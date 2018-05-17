@@ -52,6 +52,7 @@ import Data.Drasil.Concepts.Documentation as Doc (datumConstraint, inModel,
 
 import qualified Data.Drasil.Concepts.Math as M
 import Data.Drasil.Concepts.Software (program)
+import Data.Drasil.Phrase(for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
   thermal_energy, ht_trans_theo, heat, melt_pt, boil_pt, heat_trans, ht_flux,
   heat_cap_spec, thermal_conduction)
@@ -380,7 +381,7 @@ s4_1_3_list temw we = enumSimple 1 (short goalStmt) [
 ------------------------------------------------------
   
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
-  dataConstraintUncertainty, end) (npcmAssumptions, s4_2_2_T1,
+  dataConstraintUncertainty, EmptyS) (npcmAssumptions, s4_2_2_T1,
   s4_2_3_paragraph M.rOfChng temp, [s4_2_4_DD1],
   [reldefn eBalanceOnWtr] ++ (s4_2_5_d1startPara energy water) ++
   s4_2_5_paragraph ++ [reldefn heatEInWtr], [s4_2_6_table1, s4_2_6_table2])
@@ -390,11 +391,11 @@ s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
     plural softwareConstraint, S "restricts the range of",
     plural input_, S "to reasonable", plural value]
 
-  end = foldlSent [S "The", phrase uncertCol,
+  {--end = foldlSent [S "The", phrase uncertCol,
     S "provides an estimate of the confidence with which the physical",
     plural quantity, S "can be measured. This", phrase information,
     S "would be part of the input if one were performing an",
-    phrase uncertainty, S "quantification exercise"]
+    phrase uncertainty, S "quantification exercise"]--}
 
 npcmAssumptionsS :: [Sentence]
 npcmAssumptionsS = [assumpS1, assumpS2, assumpS3, assumpS4, assumpS5,

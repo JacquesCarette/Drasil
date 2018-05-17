@@ -68,6 +68,8 @@ import Drasil.Sections.SpecificSystemDescription (solChSpecF,
   physSystDesc, termDefnF, probDescF, specSysDesF)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Drasil.GlassBR.Assumptions
+import Data.Drasil.Phrase(for'')
+
 {--}
 
 gbSymbMap :: ChunkDB

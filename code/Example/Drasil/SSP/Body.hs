@@ -7,7 +7,7 @@ import Prelude hiding (sin, cos, tan)
 
 import Data.Drasil.People (henryFrankis)
 
-import Drasil.SSP.Assumptions (sspRefDB, sspAssumptions)
+import Drasil.SSP.Assumptions (sspAssumptions)
 import Drasil.SSP.DataDefs (sspDataDefs, resShrDerivation,
   mobShrDerivation, stfMtrxDerivation)
 import Drasil.SSP.DataDesc (sspInputMod)
@@ -45,6 +45,7 @@ import Data.Drasil.Concepts.Documentation (srs, physics, inModel,
   template, analysis, endUser, definition, model, element,
   property, interest, variable, table_, goalStmt,
   assumption, requirement)
+import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Physics (stress, strain, tension,
   compression, fbd, force)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
@@ -95,6 +96,9 @@ ssp_si = SI {
   _sysinfodb = sspSymMap,
   _refdb = sspRefDB
 }
+
+sspRefDB :: ReferenceDB
+sspRefDB = rdb [] [] [] [] [] sspCitations
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro

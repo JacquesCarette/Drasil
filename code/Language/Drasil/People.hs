@@ -4,7 +4,7 @@ module Language.Drasil.People
   , HasName
   , name, manyNames, nameStr
   , Conv(..) --This is needed to unwrap names for the bibliography
-  , lstName, initial, dotInitial
+  , lstName
   , rendPersLFM, rendPersLFM', rendPersLFM''
   ) where
 
@@ -58,9 +58,9 @@ class HasName p where
 
 instance HasName Person where
   nameStr (Person _ n _ Mono) =  dotInitial n
-  nameStr (Person f l ms Western) = foldr (++) "" (
+  nameStr (Person f l ms Western) = foldr nameSep "" (
     [dotInitial f] ++ map dotInitial ms ++ [dotInitial l])
-  nameStr (Person g s ms Eastern) = foldr (++) "" (
+  nameStr (Person g s ms Eastern) = foldr nameSep "" (
     [dotInitial s] ++ map dotInitial ms ++ [dotInitial g])
 
 name :: (HasName n) => n -> String
@@ -73,8 +73,8 @@ manyNames [x,y] = name x ++ " and " ++ (name y)
 manyNames names = nameList names
   where nameList [] = ""
         nameList [x] = name x
-        nameList [x,y] = (name x) ++ ", and" ++ (name y)
-        nameList (x : y : rest) = (name x) ++ "," ++ (nameList (y : rest))
+        nameList [x,y] = (name x) ++ ", and " ++ (name y)
+        nameList (x : y : rest) = (name x) ++ ", " ++ (nameList (y : rest))
 
 lstName :: Person -> String
 lstName (Person {_surname = l}) = l
@@ -83,19 +83,20 @@ lstName (Person {_surname = l}) = l
 rendPersLFM :: Person -> String
 rendPersLFM (Person {_surname = n, _convention = Mono}) = n
 rendPersLFM (Person {_given = f, _surname = l, _middle = ms}) =
-  (dotInitial l) ++ ", " ++ (dotInitial f) ++ foldr (++) "" (map dotInitial ms)
+  (dotInitial l) ++ ", " ++ (dotInitial f) `nameSep`
+  foldr nameSep "" (map dotInitial ms)
 
 -- LFM' is Last, F. M.
 rendPersLFM' :: Person -> String
 rendPersLFM' (Person {_surname = n, _convention = Mono}) = n
 rendPersLFM' (Person {_given = f, _surname = l, _middle = ms}) =
-  (dotInitial l) ++ ", " ++ foldr (++) "" (map initial (f:ms))
+  (dotInitial l) ++ ", " ++ foldr nameSep "" (map initial (f:ms))
 
 -- LFM'' is Last, First M.
 rendPersLFM'' :: Person -> String
 rendPersLFM'' (Person {_surname = n, _convention = Mono}) = n
 rendPersLFM'' (Person {_given = f, _surname = l, _middle = ms}) =
-  (dotInitial l) ++ ", " ++ foldr1 (++) (dotInitial f : (map (initial) ms))
+  (dotInitial l) ++ ", " ++ foldr1 nameSep (dotInitial f : (map (initial) ms))
 
 initial :: String -> String
 initial []    = [] -- is this right?
@@ -105,3 +106,8 @@ initial (x:_) = [x , '.']
 dotInitial :: String -> String
 dotInitial [x] = [x,'.']
 dotInitial nm  = nm
+
+nameSep :: String -> String -> String
+"" `nameSep` b = b
+a `nameSep` "" = a
+a `nameSep` b = a ++ " " ++ b

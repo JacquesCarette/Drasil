@@ -73,8 +73,8 @@ module Language.Drasil (
   , UncertainQuantity(..), UncertainChunk(..), UncertQ, uq, uqNU, uqc, uqcNU, uqcND, uncrtnChunk, uvc
   , uncrtnw
   -- Chunk.Unital
-  , UnitalChunk(..), makeUCWDS, ucFromCV
-  , uc, uc', ucs, ucs', ucsWS, ucEL, uc'EL, ucsEL, ucs'EL, ucsWSEL
+  , UnitalChunk(..), makeUCWDS
+  , uc, uc', ucs, ucs', ucsWS
   -- Chunk.Unitary
   , Unitary(..), UnitaryChunk, unitary
   -- Chunk.Relation

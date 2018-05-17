@@ -257,8 +257,8 @@ import Language.Drasil.Chunk.ReqChunk(ReqChunk, ReqType(..), reqType, requires
 import Language.Drasil.Chunk.SymbolForm (eqSymb, codeSymb, hasStageSymbol)
 import Language.Drasil.Chunk.Theory
 import Language.Drasil.Chunk.UncertainQuantity
-import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, ucFromCV
-                                  , uc, uc', ucs, ucs', ucsWS, ucEL, uc'EL, ucsEL, ucs'EL, ucsWSEL)
+import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS,
+                                   uc, uc', ucs, ucs', ucsWS)
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.UnitaryConcept
 import Language.Drasil.Chunk.VarChunk

@@ -106,7 +106,7 @@ newton = derUC' "newton"
   "newton" "force" (Atomic "N") (USynonym $ kilogram *$ (second ^: (-2)))
   
 ohm = derUC' "ohm"
-  "ohm" "resistance" (Greek Omega) (USynonym (volt /: ampere))
+  "ohm" "resistance" cOmega (USynonym (volt /: ampere))
   
 pascal = derUC' "pascal" 
   "pascal" "pressure" (Atomic "Pa")

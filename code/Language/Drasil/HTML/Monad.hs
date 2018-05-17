@@ -12,7 +12,6 @@ instance RenderGreek PrintHTML where
  
   greek Ell       = PH "&#8467;"
   greek Nabla     = PH "&nabla;"
-  greek Omega     = PH "&Omega;"
   
   
 instance RenderSpecial PrintHTML where

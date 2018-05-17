@@ -51,8 +51,8 @@ instance HasAttributes UnitalChunk where attributes = defq' . attributes
 -- | Used to create a UnitalChunk from a 'Concept', 'Symbol', and 'Unit'.
 -- Assumes the 'Space' is Real
 uc :: (Concept c, IsUnit u, DOM c ~ ConceptChunk, DOM u ~ ConceptChunk) =>
-  c -> Symbol -> u -> Attributes -> UnitalChunk
-uc a b c atts = ucs' a b c Real atts
+  c -> Symbol -> u -> {-Attributes ->-} UnitalChunk
+uc a b c {-atts-} = ucs' a b c Real []{-atts-}
 
 ucs' :: (Concept c, IsUnit u, DOM c ~ ConceptChunk, DOM u ~ ConceptChunk) =>
   c -> Symbol -> u -> Space -> Attributes -> UnitalChunk

@@ -113,7 +113,6 @@ instance RenderGreek Latex where
   greek Nabla     = L "\\nabla{}"
   greek Omega_L   = L "\\omega{}"
   greek Omega     = L "\\Omega{}"
-  greek Psi       = L "\\Psi{}"
   
 
 instance RenderSpecial Latex where

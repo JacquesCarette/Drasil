@@ -214,7 +214,7 @@ shrResI = uc' "shearRes" (cn $ "resistive shear force") ("Mohr Coulomb " ++
   
 mobShrC = uc' "Psi" (cn $ "constant") ("converts mobile shear " ++ 
   wiif ++ ", to a calculation considering the interslice forces")
-  (Greek Psi) newton
+  cPsi newton
 
 shrResC = uc' "Phi" (cn $ "constant") ("converts resistive shear " ++ 
   wiif ++ ", to a calculation considering the interslice forces")

@@ -11,7 +11,7 @@ elastMod = uc CSM.elastMod cE pascal
 mobShear = uc CSM.mobShear cS newton
 shearRes = uc CSM.shearRes cP newton
 stffness = uc CSM.stffness cK stiffnessU
-nrmStrss = uc CSM.nrmStrss (lSigma) pascal
+nrmStrss = uc CSM.nrmStrss lSigma pascal
 
 poissnsR :: ConVar
-poissnsR = cv CSM.poissnsR (lNu) Real
+poissnsR = cv CSM.poissnsR lNu Real

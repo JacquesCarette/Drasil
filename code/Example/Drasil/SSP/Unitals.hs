@@ -89,18 +89,18 @@ fricAngle = uqc "varphi'" (cn $ "effective angle of friction")
 
 dryWeight = uqc "gamma" (cn $ "dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."
-  (lGamma) specific_weight Real [gtZeroConstr]
+  lGamma specific_weight Real [gtZeroConstr]
   (dbl 20) defultUncrt
 
 satWeight = uqc "gamma_sat" (cn $ "saturated unit weight")
   ("The weight of saturated soil/ground " ++
   "layer divided by the volume of the layer.")
-  (sub (lGamma) (Atomic "Sat")) specific_weight Real [gtZeroConstr]
+  (sub lGamma (Atomic "Sat")) specific_weight Real [gtZeroConstr]
   (dbl 20) defultUncrt
 
 waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   "The weight of one cubic meter of water."
-  (sub (lGamma) lW) specific_weight Real [gtZeroConstr]
+  (sub lGamma lW) specific_weight Real [gtZeroConstr]
   (dbl 9.8) defultUncrt
   
 constant_a = uqc "a" (cn "constant") fixme
@@ -110,7 +110,7 @@ constant_A = uqc "A" (cn "constant") fixme
   cA metre Real [] (dbl 0) defultUncrt
   
 constant_K = uqc "kappa" (cn "constant") fixme
-  (lKappa) pascal Real [] (dbl 0) defultUncrt
+  lKappa pascal Real [] (dbl 0) defultUncrt
 
 {-Output Variables-} --FIXME: See if there should be typical values
 fs = constrained' (cv fs_concept (Atomic "FS") Real) [gtZeroConstr] (dbl 1)
@@ -269,11 +269,11 @@ surfLoad = uc' "Q_i" (cn $ "imposed surface load")
 
 baseAngle = uc' "alpha_i" (cn $ "angle")
   ("base of the mass relative to the horizontal " ++ fsi)
-  (lAlpha) degree
+  lAlpha degree
 
 surfAngle = uc' "beta_i" (cn $ "angle")
   ("surface of the mass relative to the horizontal " ++ fsi)
-  (lBeta) degree
+  lBeta degree
 
 impLoadAngle = uc' "omega_i" (cn $ "angle")
   ("of imposed surface load acting into the surface " ++
@@ -300,7 +300,7 @@ momntOfBdy = uc' "M" (cn $ "moment of a body") ("assumed 2D allowing a scalar")
   cM momentOfForceU --FIXME: move in concepts.physics ?
 
 genDisplace = uc' "genDisplace" (cn $ "displacement")
-  "generic displacement of a body" (lDelta) metre
+  "generic displacement of a body" lDelta metre
 
 shrStiffIntsl = uc' "K_st,i" (cn $ "shear stiffness")
   ("for interslice surface, " ++ wla ++ " " ++ fisi)
@@ -351,15 +351,15 @@ elmPrllDispl = uc' "dn_i" (cn $ "displacement")
   (Concat [lDelta, Atomic "n"]) metre
 
 porePressure = uc' "mu" (cn "pore pressure") ("from water within the soil")
-  (lMu) pascal
+  lMu pascal
 
 rotatedDispl = uc' "varepsilon_i" (cn "displacement")
   ("in rotated coordinate system")
-  (vEpsilon) metre
+  vEpsilon metre
   
 shrStress = uc' "tau_i" (cn "resistive shear stress")
   ("acting on the base of a slice")
-  (lTau) pascal
+  lTau pascal
   
 mobStress = uc' "s_i" (cn "mobilized shear stress")
   ("acting on the base of a slice")
@@ -403,7 +403,7 @@ earthqkLoadFctr = cv (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
 
 normToShear = cv (dcc "lambda"
   (nounPhraseSP $ "interslice normal/shear force ratio")
-  ("applied to all interslices")) (lLambda) Real
+  ("applied to all interslices")) lLambda Real
 
 scalFunc = cv (dcc "f_i" (nounPhraseSP $ "scaling function")
   ("magnitude of interslice forces as a function " ++
@@ -416,7 +416,7 @@ numbSlices = cv (dcc "n" (nounPhraseSP "number of slices")
 
 minFunction = cv (dcc "Upsilon" (nounPhraseSP "function")
   ("generic minimization function or algorithm"))
-  (cUpsilon) Real
+  cUpsilon Real
 
 fsloc = cv (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
   (sub (Atomic "FS") (Atomic "Loc,i")) Real

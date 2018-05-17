@@ -16,8 +16,8 @@ angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
   impulseV, linearAccel, linearDisplacement, linearVelocity, momentOfInertia,
   position, pressure, time, torque, velocity :: UnitalChunk
 
-angularAccel        = uc CP.angAccel (lAlpha) angAccelU
-angularDisplacement = uc CP.angDisp (lTheta) radian
+angularAccel        = uc CP.angAccel lAlpha angAccelU
+angularDisplacement = uc CP.angDisp lTheta radian
 angularVelocity     = uc CP.angVelo lOmega angVelU
 acceleration        = uc CP.acceleration (vec lA) accelU
 displacement        = uc CP.displacement (vec lR) metre
@@ -35,5 +35,5 @@ momentOfInertia     = uc CP.momentOfInertia (vec cI) momtInertU
 position            = uc CP.position (vec lP) metre
 pressure            = uc CP.pressure lP pascal
 time                = uc CP.time lT second
-torque              = uc CP.torque (lTau) torqueU
+torque              = uc CP.torque lTau torqueU
 velocity            = uc CP.velocity (vec lV) velU

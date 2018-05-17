@@ -42,6 +42,6 @@ cqs :: ConceptChunk -> Symbol -> Space -> Attributes -> DefinedQuantityDict
 cqs c s sp atts = DQD c (\_ -> s) sp atts
 
 cqs' :: ConceptChunk -> Symbol -> Symbol -> Space -> Attributes -> DefinedQuantityDict
-cqs' c s s2 sp atts = DQD c (symbs s s2) sp atts
-  where symbs x _ Equational     = x
-        symbs _ x Implementation = x
+cqs' c s s2 sp atts = DQD c symbs sp atts
+  where symbs Equational     = s
+        symbs Implementation = s2

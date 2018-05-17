@@ -47,6 +47,6 @@ mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> 
 mkQuant i t s sp u ab atts = QD (mkIdea i t ab) sp (\_ -> s) u atts
 
 mkQuant' :: String -> NP -> Symbol -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> Attributes -> QuantityDict
-mkQuant' i t s s2 sp u ab atts = QD (mkIdea i t ab) sp (symbs s s2) u atts
-  where symbs x _ Equational     = x
-        symbs _ x Implementation = x
+mkQuant' i t s s2 sp u ab atts = QD (mkIdea i t ab) sp symbs u atts
+  where symbs Equational     = s
+        symbs Implementation = s2

@@ -6,14 +6,14 @@ module Language.Drasil.Chunk.DefinedQuantity
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom,DOM), Concept, HasSymbol(symbol),
-  HasAttributes(attributes), IsUnit(us))
+  HasAttributes(attributes), IsUnit)
 import Language.Drasil.Chunk.Concept (ConceptChunk)
 import qualified Language.Drasil.Chunk.Quantity as Q
 
 import Language.Drasil.Symbol (Symbol,Stage)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
-import Language.Drasil.Unit(UnitDefn, unitWrapper', FundUnit)
+import Language.Drasil.Unit(UnitDefn, unitWrapper)
 
 import Control.Lens ((^.), makeLenses, view)
 
@@ -42,4 +42,4 @@ instance Q.Quantity    DefinedQuantityDict where getUnit = view unit
 instance HasAttributes DefinedQuantityDict where attributes = attribs
 
 cqs :: (IsUnit u, DOM u ~ ConceptChunk) => ConceptChunk -> Symbol -> Space -> u -> Attributes-> DefinedQuantityDict
-cqs c s sp u atts = DQD c (\_ -> s) sp (Just $ unitWrapper' u) atts
+cqs c s sp u atts = DQD c (\_ -> s) sp (Just $ unitWrapper u) atts

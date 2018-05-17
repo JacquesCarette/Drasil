@@ -10,7 +10,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
 import Language.Drasil.Chunk.Concept (ConceptChunk)
 import qualified Language.Drasil.Chunk.Quantity as Q
 
-import Language.Drasil.Symbol (Symbol, Stage(Equational, Implementation))
+import Language.Drasil.Symbol (Symbol, Stage)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 
@@ -41,7 +41,5 @@ instance HasAttributes DefinedQuantityDict where attributes = attribs
 cqs :: ConceptChunk -> Symbol -> Space -> Attributes -> DefinedQuantityDict
 cqs c s sp atts = DQD c (\_ -> s) sp atts
 
-cqs' :: ConceptChunk -> Symbol -> Symbol -> Space -> Attributes -> DefinedQuantityDict
-cqs' c s s2 sp atts = DQD c symbs sp atts
-  where symbs Equational     = s
-        symbs Implementation = s2
+cqs' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Attributes -> DefinedQuantityDict
+cqs' c symbs sp atts = DQD c symbs sp atts

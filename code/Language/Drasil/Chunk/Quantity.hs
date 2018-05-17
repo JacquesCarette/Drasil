@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Quantity 
-  ( Quantity(..), QuantityDict, qw, mkQuant, HasSpace(typ)
+  ( Quantity(..), QuantityDict, qw, mkQuant, mkQuant', HasSpace(typ)
   ) where
 
 import Control.Lens ((^.),makeLenses,view)
@@ -8,7 +8,7 @@ import Control.Lens ((^.),makeLenses,view)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), HasSpace(typ), HasAttributes(attributes))
 import Language.Drasil.Chunk.NamedIdea (IdeaDict,nw,mkIdea)
-import Language.Drasil.Symbol (Symbol,Stage)
+import Language.Drasil.Symbol (Symbol,Stage(Equational, Implementation))
 import Language.Drasil.Space (Space)
 import Language.Drasil.NounPhrase
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
@@ -45,3 +45,8 @@ qw q = QD (nw q) (q^.typ) (symbol q) (getUnit q) (q ^. attributes)
 
 mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> Attributes -> QuantityDict
 mkQuant i t s sp u ab atts = QD (mkIdea i t ab) sp (\_ -> s) u atts
+
+mkQuant' :: String -> NP -> Symbol -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> Attributes -> QuantityDict
+mkQuant' i t s s2 sp u ab atts = QD (mkIdea i t ab) sp (symbs s s2) u atts
+  where symbs x _ Equational     = x
+        symbs _ x Implementation = x

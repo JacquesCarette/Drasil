@@ -47,7 +47,7 @@ instance Eq            QDefinition where a == b = (a ^. uid) == (b ^. uid)
 fromEqn :: (IsUnit u, DOM u ~ ConceptChunk) => 
   String -> NP -> Sentence -> Symbol -> u -> Expr -> Attributes -> QDefinition
 fromEqn nm desc _ symb un eqn atts = 
-  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing atts) eqn atts --FIXME: atts is used twice?
+  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing atts) eqn atts
 
 -- | Same as fromEqn, but has no units.
 --FIXME: Space hack

@@ -1,19 +1,18 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 
 module Language.Drasil.Chunk.DefinedQuantity
-  ( cqs, DefinedQuantityDict
+  ( cqs, cqs', DefinedQuantityDict
   ) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom,DOM), Concept, HasSymbol(symbol),
-  HasAttributes(attributes), IsUnit)
+  HasAttributes(attributes))
 import Language.Drasil.Chunk.Concept (ConceptChunk)
 import qualified Language.Drasil.Chunk.Quantity as Q
 
-import Language.Drasil.Symbol (Symbol,Stage)
+import Language.Drasil.Symbol (Symbol, Stage(Equational, Implementation))
 import Language.Drasil.Space (Space)
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
-import Language.Drasil.Unit(UnitDefn, unitWrapper)
 
 import Control.Lens ((^.), makeLenses, view)
 
@@ -41,3 +40,8 @@ instance HasAttributes DefinedQuantityDict where attributes = attribs
 
 cqs :: ConceptChunk -> Symbol -> Space -> Attributes -> DefinedQuantityDict
 cqs c s sp atts = DQD c (\_ -> s) sp atts
+
+cqs' :: ConceptChunk -> Symbol -> Symbol -> Space -> Attributes -> DefinedQuantityDict
+cqs' c s s2 sp atts = DQD c (symbs s s2) sp atts
+  where symbs x _ Equational     = x
+        symbs _ x Implementation = x

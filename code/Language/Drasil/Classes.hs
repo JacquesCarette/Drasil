@@ -7,7 +7,7 @@ module Language.Drasil.Classes (
   , Definition(defn)
   , ConceptDomain(cdom, DOM)
   , Concept
-  , HasSymbol(symbol, symbol')
+  , HasSymbol(symbol)
   , HasSpace(typ)
   , HasUnitSymbol(usymb)
   , IsUnit
@@ -68,7 +68,6 @@ class (Idea c, Definition c, ConceptDomain c) => Concept c where
 class HasSymbol c where
   -- | Provides the Symbol --  for a particular stage of generation
   symbol  :: c -> Stage -> Symbol
-  symbol' :: Lens' c Symbol
   
 -- | HasSpace is anything which has a Space...
 class HasSpace c where

@@ -22,7 +22,7 @@ import Language.Drasil.Space
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom, DOM), Concept, HasSymbol(symbol),
-  IsUnit(us), Constrained(constraints), HasReasVal(reasVal), HasAttributes(attributes))
+  IsUnit, Constrained(constraints), HasReasVal(reasVal), HasAttributes(attributes))
 
 import Language.Drasil.Unit (UnitDefn)
 import Language.Drasil.UnitLang (UDefn)

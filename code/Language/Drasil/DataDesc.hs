@@ -5,7 +5,6 @@ import Language.Drasil.Chunk.Quantity
 
 import Data.List (nub)
 import Language.Drasil.Classes (HasAttributes)
-import Language.Drasil.Chunk.Attribute.Core (Attributes)
 
 type DataDesc = [Data]
 type DataItem = CodeChunk

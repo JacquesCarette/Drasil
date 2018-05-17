@@ -5,8 +5,8 @@ import Data.Drasil.Concepts.Physics as CP
 import Data.Drasil.Units.Physics
 import Data.Drasil.SI_Units
 
-restitutionCoef :: DefinedQuantityDictCV
-restitutionCoef = dqd CP.restitutionCoef (sub cC cR) Real
+restitutionCoef :: DefinedQuantityDict
+restitutionCoef = cqs CP.restitutionCoef (sub cC cR) Real
 
 angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
   distance, energy, force, gravitationalAccel, gravitationalConst, impulseS,

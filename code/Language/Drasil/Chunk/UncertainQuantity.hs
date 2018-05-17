@@ -17,7 +17,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   IsUnit, Constrained(constraints), HasReasVal(reasVal), HasAttributes(attributes))
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
-import Language.Drasil.Chunk.DefinedQuantity (cqs)
+import Language.Drasil.Chunk.DefinedQuantity (cqs')
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Chunk.Constrained (ConstrConcept(..), ConstrainedChunk,cuc',cnstrw,
   cvc)
@@ -64,11 +64,11 @@ instance HasAttributes     UncertQ where attributes = coco . attributes
 -- | The UncertainQuantity constructor. Requires a Quantity, a percentage, and a typical value
 uq :: (HasAttributes c, Quantity c, Constrained c, Concept c, HasReasVal c, DOM c ~ ConceptChunk) => 
   c -> Double -> Maybe UnitDefn -> UncertQ
-uq q u mud = UQ (ConstrConcept (cqs (cw q) {-symb-} (q ^. typ) (q ^. attributes)) (q ^. constraints) (q ^. reasVal) mud) (Just u) 
+uq q u mud = UQ (ConstrConcept (cqs' (cw q) (symbol q) (q ^. typ) (q ^. attributes)) (q ^. constraints) (q ^. reasVal) mud) (Just u) 
 
 uqNU :: (HasAttributes c, Quantity c, Constrained c, Concept c, HasReasVal c, DOM c ~ ConceptChunk) =>
   c -> Maybe UnitDefn -> UncertQ
-uqNU q mud = UQ (ConstrConcept (cqs (cw q) {-symb-} (q ^. typ) (q ^. attributes)) (q ^. constraints) (q ^. reasVal) mud) Nothing 
+uqNU q mud = UQ (ConstrConcept (cqs' (cw q) (symbol q) (q ^. typ) (q ^. attributes)) (q ^. constraints) (q ^. reasVal) mud) Nothing 
 
 -- this is kind of crazy and probably shouldn't be used!
 uqc :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u -> Space

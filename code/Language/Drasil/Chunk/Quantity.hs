@@ -43,8 +43,10 @@ instance HasAttributes QuantityDict where attributes = attribs
 qw :: (HasAttributes q, Quantity q) => q -> QuantityDict
 qw q = QD (nw q) (q^.typ) (symbol q) (getUnit q) (q ^. attributes)
 
+-- For when the symbol is constant through stages
 mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> Attributes -> QuantityDict
 mkQuant i t s sp u ab atts = QD (mkIdea i t ab) sp (\_ -> s) u atts
 
+-- For when the symbol changes depending on the stage
 mkQuant' :: String -> NP -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> Maybe String -> Attributes -> QuantityDict
 mkQuant' i t symbs sp u ab atts = QD (mkIdea i t ab) sp symbs u atts

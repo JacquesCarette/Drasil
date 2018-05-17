@@ -38,8 +38,11 @@ instance Q.HasSpace    DefinedQuantityDict where typ = spa
 instance HasSymbol     DefinedQuantityDict where symbol = view symb
 instance HasAttributes DefinedQuantityDict where attributes = attribs
 
+
+-- For when the symbol is constant through stages
 cqs :: ConceptChunk -> Symbol -> Space -> Attributes -> DefinedQuantityDict
 cqs c s sp atts = DQD c (\_ -> s) sp atts
 
+-- For when the symbol changes depending on the stage
 cqs' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Attributes -> DefinedQuantityDict
 cqs' c symbs sp atts = DQD c symbs sp atts

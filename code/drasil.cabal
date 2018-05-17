@@ -96,7 +96,6 @@ library
     , Language.Drasil.Chunk.Constrained.Core
     , Language.Drasil.Chunk.DefinedQuantity
     , Language.Drasil.Chunk.Eq
-    , Language.Drasil.Chunk.ExprRelat
     , Language.Drasil.Chunk.GenDefn
     , Language.Drasil.Chunk.Goal
     , Language.Drasil.Chunk.InstanceModel

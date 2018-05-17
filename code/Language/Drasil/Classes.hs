@@ -16,6 +16,7 @@ module Language.Drasil.Classes (
   , CommonIdea(abrv)
   , Constrained(constraints)
   , HasReasVal(reasVal)
+  , ExprRelat(relat)
   ) where
 
 import Language.Drasil.NounPhrase.Core (NP)
@@ -105,3 +106,6 @@ class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u where
 class UnitEq u where
    uniteq :: Lens' u UDefn
 
+-- ?
+class ExprRelat c where
+  relat :: Lens' c Expr

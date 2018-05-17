@@ -30,114 +30,141 @@ import Data.Drasil.SentenceStructures (acroGD, acroIM, foldlSent, ofThe,
 -- 4.2.1 : Assumptions --
 -------------------------
 
-s4_2_1_list :: [Sentence]
-s4_2_1_list = s4_2_1_assump_list 
+swhsAssumptionsS:: [Sentence]
+swhsAssumptionsS = [assumpS1, assumpS2, assumpS3, assumpS4, assumpS5,
+  assumpS6, assumpS7, assumpS8, assumpS9, assumpS10, assumpS11, assumpS12, assumpS13, assumpS14,
+  assumpS15, assumpS16, assumpS17, assumpS18, assumpS19, assumpS20]
 
-s4_2_1_assump_list :: [Sentence]
-s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5,
-  assump6, assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
-  assump15, assump16, assump17, assump18, assump19, assump20]
+assumpS1, assumpS2, assumpS3, assumpS4, assumpS5, assumpS6, assumpS7,
+  assumpS8, assumpS9, assumpS10, assumpS11, assumpS12, assumpS13, assumpS14,
+  assumpS15, assumpS16, assumpS17, assumpS18, assumpS19, assumpS20 :: Sentence
 
-assump1, assump2, assump3, assump4, assump5, assump6, assump7,
-  assump8, assump9, assump10, assump11, assump12, assump13, assump14,
-  assump15, assump16, assump17, assump18, assump19, assump20 :: Sentence
-
-assump1 = foldlSent [
+assumpS1 = foldlSent [
   S "The only form of", phrase energy, S "that is",
   S "relevant for this", phrase problem, S "is" +:+. 
   phrase CT.thermal_energy, S "All other forms of", phrase energy `sC`
   S "such as", phrase mech_energy `sC` S "are assumed to be negligible",
   sSqBr $ makeRef $ reldefn t1ConsThermE]
-assump2 = foldlSent [
+assumpS2 = foldlSent [
   S "All", phrase CT.heat_trans, S "coefficients are constant over",
   phrase time, sSqBr $ acroGD 1]
-assump3 = foldlSent [
+assumpS3 = foldlSent [
   S "The", phrase water, S "in the", phrase tank,
   S "is fully mixed, so the", phrase temp_W `isThe` 
   S "same throughout the entire", phrase tank,
   sSqBr $ acroGD 2 `sC` (makeRef $ datadefn dd2HtFluxP)]
-assump4 = foldlSent [
+assumpS4 = foldlSent [
   S "The", phrase temp_PCM `isThe` S "same throughout the", phrase pcm_vol,
   sSqBr $ acroGD 2 `sC`
   (makeRef $ datadefn dd2HtFluxP)]
   --FIXME `sC` makeRef likeChg1]
-assump5 = foldlSent [
+assumpS5 = foldlSent [
   S "The", phrase w_density `sAnd` phrase pcm_density,
   S "have no spatial variation; that is" `sC`
   S "they are each constant over their entire", phrase vol,
   sSqBr $ acroGD 2]
-assump6 = foldlSent [
+assumpS6 = foldlSent [
   S "The", phrase htCap_W `sC` phrase htCap_S_P `sC` S "and",
   phrase htCap_L_P, S "have no spatial variation; that",
   S "is" `sC` S "they are each constant over their entire",
   phrase vol, sSqBr $ acroGD 2]
-assump7 = foldlSent [
+assumpS7 = foldlSent [
   CT.law_conv_cooling ^. defn, S "applies between the",
   phrase coil `sAnd` S "the", phrase water,
   sSqBr $ makeRef $ datadefn dd1HtFluxC]
-assump8 = foldlSent [
+assumpS8 = foldlSent [
   S "The", phrase temp_C, S "is constant over", phrase time,
   sSqBr $ makeRef $ datadefn dd1HtFluxC]
   --FIXME `sC` makeRef likeChg2]
-assump9 = foldlSent [
+assumpS9 = foldlSent [
   S "The", phrase temp_C, S "does not vary along its length",
   sSqBr $ makeRef $ datadefn dd1HtFluxC]
   --FIXME `sC` makeRef likeChg3]
-assump10 = foldlSent [
+assumpS10 = foldlSent [
   CT.law_conv_cooling ^. defn, S "applies between the",
   phrase water `sAnd` S "the", short phsChgMtrl,
   sSqBr $ makeRef $ datadefn dd2HtFluxP]
-assump11 = foldlSent [
+assumpS11 = foldlSent [
   S "The", phrase model, S "only accounts for", (charging ^. defn) `sC`
   S "not" +:+. phrase discharging, S "The", phrase temp_W `sAnd`
   phrase temp_PCM, S "can only increase, or remain",
   S "constant; they do not decrease. This implies that the",
-  phrase temp_init, sSqBr $ makeRef (Assumption (assump "assump12" assump12 (S "assump12"))), S "is less than (or equal)",
+  phrase temp_init, sSqBr $ makeRef assump12, S "is less than (or equal)",
   S "to the", phrase temp_C, sSqBr $ acroIM 1]
   --FIXME `sC` makeRef likeChg4]
-assump12 = foldlSent [
+assumpS12 = foldlSent [
   phrase temp_init `ofThe'` phrase water `sAnd` S "the",
   short phsChgMtrl `isThe` S "same",
   sSqBr $ acroIM 1 `sC` acroIM 2]
   --FIXME `sC` makeRef likeChg5]
-assump13 = foldlSent [
+assumpS13 = foldlSent [
   S "The", phrase simulation, S "will start with the",
   short phsChgMtrl, S "in a", solid ^. defn,
   sSqBr $ acroIM 2 `sC` acroIM 4]
-assump14 = foldlSent [
+assumpS14 = foldlSent [
   (S "operating" +:+ phrase temp +:+ S "range") `ofThe'` phrase system,
   S "is such that the", phrase water,
   S "is always in" +:+. (liquid ^. defn), S "That is" `sC`
   S "the", phrase temp, S "will not drop below the",
   phrase melt_pt, S "of", phrase water `sC` S "or rise above its",
   phrase boil_pt, sSqBr $ acroIM 1 `sC` acroIM 3]
-assump15 = foldlSent [
+assumpS15 = foldlSent [
   S "The", phrase tank, S "is", phrase perfect_insul,
   S "so that there is no", phrase CT.heat, S "loss from the",
   phrase tank, sSqBr $ acroIM 1]
   --FIXME `sC` makeRef likeChg6]
-assump16 = foldlSent [
+assumpS16 = foldlSent [
   S "No internal", phrase CT.heat, S "is generated by either the",
   phrase water, S "or the", short phsChgMtrl `semiCol`
   S "therefore, the", phrase vol_ht_gen, S "is zero",
   sSqBr $ acroIM 1 `sC` acroIM 2]
-assump17 = foldlSent [
+assumpS17 = foldlSent [
   (phrase vol +:+ phrase change) `ofThe'` short phsChgMtrl,
   S "due to", phrase CT.melting, S "is negligible", sSqBr $ acroIM 2]
-assump18 = foldlSent [
+assumpS18 = foldlSent [
   S "The", short phsChgMtrl, S "is either in a", liquid ^. defn,
   S "or a", solid ^. defn, S "but not a", gaseous ^. defn,
   sSqBr $ acroIM 2 `sC` acroIM 4]
-assump19 = foldlSent [
+assumpS19 = foldlSent [
   S "The pressure in the", phrase tank, S "is atmospheric, so the",
   phrase melt_pt `sAnd` phrase boil_pt, S "are", S (show (0 :: Integer)) :+:
   Sy (unit_symb temp) `sAnd` S (show (100 :: Integer)) :+:
   Sy (unit_symb temp) `sC` S "respectively", sSqBr $ acroIM 1 `sC` acroIM 3]
-assump20 = foldlSent [
+assumpS20 = foldlSent [
   S "When considering the", phrase w_vol, S "in the",
   phrase tank `sC` (phrase vol `ofThe` phrase coil),
   S "is assumed to be negligible"]
   --FIXME , sSqBr $ makeRef req2]
+
+swhsAssumptions :: [Contents]
+swhsAssumptions = [assump1, assump2, assump3, assump4, assump5,
+  assump6, assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
+  assump15, assump16, assump17, assump18, assump19, assump20]
+
+assump1, assump2, assump3, assump4, assump5, assump6, assump7,
+  assump8, assump9, assump10, assump11, assump12, assump13, assump14,
+  assump15, assump16, assump17, assump18, assump19, assump20 :: Contents
+
+assump1 = let a1 = "assump1" in Assumption $ assump a1 assumpS1 (S a1)
+assump2 = let a2 = "assump2" in Assumption $ assump a2 assumpS2 (S a2)
+assump3 = let a3 = "assump3" in Assumption $ assump a3 assumpS3 (S a3)
+assump4 = let a4 = "assump4" in Assumption $ assump a4 assumpS4 (S a4)
+assump5 = let a5 = "assump5" in Assumption $ assump a5 assumpS5 (S a5)
+assump6 = let a6 = "assump6" in Assumption $ assump a6 assumpS6 (S a6)
+assump7 = let a7 = "assump7" in Assumption $ assump a7 assumpS7 (S a7)
+assump8 = let a8 = "assump8" in Assumption $ assump a8 assumpS8 (S a8)
+assump9 = let a9 = "assump9" in Assumption $ assump a9 assumpS9 (S a9)
+assump10 = let a10 = "assump10" in Assumption $ assump a10 assumpS10 (S a10)
+assump11 = let a11 = "assump11" in Assumption $ assump a11 assumpS11 (S a11)
+assump12 = let a12 = "assump12" in Assumption $ assump a12 assumpS12 (S a12)
+assump13 = let a13 = "assump13" in Assumption $ assump a13 assumpS13 (S a13)
+assump14 = let a14 = "assump14" in Assumption $ assump a14 assumpS14 (S a14)
+assump15 = let a15 = "assump15" in Assumption $ assump a15 assumpS15 (S a15)
+assump16 = let a16 = "assump16" in Assumption $ assump a16 assumpS16 (S a16)
+assump17 = let a17 = "assump17" in Assumption $ assump a17 assumpS17 (S a17)
+assump18 = let a18 = "assump18" in Assumption $ assump a18 assumpS18 (S a18)
+assump19 = let a19 = "assump19" in Assumption $ assump a19 assumpS19 (S a19)
+assump20 = let a20 = "assump20" in Assumption $ assump a20 assumpS20 (S a20)
 
 -- Again, list structure is same between all examples.
 

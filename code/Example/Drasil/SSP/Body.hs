@@ -99,6 +99,7 @@ ssp_si = SI {
 
 sspRefDB :: ReferenceDB
 sspRefDB = rdb [] [] [] [] [] sspCitations
+-- FIXME: Convert the rest to new chunk types (similar to issues #446 and #447)
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro

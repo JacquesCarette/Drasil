@@ -186,10 +186,10 @@ sim_time = uc' "sim_time" (compoundPhrase' (simulation ^. term)
 ----------------------
 -- Unitless symbols --
 ----------------------
-swhsUnitless :: [ConVar]
+swhsUnitless :: [DefinedQuantityDict]
 swhsUnitless = [uNormalVect, surface, eta, melt_frac]
 
-eta, melt_frac :: ConVar
+eta, melt_frac :: DefinedQuantityDict
 
 eta = cv (dcc "eta" (nounPhraseSP "ODE parameter")
   "Derived parameter based on rate of change of temperature of water")

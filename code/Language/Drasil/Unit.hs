@@ -65,7 +65,9 @@ instance HasUnitSymbol UnitDefn where usymb f (UD a b) = fmap (\x -> UD a x) (f 
 instance IsUnit        UnitDefn
 
 -- | for defining Derived units
-data DerUChunk = DUC { _uc :: UnitDefn, _eq :: UDefn }
+data DerUChunk = DUC { _uc :: UnitDefn
+                     , _eq :: UDefn
+                     }
 
 -- don't export this either
 duc :: Simple Lens DerUChunk UnitDefn

@@ -37,9 +37,9 @@ instance HasAttributes UnitaryChunk where attributes = quant . attributes
 
 -- Builds the Quantity part from the uid, term, symbol and space.
 -- assumes there's no abbreviation.
-unitary :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => 
+unitary :: (IsUnit u, DOM u ~ ConceptChunk) => 
   String -> NP -> Symbol -> u -> Space -> UnitaryChunk
-unitary i t s u space = UC (mkQuant i t s space (Just uu) Nothing (u ^. attributes)) uu
+unitary i t s u space = UC (mkQuant i t s space (Just uu) Nothing []) uu -- Unit doesn't have a unitDefn, so [] is passed in
   where uu = unitWrapper u
 
 mkUnitary :: (HasAttributes u, Unitary u) => u -> UnitaryChunk

@@ -81,9 +81,9 @@ uqcNU :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> St
 uqcNU nam trm desc sym un space cs val mud = uqNU (cuc' nam trm desc sym un space cs (un ^. attributes) val mud) mud -- mud passed in twice
 
 --uncertainty quantity constraint no description
-uqcND :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Symbol -> u -> Space -> [Constraint]
+uqcND :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Symbol -> u -> Space -> [Constraint]
                   -> Expr -> Double -> Maybe UnitDefn -> UncertQ
-uqcND nam trm sym un space cs val uncrt mud = uq (cuc' nam trm "" sym un space cs (un ^. attributes) val mud) uncrt mud -- mud passed in twice
+uqcND nam trm sym un space cs val uncrt mud = uq (cuc' nam trm "" sym un space cs [] val mud) uncrt mud -- mud passed in twice; unit doesn't have a unitDefn, so [] is passed in
 
 
 {--}

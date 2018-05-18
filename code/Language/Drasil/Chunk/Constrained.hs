@@ -49,7 +49,7 @@ constrained :: (HasAttributes c, Quantity c) => c -> [Constraint] -> Expr -> Con
 constrained q cs ex = ConstrainedChunk (qw q) cs (Just ex)
 
 -- | Creates a constrained unitary
-cuc :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Symbol -> u
+cuc :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Symbol -> u
                 -> Space -> [Constraint] -> Expr  -> ConstrainedChunk
 cuc i t s u space cs rv =
   ConstrainedChunk (qw (unitary i t s u space)) cs (Just rv)

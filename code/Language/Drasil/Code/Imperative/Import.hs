@@ -578,7 +578,7 @@ convStmt atts (FTry t c) = do
 convStmt _    (FContinue) = return continue
 convStmt _    (FDec v (C.List t)) = return $ listDec' (codeName v) (convType t) 0
 convStmt _    (FDec v t) = return $ varDec (codeName v) (convType t)
-convStmt atts (FProcCall n l) = fmap valStmt $ convExpr atts (FCall (asExpr n atts) l) --FIXME: atts passed in twice?
+convStmt atts (FProcCall n l) = fmap valStmt $ convExpr atts (FCall (asExpr n {-atts-}) l) --FIXME: atts passed in twice?
 convStmt atts (FAppend a b) = fmap valStmt $
   liftM2 (\x y -> x$.(listAppend y)) (convExpr atts a) (convExpr atts b)
 

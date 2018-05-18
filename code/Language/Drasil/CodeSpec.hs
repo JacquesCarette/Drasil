@@ -213,8 +213,8 @@ asVC (FDef (FuncDef n _ _ _)) atts = implVar n (nounPhraseSP n) (Atomic n) Real 
 asVC (FData (FuncData n _)) atts = implVar n (nounPhraseSP n) (Atomic n) Real atts
 asVC (FCD cd) atts = codeVC cd (codeSymb cd) (cd ^. typ) atts
 
-asExpr :: Func -> Attributes -> Expr --Attributes need to be passed in for asVC
-asExpr f atts = sy $ asVC f atts
+asExpr :: Func -> {-Attributes ->-} Expr --Attributes need to be passed in for asVC
+asExpr f {-atts-} = sy $ asVC f []{-atts-}
 
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String

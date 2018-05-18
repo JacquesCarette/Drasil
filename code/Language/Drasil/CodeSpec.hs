@@ -74,10 +74,7 @@ getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
 getStr _ = error "Term is not a string" 
 
 codeSpec :: SystemInformation -> [Mod] -> CodeSpec
-codeSpec si ms = codeSpec' si ms
-
-codeSpec' :: SystemInformation -> [Mod] -> CodeSpec
-codeSpec' (SI {_sys = sys
+codeSpec (SI {_sys = sys
               , _quants = q
               , _definitions = defs'
               , _inputs = ins

@@ -143,7 +143,7 @@ module Language.Drasil (
   , People, Person, person, HasName, name, manyNames, person', personWM
   , personWM', mononym
   -- CodeSpec
-  , CodeSpec, codeSpec, codeSpec', Choices(..), ImplementationType(..)
+  , CodeSpec, codeSpec, Choices(..), ImplementationType(..)
   , Logging(..), ConstraintBehaviour(..), Structure(..), Comments(..)
   , defaultChoices
   , Mod(..), packmod, FuncDef(..), FuncStmt(..), funcDef, ($:=), ffor, fdec -- hacks

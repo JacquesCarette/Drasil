@@ -42,7 +42,7 @@ instance ConceptDomain UnitalChunk where
 instance Concept       UnitalChunk where
 instance HasSpace      UnitalChunk where typ = defq' . typ
 instance HasSymbol     UnitalChunk where symbol c st = symbol (c^.defq') st
-instance Quantity      UnitalChunk where getUnit defq = Nothing
+instance Quantity      UnitalChunk where getUnit defq = Just (unit defq)
 instance Unitary       UnitalChunk where unit = view uni
 instance HasAttributes UnitalChunk where attributes = defq' . attributes
 

@@ -22,9 +22,9 @@ implVars = [v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
 
 read_table :: Func
 read_table = funcData "read_table" $
-  [ singleLine (repeated [junk, listEntry [WithPattern] [] z_vector]) ',',
-    multiLine (repeated [listEntry [WithLine, WithPattern] [] x_matrix,
-                         listEntry [WithLine, WithPattern] [] y_matrix]) ','
+  [ singleLine (repeated [junk, listEntry [WithPattern] z_vector]) ',',
+    multiLine (repeated [listEntry [WithLine, WithPattern] x_matrix,
+                         listEntry [WithLine, WithPattern] y_matrix]) ','
   ]
 
 readTableMod :: Mod

@@ -16,7 +16,6 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom, DOM), Concept, HasSymbol(symbol),
   IsUnit, Constrained(constraints), HasReasVal(reasVal), HasAttributes(attributes))
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.DefinedQuantity (cqs')
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Chunk.Constrained (ConstrConcept(..), ConstrainedChunk,cuc',cnstrw,

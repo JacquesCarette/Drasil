@@ -13,47 +13,47 @@ swhsInputMod = Mod "InputFormat" [swhsInputData]
 swhsInputData :: Func
 swhsInputData = funcData "get_inputs" $
   [ junkLine, -- 1
-    singleton [] tank_length,
+    singleton tank_length,
     junkLine, -- 3
-    singleton [] diam,
+    singleton  diam,
     junkLine, -- 5
-    singleton [] pcm_vol,
+    singleton  pcm_vol,
     junkLine, -- 7
-    singleton [] pcm_SA,
+    singleton  pcm_SA,
     junkLine, -- 9
-    singleton [] pcm_density,
+    singleton  pcm_density,
     junkLine, -- 11
-    singleton [] temp_melt_P,
+    singleton  temp_melt_P,
     junkLine, -- 13
-    singleton [] htCap_S_P,
+    singleton  htCap_S_P,
     junkLine, -- 15
-    singleton [] htCap_L_P,
+    singleton  htCap_L_P,
     junkLine, -- 17
-    singleton [] htFusion,
+    singleton  htFusion,
     junkLine, -- 19
-    singleton [] coil_SA,
+    singleton  coil_SA,
     junkLine, -- 21
-    singleton [] temp_C,
+    singleton  temp_C,
     junkLine, -- 23
-    singleton [] w_density,
+    singleton  w_density,
     junkLine, -- 25
-    singleton [] htCap_W,
+    singleton  htCap_W,
     junkLine, -- 27
-    singleton [] coil_HTC,
+    singleton  coil_HTC,
     junkLine, -- 29
-    singleton [] pcm_HTC,
+    singleton  pcm_HTC,
     junkLine, -- 31
-    singleton [] temp_init,
+    singleton  temp_init,
     junkLine, -- 33
-    singleton [] tau, -- FIXME: Not sure if tau should be used for "time-step"
+    singleton  tau, -- FIXME: Not sure if tau should be used for "time-step"
     junkLine,-- 35
-    singleton [] time_final,
+    singleton  time_final,
     junkLine, -- 37
-    singleton [] abs_tol,
+    singleton  abs_tol,
     junkLine, -- 39
-    singleton [] rel_tol,
+    singleton rel_tol,
     junkLine, -- 41
-    singleton [] cons_tol
+    singleton cons_tol
   ]
 
 -- Numbering refers to corresopnding line on input file

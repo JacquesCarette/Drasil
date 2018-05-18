@@ -179,7 +179,7 @@ nopcmRefDB :: ReferenceDB
 nopcmRefDB = rdb [] [] [] [] [] s9_refList -- FIXME: Convert the rest to new chunk types
 
 nopcm_code :: CodeSpec
-nopcm_code = codeSpec' nopcm_si [inputMod] []
+nopcm_code = codeSpec nopcm_si [inputMod]
 -- Sub interpolation mod into list when possible              ^
 
 nopcm_srs :: Document
@@ -450,8 +450,8 @@ s4_2_3_desc1 t1C vo =
   [S "Integrating", makeRef $ reldefn t1C,
   S "over a", phrase vo, sParen (getES vo) `sC` S "we have"]
 
-s4_2_3_desc2 :: ConceptChunk -> ConVar -> UnitalChunk -> UnitalChunk ->
-  ConVar -> ConceptChunk -> [Sentence]
+s4_2_3_desc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
+  DefinedQuantityDict -> ConceptChunk -> [Sentence]
 s4_2_3_desc2 g_d su vo tfv unv un =
   [S "Applying", titleize g_d, S "to the first term over",
   (phrase su +:+ getES su `ofThe` phrase vo) `sC` S "with",

@@ -186,6 +186,7 @@ sim_time = uc' "sim_time" (compoundPhrase' (simulation ^. term)
 ----------------------
 -- Unitless symbols --
 ----------------------
+
 swhsUnitless :: [DefinedQuantityDict]
 swhsUnitless = [uNormalVect, surface, eta, melt_frac]
 
@@ -403,11 +404,9 @@ pcm_E = uqcNU "pcm_E" (nounPhraseSP "change in heat energy in the PCM")
   (sub (eqSymb sens_heat) cP) joule Rational
   [physc $ UpFrom (Inc, 0)] (dbl 0) Nothing
 
-
-
-------------------------------
--- Uncertainties with no Units
-------------------------------
+---------------------------------
+-- Uncertainties with no Units --
+---------------------------------
 
 abs_tol, rel_tol, cons_tol :: UncertainChunk
 
@@ -426,8 +425,6 @@ cons_tol = uvc "pb_tol"
   (sub cC (Atomic "tol")) Real
   [ physc $ Bounded (Exc,0) (Exc,1)] 
   (dbl (10.0**(-3))) 0.01
-
-
 
 -------------------------
 -- Max / Min Variables --

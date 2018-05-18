@@ -106,6 +106,6 @@ class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u where
 class UnitEq u where
    uniteq :: Lens' u UDefn
 
--- ?
+-- TODO : there is a design bug here not at all apparent from its definition; have to come back to it (Pull Request #532)
 class ExprRelat c where
   relat :: Lens' c Expr

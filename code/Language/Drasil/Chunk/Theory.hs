@@ -37,7 +37,7 @@ data TheoryChunk = TC { _tid :: String
                       }
 makeLenses ''TheoryChunk
 
-instance Theory TheoryChunk where
+instance Theory        TheoryChunk where
   valid_context = vctx
   spaces        = spc
   quantities    = quan
@@ -46,7 +46,7 @@ instance Theory TheoryChunk where
   invariants    = invs
   defined_fun   = dfun
 instance HasAttributes TheoryChunk where attributes = attribs
-instance HasUID TheoryChunk where uid = tid
+instance HasUID        TheoryChunk where uid = tid
 
 -- use the id of the TheoryModel as the uid. FIXME ?
 data TheoryModel = TM { _con :: ConceptChunk

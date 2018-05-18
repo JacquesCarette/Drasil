@@ -65,5 +65,5 @@ displayGraph = foldlSent [S "Display the", phrase crtSlpSrf, S "and the",
 
 ------------------
 sspInputDataTable :: Contents
-sspInputDataTable = mkInputDatTb ([cqs coords] ++ map cqs sspInputs)
+sspInputDataTable = mkInputDatTb ([cqsWr coords] ++ map cqsWr sspInputs)
   --FIXME: this has to be seperate since coords is a different type

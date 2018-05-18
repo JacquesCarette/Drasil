@@ -68,14 +68,14 @@ plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
   [ gtZeroConstr,
     physc $ UpFrom (Exc, sy plate_width),
     sfwrc $ Bounded (Inc , sy dim_min) (Inc , sy dim_max),
-    sfwrc $ UpTo (Exc, sy ar_max * sy plate_width)] (dbl 1.5) defaultUncrt
+    sfwrc $ UpTo (Exc, sy ar_max * sy plate_width)] (dbl 1.5) defaultUncrt Nothing
 
 plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
   lB metre Real
   [ gtZeroConstr,
     physc $ Bounded (Exc,0) (Exc, sy plate_len),
     sfwrc $ Bounded (Inc, sy dim_min) (Inc, sy dim_max),
-    sfwrc $ UpTo (Exc, sy plate_len / sy ar_max)] (dbl 1.2) defaultUncrt
+    sfwrc $ UpTo (Exc, sy plate_len / sy ar_max)] (dbl 1.2) defaultUncrt Nothing
 
 pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Real
@@ -85,7 +85,7 @@ char_weight = uqcND "char_weight" (nounPhraseSP "charge weight")
   lW kilogram Real
   [ gtZeroConstr,
     sfwrc $ Bounded (Inc, sy cWeightMin) (Inc, sy cWeightMax)]
-    (dbl 42) defaultUncrt
+    (dbl 42) defaultUncrt Nothing
 
 tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
   (Atomic "TNT") Real
@@ -95,7 +95,7 @@ standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance")
   (Atomic "SD") metre Real
   [ gtZeroConstr,
     sfwrc $ Bounded (Exc, sy sd_min) (Exc, sy sd_max)]
-  (dbl 45) defaultUncrt
+  (dbl 45) defaultUncrt Nothing
 --FIXME: ^ incorporate definition in here?
 
 nom_thick = cuc "nom_thick" 

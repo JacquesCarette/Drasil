@@ -20,7 +20,8 @@ cpSymbols, cpSymbolsAll, inputSymbols, outputSymbols :: [QuantityDict]
 cpSymbolsAll = cpSymbols ++ inputSymbols ++ outputSymbols ++ [pi_]
 
 cpSymbols = (map qw cpUnits) ++ 
-  (map qw cpUnitless) ++ (map qw cpInputConstraints)
+  (map qw cpUnitless) ++ 
+  (map qw cpInputConstraints)
 
 inputSymbols = map qw [QP.position, QP.velocity, QP.force, QM.orientation, 
   QP.angularVelocity, QP.linearVelocity, QP.gravitationalConst, QPP.mass, 
@@ -265,13 +266,13 @@ numParticles = vc "n" (nounPhraseSP "number of particles in a rigid body") lN In
 lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
   angVeloCons, forceCons, torqueCons, veloCons, restCoefCons :: ConstrConcept
 
-cpInputConstraints :: [Maybe UnitDefn -> UncertQ]
-cpInputConstraints = map (\x -> uq x (0.1 :: Double))
+cpInputConstraints :: [UncertQ]
+cpInputConstraints = map (\x -> uq x (0.1 :: Double) Nothing)
   [lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
   veloCons, angVeloCons, forceCons, torqueCons, restCoefCons]
 
-cpOutputConstraints :: [Maybe UnitDefn -> UncertQ]
-cpOutputConstraints = map (\x -> uq x (0.1 :: Double)) 
+cpOutputConstraints :: [UncertQ]
+cpOutputConstraints = map (\x -> uq x (0.1 :: Double) Nothing) 
   [posCons, veloCons, orientCons, angVeloCons]
 
 nonNegativeConstraint :: Constraint -- should be pulled out and put somewhere for generic constraints

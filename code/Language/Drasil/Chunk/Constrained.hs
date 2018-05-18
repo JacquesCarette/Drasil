@@ -61,6 +61,9 @@ cvc i des sym space cs rv atts = ConstrainedChunk (qw (vc i des sym space atts))
 cvc' :: String -> NP -> Symbol -> Space -> [Constraint] -> Attributes -> ConstrainedChunk
 cvc' i des sym space cs atts = ConstrainedChunk (qw (vc i des sym space atts)) cs Nothing
 
+cnstrw :: (HasAttributes c, Quantity c, Constrained c, HasReasVal c) => c -> ConstrainedChunk
+cnstrw c = ConstrainedChunk (qw c) (c ^. constraints) (c ^. reasVal)
+
 -- | ConstrConcepts are 'Conceptual Symbolic Quantities'
 -- with 'Constraints' and maybe a reasonable value
 data ConstrConcept = ConstrConcept { _defq :: DefinedQuantityDict
@@ -86,11 +89,11 @@ instance HasReasVal    ConstrConcept where reasVal      = reasV'
 instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.defq.uid)
 instance HasAttributes ConstrConcept where attributes = defq . attributes
 
-constrained' :: (HasAttributes c, Quantity c, Concept c, DOM c ~ ConceptChunk) =>
+constrained' :: (HasAttributes c, HasSpace c, HasSymbol c, Concept c, DOM c ~ ConceptChunk) =>
   c -> [Constraint] -> Expr -> Maybe UnitDefn -> ConstrConcept
 constrained' q cs rv mud = ConstrConcept (cqs' (cw q) (symbol q) (q ^. typ) (q ^. attributes)) cs (Just rv) mud
 
-constrainedNRV' :: (HasAttributes c, Quantity c, Concept c, DOM c ~ ConceptChunk) => 
+constrainedNRV' :: (HasAttributes c, HasSpace c, HasSymbol c, Concept c, DOM c ~ ConceptChunk) => 
   c -> [Constraint] -> Maybe UnitDefn -> ConstrConcept
 constrainedNRV' q cs mud = ConstrConcept (cqs' (cw q) (symbol q) (q ^. typ) (q ^. attributes)) cs Nothing mud
 
@@ -98,6 +101,3 @@ cuc' :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> 
             -> Space -> [Constraint] -> Attributes -> Expr -> Maybe UnitDefn -> ConstrConcept
 cuc' nam trm desc sym un space cs atts rv mub =
   ConstrConcept (cqs (cw (ucs nam trm desc sym un space)) sym space atts) cs (Just rv) mub
-
-cnstrw :: (HasAttributes c, Quantity c, Constrained c, HasReasVal c) => c -> ConstrainedChunk
-cnstrw c = ConstrainedChunk (qw c) (c ^. constraints) (c ^. reasVal)

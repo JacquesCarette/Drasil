@@ -12,7 +12,7 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 
-import Control.Lens (Lens', view, makeLenses, (^.))
+import Control.Lens (Lens', view, makeLenses)
 
 class HasUID t => Theory t where
   valid_context :: Lens' t [TheoryChunk]

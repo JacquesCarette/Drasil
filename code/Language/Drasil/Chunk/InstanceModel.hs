@@ -5,12 +5,12 @@ module Language.Drasil.Chunk.InstanceModel
   )where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn),ConceptDomain(cdom,DOM),Concept, HasAttributes(attributes))
+  Definition(defn),ConceptDomain(cdom,DOM),Concept, HasAttributes(attributes),
+  ExprRelat(relat))
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained.Core (TheoryConstraint)
 import Language.Drasil.Chunk.Eq
-import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.ChunkDB

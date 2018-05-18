@@ -21,9 +21,9 @@ module Language.Drasil.Classes (
 
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Spec (Sentence)
-import Language.Drasil.Symbol (Stage,Symbol)
+import Language.Drasil.Symbol (Stage, Symbol)
 import Language.Drasil.Space (Space)
-import Language.Drasil.UnitLang (USymb,UDefn)
+import Language.Drasil.UnitLang (USymb, UDefn)
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Expr (Expr)

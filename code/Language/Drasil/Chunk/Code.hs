@@ -10,13 +10,12 @@ module Language.Drasil.Chunk.Code (
 
 import Control.Lens ((^.),makeLenses,view)
 
-import Language.Drasil.Chunk.Constrained.Core (Constraint,isPhysC)
+import Language.Drasil.Chunk.Constrained.Core (Constraint, isPhysC)
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Eq (QDefinition)
-import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.SymbolForm (codeSymb)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  HasSymbol(symbol), CommonIdea(abrv), Constrained(constraints))
+  HasSymbol(symbol), CommonIdea(abrv), Constrained(constraints), ExprRelat(relat))
 
 import Language.Drasil.Space as S
 import Language.Drasil.Code.Code as G (CodeType(..))

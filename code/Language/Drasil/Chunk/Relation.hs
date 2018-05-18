@@ -7,7 +7,7 @@ module Language.Drasil.Chunk.Relation
 import Control.Lens (makeLenses, (^.))
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term),Idea(getA),
-  Definition(defn), ConceptDomain(cdom, DOM), Concept, ExprRelat)
+  Definition(defn), ConceptDomain(cdom, DOM), Concept, ExprRelat(relat))
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Spec (Sentence(..))
 

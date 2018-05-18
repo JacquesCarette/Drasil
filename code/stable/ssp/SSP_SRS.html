@@ -1493,7 +1493,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-For a body in static equilibrium, the net forces and net moments acting on the body will cancel out. Assuming a 2D problem (A8) the x-component of the net force <em>F<sub>x</sub></em> and y-component of the net force <em>F<sub>y</sub></em> will be equal to <em>0</em>. All forces and their distance from the chosen point of rotation will create a net moment equal to, <em>0</em> also able to be analyzed as a scalar in a 2D problem.
+For a body in static equilibrium, the net forces and net moments acting on the body will cancel out. Assuming a 2D problem (<a href=#A:Plane-Strain-Conditions>Plane-Strain-Conditions</a>) the x-component of the net force <em>F<sub>x</sub></em> and y-component of the net force <em>F<sub>y</sub></em> will be equal to <em>0</em>. All forces and their distance from the chosen point of rotation will create a net moment equal to, <em>0</em> also able to be analyzed as a scalar in a 2D problem.
 </p>
 </td>
 </tr>
@@ -1531,7 +1531,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the resistive shear stress <em>&tau;</em> is proportional to the product of the normal stress on the plane <em>&sigma;</em> with it's static friction in the angular form <em>tan(&phiv;&prime;) = U<sub>t</sub></em>. The <em>&tau;</em> versus <em>&sigma;</em> relationship is not truly linear, but assuming the effective normal force is strong enough it can be approximated with a linear fit (A9) where the cohesion <em>c&prime;</em> represents the <em>&tau;</em> intercept of the fitted line.
+For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the resistive shear stress <em>&tau;</em> is proportional to the product of the normal stress on the plane <em>&sigma;</em> with it's static friction in the angular form <em>tan(&phiv;&prime;) = U<sub>t</sub></em>. The <em>&tau;</em> versus <em>&sigma;</em> relationship is not truly linear, but assuming the effective normal force is strong enough it can be approximated with a linear fit (<a href=#A:Effective-Norm-Stress-Large>Effective-Norm-Stress-Large</a>) where the cohesion <em>c&prime;</em> represents the <em>&tau;</em> intercept of the fitted line.
 </p>
 </td>
 </tr>
@@ -1821,7 +1821,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-The assumption for the Morgenstern Price method (A5) that the interslice shear force <em>x</em> is proportional to the interslice normal force <em>E</em> by a proportionality constant <em>&lambda;</em> and a predetermined scaling function <em>f</em>, that changes the proportionality as a function of the x-ordinate position of the interslice. <em>f</em> is typically either a half-sine along the slip surface, or a constant.
+The assumption for the Morgenstern Price method (<a href=#A:Interslice-Norm-Shear-Forces-Linear>Interslice-Norm-Shear-Forces-Linear</a>) that the interslice shear force <em>x</em> is proportional to the interslice normal force <em>E</em> by a proportionality constant <em>&lambda;</em> and a predetermined scaling function <em>f</em>, that changes the proportionality as a function of the x-ordinate position of the interslice. <em>f</em> is typically either a half-sine along the slip surface, or a constant.
 </p>
 </td>
 </tr>
@@ -3876,7 +3876,7 @@ Using the net force-displacement equilibrium equation of a slice from DD13 with 
 </div>
 </a>
 <p class="paragraph">
-Using the known input assumption of A2, the force variable definitions of DD1 to DD8 on the left side of the equations can be solved for. The only unknown in the variables to solve for the stiffness values from DD14 is the displacements. Therefore taking the equation from each slice a set of <em>2&#8239;n</em> equations, with <em>2&#8239;n</em> unknown displacements in the <em>x</em> and <em>y</em> directions of each slice can be derived. Solutions for the displacements of each slice can then be found. The use of displacement in the definition of the stiffness values makes the equation implicit, which means an iterative solution method, with an initial guess for the displacements in the stiffness values is required.
+Using the known input assumption of <a href=#A:Geo-Slope-Mat-Props-of-Soil-Inputs>Geo-Slope-Mat-Props-of-Soil-Inputs</a>, the force variable definitions of DD1 to DD8 on the left side of the equations can be solved for. The only unknown in the variables to solve for the stiffness values from DD14 is the displacements. Therefore taking the equation from each slice a set of <em>2&#8239;n</em> equations, with <em>2&#8239;n</em> unknown displacements in the <em>x</em> and <em>y</em> directions of each slice can be derived. Solutions for the displacements of each slice can then be found. The use of displacement in the definition of the stiffness values makes the equation implicit, which means an iterative solution method, with an initial guess for the displacements in the stiffness values is required.
 </p>
 <a id="T:rfemFoS">
 <table class="tdefn">

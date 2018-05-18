@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 
 module Language.Drasil.Chunk.DefinedQuantity
-  ( cqs, cqs', cqsEL, DefinedQuantityDict
+  ( cqs, cqs', cqsEL, DefinedQuantityDict, cqsWr
   ) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
@@ -52,5 +52,5 @@ cqs' c symbs sp atts = DQD c symbs sp atts
 cqsEL :: ConceptChunk -> Symbol -> Space -> DefinedQuantityDict
 cqsEL c s sp = DQD c (\_ -> s) sp []
 
-cqsWr :: (HasAttributes c, Q.HasSpace c, HasSymbol c, DOM c ~ ConceptChunk) => c -> DefinedQuantityDict
+cqsWr :: (Concept c, HasAttributes c, Q.HasSpace c, HasSymbol c, DOM c ~ ConceptChunk) => c -> DefinedQuantityDict
 cqsWr c = DQD (cw c) (symbol c) (c ^. typ) (c ^. attributes)

@@ -12,8 +12,8 @@ import Drasil.SSP.Defs (fs_concept)
 import Data.Drasil.Constraints (gtZeroConstr)
 
 sspSymbols :: [DefinedQuantityDict]
-sspSymbols = (map cqsWr sspInputs) ++ (map cqsWr sspOutputs) ++
-  (map cqsWr sspUnits) ++ (map cqsWr sspUnitless)
+sspSymbols = (map dqdWr sspInputs) ++ (map dqdWr sspOutputs) ++
+  (map dqdWr sspUnits) ++ (map dqdWr sspUnitless)
 
 ---------------------------
 -- Imported UnitalChunks --
@@ -112,10 +112,10 @@ constant_K = uqc "kappa" (cn "constant") fixme
   (Greek Kappa_L) pascal Real [] (dbl 0) defultUncrt Nothing
 
 {-Output Variables-} --FIXME: See if there should be typical values
-fs = constrained' (cqsEL fs_concept (Atomic "FS") Real) [gtZeroConstr] (dbl 1) Nothing
+fs = constrained' (dqdEL fs_concept (Atomic "FS") Real) [gtZeroConstr] (dbl 1) Nothing
 
 fs_min :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.
-fs_min = cqsEL (dcc "fs_min" (cn "minimum factor of safety") 
+fs_min = dqdEL (dcc "fs_min" (cn "minimum factor of safety") 
   ("The minimum factor of safety")) (sub (eqSymb fs) (Atomic "min")) Real
 -- Once things are converted to the new style of instance models, this will
 -- be removed/fixed.
@@ -395,49 +395,49 @@ sspUnitless = [earthqkLoadFctr, normToShear,scalFunc,
 earthqkLoadFctr, normToShear, scalFunc,
   numbSlices, minFunction, fsloc, index, varblU, varblV :: DefinedQuantityDict
 
-earthqkLoadFctr = cqsEL (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
+earthqkLoadFctr = dqdEL (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
   ("proportionality factor of force that " ++
   "weight pushes outwards; caused by seismic earth movements"))
   (sub cK lC) Real
 
-normToShear = cqsEL (dcc "lambda"
+normToShear = dqdEL (dcc "lambda"
   (nounPhraseSP $ "interslice normal/shear force ratio")
   ("applied to all interslices")) (Greek Lambda_L) Real
 
-scalFunc = cqsEL (dcc "f_i" (nounPhraseSP $ "scaling function")
+scalFunc = dqdEL (dcc "f_i" (nounPhraseSP $ "scaling function")
   ("magnitude of interslice forces as a function " ++
   "of the x coordinate" ++ fisi ++ "; can be constant or a half-sine"))
   (lF) Real
 
-numbSlices = cqsEL (dcc "n" (nounPhraseSP "number of slices")
+numbSlices = dqdEL (dcc "n" (nounPhraseSP "number of slices")
   "the slip mass has been divided into")
   lN Natural
 
-minFunction = cqsEL (dcc "Upsilon" (nounPhraseSP "function")
+minFunction = dqdEL (dcc "Upsilon" (nounPhraseSP "function")
   ("generic minimization function or algorithm"))
   (Greek Upsilon) Real
 
-fsloc = cqsEL (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
+fsloc = dqdEL (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
   (sub (Atomic "FS") (Atomic "Loc,i")) Real
 
-ufixme1 = cqsEL (dcc "fixme1" (cn "fixme") "What is this value?")
+ufixme1 = dqdEL (dcc "fixme1" (cn "fixme") "What is this value?")
   (Atomic "SpencerFixme1Please") Real
 
-ufixme2 = cqsEL (dcc "fixme2" (cn "fixme") "What is this value?")
+ufixme2 = dqdEL (dcc "fixme2" (cn "fixme") "What is this value?")
   (Atomic "SpencerFixme2Please") Real
 
 --------------------
 -- Index Function --
 --------------------
 
-varblU = cqsEL (dcc "varblU" (nounPhraseSP "local index")
+varblU = dqdEL (dcc "varblU" (nounPhraseSP "local index")
   ("used as a bound variable index in calculations"))
   lU Natural
-varblV = cqsEL (dcc "varblV" (nounPhraseSP "local index")
+varblV = dqdEL (dcc "varblV" (nounPhraseSP "local index")
   ("used as a bound variable index in calculations"))
   lV Natural
 
-index = cqsEL (dcc "index" (nounPhraseSP "index")
+index = dqdEL (dcc "index" (nounPhraseSP "index")
   ("used to show a quantity applies to only one slice")) lI Natural
 
 --FIXME: possibly move to Language/Drasil/Expr.hs

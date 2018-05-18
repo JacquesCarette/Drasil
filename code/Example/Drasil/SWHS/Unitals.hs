@@ -21,8 +21,8 @@ import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Phrase (of_)
 
 swhsSymbols :: [DefinedQuantityDict]
-swhsSymbols = (map cqsWr swhsUnits) ++ (map cqsWr swhsUnitless) ++
-  (map cqsWr swhsConstrained)
+swhsSymbols = (map dqdWr swhsUnits) ++ (map dqdWr swhsUnitless) ++
+  (map dqdWr swhsConstrained)
 
 swhsSymbolsAll :: [QuantityDict]
 swhsSymbolsAll = (map qw swhsUnits) ++ (map qw swhsUnitless) ++
@@ -192,11 +192,11 @@ swhsUnitless = [uNormalVect, surface, eta, melt_frac]
 
 eta, melt_frac :: DefinedQuantityDict
 
-eta = cqsEL (dcc "eta" (nounPhraseSP "ODE parameter")
+eta = dqdEL (dcc "eta" (nounPhraseSP "ODE parameter")
   "Derived parameter based on rate of change of temperature of water")
   (Greek Eta_L) Real
 
-melt_frac = cqsEL (dcc "melt_frac" (nounPhraseSP "melt fraction")
+melt_frac = dqdEL (dcc "melt_frac" (nounPhraseSP "melt fraction")
   "Ratio of thermal energy to amount of mass melted")
   --FIXME: Not sure if definition is exactly correct
   (Greek Phi_L) Real

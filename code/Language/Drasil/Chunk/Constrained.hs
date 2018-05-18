@@ -91,13 +91,13 @@ instance HasAttributes ConstrConcept where attributes = defq . attributes
 
 constrained' :: (HasAttributes c, HasSpace c, HasSymbol c, Concept c, DOM c ~ ConceptChunk) =>
   c -> [Constraint] -> Expr -> Maybe UnitDefn -> ConstrConcept
-constrained' q cs rv mud = ConstrConcept (cqs' (cw q) (symbol q) (q ^. typ) (q ^. attributes)) cs (Just rv) mud
+constrained' q cs rv mud = ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (q ^. attributes)) cs (Just rv) mud
 
 constrainedNRV' :: (HasAttributes c, HasSpace c, HasSymbol c, Concept c, DOM c ~ ConceptChunk) => 
   c -> [Constraint] -> Maybe UnitDefn -> ConstrConcept
-constrainedNRV' q cs mud = ConstrConcept (cqs' (cw q) (symbol q) (q ^. typ) (q ^. attributes)) cs Nothing mud
+constrainedNRV' q cs mud = ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (q ^. attributes)) cs Nothing mud
 
 cuc' :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u
             -> Space -> [Constraint] -> Attributes -> Expr -> Maybe UnitDefn -> ConstrConcept
 cuc' nam trm desc sym un space cs atts rv mub =
-  ConstrConcept (cqs (cw (ucs nam trm desc sym un space)) sym space atts) cs (Just rv) mub
+  ConstrConcept (dqd (cw (ucs nam trm desc sym un space)) sym space atts) cs (Just rv) mub

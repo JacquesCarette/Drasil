@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 
 module Language.Drasil.Chunk.DefinedQuantity
-  ( cqs, cqs', cqsEL, DefinedQuantityDict, cqsWr
+  ( dqd, dqd', dqdEL, DefinedQuantityDict, dqdWr
   ) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
@@ -41,16 +41,16 @@ instance Q.Quantity    DefinedQuantityDict where getUnit con = Nothing -- needed
 
 
 -- For when the symbol is constant through stages
-cqs :: ConceptChunk -> Symbol -> Space -> Attributes -> DefinedQuantityDict
-cqs c s sp atts = DQD c (\_ -> s) sp atts
+dqd :: ConceptChunk -> Symbol -> Space -> Attributes -> DefinedQuantityDict
+dqd c s sp atts = DQD c (\_ -> s) sp atts
 
 -- For when the symbol changes depending on the stage
-cqs' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Attributes -> DefinedQuantityDict
-cqs' c symbs sp atts = DQD c symbs sp atts
+dqd' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Attributes -> DefinedQuantityDict
+dqd' c symbs sp atts = DQD c symbs sp atts
 
--- Same as cqs, but passes an empty list as the Attibutes
-cqsEL :: ConceptChunk -> Symbol -> Space -> DefinedQuantityDict
-cqsEL c s sp = DQD c (\_ -> s) sp []
+-- Same as dqd, but passes an empty list as the Attibutes
+dqdEL :: ConceptChunk -> Symbol -> Space -> DefinedQuantityDict
+dqdEL c s sp = DQD c (\_ -> s) sp []
 
-cqsWr :: (Concept c, HasAttributes c, Q.HasSpace c, HasSymbol c, DOM c ~ ConceptChunk) => c -> DefinedQuantityDict
-cqsWr c = DQD (cw c) (symbol c) (c ^. typ) (c ^. attributes)
+dqdWr :: (Concept c, HasAttributes c, Q.HasSpace c, HasSymbol c, DOM c ~ ConceptChunk) => c -> DefinedQuantityDict
+dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (c ^. attributes)

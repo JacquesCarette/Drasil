@@ -52,22 +52,22 @@ instance HasAttributes UnitalChunk where attributes = defq' . attributes
 -- Assumes the 'Space' is Real
 uc :: (Concept c, IsUnit u, DOM c ~ ConceptChunk, DOM u ~ ConceptChunk) =>
   c -> Symbol -> u -> {-Attributes ->-} UnitalChunk
-uc a b c {-atts-} = ucs' a b c Real []{-atts-}
+uc a b c {-atts-} = ucs' a b c Real {-[]atts-}
 
 ucs' :: (Concept c, IsUnit u, DOM c ~ ConceptChunk, DOM u ~ ConceptChunk) =>
-  c -> Symbol -> u -> Space -> Attributes -> UnitalChunk
-ucs' a sym c space atts = UC (cqs (cw a) sym space atts) (unitWrapper c) 
+  c -> Symbol -> u -> Space -> {-Attributes -> -} UnitalChunk
+ucs' a sym c space {-atts-} = UC (cqs (cw a) sym space []{-atts-}) (unitWrapper c) 
 
 -- | Same as 'uc', except it builds the Concept portion of the UnitalChunk
 -- from a given uid, term, and defn. Those are the first three arguments
 uc' :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol ->
-  u -> Attributes -> UnitalChunk
-uc' i t d s u atts = UC (cqs (dcc i t d) s Real atts) (unitWrapper u) 
+  u -> {-Attributes -> -} UnitalChunk
+uc' i t d s u {-atts-} = UC (cqs (dcc i t d) s Real []{-atts-}) (unitWrapper u) 
 
 -- | Same as 'uc'', but does not assume the 'Space'
 ucs :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP ->
-  String -> Symbol -> u -> Space -> Attributes -> UnitalChunk
-ucs nam trm desc sym un space atts = UC (cqs (dcc nam trm desc) sym space atts) (unitWrapper un) 
+  String -> Symbol -> u -> Space -> {-Attributes -> -} UnitalChunk
+ucs nam trm desc sym un space {-atts-} = UC (cqs (dcc nam trm desc) sym space []{-atts-}) (unitWrapper un) 
 
 -- ucs With a Sentence for desc
 ucsWS :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> 

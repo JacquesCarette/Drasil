@@ -87,17 +87,17 @@ instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.d
 instance HasAttributes ConstrConcept where attributes = defq . attributes
 
 constrained' :: (HasAttributes c, Quantity c, Concept c, DOM c ~ ConceptChunk) =>
-  c -> Symbol -> Space -> Attributes -> [Constraint] -> Expr -> Maybe UnitDefn -> ConstrConcept
-constrained' q sym space atts cs rv = ConstrConcept (cqs (cw q) sym space atts) cs (Just rv)
+  c -> [Constraint] -> Expr -> Maybe UnitDefn -> ConstrConcept
+constrained' q cs rv mud = ConstrConcept (cqs' (cw q) (symbol q) (q ^. typ) (q ^. attributes)) cs (Just rv) mud
 
 constrainedNRV' :: (HasAttributes c, Quantity c, Concept c, DOM c ~ ConceptChunk) => 
-  c -> Symbol -> Space -> Attributes -> [Constraint] -> Maybe UnitDefn -> ConstrConcept
-constrainedNRV' q sym space atts cs mud = ConstrConcept (cqs (cw q) sym space atts) cs Nothing mud
+  c -> [Constraint] -> Maybe UnitDefn -> ConstrConcept
+constrainedNRV' q cs mud = ConstrConcept (cqs' (cw q) (symbol q) (q ^. typ) (q ^. attributes)) cs Nothing mud
 
 cuc' :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u
             -> Space -> [Constraint] -> Attributes -> Expr -> Maybe UnitDefn -> ConstrConcept
 cuc' nam trm desc sym un space cs atts rv mub =
-  ConstrConcept (cqs (cw (ucs nam trm desc sym un space [])) sym space atts) cs (Just rv) mub
+  ConstrConcept (cqs (cw (ucs nam trm desc sym un space)) sym space atts) cs (Just rv) mub
 
 cnstrw :: (HasAttributes c, Quantity c, Constrained c, HasReasVal c) => c -> ConstrainedChunk
 cnstrw c = ConstrainedChunk (qw c) (c ^. constraints) (c ^. reasVal)

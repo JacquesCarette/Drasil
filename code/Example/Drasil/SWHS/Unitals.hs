@@ -21,8 +21,8 @@ import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Phrase (of_)
 
 swhsSymbols :: [DefinedQuantityDict]
-swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless) ++
-  (map cqs swhsConstrained)
+swhsSymbols = (map cqsWr swhsUnits) ++ (map cqsWr swhsUnitless) ++
+  (map cqsWr swhsConstrained)
 
 swhsSymbolsAll :: [QuantityDict]
 swhsSymbolsAll = (map qw swhsUnits) ++ (map qw swhsUnitless) ++

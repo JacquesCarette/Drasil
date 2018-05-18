@@ -20,6 +20,7 @@ import Language.Drasil.Chunk.DefinedQuantity (cqs')
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Chunk.Constrained (ConstrConcept(..), ConstrainedChunk,cuc',cnstrw,
   cvc)
+--import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Expr
 import Language.Drasil.Unit (UnitDefn)
@@ -70,14 +71,14 @@ uqNU :: (HasAttributes c, Quantity c, Constrained c, Concept c, HasReasVal c, DO
 uqNU q mud = UQ (ConstrConcept (cqs' (cw q) (symbol q) (q ^. typ) (q ^. attributes)) (q ^. constraints) (q ^. reasVal) mud) Nothing 
 
 -- this is kind of crazy and probably shouldn't be used!
-uqc :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u -> Space
-                -> [Constraint] -> Expr -> Double -> Maybe UnitDefn -> UncertQ
-uqc nam trm desc sym un space cs val uncrt mud = uq (cuc' nam trm desc sym un space cs (un ^. attributes) val mud) uncrt mud -- mud passed in twice
+uqc :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u -> Space
+                -> [Constraint] -> Expr -> Double -> Maybe UnitDefn {--> Attributes-} -> UncertQ
+uqc nam trm desc sym un space cs val uncrt mud {-atts-} = uq (cuc' nam trm desc sym un space cs []{-atts-} val mud) uncrt mud -- mud passed in twice
 
 --uncertainty quanity constraint no uncertainty
-uqcNU :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u 
-                  -> Space -> [Constraint] -> Expr -> Maybe UnitDefn -> UncertQ
-uqcNU nam trm desc sym un space cs val mud = uqNU (cuc' nam trm desc sym un space cs (un ^. attributes) val mud) mud -- mud passed in twice
+uqcNU :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u 
+                  -> Space -> [Constraint] -> Expr -> Maybe UnitDefn {--> Attributes-}-> UncertQ
+uqcNU nam trm desc sym un space cs val mud {-atts-} = uqNU (cuc' nam trm desc sym un space cs []{-atts-} val mud) mud -- mud passed in twice
 
 --uncertainty quantity constraint no description
 uqcND :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Symbol -> u -> Space -> [Constraint]

@@ -59,7 +59,7 @@ module Language.Drasil (
   , constrained, cuc, cvc, cvc', constrained', cuc', constrainedNRV'
   , cnstrw
   -- Chunk.Eq
-  , QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec, ec'
+  , QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec
   -- Chunk.GenDefn
   , GenDefn, gd, gdUnit
   -- Chunk.InstanceModel
@@ -84,7 +84,7 @@ module Language.Drasil (
   -- Chunk.Attributes.Core
   , Attributes
   -- Chunk.Attributes
-  , getSource, aqd -- TODO: Remove aqd
+  , getSource
   , Derivation, getDerivation, getShortName
   , sourceref, derivationsteps
   --Citations
@@ -240,7 +240,7 @@ import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Constrained.Core (physc, sfwrc, enumc, isPhysC, isSfwrC,
   Constraint(..), ConstraintReason(..), Reason(..), TheoryConstraint(..))
 import Language.Drasil.Chunk.DefinedQuantity
-import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, aqd, ec, ec')
+import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, ec)
 import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.Goal (Goal, mkGoal)

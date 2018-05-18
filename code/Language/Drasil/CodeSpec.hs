@@ -208,13 +208,13 @@ ffor v e fs  = FFor (codevar  v) e fs
 fdec :: (HasAttributes c, Quantity c) => c -> FuncStmt
 fdec v  = FDec (codevar  v) (spaceToCodeType $ v ^. typ)
 
-asVC :: Func -> Attributes -> VarChunk --asVC uses Attributes to pass them into VarChunk constructors
-asVC (FDef (FuncDef n _ _ _)) atts = implVar n (nounPhraseSP n) (Atomic n) Real atts
-asVC (FData (FuncData n _)) atts = implVar n (nounPhraseSP n) (Atomic n) Real atts
-asVC (FCD cd) atts = codeVC cd (codeSymb cd) (cd ^. typ) atts
+asVC :: Attributes -> Func -> VarChunk --asVC uses Attributes to pass them into VarChunk constructors
+asVC atts (FDef (FuncDef n _ _ _)) = implVar n (nounPhraseSP n) (Atomic n) Real atts
+asVC atts (FData (FuncData n _)) = implVar n (nounPhraseSP n) (Atomic n) Real atts
+asVC atts (FCD cd) = codeVC cd (codeSymb cd) (cd ^. typ) atts
 
 asExpr :: Func -> {-Attributes ->-} Expr --Attributes need to be passed in for asVC
-asExpr f {-atts-} = sy $ asVC f []{-atts-}
+asExpr f {-atts-} = sy $ asVC [] f {-atts-}
 
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String

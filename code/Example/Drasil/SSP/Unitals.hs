@@ -12,8 +12,8 @@ import Drasil.SSP.Defs (fs_concept)
 import Data.Drasil.Constraints (gtZeroConstr)
 
 sspSymbols :: [DefinedQuantityDict]
-sspSymbols = (map cqs sspInputs) ++ (map cqs sspOutputs) ++
-  (map cqs sspUnits) ++ (map cqs sspUnitless)
+sspSymbols = (map cqsWr sspInputs) ++ (map cqsWr sspOutputs) ++
+  (map cqsWr sspUnits) ++ (map cqsWr sspUnitless)
 
 ---------------------------
 -- Imported UnitalChunks --
@@ -71,48 +71,48 @@ fs, coords, dx_i, dy_i :: ConstrConcept
 --FIXME: add (x,y) when we can index or make related unitals
 
 elasticMod = uq (constrained' SM.elastMod [gtZeroConstr]
-  (dbl 15000)) defultUncrt
+  (dbl 15000) Nothing) defultUncrt Nothing
 
 cohesion = uqc "c'" (cn $ "effective cohesion")
   "internal pressure that sticks particles of soil together"
-  (prime $ Atomic "c") pascal Real [gtZeroConstr] (dbl 10) defultUncrt
+  (prime $ Atomic "c") pascal Real [gtZeroConstr] (dbl 10) defultUncrt Nothing
 
 poissnsRatio = uq (constrained' SM.poissnsR
-  [physc $ Bounded (Exc,0) (Exc,1)] (dbl 0.4)) defultUncrt
+  [physc $ Bounded (Exc,0) (Exc,1)] (dbl 0.4) Nothing) defultUncrt Nothing
 
 fricAngle = uqc "varphi'" (cn $ "effective angle of friction")
   ("The angle of inclination with respect to the horizontal axis of " ++
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
   (prime $ Greek Phi_V) degree Real [physc $ Bounded (Exc,0) (Exc,90)]
-  (dbl 25) defultUncrt
+  (dbl 25) defultUncrt Nothing
 
 dryWeight = uqc "gamma" (cn $ "dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."
   (Greek Gamma_L) specific_weight Real [gtZeroConstr]
-  (dbl 20) defultUncrt
+  (dbl 20) defultUncrt Nothing
 
 satWeight = uqc "gamma_sat" (cn $ "saturated unit weight")
   ("The weight of saturated soil/ground " ++
   "layer divided by the volume of the layer.")
   (sub (Greek Gamma_L) (Atomic "Sat")) specific_weight Real [gtZeroConstr]
-  (dbl 20) defultUncrt
+  (dbl 20) defultUncrt Nothing
 
 waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   "The weight of one cubic meter of water."
   (sub (Greek Gamma_L) lW) specific_weight Real [gtZeroConstr]
-  (dbl 9.8) defultUncrt
+  (dbl 9.8) defultUncrt Nothing
   
 constant_a = uqc "a" (cn "constant") fixme
-  lA metre Real [] (dbl 0) defultUncrt
+  lA metre Real [] (dbl 0) defultUncrt Nothing
   
 constant_A = uqc "A" (cn "constant") fixme
-  cA metre Real [] (dbl 0) defultUncrt
+  cA metre Real [] (dbl 0) defultUncrt Nothing
   
 constant_K = uqc "kappa" (cn "constant") fixme
-  (Greek Kappa_L) pascal Real [] (dbl 0) defultUncrt
+  (Greek Kappa_L) pascal Real [] (dbl 0) defultUncrt Nothing
 
 {-Output Variables-} --FIXME: See if there should be typical values
-fs = constrained' (cqsEL fs_concept (Atomic "FS") Real) [gtZeroConstr] (dbl 1)
+fs = constrained' (cqsEL fs_concept (Atomic "FS") Real) [gtZeroConstr] (dbl 1) Nothing
 
 fs_min :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.
 fs_min = cqsEL (dcc "fs_min" (cn "minimum factor of safety") 
@@ -124,13 +124,13 @@ coords = cuc' "(x,y)"
   (cn $ "cartesian position coordinates" )
   ("y is considered parallel to the direction of the force of " ++
   "gravity and x is considered perpendicular to y")
-  (Atomic "(x,y)") metre Real [] (dbl 1)
+  (Atomic "(x,y)") metre Real [] [] (dbl 1) Nothing
 
 dx_i = cuc' "dx_i" (cn $ "displacement") ("in the x-ordinate direction " ++
-  fsi) (Concat [Greek Delta_L, Atomic "x"]) metre Real [] (dbl 1)
+  fsi) (Concat [Greek Delta_L, Atomic "x"]) metre Real [] [] (dbl 1) Nothing
 
 dy_i = cuc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " ++
-  fsi) (Concat [Greek Delta_L, Atomic "y"]) metre Real [] (dbl 1)
+  fsi) (Concat [Greek Delta_L, Atomic "y"]) metre Real [] [] (dbl 1) Nothing
 
 ---------------------------
 -- START OF UNITALCHUNKS --

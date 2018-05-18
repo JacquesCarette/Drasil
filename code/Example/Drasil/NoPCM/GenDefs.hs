@@ -36,8 +36,8 @@ s4_2_3_desc1 t1c vo =
   [S "Integrating", makeRef $ reldefn t1c,
   S "over a", phrase vo, sParen (getES vo) `sC` S "we have"]
 
-s4_2_3_desc2 :: ConceptChunk -> ConVar -> UnitalChunk -> UnitalChunk ->
-  ConVar -> ConceptChunk -> [Sentence]
+s4_2_3_desc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
+  DefinedQuantityDict -> ConceptChunk -> [Sentence]
 s4_2_3_desc2 gd su vo tfv unv un =
   [S "Applying", titleize gd, S "to the first term over",
   (phrase su +:+ getES su `ofThe` phrase vo) `sC` S "with",

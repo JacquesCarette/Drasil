@@ -97,7 +97,7 @@ acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, M.ode,
 
 -- This contains the list of symbols used throughout the document
 nopcm_Symbols :: [DefinedQuantityDict]
-nopcm_Symbols = (map cqs nopcm_Units) ++ (map cqs nopcm_Constraints)
+nopcm_Symbols = (map cqsWr nopcm_Units) ++ (map cqsWr nopcm_Constraints)
   
 nopcm_SymbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcm_HTC and pcm_SA

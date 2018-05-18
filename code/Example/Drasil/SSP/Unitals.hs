@@ -114,7 +114,7 @@ constant_K = uqc "kappa" (cn "constant") fixme
 {-Output Variables-} --FIXME: See if there should be typical values
 fs = constrained' (cv fs_concept (Atomic "FS") Real) [gtZeroConstr] (dbl 1)
 
-fs_min :: ConVar -- This is a hack to remove the use of indexing for 'min'.
+fs_min :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.
 fs_min = cv (dcc "fs_min" (cn "minimum factor of safety") 
   ("The minimum factor of safety")) (sub (eqSymb fs) (Atomic "min")) Real
 -- Once things are converted to the new style of instance models, this will
@@ -387,13 +387,13 @@ fy = uc' "fy" (cn "y-component of the net force") fixme
 -- Unitless Symbols --
 ----------------------
 
-sspUnitless :: [ConVar]
+sspUnitless :: [DefinedQuantityDict]
 sspUnitless = [earthqkLoadFctr, normToShear,scalFunc,
   numbSlices, minFunction, fsloc, index, varblU, varblV, fs_min,
   ufixme1, ufixme2]
 
 earthqkLoadFctr, normToShear, scalFunc,
-  numbSlices, minFunction, fsloc, index, varblU, varblV :: ConVar
+  numbSlices, minFunction, fsloc, index, varblU, varblV :: DefinedQuantityDict
 
 earthqkLoadFctr = cv (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
   ("proportionality factor of force that " ++

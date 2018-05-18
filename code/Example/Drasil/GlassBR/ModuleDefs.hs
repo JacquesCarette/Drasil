@@ -37,17 +37,17 @@ readTableMod = packmod "ReadTable" [read_table]
 glassInputData :: Func
 glassInputData = funcData "get_input" $
   [ junkLine,
-    singleton [] plate_len, singleton [] plate_width, singleton [] nom_thick,
+    singleton plate_len, singleton plate_width, singleton nom_thick,
     junkLine,
-    singleton [] glass_type,
+    singleton glass_type,
     junkLine,
-    singleton [] char_weight,
+    singleton char_weight,
     junkLine,
-    singleton [] tNT,
+    singleton tNT,
     junkLine,
-    singleton [] sdx, singleton [] sdy, singleton [] sdz,
+    singleton sdx, singleton sdy, singleton sdz,
     junkLine,
-    singleton [] pb_tol
+    singleton pb_tol
   ]
 
 inputMod :: Mod
@@ -141,79 +141,79 @@ interpOver ptx pty ind vv =
 -- But it is also 'wrong' in the sense that it assumes x_1 <= x <= x_2
 linInterpCT :: Func
 linInterpCT = funcDef "lin_interp" [x_1, y_1, x_2, y_2, x] Real
-  [ FRet $ onLine (sy x_1, sy y_1) (sy x_2, sy y_2) (sy x) ] []
+  [ FRet $ onLine (sy x_1, sy y_1) (sy x_2, sy y_2) (sy x) ]
 
 findCT :: Func
 findCT = funcDef "find" [arr, v] Natural
   [
     ffor i (sy i $< (dim (sy arr) - 1))
       [ FCond ((vLook arr i 0 $<= (sy v)) $&& ((sy v) $<= vLook arr i 1))
-        [ FRet $ sy i ] [] ] [],
+        [ FRet $ sy i ] [] ],
     FThrow "Bound error"
-  ] []
+  ]
 
 extractColumnCT :: Func
 extractColumnCT = funcDef "extractColumn" [mat, j] (Vect Real)
   [
-    fdec col [],
+    fdec col,
     --
     ffor i (sy i $< dim (sy mat))
-      [ FAppend (sy col) (aLook mat i j) ] [],
+      [ FAppend (sy col) (aLook mat i j) ],
     FRet (sy col)
-  ] []
+  ]
 
 interpY :: Func
 interpY = funcDef "interpY" [filename, x, z] Real
   [
   -- hack
-  fdec x_matrix [],
-  fdec y_matrix [],
-  fdec z_vector [],
+  fdec x_matrix,
+  fdec y_matrix,
+  fdec z_vector,
   --
   call read_table [filename, z_vector, x_matrix, y_matrix],
   -- endhack
-    (i     $:= find z_vector z) [],
-    (x_z_1 $:= getCol x_matrix i 0) [],
-    (y_z_1 $:= getCol y_matrix i 0) [],
-    (x_z_2 $:= getCol x_matrix i 1) [],
-    (y_z_2 $:= getCol y_matrix i 1) [],
+    i     $:= find z_vector z,
+    x_z_1 $:= getCol x_matrix i 0,
+    y_z_1 $:= getCol y_matrix i 0,
+    x_z_2 $:= getCol x_matrix i 1,
+    y_z_2 $:= getCol y_matrix i 1,
     FTry
-      [ (j $:= find x_z_1 x) [],
-        (k $:= find x_z_2 x) [] ]
+      [ j $:= find x_z_1 x,
+        k $:= find x_z_2 x ]
       [ FThrow "Interpolation of y failed" ],
-    (y_1 $:= (linInterp $ interpOver x_z_1 y_z_1 j x)) [],
-    (y_2 $:= (linInterp $ interpOver x_z_2 y_z_2 k x)) [],
+    y_1 $:= (linInterp $ interpOver x_z_1 y_z_1 j x),
+    y_2 $:= (linInterp $ interpOver x_z_2 y_z_2 k x),
     FRet $ linInterp [ vLook z_vector i 0, sy y_1, vLook z_vector i 1, sy y_2, sy z ]
-  ] []
+  ]
 
 interpZ :: Func
 interpZ = funcDef "interpZ" [filename, x, y] Real
   [
     -- hack
-  fdec x_matrix [],
-  fdec y_matrix [],
-  fdec z_vector [],
+  fdec x_matrix,
+  fdec y_matrix,
+  fdec z_vector,
   --
   call read_table [filename, z_vector, x_matrix, y_matrix],
   -- endhack
     ffor i (sy i $< (dim (sy z_vector) - 1))
       [
-        (x_z_1 $:= getCol x_matrix i 0) [],
-        (y_z_1 $:= getCol y_matrix i 0) [],
-        (x_z_2 $:= getCol x_matrix i 1) [],
-        (y_z_2 $:= getCol y_matrix i 1) [],
+        x_z_1 $:= getCol x_matrix i 0,
+        y_z_1 $:= getCol y_matrix i 0,
+        x_z_2 $:= getCol x_matrix i 1,
+        y_z_2 $:= getCol y_matrix i 1,
         FTry
-          [ (j $:= find x_z_1 x) [],
-            (k $:= find x_z_2 x) []]
+          [ j $:= find x_z_1 x,
+            k $:= find x_z_2 x ]
           [ FContinue ],
-        (y_1 $:= (linInterp $ interpOver x_z_1 y_z_1 j x))[],
-        (y_2 $:= (linInterp $ interpOver x_z_2 y_z_2 k x))[],
+        y_1 $:= (linInterp $ interpOver x_z_1 y_z_1 j x),
+        y_2 $:= (linInterp $ interpOver x_z_2 y_z_2 k x),
         FCond ((sy y_1 $<= sy y) $&& (sy y $<= sy y_2))
           [ FRet $ linInterp [ sy y_1, vLook z_vector i 0, sy y_2, vLook z_vector i 1, sy y ]
           ] []
-      ] [],
+      ],
     FThrow "Interpolation of z failed"
-  ] []
+  ]
 
 interpMod :: Mod
 interpMod = packmod "Interpolation" [linInterpCT, findCT, extractColumnCT, interpY, interpZ]

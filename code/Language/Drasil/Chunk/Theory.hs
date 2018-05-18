@@ -12,7 +12,7 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 
-import Control.Lens (Lens', view, makeLenses)
+import Control.Lens (Lens', view, makeLenses, (^.))
 
 class HasUID t => Theory t where
   valid_context :: Lens' t [TheoryChunk]
@@ -22,9 +22,9 @@ class HasUID t => Theory t where
   defined_quant :: Lens' t [QDefinition]
   invariants    :: Lens' t [TheoryConstraint]
   defined_fun   :: Lens' t [QDefinition]
-  
+
 data SpaceDefn -- FIXME: This should be defined.
-  
+
 data TheoryChunk = TC { _tid :: String
                       , _vctx :: [TheoryChunk]
                       , _spc  :: [SpaceDefn]
@@ -36,7 +36,6 @@ data TheoryChunk = TC { _tid :: String
                       , _attribs :: Attributes
                       }
 makeLenses ''TheoryChunk
-  
 
 instance Theory TheoryChunk where
   valid_context = vctx
@@ -52,22 +51,19 @@ instance HasUID TheoryChunk where uid = tid
 -- use the id of the TheoryModel as the uid. FIXME ?
 data TheoryModel = TM { _con :: ConceptChunk
                       , _thy :: TheoryChunk
-                      , _attrbs :: Attributes -- FIXME: Attributes included for consistency,
-                                              -- since every chunk should eventually have the
-                                              -- capability for attributes.
                       }
 makeLenses ''TheoryModel
-  
+
 instance HasUID        TheoryModel where uid = con . uid
 instance NamedIdea     TheoryModel where term = con . term
 instance Idea          TheoryModel where getA = getA . view con
 instance Definition    TheoryModel where defn = con . defn
-instance HasAttributes TheoryModel where attributes = attrbs
+instance HasAttributes TheoryModel where attributes = thy . attributes
 instance ConceptDomain TheoryModel where
   type DOM TheoryModel = ConceptChunk
   cdom = con . cdom
-instance Concept TheoryModel where
-instance Theory TheoryModel where
+instance Concept       TheoryModel where
+instance Theory        TheoryModel where
   valid_context = thy . valid_context
   spaces        = thy . spaces
   quantities    = thy . quantities
@@ -86,7 +82,5 @@ tc' :: (HasAttributes q, Quantity q, Concept c, DOM c ~ ConceptChunk) =>
     [TheoryConstraint] -> [QDefinition] -> TheoryChunk
 tc' cid q c atts = tc cid ([] :: [TheoryChunk]) [] q c atts
 
-
-tm :: (Concept c, DOM c ~ ConceptChunk) => c -> TheoryChunk -> Attributes -> TheoryModel
-tm c t atts = TM (cw c) t atts
-
+tm :: (Concept c, DOM c ~ ConceptChunk) => c -> TheoryChunk -> TheoryModel
+tm c t = TM (cw c) t

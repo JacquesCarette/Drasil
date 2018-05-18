@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 
 module Language.Drasil.Chunk.DefinedQuantity
-  ( cqs, cqs', DefinedQuantityDict
+  ( cqs, cqs', cqsEL, DefinedQuantityDict
   ) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
@@ -46,3 +46,7 @@ cqs c s sp atts = DQD c (\_ -> s) sp atts
 -- For when the symbol changes depending on the stage
 cqs' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Attributes -> DefinedQuantityDict
 cqs' c symbs sp atts = DQD c symbs sp atts
+
+-- Same as cqs, but passes an empty list as the Attibutes
+cqsEL :: ConceptChunk -> Symbol -> Space -> DefinedQuantityDict
+cqsEL c s sp = DQD c (\_ -> s) sp []

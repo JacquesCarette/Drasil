@@ -177,7 +177,7 @@ newA8 = assump "ldfConstantA" (a8Desc constant_LoadDF) (S "ldfConstant") []
 testIMFromQD :: InstanceModel
 testIMFromQD = imQD gbSymbMap risk EmptyS [] [] []
 glassBR_code :: CodeSpec
-glassBR_code = codeSpec' glassSystInfo allMods []
+glassBR_code = codeSpec glassSystInfo allMods
 
 
 s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2 :: Section

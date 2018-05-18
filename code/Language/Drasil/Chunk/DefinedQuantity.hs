@@ -5,9 +5,9 @@ module Language.Drasil.Chunk.DefinedQuantity
   ) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom,DOM), Concept, HasSymbol(symbol),
+  Definition(defn), ConceptDomain(cdom, DOM), Concept, HasSymbol(symbol),
   HasAttributes(attributes))
-import Language.Drasil.Chunk.Concept (ConceptChunk)
+import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import qualified Language.Drasil.Chunk.Quantity as Q
 
 import Language.Drasil.Symbol (Symbol, Stage)
@@ -51,3 +51,6 @@ cqs' c symbs sp atts = DQD c symbs sp atts
 -- Same as cqs, but passes an empty list as the Attibutes
 cqsEL :: ConceptChunk -> Symbol -> Space -> DefinedQuantityDict
 cqsEL c s sp = DQD c (\_ -> s) sp []
+
+cqsWr :: (HasAttributes c, Q.HasSpace c, HasSymbol c, DOM c ~ ConceptChunk) => c -> DefinedQuantityDict
+cqsWr c = DQD (cw c) (symbol c) (c ^. typ) (c ^. attributes)

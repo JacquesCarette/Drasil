@@ -256,8 +256,7 @@ cpUnitless :: [VarChunk]
 cpUnitless = [numParticles]
 
 numParticles :: VarChunk
-numParticles = vc "n" (nounPhraseSP "number of particles in a rigid body") lN Integer []
-
+numParticles = vc "n" (nounPhraseSP "number of particles in a rigid body") lN Integer
 
 -----------------------
 -- CONSTRAINT CHUNKS --

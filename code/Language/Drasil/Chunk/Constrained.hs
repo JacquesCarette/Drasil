@@ -55,11 +55,11 @@ cuc i t s u space cs rv =
   ConstrainedChunk (qw (unitary i t s u space)) cs (Just rv)
 
 -- | Creates a constrained varchunk
-cvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> Attributes -> ConstrainedChunk
-cvc i des sym space cs rv atts = ConstrainedChunk (qw (vc i des sym space atts)) cs (Just rv)
+cvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> {-Attributes ->-} ConstrainedChunk
+cvc i des sym space cs rv {-atts-} = ConstrainedChunk (qw (vc i des sym space {-atts-})) cs (Just rv)
 
-cvc' :: String -> NP -> Symbol -> Space -> [Constraint] -> Attributes -> ConstrainedChunk
-cvc' i des sym space cs atts = ConstrainedChunk (qw (vc i des sym space atts)) cs Nothing
+cvc' :: String -> NP -> Symbol -> Space -> [Constraint] -> {-Attributes ->-} ConstrainedChunk
+cvc' i des sym space cs {-atts-} = ConstrainedChunk (qw (vc i des sym space {-atts-})) cs Nothing
 
 cnstrw :: (HasAttributes c, Quantity c, Constrained c, HasReasVal c) => c -> ConstrainedChunk
 cnstrw c = ConstrainedChunk (qw c) (c ^. constraints) (c ^. reasVal)

@@ -41,8 +41,8 @@ implVar i des sym ty atts = vcSt i des f ty atts
     f Equational = Empty
 
 -- | Creates a VarChunk from an uid, term, symbol, and space
-vc :: String -> NP -> Symbol -> Space -> Attributes -> VarChunk
-vc i des sym space atts = VC (nw $ nc i des) (\_ -> sym) space atts
+vc :: String -> NP -> Symbol -> Space -> {-Attributes ->-} VarChunk
+vc i des sym space {-atts-} = VC (nw $ nc i des) (\_ -> sym) space []{-atts-}
 
 -- | Like cv, but creates a VarChunk from something that knows about stages
 vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> Attributes -> VarChunk
@@ -56,5 +56,5 @@ codeVC n s t atts = VC (nw n) f t atts
     f Equational = Empty
 
 -- | Creates a VarChunk from an 'Idea', symbol and space
-vc'' :: Idea c => c -> Symbol -> Space -> Attributes -> VarChunk
-vc'' n sy space atts = vc (n ^. uid) (n ^. term) sy space atts
+vc'' :: Idea c => c -> Symbol -> Space -> {-Attributes ->-} VarChunk
+vc'' n sy space {-atts-} = vc (n ^. uid) (n ^. term) sy space {-atts-}

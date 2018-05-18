@@ -110,8 +110,8 @@ uncrtnChunk :: (HasAttributes c, Quantity c, Constrained c, HasReasVal c) => c -
 uncrtnChunk q u = UCh (cnstrw q) (Just u)
 
 -- | Creates an uncertain varchunk
-uvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> Double -> Attributes -> UncertainChunk
-uvc nam trm sym space cs val uncrt atts = uncrtnChunk (cvc nam trm sym space cs val atts) uncrt
+uvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> Double -> {-Attributes ->-} UncertainChunk
+uvc nam trm sym space cs val uncrt {-atts-} = uncrtnChunk (cvc nam trm sym space cs val {-atts-}) uncrt
 
 uncrtnw :: (HasAttributes c, UncertainQuantity c, Constrained c, HasReasVal c) => c -> UncertainChunk
 uncrtnw c = UCh (cnstrw c) (c ^. uncert)

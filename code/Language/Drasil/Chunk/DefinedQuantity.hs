@@ -37,7 +37,7 @@ instance Concept       DefinedQuantityDict where
 instance Q.HasSpace    DefinedQuantityDict where typ = spa
 instance HasSymbol     DefinedQuantityDict where symbol = view symb
 instance HasAttributes DefinedQuantityDict where attributes = attribs
-instance Q.Quantity    DefinedQuantityDict where -- needed for use with qw wrapper
+instance Q.Quantity    DefinedQuantityDict where getUnit _ = Nothing -- needed for use with qw wrapper
 
 
 -- For when the symbol is constant through stages

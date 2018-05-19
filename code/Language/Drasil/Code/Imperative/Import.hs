@@ -150,7 +150,7 @@ genInputModNoClass atts = do
            ]
 
 genInputClass :: Attributes -> Reader State Class
-genInputClass atts = do
+genInputClass _ = do
   g <- ask
   let ins          = inputs $ codeSpec g
       inputVars    =

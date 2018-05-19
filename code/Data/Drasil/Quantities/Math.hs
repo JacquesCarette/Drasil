@@ -17,6 +17,8 @@ surface     = dqdEL CM.surface  cS                      Real m_2
 euclidNorm  = dqd'  CM.euclidN  (const $ Concat [Atomic "||", (vec lR), Atomic "||"])
                                                         Real Nothing []
 
+pi_ :: QuantityDict
+pi_         = mkQuant "pi"   (pn "π") (Greek Pi_L) Real Nothing Nothing []
 
 surArea, orientation :: UnitalChunk
 

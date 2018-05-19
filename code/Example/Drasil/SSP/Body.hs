@@ -45,6 +45,7 @@ import Data.Drasil.Concepts.Documentation (srs, physics, inModel,
   template, analysis, endUser, definition, model, element,
   property, interest, variable, table_, goalStmt,
   assumption, requirement)
+import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Physics (stress, strain, tension,
   compression, fbd, force)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
@@ -97,7 +98,8 @@ ssp_si = SI {
 }
 
 sspRefDB :: ReferenceDB
-sspRefDB = rdb [] [] [] [] [] sspCitations -- FIXME: Convert the rest to new chunk types
+sspRefDB = rdb [] [] [] [] [] sspCitations
+-- FIXME: Convert the rest to new chunk types (similar to issues #446 and #447)
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro

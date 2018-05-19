@@ -12,6 +12,7 @@ import Drasil.Sections.SpecificSystemDescription (dataDefnF)
 import Data.Drasil.SI_Units (si_units)
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Documentation (srs)
+import Data.Drasil.Phrase (for)
 
 thisCode :: CodeSpec
 thisCode = codeSpec thisSI []

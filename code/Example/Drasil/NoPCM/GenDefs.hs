@@ -38,8 +38,8 @@ s4_2_3_desc1 t1c vo =
 
 s4_2_3_desc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]
-s4_2_3_desc2 gd su vo tfv unv un =
-  [S "Applying", titleize gd, S "to the first term over",
+s4_2_3_desc2 gad su vo tfv unv un =
+  [S "Applying", titleize gad, S "to the first term over",
   (phrase su +:+ getES su `ofThe` phrase vo) `sC` S "with",
   getES tfv, S "as the", phrase tfv, S "for the",
   phrase su `sAnd` getES unv, S "as a", phrase un,

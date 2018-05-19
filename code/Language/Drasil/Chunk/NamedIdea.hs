@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.NamedIdea (
   NamedChunk, nc, IdeaDict, short, nw, mkIdea,
   compoundNC, compoundNC', compoundNC'', compoundNC''',
-  for, for', for'', the, theCustom) where
+  the, theCustom) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
 import Control.Lens ((^.), makeLenses, view)
@@ -71,26 +71,6 @@ compoundNC'' f1 f2 t1 t2 = nc
 compoundNC''' :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> a -> b -> NamedChunk
 compoundNC''' f1 t1 t2 = nc 
   (t1^.uid ++ t2^.uid) (compoundPhrase''' f1 (t1 ^. term) (t2 ^. term))
-
--- we might want to eventually restrict the use of these via
--- some kind of type system, which asserts that:
--- 1. t1 `for` t2 means that t1 is a view of part of the reason behind t2
--- 2. t1 `of_` t2 means that t1 is a view of part of the structure of t2
-
--- | Inserts the word "for" between the titleized versions of
--- two terms
-for :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
-for t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (titleize $ t2 ^. term)
-
--- | Similar to 'for', but uses titleized version of term 1 with the abbreviation
--- (if it exists, phrase otherwise) for term 2
-for' :: (NamedIdea c, Idea d) => c -> d -> Sentence
-for' t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (short t2)
-
--- | Similar to 'for', but allows one to specify the function to use on each term
--- before inserting for. For example one could use @for'' phrase plural t1 t2@
-for'' :: (NamedIdea c, NamedIdea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> Sentence
-for'' f1 f2 t1 t2 = (f1 t1) +:+ S "for" +:+ (f2 t2)
   
 the :: (NamedIdea c) => c -> NamedChunk
 the t = nc ("the" ++ t ^. uid) (nounPhrase'' 

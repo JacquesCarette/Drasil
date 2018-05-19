@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs #-}
 module Language.Drasil.CodeSpec where
 
-import Language.Drasil.Classes (term, CommonIdea, HasAttributes)
+import Language.Drasil.Classes (term, CommonIdea, HasAttributes,ExprRelat(relat))
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity -- for hack
@@ -14,7 +14,6 @@ import Language.Drasil.Expr -- for hack
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Space -- for hack
 import Language.Drasil.DataDesc
-import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.ChunkDB
 import Language.Drasil.Expr.Extract (codevars, codevars')
 import Language.Drasil.Chunk.VarChunk

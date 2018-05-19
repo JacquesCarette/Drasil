@@ -54,11 +54,11 @@ addPackage FontSpec   = usepackage "fontspec"
 
 data Def = AssumpCounter
          | LCCounter
-         -- | ModCounter
          | ReqCounter
          | UCCounter
          | Bibliography
          | TabuLine
+         | Unicode
          deriving Eq
 
 addDef :: Def -> D
@@ -66,14 +66,13 @@ addDef AssumpCounter = count "assumpnum" %%
                        comm "atheassumpnum" "A\\theassumpnum" Nothing
 addDef LCCounter     = count "lcnum" %%
                        comm "lcthelcnum" "LC\\thelcnum" Nothing
--- addDef ModCounter    = count "modnum" %%
-                       -- comm "mthemodnum" "M\\themodnum" Nothing
 addDef ReqCounter    = count "reqnum" %%
                        comm "rthereqnum" "R\\thereqnum" Nothing
 addDef UCCounter     = count "ucnum" %%
                        comm "uctheucnum" "UC\\theucnum" Nothing
 addDef Bibliography  = command "bibliography" bibFname
 addDef TabuLine      = command0 "global\\tabulinesep=1mm"
+addDef Unicode       = command "setmathfont" "latinmodern-math.otf"
 
 genPreamble :: [LayoutObj] -> D
 genPreamble los = let (pkgs, defs) = parseDoc los
@@ -81,8 +80,10 @@ genPreamble los = let (pkgs, defs) = parseDoc los
      (vcat $ map addPackage pkgs) %% (vcat $ map addDef defs)
 
 parseDoc :: [LayoutObj] -> ([Package], [Def])
-parseDoc los' = ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Breqn] ++ 
-   (nub $ concat $ map fst res), nub $ concat $ map snd res)
+parseDoc los' = 
+  ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Breqn] ++ 
+   (nub $ concat $ map fst res)
+  , [Unicode] ++ (nub $ concat $ map snd res))
   where 
     res = map parseDoc' los'
     parseDoc' :: LayoutObj -> ([Package], [Def])

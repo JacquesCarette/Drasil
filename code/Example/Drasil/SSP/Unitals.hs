@@ -71,45 +71,45 @@ fs, coords, dx_i, dy_i :: ConstrConcept
 --FIXME: add (x,y) when we can index or make related unitals
 
 elasticMod = uq (constrained' SM.elastMod [gtZeroConstr]
-  (dbl 15000) Nothing) defultUncrt Nothing
+  (dbl 15000) Nothing) defultUncrt
 
 cohesion = uqc "c'" (cn $ "effective cohesion")
   "internal pressure that sticks particles of soil together"
-  (prime $ Atomic "c") pascal Real [gtZeroConstr] (dbl 10) defultUncrt Nothing
+  (prime $ Atomic "c") pascal Real [gtZeroConstr] (dbl 10) defultUncrt
 
 poissnsRatio = uq (constrained' SM.poissnsR
-  [physc $ Bounded (Exc,0) (Exc,1)] (dbl 0.4) Nothing) defultUncrt Nothing
+  [physc $ Bounded (Exc,0) (Exc,1)] (dbl 0.4) Nothing) defultUncrt
 
 fricAngle = uqc "varphi'" (cn $ "effective angle of friction")
   ("The angle of inclination with respect to the horizontal axis of " ++
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
   (prime $ Greek Phi_V) degree Real [physc $ Bounded (Exc,0) (Exc,90)]
-  (dbl 25) defultUncrt Nothing
+  (dbl 25) defultUncrt
 
 dryWeight = uqc "gamma" (cn $ "dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."
   (Greek Gamma_L) specific_weight Real [gtZeroConstr]
-  (dbl 20) defultUncrt Nothing
+  (dbl 20) defultUncrt
 
 satWeight = uqc "gamma_sat" (cn $ "saturated unit weight")
   ("The weight of saturated soil/ground " ++
   "layer divided by the volume of the layer.")
   (sub (Greek Gamma_L) (Atomic "Sat")) specific_weight Real [gtZeroConstr]
-  (dbl 20) defultUncrt Nothing
+  (dbl 20) defultUncrt
 
 waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   "The weight of one cubic meter of water."
   (sub (Greek Gamma_L) lW) specific_weight Real [gtZeroConstr]
-  (dbl 9.8) defultUncrt Nothing
+  (dbl 9.8) defultUncrt
   
 constant_a = uqc "a" (cn "constant") fixme
-  lA metre Real [] (dbl 0) defultUncrt Nothing
+  lA metre Real [] (dbl 0) defultUncrt
   
 constant_A = uqc "A" (cn "constant") fixme
-  cA metre Real [] (dbl 0) defultUncrt Nothing
+  cA metre Real [] (dbl 0) defultUncrt
   
 constant_K = uqc "kappa" (cn "constant") fixme
-  (Greek Kappa_L) pascal Real [] (dbl 0) defultUncrt Nothing
+  (Greek Kappa_L) pascal Real [] (dbl 0) defultUncrt
 
 {-Output Variables-} --FIXME: See if there should be typical values
 fs = constrained' (dqdEL fs_concept (Atomic "FS") Real) [gtZeroConstr] (dbl 1) Nothing

@@ -20,8 +20,8 @@ import           Language.Drasil.Symbol (Symbol(..))
 import qualified Language.Drasil.Symbol as S
 import qualified Language.Drasil.Document as L
 import Language.Drasil.HTML.Monad
-import Language.Drasil.People (People,Person(..),rendPersLFM',rendPersLFM'',
-  Conv(..),nameStr,rendPersLFM)
+import Language.Drasil.People (People, Person(..), rendPersLFM', rendPersLFM'',
+  nameStr, rendPersLFM)
 import Language.Drasil.Config (StyleGuide(..), bibStyleH)
 import Language.Drasil.ChunkDB(HasSymbolTable)
 

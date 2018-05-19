@@ -37,6 +37,7 @@ module Language.Drasil (
   , CommonIdea(abrv)
   , Constrained(constraints)
   , HasReasVal(reasVal)
+  , ExprRelat(relat)
   -- Chunk.VarChunk
   , VarChunk
   , vc, implVar
@@ -78,7 +79,7 @@ module Language.Drasil (
   -- Chunk.Unitary
   , Unitary(..), UnitaryChunk, unitary
   -- Chunk.Relation
-  , RelationConcept, makeRC, makeRC', relat, ExprRelat
+  , RelationConcept, makeRC, makeRC'
   --Chunk.DefinedQuantity
   , cqs, DefinedQuantityDict
   -- Chunk.UnitaryConcept
@@ -210,7 +211,7 @@ import Language.Drasil.Unit -- all of it
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
   IsUnit, HasAttributes(attributes), CommonIdea(abrv),
-  Constrained(constraints), HasReasVal(reasVal))
+  Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
@@ -244,7 +245,6 @@ import Language.Drasil.Chunk.Constrained.Core (physc, sfwrc, enumc, isPhysC, isS
 import Language.Drasil.Chunk.ConVar (cv, ConVar)
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, aqd, ec, ec')
-import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.Goal (Goal, mkGoal)
 import Language.Drasil.Chunk.InstanceModel

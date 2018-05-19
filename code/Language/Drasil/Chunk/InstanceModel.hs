@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.InstanceModel
   )where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn),ConceptDomain(cdom,DOM),Concept, HasAttributes(attributes),
+  Definition(defn),ConceptDomain(cdom,DOM), Concept, HasAttributes(attributes),
   ExprRelat(relat))
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Concept
@@ -38,15 +38,15 @@ data InstanceModel = IM { _rc :: RelationConcept
                         }
 makeLenses ''InstanceModel
   
-instance HasUID InstanceModel        where uid = rc . uid
-instance NamedIdea InstanceModel     where term = rc . term
-instance Idea InstanceModel          where getA (IM a _ _ _ _ _) = getA a
-instance Concept InstanceModel
-instance Definition InstanceModel    where defn = rc . defn
+instance HasUID        InstanceModel where uid = rc . uid
+instance NamedIdea     InstanceModel where term = rc . term
+instance Idea          InstanceModel where getA (IM a _ _ _ _ _) = getA a
+instance Concept       InstanceModel where
+instance Definition    InstanceModel where defn = rc . defn
 instance ConceptDomain InstanceModel where
   type DOM InstanceModel = ConceptChunk
   cdom = rc . cdom
-instance ExprRelat InstanceModel     where relat = rc . relat
+instance ExprRelat     InstanceModel where relat = rc . relat
 instance HasAttributes InstanceModel where attributes = attribs
 
 -- | Smart constructor for instance models
@@ -57,5 +57,5 @@ im = IM
 -- | Smart constructor for instance model from qdefinition 
 -- (Sentence is the "concept" definition for the relation concept)
 imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> InputConstraints -> OutputConstraints -> Attributes -> InstanceModel
-imQD ctx qd dfn incon ocon att = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
-  (sy qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon (qw qd) ocon att
+imQD ctx qd dfn incon ocon atts = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
+  (sy qd $= qd ^. equat) atts) (vars (qd^.equat) ctx) incon (qw qd) ocon atts --FIXME: atts used twice?

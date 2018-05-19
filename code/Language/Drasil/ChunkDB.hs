@@ -7,7 +7,7 @@ module Language.Drasil.ChunkDB
   , HasUnitTable(..), unitMap
   ) where
 
-import Language.Drasil.Classes (HasUID(uid), Idea, Concept, DOM, IsUnit)
+import Language.Drasil.Classes (HasUID(uid), Idea, Concept, DOM, IsUnit, HasAttributes)
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw)
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Concept 
@@ -38,7 +38,7 @@ type UnitMap = Map.Map String UnitDefn
 type TermMap = Map.Map String IdeaDict
 
 -- | Smart constructor for a 'SymbolMap'
-symbolMap :: (Quantity c) => [c] -> SymbolMap
+symbolMap :: (HasAttributes c, Quantity c) => [c] -> SymbolMap
 symbolMap = Map.fromList . map (\x -> (x ^. uid, qw x))
 
 -- | Smart constructor for a 'TermMap'
@@ -95,7 +95,7 @@ makeLenses ''ChunkDB
 -- | Smart constructor for chunk databases. Takes a list of Quantities 
 -- (for SymbolTable), NamedIdeas (for TermTable), Concepts (for DefinitionTable),
 -- and Units (for UnitTable)
-cdb :: (Quantity q, Idea t, Concept c, IsUnit u,
+cdb :: (HasAttributes q, Quantity q, Idea t, Concept c, IsUnit u,
         DOM c ~ ConceptChunk, DOM u ~ ConceptChunk) => [q] -> [t] -> [c] -> [u] -> ChunkDB
 cdb s t c u = CDB (symbolMap s) (termMap t) (conceptMap c) (unitMap u)
 

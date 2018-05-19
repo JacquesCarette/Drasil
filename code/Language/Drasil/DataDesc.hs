@@ -4,6 +4,7 @@ import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.Quantity
 
 import Data.List (nub)
+import Language.Drasil.Classes (HasAttributes)
 
 type DataDesc = [Data]
 type DataItem = CodeChunk
@@ -28,16 +29,16 @@ data LinePattern = Straight [Entry]             -- line of data with no pattern
                  | Repeat [Entry] (Maybe Integer)   -- line of data with repeated pattern
                                                 -- (Maybe Int) = number of repetitions, Nothing = unknown so go to end of line          
 
-entry :: (Quantity c) => c -> Entry
+entry :: (HasAttributes c, Quantity c) => c -> Entry
 entry = Entry . codevar
 
-listEntry :: (Quantity c) => [Ind] -> c -> Entry
+listEntry :: (HasAttributes c, Quantity c) => [Ind] -> c -> Entry
 listEntry i c = ListEntry i $ codevar c
 
 junk :: Entry
 junk = JunkEntry
 
-singleton :: (Quantity c) => c -> Data
+singleton :: (HasAttributes c, Quantity c) => c -> Data
 singleton = Singleton . codevar
 
 junkLine :: Data

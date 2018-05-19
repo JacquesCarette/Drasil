@@ -22,7 +22,7 @@ module Language.Drasil (
   -- UnitLang
   , UDefn(..), from_udefn
   -- Unit
-  , DerUChunk(..), FundUnit(..), UnitDefn, unitWrapper
+  , DerUChunk(..), UnitDefn(..), unitWrapper
   , makeDerU, unitCon, fund, comp_unitdefn
   , (^:), (/:), (*:), (*$), (/$), new_unit
   -- Classes
@@ -59,10 +59,8 @@ module Language.Drasil (
   , ConstrainedChunk(..), ConstrConcept(..)
   , constrained, cuc, cvc, cvc', constrained', cuc', constrainedNRV'
   , cnstrw
-  -- Chunk.ConVar
-  , ConVar, cv
   -- Chunk.Eq
-  , QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec, ec'
+  , QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec
   -- Chunk.GenDefn
   , GenDefn, gd, gdUnit
   -- Chunk.InstanceModel
@@ -74,20 +72,20 @@ module Language.Drasil (
   , UncertainQuantity(..), UncertainChunk(..), UncertQ, uq, uqNU, uqc, uqcNU, uqcND, uncrtnChunk, uvc
   , uncrtnw
   -- Chunk.Unital
-  , UnitalChunk(..), makeUCWDS, ucFromCV
-  , uc, uc', ucs, ucs', ucsWS
+  , UnitalChunk(..), makeUCWDS
+  , uc, uc', ucs, ucs', ucsWS, ucFromDQD
   -- Chunk.Unitary
   , Unitary(..), UnitaryChunk, unitary
   -- Chunk.Relation
   , RelationConcept, makeRC, makeRC'
   --Chunk.DefinedQuantity
-  , cqs, DefinedQuantityDict
+  , dqd, dqd', dqdEL, DefinedQuantityDict, dqdWr
   -- Chunk.UnitaryConcept
   , ucw, UnitaryConceptDict
   -- Chunk.Attributes.Core
   , Attributes
   -- Chunk.Attributes
-  , getSource, aqd -- TODO: Remove aqd
+  , getSource
   , Derivation, getDerivation, getShortName
   , sourceref, derivationsteps
   --Citations
@@ -116,7 +114,7 @@ module Language.Drasil (
   , sDash
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
-  , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase', at_start, at_start'
+  , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase'
   , CapitalizationRule(..)
   , PluralRule(..)
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', titleize, titleize'
@@ -136,7 +134,7 @@ module Language.Drasil (
   , cA, cB, cC, cD, cE, cF, cG, cH, cI, cJ, cK, cL, cM, cN, cO, cP, cQ, cR, cS, cT, cU, cV, cW, cX, cY, cZ
   , lA, lB, lC, lD, lE, lF, lG, lH, lI, lJ, lK, lL, lM, lN, lO, lP, lQ, lR, lS, lT, lU, lV, lW, lX, lY, lZ
   -- Misc
-  , mkTable, unit'2Contents, unit_symb, introduceAbb, phrase, plural, phrase's, plural's
+  , mkTable, unit'2Contents, unit_symb, introduceAbb, phrase, plural, phrase's, plural's, at_start, at_start'
   , unitHidingUnitless
   -- Printing.Helpers
   , capitalize, paren, sqbrac
@@ -146,7 +144,7 @@ module Language.Drasil (
   , People, Person, person, HasName, name, manyNames, person', personWM
   , personWM', mononym
   -- CodeSpec
-  , CodeSpec, codeSpec, codeSpec', Choices(..), ImplementationType(..)
+  , CodeSpec, codeSpec, Choices(..), ImplementationType(..)
   , Logging(..), ConstraintBehaviour(..), Structure(..), Comments(..)
   , defaultChoices
   , Mod(..), packmod, FuncDef(..), FuncStmt(..), funcDef, ($:=), ffor, fdec -- hacks
@@ -242,9 +240,8 @@ import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Constrained.Core (physc, sfwrc, enumc, isPhysC, isSfwrC,
   Constraint(..), ConstraintReason(..), Reason(..), TheoryConstraint(..))
-import Language.Drasil.Chunk.ConVar (cv, ConVar)
 import Language.Drasil.Chunk.DefinedQuantity
-import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, aqd, ec, ec')
+import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec)
 import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.Goal (Goal, mkGoal)
 import Language.Drasil.Chunk.InstanceModel
@@ -257,8 +254,8 @@ import Language.Drasil.Chunk.ReqChunk(ReqChunk, ReqType(..), reqType, requires
 import Language.Drasil.Chunk.SymbolForm (eqSymb, codeSymb, hasStageSymbol)
 import Language.Drasil.Chunk.Theory
 import Language.Drasil.Chunk.UncertainQuantity
-import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, ucFromCV
-                                  , uc, uc', ucs, ucs', ucsWS)
+import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS,
+                                   uc, uc', ucs, ucs', ucsWS, ucFromDQD)
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.UnitaryConcept
 import Language.Drasil.Chunk.VarChunk

@@ -5,19 +5,20 @@ import Language.Drasil
 import Data.Drasil.Concepts.Math as CM
 import Data.Drasil.SI_Units
 
-diameter, gradient, normalVect, unitVect, euclidNorm, perpVect, surface, uNormalVect :: ConVar
+diameter, gradient, normalVect, unitVect, euclidNorm, perpVect, surface, uNormalVect :: DefinedQuantityDict
 
-diameter    = cv CM.diameter lD                                            Real
-gradient    = cv CM.gradient (Greek Nabla)                                 Real
-normalVect  = cv CM.normalV  (vec $ lN)                                    Real
-uNormalVect = cv CM.normalV  (vec $ hat lN)                                Real
-unitVect    = cv CM.unitV    (vec $ hat lI)                                Real
-perpVect    = cv CM.perpV    (vec $ lN)                                    Real
-surface     = cv CM.surface  cS                                            Real
-euclidNorm  = cv CM.euclidN  (Concat [Atomic "||", (vec lR), Atomic "||"]) Real
+diameter    = dqdEL CM.diameter lD                      Real metre
+gradient    = dqd'  CM.gradient (const $ Greek Nabla)   Real Nothing []
+normalVect  = dqd'  CM.normalV  (const $ vec $ lN)      Real Nothing []
+uNormalVect = dqd'  CM.normalV  (const $ vec $ hat lN)  Real Nothing []
+unitVect    = dqd'  CM.unitV    (const $ vec $ hat lI)  Real Nothing []
+perpVect    = dqd'  CM.perpV    (const $ vec $ lN)      Real Nothing []
+surface     = dqdEL CM.surface  cS                      Real m_2
+euclidNorm  = dqd'  CM.euclidN  (const $ Concat [Atomic "||", (vec lR), Atomic "||"])
+                                                        Real Nothing []
 
 pi_ :: QuantityDict
-pi_         = mkQuant "pi"   (pn "π") (Greek Pi_L) Real Nothing Nothing
+pi_         = mkQuant "pi"   (pn "π") (Greek Pi_L) Real Nothing Nothing []
 
 surArea, orientation :: UnitalChunk
 

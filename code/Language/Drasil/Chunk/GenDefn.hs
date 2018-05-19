@@ -20,15 +20,15 @@ data GenDefn = GD { _relC :: RelationConcept
                   }
 makeLenses ''GenDefn
 
-instance HasUID GenDefn        where uid = relC . uid
-instance NamedIdea GenDefn     where term = relC . term
-instance Idea GenDefn          where getA (GD a _ _) = getA a
-instance Concept GenDefn
-instance Definition GenDefn    where defn = relC . defn
+instance HasUID        GenDefn where uid = relC . uid
+instance NamedIdea     GenDefn where term = relC . term
+instance Idea          GenDefn where getA (GD a _ _) = getA a
+instance Concept       GenDefn where
+instance Definition    GenDefn where defn = relC . defn
 instance ConceptDomain GenDefn where
   type DOM GenDefn = ConceptChunk
   cdom = relC . cdom
-instance ExprRelat GenDefn     where relat = relC . relat
+instance ExprRelat     GenDefn where relat = relC . relat
 instance HasAttributes GenDefn where attributes = attribs
 
 gd :: (IsUnit u, DOM u ~ ConceptChunk) => RelationConcept -> Maybe u -> Attributes -> GenDefn

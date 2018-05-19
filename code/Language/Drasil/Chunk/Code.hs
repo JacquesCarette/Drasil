@@ -15,11 +15,10 @@ import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.SymbolForm (codeSymb)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  HasSymbol(symbol), CommonIdea(abrv), Constrained(constraints), ExprRelat(relat))
-
+  HasSymbol(symbol), CommonIdea(abrv), Constrained(constraints),
+  HasAttributes(attributes), relat)
 import Language.Drasil.Space as S
 import Language.Drasil.Code.Code as G (CodeType(..))
-
 import Language.Drasil.Expr
 import Language.Drasil.Unicode
 import Language.Drasil.Symbol
@@ -135,7 +134,9 @@ funcPrefix :: String
 funcPrefix = "func_"
  
 data VarOrFunc = Var | Func
-data CodeChunk = CodeC {_qc :: QuantityDict, kind :: VarOrFunc}
+data CodeChunk = CodeC { _qc :: QuantityDict
+                       , kind :: VarOrFunc
+                       }
 makeLenses ''CodeChunk
 
 instance HasUID CodeChunk where uid = qc . uid
@@ -148,6 +149,7 @@ instance CodeIdea CodeChunk where
   codeName (CodeC c Var) = symbToCodeName (codeSymb c)
   codeName (CodeC c Func) = funcPrefix ++ symbToCodeName (codeSymb c)
 instance Eq CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+instance HasAttributes CodeChunk where attributes = qc . attributes
 
 spaceToCodeType :: Space -> CodeType
 spaceToCodeType S.Integer = G.Integer
@@ -166,25 +168,29 @@ spaceToCodeType (S.DiscreteS _) = G.List (spaceToCodeType S.String)
 codeType :: HasSpace c => c -> CodeType
 codeType c = spaceToCodeType $ c ^. typ
 
-codevar :: (Quantity c) => c -> CodeChunk
+codevar :: (HasAttributes c, Quantity c) => c -> CodeChunk
 codevar c = CodeC (qw c) Var
 
-codefunc :: (Quantity c) => c -> CodeChunk
+codefunc :: (HasAttributes c, Quantity c) => c -> CodeChunk
 codefunc c = CodeC (qw c) Func
 
-data CodeDefinition = CD { _quant :: QuantityDict, _ci :: String, _def :: Expr }
+data CodeDefinition = CD { _quant :: QuantityDict
+                         , _ci :: String
+                         , _def :: Expr
+                         }
 makeLenses ''CodeDefinition
 
-instance HasUID CodeDefinition where uid = quant . uid
-instance NamedIdea CodeDefinition where term = quant . term
-instance Idea CodeDefinition where getA = getA . view quant
-instance HasSpace CodeDefinition where typ = quant . typ
-instance HasSymbol CodeDefinition where symbol c = symbol (c ^. quant)
-instance Quantity CodeDefinition where getUnit = getUnit . view quant
-instance CodeIdea CodeDefinition where codeName = (^. ci)
-instance Eq CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+instance HasUID        CodeDefinition where uid = quant . uid
+instance NamedIdea     CodeDefinition where term = quant . term
+instance Idea          CodeDefinition where getA = getA . view quant
+instance HasSpace      CodeDefinition where typ = quant . typ
+instance HasSymbol     CodeDefinition where symbol c = symbol (c ^. quant)
+instance Quantity      CodeDefinition where getUnit = getUnit . view quant
+instance CodeIdea      CodeDefinition where codeName = (^. ci)
+instance Eq            CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+instance HasAttributes CodeDefinition where attributes = quant . attributes
 
-qtoc :: QDefinition -> CodeDefinition
+qtoc :: QDefinition  -> CodeDefinition
 qtoc q = CD (qw q) (funcPrefix ++ symbToCodeName (codeSymb q)) (q ^. relat)
 
 qtov :: QDefinition -> CodeDefinition

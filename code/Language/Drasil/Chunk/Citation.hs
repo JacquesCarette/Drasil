@@ -84,7 +84,7 @@ instance Show Month where
   show Nov = "November"
   show Dec = "December"
 
--- | All citations require a unique ientifier (String) used by the Drasil chunk.
+-- | All citations require a unique identifier (String) used by the Drasil chunk.
 -- We will also have an EntryID (String) used for creating reference links.
 -- Finally we will have the reference information (type and fields).
 data Citation = Cite

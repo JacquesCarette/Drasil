@@ -72,7 +72,7 @@ data Expr where
 ($>=) a b = BinaryOp GEq a b
 a $=> b = BinaryOp Impl a b
 a $<=> b = BinaryOp Iff a b
-a $. b   = BinaryOp Dot a b
+a $. b = BinaryOp Dot a b
 a $- b = BinaryOp Subt a b
 a $/ b = BinaryOp Frac a b
 

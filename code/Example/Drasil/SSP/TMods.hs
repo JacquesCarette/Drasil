@@ -28,7 +28,7 @@ sspTMods = [fs_rc, equilibrium, mcShrStrgth, effStress, hookesLaw]
 -- 
 
 fs_rc :: RelationConcept
-fs_rc = makeRC "fs_rc" factorOfSafety fs_desc fs_rel
+fs_rc = makeRC "fs_rc" factorOfSafety fs_desc fs_rel []
 
 fs_rel :: Relation
 fs_rel = (sy fs) $= (sy shearRes) / (sy mobShear)
@@ -44,7 +44,7 @@ fs_desc = foldlSent [
 --
   
 equilibrium :: RelationConcept
-equilibrium = makeRC "equilibrium" (nounPhraseSP "equilibrium") eq_desc eq_rel
+equilibrium = makeRC "equilibrium" (nounPhraseSP "equilibrium") eq_desc eq_rel []
 
 -- FIXME: Atomic "i" is a hack.  But we need to sum over something!
 eq_rel :: Relation
@@ -63,7 +63,7 @@ eq_desc = foldlSent [S "For a body in static equilibrium, the net",
 --
 mcShrStrgth :: RelationConcept
 mcShrStrgth = makeRC "mcShrStrgth" (nounPhraseSP "Mohr-Coulumb shear strength")
-  mcSS_desc mcSS_rel
+  mcSS_desc mcSS_rel []
 
 mcSS_rel :: Relation
 mcSS_rel = (sy shrStress) $= ((sy normStress) * (tan (sy fricAngle)) + (sy cohesion))
@@ -91,7 +91,7 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
 
 effStress :: RelationConcept
 effStress = makeRC "effStress"
-  (nounPhraseSP "effective stress") effS_desc effS_rel
+  (nounPhraseSP "effective stress") effS_desc effS_rel []
 
 effS_rel :: Relation
 effS_rel = (sy normStress) $= (sy normStress) - (sy porePressure)
@@ -113,7 +113,7 @@ effS_desc = foldlSent [getES normStress, S "is the total", phrase stress,
 --
 hookesLaw :: RelationConcept
 hookesLaw = makeRC "hookesLaw"
-  (nounPhraseSP "Hooke's law") hksLw_desc hksLw_rel
+  (nounPhraseSP "Hooke's law") hksLw_desc hksLw_rel []
 
 hksLw_rel :: Relation
 hksLw_rel = (sy genForce) $= (sy stffness) * (sy genDisplace)

@@ -192,14 +192,15 @@ swhsUnitless = [uNormalVect, surface, eta, melt_frac]
 
 eta, melt_frac :: DefinedQuantityDict
 
-eta = dqdEL (dcc "eta" (nounPhraseSP "ODE parameter")
+-- FIXME: should this have units?
+eta = dqd' (dcc "eta" (nounPhraseSP "ODE parameter")
   "Derived parameter based on rate of change of temperature of water")
-  (Greek Eta_L) Real
+  (const $ Greek Eta_L) Real Nothing []
 
-melt_frac = dqdEL (dcc "melt_frac" (nounPhraseSP "melt fraction")
+melt_frac = dqd' (dcc "melt_frac" (nounPhraseSP "melt fraction")
   "Ratio of thermal energy to amount of mass melted")
   --FIXME: Not sure if definition is exactly correct
-  (Greek Phi_L) Real
+  (const $ Greek Phi_L) Real Nothing []
 
 -----------------
 -- Constraints --

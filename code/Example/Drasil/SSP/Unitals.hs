@@ -71,14 +71,14 @@ fs, coords, dx_i, dy_i :: ConstrConcept
 --FIXME: add (x,y) when we can index or make related unitals
 
 elasticMod = uq (constrained' SM.elastMod [gtZeroConstr]
-  (dbl 15000) Nothing) defultUncrt
+  (dbl 15000)) defultUncrt
 
 cohesion = uqc "c'" (cn $ "effective cohesion")
   "internal pressure that sticks particles of soil together"
   (prime $ Atomic "c") pascal Real [gtZeroConstr] (dbl 10) defultUncrt
 
 poissnsRatio = uq (constrained' SM.poissnsR
-  [physc $ Bounded (Exc,0) (Exc,1)] (dbl 0.4) Nothing) defultUncrt
+  [physc $ Bounded (Exc,0) (Exc,1)] (dbl 0.4)) defultUncrt
 
 fricAngle = uqc "varphi'" (cn $ "effective angle of friction")
   ("The angle of inclination with respect to the horizontal axis of " ++
@@ -112,11 +112,13 @@ constant_K = uqc "kappa" (cn "constant") fixme
   (Greek Kappa_L) pascal Real [] (dbl 0) defultUncrt
 
 {-Output Variables-} --FIXME: See if there should be typical values
-fs = constrained' (dqdEL fs_concept (Atomic "FS") Real) [gtZeroConstr] (dbl 1) Nothing
+fs = constrained' (dqd' fs_concept (const $ Atomic "FS") Real Nothing [])
+  [gtZeroConstr] (dbl 1)
 
 fs_min :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.
-fs_min = dqdEL (dcc "fs_min" (cn "minimum factor of safety") 
-  ("The minimum factor of safety")) (sub (eqSymb fs) (Atomic "min")) Real
+fs_min = dqd' (dcc "fs_min" (cn "minimum factor of safety") 
+  ("The minimum factor of safety")) (const $ sub (eqSymb fs) (Atomic "min")) Real
+  Nothing []
 -- Once things are converted to the new style of instance models, this will
 -- be removed/fixed.
 
@@ -124,13 +126,13 @@ coords = cuc' "(x,y)"
   (cn $ "cartesian position coordinates" )
   ("y is considered parallel to the direction of the force of " ++
   "gravity and x is considered perpendicular to y")
-  (Atomic "(x,y)") metre Real [] [] (dbl 1) Nothing
+  (Atomic "(x,y)") metre Real [] [] (dbl 1)
 
 dx_i = cuc' "dx_i" (cn $ "displacement") ("in the x-ordinate direction " ++
-  fsi) (Concat [Greek Delta_L, Atomic "x"]) metre Real [] [] (dbl 1) Nothing
+  fsi) (Concat [Greek Delta_L, Atomic "x"]) metre Real [] [] (dbl 1)
 
 dy_i = cuc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " ++
-  fsi) (Concat [Greek Delta_L, Atomic "y"]) metre Real [] [] (dbl 1) Nothing
+  fsi) (Concat [Greek Delta_L, Atomic "y"]) metre Real [] [] (dbl 1)
 
 ---------------------------
 -- START OF UNITALCHUNKS --
@@ -395,50 +397,50 @@ sspUnitless = [earthqkLoadFctr, normToShear,scalFunc,
 earthqkLoadFctr, normToShear, scalFunc,
   numbSlices, minFunction, fsloc, index, varblU, varblV :: DefinedQuantityDict
 
-earthqkLoadFctr = dqdEL (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
+earthqkLoadFctr = dqd' (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
   ("proportionality factor of force that " ++
   "weight pushes outwards; caused by seismic earth movements"))
-  (sub cK lC) Real
+  (const $ sub cK lC) Real Nothing []
 
-normToShear = dqdEL (dcc "lambda"
+normToShear = dqd' (dcc "lambda"
   (nounPhraseSP $ "interslice normal/shear force ratio")
-  ("applied to all interslices")) (Greek Lambda_L) Real
+  ("applied to all interslices")) (const $ Greek Lambda_L) Real Nothing []
 
-scalFunc = dqdEL (dcc "f_i" (nounPhraseSP $ "scaling function")
+scalFunc = dqd' (dcc "f_i" (nounPhraseSP $ "scaling function")
   ("magnitude of interslice forces as a function " ++
   "of the x coordinate" ++ fisi ++ "; can be constant or a half-sine"))
-  (lF) Real
+  (const lF) Real Nothing []
 
-numbSlices = dqdEL (dcc "n" (nounPhraseSP "number of slices")
+numbSlices = dqd' (dcc "n" (nounPhraseSP "number of slices")
   "the slip mass has been divided into")
-  lN Natural
+  (const lN) Natural Nothing []
 
-minFunction = dqdEL (dcc "Upsilon" (nounPhraseSP "function")
+minFunction = dqd' (dcc "Upsilon" (nounPhraseSP "function")
   ("generic minimization function or algorithm"))
-  (Greek Upsilon) Real
+  (const $ Greek Upsilon) Real Nothing []
 
-fsloc = dqdEL (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
-  (sub (Atomic "FS") (Atomic "Loc,i")) Real
+fsloc = dqd' (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
+  (const $ sub (Atomic "FS") (Atomic "Loc,i")) Real Nothing []
 
-ufixme1 = dqdEL (dcc "fixme1" (cn "fixme") "What is this value?")
-  (Atomic "SpencerFixme1Please") Real
+ufixme1 = dqd' (dcc "fixme1" (cn "fixme") "What is this value?")
+  (const $ Atomic "SpencerFixme1Please") Real Nothing []
 
-ufixme2 = dqdEL (dcc "fixme2" (cn "fixme") "What is this value?")
-  (Atomic "SpencerFixme2Please") Real
+ufixme2 = dqd' (dcc "fixme2" (cn "fixme") "What is this value?")
+  (const $ Atomic "SpencerFixme2Please") Real Nothing []
 
 --------------------
 -- Index Function --
 --------------------
 
-varblU = dqdEL (dcc "varblU" (nounPhraseSP "local index")
+varblU = dqd' (dcc "varblU" (nounPhraseSP "local index")
   ("used as a bound variable index in calculations"))
-  lU Natural
-varblV = dqdEL (dcc "varblV" (nounPhraseSP "local index")
+  (const lU) Natural Nothing []
+varblV = dqd' (dcc "varblV" (nounPhraseSP "local index")
   ("used as a bound variable index in calculations"))
-  lV Natural
+  (const lV) Natural Nothing []
 
-index = dqdEL (dcc "index" (nounPhraseSP "index")
-  ("used to show a quantity applies to only one slice")) lI Natural
+index = dqd' (dcc "index" (nounPhraseSP "index")
+  ("used to show a quantity applies to only one slice")) (const lI) Natural Nothing []
 
 --FIXME: possibly move to Language/Drasil/Expr.hs
 indx1 :: (Quantity a) => a -> Expr

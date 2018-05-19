@@ -56,31 +56,38 @@ uc a b c {-atts-} = ucs' a b c Real {-[]atts-}
 
 ucs' :: (Concept c, IsUnit u, DOM c ~ ConceptChunk, DOM u ~ ConceptChunk) =>
   c -> Symbol -> u -> Space -> {-Attributes -> -} UnitalChunk
-ucs' a sym c space {-atts-} = UC (dqd (cw a) sym space []{-atts-}) (unitWrapper c) 
+ucs' a sym c space {-atts-} = UC (dqd (cw a) sym space (Just un) [] {-atts-}) un
+ where un = unitWrapper c
 
 -- | Same as 'uc', except it builds the Concept portion of the UnitalChunk
 -- from a given uid, term, and defn. Those are the first three arguments
 uc' :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol ->
   u -> {-Attributes -> -} UnitalChunk
-uc' i t d s u {-atts-} = UC (dqd (dcc i t d) s Real []{-atts-}) (unitWrapper u) 
+uc' i t d s u {-atts-} = UC (dqd (dcc i t d) s Real (Just un) []{-atts-}) un
+ where un = unitWrapper u
 
 -- | Same as 'uc'', but does not assume the 'Space'
 ucs :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP ->
   String -> Symbol -> u -> Space -> {-Attributes -> -} UnitalChunk
-ucs nam trm desc sym un space {-atts-} = UC (dqd (dcc nam trm desc) sym space []{-atts-}) (unitWrapper un) 
+ucs nam trm desc sym un space {-atts-} = UC (dqd (dcc nam trm desc) sym space (Just uu) []{-atts-}) uu
+  where uu = unitWrapper un
 
 -- ucs With a Sentence for desc
 ucsWS :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> 
   Sentence -> Symbol -> u -> Space -> Attributes -> UnitalChunk
-ucsWS nam trm desc sym un space atts = UC (dqd (dccWDS nam trm desc) sym space atts) (unitWrapper un) 
+ucsWS nam trm desc sym un space atts = UC (dqd (dccWDS nam trm desc) sym space (Just uu) atts) uu
+  where uu = unitWrapper un
 
 --Better names will come later.
 -- | Create a UnitalChunk in the same way as 'uc'', but with a 'Sentence' for
 -- the definition instead of a String
 makeUCWDS :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Sentence -> Symbol ->
   u -> Attributes -> UnitalChunk
-makeUCWDS nam trm desc sym un atts = UC (dqd (dccWDS nam trm desc) sym Real atts) (unitWrapper un) 
+makeUCWDS nam trm desc sym un atts = UC (dqd (dccWDS nam trm desc) sym Real (Just uu) atts) uu
+  where uu = unitWrapper un
 
--- | Create a UnitalChunk from a 'DefinedQuantityDict' by supplying the additional 'Unit'
-ucFromDQD :: (IsUnit u, DOM u ~ ConceptChunk) => DefinedQuantityDict -> u -> UnitalChunk
-ucFromDQD defq un = UC defq (unitWrapper un) 
+-- | Create a UnitalChunk from a 'DefinedQuantityDict' which has a unit already.
+-- fail otherwise
+ucFromDQD :: DefinedQuantityDict -> UnitalChunk
+ucFromDQD defq = UC defq (unitWrapper uu) 
+  where uu = maybe (error "ucFromDQD must be called on a DQD with a unit") id (getUnit defq)

@@ -27,6 +27,7 @@ data Package = AMSMath
              | Mathtools --line breaks for long fractions and cases
              | URL
              | FontSpec -- for utf-8 encoding in lualatex
+             | Unicode -- for unicode-math in lualatex
              deriving Eq
 
 addPackage :: Package -> D
@@ -50,7 +51,8 @@ addPackage BibLaTeX  = command1o "usepackage" (Just "backend=bibtex") "biblatex"
 addPackage Tabu      = usepackage "tabu"
 addPackage Mathtools = usepackage "mathtools"
 addPackage URL       = usepackage "url"
-addPackage FontSpec   = usepackage "fontspec"
+addPackage FontSpec  = usepackage "fontspec"
+addPackage Unicode   = usepackage "unicode-math"
 
 data Def = AssumpCounter
          | LCCounter
@@ -58,7 +60,7 @@ data Def = AssumpCounter
          | UCCounter
          | Bibliography
          | TabuLine
-         | Unicode
+         | SetMathFont
          deriving Eq
 
 addDef :: Def -> D
@@ -72,7 +74,7 @@ addDef UCCounter     = count "ucnum" %%
                        comm "uctheucnum" "UC\\theucnum" Nothing
 addDef Bibliography  = command "bibliography" bibFname
 addDef TabuLine      = command0 "global\\tabulinesep=1mm"
-addDef Unicode       = command "setmathfont" "latinmodern-math.otf"
+addDef SetMathFont   = command "setmathfont" "Latin Modern Math"
 
 genPreamble :: [LayoutObj] -> D
 genPreamble los = let (pkgs, defs) = parseDoc los
@@ -81,9 +83,9 @@ genPreamble los = let (pkgs, defs) = parseDoc los
 
 parseDoc :: [LayoutObj] -> ([Package], [Def])
 parseDoc los' = 
-  ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Breqn] ++ 
+  ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Breqn, Unicode] ++ 
    (nub $ concat $ map fst res)
-  , [Unicode] ++ (nub $ concat $ map snd res))
+  , [SetMathFont] ++ (nub $ concat $ map snd res))
   where 
     res = map parseDoc' los'
     parseDoc' :: LayoutObj -> ([Package], [Def])

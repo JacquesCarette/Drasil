@@ -18,7 +18,7 @@ euclidNorm  = dqd'  CM.euclidN  (const $ Concat [Atomic "||", (vec lR), Atomic "
                                                         Real Nothing []
 
 pi_ :: QuantityDict
-pi_         = mkQuant "pi"   (pn "π") (Greek Pi_L) Real Nothing Nothing []
+pi_         = mkQuant "pi"   (pn "pi") (Greek Pi_L) Real Nothing Nothing []
 
 surArea, orientation :: UnitalChunk
 

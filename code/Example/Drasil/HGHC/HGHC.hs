@@ -12,9 +12,10 @@ import Drasil.Sections.SpecificSystemDescription (dataDefnF)
 import Data.Drasil.SI_Units (si_units)
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Documentation (srs)
+import Data.Drasil.Phrase (for)
 
 thisCode :: CodeSpec
-thisCode = codeSpec' thisSI []
+thisCode = codeSpec thisSI []
   
 thisSI :: SystemInformation
 thisSI = SI {
@@ -35,7 +36,7 @@ thisSI = SI {
 }
 
 allSymbols :: ChunkDB
-allSymbols = cdb symbols (map nw symbols) ([] :: [UnitDefn]) -- FIXME: Fill in concepts
+allSymbols = cdb symbols (map nw symbols) ([] :: [ConceptChunk]) -- FIXME: Fill in concepts
   si_units
   
 thisSRS :: DocDesc

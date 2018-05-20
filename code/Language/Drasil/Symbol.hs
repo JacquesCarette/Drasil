@@ -49,8 +49,8 @@ complsy (x : xs) (y : ys) = compsy x y `mappend` complsy xs ys
 
 compsy :: Symbol -> Symbol -> Ordering
 compsy (Concat (x:[]))       (Concat (y:[]))        = compsy x y
-compsy (Concat ((cDelta):xs))                b = compsy (Concat xs) b 
-compsy a                (Concat ((cDelta):ys)) = compsy a           (Concat ys)
+compsy (Concat (Atomic "Δ":xs))                b = compsy (Concat xs) b 
+compsy a                (Concat (Atomic "Δ":ys)) = compsy a           (Concat ys)
 compsy (Concat (x:xs))       (Concat (y:ys))       = --The above two lines ensure symbols like "x" and "delta x" stay together
  compsy x y `mappend` complsy xs ys
 compsy (Concat a)             b                     = complsy a [b]
@@ -76,10 +76,7 @@ compsy (Special _)            _                     = LT
 compsy _                     (Special _)            = GT
 compsy (Atomic _)             _                     = LT
 compsy  _                    (Atomic _)             = GT
---compsy (Greek a)             (Greek b)              = compare a b
 compsy  Empty                 Empty                 = EQ
-compsy  _                     Empty                 = GT
-compsy  Empty                 _                     = LT
 
 -- | Helper for creating a symbol with a superscript on the left side of the symbol.
 -- Arguments: Base symbol, then superscripted symbol.

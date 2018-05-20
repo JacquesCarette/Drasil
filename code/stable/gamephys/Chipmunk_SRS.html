@@ -16,22 +16,22 @@ Software Requirements Specification for Chipmunk2D
 </div>
 <div class="author">
 <h2>
-AlexHalliwushka and LuthfiMawarid
+Alex Halliwushka and Luthfi Mawarid
 </h2>
 </div>
 <a id="Sec:RefMat">
 <div class="section">
-<h0>
+<h1>
 Reference Material
-</h0>
+</h1>
 <p class="paragraph">
 This section records information for easy reference.
 </p>
 <a id="Sec:ToU">
 <div class="subsection">
-<h1>
+<h2>
 Table of Units
-</h1>
+</h2>
 <p class="paragraph">
 The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 </p>
@@ -91,9 +91,9 @@ time (second)
 </a>
 <a id="Sec:ToS">
 <div class="subsection">
-<h1>
+<h2>
 Table of Symbols
-</h1>
+</h2>
 <p class="paragraph">
 The table that follows summarizes the symbols used in this document along with their units. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order.
 </p>
@@ -775,7 +775,7 @@ rad
 <em>&pi;</em>
 </td>
 <td>
-Pi
+pi
 </td>
 <td>
 
@@ -853,9 +853,9 @@ rad/s
 </a>
 <a id="Sec:TAbbAcc">
 <div class="subsection">
-<h1>
+<h2>
 Abbreviations and Acronyms
-</h1>
+</h2>
 <a id="Table:TAbbAcc">
 <table class="table">
 <tr>
@@ -978,9 +978,9 @@ Theoretical Model
 </a>
 <a id="Sec:Intro">
 <div class="section">
-<h0>
+<h1>
 Introduction
-</h0>
+</h1>
 <p class="paragraph">
 Due to the rising cost of developing video games, developers are looking for ways to save time and money for their projects. Using an open source physics library that is reliable and free will cut down development costs and lead to better quality products.
 </p>
@@ -989,9 +989,9 @@ The following section provides an overview of the Software Requirements Specific
 </p>
 <a id="Sec:DocPurpose">
 <div class="subsection">
-<h1>
+<h2>
 Purpose of Document
-</h1>
+</h2>
 <p class="paragraph">
 This document descibes the modeling of an open source 2D rigid body physics library used for games. The theoretical models and goal statements used in Chipmunk2D are provided. This document is intended to be used as a reference to provide all necessary information to understand and verify the model.
 </p>
@@ -1002,9 +1002,9 @@ This document will be used as a starting point for subsequent development phases
 </a>
 <a id="Sec:ReqsScope">
 <div class="subsection">
-<h1>
+<h2>
 Scope of Requirements
-</h1>
+</h2>
 <p class="paragraph">
 The scope of the requirements includes the physical simulation of 2D rigid bodies acted on by forces. Given the appropriate inputs, the code for Chipmunk2D is intended to simulate how these rigid bodies interact with one another.
 </p>
@@ -1012,9 +1012,9 @@ The scope of the requirements includes the physical simulation of 2D rigid bodie
 </a>
 <a id="Sec:ReaderChars">
 <div class="subsection">
-<h1>
+<h2>
 Characteristics of Intended Reader
-</h1>
+</h2>
 <p class="paragraph">
 Reviewers of this documentation should have a strong knowledge in rigid body dynamics. The reviewers should also have an understanding of high school calculus. The users of Chipmunk2D can have a lower level of expertise, as explained in <a href=#Sec:UserChars>User Characteristics</a>.
 </p>
@@ -1022,9 +1022,9 @@ Reviewers of this documentation should have a strong knowledge in rigid body dyn
 </a>
 <a id="Sec:DocOrg">
 <div class="subsection">
-<h1>
+<h2>
 Organization of Document
-</h1>
+</h2>
 <p class="paragraph">
 The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:SolCharSpec>Solution Characteristics Specification</a> and trace back to find any additional information they require.
 </p>
@@ -1037,17 +1037,17 @@ The goal statements are refined to the theoretical models, and the theoretical m
 </a>
 <a id="Sec:GenSysDesc">
 <div class="section">
-<h0>
+<h1>
 General System Description
-</h0>
+</h1>
 <p class="paragraph">
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
 </p>
 <a id="Sec:usercharacteristic">
 <div class="subsection">
-<h1>
+<h2>
 User Characteristics
-</h1>
+</h2>
 <p class="paragraph">
 The end user of Chipmunk2D should have an understanding of first year programming concepts and an understanding of high school physics.
 </p>
@@ -1055,9 +1055,9 @@ The end user of Chipmunk2D should have an understanding of first year programmin
 </a>
 <a id="Sec:SysConstraints">
 <div class="subsection">
-<h1>
+<h2>
 System Constraints
-</h1>
+</h2>
 <p class="paragraph">
 There are no system constraints.
 </p>
@@ -1067,25 +1067,25 @@ There are no system constraints.
 </a>
 <a id="Sec:SpecSystDesc">
 <div class="section">
-<h0>
+<h1>
 Specific System Description
-</h0>
+</h1>
 <p class="paragraph">
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used for the physics library.
 </p>
 <a id="Sec:ProbDesc">
 <div class="subsection">
-<h1>
+<h2>
 Problem Description
-</h1>
+</h2>
 <p class="paragraph">
 Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (<a href=#Sec:ExistingSolns>Off-The-Shelf Solutions</a>). By creating a simple, lightweight, fast and portable 2D rigid body physics library, game development will be more accessible to the masses and higher quality products will be produced.
 </p>
 <a id="Sec:TermDefs">
 <div class="subsubsection">
-<h2>
+<h3>
 Terminology and Definitions
-</h2>
+</h3>
 <p class="paragraph">
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements
 </p>
@@ -1110,9 +1110,9 @@ Right-handed coordinate system: A coordinate system where the positive z-axis co
 </a>
 <a id="Sec:GoalStmt">
 <div class="subsubsection">
-<h2>
+<h3>
 Goal Statements
-</h2>
+</h3>
 <p class="paragraph">
 Given the inputs, the goal statements are:
 </p>
@@ -1136,17 +1136,17 @@ GS4: Given the physical properties, initial positions, orientations, linear velo
 </a>
 <a id="Sec:SolCharSpec">
 <div class="subsection">
-<h1>
+<h2>
 Solution Characteristics Specification
-</h1>
+</h2>
 <p class="paragraph">
 The instance models that govern Chipmunk2D are presented in FIXME REF to IModSection. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
 <a id="Sec:Assumps">
 <div class="subsubsection">
-<h2>
+<h3>
 Assumptions
-</h2>
+</h3>
 <p class="paragraph">
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models, General Definitions, Data Definitions, Instance Models, or Likely Changes, in which the respective assumption is used.
 </p>
@@ -1177,9 +1177,9 @@ A7: There are no constraints and joints involved throughout the simulation.
 </a>
 <a id="Sec:TMs">
 <div class="subsubsection">
-<h2>
+<h3>
 Theoretical Models
-</h2>
+</h3>
 <p class="paragraph">
 This section focuses on the general equations and laws that Chipmunk2D is based on.
 </p>
@@ -1398,9 +1398,9 @@ The net torque <em>&tau;</em> (N&sdot;m) on a rigid body is proportional to its 
 </a>
 <a id="Sec:GDs">
 <div class="subsubsection">
-<h2>
+<h3>
 General Definitions
-</h2>
+</h3>
 <p class="paragraph">
 There are no general definitions.
 </p>
@@ -1408,9 +1408,9 @@ There are no general definitions.
 </a>
 <a id="Sec:IMs">
 <div class="subsubsection">
-<h2>
+<h3>
 Instance Models
-</h2>
+</h3>
 <p class="paragraph">
 This section transforms the problem defined in FIXME REF into one which is expressed in mathematical terms. It uses concrete symbols defined in FIXME REF to replace the abstract symbols in the models identified in FIXME REF and FIXME REF.
 </p>
@@ -1567,9 +1567,9 @@ This instance model is based on our assumptions regarding rigid body (A1, A2) co
 </a>
 <a id="Sec:DDs">
 <div class="subsubsection">
-<h2>
+<h3>
 Data Definitions
-</h2>
+</h3>
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models. The dimension of each quantity is also given.
 </p>
@@ -2045,9 +2045,9 @@ Description
 </a>
 <a id="Sec:DataConstraints">
 <div class="subsubsection">
-<h2>
+<h3>
 Data Constraints
-</h2>
+</h3>
 <p class="paragraph">
 the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. FIXME
 </p>
@@ -2273,17 +2273,17 @@ Output Data Constraints
 </a>
 <a id="Sec:Requirements">
 <div class="section">
-<h0>
+<h1>
 Requirements
-</h0>
+</h1>
 <p class="paragraph">
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 </p>
 <a id="Sec:FRs">
 <div class="subsection">
-<h1>
+<h2>
 Functional Requirements
-</h1>
+</h2>
 <div class="list">
 <p>
 R1: Create a space for all of the rigid bodies in the physical simulation to interact in.
@@ -2314,9 +2314,9 @@ R8: Determine the positions and velocities over a period of time of the 2D rigid
 </a>
 <a id="Sec:NFRs">
 <div class="subsection">
-<h1>
+<h2>
 Non-Functional Requirements
-</h1>
+</h2>
 <p class="paragraph">
 Games are resource intensive, so performance is a high priority. Other non-functional requirements that are a priority are: correctness, understandability, portability, reliability, and maintainability.
 </p>
@@ -2326,9 +2326,9 @@ Games are resource intensive, so performance is a high priority. Other non-funct
 </a>
 <a id="Sec:LCs">
 <div class="section">
-<h0>
+<h1>
 Likely Changes
-</h0>
+</h1>
 <p class="paragraph">
 This section lists the likely changes to be made to the physics game library.
 </p>
@@ -2350,9 +2350,9 @@ LC4: The library may be expanded to include joints and constraints.
 </a>
 <a id="Sec:ExistingSolns">
 <div class="section">
-<h0>
+<h1>
 Off-The-Shelf Solutions
-</h0>
+</h1>
 <p class="paragraph">
 As mentioned in <a href=#Sec:ProbDesc>Problem Description</a>, there already exist free open source game physics libraries. Similar 2D physics libraries are:
 </p>
@@ -2382,9 +2382,9 @@ Newton Game Dynamics: http://newtondynamics.com/
 </a>
 <a id="Sec:TraceMatrices">
 <div class="section">
-<h0>
+<h1>
 Traceability Matrices and Graphs
-</h0>
+</h1>
 <p class="paragraph">
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TraceyReqGoalsOther>Table:TraceyReqGoalsOther</a> shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. <a href=#Table:TraceyAssumpsOther>Table:TraceyAssumpsOther</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. <a href=#Table:TraceyItemsSecs>Table:TraceyItemsSecs</a> shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
 </p>
@@ -5255,9 +5255,9 @@ Traceability Matrix Showing the Connections Between Items and Other Sections
 </a>
 <a id="Sec:AuxConstants">
 <div class="section">
-<h0>
+<h1>
 Values of Auxiliary Constants
-</h0>
+</h1>
 <p class="paragraph">
 There are no auxiliary constants.
 </p>
@@ -5265,47 +5265,47 @@ There are no auxiliary constants.
 </a>
 <a id="Sec:References">
 <div class="section">
-<h0>
+<h1>
 References
-</h0>
+</h1>
 <a id="dParnas1972">
 <ul>
-[1]: Parnas, DavidL."On the Criteria To Be Used in Decomposing Systems into Modules."<em>Communications of the ACM</em>,1972.pp. 1053&ndash;1058. Print.
+[1]: Parnas, David L. "On the Criteria To Be Used in Decomposing Systems into Modules." <em>Communications of the ACM</em>, 1972. pp. 1053&ndash;1058. Print.
 </ul>
 </a>
 <a id="dParnasPcClements1984">
 <ul>
-[2]: Parnas, DavidL., Clements, P.C., and Wiess, ."The Modular Structure of Complex Systems."<em>ICSE '84: Proceedings of the 7th international conference on Software engineering</em>.1984.pp. 408&ndash;417.
+[2]: Parnas, David L., Clements, P. C., and Wiess, . "The Modular Structure of Complex Systems." <em>ICSE '84: Proceedings of the 7th international conference on Software engineering</em>. 1984. pp. 408&ndash;417.
 </ul>
 </a>
 <a id="jfBeucheIntro">
 <ul>
-[3]: Bueche, J.Frederick.<em>Introduction to Physics for Scientists, Fourth Edition</em>.Mcgraw-Hill College,1986.
+[3]: Bueche, J. Frederick. <em>Introduction to Physics for Scientists, Fourth Edition</em>. Mcgraw-Hill College, 1986.
 </ul>
 </a>
 <a id="koothoor2013">
 <ul>
-[4]: Koothoor, Nirmitha.<em>A document drive approach to certifying scientific computing software</em>.McMaster University,Hamilton, ON, Canada:2013. Print.
+[4]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
 </ul>
 </a>
 <a id="parnas1978">
 <ul>
-[5]: Parnas, DavidL."Designing Software for Ease of Extension and Contraction.."<em>ICSE '78: Proceedings of the 3rd international conference on Software engineering</em>.1978.pp. 264&ndash;277.
+[5]: Parnas, David L. "Designing Software for Ease of Extension and Contraction.." <em>ICSE '78: Proceedings of the 3rd international conference on Software engineering</em>. 1978. pp. 264&ndash;277.
 </ul>
 </a>
 <a id="parnas1986">
 <ul>
-[6]: Parnas, DavidL. and Clements, P.C."A rational design process: How and why to fake it."<em>IEEE Transactions on Software Engineering</em>,vol. 12,no. 2,Washington, USA:February,1986.pp. 251&ndash;257. Print.
+[6]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
 </ul>
 </a>
 <a id="sciComp2013">
 <ul>
-[7]: Wilson, Greg, Aruliah, D.A., Titus, C., Chue Hong, NeilP., Davis, Matt, Guy, RichardT., Haddock, StevenH.D., Huff, KathrynD., Mitchell, IanM., Plumblet, MarkD., Waugh, Ben, White, EthanP., and Wilson, Paul."Best Practices for Scientific Computing, 2013."<em>PLoS Biol</em>,vol. 12,no. 1,2013. Print.
+[7]: Wilson, Greg, Aruliah, D. A., Titus, C., Chue Hong, Neil P., Davis, Matt, Guy, Richard T., Haddock, Steven H. D., Huff, Kathryn D., Mitchell, Ian M., Plumblet, Mark D., Waugh, Ben, White, Ethan P., and Wilson, Paul. "Best Practices for Scientific Computing, 2013." <em>PLoS Biol</em>, vol. 12, no. 1, 2013. Print.
 </ul>
 </a>
 <a id="smithLai2005">
 <ul>
-[8]: Smith, W.Spencer and Lai, Lei."A new requirements template for scientific computing."<em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>.Edited by PJAgerfalk, N.Kraiem, and J.Ralyte,Paris, France:2005.pp. 107&ndash;121.In conjunction with 13th IEEE International Requirements Engineering Conference,
+[8]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
 </ul>
 </a>
 </div>

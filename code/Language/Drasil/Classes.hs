@@ -16,16 +16,18 @@ module Language.Drasil.Classes (
   , CommonIdea(abrv)
   , Constrained(constraints)
   , HasReasVal(reasVal)
+  , ExprRelat(relat)
   ) where
 
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Spec (Sentence)
-import Language.Drasil.Symbol (Stage,Symbol)
+import Language.Drasil.Symbol (Stage, Symbol)
 import Language.Drasil.Space (Space)
-import Language.Drasil.UnitLang (USymb,UDefn)
+import Language.Drasil.UnitLang (USymb, UDefn)
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Expr (Expr)
+
 
 import Control.Lens (Lens')
 
@@ -97,11 +99,14 @@ class HasReasVal c where
 class HasUnitSymbol u where
    usymb :: Lens' u USymb
 
--- | Units are concepts which store a unit symbol.
+-- | Units are Ideas with a Definition which store a unit symbol.
 -- They must also be explicitly declared to be instances of IsUnit
-class (Concept u, HasUnitSymbol u) => IsUnit u where
+class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u where
 
 -- Investigate (TODO): is this really needed?
 class UnitEq u where
    uniteq :: Lens' u UDefn
 
+-- TODO : there is a design bug here not at all apparent from its definition; have to come back to it (Pull Request #532)
+class ExprRelat c where
+  relat :: Lens' c Expr

@@ -11,10 +11,10 @@ library
     Language.Drasil.Code,
     Data.Drasil.People
     Data.Drasil.Citations
-    Data.Drasil.Plurals
     Data.Drasil.Constraints
     Data.Drasil.SentenceStructures
     Data.Drasil.SI_Units
+    Data.Drasil.Phrase
     Data.Drasil.Utils
     Data.Drasil.Concepts.Computation
     Data.Drasil.Concepts.Documentation
@@ -91,12 +91,10 @@ library
     , Language.Drasil.Chunk.CommonIdea
     , Language.Drasil.Chunk.Concept
     , Language.Drasil.Chunk.Concept.Core
-    , Language.Drasil.Chunk.ConVar
     , Language.Drasil.Chunk.Constrained
     , Language.Drasil.Chunk.Constrained.Core
     , Language.Drasil.Chunk.DefinedQuantity
     , Language.Drasil.Chunk.Eq
-    , Language.Drasil.Chunk.ExprRelat
     , Language.Drasil.Chunk.GenDefn
     , Language.Drasil.Chunk.Goal
     , Language.Drasil.Chunk.InstanceModel

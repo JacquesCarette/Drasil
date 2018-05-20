@@ -67,6 +67,7 @@ import Drasil.Sections.SpecificSystemDescription (solChSpecF,
   inDataConstTbl, outDataConstTbl, dataConstraintUncertainty, goalStmtF,
   physSystDesc, termDefnF, probDescF, specSysDesF)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
+import Data.Drasil.Phrase(for'')
 
 {--}
 
@@ -165,19 +166,19 @@ newAssumptions :: [AssumpChunk] -- For testing
 newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8]
 
 newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8 :: AssumpChunk
-newA1 = assump "glassTyA" a1Desc (S "glassTy")
-newA2 = assump "glassConditionA" a2Desc (S "glassCondition")
-newA3 = assump "explsnScenarioA"a3Desc (S "explainScenario")
-newA4 = assump "standardValuesA" (a4Desc load_dur) (S "StandardValues")
-newA5 = assump "glassLiteA" a5Desc (S "glassLite")
-newA6 = assump "bndryConditionsA" a6Desc (S "boundaryConditions")
-newA7 = assump "responseTyA" a7Desc (S "responseType")
-newA8 = assump "ldfConstantA" (a8Desc constant_LoadDF) (S "ldfConstant")
+newA1 = assump "glassTyA" a1Desc (S "glassTy") []
+newA2 = assump "glassConditionA" a2Desc (S "glassCondition") []
+newA3 = assump "explsnScenarioA"a3Desc (S "explainScenario") []
+newA4 = assump "standardValuesA" (a4Desc load_dur) (S "StandardValues") []
+newA5 = assump "glassLiteA" a5Desc (S "glassLite") []
+newA6 = assump "bndryConditionsA" a6Desc (S "boundaryConditions") []
+newA7 = assump "responseTyA" a7Desc (S "responseType") []
+newA8 = assump "ldfConstantA" (a8Desc constant_LoadDF) (S "ldfConstant") []
   
 testIMFromQD :: InstanceModel
 testIMFromQD = imQD gbSymbMap risk EmptyS [] [] []
 glassBR_code :: CodeSpec
-glassBR_code = codeSpec' glassSystInfo allMods
+glassBR_code = codeSpec glassSystInfo allMods
 
 
 s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2 :: Section
@@ -469,7 +470,7 @@ assumpList :: [AssumpChunk] -> [Contents]
 assumpList = map Assumption
 
 assumptions :: [Contents] -- FIXME: Remove this entirely and use new refs + docLang.
-assumptions = fst (foldr (\s (ls, n) -> ((Assumption $ assump ("A" ++ show n) s (S $ "A" ++ show n)) : ls, n-1))
+assumptions = fst (foldr (\s (ls, n) -> ((Assumption $ assump ("A" ++ show n) s (S $ "A" ++ show n) []) : ls, n-1))
  ([], (length assumptionDescs)::Int) assumptionDescs)
 -- These correspond to glassTyAssumps, glassCondition, explsnScenario,
 -- standardValues, glassLiteAssmp, bndryConditions, responseTyAssump, ldfConstant

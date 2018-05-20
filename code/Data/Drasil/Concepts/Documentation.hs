@@ -3,6 +3,8 @@ module Data.Drasil.Concepts.Documentation where
 import Language.Drasil hiding (organization)
 
 import Data.Drasil.Concepts.Math (graph)
+import Data.Drasil.Phrase (ofA, andRT, and_, and_', of_, of_', of__)
+
 import Control.Lens ((^.))
 import qualified Language.Drasil.NounPhrase as NP
 
@@ -13,9 +15,9 @@ import qualified Language.Drasil.NounPhrase as NP
 acroNumGen :: [Contents] -> Int -> [Contents]
 acroNumGen [] _ = []
 acroNumGen (frst:rst) num = (f frst) : acroNumGen rst (num + 1)
-  where f (Assumption a) = Assumption $ assump (a ^. uid) (assuming a) (S $ extrctStrng (short assumption) ++  (show num))
-        f (Definition (Data qdef)) = Definition $ Data $ fromEqn'' (qdef ^. uid) (qdef ^. term) EmptyS (eqSymb qdef) (extrctStrng (short dataDefn) ++ (show num)) (getUnit qdef) (qdef ^. relat)
-        f (Definition (Theory rch)) = Definition $ Theory $ makeRC' (rch ^. uid) (rch ^. term) (rch ^. defn) (extrctStrng (short thModel) ++ (show num)) (rch ^. relat)
+  where f (Assumption a) = Assumption $ assump (a ^. uid) (assuming a) (S $ extrctStrng (short assumption) ++  (show num)) []
+        f (Definition (Data qdef)) = Definition $ Data $ fromEqn'' (qdef ^. uid) (qdef ^. term) EmptyS (eqSymb qdef) (extrctStrng (short dataDefn) ++ (show num)) (getUnit qdef) (qdef ^. relat) []
+        f (Definition (Theory rch)) = Definition $ Theory $ makeRC' (rch ^. uid) (rch ^. term) (rch ^. defn) (extrctStrng (short thModel) ++ (show num)) (rch ^. relat) []
         f (Requirement r) = Requirement $ rc' r (S $ extrctStrng (short requirement) ++ (show num))
         f (Change lch) = Change $ chc' lch (S $ extrctStrng (short likelyChg) ++ (show num))
         {- f (UnlikelyChange uch) = UnlikelyChange $ chc' uch (S $ extrctStrng (short unlikelyChg) ++  (show num)) -}

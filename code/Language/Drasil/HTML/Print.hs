@@ -20,7 +20,8 @@ import           Language.Drasil.Symbol (Symbol(..))
 import qualified Language.Drasil.Symbol as S
 import qualified Language.Drasil.Document as L
 import Language.Drasil.HTML.Monad
-import Language.Drasil.People (People,Person(..),rendPersLFM',rendPersLFM'',Conv(..),nameStr,rendPersLFM, dotInitial)
+import Language.Drasil.People (People, Person(..), rendPersLFM', rendPersLFM'',
+  nameStr, rendPersLFM)
 import Language.Drasil.Config (StyleGuide(..), bibStyleH)
 import Language.Drasil.ChunkDB(HasSymbolTable)
 
@@ -53,7 +54,7 @@ printLO (Paragraph contents)   = paragraph $ p_spec contents
 printLO (EqnBlock contents)    = p_spec contents
 printLO (Table ts rows r b t)  = makeTable ts rows (p_spec r) b (p_spec t)
 printLO (Definition dt ssPs l) = makeDefn dt ssPs (p_spec l)
-printLO (Header n contents _)  = h n $ p_spec contents -- FIXME
+printLO (Header n contents _)  = h (n + 1) $ p_spec contents -- FIXME
 printLO (List t)               = makeList t
 printLO (Figure r c f wp)      = makeFigure (p_spec r) (p_spec c) (text f) wp
 printLO (ALUR _ x l i)         = makeRefList (p_spec x) (p_spec l) (p_spec i)
@@ -302,7 +303,7 @@ renderCite (Cite e Misc cfs) = (text e, renderF cfs useStyleBk)
 renderCite (Cite e _ cfs) = (text e, renderF cfs useStyleArtcl) --FIXME: Properly render these later.
 
 renderF :: [CiteField] -> (StyleGuide -> (CiteField -> Doc)) -> Doc
-renderF fields styl = hcat $ map (styl bibStyleH) (sortBy compCiteField fields)
+renderF fields styl = hsep $ map (styl bibStyleH) (sortBy compCiteField fields)
 
 compCiteField :: CiteField -> CiteField -> Ordering
 compCiteField (Institution _) _ = LT
@@ -453,11 +454,8 @@ rendPers = rendPersLFM
 
 -- To render the last person's name
 rendPersL :: Person -> String
-rendPersL (Person {_surname = n, _convention = Mono}) = n
-rendPersL (Person {_given = f, _surname = l, _middle = []}) =
-  dotInitial l ++ ", " ++ dotInitial f
-rendPersL (Person {_given = f, _surname = l, _middle = ms}) =
-  dotInitial l ++ ", " ++ foldr1 (++) (dotInitial f : map dotInitial (init ms) ++ [last ms])
+rendPersL =
+  (\n -> (if not (null n) && last n == '.' then init else id) n) . rendPers
 
 --adds an 's' if there is more than one person in a list
 toPlural :: People -> String -> String

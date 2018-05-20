@@ -4,7 +4,7 @@
 
 module Drasil.GlassBR.ModuleDefs (implVars, allMods) where
 
-import Language.Drasil hiding (a_)
+import Language.Drasil
 
 import Drasil.GlassBR.Unitals (plate_len, plate_width, nom_thick,
   glass_type, char_weight, tNT, sdx, sdy, sdz, pb_tol)
@@ -61,7 +61,7 @@ two = Atomic "2"
 
 -- No need to be too verbose
 var :: String -> Symbol -> Space -> VarChunk
-var nam sym ty = implVar nam (nounPhraseSP nam) sym ty
+var nam sym ty = implVar nam (nounPhraseSP nam) sym ty [] -- list of attributes
 
 y_2, y_1, x_2, x_1, x :: VarChunk
 y_1  = var "y1"          (sub lY one) Real

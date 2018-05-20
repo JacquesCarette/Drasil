@@ -7,6 +7,7 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{breqn}
+\usepackage{unicode-math}
 \usepackage{tabu}
 \usepackage{longtable}
 \usepackage{booktabs}
@@ -15,10 +16,11 @@
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
+\setmathfont{Latin Modern Math}
 \global\tabulinesep=1mm
 \bibliography{bibfile}
 \title{Software Requirements Specification for Slope Stability Analysis}
-\author{HenryFrankis}
+\author{Henry Frankis}
 \begin{document}
 \maketitle
 \tableofcontents
@@ -1326,7 +1328,7 @@ There are no auxiliary constants.
 \label{Sec:References}
 \begin{filecontents*}{bibfile.bib}
 @article{chen2005,
-author={Qian, Q.H. and Zhu, D.Y. and Lee, C.F. and Chen, G.R.},
+author={Qian, Q. H. and Zhu, D. Y. and Lee, C. F. and Chen, G. R.},
 title={A concise algorithm for computing the factor of safety using the morgenstern price method},
 journal={Canadian Geotechnical Journal},
 year={2005},
@@ -1336,7 +1338,7 @@ number={1},
 pages={"272-278"}}
 
 @article{fredlund1977,
-author={Fredlund, D.G. and Krahn, J.},
+author={Fredlund, D. G. and Krahn, J.},
 title={Comparison of slope stability methods of analysis},
 journal={Canadian Geotechnical Journal},
 year={1977},
@@ -1353,7 +1355,7 @@ year={2013},
 address={Hamilton, ON, Canada}}
 
 @article{li2010,
-author={Yu-Chao, Li and Yun-Min, Chen and Zhan, TonyL.T. and Sao-Sheng, Ling and Cleall, PeterJohn},
+author={Yu-Chao, Li and Yun-Min, Chen and Zhan, Tony L. T. and Sao-Sheng, Ling and Cleall, Peter John},
 title={An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm},
 journal={Canadian Geotechnical Journal},
 year={2010},
@@ -1363,7 +1365,7 @@ volume={47},
 number={7}}
 
 @article{parnas1986,
-author={Parnas, DavidL. and Clements, P.C.},
+author={Parnas, David L. and Clements, P. C.},
 title={A rational design process: How and why to fake it},
 journal={IEEE Transactions on Software Engineering},
 year={1986},
@@ -1374,7 +1376,7 @@ pages={"251-257"},
 address={Washington, USA}}
 
 @inproceedings{smithLai2005,
-author={Smith, W.Spencer and Lai, Lei},
+author={Smith, W. Spencer and Lai, Lei},
 title={A new requirements template for scientific computing},
 booktitle={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
 year={2005},

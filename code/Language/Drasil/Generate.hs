@@ -16,6 +16,8 @@ import Language.Drasil.Code.Imperative.Import (generator, generateCode)
 import Language.Drasil.CodeSpec
 import Language.Drasil.ChunkDB (HasSymbolTable(..))
 
+import Language.Drasil.Chunk.Attribute.Core (Attributes)
+
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: HasSymbolTable s => DocSpec -> Document -> s -> IO ()
 gen ds fn sm = prnt sm ds fn
@@ -63,10 +65,10 @@ writeDoc s HTML fn doc = genHTML s fn doc
 writeDoc _    _  _   _ = error "we can only write TeX/HTML (for now)"
 
 -- | Calls the code generator
-genCode :: Choices -> CodeSpec -> IO ()
-genCode ch spec = do 
+genCode :: Attributes -> Choices -> CodeSpec -> IO ()
+genCode atts ch spec = do 
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False "src"
   setCurrentDirectory "src"
-  generateCode ch $ generator ch spec
+  generateCode atts ch $ generator ch spec
   setCurrentDirectory workingDir

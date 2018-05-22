@@ -1194,102 +1194,102 @@ This section simplifies the original problem and helps in developing the theoret
 </p>
 <a id="A:assump1">
 <ul>
-A1: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible [<a href=#T:t1ConsThermE>T:t1ConsThermE</a>].
+assump1: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible [<a href=#T:t1ConsThermE>T:t1ConsThermE</a>].
 </ul>
 </a>
 <a id="A:assump2">
 <ul>
-A2: All heat transfer coefficients are constant over time [GD1].
+assump2: All heat transfer coefficients are constant over time [GD1].
 </ul>
 </a>
 <a id="A:assump3">
 <ul>
-A3: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [GD2, <a href=#DD:ht.flux.P>DD:ht.flux.P</a>].
+assump3: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [GD2, <a href=#DD:ht.flux.P>DD:ht.flux.P</a>].
 </ul>
 </a>
 <a id="A:assump4">
 <ul>
-A4: The temperature of the phase change material is the same throughout the volume of PCM [GD2, <a href=#DD:ht.flux.P>DD:ht.flux.P</a>].
+assump4: The temperature of the phase change material is the same throughout the volume of PCM [GD2, <a href=#DD:ht.flux.P>DD:ht.flux.P</a>].
 </ul>
 </a>
 <a id="A:assump5">
 <ul>
-A5: The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume [GD2].
+assump5: The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume [GD2].
 </ul>
 </a>
 <a id="A:assump6">
 <ul>
-A6: The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume [GD2].
+assump6: The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume [GD2].
 </ul>
 </a>
 <a id="A:assump7">
 <ul>
-A7: Newton's law of convective cooling applies between the heating coil and the water [<a href=#DD:ht.flux.C>DD:ht.flux.C</a>].
+assump7: Newton's law of convective cooling applies between the heating coil and the water [<a href=#DD:ht.flux.C>DD:ht.flux.C</a>].
 </ul>
 </a>
 <a id="A:assump8">
 <ul>
-A8: The temperature of the heating coil is constant over time [<a href=#DD:ht.flux.C>DD:ht.flux.C</a>].
+assump8: The temperature of the heating coil is constant over time [<a href=#DD:ht.flux.C>DD:ht.flux.C</a>].
 </ul>
 </a>
 <a id="A:assump9">
 <ul>
-A9: The temperature of the heating coil does not vary along its length [<a href=#DD:ht.flux.C>DD:ht.flux.C</a>].
+assump9: The temperature of the heating coil does not vary along its length [<a href=#DD:ht.flux.C>DD:ht.flux.C</a>].
 </ul>
 </a>
 <a id="A:assump10">
 <ul>
-A10: Newton's law of convective cooling applies between the water and the PCM [<a href=#DD:ht.flux.P>DD:ht.flux.P</a>].
+assump10: Newton's law of convective cooling applies between the water and the PCM [<a href=#DD:ht.flux.P>DD:ht.flux.P</a>].
 </ul>
 </a>
 <a id="A:assump11">
 <ul>
-A11: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature [<a href=#A:assump12>assump12</a>] is less than (or equal) to the temperature of the heating coil [IM1].
+assump11: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature [<a href=#A:assump12>assump12</a>] is less than (or equal) to the temperature of the heating coil [IM1].
 </ul>
 </a>
 <a id="A:assump12">
 <ul>
-A12: The initial temperature of the water and the PCM is the same [IM1, IM2].
+assump12: The initial temperature of the water and the PCM is the same [IM1, IM2].
 </ul>
 </a>
 <a id="A:assump13">
 <ul>
-A13: The simulation will start with the PCM in a solid state [IM2, IM4].
+assump13: The simulation will start with the PCM in a solid state [IM2, IM4].
 </ul>
 </a>
 <a id="A:assump14">
 <ul>
-A14: The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature [IM1, IM3].
+assump14: The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature [IM1, IM3].
 </ul>
 </a>
 <a id="A:assump15">
 <ul>
-A15: The tank is perfectly insulated so that there is no heat loss from the tank [IM1].
+assump15: The tank is perfectly insulated so that there is no heat loss from the tank [IM1].
 </ul>
 </a>
 <a id="A:assump16">
 <ul>
-A16: No internal heat is generated by either the water or the PCM; therefore, the volumetric heat generation per unit volume is zero [IM1, IM2].
+assump16: No internal heat is generated by either the water or the PCM; therefore, the volumetric heat generation per unit volume is zero [IM1, IM2].
 </ul>
 </a>
 <a id="A:assump17">
 <ul>
-A17: The volume change of the PCM due to melting is negligible [IM2].
+assump17: The volume change of the PCM due to melting is negligible [IM2].
 </ul>
 </a>
 <a id="A:assump18">
 <ul>
-A18: The PCM is either in a liquid state or a solid state but not a gaseous state [IM2, IM4].
+assump18: The PCM is either in a liquid state or a solid state but not a gaseous state [IM2, IM4].
 </ul>
 </a>
 <a id="A:assump19">
 <ul>
-A19: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0&deg;C and 100&deg;C, respectively [IM1, IM3].
+assump19: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0&deg;C and 100&deg;C, respectively [IM1, IM3].
 </ul>
 </a>
 <a id="A:assump20">
 <ul>
-A20: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible.
+assump20: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible.
 </ul>
 </a>
 </div>
@@ -1498,8 +1498,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. <em><b>q</b>(t)</em> is the thermal flux (W/m<sup>2</sup>). <em>h</em> is the heat transfer coefficient, assumed independant of <em>T</em> (<a href=#A:Heat-Transfer-Coeffs-Constant>Heat-Transfer-Coeff
-s-Constant</a>) (W/(m<sup>2</sup>&sdot;&deg;C)). <em>&Delta;T(t) = T(t)&minus;T<sub>env</sub>(t)</em> is the time-dependant thermal gradient between the environment and the object (&deg;C).
+Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. <em><b>q</b>(t)</em> is the thermal flux (W/m<sup>2</sup>). <em>h</em> is the heat transfer coefficient, assumed independant of <em>T</em> (<a href=#A:Heat-Transfer-Coeffs-Constant>Heat-Transfer-Coeffs-Constant</a>) (W/(m<sup>2</sup>&sdot;&deg;C)). <em>&Delta;T(t) = T(t)&minus;T<sub>env</sub>(t)</em> is the time-dependant thermal gradient between the environment and the object (&deg;C).
 </p>
 </td>
 </tr>
@@ -2820,8 +2819,7 @@ In addition, the change in heat energy in the PCM should equal the energy input 
 </div>
 </a>
 <p class="paragraph">
-Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as &quot;sanity&quot;checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% <a href=#FR:req9>Veri
-fy-Energy-Output-follow-Conservation-of-Energy</a>.
+Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as &quot;sanity&quot;checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% <a href=#FR:req9>Verify-Energy-Output-follow-Conservation-of-Energy</a>.
 </p>
 </div>
 </a>
@@ -3051,7 +3049,7 @@ final time
 </a>
 <a id="FR:req2">
 <ul>
-Use-Above-Find-Mass-IM1-IM4: Use the inputs in <a href=#FR:req1>req1</a> to find the mass needed for IM1 to IM4, as follows, where <em>V<sub>W</sub></em> is the volume of water and <em>V<sub>tank</sub></em> is the volume of the cylindrical tank:
+Use-Above-Find-Mass-IM1-IM4: Use the inputs in <a href=#FR:req1>Input-Initial-Quantities</a> to find the mass needed for IM1 to IM4, as follows, where <em>V<sub>W</sub></em> is the volume of water and <em>V<sub>tank</sub></em> is the volume of the cylindrical tank:
 </ul>
 </a>
 <a id="">

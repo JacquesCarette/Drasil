@@ -4,11 +4,11 @@ import Language.Drasil
 -- These are not normally all exported, but need them here. Should probably create
 -- some kind of Language.Drasil.Development module... FIXME
 import Language.Drasil.UnitLang(UDefn(..))
-import Language.Drasil.Unit (FundUnit(..), DerUChunk(..),
+import Language.Drasil.Unit (UnitDefn(..), DerUChunk(..),
   UnitDefn, new_unit, (^:), (/:), (*:), makeDerU, shift, scale,
   derUC, derUC', derUC'', unitWrapper)
 
-fundamentals :: [FundUnit]
+fundamentals :: [UnitDefn]
 fundamentals = [metre, kilogram, second, kelvin, mole, ampere, candela]
 
 derived :: [DerUChunk]
@@ -21,7 +21,7 @@ si_units = map unitWrapper fundamentals ++ map unitWrapper derived
 
 ------------- Fundamental SI Units ---------------------------------------------
 
-metre, kilogram, second, kelvin, mole, ampere, candela :: FundUnit
+metre, kilogram, second, kelvin, mole, ampere, candela :: UnitDefn
 metre    = fund "metre"    "length"               "m"
 kilogram = fund "kilogram" "mass"                 "kg"
 second   = fund "second"   "time"                 "s"
@@ -32,7 +32,7 @@ candela  = fund "candela"  "luminous intensity"   "cd"
 
 ------------- Commonly defined units -------------------------------------------
 
-degree :: FundUnit --FIXME: define degree in terms of radians and pi
+degree :: UnitDefn --FIXME: define degree in terms of radians and pi
 degree = UD (dcc "degree" (cn' "degree") "angle") (US [(Special Circle,1)])
 
 -- Some of these units are easiest to define via others less common names, 

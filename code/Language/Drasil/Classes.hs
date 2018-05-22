@@ -16,16 +16,18 @@ module Language.Drasil.Classes (
   , CommonIdea(abrv)
   , Constrained(constraints)
   , HasReasVal(reasVal)
+  , ExprRelat(relat)
   ) where
 
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Spec (Sentence)
-import Language.Drasil.Symbol (Stage,Symbol)
+import Language.Drasil.Symbol (Stage, Symbol)
 import Language.Drasil.Space (Space)
-import Language.Drasil.UnitLang (USymb,UDefn)
+import Language.Drasil.UnitLang (USymb, UDefn)
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Expr (Expr)
+
 
 import Control.Lens (Lens')
 
@@ -105,3 +107,6 @@ class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u where
 class UnitEq u where
    uniteq :: Lens' u UDefn
 
+-- TODO : there is a design bug here not at all apparent from its definition; have to come back to it (Pull Request #532)
+class ExprRelat c where
+  relat :: Lens' c Expr

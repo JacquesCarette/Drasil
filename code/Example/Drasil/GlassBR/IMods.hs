@@ -32,7 +32,7 @@ probOfBreak = im probOfBr [qw risk]
 
 probOfBr :: RelationConcept
 probOfBr = makeRC "probOfBr" (nounPhraseSP "Probability of Glass Breakage")
-  pbdescr $ (sy prob_br) $= 1 - (exp (negate (sy risk)))
+  pbdescr ( (sy prob_br) $= 1 - (exp (negate (sy risk)))) []
 
 pbdescr :: Sentence
 pbdescr =
@@ -43,7 +43,7 @@ pbdescr =
 
 calOfCap :: RelationConcept
 calOfCap = makeRC "calOfCap" (nounPhraseSP "Calculation of Capacity(LR)") 
-  capdescr $ (sy lRe) $= ((sy nonFL) * (sy glaTyFac) * (sy loadSF))
+  capdescr ( (sy lRe) $= ((sy nonFL) * (sy glaTyFac) * (sy loadSF))) []
 
 capdescr :: Sentence
 capdescr =
@@ -62,7 +62,7 @@ capdescr =
 
 calOfDe :: RelationConcept
 calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)") 
-  dedescr $ (sy demand) $= apply2 demand eqTNTWeight standOffDist 
+  dedescr ( (sy demand) $= apply2 demand eqTNTWeight standOffDist) []
   --dedescr $ (C demand) $= FCall (asExpr interpY) [V "TSD.txt", sy standOffDist, sy eqTNTWeight] 
   
 dedescr :: Sentence

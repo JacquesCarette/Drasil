@@ -7,11 +7,11 @@ import Data.Drasil.SI_Units
 
 elastMod, mobShear, nrmStrss, shearRes, stffness :: UnitalChunk
 
-elastMod = uc CSM.elastMod cE pascal
-mobShear = uc CSM.mobShear cS newton
-shearRes = uc CSM.shearRes cP newton
-stffness = uc CSM.stffness cK stiffnessU
+elastMod = uc CSM.elastMod cE pascal 
+mobShear = uc CSM.mobShear cS newton 
+shearRes = uc CSM.shearRes cP newton 
+stffness = uc CSM.stffness cK stiffnessU 
 nrmStrss = uc CSM.nrmStrss (Greek Sigma_L) pascal
 
-poissnsR :: ConVar
-poissnsR = cv CSM.poissnsR (Greek Nu_L) Real
+poissnsR :: DefinedQuantityDict
+poissnsR = dqd' CSM.poissnsR (const $ Greek Nu_L) Real Nothing []

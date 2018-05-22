@@ -167,17 +167,17 @@ unwrap Nothing  = EmptyS
 mkDataDef :: (Quantity c) => c -> Expr -> QDefinition
 mkDataDef cncpt equation = datadef $ getUnit cncpt
   where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) a equation
+                           (eqSymb cncpt) a equation []
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) equation
+                           (eqSymb cncpt) equation []
 
 -- Same as 'mkDataDef', but with an additional Sentence that can be taken as "extra information"; issue #350
-mkDataDef' :: (Quantity c) => c -> Expr -> Sentence -> QDefinition
-mkDataDef' cncpt equation extraInfo = datadef $ getUnit cncpt
+mkDataDef' :: (Quantity c) => c -> Expr -> Sentence  -> Attributes -> QDefinition
+mkDataDef' cncpt equation extraInfo atts = datadef $ getUnit cncpt
   where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) (extraInfo)
-                           (eqSymb cncpt) a equation
+                           (eqSymb cncpt) a equation atts
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) (extraInfo)
-                           (eqSymb cncpt) equation
+                           (eqSymb cncpt) equation atts
 
 prodUCTbl :: [[Sentence]] -> Contents
 prodUCTbl cases = Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]

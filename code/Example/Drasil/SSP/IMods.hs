@@ -44,7 +44,7 @@ sspIMods = [fctSfty, nrmShrFor, intsliceFs, forDisEqlb, rfemFoS, crtSlpId]
 
 --
 fctSfty :: RelationConcept
-fctSfty = makeRC "fctSfty" factorOfSafety fcSfty_desc fcSfty_rel
+fctSfty = makeRC "fctSfty" factorOfSafety fcSfty_desc fcSfty_rel []
 
 --FIXME: first shearRNoIntsl should have local index v, not i,
 --       last occurence should have index n
@@ -69,7 +69,7 @@ fcSfty_desc = foldlSent [S "Equation for the", titleize fs `isThe` S "ratio",
 --
 nrmShrFor :: RelationConcept
 nrmShrFor = makeRC "nrmShrFor" (nounPhraseSP "normal/shear force ratio")
-  nrmShrF_desc nrmShrF_rel
+  nrmShrF_desc nrmShrF_rel []
 
 nrmShrF_rel :: Relation
 nrmShrF_rel = (inxi normFunc) $= case_ [case1,case2,case3] $=
@@ -109,7 +109,7 @@ nrmShrF_desc = foldlSent [getES normToShear `isThe` S "magnitude ratio",
 --
 intsliceFs :: RelationConcept
 intsliceFs = makeRC "intsliceFs" (nounPhraseSP "interslice forces")
-  sliceFs_desc sliceFs_rel
+  sliceFs_desc sliceFs_rel []
 
 sliceFs_rel :: Relation
 sliceFs_rel = inxi intNormForce $= case_ [
@@ -131,7 +131,7 @@ sliceFs_desc = foldlSent [S "The value of the interslice normal force",
 --
 forDisEqlb :: RelationConcept
 forDisEqlb = makeRC "forDisEqlb"
-  (nounPhraseSP "force displacement equilibrium") fDisEq_desc fDisEq_rel
+  (nounPhraseSP "force displacement equilibrium") fDisEq_desc fDisEq_rel []
 
 fDisEq_rel :: Relation --FIXME: split into two IMOD
 fDisEq_rel = negate (inxi watrForceDif) - (sy earthqkLoadFctr)*(inxi slcWght) -
@@ -177,7 +177,7 @@ fDisEq_desc = foldlSent [
 --
 rfemFoS :: RelationConcept
 rfemFoS = makeRC "rfemFoS" (nounPhraseSP "RFEM factor of safety")
-  rfemFoS_desc rfemFoS_rel
+  rfemFoS_desc rfemFoS_rel []
 
 rfemFoS_rel :: Relation
 rfemFoS_rel = (inxi fsloc) $= fosFracLoc $= fosFracSum
@@ -207,7 +207,7 @@ rfemFoS_desc = foldlSent [
 --
 crtSlpId :: RelationConcept
 crtSlpId = makeRC "crtSlpId" (nounPhraseSP "critical slip identification")
-  crtSlpId_desc crtSlpId_rel
+  crtSlpId_desc crtSlpId_rel []
 
 -- FIXME: horrible hack. This is short an argument... that was never defined!
 crtSlpId_rel :: Relation

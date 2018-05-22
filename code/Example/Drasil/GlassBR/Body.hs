@@ -159,11 +159,11 @@ glassSystInfo = SI {
   _refdb       = gbRefDB
 }
   --FIXME: All named ideas, not just acronyms.
-  
+
 testIMFromQD :: InstanceModel
 testIMFromQD = imQD gbSymbMap risk EmptyS [] [] []
 glassBR_code :: CodeSpec
-glassBR_code = codeSpec' glassSystInfo allMods
+glassBR_code = codeSpec glassSystInfo allMods
 
 
 s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2 :: Section
@@ -450,7 +450,7 @@ assumpList :: [AssumpChunk] -> [Contents]
 assumpList = map Assumption
 
 assumptions :: [Contents] -- FIXME: Remove this entirely and use new refs + docLang.
-assumptions = fst (foldr (\s (ls, n) -> ((Assumption $ assump ("A" ++ show n) s (S $ "A" ++ show n)) : ls, n-1))
+assumptions = fst (foldr (\s (ls, n) -> ((Assumption $ assump ("A" ++ show n) s (S $ "A" ++ show n) []) : ls, n-1))
  ([], (length assumptionDescs)::Int) assumptionDescs)
 -- These correspond to glassTyAssumps, glassCondition, explsnScenario,
 -- standardValues, glassLiteAssmp, bndryConditions, responseTyAssump, ldfConstant

@@ -34,9 +34,9 @@ data Change = ChC
   , _atts    :: Attributes
   }
   
-instance HasUID Change where uid f (ChC a b c d e) = fmap (\x -> ChC x b c d e) (f a)
+instance HasUID        Change where uid f (ChC a b c d e) = fmap (\x -> ChC x b c d e) (f a)
 instance HasAttributes Change where attributes f (ChC a b c d e) = fmap (\x -> ChC a b c d x) (f e)
-instance Eq Change where a == b = a ^. uid == b ^. uid
+instance Eq            Change where a == b = a ^. uid == b ^. uid
 
 -- | Smart constructor for requirement chunks (should not be exported)
 chc :: String -> ChngType -> Sentence -> RefName -> Attributes -> Change

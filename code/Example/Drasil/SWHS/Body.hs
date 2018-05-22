@@ -150,7 +150,7 @@ mkSRS = [RefSec (RefProg intro
   (Bibliography : [])
 
 swhsCode :: CodeSpec
-swhsCode = codeSpec' swhs_si [swhsInputMod]
+swhsCode = codeSpec swhs_si [swhsInputMod]
 
 tsymb_intro :: [TSIntro]
 tsymb_intro = [TSPurpose, SymbConvention
@@ -1034,8 +1034,8 @@ s4_2_3_deriv_3 = eqUnR
   (int_all (eqSymb vol) (sy vol_ht_gen)) $=
   (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
 
-s4_2_3_deriv_4 :: ConceptChunk -> ConVar -> UnitalChunk -> UnitalChunk ->
-  ConVar -> ConceptChunk -> Contents
+s4_2_3_deriv_4 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
+  DefinedQuantityDict -> ConceptChunk -> Contents
 s4_2_3_deriv_4 gaussdiv su vo tfv unv un = foldlSPCol [S "Applying", titleize gaussdiv,
   S "to the first term over", (phrase su +:+ getES su `ofThe` phrase vo) `sC`
   S "with", getES tfv, S "as the", phrase tfv, S "for the",
@@ -1260,7 +1260,7 @@ s4_2_5_d2startPara en pcmat sh roc ptem vo pvo pma hcsp hfp psa hfo vhg a16 =
   ]
 
 s4_2_5_d2endPara :: CI -> UncertQ -> UncertQ -> UnitalChunk -> UnitalChunk -> 
-  ConVar -> ConceptChunk -> UnitalChunk -> UncertQ -> UncertQ -> 
+  DefinedQuantityDict -> ConceptChunk -> UnitalChunk -> UncertQ -> UncertQ -> 
   ConceptChunk -> ConceptChunk -> ConceptChunk -> [Contents]
 s4_2_5_d2endPara pcmat hcsp hclp tsp tlp sur mel vo ptem tmp boi so li = map 
   foldlSP [
@@ -1351,7 +1351,7 @@ s4_2_6_T1footer qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
 ----------------------------------------------
 
 s4_2_7_deriv_1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
-  CI -> QDefinition -> QDefinition -> ConVar -> ConceptChunk -> Contents
+  CI -> QDefinition -> QDefinition -> DefinedQuantityDict -> ConceptChunk -> Contents
 s4_2_7_deriv_1 lce ewat en co pcmat d1hfc d2hfp su ht  =
   foldlSPCol [S "A", phrase corSol, S "must exhibit the" +:+.
   phrase lce, S "This means that the", phrase ewat,

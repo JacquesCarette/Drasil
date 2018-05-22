@@ -40,26 +40,26 @@ newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9,
 newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10,
   newA11, newA12, newA13, newA14, newA15, newA16, newA17, newA18, newA19, newA20 :: AssumpChunk
 
-newA1 = assump "Thermal-Energy-Only" assumpS1 (S "Thermal-Energy-Only")
-newA2 = assump "Heat-Transfer-Coeffs-Constant" assumpS2 (S "Heat-Transfer-Coeffs-Constant") 
-newA3 = assump "Constant-Water-Temp-Across-Tank" assumpS3 (S "Constant-Water-Temp-Across-Tank")
-newA4 = assump "Temp-PCM-Constant-Across-Volume" assumpS4 (S "Temp-PCM-Constant-Across-Volume")
-newA5 = assump "Density-Water-PCM-Constant-over-Volume" assumpS5 (S "Density-Water-PCM-Constant-over-Volume") 
-newA6 = assump "Specific-Heat-Energy-Constant-over-Volume" assumpS6 (S "Specific-Heat-Energy-Constant-over-Volume")
-newA7 = assump "Law-Convective-Cooling-Coil-Water" assumpS7 (S "Newton-Law-Convective-Cooling-Coil-Water")
-newA8 = assump "Temp-Heating-Coil-Constant-over-Time" assumpS8 (S "Temp-Heating-Coil-Constant-over-Time")
-newA9 = assump "Temp-Heating-Coil-Constant-over-Length" assumpS9 (S "Temp-Heating-Coil-Constant-over-Length")
-newA10 = assump "Law-Convective-Cooling-Water-PCM" assumpS10 (S "Law-Convective-Cooling-Water-PCM")
-newA11 = assump "Charging-Tank-No-Temp-Discharge" assumpS11 (S "Charging-Tank-No-Temp-Discharge")
-newA12 = assump "Same-Initial-Temp-Water-PCM" assumpS12 (S "Same-Initial-Temp-Water-PCM")
-newA13 = assump "PCM-Initialli-Soild" assumpS13 (S "PCM-Initialli-Soild")
-newA14 = assump "Water-Always-Liquid" assumpS14 (S "Water-Always-Liquid")
-newA15 = assump "Perfect-Insulation-Tank" assumpS15 (S "Perfect-Insulation-Tank")
-newA16 = assump "No-Internal-Heat-Generation-By-Water-PCM" assumpS16 (S "No-Internal-Heat-Generation-By-Water-PCM")
-newA17 = assump "Volume-Change-Melting-PCM-Negligible" assumpS17 (S "Volume-Change-Melting-PCM-Negligible")
-newA18 = assump "No-Gaseous-State-PCM" assumpS18 (S "No-Gaseous-State-PCM")
-newA19 = assump "Atmospheric-Pressure-Tank" assumpS19 (S "Atmospheric-Pressure-Tank")
-newA20 = assump "Volume-Coil-Negligible" assumpS20 (S "Volume-Coil-Negligible")
+newA1 = assump "Thermal-Energy-Only" assumpS1 (S "Thermal-Energy-Only") []
+newA2 = assump "Heat-Transfer-Coeffs-Constant" assumpS2 (S "Heat-Transfer-Coeffs-Constant")  []
+newA3 = assump "Constant-Water-Temp-Across-Tank" assumpS3 (S "Constant-Water-Temp-Across-Tank") []
+newA4 = assump "Temp-PCM-Constant-Across-Volume" assumpS4 (S "Temp-PCM-Constant-Across-Volume") []
+newA5 = assump "Density-Water-PCM-Constant-over-Volume" assumpS5 (S "Density-Water-PCM-Constant-over-Volume")  []
+newA6 = assump "Specific-Heat-Energy-Constant-over-Volume" assumpS6 (S "Specific-Heat-Energy-Constant-over-Volume") []
+newA7 = assump "Law-Convective-Cooling-Coil-Water" assumpS7 (S "Newton-Law-Convective-Cooling-Coil-Water") []
+newA8 = assump "Temp-Heating-Coil-Constant-over-Time" assumpS8 (S "Temp-Heating-Coil-Constant-over-Time") []
+newA9 = assump "Temp-Heating-Coil-Constant-over-Length" assumpS9 (S "Temp-Heating-Coil-Constant-over-Length") []
+newA10 = assump "Law-Convective-Cooling-Water-PCM" assumpS10 (S "Law-Convective-Cooling-Water-PCM") []
+newA11 = assump "Charging-Tank-No-Temp-Discharge" assumpS11 (S "Charging-Tank-No-Temp-Discharge") []
+newA12 = assump "Same-Initial-Temp-Water-PCM" assumpS12 (S "Same-Initial-Temp-Water-PCM") []
+newA13 = assump "PCM-Initialli-Soild" assumpS13 (S "PCM-Initialli-Soild") []
+newA14 = assump "Water-Always-Liquid" assumpS14 (S "Water-Always-Liquid") []
+newA15 = assump "Perfect-Insulation-Tank" assumpS15 (S "Perfect-Insulation-Tank") []
+newA16 = assump "No-Internal-Heat-Generation-By-Water-PCM" assumpS16 (S "No-Internal-Heat-Generation-By-Water-PCM") []
+newA17 = assump "Volume-Change-Melting-PCM-Negligible" assumpS17 (S "Volume-Change-Melting-PCM-Negligible") []
+newA18 = assump "No-Gaseous-State-PCM" assumpS18 (S "No-Gaseous-State-PCM") []
+newA19 = assump "Atmospheric-Pressure-Tank" assumpS19 (S "Atmospheric-Pressure-Tank") []
+newA20 = assump "Volume-Coil-Negligible" assumpS20 (S "Volume-Coil-Negligible") []
 
 swhsAssumptionsS:: [Sentence]
 swhsAssumptionsS = [assumpS1, assumpS2, assumpS3, assumpS4, assumpS5,
@@ -176,26 +176,26 @@ assump1, assump2, assump3, assump4, assump5, assump6, assump7,
   assump8, assump9, assump10, assump11, assump12, assump13, assump14,
   assump15, assump16, assump17, assump18, assump19, assump20 :: Contents
 
-assump1 = let a1 = "assump1" in Assumption $ assump a1 assumpS1 (S a1)
-assump2 = let a2 = "assump2" in Assumption $ assump a2 assumpS2 (S a2)
-assump3 = let a3 = "assump3" in Assumption $ assump a3 assumpS3 (S a3)
-assump4 = let a4 = "assump4" in Assumption $ assump a4 assumpS4 (S a4)
-assump5 = let a5 = "assump5" in Assumption $ assump a5 assumpS5 (S a5)
-assump6 = let a6 = "assump6" in Assumption $ assump a6 assumpS6 (S a6)
-assump7 = let a7 = "assump7" in Assumption $ assump a7 assumpS7 (S a7)
-assump8 = let a8 = "assump8" in Assumption $ assump a8 assumpS8 (S a8)
-assump9 = let a9 = "assump9" in Assumption $ assump a9 assumpS9 (S a9)
-assump10 = let a10 = "assump10" in Assumption $ assump a10 assumpS10 (S a10)
-assump11 = let a11 = "assump11" in Assumption $ assump a11 assumpS11 (S a11)
-assump12 = let a12 = "assump12" in Assumption $ assump a12 assumpS12 (S a12)
-assump13 = let a13 = "assump13" in Assumption $ assump a13 assumpS13 (S a13)
-assump14 = let a14 = "assump14" in Assumption $ assump a14 assumpS14 (S a14)
-assump15 = let a15 = "assump15" in Assumption $ assump a15 assumpS15 (S a15)
-assump16 = let a16 = "assump16" in Assumption $ assump a16 assumpS16 (S a16)
-assump17 = let a17 = "assump17" in Assumption $ assump a17 assumpS17 (S a17)
-assump18 = let a18 = "assump18" in Assumption $ assump a18 assumpS18 (S a18)
-assump19 = let a19 = "assump19" in Assumption $ assump a19 assumpS19 (S a19)
-assump20 = let a20 = "assump20" in Assumption $ assump a20 assumpS20 (S a20)
+assump1 = let a1 = "assump1" in Assumption $ assump a1 assumpS1 (S a1) []
+assump2 = let a2 = "assump2" in Assumption $ assump a2 assumpS2 (S a2) []
+assump3 = let a3 = "assump3" in Assumption $ assump a3 assumpS3 (S a3) []
+assump4 = let a4 = "assump4" in Assumption $ assump a4 assumpS4 (S a4) []
+assump5 = let a5 = "assump5" in Assumption $ assump a5 assumpS5 (S a5) []
+assump6 = let a6 = "assump6" in Assumption $ assump a6 assumpS6 (S a6) []
+assump7 = let a7 = "assump7" in Assumption $ assump a7 assumpS7 (S a7) []
+assump8 = let a8 = "assump8" in Assumption $ assump a8 assumpS8 (S a8) []
+assump9 = let a9 = "assump9" in Assumption $ assump a9 assumpS9 (S a9) []
+assump10 = let a10 = "assump10" in Assumption $ assump a10 assumpS10 (S a10) []
+assump11 = let a11 = "assump11" in Assumption $ assump a11 assumpS11 (S a11) []
+assump12 = let a12 = "assump12" in Assumption $ assump a12 assumpS12 (S a12) []
+assump13 = let a13 = "assump13" in Assumption $ assump a13 assumpS13 (S a13) []
+assump14 = let a14 = "assump14" in Assumption $ assump a14 assumpS14 (S a14) []
+assump15 = let a15 = "assump15" in Assumption $ assump a15 assumpS15 (S a15) []
+assump16 = let a16 = "assump16" in Assumption $ assump a16 assumpS16 (S a16) []
+assump17 = let a17 = "assump17" in Assumption $ assump a17 assumpS17 (S a17) []
+assump18 = let a18 = "assump18" in Assumption $ assump a18 assumpS18 (S a18) []
+assump19 = let a19 = "assump19" in Assumption $ assump a19 assumpS19 (S a19) []
+assump20 = let a20 = "assump20" in Assumption $ assump a20 assumpS20 (S a20) []
 
 -- Again, list structure is same between all examples.
 

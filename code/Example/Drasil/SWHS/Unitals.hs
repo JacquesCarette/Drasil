@@ -21,8 +21,8 @@ import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Phrase (of_)
 
 swhsSymbols :: [DefinedQuantityDict]
-swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless) ++
-  (map cqs swhsConstrained)
+swhsSymbols = (map dqdWr swhsUnits) ++ (map dqdWr swhsUnitless) ++
+  (map dqdWr swhsConstrained)
 
 swhsSymbolsAll :: [QuantityDict]
 swhsSymbolsAll = (map qw swhsUnits) ++ (map qw swhsUnitless) ++
@@ -186,19 +186,21 @@ sim_time = uc' "sim_time" (compoundPhrase' (simulation ^. term)
 ----------------------
 -- Unitless symbols --
 ----------------------
-swhsUnitless :: [ConVar]
+
+swhsUnitless :: [DefinedQuantityDict]
 swhsUnitless = [uNormalVect, surface, eta, melt_frac]
 
-eta, melt_frac :: ConVar
+eta, melt_frac :: DefinedQuantityDict
 
-eta = cv (dcc "eta" (nounPhraseSP "ODE parameter")
+-- FIXME: should this have units?
+eta = dqd' (dcc "eta" (nounPhraseSP "ODE parameter")
   "Derived parameter based on rate of change of temperature of water")
-  (Greek Eta_L) Real
+  (const $ Greek Eta_L) Real Nothing []
 
-melt_frac = cv (dcc "melt_frac" (nounPhraseSP "melt fraction")
+melt_frac = dqd' (dcc "melt_frac" (nounPhraseSP "melt fraction")
   "Ratio of thermal energy to amount of mass melted")
   --FIXME: Not sure if definition is exactly correct
-  (Greek Phi_L) Real
+  (const $ Greek Phi_L) Real Nothing []
 
 -----------------
 -- Constraints --
@@ -313,14 +315,14 @@ w_density = uqc "w_density" (density `of_` water)
   (sub (eqSymb density) cW) densityU Rational
   [gtZeroConstr,
   sfwrc $ Bounded (Exc, sy w_density_min) (Inc, sy w_density_max)] (dbl 1000) 0.1
-  
+
 -- Constraint 13
 htCap_W = uqc "htCap_W" (heat_cap_spec `of_` water)
   ("The amount of energy required to raise the " ++
     "temperature of a given unit mass of water by a given amount")
   (sub (eqSymb heat_cap_spec) cW) UT.heat_cap_spec Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Exc, sy htCap_W_min) (Exc, sy htCap_W_max)] (dbl 4186) 0.1
+  sfwrc $ Bounded (Exc, sy htCap_W_min) (Exc, sy htCap_W_max)] (dbl 4186) 0.1 
   
 -- Constraint 14
 coil_HTC = uqc "coil_HTC" (nounPhraseSP
@@ -331,7 +333,7 @@ coil_HTC = uqc "coil_HTC" (nounPhraseSP
   UT.heat_transfer_coef Rational
   [gtZeroConstr,
   sfwrc $ Bounded (Inc, sy coil_HTC_min) (Inc, sy coil_HTC_max)] (dbl 1000) 0.1
-  
+
 -- Constraint 15
 pcm_HTC = uqc "pcm_HTC"
   (nounPhraseSP "convective heat transfer coefficient between PCM and water")
@@ -388,11 +390,9 @@ pcm_E = uqcNU "pcm_E" (nounPhraseSP "change in heat energy in the PCM")
   (sub (eqSymb sens_heat) cP) joule Rational
   [physc $ UpFrom (Inc, 0)] (dbl 0)
 
-
-
-------------------------------
--- Uncertainties with no Units
-------------------------------
+---------------------------------
+-- Uncertainties with no Units --
+---------------------------------
 
 abs_tol, rel_tol, cons_tol :: UncertainChunk
 
@@ -411,8 +411,6 @@ cons_tol = uvc "pb_tol"
   (sub cC (Atomic "tol")) Real
   [ physc $ Bounded (Exc,0) (Exc,1)] 
   (dbl (10.0**(-3))) 0.01
-
-
 
 -------------------------
 -- Max / Min Variables --

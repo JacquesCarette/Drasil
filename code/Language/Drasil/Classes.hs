@@ -17,6 +17,7 @@ module Language.Drasil.Classes (
   , Constrained(constraints)
   , HasReasVal(reasVal)
   , ExprRelat(relat)
+  , HasDerivation(derivation)
   ) where
 
 import Language.Drasil.NounPhrase.Core (NP)
@@ -27,7 +28,7 @@ import Language.Drasil.UnitLang (USymb, UDefn)
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Expr (Expr)
-
+import Language.Drasil.Chunk.Attribute.Derivation
 
 import Control.Lens (Lens')
 
@@ -77,6 +78,9 @@ class HasSpace c where
 -- | Anything with 'Attributes'
 class HasAttributes c where
   attributes :: Lens' c Attributes
+
+class HasDerivation c where
+  derivation :: Lens' c Derivation
 
 -- | CommonIdea is a 'NamedIdea' with the additional
 -- constraint that it __must__ have an abbreviation.

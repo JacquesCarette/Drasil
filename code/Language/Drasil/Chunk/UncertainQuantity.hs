@@ -96,11 +96,11 @@ instance HasAttributes     UncertQ where attributes = coco . attributes
 -- | The UncertainQuantity constructor. Requires a Quantity, a percentage, and a typical value
 uq :: (HasAttributes c, Quantity c, Constrained c, Concept c, HasReasVal c, DOM c ~ ConceptChunk) => 
   c -> Double -> UncertQ
-uq q u = UQ (ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit q) (q ^. attributes)) (q ^. constraints) (q ^. reasVal)) (Just u) 
+uq q u = UQ (ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit q) (q ^. attributes) []) (q ^. constraints) (q ^. reasVal)) (Just u) 
 
 uqNU :: (HasAttributes c, Quantity c, Constrained c, Concept c, HasReasVal c, DOM c ~ ConceptChunk) =>
   c -> UncertQ
-uqNU q = UQ (ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit q) (q ^. attributes)) (q ^. constraints) (q ^. reasVal)) Nothing 
+uqNU q = UQ (ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit q) (q ^. attributes) []) (q ^. constraints) (q ^. reasVal)) Nothing 
 
 -- this is kind of crazy and probably shouldn't be used!
 uqc :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u -> Space

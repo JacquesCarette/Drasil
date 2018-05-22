@@ -3,8 +3,9 @@ module Language.Drasil.Chunk.Change
   , lc, ulc--, chc'
   ) where
 
-import Language.Drasil.Classes (HasUID(uid), HasAttributes(attributes), HasShortName)
+import Language.Drasil.Classes (HasUID(uid), HasAttributes(attributes), HasShortName(refAdd'))
 import Language.Drasil.Chunk.Attribute.Core(Attributes)
+import Language.Drasil.Chunk.Attribute.ShortName
 import Language.Drasil.Chunk.Attribute(shortname)
 import Language.Drasil.Spec (Sentence, RefName)
 
@@ -31,22 +32,22 @@ data Change = ChC
   , chngType :: ChngType 
   , chng     :: Sentence
   , _refName :: RefName -- HACK for refs?
-  , _atts    :: Attributes
+  , _atts    :: ShortNameD
   }
   
 instance HasUID        Change where uid f (ChC a b c d e) = fmap (\x -> ChC x b c d e) (f a)
-instance HasAttributes Change where attributes f (ChC a b c d e) = fmap (\x -> ChC a b c d x) (f e)
-instance HasShortName  Change where
+instance HasAttributes Change where --attributes f (ChC a b c d e) = fmap (\x -> ChC a b c d x) (f e)
+instance HasShortName  Change where refAdd' f (ChC a b c d e) = fmap (\x -> ChC a b c d x) (f e)
 instance Eq            Change where a == b = a ^. uid == b ^. uid
 
 -- | Smart constructor for requirement chunks (should not be exported)
-chc :: String -> ChngType -> Sentence -> RefName -> Attributes -> Change
+chc :: String -> ChngType -> Sentence -> RefName -> ShortNameD -> Change
 chc = ChC
 
 --chc' :: Change -> Sentence -> Change
 --chc' c s = set attributes ([shortname s] ++ (c ^. attributes)) c
 
-lc, ulc :: String -> Sentence -> RefName -> Attributes -> Change
+lc, ulc :: String -> Sentence -> RefName -> ShortNameD -> Change
 -- | Smart constructor for functional requirement chunks.
 lc i = chc i Likely
 

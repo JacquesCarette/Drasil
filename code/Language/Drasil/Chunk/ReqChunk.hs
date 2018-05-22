@@ -6,6 +6,7 @@ module Language.Drasil.Chunk.ReqChunk
 import Language.Drasil.Classes (HasUID(uid), HasAttributes(attributes), HasShortName)
 import Language.Drasil.Chunk.Attribute (shortname)
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
+import Language.Drasil.Chunk.Attribute.ShortName
 import Language.Drasil.Spec (Sentence, RefName)
 
 import Control.Lens (set, (^.))
@@ -35,22 +36,22 @@ data ReqChunk = RC
   , reqType    :: ReqType 
   , requires   :: Sentence
   , _refName   :: RefName -- HACK for refs?
-  , _atts      :: Attributes
+  , _atts      :: ShortNameD --Attributes
   }
   
 instance HasUID        ReqChunk where uid f (RC a b c d e) = fmap (\x -> RC x b c d e) (f a)
-instance HasAttributes ReqChunk where attributes f (RC a b c d e) = fmap (\x -> RC a b c d x) (f e)
+instance HasAttributes ReqChunk where --attributes f (RC a b c d e) = fmap (\x -> RC a b c d x) (f e)
 instance HasShortName  ReqChunk where
 instance Eq            ReqChunk where a == b = a ^. uid == b ^. uid
 
 -- | Smart constructor for requirement chunks (should not be exported)
-rc :: String -> ReqType -> Sentence -> RefName -> Attributes -> ReqChunk
+rc :: String -> ReqType -> Sentence -> RefName -> ShortNameD -> ReqChunk
 rc = RC
 
 --rc' :: ReqChunk -> Sentence -> ReqChunk
 --rc' r s = set attributes (shortname s : (r ^. attributes)) r
 
-frc, nfrc :: String -> Sentence -> RefName -> Attributes -> ReqChunk
+frc, nfrc :: String -> Sentence -> RefName -> ShortNameD -> ReqChunk
 -- | Smart constructor for functional requirement chunks.
 frc i = rc i FR
 

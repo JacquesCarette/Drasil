@@ -550,7 +550,7 @@ Label & Calculation of Capacity(LR)
 \\ \midrule \\
 Equation & $LR=NFL GTF LSF$
 \\ \midrule \\
-Description & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows A2 and A1 (``In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations'') from [4 (pg. 53)].
+Description & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows A\ref{A:glassConditionA} and A\ref{A:glassTyA} (``In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations'') from [4 (pg. 53)].
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -673,19 +673,19 @@ This problem is small in size and relatively simple, so performance is not a pri
 \section{Likely Changes}
 \label{Sec:LCs}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8.likelychg1}:]A3 - The system currently only calculates for external blast risk. In the future calculations can be added for the internal blast risk.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8.likelychg1}:]A\ref{A:explsnScenarioA} - The system currently only calculates for external blast risk. In the future calculations can be added for the internal blast risk.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8.likelychg2}:]A4, A8 - Currently the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future these values can be changed to variable inputs.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8.likelychg2}:]A\ref{A:standardValuesA}, A\ref{A:ldfConstantA} - Currently the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future these values can be changed to variable inputs.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8.likelychg3}:]A5 - The software may be changed to accommodate more than a single lite.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8.likelychg3}:]A\ref{A:glassLiteA} - The software may be changed to accommodate more than a single lite.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8.likelychg4}:]A6 - The software may be changed to accommodate more boundary conditions than 4-sided support.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8.likelychg4}:]A\ref{A:bndryConditionsA} - The software may be changed to accommodate more boundary conditions than 4-sided support.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8.likelychg5}:]A7 - The software may be changed to consider more than just flexure of the glass.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8.likelychg5}:]A\ref{A:responseTyA} - The software may be changed to consider more than just flexure of the glass.
 \end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}

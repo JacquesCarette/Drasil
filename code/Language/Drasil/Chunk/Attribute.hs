@@ -7,7 +7,8 @@ import Control.Lens ((^.))
 import Language.Drasil.Spec (Sentence(EmptyS))
 import Language.Drasil.Chunk.Attribute.Core (Attributes, Attribute(..))
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
-import Language.Drasil.Classes (HasAttributes(attributes))
+import Language.Drasil.Chunk.Attribute.ShortName 
+import Language.Drasil.Classes (HasAttributes(attributes), HasShortName(refAdd'))
 
 --------------------------------------------------------------------------------
 
@@ -31,16 +32,13 @@ getDerivation c = deriv $ c ^. attributes
     deriv ((D der):_) = der
     deriv (_:xs)      = deriv xs
 
-getShortName :: HasAttributes c => c -> Maybe Sentence
-getShortName c = shortName $ c ^. attributes
-  where
-    shortName :: Attributes -> Maybe Sentence
-    shortName [] = Nothing
-    shortName ((ShortName s):_) = Just s
-    shortName (_:xs) = shortName xs
+getShortName :: HasShortName c => c -> Maybe Sentence
+getShortName c = Just (c ^. refAdd')
 
-shortname, sourceref :: Sentence -> Attribute
+shortname :: Sentence -> ShortNameD
 shortname = ShortName
+
+sourceref :: Sentence -> Attribute
 sourceref = SourceRef
 
 derivationsteps :: Derivation -> Attribute

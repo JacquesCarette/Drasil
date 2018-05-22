@@ -17,6 +17,7 @@ module Language.Drasil.Classes (
   , Constrained(constraints)
   , HasReasVal(reasVal)
   , ExprRelat(relat)
+  , HasShortName(refAdd')
   ) where
 
 import Language.Drasil.NounPhrase.Core (NP)
@@ -27,7 +28,7 @@ import Language.Drasil.UnitLang (USymb, UDefn)
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Expr (Expr)
-
+import Language.Drasil.Chunk.Attribute.ShortName (ShortName)
 
 import Control.Lens (Lens')
 
@@ -94,9 +95,7 @@ class HasReasVal c where
   reasVal     :: Lens' c (Maybe Expr)
 
 class HasShortName c where
-  refAdd'  :: c -> String  -- The reference address (what we're linking to).
-                           -- Should be string with no spaces/special chars.
-                           -- FIXME: merge this with `refAdd` (.Reference.hs)? (#537)
+  refAdd'  :: Lens' c ShortName -- FIXME: merge this with `refAdd` (.Reference.hs)? (#537)
 
 -----------------------------------------------------
 -- Below are for units only

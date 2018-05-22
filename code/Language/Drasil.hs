@@ -86,7 +86,7 @@ module Language.Drasil (
   , Attributes
   -- Chunk.Attributes
   , getSource
-  , Derivation, getDerivation, getShortName
+  , Derivation, getDerivation, getShortName, shortname
   , sourceref, derivationsteps
   --Citations
   , Citation, BibRef, CiteField, Month(..), HP
@@ -125,7 +125,7 @@ module Language.Drasil (
   , section, fig, figWithWidth
   , datadefn, reldefn
   -- Reference
-  , makeRef, acroTest
+  , makeRef, acroTest, find'
   -- Space
   , Space(..)
   -- Symbol
@@ -273,7 +273,7 @@ import Language.Drasil.Reference (makeRef, acroTest, ReferenceDB, assumpDB, reqD
                                  , HasReqRefs, Referable(..), customRef
                                  , HasChangeRefs, changeRefTable, changeLookup
                                  , citationRefTable, citeLookup, RefMap
-                                 , simpleMap)
+                                 , simpleMap, find')
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat, prime, sCurlyBrSymb, 
   compsy, Stage(..))
 import Language.Drasil.SymbolAlphabet

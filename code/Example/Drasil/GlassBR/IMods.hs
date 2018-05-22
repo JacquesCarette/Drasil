@@ -2,10 +2,13 @@ module Drasil.GlassBR.IMods (iModels, probOfBr, calOfCap, calOfDe, probOfBreak) 
 
 import Language.Drasil
 
-import Data.Drasil.SentenceStructures (acroA, foldlSent, isThe, sAnd, sOr)
+import Drasil.GlassBR.Assumptions 
+import Drasil.DocumentLanguage.RefHelpers
+
+import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
 import Data.Drasil.Utils (getES)
 import Data.Drasil.Concepts.Math (parameter)
-import Data.Drasil.Concepts.Documentation (coordinate)
+import Data.Drasil.Concepts.Documentation (coordinate, assumption)
 
 import Prelude hiding (exp)
 import Control.Lens ((^.))
@@ -48,7 +51,7 @@ capdescr =
   S "which" +:+. S "is also called capacity" +:+. ((getES nonFL) `isThe`
   (phrase nonFL)) +:+. ((getES glaTyFac) `isThe` (phrase glassTypeFac))
   +:+. ((getES loadSF) `isThe` (phrase lShareFac)), S "Follows",
-  (acroA 2) `sAnd` (acroA 1), sParen (Quote 
+  (refA gbRefDB newA2) `sAnd` (refA gbRefDB newA1), sParen (Quote 
   (S "In the development of this procedure, it was assumed that" +:+
   S "all four edges of the glass are simply supported and free to slip" +:+
   S "in the plane of the glass. This boundary condition has been shown" +:+

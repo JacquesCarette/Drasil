@@ -385,7 +385,7 @@ Label & Equilibrium
 \\ \midrule \\
 Equation & $\displaystyle\sum{{F_{x}}}=\displaystyle\sum{{F_{y}}}=\displaystyle\sum{M}=0$
 \\ \midrule \\
-Description & For a body in static equilibrium, the net forces and net moments acting on the body will cancel out. Assuming a 2D problem (A8) the x-component of the net force ${F_{x}}$ and y-component of the net force ${F_{y}}$ will be equal to $0$. All forces and their distance from the chosen point of rotation will create a net moment equal to, $0$ also able to be analyzed as a scalar in a 2D problem.
+Description & For a body in static equilibrium, the net forces and net moments acting on the body will cancel out. Assuming a 2D problem (A\ref{A:Plane-Strain-Conditions}) the x-component of the net force ${F_{x}}$ and y-component of the net force ${F_{y}}$ will be equal to $0$. All forces and their distance from the chosen point of rotation will create a net moment equal to, $0$ also able to be analyzed as a scalar in a 2D problem.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -399,7 +399,7 @@ Label & Mohr-Coulumb Shear Strength
 \\ \midrule \\
 Equation & $\tau{}=\sigma{} \tan\left(\varphi{}'\right)+c'$
 \\ \midrule \\
-Description & For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the resistive shear stress $\tau{}$ is proportional to the product of the normal stress on the plane $\sigma{}$ with it's static friction in the angular form $\tan\left(\varphi{}'\right)={U_{t}}$. The $\tau{}$ versus $\sigma{}$ relationship is not truly linear, but assuming the effective normal force is strong enough it can be approximated with a linear fit (A9) where the cohesion $c'$ represents the $\tau{}$ intercept of the fitted line.
+Description & For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the resistive shear stress $\tau{}$ is proportional to the product of the normal stress on the plane $\sigma{}$ with it's static friction in the angular form $\tan\left(\varphi{}'\right)={U_{t}}$. The $\tau{}$ versus $\sigma{}$ relationship is not truly linear, but assuming the effective normal force is strong enough it can be approximated with a linear fit (A\ref{A:Effective-Norm-Stress-Large}) where the cohesion $c'$ represents the $\tau{}$ intercept of the fitted line.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -500,7 +500,7 @@ Label & Interslice Normal/shear Relationship
 \\ \midrule \\
 Equation & $X=\lambda{} f E$
 \\ \midrule \\
-Description & The assumption for the Morgenstern Price method (A5) that the interslice shear force $x$ is proportional to the interslice normal force $E$ by a proportionality constant $\lambda{}$ and a predetermined scaling function $f$, that changes the proportionality as a function of the x-ordinate position of the interslice. $f$ is typically either a half-sine along the slip surface, or a constant.
+Description & The assumption for the Morgenstern Price method (A\ref{A:Interslice-Norm-Shear-Forces-Linear}) that the interslice shear force $x$ is proportional to the interslice normal force $E$ by a proportionality constant $\lambda{}$ and a predetermined scaling function $f$, that changes the proportionality as a function of the x-ordinate position of the interslice. $f$ is typically either a half-sine along the slip surface, or a constant.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -1158,7 +1158,7 @@ Using the net force-displacement equilibrium equation of a slice from DD13 with 
 \begin{dmath}
 -{\Delta{}H}_{i}-{K_{c}} W_{i}-{U_{b,i}} \sin\left(\alpha{}_{i}\right)+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)={\delta{}x}_{i-1} -{\ell{}_{s,i-1}} {K_{sn,i-1}}+{\delta{}x}_{i} \left(-{\ell{}_{s,i-1}} {K_{sn,i-1}}+{\ell{}_{s,i}} {K_{sn,i}}+{\ell{}_{b,i}} {K_{bA,i}}\right)+{\delta{}x}_{i+1} -{\ell{}_{s,i}} {K_{sn,i}}+{\delta{}y}_{i} -{\ell{}_{b,i}} {K_{bB,i}}=-W_{i}-{U_{b,i}} \cos\left(\alpha{}_{i}\right)+{U_{t,i}} \cos\left(\beta{}_{i}\right)+Q_{i} \cos\left(\omega{}_{i}\right)={\delta{}y}_{i-1} -{\ell{}_{s,i-1}} {K_{st,i-1}}+{\delta{}y}_{i} \left(-{\ell{}_{s,i-1}} {K_{st,i-1}}+{\ell{}_{s,i}} {K_{sn,i}}+{\ell{}_{b,i}} {K_{bA,i}}\right)+{\delta{}y}_{i+1} -{\ell{}_{s,i}} {K_{st,i}}+{\delta{}x}_{i} -{\ell{}_{b,i}} {K_{bB,i}}
 \end{dmath}
-Using the known input assumption of A2, the force variable definitions of DD1 to DD8 on the left side of the equations can be solved for. The only unknown in the variables to solve for the stiffness values from DD14 is the displacements. Therefore taking the equation from each slice a set of $2 n$ equations, with $2 n$ unknown displacements in the $x$ and $y$ directions of each slice can be derived. Solutions for the displacements of each slice can then be found. The use of displacement in the definition of the stiffness values makes the equation implicit, which means an iterative solution method, with an initial guess for the displacements in the stiffness values is required.
+Using the known input assumption of A\ref{A:Geo-Slope-Mat-Props-of-Soil-Inputs}, the force variable definitions of DD1 to DD8 on the left side of the equations can be solved for. The only unknown in the variables to solve for the stiffness values from DD14 is the displacements. Therefore taking the equation from each slice a set of $2 n$ equations, with $2 n$ unknown displacements in the $x$ and $y$ directions of each slice can be derived. Solutions for the displacements of each slice can then be found. The use of displacement in the definition of the stiffness values makes the equation implicit, which means an iterative solution method, with an initial guess for the displacements in the stiffness values is required.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}

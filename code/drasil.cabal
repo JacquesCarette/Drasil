@@ -288,6 +288,7 @@ executable glassbr
     , Drasil.GlassBR.Units
     , Drasil.GlassBR.ModuleDefs
     , Drasil.GlassBR.Symbols
+    , Drasil.GlassBR.Assumptions
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction
     , Drasil.Sections.Requirements

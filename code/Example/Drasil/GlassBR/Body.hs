@@ -494,7 +494,7 @@ s7_1_req5 = mkRequirement "s7_1_req5" (req5Desc (output_)) (S "Check-Glass-Safet
 -- be converted to reqChunk format with meaningful refnames and this should be
 -- removed.
 newReqs :: [ReqChunk]
-newReqs = map (\(x,y) -> frc x y (S x) []) --FIXME: FRC Hack for referencing
+newReqs = map (\(x,y) -> frc x y (S x) (shortname EmptyS)) --FIXME: FRC Hack for referencing
   [ ("r1",req1Desc)
   , ("r2",req2Desc)
   , ("r3",req3Desc)

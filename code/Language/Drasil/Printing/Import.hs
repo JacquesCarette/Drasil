@@ -10,7 +10,7 @@ import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as T
 
-import Language.Drasil.Classes (term, defn, usymb, HasAttributes, relat)
+import Language.Drasil.Classes (term, defn, usymb, HasAttributes, relat, HasShortName)
 import qualified Language.Drasil.Chunk.SymbolForm as SF
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute (getShortName)
@@ -267,7 +267,7 @@ sec sm depth x@(Section title contents _) =
   (T.Header depth (spec sm title) ref :
    map (layout sm depth) contents) ref
 
-getSN :: HasAttributes c => c -> Sentence
+getSN :: HasShortName c => c -> Sentence
 getSN c = maybe (error "missing attribute ShortName") id $ getShortName c
 
 -- | Translates from Contents to the Printing Representation of LayoutObj.

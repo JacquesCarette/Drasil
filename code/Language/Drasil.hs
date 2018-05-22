@@ -174,9 +174,9 @@ module Language.Drasil (
   , HasChangeRefs, changeRefTable, changeLookup, RefBy(..)
   , reqDB, assumpDB, RefMap, simpleMap
   -- ReqChunk
-  , ReqChunk, ReqType(..), reqType, requires, frc, nfrc, rc'
+  , ReqChunk, ReqType(..), reqType, requires, frc, nfrc--, rc'
   -- Change
-  , Change, ChngType(..), chngType, chng, lc, ulc, chc'
+  , Change, ChngType(..), chngType, chng, lc, ulc--, chc'
   , citationRefTable, citeLookup
   -- Goal
   , Goal, mkGoal
@@ -250,7 +250,7 @@ import Language.Drasil.Chunk.PhysSystDesc (PhysSystDesc, pSysDes, psd, psd')
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, makeRC')
 import Language.Drasil.Chunk.ReqChunk(ReqChunk, ReqType(..), reqType, requires
-                                     , frc, nfrc, rc')
+                                     , frc, nfrc{-, rc'-})
 import Language.Drasil.Chunk.SymbolForm (eqSymb, codeSymb, hasStageSymbol)
 import Language.Drasil.Chunk.Theory
 import Language.Drasil.Chunk.UncertainQuantity

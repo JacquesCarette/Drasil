@@ -17,6 +17,7 @@ module Language.Drasil.Classes (
   , Constrained(constraints)
   , HasReasVal(reasVal)
   , ExprRelat(relat)
+  , HasShortName(refAdd')
   ) where
 
 import Language.Drasil.NounPhrase.Core (NP)
@@ -27,7 +28,7 @@ import Language.Drasil.UnitLang (USymb, UDefn)
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Expr (Expr)
-
+import Language.Drasil.Chunk.Attribute.ShortName (ShortNameD)
 
 import Control.Lens (Lens')
 
@@ -92,6 +93,9 @@ class Constrained c where
 -- | A HasReasVal is a 'Quantity' that could have a reasonable value
 class HasReasVal c where
   reasVal     :: Lens' c (Maybe Expr)
+
+class HasShortName c where
+  refAdd'  :: Lens' c ShortNameD -- FIXME: merge this with `refAdd` (.Reference.hs)? (#537)
 
 -----------------------------------------------------
 -- Below are for units only

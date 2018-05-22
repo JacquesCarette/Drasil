@@ -7,7 +7,8 @@ import Control.Lens ((^.))
 import Language.Drasil.Spec (Sentence(EmptyS))
 import Language.Drasil.Chunk.Attribute.Core (Attributes, Attribute(..))
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
-import Language.Drasil.Classes (HasAttributes(attributes))
+import Language.Drasil.Classes (HasAttributes(attributes), HasReference(getReferences))
+import Language.Drasil.Chunk.Attribute.References
 
 --------------------------------------------------------------------------------
 
@@ -15,10 +16,10 @@ import Language.Drasil.Classes (HasAttributes(attributes))
 -- Should we change the source ref to have a list (to keep things clean in case
 --    of multiple sources)?
 -- | Get the source reference from the attributes (if it exists)
-getSource :: HasAttributes c => c -> Sentence
-getSource c = sourceRef $ c ^. attributes
+getSource :: HasReference c => c -> Sentence
+getSource c = sourceRef $ c ^. getReferences
 
-sourceRef :: Attributes -> Sentence
+sourceRef :: References -> Sentence
 sourceRef []                = EmptyS
 sourceRef ((SourceRef x):_) = x
 sourceRef (_:xs)            = sourceRef xs
@@ -39,8 +40,10 @@ getShortName c = shortName $ c ^. attributes
     shortName ((ShortName s):_) = Just s
     shortName (_:xs) = shortName xs
 
-shortname, sourceref :: Sentence -> Attribute
+shortname :: Sentence -> Attribute
 shortname = ShortName
+
+sourceref :: Sentence -> Reference
 sourceref = SourceRef
 
 derivationsteps :: Derivation -> Attribute

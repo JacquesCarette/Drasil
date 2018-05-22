@@ -3,7 +3,7 @@ module Language.Drasil.Chunk.Change
   , lc, ulc--, chc'
   ) where
 
-import Language.Drasil.Classes (HasUID(uid),HasAttributes(attributes))
+import Language.Drasil.Classes (HasUID(uid), HasAttributes(attributes), HasShortName)
 import Language.Drasil.Chunk.Attribute.Core(Attributes)
 import Language.Drasil.Chunk.Attribute(shortname)
 import Language.Drasil.Spec (Sentence, RefName)
@@ -36,6 +36,7 @@ data Change = ChC
   
 instance HasUID        Change where uid f (ChC a b c d e) = fmap (\x -> ChC x b c d e) (f a)
 instance HasAttributes Change where attributes f (ChC a b c d e) = fmap (\x -> ChC a b c d x) (f e)
+instance HasShortName  Change where
 instance Eq            Change where a == b = a ^. uid == b ^. uid
 
 -- | Smart constructor for requirement chunks (should not be exported)

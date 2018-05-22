@@ -16,6 +16,7 @@ import Drasil.SSP.Unitals (shrStiffBase, index, genDisplace, baseAngle, inxi,
   ufixme1, ufixme2)
 import Drasil.SSP.GenDefs (eqlExpr, displMtx, rotMtx)
 import Drasil.SSP.Defs (intrslce)
+import Drasil.DocumentLanguage.RefHelpers
 
 import Data.Drasil.Utils (getES, mkDataDef, eqUnR)
 import Data.Drasil.Quantities.SolidMechanics as SM (poissnsR)
@@ -31,6 +32,8 @@ import Data.Drasil.Concepts.Math (equation, angle)
 ------------------------
 --  Data Definitions  --
 ------------------------
+sspRefMDB :: ModelDB
+sspRefMDB = mdb [] [] sspDataDefs [] 
 
 sspDataDefs :: [QDefinition]
 sspDataDefs = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB,

@@ -93,6 +93,11 @@ class Constrained c where
 class HasReasVal c where
   reasVal     :: Lens' c (Maybe Expr)
 
+class HasShortName c where
+  refAdd'  :: c -> String  -- The reference address (what we're linking to).
+                           -- Should be string with no spaces/special chars.
+                           -- FIXME: merge this with `refAdd` (.Reference.hs)? (#537)
+
 -----------------------------------------------------
 -- Below are for units only
 -- | Some chunks store a unit symbol

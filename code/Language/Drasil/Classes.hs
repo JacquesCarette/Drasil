@@ -13,6 +13,7 @@ module Language.Drasil.Classes (
   , IsUnit
   , UnitEq(uniteq)
   , HasAttributes(attributes)
+  , HasReference(getReferences)
   , CommonIdea(abrv)
   , Constrained(constraints)
   , HasReasVal(reasVal)
@@ -25,6 +26,7 @@ import Language.Drasil.Symbol (Stage, Symbol)
 import Language.Drasil.Space (Space)
 import Language.Drasil.UnitLang (USymb, UDefn)
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
+import Language.Drasil.Chunk.Attribute.References (References)
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Expr (Expr)
 
@@ -77,6 +79,9 @@ class HasSpace c where
 -- | Anything with 'Attributes'
 class HasAttributes c where
   attributes :: Lens' c Attributes
+
+class HasReference c where
+  getReferences :: Lens' c References
 
 -- | CommonIdea is a 'NamedIdea' with the additional
 -- constraint that it __must__ have an abbreviation.

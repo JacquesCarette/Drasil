@@ -6,8 +6,9 @@ module Language.Drasil.Chunk.Eq
 import Control.Lens ((^.), makeLenses)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA), DOM,
-  HasSymbol(symbol), IsUnit, HasAttributes(attributes), ExprRelat(relat))
+  HasSymbol(symbol), IsUnit, HasAttributes(attributes), ExprRelat(relat), HasReference)
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
+import Language.Drasil.Chunk.Attribute.References (References)
 import Language.Drasil.Chunk.Concept (ConceptChunk)
 import Language.Drasil.Chunk.Quantity (Quantity(getUnit), HasSpace(typ), QuantityDict,
   mkQuant, qw)
@@ -35,6 +36,7 @@ instance HasSymbol     QDefinition where symbol e st = symbol (e^.qua) st
 instance Quantity      QDefinition where getUnit (EC a _)   = getUnit a
 instance ExprRelat     QDefinition where relat = equat
 instance HasAttributes QDefinition where attributes = qua . attributes
+instance HasReference  QDefinition where
 instance Eq            QDefinition where a == b = (a ^. uid) == (b ^. uid)
   
 -- | Create a 'QDefinition' with an uid, noun phrase (term), definition, symbol,

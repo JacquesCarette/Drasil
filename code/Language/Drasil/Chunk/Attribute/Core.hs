@@ -20,4 +20,3 @@ data Attribute =
         --(derivations are just document sections at the moment), 
         -- but we may need to create a new representation for it in the future.
         -- To collapse Attributes into QDefinitions, can't use Contents
-  | Uses [String] -- Which chunks does this one rely on?

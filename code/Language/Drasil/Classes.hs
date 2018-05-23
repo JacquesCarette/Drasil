@@ -28,7 +28,6 @@ import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Expr (Expr)
 
-
 import Control.Lens (Lens')
 
 type UID = String

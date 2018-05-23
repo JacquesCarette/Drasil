@@ -47,21 +47,21 @@ instance HasDerivation QDefinition where derivation = deri
 -- unit, and defining equation.  And it ignores the definition...
 --FIXME: Space hack
 fromEqn :: (IsUnit u, DOM u ~ ConceptChunk) => 
-  String -> NP -> Sentence -> Symbol -> u -> Expr -> Attributes -> QDefinition
-fromEqn nm desc _ symb un eqn atts = 
-  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing atts) eqn [] []
+  String -> NP -> Sentence -> Symbol -> u -> Expr -> Attributes -> References -> QDefinition
+fromEqn nm desc _ symb un eqn atts refs = 
+  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing atts) eqn refs []
 
 -- | Same as fromEqn, but has no units.
 --FIXME: Space hack
-fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> Attributes -> QDefinition
-fromEqn' nm desc _ symb eqn atts = EC (mkQuant nm desc symb Real Nothing Nothing atts) eqn [] []
+fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> Attributes -> References -> QDefinition
+fromEqn' nm desc _ symb eqn atts refs = EC (mkQuant nm desc symb Real Nothing Nothing atts) eqn refs []
 
 -- | Create a 'QDefinition' with an uid, noun phrase (term), symbol,
 -- abbreviation, unit, and defining equation.
 fromEqn'' :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Sentence ->
- Symbol -> String -> Maybe u -> Expr -> Attributes -> QDefinition
-fromEqn'' nm desc _ symb abbr u eqn atts = 
-  EC (mkQuant nm desc symb Real (fmap unitWrapper u) (Just abbr) atts) eqn [] []
+ Symbol -> String -> Maybe u -> Expr -> Attributes -> References -> QDefinition
+fromEqn'' nm desc _ symb abbr u eqn atts refs = 
+  EC (mkQuant nm desc symb Real (fmap unitWrapper u) (Just abbr) atts) eqn refs []
 
 -- | Smart constructor for QDefinitions. Requires a quantity, its defining 
 -- equation, and a list of attributes

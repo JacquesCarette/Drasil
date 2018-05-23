@@ -36,8 +36,7 @@ genHTML sm fn doc = build fn (makeDocument sm doc)
 -- | Build the HTML Document, called by genHTML
 build :: String -> Document -> Doc
 build fn (Document t a c) =
-  text ( "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\""++
-          " \"http://www.w3.org/TR/html4/loose.dtd\">" ++ "\n") $$
+  text ( "<!DOCTYPE html>") $$
   html ( head_tag ((linkCSS fn) $$ title (title_spec t) $$
   text ("<meta charset=\"utf-8\">") $$
   text ("<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/"++

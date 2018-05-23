@@ -5,7 +5,8 @@ module Language.Drasil.Chunk.Theory
   )where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom,DOM), Concept, HasAttributes(attributes))
+  Definition(defn), ConceptDomain(cdom,DOM), Concept, HasAttributes(attributes),
+  HasShortName(shortname))
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained.Core (TheoryConstraint)
 import Language.Drasil.Chunk.Eq
@@ -59,6 +60,8 @@ instance NamedIdea     TheoryModel where term = con . term
 instance Idea          TheoryModel where getA = getA . view con
 instance Definition    TheoryModel where defn = con . defn
 instance HasAttributes TheoryModel where attributes = thy . attributes
+-- error used below is on purpose. These shortnames should be made explicit as necessary
+instance HasShortName  TheoryModel where shortname _ = error "No explicit name given for theory model -- build a custom Ref"
 instance ConceptDomain TheoryModel where
   type DOM TheoryModel = ConceptChunk
   cdom = con . cdom

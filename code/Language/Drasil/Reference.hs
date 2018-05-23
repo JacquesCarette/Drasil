@@ -1,7 +1,7 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Reference where
 
-import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Classes (HasUID(uid), HasShortName(shortname))
 import Language.Drasil.Chunk.AssumpChunk as A
 import Language.Drasil.Chunk.Change as Ch
 import Language.Drasil.Chunk.Citation as Ci
@@ -16,7 +16,6 @@ import Language.Drasil.Document
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.RefTypes (RefType(..))
 import Control.Lens ((^.), Simple, Lens, makeLenses)
-import Language.Drasil.Chunk.Attribute.ShortName
 
 import Data.List (partition, sortBy)
 import qualified Data.Map as Map

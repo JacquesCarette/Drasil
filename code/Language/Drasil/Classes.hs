@@ -17,10 +17,11 @@ module Language.Drasil.Classes (
   , Constrained(constraints)
   , HasReasVal(reasVal)
   , ExprRelat(relat)
+  , HasShortName(shortname)
   ) where
 
 import Language.Drasil.NounPhrase.Core (NP)
-import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Spec (Sentence, RefName)
 import Language.Drasil.Symbol (Stage, Symbol)
 import Language.Drasil.Space (Space)
 import Language.Drasil.UnitLang (USymb, UDefn)
@@ -91,6 +92,12 @@ class Constrained c where
 -- | A HasReasVal is a 'Quantity' that could have a reasonable value
 class HasReasVal c where
   reasVal     :: Lens' c (Maybe Expr)
+
+class HasShortName s where
+  shortname :: s -> RefName -- Sentence; The text to be displayed for the link.
+                            -- A short name used for referencing within a document that can 
+                            -- include symbols and whatnot if required.
+                            -- Visible in the typeset documents (pdf)
 
 -----------------------------------------------------
 -- Below are for units only

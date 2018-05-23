@@ -10,6 +10,8 @@ import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Expr
 import Language.Drasil.Chunk.Citation (BibRef)
+import Language.Drasil.Classes (HasUID(uid), HasShortName(shortname))
+import Control.Lens ((^.))
 
 type Title    = Sentence
 type Author   = Sentence
@@ -33,6 +35,8 @@ data SecCons = Sub Section
 -- | Sections have a title ('Sentence') and a list of contents ('SecCons')
 data Section = Section Title [SecCons] RefAdd
 
+instance HasShortName Section where shortname (Section t _ _) = t
+
 -- | Types of layout objects we deal with explicitly
 data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
   -- ^ table has: header-row data(rows) label/caption showlabel?
@@ -54,6 +58,22 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
                --------------------------------------------
                | Defnt DType [(Identifier, [Contents])] RefAdd
 type Identifier = String
+
+instance HasShortName  Contents where
+  shortname (Table _ _ _ _ r)     = S "Table:" :+: S r
+  shortname (Figure _ _ _ r)      = S "Figure:" :+: S r
+  shortname (Graph _ _ _ _ r)     = S "Figure:" :+: S r
+  shortname (EqnBlock _ r)        = S "Equation:" :+: S r
+  shortname (Definition d)        = S $ getDefName d
+  shortname (Defnt _ _ r)         = S r
+  shortname (Requirement rc)      = shortname rc
+  shortname (Assumption ca)       = shortname ca
+  shortname (Change lcc)          = shortname lcc
+  shortname (Enumeration _)       = error "Can't reference lists"
+  shortname (Paragraph _)         = error "Can't reference paragraphs"
+  shortname (Bib _)               = error $
+    "Bibliography list of references cannot be referenced. " ++
+    "You must reference the Section or an individual citation."
 
 -- | MaxWidthPercent should be kept in the range 1-100. 
 -- Values outside this range may have unexpected results.
@@ -104,3 +124,18 @@ datadefn = Definition . Data
 
 reldefn :: RelationConcept -> Contents
 reldefn = Definition . Theory
+
+-- Below were moved to avoid import cycles between this file and Reference.hs --
+
+-- | Automatically create the label for a definition
+getDefName :: DType -> String
+getDefName (Data c)   = "DD:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
+getDefName (Theory c) = "T:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
+getDefName TM         = "T:"
+getDefName DD         = "DD:"
+getDefName Instance   = "IM:"
+getDefName General    = "GD:"
+
+repUnd :: Char -> String
+repUnd '_' = "."
+repUnd c = c : []

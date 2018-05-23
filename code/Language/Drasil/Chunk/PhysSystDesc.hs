@@ -9,9 +9,9 @@ module Language.Drasil.Chunk.PhysSystDesc
   , refAddr
   ) where
 
-import Language.Drasil.Classes (HasUID(uid), HasAttributes(attributes))
+import Language.Drasil.Classes (HasUID(uid), HasAttributes(attributes), HasShortName(shortname))
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
-import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.RefTypes (RefAdd)
 
 import Control.Lens (makeLenses, (^.))
@@ -27,6 +27,7 @@ makeLenses ''PhysSystDesc
 
 instance HasUID        PhysSystDesc where uid = did
 instance HasAttributes PhysSystDesc where attributes = attribs
+instance HasShortName  PhysSystDesc where shortname p = S $ p ^. refAddr
 instance Eq            PhysSystDesc where a == b = a ^. uid == b ^. uid
   
 -- | PhysSystDesc smart constructor (has no explicit 'Attributes')

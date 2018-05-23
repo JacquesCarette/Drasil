@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.GenDefn
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom,DOM), Concept, IsUnit, 
-  HasAttributes(attributes), ExprRelat(relat))
+  HasAttributes(attributes), ExprRelat(relat), HasShortName(shortname))
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Concept (ConceptChunk)
 import Language.Drasil.Chunk.Relation (RelationConcept)
@@ -30,6 +30,8 @@ instance ConceptDomain GenDefn where
   cdom = relC . cdom
 instance ExprRelat     GenDefn where relat = relC . relat
 instance HasAttributes GenDefn where attributes = attribs
+instance HasShortName  GenDefn where
+  shortname _ = error "No explicit name given for general definition -- build a custom Ref"
 
 gd :: (IsUnit u, DOM u ~ ConceptChunk) => RelationConcept -> Maybe u -> Attributes -> GenDefn
 gd r (Just u) ats = GD r (Just (unitWrapper u)) ats

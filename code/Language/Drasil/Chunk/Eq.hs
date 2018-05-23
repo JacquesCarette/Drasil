@@ -6,7 +6,8 @@ module Language.Drasil.Chunk.Eq
 import Control.Lens ((^.), makeLenses)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA), DOM,
-  HasSymbol(symbol), IsUnit, HasAttributes(attributes), ExprRelat(relat))
+  HasSymbol(symbol), IsUnit, HasAttributes(attributes), ExprRelat(relat), 
+  HasShortName(shortname))
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Concept (ConceptChunk)
 import Language.Drasil.Chunk.Quantity (Quantity(getUnit), HasSpace(typ), QuantityDict,
@@ -35,6 +36,10 @@ instance HasSymbol     QDefinition where symbol e st = symbol (e^.qua) st
 instance Quantity      QDefinition where getUnit (EC a _)   = getUnit a
 instance ExprRelat     QDefinition where relat = equat
 instance HasAttributes QDefinition where attributes = qua . attributes
+instance HasShortName  QDefinition where -- FIXME: This could lead to trouble; need
+                                     -- to ensure sanity checking when building
+                                     -- Refs. Double-check QDef is a DD before allowing
+  shortname _ = error "No explicit name given for data definition -- build a custom Ref"
 instance Eq            QDefinition where a == b = (a ^. uid) == (b ^. uid)
   
 -- | Create a 'QDefinition' with an uid, noun phrase (term), definition, symbol,

@@ -9,7 +9,9 @@ import Data.Drasil.People (henryFrankis)
 import Drasil.DocumentLanguage.RefHelpers
 
 import Drasil.SSP.Assumptions (sspAssumptions)
-import Drasil.SSP.DataDefs 
+import Drasil.SSP.DataDefs (sspDataDefs, resShrDerivation,
+  mobShrDerivation, stfMtrxDerivation, sspRefMDB, lengthLb,
+  sliceWght, lengthLs)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (ssa, acronyms, slice, slope, soil,
   crtSlpSrf, soilLyr, morPrice, mtrlPrpty, slpSrf,

@@ -20,7 +20,7 @@ data Goal = GS
           { _gid :: String
           , goal :: Sentence
           , _refAddr :: RefAdd
-          , _attribs :: Attributes -- FIXME: I doubt this is necessary for these
+          , shortname :: Attributes -- FIXME: I doubt this is necessary for these
                                    -- but included for consistency, and since every
                                    -- chunk should eventually have the capability
                                    -- for attributes.

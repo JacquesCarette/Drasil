@@ -1,6 +1,6 @@
 module Language.Drasil.Chunk.Attribute 
   ( getSource, getDerivation, getShortName
-  , shortname, sourceref, derivationsteps
+  , shortname', sourceref, derivationsteps
   ) where
 
 import Control.Lens ((^.))
@@ -39,8 +39,8 @@ getShortName c = shortName $ c ^. attributes
     shortName ((ShortName s):_) = Just s
     shortName (_:xs) = shortName xs
 
-shortname, sourceref :: Sentence -> Attribute
-shortname = ShortName
+shortname', sourceref :: Sentence -> Attribute
+shortname' = ShortName
 sourceref = SourceRef
 
 derivationsteps :: Derivation -> Attribute

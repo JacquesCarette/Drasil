@@ -510,8 +510,8 @@ siSys (SI {_sys = sys}) = nw sys
 -- mkAssump i desc = Assumption $ ac' i desc
 
 mkRequirement :: String -> Sentence -> Sentence -> Contents
-mkRequirement i desc shrtn = Requirement $ frc i desc (shrtn) [shortname shrtn] --FIXME: HACK - Should have explicit refname
+mkRequirement i desc shrtn = Requirement $ frc i desc (shrtn) [shortname' shrtn] --FIXME: HACK - Should have explicit refname
 
 mkLklyChnk :: String -> Sentence -> Sentence -> Contents
-mkLklyChnk i desc shrtn = Change $ lc i desc (shrtn) [shortname shrtn] -- FIXME: HACK -- See above
+mkLklyChnk i desc shrtn = Change $ lc i desc (shrtn) [shortname' shrtn] -- FIXME: HACK -- See above
 

@@ -14,7 +14,6 @@ import Language.Drasil.Chunk.ReqChunk as R
 import Language.Drasil.Chunk.Theory
 import Language.Drasil.Document
 import Control.Lens ((^.))
-import Language.Drasil.Reference (repUnd, getDefName)
 
 class HasShortName c where
   shortname  :: c -> String  -- The reference address (what we're linking to).
@@ -72,3 +71,16 @@ instance HasShortName Contents where
   shortname (Bib _)                = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
+
+-- | Automatically create the label for a definition
+getDefName :: DType -> String
+getDefName (Data c)   = "DD:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
+getDefName (Theory c) = "T:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
+getDefName TM         = "T:"
+getDefName DD         = "DD:"
+getDefName Instance   = "IM:"
+getDefName General    = "GD:"
+
+repUnd :: Char -> String
+repUnd '_' = "."
+repUnd c = c : []

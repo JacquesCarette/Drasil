@@ -26,6 +26,7 @@ import Language.Drasil.People
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Classes (HasUID(uid), HasShortName(shortname))
 import Language.Drasil.Chunk.Attribute (shortname')
+import Control.Lens (makeLenses, view)
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces
@@ -88,23 +89,23 @@ instance Show Month where
 -- | All citations require a unique identifier (String) used by the Drasil chunk.
 -- We will also have an EntryID (String) used for creating reference links.
 -- Finally we will have the reference information (type and fields).
-data Citation = Cite
-  { _id :: String
-  , citeID :: EntryID
-  , externRefT :: CitationKind
-  , fields :: [CiteField]
-  }
-
--- | Smart constructor which implicitly uses EntryID as chunk i.
-cite :: EntryID -> CitationKind -> [CiteField] -> Citation
-cite i = Cite i i
+data Citation = Cite { _id :: String
+                     , _citeID :: EntryID
+                     , _externRefT :: CitationKind
+                     , _fields :: [CiteField]
+                     }
+makeLenses ''Citation
 
 -- | Citations are chunks.
 instance HasUID        Citation where 
   uid f (Cite a b c d) = fmap (\x -> Cite x b c d) (f a)
 --instance HasShortName  Citation where shortname c = S $ citeID c
 instance HasShortName  Citation where 
-  shortname f (Cite a b c d) = fmap (\x -> Cite a x c d ) (f (shortname' $ S $ citeID b))
+  shortname = view citeID
+
+-- | Smart constructor which implicitly uses EntryID as chunk i.
+cite :: EntryID -> CitationKind -> [CiteField] -> Citation
+cite i = Cite i i
 
 -- | External references come in many flavours. Articles, Books, etc.
 -- (we are using the types available in Bibtex)

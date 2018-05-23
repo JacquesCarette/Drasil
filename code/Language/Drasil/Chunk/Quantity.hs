@@ -3,7 +3,7 @@ module Language.Drasil.Chunk.Quantity
   ( Quantity(..), QuantityDict, qw, mkQuant, mkQuant', HasSpace(typ)
   ) where
 
-import Control.Lens ((^.),makeLenses,view)
+import Control.Lens ((^.), makeLenses, view)
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), HasSpace(typ), HasAttributes(attributes))

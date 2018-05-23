@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.Eq
 import Control.Lens ((^.), makeLenses)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA), DOM,
-  HasSymbol(symbol), IsUnit, HasAttributes(attributes), ExprRelat(relat), HasReference(getReferences))
+  HasSymbol(symbol), IsUnit, HasAttributes(attributes), ExprRelat(relat), HasReference(getReferences), HasDerivation(derivation))
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Attribute.References (References)
 import Language.Drasil.Chunk.Concept (ConceptChunk)
@@ -16,6 +16,7 @@ import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
 import Language.Drasil.Unit (unitWrapper)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space
+import Language.Drasil.Chunk.Attribute.Derivation
 
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Spec (Sentence)
@@ -25,6 +26,7 @@ data QDefinition = EC
           { _qua :: QuantityDict
           , _equat :: Expr
           , _ref :: References
+      	  , _deri :: Derivation
           }
 makeLenses ''QDefinition
 
@@ -39,7 +41,8 @@ instance ExprRelat     QDefinition where relat = equat
 instance HasAttributes QDefinition where attributes = qua . attributes
 instance HasReference  QDefinition where getReferences = ref
 instance Eq            QDefinition where a == b = (a ^. uid) == (b ^. uid)
-  
+instance HasDerivation QDefinition where derivation = deri
+ 
 -- | Create a 'QDefinition' with an uid, noun phrase (term), definition, symbol,
 -- unit, and defining equation.  And it ignores the definition...
 --FIXME: Space hack

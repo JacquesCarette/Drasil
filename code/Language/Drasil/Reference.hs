@@ -13,7 +13,7 @@ import Language.Drasil.Chunk.PhysSystDesc as PD
 import Language.Drasil.Chunk.ReqChunk as R
 import Language.Drasil.Chunk.Theory
 import Language.Drasil.Document
-import Language.Drasil.Spec (Sentence(..),RefName)
+import Language.Drasil.Spec (Sentence(..), RefName)
 import Language.Drasil.RefTypes (RefType(..))
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Language.Drasil.Chunk.Attribute.ShortName
@@ -152,72 +152,59 @@ instance HasCitationRefs ReferenceDB where citationRefTable = citationDB
 
 
 class Referable s where
-  refName :: s -> RefName -- Sentence; The text to be displayed for the link.
+  refAdd  :: s -> String  -- The reference address (what we're linking to).
+                          -- Should be string with no spaces/special chars.
   rType   :: s -> RefType -- The reference type (referencing namespace?)
 
 instance Referable Goal where
-  refName g = S $ g ^. G.refAddr
+  refAdd g = "GS:" ++ g ^. G.refAddr
   rType _ = Goal
 
 instance Referable PhysSystDesc where
-  refName p = S $ p ^. PD.refAddr
+  refAdd p = "PS:" ++ p ^. PD.refAddr
   rType _ = PSD
 
 instance Referable AssumpChunk where
-  refName (AC _ _ sn _) = sn
+  refAdd  x             = "A:" ++ concatMap repUnd (x ^. uid)
   rType   _             = Assump
 
 instance Referable ReqChunk where
-  refName (RC _ _ _ sn _)   = sn
+  refAdd  r@(RC _ rt _ _ _) = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
   rType   _                 = Req
 
 instance Referable Change where
-  refName (ChC _ _ _ sn _)     = sn
+  refAdd r@(ChC _ rt _ _ _)    = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
   rType (ChC _ Likely _ _ _)   = LC
   rType (ChC _ Unlikely _ _ _) = UC
 
 instance Referable Section where
-  refName (Section t _ _) = t
+  refAdd  (Section _ _ r) = "Sec:" ++ r
   rType   _               = Sect
 
 instance Referable Citation where
-  refName c = S $ citeID c
+  refAdd c = concatMap repUnd $ citeID c -- citeID should be unique.
   rType _ = Cite
 
 -- error used below is on purpose. These refNames should be made explicit as necessary
 instance Referable TheoryModel where
-  refName _ = error "No explicit name given for theory model -- build a custom Ref"
+  refAdd  t = "T:" ++ t^.uid
   rType   _ = Def
 
 instance Referable GenDefn where
-  refName _ = error "No explicit name given for theory model -- build a custom Ref"
+  refAdd  g = "GD:" ++ g^.uid
   rType   _ = Def
 
 instance Referable QDefinition where -- FIXME: This could lead to trouble; need
                                      -- to ensure sanity checking when building
                                      -- Refs. Double-check QDef is a DD before allowing
-  refName _ = error "No explicit name given for theory model -- build a custom Ref"
+  refAdd  d = "DD:" ++ d^.uid
   rType   _ = Def
 
 instance Referable InstanceModel where
-  refName _ = error "No explicit name given for theory model -- build a custom Ref"
+  refAdd  i = "IM:" ++ i^.uid
   rType   _ = Def
 
 instance Referable Contents where
-  refName (Table _ _ _ _ r)     = S "Table:" :+: S r
-  refName (Figure _ _ _ r)      = S "Figure:" :+: S r
-  refName (Graph _ _ _ _ r)     = S "Figure:" :+: S r
-  refName (EqnBlock _ r)        = S "Equation:" :+: S r
-  refName (Definition d)        = S $ getDefName d
-  refName (Defnt _ _ r)         = S r
-  refName (Requirement rc)      = refName rc
-  refName (Assumption ca)       = refName ca
-  refName (Change lcc)          = refName lcc
-  refName (Enumeration _)       = error "Can't reference lists"
-  refName (Paragraph _)         = error "Can't reference paragraphs"
-  refName (Bib _)               = error $
-    "Bibliography list of references cannot be referenced. " ++
-    "You must reference the Section or an individual citation."
   rType (Table _ _ _ _ _)       = Tab
   rType (Figure _ _ _ _)        = Fig
   rType (Definition (Data _))   = Def
@@ -231,7 +218,20 @@ instance Referable Contents where
   rType (EqnBlock _ _)          = EqnB
   rType _                       =
     error "Attempting to reference unimplemented reference type"
-
+  refAdd (Table _ _ _ _ r)      = "Table:" ++ r
+  refAdd (Figure _ _ _ r)       = "Figure:" ++ r
+  refAdd (Graph _ _ _ _ r)      = "Figure:" ++ r
+  refAdd (EqnBlock _ r)         = "Equation:" ++ r
+  refAdd (Definition d)         = getDefName d
+  refAdd (Defnt _ _ r)          = r
+  refAdd (Requirement rc)       = refAdd rc
+  refAdd (Assumption ca)        = refAdd ca
+  refAdd (Change lcc)           = refAdd lcc
+  refAdd (Enumeration _)        = error "Can't reference lists"
+  refAdd (Paragraph _)          = error "Can't reference paragraphs"
+  refAdd (Bib _)                = error $
+    "Bibliography list of references cannot be referenced. " ++
+    "You must reference the Section or an individual citation."
 
 citeSort :: Citation -> Citation -> Ordering
 citeSort = compare `on` (^. uid)
@@ -250,12 +250,12 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 -- This should not be exported to the end-user, but should be usable
 -- within the recipe (we want to force reference creation to check if the given
 -- item exists in our database of referable objects.
-makeRef :: (Referable l, HasShortName l) => l -> Sentence
-makeRef r = customRef r (refName r)
+makeRef :: (HasShortName l, Referable l) => l -> Sentence
+makeRef r = customRef r (shortname r)
 
 -- | Create a reference with a custom 'RefName'
-customRef :: (Referable l, HasShortName l) => l -> Sentence -> Sentence
-customRef r n = Ref (rType r) (shortname r) n
+customRef :: (Referable l) => l -> Sentence -> Sentence
+customRef r n = Ref (rType r) (refAdd r) n
 
 -- This works for passing the correct id to the reference generator for Assumptions,
 -- Requirements and Likely Changes but I question whether we should use it.

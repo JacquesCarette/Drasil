@@ -14,61 +14,61 @@ import Language.Drasil.Chunk.ReqChunk as R
 import Language.Drasil.Chunk.Theory
 import Language.Drasil.Document
 import Control.Lens ((^.))
+import Language.Drasil.Spec (Sentence(..), RefName)
 
-class HasShortName c where
-  shortname  :: c -> String  -- The reference address (what we're linking to).
-                             -- Should be string with no spaces/special chars.
-                             -- FIXME: merge this with `shortname` (.Reference.hs)? (#537)
 
-instance HasShortName Goal where
-  shortname g = "GS:" ++ g ^. G.refAddr
+class HasShortName  s where
+  shortname :: s -> RefName -- Sentence; The text to be displayed for the link.
 
-instance HasShortName PhysSystDesc where
-  shortname p = "PS:" ++ p ^. PD.refAddr
+instance HasShortName  Goal where
+  shortname g = S $ g ^. G.refAddr
 
-instance HasShortName AssumpChunk where
-  shortname  x             = "A:" ++ concatMap repUnd (x ^. uid)
+instance HasShortName  PhysSystDesc where
+  shortname p = S $ p ^. PD.refAddr
 
-instance HasShortName ReqChunk where
-  shortname  r@(RC _ rt _ _ _) = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
+instance HasShortName  AssumpChunk where
+  shortname (AC _ _ sn _) = sn
 
-instance HasShortName Change where
-  shortname r@(ChC _ rt _ _ _)    = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
+instance HasShortName  ReqChunk where
+  shortname (RC _ _ _ sn _)   = sn
 
-instance HasShortName Section where
-  shortname  (Section _ _ r) = "Sec:" ++ r
+instance HasShortName  Change where
+  shortname (ChC _ _ _ sn _)     = sn
 
-instance HasShortName Citation where
-  shortname c = concatMap repUnd $ citeID c -- citeID should be unique.
+instance HasShortName  Section where
+  shortname (Section t _ _) = t
 
--- error used below is on purpose. These refNames should be made explicit as necessary
-instance HasShortName TheoryModel where
-  shortname  t = "T:" ++ t^.uid
+instance HasShortName  Citation where
+  shortname c = S $ citeID c
 
-instance HasShortName GenDefn where
-  shortname  g = "GD:" ++ g^.uid
+-- error used below is on purpose. These shortnames should be made explicit as necessary
+instance HasShortName  TheoryModel where
+  shortname _ = error "No explicit name given for theory model -- build a custom Ref"
 
-instance HasShortName QDefinition where -- FIXME: This could lead to trouble; need
+instance HasShortName  GenDefn where
+  shortname _ = error "No explicit name given for theory model -- build a custom Ref"
+
+instance HasShortName  QDefinition where -- FIXME: This could lead to trouble; need
                                      -- to ensure sanity checking when building
                                      -- Refs. Double-check QDef is a DD before allowing
-  shortname  d = "DD:" ++ d^.uid
+  shortname _ = error "No explicit name given for theory model -- build a custom Ref"
 
-instance HasShortName InstanceModel where
-  shortname  i = "IM:" ++ i^.uid
+instance HasShortName  InstanceModel where
+  shortname _ = error "No explicit name given for theory model -- build a custom Ref"
 
-instance HasShortName Contents where
-  shortname (Table _ _ _ _ r)      = "Table:" ++ r
-  shortname (Figure _ _ _ r)       = "Figure:" ++ r
-  shortname (Graph _ _ _ _ r)      = "Figure:" ++ r
-  shortname (EqnBlock _ r)         = "Equation:" ++ r
-  shortname (Definition d)         = getDefName d
-  shortname (Defnt _ _ r)          = r
-  shortname (Requirement rc)       = shortname rc
-  shortname (Assumption ca)        = shortname ca
-  shortname (Change lcc)           = shortname lcc
-  shortname (Enumeration _)        = error "Can't reference lists"
-  shortname (Paragraph _)          = error "Can't reference paragraphs"
-  shortname (Bib _)                = error $
+instance HasShortName  Contents where
+  shortname (Table _ _ _ _ r)     = S "Table:" :+: S r
+  shortname (Figure _ _ _ r)      = S "Figure:" :+: S r
+  shortname (Graph _ _ _ _ r)     = S "Figure:" :+: S r
+  shortname (EqnBlock _ r)        = S "Equation:" :+: S r
+  shortname (Definition d)        = S $ getDefName d
+  shortname (Defnt _ _ r)         = S r
+  shortname (Requirement rc)      = shortname rc
+  shortname (Assumption ca)       = shortname ca
+  shortname (Change lcc)          = shortname lcc
+  shortname (Enumeration _)       = error "Can't reference lists"
+  shortname (Paragraph _)         = error "Can't reference paragraphs"
+  shortname (Bib _)               = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
 

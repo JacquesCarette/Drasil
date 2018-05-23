@@ -42,23 +42,23 @@ data InclUnits = IncludeUnits -- In description field (for other symbols)
 -- | Create a theoretical model using a list of fields to be displayed, a database of symbols,
 -- and a RelationConcept (called automatically by 'SCSSub' program)
 tmodel :: HasSymbolTable ctx => Fields -> ctx -> TheoryModel -> Contents
-tmodel fs m t = Defnt TM (foldr (mkTMField t m) [] fs) (shortname t)
+tmodel fs m t = Defnt TM (foldr (mkTMField t m) [] fs) (refAdd t)
 
 -- | Create a data definition using a list of fields, a database of symbols, and a
 -- QDefinition (called automatically by 'SCSSub' program)
 ddefn :: HasSymbolTable ctx => Fields -> ctx -> QDefinition -> Contents
-ddefn fs m d = Defnt DD (foldr (mkQField d m) [] fs) (shortname d)
+ddefn fs m d = Defnt DD (foldr (mkQField d m) [] fs) (refAdd d)
 
 -- | Create a general definition using a list of fields, database of symbols,
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'
 -- program)
 gdefn :: HasSymbolTable ctx => Fields -> ctx -> GenDefn -> Contents
-gdefn fs m g = Defnt General (foldr (mkGDField g m) [] fs) (shortname g)
+gdefn fs m g = Defnt General (foldr (mkGDField g m) [] fs) (refAdd g)
 
 -- | Create an instance model using a list of fields, database of symbols,
 -- and an 'InstanceModel' chunk (called automatically by 'SCSSub' program)
 instanceModel :: HasSymbolTable ctx => Fields -> ctx -> InstanceModel -> Contents
-instanceModel fs m i = Defnt Instance (foldr (mkIMField i m) [] fs) (shortname i)
+instanceModel fs m i = Defnt Instance (foldr (mkIMField i m) [] fs) (refAdd i)
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
 -- or IM definition automatically (called automatically by 'SCSSub' program)

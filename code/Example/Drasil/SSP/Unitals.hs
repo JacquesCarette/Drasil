@@ -112,13 +112,13 @@ constant_K = uqc "kappa" (cn "constant") fixme
   (Greek Kappa_L) pascal Real [] (dbl 0) defultUncrt
 
 {-Output Variables-} --FIXME: See if there should be typical values
-fs = constrained' (dqd' fs_concept (const $ Atomic "FS") Real Nothing [] [])
+fs = constrained' (dqd' fs_concept (const $ Atomic "FS") Real Nothing [])
   [gtZeroConstr] (dbl 1)
 
 fs_min :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.
 fs_min = dqd' (dcc "fs_min" (cn "minimum factor of safety") 
   ("The minimum factor of safety")) (const $ sub (eqSymb fs) (Atomic "min")) Real
-  Nothing [] []
+  Nothing [] 
 -- Once things are converted to the new style of instance models, this will
 -- be removed/fixed.
 
@@ -400,33 +400,33 @@ earthqkLoadFctr, normToShear, scalFunc,
 earthqkLoadFctr = dqd' (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
   ("proportionality factor of force that " ++
   "weight pushes outwards; caused by seismic earth movements"))
-  (const $ sub cK lC) Real Nothing [] []
+  (const $ sub cK lC) Real Nothing [] 
 
 normToShear = dqd' (dcc "lambda"
   (nounPhraseSP $ "interslice normal/shear force ratio")
-  ("applied to all interslices")) (const $ Greek Lambda_L) Real Nothing [] []
+  ("applied to all interslices")) (const $ Greek Lambda_L) Real Nothing [] 
 
 scalFunc = dqd' (dcc "f_i" (nounPhraseSP $ "scaling function")
   ("magnitude of interslice forces as a function " ++
   "of the x coordinate" ++ fisi ++ "; can be constant or a half-sine"))
-  (const lF) Real Nothing [] []
+  (const lF) Real Nothing [] 
 
 numbSlices = dqd' (dcc "n" (nounPhraseSP "number of slices")
   "the slip mass has been divided into")
-  (const lN) Natural Nothing [] []
+  (const lN) Natural Nothing [] 
 
 minFunction = dqd' (dcc "Upsilon" (nounPhraseSP "function")
   ("generic minimization function or algorithm"))
-  (const $ Greek Upsilon) Real Nothing [] []
+  (const $ Greek Upsilon) Real Nothing [] 
 
 fsloc = dqd' (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
-  (const $ sub (Atomic "FS") (Atomic "Loc,i")) Real Nothing [] []
+  (const $ sub (Atomic "FS") (Atomic "Loc,i")) Real Nothing [] 
 
 ufixme1 = dqd' (dcc "fixme1" (cn "fixme") "What is this value?")
-  (const $ Atomic "SpencerFixme1Please") Real Nothing [] []
+  (const $ Atomic "SpencerFixme1Please") Real Nothing []
 
 ufixme2 = dqd' (dcc "fixme2" (cn "fixme") "What is this value?")
-  (const $ Atomic "SpencerFixme2Please") Real Nothing [] []
+  (const $ Atomic "SpencerFixme2Please") Real Nothing [] 
 
 --------------------
 -- Index Function --
@@ -434,13 +434,13 @@ ufixme2 = dqd' (dcc "fixme2" (cn "fixme") "What is this value?")
 
 varblU = dqd' (dcc "varblU" (nounPhraseSP "local index")
   ("used as a bound variable index in calculations"))
-  (const lU) Natural Nothing [] []
+  (const lU) Natural Nothing [] 
 varblV = dqd' (dcc "varblV" (nounPhraseSP "local index")
   ("used as a bound variable index in calculations"))
-  (const lV) Natural Nothing [] []
+  (const lV) Natural Nothing [] 
 
 index = dqd' (dcc "index" (nounPhraseSP "index")
-  ("used to show a quantity applies to only one slice")) (const lI) Natural Nothing [] []
+  ("used to show a quantity applies to only one slice")) (const lI) Natural Nothing [] 
 
 --FIXME: possibly move to Language/Drasil/Expr.hs
 indx1 :: (Quantity a) => a -> Expr

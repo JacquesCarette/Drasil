@@ -49,8 +49,8 @@ dqd :: ConceptChunk -> Symbol -> Space -> Maybe UnitDefn -> Attributes -> Define
 dqd c s sp un atts = DQD c (\_ -> s) sp un atts []
 
 -- For when the symbol changes depending on the stage
-dqd' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> Attributes -> Derivation -> DefinedQuantityDict
-dqd' = DQD 
+dqd' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> Attributes -> DefinedQuantityDict
+dqd' c s sp un atts= DQD c s sp un atts []
 
 -- Same as dqd, but passes an empty list as the Attributes
 dqdEL :: (IsUnit u) => ConceptChunk -> Symbol -> Space -> u -> DefinedQuantityDict

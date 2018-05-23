@@ -266,10 +266,7 @@ sec sm depth x@(Section title contents _) =
   T.HDiv [(concat $ replicate depth "sub") ++ "section"]
   (T.Header depth (spec sm title) ref :
    map (layout sm depth) contents) ref
-
-getSN :: HasAttributes c => c -> Sentence
-getSN c = maybe (error "missing attribute refAdd") id $ getShortName c
-
+  
 -- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.
 lay :: HasSymbolTable ctx => ctx -> Contents -> T.LayoutObj
@@ -282,12 +279,12 @@ lay sm x@(Definition c)       = T.Definition c (makePairs sm c) (P.S (refAdd x))
 lay sm (Enumeration cs)       = T.List $ makeL sm cs
 lay sm x@(Figure c f wp _)    = T.Figure (P.S (refAdd x)) (spec sm c) f wp
 lay sm x@(Requirement r)      = T.ALUR T.Requirement
-  (spec sm $ requires r) (P.S $ refAdd x) (spec sm $ getSN r)
+  (spec sm $ requires r) (P.S $ refAdd x) (spec sm $ getShortName r)
 lay sm x@(Assumption a)       = T.ALUR T.Assumption
-  (spec sm (assuming a)) (P.S (refAdd x)) (spec sm $ getSN a)
+  (spec sm (assuming a)) (P.S (refAdd x)) (spec sm $ getShortName a)
 lay sm x@(Change lc)          = T.ALUR
   (if (chngType lc) == Likely then T.LikelyChange else T.UnlikelyChange)
-  (spec sm (chng lc)) (P.S (refAdd x)) (spec sm $ getSN lc)
+  (spec sm (chng lc)) (P.S (refAdd x)) (spec sm $ getShortName lc)
 lay sm x@(Graph ps w h t _)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S (refAdd x))
 lay sm (Defnt dtyp pairs rn)  = T.Definition dtyp (layPairs pairs) (P.S rn)

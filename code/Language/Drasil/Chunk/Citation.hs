@@ -25,6 +25,7 @@ module Language.Drasil.Chunk.Citation
 import Language.Drasil.People
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Classes (HasUID(uid), HasShortName(shortname))
+import Language.Drasil.Chunk.Attribute (shortname')
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces
@@ -99,8 +100,11 @@ cite :: EntryID -> CitationKind -> [CiteField] -> Citation
 cite i = Cite i i
 
 -- | Citations are chunks.
-instance HasUID        Citation where uid f (Cite a b c d) = fmap (\x -> Cite x b c d) (f a)
-instance HasShortName  Citation where shortname c = S $ citeID c
+instance HasUID        Citation where 
+  uid f (Cite a b c d) = fmap (\x -> Cite x b c d) (f a)
+--instance HasShortName  Citation where shortname c = S $ citeID c
+instance HasShortName  Citation where 
+  shortname f (Cite a b c d) = fmap (\x -> Cite a x c d ) (f (shortname' $ S $ citeID b))
 
 -- | External references come in many flavours. Articles, Books, etc.
 -- (we are using the types available in Bibtex)

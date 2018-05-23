@@ -17,7 +17,7 @@ import Control.Lens (makeLenses, (^.))
 data AssumpChunk = AC 
                  { _aid :: String
                  , assuming :: Sentence
-                 , _refName :: RefName -- HACK for refs?. No spaces/special chars allowed
+                 , _refName :: ShortNm
                  , _attribs :: Attributes
                  }
 makeLenses ''AssumpChunk

@@ -8,7 +8,7 @@ import Language.Drasil.Classes (HasUID(uid), HasAttributes(attributes),
 import Language.Drasil.Chunk.Attribute.Core(Attributes)
 import Language.Drasil.Chunk.Attribute(shortname')
 import Language.Drasil.Spec (Sentence, RefName)
-
+import Language.Drasil.Chunk.Attribute.ShortName
 import Control.Lens (set, (^.))
 
 -- FIXME: We need a better way to capture change information. Sentences
@@ -31,23 +31,23 @@ data Change = ChC
   { _id      :: String
   , chngType :: ChngType 
   , chng     :: Sentence
-  , _refName :: RefName -- HACK for refs?
+  , _refName :: ShortNm
   , _atts    :: Attributes
   }
   
 instance HasUID        Change where uid f (ChC a b c d e) = fmap (\x -> ChC x b c d e) (f a)
 instance HasAttributes Change where attributes f (ChC a b c d e) = fmap (\x -> ChC a b c d x) (f e)
-instance HasShortName  Change where shortname (ChC _ _ _ sn _) = sn
+instance HasShortName  Change where shortname f (ChC a b c d e) = fmap (\x -> ChC a b c x e) (f d)
 instance Eq            Change where a == b = a ^. uid == b ^. uid
 
 -- | Smart constructor for requirement chunks (should not be exported)
-chc :: String -> ChngType -> Sentence -> RefName -> Attributes -> Change
+chc :: String -> ChngType -> Sentence -> ShortNm -> Attributes -> Change
 chc = ChC
 
 chc' :: Change -> Sentence -> Change
 chc' c s = set attributes (c ^. attributes) c
 
-lc, ulc :: String -> Sentence -> RefName -> Attributes -> Change
+lc, ulc :: String -> Sentence -> ShortNm -> Attributes -> Change
 -- | Smart constructor for functional requirement chunks.
 lc i = chc i Likely
 

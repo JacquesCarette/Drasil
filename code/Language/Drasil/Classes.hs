@@ -21,12 +21,13 @@ module Language.Drasil.Classes (
   ) where
 
 import Language.Drasil.NounPhrase.Core (NP)
-import Language.Drasil.Spec (Sentence, RefName)
+import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Symbol (Stage, Symbol)
 import Language.Drasil.Space (Space)
 import Language.Drasil.UnitLang (USymb, UDefn)
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
+import Language.Drasil.Chunk.Attribute.ShortName (ShortNm)
 import Language.Drasil.Expr (Expr)
 
 import Control.Lens (Lens')
@@ -94,7 +95,7 @@ class HasReasVal c where
   reasVal     :: Lens' c (Maybe Expr)
 
 class HasShortName s where
-  shortname :: s -> RefName -- Sentence; The text to be displayed for the link.
+  shortname :: Lens' s ShortNm -- The text to be displayed for the link.
                             -- A short name used for referencing within a document that can 
                             -- include symbols and whatnot if required.
                             -- Visible in the typeset documents (pdf)

@@ -8,6 +8,7 @@ import Language.Drasil.Classes (HasUID(uid), HasAttributes(attributes),
 import Language.Drasil.Chunk.Attribute (shortname')
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Spec (Sentence, RefName)
+import Language.Drasil.Chunk.Attribute.ShortName
 
 import Control.Lens (set, (^.))
 
@@ -35,13 +36,13 @@ data ReqChunk = RC
   { _id        :: String
   , reqType    :: ReqType 
   , requires   :: Sentence
-  , _refName   :: RefName -- HACK for refs?
+  , _refName   :: ShortNm
   , _atts      :: Attributes
   }
   
 instance HasUID        ReqChunk where uid f (RC a b c d e) = fmap (\x -> RC x b c d e) (f a)
 instance HasAttributes ReqChunk where attributes f (RC a b c d e) = fmap (\x -> RC a b c d x) (f e)
-instance HasShortName  ReqChunk where shortname (RC _ _ _ sn _)   = sn
+instance HasShortName  ReqChunk where shortname = refName
 instance Eq            ReqChunk where a == b = a ^. uid == b ^. uid
 
 -- | Smart constructor for requirement chunks (should not be exported)

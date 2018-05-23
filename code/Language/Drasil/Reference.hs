@@ -13,7 +13,7 @@ import Language.Drasil.Chunk.PhysSystDesc as PD
 import Language.Drasil.Chunk.ReqChunk as R
 import Language.Drasil.Chunk.Theory
 import Language.Drasil.Document
-import Language.Drasil.Spec (Sentence(..), RefName)
+import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.RefTypes (RefType(..))
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Language.Drasil.Chunk.Attribute.ShortName
@@ -152,8 +152,9 @@ instance HasCitationRefs ReferenceDB where citationRefTable = citationDB
 
 
 class Referable s where
-  refAdd  :: s -> String  -- The reference address (what we're linking to).
+  refAdd  :: s -> String  -- The plaintext referencing address (what we're linking to).
                           -- Should be string with no spaces/special chars.
+                          -- Only visible in the source (tex/html).
   rType   :: s -> RefType -- The reference type (referencing namespace?)
 
 instance Referable Goal where

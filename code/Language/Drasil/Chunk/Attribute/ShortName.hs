@@ -19,6 +19,10 @@ import Language.Drasil.Spec (Sentence(..), RefName)
 
 class HasShortName  s where
   shortname :: s -> RefName -- Sentence; The text to be displayed for the link.
+                            -- A short name used for referencing within a document that can 
+                            -- include symbols and whatnot if required.
+                            -- Visible in the typeset documents (pdf)
+                            
 
 instance HasShortName  Goal where
   shortname g = S $ g ^. G.refAddr
@@ -46,15 +50,15 @@ instance HasShortName  TheoryModel where
   shortname _ = error "No explicit name given for theory model -- build a custom Ref"
 
 instance HasShortName  GenDefn where
-  shortname _ = error "No explicit name given for theory model -- build a custom Ref"
+  shortname _ = error "No explicit name given for general definition -- build a custom Ref"
 
 instance HasShortName  QDefinition where -- FIXME: This could lead to trouble; need
                                      -- to ensure sanity checking when building
                                      -- Refs. Double-check QDef is a DD before allowing
-  shortname _ = error "No explicit name given for theory model -- build a custom Ref"
+  shortname _ = error "No explicit name given for data definition -- build a custom Ref"
 
 instance HasShortName  InstanceModel where
-  shortname _ = error "No explicit name given for theory model -- build a custom Ref"
+  shortname _ = error "No explicit name given for instance model -- build a custom Ref"
 
 instance HasShortName  Contents where
   shortname (Table _ _ _ _ r)     = S "Table:" :+: S r

@@ -12,7 +12,7 @@ import Data.Function (on)
 -- given list of abbreviated chunks
 table_of_abb_and_acronyms :: (Idea s) => [s] -> Section
 table_of_abb_and_acronyms ls = Section (S "Abbreviations and Acronyms") 
-  [Con (table ls)] "TAbbAcc"
+  [Con (table ls)] "TAbbAcc" "TblOfAA"
 
 select :: (Idea s) => [s] -> [(String, s)]
 select [] = []

@@ -39,4 +39,4 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
 
 -- FIXME
 a10 :: Contents
-a10 = Assumption $ assump "assump10" EmptyS (S "assump10") []
+a10 = Assumption $ assump "assump10" EmptyS "assump10" []

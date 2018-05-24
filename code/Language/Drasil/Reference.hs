@@ -183,8 +183,8 @@ instance Referable Change where
   rType (ChC _ Unlikely _ _ _) = UC
 
 instance Referable Section where
-  refName (Section t _ _) = t
-  refAdd  (Section _ _ r) = "Sec:" ++ r
+  refName (Section _ _ _ sn) = sn
+  refAdd  (Section _ _ r _) = "Sec:" ++ r
   rType   _               = Sect
 
 instance Referable Citation where

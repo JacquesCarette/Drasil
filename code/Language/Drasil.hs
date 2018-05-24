@@ -184,6 +184,8 @@ module Language.Drasil (
   , Goal, mkGoal
   -- PhysSystDesc
   , PhysSystDesc, pSysDes, psd, psd'
+  -- RefTypes
+  , RefAdd
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -288,3 +290,4 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
 import Language.Drasil.CodeSpec hiding (outputs, inputs)
 import Language.Drasil.DataDesc
 import Language.Drasil.Code.Imperative.Lang
+import Language.Drasil.RefTypes(RefAdd)

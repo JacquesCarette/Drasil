@@ -34,6 +34,7 @@ module Language.Drasil (
   , HasUnitSymbol(usymb)
   , IsUnit
   , HasAttributes(attributes)
+  , HasReference(getReferences)
   , CommonIdea(abrv)
   , Constrained(constraints)
   , HasReasVal(reasVal)
@@ -88,6 +89,7 @@ module Language.Drasil (
   , getSource
   , Derivation, getDerivation, getShortName, shortname
   , sourceref, derivationsteps
+  , References
   --Citations
   , Citation, BibRef, CiteField, Month(..), HP
     -- CiteFields smart constructors
@@ -209,11 +211,12 @@ import Language.Drasil.Unit -- all of it
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
   IsUnit, HasAttributes(attributes), CommonIdea(abrv),
-  Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat))
+  Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasReference(getReferences))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
+import Language.Drasil.Chunk.Attribute.References (References)
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation (
   -- Types

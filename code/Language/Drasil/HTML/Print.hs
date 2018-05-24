@@ -36,12 +36,11 @@ genHTML sm fn doc = build fn (makeDocument sm doc)
 -- | Build the HTML Document, called by genHTML
 build :: String -> Document -> Doc
 build fn (Document t a c) =
-  text ( "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\""++
-          " \"http://www.w3.org/TR/html4/loose.dtd\">" ++ "\n" ++
-          "<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/"++
-          "2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>") $$
+  text ( "<!DOCTYPE html>") $$
   html ( head_tag ((linkCSS fn) $$ title (title_spec t) $$
-  text ("<meta charset=\"utf-8\">")) $$
+  text ("<meta charset=\"utf-8\">") $$
+  text ("<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/"++
+          "2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>")) $$
   body (article_title (p_spec t) $$ author (p_spec a)
   $$ print c
   ))
@@ -57,7 +56,8 @@ printLO (Definition dt ssPs l) = makeDefn dt ssPs (p_spec l)
 printLO (Header n contents _)  = h (n + 1) $ p_spec contents -- FIXME
 printLO (List t)               = makeList t
 printLO (Figure r c f wp)      = makeFigure (p_spec r) (p_spec c) (text f) wp
-printLO (ALUR _ x l i)         = makeRefList (p_spec x) (p_spec l) (p_spec i)
+printLO (ALUR _ x l i)         = wrap "ul" ["hide-list-style"] $
+  makeRefList (p_spec x) (p_spec l) (p_spec i)
 printLO (Bib bib)              = makeBib bib
 printLO (Graph _ _ _ _ _)      = empty -- FIXME
 
@@ -282,7 +282,7 @@ makeFigure r c f wp = refwrap r (image f c wp $$ caption c)
 
 -- | Renders assumptions, requirements, likely changes
 makeRefList :: Doc -> Doc -> Doc -> Doc
-makeRefList a l i = refwrap l (wrap "ul" [] (i <> text ": " <> a))
+makeRefList a l i = wrap "li" [] (refwrap l (i <> text ": " <> a))
 
 ---------------------
 --HTML bibliography--
@@ -290,7 +290,8 @@ makeRefList a l i = refwrap l (wrap "ul" [] (i <> text ": " <> a))
 -- **THE MAIN FUNCTION**
 
 makeBib :: BibRef -> Doc
-makeBib = vcat . map (\(x,(y,z)) -> makeRefList z y x) .
+makeBib = wrap "ul" ["hide-list-style"] . vcat .
+  map (\(x,(y,z)) -> makeRefList z y x) .
   zip [text $ sqbrac $ show x | x <- ([1..] :: [Int])] . map renderCite
 
 --for when we add other things to reference like website, newspaper

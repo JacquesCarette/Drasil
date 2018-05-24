@@ -28,10 +28,11 @@ import Data.Drasil.SentenceStructures (sAnd, sOf,
 import Control.Lens ((^.))
 import Data.Drasil.Concepts.Math (equation, angle)
 import Drasil.SSP.BasicExprs
+
 ------------------------
 --  Data Definitions  --
 ------------------------
-ddRef = refDD (ddRefDB sspRefMDB)
+ddRef = refDD (ddRefDB sspRefMDB) 
 
 sspRefMDB :: ModelDB
 sspRefMDB = mdb [] [] sspDataDefs [] 
@@ -332,7 +333,8 @@ mobShrDerivation = [
   
   foldlSP [S "The", plural value, S "of", getES shearRNoIntsl `sAnd`
   getES shearFNoIntsl, S "are now defined completely in terms of the",
-  S "known force property", plural value, S "of", ddRef sliceWght, S "to", ddRef lengthLs]
+  S "known force property", plural value, S "of", ddRef sliceWght, S "to", 
+  ddRef lengthLs]
 
   ]
 
@@ -362,7 +364,7 @@ stfMtrxDerivation = [
   
   foldlSP [S "For interslice surfaces the stiffness constants" `sAnd`
   S "displacements refer to an unrotated coordinate system" `sC`
-  getES genDisplace, S "of" +:+. acroGD 9, S "The interslice elements",
+  getES genDisplace, S "of" +:+. ddRef lengthLs, S "The interslice elements",
   S "are left in their standard coordinate system" `sC`
   S "and therefore are described by the same", phrase equation,
   S "from" +:+. acroGD 8, S "Seen as", getES shrStiffIntsl, S "in" +:+.

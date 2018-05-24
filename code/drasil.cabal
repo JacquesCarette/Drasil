@@ -85,6 +85,7 @@ library
     , Language.Drasil.Chunk.Attribute
     , Language.Drasil.Chunk.Attribute.Core
     , Language.Drasil.Chunk.Attribute.Derivation
+    , Language.Drasil.Chunk.Attribute.References
     , Language.Drasil.Chunk.Change
     , Language.Drasil.Chunk.Citation
     , Language.Drasil.Chunk.Code

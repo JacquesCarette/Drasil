@@ -24,7 +24,7 @@ data DefinedQuantityDict = DQD { _con :: ConceptChunk
                                , _spa :: Space
                                , _unit' :: Maybe UnitDefn
                                , _attribs :: Attributes
- 			       , _deri :: Derivation
+                               , _deri :: Derivation
                                }
   
 makeLenses ''DefinedQuantityDict

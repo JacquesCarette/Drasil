@@ -1,4 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Citation
   ( -- Types
     Citation, BibRef, CiteField(..), Month(..), HP(..), CitationKind(..), EntryID
@@ -25,10 +24,7 @@ module Language.Drasil.Chunk.Citation
 
 import Language.Drasil.People
 import Language.Drasil.Spec (Sentence(..))
-import Language.Drasil.Classes (HasUID(uid), HasShortName(shortname))
-import Language.Drasil.Chunk.Attribute (shortname')
-import Control.Lens (makeLenses, view)
-import Language.Drasil.CodeSpec (getStr)
+import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Printing.Helpers (noSpaces)
 
 type BibRef = [Citation]
@@ -89,6 +85,23 @@ instance Show Month where
   show Nov = "November"
   show Dec = "December"
 
+-- | All citations require a unique identifier (String) used by the Drasil chunk.
+-- We will also have an EntryID (String) used for creating reference links.
+-- Finally we will have the reference information (type and fields).
+data Citation = Cite
+  { _id :: String
+  , citeID :: EntryID
+  , externRefT :: CitationKind
+  , fields :: [CiteField]
+  }
+
+-- | Smart constructor which implicitly uses EntryID as chunk i.
+cite :: EntryID -> CitationKind -> [CiteField] -> Citation
+cite i = Cite i (noSpaces i)
+
+-- | Citations are chunks.
+instance HasUID Citation where uid f (Cite a b c d) = fmap (\x -> Cite x b c d) (f a)
+
 -- | External references come in many flavours. Articles, Books, etc.
 -- (we are using the types available in Bibtex)
 data CitationKind = Article
@@ -105,35 +118,11 @@ data CitationKind = Article
                   | TechReport
                   | Unpublished
 
--- | All citations require a unique identifier (String) used by the Drasil chunk.
--- We will also have an EntryID (String) used for creating reference links.
--- Finally we will have the reference information (type and fields).
-data Citation = Cite { _id :: String
-                     , _citeID :: EntryID
-                     , _externRefT :: CitationKind
-                     , _fields :: [CiteField]
-                     }
-makeLenses ''Citation
-
--- | Citations are chunks.
-instance HasUID        Citation where uid f (Cite a b c d) = fmap (\x -> Cite x b c d) (f a)
-instance HasShortName  Citation where shortname = view $ shortname' $ citeID
-
--- | Smart constructor which implicitly uses EntryID as chunk i.
-cite :: EntryID -> CitationKind -> [CiteField] -> Citation
-cite i = Cite (getStr i) (noSpaces i)
-  where
-    -- Checks if a sentence has spaces: returns sentence if it doesn't and throws error if it does
-    noSpaces :: EntryID -> EntryID
-    noSpaces (S s)
-      | (' ' `elem` s) == False = (S s)
-      | otherwise               = error "Sentence has at least one space in it."
-
 -- | Article citation requires author(s), title, journal, year.
 -- Optional fields can be: volume, number, pages, month, and note.
 -- Implicitly uses the EntryID as the chunk i.
 cArticle :: String -> People -> Sentence -> Sentence -> Int -> [CiteField] -> Citation
-cArticle i aut t journ yr opt = cite (S i) Article $
+cArticle i aut t journ yr opt = cite i Article $
   (author aut) : (title t) : (journal journ) : (year yr) : opt
 
 -- | Book citation requires author or editor, title, publisher, year.
@@ -142,15 +131,15 @@ cArticle i aut t journ yr opt = cite (S i) Article $
 cBookA, cBookE :: String -> People -> Sentence -> Sentence -> Int ->
   [CiteField] -> Citation
 -- | Book citation by author
-cBookA i aut t pub yr opt = cite (S i) Book $ author aut : stdFields t pub yr opt
+cBookA i aut t pub yr opt = cite i Book $ author aut : stdFields t pub yr opt
 -- | Book citation by editor
-cBookE i ed t pub yr opt = cite (S i) Book $ editor ed : stdFields t pub yr opt
+cBookE i ed t pub yr opt = cite i Book $ editor ed : stdFields t pub yr opt
 
 -- | Booklet citation requires title.
 -- Optional fields can be author, how published, address, month, year, note.
 -- Implicitly uses the EntryID as the chunk i.
 cBooklet :: String -> Sentence -> [CiteField] -> Citation
-cBooklet i t opt = cite (S i) Booklet $ title t : opt
+cBooklet i t opt = cite i Booklet $ title t : opt
 
 -- | InBook citation requires author or editor, title, chapter and/or pages,
 -- publisher, year. Optional fields can be volume or number, series, type,
@@ -160,10 +149,10 @@ cBooklet i t opt = cite (S i) Booklet $ title t : opt
 cInBookACP, cInBookECP :: String -> People -> Sentence -> Int -> [Int] ->
   Sentence -> Int -> [CiteField] -> Citation
 -- | InBook citation by author.
-cInBookACP i auth t chap pgs pub yr opt = cite (S i) InBook $
+cInBookACP i auth t chap pgs pub yr opt = cite i InBook $
   author auth : chapter chap : pages pgs : stdFields t pub yr opt
 -- | InBook citation by editor.
-cInBookECP i ed t chap pgs pub yr opt   = cite (S i) InBook $
+cInBookECP i ed t chap pgs pub yr opt   = cite i InBook $
   editor ed : chapter chap : pages pgs : stdFields t pub yr opt
 
 -- | InBook citation excluding page numbers.
@@ -171,10 +160,10 @@ cInBookAC, cInBookEC :: String -> People -> Sentence -> Int ->
   Sentence -> Int -> [CiteField] -> Citation
 
 -- | Otherwise ientical to 'cInBookACP'
-cInBookAC i auth t chap pub yr opt = cite (S i) InBook $
+cInBookAC i auth t chap pub yr opt = cite i InBook $
   author auth : chapter chap : stdFields t pub yr opt
 -- | Otherwise ientical to 'cInBookECP'
-cInBookEC i ed t chap pub yr opt   = cite (S i) InBook $
+cInBookEC i ed t chap pub yr opt   = cite i InBook $
   editor ed : chapter chap : stdFields t pub yr opt
 
 -- | InBook citation excluding chapter.
@@ -182,10 +171,10 @@ cInBookAP, cInBookEP :: String -> People -> Sentence -> [Int] ->
   Sentence -> Int -> [CiteField] -> Citation
 
 -- | Otherwise ientical to 'cInBookACP'
-cInBookAP i auth t pgs pub yr opt = cite (S i) InBook $
+cInBookAP i auth t pgs pub yr opt = cite i InBook $
   author auth : pages pgs : stdFields t pub yr opt
 -- | Otherwise ientical to 'cInBookECP'
-cInBookEP i ed t pgs pub yr opt   = cite (S i) InBook $
+cInBookEP i ed t pgs pub yr opt   = cite i InBook $
   editor ed : pages pgs : stdFields t pub yr opt
 
 -- | InCollection citation requires author, title, bookTitle, publisher, year.
@@ -194,7 +183,7 @@ cInBookEP i ed t pgs pub yr opt   = cite (S i) InBook $
 -- Implicitly uses the EntryID as the chunk i.
 cInCollection :: String -> People -> Sentence -> Sentence -> Sentence -> Int ->
   [CiteField] -> Citation
-cInCollection i auth t bt pub yr opt = cite (S i) InCollection $
+cInCollection i auth t bt pub yr opt = cite i InCollection $
   author auth : bookTitle bt : stdFields t pub yr opt
 
 -- | InProceedings citation requires author, title, bookTitle, year.
@@ -203,52 +192,52 @@ cInCollection i auth t bt pub yr opt = cite (S i) InCollection $
 -- Implicitly uses the EntryID as the chunk i.
 cInProceedings :: String -> People -> Sentence -> Sentence -> Int ->
   [CiteField] -> Citation
-cInProceedings i auth t bt yr opt = cite (S i) InProceedings $
+cInProceedings i auth t bt yr opt = cite i InProceedings $
   author auth : title t : bookTitle bt : year yr : opt
 
 -- | Manual (technical documentation) citation requires title.
 -- Optional fields can be author, organization, address, edition, month, year, and note.
 -- Implicitly uses the EntryID as the chunk i.
 cManual :: String -> Sentence -> [CiteField] -> Citation
-cManual i t opt = cite (S i) Manual $ title t : opt
+cManual i t opt = cite i Manual $ title t : opt
 
 -- | Master's Thesis citation requires author, title, school, and year.
 -- Optional fields can be type, address, month, and note.
 -- Implicitly uses the EntryID as the chunk i.
 cMThesis :: String -> People -> Sentence -> Sentence -> Int -> [CiteField] -> Citation
-cMThesis i auth t sch yr opt = cite (S i) MThesis $ thesis auth t sch yr opt
+cMThesis i auth t sch yr opt = cite i MThesis $ thesis auth t sch yr opt
 
 -- | Misc citation requires nothing.
 -- Optional fields can be author, title, howpublished, month, year, and note.
 -- Implicitly uses the EntryID as the chunk i.
 cMisc :: String -> [CiteField] -> Citation
-cMisc i opt = cite (S i) Misc opt
+cMisc i opt = cite i Misc opt
 
 -- | PhD Thesis citation requires author, title, school, and year.
 -- Optional fields can be type, address, month, and note.
 -- Implicitly uses the EntryID as the chunk i.
 cPhDThesis :: String -> People -> Sentence -> Sentence -> Int -> [CiteField] -> Citation
-cPhDThesis i auth t sch yr opt = cite (S i) PhDThesis $ thesis auth t sch yr opt
+cPhDThesis i auth t sch yr opt = cite i PhDThesis $ thesis auth t sch yr opt
 
 -- | Proceedings citation requires title and year.
 -- Optional fields can be editor, volume or number, series, address,
 -- publisher, note, month, and organization.
 -- Implicitly uses the EntryID as the chunk i.
 cProceedings :: String -> Sentence -> Int -> [CiteField] -> Citation
-cProceedings i t yr opt = cite (S i) Proceedings $ title t : year yr : opt
+cProceedings i t yr opt = cite i Proceedings $ title t : year yr : opt
 
 -- | Technical Report citation requires author, title, institution, and year.
 -- Optional fields can be type, number, address, month, and note.
 -- Implicitly uses the EntryID as the chunk i.
 cTechReport :: String -> People -> Sentence -> Sentence -> Int -> [CiteField] -> Citation
-cTechReport i auth t inst yr opt = cite (S i) TechReport $
+cTechReport i auth t inst yr opt = cite i TechReport $
   author auth : title t : institution inst : year yr : opt
 
 -- | Unpublished citation requires author, title, and note.
 -- Optional fields can be month and year.
 -- Implicitly uses the EntryID as the chunk i.
 cUnpublished :: String -> People -> Sentence -> Sentence -> [CiteField] -> Citation
-cUnpublished i auth t n opt = cite (S i) Unpublished $
+cUnpublished i auth t n opt = cite i Unpublished $
   author auth : title t : note n : opt
 
 -- Helper function (do not export) for creating book reference.

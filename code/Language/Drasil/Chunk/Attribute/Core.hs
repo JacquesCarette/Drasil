@@ -13,7 +13,7 @@ type Attributes = [Attribute]
 -- at a given model/definition/etc.
 data Attribute =
     Rationale Sentence
-  | ShortName Sentence
+  | ShortName String
   -- | SourceRef Sentence -- Source to reference for this knowledge chunk
                        -- FIXME: Allow URLs/Citations here
   | D Derivation -- Makes sense for now 

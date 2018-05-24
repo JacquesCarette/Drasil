@@ -14,7 +14,6 @@ import Drasil.SSP.Unitals (shrStiffBase, index, genDisplace, baseAngle, inxi,
   baseLngth, genForce, shrDispl, scalFunc, normToShear, slipDist, slopeDist,
   slopeHght, slipHght, waterHght, satWeight, waterWeight, dryWeight,
   ufixme1, ufixme2)
-import Drasil.SSP.GenDefs (eqlExpr, displMtx, rotMtx)
 import Drasil.SSP.Defs (intrslce)
 import Drasil.DocumentLanguage.RefHelpers
 
@@ -28,7 +27,7 @@ import Data.Drasil.SentenceStructures (sAnd, sOf,
   ofThe, getTandS, ofThe')
 import Control.Lens ((^.))
 import Data.Drasil.Concepts.Math (equation, angle)
-
+import Drasil.SSP.BasicExprs
 ------------------------
 --  Data Definitions  --
 ------------------------

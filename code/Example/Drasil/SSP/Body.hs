@@ -60,7 +60,7 @@ import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.Utils (getES, enumBullet, enumSimple, weave)
-import Data.Drasil.SentenceStructures (sOr, acroDD,
+import Data.Drasil.SentenceStructures (sOr, 
   foldlSent, ofThe, sAnd, foldlSP, foldlList, foldlSent_)
 
 --type declarations for sections--

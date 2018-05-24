@@ -72,3 +72,8 @@ sufx _ = "th"
 -- Use on any sized Int
 sufxer :: Int -> String
 sufxer = (\x -> x ++ ".") . sufx . mod 10
+
+noSpaces :: String -> String
+noSpaces s
+  | (' ' `elem` s) == False = s
+  | otherwise               = error "String has at least one space in it."

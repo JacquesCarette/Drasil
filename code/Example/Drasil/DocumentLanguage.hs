@@ -246,7 +246,7 @@ mkSections si l = map doit l
 mkRefSec :: SystemInformation -> RefSec -> Section
 mkRefSec _  (RefVerb s) = s
 mkRefSec si (RefProg c l) = section (titleize refmat) [c]
-  (map (mkSubRef si) l) "RefMat"
+  (map (mkSubRef si) l) "RefMat" "RefMat"
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
     mkSubRef (SI {_sysinfodb = db})  TUnits =
@@ -509,9 +509,9 @@ siSys (SI {_sys = sys}) = nw sys
 -- mkAssump :: String -> Sentence -> Contents
 -- mkAssump i desc = Assumption $ ac' i desc
 
-mkRequirement :: String -> Sentence -> Sentence -> Contents
+mkRequirement :: String -> Sentence -> String -> Contents
 mkRequirement i desc shrtn = Requirement $ frc i desc (shrtn) [shortname shrtn] --FIXME: HACK - Should have explicit refname
 
-mkLklyChnk :: String -> Sentence -> Sentence -> Contents
+mkLklyChnk :: String -> Sentence -> String -> Contents
 mkLklyChnk i desc shrtn = Change $ lc i desc (shrtn) [shortname shrtn] -- FIXME: HACK -- See above
 

@@ -8,7 +8,7 @@ import Drasil.DocumentLanguage.RefHelpers
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
 import Data.Drasil.Utils (getES)
 import Data.Drasil.Concepts.Math (parameter)
-import Data.Drasil.Concepts.Documentation (coordinate, assumption)
+import Data.Drasil.Concepts.Documentation (coordinate)
 
 import Prelude hiding (exp)
 import Control.Lens ((^.))

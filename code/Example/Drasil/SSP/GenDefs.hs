@@ -1,5 +1,4 @@
-module Drasil.SSP.GenDefs (sspGenDefs, eqlExpr, displMtx,
-  rotMtx, momExpr) where
+module Drasil.SSP.GenDefs (sspGenDefs) where
 
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
@@ -28,16 +27,7 @@ import Data.Drasil.Concepts.Math (surface, angle,
 import Data.Drasil.Utils (getES)
 import Drasil.SRS as SRS (physSyst, missingP)
 import Drasil.SSP.Assumptions
-
-eqlExpr :: (Expr -> Expr) -> (Expr -> Expr) -> (Expr -> Expr -> Expr) -> Expr
-eqlExpr f1_ f2_ _e_ = (inxi slcWght `_e_`
-  (inxi surfHydroForce * cos (inxi surfAngle)) +
-  (inxi surfLoad) * (cos (inxi impLoadAngle))) * (f1_ (inxi baseAngle)) +
-  (negate (sy earthqkLoadFctr) * (inxi slcWght) - (inxi intNormForce) +
-  (inxiM1 intNormForce) - (inxi watrForce) + (inxiM1 watrForce) +
-  (inxi surfHydroForce) * sin (inxi surfAngle) + 
-  (inxi surfLoad) * (sin (inxi impLoadAngle))) * (f2_ (inxi baseAngle))
-
+import Drasil.SSP.BasicExprs
 ---------------------------
 --  General Definitions  --
 ---------------------------
@@ -159,17 +149,6 @@ nmShrR_desc = foldlSent [S "The", phrase assumption,
   S "or a constant"]
 
 --
-momExpr :: (Expr -> Expr -> Expr) -> Expr
-momExpr _e_ = (negate (inxi intNormForce) * (inxi sliceHght -
-  inxi baseWthX / 2 *  tan (inxi baseAngle)) + inxiM1 intNormForce *
-  (inxiM1 sliceHght - inxi baseWthX / 2 * tan (inxi baseAngle)) -
-  inxi watrForce * (inxi sliceHght - inxi baseWthX / 2 *
-  tan (inxi baseAngle)) + inxiM1 watrForce * (inxiM1 sliceHght -
-  inxi baseWthX / 2 * tan (inxi baseAngle))) `_e_`
-  (sy earthqkLoadFctr * inxi slcWght * inxi midpntHght / 2 -
-  inxi surfHydroForce * sin (inxi surfAngle) * inxi midpntHght -
-  inxi surfLoad * sin (inxi impLoadAngle) * inxi midpntHght)
-
 momentEql :: RelationConcept
 momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")
   momEql_desc momEql_rel []
@@ -277,14 +256,6 @@ displVect = makeRC "displVect" (nounPhraseSP "displacement vectors")
 disVec_rel :: Relation
 disVec_rel = inxi rotatedDispl $= vec2D (inxi shrDispl) (inxi nrmDispl) $=
   rotMtx * (inxi genDisplace) $= rotMtx * displMtx
-
-displMtx :: Expr
-displMtx = vec2D (inxi dx_i) (inxi dy_i)
-
-rotMtx :: Expr
-rotMtx = m2x2
-  (cos(inxi baseAngle))       (sin(inxi baseAngle))
-  (negate $ sin(inxi baseAngle)) (cos(inxi baseAngle))
 
 disVec_desc :: Sentence
 disVec_desc = foldlSent [at_start' vector, S "describing the",

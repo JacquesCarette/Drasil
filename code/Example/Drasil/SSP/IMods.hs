@@ -32,8 +32,8 @@ import Data.Drasil.SentenceStructures (andThe, acroGD, acroDD,
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.Physics (displacement, force)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Drasil.SSP.GenDefs (eqlExpr, momExpr)
 import Drasil.SSP.Assumptions
+import Drasil.SSP.BasicExprs
 
 -----------------------
 --  Instance Models  --

@@ -340,7 +340,7 @@ Temperature
 </tr>
 <tr>
 <td>
-<em>&Delta;T</em>
+<em>ΔT</em>
 </td>
 <td>
 Change in temperature
@@ -450,7 +450,7 @@ m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>&rho;</em>
+<em>ρ</em>
 </td>
 <td>
 Density
@@ -461,7 +461,7 @@ kg/m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>W</sub></em>
+<em>ρ<sub>W</sub></em>
 </td>
 <td>
 Density of water
@@ -472,7 +472,7 @@ kg/m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>&tau;</em>
+<em>τ</em>
 </td>
 <td>
 Dummy variable for integration over time
@@ -945,7 +945,7 @@ Equation
 <div id="">
 <div class="equation">
 <p class="paragraph">
-<em>&minus;&nabla;&sdot;<b>q</b>&plus;g = &rho;&#8239;C&#8239;<div class="fraction">
+<em>&minus;∇&sdot;<b>q</b>&plus;g = ρ&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 &part;&#8239;T
 </span>
@@ -964,7 +964,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity <em>C</em> (J/(kg&sdot;&deg;C)) and density, <em>&rho;</em> (kg/m<sup>3</sup>), where <em><b>q</b></em> is the thermal flux vector (W/m<sup>2</sup>), <em>g</em> is the volumetric heat generation per unit volume (W/m<sup>3</sup>), <em>T</em> is the temperature (&deg;C), <em>t</em> is time (s), and <em>&nabla;</em> is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href=#A:assump1>assump1</a>).
+The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity <em>C</em> (J/(kg&sdot;&deg;C)) and density, <em>ρ</em> (kg/m<sup>3</sup>), where <em><b>q</b></em> is the thermal flux vector (W/m<sup>2</sup>), <em>g</em> is the volumetric heat generation per unit volume (W/m<sup>3</sup>), <em>T</em> is the temperature (&deg;C), <em>t</em> is time (s), and <em>∇</em> is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href=#A:assump1>assump1</a>).
 </p>
 </td>
 </tr>
@@ -1000,7 +1000,7 @@ Equation
 <div id="">
 <div class="equation">
 <p class="paragraph">
-<em><b>q</b>(t) = h&#8239;&Delta;T(t)</em>
+<em><b>q</b>(t) = h&#8239;ΔT(t)</em>
 </p>
 </div>
 </div>
@@ -1012,7 +1012,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. <em><b>q</b>(t)</em> is the thermal flux (W/m<sup>2</sup>). <em>h</em> is the heat transfer coefficient, assumed independant of <em>T</em> (<a href=#A:Heat-Transfer-Coeffs-Constant>Heat-Transfer-Coeffs-Constant</a>) (W/(m<sup>2</sup>&sdot;&deg;C)). <em>&Delta;T(t) = T(t)&minus;T<sub>env</sub>(t)</em> is the time-dependant thermal gradient between the environment and the object (&deg;C).
+Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. <em><b>q</b>(t)</em> is the thermal flux (W/m<sup>2</sup>). <em>h</em> is the heat transfer coefficient, assumed independant of <em>T</em> (<a href=#A:Heat-Transfer-Coeffs-Constant>Heat-Transfer-Coeffs-Constant</a>) (W/(m<sup>2</sup>&sdot;&deg;C)). <em>ΔT(t) = T(t)&minus;T<sub>env</sub>(t)</em> is the time-dependant thermal gradient between the environment and the object (&deg;C).
 </p>
 </td>
 </tr>
@@ -1071,7 +1071,7 @@ Integrating <a href=#T:t1ConsThermE>T:t1ConsThermE</a> over a volume (<em>V</em>
 </p>
 <div id="">
 <div class="equation">
-<em>&minus;&int;<sub>V</sub>&nabla;&sdot;<b>q</b>&#8239;dV&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>&rho;&#8239;C&#8239;<div class="fraction">
+<em>&minus;&int;<sub>V</sub>∇&sdot;<b>q</b>&#8239;dV&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 &part;&#8239;T
 </span>
@@ -1086,7 +1086,7 @@ Applying Gauss's Divergence Theorem to the first term over the surface <em>S</em
 </p>
 <div id="">
 <div class="equation">
-<em>&minus;&int;<sub>S</sub><b>q</b>&sdot;<b>n&#770;</b>&#8239;dS&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>&rho;&#8239;C&#8239;<div class="fraction">
+<em>&minus;&int;<sub>S</sub><b>q</b>&sdot;<b>n&#770;</b>&#8239;dS&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 &part;&#8239;T
 </span>
@@ -1101,7 +1101,7 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 </p>
 <div id="">
 <div class="equation">
-<em>q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V = &int;<sub>V</sub>&rho;&#8239;C&#8239;<div class="fraction">
+<em>q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 &part;&#8239;T
 </span>
@@ -1112,11 +1112,11 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 </div>
 </div>
 <p class="paragraph">
-Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in GD2. Assuming <em>&rho;</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by Assumptions (<a href=#A:assump3>assump3</a>), (<a href=#A:assump4>assump4</a>), and (<a href=#A:assump5>assump5</a>), we have:
+Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in GD2. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by Assumptions (<a href=#A:assump3>assump3</a>), (<a href=#A:assump4>assump4</a>), and (<a href=#A:assump5>assump5</a>), we have:
 </p>
 <div id="">
 <div class="equation">
-<em>&rho;&#8239;C&#8239;V&#8239;<div class="fraction">
+<em>ρ&#8239;C&#8239;V&#8239;<div class="fraction">
 <span class="fup">
 d&#8239;T
 </span>
@@ -1127,7 +1127,7 @@ d&#8239;t
 </div>
 </div>
 <p class="paragraph">
-Using the fact that <em>&rho;</em>=<em>m</em>/<em>V</em>, (2) can be written as:
+Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, (2) can be written as:
 </p>
 <div id="">
 <div class="equation">
@@ -1241,7 +1241,7 @@ d&#8239;t
 1
 </span>
 <span class="fdn">
-&tau;<sub>W</sub>
+τ<sub>W</sub>
 </span>
 </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))</em>
 </p>
@@ -1255,7 +1255,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>&tau;<sub>W</sub> = <div class="fraction">
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>τ<sub>W</sub> = <div class="fraction">
 <span class="fup">
 m<sub>W</sub>&#8239;C<sub>W</sub>
 </span>
@@ -1324,7 +1324,7 @@ m<sub>W</sub>&#8239;C<sub>W</sub>
 </div>
 </div>
 <p class="paragraph">
-Setting <em>&tau;<sub>W</sub></em>=<em>m<sub>W</sub></em><em>C<sub>W</sub></em>/<em>h<sub>C</sub></em><em>A<sub>C</sub></em>, Equation (4) can be written in its final form as:
+Setting <em>τ<sub>W</sub></em>=<em>m<sub>W</sub></em><em>C<sub>W</sub></em>/<em>h<sub>C</sub></em><em>A<sub>C</sub></em>, Equation (4) can be written in its final form as:
 </p>
 <div id="">
 <div class="equation">
@@ -1340,7 +1340,7 @@ d&#8239;t
 1
 </span>
 <span class="fdn">
-&tau;<sub>W</sub>
+τ<sub>W</sub>
 </span>
 </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
 </div>
@@ -1482,13 +1482,13 @@ None
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>W</sub></em>
+<em>ρ<sub>W</sub></em>
 </td>
 <td>
-<em>&rho;<sub>W</sub>&thinsp;&gt;&thinsp;0</em>
+<em>ρ<sub>W</sub>&thinsp;&gt;&thinsp;0</em>
 </td>
 <td>
-<em>&rho;<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;&rho;<sub>W</sub>&thinsp;&le;&thinsp;&rho;<sub>W</sub><sup>max</sup></em>
+<em>ρ<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;ρ<sub>W</sub>&thinsp;&le;&thinsp;ρ<sub>W</sub><sup>max</sup></em>
 </td>
 <td>
 <em>1000.0</em> kg/m<sup>3</sup>
@@ -1684,7 +1684,7 @@ temperature of the heating coil
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>W</sub></em>
+<em>ρ<sub>W</sub></em>
 </td>
 <td>
 kg/m<sup>3</sup>
@@ -1746,14 +1746,14 @@ Use-Above-Find-Mass-IM1-IM2: Use the inputs in <a href=#FR:req1>Input-Inital-Val
 </div>
 <div id="">
 <div class="equation">
-<em>m<sub>W</sub> = V<sub>W</sub>&#8239;&rho;<sub>W</sub> = <div class="fraction">
+<em>m<sub>W</sub> = V<sub>W</sub>&#8239;ρ<sub>W</sub> = <div class="fraction">
 <span class="fup">
 D
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;L&#8239;&rho;<sub>W</sub></em>
+</div>&#8239;L&#8239;ρ<sub>W</sub></em>
 </div>
 </div>
 <div id="FR:req3">
@@ -1763,7 +1763,7 @@ Check-Inputs-Satisfy-Physical-Constraints: Verify that the inputs satisfy the re
 </div>
 <div id="FR:req4">
 <ul>
-Output-Input-Derivied-Quantities: Outputs and inputs quantities and derived quantities in the following list: the quantities from <a href=#FR:req1>Input-Inital-Values</a>, the mass from <a href=#FR:req2>Use-Above-Find-Mass-IM1-IM2</a> and <em>&tau;<sub>W</sub></em> (from IM1).
+Output-Input-Derivied-Quantities: Outputs and inputs quantities and derived quantities in the following list: the quantities from <a href=#FR:req1>Input-Inital-Values</a>, the mass from <a href=#FR:req2>Use-Above-Find-Mass-IM1-IM2</a> and <em>τ<sub>W</sub></em> (from IM1).
 </ul>
 </div>
 <div id="FR:req5">
@@ -2900,7 +2900,7 @@ W/(m<sup>2</sup>&sdot;&deg;C)
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>W</sub><sup>min</sup></em>
+<em>ρ<sub>W</sub><sup>min</sup></em>
 </td>
 <td>
 minimum density of water
@@ -2914,7 +2914,7 @@ kg/m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>W</sub><sup>max</sup></em>
+<em>ρ<sub>W</sub><sup>max</sup></em>
 </td>
 <td>
 maximum density of water

@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 
 module Language.Drasil.Chunk.DefinedQuantity
-  ( dqd, dqd', dqdEL, DefinedQuantityDict, dqdWr
+  ( dqd, dqd', dqdEL, DefinedQuantityDict, dqdWr, uwMUnitDefnL
   ) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
@@ -59,3 +59,13 @@ dqdEL c s sp un = DQD c (\_ -> s) sp uu [] []
 
 dqdWr :: (Q.Quantity c, Concept c, HasAttributes c, Q.HasSpace c, HasSymbol c, DOM c ~ ConceptChunk) => c -> DefinedQuantityDict
 dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (Q.getUnit c) (c ^. attributes) []
+
+uwDQDL :: [DefinedQuantityDict] -> [Maybe UnitDefn]
+uwDQDL dqdl = map (\x -> x ^. unit') dqdl
+
+uwMUnitDefn :: Maybe UnitDefn -> [UnitDefn]
+uwMUnitDefn (Just a) = [a] 
+uwMUnitDefn Nothing  = []
+
+uwMUnitDefnL :: [DefinedQuantityDict] -> [UnitDefn]
+uwMUnitDefnL l = concat (map uwMUnitDefn $ uwDQDL l)

@@ -63,8 +63,8 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd ShortNm
                | Defnt DType [(Identifier, [Contents])] RefAdd ShortNm
 type Identifier = String
 
-{-
 instance HasShortName  Contents where
+{-
   shortname (Enumeration _)       = error "Can't reference lists"
   shortname (Paragraph _)         = error "Can't reference paragraphs"
   shortname (Bib _)               = error $

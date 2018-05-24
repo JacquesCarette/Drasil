@@ -15,6 +15,7 @@ import Language.Drasil.Chunk.Theory
 import Language.Drasil.Document
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.RefTypes (RefType(..))
+import Language.Drasil.Chunk.Attribute.ShortName
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 
 import Data.List (partition, sortBy)
@@ -157,11 +158,11 @@ class Referable s where
   rType   :: s -> RefType -- The reference type (referencing namespace?)
 
 instance Referable Goal where
-  refAdd g = "GS:" ++ g ^. G.refAddr
+  refAdd g = "GS:" ++ (snToS $ g ^. G.sn)
   rType _ = Goal
 
 instance Referable PhysSystDesc where
-  refAdd p = "PS:" ++ p ^. PD.refAddr
+  refAdd p = "PS:" ++ (snToS $ p ^. PD.sn)
   rType _ = PSD
 
 instance Referable AssumpChunk where
@@ -178,7 +179,7 @@ instance Referable Change where
   rType (ChC _ Unlikely _ _ _) = UC
 
 instance Referable Section where
-  refAdd  (Section _ _ r) = "Sec:" ++ r
+  refAdd  (Section _ _ r _) = "Sec:" ++ r
   rType   _               = Sect
 
 instance Referable Citation where
@@ -205,28 +206,28 @@ instance Referable InstanceModel where
   rType   _ = Def
 
 instance Referable Contents where
-  rType (Table _ _ _ _ _)       = Tab
-  rType (Figure _ _ _ _)        = Fig
-  rType (Definition (Data _))   = Def
-  rType (Definition (Theory _)) = Def
-  rType (Definition _)          = Def
-  rType (Defnt _ _ _)           = Def
-  rType (Requirement r)         = rType r
-  rType (Assumption a)          = rType a
-  rType (Change l)              = rType l --rType lc
-  rType (Graph _ _ _ _ _)       = Fig
-  rType (EqnBlock _ _)          = EqnB
+  rType (Table _ _ _ _ _ _)       = Tab
+  rType (Figure _ _ _ _ _)        = Fig
+  rType (Definition (Data _) _)   = Def
+  rType (Definition (Theory _) _) = Def
+  rType (Definition _ _)          = Def
+  rType (Defnt _ _ _ _)           = Def
+  rType (Requirement r _)         = rType r
+  rType (Assumption a _)          = rType a
+  rType (Change l _)              = rType l --rType lc
+  rType (Graph _ _ _ _ _ _)       = Fig
+  rType (EqnBlock _ _ _)          = EqnB
   rType _                       =
     error "Attempting to reference unimplemented reference type"
-  refAdd (Table _ _ _ _ r)      = "Table:" ++ r
-  refAdd (Figure _ _ _ r)       = "Figure:" ++ r
-  refAdd (Graph _ _ _ _ r)      = "Figure:" ++ r
-  refAdd (EqnBlock _ r)         = "Equation:" ++ r
-  refAdd (Definition d)         = getDefName d
-  refAdd (Defnt _ _ r)          = r
-  refAdd (Requirement rc)       = refAdd rc
-  refAdd (Assumption ca)        = refAdd ca
-  refAdd (Change lcc)           = refAdd lcc
+  refAdd (Table _ _ _ _ r _)      = "Table:" ++ r
+  refAdd (Figure _ _ _ r _)       = "Figure:" ++ r
+  refAdd (Graph _ _ _ _ r _)      = "Figure:" ++ r
+  refAdd (EqnBlock _ r _)         = "Equation:" ++ r
+  refAdd (Definition d _)         = getDefName d
+  refAdd (Defnt _ _ r _)          = r
+  refAdd (Requirement rc _)       = refAdd rc
+  refAdd (Assumption ca _)        = refAdd ca
+  refAdd (Change lcc _)           = refAdd lcc
   refAdd (Enumeration _)        = error "Can't reference lists"
   refAdd (Paragraph _)          = error "Can't reference paragraphs"
   refAdd (Bib _)                = error $
@@ -251,10 +252,10 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 -- within the recipe (we want to force reference creation to check if the given
 -- item exists in our database of referable objects.
 makeRef :: (HasShortName l, Referable l) => l -> Sentence
-makeRef r = customRef r (shortname r)
+makeRef r = customRef r (r ^. shortname)
 
 -- | Create a reference with a custom 'RefName'
-customRef :: (Referable l) => l -> String -> Sentence
+customRef :: (Referable l) => l -> ShortNm -> Sentence
 customRef r n = Ref (rType r) (refAdd r) n
 
 -- This works for passing the correct id to the reference generator for Assumptions,
@@ -267,19 +268,19 @@ acroTest ref reflst = makeRef $ find' ref reflst
 
 find' :: Contents -> [Contents] -> Contents
 find' _ [] = error "This object does not match any of the enumerated objects provided by the list."
-find' itm@(Assumption comp1) (frst@(Assumption comp2):lst)
+find' itm@(Assumption comp1 _) (frst@(Assumption comp2 _):lst)
   | (comp1 ^. uid) == (comp2 ^. uid) = frst
   | otherwise = find' itm lst
-find' itm@(Definition (Data comp1)) (frst@(Definition (Data comp2)):lst)
+find' itm@(Definition (Data comp1) _) (frst@(Definition (Data comp2) _):lst)
   | (comp1 ^. uid) == (comp2 ^. uid) = frst
   | otherwise = find' itm lst
-find' itm@(Definition (Theory comp1)) (frst@(Definition (Theory comp2)):lst)
+find' itm@(Definition (Theory comp1) _) (frst@(Definition (Theory comp2) _):lst)
   | (comp1 ^. uid) == (comp2 ^. uid) = frst
   | otherwise = find' itm lst
-find' itm@(Requirement comp1) (frst@(Requirement comp2):lst)
+find' itm@(Requirement comp1 _) (frst@(Requirement comp2 _):lst)
   | (comp1 ^. uid) == (comp2 ^. uid) = frst
   | otherwise = find' itm lst
-find' itm@(Change comp1) (frst@(Change comp2):lst)
+find' itm@(Change comp1 _) (frst@(Change comp2 _):lst)
   | (comp1 ^. uid) == (comp2 ^. uid) = frst
   | otherwise = find' itm lst
 find' _ _ = error "Error: Attempting to find unimplemented type"

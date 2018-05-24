@@ -6,6 +6,7 @@ module Language.Drasil.Chunk.PhysSystDesc
   ( PhysSystDesc
   , pSysDes
   , psd
+  , sn
   ) where
 
 import Language.Drasil.Classes (HasUID(uid), HasShortName(shortname))

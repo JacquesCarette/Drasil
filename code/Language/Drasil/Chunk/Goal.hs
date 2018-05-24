@@ -5,6 +5,7 @@
 module Language.Drasil.Chunk.Goal
   ( Goal
   , mkGoal
+  , sn
   ) where
 
 import Language.Drasil.Classes (HasUID(uid), HasShortName(shortname))

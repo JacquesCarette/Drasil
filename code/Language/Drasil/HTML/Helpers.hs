@@ -28,7 +28,7 @@ td        = wrap "td" []
 
 -- | Helper for HTML headers
 h :: Int -> Doc -> Doc
-h n       | n < 0 = error "Illegal header (too small)"
+h n       | n < 1 = error "Illegal header (too small)"
           | n > 7 = error "Illegal header (too large)"
           | otherwise = wrap ("h"++show n) []
 

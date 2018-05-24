@@ -34,12 +34,9 @@ instance ConceptDomain GenDefn where
   cdom = relC . cdom
 instance ExprRelat     GenDefn where relat = relC . relat
 instance HasAttributes GenDefn where attributes = attribs
-<<<<<<< HEAD
 instance HasShortName  GenDefn where
   shortname _ = error "No explicit name given for general definition -- build a custom Ref"
-=======
 instance HasReference  GenDefn where getReferences = ref
->>>>>>> master
 
 gd :: (IsUnit u, DOM u ~ ConceptChunk) => RelationConcept -> Maybe u -> Attributes -> GenDefn
 gd r (Just u) ats = GD r (Just (unitWrapper u)) [] ats

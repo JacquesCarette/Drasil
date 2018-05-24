@@ -6,8 +6,7 @@ module Language.Drasil.Chunk.Change
 import Language.Drasil.Classes (HasUID(uid), HasAttributes(attributes),
   HasShortName(shortname))
 import Language.Drasil.Chunk.Attribute.Core(Attributes)
-import Language.Drasil.Chunk.Attribute(shortname')
-import Language.Drasil.Spec (Sentence, RefName)
+import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Chunk.Attribute.ShortName
 import Control.Lens (set, (^.))
 

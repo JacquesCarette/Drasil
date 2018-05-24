@@ -41,14 +41,11 @@ instance HasSymbol     QDefinition where symbol e st = symbol (e^.qua) st
 instance Quantity      QDefinition where getUnit (EC a _ _ _)   = getUnit a
 instance ExprRelat     QDefinition where relat = equat
 instance HasAttributes QDefinition where attributes = qua . attributes
-<<<<<<< HEAD
 instance HasShortName  QDefinition where -- FIXME: This could lead to trouble; need
                                      -- to ensure sanity checking when building
                                      -- Refs. Double-check QDef is a DD before allowing
   shortname _ = error "No explicit name given for data definition -- build a custom Ref"
-=======
 instance HasReference  QDefinition where getReferences = ref
->>>>>>> master
 instance Eq            QDefinition where a == b = (a ^. uid) == (b ^. uid)
 instance HasDerivation QDefinition where derivation = deri
  

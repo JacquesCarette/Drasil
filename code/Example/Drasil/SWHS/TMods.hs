@@ -70,7 +70,7 @@ t1descr = foldlSent [
 --referencing within a simple list is not yet implemented.
 -- FIXME
 a1 :: Contents
-a1 = Assumption $ assump "assump1" EmptyS (S "assump1") []
+a1 = Assumption $ assump "assump1" EmptyS "assump1" []
 
 -------------------------
 -- Theoretical Model 2 --

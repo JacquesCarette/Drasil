@@ -450,7 +450,7 @@ assumpList :: [AssumpChunk] -> [Contents]
 assumpList = map Assumption
 
 assumptions :: [Contents] -- FIXME: Remove this entirely and use new refs + docLang.
-assumptions = fst (foldr (\s (ls, n) -> ((Assumption $ assump ("A" ++ show n) s (S $ "A" ++ show n) []) : ls, n-1))
+assumptions = fst (foldr (\s (ls, n) -> ((Assumption $ assump ("A" ++ show n) s ("A" ++ show n) []) : ls, n-1))
  ([], (length assumptionDescs)::Int) assumptionDescs)
 -- These correspond to glassTyAssumps, glassCondition, explsnScenario,
 -- standardValues, glassLiteAssmp, bndryConditions, responseTyAssump, ldfConstant
@@ -484,17 +484,17 @@ s7_1_req6 :: [Contents] --FIXME: Issue #327
 s7_1_listOfReqs :: [Contents]
 s7_1_listOfReqs = [s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5]
 
-s7_1_req1 = mkRequirement "s7_1_req1" req1Desc (S "Input-Glass-Props")
-s7_1_req2 = mkRequirement "s7_1_req2" req2Desc (S "System-Set-Values-Following-Assumptions")
-s7_1_req3 = mkRequirement "s7_1_req3" req3Desc (S "Check-Input-with-Data_Constraints")
-s7_1_req4 = mkRequirement "s7_1_req4" req4Desc (S "Output-Values-and-Known-Quantities")
-s7_1_req5 = mkRequirement "s7_1_req5" (req5Desc (output_)) (S "Check-Glass-Safety")
+s7_1_req1 = mkRequirement "s7_1_req1" req1Desc "Input-Glass-Props"
+s7_1_req2 = mkRequirement "s7_1_req2" req2Desc "System-Set-Values-Following-Assumptions"
+s7_1_req3 = mkRequirement "s7_1_req3" req3Desc "Check-Input-with-Data_Constraints"
+s7_1_req4 = mkRequirement "s7_1_req4" req4Desc "Output-Values-and-Known-Quantities"
+s7_1_req5 = mkRequirement "s7_1_req5" (req5Desc (output_)) "Check-Glass-Safety"
 
 -- newReqs is ONLY for testing until I get refs working. Then the old reqs should
 -- be converted to reqChunk format with meaningful refnames and this should be
 -- removed.
 newReqs :: [ReqChunk]
-newReqs = map (\(x,y) -> frc x y (S x) []) --FIXME: FRC Hack for referencing
+newReqs = map (\(x,y) -> frc x y x []) --FIXME: FRC Hack for referencing --FIXME: x used twice?
   [ ("r1",req1Desc)
   , ("r2",req2Desc)
   , ("r3",req3Desc)
@@ -585,11 +585,11 @@ likelyChanges_SRS = [s8_likelychg1, s8_likelychg2, s8_likelychg3,
 s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4,
   s8_likelychg5 :: Contents
 
-s8_likelychg1 = mkLklyChnk "s8_likelychg1" (lc1Desc (blastRisk)) (S "Calculate-Internal-Blask-Risk")
-s8_likelychg2 = mkLklyChnk "s8_likelychg2" (lc2Desc) (S "Variable-Values-of-m,k,E")
-s8_likelychg3 = mkLklyChnk "s8_likelychg3" (lc3Desc) (S "Accomodate-More-than-Single-Lite")
-s8_likelychg4 = mkLklyChnk "s8_likelychg4" (lc4Desc) (S "Accomodate-More-Boundary-Conditions")
-s8_likelychg5 = mkLklyChnk "s8_likelychg5" (lc5Desc) (S "Consider-More-than-Flexure-Glass")
+s8_likelychg1 = mkLklyChnk "s8_likelychg1" (lc1Desc (blastRisk)) "Calculate-Internal-Blask-Risk"
+s8_likelychg2 = mkLklyChnk "s8_likelychg2" (lc2Desc) "Variable-Values-of-m,k,E"
+s8_likelychg3 = mkLklyChnk "s8_likelychg3" (lc3Desc) "Accomodate-More-than-Single-Lite"
+s8_likelychg4 = mkLklyChnk "s8_likelychg4" (lc4Desc) "Accomodate-More-Boundary-Conditions"
+s8_likelychg5 = mkLklyChnk "s8_likelychg5" (lc5Desc) "Consider-More-than-Flexure-Glass"
 
 lc1Desc :: NamedChunk -> Sentence
 lc2Desc, lc3Desc, lc4Desc, lc5Desc :: Sentence

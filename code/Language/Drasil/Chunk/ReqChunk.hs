@@ -46,7 +46,7 @@ instance Eq            ReqChunk where a == b = a ^. uid == b ^. uid
 rc :: String -> ReqType -> Sentence -> RefName -> Attributes -> ReqChunk
 rc = RC
 
-rc' :: ReqChunk -> Sentence -> ReqChunk
+rc' :: ReqChunk -> String -> ReqChunk
 rc' r s = set attributes (shortname s : (r ^. attributes)) r
 
 frc, nfrc :: String -> Sentence -> RefName -> Attributes -> ReqChunk

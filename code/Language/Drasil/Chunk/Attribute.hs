@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.Attribute
   ) where
 
 import Control.Lens ((^.))
-import Language.Drasil.Spec (Sentence(EmptyS), (+:+))
+import Language.Drasil.Spec (Sentence(EmptyS, S), (+:+))
 import Language.Drasil.Chunk.Attribute.Core (Attributes, Attribute(..))
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
 import Language.Drasil.Classes (HasAttributes(attributes), HasReference(getReferences))
@@ -37,10 +37,10 @@ getShortName c = shortName $ c ^. attributes
   where
     shortName :: Attributes -> Maybe Sentence
     shortName [] = Nothing
-    shortName ((ShortName s):_) = Just s
+    shortName ((ShortName s):_) = Just (S s)
     shortName (_:xs) = shortName xs
 
-shortname :: Sentence -> Attribute
+shortname :: String -> Attribute
 shortname = ShortName
 
 sourceref :: Sentence -> Reference

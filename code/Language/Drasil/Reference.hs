@@ -157,12 +157,12 @@ class Referable s where
   rType   :: s -> RefType -- The reference type (referencing namespace?)
 
 instance Referable Goal where
-  refName g = S $ g ^. G.refAddr
+  refName g = g ^. G.refAddr
   refAdd g = "GS:" ++ g ^. G.refAddr
   rType _ = Goal
 
 instance Referable PhysSystDesc where
-  refName p = S $ p ^. PD.refAddr
+  refName p = p ^. PD.refAddr
   refAdd p = "PS:" ++ p ^. PD.refAddr
   rType _ = PSD
 
@@ -183,12 +183,12 @@ instance Referable Change where
   rType (ChC _ Unlikely _ _ _) = UC
 
 instance Referable Section where
-  refName (Section t _ _) = t
-  refAdd  (Section _ _ r) = "Sec:" ++ r
+  refName (Section _ _ _ sn) = sn
+  refAdd  (Section _ _ r _) = "Sec:" ++ r
   rType   _               = Sect
 
 instance Referable Citation where
-  refName c = S $ citeID c
+  refName c = citeID c
   refAdd c = concatMap repUnd $ citeID c -- citeID should be unique.
   rType _ = Cite
 
@@ -216,12 +216,12 @@ instance Referable InstanceModel where
   rType   _ = Def
 
 instance Referable Contents where
-  refName (Table _ _ _ _ r)     = S "Table:" :+: S r
-  refName (Figure _ _ _ r)      = S "Figure:" :+: S r
-  refName (Graph _ _ _ _ r)     = S "Figure:" :+: S r
-  refName (EqnBlock _ r)        = S "Equation:" :+: S r
-  refName (Definition d)        = S $ getDefName d
-  refName (Defnt _ _ r)         = S r
+  refName (Table _ _ _ _ r)     = "Table:" ++ r
+  refName (Figure _ _ _ r)      = "Figure:" ++ r
+  refName (Graph _ _ _ _ r)     = "Figure:" ++ r
+  refName (EqnBlock _ r)        = "Equation:" ++ r
+  refName (Definition d)        = getDefName d
+  refName (Defnt _ _ r)         = r
   refName (Requirement rc)      = refName rc
   refName (Assumption ca)       = refName ca
   refName (Change lcc)          = refName lcc
@@ -292,7 +292,7 @@ makeRef :: (Referable l) => l -> Sentence
 makeRef r = customRef r (refName r)
 
 -- | Create a reference with a custom 'RefName'
-customRef :: (Referable l) => l -> Sentence -> Sentence
+customRef :: (Referable l) => l -> String -> Sentence
 customRef r n = Ref (rType r) (refAdd r) n
 
 -- This works for passing the correct id to the reference generator for Assumptions,

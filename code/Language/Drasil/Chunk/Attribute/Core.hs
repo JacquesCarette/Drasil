@@ -2,7 +2,6 @@ module Language.Drasil.Chunk.Attribute.Core
   ( Attributes, Attribute(..)
   ) where
 
-import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
 
 -- | Attributes are just a list of 'Attribute'
@@ -12,8 +11,7 @@ type Attributes = [Attribute]
 -- this knowledge, or a derivation to show how we arrived 
 -- at a given model/definition/etc.
 data Attribute =
-    Rationale Sentence
-  | ShortName String
+    ShortName String
   -- | SourceRef Sentence -- Source to reference for this knowledge chunk
                        -- FIXME: Allow URLs/Citations here
   | D Derivation -- Makes sense for now 

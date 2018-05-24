@@ -240,7 +240,7 @@ spec _ (S s)           = P.S s
 spec _ (Sy s)          = P.Sy s
 spec _ (Sp s)          = P.Sp s
 spec _ (P s)           = P.E $ symbol s
-spec sm (Ref t r sn)   = P.Ref t r (spec sm (S sn)) sn --FIXME: sn passed in twice?
+spec sm (Ref t r sn)   = P.Ref t r (spec sm (S $ snToS sn)) sn --FIXME: sn passed in twice?
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
@@ -270,24 +270,24 @@ sec sm depth x@(Section title contents _ _) = --FIXME: should ShortName be used 
 -- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.
 lay :: HasSymbolTable ctx => ctx -> Contents -> T.LayoutObj
-lay sm x@(Table hdr lls t b _) = T.Table ["table"]
+lay sm x@(Table hdr lls t b _ _) = T.Table ["table"]
   ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S (refAdd x)) b (spec sm t)
 lay sm (Paragraph c)          = T.Paragraph (spec sm c)
-lay sm (EqnBlock c _)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
+lay sm (EqnBlock c _ _)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
                               -- FIXME: Make equations referable
-lay sm x@(Definition c)       = T.Definition c (makePairs sm c) (P.S (refAdd x))
+lay sm x@(Definition c _)       = T.Definition c (makePairs sm c) (P.S (refAdd x))
 lay sm (Enumeration cs)       = T.List $ makeL sm cs
-lay sm x@(Figure c f wp _)    = T.Figure (P.S (refAdd x)) (spec sm c) f wp
-lay sm x@(Requirement r)      = T.ALUR T.Requirement
+lay sm x@(Figure c f wp _ _)    = T.Figure (P.S (refAdd x)) (spec sm c) f wp
+lay sm x@(Requirement r _)      = T.ALUR T.Requirement
   (spec sm $ requires r) (P.S $ refAdd x) (spec sm $ getShortName r)
-lay sm x@(Assumption a)       = T.ALUR T.Assumption
+lay sm x@(Assumption a _)       = T.ALUR T.Assumption
   (spec sm (assuming a)) (P.S (refAdd x)) (spec sm $ getShortName a)
-lay sm x@(Change lc)          = T.ALUR
+lay sm x@(Change lc _)          = T.ALUR
   (if (chngType lc) == Likely then T.LikelyChange else T.UnlikelyChange)
   (spec sm (chng lc)) (P.S (refAdd x)) (spec sm $ getShortName lc)
-lay sm x@(Graph ps w h t _)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
+lay sm x@(Graph ps w h t _ _)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S (refAdd x))
-lay sm (Defnt dtyp pairs rn)  = T.Definition dtyp (layPairs pairs) (P.S rn)
+lay sm (Defnt dtyp pairs rn _)  = T.Definition dtyp (layPairs pairs) (P.S rn)
   where layPairs = map (\(x,y) -> (x, map (lay sm) y))
 lay sm (Bib bib)              = T.Bib $ map (layCite sm) bib
 

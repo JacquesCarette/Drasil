@@ -15,7 +15,7 @@ unitVect    = dqd'  CM.unitV    (const $ vec $ hat lI)  Real Nothing []
 perpVect    = dqd'  CM.perpV    (const $ vec $ lN)      Real Nothing []
 surface     = dqdEL CM.surface  cS                      Real m_2
 euclidNorm  = dqd'  CM.euclidN  (const $ Concat [Atomic "||", (vec lR), Atomic "||"])
-                                                        Real Nothing []
+                                                        Real Nothing [] 
 
 pi_ :: QuantityDict
 pi_         = mkQuant "pi"   (pn "pi") lPi              Real Nothing Nothing []

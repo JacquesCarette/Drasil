@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.Documentation (section_, traceyGraph, item,
   value, software, column, model, goalStmt, quantity, property, condition, 
   physics, user, physical, datum, system, variable, sysCont, environment, 
   srs, softwareSys, organization, document, problem, content, information, 
-  reference, definition, purpose, description, acroNumGen, symbol_, physSyst,
+  reference, definition, purpose, description, symbol_, physSyst,
   typUnc)
 
 import Data.Drasil.Concepts.PhysicalProperties (liquid, solid)
@@ -45,7 +45,7 @@ import Drasil.SWHS.IMods (s4_2_5_IMods)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, s4_2_4_swhsDataDefs, swhsDataDefs)
 import Drasil.SWHS.GenDefs (swhsGenDefs)
 import Drasil.SWHS.References (s9_swhs_citations)
-import Drasil.SWHS.Assumptions (s4_2_1_list, assump3, assump4, assump5,
+import Drasil.SWHS.Assumptions (swhsRefDB, swhsAssumptions, assump3, assump4, assump5,
   assump6, assump13, assump15, assump16, assump17, assump18)
 import Drasil.SWHS.Requirements (req1, req2, s5_1_2_Eqn1, s5_1_2_Eqn2,
   req3, req4, req5, req6, req7, req8, req9, req10, req11, s5_2)
@@ -55,7 +55,7 @@ import Drasil.SWHS.DataDesc (swhsInputMod)
 
 import qualified Drasil.SRS as SRS (inModel, missingP, likeChg,
   funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
-  sysCont, reference)
+  sysCont, reference, assumpt)
 
 import Drasil.DocumentLanguage (DocDesc, mkDoc, tsymb'',
   LFunc (TermExcept),
@@ -114,9 +114,6 @@ swhs_si = SI {
   _sysinfodb = swhsSymMap,
   _refdb = swhsRefDB
 }
-
-swhsRefDB :: ReferenceDB
-swhsRefDB = rdb [] [] [] [] [] s9_swhs_citations
 
 swhsSymMap :: ChunkDB
 swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) ([] :: [ConceptChunk] ) -- FIXME: Fill in Concepts
@@ -321,7 +318,7 @@ s4_1_3_list = enumSimple 1 (short goalStmt) $
 s4_2 :: Section
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end
   (s4_2_6_mid, dataConstraintUncertainty, s4_2_6_T1footer quantity surArea
-  vol htTransCoeff_min phsChgMtrl) (s4_2_1_list, 
+  vol htTransCoeff_min phsChgMtrl) (swhsAssumptions, 
   s4_2_2_swhsTMods, s4_2_3_genDefs ++ s4_2_3_deriv,
   s4_2_4_swhsDataDefs, s4_2_5_IModsWithDerivs, s4_2_6_DataConTables) [s4_2_7]
 
@@ -334,7 +331,7 @@ s4_2_1 = assumpF
   (SRS.thModel SRS.missingP [])
   (SRS.genDefn SRS.missingP [])
   (SRS.dataDefn SRS.missingP [])
-  s4_2_5 s6 s4_2_1_list
+  s4_2_5 s6 swhsAssumptions
 
 -- Again, list structure is same between all examples.
 
@@ -413,10 +410,10 @@ s4_2_5_d1sent_list = map foldlSPCol
 s4_2_5_deriv2 :: [Contents]
 s4_2_5_deriv2 =
   (s4_2_5_d2startPara energy phsChgMtrl sens_heat rOfChng temp_PCM vol pcm_vol
-    pcm_mass htCap_S_P ht_flux_P pcm_SA ht_flux_out vol_ht_gen assump16) ++
+    pcm_mass htCap_S_P ht_flux_P pcm_SA ht_flux_out vol_ht_gen assump16 ++
   (weave [s4_2_5_d2eqn_list, s4_2_5_d2sent_list]) ++ (s4_2_5_d2endPara 
   phsChgMtrl htCap_S_P htCap_L_P tau_S_P tau_L_P surface CT.melting vol 
-  temp_PCM temp_melt_P CT.boiling solid liquid)
+  temp_PCM temp_melt_P CT.boiling solid liquid))
 
 s4_2_5_d2sent_list = map foldlSPCol [s4_2_5_d2sent_1 dd2HtFluxP ht_flux_P,
   s4_2_5_d2sent_2, s4_2_5_d2sent_3]
@@ -496,8 +493,8 @@ s5_1 :: Section
 s5_1 = SRS.funcReq s5_1_list []
 
 s5_1_list :: [Contents]
-s5_1_list = (acroNumGen [req1] 1) ++ [s5_1_1_Table] ++ (acroNumGen [req2] 2) ++
-  [s5_1_2_Eqn1, s5_1_2_Eqn2] ++ (acroNumGen s5_1_Reqs 3) 
+s5_1_list = ([req1]) ++ [s5_1_1_Table] ++ ([req2]) ++
+  [s5_1_2_Eqn1, s5_1_2_Eqn2] ++ (s5_1_Reqs) 
 
 s5_1_1_Table :: Contents
 s5_1_1_Table = (Table [titleize symbol_, titleize unit_, titleize description]
@@ -523,7 +520,7 @@ s6 :: Section
 s6 = SRS.likeChg s6_list []
 
 s6_list :: [Contents]
-s6_list = acroNumGen s6_likeChg_list 1
+s6_list = s6_likeChg_list 
 
 s6_likeChg_list :: [Contents]
 s6_likeChg_list = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]

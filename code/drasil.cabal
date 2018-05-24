@@ -85,6 +85,7 @@ library
     , Language.Drasil.Chunk.Attribute
     , Language.Drasil.Chunk.Attribute.Core
     , Language.Drasil.Chunk.Attribute.Derivation
+    , Language.Drasil.Chunk.Attribute.References
     , Language.Drasil.Chunk.Change
     , Language.Drasil.Chunk.Citation
     , Language.Drasil.Chunk.Code
@@ -288,6 +289,7 @@ executable glassbr
     , Drasil.GlassBR.Units
     , Drasil.GlassBR.ModuleDefs
     , Drasil.GlassBR.Symbols
+    , Drasil.GlassBR.Assumptions
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction
     , Drasil.Sections.Requirements

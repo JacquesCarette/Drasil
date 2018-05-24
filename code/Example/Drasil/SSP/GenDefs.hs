@@ -3,6 +3,7 @@ module Drasil.SSP.GenDefs (sspGenDefs, eqlExpr, displMtx,
 
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
+import Drasil.DocumentLanguage.RefHelpers
 
 import Drasil.SSP.Unitals (baseAngle, genDisplace, rotatedDispl, dy_i,
   dx_i, inxi, index, nrmDispl, shrDispl, elmPrllDispl, elmNrmDispl,
@@ -19,13 +20,14 @@ import Drasil.SSP.Defs (slope, slice, intrslce, slpSrf)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len)
 import Data.Drasil.Quantities.Physics (displacement, force)
 import Data.Drasil.SentenceStructures (sAnd, getTandS,
-  isThe, ofThe, foldlSent, acroA, acroDD, acroGD, acroT)
+  isThe, ofThe, foldlSent, acroDD, acroGD, acroT)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 import Data.Drasil.Concepts.Math (surface, angle,
   matrix, vector, perp, normal)
 import Data.Drasil.Utils (getES)
 import Drasil.SRS as SRS (physSyst, missingP)
+import Drasil.SSP.Assumptions
 
 eqlExpr :: (Expr -> Expr) -> (Expr -> Expr) -> (Expr -> Expr -> Expr) -> Expr
 eqlExpr f1_ f2_ _e_ = (inxi slcWght `_e_`
@@ -145,7 +147,7 @@ nmShrR_rel = sy intShrForce $= sy normToShear * sy scalFunc * sy intNormForce
 
 nmShrR_desc :: Sentence
 nmShrR_desc = foldlSent [S "The", phrase assumption,
-  S "for the Morgenstern Price", phrase method_, sParen (acroA 5),
+  S "for the Morgenstern Price", phrase method_, sParen (refA sspRefDB newA5),
   S "that the", phrase intrslce, phrase shearForce, getES xi,
   S "is proportional to the", phrase intrslce, 
   phrase normForce, getES intNormForce, S "by a proportionality constant",

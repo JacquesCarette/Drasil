@@ -28,7 +28,7 @@ td        = wrap "td" []
 
 -- | Helper for HTML headers
 h :: Int -> Doc -> Doc
-h n       | n < 0 = error "Illegal header (too small)"
+h n       | n < 1 = error "Illegal header (too small)"
           | n > 7 = error "Illegal header (too large)"
           | otherwise = wrap ("h"++show n) []
 
@@ -49,7 +49,7 @@ caption = wrap "p" ["caption"]
 
 -- | Helper for setting up references
 refwrap :: Doc -> Doc -> Doc
-refwrap r x = vcat [hcat [text "<a id=\"", r, text  "\">"], x, text "</a>"]
+refwrap r x = vcat [hcat [text "<div id=\"", r, text  "\">"], x, text "</div>"]
 
 -- | Helper for setting up links to references
 reflink :: String -> Doc -> Doc
@@ -149,7 +149,7 @@ makeCSS _ = vcat [
     text "  border-collapse: collapse;",
     text "  margin-left: auto;",
     text "  margin-right: auto;}"],
-  text "th, td {border: 1px solid black; padding: 1%;}",
+  text "th, td {border: 1px solid black; padding: 0.5em;}",
   text ".tdefn, .ddefn {width: 75%; margin-top: 1%; margin-bottom: 1%;}",
   text ".tdefn th {width: 15%;}",
   text ".ddefn th {width: 15%;}",

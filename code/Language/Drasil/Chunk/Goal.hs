@@ -7,11 +7,8 @@ module Language.Drasil.Chunk.Goal
   , mkGoal
   ) where
 
-import Language.Drasil.Classes (HasUID(uid), HasAttributes(attributes), HasShortName(shortname))
-import Language.Drasil.Chunk.Attribute.Core (Attributes)
+import Language.Drasil.Classes (HasUID(uid), HasShortName(shortname))
 import Language.Drasil.Spec (Sentence(..))
-import Language.Drasil.RefTypes (RefAdd)
-import Language.Drasil.Chunk.Attribute (shortname')
 import Language.Drasil.Chunk.Attribute.ShortName
 
 import Control.Lens (makeLenses, (^.))

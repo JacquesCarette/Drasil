@@ -37,7 +37,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (unit_)
 
 eqUnR :: Expr -> Contents -- FIXME: Unreferable equations
-eqUnR e = EqnBlock e ""
+eqUnR e = EqnBlock e "" (shortname' "") --FIXME: want refadd and shortname to be the same?
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -123,7 +123,7 @@ mkInputDatTb :: (Quantity a) => [a] -> Contents
 mkInputDatTb inputVar = Table [titleize symbol_, titleize unit_, 
   S "Name"]
   (mkTable [getES , fmtU EmptyS, phrase] inputVar) 
-  (S "Required" +:+ titleize' input_) True "inDataTable"
+  (S "Required" +:+ titleize' input_) True "inDataTable" (shortname' "inDataTable") --FIXME: want refadd and shortname to be the same?
 
 -- | makes sentences from an item and its reference 
 -- a - String title of reference
@@ -132,8 +132,8 @@ itemRefToSent :: String -> Sentence -> Sentence
 itemRefToSent a b = S a +:+ sParen b
 
 -- | refFromType takes a function and returns a reference sentence
-refFromType :: (a -> DType) -> a -> Sentence
-refFromType f = (makeRef . Definition . f)
+refFromType :: (a -> DType) -> a -> ShortNm -> Sentence
+refFromType f sn = (makeRef $ Definition f sn)
 
 -- | makeListRef takes a list and a reference and generates references to 
 --   match the length of the list
@@ -182,4 +182,4 @@ mkDataDef' cncpt equation extraInfo atts refs = datadef $ getUnit cncpt
 prodUCTbl :: [[Sentence]] -> Contents
 prodUCTbl cases = Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
   cases
-  (titleize useCaseTable) True "useCaseTable"
+  (titleize useCaseTable) True "useCaseTable" (shortname' "useCaseTable") --FIXME: want refadd and shortname to be the same?

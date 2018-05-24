@@ -13,6 +13,7 @@ import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Chunk.Attribute (shortname')
+import Language.Drasil.Chunk.Attribute.ShortName
 
 import Control.Lens (makeLenses, (^.))
 
@@ -20,19 +21,16 @@ data Goal = GS
           { _gid :: String
           , goal :: Sentence
           , _refAddr :: RefAdd
-          , shortname :: Attributes -- FIXME: I doubt this is necessary for these
-                                   -- but included for consistency, and since every
-                                   -- chunk should eventually have the capability
-                                   -- for attributes.
+          , _shortname :: ShortNm
           }
 
 makeLenses ''Goal
 
 instance HasUID        Goal where uid = gid
-instance HasAttributes Goal where attributes = attribs
+--instance HasAttributes Goal where attributes = attribs
 instance HasShortName  Goal where shortname g = shortname' $ S $ g ^. refAddr
 instance Eq            Goal where a == b = a ^. uid == b ^. uid
   
--- | Goal smart constructor (with explicit 'Attributes')
-mkGoal :: String -> Sentence -> RefAdd -> Attributes -> Goal
+-- | Goal smart constructor
+mkGoal :: String -> Sentence -> RefAdd -> ShortNm -> Goal
 mkGoal = GS

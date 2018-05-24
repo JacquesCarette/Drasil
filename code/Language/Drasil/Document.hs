@@ -1,3 +1,4 @@
+{-# Language TemplateHaskell #-}
 -- | Document Description Language
 module Language.Drasil.Document where
 
@@ -11,70 +12,8 @@ import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Expr
 import Language.Drasil.Chunk.Citation (BibRef)
 import Language.Drasil.Classes (HasUID(uid), HasShortName(shortname))
-import Control.Lens ((^.))
-
-type Title    = Sentence
-type Author   = Sentence
-type Header   = Sentence -- Used when creating sublists
-type Depth    = Int
-type Width    = Float
-type Height   = Float
-type ListPair = (Title,ItemType) -- ^ Title: Item
-type Filepath = String
-type Label    = Sentence
-
--- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and Sections
--- which hold the contents of the document
-data Document = Document Title Author [Section]
-
--- | Section Contents are split into subsections or contents, where contents
--- are standard layout objects (see 'Contents')
-data SecCons = Sub Section
-             | Con Contents
-
--- | Sections have a title ('Sentence') and a list of contents ('SecCons')
--- and a String that will be its shortname
-data Section = Section Title [SecCons] RefAdd String
-
-instance HasShortName Section where shortname (Section t _ _) = t
-
--- | Types of layout objects we deal with explicitly
-data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
-  -- ^ table has: header-row data(rows) label/caption showlabel?
-               | Paragraph Sentence -- ^ Paragraphs are just sentences.
-               | EqnBlock Expr RefAdd
-     --        CodeBlock Code   -- GOOL complicates this.  Removed for now.
-               | Definition DType
-               | Enumeration ListType -- ^ Lists
-               | Figure Label Filepath MaxWidthPercent RefAdd-- ^ Should use relative file path.
-               | Requirement ReqChunk
-               | Assumption AssumpChunk
-               | Change Change
-               | Bib BibRef
-     --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
-               | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Label RefAdd
-               -- ^ TODO: Fill this one in.
-               ------NEW TMOD/DDEF/IM/GD BEGINS HERE------
-               ---- FIXME: The above Definition will need to be removed ----
-               --------------------------------------------
-               | Defnt DType [(Identifier, [Contents])] RefAdd
-type Identifier = String
-
-instance HasShortName  Contents where
-  shortname (Table _ _ _ _ r)     = S "Table:" :+: S r
-  shortname (Figure _ _ _ r)      = S "Figure:" :+: S r
-  shortname (Graph _ _ _ _ r)     = S "Figure:" :+: S r
-  shortname (EqnBlock _ r)        = S "Equation:" :+: S r
-  shortname (Definition d)        = S $ getDefName d
-  shortname (Defnt _ _ r)         = S r
-  shortname (Requirement rc)      = shortname rc
-  shortname (Assumption ca)       = shortname ca
-  shortname (Change lcc)          = shortname lcc
-  shortname (Enumeration _)       = error "Can't reference lists"
-  shortname (Paragraph _)         = error "Can't reference paragraphs"
-  shortname (Bib _)               = error $
-    "Bibliography list of references cannot be referenced. " ++
-    "You must reference the Section or an individual citation."
+import Control.Lens ((^.), makeLenses)
+import Language.Drasil.Chunk.Attribute.ShortName
 
 -- | MaxWidthPercent should be kept in the range 1-100. 
 -- Values outside this range may have unexpected results.
@@ -101,6 +40,77 @@ data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining
            | Instance
            | TM
            | DD
+           
+-- | Types of layout objects we deal with explicitly
+data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd ShortNm
+  -- ^ table has: header-row data(rows) label/caption showlabel?
+               | Paragraph Sentence -- ^ Paragraphs are just sentences.
+               | EqnBlock Expr RefAdd ShortNm
+     --        CodeBlock Code   -- GOOL complicates this.  Removed for now.
+               | Definition DType ShortNm
+               | Enumeration ListType -- ^ Lists
+               | Figure Label Filepath MaxWidthPercent RefAdd ShortNm-- ^ Should use relative file path.
+               | Requirement ReqChunk ShortNm
+               | Assumption AssumpChunk ShortNm
+               | Change Change ShortNm
+               | Bib BibRef
+     --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
+               | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Label RefAdd ShortNm
+               -- ^ TODO: Fill this one in.
+               ------NEW TMOD/DDEF/IM/GD BEGINS HERE------
+               ---- FIXME: The above Definition will need to be removed ----
+               --------------------------------------------
+               | Defnt DType [(Identifier, [Contents])] RefAdd ShortNm
+type Identifier = String
+
+{-
+instance HasShortName  Contents where
+  shortname (Enumeration _)       = error "Can't reference lists"
+  shortname (Paragraph _)         = error "Can't reference paragraphs"
+  shortname (Bib _)               = error $
+    "Bibliography list of references cannot be referenced. " ++
+    "You must reference the Section or an individual citation."
+  shortname (Table _ _ _ _ r _)     = S "Table:" :+: S r
+  shortname (Figure _ _ _ r _)      = S "Figure:" :+: S r
+  shortname (Graph _ _ _ _ r _)     = S "Figure:" :+: S r
+  shortname (EqnBlock _ r _)        = S "Equation:" :+: S r
+  shortname (Definition d _)        = S $ getDefName d
+  shortname (Defnt _ _ r _)         = S r
+  shortname (Requirement rc _)      = shortname rc
+  shortname (Assumption ca _)       = shortname ca
+  shortname (Change lcc _)          = shortname lcc
+-}
+
+type Title    = Sentence
+type Author   = Sentence
+type Header   = Sentence -- Used when creating sublists
+type Depth    = Int
+type Width    = Float
+type Height   = Float
+type ListPair = (Title,ItemType) -- ^ Title: Item
+type Filepath = String
+type Label    = Sentence
+
+-- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and Sections
+-- which hold the contents of the document
+data Document = Document Title Author [Section]
+
+-- | Section Contents are split into subsections or contents, where contents
+-- are standard layout objects (see 'Contents')
+data SecCons = Sub Section
+             | Con Contents
+
+-- | Sections have a title ('Sentence') and a list of contents ('SecCons')
+-- and a String that will be its shortname
+data Section = Section { t :: Title
+                       , sc :: [SecCons]
+                       , ra :: RefAdd
+                       , _sn :: ShortNm
+                       }
+makeLenses ''Section
+
+instance HasShortName Section where shortname = sn
+
 
 ---------------------------------------------------------------------------
 -- smart constructors and combinators for making instances of the above
@@ -109,21 +119,21 @@ data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining
 
 -- | Smart constructor for creating Sections with introductory contents
 -- (ie. paragraphs, tables, etc.) and a list of subsections.
-section :: Sentence -> [Contents] -> [Section] -> RefAdd -> String -> Section
+section :: Sentence -> [Contents] -> [Section] -> RefAdd -> ShortNm -> Section
 section title intro secs sn = Section title (map Con intro ++ map Sub secs) sn
 
 -- | Figure smart constructor. Assumes 100% of page width as max width.
-fig :: Label -> Filepath -> RefAdd -> Contents
+fig :: Label -> Filepath -> RefAdd -> ShortNm -> Contents
 fig l f = Figure l f 100
 
 -- | Figure smart constructor for customized max widths.
-figWithWidth :: Label -> Filepath -> MaxWidthPercent -> RefAdd -> Contents
+figWithWidth :: Label -> Filepath -> MaxWidthPercent -> RefAdd -> ShortNm -> Contents
 figWithWidth = Figure
 
-datadefn :: QDefinition -> Contents
+datadefn :: QDefinition -> ShortNm -> Contents
 datadefn = Definition . Data
 
-reldefn :: RelationConcept -> Contents
+reldefn :: RelationConcept -> ShortNm -> Contents
 reldefn = Definition . Theory
 
 -- Below were moved to avoid import cycles between this file and Reference.hs --

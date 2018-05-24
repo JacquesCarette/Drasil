@@ -243,6 +243,7 @@ executable ssp
     , Drasil.SSP.Requirements
     , Drasil.SSP.TMods
     , Drasil.SSP.Unitals
+    , Drasil.SSP.BasicExprs
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.Stakeholders

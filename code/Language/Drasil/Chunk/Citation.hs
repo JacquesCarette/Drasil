@@ -120,7 +120,13 @@ instance HasShortName  Citation where shortname = view $ shortname' $ S $ citeID
 
 -- | Smart constructor which implicitly uses EntryID as chunk i.
 cite :: EntryID -> CitationKind -> [CiteField] -> Citation
-cite i = Cite (getStr i) i
+cite i = Cite (getStr i) (noSpaces i)
+  where
+    -- Checks if a sentence has spaces: returns sentence if it doesn't and throws error if it does
+    noSpaces :: EntryID -> EntryID
+    noSpaces (S s)
+      | (' ' `elem` s) == False = (S s)
+      | otherwise               = error "Sentence has at least one space in it."
 
 -- | Article citation requires author(s), title, journal, year.
 -- Optional fields can be: volume, number, pages, month, and note.

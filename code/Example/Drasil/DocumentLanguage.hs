@@ -246,7 +246,7 @@ mkSections si l = map doit l
 mkRefSec :: SystemInformation -> RefSec -> Section
 mkRefSec _  (RefVerb s) = s
 mkRefSec si (RefProg c l) = section (titleize refmat) [c]
-  (map (mkSubRef si) l) "RefMat"
+  (map (mkSubRef si) l) "RefMat" "RefMat"
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
     mkSubRef (SI {_sysinfodb = db})  TUnits =

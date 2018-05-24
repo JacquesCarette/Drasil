@@ -34,6 +34,7 @@ module Language.Drasil (
   , HasUnitSymbol(usymb)
   , IsUnit
   , HasAttributes(attributes)
+  , HasReference(getReferences)
   , CommonIdea(abrv)
   , Constrained(constraints)
   , HasReasVal(reasVal)
@@ -88,6 +89,7 @@ module Language.Drasil (
   , getSource
   , Derivation, getDerivation, getShortName, shortname'
   , sourceref, derivationsteps, HasShortName(shortname)
+  , References
   --Citations
   , Citation, BibRef, CiteField, Month(..), HP
     -- CiteFields smart constructors
@@ -146,7 +148,7 @@ module Language.Drasil (
   -- CodeSpec
   , CodeSpec, codeSpec, Choices(..), ImplementationType(..)
   , Logging(..), ConstraintBehaviour(..), Structure(..), Comments(..)
-  , defaultChoices
+  , defaultChoices, getStr
   , Mod(..), packmod, FuncDef(..), FuncStmt(..), funcDef, ($:=), ffor, fdec -- hacks
   , relToQD, funcData, funcQD, Func(..), asExpr, asVC   -- hacks
   -- DataDesc
@@ -182,6 +184,8 @@ module Language.Drasil (
   , Goal, mkGoal
   -- PhysSystDesc
   , PhysSystDesc, pSysDes, psd, psd'
+  -- RefTypes
+  , RefAdd
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -209,12 +213,13 @@ import Language.Drasil.Unit -- all of it
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
   IsUnit, HasAttributes(attributes), CommonIdea(abrv),
-  Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat))
+  Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasReference(getReferences))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
 import Language.Drasil.Chunk.Attribute.ShortName
+import Language.Drasil.Chunk.Attribute.References (References)
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation (
   -- Types
@@ -286,3 +291,4 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
 import Language.Drasil.CodeSpec hiding (outputs, inputs)
 import Language.Drasil.DataDesc
 import Language.Drasil.Code.Imperative.Lang
+import Language.Drasil.RefTypes(RefAdd)

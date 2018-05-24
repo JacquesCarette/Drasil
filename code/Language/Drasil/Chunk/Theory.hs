@@ -7,11 +7,13 @@ module Language.Drasil.Chunk.Theory
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom,DOM), Concept, HasAttributes(attributes),
   HasShortName(shortname))
+
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained.Core (TheoryConstraint)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
+import Language.Drasil.Chunk.Attribute.References (References)
 
 import Control.Lens (Lens', view, makeLenses)
 
@@ -34,6 +36,7 @@ data TheoryChunk = TC { _tid :: String
                       , _defq :: [QDefinition]
                       , _invs :: [TheoryConstraint]
                       , _dfun :: [QDefinition]
+                      , _ref :: References
                       , _attribs :: Attributes
                       }
 makeLenses ''TheoryChunk
@@ -48,6 +51,8 @@ instance Theory        TheoryChunk where
   defined_fun   = dfun
 instance HasAttributes TheoryChunk where attributes = attribs
 instance HasUID        TheoryChunk where uid = tid
+instance HasReference  TheoryChunk where getReferences = ref
+
 
 -- use the id of the TheoryModel as the uid. FIXME ?
 data TheoryModel = TM { _con :: ConceptChunk
@@ -62,6 +67,7 @@ instance Definition    TheoryModel where defn = con . defn
 instance HasAttributes TheoryModel where attributes = thy . attributes
 -- error used below is on purpose. These shortnames should be made explicit as necessary
 instance HasShortName  TheoryModel where shortname _ = error "No explicit name given for theory model -- build a custom Ref"
+instance HasReference  TheoryModel where getReferences = thy . getReferences
 instance ConceptDomain TheoryModel where
   type DOM TheoryModel = ConceptChunk
   cdom = con . cdom
@@ -78,7 +84,7 @@ instance Theory        TheoryModel where
 tc :: (DOM c ~ ConceptChunk, Concept c, Quantity q, HasAttributes q) =>
     String -> [TheoryChunk] -> [SpaceDefn] -> [q] -> [c] -> Attributes ->
     [QDefinition] -> [TheoryConstraint] -> [QDefinition] -> TheoryChunk
-tc cid t s q c atts = \dq inv dfn -> TC cid t s (map qw q) (map cw c) dq inv dfn atts
+tc cid t s q c atts = \dq inv dfn -> TC cid t s (map qw q) (map cw c) dq inv dfn [] atts
 
 tc' :: (HasAttributes q, Quantity q, Concept c, DOM c ~ ConceptChunk) =>
     String -> [q] -> [c] -> Attributes -> [QDefinition] -> 

@@ -86,6 +86,7 @@ library
     , Language.Drasil.Chunk.Attribute.Core
     , Language.Drasil.Chunk.Attribute.Derivation
     , Language.Drasil.Chunk.Attribute.ShortName
+    , Language.Drasil.Chunk.Attribute.References
     , Language.Drasil.Chunk.Change
     , Language.Drasil.Chunk.Citation
     , Language.Drasil.Chunk.Code
@@ -244,6 +245,7 @@ executable ssp
     , Drasil.SSP.Requirements
     , Drasil.SSP.TMods
     , Drasil.SSP.Unitals
+    , Drasil.SSP.BasicExprs
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.Stakeholders

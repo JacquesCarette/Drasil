@@ -33,7 +33,8 @@ data SecCons = Sub Section
              | Con Contents
 
 -- | Sections have a title ('Sentence') and a list of contents ('SecCons')
-data Section = Section Title [SecCons] RefAdd
+-- and a String that will be its shortname
+data Section = Section Title [SecCons] RefAdd String
 
 instance HasShortName Section where shortname (Section t _ _) = t
 
@@ -108,8 +109,8 @@ data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining
 
 -- | Smart constructor for creating Sections with introductory contents
 -- (ie. paragraphs, tables, etc.) and a list of subsections.
-section :: Sentence -> [Contents] -> [Section] -> RefAdd -> Section
-section title intro secs = Section title (map Con intro ++ map Sub secs)
+section :: Sentence -> [Contents] -> [Section] -> RefAdd -> String -> Section
+section title intro secs sn = Section title (map Con intro ++ map Sub secs) sn
 
 -- | Figure smart constructor. Assumes 100% of page width as max width.
 fig :: Label -> Filepath -> RefAdd -> Contents

@@ -240,7 +240,7 @@ spec _ (S s)           = P.S s
 spec _ (Sy s)          = P.Sy s
 spec _ (Sp s)          = P.Sp s
 spec _ (P s)           = P.E $ symbol s
-spec sm (Ref t r n)    = P.Ref t r $ spec sm n
+spec sm (Ref t r sn)   = P.Ref t r (spec sm (S sn)) sn --FIXME: sn passed in twice?
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
@@ -261,7 +261,7 @@ createLayout sm = map (sec sm 0)
 
 -- | Helper function for creating sections at the appropriate depth
 sec :: HasSymbolTable ctx => ctx -> Int -> Section -> T.LayoutObj
-sec sm depth x@(Section title contents _) =
+sec sm depth x@(Section title contents _ _) = --FIXME: should ShortName be used somewhere?
   let ref = P.S (refAdd x) in
   T.HDiv [(concat $ replicate depth "sub") ++ "section"]
   (T.Header depth (spec sm title) ref :

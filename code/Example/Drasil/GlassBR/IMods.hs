@@ -8,7 +8,7 @@ import Drasil.DocumentLanguage.RefHelpers
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
 import Data.Drasil.Utils (getES)
 import Data.Drasil.Concepts.Math (parameter)
-import Data.Drasil.Concepts.Documentation (coordinate, assumption)
+import Data.Drasil.Concepts.Documentation (coordinate)
 
 import Prelude hiding (exp)
 import Control.Lens ((^.))
@@ -26,7 +26,7 @@ iModels = [probOfBr, calOfCap, calOfDe]
 
 probOfBreak :: InstanceModel
 probOfBreak = im probOfBr [qw risk] 
-  [TCon AssumedCon $ sy risk $> 0] (qw prob_br) [TCon AssumedCon $ sy prob_br $> 0] []
+  [TCon AssumedCon $ sy risk $> 0] (qw prob_br) [TCon AssumedCon $ sy prob_br $> 0] [] []
 
 {--}
 

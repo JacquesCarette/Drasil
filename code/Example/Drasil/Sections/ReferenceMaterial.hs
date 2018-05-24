@@ -9,7 +9,7 @@ import Language.Drasil
 -- | Create a reference material section with a default introduction and given
 -- subsections.
 refSec :: [Section] -> Section
-refSec secs = Section (S "Reference Material") (Con intro : map Sub secs) "RefMat"
+refSec secs = Section (S "Reference Material") (Con intro : map Sub secs) "RefMat" "RefMat"
 
 -- | Default reference section introduction
 intro :: Contents

@@ -9,7 +9,7 @@ import Language.Drasil.RefTypes
 import Language.Drasil.UnitLang (USymb)
 
 -- | One slight hack remaining
-type RefName = Sentence
+type RefName = String
 
 -- | For writing "sentences" via combining smaller elements
 -- Sentences are made up of some known vocabulary of things:

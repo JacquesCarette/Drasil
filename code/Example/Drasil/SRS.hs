@@ -88,7 +88,7 @@ offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "ExistingSol
 tOfSymb cs ss = section' (titleize Doc.tOfSymb) cs ss "ToS"
 
 --function that sets the shortname of each section to be the reference address
-section' a b c d = section a b c d d
+section' a b c d = section a b c d (getStr a) --FIXME: getStr hack 
 
 --
 missingP :: [Contents]

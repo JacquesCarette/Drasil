@@ -148,7 +148,7 @@ module Language.Drasil (
   -- CodeSpec
   , CodeSpec, codeSpec, Choices(..), ImplementationType(..)
   , Logging(..), ConstraintBehaviour(..), Structure(..), Comments(..)
-  , defaultChoices
+  , defaultChoices, getStr
   , Mod(..), packmod, FuncDef(..), FuncStmt(..), funcDef, ($:=), ffor, fdec -- hacks
   , relToQD, funcData, funcQD, Func(..), asExpr, asVC   -- hacks
   -- DataDesc

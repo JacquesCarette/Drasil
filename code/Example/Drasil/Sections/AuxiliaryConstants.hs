@@ -27,3 +27,4 @@ tableOfConstants f = Table
   (S "Auxiliary Constants")
   True
   "TAuxConsts"
+  (shortname' "TAuxConsts")

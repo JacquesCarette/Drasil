@@ -233,7 +233,7 @@ dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase colum
 
 -- Creates the input Data Constraints Table
 inDataConstTbl :: (UncertainQuantity c, Constrained c, HasReasVal c) => [c] -> Contents
-inDataConstTbl qlst = Table titl cts (S "Input Data Constraints") True "InDataConstraints"
+inDataConstTbl qlst = Table titl cts (S "Input Data Constraints") True "InDataConstraints" (shortname' "InDataConstraints")
   where
    columns = [(S "Var", map getES qlst),
             (titleize' physicalConstraint, map fmtPhys qlst),
@@ -246,7 +246,7 @@ inDataConstTbl qlst = Table titl cts (S "Input Data Constraints") True "InDataCo
 
 -- Creates the output Data Constraints Table
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> Contents
-outDataConstTbl qlst = Table titl cts (S "Output Data Constraints") True "OutDataConstraints"
+outDataConstTbl qlst = Table titl cts (S "Output Data Constraints") True "OutDataConstraints" (shortname' "OutDataConstraints")
   where
    columns = [(S "Var", map getES qlst),
             (titleize' physicalConstraint, map fmtPhys qlst),

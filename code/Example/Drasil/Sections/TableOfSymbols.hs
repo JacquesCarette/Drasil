@@ -13,6 +13,6 @@ table st ls f = Table
   [at_start symbol_, at_start description, at_start' CM.unit_]
   (mkTable [P . (flip symbol st), f, unitHidingUnitless]
   (filter (\q -> hasStageSymbol q st) ls))
-  (titleize tOfSymb) False "ToS"
+  (titleize tOfSymb) False "ToS" (shortname' "ToS")
 
 -- ^. defn

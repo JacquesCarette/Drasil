@@ -270,7 +270,7 @@ render progName symMap item@(SectionModel niname _)
 
 genericSect :: SubSec -> Section
 genericSect (SectionModel niname xs) = section (pullTitle xs niname) 
-  (pullContents xs) (pullSections xs) (niname ^. uid) (niname ^. uid)
+  (pullContents xs) (pullSections xs) (niname ^. uid) (shortname' $ niname ^. uid)
   -- FIXME: Ref HACK because
   -- generic sections need a ref name. Should be made explicit elsewhere.
 
@@ -308,7 +308,7 @@ theoreticalModelSect (SectionModel niname xs) _ progName = SRS.thModel
  ((tModIntro progName):theoreticalModels ++ 
   (pullContents xs)) (pullSections xs)
   where theoreticalModels = map symMap $ pullTMods xs
-        symMap            = Definition . Theory
+        symMap r           = Definition (Theory r) (shortname' "")
 
 
 generalDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
@@ -321,17 +321,17 @@ generalDefinitionSect (SectionModel niname xs) _ = SRS.genDefn
 instanceModelSect :: (HasSymbolTable s) => SubSec -> s -> Section
 instanceModelSect (SectionModel niname xs) _ = SRS.inModel
   (iModIntro:instanceModels ++ (pullContents xs)) (pullSections xs)
-  where symMap         = Definition . Theory
+  where symMap r        = Definition (Theory r) (shortname' "")
         instanceModels = map symMap $ pullIMods xs
 
 
 dataDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
 dataDefinitionSect (SectionModel niname xs) _ = SRS.dataDefn
-  (dataIntro:dataDefinitions ++ (pullContents xs)) (pullSections xs)
+  (dataIntro:dataDefinitions ++ (pullContents xs)) 
+  (pullSections xs)
   where dataIntro       = dataDefinitionIntro $ pullSents xs
-        symMap          = Definition . Data
+        symMap r        = Definition (Data r) (shortname' "")
         dataDefinitions = map symMap $ pullDDefs xs
-
 
 dataConstraintSect :: SubSec -> Section
 dataConstraintSect (SectionModel niname xs) = SRS.datCon

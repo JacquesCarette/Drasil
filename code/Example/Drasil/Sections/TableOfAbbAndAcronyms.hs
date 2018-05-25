@@ -12,7 +12,7 @@ import Data.Function (on)
 -- given list of abbreviated chunks
 table_of_abb_and_acronyms :: (Idea s) => [s] -> Section
 table_of_abb_and_acronyms ls = Section (S "Abbreviations and Acronyms") 
-  [Con (table ls)] "TAbbAcc" "TblOfAA"
+  [Con (table ls)] "TAbbAcc" (shortname' "TAbbAcc")
 
 select :: (Idea s) => [s] -> [(String, s)]
 select [] = []
@@ -29,4 +29,4 @@ table ls = let chunks = sortBy (compare `on` fst) $ select ls in
   [(\(a,_) -> S a),
    (\(_,b) -> titleize b)]
   chunks)
-  (S "Abbreviations and Acronyms") False "TAbbAcc"
+  (S "Abbreviations and Acronyms") False "TAbbAcc" (shortname' "TAbbAcc")

@@ -434,13 +434,16 @@ mkSolChSpec si (SCSProg l) =
       SSD.inModelF pdStub ddStub tmStub gdStub (map (instanceModel fields (_sysinfodb si')) ims)
     mkSubSCS (SI {_refdb = db}) Assumptions =
       (SSD.assumpF tmStub gdStub ddStub imStub lcStub
-      (map Assumption (assumptionsFromDB (db ^. assumpRefTable)) (shortname' "")))
+      (map assumpHack $ assumptionsFromDB (db ^. assumpRefTable)))
     mkSubSCS _ (Constraints a b c d) = (SSD.datConF a b c d)
     inModSec = (SRS.inModel [Paragraph EmptyS] [])
     --FIXME: inModSec should be replaced with a walk
     -- over the SCSProg and generate a relevant intro.
     -- Could start with just a quick check of whether or not IM is included and
     -- then error out if necessary.
+
+assumpHack :: AssumpChunk -> Contents 
+assumpHack ac = Assumption ac (ac ^. shortname)
 
 {--}
 

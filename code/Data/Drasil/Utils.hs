@@ -23,6 +23,7 @@ module Data.Drasil.Utils
   , mkDataDef, mkDataDef'
   , prodUCTbl
   , eqUnR
+  , mappingShortNames
   ) where
 
 import Data.List
@@ -183,3 +184,6 @@ prodUCTbl :: [[Sentence]] -> Contents
 prodUCTbl cases = Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
   cases
   (titleize useCaseTable) True "useCaseTable" (shortname' "useCaseTable") --FIXME: want refadd and shortname to be the same?
+
+
+mappingShortNames t m = refFromType t m (m ^. shortname)

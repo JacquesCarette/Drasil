@@ -130,11 +130,11 @@ fig l f = Figure l f 100
 figWithWidth :: Label -> Filepath -> MaxWidthPercent -> RefAdd -> ShortNm -> Contents
 figWithWidth = Figure
 
-datadefn :: QDefinition -> ShortNm -> Contents
-datadefn = Definition . Data
+datadefn :: QDefinition -> Contents
+datadefn qd = Definition (Data qd) (shortname' "")
 
-reldefn :: RelationConcept -> ShortNm -> Contents
-reldefn = Definition . Theory
+reldefn :: RelationConcept -> Contents
+reldefn rc = Definition (Theory rc) (shortname' "")
 
 -- Below were moved to avoid import cycles between this file and Reference.hs --
 

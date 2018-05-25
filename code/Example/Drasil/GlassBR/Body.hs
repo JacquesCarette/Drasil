@@ -33,7 +33,7 @@ import Data.Drasil.Concepts.Software (correctness, verifiability,
 import Data.Drasil.Concepts.Math (graph, calculation, probability,
   parameter)
 import Data.Drasil.Utils (getES, makeTMatrix, makeListRef, itemRefToSent,
-  refFromType, enumSimple, enumBullet, prodUCTbl)
+  refFromType, enumSimple, enumBullet, prodUCTbl, mappingShortNames)
 import Data.Drasil.SentenceStructures (acroR, sVersus, sAnd, foldlSP,
   foldlSent, foldlSent_, figureLabel, foldlList, showingCxnBw,
   foldlsC, sOf, followA, ofThe, sIn, isThe, isExpctdToHv, sOr, underConsidertn,
@@ -393,7 +393,7 @@ s6_1_1 = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
 s6_1_2 = physSystDesc (short gLassBR) (fig_glassbr) [s6_1_2_list, fig_glassbr]
 
 fig_glassbr = fig (at_start $ the physicalSystem) (resourcePath ++ "physicalsystimage.png")
-  "physSystImage"
+  "physSystImage" (shortname' "physSystImage")
 
 s6_1_2_list = enumSimple 1 (short physSyst) s6_1_2_list_physys
 
@@ -428,7 +428,10 @@ s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze" `sAnd` S "predict whether",
 
 s6_2 = solChSpecF gLassBR (s6_1, (SRS.likeChg SRS.missingP [])) EmptyS
  (EmptyS, dataConstraintUncertainty, end)
- (s6_2_1_list, map reldefn tModels, [], map datadefn dataDefns,
+ (s6_2_1_list, 
+  map reldefn tModels,
+  [], 
+  map datadefn dataDefns,
   map reldefn iModels,
   [s6_2_5_table1, s6_2_5_table2]) []
   where
@@ -444,16 +447,10 @@ s6_2_intro = foldlSP [S "This", phrase section_, S "explains all the",
 {--Assumptions--}
 
 s6_2_1_list :: [Contents]
-s6_2_1_list = assumpList newAssumptions
+s6_2_1_list = map assumpList newAssumptions
 
-assumpList :: [AssumpChunk] -> [Contents]
-assumpList = map Assumption
-
-assumptions :: [Contents] -- FIXME: Remove this entirely and use new refs + docLang.
-assumptions = fst (foldr (\s (ls, n) -> ((Assumption $ assump ("A" ++ show n) s ("A" ++ show n) []) : ls, n-1))
- ([], (length assumptionDescs)::Int) assumptionDescs)
--- These correspond to glassTyAssumps, glassCondition, explsnScenario,
--- standardValues, glassLiteAssmp, bndryConditions, responseTyAssump, ldfConstant
+assumpList :: AssumpChunk -> Contents
+assumpList ac = Assumption ac (ac ^. shortname)
 
 {--Theoretical Models--}
 
@@ -484,17 +481,20 @@ s7_1_req6 :: [Contents] --FIXME: Issue #327
 s7_1_listOfReqs :: [Contents]
 s7_1_listOfReqs = [s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5]
 
-s7_1_req1 = mkRequirement "s7_1_req1" req1Desc "Input-Glass-Props"
-s7_1_req2 = mkRequirement "s7_1_req2" req2Desc "System-Set-Values-Following-Assumptions"
-s7_1_req3 = mkRequirement "s7_1_req3" req3Desc "Check-Input-with-Data_Constraints"
-s7_1_req4 = mkRequirement "s7_1_req4" req4Desc "Output-Values-and-Known-Quantities"
-s7_1_req5 = mkRequirement "s7_1_req5" (req5Desc (output_)) "Check-Glass-Safety"
+s7_1_req1 = mkRequirement' "s7_1_req1" req1Desc "Input-Glass-Props"
+s7_1_req2 = mkRequirement' "s7_1_req2" req2Desc "System-Set-Values-Following-Assumptions"
+s7_1_req3 = mkRequirement' "s7_1_req3" req3Desc "Check-Input-with-Data_Constraints"
+s7_1_req4 = mkRequirement' "s7_1_req4" req4Desc "Output-Values-and-Known-Quantities"
+s7_1_req5 = mkRequirement' "s7_1_req5" (req5Desc (output_)) "Check-Glass-Safety"
+
+--FIXME: code smell for something for significant?
+mkRequirement' a b c = mkRequirement a b c (shortname' c)
 
 -- newReqs is ONLY for testing until I get refs working. Then the old reqs should
 -- be converted to reqChunk format with meaningful refnames and this should be
 -- removed.
 newReqs :: [ReqChunk]
-newReqs = map (\(x,y) -> frc x y x []) --FIXME: FRC Hack for referencing --FIXME: x used twice?
+newReqs = map (\(x,y) -> frc x y (shortname' x) []) --FIXME: FRC Hack for referencing --FIXME: x used twice?
   [ ("r1",req1Desc)
   , ("r2",req2Desc)
   , ("r3",req3Desc)
@@ -517,6 +517,7 @@ s7_1_req1Table = Table
   [getES,
    at_start, unit'2Contents] requiredInputs)
   (S "Required Inputs following R1") True "R1ReqInputs"
+  (shortname' "R1ReqInputs")
 
 req2Desc = foldlSent [S "The", phrase system,
   S "shall set the known", plural value +: S "as follows",
@@ -585,11 +586,13 @@ likelyChanges_SRS = [s8_likelychg1, s8_likelychg2, s8_likelychg3,
 s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4,
   s8_likelychg5 :: Contents
 
-s8_likelychg1 = mkLklyChnk "s8_likelychg1" (lc1Desc (blastRisk)) "Calculate-Internal-Blask-Risk"
-s8_likelychg2 = mkLklyChnk "s8_likelychg2" (lc2Desc) "Variable-Values-of-m,k,E"
-s8_likelychg3 = mkLklyChnk "s8_likelychg3" (lc3Desc) "Accomodate-More-than-Single-Lite"
-s8_likelychg4 = mkLklyChnk "s8_likelychg4" (lc4Desc) "Accomodate-More-Boundary-Conditions"
-s8_likelychg5 = mkLklyChnk "s8_likelychg5" (lc5Desc) "Consider-More-than-Flexure-Glass"
+s8_likelychg1 = mkLklyChnk' "s8_likelychg1" (lc1Desc (blastRisk)) "Calculate-Internal-Blask-Risk"
+s8_likelychg2 = mkLklyChnk' "s8_likelychg2" (lc2Desc) "Variable-Values-of-m,k,E"
+s8_likelychg3 = mkLklyChnk' "s8_likelychg3" (lc3Desc) "Accomodate-More-than-Single-Lite"
+s8_likelychg4 = mkLklyChnk' "s8_likelychg4" (lc4Desc) "Accomodate-More-Boundary-Conditions"
+s8_likelychg5 = mkLklyChnk' "s8_likelychg5" (lc5Desc) "Consider-More-than-Flexure-Glass"
+
+mkLklyChnk' a b c = mkLklyChnk a b c (shortname' c)
 
 lc1Desc :: NamedChunk -> Sentence
 lc2Desc, lc3Desc, lc4Desc, lc5Desc :: Sentence
@@ -639,13 +642,13 @@ s9_theorysRef, s9_instaModelRef, s9_dataDefRef, s9_dataRef, s9_funcReqRef,
   s9_assumpRef, s9_likelyChgRef :: [Sentence]
 
 s9_theorys = ["T1", "T2"]
-s9_theorysRef = map (refFromType Theory) tModels
+s9_theorysRef = map (mappingShortNames Theory) tModels
 
 s9_instaModel = ["IM1", "IM2", "IM3"]
-s9_instaModelRef = map (refFromType Theory) iModels
+s9_instaModelRef = map (mappingShortNames Theory) iModels
 
 s9_dataDef =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
-s9_dataDefRef = map (refFromType Data) dataDefns
+s9_dataDefRef = map (mappingShortNames Data) dataDefns
 
 s9_data  = ["Data Constraints"]
 s9_dataRef = [makeRef (SRS.datCon SRS.missingP [])]
@@ -695,6 +698,7 @@ s9_table1 = Table (EmptyS:s9_row_header_t1)
   (makeTMatrix s9_row_header_t1 s9_columns_t1 s9_row_t1)
   (showingCxnBw (traceyMatrix)
   (titleize' item +:+ S "of Different" +:+ titleize' section_)) True "TraceyItemSecs"
+  (shortname' "TraceyItemSecs")
 
 --
 
@@ -723,7 +727,7 @@ s9_t2_r6 = ["IM1", "IM2", "IM3", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"
 s9_table2 = Table (EmptyS:s9_row_header_t2)
   (makeTMatrix s9_col_header_t2 s9_columns_t2 s9_row_t2)
   (showingCxnBw (traceyMatrix) (titleize' requirement `sAnd` S "Other" +:+
-  titleize' item)) True "TraceyReqsItems"
+  titleize' item)) True "TraceyReqsItems" (shortname' "TraceyReqsItems")
 
 --
 
@@ -776,7 +780,7 @@ s9_t3_r6  = []
 s9_table3 = Table (EmptyS:s9_row_header_t3)
   (makeTMatrix s9_col_header_t3 s9_columns_t3 s9_row_t3)
   (showingCxnBw (traceyMatrix) (titleize' assumption `sAnd` S "Other"
-  +:+ titleize' item)) True "TraceyAssumpsOthers"
+  +:+ titleize' item)) True "TraceyAssumpsOthers" (shortname' "TraceyAssumpsOthers")
 
 --
 
@@ -814,12 +818,14 @@ fig_5 = fig (titleize figure +: S "5" +:+ (demandq ^. defn) +:+
   sParen (getES demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
   `sVersus` at_start char_weight +:+ sParen (getES sflawParamM))
   (resourcePath ++ "ASTM_F2248-09.png") "demandVSsod"
+  (shortname' "demandVSsod")
 
 fig_6 = fig (titleize figure +: S "6" +:+ S "Non dimensional" +:+
   phrase lateralLoad +:+ sParen (getES dimlessLoad)
   `sVersus` titleize aspectR +:+ sParen (getAcc aR)
   `sVersus` at_start stressDistFac +:+ sParen (getES stressDistFac))
   (resourcePath ++ "ASTM_F2248-09_BeasonEtAl.png") "dimlessloadVSaspect"
+  (shortname' "dimlessloadVSaspect")
 
 blstRskInvWGlassSlab :: Sentence
 blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+

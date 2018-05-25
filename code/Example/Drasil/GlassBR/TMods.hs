@@ -9,7 +9,7 @@ import Language.Drasil
 import Control.Lens ((^.))
 
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
-import Data.Drasil.Utils (getES)
+import Data.Drasil.Utils (getES, mappingShortNames)
 
 {--}
 
@@ -42,8 +42,8 @@ t2SafetyReq = makeRC "t2SafetyReq" (nounPhraseSP "Safety Requirement-2")
 t2descr :: Sentence
 t2descr = tDescr (is_safe2) s ending
   where 
-    s = ((getES is_safe1) +:+ sParen (S "from" +:+ (makeRef ((Definition . Theory) 
-        t1SafetyReq))) `sAnd` (getES is_safe2))
+    s = ((getES is_safe1) +:+ sParen (S "from" +:+ ref t1SafetyReq)
+     `sAnd` (getES is_safe2))
     ending = (short lResistance) `isThe` (phrase lResistance) +:+ 
       sParen (S "also called capacity") `sC` S "as defined in" +:+. 
       (ref calOfCap) +:+ (getES demand) +:+ sParen (S "also referred as the" +:+ 
@@ -55,4 +55,4 @@ tDescr main s ending = foldlSent [S "If", getES main `sC` S "the glass is" +:+.
   S "considered safe", s +:+. S "are either both True or both False", ending]
 
 ref :: RelationConcept -> Sentence
-ref = makeRef . (Definition . Theory)
+ref rc = makeRef (Definition (Theory rc) (shortname' ""))

@@ -29,14 +29,14 @@ newAssumptions :: [AssumpChunk] -- For testing
 newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8]
 
 newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8 :: AssumpChunk
-newA1 = assump "glassTyA" a1Desc "glassTy" []
-newA2 = assump "glassConditionA" a2Desc "glassCondition" []
-newA3 = assump "explsnScenarioA"a3Desc "explainScenario" []
-newA4 = assump "standardValuesA" (a4Desc load_dur) "StandardValues" []
-newA5 = assump "glassLiteA" a5Desc "glassLite" []
-newA6 = assump "bndryConditionsA" a6Desc "boundaryConditions" []
-newA7 = assump "responseTyA" a7Desc "responseType" []
-newA8 = assump "ldfConstantA" (a8Desc constant_LoadDF) "ldfConstant" []
+newA1 = assump "glassTyA" a1Desc (shortname' "glassTy") []
+newA2 = assump "glassConditionA" a2Desc (shortname' "glassCondition") []
+newA3 = assump "explsnScenarioA"a3Desc (shortname' "explainScenario") []
+newA4 = assump "standardValuesA" (a4Desc load_dur) (shortname' "StandardValues") []
+newA5 = assump "glassLiteA" a5Desc (shortname' "glassLite") []
+newA6 = assump "bndryConditionsA" a6Desc (shortname' "boundaryConditions") []
+newA7 = assump "responseTyA" a7Desc (shortname' "responseType") []
+newA8 = assump "ldfConstantA" (a8Desc constant_LoadDF) (shortname' "ldfConstant") []
 
 assumptionDescs :: [Sentence]
 assumptionDescs = [a1Desc, a2Desc, a3Desc, a4Desc load_dur, a5Desc, a6Desc, a7Desc, a8Desc constant_LoadDF]

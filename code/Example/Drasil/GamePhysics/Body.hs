@@ -24,7 +24,7 @@ import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass,
 import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode, 
   constraint, law)
 import Data.Drasil.Utils (makeTMatrix, itemRefToSent, refFromType,
-  makeListRef, enumSimple, enumBullet)
+  makeListRef, enumSimple, enumBullet, mappingShortNames)
 import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlList, sOf,
   sAnd, sOr, maybeChanged, maybeExpanded, foldlSentCol, foldlSP, showingCxnBw)
 import Data.Drasil.Software.Products (videoGame, openSource, sciCompS)
@@ -626,8 +626,6 @@ s8_theoryModelRef = map (mappingShortNames Theory) cpTMods
 
 s8_dataDef = ["DD1","DD2","DD3","DD4","DD5","DD6","DD7","DD8"]
 s8_dataDefRef = map (mappingShortNames Data) cpDDefs
-
-mappingShortNames t m = refFromType t m (m ^. shortname)
 
 s8_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
 s8_assumpRef = makeListRef s4_2_1_list_a s4_1

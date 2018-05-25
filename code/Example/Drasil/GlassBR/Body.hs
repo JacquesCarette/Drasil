@@ -488,6 +488,7 @@ s7_1_req4 = mkRequirement' "s7_1_req4" req4Desc "Output-Values-and-Known-Quantit
 s7_1_req5 = mkRequirement' "s7_1_req5" (req5Desc (output_)) "Check-Glass-Safety"
 
 --FIXME: code smell for something for significant?
+mkRequirement' :: String -> Sentence -> String -> Contents
 mkRequirement' a b c = mkRequirement a b c (shortname' c)
 
 -- newReqs is ONLY for testing until I get refs working. Then the old reqs should
@@ -592,6 +593,7 @@ s8_likelychg3 = mkLklyChnk' "s8_likelychg3" (lc3Desc) "Accomodate-More-than-Sing
 s8_likelychg4 = mkLklyChnk' "s8_likelychg4" (lc4Desc) "Accomodate-More-Boundary-Conditions"
 s8_likelychg5 = mkLklyChnk' "s8_likelychg5" (lc5Desc) "Consider-More-than-Flexure-Glass"
 
+mkLklyChnk' :: String -> Sentence -> String -> Contents
 mkLklyChnk' a b c = mkLklyChnk a b c (shortname' c)
 
 lc1Desc :: NamedChunk -> Sentence

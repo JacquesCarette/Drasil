@@ -11,7 +11,7 @@ import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Expr
 import Language.Drasil.Chunk.Citation (BibRef)
-import Language.Drasil.Classes (HasUID(uid), HasShortName(shortname))
+import Language.Drasil.Classes (HasUID(uid), HasShortName(shortname, sn))
 import Control.Lens ((^.), makeLenses)
 import Language.Drasil.Chunk.Attribute.ShortName
 
@@ -63,23 +63,37 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd ShortNm
                | Defnt DType [(Identifier, [Contents])] RefAdd ShortNm
 type Identifier = String
 
+-- Was moved to avoid import cycles between this file and Reference.hs --
+repUnd :: Char -> String
+repUnd '_' = "."
+repUnd c = c : []
+
+-- Was moved to avoid import cycles between this file and Reference.hs --
+-- | Automatically create the label for a definition
+getDefName :: DType -> String
+getDefName (Data c)   = "DD:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
+getDefName (Theory c) = "T:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
+getDefName TM         = "T:"
+getDefName DD         = "DD:"
+getDefName Instance   = "IM:"
+getDefName General    = "GD:"
+
 instance HasShortName  Contents where
-{-
-  shortname (Enumeration _)       = error "Can't reference lists"
-  shortname (Paragraph _)         = error "Can't reference paragraphs"
-  shortname (Bib _)               = error $
+  sn (Enumeration _)       = error "Can't reference lists"
+  sn (Paragraph _)         = error "Can't reference paragraphs"
+  sn (Bib _)               = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
-  shortname (Table _ _ _ _ r _)     = S "Table:" :+: S r
-  shortname (Figure _ _ _ r _)      = S "Figure:" :+: S r
-  shortname (Graph _ _ _ _ r _)     = S "Figure:" :+: S r
-  shortname (EqnBlock _ r _)        = S "Equation:" :+: S r
-  shortname (Definition d _)        = S $ getDefName d
-  shortname (Defnt _ _ r _)         = S r
-  shortname (Requirement rc _)      = shortname rc
-  shortname (Assumption ca _)       = shortname ca
-  shortname (Change lcc _)          = shortname lcc
--}
+  sn (Table _ _ _ _ _ shr)     = shortname' $ "Table:" ++ (snToS shr)
+  sn (Figure _ _ _ _ shr)      = shortname' $ "Figure:" ++ (snToS shr)
+  sn (Graph _ _ _ _ _ shr)     = shortname' $ "Figure:" ++ (snToS shr)
+  sn (EqnBlock _ _ shr)        = shortname' $ "Equation:" ++ (snToS shr)
+  sn (Definition d _)        = shortname' $ getDefName d
+  sn (Defnt _ _ _ shr)       = shr
+  sn (Requirement _ shr)     = shr
+  sn (Assumption _ shr)      = shr
+  sn (Change _ shr)          = shr
+
 
 type Title    = Sentence
 type Author   = Sentence
@@ -87,7 +101,7 @@ type Header   = Sentence -- Used when creating sublists
 type Depth    = Int
 type Width    = Float
 type Height   = Float
-type ListPair = (Title,ItemType) -- ^ Title: Item
+type ListPair = (Title, ItemType) -- ^ Title: Item
 type Filepath = String
 type Label    = Sentence
 
@@ -105,11 +119,11 @@ data SecCons = Sub Section
 data Section = Section { t :: Title
                        , sc :: [SecCons]
                        , ra :: RefAdd
-                       , _sn :: ShortNm
+                       , _shnm :: ShortNm
                        }
 makeLenses ''Section
 
-instance HasShortName Section where shortname = sn
+instance HasShortName Section where shortname = shnm
 
 
 ---------------------------------------------------------------------------
@@ -135,18 +149,3 @@ datadefn qd = Definition (Data qd) (shortname' "")
 
 reldefn :: RelationConcept -> Contents
 reldefn rc = Definition (Theory rc) (shortname' "")
-
--- Below were moved to avoid import cycles between this file and Reference.hs --
-
--- | Automatically create the label for a definition
-getDefName :: DType -> String
-getDefName (Data c)   = "DD:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
-getDefName (Theory c) = "T:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
-getDefName TM         = "T:"
-getDefName DD         = "DD:"
-getDefName Instance   = "IM:"
-getDefName General    = "GD:"
-
-repUnd :: Char -> String
-repUnd '_' = "."
-repUnd c = c : []

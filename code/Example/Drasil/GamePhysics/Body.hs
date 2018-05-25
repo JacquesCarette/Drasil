@@ -23,7 +23,7 @@ import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass,
   dimension)
 import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode, 
   constraint, law)
-import Data.Drasil.Utils (makeTMatrix, itemRefToSent, refFromType,
+import Data.Drasil.Utils (makeTMatrix, itemRefToSent,
   makeListRef, enumSimple, enumBullet, mappingShortNames)
 import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlList, sOf,
   sAnd, sOr, maybeChanged, maybeExpanded, foldlSentCol, foldlSP, showingCxnBw)

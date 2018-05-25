@@ -18,7 +18,7 @@ module Language.Drasil.Classes (
   , Constrained(constraints)
   , HasReasVal(reasVal)
   , ExprRelat(relat)
-  , HasShortName(shortname)
+  , HasShortName(shortname, sn)
   , HasDerivation(derivation)
   ) where
 
@@ -109,6 +109,7 @@ class HasShortName s where
                             -- A short name used for referencing within a document that can 
                             -- include symbols and whatnot if required.
                             -- Visible in the typeset documents (pdf)
+  sn :: s -> ShortNm --FIXME: Hack for Contents implementation?
 
 -----------------------------------------------------
 -- Below are for units only

@@ -443,7 +443,7 @@ mkSolChSpec si (SCSProg l) =
     -- then error out if necessary.
 
 assumpHack :: AssumpChunk -> Contents 
-assumpHack ac = Assumption ac (ac ^. shortname)
+assumpHack ac = Assumption ac (sn ac)
 
 {--}
 

@@ -36,7 +36,7 @@ FORCE: ;
 
 build: FORCE
 	mkdir -p build
-	stack build -j2 $(stackArgs) drasil
+	stack build -j2 $(stackArgs) drasil-code
 
 
 swhs_build: build
@@ -115,7 +115,7 @@ gamephys_prog: gamephys_build
 nopcm_prog: nopcm_build
 
 docs:
-	stack haddock drasil $(haddockArgs)
+	stack haddock drasil-code $(haddockArgs)
 
 clean: clean_logs
 	- rm -r ./build

@@ -1,13 +1,13 @@
 module Language.Drasil.Chunk.Attribute 
   ( getSource, getDerivation, getShortName
-  , shortname, sourceref, derivationsteps
+  , shortname, sourceref
   ) where
 
 import Control.Lens ((^.))
 import Language.Drasil.Spec (Sentence(EmptyS))
 import Language.Drasil.Chunk.Attribute.Core (Attributes, Attribute(..))
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
-import Language.Drasil.Classes (HasAttributes(attributes))
+import Language.Drasil.Classes (HasAttributes(attributes), HasDerivation(derivations))
 
 --------------------------------------------------------------------------------
 
@@ -23,13 +23,8 @@ sourceRef []                = EmptyS
 sourceRef ((SourceRef x):_) = x
 sourceRef (_:xs)            = sourceRef xs
 
-getDerivation :: HasAttributes c => c -> Derivation
-getDerivation c = deriv $ c ^. attributes
-  where
-    deriv :: Attributes -> Derivation
-    deriv []          = []
-    deriv ((D der):_) = der
-    deriv (_:xs)      = deriv xs
+getDerivation :: HasDerivation c => c -> Derivation
+getDerivation c =  c ^. derivations
 
 getShortName :: HasAttributes c => c -> Maybe Sentence
 getShortName c = shortName $ c ^. attributes
@@ -42,7 +37,4 @@ getShortName c = shortName $ c ^. attributes
 shortname, sourceref :: Sentence -> Attribute
 shortname = ShortName
 sourceref = SourceRef
-
-derivationsteps :: Derivation -> Attribute
-derivationsteps = D
 

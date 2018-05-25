@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.DefinedQuantity
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom, DOM), Concept, HasSymbol(symbol),
-  HasAttributes(attributes), HasSpace(typ), IsUnit, HasDerivation(derivation))
+  HasAttributes(attributes), HasSpace(typ), IsUnit, HasDerivation(derivations))
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import qualified Language.Drasil.Chunk.Quantity as Q
 
@@ -42,7 +42,7 @@ instance Q.HasSpace    DefinedQuantityDict where typ = spa
 instance HasSymbol     DefinedQuantityDict where symbol = view symb
 instance HasAttributes DefinedQuantityDict where attributes = attribs
 instance Q.Quantity    DefinedQuantityDict where getUnit = view unit'
-instance HasDerivation DefinedQuantityDict where derivation = deri
+instance HasDerivation DefinedQuantityDict where derivations = deri
 
 -- For when the symbol is constant through stages
 dqd :: ConceptChunk -> Symbol -> Space -> Maybe UnitDefn -> Attributes -> DefinedQuantityDict

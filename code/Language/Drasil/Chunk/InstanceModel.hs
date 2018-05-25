@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.InstanceModel
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn),ConceptDomain(cdom,DOM), Concept, HasAttributes(attributes),
-  ExprRelat(relat))
+  ExprRelat(relat), HasDerivation(derivations))
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained.Core (TheoryConstraint)
@@ -18,6 +18,7 @@ import Language.Drasil.Expr
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Expr.Extract (vars)
 import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Chunk.Attribute.Derivation
 
 import Control.Lens (makeLenses, (^.))
 
@@ -35,12 +36,13 @@ data InstanceModel = IM { _rc :: RelationConcept
                         , _imOutput :: Output
                         , _outCons :: OutputConstraints
                         , _attribs :: Attributes 
+ 			, _deri :: Derivation
                         }
 makeLenses ''InstanceModel
   
 instance HasUID        InstanceModel where uid = rc . uid
 instance NamedIdea     InstanceModel where term = rc . term
-instance Idea          InstanceModel where getA (IM a _ _ _ _ _) = getA a
+instance Idea          InstanceModel where getA (IM a _ _ _ _ _ _) = getA a
 instance Concept       InstanceModel where
 instance Definition    InstanceModel where defn = rc . defn
 instance ConceptDomain InstanceModel where
@@ -48,14 +50,15 @@ instance ConceptDomain InstanceModel where
   cdom = rc . cdom
 instance ExprRelat     InstanceModel where relat = rc . relat
 instance HasAttributes InstanceModel where attributes = attribs
+instance HasDerivation InstanceModel where derivations = deri
 
 -- | Smart constructor for instance models
 im :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> Attributes -> InstanceModel
-im = IM
+im rc i ic o oc atts = IM rc i ic o oc atts []
 
 -- | Smart constructor for instance model from qdefinition 
 -- (Sentence is the "concept" definition for the relation concept)
 imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> InputConstraints -> OutputConstraints -> Attributes -> InstanceModel
 imQD ctx qd dfn incon ocon atts = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
-  (sy qd $= qd ^. equat) atts) (vars (qd^.equat) ctx) incon (qw qd) ocon atts --FIXME: atts used twice?
+  (sy qd $= qd ^. equat) atts) (vars (qd^.equat) ctx) incon (qw qd) ocon atts []--FIXME: atts used twice?

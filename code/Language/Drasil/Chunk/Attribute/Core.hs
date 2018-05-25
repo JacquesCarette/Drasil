@@ -16,8 +16,4 @@ data Attribute =
   | ShortName Sentence
   | SourceRef Sentence -- Source to reference for this knowledge chunk
                        -- FIXME: Allow URLs/Citations here
-  | D Derivation -- Makes sense for now 
-        --(derivations are just document sections at the moment), 
-        -- but we may need to create a new representation for it in the future.
-        -- To collapse Attributes into QDefinitions, can't use Contents
   | Uses [String] -- Which chunks does this one rely on?

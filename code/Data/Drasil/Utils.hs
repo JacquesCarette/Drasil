@@ -133,7 +133,7 @@ itemRefToSent a b = S a +:+ sParen b
 
 -- | refFromType takes a function and returns a reference sentence
 refFromType :: (a -> DType) -> a -> ShortNm -> Sentence
-refFromType f sn = (makeRef $ Definition f sn)
+refFromType f r sn = makeRef $ Definition (f r) sn
 
 -- | makeListRef takes a list and a reference and generates references to 
 --   match the length of the list

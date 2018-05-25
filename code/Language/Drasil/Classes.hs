@@ -10,7 +10,7 @@ module Language.Drasil.Classes (
   , HasSymbol(symbol)
   , HasSpace(typ)
   , HasUnitSymbol(usymb)
-  , IsUnit
+  , IsUnit(udefn)
   , UnitEq(uniteq)
   , HasAttributes(attributes)
   , HasReference(getReferences)
@@ -111,7 +111,7 @@ class HasUnitSymbol u where
 -- | Units are Ideas with a Definition which store a unit symbol.
 -- They must also be explicitly declared to be instances of IsUnit
 class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u where
-
+   udefn :: Lens' u (Maybe UDefn)
 -- Investigate (TODO): is this really needed?
 class UnitEq u where
    uniteq :: Lens' u UDefn

@@ -7,8 +7,6 @@ Synopsis:	A framework for code and document generation for scientific software
 
 library
   exposed-modules:
-    Language.Drasil,
-    Language.Drasil.Code,
     Data.Drasil.People
     Data.Drasil.Citations
     Data.Drasil.Constraints
@@ -35,95 +33,6 @@ library
     Data.Drasil.Units.PhysicalProperties
     Data.Drasil.Units.Physics
     Data.Drasil.Units.SolidMechanics
-  other-modules:
-      Language.Drasil.SystemInformation
-    , Language.Drasil.Expr
-    , Language.Drasil.Expr.Math
-    , Language.Drasil.Expr.Precedence
-    , Language.Drasil.Classes
-    , Language.Drasil.Config
-    , Language.Drasil.Document
-    , Language.Drasil.Format
-    , Language.Drasil.Generate
-    , Language.Drasil.Misc
-    , Language.Drasil.NounPhrase.Core
-    , Language.Drasil.NounPhrase
-    , Language.Drasil.People
-    , Language.Drasil.RefTypes
-    , Language.Drasil.Reference
-    , Language.Drasil.Space
-    , Language.Drasil.Spec
-    , Language.Drasil.Symbol
-    , Language.Drasil.SymbolAlphabet
-    , Language.Drasil.Unicode
-    , Language.Drasil.Unit
-    , Language.Drasil.UnitLang
-    , Language.Drasil.CodeSpec
-    , Language.Drasil.Code.Code
-    , Language.Drasil.Code.Imperative.AST
-    , Language.Drasil.Code.Imperative.Import
-    , Language.Drasil.Code.Imperative.Helpers
-    , Language.Drasil.Code.Imperative.Lang
-    , Language.Drasil.Code.Imperative.LanguageRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.GOOLRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.LuaRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.ObjectiveCRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer
-    , Language.Drasil.Code.CodeGeneration
-    , Language.Drasil.Code.Imperative.Parsers.ConfigParser
-    , Language.Drasil.HTML.Helpers
-    , Language.Drasil.HTML.Print
-    , Language.Drasil.HTML.Monad
-    , Language.Drasil.TeX.Helpers
-    , Language.Drasil.TeX.Print
-    , Language.Drasil.TeX.Monad
-    , Language.Drasil.TeX.Preamble
-    , Language.Drasil.Chunk.AssumpChunk
-    , Language.Drasil.Chunk.Attribute
-    , Language.Drasil.Chunk.Attribute.Core
-    , Language.Drasil.Chunk.Attribute.Derivation
-    , Language.Drasil.Chunk.Attribute.References
-    , Language.Drasil.Chunk.Change
-    , Language.Drasil.Chunk.Citation
-    , Language.Drasil.Chunk.Code
-    , Language.Drasil.Chunk.CommonIdea
-    , Language.Drasil.Chunk.Concept
-    , Language.Drasil.Chunk.Concept.Core
-    , Language.Drasil.Chunk.Constrained
-    , Language.Drasil.Chunk.Constrained.Core
-    , Language.Drasil.Chunk.DefinedQuantity
-    , Language.Drasil.Chunk.Eq
-    , Language.Drasil.Chunk.GenDefn
-    , Language.Drasil.Chunk.Goal
-    , Language.Drasil.Chunk.InstanceModel
-    , Language.Drasil.Chunk.NamedIdea
-    , Language.Drasil.Chunk.PhysSystDesc
-    , Language.Drasil.Chunk.Quantity
-    , Language.Drasil.Chunk.Relation
-    , Language.Drasil.Chunk.ReqChunk
-    , Language.Drasil.Chunk.SymbolForm
-    , Language.Drasil.Chunk.Theory
-    , Language.Drasil.Chunk.UncertainQuantity
-    , Language.Drasil.Chunk.Unital
-    , Language.Drasil.Chunk.Unitary
-    , Language.Drasil.Chunk.UnitaryConcept
-    , Language.Drasil.Chunk.VarChunk
-    , Language.Drasil.ChunkDB
-    , Language.Drasil.Expr.Extract
-    , Language.Drasil.Make.AST
-    , Language.Drasil.Make.Helpers
-    , Language.Drasil.Make.Import
-    , Language.Drasil.Make.Print
-    , Language.Drasil.Output.Formats
-    , Language.Drasil.Printing.Helpers
-    , Language.Drasil.Printing.AST
-    , Language.Drasil.Printing.Citation
-    , Language.Drasil.Printing.Import
-    , Language.Drasil.Printing.LayoutObj
-    , Language.Drasil.DataDesc
 
   Build-Depends:
     base >= 4.7,

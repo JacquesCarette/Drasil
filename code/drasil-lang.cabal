@@ -8,7 +8,6 @@ Synopsis:	A framework for code and document generation for scientific software -
 library
   exposed-modules:
     Language.Drasil,
-    Language.Drasil.Code,
   other-modules:
       Language.Drasil.SystemInformation
     , Language.Drasil.Expr
@@ -33,21 +32,6 @@ library
     , Language.Drasil.Unit
     , Language.Drasil.UnitLang
     , Language.Drasil.CodeSpec
-    , Language.Drasil.Code.Code
-    , Language.Drasil.Code.Imperative.AST
-    , Language.Drasil.Code.Imperative.Import
-    , Language.Drasil.Code.Imperative.Helpers
-    , Language.Drasil.Code.Imperative.Lang
-    , Language.Drasil.Code.Imperative.LanguageRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.GOOLRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.LuaRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.ObjectiveCRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer
-    , Language.Drasil.Code.CodeGeneration
-    , Language.Drasil.Code.Imperative.Parsers.ConfigParser
     , Language.Drasil.HTML.Helpers
     , Language.Drasil.HTML.Print
     , Language.Drasil.HTML.Monad

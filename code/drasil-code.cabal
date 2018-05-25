@@ -1,9 +1,9 @@
-Name:		drasil-lang
+Name:		  drasil-code
 Version:	0.0.9
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
-Synopsis:	A framework for code and document generation for scientific software - Language SubPackage
+Synopsis:	A framework for code and document generation for scientific software - Code SubPackage
 
 library
   exposed-modules:

@@ -7,9 +7,9 @@ Synopsis:	A framework for code and document generation for scientific software -
 
 library
   exposed-modules:
-    Language.Drasil.Code,
+    Language.Drasil.Code
   other-modules:
-    , Language.Drasil.Code.Code
+      Language.Drasil.Code.Code
     , Language.Drasil.Code.Imperative.AST
     , Language.Drasil.Code.Imperative.Import
     , Language.Drasil.Code.Imperative.Helpers

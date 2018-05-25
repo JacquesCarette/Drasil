@@ -10,11 +10,11 @@ import Drasil.DocumentLanguage.RefHelpers
 import Data.Drasil.SI_Units
 import Data.Drasil.People (spencerSmith, nikitha, mCampidelli)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
-  characteristic, class_, code, condition, constant, constraint, content,
+  characteristic, class_, code, condition, constraint, content,
   datum, definition, description, document, emphasis, endUser, failure,
   figure, goal, implementation, information, interface, input_, item,
-  message, model, organization, output_, practice, problem, purpose,
-  quantity, reference, reviewer, section_, scenario, software, standard,
+  message, model, organization, output_, problem, purpose,
+  quantity, reference, reviewer, section_, software, standard,
   symbol_, system, template, term_, theory, traceyMatrix, user, value,
   variable, physicalSystem, datumConstraint, userInput, assumption, dataDefn,
   goalStmt, inModel, likelyChg, physSyst, requirement, srs, thModel,
@@ -31,29 +31,29 @@ import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability,
   performance, errMsg)
 import Data.Drasil.Concepts.Math (graph, calculation, probability,
-  parameter, surface, equation, shape)
+  parameter)
 import Data.Drasil.Utils (getES, makeTMatrix, makeListRef, itemRefToSent,
   refFromType, enumSimple, enumBullet, prodUCTbl)
 import Data.Drasil.SentenceStructures (acroR, sVersus, sAnd, foldlSP,
-  foldlSent, foldlOptions, foldlSent_, figureLabel, foldlList, showingCxnBw,
+  foldlSent, foldlSent_, figureLabel, foldlList, showingCxnBw,
   foldlsC, sOf, followA, ofThe, sIn, isThe, isExpctdToHv, sOr, underConsidertn,
   tAndDWAcc, tAndDOnly, tAndDWSym, andThe)
-import Data.Drasil.Concepts.PhysicalProperties (dimension, materialProprty)
+import Data.Drasil.Concepts.PhysicalProperties (dimension)
 
 import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad,
   lateralLoad, sflawParamM, char_weight, sD, demand, lite, demandq,
   aspectRWithEqn, aspectR, lRe, wtntWithEqn, sdWithEqn,
   prob_br, notSafe, safeMessage, is_safe1, is_safe2, plate_width,
-  plate_len, blast, glassTy, gbInputDataConstraints, explosion, lateral,
-  load_dur, explosion, pb_tol, blast, bomb, blastTy, glassGeo,
+  plate_len, blast, glassTy, gbInputDataConstraints, explosion,
+  explosion, pb_tol, blast, bomb, blastTy, glassGeo,
   glass_type, nom_thick, sdx, sdy, sdz, tNT, gBRSpecParamVals,
-  constant_LoadDur, constant_ModElas, constant_M, constant_K, loadTypes,
-  load, glassTypes, probBreak, termsWithAccDefn, termsWithDefsOnly,
+  loadTypes, load,
+  glassTypes, probBreak, termsWithAccDefn, termsWithDefsOnly,
   gbConstants, gbConstrained, gbOutputs, gbInputs,
-  glBreakage, capacity, constant_LoadDF, constant_LoadSF)
+  glBreakage, capacity, constant_LoadDF)
 import Drasil.GlassBR.Symbols
 import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist,
-  glaSlab, blastRisk, glass, responseTy, cantilever, beam, plane, edge,
+  glaSlab, blastRisk, glass,
   glaPlane, glassBRProg, ptOfExplsn, acronyms)
 import Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq)
 import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr)

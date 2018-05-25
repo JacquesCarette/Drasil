@@ -14,6 +14,6 @@ type Attributes = [Attribute]
 data Attribute =
     Rationale Sentence
   | ShortName Sentence
-  | SourceRef Sentence -- Source to reference for this knowledge chunk
+  -- | SourceRef Sentence -- Source to reference for this knowledge chunk
                        -- FIXME: Allow URLs/Citations here
   | Uses [String] -- Which chunks does this one rely on?

@@ -4,24 +4,26 @@ module Language.Drasil.Chunk.Attribute
   ) where
 
 import Control.Lens ((^.))
-import Language.Drasil.Spec (Sentence(EmptyS))
+import Language.Drasil.Spec (Sentence(EmptyS), (+:+))
 import Language.Drasil.Chunk.Attribute.Core (Attributes, Attribute(..))
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
-import Language.Drasil.Classes (HasAttributes(attributes), HasDerivation(derivations))
+import Language.Drasil.Classes (HasAttributes(attributes), HasDerivation(derivations), 
+  HasReference(getReferences))
+import Language.Drasil.Chunk.Attribute.References
 
 --------------------------------------------------------------------------------
 
 -- Should this get only the first one or all potential sources?
 -- Should we change the source ref to have a list (to keep things clean in case
 --    of multiple sources)?
--- | Get the source reference from the attributes (if it exists)
-getSource :: HasAttributes c => c -> Sentence
-getSource c = sourceRef $ c ^. attributes
-
-sourceRef :: Attributes -> Sentence
-sourceRef []                = EmptyS
-sourceRef ((SourceRef x):_) = x
-sourceRef (_:xs)            = sourceRef xs
+-- | Get the source reference from the references (if it exists)
+getSource :: HasReference c => c -> Sentence
+getSource c = sourceRef $ c ^. getReferences
+  where
+    sourceRef :: References -> Sentence
+    sourceRef []                 = EmptyS
+    sourceRef ((SourceRef x):xs) = x +:+ (sourceRef xs)
+    sourceRef (_:xs)             = sourceRef xs
 
 getDerivation :: HasDerivation c => c -> Derivation
 getDerivation c =  c ^. derivations
@@ -34,7 +36,9 @@ getShortName c = shortName $ c ^. attributes
     shortName ((ShortName s):_) = Just s
     shortName (_:xs) = shortName xs
 
-shortname, sourceref :: Sentence -> Attribute
+shortname :: Sentence -> Attribute
 shortname = ShortName
+
+sourceref :: Sentence -> Reference
 sourceref = SourceRef
 

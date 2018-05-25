@@ -1,4 +1,4 @@
-module Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp) where
+module Drasil.SWHS.GenDefs (swhsRC, nwtnCooling, rocTempSimp) where
 
 import Prelude hiding (sin, cos, tan)
 
@@ -17,15 +17,19 @@ import Data.Drasil.Utils (getES, unwrap)
 import Data.Drasil.Concepts.Math (equation, rOfChng, rate)
 import Data.Drasil.Concepts.Thermodynamics (law_conv_cooling)
 import Drasil.SWHS.Assumptions
+import Data.Drasil.Units.Thermodynamics (thermal_flux)
 
 ---------------------------
 --  General Definitions  --
 ---------------------------
 
-swhsGenDefs :: [RelationConcept]
-swhsGenDefs = [nwtnCooling, rocTempSimp]
+swhsRC :: [RelationConcept]
+swhsRC = [nwtnCooling, rocTempSimp]
 
 --
+gdnwtnCooling :: GenDefn
+gdnwtnCooling = gd nwtnCooling (Just thermal_flux) ([] :: Derivation)
+
 nwtnCooling :: RelationConcept
 nwtnCooling = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling") 
   nwtnCooling_desc nwtnCooling_rel []
@@ -51,6 +55,9 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
   sParen (Sy $ unit_symb deltaT)]
 
 --
+gdRocTempSimp :: GenDefn
+gdRocTempSimp = gd rocTempSimp (Nothing :: Maybe DerUChunk) ([] :: Derivation)
+
 rocTempSimp :: RelationConcept
 rocTempSimp = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
   "of change of temperature") rocTempSimp_desc rocTempSimp_rel []

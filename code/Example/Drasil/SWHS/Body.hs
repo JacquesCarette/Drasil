@@ -43,7 +43,7 @@ import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
 import Drasil.SWHS.TMods (tModels, t1ConsThermE, s4_2_2_swhsTMods)
 import Drasil.SWHS.IMods (s4_2_5_IMods)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, s4_2_4_swhsDataDefs, swhsDataDefs)
-import Drasil.SWHS.GenDefs (swhsGenDefs)
+import Drasil.SWHS.GenDefs (swhsRC)
 import Drasil.SWHS.Assumptions (swhsRefDB, swhsAssumptions, assump3, assump4, assump5,
   assump6, assump13, assump15, assump16, assump17, assump18)
 import Drasil.SWHS.Requirements (req1, req2, s5_1_2_Eqn1, s5_1_2_Eqn2,
@@ -351,7 +351,7 @@ s4_2_1 = assumpF
 -- SECTION 4.2.3 --
 -- General Definitions is automatically generated in solChSpecF
 s4_2_3_genDefs :: [Contents]
-s4_2_3_genDefs = map reldefn swhsGenDefs
+s4_2_3_genDefs = map reldefn swhsRC
 
 s4_2_3_deriv :: [Contents]
 s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
@@ -563,7 +563,7 @@ s7_theories = ["T1", "T2", "T3"]
 s7_theoriesRef = map (refFromType Theory) tModels
 
 s7_genDefs = ["GD1", "GD2"]
-s7_genDefRef = map (refFromType Theory) swhsGenDefs
+s7_genDefRef = map (refFromType Theory) swhsRC
 
 s7_dataDefs = ["DD1", "DD2", "DD3", "DD4"]
 s7_dataDefRef = map (refFromType Data) swhsDataDefs

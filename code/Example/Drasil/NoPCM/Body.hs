@@ -28,7 +28,7 @@ import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
   coil_HTC_max, time_final_max, sim_time, coil_SA_max, eta)
 import Drasil.SWHS.DataDefs(dd1HtFluxC, s4_2_4_DD1)
 import Drasil.SWHS.TMods (s4_2_2_T1, t1ConsThermE)
-import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp)
+import Drasil.SWHS.GenDefs (swhsRC, nwtnCooling, rocTempSimp)
 import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
 import Drasil.NoPCM.Unitals (temp_init)
@@ -451,7 +451,7 @@ assump13 = let a13 = "assump13" in Assumption $ assump a13 assumpS13 a13 []
 
 
 s4_2_3_paragraph :: ConceptChunk -> ConceptChunk -> [Contents]
-s4_2_3_paragraph roc te = (map reldefn swhsGenDefs) ++ [foldlSPCol
+s4_2_3_paragraph roc te = (map reldefn swhsRC) ++ [foldlSPCol
   [S "Detailed derivation of simplified", phrase roc, S "of", phrase te]] ++
   (weave [s4_2_3_description, s4_2_3_equation])
 
@@ -808,7 +808,7 @@ s7_theories = ["T1"]
 s7_theoriesRef = map (refFromType Theory) [t1ConsThermE]
 
 s7_genDefs = ["GD1", "GD2"]
-s7_genDefRef = map (refFromType Theory) swhsGenDefs
+s7_genDefRef = map (refFromType Theory) swhsRC
 
 s7_dataDefs = ["DD1"]
 s7_dataDefRef = map (refFromType Data) [dd1HtFluxC]

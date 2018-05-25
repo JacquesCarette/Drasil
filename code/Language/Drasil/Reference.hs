@@ -200,7 +200,7 @@ instance Referable TheoryModel where
 
 instance Referable GenDefn where
   refName _ = error "No explicit name given for theory model -- build a custom Ref"
-  refAdd  g = "GD:" ++ g^.uid
+  refAdd  g = "GD:" ++ concatMap repUnd (g ^. uid)
   rType   _ = Def
 
 instance Referable QDefinition where -- FIXME: This could lead to trouble; need

@@ -16,7 +16,6 @@ import Data.Drasil.SentenceStructures (isThe, sAnd)
 import Data.Drasil.Utils (getES, unwrap)
 import Data.Drasil.Concepts.Math (equation, rOfChng, rate)
 import Data.Drasil.Concepts.Thermodynamics (law_conv_cooling)
-import Data.Drasil.Concepts.Documentation (assumption)
 import Drasil.SWHS.Assumptions
 
 ---------------------------

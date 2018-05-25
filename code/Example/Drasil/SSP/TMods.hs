@@ -12,7 +12,7 @@ import Data.Drasil.SentenceStructures (ofThe, ofThe',
   foldlSent, getTandS, sAnd, sOf)
 import Data.Drasil.Utils (getES)
 import Data.Drasil.Quantities.Physics (force, distance, displacement)
-import Data.Drasil.Concepts.Documentation (safety, model, source, assumption)
+import Data.Drasil.Concepts.Documentation (safety, model, source)
 import Data.Drasil.Concepts.Math (surface)
 import Data.Drasil.Quantities.SolidMechanics (shearRes, mobShear, stffness)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)

@@ -278,7 +278,7 @@ genericSect (SectionModel niname xs) = section (pullTitle xs niname)
 ------------------------------------------------
 
 systemConstraintSect :: SubSec -> Section
-systemConstraintSect (SectionModel niname xs) = SRS.sysCon
+systemConstraintSect (SectionModel _ xs) = SRS.sysCon
   ((systemConstraintIntro (pullSents xs)):(pullContents xs)) (pullSections xs)
 
 -------------------------------------------------
@@ -286,11 +286,11 @@ systemConstraintSect (SectionModel niname xs) = SRS.sysCon
 -------------------------------------------------
 
 termDefinitionSect :: SubSec -> Section
-termDefinitionSect (SectionModel niname xs) = SRS.termAndDefn
+termDefinitionSect (SectionModel _ xs) = SRS.termAndDefn
   ((termDefinitionIntro (pullSents xs)):(pullContents xs)) (pullSections xs)
 
 goalStatementSect :: SubSec -> Section
-goalStatementSect (SectionModel niname xs) = SRS.goalStmt
+goalStatementSect (SectionModel _ xs) = SRS.goalStmt
   ((goalStatementIntro (pullSents xs)):(pullContents xs)) (pullSections xs)
 
 -----------------------------------------------------------
@@ -298,12 +298,12 @@ goalStatementSect (SectionModel niname xs) = SRS.goalStmt
 -----------------------------------------------------------
 
 assumptionSect :: SubSec -> Section
-assumptionSect (SectionModel niname xs) = SRS.assumpt
+assumptionSect (SectionModel _ xs) = SRS.assumpt
   (assumpIntro:(pullContents xs)) (pullSections xs)
 
 
 theoreticalModelSect :: (Idea a, HasSymbolTable s) => SubSec -> s -> a -> Section
-theoreticalModelSect (SectionModel niname xs) _ progName = SRS.thModel
+theoreticalModelSect (SectionModel _ xs) _ progName = SRS.thModel
  ((tModIntro progName):theoreticalModels ++ 
   (pullContents xs)) (pullSections xs)
   where theoreticalModels = map symMap $ pullTMods xs
@@ -311,21 +311,21 @@ theoreticalModelSect (SectionModel niname xs) _ progName = SRS.thModel
 
 
 generalDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
-generalDefinitionSect (SectionModel niname xs) _ = SRS.genDefn
+generalDefinitionSect (SectionModel _ xs) _ = SRS.genDefn
   (generalDefsIntro:contents) (pullSections xs)
   where generalDefsIntro = generalDefinitionIntro contents
         contents         = (pullContents xs)
 
 
 instanceModelSect :: (HasSymbolTable s) => SubSec -> s -> Section
-instanceModelSect (SectionModel niname xs) _ = SRS.inModel
+instanceModelSect (SectionModel _ xs) _ = SRS.inModel
   (iModIntro:instanceModels ++ (pullContents xs)) (pullSections xs)
   where symMap         = Definition . Theory
         instanceModels = map symMap $ pullIMods xs
 
 
 dataDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
-dataDefinitionSect (SectionModel niname xs) _ = SRS.dataDefn
+dataDefinitionSect (SectionModel _ xs) _ = SRS.dataDefn
   (dataIntro:dataDefinitions ++ (pullContents xs)) (pullSections xs)
   where dataIntro       = dataDefinitionIntro $ pullSents xs
         symMap          = Definition . Data
@@ -333,7 +333,7 @@ dataDefinitionSect (SectionModel niname xs) _ = SRS.dataDefn
 
 
 dataConstraintSect :: SubSec -> Section
-dataConstraintSect (SectionModel niname xs) = SRS.datCon
+dataConstraintSect (SectionModel _ xs) = SRS.datCon
   ([dataConIntro, inputTable, outputTable] ++ (pullContents xs)) (pullSections xs)
   where dataConIntro = dataConstraintParagraph (pullContents xs) (pullSents xs)
         inputTable  = inDataConstTbl $ pullUQI xs

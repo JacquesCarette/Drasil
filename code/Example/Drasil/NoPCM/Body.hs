@@ -45,8 +45,8 @@ import Data.Drasil.Concepts.Documentation as Doc (datumConstraint, inModel,
   requirement, section_, traceyGraph, item, assumption, dataDefn,
   likelyChg, genDefn, thModel, traceyMatrix, model, 
   output_, quantity, input_, physicalConstraint, condition,
-  property, variable, description, symbol_, uncertainty,
-  information, uncertCol, value, column, softwareConstraint, goalStmt,
+  property, variable, description, symbol_,
+  information, value, column, softwareConstraint, goalStmt,
   physSyst, problem, definition, srs, content, reference, document,
   goal, purpose, typUnc)
 

@@ -8,7 +8,7 @@ import Control.Lens (makeLenses, (^.))
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term),Idea(getA),
   Definition(defn), ConceptDomain(cdom, DOM), Concept, HasAttributes(attributes),
-  ExprRelat(relat))
+  ExprRelat(relat), HasShortName(shortname))
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
@@ -32,6 +32,7 @@ instance Concept       RelationConcept where
 instance ExprRelat     RelationConcept where relat = rel
 instance Eq            RelationConcept where a == b = (a ^. uid) == (b ^. uid)
 instance HasAttributes RelationConcept where attributes = attribs
+instance HasShortName  RelationConcept where
 
 -- | Create a RelationConcept from a given id, term, defn, list of attributes, and relation.
 makeRC :: String -> NP -> Sentence -> Relation -> Attributes -> RelationConcept

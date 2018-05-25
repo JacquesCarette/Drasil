@@ -41,9 +41,6 @@ getShortName c = unwrap $ c ^. shortname
 sourceref :: Sentence -> Reference
 sourceref = SourceRef
 
-shortname' :: String -> ShortNm
-shortname' = ShortName
-
 derivationsteps :: Derivation -> Attribute
 derivationsteps = D
 

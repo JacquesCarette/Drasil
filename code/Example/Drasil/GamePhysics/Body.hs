@@ -619,13 +619,15 @@ s8_instaModelRef, s8_assumpRef, s8_funcReqRef, s8_goalstmtRef,
   s8_dataRef :: [Sentence]
 
 s8_instaModel = ["IM1", "IM2", "IM3"]
-s8_instaModelRef = map (refFromType Theory) iModels
+s8_instaModelRef = map (mappingShortNames Theory) iModels
 
 s8_theoryModel = ["T1", "T2", "T3", "T4", "T5"]
-s8_theoryModelRef = map (refFromType Theory) cpTMods
+s8_theoryModelRef = map (mappingShortNames Theory) cpTMods
 
 s8_dataDef = ["DD1","DD2","DD3","DD4","DD5","DD6","DD7","DD8"]
-s8_dataDefRef = map (refFromType Data) cpDDefs
+s8_dataDefRef = map (mappingShortNames Data) cpDDefs
+
+mappingShortNames t m = refFromType t m (m ^. shortname)
 
 s8_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
 s8_assumpRef = makeListRef s4_2_1_list_a s4_1
@@ -681,7 +683,7 @@ s8_table1 = Table (EmptyS:(s8_row_header_t1))
   (makeTMatrix s8_col_header_t1 s8_columns_t1 s8_row_t1)
   (showingCxnBw (traceyMatrix) (titleize' requirement +:+ sParen (makeRef s5)
   `sC` (titleize' goalStmt) +:+ sParen (makeRef s4_1) `sAnd` S "Other" +:+
-  titleize' item)) True "TraceyReqGoalsOther"
+  titleize' item)) True "TraceyReqGoalsOther" (shortname' "TraceyReqGoalsOther")
 
 s8_columns_t2 :: [[String]]
 s8_columns_t2 = [t1_t2, t2_t2, t3_t2, t4_t2, t5_t2, gD1_t2, gD2_t2, gD3_t2,
@@ -736,7 +738,7 @@ s8_table2 :: Contents
 s8_table2 = Table (EmptyS:s8_row_header_t2)
   (makeTMatrix s8_col_header_t2 s8_columns_t2 s8_row_t2) 
   (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef s4_1) 
-  `sAnd` S "Other" +:+ titleize' item)) True "TraceyAssumpsOther"
+  `sAnd` S "Other" +:+ titleize' item)) True "TraceyAssumpsOther" (shortname' "TraceyAssumpsOther")
 
 
 s8_columns_t3 :: [[String]]
@@ -786,7 +788,7 @@ s8_table3 :: Contents
 s8_table3 = Table (EmptyS:s8_row_header_t3)
   (makeTMatrix s8_col_header_t3 s8_columns_t3 s8_row_t3)
   (showingCxnBw (traceyMatrix) (titleize' item `sAnd` 
-  S "Other" +:+ titleize' section_)) True "TraceyItemsSecs"
+  S "Other" +:+ titleize' section_)) True "TraceyItemsSecs" (shortname' "TraceyItemsSecs")
 
 -----------------------------------
 -- VALUES OF AUXILIARY CONSTANTS --

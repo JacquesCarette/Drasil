@@ -1,3 +1,4 @@
+{-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Citation
   ( -- Types
     Citation, BibRef, CiteField(..), Month(..), HP(..), CitationKind(..), EntryID
@@ -24,11 +25,30 @@ module Language.Drasil.Chunk.Citation
 
 import Language.Drasil.People
 import Language.Drasil.Spec (Sentence(..))
-import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Classes (HasUID(uid), HasShortName(shortname))
 import Language.Drasil.Printing.Helpers (noSpaces)
+import Language.Drasil.Chunk.Attribute.ShortName
+
+import Control.Lens(view, makeLenses)
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces
+
+-- | External references come in many flavours. Articles, Books, etc.
+-- (we are using the types available in Bibtex)
+data CitationKind = Article
+                  | Book
+                  | Booklet
+                  | InBook
+                  | InCollection
+                  | InProceedings
+                  | Manual
+                  | MThesis
+                  | Misc
+                  | PhDThesis
+                  | Proceedings
+                  | TechReport
+                  | Unpublished
 
 -- | Fields used in citations.
 data CiteField = Address      Sentence
@@ -94,6 +114,7 @@ data Citation = Cite
   , externRefT :: CitationKind
   , fields :: [CiteField]
   }
+makeLenses ''Citation
 
 -- | Smart constructor which implicitly uses EntryID as chunk i.
 cite :: EntryID -> CitationKind -> [CiteField] -> Citation
@@ -101,22 +122,8 @@ cite i = Cite i (noSpaces i)
 
 -- | Citations are chunks.
 instance HasUID Citation where uid f (Cite a b c d) = fmap (\x -> Cite x b c d) (f a)
+instance HasShortName Citation where --shortname r = view $ shortname' citeID r
 
--- | External references come in many flavours. Articles, Books, etc.
--- (we are using the types available in Bibtex)
-data CitationKind = Article
-                  | Book
-                  | Booklet
-                  | InBook
-                  | InCollection
-                  | InProceedings
-                  | Manual
-                  | MThesis
-                  | Misc
-                  | PhDThesis
-                  | Proceedings
-                  | TechReport
-                  | Unpublished
 
 -- | Article citation requires author(s), title, journal, year.
 -- Optional fields can be: volume, number, pages, month, and note.

@@ -3,6 +3,9 @@ module Language.Drasil.Chunk.Attribute.ShortName where
 
 data ShortNm = ShortName String
 
+shortname' :: String -> ShortNm
+shortname' = ShortName
+
 -- Hack 
 snToS :: ShortNm -> String
 snToS (ShortName x) = x

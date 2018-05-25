@@ -175,6 +175,6 @@ htPCMDesc = foldlSent [S "The above", phrase equation,
 ---------------
 -- FIXME, hacks
 a14, a18, a19 :: Contents
-a14 = Assumption $ assump "assump14" EmptyS "assump14" []
-a18 = Assumption $ assump "assump18" EmptyS "assump18" []
-a19 = Assumption $ assump "assump19" EmptyS "assump19" []
+a14 = Assumption (assump "assump14" EmptyS (shortname' "assump14") []) (shortname' "assump14")
+a18 = Assumption (assump "assump18" EmptyS (shortname' "assump18") []) (shortname' "assump18")
+a19 = Assumption (assump "assump19" EmptyS (shortname' "assump19") []) (shortname' "assump19")

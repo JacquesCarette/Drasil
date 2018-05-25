@@ -444,7 +444,7 @@ rigFoSDerivation = [
   sin(inxi baseAngle) * inxi dy_i,
 
   EqnBlock (inxi nrmDispl $= negate (sin(inxi baseAngle)) * inxi dx_i +
-    sin(inxi baseAngle) * inxi dy_i) "",
+    sin(inxi baseAngle) * inxi dy_i) "" (shortname' ""),
   
   foldlSP [S "With the", phrase definition, S "of normal stiffness from",
   acroDD 14, --FIXME: grab nrmStiffBase's term name?

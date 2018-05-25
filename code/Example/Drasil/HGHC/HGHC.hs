@@ -50,7 +50,7 @@ thisSRS = RefSec (RefProg intro
   [Verbatim s3]
   
 s3 :: Section --, s4 
-s3 = dataDefnF EmptyS (map (Definition . Data) hghcVars)
+s3 = dataDefnF EmptyS (map datadefn hghcVars)
   
 srsBody :: Document
 srsBody = mkDoc thisSRS (for) thisSI

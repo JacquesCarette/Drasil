@@ -509,12 +509,11 @@ siSys (SI {_sys = sys}) = nw sys
 
 --BELOW IS IN THIS FILE TEMPORARILY--
 --Creates Contents using an uid and description (passed in as a Sentence).
--- mkAssump :: String -> Sentence -> Contents
--- mkAssump i desc = Assumption $ ac' i desc
+mkAssump :: String -> Sentence -> Contents
+mkAssump i desc = Assumption (assump i desc (shortname' i) []) (shortname' i)
 
 mkRequirement :: String -> Sentence -> String -> ShortNm -> Contents
 mkRequirement i desc shrtn = Requirement $ frc i desc (shortname' shrtn) [] --FIXME: HACK - Should have explicit refname
 
 mkLklyChnk :: String -> Sentence -> String -> ShortNm -> Contents
 mkLklyChnk i desc shrtn = Change $ lc i desc (shortname' shrtn) []-- FIXME: HACK -- See above
-

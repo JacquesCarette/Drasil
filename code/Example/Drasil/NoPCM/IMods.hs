@@ -12,6 +12,8 @@ import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
 import Data.Drasil.Concepts.Thermodynamics (melting, boil_pt)
 
+import Drasil.DocumentLanguage(mkAssump)
+
 ---------
 -- IM1 --
 ---------
@@ -39,4 +41,4 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
 
 -- FIXME
 a10 :: Contents
-a10 = Assumption $ assump "assump10" EmptyS "assump10" []
+a10 = mkAssump "assump10" EmptyS

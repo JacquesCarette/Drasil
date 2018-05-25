@@ -76,7 +76,7 @@ import Drasil.Sections.Requirements (reqF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
 
 import Data.Drasil.Utils (enumSimple, weave, getES, itemRefToSent, makeListRef,
-  makeTMatrix, refFromType, eqUnR)
+  makeTMatrix, eqUnR, mappingShortNames)
 import Data.Drasil.SentenceStructures (acroIM, acroGD, acroGS, showingCxnBw,
   foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe,
   ofThe', sAnd, sOf, foldlList)
@@ -503,7 +503,7 @@ s5_1_1_Table = (Table [titleize symbol_, titleize unit_, titleize description]
   unit'2Contents,
   phrase] (map qw inputConstraints))
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False)
-  "InConstraints"
+  "InConstraints" (shortname' "InConstraints")
 
 s5_1_Reqs :: [Contents]
 s5_1_Reqs = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
@@ -546,7 +546,7 @@ s7_dataRef, s7_funcReqRef, s7_instaModelRef, s7_assumpRef, s7_theoriesRef,
   s7_dataDefRef, s7_likelyChgRef, s7_genDefRef :: [Sentence]
 
 s7_instaModel = ["IM1", "IM2", "IM3", "IM4"]
-s7_instaModelRef = map (refFromType Theory) s4_2_5_IMods
+s7_instaModelRef = map (mappingShortNames Theory) s4_2_5_IMods
 
 s7_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
   "R11"]
@@ -560,13 +560,13 @@ s7_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
 s7_assumpRef = makeListRef s7_assump s4_2_1
 
 s7_theories = ["T1", "T2", "T3"]
-s7_theoriesRef = map (refFromType Theory) tModels
+s7_theoriesRef = map (mappingShortNames Theory) tModels
 
 s7_genDefs = ["GD1", "GD2"]
-s7_genDefRef = map (refFromType Theory) swhsGenDefs
+s7_genDefRef = map (mappingShortNames Theory) swhsGenDefs
 
 s7_dataDefs = ["DD1", "DD2", "DD3", "DD4"]
-s7_dataDefRef = map (refFromType Data) swhsDataDefs
+s7_dataDefRef = map (mappingShortNames Data) swhsDataDefs
 
 s7_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
 s7_likelyChgRef = makeListRef s7_likelyChg s6
@@ -648,6 +648,7 @@ s7_table2 = Table (EmptyS:s7_row_header_t2)
   (makeTMatrix (s7_col_header_t2) (s7_columns_t2) (s7_row_t2))
   (showingCxnBw traceyMatrix
   (titleize' requirement `sAnd` titleize' inModel)) True "Tracey1"
+  (shortname' "Tracey1")
 
 {-Traceability Matrix 3-}
 
@@ -868,7 +869,7 @@ s3_1_contents pro = foldlSP [makeRef sys_context_fig, S "shows the" +:+.
 sys_context_fig :: Contents
 sys_context_fig = fig (foldlSent_
   [makeRef sys_context_fig +: EmptyS, titleize sysCont])
-  "SystemContextFigure.png" "SysCon"
+  "SystemContextFigure.png" "SysCon" (shortname' "SysCon")
 
 s3_1_2_intro :: CI -> NamedChunk -> Contents
 s3_1_2_intro pro us = foldlSPCol [short pro +:+. S "is mostly self-contained",
@@ -973,7 +974,7 @@ fig_tank :: Contents
 fig_tank = fig (
   foldlSent_ [at_start sWHT `sC` S "with", phrase ht_flux_C, S "of",
   getES ht_flux_C `sAnd` phrase ht_flux_P, S "of", getES ht_flux_P])
-  "Tank.png" "Tank"
+  "Tank.png" "Tank" (shortname' "Tank")
 
 -----------------------------
 -- 4.1.3 : Goal Statements --
@@ -1434,12 +1435,13 @@ s7_table1 = Table (EmptyS:s7_row_header_t1)
   (makeTMatrix (s7_row_header_t1) (s7_columns_t1) (s7_row_t1))
   (showingCxnBw traceyMatrix
   (titleize' item +:+ S "of Different" +:+ titleize' section_)) True "Tracey2"
+  (shortname' "Tracey2")
 
 s7_table3 :: Contents
 s7_table3 = Table (EmptyS:s7_row_header_t3)
   (makeTMatrix s7_col_header_t3 s7_columns_t3 s7_row_t3)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+
-  titleize' item)) True "Tracey3"
+  titleize' item)) True "Tracey3" (shortname' "Tracey3")
 
 -- These matrices can probably be generated automatically when enough info is
 -- abstracted out.
@@ -1457,11 +1459,11 @@ s7_intro2 = traceGIntro [s7_fig1, s7_fig2]
 
 s7_fig1 :: Contents
 s7_fig1 = fig (showingCxnBw traceyGraph (titleize' item +:+
-  S "of Different" +:+ titleize' section_)) "ATrace.png" "TraceyA"
+  S "of Different" +:+ titleize' section_)) "ATrace.png" "TraceyA" (shortname' "TraceyA")
 
 s7_fig2 :: Contents
 s7_fig2 = fig (showingCxnBw traceyGraph (foldlList $ map titleize' 
-  renameList2)) "RTrace.png" "TraceyR"
+  renameList2)) "RTrace.png" "TraceyR" (shortname' "TraceyR")
 
 -------------------------------------------------
 -- Section 8 :  Specification Parameter Values --

@@ -30,31 +30,37 @@ likeChg1 = mkLklyChnk "likeChg1" (
   foldlSent [s6_start assump4, short phsChgMtrl, S "is actually a poor", 
   phrase CT.thermal_conductor `sC` S "so the", phrase assumption, 
   S "of uniform", phrase temp_PCM, S "is not likely"] ) "Uniform-Temperature-PCM"
+  (shortname' "")
 --
 likeChg2 = mkLklyChnk "likeChg2" (
   foldlSent [s6_start assump8, S "The", phrase temp_C, S "will change over", 
   (S "course" `ofThe` S "day, depending"), S "on the", phrase energy, 
   S "received from the sun"] ) "Temperature-Coil-Variable-Over-Day"
+  (shortname' "")
 --
 likeChg3 = mkLklyChnk "likeChg3" (
   foldlSent [s6_start assump9, S "The", phrase temp_C,
   S "will actually change along its length as the", phrase water,
   S "within it cools"] ) "Temperature-Coil-Variable-Over-Length"
+  (shortname' "")
 --
 likeChg4 = mkLklyChnk "likeChg4" (
   foldlSent [s6_start assump11, S "The", phrase model, S "currently only", 
   S "accounts for charging of the tank. A more complete", phrase model, 
   S "would also account for discharging of the tank"] ) "Discharging-Tank"
+  (shortname' "")
 --
 likeChg5 = mkLklyChnk "likeChg5" (
   foldlSent [s6_start assump12, S "To add more flexibility to the", 
   phrase simulation `sC` (phrase temp_init `ofThe` phrase water) `sAnd`
   S "the", short phsChgMtrl, S "could be allowed to have different", 
   plural value] ) "Different-Initial-Temps-PCM-Water"
+  (shortname' "")
 --
 likeChg6 = mkLklyChnk "likeChg6" (
   foldlSent [s6_start assump15, S "Any real", phrase tank, S "cannot", 
   S "be perfectly insulated and will lose", phrase CT.heat] ) "Tank-Lose-Heat"
+  (shortname' "")
 
 -- List structure same in all examples.
 

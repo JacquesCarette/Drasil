@@ -33,7 +33,7 @@ import Data.Drasil.Concepts.Software (correctness, verifiability,
 import Data.Drasil.Concepts.Math (graph, calculation, probability,
   parameter)
 import Data.Drasil.Utils (getES, makeTMatrix, makeListRef, itemRefToSent,
-  refFromType, enumSimple, enumBullet, prodUCTbl, mappingShortNames)
+  enumSimple, enumBullet, prodUCTbl, mappingShortNames)
 import Data.Drasil.SentenceStructures (acroR, sVersus, sAnd, foldlSP,
   foldlSent, foldlSent_, figureLabel, foldlList, showingCxnBw,
   foldlsC, sOf, followA, ofThe, sIn, isThe, isExpctdToHv, sOr, underConsidertn,

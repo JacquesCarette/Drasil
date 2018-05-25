@@ -290,11 +290,13 @@ s4_1_2_p2 = foldlSP [S "A", phrase fbd, S "of the", plural force,
 fig_indexconv :: Contents
 fig_indexconv = fig (foldlSent_ [S "Index convention for numbering",
   phrase slice `sAnd` phrase intrslce,
-  phrase force, plural variable]) "IndexConvention.png" "IndexConvention"
+  phrase force, plural variable]) "IndexConvention.png"
+  "IndexConvention" (shortname' "IndexConvention")
 
 fig_forceacting :: Contents
 fig_forceacting = fig (at_start' force +:+ S "acting on a" +:+
-  phrase slice) "ForceDiagram.png" "ForceDiagram"
+  phrase slice) "ForceDiagram.png" 
+  "ForceDiagram" (shortname' "ForceDiagram")
 
 -- SECTION 4.1.3 --
 s4_1_3 = goalStmtF (map (\(x, y) -> x `ofThe` y) [

@@ -40,12 +40,14 @@ req1 = mkRequirement "req1" ( foldlSentCol [
   titleize input_, S "the following", plural quantity `sC`
   S "which define the", phrase tank, plural parameter `sC` S "material",
   plural property, S "and initial", plural condition] ) "Input-Initial-Quantities"
+  (shortname' "")
 
 req2 = mkRequirement "req2" ( foldlSentCol [
   S "Use the", plural input_, S "in", makeRef req1,
   S "to find the", phrase mass, S "needed for", acroIM 1, S "to",
   acroIM 4 `sC` S "as follows, where", getES w_vol `isThe` phrase w_vol,
   S "and", getES tank_vol `isThe` phrase tank_vol] ) "Use-Above-Find-Mass-IM1-IM4"
+  (shortname' "")
 
 s5_1_2_Eqn1 = eqUnR ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
   ((sy tank_vol) - (sy pcm_vol)) * (sy w_density) $=
@@ -58,6 +60,7 @@ req3 = mkRequirement "req3" ( foldlSent [
   phrase physical, plural constraint {-, S "shown in"
   --FIXME , makeRef s7_table1-}] ) 
   "Check-Input-with-Physical_Constraints"
+  (shortname' "")
 --
 req4 = mkRequirement "req4" ( foldlSent [
   titleize output_, S "the", phrase input_, plural quantity `sAnd`
@@ -69,26 +72,31 @@ req4 = mkRequirement "req4" ( foldlSent [
   sParen (S "from" +:+ acroIM 2) `sAnd` getES tau_L_P,
   sParen (S "from" +:+ acroIM 2)] ) 
   "Output-Input-Derived-Quantities"
+  (shortname' "")
 --
 req5 = mkRequirement "req5" ( foldlSent [
   S "Calculate and", phrase output_, S "the", phrase temp_W,
   sParen(getES temp_W :+: sParen (getES time)), S "over the",
   phrase simulation, phrase time, sParen (S "from" +:+ acroIM 1)] ) "Calculate-Temperature-Water-OverTime"
+  (shortname' "")
 --
 req6 = mkRequirement "req6" ( foldlSent [
   S "Calculate and", phrase output_, S "the", phrase temp_PCM,
   sParen (getES temp_PCM :+: sParen (getES time)), S "over the",
   phrase simulation, phrase time, sParen (S "from" +:+ acroIM 2)] ) "Calculate-Temperature-PCM-Over-Time"
+  (shortname' "")
 --
 req7 = mkRequirement "req7" ( foldlSent [
   S "Calculate and", phrase output_, S "the", phrase w_E,
   sParen (getES w_E :+: sParen (getES time)), S "over the",
   phrase simulation, phrase time, sParen (S "from" +:+ acroIM 3)] ) "Calculate-Change-Heat_Energy-Water-Over-Time"
+  (shortname' "")
 --
 req8 = mkRequirement "req8" ( foldlSent [
   S "Calculate and", phrase output_, S "the", phrase pcm_E,
   sParen (getES pcm_E :+: sParen (getES time)), S "over the",
   phrase simulation, phrase time, sParen (S "from" +:+ acroIM 4)] ) "Calculate-Change-Heat_Energy-PCM-Over-Time"
+  (shortname' "")
 --
 req9 = mkRequirement "req9" ( foldlSent [
   S "Verify that the", phrase energy, plural output_,
@@ -97,16 +105,19 @@ req9 = mkRequirement "req9" ( foldlSent [
   S "as outlined in"
   --FIXME , makeRef s4_2_7 `sC` -} 
   S "with relative error no greater than 0.001%"] ) "Verify-Energy-Output-follow-Conservation-of-Energy"
+  (shortname' "")
 --
 req10 = mkRequirement "req10" ( foldlSent [
   S "Calculate and", phrase output_, S "the", phrase time,
   S "at which the", short phsChgMtrl, S "begins to melt",
   getES t_init_melt, sParen (S "from" +:+ acroIM 2)] ) "Calculate-PCM-melt-begin-time"
+  (shortname' "")
 --
 req11 = mkRequirement "req11" ( foldlSent [
   S "Calculate and", phrase output_, S "the", phrase time,
   S "at which the", short phsChgMtrl, S "stops", phrase CT.melting,
   getES t_final_melt, sParen (S "from" +:+ acroIM 2)] ) "Calculate-PCM-melt-end-time"
+  (shortname' "")
 
 -- List structure same between all examples
 

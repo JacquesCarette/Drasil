@@ -42,23 +42,23 @@ data InclUnits = IncludeUnits -- In description field (for other symbols)
 -- | Create a theoretical model using a list of fields to be displayed, a database of symbols,
 -- and a RelationConcept (called automatically by 'SCSSub' program)
 tmodel :: HasSymbolTable ctx => Fields -> ctx -> TheoryModel -> Contents
-tmodel fs m t = Defnt TM (foldr (mkTMField t m) [] fs) (refAdd t) (shortname' t)
+tmodel fs m t = Defnt TM (foldr (mkTMField t m) [] fs) (refAdd t) (t ^. shortname)
 
 -- | Create a data definition using a list of fields, a database of symbols, and a
 -- QDefinition (called automatically by 'SCSSub' program)
 ddefn :: HasSymbolTable ctx => Fields -> ctx -> QDefinition -> Contents
-ddefn fs m d = Defnt DD (foldr (mkQField d m) [] fs) (refAdd d) (shortname' d)
+ddefn fs m d = Defnt DD (foldr (mkQField d m) [] fs) (refAdd d) (d ^. shortname)
 
 -- | Create a general definition using a list of fields, database of symbols,
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'
 -- program)
 gdefn :: HasSymbolTable ctx => Fields -> ctx -> GenDefn -> Contents
-gdefn fs m g = Defnt General (foldr (mkGDField g m) [] fs) (refAdd g) (shortname' g)
+gdefn fs m g = Defnt General (foldr (mkGDField g m) [] fs) (refAdd g) (g ^. shortname)
 
 -- | Create an instance model using a list of fields, database of symbols,
 -- and an 'InstanceModel' chunk (called automatically by 'SCSSub' program)
 instanceModel :: HasSymbolTable ctx => Fields -> ctx -> InstanceModel -> Contents
-instanceModel fs m i = Defnt Instance (foldr (mkIMField i m) [] fs) (refAdd i) (shortname' i)
+instanceModel fs m i = Defnt Instance (foldr (mkIMField i m) [] fs) (refAdd i) (i ^. shortname)
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
 -- or IM definition automatically (called automatically by 'SCSSub' program)
@@ -68,7 +68,7 @@ derivation g = map makeDerivationContents (getDerivation g)
 -- | Helper function for creating the layout objects
 -- (paragraphs and equation blocks) for a derivation.
 makeDerivationContents :: Sentence -> Contents
-makeDerivationContents (E e) = EqnBlock e "" -- HACK -> FIXME: reference-able?
+makeDerivationContents (E e) = EqnBlock e "" (shortname' "") -- HACK -> FIXME: reference-able?
 makeDerivationContents s     = Paragraph s
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs

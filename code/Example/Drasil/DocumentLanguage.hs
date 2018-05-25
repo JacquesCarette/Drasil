@@ -246,7 +246,7 @@ mkSections si l = map doit l
 mkRefSec :: SystemInformation -> RefSec -> Section
 mkRefSec _  (RefVerb s) = s
 mkRefSec si (RefProg c l) = section (titleize refmat) [c]
-  (map (mkSubRef si) l) "RefMat" "RefMat"
+  (map (mkSubRef si) l) "RefMat" (shortname' "RefMat")
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
     mkSubRef (SI {_sysinfodb = db})  TUnits =
@@ -434,7 +434,7 @@ mkSolChSpec si (SCSProg l) =
       SSD.inModelF pdStub ddStub tmStub gdStub (map (instanceModel fields (_sysinfodb si')) ims)
     mkSubSCS (SI {_refdb = db}) Assumptions =
       (SSD.assumpF tmStub gdStub ddStub imStub lcStub
-      (map Assumption $ assumptionsFromDB (db ^. assumpRefTable)))
+      (map Assumption (assumptionsFromDB (db ^. assumpRefTable)) (shortname' "")))
     mkSubSCS _ (Constraints a b c d) = (SSD.datConF a b c d)
     inModSec = (SRS.inModel [Paragraph EmptyS] [])
     --FIXME: inModSec should be replaced with a walk
@@ -509,9 +509,9 @@ siSys (SI {_sys = sys}) = nw sys
 -- mkAssump :: String -> Sentence -> Contents
 -- mkAssump i desc = Assumption $ ac' i desc
 
-mkRequirement :: String -> Sentence -> Sentence -> Contents
-mkRequirement i desc shrtn = Requirement $ frc i desc (shrtn) [shortname' shrtn] --FIXME: HACK - Should have explicit refname
+mkRequirement :: String -> Sentence -> String -> ShortNm -> Contents
+mkRequirement i desc shrtn = Requirement $ frc i desc (shortname' shrtn) [] --FIXME: HACK - Should have explicit refname
 
-mkLklyChnk :: String -> Sentence -> Sentence -> Contents
-mkLklyChnk i desc shrtn = Change $ lc i desc (shrtn) [shortname' shrtn] -- FIXME: HACK -- See above
+mkLklyChnk :: String -> Sentence -> String -> ShortNm -> Contents
+mkLklyChnk i desc shrtn = Change $ lc i desc (shortname' shrtn) []-- FIXME: HACK -- See above
 

@@ -62,7 +62,7 @@ instanceModel fs m i = Defnt Instance (foldr (mkIMField i m) [] fs) (refAdd i)
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
 -- or IM definition automatically (called automatically by 'SCSSub' program)
-derivation :: HasAttributes c => c -> [Contents]
+derivation :: HasDerivation c => c -> [Contents]
 derivation g = map makeDerivationContents (getDerivation g)
 
 -- | Helper function for creating the layout objects

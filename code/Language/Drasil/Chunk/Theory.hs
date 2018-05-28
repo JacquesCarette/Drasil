@@ -14,6 +14,7 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Attribute.References (References)
+import Language.Drasil.Chunk.Attribute.ShortName
 
 import Control.Lens (Lens', view, makeLenses)
 
@@ -57,6 +58,7 @@ instance HasReference  TheoryChunk where getReferences = ref
 -- use the id of the TheoryModel as the uid. FIXME ?
 data TheoryModel = TM { _con :: ConceptChunk
                       , _thy :: TheoryChunk
+                      , _refname :: ShortNm
                       }
 makeLenses ''TheoryModel
 
@@ -65,8 +67,7 @@ instance NamedIdea     TheoryModel where term = con . term
 instance Idea          TheoryModel where getA = getA . view con
 instance Definition    TheoryModel where defn = con . defn
 instance HasAttributes TheoryModel where attributes = thy . attributes
--- error used below is on purpose. These shortnames should be made explicit as necessary
-instance HasShortName  TheoryModel where shortname _ = error "No explicit name given for theory model -- build a custom Ref"
+instance HasShortName  TheoryModel where shortname = refname
 instance HasReference  TheoryModel where getReferences = thy . getReferences
 instance ConceptDomain TheoryModel where
   type DOM TheoryModel = ConceptChunk
@@ -92,4 +93,4 @@ tc' :: (HasAttributes q, Quantity q, Concept c, DOM c ~ ConceptChunk) =>
 tc' cid q c atts = tc cid ([] :: [TheoryChunk]) [] q c atts
 
 tm :: (Concept c, DOM c ~ ConceptChunk) => c -> TheoryChunk -> TheoryModel
-tm c t = TM (cw c) t
+tm c t = TM (cw c) t (shortname' "")

@@ -41,7 +41,7 @@ data Spec = E Expr
           | Spec :+: Spec -- concat
           | Sy USymb
           | Sp Special
-          | Ref RefType RefAdd Spec ShortNm --needs to be updated to a ShortName type
+          | Ref RefType RefAdd Spec ShortNm
           | EmptyS
           | Quote Spec    -- quotes are different in different languages
           | HARDNL        -- newline. Temp fix for multi-line descriptions; 

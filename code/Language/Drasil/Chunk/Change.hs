@@ -1,6 +1,6 @@
 module Language.Drasil.Chunk.Change 
   ( Change(..), ChngType(..)
-  , lc, ulc, chc'
+  , lc, ulc
   ) where
 
 import Language.Drasil.Classes (HasUID(uid), HasAttributes(attributes),
@@ -42,9 +42,6 @@ instance Eq            Change where a == b = a ^. uid == b ^. uid
 -- | Smart constructor for requirement chunks (should not be exported)
 chc :: String -> ChngType -> Sentence -> ShortNm -> Attributes -> Change
 chc = ChC
-
-chc' :: Change -> Sentence -> Change
-chc' c s = set attributes (c ^. attributes) c
 
 lc, ulc :: String -> Sentence -> ShortNm -> Attributes -> Change
 -- | Smart constructor for functional requirement chunks.

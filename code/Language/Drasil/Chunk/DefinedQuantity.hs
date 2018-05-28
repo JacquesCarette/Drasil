@@ -16,7 +16,7 @@ import Language.Drasil.Space (Space)
 import Language.Drasil.Unit (UnitDefn, unitWrapper)
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Attribute.Derivation
-
+import Language.Drasil.UnitLang
 import Control.Lens ((^.), makeLenses, view)
 
 -- | DefinedQuantity = Concept + Quantity
@@ -71,7 +71,11 @@ uwMUnitDefn Nothing  = []
 uwFund :: UnitDefn -> [UnitDefn]
 uwFund a = case a ^. udefn of
        Nothing -> [a]
-       _ -> [] 
-
+       Just x -> case x of 
+              FUSynonym _ -> [a]
+              FUShift _ _-> [a]
+              FUScale _ _ -> [a]
+              _ -> []
+      
 uwMUnitDefnL :: [DefinedQuantityDict] -> [UnitDefn]
 uwMUnitDefnL l = concat (map uwFund $ concat (map uwMUnitDefn $ uwDQDL l))

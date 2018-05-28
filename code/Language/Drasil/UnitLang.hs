@@ -13,7 +13,10 @@ import Language.Drasil.Symbol (Symbol, compsy)
 newtype USymb = US [(Symbol, Integer)] -- can be negative, should not be 0
   deriving (Eq)
 
-data UDefn = USynonym USymb      -- ^ to define straight synonyms
+data UDefn = FUSynonym USymb
+		   | FUShift Double USymb
+		   | FUScale Double USymb
+		   | USynonym USymb      -- ^ to define straight synonyms
            | UScale Double USymb -- ^ scale, i.e. *
            | UShift Double USymb -- ^ shift, i.e. +
 
@@ -22,6 +25,9 @@ from_udefn :: UDefn -> USymb
 from_udefn (USynonym x) = x
 from_udefn (UScale _ s) = s
 from_udefn (UShift _ s) = s
+from_udefn (FUSynonym x) = x
+from_udefn (FUShift _ s) = s
+from_udefn (FUScale _ s) = s  
 
 -- | Hand-rolled version of compare. Should assume |USymb| is normalized, so
 -- that some redundant EQ cases can be removed.

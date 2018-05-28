@@ -3,7 +3,7 @@ module Language.Drasil.Unit (
     UnitDefn(..)
   , from_udefn, makeDerU, unitCon
   , (^:), (/:), (*:), (*$), (/$), new_unit
-  , scale, shift
+  , scale, shift, fshift, fscale
   , derUC, derUC', derUC'', unitWrapper
   , fund, comp_unitdefn
   ) where
@@ -101,10 +101,15 @@ u1 /$ u2 = let US l1 = u1 ^. usymb
 scale :: IsUnit s => Double -> s -> UDefn
 scale a b = UScale a (b ^. usymb)
 
+fscale :: IsUnit s => Double -> s -> UDefn
+fscale a b = FUScale a (b ^. usymb)
+
 -- | Combinator for shifting one unit by some number
 shift :: IsUnit s => Double -> s -> UDefn
 shift a b = UShift a (b ^. usymb)
 
+fshift :: IsUnit s => Double -> s -> UDefn
+fshift a b = FUShift a (b ^. usymb)
 -- | Smart constructor for new derived units from existing units.
 new_unit :: String -> USymb -> UnitDefn
 new_unit s u = makeDerU (unitCon s) (USynonym u)

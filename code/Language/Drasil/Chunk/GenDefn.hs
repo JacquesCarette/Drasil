@@ -10,6 +10,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Attribute.References (References)
+import Language.Drasil.Chunk.Attribute.ShortName
 import Language.Drasil.Chunk.Concept (ConceptChunk)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Unit (unitWrapper, UnitDefn)
@@ -20,15 +21,16 @@ import Control.Lens (makeLenses)
 -- | A GenDefn is a RelationConcept that may have units
 data GenDefn = GD { _relC :: RelationConcept
                   , gdUnit :: Maybe UnitDefn
-		              , _attribs :: Attributes
-		              , _deri :: Derivation
+                  , _attribs :: Attributes
+                  , _deri :: Derivation
+                  , _sn :: ShortNm
                   , _ref :: References
                   }
 makeLenses ''GenDefn
 
 instance HasUID        GenDefn where uid = relC . uid
 instance NamedIdea     GenDefn where term = relC . term
-instance Idea          GenDefn where getA (GD a _ _ _ _) = getA a
+instance Idea          GenDefn where getA (GD a _ _ _ _ _) = getA a
 instance Concept       GenDefn where
 instance Definition    GenDefn where defn = relC . defn
 instance ConceptDomain GenDefn where
@@ -37,10 +39,9 @@ instance ConceptDomain GenDefn where
 instance ExprRelat     GenDefn where relat = relC . relat
 instance HasDerivation GenDefn where derivations = deri
 instance HasAttributes GenDefn where attributes = attribs
-instance HasShortName  GenDefn where
-  shortname _ = error "No explicit name given for general definition -- build a custom Ref"
+instance HasShortName  GenDefn where shortname = sn
 instance HasReference  GenDefn where getReferences = ref
 
-gd :: (IsUnit u, DOM u ~ ConceptChunk) => RelationConcept -> Maybe u -> Derivation -> GenDefn
-gd r (Just u) derivs = GD r (Just (unitWrapper u)) [] derivs []
-gd r Nothing derivs = GD r Nothing [] derivs []
+gd :: (IsUnit u, DOM u ~ ConceptChunk) => RelationConcept -> Maybe u -> Derivation -> {-ShortNm ->-} GenDefn
+gd r (Just u) derivs {-refName-} = GD r (Just (unitWrapper u)) [] derivs {-refName-}(shortname' "") []
+gd r Nothing derivs {-refName-} = GD r Nothing [] derivs {-refName-}(shortname' "") []

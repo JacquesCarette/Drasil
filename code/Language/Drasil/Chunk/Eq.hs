@@ -7,7 +7,7 @@ import Control.Lens ((^.), makeLenses)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA), DOM,
   HasSymbol(symbol), IsUnit, HasAttributes(attributes), ExprRelat(relat), 
-  HasShortName(shortname), HasReference(getReferences), HasDerivation(derivation))
+  HasShortName(shortname), HasReference(getReferences), HasDerivation(derivations))
 
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Attribute.References (References)
@@ -47,7 +47,7 @@ instance HasShortName  QDefinition where -- FIXME: This could lead to trouble; n
   shortname _ = error "No explicit name given for data definition -- build a custom Ref"
 instance HasReference  QDefinition where getReferences = ref
 instance Eq            QDefinition where a == b = (a ^. uid) == (b ^. uid)
-instance HasDerivation QDefinition where derivation = deri
+instance HasDerivation QDefinition where derivations = deri
  
 -- | Create a 'QDefinition' with an uid, noun phrase (term), definition, symbol,
 -- unit, and defining equation.  And it ignores the definition...

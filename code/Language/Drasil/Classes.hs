@@ -19,7 +19,7 @@ module Language.Drasil.Classes (
   , HasReasVal(reasVal)
   , ExprRelat(relat)
   , HasShortName(shortname, sn)
-  , HasDerivation(derivation)
+  , HasDerivation(derivations)
   ) where
 
 import Language.Drasil.NounPhrase.Core (NP)
@@ -87,7 +87,7 @@ class HasReference c where
   getReferences :: Lens' c References
 
 class HasDerivation c where
-  derivation :: Lens' c Derivation
+  derivations :: Lens' c Derivation
 
 -- | CommonIdea is a 'NamedIdea' with the additional
 -- constraint that it __must__ have an abbreviation.

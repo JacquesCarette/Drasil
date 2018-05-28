@@ -40,6 +40,7 @@ module Language.Drasil (
   , HasReasVal(reasVal)
   , ExprRelat(relat)
   , HasShortName(shortname, sn)
+  , HasDerivation(derivations)
   -- Chunk.VarChunk
   , VarChunk
   , vc, implVar
@@ -89,7 +90,7 @@ module Language.Drasil (
   -- Chunk.Attributes
   , getSource
   , Derivation, getDerivation, getShortName, shortname'
-  , sourceref, derivationsteps, ShortNm
+  , sourceref, ShortNm
   , References
   --Citations
   , Citation, BibRef, CiteField, Month(..), HP
@@ -215,7 +216,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
   IsUnit, HasAttributes(attributes), CommonIdea(abrv),
   Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasReference(getReferences),
-  HasShortName(shortname, sn))
+  HasShortName(shortname, sn), HasDerivation(derivations))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Attribute.Core (Attributes)

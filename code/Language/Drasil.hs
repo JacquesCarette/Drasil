@@ -179,7 +179,7 @@ module Language.Drasil (
   -- ReqChunk
   , ReqChunk, ReqType(..), reqType, requires, frc, nfrc, rc'
   -- Change
-  , Change, ChngType(..), chngType, chng, lc, ulc, chc'
+  , Change, ChngType(..), chngType, chng, lc, ulc
   , citationRefTable, citeLookup
   -- Goal
   , Goal, mkGoal

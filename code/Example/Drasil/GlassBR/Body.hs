@@ -492,8 +492,8 @@ mkRequirement' :: String -> Sentence -> String -> Contents
 mkRequirement' a b c = mkRequirement a b c (shortname' c)
 
 -- newReqs is ONLY for testing until I get refs working. Then the old reqs should
--- be converted to reqChunk format with meaningful refnames and this should be
--- removed.
+-- be converted to reqChunk format with meaningful reference names (i.e. shortnames)
+-- and this should be removed.
 newReqs :: [ReqChunk]
 newReqs = map (\(x,y) -> frc x y (shortname' x) []) --FIXME: FRC Hack for referencing --FIXME: x used twice?
   [ ("r1",req1Desc)

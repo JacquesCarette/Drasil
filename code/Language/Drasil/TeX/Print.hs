@@ -324,7 +324,7 @@ makeDefTable :: HasSymbolTable s => s -> [(String,[LayoutObj])] -> D -> D
 makeDefTable _ [] _ = error "Trying to make empty Data Defn"
 makeDefTable sm ps l = vcat [
   pure $ text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
-  (pure $ text "\\toprule \\textbf{Refname} & \\textbf{") <> l <> (pure $ text "}"),
+  (pure $ text "\\toprule \\textbf{ShortName} & \\textbf{") <> l <> (pure $ text "}"),
   (pure $ text "\\phantomsection "), label l,
   makeDRows sm ps,
   pure $ dbs <+> text ("\\bottomrule \\end{tabular}")

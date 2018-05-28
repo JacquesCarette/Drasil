@@ -25,7 +25,7 @@ import Data.Function (on)
 -- | Database for maintaining references.
 -- The Int is that reference's number.
 -- Maintains access to both num and chunk for easy reference swapping
--- between number and shortname/refname when necessary (or use of number
+-- between number and shortname when necessary (or use of number
 -- if no shortname exists)
 type RefMap a = Map.Map String (a, Int)
 
@@ -186,7 +186,6 @@ instance Referable Citation where
   refAdd c = concatMap repUnd $ citeID c -- citeID should be unique.
   rType _ = Cite
 
--- error used below is on purpose. These refNames should be made explicit as necessary
 instance Referable TheoryModel where
   refAdd  t = "T:" ++ t^.uid
   rType   _ = Def
@@ -254,7 +253,7 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 makeRef :: (HasShortName l, Referable l) => l -> Sentence
 makeRef r = customRef r (r ^. shortname)
 
--- | Create a reference with a custom 'RefName'
+-- | Create a reference with a custom shortname
 customRef :: (Referable l) => l -> ShortNm -> Sentence
 customRef r n = Ref (rType r) (refAdd r) n
 

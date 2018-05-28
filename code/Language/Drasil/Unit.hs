@@ -1,4 +1,4 @@
-{-# Language TypeFamilies #-}
+{-# Language TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Unit (
     UnitDefn(..)
   , from_udefn, makeDerU, unitCon
@@ -8,7 +8,7 @@ module Language.Drasil.Unit (
   , fund, comp_unitdefn
   ) where
 
-import Control.Lens (Simple, Lens', Lens, (^.), makeLenses)
+import Control.Lens (Simple, Lens', Lens, (^.), makeLenses, view)
 import Control.Arrow (second)
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
@@ -24,10 +24,6 @@ import Language.Drasil.NounPhrase (cn,cn',NP)
 
 data UnitDefn = UD { _vc :: ConceptChunk, _u :: USymb, _ud :: Maybe UDefn}
 makeLenses ''UnitDefn
-
-vc :: Simple Lens UnitDefn ConceptChunk
-vc f (UD a b c) = fmap (\x -> UD x b c) (f a)
--- don't export this
 
 instance HasUID        UnitDefn where uid = vc . uid
 instance NamedIdea     UnitDefn where term   = vc . term
@@ -64,19 +60,6 @@ unitCon :: String -> ConceptChunk
 unitCon s = dcc s (cn' s) s
 ---------------------------------------------------------
 
-
-
-
--- | for defining Derived units
-{--data DerUChunk = DUC { _uc :: UnitDefn
-                     , _eq :: UDefn
-                     }--}
-
--- don't export this either
-{--duc :: Simple Lens DerUChunk UnitDefn
-duc f (DUC a b) = fmap (\x -> DUC x b) (f a)--}
-
-----------------------------------------------------------
 
 -- | For allowing lists to mix the two, thus forgetting
 -- the definition part

@@ -4,14 +4,14 @@ import Language.Drasil
 -- These are not normally all exported, but need them here. Should probably create
 -- some kind of Language.Drasil.Development module... FIXME
 import Language.Drasil.UnitLang(UDefn(..))
-import Language.Drasil.Unit (UnitDefn(..), DerUChunk(..),
+import Language.Drasil.Unit (UnitDefn(..),
   UnitDefn, new_unit, (^:), (/:), (*:), makeDerU, shift, scale,
   derUC, derUC', derUC'', unitWrapper)
 
 fundamentals :: [UnitDefn]
 fundamentals = [metre, kilogram, second, kelvin, mole, ampere, candela]
 
-derived :: [DerUChunk]
+derived :: [UnitDefn]
 derived = [becquerel, calorie, centigrade, coulomb, farad, gray, henry, hertz, joule,
   katal, kilopascal, kilowatt, litre, lumen, lux,  millimetre, newton, ohm,
   pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber]
@@ -33,14 +33,14 @@ candela  = fund "candela"  "luminous intensity"   "cd"
 ------------- Commonly defined units -------------------------------------------
 
 degree :: UnitDefn --FIXME: define degree in terms of radians and pi
-degree = UD (dcc "degree" (cn' "degree") "angle") (US [(Special Circle,1)])
+degree = UD (dcc "degree" (cn' "degree") "angle") (US [(Special Circle,1)]) Nothing
 
 -- Some of these units are easiest to define via others less common names, 
 -- which we define first.
-s_2 :: DerUChunk
+s_2 :: UnitDefn
 s_2 = new_unit "seconds squared" $ second ^: 2
 
-m_2, m_3 :: DerUChunk
+m_2, m_3 :: UnitDefn
 m_2 = new_unit "square metres"   $ metre ^: 2
 m_3 = new_unit "cubic metres"    $ metre ^: 3
 
@@ -48,7 +48,7 @@ m_3 = new_unit "cubic metres"    $ metre ^: 3
 
 becquerel, calorie, centigrade, coulomb, farad, gray, henry, hertz, joule,
   katal, kilopascal, kilowatt, litre, lumen, lux,  millimetre, newton, ohm,
-  pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber :: DerUChunk
+  pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber :: UnitDefn
 
 becquerel = derUC' "becquerel" 
   "becquerel" "activity" (Atomic "Bq") --of a Radionuclide
@@ -137,11 +137,11 @@ watt = derUC' "watt" "watt" "power" (Atomic "W")
 weber = derUC' "weber"
   "weber" "magnetic flux" (Atomic "Wb") (USynonym (volt *: second))
   
-specificE :: DerUChunk
+specificE :: UnitDefn
 specificE = makeDerU (dcc "specificE" (cnIES "specific energy") 
   "energy per unit mass") $ USynonym (joule /: kilogram)
 
-specific_weight :: DerUChunk
+specific_weight :: UnitDefn
 specific_weight = makeDerU (dcc "specific_weight" (cn' "specific weight")
   "weight per unit volume") $
   USynonym $ newton *$ (metre ^: (-3))

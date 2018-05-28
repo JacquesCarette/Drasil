@@ -3,7 +3,7 @@ module Data.Drasil.Units.Physics where
 import Language.Drasil
 import Data.Drasil.SI_Units
 
-accelU, angVelU, angAccelU, momtInertU, momentOfForceU, impulseU, springConstU, torqueU, velU :: DerUChunk
+accelU, angVelU, angAccelU, momtInertU, momentOfForceU, impulseU, springConstU, torqueU, velU :: UnitDefn
 
 accelU          = new_unit "acceleration"         $ metre /: s_2
 angVelU         = new_unit "angular velocity"     $ radian /: second
@@ -15,7 +15,7 @@ springConstU    = new_unit "spring constant"      $ newton /: metre
 torqueU         = new_unit "torque"               $ newton *: metre
 velU            = new_unit "velocity"             $ metre /: second
 
-gravConstU :: DerUChunk
+gravConstU :: UnitDefn
 
 gravConstU = makeDerU (dcc "gravConstU" (cn "gravitational constant")
   "universal gravitational constant") $ USynonym (m_3 /$ (kilogram *: s_2))

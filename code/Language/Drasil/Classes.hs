@@ -100,7 +100,7 @@ class Constrained c where
 
 -- | A HasReasVal is a 'Quantity' that could have a reasonable value
 class HasReasVal c where
-  reasVal :: c -> (Maybe Expr)
+  reasVal     :: Lens' c (Maybe Expr)
 
 -----------------------------------------------------
 -- Below are for units only
@@ -111,7 +111,7 @@ class HasUnitSymbol u where
 -- | Units are Ideas with a Definition which store a unit symbol.
 -- They must also be explicitly declared to be instances of IsUnit
 class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u where
-   udefn :: u -> (Maybe UDefn)
+   udefn :: Lens' u (Maybe UDefn)
 -- Investigate (TODO): is this really needed?
 class UnitEq u where
    uniteq :: Lens' u UDefn

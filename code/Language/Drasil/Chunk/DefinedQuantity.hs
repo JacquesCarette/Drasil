@@ -6,7 +6,8 @@ module Language.Drasil.Chunk.DefinedQuantity
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom, DOM), Concept, HasSymbol(symbol),
-  HasAttributes(attributes), HasSpace(typ), IsUnit, HasDerivation(derivation))
+  HasAttributes(attributes), HasSpace(typ), IsUnit, HasDerivation(derivation),
+  IsUnit(udefn))
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import qualified Language.Drasil.Chunk.Quantity as Q
 
@@ -67,5 +68,10 @@ uwMUnitDefn :: Maybe UnitDefn -> [UnitDefn]
 uwMUnitDefn (Just a) = [a] 
 uwMUnitDefn Nothing  = []
 
+uwFund :: UnitDefn -> [UnitDefn]
+uwFund a = case a ^. udefn of
+       Nothing -> [a]
+       _ -> [] 
+
 uwMUnitDefnL :: [DefinedQuantityDict] -> [UnitDefn]
-uwMUnitDefnL l = concat (map uwMUnitDefn $ uwDQDL l)
+uwMUnitDefnL l = concat (map uwFund $ concat (map uwMUnitDefn $ uwDQDL l))

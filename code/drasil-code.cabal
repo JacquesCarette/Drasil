@@ -11,7 +11,6 @@ library
   other-modules:
       Language.Drasil.Code.Code
     , Language.Drasil.Code.Imperative.AST
-    , Language.Drasil.Code.Imperative.Import
     , Language.Drasil.Code.Imperative.Helpers
     , Language.Drasil.Code.Imperative.Lang
     , Language.Drasil.Code.Imperative.LanguageRenderer

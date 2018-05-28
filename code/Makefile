@@ -38,7 +38,6 @@ build: FORCE
 	mkdir -p build
 	stack build -j2 $(stackArgs) drasil-code
 
-
 swhs_build: build
 	mkdir -p build/$(SWHS_DIR)
 	cd build/$(SWHS_DIR) && stack exec $(SWHS_EXE)

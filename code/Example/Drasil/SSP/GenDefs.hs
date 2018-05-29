@@ -8,10 +8,9 @@ import Drasil.SSP.Unitals (baseAngle, genDisplace, rotatedDispl, dy_i,
   dx_i, inxi, index, nrmDispl, shrDispl, elmPrllDispl, elmNrmDispl,
   nrmStiffBase, shrStiffIntsl, genPressure, intShrForce, intNormForce,
   fy, fx, impLoadAngle, surfLoad, surfHydroForce, baseHydroForce,
-  slcWght, inxiM1, surfAngle, earthqkLoadFctr, watrForceDif, midpntHght,
-  baseWthX, sliceHght, watrForce, scalFunc, xi, normToShear, fs, shrResI,
-  shearFNoIntsl, shrResI, mobShrI, nrmFSubWat, totNrmForce, baseLngth,
-  shrStress, cohesion, fricAngle)
+  slcWght, inxiM1, surfAngle, earthqkLoadFctr, watrForceDif, baseWthX,
+  scalFunc, xi, normToShear, fs, shrResI, shearFNoIntsl, shrResI, mobShrI, 
+  nrmFSubWat, totNrmForce, baseLngth, shrStress, cohesion, fricAngle)
 import Data.Drasil.Concepts.Documentation (element,
   system, value, variable, definition, model,
   assumption, property, method_)

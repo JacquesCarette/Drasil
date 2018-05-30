@@ -14,6 +14,7 @@ module Drasil.Sections.SpecificSystemDescription
   , datConF
   , dataConstraintUncertainty
   , inDataConstTbl, outDataConstTbl 
+  , listofTablesToRefs
   ) where
 
 import Language.Drasil
@@ -198,7 +199,6 @@ dataConstraintParagraph :: Sentence -> Sentence -> Sentence -> Sentence -> Conte
 dataConstraintParagraph hasUncertainty tableRef middleSent trailingSent = Paragraph $
   (dataConstraintIntroSent tableRef) +:+ middleSent +:+ 
   (dataConstraintClosingSent hasUncertainty trailingSent)
-
 
 -- makes a list of references to tables takes
 -- l  list of layout objects that can be referenced

@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.Change
 
 import Language.Drasil.Classes (HasUID(uid),HasAttributes(attributes))
 import Language.Drasil.Chunk.Attribute.Core(Attributes)
-import Language.Drasil.Chunk.Attribute(shortname)
+import Language.Drasil.Chunk.Attribute(shortname')
 import Language.Drasil.Spec (Sentence, RefName)
 
 import Control.Lens (set, (^.))
@@ -43,7 +43,7 @@ chc :: String -> ChngType -> Sentence -> RefName -> Attributes -> Change
 chc = ChC
 
 chc' :: Change -> String -> Change
-chc' c s = set attributes ([shortname s] ++ (c ^. attributes)) c
+chc' c s = set attributes ([shortname' s] ++ (c ^. attributes)) c
 
 lc, ulc :: String -> Sentence -> RefName -> Attributes -> Change
 -- | Smart constructor for functional requirement chunks.

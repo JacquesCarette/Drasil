@@ -12,6 +12,7 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Attribute.References (References)
+import Language.Drasil.Chunk.Attribute.ShortName
 
 import Control.Lens (Lens', view, makeLenses)
 
@@ -64,6 +65,9 @@ instance Idea          TheoryModel where getA = getA . view con
 instance Definition    TheoryModel where defn = con . defn
 instance HasAttributes TheoryModel where attributes = thy . attributes
 instance HasReference  TheoryModel where getReferences = thy . getReferences
+-- error used below is on purpose. These shortnames should be made explicit as necessary
+instance HasShortName  TheoryModel where
+  shortname _ = error "No explicit name given for theory model -- build a custom Ref"
 instance ConceptDomain TheoryModel where
   type DOM TheoryModel = ConceptChunk
   cdom = con . cdom

@@ -31,7 +31,6 @@ import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Reference
-import Language.Drasil.Chunk.Attribute.ShortName
 import Language.Drasil.Document
 
 import Control.Lens ((^.))

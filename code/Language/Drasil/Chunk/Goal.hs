@@ -12,6 +12,7 @@ import Language.Drasil.Classes (HasUID(uid), HasAttributes(attributes))
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.RefTypes (RefAdd)
+import Language.Drasil.Chunk.Attribute.ShortName
 
 import Control.Lens (makeLenses, (^.))
 
@@ -30,7 +31,9 @@ makeLenses ''Goal
 instance HasUID        Goal where uid = gid
 instance HasAttributes Goal where attributes = attribs
 instance Eq            Goal where a == b = a ^. uid == b ^. uid
-  
+instance HasShortName  Goal where
+  shortname g = g ^. refAddr
+
 -- | Goal smart constructor (with explicit 'Attributes')
 mkGoal :: String -> Sentence -> RefAdd -> Attributes -> Goal
 mkGoal = GS

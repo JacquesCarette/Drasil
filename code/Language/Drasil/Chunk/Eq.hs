@@ -18,6 +18,7 @@ import Language.Drasil.Unit (unitWrapper)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space
 import Language.Drasil.Chunk.Attribute.Derivation
+import Language.Drasil.Chunk.Attribute.ShortName
 
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Spec (Sentence)
@@ -43,7 +44,12 @@ instance HasAttributes QDefinition where attributes = qua . attributes
 instance HasReference  QDefinition where getReferences = ref
 instance Eq            QDefinition where a == b = (a ^. uid) == (b ^. uid)
 instance HasDerivation QDefinition where derivations = deri
- 
+-- error used below is on purpose. These shortnames should be made explicit as necessary
+instance HasShortName  QDefinition where -- FIXME: This could lead to trouble; need
+                                         -- to ensure sanity checking when building
+                                         -- Refs. Double-check QDef is a DD before allowing
+  shortname _ = error "No explicit name given for data definition -- build a custom Ref"
+
 -- | Create a 'QDefinition' with an uid, noun phrase (term), definition, symbol,
 -- unit, and defining equation.  And it ignores the definition...
 --FIXME: Space hack

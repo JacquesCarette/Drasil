@@ -2,7 +2,6 @@ module Language.Drasil.Chunk.Attribute.Core
   ( Attributes, Attribute(..)
   ) where
 
-import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
 
 -- | Attributes are just a list of 'Attribute'
 type Attributes = [Attribute]

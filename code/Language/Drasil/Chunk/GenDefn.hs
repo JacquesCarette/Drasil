@@ -37,6 +37,9 @@ instance ExprRelat     GenDefn where relat = relC . relat
 instance HasDerivation GenDefn where derivations = deri
 instance HasAttributes GenDefn where attributes = attribs
 instance HasReference  GenDefn where getReferences = ref
+-- error used below is on purpose. These shortnames should be made explicit as necessary
+instance HasShortName  GenDefn where
+  shortname _ = error "No explicit name given for general definition -- build a custom Ref"
 
 gd :: (IsUnit u, DOM u ~ ConceptChunk) => RelationConcept -> Maybe u -> Derivation -> GenDefn
 gd r (Just u) derivs = GD r (Just (unitWrapper u)) [] derivs []

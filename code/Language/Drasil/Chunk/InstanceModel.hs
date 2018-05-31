@@ -54,7 +54,10 @@ instance ConceptDomain InstanceModel where
 instance ExprRelat     InstanceModel where relat = rc . relat
 instance HasAttributes InstanceModel where attributes = attribs
 instance HasDerivation InstanceModel where derivations = deri
+-- error used below is on purpose. These shortnames should be made explicit as necessary
 instance HasReference  InstanceModel where getReferences = ref
+instance HasShortName  InstanceModel where
+  shortname _ = error "No explicit name given for instance model -- build a custom Ref"
 
 -- | Smart constructor for instance models
 im :: RelationConcept -> Inputs -> InputConstraints -> Output -> 

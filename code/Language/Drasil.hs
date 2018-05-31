@@ -88,9 +88,10 @@ module Language.Drasil (
   , Attributes
   -- Chunk.Attributes
   , getSource
-  , Derivation, getDerivation, getShortName, shortname
+  , Derivation, getDerivation, getShortName, shortname'
   , sourceref
   , References
+  , HasShortName(shortname)
   --Citations
   , Citation, BibRef, CiteField, Month(..), HP
     -- CiteFields smart constructors
@@ -221,6 +222,7 @@ import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
 import Language.Drasil.Chunk.Attribute.References (References)
+import Language.Drasil.Chunk.Attribute.ShortName
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation (
   -- Types

@@ -31,7 +31,7 @@ import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Reference
-
+import Language.Drasil.Chunk.Attribute.ShortName
 import Language.Drasil.Document
 
 import Control.Lens ((^.))
@@ -268,7 +268,7 @@ sec sm depth x@(Section title contents _ _) = --FIXME: should ShortName be used 
    map (layout sm depth) contents) ref
 
 getSN :: HasAttributes c => c -> Sentence
-getSN c = maybe (error "missing attribute ShortName") id $ getShortName c
+getSN c = maybe (error "missing attribute refAdd") id $ getShortName c
 
 -- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.

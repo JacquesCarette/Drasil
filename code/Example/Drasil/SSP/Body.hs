@@ -6,11 +6,10 @@ import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
 
 import Data.Drasil.People (henryFrankis)
-import Drasil.DocumentLanguage.RefHelpers
 
 import Drasil.SSP.Assumptions (sspAssumptions)
 import Drasil.SSP.DataDefs (sspDataDefs, resShrDerivation,
-  mobShrDerivation, stfMtrxDerivation, sspRefMDB, lengthLb,
+  mobShrDerivation, stfMtrxDerivation, lengthLb,
   sliceWght, lengthLs, ddRef)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (ssa, acronyms, slice, slope, soil,
@@ -26,8 +25,8 @@ import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
 import Drasil.SSP.TMods (sspTMods)
 import Drasil.SSP.Unitals (sspSymbols, sspInputs, sspOutputs,
   sspConstrained, index, fs, numbSlices)
-import qualified Drasil.SRS as SRS (physSyst, funcReq, likeChg, inModel,
-  missingP)
+import qualified Drasil.SRS as SRS (physSyst, funcReq, likeChg, 
+  inModel, missingP)
 
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.DocumentLanguage (TSIntro, DocDesc, RefSec(..),
@@ -265,7 +264,7 @@ s4_1_2_p1 = physSystIntro slope how intrslce slice (S "slice base")
   fig_indexconv
   where how = S "as a series of" +:+ phrase slice +:+. plural element
 
-physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, Referable d) =>
+physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, HasShortName d, Referable d) =>
   a -> Sentence -> b -> c -> Sentence -> d -> Contents
 physSystIntro what how p1 p2 p3 indexref = foldlSP [
   at_start analysis, S "of the", phrase what, S "is performed by looking at",

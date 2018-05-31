@@ -1,7 +1,6 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.Attribute.ShortName where
 
-import Language.Drasil.Chunk.Change as Ch
 import Language.Drasil.Chunk.Citation as Ci
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.GenDefn
@@ -30,9 +29,6 @@ instance HasShortName  PhysSystDesc where
 
 instance HasShortName  ReqChunk where
   shortname (RC _ _ _ sn _)   = sn
-
-instance HasShortName  Change where
-  shortname (ChC _ _ _ sn _)     = sn
 
 instance HasShortName  Citation where
   shortname c = citeID c

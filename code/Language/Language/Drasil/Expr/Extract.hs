@@ -1,4 +1,4 @@
-module Language.Drasil.Expr.Extract(dep, vars, codevars, codevars') where
+module Language.Drasil.Expr.Extract(dep, vars) where
 
 import Data.List (nub)
 import Control.Lens ((^.))
@@ -66,13 +66,3 @@ dep = nub . names
 vars :: (HasSymbolTable s) => Expr -> s -> [QuantityDict]
 vars e m = map resolve $ dep e
   where resolve x = symbLookup x $ m ^. symbolTable
-
--- | Get a list of CodeChunks from an equation
-codevars :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
-codevars e m = map resolve $ dep e
-  where resolve x = codevar (symbLookup x $ m ^. symbolTable)
-
--- | Get a list of CodeChunks from an equation (no functions)
-codevars' :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
-codevars' e m = map resolve $ nub $ names' e
-  where  resolve x = codevar (symbLookup x (m ^. symbolTable))

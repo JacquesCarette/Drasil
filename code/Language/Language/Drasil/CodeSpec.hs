@@ -15,7 +15,6 @@ import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Space -- for hack
 import Language.Drasil.DataDesc
 import Language.Drasil.ChunkDB
-import Language.Drasil.Expr.Extract (codevars, codevars')
 import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Code.Imperative.Lang
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
@@ -324,3 +323,13 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
   
 subsetOf :: (Eq a) => [a] -> [a] -> Bool  
 xs `subsetOf` ys = null $ filter (not . (`elem` ys)) xs
+
+-- | Get a list of CodeChunks from an equation
+codevars :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
+codevars e m = map resolve $ dep e
+  where resolve x = codevar (symbLookup x $ m ^. symbolTable)
+
+-- | Get a list of CodeChunks from an equation (no functions)
+codevars' :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
+codevars' e m = map resolve $ nub $ names' e
+  where  resolve x = codevar (symbLookup x (m ^. symbolTable))

@@ -488,7 +488,7 @@ iModIntro = foldlSP [S "This", phrase Doc.section_,
   plural Doc.symbol_, S "defined in", S "FIXME REF", 
   S "to replace the abstract", plural Doc.symbol_, S "in the", 
   plural Doc.model, S "identified in", S "FIXME REF" :+: S " and" +:+ S "FIXME REF"]
-
+  
 ---------------------
 -- DATA CONSTRAINTS --
 ---------------------

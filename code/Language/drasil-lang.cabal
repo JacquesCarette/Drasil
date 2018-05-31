@@ -81,7 +81,6 @@ library
     , Language.Drasil.Printing.Citation
     , Language.Drasil.Printing.Import
     , Language.Drasil.Printing.LayoutObj
-    , Language.Drasil.DataDesc
     , Language.Drasil.Code.Imperative.Import
 
   Build-Depends:

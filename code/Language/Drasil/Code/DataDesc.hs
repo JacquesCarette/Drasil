@@ -1,4 +1,4 @@
-module Language.Drasil.DataDesc where
+module Language.Drasil.Code.DataDesc where
 
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.Quantity

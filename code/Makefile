@@ -12,6 +12,9 @@ SSP_DIR = SSP
 GLASS_DIR = GlassBR
 GAME_DIR = Chipmunk
 
+DATA_DIR = Data
+LANG_DIR = Language
+
 GAME_EXE = chipmunkdocs
 TINY_EXE = tiny
 SWHS_EXE = swhs
@@ -19,13 +22,13 @@ NoPCM_EXE  = nopcm
 SSP_EXE  = ssp
 GLASS_EXE= glassbr
 
-DIRS = $(SWHS_DIR) $(NoPCM_DIR) $(TINY_DIR) $(SSP_DIR) $(GLASS_DIR) $(GAME_DIR)
+DIRS = $(SWHS_DIR) $(NoPCM_DIR) $(TINY_DIR) $(SSP_DIR) $(GLASS_DIR) $(GAME_DIR) $(DATA_DIR) $(LANG_DIR)
 DIFF = diff --strip-trailing-cr --ignore-all-space
 
 TESTS = swhs_diff tiny_diff ssp_diff glassbr_diff gamephys_diff nopcm_diff
 PROGS = swhs_prog tiny_prog ssp_prog glassbr_prog gamephys_prog nopcm_prog
 
-all: Dbuild build test
+all: build build_lang build_data test
 
 test: $(PROGS) $(TESTS)
 	sh log_check.sh
@@ -38,9 +41,13 @@ build: FORCE
 	mkdir -p build
 	stack build -j2 $(stackArgs) drasil-code
 
-Dbuild: build
-	mkdir -p Data
-	cd Data && stack build -j2 $(stackArgs) drasil-data
+build_lang: build
+	mkdir -p $(LANG_DIR)
+	cd $(LANG_DIR) && stack build -j2 $(stackArgs) drasil-lang
+
+build_data: build
+	mkdir -p $(DATA_DIR)
+	cd $(DATA_DIR) && stack build -j2 $(stackArgs) drasil-data
 
 swhs_build: build
 	mkdir -p build/$(SWHS_DIR)

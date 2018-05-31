@@ -14,4 +14,3 @@ data Attribute =
     ShortName String
   -- | SourceRef Sentence -- Source to reference for this knowledge chunk
                        -- FIXME: Allow URLs/Citations here
-  | Uses [String] -- Which chunks does this one rely on?

@@ -24,6 +24,7 @@ module Language.Drasil.Chunk.Citation
 
 import Language.Drasil.People
 import Language.Drasil.Spec (Sentence(..))
+import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Printing.Helpers (noSpaces)
 import Language.Drasil.Chunk.Attribute.ShortName
@@ -90,7 +91,7 @@ instance Show Month where
 -- We will also have an EntryID (String) used for creating reference links.
 -- Finally we will have the reference information (type and fields).
 data Citation = Cite
-  { _id :: String
+  { _id :: UID
   , citeID :: EntryID
   , externRefT :: CitationKind
   , fields :: [CiteField]

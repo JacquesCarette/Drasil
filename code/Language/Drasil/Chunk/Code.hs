@@ -14,6 +14,7 @@ import Language.Drasil.Chunk.Constrained.Core (Constraint, isPhysC)
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.SymbolForm (codeSymb)
+import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), CommonIdea(abrv), Constrained(constraints), relat)
 import Language.Drasil.Space as S
@@ -196,7 +197,7 @@ qtov q = CD (qw q) (symbToCodeName (codeSymb q)) (q ^. relat)
 codeEquat :: CodeDefinition -> Expr
 codeEquat cd = cd ^. def
 
-type ConstraintMap = Map.Map String [Constraint]
+type ConstraintMap = Map.Map UID [Constraint]
 
 constraintMap :: (HasUID c, Constrained c) => [c] -> ConstraintMap
 constraintMap = Map.fromList . map (\x -> ((x ^. uid), (x ^. constraints)))

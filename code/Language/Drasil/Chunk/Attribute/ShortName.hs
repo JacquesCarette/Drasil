@@ -7,7 +7,6 @@ import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.Goal as G
 import Language.Drasil.Chunk.InstanceModel
 import Language.Drasil.Chunk.PhysSystDesc as PD
-import Language.Drasil.Chunk.ReqChunk as R
 import Language.Drasil.Chunk.Theory
 import Control.Lens ((^.))
 
@@ -26,9 +25,6 @@ instance HasShortName  Goal where
 
 instance HasShortName  PhysSystDesc where
   shortname p = p ^. PD.refAddr
-
-instance HasShortName  ReqChunk where
-  shortname (RC _ _ _ sn _)   = sn
 
 instance HasShortName  Citation where
   shortname c = citeID c

@@ -18,6 +18,7 @@ import Language.Drasil.Unit (unitWrapper)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space
 import Language.Drasil.Chunk.Attribute.Derivation
+import Language.Drasil.Chunk.Attribute.ShortName
 
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Spec (Sentence)

@@ -12,6 +12,7 @@ import Language.Drasil.Classes (HasUID(uid), HasAttributes(attributes))
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.RefTypes (RefAdd)
+import Language.Drasil.Chunk.Attribute.ShortName
 
 import Control.Lens (makeLenses, (^.))
 

@@ -12,6 +12,7 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Attribute.References (References)
+import Language.Drasil.Chunk.Attribute.ShortName
 
 import Control.Lens (Lens', view, makeLenses)
 

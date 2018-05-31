@@ -21,6 +21,7 @@ import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Expr.Extract (vars)
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Chunk.Attribute.Derivation
+import Language.Drasil.Chunk.Attribute.ShortName
 
 import Control.Lens (makeLenses, (^.))
 
@@ -39,7 +40,7 @@ data InstanceModel = IM { _rc :: RelationConcept
                         , _outCons :: OutputConstraints
                         , _ref :: References
                         , _attribs :: Attributes 
- 			, _deri :: Derivation
+                        , _deri :: Derivation
                         }
 makeLenses ''InstanceModel
   

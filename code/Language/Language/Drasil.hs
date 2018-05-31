@@ -25,6 +25,8 @@ module Language.Drasil (
   , DerUChunk(..), UnitDefn(..), unitWrapper
   , makeDerU, unitCon, fund, comp_unitdefn
   , (^:), (/:), (*:), (*$), (/$), new_unit
+  -- UID
+  , UID
   -- Classes
   , HasUID(uid)
   , NamedIdea(term)
@@ -207,6 +209,7 @@ import Language.Drasil.Document (Document(..), DType(..)
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.UnitLang -- all of it
 import Language.Drasil.Unit -- all of it
+import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
   IsUnit, CommonIdea(abrv),

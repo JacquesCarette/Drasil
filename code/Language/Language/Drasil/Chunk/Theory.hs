@@ -4,6 +4,7 @@ module Language.Drasil.Chunk.Theory
    Theory(..), TheoryChunk, TheoryModel, tm,
   )where
 
+import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom,DOM), Concept, HasReference(getReferences))
 import Language.Drasil.Chunk.Concept
@@ -26,7 +27,7 @@ class HasUID t => Theory t where
 
 data SpaceDefn -- FIXME: This should be defined.
 
-data TheoryChunk = TC { _tid :: String
+data TheoryChunk = TC { _tid :: UID
                       , _vctx :: [TheoryChunk]
                       , _spc  :: [SpaceDefn]
                       , _quan :: [QuantityDict]

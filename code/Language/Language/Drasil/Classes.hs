@@ -1,7 +1,7 @@
 {-# Language TypeFamilies #-}
 -- | Defining all the classes which represent knowledge-about-knowledge
 module Language.Drasil.Classes (
-    HasUID(uid), UID
+    HasUID(uid)
   , NamedIdea(term)
   , Idea(getA)
   , Definition(defn)
@@ -25,6 +25,7 @@ import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Symbol (Stage, Symbol)
 import Language.Drasil.Space (Space)
 import Language.Drasil.UnitLang (USymb, UDefn)
+import Language.Drasil.UID (UID)
 import Language.Drasil.Chunk.Attribute.References (References)
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Expr (Expr)
@@ -32,9 +33,7 @@ import Language.Drasil.Chunk.Attribute.Derivation
 
 import Control.Lens (Lens')
 
-type UID = String
-
--- | The most basic item: having a unique key, here a UID (as a String)
+-- | The most basic item: having a unique key, here a UID
 class HasUID c where
   -- | Provides a /unique/ id for internal Drasil use
   uid :: Lens' c UID

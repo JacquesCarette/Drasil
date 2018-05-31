@@ -88,7 +88,7 @@ siUQO xs = UnQuantO xs
 --  HELPER FUNCTION --
 ----------------------
 
-compareID :: (NamedIdea a) => a -> String -> Bool
+compareID :: (NamedIdea a) => a -> UID -> Bool
 compareID c1 c2 = (c1 ^. uid) == c2
 
 -----------------------

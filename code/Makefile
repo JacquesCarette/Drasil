@@ -25,7 +25,7 @@ DIFF = diff --strip-trailing-cr --ignore-all-space
 TESTS = swhs_diff tiny_diff ssp_diff glassbr_diff gamephys_diff nopcm_diff
 PROGS = swhs_prog tiny_prog ssp_prog glassbr_prog gamephys_prog nopcm_prog
 
-all: build test
+all: Dbuild build test
 
 test: $(PROGS) $(TESTS)
 	sh log_check.sh
@@ -37,6 +37,10 @@ FORCE: ;
 build: FORCE
 	mkdir -p build
 	stack build -j2 $(stackArgs) drasil-code
+
+Dbuild: build
+	mkdir -p Data
+	cd Data && stack build -j2 $(stackArgs) drasil-data
 
 swhs_build: build
 	mkdir -p build/$(SWHS_DIR)

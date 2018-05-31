@@ -7,32 +7,32 @@ Synopsis:	A framework for code and document generation for scientific software -
 
 library
   exposed-modules:
-    Data.Drasil.People
-    Data.Drasil.Citations
-    Data.Drasil.Constraints
-    Data.Drasil.SentenceStructures
-    Data.Drasil.SI_Units
-    Data.Drasil.Phrase
-    Data.Drasil.Utils
-    Data.Drasil.Concepts.Computation
-    Data.Drasil.Concepts.Documentation
-    Data.Drasil.Concepts.Thermodynamics
-    Data.Drasil.Concepts.PhysicalProperties
-    Data.Drasil.Concepts.Education
-    Data.Drasil.Concepts.Physics
-    Data.Drasil.Concepts.Software
-    Data.Drasil.Concepts.Math
-    Data.Drasil.Concepts.SolidMechanics
-    Data.Drasil.Software.Products
-    Data.Drasil.Quantities.Thermodynamics
-    Data.Drasil.Quantities.PhysicalProperties
-    Data.Drasil.Quantities.Physics
-    Data.Drasil.Quantities.Math
-    Data.Drasil.Quantities.SolidMechanics
-    Data.Drasil.Units.Thermodynamics
-    Data.Drasil.Units.PhysicalProperties
-    Data.Drasil.Units.Physics
-    Data.Drasil.Units.SolidMechanics
+    Drasil.People
+    Drasil.Citations
+    Drasil.Constraints
+    Drasil.SentenceStructures
+    Drasil.SI_Units
+    Drasil.Phrase
+    Drasil.Utils
+    Drasil.Concepts.Computation
+    Drasil.Concepts.Documentation
+    Drasil.Concepts.Thermodynamics
+    Drasil.Concepts.PhysicalProperties
+    Drasil.Concepts.Education
+    Drasil.Concepts.Physics
+    Drasil.Concepts.Software
+    Drasil.Concepts.Math
+    Drasil.Concepts.SolidMechanics
+    Drasil.Software.Products
+    Drasil.Quantities.Thermodynamics
+    Drasil.Quantities.PhysicalProperties
+    Drasil.Quantities.Physics
+    Drasil.Quantities.Math
+    Drasil.Quantities.SolidMechanics
+    Drasil.Units.Thermodynamics
+    Drasil.Units.PhysicalProperties
+    Drasil.Units.Physics
+    Drasil.Units.SolidMechanics
 
   Build-Depends:
     base >= 4.7,
@@ -51,4 +51,4 @@ library
 source-repository head
   type:     git
   location: git://github.com/JacquesCarette/Drasil.git
-  subdir: code
+  subdir: code/Data

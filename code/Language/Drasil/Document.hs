@@ -1,7 +1,9 @@
 -- | Document Description Language
 module Language.Drasil.Document where
 
+import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.AssumpChunk
+import Language.Drasil.Chunk.Attribute.ShortName
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
@@ -10,6 +12,8 @@ import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Expr
 import Language.Drasil.Chunk.Citation (BibRef)
+
+import Control.Lens ((^.))
 
 type Title    = Sentence
 type Author   = Sentence
@@ -34,6 +38,9 @@ data SecCons = Sub Section
 -- and a String that will be its shortname
 data Section = Section Title [SecCons] RefAdd String
 
+instance HasShortName  Section where
+  shortname (Section _ _ _ sn) = sn
+
 -- | Types of layout objects we deal with explicitly
 data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
   -- ^ table has: header-row data(rows) label/caption showlabel?
@@ -55,6 +62,22 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
                --------------------------------------------
                | Defnt DType [(Identifier, [Contents])] RefAdd
 type Identifier = String
+
+instance HasShortName  Contents where
+  shortname (Table _ _ _ _ r)     = "Table:" ++ r
+  shortname (Figure _ _ _ r)      = "Figure:" ++ r
+  shortname (Graph _ _ _ _ r)     = "Figure:" ++ r
+  shortname (EqnBlock _ r)        = "Equation:" ++ r
+  shortname (Definition d)        = getDefName d
+  shortname (Defnt _ _ r)         = r
+  shortname (Requirement rc)      = shortname rc
+  shortname (Assumption ca)       = shortname ca
+  shortname (Change lcc)          = shortname lcc
+  shortname (Enumeration _)       = error "Can't reference lists"
+  shortname (Paragraph _)         = error "Can't reference paragraphs"
+  shortname (Bib _)               = error $
+    "Bibliography list of references cannot be referenced. " ++
+    "You must reference the Section or an individual citation."
 
 -- | MaxWidthPercent should be kept in the range 1-100. 
 -- Values outside this range may have unexpected results.
@@ -105,3 +128,16 @@ datadefn = Definition . Data
 
 reldefn :: RelationConcept -> Contents
 reldefn = Definition . Theory
+
+-- | Automatically create the label for a definition
+getDefName :: DType -> String
+getDefName (Data c)   = "DD:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
+getDefName (Theory c) = "T:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
+getDefName TM         = "T:"
+getDefName DD         = "DD:"
+getDefName Instance   = "IM:"
+getDefName General    = "GD:"
+
+repUnd :: Char -> String
+repUnd '_' = "."
+repUnd c = c : []

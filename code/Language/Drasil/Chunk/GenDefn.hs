@@ -19,8 +19,8 @@ import Control.Lens (makeLenses)
 -- | A GenDefn is a RelationConcept that may have units
 data GenDefn = GD { _relC :: RelationConcept
                   , gdUnit :: Maybe UnitDefn
-		  , _attribs :: Attributes
-		  , _deri :: Derivation
+                  , _attribs :: Attributes
+                  , _deri :: Derivation
                   , _ref :: References
                   }
 makeLenses ''GenDefn

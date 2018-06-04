@@ -7,7 +7,7 @@ Synopsis:	A framework for code and document generation for scientific software -
 
 library
   exposed-modules:
-    Language.Drasil.Code
+      Language.Drasil.Code
   other-modules:
       Language.Drasil.Code.Code
     , Language.Drasil.Code.DataDesc
@@ -24,6 +24,7 @@ library
     , Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer
     , Language.Drasil.Code.CodeGeneration
     , Language.Drasil.Code.Imperative.Parsers.ConfigParser
+    , Language.Drasil.Chunk.Code
    
   Build-Depends:
     base >= 4.7,

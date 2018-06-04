@@ -126,7 +126,7 @@ module Language.Drasil (
   -- Document
   , Referable(..), Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListPair
-  , section, fig, figWithWidth
+  , section, fig, figWithWidth, section'' 
   , datadefn, reldefn
   -- Reference
   , makeRef, acroTest, find'
@@ -206,7 +206,7 @@ import Language.Drasil.Expr.Extract (vars)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website),DocSpec(DocSpec))
 import Language.Drasil.Document (Document(..), DType(..)
   , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..)
-  , section, fig, figWithWidth
+  , section, fig, figWithWidth, section''
   , datadefn, reldefn
   , ListPair)
 import Language.Drasil.Unicode -- all of it

@@ -270,7 +270,7 @@ render progName symMap item@(SectionModel niname _)
 ------------------------------
 
 genericSect :: SubSec -> Section
-genericSect (SectionModel niname xs) = section (pullTitle xs niname) 
+genericSect (SectionModel niname xs) = section'' (pullTitle xs niname) 
   (pullContents xs) (pullSections xs) (niname ^. uid)
 
 ------------------------------------------------

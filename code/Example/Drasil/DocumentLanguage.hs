@@ -245,7 +245,7 @@ mkSections si l = map doit l
 -- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section
 mkRefSec _  (RefVerb s) = s
-mkRefSec si (RefProg c l) = section (titleize refmat) [c]
+mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
   (map (mkSubRef si) l) "RefMat"
   where
     mkSubRef :: SystemInformation -> RefTab -> Section

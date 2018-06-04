@@ -112,8 +112,11 @@ data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining
 
 -- | Smart constructor for creating Sections with introductory contents
 -- (ie. paragraphs, tables, etc.) and a list of subsections.
-section :: Sentence -> [Contents] -> [Section] -> String -> Section
-section title intro secs sn = Section title (map Con intro ++ map Sub secs) sn (shortname' sn)
+section :: Sentence -> [Contents] -> [Section] -> String -> ShortName -> Section
+section title intro secs ra sn = Section title (map Con intro ++ map Sub secs) ra sn
+
+section'' :: Sentence -> [Contents] -> [Section] -> String -> Section
+section'' title intro secs ra = section title intro secs ra (shortname' ra)
 
 -- | Figure smart constructor. Assumes 100% of page width as max width.
 fig :: Label -> Filepath -> RefAdd -> Contents

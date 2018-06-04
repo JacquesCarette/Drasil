@@ -31,8 +31,7 @@ makeLenses ''Goal
 instance HasUID        Goal where uid = gid
 instance HasAttributes Goal where attributes = attribs
 instance Eq            Goal where a == b = a ^. uid == b ^. uid
-instance HasShortName  Goal where
-  shortname g = g ^. refAddr
+instance HasShortName  Goal where shortname g = shortname' $ g ^. refAddr
 
 -- | Goal smart constructor (with explicit 'Attributes')
 mkGoal :: String -> Sentence -> RefAdd -> Attributes -> Goal

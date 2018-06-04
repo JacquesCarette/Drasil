@@ -28,8 +28,7 @@ makeLenses ''PhysSystDesc
 instance HasUID        PhysSystDesc where uid = did
 instance HasAttributes PhysSystDesc where attributes = attribs
 instance Eq            PhysSystDesc where a == b = a ^. uid == b ^. uid
-instance HasShortName  PhysSystDesc where
-  shortname p = p ^. refAddr
+instance HasShortName  PhysSystDesc where shortname p = shortname' $ p ^. refAddr
 
 -- | PhysSystDesc smart constructor (has no explicit 'Attributes')
 psd :: String -> Sentence -> RefAdd -> PhysSystDesc

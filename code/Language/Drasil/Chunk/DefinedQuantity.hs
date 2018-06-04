@@ -75,7 +75,7 @@ uwFund a = case a ^. udefn of
               FUSynonym _ -> [a]
               FUShift _ _-> [a]
               FUScale _ _ -> [a]
-              _ -> getunit a
+              _ -> (getunit a)
 
       
 uwMUnitDefnL :: [DefinedQuantityDict] -> [UnitDefn]

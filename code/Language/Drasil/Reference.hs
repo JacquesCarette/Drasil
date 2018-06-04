@@ -169,13 +169,13 @@ instance Referable AssumpChunk where
   rType   _             = Assump
 
 instance Referable ReqChunk where
-  refAdd  r@(RC _ rt _ _ _) = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
+  refAdd  r@(RC _ rt _ _) = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
   rType   _                 = Req
 
 instance Referable Change where
-  refAdd r@(ChC _ rt _ _ _)    = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
-  rType (ChC _ Likely _ _ _)   = LC
-  rType (ChC _ Unlikely _ _ _) = UC
+  refAdd r@(ChC _ rt _ _)    = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
+  rType (ChC _ Likely _ _)   = LC
+  rType (ChC _ Unlikely _ _) = UC
 
 instance Referable Section where
   refAdd  (Section _ _ r _) = "Sec:" ++ r

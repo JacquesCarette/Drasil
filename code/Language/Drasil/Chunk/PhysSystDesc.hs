@@ -5,12 +5,11 @@
 module Language.Drasil.Chunk.PhysSystDesc
   ( PhysSystDesc
   , pSysDes
-  , psd, psd'
+  , psd
   , refAddr
   ) where
 
-import Language.Drasil.Classes (HasUID(uid), HasAttributes(attributes))
-import Language.Drasil.Chunk.Attribute.Core (Attributes)
+import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Chunk.Attribute.ShortName
@@ -20,20 +19,14 @@ data PhysSystDesc = PSD
           { _did        :: String
           , pSysDes     :: Sentence
           , _refAddr    :: RefAdd
-          , _attribs    :: Attributes 
           }
 
 makeLenses ''PhysSystDesc
 
 instance HasUID        PhysSystDesc where uid = did
-instance HasAttributes PhysSystDesc where attributes = attribs
 instance Eq            PhysSystDesc where a == b = a ^. uid == b ^. uid
 instance HasShortName  PhysSystDesc where shortname p = shortname' $ p ^. refAddr
 
--- | PhysSystDesc smart constructor (has no explicit 'Attributes')
+-- | PhysSystDesc smart constructor
 psd :: String -> Sentence -> RefAdd -> PhysSystDesc
-psd i g r = PSD i g r []
-
--- | PhysSystDesc smart constructor (with explicit 'Attributes')
-psd' :: String -> Sentence -> RefAdd -> Attributes -> PhysSystDesc
-psd' = PSD
+psd = PSD

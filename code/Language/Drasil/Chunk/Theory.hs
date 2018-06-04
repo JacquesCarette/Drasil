@@ -5,12 +5,11 @@ module Language.Drasil.Chunk.Theory
   )where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom,DOM), Concept, HasAttributes(attributes), HasReference(getReferences))
+  Definition(defn), ConceptDomain(cdom,DOM), Concept, HasReference(getReferences))
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained.Core (TheoryConstraint)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Attribute.References (References)
 import Language.Drasil.Chunk.Attribute.ShortName
 
@@ -36,7 +35,6 @@ data TheoryChunk = TC { _tid :: String
                       , _invs :: [TheoryConstraint]
                       , _dfun :: [QDefinition]
                       , _ref :: References
-                      , _attribs :: Attributes
                       }
 makeLenses ''TheoryChunk
 
@@ -48,7 +46,6 @@ instance Theory        TheoryChunk where
   defined_quant = defq
   invariants    = invs
   defined_fun   = dfun
-instance HasAttributes TheoryChunk where attributes = attribs
 instance HasUID        TheoryChunk where uid = tid
 instance HasReference  TheoryChunk where getReferences = ref
 
@@ -63,7 +60,6 @@ instance HasUID        TheoryModel where uid = con . uid
 instance NamedIdea     TheoryModel where term = con . term
 instance Idea          TheoryModel where getA = getA . view con
 instance Definition    TheoryModel where defn = con . defn
-instance HasAttributes TheoryModel where attributes = thy . attributes
 instance HasReference  TheoryModel where getReferences = thy . getReferences
 -- error used below is on purpose. These shortnames should be made explicit as necessary
 instance HasShortName  TheoryModel where
@@ -81,15 +77,15 @@ instance Theory        TheoryModel where
   invariants    = thy . invariants
   defined_fun   = thy . defined_fun
 
-tc :: (DOM c ~ ConceptChunk, Concept c, Quantity q, HasAttributes q) =>
-    String -> [TheoryChunk] -> [SpaceDefn] -> [q] -> [c] -> Attributes ->
+tc :: (DOM c ~ ConceptChunk, Concept c, Quantity q) =>
+    String -> [TheoryChunk] -> [SpaceDefn] -> [q] -> [c] -> 
     [QDefinition] -> [TheoryConstraint] -> [QDefinition] -> TheoryChunk
-tc cid t s q c atts = \dq inv dfn -> TC cid t s (map qw q) (map cw c) dq inv dfn [] atts
+tc cid t s q c = \dq inv dfn -> TC cid t s (map qw q) (map cw c) dq inv dfn []
 
-tc' :: (HasAttributes q, Quantity q, Concept c, DOM c ~ ConceptChunk) =>
-    String -> [q] -> [c] -> Attributes -> [QDefinition] -> 
+tc' :: (Quantity q, Concept c, DOM c ~ ConceptChunk) =>
+    String -> [q] -> [c] -> [QDefinition] -> 
     [TheoryConstraint] -> [QDefinition] -> TheoryChunk
-tc' cid q c atts = tc cid ([] :: [TheoryChunk]) [] q c atts
+tc' cid q c = tc cid ([] :: [TheoryChunk]) [] q c
 
 tm :: (Concept c, DOM c ~ ConceptChunk) => c -> TheoryChunk -> TheoryModel
 tm c t = TM (cw c) t

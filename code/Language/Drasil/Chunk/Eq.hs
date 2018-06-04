@@ -6,9 +6,8 @@ module Language.Drasil.Chunk.Eq
 import Control.Lens ((^.), makeLenses)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA), DOM,
-  HasSymbol(symbol), IsUnit, HasAttributes(attributes), ExprRelat(relat), HasDerivation(derivations), 
+  HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences))
-import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Attribute.References (References)
 import Language.Drasil.Chunk.Concept (ConceptChunk)
 import Language.Drasil.Chunk.Quantity (Quantity(getUnit), HasSpace(typ), QuantityDict,
@@ -40,7 +39,6 @@ instance HasSpace      QDefinition where typ = qua . typ
 instance HasSymbol     QDefinition where symbol e st = symbol (e^.qua) st
 instance Quantity      QDefinition where getUnit (EC a _ _ _)   = getUnit a
 instance ExprRelat     QDefinition where relat = equat
-instance HasAttributes QDefinition where attributes = qua . attributes
 instance HasReference  QDefinition where getReferences = ref
 instance Eq            QDefinition where a == b = (a ^. uid) == (b ^. uid)
 instance HasDerivation QDefinition where derivations = deri
@@ -54,28 +52,28 @@ instance HasShortName  QDefinition where -- FIXME: This could lead to trouble; n
 -- unit, and defining equation.  And it ignores the definition...
 --FIXME: Space hack
 fromEqn :: (IsUnit u, DOM u ~ ConceptChunk) => 
-  String -> NP -> Sentence -> Symbol -> u -> Expr -> Attributes -> References -> QDefinition
-fromEqn nm desc _ symb un eqn atts refs = 
-  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing atts) eqn refs []
+  String -> NP -> Sentence -> Symbol -> u -> Expr -> References -> QDefinition
+fromEqn nm desc _ symb un eqn refs = 
+  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) eqn refs []
 
 -- | Same as fromEqn, but has no units.
 --FIXME: Space hack
-fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> Attributes -> References -> QDefinition
-fromEqn' nm desc _ symb eqn atts refs = EC (mkQuant nm desc symb Real Nothing Nothing atts) eqn refs []
+fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> References -> QDefinition
+fromEqn' nm desc _ symb eqn refs = EC (mkQuant nm desc symb Real Nothing Nothing) eqn refs []
 
 -- | Create a 'QDefinition' with an uid, noun phrase (term), symbol,
 -- abbreviation, unit, and defining equation.
 fromEqn'' :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Sentence ->
- Symbol -> String -> Maybe u -> Expr -> Attributes -> References -> QDefinition
-fromEqn'' nm desc _ symb abbr u eqn atts refs = 
-  EC (mkQuant nm desc symb Real (fmap unitWrapper u) (Just abbr) atts) eqn refs []
+ Symbol -> String -> Maybe u -> Expr -> References -> QDefinition
+fromEqn'' nm desc _ symb abbr u eqn refs = 
+  EC (mkQuant nm desc symb Real (fmap unitWrapper u) (Just abbr)) eqn refs []
 
--- | Smart constructor for QDefinitions. Requires a quantity, its defining 
--- equation, and a list of attributes
-ec :: (HasAttributes c, Quantity c) => c -> Expr -> QDefinition
+-- | Smart constructor for QDefinitions. Requires a quantity and its defining 
+-- equation
+ec :: (Quantity c) => c -> Expr -> QDefinition
 ec c eqn = EC (qw c) eqn [] []
 
 -- | Returns a 'VarChunk' from a 'QDefinition'.
 -- Currently only used in example /Modules/ which are being reworked.
 getVC :: QDefinition -> VarChunk
-getVC qd = vcSt (qd ^. uid) (qd ^. term) (symbol qd) (qd ^. typ) (qd ^. attributes)
+getVC qd = vcSt (qd ^. uid) (qd ^. term) (symbol qd) (qd ^. typ)

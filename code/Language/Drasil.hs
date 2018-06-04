@@ -33,7 +33,6 @@ module Language.Drasil (
   , Concept
   , HasUnitSymbol(usymb)
   , IsUnit
-  , HasAttributes(attributes)
   , HasReference(getReferences)
   , CommonIdea(abrv)
   , Constrained(constraints)
@@ -81,11 +80,9 @@ module Language.Drasil (
   -- Chunk.Relation
   , RelationConcept, makeRC, makeRC'
   --Chunk.DefinedQuantity
-  , dqd, dqd', dqdEL, DefinedQuantityDict, dqdWr
+  , dqd, dqd', DefinedQuantityDict, dqdWr
   -- Chunk.UnitaryConcept
   , ucw, UnitaryConceptDict
-  -- Chunk.Attributes.Core
-  , Attributes
   -- Chunk.Attributes
   , getSource
   , Derivation, getDerivation, getShortName, shortname'
@@ -185,7 +182,7 @@ module Language.Drasil (
   -- Goal
   , Goal, mkGoal
   -- PhysSystDesc
-  , PhysSystDesc, pSysDes, psd, psd'
+  , PhysSystDesc, pSysDes, psd
   -- RefTypes
   , RefAdd
 ) where
@@ -214,12 +211,11 @@ import Language.Drasil.UnitLang -- all of it
 import Language.Drasil.Unit -- all of it
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
-  IsUnit, HasAttributes(attributes), CommonIdea(abrv),
+  IsUnit, CommonIdea(abrv),
   Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations),
   HasReference(getReferences))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
-import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
 import Language.Drasil.Chunk.Attribute.References (References)
 import Language.Drasil.Chunk.Attribute.ShortName
@@ -255,7 +251,7 @@ import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.Goal (Goal, mkGoal)
 import Language.Drasil.Chunk.InstanceModel
 import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.PhysSystDesc (PhysSystDesc, pSysDes, psd, psd')
+import Language.Drasil.Chunk.PhysSystDesc (PhysSystDesc, pSysDes, psd)
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, makeRC')
 import Language.Drasil.Chunk.ReqChunk(ReqChunk, ReqType(..), reqType, requires

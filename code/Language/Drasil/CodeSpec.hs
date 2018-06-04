@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs #-}
 module Language.Drasil.CodeSpec where
 
-import Language.Drasil.Classes (term, CommonIdea, HasAttributes,ExprRelat(relat))
+import Language.Drasil.Classes (term, CommonIdea, ExprRelat(relat))
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity -- for hack
@@ -18,7 +18,6 @@ import Language.Drasil.ChunkDB
 import Language.Drasil.Expr.Extract (codevars, codevars')
 import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Code.Imperative.Lang
-import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import qualified Data.Map as Map
 import Control.Lens ((^.))
 import Data.List (nub, delete, (\\))
@@ -175,7 +174,7 @@ funcQD qd = FCD $ qtoc qd
 funcData :: Name -> DataDesc -> Func
 funcData n dd = FData $ FuncData (toCodeName n) dd 
 
-funcDef :: (HasAttributes c, Quantity c) => Name -> [c] -> Space -> [FuncStmt] -> Func  
+funcDef :: (Quantity c) => Name -> [c] -> Space -> [FuncStmt] -> Func  
 funcDef s i t fs  = FDef $ FuncDef (toCodeName s) (map (codevar ) i) (spaceToCodeType t) fs 
      
 data FuncData where
@@ -198,22 +197,22 @@ data FuncStmt where
   -- slight hack, for now
   FAppend :: Expr -> Expr -> FuncStmt
   
-($:=) :: (HasAttributes c, Quantity c) => c -> Expr -> FuncStmt
+($:=) :: (Quantity c) => c -> Expr -> FuncStmt
 v $:= e = FAsg (codevar v) e
 
-ffor :: (HasAttributes c, Quantity c) => c -> Expr -> [FuncStmt] -> FuncStmt
+ffor :: (Quantity c) => c -> Expr -> [FuncStmt] -> FuncStmt
 ffor v e fs  = FFor (codevar  v) e fs
 
-fdec :: (HasAttributes c, Quantity c) => c -> FuncStmt
+fdec :: (Quantity c) => c -> FuncStmt
 fdec v  = FDec (codevar  v) (spaceToCodeType $ v ^. typ)
 
-asVC :: Attributes -> Func -> VarChunk --asVC uses Attributes to pass them into VarChunk constructors
-asVC atts (FDef (FuncDef n _ _ _)) = implVar n (nounPhraseSP n) (Atomic n) Real atts
-asVC atts (FData (FuncData n _)) = implVar n (nounPhraseSP n) (Atomic n) Real atts
-asVC atts (FCD cd) = codeVC cd (codeSymb cd) (cd ^. typ) atts
+asVC :: Func -> VarChunk
+asVC (FDef (FuncDef n _ _ _)) = implVar n (nounPhraseSP n) (Atomic n) Real
+asVC (FData (FuncData n _)) = implVar n (nounPhraseSP n) (Atomic n) Real
+asVC (FCD cd) = codeVC cd (codeSymb cd) (cd ^. typ)
 
-asExpr :: Func -> {-Attributes ->-} Expr --Attributes need to be passed in for asVC
-asExpr f {-atts-} = sy $ asVC [] f {-atts-}
+asExpr :: Func -> Expr
+asExpr f = sy $ asVC f
 
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String

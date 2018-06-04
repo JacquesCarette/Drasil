@@ -5,11 +5,12 @@ import Language.Drasil.Chunk.Concept (DefnAndDomain(DAD), ConceptChunk)
 import Language.Drasil.Chunk.Unitary (UnitaryChunk, mkUnitary, Unitary)
 import Language.Drasil.Chunk.Quantity (Quantity(getUnit),HasSpace(typ))
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom, DOM), Concept, HasSymbol(symbol),
-  HasAttributes(attributes))
+  Definition(defn), ConceptDomain(cdom, DOM), Concept, HasSymbol(symbol))
 import Control.Lens ((^.), makeLenses, view)
 
-data UnitaryConceptDict = UCC {_unitary :: UnitaryChunk, _dad :: DefnAndDomain ConceptChunk}
+data UnitaryConceptDict = UCC { _unitary :: UnitaryChunk
+                              , _dad :: DefnAndDomain ConceptChunk
+                              }
 makeLenses ''UnitaryConceptDict
 
 instance HasUID        UnitaryConceptDict where uid = unitary . uid
@@ -25,7 +26,6 @@ instance HasSymbol     UnitaryConceptDict where symbol c stage = symbol (c^.unit
 instance Quantity      UnitaryConceptDict where getUnit = getUnit . view unitary
 
 instance Eq            UnitaryConceptDict where a == b = (a ^. uid) == (b ^. uid)
-instance HasAttributes UnitaryConceptDict where attributes = unitary . attributes
 
-ucw :: (HasAttributes c, Unitary c, Concept c, DOM c ~ ConceptChunk) => c -> UnitaryConceptDict
+ucw :: (Unitary c, Concept c, DOM c ~ ConceptChunk) => c -> UnitaryConceptDict
 ucw c = UCC (mkUnitary c) (DAD (c ^. defn) (c ^. cdom))

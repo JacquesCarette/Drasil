@@ -490,17 +490,6 @@ s7_1_req3 = mkRequirement "s7_1_req3" req3Desc "Check-Input-with-Data_Constraint
 s7_1_req4 = mkRequirement "s7_1_req4" req4Desc "Output-Values-and-Known-Quantities"
 s7_1_req5 = mkRequirement "s7_1_req5" (req5Desc (output_)) "Check-Glass-Safety"
 
--- newReqs is ONLY for testing until I get refs working. Then the old reqs should
--- be converted to reqChunk format with meaningful refnames and this should be
--- removed.
-newReqs :: [ReqChunk]
-newReqs = map (\(x,y) -> frc x y (shortname' x)) --FIXME: FRC Hack for referencing --FIXME: x used twice?
-  [ ("r1",req1Desc)
-  , ("r2",req2Desc)
-  , ("r3",req3Desc)
-  , ("r4",req4Desc)
-  , ("r5",req5Desc output_)]
-
 req1Desc = foldlSent [at_start input_, S "the", plural quantity, S "from",
   makeRef s7_1_req1Table `sC` S "which define the", phrase glass,
   plural dimension `sC` (glassTy ^. defn) `sC` S "tolerable",

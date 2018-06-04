@@ -7,7 +7,7 @@ import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.Attribute.ShortName
 import Language.Drasil.Spec (Sentence)
 
-import Control.Lens (set, (^.))
+import Control.Lens ((^.))
 
 -- We will likely need to differentiate functional/non-functional reqs
 -- (or whatever we want to call them) for the future when we parse our 

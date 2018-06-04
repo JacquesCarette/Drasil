@@ -61,7 +61,7 @@ two = Atomic "2"
 
 -- No need to be too verbose
 var :: String -> Symbol -> Space -> VarChunk
-var nam sym ty = implVar nam (nounPhraseSP nam) sym ty [] -- list of attributes
+var nam sym ty = implVar nam (nounPhraseSP nam) sym ty
 
 y_2, y_1, x_2, x_1, x :: VarChunk
 y_1  = var "y1"          (sub lY one) Real

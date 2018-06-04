@@ -510,7 +510,7 @@ siSys (SI {_sys = sys}) = nw sys
 -- mkAssump i desc = Assumption $ ac' i desc
 
 mkRequirement :: String -> Sentence -> String -> Contents
-mkRequirement i desc shrtn = Requirement $ frc i desc (shortname' shrtn) [] --empty lists are attributes
+mkRequirement i desc shrtn = Requirement $ frc i desc (shortname' shrtn)
 
 mkLklyChnk :: String -> Sentence -> String -> Contents
-mkLklyChnk i desc shrtn = Change $ lc i desc (shortname' shrtn) [] --empty lists are attributes
+mkLklyChnk i desc shrtn = Change $ lc i desc (shortname' shrtn)

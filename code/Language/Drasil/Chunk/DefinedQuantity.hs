@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 
 module Language.Drasil.Chunk.DefinedQuantity
-  ( dqd, dqd', DefinedQuantityDict, dqdWr
+  ( dqd, dqd', DefinedQuantityDict, dqdWr, dqdEL
   ) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
@@ -48,6 +48,11 @@ dqd c s sp un = DQD c (\_ -> s) sp un []
 -- For when the symbol changes depending on the stage
 dqd' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> DefinedQuantityDict
 dqd' c s sp un = DQD c s sp un []
+
+-- Same as dqd, merge it
+dqdEL :: (IsUnit u) => ConceptChunk -> Symbol -> Space -> u -> DefinedQuantityDict
+dqdEL c s sp un = DQD c (\_ -> s) sp uu []
+  where uu = Just $ unitWrapper un
 
 dqdWr :: (Q.Quantity c, Concept c, Q.HasSpace c, HasSymbol c, DOM c ~ ConceptChunk) => c -> DefinedQuantityDict
 dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (Q.getUnit c) []

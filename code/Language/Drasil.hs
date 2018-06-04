@@ -80,7 +80,7 @@ module Language.Drasil (
   -- Chunk.Relation
   , RelationConcept, makeRC, makeRC'
   --Chunk.DefinedQuantity
-  , dqd, dqd', DefinedQuantityDict, dqdWr
+  , dqd, dqd', DefinedQuantityDict, dqdWr, dqdEL
   -- Chunk.UnitaryConcept
   , ucw, UnitaryConceptDict
   -- Chunk.Attributes

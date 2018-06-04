@@ -35,8 +35,8 @@ data SecCons = Sub Section
              | Con Contents
 
 -- | Sections have a title ('Sentence') and a list of contents ('SecCons')
--- and a String that will be its shortname
-data Section = Section Title [SecCons] RefAdd String
+-- and its shortname
+data Section = Section Title [SecCons] RefAdd ShortName
 
 instance HasShortName  Section where
   shortname (Section _ _ _ sn) = sn
@@ -64,12 +64,12 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
 type Identifier = String
 
 instance HasShortName  Contents where
-  shortname (Table _ _ _ _ r)     = "Table:" ++ r
-  shortname (Figure _ _ _ r)      = "Figure:" ++ r
-  shortname (Graph _ _ _ _ r)     = "Figure:" ++ r
-  shortname (EqnBlock _ r)        = "Equation:" ++ r
-  shortname (Definition d)        = getDefName d
-  shortname (Defnt _ _ r)         = r
+  shortname (Table _ _ _ _ r)     = shortname' $ "Table:" ++ r
+  shortname (Figure _ _ _ r)      = shortname' $ "Figure:" ++ r
+  shortname (Graph _ _ _ _ r)     = shortname' $ "Figure:" ++ r
+  shortname (EqnBlock _ r)        = shortname' $ "Equation:" ++ r
+  shortname (Definition d)        = shortname' $ getDefName d
+  shortname (Defnt _ _ r)         = shortname' r
   shortname (Requirement rc)      = shortname rc
   shortname (Assumption ca)       = shortname ca
   shortname (Change lcc)          = shortname lcc
@@ -112,8 +112,8 @@ data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining
 
 -- | Smart constructor for creating Sections with introductory contents
 -- (ie. paragraphs, tables, etc.) and a list of subsections.
-section :: Sentence -> [Contents] -> [Section] -> RefAdd -> String -> Section
-section title intro secs sn = Section title (map Con intro ++ map Sub secs) sn
+section :: Sentence -> [Contents] -> [Section] -> String -> Section
+section title intro secs sn = Section title (map Con intro ++ map Sub secs) sn (shortname' sn)
 
 -- | Figure smart constructor. Assumes 100% of page width as max width.
 fig :: Label -> Filepath -> RefAdd -> Contents

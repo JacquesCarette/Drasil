@@ -29,5 +29,5 @@ instance HasShortName  AssumpChunk where
 
 -- | Smart constructor for Assumption chunks. The second 'Sentence' here is 
 -- a short name (attribute).
-assump :: String -> Sentence -> ShortName -> Attributes -> AssumpChunk
-assump i a s att = AC i a s []
+assump :: String -> Sentence -> String -> Attributes -> AssumpChunk
+assump i a s att = AC i a (shortname' s) []

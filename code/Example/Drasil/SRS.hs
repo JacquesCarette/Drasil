@@ -89,7 +89,7 @@ tOfSymb cs ss = section' (titleize Doc.tOfSymb) cs ss "ToS"
 
 --function that sets the shortname of each section to be the reference address
 section' :: Sentence -> [Contents] -> [Section] -> RefAdd -> Section
-section' a b c d = section a b c d (getStr a) --FIXME: getStr hack 
+section' a b c d = section a b c d  --FIXME: getStr hack 
 
 --
 missingP :: [Contents]

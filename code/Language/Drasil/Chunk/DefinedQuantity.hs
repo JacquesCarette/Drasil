@@ -13,7 +13,7 @@ import qualified Language.Drasil.Chunk.Quantity as Q
 
 import Language.Drasil.Symbol (Symbol, Stage)
 import Language.Drasil.Space (Space)
-import Language.Drasil.Unit (UnitDefn, unitWrapper)
+import Language.Drasil.Unit (UnitDefn, unitWrapper, getunit)
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Attribute.Derivation
 import Language.Drasil.UnitLang
@@ -75,7 +75,8 @@ uwFund a = case a ^. udefn of
               FUSynonym _ -> [a]
               FUShift _ _-> [a]
               FUScale _ _ -> [a]
-              _ -> []
+              _ -> getunit a
+
       
 uwMUnitDefnL :: [DefinedQuantityDict] -> [UnitDefn]
 uwMUnitDefnL l = concat (map uwFund $ concat (map uwMUnitDefn $ uwDQDL l))

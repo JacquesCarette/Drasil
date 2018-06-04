@@ -89,7 +89,7 @@ acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
 
 this_si :: [UnitDefn]
 this_si = {--map unitWrapper [metre, kilogram, second] ++ 
-  map unitWrapper [centigrade, joule, watt] ++ --}map unitWrapper (uwMUnitDefnL swhsSymbols)
+  map unitWrapper [centigrade, joule, watt] ++ --}map unitWrapper' (uwMUnitDefnL swhsSymbols)
 
 --Will there be a table of contents?
 

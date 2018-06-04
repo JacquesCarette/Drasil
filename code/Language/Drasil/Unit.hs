@@ -6,7 +6,7 @@ module Language.Drasil.Unit (
   , scale, shift, fshift, fscale
   , derUC, derUC', derUC'', unitWrapper
   , fund, comp_unitdefn, derCUC, derCUC', derCUC'', getsymb
-  , makeDerU'
+  , makeDerU', getunit, unitWrapper',getCu,getunit
   ) where
 
 import Control.Lens (Simple, Lens', Lens, (^.), makeLenses, view)
@@ -54,7 +54,7 @@ makeDerU :: ConceptChunk -> UDefn -> UnitDefn
 makeDerU concept eqn = UD concept (from_udefn eqn) (Just eqn) []
 
 makeDerU' :: ConceptChunk -> UnitEquation -> UnitDefn
-makeDerU' concept eqn = UD concept (from_udefn $ USynonym $ getsymb eqn) (Just $ USynonym $ getsymb eqn) []
+makeDerU' concept eqn = UD concept (from_udefn $ USynonym $ getsymb eqn) (Just $ USynonym $ getsymb eqn) (getCu eqn)
 
 derCUC, derCUC' :: String -> String -> String -> Symbol -> UnitEquation -> UnitDefn
 derCUC a b c s ue = UD (dcc a (cn b) c) (US [(s,1)]) (Just $ FUSynonym $ getsymb ue) (getCu ue)
@@ -85,8 +85,11 @@ unitCon s = dcc s (cn' s) s
 
 -- | For allowing lists to mix the two, thus forgetting
 -- the definition part
-unitWrapper :: (IsUnit u) => u -> UnitDefn
+unitWrapper :: (IsUnit u)  => u -> UnitDefn
 unitWrapper u = UD (cc' u (u ^. defn)) (u ^. usymb) (u ^. udefn) []
+
+unitWrapper' :: UnitDefn -> UnitDefn
+unitWrapper' u = UD (cc' u (u ^. defn)) (u ^. usymb) (u ^. udefn) (getunit u)
 
 --- These conveniences go here, because we need the class
 -- | Combinator for raising a unit to a power
@@ -119,7 +122,7 @@ u1 /$ u2 = let US l1 = u1 ^. usymb
                US l2 = getsymb u2 in
   UE (getunit u1) (US $ l1 ++ map (second negate) l2)
 
--- | Combinator for dividing two unit equations
+-- | Combinator for mulitiplying two unit equations
 (^$) :: UnitEquation -> UnitEquation -> UnitEquation
 u1 ^$ u2 = let US l1 = getsymb u1
                US l2 = getsymb u2 in
@@ -140,7 +143,7 @@ fshift :: IsUnit s => Double -> s -> UDefn
 fshift a b = FUShift a (b ^. usymb)
 -- | Smart constructor for new derived units from existing units.
 new_unit :: String -> UnitEquation -> UnitDefn
-new_unit s u = makeDerU (unitCon s) (USynonym $ view us u)
+new_unit s u = makeDerU' (unitCon s) u
 
 fund :: String -> String -> String -> UnitDefn
 fund nam desc sym = UD (dcc nam (cn' nam) desc) (US [(Atomic sym, 1)]) Nothing []

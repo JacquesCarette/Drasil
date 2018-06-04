@@ -22,6 +22,7 @@ t1IsSafe :: TheoryModel
 t1IsSafe = tm (cw t1SafetyReq) 
   (tc' "isSafe" [qw is_safe1, qw prob_br, qw pb_tol] ([] :: [ConceptChunk])
   [] [TCon Invariant $ (sy is_safe1) $= (sy prob_br) $< (sy pb_tol)] [])
+  "isSafe" --shortname
 
 t1SafetyReq :: RelationConcept
 t1SafetyReq = makeRC "t1SafetyReq" (nounPhraseSP "Safety Requirement-1")

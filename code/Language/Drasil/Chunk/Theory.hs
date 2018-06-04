@@ -53,6 +53,7 @@ instance HasReference  TheoryChunk where getReferences = ref
 -- use the id of the TheoryModel as the uid. FIXME ?
 data TheoryModel = TM { _con :: ConceptChunk
                       , _thy :: TheoryChunk
+                      , _refame :: ShortName
                       }
 makeLenses ''TheoryModel
 
@@ -63,7 +64,7 @@ instance Definition    TheoryModel where defn = con . defn
 instance HasReference  TheoryModel where getReferences = thy . getReferences
 -- error used below is on purpose. These shortnames should be made explicit as necessary
 instance HasShortName  TheoryModel where
-  shortname _ = error "No explicit name given for theory model -- build a custom Ref"
+  shortname (TM _ _ sn) = sn
 instance ConceptDomain TheoryModel where
   type DOM TheoryModel = ConceptChunk
   cdom = con . cdom
@@ -87,5 +88,5 @@ tc' :: (Quantity q, Concept c, DOM c ~ ConceptChunk) =>
     [TheoryConstraint] -> [QDefinition] -> TheoryChunk
 tc' cid q c = tc cid ([] :: [TheoryChunk]) [] q c
 
-tm :: (Concept c, DOM c ~ ConceptChunk) => c -> TheoryChunk -> TheoryModel
-tm c t = TM (cw c) t
+tm :: (Concept c, DOM c ~ ConceptChunk) => c -> TheoryChunk -> String -> TheoryModel
+tm c t sn = TM (cw c) t (shortname' sn)

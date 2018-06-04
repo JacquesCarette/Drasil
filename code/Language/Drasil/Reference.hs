@@ -253,7 +253,7 @@ makeRef :: (HasShortName l, Referable l) => l -> Sentence
 makeRef r = customRef r (shortname r)
 
 -- | Create a reference with a custom 'ShortName'
-customRef :: (HasShortName l, Referable l) => l -> String -> Sentence
+customRef :: (HasShortName l, Referable l) => l -> ShortName -> Sentence
 customRef r n = Ref (rType r) (refAdd r) n
 
 -- This works for passing the correct id to the reference generator for Assumptions,

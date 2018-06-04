@@ -1,6 +1,6 @@
 module Language.Drasil.Chunk.ReqChunk 
   ( ReqChunk(..), ReqType(..)
-  , frc, nfrc, rc'
+  , frc, nfrc
   ) where
 
 import Language.Drasil.Classes (HasUID(uid), HasAttributes(attributes))
@@ -48,9 +48,6 @@ instance HasShortName  ReqChunk where
 -- | Smart constructor for requirement chunks (should not be exported)
 rc :: String -> ReqType -> Sentence -> ShortName -> Attributes -> ReqChunk
 rc = RC
-
-rc' :: ReqChunk -> String -> ReqChunk
-rc' r s = set attributes (shortname' s : (r ^. attributes)) r
 
 frc, nfrc :: String -> Sentence -> ShortName -> Attributes -> ReqChunk
 -- | Smart constructor for functional requirement chunks.

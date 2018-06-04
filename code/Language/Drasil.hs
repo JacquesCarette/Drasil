@@ -126,7 +126,7 @@ module Language.Drasil (
   -- Document
   , Referable(..), Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListPair
-  , section, fig, figWithWidth
+  , section, fig, figWithWidth, section'' 
   , datadefn, reldefn
   -- Reference
   , makeRef, acroTest, find'
@@ -178,9 +178,9 @@ module Language.Drasil (
   , HasChangeRefs, changeRefTable, changeLookup, RefBy(..)
   , reqDB, assumpDB, RefMap, simpleMap
   -- ReqChunk
-  , ReqChunk, ReqType(..), reqType, requires, frc, nfrc, rc'
+  , ReqChunk, ReqType(..), reqType, requires, frc, nfrc
   -- Change
-  , Change, ChngType(..), chngType, chng, lc, ulc, chc'
+  , Change, ChngType(..), chngType, chng, lc, ulc
   , citationRefTable, citeLookup
   -- Goal
   , Goal, mkGoal
@@ -206,7 +206,7 @@ import Language.Drasil.Expr.Extract (vars)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website),DocSpec(DocSpec))
 import Language.Drasil.Document (Document(..), DType(..)
   , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..)
-  , section, fig, figWithWidth
+  , section, fig, figWithWidth, section''
   , datadefn, reldefn
   , ListPair)
 import Language.Drasil.Unicode -- all of it
@@ -259,7 +259,7 @@ import Language.Drasil.Chunk.PhysSystDesc (PhysSystDesc, pSysDes, psd, psd')
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, makeRC')
 import Language.Drasil.Chunk.ReqChunk(ReqChunk, ReqType(..), reqType, requires
-                                     , frc, nfrc, rc')
+                                     , frc, nfrc)
 import Language.Drasil.Chunk.SymbolForm (eqSymb, codeSymb, hasStageSymbol)
 import Language.Drasil.Chunk.Theory
 import Language.Drasil.Chunk.UncertainQuantity

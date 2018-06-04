@@ -21,6 +21,7 @@ import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Expr.Extract (vars)
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Chunk.Attribute.Derivation
+import Language.Drasil.Chunk.Attribute.ShortName
 
 import Control.Lens (makeLenses, (^.))
 
@@ -39,7 +40,7 @@ data InstanceModel = IM { _rc :: RelationConcept
                         , _outCons :: OutputConstraints
                         , _ref :: References
                         , _attribs :: Attributes 
- 			, _deri :: Derivation
+                        , _deri :: Derivation
                         }
 makeLenses ''InstanceModel
   
@@ -54,7 +55,10 @@ instance ConceptDomain InstanceModel where
 instance ExprRelat     InstanceModel where relat = rc . relat
 instance HasAttributes InstanceModel where attributes = attribs
 instance HasDerivation InstanceModel where derivations = deri
+-- error used below is on purpose. These shortnames should be made explicit as necessary
 instance HasReference  InstanceModel where getReferences = ref
+instance HasShortName  InstanceModel where
+  shortname _ = error "No explicit name given for instance model -- build a custom Ref"
 
 -- | Smart constructor for instance models
 im :: RelationConcept -> Inputs -> InputConstraints -> Output -> 

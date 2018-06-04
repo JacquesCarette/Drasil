@@ -23,8 +23,8 @@ module Language.Drasil (
   , UDefn(..), from_udefn
   -- Unit
   , {--DerUChunk(..),--} UnitDefn(..), unitWrapper
-  , makeDerU, unitCon, fund, comp_unitdefn
-  , (^:), (/:), (*:), (*$), (/$), new_unit
+  , makeDerU, unitCon, fund, comp_unitdefn, makeDerU'
+  , (^:), (/:), (*:), (*$), (/$), (^$), new_unit, getsymb
   -- Classes
   , HasUID(uid)
   , NamedIdea(term)
@@ -39,6 +39,7 @@ module Language.Drasil (
   , Constrained(constraints)
   , HasReasVal(reasVal)
   , ExprRelat(relat)
+  , HasDerivation(derivations)
   -- Chunk.VarChunk
   , VarChunk
   , vc, implVar
@@ -87,9 +88,10 @@ module Language.Drasil (
   , Attributes
   -- Chunk.Attributes
   , getSource
-  , Derivation, getDerivation, getShortName, shortname
-  , sourceref, derivationsteps
+  , Derivation, getDerivation, getShortName, shortname'
+  , sourceref
   , References
+  , HasShortName(shortname)
   --Citations
   , Citation, BibRef, CiteField, Month(..), HP
     -- CiteFields smart constructors
@@ -213,12 +215,14 @@ import Language.Drasil.Unit -- all of it
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
   IsUnit, HasAttributes(attributes), CommonIdea(abrv),
-  Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasReference(getReferences))
+  Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations),
+  HasReference(getReferences))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
 import Language.Drasil.Chunk.Attribute.References (References)
+import Language.Drasil.Chunk.Attribute.ShortName
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation (
   -- Types

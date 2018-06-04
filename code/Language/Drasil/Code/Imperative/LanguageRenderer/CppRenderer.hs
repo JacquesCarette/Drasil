@@ -234,9 +234,9 @@ objAccessDoc' c v   (Floor) = funcAppDoc c "floor" [v]
 objAccessDoc' c v   (Ceiling) = funcAppDoc c "ceil" [v]
 objAccessDoc' c v (Cast (Base Float) (Base String)) = funcAppDoc c "std::stod" [v]
 objAccessDoc' c v (ListExtend t) = valueDoc c v <> dot <> text "push_back" <> parens (dftVal)
-    where dftVal = case t of Base bt   -> valueDoc c (defaultValue bt)
-                             List lt t  -> stateType c (List lt t) Dec <> parens (empty)
-                             _         -> error $ "ListExtend does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)
+    where dftVal = case t of Base bt     -> valueDoc c (defaultValue bt)
+                             List lt t'  -> stateType c (List lt t') Dec <> parens (empty)
+                             _           -> error $ "ListExtend does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)
 objAccessDoc' c v f = objAccessDocD c v f
 
 objVarDoc' :: Config -> Value -> Value -> Doc

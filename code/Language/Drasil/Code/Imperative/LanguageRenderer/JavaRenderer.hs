@@ -152,9 +152,9 @@ objAccessDoc' c v Floor = funcAppDoc c "Math.floor" [v]
 objAccessDoc' c v Ceiling = funcAppDoc c "Math.ceil" [v]
 objAccessDoc' c v (Cast (Base Float) (Base String)) = funcAppDoc c "Double.parseDouble" [v]
 objAccessDoc' c v (ListExtend t) = valueDoc c v <> dot <> text "add" <> parens (dftVal)
-    where dftVal = case t of Base bt   -> valueDoc c (defaultValue bt)
-                             List lt t  -> new <+> stateType c (List lt t) Dec <> parens (empty)
-                             _         -> error $ "ListExtend does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)
+    where dftVal = case t of Base bt     -> valueDoc c (defaultValue bt)
+                             List lt t'  -> new <+> stateType c (List lt t') Dec <> parens (empty)
+                             _           -> error $ "ListExtend does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)
 objAccessDoc' c v f = objAccessDocD c v f
 
 methodDoc' :: Config -> FileType -> Label -> Method -> Doc
@@ -165,8 +165,8 @@ methodDoc' c _ _ (Method n s p t ps b) = vcat [
     rbrace]
   where perm Dynamic = empty
         perm Static  = text "static "
-        throwState False = empty
-        throwState True  = text " throws Exception"
+        --throwState False = empty
+        --throwState True  = text " throws Exception"
 methodDoc' c _ _ (MainMethod b) = vcat [
     scopeDoc c Public <+> text "static" <+> methodTypeDoc c Void <+> text "main" <> parens (text "String[] args") 
       <+> text "throws Exception" <+> lbrace,  -- main throws exceptions for now, need to fix!
@@ -233,10 +233,9 @@ inputFn :: Config -> IOType -> Doc
 inputFn c Console = inputFunc c
 inputFn c (File f) = valueDoc c f
 
-
-
 -- check if method throws
-checkExceptions :: Body -> Bool
+-- FIXME: The following code calls itself recursively, and isn't used at all or exported.
+{-checkExceptions :: Body -> Bool
 checkExceptions b = foldl (||) False $ map checkExcBlock b
 
 checkExcBlock :: Block -> Bool
@@ -254,7 +253,7 @@ checkExc' (IterState (While _ b)) = checkExceptions b
 checkExc' (ExceptState _) = True
 checkExc' (IOState _) = True
 checkExc' (MultiState s) = checkExc s 
-checkExc' _ = False    
+checkExc' _ = False
                
 checkExcVB :: [(a, Body)] -> Bool
-checkExcVB vb = foldl (||) False $ map (\(_, b) -> checkExceptions b) vb 
+checkExcVB vb = foldl (||) False $ map (\(_, b) -> checkExceptions b) vb-}

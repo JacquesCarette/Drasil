@@ -8,6 +8,9 @@ import Data.Drasil.Phrase (ofA, andRT, and_, and_', of_, of_', of__)
 import Control.Lens ((^.))
 import qualified Language.Drasil.NounPhrase as NP
 
+assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
+  unlikelyChg, physSyst, requirement, thModel, mg, notApp, typUnc, srs :: CI
+
 -------------------------------------------------------------------------------------------------
 -- | CI       |           |    uid      |         term                        | abbreviation | --
 -------------------------------------------------------------------------------------------------

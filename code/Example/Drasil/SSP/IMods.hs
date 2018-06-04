@@ -26,7 +26,7 @@ import Drasil.SSP.DataDefs (fixme1,fixme2)
 import Data.Drasil.Concepts.Documentation (analysis,
   solution, definition, value, assumption, physicalProperty,
   problem, method_)
-import Data.Drasil.SentenceStructures (andThe, acroGD, acroDD,
+import Data.Drasil.SentenceStructures (andThe, acroGD, 
   sIs, sIn, getTDS, getTandS, ofThe, ofThe', sAnd, sOf, acroIM, acroT,
   eqN, foldlSP, foldlSent_)
 import Data.Drasil.Concepts.Math (equation, surface)
@@ -34,6 +34,8 @@ import Data.Drasil.Concepts.Physics (displacement, force)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Drasil.SSP.Assumptions
 import Drasil.SSP.BasicExprs
+import Drasil.SSP.DataDefs
+
 
 -----------------------
 --  Instance Models  --
@@ -240,17 +242,17 @@ instModIntro1 = foldlSP [S "The", titleize morPrice,
   acroT 3, S "so the", phrase assumption, S "of", acroGD 5,
   S "is used. Solving for", phrase force, S "equilibrium allows",
   plural definition, S "of all", plural force, S "in terms of the",
-  plural physicalProperty, S "of", acroDD 1, S "to",
-  acroDD 9 `sC` S "as done in", acroDD 10 `sC` acroDD 11]
+  plural physicalProperty, S "of", ddRef sliceWght, S "to",
+  ddRef lengthLs `sC` S "as done in", ddRef seismicLoadF `sC` ddRef surfLoads]
 
 instModIntro2 = foldlSP [
   plural value `ofThe'` (phrase intrslce +:+ phrase totNrmForce),
   getES intNormForce, S "the", getTandS normToShear `sC`
   S "and the", titleize fs, (sParen $ getES fs) `sC` S "are unknown.",
   at_start' equation, S "for the unknowns are written in terms of only the",
-  plural value, S "in", acroDD 1, S "to", acroDD 9 `sC` S "the", plural value,
+  plural value, S "in", ddRef sliceWght, S "to", ddRef lengthLs `sC` S "the", plural value,
   S "of", getES shearRNoIntsl `sC` S "and", getES shearFNoIntsl, S "in",
-  acroDD 10, S "and", acroDD 11 `sC` S "and each",
+  ddRef seismicLoadF, S "and", ddRef surfLoads `sC` S "and each",
   S "other. The relationships between the unknowns are non linear" `sC`
   S "and therefore explicit", plural equation, S "cannot be derived and an",
   S "iterative", plural solution, S "method is required"]
@@ -374,7 +376,7 @@ intrSlcDerivation = [
   foldlSP [S "Where", getES shearRNoIntsl `sAnd` getES shearFNoIntsl,
   S "are the resistive and mobile shear of the slice" `sC`
   S wiif, getES intNormForce `sAnd` getES intShrForce `sC`
-  S "as defined in", acroDD 10 `sAnd` acroDD 11,
+  S "as defined in", ddRef seismicLoadF `sAnd` ddRef surfLoads,
   S "Making use of the constants, and with full", plural equation, 
   S "found below in", eqN 19 `sAnd` eqN 20, S "respectively, then", eqN 18, 
   S "can be simplified to", eqN 21 `sC` S "also seen in", acroIM 3],
@@ -401,8 +403,8 @@ intrSlcDerivation = [
 rigDisDerivation = [
   
   foldlSP [S "Using the net force-displacement equilibrium",
-  phrase equation, S "of a slice from", acroDD 13, S "with", plural definition
-  `ofThe` S "stiffness matrices", S "from", acroDD 12, S "and the force", 
+  phrase equation, S "of a slice from", ddRef resShearWO, S "with", plural definition
+  `ofThe` S "stiffness matrices", S "from", ddRef intrsliceF, S "and the force", 
   plural definition, S "from", acroGD 7 , S "a broken down force displacement",
   S "equilibrium", phrase equation +:+. S "can be derived", eqN 22,
   S "gives the broken down", phrase equation, S "in the", getES xi,
@@ -412,10 +414,10 @@ rigDisDerivation = [
   eqUnR fDisEq_rel,
   
   foldlSP [S "Using the known input assumption of", (refA sspRefDB newA2) `sC`
-  S "the force variable", plural definition, S "of", acroDD 1, S "to",
-  acroDD 8, S "on", S "left side" `ofThe` plural equation,
+  S "the force variable", plural definition, S "of", ddRef sliceWght, S "to",
+  ddRef lengthLb, S "on", S "left side" `ofThe` plural equation,
   S "can be solved for. The only unknown in the variables to solve",
-  S "for the stiffness values from", acroDD 14 +:+. 
+  S "for the stiffness values from", ddRef mobShearWO +:+. 
   S "is the displacements", S "Therefore taking the", phrase equation, 
   S "from each slice a set of", E $ 2 * sy numbSlices, plural equation
   `sC` S "with", E $ 2 * sy numbSlices, S "unknown displacements in the", 
@@ -447,7 +449,7 @@ rigFoSDerivation = [
     sin(inxi baseAngle) * inxi dy_i) "",
   
   foldlSP [S "With the", phrase definition, S "of normal stiffness from",
-  acroDD 14, --FIXME: grab nrmStiffBase's term name?
+  ddRef mobShearWO, --FIXME: grab nrmStiffBase's term name?
   S "to find", S "normal stiffness" `ofThe` S "base", getES nrmStiffBase,
   S "and the now known base displacement perpendicular to the surface",
   getES nrmDispl, S "from", eqN 25, S "the normal base stress",

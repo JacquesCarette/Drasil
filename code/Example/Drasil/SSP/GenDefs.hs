@@ -8,10 +8,9 @@ import Drasil.SSP.Unitals (baseAngle, genDisplace, rotatedDispl, dy_i,
   dx_i, inxi, index, nrmDispl, shrDispl, elmPrllDispl, elmNrmDispl,
   nrmStiffBase, shrStiffIntsl, genPressure, intShrForce, intNormForce,
   fy, fx, impLoadAngle, surfLoad, surfHydroForce, baseHydroForce,
-  slcWght, inxiM1, surfAngle, earthqkLoadFctr, watrForceDif, midpntHght,
-  baseWthX, sliceHght, watrForce, scalFunc, xi, normToShear, fs, shrResI,
-  shearFNoIntsl, shrResI, mobShrI, nrmFSubWat, totNrmForce, baseLngth,
-  shrStress, cohesion, fricAngle)
+  slcWght, inxiM1, surfAngle, earthqkLoadFctr, watrForceDif, baseWthX,
+  scalFunc, xi, normToShear, fs, shrResI, shearFNoIntsl, shrResI, mobShrI, 
+  nrmFSubWat, totNrmForce, baseLngth, shrStress, cohesion, fricAngle)
 import Data.Drasil.Concepts.Documentation (element,
   system, value, variable, definition, model,
   assumption, property, method_)
@@ -19,7 +18,7 @@ import Drasil.SSP.Defs (slope, slice, intrslce, slpSrf)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len)
 import Data.Drasil.Quantities.Physics (displacement, force)
 import Data.Drasil.SentenceStructures (sAnd, getTandS,
-  isThe, ofThe, foldlSent, acroDD, acroGD, acroT)
+  isThe, ofThe, foldlSent,  acroGD, acroT)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 import Data.Drasil.Concepts.Math (surface, angle,
@@ -28,6 +27,9 @@ import Data.Drasil.Utils (getES)
 import Drasil.SRS as SRS (physSyst, missingP)
 import Drasil.SSP.Assumptions
 import Drasil.SSP.BasicExprs
+import Drasil.SSP.DataDefs
+
+
 ---------------------------
 --  General Definitions  --
 ---------------------------
@@ -57,8 +59,8 @@ nmFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   S "refers to", (plural value `ofThe` plural property), S "for",
   phrase slice :+: S "/" :+: plural intrslce, S "following convention in" +:+.
   makeRef (SRS.physSyst SRS.missingP []), at_start force, phrase variable,
-  plural definition, S "can be found in", acroDD 1, S "to",
-  acroDD 9]
+  plural definition, S "can be found in", ddRef sliceWght, S "to",
+  ddRef lengthLs]
 
 --
 bsShrFEq :: RelationConcept
@@ -81,8 +83,8 @@ bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   S "refers to", (plural value `ofThe` plural property), S "for",
   phrase slice :+: S "/" :+: plural intrslce, S "following convention in" +:+.
   makeRef (SRS.physSyst SRS.missingP []), at_start force, phrase variable,
-  plural definition, S "can be found in", acroDD 1, S "to",
-  acroDD 9]
+  plural definition, S "can be found in", ddRef sliceWght, S "to",
+  ddRef lengthLs]
 
 --
 shrResEqn :: Expr
@@ -167,7 +169,7 @@ momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   plural value `ofThe` plural property, S "for", phrase slice :+: S "/" :+:
   plural intrslce, S "following convention in" +:+.
   makeRef (SRS.physSyst SRS.missingP []), at_start variable, plural definition,
-  S "can be found in", acroDD 1, S "to", acroDD 9]
+  S "can be found in", ddRef sliceWght, S "to", ddRef lengthLs]
 
 --
 netForcex :: RelationConcept
@@ -213,7 +215,7 @@ fNet_desc = foldlSent [S "These equations show the net sum of the",
   phrase slice :+: S "/" :+: plural intrslce, S "following", 
   S "convention in" +:+. makeRef (SRS.physSyst SRS.missingP []), 
   at_start force, phrase variable, plural definition, S "can be found in",
-  acroDD 1, S "to", acroDD 8]
+  ddRef sliceWght, S "to", ddRef lengthLb]
 
 --
 hookesLaw2d :: RelationConcept
@@ -239,7 +241,7 @@ hooke2d_desc = foldlSent [
   phrase len, S "The stiffness", plural value, S "Kn,i" `sAnd` S "Kt,i",
   -- FIXME: Pn,i ~ Pt,i ~ Kn,i ~ Kt,i need symbols 
   S "are then the resistance to", phrase displacement,
-  S "in the respective directions defined as in" +:+. acroDD 14,
+  S "in the respective directions defined as in" +:+. ddRef mobShearWO,
   S "The pressure", plural force, S "would be the result of applied",
   S "loads on the", phrase mass `sC` S "the product of the stiffness",
   plural element, S "with the", phrase displacement, S "would be the",

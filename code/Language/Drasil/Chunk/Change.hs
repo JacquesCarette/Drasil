@@ -1,3 +1,4 @@
+{-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.Change 
   ( Change(..), ChngType(..)
   , lc, ulc
@@ -7,7 +8,7 @@ import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.Attribute.ShortName
 import Language.Drasil.Spec (Sentence)
 
-import Control.Lens ((^.))
+import Control.Lens ((^.), view, makeLenses)
 
 -- FIXME: We need a better way to capture change information. Sentences
 -- are dead information, and larger structures (like Contents) are display-specific.
@@ -31,11 +32,11 @@ data Change = ChC
   , chng     :: Sentence
   , _refName :: ShortName
   }
+makeLenses ''Change
   
 instance HasUID        Change where uid f (ChC a b c d) = fmap (\x -> ChC x b c d) (f a)
 instance Eq            Change where a == b = a ^. uid == b ^. uid
-instance HasShortName  Change where
-  shortname (ChC _ _ _ sn)     = sn
+instance HasShortName  Change where shortname = view refName
 
 -- | Smart constructor for requirement chunks (should not be exported)
 chc :: String -> ChngType -> Sentence -> ShortName -> Change

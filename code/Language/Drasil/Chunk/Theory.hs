@@ -53,7 +53,7 @@ instance HasReference  TheoryChunk where getReferences = ref
 -- use the id of the TheoryModel as the uid. FIXME ?
 data TheoryModel = TM { _con :: ConceptChunk
                       , _thy :: TheoryChunk
-                      , _refame :: ShortName
+                      , _refName :: ShortName
                       }
 makeLenses ''TheoryModel
 
@@ -62,9 +62,7 @@ instance NamedIdea     TheoryModel where term = con . term
 instance Idea          TheoryModel where getA = getA . view con
 instance Definition    TheoryModel where defn = con . defn
 instance HasReference  TheoryModel where getReferences = thy . getReferences
--- error used below is on purpose. These shortnames should be made explicit as necessary
-instance HasShortName  TheoryModel where
-  shortname (TM _ _ sn) = sn
+instance HasShortName  TheoryModel where shortname = view refName
 instance ConceptDomain TheoryModel where
   type DOM TheoryModel = ConceptChunk
   cdom = con . cdom

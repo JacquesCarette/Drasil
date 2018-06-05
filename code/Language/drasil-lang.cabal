@@ -46,7 +46,6 @@ library
     , Language.Drasil.Chunk.Attribute.References
     , Language.Drasil.Chunk.Change
     , Language.Drasil.Chunk.Citation
-    , Language.Drasil.Chunk.Code
     , Language.Drasil.Chunk.CommonIdea
     , Language.Drasil.Chunk.Concept
     , Language.Drasil.Chunk.Concept.Core
@@ -81,7 +80,6 @@ library
     , Language.Drasil.Printing.Citation
     , Language.Drasil.Printing.Import
     , Language.Drasil.Printing.LayoutObj
-    , Language.Drasil.Code.Imperative.Import
 
   Build-Depends:
     base >= 4.7,

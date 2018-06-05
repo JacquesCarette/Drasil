@@ -2,7 +2,7 @@
 module Language.Drasil.CodeSpec where
 
 import Language.Drasil.Classes (term, CommonIdea, HasAttributes,ExprRelat(relat))
-import Language.Drasil.Chunk.Code
+--import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity -- for hack
 import Language.Drasil.Chunk.SymbolForm (codeSymb)
@@ -16,7 +16,6 @@ import Language.Drasil.Space -- for hack
 import Language.Drasil.DataDesc
 import Language.Drasil.ChunkDB
 import Language.Drasil.Chunk.VarChunk
-import Language.Drasil.Code.Imperative.Lang
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import qualified Data.Map as Map
 import Control.Lens ((^.))
@@ -29,6 +28,12 @@ type Output = CodeChunk
 type Const = CodeDefinition
 type Derived = CodeDefinition
 type Def = CodeDefinition
+
+data Lang = Cpp
+          | CSharp
+          | Java
+          | Python
+          deriving Eq
 
 data CodeSpec where
   CodeSpec :: CommonIdea a => {

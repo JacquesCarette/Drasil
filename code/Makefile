@@ -38,12 +38,12 @@ prog: $(PROGS)
 FORCE: ;
 
 build: FORCE
-	mkdir -p build
-	stack build -j2 $(stackArgs) drasil-code
-
-build_lang: build
 	mkdir -p $(LANG_DIR)
 	cd $(LANG_DIR) && stack build -j2 $(stackArgs) drasil-lang
+
+build_code: build
+	mkdir -p build
+	stack build -j2 $(stackArgs) drasil-code
 
 build_data: build
 	mkdir -p $(DATA_DIR)

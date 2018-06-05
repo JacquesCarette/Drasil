@@ -14,7 +14,7 @@ iModels = [im1, im2, im3]
 
 {-- Force on the translational motion  --}
 im1 :: RelationConcept
-im1 = makeRC "im1" (im1NP) (im1descr +:+ im1leg) im1Rel []
+im1 = makeRC "im1" (im1NP) (im1descr +:+ im1leg) im1Rel
 
 im1NP :: NP
 im1NP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
@@ -39,7 +39,7 @@ im1leg = foldle1 (+:+) (+:+) $ map defList im1legTerms
 {-- --}
 
 im2 :: RelationConcept
-im2 = makeRC "im2" (im2NP) (im2descr +:+ im2leg) im2Rel []
+im2 = makeRC "im2" (im2NP) (im2descr +:+ im2leg) im2Rel
 
 im2NP :: NP
 im2NP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid body"
@@ -61,7 +61,7 @@ im2leg = foldle1 (+:+) (+:+) $ map defList im2legTerms
 {-- --}
 
 im3 :: RelationConcept
-im3 = makeRC "im3" (im3NP) (im3descr +:+ im3leg) im3Rel1 []
+im3 = makeRC "im3" (im3NP) (im3descr +:+ im3leg) im3Rel1
 
 im3NP :: NP
 im3NP =  nounPhraseSP "Collisions on 2D rigid bodies"

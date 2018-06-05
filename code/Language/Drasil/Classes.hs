@@ -12,7 +12,6 @@ module Language.Drasil.Classes (
   , HasUnitSymbol(usymb)
   , IsUnit
   , UnitEq(uniteq)
-  , HasAttributes(attributes)
   , HasReference(getReferences)
   , CommonIdea(abrv)
   , Constrained(constraints)
@@ -26,7 +25,6 @@ import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Symbol (Stage, Symbol)
 import Language.Drasil.Space (Space)
 import Language.Drasil.UnitLang (USymb, UDefn)
-import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Attribute.References (References)
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Expr (Expr)
@@ -76,10 +74,6 @@ class HasSymbol c where
 -- | HasSpace is anything which has a Space...
 class HasSpace c where
   typ      :: Lens' c Space
-
--- | Anything with 'Attributes'
-class HasAttributes c where
-  attributes :: Lens' c Attributes
 
 class HasReference c where
   getReferences :: Lens' c References

@@ -169,13 +169,13 @@ instance Referable AssumpChunk where
   rType   _             = Assump
 
 instance Referable ReqChunk where
-  refAdd  r@(RC _ rt _ _ _) = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
+  refAdd  r@(RC _ rt _ _) = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
   rType   _                 = Req
 
 instance Referable Change where
-  refAdd r@(ChC _ rt _ _ _)    = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
-  rType (ChC _ Likely _ _ _)   = LC
-  rType (ChC _ Unlikely _ _ _) = UC
+  refAdd r@(ChC _ rt _ _)    = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
+  rType (ChC _ Likely _ _)   = LC
+  rType (ChC _ Unlikely _ _) = UC
 
 instance Referable Section where
   refAdd  (Section _ _ r _) = "Sec:" ++ r
@@ -185,7 +185,6 @@ instance Referable Citation where
   refAdd c = concatMap repUnd $ citeID c -- citeID should be unique.
   rType _ = Cite
 
--- error used below is on purpose. These refNames should be made explicit as necessary
 instance Referable TheoryModel where
   refAdd  t = "T:" ++ t ^. uid
   rType   _ = Def
@@ -253,8 +252,8 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 makeRef :: (HasShortName l, Referable l) => l -> Sentence
 makeRef r = customRef r (shortname r)
 
--- | Create a reference with a custom 'RefName'
-customRef :: (HasShortName l, Referable l) => l -> String -> Sentence
+-- | Create a reference with a custom 'ShortName'
+customRef :: (HasShortName l, Referable l) => l -> ShortName -> Sentence
 customRef r n = Ref (rType r) (refAdd r) n
 
 -- This works for passing the correct id to the reference generator for Assumptions,

@@ -1,14 +1,13 @@
 module Language.Drasil.Chunk.Change 
   ( Change(..), ChngType(..)
-  , lc, ulc, chc'
+  , lc, ulc
   ) where
 
-import Language.Drasil.Classes (HasUID(uid),HasAttributes(attributes))
-import Language.Drasil.Chunk.Attribute.Core(Attributes)
-import Language.Drasil.Chunk.Attribute(shortname')
-import Language.Drasil.Spec (Sentence, RefName)
+import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Chunk.Attribute.ShortName
+import Language.Drasil.Spec (Sentence)
 
-import Control.Lens (set, (^.))
+import Control.Lens ((^.))
 
 -- FIXME: We need a better way to capture change information. Sentences
 -- are dead information, and larger structures (like Contents) are display-specific.
@@ -25,27 +24,24 @@ instance Show ChngType where
 
 -- | Requirement chunk type. Has an id, the type of requirement
 -- (Functional/Non-Functional) from 'ChngType', a sentence describing what is
--- required (TODO: Change this), and a list of attributes.
+-- required (TODO: Change this), and a short name for reference display.
 data Change = ChC 
   { _id      :: String
   , chngType :: ChngType 
   , chng     :: Sentence
-  , _refName :: RefName -- HACK for refs?
-  , _atts    :: Attributes
+  , _refName :: ShortName
   }
   
-instance HasUID        Change where uid f (ChC a b c d e) = fmap (\x -> ChC x b c d e) (f a)
-instance HasAttributes Change where attributes f (ChC a b c d e) = fmap (\x -> ChC a b c d x) (f e)
+instance HasUID        Change where uid f (ChC a b c d) = fmap (\x -> ChC x b c d) (f a)
 instance Eq            Change where a == b = a ^. uid == b ^. uid
+instance HasShortName  Change where
+  shortname (ChC _ _ _ sn)     = sn
 
 -- | Smart constructor for requirement chunks (should not be exported)
-chc :: String -> ChngType -> Sentence -> RefName -> Attributes -> Change
+chc :: String -> ChngType -> Sentence -> ShortName -> Change
 chc = ChC
 
-chc' :: Change -> String -> Change
-chc' c s = set attributes ([shortname' s] ++ (c ^. attributes)) c
-
-lc, ulc :: String -> Sentence -> RefName -> Attributes -> Change
+lc, ulc :: String -> Sentence -> ShortName -> Change
 -- | Smart constructor for functional requirement chunks.
 lc i = chc i Likely
 

@@ -161,7 +161,7 @@ glassSystInfo = SI {
   --FIXME: All named ideas, not just acronyms.
 
 testIMFromQD :: InstanceModel
-testIMFromQD = imQD gbSymbMap risk EmptyS [] [] []
+testIMFromQD = imQD gbSymbMap risk EmptyS [] []
 glassBR_code :: CodeSpec
 glassBR_code = codeSpec glassSystInfo allMods
 
@@ -450,7 +450,7 @@ assumpList :: [AssumpChunk] -> [Contents]
 assumpList = map Assumption
 
 assumptions :: [Contents] -- FIXME: Remove this entirely and use new refs + docLang.
-assumptions = fst (foldr (\s (ls, n) -> ((Assumption $ assump ("A" ++ show n) s ("A" ++ show n) []) : ls, n-1))
+assumptions = fst (foldr (\s (ls, n) -> ((Assumption $ assump ("A" ++ show n) s ("A" ++ show n)) : ls, n-1))
  ([], (length assumptionDescs)::Int) assumptionDescs)
 -- These correspond to glassTyAssumps, glassCondition, explsnScenario,
 -- standardValues, glassLiteAssmp, bndryConditions, responseTyAssump, ldfConstant
@@ -494,7 +494,7 @@ s7_1_req5 = mkRequirement "s7_1_req5" (req5Desc (output_)) "Check-Glass-Safety"
 -- be converted to reqChunk format with meaningful refnames and this should be
 -- removed.
 newReqs :: [ReqChunk]
-newReqs = map (\(x,y) -> frc x y x []) --FIXME: FRC Hack for referencing --FIXME: x used twice?
+newReqs = map (\(x,y) -> frc x y (shortname' x)) --FIXME: FRC Hack for referencing --FIXME: x used twice?
   [ ("r1",req1Desc)
   , ("r2",req2Desc)
   , ("r3",req3Desc)

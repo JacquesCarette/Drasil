@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.Attribute.ShortName where
 
 --It is a hack to think of ShortName as a String
-data ShortName = ShortNm String
+newtype ShortName = ShortNm String
 
 class HasShortName  s where
   shortname :: s -> ShortName -- String; The text to be displayed for the link.

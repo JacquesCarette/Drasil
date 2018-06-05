@@ -68,15 +68,16 @@ uwMUnitDefn :: Maybe UnitDefn -> [UnitDefn]
 uwMUnitDefn (Just a) = [a] 
 uwMUnitDefn Nothing  = []
 
-uwFund :: UnitDefn -> [UnitDefn]
+
+{--uwFund :: UnitDefn -> [UnitDefn]
 uwFund a = case a ^. udefn of
        Nothing -> [a]
        Just x -> case x of 
               FUSynonym _ -> [a]
               FUShift _ _-> [a]
               FUScale _ _ -> [a]
-              _ -> (getunit a)
+              _ -> concat (map helper (getunit a))--}
 
       
 uwMUnitDefnL :: [DefinedQuantityDict] -> [UnitDefn]
-uwMUnitDefnL l = concat (map uwFund $ concat (map uwMUnitDefn $ uwDQDL l))
+uwMUnitDefnL l = concat (map getunit $ concat (map uwMUnitDefn $ uwDQDL l))

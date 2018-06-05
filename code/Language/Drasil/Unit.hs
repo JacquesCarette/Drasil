@@ -93,13 +93,17 @@ unitWrapper' u = UD (cc' u (u ^. defn)) (u ^. usymb) (u ^. udefn) (getunit u)
 
 --- These conveniences go here, because we need the class
 -- | Combinator for raising a unit to a power
-helpUnit :: UnitDefn -> [UnitDefn]
-helpUnit a = case (getunit a) of
-  [] -> [a]
-  _ -> getunit a
+helperUnit :: UnitDefn -> [UnitDefn]
+helperUnit a = case a ^. udefn of
+  Just x -> case x of
+    FUSynonym _ -> [a]
+    FUScale _ _ -> [a]
+    FUShift _ _ -> [a]
+    _ -> getunit a
+  Nothing -> [a]
 
 (^:) :: UnitDefn -> Integer -> UnitEquation
-u ^: i = UE (helpUnit u) (upow (u ^. usymb))
+u ^: i = UE (helperUnit u) (upow (u ^. usymb))
   where
     upow (US l) = US $ map (second (* i)) l
 
@@ -107,25 +111,25 @@ u ^: i = UE (helpUnit u) (upow (u ^. usymb))
 (/:) :: UnitDefn -> UnitDefn -> UnitEquation
 u1 /: u2 = let US l1 = u1 ^. usymb
                US l2 = u2 ^. usymb in
-  UE ((helpUnit u1) ++ (helpUnit u2)) (US $ l1 ++ map (second negate) l2)
+  UE ((helperUnit u1) ++ (helperUnit u2)) (US $ l1 ++ map (second negate) l2)
 
 -- | Combinator for multiplying two units together
 (*:) :: UnitDefn -> UnitDefn -> UnitEquation
 u1 *: u2 = let US l1 = u1 ^. usymb
                US l2 = u2 ^. usymb in
-  UE ((helpUnit u1) ++ (helpUnit u2)) (US $ l1 ++ l2)
+  UE ((helperUnit u1) ++ (helperUnit u2)) (US $ l1 ++ l2)
 
 -- | Combinator for multiplying a unit and a symbol
 (*$) :: UnitDefn -> UnitEquation -> UnitEquation
 u1 *$ u2 = let US l1 = u1 ^. usymb
                US l2 = getsymb u2 in
-  UE ((helpUnit u1)++(getCu u2)) (US $ l1 ++ l2)
+  UE ((helperUnit u1)++(getCu u2)) (US $ l1 ++ l2)
 
 -- | Combinator for dividing a unit and a symbol
 (/$) :: UnitDefn -> UnitEquation -> UnitEquation
 u1 /$ u2 = let US l1 = u1 ^. usymb
                US l2 = getsymb u2 in
-  UE ((helpUnit u1)++(getCu u2)) (US $ l1 ++ map (second negate) l2)
+  UE ((helperUnit u1)++(getCu u2)) (US $ l1 ++ map (second negate) l2)
 
 -- | Combinator for mulitiplying two unit equations
 (^$) :: UnitEquation -> UnitEquation -> UnitEquation

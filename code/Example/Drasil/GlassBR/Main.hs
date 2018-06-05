@@ -21,4 +21,4 @@ main :: IO()
 main = do
   gen (DocSpec SRS "GlassBR_SRS")     glassBR_srs gbSymbMap
   gen (DocSpec Website "GlassBR_SRS") glassBR_srs gbSymbMap
-  genCode [] glassChoices glassBR_code
+  genCode glassChoices glassBR_code

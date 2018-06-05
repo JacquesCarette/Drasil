@@ -26,7 +26,8 @@ import Data.Drasil.SentenceStructures
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import Data.List (find)
 import Control.Lens ((^.))
-import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
+import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl,
+  listofTablesToRefs)
 
 import qualified Drasil.SRS as SRS
 
@@ -269,10 +270,8 @@ render progName symMap item@(SectionModel niname _)
 ------------------------------
 
 genericSect :: SubSec -> Section
-genericSect (SectionModel niname xs) = section (pullTitle xs niname) 
-  (pullContents xs) (pullSections xs) (niname ^. uid) (niname ^. uid)
-  -- FIXME: Ref HACK because
-  -- generic sections need a ref name. Should be made explicit elsewhere.
+genericSect (SectionModel niname xs) = section'' (pullTitle xs niname) 
+  (pullContents xs) (pullSections xs) (niname ^. uid)
 
 ------------------------------------------------
 -- GENERAL SYSTEM DESCRIPTION SECTION BUILDER --
@@ -487,17 +486,7 @@ iModIntro = foldlSP [S "This", phrase Doc.section_,
   plural Doc.symbol_, S "defined in", S "FIXME REF", 
   S "to replace the abstract", plural Doc.symbol_, S "in the", 
   plural Doc.model, S "identified in", S "FIXME REF" :+: S " and" +:+ S "FIXME REF"]
-
-
--- makes a list of references to tables takes
--- l  list of layout objects that can be referenced
--- outputs a sentence containing references to the layout objects 
-listofTablesToRefs :: Referable l => [l] -> Sentence
-listofTablesToRefs  []     = EmptyS
-listofTablesToRefs  [x]    = (makeRef x) +:+ S "shows"
-listofTablesToRefs  [x,y]  = (makeRef x) `sC` S "and" +:+ listofTablesToRefs [y]
-listofTablesToRefs  (x:xs) = (makeRef x) `sC` listofTablesToRefs (xs)
-
+  
 ---------------------
 -- DATA CONSTRAINTS --
 ---------------------

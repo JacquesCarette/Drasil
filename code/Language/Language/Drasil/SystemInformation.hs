@@ -3,7 +3,7 @@
 module Language.Drasil.SystemInformation where
 
 import Language.Drasil.Classes (HasUID, Idea, Concept, IsUnit, CommonIdea,
-  Constrained, HasAttributes)
+  Constrained)
 import Language.Drasil.Chunk.Citation (BibRef)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity
@@ -21,8 +21,8 @@ data SystemInformation where
 -- I'm thinking for getting concepts that are also quantities, we could
 -- use a lookup of some sort from their internal (Drasil) ids.
  SI :: (CommonIdea a, Idea a, Idea b, HasName c, IsUnit d,
-  HasAttributes e, Quantity e, Eq e, Quantity f, Concept f, Eq f,
-  HasAttributes h, Quantity h, HasAttributes i, Quantity i,
+  Quantity e, Eq e, Quantity f, Concept f, Eq f,
+  Quantity h, Quantity i,
   HasUID j, Constrained j) => 
   { _sys :: a
   , _kind :: b

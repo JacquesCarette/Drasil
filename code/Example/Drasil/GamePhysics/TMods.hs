@@ -22,7 +22,7 @@ cpTMods = [t1NewtonSL, t2NewtonTL, t3NewtonLUG, t4ChaslesThm, t5NewtonSLR]
 
 t1NewtonSL :: RelationConcept
 t1NewtonSL = makeRC "t1NewtonSL" (nounPhraseSP "Newton's second law of motion")
-  t1descr newtonSLRel []
+  t1descr newtonSLRel
 
 newtonSLRel :: Relation
 newtonSLRel = (sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)
@@ -42,7 +42,7 @@ t1descr = foldlSent [S "The net", (phrase QP.force), (getES QP.force),
 
 t2NewtonTL :: RelationConcept
 t2NewtonTL = makeRC "t2NewtonTL" (nounPhraseSP "Newton's third law of motion")
-  t2descr newtonTLRel []
+  t2descr newtonTLRel
 
 newtonTLRel :: Relation
 newtonTLRel = (sy force_1) $= (negate (sy force_2))
@@ -60,7 +60,7 @@ t2descr = foldlSent [S "Every action has an equal and opposite reaction. In othe
 
 t3NewtonLUG :: RelationConcept
 t3NewtonLUG = makeRC "t3NewtonLUG" 
-  (nounPhraseSP "Newton's law of universal gravitation") t3descr newtonLUGRel []
+  (nounPhraseSP "Newton's law of universal gravitation") t3descr newtonLUGRel
 
 newtonLUGRel :: Relation
 newtonLUGRel = (sy QP.force) $=
@@ -102,7 +102,7 @@ t3descr = foldlSent [S "Two", (plural CP.rigidBody), S "in the universe",
 
 t4ChaslesThm :: RelationConcept
 t4ChaslesThm = makeRC "t4ChaslesThm" (nounPhraseSP "Chasles' theorem")
-  t4descr chaslesRel []
+  t4descr chaslesRel
 
 -- Need the cross product symbol - third term should be a cross product.
 chaslesRel :: Relation
@@ -127,7 +127,7 @@ t4descr = foldlSent [S "The linear", (phrase QP.velocity),
 
 t5NewtonSLR :: RelationConcept
 t5NewtonSLR = makeRC "t5NewtonSLR" 
-  (nounPhraseSP "Newton's second law for rotational motion") t5descr newtonSLRRel []
+  (nounPhraseSP "Newton's second law for rotational motion") t5descr newtonSLRRel
 
 newtonSLRRel :: Relation
 newtonSLRRel = (sy  QP.torque) $= (sy QP.momentOfInertia) * (sy QP.angularAccel)

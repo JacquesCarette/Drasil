@@ -86,6 +86,12 @@ termLookup c m = getT $ Map.lookup (c ^. uid) m
   where getT (Just x) = x
         getT Nothing  = error $ "Term: " ++ (c ^. uid) ++ " not found in TermMap"
 
+-- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
+defLookup :: UID -> ConceptMap -> ConceptChunk
+defLookup u m = getC $ Map.lookup u m
+  where getC (Just x) = x
+        getC Nothing = error $ "Concept: " ++ u ++ " not found in ConceptMap"
+
 -- | Our chunk databases. Should contain all the maps we will need.
 data ChunkDB = CDB { _csymbs :: SymbolMap
                    , _cterms :: TermMap 

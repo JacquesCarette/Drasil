@@ -21,7 +21,7 @@ import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Expr.Extract (vars)
 import Language.Drasil.Spec (Sentence)
 
-import Control.Lens (makeLenses, (^.))
+import Control.Lens (makeLenses, (^.), view)
 
 type Inputs = [QuantityDict]
 type Output = QuantityDict
@@ -38,12 +38,13 @@ data InstanceModel = IM { _rc :: RelationConcept
                         , _outCons :: OutputConstraints
                         , _ref :: References
                         , _deri :: Derivation
+                        , _refName :: ShortName
                         }
 makeLenses ''InstanceModel
   
 instance HasUID        InstanceModel where uid = rc . uid
 instance NamedIdea     InstanceModel where term = rc . term
-instance Idea          InstanceModel where getA (IM a _ _ _ _ _ _) = getA a
+instance Idea          InstanceModel where getA (IM a _ _ _ _ _ _ _) = getA a
 instance Concept       InstanceModel where
 instance Definition    InstanceModel where defn = rc . defn
 instance ConceptDomain InstanceModel where
@@ -51,18 +52,18 @@ instance ConceptDomain InstanceModel where
   cdom = rc . cdom
 instance ExprRelat     InstanceModel where relat = rc . relat
 instance HasDerivation InstanceModel where derivations = deri
--- error used below is on purpose. These shortnames should be made explicit as necessary
 instance HasReference  InstanceModel where getReferences = ref
-instance HasShortName  InstanceModel where
-  shortname _ = error "No explicit name given for instance model -- build a custom Ref"
+instance HasShortName  InstanceModel where shortname = view refName
 
 -- | Smart constructor for instance models
 im :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> InstanceModel
-im rc i ic o oc = IM rc i ic o oc [] []
+  OutputConstraints -> String -> InstanceModel
+im rc i ic o oc sn = IM rc i ic o oc [] [] (shortname' sn)
 
 -- | Smart constructor for instance model from qdefinition 
 -- (Sentence is the "concept" definition for the relation concept)
-imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> InputConstraints -> OutputConstraints -> InstanceModel
-imQD ctx qd dfn incon ocon = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
-  (sy qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon (qw qd) ocon [] []
+-- FIXME: get the shortname from the QDefinition?
+imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> InputConstraints -> OutputConstraints -> 
+  String -> InstanceModel
+imQD ctx qd dfn incon ocon sn = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
+  (sy qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon (qw qd) ocon [] [] (shortname' sn)

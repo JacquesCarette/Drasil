@@ -161,7 +161,7 @@ glassSystInfo = SI {
   --FIXME: All named ideas, not just acronyms.
 
 testIMFromQD :: InstanceModel
-testIMFromQD = imQD gbSymbMap risk EmptyS [] []
+testIMFromQD = imQD gbSymbMap risk EmptyS [] [] "riskFun" --shortname
 glassBR_code :: CodeSpec
 glassBR_code = codeSpec glassSystInfo allMods
 

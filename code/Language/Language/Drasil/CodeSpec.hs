@@ -13,7 +13,7 @@ import Language.Drasil.SystemInformation
 import Language.Drasil.Expr -- for hack
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Space -- for hack
-import Language.Drasil.DataDesc
+import Language.Drasil.Code.DataDesc
 import Language.Drasil.ChunkDB
 import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Code.Imperative.Lang

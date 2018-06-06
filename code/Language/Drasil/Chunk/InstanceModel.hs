@@ -7,8 +7,8 @@ module Language.Drasil.Chunk.InstanceModel
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn),ConceptDomain(cdom,DOM), Concept, ExprRelat(relat),
   HasDerivation(derivations), HasReference(getReferences))
-import Language.Drasil.Chunk.Attribute.References (References)
-import Language.Drasil.Chunk.Attribute.Derivation
+import Language.Drasil.Chunk.References (References)
+import Language.Drasil.Chunk.Derivation
 import Language.Drasil.Chunk.ShortName
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained.Core (TheoryConstraint)

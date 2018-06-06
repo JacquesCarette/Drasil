@@ -13,7 +13,7 @@ import qualified Language.Drasil.Chunk.Quantity as Q
 import Language.Drasil.Symbol (Symbol, Stage)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Unit (UnitDefn, unitWrapper)
-import Language.Drasil.Chunk.Attribute.Derivation
+import Language.Drasil.Chunk.Derivation
 
 import Control.Lens ((^.), makeLenses, view)
 

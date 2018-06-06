@@ -13,19 +13,20 @@ import Language.Drasil.Unit (unitWrapper, UnitDefn)
 import Language.Drasil.Chunk.Attribute.Derivation
 import Language.Drasil.Chunk.Attribute.ShortName
 
-import Control.Lens (makeLenses)
+import Control.Lens (makeLenses, view)
 
 -- | A GenDefn is a RelationConcept that may have units
 data GenDefn = GD { _relC :: RelationConcept
                   , gdUnit :: Maybe UnitDefn                  
                   , _deri :: Derivation
                   , _ref :: References
+                  , _refName :: ShortName
                   }
 makeLenses ''GenDefn
 
 instance HasUID        GenDefn where uid = relC . uid
 instance NamedIdea     GenDefn where term = relC . term
-instance Idea          GenDefn where getA (GD a _ _ _) = getA a
+instance Idea          GenDefn where getA (GD a _ _ _ _) = getA a
 instance Concept       GenDefn where
 instance Definition    GenDefn where defn = relC . defn
 instance ConceptDomain GenDefn where
@@ -34,10 +35,9 @@ instance ConceptDomain GenDefn where
 instance ExprRelat     GenDefn where relat = relC . relat
 instance HasDerivation GenDefn where derivations = deri
 instance HasReference  GenDefn where getReferences = ref
--- error used below is on purpose. These shortnames should be made explicit as necessary
-instance HasShortName  GenDefn where
-  shortname _ = error "No explicit name given for general definition -- build a custom Ref"
+instance HasShortName  GenDefn where shortname = view refName
 
-gd :: (IsUnit u, DOM u ~ ConceptChunk) => RelationConcept -> Maybe u -> Derivation -> GenDefn
-gd r (Just u) derivs = GD r (Just (unitWrapper u)) derivs []
-gd r Nothing derivs = GD r Nothing derivs []
+gd :: (IsUnit u, DOM u ~ ConceptChunk) => RelationConcept -> Maybe u ->
+  Derivation -> String -> GenDefn
+gd r (Just u) derivs sn = GD r (Just (unitWrapper u)) derivs [] (shortname' sn)
+gd r Nothing derivs sn = GD r Nothing derivs [] (shortname' sn)

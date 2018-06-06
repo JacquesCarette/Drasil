@@ -24,6 +24,8 @@ library
     , Language.Drasil.Code.CodeGeneration
     , Language.Drasil.Code.Imperative.Parsers.ConfigParser
     , Language.Drasil.Chunk.Code
+    , Language.Drasil.CodeSpec
+    , Language.Drasil.Generate
    
   Build-Depends:
     base >= 4.7,

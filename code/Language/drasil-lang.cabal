@@ -17,7 +17,6 @@ library
     , Language.Drasil.Config
     , Language.Drasil.Document
     , Language.Drasil.Format
-    , Language.Drasil.Generate
     , Language.Drasil.Misc
     , Language.Drasil.NounPhrase.Core
     , Language.Drasil.NounPhrase
@@ -31,7 +30,6 @@ library
     , Language.Drasil.Unicode
     , Language.Drasil.Unit
     , Language.Drasil.UnitLang
-    , Language.Drasil.CodeSpec
     , Language.Drasil.HTML.Helpers
     , Language.Drasil.HTML.Print
     , Language.Drasil.HTML.Monad

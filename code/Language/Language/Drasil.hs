@@ -150,7 +150,7 @@ module Language.Drasil (
   , defaultChoices, getStr
   , Mod(..), packmod, FuncDef(..), FuncStmt(..), funcDef, ($:=), ffor, fdec -- hacks
   , relToQD, funcData, funcQD, Func(..), asExpr, asVC   -- hacks
-  -- DataDesc
+  -- Code.DataDesc
   , DataDesc
   , entry, listEntry, junk, singleton, junkLine, singleLine, multiLine
   , multiLine', straight, repeated, repeated', Ind(..)

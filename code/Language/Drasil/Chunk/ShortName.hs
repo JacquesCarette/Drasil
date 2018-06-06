@@ -1,5 +1,5 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.Attribute.ShortName where
+module Language.Drasil.Chunk.ShortName where
 
 --It is a hack to think of ShortName as a String
 data ShortName = ShortNm String

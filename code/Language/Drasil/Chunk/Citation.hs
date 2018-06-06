@@ -26,7 +26,7 @@ import Language.Drasil.People
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Printing.Helpers (noSpaces)
-import Language.Drasil.Chunk.Attribute.ShortName
+import Language.Drasil.Chunk.ShortName
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces

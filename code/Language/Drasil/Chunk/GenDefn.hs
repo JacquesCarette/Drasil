@@ -11,7 +11,7 @@ import Language.Drasil.Chunk.Concept (ConceptChunk)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Unit (unitWrapper, UnitDefn)
 import Language.Drasil.Chunk.Attribute.Derivation
-import Language.Drasil.Chunk.Attribute.ShortName
+import Language.Drasil.Chunk.ShortName
 
 import Control.Lens (makeLenses)
 

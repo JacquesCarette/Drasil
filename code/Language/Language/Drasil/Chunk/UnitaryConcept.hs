@@ -9,7 +9,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
 import Control.Lens ((^.), makeLenses, view)
 
 data UnitaryConceptDict = UCC { _unitary :: UnitaryChunk
-                              , _dad :: DefnAndDomain ConceptChunk
+                              , _dad :: DefnAndDomain
                               }
 makeLenses ''UnitaryConceptDict
 

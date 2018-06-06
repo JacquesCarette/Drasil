@@ -17,5 +17,5 @@ velU            = new_unit "velocity"             $ metre /: second
 
 gravConstU :: UnitDefn
 
-gravConstU = makeDerU (dcc "gravConstU" (cn "gravitational constant")
-  "universal gravitational constant") $ USynonym (m_3 /$ (kilogram *: s_2))
+gravConstU = makeDerU' (dcc "gravConstU" (cn "gravitational constant")
+  "universal gravitational constant") (m_3 /$ (kilogram *: s_2))

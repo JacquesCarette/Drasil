@@ -6,7 +6,7 @@ import Language.Drasil
 import Language.Drasil.UnitLang(UDefn(..))
 import Language.Drasil.Unit (UnitDefn(..),
   UnitDefn, new_unit, (^:), (/:), (*:), makeDerU, shift, scale,
-  derUC, derUC', derUC'', unitWrapper, fshift, fscale)
+  derUC, derUC', derUC'', unitWrapper, fshift, fscale, derCUC, derCUC', derCUC'')
 
 fundamentals :: [UnitDefn]
 fundamentals = [metre, kilogram, second, kelvin, mole, ampere, candela]
@@ -33,7 +33,7 @@ candela  = fund "candela"  "luminous intensity"   "cd"
 ------------- Commonly defined units -------------------------------------------
 
 degree :: UnitDefn --FIXME: define degree in terms of radians and pi
-degree = UD (dcc "degree" (cn' "degree") "angle") (US [(Special Circle,1)]) Nothing
+degree = UD (dcc "degree" (cn' "degree") "angle") (US [(Special Circle,1)]) Nothing []
 
 -- Some of these units are easiest to define via others less common names, 
 -- which we define first.
@@ -50,9 +50,9 @@ becquerel, calorie, centigrade, coulomb, farad, gray, henry, hertz, joule,
   katal, kilopascal, kilowatt, litre, lumen, lux,  millimetre, newton, ohm,
   pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber :: UnitDefn
 
-becquerel = derUC' "becquerel" 
+becquerel = derCUC' "becquerel" 
   "becquerel" "activity" (Atomic "Bq") --of a Radionuclide
-  (FUSynonym (second ^: (-1)))
+  (second ^: (-1))
   
 calorie = derUC' "calorie" 
   "calorie" "energy" (Atomic "cal") (scale 4.184 joule)
@@ -61,27 +61,27 @@ centigrade = derUC "centigrade"
   "centigrade" "temperature" ((Concat [Special Circle, Atomic "C"]))
   (fshift 273.15 kelvin)
 
-coulomb = derUC' "coulomb" 
-  "coulomb" "electric charge" (Atomic "C") (FUSynonym (ampere *: second))
+coulomb = derCUC' "coulomb" 
+  "coulomb" "electric charge" (Atomic "C") (ampere *: second)
 
-farad = derUC' "farad" 
-  "farad" "capacitance" (Atomic "F") (FUSynonym (coulomb /: volt))
+farad = derCUC' "farad" 
+  "farad" "capacitance" (Atomic "F") (coulomb /: volt)
 
-gray = derUC' "gray" 
-  "gray" "absorbed dose" (Atomic "Gy") (FUSynonym (joule /: kilogram))
+gray = derCUC' "gray" 
+  "gray" "absorbed dose" (Atomic "Gy") (joule /: kilogram)
   
-henry = derUC'' "henry" 
-  (cnIES "henry") "inductance" (Atomic "H") (FUSynonym (weber /: ampere))
+henry = derCUC'' "henry" 
+  (cnIES "henry") "inductance" (Atomic "H") (weber /: ampere)
   
-hertz = derUC "hertz" 
-  "hertz" "frequency" (Atomic "Hz") (FUSynonym (second ^: (-1)))
+hertz = derCUC "hertz" 
+  "hertz" "frequency" (Atomic "Hz") (second ^: (-1))
 
-joule = derUC' "joule" 
+joule = derCUC' "joule" 
   "joule" "energy" (Atomic "J") 
-  (FUSynonym $ kilogram *$ (m_2 *$ (second ^: (-2))))
+ (kilogram *$ (m_2 *$ (second ^: (-2))))
 
-katal = derUC' "katal" 
-  "katal" "catalytic activity" (Atomic "kat") (FUSynonym (mole /: second))
+katal = derCUC' "katal" 
+  "katal" "catalytic activity" (Atomic "kat") (mole /: second)
 
 kilopascal = derUC' "kilopascal" 
   "kilopascal" "pressure"
@@ -93,58 +93,57 @@ kilowatt = derUC' "kilowatt"
 litre = derUC' "litre"
   "litre" "volume" (Atomic "L") (fscale (1/1000) m_3)
 
-lumen = derUC' "lumen" 
-  "lumen" "luminous flux" (Atomic "lm") (FUSynonym (candela *: steradian))
+lumen = derCUC' "lumen" 
+  "lumen" "luminous flux" (Atomic "lm") (candela *: steradian)
 
-lux = derUC "lux" 
-  "lux" "illuminance" (Atomic "lx") (FUSynonym (lumen /: m_2))
+lux = derCUC "lux" 
+  "lux" "illuminance" (Atomic "lx") (lumen /: m_2)
 
 millimetre = derUC' "millimetre"
   "millimetre" "length" (Atomic "mm") (fscale 0.0001 metre)
 
-newton = derUC' "newton"
-  "newton" "force" (Atomic "N") (FUSynonym $ kilogram *$ (second ^: (-2)))
+newton = derCUC' "newton"
+  "newton" "force" (Atomic "N") (kilogram *$ (second ^: (-2)))
   
-ohm = derUC' "ohm"
-  "ohm" "resistance" (Greek Omega) (FUSynonym (volt /: ampere))
+ohm = derCUC' "ohm"
+  "ohm" "resistance" (Greek Omega) (volt /: ampere)
   
-pascal = derUC' "pascal" 
+pascal = derCUC' "pascal" 
   "pascal" "pressure" (Atomic "Pa")
-  (FUSynonym $ kilogram /$ (metre *$ (second ^: 2)))
+  (kilogram /$ (metre *$ (second ^: 2)))
   
-radian = derUC' "radian" 
-  "radian" "angle" (Atomic "rad") (FUSynonym (metre /: metre))
+radian = derCUC' "radian" 
+  "radian" "angle" (Atomic "rad") (metre /: metre)
             
-siemens = derUC "siemens" 
-  "siemens" "conductance" (Atomic "S") (FUSynonym (ohm ^: (-1)))
+siemens = derCUC "siemens" 
+  "siemens" "conductance" (Atomic "S") (ohm ^: (-1))
   
-sievert = derUC' "sievert" 
+sievert = derCUC' "sievert" 
   "sievert" "dose equivalent" (Atomic "Sv")
-  (FUSynonym (joule /: kilogram))
+  (joule /: kilogram)
             
-steradian = derUC' "steradian" 
-  "steradian" "solid angle" (Atomic "sr") (FUSynonym (m_2 /: m_2 ))
+steradian = derCUC' "steradian" 
+  "steradian" "solid angle" (Atomic "sr") (m_2 /: m_2 )
   
-tesla = derUC "tesla"
-  "tesla" "magnetic flux density" (Atomic "T") (FUSynonym (weber /: m_2))
+tesla = derCUC "tesla"
+  "tesla" "magnetic flux density" (Atomic "T") (weber /: m_2)
 
-volt = derUC' "volt" 
-  "volt" "voltage" (Atomic "V") (FUSynonym (watt /: ampere))
+volt = derCUC' "volt" 
+  "volt" "voltage" (Atomic "V") (watt /: ampere)
 
-watt = derUC' "watt" "watt" "power" (Atomic "W")
-  (FUSynonym $ kilogram *$ (m_2 *$ (second ^: (-3))))
+watt = derCUC' "watt" "watt" "power" (Atomic "W")
+  (kilogram *$ (m_2 *$ (second ^: (-3))))
           
-weber = derUC' "weber"
-  "weber" "magnetic flux" (Atomic "Wb") (FUSynonym (volt *: second))
+weber = derCUC' "weber"
+  "weber" "magnetic flux" (Atomic "Wb") (volt *: second)
   
 specificE :: UnitDefn
-specificE = makeDerU (dcc "specificE" (cnIES "specific energy") 
-  "energy per unit mass") $ USynonym (joule /: kilogram)
+specificE = makeDerU' (dcc "specificE" (cnIES "specific energy") 
+  "energy per unit mass") (joule /: kilogram)
 
 specific_weight :: UnitDefn
-specific_weight = makeDerU (dcc "specific_weight" (cn' "specific weight")
-  "weight per unit volume") $
-  USynonym $ newton *$ (metre ^: (-3))
+specific_weight = makeDerU' (dcc "specific_weight" (cn' "specific weight")
+  "weight per unit volume") (newton *$ (metre ^: (-3)))
   
 -- FIXME: Need to add pi 
 --degrees = DUC

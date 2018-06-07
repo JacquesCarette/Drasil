@@ -57,8 +57,7 @@ unitMap = Map.fromList . map (\x -> (x ^. uid, unitWrapper x))
 -- | Looks up an uid in the symbol table. If nothing is found, an error is thrown
 symbLookup :: UID -> SymbolMap -> QuantityDict
 symbLookup c m = getS $ Map.lookup c m
-  where getS (Just x) = x
-        getS Nothing = error $ "Symbol: " ++ c ++ " not found in SymbolMap"
+  where getS = maybe (error $ "Symbol: " ++ c ++ " not found in SymbolMap") id
 
 --- SYMBOL TABLE ---
 class HasSymbolTable s where
@@ -83,8 +82,7 @@ getUnitLup c m = getUnit $ symbLookup (c ^. uid) (m ^. symbolTable)
 -- | Looks up an uid in the term table. If nothing is found, an error is thrown
 termLookup :: (HasUID c) => c -> TermMap -> IdeaDict
 termLookup c m = getT $ Map.lookup (c ^. uid) m
-  where getT (Just x) = x
-        getT Nothing  = error $ "Term: " ++ (c ^. uid) ++ " not found in TermMap"
+  where getT = maybe (error $ "Term: " ++ (c ^. uid) ++ " not found in TermMap") id
 
 -- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
 defLookup :: UID -> ConceptMap -> ConceptChunk

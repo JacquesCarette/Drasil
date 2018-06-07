@@ -25,10 +25,10 @@ import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Symbol (Stage, Symbol)
 import Language.Drasil.Space (Space)
 import Language.Drasil.UnitLang (USymb, UDefn)
-import Language.Drasil.Chunk.Attribute.References (References)
+import Language.Drasil.Chunk.References (References)
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.Chunk.Attribute.Derivation
+import Language.Drasil.Chunk.Derivation
 
 import Control.Lens (Lens')
 

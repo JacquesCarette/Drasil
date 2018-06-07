@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.ReqChunk
   ) where
 
 import Language.Drasil.Classes (HasUID(uid))
-import Language.Drasil.Chunk.Attribute.ShortName
+import Language.Drasil.Chunk.ShortName
 import Language.Drasil.Spec (Sentence)
 
 import Control.Lens ((^.), view, makeLenses)

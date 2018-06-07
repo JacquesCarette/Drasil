@@ -1,4 +1,4 @@
-module Language.Drasil.Chunk.Attribute.References where
+module Language.Drasil.Chunk.References where
 
 import Language.Drasil.Spec (Sentence)
 

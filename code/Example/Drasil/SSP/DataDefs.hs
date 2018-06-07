@@ -252,10 +252,10 @@ soilStiffnessEqn = (case_ [case1,case2])
 -----------------
 
 fixme1 :: QDefinition
-fixme1 = ec ufixme1 (inxi intNormForce + inxiM1 intNormForce)
+fixme1 = ec ufixme1 (inxi intNormForce + inxiM1 intNormForce) (shortname' "ufixme1")
 
 fixme2 :: QDefinition
-fixme2 = ec ufixme2 (inxi watrForce + inxiM1 watrForce)
+fixme2 = ec ufixme2 (inxi watrForce + inxiM1 watrForce) (shortname' "ufixme2")
 
 -----------------
 -- Derivations --

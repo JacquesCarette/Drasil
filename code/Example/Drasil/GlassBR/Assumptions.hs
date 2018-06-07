@@ -1,9 +1,9 @@
 module Drasil.GlassBR.Assumptions where
 import Control.Lens ((^.))
 import Language.Drasil hiding (organization)
-import qualified Drasil.SRS as SRS
+import qualified Drasil.SRS as SRS (valsOfAuxCons, missingP)
 
-import Drasil.DocumentLanguage.RefHelpers
+import Drasil.DocumentLanguage.RefHelpers (cite, refA)
 
 import Data.Drasil.Concepts.Documentation as Doc (condition, constant, practice, reference, scenario, 
   system, value)
@@ -16,7 +16,7 @@ import Drasil.GlassBR.Unitals ( lite, explosion, lateral, load_dur, explosion,
   constant_LoadDur, constant_ModElas, constant_M, constant_K, constant_LoadDF, constant_LoadSF)
 import Drasil.GlassBR.Concepts (lShareFac, gLassBR,
   glaSlab, glass, responseTy, cantilever, beam, plane, edge)
-import Drasil.GlassBR.References
+import Drasil.GlassBR.References (gbCitations, astm_LR2009)
  
 gbRefDB :: ReferenceDB
 gbRefDB = rdb [] [] newAssumptions [] [] gbCitations

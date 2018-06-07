@@ -158,8 +158,6 @@ module Language.Drasil (
   , Theory(..), tc', TheoryChunk, TheoryModel, tm
   -- Chunk.SymbolForm
   , Stage(Equational,Implementation), HasSymbol(symbol), eqSymb, codeSymb, hasStageSymbol
-  -- Code.Imperative.Lang
-  --, Lang(..)
   -- ChunkDB
   , ChunkDB, cdb
   , HasSymbolTable, symbolMap, symbLookup, getUnitLup, symbolTable

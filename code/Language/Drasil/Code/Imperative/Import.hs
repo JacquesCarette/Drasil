@@ -5,7 +5,6 @@ import Language.Drasil.Code.Imperative.AST as I hiding ((&=),assign,State,return
 import qualified Language.Drasil.Code.Imperative.AST as I (assign,return)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel, cppLabel, cSharpLabel, javaLabel)
-import Language.Drasil.Code.Imperative.Lang
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.Quantity (QuantityDict)

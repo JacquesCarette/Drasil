@@ -1,11 +1,8 @@
 module Drasil.GamePhysics.Body where
 
 import Control.Lens ((^.))
-import Language.Drasil hiding (organization)
-import Data.Drasil.SI_Units(metre, kilogram, second, newton, radian)
 
-import Data.Drasil.People (alex, luthfi)
-import Data.Drasil.Phrase(for')
+import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation (assumption, body, 
   concept, condition, consumer, dataConst, dataDefn, datumConstraint,
   document, endUser, game, genDefn, generalSystemDescription, goalStmt,
@@ -15,44 +12,55 @@ import Data.Drasil.Concepts.Documentation (assumption, body,
   project, property, quantity, realtime, reference, requirement, section_, 
   simulation, solutionCharSpec, srs, systemConstraint, task, template, termAndDef, 
   thModel, traceyMatrix, userCharacteristic)
-import Data.Drasil.Concepts.Software (physLib, understandability, portability,
-  reliability, maintainability, performance, correctness)
-import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Education (highSchoolCalculus, frstYr,
   highSchoolPhysics)
+import Data.Drasil.Concepts.Software (physLib, understandability, portability,
+  reliability, maintainability, performance, correctness)
+
+import Data.Drasil.People (alex, luthfi)
+import Data.Drasil.Phrase(for')
+import Data.Drasil.SI_Units(metre, kilogram, second, newton, radian)
+
+import Drasil.DocumentLanguage (DocDesc, TConvention(..), TSIntro(..), 
+  TSIntro(..), Emphasis(..), DocSection(..), IntroSub(..), mkDoc, RefSec(..),
+  tsymb, RefTab(..), IntroSec(..), IntroSub(..))
+import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
+import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs)
+import Drasil.GamePhysics.IMods (iModels)
+import Drasil.GamePhysics.References (cpCitations)
+import Drasil.GamePhysics.TMods (cpTMods)
+import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
+  inputSymbols, outputSymbols, cpInputConstraints)
+
+import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
+import Drasil.Sections.Requirements (reqF)
+import Drasil.Sections.SolutionCharacterSpec (SubSec, siUQI, siSent, siDDef, 
+  sSubSec, siIMod, siUQO, siCon, siTMod, assembler, siSTitl)
+import Drasil.Sections.SpecificSystemDescription (specSysDescr)
 import Drasil.Sections.TraceabilityMandGs (traceMGF)
-import qualified Data.Drasil.Quantities.Math as QM (orientation)
-import qualified Data.Drasil.Quantities.Physics as QP (time, 
-  position, force, velocity, angularVelocity, linearVelocity)
-import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
-import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
-  cartesian, friction, rightHand, collision, space, joint, damping)
+
+import Language.Drasil hiding (organization)
+
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, 
   dimension)
+import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
+  cartesian, friction, rightHand, collision, space, joint, damping)
 import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode, 
   constraint, law)
-import Data.Drasil.Utils (makeTMatrix, itemRefToSent, refFromType,
-  makeListRef, enumSimple, enumBullet)
+
+import qualified Data.Drasil.Quantities.Math as QM (orientation)
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
+import qualified Data.Drasil.Quantities.Physics as QP (time, 
+  position, force, velocity, angularVelocity, linearVelocity)
 import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlList, sOf,
   sAnd, sOr, maybeChanged, maybeExpanded, foldlSentCol, foldlSP, showingCxnBw)
 import Data.Drasil.Software.Products (videoGame, openSource, sciCompS)
+import Data.Drasil.Utils (makeTMatrix, itemRefToSent, refFromType,
+  makeListRef, enumSimple, enumBullet)
 
 import qualified Drasil.SRS as SRS
 import qualified Drasil.Sections.ReferenceMaterial as RM
 
-import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
-  inputSymbols, outputSymbols, cpInputConstraints)
-import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
-import Drasil.GamePhysics.TMods (cpTMods)
-import Drasil.GamePhysics.IMods (iModels)
-import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs)
-
-import Drasil.DocumentLanguage (DocDesc)
-import Drasil.Sections.SpecificSystemDescription (specSysDescr)
-import Drasil.Sections.SolutionCharacterSpec (SubSec)
-import Drasil.Sections.Requirements (reqF)
-import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
-import Drasil.GamePhysics.References (cpCitations)
 
 authors :: People
 authors = [alex, luthfi]

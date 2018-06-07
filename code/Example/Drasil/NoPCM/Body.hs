@@ -1,7 +1,7 @@
 module Drasil.NoPCM.Body where
 
 import Language.Drasil
-import Data.Drasil.SI_Units
+import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 import Control.Lens ((^.))
 
 import Drasil.NoPCM.DataDesc (inputMod)
@@ -50,9 +50,9 @@ import Data.Drasil.Concepts.Documentation as Doc (datumConstraint, inModel,
   physSyst, problem, definition, srs, content, reference, document,
   goal, purpose, typUnc)
 
-import qualified Data.Drasil.Concepts.Math as M
+import qualified Data.Drasil.Concepts.Math as M (ode, de, rOfChng, unit_, equation)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Phrase(for)
+import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
   thermal_energy, ht_trans_theo, heat, melt_pt, boil_pt, heat_trans, ht_flux,
   heat_cap_spec, thermal_conduction)

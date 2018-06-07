@@ -140,26 +140,26 @@ module Language.Drasil (
   -- Printing.Helpers
   , capitalize, paren, sqbrac
   -- Generate
-  , gen, genCode
+  --, gen, genCode
   -- People
   , People, Person, person, HasName, name, manyNames, person', personWM
   , personWM', mononym
   -- CodeSpec
-  , CodeSpec, codeSpec, Choices(..), ImplementationType(..)
-  , Logging(..), ConstraintBehaviour(..), Structure(..), Comments(..)
-  , defaultChoices, getStr
-  , Mod(..), packmod, FuncDef(..), FuncStmt(..), funcDef, ($:=), ffor, fdec -- hacks
-  , relToQD, funcData, funcQD, Func(..), asExpr, asVC   -- hacks
+  --, CodeSpec, codeSpec, Choices(..), ImplementationType(..)
+  --, Logging(..), ConstraintBehaviour(..), Structure(..), Comments(..)
+  --, defaultChoices, getStr
+  --, Mod(..), packmod, FuncDef(..), FuncStmt(..), funcDef, ($:=), ffor, fdec -- hacks
+  --, relToQD, funcData, funcQD, Func(..), asExpr, asVC   -- hacks
   -- Code.DataDesc
-  , DataDesc
-  , entry, listEntry, junk, singleton, junkLine, singleLine, multiLine
-  , multiLine', straight, repeated, repeated', Ind(..)
+  --, DataDesc
+  --, entry, listEntry, junk, singleton, junkLine, singleLine, multiLine
+  --, multiLine', straight, repeated, repeated', Ind(..)
   -- Chunk.Theory
   , Theory(..), tc', TheoryChunk, TheoryModel, tm
   -- Chunk.SymbolForm
   , Stage(Equational,Implementation), HasSymbol(symbol), eqSymb, codeSymb, hasStageSymbol
   -- Code.Imperative.Lang
-  , Lang(..)
+  --, Lang(..)
   -- ChunkDB
   , ChunkDB, cdb
   , HasSymbolTable, symbolMap, symbLookup, getUnitLup, symbolTable
@@ -284,10 +284,10 @@ import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat, prime, sCurlyBrSy
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it
 import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
-import Language.Drasil.Generate
+--import Language.Drasil.Generate -- moved in SubPackages
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
                                ,person', personWM, personWM', mononym, name)
-import Language.Drasil.CodeSpec hiding (outputs, inputs)
-import Language.Drasil.DataDesc
-import Language.Drasil.Code.Imperative.Lang
+--import Language.Drasil.CodeSpec hiding (outputs, inputs) -- moved in SubPackages
+--import Language.Drasil.Code.DataDesc -- moved in SubPackages
+--import Language.Drasil.Code.Imperative.Lang -- moved in SubPackages
 import Language.Drasil.RefTypes(RefAdd)

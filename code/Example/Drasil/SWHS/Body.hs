@@ -1,11 +1,11 @@
 module Drasil.SWHS.Body where
 
 import Language.Drasil hiding (organization)
-import Data.Drasil.SI_Units
+import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 import Control.Lens ((^.))
 
 import Data.Drasil.People (thulasi, brooks, spencerSmith)
-import Data.Drasil.Phrase(for)
+import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Documentation (section_, traceyGraph, item,
   assumption, traceyMatrix, thModel, genDefn, dataDefn, inModel, likelyChg,
   dataConst, requirement, input_, solution, output_, corSol, constraint,

@@ -1,7 +1,7 @@
-module Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq,t1IsSafe) where
+module Drasil.GlassBR.TMods (tModels, t1IsSafe, t1SafetyReq, t2SafetyReq) where
 
-import Drasil.GlassBR.Unitals (is_safe1, is_safe2, demand, 
-  demandq, lRe, pb_tol, prob_br)
+import Drasil.GlassBR.Unitals (demand, demandq, is_safe1, is_safe2, lRe,
+  pb_tol, prob_br)
 import Drasil.GlassBR.IMods (calOfCap, calOfDe, probOfBr)
 import Drasil.GlassBR.Concepts (lResistance)
 

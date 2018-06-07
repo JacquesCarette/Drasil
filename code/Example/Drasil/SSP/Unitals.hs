@@ -2,14 +2,17 @@ module Drasil.SSP.Unitals where --export all of it
 
 import Language.Drasil
 
-import Data.Drasil.SI_Units (newton, pascal, metre, degree, specific_weight)
-import Data.Drasil.Units.SolidMechanics (stiffness3D)
-import Data.Drasil.Quantities.Physics as QP (force, pressure)
-import Data.Drasil.Quantities.SolidMechanics as SM (nrmStrss, elastMod,
-  poissnsR, stffness)
-import Data.Drasil.Units.Physics (momentOfForceU)
 import Drasil.SSP.Defs (fs_concept)
+
 import Data.Drasil.Constraints (gtZeroConstr)
+import Data.Drasil.SI_Units (degree, metre, newton, pascal, specific_weight)
+
+import Data.Drasil.Units.Physics (momentOfForceU)
+import Data.Drasil.Units.SolidMechanics (stiffness3D)
+
+import Data.Drasil.Quantities.Physics as QP (force, pressure)
+import Data.Drasil.Quantities.SolidMechanics as SM (elastMod, nrmStrss,
+  poissnsR, stffness)
 
 sspSymbols :: [DefinedQuantityDict]
 sspSymbols = (map dqdWr sspInputs) ++ (map dqdWr sspOutputs) ++

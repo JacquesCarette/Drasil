@@ -2,33 +2,35 @@ module Drasil.SSP.GenDefs (sspGenDefs) where
 
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
-import Drasil.DocumentLanguage.RefHelpers
 
-import Drasil.SSP.Unitals (baseAngle, genDisplace, rotatedDispl, dy_i,
-  dx_i, inxi, index, nrmDispl, shrDispl, elmPrllDispl, elmNrmDispl,
-  nrmStiffBase, shrStiffIntsl, genPressure, intShrForce, intNormForce,
-  fy, fx, impLoadAngle, surfLoad, surfHydroForce, baseHydroForce,
-  slcWght, inxiM1, surfAngle, earthqkLoadFctr, watrForceDif, baseWthX,
-  scalFunc, xi, normToShear, fs, shrResI, shearFNoIntsl, shrResI, mobShrI, 
-  nrmFSubWat, totNrmForce, baseLngth, shrStress, cohesion, fricAngle)
-import Data.Drasil.Concepts.Documentation (element,
-  system, value, variable, definition, model,
-  assumption, property, method_)
-import Drasil.SSP.Defs (slope, slice, intrslce, slpSrf)
-import Data.Drasil.Concepts.PhysicalProperties (mass, len)
-import Data.Drasil.Quantities.Physics (displacement, force)
-import Data.Drasil.SentenceStructures (sAnd, getTandS,
-  isThe, ofThe, foldlSent,  acroGD, acroT)
+import Drasil.DocumentLanguage.RefHelpers (refA)
+
+import Drasil.SSP.Assumptions (newA5, sspRefDB)
+import Drasil.SSP.BasicExprs (displMtx, eqlExpr, momExpr, rotMtx)
+import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShearWO, sliceWght)
+import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf)
+import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
+  cohesion, dx_i, dy_i, earthqkLoadFctr, elmNrmDispl, elmPrllDispl, fricAngle, 
+  fs, fx, fy, genDisplace, genPressure, impLoadAngle, index, intNormForce, 
+  intShrForce, inxi, inxiM1, mobShrI, normToShear, nrmDispl, nrmFSubWat, 
+  nrmStiffBase, rotatedDispl, scalFunc, shearFNoIntsl, shrDispl, shrResI, 
+  shrResI, shrStiffIntsl, shrStress, slcWght, surfAngle, surfHydroForce, 
+  surfLoad, totNrmForce, watrForceDif, xi)
+
+import Data.Drasil.Concepts.Documentation (assumption, definition, element, 
+  method_, model, property, system, value, variable)
+import Data.Drasil.Concepts.Math (angle, matrix, normal, perp, surface, vector)
+import Data.Drasil.Concepts.PhysicalProperties (len, mass)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
-import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
-import Data.Drasil.Concepts.Math (surface, angle,
-  matrix, vector, perp, normal)
-import Data.Drasil.Utils (getES)
-import Drasil.SRS as SRS (physSyst, missingP)
-import Drasil.SSP.Assumptions
-import Drasil.SSP.BasicExprs
-import Drasil.SSP.DataDefs
 
+import Data.Drasil.Quantities.Physics (displacement, force)
+import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
+
+import Data.Drasil.SentenceStructures (acroGD, acroT, foldlSent, getTandS, 
+  isThe, ofThe, sAnd)
+import Data.Drasil.Utils (getES)
+
+import Drasil.SRS as SRS (physSyst, missingP)
 
 ---------------------------
 --  General Definitions  --

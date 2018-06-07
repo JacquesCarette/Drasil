@@ -2,8 +2,7 @@ module Main (main) where
 
 import Language.Drasil
 
-import Drasil.GlassBR.Body (glassBR_srs, glassBR_code, gbSymbMap)
-
+import Drasil.GlassBR.Body (gbSymbMap, glassBR_code, glassBR_srs)
 
 glassChoices :: Choices
 glassChoices = Choices {

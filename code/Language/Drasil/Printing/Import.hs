@@ -13,7 +13,7 @@ import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.Classes (term, defn, usymb, relat)
 import qualified Language.Drasil.Chunk.SymbolForm as SF
 import Language.Drasil.Chunk.AssumpChunk
-import Language.Drasil.Chunk.Attribute (getShortName)
+import Language.Drasil.Chunk.Attribute (getShortName, snToSentence)
 import Language.Drasil.Chunk.Attribute.ShortName
 import Language.Drasil.Chunk.Change (chng, chngType, ChngType(Likely))
 import Language.Drasil.Chunk.Eq
@@ -240,7 +240,7 @@ spec _ (S s)           = P.S s
 spec _ (Sy s)          = P.Sy s
 spec _ (Sp s)          = P.Sp s
 spec _ (P s)           = P.E $ symbol s
-spec sm (Ref t r (ShortNm sn))   = P.Ref t r (spec sm (S sn)) (shortname' sn) --FIXME: sn passed in twice?; very ugly hack
+spec sm (Ref t r sn)   = P.Ref t r (spec sm (snToSentence sn)) sn --FIXME: sn passed in twice?
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm

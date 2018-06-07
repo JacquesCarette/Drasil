@@ -2,11 +2,19 @@ module Drasil.GamePhysics.Body where
 
 import Control.Lens ((^.))
 import Language.Drasil hiding (organization)
-import Data.Drasil.SI_Units
+import Data.Drasil.SI_Units(metre, kilogram, second, newton, radian)
 
 import Data.Drasil.People (alex, luthfi)
 import Data.Drasil.Phrase(for')
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation (assumption, body, 
+  concept, condition, consumer, dataConst, dataDefn, datumConstraint,
+  document, endUser, game, genDefn, generalSystemDescription, goalStmt,
+  inModel, information, input_, item, library, likelyChg, model, 
+  nonfunctionalRequirement, object, organization, physical, physicalConstraint,
+  physicalProperty, physicalSim, physics, priority, problemDescription, product_,
+  project, property, quantity, realtime, reference, requirement, section_, 
+  simulation, solutionCharSpec, srs, systemConstraint, task, template, termAndDef, 
+  thModel, traceyMatrix, userCharacteristic)
 import Data.Drasil.Concepts.Software (physLib, understandability, portability,
   reliability, maintainability, performance, correctness)
 import Data.Drasil.Concepts.Computation (algorithm)
@@ -39,9 +47,9 @@ import Drasil.GamePhysics.TMods (cpTMods)
 import Drasil.GamePhysics.IMods (iModels)
 import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs)
 
-import Drasil.DocumentLanguage 
+import Drasil.DocumentLanguage (DocDesc)
 import Drasil.Sections.SpecificSystemDescription (specSysDescr)
-import Drasil.Sections.SolutionCharacterSpec
+import Drasil.Sections.SolutionCharacterSpec (SubSec)
 import Drasil.Sections.Requirements (reqF)
 import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Drasil.GamePhysics.References (cpCitations)

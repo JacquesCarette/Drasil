@@ -16,7 +16,7 @@ import Drasil.SWHS.Concepts (phsChgMtrl, water)
 import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, mass)
 import Data.Drasil.Concepts.Thermodynamics (boiling, heat, temp, melting,
   latent_heat, sens_heat, heat_cap_spec, thermal_energy, boil_pt)
-import Drasil.SWHS.DataDefs
+import Drasil.SWHS.DataDefs (ddRef, dd3HtFusion)
 
 s4_2_5_IMods :: [RelationConcept]
 s4_2_5_IMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]

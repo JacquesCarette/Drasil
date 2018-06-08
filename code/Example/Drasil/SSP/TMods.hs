@@ -2,23 +2,26 @@ module Drasil.SSP.TMods (sspTMods) where
 
 import Prelude hiding (tan)
 import Language.Drasil
-import Drasil.DocumentLanguage.RefHelpers
 
-import Drasil.SSP.Unitals (fs, fx, fy, momntOfBdy,
-  genForce, genDisplace, porePressure, normStress,
-  shrStress, surfHydroForce, fricAngle, cohesion)
-import Drasil.SSP.Defs (slope, factor, factorOfSafety, soil)
-import Data.Drasil.SentenceStructures (ofThe, ofThe',
-  foldlSent, getTandS, sAnd, sOf)
-import Data.Drasil.Utils (getES)
-import Data.Drasil.Quantities.Physics (force, distance, displacement)
-import Data.Drasil.Concepts.Documentation (safety, model, source)
-import Data.Drasil.Concepts.Math (surface)
-import Data.Drasil.Quantities.SolidMechanics (shearRes, mobShear, stffness)
-import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
-import Data.Drasil.Concepts.Physics (linear, stress, friction)
+import Drasil.SSP.Assumptions (newA8, newA9, sspRefDB)
+import Drasil.SSP.Defs (factor, factorOfSafety, slope, soil)
+import Drasil.SSP.Unitals (cohesion, fricAngle, fs, fx, fy, genDisplace,
+  genForce, momntOfBdy, normStress, porePressure, shrStress, surfHydroForce)
+
+import Drasil.DocumentLanguage.RefHelpers (refA)
+
+import Data.Drasil.Quantities.Physics (displacement, distance, force)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Drasil.SSP.Assumptions
+import Data.Drasil.Quantities.SolidMechanics (mobShear, shearRes, stffness)
+
+import Data.Drasil.Concepts.Documentation (model, safety, source)
+import Data.Drasil.Concepts.Math (surface)
+import Data.Drasil.Concepts.Physics (friction, linear, stress)
+import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
+
+import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe',
+  sAnd, sOf)
+import Data.Drasil.Utils (getES)
 
 --------------------------
 --  Theoretical Models  --

@@ -5,7 +5,7 @@ module Language.Drasil.Classes (
   , NamedIdea(term)
   , Idea(getA)
   , Definition(defn)
-  , ConceptDomain(cdom, DOM)
+  , ConceptDomain(cdom)
   , Concept
   , HasSymbol(symbol)
   , HasSpace(typ)
@@ -56,7 +56,6 @@ class Definition c where
   defn :: Lens' c Sentence
 
 class ConceptDomain c where
-  type DOM c :: *
   -- | cdom provides (a 'Lens' to) the concept domain tags for a chunk
   cdom :: Lens' c [UID]
   -- ^ /cdom/ should be exported for use by the

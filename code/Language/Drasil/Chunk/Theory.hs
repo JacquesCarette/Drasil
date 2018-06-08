@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.Theory
 
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom,DOM), Concept, HasReference(getReferences))
+  Definition(defn), ConceptDomain(cdom), Concept, HasReference(getReferences))
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained.Core (TheoryConstraint)
 import Language.Drasil.Chunk.Eq
@@ -66,7 +66,6 @@ instance HasReference  TheoryModel where getReferences = thy . getReferences
 instance HasShortName  TheoryModel where
   shortname _ = error "No explicit name given for theory model -- build a custom Ref"
 instance ConceptDomain TheoryModel where
-  type DOM TheoryModel = ConceptChunk
   cdom = con . cdom
 instance Concept       TheoryModel where
 instance Theory        TheoryModel where
@@ -78,15 +77,15 @@ instance Theory        TheoryModel where
   invariants    = thy . invariants
   defined_fun   = thy . defined_fun
 
-tc :: (DOM c ~ ConceptChunk, Concept c, Quantity q) =>
+tc :: (Concept c, Quantity q) =>
     String -> [TheoryChunk] -> [SpaceDefn] -> [q] -> [c] -> 
     [QDefinition] -> [TheoryConstraint] -> [QDefinition] -> TheoryChunk
 tc cid t s q c = \dq inv dfn -> TC cid t s (map qw q) (map cw c) dq inv dfn []
 
-tc' :: (Quantity q, Concept c, DOM c ~ ConceptChunk) =>
+tc' :: (Quantity q, Concept c) =>
     String -> [q] -> [c] -> [QDefinition] -> 
     [TheoryConstraint] -> [QDefinition] -> TheoryChunk
 tc' cid q c = tc cid ([] :: [TheoryChunk]) [] q c
 
-tm :: (Concept c, DOM c ~ ConceptChunk) => c -> TheoryChunk -> TheoryModel
+tm :: Concept c => c -> TheoryChunk -> TheoryModel
 tm c t = TM (cw c) t

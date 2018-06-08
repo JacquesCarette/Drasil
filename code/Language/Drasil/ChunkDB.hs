@@ -8,7 +8,8 @@ module Language.Drasil.ChunkDB
   ) where
 
 import Language.Drasil.UID (UID)
-import Language.Drasil.Classes (HasUID(uid), Idea, Concept, DOM, IsUnit)
+import Language.Drasil.Classes (HasUID(uid), Idea, Concept, IsUnit,
+  ConceptDomain)
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw)
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Concept 
@@ -47,11 +48,11 @@ termMap :: (Idea c) => [c] -> TermMap
 termMap = Map.fromList . map (\x -> (x ^. uid, nw x))
 
 -- | Smart constructor for a 'ConceptMap'
-conceptMap :: (Concept c, DOM c ~ ConceptChunk) => [c] -> ConceptMap
+conceptMap :: (Concept c) => [c] -> ConceptMap
 conceptMap = Map.fromList . map (\x -> (x ^. uid, cw x))
 
 -- | Smart constructor for a 'UnitMap'
-unitMap :: (IsUnit u, DOM u ~ ConceptChunk) => [u] -> UnitMap
+unitMap :: (IsUnit u, ConceptDomain u) => [u] -> UnitMap
 unitMap = Map.fromList . map (\x -> (x ^. uid, unitWrapper x))
 
 -- | Looks up an uid in the symbol table. If nothing is found, an error is thrown
@@ -101,7 +102,7 @@ makeLenses ''ChunkDB
 -- (for SymbolTable), NamedIdeas (for TermTable), Concepts (for DefinitionTable),
 -- and Units (for UnitTable)
 cdb :: (Quantity q, Idea t, Concept c, IsUnit u,
-        DOM c ~ ConceptChunk, DOM u ~ ConceptChunk) => [q] -> [t] -> [c] -> [u] -> ChunkDB
+        ConceptDomain u) => [q] -> [t] -> [c] -> [u] -> ChunkDB
 cdb s t c u = CDB (symbolMap s) (termMap t) (conceptMap c) (unitMap u)
 
 ----------------------

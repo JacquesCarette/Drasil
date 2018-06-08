@@ -3,9 +3,10 @@ module Drasil.Sections.Requirements
 
 import Language.Drasil
 
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation (priority, software, nonfunctionalRequirement,
+  functionalRequirement, section_)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.SentenceStructures
+import Data.Drasil.SentenceStructures (foldlSP, foldlList)
 
 import qualified Drasil.SRS as SRS
 

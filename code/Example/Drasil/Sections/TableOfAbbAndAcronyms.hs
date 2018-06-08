@@ -3,7 +3,7 @@ module Drasil.Sections.TableOfAbbAndAcronyms
   ( table_of_abb_and_acronyms ) where
 
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation (symbol_, description)
 
 import Data.List (sortBy)
 import Data.Function (on)

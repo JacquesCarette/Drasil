@@ -19,10 +19,10 @@ module Drasil.Sections.SolutionCharacterSpec
 
 import Language.Drasil
 import Data.Drasil.Concepts.Math (equation, law)
-import Data.Drasil.Concepts.Computation
+import Data.Drasil.Concepts.Computation (computer)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle)
-import Data.Drasil.SentenceStructures
+import Data.Drasil.SentenceStructures (ofThe, foldlSP, foldlSent, foldlList, sAnd)
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import Data.List (find)
 import Control.Lens ((^.))

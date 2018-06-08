@@ -1,8 +1,11 @@
 module Drasil.GlassBR.Symbols where
 
 import Language.Drasil
-import Drasil.GlassBR.Unitals
-import Drasil.GlassBR.ModuleDefs (implVars,allMods)
+
+import Drasil.GlassBR.ModuleDefs (allMods, implVars)
+import Drasil.GlassBR.Unitals (gbInputDataConstraints, gbInputs, 
+    gBRSpecParamVals, glassBRSymbols, glassBRSymbolsWithDefns, glassBRUnitless, 
+    prob_br)
 
 this_symbols :: [QuantityDict]
 this_symbols = qw prob_br : gbInputs ++ (map qw gBRSpecParamVals) ++ 

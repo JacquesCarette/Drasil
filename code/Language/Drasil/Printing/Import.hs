@@ -2,7 +2,7 @@ module Language.Drasil.Printing.Import(space,expr,symbol,spec,makeDocument) wher
 
 import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..),
     BoolOper(..), RTopology(..),
-    DerivType(..), DomainDesc(..), UID,
+    DerivType(..), DomainDesc(..),
     RealInterval(..),Inclusive(..),
     ($=))
 import Language.Drasil.Expr.Precedence (precA, precB, eprec)
@@ -10,6 +10,7 @@ import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as T
 
+import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (term, defn, usymb, relat)
 import qualified Language.Drasil.Chunk.SymbolForm as SF
 import Language.Drasil.Chunk.AssumpChunk

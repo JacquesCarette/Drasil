@@ -1,9 +1,8 @@
 module Main (main) where
 
-import Language.Drasil (DocType(SRS,Website), DocSpec(DocSpec), gen
-  , Choices(..), ImplementationType(..)
-  , Logging(..), ConstraintBehaviour(..), Structure(..), Comments(..)
-  , Lang(..))
+import Language.Drasil (Choices(..), Comments(..), ConstraintBehaviour(..), 
+  DocSpec(DocSpec), DocType(SRS, Website), ImplementationType(..), Lang(..), 
+  Logging(..), Structure(..), gen)
 
 import Drasil.SSP.Body (ssp_srs, sspSymMap)
 

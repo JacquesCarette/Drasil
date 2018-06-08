@@ -5,6 +5,7 @@ module Language.Drasil.Chunk.Change
 
 import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.ShortName
+import Language.Drasil.UID (UID)
 import Language.Drasil.Spec (Sentence)
 
 import Control.Lens ((^.))
@@ -26,7 +27,7 @@ instance Show ChngType where
 -- (Functional/Non-Functional) from 'ChngType', a sentence describing what is
 -- required (TODO: Change this), and a short name for reference display.
 data Change = ChC 
-  { _id      :: String
+  { _id      :: UID
   , chngType :: ChngType 
   , chng     :: Sentence
   , _refName :: ShortName

@@ -3,7 +3,7 @@ module Drasil.NoPCM.IMods (eBalanceOnWtr) where
 import Language.Drasil
 
 import Drasil.SWHS.Concepts (water)
-import Drasil.SWHS.Unitals
+import Drasil.SWHS.Unitals (temp_W, temp_C, tau_W, w_mass, htCap_W, coil_HTC, coil_SA)
 import Data.Drasil.Utils (unwrap)
 import Data.Drasil.SentenceStructures (foldlSent, isThe,
   sAnd)

@@ -1,21 +1,20 @@
-module Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, 
-  risk, hFromt, strDisFac, nonFL, glaTyFac, dimLL, tolPre,
-  tolStrDisFac) where
+module Drasil.GlassBR.DataDefs (dataDefns, dimLL, gbQDefns, glaTyFac, hFromt,
+  nonFL, risk, strDisFac, tolPre, tolStrDisFac) where
 
 import Language.Drasil
 
 import Prelude hiding (log, exp)
-import Drasil.GlassBR.Unitals (tolLoad, dimlessLoad, gTF, stressDistFac, 
-  aspectR, aspectRWithEqn, demand, sdf_tol, nom_thick, act_thick, pb_tol,
-  plate_width, plate_len, sflawParamM, mod_elas, glass_type, sflawParamK,
-  glassTypeFactors, lDurFac, glassTypeAbbrsStr, nonFactorL, 
-  actualThicknesses, nominalThicknesses, risk_fun)
+import Drasil.GlassBR.Unitals (act_thick, actualThicknesses, aspectR, 
+  aspectRWithEqn, demand, dimlessLoad, gTF, glassTypeAbbrsStr, 
+  glassTypeFactors, glass_type, lDurFac, mod_elas, nom_thick, 
+  nominalThicknesses, nonFactorL, pb_tol, plate_len, plate_width, risk_fun,
+  sdf_tol, sflawParamK, sflawParamM, stressDistFac, tolLoad)
 
-import Data.Drasil.Utils (getES, mkDataDef', mkDataDef)
-import Data.Drasil.SentenceStructures (sAnd)
-import Data.Drasil.Concepts.PhysicalProperties (dimension)
-import Data.Drasil.Concepts.Math (probability, parameter, calculation)
 import Data.Drasil.Concepts.Documentation (datum, user)
+import Data.Drasil.Concepts.Math (probability, parameter, calculation)
+import Data.Drasil.Concepts.PhysicalProperties (dimension)
+import Data.Drasil.SentenceStructures (sAnd)
+import Data.Drasil.Utils (getES, mkDataDef, mkDataDef')
 
 import Control.Lens ((^.))
 

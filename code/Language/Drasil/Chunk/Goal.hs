@@ -8,6 +8,7 @@ module Language.Drasil.Chunk.Goal
   , refAddr
   ) where
 
+import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.RefTypes (RefAdd)
@@ -16,7 +17,7 @@ import Language.Drasil.Chunk.ShortName
 import Control.Lens (makeLenses, (^.))
 
 data Goal = GS
-          { _gid :: String
+          { _gid :: UID
           , goal :: Sentence
           , _refAddr :: RefAdd
           }

@@ -17,6 +17,7 @@ import Language.Drasil.Expr.Extract hiding (vars)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.DataDesc
+import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID, HasSymbol)
 
 import Prelude hiding (log, exp, const)

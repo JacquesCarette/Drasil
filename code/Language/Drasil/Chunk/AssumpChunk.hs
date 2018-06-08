@@ -4,15 +4,17 @@ module Language.Drasil.Chunk.AssumpChunk
   , assump
   ) where
 
+import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Chunk.ShortName
+
 import Control.Lens (makeLenses, (^.))
 
 -- | Assumption chunk type. Has id, what is being assumed, and a shortname.
 -- Presently assumptions are captured as sentences.
 data AssumpChunk = AC 
-                 { _aid :: String
+                 { _aid :: UID
                  , assuming :: Sentence
                  , _refName :: ShortName
                  }

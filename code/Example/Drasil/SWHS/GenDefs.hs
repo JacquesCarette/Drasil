@@ -3,7 +3,7 @@ module Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp) where
 import Prelude hiding (sin, cos, tan)
 
 import Language.Drasil
-import Drasil.DocumentLanguage.RefHelpers
+import Drasil.DocumentLanguage.RefHelpers (refA)
 
 import Data.Drasil.SentenceStructures (foldlSent)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (vol, mass)
@@ -16,7 +16,7 @@ import Data.Drasil.SentenceStructures (isThe, sAnd)
 import Data.Drasil.Utils (getES, unwrap)
 import Data.Drasil.Concepts.Math (equation, rOfChng, rate)
 import Data.Drasil.Concepts.Thermodynamics (law_conv_cooling)
-import Drasil.SWHS.Assumptions
+import Drasil.SWHS.Assumptions (swhsRefDB, newA2)
 
 ---------------------------
 --  General Definitions  --

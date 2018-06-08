@@ -1,6 +1,7 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Reference where
 
+import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.AssumpChunk as A
 import Language.Drasil.Chunk.Change as Ch
@@ -26,7 +27,7 @@ import Data.Function (on)
 -- Maintains access to both num and chunk for easy reference swapping
 -- between number and shortname/refname when necessary (or use of number
 -- if no shortname exists)
-type RefMap a = Map.Map String (a, Int)
+type RefMap a = Map.Map UID (a, Int)
 
 -- | Physical System Description Database
 type PhysSystDescMap = RefMap PhysSystDesc

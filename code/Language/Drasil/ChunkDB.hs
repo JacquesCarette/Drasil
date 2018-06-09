@@ -8,7 +8,8 @@ module Language.Drasil.ChunkDB
   ) where
 
 import Language.Drasil.UID (UID)
-import Language.Drasil.Classes (HasUID(uid), Idea, Concept, DOM, IsUnit)
+import Language.Drasil.Classes (HasUID(uid), Idea, Concept, IsUnit,
+  ConceptDomain)
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw)
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Concept 
@@ -47,18 +48,17 @@ termMap :: (Idea c) => [c] -> TermMap
 termMap = Map.fromList . map (\x -> (x ^. uid, nw x))
 
 -- | Smart constructor for a 'ConceptMap'
-conceptMap :: (Concept c, DOM c ~ ConceptChunk) => [c] -> ConceptMap
+conceptMap :: (Concept c) => [c] -> ConceptMap
 conceptMap = Map.fromList . map (\x -> (x ^. uid, cw x))
 
 -- | Smart constructor for a 'UnitMap'
-unitMap :: (IsUnit u, DOM u ~ ConceptChunk) => [u] -> UnitMap
+unitMap :: (IsUnit u, ConceptDomain u) => [u] -> UnitMap
 unitMap = Map.fromList . map (\x -> (x ^. uid, unitWrapper x))
 
 -- | Looks up an uid in the symbol table. If nothing is found, an error is thrown
 symbLookup :: UID -> SymbolMap -> QuantityDict
 symbLookup c m = getS $ Map.lookup c m
-  where getS (Just x) = x
-        getS Nothing = error $ "Symbol: " ++ c ++ " not found in SymbolMap"
+  where getS = maybe (error $ "Symbol: " ++ c ++ " not found in SymbolMap") id
 
 --- SYMBOL TABLE ---
 class HasSymbolTable s where
@@ -83,14 +83,12 @@ getUnitLup c m = getUnit $ symbLookup (c ^. uid) (m ^. symbolTable)
 -- | Looks up an uid in the term table. If nothing is found, an error is thrown
 termLookup :: (HasUID c) => c -> TermMap -> IdeaDict
 termLookup c m = getT $ Map.lookup (c ^. uid) m
-  where getT (Just x) = x
-        getT Nothing  = error $ "Term: " ++ (c ^. uid) ++ " not found in TermMap"
+  where getT = maybe (error $ "Term: " ++ (c ^. uid) ++ " not found in TermMap") id
 
 -- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
 defLookup :: UID -> ConceptMap -> ConceptChunk
 defLookup u m = getC $ Map.lookup u m
-  where getC (Just x) = x
-        getC Nothing = error $ "Concept: " ++ u ++ " not found in ConceptMap"
+  where getC = maybe (error $ "Concept: " ++ u ++ " not found in ConceptMap") id
 
 -- | Our chunk databases. Should contain all the maps we will need.
 data ChunkDB = CDB { _csymbs :: SymbolMap
@@ -104,7 +102,7 @@ makeLenses ''ChunkDB
 -- (for SymbolTable), NamedIdeas (for TermTable), Concepts (for DefinitionTable),
 -- and Units (for UnitTable)
 cdb :: (Quantity q, Idea t, Concept c, IsUnit u,
-        DOM c ~ ConceptChunk, DOM u ~ ConceptChunk) => [q] -> [t] -> [c] -> [u] -> ChunkDB
+        ConceptDomain u) => [q] -> [t] -> [c] -> [u] -> ChunkDB
 cdb s t c u = CDB (symbolMap s) (termMap t) (conceptMap c) (unitMap u)
 
 ----------------------

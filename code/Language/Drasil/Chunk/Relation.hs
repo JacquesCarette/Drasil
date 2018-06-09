@@ -7,7 +7,7 @@ module Language.Drasil.Chunk.Relation
 import Control.Lens (makeLenses, (^.))
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term),Idea(getA),
-  Definition(defn), ConceptDomain(cdom, DOM), Concept, ExprRelat(relat))
+  Definition(defn), ConceptDomain(cdom), Concept, ExprRelat(relat))
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Spec (Sentence(..))
 
@@ -23,7 +23,6 @@ instance NamedIdea     RelationConcept where term = conc . term
 instance Idea          RelationConcept where getA (RC c _) = getA c
 instance Definition    RelationConcept where defn = conc . defn
 instance ConceptDomain RelationConcept where
-  type DOM RelationConcept = ConceptChunk
   cdom = conc . cdom
 instance Concept       RelationConcept where
 instance ExprRelat     RelationConcept where relat = rel

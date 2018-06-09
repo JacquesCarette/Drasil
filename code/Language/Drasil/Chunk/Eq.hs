@@ -5,11 +5,10 @@ module Language.Drasil.Chunk.Eq
 
 import Control.Lens ((^.), makeLenses)
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA), DOM,
+import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
-  HasReference(getReferences))
+  HasReference(getReferences), ConceptDomain)
 import Language.Drasil.Chunk.Attribute.References (References)
-import Language.Drasil.Chunk.Concept (ConceptChunk)
 import Language.Drasil.Chunk.Quantity (Quantity(getUnit), HasSpace(typ), QuantityDict,
   mkQuant, qw)
 import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
@@ -51,7 +50,7 @@ instance HasShortName  QDefinition where -- FIXME: This could lead to trouble; n
 -- | Create a 'QDefinition' with an uid, noun phrase (term), definition, symbol,
 -- unit, and defining equation.  And it ignores the definition...
 --FIXME: Space hack
-fromEqn :: (IsUnit u, DOM u ~ ConceptChunk) => 
+fromEqn :: (IsUnit u, ConceptDomain u) =>
   String -> NP -> Sentence -> Symbol -> u -> Expr -> References -> QDefinition
 fromEqn nm desc _ symb un eqn refs = 
   EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) eqn refs []
@@ -63,7 +62,7 @@ fromEqn' nm desc _ symb eqn refs = EC (mkQuant nm desc symb Real Nothing Nothing
 
 -- | Create a 'QDefinition' with an uid, noun phrase (term), symbol,
 -- abbreviation, unit, and defining equation.
-fromEqn'' :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Sentence ->
+fromEqn'' :: (IsUnit u, ConceptDomain u) => String -> NP -> Sentence ->
  Symbol -> String -> Maybe u -> Expr -> References -> QDefinition
 fromEqn'' nm desc _ symb abbr u eqn refs = 
   EC (mkQuant nm desc symb Real (fmap unitWrapper u) (Just abbr)) eqn refs []

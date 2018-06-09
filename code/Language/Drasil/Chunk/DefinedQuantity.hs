@@ -32,8 +32,7 @@ instance Eq            DefinedQuantityDict where a == b = (a ^. uid) == (b ^. ui
 instance NamedIdea     DefinedQuantityDict where term = con . term
 instance Idea          DefinedQuantityDict where getA = getA . view con
 instance Definition    DefinedQuantityDict where defn = con . defn
-instance ConceptDomain DefinedQuantityDict where
-  cdom = con . cdom
+instance ConceptDomain DefinedQuantityDict where cdom = con . cdom
 instance Concept       DefinedQuantityDict where
 instance Q.HasSpace    DefinedQuantityDict where typ = spa
 instance HasSymbol     DefinedQuantityDict where symbol = view symb

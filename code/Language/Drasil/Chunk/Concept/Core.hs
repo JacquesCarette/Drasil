@@ -22,16 +22,14 @@ data ConceptChunk = ConDict { _idea :: IdeaDict, _dad :: DefnAndDomain }
 makeLenses ''ConceptChunk
 
 instance Definition    DefnAndDomain where defn = defn'
-instance ConceptDomain DefnAndDomain where
-  cdom = cdom'
+instance ConceptDomain DefnAndDomain where cdom = cdom'
 
 instance Eq            ConceptChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance HasUID        ConceptChunk where uid = idea . uid
 instance NamedIdea     ConceptChunk where term = idea . term
 instance Idea          ConceptChunk where getA = getA . view idea
 instance Definition    ConceptChunk where defn = dad . defn'
-instance ConceptDomain ConceptChunk where
-  cdom = dad . cdom'
+instance ConceptDomain ConceptChunk where cdom = dad . cdom'
 instance Concept       ConceptChunk where
  
 data CommonConcept = ComConDict { _comm :: CI, _def :: Sentence, _dom :: [UID]}
@@ -43,7 +41,6 @@ instance NamedIdea     CommonConcept where term = comm . term
 instance Idea          CommonConcept where getA = getA . view comm
 instance Definition    CommonConcept where defn = def
 instance CommonIdea    CommonConcept where abrv = abrv . view comm
-instance ConceptDomain CommonConcept where 
-  cdom = dom
+instance ConceptDomain CommonConcept where cdom = dom
 instance Concept       CommonConcept where
 

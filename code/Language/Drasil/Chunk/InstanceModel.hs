@@ -45,8 +45,7 @@ instance NamedIdea     InstanceModel where term = rc . term
 instance Idea          InstanceModel where getA (IM a _ _ _ _ _ _) = getA a
 instance Concept       InstanceModel where
 instance Definition    InstanceModel where defn = rc . defn
-instance ConceptDomain InstanceModel where
-  cdom = rc . cdom
+instance ConceptDomain InstanceModel where cdom = rc . cdom
 instance ExprRelat     InstanceModel where relat = rc . relat
 instance HasDerivation InstanceModel where derivations = deri
 -- error used below is on purpose. These shortnames should be made explicit as necessary

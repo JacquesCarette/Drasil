@@ -11,7 +11,7 @@ import Language.Drasil
 import Control.Lens ((^.), Simple, Lens)
 import Data.List (sortBy)
 import Data.Function (on)
-import qualified Data.Map as Map
+import qualified Data.Map as Map (elems, lookup)
 
 modelsFromDB :: RefMap a -> [a]
 modelsFromDB db = dropNums $ sortBy (compare `on` snd) elemPairs

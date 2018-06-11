@@ -65,8 +65,7 @@ instance HasReference  TheoryModel where getReferences = thy . getReferences
 -- error used below is on purpose. These shortnames should be made explicit as necessary
 instance HasShortName  TheoryModel where
   shortname _ = error "No explicit name given for theory model -- build a custom Ref"
-instance ConceptDomain TheoryModel where
-  cdom = con . cdom
+instance ConceptDomain TheoryModel where cdom = con . cdom
 instance Concept       TheoryModel where
 instance Theory        TheoryModel where
   valid_context = thy . valid_context

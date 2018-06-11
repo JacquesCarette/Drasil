@@ -77,8 +77,7 @@ instance HasSpace      ConstrConcept where typ = defq . typ
 instance HasSymbol     ConstrConcept where symbol c = symbol (c^.defq)
 instance Quantity      ConstrConcept where getUnit = getUnit . view defq
 instance Definition    ConstrConcept where defn = defq . defn
-instance ConceptDomain ConstrConcept where
-  cdom = defq . cdom
+instance ConceptDomain ConstrConcept where cdom = defq . cdom
 instance Concept       ConstrConcept where
 instance Constrained   ConstrConcept where constraints  = constr'
 instance HasReasVal    ConstrConcept where reasVal      = reasV'

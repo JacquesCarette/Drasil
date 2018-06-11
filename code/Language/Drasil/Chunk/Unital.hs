@@ -35,8 +35,7 @@ instance HasUID        UnitalChunk where uid = defq' . uid
 instance NamedIdea     UnitalChunk where term = defq' . term
 instance Idea          UnitalChunk where getA (UC qc _) = getA qc
 instance Definition    UnitalChunk where defn = defq' . defn
-instance ConceptDomain UnitalChunk where
-  cdom = defq' . cdom
+instance ConceptDomain UnitalChunk where cdom = defq' . cdom
 instance Concept       UnitalChunk where
 instance HasSpace      UnitalChunk where typ = defq' . typ
 instance HasSymbol     UnitalChunk where symbol c st = symbol (c^.defq') st

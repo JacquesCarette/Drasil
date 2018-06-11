@@ -17,8 +17,7 @@ instance HasUID        UnitaryConceptDict where uid = unitary . uid
 instance NamedIdea     UnitaryConceptDict where term = unitary . term
 instance Idea          UnitaryConceptDict where getA u = getA (u ^. unitary)
 instance Definition    UnitaryConceptDict where defn = dad . defn
-instance ConceptDomain UnitaryConceptDict where
-  cdom = dad . cdom
+instance ConceptDomain UnitaryConceptDict where cdom = dad . cdom
 instance Concept       UnitaryConceptDict where
 instance HasSpace      UnitaryConceptDict where typ = unitary . typ
 instance HasSymbol     UnitaryConceptDict where symbol c stage = symbol (c^.unitary) stage

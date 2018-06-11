@@ -1,13 +1,15 @@
 module Drasil.GamePhysics.IMods (iModels) where
 
+import Drasil.GamePhysics.Unitals(acc_i, force_i, im1legTerms, im2legTerms, 
+  im3legTerms, mass_A, mass_i, normalVect, time_c, torque_i, vel_A, vel_i)
+
 import Language.Drasil
-import Data.Drasil.Utils (foldle1, fmtU, getES)
-import Data.Drasil.SentenceStructures (foldlSent)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
   angularAccel, force, gravitationalAccel, momentOfInertia, angularVelocity, 
   time, impulseS)
-import Drasil.GamePhysics.Unitals
+import Data.Drasil.SentenceStructures (foldlSent)
+import Data.Drasil.Utils (fmtU, foldle1, getES)
 
 iModels :: [RelationConcept]
 iModels = [im1, im2, im3]

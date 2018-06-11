@@ -12,10 +12,9 @@ import Language.Drasil.Chunk.Constrained.Core (Constraint(..))
 import Language.Drasil.Expr as E hiding (($.))
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Space (Space(..))
-import Language.Drasil.Expr.Extract hiding (vars)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
-import Language.Drasil.DataDesc
+import Language.Drasil.Code.DataDesc
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID, HasSymbol)
 

@@ -740,7 +740,8 @@ s6_list = [likeChg2, likeChg3, likeChg3_npcm, likeChg6]
 likeChg3_npcm :: Contents
 likeChg3_npcm = mkLklyChnk "likeChg3" (
   (makeRef (find' assump9_npcm npcmAssumptions)) :+: S "- The" +:+ phrase model +:+
-  S "currently only accounts for charging of the tank. A more complete"
+  S "currently only accounts for charging of the tank. That is, increasing the" +:+ phrase temp +:+
+  S "of the water to match the" +:+ phrase temp +:+ S "of the coil. A more complete"  
   +:+ phrase model +:+. S "would also account for discharging of the tank") "Discharging-Tank"
 -- likeChg4 = LikelyChange (LCChunk (nw $ npnc "likeChg4" $
   -- nounPhraseSent (makeRef assump11 :+: S "- Any real" +:+ phrase tank +:+

@@ -1,12 +1,18 @@
 module Drasil.GamePhysics.Unitals where
 
 import Language.Drasil
-import Data.Drasil.SI_Units
-import qualified Data.Drasil.Concepts.Physics as CP
-import qualified Data.Drasil.Quantities.Physics as QP
-import qualified Data.Drasil.Quantities.Math as QM
-import qualified Data.Drasil.Quantities.PhysicalProperties as QPP
-import Data.Drasil.Units.Physics
+import Data.Drasil.SI_Units(kilogram, metre, m_2, newton, second)
+import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
+import qualified Data.Drasil.Quantities.Physics as QP (acceleration, 
+  angularAccel, angularDisplacement, angularVelocity, displacement, distance, 
+  force, gravitationalAccel, gravitationalConst, impulseS, impulseV, 
+  linearAccel, linearDisplacement, linearVelocity, momentOfInertia, position, 
+  restitutionCoef, time, torque, velocity)
+import qualified Data.Drasil.Quantities.Math as QM (euclidNorm, normalVect, 
+  orientation, perpVect, pi_, unitVect)
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
+import Data.Drasil.Units.Physics (accelU, angVelU, impulseU, momtInertU, 
+  torqueU, velU)
 
 import Control.Lens((^.))
 

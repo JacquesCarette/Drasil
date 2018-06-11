@@ -1,7 +1,6 @@
 module Data.Drasil.Units.Chemistry where
 
-import Language.Drasil
-import Data.Drasil.SI_Units
+import Data.Drasil.SI_Units (mole, kilogram)
 
 
 densityU :: DerUChunk

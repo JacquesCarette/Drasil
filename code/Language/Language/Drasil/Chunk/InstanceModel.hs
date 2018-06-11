@@ -5,12 +5,11 @@ module Language.Drasil.Chunk.InstanceModel
   )where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn),ConceptDomain(cdom,DOM), Concept, ExprRelat(relat),
+  Definition(defn),ConceptDomain(cdom), Concept, ExprRelat(relat),
   HasDerivation(derivations), HasReference(getReferences))
 import Language.Drasil.Chunk.Attribute.References (References)
 import Language.Drasil.Chunk.Attribute.Derivation
 import Language.Drasil.Chunk.Attribute.ShortName
-import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained.Core (TheoryConstraint)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
@@ -46,9 +45,7 @@ instance NamedIdea     InstanceModel where term = rc . term
 instance Idea          InstanceModel where getA (IM a _ _ _ _ _ _) = getA a
 instance Concept       InstanceModel where
 instance Definition    InstanceModel where defn = rc . defn
-instance ConceptDomain InstanceModel where
-  type DOM InstanceModel = ConceptChunk
-  cdom = rc . cdom
+instance ConceptDomain InstanceModel where cdom = rc . cdom
 instance ExprRelat     InstanceModel where relat = rc . relat
 instance HasDerivation InstanceModel where derivations = deri
 -- error used below is on purpose. These shortnames should be made explicit as necessary

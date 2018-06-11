@@ -2,7 +2,7 @@ module Main (main) where
 
 import Language.Drasil
 
-import Drasil.HGHC.HGHC (srsBody, allSymbols)
+import Drasil.HGHC.HGHC (allSymbols, srsBody)
 
 thisChoices :: Choices
 thisChoices = Choices {

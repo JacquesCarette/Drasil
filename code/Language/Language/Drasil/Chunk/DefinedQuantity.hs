@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.DefinedQuantity
   ) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom, DOM), Concept, HasSymbol(symbol),
+  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
   HasSpace(typ), IsUnit, HasDerivation(derivations))
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import qualified Language.Drasil.Chunk.Quantity as Q
@@ -32,9 +32,7 @@ instance Eq            DefinedQuantityDict where a == b = (a ^. uid) == (b ^. ui
 instance NamedIdea     DefinedQuantityDict where term = con . term
 instance Idea          DefinedQuantityDict where getA = getA . view con
 instance Definition    DefinedQuantityDict where defn = con . defn
-instance ConceptDomain DefinedQuantityDict where
-  type DOM DefinedQuantityDict = ConceptChunk
-  cdom = con . cdom
+instance ConceptDomain DefinedQuantityDict where cdom = con . cdom
 instance Concept       DefinedQuantityDict where
 instance Q.HasSpace    DefinedQuantityDict where typ = spa
 instance HasSymbol     DefinedQuantityDict where symbol = view symb
@@ -54,5 +52,5 @@ dqdEL :: (IsUnit u) => ConceptChunk -> Symbol -> Space -> u -> DefinedQuantityDi
 dqdEL c s sp un = DQD c (\_ -> s) sp uu []
   where uu = Just $ unitWrapper un
 
-dqdWr :: (Q.Quantity c, Concept c, Q.HasSpace c, HasSymbol c, DOM c ~ ConceptChunk) => c -> DefinedQuantityDict
+dqdWr :: (Q.Quantity c, Concept c, Q.HasSpace c, HasSymbol c) => c -> DefinedQuantityDict
 dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (Q.getUnit c) []

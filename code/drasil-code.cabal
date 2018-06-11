@@ -35,11 +35,9 @@ library
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    MissingH >= 1.4.0.1,
-    parsec >= 3.1.9,
-    data-fix (>= 0.0.4 && <= 1.0)
+    drasil >= 0.0.6
   default-language: Haskell2010
-  ghc-options:      -Wall
+  ghc-options:      -Wall -O2
 
 source-repository head
   type:     git

@@ -40,6 +40,7 @@ FORCE: ;
 build: FORCE
 	mkdir -p $(LANG_DIR)
 	cd $(LANG_DIR) && stack build -j2 $(stackArgs) drasil-lang
+	stack install $(stackArgs) drasil-lang
 
 build_code: build
 	mkdir -p build

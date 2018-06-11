@@ -5,7 +5,7 @@ module Drasil.Sections.TableOfUnits(table_of_units, unit_table) where
 import Control.Lens ((^.))
 import Prelude hiding (id)
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation (symbol_, description)
 
 -- | Table of units section builder. Takes a list of units and an introduction
 table_of_units :: IsUnit s => [s] -> Contents -> Section

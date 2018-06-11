@@ -45,10 +45,12 @@ build: FORCE
 build_code: build
 	mkdir -p build
 	stack build -j2 $(stackArgs) drasil-code
+	stack install $(stackArgs) drasil-code
 
 build_data: build
 	mkdir -p $(DATA_DIR)
 	cd $(DATA_DIR) && stack build -j2 $(stackArgs) drasil-data
+	stack install $(stackArgs) drasil-data
 
 swhs_build: build
 	mkdir -p build/$(SWHS_DIR)

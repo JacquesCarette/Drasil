@@ -7,30 +7,38 @@
 -- instead.
 module Drasil.DocumentLanguage where
 
-import Drasil.DocumentLanguage.Definitions
+import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation, 
+  instanceModel, gdefn, tmodel)
 
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 
 import Control.Lens ((^.))
-import qualified Data.Map as Map
+import qualified Data.Map as Map (elems)
 
-import Drasil.Sections.TableOfUnits (table_of_units)
-import Drasil.Sections.TableOfSymbols (table)
 import Drasil.Sections.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
-import qualified Drasil.SRS as SRS
-import qualified Drasil.Sections.Introduction as Intro
-import qualified Drasil.Sections.SpecificSystemDescription as SSD
-import qualified Drasil.Sections.Stakeholders as Stk
-import qualified Drasil.Sections.AuxiliaryConstants as AC
-import qualified Drasil.Sections.ScopeOfTheProject as SotP
-import qualified Drasil.Sections.TraceabilityMandGs as TMG
-import qualified Drasil.Sections.GeneralSystDesc as GSD
-import qualified Drasil.Sections.Requirements as R
+import Drasil.Sections.TableOfSymbols (table)
+import Drasil.Sections.TableOfUnits (table_of_units)
+import qualified Drasil.SRS as SRS (appendix, dataDefn, genDefn, genSysDes, 
+  inModel, likeChg, probDesc, reference, solCharSpec, stakeholder, thModel, 
+  tOfSymb, userChar)
+import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
+import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
+  systCon, usrCharsF)
+import qualified Drasil.Sections.Introduction as Intro (charIntRdrF, 
+  introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
+import qualified Drasil.Sections.Requirements as R (fReqF, nonFuncReqF, reqF)
+import qualified Drasil.Sections.ScopeOfTheProject as SotP (scopeOfTheProjF)
+import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
+  datConF, dataDefnF, genDefnF, inModelF, probDescF, solutionCharSpecIntro, 
+  specSysDescr, thModF)
+import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
+  stakeholderIntro, tClientF, tCustomerF)
+import qualified Drasil.Sections.TraceabilityMandGs as TMG (traceMGF)
 
 import Data.Drasil.Concepts.Documentation (refmat)
 
-import Data.List (sortBy, nub)
 import Data.Function (on)
+import Data.List (nub, sortBy)
 
 type System = Sentence
 type DocKind = Sentence

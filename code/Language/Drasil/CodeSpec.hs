@@ -6,6 +6,7 @@ import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity -- for hack
 import Language.Drasil.Chunk.SymbolForm (codeSymb)
+import Language.Drasil.Chunk.ShortName
 import Language.Drasil.NounPhrase
 import Language.Drasil.Symbol
 import Language.Drasil.Spec
@@ -155,12 +156,12 @@ defaultChoices = Choices {
 type Name = String
 
 -- medium hacks ---
-relToQD :: (ExprRelat c, HasSymbolTable ctx) => ctx -> c -> QDefinition
-relToQD sm r = convertRel sm $ r ^. relat
+relToQD :: (ExprRelat c, HasShortName c, HasSymbolTable ctx) => ctx -> c -> QDefinition
+relToQD sm r = convertRel sm (r ^. relat) (shortname r)
 
-convertRel :: HasSymbolTable ctx => ctx -> Expr -> QDefinition
-convertRel sm (BinaryOp Eq (C x) r) = ec (symbLookup x (sm ^. symbolTable)) r
-convertRel _ _ = error "Conversion failed"
+convertRel :: (HasSymbolTable ctx) => ctx -> Expr -> ShortName -> QDefinition
+convertRel sm (BinaryOp Eq (C x) r) sn = ec (symbLookup x (sm ^. symbolTable)) r sn
+convertRel _ _ _ = error "Conversion failed"
 
 data Mod = Mod Name [Func]
 

@@ -1,3 +1,4 @@
+{-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.ReqChunk 
   ( ReqChunk(..), ReqType(..)
   , frc, nfrc
@@ -8,7 +9,7 @@ import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.ShortName
 import Language.Drasil.Spec (Sentence)
 
-import Control.Lens ((^.))
+import Control.Lens ((^.), view, makeLenses)
 
 -- We will likely need to differentiate functional/non-functional reqs
 -- (or whatever we want to call them) for the future when we parse our 
@@ -36,11 +37,11 @@ data ReqChunk = RC
   , requires   :: Sentence
   , _refName   :: ShortName
   }
+makeLenses ''ReqChunk
   
 instance HasUID        ReqChunk where uid f (RC a b c d) = fmap (\x -> RC x b c d) (f a)
 instance Eq            ReqChunk where a == b = a ^. uid == b ^. uid
-instance HasShortName  ReqChunk where
-  shortname (RC _ _ _ sn)   = sn
+instance HasShortName  ReqChunk where shortname = view refName
 
 -- | Smart constructor for requirement chunks (should not be exported)
 rc :: String -> ReqType -> Sentence -> ShortName -> ReqChunk

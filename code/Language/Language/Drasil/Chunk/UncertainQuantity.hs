@@ -97,7 +97,7 @@ uqNU :: (Quantity c, Constrained c, Concept c, HasReasVal c) =>
   c -> UncertQ
 uqNU q = UQ (ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit q)) (q ^. constraints) (q ^. reasVal)) Nothing 
 
--- this is kind of crazy and probably shouldn't be used!
+--FIXME: this is kind of crazy and probably shouldn't be used!
 uqc :: (IsUnit u, ConceptDomain u) => String -> NP -> String -> Symbol -> u -> Space
                 -> [Constraint] -> Expr -> Double -> UncertQ
 uqc nam trm desc sym un space cs val uncrt = uq (cuc' nam trm desc sym un space cs val) uncrt

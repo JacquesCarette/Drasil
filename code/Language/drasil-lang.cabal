@@ -8,7 +8,8 @@ Synopsis:	A framework for code and document generation for scientific software -
 library
   exposed-modules:
     Language.Drasil
-    , Language.Drasil.SystemInformation
+  other-modules:
+      Language.Drasil.SystemInformation
     , Language.Drasil.Expr
     , Language.Drasil.Expr.Math
     , Language.Drasil.Expr.Precedence

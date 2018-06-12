@@ -209,8 +209,12 @@ mkTableFromColumns l =
 none :: Sentence
 none = S "None"
 
+found x = S ((show (x*100)) ++ "%")
+
 typUncr :: (UncertainQuantity c) => c -> Sentence
-typUncr x = maybe none (S . show) (x ^. uncert)
+--typUncr x = maybe none found(S . show) (x ^. uncert)
+--typUncr x = maybe none (S . show) (x ^. uncert)
+typUncr x = maybe none found (x ^. uncert)
 
 constraintToExpr :: (Quantity c) => c -> Constraint -> Expr
 constraintToExpr c (Range _ ri) = real_interval c ri

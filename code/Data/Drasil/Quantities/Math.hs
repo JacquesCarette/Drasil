@@ -1,9 +1,9 @@
 module Data.Drasil.Quantities.Math where
 
-
 import Language.Drasil
-import Data.Drasil.Concepts.Math as CM
-import Data.Drasil.SI_Units
+import Data.Drasil.Concepts.Math as CM (diameter, euclidN, gradient, normalV,
+    orient, perpV, surArea, surface, unitV)
+import Data.Drasil.SI_Units (metre, m_2, radian)
 
 diameter, gradient, normalVect, unitVect, euclidNorm, perpVect, surface, uNormalVect :: DefinedQuantityDict
 

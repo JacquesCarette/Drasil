@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.Concept
   )where
 
 import Language.Drasil.Classes (HasUID(uid), Idea, Definition(defn),
-  ConceptDomain(cdom,DOM), Concept)
+  ConceptDomain(cdom), Concept)
 import Language.Drasil.Chunk.NamedIdea(mkIdea,nw)
 import Language.Drasil.Chunk.CommonIdea (commonIdea)
 import Language.Drasil.Spec
@@ -49,5 +49,5 @@ ccs :: (Idea c, Concept d) => c -> Sentence -> [d] -> ConceptChunk --Explicit ta
 ccs n d l = ConDict (nw n) (DAD d $ map (\x -> x ^. uid) l)
 
 -- | For projecting out to the ConceptChunk data-type
-cw :: (Concept c, DOM c ~ ConceptChunk) => c -> ConceptChunk
+cw :: Concept c => c -> ConceptChunk
 cw c = ConDict (nw c) $ DAD (c ^. defn) (c ^. cdom)

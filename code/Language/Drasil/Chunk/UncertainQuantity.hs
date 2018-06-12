@@ -13,7 +13,7 @@ module Language.Drasil.Chunk.UncertainQuantity
   ) where
   
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom, DOM), Concept, HasSymbol(symbol),
+  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
   IsUnit, Constrained(constraints), HasReasVal(reasVal))
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.DefinedQuantity (dqd')
@@ -84,33 +84,31 @@ instance UncertainQuantity UncertQ where uncert = unc
 instance Constrained       UncertQ where constraints = coco . constraints
 instance HasReasVal        UncertQ where reasVal = coco . reasVal
 instance Definition        UncertQ where defn = coco . defn
-instance ConceptDomain     UncertQ where
-  type DOM UncertQ = ConceptChunk
-  cdom = coco . cdom
+instance ConceptDomain     UncertQ where cdom = coco . cdom
 instance Concept           UncertQ where
 
 {-- Constructors --}
 -- | The UncertainQuantity constructor. Requires a Quantity, a percentage, and a typical value
-uq :: (Quantity c, Constrained c, Concept c, HasReasVal c, DOM c ~ ConceptChunk) => 
+uq :: (Quantity c, Constrained c, Concept c, HasReasVal c) =>
   c -> Double -> UncertQ
 uq q u = UQ (ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit q)) (q ^. constraints) (q ^. reasVal)) (Just u) 
 
-uqNU :: (Quantity c, Constrained c, Concept c, HasReasVal c, DOM c ~ ConceptChunk) =>
+uqNU :: (Quantity c, Constrained c, Concept c, HasReasVal c) =>
   c -> UncertQ
 uqNU q = UQ (ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit q)) (q ^. constraints) (q ^. reasVal)) Nothing 
 
 -- this is kind of crazy and probably shouldn't be used!
-uqc :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u -> Space
+uqc :: (IsUnit u, ConceptDomain u) => String -> NP -> String -> Symbol -> u -> Space
                 -> [Constraint] -> Expr -> Double -> UncertQ
 uqc nam trm desc sym un space cs val uncrt = uq (cuc' nam trm desc sym un space cs val) uncrt
 
 --uncertainty quanity constraint no uncertainty
-uqcNU :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u 
+uqcNU :: (IsUnit u, ConceptDomain u) => String -> NP -> String -> Symbol -> u
                   -> Space -> [Constraint] -> Expr -> UncertQ
 uqcNU nam trm desc sym un space cs val = uqNU (cuc' nam trm desc sym un space cs val)
 
 --uncertainty quantity constraint no description
-uqcND :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Symbol -> u -> Space -> [Constraint]
+uqcND :: (IsUnit u, ConceptDomain u) => String -> NP -> Symbol -> u -> Space -> [Constraint]
                   -> Expr -> Double -> UncertQ
 uqcND nam trm sym un space cs val uncrt = uq (cuc' nam trm "" sym un space cs val) uncrt
 

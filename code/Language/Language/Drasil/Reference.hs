@@ -17,7 +17,7 @@ import Language.Drasil.Document
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.RefTypes (RefType(..))
 import Control.Lens ((^.), Simple, Lens, makeLenses)
-import Language.Drasil.Chunk.Attribute.ShortName
+import Language.Drasil.Chunk.ShortName
 import Data.List (partition, sortBy)
 import qualified Data.Map as Map
 import Data.Function (on)

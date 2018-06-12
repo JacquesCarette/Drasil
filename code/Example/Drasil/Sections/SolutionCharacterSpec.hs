@@ -29,6 +29,8 @@ import Control.Lens ((^.))
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl,
   listofTablesToRefs)
 
+import Drasil.Sections.GeneralSystDesc(genSysIntro)
+
 import qualified Drasil.SRS as SRS
 
 data SecItem where 
@@ -243,7 +245,7 @@ sectionMap progName (SectionModel niname xs)
   | compareID niname  (Doc.problemDescription ^. uid)       = SRS.probDesc
     [problemDescriptionIntro progName (pullSents xs)]
   | compareID niname  (Doc.generalSystemDescription ^. uid) = SRS.genSysDes
-    [genenralSystemIntro]
+    [genSysIntro]
   | compareID niname  (Doc.requirement ^. uid)              = SRS.require
     [requirementsIntro]
   | otherwise                                              = error "no matches on section name"
@@ -350,12 +352,6 @@ dataConstraintSect (SectionModel _ xs) = SRS.datCon
 -- GENERAL SYSTEM DESCRIPTION --
 --------------------------------
 
-genenralSystemIntro :: Contents
-genenralSystemIntro = foldlSP [S "This", phrase Doc.section_, S "provides general",
-  phrase Doc.information, S "about the", phrase Doc.system `sC` S "identifies",
-  S "the interfaces between the", phrase Doc.system, S "and its", 
-  phrase Doc.environment `sC` S "and describes the", plural Doc.userCharacteristic, 
-  S "and the", plural Doc.systemConstraint]
 
 --------------------------
 -- USER CHARACTERISTICS --

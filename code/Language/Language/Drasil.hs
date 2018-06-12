@@ -217,9 +217,9 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasReference(getReferences))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
-import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
-import Language.Drasil.Chunk.Attribute.References (References)
-import Language.Drasil.Chunk.Attribute.ShortName
+import Language.Drasil.Chunk.Derivation (Derivation)
+import Language.Drasil.Chunk.References (References)
+import Language.Drasil.Chunk.ShortName
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation (
   -- Types

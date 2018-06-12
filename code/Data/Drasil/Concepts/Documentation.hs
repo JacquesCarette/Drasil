@@ -3,10 +3,10 @@ module Data.Drasil.Concepts.Documentation where
 import Language.Drasil hiding (organization)
 
 import Data.Drasil.Concepts.Math (graph)
-import Data.Drasil.Phrase (ofA, andRT, and_, and_', of_, of_', of__)
+import Data.Drasil.Phrase (andRT, and_, and_', ofA, of_, of_', of__)
 
 import Control.Lens ((^.))
-import qualified Language.Drasil.NounPhrase as NP
+import qualified Language.Drasil.NounPhrase as NP (plural)
 
 assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
   unlikelyChg, physSyst, requirement, thModel, mg, notApp, typUnc, srs :: CI

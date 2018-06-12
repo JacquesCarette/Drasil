@@ -449,23 +449,23 @@ Table~\ref{Table:InDataConstraints}, and Table~\ref{Table:OutDataConstraints} sh
 Var & Physical Constraints & Software Constraints & Typical Value & TU
 \\
 \midrule
-$L$ & $L>0$ & ${L_{min}}\leq{}L\leq{}{L_{max}}$ & $1.5$ m & 0.1
+$L$ & $L>0$ & ${L_{min}}\leq{}L\leq{}{L_{max}}$ & $1.5$ m & 10.0%
 \\
-$D$ & $D>0$ & None & $0.412$ m & 0.1
+$D$ & $D>0$ & None & $0.412$ m & 10.0%
 \\
-${A_{C}}$ & ${A_{C}}>0$ & ${A_{C}}\leq{}{{A_{C}}^{max}}$ & $0.12$ $\text{m}^{2}$ & 0.1
+${A_{C}}$ & ${A_{C}}>0$ & ${A_{C}}\leq{}{{A_{C}}^{max}}$ & $0.12$ $\text{m}^{2}$ & 10.0%
 \\
-${T_{C}}$ & $0<{T_{C}}<100$ & None & $50.0$ ${}^{\circ}$C & 0.1
+${T_{C}}$ & $0<{T_{C}}<100$ & None & $50.0$ ${}^{\circ}$C & 10.0%
 \\
-${\rho{}_{W}}$ & ${\rho{}_{W}}>0$ & ${{\rho{}_{W}}^{min}}<{\rho{}_{W}}\leq{}{{\rho{}_{W}}^{max}}$ & $1000.0$ $\frac{\text{kg}}{\text{m}^{3}}$ & 0.1
+${\rho{}_{W}}$ & ${\rho{}_{W}}>0$ & ${{\rho{}_{W}}^{min}}<{\rho{}_{W}}\leq{}{{\rho{}_{W}}^{max}}$ & $1000.0$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10.0%
 \\
-${C_{W}}$ & ${C_{W}}>0$ & ${{C_{W}}^{min}}<{C_{W}}<{{C_{W}}^{max}}$ & $4186.0$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 0.1
+${C_{W}}$ & ${C_{W}}>0$ & ${{C_{W}}^{min}}<{C_{W}}<{{C_{W}}^{max}}$ & $4186.0$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10.0%
 \\
-${h_{C}}$ & ${h_{C}}>0$ & ${{h_{C}}^{min}}\leq{}{h_{C}}\leq{}{{h_{C}}^{max}}$ & $1000.0$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$ & 0.1
+${h_{C}}$ & ${h_{C}}>0$ & ${{h_{C}}^{min}}\leq{}{h_{C}}\leq{}{{h_{C}}^{max}}$ & $1000.0$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$ & 10.0%
 \\
-${T_{init}}$ & $0<{T_{init}}<100$ & None & $40.0$ ${}^{\circ}$C & 0.1
+${T_{init}}$ & $0<{T_{init}}<100$ & None & $40.0$ ${}^{\circ}$C & 10.0%
 \\
-${t_{final}}$ & ${t_{final}}>0$ & ${t_{final}}<{{t_{final}}^{max}}$ & $50000.0$ s & 0.1
+${t_{final}}$ & ${t_{final}}>0$ & ${t_{final}}<{{t_{final}}^{max}}$ & $50000.0$ s & 10.0%
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -548,7 +548,7 @@ This problem is small in size and relatively simple, so performance is not a pri
 \item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg3}:]A\ref{A:assump9} - The temperature of the heating coil will actually change along its length as the water within it cools.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg3}:]A\ref{A:assump9.npcm}- The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg3}:]A\ref{A:assump9.npcm}- The model currently only accounts for charging of the tank. That is, increasing the temperature of the water to match the temperature of the coil. A more complete model would also account for discharging of the tank.
 \end{description}
 \begin{description}
 \item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg6}:]A\ref{A:assump15} - Any real tank cannot be perfectly insulated and will lose heat.

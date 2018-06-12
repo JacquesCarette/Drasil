@@ -3,7 +3,7 @@ module Language.Drasil.Document where
 
 import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.AssumpChunk
-import Language.Drasil.Chunk.Attribute.ShortName
+import Language.Drasil.Chunk.ShortName
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation

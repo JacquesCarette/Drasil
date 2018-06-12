@@ -8,15 +8,16 @@ import Language.Drasil.Expr (Expr)
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), ConceptDomain)
-import Language.Drasil.Chunk.Attribute.References (References)
+import Language.Drasil.Chunk.References (References)
+import Language.Drasil.Chunk.Concept (ConceptChunk)
 import Language.Drasil.Chunk.Quantity (Quantity(getUnit), HasSpace(typ), QuantityDict,
   mkQuant, qw)
 import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
 import Language.Drasil.Unit (unitWrapper)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space
-import Language.Drasil.Chunk.Attribute.Derivation
-import Language.Drasil.Chunk.Attribute.ShortName
+import Language.Drasil.Chunk.Derivation
+import Language.Drasil.Chunk.ShortName
 
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Spec (Sentence)

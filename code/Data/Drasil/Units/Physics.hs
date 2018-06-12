@@ -1,9 +1,12 @@
 module Data.Drasil.Units.Physics where
 
-import Language.Drasil
-import Data.Drasil.SI_Units
+import Data.Drasil.SI_Units (metre, radian, s_2, second, newton, kilogram,
+  m_2, m_3, newton)
+import Language.Drasil (new_unit, DerUChunk, (/:), (/$), (*:), cn, UDefn(..)
+	 , dcc, makeDerU)
 
-accelU, angVelU, angAccelU, momtInertU, momentOfForceU, impulseU, springConstU, torqueU, velU :: DerUChunk
+accelU, angVelU, angAccelU, momtInertU, momentOfForceU, impulseU,
+  springConstU, torqueU, velU :: DerUChunk
 
 accelU          = new_unit "acceleration"         $ metre /: s_2
 angVelU         = new_unit "angular velocity"     $ radian /: second

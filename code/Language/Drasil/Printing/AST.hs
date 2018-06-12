@@ -3,7 +3,7 @@ module Language.Drasil.Printing.AST where
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.RefTypes (RefType, RefAdd)
 import Language.Drasil.Unicode (Greek, Special)
-import Language.Drasil.Chunk.Attribute.ShortName
+import Language.Drasil.Chunk.ShortName
 
 data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime | Log
   | Sin | Cos | Tan | Sec | Csc | Cot | Not | Dim | Exp | Neg | Cross

@@ -3,11 +3,11 @@ module Drasil.SSP.BasicExprs where
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
 
-import Drasil.SSP.Unitals (baseAngle, baseWthX, dx_i, dy_i, earthqkLoadFctr, 
-  impLoadAngle, index, intNormForce, inxi, inxiM1, midpntHght, mobShrI, 
-  normToShear, nrmDispl, nrmFSubWat, nrmStiffBase, shrDispl, shrStress, 
-  slcWght, sliceHght, surfAngle, surfHydroForce, surfLoad, watrForce, 
-  watrForceDif, xi)
+import Drasil.SSP.Unitals (baseAngle, dy_i, dx_i, inxi,
+  intNormForce, impLoadAngle, surfLoad, surfHydroForce,
+  slcWght, inxiM1, surfAngle, earthqkLoadFctr, midpntHght,
+  baseWthX, sliceHght, watrForce)
+
 
 eqlExpr :: (Expr -> Expr) -> (Expr -> Expr) -> (Expr -> Expr -> Expr) -> Expr
 eqlExpr f1_ f2_ _e_ = (inxi slcWght `_e_`

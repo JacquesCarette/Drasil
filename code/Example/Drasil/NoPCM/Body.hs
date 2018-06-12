@@ -156,8 +156,8 @@ mkSRS = RefSec (RefProg intro
   map Verbatim [s5, s6, s7, s8] ++ (Bibliography : [])
 
 generalDefinitions :: [GenDefn]
-generalDefinitions = [gd nwtnCooling (Just thermal_flux) ([] :: Derivation),
-  gd rocTempSimp (Nothing :: Maybe DerUChunk) roc_temp_simp_deriv]
+generalDefinitions = [gd nwtnCooling (Just thermal_flux) ([] :: Derivation) "nwtnCooling",
+  gd rocTempSimp (Nothing :: Maybe DerUChunk) roc_temp_simp_deriv "rocTempSimp"]
 
 nopcm_si :: SystemInformation
 nopcm_si = SI {

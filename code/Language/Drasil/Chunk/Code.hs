@@ -3,13 +3,14 @@ module Language.Drasil.Chunk.Code (
     CodeIdea(..), CodeChunk(..), CodeDefinition(..),
     codeType, codevar, codefunc, qtoc, qtov, codeEquat,
     ConstraintMap, constraintMap, physLookup, sfwrLookup,
-    programName,
-    symbToCodeName, CodeType(..),
+    programName, symbToCodeName, --CodeType(..), - not defined here
     spaceToCodeType, toCodeName, funcPrefix
   ) where
 
 import Control.Lens ((^.),makeLenses,view)
 
+import Language.Drasil
+{-
 import Language.Drasil.Chunk.Constrained.Core (Constraint, isPhysC)
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Eq (QDefinition)
@@ -21,8 +22,9 @@ import Language.Drasil.Space as S
 import Language.Drasil.Code.Code as G (CodeType(..))
 import Language.Drasil.Expr
 import Language.Drasil.Unicode
-import Language.Drasil.Symbol
+import Language.Drasil.Symbol-}
 
+import Language.Drasil.Code.Code (CodeType(..))
 import Data.String.Utils (replace)
 import qualified Data.Map as Map
 
@@ -139,30 +141,30 @@ data CodeChunk = CodeC { _qc :: QuantityDict
                        }
 makeLenses ''CodeChunk
 
-instance HasUID CodeChunk where uid = qc . uid
+instance HasUID    CodeChunk where uid = qc . uid
 instance NamedIdea CodeChunk where term = qc . term
-instance Idea CodeChunk where getA = getA . view qc
-instance HasSpace CodeChunk where typ = qc . typ
+instance Idea      CodeChunk where getA = getA . view qc
+instance HasSpace  CodeChunk where typ = qc . typ
 instance HasSymbol CodeChunk where symbol c = symbol (c ^. qc)
-instance Quantity CodeChunk where getUnit = getUnit . view qc
-instance CodeIdea CodeChunk where
+instance Quantity  CodeChunk where getUnit = getUnit . view qc
+instance CodeIdea  CodeChunk where
   codeName (CodeC c Var) = symbToCodeName (codeSymb c)
   codeName (CodeC c Func) = funcPrefix ++ symbToCodeName (codeSymb c)
-instance Eq CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+instance Eq        CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 
 spaceToCodeType :: Space -> CodeType
-spaceToCodeType S.Integer = G.Integer
-spaceToCodeType S.Natural = G.Integer
-spaceToCodeType S.Radians = G.Float
-spaceToCodeType S.Real = G.Float
-spaceToCodeType S.Rational = G.Float
-spaceToCodeType S.Boolean = G.Boolean
-spaceToCodeType S.Char = G.Char
-spaceToCodeType S.String = G.String
-spaceToCodeType (S.Vect s) = G.List (spaceToCodeType s)
-spaceToCodeType (S.DiscreteI _) = G.List (spaceToCodeType S.Integer)
-spaceToCodeType (S.DiscreteD _) = G.List (spaceToCodeType S.Rational)
-spaceToCodeType (S.DiscreteS _) = G.List (spaceToCodeType S.String)
+spaceToCodeType Integer       = Integer
+spaceToCodeType Natural       = Integer
+spaceToCodeType Radians       = Float
+spaceToCodeType Real          = Float
+spaceToCodeType Rational      = Float
+spaceToCodeType Boolean       = Boolean
+spaceToCodeType Char          = Char
+spaceToCodeType String        = String
+spaceToCodeType (Vect s)      = List (spaceToCodeType s)
+spaceToCodeType (DiscreteI _) = List (spaceToCodeType Integer)
+spaceToCodeType (DiscreteD _) = List (spaceToCodeType Rational)
+spaceToCodeType (DiscreteS _) = List (spaceToCodeType String)
 
 codeType :: HasSpace c => c -> CodeType
 codeType c = spaceToCodeType $ c ^. typ

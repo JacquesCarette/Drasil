@@ -33,6 +33,7 @@ module Language.Drasil (
   , Idea(getA)
   , Definition(defn), ConceptDomain(cdom)
   , Concept
+  , HasSpace(typ)
   , HasUnitSymbol(usymb)
   , IsUnit
   , HasReference(getReferences)
@@ -132,7 +133,7 @@ module Language.Drasil (
   -- Space
   , Space(..)
   -- Symbol
-  , Symbol(..), sub, sup, vec, hat, prime, sCurlyBrSymb, compsy
+  , Decoration(..), Symbol(..), sub, sup, vec, hat, prime, sCurlyBrSymb, compsy
   -- SymbolAlphabet
   , cA, cB, cC, cD, cE, cF, cG, cH, cI, cJ, cK, cL, cM, cN, cO, cP, cQ, cR, cS, cT, cU, cV, cW, cX, cY, cZ
   , lA, lB, lC, lD, lE, lF, lG, lH, lI, lJ, lK, lL, lM, lN, lO, lP, lQ, lR, lS, lT, lU, lV, lW, lX, lY, lZ
@@ -211,8 +212,8 @@ import Language.Drasil.UnitLang -- all of it
 import Language.Drasil.Unit -- all of it
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
-  IsUnit, CommonIdea(abrv),
+  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), 
+  HasSpace(typ), HasUnitSymbol(usymb), IsUnit, CommonIdea(abrv),
   Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations),
   HasReference(getReferences))
 import Language.Drasil.Chunk.AssumpChunk
@@ -280,8 +281,8 @@ import Language.Drasil.Reference (makeRef, acroTest, ReferenceDB, assumpDB, reqD
                                  , HasChangeRefs, changeRefTable, changeLookup
                                  , citationRefTable, citeLookup, RefMap
                                  , simpleMap, find')
-import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat, prime, sCurlyBrSymb, 
-  compsy, Stage(..))
+import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 
+  prime, sCurlyBrSymb, compsy, Stage(..))
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it
 import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)

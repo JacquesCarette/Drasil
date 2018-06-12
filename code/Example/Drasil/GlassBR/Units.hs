@@ -1,7 +1,7 @@
 module Drasil.GlassBR.Units(sFlawPU) where
 
 import Language.Drasil
-import Data.Drasil.SI_Units
+import Data.Drasil.SI_Units (metre, newton)
 
 --N^(-7)*m^12--
 sFlawPU :: DerUChunk

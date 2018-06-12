@@ -4,38 +4,40 @@ module Drasil.SSP.IMods where
 import Prelude hiding (tan, product, sin, cos)
 import Language.Drasil
 import Control.Lens ((^.))
-import Drasil.DocumentLanguage.RefHelpers
 
-import Drasil.SSP.Unitals (inxi, shrStress, baseLngth, sum1toN, mobStress,
-  fs, fs_min, fsloc, shrDispl, shrStiffBase, genForce, constant_a, fricAngle,
-  normStress, baseWthX, cohesion, poissnsRatio, intNormForce, nrmStiffBase,
-  nrmDispl, dy_i, dx_i, baseAngle, genDisplace, rotatedDispl, index, yi,
-  xi, numbSlices, shrResC, shearRNoIntsl, shearFNoIntsl, mobShrC,
-  inxi, inxiP1, normToShear, scalFunc, intShrForce, wiif, inxiM1, totNrmForce,
-  nrmFSubWat, mobShrI, baseHydroForce, impLoadAngle, surfLoad, surfAngle,
-  surfHydroForce, earthqkLoadFctr, slcWght, midpntHght, watrForce, critCoords,
-  indxn, minFunction, surfLngth, shrStiffIntsl, watrForceDif, effStiffB,
-  effStiffA, nrmStiffIntsl, indx1, normFunc, shearFunc, varblU, varblV)
-import Drasil.SSP.Defs (slope, slice, slip,
-  intrslce, ssa, morPrice, crtSlpSrf, factorOfSafety)
-import Data.Drasil.SentenceStructures (foldlSent, isThe)
-import Data.Drasil.Utils (getES, eqUnR)
 import Drasil.SSP.DataDefs (fixme1,fixme2)
+import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice, 
+  slip, slope, ssa)
+import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
+  cohesion, constant_a, critCoords, dx_i, dy_i, earthqkLoadFctr, effStiffA, 
+  effStiffB, fricAngle, fs, fs_min, fsloc, genDisplace, genForce, impLoadAngle, 
+  index, indx1, indxn, intNormForce, intShrForce, inxi, inxi, inxiM1, inxiP1, 
+  midpntHght, minFunction, mobShrC, mobShrI, mobStress, normFunc, normStress, 
+  normToShear, nrmDispl, nrmFSubWat, nrmStiffBase, nrmStiffIntsl, numbSlices, 
+  poissnsRatio, rotatedDispl, scalFunc, shearFNoIntsl, shearFunc, shearRNoIntsl, 
+  shrDispl, shrResC, shrStiffBase, shrStiffIntsl, shrStress, slcWght, sum1toN, 
+  surfAngle, surfHydroForce, surfLngth, surfLoad, totNrmForce, varblU, varblV,
+  watrForce, watrForceDif, wiif, xi, yi)
+
+import Drasil.DocumentLanguage.RefHelpers(refA)
+
+import Data.Drasil.SentenceStructures (foldlSent, isThe)
+import Data.Drasil.Utils (eqUnR, getES)
 
 -- Needed for derivations
-import Data.Drasil.Concepts.Documentation (analysis,
-  solution, definition, value, assumption, physicalProperty,
-  problem, method_)
-import Data.Drasil.SentenceStructures (andThe, acroGD, 
-  sIs, sIn, getTDS, getTandS, ofThe, ofThe', sAnd, sOf, acroIM, acroT,
-  eqN, foldlSP, foldlSent_)
-import Data.Drasil.Concepts.Math (equation, surface)
-import Data.Drasil.Concepts.Physics (displacement, force)
-import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Drasil.SSP.Assumptions
-import Drasil.SSP.BasicExprs
-import Drasil.SSP.DataDefs
+import Drasil.SSP.Assumptions (newA2, sspRefDB)
+import Drasil.SSP.BasicExprs (eqlExpr, momExpr)
+import Drasil.SSP.DataDefs (ddRef, intrsliceF, lengthLb, lengthLs, 
+  mobShearWO, resShearWO, seismicLoadF, sliceWght, surfLoads)
 
+import Data.Drasil.Concepts.Documentation (analysis, assumption, definition, 
+  method_, physicalProperty, problem, solution, value)
+import Data.Drasil.Concepts.Math (equation, surface)
+import Data.Drasil.Concepts.PhysicalProperties (mass)
+import Data.Drasil.Concepts.Physics (displacement, force)
+
+import Data.Drasil.SentenceStructures (acroGD, acroIM, acroT, andThe, eqN, 
+  foldlSent_, foldlSP, getTandS, getTDS, ofThe, ofThe', sAnd, sIn, sIs, sOf)
 
 -----------------------
 --  Instance Models  --

@@ -4,6 +4,7 @@ module Language.Drasil.Chunk.ReqChunk
   , frc, nfrc
   ) where
 
+import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.ShortName
 import Language.Drasil.Spec (Sentence)
@@ -31,7 +32,7 @@ instance Show ReqType where
 -- (Functional/Non-Functional) from 'ReqType', a sentence describing what is
 -- required (TODO: Change this), and a short name.
 data ReqChunk = RC 
-  { _id        :: String
+  { _id        :: UID
   , reqType    :: ReqType 
   , requires   :: Sentence
   , _refName   :: ShortName

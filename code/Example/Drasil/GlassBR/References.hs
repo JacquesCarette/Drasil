@@ -2,8 +2,8 @@ module Drasil.GlassBR.References where
 
 import Language.Drasil
 
-import Data.Drasil.People (jmBracci, tlKohutek, wlBeason, jRobertson, sRobertson)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
+import Data.Drasil.People (jRobertson, jmBracci, sRobertson, tlKohutek, wlBeason)
 
 rbrtsn2012, astm_LR2009, astm_C1036, astm_C1048, glThick1998 :: Citation
 

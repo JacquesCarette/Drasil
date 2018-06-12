@@ -4,10 +4,9 @@ module Language.Drasil.Chunk.GenDefn
   ) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom,DOM), Concept, IsUnit, 
+  Definition(defn), ConceptDomain(cdom), Concept, IsUnit,
   ExprRelat(relat), HasDerivation(derivations), HasReference(getReferences))
 import Language.Drasil.Chunk.References (References)
-import Language.Drasil.Chunk.Concept (ConceptChunk)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Unit (unitWrapper, UnitDefn)
 import Language.Drasil.Chunk.Derivation
@@ -29,15 +28,13 @@ instance NamedIdea     GenDefn where term = relC . term
 instance Idea          GenDefn where getA (GD a _ _ _ _) = getA a
 instance Concept       GenDefn where
 instance Definition    GenDefn where defn = relC . defn
-instance ConceptDomain GenDefn where
-  type DOM GenDefn = ConceptChunk
-  cdom = relC . cdom
+instance ConceptDomain GenDefn where cdom = relC . cdom
 instance ExprRelat     GenDefn where relat = relC . relat
 instance HasDerivation GenDefn where derivations = deri
 instance HasReference  GenDefn where getReferences = ref
 instance HasShortName  GenDefn where shortname = view refName
 
-gd :: (IsUnit u, DOM u ~ ConceptChunk) => RelationConcept -> Maybe u ->
+gd :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
   Derivation -> String -> GenDefn
 gd r (Just u) derivs sn = GD r (Just (unitWrapper u)) derivs [] (shortname' sn)
 gd r Nothing derivs sn = GD r Nothing derivs [] (shortname' sn)

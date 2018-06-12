@@ -1,8 +1,9 @@
 module Drasil.GamePhysics.Concepts (centreMass, twoD, chipmunk, cpAcronyms) where
 
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math
+import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn, 
+    goalStmt, inModel, likelyChg, requirement, srs, thModel)
+import Data.Drasil.Concepts.Math (ode)
 
 ----- Acronyms -----
 

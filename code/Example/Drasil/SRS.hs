@@ -11,7 +11,15 @@ module Drasil.SRS
 
 import Language.Drasil
 
-import qualified Data.Drasil.Concepts.Documentation as Doc
+import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, 
+    assumption, charOfIR, client, customer, consVals, dataDefn, datumConstraint, 
+    functionalRequirement, genDefn, generalSystemDescription, goalStmt, 
+    indPRCase, inModel, introduction, likelyChg, nonfunctionalRequirement,
+    offShelfSolution, orgOfDoc, physSyst, prodUCTable, problemDescription, 
+    propOfCorSol, prpsOfDoc, reference, requirement, scpOfReq, scpOfTheProj,
+    solutionCharSpec, specificsystemdescription, srs, stakeholder, sysCont, 
+    systemConstraint, termAndDef, terminology, thModel, traceyMandG, tOfSymb, 
+    userCharacteristic)
 import Data.Drasil.Phrase (for'')
 
 -- Local function to keep things looking clean, not exported.

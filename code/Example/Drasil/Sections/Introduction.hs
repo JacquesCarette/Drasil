@@ -8,10 +8,13 @@ module Drasil.Sections.Introduction
    ) where
 
 import Language.Drasil
-import qualified Drasil.SRS as SRS
+import qualified Drasil.SRS as SRS (userChar, intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc)
 import Data.Drasil.SentenceStructures (ofThe, ofThe',
   foldlList, foldlsC, refineChain, foldlSP)
-import Data.Drasil.Concepts.Documentation as Doc
+import Data.Drasil.Concepts.Documentation as Doc (goal, organization, thModel, inModel, goalStmt,
+  documentation, user, theory, definition, scope, requirement, section_, document, purpose,
+  system, model, design, intReader, srs, characteristic, designDoc, decision, environment,
+  vavPlan, softwareDoc, implementation, softwareVAV, desSpec)
 import Data.Drasil.Concepts.Computation (algorithm)
 
 

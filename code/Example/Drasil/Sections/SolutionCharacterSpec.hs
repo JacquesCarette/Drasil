@@ -19,15 +19,17 @@ module Drasil.Sections.SolutionCharacterSpec
 
 import Language.Drasil
 import Data.Drasil.Concepts.Math (equation, law)
-import Data.Drasil.Concepts.Computation
+import Data.Drasil.Concepts.Computation (computer)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle)
-import Data.Drasil.SentenceStructures
+import Data.Drasil.SentenceStructures (ofThe, foldlSP, foldlSent, foldlList, sAnd)
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import Data.List (find)
 import Control.Lens ((^.))
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl,
   listofTablesToRefs)
+
+import Drasil.Sections.GeneralSystDesc(genSysIntro)
 
 import qualified Drasil.SRS as SRS
 
@@ -88,7 +90,7 @@ siUQO xs = UnQuantO xs
 --  HELPER FUNCTION --
 ----------------------
 
-compareID :: (NamedIdea a) => a -> String -> Bool
+compareID :: (NamedIdea a) => a -> UID -> Bool
 compareID c1 c2 = (c1 ^. uid) == c2
 
 -----------------------
@@ -243,7 +245,7 @@ sectionMap progName (SectionModel niname xs)
   | compareID niname  (Doc.problemDescription ^. uid)       = SRS.probDesc
     [problemDescriptionIntro progName (pullSents xs)]
   | compareID niname  (Doc.generalSystemDescription ^. uid) = SRS.genSysDes
-    [genenralSystemIntro]
+    [genSysIntro]
   | compareID niname  (Doc.requirement ^. uid)              = SRS.require
     [requirementsIntro]
   | otherwise                                              = error "no matches on section name"
@@ -350,12 +352,6 @@ dataConstraintSect (SectionModel _ xs) = SRS.datCon
 -- GENERAL SYSTEM DESCRIPTION --
 --------------------------------
 
-genenralSystemIntro :: Contents
-genenralSystemIntro = foldlSP [S "This", phrase Doc.section_, S "provides general",
-  phrase Doc.information, S "about the", phrase Doc.system `sC` S "identifies",
-  S "the interfaces between the", phrase Doc.system, S "and its", 
-  phrase Doc.environment `sC` S "and describes the", plural Doc.userCharacteristic, 
-  S "and the", plural Doc.systemConstraint]
 
 --------------------------
 -- USER CHARACTERISTICS --

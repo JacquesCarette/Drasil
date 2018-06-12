@@ -4,7 +4,7 @@ import Language.Drasil
 
 import Data.Drasil.Concepts.Documentation (assumption, 
   dataDefn, goalStmt, inModel, likelyChg, notApp, physSyst, 
-  requirement, srs, thModel, typUnc, response, type_)
+  response, requirement, srs, thModel, type_, typUnc)
 
 {--}
 

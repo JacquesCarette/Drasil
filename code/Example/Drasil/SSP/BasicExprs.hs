@@ -8,6 +8,7 @@ import Drasil.SSP.Unitals (baseAngle, dy_i, dx_i, inxi,
   slcWght, inxiM1, surfAngle, earthqkLoadFctr, midpntHght,
   baseWthX, sliceHght, watrForce)
 
+
 eqlExpr :: (Expr -> Expr) -> (Expr -> Expr) -> (Expr -> Expr -> Expr) -> Expr
 eqlExpr f1_ f2_ _e_ = (inxi slcWght `_e_`
   (inxi surfHydroForce * cos (inxi surfAngle)) +

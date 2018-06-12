@@ -8,7 +8,8 @@ module Drasil.Sections.Stakeholders
 import Language.Drasil
 import qualified Drasil.SRS as SRS
 import Data.Drasil.SentenceStructures (foldlSP)
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation (section_, stakeholder, interest, product_, client,
+  customer, endUser)
 
 stakehldrGeneral :: (Idea a) => a -> Sentence -> Section
 stakehldrGeneral kWord clientDetails = (SRS.stakeholder) [stakeholderIntro] subs

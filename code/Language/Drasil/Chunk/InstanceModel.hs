@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.InstanceModel
   )where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn),ConceptDomain(cdom,DOM), Concept, ExprRelat(relat),
+  Definition(defn),ConceptDomain(cdom), Concept, ExprRelat(relat),
   HasDerivation(derivations), HasReference(getReferences))
 import Language.Drasil.Chunk.References (References)
 import Language.Drasil.Chunk.Derivation
@@ -47,9 +47,7 @@ instance NamedIdea     InstanceModel where term = rc . term
 instance Idea          InstanceModel where getA (IM a _ _ _ _ _ _ _) = getA a
 instance Concept       InstanceModel where
 instance Definition    InstanceModel where defn = rc . defn
-instance ConceptDomain InstanceModel where
-  type DOM InstanceModel = ConceptChunk
-  cdom = rc . cdom
+instance ConceptDomain InstanceModel where cdom = rc . cdom
 instance ExprRelat     InstanceModel where relat = rc . relat
 instance HasDerivation InstanceModel where derivations = deri
 instance HasReference  InstanceModel where getReferences = ref

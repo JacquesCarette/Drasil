@@ -40,9 +40,6 @@ library
     , Language.Drasil.TeX.Preamble
     , Language.Drasil.Chunk.AssumpChunk
     , Language.Drasil.Chunk.Attribute
-    , Language.Drasil.Chunk.Attribute.Derivation
-    , Language.Drasil.Chunk.Attribute.References
-    , Language.Drasil.Chunk.Attribute.ShortName
     , Language.Drasil.Chunk.Change
     , Language.Drasil.Chunk.Citation
     , Language.Drasil.Chunk.CommonIdea
@@ -51,6 +48,7 @@ library
     , Language.Drasil.Chunk.Constrained
     , Language.Drasil.Chunk.Constrained.Core
     , Language.Drasil.Chunk.DefinedQuantity
+    , Language.Drasil.Chunk.Derivation
     , Language.Drasil.Chunk.Eq
     , Language.Drasil.Chunk.GenDefn
     , Language.Drasil.Chunk.Goal
@@ -58,8 +56,10 @@ library
     , Language.Drasil.Chunk.NamedIdea
     , Language.Drasil.Chunk.PhysSystDesc
     , Language.Drasil.Chunk.Quantity
+    , Language.Drasil.Chunk.References
     , Language.Drasil.Chunk.Relation
     , Language.Drasil.Chunk.ReqChunk
+    , Language.Drasil.Chunk.ShortName
     , Language.Drasil.Chunk.SymbolForm
     , Language.Drasil.Chunk.Theory
     , Language.Drasil.Chunk.UncertainQuantity

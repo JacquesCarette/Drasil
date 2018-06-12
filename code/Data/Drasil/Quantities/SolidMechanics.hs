@@ -1,9 +1,10 @@
 module Data.Drasil.Quantities.SolidMechanics where
 
 import Language.Drasil
-import Data.Drasil.Concepts.SolidMechanics as CSM
-import Data.Drasil.Units.SolidMechanics
-import Data.Drasil.SI_Units
+import Data.Drasil.Concepts.SolidMechanics as CSM (elastMod, mobShear, nrmStrss,
+    poissnsR, shearRes, stffness)
+import Data.Drasil.SI_Units (newton, pascal)
+import Data.Drasil.Units.SolidMechanics (stiffnessU)
 
 elastMod, mobShear, nrmStrss, shearRes, stffness :: UnitalChunk
 

@@ -13,8 +13,8 @@ degree_         = nc "degree"         (cn'  "degree"       )
 engineering     = nc "engineering"    (cn'  "engineering"  )
 mechanics       = nc "mechanics"      (cn   "mechanics"    )
 structural      = nc "structural"     (cn'  "structural"   )--FIXME: Adjective
-undergraduate   = nc "undergraduate"  (cn'  "undergraduate")
-highSchool      = nc "highSchool"     (cn'  "high school"  )
+undergraduate   = nc "undergraduate"  (cn'  "undergraduate")--FIXME: Functions as adjective
+highSchool      = nc "highSchool"     (cn'  "high school"  )--FIXME: Functions as adjective
 chemistry       = nc "chemistry"      (cn'  "chemistry"    )
 physical_       = nc "physical"       (cn'  "physical"     )--FIXME: Adjective
 

@@ -123,8 +123,8 @@ hksLw_rel :: Relation
 hksLw_rel = (sy genForce) $= (sy stffness) * (sy genDisplace)
 
 hksLw_desc :: Sentence
-hksLw_desc = foldlSent [S "Description Stiffness", getES stffness, S "is the",
-  S "resistance a body others to deformation by", phrase displacement,
+hksLw_desc = foldlSent [S "Stiffness", getES stffness, S "is the",
+  S "resistance of a body to deformation by", phrase displacement,
   getES genDisplace, S "when subject to a", phrase force, getES genForce `sC`
   S "along the same direction. A body with high stiffness will experience",
   S "little deformation when subject to a", phrase force]

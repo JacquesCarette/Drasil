@@ -38,9 +38,9 @@ t1descr = tDescr (is_safe1) s ending
 
 
 t2IsSafe :: TheoryModel
-t2IsSafe = tm(cw t2SafetyReq)
+t2IsSafe = tm (cw t2SafetyReq)
    (tc' "isSafe2" [qw is_safe2, qw lRe, qw demand] ([] :: [ConceptChunk])
-   [] [TCon Invariant $ (sy is_safe2) $= (sy lRe) $> (sy demand)] [])
+   [] [TCon Invariant $ (sy is_safe2) $= (sy lRe) $> (sy demand)] []) "isSafe2"
 
 t2SafetyReq :: RelationConcept
 t2SafetyReq = makeRC "t2SafetyReq" (nounPhraseSP "Safety Requirement-2")

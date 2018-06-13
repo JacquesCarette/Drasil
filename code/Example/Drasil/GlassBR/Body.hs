@@ -3,17 +3,19 @@ import Control.Lens ((^.))
 import Language.Drasil hiding (organization)
 import qualified Drasil.SRS as SRS
 
-import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
+import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..), 
+  DerivationDisplay(..),
   DocSection(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons), --DocSection uses everything but Verbatim
   IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), LCsSec(..), 
+  ProblemDescription(..),
   RefSec(RefProg), RefTab(TAandA, TUnits), ReqrmntSec(..), 
-  ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SSDSec(SSDVerb), 
+  ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SCSSub(..), 
+  SSDSec(..), SSDSub(..), SolChSpec(..), 
   StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), 
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose), DocDesc, 
   mkDoc, mkLklyChnk, mkRequirement, tsymb)
-import Drasil.DocumentLanguage.Definitions (Field
-  (DefiningEquation, Description, RefBy, Source), InclUnits(IncludeUnits), 
-  Verbosity(Verbose), Fields)
+import Drasil.DocumentLanguage.Definitions 
+  (Field(..), InclUnits(IncludeUnits), Verbosity(Verbose), Fields)
 import Drasil.DocumentLanguage.RefHelpers (cite, refA)
 
 import Data.Drasil.Concepts.Computation (computerApp, inParam,

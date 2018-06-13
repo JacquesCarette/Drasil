@@ -209,8 +209,8 @@ mkTableFromColumns l =
 none :: Sentence
 none = S "None"
 
-found :: (Num a, Show a) => a -> Sentence
-found x = addPercent (x*100)
+found :: Double -> Sentence
+found x = (addPercent . realToFrac) (x*100)
 
 typUncr :: (UncertainQuantity c) => c -> Sentence
 typUncr x = maybe none found (x ^. uncert)

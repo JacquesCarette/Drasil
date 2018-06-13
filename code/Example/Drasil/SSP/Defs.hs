@@ -45,7 +45,7 @@ plnStrn = dcc "plane strain" (cn' "plane strain")
   ("The resultant stresses in one of the directions of a " ++
   "3 dimensional material can be approximated as 0. Results " ++
   "when the length of one dimension of the body dominates the " ++
-  "others. Stresses in the dominate dimensions direction are " ++
+  "others. Stresses in the dominant dimensions direction are " ++
   "the ones that can be approximated as 0.")
 
 crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface") 

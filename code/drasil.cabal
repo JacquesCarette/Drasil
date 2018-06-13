@@ -41,6 +41,7 @@ library
     , Language.Drasil.Expr.Math
     , Language.Drasil.Expr.Precedence
     , Language.Drasil.Classes
+    , Language.Drasil.Label
     , Language.Drasil.Config
     , Language.Drasil.Document
     , Language.Drasil.Format

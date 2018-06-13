@@ -1,7 +1,7 @@
 module Language.Drasil.Code.DataDesc where
 
+import Language.Drasil
 import Language.Drasil.Chunk.Code
-import Language.Drasil.Chunk.Quantity
 
 import Data.List (nub)
 

@@ -62,8 +62,7 @@ eq_desc = foldlSent [S "For a body in static equilibrium, the net",
   S "Assuming a 2D problem", sParen (refA sspRefDB newA8), S "the", getTandS fx `sAnd`
   getTandS fy, S "will be equal to" +:+. E 0, S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation",
-  S "will create a net moment equal to" `sC` E 0,
-  S "also able to be analyzed as a scalar in a 2D problem"]
+  S "will create a net moment equal to" +:+ E 0]
 
 --
 mcShrStrgth :: RelationConcept

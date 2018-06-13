@@ -1,7 +1,7 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Label (Label) where
 
-import Control.Lens (makeLenses)
+import Control.Lens (makeLenses, Lens')
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid))
 import Data.Char (isAscii)
@@ -28,6 +28,15 @@ mkLabelML id ref = Lbl id (MetaLink $ ensureASCII ref)
 
 mkLabelURI :: String -> String -> Label
 mkLabelURI id ref = Lbl id (URI $ ensureASCII ref)
+
+-- isLabel and HasLabel classes
+
+-- | For those things which "have a label"
+class HasLabel c where
+  getLabel :: Lens' c Label
+
+-- IsLabel is associated with String rendering
+class (HasLabel u, HasUID u) => IsLabel u where
 
 -- helpers
 ensureASCII :: String -> String

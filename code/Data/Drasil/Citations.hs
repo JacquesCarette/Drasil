@@ -1,11 +1,9 @@
-module Data.Drasil.Citations (
-  koothoor2013, parnas1986, smithLai2005,
-  jnlCGJ
+module Data.Drasil.Citations (koothoor2013, parnas1986, smithLai2005, jnlCGJ
   ) where
 
 import Language.Drasil --(S,(:+:),(+:+),sC,phrase,F,Accent(..),Citation(..),CiteField(..))
-import Data.Drasil.People (spencerSmith, dParnas, nKoothoor, lLai,
-  pjAgerfalk, nKraiem, jRalyte, pcClements)
+import Data.Drasil.People (dParnas, jRalyte, lLai, nKoothoor, nKraiem, 
+  pcClements, pjAgerfalk, spencerSmith)
 import Data.Drasil.Software.Products (sciCompS)
 
 ---------------

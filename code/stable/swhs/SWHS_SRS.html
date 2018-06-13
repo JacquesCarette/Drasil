@@ -615,7 +615,7 @@ Melting point temperature
 </tr>
 <tr>
 <td>
-<em>&Delta;T</em>
+<em>ΔT</em>
 </td>
 <td>
 Change in temperature
@@ -703,7 +703,7 @@ m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>&eta;</em>
+<em>η</em>
 </td>
 <td>
 ODE parameter
@@ -714,7 +714,7 @@ ODE parameter
 </tr>
 <tr>
 <td>
-<em>&rho;</em>
+<em>ρ</em>
 </td>
 <td>
 Density
@@ -725,7 +725,7 @@ kg/m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>P</sub></em>
+<em>ρ<sub>P</sub></em>
 </td>
 <td>
 Density of PCM
@@ -736,7 +736,7 @@ kg/m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>W</sub></em>
+<em>ρ<sub>W</sub></em>
 </td>
 <td>
 Density of water
@@ -747,7 +747,7 @@ kg/m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>&tau;</em>
+<em>τ</em>
 </td>
 <td>
 Dummy variable for integration over time
@@ -758,7 +758,7 @@ s
 </tr>
 <tr>
 <td>
-<em>&tau;<sub>P</sub><sup>L</sup></em>
+<em>τ<sub>P</sub><sup>L</sup></em>
 </td>
 <td>
 ODE parameter for liquid PCM
@@ -769,7 +769,7 @@ s
 </tr>
 <tr>
 <td>
-<em>&tau;<sub>P</sub><sup>S</sup></em>
+<em>τ<sub>P</sub><sup>S</sup></em>
 </td>
 <td>
 ODE parameter for solid PCM
@@ -780,7 +780,7 @@ s
 </tr>
 <tr>
 <td>
-<em>&tau;<sub>W</sub></em>
+<em>τ<sub>W</sub></em>
 </td>
 <td>
 ODE parameter for water
@@ -791,7 +791,7 @@ s
 </tr>
 <tr>
 <td>
-<em>&phi;</em>
+<em>ϕ</em>
 </td>
 <td>
 Melt fraction
@@ -1362,7 +1362,7 @@ Equation
 <div id="">
 <div class="equation">
 <p class="paragraph">
-<em>&minus;&nabla;&sdot;<b>q</b>&plus;g = &rho;&#8239;C&#8239;<div class="fraction">
+<em>&minus;∇&sdot;<b>q</b>&plus;g = ρ&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 &part;&#8239;T
 </span>
@@ -1381,7 +1381,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity <em>C</em> (J/(kg&sdot;&deg;C)) and density, <em>&rho;</em> (kg/m<sup>3</sup>), where <em><b>q</b></em> is the thermal flux vector (W/m<sup>2</sup>), <em>g</em> is the volumetric heat generation per unit volume (W/m<sup>3</sup>), <em>T</em> is the temperature (&deg;C), <em>t</em> is time (s), and <em>&nabla;</em> is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href=#A:assump1>assump1</a>).
+The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity <em>C</em> (J/(kg&sdot;&deg;C)) and density, <em>ρ</em> (kg/m<sup>3</sup>), where <em><b>q</b></em> is the thermal flux vector (W/m<sup>2</sup>), <em>g</em> is the volumetric heat generation per unit volume (W/m<sup>3</sup>), <em>T</em> is the temperature (&deg;C), <em>t</em> is time (s), and <em>∇</em> is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href=#A:assump1>assump1</a>).
 </p>
 </td>
 </tr>
@@ -1412,17 +1412,17 @@ Equation
 </span>
 <div class="cases">
 <span>
-C<sup>S</sup>&#8239;m&#8239;&Delta;T , <span class="case">
+C<sup>S</sup>&#8239;m&#8239;ΔT , <span class="case">
 T&thinsp;&lt;&thinsp;T<sub>melt</sub>
 </span>
 </span>
 <span>
-C<sup>L</sup>&#8239;m&#8239;&Delta;T , <span class="case">
+C<sup>L</sup>&#8239;m&#8239;ΔT , <span class="case">
 T<sub>melt</sub>&thinsp;&lt;&thinsp;T&thinsp;&lt;&thinsp;T<sub>boil</sub>
 </span>
 </span>
 <span>
-C<sup>V</sup>&#8239;m&#8239;&Delta;T , <span class="case">
+C<sup>V</sup>&#8239;m&#8239;ΔT , <span class="case">
 T<sub>boil</sub>&thinsp;&lt;&thinsp;T
 </span>
 </span>
@@ -1438,7 +1438,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>E</em> is the change in sensible heat energy (J). <em>C<sup>S</sup></em>, <em>C<sup>L</sup></em>, <em>C<sup>V</sup></em> are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively (J/(kg&sdot;&deg;C)). <em>m</em> is the mass (kg). <em>T</em> is the temperature (&deg;C), and <em>&Delta;T</em> is the change in temperature (&deg;C). <em>T<sub>melt</sub></em> and <em>T<sub>boil</sub></em> are the melting point temperature and boiling point temperature, respectively (&deg;C). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if <em>T</em>=<em>T<sub>boil</sub></em> or <em>T</em>=<em>T<sub>melt</sub></em>. If this is the case, refer to <a href=#T:t3LatHtE>T:t3LatHtE</a>, Latent heat energy.
+<em>E</em> is the change in sensible heat energy (J). <em>C<sup>S</sup></em>, <em>C<sup>L</sup></em>, <em>C<sup>V</sup></em> are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively (J/(kg&sdot;&deg;C)). <em>m</em> is the mass (kg). <em>T</em> is the temperature (&deg;C), and <em>ΔT</em> is the change in temperature (&deg;C). <em>T<sub>melt</sub></em> and <em>T<sub>boil</sub></em> are the melting point temperature and boiling point temperature, respectively (&deg;C). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if <em>T</em>=<em>T<sub>boil</sub></em> or <em>T</em>=<em>T<sub>melt</sub></em>. If this is the case, refer to <a href=#T:t3LatHtE>T:t3LatHtE</a>, Latent heat energy.
 </p>
 </td>
 </tr>
@@ -1466,12 +1466,12 @@ Equation
 <p class="paragraph">
 <em>Q(t) = &int;<sub>0</sub><sup>t</sup><div class="fraction">
 <span class="fup">
-d&#8239;Q(&tau;)
+d&#8239;Q(τ)
 </span>
 <span class="fdn">
-d&#8239;&tau;
+d&#8239;τ
 </span>
-</div>&#8239;d&tau;</em>
+</div>&#8239;dτ</em>
 </p>
 </div>
 </div>
@@ -1485,12 +1485,12 @@ Description
 <p class="paragraph">
 <em>Q</em> is the change in thermal energy (J), latent heat energy. <em>Q(t) = &int;<sub>0</sub><sup>t</sup><div class="fraction">
 <span class="fup">
-d&#8239;Q(&tau;)
+d&#8239;Q(τ)
 </span>
 <span class="fdn">
-d&#8239;&tau;
+d&#8239;τ
 </span>
-</div>&#8239;d&tau;</em> is the rate of change of <em>Q</em> with respect to time <em>&tau;</em> (s). <em>t</em> is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, <a href=#DD:htFusion>DD:htFusion</a>. <em>T<sub>melt</sub></em> and <em>T<sub>boil</sub></em> are the melting point temperature and boiling point temperature, respectively (&deg;C). Latent heating stops when all material has changed to the new phase.
+</div>&#8239;dτ</em> is the rate of change of <em>Q</em> with respect to time <em>τ</em> (s). <em>t</em> is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, <a href=#DD:htFusion>DD:htFusion</a>. <em>T<sub>melt</sub></em> and <em>T<sub>boil</sub></em> are the melting point temperature and boiling point temperature, respectively (&deg;C). Latent heating stops when all material has changed to the new phase.
 </p>
 </td>
 </tr>
@@ -1526,7 +1526,7 @@ Equation
 <div id="">
 <div class="equation">
 <p class="paragraph">
-<em><b>q</b>(t) = h&#8239;&Delta;T(t)</em>
+<em><b>q</b>(t) = h&#8239;ΔT(t)</em>
 </p>
 </div>
 </div>
@@ -1538,7 +1538,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. <em><b>q</b>(t)</em> is the thermal flux (W/m<sup>2</sup>). <em>h</em> is the heat transfer coefficient, assumed independant of <em>T</em> (<a href=#A:Heat-Transfer-Coeffs-Constant>Heat-Transfer-Coeffs-Constant</a>) (W/(m<sup>2</sup>&sdot;&deg;C)). <em>&Delta;T(t) = T(t)&minus;T<sub>env</sub>(t)</em> is the time-dependant thermal gradient between the environment and the object (&deg;C).
+Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. <em><b>q</b>(t)</em> is the thermal flux (W/m<sup>2</sup>). <em>h</em> is the heat transfer coefficient, assumed independant of <em>T</em> (<a href=#A:Heat-Transfer-Coeffs-Constant>Heat-Transfer-Coeffs-Constant</a>) (W/(m<sup>2</sup>&sdot;&deg;C)). <em>ΔT(t) = T(t)&minus;T<sub>env</sub>(t)</em> is the time-dependant thermal gradient between the environment and the object (&deg;C).
 </p>
 </td>
 </tr>
@@ -1597,7 +1597,7 @@ Integrating <a href=#T:t1ConsThermE>T:t1ConsThermE</a> over a volume (<em>V</em>
 </p>
 <div id="">
 <div class="equation">
-<em>&minus;&int;<sub>V</sub>&nabla;&sdot;<b>q</b>&#8239;dV&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>&rho;&#8239;C&#8239;<div class="fraction">
+<em>&minus;&int;<sub>V</sub>∇&sdot;<b>q</b>&#8239;dV&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 &part;&#8239;T
 </span>
@@ -1612,7 +1612,7 @@ Applying Gauss's Divergence Theorem to the first term over the surface <em>S</em
 </p>
 <div id="">
 <div class="equation">
-<em>&minus;&int;<sub>S</sub><b>q</b>&sdot;<b>n&#770;</b>&#8239;dS&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>&rho;&#8239;C&#8239;<div class="fraction">
+<em>&minus;&int;<sub>S</sub><b>q</b>&sdot;<b>n&#770;</b>&#8239;dS&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 &part;&#8239;T
 </span>
@@ -1627,7 +1627,7 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 </p>
 <div id="">
 <div class="equation">
-<em>q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V = &int;<sub>V</sub>&rho;&#8239;C&#8239;<div class="fraction">
+<em>q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 &part;&#8239;T
 </span>
@@ -1638,11 +1638,11 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 </div>
 </div>
 <p class="paragraph">
-Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in GD2. Assuming <em>&rho;</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by Assumptions (<a href=#A:assump3>assump3</a>), (<a href=#A:assump4>assump4</a>), (<a href=#A:assump5>assump5</a>), and (<a href=#A:assump6>assump6</a>), we have:
+Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in GD2. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by Assumptions (<a href=#A:assump3>assump3</a>), (<a href=#A:assump4>assump4</a>), (<a href=#A:assump5>assump5</a>), and (<a href=#A:assump6>assump6</a>), we have:
 </p>
 <div id="">
 <div class="equation">
-<em>&rho;&#8239;C&#8239;V&#8239;<div class="fraction">
+<em>ρ&#8239;C&#8239;V&#8239;<div class="fraction">
 <span class="fup">
 d&#8239;T
 </span>
@@ -1653,7 +1653,7 @@ d&#8239;t
 </div>
 </div>
 <p class="paragraph">
-Using the fact that <em>&rho;</em>=<em>m</em>/<em>V</em>, (2) can be written as:
+Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, (2) can be written as:
 </p>
 <div id="">
 <div class="equation">
@@ -1858,7 +1858,7 @@ Equation
 <div id="">
 <div class="equation">
 <p class="paragraph">
-<em>&phi; = <div class="fraction">
+<em>ϕ = <div class="fraction">
 <span class="fup">
 Q<sub>P</sub>
 </span>
@@ -1877,7 +1877,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>&phi;</em> is the melt fraction<br /><em>Q<sub>P</sub></em> is the latent heat energy added to PCM (J)<br /><em>H<sub>f</sub></em> is the specific latent heat of fusion (J/kg)<br /><em>m<sub>P</sub></em> is the mass of phase change material (kg)
+<em>ϕ</em> is the melt fraction<br /><em>Q<sub>P</sub></em> is the latent heat energy added to PCM (J)<br /><em>H<sub>f</sub></em> is the specific latent heat of fusion (J/kg)<br /><em>m<sub>P</sub></em> is the mass of phase change material (kg)
 </p>
 </td>
 </tr>
@@ -1928,9 +1928,9 @@ d&#8239;t
 1
 </span>
 <span class="fdn">
-&tau;<sub>W</sub>
+τ<sub>W</sub>
 </span>
-</div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t)&plus;&eta;&#8239;(T<sub>P</sub>(t)&minus;T<sub>W</sub>(t)))</em>
+</div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t)&plus;η&#8239;(T<sub>P</sub>(t)&minus;T<sub>W</sub>(t)))</em>
 </p>
 </div>
 </div>
@@ -1942,14 +1942,14 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>&tau;<sub>W</sub> = <div class="fraction">
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>τ<sub>W</sub> = <div class="fraction">
 <span class="fup">
 m<sub>W</sub>&#8239;C<sub>W</sub>
 </span>
 <span class="fdn">
 h<sub>C</sub>&#8239;A<sub>C</sub>
 </span>
-</div></em> is a constant (s). <em>&eta; = <div class="fraction">
+</div></em> is a constant (s). <em>η = <div class="fraction">
 <span class="fup">
 h<sub>P</sub>&#8239;A<sub>P</sub>
 </span>
@@ -2097,14 +2097,14 @@ m<sub>W</sub>&#8239;C<sub>W</sub>
 </div>
 </div>
 <p class="paragraph">
-Setting <em>&tau;<sub>W</sub> = <div class="fraction">
+Setting <em>τ<sub>W</sub> = <div class="fraction">
 <span class="fup">
 m<sub>W</sub>&#8239;C<sub>W</sub>
 </span>
 <span class="fdn">
 h<sub>C</sub>&#8239;A<sub>C</sub>
 </span>
-</div></em> and <em>&eta; = <div class="fraction">
+</div></em> and <em>η = <div class="fraction">
 <span class="fup">
 h<sub>P</sub>&#8239;A<sub>P</sub>
 </span>
@@ -2127,14 +2127,14 @@ d&#8239;t
 1
 </span>
 <span class="fdn">
-&tau;<sub>W</sub>
+τ<sub>W</sub>
 </span>
 </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)&plus;<div class="fraction">
 <span class="fup">
-&eta;
+η
 </span>
 <span class="fdn">
-&tau;<sub>W</sub>
+τ<sub>W</sub>
 </span>
 </div>&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>)</em>
 </div>
@@ -2145,7 +2145,7 @@ Finally, factoring out <em><div class="fraction">
 1
 </span>
 <span class="fdn">
-&tau;<sub>W</sub>
+τ<sub>W</sub>
 </span>
 </div></em>, we are left with the governing ODE for IM1:
 </p>
@@ -2163,9 +2163,9 @@ d&#8239;t
 1
 </span>
 <span class="fdn">
-&tau;<sub>W</sub>
+τ<sub>W</sub>
 </span>
-</div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>&plus;&eta;&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>))</em>
+</div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>&plus;η&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>))</em>
 </div>
 </div>
 <div id="T:eBalanceOnPCM">
@@ -2205,7 +2205,7 @@ d&#8239;t
 1
 </span>
 <span class="fdn">
-&tau;<sub>P</sub><sup>S</sup>
+τ<sub>P</sub><sup>S</sup>
 </span>
 </div>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t)) , <span class="case">
 T<sub>P</sub>&thinsp;&lt;&thinsp;T<sub>melt</sub><sup>P</sup>
@@ -2217,7 +2217,7 @@ T<sub>P</sub>&thinsp;&lt;&thinsp;T<sub>melt</sub><sup>P</sup>
 1
 </span>
 <span class="fdn">
-&tau;<sub>P</sub><sup>L</sup>
+τ<sub>P</sub><sup>L</sup>
 </span>
 </div>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t)) , <span class="case">
 T<sub>P</sub>&thinsp;&gt;&thinsp;T<sub>melt</sub><sup>P</sup>
@@ -2230,7 +2230,7 @@ T<sub>P</sub> = T<sub>melt</sub><sup>P</sup>
 </span>
 <span>
 0 , <span class="case">
-0&thinsp;&lt;&thinsp;&phi;&thinsp;&lt;&thinsp;1
+0&thinsp;&lt;&thinsp;ϕ&thinsp;&lt;&thinsp;1
 </span>
 </span>
 </div></em>
@@ -2245,14 +2245,14 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C). <em>&tau;<sub>P</sub><sup>S</sup> = <div class="fraction">
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C). <em>τ<sub>P</sub><sup>S</sup> = <div class="fraction">
 <span class="fup">
 m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>
 </span>
 <span class="fdn">
 h<sub>P</sub>&#8239;A<sub>P</sub>
 </span>
-</div></em> is a constant (s). <em>&tau;<sub>P</sub><sup>L</sup> = <div class="fraction">
+</div></em> is a constant (s). <em>τ<sub>P</sub><sup>L</sup> = <div class="fraction">
 <span class="fup">
 m<sub>P</sub>&#8239;C<sub>P</sub><sup>L</sup>
 </span>
@@ -2321,7 +2321,7 @@ m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>
 </div>
 </div>
 <p class="paragraph">
-Setting <em>&tau;<sub>P</sub><sup>S</sup></em>=<em>m<sub>P</sub></em><em>C<sub>P</sub><sup>S</sup></em>/<em>h<sub>P</sub></em><em>A<sub>P</sub></em>, this can be written as:
+Setting <em>τ<sub>P</sub><sup>S</sup></em>=<em>m<sub>P</sub></em><em>C<sub>P</sub><sup>S</sup></em>/<em>h<sub>P</sub></em><em>A<sub>P</sub></em>, this can be written as:
 </p>
 <div id="">
 <div class="equation">
@@ -2337,13 +2337,13 @@ d&#8239;t
 1
 </span>
 <span class="fdn">
-&tau;<sub>P</sub><sup>S</sup>
+τ<sub>P</sub><sup>S</sup>
 </span>
 </div>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
 </div>
 </div>
 <p class="paragraph">
-Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that <em>C<sub>P</sub><sup>S</sup></em> is replaced by <em>C<sub>P</sub><sup>L</sup></em>, and thus <em>&tau;<sub>P</sub><sup>S</sup></em> is replaced by <em>&tau;<sub>P</sub><sup>L</sup></em>. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (<a href=#A:assump17>assump17</a>).
+Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that <em>C<sub>P</sub><sup>S</sup></em> is replaced by <em>C<sub>P</sub><sup>L</sup></em>, and thus <em>τ<sub>P</sub><sup>S</sup></em> is replaced by <em>τ<sub>P</sub><sup>L</sup></em>. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (<a href=#A:assump17>assump17</a>).
 </p>
 <p class="paragraph">
 In the case where <em>T<sub>P</sub></em>=<em>T<sub>melt</sub><sup>P</sup></em> and not all of the PCM is melted, the temperature of the phase change material does not change. Therefore, in this case d<em>T<sub>P</sub></em>/d<em>t</em>=0.
@@ -2430,7 +2430,7 @@ T<sub>P</sub> = T<sub>melt</sub><sup>P</sup>
 </span>
 <span>
 E<sub>P</sub><sub>melt</sub><sup>init</sup>&plus;Q<sub>P</sub>(t) , <span class="case">
-0&thinsp;&lt;&thinsp;&phi;&thinsp;&lt;&thinsp;1
+0&thinsp;&lt;&thinsp;ϕ&thinsp;&lt;&thinsp;1
 </span>
 </span>
 </div></em>
@@ -2564,10 +2564,10 @@ h<sub>min</sub>
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>P</sub></em>
+<em>ρ<sub>P</sub></em>
 </td>
 <td>
-<em>&rho;<sub>P</sub><sup>min</sup>&thinsp;&lt;&thinsp;&rho;<sub>P</sub>&thinsp;&lt;&thinsp;&rho;<sub>P</sub><sup>max</sup></em>
+<em>ρ<sub>P</sub><sup>min</sup>&thinsp;&lt;&thinsp;ρ<sub>P</sub>&thinsp;&lt;&thinsp;ρ<sub>P</sub><sup>max</sup></em>
 </td>
 <td>
 None
@@ -2683,13 +2683,13 @@ None
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>W</sub></em>
+<em>ρ<sub>W</sub></em>
 </td>
 <td>
-<em>&rho;<sub>W</sub>&thinsp;&gt;&thinsp;0</em>
+<em>ρ<sub>W</sub>&thinsp;&gt;&thinsp;0</em>
 </td>
 <td>
-<em>&rho;<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;&rho;<sub>W</sub>&thinsp;&le;&thinsp;&rho;<sub>W</sub><sup>max</sup></em>
+<em>ρ<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;ρ<sub>W</sub>&thinsp;&le;&thinsp;ρ<sub>W</sub><sup>max</sup></em>
 </td>
 <td>
 <em>1000.0</em> kg/m<sup>3</sup>
@@ -2946,7 +2946,7 @@ phase change material surface area
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>P</sub></em>
+<em>ρ<sub>P</sub></em>
 </td>
 <td>
 kg/m<sup>3</sup>
@@ -3023,7 +3023,7 @@ temperature of the heating coil
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>W</sub></em>
+<em>ρ<sub>W</sub></em>
 </td>
 <td>
 kg/m<sup>3</sup>
@@ -3098,19 +3098,19 @@ Use-Above-Find-Mass-IM1-IM4: Use the inputs in <a href=#FR:req1>Input-Initial-Qu
 </ul>
 <div id="">
 <div class="equation">
-<em>m<sub>W</sub> = V<sub>W</sub>&#8239;&rho;<sub>W</sub> = (V<sub>tank</sub>&minus;V<sub>P</sub>)&#8239;&rho;<sub>W</sub> = (<div class="fraction">
+<em>m<sub>W</sub> = V<sub>W</sub>&#8239;ρ<sub>W</sub> = (V<sub>tank</sub>&minus;V<sub>P</sub>)&#8239;ρ<sub>W</sub> = (<div class="fraction">
 <span class="fup">
 D
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;L&minus;V<sub>P</sub>)&#8239;&rho;<sub>W</sub></em>
+</div>&#8239;L&minus;V<sub>P</sub>)&#8239;ρ<sub>W</sub></em>
 </div>
 </div>
 <div id="">
 <div class="equation">
-<em>m<sub>P</sub> = V<sub>P</sub>&#8239;&rho;<sub>P</sub></em>
+<em>m<sub>P</sub> = V<sub>P</sub>&#8239;ρ<sub>P</sub></em>
 </div>
 </div>
 <ul class="hide-list-style">
@@ -3123,7 +3123,7 @@ Check-Input-with-Physical_Constraints: Verify that the inputs satisfy the requir
 <ul class="hide-list-style">
 <li>
 <div id="FR:req4">
-Output-Input-Derived-Quantities: Output the input quantities and derived quantities in the following list: the quantities from R1, the masses from R2, <em>&tau;<sub>W</sub></em> (from IM1), <em>&eta;</em> (from IM1), <em>&tau;<sub>P</sub><sup>S</sup></em> (from IM2) and <em>&tau;<sub>P</sub><sup>L</sup></em> (from IM2).
+Output-Input-Derived-Quantities: Output the input quantities and derived quantities in the following list: the quantities from R1, the masses from R2, <em>τ<sub>W</sub></em> (from IM1), <em>η</em> (from IM1), <em>τ<sub>P</sub><sup>S</sup></em> (from IM2) and <em>τ<sub>P</sub><sup>L</sup></em> (from IM2).
 </div>
 </li>
 </ul>
@@ -6060,7 +6060,7 @@ W/(m<sup>2</sup>&sdot;&deg;C)
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>P</sub><sup>min</sup></em>
+<em>ρ<sub>P</sub><sup>min</sup></em>
 </td>
 <td>
 minimum density of PCM
@@ -6074,7 +6074,7 @@ kg/m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>P</sub><sup>max</sup></em>
+<em>ρ<sub>P</sub><sup>max</sup></em>
 </td>
 <td>
 maximum density of PCM
@@ -6088,7 +6088,7 @@ kg/m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>W</sub><sup>min</sup></em>
+<em>ρ<sub>W</sub><sup>min</sup></em>
 </td>
 <td>
 minimum density of water
@@ -6102,7 +6102,7 @@ kg/m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>W</sub><sup>max</sup></em>
+<em>ρ<sub>W</sub><sup>max</sup></em>
 </td>
 <td>
 maximum density of water

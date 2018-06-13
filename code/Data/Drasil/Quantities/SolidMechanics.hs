@@ -12,7 +12,7 @@ elastMod = uc CSM.elastMod cE pascal
 mobShear = uc CSM.mobShear cS newton 
 shearRes = uc CSM.shearRes cP newton 
 stffness = uc CSM.stffness cK stiffnessU 
-nrmStrss = uc CSM.nrmStrss (Greek Sigma_L) pascal
+nrmStrss = uc CSM.nrmStrss (lSigma) pascal
 
 poissnsR :: DefinedQuantityDict
-poissnsR = dqd' CSM.poissnsR (const $ Greek Nu_L) Real Nothing 
+poissnsR = dqd' CSM.poissnsR (const lNu) Real Nothing

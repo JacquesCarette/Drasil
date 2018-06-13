@@ -6,7 +6,7 @@ import Data.Drasil.SI_Units (kilogram, metre, m_3)
 import Data.Drasil.Units.PhysicalProperties (densityU)
 
 density, mass, len, vol :: UnitalChunk
-density = uc CPP.density (Greek Rho_L) densityU
+density = uc CPP.density lRho densityU
 mass    = uc CPP.mass    lM            kilogram
 len     = uc CPP.len     cL            metre
 vol     = uc CPP.vol     cV            m_3

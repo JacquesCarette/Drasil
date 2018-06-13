@@ -172,23 +172,23 @@ $||\mathbf{r}||$ & Euclidean norm of the displacement & m
 \\
 ${||\mathbf{r}||^{2}}$ & Squared distance & $\text{m}^{2}$
 \\
-$\alpha{}$ & Angular Acceleration & $\frac{\text{rad}}{\text{s}^{2}}$
+$α$ & Angular Acceleration & $\frac{\text{rad}}{\text{s}^{2}}$
 \\
-$\theta{}$ & Angular Displacement & rad
+$θ$ & Angular Displacement & rad
 \\
-$\pi{}$ & pi & 
+$π$ & pi & 
 \\
-${\tau{}_{i}}$ & Is the torque applied to the i-th body & Nm
+${τ_{i}}$ & Is the torque applied to the i-th body & Nm
 \\
-$\tau{}$ & Torque & Nm
+$τ$ & Torque & Nm
 \\
-$\phi{}$ & Orientation & rad
+${ω_{A}}$ & Is the a Body's Angular Velocity & $\frac{\text{rad}}{\text{s}}$
 \\
-${\omega{}_{A}}$ & Is the a Body's Angular Velocity & $\frac{\text{rad}}{\text{s}}$
+${ω_{B}}$ & Is the B Body's Angular Velocity & $\frac{\text{rad}}{\text{s}}$
 \\
-${\omega{}_{B}}$ & Is the B Body's Angular Velocity & $\frac{\text{rad}}{\text{s}}$
+$ω$ & Angular Velocity & $\frac{\text{rad}}{\text{s}}$
 \\
-$\omega{}$ & Angular Velocity & $\frac{\text{rad}}{\text{s}}$
+$ϕ$ & Orientation & rad
 \\
 \bottomrule
 \label{Table:ToS}
@@ -350,9 +350,9 @@ Description & Two rigid bodies in the universe attract each other with a force $
 \\ \midrule \\
 Label & Chasles' Theorem
 \\ \midrule \\
-Equation & ${\mathbf{v}_{B}}={\mathbf{v}_{O}}+\omega{}\times{\mathbf{r}_{OB}}$
+Equation & ${\mathbf{v}_{B}}={\mathbf{v}_{O}}+ω\times{\mathbf{r}_{OB}}$
 \\ \midrule \\
-Description & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body is the sum of the linear velocity ${\mathbf{v}_{O}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $\omega{}$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{OB}}$ (m).
+Description & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body is the sum of the linear velocity ${\mathbf{v}_{O}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{OB}}$ (m).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -364,9 +364,9 @@ Description & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}
 \\ \midrule \\
 Label & Newton's Second Law for Rotational Motion
 \\ \midrule \\
-Equation & $\tau{}=\mathbf{I} \alpha{}$
+Equation & $τ=\mathbf{I} α$
 \\ \midrule \\
-Description & The net torque $\tau{}$ (Nm) on a rigid body is proportional to its angular acceleration $\alpha{}$ ($\frac{\text{rad}}{\text{s}^{2}}$). Here, $\mathbf{I}$ (kg$\text{m}^{2}$) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional (A2).
+Description & The net torque $τ$ (Nm) on a rigid body is proportional to its angular acceleration $α$ ($\frac{\text{rad}}{\text{s}^{2}}$). Here, $\mathbf{I}$ (kg$\text{m}^{2}$) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional (A2).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{General Definitions}
@@ -398,9 +398,9 @@ Description & The above equation expresses the total acceleration of the rigid b
 \\ \midrule \\
 Label & Force on the Rotational Motion of a Set of 2D Rigid Body
 \\ \midrule \\
-Equation & $\alpha{}=\frac{d\,\omega{}\left(t\right)}{d\,t}=\frac{{\tau{}_{i}}\left(t\right)}{\mathbf{I}}$
+Equation & $α=\frac{d\,ω\left(t\right)}{d\,t}=\frac{{τ_{i}}\left(t\right)}{\mathbf{I}}$
 \\ \midrule \\
-Description & The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved. ${m_{i}}$ is the mass of the i-th rigid body (kg). $g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$). $t$ is the point in time (s). ${t_{0}}$ is the denotes the initial time (s). $\phi{}$ is the orientation (rad). $\omega{}$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$). $\alpha{}$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$). ${\tau{}_{i}}$ is the is the torque applied to the i-th body (Nm). ${\mathbf{I}_{k}}$ is the moment of inertia of the k-th rigid body (kg$\text{m}^{2}$).
+Description & The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved. ${m_{i}}$ is the mass of the i-th rigid body (kg). $g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$). $t$ is the point in time (s). ${t_{0}}$ is the denotes the initial time (s). $ϕ$ is the orientation (rad). $ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$). $α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$). ${τ_{i}}$ is the is the torque applied to the i-th body (Nm). ${\mathbf{I}_{k}}$ is the moment of inertia of the k-th rigid body (kg$\text{m}^{2}$).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -414,7 +414,7 @@ Label & Collisions on 2D Rigid Bodies
 \\ \midrule \\
 Equation & ${\mathbf{v}_{A}}\left({t_{c}}\right)={\mathbf{v}_{A}}\left(t\right)+\frac{j}{{m_{A}}} \mathbf{n}$
 \\ \midrule \\
-Description & This instance model is based on our assumptions regarding rigid body (A1, A2) collisions (A5). Again, this does not take damping (A6) or constraints (A7) into account. ${m_{i}}$ is the mass of the i-th rigid body (kg). ${\mathbf{I}_{k}}$ is the moment of inertia of the k-th rigid body (kg$\text{m}^{2}$). $t$ is the point in time (s). ${t_{0}}$ is the denotes the initial time (s). ${t_{c}}$ is the denotes the time at collision (s). ${\mathbf{p}_{CM}}$ is the the mass-weighted average position of a rigid body's particles (m). $\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$). $\phi{}$ is the orientation (rad). $\omega{}$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$). $\mathbf{n}$ is the collision normal vector (m). $j$ is the collision impulse (scalar) (Ns). $P$ is the point of collision (m). ${\mathbf{r}_{kP}}$ is the displacement vector between the centre of mass of rigid body k and contact point P (m).
+Description & This instance model is based on our assumptions regarding rigid body (A1, A2) collisions (A5). Again, this does not take damping (A6) or constraints (A7) into account. ${m_{i}}$ is the mass of the i-th rigid body (kg). ${\mathbf{I}_{k}}$ is the moment of inertia of the k-th rigid body (kg$\text{m}^{2}$). $t$ is the point in time (s). ${t_{0}}$ is the denotes the initial time (s). ${t_{c}}$ is the denotes the time at collision (s). ${\mathbf{p}_{CM}}$ is the the mass-weighted average position of a rigid body's particles (m). $\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$). $ϕ$ is the orientation (rad). $ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$). $\mathbf{n}$ is the collision normal vector (m). $j$ is the collision impulse (scalar) (Ns). $P$ is the point of collision (m). ${\mathbf{r}_{kP}}$ is the displacement vector between the centre of mass of rigid body k and contact point P (m).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Definitions}
@@ -495,9 +495,9 @@ Label & Angular Displacement
 \\ \midrule \\
 Units & rad
 \\ \midrule \\
-Equation & $\theta{}=\frac{d\,\phi{}\left(t\right)}{d\,t}$
+ Equation & $θ=\frac{d\,ϕ\left(t\right)}{d\,t}$
 \\ \midrule \\
-Description & $\theta{}$ is the angular displacement (rad)\newline$t$ is the time (s)\newline$\phi{}$ is the orientation (rad)
+Description & $θ$ is the angular displacement (rad)\newline$t$ is the time (s)\newline$ϕ$ is the orientation (rad)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -511,9 +511,9 @@ Label & Angular Velocity
 \\ \midrule \\
 Units & $\frac{\text{rad}}{\text{s}}$
 \\ \midrule \\
-Equation & $\omega{}=\frac{d\,\theta{}\left(t\right)}{d\,t}$
+Equation & $ω=\frac{d\,θ\left(t\right)}{d\,t}$
 \\ \midrule \\
-Description & $\omega{}$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)\newline$t$ is the time (s)\newline$\theta{}$ is the angular displacement (rad)
+Description & $ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)\newline$t$ is the time (s)\newline$θ$ is the angular displacement (rad)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -527,9 +527,9 @@ Label & Angular Acceleration
 \\ \midrule \\
 Units & $\frac{\text{rad}}{\text{s}^{2}}$
 \\ \midrule \\
-Equation & $\alpha{}=\frac{d\,\omega{}\left(t\right)}{d\,t}$
+Equation & $α=\frac{d\,ω\left(t\right)}{d\,t}$
 \\ \midrule \\
-Description & $\alpha{}$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)\newline$t$ is the time (s)\newline$\omega{}$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)
+Description & $α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)\newline$t$ is the time (s)\newline$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -566,15 +566,15 @@ $G$ & None & $9.8$ $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$ & 10.0\%
 \\
 $\mathbf{p}$ & None & $0.412$ m & 10.0\%
 \\
-$\phi{}$ & None & $\frac{\pi{}}{2}$ rad & 10.0\%
+$ϕ$ & None & $\frac{π}{2}$ rad & 10.0\%
 \\
 $\mathbf{v}$ & None & $2.51$ $\frac{\text{m}}{\text{s}}$ & 10.0\%
 \\
-$\omega{}$ & None & $2.1$ $\frac{\text{rad}}{\text{s}}$ & 10.0\%
+ $ω$ & None & $2.1$ $\frac{\text{rad}}{\text{s}}$ & 10.0\%
 \\
 $\mathbf{F}$ & None & $98.1$ N & 10.0\%
 \\
-$\tau{}$ & None & $200.0$ Nm & 10.0\%
+ $τ$ & None & $200.0$ Nm & 10.0\%
 \\
 ${C_{R}}$ & $0\leq{}{C_{R}}\leq{}1$ & $0.8$ & 10.0\%
 \\
@@ -591,9 +591,9 @@ $\mathbf{p}$
 \\
 $\mathbf{v}$
 \\
-$\phi{}$
+$ϕ$
 \\
-$\omega{}$
+$ω$
 \\
 \bottomrule
 \caption{Output Data Constraints}

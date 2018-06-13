@@ -18,7 +18,7 @@ module Data.Drasil.SentenceStructures
   ) where
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle, foldle1, getES)
+import Data.Drasil.Utils (foldle, foldle1, getES, addPercent)
 import Data.Drasil.Concepts.Documentation hiding (constraint)
 import Data.Drasil.Concepts.Math (equation)
 
@@ -210,7 +210,7 @@ none :: Sentence
 none = S "None"
 
 found :: (Num a, Show a) => a -> Sentence
-found x = S $ (show (x*100)) ++ "%"
+found x = addPercent (x*100)
 
 typUncr :: (UncertainQuantity c) => c -> Sentence
 typUncr x = maybe none found (x ^. uncert)

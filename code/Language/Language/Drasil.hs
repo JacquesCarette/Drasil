@@ -5,7 +5,7 @@ module Language.Drasil (
   -- SystemInformation
   , SystemInformation(..), Block(..), citeDB
   -- Expr
-  , Expr(BinaryOp, C), BinOp(Eq)
+  , Expr(..), BinOp(..), UFunc(..), ArithOper(..), BoolOper(..)
   , Relation, RealInterval(..), Inclusive(..)
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   -- Expr.Math
@@ -193,8 +193,8 @@ module Language.Drasil (
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.SystemInformation
-import Language.Drasil.Expr (Expr(..), BinOp(Eq), Relation,
-          RealInterval(..), Inclusive(..), 
+import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..), 
+          BoolOper(..), Relation, RealInterval(..), Inclusive(..), 
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
 import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
           dim, idx, int, dbl, str, isin, case_,

@@ -1,22 +1,17 @@
 module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 
+import Language.Drasil hiding (int)
 import Language.Drasil.Code.Code as C
-import Language.Drasil.Code.Imperative.AST as I hiding ((&=),assign,State,return)
-import qualified Language.Drasil.Code.Imperative.AST as I (assign,return)
+import Language.Drasil.Code.Imperative.AST as I hiding ((&=), State, assign, return, 
+  Not, Tan, Cos, Sin, Exp, Abs, Log, And, Or)
+import qualified Language.Drasil.Code.Imperative.AST as I (assign, return)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel, cppLabel, cSharpLabel, javaLabel)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code
-import Language.Drasil.Chunk.Quantity (QuantityDict)
-import Language.Drasil.Chunk.Constrained.Core (Constraint(..))
-import Language.Drasil.Expr as E hiding (($.))
-import Language.Drasil.Expr.Math (sy)
-import Language.Drasil.Space (Space(..))
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.Code.DataDesc
-import Language.Drasil.UID (UID)
-import Language.Drasil.Classes (HasUID, HasSymbol)
 
 import Prelude hiding (log, exp, const)
 import Data.List (intersperse, (\\), stripPrefix)
@@ -24,7 +19,6 @@ import System.Directory
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (maybe)
-import Language.Drasil.ChunkDB (symbLookup, HasSymbolTable(..))
 import Control.Lens ((^.))
 import Control.Monad (when,liftM2,liftM3,zipWithM)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
@@ -447,8 +441,8 @@ convExpr (Int i)      = return $ litInt i
 convExpr (Str s)      = return $ litString s
 convExpr (AssocA Add l)  = fmap (foldr1 (#+)) $ sequence $ map convExpr l
 convExpr (AssocA Mul l)  = fmap (foldr1 (#*)) $ sequence $ map convExpr l
-convExpr (AssocB E.And l)  = fmap (foldr1 (?&&)) $ sequence $ map convExpr l
-convExpr (AssocB E.Or l)  = fmap (foldr1 (?||)) $ sequence $ map convExpr l
+convExpr (AssocB And l)  = fmap (foldr1 (?&&)) $ sequence $ map convExpr l
+convExpr (AssocB Or l)  = fmap (foldr1 (?||)) $ sequence $ map convExpr l
 convExpr (Deriv _ _ _) = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr (C c)         = do
   g <- ask
@@ -497,20 +491,20 @@ renderRealInt s (UpFrom (Inc,a))  = sy s $>= a
 renderRealInt s (UpFrom (Exc,a))  = sy s $>  a
 
 unop :: UFunc -> (Value -> Value)
-unop E.Sqrt = (#/^)
-unop E.Log  = I.log
-unop E.Abs  = (#|)
-unop E.Exp  = I.exp
-unop E.Sin  = I.sin
-unop E.Cos  = I.cos
-unop E.Tan  = I.tan
-unop E.Csc  = I.csc
-unop E.Sec  = I.sec
-unop E.Cot  = I.cot
-unop E.Dim  = ($.listSize)
-unop E.Norm = error "unop: Norm not implemented"
-unop E.Not  = (?!)
-unop E.Neg  = (#~)
+unop Sqrt = (#/^)
+unop Log  = I.log
+unop Abs  = (#|)
+unop Exp  = I.exp
+unop Sin  = I.sin
+unop Cos  = I.cos
+unop Tan  = I.tan
+unop Csc  = I.csc
+unop Sec  = I.sec
+unop Cot  = I.cot
+unop Dim  = (I.$.listSize)
+unop Norm = error "unop: Norm not implemented"
+unop Not  = (?!)
+unop Neg  = (#~)
 
 bfunc :: BinOp -> (Value -> Value -> Value)
 bfunc Eq    = (?==)
@@ -526,7 +520,7 @@ bfunc Impl    = error "convExpr :=>"
 bfunc Iff        = error "convExpr :<=>"
 bfunc Dot = error "convExpr DotProduct"
 bfunc Frac = (#/)
-bfunc Index      = (\x y -> x$.(listAccess y))
+bfunc Index      = (\x y -> x I.$.(listAccess y))
 
 -- medium hacks --
 genModDef :: CS.Mod -> Reader State Module
@@ -577,7 +571,7 @@ convStmt (FDec v (C.List t)) = return $ listDec' (codeName v) (convType t) 0
 convStmt (FDec v t) = return $ varDec (codeName v) (convType t)
 convStmt (FProcCall n l) = fmap valStmt $ convExpr (FCall (asExpr n) l)
 convStmt (FAppend a b) = fmap valStmt $
-  liftM2 (\x y -> x$.(listAppend y)) (convExpr a) (convExpr b)
+  liftM2 (\x y -> x I.$.(listAppend y)) (convExpr a) (convExpr b)
 
 -- this is really ugly!!
 genDataFunc :: Name -> DataDesc -> Reader State Method
@@ -604,8 +598,8 @@ genDataFunc name dd = do
         inData (Lines lp Nothing d) = do
           ln <- lineData lp v_i
           return $ [ getFileInputAll v_infile v_lines,
-              for (varDecDef l_i int (litInt 0)) (v_i ?< v_lines$.listSize) ((&++) v_i)
-                ( body ( [ stringSplit v_linetokens (v_lines$.(listAccess v_i)) d ] ++ ln))
+              for (varDecDef l_i int (litInt 0)) (v_i ?< v_lines I.$.listSize) ((&++) v_i)
+                ( body ( [ stringSplit v_linetokens (v_lines I.$.(listAccess v_i)) d ] ++ ln))
             ]
         inData (Lines lp (Just numLines) d) = do
           ln <- lineData lp v_i
@@ -622,7 +616,7 @@ genDataFunc name dd = do
         lineData (Straight p) lineNo = patternData p lineNo (litInt 0)
         lineData (Repeat p Nothing) lineNo = do
           pat <- patternData p lineNo v_j
-          return [ for (varDecDef l_j int (litInt 0)) (v_j ?< (v_linetokens$.listSize #/ (litInt $ toInteger $ length p))$.(cast int float)) ((&++) v_j)
+          return [ for (varDecDef l_j int (litInt 0)) (v_j ?< (v_linetokens I.$.listSize #/ (litInt $ toInteger $ length p))I.$.(cast int float)) ((&++) v_j)
               ( body pat )
             ]
         lineData (Repeat p (Just numPat)) lineNo = do
@@ -640,12 +634,12 @@ genDataFunc name dd = do
         entryData :: Value -> Value -> Value -> Entry -> Reader State [Statement]
         entryData tokIndex _ _ (Entry v) = do
           vv <- variable $ codeName v
-          a <- assign vv $ (v_linetokens$.(listAccess tokIndex))$. (cast (convType $ codeType v) string)
+          a <- assign vv $ (v_linetokens I.$.(listAccess tokIndex))I.$. (cast (convType $ codeType v) string)
           return [a]
         entryData tokIndex lineNo patNo (ListEntry indx v) = do
           vv <- variable $ codeName v
           a <- assign (indexData indx lineNo patNo vv) $
-                (v_linetokens$.(listAccess tokIndex))$.(cast (listType (codeType v) (toInteger $ length indx)) string)
+                (v_linetokens I.$.(listAccess tokIndex))I.$.(cast (listType (codeType v) (toInteger $ length indx)) string)
           return $ checkIndex indx lineNo patNo vv (codeType v) ++ [ a ]
         entryData _ _ _ JunkEntry = return []
         ---------------
@@ -660,14 +654,14 @@ genDataFunc name dd = do
           where len = toInteger $ length indx
         checkIndex' [] _ _ _ _ _ = []
         checkIndex' ((Explicit i):is) n l p v s =
-          [ while (v$.listSize ?<= (litInt i)) ( body [ valStmt $ v$.(listExtend $ listType' s n) ] ) ]
-          ++ checkIndex' is (n-1) l p (v$.(listAccess $ litInt i)) s
+          [ while (v I.$.listSize ?<= (litInt i)) ( body [ valStmt $ v I.$.(listExtend $ listType' s n) ] ) ]
+          ++ checkIndex' is (n-1) l p (v I.$.(listAccess $ litInt i)) s
         checkIndex' ((WithLine):is) n l p v s =
-          [ while (v$.listSize ?<= l) ( body [ valStmt $ v$.(listExtend $ listType' s n ) ] ) ]
-          ++ checkIndex' is (n-1) l p (v$.(listAccess l)) s
+          [ while (v I.$.listSize ?<= l) ( body [ valStmt $ v I.$.(listExtend $ listType' s n ) ] ) ]
+          ++ checkIndex' is (n-1) l p (v I.$.(listAccess l)) s
         checkIndex' ((WithPattern):is) n l p v s =
-          [ while (v$.listSize ?<= p) ( body [ valStmt $ v$.(listExtend $ listType' s n ) ] ) ]
-          ++ checkIndex' is (n-1) l p (v$.(listAccess p)) s
+          [ while (v I.$.listSize ?<= p) ( body [ valStmt $ v I.$.(listExtend $ listType' s n ) ] ) ]
+          ++ checkIndex' is (n-1) l p (v I.$.(listAccess p)) s
         ---------------
         listType :: C.CodeType -> Integer -> I.StateType
         listType _ 0 = error "No index given"

@@ -12,20 +12,6 @@ import Control.Lens ((^.),makeLenses,view)
 import Language.Drasil-- hiding (CodeType(..))
 import qualified Language.Drasil.Code.Code as G
 
-{-
-import Language.Drasil.Chunk.Constrained.Core (Constraint, isPhysC)
-import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.Eq (QDefinition)
-import Language.Drasil.Chunk.SymbolForm (codeSymb)
-import Language.Drasil.UID (UID)
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  HasSymbol(symbol), CommonIdea(abrv), Constrained(constraints), relat)
-import Language.Drasil.Space as S
-import Language.Drasil.Code.Code as G (CodeType(..))
-import Language.Drasil.Expr
-import Language.Drasil.Unicode
-import Language.Drasil.Symbol-}
-
 import Data.String.Utils (replace)
 import qualified Data.Map as Map
 

@@ -6,24 +6,6 @@ import Language.Drasil.Chunk.Code
 import Language.Drasil.Code.Code
 import Language.Drasil.Code.DataDesc
 
-{-
-import Language.Drasil.Classes (term, CommonIdea,ExprRelat(relat))
-import Language.Drasil.Chunk.Eq
-import Language.Drasil.Chunk.Quantity -- for hack
-import Language.Drasil.Chunk.SymbolForm (codeSymb)
-import Language.Drasil.Chunk.ShortName
-import Language.Drasil.NounPhrase
-import Language.Drasil.Symbol
-import Language.Drasil.Spec
-import Language.Drasil.SystemInformation
-import Language.Drasil.Expr -- for hack
-import Language.Drasil.Expr.Extract (dep, names')
-import Language.Drasil.Expr.Math (sy)
-import Language.Drasil.Space -- for hack
-import Language.Drasil.ChunkDB
-import Language.Drasil.Chunk.VarChunk-}
-
-
 import qualified Data.Map as Map
 import Control.Lens ((^.))
 import Data.List (nub, delete, (\\))

@@ -5,7 +5,7 @@ module Language.Drasil (
   -- SystemInformation
   , SystemInformation(..), Block(..), citeDB
   -- Expr
-  , Expr
+  , Expr(BinaryOp, C), BinOp(Eq)
   , Relation, RealInterval(..), Inclusive(..)
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   -- Expr.Math
@@ -17,6 +17,8 @@ module Language.Drasil (
   , sy -- old "Chunk" constructor C
   , apply, apply1, apply2
   , cross, m2x2, vec2D, dgnl2x2
+  -- Expr.Extract
+  , dep, names'
   -- all the stuff from Unicode
   , Greek(..), Special(..)
   -- UnitLang
@@ -43,7 +45,7 @@ module Language.Drasil (
   , ExprRelat(relat)
   , HasDerivation(derivations)
   -- Chunk.VarChunk
-  , VarChunk
+  , VarChunk, codeVC
   , vc, implVar
   , dcc, dcc', dccWDS, dccWDS', vc'', ccs, cc, cc'
   -- Chunk.Concept
@@ -86,12 +88,13 @@ module Language.Drasil (
   , dqd, dqd', DefinedQuantityDict, dqdWr, dqdEL
   -- Chunk.UnitaryConcept
   , ucw, UnitaryConceptDict
-  -- Chunk.Attributes
+  -- Chunk.Attributes --FIXME: Changed a lot
   , getSource
-  , Derivation, getDerivation, getShortName, shortname'
+  , Derivation, getDerivation, getShortName
   , sourceref
   , References
-  , HasShortName(shortname)
+  -- Chunk.ShortName
+  , ShortName, shortname', HasShortName(shortname)
   --Citations
   , Citation, BibRef, CiteField, Month(..), HP
     -- CiteFields smart constructors
@@ -190,7 +193,7 @@ module Language.Drasil (
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.SystemInformation
-import Language.Drasil.Expr (Expr(..), Relation,
+import Language.Drasil.Expr (Expr(..), BinOp(Eq), Relation,
           RealInterval(..), Inclusive(..), 
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
 import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
@@ -200,7 +203,7 @@ import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, co
           apply, apply1, apply2,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
-import Language.Drasil.Expr.Extract (vars)
+import Language.Drasil.Expr.Extract (dep, names', vars)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website),DocSpec(DocSpec))
 import Language.Drasil.Document (Document(..), DType(..)
   , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..)
@@ -214,13 +217,13 @@ import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), 
   HasSpace(typ), HasUnitSymbol(usymb), IsUnit, CommonIdea(abrv),
-  Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations),
-  HasReference(getReferences))
+  Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), 
+  HasDerivation(derivations), HasReference(getReferences))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.References (References)
-import Language.Drasil.Chunk.ShortName
+import Language.Drasil.Chunk.ShortName (ShortName, shortname', HasShortName(shortname))
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation (
   -- Types

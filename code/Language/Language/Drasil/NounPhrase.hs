@@ -36,18 +36,18 @@ type Capitalization = Sentence  --Using type synonyms for clarity.
 type PluralString   = String
 
 instance NounPhrase NP where
-  phrase (ProperNoun n _)       = S n
-  phrase (CommonNoun n _ _)     = S n
-  phrase (Phrase n _ _ _)         = n
-  plural n@(ProperNoun _ p)     = sPlur (phrase n) p
-  plural n@(CommonNoun _ p _)   = sPlur (phrase n) p
-  plural (Phrase _ p _ _)         = p
+  phrase (ProperNoun n _)             = S n
+  phrase (CommonNoun n _ _)           = S n
+  phrase (Phrase n _ _ _)             = n
+  plural n@(ProperNoun _ p)           = sPlur (phrase n) p
+  plural n@(CommonNoun _ p _)         = sPlur (phrase n) p
+  plural (Phrase _ p _ _)             = p
   sentenceCase n@(ProperNoun _ _)   _ = phrase n
   sentenceCase n@(CommonNoun _ _ r) f = cap (f n) r
-  sentenceCase n@(Phrase _ _ r _)     f = cap (f n) r
+  sentenceCase n@(Phrase _ _ r _)   f = cap (f n) r
   titleCase n@(ProperNoun _ _)      _ = phrase n
   titleCase n@(CommonNoun _ _ _)    f = cap (f n) CapWords
-  titleCase n@(Phrase _ _ _ r)        f = cap (f n) r
+  titleCase n@(Phrase _ _ _ r)      f = cap (f n) r
   
 -- ===Constructors=== --
 -- | Construct a Proper Noun, it is always capitalized as written.

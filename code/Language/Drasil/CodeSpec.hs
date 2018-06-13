@@ -1,8 +1,13 @@
 {-# LANGUAGE GADTs #-}
 module Language.Drasil.CodeSpec where
 
-import Language.Drasil.Classes (term, CommonIdea,ExprRelat(relat))
+import Language.Drasil
 import Language.Drasil.Chunk.Code
+import Language.Drasil.Code.Code
+import Language.Drasil.Code.DataDesc
+
+{-
+import Language.Drasil.Classes (term, CommonIdea,ExprRelat(relat))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity -- for hack
 import Language.Drasil.Chunk.SymbolForm (codeSymb)
@@ -15,9 +20,10 @@ import Language.Drasil.Expr -- for hack
 import Language.Drasil.Expr.Extract (dep, names')
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Space -- for hack
-import Language.Drasil.Code.DataDesc
 import Language.Drasil.ChunkDB
-import Language.Drasil.Chunk.VarChunk
+import Language.Drasil.Chunk.VarChunk-}
+
+
 import qualified Data.Map as Map
 import Control.Lens ((^.))
 import Data.List (nub, delete, (\\))
@@ -63,10 +69,10 @@ assocToMap :: CodeIdea a => [a] -> Map.Map String a
 assocToMap = Map.fromList . map (\x -> (codeName x, x))
 
 funcTerm :: String -> FunctionMap -> String
-funcTerm cname m = maybe "" (\cd -> getStr (phrase $ cd ^. term)) (Map.lookup cname m)
+funcTerm cname m = maybe "" (\cd -> getStr (phrase $ cd {-^. term-})) (Map.lookup cname m) -- Not sure why commenting out "^. term" works - now the type signatures match
        
 varTerm :: String -> VarMap -> String
-varTerm cname m = maybe "" (\cc -> getStr (phrase $ cc ^. term)) (Map.lookup cname m)
+varTerm cname m = maybe "" (\cc -> getStr (phrase $ cc {-^. term-})) (Map.lookup cname m) -- Not sure why commenting out "^. term" works
         
 varType :: String -> VarMap -> CodeType
 varType cname m = maybe (error "Variable not found") codeType (Map.lookup cname m)

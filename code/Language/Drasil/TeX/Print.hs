@@ -23,7 +23,7 @@ import Language.Drasil.TeX.Preamble
 import           Language.Drasil.Symbol (Symbol(..))
 import qualified Language.Drasil.Symbol as S
 import qualified Language.Drasil.Document as L
-import Language.Drasil.Unicode (RenderGreek(..), RenderSpecial(..))
+import Language.Drasil.Unicode (RenderSpecial(..))
 import Language.Drasil.People (People,rendPersLFM)
 import Language.Drasil.ChunkDB (HasSymbolTable)
 import Language.Drasil.Chunk.Citation (CitationKind(..), Month(..))
@@ -66,7 +66,7 @@ print sm l = foldr ($+$) empty $ map (flip lo sm) l
 symbol :: Symbol -> String
 symbol (Atomic s)  = s
 symbol (Special s) = unPL $ special s
-symbol (Greek g)   = unPL $ greek g
+--symbol (Greek g)   = unPL $ greek g
 symbol (Concat sl) = foldr (++) "" $ map symbol sl
 --
 -- handle the special cases first, then general case
@@ -100,7 +100,7 @@ p_expr (Row [x]) = brace $ p_expr x -- a bit of a hack...
 p_expr (Row l) = concatMap p_expr l
 p_expr (Ident s) = s
 p_expr (Spec s) = unPL $ special s
-p_expr (Gr g) = unPL $ greek g
+--p_expr (Gr g) = unPL $ greek g
 p_expr (Sub e) = "_" ++ brace (p_expr e)
 p_expr (Sup e) = "^" ++ brace (p_expr e)
 p_expr (Over Hat s)     = "\\hat{" ++ p_expr s ++ "}"
@@ -224,14 +224,14 @@ makeColumns ls = hpunctuate (text " & ") $ map spec ls
 
 needs :: Spec -> MathContext
 needs (a :+: b) = needs a `lub` needs b
-needs (S _)     = Text
-needs (E _)     = Math
-needs (Sy _)    = Text
-needs (Sp _)    = Math
-needs HARDNL    = Text
-needs (Ref _ _ _) = Text
-needs (EmptyS)  = Text
-needs (Quote _) = Text
+needs (S _)         = Text
+needs (E _)         = Math
+needs (Sy _)        = Text
+needs (Sp _)        = Math
+needs HARDNL        = Text
+needs (Ref _ _ _ _) = Text
+needs (EmptyS)      = Text
+needs (Quote _)     = Text
 
 -- print all Spec through here
 spec :: Spec -> D
@@ -245,15 +245,15 @@ spec (S s)       = pure $ text (concatMap escapeChars s)
 spec (Sy s)      = p_unit s
 spec (Sp s)      = pure $ text $ unPL $ special s
 spec HARDNL      = pure $ text "\\newline"
-spec (Ref t@RT.Sect r _) = sref (show t) (pure $ text r)
-spec (Ref t@RT.Def r _)  = hyperref (show t) (pure $ text r)
-spec (Ref RT.Mod r _)    = mref  (pure $ text r)
-spec (Ref RT.Req r _)    = rref  (pure $ text r)
-spec (Ref RT.Assump r _) = aref  (pure $ text r)
-spec (Ref RT.LC r _)     = lcref (pure $ text r)
-spec (Ref RT.UC r _)     = ucref (pure $ text r)
-spec (Ref RT.Cite r _)   = cite  (pure $ text r)
-spec (Ref t r _)         = ref (show t) (pure $ text r)
+spec (Ref t@RT.Sect r _ _) = sref (show t) (pure $ text r)
+spec (Ref t@RT.Def r _ _)  = hyperref (show t) (pure $ text r)
+spec (Ref RT.Mod r _ _)    = mref  (pure $ text r)
+spec (Ref RT.Req r _ _)    = rref  (pure $ text r)
+spec (Ref RT.Assump r _ _) = aref  (pure $ text r)
+spec (Ref RT.LC r _ _)     = lcref (pure $ text r)
+spec (Ref RT.UC r _ _)     = ucref (pure $ text r)
+spec (Ref RT.Cite r _ _)   = cite  (pure $ text r)
+spec (Ref t r _ _)         = ref (show t) (pure $ text r)
 spec EmptyS              = empty
 spec (Quote q)           = quote $ spec q
 
@@ -264,7 +264,7 @@ escapeChars c = c : []
 symbol_needs :: Symbol -> MathContext
 symbol_needs (Atomic _)          = Text
 symbol_needs (Special _)         = Math
-symbol_needs (Greek _)           = Math
+--symbol_needs (Greek _)           = Math
 symbol_needs (Concat [])         = Math
 symbol_needs (Concat (s:_))      = symbol_needs s
 symbol_needs (Corners _ _ _ _ _) = Math
@@ -324,7 +324,7 @@ makeDefTable :: HasSymbolTable s => s -> [(String,[LayoutObj])] -> D -> D
 makeDefTable _ [] _ = error "Trying to make empty Data Defn"
 makeDefTable sm ps l = vcat [
   pure $ text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
-  (pure $ text "\\toprule \\textbf{Refname} & \\textbf{") <> l <> (pure $ text "}"),
+  (pure $ text "\\toprule \\textbf{Refname} & \\textbf{") <> l <> (pure $ text "}"), --shortname instead of refname?
   (pure $ text "\\phantomsection "), label l,
   makeDRows sm ps,
   pure $ dbs <+> text ("\\bottomrule \\end{tabular}")

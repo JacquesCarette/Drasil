@@ -1,65 +1,63 @@
 module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap) where
 
 import Language.Drasil hiding (organization)
-import Data.Drasil.SI_Units
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
 
-import Data.Drasil.People (henryFrankis)
-
-import Drasil.SSP.Assumptions (sspAssumptions)
-import Drasil.SSP.DataDefs (sspDataDefs, resShrDerivation,
-  mobShrDerivation, stfMtrxDerivation)
-import Drasil.SSP.DataDesc (sspInputMod)
-import Drasil.SSP.Defs (ssa, acronyms, slice, slope, soil,
-  crtSlpSrf, soilLyr, morPrice, mtrlPrpty, slpSrf,
-  fs_concept, plnStrn, intrslce, itslPrpty)
-import Drasil.SSP.GenDefs (sspGenDefs)
-import Drasil.SSP.Goals (sspGoals)
-import Drasil.SSP.IMods (instModIntro1, instModIntro2,
-  sspIMods, fctSftyDerivation, nrmShrDerivation,
-  intrSlcDerivation, rigDisDerivation, rigFoSDerivation)
-import Drasil.SSP.References (sspCitations)
-import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
-import Drasil.SSP.TMods (sspTMods)
-import Drasil.SSP.Unitals (sspSymbols, sspInputs, sspOutputs,
-  sspConstrained, index, fs, numbSlices)
-import qualified Drasil.SRS as SRS (physSyst, funcReq, likeChg, inModel,
-  missingP)
-
-import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.DocumentLanguage (TSIntro, DocDesc, RefSec(..),
-  RefTab(..), tsymb'', LFunc(..),
-  IntroSub(..), TSIntro(..), TConvention(..),
-  DocSection(..), mkDoc, IntroSec(..))
-import Drasil.Sections.SpecificSystemDescription (inDataConstTbl,
-  outDataConstTbl, dataConstraintUncertainty, goalStmtF, termDefnF,
-  probDescF, solChSpecF, specSysDesF)
-import Drasil.Sections.Requirements (reqF, nonFuncReqF)
-import Drasil.Sections.GeneralSystDesc (genSysF)
-import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
-
-import Data.Drasil.Concepts.Documentation (srs, physics, inModel,
-  value, effect, loss, interest, problem, design, issue,
-  method_, analysis, input_, organization, document,
-  template, analysis, endUser, definition, model, element,
-  property, interest, variable, table_, goalStmt,
-  assumption, requirement)
-import Data.Drasil.Phrase (for)
-import Data.Drasil.Concepts.Physics (stress, strain, tension,
-  compression, fbd, force)
-import Data.Drasil.Concepts.PhysicalProperties (mass)
+import Data.Drasil.Concepts.Documentation (analysis, assumption, definition, 
+  design, document, effect, element, endUser, goalStmt, inModel, input_, 
+  interest, interest, issue, loss, method_, model, organization, physics, 
+  problem, property, requirement, srs, table_, template, value, variable)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
-import Data.Drasil.Concepts.Software (program, accuracy,
-  performanceSpd, correctness, understandability,
-  reusability, maintainability)
-import Data.Drasil.Concepts.Math (surface, equation)
+import Data.Drasil.Concepts.Math (equation, surface)
+import Data.Drasil.Concepts.PhysicalProperties (mass)
+import Data.Drasil.Concepts.Physics (compression, fbd, force, strain, stress,
+  tension)
+import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability, 
+  performanceSpd, program, reusability, understandability)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
+
 import Data.Drasil.Software.Products (sciCompS)
 
-import Data.Drasil.Utils (getES, enumBullet, enumSimple, weave)
-import Data.Drasil.SentenceStructures (sOr, acroDD,
-  foldlSent, ofThe, sAnd, foldlSP, foldlList, foldlSent_)
+import Data.Drasil.People (henryFrankis)
+import Data.Drasil.Phrase (for)
+import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent, 
+  foldlSent_, ofThe, sAnd, sOr)
+import Data.Drasil.SI_Units (degree, metre, newton, pascal)
+import Data.Drasil.Utils (enumBullet, enumSimple, getES, weave)
+
+import Drasil.SSP.Assumptions (sspAssumptions)
+import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShrDerivation, 
+  resShrDerivation, sliceWght, sspDataDefs, stfMtrxDerivation)
+import Drasil.SSP.DataDesc (sspInputMod)
+import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty, 
+  morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil, soilLyr, ssa)
+import Drasil.SSP.GenDefs (sspGenDefs)
+import Drasil.SSP.Goals (sspGoals)
+import Drasil.SSP.IMods (fctSftyDerivation, instModIntro1, instModIntro2, 
+  intrSlcDerivation, nrmShrDerivation, rigDisDerivation, rigFoSDerivation, 
+  sspIMods)
+import Drasil.SSP.References (sspCitations)
+import Drasil.SSP.Requirements (sspInputDataTable, sspRequirements)
+import Drasil.SSP.TMods (sspTMods)
+import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
+  sspOutputs, sspSymbols)
+
+import qualified Drasil.SRS as SRS (funcReq, inModel, likeChg, missingP, 
+  physSyst)
+
+import Drasil.DocumentLanguage (DocDesc, DocSection(..), IntroSec(..), 
+  IntroSub(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), TSIntro, 
+  TSIntro(..), mkDoc, tsymb'')
+
+import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
+import Drasil.Sections.GeneralSystDesc (genSysF)
+import Drasil.Sections.ReferenceMaterial (intro)
+import Drasil.Sections.Requirements (reqF, nonFuncReqF)
+import Drasil.Sections.SpecificSystemDescription (dataConstraintUncertainty, 
+  goalStmtF, inDataConstTbl, outDataConstTbl, probDescF, solChSpecF, 
+  specSysDesF, termDefnF)
+
 
 --type declarations for sections--
 s3, s4, s5, s6, s7 :: Section
@@ -98,7 +96,8 @@ ssp_si = SI {
 }
 
 sspRefDB :: ReferenceDB
-sspRefDB = rdb [] [] [] [] [] sspCitations -- FIXME: Convert the rest to new chunk types
+sspRefDB = rdb [] [] [] [] [] sspCitations
+-- FIXME: Convert the rest to new chunk types (similar to issues #446 and #447)
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
@@ -116,7 +115,7 @@ ssp_srs :: Document
 ssp_srs = mkDoc mkSRS (for) ssp_si
   
 ssp_code :: CodeSpec
-ssp_code = codeSpec' ssp_si [sspInputMod]
+ssp_code = codeSpec ssp_si [sspInputMod]
 
 
 -- SYMBOL MAP HELPERS --
@@ -262,7 +261,7 @@ s4_1_2_p1 = physSystIntro slope how intrslce slice (S "slice base")
   fig_indexconv
   where how = S "as a series of" +:+ phrase slice +:+. plural element
 
-physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, Referable d) =>
+physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, HasShortName d, Referable d) =>
   a -> Sentence -> b -> c -> Sentence -> d -> Contents
 physSystIntro what how p1 p2 p3 indexref = foldlSP [
   at_start analysis, S "of the", phrase what, S "is performed by looking at",
@@ -310,12 +309,12 @@ s4_2 = solChSpecF ssa (s4_1, s6) ddEnding
   ([s4_2_1_list], s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, 
   instModIntro1:instModIntro2:s4_2_5_IMods, [s4_2_6Table2, s4_2_6Table3]) []
 
-  where ddEnding = foldlSent [at_start' definition, acroDD 1, S "to", acroDD 8,
+  where ddEnding = foldlSent [at_start' definition, ddRef sliceWght, S "to", ddRef lengthLb,
           S "are the", phrase force, plural variable, S "that can be solved",
           S "by direct analysis of given" +:+. plural input_, S "The", 
-          phrase intrslce, S "forces", acroDD 9, S "are", phrase force,
-          plural variable, S "that must be written in terms of", acroDD 1, 
-          S "to", acroDD 8, S "to solve"]
+          phrase intrslce, S "forces", ddRef lengthLs, S "are", phrase force,
+          plural variable, S "that must be written in terms of", ddRef sliceWght, 
+          S "to", ddRef lengthLb, S "to solve"]
 
 -- SECTION 4.2.1 --
 -- Assumptions is automatically generated in solChSpecF using the list below

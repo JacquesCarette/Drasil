@@ -1,5 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+<!DOCTYPE html>
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="Chipmunk_SRS.css">
@@ -7,6 +6,7 @@
 Software Requirements Specification for Chipmunk2D
 </title>
 <meta charset="utf-8">
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
 </head>
 <body>
 <div class="title">
@@ -19,7 +19,7 @@ Software Requirements Specification for Chipmunk2D
 Alex Halliwushka and Luthfi Mawarid
 </h2>
 </div>
-<a id="Sec:RefMat">
+<div id="Sec:RefMat">
 <div class="section">
 <h1>
 Reference Material
@@ -27,7 +27,7 @@ Reference Material
 <p class="paragraph">
 This section records information for easy reference.
 </p>
-<a id="Sec:ToU">
+<div id="Sec:ToU">
 <div class="subsection">
 <h2>
 Table of Units
@@ -35,7 +35,7 @@ Table of Units
 <p class="paragraph">
 The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 </p>
-<a id="Table:ToU">
+<div id="Table:ToU">
 <table class="table">
 <tr>
 <th>
@@ -86,10 +86,10 @@ time (second)
 </td>
 </tr>
 </table>
-</a>
 </div>
-</a>
-<a id="Sec:ToS">
+</div>
+</div>
+<div id="Sec:ToS">
 <div class="subsection">
 <h2>
 Table of Symbols
@@ -97,7 +97,7 @@ Table of Symbols
 <p class="paragraph">
 The table that follows summarizes the symbols used in this document along with their units. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order.
 </p>
-<a id="Table:ToS">
+<div id="Table:ToS">
 <table class="table">
 <tr>
 <th>
@@ -750,7 +750,7 @@ m<sup>2</sup>
 </tr>
 <tr>
 <td>
-<em>&alpha;</em>
+<em>α</em>
 </td>
 <td>
 Angular Acceleration
@@ -761,7 +761,7 @@ rad/s<sup>2</sup>
 </tr>
 <tr>
 <td>
-<em>&theta;</em>
+<em>θ</em>
 </td>
 <td>
 Angular Displacement
@@ -772,10 +772,10 @@ rad
 </tr>
 <tr>
 <td>
-<em>&pi;</em>
+<em>π</em>
 </td>
 <td>
-Pi
+pi
 </td>
 <td>
 
@@ -783,7 +783,7 @@ Pi
 </tr>
 <tr>
 <td>
-<em>&tau;<sub>i</sub></em>
+<em>τ<sub>i</sub></em>
 </td>
 <td>
 Is the torque applied to the i-th body
@@ -794,7 +794,7 @@ N&sdot;m
 </tr>
 <tr>
 <td>
-<em>&tau;</em>
+<em>τ</em>
 </td>
 <td>
 Torque
@@ -805,18 +805,7 @@ N&sdot;m
 </tr>
 <tr>
 <td>
-<em>&phi;</em>
-</td>
-<td>
-Orientation
-</td>
-<td>
-rad
-</td>
-</tr>
-<tr>
-<td>
-<em>&omega;<sub>A</sub></em>
+<em>ω<sub>A</sub></em>
 </td>
 <td>
 Is the a Body's Angular Velocity
@@ -827,7 +816,7 @@ rad/s
 </tr>
 <tr>
 <td>
-<em>&omega;<sub>B</sub></em>
+<em>ω<sub>B</sub></em>
 </td>
 <td>
 Is the B Body's Angular Velocity
@@ -838,7 +827,7 @@ rad/s
 </tr>
 <tr>
 <td>
-<em>&omega;</em>
+<em>ω</em>
 </td>
 <td>
 Angular Velocity
@@ -847,16 +836,27 @@ Angular Velocity
 rad/s
 </td>
 </tr>
+<tr>
+<td>
+<em>ϕ</em>
+</td>
+<td>
+Orientation
+</td>
+<td>
+rad
+</td>
+</tr>
 </table>
-</a>
 </div>
-</a>
-<a id="Sec:TAbbAcc">
+</div>
+</div>
+<div id="Sec:TAbbAcc">
 <div class="subsection">
 <h2>
 Abbreviations and Acronyms
 </h2>
-<a id="Table:TAbbAcc">
+<div id="Table:TAbbAcc">
 <table class="table">
 <tr>
 <th>
@@ -971,12 +971,12 @@ Theoretical Model
 </td>
 </tr>
 </table>
-</a>
 </div>
-</a>
 </div>
-</a>
-<a id="Sec:Intro">
+</div>
+</div>
+</div>
+<div id="Sec:Intro">
 <div class="section">
 <h1>
 Introduction
@@ -987,7 +987,7 @@ Due to the rising cost of developing video games, developers are looking for way
 <p class="paragraph">
 The following section provides an overview of the Software Requirements Specification (SRS) for Chipmunk2D. This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
 </p>
-<a id="Sec:DocPurpose">
+<div id="Sec:DocPurpose">
 <div class="subsection">
 <h2>
 Purpose of Document
@@ -999,8 +999,8 @@ This document descibes the modeling of an open source 2D rigid body physics libr
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
 </p>
 </div>
-</a>
-<a id="Sec:ReqsScope">
+</div>
+<div id="Sec:ReqsScope">
 <div class="subsection">
 <h2>
 Scope of Requirements
@@ -1009,8 +1009,8 @@ Scope of Requirements
 The scope of the requirements includes the physical simulation of 2D rigid bodies acted on by forces. Given the appropriate inputs, the code for Chipmunk2D is intended to simulate how these rigid bodies interact with one another.
 </p>
 </div>
-</a>
-<a id="Sec:ReaderChars">
+</div>
+<div id="Sec:ReaderChars">
 <div class="subsection">
 <h2>
 Characteristics of Intended Reader
@@ -1019,8 +1019,8 @@ Characteristics of Intended Reader
 Reviewers of this documentation should have a strong knowledge in rigid body dynamics. The reviewers should also have an understanding of high school calculus. The users of Chipmunk2D can have a lower level of expertise, as explained in <a href=#Sec:UserChars>User Characteristics</a>.
 </p>
 </div>
-</a>
-<a id="Sec:DocOrg">
+</div>
+<div id="Sec:DocOrg">
 <div class="subsection">
 <h2>
 Organization of Document
@@ -1032,18 +1032,18 @@ The organization of this document follows the template for an SRS for scientific
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models.
 </p>
 </div>
-</a>
 </div>
-</a>
-<a id="Sec:GenSysDesc">
+</div>
+</div>
+<div id="Sec:GenSysDesc">
 <div class="section">
 <h1>
 General System Description
 </h1>
 <p class="paragraph">
-This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
+This section provides general information about the system including identifying the interfaces between the system and its environment (system context), describing the user characteristics and listing the system constraints.
 </p>
-<a id="Sec:usercharacteristic">
+<div id="Sec:usercharacteristic">
 <div class="subsection">
 <h2>
 User Characteristics
@@ -1052,8 +1052,8 @@ User Characteristics
 The end user of Chipmunk2D should have an understanding of first year programming concepts and an understanding of high school physics.
 </p>
 </div>
-</a>
-<a id="Sec:SysConstraints">
+</div>
+<div id="Sec:SysConstraints">
 <div class="subsection">
 <h2>
 System Constraints
@@ -1062,10 +1062,10 @@ System Constraints
 There are no system constraints.
 </p>
 </div>
-</a>
 </div>
-</a>
-<a id="Sec:SpecSystDesc">
+</div>
+</div>
+<div id="Sec:SpecSystDesc">
 <div class="section">
 <h1>
 Specific System Description
@@ -1073,7 +1073,7 @@ Specific System Description
 <p class="paragraph">
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used for the physics library.
 </p>
-<a id="Sec:ProbDesc">
+<div id="Sec:ProbDesc">
 <div class="subsection">
 <h2>
 Problem Description
@@ -1081,7 +1081,7 @@ Problem Description
 <p class="paragraph">
 Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (<a href=#Sec:ExistingSolns>Off-The-Shelf Solutions</a>). By creating a simple, lightweight, fast and portable 2D rigid body physics library, game development will be more accessible to the masses and higher quality products will be produced.
 </p>
-<a id="Sec:TermDefs">
+<div id="Sec:TermDefs">
 <div class="subsubsection">
 <h3>
 Terminology and Definitions
@@ -1107,8 +1107,8 @@ Right-handed coordinate system: A coordinate system where the positive z-axis co
 </li>
 </ul>
 </div>
-</a>
-<a id="Sec:GoalStmt">
+</div>
+<div id="Sec:GoalStmt">
 <div class="subsubsection">
 <h3>
 Goal Statements
@@ -1131,10 +1131,10 @@ GS4: Given the physical properties, initial positions, orientations, linear velo
 </p>
 </div>
 </div>
-</a>
 </div>
-</a>
-<a id="Sec:SolCharSpec">
+</div>
+</div>
+<div id="Sec:SolCharSpec">
 <div class="subsection">
 <h2>
 Solution Characteristics Specification
@@ -1142,7 +1142,7 @@ Solution Characteristics Specification
 <p class="paragraph">
 The instance models that govern Chipmunk2D are presented in FIXME REF to IModSection. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
-<a id="Sec:Assumps">
+<div id="Sec:Assumps">
 <div class="subsubsection">
 <h3>
 Assumptions
@@ -1174,8 +1174,8 @@ A7: There are no constraints and joints involved throughout the simulation.
 </p>
 </div>
 </div>
-</a>
-<a id="Sec:TMs">
+</div>
+<div id="Sec:TMs">
 <div class="subsubsection">
 <h3>
 Theoretical Models
@@ -1183,7 +1183,7 @@ Theoretical Models
 <p class="paragraph">
 This section focuses on the general equations and laws that Chipmunk2D is based on.
 </p>
-<a id="T:t1NewtonSL">
+<div id="T:t1NewtonSL">
 <table class="tdefn">
 <tr>
 <th>
@@ -1200,13 +1200,13 @@ Newton's Second Law of Motion
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em><b>F</b> = m&#8239;<b>a</b></em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1220,8 +1220,8 @@ The net force <em><b>F</b></em> (N) on a rigid body is proportional to the accel
 </td>
 </tr>
 </table>
-</a>
-<a id="T:t2NewtonTL">
+</div>
+<div id="T:t2NewtonTL">
 <table class="tdefn">
 <tr>
 <th>
@@ -1238,13 +1238,13 @@ Newton's Third Law of Motion
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em><b>F</b><sub>1</sub> = &minus;<b>F</b><sub>2</sub></em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1258,8 +1258,8 @@ Every action has an equal and opposite reaction. In other words, the force <em><
 </td>
 </tr>
 </table>
-</a>
-<a id="T:t3NewtonLUG">
+</div>
+<div id="T:t3NewtonLUG">
 <table class="tdefn">
 <tr>
 <th>
@@ -1276,7 +1276,7 @@ Newton's Law of Universal Gravitation
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em><b>F</b> = G&#8239;<div class="fraction">
@@ -1303,7 +1303,7 @@ m<sub>1</sub>&#8239;m<sub>2</sub>
 </div></em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1317,8 +1317,8 @@ Two rigid bodies in the universe attract each other with a force <em><b>F</b></e
 </td>
 </tr>
 </table>
-</a>
-<a id="T:t4ChaslesThm">
+</div>
+<div id="T:t4ChaslesThm">
 <table class="tdefn">
 <tr>
 <th>
@@ -1335,13 +1335,13 @@ Chasles' Theorem
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
-<em><b>v</b><sub>B</sub> = <b>v</b><sub>O</sub>&plus;&omega;&#10799;<b>r</b><sub>OB</sub></em>
+<em><b>v</b><sub>B</sub> = <b>v</b><sub>O</sub>&plus;ω&#10799;<b>r</b><sub>OB</sub></em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1350,13 +1350,13 @@ Description
 </th>
 <td>
 <p class="paragraph">
-The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigid body is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> (m/s) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>&omega;</em> (rad/s) and the displacement vector between the origin and point B, <em><b>r</b><sub>OB</sub></em> (m).
+The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigid body is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> (m/s) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>ω</em> (rad/s) and the displacement vector between the origin and point B, <em><b>r</b><sub>OB</sub></em> (m).
 </p>
 </td>
 </tr>
 </table>
-</a>
-<a id="T:t5NewtonSLR">
+</div>
+<div id="T:t5NewtonSLR">
 <table class="tdefn">
 <tr>
 <th>
@@ -1373,13 +1373,13 @@ Newton's Second Law for Rotational Motion
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
-<em>&tau; = <b>I</b>&#8239;&alpha;</em>
+<em>τ = <b>I</b>&#8239;α</em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1388,15 +1388,15 @@ Description
 </th>
 <td>
 <p class="paragraph">
-The net torque <em>&tau;</em> (N&sdot;m) on a rigid body is proportional to its angular acceleration <em>&alpha;</em> (rad/s<sup>2</sup>). Here, <em><b>I</b></em> (kg&sdot;m<sup>2</sup>) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional (A2).
+The net torque <em>τ</em> (N&sdot;m) on a rigid body is proportional to its angular acceleration <em>α</em> (rad/s<sup>2</sup>). Here, <em><b>I</b></em> (kg&sdot;m<sup>2</sup>) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional (A2).
 </p>
 </td>
 </tr>
 </table>
-</a>
 </div>
-</a>
-<a id="Sec:GDs">
+</div>
+</div>
+<div id="Sec:GDs">
 <div class="subsubsection">
 <h3>
 General Definitions
@@ -1405,8 +1405,8 @@ General Definitions
 There are no general definitions.
 </p>
 </div>
-</a>
-<a id="Sec:IMs">
+</div>
+<div id="Sec:IMs">
 <div class="subsubsection">
 <h3>
 Instance Models
@@ -1414,7 +1414,7 @@ Instance Models
 <p class="paragraph">
 This section transforms the problem defined in FIXME REF into one which is expressed in mathematical terms. It uses concrete symbols defined in FIXME REF to replace the abstract symbols in the models identified in FIXME REF and FIXME REF.
 </p>
-<a id="T:im1">
+<div id="T:im1">
 <table class="tdefn">
 <tr>
 <th>
@@ -1431,7 +1431,7 @@ Force on the Translational Motion of a Set of 2d Rigid Bodies
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em><b>a</b><sub>i</sub> = <div class="fraction">
@@ -1451,7 +1451,7 @@ m<sub>j</sub>
 </div></em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1465,8 +1465,8 @@ The above equation expresses the total acceleration of the rigid body (A1, A2) i
 </td>
 </tr>
 </table>
-</a>
-<a id="T:im2">
+</div>
+<div id="T:im2">
 <table class="tdefn">
 <tr>
 <th>
@@ -1483,19 +1483,19 @@ Force on the Rotational Motion of a Set of 2D Rigid Body
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
-<em>&alpha; = <div class="fraction">
+<em>α = <div class="fraction">
 <span class="fup">
-d&#8239;&omega;(t)
+d&#8239;ω(t)
 </span>
 <span class="fdn">
 d&#8239;t
 </span>
 </div> = <div class="fraction">
 <span class="fup">
-&tau;<sub>i</sub>(t)
+τ<sub>i</sub>(t)
 </span>
 <span class="fdn">
 <b>I</b>
@@ -1503,7 +1503,7 @@ d&#8239;t
 </div></em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1512,13 +1512,13 @@ Description
 </th>
 <td>
 <p class="paragraph">
-The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved. <em>m<sub>i</sub></em> is the mass of the i-th rigid body (kg). <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>). <em>t</em> is the point in time (s). <em>t<sub>0</sub></em> is the denotes the initial time (s). <em>&phi;</em> is the orientation (rad). <em>&omega;</em> is the angular velocity (rad/s). <em>&alpha;</em> is the angular acceleration (rad/s<sup>2</sup>). <em>&tau;<sub>i</sub></em> is the is the torque applied to the i-th body (N&sdot;m). <em><b>I</b><sub>k</sub></em> is the moment of inertia of the k-th rigid body (kg&sdot;m<sup>2</sup>).
+The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved. <em>m<sub>i</sub></em> is the mass of the i-th rigid body (kg). <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>). <em>t</em> is the point in time (s). <em>t<sub>0</sub></em> is the denotes the initial time (s). <em>ϕ</em> is the orientation (rad). <em>ω</em> is the angular velocity (rad/s). <em>α</em> is the angular acceleration (rad/s<sup>2</sup>). <em>τ<sub>i</sub></em> is the is the torque applied to the i-th body (N&sdot;m). <em><b>I</b><sub>k</sub></em> is the moment of inertia of the k-th rigid body (kg&sdot;m<sup>2</sup>).
 </p>
 </td>
 </tr>
 </table>
-</a>
-<a id="T:im3">
+</div>
+<div id="T:im3">
 <table class="tdefn">
 <tr>
 <th>
@@ -1535,7 +1535,7 @@ Collisions on 2D Rigid Bodies
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em><b>v</b><sub>A</sub>(t<sub>c</sub>) = <b>v</b><sub>A</sub>(t)&plus;<div class="fraction">
@@ -1548,7 +1548,7 @@ m<sub>A</sub>
 </div>&#8239;<b>n</b></em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1557,15 +1557,15 @@ Description
 </th>
 <td>
 <p class="paragraph">
-This instance model is based on our assumptions regarding rigid body (A1, A2) collisions (A5). Again, this does not take damping (A6) or constraints (A7) into account. <em>m<sub>i</sub></em> is the mass of the i-th rigid body (kg). <em><b>I</b><sub>k</sub></em> is the moment of inertia of the k-th rigid body (kg&sdot;m<sup>2</sup>). <em>t</em> is the point in time (s). <em>t<sub>0</sub></em> is the denotes the initial time (s). <em>t<sub>c</sub></em> is the denotes the time at collision (s). <em><b>p</b><sub>CM</sub></em> is the the mass-weighted average position of a rigid body's particles (m). <em><b>v</b></em> is the velocity (m/s). <em>&phi;</em> is the orientation (rad). <em>&omega;</em> is the angular velocity (rad/s). <em><b>n</b></em> is the collision normal vector (m). <em>j</em> is the collision impulse (scalar) (N&sdot;s). <em>P</em> is the point of collision (m). <em><b>r</b><sub>kP</sub></em> is the displacement vector between the centre of mass of rigid body k and contact point P (m).
+This instance model is based on our assumptions regarding rigid body (A1, A2) collisions (A5). Again, this does not take damping (A6) or constraints (A7) into account. <em>m<sub>i</sub></em> is the mass of the i-th rigid body (kg). <em><b>I</b><sub>k</sub></em> is the moment of inertia of the k-th rigid body (kg&sdot;m<sup>2</sup>). <em>t</em> is the point in time (s). <em>t<sub>0</sub></em> is the denotes the initial time (s). <em>t<sub>c</sub></em> is the denotes the time at collision (s). <em><b>p</b><sub>CM</sub></em> is the the mass-weighted average position of a rigid body's particles (m). <em><b>v</b></em> is the velocity (m/s). <em>ϕ</em> is the orientation (rad). <em>ω</em> is the angular velocity (rad/s). <em><b>n</b></em> is the collision normal vector (m). <em>j</em> is the collision impulse (scalar) (N&sdot;s). <em>P</em> is the point of collision (m). <em><b>r</b><sub>kP</sub></em> is the displacement vector between the centre of mass of rigid body k and contact point P (m).
 </p>
 </td>
 </tr>
 </table>
-</a>
 </div>
-</a>
-<a id="Sec:DDs">
+</div>
+</div>
+<div id="Sec:DDs">
 <div class="subsubsection">
 <h3>
 Data Definitions
@@ -1573,7 +1573,7 @@ Data Definitions
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models. The dimension of each quantity is also given.
 </p>
-<a id="DD:p.CM">
+<div id="DD:p.CM">
 <table class="ddefn">
 <tr>
 <th>
@@ -1600,7 +1600,7 @@ m
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em><b>p</b><sub>CM</sub> = <div class="fraction">
@@ -1613,7 +1613,7 @@ M
 </div></em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1627,8 +1627,8 @@ Description
 </td>
 </tr>
 </table>
-</a>
-<a id="DD:linearDisplacement">
+</div>
+<div id="DD:linearDisplacement">
 <table class="ddefn">
 <tr>
 <th>
@@ -1655,7 +1655,7 @@ m
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em><b>r</b>(t) = <div class="fraction">
@@ -1668,7 +1668,7 @@ d&#8239;t
 </div></em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1682,8 +1682,8 @@ Description
 </td>
 </tr>
 </table>
-</a>
-<a id="DD:linearVelocity">
+</div>
+<div id="DD:linearVelocity">
 <table class="ddefn">
 <tr>
 <th>
@@ -1710,7 +1710,7 @@ m/s
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em><b>v</b>(t) = <div class="fraction">
@@ -1723,7 +1723,7 @@ d&#8239;t
 </div></em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1737,8 +1737,8 @@ Description
 </td>
 </tr>
 </table>
-</a>
-<a id="DD:linearAcceleration">
+</div>
+<div id="DD:linearAcceleration">
 <table class="ddefn">
 <tr>
 <th>
@@ -1765,7 +1765,7 @@ m/s<sup>2</sup>
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em><b>a</b>(t) = <div class="fraction">
@@ -1778,7 +1778,7 @@ d&#8239;t
 </div></em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1792,8 +1792,8 @@ Description
 </td>
 </tr>
 </table>
-</a>
-<a id="DD:angularDisplacement">
+</div>
+<div id="DD:angularDisplacement">
 <table class="ddefn">
 <tr>
 <th>
@@ -1820,12 +1820,12 @@ rad
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
-<em>&theta; = <div class="fraction">
+<em>θ = <div class="fraction">
 <span class="fup">
-d&#8239;&phi;(t)
+d&#8239;ϕ(t)
 </span>
 <span class="fdn">
 d&#8239;t
@@ -1833,7 +1833,7 @@ d&#8239;t
 </div></em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1842,13 +1842,13 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>&theta;</em> is the angular displacement (rad)<br /><em>t</em> is the time (s)<br /><em>&phi;</em> is the orientation (rad)
+<em>θ</em> is the angular displacement (rad)<br /><em>t</em> is the time (s)<br /><em>ϕ</em> is the orientation (rad)
 </p>
 </td>
 </tr>
 </table>
-</a>
-<a id="DD:angularVelocity">
+</div>
+<div id="DD:angularVelocity">
 <table class="ddefn">
 <tr>
 <th>
@@ -1875,12 +1875,12 @@ rad/s
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
-<em>&omega; = <div class="fraction">
+<em>ω = <div class="fraction">
 <span class="fup">
-d&#8239;&theta;(t)
+d&#8239;θ(t)
 </span>
 <span class="fdn">
 d&#8239;t
@@ -1888,7 +1888,7 @@ d&#8239;t
 </div></em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1897,13 +1897,13 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>&omega;</em> is the angular velocity (rad/s)<br /><em>t</em> is the time (s)<br /><em>&theta;</em> is the angular displacement (rad)
+<em>ω</em> is the angular velocity (rad/s)<br /><em>t</em> is the time (s)<br /><em>θ</em> is the angular displacement (rad)
 </p>
 </td>
 </tr>
 </table>
-</a>
-<a id="DD:angularAcceleration">
+</div>
+<div id="DD:angularAcceleration">
 <table class="ddefn">
 <tr>
 <th>
@@ -1930,12 +1930,12 @@ rad/s<sup>2</sup>
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
-<em>&alpha; = <div class="fraction">
+<em>α = <div class="fraction">
 <span class="fup">
-d&#8239;&omega;(t)
+d&#8239;ω(t)
 </span>
 <span class="fdn">
 d&#8239;t
@@ -1943,7 +1943,7 @@ d&#8239;t
 </div></em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1952,13 +1952,13 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>&alpha;</em> is the angular acceleration (rad/s<sup>2</sup>)<br /><em>t</em> is the time (s)<br /><em>&omega;</em> is the angular velocity (rad/s)
+<em>α</em> is the angular acceleration (rad/s<sup>2</sup>)<br /><em>t</em> is the time (s)<br /><em>ω</em> is the angular velocity (rad/s)
 </p>
 </td>
 </tr>
 </table>
-</a>
-<a id="DD:impulseS">
+</div>
+<div id="DD:impulseS">
 <table class="ddefn">
 <tr>
 <th>
@@ -1985,7 +1985,7 @@ N&sdot;s
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em>j = <div class="fraction">
@@ -2026,7 +2026,7 @@ m<sub>B</sub>
 </div></em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -2040,10 +2040,10 @@ Description
 </td>
 </tr>
 </table>
-</a>
 </div>
-</a>
-<a id="Sec:DataConstraints">
+</div>
+</div>
+<div id="Sec:DataConstraints">
 <div class="subsubsection">
 <h3>
 Data Constraints
@@ -2051,7 +2051,7 @@ Data Constraints
 <p class="paragraph">
 the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. FIXME
 </p>
-<a id="Table:InDataConstraints">
+<div id="Table:InDataConstraints">
 <table class="table">
 <tr>
 <th>
@@ -2139,7 +2139,7 @@ None
 </tr>
 <tr>
 <td>
-<em>&phi;</em>
+<em>ϕ</em>
 </td>
 <td>
 None
@@ -2147,7 +2147,7 @@ None
 <td>
 <em><div class="fraction">
 <span class="fup">
-&pi;
+π
 </span>
 <span class="fdn">
 2
@@ -2174,7 +2174,7 @@ None
 </tr>
 <tr>
 <td>
-<em>&omega;</em>
+<em>ω</em>
 </td>
 <td>
 None
@@ -2202,7 +2202,7 @@ None
 </tr>
 <tr>
 <td>
-<em>&tau;</em>
+<em>τ</em>
 </td>
 <td>
 None
@@ -2232,8 +2232,8 @@ None
 <p class="caption">
 Input Data Constraints
 </p>
-</a>
-<a id="Table:OutDataConstraints">
+</div>
+<div id="Table:OutDataConstraints">
 <table class="table">
 <tr>
 <th>
@@ -2252,26 +2252,26 @@ Var
 </tr>
 <tr>
 <td>
-<em>&phi;</em>
+<em>ϕ</em>
 </td>
 </tr>
 <tr>
 <td>
-<em>&omega;</em>
+<em>ω</em>
 </td>
 </tr>
 </table>
 <p class="caption">
 Output Data Constraints
 </p>
-</a>
 </div>
-</a>
 </div>
-</a>
 </div>
-</a>
-<a id="Sec:Requirements">
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:Requirements">
 <div class="section">
 <h1>
 Requirements
@@ -2279,7 +2279,7 @@ Requirements
 <p class="paragraph">
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 </p>
-<a id="Sec:FRs">
+<div id="Sec:FRs">
 <div class="subsection">
 <h2>
 Functional Requirements
@@ -2311,8 +2311,8 @@ R8: Determine the positions and velocities over a period of time of the 2D rigid
 </p>
 </div>
 </div>
-</a>
-<a id="Sec:NFRs">
+</div>
+<div id="Sec:NFRs">
 <div class="subsection">
 <h2>
 Non-Functional Requirements
@@ -2321,10 +2321,10 @@ Non-Functional Requirements
 Games are resource intensive, so performance is a high priority. Other non-functional requirements that are a priority are: correctness, understandability, portability, reliability, and maintainability.
 </p>
 </div>
-</a>
 </div>
-</a>
-<a id="Sec:LCs">
+</div>
+</div>
+<div id="Sec:LCs">
 <div class="section">
 <h1>
 Likely Changes
@@ -2347,8 +2347,8 @@ LC4: The library may be expanded to include joints and constraints.
 </p>
 </div>
 </div>
-</a>
-<a id="Sec:ExistingSolns">
+</div>
+<div id="Sec:ExistingSolns">
 <div class="section">
 <h1>
 Off-The-Shelf Solutions
@@ -2379,8 +2379,8 @@ Newton Game Dynamics: http://newtondynamics.com/
 </li>
 </ul>
 </div>
-</a>
-<a id="Sec:TraceMatrices">
+</div>
+<div id="Sec:TraceMatrices">
 <div class="section">
 <h1>
 Traceability Matrices and Graphs
@@ -2388,7 +2388,7 @@ Traceability Matrices and Graphs
 <p class="paragraph">
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TraceyReqGoalsOther>Table:TraceyReqGoalsOther</a> shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. <a href=#Table:TraceyAssumpsOther>Table:TraceyAssumpsOther</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. <a href=#Table:TraceyItemsSecs>Table:TraceyItemsSecs</a> shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
 </p>
-<a id="Table:TraceyReqGoalsOther">
+<div id="Table:TraceyReqGoalsOther">
 <table class="table">
 <tr>
 <th>
@@ -2732,8 +2732,8 @@ X
 <p class="caption">
 Traceability Matrix Showing the Connections Between Requirements (<a href=#Sec:Requirements>Requirements</a>), Goal Statements (<a href=#Sec:ProbDesc>Problem Description</a>) and Other Items
 </p>
-</a>
-<a id="Table:TraceyAssumpsOther">
+</div>
+<div id="Table:TraceyAssumpsOther">
 <table class="table">
 <tr>
 <th>
@@ -3467,8 +3467,8 @@ X
 <p class="caption">
 Traceability Matrix Showing the Connections Between Assumptions (<a href=#Sec:ProbDesc>Problem Description</a>) and Other Items
 </p>
-</a>
-<a id="Table:TraceyItemsSecs">
+</div>
+<div id="Table:TraceyItemsSecs">
 <table class="table">
 <tr>
 <th>
@@ -5250,10 +5250,10 @@ X
 <p class="caption">
 Traceability Matrix Showing the Connections Between Items and Other Sections
 </p>
-</a>
 </div>
-</a>
-<a id="Sec:AuxConstants">
+</div>
+</div>
+<div id="Sec:AuxConstants">
 <div class="section">
 <h1>
 Values of Auxiliary Constants
@@ -5262,53 +5262,55 @@ Values of Auxiliary Constants
 There are no auxiliary constants.
 </p>
 </div>
-</a>
-<a id="Sec:References">
+</div>
+<div id="Sec:References">
 <div class="section">
 <h1>
 References
 </h1>
-<a id="dParnas1972">
-<ul>
+<ul class="hide-list-style">
+<li>
+<div id="dParnas1972">
 [1]: Parnas, David L. "On the Criteria To Be Used in Decomposing Systems into Modules." <em>Communications of the ACM</em>, 1972. pp. 1053&ndash;1058. Print.
-</ul>
-</a>
-<a id="dParnasPcClements1984">
-<ul>
-[2]: Parnas, David L., Clements, P. C., and Wiess, . "The Modular Structure of Complex Systems." <em>ICSE '84: Proceedings of the 7th international conference on Software engineering</em>. 1984. pp. 408&ndash;417.
-</ul>
-</a>
-<a id="jfBeucheIntro">
-<ul>
-[3]: Bueche, J. Frederick. <em>Introduction to Physics for Scientists, Fourth Edition</em>. Mcgraw-Hill College, 1986.
-</ul>
-</a>
-<a id="koothoor2013">
-<ul>
-[4]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
-</ul>
-</a>
-<a id="parnas1978">
-<ul>
-[5]: Parnas, David L. "Designing Software for Ease of Extension and Contraction.." <em>ICSE '78: Proceedings of the 3rd international conference on Software engineering</em>. 1978. pp. 264&ndash;277.
-</ul>
-</a>
-<a id="parnas1986">
-<ul>
-[6]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
-</ul>
-</a>
-<a id="sciComp2013">
-<ul>
-[7]: Wilson, Greg, Aruliah, D. A., Titus, C., Chue Hong, Neil P., Davis, Matt, Guy, Richard T., Haddock, Steven H. D., Huff, Kathryn D., Mitchell, Ian M., Plumblet, Mark D., Waugh, Ben, White, Ethan P., and Wilson, Paul. "Best Practices for Scientific Computing, 2013." <em>PLoS Biol</em>, vol. 12, no. 1, 2013. Print.
-</ul>
-</a>
-<a id="smithLai2005">
-<ul>
-[8]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
-</ul>
-</a>
 </div>
-</a>
+</li>
+<li>
+<div id="dParnasPcClements1984">
+[2]: Parnas, David L., Clements, P. C., and Wiess, . "The Modular Structure of Complex Systems." <em>ICSE '84: Proceedings of the 7th international conference on Software engineering</em>. 1984. pp. 408&ndash;417.
+</div>
+</li>
+<li>
+<div id="jfBeucheIntro">
+[3]: Bueche, J. Frederick. <em>Introduction to Physics for Scientists, Fourth Edition</em>. Mcgraw-Hill College, 1986.
+</div>
+</li>
+<li>
+<div id="koothoor2013">
+[4]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
+</div>
+</li>
+<li>
+<div id="parnas1978">
+[5]: Parnas, David L. "Designing Software for Ease of Extension and Contraction.." <em>ICSE '78: Proceedings of the 3rd international conference on Software engineering</em>. 1978. pp. 264&ndash;277.
+</div>
+</li>
+<li>
+<div id="parnas1986">
+[6]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
+</div>
+</li>
+<li>
+<div id="sciComp2013">
+[7]: Wilson, Greg, Aruliah, D. A., Titus, C., Chue Hong, Neil P., Davis, Matt, Guy, Richard T., Haddock, Steven H. D., Huff, Kathryn D., Mitchell, Ian M., Plumblet, Mark D., Waugh, Ben, White, Ethan P., and Wilson, Paul. "Best Practices for Scientific Computing, 2013." <em>PLoS Biol</em>, vol. 12, no. 1, 2013. Print.
+</div>
+</li>
+<li>
+<div id="smithLai2005">
+[8]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+</div>
+</li>
+</ul>
+</div>
+</div>
 </body>
 </html>

@@ -2,7 +2,8 @@
 
 module Language.Drasil.SystemInformation where
 
-import Language.Drasil.Classes (HasUID,Idea,Concept,IsUnit,CommonIdea,Constrained)
+import Language.Drasil.Classes (HasUID, Idea, Concept, IsUnit, CommonIdea,
+  Constrained)
 import Language.Drasil.Chunk.Citation (BibRef)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity

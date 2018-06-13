@@ -1,9 +1,9 @@
 module Drasil.SSP.Defs where --export all of this file
 
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation (assumption, dataDefn,
-  genDefn, goalStmt, inModel, likelyChg, physSyst, requirement,
-  srs, thModel, typUnc, property, safety)
+import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn, 
+  goalStmt, inModel, likelyChg, physSyst, property, requirement, safety, srs,
+  thModel, typUnc)
 import Data.Drasil.Concepts.Math (surface)
 
 import Data.Drasil.Phrase(of_'')
@@ -22,7 +22,9 @@ soil, material, intrslce, slip, slope, slice, morPrice, rgFnElm :: NamedChunk
 intrslce = nc "interslice" (cn' "interslice")
 material = nc "material"   (cn' "material")
 slice    = nc "slice"      (cn' "slice")
-slip     = nc "slip"       (cn  "slip") --FIXME: adjective?
+slip     = nc "slip"       (cn  "slip") --FIXME: verb (escape or get loose from (a means of restraint))/noun 
+                                        --       (an act of sliding unintentionally for a short distance)?
+                                        --       (related to issue #129)
 slope    = nc "slope"      (cn' "slope")
 soil     = nc "soil"       (cn  "soil")
 

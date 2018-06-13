@@ -1,7 +1,7 @@
 module Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq,t1IsSafe,t2IsSafe) where
 
-import Drasil.GlassBR.Unitals (is_safe1, is_safe2, demand, 
-  demandq, lRe, pb_tol, prob_br)
+import Drasil.GlassBR.Unitals (demand, demandq, is_safe1, is_safe2, lRe,
+  pb_tol, prob_br)
 import Drasil.GlassBR.IMods (calOfCap, calOfDe, probOfBr)
 import Drasil.GlassBR.Concepts (lResistance)
 
@@ -22,10 +22,11 @@ t1IsSafe :: TheoryModel
 t1IsSafe = tm (cw t1SafetyReq) 
   (tc' "isSafe" [qw is_safe1, qw prob_br, qw pb_tol] ([] :: [ConceptChunk])
   [] [TCon Invariant $ (sy is_safe1) $= (sy prob_br) $< (sy pb_tol)] [])
+  "isSafe" --shortname
 
 t1SafetyReq :: RelationConcept
 t1SafetyReq = makeRC "t1SafetyReq" (nounPhraseSP "Safety Requirement-1")
-  t1descr $ (sy is_safe1) $= (sy prob_br) $< (sy pb_tol)
+  t1descr ((sy is_safe1) $= (sy prob_br) $< (sy pb_tol))
 
 t1descr :: Sentence
 t1descr = tDescr (is_safe1) s ending
@@ -43,7 +44,7 @@ t2IsSafe = tm(cw t2SafetyReq)
 
 t2SafetyReq :: RelationConcept
 t2SafetyReq = makeRC "t2SafetyReq" (nounPhraseSP "Safety Requirement-2")
-  t2descr $ (sy is_safe2) $= (sy lRe) $> (sy demand)
+  t2descr ( (sy is_safe2) $= (sy lRe) $> (sy demand))
 
 t2descr :: Sentence
 t2descr = tDescr (is_safe2) s ending

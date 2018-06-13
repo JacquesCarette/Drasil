@@ -8,12 +8,10 @@ module Drasil.DocumentLanguage.RefHelpers
 
 import Language.Drasil
 
-import Data.Drasil.Concepts.Documentation (assumption)
-
 import Control.Lens ((^.), Simple, Lens)
 import Data.List (sortBy)
 import Data.Function (on)
-import qualified Data.Map as Map
+import qualified Data.Map as Map (elems, lookup)
 
 modelsFromDB :: RefMap a -> [a]
 modelsFromDB db = dropNums $ sortBy (compare `on` snd) elemPairs
@@ -35,19 +33,26 @@ mdb tms gds dds ims = MDB
 
 -- | Automatically reference TMs by number.
 refTM :: RefMap TheoryModel -> TheoryModel -> Sentence
-refTM db c = customRef c (S $ "T" ++ (show $ snd $ modelLookup c db))
+refTM db c = customRef c (shortname' $ "T" ++ (show $ snd $ modelLookup c db))
 
 -- | Automatically reference GDs by number.
 refGD :: RefMap GenDefn -> GenDefn -> Sentence
-refGD db c = customRef c (S $ "GD" ++ (show $ snd $ modelLookup c db))
+refGD db c = customRef c (shortname' $ "GD" ++ (show $ snd $ modelLookup c db))
 
 -- | Automatically reference DDs by number.
 refDD :: RefMap QDefinition -> QDefinition -> Sentence
-refDD db c = customRef c (S $ "DD" ++ (show $ snd $ modelLookup c db))
+refDD db c = customRef c (shortname' $ "DD" ++ (show $ snd $ modelLookup c db))
 
 -- | Automatically reference IMs by number.
 refIM :: RefMap InstanceModel -> InstanceModel -> Sentence
-refIM db c = customRef c (S $ "IM" ++ (show $ snd $ modelLookup c db))
+refIM db c = customRef c (shortname' $ "IM" ++ (show $ snd $ modelLookup c db))
+
+-- | Reference Assumptions by Name or by Number where applicable
+refACustom :: ReferenceDB -> RefBy -> AssumpChunk -> Sentence
+refACustom rfdb ByNum  a = customRef a (shortname' $ "A" ++
+  numLookup rfdb assumpRefTable assumpLookup a)
+refACustom rfdb ByName a =
+  makeRef (chunkLookup rfdb assumpRefTable assumpLookup a)
 
 modelLookup :: HasUID a => a -> RefMap a -> (a, Int)
 modelLookup c db = getS $ Map.lookup (c ^. uid) db
@@ -63,9 +68,9 @@ modelLookup c db = getS $ Map.lookup (c ^. uid) db
 -- a reference database, the assumpRefTable lens, the assumpLookup function, and
 -- the assumption chunk being looked up.
 numLookup :: HasUID c => ReferenceDB -> Simple Lens ReferenceDB t ->
-  (c -> t -> (ct, Int)) -> c -> Sentence
+  (c -> t -> (ct, Int)) -> c -> String
 numLookup db tableLens lookupFun chunk =
-  S $ show $ snd $ lookupFun chunk (db ^. tableLens)
+  show $ snd $ lookupFun chunk (db ^. tableLens)
 
 -- | Verifies that a chunk exists within our referencing database before we
 -- attempt to make a reference to it.
@@ -79,12 +84,6 @@ refA, refAByNum :: ReferenceDB -> AssumpChunk -> Sentence
 refA rfdb = refACustom rfdb ByName
 refAByNum rfdb = refACustom rfdb ByNum
 
--- | Reference Assumptions by Name or by Number where applicable
-refACustom :: ReferenceDB -> RefBy -> AssumpChunk -> Sentence
-refACustom rfdb ByNum  a = customRef a (short assumption :+:
-  numLookup rfdb assumpRefTable assumpLookup a)
-refACustom rfdb ByName a =
-  makeRef (chunkLookup rfdb assumpRefTable assumpLookup a)
 
 -- | Smart constructors for requirement referencing by name or by number.
 refR, refRByNum :: ReferenceDB -> ReqChunk -> Sentence
@@ -93,7 +92,7 @@ refRByNum rfdb = refRCustom rfdb ByNum
 
 -- | Reference Requirements by Name or by Number where applicable
 refRCustom :: ReferenceDB -> RefBy -> ReqChunk -> Sentence
-refRCustom rfdb ByNum  r = customRef r (S (show (reqType r)) :+:
+refRCustom rfdb ByNum  r = customRef r (shortname' $ show (reqType r) ++
   numLookup rfdb reqRefTable reqLookup r)
 refRCustom rfdb ByName r = makeRef (chunkLookup rfdb reqRefTable reqLookup r)
 
@@ -104,7 +103,7 @@ refChngByNum rfdb = refChngCustom rfdb ByNum
 
 -- | Reference Changes by Name or by Number where applicable
 refChngCustom :: ReferenceDB -> RefBy -> Change -> Sentence
-refChngCustom chdb ByNum  c = customRef c (S (show (chngType c)) :+:
+refChngCustom chdb ByNum  c = customRef c (shortname' $ show (chngType c) ++
   numLookup chdb changeRefTable changeLookup c)
 refChngCustom chdb ByName c =
   makeRef (chunkLookup chdb changeRefTable changeLookup c)
@@ -117,6 +116,6 @@ citeByNum rfdb = citeCustom rfdb ByNum
 -- | Reference Changes by Name or by Number where applicable
 citeCustom :: ReferenceDB -> RefBy -> Citation -> Sentence
 citeCustom rfdb ByNum  c = customRef c
-  (S "[" :+: numLookup rfdb citationRefTable citeLookup c :+: S "]")
+  (shortname' $ "[" ++ numLookup rfdb citationRefTable citeLookup c ++ "]")
 citeCustom rfdb ByName c =
   makeRef (chunkLookup rfdb citationRefTable citeLookup c)

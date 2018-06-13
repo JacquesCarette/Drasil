@@ -1,14 +1,15 @@
+{-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.ReqChunk 
   ( ReqChunk(..), ReqType(..)
-  , frc, nfrc, rc'
+  , frc, nfrc
   ) where
 
-import Language.Drasil.Classes (HasUID(uid), HasAttributes(attributes))
-import Language.Drasil.Chunk.Attribute (shortname)
-import Language.Drasil.Chunk.Attribute.Core (Attributes)
-import Language.Drasil.Spec (Sentence, RefName)
+import Language.Drasil.UID (UID)
+import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Chunk.ShortName
+import Language.Drasil.Spec (Sentence)
 
-import Control.Lens (set, (^.))
+import Control.Lens ((^.), view, makeLenses)
 
 -- We will likely need to differentiate functional/non-functional reqs
 -- (or whatever we want to call them) for the future when we parse our 
@@ -29,27 +30,24 @@ instance Show ReqType where
 
 -- | Requirement chunk type. Has an id, the type of requirement
 -- (Functional/Non-Functional) from 'ReqType', a sentence describing what is
--- required (TODO: Change this), and a list of attributes.
+-- required (TODO: Change this), and a short name.
 data ReqChunk = RC 
-  { _id        :: String
+  { _id        :: UID
   , reqType    :: ReqType 
   , requires   :: Sentence
-  , _refName   :: RefName -- HACK for refs?
-  , _atts      :: Attributes
+  , _refName   :: ShortName
   }
+makeLenses ''ReqChunk
   
-instance HasUID ReqChunk where uid f (RC a b c d e) = fmap (\x -> RC x b c d e) (f a)
-instance HasAttributes ReqChunk where attributes f (RC a b c d e) = fmap (\x -> RC a b c d x) (f e)
-instance Eq ReqChunk where a == b = a ^. uid == b ^. uid
+instance HasUID        ReqChunk where uid f (RC a b c d) = fmap (\x -> RC x b c d) (f a)
+instance Eq            ReqChunk where a == b = a ^. uid == b ^. uid
+instance HasShortName  ReqChunk where shortname = view refName
 
 -- | Smart constructor for requirement chunks (should not be exported)
-rc :: String -> ReqType -> Sentence -> RefName -> Attributes -> ReqChunk
+rc :: String -> ReqType -> Sentence -> ShortName -> ReqChunk
 rc = RC
 
-rc' :: ReqChunk -> Sentence -> ReqChunk
-rc' r s = set attributes (shortname s : (r ^. attributes)) r
-
-frc, nfrc :: String -> Sentence -> RefName -> Attributes -> ReqChunk
+frc, nfrc :: String -> Sentence -> ShortName -> ReqChunk
 -- | Smart constructor for functional requirement chunks.
 frc i = rc i FR
 

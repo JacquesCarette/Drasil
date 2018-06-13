@@ -2,16 +2,15 @@ module Drasil.SSP.Requirements (sspRequirements, sspInputDataTable) where
 
 import Language.Drasil
 
-import Drasil.SSP.Defs (slice, slope, slpSrf,
-  crtSlpSrf, morPrice)
-import Drasil.SSP.Unitals (fs, fs_min, sspInputs, coords)
+import Drasil.SSP.Defs (crtSlpSrf, morPrice, slice, slope, slpSrf)
+import Drasil.SSP.Unitals (coords, fs, fs_min, sspInputs)
 
-import Data.Drasil.Utils (mkInputDatTb)
-import Data.Drasil.SentenceStructures (acroR,
-  ofThe, foldlSent)
-import Data.Drasil.Concepts.Documentation (datum,
-  input_, value, method_, element, requirement)
 import Data.Drasil.Concepts.Computation (inDatum)
+import Data.Drasil.Concepts.Documentation (datum, element, input_, method_, 
+  requirement, value)
+
+import Data.Drasil.SentenceStructures (acroR, foldlSent, ofThe)
+import Data.Drasil.Utils (mkInputDatTb)
 
 sspRequirements :: [Sentence]
 sspRequirements = [readAndStore, generateCSS, testSlipSrf, prepareSlipS,
@@ -65,5 +64,5 @@ displayGraph = foldlSent [S "Display the", phrase crtSlpSrf, S "and the",
 
 ------------------
 sspInputDataTable :: Contents
-sspInputDataTable = mkInputDatTb ([cqs coords] ++ map cqs sspInputs)
+sspInputDataTable = mkInputDatTb ([dqdWr coords] ++ map dqdWr sspInputs)
   --FIXME: this has to be seperate since coords is a different type

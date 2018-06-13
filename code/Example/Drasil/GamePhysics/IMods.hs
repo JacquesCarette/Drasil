@@ -1,13 +1,15 @@
 module Drasil.GamePhysics.IMods (iModels, im1_new, im2_new, im3_new) where
 
+import Drasil.GamePhysics.Unitals(acc_i, force_i, im1legTerms, im2legTerms, 
+  im3legTerms, mass_A, mass_i, normalVect, time_c, torque_i, vel_A, vel_i)
+
 import Language.Drasil
-import Data.Drasil.Utils (foldle1, fmtU, getES)
-import Data.Drasil.SentenceStructures (foldlSent)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
   angularAccel, force, gravitationalAccel, momentOfInertia, angularVelocity, 
   time, impulseS)
-import Drasil.GamePhysics.Unitals
+import Data.Drasil.SentenceStructures (foldlSent)
+import Data.Drasil.Utils (fmtU, foldle1, getES)
 
 
 iModels :: [RelationConcept]
@@ -20,7 +22,7 @@ im1_new = im im1 [qw vel_i, qw QP.time, qw QP.gravitationalAccel, qw force_i, qw
   TCon AssumedCon $ sy force_i $> 0, TCon AssumedCon $ sy mass_i $> 0 ] (qw acc_i) [] []
 
 im1 :: RelationConcept
-im1 = makeRC "im1" (im1NP) (im1descr +:+ im1leg) im1Rel 
+im1 = makeRC "im1" (im1NP) (im1descr +:+ im1leg) im1Rel
 
 im1NP :: NP
 im1NP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
@@ -51,7 +53,7 @@ im2_new = im im2 [qw QP.angularVelocity, qw QP.time, qw torque_i, qw QP.momentOf
   (qw QP.angularAccel) [TCon AssumedCon $ sy QP.angularAccel $> 0] [] 
 
 im2 :: RelationConcept
-im2 = makeRC "im2" (im2NP) (im2descr +:+ im2leg) im2Rel 
+im2 = makeRC "im2" (im2NP) (im2descr +:+ im2leg) im2Rel
 
 im2NP :: NP
 im2NP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid body"

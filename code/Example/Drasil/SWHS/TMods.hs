@@ -4,7 +4,7 @@ module Drasil.SWHS.TMods (tModels, t1ConsThermE,
 import Language.Drasil
 import Control.Lens ((^.))
 
-import Data.Drasil.Concepts.Documentation (system, acroNumGen)
+import Data.Drasil.Concepts.Documentation (system)
 import Data.Drasil.SI_Units (joule)
 
 import Data.Drasil.Concepts.Thermodynamics (phase_change, thermal_energy,
@@ -28,7 +28,7 @@ tModels :: [RelationConcept]
 tModels = [t1ConsThermE, t2SensHtE, t3LatHtE]
 
 s4_2_2_swhsTMods :: [Contents]
-s4_2_2_swhsTMods = acroNumGen (s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3) 1
+s4_2_2_swhsTMods = (s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3)
 
 -------------------------
 -- Theoretical Model 1 --
@@ -70,7 +70,7 @@ t1descr = foldlSent [
 --referencing within a simple list is not yet implemented.
 -- FIXME
 a1 :: Contents
-a1 = Assumption $ assump "assump1" EmptyS (S "assump1")
+a1 = Assumption $ assump "assump1" EmptyS "assump1" 
 
 -------------------------
 -- Theoretical Model 2 --
@@ -81,7 +81,7 @@ s4_2_2_T2 = [reldefn t2SensHtE]
 
 t2SensHtE :: RelationConcept
 t2SensHtE = makeRC "t2SensHtE"
-  (nounPhraseSP "Sensible heat energy") t2descr sensHtEEqn
+  (nounPhraseSP "Sensible heat energy") t2descr sensHtEEqn 
 
 sensHtEEqn :: Relation
 sensHtEEqn = (sy sens_heat) $= case_ [((sy htCap_S) * (sy mass) * (sy deltaT),

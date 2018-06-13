@@ -1,21 +1,25 @@
 module Data.Drasil.Quantities.Physics where
 
 import Language.Drasil
-import Data.Drasil.Concepts.Physics as CP
-import Data.Drasil.Units.Physics
-import Data.Drasil.SI_Units
+import Data.Drasil.Concepts.Physics as CP (angAccel, angDisp, angVelo, 
+    acceleration, displacement, distance, energy, force, gravitationalAccel, 
+    gravitationalConst, impulseS, impulseV, linAccel, linDisp, linVelo, 
+    momentOfInertia, position, pressure, restitutionCoef, time, torque, velocity)
+import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second)
+import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
+    impulseU, momtInertU, torqueU, velU)
 
-restitutionCoef :: ConVar
-restitutionCoef = cv CP.restitutionCoef (sub cC cR) Real
+restitutionCoef :: DefinedQuantityDict
+restitutionCoef = dqd CP.restitutionCoef (sub cC cR) Real Nothing
 
 angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
   distance, energy, force, gravitationalAccel, gravitationalConst, impulseS,
   impulseV, linearAccel, linearDisplacement, linearVelocity, momentOfInertia,
   position, pressure, time, torque, velocity :: UnitalChunk
 
-angularAccel        = uc CP.angAccel (Greek Alpha_L) angAccelU
-angularDisplacement = uc CP.angDisp (Greek Theta_L) radian
-angularVelocity     = uc CP.angVelo (Greek Omega_L) angVelU
+angularAccel        = uc CP.angAccel lAlpha angAccelU
+angularDisplacement = uc CP.angDisp lTheta radian
+angularVelocity     = uc CP.angVelo lOmega angVelU
 acceleration        = uc CP.acceleration (vec lA) accelU
 displacement        = uc CP.displacement (vec lR) metre
 distance            = uc CP.distance lR metre
@@ -32,5 +36,5 @@ momentOfInertia     = uc CP.momentOfInertia (vec cI) momtInertU
 position            = uc CP.position (vec lP) metre
 pressure            = uc CP.pressure lP pascal
 time                = uc CP.time lT second
-torque              = uc CP.torque (Greek Tau_L) torqueU
+torque              = uc CP.torque lTau torqueU
 velocity            = uc CP.velocity (vec lV) velU

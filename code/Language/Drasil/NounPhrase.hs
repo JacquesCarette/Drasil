@@ -11,7 +11,7 @@ module Language.Drasil.NounPhrase
   , CapitalizationRule(..), PluralRule(..)
   ) where
 
-import Data.Char (toUpper, toLower)
+import Data.Char (toUpper, toLower, isLetter, isLatin1)
 import Data.List (intersperse)
 
 import Language.Drasil.NounPhrase.Core
@@ -216,9 +216,10 @@ findNotCaps "" = ""
 findNotCaps s = concat $ intersperse " " ((head $ words s) : map isNotCaps (tail $ words s))
 
 isNotCaps :: String -> String
-isNotCaps s
-  | (toLower (head s) : tail s) `elem` doNotCaps = toLower (head s) : tail s
-  | otherwise = s
+isNotCaps (c:cs)
+    | not ((isLetter c) && (isLatin1 c)) = (toLower c) : cs
+    | ((toLower c) : cs) `elem` doNotCaps = (toLower c) : cs
+isNotCaps s = s
 
 doNotCaps :: [String]
 doNotCaps = ["a", "an", "the", "at", "by", "for", "in", "of",

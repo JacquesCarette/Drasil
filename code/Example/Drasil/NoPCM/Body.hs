@@ -1,7 +1,7 @@
 module Drasil.NoPCM.Body where
 
 import Language.Drasil
-import Data.Drasil.SI_Units
+import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 import Control.Lens ((^.))
 
 import Drasil.NoPCM.DataDesc (inputMod)
@@ -11,7 +11,8 @@ import Drasil.NoPCM.GenDefs (roc_temp_simp_deriv)
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
-import Drasil.SWHS.Assumptions (assump1, assump2, assump7, assump8, assump9,
+import Drasil.SWHS.Assumptions (assumpS1, assumpS2, assumpS7, assumpS8, assumpS9,
+  assumpS14, assumpS15, assumpS20, assump1, assump2, assump7, assump8, assump9,
   assump14, assump15, assump20)
 import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro,
   s3, physSyst1, physSyst2, s4_2_4_intro_end, s4_2_5_d1startPara,
@@ -42,16 +43,16 @@ import Data.Drasil.Citations (parnas1986, smithLai2005)
 
 import Data.Drasil.Concepts.Documentation as Doc (datumConstraint, inModel,
   requirement, section_, traceyGraph, item, assumption, dataDefn,
-  likelyChg, genDefn, thModel, traceyMatrix, model, acroNumGen,
+  likelyChg, genDefn, thModel, traceyMatrix, model, 
   output_, quantity, input_, physicalConstraint, condition,
-  property, variable, description, symbol_, uncertainty,
-  information, uncertCol, value, column, softwareConstraint, goalStmt,
+  property, variable, description, symbol_,
+  information, value, column, softwareConstraint, goalStmt,
   physSyst, problem, definition, srs, content, reference, document,
   goal, purpose, typUnc)
 
-import qualified Data.Drasil.Concepts.Math as M
+import qualified Data.Drasil.Concepts.Math as M (ode, de, rOfChng, unit_, equation)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Phrase(for)
+import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
   thermal_energy, ht_trans_theo, heat, melt_pt, boil_pt, heat_trans, ht_flux,
   heat_cap_spec, thermal_conduction)
@@ -98,7 +99,7 @@ acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, M.ode,
 
 -- This contains the list of symbols used throughout the document
 nopcm_Symbols :: [DefinedQuantityDict]
-nopcm_Symbols = (map cqs nopcm_Units) ++ (map cqs nopcm_Constraints)
+nopcm_Symbols = (map dqdWr nopcm_Units) ++ (map dqdWr nopcm_Constraints)
   
 nopcm_SymbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcm_HTC and pcm_SA
@@ -155,8 +156,8 @@ mkSRS = RefSec (RefProg intro
   map Verbatim [s5, s6, s7, s8] ++ (Bibliography : [])
 
 generalDefinitions :: [GenDefn]
-generalDefinitions = [gd nwtnCooling (Just thermal_flux) ([] :: Attributes),
-  gd rocTempSimp (Nothing :: Maybe DerUChunk) [derivationsteps roc_temp_simp_deriv]]
+generalDefinitions = [gd nwtnCooling (Just thermal_flux) ([] :: Derivation) "nwtnCooling",
+  gd rocTempSimp (Nothing :: Maybe DerUChunk) roc_temp_simp_deriv "rocTempSimp"]
 
 nopcm_si :: SystemInformation
 nopcm_si = SI {
@@ -180,7 +181,7 @@ nopcmRefDB :: ReferenceDB
 nopcmRefDB = rdb [] [] [] [] [] s9_refList -- FIXME: Convert the rest to new chunk types
 
 nopcm_code :: CodeSpec
-nopcm_code = codeSpec' nopcm_si [inputMod]
+nopcm_code = codeSpec nopcm_si [inputMod]
 -- Sub interpolation mod into list when possible              ^
 
 nopcm_srs :: Document
@@ -380,8 +381,8 @@ s4_1_3_list temw we = enumSimple 1 (short goalStmt) [
 ------------------------------------------------------
   
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
-  dataConstraintUncertainty, EmptyS) (s4_2_1_list, acroNumGen s4_2_2_T1 1,
-  s4_2_3_paragraph M.rOfChng temp, acroNumGen [s4_2_4_DD1] 1,
+  dataConstraintUncertainty, EmptyS) (npcmAssumptions, s4_2_2_T1,
+  s4_2_3_paragraph M.rOfChng temp, [s4_2_4_DD1],
   [reldefn eBalanceOnWtr] ++ (s4_2_5_d1startPara energy water) ++
   s4_2_5_paragraph ++ [reldefn heatEInWtr], [s4_2_6_table1, s4_2_6_table2])
   []
@@ -396,40 +397,57 @@ s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
     S "would be part of the input if one were performing an",
     phrase uncertainty, S "quantification exercise"]--}
 
-s4_2_1_list :: [Contents]
-s4_2_1_list = acroNumGen [assump1, assump2, assump3, assump4, assump5, assump7,
+npcmAssumptionsS :: [Sentence]
+npcmAssumptionsS = [assumpS1, assumpS2, assumpS3, assumpS4, assumpS5,
+  assumpS7, assumpS8, assumpS9, assumpS9_npcm, assumpS14, assumpS15,
+  assumpS12, assumpS13, assumpS20]
+
+npcmAssumptions :: [Contents]
+npcmAssumptions = [assump1, assump2, assump3, assump4, assump5, assump7,
   assump8, assump9, assump9_npcm, assump14, assump15, assump12, assump13,
-  assump20] 1
+  assump20]
   
+assumpS3, assumpS4, assumpS5, assumpS9_npcm, assumpS12, assumpS13 :: Sentence
 assump3, assump4, assump5, assump9_npcm, assump12, assump13 :: Contents
 
-assump3 = Assumption $ assump "assump3"
+assumpS3 = 
   (foldlSent [S "The", phrase water, S "in the", phrase tank,
   S "is fully mixed, so the", phrase temp_W `isThe`
-  S "same throughout the entire", phrase tank, sSqBr (acroGD 2)]) (S "assump3")
-assump4 = Assumption $ assump "assump4"
+  S "same throughout the entire", phrase tank, sSqBr (acroGD 2)]) 
+assump3 = let a3 = "assump3" in Assumption $ assump a3 assumpS3 a3 
+
+assumpS4 = 
   (foldlSent [S "The", phrase w_density, S "has no spatial variation; that is"
   `sC` S "it is constant over their entire", phrase vol, sSqBr ((acroGD 2)`sC`
-  (acroTest likeChg2 s6_list))]) (S "assump4")
-assump5 = Assumption $ assump "assump5"
+  (makeRef (find' likeChg2 s6_list) ))]) 
+assump4 = let a4 = "assump4" in Assumption $ assump a4 assumpS4 a4 
+
+assumpS5 = 
   (foldlSent [S "The", phrase htCap_W, S "has no spatial variation; that", 
-  S "is, it is constant over its entire", phrase vol, sSqBr (acroGD 2)]) (S "assump5")
-assump9_npcm = Assumption $ assump "assump9_npnc"
+  S "is, it is constant over its entire", phrase vol, sSqBr (acroGD 2)]) 
+assump5 = let a5 = "assump5" in Assumption $ assump a5 assumpS5 a5 
+
+assumpS9_npcm = 
   (foldlSent [S "The", phrase model, S "only accounts for charging",
   S "of the tank" `sC` S "not discharging. The", phrase temp_W, S "can only",
   S "increase, or remain constant; it cannot decrease. This implies that the",
   phrase temp_init, S "is less than (or equal to) the", phrase temp_C,
-  sSqBr ((acroIM 1) `sC` (acroTest likeChg3_npcm s6_list))]) (S "assump9")
-assump12 = Assumption $ assump "assump12"
+  sSqBr ((acroIM 1) `sC` (makeRef (find' likeChg3_npcm s6_list)))])
+assump9_npcm = let a9 = "assump9_npcm" in Assumption $ assump a9 assumpS9_npcm a9 
+
+assumpS12 = 
   (S "No internal" +:+ phrase heat +:+ S "is generated by the" +:+ phrase water
   `semiCol` S "therefore, the" +:+ phrase vol_ht_gen +:+ S "is zero" +:+.
-  sSqBr (acroIM 1)) (S "assump12")
-assump13 = Assumption $ assump "assump13"
+  sSqBr (acroIM 1)) 
+assump12 = let a12 = "assump12" in Assumption $ assump a12 assumpS12 a12 
+
+assumpS13 = 
   (S "The pressure in the" +:+ phrase tank +:+ S "is atmospheric, so the" +:+
   phrase melt_pt `sAnd` phrase boil_pt +:+ S "are" +:+ S (show (0 :: Integer))
   :+: Sy (unit_symb QT.temp) `sAnd` S (show (100 :: Integer)) :+:
   Sy (unit_symb QT.temp) `sC` S "respectively" +:+.
-  sSqBr ((acroIM 1) `sC` (acroIM 2))) (S "assump13")
+  sSqBr ((acroIM 1) `sC` (acroIM 2)))
+assump13 = let a13 = "assump13" in Assumption $ assump a13 assumpS13 a13 
 
 
 s4_2_3_paragraph :: ConceptChunk -> ConceptChunk -> [Contents]
@@ -451,8 +469,8 @@ s4_2_3_desc1 t1C vo =
   [S "Integrating", makeRef $ reldefn t1C,
   S "over a", phrase vo, sParen (getES vo) `sC` S "we have"]
 
-s4_2_3_desc2 :: ConceptChunk -> ConVar -> UnitalChunk -> UnitalChunk ->
-  ConVar -> ConceptChunk -> [Sentence]
+s4_2_3_desc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
+  DefinedQuantityDict -> ConceptChunk -> [Sentence]
 s4_2_3_desc2 g_d su vo tfv unv un =
   [S "Applying", titleize g_d, S "to the first term over",
   (phrase su +:+ getES su `ofThe` phrase vo) `sC` S "with",
@@ -471,7 +489,7 @@ s4_2_3_desc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", getES hfi `sC`
   getES hfo `sC` getES iS `sC` S "and", getES oS, S "are explained in" +:+.
   acroGD 2, S "Assuming", getES den `sC` getES hcs `sAnd` getES te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
-  titleize' assumption, (foldlList $ (map (\d -> sParen (acroTest d s4_2_1_list)))
+  titleize' assumption, (foldlList $ (map (\d -> sParen (makeRef (find' d npcmAssumptions))))
   assumps) `sC` S "we have"]
 
 s4_2_3_desc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]
@@ -533,8 +551,8 @@ s4_2_5_desc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin a11 vhg a12 =
   `sC` S "over area") +:+. getES csa, S "No",
   phrase ht, S "occurs to", (S "outside" `ofThe`
   phrase ta) `sC` S "since it has been assumed to be",
-  phrase purin +:+. sParen (acroTest a11 s4_2_1_list), S "Assuming no",
-  phrase vhg +:+. (sParen (acroTest a12 s4_2_1_list) `sC`
+  phrase purin +:+. sParen (makeRef (find' a11 npcmAssumptions)), S "Assuming no",
+  phrase vhg +:+. (sParen (makeRef (find' a12 npcmAssumptions)) `sC`
   E (sy vhg $= 0)), S "Therefore, the", phrase M.equation, S "for",
   acroGD 2, S "can be written as"]
 
@@ -653,38 +671,38 @@ s5_1_list_items = [
   -- ]
 
 s5_1_list_words_num :: [Contents]
-s5_1_list_words_num = acroNumGen [req1, req2, req3, req4, req5, req6] 1
+s5_1_list_words_num = [req1, req2, req3, req4, req5, req6] 
 
 req1, req2, req3, req4, req5, req6 :: Contents
 
 --Empty list is supposed to take a ModuleChunk. Not sure what to put there.
-req1 = mkRequirement "req1" $
+req1 = mkRequirement "req1" (
   titleize input_ +:+ S "the following" +:+ plural quantity `sC`
   S "which define the" +:+ plural tank_para `sC` S "material" +:+
-  plural property +:+ S "and initial" +: plural condition
-req2 = mkRequirement "req2" $
+  plural property +:+ S "and initial" +: plural condition) "Input-Inital-Values"
+req2 = mkRequirement "req2" (
   S "Use the" +:+ plural input_ +:+ S "in" +:+
-  acroTest req1 s5_1_list_words_num +:+ S "to find the" +:+ phrase mass +:+
+  (makeRef (find' req1 s5_1_list_words_num)) +:+ S "to find the" +:+ phrase mass +:+
   S "needed for" +:+ acroIM 1 +:+ S "to" +:+ acroIM 2 `sC`
   S "as follows, where" +:+ getES w_vol `isThe` phrase w_vol +:+
-  S "and" +: (getES tank_vol `isThe` phrase tank_vol)
-req3 = mkRequirement "req3" $
+  S "and" +: (getES tank_vol `isThe` phrase tank_vol) ) "Use-Above-Find-Mass-IM1-IM2"
+req3 = mkRequirement "req3" (
   S "Verify that the" +:+ plural input_ +:+ S "satisfy the required"
-  +:+ phrase physicalConstraint +:+ S "shown in" +:+. makeRef s4_2_6_table1
-req4 = mkRequirement "req4" $
+  +:+ phrase physicalConstraint +:+ S "shown in" +:+. makeRef s4_2_6_table1 ) "Check-Inputs-Satisfy-Physical-Constraints"
+req4 = mkRequirement "req4" (
   titleize' output_ `sAnd` plural input_ +:+ plural quantity
   +:+ S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
-  plural quantity +:+ S "from" +:+ (acroTest req1 s5_1_list_words_num) `sC`
-  S "the" +:+ phrase mass +:+ S "from" +:+ acroTest req2 s5_1_list_words_num
-  `sAnd` getES tau_W +:+. sParen(S "from" +:+ acroIM 1)
-req5 = mkRequirement "req5" $
+  plural quantity +:+ S "from" +:+ (makeRef (find' req1 s5_1_list_words_num)) `sC`
+  S "the" +:+ phrase mass +:+ S "from" +:+ (makeRef (find' req2 s5_1_list_words_num))
+  `sAnd` getES tau_W +:+. sParen(S "from" +:+ acroIM 1) ) "Output-Input-Derivied-Quantities"
+req5 = mkRequirement "req5" (
   S "Calculate and output the" +:+ phrase temp_W +:+
   sParen (getES temp_W :+: sParen (getES time)) +:+ S "over the" +:+
-  phrase sim_time
-req6 = mkRequirement "req6" $
+  phrase sim_time ) "Calculate-Temperature-Water-Over-Time"
+req6 = mkRequirement "req6" (
   S "Calculate and" +:+ phrase output_ +:+ S "the" +:+ phrase w_E
   +:+ sParen (getES w_E :+: sParen (getES time)) +:+ S "over the" +:+
-  phrase sim_time +:+. sParen (S "from" +:+ acroIM 3)
+  phrase sim_time +:+. sParen (S "from" +:+ acroIM 3) ) "Calculate-Change-Heat_Energy-Water-Time"
 
 -------------------------------------------
 --Section 5.2 : NON-FUNCTIONAL REQUIREMENTS
@@ -704,7 +722,7 @@ req6 = mkRequirement "req6" $
 s6 = SRS.likeChg s6_list []
 
 s6_list :: [Contents]
-s6_list = acroNumGen [likeChg2, likeChg3, likeChg3_npcm, likeChg6] 1
+s6_list = [likeChg2, likeChg3, likeChg3_npcm, likeChg6]
 
 -- likeChg1, likeChg2, likeChg3, likeChg4 :: Contents
 
@@ -720,10 +738,11 @@ s6_list = acroNumGen [likeChg2, likeChg3, likeChg3_npcm, likeChg6] 1
   -- S "within it cools."))
   -- []) EmptyS
 likeChg3_npcm :: Contents
-likeChg3_npcm = mkLklyChnk "likeChg3" $
-  acroTest assump9_npcm s4_2_1_list :+: S "- The" +:+ phrase model +:+
-  S "currently only accounts for charging of the tank. A more complete"
-  +:+ phrase model +:+. S "would also account for discharging of the tank"
+likeChg3_npcm = mkLklyChnk "likeChg3" (
+  (makeRef (find' assump9_npcm npcmAssumptions)) :+: S "- The" +:+ phrase model +:+
+  S "currently only accounts for charging of the tank. That is, increasing the" +:+ phrase temp +:+
+  S "of the water to match the" +:+ phrase temp +:+ S "of the coil. A more complete"  
+  +:+ phrase model +:+. S "would also account for discharging of the tank") "Discharging-Tank"
 -- likeChg4 = LikelyChange (LCChunk (nw $ npnc "likeChg4" $
   -- nounPhraseSent (makeRef assump11 :+: S "- Any real" +:+ phrase tank +:+
   -- S "cannot be perfectly insulated and will lose" +:+. phrase heat))
@@ -776,7 +795,7 @@ s7_instaModelRef = map (refFromType Theory) [eBalanceOnWtr,
   heatEInWtr]
 
 s7_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-s7_funcReqRef = map (\x -> acroTest x s5_1_list_words_num)
+s7_funcReqRef = map (\x -> (makeRef (find' x s5_1_list_words_num)))
   s5_1_list_words_num--makeListRef s7_funcReq s5_1
 
 s7_data = ["Data Constraints"]
@@ -784,7 +803,7 @@ s7_dataRef = [makeRef s4_2_6_table1] --FIXME: Reference section?
 
 s7_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14"]
-s7_assumpRef = map (\x -> acroTest x s4_2_1_list) s4_2_1_list--makeListRef s7_assump (SRS.inModel SRS.missingP [])
+s7_assumpRef = map (\x -> (makeRef (find' x npcmAssumptions))) npcmAssumptions--makeListRef s7_assump (SRS.inModel SRS.missingP [])
 
 s7_theories = ["T1"]
 s7_theoriesRef = map (refFromType Theory) [t1ConsThermE]
@@ -796,7 +815,7 @@ s7_dataDefs = ["DD1"]
 s7_dataDefRef = map (refFromType Data) [dd1HtFluxC]
 
 s7_likelyChg = ["LC1", "LC2", "LC3", "LC4"]
-s7_likelyChgRef = map (\x -> acroTest x s6_list) s6_list--makeListRef s7_likelyChg s6
+s7_likelyChgRef = map (\x -> (makeRef (find' x s6_list))) s6_list--makeListRef s7_likelyChg s6
 
 {-Traceability Matrix 1-}
 

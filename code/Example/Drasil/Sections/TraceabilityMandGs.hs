@@ -3,9 +3,10 @@ module Drasil.Sections.TraceabilityMandGs
     traceGIntro
    ) where
 
-import Data.Drasil.SentenceStructures
+import Data.Drasil.SentenceStructures (ofThe, ofThe', foldlSent, tableShows)
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation (purpose, component, column, label, reference,
+  traceyGraph, traceyMatrix, item, dependency)
 import Data.Drasil.Concepts.Math (matrix, graph)
 import qualified Drasil.SRS as SRS
 

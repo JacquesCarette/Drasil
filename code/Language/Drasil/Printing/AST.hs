@@ -2,7 +2,8 @@ module Language.Drasil.Printing.AST where
 
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.RefTypes (RefType, RefAdd)
-import Language.Drasil.Unicode (Greek, Special)
+import Language.Drasil.Unicode (Special)
+import Language.Drasil.Chunk.ShortName
 
 data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime | Log
   | Sin | Cos | Tan | Sec | Csc | Cot | Not | Dim | Exp | Neg | Cross
@@ -22,7 +23,7 @@ data Expr = Dbl   Double
           | Row   [Expr]
           | Ident String
           | Spec  Special
-          | Gr    Greek
+          
           | Sub   Expr
           | Sup   Expr
           | MO    Ops
@@ -40,7 +41,7 @@ data Spec = E Expr
           | Spec :+: Spec -- concat
           | Sy USymb
           | Sp Special
-          | Ref RefType RefAdd Spec
+          | Ref RefType RefAdd Spec ShortName
           | EmptyS
           | Quote Spec    -- quotes are different in different languages
           | HARDNL        -- newline. Temp fix for multi-line descriptions; 

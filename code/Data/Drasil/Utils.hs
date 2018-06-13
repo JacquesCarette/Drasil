@@ -25,7 +25,7 @@ module Data.Drasil.Utils
   , eqUnR
   ) where
 
-import Data.List
+import Data.List (transpose)
 import Control.Lens ((^.))
 import Language.Drasil {-(Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
   ItemType(Flat), sParen, sSqBr, Contents(Definition, Enumeration), 
@@ -33,7 +33,8 @@ import Language.Drasil {-(Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
   symbol, SymbolForm, symbolMap, UnitDefn, usymb, Chunk, Expr(..),
   phrase, titleize, titleize', mkTable, Contents(Table), fromEqn, fromEqn', 
   UnitalChunk, QDefinition, term, uid, unit, ucw)-}
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation (fterms, input_, output_, symbol_, 
+  useCaseTable)
 import Data.Drasil.Concepts.Math (unit_)
 
 eqUnR :: Expr -> Contents -- FIXME: Unreferable equations
@@ -165,19 +166,19 @@ unwrap Nothing  = EmptyS
 
 -- Used to help make Qdefinitions when uid, term, and symbol come from the same source
 mkDataDef :: (Quantity c) => c -> Expr -> QDefinition
-mkDataDef cncpt equation = datadef $ getUnit cncpt
+mkDataDef cncpt equation = datadef $ getUnit cncpt --should references be passed in at this point?
   where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) a equation
+                           (eqSymb cncpt) a equation [] (cncpt ^. uid) --shortname
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) equation
+                           (eqSymb cncpt) equation [] (cncpt ^. uid) --shortname
 
 -- Same as 'mkDataDef', but with an additional Sentence that can be taken as "extra information"; issue #350
-mkDataDef' :: (Quantity c) => c -> Expr -> Sentence -> QDefinition
-mkDataDef' cncpt equation extraInfo = datadef $ getUnit cncpt
+mkDataDef' :: (Quantity c) => c -> Expr -> Sentence -> References -> QDefinition
+mkDataDef' cncpt equation extraInfo refs = datadef $ getUnit cncpt
   where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) (extraInfo)
-                           (eqSymb cncpt) a equation
+                           (eqSymb cncpt) a equation refs (cncpt ^. uid) --shortname
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) (extraInfo)
-                           (eqSymb cncpt) equation
+                           (eqSymb cncpt) equation refs (cncpt ^. uid) --shortname
 
 prodUCTbl :: [[Sentence]] -> Contents
 prodUCTbl cases = Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]

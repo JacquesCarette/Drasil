@@ -1,15 +1,16 @@
 module Drasil.GamePhysics.TMods (cpTMods, t1NewtonSL_new, t2NewtonTL_new, 
 t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new) where
 
-import Drasil.GamePhysics.Unitals
+import Drasil.GamePhysics.Unitals (dispNorm, dispUnit, force_1, force_2,
+  mass_1, mass_2, r_OB, sqrDist, vel_B, vel_O)
 
 import Language.Drasil
 import Data.Drasil.SentenceStructures (foldlSent)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
-import qualified Data.Drasil.Quantities.Physics as QP (torque, acceleration, 
-  angularAccel, force, gravitationalConst, velocity, momentOfInertia, 
-  displacement, angularVelocity)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
+import qualified Data.Drasil.Quantities.Physics as QP (acceleration, 
+  angularAccel, angularVelocity, displacement, force, gravitationalConst, 
+  momentOfInertia, torque, velocity)
 import Prelude hiding (id)
 import Control.Lens ((^.))
 import Data.Drasil.Utils(getES)

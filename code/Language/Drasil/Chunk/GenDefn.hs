@@ -4,33 +4,37 @@ module Language.Drasil.Chunk.GenDefn
   ) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom,DOM), Concept, IsUnit, HasAttributes(attributes))
-import Language.Drasil.Chunk.Attribute.Core (Attributes)
-import Language.Drasil.Chunk.Concept (ConceptChunk)
-import Language.Drasil.Chunk.ExprRelat (ExprRelat(relat))
+  Definition(defn), ConceptDomain(cdom), Concept, IsUnit,
+  ExprRelat(relat), HasDerivation(derivations), HasReference(getReferences))
+import Language.Drasil.Chunk.References (References)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Unit (unitWrapper, UnitDefn)
+import Language.Drasil.Chunk.Derivation
+import Language.Drasil.Chunk.ShortName
 
-import Control.Lens (makeLenses)
+import Control.Lens (makeLenses, view)
 
 -- | A GenDefn is a RelationConcept that may have units
 data GenDefn = GD { _relC :: RelationConcept
-                  , gdUnit :: Maybe UnitDefn
-                  , _attribs :: Attributes
+                  , gdUnit :: Maybe UnitDefn                  
+                  , _deri :: Derivation
+                  , _ref :: References
+                  , _refName :: ShortName
                   }
 makeLenses ''GenDefn
 
-instance HasUID GenDefn        where uid = relC . uid
-instance NamedIdea GenDefn     where term = relC . term
-instance Idea GenDefn          where getA (GD a _ _) = getA a
-instance Concept GenDefn
-instance Definition GenDefn    where defn = relC . defn
-instance ConceptDomain GenDefn where
-  type DOM GenDefn = ConceptChunk
-  cdom = relC . cdom
-instance ExprRelat GenDefn     where relat = relC . relat
-instance HasAttributes GenDefn where attributes = attribs
+instance HasUID        GenDefn where uid = relC . uid
+instance NamedIdea     GenDefn where term = relC . term
+instance Idea          GenDefn where getA (GD a _ _ _ _) = getA a
+instance Concept       GenDefn where
+instance Definition    GenDefn where defn = relC . defn
+instance ConceptDomain GenDefn where cdom = relC . cdom
+instance ExprRelat     GenDefn where relat = relC . relat
+instance HasDerivation GenDefn where derivations = deri
+instance HasReference  GenDefn where getReferences = ref
+instance HasShortName  GenDefn where shortname = view refName
 
-gd :: (IsUnit u, DOM u ~ ConceptChunk) => RelationConcept -> Maybe u -> Attributes -> GenDefn
-gd r (Just u) ats = GD r (Just (unitWrapper u)) ats
-gd r Nothing ats = GD r Nothing ats
+gd :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
+  Derivation -> String -> GenDefn
+gd r (Just u) derivs sn = GD r (Just (unitWrapper u)) derivs [] (shortname' sn)
+gd r Nothing derivs sn = GD r Nothing derivs [] (shortname' sn)

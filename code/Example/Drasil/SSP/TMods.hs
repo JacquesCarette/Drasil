@@ -3,20 +3,25 @@ module Drasil.SSP.TMods (sspTMods) where
 import Prelude hiding (tan)
 import Language.Drasil
 
-import Drasil.SSP.Unitals (fs, fx, fy, momntOfBdy,
-  genForce, genDisplace, porePressure, normStress,
-  shrStress, surfHydroForce, fricAngle, cohesion)
-import Drasil.SSP.Defs (slope, factor, factorOfSafety, soil)
-import Data.Drasil.SentenceStructures (ofThe, ofThe',
-  foldlSent, acroA, getTandS, sAnd, sOf)
-import Data.Drasil.Utils (getES)
-import Data.Drasil.Quantities.Physics (force, distance, displacement)
-import Data.Drasil.Concepts.Documentation (safety, model, source)
-import Data.Drasil.Concepts.Math (surface)
-import Data.Drasil.Quantities.SolidMechanics (shearRes, mobShear, stffness)
-import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
-import Data.Drasil.Concepts.Physics (linear, stress, friction)
+import Drasil.SSP.Assumptions (newA8, newA9, sspRefDB)
+import Drasil.SSP.Defs (factor, factorOfSafety, slope, soil)
+import Drasil.SSP.Unitals (cohesion, fricAngle, fs, fx, fy, genDisplace,
+  genForce, momntOfBdy, normStress, porePressure, shrStress, surfHydroForce)
+
+import Drasil.DocumentLanguage.RefHelpers (refA)
+
+import Data.Drasil.Quantities.Physics (displacement, distance, force)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
+import Data.Drasil.Quantities.SolidMechanics (mobShear, shearRes, stffness)
+
+import Data.Drasil.Concepts.Documentation (model, safety, source)
+import Data.Drasil.Concepts.Math (surface)
+import Data.Drasil.Concepts.Physics (friction, linear, stress)
+import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
+
+import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe',
+  sAnd, sOf)
+import Data.Drasil.Utils (getES)
 
 --------------------------
 --  Theoretical Models  --
@@ -28,7 +33,7 @@ sspTMods = [fs_rc, equilibrium, mcShrStrgth, effStress, hookesLaw]
 -- 
 
 fs_rc :: RelationConcept
-fs_rc = makeRC "fs_rc" factorOfSafety fs_desc fs_rel
+fs_rc = makeRC "fs_rc" factorOfSafety fs_desc fs_rel 
 
 fs_rel :: Relation
 fs_rel = (sy fs) $= (sy shearRes) / (sy mobShear)
@@ -44,7 +49,7 @@ fs_desc = foldlSent [
 --
   
 equilibrium :: RelationConcept
-equilibrium = makeRC "equilibrium" (nounPhraseSP "equilibrium") eq_desc eq_rel
+equilibrium = makeRC "equilibrium" (nounPhraseSP "equilibrium") eq_desc eq_rel 
 
 -- FIXME: Atomic "i" is a hack.  But we need to sum over something!
 eq_rel :: Relation
@@ -54,7 +59,7 @@ eq_rel = foldr ($=) 0 (map summ [fx, fy, momntOfBdy])
 eq_desc :: Sentence
 eq_desc = foldlSent [S "For a body in static equilibrium, the net",
   plural force +:+. S "and net moments acting on the body will cancel out",
-  S "Assuming a 2D problem", sParen (acroA 8), S "the", getTandS fx `sAnd`
+  S "Assuming a 2D problem", sParen (refA sspRefDB newA8), S "the", getTandS fx `sAnd`
   getTandS fy, S "will be equal to" +:+. E 0, S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation",
   S "will create a net moment equal to" `sC` E 0,
@@ -63,7 +68,7 @@ eq_desc = foldlSent [S "For a body in static equilibrium, the net",
 --
 mcShrStrgth :: RelationConcept
 mcShrStrgth = makeRC "mcShrStrgth" (nounPhraseSP "Mohr-Coulumb shear strength")
-  mcSS_desc mcSS_rel
+  mcSS_desc mcSS_rel 
 
 mcSS_rel :: Relation
 mcSS_rel = (sy shrStress) $= ((sy normStress) * (tan (sy fricAngle)) + (sy cohesion))
@@ -84,14 +89,14 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
   S "relationship is not truly",
   phrase linear `sC` S "but assuming the effective", phrase normForce,
   S "is strong enough it can be approximated with a", phrase linear,
-  S "fit", sParen (acroA 9), S "where the cohesion", getES cohesion,
+  S "fit", sParen (refA sspRefDB newA9), S "where the cohesion", getES cohesion,
   S "represents the", getES shrStress, S "intercept of the fitted line"]
 
 --
 
 effStress :: RelationConcept
 effStress = makeRC "effStress"
-  (nounPhraseSP "effective stress") effS_desc effS_rel
+  (nounPhraseSP "effective stress") effS_desc effS_rel 
 
 effS_rel :: Relation
 effS_rel = (sy normStress) $= (sy normStress) - (sy porePressure)

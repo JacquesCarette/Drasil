@@ -1,11 +1,12 @@
 {-# LANGUAGE GADTs #-}
 module Language.Drasil.CodeSpec where
 
-import Language.Drasil.Classes (term,CommonIdea)
+import Language.Drasil.Classes (term, CommonIdea, ExprRelat(relat))
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity -- for hack
 import Language.Drasil.Chunk.SymbolForm (codeSymb)
+import Language.Drasil.Chunk.ShortName
 import Language.Drasil.NounPhrase
 import Language.Drasil.Symbol
 import Language.Drasil.Spec
@@ -14,12 +15,10 @@ import Language.Drasil.Expr -- for hack
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Space -- for hack
 import Language.Drasil.DataDesc
-import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.ChunkDB
 import Language.Drasil.Expr.Extract (codevars, codevars')
 import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Code.Imperative.Lang
-
 import qualified Data.Map as Map
 import Control.Lens ((^.))
 import Data.List (nub, delete, (\\))
@@ -74,10 +73,14 @@ getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
 getStr _ = error "Term is not a string" 
 
 codeSpec :: SystemInformation -> [Mod] -> CodeSpec
-codeSpec si ms = codeSpec' si ms
-
-codeSpec' :: SystemInformation -> [Mod] -> CodeSpec
-codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs', _inputs = ins, _outputs = outs, _constraints = cs, _constants = constants, _sysinfodb = db}) ms = 
+codeSpec (SI {_sys = sys
+              , _quants = q
+              , _definitions = defs'
+              , _inputs = ins
+              , _outputs = outs
+              , _constraints = cs
+              , _constants = constants
+              , _sysinfodb = db}) ms = 
   let inputs' = map codevar ins
       const' = map qtov constants
       derived = map qtov $ getDerivedInputs defs' inputs' const' db
@@ -148,12 +151,12 @@ defaultChoices = Choices {
 type Name = String
 
 -- medium hacks ---
-relToQD :: (ExprRelat c, HasSymbolTable ctx) => ctx -> c -> QDefinition
-relToQD sm r = convertRel sm $ r ^. relat
+relToQD :: (ExprRelat c, HasShortName c, HasSymbolTable ctx) => ctx -> c -> QDefinition
+relToQD sm r = convertRel sm (r ^. relat) (shortname r)
 
-convertRel :: HasSymbolTable ctx => ctx -> Expr -> QDefinition
-convertRel sm (BinaryOp Eq (C x) r) = ec' (symbLookup x (sm ^. symbolTable)) r
-convertRel _ _ = error "Conversion failed"
+convertRel :: (HasSymbolTable ctx) => ctx -> Expr -> ShortName -> QDefinition
+convertRel sm (BinaryOp Eq (C x) r) sn = ec (symbLookup x (sm ^. symbolTable)) r sn
+convertRel _ _ _ = error "Conversion failed"
 
 data Mod = Mod Name [Func]
 
@@ -167,13 +170,13 @@ data Func = FCD CodeDefinition
           | FData FuncData
 
 funcQD :: QDefinition -> Func
-funcQD qd = FCD $ qtoc qd
+funcQD qd = FCD $ qtoc qd 
 
 funcData :: Name -> DataDesc -> Func
 funcData n dd = FData $ FuncData (toCodeName n) dd 
 
 funcDef :: (Quantity c) => Name -> [c] -> Space -> [FuncStmt] -> Func  
-funcDef s i t fs = FDef $ FuncDef (toCodeName s) (map codevar i) (spaceToCodeType t) fs 
+funcDef s i t fs  = FDef $ FuncDef (toCodeName s) (map (codevar ) i) (spaceToCodeType t) fs 
      
 data FuncData where
   FuncData :: Name -> DataDesc -> FuncData
@@ -199,10 +202,10 @@ data FuncStmt where
 v $:= e = FAsg (codevar v) e
 
 ffor :: (Quantity c) => c -> Expr -> [FuncStmt] -> FuncStmt
-ffor v e fs = FFor (codevar v) e fs
+ffor v e fs  = FFor (codevar  v) e fs
 
 fdec :: (Quantity c) => c -> FuncStmt
-fdec v = FDec (codevar v) (spaceToCodeType $ v ^. typ)
+fdec v  = FDec (codevar  v) (spaceToCodeType $ v ^. typ)
 
 asVC :: Func -> VarChunk
 asVC (FDef (FuncDef n _ _ _)) = implVar n (nounPhraseSP n) (Atomic n) Real
@@ -229,7 +232,7 @@ modExportMap ms ins _ = Map.fromList $ concatMap mpair ms
 type ModDepMap = Map.Map String [String]
 
 modDepMap :: HasSymbolTable ctx => ctx -> ModExportMap -> [Mod] -> ModDepMap
-modDepMap sm mem ms = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDep ms 
+modDepMap sm mem ms  = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDep ms 
                                    ++ [("Control", [ "InputParameters",  
                                                      "DerivedValues",
                                                      "InputConstraints",
@@ -242,22 +245,22 @@ modDepMap sm mem ms = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDe
   where getModDep (Mod name funcs) = 
           delete name $ nub $ concatMap getDep (concatMap fdep funcs)
         getDep n = maybe [] (\x -> [x]) (Map.lookup n mem)        
-        fdep (FCD cd) = codeName cd:map codeName (codevars (codeEquat cd) sm)
-        fdep (FDef (FuncDef _ i _ fs)) = map codeName (i ++ concatMap (fstdep sm) fs)
+        fdep (FCD cd) = codeName cd:map codeName (codevars  (codeEquat cd) sm)
+        fdep (FDef (FuncDef _ i _ fs)) = map codeName (i ++ concatMap (fstdep sm ) fs)
         fdep (FData (FuncData _ d)) = map codeName $ getInputs d   
 
-fstdep :: HasSymbolTable ctx => ctx -> FuncStmt -> [CodeChunk]
+fstdep :: HasSymbolTable ctx => ctx -> FuncStmt ->[CodeChunk]
 fstdep _  (FDec cc _) = [cc]
 fstdep sm (FAsg cc e) = cc:codevars e sm
-fstdep sm (FFor cc e fs) = delete cc $ nub (codevars e sm ++ concatMap (fstdep sm) fs)
-fstdep sm (FWhile e fs) = codevars e sm ++ concatMap (fstdep sm) fs
-fstdep sm (FCond e tfs efs) = codevars e sm ++ concatMap (fstdep sm) tfs ++ concatMap (fstdep sm) efs
-fstdep sm (FRet e) = codevars e sm
-fstdep sm (FTry tfs cfs) = concatMap (fstdep sm) tfs ++ concatMap (fstdep sm) cfs
+fstdep sm (FFor cc e fs) = delete cc $ nub (codevars  e sm ++ concatMap (fstdep sm ) fs)
+fstdep sm (FWhile e fs) = codevars e sm ++ concatMap (fstdep sm ) fs
+fstdep sm (FCond e tfs efs)  = codevars e sm ++ concatMap (fstdep sm ) tfs ++ concatMap (fstdep sm ) efs
+fstdep sm (FRet e)  = codevars  e sm
+fstdep sm (FTry tfs cfs) = concatMap (fstdep sm ) tfs ++ concatMap (fstdep sm ) cfs
 fstdep _  (FThrow _) = [] -- is this right?
 fstdep _  (FContinue) = []
-fstdep sm (FProcCall _ l) = concatMap (\x -> codevars x sm) l
-fstdep sm (FAppend a b) = nub (codevars a sm ++ codevars b sm)
+fstdep sm (FProcCall _ l)  = concatMap (\x -> codevars  x sm) l
+fstdep sm (FAppend a b)  = nub (codevars  a sm ++ codevars  b sm)
 
 fstdecl :: HasSymbolTable ctx => ctx -> [FuncStmt] -> [CodeChunk]
 fstdecl ctx fsts = (nub $ concatMap (fstvars ctx) fsts) \\ (nub $ concatMap (declared ctx) fsts) 
@@ -269,7 +272,7 @@ fstdecl ctx fsts = (nub $ concatMap (fstvars ctx) fsts) \\ (nub $ concatMap (dec
     fstvars sm (FWhile e fs) = codevars' e sm ++ concatMap (fstvars sm) fs
     fstvars sm (FCond e tfs efs) = codevars' e sm ++ concatMap (fstvars sm) tfs ++ concatMap (fstvars sm) efs
     fstvars sm (FRet e) = codevars' e sm
-    fstvars sm (FTry tfs cfs) = concatMap (fstvars sm) tfs ++ concatMap (fstvars sm) cfs
+    fstvars sm (FTry tfs cfs) = concatMap (fstvars sm) tfs ++ concatMap (fstvars sm ) cfs
     fstvars _  (FThrow _) = [] -- is this right?
     fstvars _  (FContinue) = []
     fstvars sm (FProcCall _ l) = concatMap (\x -> codevars x sm) l
@@ -300,18 +303,18 @@ prefixFunctions = map (\(Mod nm fs) -> Mod nm $ map pfunc fs)
         pfunc (FDef (FuncDef n a t f)) = FDef (FuncDef (funcPrefix ++ n) a t f)
 
 getDerivedInputs :: HasSymbolTable ctx => [QDefinition] -> [Input] -> [Const] -> ctx -> [QDefinition]
-getDerivedInputs defs' ins consts sm =
-  let refSet = ins ++ map codevar consts 
-  in  filter ((`subsetOf` refSet) . flip codevars sm . (^.equat)) defs'
+getDerivedInputs defs' ins consts sm  =
+  let refSet = ins ++ map (codevar) consts 
+  in  filter ((`subsetOf` refSet) . flip (codevars) sm . (^.equat)) defs'
   
 type Known = CodeChunk
 type Need  = CodeChunk
 
 getExecOrder :: HasSymbolTable ctx => [Def] -> [Known] -> [Need] -> ctx -> [Def]
-getExecOrder d k' n' sm = getExecOrder' [] d k' (n' \\ k')
+getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
   where getExecOrder' ord _ _ []   = ord
         getExecOrder' ord defs' k n = 
-          let new  = filter ((`subsetOf` k) . flip codevars' sm . codeEquat) defs'
+          let new  = filter ((`subsetOf` k) . flip (codevars') sm . codeEquat) defs'
               cnew = map codevar new
               kNew = k ++ cnew
               nNew = n \\ cnew

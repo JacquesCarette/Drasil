@@ -6,11 +6,11 @@ import Data.Ratio (numerator,denominator)
 import Prelude hiding (sqrt)
 import Language.Drasil.Symbol
 import Language.Drasil.Space (Space(..))
+import Language.Drasil.UID (UID)
 
 --FIXME: Haddock open issue #43 seems to make it so GADT constructors cannot
 -- be documented properly
 
-type UID = String
 type Relation = Expr
 
 infixr 8 $^
@@ -72,7 +72,7 @@ data Expr where
 ($>=) a b = BinaryOp GEq a b
 a $=> b = BinaryOp Impl a b
 a $<=> b = BinaryOp Iff a b
-a $. b   = BinaryOp Dot a b
+a $. b = BinaryOp Dot a b
 a $- b = BinaryOp Subt a b
 a $/ b = BinaryOp Frac a b
 

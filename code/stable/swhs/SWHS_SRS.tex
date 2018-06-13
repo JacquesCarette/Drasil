@@ -7,6 +7,7 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{breqn}
+\usepackage{unicode-math}
 \usepackage{tabu}
 \usepackage{longtable}
 \usepackage{booktabs}
@@ -15,6 +16,7 @@
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
+\setmathfont{Latin Modern Math}
 \global\tabulinesep=1mm
 \newcounter{assumpnum}
 \newcommand{\atheassumpnum}{A\theassumpnum}
@@ -131,7 +133,7 @@ ${q_{P}}$ & Heat flux into the PCM from water & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 ${Q_{P}}$ & Latent heat energy added to PCM & J
 \\
-$S$ & Surface & 
+$S$ & Surface & $\text{m}^{2}$
 \\
 $T$ & Temperature & ${}^{\circ}$C
 \\
@@ -153,7 +155,7 @@ ${T_{init}}$ & Initial temperature & ${}^{\circ}$C
 \\
 ${T_{melt}}$ & Melting point temperature & ${}^{\circ}$C
 \\
-$\Delta{}T$ & Change in temperature & ${}^{\circ}$C
+$ΔT$ & Change in temperature & ${}^{\circ}$C
 \\
 $t$ & Time & s
 \\
@@ -169,23 +171,23 @@ ${V_{tank}}$ & Volume of the cylindrical tank & $\text{m}^{3}$
 \\
 ${V_{W}}$ & Volume of water & $\text{m}^{3}$
 \\
-$\eta{}$ & ODE parameter & 
+$η$ & ODE parameter &
 \\
-$\rho{}$ & Density & $\frac{\text{kg}}{\text{m}^{3}}$
+$ρ$ & Density & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${\rho{}_{P}}$ & Density of PCM & $\frac{\text{kg}}{\text{m}^{3}}$
+${ρ_{P}}$ & Density of PCM & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${\rho{}_{W}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
+${ρ_{W}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-$\tau{}$ & Dummy variable for integration over time & s
+$τ$ & Dummy variable for integration over time & s
 \\
-${{\tau{}_{P}}^{L}}$ & ODE parameter for liquid PCM & s
+${{τ_{P}}^{L}}$ & ODE parameter for liquid PCM & s
 \\
-${{\tau{}_{P}}^{S}}$ & ODE parameter for solid PCM & s
+${{τ_{P}}^{S}}$ & ODE parameter for solid PCM & s
 \\
-${\tau{}_{W}}$ & ODE parameter for water & s
+${τ_{W}}$ & ODE parameter for water & s
 \\
-$\phi{}$ & Melt fraction & 
+$ϕ$ & Melt fraction &
 \\
 \bottomrule
 \label{Table:ToS}
@@ -250,7 +252,7 @@ The organization of this document follows the template for an SRS for scientific
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance models (Section~\ref{Sec:IMs}) to be solved are referred to as IM1 to IM4. The instance models provide the Ordinary Differential Equation (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM. SWHS solves these ODEs.
 \section{General System Description}
 \label{Sec:GenSysDesc}
-This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
+This section provides general information about the system including identifying the interfaces between the system and its environment (system context), describing the user characteristics and listing the system constraints.
 \subsection{System Context}
 \label{Sec:SysContext}
 Figure~\ref{Figure:SysCon} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system and its environment.
@@ -399,9 +401,9 @@ This section focuses on the general equations and laws that SWHS is based on.
 \\ \midrule \\
 Label & Conservation of Thermal Energy
 \\ \midrule \\
-Equation & $-\nabla{}\cdot{}\mathbf{q}+g=\rho{} C \frac{\partial{}\,T}{\partial{}\,t}$
+Equation & $-∇\cdot{}\mathbf{q}+g=ρ C \frac{\partial{}\,T}{\partial{}\,t}$
 \\ \midrule \\
-Description & The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity $C$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and density, $\rho{}$ ($\frac{\text{kg}}{\text{m}^{3}}$), where $\mathbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$), $g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$), $T$ is the temperature (${}^{\circ}$C), $t$ is time (s), and $\nabla{}$ is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (A\ref{A:assump1}).
+Description & The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity $C$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and density, $ρ$ ($\frac{\text{kg}}{\text{m}^{3}}$), where $\mathbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$), $g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$), $T$ is the temperature (${}^{\circ}$C), $t$ is time (s), and $∇$ is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (A\ref{A:assump1}).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -414,12 +416,12 @@ Description & The above equation gives the law of conservation of energy for tra
 Label & Sensible Heat Energy
 \\ \midrule \\
 Equation & $E=\begin{cases}
-{C^{S}} m \Delta{}T, & T<{T_{melt}}\\
-{C^{L}} m \Delta{}T, & {T_{melt}}<T<{T_{boil}}\\
-{C^{V}} m \Delta{}T, & {T_{boil}}<T
+{C^{S}} m ΔT, & T<{T_{melt}}\\
+{C^{L}} m ΔT, & {T_{melt}}<T<{T_{boil}}\\
+{C^{V}} m ΔT, & {T_{boil}}<T
 \end{cases}$
 \\ \midrule \\
-Description & $E$ is the change in sensible heat energy (J). ${C^{S}}$, ${C^{L}}$, ${C^{V}}$ are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$). $m$ is the mass (kg). $T$ is the temperature (${}^{\circ}$C), and $\Delta{}T$ is the change in temperature (${}^{\circ}$C). ${T_{melt}}$ and ${T_{boil}}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}$C). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if $T$=${T_{boil}}$ or $T$=${T_{melt}}$. If this is the case, refer to \hyperref[T:t3LatHtE]{Definition~T:t3LatHtE}, Latent heat energy.
+Description & $E$ is the change in sensible heat energy (J). ${C^{S}}$, ${C^{L}}$, ${C^{V}}$ are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$). $m$ is the mass (kg). $T$ is the temperature (${}^{\circ}$C), and $ΔT$ is the change in temperature (${}^{\circ}$C). ${T_{melt}}$ and ${T_{boil}}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}$C). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if $T$=${T_{boil}}$ or $T$=${T_{melt}}$. If this is the case, refer to \hyperref[T:t3LatHtE]{Definition~T:t3LatHtE}, Latent heat energy.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -431,9 +433,9 @@ Description & $E$ is the change in sensible heat energy (J). ${C^{S}}$, ${C^{L}}
 \\ \midrule \\
 Label & Latent Heat Energy
 \\ \midrule \\
-Equation & $Q\left(t\right)=\int_{0}^{t}{\frac{d\,Q\left(\tau{}\right)}{d\,\tau{}}}\,d\tau{}$
+Equation & $Q\left(t\right)=\int_{0}^{t}{\frac{d\,Q\left(τ\right)}{d\,τ}}\,dτ$
 \\ \midrule \\
-Description & $Q$ is the change in thermal energy (J), latent heat energy. $Q\left(t\right)=\int_{0}^{t}{\frac{d\,Q\left(\tau{}\right)}{d\,\tau{}}}\,d\tau{}$ is the rate of change of $Q$ with respect to time $\tau{}$ (s). $t$ is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, \hyperref[DD:htFusion]{Definition~DD:htFusion}. ${T_{melt}}$ and ${T_{boil}}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}$C). Latent heating stops when all material has changed to the new phase.
+Description & $Q$ is the change in thermal energy (J), latent heat energy. $Q\left(t\right)=\int_{0}^{t}{\frac{d\,Q\left(τ\right)}{d\,τ}}\,dτ$ is the rate of change of $Q$ with respect to time $τ$ (s). $t$ is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, \hyperref[DD:htFusion]{Definition~DD:htFusion}. ${T_{melt}}$ and ${T_{boil}}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}$C). Latent heating stops when all material has changed to the new phase.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{General Definitions}
@@ -448,9 +450,9 @@ This section collects the laws and equations that will be used in deriving the d
 \\ \midrule \\
 Label & Newton's Law of Cooling
 \\ \midrule \\
-Equation & $\mathbf{q}\left(t\right)=h \Delta{}T\left(t\right)$
+Equation & $\mathbf{q}\left(t\right)=h ΔT\left(t\right)$
 \\ \midrule \\
-Description & Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. $\mathbf{q}\left(t\right)$ is the thermal flux ($\frac{\text{W}}{\text{m}^{2}}$). $h$ is the heat transfer coefficient, assumed independant of $T$ (A2) ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$). $\Delta{}T\left(t\right)=T\left(t\right)-{T_{env}}\left(t\right)$ is the time-dependant thermal gradient between the environment and the object (${}^{\circ}$C).
+Description & Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. $\mathbf{q}\left(t\right)$ is the thermal flux ($\frac{\text{W}}{\text{m}^{2}}$). $h$ is the heat transfer coefficient, assumed independant of $T$ (A\ref{A:Heat-Transfer-Coeffs-Constant}) ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$). $ΔT\left(t\right)=T\left(t\right)-{T_{env}}\left(t\right)$ is the time-dependant thermal gradient between the environment and the object (${}^{\circ}$C).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -470,21 +472,21 @@ Description & The basic equation governing the rate of change of temperature, fo
 Detailed derivation of simplified rate of change of temperature:
 Integrating \hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE} over a volume ($V$), we have:
 \begin{dmath}
--\int_{V}{\nabla{}\cdot{}\mathbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
+-\int_{V}{∇\cdot{}\mathbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
 \end{dmath}
 Applying Gauss's Divergence Theorem to the first term over the surface $S$ of the volume, with $\mathbf{q}$ as the thermal flux vector for the surface and $\mathbf{\hat{n}}$ as a unit outward normal vector for a surface:
 \begin{dmath}
--\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
+-\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
 \end{dmath}
 We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
 \begin{dmath}
-{q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
+{q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
 \end{dmath}
-Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in GD2. Assuming $\rho{}$, $C$ and $T$ are constant over the volume, which is true in our case by Assumptions (A\ref{A:assump3}), (A\ref{A:assump4}), (A\ref{A:assump5}), and (A\ref{A:assump6}), we have:
+Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in GD2. Assuming $ρ$, $C$ and $T$ are constant over the volume, which is true in our case by Assumptions (A\ref{A:assump3}), (A\ref{A:assump4}), (A\ref{A:assump5}), and (A\ref{A:assump6}), we have:
 \begin{dmath}
-\rho{} C V \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
+ρ C V \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \end{dmath}
-Using the fact that $\rho{}$=$m$/$V$, (2) can be written as:
+Using the fact that $ρ$=$m$/$V$, (2) can be written as:
 \begin{dmath}
 m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \end{dmath}
@@ -550,9 +552,9 @@ Label & Melt Fraction
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $\phi{}=\frac{{Q_{P}}}{{H_{f}} {m_{P}}}$
+Equation & $ϕ=\frac{{Q_{P}}}{{H_{f}} {m_{P}}}$
 \\ \midrule \\
-Description & $\phi{}$ is the melt fraction\newline${Q_{P}}$ is the latent heat energy added to PCM (J)\newline${H_{f}}$ is the specific latent heat of fusion ($\frac{\text{J}}{\text{kg}}$)\newline${m_{P}}$ is the mass of phase change material (kg)
+Description & $ϕ$ is the melt fraction\newline${Q_{P}}$ is the latent heat energy added to PCM (J)\newline${H_{f}}$ is the specific latent heat of fusion ($\frac{\text{J}}{\text{kg}}$)\newline${m_{P}}$ is the mass of phase change material (kg)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Instance Models}
@@ -568,9 +570,9 @@ The goals GS1 to GS4 are solved by IM1 to IM4. The solutions for IM1 and IM2 are
 \\ \midrule \\
 Label & Energy Balance on Water to Find the Temperature of the Water
 \\ \midrule \\
-Equation & $\frac{d\,{T_{W}}}{d\,t}=\frac{1}{{\tau{}_{W}}} \left({T_{C}}-{T_{W}}\left(t\right)+\eta{} \left({T_{P}}\left(t\right)-{T_{W}}\left(t\right)\right)\right)$
+Equation & $\frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\left(t\right)+η \left({T_{P}}\left(t\right)-{T_{W}}\left(t\right)\right)\right)$
 \\ \midrule \\
-Description & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C). ${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C). ${\tau{}_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ is a constant (s). $\eta{}=\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}}$ is a constant (dimensionless). The above equation applies as long as the water is in liquid form, $0<{T_{W}}<100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (A\ref{A:assump14}, A\ref{A:assump19}).
+Description & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C). ${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C). ${τ_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ is a constant (s). $η=\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}}$ is a constant (dimensionless). The above equation applies as long as the water is in liquid form, $0<{T_{W}}<100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (A\ref{A:assump14}, A\ref{A:assump19}).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Derivation of the energy balance on water:
@@ -594,13 +596,13 @@ Which simplifies to:
 \begin{dmath}
 \frac{d\,{T_{W}}}{d\,t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}} \frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{P}}-{T_{W}}\right)
 \end{dmath}
-Setting ${\tau{}_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ and $\eta{}=\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}}$, Equation (5) can be written as:
+Setting ${τ_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ and $η=\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}}$, Equation (5) can be written as:
 \begin{dmath}
-\frac{d\,{T_{W}}}{d\,t}=\frac{1}{{\tau{}_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{\eta{}}{{\tau{}_{W}}} \left({T_{P}}-{T_{W}}\right)
+\frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{η}{{τ_{W}}} \left({T_{P}}-{T_{W}}\right)
 \end{dmath}
-Finally, factoring out $\frac{1}{{\tau{}_{W}}}$, we are left with the governing ODE for IM1:
+Finally, factoring out $\frac{1}{{τ_{W}}}$, we are left with the governing ODE for IM1:
 \begin{dmath}
-\frac{d\,{T_{W}}}{d\,t}=\frac{1}{{\tau{}_{W}}} \left({T_{C}}-{T_{W}}+\eta{} \left({T_{P}}-{T_{W}}\right)\right)
+\frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}+η \left({T_{P}}-{T_{W}}\right)\right)
 \end{dmath}
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -612,13 +614,13 @@ Finally, factoring out $\frac{1}{{\tau{}_{W}}}$, we are left with the governing 
 Label & Energy Balance on PCM to Find T\_p
 \\ \midrule \\
 Equation & $\frac{d\,{T_{P}}}{d\,t}=\begin{cases}
-\frac{1}{{{\tau{}_{P}}^{S}}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right), & {T_{P}}<{{T_{melt}}^{P}}\\
-\frac{1}{{{\tau{}_{P}}^{L}}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right), & {T_{P}}>{{T_{melt}}^{P}}\\
+\frac{1}{{{τ_{P}}^{S}}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right), & {T_{P}}<{{T_{melt}}^{P}}\\
+\frac{1}{{{τ_{P}}^{L}}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right), & {T_{P}}>{{T_{melt}}^{P}}\\
 0, & {T_{P}}={{T_{melt}}^{P}}\\
-0, & 0<\phi{}<1
+0, & 0<ϕ<1
 \end{cases}$
 \\ \midrule \\
-Description & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C). ${{\tau{}_{P}}^{S}}=\frac{{m_{P}} {{C_{P}}^{S}}}{{h_{P}} {A_{P}}}$ is a constant (s). ${{\tau{}_{P}}^{L}}=\frac{{m_{P}} {{C_{P}}^{L}}}{{h_{P}} {A_{P}}}$ is a constant (s).
+Description & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C). ${{τ_{P}}^{S}}=\frac{{m_{P}} {{C_{P}}^{S}}}{{h_{P}} {A_{P}}}$ is a constant (s). ${{τ_{P}}^{L}}=\frac{{m_{P}} {{C_{P}}^{L}}}{{h_{P}} {A_{P}}}$ is a constant (s).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Detailed derivation of the energy balance on the PCM during sensible heating phase:
@@ -634,11 +636,11 @@ Dividing by ${m_{P}}$${{C_{P}}^{S}}$ we obtain:
 \begin{dmath}
 \frac{d\,{T_{P}}}{d\,t}=\frac{{h_{P}} {A_{P}}}{{m_{P}} {{C_{P}}^{S}}} \left({T_{W}}-{T_{P}}\right)
 \end{dmath}
-Setting ${{\tau{}_{P}}^{S}}$=${m_{P}}$${{C_{P}}^{S}}$/${h_{P}}$${A_{P}}$, this can be written as:
+Setting ${{τ_{P}}^{S}}$=${m_{P}}$${{C_{P}}^{S}}$/${h_{P}}$${A_{P}}$, this can be written as:
 \begin{dmath}
-\frac{d\,{T_{P}}}{d\,t}=\frac{1}{{{\tau{}_{P}}^{S}}} \left({T_{W}}-{T_{P}}\right)
+\frac{d\,{T_{P}}}{d\,t}=\frac{1}{{{τ_{P}}^{S}}} \left({T_{W}}-{T_{P}}\right)
 \end{dmath}
-Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that ${{C_{P}}^{S}}$ is replaced by ${{C_{P}}^{L}}$, and thus ${{\tau{}_{P}}^{S}}$ is replaced by ${{\tau{}_{P}}^{L}}$. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (A\ref{A:assump17}).
+Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that ${{C_{P}}^{S}}$ is replaced by ${{C_{P}}^{L}}$, and thus ${{τ_{P}}^{S}}$ is replaced by ${{τ_{P}}^{L}}$. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (A\ref{A:assump17}).
 In the case where ${T_{P}}$=${{T_{melt}}^{P}}$ and not all of the PCM is melted, the temperature of the phase change material does not change. Therefore, in this case d${T_{P}}$/d$t$=0.
 This derivation does not consider the boiling of the PCM, as the PCM is assumed to either be in a solid state or a liquid state (A\ref{A:assump18}).
 ~\newline
@@ -668,10 +670,10 @@ Equation & ${E_{P}}=\begin{cases}
 {{C_{P}}^{S}} {m_{P}} \left({T_{P}}\left(t\right)-{T_{init}}\right), & {T_{P}}<{{T_{melt}}^{P}}\\
 {{{E_{P}}_{melt}}^{init}}+{H_{f}} {m_{P}}+{{C_{P}}^{L}} {m_{P}} \left({T_{P}}\left(t\right)-{{T_{melt}}^{P}}\right), & {T_{P}}>{{T_{melt}}^{P}}\\
 {{{E_{P}}_{melt}}^{init}}+{Q_{P}}\left(t\right), & {T_{P}}={{T_{melt}}^{P}}\\
-{{{E_{P}}_{melt}}^{init}}+{Q_{P}}\left(t\right), & 0<\phi{}<1
+{{{E_{P}}_{melt}}^{init}}+{Q_{P}}\left(t\right), & 0<ϕ<1
 \end{cases}$
 \\ \midrule \\
-Description & The above equation is derived using T2 and T3. ${E_{P}}$ is the change in thermal energy of the PCM relative to the energy at the initial temperature (${T_{init}}$) J. ${E_{P}}$ for the solid PCM is found using T2 for sensible heat ing, with the specific heat capacity of the solid PCM, ${{C_{P}}^{S}}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and the change in the PCM temperature from the initial temperature (${}^{\circ}$C). ${E_{P}}$ for the melted PCM (${T_{P}}>{{{E_{P}}_{melt}}^{init}}$) is found using T2 for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is ${{{E_{P}}_{melt}}^{init}}$ (J). The energy required to melt all of the PCM is ${H_{f}} {m_{P}}$ (J) (DD3). the specific heat capacity of the liquid PCM is ${{C_{P}}^{L}}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and the change in temperature is ${T_{P}}-{{T_{melt}}^{P}}$ (${}^{\circ}$C). ${E_{P}}$ during melting of the PCM is found using the energy required at the instant melting of the PCM begins, ${{{E_{P}}_{melt}}^{init}}$ plus the latent heat energy added to the PCM, ${Q_{P}}$ (J) since the time when melting began ${{t_{melt}}^{init}}$ (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (A\ref{A:assump18}).
+Description & The above equation is derived using T2 and T3. ${E_{P}}$ is the change in thermal energy of the PCM relative to the energy at the initial temperature (${T_{init}}$) J. ${E_{P}}$ for the solid PCM is found using T2 for sensible heat ing, with the specific heat capacity of the solid PCM, ${{C_{P}}^{S}}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and the change in the PCM temperature from the initial temperature (${}^{\circ}$C). ${E_{P}}$ for the melted PCM (${T_{P}}>{{{E_{P}}_{melt}}^{init}}$) is found using T2 for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is ${{{E_{P}}_{melt}}^{init}}$ (J). The energy required to melt all of the PCM is ${H_{f}} {m_{P}}$ (J) (\hyperref[DD:htFusion]{Definition~DD:htFusion}). the specific heat capacity of the liquid PCM is ${{C_{P}}^{L}}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and the change in temperature is ${T_{P}}-{{T_{melt}}^{P}}$ (${}^{\circ}$C). ${E_{P}}$ during melting of the PCM is found using the energy required at the instant melting of the PCM begins, ${{{E_{P}}_{melt}}^{init}}$ plus the latent heat energy added to the PCM, ${Q_{P}}$ (J) since the time when melting began ${{t_{melt}}^{init}}$ (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (A\ref{A:assump18}).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Constraints}
@@ -690,7 +692,7 @@ ${V_{P}}$ & $0<{V_{P}}<{V_{tank}}$ & None & $0.05$ $\text{m}^{3}$ & 0.1
 \\
 ${A_{P}}$ & ${A_{P}}>0$ & ${V_{P}}\leq{}{A_{P}}\leq{}\frac{2}{{h_{min}}} {V_{tank}}$ & $1.2$ $\text{m}^{2}$ & 0.1
 \\
-${\rho{}_{P}}$ & ${{\rho{}_{P}}^{min}}<{\rho{}_{P}}<{{\rho{}_{P}}^{max}}$ & None & $1007.0$ $\frac{\text{kg}}{\text{m}^{3}}$ & 0.1
+${ρ_{P}}$ & ${{ρ_{P}}^{min}}<{ρ_{P}}<{{ρ_{P}}^{max}}$ & None & $1007.0$ $\frac{\text{kg}}{\text{m}^{3}}$ & 0.1
 \\
 ${{T_{melt}}^{P}}$ & $0<{{T_{melt}}^{P}}<{T_{C}}$ & None & $44.2$ ${}^{\circ}$C & 0.1
 \\
@@ -704,7 +706,7 @@ ${A_{C}}$ & ${A_{C}}>0$ & ${A_{C}}\leq{}{{A_{C}}^{max}}$ & $0.12$ $\text{m}^{2}$
 \\
 ${T_{C}}$ & $0<{T_{C}}<100$ & None & $50.0$ ${}^{\circ}$C & 0.1
 \\
-${\rho{}_{W}}$ & ${\rho{}_{W}}>0$ & ${{\rho{}_{W}}^{min}}<{\rho{}_{W}}\leq{}{{\rho{}_{W}}^{max}}$ & $1000.0$ $\frac{\text{kg}}{\text{m}^{3}}$ & 0.1
+${ρ_{W}}$ & ${ρ_{W}}>0$ & ${{ρ_{W}}^{min}}<{ρ_{W}}\leq{}{{ρ_{W}}^{max}}$ & $1000.0$ $\frac{\text{kg}}{\text{m}^{3}}$ & 0.1
 \\
 ${C_{W}}$ & ${C_{W}}>0$ & ${{C_{W}}^{min}}<{C_{W}}<{{C_{W}}^{max}}$ & $4186.0$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 0.1
 \\
@@ -769,7 +771,7 @@ ${V_{P}}$ & $\text{m}^{3}$ & volume of PCM
 \\
 ${A_{P}}$ & $\text{m}^{2}$ & phase change material surface area
 \\
-${\rho{}_{P}}$ & $\frac{\text{kg}}{\text{m}^{3}}$ & density of PCM
+${ρ_{P}}$ & $\frac{\text{kg}}{\text{m}^{3}}$ & density of PCM
 \\
 ${{T_{melt}}^{P}}$ & ${}^{\circ}$C & melting point temperature for PCM
 \\
@@ -783,7 +785,7 @@ ${A_{C}}$ & $\text{m}^{2}$ & heating coil surface area
 \\
 ${T_{C}}$ & ${}^{\circ}$C & temperature of the heating coil
 \\
-${\rho{}_{W}}$ & $\frac{\text{kg}}{\text{m}^{3}}$ & density of water
+${ρ_{W}}$ & $\frac{\text{kg}}{\text{m}^{3}}$ & density of water
 \\
 ${C_{W}}$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & specific heat capacity of water
 \\
@@ -802,16 +804,16 @@ ${t_{final}}$ & s & final time
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:req2}:]Use the inputs in R\ref{FR:req1} to find the mass needed for IM1 to IM4, as follows, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank:
 \end{description}
 \begin{dmath}
-{m_{W}}={V_{W}} {\rho{}_{W}}=\left({V_{tank}}-{V_{P}}\right) {\rho{}_{W}}=\left(\frac{D}{2} L-{V_{P}}\right) {\rho{}_{W}}
+{m_{W}}={V_{W}} {ρ_{W}}=\left({V_{tank}}-{V_{P}}\right) {ρ_{W}}=\left(\frac{D}{2} L-{V_{P}}\right) {ρ_{W}}
 \end{dmath}
 \begin{dmath}
-{m_{P}}={V_{P}} {\rho{}_{P}}
+{m_{P}}={V_{P}} {ρ_{P}}
 \end{dmath}
 \begin{description}
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:req3}:]Verify that the inputs satisfy the required physical constraints.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req4}:]Output the input quantities and derived quantities in the following list: the quantities from R1, the masses from R2, ${\tau{}_{W}}$ (from IM1), $\eta{}$ (from IM1), ${{\tau{}_{P}}^{S}}$ (from IM2) and ${{\tau{}_{P}}^{L}}$ (from IM2).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req4}:]Output the input quantities and derived quantities in the following list: the quantities from R1, the masses from R2, ${τ_{W}}$ (from IM1), $η$ (from IM1), ${{τ_{P}}^{S}}$ (from IM2) and ${{τ_{P}}^{L}}$ (from IM2).
 \end{description}
 \begin{description}
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:req5}:]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time (from IM1).
@@ -1011,13 +1013,13 @@ ${L_{max}}$ & maximum length of tank & $50$ & m
 \\
 ${h_{min}}$ & minimum convective heat transfer coefficient & $0.001$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\
-${{\rho{}_{P}}^{min}}$ & minimum density of PCM & $500$ & $\frac{\text{kg}}{\text{m}^{3}}$
+${{ρ_{P}}^{min}}$ & minimum density of PCM & $500$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${{\rho{}_{P}}^{max}}$ & maximum density of PCM & $20000$ & $\frac{\text{kg}}{\text{m}^{3}}$
+${{ρ_{P}}^{max}}$ & maximum density of PCM & $20000$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${{\rho{}_{W}}^{min}}$ & minimum density of water & $950$ & $\frac{\text{kg}}{\text{m}^{3}}$
+${{ρ_{W}}^{min}}$ & minimum density of water & $950$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${{\rho{}_{W}}^{max}}$ & maximum density of water & $1000$ & $\frac{\text{kg}}{\text{m}^{3}}$
+${{ρ_{W}}^{max}}$ & maximum density of water & $1000$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 ${{{C_{P}}^{S}}_{min}}$ & minimum specific heat capacity of PCM as a solid & $100$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\

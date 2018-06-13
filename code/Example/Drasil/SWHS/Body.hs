@@ -1,18 +1,18 @@
 module Drasil.SWHS.Body where
 
 import Language.Drasil hiding (organization)
-import Data.Drasil.SI_Units
+import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 import Control.Lens ((^.))
 
 import Data.Drasil.People (thulasi, brooks, spencerSmith)
-import Data.Drasil.Phrase(for)
+import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Documentation (section_, traceyGraph, item,
   assumption, traceyMatrix, thModel, genDefn, dataDefn, inModel, likelyChg,
   dataConst, requirement, input_, solution, output_, corSol, constraint,
   value, software, column, model, goalStmt, quantity, property, condition, 
   physics, user, physical, datum, system, variable, sysCont, environment, 
   srs, softwareSys, organization, document, problem, content, information, 
-  reference, definition, purpose, description, acroNumGen, symbol_, physSyst,
+  reference, definition, purpose, description, symbol_, physSyst,
   typUnc)
 
 import Data.Drasil.Concepts.PhysicalProperties (liquid, solid)
@@ -44,8 +44,7 @@ import Drasil.SWHS.TMods (tModels, t1ConsThermE, s4_2_2_swhsTMods)
 import Drasil.SWHS.IMods (s4_2_5_IMods)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, s4_2_4_swhsDataDefs, swhsDataDefs)
 import Drasil.SWHS.GenDefs (swhsGenDefs)
-import Drasil.SWHS.References (s9_swhs_citations)
-import Drasil.SWHS.Assumptions (s4_2_1_list, assump3, assump4, assump5,
+import Drasil.SWHS.Assumptions (swhsRefDB, swhsAssumptions, assump3, assump4, assump5,
   assump6, assump13, assump15, assump16, assump17, assump18)
 import Drasil.SWHS.Requirements (req1, req2, s5_1_2_Eqn1, s5_1_2_Eqn2,
   req3, req4, req5, req6, req7, req8, req9, req10, req11, s5_2)
@@ -115,9 +114,6 @@ swhs_si = SI {
   _refdb = swhsRefDB
 }
 
-swhsRefDB :: ReferenceDB
-swhsRefDB = rdb [] [] [] [] [] s9_swhs_citations
-
 swhsSymMap :: ChunkDB
 swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) ([] :: [ConceptChunk] ) -- FIXME: Fill in Concepts
   this_si
@@ -153,7 +149,7 @@ mkSRS = [RefSec (RefProg intro
   (Bibliography : [])
 
 swhsCode :: CodeSpec
-swhsCode = codeSpec' swhs_si [swhsInputMod]
+swhsCode = codeSpec swhs_si [swhsInputMod]
 
 tsymb_intro :: [TSIntro]
 tsymb_intro = [TSPurpose, SymbConvention
@@ -321,7 +317,7 @@ s4_1_3_list = enumSimple 1 (short goalStmt) $
 s4_2 :: Section
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end
   (s4_2_6_mid, dataConstraintUncertainty, s4_2_6_T1footer quantity surArea
-  vol htTransCoeff_min phsChgMtrl) (s4_2_1_list, 
+  vol htTransCoeff_min phsChgMtrl) (swhsAssumptions, 
   s4_2_2_swhsTMods, s4_2_3_genDefs ++ s4_2_3_deriv,
   s4_2_4_swhsDataDefs, s4_2_5_IModsWithDerivs, s4_2_6_DataConTables) [s4_2_7]
 
@@ -334,7 +330,7 @@ s4_2_1 = assumpF
   (SRS.thModel SRS.missingP [])
   (SRS.genDefn SRS.missingP [])
   (SRS.dataDefn SRS.missingP [])
-  s4_2_5 s6 s4_2_1_list
+  s4_2_5 s6 swhsAssumptions
 
 -- Again, list structure is same between all examples.
 
@@ -413,10 +409,10 @@ s4_2_5_d1sent_list = map foldlSPCol
 s4_2_5_deriv2 :: [Contents]
 s4_2_5_deriv2 =
   (s4_2_5_d2startPara energy phsChgMtrl sens_heat rOfChng temp_PCM vol pcm_vol
-    pcm_mass htCap_S_P ht_flux_P pcm_SA ht_flux_out vol_ht_gen assump16) ++
+    pcm_mass htCap_S_P ht_flux_P pcm_SA ht_flux_out vol_ht_gen assump16 ++
   (weave [s4_2_5_d2eqn_list, s4_2_5_d2sent_list]) ++ (s4_2_5_d2endPara 
   phsChgMtrl htCap_S_P htCap_L_P tau_S_P tau_L_P surface CT.melting vol 
-  temp_PCM temp_melt_P CT.boiling solid liquid)
+  temp_PCM temp_melt_P CT.boiling solid liquid))
 
 s4_2_5_d2sent_list = map foldlSPCol [s4_2_5_d2sent_1 dd2HtFluxP ht_flux_P,
   s4_2_5_d2sent_2, s4_2_5_d2sent_3]
@@ -496,8 +492,8 @@ s5_1 :: Section
 s5_1 = SRS.funcReq s5_1_list []
 
 s5_1_list :: [Contents]
-s5_1_list = (acroNumGen [req1] 1) ++ [s5_1_1_Table] ++ (acroNumGen [req2] 2) ++
-  [s5_1_2_Eqn1, s5_1_2_Eqn2] ++ (acroNumGen s5_1_Reqs 3) 
+s5_1_list = ([req1]) ++ [s5_1_1_Table] ++ ([req2]) ++
+  [s5_1_2_Eqn1, s5_1_2_Eqn2] ++ (s5_1_Reqs) 
 
 s5_1_1_Table :: Contents
 s5_1_1_Table = (Table [titleize symbol_, titleize unit_, titleize description]
@@ -523,7 +519,7 @@ s6 :: Section
 s6 = SRS.likeChg s6_list []
 
 s6_list :: [Contents]
-s6_list = acroNumGen s6_likeChg_list 1
+s6_list = s6_likeChg_list 
 
 s6_likeChg_list :: [Contents]
 s6_likeChg_list = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
@@ -1037,8 +1033,8 @@ s4_2_3_deriv_3 = eqUnR
   (int_all (eqSymb vol) (sy vol_ht_gen)) $=
   (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
 
-s4_2_3_deriv_4 :: ConceptChunk -> ConVar -> UnitalChunk -> UnitalChunk ->
-  ConVar -> ConceptChunk -> Contents
+s4_2_3_deriv_4 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
+  DefinedQuantityDict -> ConceptChunk -> Contents
 s4_2_3_deriv_4 gaussdiv su vo tfv unv un = foldlSPCol [S "Applying", titleize gaussdiv,
   S "to the first term over", (phrase su +:+ getES su `ofThe` phrase vo) `sC`
   S "with", getES tfv, S "as the", phrase tfv, S "for the",
@@ -1263,7 +1259,7 @@ s4_2_5_d2startPara en pcmat sh roc ptem vo pvo pma hcsp hfp psa hfo vhg a16 =
   ]
 
 s4_2_5_d2endPara :: CI -> UncertQ -> UncertQ -> UnitalChunk -> UnitalChunk -> 
-  ConVar -> ConceptChunk -> UnitalChunk -> UncertQ -> UncertQ -> 
+  DefinedQuantityDict -> ConceptChunk -> UnitalChunk -> UncertQ -> UncertQ -> 
   ConceptChunk -> ConceptChunk -> ConceptChunk -> [Contents]
 s4_2_5_d2endPara pcmat hcsp hclp tsp tlp sur mel vo ptem tmp boi so li = map 
   foldlSP [
@@ -1354,7 +1350,7 @@ s4_2_6_T1footer qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
 ----------------------------------------------
 
 s4_2_7_deriv_1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
-  CI -> QDefinition -> QDefinition -> ConVar -> ConceptChunk -> Contents
+  CI -> QDefinition -> QDefinition -> DefinedQuantityDict -> ConceptChunk -> Contents
 s4_2_7_deriv_1 lce ewat en co pcmat d1hfc d2hfp su ht  =
   foldlSPCol [S "A", phrase corSol, S "must exhibit the" +:+.
   phrase lce, S "This means that the", phrase ewat,

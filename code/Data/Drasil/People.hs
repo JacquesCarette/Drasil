@@ -1,6 +1,6 @@
 module Data.Drasil.People where
 
-import Language.Drasil (Person, person, personWM, personWM', person')
+import Language.Drasil (Person, person, person', personWM, personWM')
   
 spencerSmith, henryFrankis, nKoothoor, dParnas, daAruliah, gWilson,
   cTitus, kdHuff, nChueHong, mDavis, rGuy, shdHaddock, imMitchell, mdPlumblet,

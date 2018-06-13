@@ -9,7 +9,9 @@ module Language.Drasil.Chunk.Code (
 
 import Control.Lens ((^.),makeLenses,view)
 
-import Language.Drasil
+import Language.Drasil-- hiding (CodeType(..))
+import qualified Language.Drasil.Code.Code as G
+
 {-
 import Language.Drasil.Chunk.Constrained.Core (Constraint, isPhysC)
 import Language.Drasil.Chunk.Quantity
@@ -24,7 +26,6 @@ import Language.Drasil.Expr
 import Language.Drasil.Unicode
 import Language.Drasil.Symbol-}
 
-import Language.Drasil.Code.Code (CodeType(..))
 import Data.String.Utils (replace)
 import qualified Data.Map as Map
 
@@ -152,21 +153,21 @@ instance CodeIdea  CodeChunk where
   codeName (CodeC c Func) = funcPrefix ++ symbToCodeName (codeSymb c)
 instance Eq        CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 
-spaceToCodeType :: Space -> CodeType
-spaceToCodeType Integer       = Integer
-spaceToCodeType Natural       = Integer
-spaceToCodeType Radians       = Float
-spaceToCodeType Real          = Float
-spaceToCodeType Rational      = Float
-spaceToCodeType Boolean       = Boolean
-spaceToCodeType Char          = Char
-spaceToCodeType String        = String
-spaceToCodeType (Vect s)      = List (spaceToCodeType s)
-spaceToCodeType (DiscreteI _) = List (spaceToCodeType Integer)
-spaceToCodeType (DiscreteD _) = List (spaceToCodeType Rational)
-spaceToCodeType (DiscreteS _) = List (spaceToCodeType String)
+spaceToCodeType :: Space -> G.CodeType
+spaceToCodeType Integer       = G.Integer
+spaceToCodeType Natural       = G.Integer
+spaceToCodeType Radians       = G.Float
+spaceToCodeType Real          = G.Float
+spaceToCodeType Rational      = G.Float
+spaceToCodeType Boolean       = G.Boolean
+spaceToCodeType Char          = G.Char
+spaceToCodeType String        = G.String
+spaceToCodeType (Vect s)      = G.List (spaceToCodeType s)
+spaceToCodeType (DiscreteI _) = G.List (spaceToCodeType Integer)
+spaceToCodeType (DiscreteD _) = G.List (spaceToCodeType Rational)
+spaceToCodeType (DiscreteS _) = G.List (spaceToCodeType String)
 
-codeType :: HasSpace c => c -> CodeType
+codeType :: HasSpace c => c -> G.CodeType
 codeType c = spaceToCodeType $ c ^. typ
 
 codevar :: (Quantity c) => c -> CodeChunk

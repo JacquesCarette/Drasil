@@ -1,7 +1,15 @@
 {- re-export many things to simplify external use -}
 module Language.Drasil (
   -- Output.Formats
-    DocType(SRS,MG,MIS,Website), DocSpec(DocSpec)
+    DocType(SRS,MG,MIS,Website), DocSpec(DocSpec), Filename
+  --TeX.Print 
+  , genTeX
+  -- HTML.Print 
+  , genHTML
+  -- HTML.Helpers
+  , makeCSS
+  -- Make.Print 
+  , genMake
   -- SystemInformation
   , SystemInformation(..), Block(..), citeDB
   -- Expr
@@ -19,6 +27,8 @@ module Language.Drasil (
   , cross, m2x2, vec2D, dgnl2x2
   -- Expr.Extract
   , dep, names'
+  -- Format
+  , Format(TeX, HTML)
   -- all the stuff from Unicode
   , Greek(..), Special(..)
   -- UnitLang
@@ -204,7 +214,7 @@ import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, co
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
 import Language.Drasil.Expr.Extract (dep, names', vars)
-import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website),DocSpec(DocSpec))
+import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website), DocSpec(DocSpec), Filename)
 import Language.Drasil.Document (Document(..), DType(..)
   , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..)
   , section, fig, figWithWidth, section''
@@ -296,3 +306,11 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
 --import Language.Drasil.Code.DataDesc -- moved in SubPackages
 --import Language.Drasil.Code.Imperative.Lang -- moved in SubPackages
 import Language.Drasil.RefTypes(RefAdd)
+
+--Should be in lang-dev package?
+import Language.Drasil.Format(Format(TeX, HTML))
+import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website),DocSpec(DocSpec),Filename)
+import Language.Drasil.TeX.Print (genTeX)
+import Language.Drasil.HTML.Print (genHTML)
+import Language.Drasil.HTML.Helpers (makeCSS)
+import Language.Drasil.Make.Print (genMake)

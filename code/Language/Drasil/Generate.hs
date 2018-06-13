@@ -5,16 +5,9 @@ import Text.PrettyPrint.HughesPJ
 import Prelude hiding (id)
 import System.Directory
 
-import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website),DocSpec(DocSpec),Filename)
-import Language.Drasil.TeX.Print (genTeX)
-import Language.Drasil.HTML.Print (genHTML)
-import Language.Drasil.HTML.Helpers (makeCSS)
-import Language.Drasil.Make.Print (genMake)
-import Language.Drasil.Document
-import Language.Drasil.Format(Format(TeX, HTML))
-import Language.Drasil.Code.Imperative.Import (generator, generateCode)
+import Language.Drasil
 import Language.Drasil.CodeSpec
-import Language.Drasil.ChunkDB (HasSymbolTable(..))
+import Language.Drasil.Code.Imperative.Import (generator, generateCode)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: HasSymbolTable s => DocSpec -> Document -> s -> IO ()

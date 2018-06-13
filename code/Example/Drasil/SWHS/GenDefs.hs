@@ -3,7 +3,7 @@ module Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp) where
 import Prelude hiding (sin, cos, tan)
 
 import Language.Drasil
-import Drasil.DocumentLanguage.RefHelpers
+import Drasil.DocumentLanguage.RefHelpers (refA)
 
 import Data.Drasil.SentenceStructures (foldlSent)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (vol, mass)
@@ -16,8 +16,7 @@ import Data.Drasil.SentenceStructures (isThe, sAnd)
 import Data.Drasil.Utils (getES, unwrap)
 import Data.Drasil.Concepts.Math (equation, rOfChng, rate)
 import Data.Drasil.Concepts.Thermodynamics (law_conv_cooling)
-import Data.Drasil.Concepts.Documentation (assumption)
-import Drasil.SWHS.Assumptions
+import Drasil.SWHS.Assumptions (swhsRefDB, newA2)
 
 ---------------------------
 --  General Definitions  --
@@ -29,7 +28,7 @@ swhsGenDefs = [nwtnCooling, rocTempSimp]
 --
 nwtnCooling :: RelationConcept
 nwtnCooling = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling") 
-  nwtnCooling_desc nwtnCooling_rel []
+  nwtnCooling_desc nwtnCooling_rel
 
 nwtnCooling_rel :: Relation
 nwtnCooling_rel = apply1 thFluxVect QP.time $= sy htTransCoeff *
@@ -54,7 +53,7 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
 --
 rocTempSimp :: RelationConcept
 rocTempSimp = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
-  "of change of temperature") rocTempSimp_desc rocTempSimp_rel []
+  "of change of temperature") rocTempSimp_desc rocTempSimp_rel 
 
 rocTempSimp_rel :: Relation
 rocTempSimp_rel = (sy QPP.mass) * (sy QT.heat_cap_spec) *

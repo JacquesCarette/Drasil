@@ -4,7 +4,7 @@ module Drasil.Sections.TableOfSymbols
 
 import Language.Drasil
 import qualified Data.Drasil.Concepts.Math as CM
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation (symbol_, description, tOfSymb)
  
 --Removed SymbolForm Constraint and filtered non-symbol'd chunks 
 -- | table of symbols creation function

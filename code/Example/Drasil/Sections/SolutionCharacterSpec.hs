@@ -19,14 +19,17 @@ module Drasil.Sections.SolutionCharacterSpec
 
 import Language.Drasil
 import Data.Drasil.Concepts.Math (equation, law)
-import Data.Drasil.Concepts.Computation
+import Data.Drasil.Concepts.Computation (computer)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle)
-import Data.Drasil.SentenceStructures
+import Data.Drasil.SentenceStructures (ofThe, foldlSP, foldlSent, foldlList, sAnd)
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import Data.List (find)
 import Control.Lens ((^.))
-import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
+import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl,
+  listofTablesToRefs)
+
+import Drasil.Sections.GeneralSystDesc(genSysIntro)
 
 import qualified Drasil.SRS as SRS
 
@@ -87,7 +90,7 @@ siUQO xs = UnQuantO xs
 --  HELPER FUNCTION --
 ----------------------
 
-compareID :: (NamedIdea a) => a -> String -> Bool
+compareID :: (NamedIdea a) => a -> UID -> Bool
 compareID c1 c2 = (c1 ^. uid) == c2
 
 -----------------------
@@ -242,7 +245,7 @@ sectionMap progName (SectionModel niname xs)
   | compareID niname  (Doc.problemDescription ^. uid)       = SRS.probDesc
     [problemDescriptionIntro progName (pullSents xs)]
   | compareID niname  (Doc.generalSystemDescription ^. uid) = SRS.genSysDes
-    [genenralSystemIntro]
+    [genSysIntro]
   | compareID niname  (Doc.requirement ^. uid)              = SRS.require
     [requirementsIntro]
   | otherwise                                              = error "no matches on section name"
@@ -269,16 +272,15 @@ render progName symMap item@(SectionModel niname _)
 ------------------------------
 
 genericSect :: SubSec -> Section
-genericSect (SectionModel niname xs) = section (pullTitle xs niname) 
-  (pullContents xs) (pullSections xs) ((niname ^. uid)) -- FIXME: Ref HACK because
-  -- generic sections need a ref name. Should be made explicit elsewhere.
+genericSect (SectionModel niname xs) = section'' (pullTitle xs niname) 
+  (pullContents xs) (pullSections xs) (niname ^. uid)
 
 ------------------------------------------------
 -- GENERAL SYSTEM DESCRIPTION SECTION BUILDER --
 ------------------------------------------------
 
 systemConstraintSect :: SubSec -> Section
-systemConstraintSect (SectionModel niname xs) = SRS.sysCon
+systemConstraintSect (SectionModel _ xs) = SRS.sysCon
   ((systemConstraintIntro (pullSents xs)):(pullContents xs)) (pullSections xs)
 
 -------------------------------------------------
@@ -286,11 +288,11 @@ systemConstraintSect (SectionModel niname xs) = SRS.sysCon
 -------------------------------------------------
 
 termDefinitionSect :: SubSec -> Section
-termDefinitionSect (SectionModel niname xs) = SRS.termAndDefn
+termDefinitionSect (SectionModel _ xs) = SRS.termAndDefn
   ((termDefinitionIntro (pullSents xs)):(pullContents xs)) (pullSections xs)
 
 goalStatementSect :: SubSec -> Section
-goalStatementSect (SectionModel niname xs) = SRS.goalStmt
+goalStatementSect (SectionModel _ xs) = SRS.goalStmt
   ((goalStatementIntro (pullSents xs)):(pullContents xs)) (pullSections xs)
 
 -----------------------------------------------------------
@@ -298,12 +300,12 @@ goalStatementSect (SectionModel niname xs) = SRS.goalStmt
 -----------------------------------------------------------
 
 assumptionSect :: SubSec -> Section
-assumptionSect (SectionModel niname xs) = SRS.assumpt
+assumptionSect (SectionModel _ xs) = SRS.assumpt
   (assumpIntro:(pullContents xs)) (pullSections xs)
 
 
 theoreticalModelSect :: (Idea a, HasSymbolTable s) => SubSec -> s -> a -> Section
-theoreticalModelSect (SectionModel niname xs) _ progName = SRS.thModel
+theoreticalModelSect (SectionModel _ xs) _ progName = SRS.thModel
  ((tModIntro progName):theoreticalModels ++ 
   (pullContents xs)) (pullSections xs)
   where theoreticalModels = map symMap $ pullTMods xs
@@ -311,21 +313,21 @@ theoreticalModelSect (SectionModel niname xs) _ progName = SRS.thModel
 
 
 generalDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
-generalDefinitionSect (SectionModel niname xs) _ = SRS.genDefn
+generalDefinitionSect (SectionModel _ xs) _ = SRS.genDefn
   (generalDefsIntro:contents) (pullSections xs)
   where generalDefsIntro = generalDefinitionIntro contents
         contents         = (pullContents xs)
 
 
 instanceModelSect :: (HasSymbolTable s) => SubSec -> s -> Section
-instanceModelSect (SectionModel niname xs) _ = SRS.inModel
+instanceModelSect (SectionModel _ xs) _ = SRS.inModel
   (iModIntro:instanceModels ++ (pullContents xs)) (pullSections xs)
   where symMap         = Definition . Theory
         instanceModels = map symMap $ pullIMods xs
 
 
 dataDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
-dataDefinitionSect (SectionModel niname xs) _ = SRS.dataDefn
+dataDefinitionSect (SectionModel _ xs) _ = SRS.dataDefn
   (dataIntro:dataDefinitions ++ (pullContents xs)) (pullSections xs)
   where dataIntro       = dataDefinitionIntro $ pullSents xs
         symMap          = Definition . Data
@@ -333,7 +335,7 @@ dataDefinitionSect (SectionModel niname xs) _ = SRS.dataDefn
 
 
 dataConstraintSect :: SubSec -> Section
-dataConstraintSect (SectionModel niname xs) = SRS.datCon
+dataConstraintSect (SectionModel _ xs) = SRS.datCon
   ([dataConIntro, inputTable, outputTable] ++ (pullContents xs)) (pullSections xs)
   where dataConIntro = dataConstraintParagraph (pullContents xs) (pullSents xs)
         inputTable  = inDataConstTbl $ pullUQI xs
@@ -350,12 +352,6 @@ dataConstraintSect (SectionModel niname xs) = SRS.datCon
 -- GENERAL SYSTEM DESCRIPTION --
 --------------------------------
 
-genenralSystemIntro :: Contents
-genenralSystemIntro = foldlSP [S "This", phrase Doc.section_, S "provides general",
-  phrase Doc.information, S "about the", phrase Doc.system `sC` S "identifies",
-  S "the interfaces between the", phrase Doc.system, S "and its", 
-  phrase Doc.environment `sC` S "and describes the", plural Doc.userCharacteristic, 
-  S "and the", plural Doc.systemConstraint]
 
 --------------------------
 -- USER CHARACTERISTICS --
@@ -486,17 +482,7 @@ iModIntro = foldlSP [S "This", phrase Doc.section_,
   plural Doc.symbol_, S "defined in", S "FIXME REF", 
   S "to replace the abstract", plural Doc.symbol_, S "in the", 
   plural Doc.model, S "identified in", S "FIXME REF" :+: S " and" +:+ S "FIXME REF"]
-
-
--- makes a list of references to tables takes
--- l  list of layout objects that can be referenced
--- outputs a sentence containing references to the layout objects 
-listofTablesToRefs :: Referable l => [l] -> Sentence
-listofTablesToRefs  []     = EmptyS
-listofTablesToRefs  [x]    = (makeRef x) +:+ S "shows"
-listofTablesToRefs  [x,y]  = (makeRef x) `sC` S "and" +:+ listofTablesToRefs [y]
-listofTablesToRefs  (x:xs) = (makeRef x) `sC` listofTablesToRefs (xs)
-
+  
 ---------------------
 -- DATA CONSTRAINTS --
 ---------------------

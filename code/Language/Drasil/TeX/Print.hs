@@ -224,14 +224,14 @@ makeColumns ls = hpunctuate (text " & ") $ map spec ls
 
 needs :: Spec -> MathContext
 needs (a :+: b) = needs a `lub` needs b
-needs (S _)     = Text
-needs (E _)     = Math
-needs (Sy _)    = Text
-needs (Sp _)    = Math
-needs HARDNL    = Text
-needs (Ref _ _ _) = Text
-needs (EmptyS)  = Text
-needs (Quote _) = Text
+needs (S _)         = Text
+needs (E _)         = Math
+needs (Sy _)        = Text
+needs (Sp _)        = Math
+needs HARDNL        = Text
+needs (Ref _ _ _ _) = Text
+needs (EmptyS)      = Text
+needs (Quote _)     = Text
 
 -- print all Spec through here
 spec :: Spec -> D
@@ -245,15 +245,15 @@ spec (S s)       = pure $ text (concatMap escapeChars s)
 spec (Sy s)      = p_unit s
 spec (Sp s)      = pure $ text $ unPL $ special s
 spec HARDNL      = pure $ text "\\newline"
-spec (Ref t@RT.Sect r _) = sref (show t) (pure $ text r)
-spec (Ref t@RT.Def r _)  = hyperref (show t) (pure $ text r)
-spec (Ref RT.Mod r _)    = mref  (pure $ text r)
-spec (Ref RT.Req r _)    = rref  (pure $ text r)
-spec (Ref RT.Assump r _) = aref  (pure $ text r)
-spec (Ref RT.LC r _)     = lcref (pure $ text r)
-spec (Ref RT.UC r _)     = ucref (pure $ text r)
-spec (Ref RT.Cite r _)   = cite  (pure $ text r)
-spec (Ref t r _)         = ref (show t) (pure $ text r)
+spec (Ref t@RT.Sect r _ _) = sref (show t) (pure $ text r)
+spec (Ref t@RT.Def r _ _)  = hyperref (show t) (pure $ text r)
+spec (Ref RT.Mod r _ _)    = mref  (pure $ text r)
+spec (Ref RT.Req r _ _)    = rref  (pure $ text r)
+spec (Ref RT.Assump r _ _) = aref  (pure $ text r)
+spec (Ref RT.LC r _ _)     = lcref (pure $ text r)
+spec (Ref RT.UC r _ _)     = ucref (pure $ text r)
+spec (Ref RT.Cite r _ _)   = cite  (pure $ text r)
+spec (Ref t r _ _)         = ref (show t) (pure $ text r)
 spec EmptyS              = empty
 spec (Quote q)           = quote $ spec q
 
@@ -324,7 +324,7 @@ makeDefTable :: HasSymbolTable s => s -> [(String,[LayoutObj])] -> D -> D
 makeDefTable _ [] _ = error "Trying to make empty Data Defn"
 makeDefTable sm ps l = vcat [
   pure $ text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
-  (pure $ text "\\toprule \\textbf{Refname} & \\textbf{") <> l <> (pure $ text "}"),
+  (pure $ text "\\toprule \\textbf{Refname} & \\textbf{") <> l <> (pure $ text "}"), --shortname instead of refname?
   (pure $ text "\\phantomsection "), label l,
   makeDRows sm ps,
   pure $ dbs <+> text ("\\bottomrule \\end{tabular}")

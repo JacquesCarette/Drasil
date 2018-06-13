@@ -12,7 +12,7 @@ import Control.Lens (Simple, Lens, (^.))
 import Control.Arrow (second)
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom, DOM), HasUnitSymbol(usymb), IsUnit,
+  Definition(defn), ConceptDomain(cdom), HasUnitSymbol(usymb), IsUnit,
   UnitEq(uniteq))
 import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cc')
 import Language.Drasil.Symbol
@@ -58,9 +58,7 @@ instance NamedIdea     UnitDefn where term   = vc . term
 instance Idea          UnitDefn where getA c = getA (c ^. vc)
 instance Definition    UnitDefn where defn = vc . defn
 instance Eq            UnitDefn where a == b = (a ^. usymb) == (b ^. usymb)
-instance ConceptDomain UnitDefn where
-  type DOM UnitDefn = ConceptChunk
-  cdom = vc . cdom
+instance ConceptDomain UnitDefn where cdom = vc . cdom
 instance HasUnitSymbol UnitDefn where usymb f (UD a b) = fmap (\x -> UD a x) (f b)
 instance IsUnit        UnitDefn
 
@@ -77,9 +75,7 @@ instance HasUID        DerUChunk where uid  = duc . uid
 instance NamedIdea     DerUChunk where term = duc . term
 instance Idea          DerUChunk where getA c = getA (c ^. duc)
 instance Definition    DerUChunk where defn = duc . defn
-instance ConceptDomain DerUChunk where
-  type DOM DerUChunk = ConceptChunk
-  cdom = duc . cdom
+instance ConceptDomain DerUChunk where cdom = duc . cdom
 instance HasUnitSymbol DerUChunk where usymb  = duc . usymb
 instance IsUnit        DerUChunk where
 

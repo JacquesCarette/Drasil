@@ -1,9 +1,9 @@
 module Data.Drasil.Quantities.PhysicalProperties where
 
 import Language.Drasil
-import Data.Drasil.Concepts.PhysicalProperties as CPP
-import Data.Drasil.Units.PhysicalProperties
-import Data.Drasil.SI_Units
+import Data.Drasil.Concepts.PhysicalProperties as CPP (density, len, mass, vol)
+import Data.Drasil.SI_Units (kilogram, metre, m_3)
+import Data.Drasil.Units.PhysicalProperties (densityU)
 
 density, mass, len, vol :: UnitalChunk
 density = uc CPP.density lRho densityU

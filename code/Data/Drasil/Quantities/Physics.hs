@@ -1,12 +1,16 @@
 module Data.Drasil.Quantities.Physics where
 
 import Language.Drasil
-import Data.Drasil.Concepts.Physics as CP
-import Data.Drasil.Units.Physics
-import Data.Drasil.SI_Units
+import Data.Drasil.Concepts.Physics as CP (angAccel, angDisp, angVelo, 
+    acceleration, displacement, distance, energy, force, gravitationalAccel, 
+    gravitationalConst, impulseS, impulseV, linAccel, linDisp, linVelo, 
+    momentOfInertia, position, pressure, restitutionCoef, time, torque, velocity)
+import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second)
+import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
+    impulseU, momtInertU, torqueU, velU)
 
 restitutionCoef :: DefinedQuantityDict
-restitutionCoef = dqd CP.restitutionCoef (sub cC cR) Real Nothing []
+restitutionCoef = dqd CP.restitutionCoef (sub cC cR) Real Nothing
 
 angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
   distance, energy, force, gravitationalAccel, gravitationalConst, impulseS,

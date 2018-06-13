@@ -1,14 +1,14 @@
 module Language.Drasil.Chunk.Attribute 
   ( getSource, getDerivation, getShortName
-  , shortname, sourceref, derivationsteps
+  , shortname', sourceref, snToSentence
   ) where
 
 import Control.Lens ((^.))
-import Language.Drasil.Spec (Sentence(EmptyS), (+:+))
-import Language.Drasil.Chunk.Attribute.Core (Attributes, Attribute(..))
-import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
-import Language.Drasil.Classes (HasAttributes(attributes), HasReference(getReferences))
-import Language.Drasil.Chunk.Attribute.References
+import Language.Drasil.Spec (Sentence(EmptyS, S), (+:+))
+import Language.Drasil.Chunk.Derivation (Derivation)
+import Language.Drasil.Chunk.References
+import Language.Drasil.Chunk.ShortName
+import Language.Drasil.Classes (HasDerivation(derivations), HasReference(getReferences))
 
 --------------------------------------------------------------------------------
 
@@ -22,30 +22,18 @@ getSource c = sourceRef $ c ^. getReferences
     sourceRef :: References -> Sentence
     sourceRef []                 = EmptyS
     sourceRef ((SourceRef x):xs) = x +:+ (sourceRef xs)
-    sourceRef (_:xs)             = sourceRef xs
 
-getDerivation :: HasAttributes c => c -> Derivation
-getDerivation c = deriv $ c ^. attributes
-  where
-    deriv :: Attributes -> Derivation
-    deriv []          = []
-    deriv ((D der):_) = der
-    deriv (_:xs)      = deriv xs
+getDerivation :: HasDerivation c => c -> Derivation
+getDerivation c =  c ^. derivations
 
-getShortName :: HasAttributes c => c -> Maybe Sentence
-getShortName c = shortName $ c ^. attributes
-  where
-    shortName :: Attributes -> Maybe Sentence
-    shortName [] = Nothing
-    shortName ((ShortName s):_) = Just s
-    shortName (_:xs) = shortName xs
+getShortName :: HasShortName c => c -> Sentence
+getShortName c = snToSentence $ shortname c
 
-shortname :: Sentence -> Attribute
-shortname = ShortName
+
+snToSentence :: ShortName -> Sentence
+snToSentence (ShortNm s) = S s
+
+
 
 sourceref :: Sentence -> Reference
 sourceref = SourceRef
-
-derivationsteps :: Derivation -> Attribute
-derivationsteps = D
-

@@ -1010,7 +1010,7 @@ The goal statements are refined to the theoretical models, and the theoretical m
 General System Description
 </h1>
 <p class="paragraph">
-This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
+This section provides general information about the system including identifying the interfaces between the system and its environment (system context), describing the user characteristics and listing the system constraints.
 </p>
 <div id="Sec:SysContext">
 <div class="subsection">
@@ -1192,106 +1192,146 @@ Assumptions
 <p class="paragraph">
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], or Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], in which the respective assumption is used.
 </p>
+<ul class="hide-list-style">
+<li>
 <div id="A:assump1">
-<ul>
 assump1: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible [<a href=#T:t1ConsThermE>T:t1ConsThermE</a>].
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:assump2">
-<ul>
 assump2: All heat transfer coefficients are constant over time [GD1].
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:assump3">
-<ul>
 assump3: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [GD2, <a href=#DD:ht.flux.P>DD:ht.flux.P</a>].
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:assump4">
-<ul>
 assump4: The temperature of the phase change material is the same throughout the volume of PCM [GD2, <a href=#DD:ht.flux.P>DD:ht.flux.P</a>].
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:assump5">
-<ul>
 assump5: The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume [GD2].
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:assump6">
-<ul>
 assump6: The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume [GD2].
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:assump7">
-<ul>
 assump7: Newton's law of convective cooling applies between the heating coil and the water [<a href=#DD:ht.flux.C>DD:ht.flux.C</a>].
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:assump8">
-<ul>
 assump8: The temperature of the heating coil is constant over time [<a href=#DD:ht.flux.C>DD:ht.flux.C</a>].
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:assump9">
-<ul>
 assump9: The temperature of the heating coil does not vary along its length [<a href=#DD:ht.flux.C>DD:ht.flux.C</a>].
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:assump10">
-<ul>
 assump10: Newton's law of convective cooling applies between the water and the PCM [<a href=#DD:ht.flux.P>DD:ht.flux.P</a>].
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:assump11">
-<ul>
 assump11: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature [<a href=#A:assump12>assump12</a>] is less than (or equal) to the temperature of the heating coil [IM1].
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:assump12">
-<ul>
 assump12: The initial temperature of the water and the PCM is the same [IM1, IM2].
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:assump13">
-<ul>
 assump13: The simulation will start with the PCM in a solid state [IM2, IM4].
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:assump14">
-<ul>
 assump14: The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature [IM1, IM3].
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:assump15">
-<ul>
 assump15: The tank is perfectly insulated so that there is no heat loss from the tank [IM1].
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:assump16">
-<ul>
 assump16: No internal heat is generated by either the water or the PCM; therefore, the volumetric heat generation per unit volume is zero [IM1, IM2].
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:assump17">
-<ul>
 assump17: The volume change of the PCM due to melting is negligible [IM2].
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:assump18">
-<ul>
 assump18: The PCM is either in a liquid state or a solid state but not a gaseous state [IM2, IM4].
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:assump19">
-<ul>
 assump19: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0&deg;C and 100&deg;C, respectively [IM1, IM3].
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:assump20">
-<ul>
 assump20: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible.
-</ul>
 </div>
+</li>
+</ul>
 </div>
 </div>
 <div id="Sec:TMs">
@@ -2405,7 +2445,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-The above equation is derived using T2 and T3. <em>E<sub>P</sub></em> is the change in thermal energy of the PCM relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) J. <em>E<sub>P</sub></em> for the solid PCM is found using T2 for sensible heat ing, with the specific heat capacity of the solid PCM, <em>C<sub>P</sub><sup>S</sup></em> (J/(kg&sdot;&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). <em>E<sub>P</sub></em> for the melted PCM (<em>T<sub>P</sub>&thinsp;&gt;&thinsp;E<sub>P</sub><sub>melt</sub><sup>init</sup></em>) is found using T2 for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> (J). The energy required to melt all of the PCM is <em>H<sub>f</sub>&#8239;m<sub>P</sub></em> (J) (DD3). the specific heat capacity of the liquid PCM is <em>C<sub>P</sub><sup>L</sup></em> (J/(kg&sdot;&deg;C)) and the change in temperature is <em>T<sub>P</sub>&minus;T<sub>melt</sub><sup>P</sup></em> (&deg;C). <em>E<sub>P</sub></em> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> plus the latent heat energy added to the PCM, <em>Q<sub>P</sub></em> (J) since the time when melting began <em>t<sub>melt</sub><sup>init</sup></em> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (<a href=#A:assump18>assump18</a>).
+The above equation is derived using T2 and T3. <em>E<sub>P</sub></em> is the change in thermal energy of the PCM relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) J. <em>E<sub>P</sub></em> for the solid PCM is found using T2 for sensible heat ing, with the specific heat capacity of the solid PCM, <em>C<sub>P</sub><sup>S</sup></em> (J/(kg&sdot;&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). <em>E<sub>P</sub></em> for the melted PCM (<em>T<sub>P</sub>&thinsp;&gt;&thinsp;E<sub>P</sub><sub>melt</sub><sup>init</sup></em>) is found using T2 for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> (J). The energy required to melt all of the PCM is <em>H<sub>f</sub>&#8239;m<sub>P</sub></em> (J) (<a href=#DD:htFusion>DD3</a>). the specific heat capacity of the liquid PCM is <em>C<sub>P</sub><sup>L</sup></em> (J/(kg&sdot;&deg;C)) and the change in temperature is <em>T<sub>P</sub>&minus;T<sub>melt</sub><sup>P</sup></em> (&deg;C). <em>E<sub>P</sub></em> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> plus the latent heat energy added to the PCM, <em>Q<sub>P</sub></em> (J) since the time when melting began <em>t<sub>melt</sub><sup>init</sup></em> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (<a href=#A:assump18>assump18</a>).
 </p>
 </td>
 </tr>
@@ -2840,11 +2880,13 @@ This section provides the functional requirements, the business tasks that the s
 <h2>
 Functional Requirements
 </h2>
+<ul class="hide-list-style">
+<li>
 <div id="FR:req1">
-<ul>
 Input-Initial-Quantities: Input the following quantities, which define the tank parameters, material properties and initial conditions:
-</ul>
 </div>
+</li>
+</ul>
 <div id="Table:InConstraints">
 <table class="table">
 <tr>
@@ -3047,11 +3089,13 @@ final time
 </tr>
 </table>
 </div>
+<ul class="hide-list-style">
+<li>
 <div id="FR:req2">
-<ul>
 Use-Above-Find-Mass-IM1-IM4: Use the inputs in <a href=#FR:req1>Input-Initial-Quantities</a> to find the mass needed for IM1 to IM4, as follows, where <em>V<sub>W</sub></em> is the volume of water and <em>V<sub>tank</sub></em> is the volume of the cylindrical tank:
-</ul>
 </div>
+</li>
+</ul>
 <div id="">
 <div class="equation">
 <em>m<sub>W</sub> = V<sub>W</sub>&#8239;ρ<sub>W</sub> = (V<sub>tank</sub>&minus;V<sub>P</sub>)&#8239;ρ<sub>W</sub> = (<div class="fraction">
@@ -3069,51 +3113,69 @@ D
 <em>m<sub>P</sub> = V<sub>P</sub>&#8239;ρ<sub>P</sub></em>
 </div>
 </div>
+<ul class="hide-list-style">
+<li>
 <div id="FR:req3">
-<ul>
 Check-Input-with-Physical_Constraints: Verify that the inputs satisfy the required physical constraints.
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="FR:req4">
-<ul>
 Output-Input-Derived-Quantities: Output the input quantities and derived quantities in the following list: the quantities from R1, the masses from R2, <em>τ<sub>W</sub></em> (from IM1), <em>η</em> (from IM1), <em>τ<sub>P</sub><sup>S</sup></em> (from IM2) and <em>τ<sub>P</sub><sup>L</sup></em> (from IM2).
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="FR:req5">
-<ul>
 Calculate-Temperature-Water-OverTime: Calculate and output the temperature of the water (<em>T<sub>W</sub></em>(<em>t</em>)) over the simulation time (from IM1).
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="FR:req6">
-<ul>
- Calculate-Temperature-PCM-Over-Time: Calculate and output the temperature of the phase change material (<em>T<sub>P</sub></em>(<em>t</em>)) over the simulation time (from IM2).
-</ul>
+Calculate-Temperature-PCM-Over-Time: Calculate and output the temperature of the phase change material (<em>T<sub>P</sub></em>(<em>t</em>)) over the simulation time (from IM2).
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="FR:req7">
-<ul>
 Calculate-Change-Heat_Energy-Water-Over-Time: Calculate and output the change in heat energy in the water (<em>E<sub>W</sub></em>(<em>t</em>)) over the simulation time (from IM3).
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="FR:req8">
-<ul>
 Calculate-Change-Heat_Energy-PCM-Over-Time: Calculate and output the change in heat energy in the PCM (<em>E<sub>P</sub></em>(<em>t</em>)) over the simulation time (from IM4).
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="FR:req9">
-<ul>
 Verify-Energy-Output-follow-Conservation-of-Energy: Verify that the energy outputs (<em>E<sub>W</sub></em>(<em>t</em>) and <em>E<sub>P</sub></em>(<em>t</em>)) follow the law of conservation of energy with relative error no greater than 0.001%.
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="FR:req10">
-<ul>
 Calculate-PCM-melt-begin-time: Calculate and output the time at which the PCM begins to melt <em>t<sub>melt</sub><sup>init</sup></em> (from IM2).
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="FR:req11">
-<ul>
 Calculate-PCM-melt-end-time: Calculate and output the time at which the PCM stops melting <em>t<sub>melt</sub><sup>final</sup></em> (from IM2).
-</ul>
 </div>
+</li>
+</ul>
 </div>
 </div>
 <div id="Sec:NFRs">
@@ -3133,36 +3195,48 @@ This problem is small in size and relatively simple, so performance is not a pri
 <h1>
 Likely Changes
 </h1>
+<ul class="hide-list-style">
+<li>
 <div id="LC:likeChg1">
-<ul>
 Uniform-Temperature-PCM: <a href=#A:assump4>assump4</a> - PCM is actually a poor thermal conductor, so the assumption of uniform temperature of the phase change material is not likely.
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="LC:likeChg2">
-<ul>
 Temperature-Coil-Variable-Over-Day: <a href=#A:assump8>assump8</a> - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="LC:likeChg3">
-<ul>
 Temperature-Coil-Variable-Over-Length: <a href=#A:assump9>assump9</a> - The temperature of the heating coil will actually change along its length as the water within it cools.
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="LC:likeChg4">
-<ul>
 Discharging-Tank: <a href=#A:assump11>assump11</a> - The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="LC:likeChg5">
-<ul>
 Different-Initial-Temps-PCM-Water: <a href=#A:assump12>assump12</a> - To add more flexibility to the simulation, the initial temperature of the water and the PCM could be allowed to have different values.
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="LC:likeChg6">
-<ul>
 Tank-Lose-Heat: <a href=#A:assump15>assump15</a> - Any real tank cannot be perfectly insulated and will lose heat.
-</ul>
 </div>
+</li>
+</ul>
 </div>
 </div>
 <div id="Sec:TraceMatrices">
@@ -6206,36 +6280,38 @@ Auxiliary Constants
 <h1>
 References
 </h1>
+<ul class="hide-list-style">
+<li>
 <div id="bueche1986">
-<ul>
 [1]: Bueche, J. Frederick. <em>Introduction to Physics for Scientists</em>. 4nd. ed., New York City, New York: McGraw Hill, 1986. Print.
-</ul>
 </div>
+</li>
+<li>
 <div id="incroperaEtAl2007">
-<ul>
 [2]: Incropera, F. P., Dewitt, D. P., Bergman, T. L., and Lavine, A. S. <em>Fundamentals of Heat and Mass Transfer</em>. 6th. ed., Hoboken, New Jersey: John Wiley and Sons, 2007. Print.
-</ul>
 </div>
+</li>
+<li>
 <div id="koothoor2013">
-<ul>
 [3]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
-</ul>
 </div>
+</li>
+<li>
 <div id="lightstone2012">
-<ul>
 [4]: Lightstone, Marilyn. <em>Derivation of tank/pcm model</em>. 2012. From Marilyn Lightstone's Personal Notes
-</ul>
 </div>
+</li>
+<li>
 <div id="parnas1986">
-<ul>
 [5]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
-</ul>
 </div>
+</li>
+<li>
 <div id="smithLai2005">
-<ul>
 [6]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
-</ul>
 </div>
+</li>
+</ul>
 </div>
 </div>
 </body>

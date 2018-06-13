@@ -24,7 +24,10 @@ module Language.Drasil.Chunk.Citation
 
 import Language.Drasil.People
 import Language.Drasil.Spec (Sentence(..))
+import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Printing.Helpers (noSpaces)
+import Language.Drasil.Chunk.ShortName
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces
@@ -88,7 +91,7 @@ instance Show Month where
 -- We will also have an EntryID (String) used for creating reference links.
 -- Finally we will have the reference information (type and fields).
 data Citation = Cite
-  { _id :: String
+  { _id :: UID
   , citeID :: EntryID
   , externRefT :: CitationKind
   , fields :: [CiteField]
@@ -96,10 +99,11 @@ data Citation = Cite
 
 -- | Smart constructor which implicitly uses EntryID as chunk i.
 cite :: EntryID -> CitationKind -> [CiteField] -> Citation
-cite i = Cite i i
+cite i = Cite i (noSpaces i)
 
 -- | Citations are chunks.
 instance HasUID Citation where uid f (Cite a b c d) = fmap (\x -> Cite x b c d) (f a)
+instance HasShortName  Citation where shortname c = shortname' $ citeID c
 
 -- | External references come in many flavours. Articles, Books, etc.
 -- (we are using the types available in Bibtex)

@@ -55,6 +55,7 @@ library
     , Language.Drasil.Spec
     , Language.Drasil.Symbol
     , Language.Drasil.SymbolAlphabet
+    , Language.Drasil.UID
     , Language.Drasil.Unicode
     , Language.Drasil.Unit
     , Language.Drasil.UnitLang
@@ -83,9 +84,9 @@ library
     , Language.Drasil.TeX.Preamble
     , Language.Drasil.Chunk.AssumpChunk
     , Language.Drasil.Chunk.Attribute
-    , Language.Drasil.Chunk.Attribute.Core
-    , Language.Drasil.Chunk.Attribute.Derivation
-    , Language.Drasil.Chunk.Attribute.References
+    , Language.Drasil.Chunk.Derivation
+    , Language.Drasil.Chunk.References
+    , Language.Drasil.Chunk.ShortName
     , Language.Drasil.Chunk.Change
     , Language.Drasil.Chunk.Citation
     , Language.Drasil.Chunk.Code
@@ -244,6 +245,7 @@ executable ssp
     , Drasil.SSP.Requirements
     , Drasil.SSP.TMods
     , Drasil.SSP.Unitals
+    , Drasil.SSP.BasicExprs
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.Stakeholders

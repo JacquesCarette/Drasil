@@ -25,6 +25,8 @@ module Language.Drasil (
   , DerUChunk(..), UnitDefn(..), unitWrapper
   , makeDerU, unitCon, fund, comp_unitdefn
   , (^:), (/:), (*:), (*$), (/$), new_unit
+  -- UID
+  , UID
   -- Classes
   , HasUID(uid)
   , NamedIdea(term)
@@ -33,12 +35,12 @@ module Language.Drasil (
   , Concept
   , HasUnitSymbol(usymb)
   , IsUnit
-  , HasAttributes(attributes)
   , HasReference(getReferences)
   , CommonIdea(abrv)
   , Constrained(constraints)
   , HasReasVal(reasVal)
   , ExprRelat(relat)
+  , HasDerivation(derivations)
   -- Chunk.VarChunk
   , VarChunk
   , vc, implVar
@@ -80,16 +82,15 @@ module Language.Drasil (
   -- Chunk.Relation
   , RelationConcept, makeRC, makeRC'
   --Chunk.DefinedQuantity
-  , dqd, dqd', dqdEL, DefinedQuantityDict, dqdWr
+  , dqd, dqd', DefinedQuantityDict, dqdWr, dqdEL
   -- Chunk.UnitaryConcept
   , ucw, UnitaryConceptDict
-  -- Chunk.Attributes.Core
-  , Attributes
   -- Chunk.Attributes
   , getSource
-  , Derivation, getDerivation, getShortName, shortname
-  , sourceref, derivationsteps
+  , Derivation, getDerivation, getShortName, shortname'
+  , sourceref
   , References
+  , HasShortName(shortname)
   --Citations
   , Citation, BibRef, CiteField, Month(..), HP
     -- CiteFields smart constructors
@@ -124,7 +125,7 @@ module Language.Drasil (
   -- Document
   , Referable(..), Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListPair
-  , section, fig, figWithWidth
+  , section, fig, figWithWidth, section'' 
   , datadefn, reldefn
   -- Reference
   , makeRef, acroTest, find'
@@ -152,7 +153,7 @@ module Language.Drasil (
   -- CodeSpec
   , CodeSpec, codeSpec, Choices(..), ImplementationType(..)
   , Logging(..), ConstraintBehaviour(..), Structure(..), Comments(..)
-  , defaultChoices
+  , defaultChoices, getStr
   , Mod(..), packmod, FuncDef(..), FuncStmt(..), funcDef, ($:=), ffor, fdec -- hacks
   , relToQD, funcData, funcQD, Func(..), asExpr, asVC   -- hacks
   -- DataDesc
@@ -180,14 +181,16 @@ module Language.Drasil (
   , HasChangeRefs, changeRefTable, changeLookup, RefBy(..)
   , reqDB, assumpDB, RefMap, simpleMap
   -- ReqChunk
-  , ReqChunk, ReqType(..), reqType, requires, frc, nfrc, rc'
+  , ReqChunk, ReqType(..), reqType, requires, frc, nfrc
   -- Change
-  , Change, ChngType(..), chngType, chng, lc, ulc, chc'
+  , Change, ChngType(..), chngType, chng, lc, ulc
   , citationRefTable, citeLookup
   -- Goal
   , Goal, mkGoal
   -- PhysSystDesc
-  , PhysSystDesc, pSysDes, psd, psd'
+  , PhysSystDesc, pSysDes, psd
+  -- RefTypes
+  , RefAdd
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -206,21 +209,23 @@ import Language.Drasil.Expr.Extract (vars)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website),DocSpec(DocSpec))
 import Language.Drasil.Document (Document(..), DType(..)
   , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..)
-  , section, fig, figWithWidth
+  , section, fig, figWithWidth, section''
   , datadefn, reldefn
   , ListPair)
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.UnitLang -- all of it
 import Language.Drasil.Unit -- all of it
+import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
-  IsUnit, HasAttributes(attributes), CommonIdea(abrv),
-  Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasReference(getReferences))
+  IsUnit, CommonIdea(abrv),
+  Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations),
+  HasReference(getReferences))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
-import Language.Drasil.Chunk.Attribute.Core (Attributes)
-import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
-import Language.Drasil.Chunk.Attribute.References (References)
+import Language.Drasil.Chunk.Derivation (Derivation)
+import Language.Drasil.Chunk.References (References)
+import Language.Drasil.Chunk.ShortName
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation (
   -- Types
@@ -253,11 +258,11 @@ import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.Goal (Goal, mkGoal)
 import Language.Drasil.Chunk.InstanceModel
 import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.PhysSystDesc (PhysSystDesc, pSysDes, psd, psd')
+import Language.Drasil.Chunk.PhysSystDesc (PhysSystDesc, pSysDes, psd)
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, makeRC')
 import Language.Drasil.Chunk.ReqChunk(ReqChunk, ReqType(..), reqType, requires
-                                     , frc, nfrc, rc')
+                                     , frc, nfrc)
 import Language.Drasil.Chunk.SymbolForm (eqSymb, codeSymb, hasStageSymbol)
 import Language.Drasil.Chunk.Theory
 import Language.Drasil.Chunk.UncertainQuantity
@@ -292,3 +297,4 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
 import Language.Drasil.CodeSpec hiding (outputs, inputs)
 import Language.Drasil.DataDesc
 import Language.Drasil.Code.Imperative.Lang
+import Language.Drasil.RefTypes(RefAdd)

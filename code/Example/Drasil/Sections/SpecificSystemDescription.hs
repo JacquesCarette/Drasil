@@ -14,14 +14,20 @@ module Drasil.Sections.SpecificSystemDescription
   , datConF
   , dataConstraintUncertainty
   , inDataConstTbl, outDataConstTbl 
+  , listofTablesToRefs
   ) where
 
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation (physical, column, input_, uncertainty, physicalConstraint,
+  softwareConstraint, typUnc, user, model, value, quantity, information, constraint, variable,
+  output_, symbol_, limitation, problem, inModel, datum, datumConstraint, section_, dataDefn,
+  general, genDefn, problemDescription, solutionCharSpec, assumption, thModel, physicalSystem,
+  likelyChg, goalStmt, theory, purpose, requirement, element)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle, getES, fmtU, getRVal)
-import Data.Drasil.SentenceStructures
+import Data.Drasil.SentenceStructures (fmtPhys, fmtSfwr, mkTableFromColumns, foldlSent, foldlSP,
+  typUncr, ofThe, foldlList)
 import qualified Drasil.SRS as SRS
 
 
@@ -199,11 +205,10 @@ dataConstraintParagraph hasUncertainty tableRef middleSent trailingSent = Paragr
   (dataConstraintIntroSent tableRef) +:+ middleSent +:+ 
   (dataConstraintClosingSent hasUncertainty trailingSent)
 
-
 -- makes a list of references to tables takes
 -- l  list of layout objects that can be referenced
 -- outputs a sentence containing references to the layout objects 
-listofTablesToRefs :: Referable l => [l] -> Sentence
+listofTablesToRefs :: (HasShortName l, Referable l) => [l] -> Sentence
 listofTablesToRefs  []     = EmptyS
 listofTablesToRefs  [x]    = (makeRef x) +:+ S "shows"
 listofTablesToRefs  [x,y]  = (makeRef x) `sC` S "and" +:+ listofTablesToRefs [y]

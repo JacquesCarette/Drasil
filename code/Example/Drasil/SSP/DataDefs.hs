@@ -4,33 +4,39 @@ module Drasil.SSP.DataDefs where
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
 
-import Drasil.SSP.Unitals (shrStiffBase, index, genDisplace, baseAngle, inxi,
-  nrmStiffBase, effStiffA, effStiffB, rotatedDispl, genPressure, shrStiffIntsl,
-  nrmStiffIntsl, nrmFNoIntsl, shearFNoIntsl, shearRNoIntsl, impLoadAngle,
-  surfLoad, surfAngle, surfHydroForce, watrForceDif, slcWght, earthqkLoadFctr,
-  inxiM1, mobShrI, wiif, intShrForce, intNormForce, baseWthX, cohesion,
-  fricAngle, baseHydroForce, watrForce, nrmFSubWat, shrResI, constant_A,
-  nrmDispl, constant_K, constant_a, normStress, poissnsRatio, inx, surfLngth,
-  baseLngth, genForce, shrDispl, scalFunc, normToShear, slipDist, slopeDist,
-  slopeHght, slipHght, waterHght, satWeight, waterWeight, dryWeight,
-  ufixme1, ufixme2)
-import Drasil.SSP.GenDefs (eqlExpr, displMtx, rotMtx)
+import Drasil.SSP.BasicExprs (displMtx, eqlExpr, rotMtx)
 import Drasil.SSP.Defs (intrslce)
+import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
+  cohesion, constant_A, constant_K, constant_a, dryWeight, earthqkLoadFctr, 
+  effStiffA, effStiffB, fricAngle, genDisplace, genForce, genPressure, 
+  impLoadAngle, index, intNormForce, intShrForce, inx, inxi, inxiM1, mobShrI, 
+  normStress, normToShear, nrmDispl, nrmFNoIntsl, nrmFSubWat, nrmStiffBase, 
+  nrmStiffIntsl, poissnsRatio, rotatedDispl, satWeight, scalFunc, 
+  shearFNoIntsl, shearRNoIntsl, shrDispl, shrResI, shrStiffBase, shrStiffIntsl, 
+  slcWght, slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce, 
+  surfLngth, surfLoad, ufixme1, ufixme2, waterHght, waterWeight, watrForce, 
+  watrForceDif, wiif)
 
-import Data.Drasil.Utils (getES, mkDataDef, eqUnR)
+import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb, refDD)
+
 import Data.Drasil.Quantities.SolidMechanics as SM (poissnsR)
+import Data.Drasil.Utils (eqUnR, getES, mkDataDef)
 
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (definition, element, value)
-import Data.Drasil.SentenceStructures (sAnd, sOf,
-  foldlSP, eqN, isThe, acroDD, acroGD, acroT,
-  ofThe, getTandS, ofThe')
+import Data.Drasil.Concepts.Math (angle, equation)
+import Data.Drasil.SentenceStructures (acroGD, acroT, eqN, foldlSP, getTandS, 
+  isThe, ofThe, ofThe', sAnd, sOf)
 import Control.Lens ((^.))
-import Data.Drasil.Concepts.Math (equation, angle)
 
 ------------------------
 --  Data Definitions  --
 ------------------------
+ddRef :: QDefinition -> Sentence
+ddRef = refDD (ddRefDB sspRefMDB) 
+
+sspRefMDB :: ModelDB
+sspRefMDB = mdb [] [] sspDataDefs [] 
 
 sspDataDefs :: [QDefinition]
 sspDataDefs = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB,
@@ -247,10 +253,10 @@ soilStiffnessEqn = (case_ [case1,case2])
 -----------------
 
 fixme1 :: QDefinition
-fixme1 = ec ufixme1 (inxi intNormForce + inxiM1 intNormForce)
+fixme1 = ec ufixme1 (inxi intNormForce + inxiM1 intNormForce) (shortname' "ufixme1")
 
 fixme2 :: QDefinition
-fixme2 = ec ufixme2 (inxi watrForce + inxiM1 watrForce)
+fixme2 = ec ufixme2 (inxi watrForce + inxiM1 watrForce) (shortname' "ufixme2")
 
 -----------------
 -- Derivations --
@@ -275,7 +281,7 @@ resShrDerivation = [
   getES intNormForce `sAnd` getES intShrForce, S "in the", phrase equation,
   S "are unknown, while the other", plural value,
   S "are found from the physical force", plural definition, S "of",
-  acroDD 1, S "to" +:+. acroDD 9,
+  ddRef sliceWght, S "to" +:+. ddRef lengthLs,
   S "Consider a force equilibrium without the affect of interslice forces" `sC`
   S "to obtain a solvable value as done for", getES nrmFNoIntsl, S "in", eqN 2],
 
@@ -328,7 +334,8 @@ mobShrDerivation = [
   
   foldlSP [S "The", plural value, S "of", getES shearRNoIntsl `sAnd`
   getES shearFNoIntsl, S "are now defined completely in terms of the",
-  S "known force property", plural value, S "of", acroDD 1, S "to", acroDD 9]
+  S "known force property", plural value, S "of", ddRef sliceWght, S "to", 
+  ddRef lengthLs]
 
   ]
 
@@ -358,16 +365,16 @@ stfMtrxDerivation = [
   
   foldlSP [S "For interslice surfaces the stiffness constants" `sAnd`
   S "displacements refer to an unrotated coordinate system" `sC`
-  getES genDisplace, S "of" +:+. acroGD 9, S "The interslice elements",
+  getES genDisplace, S "of" +:+. ddRef lengthLs, S "The interslice elements",
   S "are left in their standard coordinate system" `sC`
   S "and therefore are described by the same", phrase equation,
   S "from" +:+. acroGD 8, S "Seen as", getES shrStiffIntsl, S "in" +:+.
-  acroDD 12, isElemInMx shrStiffIntsl "shear" `sC` --FIXEME: add matrix symbols?
-  S "and", isElemInMx nrmStiffIntsl "normal" `sC` S "calculated as in", acroDD 14],
+  ddRef intrsliceF, isElemInMx shrStiffIntsl "shear" `sC` --FIXEME: add matrix symbols?
+  S "and", isElemInMx nrmStiffIntsl "normal" `sC` S "calculated as in", ddRef mobShearWO],
   
   foldlSP [S "For basal surfaces the stiffness constants" `sAnd`
   S "displacements refer to a system rotated for the base angle alpha" +:+.
-  sParen (acroDD 5), S "To analyze the effect of force-displacement",
+  sParen (ddRef angleA), S "To analyze the effect of force-displacement",
   S "relationships occurring on both basal" `sAnd`
   S "interslice surfaces of an", phrase element, getES index,
   S "they must reference the same coordinate",
@@ -403,7 +410,7 @@ stfMtrxDerivation = [
   S "as derived in", eqN 7, S "is defined in" +:+. eqN 9,
   S "This is seen as matrix", getES shrStiffBase, S "in" +:+.
   acroGD 12, isElemInMx shrStiffBase "shear" `sC` S "and",
-  isElemInMx nrmStiffBase "normal" `sC` S "calculated as in" +:+. acroDD 14,
+  isElemInMx nrmStiffBase "normal" `sC` S "calculated as in" +:+. ddRef mobShearWO,
   S "The notation is simplified by", S "introduction" `ofThe` S "constants",
   getES effStiffA `sAnd` getES effStiffB `sC` S "defined in", eqN 10 `sAnd`
   eqN 11, S "respectively"],
@@ -423,7 +430,7 @@ stfMtrxDerivation = [
   S "can be written in terms of displacements occurring in the unrotated", 
   S "coordinate system", getES genDisplace `sOf` acroGD 9, S "using the matrix",
   getES shrStiffBase `sC` --FIXME: index 
-  S "and", getES shrStiffBase, S "as seen in", acroDD 12]
+  S "and", getES shrStiffBase, S "as seen in", ddRef intrsliceF]
   
   ]
 

@@ -217,8 +217,8 @@ findNotCaps s = concat $ intersperse " " ((head $ words s) : map isNotCaps (tail
 
 isNotCaps :: String -> String
 isNotCaps (c:cs)
-  	| not ((isLetter c) && (isLatin1 c)) = (toLower c) : cs
-  	| ((toLower c) : cs) `elem` doNotCaps = (toLower c) : cs
+    | not ((isLetter c) && (isLatin1 c)) = (toLower c) : cs
+    | ((toLower c) : cs) `elem` doNotCaps = (toLower c) : cs
 isNotCaps s = s
 
 doNotCaps :: [String]

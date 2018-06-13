@@ -1,11 +1,11 @@
 module Drasil.SWHS.Body where
 
 import Language.Drasil hiding (organization)
-import Data.Drasil.SI_Units
+import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 import Control.Lens ((^.))
 
 import Data.Drasil.People (thulasi, brooks, spencerSmith)
-import Data.Drasil.Phrase(for)
+import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Documentation (section_, traceyGraph, item,
   assumption, traceyMatrix, thModel, genDefn, dataDefn, inModel, likelyChg,
   dataConst, requirement, input_, solution, output_, corSol, constraint,
@@ -44,7 +44,6 @@ import Drasil.SWHS.TMods (tModels, t1ConsThermE, s4_2_2_swhsTMods)
 import Drasil.SWHS.IMods (s4_2_5_IMods)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, s4_2_4_swhsDataDefs, swhsDataDefs)
 import Drasil.SWHS.GenDefs (swhsGenDefs)
-import Drasil.SWHS.References (s9_swhs_citations)
 import Drasil.SWHS.Assumptions (swhsRefDB, swhsAssumptions, assump3, assump4, assump5,
   assump6, assump13, assump15, assump16, assump17, assump18)
 import Drasil.SWHS.Requirements (req1, req2, s5_1_2_Eqn1, s5_1_2_Eqn2,
@@ -55,7 +54,7 @@ import Drasil.SWHS.DataDesc (swhsInputMod)
 
 import qualified Drasil.SRS as SRS (inModel, missingP, likeChg,
   funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
-  sysCont, reference, assumpt)
+  sysCont, reference)
 
 import Drasil.DocumentLanguage (DocDesc, mkDoc, tsymb'',
   LFunc (TermExcept),

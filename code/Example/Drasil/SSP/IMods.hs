@@ -4,36 +4,40 @@ module Drasil.SSP.IMods where
 import Prelude hiding (tan, product, sin, cos)
 import Language.Drasil
 import Control.Lens ((^.))
-import Drasil.DocumentLanguage.RefHelpers
 
-import Drasil.SSP.Unitals (inxi, shrStress, baseLngth, sum1toN, mobStress,
-  fs, fs_min, fsloc, shrDispl, shrStiffBase, genForce, constant_a, fricAngle,
-  normStress, baseWthX, cohesion, poissnsRatio, intNormForce, nrmStiffBase,
-  nrmDispl, dy_i, dx_i, baseAngle, genDisplace, rotatedDispl, index, yi,
-  xi, numbSlices, shrResC, shearRNoIntsl, shearFNoIntsl, mobShrC,
-  inxi, inxiP1, normToShear, scalFunc, intShrForce, wiif, inxiM1, totNrmForce,
-  nrmFSubWat, mobShrI, baseHydroForce, impLoadAngle, surfLoad, surfAngle,
-  surfHydroForce, earthqkLoadFctr, slcWght, midpntHght, watrForce, critCoords,
-  indxn, minFunction, surfLngth, shrStiffIntsl, watrForceDif, effStiffB,
-  effStiffA, nrmStiffIntsl, indx1, normFunc, shearFunc, varblU, varblV)
-import Drasil.SSP.Defs (slope, slice, slip,
-  intrslce, ssa, morPrice, crtSlpSrf, factorOfSafety)
-import Data.Drasil.SentenceStructures (foldlSent, isThe)
-import Data.Drasil.Utils (getES, eqUnR)
 import Drasil.SSP.DataDefs (fixme1,fixme2)
+import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice, 
+  slip, slope, ssa)
+import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
+  cohesion, constant_a, critCoords, dx_i, dy_i, earthqkLoadFctr, effStiffA, 
+  effStiffB, fricAngle, fs, fs_min, fsloc, genDisplace, genForce, impLoadAngle, 
+  index, indx1, indxn, intNormForce, intShrForce, inxi, inxi, inxiM1, inxiP1, 
+  midpntHght, minFunction, mobShrC, mobShrI, mobStress, normFunc, normStress, 
+  normToShear, nrmDispl, nrmFSubWat, nrmStiffBase, nrmStiffIntsl, numbSlices, 
+  poissnsRatio, rotatedDispl, scalFunc, shearFNoIntsl, shearFunc, shearRNoIntsl, 
+  shrDispl, shrResC, shrStiffBase, shrStiffIntsl, shrStress, slcWght, sum1toN, 
+  surfAngle, surfHydroForce, surfLngth, surfLoad, totNrmForce, varblU, varblV,
+  watrForce, watrForceDif, wiif, xi, yi)
+
+import Drasil.DocumentLanguage.RefHelpers(refA)
+
+import Data.Drasil.SentenceStructures (foldlSent, isThe)
+import Data.Drasil.Utils (eqUnR, getES)
 
 -- Needed for derivations
-import Data.Drasil.Concepts.Documentation (analysis,
-  solution, definition, value, assumption, physicalProperty,
-  problem, method_)
-import Data.Drasil.SentenceStructures (andThe, acroGD, acroDD,
-  sIs, sIn, getTDS, getTandS, ofThe, ofThe', sAnd, sOf, acroIM, acroT,
-  eqN, foldlSP, foldlSent_)
+import Drasil.SSP.Assumptions (newA2, sspRefDB)
+import Drasil.SSP.BasicExprs (eqlExpr, momExpr)
+import Drasil.SSP.DataDefs (ddRef, intrsliceF, lengthLb, lengthLs, 
+  mobShearWO, resShearWO, seismicLoadF, sliceWght, surfLoads)
+
+import Data.Drasil.Concepts.Documentation (analysis, assumption, definition, 
+  method_, physicalProperty, problem, solution, value)
 import Data.Drasil.Concepts.Math (equation, surface)
-import Data.Drasil.Concepts.Physics (displacement, force)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Drasil.SSP.GenDefs (eqlExpr, momExpr)
-import Drasil.SSP.Assumptions
+import Data.Drasil.Concepts.Physics (displacement, force)
+
+import Data.Drasil.SentenceStructures (acroGD, acroIM, acroT, andThe, eqN, 
+  foldlSent_, foldlSP, getTandS, getTDS, ofThe, ofThe', sAnd, sIn, sIs, sOf)
 
 -----------------------
 --  Instance Models  --
@@ -44,7 +48,7 @@ sspIMods = [fctSfty, nrmShrFor, intsliceFs, forDisEqlb, rfemFoS, crtSlpId]
 
 --
 fctSfty :: RelationConcept
-fctSfty = makeRC "fctSfty" factorOfSafety fcSfty_desc fcSfty_rel []
+fctSfty = makeRC "fctSfty" factorOfSafety fcSfty_desc fcSfty_rel 
 
 --FIXME: first shearRNoIntsl should have local index v, not i,
 --       last occurence should have index n
@@ -69,7 +73,7 @@ fcSfty_desc = foldlSent [S "Equation for the", titleize fs `isThe` S "ratio",
 --
 nrmShrFor :: RelationConcept
 nrmShrFor = makeRC "nrmShrFor" (nounPhraseSP "normal/shear force ratio")
-  nrmShrF_desc nrmShrF_rel []
+  nrmShrF_desc nrmShrF_rel 
 
 nrmShrF_rel :: Relation
 nrmShrF_rel = (inxi normFunc) $= case_ [case1,case2,case3] $=
@@ -109,7 +113,7 @@ nrmShrF_desc = foldlSent [getES normToShear `isThe` S "magnitude ratio",
 --
 intsliceFs :: RelationConcept
 intsliceFs = makeRC "intsliceFs" (nounPhraseSP "interslice forces")
-  sliceFs_desc sliceFs_rel []
+  sliceFs_desc sliceFs_rel 
 
 sliceFs_rel :: Relation
 sliceFs_rel = inxi intNormForce $= case_ [
@@ -131,7 +135,7 @@ sliceFs_desc = foldlSent [S "The value of the interslice normal force",
 --
 forDisEqlb :: RelationConcept
 forDisEqlb = makeRC "forDisEqlb"
-  (nounPhraseSP "force displacement equilibrium") fDisEq_desc fDisEq_rel []
+  (nounPhraseSP "force displacement equilibrium") fDisEq_desc fDisEq_rel 
 
 fDisEq_rel :: Relation --FIXME: split into two IMOD
 fDisEq_rel = negate (inxi watrForceDif) - (sy earthqkLoadFctr)*(inxi slcWght) -
@@ -177,7 +181,7 @@ fDisEq_desc = foldlSent [
 --
 rfemFoS :: RelationConcept
 rfemFoS = makeRC "rfemFoS" (nounPhraseSP "RFEM factor of safety")
-  rfemFoS_desc rfemFoS_rel []
+  rfemFoS_desc rfemFoS_rel 
 
 rfemFoS_rel :: Relation
 rfemFoS_rel = (inxi fsloc) $= fosFracLoc $= fosFracSum
@@ -207,7 +211,7 @@ rfemFoS_desc = foldlSent [
 --
 crtSlpId :: RelationConcept
 crtSlpId = makeRC "crtSlpId" (nounPhraseSP "critical slip identification")
-  crtSlpId_desc crtSlpId_rel []
+  crtSlpId_desc crtSlpId_rel 
 
 -- FIXME: horrible hack. This is short an argument... that was never defined!
 crtSlpId_rel :: Relation
@@ -240,17 +244,17 @@ instModIntro1 = foldlSP [S "The", titleize morPrice,
   acroT 3, S "so the", phrase assumption, S "of", acroGD 5,
   S "is used. Solving for", phrase force, S "equilibrium allows",
   plural definition, S "of all", plural force, S "in terms of the",
-  plural physicalProperty, S "of", acroDD 1, S "to",
-  acroDD 9 `sC` S "as done in", acroDD 10 `sC` acroDD 11]
+  plural physicalProperty, S "of", ddRef sliceWght, S "to",
+  ddRef lengthLs `sC` S "as done in", ddRef seismicLoadF `sC` ddRef surfLoads]
 
 instModIntro2 = foldlSP [
   plural value `ofThe'` (phrase intrslce +:+ phrase totNrmForce),
   getES intNormForce, S "the", getTandS normToShear `sC`
   S "and the", titleize fs, (sParen $ getES fs) `sC` S "are unknown.",
   at_start' equation, S "for the unknowns are written in terms of only the",
-  plural value, S "in", acroDD 1, S "to", acroDD 9 `sC` S "the", plural value,
+  plural value, S "in", ddRef sliceWght, S "to", ddRef lengthLs `sC` S "the", plural value,
   S "of", getES shearRNoIntsl `sC` S "and", getES shearFNoIntsl, S "in",
-  acroDD 10, S "and", acroDD 11 `sC` S "and each",
+  ddRef seismicLoadF, S "and", ddRef surfLoads `sC` S "and each",
   S "other. The relationships between the unknowns are non linear" `sC`
   S "and therefore explicit", plural equation, S "cannot be derived and an",
   S "iterative", plural solution, S "method is required"]
@@ -374,7 +378,7 @@ intrSlcDerivation = [
   foldlSP [S "Where", getES shearRNoIntsl `sAnd` getES shearFNoIntsl,
   S "are the resistive and mobile shear of the slice" `sC`
   S wiif, getES intNormForce `sAnd` getES intShrForce `sC`
-  S "as defined in", acroDD 10 `sAnd` acroDD 11,
+  S "as defined in", ddRef seismicLoadF `sAnd` ddRef surfLoads,
   S "Making use of the constants, and with full", plural equation, 
   S "found below in", eqN 19 `sAnd` eqN 20, S "respectively, then", eqN 18, 
   S "can be simplified to", eqN 21 `sC` S "also seen in", acroIM 3],
@@ -401,8 +405,8 @@ intrSlcDerivation = [
 rigDisDerivation = [
   
   foldlSP [S "Using the net force-displacement equilibrium",
-  phrase equation, S "of a slice from", acroDD 13, S "with", plural definition
-  `ofThe` S "stiffness matrices", S "from", acroDD 12, S "and the force", 
+  phrase equation, S "of a slice from", ddRef resShearWO, S "with", plural definition
+  `ofThe` S "stiffness matrices", S "from", ddRef intrsliceF, S "and the force", 
   plural definition, S "from", acroGD 7 , S "a broken down force displacement",
   S "equilibrium", phrase equation +:+. S "can be derived", eqN 22,
   S "gives the broken down", phrase equation, S "in the", getES xi,
@@ -412,10 +416,10 @@ rigDisDerivation = [
   eqUnR fDisEq_rel,
   
   foldlSP [S "Using the known input assumption of", (refA sspRefDB newA2) `sC`
-  S "the force variable", plural definition, S "of", acroDD 1, S "to",
-  acroDD 8, S "on", S "left side" `ofThe` plural equation,
+  S "the force variable", plural definition, S "of", ddRef sliceWght, S "to",
+  ddRef lengthLb, S "on", S "left side" `ofThe` plural equation,
   S "can be solved for. The only unknown in the variables to solve",
-  S "for the stiffness values from", acroDD 14 +:+. 
+  S "for the stiffness values from", ddRef mobShearWO +:+. 
   S "is the displacements", S "Therefore taking the", phrase equation, 
   S "from each slice a set of", E $ 2 * sy numbSlices, plural equation
   `sC` S "with", E $ 2 * sy numbSlices, S "unknown displacements in the", 
@@ -447,7 +451,7 @@ rigFoSDerivation = [
     sin(inxi baseAngle) * inxi dy_i) "",
   
   foldlSP [S "With the", phrase definition, S "of normal stiffness from",
-  acroDD 14, --FIXME: grab nrmStiffBase's term name?
+  ddRef mobShearWO, --FIXME: grab nrmStiffBase's term name?
   S "to find", S "normal stiffness" `ofThe` S "base", getES nrmStiffBase,
   S "and the now known base displacement perpendicular to the surface",
   getES nrmDispl, S "from", eqN 25, S "the normal base stress",

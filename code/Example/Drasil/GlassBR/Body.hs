@@ -3,12 +3,21 @@ import Control.Lens ((^.))
 import Language.Drasil hiding (organization)
 import qualified Drasil.SRS as SRS
 
-import Drasil.DocumentLanguage
-import Drasil.DocumentLanguage.Definitions
-import Drasil.DocumentLanguage.RefHelpers 
+import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
+  DocSection(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons), --DocSection uses everything but Verbatim
+  IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), LCsSec(..), 
+  RefSec(RefProg), RefTab(TAandA, TUnits), ReqrmntSec(..), 
+  ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SSDSec(SSDVerb), 
+  StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), 
+  TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose), DocDesc, 
+  mkDoc, mkLklyChnk, mkRequirement, tsymb)
+import Drasil.DocumentLanguage.Definitions (Field
+  (DefiningEquation, Description, RefBy, Source), InclUnits(IncludeUnits), 
+  Verbosity(Verbose), Fields)
+import Drasil.DocumentLanguage.RefHelpers (cite, refA)
 
-import Data.Drasil.SI_Units
-import Data.Drasil.People (spencerSmith, nikitha, mCampidelli)
+import Data.Drasil.Concepts.Computation (computerApp, inParam,
+  computerLiteracy, inValue, inQty)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   characteristic, class_, code, condition, constraint, content,
   datum, definition, description, document, emphasis, endUser, failure,
@@ -21,54 +30,54 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   dataConst, company)
 import Data.Drasil.Concepts.Education (secondYear, undergradDegree,
   civilEng, structuralEng, scndYrCalculus, structuralMechanics)
-import Data.Drasil.Software.Products (sciCompS)
-import Data.Drasil.Concepts.Computation (computerApp, inParam,
-  computerLiteracy, inValue, inQty)
+import Data.Drasil.Concepts.Math (graph, calculation, probability,
+  parameter)
+import Data.Drasil.Concepts.PhysicalProperties (dimension, flexure)
 import Data.Drasil.Concepts.Physics (distance)
-import Data.Drasil.Concepts.Thermodynamics (degree_')
-import Data.Drasil.Concepts.PhysicalProperties (flexure)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability,
   performance, errMsg)
-import Data.Drasil.Concepts.Math (graph, calculation, probability,
-  parameter)
-import Data.Drasil.Utils (getES, makeTMatrix, makeListRef, itemRefToSent,
-  refFromType, enumSimple, enumBullet, prodUCTbl)
+import Data.Drasil.Concepts.Thermodynamics (degree_')
 import Data.Drasil.SentenceStructures (acroR, sVersus, sAnd, foldlSP,
   foldlSent, foldlSent_, figureLabel, foldlList, showingCxnBw,
   foldlsC, sOf, followA, ofThe, sIn, isThe, isExpctdToHv, sOr, underConsidertn,
   tAndDWAcc, tAndDOnly, tAndDWSym, andThe)
-import Data.Drasil.Concepts.PhysicalProperties (dimension)
+import Data.Drasil.Software.Products (sciCompS)
+import Data.Drasil.Utils (getES, makeTMatrix, makeListRef, itemRefToSent,
+  refFromType, enumSimple, enumBullet, prodUCTbl)
 
-import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad,
-  lateralLoad, sflawParamM, char_weight, sD, demand, lite, demandq,
-  aspectRWithEqn, aspectR, lRe, wtntWithEqn, sdWithEqn,
-  prob_br, notSafe, safeMessage, is_safe1, is_safe2, plate_width,
-  plate_len, blast, glassTy, gbInputDataConstraints, explosion,
-  explosion, pb_tol, blast, bomb, blastTy, glassGeo,
-  glass_type, nom_thick, sdx, sdy, sdz, tNT, gBRSpecParamVals,
-  loadTypes, load,
-  glassTypes, probBreak, termsWithAccDefn, termsWithDefsOnly,
-  gbConstants, gbConstrained, gbOutputs, gbInputs,
-  glBreakage, capacity, constant_LoadDF)
-import Drasil.GlassBR.Symbols
-import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist,
-  glaSlab, blastRisk, glass,
-  glaPlane, glassBRProg, ptOfExplsn, acronyms)
-import Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq)
+import Drasil.GlassBR.Assumptions (assumptionConstants, assumptionDescs,
+  gbRefDB, newAssumptions, newA3, newA4, newA5, newA6, newA7,
+  newA8)
+import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist, glaSlab, 
+  blastRisk, glass, glaPlane, glassBRProg, ptOfExplsn, acronyms)
+import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
+  dimLL, glaTyFac, tolStrDisFac, tolPre, risk)
 import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr)
-import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt,
-  strDisFac, nonFL, dimLL, glaTyFac, tolStrDisFac, tolPre, risk)
-import Drasil.GlassBR.References
-import Drasil.GlassBR.ModuleDefs
+import Drasil.GlassBR.ModuleDefs (allMods)
+import Drasil.GlassBR.References (rbrtsn2012)
+import Drasil.GlassBR.Symbols (this_symbols)
+import Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq)
+import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad, 
+  lateralLoad, sflawParamM, char_weight, sD, demand, lite, demandq, 
+  aspectRWithEqn, aspectR, lRe, wtntWithEqn, sdWithEqn, prob_br, notSafe, 
+  safeMessage, is_safe1, is_safe2, plate_width, plate_len, blast, glassTy, 
+  gbInputDataConstraints, explosion, explosion, pb_tol, blast, bomb, blastTy, 
+  glassGeo, glass_type, nom_thick, sdx, sdy, sdz, tNT, gBRSpecParamVals,
+  loadTypes, load, glassTypes, probBreak, termsWithAccDefn, termsWithDefsOnly,
+  gbConstants, gbConstrained, gbOutputs, gbInputs, glBreakage, capacity, 
+  constant_LoadDF)
+
 import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.Sections.TraceabilityMandGs (traceGIntro)
 import Drasil.Sections.SpecificSystemDescription (solChSpecF,
   inDataConstTbl, outDataConstTbl, dataConstraintUncertainty, goalStmtF,
   physSystDesc, termDefnF, probDescF, specSysDesF)
+import Drasil.Sections.TraceabilityMandGs (traceGIntro)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
-import Drasil.GlassBR.Assumptions
+import Data.Drasil.People (spencerSmith, nikitha, mCampidelli)
 import Data.Drasil.Phrase(for'')
+import Data.Drasil.SI_Units (kilogram, metre, millimetre, newton, pascal, 
+  second)
 
 {--}
 
@@ -144,8 +153,8 @@ glassSystInfo = SI {
   _quants      = this_symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _definitions = dataDefns ++ 
-                 (map (relToQD gbSymbMap) iModels) ++ 
-                 (map (relToQD gbSymbMap) tModels) ++
+                 (map (relToQD gbSymbMap) iModels {-[RelationConcept]-}) ++ 
+                 (map (relToQD gbSymbMap) tModels {-[RelationConcept]-}) ++
                   [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears
                                              -- in the description of the Calculation of Demand instance model;
                                              -- should this be included as a Data Definition?
@@ -161,7 +170,7 @@ glassSystInfo = SI {
   --FIXME: All named ideas, not just acronyms.
 
 testIMFromQD :: InstanceModel
-testIMFromQD = imQD gbSymbMap risk EmptyS [] [] []
+testIMFromQD = imQD gbSymbMap risk EmptyS [] [] "riskFun" --shortname
 glassBR_code :: CodeSpec
 glassBR_code = codeSpec glassSystInfo allMods
 
@@ -450,7 +459,7 @@ assumpList :: [AssumpChunk] -> [Contents]
 assumpList = map Assumption
 
 assumptions :: [Contents] -- FIXME: Remove this entirely and use new refs + docLang.
-assumptions = fst (foldr (\s (ls, n) -> ((Assumption $ assump ("A" ++ show n) s (S $ "A" ++ show n) []) : ls, n-1))
+assumptions = fst (foldr (\s (ls, n) -> ((Assumption $ assump ("A" ++ show n) s ("A" ++ show n)) : ls, n-1))
  ([], (length assumptionDescs)::Int) assumptionDescs)
 -- These correspond to glassTyAssumps, glassCondition, explsnScenario,
 -- standardValues, glassLiteAssmp, bndryConditions, responseTyAssump, ldfConstant
@@ -484,22 +493,11 @@ s7_1_req6 :: [Contents] --FIXME: Issue #327
 s7_1_listOfReqs :: [Contents]
 s7_1_listOfReqs = [s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5]
 
-s7_1_req1 = mkRequirement "s7_1_req1" req1Desc (S "Input-Glass-Props")
-s7_1_req2 = mkRequirement "s7_1_req2" req2Desc (S "System-Set-Values-Following-Assumptions")
-s7_1_req3 = mkRequirement "s7_1_req3" req3Desc (S "Check-Input-with-Data_Constraints")
-s7_1_req4 = mkRequirement "s7_1_req4" req4Desc (S "Output-Values-and-Known-Quantities")
-s7_1_req5 = mkRequirement "s7_1_req5" (req5Desc (output_)) (S "Check-Glass-Safety")
-
--- newReqs is ONLY for testing until I get refs working. Then the old reqs should
--- be converted to reqChunk format with meaningful refnames and this should be
--- removed.
-newReqs :: [ReqChunk]
-newReqs = map (\(x,y) -> frc x y (S x) []) --FIXME: FRC Hack for referencing
-  [ ("r1",req1Desc)
-  , ("r2",req2Desc)
-  , ("r3",req3Desc)
-  , ("r4",req4Desc)
-  , ("r5",req5Desc output_)]
+s7_1_req1 = mkRequirement "s7_1_req1" req1Desc "Input-Glass-Props"
+s7_1_req2 = mkRequirement "s7_1_req2" req2Desc "System-Set-Values-Following-Assumptions"
+s7_1_req3 = mkRequirement "s7_1_req3" req3Desc "Check-Input-with-Data_Constraints"
+s7_1_req4 = mkRequirement "s7_1_req4" req4Desc "Output-Values-and-Known-Quantities"
+s7_1_req5 = mkRequirement "s7_1_req5" (req5Desc (output_)) "Check-Glass-Safety"
 
 req1Desc = foldlSent [at_start input_, S "the", plural quantity, S "from",
   makeRef s7_1_req1Table `sC` S "which define the", phrase glass,
@@ -585,11 +583,11 @@ likelyChanges_SRS = [s8_likelychg1, s8_likelychg2, s8_likelychg3,
 s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4,
   s8_likelychg5 :: Contents
 
-s8_likelychg1 = mkLklyChnk "s8_likelychg1" (lc1Desc (blastRisk)) (S "Calculate-Internal-Blask-Risk")
-s8_likelychg2 = mkLklyChnk "s8_likelychg2" (lc2Desc) (S "Variable-Values-of-m,k,E")
-s8_likelychg3 = mkLklyChnk "s8_likelychg3" (lc3Desc) (S "Accomodate-More-than-Single-Lite")
-s8_likelychg4 = mkLklyChnk "s8_likelychg4" (lc4Desc) (S "Accomodate-More-Boundary-Conditions")
-s8_likelychg5 = mkLklyChnk "s8_likelychg5" (lc5Desc) (S "Consider-More-than-Flexure-Glass")
+s8_likelychg1 = mkLklyChnk "s8_likelychg1" (lc1Desc (blastRisk)) "Calculate-Internal-Blask-Risk"
+s8_likelychg2 = mkLklyChnk "s8_likelychg2" (lc2Desc) "Variable-Values-of-m,k,E"
+s8_likelychg3 = mkLklyChnk "s8_likelychg3" (lc3Desc) "Accomodate-More-than-Single-Lite"
+s8_likelychg4 = mkLklyChnk "s8_likelychg4" (lc4Desc) "Accomodate-More-Boundary-Conditions"
+s8_likelychg5 = mkLklyChnk "s8_likelychg5" (lc5Desc) "Consider-More-than-Flexure-Glass"
 
 lc1Desc :: NamedChunk -> Sentence
 lc2Desc, lc3Desc, lc4Desc, lc5Desc :: Sentence

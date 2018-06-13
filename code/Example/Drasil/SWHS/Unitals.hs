@@ -195,12 +195,12 @@ eta, melt_frac :: DefinedQuantityDict
 -- FIXME: should this have units?
 eta = dqd' (dcc "eta" (nounPhraseSP "ODE parameter")
   "Derived parameter based on rate of change of temperature of water")
-  (const lEta) Real Nothing []
+  (const lEta) Real Nothing
 
 melt_frac = dqd' (dcc "melt_frac" (nounPhraseSP "melt fraction")
   "Ratio of thermal energy to amount of mass melted")
   --FIXME: Not sure if definition is exactly correct
-  (const lPhi) Real Nothing []
+  (const lPhi) Real Nothing
 
 -----------------
 -- Constraints --

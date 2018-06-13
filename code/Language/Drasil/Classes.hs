@@ -1,24 +1,23 @@
 {-# Language TypeFamilies #-}
 -- | Defining all the classes which represent knowledge-about-knowledge
 module Language.Drasil.Classes (
-    HasUID(uid), UID
+    HasUID(uid)
   , NamedIdea(term)
   , Idea(getA)
   , Definition(defn)
-  , ConceptDomain(cdom, DOM)
+  , ConceptDomain(cdom)
   , Concept
   , HasSymbol(symbol)
   , HasSpace(typ)
   , HasUnitSymbol(usymb)
   , IsUnit
   , UnitEq(uniteq)
-  , HasAttributes(attributes)
   , HasReference(getReferences)
   , CommonIdea(abrv)
   , Constrained(constraints)
   , HasReasVal(reasVal)
   , ExprRelat(relat)
-  , HasDerivation(derivation)
+  , HasDerivation(derivations)
   ) where
 
 import Language.Drasil.NounPhrase.Core (NP)
@@ -26,17 +25,15 @@ import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Symbol (Stage, Symbol)
 import Language.Drasil.Space (Space)
 import Language.Drasil.UnitLang (USymb, UDefn)
-import Language.Drasil.Chunk.Attribute.Core (Attributes)
-import Language.Drasil.Chunk.Attribute.References (References)
+import Language.Drasil.Chunk.References (References)
+import Language.Drasil.UID (UID)
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.Chunk.Attribute.Derivation
+import Language.Drasil.Chunk.Derivation
 
 import Control.Lens (Lens')
 
-type UID = String
-
--- | The most basic item: having a unique key, here a UID (as a String)
+-- | The most basic item: having a unique key, here a UID
 class HasUID c where
   -- | Provides a /unique/ id for internal Drasil use
   uid :: Lens' c UID
@@ -59,9 +56,8 @@ class Definition c where
   defn :: Lens' c Sentence
 
 class ConceptDomain c where
-  type DOM c :: *
   -- | cdom provides (a 'Lens' to) the concept domain tags for a chunk
-  cdom :: Lens' c [DOM c] 
+  cdom :: Lens' c [UID]
   -- ^ /cdom/ should be exported for use by the
   -- Drasil framework, but should not be exported beyond that.
 
@@ -77,15 +73,11 @@ class HasSymbol c where
 class HasSpace c where
   typ      :: Lens' c Space
 
--- | Anything with 'Attributes'
-class HasAttributes c where
-  attributes :: Lens' c Attributes
-
 class HasReference c where
   getReferences :: Lens' c References
 
 class HasDerivation c where
-  derivation :: Lens' c Derivation
+  derivations :: Lens' c Derivation
 
 -- | CommonIdea is a 'NamedIdea' with the additional
 -- constraint that it __must__ have an abbreviation.

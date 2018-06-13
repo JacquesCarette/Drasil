@@ -358,7 +358,13 @@ Equation & \begin{dmath}
            is\_safe1={P_{b}}<{P_{btol}}
            \end{dmath}
 \\ \midrule \\
-Description & If $is\_safe1$, the glass is considered safe. $is\_safe1$ and $is\_safe2$ (from \hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[T:probOfBr]{Definition~T:probOfBr}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
+Description & \begin{description}
+If $is\_safe1$, the glass is considered safe. $is\_safe1$ and $is\_safe2$ (from \hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[T:probOfBr]{Definition~T:probOfBr}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
+              \end{description}
+\\ \midrule \\
+Source & FIXME: This needs to be filled in
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -374,7 +380,13 @@ Equation & \begin{dmath}
            is\_safe2=LR>q
            \end{dmath}
 \\ \midrule \\
-Description & If $is\_safe2$, the glass is considered safe. $is\_safe1$ (from \hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) and $is\_safe2$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[T:calOfCap]{Definition~T:calOfCap}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[T:calOfDe]{Definition~T:calOfDe}.
+Description & \begin{description}
+If $is\_safe2$, the glass is considered safe. $is\_safe1$ (from \hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) and $is\_safe2$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[T:calOfCap]{Definition~T:calOfCap}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[T:calOfDe]{Definition~T:calOfDe}.
+              \end{description}
+\\ \midrule \\
+Source & FIXME: This needs to be filled in
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{General Definitions}
@@ -386,9 +398,9 @@ This section collects and defines all the data needed to build the instance mode
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:risk\_fun}
+\toprule \textbf{Refname} & \textbf{DD:risk.fun}
 \phantomsection 
-\label{DD:risk\_fun}
+\label{DD:risk.fun}
 \\ \midrule \\
 Label & Risk of failure
 \\ \midrule \\
@@ -396,7 +408,9 @@ Symbol & $B$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $B=\frac{k}{\left(a b\right)^{m-1}} \left(1000 E h^{2}\right)^{m} LDF e^{J}$
+Equation & \begin{dmath}
+           B=\frac{k}{\left(a b\right)^{m-1}} \left(1000 E h^{2}\right)^{m} LDF e^{J}
+           \end{dmath}
 \\ \midrule \\
 Description & \begin{description}
               \item{$B$ is the risk of failure (Unitless)}
@@ -418,9 +432,9 @@ RefBy & FIXME: This needs to be filled in
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:act\_thick}
+\toprule \textbf{Refname} & \textbf{DD:act.thick}
 \phantomsection 
-\label{DD:act\_thick}
+\label{DD:act.thick}
 \\ \midrule \\
 Label & Actual thickness
 \\ \midrule \\
@@ -428,7 +442,8 @@ Symbol & $h$
 \\ \midrule \\
 Units & m
 \\ \midrule \\
-Equation & $h=\frac{1}{1000} \begin{cases}
+Equation & \begin{dmath}
+           h=\frac{1}{1000} \begin{cases}
 2.16, & t=2.5\\
 2.59, & t=2.7\\
 2.92, & t=3.0\\
@@ -441,9 +456,17 @@ Equation & $h=\frac{1}{1000} \begin{cases}
 15.09, & t=16.0\\
 18.26, & t=19.0\\
 21.44, & t=22.0
-\end{cases}$
+\end{cases}
+           \end{dmath}
 \\ \midrule \\
-Description & $h$ is the actual thickness (m)\newline$t$ is the nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ (mm)
+Description & \begin{description}
+              \item{$h$ is the actual thickness (m)}
+              \item{$t$ is the nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ (mm)}
+              \end{description}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -459,7 +482,9 @@ Symbol & $J$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $J=J\left(\hat{q},\frac{a}{b}\right)$
+Equation & \begin{dmath}
+           J=J\left(\hat{q},\frac{a}{b}\right)
+           \end{dmath}
 \\ \midrule \\
 Description & \begin{description}
               \item{$J$ is the stress distribution factor (Function) (Unitless)}
@@ -487,7 +512,9 @@ Symbol & $NFL$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $NFL=\frac{{\hat{q}_{tol}} E h^{4}}{\left(a b\right)^{2}}$
+Equation & \begin{dmath}
+           NFL=\frac{{\hat{q}_{tol}} E h^{4}}{\left(a b\right)^{2}}
+           \end{dmath}
 \\ \midrule \\
 Description & \begin{description}
               \item{$NFL$ is the non-factored load (Unitless)}
@@ -516,13 +543,22 @@ Symbol & $GTF$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $GTF=\begin{cases}
+Equation & \begin{dmath}
+           GTF=\begin{cases}
 1, & g=AN\\
 4, & g=FT\\
 2, & g=HS
-\end{cases}$
+\end{cases}
+           \end{dmath}
 \\ \midrule \\
-Description & $GTF$ is the glass type factor\newline$g$ is the glass type $g\in{}\{AN,FT,HS\}$
+Description & \begin{description}
+              \item{$GTF$ is the glass type factor (Unitless)}
+              \item{$g$ is the glass type $g\in{}\{AN,FT,HS\}$ (Unitless)}
+              \end{description}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -538,7 +574,9 @@ Symbol & $\hat{q}$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $\hat{q}=\frac{q \left(a b\right)^{2}}{E h^{4} GTF}$
+Equation & \begin{dmath}
+           \hat{q}=\frac{q \left(a b\right)^{2}}{E h^{4} GTF}
+           \end{dmath}
 \\ \midrule \\
 Description & \begin{description}
               \item{$\hat{q}$ is the dimensionless load (Unitless)}
@@ -568,7 +606,9 @@ Symbol & ${\hat{q}_{tol}}$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & ${\hat{q}_{tol}}={\hat{q}_{tol}}\left({J_{tol}},\frac{a}{b}\right)$
+Equation & \begin{dmath}
+           {\hat{q}_{tol}}={\hat{q}_{tol}}\left({J_{tol}},\frac{a}{b}\right)
+           \end{dmath}
 \\ \midrule \\
 Description & \begin{description}
               \item{${\hat{q}_{tol}}$ is the tolerable load (Unitless)}
@@ -586,9 +626,9 @@ RefBy & FIXME: This needs to be filled in
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:sdf\_tol}
+\toprule \textbf{Refname} & \textbf{DD:sdf.tol}
 \phantomsection 
-\label{DD:sdf\_tol}
+\label{DD:sdf.tol}
 \\ \midrule \\
 Label & Stress distribution factor (Function) based on Pbtol
 \\ \midrule \\
@@ -596,7 +636,9 @@ Symbol & ${J_{tol}}$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & ${J_{tol}}=\log\left(\log\left(\frac{1}{1-{P_{btol}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(1000 E h^{2}\right)^{m} LDF}\right)$
+Equation & \begin{dmath}
+           {J_{tol}}=\log\left(\log\left(\frac{1}{1-{P_{btol}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(1000 E h^{2}\right)^{m} LDF}\right)
+           \end{dmath}
 \\ \midrule \\
 Description & \begin{description}
               \item{${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
@@ -664,7 +706,31 @@ Label & Calculation of Capacity(LR)
 \\ \midrule \\
 Input & $NFL$, $GTF$, $LSF$
 \\ \midrule \\
-Description & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows A\ref{A:glassConditionA} and A\ref{A:glassTyA} (``In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations'') from [4 (pg. 53)].
+Output & $LR$
+\\ \midrule \\
+Input Constraints & \begin{dmath}
+                    NFL>0
+                    \end{dmath}
+                    \begin{dmath}
+                    GTF>0
+                    \end{dmath}
+                    \begin{dmath}
+                    LSF>0
+                    \end{dmath}
+\\ \midrule \\
+Output Constraints & 
+\\ \midrule \\
+Equation & \begin{dmath}
+           LR=NFL GTF LSF
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{description}
+$LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows A\ref{A:glassConditionA} and A\ref{A:glassTyA} (``In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations'') from [4 (pg. 53)].
+              \end{description}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -676,7 +742,7 @@ Description & $LR$ is the load resistance, which is also called capacity. $NFL$ 
 \\ \midrule \\
 Label & Calculation of Demand(q)
 \\ \midrule \\
-Equation & $q=q\left({w_{TNT}},SD\right)$
+Input & $q$, ${w_{TNT}}$, $SD$
 \\ \midrule \\
 Output & $q$
 \\ \midrule \\
@@ -763,7 +829,7 @@ This section provides the functional requirements, the business tasks that the s
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req4}:]Output the input quantities from R1 and the known quantities from R2.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req5}:]If $is\_safe1$ and $is\_safe2$ (from \hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq} and \hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) are true, output the message ``For the given input parameters, the glass is considered safe." If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe."
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req5}:]If $is\_safe1$ and $is\_safe2$ (from \hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq} and \hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) are true, output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
 \end{description}
 \begin{itemize}
 \item[R6:]Output the following quantities:

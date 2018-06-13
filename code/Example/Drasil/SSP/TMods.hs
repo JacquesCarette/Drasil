@@ -86,8 +86,8 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
   --FIXME: sould say U_s but there is no way to say that yet
   S "The", getES shrStress, S "versus", getES normStress,
   S "relationship is not truly",
-  phrase linear `sC` S "but assuming the effective", phrase normForce,
-  S "is strong enough it can be approximated with a", phrase linear,
+  phrase linear `sC` S "but assuming the effective", phrase normForce, 
+  S "is strong enough, it can be approximated with a", phrase linear,
   S "fit", sParen (refA sspRefDB newA9), S "where the cohesion", getES cohesion,
   S "represents the", getES shrStress, S "intercept of the fitted line"]
 

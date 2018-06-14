@@ -12,8 +12,9 @@ SSP_DIR = SSP
 GLASS_DIR = GlassBR
 GAME_DIR = Chipmunk
 
-DATA_DIR = Data
 LANG_DIR = drasil-lang
+CODE_DIR = drasil-code
+DATA_DIR = Data
 
 GAME_EXE = chipmunkdocs
 TINY_EXE = tiny
@@ -43,8 +44,8 @@ build: FORCE
 	stack install $(stackArgs) drasil-lang
 
 build_code: build
-	mkdir -p build
-	stack build -j2 $(stackArgs) drasil-code
+	mkdir -p $(CODE_DIR)
+	cd $(CODE_DIR) && stack build -j2 $(stackArgs) drasil-code
 	stack install $(stackArgs) drasil-code
 
 build_data: build

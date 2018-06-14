@@ -383,10 +383,10 @@ shearFunc = uc' "C2_i" (cn "interslice shear force function")
   (fixme)
   (Concat [cC, Atomic "2"]) momentOfForceU
 
-fx = uc' "fx" (cn "x-component of the net force") fixme
+fx = uc' "fx" (cn "x-component of the net force") ""
   (sub cF lX) newton
 
-fy = uc' "fy" (cn "y-component of the net force") fixme
+fy = uc' "fy" (cn "y-component of the net force") ""
   (sub cF lY) newton
   
 ----------------------

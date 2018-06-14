@@ -9,9 +9,11 @@ import Language.Drasil.Classes (HasUID(uid), Idea, Definition(defn),
   ConceptDomain(cdom), Concept)
 import Language.Drasil.Chunk.NamedIdea(mkIdea,nw)
 import Language.Drasil.Chunk.CommonIdea (commonIdea)
-import Language.Drasil.Spec
-import Language.Drasil.NounPhrase
-import Language.Drasil.Chunk.Concept.Core
+import Language.Drasil.Spec (Sentence(S))
+import Language.Drasil.NounPhrase (NP)
+import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict), CommonConcept(ComConDict), 
+  DefnAndDomain(DAD))
+
 
 import Control.Lens ((^.))
 

@@ -32,6 +32,11 @@ import Control.Lens ((^.), Lens', makeLenses)
 class Quantity c => UncertainQuantity c where
   uncert :: Lens' c (Maybe Double)
 
+--make sure that it is between 0 and 1, and throw an error otherwise
+bw0And1 :: (Num a, Ord a) => a -> Maybe a
+bw0And1 u = if ((0 < u) && (u < 1)) then (Just u)
+            else error "Uncertainty must be between 0 and 1."
+
 {- The order of the following two implementations is the same as in Constrained -}
 
 {--}
@@ -56,7 +61,7 @@ instance UncertainQuantity UncertainChunk where uncert = unc'
 
 {-- Constructors --}
 uncrtnChunk :: (Quantity c, Constrained c, HasReasVal c) => c -> Double -> UncertainChunk
-uncrtnChunk q u = UCh (cnstrw q) (Just u)
+uncrtnChunk q u = UCh (cnstrw q) (bw0And1 u)
 
 -- | Creates an uncertain varchunk
 uvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> Double -> UncertainChunk
@@ -91,7 +96,7 @@ instance Concept           UncertQ where
 -- | The UncertainQuantity constructor. Requires a Quantity, a percentage, and a typical value
 uq :: (Quantity c, Constrained c, Concept c, HasReasVal c) =>
   c -> Double -> UncertQ
-uq q u = UQ (ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit q)) (q ^. constraints) (q ^. reasVal)) (Just u) 
+uq q u = UQ (ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit q)) (q ^. constraints) (q ^. reasVal)) (bw0And1 u)
 
 uqNU :: (Quantity c, Constrained c, Concept c, HasReasVal c) =>
   c -> UncertQ
@@ -111,4 +116,3 @@ uqcNU nam trm desc sym un space cs val = uqNU (cuc' nam trm desc sym un space cs
 uqcND :: (IsUnit u, ConceptDomain u) => String -> NP -> Symbol -> u -> Space -> [Constraint]
                   -> Expr -> Double -> UncertQ
 uqcND nam trm sym un space cs val uncrt = uq (cuc' nam trm "" sym un space cs val) uncrt
-

@@ -25,7 +25,7 @@ module Data.Drasil.Utils
   , eqUnR
   ) where
 
-import Data.List
+import Data.List (transpose)
 import Control.Lens ((^.))
 import Language.Drasil {-(Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
   ItemType(Flat), sParen, sSqBr, Contents(Definition, Enumeration), 
@@ -33,7 +33,8 @@ import Language.Drasil {-(Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
   symbol, SymbolForm, symbolMap, UnitDefn, usymb, Chunk, Expr(..),
   phrase, titleize, titleize', mkTable, Contents(Table), fromEqn, fromEqn', 
   UnitalChunk, QDefinition, term, uid, unit, ucw)-}
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation (fterms, input_, output_, symbol_, 
+  useCaseTable)
 import Data.Drasil.Concepts.Math (unit_)
 
 eqUnR :: Expr -> Contents -- FIXME: Unreferable equations

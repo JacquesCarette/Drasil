@@ -29,7 +29,7 @@ import Language.Drasil.Space (Space)
 import Language.Drasil.UnitLang (USymb, UDefn)
 import Language.Drasil.Chunk.References (References)
 import Language.Drasil.UID (UID)
-import Language.Drasil.Label (Label)
+import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Chunk.Derivation

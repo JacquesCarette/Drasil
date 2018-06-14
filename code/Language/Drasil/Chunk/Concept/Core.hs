@@ -7,6 +7,7 @@ import Language.Drasil.Chunk.CommonIdea (CI)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, CommonIdea(abrv))
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName)
 
 import Control.Lens (makeLenses, (^.), view)
 
@@ -17,8 +18,11 @@ data DefnAndDomain = DAD { _defn' :: Sentence, _cdom' :: [UID]}
 makeLenses ''DefnAndDomain
 
 -- | The ConceptChunk datatype is a Concept
--- ConDict is not exported, nor are _idea and _dad
-data ConceptChunk = ConDict { _idea :: IdeaDict, _dad :: DefnAndDomain }
+-- ConDict is not exported, nor are _idea, _dad, and _sn.
+data ConceptChunk = ConDict { _idea :: IdeaDict
+                            , _dad :: DefnAndDomain
+                            , _sn :: Maybe ShortName
+                            }
 makeLenses ''ConceptChunk
 
 instance Definition    DefnAndDomain where defn = defn'
@@ -31,6 +35,10 @@ instance Idea          ConceptChunk where getA = getA . view idea
 instance Definition    ConceptChunk where defn = dad . defn'
 instance ConceptDomain ConceptChunk where cdom = dad . cdom'
 instance Concept       ConceptChunk where
+instance HasShortName  ConceptChunk where
+  shortname x = maybe
+    (error $ "No ShortName found for ConceptChunk: " ++ (view uid x)) id $
+    view sn x
  
 data CommonConcept = ComConDict { _comm :: CI, _def :: Sentence, _dom :: [UID]}
 makeLenses ''CommonConcept

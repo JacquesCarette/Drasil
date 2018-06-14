@@ -91,12 +91,12 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
                | Defnt DType [(Identifier, [Contents])] RefAdd
 type Identifier = String
 
-data ContentChunk = CC { _uniqueID :: UID
+data LabelledContent = LblC { _uniqueID :: UID
                        , _lbl :: Label
                        , ctype :: Contents
                        , _sn :: Maybe ShortName
                        }
-makeLenses ''ContentChunk
+makeLenses ''LabelledContent
 
 instance HasShortName  Contents where
   shortname (Table _ _ _ _ r)     = shortname' $ "Table:" ++ r

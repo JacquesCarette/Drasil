@@ -377,12 +377,12 @@ sliceHght = uc' "z_i" (cn "center of slice height")
   (lZ) metre
 
 normFunc = uc' "C1_i" (cn "interslice normal force function")
-  (fixme)
-  (Concat [cC, Atomic "1"]) momentOfForceU
+  "the normal force at the interslice interface for slice i"
+  (sub (Concat [cC, Atomic "1"]) lI) momentOfForceU
   
 shearFunc = uc' "C2_i" (cn "interslice shear force function")
-  (fixme)
-  (Concat [cC, Atomic "2"]) momentOfForceU
+  "the shear force at the interslice interface for slice i"
+  (sub (Concat [cC, Atomic "2"]) lI) momentOfForceU
 
 fx = uc' "fx" (cn "x-component of the net force") ""
   (sub cF lX) newton

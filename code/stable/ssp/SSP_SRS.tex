@@ -67,9 +67,9 @@ $b$ & Base Width of a Slice: in the x-ordinate direction only for slice index i 
 \\
 $c'$ & Effective Cohesion: internal pressure that sticks particles of soil together & Pa
 \\
-$C1$ & Interslice Normal Force Function: FIXME: missing discription & Nm
+${C1_{i}}$ & Interslice Normal Force Function: the normal force at the interslice interface for slice i & Nm
 \\
-$C2$ & Interslice Shear Force Function: FIXME: missing discription & Nm
+${C2_{i}}$ & Interslice Shear Force Function: the shear force at the interslice interface for slice i & Nm
 \\
 $E$ & Elastic Modulus: The ratio of the stress exerted on a body to the resulting strain. & Pa
 \\
@@ -1073,15 +1073,15 @@ The constants $Ψ$ and $Φ$ described in equation (20) and equation (19) are fun
 \\ \midrule \\
 Label & Normal/shear Force Ratio
 \\ \midrule \\
-Equation & ${C1}_{i}=\begin{cases}
+Equation & ${C1_{i}}=\begin{cases}
 b_{1} \left(E_{1}+H_{1}\right) \tan\left(α_{1}\right), & i=1\\
 b_{i} \left(SpencerFixme1Please+SpencerFixme2Please\right) \tan\left(α_{i}\right)+h \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(β_{i}\right)-2 Q_{i} \cos\left(ω_{i}\right)\right), & 2\leq{}i\leq{}n-1\\
 b_{n} \left(E_{n-1}+H_{n-1}\right) \tan\left(α_{n-1}\right), & i=n
-\end{cases}={C2}_{i}=\begin{cases}
+\end{cases}={C2_{i}}=\begin{cases}
 b_{1} f_{1} E_{1}, & i=1\\
 b_{i} \left(f_{i} E_{i}+f_{i-1} E_{i-1}\right), & 2\leq{}i\leq{}n-1\\
 b_{n} E_{n-1} H_{n-1}, & i=1
-\end{cases}=λ=\frac{\displaystyle\sum_{i=1}^{n}{{C1}_{i}}}{\displaystyle\sum_{i=1}^{n}{{C2}_{i}}}$
+\end{cases}=λ=\frac{\displaystyle\sum_{i=1}^{n}{{C1_{i}}}}{\displaystyle\sum_{i=1}^{n}{{C2_{i}}}}$
 \\ \midrule \\
 Description & $λ$ is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in GD5 The inclination function $f$ determines the relative magnitude ratio between the different interslices, while $λ$ determines the magnitude. $λ$ uses the sum of interslice normal and shear forces taken from each interslice.
 \\ \bottomrule \end{tabular}

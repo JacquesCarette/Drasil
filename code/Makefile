@@ -14,7 +14,7 @@ GAME_DIR = Chipmunk
 
 LANG_DIR = drasil-lang
 CODE_DIR = drasil-code
-DATA_DIR = Data
+DATA_DIR = drasil-data
 
 GAME_EXE = chipmunkdocs
 TINY_EXE = tiny

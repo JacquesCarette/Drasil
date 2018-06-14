@@ -13,7 +13,7 @@ GLASS_DIR = GlassBR
 GAME_DIR = Chipmunk
 
 DATA_DIR = Data
-LANG_DIR = Language
+LANG_DIR = drasil-lang
 
 GAME_EXE = chipmunkdocs
 TINY_EXE = tiny

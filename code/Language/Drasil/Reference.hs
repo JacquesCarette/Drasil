@@ -1,26 +1,28 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Reference where
 
-import Language.Drasil.UID (UID)
-import Language.Drasil.Classes (HasUID(uid))
-import Language.Drasil.Chunk.AssumpChunk as A
-import Language.Drasil.Chunk.Change as Ch
-import Language.Drasil.Chunk.Citation as Ci
-import Language.Drasil.Chunk.Eq
-import Language.Drasil.Chunk.GenDefn
-import Language.Drasil.Chunk.Goal as G
-import Language.Drasil.Chunk.InstanceModel
-import Language.Drasil.Chunk.PhysSystDesc as PD
-import Language.Drasil.Chunk.ReqChunk as R
-import Language.Drasil.Chunk.Theory
-import Language.Drasil.Document
-import Language.Drasil.Spec (Sentence(..))
-import Language.Drasil.RefTypes (RefType(..))
 import Control.Lens ((^.), Simple, Lens, makeLenses)
-import Language.Drasil.Chunk.ShortName
+import Data.Function (on)
 import Data.List (partition, sortBy)
 import qualified Data.Map as Map
-import Data.Function (on)
+
+import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
+import Language.Drasil.Chunk.Change as Ch (Change(..), ChngType(..))
+import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID))
+import Language.Drasil.Chunk.Eq (QDefinition)
+import Language.Drasil.Chunk.GenDefn (GenDefn)
+import Language.Drasil.Chunk.Goal as G (Goal, refAddr)
+import Language.Drasil.Chunk.InstanceModel (InstanceModel)
+import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc, refAddr)
+import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..), ReqType(FR))
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName)
+import Language.Drasil.Chunk.Theory (TheoryModel)
+import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Document (Contents(..), DType(Data, Theory), 
+  Section(Section), getDefName, repUnd)
+import Language.Drasil.RefTypes (RefType(..))
+import Language.Drasil.Spec (Sentence(..))
+import Language.Drasil.UID (UID)
 
 -- | Database for maintaining references.
 -- The Int is that reference's number.

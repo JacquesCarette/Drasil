@@ -1,4 +1,4 @@
-module Language.Drasil.UnitLang (
+module Language.Drasil.Development.UnitLang (
     USymb(US), UDefn(..)
   , from_udefn, comp_usymb
   ) where

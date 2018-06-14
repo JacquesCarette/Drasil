@@ -15,7 +15,6 @@ GAME_DIR = Chipmunk
 LANG_DIR = drasil-lang
 CODE_DIR = drasil-code
 DATA_DIR = drasil-data
-DEV_DIR  = drasil-dev
 
 GAME_EXE = chipmunkdocs
 TINY_EXE = tiny
@@ -51,11 +50,6 @@ build_code: build
 	mkdir -p $(CODE_DIR)
 	cd $(CODE_DIR) && stack build -j2 $(stackArgs) drasil-code
 	stack install $(stackArgs) drasil-code
-
-build_dev: build
-	make p $(DEV_DIR)
-	cd $(DEV_DIR) && stack build -j2 $(stackArgs) drasil-dev
-	stack install $(stackArgs) drasil-dev
 
 build_data: build
 	mkdir -p $(DATA_DIR)

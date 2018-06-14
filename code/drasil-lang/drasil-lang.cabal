@@ -7,7 +7,8 @@ Synopsis:	A framework for code and document generation for scientific software -
 
 library
   exposed-modules:
-    Language.Drasil
+      Language.Drasil
+    , Language.Drasil.Development
   other-modules:
       Language.Drasil.SystemInformation
     , Language.Drasil.Expr
@@ -17,6 +18,7 @@ library
     , Language.Drasil.Config
     , Language.Drasil.Document
     , Language.Drasil.Format
+    , Language.Drasil.Label
     , Language.Drasil.Misc
     , Language.Drasil.NounPhrase.Core
     , Language.Drasil.NounPhrase
@@ -77,6 +79,8 @@ library
     , Language.Drasil.Printing.Citation
     , Language.Drasil.Printing.Import
     , Language.Drasil.Printing.LayoutObj
+    , Language.Drasil.Development.Unit
+    , Language.Drasil.Development.UnitLang
 
   Build-Depends:
     base >= 4.7,

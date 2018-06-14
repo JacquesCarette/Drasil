@@ -301,7 +301,8 @@ midpntHght = uc' "h_i" (cn $ "midpoint height")
   "line from the midpoint of the slice " ++ fsi)
   (lH) metre
 
-momntOfBdy = uc' "M" (cn $ "moment of a body") ("assumed 2D allowing a scalar")
+momntOfBdy = uc' "M" (cn $ "moment") ("a measure of the tendency of " ++
+  "a body to rotate about a specific point or axis")
   cM momentOfForceU --FIXME: move in concepts.physics ?
 
 genDisplace = uc' "genDisplace" (cn $ "displacement")

@@ -3,10 +3,11 @@ import Language.Drasil
 
 -- These are not normally all exported, but need them here. Should probably create
 -- some kind of Language.Drasil.Development module... FIXME
-import Language.Drasil.UnitLang(UDefn(..))
-import Language.Drasil.Unit (UnitDefn(..), DerUChunk(..),
+import Language.Drasil.Development
+{-.UnitLang(UDefn(..))
+import Language.Drasil.Development.Unit (UnitDefn(..), DerUChunk(..),
   UnitDefn, new_unit, (^:), (/:), (*:), makeDerU, shift, scale,
-  derUC, derUC', derUC'', unitWrapper)
+  derUC, derUC', derUC'', unitWrapper)-}
 
 fundamentals :: [UnitDefn]
 fundamentals = [metre, kilogram, second, kelvin, mole, ampere, candela]

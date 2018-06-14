@@ -16,7 +16,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   UnitEq(uniteq))
 import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cc')
 import Language.Drasil.Symbol
-import Language.Drasil.UnitLang
+import Language.Drasil.Development.UnitLang
 
 import Language.Drasil.NounPhrase (cn,cn',NP)
 

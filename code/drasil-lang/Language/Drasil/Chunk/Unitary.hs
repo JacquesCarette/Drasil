@@ -8,7 +8,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   ConceptDomain, HasSymbol(symbol), IsUnit)
 import Language.Drasil.Chunk.Quantity (Quantity(..), QuantityDict, mkQuant, qw, 
   HasSpace(typ))
-import Language.Drasil.Unit (UnitDefn, unitWrapper)
+import Language.Drasil.Development.Unit (UnitDefn, unitWrapper)
 import Language.Drasil.Symbol
 import Language.Drasil.Space
 import Language.Drasil.NounPhrase (NP)

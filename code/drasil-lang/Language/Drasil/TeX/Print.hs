@@ -14,7 +14,7 @@ import Language.Drasil.Printing.LayoutObj
 import qualified Language.Drasil.Printing.Import as I
 import qualified Language.Drasil.Spec as LS
 import qualified Language.Drasil.RefTypes as RT
-import Language.Drasil.UnitLang
+import Language.Drasil.Development.UnitLang
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT,bibFname)
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers

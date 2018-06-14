@@ -1,6 +1,6 @@
 module Language.Drasil.Printing.AST where
 
-import Language.Drasil.UnitLang (USymb)
+import Language.Drasil.Development.UnitLang (USymb)
 import Language.Drasil.RefTypes (RefType, RefAdd)
 import Language.Drasil.Unicode (Special)
 import Language.Drasil.Chunk.ShortName

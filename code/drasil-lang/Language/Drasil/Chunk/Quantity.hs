@@ -11,7 +11,7 @@ import Language.Drasil.Chunk.NamedIdea (IdeaDict,nw,mkIdea)
 import Language.Drasil.Symbol (Symbol,Stage)
 import Language.Drasil.Space (Space)
 import Language.Drasil.NounPhrase
-import Language.Drasil.Unit(UnitDefn)
+import Language.Drasil.Development.Unit(UnitDefn)
 
 -- | A Quantity is an 'Idea' with a 'Space' and a symbol and 
 -- may have units

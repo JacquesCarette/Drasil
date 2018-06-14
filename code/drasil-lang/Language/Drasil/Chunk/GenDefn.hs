@@ -8,7 +8,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   ExprRelat(relat), HasDerivation(derivations), HasReference(getReferences))
 import Language.Drasil.Chunk.References (References)
 import Language.Drasil.Chunk.Relation (RelationConcept)
-import Language.Drasil.Unit (unitWrapper, UnitDefn)
+import Language.Drasil.Development.Unit (unitWrapper, UnitDefn)
 import Language.Drasil.Chunk.Derivation
 import Language.Drasil.Chunk.ShortName
 

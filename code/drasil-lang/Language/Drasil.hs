@@ -225,8 +225,8 @@ import Language.Drasil.Document (Document(..), DType(..)
   , datadefn, reldefn
   , ListPair)
 import Language.Drasil.Unicode -- all of it
-import Language.Drasil.UnitLang -- all of it
-import Language.Drasil.Unit -- all of it
+import Language.Drasil.Development.UnitLang -- all of it
+import Language.Drasil.Development.Unit -- all of it
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), 

@@ -17,7 +17,7 @@ import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Chunk.Unital (ucs)
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.NounPhrase
-import Language.Drasil.Unit (unitWrapper)
+import Language.Drasil.Development.Unit (unitWrapper)
 import Language.Drasil.Space
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),

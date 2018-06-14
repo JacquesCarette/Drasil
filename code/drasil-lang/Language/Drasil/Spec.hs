@@ -6,7 +6,7 @@ import Language.Drasil.Unicode (Special(SqBrOpen,SqBrClose))
 import Language.Drasil.Symbol
 import Language.Drasil.Expr
 import Language.Drasil.RefTypes
-import Language.Drasil.UnitLang (USymb)
+import Language.Drasil.Development.UnitLang (USymb)
 import Language.Drasil.Chunk.ShortName
 
 

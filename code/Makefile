@@ -29,7 +29,7 @@ DIFF = diff --strip-trailing-cr --ignore-all-space
 TESTS = swhs_diff tiny_diff ssp_diff glassbr_diff gamephys_diff nopcm_diff
 PROGS = swhs_prog tiny_prog ssp_prog glassbr_prog gamephys_prog nopcm_prog
 
-all: build build_code build_dev build_data test
+all: build build_code build_data test
 
 test: $(PROGS) $(TESTS)
 	@echo ----------------------------

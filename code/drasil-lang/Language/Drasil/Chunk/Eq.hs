@@ -13,7 +13,7 @@ import Language.Drasil.Chunk.Concept (ConceptChunk)
 import Language.Drasil.Chunk.Quantity (Quantity(getUnit), HasSpace(typ), QuantityDict,
   mkQuant, qw)
 import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
-import Language.Drasil.Unit (unitWrapper)
+import Language.Drasil.Development.Unit (unitWrapper)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space
 import Language.Drasil.Chunk.Derivation

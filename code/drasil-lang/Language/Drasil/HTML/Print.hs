@@ -11,7 +11,7 @@ import Language.Drasil.Printing.AST
 import Language.Drasil.Printing.Citation
 import Language.Drasil.Printing.LayoutObj
 import qualified Language.Drasil.Output.Formats as F
-import Language.Drasil.UnitLang
+import Language.Drasil.Development.UnitLang
 
 import Language.Drasil.HTML.Helpers
 import Language.Drasil.Printing.Helpers

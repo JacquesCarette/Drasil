@@ -1,7 +1,7 @@
 module Language.Drasil.Expr.Precedence where
 
-import Language.Drasil.Expr (BinOp(..),BoolOper(..),ArithOper(..),
-  UFunc(..),Expr(..))
+import Language.Drasil.Expr (BinOp(..), BoolOper(..), ArithOper(..),
+  UFunc(..), Expr(..))
 
 -- These precedences are inspired from Haskell/F# 
 -- as documented at http://kevincantu.org/code/operators.html

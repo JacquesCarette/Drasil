@@ -10,7 +10,6 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
 import Language.Drasil.Chunk.References (References)
 import Language.Drasil.Chunk.Derivation
 import Language.Drasil.Chunk.ShortName
-import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained.Core (TheoryConstraint)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation

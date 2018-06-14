@@ -5,6 +5,7 @@ import Data.Drasil.SI_Units (metre, radian, s_2, second, newton, kilogram,
 import Language.Drasil (new_unit, DerUChunk, (/:), (/$), (*:), cn, UDefn(..),
   dcc, makeDerU)
 
+
 accelU, angVelU, angAccelU, momtInertU, momentOfForceU, impulseU,
   springConstU, torqueU, velU :: DerUChunk
 

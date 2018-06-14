@@ -1,3 +1,4 @@
+{-# Language TemplateHaskell #-}
 -- | Document Description Language
 module Language.Drasil.Document where
 
@@ -6,6 +7,7 @@ import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.ShortName
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Eq
+import Language.Drasil.UID
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.ReqChunk
 import Language.Drasil.Spec (Sentence(..))
@@ -13,7 +15,22 @@ import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Expr
 import Language.Drasil.Chunk.Citation (BibRef)
 
-import Control.Lens ((^.))
+import Control.Lens ((^.), makeLenses)
+
+data ListType = Bullet [ItemType] -- ^ Bulleted list
+              | Numeric [ItemType] -- ^ Enumerated List
+              | Simple [ListPair] -- ^ Simple list with items denoted by @-@
+              | Desc [ListPair] -- ^ Descriptive list, renders as "Title: Item" (see 'ListPair')
+              | Definitions [ListPair] -- ^ Renders a list of "@Title@ is the @Item@"
+
+data ItemType = Flat Sentence -- ^ Standard singular item
+              | Nested Header ListType -- ^ Nest a list as an item
+
+-- | MaxWidthPercent should be kept in the range 1-100. 
+-- Values outside this range may have unexpected results.
+-- Used for specifying max figure width as
+-- pagewidth*MaxWidthPercent/100.
+type MaxWidthPercent = Float
 
 type Title    = Sentence
 type Author   = Sentence
@@ -28,6 +45,17 @@ type Label    = Sentence
 -- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and Sections
 -- which hold the contents of the document
 data Document = Document Title Author [Section]
+
+--FIXME: Remove Data and Theory from below.
+-- | Types of definitions
+data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining 
+                              -- equation used to generate the Data Definition
+           | General
+           | Theory RelationConcept -- ^ Theoretical models use a relation as
+                                    -- their definition
+           | Instance
+           | TM
+           | DD
 
 -- | Section Contents are split into subsections or contents, where contents
 -- are standard layout objects (see 'Contents')
@@ -63,6 +91,13 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
                | Defnt DType [(Identifier, [Contents])] RefAdd
 type Identifier = String
 
+data ContentChunk = CC { _uniqueID :: UID
+                       , _lbl :: Label
+                       , ctype :: Contents
+                       , _sn :: Maybe ShortName
+                       }
+makeLenses ''ContentChunk
+
 instance HasShortName  Contents where
   shortname (Table _ _ _ _ r)     = shortname' $ "Table:" ++ r
   shortname (Figure _ _ _ r)      = shortname' $ "Figure:" ++ r
@@ -79,31 +114,6 @@ instance HasShortName  Contents where
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
 
--- | MaxWidthPercent should be kept in the range 1-100. 
--- Values outside this range may have unexpected results.
--- Used for specifying max figure width as
--- pagewidth*MaxWidthPercent/100.
-type MaxWidthPercent = Float
-
-data ListType = Bullet [ItemType] -- ^ Bulleted list
-              | Numeric [ItemType] -- ^ Enumerated List
-              | Simple [ListPair] -- ^ Simple list with items denoted by @-@
-              | Desc [ListPair] -- ^ Descriptive list, renders as "Title: Item" (see 'ListPair')
-              | Definitions [ListPair] -- ^ Renders a list of "@Title@ is the @Item@"
-         
-data ItemType = Flat Sentence -- ^ Standard singular item
-              | Nested Header ListType -- ^ Nest a list as an item
-
---FIXME: Remove Data and Theory from below.
--- | Types of definitions
-data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining 
-                              -- equation used to generate the Data Definition
-           | General
-           | Theory RelationConcept -- ^ Theoretical models use a relation as
-                                    -- their definition
-           | Instance
-           | TM
-           | DD
 
 ---------------------------------------------------------------------------
 -- smart constructors and combinators for making instances of the above

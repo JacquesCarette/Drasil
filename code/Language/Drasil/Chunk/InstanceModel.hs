@@ -8,14 +8,14 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn),ConceptDomain(cdom), Concept, ExprRelat(relat),
   HasDerivation(derivations), HasReference(getReferences))
 import Language.Drasil.Chunk.References (References)
-import Language.Drasil.Chunk.Derivation
-import Language.Drasil.Chunk.ShortName
+import Language.Drasil.Chunk.Derivation (Derivation)
+import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
 import Language.Drasil.Chunk.Constrained.Core (TheoryConstraint)
-import Language.Drasil.Chunk.Eq
-import Language.Drasil.Chunk.Relation
-import Language.Drasil.Chunk.Quantity
-import Language.Drasil.ChunkDB
-import Language.Drasil.Expr
+import Language.Drasil.Chunk.Eq (QDefinition, equat)
+import Language.Drasil.Chunk.Relation (RelationConcept, makeRC)
+import Language.Drasil.Chunk.Quantity (QuantityDict, qw)
+import Language.Drasil.ChunkDB (HasSymbolTable)
+import Language.Drasil.Expr (($=))
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Expr.Extract (vars)
 import Language.Drasil.Spec (Sentence)

@@ -14,9 +14,9 @@ import Language.Drasil.Chunk.Quantity (Quantity(getUnit), HasSpace(typ), Quantit
 import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
 import Language.Drasil.Unit (unitWrapper)
 import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.Space
-import Language.Drasil.Chunk.Derivation
-import Language.Drasil.Chunk.ShortName
+import Language.Drasil.Space (Space(Real))
+import Language.Drasil.Chunk.Derivation (Derivation)
+import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
 
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Spec (Sentence)

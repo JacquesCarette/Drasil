@@ -22,17 +22,20 @@ module Language.Drasil.Classes (
   , HasDerivation(derivations)
   ) where
 
+import Language.Drasil.Chunk.Constrained.Core (Constraint)
+import Language.Drasil.Chunk.Derivation (Derivation)
+import Language.Drasil.Chunk.References (References)
+import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase.Core (NP)
+import Language.Drasil.Space (Space)
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Symbol (Stage, Symbol)
-import Language.Drasil.Space (Space)
-import Language.Drasil.UnitLang (USymb, UDefn)
-import Language.Drasil.Chunk.References (References)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Chunk.Derivation
+import Language.Drasil.UnitLang (UDefn, USymb)
 
 import Control.Lens (Lens')
 

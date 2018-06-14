@@ -29,8 +29,6 @@ library
     , Language.Drasil.SymbolAlphabet
     , Language.Drasil.UID
     , Language.Drasil.Unicode
-    , Language.Drasil.Unit
-    , Language.Drasil.UnitLang
     , Language.Drasil.HTML.Helpers
     , Language.Drasil.HTML.Print
     , Language.Drasil.HTML.Monad

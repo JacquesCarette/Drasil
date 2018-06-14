@@ -15,6 +15,7 @@ GAME_DIR = Chipmunk
 LANG_DIR = drasil-lang
 CODE_DIR = drasil-code
 DATA_DIR = drasil-data
+DEV_DIR  = drasil-dev
 
 GAME_EXE = chipmunkdocs
 TINY_EXE = tiny
@@ -29,7 +30,7 @@ DIFF = diff --strip-trailing-cr --ignore-all-space
 TESTS = swhs_diff tiny_diff ssp_diff glassbr_diff gamephys_diff nopcm_diff
 PROGS = swhs_prog tiny_prog ssp_prog glassbr_prog gamephys_prog nopcm_prog
 
-all: build build_code build_data test
+all: build build_code build_dev build_data test
 
 test: $(PROGS) $(TESTS)
 	sh log_check.sh
@@ -47,6 +48,11 @@ build_code: build
 	mkdir -p $(CODE_DIR)
 	cd $(CODE_DIR) && stack build -j2 $(stackArgs) drasil-code
 	stack install $(stackArgs) drasil-code
+
+build_dev: build
+	make p $(DEV_DIR)
+	cd $(DEV_DIR) && stack build -j2 $(stackArgs) drasil-dev
+	stack install $(stackArgs) drasil-dev
 
 build_data: build
 	mkdir -p $(DATA_DIR)

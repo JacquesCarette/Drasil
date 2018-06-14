@@ -10,7 +10,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
 import Language.Drasil.Chunk.NamedIdea (IdeaDict,nw,mkIdea)
 import Language.Drasil.Symbol (Symbol,Stage)
 import Language.Drasil.Space (Space)
-import Language.Drasil.NounPhrase
+import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Unit(UnitDefn)
 
 -- | A Quantity is an 'Idea' with a 'Space' and a symbol and 

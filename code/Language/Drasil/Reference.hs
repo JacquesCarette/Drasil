@@ -3,12 +3,13 @@ module Language.Drasil.Reference where
 
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
-import Data.List (partition, sortBy)
+import Data.List (concatMap, groupBy, partition, sortBy)
 import qualified Data.Map as Map
 
 import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
 import Language.Drasil.Chunk.Change as Ch (Change(..), ChngType(..))
 import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID))
+import Language.Drasil.Chunk.Concept (ConceptChunk)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
 import Language.Drasil.Chunk.Goal as G (Goal, refAddr)
@@ -17,7 +18,7 @@ import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc, refAddr)
 import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..), ReqType(FR))
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName)
 import Language.Drasil.Chunk.Theory (TheoryModel)
-import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid))
 import Language.Drasil.Document (Contents(..), DType(Data, Theory), 
   Section(Section), getDefName, repUnd)
 import Language.Drasil.RefTypes (RefType(..))
@@ -43,6 +44,8 @@ type ReqMap = RefMap ReqChunk
 type ChangeMap = RefMap Change
 -- | Citation Database (bibliography information)
 type BibMap = RefMap Citation
+-- | ConceptChunk Database
+type ConceptMap = RefMap ConceptChunk
 
 
 -- | Database for internal references.
@@ -53,6 +56,7 @@ data ReferenceDB = RDB -- organized in order of appearance in SmithEtAl template
   , _reqDB :: ReqMap
   , _changeDB :: ChangeMap
   , _citationDB :: BibMap
+  , _conceptDB :: ConceptMap
   }
 
 makeLenses ''ReferenceDB
@@ -69,6 +73,7 @@ rdb psds goals assumps reqs changes citations = RDB
   (reqMap reqs)
   (changeMap changes)
   (bibMap citations)
+  (conceptMap [])
 
 simpleMap :: HasUID a => [a] -> RefMap a
 simpleMap xs = Map.fromList $ zip (map (^. uid) xs) (zip xs [1..])
@@ -90,10 +95,25 @@ changeMap cs = Map.fromList $ zip (map (^. uid) (lcs ++ ulcs))
 bibMap :: [Citation] -> BibMap
 bibMap cs = Map.fromList $ zip (map (^. uid) scs) (zip scs [1..])
   where scs :: [Citation]
-        scs = sortBy citeSort cs
+        scs = sortBy uidSort cs
         -- Sorting is necessary if using elems to pull all the citations
         -- (as it sorts them and would change the order).
         -- We can always change the sorting to whatever makes most sense
+
+conGrp :: ConceptChunk -> ConceptChunk -> Bool
+conGrp a b = (cdl a) == (cdl b) where
+  cdl :: ConceptChunk -> UID
+  cdl x = sDom $ x ^. cdom where
+    sDom [d] = d
+    sDom d = error $ "Expected ConceptDomain for: " ++ (x ^. uid) ++
+                     " to have a single domain, found " ++ (show $ length d) ++
+                     " instead."
+
+conceptMap :: [ConceptChunk] -> ConceptMap
+conceptMap cs = Map.fromList $ zip (map (^. uid) (concat grp)) $ concatMap
+  (\x -> zip x [1..]) grp
+  where grp :: [[ConceptChunk]]
+        grp = groupBy conGrp $ sortBy uidSort cs
 
 psdLookup :: HasUID c => c -> PhysSystDescMap -> (PhysSystDesc, Int)
 psdLookup p m = getS $ Map.lookup (p ^. uid) m
@@ -131,6 +151,11 @@ citeLookup c m = getS $ Map.lookup (c ^. uid) m
         getS Nothing = error $ "Change: " ++ (c ^. uid) ++
           " referencing information not found in Change Map"
 
+conceptLookup :: HasUID c => c -> ConceptMap -> (ConceptChunk, Int)
+conceptLookup c = maybe (error $ "ConceptChunk: " ++ (c ^. uid) ++
+          " referencing information not found in Concept Map") id .
+          Map.lookup (c ^. uid)
+
 -- Classes and instances --
 class HasAssumpRefs s where
   assumpRefTable :: Simple Lens s AssumpMap
@@ -144,6 +169,8 @@ class HasGoalRefs s where
   goalRefTable :: Simple Lens s GoalMap
 class HasPSDRefs s where
   psdRefTable :: Simple Lens s PhysSystDescMap
+class HasConceptRefs s where
+  conceptRefTable :: Simple Lens s ConceptMap
 
 instance HasGoalRefs ReferenceDB where goalRefTable = goalDB
 instance HasPSDRefs ReferenceDB where psdRefTable = physSystDescDB
@@ -151,6 +178,7 @@ instance HasAssumpRefs ReferenceDB where assumpRefTable = assumpDB
 instance HasReqRefs ReferenceDB where reqRefTable = reqDB
 instance HasChangeRefs ReferenceDB where changeRefTable = changeDB
 instance HasCitationRefs ReferenceDB where citationRefTable = citationDB
+instance HasConceptRefs ReferenceDB where conceptRefTable = conceptDB
 
 
 class Referable s where
@@ -235,11 +263,11 @@ instance Referable Contents where
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
 
-citeSort :: Citation -> Citation -> Ordering
-citeSort = compare `on` (^. uid)
+uidSort :: HasUID c => c -> c -> Ordering
+uidSort = compare `on` (^. uid)
 
 citationsFromBibMap :: BibMap -> [Citation]
-citationsFromBibMap bm = sortBy citeSort citations
+citationsFromBibMap bm = sortBy uidSort citations
   where citations :: [Citation]
         citations = map (\(x,_) -> x) (Map.elems bm)
 

@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.NamedIdea (
   NamedChunk, nc, IdeaDict, short, nw, mkIdea,
-  compoundNC, compoundNC', compoundNC'', compoundNC''',
+  compoundNC, compoundNC', compoundNC'', compoundNC''', compoundNCP1,
   the, theCustom) where
 
 import Language.Drasil.UID (UID)
@@ -73,6 +73,9 @@ compoundNC'' f1 f2 t1 t2 = nc
 compoundNC''' :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> a -> b -> NamedChunk
 compoundNC''' f1 t1 t2 = nc
   (t1^.uid ++ t2^.uid) (compoundPhrase''' f1 (t1 ^. term) (t2 ^. term))
+
+compoundNCP1 :: NamedChunk -> NamedChunk -> NamedChunk
+compoundNCP1 = compoundNC''' plural
   
 the :: (NamedIdea c) => c -> NamedChunk
 the t = nc ("the" ++ t ^. uid) (nounPhrase''

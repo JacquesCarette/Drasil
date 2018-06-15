@@ -66,7 +66,7 @@ module Language.Drasil (
   -- Chunk.NamedIdea
   , NamedChunk, short, nc, IdeaDict
   , nw -- bad name (historical)
-  , compoundNC, compoundNC', compoundNC'', compoundNC'''
+  , compoundNC, compoundNC', compoundNC'', compoundNC''', compoundNCP1
   , the, theCustom
   -- Chunk.Constrained.Core
   , physc, sfwrc, enumc , isPhysC, isSfwrC
@@ -135,8 +135,8 @@ module Language.Drasil (
   , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase'
   , CapitalizationRule(..)
   , PluralRule(..)
-  , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', titleize, titleize'
-  , nounPhrase'', nounPhraseSP, nounPhraseSent
+  , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
+  , titleize, titleize', nounPhrase'', nounPhraseSP, nounPhraseSent
   -- Document
   , Referable(..), Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListPair

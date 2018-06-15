@@ -5,7 +5,7 @@ module Language.Drasil.NounPhrase
   , pn, pn', pn'', pn''', pnIrr
   , cn, cn', cn'', cn''', cnIP, cnIrr, cnIES, cnICES, cnIS, cnUM
   , nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP, nounPhraseSent
-  , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase'''
+  , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
   , at_start, at_start', titleize, titleize'
   -- re-export these
   , CapitalizationRule(..), PluralRule(..)
@@ -164,6 +164,11 @@ compoundPhrase'' f1 f2 t1 t2 = Phrase
 compoundPhrase''' :: (NP -> Sentence) -> NP -> NP -> NP
 compoundPhrase''' f1 t1 t2 = Phrase 
   (f1 t1 +:+ phrase t2) (f1 t1 +:+ plural t2) CapFirst CapWords
+
+--For Data.Drasil.Documentation
+--Pluralizes the first word in two phrases
+compoundPhraseP1 :: NP -> NP -> NP
+compoundPhraseP1 = compoundPhrase''' plural
 
 -- === Helpers === 
 -- | Helper function for getting the sentence case of a noun phrase.

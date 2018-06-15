@@ -6,7 +6,7 @@ import Data.Drasil.Concepts.Math (graph)
 import Data.Drasil.Phrase (andRT, and_, and_', ofA, of_, of_', of__)
 
 import Control.Lens ((^.))
-import qualified Language.Drasil.NounPhrase as NP (plural)
+--import qualified Language.Drasil.NounPhrase as NP (plural)
 
 assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
   unlikelyChg, physSyst, requirement, thModel, mg, notApp, typUnc, srs :: CI
@@ -31,7 +31,7 @@ notApp      = commonIdea "notApp"      (nounPhraseSP "not applicable")          
 typUnc      = commonIdea "typUnc"      (cn' "typical uncertainty")                         "TU"
 
 srs = commonIdea "srs" 
-  (compoundPhrase''' NP.plural (softwareReq ^. term) (specification ^. term))
+  (compoundPhraseP1 (softwareReq ^. term) (specification ^. term))
   "SRS"
 
 ---------------------------------------------------------------------
@@ -229,7 +229,7 @@ softwareReq                  = compoundNC' software requirement_
 softwareSys                  = compoundNC software system
 softwareVAV                  = compoundNC software vav
 softwareVerif                = compoundNC software verification
-solutionCharSpec             = compoundNC''' (NP.plural) solutionCharacteristic specification
+solutionCharSpec             = compoundNCP1 solutionCharacteristic specification
 solutionCharacteristic       = compoundNC solution characteristic
 specificsystemdescription    = compoundNC specific systemdescription
 sysCont                      = compoundNC system context

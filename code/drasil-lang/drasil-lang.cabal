@@ -12,6 +12,7 @@ library
   other-modules:
       Language.Drasil.SystemInformation
     , Language.Drasil.Expr
+    , Language.Drasil.Expr.Extract
     , Language.Drasil.Expr.Math
     , Language.Drasil.Expr.Precedence
     , Language.Drasil.Classes
@@ -69,7 +70,6 @@ library
     , Language.Drasil.Chunk.UnitaryConcept
     , Language.Drasil.Chunk.VarChunk
     , Language.Drasil.ChunkDB
-    , Language.Drasil.Expr.Extract
     , Language.Drasil.Make.AST
     , Language.Drasil.Make.Helpers
     , Language.Drasil.Make.Import

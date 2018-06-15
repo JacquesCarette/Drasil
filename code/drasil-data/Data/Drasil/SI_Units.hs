@@ -1,6 +1,6 @@
 module Data.Drasil.SI_Units where
-import Language.Drasil
 
+import Language.Drasil
 -- These are not normally all exported, but need them here. Should probably create
 -- some kind of Language.Drasil.Development module... FIXME
 import Language.Drasil.Development

@@ -8,8 +8,9 @@ import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
 import Control.Lens ((^.), makeLenses, view)
 
-import Language.Drasil.Spec
-import Language.Drasil.NounPhrase
+import Language.Drasil.Spec (Sentence(S), (+:+))
+import Language.Drasil.NounPhrase (NP, CapitalizationRule(CapFirst, CapWords), phrase,
+  plural, compoundPhrase, compoundPhrase'', compoundPhrase''', nounPhrase'')
 
 -- | Get short form (if it exists), else get term.
 short :: Idea c => c -> Sentence

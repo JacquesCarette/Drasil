@@ -8,12 +8,12 @@ module Language.Drasil.ChunkDB
   ) where
 
 import Language.Drasil.UID (UID)
-import Language.Drasil.Classes (HasUID(uid), Idea, Concept, IsUnit,
-  ConceptDomain)
+import Language.Drasil.Classes (Concept, ConceptDomain, HasUID(uid), Idea, 
+    IsUnit)
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw)
-import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.Concept 
-import Language.Drasil.Development.Unit (unitWrapper, UnitDefn)
+import Language.Drasil.Chunk.Quantity (Quantity, QuantityDict, getUnit, qw)
+import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
+import Language.Drasil.Development.Unit (UnitDefn, unitWrapper)
 
 import Control.Lens ((^.), Lens', makeLenses)
 import qualified Data.Map as Map

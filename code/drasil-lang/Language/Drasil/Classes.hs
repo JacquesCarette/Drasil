@@ -11,6 +11,8 @@ module Language.Drasil.Classes (
   , HasSpace(typ)
   , HasUnitSymbol(usymb)
   , IsUnit
+  , HasLabel(getLabel)
+  , IsLabel
   , UnitEq(uniteq)
   , HasReference(getReferences)
   , CommonIdea(abrv)
@@ -20,16 +22,17 @@ module Language.Drasil.Classes (
   , HasDerivation(derivations)
   ) where
 
+import Language.Drasil.Chunk.Constrained.Core (Constraint)
+import Language.Drasil.Chunk.Derivation (Derivation)
+import Language.Drasil.Chunk.References (References)
+import Language.Drasil.Development.UnitLang (UDefn, USymb)
+import Language.Drasil.Expr (Expr)
+import Language.Drasil.Label.Core (Label)
 import Language.Drasil.NounPhrase.Core (NP)
+import Language.Drasil.Space (Space)
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Symbol (Stage, Symbol)
-import Language.Drasil.Space (Space)
-import Language.Drasil.Development.UnitLang (USymb, UDefn)
-import Language.Drasil.Chunk.References (References)
 import Language.Drasil.UID (UID)
-import Language.Drasil.Chunk.Constrained.Core (Constraint)
-import Language.Drasil.Expr (Expr)
-import Language.Drasil.Chunk.Derivation
 
 import Control.Lens (Lens')
 
@@ -93,6 +96,13 @@ class Constrained c where
 -- | A HasReasVal is a 'Quantity' that could have a reasonable value
 class HasReasVal c where
   reasVal     :: Lens' c (Maybe Expr)
+
+-- | For those things which "have a label"
+class HasLabel c where
+  getLabel :: Lens' c Label
+
+-- IsLabel is associated with String rendering
+class (HasLabel u, HasUID u) => IsLabel u where
 
 -----------------------------------------------------
 -- Below are for units only

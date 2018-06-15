@@ -2,15 +2,10 @@ module Language.Drasil.Expr.Extract(dep, names', vars) where
 
 import Data.List (nub)
 import Control.Lens ((^.))
-import Language.Drasil.Expr (Expr(..), RealInterval(..))
-<<<<<<< HEAD:code/drasil-lang/Language/Drasil/Expr/Extract.hs
-import Language.Drasil.ChunkDB
---import Language.Drasil.Chunk.Code
-=======
 import Language.Drasil.ChunkDB (HasSymbolTable, symbLookup, symbolTable)
 import Language.Drasil.Chunk.Code (CodeChunk, codevar)
->>>>>>> master:code/Language/Drasil/Expr/Extract.hs
 import Language.Drasil.Chunk.Quantity (QuantityDict)
+import Language.Drasil.Expr (Expr(..), RealInterval(..))
 
 -- | Generic traverse of all positions that could lead to names
 names :: Expr -> [String]

@@ -2,12 +2,11 @@
 -- gets rendered as a (unique) symbol.  This is actually NOT based on
 -- semantics at all, but just a description of how things look.
 
-module Language.Drasil.Symbol(Decoration(..),Symbol(..),compsy, 
- upper_left, sub, sup, hat, vec, prime,
-  sCurlyBrSymb,
- Stage(..)) where
+module Language.Drasil.Symbol(Decoration(..), Symbol(..), compsy, 
+ upper_left, sub, sup, hat, vec, prime, sCurlyBrSymb, Stage(..)) where
 
-import Language.Drasil.Unicode 
+import Language.Drasil.Unicode (Special(CurlyBrClose, CurlyBrOpen))
+
 import Data.Char (toLower)
 
 -- | Decorations on symbols/characters such as hats or Vector representations

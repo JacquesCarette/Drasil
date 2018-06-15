@@ -2,12 +2,12 @@
 -- | Contains Sentences and helpers
 module Language.Drasil.Spec where
 
-import Language.Drasil.Unicode (Special(SqBrOpen,SqBrClose))
-import Language.Drasil.Symbol
-import Language.Drasil.Expr
-import Language.Drasil.RefTypes
+import Language.Drasil.Unicode (Special(SqBrClose, SqBrOpen))
+import Language.Drasil.Symbol (Symbol)
+import Language.Drasil.Expr (Expr)
+import Language.Drasil.RefTypes (RefAdd, RefType)
 import Language.Drasil.UnitLang (USymb)
-import Language.Drasil.Chunk.ShortName
+import Language.Drasil.Chunk.ShortName (ShortName)
 
 
 -- | For writing "sentences" via combining smaller elements

@@ -43,7 +43,8 @@ module Language.Drasil (
   , HasUID(uid)
   , NamedIdea(term)
   , Idea(getA)
-  , Definition(defn), ConceptDomain(cdom)
+  , Definition(defn)
+  , ConceptDomain(cdom)
   , Concept
   , HasSpace(typ)
   , HasUnitSymbol(usymb)

@@ -3,7 +3,6 @@ module Language.Drasil.Expr.Extract(dep, names', vars) where
 import Data.List (nub)
 import Control.Lens ((^.))
 import Language.Drasil.ChunkDB (HasSymbolTable, symbLookup, symbolTable)
-import Language.Drasil.Chunk.Code (CodeChunk, codevar)
 import Language.Drasil.Chunk.Quantity (QuantityDict)
 import Language.Drasil.Expr (Expr(..), RealInterval(..))
 

@@ -12,10 +12,10 @@ import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName,
   shortname')
 import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Expr (Expr)
+import Language.Drasil.Label (Label, mkLabelRA)
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.UID
-
 import Control.Lens ((^.), makeLenses)
 
 data ListType = Bullet [ItemType] -- ^ Bulleted list
@@ -41,7 +41,7 @@ type Width    = Float
 type Height   = Float
 type ListPair = (Title,ItemType) -- ^ Title: Item
 type Filepath = String
-type Label    = Sentence
+type Lbl    = Sentence
 
 -- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and Sections
 -- which hold the contents of the document
@@ -78,13 +78,13 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
      --        CodeBlock Code   -- GOOL complicates this.  Removed for now.
                | Definition DType
                | Enumeration ListType -- ^ Lists
-               | Figure Label Filepath MaxWidthPercent RefAdd-- ^ Should use relative file path.
+               | Figure Lbl Filepath MaxWidthPercent RefAdd-- ^ Should use relative file path.
                | Requirement ReqChunk
                | Assumption AssumpChunk
                | Change Change
                | Bib BibRef
      --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
-               | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Label RefAdd
+               | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl RefAdd
                -- ^ TODO: Fill this one in.
                ------NEW TMOD/DDEF/IM/GD BEGINS HERE------
                ---- FIXME: The above Definition will need to be removed ----
@@ -98,6 +98,10 @@ data LabelledContent = LblC { _uniqueID :: UID
                        , _sn :: Maybe ShortName
                        }
 makeLenses ''LabelledContent
+
+-- | Smart constructor for labelled content chunks (should not be exported)
+llcc :: UID -> Label -> Contents -> Maybe ShortName -> LabelledContent
+llcc = LblC
 
 instance HasShortName  Contents where
   shortname (Table _ _ _ _ r)     = shortname' $ "Table:" ++ r
@@ -115,7 +119,24 @@ instance HasShortName  Contents where
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
 
+---------------------------------------------------------------------------
+-- smart constructors needed for LabelledContent
+-- nothing has a shortname right now
+mkTableLC :: String -> String -> String -> Contents -> LabelledContent
+mkTableLC uidLC labelUID refAdd tbl = llcc uidLC 
+  (mkLabelRA labelUID refAdd {- table ^. refAdd? -}) tbl Nothing
 
+{-mkParagraph
+mkEqnBlock
+mkDefinition
+mkEnumeration
+mkFigure
+mkRequirement
+mkAssumption
+mkChange
+mkBib
+mkGraph
+mkDefnt-}
 ---------------------------------------------------------------------------
 -- smart constructors and combinators for making instances of the above
 -- data types.  Over time, the types should no longer be exported, and 
@@ -130,11 +151,11 @@ section'' :: Sentence -> [Contents] -> [Section] -> String -> Section
 section'' title intro secs ra = section title intro secs ra (shortname' ra)
 
 -- | Figure smart constructor. Assumes 100% of page width as max width.
-fig :: Label -> Filepath -> RefAdd -> Contents
+fig :: Lbl -> Filepath -> RefAdd -> Contents
 fig l f = Figure l f 100
 
 -- | Figure smart constructor for customized max widths.
-figWithWidth :: Label -> Filepath -> MaxWidthPercent -> RefAdd -> Contents
+figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RefAdd -> Contents
 figWithWidth = Figure
 
 datadefn :: QDefinition -> Contents

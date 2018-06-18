@@ -27,7 +27,7 @@ import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Printing.Helpers (noSpaces)
-import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname), shortname')
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces

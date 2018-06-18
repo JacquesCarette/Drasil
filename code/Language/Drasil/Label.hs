@@ -1,4 +1,4 @@
-module Language.Drasil.Label (Label) where
+module Language.Drasil.Label (Label, mkLabelRA) where
 
 import Language.Drasil.Label.Core
 import Language.Drasil.Classes (HasUID(uid))

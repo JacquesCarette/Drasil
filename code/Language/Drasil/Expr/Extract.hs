@@ -1,4 +1,4 @@
-module Language.Drasil.Expr.Extract(dep, vars, codevars, codevars') where
+module Language.Drasil.Expr.Extract(dep, vars, codevars, codevars', vars') where
 
 import Data.List (nub)
 import Control.Lens ((^.))
@@ -82,11 +82,11 @@ codevars' e m = map resolve $ nub $ names' e
 -- | Generic traverse of all positions that could lead to names from sentences
 snames   :: Sentence -> [String]
 snames (Ch a)       = [a]
-snames (Sy a)       = []
-snames (S a)        = []
-snames (Sp a)       = []
-snames (P a)        = []
-snames (Ref a b c)  = []
+snames (Sy _)       = []
+snames (S _)        = []
+snames (Sp _)       = []
+snames (P _)        = []
+snames (Ref _ _ _)  = []
 snames ((:+:) a b)  = (snames a) ++ (snames b)
 snames (Quote a)    = snames a
 snames (E a)        = names a
@@ -96,3 +96,6 @@ snames (EmptyS)     = []
 sdep :: Sentence -> [String]
 sdep = nub . snames
 
+vars' :: (HasSymbolTable s) => Sentence -> s -> [QuantityDict]
+vars' a m = map resolve $ sdep a
+  where resolve x = symbLookup x $ m ^. symbolTable

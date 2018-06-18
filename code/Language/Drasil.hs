@@ -191,8 +191,12 @@ module Language.Drasil (
   , PhysSystDesc, pSysDes, psd
   -- RefTypes
   , RefAdd
+  -- SentenceExtract
+  , getDoc
+  , vars, vars'
 ) where
 
+import Language.Drasil.SentenceExtract (getDoc)
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.SystemInformation
 import Language.Drasil.Expr (Expr(..), Relation,
@@ -205,7 +209,7 @@ import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, co
           apply, apply1, apply2,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all, ch)
-import Language.Drasil.Expr.Extract (vars)
+import Language.Drasil.Expr.Extract (vars, vars')
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website),DocSpec(DocSpec))
 import Language.Drasil.Document (Document(..), DType(..)
   , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..)

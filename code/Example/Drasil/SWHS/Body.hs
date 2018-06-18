@@ -155,6 +155,7 @@ tsymb_intro :: [TSIntro]
 tsymb_intro = [TSPurpose, SymbConvention
   [Lit (nw CT.heat_trans), Doc' (nw progName)], SymbOrder]
 
+--- The document starts here
 swhs_srs' :: Document
 swhs_srs' = mkDoc mkSRS (for) swhs_si
 
@@ -351,7 +352,7 @@ s4_2_1 = assumpF
 -- SECTION 4.2.3 --
 -- General Definitions is automatically generated in solChSpecF
 s4_2_3_genDefs :: [Contents]
-s4_2_3_genDefs = map reldefn swhsGenDefs
+s4_2_3_genDefs = (map reldefn swhsGenDefs)
 
 s4_2_3_deriv :: [Contents]
 s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,

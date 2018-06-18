@@ -6,6 +6,7 @@ import Language.Drasil.Expr (Expr(..), RealInterval(..))
 import Language.Drasil.ChunkDB (HasSymbolTable, symbLookup, symbolTable)
 import Language.Drasil.Chunk.Code (CodeChunk, codevar)
 import Language.Drasil.Chunk.Quantity (QuantityDict)
+import Language.Drasil.Spec(Sentence(..))
 
 -- | Generic traverse of all positions that could lead to names
 names :: Expr -> [String]
@@ -76,3 +77,22 @@ codevars e m = map resolve $ dep e
 codevars' :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
 codevars' e m = map resolve $ nub $ names' e
   where  resolve x = codevar (symbLookup x (m ^. symbolTable))
+
+-----------------------------------------------------------------------------
+-- | Generic traverse of all positions that could lead to names from sentences
+snames   :: Sentence -> [String]
+snames (Ch a)       = [a]
+snames (Sy a)       = []
+snames (S a)        = []
+snames (Sp a)       = []
+snames (P a)        = []
+snames (Ref a b c)  = []
+snames ((:+:) a b)  = (snames a) ++ (snames b)
+snames (Quote a)    = snames a
+snames (E a)        = names a
+snames (EmptyS)     = []
+-----------------------------------------------------------------------------
+-- And now implement the exported traversals all in terms of the above
+sdep :: Sentence -> [String]
+sdep = nub . snames
+

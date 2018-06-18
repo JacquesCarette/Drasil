@@ -15,15 +15,15 @@ module Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
   IsUnit, Constrained(constraints), HasReasVal(reasVal))
-import Language.Drasil.Chunk.Quantity
+import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(..), getUnit)
 import Language.Drasil.Chunk.DefinedQuantity (dqd')
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
-import Language.Drasil.Chunk.Constrained (ConstrConcept(..), ConstrainedChunk,cuc',cnstrw,
-  cvc)
-import Language.Drasil.Chunk.Concept
-import Language.Drasil.Expr
-import Language.Drasil.NounPhrase
-import Language.Drasil.Space
+import Language.Drasil.Chunk.Constrained (ConstrConcept(..), ConstrainedChunk,
+  cuc', cnstrw, cvc)
+import Language.Drasil.Chunk.Concept(cw)
+import Language.Drasil.Expr (Expr)
+import Language.Drasil.NounPhrase(NP)
+import Language.Drasil.Space (Space)
 import Language.Drasil.Symbol (Symbol)
 import Control.Lens ((^.), Lens', makeLenses)
 

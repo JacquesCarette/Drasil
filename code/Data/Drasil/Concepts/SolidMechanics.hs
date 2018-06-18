@@ -1,7 +1,7 @@
 module Data.Drasil.Concepts.SolidMechanics where
 
-import Data.Drasil.Concepts.Physics
 import Language.Drasil
+import Data.Drasil.Concepts.Physics (force, friction, strain, stress)
 
 --FIXME: add "shear stress" and "shear strain" when we have adjectives
 --       to make a combined "mobilized shear force" for example

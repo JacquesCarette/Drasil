@@ -2,12 +2,11 @@
 -- gets rendered as a (unique) symbol.  This is actually NOT based on
 -- semantics at all, but just a description of how things look.
 
-module Language.Drasil.Symbol(Decoration(..),Symbol(..),compsy, 
- upper_left, sub, sup, hat, vec, prime,
-  sCurlyBrSymb,
- Stage(..)) where
+module Language.Drasil.Symbol(Decoration(..), Symbol(..), compsy, 
+ upper_left, sub, sup, hat, vec, prime, sCurlyBrSymb, Stage(..)) where
 
-import Language.Drasil.Unicode 
+import Language.Drasil.Unicode (Special(CurlyBrClose, CurlyBrOpen))
+
 import Data.Char (toLower)
 
 -- | Decorations on symbols/characters such as hats or Vector representations
@@ -24,7 +23,7 @@ data Decoration = Hat | Vector | Prime deriving (Eq, Ord)
 data Symbol =
     Atomic  String
   | Special Special
-  | Greek   Greek
+--  | Greek   Greek
   | Atop    Decoration Symbol
   | Corners [Symbol] [Symbol] [Symbol] [Symbol] Symbol
           -- upleft   lowleft  upright  lowright base
@@ -49,8 +48,8 @@ complsy (x : xs) (y : ys) = compsy x y `mappend` complsy xs ys
 
 compsy :: Symbol -> Symbol -> Ordering
 compsy (Concat (x:[]))       (Concat (y:[]))        = compsy x y
-compsy (Concat ((Greek Delta):xs))                b = compsy (Concat xs) b 
-compsy a                (Concat ((Greek Delta):ys)) = compsy a           (Concat ys)
+compsy (Concat (Atomic "Δ":xs))                b = compsy (Concat xs) b 
+compsy a                (Concat (Atomic "Δ":ys)) = compsy a           (Concat ys)
 compsy (Concat (x:xs))       (Concat (y:ys))       = --The above two lines ensure symbols like "x" and "delta x" stay together
  compsy x y `mappend` complsy xs ys
 compsy (Concat a)             b                     = complsy a [b]
@@ -76,10 +75,7 @@ compsy (Special _)            _                     = LT
 compsy _                     (Special _)            = GT
 compsy (Atomic _)             _                     = LT
 compsy  _                    (Atomic _)             = GT
-compsy (Greek a)             (Greek b)              = compare a b
 compsy  Empty                 Empty                 = EQ
-compsy  _                     Empty                 = GT
-compsy  Empty                 _                     = LT
 
 -- | Helper for creating a symbol with a superscript on the left side of the symbol.
 -- Arguments: Base symbol, then superscripted symbol.

@@ -3,8 +3,8 @@ module Language.Drasil.Expr.Extract(dep, vars, codevars, codevars') where
 import Data.List (nub)
 import Control.Lens ((^.))
 import Language.Drasil.Expr (Expr(..), RealInterval(..))
-import Language.Drasil.ChunkDB
-import Language.Drasil.Chunk.Code
+import Language.Drasil.ChunkDB (HasSymbolTable, symbLookup, symbolTable)
+import Language.Drasil.Chunk.Code (CodeChunk, codevar)
 import Language.Drasil.Chunk.Quantity (QuantityDict)
 
 -- | Generic traverse of all positions that could lead to names

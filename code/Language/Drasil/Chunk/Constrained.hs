@@ -10,15 +10,15 @@ import Control.Lens ((^.), makeLenses, view)
 
 import Language.Drasil.Chunk.Constrained.Core (Constraint(..))
 import Language.Drasil.Expr (Expr(..))
-import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.DefinedQuantity
-import Language.Drasil.Chunk.Unitary
-import Language.Drasil.Chunk.VarChunk
+import Language.Drasil.Chunk.Quantity (QuantityDict, Quantity(getUnit), HasSpace(typ), qw)
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
+import Language.Drasil.Chunk.Unitary (unitary)
+import Language.Drasil.Chunk.VarChunk (vc)
 import Language.Drasil.Chunk.Unital (ucs)
-import Language.Drasil.Chunk.Concept
-import Language.Drasil.NounPhrase
+import Language.Drasil.Chunk.Concept (cw)
+import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Unit (unitWrapper)
-import Language.Drasil.Space
+import Language.Drasil.Space (Space)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),

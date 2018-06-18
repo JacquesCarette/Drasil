@@ -18,7 +18,7 @@ module Data.Drasil.SentenceStructures
   ) where
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle, foldle1)
+import Data.Drasil.Utils (foldle, foldle1, addPercent)
 import Data.Drasil.Concepts.Documentation hiding (constraint)
 import Data.Drasil.Concepts.Math (equation)
 
@@ -209,8 +209,11 @@ mkTableFromColumns l =
 none :: Sentence
 none = S "None"
 
+found :: Double -> Sentence
+found x = (addPercent . realToFrac) (x*100)
+
 typUncr :: (UncertainQuantity c) => c -> Sentence
-typUncr x = maybe none (S . show) (x ^. uncert)
+typUncr x = maybe none found (x ^. uncert)
 
 constraintToExpr :: (Quantity c) => c -> Constraint -> Expr
 constraintToExpr c (Range _ ri) = real_interval c ri

@@ -11,10 +11,10 @@ module Language.Drasil.NounPhrase
   , CapitalizationRule(..), PluralRule(..)
   ) where
 
-import Data.Char (toUpper, toLower, isLetter, isLatin1)
+import Data.Char (isLatin1, isLetter, toLower, toUpper)
 import Data.List (intersperse)
 
-import Language.Drasil.NounPhrase.Core
+import Language.Drasil.NounPhrase.Core -- uses whole module
 import Language.Drasil.Spec (Sentence(..), (+:+))
 
 

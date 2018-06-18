@@ -2,10 +2,11 @@
 -- | The Drasil Expression language
 module Language.Drasil.Expr where
 
-import Data.Ratio (numerator,denominator)
+import Data.Ratio (denominator, numerator)
 import Prelude hiding (sqrt)
 import Language.Drasil.Symbol
 import Language.Drasil.Space (Space(..))
+import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UID (UID)
 
 --FIXME: Haddock open issue #43 seems to make it so GADT constructors cannot

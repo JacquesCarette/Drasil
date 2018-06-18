@@ -2,11 +2,13 @@ module Language.Drasil.Expr.Math where
 
 import Prelude hiding (sqrt)
 import Control.Lens ((^.))
-import Language.Drasil.Symbol
-import Language.Drasil.Expr
-import Language.Drasil.Spec
+import Language.Drasil.Symbol (Symbol)
+import Language.Drasil.Expr (Expr(..), RealInterval, Relation,
+  DerivType(..), ($^), BinOp(..), RTopology(..), DomainDesc(..),
+  ArithOper(..), UFunc(..))
 import Language.Drasil.Space (Space)
-import Language.Drasil.Classes (HasUID(uid),HasSymbol)
+import Language.Drasil.Classes (HasUID(uid), HasSymbol)
+import Language.Drasil.Spec(Sentence(..))
 
 -- | Smart constructor to take the log of an expression
 log :: Expr -> Expr

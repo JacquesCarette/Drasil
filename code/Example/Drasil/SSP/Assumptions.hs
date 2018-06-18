@@ -15,7 +15,8 @@ import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe')
 import Data.Drasil.Utils (getES)
 
 sspRefDB :: ReferenceDB
-sspRefDB = rdb [] [] newAssumptions [] [] sspCitations -- FIXME: Convert the rest to new chunk types
+sspRefDB = rdb [] [] newAssumptions [] [] sspCitations 
+-- FIXME: Convert the rest to new chunk types (similar to issues #446 and #447)
 
 newAssumptions :: [AssumpChunk]
 newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10]

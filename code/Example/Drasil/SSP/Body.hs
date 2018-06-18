@@ -26,7 +26,7 @@ import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent,
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
 import Data.Drasil.Utils (enumBullet, enumSimple, getES, weave)
 
-import Drasil.SSP.Assumptions (sspAssumptions, newA3)
+import Drasil.SSP.Assumptions (sspAssumptions, newA3, sspRefDB)
 import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShrDerivation, 
   resShrDerivation, sliceWght, sspDataDefs, stfMtrxDerivation)
 import Drasil.SSP.DataDesc (sspInputMod)
@@ -49,7 +49,7 @@ import qualified Drasil.SRS as SRS (funcReq, inModel, likeChg, missingP,
 
 import Drasil.DocumentLanguage (DocDesc, DocSection(..), IntroSec(..), 
   IntroSub(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), TSIntro, 
-  TSIntro(..), mkDoc, tsymb'', mkLklyChnk)
+  TSIntro(..), LCsSec(..), mkDoc, tsymb'', mkLklyChnk)
 
 import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
@@ -96,10 +96,9 @@ ssp_si = SI {
   _refdb = sspRefDB
 }
 
-sspRefDB :: ReferenceDB
-sspRefDB = rdb [] [] [] [] [] sspCitations
--- FIXME: Convert the rest to new chunk types (similar to issues #446 and #447)
-
+ssp_srs :: Document
+ssp_srs = mkDoc mkSRS (for) ssp_si
+  
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
   [TUnits, tsymb'' s1_2_intro TAD, TAandA]) :
@@ -110,10 +109,8 @@ mkSRS = RefSec (RefProg intro
       EmptyS
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
     --FIXME: issue #235
-  map Verbatim [s3, s4, s5, s6, s7] ++ (Bibliography : [])
-  
-ssp_srs :: Document
-ssp_srs = mkDoc mkSRS (for) ssp_si
+  map Verbatim [s3, s4, s5] ++ [LCsSec (LCsProg likelyChanges_SRS)] ++ [Verbatim s7] ++
+  (Bibliography : [])
   
 ssp_code :: CodeSpec
 ssp_code = codeSpec ssp_si [sspInputMod]

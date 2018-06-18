@@ -2,16 +2,14 @@
 -- WARNING
 -- File not actually used in drasil.cabal for GamePhysics
 -- so it is not actually 'plugged in'.  The definitions in here
--- may not type check anyore!
+-- may not type check anymore!
 -- %%%%%%%%%%%%%%%%%%%%%%%%%%
 module Drasil.GamePhysics.GDefs (cpGDefs) where
 
-import Drasil.GamePhysics.Unitals
-
 import Language.Drasil
-import Data.Drasil.Utils (foldlSent)
 import Data.Drasil.Concepts.Physics (rigidBody)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
+import Data.Drasil.Utils (foldlSent)
 
 ----- General Models -----
 

@@ -55,131 +55,131 @@ in_SA, out_SA, htCap_L, htCap_S, htCap_V,
 
 --symbol names can't begin with a capital
 
-in_SA = ucc' "in_SA" (nounPhraseSP
+in_SA = uc' "in_SA" (nounPhraseSP
   "surface area over which heat is transferred in")
   "Surface area over which thermal energy is transferred into an object"
   (sub cA (Atomic "in")) m_2
 
-out_SA = ucc' "out_SA" (nounPhraseSP
+out_SA = uc' "out_SA" (nounPhraseSP
   "surface area over which heat is transferred out")
   "Surface area over which thermal energy is transferred out of an object"
   (sub cA (Atomic "out")) m_2
 
-htCap_L = ucc' "htCap_L" (nounPhraseSP "specific heat capacity of a liquid")
+htCap_L = uc' "htCap_L" (nounPhraseSP "specific heat capacity of a liquid")
   ("The amount of energy required to raise the temperature of a given " ++
   "unit mass of a given liquid by a given amount")
   (sup (eqSymb heat_cap_spec) cL) UT.heat_cap_spec
 
-htCap_S = ucc' "htCap_S"
+htCap_S = uc' "htCap_S"
   (nounPhraseSP "specific heat capacity of a solid")
   ("The amount of energy required to raise the temperature of " ++
   "a given unit mass of a given solid by a given amount")
   (sup (eqSymb heat_cap_spec) cS) UT.heat_cap_spec
 
-htCap_V = ucc' "htCap_V"
+htCap_V = uc' "htCap_V"
   (nounPhraseSP "specific heat capacity of a vapour")
   ("The amount of energy required to raise the temperature of a given " ++
   "unit mass of vapour by a given amount")
   (sup (eqSymb heat_cap_spec) cV) UT.heat_cap_spec
 
-pcm_initMltE = ucc' "pcm_initMltE" (nounPhraseSP
+pcm_initMltE = uc' "pcm_initMltE" (nounPhraseSP
   "change in heat energy in the PCM at the instant when melting begins")
   "Change in thermal energy in the phase change material at the melting point"
   (sup (sub (sub (eqSymb sens_heat)
   (Atomic "P")) (Atomic "melt")) (Atomic "init")) joule
 
-vol_ht_gen = ucc' "vol_ht_gen"
+vol_ht_gen = uc' "vol_ht_gen"
   (nounPhraseSP "volumetric heat generation per unit volume")
   "Amount of thermal energy generated per unit volume" lG UT.volHtGenU
 
-htTransCoeff = ucc' "htTransCoeff"
+htTransCoeff = uc' "htTransCoeff"
   (nounPhraseSP "convective heat transfer coefficient")
   ("The proportionality constant between the heat flux and the " ++
   "thermodynamic driving force for the flow of thermal energy")
   lH UT.heat_transfer_coef
 
-pcm_mass = ucc' "pcm_mass" (nounPhraseSP "mass of phase change material")
+pcm_mass = uc' "pcm_mass" (nounPhraseSP "mass of phase change material")
   "The quantity of matter within the phase change material"
   (sub (eqSymb mass) cP) kilogram
 
-w_mass = ucc' "w_mass" (nounPhraseSP "mass of water")
+w_mass = uc' "w_mass" (nounPhraseSP "mass of water")
   "The quantity of matter within the water" (sub (eqSymb mass) cW) kilogram
 
-thFluxVect = ucc' "thFluxVect" (nounPhraseSP "thermal flux vector")
+thFluxVect = uc' "thFluxVect" (nounPhraseSP "thermal flux vector")
   "Vector denoting the direction of thermal flux through a surface"
   (vec lQ) UT.thermal_flux
 
-ht_flux_C = ucc' "ht_flux_C"
+ht_flux_C = uc' "ht_flux_C"
   (nounPhraseSP "heat flux into the water from the coil")
   "The rate of heat energy transfer into the water from the coil per unit time"
   (sub (eqSymb ht_flux) cC) UT.thermal_flux
 
-ht_flux_in = ucc' "ht_flux_in" (nounPhraseSP "heat flux input")
+ht_flux_in = uc' "ht_flux_in" (nounPhraseSP "heat flux input")
   "The rate of heat energy transfer into an object per unit time"
   (sub (eqSymb ht_flux) (Atomic "in")) UT.thermal_flux
 
-ht_flux_out = ucc' "ht_flux_out" (nounPhraseSP "heat flux output")
+ht_flux_out = uc' "ht_flux_out" (nounPhraseSP "heat flux output")
   "The rate of heat energy transfer into an object per unit time"
   (sub (eqSymb ht_flux) (Atomic "out")) UT.thermal_flux
 
-ht_flux_P = ucc' "ht_flux_P" (nounPhraseSP "heat flux into the PCM from water")
+ht_flux_P = uc' "ht_flux_P" (nounPhraseSP "heat flux into the PCM from water")
   ("The rate of heat energy transfer into the phase" ++
   "change material from the water per unit time")
   (sub (eqSymb ht_flux) cP) UT.thermal_flux
 
-latentE_P = ucc' "latentE_P" (nounPhraseSP "latent heat energy added to PCM")
+latentE_P = uc' "latentE_P" (nounPhraseSP "latent heat energy added to PCM")
   ("Energy released or absorbed, by a body or a thermodynamic system, "++
   "during a constant-temperature process and absorbed by the phase" ++
   "change material") (sub (eqSymb latent_heat) cP) joule
 
-temp_env = ucc' "temp_env" (nounPhraseSP "temperature of the environment")
+temp_env = uc' "temp_env" (nounPhraseSP "temperature of the environment")
   "The tempature of a given environment"
   (sub (eqSymb temp) (Atomic "env")) centigrade
 
-t_init_melt = ucc' "t_init_melt"
+t_init_melt = uc' "t_init_melt"
   (nounPhraseSP "time at which melting of PCM begins")
   ("Time at which the phase change material " ++
     "begins changing from a solid to a liquid")
   (sup (sub (eqSymb time) (Atomic "melt")) (Atomic "init")) second
 
-t_final_melt = ucc' "t_final_melt"
+t_final_melt = uc' "t_final_melt"
   (nounPhraseSP "time at which melting of PCM ends")
   ("Time at which the phase change material " ++
     "finishes changes from a solid to a liquid")
   (sup (sub (eqSymb time) (Atomic "melt")) (Atomic "final")) second
   
-tank_vol = ucc' "tank_vol" (nounPhraseSP "volume of the cylindrical tank")
+tank_vol = uc' "tank_vol" (nounPhraseSP "volume of the cylindrical tank")
   "The amount of space encompassed by a tank"
   (sub (eqSymb vol) (Atomic "tank")) m_3
 
-w_vol = ucc' "w_vol" (vol `of_` water)
+w_vol = uc' "w_vol" (vol `of_` water)
   "The amount of space occupied by a given quantity of water"
   (sub (eqSymb vol) cW) m_3
 
-deltaT = ucc' "deltaT" (nounPhraseSP "change in temperature")
+deltaT = uc' "deltaT" (nounPhraseSP "change in temperature")
   "Change in the average kinetic energy of a given material"
   (Concat [Greek Delta, (eqSymb temp)]) centigrade
 
-tau = ucc' "tau" (nounPhraseSP "dummy variable for integration over time")
+tau = uc' "tau" (nounPhraseSP "dummy variable for integration over time")
   "Binary value representing the presence or absence of integration over time"
   (Greek Tau_L) second
 --Not sure how to define anything after this point
 
-tau_L_P = ucc' "tau_L_P" (nounPhraseSP "ODE parameter for liquid PCM")
+tau_L_P = uc' "tau_L_P" (nounPhraseSP "ODE parameter for liquid PCM")
   ("Derived through melting of phase change material, which " ++
   "changes ODE parameter for solid PCM into parameter for liquid")
   (sup (sub (Greek Tau_L) cP) cL) second
 
-tau_S_P = ucc' "tau_S_P" (nounPhraseSP "ODE parameter for solid PCM")
+tau_S_P = uc' "tau_S_P" (nounPhraseSP "ODE parameter for solid PCM")
   ("Derived parameter based on rate of " ++
     "change of temperature of phase change material")
   (sup (sub (Greek Tau_L) cP) cS) second
 
-tau_W = ucc' "tau_W" (nounPhraseSP "ODE parameter for water")
+tau_W = uc' "tau_W" (nounPhraseSP "ODE parameter for water")
   "Derived parameter based on rate of change of temperature of water"
   (sub (Greek Tau_L) cW) second
 
-sim_time = ucc' "sim_time" (compoundPhrase' (simulation ^. term)
+sim_time = uc' "sim_time" (compoundPhrase' (simulation ^. term)
   (time ^. term)) "Time over which the simulation runs"
   lT second
 
@@ -195,12 +195,12 @@ eta, melt_frac :: DefinedQuantityDict
 -- FIXME: should this have units?
 eta = dqd' (dcc "eta" (nounPhraseSP "ODE parameter")
   "Derived parameter based on rate of change of temperature of water")
-  (const $ Greek Eta_L) Real Nothing [] 
+  (const $ Greek Eta_L) Real Nothing
 
 melt_frac = dqd' (dcc "melt_frac" (nounPhraseSP "melt fraction")
   "Ratio of thermal energy to amount of mass melted")
   --FIXME: Not sure if definition is exactly correct
-  (const $ Greek Phi_L) Real Nothing []
+  (const $ Greek Phi_L) Real Nothing
 
 -----------------
 -- Constraints --

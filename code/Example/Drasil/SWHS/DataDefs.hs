@@ -2,7 +2,7 @@ module Drasil.SWHS.DataDefs where --exports all of it
 
 import Language.Drasil
 import Control.Lens ((^.))
-import Drasil.DocumentLanguage.RefHelpers
+import Drasil.DocumentLanguage.RefHelpers (ModelDB, mdb, refDD, ddRefDB)
 
 import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcm_mass,
   temp_W, temp_PCM, ht_flux_P, pcm_HTC, coil_HTC, temp_C, ht_flux_C)
@@ -47,7 +47,7 @@ htFusionEqn = (sy latent_heat) / (sy mass)
 dd4MeltFrac :: QDefinition
 dd4MeltFrac = fromEqn' (melt_frac ^. uid) -- FIXME Should (^. id) be used
   (melt_frac ^. term) (S "fraction of the PCM that is liquid")
-  (eqSymb melt_frac) melt_frac_eqn [] []
+  (eqSymb melt_frac) melt_frac_eqn [] "meltFrac"
 --FIXME: "Phi is the melt fraction" is produced; 
   --"Phi is the fraction of the PCM that is liquid" is what is supposed to be
   -- produced according to CaseStudies' original

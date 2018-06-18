@@ -4,6 +4,7 @@ import Prelude hiding (sqrt)
 import Control.Lens ((^.))
 import Language.Drasil.Symbol
 import Language.Drasil.Expr
+import Language.Drasil.Spec
 import Language.Drasil.Space (Space)
 import Language.Drasil.Classes (HasUID(uid),HasSymbol)
 
@@ -131,3 +132,6 @@ sy x = C (x ^. uid)
 deriv, pderiv :: (HasUID c, HasSymbol c) => Expr -> c -> Expr
 deriv e c = Deriv Total e (c^.uid)
 pderiv e c = Deriv Part e (c^.uid)
+
+ch :: (HasUID c, HasSymbol c) => c -> Sentence
+ch x = Ch (x ^. uid)

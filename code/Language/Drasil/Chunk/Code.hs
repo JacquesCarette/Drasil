@@ -14,9 +14,9 @@ import Language.Drasil.Chunk.Constrained.Core (Constraint, isPhysC)
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.SymbolForm (codeSymb)
+import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  HasSymbol(symbol), CommonIdea(abrv), Constrained(constraints),
-  HasAttributes(attributes), relat)
+  HasSymbol(symbol), CommonIdea(abrv), Constrained(constraints), relat)
 import Language.Drasil.Space as S
 import Language.Drasil.Code.Code as G (CodeType(..))
 import Language.Drasil.Expr
@@ -149,7 +149,6 @@ instance CodeIdea CodeChunk where
   codeName (CodeC c Var) = symbToCodeName (codeSymb c)
   codeName (CodeC c Func) = funcPrefix ++ symbToCodeName (codeSymb c)
 instance Eq CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
-instance HasAttributes CodeChunk where attributes = qc . attributes
 
 spaceToCodeType :: Space -> CodeType
 spaceToCodeType S.Integer = G.Integer
@@ -168,10 +167,10 @@ spaceToCodeType (S.DiscreteS _) = G.List (spaceToCodeType S.String)
 codeType :: HasSpace c => c -> CodeType
 codeType c = spaceToCodeType $ c ^. typ
 
-codevar :: (HasAttributes c, Quantity c) => c -> CodeChunk
+codevar :: (Quantity c) => c -> CodeChunk
 codevar c = CodeC (qw c) Var
 
-codefunc :: (HasAttributes c, Quantity c) => c -> CodeChunk
+codefunc :: (Quantity c) => c -> CodeChunk
 codefunc c = CodeC (qw c) Func
 
 data CodeDefinition = CD { _quant :: QuantityDict
@@ -188,7 +187,6 @@ instance HasSymbol     CodeDefinition where symbol c = symbol (c ^. quant)
 instance Quantity      CodeDefinition where getUnit = getUnit . view quant
 instance CodeIdea      CodeDefinition where codeName = (^. ci)
 instance Eq            CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
-instance HasAttributes CodeDefinition where attributes = quant . attributes
 
 qtoc :: QDefinition  -> CodeDefinition
 qtoc q = CD (qw q) (funcPrefix ++ symbToCodeName (codeSymb q)) (q ^. relat)
@@ -199,7 +197,7 @@ qtov q = CD (qw q) (symbToCodeName (codeSymb q)) (q ^. relat)
 codeEquat :: CodeDefinition -> Expr
 codeEquat cd = cd ^. def
 
-type ConstraintMap = Map.Map String [Constraint]
+type ConstraintMap = Map.Map UID [Constraint]
 
 constraintMap :: (HasUID c, Constrained c) => [c] -> ConstraintMap
 constraintMap = Map.fromList . map (\x -> ((x ^. uid), (x ^. constraints)))

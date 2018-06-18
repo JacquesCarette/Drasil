@@ -1,6 +1,7 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Reference where
 
+import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.AssumpChunk as A
 import Language.Drasil.Chunk.Change as Ch
@@ -16,7 +17,7 @@ import Language.Drasil.Document
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.RefTypes (RefType(..))
 import Control.Lens ((^.), Simple, Lens, makeLenses)
-import Language.Drasil.Chunk.Attribute.ShortName
+import Language.Drasil.Chunk.ShortName
 import Data.List (partition, sortBy)
 import qualified Data.Map as Map
 import Data.Function (on)
@@ -26,7 +27,7 @@ import Data.Function (on)
 -- Maintains access to both num and chunk for easy reference swapping
 -- between number and shortname/refname when necessary (or use of number
 -- if no shortname exists)
-type RefMap a = Map.Map String (a, Int)
+type RefMap a = Map.Map UID (a, Int)
 
 -- | Physical System Description Database
 type PhysSystDescMap = RefMap PhysSystDesc
@@ -169,13 +170,13 @@ instance Referable AssumpChunk where
   rType   _             = Assump
 
 instance Referable ReqChunk where
-  refAdd  r@(RC _ rt _ _ _) = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
+  refAdd  r@(RC _ rt _ _) = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
   rType   _                 = Req
 
 instance Referable Change where
-  refAdd r@(ChC _ rt _ _ _)    = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
-  rType (ChC _ Likely _ _ _)   = LC
-  rType (ChC _ Unlikely _ _ _) = UC
+  refAdd r@(ChC _ rt _ _)    = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
+  rType (ChC _ Likely _ _)   = LC
+  rType (ChC _ Unlikely _ _) = UC
 
 instance Referable Section where
   refAdd  (Section _ _ r _) = "Sec:" ++ r
@@ -185,7 +186,6 @@ instance Referable Citation where
   refAdd c = concatMap repUnd $ citeID c -- citeID should be unique.
   rType _ = Cite
 
--- error used below is on purpose. These refNames should be made explicit as necessary
 instance Referable TheoryModel where
   refAdd  t = "T:" ++ t ^. uid
   rType   _ = Def
@@ -253,8 +253,8 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 makeRef :: (HasShortName l, Referable l) => l -> Sentence
 makeRef r = customRef r (shortname r)
 
--- | Create a reference with a custom 'RefName'
-customRef :: (HasShortName l, Referable l) => l -> String -> Sentence
+-- | Create a reference with a custom 'ShortName'
+customRef :: (HasShortName l, Referable l) => l -> ShortName -> Sentence
 customRef r n = Ref (rType r) (refAdd r) n
 
 -- This works for passing the correct id to the reference generator for Assumptions,

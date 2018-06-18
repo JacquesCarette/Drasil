@@ -3,12 +3,21 @@ import Control.Lens ((^.))
 import Language.Drasil hiding (organization)
 import qualified Drasil.SRS as SRS
 
-import Drasil.DocumentLanguage
-import Drasil.DocumentLanguage.Definitions
-import Drasil.DocumentLanguage.RefHelpers 
+import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
+  DocSection(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons), --DocSection uses everything but Verbatim
+  IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), LCsSec(..), 
+  RefSec(RefProg), RefTab(TAandA, TUnits), ReqrmntSec(..), 
+  ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SSDSec(SSDVerb), 
+  StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), 
+  TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose), DocDesc, 
+  mkDoc, mkLklyChnk, mkRequirement, tsymb)
+import Drasil.DocumentLanguage.Definitions (Field
+  (DefiningEquation, Description, RefBy, Source), InclUnits(IncludeUnits), 
+  Verbosity(Verbose), Fields)
+import Drasil.DocumentLanguage.RefHelpers (cite, refA)
 
-import Data.Drasil.SI_Units
-import Data.Drasil.People (spencerSmith, nikitha, mCampidelli)
+import Data.Drasil.Concepts.Computation (computerApp, inParam,
+  computerLiteracy, inValue, inQty)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   characteristic, class_, code, condition, constraint, content,
   datum, definition, description, document, emphasis, endUser, failure,
@@ -21,54 +30,54 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   dataConst, company)
 import Data.Drasil.Concepts.Education (secondYear, undergradDegree,
   civilEng, structuralEng, scndYrCalculus, structuralMechanics)
-import Data.Drasil.Software.Products (sciCompS)
-import Data.Drasil.Concepts.Computation (computerApp, inParam,
-  computerLiteracy, inValue, inQty)
+import Data.Drasil.Concepts.Math (graph, calculation, probability,
+  parameter)
+import Data.Drasil.Concepts.PhysicalProperties (dimension, flexure)
 import Data.Drasil.Concepts.Physics (distance)
-import Data.Drasil.Concepts.Thermodynamics (degree_')
-import Data.Drasil.Concepts.PhysicalProperties (flexure)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability,
   performance, errMsg)
-import Data.Drasil.Concepts.Math (graph, calculation, probability,
-  parameter)
-import Data.Drasil.Utils (getES, makeTMatrix, makeListRef, itemRefToSent,
-  refFromType, enumSimple, enumBullet, prodUCTbl)
+import Data.Drasil.Concepts.Thermodynamics (degree_')
 import Data.Drasil.SentenceStructures (acroR, sVersus, sAnd, foldlSP,
   foldlSent, foldlSent_, figureLabel, foldlList, showingCxnBw,
   foldlsC, sOf, followA, ofThe, sIn, isThe, isExpctdToHv, sOr, underConsidertn,
   tAndDWAcc, tAndDOnly, tAndDWSym, andThe)
-import Data.Drasil.Concepts.PhysicalProperties (dimension)
+import Data.Drasil.Software.Products (sciCompS)
+import Data.Drasil.Utils (makeTMatrix, makeListRef, itemRefToSent,
+  refFromType, enumSimple, enumBullet, prodUCTbl)
 
-import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad,
-  lateralLoad, sflawParamM, char_weight, sD, demand, lite, demandq,
-  aspectRWithEqn, aspectR, lRe, wtntWithEqn, sdWithEqn,
-  prob_br, notSafe, safeMessage, is_safe1, is_safe2, plate_width,
-  plate_len, blast, glassTy, gbInputDataConstraints, explosion,
-  explosion, pb_tol, blast, bomb, blastTy, glassGeo,
-  glass_type, nom_thick, sdx, sdy, sdz, tNT, gBRSpecParamVals,
-  loadTypes, load,
-  glassTypes, probBreak, termsWithAccDefn, termsWithDefsOnly,
-  gbConstants, gbConstrained, gbOutputs, gbInputs,
-  glBreakage, capacity, constant_LoadDF)
-import Drasil.GlassBR.Symbols
-import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist,
-  glaSlab, blastRisk, glass,
-  glaPlane, glassBRProg, ptOfExplsn, acronyms)
-import Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq)
+import Drasil.GlassBR.Assumptions (assumptionConstants, assumptionDescs,
+  gbRefDB, newAssumptions, newA3, newA4, newA5, newA6, newA7,
+  newA8)
+import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist, glaSlab, 
+  blastRisk, glass, glaPlane, glassBRProg, ptOfExplsn, acronyms)
+import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
+  dimLL, glaTyFac, tolStrDisFac, tolPre, risk)
 import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr)
-import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt,
-  strDisFac, nonFL, dimLL, glaTyFac, tolStrDisFac, tolPre, risk)
-import Drasil.GlassBR.References
-import Drasil.GlassBR.ModuleDefs
+import Drasil.GlassBR.ModuleDefs (allMods)
+import Drasil.GlassBR.References (rbrtsn2012)
+import Drasil.GlassBR.Symbols (this_symbols)
+import Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq)
+import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad, 
+  lateralLoad, sflawParamM, char_weight, sD, demand, lite, demandq, 
+  aspectRWithEqn, aspectR, lRe, wtntWithEqn, sdWithEqn, prob_br, notSafe, 
+  safeMessage, is_safe1, is_safe2, plate_width, plate_len, blast, glassTy, 
+  gbInputDataConstraints, explosion, explosion, pb_tol, blast, bomb, blastTy, 
+  glassGeo, glass_type, nom_thick, sdx, sdy, sdz, tNT, gBRSpecParamVals,
+  loadTypes, load, glassTypes, probBreak, termsWithAccDefn, termsWithDefsOnly,
+  gbConstants, gbConstrained, gbOutputs, gbInputs, glBreakage, capacity, 
+  constant_LoadDF)
+
 import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.Sections.TraceabilityMandGs (traceGIntro)
 import Drasil.Sections.SpecificSystemDescription (solChSpecF,
   inDataConstTbl, outDataConstTbl, dataConstraintUncertainty, goalStmtF,
   physSystDesc, termDefnF, probDescF, specSysDesF)
+import Drasil.Sections.TraceabilityMandGs (traceGIntro)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
-import Drasil.GlassBR.Assumptions
+import Data.Drasil.People (spencerSmith, nikitha, mCampidelli)
 import Data.Drasil.Phrase(for'')
+import Data.Drasil.SI_Units (kilogram, metre, millimetre, newton, pascal, 
+  second)
 
 {--}
 
@@ -144,8 +153,8 @@ glassSystInfo = SI {
   _quants      = this_symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _definitions = dataDefns ++ 
-                 (map (relToQD gbSymbMap) iModels) ++ 
-                 (map (relToQD gbSymbMap) tModels) ++
+                 (map (relToQD gbSymbMap) iModels {-[RelationConcept]-}) ++ 
+                 (map (relToQD gbSymbMap) tModels {-[RelationConcept]-}) ++
                   [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears
                                              -- in the description of the Calculation of Demand instance model;
                                              -- should this be included as a Data Definition?
@@ -161,7 +170,7 @@ glassSystInfo = SI {
   --FIXME: All named ideas, not just acronyms.
 
 testIMFromQD :: InstanceModel
-testIMFromQD = imQD gbSymbMap risk EmptyS [] [] []
+testIMFromQD = imQD gbSymbMap risk EmptyS [] [] "riskFun" --shortname
 glassBR_code :: CodeSpec
 glassBR_code = codeSpec glassSystInfo allMods
 
@@ -355,8 +364,8 @@ s5_2 mainObj compare1 compare2 factorOfComparison =
   `sAnd` (phrase compare2 `isThe` phrase requirement) +:+.
   (S "which" `isThe` (compare2 ^. defn)), S "The second", phrase condition,
   S "is to check whether the calculated", phrase factorOfComparison,
-  sParen (getES prob_br), S "is less than the tolerable",
-  phrase factorOfComparison, sParen (getES pb_tol),
+  sParen (ch prob_br), S "is less than the tolerable",
+  phrase factorOfComparison, sParen (ch pb_tol),
   S "which is obtained from the", phrase user, S "as an" +:+. phrase input_,
   S "If both", plural condition, S "return true then it's shown that the",
   phrase mainObj, S "is safe to use" `sC`
@@ -450,7 +459,7 @@ assumpList :: [AssumpChunk] -> [Contents]
 assumpList = map Assumption
 
 assumptions :: [Contents] -- FIXME: Remove this entirely and use new refs + docLang.
-assumptions = fst (foldr (\s (ls, n) -> ((Assumption $ assump ("A" ++ show n) s ("A" ++ show n) []) : ls, n-1))
+assumptions = fst (foldr (\s (ls, n) -> ((Assumption $ assump ("A" ++ show n) s ("A" ++ show n)) : ls, n-1))
  ([], (length assumptionDescs)::Int) assumptionDescs)
 -- These correspond to glassTyAssumps, glassCondition, explsnScenario,
 -- standardValues, glassLiteAssmp, bndryConditions, responseTyAssump, ldfConstant
@@ -490,23 +499,12 @@ s7_1_req3 = mkRequirement "s7_1_req3" req3Desc "Check-Input-with-Data_Constraint
 s7_1_req4 = mkRequirement "s7_1_req4" req4Desc "Output-Values-and-Known-Quantities"
 s7_1_req5 = mkRequirement "s7_1_req5" (req5Desc (output_)) "Check-Glass-Safety"
 
--- newReqs is ONLY for testing until I get refs working. Then the old reqs should
--- be converted to reqChunk format with meaningful refnames and this should be
--- removed.
-newReqs :: [ReqChunk]
-newReqs = map (\(x,y) -> frc x y x []) --FIXME: FRC Hack for referencing --FIXME: x used twice?
-  [ ("r1",req1Desc)
-  , ("r2",req2Desc)
-  , ("r3",req3Desc)
-  , ("r4",req4Desc)
-  , ("r5",req5Desc output_)]
-
 req1Desc = foldlSent [at_start input_, S "the", plural quantity, S "from",
   makeRef s7_1_req1Table `sC` S "which define the", phrase glass,
   plural dimension `sC` (glassTy ^. defn) `sC` S "tolerable",
   phrase probability `sOf` phrase failure, S "and",
   (plural characteristic `ofThe` phrase blast), S "Note:",
-  getES plate_len `sAnd` getES plate_width,
+  ch plate_len `sAnd` ch plate_width,
   S "will be input in terms of", plural millimetre `sAnd`
   S "will be converted to the equivalent value in", plural metre]
 
@@ -514,14 +512,14 @@ s7_1_req1Table :: Contents
 s7_1_req1Table = Table
   [at_start symbol_, at_start description, S "Units"]
   (mkTable
-  [getES,
+  [ch,
    at_start, unit'2Contents] requiredInputs)
   (S "Required Inputs following R1") True "R1ReqInputs"
 
 req2Desc = foldlSent [S "The", phrase system,
   S "shall set the known", plural value +: S "as follows",
-  foldlList [(foldlsC (map getES (take 4 assumptionConstants)) `followA` 4),
-  ((getES constant_LoadDF) `followA` 8), (short lShareFac `followA` 5)]]
+  foldlList [(foldlsC (map ch (take 4 assumptionConstants)) `followA` 4),
+  ((ch constant_LoadDF) `followA` 8), (short lShareFac `followA` 5)]]
 
 --ItemType
 {-s7_1_req2 = (Nested (S "The" +:+ phrase system +:+
@@ -545,7 +543,7 @@ req4Desc = foldlSent [titleize output_, S "the", plural inQty,
   S "from", acroR 1 `andThe` S "known", plural quantity,
   S "from", acroR 2]
 
-req5Desc cmd = foldlSent_ [S "If", (getES is_safe1) `sAnd` (getES is_safe2),
+req5Desc cmd = foldlSent_ [S "If", (ch is_safe1) `sAnd` (ch is_safe2),
   sParen (S "from" +:+ (makeRef (reldefn t1SafetyReq))
   `sAnd` (makeRef (reldefn t2SafetyReq))), S "are true" `sC`
   phrase cmd, S "the", phrase message, Quote (safeMessage ^. defn),
@@ -561,13 +559,13 @@ testing1 = [probOfBr, calOfCap, calOfDe]
 s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $
-    map (\(a, d) -> Flat $ (at_start a) +:+ sParen (getES a) +:+
+    map (\(a, d) -> Flat $ (at_start a) +:+ sParen (ch a) +:+
     sParen (makeRef (reldefn d))) (zip testing testing1)
     ++
-    map (\d -> Flat $ (at_start d) +:+ sParen (getES d) +:+
+    map (\d -> Flat $ (at_start d) +:+ sParen (ch d) +:+
     sParen (makeRef (datadefn d))) s7_1_req6_pulledList
     ++
-    [Flat $ (titleize aspectR) +:+ sParen (getES aspectR) +:+
+    [Flat $ (titleize aspectR) +:+ sParen (ch aspectR) +:+
     E (aspectRWithEqn^.equat)]
     ))])]
 
@@ -601,7 +599,7 @@ lc1Desc mainConcept = foldlSent [(refA gbRefDB newA3) `sDash` S "The",
 
 lc2Desc = foldlSent [(refA gbRefDB newA4) `sC` ((refA gbRefDB newA8) `sDash`
   S "Currently the"), plural value, S "for",
-  foldlList (map getES (take 3 assumptionConstants)),
+  foldlList (map ch (take 3 assumptionConstants)),
   S "are assumed to be the same for all" +:+. phrase glass,
   S "In the future these", plural value, S "can be changed to",
   phrase variable, plural input_]
@@ -811,14 +809,14 @@ s12_intro = foldlSP [
   S "used for interpolating", plural value, S "needed in the", plural model]
 
 fig_5 = fig (titleize figure +: S "5" +:+ (demandq ^. defn) +:+
-  sParen (getES demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
-  `sVersus` at_start char_weight +:+ sParen (getES sflawParamM))
+  sParen (ch demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
+  `sVersus` at_start char_weight +:+ sParen (ch sflawParamM))
   (resourcePath ++ "ASTM_F2248-09.png") "demandVSsod"
 
 fig_6 = fig (titleize figure +: S "6" +:+ S "Non dimensional" +:+
-  phrase lateralLoad +:+ sParen (getES dimlessLoad)
+  phrase lateralLoad +:+ sParen (ch dimlessLoad)
   `sVersus` titleize aspectR +:+ sParen (getAcc aR)
-  `sVersus` at_start stressDistFac +:+ sParen (getES stressDistFac))
+  `sVersus` at_start stressDistFac +:+ sParen (ch stressDistFac))
   (resourcePath ++ "ASTM_F2248-09_BeasonEtAl.png") "dimlessloadVSaspect"
 
 blstRskInvWGlassSlab :: Sentence

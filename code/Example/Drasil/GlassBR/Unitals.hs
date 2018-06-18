@@ -4,16 +4,17 @@ import Language.Drasil
 import Control.Lens ((^.))
 import Prelude hiding (log, sqrt)
 
+import Drasil.GlassBR.Concepts (aR, annealedGlass, fullyTGlass, glaPlane, 
+  glassTypeFac, heatSGlass, iGlass, lGlass, lResistance, lShareFac, 
+  loadDurFactor, nFL, responseTy, stdOffDist)
 import Drasil.GlassBR.Units (sFlawPU)
-import Drasil.GlassBR.Concepts (annealedGlass, aR, fullyTGlass, glassTypeFac,
-  heatSGlass, loadDurFactor, iGlass, lGlass, lResistance, lShareFac, nFL, 
-  stdOffDist, glaPlane, responseTy)
 
-import Data.Drasil.SI_Units
 import Data.Drasil.Constraints
-import Data.Drasil.Utils (mkDataDef, getES)
-import Data.Drasil.SentenceStructures (foldlSent, displayConstrntsAsSet,
+import Data.Drasil.SentenceStructures (displayConstrntsAsSet, foldlSent,
   foldlsC, foldlOptions)
+import Data.Drasil.SI_Units (kilogram, kilopascal, metre, millimetre, pascal, 
+  second)
+import Data.Drasil.Utils (mkDataDef)
 
 --FIXME: Many of the current terms can be separated into terms and defns?
 
@@ -378,7 +379,7 @@ sdCalculation :: Relation
 sdCalculation = euclidean (map sy sdVector)
 
 sdVectorSent :: Sentence
-sdVectorSent = foldlsC (map (getES) sdVector)
+sdVectorSent = foldlsC (map (ch) sdVector)
 
 sdVector :: [UnitaryChunk]
 sdVector = [sdx, sdy, sdz]

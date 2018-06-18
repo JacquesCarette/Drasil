@@ -1,14 +1,13 @@
 module Drasil.GlassBR.Assumptions where
 import Control.Lens ((^.))
 import Language.Drasil hiding (organization)
-import qualified Drasil.SRS as SRS
+import qualified Drasil.SRS as SRS (valsOfAuxCons, missingP)
 
-import Drasil.DocumentLanguage.RefHelpers
+import Drasil.DocumentLanguage.RefHelpers (cite, refA)
 
 import Data.Drasil.Concepts.Documentation as Doc (condition, constant, practice, reference, scenario, 
   system, value)
 import Data.Drasil.Concepts.Math (calculation, surface, equation, shape)
-import Data.Drasil.Utils (getES)
 import Data.Drasil.SentenceStructures (sAnd, foldlSent, foldlOptions, foldlList, sOf, sIn)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 
@@ -16,7 +15,7 @@ import Drasil.GlassBR.Unitals ( lite, explosion, lateral, load_dur, explosion,
   constant_LoadDur, constant_ModElas, constant_M, constant_K, constant_LoadDF, constant_LoadSF)
 import Drasil.GlassBR.Concepts (lShareFac, gLassBR,
   glaSlab, glass, responseTy, cantilever, beam, plane, edge)
-import Drasil.GlassBR.References
+import Drasil.GlassBR.References (gbCitations, astm_LR2009)
  
 gbRefDB :: ReferenceDB
 gbRefDB = rdb [] [] newAssumptions [] [] gbCitations
@@ -29,14 +28,14 @@ newAssumptions :: [AssumpChunk] -- For testing
 newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8]
 
 newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8 :: AssumpChunk
-newA1 = assump "glassTyA" a1Desc "glassTy" []
-newA2 = assump "glassConditionA" a2Desc "glassCondition" []
-newA3 = assump "explsnScenarioA"a3Desc "explainScenario" []
-newA4 = assump "standardValuesA" (a4Desc load_dur) "StandardValues" []
-newA5 = assump "glassLiteA" a5Desc "glassLite" []
-newA6 = assump "bndryConditionsA" a6Desc "boundaryConditions" []
-newA7 = assump "responseTyA" a7Desc "responseType" []
-newA8 = assump "ldfConstantA" (a8Desc constant_LoadDF) "ldfConstant" []
+newA1 = assump "glassTyA" a1Desc "glassTy"
+newA2 = assump "glassConditionA" a2Desc "glassCondition" 
+newA3 = assump "explsnScenarioA"a3Desc "explainScenario" 
+newA4 = assump "standardValuesA" (a4Desc load_dur) "StandardValues" 
+newA5 = assump "glassLiteA" a5Desc "glassLite"
+newA6 = assump "bndryConditionsA" a6Desc "boundaryConditions" 
+newA7 = assump "responseTyA" a7Desc "responseType" 
+newA8 = assump "ldfConstantA" (a8Desc constant_LoadDF) "ldfConstant"
 
 assumptionDescs :: [Sentence]
 assumptionDescs = [a1Desc, a2Desc, a3Desc, a4Desc load_dur, a5Desc, a6Desc, a7Desc, a8Desc constant_LoadDF]
@@ -70,8 +69,8 @@ a3Desc = foldlSent [S "This", phrase system,
 a4Desc :: UnitaryChunk -> Sentence
 a4Desc mainIdea = foldlSent [S "The", plural value, S "provided in",
   makeRef (SRS.valsOfAuxCons SRS.missingP []), S "are assumed for the",
-  phrase mainIdea, sParen (getES mainIdea) `sC` S "and the",
-  plural materialProprty `sOf` foldlList (map getES
+  phrase mainIdea, sParen (ch mainIdea) `sC` S "and the",
+  plural materialProprty `sOf` foldlList (map ch
   (take 3 assumptionConstants))]
 
 a5Desc :: Sentence
@@ -92,7 +91,7 @@ a7Desc = foldlSent [S "The", phrase responseTy, S "considered in",
 a8Desc :: QDefinition -> Sentence
 a8Desc mainConcept = foldlSent [S "With", phrase reference, S "to",
   (refA gbRefDB newA4), S "the", phrase value `sOf`
-  phrase mainConcept, sParen (getES mainConcept), S "is a", phrase constant,
+  phrase mainConcept, sParen (ch mainConcept), S "is a", phrase constant,
   S "in" +:+. short gLassBR, S "It is calculated by the" +: phrase equation +:+.
   E (sy mainConcept $= mainConcept^.equat), S "Using this" `sC`
   E (sy mainConcept $= dbl 0.27)]

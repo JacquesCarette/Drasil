@@ -23,4 +23,4 @@ main :: IO ()
 main = do
   gen (DocSpec SRS "NoPCM_SRS") nopcm_srs nopcm_SymbMap
   gen (DocSpec Website "NoPCM_SRS") nopcm_srs nopcm_SymbMap
-  genCode [] nopcm_Choices nopcm_code
+  genCode nopcm_Choices nopcm_code

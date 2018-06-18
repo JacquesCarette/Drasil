@@ -2,8 +2,8 @@ module Drasil.NoPCM.Unitals where
 
 import Language.Drasil
 
-import Data.Drasil.SI_Units
-import Data.Drasil.Quantities.Thermodynamics
+import Data.Drasil.SI_Units (centigrade)
+import Data.Drasil.Quantities.Thermodynamics (temp)
 
 temp_init :: UncertQ
 temp_init = uqc "temp_init" (nounPhraseSP "initial temperature")

@@ -11,7 +11,7 @@ import Drasil.SWHS.Concepts (gauss_div)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Drasil.SWHS.Unitals (in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, 
                             ht_flux_out)
-import Data.Drasil.Utils (getES, weave)
+import Data.Drasil.Utils (weave)
 import Data.Drasil.SentenceStructures (sAnd, foldlList, ofThe, acroGD, foldlSentCol)
 import Data.Drasil.Concepts.Documentation (assumption)
 import Data.Drasil.Quantities.Physics (time)
@@ -34,15 +34,15 @@ roc_temp_simp_deriv_sentences = map foldlSentCol [
 s4_2_3_desc1 :: RelationConcept -> UnitalChunk -> [Sentence]
 s4_2_3_desc1 t1c vo =
   [S "Integrating", makeRef $ reldefn t1c,
-  S "over a", phrase vo, sParen (getES vo) `sC` S "we have"]
+  S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
 s4_2_3_desc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]
 s4_2_3_desc2 gad su vo tfv unv un =
   [S "Applying", titleize gad, S "to the first term over",
-  (phrase su +:+ getES su `ofThe` phrase vo) `sC` S "with",
-  getES tfv, S "as the", phrase tfv, S "for the",
-  phrase su `sAnd` getES unv, S "as a", phrase un,
+  (phrase su +:+ ch su `ofThe` phrase vo) `sC` S "with",
+  ch tfv, S "as the", phrase tfv, S "for the",
+  phrase su `sAnd` ch unv, S "as a", phrase un,
   S "outward", phrase unv, S "for a", phrase su]
 
 s4_2_3_desc3 :: UnitalChunk -> UnitalChunk -> [Sentence]
@@ -52,16 +52,16 @@ s4_2_3_desc3 vo vhg = [S "We consider an arbitrary" +:+. phrase vo, S "The",
 s4_2_3_desc4 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   [Sentence] -> [Sentence]
-s4_2_3_desc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", getES hfi `sC`
-  getES hfo `sC` getES iS `sC` S "and", getES oS, S "are explained in" +:+.
-  acroGD 2, S "Assuming", getES den `sC` getES hcs `sAnd` getES te,
+s4_2_3_desc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
+  ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
+  acroGD 2, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
   titleize' assumption, (foldlList $ (map (\d -> sParen (d)))
   assumps) `sC` S "we have"]
 
 s4_2_3_desc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]
-s4_2_3_desc5 den ma vo = [S "Using the fact that", getES den :+: S "=" :+:
-  getES ma :+: S "/" :+: getES vo `sC` S "(2) can be written as"]
+s4_2_3_desc5 den ma vo = [S "Using the fact that", ch den :+: S "=" :+:
+  ch ma :+: S "/" :+: ch vo `sC` S "(2) can be written as"]
 
 s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4, s4_2_3_eq5 :: Expr
 

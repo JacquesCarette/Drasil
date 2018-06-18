@@ -34,7 +34,8 @@ htTransCladCool, htTransCladFuel :: QDefinition
 htTransCladCool = fromEqn "htTransCladCool" (nounPhraseSP 
   "convective heat transfer coefficient between clad and coolant")
   EmptyS
-  (lH `sub` lC) heat_transfer_coef htTransCladCool_eq [] []
+  (lH `sub` lC) heat_transfer_coef htTransCladCool_eq []
+  "htTransCladCool" --shortname
 
 htTransCladCool_eq =
   (2 * (sy cladCond) * (sy coolFilmCond) / (2 * (sy cladCond) + (sy cladThick) 
@@ -43,7 +44,8 @@ htTransCladCool_eq =
 htTransCladFuel = fromEqn "htTransCladFuel" (nounPhraseSP
   "effective heat transfer coefficient between clad and fuel surface")
   EmptyS
-  (lH `sub` lG) heat_transfer_coef htTransCladFuel_eq [] []
+  (lH `sub` lG) heat_transfer_coef htTransCladFuel_eq []
+  "htTransCladFuel" --shortname
 
 htTransCladFuel_eq = (2 * (sy cladCond) * (sy gapFilmCond)) / (2 * (sy cladCond)
   + ((sy cladThick) * (sy gapFilmCond)))

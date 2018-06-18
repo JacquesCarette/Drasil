@@ -13,7 +13,6 @@ module Data.Drasil.Utils
   , enumBullet
   , mkRefsList
   , mkInputDatTb
-  , getES
   , getRVal
   , addPercent
   , weave
@@ -84,10 +83,6 @@ enumWithSquBrk start = [sSqBr $ S $ show x | x <- [start..]]
 fmtU :: (Quantity a) => Sentence -> a -> Sentence
 fmtU n u  = n +:+ (unwrap $ getUnit u)
 
--- | gets 'presentation' symbol from chunk
-getES :: (HasSymbol a) => a -> Sentence
-getES = P . eqSymb
-
 -- | gets a reasonable or typical value from a Constrained chunk
 getRVal :: (HasUID c, HasReasVal c) => c -> Expr
 getRVal c = uns (c ^. reasVal)
@@ -122,7 +117,7 @@ makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- 
 mkInputDatTb :: (Quantity a) => [a] -> Contents
 mkInputDatTb inputVar = Table [titleize symbol_, titleize unit_, 
   S "Name"]
-  (mkTable [getES , fmtU EmptyS, phrase] inputVar) 
+  (mkTable [ch , fmtU EmptyS, phrase] inputVar) 
   (S "Required" +:+ titleize' input_) True "inDataTable"
 
 -- | makes sentences from an item and its reference 
@@ -167,20 +162,19 @@ unwrap Nothing  = EmptyS
 mkDataDef :: (Quantity c) => c -> Expr -> QDefinition
 mkDataDef cncpt equation = datadef $ getUnit cncpt --should references be passed in at this point?
   where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) a equation [] [] 
+                           (eqSymb cncpt) a equation [] (cncpt ^. uid) --shortname
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) equation [] []
+                           (eqSymb cncpt) equation [] (cncpt ^. uid) --shortname
 
 -- Same as 'mkDataDef', but with an additional Sentence that can be taken as "extra information"; issue #350
-mkDataDef' :: (Quantity c) => c -> Expr -> Sentence -> Attributes -> References -> QDefinition
-mkDataDef' cncpt equation extraInfo atts refs = datadef $ getUnit cncpt
+mkDataDef' :: (Quantity c) => c -> Expr -> Sentence -> References -> QDefinition
+mkDataDef' cncpt equation extraInfo refs = datadef $ getUnit cncpt
   where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) (extraInfo)
-                           (eqSymb cncpt) a equation atts refs
+                           (eqSymb cncpt) a equation refs (cncpt ^. uid) --shortname
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) (extraInfo)
-                           (eqSymb cncpt) equation atts refs
+                           (eqSymb cncpt) equation refs (cncpt ^. uid) --shortname
 
 prodUCTbl :: [[Sentence]] -> Contents
 prodUCTbl cases = Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
   cases
   (titleize useCaseTable) True "useCaseTable"
-

@@ -11,7 +11,15 @@ module Drasil.SRS
 
 import Language.Drasil
 
-import qualified Data.Drasil.Concepts.Documentation as Doc
+import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, 
+    assumption, charOfIR, client, customer, consVals, dataDefn, datumConstraint, 
+    functionalRequirement, genDefn, generalSystemDescription, goalStmt, 
+    indPRCase, inModel, introduction, likelyChg, nonfunctionalRequirement,
+    offShelfSolution, orgOfDoc, physSyst, prodUCTable, problemDescription, 
+    propOfCorSol, prpsOfDoc, reference, requirement, scpOfReq, scpOfTheProj,
+    solutionCharSpec, specificsystemdescription, srs, stakeholder, sysCont, 
+    systemConstraint, termAndDef, terminology, thModel, traceyMandG, tOfSymb, 
+    userCharacteristic)
 import Data.Drasil.Phrase (for'')
 
 -- Local function to keep things looking clean, not exported.
@@ -89,7 +97,7 @@ tOfSymb cs ss = section' (titleize Doc.tOfSymb) cs ss "ToS"
 
 --function that sets the shortname of each section to be the reference address
 section' :: Sentence -> [Contents] -> [Section] -> RefAdd -> Section
-section' a b c d = section a b c d (getStr a) --FIXME: getStr hack 
+section' a b c d = section a b c d (shortname' $ getStr a) --FIXME: getStr hack 
 
 --
 missingP :: [Contents]

@@ -2,12 +2,12 @@
 -- when 'name' and 'nameCT' both appear, 'name' is the Haskell function and
 -- 'nameCT' is the "Code Template" that 'name' builds.
 
-module Drasil.GlassBR.ModuleDefs (implVars, allMods) where
+module Drasil.GlassBR.ModuleDefs (allMods, implVars) where
 
 import Language.Drasil
 
-import Drasil.GlassBR.Unitals (plate_len, plate_width, nom_thick,
-  glass_type, char_weight, tNT, sdx, sdy, sdz, pb_tol)
+import Drasil.GlassBR.Unitals (char_weight, glass_type, nom_thick, pb_tol, 
+  plate_len, plate_width, sdx, sdy, sdz, tNT)
 
 allMods :: [Mod]
 allMods = [readTableMod, inputMod, interpMod]
@@ -61,7 +61,7 @@ two = Atomic "2"
 
 -- No need to be too verbose
 var :: String -> Symbol -> Space -> VarChunk
-var nam sym ty = implVar nam (nounPhraseSP nam) sym ty [] -- list of attributes
+var nam sym ty = implVar nam (nounPhraseSP nam) sym ty
 
 y_2, y_1, x_2, x_1, x :: VarChunk
 y_1  = var "y1"          (sub lY one) Real

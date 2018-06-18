@@ -1,9 +1,9 @@
 module Drasil.SSP.Defs where --export all of this file
 
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation (assumption, dataDefn,
-  genDefn, goalStmt, inModel, likelyChg, physSyst, requirement,
-  srs, thModel, typUnc, property, safety)
+import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn, 
+  goalStmt, inModel, likelyChg, physSyst, property, requirement, safety, srs,
+  thModel, typUnc)
 import Data.Drasil.Concepts.Math (surface)
 
 import Data.Drasil.Phrase(of_'')

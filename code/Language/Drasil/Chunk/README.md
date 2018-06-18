@@ -39,9 +39,6 @@ Constrained.hs
   - Constraint and helper data types.
   - ConstrainedChunk and ConstrainedConcept data types.
 
-ConVar.hs
-  - ConVar data type.
-
 DefinedQuantity
   - DefinedQuantityDict data type.
 

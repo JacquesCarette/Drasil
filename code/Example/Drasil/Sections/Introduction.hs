@@ -37,7 +37,7 @@ developmentProcessParagraph = foldlSP [S "This", phrase document,
   S "that follow the so-called waterfall", phrase model `sC` 
   S "the actual development process is not constrained", 
   S "in any way. Even when the waterfall model is not followed, as",
-  S "Parnas and Clements point out" `sC` --cite gbRefDB koothoor2013,
+  S "Parnas and Clements point out" `sC` --cite gbRefDB parnasClements1986,
   S "the most logical way to present the", phrase documentation,
   S "is still to", Quote (S "fake"), S "a rational", phrase design,
   S "process"]

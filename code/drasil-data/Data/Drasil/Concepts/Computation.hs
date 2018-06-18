@@ -3,9 +3,7 @@ module Data.Drasil.Concepts.Computation where
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (datum, input_, literacy, output_, 
     quantity, type_, value, variable)
-import qualified Language.Drasil.NounPhrase as NP (phrase, plural)
 import Data.Drasil.Concepts.Math (parameter)
-
 
 algorithm :: ConceptChunk
 algorithm    = dcc "algorithm" (cn' "algorithm")
@@ -29,10 +27,10 @@ dataStruct, dataStruct', dataType, dataType',
   inDatum, outDatum, inParam, inVar, inValue, inQty,
   computerLiteracy, computerApp :: NamedChunk
 
-dataStruct       = compoundNC'' NP.plural NP.phrase datum structure
-dataStruct'      = compoundNC'' NP.plural NP.plural datum structure
-dataType         = compoundNC'' NP.plural NP.phrase datum type_
-dataType'        = compoundNC'' NP.plural NP.plural datum type_
+dataStruct       = compoundNCPlPh datum structure
+dataStruct'      = compoundNCPlPl datum structure
+dataType         = compoundNCPlPh datum type_
+dataType'        = compoundNCPlPl datum type_
 inDatum          = compoundNC input_ datum
 outDatum         = compoundNC output_ datum
 inParam          = compoundNC input_ parameter

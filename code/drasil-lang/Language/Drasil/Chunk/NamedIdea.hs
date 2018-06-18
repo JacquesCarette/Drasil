@@ -1,7 +1,8 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.NamedIdea (
   NamedChunk, nc, IdeaDict, short, nw, mkIdea,
-  compoundNC, compoundNC', compoundNC'', compoundNC''', compoundNCP1,
+  compoundNC, compoundNC', compoundNC'', compoundNC''', 
+  compoundNCP1, compoundNCPlPh, compoundNCPlPl,
   the, theCustom) where
 
 import Language.Drasil.UID (UID)
@@ -67,6 +68,12 @@ compoundNC'' :: (NamedIdea a, NamedIdea b) =>
   (NP -> Sentence) -> (NP -> Sentence) -> a -> b -> NamedChunk
 compoundNC'' f1 f2 t1 t2 = nc
   (t1 ^. uid ++ t2 ^. uid) (compoundPhrase'' f1 f2 (t1 ^. term) (t2 ^. term))
+
+compoundNCPlPh :: NamedChunk -> NamedChunk -> NamedChunk
+compoundNCPlPh = compoundNC'' plural phrase
+
+compoundNCPlPl :: NamedChunk -> NamedChunk -> NamedChunk
+compoundNCPlPl = compoundNC'' plural plural
 
 -- hack for Solution Characteristics Specification, calling upon plural will pluralize
 -- Characteristics as it is the end of the first term (solutionCharacteristic)

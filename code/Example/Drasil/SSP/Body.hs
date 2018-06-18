@@ -38,7 +38,6 @@ import Drasil.SSP.IMods (fctSftyDerivation, instModIntro1, instModIntro2,
   intrSlcDerivation, nrmShrDerivation, rigDisDerivation, rigFoSDerivation, 
   sspIMods)
 import Drasil.DocumentLanguage.RefHelpers (refA)
-import Drasil.SSP.References (sspCitations)
 import Drasil.SSP.Requirements (sspInputDataTable, sspRequirements)
 import Drasil.SSP.TMods (sspTMods)
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
@@ -387,8 +386,8 @@ s5_2 = nonFuncReqF [accuracy, performanceSpd]
   where r = (short ssa) +:+ S "is intended to be an educational tool"
 
 -- SECTION 6     --
--- LikelyChanges --
-s6 = SRS.likeChg [] []
+-- Likely Changes --
+s6 = SRS.likeChg [] [] -- can be removed with work on #321
 
 likelyChanges_SRS :: [Contents]
 likelyChanges_SRS = [likelychg1]
@@ -399,7 +398,7 @@ likelychg1 = mkLklyChnk "LC_inhomogeneous" lc1Desc "Calculate-Inhomogeneous-Soil
 lc1Desc :: Sentence
 lc1Desc = foldlSent [(refA sspRefDB newA3) `sDash` S "The",
   phrase system +:+. S "currently assumes the different layers of the soil are homogeneous",
-  S "In the future", plural calculation,
+  S "In the future,", plural calculation,
   S "can be added for inconsistent soil properties throughout"]
 
 -- SECTION 7 --

@@ -7,16 +7,16 @@ import Prelude hiding (sin, cos, tan)
 import Data.Drasil.Concepts.Documentation (analysis, assumption, definition, 
   design, document, effect, element, endUser, goalStmt, inModel, input_, 
   interest, interest, issue, loss, method_, model, organization, physics, 
-  problem, property, requirement, srs, table_, template, value, variable)
+  problem, property, requirement, srs, table_, template, value, variable,
+  system)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
-import Data.Drasil.Concepts.Math (equation, surface)
+import Data.Drasil.Concepts.Math (equation, surface, calculation)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (compression, fbd, force, strain, stress,
   tension)
 import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability, 
   performanceSpd, program, reusability, understandability)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
-
 import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.People (henryFrankis)
@@ -26,7 +26,7 @@ import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent,
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
 import Data.Drasil.Utils (enumBullet, enumSimple, getES, weave)
 
-import Drasil.SSP.Assumptions (sspAssumptions)
+import Drasil.SSP.Assumptions (sspAssumptions, newA3)
 import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShrDerivation, 
   resShrDerivation, sliceWght, sspDataDefs, stfMtrxDerivation)
 import Drasil.SSP.DataDesc (sspInputMod)
@@ -37,6 +37,7 @@ import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (fctSftyDerivation, instModIntro1, instModIntro2, 
   intrSlcDerivation, nrmShrDerivation, rigDisDerivation, rigFoSDerivation, 
   sspIMods)
+import Drasil.DocumentLanguage.RefHelpers (refA)
 import Drasil.SSP.References (sspCitations)
 import Drasil.SSP.Requirements (sspInputDataTable, sspRequirements)
 import Drasil.SSP.TMods (sspTMods)
@@ -48,7 +49,7 @@ import qualified Drasil.SRS as SRS (funcReq, inModel, likeChg, missingP,
 
 import Drasil.DocumentLanguage (DocDesc, DocSection(..), IntroSec(..), 
   IntroSub(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), TSIntro, 
-  TSIntro(..), mkDoc, tsymb'')
+  TSIntro(..), mkDoc, tsymb'', mkLklyChnk)
 
 import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
@@ -388,8 +389,21 @@ s5_2 = nonFuncReqF [accuracy, performanceSpd]
   [correctness, understandability, reusability, maintainability] r EmptyS
   where r = (short ssa) +:+ S "is intended to be an educational tool"
 
--- SECTION 6 --
+-- SECTION 6     --
+-- LikelyChanges --
 s6 = SRS.likeChg [] []
+
+likelyChanges_SRS :: [Contents]
+likelyChanges_SRS = [likelychg1]
+
+likelychg1 :: Contents
+likelychg1 = mkLklyChnk "LC_inhomogeneous" lc1Desc "Calculate-Inhomogeneous-Soil-Layers"
+
+lc1Desc :: Sentence
+lc1Desc = foldlSent [(refA sspRefDB newA3) `sDash` S "The",
+  phrase system +:+. S "currently assumes the different layers of the soil are homogeneous",
+  S "In the future", plural calculation,
+  S "can be added for inconsistent soil properties throughout"]
 
 -- SECTION 7 --
 s7 = valsOfAuxConstantsF ssa []

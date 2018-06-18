@@ -168,9 +168,9 @@ normStress, genPressure, normFunc, shearFunc, slopeDist, slipDist, genStffness,
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
 
-intNormForce = uc' "E_i" (cn $ "interslice normal force")
+intNormForce = uc' "G_i" (cn $ "interslice normal force")
   ("exerted between adjacent slices " ++ fisi)
-  (cE) newton
+  (cG) newton
 
 waterHght = uc' "y_wt,i"
   (cn $ "y ordinate")

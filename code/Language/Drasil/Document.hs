@@ -2,6 +2,14 @@
 -- | Document Description Language
 module Language.Drasil.Document where
 
+import Language.Drasil.Chunk.AssumpChunk (AssumpChunk)
+import Language.Drasil.Chunk.Change (Change)
+import Language.Drasil.Chunk.Citation (BibRef)
+import Language.Drasil.Chunk.Eq (QDefinition)
+import Language.Drasil.Chunk.Relation (RelationConcept)
+import Language.Drasil.Chunk.ReqChunk (ReqChunk)
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName,
+  shortname')
 import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.ShortName
@@ -11,9 +19,9 @@ import Language.Drasil.UID
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.ReqChunk
 import Language.Drasil.Spec (Sentence(..))
+import Language.Drasil.Expr (Expr)
 import Language.Drasil.RefTypes (RefAdd)
-import Language.Drasil.Expr
-import Language.Drasil.Chunk.Citation (BibRef)
+import Language.Drasil.Spec (Sentence(..))
 
 import Control.Lens ((^.), makeLenses)
 

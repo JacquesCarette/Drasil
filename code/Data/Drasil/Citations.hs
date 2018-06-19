@@ -1,4 +1,4 @@
-module Data.Drasil.Citations (koothoor2013, parnas1986, smithLai2005, jnlCGJ
+module Data.Drasil.Citations (koothoor2013, parnasClements1986, smithLai2005, jnlCGJ
   ) where
 
 import Language.Drasil --(S,(:+:),(+:+),sC,phrase,F,Accent(..),Citation(..),CiteField(..))
@@ -10,14 +10,14 @@ import Data.Drasil.Software.Products (sciCompS)
 -- CITATIONS --
 ---------------
 
-koothoor2013, parnas1986, smithLai2005 :: Citation
+koothoor2013, parnasClements1986, smithLai2005 :: Citation
 
 koothoor2013 = 
   cMThesis "koothoor2013" [nKoothoor] 
   (S "A document drive approach to certifying" +:+ phrase sciCompS)
   (S "McMaster University") 2013 [address (S "Hamilton, ON, Canada")]
   
-parnas1986 = cArticle "parnas1986" [dParnas, pcClements] 
+parnasClements1986 = cArticle "parnasClements1986" [dParnas, pcClements] 
   (S "A rational design process: How and why to fake it")
   (S "IEEE Transactions on Software Engineering") 1986
   [month Feb, volume 12, number 2, pages [251,257], address (S "Washington, USA")]

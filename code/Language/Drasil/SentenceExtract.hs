@@ -25,10 +25,10 @@ import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA),
   HasReference(getReferences), ConceptDomain, Definition(defn))
 
 getDoc :: Document -> [Sentence]
-getDoc (Document t a s) = [t] ++ [a] ++ (concatMap getSec s)
+getDoc (Document t a s) = t : a : concatMap getSec s
 
 getSec :: Section -> [Sentence]
-getSec (Section t sc _ _) = [t] ++ (concatMap getSecCon sc)
+getSec (Section t sc _ _) = t : concatMap getSecCon sc
 
 getSecCon :: SecCons -> [Sentence]
 getSecCon (Sub s) = getSec s
@@ -45,8 +45,8 @@ getCon (Requirement reqc) = getReq reqc
 getCon (Assumption assc) = getAss assc
 getCon (Change chg) = getChg chg
 getCon (Bib bref) = getBib bref
-getCon (Graph [(s1, s2)] _ _ l _) = [s1] ++ [s2] ++ [l]
-getCon (Defnt dt [(_, con)] _) = (getDtype dt) ++ (concatMap getCon con)
+getCon (Graph [(s1, s2)] _ _ l _) = s1 : s2 : [l]
+getCon (Defnt dt [(_, con)] _) = getDtype dt ++ concatMap getCon con
 getCon _ = []
 
 getDtype :: DType -> [Sentence]
@@ -56,13 +56,13 @@ getDtype _ = []
 
 
 getQDef :: QDefinition -> [Sentence]
-getQDef a = (concatMap getRef (a ^. getReferences)) ++ (a ^. derivations) ++ (getQuanDict (a ^. qua))
+getQDef a = concatMap getRef (a ^. getReferences) ++ (a ^. derivations) ++ getQuanDict (a ^. qua)
 
 getRef :: Reference -> [Sentence]
 getRef (SourceRef s) = [s]
 
 getQuanDict :: QuantityDict -> [Sentence]
-getQuanDict a = (getIdeaDict (a ^. id')) ++ (getUnitD (getUnit a))
+getQuanDict a = getIdeaDict (a ^. id') ++ getUnitD (getUnit a)
 
 getIdeaDict :: IdeaDict -> [Sentence]
 getIdeaDict a = getNameC (a ^. nc')
@@ -73,7 +73,7 @@ getNameC a = getNP (a ^. np)
 getNP :: NP -> [Sentence]
 getNP (ProperNoun _ _) = []
 getNP (CommonNoun _ _ c) = getCap c
-getNP (Phrase s _ c1 c2) = [s] ++ (getCap c1) ++ (getCap c2)
+getNP (Phrase s _ c1 c2) = s : getCap c1 ++ getCap c2
 
 getCap :: CapitalizationRule -> [Sentence]
 getCap (Replace s) = [s]
@@ -84,10 +84,10 @@ getUnitD (Nothing) = []
 getUnitD (Just a) = getUd a
 
 getUd :: UnitDefn -> [Sentence]
-getUd a = [(a ^. defn)] ++ (getNP (a ^. term))
+getUd a = (a ^. defn) : getNP (a ^. term)
 
 getRelaConc :: RelationConcept -> [Sentence]
-getRelaConc a = [(a ^. defn)] ++ (getNP (a ^. term))
+getRelaConc a = (a ^. defn) : getNP (a ^. term)
 
 getReq :: ReqChunk -> [Sentence]
 getReq a = [(requires a)]
@@ -108,13 +108,13 @@ getLT (Definitions lp) = concatMap getLP lp
 
 getIL :: ItemType -> [Sentence]
 getIL (Flat s) = [s]
-getIL (Nested h lt) = [h] ++ (getLT lt)
+getIL (Nested h lt) = h : getLT lt
 
 getLP :: ListPair -> [Sentence]
-getLP (t, it) = [t] ++ (getIL it)
+getLP (t, it) = t : getIL it
 
 getBib :: BibRef -> [Sentence]
-getBib a = concatMap getField (concatMap fields a)
+getBib a = concatMap getField $ concatMap fields a
 
 getField :: CiteField -> [Sentence]
 getField (Address s) = [s]

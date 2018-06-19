@@ -93,14 +93,13 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
 type Identifier = String
 
 data LabelledContent = LblC { _uniqueID :: UID
-                       , _lbl :: Label
-                       , ctype :: Contents
-                       , _sn :: Maybe ShortName
-                       }
+                            , _lbl :: Label
+                            , ctype :: Contents
+                            }
 makeLenses ''LabelledContent
 
 -- | Smart constructor for labelled content chunks (should not be exported)
-llcc :: UID -> Label -> Contents -> Maybe ShortName -> LabelledContent
+llcc :: UID -> Label -> Contents -> LabelledContent
 llcc = LblC
 
 instance HasShortName  Contents where
@@ -124,7 +123,7 @@ instance HasShortName  Contents where
 -- nothing has a shortname right now
 mkTableLC :: String -> String -> String -> String -> Contents -> LabelledContent
 mkTableLC uidForContent labelUID refAdd sn tbl = llcc uidForContent 
-  (mkLabelRA labelUID refAdd (Just sn)) tbl Nothing
+  (mkLabelRA labelUID refAdd (Just sn)) tbl
 
 {-mkParagraph
 mkEqnBlock

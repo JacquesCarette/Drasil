@@ -1,3 +1,4 @@
+{-# Language TemplateHaskell #-}
 -- | Document Description Language
 module Language.Drasil.Document where
 
@@ -10,11 +11,27 @@ import Language.Drasil.Chunk.ReqChunk (ReqChunk)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName,
   shortname')
 import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.UID
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Spec (Sentence(..))
+import Language.Drasil.Label (Label, mkLabelRA)
+import Control.Lens ((^.), makeLenses)
 
-import Control.Lens ((^.))
+data ListType = Bullet [ItemType] -- ^ Bulleted list
+              | Numeric [ItemType] -- ^ Enumerated List
+              | Simple [ListPair] -- ^ Simple list with items denoted by @-@
+              | Desc [ListPair] -- ^ Descriptive list, renders as "Title: Item" (see 'ListPair')
+              | Definitions [ListPair] -- ^ Renders a list of "@Title@ is the @Item@"
+
+data ItemType = Flat Sentence -- ^ Standard singular item
+              | Nested Header ListType -- ^ Nest a list as an item
+
+-- | MaxWidthPercent should be kept in the range 1-100. 
+-- Values outside this range may have unexpected results.
+-- Used for specifying max figure width as
+-- pagewidth*MaxWidthPercent/100.
+type MaxWidthPercent = Float
 
 type Title    = Sentence
 type Author   = Sentence
@@ -24,11 +41,22 @@ type Width    = Float
 type Height   = Float
 type ListPair = (Title,ItemType) -- ^ Title: Item
 type Filepath = String
-type Label    = Sentence
+type Lbl    = Sentence
 
 -- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and Sections
 -- which hold the contents of the document
 data Document = Document Title Author [Section]
+
+--FIXME: Remove Data and Theory from below.
+-- | Types of definitions
+data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining 
+                              -- equation used to generate the Data Definition
+           | General
+           | Theory RelationConcept -- ^ Theoretical models use a relation as
+                                    -- their definition
+           | Instance
+           | TM
+           | DD
 
 -- | Section Contents are split into subsections or contents, where contents
 -- are standard layout objects (see 'Contents')
@@ -50,19 +78,29 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
      --        CodeBlock Code   -- GOOL complicates this.  Removed for now.
                | Definition DType
                | Enumeration ListType -- ^ Lists
-               | Figure Label Filepath MaxWidthPercent RefAdd-- ^ Should use relative file path.
+               | Figure Lbl Filepath MaxWidthPercent RefAdd-- ^ Should use relative file path.
                | Requirement ReqChunk
                | Assumption AssumpChunk
                | Change Change
                | Bib BibRef
      --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
-               | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Label RefAdd
+               | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl RefAdd
                -- ^ TODO: Fill this one in.
                ------NEW TMOD/DDEF/IM/GD BEGINS HERE------
                ---- FIXME: The above Definition will need to be removed ----
                --------------------------------------------
                | Defnt DType [(Identifier, [Contents])] RefAdd
 type Identifier = String
+
+data LabelledContent = LblC { _uniqueID :: UID
+                            , _lbl :: Label
+                            , ctype :: Contents
+                            }
+makeLenses ''LabelledContent
+
+-- | Smart constructor for labelled content chunks (should not be exported)
+llcc :: UID -> Label -> Contents -> LabelledContent
+llcc = LblC
 
 instance HasShortName  Contents where
   shortname (Table _ _ _ _ r)     = shortname' $ "Table:" ++ r
@@ -80,32 +118,24 @@ instance HasShortName  Contents where
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
 
--- | MaxWidthPercent should be kept in the range 1-100. 
--- Values outside this range may have unexpected results.
--- Used for specifying max figure width as
--- pagewidth*MaxWidthPercent/100.
-type MaxWidthPercent = Float
+---------------------------------------------------------------------------
+-- smart constructors needed for LabelledContent
+-- nothing has a shortname right now
+mkTableLC :: String -> String -> String -> String -> Contents -> LabelledContent
+mkTableLC uidForContent labelUID refAdd sn tbl = llcc uidForContent 
+  (mkLabelRA labelUID refAdd (Just sn)) tbl
 
-data ListType = Bullet [ItemType] -- ^ Bulleted list
-              | Numeric [ItemType] -- ^ Enumerated List
-              | Simple [ListPair] -- ^ Simple list with items denoted by @-@
-              | Desc [ListPair] -- ^ Descriptive list, renders as "Title: Item" (see 'ListPair')
-              | Definitions [ListPair] -- ^ Renders a list of "@Title@ is the @Item@"
-         
-data ItemType = Flat Sentence -- ^ Standard singular item
-              | Nested Header ListType -- ^ Nest a list as an item
-
---FIXME: Remove Data and Theory from below.
--- | Types of definitions
-data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining 
-                              -- equation used to generate the Data Definition
-           | General
-           | Theory RelationConcept -- ^ Theoretical models use a relation as
-                                    -- their definition
-           | Instance
-           | TM
-           | DD
-
+{-mkParagraph
+mkEqnBlock
+mkDefinition
+mkEnumeration
+mkFigure
+mkRequirement
+mkAssumption
+mkChange
+mkBib
+mkGraph
+mkDefnt-}
 ---------------------------------------------------------------------------
 -- smart constructors and combinators for making instances of the above
 -- data types.  Over time, the types should no longer be exported, and 
@@ -120,11 +150,11 @@ section'' :: Sentence -> [Contents] -> [Section] -> String -> Section
 section'' title intro secs ra = section title intro secs ra (shortname' ra)
 
 -- | Figure smart constructor. Assumes 100% of page width as max width.
-fig :: Label -> Filepath -> RefAdd -> Contents
+fig :: Lbl -> Filepath -> RefAdd -> Contents
 fig l f = Figure l f 100
 
 -- | Figure smart constructor for customized max widths.
-figWithWidth :: Label -> Filepath -> MaxWidthPercent -> RefAdd -> Contents
+figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RefAdd -> Contents
 figWithWidth = Figure
 
 datadefn :: QDefinition -> Contents

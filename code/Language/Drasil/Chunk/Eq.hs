@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.Eq 
   (QDefinition, fromEqn, fromEqn', fromEqn'', equat, getVC
-  , ec, ref) where
+  , ec, qua) where
 
 import Control.Lens ((^.), makeLenses, view)
 import Language.Drasil.Expr (Expr)

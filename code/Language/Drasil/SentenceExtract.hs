@@ -6,11 +6,11 @@ import Language.Drasil.Spec
 import Language.Drasil.Chunk.AssumpChunk (AssumpChunk)
 import Language.Drasil.Chunk.Change (Change)
 import Language.Drasil.Chunk.Citation (BibRef)
-import Language.Drasil.Chunk.Eq (QDefinition, ref)
+import Language.Drasil.Chunk.Eq (QDefinition, qua)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
-import Language.Drasil.Chunk.Eq (QDefinition(..))
 import Language.Drasil.Chunk.References
+import Language.Drasil.Chunk.Quantity(QuantityDict)
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), ConceptDomain)
@@ -48,10 +48,13 @@ getDtype _ = []
 
 ---- not done --------
 getQDef :: QDefinition -> [Sentence]
-getQDef a = concatMap getRef (a ^. ref)
+getQDef a = (concatMap getRef (a ^. getReferences)) ++ (a ^. derivations) ++ (getQuanDict (a ^. qua))
 
 getRef :: Reference -> [Sentence]
 getRef (SourceRef s) = [s]
+
+getQuanDict :: QuantityDict -> [Sentence]
+getQuanDict (_) = []
 
 ---- not done -------
 getRelaConc :: RelationConcept -> [Sentence]

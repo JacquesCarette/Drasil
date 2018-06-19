@@ -3,9 +3,9 @@ module Drasil.SSP.Changes (likelyChanges_SRS) where
 -- A list of likely and unlikely changes for the SSP example
 
 import Language.Drasil
-import Drasil.DocumentLanguage (mkLklyChnk)
+import Drasil.DocumentLanguage (mkLklyChnk, mkUnLklyChnk)
 import Data.Drasil.SentenceStructures (foldlSent)
-import Drasil.SSP.Assumptions (sspRefDB, newA3)
+import Drasil.SSP.Assumptions (sspRefDB, newA3, newA5, newA6, newA8)
 import Data.Drasil.Concepts.Math (calculation)
 import Drasil.DocumentLanguage.RefHelpers (refA)
 import Data.Drasil.Concepts.Documentation (system)
@@ -22,4 +22,20 @@ lc1Desc = foldlSent [(refA sspRefDB newA3) `sDash` S "The",
   S "In the future,", plural calculation,
   S "can be added for inconsistent soil properties throughout"]
 
---unlikelyChanges_SRS :: [Contents]
+unlikelyChanges_SRS :: [Contents]
+unlikelyChanges_SRS = [unlikelychg1, unlikelychg2]
+
+unlikelychg1 = mkUnLklyChnk "UC_normshearlinear" uc1Desc "Normal-And-Shear-Linear-Only"
+unlikelychg2 = mkUnLklyChnk "UC_2donly"          uc2Desc "2D-Analysis-Only"
+
+uc1Desc, uc2Desc :: Sentence
+
+uc1Desc = foldlSent [S "Chages related to", (refA sspRefDB newA5), S "and",
+  (refA sspRefDB newA6), S "are not possible due to the dependency",
+  S "of the", plural calculation, S "on the linear relationship between",
+  S "interslice normal and shear forces"]
+
+uc2Desc = foldlSent [(refA sspRefDB newA8), S "allows for 2D analysis" +:+.
+  S "with these models only because stress along z-direction is zero", 
+  S "These models do not take into account stress in the z-direction, and",
+  S "therefore cannot be without manipulation to attempt 3d analysis"]

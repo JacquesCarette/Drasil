@@ -522,3 +522,6 @@ mkRequirement i desc shrtn = Requirement $ frc i desc (shortname' shrtn)
 
 mkLklyChnk :: String -> Sentence -> String -> Contents
 mkLklyChnk i desc shrtn = Change $ lc i desc (shortname' shrtn)
+
+mkUnLklyChnk :: String -> Sentence -> String -> Contents
+mkUnLklyChnk i desc shrtn = Change $ ulc i desc (shortname' shrtn)

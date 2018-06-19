@@ -1,13 +1,19 @@
 module Language.Drasil.SentenceExtract (getDoc)where
 
+import Control.Lens ((^.), makeLenses, view)
 import Language.Drasil.Document
 import Language.Drasil.Spec
 import Language.Drasil.Chunk.AssumpChunk (AssumpChunk)
 import Language.Drasil.Chunk.Change (Change)
 import Language.Drasil.Chunk.Citation (BibRef)
-import Language.Drasil.Chunk.Eq (QDefinition)
+import Language.Drasil.Chunk.Eq (QDefinition, ref)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
+import Language.Drasil.Chunk.Eq (QDefinition(..))
+import Language.Drasil.Chunk.References
+import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA),
+  HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
+  HasReference(getReferences), ConceptDomain)
 
 getDoc :: Document -> [Sentence]
 getDoc (Document t a s) = [t] ++ [a] ++ (concatMap getSec s)
@@ -42,7 +48,10 @@ getDtype _ = []
 
 ---- not done --------
 getQDef :: QDefinition -> [Sentence]
-getQDef (_) = []
+getQDef a = concatMap getRef (a ^. ref)
+
+getRef :: Reference -> [Sentence]
+getRef (SourceRef s) = [s]
 
 ---- not done -------
 getRelaConc :: RelationConcept -> [Sentence]

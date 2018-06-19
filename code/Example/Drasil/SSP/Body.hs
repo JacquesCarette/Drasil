@@ -287,7 +287,8 @@ fig_indexconv = fig (foldlSent_ [S "Index convention for numbering",
 
 fig_forceacting :: Contents
 fig_forceacting = fig (at_start' force +:+ S "acting on a" +:+
-  phrase slice) "ForceDiagram.png" "ForceDiagram"
+  phrase slice +:+ S "(Note: Instances of E in the figure is" +:+
+  S "to be relabelled G)") "ForceDiagram.png" "ForceDiagram"
 
 -- SECTION 4.1.3 --
 s4_1_3 = goalStmtF (map (\(x, y) -> x `ofThe` y) [

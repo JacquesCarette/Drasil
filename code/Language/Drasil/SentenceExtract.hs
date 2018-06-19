@@ -1,25 +1,19 @@
 module Language.Drasil.SentenceExtract (getDoc)where
 
-import Control.Lens ((^.), makeLenses, view)
+import Control.Lens ((^.))
 import Language.Drasil.Document
 import Language.Drasil.Spec
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Change
-import Language.Drasil.Chunk.Citation (BibRef)
-import Language.Drasil.Chunk.Eq (QDefinition, qua)
-import Language.Drasil.Chunk.Relation (RelationConcept)
-import Language.Drasil.Chunk.ReqChunk (ReqChunk)
+import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.References
-import Language.Drasil.Chunk.Quantity(QuantityDict, getUnit)
 import Language.Drasil.Unit(UnitDefn)
-import Language.Drasil.Chunk.NamedIdea(IdeaDict, NamedChunk)
 import Language.Drasil.NounPhrase 
 import Language.Drasil.NounPhrase.Core
-import Language.Drasil.Unit(UnitDefn)
-import Language.Drasil.Chunk.Concept.Core
 import Language.Drasil.Chunk.Concept
-import Language.Drasil.Chunk.ReqChunk (requires, ReqChunk)
 import Language.Drasil.Chunk.Citation
+import Language.Drasil.Chunk.ReqChunk
+import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), ConceptDomain, Definition(defn))
@@ -51,12 +45,12 @@ getCon _ = []
 
 getDtype :: DType -> [Sentence]
 getDtype (Data q) = getQDef q
-getDtype (Theory t) = getRelaConc t
+getDtype (Theory t) = getTerm t ++ getDefn t
 getDtype _ = []
 
 
 getQDef :: QDefinition -> [Sentence]
-getQDef a = concatMap getRef (a ^. getReferences) ++ (a ^. derivations) ++ getNP (a ^. term) ++ getUnitD (getUnit a)
+getQDef a = concatMap getRef (a ^. getReferences) ++ (a ^. derivations) ++ getTerm a ++ getUnitD (getUnit a)
 
 getRef :: Reference -> [Sentence]
 getRef (SourceRef s) = [s]
@@ -72,13 +66,13 @@ getCap (_) = []
 
 getUnitD :: Maybe UnitDefn -> [Sentence]
 getUnitD (Nothing) = []
-getUnitD (Just a) = getUd a
+getUnitD (Just a) = getTerm a ++ getDefn a
 
-getUd :: UnitDefn -> [Sentence]
-getUd a = (a ^. defn) : getNP (a ^. term)
+getTerm :: (NamedIdea a) => a -> [Sentence]
+getTerm a  = getNP (a ^. term)
 
-getRelaConc :: RelationConcept -> [Sentence]
-getRelaConc a = (a ^. defn) : getNP (a ^. term)
+getDefn :: (Definition a) => a -> [Sentence]
+getDefn a = [a ^. defn]
 
 getReq :: ReqChunk -> [Sentence]
 getReq a = [(requires a)]

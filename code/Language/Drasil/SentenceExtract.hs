@@ -19,6 +19,7 @@ import Language.Drasil.Unit(UnitDefn)
 import Language.Drasil.Chunk.Concept.Core
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.ReqChunk (requires, ReqChunk)
+import Language.Drasil.Chunk.Citation
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), ConceptDomain, Definition(defn))
@@ -49,8 +50,8 @@ getCon (Defnt dt [(_, con)] _) = (getDtype dt) ++ (concatMap getCon con)
 getCon _ = []
 
 getDtype :: DType -> [Sentence]
-getDtype (Data q) = getQDef q ----
-getDtype (Theory t) = getRelaConc t ----
+getDtype (Data q) = getQDef q
+getDtype (Theory t) = getRelaConc t
 getDtype _ = []
 
 
@@ -113,5 +114,20 @@ getLP :: ListPair -> [Sentence]
 getLP (t, it) = [t] ++ (getIL it)
 
 getBib :: BibRef -> [Sentence]
-getBib (_) = []
+getBib a = concatMap getField (concatMap fields a)
+
+getField :: CiteField -> [Sentence]
+getField (Address s) = [s]
+getField (BookTitle s) = [s]
+getField (Institution s) = [s]
+getField (Journal s) = [s]
+getField (Note s) = [s]
+getField (Organization s) = [s]
+getField (Publisher s) = [s]
+getField (School s) = [s]
+getField (Series s) = [s]
+getField (Title s) = [s]
+getField (Type s) = [s]
+getField _ = []
+               
 

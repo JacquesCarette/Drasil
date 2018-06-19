@@ -18,6 +18,8 @@
 \usepackage{url}
 \setmathfont{Latin Modern Math}
 \global\tabulinesep=1mm
+\newcounter{lcnum}
+\newcommand{\lcthelcnum}{LC\thelcnum}
 \bibliography{bibfile}
 \title{Software Requirements Specification for Slope Stability Analysis}
 \author{Henry Frankis}
@@ -1321,6 +1323,9 @@ $κ$ & Pa & constant
 SSA is intended to be an educational tool, so accuracy and performance are not priorities. Rather, the non-functional requirement priorities are correctness, understandability, reusability, and maintainability.
 \section{Likely Changes}
 \label{Sec:LCs}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:LC.inhomogeneous}:]A\ref{A:Soil-Layer-Homogeneous} - The system currently assumes the different layers of the soil are homogeneous. In the future, calculations can be added for inconsistent soil properties throughout.
+\end{description}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}
 There are no auxiliary constants.

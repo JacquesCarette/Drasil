@@ -82,15 +82,12 @@ getUnitD :: Maybe UnitDefn -> [Sentence]
 getUnitD (Nothing) = []
 getUnitD (Just a) = getUd a
 
------ not done -------
 getUd :: UnitDefn -> [Sentence]
 getUd a = [(a ^. defn)] ++ (getNP (a ^. term))
 
-  
-
 ---- not done -------
 getRelaConc :: RelationConcept -> [Sentence]
-getRelaConc (_) = []
+getRelaConc a = [(a ^. defn)] ++ (getNP (a ^. term))
 
 ----- not done ------
 getReq :: ReqChunk -> [Sentence]

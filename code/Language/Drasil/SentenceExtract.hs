@@ -15,6 +15,7 @@ import Language.Drasil.Unit(UnitDefn)
 import Language.Drasil.Chunk.NamedIdea(IdeaDict, NamedChunk, nc', np)
 import Language.Drasil.NounPhrase 
 import Language.Drasil.NounPhrase.Core
+import Language.Drasil.Unit(UnitDefn)
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), ConceptDomain)
@@ -50,7 +51,7 @@ getDtype (Data q) = getQDef q ----
 getDtype (Theory t) = getRelaConc t ----
 getDtype _ = []
 
----- not done --------
+
 getQDef :: QDefinition -> [Sentence]
 getQDef a = (concatMap getRef (a ^. getReferences)) ++ (a ^. derivations) ++ (getQuanDict (a ^. qua))
 
@@ -76,7 +77,15 @@ getCap (Replace s) = [s]
 getCap (_) = []
 
 getUnitD :: Maybe UnitDefn -> [Sentence]
-getUnitD (_) = []
+getUnitD (Nothing) = []
+getUnitD (Just a) = getUd a
+
+----- not done -------
+getUd :: UnitDefn -> [Sentence]
+getUd (_) = []
+
+getConcptC :: ConceptChunk -> [Sentence]
+getConcptC 
 
 ---- not done -------
 getRelaConc :: RelationConcept -> [Sentence]

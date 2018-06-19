@@ -525,7 +525,9 @@ functional_requirements_req1Table = Table
 req2Desc = foldlSent [S "The", phrase system,
   S "shall set the known", plural value +: S "as follows",
   foldlList [(foldlsC (map getES (take 4 assumptionConstants)) `followA` 4),
-  ((getES constant_LoadDF) `followA` 8), (short lShareFac `followA` 5)]]
+  ((getES constant_LoadDF) `followA` 8), (short lShareFac `followA` 5),
+  (getES hFromt) +:+ sParen (S "from" +:+ (makeRef hFromt)), 
+  (getES glaTyFac) +:+ sParen (S "from" +:+ (makeRef glaTyFac))]]
 
 --ItemType
 {-functional_requirements_req2 = (Nested (S "The" +:+ phrase system +:+

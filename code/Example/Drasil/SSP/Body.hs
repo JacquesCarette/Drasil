@@ -24,7 +24,7 @@ import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent,
   foldlSent_, ofThe, sAnd, sOr)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
 import Data.Drasil.Utils (enumBullet, enumSimple, getES, weave)
-import Drasil.SSP.Changes (likelyChanges_SRS)
+import Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.SSP.Assumptions (sspAssumptions, sspRefDB)
 import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShrDerivation, 
   resShrDerivation, sliceWght, sspDataDefs, stfMtrxDerivation)
@@ -46,7 +46,7 @@ import qualified Drasil.SRS as SRS (funcReq, inModel, likeChg, missingP,
 
 import Drasil.DocumentLanguage (DocDesc, DocSection(..), IntroSec(..), 
   IntroSub(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), TSIntro, 
-  TSIntro(..), LCsSec(..), mkDoc, tsymb'')
+  TSIntro(..), LCsSec(..), UCsSec(..), mkDoc, tsymb'')
 
 import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
@@ -106,8 +106,8 @@ mkSRS = RefSec (RefProg intro
       EmptyS
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
     --FIXME: issue #235
-  map Verbatim [s3, s4, s5] ++ [LCsSec (LCsProg likelyChanges_SRS)] ++ [Verbatim s7] ++
-  (Bibliography : [])
+  map Verbatim [s3, s4, s5] ++ [LCsSec (LCsProg likelyChanges_SRS)] 
+  ++ [UCsSec (UCsProg unlikelyChanges_SRS)] ++[Verbatim s7] ++ (Bibliography : [])
   
 ssp_code :: CodeSpec
 ssp_code = codeSpec ssp_si [sspInputMod]

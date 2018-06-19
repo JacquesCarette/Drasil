@@ -1,4 +1,4 @@
-module Drasil.SSP.Changes (likelyChanges_SRS) where
+module Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS) where
 
 -- A list of likely and unlikely changes for the SSP example
 

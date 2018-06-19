@@ -19,8 +19,8 @@ import Drasil.Sections.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
 import Drasil.Sections.TableOfSymbols (table)
 import Drasil.Sections.TableOfUnits (table_of_units)
 import qualified Drasil.SRS as SRS (appendix, dataDefn, genDefn, genSysDes, 
-  inModel, likeChg, probDesc, reference, solCharSpec, stakeholder, thModel, 
-  tOfSymb, userChar)
+  inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec, stakeholder,
+  thModel, tOfSymb, userChar)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF)
@@ -58,6 +58,7 @@ data DocSection = Verbatim Section
                 | SSDSec SSDSec
                 | ReqrmntSec ReqrmntSec
                 | LCsSec LCsSec
+                | UCsSec UCsSec
                 | TraceabilitySec TraceabilitySec
                 | AuxConstntSec AuxConstntSec
                 | Bibliography
@@ -212,6 +213,10 @@ data LCsSec = LCsVerb Section | LCsProg [Contents]
 
 {--}
 
+data UCsSec = UCsVerb Section | UCsProg [Contents]
+
+{--}
+
 data TraceabilitySec = TraceabilityVerb Section | TraceabilityProg [Contents] [Sentence] [Contents] [Section]
 
 {--}
@@ -246,6 +251,7 @@ mkSections si l = map doit l
     doit (ScpOfProjSec sop)  = mkScpOfProjSec sop
     doit (ReqrmntSec r)      = mkReqrmntSec r
     doit (LCsSec lc')        = mkLCsSec lc'
+    doit (UCsSec ulc)        = mkUCsSec ulc
     doit (TraceabilitySec t) = mkTraceabilitySec t
     doit (AppndxSec a)       = mkAppndxSec a
 
@@ -477,6 +483,13 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 mkLCsSec :: LCsSec -> Section
 mkLCsSec (LCsVerb s) = s
 mkLCsSec (LCsProg c) = SRS.likeChg c []
+
+{--}
+
+-- | Helper for making the 'UnikelyChanges' section
+mkUCsSec :: UCsSec -> Section
+mkUCsSec (UCsVerb s) = s
+mkUCsSec (UCsProg c) = SRS.unlikeChg c []
 
 {--}
 

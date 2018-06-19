@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.NamedIdea (
   NamedChunk, nc, IdeaDict, short, nw, mkIdea,
   compoundNC, compoundNC', compoundNC'', compoundNC''',
-  the, theCustom, nc', np) where
+  the, theCustom) where
 
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))

@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Quantity 
   ( Quantity(..), QuantityDict, qw, mkQuant, mkQuant', HasSpace(typ),
-  id', getUnit) where
+ getUnit) where
 
 import Control.Lens ((^.),makeLenses,view)
 

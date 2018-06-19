@@ -10,9 +10,9 @@ import Language.Drasil.Chunk.Eq (QDefinition, qua)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
 import Language.Drasil.Chunk.References
-import Language.Drasil.Chunk.Quantity(QuantityDict, id', getUnit)
+import Language.Drasil.Chunk.Quantity(QuantityDict, getUnit)
 import Language.Drasil.Unit(UnitDefn)
-import Language.Drasil.Chunk.NamedIdea(IdeaDict, NamedChunk, nc', np)
+import Language.Drasil.Chunk.NamedIdea(IdeaDict, NamedChunk)
 import Language.Drasil.NounPhrase 
 import Language.Drasil.NounPhrase.Core
 import Language.Drasil.Unit(UnitDefn)
@@ -56,19 +56,10 @@ getDtype _ = []
 
 
 getQDef :: QDefinition -> [Sentence]
-getQDef a = concatMap getRef (a ^. getReferences) ++ (a ^. derivations) ++ getQuanDict (a ^. qua)
+getQDef a = concatMap getRef (a ^. getReferences) ++ (a ^. derivations) ++ getNP (a ^. term) ++ getUnitD (getUnit a)
 
 getRef :: Reference -> [Sentence]
 getRef (SourceRef s) = [s]
-
-getQuanDict :: QuantityDict -> [Sentence]
-getQuanDict a = getIdeaDict (a ^. id') ++ getUnitD (getUnit a)
-
-getIdeaDict :: IdeaDict -> [Sentence]
-getIdeaDict a = getNameC (a ^. nc')
-
-getNameC :: NamedChunk -> [Sentence]
-getNameC a = getNP (a ^. np)
 
 getNP :: NP -> [Sentence]
 getNP (ProperNoun _ _) = []

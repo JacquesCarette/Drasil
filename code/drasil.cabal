@@ -117,6 +117,8 @@ library
     , Language.Drasil.Chunk.VarChunk
     , Language.Drasil.ChunkDB
     , Language.Drasil.Expr.Extract
+    , Language.Drasil.Sentence.Math
+    , Language.Drasil.Sentence.Extract
     , Language.Drasil.Make.AST
     , Language.Drasil.Make.Helpers
     , Language.Drasil.Make.Import

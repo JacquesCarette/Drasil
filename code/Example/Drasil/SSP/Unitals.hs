@@ -168,9 +168,9 @@ normStress, genPressure, normFunc, shearFunc, slopeDist, slipDist, genStffness,
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
 
-intNormForce = uc' "E_i" (cn $ "interslice normal force")
+intNormForce = uc' "G_i" (cn $ "interslice normal force")
   ("exerted between adjacent slices " ++ fisi)
-  (cE) newton
+  (cG) newton
 
 waterHght = uc' "y_wt,i"
   (cn $ "y ordinate")
@@ -301,7 +301,8 @@ midpntHght = uc' "h_i" (cn $ "midpoint height")
   "line from the midpoint of the slice " ++ fsi)
   (lH) metre
 
-momntOfBdy = uc' "M" (cn $ "moment of a body") ("assumed 2D allowing a scalar")
+momntOfBdy = uc' "M" (cn $ "moment") ("a measure of the tendency of " ++
+  "a body to rotate about a specific point or axis")
   cM momentOfForceU --FIXME: move in concepts.physics ?
 
 genDisplace = uc' "genDisplace" (cn $ "displacement")
@@ -376,17 +377,17 @@ sliceHght = uc' "z_i" (cn "center of slice height")
   (lZ) metre
 
 normFunc = uc' "C1_i" (cn "interslice normal force function")
-  (fixme)
-  (Concat [cC, Atomic "1"]) momentOfForceU
+  "the normal force at the interslice interface for slice i"
+  (sub (Concat [cC, Atomic "1"]) lI) momentOfForceU
   
 shearFunc = uc' "C2_i" (cn "interslice shear force function")
-  (fixme)
-  (Concat [cC, Atomic "2"]) momentOfForceU
+  "the shear force at the interslice interface for slice i"
+  (sub (Concat [cC, Atomic "2"]) lI) momentOfForceU
 
-fx = uc' "fx" (cn "x-component of the net force") fixme
+fx = uc' "fx" (cn "x-component of the net force") ""
   (sub cF lX) newton
 
-fy = uc' "fy" (cn "y-component of the net force") fixme
+fy = uc' "fy" (cn "y-component of the net force") ""
   (sub cF lY) newton
   
 ----------------------

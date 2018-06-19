@@ -18,6 +18,7 @@ import Language.Drasil.NounPhrase.Core
 import Language.Drasil.Unit(UnitDefn)
 import Language.Drasil.Chunk.Concept.Core
 import Language.Drasil.Chunk.Concept
+import Language.Drasil.Chunk.ReqChunk (requires, ReqChunk)
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), ConceptDomain, Definition(defn))
@@ -47,7 +48,6 @@ getCon (Graph [(s1, s2)] _ _ l _) = [s1] ++ [s2] ++ [l]
 getCon (Defnt dt [(_, con)] _) = (getDtype dt) ++ (concatMap getCon con)
 getCon _ = []
 
------ not done ------
 getDtype :: DType -> [Sentence]
 getDtype (Data q) = getQDef q ----
 getDtype (Theory t) = getRelaConc t ----
@@ -85,13 +85,12 @@ getUnitD (Just a) = getUd a
 getUd :: UnitDefn -> [Sentence]
 getUd a = [(a ^. defn)] ++ (getNP (a ^. term))
 
----- not done -------
 getRelaConc :: RelationConcept -> [Sentence]
 getRelaConc a = [(a ^. defn)] ++ (getNP (a ^. term))
 
 ----- not done ------
 getReq :: ReqChunk -> [Sentence]
-getReq (_) = []
+getReq a = [(requires a)]
 
 ----- not done ------
 getAss :: AssumpChunk -> [Sentence]

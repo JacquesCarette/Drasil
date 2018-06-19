@@ -124,7 +124,7 @@ instance HasShortName  Contents where
 -- nothing has a shortname right now
 mkTableLC :: String -> String -> String -> String -> Contents -> LabelledContent
 mkTableLC uidForContent labelUID refAdd sn tbl = llcc uidForContent 
-  (mkLabelRA labelUID refAdd sn) tbl Nothing
+  (mkLabelRA labelUID refAdd (Just sn)) tbl Nothing
 
 {-mkParagraph
 mkEqnBlock

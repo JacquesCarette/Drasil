@@ -16,9 +16,11 @@ import Language.Drasil.Chunk.NamedIdea(IdeaDict, NamedChunk, nc', np)
 import Language.Drasil.NounPhrase 
 import Language.Drasil.NounPhrase.Core
 import Language.Drasil.Unit(UnitDefn)
+import Language.Drasil.Chunk.Concept.Core
+import Language.Drasil.Chunk.Concept
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
-  HasReference(getReferences), ConceptDomain)
+  HasReference(getReferences), ConceptDomain, Definition(defn))
 
 getDoc :: Document -> [Sentence]
 getDoc (Document t a s) = [t] ++ [a] ++ (concatMap getSec s)
@@ -82,10 +84,9 @@ getUnitD (Just a) = getUd a
 
 ----- not done -------
 getUd :: UnitDefn -> [Sentence]
-getUd (_) = []
+getUd a = [(a ^. defn)] ++ (getNP (a ^. term))
 
-getConcptC :: ConceptChunk -> [Sentence]
-getConcptC 
+  
 
 ---- not done -------
 getRelaConc :: RelationConcept -> [Sentence]

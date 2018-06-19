@@ -13,6 +13,7 @@ import Language.Drasil.Chunk.References
 import Language.Drasil.Chunk.Quantity(QuantityDict, id', getUnit)
 import Language.Drasil.Unit(UnitDefn)
 import Language.Drasil.Chunk.NamedIdea(IdeaDict, NamedChunk, nc', np)
+import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), ConceptDomain)
@@ -59,7 +60,13 @@ getQuanDict :: QuantityDict -> [Sentence]
 getQuanDict a = (getIdeaDict (a ^. id')) ++ (getUnitD (getUnit a))
 
 getIdeaDict :: IdeaDict -> [Sentence]
-getIdeaDict (_) = []
+getIdeaDict a = getNameC (a ^. nc')
+
+getNameC :: NamedChunk -> [Sentence]
+getNameC a = getNP (a ^. np)
+
+getNP :: NP -> [Sentence]
+getNP (_) = []
 
 getUnitD :: Maybe UnitDefn -> [Sentence]
 getUnitD (_) = []

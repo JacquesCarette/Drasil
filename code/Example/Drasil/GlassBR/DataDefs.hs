@@ -1,14 +1,14 @@
 module Drasil.GlassBR.DataDefs (dataDefns, dimLL, gbQDefns, glaTyFac, hFromt,
-  nonFL, risk, strDisFac, tolPre, tolStrDisFac) where
+  nonFL, risk, strDisFac, tolPre, tolStrDisFac, standOffDis) where
 
 import Language.Drasil
 
-import Prelude hiding (log, exp)
+import Prelude hiding (log, exp, sqrt)
 import Drasil.GlassBR.Unitals (act_thick, actualThicknesses, aspectR, 
   aspectRWithEqn, demand, dimlessLoad, gTF, glassTypeAbbrsStr, 
   glassTypeFactors, glass_type, lDurFac, mod_elas, nom_thick, 
   nominalThicknesses, nonFactorL, pb_tol, plate_len, plate_width, risk_fun,
-  sdf_tol, sflawParamK, sflawParamM, stressDistFac, tolLoad)
+  sdf_tol, sdx, sdy, sdz, sd, sflawParamK, sflawParamM, stressDistFac, tolLoad)
 
 import Data.Drasil.Concepts.Documentation (datum, user)
 import Data.Drasil.Concepts.Math (probability, parameter, calculation)
@@ -24,7 +24,7 @@ import Control.Lens ((^.))
 
 dataDefns :: [QDefinition]
 dataDefns = [risk, hFromt, strDisFac, nonFL, glaTyFac, dimLL, tolPre,
-  tolStrDisFac]
+  tolStrDisFac, standOffDis]
 
 gbQDefns :: [Block QDefinition]
 gbQDefns = [Parallel hFromt {-DD2-} [glaTyFac {-DD6-}]] ++ --can be calculated on their own
@@ -121,6 +121,14 @@ tolStrDisFac_eq = log (log (1 / (1 - (sy pb_tol)))
 
 tolStrDisFac :: QDefinition
 tolStrDisFac = mkDataDef' sdf_tol tolStrDisFac_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ pbTolUsr) []
+
+--DD10--
+
+standOffDis_eq :: Expr
+standOffDis_eq = sqrt ((sy sdx) $^ 2 + (sy sdy) $^ 2 + (sy sdz) $^ 2)
+
+standOffDis :: QDefinition
+standOffDis = mkDataDef sd standOffDis_eq
 
 --Issue #350
 

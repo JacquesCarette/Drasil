@@ -4,7 +4,7 @@ import Control.Lens ((^.), makeLenses, view)
 import Language.Drasil.Document
 import Language.Drasil.Spec
 import Language.Drasil.Chunk.AssumpChunk
-import Language.Drasil.Chunk.Change (Change)
+import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation (BibRef)
 import Language.Drasil.Chunk.Eq (QDefinition, qua)
 import Language.Drasil.Chunk.Relation (RelationConcept)
@@ -91,13 +91,11 @@ getRelaConc a = [(a ^. defn)] ++ (getNP (a ^. term))
 getReq :: ReqChunk -> [Sentence]
 getReq a = [(requires a)]
 
------ not done ------
 getAss :: AssumpChunk -> [Sentence]
 getAss a = [(assuming a)]
 
------ not done ------
 getChg :: Change -> [Sentence]
-getChg (_) = []
+getChg a = [(chng a)]
 
 getLT :: ListType -> [Sentence]
 getLT (Bullet it) = concatMap getIL it

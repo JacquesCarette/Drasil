@@ -122,9 +122,9 @@ instance HasShortName  Contents where
 ---------------------------------------------------------------------------
 -- smart constructors needed for LabelledContent
 -- nothing has a shortname right now
-mkTableLC :: String -> String -> String -> Contents -> LabelledContent
-mkTableLC uidLC labelUID refAdd tbl = llcc uidLC 
-  (mkLabelRA labelUID refAdd {- table ^. refAdd? -}) tbl Nothing
+mkTableLC :: String -> String -> String -> String -> Contents -> LabelledContent
+mkTableLC uidForContent labelUID refAdd sn tbl = llcc uidForContent 
+  (mkLabelRA labelUID refAdd sn) tbl Nothing
 
 {-mkParagraph
 mkEqnBlock

@@ -3,7 +3,7 @@ module Language.Drasil.SentenceExtract (getDoc)where
 import Control.Lens ((^.), makeLenses, view)
 import Language.Drasil.Document
 import Language.Drasil.Spec
-import Language.Drasil.Chunk.AssumpChunk (AssumpChunk)
+import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Change (Change)
 import Language.Drasil.Chunk.Citation (BibRef)
 import Language.Drasil.Chunk.Eq (QDefinition, qua)
@@ -88,13 +88,12 @@ getUd a = [(a ^. defn)] ++ (getNP (a ^. term))
 getRelaConc :: RelationConcept -> [Sentence]
 getRelaConc a = [(a ^. defn)] ++ (getNP (a ^. term))
 
------ not done ------
 getReq :: ReqChunk -> [Sentence]
 getReq a = [(requires a)]
 
 ----- not done ------
 getAss :: AssumpChunk -> [Sentence]
-getAss (_) = []
+getAss a = [(assuming a)]
 
 ----- not done ------
 getChg :: Change -> [Sentence]

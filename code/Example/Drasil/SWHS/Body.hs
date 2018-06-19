@@ -355,7 +355,7 @@ s4_2_1 = assumpF
 -- SECTION 4.2.3 --
 -- General Definitions is automatically generated in solChSpecF
 s4_2_3_genDefs :: [Contents]
-s4_2_3_genDefs = (map reldefn swhsGenDefs)
+s4_2_3_genDefs = map reldefn swhsGenDefs
 
 s4_2_3_deriv :: [Contents]
 s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,

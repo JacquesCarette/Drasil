@@ -5,4 +5,5 @@ import Drasil.SWHS.Body
 
 main :: IO ()
 main = do
+	generate
 	mapM_ print outputuid

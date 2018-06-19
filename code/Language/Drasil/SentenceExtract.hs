@@ -13,7 +13,8 @@ import Language.Drasil.Chunk.References
 import Language.Drasil.Chunk.Quantity(QuantityDict, id', getUnit)
 import Language.Drasil.Unit(UnitDefn)
 import Language.Drasil.Chunk.NamedIdea(IdeaDict, NamedChunk, nc', np)
-import Language.Drasil.NounPhrase (NP)
+import Language.Drasil.NounPhrase 
+import Language.Drasil.NounPhrase.Core
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), ConceptDomain)
@@ -66,7 +67,13 @@ getNameC :: NamedChunk -> [Sentence]
 getNameC a = getNP (a ^. np)
 
 getNP :: NP -> [Sentence]
-getNP (_) = []
+getNP (ProperNoun _ _) = []
+getNP (CommonNoun _ _ c) = getCap c
+getNP (Phrase s _ c1 c2) = [s] ++ (getCap c1) ++ (getCap c2)
+
+getCap :: CapitalizationRule -> [Sentence]
+getCap (Replace s) = [s]
+getCap (_) = []
 
 getUnitD :: Maybe UnitDefn -> [Sentence]
 getUnitD (_) = []

@@ -7,16 +7,16 @@ import Prelude hiding (sin, cos, tan)
 import Data.Drasil.Concepts.Documentation (analysis, assumption, definition, 
   design, document, effect, element, endUser, goalStmt, inModel, input_, 
   interest, interest, issue, loss, method_, model, organization, physics, 
-  problem, property, requirement, srs, table_, template, value, variable)
+  problem, property, requirement, srs, table_, template, value, variable,
+  system)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
-import Data.Drasil.Concepts.Math (equation, surface)
+import Data.Drasil.Concepts.Math (equation, surface, calculation)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (compression, fbd, force, strain, stress,
   tension)
 import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability, 
   performanceSpd, program, reusability, understandability)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
-
 import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.People (henryFrankis)
@@ -26,7 +26,7 @@ import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent,
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
 import Data.Drasil.Utils (enumBullet, enumSimple, getES, weave)
 
-import Drasil.SSP.Assumptions (sspAssumptions)
+import Drasil.SSP.Assumptions (sspAssumptions, newA3, sspRefDB)
 import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShrDerivation, 
   resShrDerivation, sliceWght, sspDataDefs, stfMtrxDerivation)
 import Drasil.SSP.DataDesc (sspInputMod)
@@ -37,7 +37,7 @@ import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (fctSftyDerivation, instModIntro1, instModIntro2, 
   intrSlcDerivation, nrmShrDerivation, rigDisDerivation, rigFoSDerivation, 
   sspIMods)
-import Drasil.SSP.References (sspCitations)
+import Drasil.DocumentLanguage.RefHelpers (refA)
 import Drasil.SSP.Requirements (sspInputDataTable, sspRequirements)
 import Drasil.SSP.TMods (sspTMods)
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
@@ -48,7 +48,7 @@ import qualified Drasil.SRS as SRS (funcReq, inModel, likeChg, missingP,
 
 import Drasil.DocumentLanguage (DocDesc, DocSection(..), IntroSec(..), 
   IntroSub(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), TSIntro, 
-  TSIntro(..), mkDoc, tsymb'')
+  TSIntro(..), LCsSec(..), mkDoc, tsymb'', mkLklyChnk)
 
 import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
@@ -95,10 +95,9 @@ ssp_si = SI {
   _refdb = sspRefDB
 }
 
-sspRefDB :: ReferenceDB
-sspRefDB = rdb [] [] [] [] [] sspCitations
--- FIXME: Convert the rest to new chunk types (similar to issues #446 and #447)
-
+ssp_srs :: Document
+ssp_srs = mkDoc mkSRS (for) ssp_si
+  
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
   [TUnits, tsymb'' s1_2_intro TAD, TAandA]) :
@@ -109,10 +108,8 @@ mkSRS = RefSec (RefProg intro
       EmptyS
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
     --FIXME: issue #235
-  map Verbatim [s3, s4, s5, s6, s7] ++ (Bibliography : [])
-  
-ssp_srs :: Document
-ssp_srs = mkDoc mkSRS (for) ssp_si
+  map Verbatim [s3, s4, s5] ++ [LCsSec (LCsProg likelyChanges_SRS)] ++ [Verbatim s7] ++
+  (Bibliography : [])
   
 ssp_code :: CodeSpec
 ssp_code = codeSpec ssp_si [sspInputMod]
@@ -388,8 +385,21 @@ s5_2 = nonFuncReqF [accuracy, performanceSpd]
   [correctness, understandability, reusability, maintainability] r EmptyS
   where r = (short ssa) +:+ S "is intended to be an educational tool"
 
--- SECTION 6 --
-s6 = SRS.likeChg [] []
+-- SECTION 6     --
+-- Likely Changes --
+s6 = SRS.likeChg [] [] -- can be removed with work on #321
+
+likelyChanges_SRS :: [Contents]
+likelyChanges_SRS = [likelychg1]
+
+likelychg1 :: Contents
+likelychg1 = mkLklyChnk "LC_inhomogeneous" lc1Desc "Calculate-Inhomogeneous-Soil-Layers"
+
+lc1Desc :: Sentence
+lc1Desc = foldlSent [(refA sspRefDB newA3) `sDash` S "The",
+  phrase system +:+. S "currently assumes the different layers of the soil are homogeneous",
+  S "In the future,", plural calculation,
+  S "can be added for inconsistent soil properties throughout"]
 
 -- SECTION 7 --
 s7 = valsOfAuxConstantsF ssa []

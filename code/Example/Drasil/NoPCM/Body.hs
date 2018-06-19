@@ -39,7 +39,7 @@ import Drasil.SWHS.LikelyChanges (likeChg2, likeChg3, likeChg6)
 import Data.Drasil.People (thulasi)
 import Data.Drasil.Utils (enumSimple, getES, refFromType,
   itemRefToSent, makeTMatrix, itemRefToSent, weave, eqUnR)
-import Data.Drasil.Citations (parnas1986, smithLai2005)
+import Data.Drasil.Citations (parnasClements1986, smithLai2005)
 
 import Data.Drasil.Concepts.Documentation as Doc (datumConstraint, inModel,
   requirement, section_, traceyGraph, item, assumption, dataDefn,
@@ -976,4 +976,4 @@ s8 = valsOfAuxConstantsF progName specParamValList
 -- s9_refs = mkRefsList 1 $ map foldlsC s9_refList
 
 s9_refList :: BibRef
-s9_refList = [ref2, ref3, ref4, parnas1986, smithLai2005]
+s9_refList = [ref2, ref3, ref4, parnasClements1986, smithLai2005]

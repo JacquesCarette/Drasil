@@ -5,7 +5,7 @@ import Language.Drasil
 import Data.Drasil.People (jBueche, fIncropera, dDewitt, tBergman, aLavine,
   mLightstone)
 
-import Data.Drasil.Citations (koothoor2013, parnas1986, smithLai2005)
+import Data.Drasil.Citations (koothoor2013, parnasClements1986, smithLai2005)
 
 ----------------------------
 -- Section 9 : References --
@@ -34,6 +34,6 @@ ref4 = cMisc "lightstone2012" [
   year 2012,
   note (S "From Marilyn Lightstone's Personal Notes")]
 
-ref5 = parnas1986
+ref5 = parnasClements1986
 
 ref6 = smithLai2005

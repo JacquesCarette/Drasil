@@ -19,8 +19,8 @@ import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd)
 import Language.Drasil.Chunk.Quantity (Quantity(..),HasSpace(typ))
 import Language.Drasil.Chunk.Unitary (Unitary(..))
 import Language.Drasil.Development.Unit (UnitDefn, unitWrapper)
-import Language.Drasil.Symbol
-import Language.Drasil.Space
+import Language.Drasil.Symbol (Symbol)
+import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (Sentence)
 
 import Language.Drasil.NounPhrase (NP)

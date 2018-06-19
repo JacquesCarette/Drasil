@@ -10,7 +10,9 @@ import Language.Drasil.Chunk.Eq (QDefinition, qua)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
 import Language.Drasil.Chunk.References
-import Language.Drasil.Chunk.Quantity(QuantityDict)
+import Language.Drasil.Chunk.Quantity(QuantityDict, id', getUnit)
+import Language.Drasil.Unit(UnitDefn)
+import Language.Drasil.Chunk.NamedIdea(IdeaDict, NamedChunk, nc', np)
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), ConceptDomain)
@@ -54,7 +56,13 @@ getRef :: Reference -> [Sentence]
 getRef (SourceRef s) = [s]
 
 getQuanDict :: QuantityDict -> [Sentence]
-getQuanDict (_) = []
+getQuanDict a = (getIdeaDict (a ^. id')) ++ (getUnitD (getUnit a))
+
+getIdeaDict :: IdeaDict -> [Sentence]
+getIdeaDict (_) = []
+
+getUnitD :: Maybe UnitDefn -> [Sentence]
+getUnitD (_) = []
 
 ---- not done -------
 getRelaConc :: RelationConcept -> [Sentence]

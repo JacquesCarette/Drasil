@@ -1,5 +1,5 @@
 module Drasil.SWHS.Body where
-
+import Data.List (nub)
 import Language.Drasil hiding (organization)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 import Control.Lens ((^.))
@@ -122,6 +122,9 @@ swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) ([] :: [
     -- Redundant b/c the unitals are not really concepts (yet). There
     -- Will still likely be a better way to do this.
   --FIXME: Should be all Named, not just acronyms at the end.
+
+outputuid :: [String]
+outputuid = nub $ concatMap snames $ getDoc swhs_srs'
 
 swhsPeople :: [Person]
 swhsPeople = [thulasi, brooks, spencerSmith]

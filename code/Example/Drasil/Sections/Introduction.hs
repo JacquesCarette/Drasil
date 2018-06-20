@@ -8,7 +8,7 @@ module Drasil.Sections.Introduction
    ) where
 
 import Language.Drasil
-import qualified Drasil.SRS as SRS (userChar, intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc)
+import qualified Drasil.SRS as SRS (intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc)
 import Data.Drasil.SentenceStructures (ofThe, ofThe',
   foldlList, foldlsC, refineChain, foldlSP)
 import Data.Drasil.Concepts.Documentation as Doc (goal, organization, thModel, inModel, goalStmt,
@@ -16,7 +16,10 @@ import Data.Drasil.Concepts.Documentation as Doc (goal, organization, thModel, i
   system, model, design, intReader, srs, characteristic, designDoc, decision, environment,
   vavPlan, softwareDoc, implementation, softwareVAV, desSpec)
 import Data.Drasil.Concepts.Computation (algorithm)
+import Data.Drasil.Citations (parnasClements1986)
+import Drasil.DocumentLanguage.RefHelpers (cite)
 
+--import Control.Lens ((^.))
 
 -----------------------
 --     Constants     --
@@ -37,10 +40,14 @@ developmentProcessParagraph refdb = foldlSP [S "This", phrase document,
   S "that follow the so-called waterfall", phrase model `sC` 
   S "the actual development process is not constrained", 
   S "in any way. Even when the waterfall model is not followed, as",
-  S "Parnas and Clements point out" `sC` --cite refdb parnasClements1986,
+  S "Parnas and Clements point out" `sC` cite refdb parnasClements1986,
   S "the most logical way to present the", phrase documentation,
   S "is still to", Quote (S "fake"), S "a rational", phrase design,
   S "process"]
+
+{-citeParnas :: ReferenceDB -> Sentence
+citeParnas rdb = if (parnasClements1986 `elem` (rdb ^. citationRefTable)) then (cite rdb parnasClements1986)
+                 else S "Add parnasClements1986 to list of citations"-}
 
 -- | Sentence containing the subsections of the introduction
 introductionSubsections :: Sentence

@@ -24,8 +24,9 @@ import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent,
   foldlSent_, ofThe, sAnd, sOr)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
 import Data.Drasil.Utils (enumBullet, enumSimple, getES, weave)
+
+import Drasil.SSP.Assumptions (sspAssumptions, newA3, sspRefDB, newAssumptions)
 import Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
-import Drasil.SSP.Assumptions (sspAssumptions, sspRefDB)
 import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShrDerivation, 
   resShrDerivation, sliceWght, sspDataDefs, stfMtrxDerivation)
 import Drasil.SSP.DataDesc (sspInputMod)
@@ -66,7 +67,7 @@ s4_1, s4_1_1, s4_1_2,
   s4_1_3, s4_2, s5_1, s5_2 :: Section
 
 s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
-  s4_1_2_p2, goals_list, s4_2_1_list,
+  s4_1_2_p2, goals_list, 
   s5_1_list :: Contents
 
 s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, s4_2_5_IMods :: [Contents]
@@ -302,7 +303,7 @@ goals_list = enumSimple 1 (short goalStmt) sspGoals
 -- SECTION 4.2 --
 s4_2 = solChSpecF ssa (s4_1, SRS.likeChg [] []) ddEnding
   (EmptyS, dataConstraintUncertainty, EmptyS)
-  ([s4_2_1_list], s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, 
+  (s4_2_1_list, s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, 
   instModIntro1:instModIntro2:s4_2_5_IMods, [s4_2_6Table2, s4_2_6Table3]) []
 
   where ddEnding = foldlSent [at_start' definition, ddRef sliceWght, S "to", ddRef lengthLb,
@@ -314,8 +315,11 @@ s4_2 = solChSpecF ssa (s4_1, SRS.likeChg [] []) ddEnding
 
 -- SECTION 4.2.1 --
 -- Assumptions is automatically generated in solChSpecF using the list below
+s4_2_1_list :: [Contents]
+s4_2_1_list = assumpList newAssumptions
 
-s4_2_1_list = enumSimple 1 (short assumption) sspAssumptions
+assumpList :: [AssumpChunk] -> [Contents]
+assumpList = map Assumption
 
 -- SECTION 4.2.2 --
 -- TModels is automatically generated in solChSpecF using the tmods below

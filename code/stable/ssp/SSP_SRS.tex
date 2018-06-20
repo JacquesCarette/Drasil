@@ -22,6 +22,8 @@
 \newcommand{\atheassumpnum}{A\theassumpnum}
 \newcounter{lcnum}
 \newcommand{\lcthelcnum}{LC\thelcnum}
+\newcounter{ucnum}
+\newcommand{\uctheucnum}{UC\theucnum}
 \bibliography{bibfile}
 \title{Software Requirements Specification for Slope Stability Analysis}
 \author{Henry Frankis}
@@ -1345,6 +1347,15 @@ SSA is intended to be an educational tool, so accuracy and performance are not p
 \label{Sec:LCs}
 \begin{description}
 \item[\refstepcounter{lcnum}\lcthelcnum\label{LC:LC.inhomogeneous}:]A\ref{A:Soil-Layer-Homogeneous} - The system currently assumes the different layers of the soil are homogeneous. In the future, calculations can be added for inconsistent soil properties throughout.
+\end{description}
+\section{Unlikely Changes}
+\label{Sec:UCs}
+If changes were to be made with regard to the following, a different algorithm would be needed.
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC:UC.normshearlinear}:]Chages related to A\ref{A:Interslice-Norm-Shear-Forces-Linear} and A\ref{A:Base-Norm-Shear-Forces-Linear-on-FS} are not possible due to the dependency of the calculations on the linear relationship between interslice normal and shear forces.
+\end{description}
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC:UC.2donly}:]A\ref{A:Plane-Strain-Conditions} allows for 2D analysis with these models only because stress along z-direction is zero. These models do not take into account stress in the z-direction, and therefore cannot be without manipulation to attempt 3d analysis.
 \end{description}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}

@@ -101,7 +101,8 @@ mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
   [TUnits, tsymb'' s1_2_intro TAD, TAandA]) :
   IntroSec (IntroProg startIntro kSent
-    [IPurpose prpsOfDoc_p1, IScope scpIncl scpEnd
+    [IPurpose sspRefDB prpsOfDoc_p1
+    , IScope scpIncl scpEnd
     , IChar (phrase solidMechanics) 
       (phrase undergraduate +:+ S "level 4" +:+ phrase physics)
       EmptyS

@@ -162,7 +162,7 @@ keySent pname = foldlSent_ [S "a", phrase pname +:+. phrase problem,
   introduceAbb pname, phrase program]
   
 -- SECTION 2.1 --
--- Purpose of Document automatically generated in introductionF
+-- Purpose of Document automatically generated in IPurpose
 prpsOfDoc_p1 :: Sentence
 prpsOfDoc_p1 = purposeDoc ssa crtSlpSrf fs how introduces analysizes
   where how = S "assessing the stability of a" +:+ phrase slope +:+
@@ -183,7 +183,7 @@ purposeDoc pname what calculates how introduces analysizes =
   phrase analysis `sAnd` phrase design, S "of a", analysizes]
 
 -- SECTION 2.2 --
--- Scope of Requirements automatically generated in introductionF
+-- Scope of Requirements automatically generated in IScope
 scpIncl, scpEnd :: Sentence
 scpIncl = S "stability analysis of a 2 dimensional" +:+ phrase slope `sC`
   S "composed of homogeneous" +:+ plural soilLyr
@@ -194,10 +194,10 @@ scpEnd  = S "identify the most likely failure" +:+
   S "that will occur on the" +:+ phrase slope
 
 -- SECTION 2.3 --
--- Characteristics of the Intended Reader generated in introductionF
+-- Characteristics of the Intended Reader generated in IChar
 
 -- SECTION 2.4 --
--- Organization automatically generated in introductionF
+-- Organization automatically generated in IOrgSec
 orgSecStart, orgSecEnd :: Sentence
 orgSecStart = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an",

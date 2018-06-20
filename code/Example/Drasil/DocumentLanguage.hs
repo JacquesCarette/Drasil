@@ -123,7 +123,6 @@ data LFunc where
 
 {--}
 
---FIXME: This needs to be updated for the requisite information in introductionF
 -- | Introduction section. Contents are top level followed by a list of
 -- subsections. IntroVerb is used for including verbatim subsections.
 data IntroSec = IntroProg Sentence Sentence [IntroSub]

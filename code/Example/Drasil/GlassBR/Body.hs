@@ -87,7 +87,7 @@ gbSymbMap =
       (map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton])
 
 resourcePath :: String
-resourcePath = "../../datafiles/GlassBR/"
+resourcePath = "../../../datafiles/GlassBR/"
 
 glassBR_srs :: Document
 glassBR_srs = mkDoc mkSRS (for'' titleize phrase) glassSystInfo

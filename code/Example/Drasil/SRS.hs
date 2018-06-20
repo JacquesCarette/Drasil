@@ -42,7 +42,7 @@ intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theCli
   genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
   probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assumpt, thModel,
   genDefn, inModel, dataDefn, datCon, propCorSol, require, nonfuncReq, funcReq, likeChg, traceyMandG, tOfSymb,
-  appendix, reference, offShelfSol, valsOfAuxCons :: [Contents] -> [Section] -> Section
+  appendix, reference, offShelfSol, valsOfAuxCons, unlikeChg :: [Contents] -> [Section] -> Section
 
 intro       cs ss = section' (titleize Doc.introduction) cs ss "Intro"
 prpsOfDoc   cs ss = section' (titleize Doc.prpsOfDoc) cs ss "DocPurpose"

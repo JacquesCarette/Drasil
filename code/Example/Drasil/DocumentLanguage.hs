@@ -133,7 +133,7 @@ data IntroSec = IntroProg Sentence Sentence [IntroSub]
 -- | Introduction subsections
 data IntroSub where
   IVerb    :: Section -> IntroSub
-  IPurpose :: ReferenceDB -> Sentence -> IntroSub
+  IPurpose :: Sentence -> IntroSub
   IScope   :: Sentence -> Sentence -> IntroSub
   IChar    :: Sentence -> Sentence -> Sentence -> IntroSub
   IOrgSec  :: Sentence -> CI -> Section -> Sentence -> IntroSub
@@ -368,7 +368,7 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
   where
     mkSubIntro :: SystemInformation -> IntroSub -> Section
     mkSubIntro _ (IVerb s) = s
-    mkSubIntro _ (IPurpose refdb intro) = Intro.purposeOfDoc refdb intro
+    mkSubIntro si (IPurpose intro) = Intro.purposeOfDoc (getRefDB si) intro
     mkSubIntro (SI {_sys = sys}) (IScope main intendedPurp) =
       Intro.scopeOfRequirements main sys intendedPurp
     mkSubIntro (SI {_sys = sys}) (IChar know understand appStandd) =

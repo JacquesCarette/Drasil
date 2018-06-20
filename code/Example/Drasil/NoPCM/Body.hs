@@ -140,7 +140,7 @@ mkSRS = RefSec (RefProg intro
   [Lit (nw ht_trans), Doc' (nw progName)], SymbOrder], TAandA]) :
   IntroSec (IntroProg (s2_start ener_src energy progName)
     (s2_end progName program)
-  [IPurpose nopcmRefDB (s2_1 progName),
+  [IPurpose (s2_1 progName),
   IScope (s2_2_start thermal_analysis sWHT) (s2_2_end temp thermal_energy
     water),
   IChar (s2_3_knowlegde ht_trans_theo) (s2_3_understanding M.de) EmptyS,

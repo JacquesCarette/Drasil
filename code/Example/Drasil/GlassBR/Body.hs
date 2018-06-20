@@ -97,7 +97,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   IntroSec (
     IntroProg (startIntro software blstRskInvWGlassSlab gLassBR)
       (short gLassBR)
-    [IPurpose gbRefDB (s2_1_intro_p1 document gLassBR glaSlab),
+    [IPurpose (s2_1_intro_p1 document gLassBR glaSlab),
      IScope incScoR endScoR,
      IChar (rdrKnldgbleIn glBreakage blastRisk) undIR appStanddIR,
      IOrgSec s2_3_intro dataDefn (SRS.dataDefn SRS.missingP []) s2_3_intro_end]) :

@@ -10,11 +10,11 @@ import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
   ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SSDSec(SSDVerb), 
   StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), 
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose), DocDesc, 
-  mkDoc, mkLklyChnk, mkRequirement, tsymb)
+  mkDoc, mkRequirement, tsymb)
 import Drasil.DocumentLanguage.Definitions (Field
   (DefiningEquation, Description, RefBy, Source), InclUnits(IncludeUnits), 
   Verbosity(Verbose), Fields)
-import Drasil.DocumentLanguage.RefHelpers (cite, refA)
+import Drasil.DocumentLanguage.RefHelpers (cite)
 
 import Data.Drasil.Concepts.Computation (computerApp, inParam,
   computerLiteracy, inValue, inQty)
@@ -25,14 +25,14 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   message, model, organization, output_, problem, purpose,
   quantity, reference, reviewer, section_, software, standard,
   symbol_, system, template, term_, theory, traceyMatrix, user, value,
-  variable, physicalSystem, datumConstraint, userInput, assumption, dataDefn,
+  physicalSystem, datumConstraint, userInput, assumption, dataDefn,
   goalStmt, inModel, likelyChg, physSyst, requirement, srs, thModel,
   dataConst, company)
 import Data.Drasil.Concepts.Education (secondYear, undergradDegree,
   civilEng, structuralEng, scndYrCalculus, structuralMechanics)
 import Data.Drasil.Concepts.Math (graph, calculation, probability,
   parameter)
-import Data.Drasil.Concepts.PhysicalProperties (dimension, flexure)
+import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability,
@@ -47,8 +47,7 @@ import Data.Drasil.Utils (getES, makeTMatrix, makeListRef, itemRefToSent,
   refFromType, enumSimple, enumBullet, prodUCTbl)
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptionDescs,
-  gbRefDB, newAssumptions, newA3, newA4, newA5, newA6, newA7,
-  newA8)
+  gbRefDB, newAssumptions)
 import Drasil.GlassBR.Changes (likelyChanges_SRS)
 import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist, glaSlab, 
   blastRisk, glass, glaPlane, glassBRProg, ptOfExplsn, acronyms)
@@ -60,7 +59,7 @@ import Drasil.GlassBR.References (rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
 import Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq)
 import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad, 
-  lateralLoad, sflawParamM, char_weight, sD, demand, lite, demandq, 
+  lateralLoad, sflawParamM, char_weight, sD, demand, demandq, 
   aspectRWithEqn, aspectR, lRe, wtntWithEqn, sdWithEqn, prob_br, notSafe, 
   safeMessage, is_safe1, is_safe2, plate_width, plate_len, blast, glassTy, 
   gbInputDataConstraints, explosion, explosion, pb_tol, blast, bomb, blastTy, 

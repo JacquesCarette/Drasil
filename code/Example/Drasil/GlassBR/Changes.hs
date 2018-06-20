@@ -14,7 +14,7 @@ import Data.Drasil.Concepts.Documentation (condition, input_, software, system, 
   variable)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.PhysicalProperties (flexure)
-import Data.Drasil.SentenceStructures (foldlList, foldlSent, getES, foldlSP)
+import Data.Drasil.SentenceStructures (foldlList, foldlSent, getES, {-foldlSP-})
 
 likelyChanges_SRS :: [Contents]
 likelyChanges_SRS = [s8_likelychg1, s8_likelychg2, s8_likelychg3,

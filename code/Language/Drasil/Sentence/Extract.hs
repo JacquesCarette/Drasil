@@ -1,11 +1,13 @@
-module Language.Drasil.Sentence.Extract(sdep, vars',snames) where
+module Language.Drasil.Sentence.Extract(sdep, vars',snames, concpt) where
 
 import Data.List (nub)
 import Control.Lens ((^.))
 import Language.Drasil.Expr (Expr(..), RealInterval(..))
-import Language.Drasil.ChunkDB (HasSymbolTable, symbLookup, symbolTable)
+import Language.Drasil.ChunkDB (HasSymbolTable, symbLookup, symbolTable, HasDefinitionTable,
+ defLookup, defTable)
 import Language.Drasil.Chunk.Code (CodeChunk, codevar)
 import Language.Drasil.Chunk.Quantity (QuantityDict)
+import Language.Drasil.Chunk.Concept (ConceptChunk)
 import Language.Drasil.Spec(Sentence(..))
 import Language.Drasil.Expr.Extract(names)
 
@@ -29,3 +31,7 @@ sdep = nub . snames
 vars' :: (HasSymbolTable s) => Sentence -> s -> [QuantityDict]
 vars' a m = map resolve $ sdep a
   where resolve x = symbLookup x $ m ^. symbolTable
+
+concpt :: (HasDefinitionTable s) => Sentence -> s -> [ConceptChunk]
+concpt a m = map resolve $ sdep a
+  where resolve x = defLookup x $ m ^. defTable

@@ -3,7 +3,7 @@ module Language.Drasil.ChunkDB
   ( ChunkDB, cdb
   , HasSymbolTable(..), symbolMap, symbLookup, getUnitLup
   , HasTermTable(..), termLookup
-  , HasDefinitionTable(..), conceptMap
+  , HasDefinitionTable(..), conceptMap, defLookup
   , HasUnitTable(..), unitMap
   ) where
 

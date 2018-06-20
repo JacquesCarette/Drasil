@@ -8,6 +8,7 @@ import Language.Drasil.ChunkDB (HasSymbolTable, symbLookup, symbolTable, HasDefi
 import Language.Drasil.Chunk.Code (CodeChunk, codevar)
 import Language.Drasil.Chunk.Quantity (QuantityDict)
 import Language.Drasil.Chunk.Concept (ConceptChunk)
+import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Spec(Sentence(..))
 import Language.Drasil.Expr.Extract(names)
 
@@ -35,3 +36,7 @@ vars' a m = map resolve $ sdep a
 concpt :: (HasDefinitionTable s) => Sentence -> s -> [ConceptChunk]
 concpt a m = map resolve $ sdep a
   where resolve x = defLookup x $ m ^. defTable
+
+combine :: (HasSymbolTable s, HasDefinitionTable s) => Sentence -> s -> [DefinedQuantityDict]
+combine a m = zipWith dqdQd (vars' a m) (concpt a m)
+

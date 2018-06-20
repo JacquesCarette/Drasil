@@ -7,10 +7,9 @@ import Prelude hiding (sin, cos, tan)
 import Data.Drasil.Concepts.Documentation (analysis, assumption, definition, 
   design, document, effect, element, endUser, goalStmt, inModel, input_, 
   interest, interest, issue, loss, method_, model, organization, physics, 
-  problem, property, requirement, srs, table_, template, value, variable,
-  system)
+  problem, property, requirement, srs, table_, template, value, variable)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
-import Data.Drasil.Concepts.Math (equation, surface, calculation)
+import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (compression, fbd, force, strain, stress,
   tension)
@@ -25,8 +24,8 @@ import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent,
   foldlSent_, ofThe, sAnd, sOr)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
 import Data.Drasil.Utils (enumBullet, enumSimple, getES, weave)
-
-import Drasil.SSP.Assumptions (sspAssumptions, newA3, sspRefDB)
+import Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
+import Drasil.SSP.Assumptions (sspAssumptions, sspRefDB)
 import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShrDerivation, 
   resShrDerivation, sliceWght, sspDataDefs, stfMtrxDerivation)
 import Drasil.SSP.DataDesc (sspInputMod)
@@ -37,7 +36,6 @@ import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (fctSftyDerivation, instModIntro1, instModIntro2, 
   intrSlcDerivation, nrmShrDerivation, rigDisDerivation, rigFoSDerivation, 
   sspIMods)
-import Drasil.DocumentLanguage.RefHelpers (refA)
 import Drasil.SSP.Requirements (sspInputDataTable, sspRequirements)
 import Drasil.SSP.TMods (sspTMods)
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
@@ -48,7 +46,7 @@ import qualified Drasil.SRS as SRS (funcReq, inModel, likeChg, missingP,
 
 import Drasil.DocumentLanguage (DocDesc, DocSection(..), IntroSec(..), 
   IntroSub(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), TSIntro, 
-  TSIntro(..), LCsSec(..), mkDoc, tsymb'', mkLklyChnk)
+  TSIntro(..), LCsSec(..), UCsSec(..), mkDoc, tsymb'')
 
 import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
@@ -60,7 +58,7 @@ import Drasil.Sections.SpecificSystemDescription (dataConstraintUncertainty,
 
 
 --type declarations for sections--
-s3, s4, s5, s6, s7 :: Section
+s3, s4, s5, s7 :: Section
 
 s1_2_intro :: [TSIntro]
 
@@ -108,8 +106,8 @@ mkSRS = RefSec (RefProg intro
       EmptyS
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
     --FIXME: issue #235
-  map Verbatim [s3, s4, s5] ++ [LCsSec (LCsProg likelyChanges_SRS)] ++ [Verbatim s7] ++
-  (Bibliography : [])
+  map Verbatim [s3, s4, s5] ++ [LCsSec (LCsProg likelyChanges_SRS)] 
+  ++ [UCsSec (UCsProg unlikelyChanges_SRS)] ++[Verbatim s7] ++ (Bibliography : [])
   
 ssp_code :: CodeSpec
 ssp_code = codeSpec ssp_si [sspInputMod]
@@ -289,7 +287,8 @@ fig_indexconv = fig (foldlSent_ [S "Index convention for numbering",
 
 fig_forceacting :: Contents
 fig_forceacting = fig (at_start' force +:+ S "acting on a" +:+
-  phrase slice) "ForceDiagram.png" "ForceDiagram"
+  phrase slice +:+ S "(Note: Instances of E in the figure is" +:+
+  S "to be relabelled G)") "ForceDiagram.png" "ForceDiagram"
 
 -- SECTION 4.1.3 --
 s4_1_3 = goalStmtF (map (\(x, y) -> x `ofThe` y) [
@@ -301,7 +300,7 @@ s4_1_3 = goalStmtF (map (\(x, y) -> x `ofThe` y) [
 goals_list = enumSimple 1 (short goalStmt) sspGoals
 
 -- SECTION 4.2 --
-s4_2 = solChSpecF ssa (s4_1, s6) ddEnding
+s4_2 = solChSpecF ssa (s4_1, SRS.likeChg [] []) ddEnding
   (EmptyS, dataConstraintUncertainty, EmptyS)
   ([s4_2_1_list], s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, 
   instModIntro1:instModIntro2:s4_2_5_IMods, [s4_2_6Table2, s4_2_6Table3]) []
@@ -385,21 +384,8 @@ s5_2 = nonFuncReqF [accuracy, performanceSpd]
   [correctness, understandability, reusability, maintainability] r EmptyS
   where r = (short ssa) +:+ S "is intended to be an educational tool"
 
--- SECTION 6     --
+-- SECTION 6      --
 -- Likely Changes --
-s6 = SRS.likeChg [] [] -- can be removed with work on #321
-
-likelyChanges_SRS :: [Contents]
-likelyChanges_SRS = [likelychg1]
-
-likelychg1 :: Contents
-likelychg1 = mkLklyChnk "LC_inhomogeneous" lc1Desc "Calculate-Inhomogeneous-Soil-Layers"
-
-lc1Desc :: Sentence
-lc1Desc = foldlSent [(refA sspRefDB newA3) `sDash` S "The",
-  phrase system +:+. S "currently assumes the different layers of the soil are homogeneous",
-  S "In the future,", plural calculation,
-  S "can be added for inconsistent soil properties throughout"]
 
 -- SECTION 7 --
 s7 = valsOfAuxConstantsF ssa []

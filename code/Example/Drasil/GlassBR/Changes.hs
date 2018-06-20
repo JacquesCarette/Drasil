@@ -14,9 +14,9 @@ import Data.Drasil.Concepts.Documentation (condition, goal, input_, software,
   system, value, variable)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.PhysicalProperties (flexure)
-import Data.Drasil.SentenceStructures (foldlList, foldlSent, getES, {-foldlSP-})
+import Data.Drasil.SentenceStructures (foldlList, foldlSent, getES)
 
--- LIKELY CHANGES --
+{--LIKELY CHANGES--}
 
 likelyChanges_SRS :: [Contents]
 likelyChanges_SRS = [s8_likelychg1, s8_likelychg2, s8_likelychg3,
@@ -57,7 +57,7 @@ lc5Desc = foldlSent [(refA gbRefDB newA7) `sDash` S "The", phrase software,
   S "may be changed to consider more than just", phrase flexure,
   S "of the glass"]
 
--- UNLIKELY CHANGES --
+{--UNLIKELY CHANGES--}
 
 unlikelyChanges_SRS :: [Contents]
 unlikelyChanges_SRS = [s8_unlikelychg1, s8_unlikelychg2]

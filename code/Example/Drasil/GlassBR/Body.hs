@@ -52,7 +52,7 @@ import Drasil.GlassBR.Assumptions (assumptionConstants, assumptionDescs,
 import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist, glaSlab, 
   blastRisk, glass, glaPlane, glassBRProg, ptOfExplsn, acronyms)
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
-  dimLL, glaTyFac, tolStrDisFac, tolPre, risk)
+  dimLL, glaTyFac, tolStrDisFac, tolPre, risk, standOffDis)
 import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (rbrtsn2012)
@@ -521,7 +521,8 @@ req2Desc = foldlSent [S "The", phrase system,
   foldlList [(foldlsC (map getES (take 4 assumptionConstants)) `followA` 4),
   ((getES constant_LoadDF) `followA` 8), (short lShareFac `followA` 5),
   (getES hFromt) +:+ sParen (S "from" +:+ (makeRef hFromt)), 
-  (getES glaTyFac) +:+ sParen (S "from" +:+ (makeRef glaTyFac))]]
+  (getES glaTyFac) +:+ sParen (S "from" +:+ (makeRef glaTyFac)),
+  (getES standOffDis) +:+ sParen (S "from" +:+ (makeRef standOffDis))]]
 
 --ItemType
 {-s7_1_req2 = (Nested (S "The" +:+ phrase system +:+

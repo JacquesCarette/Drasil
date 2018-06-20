@@ -1,5 +1,5 @@
 module Drasil.GlassBR.DataDefs (dataDefns, dimLL, gbQDefns, glaTyFac, hFromt,
-  nonFL, risk, strDisFac, tolPre, tolStrDisFac, standOffDis) where
+  nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac) where
 
 import Language.Drasil
 

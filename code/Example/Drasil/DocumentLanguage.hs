@@ -446,7 +446,7 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (IMs fields ims _)= 
       SSD.inModelF pdStub ddStub tmStub gdStub (map (instanceModel fields (_sysinfodb si')) ims)
     mkSubSCS (SI {_refdb = db}) Assumptions =
-      (SSD.assumpF tmStub gdStub ddStub imStub lcStub
+      (SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
       (map Assumption $ assumptionsFromDB (db ^. assumpRefTable)))
     mkSubSCS _ (Constraints a b c d) = (SSD.datConF a b c d)
     inModSec = (SRS.inModel [Paragraph EmptyS] [])
@@ -458,13 +458,14 @@ mkSolChSpec si (SCSProg l) =
 {--}
 
 -- | Section stubs for implicit referencing
-tmStub, gdStub, ddStub, imStub, lcStub, pdStub:: Section
-tmStub = SRS.thModel  [] []
-gdStub = SRS.genDefn  [] []
-ddStub = SRS.dataDefn [] []
-imStub = SRS.inModel  [] []
-lcStub = SRS.likeChg  [] []
-pdStub = SRS.probDesc [] []
+tmStub, gdStub, ddStub, imStub, lcStub, ucStub, pdStub:: Section
+tmStub = SRS.thModel   [] []
+gdStub = SRS.genDefn   [] []
+ddStub = SRS.dataDefn  [] []
+imStub = SRS.inModel   [] []
+lcStub = SRS.likeChg   [] []
+ucStub = SRS.unlikeChg [] []
+pdStub = SRS.probDesc  [] []
 
 -- | Helper for making the 'Requirements' section
 mkReqrmntSec :: ReqrmntSec -> Section

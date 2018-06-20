@@ -441,7 +441,7 @@ goal_statements_list_goalStmt1 = [foldlSent [S "Analyze" `sAnd` S "predict wheth
 
 {--SOLUTION CHARACTERISTICS SPECIFICATION--}
 
-solution_characteristics_specification = solChSpecF gLassBR (problem_description, (SRS.likeChg SRS.missingP [])) EmptyS
+solution_characteristics_specification = solChSpecF gLassBR (problem_description, (SRS.likeChg SRS.missingP []), (SRS.unlikeChg SRS.missingP [])) EmptyS
  (EmptyS, dataConstraintUncertainty, end)
  (assumptions_list, map reldefn tModels, [], map datadefn dataDefns,
   map reldefn iModels,

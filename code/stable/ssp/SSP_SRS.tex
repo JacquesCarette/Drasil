@@ -18,6 +18,8 @@
 \usepackage{url}
 \setmathfont{Latin Modern Math}
 \global\tabulinesep=1mm
+\newcounter{assumpnum}
+\newcommand{\atheassumpnum}{A\theassumpnum}
 \newcounter{lcnum}
 \newcommand{\lcthelcnum}{LC\thelcnum}
 \newcounter{ucnum}
@@ -349,18 +351,36 @@ The instance models that govern SSA are presented in Section~\ref{Sec:IMs}. The 
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TMs}{]}, General Definitions {[}Section~\ref{Sec:GDs}{]}, Data Definitions {[}Section~\ref{Sec:DDs}{]}, Instance Models {[}Section~\ref{Sec:IMs}{]}, or Likely Changes {[}Section~\ref{Sec:LCs}{]}, in which the respective assumption is used.
-\begin{itemize}
-\item[A1:]The slip surface is concave with respect to the slope surface. The $(x,y)$ coordinates of the failure surface follow a monotonic function.
-\item[A2:]The geometry of the slope, and the material properties of the soil layers are given as inputs.
-\item[A3:]The different layers of the soil are homogeneous, with consistent soil properties throughout, and independent of dry or saturated conditions, with the exception of unit weight.
-\item[A4:]Soil layers are treated as if they have isotropic properties.
-\item[A5:]Interslice normal and shear forces have a linear relationship, proportional to a constant ($λ$) and an interslice force function ($f$) depending on x position.
-\item[A6:]Slice to base normal and shear forces have a linear relationship, dependent on the factor of safety $FS$, and the Coulomb sliding law.
-\item[A7:]The stress - strain curve for interslice relationships is linear with a constant slope.
-\item[A8:]The slope and slip surface extends far into and out of the geometry (z coordinate). This implies plane strain conditions, making 2D analysis appropriate.
-\item[A9:]The effective normal stress is large enough that the resistive shear to effective normal stress relationship can be approximated as a linear relationship.
-\item[A10:]The surface and base of a slice between interslice nodes are approximated as straight lines.
-\end{itemize}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Slip-Surface-Concave}:]The slip surface is concave with respect to the slope surface. The $(x,y)$ coordinates of the failure surface follow a monotonic function.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Geo-Slope-Mat-Props-of-Soil-Inputs}:]The geometry of the slope, and the material properties of the soil layers are given as inputs.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Soil-Layer-Homogeneous}:]The different layers of the soil are homogeneous, with consistent soil properties throughout, and independent of dry or saturated conditions, with the exception of unit weight.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Soil-Layers-Isotropic}:]Soil layers are treated as if they have isotropic properties.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Interslice-Norm-Shear-Forces-Linear}:]Interslice normal and shear forces have a linear relationship, proportional to a constant ($λ$) and an interslice force function ($f$) depending on x position.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Base-Norm-Shear-Forces-Linear-on-FS}:]Slice to base normal and shear forces have a linear relationship, dependent on the factor of safety $FS$, and the Coulomb sliding law.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Stress-Strain-Curve-interslice-Linear}:]The stress - strain curve for interslice relationships is linear with a constant slope.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Plane-Strain-Conditions}:]The slope and slip surface extends far into and out of the geometry (z coordinate). This implies plane strain conditions, making 2D analysis appropriate.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Effective-Norm-Stress-Large}:]The effective normal stress is large enough that the resistive shear to effective normal stress relationship can be approximated as a linear relationship.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Surface-Base-Slice-between-Interslice-Straight-Lines}:]The surface and base of a slice between interslice nodes are approximated as straight lines.
+\end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
 This section focuses on the general equations and laws that SSA is based on.

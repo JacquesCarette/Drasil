@@ -41,7 +41,7 @@ import Drasil.SSP.TMods (sspTMods)
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
   sspOutputs, sspSymbols)
 
-import qualified Drasil.SRS as SRS (funcReq, inModel, likeChg, missingP, 
+import qualified Drasil.SRS as SRS (funcReq, inModel, likeChg, unlikeChg, missingP, 
   physSyst)
 
 import Drasil.DocumentLanguage (DocDesc, DocSection(..), IntroSec(..), 
@@ -301,7 +301,7 @@ s4_1_3 = goalStmtF (map (\(x, y) -> x `ofThe` y) [
 goals_list = enumSimple 1 (short goalStmt) sspGoals
 
 -- SECTION 4.2 --
-s4_2 = solChSpecF ssa (s4_1, SRS.likeChg [] []) ddEnding
+s4_2 = solChSpecF ssa (s4_1, SRS.likeChg [] [], SRS.unlikeChg [] []) ddEnding
   (EmptyS, dataConstraintUncertainty, EmptyS)
   (s4_2_1_list, s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, 
   instModIntro1:instModIntro2:s4_2_5_IMods, [s4_2_6Table2, s4_2_6Table3]) []

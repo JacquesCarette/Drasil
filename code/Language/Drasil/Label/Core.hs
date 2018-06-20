@@ -12,6 +12,6 @@ data LblType = RefAdd String | MetaLink String | URI String
 data Label = Lbl
   { _uniqueID  :: UID --internal, unique
   , lblType    :: LblType
-  , sn         :: Maybe ShortName
+  , sn         :: ShortName
   }
 makeLenses ''Label

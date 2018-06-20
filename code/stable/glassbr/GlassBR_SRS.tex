@@ -201,7 +201,7 @@ The following section provides an overview of the Software Requirements Specific
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
 The main purpose of this document is to predict whether a given glass slab is likely to resist a specified blast. The goals and theoretical models used in the GlassBR code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide all information necessary to understand and verify the analysis. The SRS is abstract because the contents say what problem is being solved, but not how to solve it.
-This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to ``fake'' a rational design process.
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
 The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given the appropriate inputs, the code for GlassBR is intended to use the data and predict whether the glass slab is safe to use or not.
@@ -1149,6 +1149,17 @@ title={A document drive approach to certifying scientific computing software},
 school={McMaster University},
 year={2013},
 address={Hamilton, ON, Canada}}
+
+@article{parnasClements1986,
+author={Parnas, David L. and Clements, P. C.},
+title={A rational design process: How and why to fake it},
+journal={IEEE Transactions on Software Engineering},
+year={1986},
+month={feb},
+volume={12},
+number={2},
+pages={"251-257"},
+address={Washington, USA}}
 
 @misc{rbrtsn2012,
 author={Robertson, James and Robertson, Suzanne},

@@ -123,6 +123,12 @@ swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) ([] :: [
     -- Will still likely be a better way to do this.
   --FIXME: Should be all Named, not just acronyms at the end.
 
+ccss :: Sentence -> [DefinedQuantityDict]
+ccss s = combine s swhsSymMap
+
+ccs' :: [DefinedQuantityDict]
+ccs' = concatMap ccss $ getDoc swhs_srs'
+
 outputuid :: [String]
 outputuid = nub $ concatMap snames $ getDoc swhs_srs'
 

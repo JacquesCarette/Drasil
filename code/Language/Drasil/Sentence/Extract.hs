@@ -1,4 +1,4 @@
-module Language.Drasil.Sentence.Extract(sdep, vars',snames, concpt) where
+module Language.Drasil.Sentence.Extract(sdep, vars',snames, combine) where
 
 import Data.List (nub)
 import Control.Lens ((^.))

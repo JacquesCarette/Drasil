@@ -197,12 +197,12 @@ module Language.Drasil (
   -- Chunk.Sentence.Math
   , ch
   -- Chunk.Sentence.Extract
-  , sdep, vars',snames
+  , sdep, vars',snames, combine
 ) where
 
 import Language.Drasil.SentenceExtract (getDoc)
 import Language.Drasil.Sentence.Math(ch)
-import Language.Drasil.Sentence.Extract(sdep, vars', snames)
+import Language.Drasil.Sentence.Extract(sdep, vars', snames, combine)
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.SystemInformation
 import Language.Drasil.Expr (Expr(..), Relation,

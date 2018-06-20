@@ -1328,9 +1328,9 @@ Index convention for numbering slice and interslice force variables
 </p>
 </div>
 <div id="Figure:ForceDiagram">
-<img class="figure" src="ForceDiagram.png" alt="Forces acting on a slice"></img>
+<img class="figure" src="ForceDiagram.png" alt="Forces acting on a slice (Note: Instances of E in the figure is to be relabelled G)"></img>
 <p class="caption">
-Forces acting on a slice
+Forces acting on a slice (Note: Instances of E in the figure is to be relabelled G)
 </p>
 </div>
 </div>
@@ -4550,6 +4550,30 @@ Likely Changes
 <li>
 <div id="LC:LC.inhomogeneous">
 Calculate-Inhomogeneous-Soil-Layers: <a href=#A:Soil-Layer-Homogeneous>Soil-Layer-Homogeneous</a> - The system currently assumes the different layers of the soil are homogeneous. In the future, calculations can be added for inconsistent soil properties throughout.
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div id="Sec:UCs">
+<div class="section">
+<h1>
+Unlikely Changes
+</h1>
+<p class="paragraph">
+If changes were to be made with regard to the following, a different algorithm would be needed.
+</p>
+<ul class="hide-list-style">
+<li>
+<div id="UC:UC.normshearlinear">
+Normal-And-Shear-Linear-Only: Chages related to <a href=#A:Interslice-Norm-Shear-Forces-Linear>Interslice-Norm-Shear-Forces-Linear</a> and <a href=#A:Base-Norm-Shear-Forces-Linear-on-FS>Base-Norm-Shear-Forces-Linear-on-FS</a> are not possible due to the dependency of the calculations on the linear relationship between interslice normal and shear forces.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="UC:UC.2donly">
+2D-Analysis-Only: <a href=#A:Plane-Strain-Conditions>Plane-Strain-Conditions</a> allows for 2D analysis with these models only because stress along z-direction is zero. These models do not take into account stress in the z-direction, and therefore cannot be without manipulation to attempt 3d analysis.
 </div>
 </li>
 </ul>

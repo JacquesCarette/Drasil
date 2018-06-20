@@ -2,8 +2,9 @@ module Drasil.SRS
  (doc, doc', intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
   genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
   probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assumpt, thModel,
-  genDefn, inModel, dataDefn, datCon, require, nonfuncReq, funcReq, likeChg, traceyMandG,
-  appendix, reference, propCorSol, offShelfSol, missingP, valsOfAuxCons, tOfSymb) where
+  genDefn, inModel, dataDefn, datCon, require, nonfuncReq, funcReq, likeChg, unlikeChg, 
+  traceyMandG, appendix, reference, propCorSol, offShelfSol, missingP, valsOfAuxCons,
+  tOfSymb) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
@@ -14,7 +15,7 @@ import Language.Drasil
 import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, 
     assumption, charOfIR, client, customer, consVals, dataDefn, datumConstraint, 
     functionalRequirement, genDefn, generalSystemDescription, goalStmt, 
-    indPRCase, inModel, introduction, likelyChg, nonfunctionalRequirement,
+    indPRCase, inModel, introduction, likelyChg, unlikelyChg, nonfunctionalRequirement,
     offShelfSolution, orgOfDoc, physSyst, prodUCTable, problemDescription, 
     propOfCorSol, prpsOfDoc, reference, requirement, scpOfReq, scpOfTheProj,
     solutionCharSpec, specificsystemdescription, srs, stakeholder, sysCont, 
@@ -83,6 +84,7 @@ nonfuncReq  cs ss = section' (titleize' Doc.nonfunctionalRequirement) cs ss "NFR
 funcReq     cs ss = section' (titleize' Doc.functionalRequirement) cs ss "FRs"
 
 likeChg     cs ss = section' (titleize' Doc.likelyChg)        cs ss "LCs"
+unlikeChg   cs ss = section' (titleize' Doc.unlikelyChg)      cs ss "UCs"
 
 traceyMandG cs ss = section' (titleize' Doc.traceyMandG)      cs ss "TraceMatrices"
 

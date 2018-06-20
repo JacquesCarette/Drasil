@@ -1,6 +1,5 @@
 module Drasil.Sections.Introduction 
-  (--introductionF,
-   orgSec,
+  (orgSec,
    introductionSection,
    purposeOfDoc,
    scopeOfRequirements,
@@ -53,17 +52,6 @@ introductionSubsections = foldlList (map (\(x,y) -> x `ofThe` y)
 -------------------------
 --                    --
 -------------------------
-
-{-introductionF :: (Idea a, CommonIdea a, NamedIdea b) => 
-  a -> (Sentence, Sentence) -> Sentence -> (Sentence, Sentence) -> 
-  (Sentence, Sentence, Sentence) -> (Sentence, b, Section, Sentence) -> Section
-
-introductionF progName (problemIntroduction, programDefinition) (pOdPart1)
-  (mainRequirement, intendedPurpose) (know, und, appStandd) (i, b, s, t) =
-    introductionSection problemIntroduction programDefinition subsec
-      where subsec = [(purposeOfDoc pOdPart1), (scopeOfRequirements mainRequirement
-              progName intendedPurpose), (charIntRdrF know und progName appStandd
-              (SRS.userChar [] [])), (orgSec i b s t)]-}
 
 -- | Constructor for the introduction section
 -- problemIntroduction - Sentence introducing the specific example problem

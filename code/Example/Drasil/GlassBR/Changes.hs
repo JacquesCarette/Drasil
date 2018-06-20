@@ -73,6 +73,6 @@ uc1Desc = foldlSent [S "The", phrase goal, S "of the", phrase system,
   S "is to predict whether the", phrase glaSlab, S "under consideration can",
   S "withstand an", phrase explosion, S "of a certain degree"]
 
-uc2Desc = foldlSent [(refA gbRefDB newA7), S "requires that the", phrase glass +:+.
+uc2Desc = foldlSent [(refA gbRefDB newA2), S "requires that the", phrase glass +:+.
   S "is not altered in any way", S "Therefore, this cannot be used on altered",
   phrase glass]

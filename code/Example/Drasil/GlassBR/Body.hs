@@ -100,11 +100,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   IntroSec (
     IntroProg (startIntro software blstRskInvWGlassSlab gLassBR)
       (short gLassBR)
-<<<<<<< HEAD
     [IPurpose (purpose_of_document_intro_p1 document gLassBR glaSlab),
-=======
-    [IPurpose gbRefDB (s2_1_intro_p1 document gLassBR glaSlab),
->>>>>>> added refdb as an argument to be passed in from the examples
      IScope incScoR endScoR,
      IChar (rdrKnldgbleIn glBreakage blastRisk) undIR appStanddIR,
      IOrgSec char_intended_reader_intro dataDefn (SRS.dataDefn SRS.missingP []) char_intended_reader_intro_end]) :

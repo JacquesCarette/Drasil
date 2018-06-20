@@ -134,7 +134,7 @@ mkSRS = [RefSec (RefProg intro
     progName CT.thermal_energy latent_heat unit_) (s2_kSent swhs_pcm program
     progName) [
    
-  IPurpose swhsRefDB (s2_1_par1 swhs_pcm progName),
+  IPurpose (s2_1_par1 swhs_pcm progName),
   
   IScope (s2_2_contents CT.thermal_analysis tank_pcm)
   (s2_2_end temp CT.thermal_energy water phsChgMtrl sWHT),

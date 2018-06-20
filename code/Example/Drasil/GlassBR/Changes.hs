@@ -1,20 +1,22 @@
-module Drasil.GlassBR.Changes (likelyChanges_SRS) where
+module Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS) where
 
 --A list of likely and unlikely changes for GlassBR
 
 import Language.Drasil
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, gbRefDB, newA2, newA3, newA4, newA5, newA6, newA7, newA8)
-import Drasil.GlassBR.Concepts (blastRisk, glass)
-import Drasil.GlassBR.Unitals (lite)
+import Drasil.GlassBR.Concepts (blastRisk, glaSlab, glass)
+import Drasil.GlassBR.Unitals (explosion, lite)
 
 import Drasil.DocumentLanguage (mkLklyChnk, mkUnLklyChnk)
 import Drasil.DocumentLanguage.RefHelpers (refA)
-import Data.Drasil.Concepts.Documentation (condition, input_, software, system, value,
-  variable)
+import Data.Drasil.Concepts.Documentation (condition, goal, input_, software, 
+  system, value, variable)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.PhysicalProperties (flexure)
 import Data.Drasil.SentenceStructures (foldlList, foldlSent, getES, {-foldlSP-})
+
+-- LIKELY CHANGES --
 
 likelyChanges_SRS :: [Contents]
 likelyChanges_SRS = [s8_likelychg1, s8_likelychg2, s8_likelychg3,
@@ -54,3 +56,23 @@ lc4Desc = foldlSent [(refA gbRefDB newA6) `sDash` S "The", phrase software,
 lc5Desc = foldlSent [(refA gbRefDB newA7) `sDash` S "The", phrase software,
   S "may be changed to consider more than just", phrase flexure,
   S "of the glass"]
+
+-- UNLIKELY CHANGES --
+
+unlikelyChanges_SRS :: [Contents]
+unlikelyChanges_SRS = [s8_unlikelychg1, s8_unlikelychg2]
+
+s8_unlikelychg1, s8_unlikelychg2 :: Contents
+
+s8_unlikelychg1 = mkUnLklyChnk "s8_unlikelychg1" (uc1Desc) "Predict-Withstanding-of-Certain-Degree"
+s8_unlikelychg2 = mkUnLklyChnk "s8_unlikelychg2" (uc2Desc) "Accommodate-Altered-Glass"
+
+uc1Desc, uc2Desc :: Sentence
+
+uc1Desc = foldlSent [S "The", phrase goal, S "of the", phrase system,
+  S "is to predict whether the", phrase glaSlab, S "under consideration can",
+  S "withstand an", phrase explosion, S "of a certain degree"]
+
+uc2Desc = foldlSent [(refA gbRefDB newA7), S "requires that the", phrase glass +:+.
+  S "is not altered in any way", S "Therefore, this cannot be used on altered",
+  phrase glass]

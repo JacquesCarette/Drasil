@@ -6,7 +6,7 @@ import qualified Drasil.SRS as SRS
 import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
   DocSection(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons), --DocSection uses everything but Verbatim
   IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), LCsSec(..), 
-  RefSec(RefProg), RefTab(TAandA, TUnits), ReqrmntSec(..), 
+  UCsSec(..), RefSec(RefProg), RefTab(TAandA, TUnits), ReqrmntSec(..), 
   ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SSDSec(SSDVerb), 
   StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), 
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose), DocDesc, 
@@ -48,7 +48,7 @@ import Data.Drasil.Utils (getES, makeTMatrix, makeListRef, itemRefToSent,
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptionDescs,
   gbRefDB, newAssumptions)
-import Drasil.GlassBR.Changes (likelyChanges_SRS)
+import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist, glaSlab, 
   blastRisk, glass, glaPlane, glassBRProg, ptOfExplsn, acronyms)
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
@@ -62,7 +62,7 @@ import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad,
   lateralLoad, sflawParamM, char_weight, sD, demand, demandq, 
   aspectRWithEqn, aspectR, lRe, wtntWithEqn, sdWithEqn, prob_br, notSafe, 
   safeMessage, is_safe1, is_safe2, plate_width, plate_len, blast, glassTy, 
-  gbInputDataConstraints, explosion, explosion, pb_tol, blast, bomb, blastTy, 
+  gbInputDataConstraints, explosion, pb_tol, blast, bomb, blastTy, 
   glassGeo, glass_type, nom_thick, sdx, sdy, sdz, tNT, gBRSpecParamVals,
   loadTypes, load, glassTypes, probBreak, termsWithAccDefn, termsWithDefsOnly,
   gbConstants, gbConstrained, gbOutputs, gbInputs, glBreakage, capacity, 
@@ -133,7 +133,8 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     (S "This problem is small in size and relatively simple")
     (S "Any reasonable" +:+ phrase implementation +:+.
     (S "will be very quick" `sAnd` S "use minimal storage"))]) :
-  LCsSec (LCsProg s8_list) :
+  LCsSec (LCsProg s8a_list) :
+  UCsSec (UCsProg s8b_list) :
   TraceabilitySec
     (TraceabilityProg traceyMatrices [s9_table1Desc, s9_table2Desc, s9_table3Desc]
     (traceyMatrices ++ s9_intro2 ++ traceyGraphs) []) :
@@ -575,8 +576,13 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
 
 {--LIKELY CHANGES--}
 
-s8_list :: [Contents]
-s8_list = likelyChanges_SRS 
+s8a_list :: [Contents]
+s8a_list = likelyChanges_SRS 
+
+{--UNLIKELY CHANGES--}
+
+s8b_list :: [Contents]
+s8b_list = unlikelyChanges_SRS 
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
 

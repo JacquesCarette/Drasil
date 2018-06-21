@@ -14,6 +14,7 @@ import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Citation
 import Language.Drasil.Chunk.ReqChunk
 import Language.Drasil.Chunk.Quantity
+import Language.Drasil.Chunk.ShortName
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), ConceptDomain, Definition(defn))
@@ -22,6 +23,7 @@ getDoc :: Document -> [Sentence]
 getDoc (Document t a s) = t : a : concatMap getSec s
 
 getSec :: Section -> [Sentence]
+getSec (Section _ _ _ (ShortNm "RefMat")) = []
 getSec (Section t sc _ _) = t : concatMap getSecCon sc
 
 getSecCon :: SecCons -> [Sentence]

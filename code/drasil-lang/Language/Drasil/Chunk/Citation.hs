@@ -26,7 +26,7 @@ import Language.Drasil.People (People)
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid))
-import Language.Drasil.Printing.Helpers (noSpaces)
+import Language.Drasil.Utils (noSpaces)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), shortname')
 
 type BibRef = [Citation]

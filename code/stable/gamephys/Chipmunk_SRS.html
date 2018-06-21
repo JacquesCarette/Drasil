@@ -1148,31 +1148,57 @@ The instance models that govern Chipmunk2D are presented in FIXME REF to IModSec
 Assumptions
 </h3>
 <p class="paragraph">
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models, General Definitions, Data Definitions, Instance Models, or Likely Changes, in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], or Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], in which the respective assumption is used.
 </p>
-<div class="list">
-<p>
-A1: All objects are rigid bodies.
-</p>
-<p>
-A2: All objects are 2D.
-</p>
-<p>
-A3: The library uses a Cartesian coordinate system.
-</p>
-<p>
-A4: The axes are defined using right-handed coordinate system.
-</p>
-<p>
-A5: All rigid bodies collisions are vertex-to-edge collisions.
-</p>
-<p>
-A6: There is no damping involved throughout the simulation.
-</p>
-<p>
-A7: There are no constraints and joints involved throughout the simulation.
-</p>
+<ul class="hide-list-style">
+<li>
+<div id="A:objectTyA">
+objectTy: All objects are rigid bodies.
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="A:objectDimensionA">
+objectDimension: All objects are 2D.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="A:coordinatesystemTyA">
+coordinatesystemTy: The library uses a Cartesian coordinate system.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="A:axesDefinedA">
+axesDefined: The axes are defined using right-handed coordinate system.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="A:collisionTypeA">
+collisionType: All rigid bodies collisions are vertex-to-edge collisions.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="A:dampingInvolvementA">
+dampingInvolvement: There is no damping involved throughout the simulation.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="A:constraints.and.jointsInvolvementA">
+constraints_and_jointsInvolvement: There are no constraints and joints involved throughout the simulation.
+</div>
+</li>
+</ul>
 </div>
 </div>
 <div id="Sec:TMs">

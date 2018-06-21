@@ -115,7 +115,7 @@ swhs_si = SI {
 }
 
 swhsSymMap :: ChunkDB
-swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) ([] :: [ConceptChunk] ) -- FIXME: Fill in Concepts
+swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) swhsSymbols
   this_si
 
   --Note: The second swhsSymbols here is

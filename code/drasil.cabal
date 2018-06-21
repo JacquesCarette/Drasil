@@ -37,6 +37,7 @@ library
     Data.Drasil.Units.SolidMechanics
   other-modules:
       Language.Drasil.SentenceExtract
+    , Language.Drasil.ExprExtract
     , Language.Drasil.SystemInformation
     , Language.Drasil.Expr
     , Language.Drasil.Expr.Math

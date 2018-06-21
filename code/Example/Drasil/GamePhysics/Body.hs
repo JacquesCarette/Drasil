@@ -28,7 +28,8 @@ import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
 import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs)
 import Drasil.GamePhysics.IMods (iModels)
 import Drasil.GamePhysics.References (cpCitations)
-import Drasil.GamePhysics.TMods (cpTMods)
+import Drasil.GamePhysics.TMods (cpTMods, t1NewtonSL_new, t2NewtonTL_new, 
+  t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new)
 import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
   inputSymbols, outputSymbols, cpInputConstraints)
 
@@ -61,20 +62,8 @@ import Data.Drasil.Utils (makeTMatrix, itemRefToSent, refFromType,
 import qualified Drasil.SRS as SRS
 import qualified Drasil.Sections.ReferenceMaterial as RM
 
-import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
-  inputSymbols, outputSymbols, cpInputConstraints)
-import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
-import Drasil.GamePhysics.TMods (cpTMods, t1NewtonSL_new, t2NewtonTL_new, 
-            t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new)
-import Drasil.GamePhysics.IMods (iModels, im1_new, im2_new, im3_new)
-import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs)
+import Drasil.GamePhysics.IMods (im1_new, im2_new, im3_new)
 
-import Drasil.DocumentLanguage 
-import Drasil.Sections.SpecificSystemDescription (specSysDescr)
-import Drasil.Sections.SolutionCharacterSpec
-import Drasil.Sections.Requirements (reqF)
-import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
-import Drasil.GamePhysics.References (cpCitations)
 import Drasil.DocumentLanguage
 import Drasil.DocumentLanguage.Definitions
 
@@ -101,11 +90,11 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
       , SSDSolChSpec 
         (SCSProg 
           [ Assumptions
-		  ,  TMs ([Label] ++ stdFields) [t1NewtonSL_new, t2NewtonTL_new, 
+          ,  TMs ([Label] ++ stdFields) [t1NewtonSL_new, t2NewtonTL_new,
             t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new]
+          , GDs [] [] HideDerivation -- No Gen Defs for Gamephysics
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
            [im1_new, im2_new, im3_new] ShowDerivation
-          
           ]
         )
       ]
@@ -113,7 +102,7 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
   (map Verbatim [requirements, likely_changes, off_the_shelf_solutions, traceability_matrices_and_graph, values_of_auxiliary_constatnts]) ++ 
   (Bibliography : [])
     where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
-	
+
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Source, RefBy]
 

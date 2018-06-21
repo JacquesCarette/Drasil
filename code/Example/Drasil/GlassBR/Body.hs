@@ -55,16 +55,12 @@ import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist, glaSlab,
   blastRisk, glass, glaPlane, glassBRProg, ptOfExplsn, acronyms)
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
   dimLL, glaTyFac, tolStrDisFac, tolPre, risk)
-import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
 import Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq, t1IsSafe, t2IsSafe)
 import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr, probOfBreak, calofCapacity, calofDemand)
-import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt,
-  strDisFac, nonFL, dimLL, glaTyFac, tolStrDisFac, tolPre, risk)
-import Drasil.GlassBR.References
-import Drasil.GlassBR.ModuleDefs
+
 import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad, 
   lateralLoad, sflawParamM, char_weight, sD, demand, lite, demandq, 
   aspectRWithEqn, aspectR, lRe, wtntWithEqn, sdWithEqn, prob_br, notSafe, 

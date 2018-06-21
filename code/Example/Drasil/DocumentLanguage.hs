@@ -123,7 +123,6 @@ data LFunc where
 
 {--}
 
---FIXME: This needs to be updated for the requisite information in introductionF
 -- | Introduction section. Contents are top level followed by a list of
 -- subsections. IntroVerb is used for including verbatim subsections.
 data IntroSec = IntroProg Sentence Sentence [IntroSub]
@@ -368,7 +367,7 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
   where
     mkSubIntro :: SystemInformation -> IntroSub -> Section
     mkSubIntro _ (IVerb s) = s
-    mkSubIntro _ (IPurpose intro) = Intro.purposeOfDoc intro
+    mkSubIntro si (IPurpose intro) = Intro.purposeOfDoc (getRefDB si) intro
     mkSubIntro (SI {_sys = sys}) (IScope main intendedPurp) =
       Intro.scopeOfRequirements main sys intendedPurp
     mkSubIntro (SI {_sys = sys}) (IChar know understand appStandd) =
@@ -447,7 +446,7 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (IMs fields ims _)= 
       SSD.inModelF pdStub ddStub tmStub gdStub (map (instanceModel fields (_sysinfodb si')) ims)
     mkSubSCS (SI {_refdb = db}) Assumptions =
-      (SSD.assumpF tmStub gdStub ddStub imStub lcStub
+      (SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
       (map Assumption $ assumptionsFromDB (db ^. assumpRefTable)))
     mkSubSCS _ (Constraints a b c d) = (SSD.datConF a b c d)
     inModSec = (SRS.inModel [Paragraph EmptyS] [])
@@ -459,13 +458,14 @@ mkSolChSpec si (SCSProg l) =
 {--}
 
 -- | Section stubs for implicit referencing
-tmStub, gdStub, ddStub, imStub, lcStub, pdStub:: Section
-tmStub = SRS.thModel  [] []
-gdStub = SRS.genDefn  [] []
-ddStub = SRS.dataDefn [] []
-imStub = SRS.inModel  [] []
-lcStub = SRS.likeChg  [] []
-pdStub = SRS.probDesc [] []
+tmStub, gdStub, ddStub, imStub, lcStub, ucStub, pdStub:: Section
+tmStub = SRS.thModel   [] []
+gdStub = SRS.genDefn   [] []
+ddStub = SRS.dataDefn  [] []
+imStub = SRS.inModel   [] []
+lcStub = SRS.likeChg   [] []
+ucStub = SRS.unlikeChg [] []
+pdStub = SRS.probDesc  [] []
 
 -- | Helper for making the 'Requirements' section
 mkReqrmntSec :: ReqrmntSec -> Section

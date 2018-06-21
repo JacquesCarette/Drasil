@@ -23,7 +23,7 @@ module Language.Drasil.Chunk.Citation
   ) where
 
 import Language.Drasil.People (People)
-import Language.Drasil.Spec (Sentence(..))
+import Language.Drasil.Spec (Sentence)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Utils (noSpaces)

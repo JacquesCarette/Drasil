@@ -9,7 +9,7 @@ import Language.Drasil.Expr (Relation)
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term),Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, ExprRelat(relat))
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw, dccWDS, dccWDS')
-import Language.Drasil.Spec (Sentence(..))
+import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname))
 
 import Language.Drasil.NounPhrase (NP)

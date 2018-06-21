@@ -14,7 +14,7 @@ import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.UID
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.RefTypes (RefAdd)
-import Language.Drasil.Spec (Sentence(..))
+import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Label (Label, mkLabelRA)
 import Control.Lens ((^.), makeLenses)
 

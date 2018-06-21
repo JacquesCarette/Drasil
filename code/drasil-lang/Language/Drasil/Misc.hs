@@ -79,6 +79,12 @@ phrase's a = phrase a :+: S "'s"
 -- | Plural possesive function
 plural's a = plural a :+: S "'"
 
+-- Returns the string if it doesn't contain spaces and throws an error if it does
+noSpaces :: String -> String
+noSpaces s
+  | (' ' `elem` s) == False = s
+  | otherwise               = error "String has at least one space in it."
+
 {-
 --------------------- WIP ---------------------
 Function used to derive the unit of an equation. Takes a Relation, sorts the

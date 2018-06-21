@@ -82,6 +82,7 @@ library
     , Language.Drasil.Printing.LayoutObj
     , Language.Drasil.Development.Unit
     , Language.Drasil.Development.UnitLang
+    , Language.Drasil.Utils
 
   Build-Depends:
     base >= 4.7,

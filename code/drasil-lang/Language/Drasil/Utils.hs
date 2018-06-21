@@ -1,4 +1,4 @@
-module Language.Drasil.Utils where
+module Language.Drasil.Utils (noSpaces) where
 
 noSpaces :: String -> String
 noSpaces s

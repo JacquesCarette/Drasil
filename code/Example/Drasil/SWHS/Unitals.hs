@@ -22,7 +22,7 @@ import Data.Drasil.Phrase (of_)
 
 swhsSymbols :: [DefinedQuantityDict]
 swhsSymbols = (map dqdWr swhsUnits) ++ (map dqdWr swhsUnitless) ++
-  (map dqdWr swhsConstrained) ++ [gradient]
+  (map dqdWr swhsConstrained)
 
 swhsSymbolsAll :: [QuantityDict]
 swhsSymbolsAll = (map qw swhsUnits) ++ (map qw swhsUnitless) ++
@@ -188,7 +188,7 @@ sim_time = uc' "sim_time" (compoundPhrase' (simulation ^. term)
 ----------------------
 
 swhsUnitless :: [DefinedQuantityDict]
-swhsUnitless = [uNormalVect, surface, eta, melt_frac]
+swhsUnitless = [uNormalVect, surface, eta, melt_frac, gradient]
 
 eta, melt_frac :: DefinedQuantityDict
 

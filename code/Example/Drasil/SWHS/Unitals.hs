@@ -22,7 +22,7 @@ import Data.Drasil.Phrase (of_)
 
 swhsSymbols :: [DefinedQuantityDict]
 swhsSymbols = (map dqdWr swhsUnits) ++ (map dqdWr swhsUnitless) ++
-  (map dqdWr swhsConstrained)
+  (map dqdWr swhsConstrained) ++ [gradient]
 
 swhsSymbolsAll :: [QuantityDict]
 swhsSymbolsAll = (map qw swhsUnits) ++ (map qw swhsUnitless) ++

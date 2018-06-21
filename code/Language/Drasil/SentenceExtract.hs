@@ -24,6 +24,7 @@ getDoc (Document t a s) = t : a : concatMap getSec s
 
 getSec :: Section -> [Sentence]
 getSec (Section _ _ _ (ShortNm "RefMat")) = []
+getSec (Section _ _ _ (ShortNm "AuxConstants")) = []
 getSec (Section t sc _ _) = t : concatMap getSecCon sc
 
 getSecCon :: SecCons -> [Sentence]

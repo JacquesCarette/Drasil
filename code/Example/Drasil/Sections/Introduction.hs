@@ -1,6 +1,5 @@
 module Drasil.Sections.Introduction 
-  (introductionF,
-   orgSec,
+  (orgSec,
    introductionSection,
    purposeOfDoc,
    scopeOfRequirements,
@@ -16,15 +15,16 @@ import Data.Drasil.Concepts.Documentation as Doc (goal, organization, thModel, i
   system, model, design, intReader, srs, characteristic, designDoc, decision, environment,
   vavPlan, softwareDoc, implementation, softwareVAV, desSpec)
 import Data.Drasil.Concepts.Computation (algorithm)
-
+import Data.Drasil.Citations (parnasClements1986)
+import Drasil.DocumentLanguage.RefHelpers (cite)
 
 -----------------------
 --     Constants     --
 -----------------------
 
 -- | Contents explaining the development process of this program
-developmentProcessParagraph :: Contents
-developmentProcessParagraph = foldlSP [S "This", phrase document, 
+developmentProcessParagraph :: ReferenceDB -> Contents
+developmentProcessParagraph refdb = foldlSP [S "This", phrase document, 
   S "will be used as a starting point for subsequent development", 
   S "phases, including writing the", phrase desSpec, S "and the", 
   phrase softwareVAV, S "plan. The", phrase designDoc, S "will show how the", 
@@ -37,7 +37,7 @@ developmentProcessParagraph = foldlSP [S "This", phrase document,
   S "that follow the so-called waterfall", phrase model `sC` 
   S "the actual development process is not constrained", 
   S "in any way. Even when the waterfall model is not followed, as",
-  S "Parnas and Clements point out" `sC` --cite gbRefDB parnasClements1986,
+  S "Parnas and Clements point out",  cite refdb parnasClements1986 `sC`
   S "the most logical way to present the", phrase documentation,
   S "is still to", Quote (S "fake"), S "a rational", phrase design,
   S "process"]
@@ -52,17 +52,6 @@ introductionSubsections = foldlList (map (\(x,y) -> x `ofThe` y)
 -------------------------
 --                    --
 -------------------------
-
-introductionF :: (Idea a, CommonIdea a, NamedIdea b) => 
-  a -> (Sentence, Sentence) -> Sentence -> (Sentence, Sentence) -> 
-  (Sentence, Sentence, Sentence) -> (Sentence, b, Section, Sentence) -> Section
-
-introductionF progName (problemIntroduction, programDefinition) (pOdPart1)
-  (mainRequirement, intendedPurpose) (know, und, appStandd) (i, b, s, t) =
-    introductionSection problemIntroduction programDefinition subsec
-      where subsec = [(purposeOfDoc pOdPart1), (scopeOfRequirements mainRequirement
-              progName intendedPurpose), (charIntRdrF know und progName appStandd
-              (SRS.userChar [] [])), (orgSec i b s t)]
 
 -- | Constructor for the introduction section
 -- problemIntroduction - Sentence introducing the specific example problem
@@ -84,9 +73,9 @@ overviewParagraph programDefinition = foldlSP [S "The following", phrase section
 -- | constructor for purpose of document subsection
 -- purposeOfProgramParagraph - a sentence explaining the purpose of the specific 
 -- example
-purposeOfDoc :: Sentence -> Section
-purposeOfDoc purposeOfProgramParagraph = SRS.prpsOfDoc 
-  [Paragraph purposeOfProgramParagraph, developmentProcessParagraph] []
+purposeOfDoc :: ReferenceDB -> Sentence -> Section
+purposeOfDoc refdb purposeOfProgramParagraph = SRS.prpsOfDoc 
+  [Paragraph purposeOfProgramParagraph, developmentProcessParagraph refdb] []
 
 
 -- | constructor for scope of requirements subsection

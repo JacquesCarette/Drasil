@@ -11,7 +11,7 @@ module Language.Drasil (
   -- Make.Print 
   , genMake
   -- SystemInformation
-  , SystemInformation(..), Block(..), citeDB
+  , SystemInformation(..), Block(..), citeDB, getRefDB
   -- Expr
   , Expr(..), BinOp(..), UFunc(..), ArithOper(..), BoolOper(..)
   , Relation, RealInterval(..), Inclusive(..)

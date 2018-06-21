@@ -43,7 +43,7 @@ import Data.Drasil.Citations (parnasClements1986, smithLai2005)
 
 import Data.Drasil.Concepts.Documentation as Doc (datumConstraint, inModel,
   requirement, section_, traceyGraph, item, assumption, dataDefn,
-  likelyChg, genDefn, thModel, traceyMatrix, model, 
+  likelyChg, unlikelyChg, genDefn, thModel, traceyMatrix, model, 
   output_, quantity, input_, physicalConstraint, condition,
   property, variable, description, symbol_,
   information, value, column, softwareConstraint, goalStmt,
@@ -64,7 +64,7 @@ import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Software.Products (compPro)
 
 import Drasil.Sections.ReferenceMaterial (intro)
-import qualified Drasil.SRS as SRS (funcReq, likeChg, probDesc, goalStmt,
+import qualified Drasil.SRS as SRS (funcReq, likeChg, unlikeChg, probDesc, goalStmt,
   inModel, missingP)
 import Drasil.DocumentLanguage {-(DocDesc,
   tsymb, mkRequirement, mkLklyChnk, mkAssump, mkDoc,
@@ -380,7 +380,7 @@ s4_1_3_list temw we = enumSimple 1 (short goalStmt) [
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
 ------------------------------------------------------
   
-s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
+s4_2 = solChSpecF progName (s4_1, s6, s6b) s4_2_4_intro_end (mid,
   dataConstraintUncertainty, EmptyS) (npcmAssumptions, s4_2_2_T1,
   s4_2_3_paragraph M.rOfChng temp, [s4_2_4_DD1],
   [reldefn eBalanceOnWtr] ++ (s4_2_5_d1startPara energy water) ++
@@ -772,7 +772,14 @@ likeChg3_npcm = mkLklyChnk "likeChg3" (
   -- S "cannot be perfectly insulated and will lose",
   -- phrase heat]
 
+-------------------------------
+--Section 6b : UNLIKELY CHANGES
+-------------------------------
 
+s6b = SRS.unlikeChg s6b_list []
+
+s6b_list :: [Contents]
+s6b_list = []
 
 ----------------------------------------------
 --Section 7:  TRACEABILITY MATRICES AND GRAPHS

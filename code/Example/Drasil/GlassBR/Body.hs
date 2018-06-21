@@ -125,6 +125,10 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
           , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand, testIMFromQD] HideDerivation
+          , Constraints (EmptyS) (dataConstraintUncertainty) 
+                        (foldlSent [(makeRef (SRS.valsOfAuxCons SRS.missingP [])), S "gives", (plural value `ofThe` S "specification"), 
+                        plural parameter, S "used in", (makeRef inputDataConstraints)] +:+ instance_models_intro2)
+                        [inputDataConstraints, outputDataConstraints]
           ]
         )
       ]
@@ -180,8 +184,8 @@ glassBR_code = codeSpec glassSystInfo allMods
 specific_sysytem_description, problem_description, terminology_and_description, physical_system_description, goal_statements, solution_characteristics_specification :: Section
 
 product_use_case_table,
-  physical_system_description_list, solution_characteristics_specification_intro, instance_models_table1,
-  instance_models_table2, traceability_matrices_and_graphs_table1,
+  physical_system_description_list, solution_characteristics_specification_intro, inputDataConstraints,
+  outputDataConstraints, traceability_matrices_and_graphs_table1,
   traceability_matrices_and_graphs_table2, traceability_matrices_and_graphs_table3, appendix_intro,
   fig_glassbr, fig_2, fig_3, fig_4, fig_5,
   fig_6 :: Contents
@@ -441,11 +445,11 @@ solution_characteristics_specification = solChSpecF gLassBR (problem_description
  (EmptyS, dataConstraintUncertainty, end)
  (assumptions_list, map reldefn tModels, [], map datadefn dataDefns,
   map reldefn iModels,
-  [instance_models_table1, instance_models_table2]) []
+  [inputDataConstraints, outputDataConstraints]) []
   where
     end = foldlSent [(makeRef (SRS.valsOfAuxCons SRS.missingP [])),
       S "gives", (plural value `ofThe` S "specification"),
-      plural parameter, S "used in", (makeRef instance_models_table1)]
+      plural parameter, S "used in", (makeRef inputDataConstraints)]
       +:+ instance_models_intro2
 
 solution_characteristics_specification_intro = foldlSP [S "This", phrase section_, S "explains all the",
@@ -474,11 +478,11 @@ assumptions = fst (foldr (\s (ls, n) -> ((Assumption $ assump ("A" ++ show n) s 
 
 {-input and output tables-}
 
-instance_models_table1 = inDataConstTbl gbInputDataConstraints
-instance_models_table2 = outDataConstTbl [prob_br]
+inputDataConstraints = inDataConstTbl gbInputDataConstraints
+outputDataConstraints = outDataConstTbl [prob_br]
 
 instance_models_intro2 :: Sentence
-instance_models_intro2 = foldlSent [makeRef instance_models_table2, S "shows the",
+instance_models_intro2 = foldlSent [makeRef outputDataConstraints, S "shows the",
   plural constraint, S "that must be satisfied by the", phrase output_]
 
 {--REQUIREMENTS--}

@@ -24,6 +24,8 @@
 \newcommand{\rthereqnum}{R\thereqnum}
 \newcounter{lcnum}
 \newcommand{\lcthelcnum}{LC\thelcnum}
+\newcounter{ucnum}
+\newcommand{\uctheucnum}{UC\theucnum}
 \bibliography{bibfile}
 \title{Software Requirements Specification for GlassBR program}
 \author{Nikitha Krithnan and W. Spencer Smith}
@@ -688,6 +690,14 @@ This problem is small in size and relatively simple, so performance is not a pri
 \end{description}
 \begin{description}
 \item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8.likelychg5}:]A\ref{A:responseTyA} - The software may be changed to consider more than just flexure of the glass.
+\end{description}
+\section{Unlikely Changes}
+\label{Sec:UCs}
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC:s8.unlikelychg1}:]The goal of the system is to predict whether the glass slab under consideration can withstand an explosion of a certain degree.
+\end{description}
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC:s8.unlikelychg2}:]A\ref{A:glassConditionA} requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.
 \end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}

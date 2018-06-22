@@ -480,6 +480,26 @@ RefBy & FIXME: This needs to be filled in
 \\ \midrule \\
 Label & Force on the rotational motion of a set of 2D rigid body
 \\ \midrule \\
+Input & $ω$, $t$, ${τ_{i}}$, $\mathbf{I}$
+\\ \midrule \\
+Output & $α$
+\\ \midrule \\
+Input Constraints & \begin{dmath}
+                    ω>0
+                    \end{dmath}
+                    \begin{dmath}
+                    t>0
+                    \end{dmath}
+                    \begin{dmath}
+                    {τ_{i}}>0
+                    \end{dmath}
+                    \begin{dmath}
+                    \mathbf{I}>0
+                    \end{dmath}
+\\ \midrule \\
+Output Constraints & \begin{dmath}
+                     α>0
+                     \end{dmath}
 Equation & $α=\frac{d\,ω\left(t\right)}{d\,t}=\frac{{τ_{i}}\left(t\right)}{\mathbf{I}}$
 \\ \midrule \\
 Description & The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved. ${m_{i}}$ is the mass of the i-th rigid body (kg). $g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$). $t$ is the point in time (s). ${t_{0}}$ is the denotes the initial time (s). $ϕ$ is the orientation (rad). $ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$). $α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$). ${τ_{i}}$ is the is the torque applied to the i-th body (Nm). ${\mathbf{I}_{k}}$ is the moment of inertia of the k-th rigid body (kg$\text{m}^{2}$).
@@ -495,6 +515,32 @@ Description & The above equation for the total angular acceleration of the rigid
 Label & Collisions on 2D rigid bodies
 \\ \midrule \\
 Input & $t$, $j$, ${m_{A}}$, $\mathbf{n}$
+\\ \midrule \\
+Output & ${t_{c}}$
+\\ \midrule \\
+Input Constraints & \begin{dmath}
+                    t>0
+                    \end{dmath}
+                    \begin{dmath}
+                    j>0
+                    \end{dmath}
+                    \begin{dmath}
+                    {m_{A}}>0
+                    \end{dmath}
+                    \begin{dmath}
+                    \mathbf{n}>0
+                    \end{dmath}
+\\ \midrule \\
+Output Constraints & \begin{dmath}
+                     {\mathbf{v}_{A}}>0
+                     \end{dmath}
+                     \begin{dmath}
+                     {t_{c}}>0
+                     \end{dmath}
+\\ \midrule \\
+Equation & \begin{dmath}
+           {\mathbf{v}_{A}}\left({t_{c}}\right)={\mathbf{v}_{A}}\left(t\right)+\frac{j}{{m_{A}}} \mathbf{n}
+           \end{dmath}
 \\ \midrule \\
 Description & This instance model is based on our assumptions regarding rigid body (A1, A2) collisions (A5). Again, this does not take damping (A6) or constraints (A7) into account. ${m_{i}}$ is the mass of the i-th rigid body (kg). ${\mathbf{I}_{k}}$ is the moment of inertia of the k-th rigid body (kg$\text{m}^{2}$). $t$ is the point in time (s). ${t_{0}}$ is the denotes the initial time (s). ${t_{c}}$ is the denotes the time at collision (s). ${\mathbf{p}_{CM}}$ is the the mass-weighted average position of a rigid body's particles (m). $\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$). $ϕ$ is the orientation (rad). $ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$). $\mathbf{n}$ is the collision normal vector (m). $j$ is the collision impulse (scalar) (Ns). $P$ is the point of collision (m). ${\mathbf{r}_{kP}}$ is the displacement vector between the centre of mass of rigid body k and contact point P (m).
 \\ \bottomrule \end{tabular}

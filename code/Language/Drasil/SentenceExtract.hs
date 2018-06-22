@@ -32,7 +32,7 @@ getSecCon (Sub s) = getSec s
 getSecCon (Con c) = getCon c
 
 getCon :: Contents -> [Sentence]
-getCon (Table s1 [s2] t _ _) = s1 ++ s2 ++ [t]
+getCon (Table s1 s2 t _ _) = s1 ++ concat s2 ++ [t]
 getCon (Paragraph s) = [s]
 getCon (EqnBlock _ _) = []
 getCon (Definition d) = getDtype d

@@ -199,13 +199,13 @@ module Language.Drasil (
   -- Chunk.Sentence.Extract
   , sdep, vars',snames, combine
   -- Chunk.Expr.Extract
-  , names
+  , names, combine'
   -- ExprExtract
   , egetDoc
 ) where
 
 import Language.Drasil.ExprExtract(egetDoc)
-import Language.Drasil.Expr.Extract(names)
+import Language.Drasil.Expr.Extract(names, combine')
 import Language.Drasil.SentenceExtract (getDoc)
 import Language.Drasil.Sentence.Math(ch)
 import Language.Drasil.Sentence.Extract(sdep, vars', snames, combine)

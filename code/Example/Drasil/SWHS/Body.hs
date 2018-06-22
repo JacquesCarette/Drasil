@@ -127,11 +127,14 @@ swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) swhsSymb
 ccss :: Sentence -> [DefinedQuantityDict]
 ccss s = combine s swhsSymMap
 
+ccss' :: Expr -> [DefinedQuantityDict]
+ccss' s = combine' s swhsSymMap
+
 ccs' :: [DefinedQuantityDict]
-ccs' = concatMap ccss $ getDoc swhs_srs'
+ccs' = nub ((concatMap ccss $ getDoc swhs_srs') ++ (concatMap ccss' $ egetDoc swhs_srs'))
 
 outputuid :: [String]
-outputuid = nub $ ((concatMap snames $ getDoc swhs_srs') ++ (concatMap names $ egetDoc swhs_srs'))
+outputuid = nub ((concatMap snames $ getDoc swhs_srs') ++ (concatMap names $ egetDoc swhs_srs'))
 
 swhsPeople :: [Person]
 swhsPeople = [thulasi, brooks, spencerSmith]

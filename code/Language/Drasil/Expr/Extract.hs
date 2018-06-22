@@ -1,12 +1,15 @@
-module Language.Drasil.Expr.Extract(dep, vars, codevars, codevars', names) where
+module Language.Drasil.Expr.Extract(dep, vars, codevars, codevars', names, combine') where
 
 import Data.List (nub)
 import Control.Lens ((^.))
 import Language.Drasil.Expr (Expr(..), RealInterval(..))
-import Language.Drasil.ChunkDB (HasSymbolTable, symbLookup, symbolTable)
+import Language.Drasil.ChunkDB (HasSymbolTable, symbLookup, symbolTable, HasDefinitionTable,
+ defLookup, defTable)
 import Language.Drasil.Chunk.Code (CodeChunk, codevar)
 import Language.Drasil.Chunk.Quantity (QuantityDict)
+import Language.Drasil.Chunk.Concept (ConceptChunk)
 import Language.Drasil.Spec(Sentence(..))
+import Language.Drasil.Chunk.DefinedQuantity
 
 -- | Generic traverse of all positions that could lead to names
 names :: Expr -> [String]
@@ -77,3 +80,15 @@ codevars e m = map resolve $ dep e
 codevars' :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
 codevars' e m = map resolve $ nub $ names' e
   where  resolve x = codevar (symbLookup x (m ^. symbolTable))
+
+concpt' :: (HasDefinitionTable s) => Expr -> s -> [ConceptChunk]
+concpt' a m = map resolve $ removeItem' $ dep a
+  where resolve x = defLookup x $ m ^. defTable
+
+combine' :: (HasSymbolTable s, HasDefinitionTable s) => Expr -> s -> [DefinedQuantityDict]
+combine' a m = zipWith dqdQd (vars a m) (concpt' a m)
+
+removeItem' :: [String] -> [String]
+removeItem' ("htTransCoeff_min":tl) = tl
+removeItem' (a : tl) = a: removeItem' tl
+removeItem' [] = []

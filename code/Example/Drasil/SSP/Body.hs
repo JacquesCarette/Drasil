@@ -25,7 +25,7 @@ import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent,
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
 import Data.Drasil.Utils (enumBullet, enumSimple, getES, weave)
 import Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
-import Drasil.SSP.Assumptions (sspAssumptions, sspRefDB)
+import Drasil.SSP.Assumptions (newAssumptions, sspRefDB)
 import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShrDerivation, 
   resShrDerivation, sliceWght, sspDataDefs, stfMtrxDerivation)
 import Drasil.SSP.DataDesc (sspInputMod)

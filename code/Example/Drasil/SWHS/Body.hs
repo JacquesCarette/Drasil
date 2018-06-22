@@ -131,7 +131,7 @@ ccs' :: [DefinedQuantityDict]
 ccs' = concatMap ccss $ getDoc swhs_srs'
 
 outputuid :: [String]
-outputuid = nub $ concatMap snames $ getDoc swhs_srs'
+outputuid = nub $ ((concatMap snames $ getDoc swhs_srs') ++ (concatMap names $ egetDoc swhs_srs'))
 
 swhsPeople :: [Person]
 swhsPeople = [thulasi, brooks, spencerSmith]

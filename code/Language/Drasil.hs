@@ -198,8 +198,14 @@ module Language.Drasil (
   , ch
   -- Chunk.Sentence.Extract
   , sdep, vars',snames, combine
+  -- Chunk.Expr.Extract
+  , names
+  -- ExprExtract
+  , egetDoc
 ) where
 
+import Language.Drasil.ExprExtract(egetDoc)
+import Language.Drasil.Expr.Extract(names)
 import Language.Drasil.SentenceExtract (getDoc)
 import Language.Drasil.Sentence.Math(ch)
 import Language.Drasil.Sentence.Extract(sdep, vars', snames, combine)

@@ -67,7 +67,7 @@ gbInputDataConstraints = (map uncrtnw gbInputsWUnitsUncrtn) ++
 plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA metre Real 
   [ gtZeroConstr,
-    physc $ UpFrom (Exc, sy plate_width),
+    physc $ UpFrom (Inc, sy plate_width),
     sfwrc $ Bounded (Inc , sy dim_min) (Inc , sy dim_max),
     sfwrc $ UpTo (Exc, sy ar_max * sy plate_width)] (dbl 1.5) defaultUncrt
 

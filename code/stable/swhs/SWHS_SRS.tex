@@ -169,7 +169,7 @@ ${V_{tank}}$ & Volume of the cylindrical tank & $\text{m}^{3}$
 \\
 ${V_{W}}$ & Volume of water & $\text{m}^{3}$
 \\
-$η$ & ODE parameter &
+$η$ & ODE parameter & 
 \\
 $ρ$ & Density & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
@@ -185,7 +185,7 @@ ${{τ_{P}}^{S}}$ & ODE parameter for solid PCM & s
 \\
 ${τ_{W}}$ & ODE parameter for water & s
 \\
-$ϕ$ & Melt fraction &
+$ϕ$ & Melt fraction & 
 \\
 $∇$ & Gradient &
 \\
@@ -229,6 +229,8 @@ T & Theoretical Model
 \\
 TU & Typical Uncertainty
 \\
+UC & Unlikely Change
+\\
 \bottomrule
 \label{Table:TAbbAcc}
 \end{longtable*}
@@ -239,7 +241,7 @@ The following section provides an overview of the Software Requirements Specific
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
 The main purpose of this document is to describe the modelling of solar water heating systems incorporating PCM. The goal statements and theoretical models used in the SWHS code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide ad hoc access to all information necessary to understand and verify the model. The SRS is abstract because the contents say what problem is being solved, but do not say how to solve it.
-This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to ``fake'' a rational design process.
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
 The scope of the requirements includes thermal analysis of a single solar water heating tank incorporating PCM. Given the appropriate inputs, the code for SWHS is intended to predict the temperature and thermal energy histories for the water and the PCM. This entire document is written assuming that the substances inside the solar water heating tank are water and PCM.
@@ -328,7 +330,7 @@ Given the temperature of the heating coil, initial conditions for the temperatur
 The instance models that govern SWHS are presented in Section~\ref{Sec:IMs}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TMs}{]}, General Definitions {[}Section~\ref{Sec:GDs}{]}, Data Definitions {[}Section~\ref{Sec:DDs}{]}, Instance Models {[}Section~\ref{Sec:IMs}{]}, or Likely Changes {[}Section~\ref{Sec:LCs}{]}, in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TMs}{]}, General Definitions {[}Section~\ref{Sec:GDs}{]}, Data Definitions {[}Section~\ref{Sec:DDs}{]}, Instance Models {[}Section~\ref{Sec:IMs}{]}, Likely Changes {[}Section~\ref{Sec:LCs}{]}, or Unlikely Changes {[}Section~\ref{Sec:UCs}{]}, in which the respective assumption is used.
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump1}:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible {[}\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}{]}.
 \end{description}
@@ -1079,7 +1081,7 @@ title={Derivation of tank/pcm model},
 year={2012},
 note={From Marilyn Lightstone's Personal Notes}}
 
-@article{parnas1986,
+@article{parnasClements1986,
 author={Parnas, David L. and Clements, P. C.},
 title={A rational design process: How and why to fake it},
 journal={IEEE Transactions on Software Engineering},

@@ -9,8 +9,8 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
 import Language.Drasil.Chunk.Quantity (Quantity(..), QuantityDict, mkQuant, qw, 
   HasSpace(typ))
 import Language.Drasil.Unit (UnitDefn, unitWrapper)
-import Language.Drasil.Symbol
-import Language.Drasil.Space
+import Language.Drasil.Symbol (Symbol)
+import Language.Drasil.Space (Space)
 import Language.Drasil.NounPhrase (NP)
 
 import Control.Lens ((^.), makeLenses)

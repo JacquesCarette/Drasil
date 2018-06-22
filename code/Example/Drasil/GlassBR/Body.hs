@@ -435,7 +435,7 @@ s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze" `sAnd` S "predict whether",
 
 {--SOLUTION CHARACTERISTICS SPECIFICATION--}
 
-s6_2 = solChSpecF gLassBR (s6_1, (SRS.likeChg SRS.missingP [])) EmptyS
+s6_2 = solChSpecF gLassBR (s6_1, (SRS.likeChg SRS.missingP []), (SRS.unlikeChg SRS.missingP [])) EmptyS
  (EmptyS, dataConstraintUncertainty, end)
  (s6_2_1_list, map reldefn tModels, [], map datadefn dataDefns,
   map reldefn iModels,
@@ -519,7 +519,9 @@ s7_1_req1Table = Table
 req2Desc = foldlSent [S "The", phrase system,
   S "shall set the known", plural value +: S "as follows",
   foldlList [(foldlsC (map ch (take 4 assumptionConstants)) `followA` 4),
-  ((ch constant_LoadDF) `followA` 8), (short lShareFac `followA` 5)]]
+  ((ch constant_LoadDF) `followA` 8), (short lShareFac `followA` 5),
+  (ch hFromt) +:+ sParen (S "from" +:+ (makeRef hFromt)), 
+  (ch glaTyFac) +:+ sParen (S "from" +:+ (makeRef glaTyFac))]]
 
 --ItemType
 {-s7_1_req2 = (Nested (S "The" +:+ phrase system +:+

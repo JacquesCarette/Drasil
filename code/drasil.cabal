@@ -241,6 +241,7 @@ executable ssp
     , Drasil.SRS
     , Drasil.SSP.Assumptions
     , Drasil.SSP.Body
+    , Drasil.SSP.Changes
     , Drasil.SSP.DataDefs
     , Drasil.SSP.DataDesc
     , Drasil.SSP.Defs

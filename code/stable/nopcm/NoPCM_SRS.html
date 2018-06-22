@@ -604,6 +604,14 @@ TU
 Typical Uncertainty
 </td>
 </tr>
+<tr>
+<td>
+UC
+</td>
+<td>
+Unlikely Change
+</td>
+</tr>
 </table>
 </div>
 </div>
@@ -630,7 +638,7 @@ Purpose of Document
 The main purpose of this document is to describe the modelling of solar water heating system. The goals and theoretical models used in the SWHS code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide ad hoc access to all information necessary to understand and verify the model. The SRS is abstract because the contents say what problem is being solved, but do not say how to solve it.
 </p>
 <p class="paragraph">
-This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
 </p>
 </div>
 </div>
@@ -843,7 +851,7 @@ The instance models that govern SWHS are presented in <a href=#Sec:IMs>Instance 
 Assumptions
 </h3>
 <p class="paragraph">
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], or Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], or Unlikely Changes [<a href=#Sec:UCs>Unlikely Changes</a>], in which the respective assumption is used.
 </p>
 <ul class="hide-list-style">
 <li>
@@ -3073,7 +3081,7 @@ References
 </div>
 </li>
 <li>
-<div id="parnas1986">
+<div id="parnasClements1986">
 [4]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
 </div>
 </li>

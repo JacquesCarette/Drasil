@@ -3,7 +3,7 @@ module Language.Drasil (
   -- Output.Formats
     DocType(SRS,MG,MIS,Website), DocSpec(DocSpec)
   -- SystemInformation
-  , SystemInformation(..), Block(..), citeDB
+  , SystemInformation(..), Block(..), citeDB, getRefDB
   -- Expr
   , Expr
   , Relation, RealInterval(..), Inclusive(..)

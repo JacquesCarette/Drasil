@@ -76,8 +76,8 @@ nrmShrFor = makeRC "nrmShrFor" (nounPhraseSP "normal/shear force ratio")
   nrmShrF_desc nrmShrF_rel 
 
 nrmShrF_rel :: Relation
-nrmShrF_rel = (inxi normFunc) $= case_ [case1,case2,case3] $=
-  inxi shearFunc $= case_ [
+nrmShrF_rel = (sy normFunc) $= case_ [case1,case2,case3] $=
+  sy shearFunc $= case_ [
   (indx1 baseWthX * indx1 scalFunc * indx1 intNormForce, sy index $= 1),
   (inxi baseWthX * (inxi scalFunc * inxi intNormForce +
     inxiM1 scalFunc  * inxiM1 intNormForce),
@@ -86,7 +86,7 @@ nrmShrF_rel = (inxi normFunc) $= case_ [case1,case2,case3] $=
     idx (sy watrForce) (sy numbSlices - 1), sy index $= 1)
   ]
   $= --FIXME: move to seperate instance model
-  sy normToShear $= sum1toN (inxi normFunc) / sum1toN (inxi shearFunc)
+  sy normToShear $= sum1toN (sy normFunc) / sum1toN (sy shearFunc)
   where case1 = ((indx1 baseWthX)*((indx1 intNormForce)+(indx1 watrForce)) *
           tan (indx1 baseAngle), sy index $= 1)
         case2 = ((inxi baseWthX)*

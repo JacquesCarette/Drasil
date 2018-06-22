@@ -16,7 +16,6 @@ import Data.Drasil.Concepts.Physics (compression, fbd, force, strain, stress,
 import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability, 
   performanceSpd, program, reusability, understandability)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
-
 import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.People (henryFrankis)
@@ -26,7 +25,8 @@ import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent,
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
 import Data.Drasil.Utils (enumBullet, enumSimple, weave)
 
-import Drasil.SSP.Assumptions (sspAssumptions)
+import Drasil.SSP.Assumptions (sspAssumptions, newA3, sspRefDB, newAssumptions)
+import Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShrDerivation, 
   resShrDerivation, sliceWght, sspDataDefs, stfMtrxDerivation)
 import Drasil.SSP.DataDesc (sspInputMod)
@@ -37,18 +37,17 @@ import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (fctSftyDerivation, instModIntro1, instModIntro2, 
   intrSlcDerivation, nrmShrDerivation, rigDisDerivation, rigFoSDerivation, 
   sspIMods)
-import Drasil.SSP.References (sspCitations)
 import Drasil.SSP.Requirements (sspInputDataTable, sspRequirements)
 import Drasil.SSP.TMods (sspTMods)
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
   sspOutputs, sspSymbols)
 
-import qualified Drasil.SRS as SRS (funcReq, inModel, likeChg, missingP, 
+import qualified Drasil.SRS as SRS (funcReq, inModel, likeChg, unlikeChg, missingP, 
   physSyst)
 
 import Drasil.DocumentLanguage (DocDesc, DocSection(..), IntroSec(..), 
   IntroSub(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), TSIntro, 
-  TSIntro(..), mkDoc, tsymb'')
+  TSIntro(..), LCsSec(..), UCsSec(..), mkDoc, tsymb'')
 
 import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
@@ -60,7 +59,7 @@ import Drasil.Sections.SpecificSystemDescription (dataConstraintUncertainty,
 
 
 --type declarations for sections--
-s3, s4, s5, s6, s7 :: Section
+s3, s4, s5, s7 :: Section
 
 s1_2_intro :: [TSIntro]
 
@@ -68,7 +67,7 @@ s4_1, s4_1_1, s4_1_2,
   s4_1_3, s4_2, s5_1, s5_2 :: Section
 
 s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
-  s4_1_2_p2, goals_list, s4_2_1_list,
+  s4_1_2_p2, goals_list, 
   s5_1_list :: Contents
 
 s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, s4_2_5_IMods :: [Contents]
@@ -95,24 +94,22 @@ ssp_si = SI {
   _refdb = sspRefDB
 }
 
-sspRefDB :: ReferenceDB
-sspRefDB = rdb [] [] [] [] [] sspCitations
--- FIXME: Convert the rest to new chunk types (similar to issues #446 and #447)
-
+ssp_srs :: Document
+ssp_srs = mkDoc mkSRS (for) ssp_si
+  
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
   [TUnits, tsymb'' s1_2_intro TAD, TAandA]) :
   IntroSec (IntroProg startIntro kSent
-    [IPurpose prpsOfDoc_p1, IScope scpIncl scpEnd
+    [IPurpose prpsOfDoc_p1
+    , IScope scpIncl scpEnd
     , IChar (phrase solidMechanics) 
       (phrase undergraduate +:+ S "level 4" +:+ phrase physics)
       EmptyS
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
     --FIXME: issue #235
-  map Verbatim [s3, s4, s5, s6, s7] ++ (Bibliography : [])
-  
-ssp_srs :: Document
-ssp_srs = mkDoc mkSRS (for) ssp_si
+  map Verbatim [s3, s4, s5] ++ [LCsSec (LCsProg likelyChanges_SRS)] 
+  ++ [UCsSec (UCsProg unlikelyChanges_SRS)] ++[Verbatim s7] ++ (Bibliography : [])
   
 ssp_code :: CodeSpec
 ssp_code = codeSpec ssp_si [sspInputMod]
@@ -165,7 +162,7 @@ keySent pname = foldlSent_ [S "a", phrase pname +:+. phrase problem,
   introduceAbb pname, phrase program]
   
 -- SECTION 2.1 --
--- Purpose of Document automatically generated in introductionF
+-- Purpose of Document automatically generated in IPurpose
 prpsOfDoc_p1 :: Sentence
 prpsOfDoc_p1 = purposeDoc ssa crtSlpSrf fs how introduces analysizes
   where how = S "assessing the stability of a" +:+ phrase slope +:+
@@ -186,7 +183,7 @@ purposeDoc pname what calculates how introduces analysizes =
   phrase analysis `sAnd` phrase design, S "of a", analysizes]
 
 -- SECTION 2.2 --
--- Scope of Requirements automatically generated in introductionF
+-- Scope of Requirements automatically generated in IScope
 scpIncl, scpEnd :: Sentence
 scpIncl = S "stability analysis of a 2 dimensional" +:+ phrase slope `sC`
   S "composed of homogeneous" +:+ plural soilLyr
@@ -197,10 +194,10 @@ scpEnd  = S "identify the most likely failure" +:+
   S "that will occur on the" +:+ phrase slope
 
 -- SECTION 2.3 --
--- Characteristics of the Intended Reader generated in introductionF
+-- Characteristics of the Intended Reader generated in IChar
 
 -- SECTION 2.4 --
--- Organization automatically generated in introductionF
+-- Organization automatically generated in IOrgSec
 orgSecStart, orgSecEnd :: Sentence
 orgSecStart = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an",
@@ -292,7 +289,8 @@ fig_indexconv = fig (foldlSent_ [S "Index convention for numbering",
 
 fig_forceacting :: Contents
 fig_forceacting = fig (at_start' force +:+ S "acting on a" +:+
-  phrase slice) "ForceDiagram.png" "ForceDiagram"
+  phrase slice +:+ S "(Note: Instances of E in the figure is" +:+
+  S "to be relabelled G)") "ForceDiagram.png" "ForceDiagram"
 
 -- SECTION 4.1.3 --
 s4_1_3 = goalStmtF (map (\(x, y) -> x `ofThe` y) [
@@ -304,9 +302,9 @@ s4_1_3 = goalStmtF (map (\(x, y) -> x `ofThe` y) [
 goals_list = enumSimple 1 (short goalStmt) sspGoals
 
 -- SECTION 4.2 --
-s4_2 = solChSpecF ssa (s4_1, s6) ddEnding
+s4_2 = solChSpecF ssa (s4_1, SRS.likeChg [] [], SRS.unlikeChg [] []) ddEnding
   (EmptyS, dataConstraintUncertainty, EmptyS)
-  ([s4_2_1_list], s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, 
+  (s4_2_1_list, s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, 
   instModIntro1:instModIntro2:s4_2_5_IMods, [s4_2_6Table2, s4_2_6Table3]) []
 
   where ddEnding = foldlSent [at_start' definition, ddRef sliceWght, S "to", ddRef lengthLb,
@@ -318,8 +316,11 @@ s4_2 = solChSpecF ssa (s4_1, s6) ddEnding
 
 -- SECTION 4.2.1 --
 -- Assumptions is automatically generated in solChSpecF using the list below
+s4_2_1_list :: [Contents]
+s4_2_1_list = assumpList newAssumptions
 
-s4_2_1_list = enumSimple 1 (short assumption) sspAssumptions
+assumpList :: [AssumpChunk] -> [Contents]
+assumpList = map Assumption
 
 -- SECTION 4.2.2 --
 -- TModels is automatically generated in solChSpecF using the tmods below
@@ -388,8 +389,8 @@ s5_2 = nonFuncReqF [accuracy, performanceSpd]
   [correctness, understandability, reusability, maintainability] r EmptyS
   where r = (short ssa) +:+ S "is intended to be an educational tool"
 
--- SECTION 6 --
-s6 = SRS.likeChg [] []
+-- SECTION 6      --
+-- Likely Changes --
 
 -- SECTION 7 --
 s7 = valsOfAuxConstantsF ssa []

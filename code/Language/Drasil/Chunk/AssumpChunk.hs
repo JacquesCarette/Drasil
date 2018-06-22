@@ -28,5 +28,5 @@ instance HasLabel      AssumpChunk where getLabel = lbl
 instance HasShortName  AssumpChunk where shortname = lbl . shortname
 
 -- | Smart constructor for Assumption chunks.
-assump :: String -> Sentence -> String -> String -> String -> AssumpChunk
-assump i a id ref shortn = AC i a (mkLabelRA id ref shortn)
+assump :: String -> Sentence -> Label -> AssumpChunk
+assump i a lb = AC i a lb

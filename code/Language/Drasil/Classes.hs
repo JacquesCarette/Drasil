@@ -11,7 +11,7 @@ module Language.Drasil.Classes (
   , HasSpace(typ)
   , HasUnitSymbol(usymb)
   , IsUnit
-  , HasLabel(getLabel)
+  , HasLabel(getLabel, getMaybeLabel)
   , IsLabel
   , UnitEq(uniteq)
   , HasReference(getReferences)
@@ -99,7 +99,8 @@ class HasReasVal c where
 
 -- | For those things which "have a label"
 class HasLabel c where
-  getLabel :: Lens' c Label
+  getLabel      :: Lens' c Label
+  getMaybeLabel :: Lens' c (Maybe Label)
 
 -- IsLabel is associated with String rendering
 class (HasLabel u, HasUID u) => IsLabel u where

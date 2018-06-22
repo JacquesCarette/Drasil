@@ -14,20 +14,25 @@ import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), shortname')
+import Language.Drasil.Label.Core (Label)
+import Language.Drasil.Classes (HasLabel(getLabel))
+
 import Control.Lens (makeLenses, (^.))
 
 data PhysSystDesc = PSD
           { _did        :: UID
           , pSysDes     :: Sentence
           , _refAddr    :: RefAdd
+          , _lbl        :: Label
           }
 
 makeLenses ''PhysSystDesc
 
 instance HasUID        PhysSystDesc where uid = did
 instance Eq            PhysSystDesc where a == b = a ^. uid == b ^. uid
-instance HasShortName  PhysSystDesc where shortname p = shortname' $ p ^. refAddr
+instance HasLabel      PhysSystDesc where getLabel = lbl
+instance HasShortName  PhysSystDesc where shortname = lbl . shortname
 
 -- | PhysSystDesc smart constructor
-psd :: String -> Sentence -> RefAdd -> PhysSystDesc
+psd :: String -> Sentence -> RefAdd -> Label -> PhysSystDesc
 psd = PSD

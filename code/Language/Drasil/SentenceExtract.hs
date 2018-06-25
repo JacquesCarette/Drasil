@@ -24,12 +24,10 @@ getDoc (Document t a s) = t : a : concatMap getSec s
 
 getSec :: Section -> [Sentence]
 getSec (Section _ _ _ (ShortNm "RefMat")) = []
+getSec (Section _ _ _ (ShortNm "SpecSystDesc")) = []
 getSec (Section _ _ _ (ShortNm "AuxConstants")) = []
-getSec (Section _ _ _ (ShortNm "DataConstraints")) = []
 getSec (Section t sc _ _) = t : concatMap getSecCon sc
---getSec (Section _ sc _ (ShortNm "FRs")) = concatMap getSecCon sc
---getSec (Section _ sc _ (ShortNm "DataConstraints")) = concatMap getSecCon sc
---getSec (_) = []
+
 
 getSecCon :: SecCons -> [Sentence]
 getSecCon (Sub s) = getSec s
@@ -42,7 +40,7 @@ isVar ([], _) = []
 isVar _ = []
 
 getCon :: Contents -> [Sentence]
-getCon (Table s1 s2 t _ _) = isVar (s1, s2) ++ [t]--s1 ++ concat s2 ++ [t]
+getCon (Table s1 s2 t _ _) = isVar (s1, s2)-- s1 ++ concat s2 ++ [t]
 --getCon (Paragraph s) = [s]
 --getCon (EqnBlock _ _) = []
 --getCon (Definition d) = getDtype d

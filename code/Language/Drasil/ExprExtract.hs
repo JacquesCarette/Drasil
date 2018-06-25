@@ -24,8 +24,8 @@ egetDoc (Document _ _ s) = concatMap egetSec s
 -- These values should not appear in the basic Table of symbol.
 egetSec :: Section -> [Expr]
 egetSec (Section _ _ _ (ShortNm "RefMat")) = []
-egetSec (Section _ _ _ (ShortNm "AuxConstants")) = []
 egetSec (Section _ sc _ _) = concatMap egetSecCon sc
+egetSec (Section _ _ _ _) = []
 
 egetSecCon :: SecCons -> [Expr]
 egetSecCon (Sub s) = egetSec s

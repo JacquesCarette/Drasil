@@ -37,7 +37,7 @@ executable tiny
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil >= 0.0.6
+    drasil >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall -O2
 
@@ -88,7 +88,7 @@ executable nopcm
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil >= 0.0.6
+    drasil >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall -O2
 
@@ -135,7 +135,7 @@ executable ssp
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil >= 0.0.6
+    drasil >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall
 
@@ -179,7 +179,7 @@ executable glassbr
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil >= 0.0.6
+    drasil >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall
 
@@ -220,7 +220,7 @@ executable chipmunkdocs
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil >= 0.0.6
+    drasil >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall
 
@@ -266,7 +266,7 @@ executable swhs
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil >= 0.0.6
+    drasil >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall
 

@@ -14,8 +14,8 @@ import Drasil.NoPCM.GenDefs (roc_temp_simp_deriv)
 import Drasil.SWHS.Assumptions (assumpS1, assumpS2, assumpS7, assumpS8, assumpS9,
   assumpS14, assumpS15, assumpS20, assump1, assump2, assump7, assump8, assump9,
   assump14, assump15, assump20)
-import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro,
-  genSystDesc, physSyst1, physSyst2, s4_2_4_intro_end, s4_2_5_d1startPara,
+import Drasil.SWHS.Body (charReader1, charReader2, orgDocIntro,
+  genSystDesc, physSyst1, physSyst2, dataDefIntroEnd, iMod1Para,
   s7_trailing)
 import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil,
   transient, perfect_insul, tank_para)
@@ -33,7 +33,7 @@ import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
 import Drasil.NoPCM.Unitals (temp_init)
 import Drasil.SWHS.References (ref2, ref3, ref4)
-import Drasil.SWHS.Requirements (s5_2)
+import Drasil.SWHS.Requirements (nonFuncReqs)
 import Drasil.SWHS.LikelyChanges (likeChg2, likeChg3, likeChg6)
 
 import Data.Drasil.People (thulasi)
@@ -138,8 +138,8 @@ mkSRS = RefSec (RefProg intro
   [IPurpose (s2_1 progName),
   IScope (s2_2_start thermal_analysis sWHT) (s2_2_end temp thermal_energy
     water),
-  IChar (s2_3_knowlegde ht_trans_theo) (s2_3_understanding M.de) EmptyS,
-  IOrgSec s2_4_intro inModel (SRS.inModel SRS.missingP [])
+  IChar (charReader1 ht_trans_theo) (charReader2 M.de) EmptyS,
+  IOrgSec orgDocIntro inModel (SRS.inModel SRS.missingP [])
   (s2_4_end inModel M.ode progName)]) : 
   Verbatim genSystDesc:
   {-SSDSec (SSDProg [SSDSubVerb s4_1, 
@@ -375,10 +375,10 @@ s4_1_3_list temw we = enumSimple 1 (short goalStmt) [
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
 ------------------------------------------------------
   
-s4_2 = solChSpecF progName (s4_1, s6, s6b) s4_2_4_intro_end (mid,
+s4_2 = solChSpecF progName (s4_1, s6, s6b) dataDefIntroEnd (mid,
   dataConstraintUncertainty, EmptyS) (npcmAssumptions, tMod1,
   s4_2_3_paragraph M.rOfChng temp, [swhsDD1],
-  [reldefn eBalanceOnWtr] ++ (s4_2_5_d1startPara energy water) ++
+  [reldefn eBalanceOnWtr] ++ (iMod1Para energy water) ++
   s4_2_5_paragraph ++ [reldefn heatEInWtr], [s4_2_6_table1, s4_2_6_table2])
   []
   where
@@ -612,7 +612,7 @@ inputVar = map qw s4_2_6_conListIn
 --Section 5 : REQUIREMENTS
 --------------------------
 
-s5 = reqF [s5_1, s5_2]
+s5 = reqF [s5_1, nonFuncReqs]
 
 ---------------------------------------
 --Section 5.1 : FUNCTIONAL REQUIREMENTS

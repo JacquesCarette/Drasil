@@ -98,7 +98,7 @@ mkQField :: HasSymbolTable ctx => QDefinition -> ctx -> Field -> ModRow -> ModRo
 mkQField d _ l@Label fs = (show l, (Paragraph $ at_start d):[]) : fs
 mkQField d _ l@Symbol fs = (show l, (Paragraph $ (P $ eqSymb d)):[]) : fs
 mkQField d _ l@Units fs = (show l, (Paragraph $ (unit'2Contents d)):[]) : fs
-mkQField d _ l@DefiningEquation fs = (show l, (eqUnR $ d ^. equat):[]) : fs
+mkQField d _ l@DefiningEquation fs = (show l, (eqUnR $ sy d $= d ^. equat):[]) : fs
 mkQField d m l@(Description v u) fs =
   (show l, buildDDescription v u d m) : fs
 mkQField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in

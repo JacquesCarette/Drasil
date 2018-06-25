@@ -70,14 +70,14 @@ derUC, derUC' :: String -> String -> String -> Symbol -> UDefn -> UnitDefn
 -- | Uses self-plural term
 derUC  a b c s u = UD (dcc a (cn b) c) (US [(s,1)]) (Just $ from_udefn u) (Just u) []
 -- | Uses term that pluralizes by adding *s* to the end
-derUC' a b c s u = UD (dcc a (cn' b) c) (US [(s,1)]) Nothing (Just u) []
+derUC' a b c s u = UD (dcc a (cn' b) c) (US [(s,1)]) (Just $ from_udefn u) (Just u) []
 
 derCUC'' :: String -> NP -> String -> Symbol -> UnitEquation -> UnitDefn
-derCUC'' a b c s ue = UD (dcc a b c) (US [(s,1)]) Nothing (Just $ FUSynonym $ getsymb ue) (getCu ue)
+derCUC'' a b c s ue = UD (dcc a b c) (US [(s,1)]) (Just $ getsymb ue) (Just $ FUSynonym $ getsymb ue) (getCu ue)
 -- | Create a derived unit chunk from an id, term (as noun phrase), definition, 
 -- symbol, and unit equation
 derUC'' :: String -> NP -> String -> Symbol -> UDefn -> UnitDefn
-derUC'' a b c s u = UD (dcc a b c) (US [(s,1)]) Nothing (Just u) []
+derUC'' a b c s u = UD (dcc a b c) (US [(s,1)]) (Just $ from_udefn u) (Just u) []
 
 --FIXME: Make this use a meaningful identifier.
 -- | Helper for fundamental unit concept chunk creation. Uses the same string

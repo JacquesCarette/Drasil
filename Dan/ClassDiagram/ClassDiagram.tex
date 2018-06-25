@@ -10,8 +10,10 @@
         text centered, anchor=north, text=black, text width=3cm]
 \tikzstyle{comment}=[rectangle, draw=black, rounded corners, fill=green, drop shadow,
         text centered, anchor=north, text=white, text width=3cm]
-\tikzstyle{myarrow}=[->, >=open triangle 90, thick]
+\tikzstyle{myarrow}=[->, >=triangle 90, thick]
 \tikzstyle{line}=[-, thick]
+\tikzstyle{mayHave}=[rectangle, fill=green, text=black, text width=0.65cm];
+\tikzstyle{greenArrow}=[->, >=triangle 90, thick]
 
 \begin{center}
 \begin{tikzpicture}[node distance=2cm]
@@ -67,11 +69,20 @@
 			get-unit : (Unit u $=>$ u) +1
 		};
 
+//is-a relations
+
 \draw[myarrow] (NamedIdea.north) -- ++(0,0.8) -| (Chunk.south);
 \draw[line] (NamedIdea.north) -- ++(0,0.8) -| (SymbolForm.north);
 \draw[myarrow] (concept.north) -- ++(0,0.8) -| (NamedIdea.south);
 \draw[myarrow] (unit.north) -- ++ (0, 0.8) -| (concept.south);
 \draw[line] (quantity.north) -- ++ (0, 2.3) -| (concept.north);
+
+//may-have relations
+\node (qtyMayHaveUnit) [mayHave, right=of unit] {may have};
+\draw[greenArrow] (quantity.west) -- ++ (0, 0) -| (unit.east);
+
+\node (qtyMayHaveSymb) [mayHave, below=of SymbolForm] {may have};
+\draw[greenArrow] (quantity.east) -- ++ (0, 0) -| (SymbolForm.south);
 
 \end{tikzpicture}
 \end{center}

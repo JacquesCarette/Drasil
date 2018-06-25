@@ -11,11 +11,13 @@ import Language.Drasil.Chunk.ReqChunk (ReqChunk)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName,
   shortname')
 import Language.Drasil.Classes (HasUID(uid))
+
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label (Label, mkLabelRA)
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.UID
+
 import Control.Lens ((^.), makeLenses)
 
 data ListType = Bullet [ItemType] -- ^ Bulleted list

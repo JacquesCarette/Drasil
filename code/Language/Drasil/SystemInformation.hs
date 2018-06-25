@@ -48,3 +48,8 @@ data Block a = Coupled a a [a]
 -- | Helper for extracting bibliography
 citeDB :: SystemInformation -> BibRef
 citeDB (SI {_refdb = db}) = citationsFromBibMap (db ^. citationRefTable)
+
+
+-- | Helper for ectracting RefDB
+getRefDB :: SystemInformation -> ReferenceDB
+getRefDB (SI {_refdb = db}) = db

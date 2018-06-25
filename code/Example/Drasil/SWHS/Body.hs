@@ -13,7 +13,7 @@ import Data.Drasil.Concepts.Documentation (section_, traceyGraph, item,
   physics, user, physical, datum, system, variable, sysCont, environment, 
   srs, softwareSys, organization, document, problem, content, information, 
   reference, definition, purpose, description, symbol_, physSyst,
-  typUnc)
+  typUnc, unlikelyChg)
 
 import Data.Drasil.Concepts.PhysicalProperties (liquid, solid)
 import qualified Data.Drasil.Concepts.Thermodynamics as CT (boiling,
@@ -52,7 +52,7 @@ import Drasil.SWHS.LikelyChanges (likeChg1, likeChg2, likeChg3, likeChg4,
   likeChg5, likeChg6)
 import Drasil.SWHS.DataDesc (swhsInputMod)
 
-import qualified Drasil.SRS as SRS (inModel, missingP, likeChg,
+import qualified Drasil.SRS as SRS (inModel, missingP, likeChg, unlikeChg,
   funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
   sysCont, reference)
 
@@ -85,7 +85,8 @@ import Data.Drasil.SentenceStructures (acroIM, acroGD, acroGS, showingCxnBw,
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
-  phsChgMtrl, physSyst, requirement, rightSide, srs, progName, thModel, typUnc]
+  phsChgMtrl, physSyst, requirement, rightSide, srs, progName, thModel, typUnc,
+  unlikelyChg]
 
 this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, kilogram, second] ++ 
@@ -315,7 +316,7 @@ s4_1_3_list = enumSimple 1 (short goalStmt) $
 --------------------------------------------------
 
 s4_2 :: Section
-s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end
+s4_2 = solChSpecF progName (s4_1, s6, s6b) s4_2_4_intro_end
   (s4_2_6_mid, dataConstraintUncertainty, s4_2_6_T1footer quantity surArea
   vol htTransCoeff_min phsChgMtrl) (swhsAssumptions, 
   s4_2_2_swhsTMods, s4_2_3_genDefs ++ s4_2_3_deriv,
@@ -330,7 +331,7 @@ s4_2_1 = assumpF
   (SRS.thModel SRS.missingP [])
   (SRS.genDefn SRS.missingP [])
   (SRS.dataDefn SRS.missingP [])
-  s4_2_5 s6 swhsAssumptions
+  s4_2_5 s6 s6b swhsAssumptions
 
 -- Again, list structure is same between all examples.
 
@@ -523,6 +524,19 @@ s6_list = s6_likeChg_list
 
 s6_likeChg_list :: [Contents]
 s6_likeChg_list = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
+
+--------------------------------
+-- Section 6b : LIKELY CHANGES --
+--------------------------------
+
+s6b :: Section
+s6b = SRS.unlikeChg s6b_list []
+
+s6b_list :: [Contents]
+s6b_list = s6b_unlikeChg_list 
+
+s6b_unlikeChg_list :: [Contents]
+s6b_unlikeChg_list = []
 
 --------------------------------------------------
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --

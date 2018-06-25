@@ -435,7 +435,7 @@ s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze" `sAnd` S "predict whether",
 
 {--SOLUTION CHARACTERISTICS SPECIFICATION--}
 
-s6_2 = solChSpecF gLassBR (s6_1, (SRS.likeChg SRS.missingP [])) EmptyS
+s6_2 = solChSpecF gLassBR (s6_1, (SRS.likeChg SRS.missingP []), (SRS.unlikeChg SRS.missingP [])) EmptyS
  (EmptyS, dataConstraintUncertainty, end)
  (s6_2_1_list, map reldefn tModels, [], map datadefn dataDefns,
   map reldefn iModels,

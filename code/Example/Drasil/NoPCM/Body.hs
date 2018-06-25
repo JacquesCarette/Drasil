@@ -5,7 +5,7 @@ import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 import Control.Lens ((^.))
 
 import Drasil.NoPCM.DataDesc (inputMod)
-import Drasil.NoPCM.Definitions (ht_trans, srs_swhs)
+import Drasil.NoPCM.Definitions (ht_trans, srs_swhs, acronyms)
 import Drasil.NoPCM.GenDefs (roc_temp_simp_deriv)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
@@ -48,7 +48,7 @@ import Data.Drasil.Concepts.Documentation as Doc (datumConstraint, inModel,
   property, variable, description, symbol_,
   information, value, column, softwareConstraint, goalStmt,
   physSyst, problem, definition, srs, content, reference, document,
-  goal, purpose, typUnc)
+  goal, purpose)
 
 import qualified Data.Drasil.Concepts.Math as M (ode, de, rOfChng, unit_, equation)
 import Data.Drasil.Concepts.Software (program)
@@ -64,7 +64,7 @@ import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Software.Products (compPro)
 
 import Drasil.Sections.ReferenceMaterial (intro)
-import qualified Drasil.SRS as SRS (funcReq, likeChg, probDesc, goalStmt,
+import qualified Drasil.SRS as SRS (funcReq, likeChg, unlikeChg, probDesc, goalStmt,
   inModel, missingP)
 import Drasil.DocumentLanguage {-(DocDesc,
   tsymb, mkRequirement, mkLklyChnk, mkAssump, mkDoc,
@@ -92,11 +92,6 @@ import Data.Drasil.Units.Thermodynamics (thermal_flux)
 this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
 
--- This defines the list of acronyms that are used throughout the document
-acronyms :: [CI]
-acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, M.ode,
-            physSyst, requirement, srs, progName, thModel, typUnc]
-
 -- This contains the list of symbols used throughout the document
 nopcm_Symbols :: [DefinedQuantityDict]
 nopcm_Symbols = (map dqdWr nopcm_Units) ++ (map dqdWr nopcm_Constraints)
@@ -121,7 +116,7 @@ nopcm_Constraints =  [coil_SA, w_E, htCap_W, coil_HTC, temp_init,
   time_final, tank_length, temp_C, w_density, diam, temp_W]
 
 s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2,
-  s5, s5_1, s6, s7, s8 :: Section
+  s5, s5_1, s6, s6b, s7, s8 :: Section
 
 
 
@@ -380,7 +375,7 @@ s4_1_3_list temw we = enumSimple 1 (short goalStmt) [
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
 ------------------------------------------------------
   
-s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
+s4_2 = solChSpecF progName (s4_1, s6, s6b) s4_2_4_intro_end (mid,
   dataConstraintUncertainty, EmptyS) (npcmAssumptions, s4_2_2_T1,
   s4_2_3_paragraph M.rOfChng temp, [s4_2_4_DD1],
   [reldefn eBalanceOnWtr] ++ (s4_2_5_d1startPara energy water) ++
@@ -772,7 +767,14 @@ likeChg3_npcm = mkLklyChnk "likeChg3" (
   -- S "cannot be perfectly insulated and will lose",
   -- phrase heat]
 
+-------------------------------
+--Section 6b : UNLIKELY CHANGES
+-------------------------------
 
+s6b = SRS.unlikeChg s6b_list []
+
+s6b_list :: [Contents]
+s6b_list = []
 
 ----------------------------------------------
 --Section 7:  TRACEABILITY MATRICES AND GRAPHS

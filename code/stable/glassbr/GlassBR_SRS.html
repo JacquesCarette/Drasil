@@ -2082,35 +2082,35 @@ Functional Requirements
 </h2>
 <ul class="hide-list-style">
 <li>
-<div id="FR:s7.1.req1">
+<div id="FR:func.reqs.req1">
 Input-Glass-Props: Input the quantities from <a href=#Table:R1ReqInputs>Table:R1ReqInputs</a>, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: <em>a</em> and <em>b</em> will be input in terms of millimetres and will be converted to the equivalent value in metres.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="FR:s7.1.req2">
+<div id="FR:func.reqs.req2">
 System-Set-Values-Following-Assumptions: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following A4, <em>LDF</em> following A8, LSF following A5, <em>h</em> (from <a href=#DD:act.thick>act_thick</a>), and <em>GTF</em> (from <a href=#DD:gTF>gTF</a>).
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="FR:s7.1.req3">
+<div id="FR:func.reqs.req3">
 Check-Input-with-Data_Constraints: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Data Constraints</a>. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="FR:s7.1.req4">
+<div id="FR:func.reqs.req4">
 Output-Values-and-Known-Quantities: Output the input quantities from R1 and the known quantities from R2.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="FR:s7.1.req5">
+<div id="FR:func.reqs.req5">
 Check-Glass-Safety: If <em>is_safe1</em> and <em>is_safe2</em> (from <a href=#T:t1SafetyReq>T:t1SafetyReq</a> and <a href=#T:t2SafetyReq>T:t2SafetyReq</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
 </div>
 </li>

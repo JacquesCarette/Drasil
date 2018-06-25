@@ -97,24 +97,24 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   IntroSec (
     IntroProg (startIntro software blstRskInvWGlassSlab gLassBR)
       (short gLassBR)
-    [IPurpose (s2_1_intro_p1 document gLassBR glaSlab),
+    [IPurpose (purpose_intro_p1 document gLassBR glaSlab),
      IScope incScoR endScoR,
      IChar (rdrKnldgbleIn glBreakage blastRisk) undIR appStanddIR,
-     IOrgSec s2_3_intro dataDefn (SRS.dataDefn SRS.missingP []) s2_3_intro_end]) :
+     IOrgSec intended_reader_intro dataDefn (SRS.dataDefn SRS.missingP []) intended_reader_intro_end]) :
   StkhldrSec
     (StkhldrProg2
       [Client gLassBR (S "a" +:+ phrase company
         +:+ S "named Entuitive. It is developed by Dr." +:+ (S $ name mCampidelli)),
       Cstmr gLassBR]) :
-  GSDSec (GSDProg2 [UsrChars [s4_1_bullets endUser gLassBR secondYear
+  GSDSec (GSDProg2 [UsrChars [user_chars_bullets endUser gLassBR secondYear
     undergradDegree civilEng structuralEng glBreakage blastRisk],
     SystCons [] []]) :
-  ScpOfProjSec (ScpOfProjProg (short gLassBR) (s5_1_table) (s5_2 (glaSlab)
+  ScpOfProjSec (ScpOfProjProg (short gLassBR) (prod_use_case_table) (indiv_prod_use_case (glaSlab)
     (capacity) (demandq) (probability))) :
-  SSDSec (SSDVerb s6) : 
+  SSDSec (SSDVerb spec_sys_desc) : 
   {- SSDSec 
     (SSDProg
-      --[SSDProblem  (PDProg start gLassBR ending [s6_1_1, s6_1_2, s6_1_3])
+      --[SSDProblem  (PDProg start gLassBR ending [terms_defs, phys_sys_desc, goals])
       --, 
       [ SSDSolChSpec 
         (SCSProg
@@ -128,7 +128,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
       ]
     ) :  -}
   ReqrmntSec (ReqsProg [
-    FReqsSub s7_1_list,
+    FReqsSub func_reqs_list,
     NonFReqsSub [performance] (gBRpriorityNFReqs)
     (S "This problem is small in size and relatively simple")
     (S "Any reasonable" +:+ phrase implementation +:+.
@@ -136,11 +136,11 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   LCsSec (LCsProg likely_change_list) :
   UCsSec (UCsProg unlikely_change_list) :
   TraceabilitySec
-    (TraceabilityProg traceyMatrices [s9_table1Desc, s9_table2Desc, s9_table3Desc]
-    (traceyMatrices ++ s9_intro2 ++ traceyGraphs) []) :
+    (TraceabilityProg traceyMatrices [trace_table1Desc, trace_table2Desc, trace_table3Desc]
+    (traceyMatrices ++ trace_intro2 ++ traceyGraphs) []) :
   AuxConstntSec (AuxConsProg gLassBR auxiliaryConstants) :
   Bibliography :
-  AppndxSec (AppndxProg [s12_intro, fig_5, fig_6]) : []
+  AppndxSec (AppndxProg [appendix_intro, fig_5, fig_6]) : []
  
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Source, RefBy]
@@ -176,48 +176,48 @@ glassBR_code :: CodeSpec
 glassBR_code = codeSpec glassSystInfo allMods
 
 
-s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2 :: Section
+spec_sys_desc, prob_desc, terms_defs, phys_sys_desc, goals, sol_chars_spec :: Section
 
-s5_1_table,
-  s6_1_2_list, s6_2_intro, s6_2_5_table1,
-  s6_2_5_table2, s9_table1,
-  s9_table2, s9_table3, s12_intro,
+prod_use_case_table,
+  phys_sys_desc_list, sol_chars_spec_intro, data_consts_table1,
+  data_consts_table2, trace_table1,
+  trace_table2, trace_table3, appendix_intro,
   fig_glassbr, fig_2, fig_3, fig_4, fig_5,
   fig_6 :: Contents
 
-s7_1_list, s9_intro2 :: [Contents]
+func_reqs_list, trace_intro2 :: [Contents]
 
 --------------------------------------------------------------------------------
-s6_1_1_bullets :: Contents
-s6_1_1_bullets = Enumeration $ (Numeric $
+terms_defs_bullets :: Contents
+terms_defs_bullets = Enumeration $ (Numeric $
   map tAndDOnly termsWithDefsOnly
   ++
-  s6_1_1_bullets_glTySubSec
+  terms_defs_bullets_glTySubSec
   ++
-  s6_1_1_bullets_loadSubSec
+  terms_defs_bullets_loadSubSec
   ++
   map tAndDWAcc termsWithAccDefn
   ++
   [tAndDWSym probBreak prob_br])
    --FIXME: merge? Needs 2 arguments because there is no instance for (SymbolForm ConceptChunk)...
 
-s6_1_1_bullets_glTySubSec, s6_1_1_bullets_loadSubSec :: [ItemType]
+terms_defs_bullets_glTySubSec, terms_defs_bullets_loadSubSec :: [ItemType]
 
-s6_1_1_bullets_glTySubSec = [Nested (((titleize glassTy) :+: S ":"))
+terms_defs_bullets_glTySubSec = [Nested (((titleize glassTy) :+: S ":"))
   (Bullet $ map tAndDWAcc glassTypes)]
 
-s6_1_1_bullets_loadSubSec = [Nested (((at_start load) :+: S ":"))
+terms_defs_bullets_loadSubSec = [Nested (((at_start load) :+: S ":"))
   (Bullet $ map tAndDWAcc (take 2 loadTypes)
   ++
   map tAndDOnly (drop 2 loadTypes))]
 
 --Used in "Goal Statements" Section--
-s6_1_3_list :: Contents
-s6_1_3_list = enumSimple 1 (short goalStmt) s6_1_3_list_goalStmt1
+goals_list :: Contents
+goals_list = enumSimple 1 (short goalStmt) goals_list_goalStmt1
 
 --Used in "Traceability Matrices and Graphs" Section--
 traceyMatrices, traceyGraphs :: [Contents]
-traceyMatrices = [s9_table1, s9_table2, s9_table3]
+traceyMatrices = [trace_table1, trace_table2, trace_table3]
 traceyGraphs = [fig_2, fig_3, fig_4]
 
 solChSpecSubsections :: [CI]
@@ -233,8 +233,8 @@ requiredInputs = (map qw [plate_len, plate_width, char_weight])
   ++ (map qw [pb_tol, tNT]) ++ (map qw [sdx, sdy, sdz])
   ++ (map qw [glass_type, nom_thick])
 
-s7_1_req6_pulledList :: [QDefinition]
-s7_1_req6_pulledList = [nonFL, glaTyFac, dimLL, tolPre,
+func_reqs_req6_pulledList :: [QDefinition]
+func_reqs_req6_pulledList = [nonFL, glaTyFac, dimLL, tolPre,
   tolStrDisFac, strDisFac, hFromt]
 
 --Used in "Non-Functional Requirements" Section--
@@ -275,8 +275,8 @@ endScoR = foldl (+:+) EmptyS [S "use the", plural datum `sAnd`
 
 {--Purpose of Document--}
 
-s2_1_intro_p1 :: NamedChunk -> CI -> NamedChunk -> Sentence
-s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
+purpose_intro_p1 :: NamedChunk -> CI -> NamedChunk -> Sentence
+purpose_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
   S "of this", phrase typeOf, S "is to predict whether a given", phrase gvnVar,
   S "is likely to resist a specified" +:+. phrase blast, S "The", plural Doc.goal
   `sAnd` plural thModel, S "used in the", short progName, phrase code,
@@ -293,15 +293,15 @@ s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
 
 {--Organization of Document--}
 
-s2_3_intro_end, s2_3_intro :: Sentence
-s2_3_intro = foldlSent [S "The", phrase organization, S "of this",
+intended_reader_intro_end, intended_reader_intro :: Sentence
+intended_reader_intro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an", short srs,
   S "for", phrase sciCompS, S "proposed by" +:+ cite gbRefDB koothoor2013
   `sAnd` cite gbRefDB smithLai2005 `sC` S "with some", 
   plural aspect, S "taken from Volere", phrase template,
   S "16", cite gbRefDB rbrtsn2012]
 
-s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
+intended_reader_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
   S "are used to support", (plural definition `ofThe` S "different"),
   plural model]
 
@@ -314,10 +314,10 @@ s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
 
 {--User Characteristics--}
 
-s4_1_bullets :: (NamedIdea n1, NamedIdea n, NamedIdea n2, NamedIdea n3,
+user_chars_bullets :: (NamedIdea n1, NamedIdea n, NamedIdea n2, NamedIdea n3,
   NamedIdea n4, NamedIdea n5, Idea c, NamedIdea n6) =>
   n6 -> c -> n5 -> n4 -> n3 -> n2 -> n1 -> n -> Contents
-s4_1_bullets intendedIndvdl progName yr degreeType prog1 prog2 undrstd1 undrstd2
+user_chars_bullets intendedIndvdl progName yr degreeType prog1 prog2 undrstd1 undrstd2
   = enumBullet [foldlSent [(phrase intendedIndvdl `sOf` short progName)
   `isExpctdToHv` S "completed at least", (S "equivalent" `ofThe` (phrase yr)),
   S "of an", phrase degreeType `sIn` phrase prog1 `sOr` phrase prog2],
@@ -332,23 +332,23 @@ s4_1_bullets intendedIndvdl progName yr degreeType prog1 prog2 undrstd1 undrstd2
 
 {--Product Use Case Table--}
 
-s5_1_table = prodUCTbl [s5_1_table_UC1, s5_1_table_UC2]
+prod_use_case_table = prodUCTbl [prod_use_case_table_UC1, prod_use_case_table_UC2]
 
-s5_1_table_UC1, s5_1_table_UC2 :: [Sentence]
+prod_use_case_table_UC1, prod_use_case_table_UC2 :: [Sentence]
 
-s5_1_table_UC1 = [titleize user, titleize' characteristic +:+ S "of the"
+prod_use_case_table_UC1 = [titleize user, titleize' characteristic +:+ S "of the"
   +:+ phrase glaSlab `sAnd` S "of the" +:+. phrase blast +:+ S "Details in"
   +:+ makeRef (SRS.indPRCase SRS.missingP [])]
 
-s5_1_table_UC2 = [short gLassBR, S "Whether" `sOr` S "not the" +:+
+prod_use_case_table_UC2 = [short gLassBR, S "Whether" `sOr` S "not the" +:+
   phrase glaSlab +:+ S "is safe for the" +:+ S "calculated" +:+ phrase load
   `sAnd` S "supporting calculated" +:+ plural value]
 
 {--Individual Product Use Case--}
 
-s5_2 :: NamedChunk -> ConceptChunk -> ConceptChunk -> ConceptChunk ->
+indiv_prod_use_case :: NamedChunk -> ConceptChunk -> ConceptChunk -> ConceptChunk ->
   Contents
-s5_2 mainObj compare1 compare2 factorOfComparison =
+indiv_prod_use_case mainObj compare1 compare2 factorOfComparison =
   foldlSP [S "The", phrase user, S "provides the", plural input_, S "to",
   short gLassBR, S "for use within the" +:+. phrase analysis,
   S "There are two main", plural class_, S "of" +: plural input_ +:+.
@@ -376,7 +376,7 @@ s5_2 mainObj compare1 compare2 factorOfComparison =
 
 {--SPECIFIC SYSTEM DESCRIPTION--}
 
-s6 = specSysDesF (S "and" +:+ plural definition) [s6_1, s6_2]
+spec_sys_desc = specSysDesF (S "and" +:+ plural definition) [prob_desc, sol_chars_spec]
 
 {--PROBLEM DESCRIPTION--}
 
@@ -390,33 +390,33 @@ ending = foldl (+:+) EmptyS [S "interpret the", plural input_,
   S "can withstand the", phrase blast, S "under the",
   plural condition]
 
-s6_1 = probDescF start gLassBR ending [s6_1_1, s6_1_2, s6_1_3]
+prob_desc = probDescF start gLassBR ending [terms_defs, phys_sys_desc, goals]
 
 {--Terminology and Definitions--}
 
-s6_1_1 = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
+terms_defs = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
   S "are extracted from" +:+ (sSqBrNum 4 {-astm_LR2009-}) `sIn`
-  (makeRef (SRS.reference SRS.missingP [])))) [s6_1_1_bullets]
+  (makeRef (SRS.reference SRS.missingP [])))) [terms_defs_bullets]
 
 {--Physical System Description--}
 
-s6_1_2 = physSystDesc (short gLassBR) (fig_glassbr) [s6_1_2_list, fig_glassbr]
+phys_sys_desc = physSystDesc (short gLassBR) (fig_glassbr) [phys_sys_desc_list, fig_glassbr]
 
 fig_glassbr = fig (at_start $ the physicalSystem) (resourcePath ++ "physicalsystimage.png")
   "physSystImage"
 
-s6_1_2_list = enumSimple 1 (short physSyst) s6_1_2_list_physys
+phys_sys_desc_list = enumSimple 1 (short physSyst) phys_sys_desc_list_physys
 
 --"Dead" knowledge?
-s6_1_2_list_physys :: [Sentence]
-s6_1_2_list_physys1 :: Sentence
-s6_1_2_list_physys2 :: NamedIdea n => n -> Sentence
+phys_sys_desc_list_physys :: [Sentence]
+phys_sys_desc_list_physys1 :: Sentence
+phys_sys_desc_list_physys2 :: NamedIdea n => n -> Sentence
 
-s6_1_2_list_physys = [s6_1_2_list_physys1, s6_1_2_list_physys2 (ptOfExplsn)]
+phys_sys_desc_list_physys = [phys_sys_desc_list_physys1, phys_sys_desc_list_physys2 (ptOfExplsn)]
 
-s6_1_2_list_physys1 = at_start glaSlab
+phys_sys_desc_list_physys1 = at_start glaSlab
 
-s6_1_2_list_physys2 imprtntElem = foldlSent [S "The"
+phys_sys_desc_list_physys2 imprtntElem = foldlSent [S "The"
   +:+. phrase imprtntElem, S "Where the", phrase bomb `sC`
   S "or", (blast ^. defn) `sC` S "is located. The", phrase sD
   `isThe` phrase distance, S "between the", phrase imprtntElem `sAnd`
@@ -424,37 +424,37 @@ s6_1_2_list_physys2 imprtntElem = foldlSent [S "The"
 
 {--Goal Statements--}
 
-s6_1_3 = goalStmtF [foldlList [plural dimension `ofThe` phrase glaPlane,
+goals = goalStmtF [foldlList [plural dimension `ofThe` phrase glaPlane,
   phrase glassTy, plural characteristic `ofThe` phrase explosion,
-  S "the" +:+ phrase pb_tol]] [s6_1_3_list]
+  S "the" +:+ phrase pb_tol]] [goals_list]
 
-s6_1_3_list_goalStmt1 :: [Sentence]
-s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze" `sAnd` S "predict whether",
+goals_list_goalStmt1 :: [Sentence]
+goals_list_goalStmt1 = [foldlSent [S "Analyze" `sAnd` S "predict whether",
   S "the", phrase glaSlab, S "under consideration will be able to withstand",
   S "the", phrase explosion `sOf` S "a certain", phrase degree_',
   S "which is calculated based on", phrase userInput]]
 
 {--SOLUTION CHARACTERISTICS SPECIFICATION--}
 
-s6_2 = solChSpecF gLassBR (s6_1, (SRS.likeChg SRS.missingP []), (SRS.unlikeChg SRS.missingP [])) EmptyS
+sol_chars_spec = solChSpecF gLassBR (prob_desc, (SRS.likeChg SRS.missingP []), (SRS.unlikeChg SRS.missingP [])) EmptyS
  (EmptyS, dataConstraintUncertainty, end)
- (s6_2_1_list, map reldefn tModels, [], map datadefn dataDefns,
+ (assumps_list, map reldefn tModels, [], map datadefn dataDefns,
   map reldefn iModels,
-  [s6_2_5_table1, s6_2_5_table2]) []
+  [data_consts_table1, data_consts_table2]) []
   where
     end = foldlSent [(makeRef (SRS.valsOfAuxCons SRS.missingP [])),
       S "gives", (plural value `ofThe` S "specification"),
-      plural parameter, S "used in", (makeRef s6_2_5_table1)]
-      +:+ s6_2_5_intro2
+      plural parameter, S "used in", (makeRef data_consts_table1)]
+      +:+ data_consts_intro2
 
-s6_2_intro = foldlSP [S "This", phrase section_, S "explains all the",
+sol_chars_spec_intro = foldlSP [S "This", phrase section_, S "explains all the",
   plural assumption, S "considered" `sAnd` S "the", plural thModel,
   S "which are supported by the", plural dataDefn]
 
 {--Assumptions--}
 
-s6_2_1_list :: [Contents]
-s6_2_1_list = assumpList newAssumptions
+assumps_list :: [Contents]
+assumps_list = assumpList newAssumptions
 
 assumpList :: [AssumpChunk] -> [Contents]
 assumpList = map Assumption
@@ -473,35 +473,35 @@ assumptions = fst (foldr (\s (ls, n) -> ((Assumption $ assump ("A" ++ show n) s 
 
 {-input and output tables-}
 
-s6_2_5_table1 = inDataConstTbl gbInputDataConstraints
-s6_2_5_table2 = outDataConstTbl [prob_br]
+data_consts_table1 = inDataConstTbl gbInputDataConstraints
+data_consts_table2 = outDataConstTbl [prob_br]
 
-s6_2_5_intro2 :: Sentence
-s6_2_5_intro2 = foldlSent [makeRef s6_2_5_table2, S "shows the",
+data_consts_intro2 :: Sentence
+data_consts_intro2 = foldlSent [makeRef data_consts_table2, S "shows the",
   plural constraint, S "that must be satisfied by the", phrase output_]
 
 {--REQUIREMENTS--}
 
 {--Functional Requirements--}
 
-s7_1_list = (s7_1_listOfReqs) ++ s7_1_req6 ++ [s7_1_req1Table]
+func_reqs_list = (func_reqs_listOfReqs) ++ func_reqs_req6 ++ [func_reqs_req1Table]
 
-s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5 :: Contents
+func_reqs_req1, func_reqs_req2, func_reqs_req3, func_reqs_req4, func_reqs_req5 :: Contents
 req1Desc, req2Desc, req3Desc, req4Desc :: Sentence
 req5Desc :: NamedChunk -> Sentence
-s7_1_req6 :: [Contents] --FIXME: Issue #327
+func_reqs_req6 :: [Contents] --FIXME: Issue #327
 
-s7_1_listOfReqs :: [Contents]
-s7_1_listOfReqs = [s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5]
+func_reqs_listOfReqs :: [Contents]
+func_reqs_listOfReqs = [func_reqs_req1, func_reqs_req2, func_reqs_req3, func_reqs_req4, func_reqs_req5]
 
-s7_1_req1 = mkRequirement "s7_1_req1" req1Desc "Input-Glass-Props"
-s7_1_req2 = mkRequirement "s7_1_req2" req2Desc "System-Set-Values-Following-Assumptions"
-s7_1_req3 = mkRequirement "s7_1_req3" req3Desc "Check-Input-with-Data_Constraints"
-s7_1_req4 = mkRequirement "s7_1_req4" req4Desc "Output-Values-and-Known-Quantities"
-s7_1_req5 = mkRequirement "s7_1_req5" (req5Desc (output_)) "Check-Glass-Safety"
+func_reqs_req1 = mkRequirement "func_reqs_req1" req1Desc "Input-Glass-Props"
+func_reqs_req2 = mkRequirement "func_reqs_req2" req2Desc "System-Set-Values-Following-Assumptions"
+func_reqs_req3 = mkRequirement "func_reqs_req3" req3Desc "Check-Input-with-Data_Constraints"
+func_reqs_req4 = mkRequirement "func_reqs_req4" req4Desc "Output-Values-and-Known-Quantities"
+func_reqs_req5 = mkRequirement "func_reqs_req5" (req5Desc (output_)) "Check-Glass-Safety"
 
 req1Desc = foldlSent [at_start input_, S "the", plural quantity, S "from",
-  makeRef s7_1_req1Table `sC` S "which define the", phrase glass,
+  makeRef func_reqs_req1Table `sC` S "which define the", phrase glass,
   plural dimension `sC` (glassTy ^. defn) `sC` S "tolerable",
   phrase probability `sOf` phrase failure, S "and",
   (plural characteristic `ofThe` phrase blast), S "Note:",
@@ -509,8 +509,8 @@ req1Desc = foldlSent [at_start input_, S "the", plural quantity, S "from",
   S "will be input in terms of", plural millimetre `sAnd`
   S "will be converted to the equivalent value in", plural metre]
 
-s7_1_req1Table :: Contents
-s7_1_req1Table = Table
+func_reqs_req1Table :: Contents
+func_reqs_req1Table = Table
   [at_start symbol_, at_start description, S "Units"]
   (mkTable
   [getES,
@@ -525,7 +525,7 @@ req2Desc = foldlSent [S "The", phrase system,
   (getES glaTyFac) +:+ sParen (S "from" +:+ (makeRef glaTyFac))]]
 
 --ItemType
-{-s7_1_req2 = (Nested (S "The" +:+ phrase system +:+
+{-func_reqs_req2 = (Nested (S "The" +:+ phrase system +:+
    S "shall set the known" +:+ plural value +: S "as follows")
     (Bullet $ map Flat
      [foldlsC (map getS (take 4 assumptionConstants)) `followA` 4,
@@ -559,14 +559,14 @@ testing1 :: [RelationConcept]
 testing1 = [probOfBr, calOfCap, calOfDe]
 --FIXME: rename or find better implementation?
 
-s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
+func_reqs_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $
     map (\(a, d) -> Flat $ (at_start a) +:+ sParen (getES a) +:+
     sParen (makeRef (reldefn d))) (zip testing testing1)
     ++
     map (\d -> Flat $ (at_start d) +:+ sParen (getES d) +:+
-    sParen (makeRef (datadefn d))) s7_1_req6_pulledList
+    sParen (makeRef (datadefn d))) func_reqs_req6_pulledList
     ++
     [Flat $ (titleize aspectR) +:+ sParen (getES aspectR) +:+
     E (aspectRWithEqn^.equat)]
@@ -586,168 +586,168 @@ unlikely_change_list = unlikelyChanges_SRS
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
 
-s9_table1Desc :: Sentence
-s9_table1Desc = foldlList (map plural (take 3 solChSpecSubsections)) +:+.
+trace_table1Desc :: Sentence
+trace_table1Desc = foldlList (map plural (take 3 solChSpecSubsections)) +:+.
   S "with each other"
 
-s9_table2Desc :: Sentence
-s9_table2Desc = plural requirement +:+ S "on" +:+. foldlList
+trace_table2Desc :: Sentence
+trace_table2Desc = plural requirement +:+ S "on" +:+. foldlList
   (map plural solChSpecSubsections)
 
-s9_table3Desc :: Sentence
-s9_table3Desc = foldlsC (map plural (take 3 solChSpecSubsections)) `sC`
+trace_table3Desc :: Sentence
+trace_table3Desc = foldlsC (map plural (take 3 solChSpecSubsections)) `sC`
   plural likelyChg `sAnd` plural requirement +:+ S "on the" +:+
   plural assumption
 
-s9_theorys, s9_instaModel, s9_dataDef, s9_data, s9_funcReq, s9_assump,
-  s9_likelyChg :: [String]
+trace_theorys, trace_instaModel, trace_dataDef, trace_data, trace_funcReq, trace_assump,
+  trace_likelyChg :: [String]
 
-s9_theorysRef, s9_instaModelRef, s9_dataDefRef, s9_dataRef, s9_funcReqRef,
-  s9_assumpRef, s9_likelyChgRef :: [Sentence]
+trace_theorysRef, trace_instaModelRef, trace_dataDefRef, trace_dataRef, trace_funcReqRef,
+  trace_assumpRef, trace_likelyChgRef :: [Sentence]
 
-s9_theorys = ["T1", "T2"]
-s9_theorysRef = map (refFromType Theory) tModels
+trace_theorys = ["T1", "T2"]
+trace_theorysRef = map (refFromType Theory) tModels
 
-s9_instaModel = ["IM1", "IM2", "IM3"]
-s9_instaModelRef = map (refFromType Theory) iModels
+trace_instaModel = ["IM1", "IM2", "IM3"]
+trace_instaModelRef = map (refFromType Theory) iModels
 
-s9_dataDef =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
-s9_dataDefRef = map (refFromType Data) dataDefns
+trace_dataDef =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
+trace_dataDefRef = map (refFromType Data) dataDefns
 
-s9_data  = ["Data Constraints"]
-s9_dataRef = [makeRef (SRS.datCon SRS.missingP [])]
+trace_data  = ["Data Constraints"]
+trace_dataRef = [makeRef (SRS.datCon SRS.missingP [])]
 
-s9_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-s9_funcReqRef = makeListRef s9_funcReq (SRS.funcReq SRS.missingP [])
+trace_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
+trace_funcReqRef = makeListRef trace_funcReq (SRS.funcReq SRS.missingP [])
 
-s9_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
-s9_assumpRef = makeListRef s9_assump (SRS.assumpt SRS.missingP [])
+trace_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
+trace_assumpRef = makeListRef trace_assump (SRS.assumpt SRS.missingP [])
 
-s9_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5"]
-s9_likelyChgRef = makeListRef s9_likelyChg (SRS.likeChg SRS.missingP [])
+trace_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5"]
+trace_likelyChgRef = makeListRef trace_likelyChg (SRS.likeChg SRS.missingP [])
 
-s9_row_t1 :: [String]
-s9_row_t1 = s9_theorys ++ s9_instaModel ++ s9_dataDef
+trace_row_t1 :: [String]
+trace_row_t1 = trace_theorys ++ trace_instaModel ++ trace_dataDef
 
 -- The headers for the first row, and column
-s9_row_header_t1 :: [Sentence]
-s9_row_header_t1 = zipWith itemRefToSent s9_row_t1 (s9_theorysRef ++
-  s9_instaModelRef ++ s9_dataDefRef)
+trace_row_header_t1 :: [Sentence]
+trace_row_header_t1 = zipWith itemRefToSent trace_row_t1 (trace_theorysRef ++
+  trace_instaModelRef ++ trace_dataDefRef)
 
 -- list of columns and their rows for traceability matrix
-s9_columns_t1 :: [[String]]
-s9_columns_t1 = [s9_t1_T1, s9_t1_T2, s9_t1_IM1, s9_t1_IM2, s9_t1_IM3,
-  s9_t1_DD1, s9_t1_DD2, s9_t1_DD3, s9_t1_DD4, s9_t1_DD5, s9_t1_DD6, s9_t1_DD7,
-  s9_t1_DD8]
+trace_columns_t1 :: [[String]]
+trace_columns_t1 = [trace_t1_T1, trace_t1_T2, trace_t1_IM1, trace_t1_IM2, trace_t1_IM3,
+  trace_t1_DD1, trace_t1_DD2, trace_t1_DD3, trace_t1_DD4, trace_t1_DD5, trace_t1_DD6, trace_t1_DD7,
+  trace_t1_DD8]
 
-s9_t1_T1, s9_t1_T2, s9_t1_IM1, s9_t1_IM2, s9_t1_IM3, s9_t1_DD1, s9_t1_DD2,
-  s9_t1_DD3, s9_t1_DD4, s9_t1_DD5, s9_t1_DD6, s9_t1_DD7, s9_t1_DD8 :: [String]
+trace_t1_T1, trace_t1_T2, trace_t1_IM1, trace_t1_IM2, trace_t1_IM3, trace_t1_DD1, trace_t1_DD2,
+  trace_t1_DD3, trace_t1_DD4, trace_t1_DD5, trace_t1_DD6, trace_t1_DD7, trace_t1_DD8 :: [String]
 
 -- list of each item that "this" item requires for traceability matrix
-s9_t1_T1  = ["T2", "IM1"]
-s9_t1_T2  = ["T1", "IM2", "IM3"]
-s9_t1_IM1 = ["DD1", "DD2", "DD3"]
-s9_t1_IM2 = ["DD4", "DD5"]
-s9_t1_IM3 = []
-s9_t1_DD1 = []
-s9_t1_DD2 = []
-s9_t1_DD3 = ["DD6"]
-s9_t1_DD4 = ["DD2", "DD6"]
-s9_t1_DD5 = []
-s9_t1_DD6 = ["IM3", "DD2", "DD5"]
-s9_t1_DD7 = ["DD8"]
-s9_t1_DD8 = ["DD2"]
+trace_t1_T1  = ["T2", "IM1"]
+trace_t1_T2  = ["T1", "IM2", "IM3"]
+trace_t1_IM1 = ["DD1", "DD2", "DD3"]
+trace_t1_IM2 = ["DD4", "DD5"]
+trace_t1_IM3 = []
+trace_t1_DD1 = []
+trace_t1_DD2 = []
+trace_t1_DD3 = ["DD6"]
+trace_t1_DD4 = ["DD2", "DD6"]
+trace_t1_DD5 = []
+trace_t1_DD6 = ["IM3", "DD2", "DD5"]
+trace_t1_DD7 = ["DD8"]
+trace_t1_DD8 = ["DD2"]
 
-s9_table1 = Table (EmptyS:s9_row_header_t1)
-  (makeTMatrix s9_row_header_t1 s9_columns_t1 s9_row_t1)
+trace_table1 = Table (EmptyS:trace_row_header_t1)
+  (makeTMatrix trace_row_header_t1 trace_columns_t1 trace_row_t1)
   (showingCxnBw (traceyMatrix)
   (titleize' item +:+ S "of Different" +:+ titleize' section_)) True "TraceyItemSecs"
 
 --
 
-s9_row_t2 :: [String]
-s9_row_t2 = s9_row_t1 ++ s9_data ++ s9_funcReq
+trace_row_t2 :: [String]
+trace_row_t2 = trace_row_t1 ++ trace_data ++ trace_funcReq
 
-s9_row_header_t2, s9_col_header_t2 :: [Sentence]
-s9_row_header_t2 = s9_row_header_t1 ++
-  (zipWith itemRefToSent (s9_data ++ s9_funcReq) (s9_dataRef ++ s9_funcReqRef))
+trace_row_header_t2, trace_col_header_t2 :: [Sentence]
+trace_row_header_t2 = trace_row_header_t1 ++
+  (zipWith itemRefToSent (trace_data ++ trace_funcReq) (trace_dataRef ++ trace_funcReqRef))
 
-s9_col_header_t2 = zipWith (\x y -> (S x) +:+ (sParen (S "in" +:+ y)))
-  s9_funcReq s9_funcReqRef
+trace_col_header_t2 = zipWith (\x y -> (S x) +:+ (sParen (S "in" +:+ y)))
+  trace_funcReq trace_funcReqRef
 
-s9_t2_r1, s9_t2_r2, s9_t2_r3, s9_t2_r4, s9_t2_r5,
-  s9_t2_r6 :: [String]
+trace_t2_r1, trace_t2_r2, trace_t2_r3, trace_t2_r4, trace_t2_r5,
+  trace_t2_r6 :: [String]
 
-s9_columns_t2 :: [[String]]
-s9_columns_t2 = [s9_t2_r1, s9_t2_r2, s9_t2_r3, s9_t2_r4, s9_t2_r5, s9_t2_r6]
-s9_t2_r1 = []
-s9_t2_r2 = []
-s9_t2_r3 = ["Data Constraints"]
-s9_t2_r4 = ["R1", "R2"]
-s9_t2_r5 = ["T1", "T2"]
-s9_t2_r6 = ["IM1", "IM2", "IM3", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
+trace_columns_t2 :: [[String]]
+trace_columns_t2 = [trace_t2_r1, trace_t2_r2, trace_t2_r3, trace_t2_r4, trace_t2_r5, trace_t2_r6]
+trace_t2_r1 = []
+trace_t2_r2 = []
+trace_t2_r3 = ["Data Constraints"]
+trace_t2_r4 = ["R1", "R2"]
+trace_t2_r5 = ["T1", "T2"]
+trace_t2_r6 = ["IM1", "IM2", "IM3", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
 
-s9_table2 = Table (EmptyS:s9_row_header_t2)
-  (makeTMatrix s9_col_header_t2 s9_columns_t2 s9_row_t2)
+trace_table2 = Table (EmptyS:trace_row_header_t2)
+  (makeTMatrix trace_col_header_t2 trace_columns_t2 trace_row_t2)
   (showingCxnBw (traceyMatrix) (titleize' requirement `sAnd` S "Other" +:+
   titleize' item)) True "TraceyReqsItems"
 
 --
 
-s9_row_t3 :: [String]
-s9_row_t3 = s9_assump
+trace_row_t3 :: [String]
+trace_row_t3 = trace_assump
 
-s9_row_header_t3, s9_col_header_t3 :: [Sentence]
-s9_row_header_t3 = zipWith itemRefToSent s9_assump s9_assumpRef
+trace_row_header_t3, trace_col_header_t3 :: [Sentence]
+trace_row_header_t3 = zipWith itemRefToSent trace_assump trace_assumpRef
 
-s9_col_header_t3 = s9_row_header_t1 ++ (zipWith itemRefToSent
-  (s9_likelyChg ++ s9_funcReq) (s9_likelyChgRef ++ s9_funcReqRef))
+trace_col_header_t3 = trace_row_header_t1 ++ (zipWith itemRefToSent
+  (trace_likelyChg ++ trace_funcReq) (trace_likelyChgRef ++ trace_funcReqRef))
 
-s9_columns_t3 :: [[String]]
-s9_columns_t3 = [s9_t3_T1, s9_t3_T2, s9_t3_IM1, s9_t3_IM2, s9_t3_IM3, s9_t3_DD1,
-  s9_t3_DD2, s9_t3_DD3, s9_t3_DD4, s9_t3_DD5, s9_t3_DD6, s9_t3_DD7, s9_t3_DD8,
-  s9_t3_lc1, s9_t3_lc2, s9_t3_lc3, s9_t3_lc4, s9_t3_lc5, s9_t3_r1, s9_t3_r2,
-  s9_t3_r3, s9_t3_r4, s9_t3_r5, s9_t3_r6]
+trace_columns_t3 :: [[String]]
+trace_columns_t3 = [trace_t3_T1, trace_t3_T2, trace_t3_IM1, trace_t3_IM2, trace_t3_IM3, trace_t3_DD1,
+  trace_t3_DD2, trace_t3_DD3, trace_t3_DD4, trace_t3_DD5, trace_t3_DD6, trace_t3_DD7, trace_t3_DD8,
+  trace_t3_lc1, trace_t3_lc2, trace_t3_lc3, trace_t3_lc4, trace_t3_lc5, trace_t3_r1, trace_t3_r2,
+  trace_t3_r3, trace_t3_r4, trace_t3_r5, trace_t3_r6]
 
-s9_t3_T1, s9_t3_T2, s9_t3_IM1, s9_t3_IM2, s9_t3_IM3, s9_t3_DD1, s9_t3_DD2,
-  s9_t3_DD3, s9_t3_DD4, s9_t3_DD5, s9_t3_DD6, s9_t3_DD7, s9_t3_DD8,
-  s9_t3_lc1, s9_t3_lc2, s9_t3_lc3, s9_t3_lc4, s9_t3_lc5, s9_t3_r1,
-  s9_t3_r2, s9_t3_r3, s9_t3_r4, s9_t3_r5, s9_t3_r6 :: [String]
+trace_t3_T1, trace_t3_T2, trace_t3_IM1, trace_t3_IM2, trace_t3_IM3, trace_t3_DD1, trace_t3_DD2,
+  trace_t3_DD3, trace_t3_DD4, trace_t3_DD5, trace_t3_DD6, trace_t3_DD7, trace_t3_DD8,
+  trace_t3_lc1, trace_t3_lc2, trace_t3_lc3, trace_t3_lc4, trace_t3_lc5, trace_t3_r1,
+  trace_t3_r2, trace_t3_r3, trace_t3_r4, trace_t3_r5, trace_t3_r6 :: [String]
 
 -- list of each item that "this" item requires for traceability matrix
-s9_t3_T1  = []
-s9_t3_T2  = []
-s9_t3_IM1 = ["A4", "A6", "A7"]
-s9_t3_IM2 = ["A1", "A2", "A5"]
-s9_t3_IM3 = []
-s9_t3_DD1 = []
-s9_t3_DD2 = []
-s9_t3_DD3 = []
-s9_t3_DD4 = ["A4"]
-s9_t3_DD5 = []
-s9_t3_DD6 = ["A5"]
-s9_t3_DD7 = []
-s9_t3_DD8 = ["A4"]
-s9_t3_lc1 = ["A3"]
-s9_t3_lc2 = ["A4", "A8"]
-s9_t3_lc3 = ["A5"]
-s9_t3_lc4 = ["A6"]
-s9_t3_lc5 = ["A7"]
-s9_t3_r1  = []
-s9_t3_r2  = ["A4", "A5", "A8"]
-s9_t3_r3  = []
-s9_t3_r4  = []
-s9_t3_r5  = []
-s9_t3_r6  = []
+trace_t3_T1  = []
+trace_t3_T2  = []
+trace_t3_IM1 = ["A4", "A6", "A7"]
+trace_t3_IM2 = ["A1", "A2", "A5"]
+trace_t3_IM3 = []
+trace_t3_DD1 = []
+trace_t3_DD2 = []
+trace_t3_DD3 = []
+trace_t3_DD4 = ["A4"]
+trace_t3_DD5 = []
+trace_t3_DD6 = ["A5"]
+trace_t3_DD7 = []
+trace_t3_DD8 = ["A4"]
+trace_t3_lc1 = ["A3"]
+trace_t3_lc2 = ["A4", "A8"]
+trace_t3_lc3 = ["A5"]
+trace_t3_lc4 = ["A6"]
+trace_t3_lc5 = ["A7"]
+trace_t3_r1  = []
+trace_t3_r2  = ["A4", "A5", "A8"]
+trace_t3_r3  = []
+trace_t3_r4  = []
+trace_t3_r5  = []
+trace_t3_r6  = []
 
-s9_table3 = Table (EmptyS:s9_row_header_t3)
-  (makeTMatrix s9_col_header_t3 s9_columns_t3 s9_row_t3)
+trace_table3 = Table (EmptyS:trace_row_header_t3)
+  (makeTMatrix trace_col_header_t3 trace_columns_t3 trace_row_t3)
   (showingCxnBw (traceyMatrix) (titleize' assumption `sAnd` S "Other"
   +:+ titleize' item)) True "TraceyAssumpsOthers"
 
 --
 
-s9_intro2 = traceGIntro traceyGraphs
+trace_intro2 = traceGIntro traceyGraphs
   [(foldlList (map plural (take 3 solChSpecSubsections)) +:+.
   S "on each other"), (plural requirement +:+ S "on" +:+. foldlList
   (map plural solChSpecSubsections)),
@@ -772,7 +772,7 @@ fig_4 = figureLabel 4 (traceyMatrix)
 
 {--APPENDIX--}
 
-s12_intro = foldlSP [
+appendix_intro = foldlSP [
   S "This", phrase appendix, S "holds the", plural graph,
   sParen ((makeRef fig_5) `sAnd` (makeRef fig_6)),
   S "used for interpolating", plural value, S "needed in the", plural model]

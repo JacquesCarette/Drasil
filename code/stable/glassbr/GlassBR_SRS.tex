@@ -614,19 +614,19 @@ This section provides the functional requirements, the business tasks that the s
 \subsection{Functional Requirements}
 \label{Sec:FRs}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:s7.1.req1}:]Input the quantities from Table~\ref{Table:R1ReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:func.reqs.req1}:]Input the quantities from Table~\ref{Table:R1ReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:s7.1.req2}:]The system shall set the known values as follows: $m$, $k$, $E$, ${t_{d}}$ following A4, $LDF$ following A8, LSF following A5, $h$ (from \hyperref[DD:act.thick]{Definition~DD:act.thick}), and $GTF$ (from \hyperref[DD:gTF]{Definition~DD:gTF}).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:func.reqs.req2}:]The system shall set the known values as follows: $m$, $k$, $E$, ${t_{d}}$ following A4, $LDF$ following A8, LSF following A5, $h$ (from \hyperref[DD:act.thick]{Definition~DD:act.thick}), and $GTF$ (from \hyperref[DD:gTF]{Definition~DD:gTF}).
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:s7.1.req3}:]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DataConstraints}. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:func.reqs.req3}:]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DataConstraints}. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:s7.1.req4}:]Output the input quantities from R1 and the known quantities from R2.
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:func.reqs.req4}:]Output the input quantities from R1 and the known quantities from R2.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:s7.1.req5}:]If $is\_safe1$ and $is\_safe2$ (from \hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq} and \hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) are true, output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:func.reqs.req5}:]If $is\_safe1$ and $is\_safe2$ (from \hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq} and \hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) are true, output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
 \end{description}
 \begin{itemize}
 \item[R6:]Output the following quantities:

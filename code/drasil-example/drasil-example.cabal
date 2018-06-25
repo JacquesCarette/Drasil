@@ -6,7 +6,7 @@ build-type:     Simple
 Synopsis:	A framework for code and document generation for scientific software - Example SubPackage
 
 executable tiny
-  hs-source-dirs: Example
+  hs-source-dirs: .
   main-is: Drasil/HGHC/Main.hs
   other-modules:
       Drasil.HGHC.HGHC
@@ -37,12 +37,12 @@ executable tiny
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil >= 0.1.0
+    drasil-lang >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall -O2
 
 executable nopcm
-  hs-source-dirs: Example
+  hs-source-dirs: .
   main-is: Drasil/NoPCM/Main.hs
   other-modules:
       Drasil.NoPCM.Body
@@ -88,12 +88,12 @@ executable nopcm
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil >= 0.1.0
+    drasil-lang >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall -O2
 
 executable ssp
-  hs-source-dirs: Example
+  hs-source-dirs: .
   main-is: Drasil/SSP/Main.hs
   other-modules:
       Drasil.Sections.ReferenceMaterial
@@ -135,12 +135,12 @@ executable ssp
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil >= 0.1.0
+    drasil-lang >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall
 
 executable glassbr
-  hs-source-dirs: Example
+  hs-source-dirs: .
   main-is: Drasil/GlassBR/Main.hs
   other-modules:
       Drasil.DocumentLanguage
@@ -179,12 +179,12 @@ executable glassbr
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil >= 0.1.0
+    drasil-lang >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall
 
 executable chipmunkdocs
-  hs-source-dirs: Example
+  hs-source-dirs: .
   main-is: Drasil/GamePhysics/Main.hs
   other-modules:
       Drasil.DocumentLanguage
@@ -220,12 +220,12 @@ executable chipmunkdocs
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil >= 0.1.0
+    drasil-lang >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall
 
 executable swhs
-  hs-source-dirs: Example
+  hs-source-dirs: .
   main-is: Drasil/SWHS/Main.hs
   other-modules:
       Drasil.DocumentLanguage
@@ -266,7 +266,7 @@ executable swhs
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil >= 0.1.0
+    drasil-lang >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall
 

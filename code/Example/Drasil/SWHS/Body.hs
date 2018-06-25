@@ -89,10 +89,25 @@ acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
   unlikelyChg]
 
 this_si :: [UnitDefn]
-this_si = {--map unitWrapper [metre, kilogram, second] ++ 
-  map unitWrapper [centigrade, joule, watt] ++--} map unitWrapper' (uwMUnitDefnL swhsSymbols){--map unitWrapper' (uwMUnitDefnL [dqdWr vol_ht_gen])--}
-
+this_si = map unitWrapper [metre, kilogram, second] ++ 
+  map unitWrapper [centigrade, joule, watt] --map unitWrapper' middleV'
 --Will there be a table of contents?
+
+check_si :: [UnitDefn]
+check_si = map unitWrapper' middleV'
+
+middleValue :: UID -> Maybe UnitDefn
+middleValue a = getUnitLup' a swhsSymMap
+
+aa :: [Maybe UnitDefn]
+aa = map middleValue (uwMUnitDefnL swhsSymbols)
+
+middleV' :: [UnitDefn]
+middleV' = concatMap filterr aa
+
+filterr :: Maybe UnitDefn -> [UnitDefn]
+filterr (Just a) = [a]
+filterr Nothing = []
 
 swhsAuthors :: Sentence
 swhsAuthors = S $ manyNames swhsPeople
@@ -102,7 +117,7 @@ swhs_si = SI {
   _sys = swhs_pcm,
   _kind = srs, 
   _authors = swhsPeople,
-  _units = this_si,
+  _units = check_si,
   _quants = swhsSymbols,
   _concepts = (swhsSymbols),
   _definitions = swhsDataDefs,

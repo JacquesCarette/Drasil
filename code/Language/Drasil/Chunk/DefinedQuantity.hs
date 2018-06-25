@@ -10,7 +10,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   IsUnit(udefn))
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import qualified Language.Drasil.Chunk.Quantity as Q
-
+import Language.Drasil.UID
 import Language.Drasil.Symbol (Symbol, Stage)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Unit (UnitDefn, unitWrapper, getunit)
@@ -63,16 +63,5 @@ uwMUnitDefn :: Maybe UnitDefn -> [UnitDefn]
 uwMUnitDefn (Just a) = [a] 
 uwMUnitDefn Nothing  = []
 
-
-{--uwFund :: UnitDefn -> [UnitDefn]
-uwFund a = case a ^. udefn of
-       Nothing -> [a]
-       Just x -> case x of 
-              FUSynonym _ -> [a]
-              FUShift _ _-> [a]
-              FUScale _ _ -> [a]
-              _ -> concat (map helper (getunit a))--}
-
-      
-uwMUnitDefnL :: [DefinedQuantityDict] -> [UnitDefn]
+uwMUnitDefnL :: [DefinedQuantityDict] -> [UID]
 uwMUnitDefnL l = concat (map getunit $ concat (map uwMUnitDefn $ uwDQDL l))

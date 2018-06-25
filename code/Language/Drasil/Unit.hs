@@ -6,7 +6,7 @@ module Language.Drasil.Unit (
   , scale, shift, fshift, fscale
   , derUC, derUC', derUC'', unitWrapper
   , fund, comp_unitdefn, derCUC, derCUC', derCUC'', getsymb
-  , makeDerU, getunit, unitWrapper',getCu,getunit
+  , makeDerU, getunit, unitWrapper',getCu
   ) where
 
 import Control.Lens (Simple, Lens', Lens, (^.), makeLenses, view)
@@ -27,7 +27,7 @@ data UnitDefn = UD { _vc :: ConceptChunk,
                      _fsymb :: USymb,
                      _dsymb :: Maybe USymb,
                      _ud :: Maybe UDefn,
-                     _cu :: [UnitDefn]}
+                     _cu :: [UID]}
 makeLenses ''UnitDefn
 
 instance HasUID        UnitDefn where uid = vc . uid
@@ -40,16 +40,16 @@ instance ConceptDomain UnitDefn where
 instance HasUnitSymbol UnitDefn where usymb f (UD a b c e d) = fmap (\x -> UD a x c e d) (f b)
 instance IsUnit        UnitDefn where udefn = ud
 
-getunit :: UnitDefn -> [UnitDefn]
+getunit :: UnitDefn -> [UID]
 getunit a = view cu a
 
-data UnitEquation = UE {_contributingUnit :: [UnitDefn], _us :: USymb}
+data UnitEquation = UE {_contributingUnit :: [UID], _us :: USymb}
 makeLenses ''UnitEquation
 
 getsymb :: UnitEquation -> USymb
 getsymb a = view us a
 
-getCu :: UnitEquation -> [UnitDefn]
+getCu :: UnitEquation -> [UID]
 getCu a = view contributingUnit a
 
 -- | Create a derived unit chunk from a concept and a unit equation
@@ -91,19 +91,20 @@ unitWrapper u = UD (cc' u (u ^. defn)) (u ^. usymb) Nothing (u ^. udefn) []
 unitWrapper' :: UnitDefn -> UnitDefn
 unitWrapper' u = UD (cc' u (u ^. defn)) (u ^. usymb) Nothing (u ^. udefn) (getunit u)
 
-helperUnit :: UnitDefn -> [UnitDefn]
+helperUnit :: UnitDefn -> [UID]
 helperUnit a = case a ^. udefn of
   Just x -> case x of
-    FUSynonym _ -> [a]
-    FUScale _ _ -> [a]
-    FUShift _ _ -> [a]
+    FUSynonym _ -> [a ^. uid]
+    FUScale _ _ -> [a ^. uid]
+    FUShift _ _ -> [a ^. uid]
     _ -> getunit a
-  Nothing -> [a]
+  Nothing -> [a ^. uid]
 
 --- These conveniences go here, because we need the class
 -- | Combinator for raising a unit to a power
 (^:) :: UnitDefn -> Integer -> UnitEquation
 u ^: i = UE (helperUnit u) (upow (u ^. usymb))
+--u ^: i = UE ((helperUnit u) ^. uid) (upow (u ^. usymb))
   where
     upow (US l) = US $ map (second (* i)) l
 
@@ -123,13 +124,13 @@ u1 *: u2 = let US l1 = u1 ^. usymb
 (*$) :: UnitDefn -> UnitEquation -> UnitEquation
 u1 *$ u2 = let US l1 = u1 ^. usymb
                US l2 = getsymb u2 in
-  UE ((helperUnit u1)++(getCu u2)) (US $ l1 ++ l2)
+  UE ((helperUnit u1) ++(getCu u2)) (US $ l1 ++ l2)
 
 -- | Combinator for dividing a unit and a symbol
 (/$) :: UnitDefn -> UnitEquation -> UnitEquation
 u1 /$ u2 = let US l1 = u1 ^. usymb
                US l2 = getsymb u2 in
-  UE ((helperUnit u1)++(getCu u2)) (US $ l1 ++ map (second negate) l2)
+  UE ((helperUnit u1) ++ (getCu u2)) (US $ l1 ++ map (second negate) l2)
 
 -- | Combinator for mulitiplying two unit equations
 (^$) :: UnitEquation -> UnitEquation -> UnitEquation

@@ -19,17 +19,17 @@ import Data.Drasil.SentenceStructures (foldlList, foldlSent, getES)
 {--LIKELY CHANGES--}
 
 likelyChanges_SRS :: [Contents]
-likelyChanges_SRS = [s8_likelychg1, s8_likelychg2, s8_likelychg3,
-  s8_likelychg4, s8_likelychg5]
+likelyChanges_SRS = [likelychg1, likelychg2, likelychg3,
+  likelychg4, likelychg5]
 
-s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4,
-  s8_likelychg5 :: Contents
+likelychg1, likelychg2, likelychg3, likelychg4,
+  likelychg5 :: Contents
 
-s8_likelychg1 = mkLklyChnk "s8_likelychg1" (lc1Desc (blastRisk)) "Calculate-Internal-Blask-Risk"
-s8_likelychg2 = mkLklyChnk "s8_likelychg2" (lc2Desc) "Variable-Values-of-m,k,E"
-s8_likelychg3 = mkLklyChnk "s8_likelychg3" (lc3Desc) "Accomodate-More-than-Single-Lite"
-s8_likelychg4 = mkLklyChnk "s8_likelychg4" (lc4Desc) "Accomodate-More-Boundary-Conditions"
-s8_likelychg5 = mkLklyChnk "s8_likelychg5" (lc5Desc) "Consider-More-than-Flexure-Glass"
+likelychg1 = mkLklyChnk "likelychg1" (lc1Desc (blastRisk)) "Calculate-Internal-Blask-Risk"
+likelychg2 = mkLklyChnk "likelychg2" (lc2Desc) "Variable-Values-of-m,k,E"
+likelychg3 = mkLklyChnk "likelychg3" (lc3Desc) "Accomodate-More-than-Single-Lite"
+likelychg4 = mkLklyChnk "likelychg4" (lc4Desc) "Accomodate-More-Boundary-Conditions"
+likelychg5 = mkLklyChnk "likelychg5" (lc5Desc) "Consider-More-than-Flexure-Glass"
 
 lc1Desc :: NamedChunk -> Sentence
 lc2Desc, lc3Desc, lc4Desc, lc5Desc :: Sentence
@@ -60,12 +60,12 @@ lc5Desc = foldlSent [(refA gbRefDB newA7) `sDash` S "The", phrase software,
 {--UNLIKELY CHANGES--}
 
 unlikelyChanges_SRS :: [Contents]
-unlikelyChanges_SRS = [s8_unlikelychg1, s8_unlikelychg2]
+unlikelyChanges_SRS = [unlikelychg1, unlikelychg2]
 
-s8_unlikelychg1, s8_unlikelychg2 :: Contents
+unlikelychg1, unlikelychg2 :: Contents
 
-s8_unlikelychg1 = mkUnLklyChnk "s8_unlikelychg1" (uc1Desc) "Predict-Withstanding-of-Certain-Degree"
-s8_unlikelychg2 = mkUnLklyChnk "s8_unlikelychg2" (uc2Desc) "Accommodate-Altered-Glass"
+unlikelychg1 = mkUnLklyChnk "unlikelychg1" (uc1Desc) "Predict-Withstanding-of-Certain-Degree"
+unlikelychg2 = mkUnLklyChnk "unlikelychg2" (uc2Desc) "Accommodate-Altered-Glass"
 
 uc1Desc, uc2Desc :: Sentence
 

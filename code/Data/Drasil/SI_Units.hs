@@ -54,7 +54,7 @@ becquerel = derCUC' "becquerel"
   "becquerel" "activity" (Atomic "Bq") --of a Radionuclide
   (second ^: (-1))
   
-calorie = derUC' "calorie" 
+calorie = derUC "calorie" 
   "calorie" "energy" (Atomic "cal") (scale 4.184 joule)
 
 centigrade = derUC "centigrade" 

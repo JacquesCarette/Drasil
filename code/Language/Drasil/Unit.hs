@@ -59,17 +59,18 @@ makeDerU concept eqn = UD concept (from_udefn eqn) Nothing (Just eqn) []
 makeDerU' :: ConceptChunk -> UnitEquation -> UnitDefn
 makeDerU' concept eqn = UD concept (from_udefn $ USynonym $ getsymb eqn) Nothing (Just $ USynonym $ getsymb eqn) (getCu eqn)
 
+-- | Create a SI_Unit with two symbol representations
 derCUC, derCUC' :: String -> String -> String -> Symbol -> UnitEquation -> UnitDefn
 derCUC a b c s ue = UD (dcc a (cn b) c) (US [(s,1)]) (Just $ getsymb ue) (Just $ FUSynonym $ getsymb ue) (getCu ue)
 derCUC' a b c s ue = UD (dcc a (cn' b) c) (US [(s,1)]) (Just $ getsymb ue) (Just $ FUSynonym $ getsymb ue) (getCu ue)
+-- | 
 -- | Create a derived unit chunk from an id, term (as 'String'), definition,
 -- symbol, and unit equation
 derUC, derUC' :: String -> String -> String -> Symbol -> UDefn -> UnitDefn
 -- | Uses self-plural term
-derUC  a b c s u = UD (dcc a (cn b) c) (US [(s,1)]) Nothing (Just u) []
+derUC  a b c s u = UD (dcc a (cn b) c) (US [(s,1)]) (Just $ from_udefn u) (Just u) []
 -- | Uses term that pluralizes by adding *s* to the end
 derUC' a b c s u = UD (dcc a (cn' b) c) (US [(s,1)]) Nothing (Just u) []
-
 
 derCUC'' :: String -> NP -> String -> Symbol -> UnitEquation -> UnitDefn
 derCUC'' a b c s ue = UD (dcc a b c) (US [(s,1)]) Nothing (Just $ FUSynonym $ getsymb ue) (getCu ue)
@@ -138,7 +139,7 @@ u1 /$ u2 = let US l1 = u1 ^. usymb
 u1 ^$ u2 = let US l1 = getsymb u1
                US l2 = getsymb u2 in
   UE ((getCu u1)++(getCu u2)) (US $ l1 ++ l2)
-
+ 
 -- | Combinator for scaling one unit by some number
 scale :: IsUnit s => Double -> s -> UDefn
 scale a b = UScale a (b ^. usymb)

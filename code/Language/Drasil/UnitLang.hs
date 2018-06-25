@@ -17,8 +17,8 @@ data UDefn = FUSynonym USymb
 		   | FUShift Double USymb
 		   | FUScale Double USymb
 		   | USynonym USymb      -- ^ to define straight synonyms
-           | UScale Double USymb -- ^ scale, i.e. *
-           | UShift Double USymb -- ^ shift, i.e. +
+       | UScale Double USymb -- ^ scale, i.e. *
+       | UShift Double USymb -- ^ shift, i.e. +
 
 -- | Can generate a default symbol
 from_udefn :: UDefn -> USymb

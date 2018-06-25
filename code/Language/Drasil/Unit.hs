@@ -60,8 +60,8 @@ makeDerU' :: ConceptChunk -> UnitEquation -> UnitDefn
 makeDerU' concept eqn = UD concept (from_udefn $ USynonym $ getsymb eqn) Nothing (Just $ USynonym $ getsymb eqn) (getCu eqn)
 
 derCUC, derCUC' :: String -> String -> String -> Symbol -> UnitEquation -> UnitDefn
-derCUC a b c s ue = UD (dcc a (cn b) c) (getsymb ue) (Just $ US [(s,1)]) (Just $ FUSynonym $ getsymb ue) (getCu ue)
-derCUC' a b c s ue = UD (dcc a (cn' b) c) (getsymb ue) (Just $ US [(s,1)]) (Just $ FUSynonym $ getsymb ue) (getCu ue)
+derCUC a b c s ue = UD (dcc a (cn b) c) (US [(s,1)]) (Just $ getsymb ue) (Just $ FUSynonym $ getsymb ue) (getCu ue)
+derCUC' a b c s ue = UD (dcc a (cn' b) c) (US [(s,1)]) (Just $ getsymb ue) (Just $ FUSynonym $ getsymb ue) (getCu ue)
 -- | Create a derived unit chunk from an id, term (as 'String'), definition,
 -- symbol, and unit equation
 derUC, derUC' :: String -> String -> String -> Symbol -> UDefn -> UnitDefn

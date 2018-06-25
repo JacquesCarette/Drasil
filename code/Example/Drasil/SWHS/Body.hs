@@ -40,9 +40,9 @@ import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
 import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
   coil, perfect_insul, tank, transient, gauss_div, swhs_pcm,
   phase_change_material, tank_pcm)
-import Drasil.SWHS.TMods (tModels, t1ConsThermE, s4_2_2_swhsTMods)
-import Drasil.SWHS.IMods (s4_2_5_IMods)
-import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, s4_2_4_swhsDataDefs, swhsDataDefs)
+import Drasil.SWHS.TMods (tModels, t1ConsThermE, swhsTMods)
+import Drasil.SWHS.IMods (swhsIMods)
+import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, swhsDDefs, swhsDataDefs)
 import Drasil.SWHS.GenDefs (swhsGenDefs)
 import Drasil.SWHS.Assumptions (swhsRefDB, swhsAssumptions, assump3, assump4, assump5,
   assump6, assump13, assump15, assump16, assump17, assump18)
@@ -145,7 +145,7 @@ mkSRS = [RefSec (RefProg intro
   IOrgSec (s2_4_intro) (inModel) (SRS.inModel SRS.missingP [])
   (s2_4_trail swhs_pcm progName)])] ++
   
-  map Verbatim [s3, s4, s5, s6, s7] ++ 
+  map Verbatim [genSystDesc, specSystDesc, reqS, likelyChgs, s7] ++ 
   [AuxConstntSec (AuxConsProg progName specParamValList)] ++
   (Bibliography : [])
 
@@ -213,20 +213,20 @@ swhs_srs' = mkDoc mkSRS (for) swhs_si
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
 --------------------------------------------
 
-s3 :: Section
-s3 = genSysF [s3_1] (s3_2_contents progName) [] []
+genSystDesc :: Section
+genSystDesc = genSysF [systCont] (s3_2_contents progName) [] []
 -- First empty list is the list of constraints
 
 --------------------------
 -- 3.1 : System Context --
 --------------------------
 
-s3_1 :: Section
-s3_1 = SRS.sysCont [s3_1_contents progName, sys_context_fig, s3_1_2_intro 
-  progName user, s3_1_2_respBullets] []
+systCont :: Section
+systCont = SRS.sysCont [s3_1_contents progName, sys_context_fig, s3_1_2_intro 
+  progName user, systContRespBullets] []
 
-s3_1_2_respBullets :: Contents
-s3_1_2_respBullets = Enumeration $ Bullet $ [s3_1_2_userResp input_ datum,
+systContRespBullets :: Contents
+systContRespBullets = Enumeration $ Bullet $ [s3_1_2_userResp input_ datum,
   s3_1_2_swhsResp]
 
 --------------------------------
@@ -241,34 +241,34 @@ s3_1_2_respBullets = Enumeration $ Bullet $ [s3_1_2_userResp input_ datum,
 -- Section 4 : SPECIFIC SYSTEM DESCRIPTION --
 ---------------------------------------------
 
-s4 :: Section
-s4 = specSysDesF (s4_intro_end swhs_pcm) [s4_1, s4_2]
+specSystDesc :: Section
+specSystDesc = specSysDesF (s4_intro_end swhs_pcm) [probDescription, solCharSpec]
 
 -------------------------------
 -- 4.1 : Problem Description --
 -------------------------------
 
-s4_1 :: Section
-s4_1 = SRS.probDesc [s4_1_intro progName phsChgMtrl sWHT]
-  [s4_1_1, s4_1_2, s4_1_3]
+probDescription :: Section
+probDescription = SRS.probDesc [s4_1_intro progName phsChgMtrl sWHT]
+  [termAndDefn, physSystDescription, goalStates]
 
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --
 -----------------------------------------
 
-s4_1_1 :: Section
-s4_1_1 = termDefnF Nothing [s4_1_1_bullets]
+termAndDefn :: Section
+termAndDefn = termDefnF Nothing [termAndDefnBullets]
 
 -- Above paragraph is repeated in all examples, can be abstracted out. (Note:
 -- GlassBR has an additional sentence with a reference at the end.)
 
-s4_1_1_bullets :: Contents
-s4_1_1_bullets = Enumeration (Bullet $ map s4_1_1_bullet_map_f
+termAndDefnBullets :: Contents
+termAndDefnBullets = Enumeration (Bullet $ map tAndDMap
   [CT.ht_flux, phase_change_material, CT.heat_cap_spec,
   CT.thermal_conduction, transient])
 
-s4_1_1_bullet_map_f :: Concept c => c -> ItemType
-s4_1_1_bullet_map_f c = Flat $ foldlSent [at_start c +: EmptyS, (c ^. defn)]
+tAndDMap :: Concept c => c -> ItemType
+tAndDMap c = Flat $ foldlSent [at_start c +: EmptyS, (c ^. defn)]
 
 -- Structure of this list is same in all examples, probably can be automated.
 
@@ -279,30 +279,30 @@ s4_1_1_bullet_map_f c = Flat $ foldlSent [at_start c +: EmptyS, (c ^. defn)]
 -- 4.1.2 : Physical System Description --
 -----------------------------------------
 
-s4_1_2 :: Section
-s4_1_2 = physSystDesc (short progName) (fig_tank) [s4_1_2_list, fig_tank]
+physSystDescription :: Section
+physSystDescription = physSystDesc (short progName) (fig_tank) [physSystDescList, fig_tank]
 
 -- Above paragraph is general except for progName and figure. However, not
 -- every example has a physical system. Also, the SSP example is different, so
 -- this paragraph can not be abstracted out as is.
 
-s4_1_2_list :: Contents
-s4_1_2_list = enumSimple 1 (short physSyst) $
-  map foldlSent_ s4_1_2_physSystList
+physSystDescList :: Contents
+physSystDescList = enumSimple 1 (short physSyst) $
+  map foldlSent_ systDescList
 
-s4_1_2_physSystList :: [[Sentence]]
-s4_1_2_physSystList = [physSyst1 tank water, physSyst2 coil tank ht_flux_C,
+systDescList :: [[Sentence]]
+systDescList = [physSyst1 tank water, physSyst2 coil tank ht_flux_C,
   physSyst3 phsChgMtrl tank ht_flux_P]
 
 -----------------------------
 -- 4.1.3 : Goal Statements --
 -----------------------------
 
-s4_1_3 :: Section
-s4_1_3 = SRS.goalStmt [s4_1_3_intro temp_C temp_W temp_PCM, s4_1_3_list] []
+goalStates :: Section
+goalStates = SRS.goalStmt [s4_1_3_intro temp_C temp_W temp_PCM, goalStateList] []
 
-s4_1_3_list :: Contents
-s4_1_3_list = enumSimple 1 (short goalStmt) $
+goalStateList :: Contents
+goalStateList = enumSimple 1 (short goalStmt) $
   map (goalState) outputConstraints
 
 -- List structure is repeated between examples. (For all of these lists I am
@@ -315,23 +315,23 @@ s4_1_3_list = enumSimple 1 (short goalStmt) $
 -- 4.2 : Solution Characteristics Specification --
 --------------------------------------------------
 
-s4_2 :: Section
-s4_2 = solChSpecF progName (s4_1, s6, s6b) s4_2_4_intro_end
+solCharSpec :: Section
+solCharSpec = solChSpecF progName (probDescription, likelyChgs, unlikelyChgs) s4_2_4_intro_end
   (s4_2_6_mid, dataConstraintUncertainty, s4_2_6_T1footer quantity surArea
   vol htTransCoeff_min phsChgMtrl) (swhsAssumptions, 
-  s4_2_2_swhsTMods, s4_2_3_genDefs ++ s4_2_3_deriv,
-  s4_2_4_swhsDataDefs, s4_2_5_IModsWithDerivs, s4_2_6_DataConTables) [s4_2_7]
+  swhsTMods, genDefs ++ genDefsDeriv,
+  swhsDDefs, iModsWithDerivs, dataConTables) [propsCorrSol]
 
 -------------------------
 -- 4.2.1 : Assumptions --
 -------------------------
 
-s4_2_1 :: Section
-s4_2_1 = assumpF
+assumps :: Section
+assumps = assumpF
   (SRS.thModel SRS.missingP [])
   (SRS.genDefn SRS.missingP [])
   (SRS.dataDefn SRS.missingP [])
-  s4_2_5 s6 s6b swhsAssumptions
+  iMods likelyChgs unlikelyChgs swhsAssumptions
 
 -- Again, list structure is same between all examples.
 
@@ -351,11 +351,11 @@ s4_2_1 = assumpF
 
 -- SECTION 4.2.3 --
 -- General Definitions is automatically generated in solChSpecF
-s4_2_3_genDefs :: [Contents]
-s4_2_3_genDefs = map reldefn swhsGenDefs
+genDefs :: [Contents]
+genDefs = map reldefn swhsGenDefs
 
-s4_2_3_deriv :: [Contents]
-s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
+genDefsDeriv :: [Contents]
+genDefsDeriv = [s4_2_3_deriv_1 rOfChng temp,
   s4_2_3_deriv_2 t1ConsThermE vol,
   s4_2_3_deriv_3,
   s4_2_3_deriv_4 gauss_div surface vol thFluxVect uNormalVect unit_,
@@ -376,23 +376,23 @@ s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
 -- 4.2.5 : Instance Models --
 -----------------------------
 
-s4_2_5 :: Section
-s4_2_5 = inModelF s4_1
+iMods :: Section
+iMods = inModelF probDescription
   (SRS.dataDefn SRS.missingP [])
   (SRS.thModel SRS.missingP [])
   (SRS.genDefn SRS.missingP [])
-  s4_2_5_IModsWithDerivs
+  iModsWithDerivs
 
-s4_2_5_IModsWithDerivs :: [Contents]
-s4_2_5_IModsWithDerivs = concat $ weave [s4_2_5_derivations,
-  map (\x -> [reldefn x]) s4_2_5_IMods]
+iModsWithDerivs :: [Contents]
+iModsWithDerivs = concat $ weave [iModsDerivations,
+  map (\x -> [reldefn x]) swhsIMods]
 
-s4_2_5_derivations :: [[Contents]]
-s4_2_5_derivations = [s4_2_5_subpar solution temp_W temp_PCM pcm_E 
-  CT.phase_change, s4_2_5_deriv1, s4_2_5_deriv2]
+iModsDerivations :: [[Contents]]
+iModsDerivations = [s4_2_5_subpar solution temp_W temp_PCM pcm_E 
+  CT.phase_change, iModDeriv1, iModDeriv2]
   
-s4_2_5_deriv1 :: [Contents]
-s4_2_5_deriv1 = (s4_2_5_d1startPara energy water) ++
+iModDeriv1 :: [Contents]
+iModDeriv1 = (s4_2_5_d1startPara energy water) ++
   (weave [s4_2_5_d1sent_list, s4_2_5_d1eqn_list])
 
 s4_2_5_d1eqn_list = map eqUnR [s4_2_5_d_eqn1, s4_2_5_d_eqn2,
@@ -407,8 +407,8 @@ s4_2_5_d1sent_list = map foldlSPCol
   s4_2_5_d1sent_4 rightSide coil_HTC coil_SA,
   s4_2_5_d1sent_5, s4_2_5_d1sent_6, s4_2_5_d1sent_7]
 
-s4_2_5_deriv2 :: [Contents]
-s4_2_5_deriv2 =
+iModDeriv2 :: [Contents]
+iModDeriv2 =
   (s4_2_5_d2startPara energy phsChgMtrl sens_heat rOfChng temp_PCM vol pcm_vol
     pcm_mass htCap_S_P ht_flux_P pcm_SA ht_flux_out vol_ht_gen assump16 ++
   (weave [s4_2_5_d2eqn_list, s4_2_5_d2sent_list]) ++ (s4_2_5_d2endPara 
@@ -428,11 +428,11 @@ s4_2_5_d2eqn_list = map eqUnR [s4_2_5_d2eqn1, s4_2_5_d2eqn2,
 -- Data Constraint: Table 1 --
 ------------------------------
 
-s4_2_6_DataConTables :: [Contents]
-s4_2_6_DataConTables = [s4_2_6_table1, s4_2_6_table3]
+dataConTables :: [Contents]
+dataConTables = [dataConTable1, dataConTable3]
 
-s4_2_6_table1 :: Contents
-s4_2_6_table1 = inDataConstTbl inputConstraints
+dataConTable1 :: Contents
+dataConTable1 = inDataConstTbl inputConstraints
 
 inputConstraints :: [UncertQ]
 inputConstraints = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
@@ -447,8 +447,8 @@ inputConstraints = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
 -- Data Constraint: Table 3 --
 ------------------------------
 
-s4_2_6_table3 :: Contents
-s4_2_6_table3 = outDataConstTbl outputConstraints
+dataConTable3 :: Contents
+dataConTable3 = outDataConstTbl outputConstraints
 --FIXME: add "(by A11)" in Physical Constraints of `temp_W` and `temp_PCM`?
 
 outputConstraints :: [UncertQ]
@@ -461,11 +461,11 @@ outputConstraints = [temp_W, temp_PCM, w_E, pcm_E]
 -- 4.2.7 : Properties of A Correct Solution --
 ----------------------------------------------
 
-s4_2_7 :: Section
-s4_2_7 = SRS.propCorSol (s4_2_7_deriv) []
+propsCorrSol :: Section
+propsCorrSol = SRS.propCorSol (propsDeriv) []
 
-s4_2_7_deriv :: [Contents]
-s4_2_7_deriv =
+propsDeriv :: [Contents]
+propsDeriv =
   [s4_2_7_deriv_1 CT.law_cons_energy w_E energy coil phsChgMtrl dd1HtFluxC
     dd2HtFluxP surface CT.heat_trans,
   s4_2_7_deriv_2,
@@ -482,22 +482,22 @@ s4_2_7_deriv =
 -- Section 5 : REQUIREMENTS --
 ------------------------------
 
-s5 :: Section
-s5 = reqF [s5_1, s5_2]
+reqS :: Section
+reqS = reqF [funcReqs, s5_2]
 
 -----------------------------------
 -- 5.1 : Functional Requirements --
 -----------------------------------
 
-s5_1 :: Section
-s5_1 = SRS.funcReq s5_1_list []
+funcReqs :: Section
+funcReqs = SRS.funcReq funcReqsList []
 
-s5_1_list :: [Contents]
-s5_1_list = ([req1]) ++ [s5_1_1_Table] ++ ([req2]) ++
-  [s5_1_2_Eqn1, s5_1_2_Eqn2] ++ (s5_1_Reqs) 
+funcReqsList :: [Contents]
+funcReqsList = ([req1]) ++ [funcReqsTable] ++ ([req2]) ++
+  [s5_1_2_Eqn1, s5_1_2_Eqn2] ++ (reqs) 
 
-s5_1_1_Table :: Contents
-s5_1_1_Table = (Table [titleize symbol_, titleize unit_, titleize description]
+funcReqsTable :: Contents
+funcReqsTable = (Table [titleize symbol_, titleize unit_, titleize description]
   (mkTable
   [getES,
   --(\ch -> Sy (unit_symb ch)),
@@ -506,8 +506,8 @@ s5_1_1_Table = (Table [titleize symbol_, titleize unit_, titleize description]
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False)
   "InConstraints"
 
-s5_1_Reqs :: [Contents]
-s5_1_Reqs = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
+reqs :: [Contents]
+reqs = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
 
 ---------------------------------------
 -- 5.2 : Non-functional Requirements --
@@ -516,27 +516,27 @@ s5_1_Reqs = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
 -- Section 6 : LIKELY CHANGES --
 --------------------------------
 
-s6 :: Section
-s6 = SRS.likeChg s6_list []
+likelyChgs :: Section
+likelyChgs = SRS.likeChg likelyChgsList []
 
-s6_list :: [Contents]
-s6_list = s6_likeChg_list 
+likelyChgsList :: [Contents]
+likelyChgsList = likeChgList 
 
-s6_likeChg_list :: [Contents]
-s6_likeChg_list = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
+likeChgList :: [Contents]
+likeChgList = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
 
 --------------------------------
--- Section 6b : LIKELY CHANGES --
+-- Section 6b : UNLIKELY CHANGES --
 --------------------------------
 
-s6b :: Section
-s6b = SRS.unlikeChg s6b_list []
+unlikelyChgs :: Section
+unlikelyChgs = SRS.unlikeChg unlikelyChgsList []
 
-s6b_list :: [Contents]
-s6b_list = s6b_unlikeChg_list 
+unlikelyChgsList :: [Contents]
+unlikelyChgsList = unlikeChgList 
 
-s6b_unlikeChg_list :: [Contents]
-s6b_unlikeChg_list = []
+unlikeChgList :: [Contents]
+unlikeChgList = []
 
 --------------------------------------------------
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
@@ -560,18 +560,18 @@ s7_dataRef, s7_funcReqRef, s7_instaModelRef, s7_assumpRef, s7_theoriesRef,
   s7_dataDefRef, s7_likelyChgRef, s7_genDefRef :: [Sentence]
 
 s7_instaModel = ["IM1", "IM2", "IM3", "IM4"]
-s7_instaModelRef = map (refFromType Theory) s4_2_5_IMods
+s7_instaModelRef = map (refFromType Theory) swhsIMods
 
 s7_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
   "R11"]
-s7_funcReqRef = makeListRef s7_funcReq s5_1
+s7_funcReqRef = makeListRef s7_funcReq funcReqs
 
 s7_data = ["Data Constraints"]
-s7_dataRef = [makeRef s4_2_6_table1] --FIXME: Reference section?
+s7_dataRef = [makeRef dataConTable1] --FIXME: Reference section?
 
 s7_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19"]
-s7_assumpRef = makeListRef s7_assump s4_2_1
+s7_assumpRef = makeListRef s7_assump assumps
 
 s7_theories = ["T1", "T2", "T3"]
 s7_theoriesRef = map (refFromType Theory) tModels
@@ -583,7 +583,7 @@ s7_dataDefs = ["DD1", "DD2", "DD3", "DD4"]
 s7_dataDefRef = map (refFromType Data) swhsDataDefs
 
 s7_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
-s7_likelyChgRef = makeListRef s7_likelyChg s6
+s7_likelyChgRef = makeListRef s7_likelyChg likelyChgs
 
 {-Traceability Matrix 1-}
 

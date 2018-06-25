@@ -32,10 +32,10 @@ import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
 
 import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
   temp_C, coil_SA, w_E, coil_HTC, sim_time, tau_S_P, htCap_S_P, pcm_mass,
-  ht_flux_P, eta, tau_W, htCap_W, w_mass, ht_flux_C, vol_ht_gen,
+  ht_flux_P, eta, tau_W, htCap_W, w_mass, ht_flux_C, vol_ht_gen, thickness,
   out_SA, ht_flux_out, ht_flux_in, in_SA, thFluxVect, time_final,
   specParamValList, w_density, temp_init, htCap_L_P, htFusion, pcm_density,
-  temp_melt_P, pcm_vol, diam, tau_L_P, tank_length, htTransCoeff_min,
+  temp_melt_P, pcm_vol, diam, tau_L_P, tank_length,
   w_vol, swhsConstrained, swhsOutputs, swhsInputs, swhsSymbols, swhsSymbolsAll)
 import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
   coil, perfect_insul, tank, transient, gauss_div, swhs_pcm,
@@ -332,7 +332,7 @@ s4_1_3_list = enumSimple 1 (short goalStmt) $
 s4_2 :: Section
 s4_2 = solChSpecF progName (s4_1, s6, s6b) s4_2_4_intro_end
   (s4_2_6_mid, dataConstraintUncertainty, s4_2_6_T1footer quantity surArea
-  vol htTransCoeff_min phsChgMtrl) (swhsAssumptions, 
+  vol thickness phsChgMtrl) (swhsAssumptions, 
   s4_2_2_swhsTMods, s4_2_3_genDefs ++ s4_2_3_deriv,
   s4_2_4_swhsDataDefs, s4_2_5_IModsWithDerivs, s4_2_6_DataConTables) [s4_2_7]
 
@@ -1338,7 +1338,7 @@ s4_2_6_mid = foldlSent [S "The", phrase column, S "for", phrase software,
 -- Data Constraint: Table 1 --
 ------------------------------
 
-s4_2_6_T1footer :: NamedChunk -> UnitalChunk -> UnitalChunk -> QDefinition ->
+s4_2_6_T1footer :: NamedChunk -> UnitalChunk -> UnitalChunk -> DefinedQuantityDict ->
   CI -> Sentence
 s4_2_6_T1footer qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
 

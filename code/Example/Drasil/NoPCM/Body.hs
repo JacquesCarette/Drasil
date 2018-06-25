@@ -23,7 +23,7 @@ import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
   w_mass, diam, coil_SA, temp_C, w_density, htCap_W, time_final,
   in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, ht_flux_out, tau, htCap_L,
   htTransCoeff, temp_env, diam, tank_length, ht_flux_C, coil_HTC,
-  deltaT, w_E, tank_length_min, tank_length_max, htTransCoeff_min,
+  deltaT, w_E, tank_length_min, tank_length_max,
   w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
   coil_HTC_max, time_final_max, sim_time, coil_SA_max, eta)
 import Drasil.SWHS.DataDefs(dd1HtFluxC, s4_2_4_DD1)
@@ -959,7 +959,7 @@ s7_fig2 = fig (showingCxnBw traceyGraph (titleize' requirement `sC`
 ------------------------------------------
 
 specParamValList :: [QDefinition]
-specParamValList = [tank_length_min, tank_length_max, htTransCoeff_min,
+specParamValList = [tank_length_min, tank_length_max,
   w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
   coil_HTC_max, time_final_max]
 

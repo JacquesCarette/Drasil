@@ -30,17 +30,17 @@ sdep :: Sentence -> [String]
 sdep = nub . snames
 
 vars' :: (HasSymbolTable s) => Sentence -> s -> [QuantityDict]
-vars' a m = map resolve $ removeItem $ sdep a
+vars' a m = map resolve $ sdep a
   where resolve x = symbLookup x $ m ^. symbolTable
 
 concpt :: (HasDefinitionTable s) => Sentence -> s -> [ConceptChunk]
-concpt a m = map resolve $ removeItem $ sdep a
+concpt a m = map resolve $ sdep a
   where resolve x = defLookup x $ m ^. defTable
 
 combine :: (HasSymbolTable s, HasDefinitionTable s) => Sentence -> s -> [DefinedQuantityDict]
 combine a m = zipWith dqdQd (vars' a m) (concpt a m)
 
-removeItem :: [String] -> [String]
+{--removeItem :: [String] -> [String]
 removeItem ("htTransCoeff_min":tl) = tl
 removeItem (a : tl) = a: removeItem tl
-removeItem [] = []
+removeItem [] = []--}

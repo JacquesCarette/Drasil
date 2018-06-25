@@ -188,7 +188,7 @@ sim_time = uc' "sim_time" (compoundPhrase' (simulation ^. term)
 ----------------------
 
 swhsUnitless :: [DefinedQuantityDict]
-swhsUnitless = [uNormalVect, surface, eta, melt_frac, gradient]
+swhsUnitless = [uNormalVect, surface, eta, melt_frac, gradient, thickness]
 
 eta, melt_frac :: DefinedQuantityDict
 
@@ -201,6 +201,10 @@ melt_frac = dqd' (dcc "melt_frac" (nounPhraseSP "melt fraction")
   "Ratio of thermal energy to amount of mass melted")
   --FIXME: Not sure if definition is exactly correct
   (const lPhi) Real Nothing
+
+thickness = dqd' (dcc "thickness" (nounPhraseSP "thickness")
+  "The thickness of a sheet of PCM")
+  (const (sub lH (Atomic "min"))) Real Nothing
 
 -----------------
 -- Constraints --
@@ -250,7 +254,7 @@ pcm_SA = uqc "pcm_SA"
   "Area covered by the outermost layer of the phase change material"
   (sub cA cP) m_2 Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Inc, sy pcm_vol) (Inc, (2 / sy htTransCoeff_min) * sy tank_vol)]
+  sfwrc $ Bounded (Inc, sy pcm_vol) (Inc, (2 / sy thickness) * sy tank_vol)]
   (dbl 1.2) 0.1
 
 -- Constraint 5
@@ -417,13 +421,13 @@ cons_tol = uvc "pb_tol"
 -------------------------
 
 specParamValList :: [QDefinition]
-specParamValList = [tank_length_min, tank_length_max, htTransCoeff_min,
+specParamValList = [tank_length_min, tank_length_max,
   pcm_density_min, pcm_density_max, w_density_min, w_density_max,
   htCap_S_P_min, htCap_S_P_max, htCap_L_P_min, htCap_L_P_max,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max,
   pcm_HTC_min, pcm_HTC_max, time_final_max]
 
-tank_length_min, tank_length_max, htTransCoeff_min, pcm_density_min, 
+tank_length_min, tank_length_max, pcm_density_min, 
   pcm_density_max, w_density_min, w_density_max, htCap_S_P_min, 
   htCap_S_P_max, htCap_L_P_min, htCap_L_P_max,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, pcm_HTC_min,
@@ -439,12 +443,6 @@ tank_length_min = mkDataDef (unitary "tank_length_min"
 tank_length_max = mkDataDef (unitary "tank_length_max"
   (nounPhraseSP "maximum length of tank")
   (sub (eqSymb tank_length) (Atomic "max")) metre Rational) 50
-
--- Used in Constraint 4
-htTransCoeff_min = mkDataDef (unitary "htTransCoeff_min"
-  (nounPhraseSP "minimum convective heat transfer coefficient")
-  (sub (eqSymb htTransCoeff) (Atomic "min")) UT.heat_transfer_coef Rational)
-  (dbl 0.001)
 
 -- Used in Constraint 5
 pcm_density_min = mkDataDef (unitary "pcm_density_min"

@@ -82,13 +82,13 @@ codevars' e m = map resolve $ nub $ names' e
   where  resolve x = codevar (symbLookup x (m ^. symbolTable))
 
 concpt' :: (HasDefinitionTable s) => Expr -> s -> [ConceptChunk]
-concpt' a m = map resolve $ removeItem' $ dep a
+concpt' a m = map resolve $ dep a
   where resolve x = defLookup x $ m ^. defTable
 
 combine' :: (HasSymbolTable s, HasDefinitionTable s) => Expr -> s -> [DefinedQuantityDict]
 combine' a m = zipWith dqdQd (vars a m) (concpt' a m)
 
-removeItem' :: [String] -> [String]
+{--removeItem' :: [String] -> [String]
 removeItem' ("htTransCoeff_min":tl) = tl
 removeItem' (a : tl) = a: removeItem' tl
-removeItem' [] = []
+removeItem' [] = []--}

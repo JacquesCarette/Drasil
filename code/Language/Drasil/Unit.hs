@@ -23,7 +23,7 @@ import Language.Drasil.NounPhrase (cn,cn',NP)
 
 -- | for defining fundamental units
 
-data UnitDefn = UD { _vc :: ConceptChunk, _u :: USymb, _ud :: Maybe UDefn, _cu :: [UnitDefn]}
+data UnitDefn = UD { _vc :: ConceptChunk, _fsymb :: USymb, _dsymb :: Maybe USymb,  _ud :: Maybe UDefn, _cu :: [UnitDefn]}
 makeLenses ''UnitDefn
 
 instance HasUID        UnitDefn where uid = vc . uid
@@ -34,7 +34,7 @@ instance Eq            UnitDefn where a == b = (a ^. usymb) == (b ^. usymb)
 instance ConceptDomain UnitDefn where
   type DOM UnitDefn = ConceptChunk
   cdom = vc . cdom
-instance HasUnitSymbol UnitDefn where usymb f (UD a b c d) = fmap (\x -> UD a x c d) (f b)
+instance HasUnitSymbol UnitDefn where usymb f (UD a b c e d) = fmap (\x -> UD a x c e d) (f b)
 instance IsUnit        UnitDefn where udefn = ud
 
 getunit :: UnitDefn -> [UnitDefn]
@@ -51,29 +51,29 @@ getCu a = view contributingUnit a
 
 -- | Create a derived unit chunk from a concept and a unit equation
 makeDerU :: ConceptChunk -> UDefn -> UnitDefn
-makeDerU concept eqn = UD concept (from_udefn eqn) (Just eqn) []
+makeDerU concept eqn = UD concept (from_udefn eqn) Nothing (Just eqn) []
 
 makeDerU' :: ConceptChunk -> UnitEquation -> UnitDefn
-makeDerU' concept eqn = UD concept (from_udefn $ USynonym $ getsymb eqn) (Just $ USynonym $ getsymb eqn) (getCu eqn)
+makeDerU' concept eqn = UD concept (from_udefn $ USynonym $ getsymb eqn) Nothing (Just $ USynonym $ getsymb eqn) (getCu eqn)
 
 derCUC, derCUC' :: String -> String -> String -> Symbol -> UnitEquation -> UnitDefn
-derCUC a b c s ue = UD (dcc a (cn b) c) (US [(s,1)]) (Just $ FUSynonym $ getsymb ue) (getCu ue)
-derCUC' a b c s ue = UD (dcc a (cn' b) c) (US [(s,1)]) (Just $ FUSynonym $ getsymb ue) (getCu ue)
+derCUC a b c s ue = UD (dcc a (cn b) c) (US [(s,1)]) Nothing (Just $ FUSynonym $ getsymb ue) (getCu ue)
+derCUC' a b c s ue = UD (dcc a (cn' b) c) (US [(s,1)]) Nothing (Just $ FUSynonym $ getsymb ue) (getCu ue)
 -- | Create a derived unit chunk from an id, term (as 'String'), definition,
 -- symbol, and unit equation
 derUC, derUC' :: String -> String -> String -> Symbol -> UDefn -> UnitDefn
 -- | Uses self-plural term
-derUC  a b c s u = UD (dcc a (cn b) c) (US [(s,1)]) (Just u) []
+derUC  a b c s u = UD (dcc a (cn b) c) (US [(s,1)]) Nothing (Just u) []
 -- | Uses term that pluralizes by adding *s* to the end
-derUC' a b c s u = UD (dcc a (cn' b) c) (US [(s,1)]) (Just u) []
+derUC' a b c s u = UD (dcc a (cn' b) c) (US [(s,1)]) Nothing (Just u) []
 
 
 derCUC'' :: String -> NP -> String -> Symbol -> UnitEquation -> UnitDefn
-derCUC'' a b c s ue = UD (dcc a b c) (US [(s,1)]) (Just $ FUSynonym $ getsymb ue) (getCu ue)
+derCUC'' a b c s ue = UD (dcc a b c) (US [(s,1)]) Nothing (Just $ FUSynonym $ getsymb ue) (getCu ue)
 -- | Create a derived unit chunk from an id, term (as noun phrase), definition, 
 -- symbol, and unit equation
 derUC'' :: String -> NP -> String -> Symbol -> UDefn -> UnitDefn
-derUC'' a b c s u = UD (dcc a b c) (US [(s,1)]) (Just u) []
+derUC'' a b c s u = UD (dcc a b c) (US [(s,1)]) Nothing (Just u) []
 
 --FIXME: Make this use a meaningful identifier.
 -- | Helper for fundamental unit concept chunk creation. Uses the same string
@@ -86,10 +86,10 @@ unitCon s = dcc s (cn' s) s
 -- | For allowing lists to mix the two, thus forgetting
 -- the definition part
 unitWrapper :: (IsUnit u)  => u -> UnitDefn
-unitWrapper u = UD (cc' u (u ^. defn)) (u ^. usymb) (u ^. udefn) []
+unitWrapper u = UD (cc' u (u ^. defn)) (u ^. usymb) Nothing (u ^. udefn) []
 
 unitWrapper' :: UnitDefn -> UnitDefn
-unitWrapper' u = UD (cc' u (u ^. defn)) (u ^. usymb) (u ^. udefn) (getunit u)
+unitWrapper' u = UD (cc' u (u ^. defn)) (u ^. usymb) Nothing (u ^. udefn) (getunit u)
 
 --- These conveniences go here, because we need the class
 -- | Combinator for raising a unit to a power
@@ -155,7 +155,7 @@ new_unit :: String -> UnitEquation -> UnitDefn
 new_unit s u = makeDerU' (unitCon s) u
 
 fund :: String -> String -> String -> UnitDefn
-fund nam desc sym = UD (dcc nam (cn' nam) desc) (US [(Atomic sym, 1)]) Nothing []
+fund nam desc sym = UD (dcc nam (cn' nam) desc) (US [(Atomic sym, 1)]) Nothing Nothing []
 
 comp_unitdefn :: UnitDefn -> UnitDefn -> Ordering
 comp_unitdefn a b = comp_usymb (a ^. usymb) (b ^. usymb)

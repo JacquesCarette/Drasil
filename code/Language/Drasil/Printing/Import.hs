@@ -2,7 +2,7 @@ module Language.Drasil.Printing.Import(space,expr,symbol,spec,makeDocument) wher
 
 import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..),
     BoolOper(..), RTopology(..),
-    DerivType(..), DomainDesc(..), UID,
+    DerivType(..), DomainDesc(..),
     RealInterval(..),Inclusive(..),
     ($=))
 import Language.Drasil.Expr.Precedence (precA, precB, eprec)
@@ -10,10 +10,11 @@ import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as T
 
-import Language.Drasil.Classes (term, defn, usymb, HasAttributes, relat)
+import Language.Drasil.UID (UID)
+import Language.Drasil.Classes (term, defn, usymb, relat)
 import qualified Language.Drasil.Chunk.SymbolForm as SF
 import Language.Drasil.Chunk.AssumpChunk
-import Language.Drasil.Chunk.Attribute (getShortName)
+import Language.Drasil.Chunk.Attribute (getShortName, snToSentence)
 import Language.Drasil.Chunk.Change (chng, chngType, ChngType(Likely))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity (Quantity(..))
@@ -31,7 +32,6 @@ import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Reference
-import Language.Drasil.Chunk.Attribute.ShortName
 import Language.Drasil.Document
 
 import Control.Lens ((^.))
@@ -162,7 +162,7 @@ indx sm (C c) i = f s
           b' = symbol b in
       P.Row [P.Row [e', P.Sub (P.Row [b', P.MO P.Comma, i'])]] -- FIXME, extra Row
     f a@(Atomic _) = P.Row [symbol a, P.Sub i']
-    f a@(Greek _)  = P.Row [symbol a, P.Sub i']
+--    f a@(Greek _)  = P.Row [symbol a, P.Sub i']
     f   e          = let e' = symbol e in P.Row [P.Row [e'], P.Sub i']
 indx sm a i = P.Row [P.Row [expr a sm], P.Sub $ expr i sm]
 
@@ -188,7 +188,7 @@ eop sm Add (AllDD _ Discrete) e = P.Row [P.MO P.Summ, P.Row [expr e sm]]
 symbol :: Symbol -> P.Expr
 symbol (Atomic s)  = P.Ident s
 symbol (Special s) = P.Spec s
-symbol (Greek g)   = P.Gr g
+--symbol (Greek g)   = P.Gr g
 symbol (Concat sl) = P.Row $ map symbol sl
 --
 -- handle the special cases first, then general case
@@ -240,7 +240,7 @@ spec _ (S s)           = P.S s
 spec _ (Sy s)          = P.Sy s
 spec _ (Sp s)          = P.Sp s
 spec _ (P s)           = P.E $ symbol s
-spec sm (Ref t r sn)   = P.Ref t r (spec sm (S sn)) sn --FIXME: sn passed in twice?
+spec sm (Ref t r sn)   = P.Ref t r (spec sm (snToSentence sn)) sn --FIXME: sn passed in twice?
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
@@ -267,9 +267,6 @@ sec sm depth x@(Section title contents _ _) = --FIXME: should ShortName be used 
   (T.Header depth (spec sm title) ref :
    map (layout sm depth) contents) ref
 
-getSN :: HasAttributes c => c -> Sentence
-getSN c = maybe (error "missing attribute refAdd") id $ getShortName c
-
 -- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.
 lay :: HasSymbolTable ctx => ctx -> Contents -> T.LayoutObj
@@ -282,12 +279,12 @@ lay sm x@(Definition c)       = T.Definition c (makePairs sm c) (P.S (refAdd x))
 lay sm (Enumeration cs)       = T.List $ makeL sm cs
 lay sm x@(Figure c f wp _)    = T.Figure (P.S (refAdd x)) (spec sm c) f wp
 lay sm x@(Requirement r)      = T.ALUR T.Requirement
-  (spec sm $ requires r) (P.S $ refAdd x) (spec sm $ getSN r)
+  (spec sm $ requires r) (P.S $ refAdd x) (spec sm $ getShortName r)
 lay sm x@(Assumption a)       = T.ALUR T.Assumption
-  (spec sm (assuming a)) (P.S (refAdd x)) (spec sm $ getSN a)
+  (spec sm (assuming a)) (P.S (refAdd x)) (spec sm $ getShortName a)
 lay sm x@(Change lc)          = T.ALUR
   (if (chngType lc) == Likely then T.LikelyChange else T.UnlikelyChange)
-  (spec sm (chng lc)) (P.S (refAdd x)) (spec sm $ getSN lc)
+  (spec sm (chng lc)) (P.S (refAdd x)) (spec sm $ getShortName lc)
 lay sm x@(Graph ps w h t _)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S (refAdd x))
 lay sm (Defnt dtyp pairs rn)  = T.Definition dtyp (layPairs pairs) (P.S rn)

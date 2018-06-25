@@ -6,12 +6,11 @@ module Language.Drasil.Chunk.Quantity
 import Control.Lens ((^.),makeLenses,view)
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  HasSymbol(symbol), HasSpace(typ), HasAttributes(attributes))
+  HasSymbol(symbol), HasSpace(typ))
 import Language.Drasil.Chunk.NamedIdea (IdeaDict,nw,mkIdea)
 import Language.Drasil.Symbol (Symbol,Stage)
 import Language.Drasil.Space (Space)
-import Language.Drasil.NounPhrase
-import Language.Drasil.Chunk.Attribute.Core (Attributes)
+import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Unit(UnitDefn)
 
 -- | A Quantity is an 'Idea' with a 'Space' and a symbol and 
@@ -25,9 +24,6 @@ data QuantityDict = QD { _id' :: IdeaDict
                        , _typ' :: Space
                        , _symb' :: Stage -> Symbol
                        , _unit' :: Maybe UnitDefn
-                       , _attribs :: Attributes -- FIXME: Attributes included for consistency,
-                                                -- since every chunk should eventually have the
-                                                -- capability for attributes.
                        }
 makeLenses ''QuantityDict
 
@@ -38,15 +34,14 @@ instance HasSpace      QuantityDict where typ = typ'
 instance HasSymbol     QuantityDict where symbol = view symb'
 instance Quantity      QuantityDict where getUnit = view unit'
 instance Eq            QuantityDict where a == b = (a ^. uid) == (b ^. uid)
-instance HasAttributes QuantityDict where attributes = attribs
 
-qw :: (HasAttributes q, Quantity q) => q -> QuantityDict
-qw q = QD (nw q) (q^.typ) (symbol q) (getUnit q) (q ^. attributes)
+qw :: (Quantity q) => q -> QuantityDict
+qw q = QD (nw q) (q^.typ) (symbol q) (getUnit q)
 
 -- For when the symbol is constant through stages
-mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> Attributes -> QuantityDict
-mkQuant i t s sp u ab atts = QD (mkIdea i t ab) sp (\_ -> s) u atts
+mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> QuantityDict
+mkQuant i t s sp u ab = QD (mkIdea i t ab) sp (\_ -> s) u
 
 -- For when the symbol changes depending on the stage
-mkQuant' :: String -> NP -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> Maybe String -> Attributes -> QuantityDict
-mkQuant' i t symbs sp u ab atts = QD (mkIdea i t ab) sp symbs u atts
+mkQuant' :: String -> NP -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> Maybe String -> QuantityDict
+mkQuant' i t symbs sp u ab = QD (mkIdea i t ab) sp symbs u

@@ -3,7 +3,7 @@ module Drasil.NoPCM.IMods (eBalanceOnWtr) where
 import Language.Drasil
 
 import Drasil.SWHS.Concepts (water)
-import Drasil.SWHS.Unitals
+import Drasil.SWHS.Unitals (temp_W, temp_C, tau_W, w_mass, htCap_W, coil_HTC, coil_SA)
 import Data.Drasil.Utils (unwrap)
 import Data.Drasil.SentenceStructures (foldlSent, isThe,
   sAnd)
@@ -17,7 +17,7 @@ import Data.Drasil.Concepts.Thermodynamics (melting, boil_pt)
 ---------
 eBalanceOnWtr :: RelationConcept
 eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
-  "water to find the temperature of the water") balWtrDesc balWtr_Rel []
+  "water to find the temperature of the water") balWtrDesc balWtr_Rel
 
 balWtr_Rel :: Relation
 balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
@@ -39,4 +39,4 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
 
 -- FIXME
 a10 :: Contents
-a10 = Assumption $ assump "assump10" EmptyS "assump10" []
+a10 = Assumption $ assump "assump10" EmptyS "assump10"

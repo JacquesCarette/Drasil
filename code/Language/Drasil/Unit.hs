@@ -13,7 +13,7 @@ import Control.Lens (Simple, Lens', Lens, (^.), makeLenses, view)
 import Control.Arrow (second)
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom, DOM), HasUnitSymbol(usymb), IsUnit(udefn),
+  Definition(defn), ConceptDomain(cdom), HasUnitSymbol(usymb), IsUnit(udefn),
   UnitEq(uniteq))
 import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cc')
 import Language.Drasil.Symbol
@@ -82,6 +82,51 @@ unitCon :: String -> ConceptChunk
 unitCon s = dcc s (cn' s) s
 ---------------------------------------------------------
 
+==== BASE ====
+-- | for defining fundamental units
+data UnitDefn = UD { _vc :: ConceptChunk
+                   , _u :: USymb
+                   }
+
+-- don't export this
+vc :: Simple Lens UnitDefn ConceptChunk
+vc f (UD a b) = fmap (\x -> UD x b) (f a)
+
+instance HasUID        UnitDefn where uid = vc . uid
+instance NamedIdea     UnitDefn where term   = vc . term
+instance Idea          UnitDefn where getA c = getA (c ^. vc)
+instance Definition    UnitDefn where defn = vc . defn
+instance Eq            UnitDefn where a == b = (a ^. usymb) == (b ^. usymb)
+instance ConceptDomain UnitDefn where
+  type DOM UnitDefn = ConceptChunk
+  cdom = vc . cdom
+instance HasUnitSymbol UnitDefn where usymb f (UD a b) = fmap (\x -> UD a x) (f b)
+instance IsUnit        UnitDefn
+
+-- | for defining Derived units
+data DerUChunk = DUC { _uc :: UnitDefn
+                     , _eq :: UDefn
+                     }
+
+-- don't export this either
+duc :: Simple Lens DerUChunk UnitDefn
+duc f (DUC a b) = fmap (\x -> DUC x b) (f a)
+
+instance HasUID        DerUChunk where uid  = duc . uid
+instance NamedIdea     DerUChunk where term = duc . term
+instance Idea          DerUChunk where getA c = getA (c ^. duc)
+instance Definition    DerUChunk where defn = duc . defn
+instance ConceptDomain DerUChunk where
+  type DOM DerUChunk = ConceptChunk
+  cdom = duc . cdom
+instance HasUnitSymbol DerUChunk where usymb  = duc . usymb
+instance IsUnit        DerUChunk where
+
+instance UnitEq DerUChunk where
+  uniteq f (DUC a b) = fmap (\x -> DUC a x) (f b)
+
+----------------------------------------------------------
+==== BASE ====
 
 -- | For allowing lists to mix the two, thus forgetting
 -- the definition part

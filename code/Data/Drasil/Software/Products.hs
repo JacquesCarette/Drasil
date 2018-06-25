@@ -1,6 +1,6 @@
 module Data.Drasil.Software.Products where
-import Language.Drasil (CI, NamedChunk, compoundNC, nc, commonIdea,pn',cn')
-import Data.Drasil.Concepts.Documentation (video,game,open,source)
+import Language.Drasil (CI, NamedChunk, cn', commonIdea, compoundNC, nc, pn')
+import Data.Drasil.Concepts.Documentation (game, video, open, source)
 import Data.Drasil.Concepts.Computation (computer)
 import Data.Drasil.Concepts.Software (program)
 

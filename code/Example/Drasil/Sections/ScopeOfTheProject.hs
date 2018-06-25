@@ -4,7 +4,7 @@ module Drasil.Sections.ScopeOfTheProject
 import Language.Drasil
 import qualified Drasil.SRS as SRS
 import Data.Drasil.SentenceStructures (foldlSP, sAnd)
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation (section_, input_, output_, useCase, scpOfTheProj)
 
 scopeOfTheProjF :: Sentence -> Contents -> Contents -> Section
 scopeOfTheProjF kWord useCaseTableContents indCases = SRS.scpOfTheProj

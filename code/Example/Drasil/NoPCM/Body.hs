@@ -1,11 +1,11 @@
 module Drasil.NoPCM.Body where
 
 import Language.Drasil
-import Data.Drasil.SI_Units
+import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 import Control.Lens ((^.))
 
 import Drasil.NoPCM.DataDesc (inputMod)
-import Drasil.NoPCM.Definitions (ht_trans, srs_swhs)
+import Drasil.NoPCM.Definitions (ht_trans, srs_swhs, acronyms)
 import Drasil.NoPCM.GenDefs (roc_temp_simp_deriv)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
@@ -39,7 +39,7 @@ import Drasil.SWHS.LikelyChanges (likeChg2, likeChg3, likeChg6)
 import Data.Drasil.People (thulasi)
 import Data.Drasil.Utils (enumSimple, getES, refFromType,
   itemRefToSent, makeTMatrix, itemRefToSent, weave, eqUnR)
-import Data.Drasil.Citations (parnas1986, smithLai2005)
+import Data.Drasil.Citations (parnasClements1986, smithLai2005)
 
 import Data.Drasil.Concepts.Documentation as Doc (datumConstraint, inModel,
   requirement, section_, traceyGraph, item, assumption, dataDefn,
@@ -48,11 +48,11 @@ import Data.Drasil.Concepts.Documentation as Doc (datumConstraint, inModel,
   property, variable, description, symbol_,
   information, value, column, softwareConstraint, goalStmt,
   physSyst, problem, definition, srs, content, reference, document,
-  goal, purpose, typUnc)
+  goal, purpose)
 
-import qualified Data.Drasil.Concepts.Math as M
+import qualified Data.Drasil.Concepts.Math as M (ode, de, rOfChng, unit_, equation)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Phrase(for)
+import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
   thermal_energy, ht_trans_theo, heat, melt_pt, boil_pt, heat_trans, ht_flux,
   heat_cap_spec, thermal_conduction)
@@ -64,7 +64,7 @@ import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Software.Products (compPro)
 
 import Drasil.Sections.ReferenceMaterial (intro)
-import qualified Drasil.SRS as SRS (funcReq, likeChg, probDesc, goalStmt,
+import qualified Drasil.SRS as SRS (funcReq, likeChg, unlikeChg, probDesc, goalStmt,
   inModel, missingP)
 import Drasil.DocumentLanguage {-(DocDesc,
   tsymb, mkRequirement, mkLklyChnk, mkAssump, mkDoc,
@@ -92,11 +92,6 @@ import Data.Drasil.Units.Thermodynamics (thermal_flux)
 this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
 
--- This defines the list of acronyms that are used throughout the document
-acronyms :: [CI]
-acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, M.ode,
-            physSyst, requirement, srs, progName, thModel, typUnc]
-
 -- This contains the list of symbols used throughout the document
 nopcm_Symbols :: [DefinedQuantityDict]
 nopcm_Symbols = (map dqdWr nopcm_Units) ++ (map dqdWr nopcm_Constraints)
@@ -121,7 +116,7 @@ nopcm_Constraints =  [coil_SA, w_E, htCap_W, coil_HTC, temp_init,
   time_final, tank_length, temp_C, w_density, diam, temp_W]
 
 s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2,
-  s5, s5_1, s6, s7, s8 :: Section
+  s5, s5_1, s6, s6b, s7, s8 :: Section
 
 
 
@@ -156,8 +151,8 @@ mkSRS = RefSec (RefProg intro
   map Verbatim [s5, s6, s7, s8] ++ (Bibliography : [])
 
 generalDefinitions :: [GenDefn]
-generalDefinitions = [gd nwtnCooling (Just thermal_flux) ([] :: Derivation),
-  gd rocTempSimp (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv]
+generalDefinitions = [gd nwtnCooling (Just thermal_flux) ([] :: Derivation) "nwtnCooling",
+  gd rocTempSimp (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv "rocTempSimp"]
 
 nopcm_si :: SystemInformation
 nopcm_si = SI {
@@ -380,7 +375,7 @@ s4_1_3_list temw we = enumSimple 1 (short goalStmt) [
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
 ------------------------------------------------------
   
-s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
+s4_2 = solChSpecF progName (s4_1, s6, s6b) s4_2_4_intro_end (mid,
   dataConstraintUncertainty, EmptyS) (npcmAssumptions, s4_2_2_T1,
   s4_2_3_paragraph M.rOfChng temp, [s4_2_4_DD1],
   [reldefn eBalanceOnWtr] ++ (s4_2_5_d1startPara energy water) ++
@@ -414,18 +409,18 @@ assumpS3 =
   (foldlSent [S "The", phrase water, S "in the", phrase tank,
   S "is fully mixed, so the", phrase temp_W `isThe`
   S "same throughout the entire", phrase tank, sSqBr (acroGD 2)]) 
-assump3 = let a3 = "assump3" in Assumption $ assump a3 assumpS3 a3 []
+assump3 = let a3 = "assump3" in Assumption $ assump a3 assumpS3 a3 
 
 assumpS4 = 
   (foldlSent [S "The", phrase w_density, S "has no spatial variation; that is"
   `sC` S "it is constant over their entire", phrase vol, sSqBr ((acroGD 2)`sC`
   (makeRef (find' likeChg2 s6_list) ))]) 
-assump4 = let a4 = "assump4" in Assumption $ assump a4 assumpS4 a4 []
+assump4 = let a4 = "assump4" in Assumption $ assump a4 assumpS4 a4 
 
 assumpS5 = 
   (foldlSent [S "The", phrase htCap_W, S "has no spatial variation; that", 
   S "is, it is constant over its entire", phrase vol, sSqBr (acroGD 2)]) 
-assump5 = let a5 = "assump5" in Assumption $ assump a5 assumpS5 a5 []
+assump5 = let a5 = "assump5" in Assumption $ assump a5 assumpS5 a5 
 
 assumpS9_npcm = 
   (foldlSent [S "The", phrase model, S "only accounts for charging",
@@ -433,13 +428,13 @@ assumpS9_npcm =
   S "increase, or remain constant; it cannot decrease. This implies that the",
   phrase temp_init, S "is less than (or equal to) the", phrase temp_C,
   sSqBr ((acroIM 1) `sC` (makeRef (find' likeChg3_npcm s6_list)))])
-assump9_npcm = let a9 = "assump9_npcm" in Assumption $ assump a9 assumpS9_npcm a9 []
+assump9_npcm = let a9 = "assump9_npcm" in Assumption $ assump a9 assumpS9_npcm a9 
 
 assumpS12 = 
   (S "No internal" +:+ phrase heat +:+ S "is generated by the" +:+ phrase water
   `semiCol` S "therefore, the" +:+ phrase vol_ht_gen +:+ S "is zero" +:+.
   sSqBr (acroIM 1)) 
-assump12 = let a12 = "assump12" in Assumption $ assump a12 assumpS12 a12 []
+assump12 = let a12 = "assump12" in Assumption $ assump a12 assumpS12 a12 
 
 assumpS13 = 
   (S "The pressure in the" +:+ phrase tank +:+ S "is atmospheric, so the" +:+
@@ -447,7 +442,7 @@ assumpS13 =
   :+: Sy (unit_symb QT.temp) `sAnd` S (show (100 :: Integer)) :+:
   Sy (unit_symb QT.temp) `sC` S "respectively" +:+.
   sSqBr ((acroIM 1) `sC` (acroIM 2)))
-assump13 = let a13 = "assump13" in Assumption $ assump a13 assumpS13 a13 []
+assump13 = let a13 = "assump13" in Assumption $ assump a13 assumpS13 a13 
 
 
 s4_2_3_paragraph :: ConceptChunk -> ConceptChunk -> [Contents]
@@ -740,7 +735,8 @@ s6_list = [likeChg2, likeChg3, likeChg3_npcm, likeChg6]
 likeChg3_npcm :: Contents
 likeChg3_npcm = mkLklyChnk "likeChg3" (
   (makeRef (find' assump9_npcm npcmAssumptions)) :+: S "- The" +:+ phrase model +:+
-  S "currently only accounts for charging of the tank. A more complete"
+  S "currently only accounts for charging of the tank. That is, increasing the" +:+ phrase temp +:+
+  S "of the water to match the" +:+ phrase temp +:+ S "of the coil. A more complete"  
   +:+ phrase model +:+. S "would also account for discharging of the tank") "Discharging-Tank"
 -- likeChg4 = LikelyChange (LCChunk (nw $ npnc "likeChg4" $
   -- nounPhraseSent (makeRef assump11 :+: S "- Any real" +:+ phrase tank +:+
@@ -771,7 +767,14 @@ likeChg3_npcm = mkLklyChnk "likeChg3" (
   -- S "cannot be perfectly insulated and will lose",
   -- phrase heat]
 
+-------------------------------
+--Section 6b : UNLIKELY CHANGES
+-------------------------------
 
+s6b = SRS.unlikeChg s6b_list []
+
+s6b_list :: [Contents]
+s6b_list = []
 
 ----------------------------------------------
 --Section 7:  TRACEABILITY MATRICES AND GRAPHS
@@ -975,4 +978,4 @@ s8 = valsOfAuxConstantsF progName specParamValList
 -- s9_refs = mkRefsList 1 $ map foldlsC s9_refList
 
 s9_refList :: BibRef
-s9_refList = [ref2, ref3, ref4, parnas1986, smithLai2005]
+s9_refList = [ref2, ref3, ref4, parnasClements1986, smithLai2005]

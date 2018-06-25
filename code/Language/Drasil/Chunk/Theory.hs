@@ -4,14 +4,15 @@ module Language.Drasil.Chunk.Theory
    Theory(..), TheoryChunk, TheoryModel, tm,
   )where
 
+import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom,DOM), Concept, HasAttributes(attributes), HasReference(getReferences))
-import Language.Drasil.Chunk.Concept
+  Definition(defn), ConceptDomain(cdom), Concept, HasReference(getReferences))
+import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import Language.Drasil.Chunk.Constrained.Core (TheoryConstraint)
-import Language.Drasil.Chunk.Eq
-import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.Attribute.Core (Attributes)
-import Language.Drasil.Chunk.Attribute.References (References)
+import Language.Drasil.Chunk.Eq (QDefinition)
+import Language.Drasil.Chunk.Quantity (Quantity, QuantityDict, qw)
+import Language.Drasil.Chunk.References (References)
+import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
 
 import Control.Lens (Lens', view, makeLenses)
 
@@ -26,7 +27,7 @@ class HasUID t => Theory t where
 
 data SpaceDefn -- FIXME: This should be defined.
 
-data TheoryChunk = TC { _tid :: String
+data TheoryChunk = TC { _tid :: UID
                       , _vctx :: [TheoryChunk]
                       , _spc  :: [SpaceDefn]
                       , _quan :: [QuantityDict]
@@ -35,7 +36,6 @@ data TheoryChunk = TC { _tid :: String
                       , _invs :: [TheoryConstraint]
                       , _dfun :: [QDefinition]
                       , _ref :: References
-                      , _attribs :: Attributes
                       }
 makeLenses ''TheoryChunk
 
@@ -47,7 +47,6 @@ instance Theory        TheoryChunk where
   defined_quant = defq
   invariants    = invs
   defined_fun   = dfun
-instance HasAttributes TheoryChunk where attributes = attribs
 instance HasUID        TheoryChunk where uid = tid
 instance HasReference  TheoryChunk where getReferences = ref
 
@@ -55,6 +54,7 @@ instance HasReference  TheoryChunk where getReferences = ref
 -- use the id of the TheoryModel as the uid. FIXME ?
 data TheoryModel = TM { _con :: ConceptChunk
                       , _thy :: TheoryChunk
+                      , _refName :: ShortName
                       }
 makeLenses ''TheoryModel
 
@@ -62,11 +62,9 @@ instance HasUID        TheoryModel where uid = con . uid
 instance NamedIdea     TheoryModel where term = con . term
 instance Idea          TheoryModel where getA = getA . view con
 instance Definition    TheoryModel where defn = con . defn
-instance HasAttributes TheoryModel where attributes = thy . attributes
 instance HasReference  TheoryModel where getReferences = thy . getReferences
-instance ConceptDomain TheoryModel where
-  type DOM TheoryModel = ConceptChunk
-  cdom = con . cdom
+instance HasShortName  TheoryModel where shortname = view refName
+instance ConceptDomain TheoryModel where cdom = con . cdom
 instance Concept       TheoryModel where
 instance Theory        TheoryModel where
   valid_context = thy . valid_context
@@ -77,15 +75,15 @@ instance Theory        TheoryModel where
   invariants    = thy . invariants
   defined_fun   = thy . defined_fun
 
-tc :: (DOM c ~ ConceptChunk, Concept c, Quantity q, HasAttributes q) =>
-    String -> [TheoryChunk] -> [SpaceDefn] -> [q] -> [c] -> Attributes ->
+tc :: (Concept c, Quantity q) =>
+    String -> [TheoryChunk] -> [SpaceDefn] -> [q] -> [c] -> 
     [QDefinition] -> [TheoryConstraint] -> [QDefinition] -> TheoryChunk
-tc cid t s q c atts = \dq inv dfn -> TC cid t s (map qw q) (map cw c) dq inv dfn [] atts
+tc cid t s q c = \dq inv dfn -> TC cid t s (map qw q) (map cw c) dq inv dfn []
 
-tc' :: (HasAttributes q, Quantity q, Concept c, DOM c ~ ConceptChunk) =>
-    String -> [q] -> [c] -> Attributes -> [QDefinition] -> 
+tc' :: (Quantity q, Concept c) =>
+    String -> [q] -> [c] -> [QDefinition] -> 
     [TheoryConstraint] -> [QDefinition] -> TheoryChunk
-tc' cid q c atts = tc cid ([] :: [TheoryChunk]) [] q c atts
+tc' cid q c = tc cid ([] :: [TheoryChunk]) [] q c
 
-tm :: (Concept c, DOM c ~ ConceptChunk) => c -> TheoryChunk -> TheoryModel
-tm c t = TM (cw c) t
+tm :: Concept c => c -> TheoryChunk -> String -> TheoryModel
+tm c t sn = TM (cw c) t (shortname' sn)

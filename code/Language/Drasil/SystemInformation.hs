@@ -2,14 +2,15 @@
 
 module Language.Drasil.SystemInformation where
 
-import Language.Drasil.Classes (HasUID, Idea, Concept, IsUnit, CommonIdea,
-  Constrained, HasAttributes)
 import Language.Drasil.Chunk.Citation (BibRef)
-import Language.Drasil.Chunk.Eq
-import Language.Drasil.Chunk.Quantity
+import Language.Drasil.Chunk.Eq (QDefinition)
+import Language.Drasil.Chunk.Quantity (Quantity)
 import Language.Drasil.ChunkDB (ChunkDB)
-import Language.Drasil.People
-import Language.Drasil.Reference
+import Language.Drasil.Classes (CommonIdea, Concept, Constrained, HasUID, 
+  Idea, IsUnit)
+import Language.Drasil.People (HasName)
+import Language.Drasil.Reference (ReferenceDB, citationsFromBibMap, 
+  citationRefTable)
 
 import Control.Lens ((^.))
 
@@ -21,8 +22,8 @@ data SystemInformation where
 -- I'm thinking for getting concepts that are also quantities, we could
 -- use a lookup of some sort from their internal (Drasil) ids.
  SI :: (CommonIdea a, Idea a, Idea b, HasName c, IsUnit d,
-  HasAttributes e, Quantity e, Eq e, Quantity f, Concept f, Eq f,
-  HasAttributes h, Quantity h, HasAttributes i, Quantity i,
+  Quantity e, Eq e, Quantity f, Concept f, Eq f,
+  Quantity h, Quantity i,
   HasUID j, Constrained j) => 
   { _sys :: a
   , _kind :: b
@@ -47,3 +48,8 @@ data Block a = Coupled a a [a]
 -- | Helper for extracting bibliography
 citeDB :: SystemInformation -> BibRef
 citeDB (SI {_refdb = db}) = citationsFromBibMap (db ^. citationRefTable)
+
+
+-- | Helper for ectracting RefDB
+getRefDB :: SystemInformation -> ReferenceDB
+getRefDB (SI {_refdb = db}) = db

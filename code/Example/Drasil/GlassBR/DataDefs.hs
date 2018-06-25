@@ -1,21 +1,20 @@
-module Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, 
-  risk, hFromt, strDisFac, nonFL, glaTyFac, dimLL, tolPre,
-  tolStrDisFac) where
+module Drasil.GlassBR.DataDefs (dataDefns, dimLL, gbQDefns, glaTyFac, hFromt,
+  nonFL, risk, strDisFac, tolPre, tolStrDisFac) where
 
 import Language.Drasil
 
 import Prelude hiding (log, exp)
-import Drasil.GlassBR.Unitals (tolLoad, dimlessLoad, gTF, stressDistFac, 
-  aspectR, aspectRWithEqn, demand, sdf_tol, nom_thick, act_thick, pb_tol,
-  plate_width, plate_len, sflawParamM, mod_elas, glass_type, sflawParamK,
-  glassTypeFactors, lDurFac, glassTypeAbbrsStr, nonFactorL, 
-  actualThicknesses, nominalThicknesses, risk_fun)
+import Drasil.GlassBR.Unitals (act_thick, actualThicknesses, aspectR, 
+  aspectRWithEqn, demand, dimlessLoad, gTF, glassTypeAbbrsStr, 
+  glassTypeFactors, glass_type, lDurFac, mod_elas, nom_thick, 
+  nominalThicknesses, nonFactorL, pb_tol, plate_len, plate_width, risk_fun,
+  sdf_tol, sflawParamK, sflawParamM, stressDistFac, tolLoad)
 
-import Data.Drasil.Utils (getES, mkDataDef', mkDataDef)
-import Data.Drasil.SentenceStructures (sAnd)
-import Data.Drasil.Concepts.PhysicalProperties (dimension)
-import Data.Drasil.Concepts.Math (probability, parameter, calculation)
 import Data.Drasil.Concepts.Documentation (datum, user)
+import Data.Drasil.Concepts.Math (probability, parameter, calculation)
+import Data.Drasil.Concepts.PhysicalProperties (dimension)
+import Data.Drasil.SentenceStructures (sAnd)
+import Data.Drasil.Utils (getES, mkDataDef, mkDataDef')
 
 import Control.Lens ((^.))
 
@@ -42,7 +41,7 @@ risk_eq = ((sy sflawParamK) /
 
 -- FIXME [4] !!!
 risk :: QDefinition
-risk = mkDataDef' risk_fun risk_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ jRef) [] [sourceref $ S "[4]"]
+risk = mkDataDef' risk_fun risk_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ jRef) [sourceref $ S "[4]"]
 
 --DD2--
 
@@ -54,7 +53,7 @@ hFromt_helper :: Double -> Double -> (Expr, Relation)
 hFromt_helper result condition = (dbl result, (sy nom_thick) $= dbl condition)
 
 hFromt :: QDefinition
-hFromt = mkDataDef' act_thick hFromt_eq (hMin) [] []
+hFromt = mkDataDef' act_thick hFromt_eq (hMin) []
 
 --DD3--
 
@@ -72,7 +71,7 @@ strDisFac_eq = apply (sy stressDistFac)
 --strDisFac_eq = FCall (asExpr interpZ) [V "SDF.txt", (sy plate_len) / (sy plate_width), sy dimlessLoad]
   
 strDisFac :: QDefinition
-strDisFac = mkDataDef' stressDistFac strDisFac_eq (jRef2 +:+ qHtRef +:+ aGrtrThanB) [] []
+strDisFac = mkDataDef' stressDistFac strDisFac_eq (jRef2 +:+ qHtRef +:+ aGrtrThanB) []
 
 --DD5--
 
@@ -81,7 +80,7 @@ nonFL_eq = ((sy tolLoad) * (sy mod_elas) * (sy act_thick) $^ 4) /
   (square (sy plate_len * sy plate_width))
 
 nonFL :: QDefinition
-nonFL = mkDataDef' nonFactorL nonFL_eq (aGrtrThanB +:+ hRef +:+ qHtTlTolRef) [] []
+nonFL = mkDataDef' nonFactorL nonFL_eq (aGrtrThanB +:+ hRef +:+ qHtTlTolRef) []
 
 --DD6--
 
@@ -101,7 +100,7 @@ dimLL_eq = ((sy demand) * (square (sy plate_len * sy plate_width)))
   / ((sy mod_elas) * (sy act_thick $^ 4) * (sy gTF))
 
 dimLL :: QDefinition
-dimLL = mkDataDef' dimlessLoad dimLL_eq (qRef +:+ aGrtrThanB +:+ hRef +:+ gtfRef) [] []
+dimLL = mkDataDef' dimlessLoad dimLL_eq (qRef +:+ aGrtrThanB +:+ hRef +:+ gtfRef) []
 
 --DD8--
 
@@ -110,7 +109,7 @@ tolPre_eq = apply (sy tolLoad) [sy sdf_tol, (sy plate_len) / (sy plate_width)]
 --tolPre_eq = FCall (asExpr interpY) [V "SDF.txt", (sy plate_len) / (sy plate_width), sy sdf_tol]
 
 tolPre :: QDefinition
-tolPre = mkDataDef' tolLoad tolPre_eq (qHtTlExtra) [] []
+tolPre = mkDataDef' tolLoad tolPre_eq (qHtTlExtra) []
 
 --DD9--
 
@@ -121,7 +120,7 @@ tolStrDisFac_eq = log (log (1 / (1 - (sy pb_tol)))
     (square (sy act_thick)))) $^ (sy sflawParamM) * (sy lDurFac)))))
 
 tolStrDisFac :: QDefinition
-tolStrDisFac = mkDataDef' sdf_tol tolStrDisFac_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ pbTolUsr) [] []
+tolStrDisFac = mkDataDef' sdf_tol tolStrDisFac_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ pbTolUsr) []
 
 --Issue #350
 

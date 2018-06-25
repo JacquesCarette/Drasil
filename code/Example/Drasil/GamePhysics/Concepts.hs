@@ -1,8 +1,9 @@
 module Drasil.GamePhysics.Concepts (centreMass, twoD, chipmunk, cpAcronyms) where
 
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math
+import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn, 
+    goalStmt, inModel, likelyChg, unlikelyChg, requirement, srs, thModel)
+import Data.Drasil.Concepts.Math (ode)
 
 ----- Acronyms -----
 
@@ -10,7 +11,8 @@ centreMass, twoD, chipmunk :: CI
 
 cpAcronyms :: [CI]
 cpAcronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt,
-    inModel, likelyChg, ode, requirement, srs, thModel, twoD, chipmunk]
+    inModel, likelyChg, ode, requirement, srs, thModel, twoD, chipmunk,
+    unlikelyChg]
 
 --FIXME: Should use of' combinator.
 cent_mass :: NP --FIXME: Need to be able to cap plural.

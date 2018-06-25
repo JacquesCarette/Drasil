@@ -4,34 +4,35 @@ module Drasil.SSP.DataDefs where
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
 
-import Drasil.SSP.Unitals (shrStiffBase, index, genDisplace, baseAngle, inxi,
-  nrmStiffBase, effStiffA, effStiffB, rotatedDispl, genPressure, shrStiffIntsl,
-  nrmStiffIntsl, nrmFNoIntsl, shearFNoIntsl, shearRNoIntsl, impLoadAngle,
-  surfLoad, surfAngle, surfHydroForce, watrForceDif, slcWght, earthqkLoadFctr,
-  inxiM1, mobShrI, wiif, intShrForce, intNormForce, baseWthX, cohesion,
-  fricAngle, baseHydroForce, watrForce, nrmFSubWat, shrResI, constant_A,
-  nrmDispl, constant_K, constant_a, normStress, poissnsRatio, inx, surfLngth,
-  baseLngth, genForce, shrDispl, scalFunc, normToShear, slipDist, slopeDist,
-  slopeHght, slipHght, waterHght, satWeight, waterWeight, dryWeight,
-  ufixme1, ufixme2)
+import Drasil.SSP.BasicExprs (displMtx, eqlExpr, rotMtx)
 import Drasil.SSP.Defs (intrslce)
-import Drasil.DocumentLanguage.RefHelpers
+import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
+  cohesion, constant_A, constant_K, constant_a, dryWeight, earthqkLoadFctr, 
+  effStiffA, effStiffB, fricAngle, genDisplace, genForce, genPressure, 
+  impLoadAngle, index, intNormForce, intShrForce, inx, inxi, inxiM1, mobShrI, 
+  normStress, normToShear, nrmDispl, nrmFNoIntsl, nrmFSubWat, nrmStiffBase, 
+  nrmStiffIntsl, poissnsRatio, rotatedDispl, satWeight, scalFunc, 
+  shearFNoIntsl, shearRNoIntsl, shrDispl, shrResI, shrStiffBase, shrStiffIntsl, 
+  slcWght, slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce, 
+  surfLngth, surfLoad, ufixme1, ufixme2, waterHght, waterWeight, watrForce, 
+  watrForceDif, wiif)
 
-import Data.Drasil.Utils (getES, mkDataDef, eqUnR)
+import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb, refDD)
+
 import Data.Drasil.Quantities.SolidMechanics as SM (poissnsR)
+import Data.Drasil.Utils (eqUnR, getES, mkDataDef)
 
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (definition, element, value)
-import Data.Drasil.SentenceStructures (sAnd, sOf,
-  foldlSP, eqN, isThe,  acroGD, acroT,
-  ofThe, getTandS, ofThe')
+import Data.Drasil.Concepts.Math (angle, equation)
+import Data.Drasil.SentenceStructures (acroGD, acroT, eqN, foldlSP, getTandS, 
+  isThe, ofThe, ofThe', sAnd, sOf)
 import Control.Lens ((^.))
-import Data.Drasil.Concepts.Math (equation, angle)
-import Drasil.SSP.BasicExprs
 
 ------------------------
 --  Data Definitions  --
 ------------------------
+ddRef :: QDefinition -> Sentence
 ddRef = refDD (ddRefDB sspRefMDB) 
 
 sspRefMDB :: ModelDB
@@ -252,10 +253,10 @@ soilStiffnessEqn = (case_ [case1,case2])
 -----------------
 
 fixme1 :: QDefinition
-fixme1 = ec ufixme1 (inxi intNormForce + inxiM1 intNormForce)
+fixme1 = ec ufixme1 (inxi intNormForce + inxiM1 intNormForce) (shortname' "ufixme1")
 
 fixme2 :: QDefinition
-fixme2 = ec ufixme2 (inxi watrForce + inxiM1 watrForce)
+fixme2 = ec ufixme2 (inxi watrForce + inxiM1 watrForce) (shortname' "ufixme2")
 
 -----------------
 -- Derivations --

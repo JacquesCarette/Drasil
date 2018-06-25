@@ -5,14 +5,13 @@ module Language.Drasil.Chunk.Unitary
   , Unitary(..)) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  ConceptDomain(DOM), HasSymbol(symbol), IsUnit, HasAttributes(attributes))
+  ConceptDomain, HasSymbol(symbol), IsUnit)
 import Language.Drasil.Chunk.Quantity (Quantity(..), QuantityDict, mkQuant, qw, 
   HasSpace(typ))
 import Language.Drasil.Unit (UnitDefn, unitWrapper)
-import Language.Drasil.Symbol
-import Language.Drasil.Space
+import Language.Drasil.Symbol (Symbol)
+import Language.Drasil.Space (Space)
 import Language.Drasil.NounPhrase (NP)
-import Language.Drasil.Chunk.Concept (ConceptChunk)
 
 import Control.Lens ((^.), makeLenses)
 
@@ -33,14 +32,13 @@ instance HasSpace      UnitaryChunk where typ = quant . typ
 instance HasSymbol     UnitaryChunk where symbol u st = symbol (u^.quant) st
 instance Quantity      UnitaryChunk where getUnit = Just . _un
 instance Unitary       UnitaryChunk where unit x = x ^. un
-instance HasAttributes UnitaryChunk where attributes = quant . attributes
 
 -- Builds the Quantity part from the uid, term, symbol and space.
 -- assumes there's no abbreviation.
-unitary :: (IsUnit u, DOM u ~ ConceptChunk) => 
+unitary :: (IsUnit u, ConceptDomain u) =>
   String -> NP -> Symbol -> u -> Space -> UnitaryChunk
-unitary i t s u space = UC (mkQuant i t s space (Just uu) Nothing []) uu -- Unit doesn't have a unitDefn, so [] is passed in
+unitary i t s u space = UC (mkQuant i t s space (Just uu) Nothing) uu -- Unit doesn't have a unitDefn, so [] is passed in
   where uu = unitWrapper u
 
-mkUnitary :: (HasAttributes u, Unitary u) => u -> UnitaryChunk
+mkUnitary :: (Unitary u) => u -> UnitaryChunk
 mkUnitary u = UC (qw u) (unit u)

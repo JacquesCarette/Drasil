@@ -14,9 +14,9 @@ import Language.Drasil.Chunk.Constrained.Core (Constraint, isPhysC)
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.SymbolForm (codeSymb)
+import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  HasSymbol(symbol), CommonIdea(abrv), Constrained(constraints),
-  HasAttributes(attributes), relat)
+  HasSymbol(symbol), CommonIdea(abrv), Constrained(constraints), relat)
 import Language.Drasil.Space as S
 import Language.Drasil.Code.Code as G (CodeType(..))
 import Language.Drasil.Expr
@@ -36,7 +36,7 @@ programName = toCodeName . abrv
 symbToCodeName :: Symbol -> String
 symbToCodeName (Atomic s) = toCodeName s
 symbToCodeName (Special sp) = specialToCodeName sp
-symbToCodeName (Greek g) = greekToCodeName g
+--symbToCodeName (Greek g) = greekToCodeName g
 symbToCodeName (Atop d s) = decorate (symbToCodeName s) d
 symbToCodeName (Corners ul ll ur lr b) =
   (cleft ul) ++ (cleft ll) ++ (symbToCodeName b)
@@ -55,59 +55,59 @@ decorate s Hat = s ++ "_hat"
 decorate s Vector = s ++ "_vect"
 decorate s Prime = s ++ "'"
 
-greekToCodeName :: Greek -> String
-greekToCodeName Alpha_L   = "alpha"
-greekToCodeName Alpha     = "Alpha"
-greekToCodeName Beta_L    = "beta"
-greekToCodeName Beta      = "Beta"
-greekToCodeName Chi_L     = "chi"
-greekToCodeName Chi       = "Chi"
-greekToCodeName Delta_L   = "delta"
-greekToCodeName Delta     = "Delta"
-greekToCodeName Ell       = "ell"
-greekToCodeName Epsilon_L = "epsilon"
-greekToCodeName Epsilon_V = "varepsilon"
-greekToCodeName Epsilon   = "Epsilon"
-greekToCodeName Eta_L     = "eta"
-greekToCodeName Eta       = "Eta"
-greekToCodeName Gamma_L   = "gamma"
-greekToCodeName Gamma     = "Gamma"
-greekToCodeName Iota_L    = "iota"
-greekToCodeName Iota      = "Iota"
-greekToCodeName Kappa_L   = "kappa"
-greekToCodeName Kappa     = "Kappa"
-greekToCodeName Lambda_L  = "lambda"
-greekToCodeName Lambda    = "Lambda"
-greekToCodeName Mu_L      = "mu"
-greekToCodeName Mu        = "Mu"
-greekToCodeName Nabla     = "nabla"
-greekToCodeName Nu_L      = "nu"
-greekToCodeName Nu        = "Nu"
-greekToCodeName Omega_L   = "omega"
-greekToCodeName Omega     = "Omega"
-greekToCodeName Omicron_L = "omicron"
-greekToCodeName Omicron   = "Omicron"
-greekToCodeName Pi_L      = "pi"
-greekToCodeName Pi        = "Pi"
-greekToCodeName Phi_L     = "phi"
-greekToCodeName Phi_V     = "varphi"
-greekToCodeName Phi       = "Phi"
-greekToCodeName Psi_L     = "psi"
-greekToCodeName Psi       = "Psi"
-greekToCodeName Rho_L     = "rho"
-greekToCodeName Rho       = "Rho"
-greekToCodeName Sigma_L   = "sigma"
-greekToCodeName Sigma     = "Sigma"
-greekToCodeName Tau_L     = "tau"
-greekToCodeName Tau       = "Tau"
-greekToCodeName Theta_L   = "theta"
-greekToCodeName Theta     = "Theta"
-greekToCodeName Upsilon_L = "upsilon"
-greekToCodeName Upsilon   = "Upsilon"
-greekToCodeName Xi_L      = "xi"
-greekToCodeName Xi        = "Xi"
-greekToCodeName Zeta_L    = "zeta"
-greekToCodeName Zeta      = "Zeta"
+--greekToCodeName :: Greek -> String
+--greekToCodeName Alpha_L   = "alpha"
+--greekToCodeName Alpha     = "Alpha"
+--greekToCodeName Beta_L    = "beta"
+--greekToCodeName Beta      = "Beta"
+--greekToCodeName Chi_L     = "chi"
+--greekToCodeName Chi       = "Chi"
+--greekToCodeName Delta_L   = "delta"
+--greekToCodeName Delta     = "Delta"
+--greekToCodeName Ell       = "ell"
+--greekToCodeName Epsilon_L = "epsilon"
+--greekToCodeName Epsilon_V = "varepsilon"
+--greekToCodeName Epsilon   = "Epsilon"
+--greekToCodeName Eta_L     = "eta"
+--greekToCodeName Eta       = "Eta"
+--greekToCodeName Gamma_L   = "gamma"
+--greekToCodeName Gamma     = "Gamma"
+--greekToCodeName Iota_L    = "iota"
+--greekToCodeName Iota      = "Iota"
+--greekToCodeName Kappa_L   = "kappa"
+--greekToCodeName Kappa     = "Kappa"
+--greekToCodeName Lambda_L  = "lambda"
+--greekToCodeName Lambda    = "Lambda"
+--greekToCodeName Mu_L      = "mu"
+--greekToCodeName Mu        = "Mu"
+--greekToCodeName Nabla     = "nabla"
+--greekToCodeName Nu_L      = "nu"
+--greekToCodeName Nu        = "Nu"
+--greekToCodeName Omega_L   = "omega"
+--greekToCodeName Omega     = "Omega"
+--greekToCodeName Omicron_L = "omicron"
+--greekToCodeName Omicron   = "Omicron"
+--greekToCodeName Pi_L      = "pi"
+--greekToCodeName Pi        = "Pi"
+--greekToCodeName Phi_L     = "phi"
+--greekToCodeName Phi_V     = "varphi"
+--greekToCodeName Phi       = "Phi"
+--greekToCodeName Psi_L     = "psi"
+--greekToCodeName Psi       = "Psi"
+--greekToCodeName Rho_L     = "rho"
+--greekToCodeName Rho       = "Rho"
+--greekToCodeName Sigma_L   = "sigma"
+--greekToCodeName Sigma     = "Sigma"
+--greekToCodeName Tau_L     = "tau"
+--greekToCodeName Tau       = "Tau"
+--greekToCodeName Theta_L   = "theta"
+--greekToCodeName Theta     = "Theta"
+--greekToCodeName Upsilon_L = "upsilon"
+--greekToCodeName Upsilon   = "Upsilon"
+--greekToCodeName Xi_L      = "xi"
+--greekToCodeName Xi        = "Xi"
+--greekToCodeName Zeta_L    = "zeta"
+--greekToCodeName Zeta      = "Zeta"
 
 specialToCodeName :: Special -> String
 specialToCodeName Circle        = "circ"
@@ -149,7 +149,6 @@ instance CodeIdea CodeChunk where
   codeName (CodeC c Var) = symbToCodeName (codeSymb c)
   codeName (CodeC c Func) = funcPrefix ++ symbToCodeName (codeSymb c)
 instance Eq CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
-instance HasAttributes CodeChunk where attributes = qc . attributes
 
 spaceToCodeType :: Space -> CodeType
 spaceToCodeType S.Integer = G.Integer
@@ -168,10 +167,10 @@ spaceToCodeType (S.DiscreteS _) = G.List (spaceToCodeType S.String)
 codeType :: HasSpace c => c -> CodeType
 codeType c = spaceToCodeType $ c ^. typ
 
-codevar :: (HasAttributes c, Quantity c) => c -> CodeChunk
+codevar :: (Quantity c) => c -> CodeChunk
 codevar c = CodeC (qw c) Var
 
-codefunc :: (HasAttributes c, Quantity c) => c -> CodeChunk
+codefunc :: (Quantity c) => c -> CodeChunk
 codefunc c = CodeC (qw c) Func
 
 data CodeDefinition = CD { _quant :: QuantityDict
@@ -188,7 +187,6 @@ instance HasSymbol     CodeDefinition where symbol c = symbol (c ^. quant)
 instance Quantity      CodeDefinition where getUnit = getUnit . view quant
 instance CodeIdea      CodeDefinition where codeName = (^. ci)
 instance Eq            CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
-instance HasAttributes CodeDefinition where attributes = quant . attributes
 
 qtoc :: QDefinition  -> CodeDefinition
 qtoc q = CD (qw q) (funcPrefix ++ symbToCodeName (codeSymb q)) (q ^. relat)
@@ -199,7 +197,7 @@ qtov q = CD (qw q) (symbToCodeName (codeSymb q)) (q ^. relat)
 codeEquat :: CodeDefinition -> Expr
 codeEquat cd = cd ^. def
 
-type ConstraintMap = Map.Map String [Constraint]
+type ConstraintMap = Map.Map UID [Constraint]
 
 constraintMap :: (HasUID c, Constrained c) => [c] -> ConstraintMap
 constraintMap = Map.fromList . map (\x -> ((x ^. uid), (x ^. constraints)))

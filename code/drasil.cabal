@@ -41,6 +41,8 @@ library
     , Language.Drasil.Expr.Math
     , Language.Drasil.Expr.Precedence
     , Language.Drasil.Classes
+    , Language.Drasil.Label.Core
+    , Language.Drasil.Label
     , Language.Drasil.Config
     , Language.Drasil.Document
     , Language.Drasil.Format
@@ -55,6 +57,7 @@ library
     , Language.Drasil.Spec
     , Language.Drasil.Symbol
     , Language.Drasil.SymbolAlphabet
+    , Language.Drasil.UID
     , Language.Drasil.Unicode
     , Language.Drasil.Unit
     , Language.Drasil.UnitLang
@@ -83,10 +86,9 @@ library
     , Language.Drasil.TeX.Preamble
     , Language.Drasil.Chunk.AssumpChunk
     , Language.Drasil.Chunk.Attribute
-    , Language.Drasil.Chunk.Attribute.Core
-    , Language.Drasil.Chunk.Attribute.Derivation
-    , Language.Drasil.Chunk.Attribute.References
-    , Language.Drasil.Chunk.Attribute.ShortName
+    , Language.Drasil.Chunk.Derivation
+    , Language.Drasil.Chunk.References
+    , Language.Drasil.Chunk.ShortName
     , Language.Drasil.Chunk.Change
     , Language.Drasil.Chunk.Citation
     , Language.Drasil.Chunk.Code
@@ -235,6 +237,7 @@ executable ssp
     , Drasil.SRS
     , Drasil.SSP.Assumptions
     , Drasil.SSP.Body
+    , Drasil.SSP.Changes
     , Drasil.SSP.DataDefs
     , Drasil.SSP.DataDesc
     , Drasil.SSP.Defs

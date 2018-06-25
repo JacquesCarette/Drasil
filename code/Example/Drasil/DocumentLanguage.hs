@@ -7,30 +7,38 @@
 -- instead.
 module Drasil.DocumentLanguage where
 
-import Drasil.DocumentLanguage.Definitions
+import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation, 
+  instanceModel, gdefn, tmodel)
 
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 
 import Control.Lens ((^.))
-import qualified Data.Map as Map
+import qualified Data.Map as Map (elems)
 
-import Drasil.Sections.TableOfUnits (table_of_units)
-import Drasil.Sections.TableOfSymbols (table)
 import Drasil.Sections.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
-import qualified Drasil.SRS as SRS
-import qualified Drasil.Sections.Introduction as Intro
-import qualified Drasil.Sections.SpecificSystemDescription as SSD
-import qualified Drasil.Sections.Stakeholders as Stk
-import qualified Drasil.Sections.AuxiliaryConstants as AC
-import qualified Drasil.Sections.ScopeOfTheProject as SotP
-import qualified Drasil.Sections.TraceabilityMandGs as TMG
-import qualified Drasil.Sections.GeneralSystDesc as GSD
-import qualified Drasil.Sections.Requirements as R
+import Drasil.Sections.TableOfSymbols (table)
+import Drasil.Sections.TableOfUnits (table_of_units)
+import qualified Drasil.SRS as SRS (appendix, dataDefn, genDefn, genSysDes, 
+  inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec, stakeholder,
+  thModel, tOfSymb, userChar)
+import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
+import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
+  systCon, usrCharsF)
+import qualified Drasil.Sections.Introduction as Intro (charIntRdrF, 
+  introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
+import qualified Drasil.Sections.Requirements as R (fReqF, nonFuncReqF, reqF)
+import qualified Drasil.Sections.ScopeOfTheProject as SotP (scopeOfTheProjF)
+import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
+  datConF, dataDefnF, genDefnF, inModelF, probDescF, solutionCharSpecIntro, 
+  specSysDescr, thModF)
+import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
+  stakeholderIntro, tClientF, tCustomerF)
+import qualified Drasil.Sections.TraceabilityMandGs as TMG (traceMGF)
 
 import Data.Drasil.Concepts.Documentation (refmat)
 
-import Data.List (sortBy, nub)
 import Data.Function (on)
+import Data.List (nub, sortBy)
 
 type System = Sentence
 type DocKind = Sentence
@@ -50,6 +58,7 @@ data DocSection = Verbatim Section
                 | SSDSec SSDSec
                 | ReqrmntSec ReqrmntSec
                 | LCsSec LCsSec
+                | UCsSec UCsSec
                 | TraceabilitySec TraceabilitySec
                 | AuxConstntSec AuxConstntSec
                 | Bibliography
@@ -114,7 +123,6 @@ data LFunc where
 
 {--}
 
---FIXME: This needs to be updated for the requisite information in introductionF
 -- | Introduction section. Contents are top level followed by a list of
 -- subsections. IntroVerb is used for including verbatim subsections.
 data IntroSec = IntroProg Sentence Sentence [IntroSub]
@@ -204,6 +212,10 @@ data LCsSec = LCsVerb Section | LCsProg [Contents]
 
 {--}
 
+data UCsSec = UCsVerb Section | UCsProg [Contents]
+
+{--}
+
 data TraceabilitySec = TraceabilityVerb Section | TraceabilityProg [Contents] [Sentence] [Contents] [Section]
 
 {--}
@@ -238,6 +250,7 @@ mkSections si l = map doit l
     doit (ScpOfProjSec sop)  = mkScpOfProjSec sop
     doit (ReqrmntSec r)      = mkReqrmntSec r
     doit (LCsSec lc')        = mkLCsSec lc'
+    doit (UCsSec ulc)        = mkUCsSec ulc
     doit (TraceabilitySec t) = mkTraceabilitySec t
     doit (AppndxSec a)       = mkAppndxSec a
 
@@ -245,8 +258,8 @@ mkSections si l = map doit l
 -- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section
 mkRefSec _  (RefVerb s) = s
-mkRefSec si (RefProg c l) = section (titleize refmat) [c]
-  (map (mkSubRef si) l) "RefMat" "RefMat"
+mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
+  (map (mkSubRef si) l) "RefMat"
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
     mkSubRef (SI {_sysinfodb = db})  TUnits =
@@ -354,7 +367,7 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
   where
     mkSubIntro :: SystemInformation -> IntroSub -> Section
     mkSubIntro _ (IVerb s) = s
-    mkSubIntro _ (IPurpose intro) = Intro.purposeOfDoc intro
+    mkSubIntro si (IPurpose intro) = Intro.purposeOfDoc (getRefDB si) intro
     mkSubIntro (SI {_sys = sys}) (IScope main intendedPurp) =
       Intro.scopeOfRequirements main sys intendedPurp
     mkSubIntro (SI {_sys = sys}) (IChar know understand appStandd) =
@@ -433,7 +446,7 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (IMs fields ims _)= 
       SSD.inModelF pdStub ddStub tmStub gdStub (map (instanceModel fields (_sysinfodb si')) ims)
     mkSubSCS (SI {_refdb = db}) Assumptions =
-      (SSD.assumpF tmStub gdStub ddStub imStub lcStub
+      (SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
       (map Assumption $ assumptionsFromDB (db ^. assumpRefTable)))
     mkSubSCS _ (Constraints a b c d) = (SSD.datConF a b c d)
     inModSec = (SRS.inModel [Paragraph EmptyS] [])
@@ -445,13 +458,14 @@ mkSolChSpec si (SCSProg l) =
 {--}
 
 -- | Section stubs for implicit referencing
-tmStub, gdStub, ddStub, imStub, lcStub, pdStub:: Section
-tmStub = SRS.thModel  [] []
-gdStub = SRS.genDefn  [] []
-ddStub = SRS.dataDefn [] []
-imStub = SRS.inModel  [] []
-lcStub = SRS.likeChg  [] []
-pdStub = SRS.probDesc [] []
+tmStub, gdStub, ddStub, imStub, lcStub, ucStub, pdStub:: Section
+tmStub = SRS.thModel   [] []
+gdStub = SRS.genDefn   [] []
+ddStub = SRS.dataDefn  [] []
+imStub = SRS.inModel   [] []
+lcStub = SRS.likeChg   [] []
+ucStub = SRS.unlikeChg [] []
+pdStub = SRS.probDesc  [] []
 
 -- | Helper for making the 'Requirements' section
 mkReqrmntSec :: ReqrmntSec -> Section
@@ -469,6 +483,13 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 mkLCsSec :: LCsSec -> Section
 mkLCsSec (LCsVerb s) = s
 mkLCsSec (LCsProg c) = SRS.likeChg c []
+
+{--}
+
+-- | Helper for making the 'UnikelyChanges' section
+mkUCsSec :: UCsSec -> Section
+mkUCsSec (UCsVerb s) = s
+mkUCsSec (UCsProg c) = SRS.unlikeChg c []
 
 {--}
 
@@ -510,8 +531,10 @@ siSys (SI {_sys = sys}) = nw sys
 -- mkAssump i desc = Assumption $ ac' i desc
 
 mkRequirement :: String -> Sentence -> String -> Contents
-mkRequirement i desc shrtn = Requirement $ frc i desc (shrtn) [shortname' shrtn] --FIXME: HACK - Should have explicit refname
+mkRequirement i desc shrtn = Requirement $ frc i desc (shortname' shrtn)
 
 mkLklyChnk :: String -> Sentence -> String -> Contents
-mkLklyChnk i desc shrtn = Change $ lc i desc (shrtn) [shortname' shrtn] -- FIXME: HACK -- See above
+mkLklyChnk i desc shrtn = Change $ lc i desc (shortname' shrtn)
 
+mkUnLklyChnk :: String -> Sentence -> String -> Contents
+mkUnLklyChnk i desc shrtn = Change $ ulc i desc (shortname' shrtn)

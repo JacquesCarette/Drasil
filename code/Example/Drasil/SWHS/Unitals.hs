@@ -158,26 +158,26 @@ w_vol = ucc' "w_vol" (vol `of_` water)
 
 deltaT = ucc' "deltaT" (nounPhraseSP "change in temperature")
   "Change in the average kinetic energy of a given material"
-  (Concat [Greek Delta, (eqSymb temp)]) centigrade
+  (Concat [cDelta, (eqSymb temp)]) centigrade
 
 tau = ucc' "tau" (nounPhraseSP "dummy variable for integration over time")
   "Binary value representing the presence or absence of integration over time"
-  (Greek Tau_L) second
+  lTau second
 --Not sure how to define anything after this point
 
 tau_L_P = ucc' "tau_L_P" (nounPhraseSP "ODE parameter for liquid PCM")
   ("Derived through melting of phase change material, which " ++
   "changes ODE parameter for solid PCM into parameter for liquid")
-  (sup (sub (Greek Tau_L) cP) cL) second
+  (sup (sub lTau cP) cL) second
 
 tau_S_P = ucc' "tau_S_P" (nounPhraseSP "ODE parameter for solid PCM")
   ("Derived parameter based on rate of " ++
     "change of temperature of phase change material")
-  (sup (sub (Greek Tau_L) cP) cS) second
+  (sup (sub lTau cP) cS) second
 
 tau_W = ucc' "tau_W" (nounPhraseSP "ODE parameter for water")
   "Derived parameter based on rate of change of temperature of water"
-  (sub (Greek Tau_L) cW) second
+  (sub lTau cW) second
 
 sim_time = ucc' "sim_time" (compoundPhrase' (simulation ^. term)
   (time ^. term)) "Time over which the simulation runs"
@@ -195,12 +195,12 @@ eta, melt_frac :: DefinedQuantityDict
 -- FIXME: should this have units?
 eta = dqd' (dcc "eta" (nounPhraseSP "ODE parameter")
   "Derived parameter based on rate of change of temperature of water")
-  (const $ Greek Eta_L) Real Nothing [] 
+  (const lEta) Real Nothing
 
 melt_frac = dqd' (dcc "melt_frac" (nounPhraseSP "melt fraction")
   "Ratio of thermal energy to amount of mass melted")
   --FIXME: Not sure if definition is exactly correct
-  (const $ Greek Phi_L) Real Nothing []
+  (const lPhi) Real Nothing
 
 -----------------
 -- Constraints --

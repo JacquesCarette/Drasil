@@ -1,9 +1,10 @@
 module Data.Drasil.Quantities.SolidMechanics where
 
 import Language.Drasil
-import Data.Drasil.Concepts.SolidMechanics as CSM
-import Data.Drasil.Units.SolidMechanics
-import Data.Drasil.SI_Units
+import Data.Drasil.Concepts.SolidMechanics as CSM (elastMod, mobShear, nrmStrss,
+    poissnsR, shearRes, stffness)
+import Data.Drasil.SI_Units (newton, pascal)
+import Data.Drasil.Units.SolidMechanics (stiffnessU)
 
 elastMod, mobShear, nrmStrss, shearRes, stffness :: UnitalChunk
 
@@ -11,7 +12,7 @@ elastMod = uc CSM.elastMod cE pascal
 mobShear = uc CSM.mobShear cS newton 
 shearRes = uc CSM.shearRes cP newton 
 stffness = uc CSM.stffness cK stiffnessU 
-nrmStrss = uc CSM.nrmStrss (Greek Sigma_L) pascal
+nrmStrss = uc CSM.nrmStrss (lSigma) pascal
 
 poissnsR :: DefinedQuantityDict
-poissnsR = dqd' CSM.poissnsR (const $ Greek Nu_L) Real Nothing [] 
+poissnsR = dqd' CSM.poissnsR (const lNu) Real Nothing

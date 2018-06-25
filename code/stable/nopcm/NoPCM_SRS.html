@@ -340,7 +340,7 @@ Temperature
 </tr>
 <tr>
 <td>
-<em>&Delta;T</em>
+<em>ΔT</em>
 </td>
 <td>
 Change in temperature
@@ -450,7 +450,7 @@ m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>&rho;</em>
+<em>ρ</em>
 </td>
 <td>
 Density
@@ -461,7 +461,7 @@ kg/m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>W</sub></em>
+<em>ρ<sub>W</sub></em>
 </td>
 <td>
 Density of water
@@ -472,7 +472,7 @@ kg/m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>&tau;</em>
+<em>τ</em>
 </td>
 <td>
 Dummy variable for integration over time
@@ -604,6 +604,14 @@ TU
 Typical Uncertainty
 </td>
 </tr>
+<tr>
+<td>
+UC
+</td>
+<td>
+Unlikely Change
+</td>
+</tr>
 </table>
 </div>
 </div>
@@ -630,7 +638,7 @@ Purpose of Document
 The main purpose of this document is to describe the modelling of solar water heating system. The goals and theoretical models used in the SWHS code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide ad hoc access to all information necessary to understand and verify the model. The SRS is abstract because the contents say what problem is being solved, but do not say how to solve it.
 </p>
 <p class="paragraph">
-This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
 </p>
 </div>
 </div>
@@ -675,7 +683,7 @@ The goal statements are refined to the theoretical models, and the theoretical m
 General System Description
 </h1>
 <p class="paragraph">
-This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
+This section provides general information about the system including identifying the interfaces between the system and its environment (system context), describing the user characteristics and listing the system constraints.
 </p>
 <div id="Sec:SysContext">
 <div class="subsection">
@@ -843,7 +851,7 @@ The instance models that govern SWHS are presented in <a href=#Sec:IMs>Instance 
 Assumptions
 </h3>
 <p class="paragraph">
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], or Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], or Unlikely Changes [<a href=#Sec:UCs>Unlikely Changes</a>], in which the respective assumption is used.
 </p>
 <ul class="hide-list-style">
 <li>
@@ -973,7 +981,7 @@ Equation
 <div id="">
 <div class="equation">
 <p class="paragraph">
-<em>&minus;&nabla;&sdot;<b>q</b>&plus;g = &rho;&#8239;C&#8239;<div class="fraction">
+<em>&minus;∇&sdot;<b>q</b>&plus;g = ρ&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 &part;&#8239;T
 </span>
@@ -992,7 +1000,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity <em>C</em> (J/(kg&sdot;&deg;C)) and density, <em>&rho;</em> (kg/m<sup>3</sup>), where <em><b>q</b></em> is the thermal flux vector (W/m<sup>2</sup>), <em>g</em> is the volumetric heat generation per unit volume (W/m<sup>3</sup>), <em>T</em> is the temperature (&deg;C), <em>t</em> is time (s), and <em>&nabla;</em> is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href=#A:assump1>assump1</a>).
+The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity <em>C</em> (J/(kg&sdot;&deg;C)) and density, <em>ρ</em> (kg/m<sup>3</sup>), where <em><b>q</b></em> is the thermal flux vector (W/m<sup>2</sup>), <em>g</em> is the volumetric heat generation per unit volume (W/m<sup>3</sup>), <em>T</em> is the temperature (&deg;C), <em>t</em> is time (s), and <em>∇</em> is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href=#A:assump1>assump1</a>).
 </p>
 </td>
 </tr>
@@ -1028,7 +1036,7 @@ Equation
 <div id="">
 <div class="equation">
 <p class="paragraph">
-<em><b>q</b>(t) = h&#8239;&Delta;T(t)</em>
+<em><b>q</b>(t) = h&#8239;ΔT(t)</em>
 </p>
 </div>
 </div>
@@ -1040,7 +1048,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. <em><b>q</b>(t)</em> is the thermal flux (W/m<sup>2</sup>). <em>h</em> is the heat transfer coefficient, assumed independant of <em>T</em> (<a href=#A:Heat-Transfer-Coeffs-Constant>Heat-Transfer-Coeffs-Constant</a>) (W/(m<sup>2</sup>&sdot;&deg;C)). <em>&Delta;T(t) = T(t)&minus;T<sub>env</sub>(t)</em> is the time-dependant thermal gradient between the environment and the object (&deg;C).
+Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. <em><b>q</b>(t)</em> is the thermal flux (W/m<sup>2</sup>). <em>h</em> is the heat transfer coefficient, assumed independant of <em>T</em> (<a href=#A:Heat-Transfer-Coeffs-Constant>Heat-Transfer-Coeffs-Constant</a>) (W/(m<sup>2</sup>&sdot;&deg;C)). <em>ΔT(t) = T(t)&minus;T<sub>env</sub>(t)</em> is the time-dependant thermal gradient between the environment and the object (&deg;C).
 </p>
 </td>
 </tr>
@@ -1099,7 +1107,7 @@ Integrating <a href=#T:t1ConsThermE>T:t1ConsThermE</a> over a volume (<em>V</em>
 </p>
 <div id="">
 <div class="equation">
-<em>&minus;&int;<sub>V</sub>&nabla;&sdot;<b>q</b>&#8239;dV&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>&rho;&#8239;C&#8239;<div class="fraction">
+<em>&minus;&int;<sub>V</sub>∇&sdot;<b>q</b>&#8239;dV&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 &part;&#8239;T
 </span>
@@ -1114,7 +1122,7 @@ Applying Gauss's Divergence Theorem to the first term over the surface <em>S</em
 </p>
 <div id="">
 <div class="equation">
-<em>&minus;&int;<sub>S</sub><b>q</b>&sdot;<b>n&#770;</b>&#8239;dS&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>&rho;&#8239;C&#8239;<div class="fraction">
+<em>&minus;&int;<sub>S</sub><b>q</b>&sdot;<b>n&#770;</b>&#8239;dS&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 &part;&#8239;T
 </span>
@@ -1129,7 +1137,7 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 </p>
 <div id="">
 <div class="equation">
-<em>q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V = &int;<sub>V</sub>&rho;&#8239;C&#8239;<div class="fraction">
+<em>q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 &part;&#8239;T
 </span>
@@ -1140,11 +1148,11 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 </div>
 </div>
 <p class="paragraph">
-Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in GD2. Assuming <em>&rho;</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by Assumptions (<a href=#A:assump3>assump3</a>), (<a href=#A:assump4>assump4</a>), and (<a href=#A:assump5>assump5</a>), we have:
+Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in GD2. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by Assumptions (<a href=#A:assump3>assump3</a>), (<a href=#A:assump4>assump4</a>), and (<a href=#A:assump5>assump5</a>), we have:
 </p>
 <div id="">
 <div class="equation">
-<em>&rho;&#8239;C&#8239;V&#8239;<div class="fraction">
+<em>ρ&#8239;C&#8239;V&#8239;<div class="fraction">
 <span class="fup">
 d&#8239;T
 </span>
@@ -1155,7 +1163,7 @@ d&#8239;t
 </div>
 </div>
 <p class="paragraph">
-Using the fact that <em>&rho;</em>=<em>m</em>/<em>V</em>, (2) can be written as:
+Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, (2) can be written as:
 </p>
 <div id="">
 <div class="equation">
@@ -1269,7 +1277,7 @@ d&#8239;t
 1
 </span>
 <span class="fdn">
-&tau;<sub>W</sub>
+τ<sub>W</sub>
 </span>
 </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))</em>
 </p>
@@ -1283,7 +1291,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>&tau;<sub>W</sub> = <div class="fraction">
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>τ<sub>W</sub> = <div class="fraction">
 <span class="fup">
 m<sub>W</sub>&#8239;C<sub>W</sub>
 </span>
@@ -1352,7 +1360,7 @@ m<sub>W</sub>&#8239;C<sub>W</sub>
 </div>
 </div>
 <p class="paragraph">
-Setting <em>&tau;<sub>W</sub></em>=<em>m<sub>W</sub></em><em>C<sub>W</sub></em>/<em>h<sub>C</sub></em><em>A<sub>C</sub></em>, Equation (4) can be written in its final form as:
+Setting <em>τ<sub>W</sub></em>=<em>m<sub>W</sub></em><em>C<sub>W</sub></em>/<em>h<sub>C</sub></em><em>A<sub>C</sub></em>, Equation (4) can be written in its final form as:
 </p>
 <div id="">
 <div class="equation">
@@ -1368,7 +1376,7 @@ d&#8239;t
 1
 </span>
 <span class="fdn">
-&tau;<sub>W</sub>
+τ<sub>W</sub>
 </span>
 </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
 </div>
@@ -1454,7 +1462,7 @@ TU
 <em>1.5</em> m
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
@@ -1471,7 +1479,7 @@ None
 <em>0.412</em> m
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
@@ -1488,7 +1496,7 @@ None
 <em>0.12</em> m<sup>2</sup>
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
@@ -1505,24 +1513,24 @@ None
 <em>50.0</em> &deg;C
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>W</sub></em>
+<em>ρ<sub>W</sub></em>
 </td>
 <td>
-<em>&rho;<sub>W</sub>&thinsp;&gt;&thinsp;0</em>
+<em>ρ<sub>W</sub>&thinsp;&gt;&thinsp;0</em>
 </td>
 <td>
-<em>&rho;<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;&rho;<sub>W</sub>&thinsp;&le;&thinsp;&rho;<sub>W</sub><sup>max</sup></em>
+<em>ρ<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;ρ<sub>W</sub>&thinsp;&le;&thinsp;ρ<sub>W</sub><sup>max</sup></em>
 </td>
 <td>
 <em>1000.0</em> kg/m<sup>3</sup>
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
@@ -1539,7 +1547,7 @@ None
 <em>4186.0</em> J/(kg&sdot;&deg;C)
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
@@ -1556,7 +1564,7 @@ None
 <em>1000.0</em> W/(m<sup>2</sup>&sdot;&deg;C)
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
@@ -1573,7 +1581,7 @@ None
 <em>40.0</em> &deg;C
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
@@ -1590,7 +1598,7 @@ None
 <em>50000.0</em> s
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 </table>
@@ -1714,7 +1722,7 @@ temperature of the heating coil
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>W</sub></em>
+<em>ρ<sub>W</sub></em>
 </td>
 <td>
 kg/m<sup>3</sup>
@@ -1778,14 +1786,14 @@ Use-Above-Find-Mass-IM1-IM2: Use the inputs in <a href=#FR:req1>Input-Inital-Val
 </ul>
 <div id="">
 <div class="equation">
-<em>m<sub>W</sub> = V<sub>W</sub>&#8239;&rho;<sub>W</sub> = <div class="fraction">
+<em>m<sub>W</sub> = V<sub>W</sub>&#8239;ρ<sub>W</sub> = <div class="fraction">
 <span class="fup">
 D
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;L&#8239;&rho;<sub>W</sub></em>
+</div>&#8239;L&#8239;ρ<sub>W</sub></em>
 </div>
 </div>
 <ul class="hide-list-style">
@@ -1798,7 +1806,7 @@ Check-Inputs-Satisfy-Physical-Constraints: Verify that the inputs satisfy the re
 <ul class="hide-list-style">
 <li>
 <div id="FR:req4">
-Output-Input-Derivied-Quantities: Outputs and inputs quantities and derived quantities in the following list: the quantities from <a href=#FR:req1>Input-Inital-Values</a>, the mass from <a href=#FR:req2>Use-Above-Find-Mass-IM1-IM2</a> and <em>&tau;<sub>W</sub></em> (from IM1).
+Output-Input-Derivied-Quantities: Outputs and inputs quantities and derived quantities in the following list: the quantities from <a href=#FR:req1>Input-Inital-Values</a>, the mass from <a href=#FR:req2>Use-Above-Find-Mass-IM1-IM2</a> and <em>τ<sub>W</sub></em> (from IM1).
 </div>
 </li>
 </ul>
@@ -1852,7 +1860,7 @@ Temperature-Coil-Variable-Over-Length: <a href=#A:assump9>assump9</a> - The temp
 <ul class="hide-list-style">
 <li>
 <div id="LC:likeChg3">
-Discharging-Tank: <a href=#A:assump9.npcm>assump9_npcm</a>- The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.
+Discharging-Tank: <a href=#A:assump9.npcm>assump9_npcm</a>- The model currently only accounts for charging of the tank. That is, increasing the temperature of the water to match the temperature of the coil. A more complete model would also account for discharging of the tank.
 </div>
 </li>
 </ul>
@@ -2948,7 +2956,7 @@ W/(m<sup>2</sup>&sdot;&deg;C)
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>W</sub><sup>min</sup></em>
+<em>ρ<sub>W</sub><sup>min</sup></em>
 </td>
 <td>
 minimum density of water
@@ -2962,7 +2970,7 @@ kg/m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>W</sub><sup>max</sup></em>
+<em>ρ<sub>W</sub><sup>max</sup></em>
 </td>
 <td>
 maximum density of water
@@ -3073,7 +3081,7 @@ References
 </div>
 </li>
 <li>
-<div id="parnas1986">
+<div id="parnasClements1986">
 [4]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
 </div>
 </li>

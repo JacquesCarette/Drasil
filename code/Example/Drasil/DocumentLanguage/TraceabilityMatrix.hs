@@ -1,7 +1,8 @@
 module Drasil.DocumentLanguage.TraceabilityMatrix where
 
 import Language.Drasil
-import Drasil.DocumentLanguage.RefHelpers
+import Drasil.DocumentLanguage.RefHelpers (ddRefDB, gdRefDB, imRefDB, mdb, 
+    modelsFromDB, refDD, refGD, refIM, refTM, tmRefDB)
 
 modelTraceTable :: ModelDB -> Contents
 modelTraceTable mdb = Table

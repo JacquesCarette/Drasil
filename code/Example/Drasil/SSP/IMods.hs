@@ -4,38 +4,40 @@ module Drasil.SSP.IMods where
 import Prelude hiding (tan, product, sin, cos)
 import Language.Drasil
 import Control.Lens ((^.))
-import Drasil.DocumentLanguage.RefHelpers
 
-import Drasil.SSP.Unitals (inxi, shrStress, baseLngth, sum1toN, mobStress,
-  fs, fs_min, fsloc, shrDispl, shrStiffBase, genForce, constant_a, fricAngle,
-  normStress, baseWthX, cohesion, poissnsRatio, intNormForce, nrmStiffBase,
-  nrmDispl, dy_i, dx_i, baseAngle, genDisplace, rotatedDispl, index, yi,
-  xi, numbSlices, shrResC, shearRNoIntsl, shearFNoIntsl, mobShrC,
-  inxi, inxiP1, normToShear, scalFunc, intShrForce, wiif, inxiM1, totNrmForce,
-  nrmFSubWat, mobShrI, baseHydroForce, impLoadAngle, surfLoad, surfAngle,
-  surfHydroForce, earthqkLoadFctr, slcWght, midpntHght, watrForce, critCoords,
-  indxn, minFunction, surfLngth, shrStiffIntsl, watrForceDif, effStiffB,
-  effStiffA, nrmStiffIntsl, indx1, normFunc, shearFunc, varblU, varblV)
-import Drasil.SSP.Defs (slope, slice, slip,
-  intrslce, ssa, morPrice, crtSlpSrf, factorOfSafety)
-import Data.Drasil.SentenceStructures (foldlSent, isThe)
-import Data.Drasil.Utils (getES, eqUnR)
 import Drasil.SSP.DataDefs (fixme1,fixme2)
+import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice, 
+  slip, slope, ssa)
+import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
+  cohesion, constant_a, critCoords, dx_i, dy_i, earthqkLoadFctr, effStiffA, 
+  effStiffB, fricAngle, fs, fs_min, fsloc, genDisplace, genForce, impLoadAngle, 
+  index, indx1, indxn, intNormForce, intShrForce, inxi, inxi, inxiM1, inxiP1, 
+  midpntHght, minFunction, mobShrC, mobShrI, mobStress, normFunc, normStress, 
+  normToShear, nrmDispl, nrmFSubWat, nrmStiffBase, nrmStiffIntsl, numbSlices, 
+  poissnsRatio, rotatedDispl, scalFunc, shearFNoIntsl, shearFunc, shearRNoIntsl, 
+  shrDispl, shrResC, shrStiffBase, shrStiffIntsl, shrStress, slcWght, sum1toN, 
+  surfAngle, surfHydroForce, surfLngth, surfLoad, totNrmForce, varblU, varblV,
+  watrForce, watrForceDif, wiif, xi, yi)
+
+import Drasil.DocumentLanguage.RefHelpers(refA)
+
+import Data.Drasil.SentenceStructures (foldlSent, isThe)
+import Data.Drasil.Utils (eqUnR, getES)
 
 -- Needed for derivations
-import Data.Drasil.Concepts.Documentation (analysis,
-  solution, definition, value, assumption, physicalProperty,
-  problem, method_)
-import Data.Drasil.SentenceStructures (andThe, acroGD, 
-  sIs, sIn, getTDS, getTandS, ofThe, ofThe', sAnd, sOf, acroIM, acroT,
-  eqN, foldlSP, foldlSent_)
-import Data.Drasil.Concepts.Math (equation, surface)
-import Data.Drasil.Concepts.Physics (displacement, force)
-import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Drasil.SSP.Assumptions
-import Drasil.SSP.BasicExprs
-import Drasil.SSP.DataDefs
+import Drasil.SSP.Assumptions (newA2, sspRefDB)
+import Drasil.SSP.BasicExprs (eqlExpr, momExpr)
+import Drasil.SSP.DataDefs (ddRef, intrsliceF, lengthLb, lengthLs, 
+  mobShearWO, resShearWO, seismicLoadF, sliceWght, surfLoads)
 
+import Data.Drasil.Concepts.Documentation (analysis, assumption, definition, 
+  method_, physicalProperty, problem, solution, value)
+import Data.Drasil.Concepts.Math (equation, surface)
+import Data.Drasil.Concepts.PhysicalProperties (mass)
+import Data.Drasil.Concepts.Physics (displacement, force)
+
+import Data.Drasil.SentenceStructures (acroGD, acroIM, acroT, andThe, eqN, 
+  foldlSent_, foldlSP, getTandS, getTDS, ofThe, ofThe', sAnd, sIn, sIs, sOf)
 
 -----------------------
 --  Instance Models  --
@@ -46,7 +48,7 @@ sspIMods = [fctSfty, nrmShrFor, intsliceFs, forDisEqlb, rfemFoS, crtSlpId]
 
 --
 fctSfty :: RelationConcept
-fctSfty = makeRC "fctSfty" factorOfSafety fcSfty_desc fcSfty_rel []
+fctSfty = makeRC "fctSfty" factorOfSafety fcSfty_desc fcSfty_rel 
 
 --FIXME: first shearRNoIntsl should have local index v, not i,
 --       last occurence should have index n
@@ -71,11 +73,11 @@ fcSfty_desc = foldlSent [S "Equation for the", titleize fs `isThe` S "ratio",
 --
 nrmShrFor :: RelationConcept
 nrmShrFor = makeRC "nrmShrFor" (nounPhraseSP "normal/shear force ratio")
-  nrmShrF_desc nrmShrF_rel []
+  nrmShrF_desc nrmShrF_rel 
 
 nrmShrF_rel :: Relation
-nrmShrF_rel = (inxi normFunc) $= case_ [case1,case2,case3] $=
-  inxi shearFunc $= case_ [
+nrmShrF_rel = (sy normFunc) $= case_ [case1,case2,case3] $=
+  sy shearFunc $= case_ [
   (indx1 baseWthX * indx1 scalFunc * indx1 intNormForce, sy index $= 1),
   (inxi baseWthX * (inxi scalFunc * inxi intNormForce +
     inxiM1 scalFunc  * inxiM1 intNormForce),
@@ -84,7 +86,7 @@ nrmShrF_rel = (inxi normFunc) $= case_ [case1,case2,case3] $=
     idx (sy watrForce) (sy numbSlices - 1), sy index $= 1)
   ]
   $= --FIXME: move to seperate instance model
-  sy normToShear $= sum1toN (inxi normFunc) / sum1toN (inxi shearFunc)
+  sy normToShear $= sum1toN (sy normFunc) / sum1toN (sy shearFunc)
   where case1 = ((indx1 baseWthX)*((indx1 intNormForce)+(indx1 watrForce)) *
           tan (indx1 baseAngle), sy index $= 1)
         case2 = ((inxi baseWthX)*
@@ -111,7 +113,7 @@ nrmShrF_desc = foldlSent [getES normToShear `isThe` S "magnitude ratio",
 --
 intsliceFs :: RelationConcept
 intsliceFs = makeRC "intsliceFs" (nounPhraseSP "interslice forces")
-  sliceFs_desc sliceFs_rel []
+  sliceFs_desc sliceFs_rel 
 
 sliceFs_rel :: Relation
 sliceFs_rel = inxi intNormForce $= case_ [
@@ -133,7 +135,7 @@ sliceFs_desc = foldlSent [S "The value of the interslice normal force",
 --
 forDisEqlb :: RelationConcept
 forDisEqlb = makeRC "forDisEqlb"
-  (nounPhraseSP "force displacement equilibrium") fDisEq_desc fDisEq_rel []
+  (nounPhraseSP "force displacement equilibrium") fDisEq_desc fDisEq_rel 
 
 fDisEq_rel :: Relation --FIXME: split into two IMOD
 fDisEq_rel = negate (inxi watrForceDif) - (sy earthqkLoadFctr)*(inxi slcWght) -
@@ -179,7 +181,7 @@ fDisEq_desc = foldlSent [
 --
 rfemFoS :: RelationConcept
 rfemFoS = makeRC "rfemFoS" (nounPhraseSP "RFEM factor of safety")
-  rfemFoS_desc rfemFoS_rel []
+  rfemFoS_desc rfemFoS_rel 
 
 rfemFoS_rel :: Relation
 rfemFoS_rel = (inxi fsloc) $= fosFracLoc $= fosFracSum
@@ -209,7 +211,7 @@ rfemFoS_desc = foldlSent [
 --
 crtSlpId :: RelationConcept
 crtSlpId = makeRC "crtSlpId" (nounPhraseSP "critical slip identification")
-  crtSlpId_desc crtSlpId_rel []
+  crtSlpId_desc crtSlpId_rel 
 
 -- FIXME: horrible hack. This is short an argument... that was never defined!
 crtSlpId_rel :: Relation

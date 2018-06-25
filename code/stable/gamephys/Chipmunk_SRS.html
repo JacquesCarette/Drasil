@@ -750,7 +750,7 @@ m<sup>2</sup>
 </tr>
 <tr>
 <td>
-<em>&alpha;</em>
+<em>α</em>
 </td>
 <td>
 Angular Acceleration
@@ -761,7 +761,7 @@ rad/s<sup>2</sup>
 </tr>
 <tr>
 <td>
-<em>&theta;</em>
+<em>θ</em>
 </td>
 <td>
 Angular Displacement
@@ -772,7 +772,7 @@ rad
 </tr>
 <tr>
 <td>
-<em>&pi;</em>
+<em>π</em>
 </td>
 <td>
 pi
@@ -783,7 +783,7 @@ pi
 </tr>
 <tr>
 <td>
-<em>&tau;<sub>i</sub></em>
+<em>τ<sub>i</sub></em>
 </td>
 <td>
 Is the torque applied to the i-th body
@@ -794,7 +794,7 @@ N&sdot;m
 </tr>
 <tr>
 <td>
-<em>&tau;</em>
+<em>τ</em>
 </td>
 <td>
 Torque
@@ -805,18 +805,7 @@ N&sdot;m
 </tr>
 <tr>
 <td>
-<em>&phi;</em>
-</td>
-<td>
-Orientation
-</td>
-<td>
-rad
-</td>
-</tr>
-<tr>
-<td>
-<em>&omega;<sub>A</sub></em>
+<em>ω<sub>A</sub></em>
 </td>
 <td>
 Is the a Body's Angular Velocity
@@ -827,7 +816,7 @@ rad/s
 </tr>
 <tr>
 <td>
-<em>&omega;<sub>B</sub></em>
+<em>ω<sub>B</sub></em>
 </td>
 <td>
 Is the B Body's Angular Velocity
@@ -838,13 +827,24 @@ rad/s
 </tr>
 <tr>
 <td>
-<em>&omega;</em>
+<em>ω</em>
 </td>
 <td>
 Angular Velocity
 </td>
 <td>
 rad/s
+</td>
+</tr>
+<tr>
+<td>
+<em>ϕ</em>
+</td>
+<td>
+Orientation
+</td>
+<td>
+rad
 </td>
 </tr>
 </table>
@@ -970,6 +970,14 @@ T
 Theoretical Model
 </td>
 </tr>
+<tr>
+<td>
+UC
+</td>
+<td>
+Unlikely Change
+</td>
+</tr>
 </table>
 </div>
 </div>
@@ -996,7 +1004,7 @@ Purpose of Document
 This document descibes the modeling of an open source 2D rigid body physics library used for games. The theoretical models and goal statements used in Chipmunk2D are provided. This document is intended to be used as a reference to provide all necessary information to understand and verify the model.
 </p>
 <p class="paragraph">
-This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
 </p>
 </div>
 </div>
@@ -1041,7 +1049,7 @@ The goal statements are refined to the theoretical models, and the theoretical m
 General System Description
 </h1>
 <p class="paragraph">
-This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
+This section provides general information about the system including identifying the interfaces between the system and its environment (system context), describing the user characteristics and listing the system constraints.
 </p>
 <div id="Sec:usercharacteristic">
 <div class="subsection">
@@ -1338,7 +1346,7 @@ Equation
 <div id="">
 <div class="equation">
 <p class="paragraph">
-<em><b>v</b><sub>B</sub> = <b>v</b><sub>O</sub>&plus;&omega;&#10799;<b>r</b><sub>OB</sub></em>
+<em><b>v</b><sub>B</sub> = <b>v</b><sub>O</sub>&plus;ω&#10799;<b>r</b><sub>OB</sub></em>
 </p>
 </div>
 </div>
@@ -1350,7 +1358,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigid body is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> (m/s) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>&omega;</em> (rad/s) and the displacement vector between the origin and point B, <em><b>r</b><sub>OB</sub></em> (m).
+The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigid body is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> (m/s) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>ω</em> (rad/s) and the displacement vector between the origin and point B, <em><b>r</b><sub>OB</sub></em> (m).
 </p>
 </td>
 </tr>
@@ -1376,7 +1384,7 @@ Equation
 <div id="">
 <div class="equation">
 <p class="paragraph">
-<em>&tau; = <b>I</b>&#8239;&alpha;</em>
+<em>τ = <b>I</b>&#8239;α</em>
 </p>
 </div>
 </div>
@@ -1388,7 +1396,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-The net torque <em>&tau;</em> (N&sdot;m) on a rigid body is proportional to its angular acceleration <em>&alpha;</em> (rad/s<sup>2</sup>). Here, <em><b>I</b></em> (kg&sdot;m<sup>2</sup>) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional (A2).
+The net torque <em>τ</em> (N&sdot;m) on a rigid body is proportional to its angular acceleration <em>α</em> (rad/s<sup>2</sup>). Here, <em><b>I</b></em> (kg&sdot;m<sup>2</sup>) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional (A2).
 </p>
 </td>
 </tr>
@@ -1486,16 +1494,16 @@ Equation
 <div id="">
 <div class="equation">
 <p class="paragraph">
-<em>&alpha; = <div class="fraction">
+<em>α = <div class="fraction">
 <span class="fup">
-d&#8239;&omega;(t)
+d&#8239;ω(t)
 </span>
 <span class="fdn">
 d&#8239;t
 </span>
 </div> = <div class="fraction">
 <span class="fup">
-&tau;<sub>i</sub>(t)
+τ<sub>i</sub>(t)
 </span>
 <span class="fdn">
 <b>I</b>
@@ -1512,7 +1520,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved. <em>m<sub>i</sub></em> is the mass of the i-th rigid body (kg). <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>). <em>t</em> is the point in time (s). <em>t<sub>0</sub></em> is the denotes the initial time (s). <em>&phi;</em> is the orientation (rad). <em>&omega;</em> is the angular velocity (rad/s). <em>&alpha;</em> is the angular acceleration (rad/s<sup>2</sup>). <em>&tau;<sub>i</sub></em> is the is the torque applied to the i-th body (N&sdot;m). <em><b>I</b><sub>k</sub></em> is the moment of inertia of the k-th rigid body (kg&sdot;m<sup>2</sup>).
+The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved. <em>m<sub>i</sub></em> is the mass of the i-th rigid body (kg). <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>). <em>t</em> is the point in time (s). <em>t<sub>0</sub></em> is the denotes the initial time (s). <em>ϕ</em> is the orientation (rad). <em>ω</em> is the angular velocity (rad/s). <em>α</em> is the angular acceleration (rad/s<sup>2</sup>). <em>τ<sub>i</sub></em> is the is the torque applied to the i-th body (N&sdot;m). <em><b>I</b><sub>k</sub></em> is the moment of inertia of the k-th rigid body (kg&sdot;m<sup>2</sup>).
 </p>
 </td>
 </tr>
@@ -1557,7 +1565,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-This instance model is based on our assumptions regarding rigid body (A1, A2) collisions (A5). Again, this does not take damping (A6) or constraints (A7) into account. <em>m<sub>i</sub></em> is the mass of the i-th rigid body (kg). <em><b>I</b><sub>k</sub></em> is the moment of inertia of the k-th rigid body (kg&sdot;m<sup>2</sup>). <em>t</em> is the point in time (s). <em>t<sub>0</sub></em> is the denotes the initial time (s). <em>t<sub>c</sub></em> is the denotes the time at collision (s). <em><b>p</b><sub>CM</sub></em> is the the mass-weighted average position of a rigid body's particles (m). <em><b>v</b></em> is the velocity (m/s). <em>&phi;</em> is the orientation (rad). <em>&omega;</em> is the angular velocity (rad/s). <em><b>n</b></em> is the collision normal vector (m). <em>j</em> is the collision impulse (scalar) (N&sdot;s). <em>P</em> is the point of collision (m). <em><b>r</b><sub>kP</sub></em> is the displacement vector between the centre of mass of rigid body k and contact point P (m).
+This instance model is based on our assumptions regarding rigid body (A1, A2) collisions (A5). Again, this does not take damping (A6) or constraints (A7) into account. <em>m<sub>i</sub></em> is the mass of the i-th rigid body (kg). <em><b>I</b><sub>k</sub></em> is the moment of inertia of the k-th rigid body (kg&sdot;m<sup>2</sup>). <em>t</em> is the point in time (s). <em>t<sub>0</sub></em> is the denotes the initial time (s). <em>t<sub>c</sub></em> is the denotes the time at collision (s). <em><b>p</b><sub>CM</sub></em> is the the mass-weighted average position of a rigid body's particles (m). <em><b>v</b></em> is the velocity (m/s). <em>ϕ</em> is the orientation (rad). <em>ω</em> is the angular velocity (rad/s). <em><b>n</b></em> is the collision normal vector (m). <em>j</em> is the collision impulse (scalar) (N&sdot;s). <em>P</em> is the point of collision (m). <em><b>r</b><sub>kP</sub></em> is the displacement vector between the centre of mass of rigid body k and contact point P (m).
 </p>
 </td>
 </tr>
@@ -1823,9 +1831,9 @@ Equation
 <div id="">
 <div class="equation">
 <p class="paragraph">
-<em>&theta; = <div class="fraction">
+<em>θ = <div class="fraction">
 <span class="fup">
-d&#8239;&phi;(t)
+d&#8239;ϕ(t)
 </span>
 <span class="fdn">
 d&#8239;t
@@ -1842,7 +1850,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>&theta;</em> is the angular displacement (rad)<br /><em>t</em> is the time (s)<br /><em>&phi;</em> is the orientation (rad)
+<em>θ</em> is the angular displacement (rad)<br /><em>t</em> is the time (s)<br /><em>ϕ</em> is the orientation (rad)
 </p>
 </td>
 </tr>
@@ -1878,9 +1886,9 @@ Equation
 <div id="">
 <div class="equation">
 <p class="paragraph">
-<em>&omega; = <div class="fraction">
+<em>ω = <div class="fraction">
 <span class="fup">
-d&#8239;&theta;(t)
+d&#8239;θ(t)
 </span>
 <span class="fdn">
 d&#8239;t
@@ -1897,7 +1905,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>&omega;</em> is the angular velocity (rad/s)<br /><em>t</em> is the time (s)<br /><em>&theta;</em> is the angular displacement (rad)
+<em>ω</em> is the angular velocity (rad/s)<br /><em>t</em> is the time (s)<br /><em>θ</em> is the angular displacement (rad)
 </p>
 </td>
 </tr>
@@ -1933,9 +1941,9 @@ Equation
 <div id="">
 <div class="equation">
 <p class="paragraph">
-<em>&alpha; = <div class="fraction">
+<em>α = <div class="fraction">
 <span class="fup">
-d&#8239;&omega;(t)
+d&#8239;ω(t)
 </span>
 <span class="fdn">
 d&#8239;t
@@ -1952,7 +1960,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>&alpha;</em> is the angular acceleration (rad/s<sup>2</sup>)<br /><em>t</em> is the time (s)<br /><em>&omega;</em> is the angular velocity (rad/s)
+<em>α</em> is the angular acceleration (rad/s<sup>2</sup>)<br /><em>t</em> is the time (s)<br /><em>ω</em> is the angular velocity (rad/s)
 </p>
 </td>
 </tr>
@@ -2078,7 +2086,7 @@ TU
 <em>44.2</em> m
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
@@ -2092,7 +2100,7 @@ TU
 <em>56.2</em> kg
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
@@ -2106,7 +2114,7 @@ TU
 <em>74.5</em> kg&sdot;m<sup>2</sup>
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
@@ -2120,7 +2128,7 @@ None
 <em>9.8</em> m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
@@ -2134,12 +2142,12 @@ None
 <em>0.412</em> m
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
 <td>
-<em>&phi;</em>
+<em>ϕ</em>
 </td>
 <td>
 None
@@ -2147,7 +2155,7 @@ None
 <td>
 <em><div class="fraction">
 <span class="fup">
-&pi;
+π
 </span>
 <span class="fdn">
 2
@@ -2155,7 +2163,7 @@ None
 </div></em> rad
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
@@ -2169,12 +2177,12 @@ None
 <em>2.51</em> m/s
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
 <td>
-<em>&omega;</em>
+<em>ω</em>
 </td>
 <td>
 None
@@ -2183,7 +2191,7 @@ None
 <em>2.1</em> rad/s
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
@@ -2197,12 +2205,12 @@ None
 <em>98.1</em> N
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
 <td>
-<em>&tau;</em>
+<em>τ</em>
 </td>
 <td>
 None
@@ -2211,7 +2219,7 @@ None
 <em>200.0</em> N&sdot;m
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
@@ -2225,7 +2233,7 @@ None
 <em>0.8</em>
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 </table>
@@ -2252,12 +2260,12 @@ Var
 </tr>
 <tr>
 <td>
-<em>&phi;</em>
+<em>ϕ</em>
 </td>
 </tr>
 <tr>
 <td>
-<em>&omega;</em>
+<em>ω</em>
 </td>
 </tr>
 </table>
@@ -5295,7 +5303,7 @@ References
 </div>
 </li>
 <li>
-<div id="parnas1986">
+<div id="parnasClements1986">
 [6]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
 </div>
 </li>

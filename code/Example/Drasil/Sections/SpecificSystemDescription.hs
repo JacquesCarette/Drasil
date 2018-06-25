@@ -18,11 +18,16 @@ module Drasil.Sections.SpecificSystemDescription
   ) where
 
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation (physical, column, input_, uncertainty, physicalConstraint,
+  softwareConstraint, typUnc, user, model, value, quantity, information, constraint, variable,
+  output_, symbol_, limitation, problem, inModel, datum, datumConstraint, section_, dataDefn,
+  general, genDefn, problemDescription, solutionCharSpec, assumption, thModel, physicalSystem,
+  likelyChg, unlikelyChg, goalStmt, theory, purpose, requirement, element)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle, getES, fmtU, getRVal)
-import Data.Drasil.SentenceStructures
+import Data.Drasil.SentenceStructures (fmtPhys, fmtSfwr, mkTableFromColumns, foldlSent, foldlSP,
+  typUncr, ofThe, foldlList)
 import qualified Drasil.SRS as SRS
 
 
@@ -94,15 +99,15 @@ goalStmtF givenInputs otherContents = SRS.goalStmt (intro:otherContents) []
 -- progName (ex ssp, progName), the two sections, gendef is True if you want general definitions sections, 
 --  ddEndSent is the ending sentence for Data Definitions, this is a 4-tuple of inputs for Data Constraints, 
 --  the last input is a tupple of lists of Sections for each Subsection in order.
-solChSpecF :: (Idea a) => a -> (Section, Section) -> Sentence -> 
+solChSpecF :: (Idea a) => a -> (Section, Section, Section) -> Sentence -> 
   (Sentence, Sentence, Sentence) -> 
   ([Contents], [Contents], [Contents], [Contents], [Contents], [Contents]) -> 
   [Section] -> Section
-solChSpecF progName (probDes, likeChg) ddEndSent (mid, hasUncertainty, trail) (a, t, g, dd, i, dc) adSubSec = 
+solChSpecF progName (probDes, likeChg, unlikeChg) ddEndSent (mid, hasUncertainty, trail) (a, t, g, dd, i, dc) adSubSec = 
   SRS.solCharSpec [solutionCharSpecIntro progName instModels] (subSec)
   where subSec = [assumption_, theModels, generDefn, 
                         dataDefin, instModels, dataConstr] ++ adSubSec
-        assumption_  = assumpF  theModels generDefn dataDefin instModels likeChg a
+        assumption_  = assumpF  theModels generDefn dataDefin instModels likeChg unlikeChg a
         theModels    = thModF progName t
         generDefn    = genDefnF g
         dataDefin    = dataDefnF ddEndSent dd
@@ -120,20 +125,20 @@ solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inMod
 
 
 -- wrappers for assumpIntro. Use assumpF' if genDefs is not needed
-assumpF :: Section -> Section -> Section -> Section -> Section -> [Contents] -> Section
-assumpF theMod genDef dataDef inMod likeChg otherContents = 
-      SRS.assumpt ((assumpIntro theMod genDef dataDef inMod likeChg):otherContents) []
+assumpF :: Section -> Section -> Section -> Section -> Section -> Section -> [Contents] -> Section
+assumpF theMod genDef dataDef inMod likeChg unlikeChg otherContents = 
+      SRS.assumpt ((assumpIntro theMod genDef dataDef inMod likeChg unlikeChg):otherContents) []
 
 
 -- takes a bunch of references to things discribed in the wrapper
-assumpIntro :: Section -> Section -> Section -> Section -> Section -> Contents
-assumpIntro r1 r2 r3 r4 r5 = Paragraph $ foldlSent 
+assumpIntro :: Section -> Section -> Section -> Section -> Section -> Section-> Contents
+assumpIntro r1 r2 r3 r4 r5 r6 = Paragraph $ foldlSent 
           [S "This", (phrase section_), S "simplifies the original", (phrase problem), 
           S "and helps in developing the", (phrase thModel), S "by filling in the", 
           S "missing", (phrase information), S "for the" +:+. (phrase physicalSystem), 
           S "The numbers given in the square brackets refer to the", 
-          foldr1 sC (map (refs) (itemsAndRefs)) `sC` S "or", 
-          refs (likelyChg, r5) `sC` S "in which the respective", 
+          foldr1 sC (map (refs) (itemsAndRefs)) `sC` (refs (likelyChg, r5)) `sC` S "or", 
+          refs (unlikelyChg, r6) `sC` S "in which the respective", 
           (phrase assumption), S "is used"] --FIXME: use some clever "zipWith"
           where refs (chunk, ref) = (titleize' chunk) +:+ sSqBr (makeRef ref) 
                 itemsAndRefs = [(thModel, r1), (genDefn, r2), (dataDefn, r3), 

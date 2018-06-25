@@ -2,8 +2,9 @@ module Drasil.SRS
  (doc, doc', intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
   genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
   probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assumpt, thModel,
-  genDefn, inModel, dataDefn, datCon, require, nonfuncReq, funcReq, likeChg, traceyMandG,
-  appendix, reference, propCorSol, offShelfSol, missingP, valsOfAuxCons, tOfSymb) where
+  genDefn, inModel, dataDefn, datCon, require, nonfuncReq, funcReq, likeChg, unlikeChg, 
+  traceyMandG, appendix, reference, propCorSol, offShelfSol, missingP, valsOfAuxCons,
+  tOfSymb) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
@@ -11,7 +12,15 @@ module Drasil.SRS
 
 import Language.Drasil
 
-import qualified Data.Drasil.Concepts.Documentation as Doc
+import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, 
+    assumption, charOfIR, client, customer, consVals, dataDefn, datumConstraint, 
+    functionalRequirement, genDefn, generalSystemDescription, goalStmt, 
+    indPRCase, inModel, introduction, likelyChg, unlikelyChg, nonfunctionalRequirement,
+    offShelfSolution, orgOfDoc, physSyst, prodUCTable, problemDescription, 
+    propOfCorSol, prpsOfDoc, reference, requirement, scpOfReq, scpOfTheProj,
+    solutionCharSpec, specificsystemdescription, srs, stakeholder, sysCont, 
+    systemConstraint, termAndDef, terminology, thModel, traceyMandG, tOfSymb, 
+    userCharacteristic)
 import Data.Drasil.Phrase (for'')
 
 -- Local function to keep things looking clean, not exported.
@@ -33,7 +42,7 @@ intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theCli
   genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
   probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assumpt, thModel,
   genDefn, inModel, dataDefn, datCon, propCorSol, require, nonfuncReq, funcReq, likeChg, traceyMandG, tOfSymb,
-  appendix, reference, offShelfSol, valsOfAuxCons :: [Contents] -> [Section] -> Section
+  appendix, reference, offShelfSol, valsOfAuxCons, unlikeChg :: [Contents] -> [Section] -> Section
 
 intro       cs ss = section' (titleize Doc.introduction) cs ss "Intro"
 prpsOfDoc   cs ss = section' (titleize Doc.prpsOfDoc) cs ss "DocPurpose"
@@ -75,6 +84,7 @@ nonfuncReq  cs ss = section' (titleize' Doc.nonfunctionalRequirement) cs ss "NFR
 funcReq     cs ss = section' (titleize' Doc.functionalRequirement) cs ss "FRs"
 
 likeChg     cs ss = section' (titleize' Doc.likelyChg)        cs ss "LCs"
+unlikeChg   cs ss = section' (titleize' Doc.unlikelyChg)      cs ss "UCs"
 
 traceyMandG cs ss = section' (titleize' Doc.traceyMandG)      cs ss "TraceMatrices"
 
@@ -89,7 +99,7 @@ tOfSymb cs ss = section' (titleize Doc.tOfSymb) cs ss "ToS"
 
 --function that sets the shortname of each section to be the reference address
 section' :: Sentence -> [Contents] -> [Section] -> RefAdd -> Section
-section' a b c d = section a b c d (getStr a) --FIXME: getStr hack 
+section' a b c d = section a b c d (shortname' $ getStr a) --FIXME: getStr hack 
 
 --
 missingP :: [Contents]

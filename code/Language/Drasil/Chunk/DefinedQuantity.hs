@@ -5,8 +5,8 @@ module Language.Drasil.Chunk.DefinedQuantity
   ) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom, DOM), Concept, HasSymbol(symbol),
-  HasAttributes(attributes), HasSpace(typ), IsUnit, HasDerivation(derivations),
+  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
+  HasSpace(typ), IsUnit, HasDerivation(derivations),
   IsUnit(udefn))
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import qualified Language.Drasil.Chunk.Quantity as Q
@@ -14,9 +14,8 @@ import qualified Language.Drasil.Chunk.Quantity as Q
 import Language.Drasil.Symbol (Symbol, Stage)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Unit (UnitDefn, unitWrapper, getunit)
-import Language.Drasil.Chunk.Attribute.Core (Attributes)
-import Language.Drasil.Chunk.Attribute.Derivation
-import Language.Drasil.UnitLang
+import Language.Drasil.Chunk.Derivation (Derivation)
+
 import Control.Lens ((^.), makeLenses, view)
 
 -- | DefinedQuantity = Concept + Quantity
@@ -24,7 +23,6 @@ data DefinedQuantityDict = DQD { _con :: ConceptChunk
                                , _symb :: Stage -> Symbol
                                , _spa :: Space
                                , _unit' :: Maybe UnitDefn
-                               , _attribs :: Attributes
                                , _deri :: Derivation
                                }
   
@@ -35,13 +33,10 @@ instance Eq            DefinedQuantityDict where a == b = (a ^. uid) == (b ^. ui
 instance NamedIdea     DefinedQuantityDict where term = con . term
 instance Idea          DefinedQuantityDict where getA = getA . view con
 instance Definition    DefinedQuantityDict where defn = con . defn
-instance ConceptDomain DefinedQuantityDict where
-  type DOM DefinedQuantityDict = ConceptChunk
-  cdom = con . cdom
+instance ConceptDomain DefinedQuantityDict where cdom = con . cdom
 instance Concept       DefinedQuantityDict where
 instance Q.HasSpace    DefinedQuantityDict where typ = spa
 instance HasSymbol     DefinedQuantityDict where symbol = view symb
-instance HasAttributes DefinedQuantityDict where attributes = attribs
 instance Q.Quantity    DefinedQuantityDict where getUnit = view unit'
 instance HasDerivation DefinedQuantityDict where derivations = deri
 

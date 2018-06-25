@@ -3,7 +3,7 @@ module Language.Drasil (
   -- Output.Formats
     DocType(SRS,MG,MIS,Website), DocSpec(DocSpec)
   -- SystemInformation
-  , SystemInformation(..), Block(..), citeDB
+  , SystemInformation(..), Block(..), citeDB, getRefDB
   -- Expr
   , Expr
   , Relation, RealInterval(..), Inclusive(..)
@@ -18,7 +18,7 @@ module Language.Drasil (
   , apply, apply1, apply2
   , cross, m2x2, vec2D, dgnl2x2
   -- all the stuff from Unicode
-  , Greek(..), Special(..)
+  ,Special(..)
   -- UnitLang
   , UDefn(..), from_udefn
   -- Unit
@@ -33,7 +33,6 @@ module Language.Drasil (
   , Concept
   , HasUnitSymbol(usymb)
   , IsUnit
-  , HasAttributes(attributes)
   , HasReference(getReferences)
   , CommonIdea(abrv)
   , Constrained(constraints)
@@ -84,8 +83,6 @@ module Language.Drasil (
   , dqd, dqd', dqdEL, DefinedQuantityDict, dqdWr, uwMUnitDefnL
   -- Chunk.UnitaryConcept
   , ucw, UnitaryConceptDict
-  -- Chunk.Attributes.Core
-  , Attributes
   -- Chunk.Attributes
   , getSource
   , Derivation, getDerivation, getShortName, shortname'
@@ -126,7 +123,7 @@ module Language.Drasil (
   -- Document
   , Referable(..), Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListPair
-  , section, fig, figWithWidth
+  , section, fig, figWithWidth, section'' 
   , datadefn, reldefn
   -- Reference
   , makeRef, acroTest, find'
@@ -137,6 +134,10 @@ module Language.Drasil (
   -- SymbolAlphabet
   , cA, cB, cC, cD, cE, cF, cG, cH, cI, cJ, cK, cL, cM, cN, cO, cP, cQ, cR, cS, cT, cU, cV, cW, cX, cY, cZ
   , lA, lB, lC, lD, lE, lF, lG, lH, lI, lJ, lK, lL, lM, lN, lO, lP, lQ, lR, lS, lT, lU, lV, lW, lX, lY, lZ
+  , lAlpha, cAlpha, lBeta, cBeta, lGamma, cGamma, lDelta, cDelta, lEpsilon, vEpsilon, cEpsilon, lZeta, cZeta
+  , lEta, cEta, lTheta, cTheta, lIota, cIota, lKappa, cKappa, lLambda, cLambda, lMu, cMu, lNu, cNu, lXi, cXi 
+  , lOmicron, cOmicron, lPi, cPi, lRho, cRho, lSigma, cSigma, lTau, cTau, lUpsilon, cUpsilon, lPhi, vPhi, cPhi
+  , lChi, cChi, lPsi, cPsi, lOmega, cOmega, lNabla, lEll
   -- Misc
   , mkTable, unit'2Contents, unit_symb, introduceAbb, phrase, plural, phrase's, plural's, at_start, at_start'
   , unitHidingUnitless
@@ -206,23 +207,23 @@ import Language.Drasil.Expr.Extract (vars)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website),DocSpec(DocSpec))
 import Language.Drasil.Document (Document(..), DType(..)
   , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..)
-  , section, fig, figWithWidth
+  , section, fig, figWithWidth, section''
   , datadefn, reldefn
   , ListPair)
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.UnitLang -- all of it
 import Language.Drasil.Unit -- all of it
+import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
-  IsUnit, HasAttributes(attributes), CommonIdea(abrv),
+  IsUnit, CommonIdea(abrv),
   Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations),
   HasReference(getReferences))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
-import Language.Drasil.Chunk.Attribute.Core (Attributes)
-import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
-import Language.Drasil.Chunk.Attribute.References (References)
-import Language.Drasil.Chunk.Attribute.ShortName
+import Language.Drasil.Chunk.Derivation (Derivation)
+import Language.Drasil.Chunk.References (References)
+import Language.Drasil.Chunk.ShortName
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation (
   -- Types

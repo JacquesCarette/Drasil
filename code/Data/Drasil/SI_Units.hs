@@ -5,7 +5,7 @@ import Language.Drasil
 -- some kind of Language.Drasil.Development module... FIXME
 import Language.Drasil.UnitLang(UDefn(..))
 import Language.Drasil.Unit (UnitDefn(..),
-  UnitDefn, new_unit, (^:), (/:), (*:), makeDerU, shift, scale,
+  new_unit, (^:), (/:), (*:), makeDerU, shift, scale,
   derUC, derUC', derUC'', unitWrapper, fshift, fscale, derCUC, derCUC', derCUC'')
 
 fundamentals :: [UnitDefn]
@@ -106,7 +106,7 @@ newton = derCUC' "newton"
   "newton" "force" (Atomic "N") (kilogram *$ (second ^: (-2)))
   
 ohm = derCUC' "ohm"
-  "ohm" "resistance" (Greek Omega) (volt /: ampere)
+  "ohm" "resistance" cOmega (volt /: ampere)
   
 pascal = derCUC' "pascal" 
   "pascal" "pressure" (Atomic "Pa")

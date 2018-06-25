@@ -9,6 +9,8 @@ module Data.Drasil.Utils
   , itemRefToSent
   , refFromType
   , makeListRef
+  , bulletFlat
+  , bulletNested
   , enumSimple
   , enumBullet
   , mkRefsList
@@ -143,10 +145,19 @@ refFromType f = (makeRef . Definition . f)
 makeListRef :: [a] -> Section -> [Sentence]
 makeListRef l r = take (length l) $ repeat $ makeRef r
 
+-- | bulletFlat applies Bullet and Flat to a list.
+bulletFlat :: [Sentence] -> ListType
+bulletFlat = Bullet . map Flat
+
+-- | bulletNested applies Bullets and headers to a Nested ListType.
+-- t - Headers of the Nested lists.
+-- l - Lists of ListType.
+bulletNested :: [Sentence] -> [ListType] -> ListType
+bulletNested t l = Bullet . map (\(h,c) -> Nested h c) $ zip t l
 
 -- | enumBullet apply Enumeration, Bullet and Flat to a list
 enumBullet ::[Sentence] -> Contents
-enumBullet = Enumeration . Bullet . map Flat
+enumBullet = Enumeration . bulletFlat
 
 -- | enumSimple enumerates a list and applies simple and enumeration to it
 -- s - start index for the enumeration

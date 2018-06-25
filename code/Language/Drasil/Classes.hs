@@ -1,7 +1,7 @@
 {-# Language TypeFamilies #-}
 -- | Defining all the classes which represent knowledge-about-knowledge
 module Language.Drasil.Classes (
-    HasUID(uid)
+    HasUID(uid), UID
   , NamedIdea(term)
   , Idea(getA)
   , Definition(defn)
@@ -10,7 +10,7 @@ module Language.Drasil.Classes (
   , HasSymbol(symbol)
   , HasSpace(typ)
   , HasUnitSymbol(usymb)
-  , IsUnit
+  , IsUnit(udefn)
   , HasLabel(getLabel)
   , IsLabel
   , UnitEq(uniteq)

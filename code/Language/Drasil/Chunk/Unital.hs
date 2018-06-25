@@ -19,7 +19,7 @@ import Language.Drasil.Chunk.Concept (dcc, dccWDS,cw)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd)
 import Language.Drasil.Chunk.Quantity (Quantity(..),HasSpace(typ))
 import Language.Drasil.Chunk.Unitary (Unitary(..))
-import Language.Drasil.Unit (UnitDefn, unitWrapper')
+import Language.Drasil.Unit (UnitDefn, unitWrapper', unitWrapper)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (Sentence)
@@ -65,7 +65,7 @@ uc' i t d s u = UC (dqd (dcc i t d) s Real (Just un)) un
 
 ucc' :: String -> NP -> String -> Symbol ->
  UnitDefn -> {-Attributes -> -} UnitalChunk
-ucc' i t d s u {-atts-} = UC (dqd (dcc i t d) s Real (Just un) []{-atts-}) un
+ucc' i t d s u {-atts-} = UC (dqd (dcc i t d) s Real (Just un)) un
  where un = unitWrapper' u
 
 

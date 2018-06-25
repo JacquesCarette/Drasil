@@ -18,12 +18,16 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
 import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cc')
 import Language.Drasil.Symbol
 import Language.Drasil.UnitLang
-
+import Language.Drasil.UID
 import Language.Drasil.NounPhrase (cn,cn',NP)
 
 -- | for defining fundamental units
 
-data UnitDefn = UD { _vc :: ConceptChunk, _fsymb :: USymb, _dsymb :: Maybe USymb,  _ud :: Maybe UDefn, _cu :: [UnitDefn]}
+data UnitDefn = UD { _vc :: ConceptChunk, 
+                     _fsymb :: USymb,
+                     _dsymb :: Maybe USymb,
+                     _ud :: Maybe UDefn,
+                     _cu :: [UnitDefn]}
 makeLenses ''UnitDefn
 
 instance HasUID        UnitDefn where uid = vc . uid
@@ -32,7 +36,6 @@ instance Idea          UnitDefn where getA c = getA (c ^. vc)
 instance Definition    UnitDefn where defn = vc . defn
 instance Eq            UnitDefn where a == b = (a ^. usymb) == (b ^. usymb)
 instance ConceptDomain UnitDefn where
-  type DOM UnitDefn = ConceptChunk
   cdom = vc . cdom
 instance HasUnitSymbol UnitDefn where usymb f (UD a b c e d) = fmap (\x -> UD a x c e d) (f b)
 instance IsUnit        UnitDefn where udefn = ud
@@ -57,8 +60,8 @@ makeDerU' :: ConceptChunk -> UnitEquation -> UnitDefn
 makeDerU' concept eqn = UD concept (from_udefn $ USynonym $ getsymb eqn) Nothing (Just $ USynonym $ getsymb eqn) (getCu eqn)
 
 derCUC, derCUC' :: String -> String -> String -> Symbol -> UnitEquation -> UnitDefn
-derCUC a b c s ue = UD (dcc a (cn b) c) (US [(s,1)]) Nothing (Just $ FUSynonym $ getsymb ue) (getCu ue)
-derCUC' a b c s ue = UD (dcc a (cn' b) c) (US [(s,1)]) Nothing (Just $ FUSynonym $ getsymb ue) (getCu ue)
+derCUC a b c s ue = UD (dcc a (cn b) c) (getsymb ue) (Just $ US [(s,1)]) (Just $ FUSynonym $ getsymb ue) (getCu ue)
+derCUC' a b c s ue = UD (dcc a (cn' b) c) (getsymb ue) (Just $ US [(s,1)]) (Just $ FUSynonym $ getsymb ue) (getCu ue)
 -- | Create a derived unit chunk from an id, term (as 'String'), definition,
 -- symbol, and unit equation
 derUC, derUC' :: String -> String -> String -> Symbol -> UDefn -> UnitDefn
@@ -82,52 +85,6 @@ unitCon :: String -> ConceptChunk
 unitCon s = dcc s (cn' s) s
 ---------------------------------------------------------
 
-==== BASE ====
--- | for defining fundamental units
-data UnitDefn = UD { _vc :: ConceptChunk
-                   , _u :: USymb
-                   }
-
--- don't export this
-vc :: Simple Lens UnitDefn ConceptChunk
-vc f (UD a b) = fmap (\x -> UD x b) (f a)
-
-instance HasUID        UnitDefn where uid = vc . uid
-instance NamedIdea     UnitDefn where term   = vc . term
-instance Idea          UnitDefn where getA c = getA (c ^. vc)
-instance Definition    UnitDefn where defn = vc . defn
-instance Eq            UnitDefn where a == b = (a ^. usymb) == (b ^. usymb)
-instance ConceptDomain UnitDefn where
-  type DOM UnitDefn = ConceptChunk
-  cdom = vc . cdom
-instance HasUnitSymbol UnitDefn where usymb f (UD a b) = fmap (\x -> UD a x) (f b)
-instance IsUnit        UnitDefn
-
--- | for defining Derived units
-data DerUChunk = DUC { _uc :: UnitDefn
-                     , _eq :: UDefn
-                     }
-
--- don't export this either
-duc :: Simple Lens DerUChunk UnitDefn
-duc f (DUC a b) = fmap (\x -> DUC x b) (f a)
-
-instance HasUID        DerUChunk where uid  = duc . uid
-instance NamedIdea     DerUChunk where term = duc . term
-instance Idea          DerUChunk where getA c = getA (c ^. duc)
-instance Definition    DerUChunk where defn = duc . defn
-instance ConceptDomain DerUChunk where
-  type DOM DerUChunk = ConceptChunk
-  cdom = duc . cdom
-instance HasUnitSymbol DerUChunk where usymb  = duc . usymb
-instance IsUnit        DerUChunk where
-
-instance UnitEq DerUChunk where
-  uniteq f (DUC a b) = fmap (\x -> DUC a x) (f b)
-
-----------------------------------------------------------
-==== BASE ====
-
 -- | For allowing lists to mix the two, thus forgetting
 -- the definition part
 unitWrapper :: (IsUnit u)  => u -> UnitDefn
@@ -136,8 +93,6 @@ unitWrapper u = UD (cc' u (u ^. defn)) (u ^. usymb) Nothing (u ^. udefn) []
 unitWrapper' :: UnitDefn -> UnitDefn
 unitWrapper' u = UD (cc' u (u ^. defn)) (u ^. usymb) Nothing (u ^. udefn) (getunit u)
 
---- These conveniences go here, because we need the class
--- | Combinator for raising a unit to a power
 helperUnit :: UnitDefn -> [UnitDefn]
 helperUnit a = case a ^. udefn of
   Just x -> case x of
@@ -147,6 +102,8 @@ helperUnit a = case a ^. udefn of
     _ -> getunit a
   Nothing -> [a]
 
+--- These conveniences go here, because we need the class
+-- | Combinator for raising a unit to a power
 (^:) :: UnitDefn -> Integer -> UnitEquation
 u ^: i = UE (helperUnit u) (upow (u ^. usymb))
   where

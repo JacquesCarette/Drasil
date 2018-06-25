@@ -5,7 +5,7 @@ import Language.Drasil
 -- some kind of Language.Drasil.Development module... FIXME
 import Language.Drasil.UnitLang(UDefn(..))
 import Language.Drasil.Unit (UnitDefn(..),
-  new_unit, (^:), (/:), (*:), makeDerU, shift, scale,
+  new_unit, (^:), (/:), (*:), shift, scale,
   derUC, derUC', derUC'', unitWrapper, fshift, fscale, derCUC, derCUC', derCUC'')
 
 fundamentals :: [UnitDefn]
@@ -138,11 +138,11 @@ weber = derCUC' "weber"
   "weber" "magnetic flux" (Atomic "Wb") (volt *: second)
   
 specificE :: UnitDefn
-specificE = makeDerU' (dcc "specificE" (cnIES "specific energy") 
+specificE = makeDerU (dcc "specificE" (cnIES "specific energy") 
   "energy per unit mass") (joule /: kilogram)
 
 specific_weight :: UnitDefn
-specific_weight = makeDerU' (dcc "specific_weight" (cn' "specific weight")
+specific_weight = makeDerU (dcc "specific_weight" (cn' "specific weight")
   "weight per unit volume") (newton *$ (metre ^: (-3)))
   
 -- FIXME: Need to add pi 

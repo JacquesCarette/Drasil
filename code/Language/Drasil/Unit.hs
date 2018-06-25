@@ -1,12 +1,12 @@
 {-# Language TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Unit (
     UnitDefn(..)
-  , from_udefn, makeDerU, unitCon
+  , from_udefn, unitCon
   , (^:), (/:), (*:), (*$), (/$),(^$), new_unit
   , scale, shift, fshift, fscale
   , derUC, derUC', derUC'', unitWrapper
   , fund, comp_unitdefn, derCUC, derCUC', derCUC'', getsymb
-  , makeDerU', getunit, unitWrapper',getCu,getunit
+  , makeDerU, getunit, unitWrapper',getCu,getunit
   ) where
 
 import Control.Lens (Simple, Lens', Lens, (^.), makeLenses, view)
@@ -53,11 +53,8 @@ getCu :: UnitEquation -> [UnitDefn]
 getCu a = view contributingUnit a
 
 -- | Create a derived unit chunk from a concept and a unit equation
-makeDerU :: ConceptChunk -> UDefn -> UnitDefn
-makeDerU concept eqn = UD concept (from_udefn eqn) Nothing (Just eqn) []
-
-makeDerU' :: ConceptChunk -> UnitEquation -> UnitDefn
-makeDerU' concept eqn = UD concept (from_udefn $ USynonym $ getsymb eqn) Nothing (Just $ USynonym $ getsymb eqn) (getCu eqn)
+makeDerU :: ConceptChunk -> UnitEquation -> UnitDefn
+makeDerU concept eqn = UD concept (from_udefn $ USynonym $ getsymb eqn) Nothing (Just $ USynonym $ getsymb eqn) (getCu eqn)
 
 -- | Create a SI_Unit with two symbol representations
 derCUC, derCUC' :: String -> String -> String -> Symbol -> UnitEquation -> UnitDefn
@@ -155,7 +152,7 @@ fshift :: IsUnit s => Double -> s -> UDefn
 fshift a b = FUShift a (b ^. usymb)
 -- | Smart constructor for new derived units from existing units.
 new_unit :: String -> UnitEquation -> UnitDefn
-new_unit s u = makeDerU' (unitCon s) u
+new_unit s u = makeDerU (unitCon s) u
 
 fund :: String -> String -> String -> UnitDefn
 fund nam desc sym = UD (dcc nam (cn' nam) desc) (US [(Atomic sym, 1)]) Nothing Nothing []

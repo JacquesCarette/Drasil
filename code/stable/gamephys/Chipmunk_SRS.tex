@@ -12,6 +12,7 @@
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{caption}
+\usepackage{graphics}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
@@ -226,6 +227,8 @@ SRS & Software Requirements Specification
 \\
 T & Theoretical Model
 \\
+UC & Unlikely Change
+\\
 \bottomrule
 \label{Table:TAbbAcc}
 \end{longtable*}
@@ -250,6 +253,31 @@ The goal statements are refined to the theoretical models, and the theoretical m
 \section{General System Description}
 \label{Sec:GenSysDesc}
 This section provides general information about the system including identifying the interfaces between the system and its environment (system context), describing the user characteristics and listing the system constraints.
+\subsection{System Context}
+\label{Sec:systemcontext}
+Figure~\ref{Figure:sysCtxDiag} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (Chipmunk2D). Arrows are used to show the data flow between the system and its environment.
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{../../../datafiles/GamePhysics/sysctx.png}
+\caption{System Context}
+\label{Figure:sysCtxDiag}
+\end{center}
+\end{figure}
+The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:
+\begin{itemize}
+\item{User Responsibilities}
+\begin{itemize}
+\item{Provide initial conditions of the physical state of the simulation, rigid bodies present, and forces applied to them.}
+\item{Ensure application programming interface use complies with the user guide.}
+\item{Ensure required software assumptions (FIXME REF) are appropriate for any particular problem the software addresses.}
+\end{itemize}
+\item{Chipmunk2D Responsibilities}
+\begin{itemize}
+\item{Determine if the inputs and simulation state satisfy the required physical and system constraints (FIXME REF).}
+\item{Calculate the new state of all rigid bodies within the simulation at each simulation step.}
+\item{Provide updated physical state of all rigid bodies at the end of a simulation step.}
+\end{itemize}
+\end{itemize}
 \subsection{User Characteristics}
 \label{Sec:usercharacteristic}
 The end user of Chipmunk2D should have an understanding of first year programming concepts and an understanding of high school physics.

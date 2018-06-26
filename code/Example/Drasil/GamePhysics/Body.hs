@@ -3,15 +3,16 @@ module Drasil.GamePhysics.Body where
 import Control.Lens ((^.))
 
 import Data.Drasil.Concepts.Computation (algorithm)
-import Data.Drasil.Concepts.Documentation (assumption, body, 
+import Data.Drasil.Concepts.Documentation (assumption, body,
   concept, condition, consumer, dataConst, dataDefn, datumConstraint,
-  document, endUser, game, genDefn, generalSystemDescription, goalStmt,
-  inModel, information, input_, item, library, likelyChg, model, 
-  nonfunctionalRequirement, object, organization, physical, physicalConstraint,
-  physicalProperty, physicalSim, physics, priority, problemDescription, product_,
-  project, property, quantity, realtime, reference, requirement, section_, 
-  simulation, solutionCharSpec, srs, systemConstraint, task, template, termAndDef, 
-  thModel, traceyMatrix, userCharacteristic)
+  document, endUser, environment, game, genDefn, generalSystemDescription,
+  goalStmt, guide, inModel, information, input_, interface, item, library,
+  likelyChg, model, nonfunctionalRequirement, object, organization, physical,
+  physicalConstraint, physicalProperty, physicalSim, physics, priority,
+  problem, problemDescription, product_, project, property, quantity, realtime,
+  reference, requirement, section_, simulation, software, softwareSys,
+  solutionCharSpec, srs, system, systemConstraint, sysCont, task, template,
+  termAndDef, thModel, traceyMatrix, user, userCharacteristic)
 import Data.Drasil.Concepts.Education (highSchoolCalculus, frstYr,
   highSchoolPhysics)
 import Data.Drasil.Concepts.Software (physLib, understandability, portability,
@@ -53,10 +54,11 @@ import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Quantities.Physics as QP (time, 
   position, force, velocity, angularVelocity, linearVelocity)
 import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlList, sOf,
-  sAnd, sOr, maybeChanged, maybeExpanded, foldlSentCol, foldlSP, showingCxnBw)
+  sAnd, sOr, maybeChanged, maybeExpanded, foldlSentCol, foldlSP, foldlSPCol,
+  showingCxnBw)
 import Data.Drasil.Software.Products (videoGame, openSource, sciCompS)
 import Data.Drasil.Utils (makeTMatrix, itemRefToSent, refFromType,
-  makeListRef, enumSimple, enumBullet)
+  makeListRef, bulletFlat, bulletNested, enumSimple, enumBullet)
 
 import qualified Drasil.SRS as SRS
 import qualified Drasil.Sections.ReferenceMaterial as RM
@@ -117,6 +119,9 @@ everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: 
 
 chipCode :: CodeSpec
 chipCode = codeSpec chipmunkSysInfo []
+
+resourcePath :: String
+resourcePath = "../../../datafiles/GamePhysics/"
 
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
@@ -202,26 +207,81 @@ s2_4_intro = foldlSent
 
 s3 :: Section
 s3 = assembler chipmunk everything generalSystemDescriptionSect
-  [userCharacteristicSect, systemConstraintSect]
+  [sysContext, userCharacteristicSect, systemConstraintSect]
 
 generalSystemDescriptionSect :: SubSec
 generalSystemDescriptionSect = sSubSec generalSystemDescription []
 
---------------------------------
--- 3.1 : User Characteristics --
---------------------------------
+--------------------------
+-- 3.1 : System Context --
+--------------------------
 
-userCharacteristicSect :: SubSec
-userCharacteristicSect = sSubSec userCharacteristic [(siCon [s3_1_intro])]
+sysContext :: SubSec
+sysContext = sSubSec sysCont [siSTitl, (siCon [s3_1_intro, fig_1, s3_1_desc, s3_1_list])]
 
 s3_1_intro :: Contents
 s3_1_intro = foldlSP
+  [makeRef fig_1 +:+ S "shows the" +:+. phrase sysCont,
+   S "A circle represents an external entity outside the" +:+ phrase software
+   `sC` S "the", phrase user, S "in this case. A rectangle represents the",
+   phrase softwareSys, S "itself", (sParen $ short chipmunk) +:+. EmptyS,
+   S "Arrows are used to show the data flow between the" +:+ phrase system +:+ S "and its" +:+ phrase environment]
+
+fig_1 :: Contents
+fig_1 = fig (titleize sysCont) (resourcePath ++ "sysctx.png") "sysCtxDiag"
+
+s3_1_desc :: Contents
+s3_1_desc = foldlSPCol
+  [S "The interaction between the", phrase product_, S "and the", phrase user,
+   S "is through an application programming" +:+. phrase interface,
+   S "The responsibilities of the", phrase user, S "and the", phrase system,
+   S "are as follows"]
+
+sysCtxUsrResp :: [Sentence]
+sysCtxUsrResp = [S "Provide initial" +:+ plural condition +:+ S "of the" +:+
+    phrase physical +:+ S"state of the" +:+ phrase simulation `sC`
+    plural (CP.rigidBody) +:+ S "present, and" +:+ plural QP.force +:+.
+    S "applied to them",
+  S "Ensure application programming" +:+ phrase interface +:+
+    S "use complies with the" +:+ phrase user +:+. phrase guide,
+  S "Ensure required" +:+ phrase software +:+ plural assumption +:+
+    S "(FIXME REF)" +:+ S "are appropriate for any particular" +:+
+    phrase problem +:+ S "the" +:+ phrase software +:+. S "addresses"]
+
+sysCtxSysResp :: [Sentence]
+sysCtxSysResp = [S "Determine if the" +:+ plural input_ +:+ S "and" +:+
+    phrase simulation +:+ S "state satisfy the required" +:+
+    (phrase physical `sAnd` plural systemConstraint) +:+. S "(FIXME REF)",
+  S "Calculate the new state of all" +:+ plural CP.rigidBody +:+
+    S "within the" +:+ phrase simulation +:+ S "at each" +:+
+    phrase simulation +:+. S "step",
+  S "Provide updated" +:+ phrase physical +:+ S "state of all" +:+
+    plural CP.rigidBody +:+ S "at the end of a" +:+ phrase simulation +:+.
+    S "step"]
+
+sysCtxResp :: [Sentence]
+sysCtxResp = [titleize user +:+ S "Responsibilities",
+  short chipmunk +:+ S "Responsibilities"]
+
+s3_1_list :: Contents
+s3_1_list = Enumeration $ bulletNested sysCtxResp $
+  map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
+
+--------------------------------
+-- 3.2 : User Characteristics --
+--------------------------------
+
+userCharacteristicSect :: SubSec
+userCharacteristicSect = sSubSec userCharacteristic [(siCon [s3_2_intro])]
+
+s3_2_intro :: Contents
+s3_2_intro = foldlSP
   [S "The", phrase endUser `sOf` short chipmunk,
   S "should have an understanding of", phrase frstYr, S "programming",
   plural concept `sAnd` S "an understanding of", phrase highSchoolPhysics]
 
 -------------------------------
--- 3.2 : System Constraints  --
+-- 3.3 : System Constraints  --
 -------------------------------
 
 systemConstraintSect :: SubSec

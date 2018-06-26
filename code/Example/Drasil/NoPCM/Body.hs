@@ -16,7 +16,7 @@ import Drasil.SWHS.Assumptions (assumpS1, assumpS2, assumpS7, assumpS8, assumpS9
   assump14, assump15, assump20)
 import Drasil.SWHS.Body (charReader1, charReader2, orgDocIntro,
   genSystDesc, physSyst1, physSyst2, dataDefIntroEnd, iMod1Para,
-  s7_trailing)
+  traceTrailing)
 import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil,
   transient, perfect_insul, tank_para)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
@@ -780,7 +780,7 @@ s6b_list = []
 --Section 7:  TRACEABILITY MATRICES AND GRAPHS
 ----------------------------------------------
 
-s7 = traceMGF s7_refList s7_trailing
+s7 = traceMGF s7_refList traceTrailing
   ([s7_table1, s7_table2, s7_table3] ++
   (s7_intro2) ++ [s7_fig1, s7_fig2]) []
 

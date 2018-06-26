@@ -145,7 +145,7 @@ mkSRS = [RefSec (RefProg intro
   IOrgSec (orgDocIntro) (inModel) (SRS.inModel SRS.missingP [])
   (orgDocEnd swhs_pcm progName)])] ++
   
-  map Verbatim [genSystDesc, specSystDesc, reqS, likelyChgs, s7] ++ 
+  map Verbatim [genSystDesc, specSystDesc, reqS, likelyChgs, traceMAndG] ++ 
   [AuxConstntSec (AuxConsProg progName specParamValList)] ++
   (Bibliography : [])
 
@@ -317,7 +317,7 @@ goalStateList = enumSimple 1 (short goalStmt) $
 
 solCharSpec :: Section
 solCharSpec = solChSpecF progName (probDescription, likelyChgs, unlikelyChgs) dataDefIntroEnd
-  (s4_2_6_mid, dataConstraintUncertainty, s4_2_6_T1footer quantity surArea
+  (dataContMid, dataConstraintUncertainty, dataContFooter quantity surArea
   vol htTransCoeff_min phsChgMtrl) (swhsAssumptions, 
   swhsTMods, genDefs ++ genDefsDeriv,
   swhsDDefs, iModsWithDerivs, dataConTables) [propsCorrSol]
@@ -466,12 +466,12 @@ propsCorrSol = SRS.propCorSol (propsDeriv) []
 
 propsDeriv :: [Contents]
 propsDeriv =
-  [s4_2_7_deriv_1 CT.law_cons_energy w_E energy coil phsChgMtrl dd1HtFluxC
+  [propCorSolDeriv1 CT.law_cons_energy w_E energy coil phsChgMtrl dd1HtFluxC
     dd2HtFluxP surface CT.heat_trans,
-  s4_2_7_deriv_2,
-  s4_2_7_deriv_3 pcm_E energy phsChgMtrl water,
-  s4_2_7_deriv_4,
-  s4_2_7_deriv_5 equation progName rightSide]
+  propCorSolDeriv2,
+  propCorSolDeriv3 pcm_E energy phsChgMtrl water,
+  propCorSolDeriv4,
+  propCorSolDeriv5 equation progName rightSide]
 
 -- Above section only occurs in this example (although maybe it SHOULD be in
 -- the others).
@@ -542,168 +542,168 @@ unlikeChgList = []
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
 --------------------------------------------------
 
-s7 :: Section
-s7 = traceMGF s7_refList s7_trailing
-  ([s7_table1, s7_table2, s7_table3] ++
-  (s7_intro2) ++ [s7_fig1, s7_fig2]) []
+traceMAndG :: Section
+traceMAndG = traceMGF traceRefList traceTrailing
+  ([traceTable1, traceTable2, traceTable3] ++
+  (traceIntro2) ++ [traceFig1, traceFig2]) []
 
-s7_refList :: [Contents]
-s7_refList = [s7_table1, s7_table2, s7_table3]
+traceRefList :: [Contents]
+traceRefList = [traceTable1, traceTable2, traceTable3]
 
-s7_trailing :: [Sentence]
-s7_trailing = [s7_trailing_1, s7_trailing_2, s7_trailing_3]
+traceTrailing :: [Sentence]
+traceTrailing = [traceTrailing1, traceTrailing2, traceTrailing3]
 
-s7_instaModel, s7_data, s7_funcReq, s7_likelyChg, s7_dataDefs, s7_genDefs,
-  s7_assump, s7_theories :: [String]
+traceInstaModel, traceData, traceFuncReq, traceLikelyChg, traceDataDefs, traceGenDefs,
+  traceAssump, traceTheories :: [String]
   
-s7_dataRef, s7_funcReqRef, s7_instaModelRef, s7_assumpRef, s7_theoriesRef,
-  s7_dataDefRef, s7_likelyChgRef, s7_genDefRef :: [Sentence]
+traceDataRef, traceFuncReqRef, traceInstaModelRef, traceAssumpRef, traceTheoriesRef,
+  traceDataDefRef, traceLikelyChgRef, traceGenDefRef :: [Sentence]
 
-s7_instaModel = ["IM1", "IM2", "IM3", "IM4"]
-s7_instaModelRef = map (refFromType Theory) swhsIMods
+traceInstaModel = ["IM1", "IM2", "IM3", "IM4"]
+traceInstaModelRef = map (refFromType Theory) swhsIMods
 
-s7_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
+traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
   "R11"]
-s7_funcReqRef = makeListRef s7_funcReq funcReqs
+traceFuncReqRef = makeListRef traceFuncReq funcReqs
 
-s7_data = ["Data Constraints"]
-s7_dataRef = [makeRef dataConTable1] --FIXME: Reference section?
+traceData = ["Data Constraints"]
+traceDataRef = [makeRef dataConTable1] --FIXME: Reference section?
 
-s7_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
+traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19"]
-s7_assumpRef = makeListRef s7_assump assumps
+traceAssumpRef = makeListRef traceAssump assumps
 
-s7_theories = ["T1", "T2", "T3"]
-s7_theoriesRef = map (refFromType Theory) tModels
+traceTheories = ["T1", "T2", "T3"]
+traceTheoriesRef = map (refFromType Theory) tModels
 
-s7_genDefs = ["GD1", "GD2"]
-s7_genDefRef = map (refFromType Theory) swhsGenDefs
+traceGenDefs = ["GD1", "GD2"]
+traceGenDefRef = map (refFromType Theory) swhsGenDefs
 
-s7_dataDefs = ["DD1", "DD2", "DD3", "DD4"]
-s7_dataDefRef = map (refFromType Data) swhsDataDefs
+traceDataDefs = ["DD1", "DD2", "DD3", "DD4"]
+traceDataDefRef = map (refFromType Data) swhsDataDefs
 
-s7_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
-s7_likelyChgRef = makeListRef s7_likelyChg likelyChgs
+traceLikelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
+traceLikelyChgRef = makeListRef traceLikelyChg likelyChgs
 
 {-Traceability Matrix 1-}
 
-s7_row_t1 :: [String]
-s7_row_t1 = s7_theories ++ s7_genDefs ++ s7_dataDefs ++ s7_instaModel
+traceMRow1 :: [String]
+traceMRow1 = traceTheories ++ traceGenDefs ++ traceDataDefs ++ traceInstaModel
 
-s7_row_header_t1 :: [Sentence]
-s7_row_header_t1 = zipWith itemRefToSent s7_row_t1 
-  (s7_theoriesRef ++ s7_genDefRef ++ s7_dataDefRef ++ s7_instaModelRef)
+traceMRowHeader1 :: [Sentence]
+traceMRowHeader1 = zipWith itemRefToSent traceMRow1 
+  (traceTheoriesRef ++ traceGenDefRef ++ traceDataDefRef ++ traceInstaModelRef)
 
-s7_columns_t1 :: [[String]]
-s7_columns_t1 = [s7_t1_T1, s7_t1_T2, s7_t1_T3, s7_t1_GD1, s7_t1_GD2, s7_t1_DD1,
-  s7_t1_DD2, s7_t1_DD3, s7_t1_DD4, s7_t1_IM1, s7_t1_IM2, s7_t1_IM3, s7_t1_IM4]
+traceMColumns1 :: [[String]]
+traceMColumns1 = [trace1T1, trace1T2, trace1T3, trace1GD1, trace1GD2, trace1DD1,
+  trace1DD2, trace1DD3, trace1DD4, trace1IM1, trace1IM2, trace1IM3, trace1IM4]
 
-s7_t1_T1, s7_t1_T2, s7_t1_T3, s7_t1_GD1, s7_t1_GD2, s7_t1_DD1, s7_t1_DD2,
-  s7_t1_DD3, s7_t1_DD4, s7_t1_IM1, s7_t1_IM2, s7_t1_IM3, s7_t1_IM4 :: [String]
+trace1T1, trace1T2, trace1T3, trace1GD1, trace1GD2, trace1DD1, trace1DD2,
+  trace1DD3, trace1DD4, trace1IM1, trace1IM2, trace1IM3, trace1IM4 :: [String]
 
 --list of each item that "X" item requires for traceability matrix
-s7_t1_T1 = []
-s7_t1_T2 = ["T3"]
-s7_t1_T3 = []
-s7_t1_GD1 = []
-s7_t1_GD2 = ["T1"]
-s7_t1_DD1 = ["GD1"]
-s7_t1_DD2 = ["GD1"]
-s7_t1_DD3 = []
-s7_t1_DD4 = ["DD3"]
-s7_t1_IM1 = ["GD2", "DD1", "DD2", "IM2"]
-s7_t1_IM2 = ["GD2", "DD2", "DD4", "IM1", "IM4"]
-s7_t1_IM3 = ["T2"]
-s7_t1_IM4 = ["T2", "T3", "DD2", "DD3", "DD4", "IM2"]
+trace1T1 = []
+trace1T2 = ["T3"]
+trace1T3 = []
+trace1GD1 = []
+trace1GD2 = ["T1"]
+trace1DD1 = ["GD1"]
+trace1DD2 = ["GD1"]
+trace1DD3 = []
+trace1DD4 = ["DD3"]
+trace1IM1 = ["GD2", "DD1", "DD2", "IM2"]
+trace1IM2 = ["GD2", "DD2", "DD4", "IM1", "IM4"]
+trace1IM3 = ["T2"]
+trace1IM4 = ["T2", "T3", "DD2", "DD3", "DD4", "IM2"]
 
 {-Traceability Matrix 2-}
 
-s7_row_t2 :: [String]
-s7_row_t2 = s7_instaModel ++ s7_data ++ s7_funcReq
+traceMRow2 :: [String]
+traceMRow2 = traceInstaModel ++ traceData ++ traceFuncReq
 
 --column header
-s7_row_header_t2 :: [Sentence]
-s7_row_header_t2 = zipWith itemRefToSent s7_row_t2 
-  (s7_instaModelRef ++ s7_dataRef ++ s7_funcReqRef)
+traceMRowHeader2 :: [Sentence]
+traceMRowHeader2 = zipWith itemRefToSent traceMRow2 
+  (traceInstaModelRef ++ traceDataRef ++ traceFuncReqRef)
 
 --row header
-s7_col_header_t2 :: [Sentence]
-s7_col_header_t2 = zipWith itemRefToSent (s7_instaModel ++ s7_funcReq)
-  (s7_instaModelRef ++ s7_funcReqRef)
+traceMColHeader2 :: [Sentence]
+traceMColHeader2 = zipWith itemRefToSent (traceInstaModel ++ traceFuncReq)
+  (traceInstaModelRef ++ traceFuncReqRef)
 
-s7_columns_t2 :: [[String]]
-s7_columns_t2 = [s7_t2_IM1, s7_t2_IM2, s7_t2_IM3, s7_t2_IM4, s7_t2_R1, 
-  s7_t2_R2, s7_t2_R3, s7_t2_R4, s7_t2_R5, s7_t2_R6, s7_t2_R7, s7_t2_R8, 
-  s7_t2_R9, s7_t2_R10, s7_t2_R11]
+traceMColumns2 :: [[String]]
+traceMColumns2 = [trace2IM1, trace2IM2, trace2IM3, trace2IM4, trace2R1, 
+  trace2R2, trace2R3, trace2R4, trace2R5, trace2R6, trace2R7, trace2R8, 
+  trace2R9, trace2R10, trace2R11]
 
-s7_t2_IM1, s7_t2_IM2, s7_t2_IM3, s7_t2_IM4, s7_t2_R1, s7_t2_R2,
-  s7_t2_R3, s7_t2_R4, s7_t2_R5, s7_t2_R6, s7_t2_R7, s7_t2_R8, 
-  s7_t2_R9, s7_t2_R10, s7_t2_R11 :: [String]
+trace2IM1, trace2IM2, trace2IM3, trace2IM4, trace2R1, trace2R2,
+  trace2R3, trace2R4, trace2R5, trace2R6, trace2R7, trace2R8, 
+  trace2R9, trace2R10, trace2R11 :: [String]
 
 --list of each item that "X" item requires for traceability matrix
-s7_t2_IM1 = ["IM2", "R1", "R2"]
-s7_t2_IM2 = ["IM1", "IM4", "R1", "R2"]
-s7_t2_IM3 = ["R1", "R2"]
-s7_t2_IM4 = ["IM2", "R1", "R2"]
-s7_t2_R1 = []
-s7_t2_R2 = ["R1"]
-s7_t2_R3 = ["Data Constraints"]
-s7_t2_R4 = ["IM1", "IM2", "R1", "R2"]
-s7_t2_R5 = ["IM1"]
-s7_t2_R6 = ["IM2"]
-s7_t2_R7 = ["IM3"]
-s7_t2_R8 = ["IM4"]
-s7_t2_R9 = ["IM3", "IM4"]
-s7_t2_R10 = ["IM2"]
-s7_t2_R11 = ["IM2"]
+trace2IM1 = ["IM2", "R1", "R2"]
+trace2IM2 = ["IM1", "IM4", "R1", "R2"]
+trace2IM3 = ["R1", "R2"]
+trace2IM4 = ["IM2", "R1", "R2"]
+trace2R1 = []
+trace2R2 = ["R1"]
+trace2R3 = ["Data Constraints"]
+trace2R4 = ["IM1", "IM2", "R1", "R2"]
+trace2R5 = ["IM1"]
+trace2R6 = ["IM2"]
+trace2R7 = ["IM3"]
+trace2R8 = ["IM4"]
+trace2R9 = ["IM3", "IM4"]
+trace2R10 = ["IM2"]
+trace2R11 = ["IM2"]
 
-s7_table2 :: Contents
-s7_table2 = Table (EmptyS:s7_row_header_t2)
-  (makeTMatrix (s7_col_header_t2) (s7_columns_t2) (s7_row_t2))
+traceTable2 :: Contents
+traceTable2 = Table (EmptyS:traceMRowHeader2)
+  (makeTMatrix (traceMColHeader2) (traceMColumns2) (traceMRow2))
   (showingCxnBw traceyMatrix
   (titleize' requirement `sAnd` titleize' inModel)) True "Tracey1"
 
 {-Traceability Matrix 3-}
 
-s7_row_t3 :: [String]
-s7_row_t3 = s7_assump
+traceMRow3 :: [String]
+traceMRow3 = traceAssump
 
-s7_row_header_t3, s7_col_header_t3 :: [Sentence]
-s7_row_header_t3 = zipWith itemRefToSent s7_assump s7_assumpRef
+traceMRowHeader3, traceMColHeader3 :: [Sentence]
+traceMRowHeader3 = zipWith itemRefToSent traceAssump traceAssumpRef
 
-s7_col_header_t3 = zipWith itemRefToSent
-  (s7_theories ++ s7_genDefs ++ s7_dataDefs ++ s7_instaModel ++ s7_likelyChg)
-  (s7_theoriesRef ++ s7_genDefRef ++ s7_dataDefRef ++ s7_instaModelRef ++ 
-    s7_likelyChgRef)
+traceMColHeader3 = zipWith itemRefToSent
+  (traceTheories ++ traceGenDefs ++ traceDataDefs ++ traceInstaModel ++ traceLikelyChg)
+  (traceTheoriesRef ++ traceGenDefRef ++ traceDataDefRef ++ traceInstaModelRef ++ 
+    traceLikelyChgRef)
 
-s7_columns_t3 :: [[String]]
-s7_columns_t3 = [s7_t3_T1, s7_t3_T2, s7_t3_T3, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1,
-  s7_t3_DD2, s7_t3_DD3, s7_t3_DD4, s7_t3_IM1, s7_t3_IM2, s7_t3_IM3, s7_t3_IM4,
-  s7_t3_LC1, s7_t3_LC2, s7_t3_LC3, s7_t3_LC4, s7_t3_LC5, s7_t3_LC6]
+traceMColumns3 :: [[String]]
+traceMColumns3 = [trace3T1, trace3T2, trace3T3, trace3GD1, trace3GD2, trace3DD1,
+  trace3DD2, trace3DD3, trace3DD4, trace3IM1, trace3IM2, trace3IM3, trace3IM4,
+  trace3LC1, trace3LC2, trace3LC3, trace3LC4, trace3LC5, trace3LC6]
 
-s7_t3_T1, s7_t3_T2, s7_t3_T3, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1, s7_t3_DD2, 
-  s7_t3_DD3, s7_t3_DD4, s7_t3_IM1, s7_t3_IM2, s7_t3_IM3, s7_t3_IM4, s7_t3_LC1,
-  s7_t3_LC2, s7_t3_LC3, s7_t3_LC4, s7_t3_LC5, s7_t3_LC6 :: [String]
+trace3T1, trace3T2, trace3T3, trace3GD1, trace3GD2, trace3DD1, trace3DD2, 
+  trace3DD3, trace3DD4, trace3IM1, trace3IM2, trace3IM3, trace3IM4, trace3LC1,
+  trace3LC2, trace3LC3, trace3LC4, trace3LC5, trace3LC6 :: [String]
 
-s7_t3_T1  = ["A1"]
-s7_t3_T2  = []
-s7_t3_T3  = []
-s7_t3_GD1 = ["A2"]
-s7_t3_GD2 = ["A3", "A4", "A5", "A6"]
-s7_t3_DD1 = ["A7", "A8", "A9"]
-s7_t3_DD2 = ["A3", "A4", "A10"]
-s7_t3_DD3 = []
-s7_t3_DD4 = []
-s7_t3_IM1 = ["A11", "A12", "A14", "A15", "A16", "A19"]
-s7_t3_IM2 = ["A12", "A13", "A16", "A17", "A18"]
-s7_t3_IM3 = ["A14", "A19"]
-s7_t3_IM4 = ["A13", "A18"]
-s7_t3_LC1 = ["A4"]
-s7_t3_LC2 = ["A8"]
-s7_t3_LC3 = ["A9"]
-s7_t3_LC4 = ["A11"]
-s7_t3_LC5 = ["A12"]
-s7_t3_LC6 = ["A15"]
+trace3T1  = ["A1"]
+trace3T2  = []
+trace3T3  = []
+trace3GD1 = ["A2"]
+trace3GD2 = ["A3", "A4", "A5", "A6"]
+trace3DD1 = ["A7", "A8", "A9"]
+trace3DD2 = ["A3", "A4", "A10"]
+trace3DD3 = []
+trace3DD4 = []
+trace3IM1 = ["A11", "A12", "A14", "A15", "A16", "A19"]
+trace3IM2 = ["A12", "A13", "A16", "A17", "A18"]
+trace3IM3 = ["A14", "A19"]
+trace3IM4 = ["A13", "A18"]
+trace3LC1 = ["A4"]
+trace3LC2 = ["A8"]
+trace3LC3 = ["A9"]
+trace3LC4 = ["A11"]
+trace3LC5 = ["A12"]
+trace3LC6 = ["A15"]
 
 
 -- These matrices can probably be generated automatically when enough info is
@@ -1315,8 +1315,8 @@ iMod2EndPara pcmat hcsp hclp tsp tlp sur mel vo ptem tmp boi so li = map
 
 -- I do not think Table 2 will end up being necessary for the Drasil version
 ---- The info from table 2 will likely end up in table 1.
-s4_2_6_mid :: Sentence
-s4_2_6_mid = foldlSent [S "The", phrase column, S "for", phrase software,
+dataContMid :: Sentence
+dataContMid = foldlSent [S "The", phrase column, S "for", phrase software,
   plural constraint, S "restricts the range of",
   plural input_, S "to reasonable", plural value]
 
@@ -1324,9 +1324,9 @@ s4_2_6_mid = foldlSent [S "The", phrase column, S "for", phrase software,
 -- Data Constraint: Table 1 --
 ------------------------------
 
-s4_2_6_T1footer :: NamedChunk -> UnitalChunk -> UnitalChunk -> QDefinition ->
+dataContFooter :: NamedChunk -> UnitalChunk -> UnitalChunk -> QDefinition ->
   CI -> Sentence
-s4_2_6_T1footer qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
+dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
 
   [sParen (S "*"), S "These", plural qua, S "cannot be equal to zero" `sC`
   S "or there will be a divide by zero in the", phrase model],
@@ -1363,9 +1363,9 @@ s4_2_6_T1footer qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
 -- 4.2.7 : Properties of A Correct Solution --
 ----------------------------------------------
 
-s4_2_7_deriv_1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
+propCorSolDeriv1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
   CI -> QDefinition -> QDefinition -> DefinedQuantityDict -> ConceptChunk -> Contents
-s4_2_7_deriv_1 lce ewat en co pcmat d1hfc d2hfp su ht  =
+propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
   foldlSPCol [S "A", phrase corSol, S "must exhibit the" +:+.
   phrase lce, S "This means that the", phrase ewat,
   S "should equal the difference between the total", phrase en,
@@ -1377,28 +1377,28 @@ s4_2_7_deriv_1 lce ewat en co pcmat d1hfc d2hfp su ht  =
   S "area of", phrase ht `sC` S "and integrating each",
   S "over the", phrase sim_time `sC` S "as follows"]
 
-s4_2_7_deriv_2 :: Contents
-s4_2_7_deriv_2 = eqUnR
+propCorSolDeriv2 :: Contents
+propCorSolDeriv2 = eqUnR
   ((sy w_E) $= (defint (eqSymb time) 0 (sy time)
   ((sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - apply1 temp_W time)))
   - (defint (eqSymb time) 0 (sy time)
   ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) -
   (apply1 temp_PCM time)))))
 
-s4_2_7_deriv_3 :: UncertQ -> UnitalChunk -> CI -> ConceptChunk -> Contents
-s4_2_7_deriv_3 epcm en pcmat wa =
+propCorSolDeriv3 :: UncertQ -> UnitalChunk -> CI -> ConceptChunk -> Contents
+propCorSolDeriv3 epcm en pcmat wa =
   foldlSP_ [S "In addition, the", phrase epcm, S "should equal the",
   phrase en, phrase input_, S "to the", short pcmat,
   S "from the" +:+. phrase wa, S "This can be expressed as"]
 
-s4_2_7_deriv_4 :: Contents
-s4_2_7_deriv_4 = eqUnR
+propCorSolDeriv4 :: Contents
+propCorSolDeriv4 = eqUnR
   ((sy pcm_E) $= (defint (eqSymb time) 0 (sy time)
   ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) - 
   (apply1 temp_PCM time)))))
 
-s4_2_7_deriv_5 :: ConceptChunk -> CI -> CI -> Contents
-s4_2_7_deriv_5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)" 
+propCorSolDeriv5 :: ConceptChunk -> CI -> CI -> Contents
+propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)" 
   `sAnd` S "(FIXME: Equation 8) can be used as", Quote (S "sanity") :+:
   S "checks to gain confidence in any", phrase solution,
   S "computed by" +:+. short pro, S "The relative",
@@ -1432,26 +1432,26 @@ renameList1, renameList2 :: [CI]
 renameList1  = [thModel, genDefn, dataDefn, inModel, likelyChg, assumption]
 renameList2  = [inModel, requirement, dataConst]
 
-s7_trailing_1, s7_trailing_2, s7_trailing_3 :: Sentence
+traceTrailing1, traceTrailing2, traceTrailing3 :: Sentence
 
-s7_trailing_1 = foldlSent [foldlList $ map plural (take 4 renameList1), 
+traceTrailing1 = foldlSent [foldlList $ map plural (take 4 renameList1), 
   S "with each other"]
 
-s7_trailing_2 = foldlSent [foldlList $ map plural renameList2, 
+traceTrailing2 = foldlSent [foldlList $ map plural renameList2, 
   S "on each other"]
 
-s7_trailing_3 = foldlSent_ [foldlList $ map plural (take 5 renameList1),
+traceTrailing3 = foldlSent_ [foldlList $ map plural (take 5 renameList1),
   S "on the", plural assumption]
 
-s7_table1 :: Contents
-s7_table1 = Table (EmptyS:s7_row_header_t1)
-  (makeTMatrix (s7_row_header_t1) (s7_columns_t1) (s7_row_t1))
+traceTable1 :: Contents
+traceTable1 = Table (EmptyS:traceMRowHeader1)
+  (makeTMatrix (traceMRowHeader1) (traceMColumns1) (traceMRow1))
   (showingCxnBw traceyMatrix
   (titleize' item +:+ S "of Different" +:+ titleize' section_)) True "Tracey2"
 
-s7_table3 :: Contents
-s7_table3 = Table (EmptyS:s7_row_header_t3)
-  (makeTMatrix s7_col_header_t3 s7_columns_t3 s7_row_t3)
+traceTable3 :: Contents
+traceTable3 = Table (EmptyS:traceMRowHeader3)
+  (makeTMatrix traceMColHeader3 traceMColumns3 traceMRow3)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+
   titleize' item)) True "Tracey3"
 
@@ -1462,19 +1462,19 @@ s7_table3 = Table (EmptyS:s7_row_header_t3)
 -- Traceabilty Graphs --
 ------------------------
 
-s7_intro2 :: [Contents]
-s7_intro2 = traceGIntro [s7_fig1, s7_fig2]
+traceIntro2 :: [Contents]
+traceIntro2 = traceGIntro [traceFig1, traceFig2]
 
   [foldlSent [foldlList $ map plural renameList1, S "on each other"],
 
   foldlSent_ [foldlList $ map plural renameList2, S "on each other"]]
 
-s7_fig1 :: Contents
-s7_fig1 = fig (showingCxnBw traceyGraph (titleize' item +:+
+traceFig1 :: Contents
+traceFig1 = fig (showingCxnBw traceyGraph (titleize' item +:+
   S "of Different" +:+ titleize' section_)) "ATrace.png" "TraceyA"
 
-s7_fig2 :: Contents
-s7_fig2 = fig (showingCxnBw traceyGraph (foldlList $ map titleize' 
+traceFig2 :: Contents
+traceFig2 = fig (showingCxnBw traceyGraph (foldlList $ map titleize' 
   renameList2)) "RTrace.png" "TraceyR"
 
 -------------------------------------------------

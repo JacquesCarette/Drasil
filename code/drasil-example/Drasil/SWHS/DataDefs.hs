@@ -57,14 +57,14 @@ melt_frac_eqn = (sy latentE_P) / ((sy htFusion) * (sy pcm_mass))
 
 --Need to add units to data definition descriptions
 
-s4_2_4_swhsDataDefs :: [Contents]
-s4_2_4_swhsDataDefs = [s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3, s4_2_4_DD4] 
+swhsDDefs :: [Contents]
+swhsDDefs = [swhsDD1, swhsDD2, swhsDD3, swhsDD4] 
 
-s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3, s4_2_4_DD4 :: Contents
-s4_2_4_DD1 = datadefn dd1HtFluxC
-s4_2_4_DD2 = datadefn dd2HtFluxP
-s4_2_4_DD3 = datadefn dd3HtFusion
-s4_2_4_DD4 = datadefn dd4MeltFrac
+swhsDD1, swhsDD2, swhsDD3, swhsDD4 :: Contents
+swhsDD1 = datadefn dd1HtFluxC
+swhsDD2 = datadefn dd2HtFluxP
+swhsDD3 = datadefn dd3HtFusion
+swhsDD4 = datadefn dd4MeltFrac
 
 --Symbol appears as "Label"
 --There is no actual label

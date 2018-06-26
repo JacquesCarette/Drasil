@@ -1,5 +1,5 @@
 module Drasil.SWHS.TMods (tModels, t1ConsThermE, 
-  s4_2_2_swhsTMods, s4_2_2_T1) where
+  swhsTMods, tMod1) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -27,15 +27,15 @@ import Drasil.SWHS.DataDefs (dd3HtFusion)
 tModels :: [RelationConcept]
 tModels = [t1ConsThermE, t2SensHtE, t3LatHtE]
 
-s4_2_2_swhsTMods :: [Contents]
-s4_2_2_swhsTMods = (s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3)
+swhsTMods :: [Contents]
+swhsTMods = (tMod1 ++ tMod2 ++ tMod3)
 
 -------------------------
 -- Theoretical Model 1 --
 -------------------------
 
-s4_2_2_T1 :: [Contents]
-s4_2_2_T1 = [reldefn t1ConsThermE]
+tMod1 :: [Contents]
+tMod1 = [reldefn t1ConsThermE]
 
 t1ConsThermE :: RelationConcept
 t1ConsThermE = makeRC "t1ConsThermE"
@@ -76,8 +76,8 @@ a1 = Assumption $ assump "assump1" EmptyS "assump1"
 -- Theoretical Model 2 --
 -------------------------
 
-s4_2_2_T2 :: [Contents]
-s4_2_2_T2 = [reldefn t2SensHtE]
+tMod2 :: [Contents]
+tMod2 = [reldefn t2SensHtE]
 
 t2SensHtE :: RelationConcept
 t2SensHtE = makeRC "t2SensHtE"
@@ -130,8 +130,8 @@ t2descr = foldlSent [
 -- Theoretical Model 3 --
 -------------------------
 
-s4_2_2_T3 :: [Contents]
-s4_2_2_T3 = [reldefn t3LatHtE]
+tMod3 :: [Contents]
+tMod3 = [reldefn t3LatHtE]
 
 t3LatHtE :: RelationConcept
 t3LatHtE = makeRC "t3LatHtE"

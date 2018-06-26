@@ -18,40 +18,38 @@ import Language.Drasil.Chunk.ShortName
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), ConceptDomain, Definition(defn))
+import Data.List(transpose, head, tail)
 
 getDoc :: Document -> [Sentence]
 getDoc (Document t a s) = t : a : concatMap getSec s
 
 getSec :: Section -> [Sentence]
-getSec (Section _ _ _ (ShortNm "RefMat")) = []
-getSec (Section _ _ _ (ShortNm "SpecSystDesc")) = []
-getSec (Section _ _ _ (ShortNm "AuxConstants")) = []
+getSec (Section _ _ ("AuxConstants") _) = []
 getSec (Section t sc _ _) = t : concatMap getSecCon sc
-
 
 getSecCon :: SecCons -> [Sentence]
 getSecCon (Sub s) = getSec s
 getSecCon (Con c) = getCon c
 
 isVar :: ([Sentence], [[Sentence]]) -> [Sentence]
-isVar (((S "Var") : tl), (a: b)) = a
-isVar ((hd : tl, hd1 : tl1)) = isVar (tl, tl1)
+isVar (((S "Var") : tl), s) = head s
+isVar ((hd : tl, s)) = isVar (tl, tail s)
 isVar ([], _) = []
-isVar _ = []
+isVar (_, []) = []
 
 getCon :: Contents -> [Sentence]
-getCon (Table s1 s2 t _ _) = isVar (s1, s2)-- s1 ++ concat s2 ++ [t]
---getCon (Paragraph s) = [s]
---getCon (EqnBlock _ _) = []
---getCon (Definition d) = getDtype d
---getCon (Enumeration lst) = getLT lst
---getCon (Figure l _ _ _) = [l]
---getCon (Requirement reqc) = getReq reqc 
---getCon (Assumption assc) = getAss assc
---getCon (Change chg) = getChg chg
---getCon (Bib bref) = getBib bref
---getCon (Graph [(s1, s2)] _ _ l _) = s1 : s2 : [l]
---getCon (Defnt dt [(_, con)] _) = getDtype dt ++ concatMap getCon con
+getCon (Table s1 s2 t _ _) = isVar (s1, transpose s2) --s1 ++ concat s2 ++ [t]
+getCon (Paragraph s) = [s]
+getCon (EqnBlock _ _) = []
+getCon (Definition d) = getDtype d
+getCon (Enumeration lst) = getLT lst
+getCon (Figure l _ _ _) = [l]
+getCon (Requirement reqc) = getReq reqc 
+getCon (Assumption assc) = getAss assc
+getCon (Change chg) = getChg chg
+getCon (Bib bref) = getBib bref
+getCon (Graph [(s1, s2)] _ _ l _) = s1 : s2 : [l]
+getCon (Defnt dt [(_, con)] _) = getDtype dt ++ concatMap getCon con
 getCon _ = []
 
 getDtype :: DType -> [Sentence]

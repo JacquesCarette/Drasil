@@ -104,7 +104,7 @@ swhs_si = SI {
   _authors = swhsPeople,
   _units = this_si,
   _quants = swhsSymbols,
-  _concepts = (swhsSymbols),
+  _concepts = (ccs'),
   _definitions = swhsDataDefs,
   _inputs = map qw swhsInputs,
   _outputs = map qw swhsOutputs,
@@ -134,8 +134,7 @@ ccs' :: [DefinedQuantityDict]
 ccs' = nub ((concatMap ccss $ getDoc swhs_srs') ++ (concatMap ccss' $ egetDoc swhs_srs'))
 
 outputuid :: [String]
-outputuid = nub $ concatMap snames $ getDoc swhs_srs'
---outputuid = nub ((concatMap snames $ getDoc swhs_srs') ++ (concatMap names $ egetDoc swhs_srs'))
+outputuid = nub ((concatMap snames $ getDoc swhs_srs') ++ (concatMap names $ egetDoc swhs_srs'))
 
 swhsPeople :: [Person]
 swhsPeople = [thulasi, brooks, spencerSmith]

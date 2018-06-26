@@ -1337,7 +1337,7 @@ s4_2_6_mid = foldlSent [S "The", phrase column, S "for", phrase software,
 -- Data Constraint: Table 1 --
 ------------------------------
 
-s4_2_6_T1footer :: NamedChunk -> UnitalChunk -> UnitalChunk -> DefinedQuantityDict ->
+s4_2_6_T1footer :: NamedChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   CI -> Sentence
 s4_2_6_T1footer qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
 

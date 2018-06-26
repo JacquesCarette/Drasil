@@ -38,7 +38,7 @@ swhsUnits = map ucw [in_SA, out_SA, heat_cap_spec, htCap_L,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp,boil_pt, temp_env, melt_pt, t_init_melt,
   t_final_melt, vol, tank_vol, w_vol, deltaT,
-  density, tau, tau_L_P, tau_S_P, tau_W] ++
+  density, tau, tau_L_P, tau_S_P, tau_W, thickness] ++
   map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]
 
 in_SA, out_SA, htCap_L, htCap_S, htCap_V,
@@ -47,7 +47,7 @@ in_SA, out_SA, htCap_L, htCap_S, htCap_V,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp_env, t_init_melt,
   t_final_melt, tank_vol, w_vol, deltaT,
-  tau, tau_L_P, tau_S_P, tau_W, sim_time :: UnitalChunk
+  tau, tau_L_P, tau_S_P, tau_W, sim_time, thickness:: UnitalChunk
 
 ---------------------
 -- Regular Symbols --
@@ -183,12 +183,15 @@ sim_time = uc' "sim_time" (compoundPhrase' (simulation ^. term)
   (time ^. term)) "Time over which the simulation runs"
   lT second
 
+thickness = uc'  "thickness" (nounPhraseSP "Minimum thickness of a sheet of PCM")
+  "The minimum thickness of a sheet of PCM"
+  (sub lH (Atomic "min")) metre
 ----------------------
 -- Unitless symbols --
 ----------------------
 
 swhsUnitless :: [DefinedQuantityDict]
-swhsUnitless = [uNormalVect, surface, eta, melt_frac, gradient, thickness]
+swhsUnitless = [uNormalVect, surface, eta, melt_frac, gradient]
 
 eta, melt_frac :: DefinedQuantityDict
 
@@ -201,10 +204,6 @@ melt_frac = dqd' (dcc "melt_frac" (nounPhraseSP "melt fraction")
   "Ratio of thermal energy to amount of mass melted")
   --FIXME: Not sure if definition is exactly correct
   (const lPhi) Real Nothing
-
-thickness = dqd' (dcc "thickness" (nounPhraseSP "thickness")
-  "The thickness of a sheet of PCM")
-  (const (sub lH (Atomic "min"))) Real Nothing
 
 -----------------
 -- Constraints --

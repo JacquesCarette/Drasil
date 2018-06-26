@@ -246,7 +246,7 @@ software, or some piece of it, performs a given task to within an acceptable
 standard and can potentially be reused in other systems.
 
 Software certification is necessary by law in certain fields. This is 
-particularly evident in safety-critical applications, such as control systems 
+particularly evident in safety-critical applications such as control systems 
 for nuclear power plants or X-ray machines. 
 
 Different certifying bodies exist across domains and each has their own list of 
@@ -288,23 +288,30 @@ artifacts we can ensure they are \emph{consistent by construction}, implement
 changes 
 quickly, and automatically update relevant and/or dependent artifacts.
 
-\subsection{Scope} %DS Should this be here?
+\subsection{Scope} %DS Should this be here? Maybe, as long as the above clarifies the problem.
 
 - Scientific Computing Software
-	- Why? Many highly specialized SCS require certification. Ex. Control sfwr 
-	in nuclear power, x-ray machines, and other safety-critical contexts.
-	- Well understood domain -> theories underpinning the work being done.
+- Why? Many highly specialized SCS require certification. Ex. Control sfwr 
+in nuclear power, x-ray machines, and other safety-critical contexts.
+- Well understood domain -> theories underpinning the work being done.
 
 \wss{My suggestion is to stop writing Section 1 for now and focus on Sections 5
-  and 6.  Section 1 is a good start, but it feels like we need more current
-  information on MDL.  We might also want more information on scientific
-  knowledge ontologies.}
+	and 6.  Section 1 is a good start, but it feels like we need more current
+	information on MDL.  We might also want more information on scientific
+	knowledge ontologies.}
+
 
 \section{Background}
 
-- We are not the first to try and deal with certification / artifact creation.
+Reducing the costs of (re-)certification efforts and automating the generation of software artifacts has been attempted in differing scopes by many others. We look to them for insight and in an attempt to combine the fruits of their labours into something more versatile.
 
-\subsection{Previous efforts} %DS Is this subsect necessary?
+In this section we will explore previous efforts in automating software artifact generation, as well as take a look at the current state of Model Driven Engineering and scientific knowledge ontologies.
+
+\subsection{Software Artifact Reuse and Generation} %DS Is this subsect necessary?
+
+Previous attempts at generating software artifacts were primarily focused on artifact reuse. One aim of these approaches was to remove the burden of replicating some artifacts.
+
+We will start by looking at Compendia~\cite{GentlemanAndLang} 
 
 Previous attempts at automating / reducing the artifact burden.
 

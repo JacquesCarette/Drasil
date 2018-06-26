@@ -133,8 +133,8 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     (S "This problem is small in size and relatively simple")
     (S "Any reasonable" +:+ phrase implementation +:+.
     (S "will be very quick" `sAnd` S "use minimal storage"))]) :
-  LCsSec (LCsProg s8a_list) :
-  UCsSec (UCsProg s8b_list) :
+  LCsSec (LCsProg likely_change_list) :
+  UCsSec (UCsProg unlikely_change_list) :
   TraceabilitySec
     (TraceabilityProg traceyMatrices [s9_table1Desc, s9_table2Desc, s9_table3Desc]
     (traceyMatrices ++ s9_intro2 ++ traceyGraphs) []) :
@@ -576,13 +576,13 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
 
 {--LIKELY CHANGES--}
 
-s8a_list :: [Contents]
-s8a_list = likelyChanges_SRS 
+likely_change_list :: [Contents]
+likely_change_list = likelyChanges_SRS 
 
 {--UNLIKELY CHANGES--}
 
-s8b_list :: [Contents]
-s8b_list = unlikelyChanges_SRS 
+unlikely_change_list :: [Contents]
+unlikely_change_list = unlikelyChanges_SRS 
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
 

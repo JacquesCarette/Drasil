@@ -24,6 +24,8 @@
 \newcommand{\rthereqnum}{R\thereqnum}
 \newcounter{lcnum}
 \newcommand{\lcthelcnum}{LC\thelcnum}
+\newcounter{ucnum}
+\newcommand{\uctheucnum}{UC\theucnum}
 \bibliography{bibfile}
 \title{Software Requirements Specification for GlassBR program}
 \author{Nikitha Krithnan and W. Spencer Smith}
@@ -677,19 +679,27 @@ This problem is small in size and relatively simple, so performance is not a pri
 \section{Likely Changes}
 \label{Sec:LCs}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8.likelychg1}:]A\ref{A:explsnScenarioA} - The system currently only calculates for external blast risk. In the future calculations can be added for the internal blast risk.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likelychg1}:]A\ref{A:explsnScenarioA} - The system currently only calculates for external blast risk. In the future calculations can be added for the internal blast risk.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8.likelychg2}:]A\ref{A:standardValuesA}, A\ref{A:ldfConstantA} - Currently the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future these values can be changed to variable inputs.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likelychg2}:]A\ref{A:standardValuesA}, A\ref{A:ldfConstantA} - Currently the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future these values can be changed to variable inputs.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8.likelychg3}:]A\ref{A:glassLiteA} - The software may be changed to accommodate more than a single lite.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likelychg3}:]A\ref{A:glassLiteA} - The software may be changed to accommodate more than a single lite.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8.likelychg4}:]A\ref{A:bndryConditionsA} - The software may be changed to accommodate more boundary conditions than 4-sided support.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likelychg4}:]A\ref{A:bndryConditionsA} - The software may be changed to accommodate more boundary conditions than 4-sided support.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8.likelychg5}:]A\ref{A:responseTyA} - The software may be changed to consider more than just flexure of the glass.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likelychg5}:]A\ref{A:responseTyA} - The software may be changed to consider more than just flexure of the glass.
+\end{description}
+\section{Unlikely Changes}
+\label{Sec:UCs}
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC:unlikelychg1}:]The goal of the system is to predict whether the glass slab under consideration can withstand an explosion of a certain degree.
+\end{description}
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC:unlikelychg2}:]A\ref{A:glassConditionA} requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.
 \end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}

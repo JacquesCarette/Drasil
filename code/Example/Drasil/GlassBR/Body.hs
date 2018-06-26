@@ -6,15 +6,15 @@ import qualified Drasil.SRS as SRS
 import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
   DocSection(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons), --DocSection uses everything but Verbatim
   IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), LCsSec(..), 
-  RefSec(RefProg), RefTab(TAandA, TUnits), ReqrmntSec(..), 
+  UCsSec(..), RefSec(RefProg), RefTab(TAandA, TUnits), ReqrmntSec(..), 
   ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SSDSec(SSDVerb), 
   StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), 
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose), DocDesc, 
-  mkDoc, mkLklyChnk, mkRequirement, tsymb)
+  mkDoc, mkRequirement, tsymb)
 import Drasil.DocumentLanguage.Definitions (Field
   (DefiningEquation, Description, RefBy, Source), InclUnits(IncludeUnits), 
   Verbosity(Verbose), Fields)
-import Drasil.DocumentLanguage.RefHelpers (cite, refA)
+import Drasil.DocumentLanguage.RefHelpers (cite)
 
 import Data.Drasil.Concepts.Computation (computerApp, inParam,
   computerLiteracy, inValue, inQty)
@@ -25,14 +25,14 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   message, model, organization, output_, problem, purpose,
   quantity, reference, reviewer, section_, software, standard,
   symbol_, system, template, term_, theory, traceyMatrix, user, value,
-  variable, physicalSystem, datumConstraint, userInput, assumption, dataDefn,
+  physicalSystem, datumConstraint, userInput, assumption, dataDefn,
   goalStmt, inModel, likelyChg, physSyst, requirement, srs, thModel,
   dataConst, company)
 import Data.Drasil.Concepts.Education (secondYear, undergradDegree,
   civilEng, structuralEng, scndYrCalculus, structuralMechanics)
 import Data.Drasil.Concepts.Math (graph, calculation, probability,
   parameter)
-import Data.Drasil.Concepts.PhysicalProperties (dimension, flexure)
+import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability,
@@ -47,8 +47,8 @@ import Data.Drasil.Utils (getES, makeTMatrix, makeListRef, itemRefToSent,
   refFromType, enumSimple, enumBullet, prodUCTbl)
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptionDescs,
-  gbRefDB, newAssumptions, newA3, newA4, newA5, newA6, newA7,
-  newA8)
+  gbRefDB, newAssumptions)
+import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist, glaSlab, 
   blastRisk, glass, glaPlane, glassBRProg, ptOfExplsn, acronyms)
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
@@ -59,10 +59,10 @@ import Drasil.GlassBR.References (rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
 import Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq)
 import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad, 
-  lateralLoad, sflawParamM, char_weight, sD, demand, lite, demandq, 
+  lateralLoad, sflawParamM, char_weight, sD, demand, demandq, 
   aspectRWithEqn, aspectR, lRe, wtntWithEqn, sdWithEqn, prob_br, notSafe, 
   safeMessage, is_safe1, is_safe2, plate_width, plate_len, blast, glassTy, 
-  gbInputDataConstraints, explosion, explosion, pb_tol, blast, bomb, blastTy, 
+  gbInputDataConstraints, explosion, pb_tol, blast, bomb, blastTy, 
   glassGeo, glass_type, nom_thick, sdx, sdy, sdz, tNT, gBRSpecParamVals,
   loadTypes, load, glassTypes, probBreak, termsWithAccDefn, termsWithDefsOnly,
   gbConstants, gbConstrained, gbOutputs, gbInputs, glBreakage, capacity, 
@@ -133,7 +133,8 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     (S "This problem is small in size and relatively simple")
     (S "Any reasonable" +:+ phrase implementation +:+.
     (S "will be very quick" `sAnd` S "use minimal storage"))]) :
-  LCsSec (LCsProg s8_list) :
+  LCsSec (LCsProg likely_change_list) :
+  UCsSec (UCsProg unlikely_change_list) :
   TraceabilitySec
     (TraceabilityProg traceyMatrices [s9_table1Desc, s9_table2Desc, s9_table3Desc]
     (traceyMatrices ++ s9_intro2 ++ traceyGraphs) []) :
@@ -575,47 +576,13 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
 
 {--LIKELY CHANGES--}
 
-s8_list :: [Contents]
-s8_list = likelyChanges_SRS 
+likely_change_list :: [Contents]
+likely_change_list = likelyChanges_SRS 
 
-likelyChanges_SRS :: [Contents]
-likelyChanges_SRS = [s8_likelychg1, s8_likelychg2, s8_likelychg3,
-  s8_likelychg4, s8_likelychg5]
+{--UNLIKELY CHANGES--}
 
-s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4,
-  s8_likelychg5 :: Contents
-
-s8_likelychg1 = mkLklyChnk "s8_likelychg1" (lc1Desc (blastRisk)) "Calculate-Internal-Blask-Risk"
-s8_likelychg2 = mkLklyChnk "s8_likelychg2" (lc2Desc) "Variable-Values-of-m,k,E"
-s8_likelychg3 = mkLklyChnk "s8_likelychg3" (lc3Desc) "Accomodate-More-than-Single-Lite"
-s8_likelychg4 = mkLklyChnk "s8_likelychg4" (lc4Desc) "Accomodate-More-Boundary-Conditions"
-s8_likelychg5 = mkLklyChnk "s8_likelychg5" (lc5Desc) "Consider-More-than-Flexure-Glass"
-
-lc1Desc :: NamedChunk -> Sentence
-lc2Desc, lc3Desc, lc4Desc, lc5Desc :: Sentence
-
-lc1Desc mainConcept = foldlSent [(refA gbRefDB newA3) `sDash` S "The",
-  phrase system, S "currently only calculates for external" +:+.
-  phrase mainConcept, S "In the future", plural calculation,
-  S "can be added for the internal", phrase mainConcept]
-
-lc2Desc = foldlSent [(refA gbRefDB newA4) `sC` ((refA gbRefDB newA8) `sDash`
-  S "Currently the"), plural value, S "for",
-  foldlList (map getES (take 3 assumptionConstants)),
-  S "are assumed to be the same for all" +:+. phrase glass,
-  S "In the future these", plural value, S "can be changed to",
-  phrase variable, plural input_]
-
-lc3Desc = foldlSent [(refA gbRefDB newA5) `sDash` S "The", phrase software,
-  S "may be changed to accommodate more than a single", phrase lite]
-
-lc4Desc = foldlSent [(refA gbRefDB newA6) `sDash` S "The", phrase software,
-  S "may be changed to accommodate more boundary", plural condition,
-  S "than 4-sided support"]
-
-lc5Desc = foldlSent [(refA gbRefDB newA7) `sDash` S "The", phrase software,
-  S "may be changed to consider more than just", phrase flexure,
-  S "of the glass"]
+unlikely_change_list :: [Contents]
+unlikely_change_list = unlikelyChanges_SRS 
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
 

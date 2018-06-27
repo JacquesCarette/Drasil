@@ -1051,6 +1051,55 @@ General System Description
 <p class="paragraph">
 This section provides general information about the system including identifying the interfaces between the system and its environment (system context), describing the user characteristics and listing the system constraints.
 </p>
+<div id="Sec:systemcontext">
+<div class="subsection">
+<h2>
+System Context
+</h2>
+<p class="paragraph">
+<a href=#Figure:sysCtxDiag>Figure:sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (Chipmunk2D). Arrows are used to show the data flow between the system and its environment.
+</p>
+<div id="Figure:sysCtxDiag">
+<img class="figure" src="../../../datafiles/GamePhysics/sysctx.png" alt="System Context"></img>
+<p class="caption">
+System Context
+</p>
+</div>
+<p class="paragraph">
+The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:
+</p>
+<ul class="list">
+<li>
+User Responsibilities
+<ul class="list">
+<li>
+Provide initial conditions of the physical state of the simulation, rigid bodies present, and forces applied to them.
+</li>
+<li>
+Ensure application programming interface use complies with the user guide.
+</li>
+<li>
+Ensure required software assumptions (FIXME REF) are appropriate for any particular problem the software addresses.
+</li>
+</ul>
+</li>
+<li>
+Chipmunk2D Responsibilities
+<ul class="list">
+<li>
+Determine if the inputs and simulation state satisfy the required physical and system constraints (FIXME REF).
+</li>
+<li>
+Calculate the new state of all rigid bodies within the simulation at each simulation step.
+</li>
+<li>
+Provide updated physical state of all rigid bodies at the end of a simulation step.
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
 <div id="Sec:usercharacteristic">
 <div class="subsection">
 <h2>

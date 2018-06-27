@@ -2082,35 +2082,35 @@ Functional Requirements
 </h2>
 <ul class="hide-list-style">
 <li>
-<div id="FR:s7.1.req1">
+<div id="FR:func.reqs.req1">
 Input-Glass-Props: Input the quantities from <a href=#Table:R1ReqInputs>Table:R1ReqInputs</a>, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: <em>a</em> and <em>b</em> will be input in terms of millimetres and will be converted to the equivalent value in metres.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="FR:s7.1.req2">
+<div id="FR:func.reqs.req2">
 System-Set-Values-Following-Assumptions: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following A4, <em>LDF</em> following A8, LSF following A5, <em>h</em> (from <a href=#DD:act.thick>act_thick</a>), and <em>GTF</em> (from <a href=#DD:gTF>gTF</a>).
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="FR:s7.1.req3">
+<div id="FR:func.reqs.req3">
 Check-Input-with-Data_Constraints: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Data Constraints</a>. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="FR:s7.1.req4">
+<div id="FR:func.reqs.req4">
 Output-Values-and-Known-Quantities: Output the input quantities from R1 and the known quantities from R2.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="FR:s7.1.req5">
+<div id="FR:func.reqs.req5">
 Check-Glass-Safety: If <em>is_safe1</em> and <em>is_safe2</em> (from <a href=#T:t1SafetyReq>T:t1SafetyReq</a> and <a href=#T:t2SafetyReq>T:t2SafetyReq</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
 </div>
 </li>
@@ -2311,36 +2311,57 @@ Likely Changes
 </h1>
 <ul class="hide-list-style">
 <li>
-<div id="LC:s8.likelychg1">
+<div id="LC:likelychg1">
 Calculate-Internal-Blask-Risk: <a href=#A:explsnScenarioA>explainScenario</a> - The system currently only calculates for external blast risk. In the future calculations can be added for the internal blast risk.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="LC:s8.likelychg2">
+<div id="LC:likelychg2">
 Variable-Values-of-m,k,E: <a href=#A:standardValuesA>StandardValues</a>, <a href=#A:ldfConstantA>ldfConstant</a> - Currently the values for <em>m</em>, <em>k</em>, and <em>E</em> are assumed to be the same for all glass. In the future these values can be changed to variable inputs.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="LC:s8.likelychg3">
+<div id="LC:likelychg3">
 Accomodate-More-than-Single-Lite: <a href=#A:glassLiteA>glassLite</a> - The software may be changed to accommodate more than a single lite.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="LC:s8.likelychg4">
+<div id="LC:likelychg4">
 Accomodate-More-Boundary-Conditions: <a href=#A:bndryConditionsA>boundaryConditions</a> - The software may be changed to accommodate more boundary conditions than 4-sided support.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="LC:s8.likelychg5">
+<div id="LC:likelychg5">
 Consider-More-than-Flexure-Glass: <a href=#A:responseTyA>responseType</a> - The software may be changed to consider more than just flexure of the glass.
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div id="Sec:UCs">
+<div class="section">
+<h1>
+Unlikely Changes
+</h1>
+<ul class="hide-list-style">
+<li>
+<div id="UC:unlikelychg1">
+Predict-Withstanding-of-Certain-Degree: The goal of the system is to predict whether the glass slab under consideration can withstand an explosion of a certain degree.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="UC:unlikelychg2">
+Accommodate-Altered-Glass: <a href=#A:glassConditionA>glassCondition</a> requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.
 </div>
 </li>
 </ul>

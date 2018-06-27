@@ -20,7 +20,7 @@ data Package = AMSMath
              | Dot2Tex
              | AdjustBox
              | AMSsymb --displays bold math sets (reals, naturals, etc.)
-             | Breqn --line breaks long equations automaticly
+--           | Breqn --line breaks long equations automaticly
              | FileContents --creates .bib file within .tex file
              | BibLaTeX
              | Tabu --adds auto column width feature for tables 
@@ -45,7 +45,7 @@ addPackage Tikz      = usepackage "tikz" %%
 addPackage Dot2Tex   = usepackage "dot2texi"
 addPackage AdjustBox = usepackage "adjustbox"
 addPackage AMSsymb   = usepackage "amssymb"
-addPackage Breqn     = usepackage "breqn"
+--addPackage Breqn     = usepackage "breqn"
 addPackage FileContents = usepackage "filecontents"
 addPackage BibLaTeX  = command1o "usepackage" (Just "backend=bibtex") "biblatex"
 addPackage Tabu      = usepackage "tabu"
@@ -83,7 +83,7 @@ genPreamble los = let (pkgs, defs) = parseDoc los
 
 parseDoc :: [LayoutObj] -> ([Package], [Def])
 parseDoc los' = 
-  ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Breqn, Unicode] ++ 
+  ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Unicode] ++ 
    (nub $ concat $ map fst res)
   , [SetMathFont] ++ (nub $ concat $ map snd res))
   where 

@@ -20,6 +20,7 @@ module Language.Drasil.Classes (
   , HasReasVal(reasVal)
   , ExprRelat(relat)
   , HasDerivation(derivations)
+  , HasRefAddress(getRefAdd)
   ) where
 
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
@@ -103,7 +104,7 @@ class HasLabel c where
 
 -- HasRefAddress is associated with the HasLabel class due to
 -- the current definition of a Label
-class HasLabel b => HasRefAddress b where
+class HasRefAddress b where
   getRefAdd :: Lens' b LblType 
 
 -- IsLabel is associated with String rendering

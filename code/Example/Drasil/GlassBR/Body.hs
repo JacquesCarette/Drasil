@@ -181,10 +181,11 @@ glassBR_code :: CodeSpec
 glassBR_code = codeSpec glassSystInfo allMods
 
 
-specific_sysytem_description, problem_description, terminology_and_description, physical_system_description, goal_statements, solution_characteristics_specification :: Section
+problem_description, terminology_and_description, 
+  physical_system_description, goal_statements :: Section
 
 product_use_case_table,
-  physical_system_description_list, solution_characteristics_specification_intro, inputDataConstraints,
+  physical_system_description_list, {-solution_characteristics_specification_intro,-} inputDataConstraints,
   outputDataConstraints, traceability_matrices_and_graphs_table1,
   traceability_matrices_and_graphs_table2, traceability_matrices_and_graphs_table3, appendix_intro,
   fig_glassbr, fig_2, fig_3, fig_4, fig_5,
@@ -381,7 +382,7 @@ individual_product_use_case mainObj compare1 compare2 factorOfComparison =
 
 {--SPECIFIC SYSTEM DESCRIPTION--}
 
-specific_sysytem_description = specSysDesF (S "and" +:+ plural definition) [problem_description, solution_characteristics_specification]
+--specific_sysytem_description = specSysDesF (S "and" +:+ plural definition) [problem_description, solution_characteristics_specification]
 
 {--PROBLEM DESCRIPTION--}
 
@@ -441,6 +442,7 @@ goal_statements_list_goalStmt1 = [foldlSent [S "Analyze" `sAnd` S "predict wheth
 
 {--SOLUTION CHARACTERISTICS SPECIFICATION--}
 
+{-
 solution_characteristics_specification = solChSpecF gLassBR (problem_description, (SRS.likeChg SRS.missingP []), (SRS.unlikeChg SRS.missingP [])) EmptyS
  (EmptyS, dataConstraintUncertainty, end)
  (assumptions_list, map reldefn tModels, [], map datadefn dataDefns,
@@ -455,7 +457,7 @@ solution_characteristics_specification = solChSpecF gLassBR (problem_description
 solution_characteristics_specification_intro = foldlSP [S "This", phrase section_, S "explains all the",
   plural assumption, S "considered" `sAnd` S "the", plural thModel,
   S "which are supported by the", plural dataDefn]
-
+-}
 {--Assumptions--}
 
 assumptions_list :: [Contents]

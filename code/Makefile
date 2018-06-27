@@ -85,16 +85,16 @@ ssp_diff: ssp_build
 	- $(DIFF) ./stable/ssp/$(SSP_PREF)SRS.html ./build/$(SSP_DIR)/Website/$(SSP_PREF)SRS.html >> $(SSP_PREF)log.log 2>&1
 
 glassbr_diff: glassbr_build
-	- $(DIFF) ./stable/glassbr/$(GLASS_PREF)SRS.tex ./build/$(GLASS_DIR)/SRS/$(GLASS_PREF)SRS.tex > $(GLASS_PREF)log.log 2>&1
-#	- $(DIFF) ./stable/glassbr/$(GLASS_PREF)MG.tex ./build/$(GLASS_DIR)/MG/$(GLASS_PREF)MG.tex >> $(GLASS_PREF)log.log 2>&1
-	- $(DIFF) ./stable/glassbr/$(GLASS_PREF)SRS.css ./build/$(GLASS_DIR)/Website/$(GLASS_PREF)SRS.css >> $(GLASS_PREF)log.log 2>&1
-	- $(DIFF) ./stable/glassbr/$(GLASS_PREF)SRS.html ./build/$(GLASS_DIR)/Website/$(GLASS_PREF)SRS.html >> $(GLASS_PREF)log.log 2>&1
+	- $(DIFF) ./stable/glassbr/SRS/$(GLASS_PREF)SRS.tex ./build/$(GLASS_DIR)/SRS/$(GLASS_PREF)SRS.tex > $(GLASS_PREF)log.log 2>&1
+#	- $(DIFF) ./stable/glassbr/SRS/$(GLASS_PREF)MG.tex ./build/$(GLASS_DIR)/MG/$(GLASS_PREF)MG.tex >> $(GLASS_PREF)log.log 2>&1
+	- $(DIFF) ./stable/glassbr/Website/$(GLASS_PREF)SRS.css ./build/$(GLASS_DIR)/Website/$(GLASS_PREF)SRS.css >> $(GLASS_PREF)log.log 2>&1
+	- $(DIFF) ./stable/glassbr/Website/$(GLASS_PREF)SRS.html ./build/$(GLASS_DIR)/Website/$(GLASS_PREF)SRS.html >> $(GLASS_PREF)log.log 2>&1
 
 gamephys_diff: gamephys_build
-	- $(DIFF) ./stable/gamephys/$(GAME_PREF)SRS.tex ./build/$(GAME_DIR)/SRS/$(GAME_PREF)SRS.tex > $(GAME_PREF)log.log 2>&1
-#	- $(DIFF) ./stable/gamephys/$(GAME_PREF)MG.tex ./build/$(GAME_DIR)/MG/$(GAME_PREF)MG.tex >> $(GAME_PREF)log.log 2>&1
-	- $(DIFF) ./stable/gamephys/$(GAME_PREF)SRS.css ./build/$(GAME_DIR)/Website/$(GAME_PREF)SRS.css >> $(GAME_PREF)log.log 2>&1
-	- $(DIFF) ./stable/gamephys/$(GAME_PREF)SRS.html ./build/$(GAME_DIR)/Website/$(GAME_PREF)SRS.html >> $(GAME_PREF)log.log 2>&1
+	- $(DIFF) ./stable/gamephys/SRS/$(GAME_PREF)SRS.tex ./build/$(GAME_DIR)/SRS/$(GAME_PREF)SRS.tex > $(GAME_PREF)log.log 2>&1
+#	- $(DIFF) ./stable/gamephys/SRS/$(GAME_PREF)MG.tex ./build/$(GAME_DIR)/MG/$(GAME_PREF)MG.tex >> $(GAME_PREF)log.log 2>&1
+	- $(DIFF) ./stable/gamephys/Website/$(GAME_PREF)SRS.css ./build/$(GAME_DIR)/Website/$(GAME_PREF)SRS.css >> $(GAME_PREF)log.log 2>&1
+	- $(DIFF) ./stable/gamephys/Website/$(GAME_PREF)SRS.html ./build/$(GAME_DIR)/Website/$(GAME_PREF)SRS.html >> $(GAME_PREF)log.log 2>&1
 
 nopcm_diff: nopcm_build
 	- $(DIFF) ./stable/nopcm/$(NoPCM_PREF)SRS.tex ./build/$(NoPCM_DIR)/SRS/$(NoPCM_PREF)SRS.tex > $(NoPCM_PREF)log.log 2>&1

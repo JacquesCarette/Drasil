@@ -49,6 +49,9 @@
 \newcommand{\colAwidth}{0.2\textwidth}
 \newcommand{\colBwidth}{0.73\textwidth}
 
+\newcommand{\red}{\textcolor{red}}
+\newcommand{\ro}[1]{\only<#1>{\red}}
+
 \renewcommand{\arraystretch}{0.6} %so that tables with equations do not look crowded
 
 \pgfdeclareimage[height=0.7cm]{logo}{McMasterLogo}
@@ -123,7 +126,7 @@
 \begin{frame}
 
 \frametitle{Overview}
-\tableofcontents[pausesections]
+\tableofcontents
 % You might wish to add the option [pausesections]
 
 % make like a story - the phases - reason for, why works, advantages
@@ -132,11 +135,11 @@
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section[Introduction]{Introduction}
-
-% \subsection[Important Software Qualities]{Scientific Computing Software
-% Qualities}
+%
+%\section[Introduction]{Introduction}
+%
+%% \subsection[Important Software Qualities]{Scientific Computing Software
+%% Qualities}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -180,6 +183,73 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
+\setbeamercovered{invisible}
+\frametitle{Research Topic Recap}
+\framesubtitle{\alt<6->{\ro{6}{KBSE \& The Drasil Framework}}{Motivation}}
+
+\only<6->{\ro{6}{A Knowledge-Based Software Engineering Approach}}
+\begin{itemize}
+	\item<1->\alt<7->{\ro{7}{Single knowledge-base}}{Too much 
+	duplication!}
+	\item<2->\alt<8->{\ro{8}{Generate artifacts}}{(Re-)Certification is 
+	expensive}
+	\item<3->\alt<9->{\ro{9}{Guaranteed consistency}}{Inter-/intra-artifact 
+	consistency 
+	issues}% \& improve:
+%		\begin{itemize}
+%			\item Verifiability
+%			\item Maintainability
+%			\item Reusability
+%		\end{itemize}
+	\item<4->\alt<10->{\ro{10}{Reusable across projects}}{Promote reusability}
+	\item<5->\alt<11->{\ro{11}{Easy to mix and match}}{Design for change} %-- 
+	%Easily 
+	%switch between software family members
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\begin{frame}
+%
+%\frametitle{Research Topic Recap}
+%\framesubtitle{KBSE \& The Drasil Framework}
+%
+%A Knowledge-Based Software Engineering Approach
+%\setbeamercovered{invisible}
+%\begin{itemize}
+%	\item<2->\alt<3->{Single knowledge-base}{Too much duplication!}
+%	\item<4->\alt<5->{Generate artifacts}{(Re-)Certification is expensive}
+%	\item<6->\alt<7->{Guaranteed consistency}{Inter-/intra-artifact consistency 
+%	issues}% \& improve:
+%	\item<8->\alt<9->{Reusable across projects}{Promote reusability}
+%	\item<10->\alt<11->{Easy to mix and match}{Design for change} %-- Easily 
+%	%switch between software family members
+%\end{itemize}
+%
+%\end{frame}
+
+\begin{frame}
+
+Drasil Framework -- Generating Software Families
+
+\begin{itemize}
+	\item One ``source'', multiple views
+	\begin{itemize}
+		\item Requirements%, including or excluding derivations.
+		\item Design
+		\item Test Cases
+		\item Build instructions
+		\item ...
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
 
 \frametitle{Current Program Progress}
 
@@ -194,8 +264,8 @@
 \item Completed comprehensive examinations.
 \item Drasil framework proof-of-concept completed
 	\begin{itemize}
-		\item Scoped-down section due to nature of project
-		\item Generating Software Requirements Specification (SRS) for six case studies + code for one
+		\item Scoped-down due to nature of project
+		\item Generating SRS for six case studies \& code for one
 	\end{itemize}
 \end{itemize}
 \end{frame}
@@ -215,48 +285,8 @@ Currently Writing:
 \item Thesis
 \end{itemize}
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-
-\frametitle{Research Topic Recap}
-\framesubtitle{Motivation}
-
-\begin{itemize}
-	\item Too much duplication!
-	\item (Re-)Certification is expensive
-	\item Ensure inter-/intra-artifact consistency \& improve:
-		\begin{itemize}
-			\item Verifiability
-			\item Maintainability
-			\item Reusability
-		\end{itemize}
-	\item Promote reusability
-	\item Design for change -- Easily switch between software family members
-\end{itemize}
-
-\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-Drasil Framework -- Generating Software Families
-
-\begin{itemize}
-	\item One ``source'', multiple views
-	\begin{itemize}
-		\item Requirements%, including or excluding derivations.
-		\item Design
-		\item Test Cases
-		\item Build instructions
-		\item ...
-	\end{itemize}
-\end{itemize}
-\end{frame}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 
 \begin{frame}
 

@@ -341,7 +341,7 @@ sD            = cc' stdOffDist
    +:+ S "high explosive charge. It is represented by the coordinates" +:+.
    sParen (sdVectorSent))
 shortDurLoad  = dcc "shortDurLoad"       (nounPhraseSP "short duration load")
-  "Any load lasting 3s or less."
+  "Any load lasting 3 seconds or less."
 specA         = dcc "specA"       (nounPhraseSP "specifying authority")
   ("The design professional responsible for interpreting applicable " ++
     "regulations of authorities having jurisdiction and considering " ++

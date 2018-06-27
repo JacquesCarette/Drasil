@@ -283,7 +283,7 @@ eqTNTChar     = dcc "eqTNTChar"   (nounPhraseSP "equivalent TNT charge mass")
 explosion     = dcc "explosion"   (nounPhraseSP "explosion") 
   "a destructive shattering of something"
 fTemperedGl   = cc fullyTGlass
-  ("A flat and monolithic, glass lite of uniform thickness that has been " ++
+  ("A flat, monolithic, glass lite of uniform thickness that has been " ++
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 69 MPa (10 000 psi) or the edge " ++
     "compression not less than 67 MPa (9700 psi), as defined in [6]." {-astm_C1048-})

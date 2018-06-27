@@ -178,7 +178,7 @@
 %\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section[Progress]{Current Progress}
+\section[Recap]{Research Recap}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -231,288 +231,346 @@
 %\end{frame}
 
 \begin{frame}
+\frametitle{Research Topic Recap}
+\framesubtitle{KBSE \& The Drasil Framework}
 
-Drasil Framework -- Generating Software Families
+\only<1-2>{Drasil -- Towards generating Software Families}
 
+\only<1>{
+\begin{center}
+\includegraphics[scale=0.07]{tree.png}
+\end{center}
+}
+
+\only<2>{
 \begin{itemize}
 	\item One ``source'', multiple views
-	\begin{itemize}
-		\item Requirements%, including or excluding derivations.
-		\item Design
-		\item Test Cases
-		\item Build instructions
-		\item ...
-	\end{itemize}
+	\item Full traceability
+	\item Consistent-by-construction artifacts
 \end{itemize}
+}
+
+\only<3>{
+Drasil composed of many Domain-Specific Languages (DSLs) including, but not 
+limited to:
+\begin{itemize}
+\item Knowledge Capture
+\item Recipes (Document generation)
+\item Code Generation
+\end{itemize}
+}
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[Progress]{Current Progress}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
 
 \frametitle{Current Program Progress}
+\framesubtitle{A brief overview \only<2>{continued}}
 
+\only<1>{
 \begin{itemize}
-\item Completed all necessary graduate courses.
+\item Completed all necessary graduate courses \& comprehensive examinations
 %	\begin{itemize}
 %	\item CAS781 -- Category Theory: A (11)
 %	\item CAS703 -- Software Design: A (11)
 %	\item CAS708 -- Scientific Computation: A+ (12)
 %	\item CAS761 -- Generative Programming: A+ (12)
 %	\end{itemize}
-\item Completed comprehensive examinations.
-\item Drasil framework proof-of-concept completed
+
+\item Currently Writing:
 	\begin{itemize}
-		\item Scoped-down due to nature of project
-		\item Generating SRS for six case studies \& code for one
+	\item Journal paper for ACM TOSEM
+	%	\begin{itemize}
+	%		\item Focus on (re-)certification and consistency
+	%	\end{itemize}
+	\item Thesis
 	\end{itemize}
 \end{itemize}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-
-\frametitle{Current Progress}
-\framesubtitle{Cont'd}
-
-Currently Writing:
-\begin{itemize}
-\item Journal paper for ACM TOSEM
-%	\begin{itemize}
-%		\item Focus on (re-)certification and consistency
-%	\end{itemize}
-\item Thesis
-\end{itemize}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-
-\frametitle{Research Topic}
-\framesubtitle{How?}
-
-Knowledge Capture!
-
-\begin{itemize}
-\item Advantages
-\begin{itemize}
-\item Avoid duplication through chunk reuse.
-\item Improve understandability, traceability and reproducibility.
-\item Increased flexibility
-\end{itemize}
-\end{itemize}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section[Example]{Example.}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-
-\frametitle{Example: $h_g$}
-
-\framesubtitle{A simple example taken from the SRS for FP}
-
-$h_g$ is a symbol which appears in several locations including:
-\begin{itemize}
-\item The Software Requirements Specification
-\item The Literate Programmer's Manual
-\item The Source Code
-\end{itemize}
-
-Let's take a look!
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-
-\frametitle{Example: $h_g$}
-
-\framesubtitle{SRS Definition for $h_g$ (original)}
-
-\noindent
-\begin{minipage}{\textwidth}
-\begin{tabular}{p{\colAwidth} p{\colBwidth}}
-\toprule
-\textbf{Number} & \textbf{DD\refstepcounter{datadefnum}\thedatadefnum} \label{hg}\\
-\midrule
-Label & $h_g$\\
-\midrule
-Units & $ML^0t^{-3}T^{-1}$\\
-\midrule
-SI & $\mathrm{\frac{kW}{m^{2} (^{\circ}C)}}$\\
-\midrule
-Equation & $h_g$ =$ \frac{2k_{c}h_{p}}{2k_{c}+\tau_c h_{p}}$\\
-\midrule
-Description & $h_g$ is the  gap conductance\newline
-$\tau_c$ is the clad thickness\newline
-$h_p$ is initial gap film conductance\newline
-$k_c$ is the clad conductivity\newline
-NOTE: Equation taken from the code\\
-\midrule
-Sources & source code\\
-\bottomrule
-\end{tabular}
-\end{minipage}\\
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}[fragile]
-
-\frametitle{Example: $h_g$}
-
-\framesubtitle{LPM Definition for $h_g$ (original)}
-
-\begin{equation} 
-h_{g} =\frac{2k_{c}h_{p}}{2k_{c}+\tau_c h_{p}}
-\end{equation}
-
-The corresponding C code is given by:
-
-\begin{lstlisting}[basicstyle=\tiny]
-double calc_hg(double k_c,double h_b,double tau_c)
-{
- return (2*(k_c)*(h_p)) / ((2*(k_c)) + (tau_c*(h_p)));
 }
-\end{lstlisting}
 
+\only<2>{
+
+Research Project: Drasil proof-of-concept ``complete"
+\begin{itemize}
+	\item Scoped-down due to nature of project
+	\item Generating SRS for six case studies \& code for one
+	\item Still improving with the help of summer students
+% Work still being done is 2-part:
+% 1. (Obv) For future researchers/students
+% 2. To help me write -- If I can't explain something well-enough, it's usually 
+%		because the code needs work
+\end{itemize}
+
+}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{frame}
+
+\frametitle{Since Last Time}
+\only<1>{
+
+\framesubtitle{General}
+Summer 2017: Supervised 5 research students
+\begin{itemize}
+\item Cleaned up case studies
+\item Helped improve Drasil
+\end{itemize}
+
+Submitted a paper for SE-CoDeSE'17: Rejected
+
+Began work on a paper for FASE 2018 -- Scrapped
+
+Met with OPG in January: Positive feedback
+
+Currently co-supervising 3 summer research students
+
+Writing %mentioned earlier
+}
+
+\only<2>{
+\framesubtitle{Drasil-Specific}
+
+Total of 372 issues closed on the Drasil github
+
+\begin{itemize}
+\item Automated generation of some Drasil user-documentation using Haddock
+\item Created new chunk and referencing databases %improved referencing
+\item Added to, and refactored, the Drasil class hierarchy
+% Citations, Theories, Labels, etc.
+\item Finished creating Document Language (Continued on next slides)
+\item Implemented Continuous Integration testing
+\item General source clean-up and refactoring
+\end{itemize}
+
+Currently $\sim$130 open issues guiding development
+}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+\frametitle{Document Language}
+\
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%\section[Example]{Example.}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 %\begin{frame}
 %
-%\frametitle{Example: $h_g$ and $h_c$}
+%\frametitle{Example: $h_g$}
 %
-%\framesubtitle{Code source for $h_g$}
+%\framesubtitle{A simple example taken from the SRS for FP}
+%
+%$h_g$ is a symbol which appears in several locations including:
+%\begin{itemize}
+%\item The Software Requirements Specification
+%\item The Literate Programmer's Manual
+%\item The Source Code
+%\end{itemize}
+%
+%Let's take a look!
 %
 %\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-
-\frametitle{Example: $h_g$}
-
-\framesubtitle{A simple example taken from the SRS for FP}
-
-Modifying $h_g$ to reflect changes in requirements is not a simple
-matter. It involves, at the very least, the following steps:
-\begin{itemize}
-\item Update the definition in the SRS, LPM, and all other documents which
-  reference the symbol
-\item Modify the source code to reflect the new requirements
-\item Trace all dependencies
-\item Modify dependents to accomodate the change
-\item Ensure each of the documents is now up to date and consistent
-\end{itemize}
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-
-\frametitle{Example: $h_g$}
-
-\framesubtitle{Simplifying the process}
-
-%This is where knowledge capture comes into play. 
-Here is an example of a ``chunk'' for $h_g$:
-
-\pgfuseimage{ex1}
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-
-\frametitle{Example: $h_g$}
-
-\framesubtitle{How do we generate?}
-What do we do with the ``chunk''?
-
-That depends on the ``recipe''!
-
-\begin{itemize}
-\item To create our SRS we use the following recipe:
-\end{itemize}
-
-\pgfuseimage{rec1}
-
-\begin{itemize}
-\item To create our LPM we use the following recipe:
-\end{itemize}
-
-\pgfuseimage{rec2}
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-
-\frametitle{Example: $h_g$}
-
-\framesubtitle{Generated SRS Output}
-
-%Let's look at (excerpts of the) generated output:
-
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{\colAwidth} p{\colBwidth}}
-\toprule \textbf{Number} & \textbf{DD\refstepcounter{datadefnum}\thedatadefnum}
-\label{hg}\\ \midrule
-Label & $h_{g}$\\ \midrule
-Units & $ML^0t^{-3}T^{-1}$\\ \midrule
-SI & $\mathrm{\frac{kW}{m^{2\circ} C}}$\\
-\midrule Equation & $h_{g}$ = $\frac{2k_{c}h_{p}}{2k_{c}+\tau_{c}h_{p}}$\\ \midrule
-Description & $h_{g}$ is the effective heat transfer coefficient between clad and fuel surface
-\newline
-$k_{c}$ is the
-clad conductivity \newline
-$h_{p}$ is the
-initial gap film conductance \newline
-$\tau_{c}$ is the
-clad thickness \newline
-NOTE: Equation taken from the code\\ \midrule
-Sources & source code\\
-\bottomrule \end{tabular} \end{minipage}\\
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}[fragile]
-
-\frametitle{Example: $h_g$}
-
-\framesubtitle{Generated LPM Output}
-
-%Let's look at (excerpts of the) generated output:
-
-\begin{equation}
-h_{g} =\frac{2k_{c}h_{p}}{2k_{c}+\tau_{c}h_{p}}\label{eq:hg}
-\end{equation}
-
-The corresponding C code is given by:
-
-\begin{lstlisting}[basicstyle=\tiny]
-double calc_h_g(double k_c, double h_p, double tau_c)
-{
-	return 2*k_c*h_p/(2*k_c+tau_c*h_p);
-}
-\end{lstlisting}
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%\begin{frame}
+%
+%\frametitle{Example: $h_g$}
+%
+%\framesubtitle{SRS Definition for $h_g$ (original)}
+%
+%\noindent
+%\begin{minipage}{\textwidth}
+%\begin{tabular}{p{\colAwidth} p{\colBwidth}}
+%\toprule
+%\textbf{Number} & \textbf{DD\refstepcounter{datadefnum}\thedatadefnum} 
+%\label{hg}\\
+%\midrule
+%Label & $h_g$\\
+%\midrule
+%Units & $ML^0t^{-3}T^{-1}$\\
+%\midrule
+%SI & $\mathrm{\frac{kW}{m^{2} (^{\circ}C)}}$\\
+%\midrule
+%Equation & $h_g$ =$ \frac{2k_{c}h_{p}}{2k_{c}+\tau_c h_{p}}$\\
+%\midrule
+%Description & $h_g$ is the  gap conductance\newline
+%$\tau_c$ is the clad thickness\newline
+%$h_p$ is initial gap film conductance\newline
+%$k_c$ is the clad conductivity\newline
+%NOTE: Equation taken from the code\\
+%\midrule
+%Sources & source code\\
+%\bottomrule
+%\end{tabular}
+%\end{minipage}\\
+%
+%\end{frame}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%\begin{frame}[fragile]
+%
+%\frametitle{Example: $h_g$}
+%
+%\framesubtitle{LPM Definition for $h_g$ (original)}
+%
+%\begin{equation} 
+%h_{g} =\frac{2k_{c}h_{p}}{2k_{c}+\tau_c h_{p}}
+%\end{equation}
+%
+%The corresponding C code is given by:
+%
+%\begin{lstlisting}[basicstyle=\tiny]
+%double calc_hg(double k_c,double h_b,double tau_c)
+%{
+% return (2*(k_c)*(h_p)) / ((2*(k_c)) + (tau_c*(h_p)));
+%}
+%\end{lstlisting}
+%
+%\end{frame}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%%\begin{frame}
+%%
+%%\frametitle{Example: $h_g$ and $h_c$}
+%%
+%%\framesubtitle{Code source for $h_g$}
+%%
+%%\end{frame}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%\begin{frame}
+%
+%\frametitle{Example: $h_g$}
+%
+%\framesubtitle{A simple example taken from the SRS for FP}
+%
+%Modifying $h_g$ to reflect changes in requirements is not a simple
+%matter. It involves, at the very least, the following steps:
+%\begin{itemize}
+%\item Update the definition in the SRS, LPM, and all other documents which
+%  reference the symbol
+%\item Modify the source code to reflect the new requirements
+%\item Trace all dependencies
+%\item Modify dependents to accomodate the change
+%\item Ensure each of the documents is now up to date and consistent
+%\end{itemize}
+%
+%\end{frame}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%\begin{frame}
+%
+%\frametitle{Example: $h_g$}
+%
+%\framesubtitle{Simplifying the process}
+%
+%%This is where knowledge capture comes into play. 
+%Here is an example of a ``chunk'' for $h_g$:
+%
+%\pgfuseimage{ex1}
+%
+%\end{frame}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%\begin{frame}
+%
+%\frametitle{Example: $h_g$}
+%
+%\framesubtitle{How do we generate?}
+%What do we do with the ``chunk''?
+%
+%That depends on the ``recipe''!
+%
+%\begin{itemize}
+%\item To create our SRS we use the following recipe:
+%\end{itemize}
+%
+%\pgfuseimage{rec1}
+%
+%\begin{itemize}
+%\item To create our LPM we use the following recipe:
+%\end{itemize}
+%
+%\pgfuseimage{rec2}
+%
+%\end{frame}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%\begin{frame}
+%
+%\frametitle{Example: $h_g$}
+%
+%\framesubtitle{Generated SRS Output}
+%
+%%Let's look at (excerpts of the) generated output:
+%
+%\noindent \begin{minipage}{\textwidth}
+%\begin{tabular}{p{\colAwidth} p{\colBwidth}}
+%\toprule \textbf{Number} & \textbf{DD\refstepcounter{datadefnum}\thedatadefnum}
+%\label{hg}\\ \midrule
+%Label & $h_{g}$\\ \midrule
+%Units & $ML^0t^{-3}T^{-1}$\\ \midrule
+%SI & $\mathrm{\frac{kW}{m^{2\circ} C}}$\\
+%\midrule Equation & $h_{g}$ = $\frac{2k_{c}h_{p}}{2k_{c}+\tau_{c}h_{p}}$\\ 
+%\midrule
+%Description & $h_{g}$ is the effective heat transfer coefficient between clad 
+%and fuel surface
+%\newline
+%$k_{c}$ is the
+%clad conductivity \newline
+%$h_{p}$ is the
+%initial gap film conductance \newline
+%$\tau_{c}$ is the
+%clad thickness \newline
+%NOTE: Equation taken from the code\\ \midrule
+%Sources & source code\\
+%\bottomrule \end{tabular} \end{minipage}\\
+%\end{frame}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%\begin{frame}[fragile]
+%
+%\frametitle{Example: $h_g$}
+%
+%\framesubtitle{Generated LPM Output}
+%
+%%Let's look at (excerpts of the) generated output:
+%
+%\begin{equation}
+%h_{g} =\frac{2k_{c}h_{p}}{2k_{c}+\tau_{c}h_{p}}\label{eq:hg}
+%\end{equation}
+%
+%The corresponding C code is given by:
+%
+%\begin{lstlisting}[basicstyle=\tiny]
+%double calc_h_g(double k_c, double h_p, double tau_c)
+%{
+%	return 2*k_c*h_p/(2*k_c+tau_c*h_p);
+%}
+%\end{lstlisting}
+%\end{frame}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section[Next Steps]{Next Steps.}
 

@@ -20,7 +20,7 @@ import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName)
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid))
 import Language.Drasil.Document (Contents(..), DType(Data, Theory), 
-  Section(Section), getDefName, repUnd)
+  Section(Section), getDefName, repUnd, LabelledContent)
 import Language.Drasil.RefTypes (RefType(..))
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.UID (UID)
@@ -233,6 +233,10 @@ instance Referable QDefinition where -- FIXME: This could lead to trouble; need
 instance Referable InstanceModel where
   refAdd  i = "IM:" ++ i^.uid
   rType   _ = Def
+
+instance Referable LabelledContent where
+  refAdd lc = "LabelledC:" ++ lc ^. uid
+  rType  _  = Def
 
 instance Referable Contents where
   rType (Table _ _ _ _ _)       = Tab

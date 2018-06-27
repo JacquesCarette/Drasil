@@ -8,15 +8,15 @@ import Language.Drasil.Chunk.Citation (BibRef)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName,
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname, shortNm), ShortName,
   shortname')
-import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel))
 import Language.Drasil.UID
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Label (Label, mkLabelRA)
-import Control.Lens ((^.), makeLenses)
+import Control.Lens ((^.), makeLenses, view)
 
 data ListType = Bullet [ItemType] -- ^ Bulleted list
               | Numeric [ItemType] -- ^ Enumerated List
@@ -97,6 +97,10 @@ data LabelledContent = LblC { _uniqueID :: UID
                             , ctype :: Contents
                             }
 makeLenses ''LabelledContent
+
+instance HasUID       LabelledContent where uid      = uniqueID
+instance HasLabel     LabelledContent where getLabel = lbl
+instance HasShortName LabelledContent where shortNm  = lbl . shortNm
 
 -- | Smart constructor for labelled content chunks (should not be exported)
 llcc :: UID -> Label -> Contents -> LabelledContent

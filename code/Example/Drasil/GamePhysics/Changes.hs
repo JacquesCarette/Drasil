@@ -3,34 +3,18 @@ module Drasil.GamePhysics.Changes where
 --A list of likely and unlikely changes for GamePhysics
 
 import Language.Drasil
-import Drasil.DocumentLanguage (mkLklyChnk)
+import Drasil.DocumentLanguage (mkLklyChnk, mkUnLklyChnk)
 import Data.Drasil.SentenceStructures (foldlSent, foldlList, getES, foldlSP, maybeChanged, maybeExpanded, sAnd)
-import Data.Drasil.Concepts.Documentation (section_, likelyChg, physics, game, library)
+import Data.Drasil.Concepts.Documentation (section_, likelyChg, unlikelyChg, physics, game, library)
 import qualified Data.Drasil.Concepts.Math as CM (ode, constraint)
 import Data.Drasil.Concepts.Computation (algorithm)
 import qualified Data.Drasil.Concepts.Physics as CP (collision, damping, joint)
 import Data.Drasil.Utils (enumSimple)
-import qualified Drasil.SRS as SRS (likeChg)
+import qualified Drasil.SRS as SRS (likeChg, unlikeChg)
 
-
-
-
-{--likelyChanges_SRS :: [Contents]
-likelyChanges_SRS = [likelychg1{--, likelychg2, likelychg3, likelychg4--}]
-
-likelychg1{--, likelychg2, likelychg3, likelychg4--} :: Contents
-likelychg1 = mkLklyChnk "likelychg1" (lc1Desc) "ODE-Solving Algorithm"
---likelychg2 = mkLklyChnk "likelychg2" (lc2Desc) "Collisions"
---likelychg3 = mkLklyChnk "likelychg3" (lc3Desc) "Damping"
---likelychg4 = mkLklyChnk "likelychg4" (lc1Desc) "Joints and Constraints"
-
-lc1Desc{--, 1c2Desc, 1c3Desc, 1c4Desc--} :: Sentence
-
-lc1Desc = foldlSent[(S "internal" +:+ (getAcc CM.ode) :+: 
-  S "-solving" +:+ phrase algorithm +:+ S "used by the" +:+
-  (phrase library)) `maybeChanged` (S "in the future")]--}
-
-
+--------------------------------
+--  LIKELY CHANGES --
+--------------------------------
 
 s6 :: Section
 s6_intro, s6_list :: Contents
@@ -38,7 +22,7 @@ s6_intro, s6_list :: Contents
 s6 = SRS.likeChg [s6_intro, s6_list] []
 
 s6_intro = foldlSP [S "This", (phrase section_), S "lists the", 
-  (plural likelyChg), S "to be made to the", (phrase physics), (phrase game), 
+  (plural likelyChg), S "to be made to the", (phrase game), (phrase physics), 
   (phrase library)]
 
 s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3, 
@@ -63,3 +47,33 @@ s6_list' = [s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3,
   s6_likelyChg_stmt4]
 
 s6_list = enumSimple 1 (getAcc likelyChg) s6_list'
+
+--------------------------------
+--UNLIKELY CHANGES --
+--------------------------------
+
+unlikelyChanges :: Section
+unlikelyChanges_intro, unlikelyChanges_list :: Contents
+
+unlikelyChanges = SRS.unlikeChg [unlikelyChanges_intro, unlikelyChanges_list] []
+
+unlikelyChanges_intro = foldlSP [S "This", (phrase section_), S "lists the", 
+  (plural unlikelyChg), S "to be made to the", (phrase game), (phrase physics), 
+  (phrase library)]
+
+unlikeChganges_unlikelyChg_stmt1, unlikeChganges_unlikelyChg_stmt2,
+  unlikeChganges_unlikelyChg_stmt3, unlikeChganges_unlikelyChg_stmt4 :: Sentence
+
+unlikeChganges_unlikelyChg_stmt1 = foldlSent [S "The goal of the system is to simulate",
+  S "the interactions of rigid bodies"]
+unlikeChganges_unlikelyChg_stmt2 = foldlSent [S "There will always be a sourse of input",
+  S "data external to the software"]
+unlikeChganges_unlikelyChg_stmt3 = foldlSent [S "A Cartesian Coordinate system is used"]
+unlikeChganges_unlikelyChg_stmt4 = foldlSent [S "All objects are regid bodies"]
+  
+unlikelyChanges_list' :: [Sentence]
+unlikelyChanges_list' = [unlikeChganges_unlikelyChg_stmt1, unlikeChganges_unlikelyChg_stmt2,
+  unlikeChganges_unlikelyChg_stmt3, unlikeChganges_unlikelyChg_stmt4]
+
+unlikelyChanges_list = enumSimple 1 (getAcc unlikelyChg) unlikelyChanges_list'
+  

@@ -126,10 +126,10 @@ prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
 
 gBRSpecParamVals :: [QDefinition]
 gBRSpecParamVals = [dim_max, dim_min, ar_max, cWeightMax, cWeightMin,
-  sd_min, sd_max]
+  sd_max, sd_min]
 
-dim_max, dim_min, ar_max, cWeightMax, cWeightMin, sd_min,
-  sd_max :: QDefinition
+dim_max, dim_min, ar_max, cWeightMax, cWeightMin, sd_max,
+  sd_min :: QDefinition
 
 dim_max     = mkDataDef (unitary "dim_max"
   (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
@@ -151,13 +151,14 @@ cWeightMin = mkDataDef (unitary "cWeightMin"
   (nounPhraseSP "minimum permissible input charge weight")
   (sub (eqSymb char_weight) (Atomic "min")) kilogram Rational) (dbl 4.5)
 
+sd_max     = mkDataDef (unitary "sd_max"
+  (nounPhraseSP "maximum stand off distance permissible for input")
+  (sub (eqSymb standOffDist) (Atomic "max")) metre Real) (dbl 130)
+
 sd_min     = mkDataDef (unitary "sd_min"
   (nounPhraseSP "minimum stand off distance permissible for input") 
   (sub (eqSymb standOffDist) (Atomic "min")) metre Real) (dbl 6)
 
-sd_max     = mkDataDef (unitary "sd_max"
-  (nounPhraseSP "maximum stand off distance permissible for input")
-  (sub (eqSymb standOffDist) (Atomic "max")) metre Real) (dbl 130)
 
 {--}
 

@@ -32,6 +32,7 @@ import Drasil.GamePhysics.References (cpCitations)
 import Drasil.GamePhysics.TMods (cpTMods)
 import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
   inputSymbols, outputSymbols, cpInputConstraints)
+import Drasil.GamePhysics.Changes   
 
 import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Drasil.Sections.Requirements (reqF)
@@ -81,7 +82,7 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
    IScope s2_2_intro_p1 s2_2_intro_p2, 
    IChar (S "rigid body dynamics") (phrase highSchoolCalculus) (EmptyS), 
    IOrgSec s2_4_intro inModel s4_2 EmptyS]) :
-  (map Verbatim [s3, s4, s5, s6, s7, s8, s9])  ++ 
+  (map Verbatim [s3, s4, s5, s6, unlikelyChanges, s7, s8, s9])  ++ 
   (Bibliography : []) 
     where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
@@ -605,37 +606,7 @@ s5_2_intro = foldlSP
 -- SECTION 6 : LIKELY CHANGES --
 --------------------------------
 
-s6 :: Section
-s6_intro, s6_list :: Contents
 
-s6 = SRS.likeChg [s6_intro, s6_list] []
-
-s6_intro = foldlSP [S "This", (phrase section_), S "lists the", 
-  (plural likelyChg), S "to be made to the", (phrase physics), (phrase game), 
-  (phrase library)]
-
-s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3, 
-  s6_likelyChg_stmt4 :: Sentence
-
---these statements look like they could be parametrized
-s6_likelyChg_stmt1 = (S "internal" +:+ (getAcc CM.ode) :+: 
-  S "-solving" +:+ phrase algorithm +:+ S "used by the" +:+
-  (phrase library)) `maybeChanged` (S "in the future")
-
-s6_likelyChg_stmt2 = (phrase library) `maybeExpanded`
-  (S "to deal with edge-to-edge and vertex-to-vertex" +:+ (plural CP.collision))
-
-s6_likelyChg_stmt3 = (phrase library) `maybeExpanded` (
-  S "to include motion with" +:+ (phrase CP.damping))
-
-s6_likelyChg_stmt4 = (phrase library) `maybeExpanded` (S "to include" +:+ 
-  (plural CP.joint) `sAnd` (plural CM.constraint))
-
-s6_list' :: [Sentence]
-s6_list' = [s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3,
-  s6_likelyChg_stmt4]
-
-s6_list = enumSimple 1 (getAcc likelyChg) s6_list'
 
 -----------------------------------------
 -- SECTION 7 : OFF-THE-SHELF SOLUTIONS --

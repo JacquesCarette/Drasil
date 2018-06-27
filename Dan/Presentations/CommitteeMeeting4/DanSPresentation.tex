@@ -40,6 +40,33 @@
 %\usepackage{bm}
 
 \usepackage{listings}
+\usepackage{color}
+ 
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+ 
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegray},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegreen},
+    stringstyle=\color{codepurple},
+    basicstyle=\tiny,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+ 
+\lstset{style=mystyle}
 \newcommand{\blt}{- } %used for bullets in a list
 
 \newcounter{datadefnum} %Datadefinition Number
@@ -340,12 +367,13 @@ Writing %mentioned earlier
 Total of 372 issues closed on the Drasil github
 
 \begin{itemize}
-\item Automated generation of some Drasil user-documentation using Haddock
-\item Created new chunk and referencing databases %improved referencing
-\item Added to, and refactored, the Drasil class hierarchy
+\item Haddock % Automated generation of some Drasil user-documentation using 
+%Haddock
+\item Chunk and referencing databases %improved referencing
+\item Improved the Drasil class hierarchy %Added to, and refactored, 
 % Citations, Theories, Labels, etc.
-\item Finished creating Document Language (Continued on next slides)
-\item Implemented Continuous Integration with automated tests
+\item Finished creating Document Language (Cont'd)
+\item Continuous Integration \& automated tests
 \item General source clean-up and refactoring
 \end{itemize}
 
@@ -361,11 +389,13 @@ Currently $\sim$130 open issues guiding development
 \only<1>{
 \framesubtitle{Old}
 
+\lstinputlisting[language=Haskell, firstline=46, lastline=75]{BodyOld.hs}
+
 }
 
 \only<2>{
 \framesubtitle{New}
-
+\lstinputlisting[language=Haskell, firstline=92, lastline=121]{BodyNew.hs}
 }
 
 

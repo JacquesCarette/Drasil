@@ -94,39 +94,34 @@ glassBR_srs = mkDoc mkSRS (for'' titleize phrase) glassSystInfo
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
-  IntroSec (
-    IntroProg (startIntro software blstRskInvWGlassSlab gLassBR)
-      (short gLassBR)
-    [IPurpose (purpose_intro_p1 document gLassBR glaSlab),
-     IScope incScoR endScoR,
-     IChar (rdrKnldgbleIn glBreakage blastRisk) undIR appStanddIR,
-     IOrgSec intended_reader_intro dataDefn (SRS.dataDefn SRS.missingP []) intended_reader_intro_end]) :
-  StkhldrSec
-    (StkhldrProg2
-      [Client gLassBR (S "a" +:+ phrase company
-        +:+ S "named Entuitive. It is developed by Dr." +:+ (S $ name mCampidelli)),
-      Cstmr gLassBR]) :
-  GSDSec (GSDProg2 [UsrChars [user_chars_bullets endUser gLassBR secondYear
-    undergradDegree civilEng structuralEng glBreakage blastRisk],
-    SystCons [] []]) :
-  ScpOfProjSec (ScpOfProjProg (short gLassBR) (prod_use_case_table) (indiv_prod_use_case (glaSlab)
-    (capacity) (demandq) (probability))) :
-  SSDSec (SSDVerb spec_sys_desc) : 
-  {- SSDSec 
-    (SSDProg
-      --[SSDProblem  (PDProg start gLassBR ending [terms_defs, phys_sys_desc, goals])
-      --, 
-      [ SSDSolChSpec 
-        (SCSProg
-          [ Assumptions ]
-          {-[ TMs ([Label] ++ stdFields) [t1IsSafe]
-          , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
-          , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, testIMFromQD] HideDerivation 
-          ] -}
-        )
-      ]
-    ) :  -}
+ IntroSec (
+  IntroProg (startIntro software blstRskInvWGlassSlab gLassBR) (short gLassBR)
+   [IPurpose (purpose_intro_p1 document gLassBR glaSlab),
+   IScope incScoR endScoR,
+   IChar (rdrKnldgbleIn glBreakage blastRisk) undIR appStanddIR,
+   IOrgSec intendedReaderIntro dataDefn SRS.dataDefn intendedReaderIntro_end]):
+ StkhldrSec (StkhldrProg2 [Client gLassBR (S "a" +:+ phrase company +:+ 
+     S "named Entuitive. It is developed by Dr." +:+ (S $ name mCampidelli)), 
+   Cstmr gLassBR]) :
+ GSDSec (GSDProg2 
+   [UsrChars [user_chars_bullets endUser gLassBR secondYear undergradDegree 
+    civilEng structuralEng glBreakage blastRisk], SystCons [] []]) :
+ ScpOfProjSec (ScpOfProjProg (short gLassBR) (prod_use_case_table) 
+           (indiv_prod_use_case (glaSlab) (capacity) (demandq) (probability))) :
+ SSDSec (SSDProg [SSDProblem (
+   PDProg start gLassBR ending [terms_defs, phys_sys_desc, goals])],
+   [ SSDSolChSpec (
+      SCSProg
+       [ Assumptions
+       , TMs ([Label] ++ stdFields) [t1IsSafe]
+       , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
+       , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+       , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ 
+               stdFields) [probOfBreak, testIMFromQD] HideDerivation
+       ]
+      )
+   ]
+  ) :
   ReqrmntSec (ReqsProg [
     FReqsSub func_reqs_list,
     NonFReqsSub [performance] (gBRpriorityNFReqs)
@@ -293,15 +288,15 @@ purpose_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpos
 
 {--Organization of Document--}
 
-intended_reader_intro_end, intended_reader_intro :: Sentence
-intended_reader_intro = foldlSent [S "The", phrase organization, S "of this",
+intendedReaderIntro_end, intendedReaderIntro :: Sentence
+intendedReaderIntro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an", short srs,
   S "for", phrase sciCompS, S "proposed by" +:+ cite gbRefDB koothoor2013
   `sAnd` cite gbRefDB smithLai2005 `sC` S "with some", 
   plural aspect, S "taken from Volere", phrase template,
   S "16", cite gbRefDB rbrtsn2012]
 
-intended_reader_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
+intendedReaderIntro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
   S "are used to support", (plural definition `ofThe` S "different"),
   plural model]
 

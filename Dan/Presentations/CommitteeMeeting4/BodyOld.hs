@@ -47,13 +47,6 @@ glassBR_srs :: Document
 glassBR_srs = Document ((srs ^. defn) +:+ S "for" +:+ (gLassBR ^. defn)) srs_authors
   [s1,s2,s3,s4,s5,s6,s7,s8,s9,s10,s11]
 
-mgBod :: [Section]
-(mgBod, _) = makeDD lcs ucs reqs modules
-
-glassBR_mg :: Document
-glassBR_mg = Document (S "Module Guide for" +:+ (gLassBR ^. term)) mg_authors mgBod
-
-
 s1 = Section(S "Reference Material") [Con s1_intro, Sub s1_1, Sub s1_2, 
   Sub s1_3]
 

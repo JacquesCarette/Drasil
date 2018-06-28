@@ -61,7 +61,7 @@ class Definition c where
 
 -- Temporary hack to avoid loss of information
 class HasAdditionalNotes c where
-  getNotes :: c -> Maybe [Sentence]
+  getNotes :: Lens' c (Maybe [Sentence])
 
 class ConceptDomain c where
   -- | cdom provides (a 'Lens' to) the concept domain tags for a chunk

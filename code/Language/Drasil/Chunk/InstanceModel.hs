@@ -53,7 +53,7 @@ instance ExprRelat          InstanceModel where relat = rc . relat
 instance HasDerivation      InstanceModel where derivations = deri
 instance HasReference       InstanceModel where getReferences = ref
 instance HasShortName       InstanceModel where shortname = view refName
-instance HasAdditionalNotes InstanceModel where getNotes (IM _ _ _ _ _ _ _ _ n) = n
+instance HasAdditionalNotes InstanceModel where getNotes = notes
 
 -- | Smart constructor for instance models
 im :: RelationConcept -> Inputs -> InputConstraints -> Output -> 

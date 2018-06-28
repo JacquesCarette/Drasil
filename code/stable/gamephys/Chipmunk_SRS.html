@@ -1446,10 +1446,10 @@ There are no general definitions.
 Instance Models
 </h3>
 <p class="paragraph">
-This section transforms the problem defined in FIXME REF into one which is expressed in mathematical terms. It uses concrete symbols defined in FIXME REF to replace the abstract symbols in the models identified in FIXME REF and FIXME REF.
+This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
 </p>
-<div id="T:im1">
-<table class="tdefn">
+<div id="IM:im1">
+<table class="idefn">
 <tr>
 <th>
 Label
@@ -1466,8 +1466,7 @@ Input
 </th>
 <td>
 <p class="paragraph">
-<em><b>v</b><sub>i</sub></em>, <em>t</em>, <em>g</em>, <em><b>F</b><sub>i</sub></em>, <em>m<sub>j</sub><
-/em>
+<em><b>v</b><sub>i</sub></em>, <em>t</em>, <em>g</em>, <em><b>F</b><sub>i</sub></em>, <em>m<sub>j</sub></em>
 </p>
 </td>
 </tr>
@@ -1527,7 +1526,6 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em><b>a</b><sub>i</sub> = <div class="fraction">
 <span class="fup">
 d&#8239;<b>v</b><sub>i</sub>(t)
@@ -1553,15 +1551,62 @@ m<sub>j</sub>
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em><b>a</b><sub>i</sub></em> is the the i-th body's acceleration (m/s<sup>2</sup>)
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+<p>
+<em><b>v</b><sub>i</sub></em> is the velocity of the i-th body's velocity (m/s)
+</p>
+<p>
+<em>g</em> is the gravitational acceleration (m/s<sup>2</sup>)
+</p>
+<p>
+<em><b>F</b><sub>i</sub></em> is the force applied to the i-th body at time t (N)
+</p>
+<p>
+<em>m<sub>j</sub></em> is the mass of the j-th particle (kg)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-The above equation expresses the total acceleration of the rigid body (A1, A2) i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using DD2, DD3 and DD4. It is currently assumed that there is no damping (A6) or constraints (A7) involved. <em>m<sub>i</sub></em> is the mass of the i-th rigid body (kg). <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>). <em>t</em> is the point in time (s). <em>t<sub>0</sub></em> is the denotes the initial time (s). <em><b>p</b><sub>CM</sub></em> is the the mass-weighted average position of a rigid body's particles (m). <em><b>a</b></em> is the acceleration (m/s<sup>2</sup>). <em><b>v</b></em> is the velocity (m/s). <em><b>F</b><sub>i</sub></em> is the force applied to the i-th body at time t (N).
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+The above equation expresses the total acceleration of the rigid body (A1, A2) i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using DD2, DD3 and DD4. It is currently assumed that there is no damping (A6) or constraints (A7) involved.
 </p>
 </td>
 </tr>
 </table>
 </div>
-<div id="T:im2">
-<table class="tdefn">
+<div id="IM:im2">
+<table class="idefn">
 <tr>
 <th>
 Label
@@ -1638,7 +1683,6 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em>α = <div class="fraction">
 <span class="fup">
 d&#8239;ω(t)
@@ -1664,15 +1708,59 @@ d&#8239;t
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>α</em> is the angular acceleration (rad/s<sup>2</sup>)
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+<p>
+<em>ω</em> is the angular velocity (rad/s)
+</p>
+<p>
+<em>τ<sub>i</sub></em> is the is the torque applied to the i-th body (N&sdot;m)
+</p>
+<p>
+<em><b>I</b></em> is the moment of inertia (kg&sdot;m<sup>2</sup>)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved. <em>m<sub>i</sub></em> is the mass of the i-th rigid body (kg). <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>). <em>t</em> is the point in time (s). <em>t<sub>0</sub></em> is the denotes the initial time (s). <em>ϕ</em> is the orientation (rad). <em>ω</em> is the angular velocity (rad/s). <em>α</em> is the angular acceleration (rad/s<sup>2</sup>). <em>τ<sub>i</sub></em> is the is the torque applied to the i-th body (N&sdot;m). <em><b>I</b><sub>k</sub></em> is the moment of inertia of the k-th rigid body (kg&sdot;m<sup>2</sup>).
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved.
 </p>
 </td>
 </tr>
 </table>
 </div>
-<div id="T:im3">
-<table class="tdefn">
+<div id="IM:im3">
+<table class="idefn">
 <tr>
 <th>
 Label
@@ -1754,7 +1842,6 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em><b>v</b><sub>A</sub>(t<sub>c</sub>) = <b>v</b><sub>A</sub>(t)&plus;<div class="fraction">
 <span class="fup">
 j
@@ -1773,8 +1860,55 @@ m<sub>A</sub>
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em><b>v</b><sub>A</sub></em> is the velocity at point A (m/s)
+</p>
+<p>
+<em>t<sub>c</sub></em> is the denotes the time at collision (s)
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+<p>
+<em>j</em> is the impulse (scalar) (N&sdot;s)
+</p>
+<p>
+<em>m<sub>A</sub></em> is the mass of rigid body A (kg)
+</p>
+<p>
+<em><b>n</b></em> is the collision normal vector (m)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-This instance model is based on our assumptions regarding rigid body (A1, A2) collisions (A5). Again, this does not take damping (A6) or constraints (A7) into account. <em>m<sub>i</sub></em> is the mass of the i-th rigid body (kg). <em><b>I</b><sub>k</sub></em> is the moment of inertia of the k-th rigid body (kg&sdot;m<sup>2</sup>). <em>t</em> is the point in time (s). <em>t<sub>0</sub></em> is the denotes the initial time (s). <em>t<sub>c</sub></em> is the denotes the time at collision (s). <em><b>p</b><sub>CM</sub></em> is the the mass-weighted average position of a rigid body's particles (m). <em><b>v</b></em> is the velocity (m/s). <em>ϕ</em> is the orientation (rad). <em>ω</em> is the angular velocity (rad/s). <em><b>n</b></em> is the collision normal vector (m). <em>j</em> is the collision impulse (scalar) (N&sdot;s). <em>P</em> is the point of collision (m). <em><b>r</b><sub>kP</sub></em> is the displacement vector between the centre of mass of rigid body k and contact point P (m).
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+This instance model is based on our assumptions regarding rigid body (A1, A2) collisions (A5). Again, this does not take damping (A6) or constraints (A7) into account.
 </p>
 </td>
 </tr>

@@ -1,6 +1,9 @@
+{-# Language TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.Citation
   ( -- Types
     Citation, BibRef, CiteField(..), Month(..), HP(..), CitationKind(..), EntryID
+    -- Class for Reference.hs
+  , HasFields(getFields)
     -- Accessors
   , citeID, externRefT, fields
     -- CiteFields smart constructors
@@ -28,6 +31,8 @@ import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Printing.Helpers (noSpaces)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), shortname')
+
+import Control.Lens (Lens', makeLenses)
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces
@@ -87,24 +92,6 @@ instance Show Month where
   show Nov = "November"
   show Dec = "December"
 
--- | All citations require a unique identifier (String) used by the Drasil chunk.
--- We will also have an EntryID (String) used for creating reference links.
--- Finally we will have the reference information (type and fields).
-data Citation = Cite
-  { _id :: UID
-  , citeID :: EntryID
-  , externRefT :: CitationKind
-  , fields :: [CiteField]
-  }
-
--- | Smart constructor which implicitly uses EntryID as chunk i.
-cite :: EntryID -> CitationKind -> [CiteField] -> Citation
-cite i = Cite i (noSpaces i)
-
--- | Citations are chunks.
-instance HasUID        Citation where uid f (Cite a b c d) = fmap (\x -> Cite x b c d) (f a)
-instance HasShortName  Citation where shortname c = shortname' $ citeID c
-
 -- | External references come in many flavours. Articles, Books, etc.
 -- (we are using the types available in Bibtex)
 data CitationKind = Article
@@ -120,6 +107,29 @@ data CitationKind = Article
                   | Proceedings
                   | TechReport
                   | Unpublished
+
+-- | All citations require a unique identifier (String) used by the Drasil chunk.
+-- We will also have an EntryID (String) used for creating reference links.
+-- Finally we will have the reference information (type and fields).
+data Citation = Cite
+  { _id :: UID
+  , citeID :: EntryID
+  , externRefT :: CitationKind
+  , _fields :: [CiteField]
+  }
+makeLenses ''Citation
+
+class HasFields c where
+  getFields :: Lens' c [CiteField]
+
+-- | Smart constructor which implicitly uses EntryID as chunk i.
+cite :: EntryID -> CitationKind -> [CiteField] -> Citation
+cite i = Cite i (noSpaces i)
+
+-- | Citations are chunks.
+instance HasUID        Citation where uid f (Cite a b c d) = fmap (\x -> Cite x b c d) (f a)
+instance HasShortName  Citation where shortname c = shortname' $ citeID c
+instance HasFields     Citation where getFields = fields
 
 -- | Article citation requires author(s), title, journal, year.
 -- Optional fields can be: volume, number, pages, month, and note.

@@ -8,7 +8,7 @@ import qualified Data.Map as Map
 
 import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
 import Language.Drasil.Chunk.Change as Ch (Change(..), ChngType(..))
-import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID))
+import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID), HasFields(getFields))
 import Language.Drasil.Chunk.Concept (ConceptChunk)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
@@ -266,8 +266,8 @@ instance Referable Contents where
 uidSort :: HasUID c => c -> c -> Ordering
 uidSort = compare `on` (^. uid)
 
-authorSort :: Citation -> Citation -> Ordering
-authorSort = compare `on` author
+authorSort :: HasFields c => c -> c -> Ordering
+authorSort = compare `on` (^. getFields)
 
 citationsFromBibMap :: BibMap -> [Citation]
 citationsFromBibMap bm = sortBy uidSort citations

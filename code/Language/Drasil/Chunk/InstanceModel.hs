@@ -1,7 +1,8 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.InstanceModel 
   ( InstanceModel
-  , inCons, outCons, imOutput, imInputs, im, imQD
+  , inCons, outCons, imOutput, imInputs
+  , im, imQD, im', imQD'
   )where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
@@ -61,8 +62,8 @@ im rc i ic o oc sn = IM rc i ic o oc [] [] (shortname' sn) Nothing
 
 -- | Same as `im`, with an additional field for notes to be passed in
 im' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> String -> Maybe [Sentence] -> InstanceModel
-im' rc i ic o oc sn notes = IM rc i ic o oc [] [] (shortname' sn) notes
+  OutputConstraints -> String -> [Sentence] -> InstanceModel
+im' rc i ic o oc sn notes = IM rc i ic o oc [] [] (shortname' sn) (Just notes)
 
 -- | Smart constructor for instance model from qdefinition 
 -- (Sentence is the "concept" definition for the relation concept)

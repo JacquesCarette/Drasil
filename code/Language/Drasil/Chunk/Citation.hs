@@ -102,7 +102,7 @@ cite :: EntryID -> CitationKind -> [CiteField] -> Citation
 cite i = Cite i (noSpaces i)
 
 -- | Citations are chunks.
-instance HasUID Citation where uid f (Cite a b c d) = fmap (\x -> Cite x b c d) (f a)
+instance HasUID        Citation where uid f (Cite a b c d) = fmap (\x -> Cite x b c d) (f a)
 instance HasShortName  Citation where shortname c = shortname' $ citeID c
 
 -- | External references come in many flavours. Articles, Books, etc.

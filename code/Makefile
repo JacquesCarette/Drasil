@@ -1,6 +1,6 @@
 SWHS_PREF = SWHS_
 NoPCM_PREF = NoPCM_
-TINY_PREF = $(empty)
+TINY_PREF = Tiny_
 SSP_PREF = SSP_
 GLASS_PREF = GlassBR_
 GAME_PREF = Chipmunk_

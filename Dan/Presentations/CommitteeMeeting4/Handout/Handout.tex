@@ -78,6 +78,7 @@ to encode a definition once and automatically reuse it wherever required in
 our software artifacts?
 
 \section{Inter-/intra-artifact\\consistency}
+\label{Sec:consistency}
 
 Our five case studies have been reviewed at least once per year by multiple 
 people. Every time the documents are reviewed, new inconsistencies and problems 
@@ -85,7 +86,7 @@ with the artifacts are found. We show a subset of the
 issues that are currently open (Figure~\ref{Fig:OpenIssues}), 
 \begin{figure}
   \centering
-  \includegraphics[width=0.6\linewidth]{OpenIssuesSWHS.PNG}
+  \includegraphics[width=0.7\linewidth]{OpenIssuesSWHS.PNG}
   \caption{Subset of the currently open issues with PCM}
   \label{Fig:OpenIssues}
 \end{figure}
@@ -121,6 +122,19 @@ ensure consistency by construction?
 \emph{Note: An example of intra-artifact consistency will be covered on slides 
 \#25-27 in the companion presentation.}
 
+\section{Design for change}
+
+Consider the PCM case study mentioned in Section~\ref{Sec:consistency}. It is a 
+single member of a larger software family. If we decide to remove the phase 
+change material from the problem, our solution will still be very similar with 
+the obvious lack of any information related to phase change material -- it 
+becomes the noPCM case study.
+
+A lot of PCM's design can (and should) be reused for noPCM. Not only that, but 
+if we have designed the system with change in mind, it should be easy, if not 
+trivial, to switch from PCM to noPCM. Why not make it easier to target software 
+families instead of singular family members?
+
 \section{(Re-)Certification is expensive}
 
 Software certification is necessary by law in certain fields, particularly in 
@@ -148,8 +162,6 @@ re-verified manually.
 While we are not proposing to automatically verify our software artifacts, we 
 want to relieve the burden of artifact creation. What if instead of manually 
 maintaining each artifact, we could automatically generate them? 
-
-
 
 \bibliographystyle{abbrv}
 \bibliography{drasil}  

@@ -330,6 +330,7 @@ executable chipmunkdocs
     , Drasil.DocumentLanguage.RefHelpers
     , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.GamePhysics.Body
+    , Drasil.GamePhysics.Changes
     , Drasil.GamePhysics.Concepts
     , Drasil.GamePhysics.DataDefs
     , Drasil.GamePhysics.TMods

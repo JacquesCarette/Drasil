@@ -77,7 +77,7 @@ in multiple places is tedious and time-consuming. Wouldn't it make more sense
 to encode a definition once and automatically reuse it wherever required in 
 our software artifacts?
 
-\section{Inter-/intra-artifact consistency}
+\section{Inter-/intra-artifact\\consistency}
 
 Our five case studies have been reviewed at least once per year by multiple 
 people. Every time the documents are reviewed, new inconsistencies and problems 
@@ -97,10 +97,16 @@ our case studies. If you would like to see more, the PCM case study is publicly
 accessible at \url{https://github.com/smiths/swhs}.
 \begin{figure}[!htbp]
   \centering
-  \includegraphics[width=0.8\linewidth]{RecentIssuesSWHS.PNG}
-  \caption{Subset of issues closed within the last two months}
+  \includegraphics[width=\linewidth]{RecentIssuesSWHS.PNG}
+  \caption{Closed issues within the last two months}
   \label{Fig:ClosedIssues}
 \end{figure}
+
+Each of those issues is related to some inconsistency found in the 
+manually-produced software artifacts. Information is missing, out of date, 
+unclear, or simply incorrect. Every closed issue from 
+Figure~\ref{Fig:ClosedIssues} had to be taken care of manually and took a 
+non-trivial amount of time.
 
 It is easy to see a problem exists with maintaining consistent artifacts. 
 Changes made to the code, requirements, or design do not always have obvious 

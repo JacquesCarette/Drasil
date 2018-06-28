@@ -19,10 +19,11 @@ tModels = [t1SafetyReq, t2SafetyReq]
 -- FIXME: This is a hack to see if TheoryModel printing will work. This chunk
 -- needs to be updated properly.
 t1IsSafe :: TheoryModel
-t1IsSafe = tm (cw t1SafetyReq) 
+t1IsSafe = tm' (cw t1SafetyReq) 
   (tc' "isSafe" [qw is_safe1, qw prob_br, qw pb_tol] ([] :: [ConceptChunk])
   [] [TCon Invariant $ (sy is_safe1) $= (sy prob_br) $< (sy pb_tol)] [])
   "isSafe" --shortname
+  [t1descr]
 
 t1SafetyReq :: RelationConcept
 t1SafetyReq = makeRC "t1SafetyReq" (nounPhraseSP "Safety Requirement-1")
@@ -38,9 +39,10 @@ t1descr = tDescr (is_safe1) s ending
 
 
 t2IsSafe :: TheoryModel
-t2IsSafe = tm (cw t2SafetyReq)
+t2IsSafe = tm' (cw t2SafetyReq)
    (tc' "isSafe2" [qw is_safe2, qw lRe, qw demand] ([] :: [ConceptChunk])
    [] [TCon Invariant $ (sy is_safe2) $= (sy lRe) $> (sy demand)] []) "isSafe2"
+   [t2descr]
 
 t2SafetyReq :: RelationConcept
 t2SafetyReq = makeRC "t2SafetyReq" (nounPhraseSP "Safety Requirement-2")

@@ -121,7 +121,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
       , SSDSolChSpec 
         (SCSProg
           [ Assumptions
-          , TMs ([Label] ++ stdFields) [t1IsSafe, t2IsSafe]
+          , TMs ([Label] ++ stdFields ++ [Notes]) [t1IsSafe, t2IsSafe]
           , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
           , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields ++ [Notes]) [probOfBreak, calofCapacity, calofDemand, testIMFromQD] HideDerivation

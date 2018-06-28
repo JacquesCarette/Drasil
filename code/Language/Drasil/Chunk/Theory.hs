@@ -1,7 +1,7 @@
 {-# Language TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.Theory 
   ( tc',
-   Theory(..), TheoryChunk, TheoryModel, tm,
+   Theory(..), TheoryChunk, TheoryModel, tm, tm'
   )where
 
 import Language.Drasil.UID (UID)

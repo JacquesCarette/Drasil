@@ -162,7 +162,7 @@ module Language.Drasil (
   , entry, listEntry, junk, singleton, junkLine, singleLine, multiLine
   , multiLine', straight, repeated, repeated', Ind(..)
   -- Chunk.Theory
-  , Theory(..), tc', TheoryChunk, TheoryModel, tm
+  , Theory(..), tc', TheoryChunk, TheoryModel, tm, tm'
   -- Chunk.SymbolForm
   , Stage(Equational,Implementation), HasSymbol(symbol), eqSymb, codeSymb, hasStageSymbol
   -- Code.Imperative.Lang

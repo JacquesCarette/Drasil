@@ -1181,9 +1181,17 @@ Equation
 Description
 </th>
 <td>
-<p class="paragraph">
-If <em>is_safe1</em>, the glass is considered safe. <em>is_safe1</em> and <em>is_safe2</em> (from <a href=#T:t2SafetyReq>T:t2SafetyReq</a>) are either both True or both False. <em>P<sub>b</sub></em> is the probability of breakage, as calculated in <a href=#T:probOfBr>T:probOfBr</a>. <em>P<sub>btol</sub></em> is the tolerable probability of breakage entered by the user.
+<div class="list">
+<p>
+<em>is_safe1</em> is true when calculated probability is less than tolerable probability (Unitless)
 </p>
+<p>
+<em>P<sub>b</sub></em> is the probability of breakage (Unitless)
+</p>
+<p>
+<em>P<sub>btol</sub></em> is the tolerable probability of breakage (Unitless)
+</p>
+</div>
 </td>
 </tr>
 <tr>
@@ -1203,6 +1211,16 @@ RefBy
 <td>
 <p class="paragraph">
 FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+If <em>is_safe1</em>, the glass is considered safe. <em>is_safe1</em> and <em>is_safe2</em> (from <a href=#T:t2SafetyReq>T:t2SafetyReq</a>) are either both True or both False. <em>P<sub>b</sub></em> is the probability of breakage, as calculated in <a href=#T:probOfBr>T:probOfBr</a>. <em>P<sub>btol</sub></em> is the tolerable probability of breakage entered by the user.
 </p>
 </td>
 </tr>
@@ -1237,9 +1255,17 @@ Equation
 Description
 </th>
 <td>
-<p class="paragraph">
-If <em>is_safe2</em>, the glass is considered safe. <em>is_safe1</em> (from <a href=#T:t1SafetyReq>T:t1SafetyReq</a>) and <em>is_safe2</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#T:calOfCap>T:calOfCap</a>. <em>q</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#T:calOfDe>T:calOfDe</a>.
+<div class="list">
+<p>
+<em>is_safe2</em> is true when load resistance (capacity) is greater than load (demand) (Unitless)
 </p>
+<p>
+<em>LR</em> is the load resistance (Unitless)
+</p>
+<p>
+<em>q</em> is the applied load (demand) (kPa)
+</p>
+</div>
 </td>
 </tr>
 <tr>
@@ -1259,6 +1285,16 @@ RefBy
 <td>
 <p class="paragraph">
 FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+If <em>is_safe2</em>, the glass is considered safe. <em>is_safe1</em> (from <a href=#T:t1SafetyReq>T:t1SafetyReq</a>) and <em>is_safe2</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#T:calOfCap>T:calOfCap</a>. <em>q</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#T:calOfDe>T:calOfDe</a>.
 </p>
 </td>
 </tr>

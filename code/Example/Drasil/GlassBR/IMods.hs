@@ -68,8 +68,8 @@ capdescr =
 {--}
 
 calofDemand :: InstanceModel
-calofDemand = im calOfDe [qw demand, qw eqTNTWeight, qw standOffDist] [TCon AssumedCon $ sy demand $> 0,
-  TCon AssumedCon $ sy eqTNTWeight $> 0, TCon AssumedCon $ sy standOffDist $> 0] (qw demand) [] [] 
+calofDemand = im' calOfDe [qw demand, qw eqTNTWeight, qw standOffDist] [TCon AssumedCon $ sy demand $> 0,
+  TCon AssumedCon $ sy eqTNTWeight $> 0, TCon AssumedCon $ sy standOffDist $> 0] (qw demand) [] [] [dedescr]
 
 {--}
 
@@ -86,8 +86,6 @@ dedescr =
   (phrase standOffDist), sParen (getES standOffDist) `sAnd`
   (getES eqTNTWeight), S "as" +:+. plural parameter, 
   (getES eqTNTWeight), S "is defined as" +:+.
-  E (wtntWithEqn^.equat) +:+. ((getES char_weight) `isThe`
-  (phrase char_weight)) +:+. ((getES tNT) `isThe`
-  (phrase tNT)), (getES standOffDist) `isThe`
+  E (wtntWithEqn^.equat) +:+. (getES standOffDist) `isThe`
   (phrase standOffDist), S "where", E (sdWithEqn^.equat), S "where",
   sParen (sdVectorSent), S "are", plural coordinate]

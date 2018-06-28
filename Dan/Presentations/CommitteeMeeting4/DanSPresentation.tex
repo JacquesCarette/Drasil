@@ -161,7 +161,8 @@
 
 \begin{frame}
 \frametitle{Research Topic Recap}
-\framesubtitle{\alt<6->{\ro{6}{KBSE \& The Drasil Framework}}{Motivation}}
+\framesubtitle{\alt<6->{\ro{6}{KBSE \& The Drasil Framework}}{Motivation -- See 
+handout for examples}}
 
 \only<6->{\ro{6}{A Knowledge-Based Software Engineering Approach}}
 \begin{itemize}
@@ -202,7 +203,7 @@
 \begin{itemize}
 	\item One ``source'', multiple views
 	\item Full traceability
-	\item Consistent-by-construction artifacts
+	\item Consistent-by-construction artifacts* % does not mean correct
 \end{itemize}
 }
 
@@ -303,7 +304,7 @@ Total of 372 issues closed on the Drasil github
 % Citations, Theories, Labels, etc.
 \item Finished creating Document Language (Cont'd)
 \item Continuous Integration \& automated tests
-\item General source clean-up and refactoring
+\item General source clean-up and refactoring % template haskell
 \end{itemize}
 
 Currently $\sim$130 open issues guiding development
@@ -337,7 +338,8 @@ Introduction of new Document Language led to:
 }
 
 \only<3->{
-\framesubtitle{\only<3>{New}\only<4>{Equivalent to 140 ``Old" lines}}
+\framesubtitle{\only<3>{New}\only<4>{140 ``Old" line equiv.; 260 (216 
+gen.) lines of TeX}} %793 generated lines of HTML / >800 manual
 \only<3>{\lstinputlisting[language=Haskell, firstline=92, 
 lastline=119]{BodyNew.hs}}
 \only<4>{\lstinputlisting[language=Haskell, firstline=92, 
@@ -375,7 +377,11 @@ FS = \frac{S_i}{\ro{2}{\tau{}_i}}
 Were $S_i$ and $P_i$ swapped?
 }
 
-\only<3->{
+\only<3>{\includegraphics[width=\textwidth]{Pi.png}}
+\only<4>{\includegraphics[width=\textwidth]{Si.png}}
+\only<5>{\includegraphics[width=\textwidth]{taui.png}}
+
+\only<6->{
 
 \begin{itemize}
 \item $\tau{}_i$ was not defined anywhere in the documents
@@ -403,7 +409,7 @@ Problems arise when explaining things to a machine.
 \item What is each section contributing? %(in an artifact) --> New knowledge 
 %(assumps, reqs)? Building off previous towards a solution?
 \item Why do we organize things a given way?
-\item Are models/definitions different? How?
+%\item Are models/definitions different? How?
 \end{itemize}
 
 Need to be more rigorous!
@@ -412,13 +418,13 @@ Need to be more rigorous!
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section[Next Steps]{Next Steps.}
+\section[Next Steps]{Next Steps}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
 
-\frametitle{Next Steps}
+\frametitle{Next Steps for Me}
 \framesubtitle{Broad Strokes}
 
 

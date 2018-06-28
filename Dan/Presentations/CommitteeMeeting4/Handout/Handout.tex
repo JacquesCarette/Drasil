@@ -1,0 +1,90 @@
+\documentclass[twocolumn]{article}
+\usepackage[margin=0.5in]{geometry}
+\usepackage{listings}
+\usepackage{longtable}
+\usepackage{booktabs}
+
+\newcommand{\colAwidth}{0.2\textwidth}
+\newcommand{\colBwidth}{0.73\textwidth}
+
+\newcounter{datadefnum} %Datadefinition Number
+\newcommand{\ddthedatadefnum}{DD\thedatadefnum}
+\newcommand{\ddref}[1]{DD\ref{#1}}
+
+
+\title{Research Topic Handout -- Problems and Solutions}
+\author{Daniel Szymczak\\
+McMaster University}
+\date{June 28, 2018}
+
+\begin{document}
+
+\maketitle
+{\noindent\emph{Note: This handout was created as a companion-piece to my 
+supervisory committee meeting presentation for June 28, 2018}}
+
+\section{Too much duplication!}
+
+In any given piece of software, the same knowledge will appear across a number 
+of different artifacts. Manually entering this knowledge in multiple places 
+introduces the potential for errors to occur.
+
+From our case study on a fuel pin in a nuclear reactor, we see $h_g$~--~a 
+symbol which appears in the Software Requirements Specification (SRS), the 
+Literate Programmer's Manual (LPM), and the source code.
+
+The following table shows a (simplified) definition of $h_g$ taken from the 
+SRS. Its defining equation also appears in Equation~\ref{E:h.g}, which was 
+taken from the LPM.
+
+\noindent
+\begin{minipage}{0.4\textwidth}
+\begin{tabular}{p{\colAwidth} p{\colBwidth}}
+\toprule
+\textbf{Number} & \textbf{DD\refstepcounter{datadefnum}\thedatadefnum} 
+\label{hg}\\
+\midrule
+Label & $h_g$\\
+\midrule
+Equation & $h_g$ =$ \frac{2k_{c}h_{p}}{2k_{c}+\tau_c h_{p}}$\\
+\midrule
+Description & $h_g$ is the  gap conductance \dots \\
+\midrule
+\dots \\
+\bottomrule
+\end{tabular}
+\end{minipage}\\
+
+\begin{equation}
+\label{E:h.g} 
+h_{g} =\frac{2k_{c}h_{p}}{2k_{c}+\tau_c h_{p}}
+\end{equation}
+
+We then see the same equation appear in the 
+corresponding C code for $h_g$ given by:
+
+\begin{lstlisting}[basicstyle=\scriptsize]
+double calc_hg(double k_c,double h_b,double tau_c)
+{
+ return (2*(k_c)*(h_p)) / ((2*(k_c)) + (tau_c*(h_p)));
+}
+\end{lstlisting}
+
+This situation comes up all the time and writing the same information in 
+multiple places is tedious. Wouldn't it  
+make more sense to encode a definition once and 
+automatically reuse it wherever necessary in our artifacts?
+
+
+\section{Inter-/intra-artifact consistency}
+
+
+
+\section{(Re-)Certification is expensive}
+
+\cite{CSA1999,CSA2009,CDRH2002,FDA2014}
+
+
+\bibliographystyle{abbrv}
+\bibliography{drasil}  
+\end{document}

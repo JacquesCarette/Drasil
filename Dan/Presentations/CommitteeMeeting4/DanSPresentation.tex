@@ -8,7 +8,7 @@
 \usetheme[width=0.7in]{Hannover}
 % or ...
 
-  \setbeamercovered{transparent}
+  \setbeamercovered{invisible}
   % or whatever (possibly just delete it)
 }
 \usepackage{longtable}
@@ -82,9 +82,6 @@
 \renewcommand{\arraystretch}{0.6} %so that tables with equations do not look crowded
 
 \pgfdeclareimage[height=0.7cm]{logo}{McMasterLogo}
-\pgfdeclareimage[width=10.55cm]{ex1}{h_g_ex}
-\pgfdeclareimage[width=6cm]{rec1}{SRS_ex}
-\pgfdeclareimage[width=6cm]{rec2}{LPM_ex}
 \title[\pgfuseimage{logo}]  % (optional, use only with long paper titles)
 {PhD Committee Meeting \#4}
 
@@ -137,8 +134,6 @@
 
 \beamertemplatenavigationsymbolsempty 
 
-% have SRS and LP open during the presentation
-
 \begin{document}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -156,53 +151,8 @@
 \tableofcontents
 % You might wish to add the option [pausesections]
 
-% make like a story - the phases - reason for, why works, advantages
-% changing the history a bit to make a more rational narrative
-
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%\section[Introduction]{Introduction}
-%
-%% \subsection[Important Software Qualities]{Scientific Computing Software
-%% Qualities}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%\begin{frame}
-%
-%\frametitle{Who am I?}
-%
-%Dan Szymczak
-%
-%\vspace{0.5cm}
-%\pgfuseimage{Dan2}\hspace{1cm}\pgfuseimage{Dan}
-%\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%\begin{frame}
-%
-%\frametitle{Education History}
-%
-%\begin{itemize}
-%\item Ph.D. Software Engineering
-%	\begin{itemize}
-%	\item Currently in progress. Started Autumn 2014.
-%	\end{itemize}
-%\item M.A.Sc. Software Engineering
-%	\begin{itemize}
-%	\item McMaster University 2014
-%	\item Thesis -- \textit{Generating Learning Algorithms: Hidden Markov Models as a Case Study}
-%	\end{itemize}
-%\item B.Eng Software (Game Design) 
-%\begin{itemize}
-%	\item McMaster University 2011
-%	\end{itemize}
-%
-%\end{itemize}
-%\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section[Recap]{Research Recap}
@@ -210,7 +160,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
-\setbeamercovered{invisible}
 \frametitle{Research Topic Recap}
 \framesubtitle{\alt<6->{\ro{6}{KBSE \& The Drasil Framework}}{Motivation}}
 
@@ -218,9 +167,7 @@
 \begin{itemize}
 	\item<1->\alt<7->{\ro{7}{Single knowledge-base}}{Too much 
 	duplication!}
-	\item<2->\alt<8->{\ro{8}{Generate artifacts}}{(Re-)Certification is 
-	expensive}
-	\item<3->\alt<9->{\ro{9}{Guaranteed consistency}}{Inter-/intra-artifact 
+	\item<2->\alt<8->{\ro{8}{Guaranteed consistency}}{Inter-/intra-artifact 
 	consistency 
 	issues}% \& improve:
 %		\begin{itemize}
@@ -228,10 +175,11 @@
 %			\item Maintainability
 %			\item Reusability
 %		\end{itemize}
+	\item<3->\alt<9->{\ro{9}{Easy to mix and match}}{Design for change} 
+	%Easily switch between software family members
 	\item<4->\alt<10->{\ro{10}{Reusable across projects}}{Promote reusability}
-	\item<5->\alt<11->{\ro{11}{Easy to mix and match}}{Design for change} %-- 
-	%Easily 
-	%switch between software family members
+	\item<5->\alt<11->{\ro{11}{Generate artifacts}}{(Re-)Certification is 
+	expensive} 
 \end{itemize}
 
 \end{frame}
@@ -350,13 +298,13 @@ Summer 2017: Supervised 5 research students
 \item Helped improve Drasil
 \end{itemize}
 
-Submitted a paper for SE-CoDeSE'17: Rejected
+Submitted to SE-CoDeSE'17 -- Rejected
 
-Began work on a paper for FASE 2018 -- Scrapped
+Began a paper for FASE 2018 -- Scrapped
 
-Met with OPG in January: Positive feedback
+Met with OPG -- Positive feedback
 
-Currently co-supervising 3 summer research students
+Co-supervising 3 research students
 
 Writing %mentioned earlier
 }
@@ -383,235 +331,105 @@ Currently $\sim$130 open issues guiding development
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\section[Results]{Results to date}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{frame}
-\frametitle{Document Language}
+\frametitle{Results}
+\framesubtitle{Document Language}
 
 \only<1>{
+Introduction of new Document Language led to:
+\begin{itemize}
+\item De-embedding a lot of English
+\item More readable source%debatable
+\item Improved sanity checking
+\end{itemize}
+}
+
+\only<2>{
 \framesubtitle{Old}
 
 \lstinputlisting[language=Haskell, firstline=46, lastline=75]{BodyOld.hs}
 
 }
 
-\only<2>{
-\framesubtitle{New}
-\lstinputlisting[language=Haskell, firstline=92, lastline=121]{BodyNew.hs}
+\only<3->{
+\framesubtitle{\only<3>{New}\only<4>{Equivalent to 140 ``Old" lines}}
+\only<3>{\lstinputlisting[language=Haskell, firstline=92, 
+lastline=121]{BodyNew.hs}}
+\only<4>{\lstinputlisting[language=Haskell, firstline=92, 
+lastline=102, frame=single]{BodyNew.hs}
+\lstinputlisting[language=Haskell, firstline=103, 
+lastline=120, firstnumber=12]{BodyNew.hs}}
 }
 
 
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%\section[Example]{Example.}
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%\begin{frame}
-%
-%\frametitle{Example: $h_g$}
-%
-%\framesubtitle{A simple example taken from the SRS for FP}
-%
-%$h_g$ is a symbol which appears in several locations including:
-%\begin{itemize}
-%\item The Software Requirements Specification
-%\item The Literate Programmer's Manual
-%\item The Source Code
-%\end{itemize}
-%
-%Let's take a look!
-%
-%\end{frame}
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%\begin{frame}
-%
-%\frametitle{Example: $h_g$}
-%
-%\framesubtitle{SRS Definition for $h_g$ (original)}
-%
-%\noindent
-%\begin{minipage}{\textwidth}
-%\begin{tabular}{p{\colAwidth} p{\colBwidth}}
-%\toprule
-%\textbf{Number} & \textbf{DD\refstepcounter{datadefnum}\thedatadefnum} 
-%\label{hg}\\
-%\midrule
-%Label & $h_g$\\
-%\midrule
-%Units & $ML^0t^{-3}T^{-1}$\\
-%\midrule
-%SI & $\mathrm{\frac{kW}{m^{2} (^{\circ}C)}}$\\
-%\midrule
-%Equation & $h_g$ =$ \frac{2k_{c}h_{p}}{2k_{c}+\tau_c h_{p}}$\\
-%\midrule
-%Description & $h_g$ is the  gap conductance\newline
-%$\tau_c$ is the clad thickness\newline
-%$h_p$ is initial gap film conductance\newline
-%$k_c$ is the clad conductivity\newline
-%NOTE: Equation taken from the code\\
-%\midrule
-%Sources & source code\\
-%\bottomrule
-%\end{tabular}
-%\end{minipage}\\
-%
-%\end{frame}
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%\begin{frame}[fragile]
-%
-%\frametitle{Example: $h_g$}
-%
-%\framesubtitle{LPM Definition for $h_g$ (original)}
-%
-%\begin{equation} 
-%h_{g} =\frac{2k_{c}h_{p}}{2k_{c}+\tau_c h_{p}}
-%\end{equation}
-%
-%The corresponding C code is given by:
-%
-%\begin{lstlisting}[basicstyle=\tiny]
-%double calc_hg(double k_c,double h_b,double tau_c)
-%{
-% return (2*(k_c)*(h_p)) / ((2*(k_c)) + (tau_c*(h_p)));
-%}
-%\end{lstlisting}
-%
-%\end{frame}
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%%\begin{frame}
-%%
-%%\frametitle{Example: $h_g$ and $h_c$}
-%%
-%%\framesubtitle{Code source for $h_g$}
-%%
-%%\end{frame}
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%\begin{frame}
-%
-%\frametitle{Example: $h_g$}
-%
-%\framesubtitle{A simple example taken from the SRS for FP}
-%
-%Modifying $h_g$ to reflect changes in requirements is not a simple
-%matter. It involves, at the very least, the following steps:
-%\begin{itemize}
-%\item Update the definition in the SRS, LPM, and all other documents which
-%  reference the symbol
-%\item Modify the source code to reflect the new requirements
-%\item Trace all dependencies
-%\item Modify dependents to accomodate the change
-%\item Ensure each of the documents is now up to date and consistent
-%\end{itemize}
-%
-%\end{frame}
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%\begin{frame}
-%
-%\frametitle{Example: $h_g$}
-%
-%\framesubtitle{Simplifying the process}
-%
-%%This is where knowledge capture comes into play. 
-%Here is an example of a ``chunk'' for $h_g$:
-%
-%\pgfuseimage{ex1}
-%
-%\end{frame}
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%\begin{frame}
-%
-%\frametitle{Example: $h_g$}
-%
-%\framesubtitle{How do we generate?}
-%What do we do with the ``chunk''?
-%
-%That depends on the ``recipe''!
-%
-%\begin{itemize}
-%\item To create our SRS we use the following recipe:
-%\end{itemize}
-%
-%\pgfuseimage{rec1}
-%
-%\begin{itemize}
-%\item To create our LPM we use the following recipe:
-%\end{itemize}
-%
-%\pgfuseimage{rec2}
-%
-%\end{frame}
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%\begin{frame}
-%
-%\frametitle{Example: $h_g$}
-%
-%\framesubtitle{Generated SRS Output}
-%
-%%Let's look at (excerpts of the) generated output:
-%
-%\noindent \begin{minipage}{\textwidth}
-%\begin{tabular}{p{\colAwidth} p{\colBwidth}}
-%\toprule \textbf{Number} & \textbf{DD\refstepcounter{datadefnum}\thedatadefnum}
-%\label{hg}\\ \midrule
-%Label & $h_{g}$\\ \midrule
-%Units & $ML^0t^{-3}T^{-1}$\\ \midrule
-%SI & $\mathrm{\frac{kW}{m^{2\circ} C}}$\\
-%\midrule Equation & $h_{g}$ = $\frac{2k_{c}h_{p}}{2k_{c}+\tau_{c}h_{p}}$\\ 
-%\midrule
-%Description & $h_{g}$ is the effective heat transfer coefficient between clad 
-%and fuel surface
-%\newline
-%$k_{c}$ is the
-%clad conductivity \newline
-%$h_{p}$ is the
-%initial gap film conductance \newline
-%$\tau_{c}$ is the
-%clad thickness \newline
-%NOTE: Equation taken from the code\\ \midrule
-%Sources & source code\\
-%\bottomrule \end{tabular} \end{minipage}\\
-%\end{frame}
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%\begin{frame}[fragile]
-%
-%\frametitle{Example: $h_g$}
-%
-%\framesubtitle{Generated LPM Output}
-%
-%%Let's look at (excerpts of the) generated output:
-%
-%\begin{equation}
-%h_{g} =\frac{2k_{c}h_{p}}{2k_{c}+\tau_{c}h_{p}}\label{eq:hg}
-%\end{equation}
-%
-%The corresponding C code is given by:
-%
-%\begin{lstlisting}[basicstyle=\tiny]
-%double calc_h_g(double k_c, double h_p, double tau_c)
-%{
-%	return 2*k_c*h_p/(2*k_c+tau_c*h_p);
-%}
-%\end{lstlisting}
-%\end{frame}
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+\frametitle{Results}
+\framesubtitle{Sanity Checking}
+
+SSP Example (Issue \#348)
+
+\begin{minipage}{.4\linewidth}
+\begin{equation}
+S_i = \frac{P_i}{FS}
+\end{equation}
+\end{minipage}%
+\begin{minipage}{.4\linewidth}
+\begin{equation}
+FS = \frac{S_i}{\ro{2}{\tau{}_i}}
+\end{equation}
+\end{minipage}
+
+\only<2->{
+
+\vspace{.5cm}Where did \ro{2}{$\tau{}_i$} come from?\vspace{.3cm}
+
+Were $S_i$ and $P_i$ swapped?
+}
+
+\only<3->{
+
+\begin{itemize}
+\item $\tau{}_i$ was not defined anywhere in the documents
+\item Found with Drasil -- undefined symbols throw errors
+\item Equation based on concepts -- symbols automatically retrieved
+\end{itemize}
+}
+%Original issue was a bit more complicated, but came down to this.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{Results} %DS Get a better name for this
+\framesubtitle{Conceptual Inconsistencies in Software Artifacts}
+
+Manually created artifacts are human-readable.
+
+Problems arise when explaining things to a machine.
+
+\begin{itemize}
+\item What do our artifacts \emph{mean}?
+\item What is each section contributing? %(in an artifact) --> New knowledge 
+%(assumps, reqs)? Building off previous towards a solution?
+\item Why do we organize things a given way?
+\item Are models/definitions different? How?
+\end{itemize}
+
+Need to be more rigorous!
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section[Next Steps]{Next Steps.}
 
@@ -630,16 +448,30 @@ What next?
 \begin{itemize}
 \item Finish writing paper for ACM TOSEM
 \item Complete Thesis writing
-\item Continue improving Drasil
+\item Continue improving Drasil %issues
 \end{itemize}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}
+\frametitle{Summary}
+
+Problem:
+\begin{itemize}
+\item Duplication
+\item Inconsistency
+\item Design for change
+\item Promote re-usability
+\item Re-certification
+\end{itemize}
+
+\emph{Solution}:
 \begin{center}
-\Huge Thank You!
+Capture fine-grained knowledge \& generate \ro{1}{ALL} artifacts
 \end{center}
+
+
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

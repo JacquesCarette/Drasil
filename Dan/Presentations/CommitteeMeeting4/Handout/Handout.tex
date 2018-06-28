@@ -12,7 +12,7 @@
 \newcommand{\ddref}[1]{DD\ref{#1}}
 
 
-\title{Research Topic Handout -- Problems and Solutions}
+\title{Research Topic Handout}
 \author{Daniel Szymczak\\
 McMaster University}
 \date{June 28, 2018}
@@ -25,17 +25,16 @@ supervisory committee meeting presentation for June 28, 2018}}
 
 \section{Too much duplication!}
 
-In any given piece of software, the same knowledge will appear across a number 
-of different artifacts. Manually entering this knowledge in multiple places 
-introduces the potential for errors to occur.
+In any piece of software, the same knowledge will appear across many different 
+artifacts. Manually entering this knowledge multiple times
+increases the potential for errors to occur.
 
 From our case study on a fuel pin in a nuclear reactor, we see $h_g$~--~a 
 symbol which appears in the Software Requirements Specification (SRS), the 
 Literate Programmer's Manual (LPM), and the source code.
 
 The following table shows a (simplified) definition of $h_g$ taken from the 
-SRS. Its defining equation also appears in Equation~\ref{E:h.g}, which was 
-taken from the LPM.
+SRS.
 
 \noindent
 \begin{minipage}{0.4\textwidth}
@@ -60,8 +59,8 @@ Description & $h_g$ is the  gap conductance \dots \\
 h_{g} =\frac{2k_{c}h_{p}}{2k_{c}+\tau_c h_{p}}
 \end{equation}
 
-We then see the same equation appear in the 
-corresponding C code for $h_g$ given by:
+The defining equation for $h_g$ also appears in Equation~\ref{E:h.g}, taken 
+from the LPM, and it appears again in the corresponding C code:
 
 \begin{lstlisting}[basicstyle=\scriptsize]
 double calc_hg(double k_c,double h_b,double tau_c)
@@ -70,11 +69,10 @@ double calc_hg(double k_c,double h_b,double tau_c)
 }
 \end{lstlisting}
 
-This situation comes up all the time and writing the same information in 
-multiple places is tedious. Wouldn't it  
-make more sense to encode a definition once and 
-automatically reuse it wherever necessary in our artifacts?
-
+This kind of duplication is all too common and writing one piece of information 
+in multiple places is tedious and time-consuming. Wouldn't it make more sense 
+to encode a definition once and automatically reuse it wherever required in 
+our software artifacts?
 
 \section{Inter-/intra-artifact consistency}
 
@@ -82,8 +80,31 @@ automatically reuse it wherever necessary in our artifacts?
 
 \section{(Re-)Certification is expensive}
 
-\cite{CSA1999,CSA2009,CDRH2002,FDA2014}
+Software certification is necessary by law in certain fields, particularly in 
+safety-critical applications. Certifying bodies exist across domains 
+and each have their own list of requirements. Looking at some 
+examples \cite{CDRH2002,CSA1999,CSA2009,FDA2014} there are many common  
+requisite documentation artifacts including, but not limited to:
 
+\begin{itemize}
+\itemsep-.2em
+\item Problem definition
+\item Theory manual
+\item Requirements specification
+\item Design description
+\item Verification and Validation (V\&V) report
+\end{itemize}
+
+Overall certification is an expensive process. The exact costs can be hard to 
+estimate~\cite{HatcliffEtAl2009}, but many person-hours are spent 
+working on ensuring full traceability and consistency between software 
+artifacts. Getting re-certified should anything need to be updated is a 
+similarly long and costly process as all artifacts must be updated and 
+re-verified manually.
+
+While we are not proposing to automatically verify our software artifacts, we 
+want to relieve the burden of artifact creation. What if instead of manually 
+maintaining each artifact, we could automatically generate them?
 
 \bibliographystyle{abbrv}
 \bibliography{drasil}  

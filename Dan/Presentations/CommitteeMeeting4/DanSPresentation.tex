@@ -186,25 +186,6 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%\begin{frame}
-%
-%\frametitle{Research Topic Recap}
-%\framesubtitle{KBSE \& The Drasil Framework}
-%
-%A Knowledge-Based Software Engineering Approach
-%\setbeamercovered{invisible}
-%\begin{itemize}
-%	\item<2->\alt<3->{Single knowledge-base}{Too much duplication!}
-%	\item<4->\alt<5->{Generate artifacts}{(Re-)Certification is expensive}
-%	\item<6->\alt<7->{Guaranteed consistency}{Inter-/intra-artifact consistency 
-%	issues}% \& improve:
-%	\item<8->\alt<9->{Reusable across projects}{Promote reusability}
-%	\item<10->\alt<11->{Easy to mix and match}{Design for change} %-- Easily 
-%	%switch between software family members
-%\end{itemize}
-%
-%\end{frame}
-
 \begin{frame}
 \frametitle{Research Topic Recap}
 \framesubtitle{KBSE \& The Drasil Framework}
@@ -342,8 +323,8 @@ Currently $\sim$130 open issues guiding development
 \only<1>{
 Introduction of new Document Language led to:
 \begin{itemize}
-\item De-embedding a lot of English
-\item More readable source%debatable
+\item De-embedding English
+\item More readable source %debatable
 \item Improved sanity checking
 \end{itemize}
 }
@@ -351,18 +332,18 @@ Introduction of new Document Language led to:
 \only<2>{
 \framesubtitle{Old}
 
-\lstinputlisting[language=Haskell, firstline=46, lastline=75]{BodyOld.hs}
+\lstinputlisting[language=Haskell, firstline=46, lastline=74]{BodyOld.hs}
 
 }
 
 \only<3->{
 \framesubtitle{\only<3>{New}\only<4>{Equivalent to 140 ``Old" lines}}
 \only<3>{\lstinputlisting[language=Haskell, firstline=92, 
-lastline=121]{BodyNew.hs}}
+lastline=119]{BodyNew.hs}}
 \only<4>{\lstinputlisting[language=Haskell, firstline=92, 
 lastline=102, frame=single]{BodyNew.hs}
 \lstinputlisting[language=Haskell, firstline=103, 
-lastline=120, firstnumber=12]{BodyNew.hs}}
+lastline=119, firstnumber=12]{BodyNew.hs}}
 }
 
 

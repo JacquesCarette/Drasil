@@ -1,8 +1,11 @@
 \documentclass[twocolumn]{article}
-\usepackage[margin=0.5in]{geometry}
+\usepackage[margin=.8in]{geometry}
 \usepackage{listings}
 \usepackage{longtable}
 \usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{hyperref}
 
 \newcommand{\colAwidth}{0.2\textwidth}
 \newcommand{\colBwidth}{0.73\textwidth}
@@ -12,7 +15,7 @@
 \newcommand{\ddref}[1]{DD\ref{#1}}
 
 
-\title{Research Topic Handout}
+\title{Research Topic Handout -- Examples}
 \author{Daniel Szymczak\\
 McMaster University}
 \date{June 28, 2018}
@@ -49,7 +52,7 @@ Equation & $h_g$ =$ \frac{2k_{c}h_{p}}{2k_{c}+\tau_c h_{p}}$\\
 \midrule
 Description & $h_g$ is the  gap conductance \dots \\
 \midrule
-\dots \\
+\dots & \\
 \bottomrule
 \end{tabular}
 \end{minipage}\\
@@ -65,7 +68,7 @@ from the LPM, and it appears again in the corresponding C code:
 \begin{lstlisting}[basicstyle=\scriptsize]
 double calc_hg(double k_c,double h_b,double tau_c)
 {
- return (2*(k_c)*(h_p)) / ((2*(k_c)) + (tau_c*(h_p)));
+ return (2*k_c*h_p) / ((2*k_c) + (tau_c * h_p));
 }
 \end{lstlisting}
 
@@ -76,7 +79,41 @@ our software artifacts?
 
 \section{Inter-/intra-artifact consistency}
 
+Our five case studies have been reviewed at least once per year by multiple 
+people. Every time the documents are reviewed, new inconsistencies and problems 
+with the artifacts are found. We show a subset of the 
+issues that are currently open (Figure~\ref{Fig:OpenIssues}), 
+\begin{figure}
+  \centering
+  \includegraphics[width=0.6\linewidth]{OpenIssuesSWHS.PNG}
+  \caption{Subset of the currently open issues with PCM}
+  \label{Fig:OpenIssues}
+\end{figure}
+or closed within 
+the last two months (Figure~\ref{Fig:ClosedIssues}) for \emph{one} 
+particular case study -- the Solar Water Heating System with Phase Change 
+Material, also known as PCM -- but similar issues have been found across all of 
+our case studies. If you would like to see more, the PCM case study is publicly 
+accessible at \url{https://github.com/smiths/swhs}.
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=0.8\linewidth]{RecentIssuesSWHS.PNG}
+  \caption{Subset of issues closed within the last two months}
+  \label{Fig:ClosedIssues}
+\end{figure}
 
+It is easy to see a problem exists with maintaining consistent artifacts. 
+Changes made to the code, requirements, or design do not always have obvious 
+repercussions (inter-artifacts) and inconsistencies can begin to appear. Code 
+and documentation reviews allow us to find some such inconsistencies, but the 
+majority of them should be avoidable in the first place if there were some way 
+to test the effects of a change. Why do we build automated tests for code, but 
+not other software artifacts? Why not automatically trace our 
+artifacts and report where a given change will affect them? What if we could 
+ensure consistency by construction?
+
+\emph{Note: An example of intra-artifact consistency will be covered on slides 
+\#25-27 in the companion presentation.}
 
 \section{(Re-)Certification is expensive}
 
@@ -104,7 +141,9 @@ re-verified manually.
 
 While we are not proposing to automatically verify our software artifacts, we 
 want to relieve the burden of artifact creation. What if instead of manually 
-maintaining each artifact, we could automatically generate them?
+maintaining each artifact, we could automatically generate them? 
+
+
 
 \bibliographystyle{abbrv}
 \bibliography{drasil}  

@@ -20,7 +20,7 @@ data Package = AMSMath
              | Dot2Tex
              | AdjustBox
              | AMSsymb --displays bold math sets (reals, naturals, etc.)
---           | Breqn --line breaks long equations automaticly
+--           | Breqn --line breaks long equations automatically
              | FileContents --creates .bib file within .tex file
              | BibLaTeX
              | Tabu --adds auto column width feature for tables 
@@ -28,6 +28,7 @@ data Package = AMSMath
              | URL
              | FontSpec -- for utf-8 encoding in lualatex
              | Unicode -- for unicode-math in lualatex
+             | EnumItem -- for allowing inline lists and changing list characters
              deriving Eq
 
 addPackage :: Package -> D
@@ -53,6 +54,7 @@ addPackage Mathtools = usepackage "mathtools"
 addPackage URL       = usepackage "url"
 addPackage FontSpec  = usepackage "fontspec"
 addPackage Unicode   = usepackage "unicode-math"
+addPackage EnumItem  = usepackage "enumitem"
 
 data Def = AssumpCounter
          | LCCounter
@@ -83,7 +85,7 @@ genPreamble los = let (pkgs, defs) = parseDoc los
 
 parseDoc :: [LayoutObj] -> ([Package], [Def])
 parseDoc los' = 
-  ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Unicode] ++ 
+  ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Unicode, EnumItem] ++ 
    (nub $ concat $ map fst res)
   , [SetMathFont] ++ (nub $ concat $ map snd res))
   where 

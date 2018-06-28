@@ -157,10 +157,7 @@ mkIMField i _ l@(InConstraints) fs  = (show l,
   foldr ((:) . eqUnR) [] (map tConToExpr (i ^. inCons))) : fs
 mkIMField i _ l@(OutConstraints) fs = (show l,
   foldr ((:) . eqUnR) [] (map tConToExpr (i ^. outCons))) : fs
-mkIMField i _ l@(Notes) fs = 
-  case (i ^. getNotes) of
-  Nothing -> (show l, [Paragraph EmptyS]) : fs -- FIXME?
-  Just ss -> (show l, map Paragraph ss) : fs
+mkIMField i _ l@(Notes) fs = (show l, maybe [Paragraph EmptyS] (map Paragraph) (i ^. getNotes)) : fs
 mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for instance models"
 

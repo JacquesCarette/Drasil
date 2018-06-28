@@ -94,6 +94,9 @@ ssp_si = SI {
   _refdb = sspRefDB
 }
 
+resourcePath :: String
+resourcePath = "../../../datafiles/SSP/"
+
 ssp_srs :: Document
 ssp_srs = mkDoc mkSRS (for) ssp_si
   
@@ -285,11 +288,11 @@ s4_1_2_p2 = foldlSP [S "A", phrase fbd, S "of the", plural force,
 fig_indexconv :: Contents
 fig_indexconv = fig (foldlSent_ [S "Index convention for numbering",
   phrase slice `sAnd` phrase intrslce,
-  phrase force, plural variable]) "IndexConvention.png" "IndexConvention"
+  phrase force, plural variable]) (resourcePath ++ "IndexConvention.png") "IndexConvention"
 
 fig_forceacting :: Contents
 fig_forceacting = fig (at_start' force +:+ S "acting on a" +:+
-  phrase slice) "ForceDiagram.png" "ForceDiagram"
+  phrase slice) (resourcePath ++ "ForceDiagram.png") "ForceDiagram"
 
 -- SECTION 4.1.3 --
 s4_1_3 = goalStmtF (map (\(x, y) -> x `ofThe` y) [

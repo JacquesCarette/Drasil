@@ -20,6 +20,7 @@ module Language.Drasil.Classes (
   , HasReasVal(reasVal)
   , ExprRelat(relat)
   , HasDerivation(derivations)
+  , HasAdditionalNotes(getNotes)
   ) where
 
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
@@ -57,6 +58,10 @@ class NamedIdea c => Idea c where
 class Definition c where
   -- | defn provides (a 'Lens' to) the definition for a chunk
   defn :: Lens' c Sentence
+
+-- Temporary hack to avoid loss of information
+class HasAdditionalNotes c where
+  getNotes :: c -> Maybe [Sentence]
 
 class ConceptDomain c where
   -- | cdom provides (a 'Lens' to) the concept domain tags for a chunk

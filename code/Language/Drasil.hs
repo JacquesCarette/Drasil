@@ -30,6 +30,7 @@ module Language.Drasil (
   -- Classes
   , HasUID(uid)
   , NamedIdea(term)
+  , HasAdditionalNotes(getNotes)
   , Idea(getA)
   , Definition(defn), ConceptDomain(cdom)
   , Concept
@@ -218,7 +219,7 @@ import Language.Drasil.Unit -- all of it
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
-  IsUnit, CommonIdea(abrv),
+  IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes),
   Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations),
   HasReference(getReferences))
 import Language.Drasil.Chunk.AssumpChunk

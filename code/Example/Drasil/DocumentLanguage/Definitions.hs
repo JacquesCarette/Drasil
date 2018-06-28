@@ -29,6 +29,7 @@ data Field = Label
            | Output
            | InConstraints
            | OutConstraints
+           | Notes
            | Source --  I think using attribute makes most sense, as sources can and
               -- will be modified across applications; the underlying knowledge won't.
            | RefBy --TODO: Fill in the field.
@@ -72,7 +73,7 @@ makeDerivationContents (E e) = EqnBlock e "" -- HACK -> FIXME: reference-able?
 makeDerivationContents s     = Paragraph s
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
-type ModRow = [(String,[Contents])]
+type ModRow = [(String, [Contents])]
 
 -- | Create the fields for a model from a relation concept (used by tmodel)
 mkTMField :: HasSymbolTable ctx => TheoryModel -> ctx -> Field -> ModRow -> ModRow
@@ -156,6 +157,10 @@ mkIMField i _ l@(InConstraints) fs  = (show l,
   foldr ((:) . eqUnR) [] (map tConToExpr (i ^. inCons))) : fs
 mkIMField i _ l@(OutConstraints) fs = (show l,
   foldr ((:) . eqUnR) [] (map tConToExpr (i ^. outCons))) : fs
+mkIMField i _ l@(Notes) fs = 
+  case (getNotes i) of
+  Nothing -> (show l, [Paragraph EmptyS]) : fs -- FIXME?
+  Just ss -> (show l, map Paragraph ss) : fs
 mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for instance models"
 
@@ -185,6 +190,7 @@ instance Show Field where
   show OutConstraints    = "Output Constraints"
   show DefiningEquation  = "Equation"
   show (Description _ _) = "Description"
+  show Notes             = "Notes"
 
 fixme :: [Contents]
 fixme = [Paragraph $ S "FIXME: This needs to be filled in"]

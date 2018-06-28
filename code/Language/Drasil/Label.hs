@@ -1,11 +1,12 @@
 module Language.Drasil.Label (Label, mkLabelRA) where
 
 import Language.Drasil.Label.Core
-import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd))
 import Data.Char (isAscii)
 import Language.Drasil.Chunk.ShortName (shortname')
 
-instance HasUID Label where uid = uniqueID
+instance HasUID        Label where uid       = uniqueID
+instance HasRefAddress Label where getRefAdd = lblType
 
 -- multiple mkLabel constructors for label creation
 -- id     ==> unique ID for Drasil referencing (i.e. internal)

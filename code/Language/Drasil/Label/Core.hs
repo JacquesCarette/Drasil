@@ -12,7 +12,7 @@ data LblType = RefAdd String | MetaLink String | URI String
 -- Used for referencing; has to be pure ASCII
 data Label = Lbl
   { _uniqueID  :: UID --internal, unique
-  , lblType    :: LblType
+  , _lblType    :: LblType
   , _sn        :: ShortName
   }
 makeLenses ''Label

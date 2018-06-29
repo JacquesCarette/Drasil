@@ -2,18 +2,22 @@ module Drasil.SSP.Unitals where --export all of it
 
 import Language.Drasil
 
-import Data.Drasil.SI_Units (newton, pascal, metre, degree, specific_weight)
-import Data.Drasil.Units.SolidMechanics (stiffness3D)
-import Data.Drasil.Quantities.Physics as QP (force, pressure)
-import Data.Drasil.Quantities.SolidMechanics as SM (nrmStrss, elastMod,
-  poissnsR, stffness)
-import Data.Drasil.Units.Physics (momentOfForceU)
 import Drasil.SSP.Defs (fs_concept)
+
 import Data.Drasil.Constraints (gtZeroConstr)
+import Data.Drasil.SI_Units (degree, metre, newton, pascal, specific_weight)
+
+import Data.Drasil.Units.Physics (momentOfForceU)
+import Data.Drasil.Units.SolidMechanics (stiffness3D)
+
+import Data.Drasil.Quantities.Physics as QP (force, pressure)
+import Data.Drasil.Quantities.SolidMechanics as SM (elastMod, nrmStrss,
+  poissnsR, stffness)
+
 
 sspSymbols :: [DefinedQuantityDict]
-sspSymbols = (map cqs sspInputs) ++ (map cqs sspOutputs) ++
-  (map cqs sspUnits) ++ (map cqs sspUnitless)
+sspSymbols = (map dqdWr sspInputs) ++ (map dqdWr sspOutputs) ++
+  (map dqdWr sspUnits) ++ (map dqdWr sspUnitless)
 
 ---------------------------
 -- Imported UnitalChunks --
@@ -32,7 +36,7 @@ genStffness = SM.stffness
 -- HELPERS --
 -------------
 fixme, fsi, fisi, wiif, wla, smsi :: String
-fixme = "FIXME: missing discription"
+fixme = "FIXME: missing description"
 fsi   = "for slice index i"
 fisi  = "for interslice index i"
 wiif  = "without the influence of interslice forces"
@@ -83,23 +87,23 @@ poissnsRatio = uq (constrained' SM.poissnsR
 fricAngle = uqc "varphi'" (cn $ "effective angle of friction")
   ("The angle of inclination with respect to the horizontal axis of " ++
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
-  (prime $ Greek Phi_V) degree Real [physc $ Bounded (Exc,0) (Exc,90)]
+  (prime $ vPhi) degree Real [physc $ Bounded (Exc,0) (Exc,90)]
   (dbl 25) defultUncrt
 
 dryWeight = uqc "gamma" (cn $ "dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."
-  (Greek Gamma_L) specific_weight Real [gtZeroConstr]
+  lGamma specific_weight Real [gtZeroConstr]
   (dbl 20) defultUncrt
 
 satWeight = uqc "gamma_sat" (cn $ "saturated unit weight")
   ("The weight of saturated soil/ground " ++
   "layer divided by the volume of the layer.")
-  (sub (Greek Gamma_L) (Atomic "Sat")) specific_weight Real [gtZeroConstr]
+  (sub lGamma (Atomic "Sat")) specific_weight Real [gtZeroConstr]
   (dbl 20) defultUncrt
 
 waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   "The weight of one cubic meter of water."
-  (sub (Greek Gamma_L) lW) specific_weight Real [gtZeroConstr]
+  (sub lGamma lW) specific_weight Real [gtZeroConstr]
   (dbl 9.8) defultUncrt
   
 constant_a = uqc "a" (cn "constant") fixme
@@ -109,14 +113,16 @@ constant_A = uqc "A" (cn "constant") fixme
   cA metre Real [] (dbl 0) defultUncrt
   
 constant_K = uqc "kappa" (cn "constant") fixme
-  (Greek Kappa_L) pascal Real [] (dbl 0) defultUncrt
+  lKappa pascal Real [] (dbl 0) defultUncrt
 
 {-Output Variables-} --FIXME: See if there should be typical values
-fs = constrained' (cv fs_concept (Atomic "FS") Real) [gtZeroConstr] (dbl 1)
+fs = constrained' (dqd' fs_concept (const $ Atomic "FS") Real Nothing)
+  [gtZeroConstr] (dbl 1)
 
-fs_min :: ConVar -- This is a hack to remove the use of indexing for 'min'.
-fs_min = cv (dcc "fs_min" (cn "minimum factor of safety") 
-  ("The minimum factor of safety")) (sub (eqSymb fs) (Atomic "min")) Real
+fs_min :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.
+fs_min = dqd' (dcc "fs_min" (cn "minimum factor of safety") 
+  ("The minimum factor of safety")) (const $ sub (eqSymb fs) (Atomic "min")) Real
+  Nothing 
 -- Once things are converted to the new style of instance models, this will
 -- be removed/fixed.
 
@@ -127,10 +133,10 @@ coords = cuc' "(x,y)"
   (Atomic "(x,y)") metre Real [] (dbl 1)
 
 dx_i = cuc' "dx_i" (cn $ "displacement") ("in the x-ordinate direction " ++
-  fsi) (Concat [Greek Delta_L, Atomic "x"]) metre Real [] (dbl 1)
+  fsi) (Concat [lDelta, Atomic "x"]) metre Real [] (dbl 1)
 
 dy_i = cuc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " ++
-  fsi) (Concat [Greek Delta_L, Atomic "y"]) metre Real [] (dbl 1)
+  fsi) (Concat [lDelta, Atomic "y"]) metre Real [] (dbl 1)
 
 ---------------------------
 -- START OF UNITALCHUNKS --
@@ -162,9 +168,9 @@ normStress, genPressure, normFunc, shearFunc, slopeDist, slipDist, genStffness,
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
 
-intNormForce = uc' "E_i" (cn $ "interslice normal force")
+intNormForce = uc' "G_i" (cn $ "interslice normal force")
   ("exerted between adjacent slices " ++ fisi)
-  (cE) newton
+  (cG) newton
 
 waterHght = uc' "y_wt,i"
   (cn $ "y ordinate")
@@ -213,11 +219,11 @@ shrResI = uc' "shearRes" (cn $ "resistive shear force") ("Mohr Coulomb " ++
   
 mobShrC = uc' "Psi" (cn $ "constant") ("converts mobile shear " ++ 
   wiif ++ ", to a calculation considering the interslice forces")
-  (Greek Psi) newton
+  cPsi newton
 
 shrResC = uc' "Phi" (cn $ "constant") ("converts resistive shear " ++ 
   wiif ++ ", to a calculation considering the interslice forces")
-  (Greek Phi) newton
+  cPhi newton
 
 shearFNoIntsl = uc' "T_i"
   (cn $ "mobilized shear force") (wiif ++ " " ++ fsi)
@@ -236,7 +242,7 @@ watrForce = uc' "H_i" (cn $ "interslice water force") ("exerted in the " ++
 
 watrForceDif = uc' "dH_i" (cn $ "difference between interslice forces")
   ("exerted in the x-ordinate direction between adjacent slices " ++ fisi)
-  (Concat [Greek Delta, cH]) newton
+  (Concat [cDelta, cH]) newton
 
 intShrForce = uc' "X_i" (cn $ "interslice shear force") 
   ("exerted between adjacent slices " ++ fisi)
@@ -268,38 +274,39 @@ surfLoad = uc' "Q_i" (cn $ "imposed surface load")
 
 baseAngle = uc' "alpha_i" (cn $ "angle")
   ("base of the mass relative to the horizontal " ++ fsi)
-  (Greek Alpha_L) degree
+  lAlpha degree
 
 surfAngle = uc' "beta_i" (cn $ "angle")
   ("surface of the mass relative to the horizontal " ++ fsi)
-  (Greek Beta_L) degree
+  lBeta degree
 
 impLoadAngle = uc' "omega_i" (cn $ "angle")
   ("of imposed surface load acting into the surface " ++
-  "relative to the vertical " ++ fsi) (Greek Omega_L) degree
+  "relative to the vertical " ++ fsi) lOmega degree
 
 baseWthX = uc' "b_i" (cn $ "base width of a slice")
   ("in the x-ordinate direction only " ++ fsi)
   (lB) metre
 
 baseLngth = uc' "l_b,i" (cn $ "total base length of a slice") fsi
-  (sub (Greek Ell) (Atomic "b")) metre
+  (sub lEll (Atomic "b")) metre
 
 surfLngth = uc' "l_s,i" (cn $ "length of an interslice surface")
   ("from slip base to slope surface in a vertical " ++
   "line from an interslice vertex " ++ fisi)
-  (sub (Greek Ell) (Atomic "s")) metre
+  (sub lEll (Atomic "s")) metre
 
 midpntHght = uc' "h_i" (cn $ "midpoint height")
   ("distance from the slip base to the slope surface in a vertical " ++
   "line from the midpoint of the slice " ++ fsi)
   (lH) metre
 
-momntOfBdy = uc' "M" (cn $ "moment of a body") ("assumed 2D allowing a scalar")
+momntOfBdy = uc' "M" (cn $ "moment") ("a measure of the tendency of " ++
+  "a body to rotate about a specific point or axis")
   cM momentOfForceU --FIXME: move in concepts.physics ?
 
 genDisplace = uc' "genDisplace" (cn $ "displacement")
-  "generic displacement of a body" (Greek Delta_L) metre
+  "generic displacement of a body" lDelta metre
 
 shrStiffIntsl = uc' "K_st,i" (cn $ "shear stiffness")
   ("for interslice surface, " ++ wla ++ " " ++ fisi)
@@ -335,30 +342,30 @@ effStiffB = uc' "K_bB" (cn $ "effective base stiffness A")
 
 shrDispl = uc' "du_i" (cn $ "displacement")
   ("shear displacement " ++ fsi)
-  (Concat [Greek Delta_L, Atomic "u"]) metre
+  (Concat [lDelta, Atomic "u"]) metre
 
 nrmDispl = uc' "dv_i" (cn $ "displacement")
   ("normal displacement " ++ fsi)
-  (Concat [Greek Delta_L, Atomic "v"]) metre
+  (Concat [lDelta, Atomic "v"]) metre
   
 elmNrmDispl = uc' "dt_i" (cn $ "displacement")
   ("for the element normal to the surface " ++ fsi)
-  (Concat [Greek Delta_L, Atomic "t"]) metre
+  (Concat [lDelta, Atomic "t"]) metre
   
 elmPrllDispl = uc' "dn_i" (cn $ "displacement")
   ("for the element parallel to the surface " ++ fsi)
-  (Concat [Greek Delta_L, Atomic "n"]) metre
+  (Concat [lDelta, Atomic "n"]) metre
 
 porePressure = uc' "mu" (cn "pore pressure") ("from water within the soil")
-  (Greek Mu_L) pascal
+  lMu pascal
 
 rotatedDispl = uc' "varepsilon_i" (cn "displacement")
   ("in rotated coordinate system")
-  (Greek Epsilon_V) metre
+  vEpsilon metre
   
 shrStress = uc' "tau_i" (cn "resistive shear stress")
   ("acting on the base of a slice")
-  (Greek Tau_L) pascal
+  lTau pascal
   
 mobStress = uc' "s_i" (cn "mobilized shear stress")
   ("acting on the base of a slice")
@@ -370,75 +377,75 @@ sliceHght = uc' "z_i" (cn "center of slice height")
   (lZ) metre
 
 normFunc = uc' "C1_i" (cn "interslice normal force function")
-  (fixme)
-  (Concat [cC, Atomic "1"]) momentOfForceU
+  "the normal force at the interslice interface for slice i"
+  (sub (Concat [cC, Atomic "1"]) lI) momentOfForceU
   
 shearFunc = uc' "C2_i" (cn "interslice shear force function")
-  (fixme)
-  (Concat [cC, Atomic "2"]) momentOfForceU
+  "the shear force at the interslice interface for slice i"
+  (sub (Concat [cC, Atomic "2"]) lI) momentOfForceU
 
-fx = uc' "fx" (cn "x-component of the net force") fixme
+fx = uc' "fx" (cn "x-component of the net force") ""
   (sub cF lX) newton
 
-fy = uc' "fy" (cn "y-component of the net force") fixme
+fy = uc' "fy" (cn "y-component of the net force") ""
   (sub cF lY) newton
   
 ----------------------
 -- Unitless Symbols --
 ----------------------
 
-sspUnitless :: [ConVar]
+sspUnitless :: [DefinedQuantityDict]
 sspUnitless = [earthqkLoadFctr, normToShear,scalFunc,
   numbSlices, minFunction, fsloc, index, varblU, varblV, fs_min,
   ufixme1, ufixme2]
 
-earthqkLoadFctr, normToShear, scalFunc,
-  numbSlices, minFunction, fsloc, index, varblU, varblV :: ConVar
+earthqkLoadFctr, normToShear, scalFunc, numbSlices,
+  minFunction, fsloc, index, varblU, varblV :: DefinedQuantityDict
 
-earthqkLoadFctr = cv (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
+earthqkLoadFctr = dqd' (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
   ("proportionality factor of force that " ++
   "weight pushes outwards; caused by seismic earth movements"))
-  (sub cK lC) Real
+  (const $ sub cK lC) Real Nothing 
 
-normToShear = cv (dcc "lambda"
+normToShear = dqd' (dcc "lambda"
   (nounPhraseSP $ "interslice normal/shear force ratio")
-  ("applied to all interslices")) (Greek Lambda_L) Real
+  ("applied to all interslices")) (const lLambda) Real Nothing
 
-scalFunc = cv (dcc "f_i" (nounPhraseSP $ "scaling function")
+scalFunc = dqd' (dcc "f_i" (nounPhraseSP $ "scaling function")
   ("magnitude of interslice forces as a function " ++
   "of the x coordinate" ++ fisi ++ "; can be constant or a half-sine"))
-  (lF) Real
+  (const lF) Real Nothing 
 
-numbSlices = cv (dcc "n" (nounPhraseSP "number of slices")
+numbSlices = dqd' (dcc "n" (nounPhraseSP "number of slices")
   "the slip mass has been divided into")
-  lN Natural
+  (const lN) Natural Nothing
 
-minFunction = cv (dcc "Upsilon" (nounPhraseSP "function")
+minFunction = dqd' (dcc "Upsilon" (nounPhraseSP "function")
   ("generic minimization function or algorithm"))
-  (Greek Upsilon) Real
+  (const cUpsilon) Real Nothing
 
-fsloc = cv (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
-  (sub (Atomic "FS") (Atomic "Loc,i")) Real
+fsloc = dqd' (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
+  (const $ sub (Atomic "FS") (Atomic "Loc,i")) Real Nothing 
 
-ufixme1 = cv (dcc "fixme1" (cn "fixme") "What is this value?")
-  (Atomic "SpencerFixme1Please") Real
+ufixme1 = dqd' (dcc "fixme1" (cn "fixme") "What is this value?")
+  (const $ Atomic "SpencerFixme1Please") Real Nothing 
 
-ufixme2 = cv (dcc "fixme2" (cn "fixme") "What is this value?")
-  (Atomic "SpencerFixme2Please") Real
+ufixme2 = dqd' (dcc "fixme2" (cn "fixme") "What is this value?")
+  (const $ Atomic "SpencerFixme2Please") Real Nothing 
 
 --------------------
 -- Index Function --
 --------------------
 
-varblU = cv (dcc "varblU" (nounPhraseSP "local index")
+varblU = dqd' (dcc "varblU" (nounPhraseSP "local index")
   ("used as a bound variable index in calculations"))
-  lU Natural
-varblV = cv (dcc "varblV" (nounPhraseSP "local index")
+  (const lU) Natural Nothing 
+varblV = dqd' (dcc "varblV" (nounPhraseSP "local index")
   ("used as a bound variable index in calculations"))
-  lV Natural
+  (const lV) Natural Nothing
 
-index = cv (dcc "index" (nounPhraseSP "index")
-  ("used to show a quantity applies to only one slice")) lI Natural
+index = dqd' (dcc "index" (nounPhraseSP "index")
+  ("used to show a quantity applies to only one slice")) (const lI) Natural Nothing 
 
 --FIXME: possibly move to Language/Drasil/Expr.hs
 indx1 :: (Quantity a) => a -> Expr

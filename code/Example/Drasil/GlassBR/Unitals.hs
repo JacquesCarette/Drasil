@@ -4,16 +4,17 @@ import Language.Drasil
 import Control.Lens ((^.))
 import Prelude hiding (log, sqrt)
 
+import Drasil.GlassBR.Concepts (aR, annealedGlass, fullyTGlass, glaPlane, 
+  glassTypeFac, heatSGlass, iGlass, lGlass, lResistance, lShareFac, 
+  loadDurFactor, nFL, responseTy, stdOffDist)
 import Drasil.GlassBR.Units (sFlawPU)
-import Drasil.GlassBR.Concepts (annealedGlass, aR, fullyTGlass, glassTypeFac,
-  heatSGlass, loadDurFactor, iGlass, lGlass, lResistance, lShareFac, nFL, 
-  stdOffDist, glaPlane, responseTy)
 
-import Data.Drasil.SI_Units
 import Data.Drasil.Constraints
-import Data.Drasil.Utils (mkDataDef, getES)
-import Data.Drasil.SentenceStructures (foldlSent, displayConstrntsAsSet,
+import Data.Drasil.SentenceStructures (displayConstrntsAsSet, foldlSent,
   foldlsC, foldlOptions)
+import Data.Drasil.SI_Units (kilogram, kilopascal, metre, millimetre, pascal, 
+  second)
+import Data.Drasil.Utils (getES, mkDataDef)
 
 --FIXME: Many of the current terms can be separated into terms and defns?
 
@@ -66,7 +67,7 @@ gbInputDataConstraints = (map uncrtnw gbInputsWUnitsUncrtn) ++
 plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA metre Real 
   [ gtZeroConstr,
-    physc $ UpFrom (Exc, sy plate_width),
+    physc $ UpFrom (Inc, sy plate_width),
     sfwrc $ Bounded (Inc , sy dim_min) (Inc , sy dim_max),
     sfwrc $ UpTo (Exc, sy ar_max * sy plate_width)] (dbl 1.5) defaultUncrt
 
@@ -125,10 +126,10 @@ prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
 
 gBRSpecParamVals :: [QDefinition]
 gBRSpecParamVals = [dim_max, dim_min, ar_max, cWeightMax, cWeightMin,
-  sd_min, sd_max]
+  sd_max, sd_min]
 
-dim_max, dim_min, ar_max, cWeightMax, cWeightMin, sd_min,
-  sd_max :: QDefinition
+dim_max, dim_min, ar_max, cWeightMax, cWeightMin, sd_max,
+  sd_min :: QDefinition
 
 dim_max     = mkDataDef (unitary "dim_max"
   (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
@@ -150,13 +151,14 @@ cWeightMin = mkDataDef (unitary "cWeightMin"
   (nounPhraseSP "minimum permissible input charge weight")
   (sub (eqSymb char_weight) (Atomic "min")) kilogram Rational) (dbl 4.5)
 
+sd_max     = mkDataDef (unitary "sd_max"
+  (nounPhraseSP "maximum stand off distance permissible for input")
+  (sub (eqSymb standOffDist) (Atomic "max")) metre Real) (dbl 130)
+
 sd_min     = mkDataDef (unitary "sd_min"
   (nounPhraseSP "minimum stand off distance permissible for input") 
   (sub (eqSymb standOffDist) (Atomic "min")) metre Real) (dbl 6)
 
-sd_max     = mkDataDef (unitary "sd_max"
-  (nounPhraseSP "maximum stand off distance permissible for input")
-  (sub (eqSymb standOffDist) (Atomic "max")) metre Real) (dbl 130)
 
 {--}
 
@@ -282,7 +284,7 @@ eqTNTChar     = dcc "eqTNTChar"   (nounPhraseSP "equivalent TNT charge mass")
 explosion     = dcc "explosion"   (nounPhraseSP "explosion") 
   "a destructive shattering of something"
 fTemperedGl   = cc fullyTGlass
-  ("A flat and monolithic, glass lite of uniform thickness that has been " ++
+  ("A flat, monolithic, glass lite of uniform thickness that has been " ++
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 69 MPa (10 000 psi) or the edge " ++
     "compression not less than 67 MPa (9700 psi), as defined in [6]." {-astm_C1048-})
@@ -340,7 +342,7 @@ sD            = cc' stdOffDist
    +:+ S "high explosive charge. It is represented by the coordinates" +:+.
    sParen (sdVectorSent))
 shortDurLoad  = dcc "shortDurLoad"       (nounPhraseSP "short duration load")
-  "Any load lasting 3s or less."
+  "Any load lasting 3 seconds or less."
 specA         = dcc "specA"       (nounPhraseSP "specifying authority")
   ("The design professional responsible for interpreting applicable " ++
     "regulations of authorities having jurisdiction and considering " ++

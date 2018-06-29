@@ -1,33 +1,41 @@
-module Drasil.SSP.Assumptions (sspAssumptions, assumps_SSP_list_new) where
+module Drasil.SSP.Assumptions where
 
 import Language.Drasil
 
 import Drasil.SSP.Defs (slpSrf, slopeSrf, slope,
   mtrlPrpty, soil, soilLyr, soilPrpty, intrslce, slice)
 import Drasil.SSP.Unitals (coords, normToShear, scalFunc, fs)
-
+import Drasil.SSP.References (sspCitations)
 import Data.Drasil.Utils (getES)
 import Data.Drasil.SentenceStructures (ofThe, ofThe', getTandS, foldlSent)
 
 import Data.Drasil.Concepts.Documentation (condition)
 import Data.Drasil.Concepts.Physics (force, stress, strain)
 import Data.Drasil.Concepts.Math (surface, unit_)
+import Data.Drasil.Concepts.Physics (force, strain, stress)
 import Data.Drasil.Concepts.SolidMechanics (shearForce)
+import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe')
+import Data.Drasil.Utils (getES)
 
-assumps_SSP_list_new :: [AssumpChunk]
-assumps_SSP_list_new = [assump_new_1, assump_new_2,assump_new_3, assump_new_4, assump_new_5,
-  assump_new_6, assump_new_7, assump_new_8, assump_new_9, assump_new_10]
+sspRefDB :: ReferenceDB
+sspRefDB = rdb [] [] newAssumptions [] [] sspCitations 
+-- FIXME: Convert the rest to new chunk types (similar to issues #446 and #447)
 
-assump_new_1 = assump "assump1" monotonicF (S "assump1");
-assump_new_2 = assump "assump2" slopeG (S "assump2");
-assump_new_3 = assump "assump3" homogeneousL (S "assump3");
-assump_new_4 = assump "assump4" isotropicP (S "assump4");
-assump_new_5 = assump "assump5" linearS (S "assump5");
-assump_new_6 = assump "assump6" linearF (S "assump6");
-assump_new_7 = assump "assump7" stressC (S "assump7");
-assump_new_8 = assump "assump8" planeS (S "assump8");
-assump_new_9 = assump "assump9" largeN (S "assump9");
-assump_new_10 = assump "assump10" straightS (S "assump10");
+newAssumptions :: [AssumpChunk]
+newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10]
+
+newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10 :: AssumpChunk
+newA1 = assump "Slip-Surface-Concave" monotonicF "Slip-Surface-Concave"
+newA2 = assump "Geo-Slope-Mat-Props-of-Soil-Inputs" slopeG "Geo-Slope-Mat-Props-of-Soil-Inputs"
+newA3 = assump "Soil-Layer-Homogeneous" homogeneousL "Soil-Layer-Homogeneous"
+newA4 = assump "Soil-Layers-Isotropic" isotropicP "Soil-Layers-Isotropic"
+newA5 = assump "Interslice-Norm-Shear-Forces-Linear" linearS "Interslice-Norm-Shear-Forces-Linear"
+newA6 = assump "Base-Norm-Shear-Forces-Linear-on-FS" linearF "Base-Norm-Shear-Forces-Linear-on-FS"
+newA7 = assump "Stress-Strain-Curve-interslice-Linear" stressC "Stress-Strain-Curve-interslice-Linear"
+newA8 = assump "Plane-Strain-Conditions" planeS "Plane-Strain-Conditions"
+newA9 = assump "Effective-Norm-Stress-Large" largeN "Effective-Norm-Stress-Large"
+newA10 = assump "Surface-Base-Slice-between-Interslice-Straight-Lines" straightS "Surface-Base-Slice-between-Interslice-Straight-Lines"
+
 
 sspAssumptions :: [Sentence]
 sspAssumptions = [monotonicF, slopeG, homogeneousL, isotropicP,

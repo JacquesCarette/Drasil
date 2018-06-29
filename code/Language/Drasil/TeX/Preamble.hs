@@ -20,13 +20,14 @@ data Package = AMSMath
              | Dot2Tex
              | AdjustBox
              | AMSsymb --displays bold math sets (reals, naturals, etc.)
-             | Breqn --line breaks long equations automaticly
+--           | Breqn --line breaks long equations automaticly
              | FileContents --creates .bib file within .tex file
              | BibLaTeX
              | Tabu --adds auto column width feature for tables 
              | Mathtools --line breaks for long fractions and cases
              | URL
              | FontSpec -- for utf-8 encoding in lualatex
+             | Unicode -- for unicode-math in lualatex
              deriving Eq
 
 addPackage :: Package -> D
@@ -44,21 +45,22 @@ addPackage Tikz      = usepackage "tikz" %%
 addPackage Dot2Tex   = usepackage "dot2texi"
 addPackage AdjustBox = usepackage "adjustbox"
 addPackage AMSsymb   = usepackage "amssymb"
-addPackage Breqn     = usepackage "breqn"
+--addPackage Breqn     = usepackage "breqn"
 addPackage FileContents = usepackage "filecontents"
 addPackage BibLaTeX  = command1o "usepackage" (Just "backend=bibtex") "biblatex"
 addPackage Tabu      = usepackage "tabu"
 addPackage Mathtools = usepackage "mathtools"
 addPackage URL       = usepackage "url"
-addPackage FontSpec   = usepackage "fontspec"
+addPackage FontSpec  = usepackage "fontspec"
+addPackage Unicode   = usepackage "unicode-math"
 
 data Def = AssumpCounter
          | LCCounter
-         -- | ModCounter
          | ReqCounter
          | UCCounter
          | Bibliography
          | TabuLine
+         | SetMathFont
          deriving Eq
 
 addDef :: Def -> D
@@ -66,14 +68,13 @@ addDef AssumpCounter = count "assumpnum" %%
                        comm "atheassumpnum" "A\\theassumpnum" Nothing
 addDef LCCounter     = count "lcnum" %%
                        comm "lcthelcnum" "LC\\thelcnum" Nothing
--- addDef ModCounter    = count "modnum" %%
-                       -- comm "mthemodnum" "M\\themodnum" Nothing
 addDef ReqCounter    = count "reqnum" %%
                        comm "rthereqnum" "R\\thereqnum" Nothing
 addDef UCCounter     = count "ucnum" %%
                        comm "uctheucnum" "UC\\theucnum" Nothing
 addDef Bibliography  = command "bibliography" bibFname
 addDef TabuLine      = command0 "global\\tabulinesep=1mm"
+addDef SetMathFont   = command "setmathfont" "Latin Modern Math"
 
 genPreamble :: [LayoutObj] -> D
 genPreamble los = let (pkgs, defs) = parseDoc los
@@ -81,8 +82,10 @@ genPreamble los = let (pkgs, defs) = parseDoc los
      (vcat $ map addPackage pkgs) %% (vcat $ map addDef defs)
 
 parseDoc :: [LayoutObj] -> ([Package], [Def])
-parseDoc los' = ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Breqn] ++ 
-   (nub $ concat $ map fst res), nub $ concat $ map snd res)
+parseDoc los' = 
+  ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Unicode] ++ 
+   (nub $ concat $ map fst res)
+  , [SetMathFont] ++ (nub $ concat $ map snd res))
   where 
     res = map parseDoc' los'
     parseDoc' :: LayoutObj -> ([Package], [Def])

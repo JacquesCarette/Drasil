@@ -9,6 +9,8 @@ module Data.Drasil.Utils
   , itemRefToSent
   , refFromType
   , makeListRef
+  , bulletFlat
+  , bulletNested
   , enumSimple
   , enumBullet
   , mkRefsList
@@ -25,7 +27,7 @@ module Data.Drasil.Utils
   , eqUnR
   ) where
 
-import Data.List
+import Data.List (transpose)
 import Control.Lens ((^.))
 import Language.Drasil {-(Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
   ItemType(Flat), sParen, sSqBr, Contents(Definition, Enumeration), 
@@ -33,7 +35,8 @@ import Language.Drasil {-(Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
   symbol, SymbolForm, symbolMap, UnitDefn, usymb, Chunk, Expr(..),
   phrase, titleize, titleize', mkTable, Contents(Table), fromEqn, fromEqn', 
   UnitalChunk, QDefinition, term, uid, unit, ucw)-}
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation (fterms, input_, output_, symbol_, 
+  useCaseTable)
 import Data.Drasil.Concepts.Math (unit_)
 
 eqUnR :: Expr -> Contents -- FIXME: Unreferable equations
@@ -142,10 +145,19 @@ refFromType f = (makeRef . Definition . f)
 makeListRef :: [a] -> Section -> [Sentence]
 makeListRef l r = take (length l) $ repeat $ makeRef r
 
+-- | bulletFlat applies Bullet and Flat to a list.
+bulletFlat :: [Sentence] -> ListType
+bulletFlat = Bullet . map Flat
+
+-- | bulletNested applies Bullets and headers to a Nested ListType.
+-- t - Headers of the Nested lists.
+-- l - Lists of ListType.
+bulletNested :: [Sentence] -> [ListType] -> ListType
+bulletNested t l = Bullet . map (\(h,c) -> Nested h c) $ zip t l
 
 -- | enumBullet apply Enumeration, Bullet and Flat to a list
 enumBullet ::[Sentence] -> Contents
-enumBullet = Enumeration . Bullet . map Flat
+enumBullet = Enumeration . bulletFlat
 
 -- | enumSimple enumerates a list and applies simple and enumeration to it
 -- s - start index for the enumeration
@@ -165,19 +177,19 @@ unwrap Nothing  = EmptyS
 
 -- Used to help make Qdefinitions when uid, term, and symbol come from the same source
 mkDataDef :: (Quantity c) => c -> Expr -> QDefinition
-mkDataDef cncpt equation = datadef $ getUnit cncpt
+mkDataDef cncpt equation = datadef $ getUnit cncpt --should references be passed in at this point?
   where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) a equation
+                           (eqSymb cncpt) a equation [] (cncpt ^. uid) --shortname
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) equation
+                           (eqSymb cncpt) equation [] (cncpt ^. uid) --shortname
 
 -- Same as 'mkDataDef', but with an additional Sentence that can be taken as "extra information"; issue #350
-mkDataDef' :: (Quantity c) => c -> Expr -> Sentence -> QDefinition
-mkDataDef' cncpt equation extraInfo = datadef $ getUnit cncpt
+mkDataDef' :: (Quantity c) => c -> Expr -> Sentence -> References -> QDefinition
+mkDataDef' cncpt equation extraInfo refs = datadef $ getUnit cncpt
   where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) (extraInfo)
-                           (eqSymb cncpt) a equation
+                           (eqSymb cncpt) a equation refs (cncpt ^. uid) --shortname
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) (extraInfo)
-                           (eqSymb cncpt) equation
+                           (eqSymb cncpt) equation refs (cncpt ^. uid) --shortname
 
 prodUCTbl :: [[Sentence]] -> Contents
 prodUCTbl cases = Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]

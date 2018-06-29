@@ -13,20 +13,38 @@ import Language.Drasil.Chunk.PhysSystDesc as PD
 import Language.Drasil.Chunk.ReqChunk as R
 import Language.Drasil.Chunk.Theory
 import Language.Drasil.Document
-import Language.Drasil.Spec (Sentence(..),RefName)
+import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.RefTypes (RefType(..))
 import Control.Lens ((^.), Simple, Lens, makeLenses)
-
-import Data.List (partition, sortBy)
-import qualified Data.Map as Map
 import Data.Function (on)
+import Data.List (concatMap, groupBy, partition, sortBy)
+import qualified Data.Map as Map
+
+import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
+import Language.Drasil.Chunk.Change as Ch (Change(..), ChngType(..))
+import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID))
+import Language.Drasil.Chunk.Concept (ConceptChunk)
+import Language.Drasil.Chunk.Eq (QDefinition)
+import Language.Drasil.Chunk.GenDefn (GenDefn)
+import Language.Drasil.Chunk.Goal as G (Goal, refAddr)
+import Language.Drasil.Chunk.InstanceModel (InstanceModel)
+import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc, refAddr)
+import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..), ReqType(FR))
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName)
+import Language.Drasil.Chunk.Theory (TheoryModel)
+import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid))
+import Language.Drasil.Document (Contents(..), DType(Data, Theory), 
+  Section(Section), getDefName, repUnd)
+import Language.Drasil.RefTypes (RefType(..))
+import Language.Drasil.Spec (Sentence(..))
+import Language.Drasil.UID (UID)
 
 -- | Database for maintaining references.
 -- The Int is that reference's number.
 -- Maintains access to both num and chunk for easy reference swapping
 -- between number and shortname/refname when necessary (or use of number
 -- if no shortname exists)
-type RefMap a = Map.Map String (a, Int)
+type RefMap a = Map.Map UID (a, Int)
 
 -- | Physical System Description Database
 type PhysSystDescMap = RefMap PhysSystDesc
@@ -40,6 +58,9 @@ type ReqMap = RefMap ReqChunk
 type ChangeMap = RefMap Change
 -- | Citation Database (bibliography information)
 type BibMap = RefMap Citation
+-- | ConceptChunk Database
+type ConceptMap = RefMap ConceptChunk
+
 
 -- | Database for internal references.
 data ReferenceDB = RDB -- organized in order of appearance in SmithEtAl template
@@ -49,6 +70,7 @@ data ReferenceDB = RDB -- organized in order of appearance in SmithEtAl template
   , _reqDB :: ReqMap
   , _changeDB :: ChangeMap
   , _citationDB :: BibMap
+  , _conceptDB :: ConceptMap
   }
 
 makeLenses ''ReferenceDB
@@ -65,6 +87,7 @@ rdb psds goals assumps reqs changes citations = RDB
   (reqMap reqs)
   (changeMap changes)
   (bibMap citations)
+  (conceptMap [])
 
 simpleMap :: HasUID a => [a] -> RefMap a
 simpleMap xs = Map.fromList $ zip (map (^. uid) xs) (zip xs [1..])
@@ -86,10 +109,25 @@ changeMap cs = Map.fromList $ zip (map (^. uid) (lcs ++ ulcs))
 bibMap :: [Citation] -> BibMap
 bibMap cs = Map.fromList $ zip (map (^. uid) scs) (zip scs [1..])
   where scs :: [Citation]
-        scs = sortBy citeSort cs
+        scs = sortBy uidSort cs
         -- Sorting is necessary if using elems to pull all the citations
         -- (as it sorts them and would change the order).
         -- We can always change the sorting to whatever makes most sense
+
+conGrp :: ConceptChunk -> ConceptChunk -> Bool
+conGrp a b = (cdl a) == (cdl b) where
+  cdl :: ConceptChunk -> UID
+  cdl x = sDom $ x ^. cdom where
+    sDom [d] = d
+    sDom d = error $ "Expected ConceptDomain for: " ++ (x ^. uid) ++
+                     " to have a single domain, found " ++ (show $ length d) ++
+                     " instead."
+
+conceptMap :: [ConceptChunk] -> ConceptMap
+conceptMap cs = Map.fromList $ zip (map (^. uid) (concat grp)) $ concatMap
+  (\x -> zip x [1..]) grp
+  where grp :: [[ConceptChunk]]
+        grp = groupBy conGrp $ sortBy uidSort cs
 
 psdLookup :: HasUID c => c -> PhysSystDescMap -> (PhysSystDesc, Int)
 psdLookup p m = getS $ Map.lookup (p ^. uid) m
@@ -127,6 +165,11 @@ citeLookup c m = getS $ Map.lookup (c ^. uid) m
         getS Nothing = error $ "Change: " ++ (c ^. uid) ++
           " referencing information not found in Change Map"
 
+conceptLookup :: HasUID c => c -> ConceptMap -> (ConceptChunk, Int)
+conceptLookup c = maybe (error $ "ConceptChunk: " ++ (c ^. uid) ++
+          " referencing information not found in Concept Map") id .
+          Map.lookup (c ^. uid)
+
 -- Classes and instances --
 class HasAssumpRefs s where
   assumpRefTable :: Simple Lens s AssumpMap
@@ -140,6 +183,8 @@ class HasGoalRefs s where
   goalRefTable :: Simple Lens s GoalMap
 class HasPSDRefs s where
   psdRefTable :: Simple Lens s PhysSystDescMap
+class HasConceptRefs s where
+  conceptRefTable :: Simple Lens s ConceptMap
 
 instance HasGoalRefs ReferenceDB where goalRefTable = goalDB
 instance HasPSDRefs ReferenceDB where psdRefTable = physSystDescDB
@@ -147,88 +192,63 @@ instance HasAssumpRefs ReferenceDB where assumpRefTable = assumpDB
 instance HasReqRefs ReferenceDB where reqRefTable = reqDB
 instance HasChangeRefs ReferenceDB where changeRefTable = changeDB
 instance HasCitationRefs ReferenceDB where citationRefTable = citationDB
+instance HasConceptRefs ReferenceDB where conceptRefTable = conceptDB
 
 
 class Referable s where
-  refName :: s -> RefName -- Sentence; The text to be displayed for the link.
-  refAdd  :: s -> String  -- The reference address (what we're linking to).
+  refAdd  :: s -> String  -- The plaintext referencing address (what we're linking to).
                           -- Should be string with no spaces/special chars.
+                          -- Only visible in the source (tex/html).
   rType   :: s -> RefType -- The reference type (referencing namespace?)
 
 instance Referable Goal where
-  refName g = S $ g ^. G.refAddr
   refAdd g = "GS:" ++ g ^. G.refAddr
   rType _ = Goal
 
 instance Referable PhysSystDesc where
-  refName p = S $ p ^. PD.refAddr
   refAdd p = "PS:" ++ p ^. PD.refAddr
   rType _ = PSD
 
 instance Referable AssumpChunk where
-  refName (AC _ _ sn _) = sn
-  refAdd  x             = "A:" ++ repUScore (x ^. uid)
+  refAdd  x             = "A:" ++ concatMap repUnd (x ^. uid)
   rType   _             = Assump
 
 instance Referable ReqChunk where
-  refName (RC _ _ _ sn _)   = sn
-  refAdd  r@(RC _ rt _ _ _) = show rt ++ ":" ++ repUScore (r ^. uid)
+  refAdd  r@(RC _ rt _ _) = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
   rType   _                 = Req
 
 instance Referable Change where
-  refName (ChC _ _ _ sn _)     = sn
-  refAdd r@(ChC _ rt _ _ _)    = show rt ++ ":" ++ repUScore (r ^. uid)
-  rType (ChC _ Likely _ _ _)   = LC
-  rType (ChC _ Unlikely _ _ _) = UC
+  refAdd r@(ChC _ rt _ _)    = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
+  rType (ChC _ Likely _ _)   = LC
+  rType (ChC _ Unlikely _ _) = UC
 
 instance Referable Section where
-  refName (Section t _ _) = t
-  refAdd  (Section _ _ r) = "Sec:" ++ r
+  refAdd  (Section _ _ r _) = "Sec:" ++ r
   rType   _               = Sect
 
 instance Referable Citation where
-  refName c = S $ citeID c
-  refAdd c = repUScore $ citeID c -- citeID should be unique.
+  refAdd c = concatMap repUnd $ citeID c -- citeID should be unique.
   rType _ = Cite
 
--- error used below is on purpose. These refNames should be made explicit as necessary
 instance Referable TheoryModel where
-  refName _ = error "No explicit name given for theory model -- build a custom Ref"
-  refAdd  t = "T:" ++ repUScore (t ^. uid)
+  refAdd  t = "T:" ++ t ^. uid
   rType   _ = Def
 
 instance Referable GenDefn where
-  refName _ = error "No explicit name given for gen defn -- build a custom Ref"
-  refAdd  g = "GD:" ++ repUScore (g ^. uid)
+  refAdd  g = "GD:" ++ g ^. uid
   rType   _ = Def
 
 instance Referable QDefinition where -- FIXME: This could lead to trouble; need
                                      -- to ensure sanity checking when building
                                      -- Refs. Double-check QDef is a DD before allowing
-  refName _ = error "No explicit name given for data defn -- build a custom Ref"
-  refAdd  d = "DD:" ++ repUScore (d ^. uid)
+  refAdd  d = "DD:" ++ concatMap repUnd (d ^. uid)
   rType   _ = Def
 
 instance Referable InstanceModel where
-  refName _ = error "No explicit name given for instance model -- build a custom Ref"
-  refAdd  i = "IM:" ++ repUScore (i ^. uid)
+  refAdd  i = "IM:" ++ i^.uid
   rType   _ = Def
 
 instance Referable Contents where
-  refName (Table _ _ _ _ r)     = S "Table:" :+: S r
-  refName (Figure _ _ _ r)      = S "Figure:" :+: S r
-  refName (Graph _ _ _ _ r)     = S "Figure:" :+: S r
-  refName (EqnBlock _ r)        = S "Equation:" :+: S r
-  refName (Definition d)        = S $ getDefName d
-  refName (Defnt _ _ r)         = S r
-  refName (Requirement rc)      = refName rc
-  refName (Assumption ca)       = refName ca
-  refName (Change lcc)          = refName lcc
-  refName (Enumeration _)       = error "Can't reference lists"
-  refName (Paragraph _)         = error "Can't reference paragraphs"
-  refName (Bib _)               = error $
-    "Bibliography list of references cannot be referenced. " ++
-    "You must reference the Section or an individual citation."
   rType (Table _ _ _ _ _)       = Tab
   rType (Figure _ _ _ _)        = Fig
   rType (Definition (Data _))   = Def
@@ -257,20 +277,11 @@ instance Referable Contents where
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
 
--- | Automatically create the label for a definition
-getDefName :: DType -> String
-getDefName (Data c)   = "DD:" ++ repUScore (c ^. uid) -- FIXME: To be removed
-getDefName (Theory c) = "T:" ++ repUScore (c ^. uid) -- FIXME: To be removed
-getDefName TM         = "T:"
-getDefName DD         = "DD:"
-getDefName Instance   = "IM:"
-getDefName General    = "GD:"
-
-citeSort :: Citation -> Citation -> Ordering
-citeSort = compare `on` (^. uid)
+uidSort :: HasUID c => c -> c -> Ordering
+uidSort = compare `on` (^. uid)
 
 citationsFromBibMap :: BibMap -> [Citation]
-citationsFromBibMap bm = sortBy citeSort citations
+citationsFromBibMap bm = sortBy uidSort citations
   where citations :: [Citation]
         citations = map (\(x,_) -> x) (Map.elems bm)
 
@@ -279,22 +290,15 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
   where assumptions = Map.elems am
         dropNums = map fst
 
-repUnd :: Char -> String
-repUnd '_' = "."
-repUnd c = c : []
-
-repUScore :: String -> String
-repUScore = concatMap repUnd
-
 -- | Create References to a given 'LayoutObj'
 -- This should not be exported to the end-user, but should be usable
 -- within the recipe (we want to force reference creation to check if the given
 -- item exists in our database of referable objects.
-makeRef :: (Referable l) => l -> Sentence
-makeRef r = customRef r (refName r)
+makeRef :: (HasShortName l, Referable l) => l -> Sentence
+makeRef r = customRef r (shortname r)
 
--- | Create a reference with a custom 'RefName'
-customRef :: (Referable l) => l -> Sentence -> Sentence
+-- | Create a reference with a custom 'ShortName'
+customRef :: (HasShortName l, Referable l) => l -> ShortName -> Sentence
 customRef r n = Ref (rType r) (refAdd r) n
 
 -- This works for passing the correct id to the reference generator for Assumptions,
@@ -303,23 +307,23 @@ customRef r n = Ref (rType r) (refAdd r) n
 -- contents for that file. Change rType values to implement.
 
 acroTest :: Contents -> [Contents] -> Sentence
-acroTest ref reflst = makeRef $ find ref reflst
+acroTest ref reflst = makeRef $ find' ref reflst
 
-find :: Contents -> [Contents] -> Contents
-find _ [] = error "This object does not match any of the enumerated objects provided by the list."
-find itm@(Assumption comp1) (frst@(Assumption comp2):lst)
+find' :: Contents -> [Contents] -> Contents
+find' _ [] = error "This object does not match any of the enumerated objects provided by the list."
+find' itm@(Assumption comp1) (frst@(Assumption comp2):lst)
   | (comp1 ^. uid) == (comp2 ^. uid) = frst
-  | otherwise = find itm lst
-find itm@(Definition (Data comp1)) (frst@(Definition (Data comp2)):lst)
+  | otherwise = find' itm lst
+find' itm@(Definition (Data comp1)) (frst@(Definition (Data comp2)):lst)
   | (comp1 ^. uid) == (comp2 ^. uid) = frst
-  | otherwise = find itm lst
-find itm@(Definition (Theory comp1)) (frst@(Definition (Theory comp2)):lst)
+  | otherwise = find' itm lst
+find' itm@(Definition (Theory comp1)) (frst@(Definition (Theory comp2)):lst)
   | (comp1 ^. uid) == (comp2 ^. uid) = frst
-  | otherwise = find itm lst
-find itm@(Requirement comp1) (frst@(Requirement comp2):lst)
+  | otherwise = find' itm lst
+find' itm@(Requirement comp1) (frst@(Requirement comp2):lst)
   | (comp1 ^. uid) == (comp2 ^. uid) = frst
-  | otherwise = find itm lst
-find itm@(Change comp1) (frst@(Change comp2):lst)
+  | otherwise = find' itm lst
+find' itm@(Change comp1) (frst@(Change comp2):lst)
   | (comp1 ^. uid) == (comp2 ^. uid) = frst
-  | otherwise = find itm lst
-find _ _ = error "Error: Attempting to find unimplemented type"
+  | otherwise = find' itm lst
+find' _ _ = error "Error: Attempting to find unimplemented type"

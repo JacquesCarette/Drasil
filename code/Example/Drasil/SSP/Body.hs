@@ -1,35 +1,59 @@
 module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap) where
 
 import Language.Drasil hiding (organization)
-import Data.Drasil.SI_Units
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
 
-import Data.Drasil.People (henryFrankis)
+import Data.Drasil.Concepts.Documentation (analysis, assumption, definition, 
+  design, document, effect, element, endUser, goalStmt, inModel, input_, 
+  interest, interest, issue, loss, method_, model, organization, physics, 
+  problem, property, requirement, srs, table_, template, value, variable)
+import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
+import Data.Drasil.Concepts.Math (equation, surface)
+import Data.Drasil.Concepts.PhysicalProperties (mass)
+import Data.Drasil.Concepts.Physics (compression, fbd, force, strain, stress,
+  tension)
+import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability, 
+  performanceSpd, program, reusability, understandability)
+import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
+import Data.Drasil.Software.Products (sciCompS)
 
-import Drasil.SSP.Assumptions (sspAssumptions, assumps_SSP_list_new)
-import Drasil.SSP.DataDefs (sspDataDefs, resShrDerivation,
-  mobShrDerivation, stfMtrxDerivation)
+import Data.Drasil.People (henryFrankis)
+import Data.Drasil.Phrase (for)
+import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent, 
+  foldlSent_, ofThe, sAnd, sOr)
+import Data.Drasil.SI_Units (degree, metre, newton, pascal)
+import Data.Drasil.Utils (enumBullet, enumSimple, getES, weave)
+
+import Drasil.SSP.Assumptions (sspAssumptions, newA3, sspRefDB, newAssumptions)
+import Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
+import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShrDerivation, 
+  resShrDerivation, sliceWght, sspDataDefs, stfMtrxDerivation)
 import Drasil.SSP.DataDesc (sspInputMod)
-import Drasil.SSP.Defs (ssa, acronyms, slice, slope, soil,
-  crtSlpSrf, soilLyr, morPrice, mtrlPrpty, slpSrf,
-  fs_concept, plnStrn, intrslce, itslPrpty)
+import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty, 
+  morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil, soilLyr, ssa)
 import Drasil.SSP.GenDefs (sspGenDefs, normForcEq, bsShrFEq, resShr, mobShr,
   normShrR, momentEql, netForcex, netForcey, hookesLaw2d, displVect)
+import Drasil.SSP.BasicExprs (displMtx, eqlExpr, momExpr, rotMtx)
 import Drasil.SSP.Goals (sspGoals)
-import Drasil.SSP.IMods (instModIntro1, instModIntro2,
-  sspIMods, fctSftyDerivation, nrmShrDerivation,
-  intrSlcDerivation, rigDisDerivation, rigFoSDerivation,
-  sspIMods_new)
-import Drasil.SSP.References (sspCitations)
-import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
-import Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_new
-  , effStress_new, sspTMods)
-import Drasil.SSP.Unitals (sspSymbols, sspInputs, sspOutputs,
-  sspConstrained, index, fs, numbSlices)
-import qualified Drasil.SRS as SRS (physSyst, funcReq, likeChg, inModel,
-  missingP)
+import Drasil.SSP.IMods (fctSftyDerivation, instModIntro1, instModIntro2, 
+  intrSlcDerivation, nrmShrDerivation, rigDisDerivation, rigFoSDerivation, 
+  sspIMods, sspIMods_new)
+import Drasil.SSP.Requirements (sspInputDataTable, sspRequirements)
+import Drasil.SSP.TMods (sspTMods, fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_new
+  , effStress_new)
+import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
+  sspOutputs, sspSymbols)
 
+import qualified Drasil.SRS as SRS (funcReq, inModel, likeChg, unlikeChg, missingP, 
+  physSyst)
+
+import Drasil.DocumentLanguage (DocDesc, DocSection(..), IntroSec(..), 
+  IntroSub(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), TSIntro, 
+  TSIntro(..), LCsSec(..), UCsSec(..), mkDoc, tsymb'')
+
+import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
+import Drasil.Sections.GeneralSystDesc (genSysF)
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.DocumentLanguage (TSIntro, DocDesc, RefSec(..),
   RefTab(..), tsymb'', LFunc(..),
@@ -39,8 +63,9 @@ import Drasil.Sections.SpecificSystemDescription (inDataConstTbl,
   outDataConstTbl, dataConstraintUncertainty, goalStmtF, termDefnF,
   probDescF, solChSpecF, specSysDesF)
 import Drasil.Sections.Requirements (reqF, nonFuncReqF)
-import Drasil.Sections.GeneralSystDesc (genSysF)
-import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
+import Drasil.Sections.SpecificSystemDescription (dataConstraintUncertainty, 
+  goalStmtF, inDataConstTbl, outDataConstTbl, probDescF, solChSpecF, 
+  specSysDesF, termDefnF)
 
 import Data.Drasil.Concepts.Documentation (srs, physics, inModel,
   value, effect, loss, interest, problem, design, issue,
@@ -61,7 +86,7 @@ import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.Utils (getES, enumBullet, enumSimple, weave)
-import Data.Drasil.SentenceStructures (sOr, acroDD,
+import Data.Drasil.SentenceStructures (sOr,
   foldlSent, ofThe, sAnd, foldlSP, foldlList, foldlSent_)
 import Drasil.DocumentLanguage.Definitions
 import Drasil.DocumentLanguage
@@ -106,14 +131,12 @@ ssp_si = SI {
   _refdb = sspRefDB
 }
 
-sspRefDB :: ReferenceDB
-sspRefDB = rdb [] [] assumps_SSP_list_new [] [] sspCitations -- FIXME: Convert the rest to new chunk types
-
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
   [TUnits, tsymb'' table_of_symbol_intro TAD, TAandA]) :
   IntroSec (IntroProg startIntro kSent
-    [IPurpose prpsOfDoc_p1, IScope scpIncl scpEnd
+    [IPurpose prpsOfDoc_p1
+    , IScope scpIncl scpEnd
     , IChar (phrase solidMechanics) 
       (phrase undergraduate +:+ S "level 4" +:+ phrase physics)
       EmptyS
@@ -148,16 +171,16 @@ mkSRS = RefSec (RefProg intro
 {--normForcEq, bsShrFEq, resShr, mobShr,
   normShrR, momentEql, netForcex, netForcey, hookesLaw2d, displVect-}
 generalDefinitions :: [GenDefn]
-generalDefinitions = [gd normForcEq (Nothing :: Maybe DerUChunk) ([] :: Attributes),
-  gd bsShrFEq (Nothing :: Maybe DerUChunk) ([] :: Attributes),
-  gd resShr (Nothing :: Maybe DerUChunk) ([] :: Attributes),
-  gd mobShr (Nothing :: Maybe DerUChunk) ([] :: Attributes),
-  gd normShrR (Nothing :: Maybe DerUChunk) ([] :: Attributes),
-  gd momentEql (Nothing :: Maybe DerUChunk) ([] :: Attributes),
-  gd netForcex (Nothing :: Maybe DerUChunk) ([] :: Attributes),
-  gd netForcey (Nothing :: Maybe DerUChunk) ([] :: Attributes),
-  gd hookesLaw2d (Nothing :: Maybe DerUChunk) ([] :: Attributes),
-  gd displVect (Nothing :: Maybe DerUChunk) ([] :: Attributes)]
+generalDefinitions = [gd normForcEq (Nothing :: Maybe DerUChunk) ([] :: Derivation) "normForcEq",
+  gd bsShrFEq (Nothing :: Maybe DerUChunk) ([] :: Derivation) "bsShrFEq",
+  gd resShr (Nothing :: Maybe DerUChunk) ([] :: Derivation) "resShr",
+  gd mobShr (Nothing :: Maybe DerUChunk) ([] :: Derivation) "mobShr",
+  gd normShrR (Nothing :: Maybe DerUChunk) ([] :: Derivation) "normShrR",
+  gd momentEql (Nothing :: Maybe DerUChunk) ([] :: Derivation) "momentEql",
+  gd netForcex (Nothing :: Maybe DerUChunk) ([] :: Derivation) "netForcex",
+  gd netForcey (Nothing :: Maybe DerUChunk) ([] :: Derivation) "netForcey",
+  gd hookesLaw2d (Nothing :: Maybe DerUChunk) ([] :: Derivation) "hookesLaw2d",
+  gd displVect (Nothing :: Maybe DerUChunk) ([] :: Derivation) "displVect"]
 
 
 stdFields :: Fields
@@ -167,7 +190,7 @@ ssp_srs :: Document
 ssp_srs = mkDoc mkSRS (for) ssp_si
   
 ssp_code :: CodeSpec
-ssp_code = codeSpec' ssp_si [sspInputMod]
+ssp_code = codeSpec ssp_si [sspInputMod]
 
 
 -- SYMBOL MAP HELPERS --
@@ -217,7 +240,7 @@ keySent pname = foldlSent_ [S "a", phrase pname +:+. phrase problem,
   introduceAbb pname, phrase program]
   
 -- SECTION 2.1 --
--- Purpose of Document automatically generated in introductionF
+-- Purpose of Document automatically generated in IPurpose
 prpsOfDoc_p1 :: Sentence
 prpsOfDoc_p1 = purposeDoc ssa crtSlpSrf fs how introduces analysizes
   where how = S "assessing the stability of a" +:+ phrase slope +:+
@@ -238,7 +261,7 @@ purposeDoc pname what calculates how introduces analysizes =
   phrase analysis `sAnd` phrase design, S "of a", analysizes]
 
 -- SECTION 2.2 --
--- Scope of Requirements automatically generated in introductionF
+-- Scope of Requirements automatically generated in IScope
 scpIncl, scpEnd :: Sentence
 scpIncl = S "stability analysis of a 2 dimensional" +:+ phrase slope `sC`
   S "composed of homogeneous" +:+ plural soilLyr
@@ -249,10 +272,10 @@ scpEnd  = S "identify the most likely failure" +:+
   S "that will occur on the" +:+ phrase slope
 
 -- SECTION 2.3 --
--- Characteristics of the Intended Reader generated in introductionF
+-- Characteristics of the Intended Reader generated in IChar
 
 -- SECTION 2.4 --
--- Organization automatically generated in introductionF
+-- Organization automatically generated in IOrgSec
 orgSecStart, orgSecEnd :: Sentence
 orgSecStart = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an",
@@ -314,7 +337,7 @@ phys_sys_desc_p1 = physSystIntro slope how intrslce slice (S "slice base")
   fig_indexconv
   where how = S "as a series of" +:+ phrase slice +:+. plural element
 
-physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, Referable d) =>
+physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, HasShortName d, Referable d) =>
   a -> Sentence -> b -> c -> Sentence -> d -> Contents
 physSystIntro what how p1 p2 p3 indexref = foldlSP [
   at_start analysis, S "of the", phrase what, S "is performed by looking at",
@@ -357,18 +380,17 @@ goal_stmt = goalStmtF (map (\(x, y) -> x `ofThe` y) [
 goals_list = enumSimple 1 (short goalStmt) sspGoals
 
 -- SECTION 4.2 --
-sol_charac_spec = solChSpecF ssa (problem_desc, likely_chg) ddEnding
+sol_charac_spec = solChSpecF ssa (problem_desc, SRS.likeChg [] [], SRS.unlikeChg [] []) ddEnding
   (EmptyS, dataConstraintUncertainty, EmptyS)
   ([assumps_list], theory_model_tmods, gen_def_genDefs, data_def_dataDefs, 
-  instModIntro1:instModIntro2:insta_model_IMods, [data_constraint_Table2,
-   data_constraint_Table3]) []
+  instModIntro1:instModIntro2:insta_model_IMods, [data_constraint_Table2, data_constraint_Table3]) []
 
-  where ddEnding = foldlSent [at_start' definition, acroDD 1, S "to", acroDD 8,
+  where ddEnding = foldlSent [at_start' definition, ddRef sliceWght, S "to", ddRef lengthLb,
           S "are the", phrase force, plural variable, S "that can be solved",
           S "by direct analysis of given" +:+. plural input_, S "The", 
-          phrase intrslce, S "forces", acroDD 9, S "are", phrase force,
-          plural variable, S "that must be written in terms of", acroDD 1, 
-          S "to", acroDD 8, S "to solve"]
+          phrase intrslce, S "forces", ddRef lengthLs, S "are", phrase force,
+          plural variable, S "that must be written in terms of", ddRef sliceWght, 
+          S "to", ddRef lengthLb, S "to solve"]
 
 -- SECTION 4.2.1 --
 -- Assumptions is automatically generated in solChSpecF using the list below

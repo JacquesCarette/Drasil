@@ -1,37 +1,42 @@
 {-# Language TypeFamilies #-}
 -- | Defining all the classes which represent knowledge-about-knowledge
 module Language.Drasil.Classes (
-    HasUID(uid), UID
+    HasUID(uid)
   , NamedIdea(term)
   , Idea(getA)
   , Definition(defn)
-  , ConceptDomain(cdom, DOM)
+  , ConceptDomain(cdom)
   , Concept
   , HasSymbol(symbol)
   , HasSpace(typ)
   , HasUnitSymbol(usymb)
   , IsUnit
+  , HasLabel(getLabel)
+  , IsLabel
   , UnitEq(uniteq)
-  , HasAttributes(attributes)
+  , HasReference(getReferences)
   , CommonIdea(abrv)
   , Constrained(constraints)
   , HasReasVal(reasVal)
+  , ExprRelat(relat)
+  , HasDerivation(derivations)
   ) where
 
-import Language.Drasil.NounPhrase.Core (NP)
-import Language.Drasil.Spec (Sentence)
-import Language.Drasil.Symbol (Stage,Symbol)
-import Language.Drasil.Space (Space)
-import Language.Drasil.UnitLang (USymb,UDefn)
-import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
+import Language.Drasil.Chunk.Derivation (Derivation)
+import Language.Drasil.Chunk.References (References)
 import Language.Drasil.Expr (Expr)
+import Language.Drasil.Label.Core (Label)
+import Language.Drasil.NounPhrase.Core (NP)
+import Language.Drasil.Space (Space)
+import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Symbol (Stage, Symbol)
+import Language.Drasil.UID (UID)
+import Language.Drasil.UnitLang (UDefn, USymb)
 
 import Control.Lens (Lens')
 
-type UID = String
-
--- | The most basic item: having a unique key, here a UID (as a String)
+-- | The most basic item: having a unique key, here a UID
 class HasUID c where
   -- | Provides a /unique/ id for internal Drasil use
   uid :: Lens' c UID
@@ -54,9 +59,8 @@ class Definition c where
   defn :: Lens' c Sentence
 
 class ConceptDomain c where
-  type DOM c :: *
   -- | cdom provides (a 'Lens' to) the concept domain tags for a chunk
-  cdom :: Lens' c [DOM c] 
+  cdom :: Lens' c [UID]
   -- ^ /cdom/ should be exported for use by the
   -- Drasil framework, but should not be exported beyond that.
 
@@ -72,9 +76,11 @@ class HasSymbol c where
 class HasSpace c where
   typ      :: Lens' c Space
 
--- | Anything with 'Attributes'
-class HasAttributes c where
-  attributes :: Lens' c Attributes
+class HasReference c where
+  getReferences :: Lens' c References
+
+class HasDerivation c where
+  derivations :: Lens' c Derivation
 
 -- | CommonIdea is a 'NamedIdea' with the additional
 -- constraint that it __must__ have an abbreviation.
@@ -91,6 +97,13 @@ class Constrained c where
 class HasReasVal c where
   reasVal     :: Lens' c (Maybe Expr)
 
+-- | For those things which "have a label"
+class HasLabel c where
+  getLabel :: Lens' c Label
+
+-- IsLabel is associated with String rendering
+class (HasLabel u, HasUID u) => IsLabel u where
+
 -----------------------------------------------------
 -- Below are for units only
 -- | Some chunks store a unit symbol
@@ -105,3 +118,6 @@ class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u where
 class UnitEq u where
    uniteq :: Lens' u UDefn
 
+-- TODO : there is a design bug here not at all apparent from its definition; have to come back to it (Pull Request #532)
+class ExprRelat c where
+  relat :: Lens' c Expr

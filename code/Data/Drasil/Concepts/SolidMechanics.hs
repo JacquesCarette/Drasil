@@ -1,7 +1,7 @@
 module Data.Drasil.Concepts.SolidMechanics where
 
-import Data.Drasil.Concepts.Physics
 import Language.Drasil
+import Data.Drasil.Concepts.Physics (force, friction, strain, stress)
 
 --FIXME: add "shear stress" and "shear strain" when we have adjectives
 --       to make a combined "mobilized shear force" for example
@@ -23,7 +23,7 @@ normForce  = dccWDS "normForce" (cn' "normal force")
   
 nrmStrss   = dccWDS "nrmStrss" (cn "normal stress") 
   (S "The" +:+ phrase stress +:+ 
-  S "exerted perpendicular to the plain of the object")
+  S "exerted perpendicular to the plane of the object")
   
 poissnsR   = dccWDS "poissnsR" (nounPhraseSP "Poisson's ratio") 
   (S "The ratio of perpendicular" +:+ phrase strain +:+ 

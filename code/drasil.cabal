@@ -41,6 +41,8 @@ library
     , Language.Drasil.Expr.Math
     , Language.Drasil.Expr.Precedence
     , Language.Drasil.Classes
+    , Language.Drasil.Label.Core
+    , Language.Drasil.Label
     , Language.Drasil.Config
     , Language.Drasil.Document
     , Language.Drasil.Format
@@ -55,6 +57,7 @@ library
     , Language.Drasil.Spec
     , Language.Drasil.Symbol
     , Language.Drasil.SymbolAlphabet
+    , Language.Drasil.UID
     , Language.Drasil.Unicode
     , Language.Drasil.Unit
     , Language.Drasil.UnitLang
@@ -83,20 +86,19 @@ library
     , Language.Drasil.TeX.Preamble
     , Language.Drasil.Chunk.AssumpChunk
     , Language.Drasil.Chunk.Attribute
-    , Language.Drasil.Chunk.Attribute.Core
-    , Language.Drasil.Chunk.Attribute.Derivation
+    , Language.Drasil.Chunk.Derivation
+    , Language.Drasil.Chunk.References
+    , Language.Drasil.Chunk.ShortName
     , Language.Drasil.Chunk.Change
     , Language.Drasil.Chunk.Citation
     , Language.Drasil.Chunk.Code
     , Language.Drasil.Chunk.CommonIdea
     , Language.Drasil.Chunk.Concept
     , Language.Drasil.Chunk.Concept.Core
-    , Language.Drasil.Chunk.ConVar
     , Language.Drasil.Chunk.Constrained
     , Language.Drasil.Chunk.Constrained.Core
     , Language.Drasil.Chunk.DefinedQuantity
     , Language.Drasil.Chunk.Eq
-    , Language.Drasil.Chunk.ExprRelat
     , Language.Drasil.Chunk.GenDefn
     , Language.Drasil.Chunk.Goal
     , Language.Drasil.Chunk.InstanceModel
@@ -235,6 +237,7 @@ executable ssp
     , Drasil.SRS
     , Drasil.SSP.Assumptions
     , Drasil.SSP.Body
+    , Drasil.SSP.Changes
     , Drasil.SSP.DataDefs
     , Drasil.SSP.DataDesc
     , Drasil.SSP.Defs
@@ -245,6 +248,7 @@ executable ssp
     , Drasil.SSP.Requirements
     , Drasil.SSP.TMods
     , Drasil.SSP.Unitals
+    , Drasil.SSP.BasicExprs
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.Stakeholders
@@ -281,6 +285,7 @@ executable glassbr
     , Drasil.DocumentLanguage.RefHelpers
     , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.GlassBR.Body
+    , Drasil.GlassBR.Changes
     , Drasil.GlassBR.Concepts
     , Drasil.GlassBR.Unitals
     , Drasil.GlassBR.TMods
@@ -290,6 +295,7 @@ executable glassbr
     , Drasil.GlassBR.Units
     , Drasil.GlassBR.ModuleDefs
     , Drasil.GlassBR.Symbols
+    , Drasil.GlassBR.Assumptions
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction
     , Drasil.Sections.Requirements
@@ -324,6 +330,7 @@ executable chipmunkdocs
     , Drasil.DocumentLanguage.RefHelpers
     , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.GamePhysics.Body
+    , Drasil.GamePhysics.Changes
     , Drasil.GamePhysics.Concepts
     , Drasil.GamePhysics.DataDefs
     , Drasil.GamePhysics.TMods

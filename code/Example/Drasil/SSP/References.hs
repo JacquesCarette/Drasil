@@ -2,15 +2,15 @@ module Drasil.SSP.References (sspCitations) where
 
 import Language.Drasil
 
-import Drasil.SSP.Defs (ssa, crtSlpSrf, fs_concept)
+import Drasil.SSP.Defs (crtSlpSrf, fs_concept, ssa)
+
+import Data.Drasil.Citations (jnlCGJ, koothoor2013, parnasClements1986, smithLai2005)
 import Data.Drasil.Concepts.Documentation (analysis)
-import Data.Drasil.Citations (smithLai2005, koothoor2013, parnas1986,
-  jnlCGJ)
-import Data.Drasil.People (qhQian, dyZhu, cfLee, grChen, dgFredlund,
-  jKrahn, dStolle, yCLi, ymChen, tltZhan, ssLing, pjCleall, pGuo)
+import Data.Drasil.People (cfLee, dgFredlund, dStolle, dyZhu, grChen, jKrahn, 
+  pGuo, pjCleall, qhQian, ssLing, tltZhan, yCLi, ymChen)
 
 sspCitations :: BibRef
-sspCitations = [chen2005, parnas1986, koothoor2013,
+sspCitations = [chen2005, parnasClements1986, koothoor2013,
   fredlund1977, smithLai2005, stolle2008, li2010]
 
 chen2005, fredlund1977, stolle2008, li2010 :: Citation

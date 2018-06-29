@@ -1,15 +1,13 @@
-module Drasil.SWHS.IMods (insta_model_IMods,
+module Drasil.SWHS.IMods (swhsIMods,
    eBalanceOnWtr_new,  heatEInWtr_new,
    heatEInPCM_new,  eBalanceOnPCM_new, heatEInWtr) where
 
 import Language.Drasil
 
-import Drasil.SWHS.Unitals {-(t_init_melt, latentE_P, pcm_E, pcm_initMltE,
-  temp_melt_P, temp_PCM, htCap_L_P, pcm_mass, htFusion, temp_init, htCap_S_P,
-  melt_frac, temp_W, w_mass, w_E, htCap_W, tau_S_P, pcm_SA, tau_L_P, pcm_HTC,
-  coil_SA, coil_HTC, eta, tau_W, temp_C, time_final, w_vol, pcm_vol)-}
+import Drasil.SWHS.Unitals 
+import Drasil.SWHS.DataDefs(dd1HtFluxC, dd2HtFluxP, dd3HtFusion, ddRef)
 import Data.Drasil.Utils (getES, unwrap, weave)
-import Data.Drasil.SentenceStructures (acroT, acroDD, foldlSent, isThe,
+import Data.Drasil.SentenceStructures (acroT, foldlSent, isThe,
   sAnd, ofThe, foldlSent, isThe, foldlList, acroGD, foldlSentCol, sOf)
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Concepts.Math (equation, change, rOfChng, surface, area)
@@ -19,12 +17,10 @@ import Data.Drasil.Concepts.Thermodynamics (boiling, heat, temp, melting,
   latent_heat, sens_heat, heat_cap_spec, thermal_energy, boil_pt, heat_trans,
   phase_change, ht_flux)
 
-import Drasil.SWHS.DataDefs(dd1HtFluxC, dd2HtFluxP)
-import Drasil.SWHS.Assumptions (assump_new_15, assump_new_16, assump_new_17, assump_new_18)
-import Data.Drasil.Concepts.Documentation (dataDefn)
---s4_2_5_IMods
-insta_model_IMods :: [RelationConcept]
-insta_model_IMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
+import Drasil.SWHS.Assumptions (newA15, newA16, newA17, newA18)
+
+swhsIMods :: [RelationConcept]
+swhsIMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 
 ---------
 -- IM1 --
@@ -33,7 +29,7 @@ eBalanceOnWtr_new :: InstanceModel
 eBalanceOnWtr_new = im eBalanceOnWtr [qw time, qw tau_W, qw temp_C, qw eta,
  qw temp_PCM, qw time_final, qw temp_init, qw coil_SA]
   [TCon AssumedCon $ sy temp_init $< sy temp_C] (qw temp_W)
-   [TCon AssumedCon $ 0 $< sy time $< sy time_final] [(derivationsteps eBalanceOnWtr_deriv_swhs)]
+   [TCon AssumedCon $ 0 $< sy time $< sy time_final] eBalanceOnWtr_deriv_swhs "eBalanceOnWtr"
 
 eBalanceOnWtr :: RelationConcept
 eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
@@ -99,9 +95,9 @@ s4_2_3_desc1_swhs_im1 roc tw en wt vo wvo ms wms hcs hw ht cl hfc cs ps tk hfp s
     (E $ sy cs) `sAnd` (E $ sy ps) `sC` S "respectively.",  S "No", phrase ht,
     S "occurs to", S "outside" `ofThe` phrase tk `sC` 
     S "since it has been assumed to be perfectly insulated", 
-    sParen (makeRef assump_new_15) :+: S ". Assuming no volumetric", 
+    sParen (makeRef newA15) :+: S ". Assuming no volumetric", 
     S "heat generation per unit", phrase vo +:+.
-    (sParen (makeRef assump_new_16) `sC` (E $ sy vhg $= 0)), S "Therefore, the equation for",
+    (sParen (makeRef newA16) `sC` (E $ sy vhg $= 0)), S "Therefore, the equation for",
      acroGD 2, S "can be written as"]
 
 s4_2_3_desc2_swhs_im1 :: QDefinition -> QDefinition -> [Sentence]
@@ -194,13 +190,13 @@ eBalanceOnPCM_new :: InstanceModel
 eBalanceOnPCM_new = im eBalanceOnPCM [qw time, qw tau_W, qw temp_C, qw eta,
  qw temp_PCM, qw time_final, qw temp_init, qw coil_SA]
   [TCon AssumedCon $ sy temp_init $< sy temp_C] (qw temp_W)
-   [TCon AssumedCon $ 0 $< sy time $< sy time_final] [(derivationsteps eBalanceOnPCM_deriv_swhs)]
+   [TCon AssumedCon $ 0 $< sy time $< sy time_final] eBalanceOnPCM_deriv_swhs "eBalanceOnPCM"
 
 eBalanceOnPCM :: RelationConcept
 eBalanceOnPCM = makeRC "eBalanceOnPCM" (nounPhraseSP
   "Energy Balance on PCM to Find T_p")
   --FIXME: T_p should be called from symbol
-  balPCMDesc balPCM_Rel
+  balPCMDesc balPCM_Rel 
 
 balPCM_Rel :: Relation
 balPCM_Rel = (deriv (sy temp_PCM) time) $= case_ [case1, case2, case3, case4]
@@ -235,14 +231,14 @@ eBalanceOnPCM_deriv_swhs =
   [S "Detailed derivation of the" +:+ phrase energy +:+ S "balance on the PCM during " +:+ 
     S "sensible heating phase:" ] ++
   (weave [eBalanceOnPCM_deriv_sentences_swhs_im2, map E eBalanceOnPCM_deriv_eqns_swhs_im2])
-  ++ (s4_2_3_desc5_swhs_im2 htCap_S_P htCap_L_P tau_S_P tau_L_P surface area melting vol assump_new_17)
+  ++ (s4_2_3_desc5_swhs_im2 htCap_S_P htCap_L_P tau_S_P tau_L_P surface area melting vol newA17)
   ++ (s4_2_3_desc6_swhs_im2 temp_PCM)
-  ++ (s4_2_3_desc7_swhs_im2 boiling solid liquid assump_new_18)
+  ++ (s4_2_3_desc7_swhs_im2 boiling solid liquid newA18)
 
 eBalanceOnPCM_deriv_sentences_swhs_im2 :: [Sentence]
 eBalanceOnPCM_deriv_sentences_swhs_im2 = map foldlSentCol [
   s4_2_3_desc1_swhs_im2 rOfChng temp_PCM energy water vol pcm_vol pcm_mass heat_cap_spec
-    htCap_S_P ht_flux ht_flux_P phase_change pcm_SA heat assump_new_16 vol_ht_gen,
+    htCap_S_P ht_flux ht_flux_P phase_change pcm_SA heat newA16 vol_ht_gen,
   s4_2_3_desc2_swhs_im2 dd2HtFluxP ht_flux_P,
   s4_2_3_desc3_swhs_im2 eq6,
   s4_2_3_desc4_swhs_im2 eq7
@@ -338,7 +334,7 @@ eBalanceOnPCM_deriv_eqns_swhs_im2 = [s4_2_3_eq1_swhs_im2, s4_2_3_eq2_swhs_im2,
 ---------
 heatEInWtr_new :: InstanceModel
 heatEInWtr_new = im heatEInWtr [qw temp_init, qw coil_SA, qw htCap_W, qw w_mass] 
-  [] (qw w_E) [TCon AssumedCon $ 0 $< sy time $< sy time_final] []
+  [] (qw w_E) [TCon AssumedCon $ 0 $< sy time $< sy time_final] [] "heatEInWtr"
 
 heatEInWtr :: RelationConcept
 heatEInWtr = makeRC "heatEInWtr" (nounPhraseSP "Heat energy in the water")
@@ -374,7 +370,7 @@ heatEInPCM_new :: InstanceModel
 heatEInPCM_new = im heatEInPCM [qw time, qw tau_W, qw temp_C, qw eta,
  qw temp_PCM, qw time_final, qw temp_init, qw coil_SA]
   [TCon AssumedCon $ sy temp_init $< sy temp_C] (qw temp_W)
-   [TCon AssumedCon $ 0 $< sy time $< sy time_final] []
+   [TCon AssumedCon $ 0 $< sy time $< sy time_final] [] "heatEInPCM"
 
 heatEInPCM :: RelationConcept
 heatEInPCM = makeRC "heatEInPCM" (nounPhraseSP "Heat energy in the PCM")
@@ -416,7 +412,7 @@ htPCMDesc = foldlSent [S "The above", phrase equation,
   sParen (unwrap $ getUnit pcm_initMltE), S "The", phrase energy,
   S "required to melt all of the", short phsChgMtrl, S "is",
   E (sy htFusion * sy pcm_mass), sParen (unwrap $ getUnit pcm_initMltE) +:+.
-  sParen (acroDD 3), phrase heat_cap_spec `ofThe` phrase liquid,
+  sParen (ddRef dd3HtFusion), phrase heat_cap_spec `ofThe` phrase liquid,
   short phsChgMtrl, S "is", getES htCap_L_P,
   sParen (unwrap $ getUnit htCap_L_P) `sAnd` S "the", phrase change, S "in",
   phrase temp, S "is", E (sy temp_PCM - sy temp_melt_P) +:+.
@@ -436,6 +432,6 @@ htPCMDesc = foldlSent [S "The above", phrase equation,
 ---------------
 -- FIXME, hacks
 a14, a18, a19 :: Contents
-a14 = Assumption $ assump "assump14" EmptyS (S "assump14")
-a18 = Assumption $ assump "assump18" EmptyS (S "assump18")
-a19 = Assumption $ assump "assump19" EmptyS (S "assump19")
+a14 = Assumption $ assump "assump14" EmptyS "assump14" 
+a18 = Assumption $ assump "assump18" EmptyS "assump18" 
+a19 = Assumption $ assump "assump19" EmptyS "assump19" 

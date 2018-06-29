@@ -3,8 +3,9 @@ module Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp, roc_temp_simp
 import Prelude hiding (sin, cos, tan)
 
 import Language.Drasil
+import Drasil.DocumentLanguage.RefHelpers (refA)
 
-import Data.Drasil.SentenceStructures (foldlSent, acroA)
+import Data.Drasil.SentenceStructures (foldlSent)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (vol, mass, density)
 import Data.Drasil.Quantities.Thermodynamics as QT (ht_flux, heat_cap_spec,
   temp)
@@ -47,7 +48,7 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
   S "and its surroundings", E (apply1 thFluxVect QP.time) `isThe`
   S "thermal flux" +:+. sParen (Sy $ unit_symb thFluxVect),
   getES htTransCoeff `isThe` S "heat transfer coefficient" `sC`
-  S "assumed independant of", getES QT.temp, sParen (acroA 2) +:+.
+  S "assumed independant of", getES QT.temp, sParen (refA swhsRefDB newA2) +:+.
   sParen (Sy $ unit_symb htTransCoeff),
   E (apply1 deltaT QP.time $= apply1 temp QP.time -
   apply1 temp_env QP.time) `isThe` S "time-dependant thermal gradient",
@@ -57,7 +58,7 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
 --
 rocTempSimp :: RelationConcept
 rocTempSimp = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
-  "of change of temperature") rocTempSimp_desc rocTempSimp_rel
+  "of change of temperature") rocTempSimp_desc rocTempSimp_rel 
 
 rocTempSimp_rel :: Relation
 rocTempSimp_rel = (sy QPP.mass) * (sy QT.heat_cap_spec) *
@@ -97,8 +98,8 @@ roc_temp_simp_deriv_sentences = map foldlSentCol [
   s4_2_3_desc2 gauss_div surface vol thFluxVect uNormalVect unit_,
   s4_2_3_desc3 vol vol_ht_gen,
   s4_2_3_desc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heat_cap_spec
-    QT.temp vol [makeRef assump_new_3, makeRef assump_new_4, 
-                 makeRef assump_new_5, makeRef assump_new_6],
+    QT.temp vol [makeRef newA3, makeRef newA4, 
+                 makeRef newA5, makeRef newA6],
   s4_2_3_desc5 density mass vol]
 
 s4_2_3_desc1 :: RelationConcept -> UnitalChunk -> [Sentence]
@@ -106,8 +107,8 @@ s4_2_3_desc1 t1c vo =
   [S "Integrating", makeRef $ reldefn t1c,
   S "over a", phrase vo, sParen (getES vo) `sC` S "we have"]
 
-s4_2_3_desc2 :: ConceptChunk -> ConVar -> UnitalChunk -> UnitalChunk ->
-  ConVar -> ConceptChunk -> [Sentence]
+s4_2_3_desc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
+  DefinedQuantityDict -> ConceptChunk -> [Sentence]
 s4_2_3_desc2 gd su vo tfv unv un =
   [S "Applying", titleize gd, S "to the first term over",
   (phrase su +:+ getES su `ofThe` phrase vo) `sC` S "with",

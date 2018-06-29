@@ -5,14 +5,13 @@ module Language.Drasil.Chunk.Unitary
   , Unitary(..)) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  ConceptDomain(DOM), HasSymbol(symbol),IsUnit)
+  ConceptDomain, HasSymbol(symbol), IsUnit)
 import Language.Drasil.Chunk.Quantity (Quantity(..), QuantityDict, mkQuant, qw, 
   HasSpace(typ))
 import Language.Drasil.Unit (UnitDefn, unitWrapper)
-import Language.Drasil.Symbol
-import Language.Drasil.Space
+import Language.Drasil.Symbol (Symbol)
+import Language.Drasil.Space (Space)
 import Language.Drasil.NounPhrase (NP)
-import Language.Drasil.Chunk.Concept (ConceptChunk)
 
 import Control.Lens ((^.), makeLenses)
 
@@ -21,23 +20,25 @@ class (Quantity c) => Unitary c where
   unit :: c -> UnitDefn
 
 -- | UnitaryChunks are 'Unitary's with 'Symbols'
-data UnitaryChunk = UC { _quant :: QuantityDict, _un :: UnitDefn }
+data UnitaryChunk = UC { _quant :: QuantityDict
+                       , _un :: UnitDefn
+                       }
 makeLenses ''UnitaryChunk
 
-instance HasUID    UnitaryChunk where uid = quant . uid
-instance NamedIdea UnitaryChunk where term = quant . term
-instance Idea      UnitaryChunk where getA uc = getA $ uc ^. quant
-instance HasSpace  UnitaryChunk where typ = quant . typ
-instance HasSymbol UnitaryChunk where symbol u st = symbol (u^.quant) st
-instance Quantity  UnitaryChunk where getUnit = Just . _un
-instance Unitary   UnitaryChunk where unit x = x ^. un
-  
+instance HasUID        UnitaryChunk where uid = quant . uid
+instance NamedIdea     UnitaryChunk where term = quant . term
+instance Idea          UnitaryChunk where getA uc = getA $ uc ^. quant
+instance HasSpace      UnitaryChunk where typ = quant . typ
+instance HasSymbol     UnitaryChunk where symbol u st = symbol (u^.quant) st
+instance Quantity      UnitaryChunk where getUnit = Just . _un
+instance Unitary       UnitaryChunk where unit x = x ^. un
+
 -- Builds the Quantity part from the uid, term, symbol and space.
 -- assumes there's no abbreviation.
-unitary :: (IsUnit u, DOM u ~ ConceptChunk) => 
+unitary :: (IsUnit u, ConceptDomain u) =>
   String -> NP -> Symbol -> u -> Space -> UnitaryChunk
-unitary i t s u space = UC (mkQuant i t s space (Just uu) Nothing) uu
+unitary i t s u space = UC (mkQuant i t s space (Just uu) Nothing) uu -- Unit doesn't have a unitDefn, so [] is passed in
   where uu = unitWrapper u
 
-mkUnitary :: Unitary u => u -> UnitaryChunk
+mkUnitary :: (Unitary u) => u -> UnitaryChunk
 mkUnitary u = UC (qw u) (unit u)

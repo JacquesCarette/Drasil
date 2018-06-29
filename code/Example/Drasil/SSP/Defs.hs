@@ -1,9 +1,9 @@
 module Drasil.SSP.Defs where --export all of this file
 
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation (assumption, dataDefn,
-  genDefn, goalStmt, inModel, likelyChg, physSyst, requirement,
-  srs, thModel, typUnc, property, safety)
+import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn, 
+  goalStmt, inModel, likelyChg, physSyst, property, requirement, safety, srs,
+  thModel, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (surface)
 
 import Data.Drasil.Phrase(of_'')
@@ -11,7 +11,7 @@ import Data.Drasil.Phrase(of_'')
 ----Acronyms-----
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
-  physSyst, requirement, srs, ssa, thModel, typUnc]
+  physSyst, requirement, srs, ssa, thModel, typUnc, unlikelyChg]
   
 ssa, ssp :: CI
 ssa = commonIdea "ssa" (cnIS "slope stability analysis") "SSA"
@@ -45,7 +45,7 @@ plnStrn = dcc "plane strain" (cn' "plane strain")
   ("The resultant stresses in one of the directions of a " ++
   "3 dimensional material can be approximated as 0. Results " ++
   "when the length of one dimension of the body dominates the " ++
-  "others. Stresses in the dominate dimensions direction are " ++
+  "others. Stresses in the dominant dimensions direction are " ++
   "the ones that can be approximated as 0.")
 
 crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface") 

@@ -2,14 +2,13 @@
 -- | Contains Sentences and helpers
 module Language.Drasil.Spec where
 
-import Language.Drasil.Unicode (Special(SqBrOpen,SqBrClose))
-import Language.Drasil.Symbol
-import Language.Drasil.Expr
-import Language.Drasil.RefTypes
+import Language.Drasil.Unicode (Special(SqBrClose, SqBrOpen))
+import Language.Drasil.Symbol (Symbol)
+import Language.Drasil.Expr (Expr)
+import Language.Drasil.RefTypes (RefAdd, RefType)
 import Language.Drasil.UnitLang (USymb)
+import Language.Drasil.Chunk.ShortName (ShortName)
 
--- | One slight hack remaining
-type RefName = Sentence
 
 -- | For writing "sentences" via combining smaller elements
 -- Sentences are made up of some known vocabulary of things:
@@ -24,8 +23,8 @@ data Sentence where
   S     :: String -> Sentence       -- Strings, used for Descriptions in Chunks
   Sp    :: Special -> Sentence
   P     :: Symbol -> Sentence
-  Ref   :: RefType -> RefAdd -> RefName -> Sentence  -- Needs helper func to create Ref
-                                    -- See Reference.hs
+  Ref   :: RefType -> RefAdd -> ShortName -> Sentence  -- Needs helper func to create Ref
+                                                       -- See Reference.hs
   Quote :: Sentence -> Sentence     -- Adds quotation marks around a sentence
                                     
   -- Direct concatenation of two Sentences (no implicit spaces!)

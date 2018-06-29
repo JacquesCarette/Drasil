@@ -1,12 +1,10 @@
 module Drasil.SWHS.TMods (tModels, t1ConsThermE, 
-  theory_model_swhsTMods, theory_model_T1,
-  t1ConsThermE_new, t2SensHtE_new, theory_model_T2, t2SensHtE,
-  t3LatHtE_new, theory_model_T3) where
+  t1ConsThermE_new, t2SensHtE_new, t2SensHtE, t3LatHtE_new, swhsTMods, tMod1) where
 
 import Language.Drasil
 import Control.Lens ((^.))
 
-import Data.Drasil.Concepts.Documentation (system, acroNumGen)
+import Data.Drasil.Concepts.Documentation (system)
 import Data.Drasil.SI_Units (joule)
 
 import Data.Drasil.Concepts.Thermodynamics (phase_change, thermal_energy,
@@ -29,10 +27,8 @@ import Drasil.SWHS.DataDefs (dd3HtFusion)
 tModels :: [RelationConcept]
 tModels = [t1ConsThermE, t2SensHtE, t3LatHtE]
 
---s4_2_2_swhsTMods
-theory_model_swhsTMods :: [Contents]
-theory_model_swhsTMods = acroNumGen (theory_model_T1 ++ theory_model_T2 
-  ++ theory_model_T3) 1
+swhsTMods :: [Contents]
+swhsTMods = (tMod1 ++ tMod2 ++ tMod3)
 
 -------------------------
 -- Theoretical Model 1 --
@@ -40,14 +36,13 @@ theory_model_swhsTMods = acroNumGen (theory_model_T1 ++ theory_model_T2
 --s4_2_2_T1
 ------------- New Chunck -----------
 t1ConsThermE_new :: TheoryModel
-t1ConsThermE_new = tm (cw t1ConsThermE)
+t1ConsThermE_new = tm t1ConsThermE
   (tc' "ConsThermE_new" [qw thFluxVect, qw gradient, qw vol_ht_gen, 
     qw density, qw heat_cap_spec, qw temp, qw time] ([] :: [ConceptChunk])
-  [] [TCon Invariant consThermERel] [])
+  [] [TCon Invariant consThermERel] []) "t1ConsThermE"
 
-------------------------------------
-theory_model_T1 :: [Contents]
-theory_model_T1 = [reldefn t1ConsThermE]
+tMod1 :: [Contents]
+tMod1 = [reldefn t1ConsThermE]
 
 t1ConsThermE :: RelationConcept
 t1ConsThermE = makeRC "t1ConsThermE"
@@ -82,24 +77,23 @@ t1descr = foldlSent [
 --referencing within a simple list is not yet implemented.
 -- FIXME
 a1 :: Contents
-a1 = Assumption $ assump "assump1" EmptyS (S "assump1")
+a1 = Assumption $ assump "assump1" EmptyS "assump1" 
 
 -------------------------
 -- Theoretical Model 2 --
 -------------------------
 t2SensHtE_new :: TheoryModel
-t2SensHtE_new = tm (cw t2SensHtE)
+t2SensHtE_new = tm t2SensHtE
   (tc' "SensHtE_new" [qw sens_heat, qw htCap_S, qw mass, 
     qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [ConceptChunk])
-  [] [TCon Invariant sensHtEEqn] [])
+  [] [TCon Invariant sensHtEEqn] []) "t2SensHtE"
 
---s4_2_2_T2
-theory_model_T2 :: [Contents]
-theory_model_T2 = [reldefn t2SensHtE]
+tMod2 :: [Contents]
+tMod2 = [reldefn t2SensHtE]
 
 t2SensHtE :: RelationConcept
 t2SensHtE = makeRC "t2SensHtE"
-  (nounPhraseSP "Sensible heat energy") t2descr sensHtEEqn
+  (nounPhraseSP "Sensible heat energy") t2descr sensHtEEqn 
 
 sensHtEEqn :: Relation
 sensHtEEqn = (sy sens_heat) $= case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
@@ -148,13 +142,12 @@ t2descr = foldlSent [
 -- Theoretical Model 3 --
 -------------------------
 t3LatHtE_new :: TheoryModel
-t3LatHtE_new = tm (cw t3LatHtE)
+t3LatHtE_new = tm t3LatHtE
   (tc' "SensHtE_new" [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
-  [] [TCon Invariant latHtEEqn] [])
+  [] [TCon Invariant latHtEEqn] []) "t3LatHtE"
 
---s4_2_2_T3
-theory_model_T3 :: [Contents]
-theory_model_T3 = [reldefn t3LatHtE]
+tMod3 :: [Contents]
+tMod3 = [reldefn t3LatHtE]
 
 t3LatHtE :: RelationConcept
 t3LatHtE = makeRC "t3LatHtE"

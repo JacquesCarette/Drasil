@@ -2,16 +2,20 @@ module Drasil.SWHS.DataDefs where --exports all of it
 
 import Language.Drasil
 import Control.Lens ((^.))
+import Drasil.DocumentLanguage.RefHelpers (ModelDB, mdb, refDD, ddRefDB)
 
 import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcm_mass,
   temp_W, temp_PCM, ht_flux_P, pcm_HTC, coil_HTC, temp_C, ht_flux_C)
-
-import Data.Drasil.Concepts.Documentation (acroNumGen)
 
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latent_heat)
 import Data.Drasil.Utils (mkDataDef)
+
+ddRef = refDD (ddRefDB swhsRefMDB)
+
+swhsRefMDB :: ModelDB
+swhsRefMDB = mdb [] [] swhsDataDefs []
 
 swhsDataDefs :: [QDefinition]
 swhsDataDefs = [dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac]
@@ -43,7 +47,7 @@ htFusionEqn = (sy latent_heat) / (sy mass)
 dd4MeltFrac :: QDefinition
 dd4MeltFrac = fromEqn' (melt_frac ^. uid) -- FIXME Should (^. id) be used
   (melt_frac ^. term) (S "fraction of the PCM that is liquid")
-  (eqSymb melt_frac) melt_frac_eqn
+  (eqSymb melt_frac) melt_frac_eqn [] "meltFrac"
 --FIXME: "Phi is the melt fraction" is produced; 
   --"Phi is the fraction of the PCM that is liquid" is what is supposed to be
   -- produced according to CaseStudies' original
@@ -53,14 +57,14 @@ melt_frac_eqn = (sy latentE_P) / ((sy htFusion) * (sy pcm_mass))
 
 --Need to add units to data definition descriptions
 
-data_def_swhsDataDefs :: [Contents]
-data_def_swhsDataDefs = acroNumGen [data_def_DD1, data_def_DD2, data_def_DD3, data_def_DD4] 1
+swhsDDefs :: [Contents]
+swhsDDefs = [swhsDD1, swhsDD2, swhsDD3, swhsDD4] 
 
-data_def_DD1, data_def_DD2, data_def_DD3, data_def_DD4 :: Contents
-data_def_DD1 = datadefn dd1HtFluxC
-data_def_DD2 = datadefn dd2HtFluxP
-data_def_DD3 = datadefn dd3HtFusion
-data_def_DD4 = datadefn dd4MeltFrac
+swhsDD1, swhsDD2, swhsDD3, swhsDD4 :: Contents
+swhsDD1 = datadefn dd1HtFluxC
+swhsDD2 = datadefn dd2HtFluxP
+swhsDD3 = datadefn dd3HtFusion
+swhsDD4 = datadefn dd4MeltFrac
 
 --Symbol appears as "Label"
 --There is no actual label

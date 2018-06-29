@@ -14,11 +14,11 @@ module Data.Drasil.SentenceStructures
   , displayConstrntsAsSet
   , getES, fmtPhys, fmtSfwr, typUncr
   , mkTableFromColumns
-  , acroA, acroDD, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, acroT
+  , acroA, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, acroT
   ) where
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle, foldle1, getES)
+import Data.Drasil.Utils (foldle, foldle1, getES, addPercent)
 import Data.Drasil.Concepts.Documentation hiding (constraint)
 import Data.Drasil.Concepts.Math (equation)
 
@@ -108,11 +108,10 @@ toThe p1 p2 = p1 +:+ S "to the" +:+ p2
 
 {--Acronyms to be used throughout--}
 -- ex. S "as seen in (A1)" -> S "as seen in" +:+ sParen (acroA "1")
-acroA, acroDD, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, 
+acroA, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, 
   acroT :: Int -> Sentence
 
 acroA  numVar = short assumption  :+: S (show numVar)
-acroDD numVar = short dataDefn    :+: S (show numVar)
 acroGD numVar = short genDefn     :+: S (show numVar)
 acroGS numVar = short goalStmt    :+: S (show numVar)
 acroIM numVar = short inModel     :+: S (show numVar)
@@ -210,8 +209,11 @@ mkTableFromColumns l =
 none :: Sentence
 none = S "None"
 
+found :: Double -> Sentence
+found x = (addPercent . realToFrac) (x*100)
+
 typUncr :: (UncertainQuantity c) => c -> Sentence
-typUncr x = maybe none (S . show) (x ^. uncert)
+typUncr x = maybe none found (x ^. uncert)
 
 constraintToExpr :: (Quantity c) => c -> Constraint -> Expr
 constraintToExpr c (Range _ ri) = real_interval c ri

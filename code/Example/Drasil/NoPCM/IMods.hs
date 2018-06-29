@@ -2,11 +2,12 @@ module Drasil.NoPCM.IMods (eBalanceOnWtr, eBalanceOnWtr_new) where
 
 import Language.Drasil
 
-import Drasil.SWHS.Concepts (water, coil, tank)
-import Drasil.SWHS.Unitals
-import Data.Drasil.Utils (unwrap, weave, getES)
+import Drasil.SWHS.Concepts (water, tank)
+import Drasil.SWHS.Unitals (temp_W, temp_C, tau_W, w_mass, htCap_W, coil_HTC, coil_SA, temp_init
+  , time_final, w_vol, ht_flux_C, vol_ht_gen)
+import Data.Drasil.Utils (unwrap, weave)
 import Data.Drasil.SentenceStructures (foldlSent, isThe,
-  sAnd, foldlList, ofThe, acroGD, foldlSentCol, sOf)
+  sAnd, foldlList, ofThe, acroGD, foldlSentCol, sOf, getES)
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Concepts.Math (equation, rOfChng)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
@@ -27,7 +28,7 @@ eBalanceOnWtr_new = im eBalanceOnWtr [qw temp_C, qw temp_init, qw time_final,
   qw coil_SA, qw coil_HTC, qw htCap_W, qw w_mass] 
   [TCon AssumedCon $sy temp_init $<= sy temp_C] (qw temp_W) 
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
-  [TCon AssumedCon $ 0 $< sy time $< sy time_final] [(derivationsteps eBalanceOnWtr_deriv_nopcm)]
+  [TCon AssumedCon $ 0 $< sy time $< sy time_final] eBalanceOnWtr_deriv_nopcm "eBalanceOnWtr"
 
 eBalanceOnWtr :: RelationConcept
 eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
@@ -49,7 +50,7 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively",
-  sParen (makeRef assump_new_10)]
+  sParen (makeRef assump10)]
   
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --
@@ -62,7 +63,7 @@ eBalanceOnWtr_deriv_nopcm =
 eBalanceOnWtr_deriv_sentences_nopcm :: [Sentence]
 eBalanceOnWtr_deriv_sentences_nopcm = map foldlSentCol [
   s4_2_3_desc1_nopcm rOfChng temp_W energy water vol w_vol mass w_mass heat_cap_spec
-    htCap_W heat_trans ht_flux_C coil_SA tank assump_new_11 assump_new_12 vol_ht_gen, 
+    htCap_W heat_trans ht_flux_C coil_SA tank newA11 newA12 vol_ht_gen, 
   s4_2_3_desc2_nopcm dd1HtFluxC,
   s4_2_3_desc3_nopcm eq1,
   s4_2_3_desc4_nopcm eq2]

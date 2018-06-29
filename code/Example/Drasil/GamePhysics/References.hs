@@ -2,17 +2,16 @@ module Drasil.GamePhysics.References (cpCitations) where
 
 import Language.Drasil
 
-import Data.Drasil.People (dParnas, gWilson, daAruliah, cTitus, nChueHong, 
-  mDavis, rGuy, shdHaddock, kdHuff, imMitchell, mdPlumblet, bWaugh, 
-  epWhite, pWilson, pcClements, dmWiess, jBueche)
-  
-import Data.Drasil.Citations (koothoor2013, parnas1986, smithLai2005)
+import Data.Drasil.Citations (koothoor2013, parnasClements1986, smithLai2005)
+import Data.Drasil.People (bWaugh, cTitus, dParnas, daAruliah, dmWiess, epWhite,
+  gWilson, imMitchell, jBueche, kdHuff, mDavis, mdPlumblet, nChueHong, pWilson,
+  pcClements, rGuy, shdHaddock)
 
 parnas1978, sciComp2013, dParnas1972, dParnasPcClements1984, jfBeucheIntro :: Citation
 
 cpCitations :: BibRef
 cpCitations = [parnas1978, sciComp2013, dParnas1972, dParnasPcClements1984, 
-  parnas1986, koothoor2013, smithLai2005, jfBeucheIntro]
+  parnasClements1986, koothoor2013, smithLai2005, jfBeucheIntro]
 
 --FIXME: check for references made within document
 

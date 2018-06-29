@@ -4,26 +4,28 @@ module Drasil.SSP.DataDefs where
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
 
-import Drasil.SSP.Unitals (shrStiffBase, index, genDisplace, baseAngle, inxi,
-  nrmStiffBase, effStiffA, effStiffB, rotatedDispl, genPressure, shrStiffIntsl,
-  nrmStiffIntsl, nrmFNoIntsl, shearFNoIntsl, shearRNoIntsl, impLoadAngle,
-  surfLoad, surfAngle, surfHydroForce, watrForceDif, slcWght, earthqkLoadFctr,
-  inxiM1, mobShrI, wiif, intShrForce, intNormForce, baseWthX, cohesion,
-  fricAngle, baseHydroForce, watrForce, nrmFSubWat, shrResI, constant_A,
-  nrmDispl, constant_K, constant_a, normStress, poissnsRatio, inx, surfLngth,
-  baseLngth, genForce, shrDispl, scalFunc, normToShear, slipDist, slopeDist,
-  slopeHght, slipHght, waterHght, satWeight, waterWeight, dryWeight,
-  ufixme1, ufixme2)
-import Drasil.SSP.GenDefs (eqlExpr, displMtx, rotMtx)
+import Drasil.SSP.BasicExprs (displMtx, eqlExpr, rotMtx)
 import Drasil.SSP.Defs (intrslce)
+import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
+  cohesion, constant_A, constant_K, constant_a, dryWeight, earthqkLoadFctr, 
+  effStiffA, effStiffB, fricAngle, genDisplace, genForce, genPressure, 
+  impLoadAngle, index, intNormForce, intShrForce, inx, inxi, inxiM1, mobShrI, 
+  normStress, normToShear, nrmDispl, nrmFNoIntsl, nrmFSubWat, nrmStiffBase, 
+  nrmStiffIntsl, poissnsRatio, rotatedDispl, satWeight, scalFunc, 
+  shearFNoIntsl, shearRNoIntsl, shrDispl, shrResI, shrStiffBase, shrStiffIntsl, 
+  slcWght, slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce, 
+  surfLngth, surfLoad, ufixme1, ufixme2, waterHght, waterWeight, watrForce, 
+  watrForceDif, wiif)
 
-import Data.Drasil.Utils (getES, mkDataDef, eqUnR, weave)
+import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb, refDD)
+
 import Data.Drasil.Quantities.SolidMechanics as SM (poissnsR)
+import Data.Drasil.Utils (eqUnR, getES, mkDataDef, weave)
 
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (definition, element, value)
 import Data.Drasil.SentenceStructures (sAnd, sOf,
-  foldlSP, eqN, isThe, acroDD, acroGD, acroT,
+  foldlSP, eqN, isThe, acroGD, acroT,
   ofThe, getTandS, ofThe', foldlSentCol)
 import Control.Lens ((^.))
 import Data.Drasil.Concepts.Math (equation, angle)
@@ -31,6 +33,11 @@ import Data.Drasil.Concepts.Math (equation, angle)
 ------------------------
 --  Data Definitions  --
 ------------------------
+ddRef :: QDefinition -> Sentence
+ddRef = refDD (ddRefDB sspRefMDB) 
+
+sspRefMDB :: ModelDB
+sspRefMDB = mdb [] [] sspDataDefs [] 
 
 sspDataDefs :: [QDefinition]
 sspDataDefs = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB,
@@ -42,7 +49,7 @@ sspDataDefs = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB,
 --DD1
 
 sliceWght :: QDefinition
-sliceWght = ec' slcWght slcWgtEqn
+sliceWght = mkDataDef slcWght slcWgtEqn
 
 slcWgtEqn :: Expr
 slcWgtEqn = (inxi baseWthX) * (case_ [case1,case2,case3])
@@ -59,7 +66,7 @@ slcWgtEqn = (inxi baseWthX) * (case_ [case1,case2,case3])
 --DD2
 
 baseWtrF :: QDefinition
-baseWtrF = ec' baseHydroForce bsWtrFEqn 
+baseWtrF = mkDataDef baseHydroForce bsWtrFEqn 
 
 bsWtrFEqn :: Expr
 bsWtrFEqn = (inxi baseLngth)*(case_ [case1,case2])
@@ -71,7 +78,7 @@ bsWtrFEqn = (inxi baseLngth)*(case_ [case1,case2])
 --DD3
 
 surfWtrF :: QDefinition
-surfWtrF = ec' surfHydroForce surfWtrFEqn
+surfWtrF = mkDataDef surfHydroForce surfWtrFEqn
 
 surfWtrFEqn :: Expr
 surfWtrFEqn = (inxi surfLngth)*(case_ [case1,case2])
@@ -83,7 +90,7 @@ surfWtrFEqn = (inxi surfLngth)*(case_ [case1,case2])
 --DD4
 
 intersliceWtrF :: QDefinition
-intersliceWtrF = ec' watrForce intersliceWtrFEqn
+intersliceWtrF = mkDataDef watrForce intersliceWtrFEqn
 
 intersliceWtrFEqn :: Expr
 intersliceWtrFEqn = case_ [case1,case2,case3]
@@ -99,7 +106,7 @@ intersliceWtrFEqn = case_ [case1,case2,case3]
 --DD5
 
 angleA :: QDefinition
-angleA = ec' baseAngle angleAEqn
+angleA = mkDataDef baseAngle angleAEqn
 
 angleAEqn :: Expr
 angleAEqn = (inxi slipHght - inx slipHght (-1)) /
@@ -107,7 +114,7 @@ angleAEqn = (inxi slipHght - inx slipHght (-1)) /
 
 --DD5.5
 angleB :: QDefinition
-angleB = ec' surfAngle angleBEqn
+angleB = mkDataDef surfAngle angleBEqn
 
 angleBEqn :: Expr
 angleBEqn = (inxi slopeHght - inx slopeHght (-1)) /
@@ -116,7 +123,7 @@ angleBEqn = (inxi slopeHght - inx slopeHght (-1)) /
 --DD6
 
 lengthB :: QDefinition
-lengthB = ec' baseWthX lengthBEqn
+lengthB = mkDataDef baseWthX lengthBEqn
 
 lengthBEqn :: Expr
 lengthBEqn = inxi slipDist - inx slipDist (-1)
@@ -124,14 +131,14 @@ lengthBEqn = inxi slipDist - inx slipDist (-1)
 --DD6.3
 
 lengthLb :: QDefinition
-lengthLb = ec' baseLngth lengthLbEqn
+lengthLb = mkDataDef baseLngth lengthLbEqn
 
 lengthLbEqn :: Expr
 lengthLbEqn = (inxi baseWthX) * sec (inxi baseAngle)
 --DD6.6
 
 lengthLs :: QDefinition
-lengthLs = ec' surfLngth lengthLsEqn
+lengthLs = mkDataDef surfLngth lengthLsEqn
 
 lengthLsEqn :: Expr
 lengthLsEqn = (inxi baseWthX) * sec (inxi surfAngle)
@@ -139,7 +146,7 @@ lengthLsEqn = (inxi baseWthX) * sec (inxi surfAngle)
 --DD7
 
 seismicLoadF :: QDefinition
-seismicLoadF = ec' earthqkLoadFctr ssmcLFEqn
+seismicLoadF = mkDataDef earthqkLoadFctr ssmcLFEqn
   --FIXME: K_E missing for unitals?
 
 ssmcLFEqn :: Expr
@@ -148,7 +155,7 @@ ssmcLFEqn = ((sy earthqkLoadFctr) * (inxi slcWght))
 --DD8
 
 surfLoads :: QDefinition
-surfLoads = ec' surfLoad surfLEqn
+surfLoads = mkDataDef surfLoad surfLEqn
   --FIXEME: is this data definition necessary?
 
 surfLEqn :: Expr
@@ -158,7 +165,7 @@ surfLEqn = (inxi surfLoad) * (inxi impLoadAngle)
 --DD9
 
 intrsliceF :: QDefinition
-intrsliceF = ec' intShrForce intrsliceFEqn
+intrsliceF = mkDataDef intShrForce intrsliceFEqn
 
 intrsliceFEqn :: Expr
 intrsliceFEqn = (sy normToShear) * (inxi scalFunc) * (inxi intNormForce)
@@ -166,7 +173,7 @@ intrsliceFEqn = (sy normToShear) * (inxi scalFunc) * (inxi intNormForce)
 --DD10
 
 resShearWO :: QDefinition
-resShearWO = ec shearRNoIntsl resShearWOEqn [derivationsteps resShr_deriv_ssp]
+resShearWO = mkDataDef shearRNoIntsl resShearWOEqn
 
 resShearWOEqn :: Expr
 resShearWOEqn = (((inxi slcWght) + (inxi surfHydroForce) *
@@ -180,7 +187,7 @@ resShearWOEqn = (((inxi slcWght) + (inxi surfHydroForce) *
 --DD11
 
 mobShearWO :: QDefinition
-mobShearWO = ec shearFNoIntsl mobShearWOEqn [derivationsteps mobShr_deriv_ssp]
+mobShearWO = mkDataDef shearFNoIntsl mobShearWOEqn
 
 mobShearWOEqn :: Expr 
 mobShearWOEqn = ((inxi slcWght) + (inxi surfHydroForce) *
@@ -192,14 +199,14 @@ mobShearWOEqn = ((inxi slcWght) + (inxi surfHydroForce) *
 --DD12
 
 displcmntRxnF :: QDefinition
-displcmntRxnF = ec' genPressure displcmntRxnFEqn
+displcmntRxnF = mkDataDef genPressure displcmntRxnFEqn
 
 displcmntRxnFEqn :: Expr
 displcmntRxnFEqn = dgnl2x2 (inxi shrStiffIntsl) (inxi nrmStiffBase) * displMtx
 
 --DD12.5
 displcmntBasel :: QDefinition
-displcmntBasel = ec genPressure displcmntBaselEqn [derivationsteps stfMtrx_deriv_ssp]
+displcmntBasel = mkDataDef genPressure displcmntBaselEqn
 
 displcmntBaselEqn :: Expr
 displcmntBaselEqn = m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB)
@@ -208,7 +215,7 @@ displcmntBaselEqn = m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB)
 --DD13
 
 netFDsplcmntEqbm :: QDefinition
-netFDsplcmntEqbm = ec' genForce netFDsplcmntEqbmEqn
+netFDsplcmntEqbm = mkDataDef genForce netFDsplcmntEqbmEqn
 
 netFDsplcmntEqbmEqn :: Expr
 netFDsplcmntEqbmEqn = negate (inx surfLngth (-1)) * (inx nrmStiffIntsl (-1)) *
@@ -220,7 +227,7 @@ netFDsplcmntEqbmEqn = negate (inx surfLngth (-1)) * (inx nrmStiffIntsl (-1)) *
 --DD14
 
 shearStiffness :: QDefinition
-shearStiffness = ec' shrStiffBase shearStiffnessEqn  
+shearStiffness = mkDataDef shrStiffBase shearStiffnessEqn  
 
 shearStiffnessEqn :: Expr
 shearStiffnessEqn = sy intNormForce / (2 * (1 + sy poissnsRatio)) *
@@ -230,7 +237,7 @@ shearStiffnessEqn = sy intNormForce / (2 * (1 + sy poissnsRatio)) *
 --DD15 this is the second part to the original DD14
 
 soilStiffness :: QDefinition
-soilStiffness = ec' nrmStiffBase soilStiffnessEqn
+soilStiffness = mkDataDef nrmStiffBase soilStiffnessEqn
 
 soilStiffnessEqn :: Expr
 soilStiffnessEqn = (case_ [case1,case2])
@@ -247,10 +254,10 @@ soilStiffnessEqn = (case_ [case1,case2])
 -----------------
 
 fixme1 :: QDefinition
-fixme1 = ec' ufixme1 (inxi intNormForce + inxiM1 intNormForce)
+fixme1 = ec ufixme1 (inxi intNormForce + inxiM1 intNormForce) (shortname' "ufixme1")
 
 fixme2 :: QDefinition
-fixme2 = ec' ufixme2 (inxi watrForce + inxiM1 watrForce)
+fixme2 = ec ufixme2 (inxi watrForce + inxiM1 watrForce) (shortname' "ufixme2")
 
 -----------------
 -- Derivations --
@@ -273,7 +280,7 @@ resShr_deriv_sentences_ssp_s2 = [plural value `ofThe'` S "interslice forces",
   getES intNormForce `sAnd` getES intShrForce, S "in the", phrase equation,
   S "are unknown, while the other", plural value,
   S "are found from the physical force", plural definition, S "of",
-  acroDD 1, S "to" +:+. acroDD 9,
+  ddRef sliceWght, S "to" +:+. ddRef intrsliceF,
   S "Consider a force equilibrium without the affect of interslice forces" `sC`
   S "to obtain a solvable value as done for", getES nrmFNoIntsl, S "in", eqN 2]
 
@@ -328,7 +335,7 @@ resShrDerivation = [
   getES intNormForce `sAnd` getES intShrForce, S "in the", phrase equation,
   S "are unknown, while the other", plural value,
   S "are found from the physical force", plural definition, S "of",
-  acroDD 1, S "to" +:+. acroDD 9,
+  ddRef sliceWght, S "to" +:+. ddRef lengthLs,
   S "Consider a force equilibrium without the affect of interslice forces" `sC`
   S "to obtain a solvable value as done for", getES nrmFNoIntsl, S "in", eqN 2],
 
@@ -376,7 +383,7 @@ mobShr_deriv_sentences_ssp_s2 = [S "The", phrase equation, S "is unsolvable, con
 mobShr_deriv_sentences_ssp_s3 :: [Sentence]
 mobShr_deriv_sentences_ssp_s3 = [S "The", plural value, S "of", getES shearRNoIntsl `sAnd`
   getES shearFNoIntsl, S "are now defined completely in terms of the",
-  S "known force property", plural value, S "of", acroDD 1, S "to", acroDD 12]
+  S "known force property", plural value, S "of", ddRef sliceWght, S "to", ddRef displcmntRxnF]
 
 
 mobShrDerivation_sentence :: [Sentence]
@@ -421,7 +428,8 @@ mobShrDerivation = [
   
   foldlSP [S "The", plural value, S "of", getES shearRNoIntsl `sAnd`
   getES shearFNoIntsl, S "are now defined completely in terms of the",
-  S "known force property", plural value, S "of", acroDD 1, S "to", acroDD 9]
+  S "known force property", plural value, S "of", ddRef sliceWght, S "to", 
+  ddRef lengthLs]
 
   ]
 
@@ -458,14 +466,14 @@ stfMtrx_deriv_sentences_ssp_s1 = [S "For interslice surfaces the stiffness const
   S "are left in their standard coordinate system" `sC`
   S "and therefore are described by the same" +:+ phrase equation +:+
   S "from" +:+. acroGD 8 +:+ S "Seen as" +:+ getES shrStiffIntsl +:+ S "in" +:+.
-  acroDD 12 +:+ isElemInMx shrStiffIntsl "shear" `sC` --FIXEME: add matrix symbols?
-  S "and" +:+ (isElemInMx nrmStiffIntsl "normal" `sC` S "calculated as in") +:+. acroDD 14]
+  ddRef displcmntRxnF +:+ isElemInMx shrStiffIntsl "shear" `sC` --FIXEME: add matrix symbols?
+  S "and" +:+ (isElemInMx nrmStiffIntsl "normal" `sC` S "calculated as in") +:+. ddRef shearStiffness]
   
 stfMtrx_deriv_sentences_ssp_s2 :: [Sentence]
 stfMtrx_deriv_sentences_ssp_s2 =
  [S "For basal surfaces the stiffness constants" `sAnd`
   S "displacements refer to a system rotated for the base angle alpha" +:+.
-  sParen (acroDD 5) +:+ S "To analyze the effect of force-displacement" +:+
+  sParen (ddRef angleA) +:+ S "To analyze the effect of force-displacement" +:+
   S "relationships occurring on both basal" `sAnd`
   S "interslice surfaces of an" +:+ phrase element +:+ getES index +:+
   S "they must reference the same coordinate" +:+
@@ -495,7 +503,7 @@ stfMtrx_deriv_sentences_ssp_s4 =
   S "as derived in" +:+ eqN 7 +:+ S "is defined in" +:+. eqN 9 +:+
   S "This is seen as matrix" +:+ getES shrStiffBase +:+ S "in" +:+.
   acroGD 12 +:+ isElemInMx shrStiffBase "shear" `sC` S "and" +:+
-  isElemInMx nrmStiffBase "normal" `sC` S "calculated as in" +:+. acroDD 14 +:+
+  isElemInMx nrmStiffBase "normal" `sC` S "calculated as in" +:+. ddRef shearStiffness  +:+
   S "The notation is simplified by" +:+ S "introduction" `ofThe` S "constants" +:+
   getES effStiffA `sAnd` getES effStiffB `sC` S "defined in" +:+ eqN 10 `sAnd`
   eqN 11 +:+. S "respectively"]
@@ -505,7 +513,7 @@ stfMtrx_deriv_sentences_ssp_s5 = [S "A force-displacement relationship for an el
   S "can be written in terms of displacements occurring in the unrotated" +:+
   S "coordinate system" +:+ getES genDisplace `sOf` acroGD 9 +:+ S "using the matrix" +:+
   getES shrStiffBase `sC` --FIXME: index 
-  S "and" +:+ getES shrStiffBase +:+ S "as seen in" +:+. acroDD 12]
+  S "and" +:+ getES shrStiffBase +:+ S "as seen in" +:+. ddRef displcmntRxnF]
 
 
 eq6, eq7, eq8, eq9, eq10, eq11:: Expr
@@ -542,16 +550,16 @@ stfMtrxDerivation = [
   
   foldlSP [S "For interslice surfaces the stiffness constants" `sAnd`
   S "displacements refer to an unrotated coordinate system" `sC`
-  getES genDisplace, S "of" +:+. acroGD 9, S "The interslice elements",
+  getES genDisplace, S "of" +:+. ddRef lengthLs, S "The interslice elements",
   S "are left in their standard coordinate system" `sC`
   S "and therefore are described by the same", phrase equation,
   S "from" +:+. acroGD 8, S "Seen as", getES shrStiffIntsl, S "in" +:+.
-  acroDD 12, isElemInMx nrmStiffIntsl "shear" `sC` --FIXEME: add matrix symbols?
-  S "and", isElemInMx nrmStiffIntsl "normal" `sC` S "calculated as in", acroDD 14],
+  ddRef intrsliceF, isElemInMx shrStiffIntsl "shear" `sC` --FIXEME: add matrix symbols?
+  S "and", isElemInMx nrmStiffIntsl "normal" `sC` S "calculated as in", ddRef mobShearWO],
   
   foldlSP [S "For basal surfaces the stiffness constants" `sAnd`
   S "displacements refer to a system rotated for the base angle alpha" +:+.
-  sParen (acroDD 5), S "To analyze the effect of force-displacement",
+  sParen (ddRef angleA), S "To analyze the effect of force-displacement",
   S "relationships occurring on both basal" `sAnd`
   S "interslice surfaces of an", phrase element, getES index,
   S "they must reference the same coordinate",
@@ -587,7 +595,7 @@ stfMtrxDerivation = [
   S "as derived in", eqN 7, S "is defined in" +:+. eqN 9,
   S "This is seen as matrix", getES shrStiffBase, S "in" +:+.
   acroGD 12, isElemInMx shrStiffBase "shear" `sC` S "and",
-  isElemInMx nrmStiffBase "normal" `sC` S "calculated as in" +:+. acroDD 14,
+  isElemInMx nrmStiffBase "normal" `sC` S "calculated as in" +:+. ddRef mobShearWO,
   S "The notation is simplified by", S "introduction" `ofThe` S "constants",
   getES effStiffA `sAnd` getES effStiffB `sC` S "defined in", eqN 10 `sAnd`
   eqN 11, S "respectively"],
@@ -607,7 +615,7 @@ stfMtrxDerivation = [
   S "can be written in terms of displacements occurring in the unrotated", 
   S "coordinate system", getES genDisplace `sOf` acroGD 9, S "using the matrix",
   getES shrStiffBase `sC` --FIXME: index 
-  S "and", getES shrStiffBase, S "as seen in", acroDD 12]
+  S "and", getES shrStiffBase, S "as seen in", ddRef intrsliceF]
   
   ]
 

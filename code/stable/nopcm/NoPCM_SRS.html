@@ -1,5 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+<!DOCTYPE html>
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="NoPCM_SRS.css">
@@ -7,6 +6,7 @@
 Software Requirements Specification for Solar Water Heating Systems
 </title>
 <meta charset="utf-8">
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
 </head>
 <body>
 <div class="title">
@@ -19,7 +19,7 @@ Software Requirements Specification for Solar Water Heating Systems
 Thulasi Jegatheesan
 </h2>
 </div>
-<a id="Sec:RefMat">
+<div id="Sec:RefMat">
 <div class="section">
 <h1>
 Reference Material
@@ -27,7 +27,7 @@ Reference Material
 <p class="paragraph">
 This section records information for easy reference.
 </p>
-<a id="Sec:ToU">
+<div id="Sec:ToU">
 <div class="subsection">
 <h2>
 Table of Units
@@ -35,7 +35,7 @@ Table of Units
 <p class="paragraph">
 The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 </p>
-<a id="Table:ToU">
+<div id="Table:ToU">
 <table class="table">
 <tr>
 <th>
@@ -94,10 +94,10 @@ power (watt)
 </td>
 </tr>
 </table>
-</a>
 </div>
-</a>
-<a id="Sec:ToS">
+</div>
+</div>
+<div id="Sec:ToS">
 <div class="subsection">
 <h2>
 Table of Symbols
@@ -105,7 +105,7 @@ Table of Symbols
 <p class="paragraph">
 The table that follows summarizes the symbols used in this document along with their units. The choice of symbols was made to be consistent with the heat transfer literature and with existing documentation for solar water heating systems. The symbols are listed in alphabetical order.
 </p>
-<a id="Table:ToS">
+<div id="Table:ToS">
 <table class="table">
 <tr>
 <th>
@@ -340,7 +340,7 @@ Temperature
 </tr>
 <tr>
 <td>
-<em>&Delta;T</em>
+<em>ΔT</em>
 </td>
 <td>
 Change in temperature
@@ -450,7 +450,7 @@ m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>&rho;</em>
+<em>ρ</em>
 </td>
 <td>
 Density
@@ -461,7 +461,7 @@ kg/m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>W</sub></em>
+<em>ρ<sub>W</sub></em>
 </td>
 <td>
 Density of water
@@ -472,7 +472,7 @@ kg/m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>&tau;</em>
+<em>τ</em>
 </td>
 <td>
 Dummy variable for integration over time
@@ -482,15 +482,15 @@ s
 </td>
 </tr>
 </table>
-</a>
 </div>
-</a>
-<a id="Sec:TAbbAcc">
+</div>
+</div>
+<div id="Sec:TAbbAcc">
 <div class="subsection">
 <h2>
 Abbreviations and Acronyms
 </h2>
-<a id="Table:TAbbAcc">
+<div id="Table:TAbbAcc">
 <table class="table">
 <tr>
 <th>
@@ -604,13 +604,21 @@ TU
 Typical Uncertainty
 </td>
 </tr>
+<tr>
+<td>
+UC
+</td>
+<td>
+Unlikely Change
+</td>
+</tr>
 </table>
-</a>
 </div>
-</a>
 </div>
-</a>
-<a id="Sec:Intro">
+</div>
+</div>
+</div>
+<div id="Sec:Intro">
 <div class="section">
 <h1>
 Introduction
@@ -621,7 +629,7 @@ Due to increasing cost, diminishing availability, and negative environmental imp
 <p class="paragraph">
 The following section provides an overview of the Software Requirements Specification (SRS) for solar water heating systems. The developed program will be referred to as Solar Water Heating System (SWHS). This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
 </p>
-<a id="Sec:DocPurpose">
+<div id="Sec:DocPurpose">
 <div class="subsection">
 <h2>
 Purpose of Document
@@ -630,11 +638,11 @@ Purpose of Document
 The main purpose of this document is to describe the modelling of solar water heating system. The goals and theoretical models used in the SWHS code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide ad hoc access to all information necessary to understand and verify the model. The SRS is abstract because the contents say what problem is being solved, but do not say how to solve it.
 </p>
 <p class="paragraph">
-This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
 </p>
 </div>
-</a>
-<a id="Sec:ReqsScope">
+</div>
+<div id="Sec:ReqsScope">
 <div class="subsection">
 <h2>
 Scope of Requirements
@@ -643,8 +651,8 @@ Scope of Requirements
 The scope of the requirements includes thermal analysis of a single solar water heating tank. Given the appropriate inputs, the code for SWHS is intended to predict the temperature and thermal energy histories for the water.
 </p>
 </div>
-</a>
-<a id="Sec:ReaderChars">
+</div>
+<div id="Sec:ReaderChars">
 <div class="subsection">
 <h2>
 Characteristics of Intended Reader
@@ -653,8 +661,8 @@ Characteristics of Intended Reader
 Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of SWHS can have a lower level of expertise, as explained in <a href=#Sec:UserChars>User Characteristics</a>.
 </p>
 </div>
-</a>
-<a id="Sec:DocOrg">
+</div>
+<div id="Sec:DocOrg">
 <div class="subsection">
 <h2>
 Organization of Document
@@ -666,18 +674,18 @@ The organization of this document follows the template for an SRS for scientific
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance model (<a href=#Sec:IMs>Instance Models</a>) to be solved is referred to as IM1. The instance model provides the Ordinary Differential Equation (ODE) that model the solar water heating system. SWHS solves this ODE.
 </p>
 </div>
-</a>
 </div>
-</a>
-<a id="Sec:GenSysDesc">
+</div>
+</div>
+<div id="Sec:GenSysDesc">
 <div class="section">
 <h1>
 General System Description
 </h1>
 <p class="paragraph">
-This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
+This section provides general information about the system including identifying the interfaces between the system and its environment (system context), describing the user characteristics and listing the system constraints.
 </p>
-<a id="Sec:SysContext">
+<div id="Sec:SysContext">
 <div class="subsection">
 <h2>
 System Context
@@ -685,12 +693,12 @@ System Context
 <p class="paragraph">
 <a href=#Figure:SysCon>Figure:SysCon</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system and its environment.
 </p>
-<a id="Figure:SysCon">
+<div id="Figure:SysCon">
 <img class="figure" src="SystemContextFigure.png" alt="<a href=#Figure:SysCon>Figure:SysCon</a>: System Context"></img>
 <p class="caption">
 <a href=#Figure:SysCon>Figure:SysCon</a>: System Context
 </p>
-</a>
+</div>
 <p class="paragraph">
 SWHS is mostly self-contained. The only external interaction is through the user interface. The responsibilities of the user and the system are as follows:
 </p>
@@ -722,8 +730,8 @@ Calculate the required outputs
 </li>
 </ul>
 </div>
-</a>
-<a id="Sec:UserChars">
+</div>
+<div id="Sec:UserChars">
 <div class="subsection">
 <h2>
 User Characteristics
@@ -732,8 +740,8 @@ User Characteristics
 The end user of SWHS should have an understanding of undergraduate Level 1 Calculus and Physics.
 </p>
 </div>
-</a>
-<a id="Sec:SysConstraints">
+</div>
+<div id="Sec:SysConstraints">
 <div class="subsection">
 <h2>
 System Constraints
@@ -742,10 +750,10 @@ System Constraints
 There are no system constraints.
 </p>
 </div>
-</a>
 </div>
-</a>
-<a id="Sec:SpecSystDesc">
+</div>
+</div>
+<div id="Sec:SpecSystDesc">
 <div class="section">
 <h1>
 Specific System Description
@@ -753,7 +761,7 @@ Specific System Description
 <p class="paragraph">
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, theoretical models, general definitions, data definitions, and finally the instance models (ODEs) that model the Solar Water Heating Systems.
 </p>
-<a id="Sec:ProbDesc">
+<div id="Sec:ProbDesc">
 <div class="subsection">
 <h2>
 Problem Description
@@ -761,7 +769,7 @@ Problem Description
 <p class="paragraph">
 SWHS is a computer program developed to investigate the heating of water in a solar water heating tank.
 </p>
-<a id="Sec:TermDefs">
+<div id="Sec:TermDefs">
 <div class="subsubsection">
 <h3>
 Terminology and Definitions
@@ -784,8 +792,8 @@ Transient: Changing with time
 </li>
 </ul>
 </div>
-</a>
-<a id="Sec:PhysSyst">
+</div>
+<div id="Sec:PhysSyst">
 <div class="subsubsection">
 <h3>
 Physical System Description
@@ -801,15 +809,15 @@ PS1: Tank containing water.
 PS2: Heating coil at bottom of tank. (<em>q<sub>C</sub></em> represents the heat flux into the water from the coil.)
 </p>
 </div>
-<a id="Figure:Tank">
+<div id="Figure:Tank">
 <img class="figure" src="TankWaterOnly.png" alt="Solar water heating tank, with heat flux from heating coil of <em>q<sub>C</sub></em>"></img>
 <p class="caption">
 Solar water heating tank, with heat flux from heating coil of <em>q<sub>C</sub></em>
 </p>
-</a>
 </div>
-</a>
-<a id="Sec:GoalStmt">
+</div>
+</div>
+<div id="Sec:GoalStmt">
 <div class="subsubsection">
 <h3>
 Goal Statements
@@ -826,10 +834,10 @@ GS2: predict the change in heat energy in the water over time
 </p>
 </div>
 </div>
-</a>
 </div>
-</a>
-<a id="Sec:SolCharSpec">
+</div>
+</div>
+<div id="Sec:SolCharSpec">
 <div class="subsection">
 <h2>
 Solution Characteristics Specification
@@ -837,14 +845,15 @@ Solution Characteristics Specification
 <p class="paragraph">
 The instance models that govern SWHS are presented in <a href=#Sec:IMs>Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
-<a id="Sec:Assumps">
+<div id="Sec:Assumps">
 <div class="subsubsection">
 <h3>
 Assumptions
 </h3>
 <p class="paragraph">
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], or Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], or Unlikely Changes [<a href=#Sec:UCs>Unlikely Changes</a>], in which the respective assumption is used.
 </p>
+<<<<<<< HEAD
 <a id="A:assump1">
 <ul>
 assump1: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible [<a href=#T:t1ConsThermE>T:t1ConsThermE</a>].
@@ -913,11 +922,109 @@ assump13: The pressure in the tank is atmospheric, so the melting point temperat
 <a id="A:assump14">
 <ul>
 assump14: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible.
-</ul>
-</a>
+=======
+<ul class="hide-list-style">
+<li>
+<div id="A:assump1">
+assump1: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible [<a href=#T:t1ConsThermE>T:t1ConsThermE</a>].
 </div>
-</a>
-<a id="Sec:TMs">
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="A:assump2">
+assump2: All heat transfer coefficients are constant over time [GD1].
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="A:assump3">
+assump3: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [GD2].
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="A:assump4">
+assump4: The density of water has no spatial variation; that is, it is constant over their entire volume [GD2, <a href=#LC:likeChg2>Temperature-Coil-Variable-Over-Day</a>].
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="A:assump5">
+assump5: The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume [GD2].
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="A:assump7">
+assump7: Newton's law of convective cooling applies between the heating coil and the water [<a href=#DD:ht.flux.C>DD:ht.flux.C</a>].
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="A:assump8">
+assump8: The temperature of the heating coil is constant over time [<a href=#DD:ht.flux.C>DD:ht.flux.C</a>].
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="A:assump9">
+assump9: The temperature of the heating coil does not vary along its length [<a href=#DD:ht.flux.C>DD:ht.flux.C</a>].
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="A:assump9.npcm">
+assump9_npcm: The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil [IM1, <a href=#LC:likeChg3>Temperature-Coil-Variable-Over-Length</a>].
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="A:assump14">
+assump14: The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature [IM1, IM3].
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="A:assump15">
+assump15: The tank is perfectly insulated so that there is no heat loss from the tank [IM1].
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="A:assump12">
+assump12: No internal heat is generated by the water; therefore, the volumetric heat generation per unit volume is zero [IM1].
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="A:assump13">
+assump13: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0&deg;C and 100&deg;C, respectively [IM1, IM2].
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="A:assump20">
+assump20: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible.
+</div>
+</li>
+>>>>>>> master
+</ul>
+</div>
+</div>
+<div id="Sec:TMs">
 <div class="subsubsection">
 <h3>
 Theoretical Models
@@ -925,7 +1032,7 @@ Theoretical Models
 <p class="paragraph">
 This section focuses on the general equations and laws that SWHS is based on.
 </p>
-<a id="T:t1ConsThermE">
+<div id="T:t1ConsThermE">
 <table class="tdefn">
 <tr>
 <th>
@@ -942,9 +1049,14 @@ Conservation of thermal energy
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
+<<<<<<< HEAD
 <em>&minus;&nabla;&sdot;<b>q</b>&plus;g = &rho;&#8239;C&#8239;<div class="fraction">
+=======
+<p class="paragraph">
+<em>&minus;∇&sdot;<b>q</b>&plus;g = ρ&#8239;C&#8239;<div class="fraction">
+>>>>>>> master
 <span class="fup">
 &part;&#8239;T
 </span>
@@ -953,7 +1065,7 @@ Equation
 </span>
 </div></em>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -992,6 +1104,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
+<<<<<<< HEAD
 FIXME: This needs to be filled in
 </p>
 </td>
@@ -1003,14 +1116,17 @@ RefBy
 <td>
 <p class="paragraph">
 FIXME: This needs to be filled in
+=======
+The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity <em>C</em> (J/(kg&sdot;&deg;C)) and density, <em>ρ</em> (kg/m<sup>3</sup>), where <em><b>q</b></em> is the thermal flux vector (W/m<sup>2</sup>), <em>g</em> is the volumetric heat generation per unit volume (W/m<sup>3</sup>), <em>T</em> is the temperature (&deg;C), <em>t</em> is time (s), and <em>∇</em> is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href=#A:assump1>assump1</a>).
+>>>>>>> master
 </p>
 </td>
 </tr>
 </table>
-</a>
 </div>
-</a>
-<a id="Sec:GDs">
+</div>
+</div>
+<div id="Sec:GDs">
 <div class="subsubsection">
 <h3>
 General Definitions
@@ -1018,8 +1134,13 @@ General Definitions
 <p class="paragraph">
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
 </p>
+<<<<<<< HEAD
 <a id="GD:nwtnCooling">
 <table class="gdefn">
+=======
+<div id="T:nwtnCooling">
+<table class="tdefn">
+>>>>>>> master
 <tr>
 <th>
 Label
@@ -1045,11 +1166,17 @@ W/m<sup>2</sup>
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
+<<<<<<< HEAD
 <em><b>q</b>(t) = h&#8239;&Delta;T(t)</em>
+=======
+<p class="paragraph">
+<em><b>q</b>(t) = h&#8239;ΔT(t)</em>
+</p>
+>>>>>>> master
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1089,14 +1216,24 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
+<<<<<<< HEAD
 FIXME: This needs to be filled in
+=======
+Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. <em><b>q</b>(t)</em> is the thermal flux (W/m<sup>2</sup>). <em>h</em> is the heat transfer coefficient, assumed independant of <em>T</em> (<a href=#A:Heat-Transfer-Coeffs-Constant>Heat-Transfer-Coeffs-Constant</a>) (W/(m<sup>2</sup>&sdot;&deg;C)). <em>ΔT(t) = T(t)&minus;T<sub>env</sub>(t)</em> is the time-dependant thermal gradient between the environment and the object (&deg;C).
+>>>>>>> master
 </p>
 </td>
 </tr>
 </table>
+<<<<<<< HEAD
 </a>
 <a id="GD:rocTempSimp">
 <table class="gdefn">
+=======
+</div>
+<div id="T:rocTempSimp">
+<table class="tdefn">
+>>>>>>> master
 <tr>
 <th>
 Label
@@ -1112,7 +1249,7 @@ Simplified rate of change of temperature
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <em>m&#8239;C&#8239;<div class="fraction">
 <span class="fup">
@@ -1123,7 +1260,7 @@ d&#8239;t
 </span>
 </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1186,16 +1323,16 @@ FIXME: This needs to be filled in
 </td>
 </tr>
 </table>
-</a>
+</div>
 <p class="paragraph">
 Detailed derivation of simplified rate of change of temperature :
 </p>
 <p class="paragraph">
 Integrating <a href=#T:t1ConsThermE>T:t1ConsThermE</a> over a volume (<em>V</em>), we have:
 </p>
-<a id="">
+<div id="">
 <div class="equation">
-<em>&minus;&int;<sub>V</sub>&nabla;&sdot;<b>q</b>&#8239;dV&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>&rho;&#8239;C&#8239;<div class="fraction">
+<em>&minus;&int;<sub>V</sub>∇&sdot;<b>q</b>&#8239;dV&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 &part;&#8239;T
 </span>
@@ -1204,13 +1341,13 @@ Integrating <a href=#T:t1ConsThermE>T:t1ConsThermE</a> over a volume (<em>V</em>
 </span>
 </div>&#8239;dV</em>
 </div>
-</a>
+</div>
 <p class="paragraph">
 Applying Gauss's Divergence Theorem to the first term over the surface <em>S</em> of the volume, with <em><b>q</b></em> as the thermal flux vector for the surface and <em><b>n&#770;</b></em> as a unit outward normal vector for a surface:
 </p>
-<a id="">
+<div id="">
 <div class="equation">
-<em>&minus;&int;<sub>S</sub><b>q</b>&sdot;<b>n&#770;</b>&#8239;dS&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>&rho;&#8239;C&#8239;<div class="fraction">
+<em>&minus;&int;<sub>S</sub><b>q</b>&sdot;<b>n&#770;</b>&#8239;dS&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 &part;&#8239;T
 </span>
@@ -1219,13 +1356,13 @@ Applying Gauss's Divergence Theorem to the first term over the surface <em>S</em
 </span>
 </div>&#8239;dV</em>
 </div>
-</a>
+</div>
 <p class="paragraph">
 We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
 </p>
-<a id="">
+<div id="">
 <div class="equation">
-<em>q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V = &int;<sub>V</sub>&rho;&#8239;C&#8239;<div class="fraction">
+<em>q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 &part;&#8239;T
 </span>
@@ -1234,13 +1371,17 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 </span>
 </div>&#8239;dV</em>
 </div>
-</a>
+</div>
 <p class="paragraph">
+<<<<<<< HEAD
 Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in GD2. Assuming <em>&rho;</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by Assumptions (<a href=#A:assump3>assump3</a>), (<a href=#A:assump4>assump4</a>), and (<a href=#A:assump5>assump5</a>), we have:
+=======
+Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in GD2. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by Assumptions (<a href=#A:assump3>assump3</a>), (<a href=#A:assump4>assump4</a>), and (<a href=#A:assump5>assump5</a>), we have:
+>>>>>>> master
 </p>
-<a id="">
+<div id="">
 <div class="equation">
-<em>&rho;&#8239;C&#8239;V&#8239;<div class="fraction">
+<em>ρ&#8239;C&#8239;V&#8239;<div class="fraction">
 <span class="fup">
 d&#8239;T
 </span>
@@ -1249,11 +1390,11 @@ d&#8239;t
 </span>
 </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
 </div>
-</a>
+</div>
 <p class="paragraph">
-Using the fact that <em>&rho;</em>=<em>m</em>/<em>V</em>, (2) can be written as:
+Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, (2) can be written as:
 </p>
-<a id="">
+<div id="">
 <div class="equation">
 <em>m&#8239;C&#8239;<div class="fraction">
 <span class="fup">
@@ -1264,10 +1405,10 @@ d&#8239;t
 </span>
 </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
 </div>
-</a>
 </div>
-</a>
-<a id="Sec:DDs">
+</div>
+</div>
+<div id="Sec:DDs">
 <div class="subsubsection">
 <h3>
 Data Definitions
@@ -1275,7 +1416,7 @@ Data Definitions
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models.
 </p>
-<a id="DD:ht.flux.C">
+<div id="DD:ht.flux.C">
 <table class="ddefn">
 <tr>
 <th>
@@ -1312,11 +1453,11 @@ W/m<sup>2</sup>
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <em>h<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))</em>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1364,10 +1505,10 @@ FIXME: This needs to be filled in
 </td>
 </tr>
 </table>
-</a>
 </div>
-</a>
-<a id="Sec:IMs">
+</div>
+</div>
+<div id="Sec:IMs">
 <div class="subsubsection">
 <h3>
 Instance Models
@@ -1375,8 +1516,13 @@ Instance Models
 <p class="paragraph">
 This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
 </p>
+<<<<<<< HEAD
 <a id="IM:eBalanceOnWtr">
 <table class="idefn">
+=======
+<div id="T:eBalanceOnWtr">
+<table class="tdefn">
+>>>>>>> master
 <tr>
 <th>
 Label
@@ -1436,7 +1582,7 @@ Output Constraints
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <em><div class="fraction">
 <span class="fup">
@@ -1450,11 +1596,11 @@ d&#8239;t
 1
 </span>
 <span class="fdn">
-&tau;<sub>W</sub>
+τ<sub>W</sub>
 </span>
 </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))</em>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1484,6 +1630,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
+<<<<<<< HEAD
 
 </p>
 </td>
@@ -1495,18 +1642,32 @@ RefBy
 <td>
 <p class="paragraph">
 FIXME: This needs to be filled in
+=======
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>τ<sub>W</sub> = <div class="fraction">
+<span class="fup">
+m<sub>W</sub>&#8239;C<sub>W</sub>
+</span>
+<span class="fdn">
+h<sub>C</sub>&#8239;A<sub>C</sub>
+</span>
+</div></em> is a constant (s). The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#A:assump10>assump10</a>).
+>>>>>>> master
 </p>
 </td>
 </tr>
 </table>
-</a>
+</div>
 <p class="paragraph">
 Derivation of the energy balance on water:
 </p>
 <p class="paragraph">
+<<<<<<< HEAD
 To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity of water, <em>C<sub>W</sub></em> . Heat transfer occurs in the water from the coil as <em>q<sub>C</sub></em>, over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#A:assump11>assump11</a>) . Assuming no volumetric heat generation per unit volume (<a href=#A:assump12>assump12</a>), <em>g = 0</em> . Therefore, the equation for GD2 can be written as:
+=======
+To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity of water, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the coil as <em>q<sub>C</sub></em>, over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#A:assump15>assump15</a>). Assuming no volumetric heat generation per unit volume (<a href=#A:assump12>assump12</a>), <em>g = 0</em>. Therefore, the equation for GD2 can be written as:
+>>>>>>> master
 </p>
-<a id="">
+<div id="">
 <div class="equation">
 <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
 <span class="fup">
@@ -1517,11 +1678,11 @@ d&#8239;t
 </span>
 </div> = q<sub>C</sub>&#8239;A<sub>C</sub></em>
 </div>
-</a>
+</div>
 <p class="paragraph">
 Using <a href=#DD:ht.flux.C>DD:ht.flux.C</a> , this can be written as:
 </p>
-<a id="">
+<div id="">
 <div class="equation">
 <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
 <span class="fup">
@@ -1532,11 +1693,11 @@ d&#8239;t
 </span>
 </div> = h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
 </div>
-</a>
+</div>
 <p class="paragraph">
 Dividing (3) by <em>m<sub>W</sub>&#8239;C<sub>W</sub></em>, we obtain:
 </p>
-<a id="">
+<div id="">
 <div class="equation">
 <em><div class="fraction">
 <span class="fup">
@@ -1554,11 +1715,15 @@ m<sub>W</sub>&#8239;C<sub>W</sub>
 </span>
 </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
 </div>
-</a>
+</div>
 <p class="paragraph">
+<<<<<<< HEAD
 Setting <em>&tau;<sub>W</sub></em> = <em>m<sub>W</sub></em> <em>C<sub>W</sub></em> / <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> , Equation (4) can be written in its final form as:
+=======
+Setting <em>τ<sub>W</sub></em>=<em>m<sub>W</sub></em><em>C<sub>W</sub></em>/<em>h<sub>C</sub></em><em>A<sub>C</sub></em>, Equation (4) can be written in its final form as:
+>>>>>>> master
 </p>
-<a id="">
+<div id="">
 <div class="equation">
 <em><div class="fraction">
 <span class="fup">
@@ -1572,13 +1737,19 @@ d&#8239;t
 1
 </span>
 <span class="fdn">
-&tau;<sub>W</sub>
+τ<sub>W</sub>
 </span>
 </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
 </div>
+<<<<<<< HEAD
 </a>
 <a id="IM:heatEInWtr">
 <table class="idefn">
+=======
+</div>
+<div id="T:heatEInWtr">
+<table class="tdefn">
+>>>>>>> master
 <tr>
 <th>
 Label
@@ -1633,11 +1804,11 @@ Output Constraints
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <em>E<sub>W</sub>(t) = C<sub>W</sub>&#8239;m<sub>W</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>init</sub>)</em>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1688,10 +1859,10 @@ FIXME: This needs to be filled in
 </td>
 </tr>
 </table>
-</a>
 </div>
-</a>
-<a id="Sec:DataConstraints">
+</div>
+</div>
+<div id="Sec:DataConstraints">
 <div class="subsubsection">
 <h3>
 Data Constraints
@@ -1699,7 +1870,7 @@ Data Constraints
 <p class="paragraph">
 <a href=#Table:InDataConstraints>Table:InDataConstraints</a>, and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.
 </p>
-<a id="Table:InDataConstraints">
+<div id="Table:InDataConstraints">
 <table class="table">
 <tr>
 <th>
@@ -1732,7 +1903,7 @@ TU
 <em>1.5</em> m
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
@@ -1749,7 +1920,7 @@ None
 <em>0.412</em> m
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
@@ -1766,7 +1937,7 @@ None
 <em>0.12</em> m<sup>2</sup>
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
@@ -1783,24 +1954,24 @@ None
 <em>50.0</em> &deg;C
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>W</sub></em>
+<em>ρ<sub>W</sub></em>
 </td>
 <td>
-<em>&rho;<sub>W</sub>&thinsp;&gt;&thinsp;0</em>
+<em>ρ<sub>W</sub>&thinsp;&gt;&thinsp;0</em>
 </td>
 <td>
-<em>&rho;<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;&rho;<sub>W</sub>&thinsp;&le;&thinsp;&rho;<sub>W</sub><sup>max</sup></em>
+<em>ρ<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;ρ<sub>W</sub>&thinsp;&le;&thinsp;ρ<sub>W</sub><sup>max</sup></em>
 </td>
 <td>
 <em>1000.0</em> kg/m<sup>3</sup>
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
@@ -1817,7 +1988,7 @@ None
 <em>4186.0</em> J/(kg&sdot;&deg;C)
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
@@ -1834,7 +2005,7 @@ None
 <em>1000.0</em> W/(m<sup>2</sup>&sdot;&deg;C)
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
@@ -1851,7 +2022,7 @@ None
 <em>40.0</em> &deg;C
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 <tr>
@@ -1868,15 +2039,15 @@ None
 <em>50000.0</em> s
 </td>
 <td>
-0.1
+10.0%
 </td>
 </tr>
 </table>
 <p class="caption">
 Input Data Constraints
 </p>
-</a>
-<a id="Table:OutDataConstraints">
+</div>
+<div id="Table:OutDataConstraints">
 <table class="table">
 <tr>
 <th>
@@ -1906,14 +2077,14 @@ Physical Constraints
 <p class="caption">
 Output Data Constraints
 </p>
-</a>
 </div>
-</a>
 </div>
-</a>
 </div>
-</a>
-<a id="Sec:Requirements">
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:Requirements">
 <div class="section">
 <h1>
 Requirements
@@ -1921,17 +2092,19 @@ Requirements
 <p class="paragraph">
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 </p>
-<a id="Sec:FRs">
+<div id="Sec:FRs">
 <div class="subsection">
 <h2>
 Functional Requirements
 </h2>
-<a id="FR:req1">
-<ul>
-R1: Input the following quantities, which define the tank parameters, material properties and initial conditions:
+<ul class="hide-list-style">
+<li>
+<div id="FR:req1">
+Input-Inital-Values: Input the following quantities, which define the tank parameters, material properties and initial conditions:
+</div>
+</li>
 </ul>
-</a>
-<a id="Table:fr1list">
+<div id="Table:fr1list">
 <table class="table">
 <tr>
 <th>
@@ -1990,7 +2163,7 @@ temperature of the heating coil
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>W</sub></em>
+<em>ρ<sub>W</sub></em>
 </td>
 <td>
 kg/m<sup>3</sup>
@@ -2044,47 +2217,57 @@ final time
 </td>
 </tr>
 </table>
-</a>
-<a id="FR:req2">
-<ul>
-R2: Use the inputs in <a href=#FR:req1>req1</a> to find the mass needed for IM1 to IM2, as follows, where <em>V<sub>W</sub></em> is the volume of water and <em>V<sub>tank</sub></em> is the volume of the cylindrical tank:
+</div>
+<ul class="hide-list-style">
+<li>
+<div id="FR:req2">
+Use-Above-Find-Mass-IM1-IM2: Use the inputs in <a href=#FR:req1>Input-Inital-Values</a> to find the mass needed for IM1 to IM2, as follows, where <em>V<sub>W</sub></em> is the volume of water and <em>V<sub>tank</sub></em> is the volume of the cylindrical tank:
+</div>
+</li>
 </ul>
-</a>
-<a id="">
+<div id="">
 <div class="equation">
-<em>m<sub>W</sub> = V<sub>W</sub>&#8239;&rho;<sub>W</sub> = <div class="fraction">
+<em>m<sub>W</sub> = V<sub>W</sub>&#8239;ρ<sub>W</sub> = <div class="fraction">
 <span class="fup">
 D
 </span>
 <span class="fdn">
 2
 </span>
-</div>&#8239;L&#8239;&rho;<sub>W</sub></em>
+</div>&#8239;L&#8239;ρ<sub>W</sub></em>
 </div>
-</a>
-<a id="FR:req3">
-<ul>
-R3: Verify that the inputs satisfy the required physical constraint shown in <a href=#Table:InDataConstraints>Table:InDataConstraints</a>.
-</ul>
-</a>
-<a id="FR:req4">
-<ul>
-R4: Outputs and inputs quantities and derived quantities in the following list: the quantities from <a href=#FR:req1>req1</a>, the mass from <a href=#FR:req2>req2</a> and <em>&tau;<sub>W</sub></em> (from IM1).
-</ul>
-</a>
-<a id="FR:req5">
-<ul>
-R5: Calculate and output the temperature of the water (<em>T<sub>W</sub></em>(<em>t</em>)) over the simulation time
-</ul>
-</a>
-<a id="FR:req6">
-<ul>
-R6: Calculate and output the change in heat energy in the water (<em>E<sub>W</sub></em>(<em>t</em>)) over the simulation time (from IM3).
-</ul>
-</a>
 </div>
-</a>
-<a id="Sec:NFRs">
+<ul class="hide-list-style">
+<li>
+<div id="FR:req3">
+Check-Inputs-Satisfy-Physical-Constraints: Verify that the inputs satisfy the required physical constraint shown in <a href=#Table:InDataConstraints>Table:InDataConstraints</a>.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="FR:req4">
+Output-Input-Derivied-Quantities: Outputs and inputs quantities and derived quantities in the following list: the quantities from <a href=#FR:req1>Input-Inital-Values</a>, the mass from <a href=#FR:req2>Use-Above-Find-Mass-IM1-IM2</a> and <em>τ<sub>W</sub></em> (from IM1).
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="FR:req5">
+Calculate-Temperature-Water-Over-Time: Calculate and output the temperature of the water (<em>T<sub>W</sub></em>(<em>t</em>)) over the simulation time
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="FR:req6">
+Calculate-Change-Heat_Energy-Water-Time: Calculate and output the change in heat energy in the water (<em>E<sub>W</sub></em>(<em>t</em>)) over the simulation time (from IM3).
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div id="Sec:NFRs">
 <div class="subsection">
 <h2>
 Non-Functional Requirements
@@ -2093,37 +2276,45 @@ Non-Functional Requirements
 This problem is small in size and relatively simple, so performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the non-functional requirement priorities are correctness, verifiability, understandability, reusability, and maintainability.
 </p>
 </div>
-</a>
 </div>
-</a>
-<a id="Sec:LCs">
+</div>
+</div>
+<div id="Sec:LCs">
 <div class="section">
 <h1>
 Likely Changes
 </h1>
-<a id="LC:likeChg2">
-<ul>
-LC1: <a href=#A:assump8>assump8</a> - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
-</ul>
-</a>
-<a id="LC:likeChg3">
-<ul>
-LC2: <a href=#A:assump9>assump9</a> - The temperature of the heating coil will actually change along its length as the water within it cools.
-</ul>
-</a>
-<a id="LC:likeChg3">
-<ul>
-LC3: <a href=#A:assump9.npnc>A9</a>- The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.
-</ul>
-</a>
-<a id="LC:likeChg6">
-<ul>
-LC4: <a href=#A:assump15>assump15</a> - Any real tank cannot be perfectly insulated and will lose heat.
-</ul>
-</a>
+<ul class="hide-list-style">
+<li>
+<div id="LC:likeChg2">
+Temperature-Coil-Variable-Over-Day: <a href=#A:assump8>assump8</a> - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
 </div>
-</a>
-<a id="Sec:TraceMatrices">
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="LC:likeChg3">
+Temperature-Coil-Variable-Over-Length: <a href=#A:assump9>assump9</a> - The temperature of the heating coil will actually change along its length as the water within it cools.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="LC:likeChg3">
+Discharging-Tank: <a href=#A:assump9.npcm>assump9_npcm</a>- The model currently only accounts for charging of the tank. That is, increasing the temperature of the water to match the temperature of the coil. A more complete model would also account for discharging of the tank.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="LC:likeChg6">
+Tank-Lose-Heat: <a href=#A:assump15>assump15</a> - Any real tank cannot be perfectly insulated and will lose heat.
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div id="Sec:TraceMatrices">
 <div class="section">
 <h1>
 Traceability Matrices and Graphs
@@ -2131,7 +2322,7 @@ Traceability Matrices and Graphs
 <p class="paragraph">
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TraceyRI>Table:TraceyRI</a> shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. <a href=#Table:TraceyRIs>Table:TraceyRIs</a> shows the dependencies of instance models, requirements, and data constraints on each other. <a href=#Table:TraceyAI>Table:TraceyAI</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
 </p>
-<a id="Table:TraceyRI">
+<div id="Table:TraceyRI">
 <table class="table">
 <tr>
 <th>
@@ -2298,8 +2489,8 @@ IM2 (<a href=#T:heatEInWtr>T:heatEInWtr</a>)
 <p class="caption">
 Traceability Matrix Showing the Connections Between Requirements and Instance Models
 </p>
-</a>
-<a id="Table:TraceyRIs">
+</div>
+<div id="Table:TraceyRIs">
 <table class="table">
 <tr>
 <th>
@@ -2315,22 +2506,22 @@ IM2 (<a href=#T:heatEInWtr>T:heatEInWtr</a>)
 Data Constraints (<a href=#Table:InDataConstraints>Table:InDataConstraints</a>)
 </th>
 <th>
-R1 (<a href=#FR:req1>req1</a>)
+R1 (<a href=#FR:req1>Input-Inital-Values</a>)
 </th>
 <th>
-R2 (<a href=#FR:req2>req2</a>)
+R2 (<a href=#FR:req2>Use-Above-Find-Mass-IM1-IM2</a>)
 </th>
 <th>
-R3 (<a href=#FR:req3>req3</a>)
+R3 (<a href=#FR:req3>Check-Inputs-Satisfy-Physical-Constraints</a>)
 </th>
 <th>
-R4 (<a href=#FR:req4>req4</a>)
+R4 (<a href=#FR:req4>Output-Input-Derivied-Quantities</a>)
 </th>
 <th>
-R5 (<a href=#FR:req5>req5</a>)
+R5 (<a href=#FR:req5>Calculate-Temperature-Water-Over-Time</a>)
 </th>
 <th>
-R6 (<a href=#FR:req6>req6</a>)
+R6 (<a href=#FR:req6>Calculate-Change-Heat_Energy-Water-Time</a>)
 </th>
 </tr>
 <tr>
@@ -2399,7 +2590,7 @@ IM2 (<a href=#T:heatEInWtr>T:heatEInWtr</a>)
 </tr>
 <tr>
 <td>
-R1 (<a href=#FR:req1>req1</a>)
+R1 (<a href=#FR:req1>Input-Inital-Values</a>)
 </td>
 <td>
 
@@ -2431,7 +2622,7 @@ R1 (<a href=#FR:req1>req1</a>)
 </tr>
 <tr>
 <td>
-R2 (<a href=#FR:req2>req2</a>)
+R2 (<a href=#FR:req2>Use-Above-Find-Mass-IM1-IM2</a>)
 </td>
 <td>
 
@@ -2463,7 +2654,7 @@ X
 </tr>
 <tr>
 <td>
-R3 (<a href=#FR:req3>req3</a>)
+R3 (<a href=#FR:req3>Check-Inputs-Satisfy-Physical-Constraints</a>)
 </td>
 <td>
 
@@ -2495,7 +2686,7 @@ X
 </tr>
 <tr>
 <td>
-R4 (<a href=#FR:req4>req4</a>)
+R4 (<a href=#FR:req4>Output-Input-Derivied-Quantities</a>)
 </td>
 <td>
 
@@ -2527,7 +2718,7 @@ X
 </tr>
 <tr>
 <td>
-R5 (<a href=#FR:req5>req5</a>)
+R5 (<a href=#FR:req5>Calculate-Temperature-Water-Over-Time</a>)
 </td>
 <td>
 X
@@ -2559,7 +2750,7 @@ X
 </tr>
 <tr>
 <td>
-R6 (<a href=#FR:req6>req6</a>)
+R6 (<a href=#FR:req6>Calculate-Change-Heat_Energy-Water-Time</a>)
 </td>
 <td>
 
@@ -2593,29 +2784,30 @@ X
 <p class="caption">
 Traceability Matrix Showing the Connections Between Requirements and Instance Models
 </p>
-</a>
-<a id="Table:TraceyAI">
+</div>
+<div id="Table:TraceyAI">
 <table class="table">
 <tr>
 <th>
 
 </th>
 <th>
-A1 (<a href=#A:assump1>A1</a>)
+A1 (<a href=#A:assump1>assump1</a>)
 </th>
 <th>
-A2 (<a href=#A:assump2>A2</a>)
+A2 (<a href=#A:assump2>assump2</a>)
 </th>
 <th>
-A3 (<a href=#A:assump3>A3</a>)
+A3 (<a href=#A:assump3>assump3</a>)
 </th>
 <th>
-A4 (<a href=#A:assump4>A4</a>)
+A4 (<a href=#A:assump4>assump4</a>)
 </th>
 <th>
-A5 (<a href=#A:assump5>A5</a>)
+A5 (<a href=#A:assump5>assump5</a>)
 </th>
 <th>
+<<<<<<< HEAD
 A6 (<a href=#A:assump6>A6</a>)
 </th>
 <th>
@@ -2623,24 +2815,44 @@ A7 (<a href=#A:assump7>A7</a>)
 </th>
 <th>
 A8 (<a href=#A:assump8>A8</a>)
+=======
+A6 (<a href=#A:assump7>assump7</a>)
 </th>
 <th>
-A9 (<a href=#A:assump9.npnc>A9</a>)
+A7 (<a href=#A:assump8>assump8</a>)
 </th>
 <th>
+A8 (<a href=#A:assump9>assump9</a>)
+>>>>>>> master
+</th>
+<th>
+A9 (<a href=#A:assump9.npcm>assump9_npcm</a>)
+</th>
+<th>
+<<<<<<< HEAD
 A10 (<a href=#A:assump10>A10</a>)
 </th>
 <th>
 A11 (<a href=#A:assump11>A11</a>)
+=======
+A10 (<a href=#A:assump14>assump14</a>)
 </th>
 <th>
-A12 (<a href=#A:assump12>A12</a>)
+A11 (<a href=#A:assump15>assump15</a>)
+>>>>>>> master
 </th>
 <th>
-A13 (<a href=#A:assump13>A13</a>)
+A12 (<a href=#A:assump12>assump12</a>)
 </th>
 <th>
+A13 (<a href=#A:assump13>assump13</a>)
+</th>
+<th>
+<<<<<<< HEAD
 A14 (<a href=#A:assump14>A14</a>)
+=======
+A14 (<a href=#A:assump20>assump20</a>)
+>>>>>>> master
 </th>
 </tr>
 <tr>
@@ -2927,7 +3139,7 @@ X
 </tr>
 <tr>
 <td>
-LC1 (<a href=#LC:likeChg2>likeChg2</a>)
+LC1 (<a href=#LC:likeChg2>Temperature-Coil-Variable-Over-Day</a>)
 </td>
 <td>
 
@@ -2974,7 +3186,7 @@ X
 </tr>
 <tr>
 <td>
-LC2 (<a href=#LC:likeChg3>likeChg3</a>)
+LC2 (<a href=#LC:likeChg3>Temperature-Coil-Variable-Over-Length</a>)
 </td>
 <td>
 
@@ -3021,7 +3233,7 @@ X
 </tr>
 <tr>
 <td>
-LC3 (<a href=#LC:likeChg3>likeChg3</a>)
+LC3 (<a href=#LC:likeChg3>Temperature-Coil-Variable-Over-Length</a>)
 </td>
 <td>
 
@@ -3068,7 +3280,7 @@ X
 </tr>
 <tr>
 <td>
-LC4 (<a href=#LC:likeChg6>likeChg6</a>)
+LC4 (<a href=#LC:likeChg6>Tank-Lose-Heat</a>)
 </td>
 <td>
 
@@ -3117,28 +3329,28 @@ X
 <p class="caption">
 Traceability Matrix Showing the Connections Between Assumptions and Other Items
 </p>
-</a>
+</div>
 <p class="paragraph">
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:TraceA>Figure:TraceA</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, likely changes, and assumptions on each other. <a href=#Figure:TraceR>Figure:TraceR</a> shows the dependencies of instance models, requirements, and data constraints on each other.
 </p>
 <p class="paragraph">
 NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.
 </p>
-<a id="Figure:TraceA">
+<div id="Figure:TraceA">
 <img class="figure" src="ATrace.png" alt="Traceability Graph Showing the Connections Between Items of Different Sections"></img>
 <p class="caption">
 Traceability Graph Showing the Connections Between Items of Different Sections
 </p>
-</a>
-<a id="Figure:TraceR">
+</div>
+<div id="Figure:TraceR">
 <img class="figure" src="RTrace.png" alt="Traceability Graph Showing the Connections Between Requirements, Instance Models, and Data Constraints"></img>
 <p class="caption">
 Traceability Graph Showing the Connections Between Requirements, Instance Models, and Data Constraints
 </p>
-</a>
 </div>
-</a>
-<a id="Sec:AuxConstants">
+</div>
+</div>
+<div id="Sec:AuxConstants">
 <div class="section">
 <h1>
 Values of Auxiliary Constants
@@ -3146,7 +3358,7 @@ Values of Auxiliary Constants
 <p class="paragraph">
 This section contains the standard values that are used for calculations in SWHS.
 </p>
-<a id="Table:TAuxConsts">
+<div id="Table:TAuxConsts">
 <table class="table">
 <tr>
 <th>
@@ -3206,7 +3418,7 @@ W/(m<sup>2</sup>&sdot;&deg;C)
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>W</sub><sup>min</sup></em>
+<em>ρ<sub>W</sub><sup>min</sup></em>
 </td>
 <td>
 minimum density of water
@@ -3220,7 +3432,7 @@ kg/m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>&rho;<sub>W</sub><sup>max</sup></em>
+<em>ρ<sub>W</sub><sup>max</sup></em>
 </td>
 <td>
 maximum density of water
@@ -3306,40 +3518,42 @@ s
 <p class="caption">
 Auxiliary Constants
 </p>
-</a>
 </div>
-</a>
-<a id="Sec:References">
+</div>
+</div>
+<div id="Sec:References">
 <div class="section">
 <h1>
 References
 </h1>
-<a id="incroperaEtAl2007">
-<ul>
+<ul class="hide-list-style">
+<li>
+<div id="incroperaEtAl2007">
 [1]: Incropera, F. P., Dewitt, D. P., Bergman, T. L., and Lavine, A. S. <em>Fundamentals of Heat and Mass Transfer</em>. 6th. ed., Hoboken, New Jersey: John Wiley and Sons, 2007. Print.
-</ul>
-</a>
-<a id="koothoor2013">
-<ul>
-[2]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
-</ul>
-</a>
-<a id="lightstone2012">
-<ul>
-[3]: Lightstone, Marilyn. <em>Derivation of tank/pcm model</em>. 2012. From Marilyn Lightstone's Personal Notes
-</ul>
-</a>
-<a id="parnas1986">
-<ul>
-[4]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
-</ul>
-</a>
-<a id="smithLai2005">
-<ul>
-[5]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
-</ul>
-</a>
 </div>
-</a>
+</li>
+<li>
+<div id="koothoor2013">
+[2]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
+</div>
+</li>
+<li>
+<div id="lightstone2012">
+[3]: Lightstone, Marilyn. <em>Derivation of tank/pcm model</em>. 2012. From Marilyn Lightstone's Personal Notes
+</div>
+</li>
+<li>
+<div id="parnasClements1986">
+[4]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
+</div>
+</li>
+<li>
+<div id="smithLai2005">
+[5]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+</div>
+</li>
+</ul>
+</div>
+</div>
 </body>
 </html>

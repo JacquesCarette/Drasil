@@ -17,6 +17,7 @@ import Language.Drasil.Expr.Extract hiding (vars)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.DataDesc
+import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID, HasSymbol)
 
 import Prelude hiding (log, exp, const)
@@ -371,7 +372,7 @@ variable s' = do
       mm = constMap cs
       doit :: String -> Reader State Value
       doit s | member s mm =
-        maybe (error "impossible") (convExpr . codeEquat) (Map.lookup s mm) --extvar "Constants" s
+        maybe (error "impossible") ((convExpr) . codeEquat) (Map.lookup s mm) --extvar "Constants" s
              | s `elem` (map codeName $ inputs cs) = return $ (var "inParams")$->(var s)
              | otherwise                        = return $ var s
   doit s'
@@ -453,18 +454,18 @@ convExpr (AssocB E.Or l)  = fmap (foldr1 (?||)) $ sequence $ map convExpr l
 convExpr (Deriv _ _ _) = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr (C c)         = do
   g <- ask
-  variable $ codeName $ codevar $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable
-convExpr (FCall (C c) x)  = do
+  variable $ codeName $ codevar (symbLookup c ((sysinfodb $ codeSpec g) ^. symbolTable))
+convExpr  (FCall (C c) x)  = do
   g <- ask
   let info = sysinfodb $ codeSpec g
   args <- mapM convExpr x
-  fApp (codeName (codefunc $ symbLookup c $ info ^. symbolTable)) args
+  fApp (codeName (codefunc (symbLookup c (info ^. symbolTable)))) args
 convExpr (FCall _ _)   = return $ litString "**convExpr :: FCall unimplemented**"
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) =
   return $ (litFloat $ fromIntegral a) #/ (litFloat $ fromIntegral b) -- hack to deal with integer division
-convExpr (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
-convExpr (Case l)      = doit l -- FIXME this is sub-optimal
+convExpr  (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
+convExpr  (Case l)      = doit l -- FIXME this is sub-optimal
   where
     doit [] = error "should never happen"
     doit [(e,_)] = convExpr e -- should always be the else clause
@@ -541,7 +542,7 @@ genFunc (FDef (FuncDef n i o s)) = do
   publicMethod (methodType $ convType o) n parms
     (return [ block $
         (map (\x -> varDec (codeName x) (convType $ codeType x))
-          (((fstdecl $ sysinfodb $ codeSpec g) s) \\ i))
+          ((((fstdecl (sysinfodb (codeSpec g)))) s) \\ i)) 
         ++ stmts
     ])
 genFunc (FData (FuncData n dd)) = genDataFunc n dd

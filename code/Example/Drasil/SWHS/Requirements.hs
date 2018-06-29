@@ -35,32 +35,33 @@ import Data.Drasil.SentenceStructures (acroIM, acroR, foldlSent, sAnd, isThe,
 
 --req1, req2, s5_1_2_Eqn1, s5_1_2_Eqn2, req3, req4,
 --  req5, req6, req7, req8, req9, req10, req11
-req1, req2, func_req_Eqn1, func_req_Eqn2, req3, req4,
+req1, req2, reqEqn1, reqEqn2, req3, req4,
   req5, req6, req7, req8, req9, req10, req11 :: Contents
 
-req1 = mkRequirement "req1" $ foldlSentCol [
+req1 = mkRequirement "req1" (foldlSentCol [
   titleize input_, S "the following", plural quantity `sC`
   S "which define the", phrase tank, plural parameter `sC` S "material",
-  plural property, S "and initial", plural condition]
+  plural property, S "and initial", plural condition]) "Input-Initial-Quantities"
 
-req2 = mkRequirement "req2" $ foldlSentCol [
+req2 = mkRequirement "req2" (foldlSentCol [
   S "Use the", plural input_, S "in", makeRef req1,
   S "to find the", phrase mass, S "needed for", acroIM 1, S "to",
   acroIM 4 `sC` S "as follows, where", getES w_vol `isThe` phrase w_vol,
-  S "and", getES tank_vol `isThe` phrase tank_vol]
+  S "and", getES tank_vol `isThe` phrase tank_vol]) "Use-Above-Find-Mass-IM1-IM4"
 
-func_req_Eqn1 = eqUnR ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
+reqEqn1 = eqUnR ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
   ((sy tank_vol) - (sy pcm_vol)) * (sy w_density) $=
   (((sy diam) / 2) * (sy tank_length) - (sy pcm_vol)) * (sy w_density)) -- FIXME: Ref Hack
 
-func_req_Eqn2 = eqUnR ((sy pcm_mass) $= (sy pcm_vol) * (sy pcm_density)) -- FIXME: Ref Hack
+reqEqn2 = eqUnR ((sy pcm_mass) $= (sy pcm_vol) * (sy pcm_density)) -- FIXME: Ref Hack
 
-req3 = mkRequirement "req3" $ foldlSent [
+req3 = mkRequirement "req3" ( foldlSent [
   S "Verify that the", plural input_, S "satisfy the required",
   phrase physical, plural constraint {-, S "shown in"
-  --FIXME , makeRef s7_table1-}]
+  --FIXME , makeRef s7_table1-}] ) 
+  "Check-Input-with-Physical_Constraints"
 --
-req4 = mkRequirement "req4" $ foldlSent [
+req4 = mkRequirement "req4" ( foldlSent [
   titleize output_, S "the", phrase input_, plural quantity `sAnd`
   S "derived", plural quantity +: S "in the following list",
   S "the", plural quantity, S "from", acroR 1 `sC` S "the",
@@ -68,45 +69,46 @@ req4 = mkRequirement "req4" $ foldlSent [
   sParen (S "from" +:+ acroIM 1) `sC` getES eta,
   sParen (S "from" +:+ acroIM 1) `sC` getES tau_S_P,
   sParen (S "from" +:+ acroIM 2) `sAnd` getES tau_L_P,
-  sParen (S "from" +:+ acroIM 2)]
+  sParen (S "from" +:+ acroIM 2)] ) 
+  "Output-Input-Derived-Quantities"
 --
-req5 = mkRequirement "req5" $ foldlSent [
+req5 = mkRequirement "req5" ( foldlSent [
   S "Calculate and", phrase output_, S "the", phrase temp_W,
   sParen(getES temp_W :+: sParen (getES time)), S "over the",
-  phrase simulation, phrase time, sParen (S "from" +:+ acroIM 1)]
+  phrase simulation, phrase time, sParen (S "from" +:+ acroIM 1)] ) "Calculate-Temperature-Water-OverTime"
 --
-req6 = mkRequirement "req6" $ foldlSent [
+req6 = mkRequirement "req6" ( foldlSent [
   S "Calculate and", phrase output_, S "the", phrase temp_PCM,
   sParen (getES temp_PCM :+: sParen (getES time)), S "over the",
-  phrase simulation, phrase time, sParen (S "from" +:+ acroIM 2)]
+  phrase simulation, phrase time, sParen (S "from" +:+ acroIM 2)] ) "Calculate-Temperature-PCM-Over-Time"
 --
-req7 = mkRequirement "req7" $ foldlSent [
+req7 = mkRequirement "req7" ( foldlSent [
   S "Calculate and", phrase output_, S "the", phrase w_E,
   sParen (getES w_E :+: sParen (getES time)), S "over the",
-  phrase simulation, phrase time, sParen (S "from" +:+ acroIM 3)]
+  phrase simulation, phrase time, sParen (S "from" +:+ acroIM 3)] ) "Calculate-Change-Heat_Energy-Water-Over-Time"
 --
-req8 = mkRequirement "req8" $ foldlSent [
+req8 = mkRequirement "req8" ( foldlSent [
   S "Calculate and", phrase output_, S "the", phrase pcm_E,
   sParen (getES pcm_E :+: sParen (getES time)), S "over the",
-  phrase simulation, phrase time, sParen (S "from" +:+ acroIM 4)]
+  phrase simulation, phrase time, sParen (S "from" +:+ acroIM 4)] ) "Calculate-Change-Heat_Energy-PCM-Over-Time"
 --
-req9 = mkRequirement "req9" $ foldlSent [
+req9 = mkRequirement "req9" ( foldlSent [
   S "Verify that the", phrase energy, plural output_,
   sParen (getES w_E :+: sParen (getES time) `sAnd` getES pcm_E :+:
   sParen (getES time)), S "follow the", phrase CT.law_cons_energy, {-`sC`
   S "as outlined in"
   --FIXME , makeRef s4_2_7 `sC` -} 
-  S "with relative error no greater than 0.001%"]
+  S "with relative error no greater than 0.001%"] ) "Verify-Energy-Output-follow-Conservation-of-Energy"
 --
-req10 = mkRequirement "req10" $ foldlSent [
+req10 = mkRequirement "req10" ( foldlSent [
   S "Calculate and", phrase output_, S "the", phrase time,
   S "at which the", short phsChgMtrl, S "begins to melt",
-  getES t_init_melt, sParen (S "from" +:+ acroIM 2)]
+  getES t_init_melt, sParen (S "from" +:+ acroIM 2)] ) "Calculate-PCM-melt-begin-time"
 --
-req11 = mkRequirement "req11" $ foldlSent [
+req11 = mkRequirement "req11" ( foldlSent [
   S "Calculate and", phrase output_, S "the", phrase time,
   S "at which the", short phsChgMtrl, S "stops", phrase CT.melting,
-  getES t_final_melt, sParen (S "from" +:+ acroIM 2)]
+  getES t_final_melt, sParen (S "from" +:+ acroIM 2)] ) "Calculate-PCM-melt-end-time"
 
 -- List structure same between all examples
 
@@ -116,9 +118,9 @@ req11 = mkRequirement "req11" $ foldlSent [
 ---------------------------------------
 -- 5.2 : Non-functional Requirements --
 ---------------------------------------
---s5_2
-non_func_req :: Section
-non_func_req = nonFuncReqF [performance] [correctness, verifiability,
+
+nonFuncReqs :: Section
+nonFuncReqs = nonFuncReqF [performance] [correctness, verifiability,
   understandability, reusability, maintainability]
   (S "This problem is small in size and relatively simple")
   (S "Any reasonable implementation will be very" +:+

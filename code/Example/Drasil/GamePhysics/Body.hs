@@ -1,50 +1,69 @@
 module Drasil.GamePhysics.Body where
 
 import Control.Lens ((^.))
-import Language.Drasil hiding (organization)
-import Data.Drasil.SI_Units
+
+import Data.Drasil.Concepts.Computation (algorithm)
+import Data.Drasil.Concepts.Documentation (assumption, body,
+  concept, condition, consumer, dataConst, dataDefn, datumConstraint,
+  document, endUser, environment, game, genDefn, generalSystemDescription,
+  goalStmt, guide, inModel, information, input_, interface, item, library,
+  likelyChg, model, nonfunctionalRequirement, object, organization, physical,
+  physicalConstraint, physicalProperty, physicalSim, physics, priority,
+  problem, problemDescription, product_, project, property, quantity, realtime,
+  reference, requirement, section_, simulation, software, softwareSys,
+  solutionCharSpec, srs, system, systemConstraint, sysCont, task, template,
+  termAndDef, thModel, traceyMatrix, user, userCharacteristic)
+import Data.Drasil.Concepts.Education (highSchoolCalculus, frstYr,
+  highSchoolPhysics)
+import Data.Drasil.Concepts.Software (physLib, understandability, portability,
+  reliability, maintainability, performance, correctness)
 
 import Data.Drasil.People (alex, luthfi)
 import Data.Drasil.Phrase(for')
-import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Software (physLib, understandability, portability,
-  reliability, maintainability, performance, correctness)
-import Data.Drasil.Concepts.Computation (algorithm)
-import Data.Drasil.Concepts.Education (highSchoolCalculus, frstYr,
-  highSchoolPhysics)
+import Data.Drasil.SI_Units(metre, kilogram, second, newton, radian)
+
+import Drasil.DocumentLanguage (DocDesc, TConvention(..), TSIntro(..), 
+  TSIntro(..), Emphasis(..), DocSection(..), IntroSub(..), mkDoc, RefSec(..),
+  tsymb, RefTab(..), IntroSec(..), IntroSub(..))
+import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
+import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs)
+import Drasil.GamePhysics.IMods (iModels)
+import Drasil.GamePhysics.References (cpCitations)
+import Drasil.GamePhysics.TMods (cpTMods)
+import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
+  inputSymbols, outputSymbols, cpInputConstraints)
+import Drasil.GamePhysics.Changes   
+
+import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
+import Drasil.Sections.Requirements (reqF)
+import Drasil.Sections.SolutionCharacterSpec (SubSec, siUQI, siSent, siDDef, 
+  sSubSec, siIMod, siUQO, siCon, siTMod, assembler, siSTitl)
+import Drasil.Sections.SpecificSystemDescription (specSysDescr)
 import Drasil.Sections.TraceabilityMandGs (traceMGF)
-import qualified Data.Drasil.Quantities.Math as QM (orientation)
-import qualified Data.Drasil.Quantities.Physics as QP (time, 
-  position, force, velocity, angularVelocity, linearVelocity)
-import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
-import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
-  cartesian, friction, rightHand, collision, space, joint, damping)
+
+import Language.Drasil hiding (organization)
+
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, 
   dimension)
+import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
+  cartesian, friction, rightHand, collision, space, joint, damping)
 import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode, 
   constraint, law)
-import Data.Drasil.Utils (makeTMatrix, itemRefToSent, refFromType,
-  makeListRef, enumSimple, enumBullet)
+
+import qualified Data.Drasil.Quantities.Math as QM (orientation)
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
+import qualified Data.Drasil.Quantities.Physics as QP (time, 
+  position, force, velocity, angularVelocity, linearVelocity)
 import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlList, sOf,
-  sAnd, sOr, maybeChanged, maybeExpanded, foldlSentCol, foldlSP, showingCxnBw)
+  sAnd, sOr, maybeChanged, maybeExpanded, foldlSentCol, foldlSP, foldlSPCol,
+  showingCxnBw)
 import Data.Drasil.Software.Products (videoGame, openSource, sciCompS)
+import Data.Drasil.Utils (makeTMatrix, itemRefToSent, refFromType,
+  makeListRef, bulletFlat, bulletNested, enumSimple, enumBullet)
 
 import qualified Drasil.SRS as SRS
 import qualified Drasil.Sections.ReferenceMaterial as RM
 
-import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
-  inputSymbols, outputSymbols, cpInputConstraints)
-import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
-import Drasil.GamePhysics.TMods (cpTMods)
-import Drasil.GamePhysics.IMods (iModels)
-import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs)
-
-import Drasil.DocumentLanguage 
-import Drasil.Sections.SpecificSystemDescription (specSysDescr)
-import Drasil.Sections.SolutionCharacterSpec
-import Drasil.Sections.Requirements (reqF)
-import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
-import Drasil.GamePhysics.References (cpCitations)
 
 authors :: People
 authors = [alex, luthfi]
@@ -59,11 +78,11 @@ mkSRS :: DocDesc
 mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
   IntroSec (
     IntroProg para1_s2_intro (short chipmunk) 
-  [IPurpose (para1_s2_1_intro), 
+  [IPurpose para1_s2_1_intro, 
    IScope s2_2_intro_p1 s2_2_intro_p2, 
    IChar (S "rigid body dynamics") (phrase highSchoolCalculus) (EmptyS), 
    IOrgSec s2_4_intro inModel s4_2 EmptyS]) :
-  (map Verbatim [s3, s4, s5, s6, s7, s8, s9])  ++ 
+  (map Verbatim [s3, s4, s5, s6, unlikelyChanges, s7, s8, s9])  ++ 
   (Bibliography : []) 
     where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
@@ -100,7 +119,10 @@ everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: 
   chipUnits
 
 chipCode :: CodeSpec
-chipCode = codeSpec' chipmunkSysInfo []
+chipCode = codeSpec chipmunkSysInfo []
+
+resourcePath :: String
+resourcePath = "../../../datafiles/GamePhysics/"
 
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
@@ -186,26 +208,81 @@ s2_4_intro = foldlSent
 
 s3 :: Section
 s3 = assembler chipmunk everything generalSystemDescriptionSect
-  [userCharacteristicSect, systemConstraintSect]
+  [sysContext, userCharacteristicSect, systemConstraintSect]
 
 generalSystemDescriptionSect :: SubSec
 generalSystemDescriptionSect = sSubSec generalSystemDescription []
 
---------------------------------
--- 3.1 : User Characteristics --
---------------------------------
+--------------------------
+-- 3.1 : System Context --
+--------------------------
 
-userCharacteristicSect :: SubSec
-userCharacteristicSect = sSubSec userCharacteristic [(siCon [s3_1_intro])]
+sysContext :: SubSec
+sysContext = sSubSec sysCont [siSTitl, (siCon [s3_1_intro, fig_1, s3_1_desc, s3_1_list])]
 
 s3_1_intro :: Contents
 s3_1_intro = foldlSP
+  [makeRef fig_1 +:+ S "shows the" +:+. phrase sysCont,
+   S "A circle represents an external entity outside the" +:+ phrase software
+   `sC` S "the", phrase user, S "in this case. A rectangle represents the",
+   phrase softwareSys, S "itself", (sParen $ short chipmunk) +:+. EmptyS,
+   S "Arrows are used to show the data flow between the" +:+ phrase system +:+ S "and its" +:+ phrase environment]
+
+fig_1 :: Contents
+fig_1 = fig (titleize sysCont) (resourcePath ++ "sysctx.png") "sysCtxDiag"
+
+s3_1_desc :: Contents
+s3_1_desc = foldlSPCol
+  [S "The interaction between the", phrase product_, S "and the", phrase user,
+   S "is through an application programming" +:+. phrase interface,
+   S "The responsibilities of the", phrase user, S "and the", phrase system,
+   S "are as follows"]
+
+sysCtxUsrResp :: [Sentence]
+sysCtxUsrResp = [S "Provide initial" +:+ plural condition +:+ S "of the" +:+
+    phrase physical +:+ S"state of the" +:+ phrase simulation `sC`
+    plural (CP.rigidBody) +:+ S "present, and" +:+ plural QP.force +:+.
+    S "applied to them",
+  S "Ensure application programming" +:+ phrase interface +:+
+    S "use complies with the" +:+ phrase user +:+. phrase guide,
+  S "Ensure required" +:+ phrase software +:+ plural assumption +:+
+    S "(FIXME REF)" +:+ S "are appropriate for any particular" +:+
+    phrase problem +:+ S "the" +:+ phrase software +:+. S "addresses"]
+
+sysCtxSysResp :: [Sentence]
+sysCtxSysResp = [S "Determine if the" +:+ plural input_ +:+ S "and" +:+
+    phrase simulation +:+ S "state satisfy the required" +:+
+    (phrase physical `sAnd` plural systemConstraint) +:+. S "(FIXME REF)",
+  S "Calculate the new state of all" +:+ plural CP.rigidBody +:+
+    S "within the" +:+ phrase simulation +:+ S "at each" +:+
+    phrase simulation +:+. S "step",
+  S "Provide updated" +:+ phrase physical +:+ S "state of all" +:+
+    plural CP.rigidBody +:+ S "at the end of a" +:+ phrase simulation +:+.
+    S "step"]
+
+sysCtxResp :: [Sentence]
+sysCtxResp = [titleize user +:+ S "Responsibilities",
+  short chipmunk +:+ S "Responsibilities"]
+
+s3_1_list :: Contents
+s3_1_list = Enumeration $ bulletNested sysCtxResp $
+  map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
+
+--------------------------------
+-- 3.2 : User Characteristics --
+--------------------------------
+
+userCharacteristicSect :: SubSec
+userCharacteristicSect = sSubSec userCharacteristic [(siCon [s3_2_intro])]
+
+s3_2_intro :: Contents
+s3_2_intro = foldlSP
   [S "The", phrase endUser `sOf` short chipmunk,
   S "should have an understanding of", phrase frstYr, S "programming",
   plural concept `sAnd` S "an understanding of", phrase highSchoolPhysics]
 
 -------------------------------
--- 3.2 : System Constraints  --
+-- 3.3 : System Constraints  --
 -------------------------------
 
 systemConstraintSect :: SubSec
@@ -529,37 +606,7 @@ s5_2_intro = foldlSP
 -- SECTION 6 : LIKELY CHANGES --
 --------------------------------
 
-s6 :: Section
-s6_intro, s6_list :: Contents
 
-s6 = SRS.likeChg [s6_intro, s6_list] []
-
-s6_intro = foldlSP [S "This", (phrase section_), S "lists the", 
-  (plural likelyChg), S "to be made to the", (phrase physics), (phrase game), 
-  (phrase library)]
-
-s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3, 
-  s6_likelyChg_stmt4 :: Sentence
-
---these statements look like they could be parametrized
-s6_likelyChg_stmt1 = (S "internal" +:+ (getAcc CM.ode) :+: 
-  S "-solving" +:+ phrase algorithm +:+ S "used by the" +:+
-  (phrase library)) `maybeChanged` (S "in the future")
-
-s6_likelyChg_stmt2 = (phrase library) `maybeExpanded`
-  (S "to deal with edge-to-edge and vertex-to-vertex" +:+ (plural CP.collision))
-
-s6_likelyChg_stmt3 = (phrase library) `maybeExpanded` (
-  S "to include motion with" +:+ (phrase CP.damping))
-
-s6_likelyChg_stmt4 = (phrase library) `maybeExpanded` (S "to include" +:+ 
-  (plural CP.joint) `sAnd` (plural CM.constraint))
-
-s6_list' :: [Sentence]
-s6_list' = [s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3,
-  s6_likelyChg_stmt4]
-
-s6_list = enumSimple 1 (getAcc likelyChg) s6_list'
 
 -----------------------------------------
 -- SECTION 7 : OFF-THE-SHELF SOLUTIONS --

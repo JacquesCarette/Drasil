@@ -1240,7 +1240,7 @@ Theoretical Models
 <p class="paragraph">
 This section focuses on the general equations and laws that Chipmunk2D is based on.
 </p>
-<div id="T:t1NewtonSL">
+<div id="T:newtonSL">
 <table class="tdefn">
 <tr>
 <th>
@@ -1278,7 +1278,7 @@ The net force <em><b>F</b></em> (N) on a rigid body is proportional to the accel
 </tr>
 </table>
 </div>
-<div id="T:t2NewtonTL">
+<div id="T:newtonTL">
 <table class="tdefn">
 <tr>
 <th>
@@ -1316,7 +1316,7 @@ Every action has an equal and opposite reaction. In other words, the force <em><
 </tr>
 </table>
 </div>
-<div id="T:t3NewtonLUG">
+<div id="T:newtonLUG">
 <table class="tdefn">
 <tr>
 <th>
@@ -1375,7 +1375,7 @@ Two rigid bodies in the universe attract each other with a force <em><b>F</b></e
 </tr>
 </table>
 </div>
-<div id="T:t4ChaslesThm">
+<div id="T:chaslesThm">
 <table class="tdefn">
 <tr>
 <th>
@@ -1413,7 +1413,7 @@ The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigi
 </tr>
 </table>
 </div>
-<div id="T:t5NewtonSLR">
+<div id="T:newtonSLR">
 <table class="tdefn">
 <tr>
 <th>
@@ -1471,7 +1471,7 @@ Instance Models
 <p class="paragraph">
 This section transforms the problem defined in FIXME REF into one which is expressed in mathematical terms. It uses concrete symbols defined in FIXME REF to replace the abstract symbols in the models identified in FIXME REF and FIXME REF.
 </p>
-<div id="T:im1">
+<div id="T:transMot">
 <table class="tdefn">
 <tr>
 <th>
@@ -1523,7 +1523,7 @@ The above equation expresses the total acceleration of the rigid body (A1, A2) i
 </tr>
 </table>
 </div>
-<div id="T:im2">
+<div id="T:rotMot">
 <table class="tdefn">
 <tr>
 <th>
@@ -1575,7 +1575,7 @@ The above equation for the total angular acceleration of the rigid body (A1, A2)
 </tr>
 </table>
 </div>
-<div id="T:im3">
+<div id="T:col2D">
 <table class="tdefn">
 <tr>
 <th>
@@ -2387,7 +2387,7 @@ Games are resource intensive, so performance is a high priority. Other non-funct
 Likely Changes
 </h1>
 <p class="paragraph">
-This section lists the likely changes to be made to the physics game library.
+This section lists the likely changes to be made to the game physics library.
 </p>
 <div class="list">
 <p>
@@ -2401,6 +2401,30 @@ LC3: The library may be expanded to include motion with damping.
 </p>
 <p>
 LC4: The library may be expanded to include joints and constraints.
+</p>
+</div>
+</div>
+</div>
+<div id="Sec:UCs">
+<div class="section">
+<h1>
+Unlikely Changes
+</h1>
+<p class="paragraph">
+This section lists the unlikely changes to be made to the game physics library.
+</p>
+<div class="list">
+<p>
+UC1: The goal of the system is to simulate the interactions of rigid bodies.
+</p>
+<p>
+UC2: There will always be a sourse of input data external to the software.
+</p>
+<p>
+UC3: A Cartesian Coordinate system is used.
+</p>
+<p>
+UC4: All objects are regid bodies.
 </p>
 </div>
 </div>
@@ -2452,13 +2476,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 
 </th>
 <th>
-IM1 (<a href=#T:im1>T:im1</a>)
+IM1 (<a href=#T:transMot>T:transMot</a>)
 </th>
 <th>
-IM2 (<a href=#T:im2>T:im2</a>)
+IM2 (<a href=#T:rotMot>T:rotMot</a>)
 </th>
 <th>
-IM3 (<a href=#T:im3>T:im3</a>)
+IM3 (<a href=#T:col2D>T:col2D</a>)
 </th>
 <th>
 R1 (<a href=#Sec:FRs>Functional Requirements</a>)
@@ -2820,7 +2844,7 @@ A7 (<a href=#Sec:ProbDesc>Problem Description</a>)
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:t1NewtonSL>T:t1NewtonSL</a>)
+T1 (<a href=#T:newtonSL>T:newtonSL</a>)
 </td>
 <td>
 
@@ -2846,7 +2870,7 @@ T1 (<a href=#T:t1NewtonSL>T:t1NewtonSL</a>)
 </tr>
 <tr>
 <td>
-T2 (<a href=#T:t2NewtonTL>T:t2NewtonTL</a>)
+T2 (<a href=#T:newtonTL>T:newtonTL</a>)
 </td>
 <td>
 
@@ -2872,7 +2896,7 @@ T2 (<a href=#T:t2NewtonTL>T:t2NewtonTL</a>)
 </tr>
 <tr>
 <td>
-T3 (<a href=#T:t3NewtonLUG>T:t3NewtonLUG</a>)
+T3 (<a href=#T:newtonLUG>T:newtonLUG</a>)
 </td>
 <td>
 
@@ -2898,7 +2922,7 @@ T3 (<a href=#T:t3NewtonLUG>T:t3NewtonLUG</a>)
 </tr>
 <tr>
 <td>
-T4 (<a href=#T:t4ChaslesThm>T:t4ChaslesThm</a>)
+T4 (<a href=#T:chaslesThm>T:chaslesThm</a>)
 </td>
 <td>
 X
@@ -2924,7 +2948,7 @@ X
 </tr>
 <tr>
 <td>
-T5 (<a href=#T:t5NewtonSLR>T:t5NewtonSLR</a>)
+T5 (<a href=#T:newtonSLR>T:newtonSLR</a>)
 </td>
 <td>
 
@@ -3340,7 +3364,7 @@ X
 </tr>
 <tr>
 <td>
-IM1 (<a href=#T:im1>T:im1</a>)
+IM1 (<a href=#T:transMot>T:transMot</a>)
 </td>
 <td>
 X
@@ -3366,7 +3390,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#T:im2>T:im2</a>)
+IM2 (<a href=#T:rotMot>T:rotMot</a>)
 </td>
 <td>
 X
@@ -3392,7 +3416,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#T:im3>T:im3</a>)
+IM3 (<a href=#T:col2D>T:col2D</a>)
 </td>
 <td>
 X
@@ -3532,19 +3556,19 @@ Traceability Matrix Showing the Connections Between Assumptions (<a href=#Sec:Pr
 
 </th>
 <th>
-T1 (<a href=#T:t1NewtonSL>T:t1NewtonSL</a>)
+T1 (<a href=#T:newtonSL>T:newtonSL</a>)
 </th>
 <th>
-T2 (<a href=#T:t2NewtonTL>T:t2NewtonTL</a>)
+T2 (<a href=#T:newtonTL>T:newtonTL</a>)
 </th>
 <th>
-T3 (<a href=#T:t3NewtonLUG>T:t3NewtonLUG</a>)
+T3 (<a href=#T:newtonLUG>T:newtonLUG</a>)
 </th>
 <th>
-T4 (<a href=#T:t4ChaslesThm>T:t4ChaslesThm</a>)
+T4 (<a href=#T:chaslesThm>T:chaslesThm</a>)
 </th>
 <th>
-T5 (<a href=#T:t5NewtonSLR>T:t5NewtonSLR</a>)
+T5 (<a href=#T:newtonSLR>T:newtonSLR</a>)
 </th>
 <th>
 GD1 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
@@ -3592,18 +3616,18 @@ DD7 (<a href=#DD:angularAcceleration>DD:angularAcceleration</a>)
 DD8 (<a href=#DD:impulseS>DD:impulseS</a>)
 </th>
 <th>
-IM1 (<a href=#T:im1>T:im1</a>)
+IM1 (<a href=#T:transMot>T:transMot</a>)
 </th>
 <th>
-IM2 (<a href=#T:im2>T:im2</a>)
+IM2 (<a href=#T:rotMot>T:rotMot</a>)
 </th>
 <th>
-IM3 (<a href=#T:im3>T:im3</a>)
+IM3 (<a href=#T:col2D>T:col2D</a>)
 </th>
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:t1NewtonSL>T:t1NewtonSL</a>)
+T1 (<a href=#T:newtonSL>T:newtonSL</a>)
 </td>
 <td>
 
@@ -3677,7 +3701,7 @@ T1 (<a href=#T:t1NewtonSL>T:t1NewtonSL</a>)
 </tr>
 <tr>
 <td>
-T2 (<a href=#T:t2NewtonTL>T:t2NewtonTL</a>)
+T2 (<a href=#T:newtonTL>T:newtonTL</a>)
 </td>
 <td>
 
@@ -3751,7 +3775,7 @@ T2 (<a href=#T:t2NewtonTL>T:t2NewtonTL</a>)
 </tr>
 <tr>
 <td>
-T3 (<a href=#T:t3NewtonLUG>T:t3NewtonLUG</a>)
+T3 (<a href=#T:newtonLUG>T:newtonLUG</a>)
 </td>
 <td>
 
@@ -3825,7 +3849,7 @@ T3 (<a href=#T:t3NewtonLUG>T:t3NewtonLUG</a>)
 </tr>
 <tr>
 <td>
-T4 (<a href=#T:t4ChaslesThm>T:t4ChaslesThm</a>)
+T4 (<a href=#T:chaslesThm>T:chaslesThm</a>)
 </td>
 <td>
 
@@ -3899,7 +3923,7 @@ T4 (<a href=#T:t4ChaslesThm>T:t4ChaslesThm</a>)
 </tr>
 <tr>
 <td>
-T5 (<a href=#T:t5NewtonSLR>T:t5NewtonSLR</a>)
+T5 (<a href=#T:newtonSLR>T:newtonSLR</a>)
 </td>
 <td>
 
@@ -5083,7 +5107,7 @@ X
 </tr>
 <tr>
 <td>
-IM1 (<a href=#T:im1>T:im1</a>)
+IM1 (<a href=#T:transMot>T:transMot</a>)
 </td>
 <td>
 X
@@ -5157,7 +5181,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#T:im2>T:im2</a>)
+IM2 (<a href=#T:rotMot>T:rotMot</a>)
 </td>
 <td>
 
@@ -5231,7 +5255,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#T:im3>T:im3</a>)
+IM3 (<a href=#T:col2D>T:col2D</a>)
 </td>
 <td>
 

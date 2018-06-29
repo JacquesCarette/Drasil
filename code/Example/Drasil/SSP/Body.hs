@@ -161,7 +161,7 @@ mkSRS = RefSec (RefProg intro
             , Description Verbose IncludeUnits
             , Source, RefBy] generalDefinitions ShowDerivation
             , DDs ([Label, Symbol, Units] ++ stdFields) sspDataDefs ShowDerivation
-            , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+            , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields ++ [Notes])
              sspIMods_new ShowDerivation
             , Constraints  EmptyS dataConstraintUncertainty EmptyS
               [data_constraint_Table2, data_constraint_Table3]

@@ -32,7 +32,8 @@ import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Printing.Helpers (noSpaces)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), shortname')
 
-import Control.Lens (Lens', makeLenses)
+import Control.Lens ((^.), Lens', makeLenses)
+import Data.List (find)
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces
@@ -122,14 +123,21 @@ makeLenses ''Citation
 class HasFields c where
   getFields :: Lens' c [CiteField]
 
+class (HasFields c) => HasAuthor c where
+  getAuthor :: People
+  getAuthor = check (find ((Author x)==) (c ^. getFields))
+    where
+      check (Just (Author x)) = x
+      check  Nothing          = (error "No author found")
+
 -- | Smart constructor which implicitly uses EntryID as chunk i.
 cite :: EntryID -> CitationKind -> [CiteField] -> Citation
 cite i = Cite i (noSpaces i)
 
 -- | Citations are chunks.
-instance HasUID        Citation where uid f (Cite a b c d) = fmap (\x -> Cite x b c d) (f a)
-instance HasShortName  Citation where shortname c = shortname' $ citeID c
-instance HasFields     Citation where getFields = fields
+instance HasUID       Citation where uid f (Cite a b c d) = fmap (\x -> Cite x b c d) (f a)
+instance HasShortName Citation where shortname c = shortname' $ citeID c
+instance HasFields    Citation where getFields = fields
 
 -- | Article citation requires author(s), title, journal, year.
 -- Optional fields can be: volume, number, pages, month, and note.

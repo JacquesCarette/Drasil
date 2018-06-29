@@ -4,11 +4,12 @@ module Language.Drasil.Reference where
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
 import Data.List (concatMap, groupBy, partition, sortBy)
+import Data.Maybe (fromMaybe)
 import qualified Data.Map as Map
 
 import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
 import Language.Drasil.Chunk.Change as Ch (Change(..), ChngType(..))
-import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID), HasFields(getFields))
+import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID), CiteField(Author), HasAuthor(getAuthor))
 import Language.Drasil.Chunk.Concept (ConceptChunk)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
@@ -24,6 +25,7 @@ import Language.Drasil.Document (Contents(..), DType(Data, Theory),
 import Language.Drasil.RefTypes (RefType(..))
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.UID (UID)
+
 
 -- | Database for maintaining references.
 -- The Int is that reference's number.
@@ -266,8 +268,8 @@ instance Referable Contents where
 uidSort :: HasUID c => c -> c -> Ordering
 uidSort = compare `on` (^. uid)
 
-authorSort :: HasFields c => c -> c -> Ordering
-authorSort = compare `on` (^. getFields)
+authorSort :: HasAuthors c => c -> c -> Ordering
+authorSort = compare `on` (^. getAuthor)
 
 citationsFromBibMap :: BibMap -> [Citation]
 citationsFromBibMap bm = sortBy uidSort citations

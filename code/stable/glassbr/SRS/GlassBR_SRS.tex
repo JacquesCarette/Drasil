@@ -27,7 +27,7 @@
 \newcommand{\uctheucnum}{UC\theucnum}
 \bibliography{bibfile}
 \title{Software Requirements Specification for GlassBR program}
-\author{NikithaKrithnan and W.SpencerSmith}
+\author{Nikitha Krithnan and W. Spencer Smith}
 \begin{document}
 \maketitle
 \tableofcontents
@@ -220,7 +220,7 @@ The goal statements are refined to the theoretical models, and the theoretical m
 This section describes the Stakeholders: the people who have an interest in the product.
 \subsection{The Client}
 \label{Sec:Client}
-The client for GlassBR is a company named Entuitive. It is developed by Dr. ManuelCampidelli. The client has the final say on acceptance of the product.
+The client for GlassBR is a company named Entuitive. It is developed by Dr. Manuel Campidelli. The client has the final say on acceptance of the product.
 \subsection{The Customer}
 \label{Sec:Customer}
 The customers are the end user of GlassBR.
@@ -325,7 +325,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:glassTyA}:]The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along. one, two, three, or four edge This practice assumes that (1) the supported glass edge for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam and (3) glass supported on one side acts as a cantilever.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:glassConditionA}:]Following \cite{astm.LR2009} (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:glassConditionA}:]Following \cite{astm2009} (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:explsnScenarioA}:]This system only considers the external explosion scenario for its calculations.
@@ -880,32 +880,32 @@ ${SD_{min}}$ & minimum stand off distance permissible for input & $6.0$ & m
 \section{References}
 \label{Sec:References}
 \begin{filecontents*}{bibfile.bib}
-@misc{astm\_C1036,
-author={ASTM C1036-16},
-title={Standard specification for Flat Glass},
-publisher={ASTM International},
-address={West Conshohocken, PA},
-year={2016},
-howpublished={\url{www.astm.org}}}
-
-@misc{astm\_C1048,
-author={ASTM C1048-04},
-title={Specification for Heat-Treated Flat Glass-Kind HS, Kind FT Coated and Uncoated Glass},
-publisher={ASTM International},
-address={West Conshohocken, PA},
-year={2009},
-howpublished={\url{www.astm.org}}}
-
-@misc{astm\_LR2009,
-author={ASTM E1300-09},
+@misc{astm2009,
+author={ASTM},
 title={Standard Practice for Determining Load Resistance of Glass in Buildings},
 publisher={ASTM International},
 booktitle={Standard E1300-09a},
 year={2009},
 howpublished={\url{www.astm.org}}}
 
-@misc{glThick1998,
-author={Beason, W.Lynn and Kohutek, TerryL. and Bracci, JosephM.},
+@misc{astm2012,
+author={ASTM},
+title={Standard Specification for Heat-Strengthened and Fully Tempered Flat Glass},
+publisher={ASTM International},
+address={West Conshohocken, PA},
+year={2012},
+howpublished={\url{https://doi.org/10.1520/C1048-12E01}}}
+
+@misc{astm2016,
+author={ASTM},
+title={Standard specification for Flat Glass},
+publisher={ASTM International},
+address={West Conshohocken, PA},
+year={2016},
+howpublished={\url{https://doi.org/10.1520/C1036-16}}}
+
+@misc{beasonEtAl1998,
+author={Beason, W. Lynn and Kohutek, Terry L. and Bracci, Joseph M.},
 title={Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts},
 booktitle={ASCE Library},
 month={feb},
@@ -937,7 +937,7 @@ howpublished={\url{https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e
 year={2012}}
 
 @inproceedings{smithLai2005,
-author={Smith, W.Spencer and Lai, Lei},
+author={Smith, W. Spencer and Lai, Lei},
 title={A new requirements template for scientific computing},
 booktitle={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
 year={2005},

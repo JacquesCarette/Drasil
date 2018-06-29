@@ -1,6 +1,6 @@
 #!/bin/sh
 SWHS_PREF="SWHS_"
-TINY_PREF=""
+TINY_PREF="TINY_"
 SSP_PREF="SSP_"
 GLASS_PREF="GlassBR_"
 GAME_PREF="Chipmunk_"

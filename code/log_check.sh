@@ -5,6 +5,7 @@ SSP_PREF="SSP_"
 GLASS_PREF="GlassBR_"
 GAME_PREF="Chipmunk_"
 NoPCM_PREF="NoPCM_"
+log="log.log"
 #
 errors="no"
 exitval=0

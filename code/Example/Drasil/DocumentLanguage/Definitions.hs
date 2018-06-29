@@ -85,7 +85,10 @@ mkTMField t m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] (map tConToExpr (t ^. invariants))) : fs
 mkTMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkTMField _ _ l@(Source) fs = (show l, fixme) : fs --FIXME: fill this in
-mkTMField t _ l@(Notes) fs = (show l, maybe [Paragraph EmptyS] (map Paragraph) (t ^. getNotes)) : fs
+mkTMField t _ l@(Notes) fs = 
+  case (t ^. getNotes) of
+  Nothing -> fs
+  Just ss -> (show l, map Paragraph ss) : fs
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
 
@@ -158,7 +161,10 @@ mkIMField i _ l@(InConstraints) fs  = (show l,
   foldr ((:) . eqUnR) [] (map tConToExpr (i ^. inCons))) : fs
 mkIMField i _ l@(OutConstraints) fs = (show l,
   foldr ((:) . eqUnR) [] (map tConToExpr (i ^. outCons))) : fs
-mkIMField i _ l@(Notes) fs = (show l, maybe [Paragraph $ S "Not applicable."] (map Paragraph) (i ^. getNotes)) : fs
+mkIMField i _ l@(Notes) fs = 
+  case (i ^. getNotes) of
+  Nothing -> fs
+  Just ss -> (show l, map Paragraph ss) : fs
 mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for instance models"
 

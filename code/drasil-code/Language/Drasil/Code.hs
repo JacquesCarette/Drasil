@@ -25,7 +25,8 @@ module Language.Drasil.Code (
   var, svToVar, objMethodCall, objMethodCallVoid, valStmt, funcApp, funcApp', func, continue,
   cSharpLabel, cppLabel, goolLabel, javaLabel, objectiveCLabel, pythonLabel, luaLabel,
   makeCode, createCodeFiles, toAbsCode, getClassName, buildModule, moduleName,
-  Options(..)
+  Options(..),
+  Func, Mod
 ) where
 
 import Prelude hiding (break, print, return, log, exp)
@@ -33,3 +34,4 @@ import Language.Drasil.Code.Imperative.AST
 import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser
 import Language.Drasil.Code.CodeGeneration
+import Language.Drasil.CodeSpec (Func, Mod)

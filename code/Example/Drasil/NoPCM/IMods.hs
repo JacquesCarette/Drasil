@@ -28,7 +28,7 @@ eBalanceOnWtr_new = im eBalanceOnWtr [qw temp_C, qw temp_init, qw time_final,
   qw coil_SA, qw coil_HTC, qw htCap_W, qw w_mass] 
   [TCon AssumedCon $sy temp_init $<= sy temp_C] (qw temp_W) 
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
-  [TCon AssumedCon $ 0 $< sy time $< sy time_final] eBalanceOnWtr_deriv_nopcm "eBalanceOnWtr" []
+  [TCon AssumedCon $ 0 $< sy time $< sy time_final] eBalanceOnWtr_deriv_nopcm "eBalanceOnWtr" [balWtrDesc_note]
 
 eBalanceOnWtr :: RelationConcept
 eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
@@ -45,6 +45,15 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   (E $ sy tau_W $= (sy w_mass * sy htCap_W) / (sy coil_HTC * sy coil_SA)),
   S "is a constant" +:+. sParen (unwrap $ getUnit tau_W),
   S "The above", phrase equation, S "applies as long as the", phrase water,
+  S "is in", phrase liquid, S "form" `sC` (E $ 0 $< sy temp_W $< 100),
+  sParen (unwrap $ getUnit temp_W), S "where", E 0,
+  sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
+  sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
+  plural boil_pt, S "of", phrase water `sC` S "respectively",
+  sParen (makeRef assump10)]
+
+balWtrDesc_note :: Sentence
+balWtrDesc_note = foldlSent [S "The above", phrase equation, S "applies as long as the", phrase water,
   S "is in", phrase liquid, S "form" `sC` (E $ 0 $< sy temp_W $< 100),
   sParen (unwrap $ getUnit temp_W), S "where", E 0,
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),

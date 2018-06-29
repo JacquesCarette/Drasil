@@ -5,7 +5,7 @@ module Drasil.SWHS.IMods (swhsIMods,
 import Language.Drasil
 
 import Drasil.SWHS.Unitals 
-import Drasil.SWHS.DataDefs(dd1HtFluxC, dd2HtFluxP, dd3HtFusion, ddRef)
+import Drasil.SWHS.DataDefs(dd1HtFluxC, dd2HtFluxP, dd3HtFusion, ddRef, dd4MeltFrac)
 import Data.Drasil.Utils (getES, unwrap, weave)
 import Data.Drasil.SentenceStructures (acroT, foldlSent, isThe,
   sAnd, ofThe, foldlSent, isThe, foldlList, acroGD, foldlSentCol, sOf)
@@ -17,7 +17,7 @@ import Data.Drasil.Concepts.Thermodynamics (boiling, heat, temp, melting,
   latent_heat, sens_heat, heat_cap_spec, thermal_energy, boil_pt, heat_trans,
   phase_change, ht_flux)
 
-import Drasil.SWHS.Assumptions (newA15, newA16, newA17, newA18)
+import Drasil.SWHS.Assumptions (newA12, newA15, newA16, newA17, newA18)
 
 swhsIMods :: [RelationConcept]
 swhsIMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
@@ -29,7 +29,7 @@ eBalanceOnWtr_new :: InstanceModel
 eBalanceOnWtr_new = im eBalanceOnWtr [qw time, qw tau_W, qw temp_C, qw eta,
  qw temp_PCM, qw time_final, qw temp_init, qw coil_SA]
   [TCon AssumedCon $ sy temp_init $< sy temp_C] (qw temp_W)
-   [TCon AssumedCon $ 0 $< sy time $< sy time_final] eBalanceOnWtr_deriv_swhs "eBalanceOnWtr" []
+   [TCon AssumedCon $ 0 $< sy time $< sy time_final] eBalanceOnWtr_deriv_swhs "eBalanceOnWtr" [balWtrDesc']
 
 eBalanceOnWtr :: RelationConcept
 eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
@@ -39,6 +39,15 @@ balWtr_Rel :: Relation
 balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
   (((sy temp_C) - (apply1 temp_W time)) +
   (sy eta) * ((apply1 temp_PCM time) - (apply1 temp_W time)))
+
+balWtrDesc' :: Sentence
+balWtrDesc' = foldlSent [S "The above", phrase equation, S "applies as long as the", phrase water,
+  S "is in", phrase liquid, S "form" `sC` (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100))),
+  sParen (unwrap $ getUnit temp_W), S "where", E 0,
+  sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
+  sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
+  plural boil_pt, S "of", phrase water `sC` S "respectively",
+  sParen (makeRef a14 `sC` makeRef a19)]
 
 balWtrDesc :: Sentence
 balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
@@ -190,7 +199,7 @@ eBalanceOnPCM_new :: InstanceModel
 eBalanceOnPCM_new = im eBalanceOnPCM [qw time, qw tau_W, qw temp_C, qw eta,
  qw temp_PCM, qw time_final, qw temp_init, qw coil_SA]
   [TCon AssumedCon $ sy temp_init $< sy temp_C] (qw temp_W)
-   [TCon AssumedCon $ 0 $< sy time $< sy time_final] eBalanceOnPCM_deriv_swhs "eBalanceOnPCM" []
+   [TCon AssumedCon $ 0 $< sy time $< sy time_final] eBalanceOnPCM_deriv_swhs "eBalanceOnPCM" [balPCMDesc_note]
 
 eBalanceOnPCM :: RelationConcept
 eBalanceOnPCM = makeRC "eBalanceOnPCM" (nounPhraseSP
@@ -220,6 +229,15 @@ balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   ((sy pcm_mass) * (sy htCap_L_P)) / ((sy pcm_HTC) * (sy pcm_SA))),
   S "is a constant", sParen (unwrap $ getUnit tau_S_P)]
 
+balPCMDesc_note :: Sentence
+balPCMDesc_note = foldlSent [(E $ (sy temp_PCM)) `sC` (E $ (0 $< sy time $< sy time_final)) `sC` (S "with initial conditions")
+  `sC` (E $ (sy temp_W $= sy temp_PCM $= sy temp_init)) `sC` (S "FIXME t_w(0) = t_p(0)") `sC` makeRef newA12 `sC`
+  (S "and"), (E $ (sy temp_W)), S "from IM1, such that the following governing ODE is satisfied.", 
+  S "The temperature remains constant at",
+  (E $ (sy temp_melt_P)) `sC` 
+  (S "even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as"),
+  (E $ (0 $< sy melt_frac $< 1)), S "(from", makeRef $ datadefn dd4MeltFrac, 
+  S ") is determined as part of the heat energy in the PCM, as given in IM4"]
 
 
 
@@ -334,7 +352,7 @@ eBalanceOnPCM_deriv_eqns_swhs_im2 = [s4_2_3_eq1_swhs_im2, s4_2_3_eq2_swhs_im2,
 ---------
 heatEInWtr_new :: InstanceModel
 heatEInWtr_new = im heatEInWtr [qw temp_init, qw coil_SA, qw htCap_W, qw w_mass] 
-  [] (qw w_E) [TCon AssumedCon $ 0 $< sy time $< sy time_final] [] "heatEInWtr" []
+  [] (qw w_E) [TCon AssumedCon $ 0 $< sy time $< sy time_final] [] "heatEInWtr" [htWtrDesc]
 
 heatEInWtr :: RelationConcept
 heatEInWtr = makeRC "heatEInWtr" (nounPhraseSP "Heat energy in the water")
@@ -370,7 +388,7 @@ heatEInPCM_new :: InstanceModel
 heatEInPCM_new = im heatEInPCM [qw time, qw tau_W, qw temp_C, qw eta,
  qw temp_PCM, qw time_final, qw temp_init, qw coil_SA]
   [TCon AssumedCon $ sy temp_init $< sy temp_C] (qw temp_W)
-   [TCon AssumedCon $ 0 $< sy time $< sy time_final] [] "heatEInPCM" []
+   [TCon AssumedCon $ 0 $< sy time $< sy time_final] [] "heatEInPCM" [htPCMDesc]
 
 heatEInPCM :: RelationConcept
 heatEInPCM = makeRC "heatEInPCM" (nounPhraseSP "Heat energy in the PCM")

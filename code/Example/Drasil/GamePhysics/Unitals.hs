@@ -300,14 +300,14 @@ restCoefCons   = constrained' QP.restitutionCoef    [physc $ Bounded (Inc,0) (In
 -- INSTANCE MODELS --
 ---------------------
 
-im1legTerms, im2legTerms, im3legTerms :: [UnitalChunk]
-im1legTerms = [massIRigidBody, QP.gravitationalAccel, timeT, initTime, pos_CM, 
+transMotLegTerms, rotMotLegTerms, col2DLegTerms :: [UnitalChunk]
+transMotLegTerms = [massIRigidBody, QP.gravitationalAccel, timeT, initTime, pos_CM,
   QP.acceleration, QP.velocity, force_i]
 
-im2legTerms = [massIRigidBody, QP.gravitationalAccel, timeT, initTime, 
+rotMotLegTerms = [massIRigidBody, QP.gravitationalAccel, timeT, initTime,
   QM.orientation, QP.angularVelocity, QP.angularAccel, torque_i, momtInert_k]
 
-im3legTerms = [massIRigidBody, momtInert_k, timeT, initTime, time_c, pos_CM,
+col2DLegTerms = [massIRigidBody, momtInert_k, timeT, initTime, time_c, pos_CM,
   QP.velocity, QM.orientation, QP.angularVelocity, normalVect, -- +:+. S "Its signed direction is determined by (A4)",
   collisionImpulse, pointOfCollision, contDisp_k]
 

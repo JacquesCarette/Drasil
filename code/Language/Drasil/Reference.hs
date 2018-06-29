@@ -3,13 +3,13 @@ module Language.Drasil.Reference where
 
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
-import Data.List (concatMap, groupBy, partition, sortBy)
+import Data.List (concatMap, find, groupBy, partition, sortBy)
 import Data.Maybe (fromMaybe)
 import qualified Data.Map as Map
 
 import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
 import Language.Drasil.Chunk.Change as Ch (Change(..), ChngType(..))
-import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID), CiteField(Author), HasAuthor(getAuthor))
+import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID), CiteField(Author), HasFields(getFields))
 import Language.Drasil.Chunk.Concept (ConceptChunk)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
@@ -22,6 +22,7 @@ import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid))
 import Language.Drasil.Document (Contents(..), DType(Data, Theory), 
   Section(Section), getDefName, repUnd)
+import Language.Drasil.People (People)
 import Language.Drasil.RefTypes (RefType(..))
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.UID (UID)
@@ -268,8 +269,11 @@ instance Referable Contents where
 uidSort :: HasUID c => c -> c -> Ordering
 uidSort = compare `on` (^. uid)
 
-authorSort :: HasAuthors c => c -> c -> Ordering
-authorSort = compare `on` (^. getAuthor)
+authorSort :: HasFields c => c -> c -> Ordering
+authorSort = compare `on` getAuthor
+
+getAuthor :: (HasFields c) => c -> People
+getAuthor c = maybe (error "No author found") (\(Author x) -> x) (find ((Author x)==) (c ^. getFields))
 
 citationsFromBibMap :: BibMap -> [Citation]
 citationsFromBibMap bm = sortBy uidSort citations

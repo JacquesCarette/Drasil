@@ -33,7 +33,6 @@ import Language.Drasil.Printing.Helpers (noSpaces)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), shortname')
 
 import Control.Lens ((^.), Lens', makeLenses)
-import Data.List (find)
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces
@@ -122,13 +121,6 @@ makeLenses ''Citation
 
 class HasFields c where
   getFields :: Lens' c [CiteField]
-
-class (HasFields c) => HasAuthor c where
-  getAuthor :: People
-  getAuthor = check (find ((Author x)==) (c ^. getFields))
-    where
-      check (Just (Author x)) = x
-      check  Nothing          = (error "No author found")
 
 -- | Smart constructor which implicitly uses EntryID as chunk i.
 cite :: EntryID -> CitationKind -> [CiteField] -> Citation

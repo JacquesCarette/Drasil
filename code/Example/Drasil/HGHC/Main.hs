@@ -18,6 +18,6 @@ thisChoices = Choices {
   
 main :: IO ()            
 main = do
-  gen (DocSpec Website "SRS") srsBody allSymbols
-  gen (DocSpec SRS "SRS")     srsBody allSymbols
+  gen (DocSpec Website "Tiny_SRS") srsBody allSymbols
+  gen (DocSpec SRS "Tiny_SRS")     srsBody allSymbols
   --genCode thisChoices thisCode

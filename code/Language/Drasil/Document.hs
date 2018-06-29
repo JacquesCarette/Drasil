@@ -10,13 +10,13 @@ import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName,
   shortname')
-import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel), 
-  HasRefAddress(getRefAdd))
-import Language.Drasil.UID
+import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd))
 import Language.Drasil.Expr (Expr)
+import Language.Drasil.Label (Label, mkLabelRA)
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Spec (Sentence(..))
-import Language.Drasil.Label (Label, mkLabelRA)
+import Language.Drasil.UID
+
 import Control.Lens ((^.), makeLenses)
 import Language.Drasil.Label.Core (Label)
 
@@ -60,6 +60,11 @@ data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining
            | TM
            | DD
 
+-- | Section Contents are split into subsections or contents, where contents
+-- are standard layout objects (see 'Contents')
+data SecCons = Sub Section
+             | Con Contents
+
 -- | Types of layout objects we deal with explicitly
 data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
   -- ^ table has: header-row data(rows) label/caption showlabel?
@@ -81,11 +86,6 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
                --------------------------------------------
                | Defnt DType [(Identifier, [Contents])] RefAdd
 type Identifier = String
-
--- | Section Contents are split into subsections or contents, where contents
--- are standard layout objects (see 'Contents')
-data SecCons = Sub Section
-             | Con Contents
 
 -- | Sections have a title ('Sentence') and a list of contents ('SecCons')
 -- and its shortname
@@ -127,7 +127,6 @@ instance HasShortName  Contents where
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
 
-
 ---------------------------------------------------------------------------
 -- smart constructors needed for LabelledContent
 -- nothing has a shortname right now
@@ -156,7 +155,7 @@ mkDefnt-}
 section :: Sentence -> [Contents] -> [Section] -> String -> ShortName -> Section
 section title intro secs ra sn = Section title (map Con intro ++ map Sub secs) ra sn
 
-section'' :: Sentence -> [Contents] -> [Section] -> String  -> Section
+section'' :: Sentence -> [Contents] -> [Section] -> String -> Section
 section'' title intro secs ra = section title intro secs ra (shortname' ra)
 
 -- | Figure smart constructor. Assumes 100% of page width as max width.

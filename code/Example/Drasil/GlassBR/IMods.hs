@@ -1,4 +1,4 @@
-module Drasil.GlassBR.IMods (calOfCap, calOfDe, iModels, probOfBr, probOfBreak) where
+module Drasil.GlassBR.IMods (iModels, probOfBr, calOfCap, calOfDe, probOfBreak, calofCapacity, calofDemand) where
 
 import Language.Drasil
 
@@ -27,7 +27,7 @@ iModels = [probOfBr, calOfCap, calOfDe]
 probOfBreak :: InstanceModel
 probOfBreak = im probOfBr [qw risk] 
   [TCon AssumedCon $ sy risk $> 0] (qw prob_br) [TCon AssumedCon $ sy prob_br $> 0] []
-  "probOfBrIM" --shortname
+  "probOfBrIM" []--shortname
 
 {--}
 
@@ -39,6 +39,12 @@ pbdescr :: Sentence
 pbdescr =
   foldlSent [(getES prob_br) `isThe` (S "calculated" +:+. (phrase prob_br)),
   (getES risk_fun) `isThe` (phrase risk)]
+
+{--}
+
+calofCapacity :: InstanceModel
+calofCapacity = im' calOfCap [qw nonFL, qw glaTyFac, qw loadSF] [TCon AssumedCon $ sy nonFL $> 0,
+  TCon AssumedCon $ sy glaTyFac $> 0, TCon AssumedCon $ sy loadSF $> 0] (qw lRe) [] [] [capdescr]
 
 {--}
 
@@ -61,6 +67,12 @@ capdescr =
 
 {--}
 
+calofDemand :: InstanceModel
+calofDemand = im' calOfDe [qw demand, qw eqTNTWeight, qw standOffDist] [TCon AssumedCon $ sy demand $> 0,
+  TCon AssumedCon $ sy eqTNTWeight $> 0, TCon AssumedCon $ sy standOffDist $> 0] (qw demand) [] [] [dedescr]
+
+{--}
+
 calOfDe :: RelationConcept
 calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)") 
   dedescr ( (sy demand) $= apply2 demand eqTNTWeight standOffDist)
@@ -74,8 +86,6 @@ dedescr =
   (phrase standOffDist), sParen (getES standOffDist) `sAnd`
   (getES eqTNTWeight), S "as" +:+. plural parameter, 
   (getES eqTNTWeight), S "is defined as" +:+.
-  E (wtntWithEqn^.equat) +:+. ((getES char_weight) `isThe`
-  (phrase char_weight)) +:+. ((getES tNT) `isThe`
-  (phrase tNT)), (getES standOffDist) `isThe`
+  E (wtntWithEqn^.equat) +:+. (getES standOffDist) `isThe`
   (phrase standOffDist), S "where", E (sdWithEqn^.equat), S "where",
   sParen (sdVectorSent), S "are", plural coordinate]

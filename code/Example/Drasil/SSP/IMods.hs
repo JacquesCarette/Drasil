@@ -69,7 +69,7 @@ fctSfty_new :: InstanceModel
 fctSfty_new = im fctSfty [qw fs, qw shearRNoIntsl, qw shearFNoIntsl, qw index,
  qw numbSlices, qw mobShrC, qw varblU, qw shrResC, qw varblV]
   [TCon AssumedCon $ sy fs $< sy fs] (qw fs)
-   [TCon AssumedCon $ 0 $< sy fs $< sy fs] fctSfty_deriv_ssp "fctSfty"
+   [TCon AssumedCon $ 0 $< sy fs $< sy fs] fctSfty_deriv_ssp "fctSfty" []
 
 fctSfty :: RelationConcept
 fctSfty = makeRC "fctSfty" factorOfSafety fcSfty_desc fcSfty_rel 
@@ -101,7 +101,7 @@ nrmShrFor_new = im nrmShrFor [qw normFunc, qw shearFunc, qw baseWthX, qw scalFun
  qw earthqkLoadFctr, qw slcWght, qw surfHydroForce, qw surfLoad, qw impLoadAngle,
  qw fixme1, qw fixme2]
   [TCon AssumedCon $ sy fixme1 $< sy fixme1] (qw fixme1)
-   [TCon AssumedCon $ 0 $< sy fixme1 $< sy fixme1] nrmShr_deriv_ssp "nrmShrFor"
+   [TCon AssumedCon $ 0 $< sy fixme1 $< sy fixme1] nrmShr_deriv_ssp "nrmShrFor" []
 
 nrmShrFor :: RelationConcept
 nrmShrFor = makeRC "nrmShrFor" (nounPhraseSP "normal/shear force ratio")
@@ -148,7 +148,7 @@ intsliceFs_new :: InstanceModel
 intsliceFs_new = im intsliceFs [qw normFunc, qw shearFunc, qw intNormForce, qw index,
  qw numbSlices, qw shearFNoIntsl, qw fs]
   [TCon AssumedCon $ sy fs $< sy fs] (qw fs)
-   [TCon AssumedCon $ 0 $< sy fs $< sy fs] intrSlc_deriv_ssp "intsliceFs"
+   [TCon AssumedCon $ 0 $< sy fs $< sy fs] intrSlc_deriv_ssp "intsliceFs" []
 
 intsliceFs :: RelationConcept
 intsliceFs = makeRC "intsliceFs" (nounPhraseSP "interslice forces")
@@ -177,7 +177,7 @@ forDisEqlb_new = im forDisEqlb [qw watrForceDif, qw earthqkLoadFctr, qw slcWght,
  qw baseHydroForce, qw surfHydroForce, qw surfAngle, qw surfLoad, qw impLoadAngle,
  qw surfLngth, qw nrmStiffIntsl, qw dx_i, qw effStiffA, qw dy_i, qw baseLngth, qw effStiffB]
   [TCon AssumedCon $ sy earthqkLoadFctr $< sy earthqkLoadFctr] (qw earthqkLoadFctr)
-   [TCon AssumedCon $ 0 $< sy earthqkLoadFctr $< sy earthqkLoadFctr] rigDis_deriv_ssp "forDisEqlb"
+   [TCon AssumedCon $ 0 $< sy earthqkLoadFctr $< sy earthqkLoadFctr] rigDis_deriv_ssp "forDisEqlb" []
 
 forDisEqlb :: RelationConcept
 forDisEqlb = makeRC "forDisEqlb"
@@ -229,7 +229,7 @@ rfemFoS_new :: InstanceModel
 rfemFoS_new = im rfemFoS [qw fsloc, qw cohesion, qw nrmStiffBase, qw nrmDispl,
  qw fricAngle, qw shrStiffBase, qw shrDispl, qw baseLngth]
   [TCon AssumedCon $ inxi fsloc $< inxi fsloc] (qw fsloc)
-   [TCon AssumedCon $ 0 $< inxi fsloc $< inxi fsloc] rigFoS_deriv_ssp "rfemFoS"
+   [TCon AssumedCon $ 0 $< inxi fsloc $< inxi fsloc] rigFoS_deriv_ssp "rfemFoS" []
 
 
 rfemFoS :: RelationConcept
@@ -265,7 +265,7 @@ rfemFoS_desc = foldlSent [
 crtSlpId_new :: InstanceModel
 crtSlpId_new = im crtSlpId [qw fs_min]
   [TCon AssumedCon $ sy fs_min $< sy fs_min] (qw fs_min)
-   [TCon AssumedCon $ 0 $< sy fs_min $< sy fs_min] [] "crtSlpId"{-derivation part-}
+   [TCon AssumedCon $ 0 $< sy fs_min $< sy fs_min] [] "crtSlpId" []
 
 crtSlpId :: RelationConcept
 crtSlpId = makeRC "crtSlpId" (nounPhraseSP "critical slip identification")

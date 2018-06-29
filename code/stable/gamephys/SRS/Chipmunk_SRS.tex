@@ -6,6 +6,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{mathtools}
+\usepackage{breqn}
 \usepackage{unicode-math}
 \usepackage{tabu}
 \usepackage{longtable}
@@ -17,6 +18,8 @@
 \usepackage{url}
 \setmathfont{Latin Modern Math}
 \global\tabulinesep=1mm
+\newcounter{assumpnum}
+\newcommand{\atheassumpnum}{A\theassumpnum}
 \bibliography{bibfile}
 \title{Software Requirements Specification for Chipmunk2D}
 \author{Alex Halliwushka and Luthfi Mawarid}
@@ -285,7 +288,7 @@ The end user of Chipmunk2D should have an understanding of first year programmin
 There are no system constraints.
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
-This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used for the physics library.
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used for the Chipmunk2D game physics library.
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
 Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (Section~\ref{Sec:ExistingSolns}). By creating a simple, lightweight, fast and portable 2D rigid body physics library, game development will be more accessible to the masses and higher quality products will be produced.
@@ -310,72 +313,123 @@ Given the inputs, the goal statements are:
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
-The instance models that govern Chipmunk2D are presented in FIXME REF to IModSection. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern Chipmunk2D are presented in Section~\ref{Sec:IMs}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models, General Definitions, Data Definitions, Instance Models, or Likely Changes, in which the respective assumption is used.
-\begin{itemize}
-\item[A1:]All objects are rigid bodies.
-\item[A2:]All objects are 2D.
-\item[A3:]The library uses a Cartesian coordinate system.
-\item[A4:]The axes are defined using right-handed coordinate system.
-\item[A5:]All rigid bodies collisions are vertex-to-edge collisions.
-\item[A6:]There is no damping involved throughout the simulation.
-\item[A7:]There are no constraints and joints involved throughout the simulation.
-\end{itemize}
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TMs}{]}, General Definitions {[}Section~\ref{Sec:GDs}{]}, Data Definitions {[}Section~\ref{Sec:DDs}{]}, Instance Models {[}Section~\ref{Sec:IMs}{]}, or Likely Changes {[}Section~\ref{Sec:LCs}{]}, in which the respective assumption is used.
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:objectTyA}:]All objects are rigid bodies.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:objectDimensionA}:]All objects are 2D.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:coordinatesystemTyA}:]The library uses a Cartesian coordinate system.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:axesDefinedA}:]The axes are defined using right-handed coordinate system.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:collisionTypeA}:]All rigid bodies collisions are vertex-to-edge collisions.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:dampingInvolvementA}:]There is no damping involved throughout the simulation.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:constraints.and.jointsInvolvementA}:]There are no constraints and joints involved throughout the simulation.
+\end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
 This section focuses on the general equations and laws that Chipmunk2D is based on.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:newtonSL}
+\toprule \textbf{Refname} & \textbf{T:t1NewtonSL}
 \phantomsection 
-\label{T:newtonSL}
+\label{T:t1NewtonSL}
 \\ \midrule \\
-Label & Newton's Second Law of Motion
+Label & Newton's second law of motion
 \\ \midrule \\
-Equation & $\mathbf{F}=m \mathbf{a}$
+Equation & \begin{dmath}
+           \mathbf{F}=m \mathbf{a}
+           \end{dmath}
 \\ \midrule \\
-Description & The net force $\mathbf{F}$ (N) on a rigid body is proportional to the acceleration $\mathbf{a}$ ($\frac{\text{m}}{\text{s}^{2}}$) of the rigid body, where $m$ (kg) denotes the mass of the rigid body as the constant of proportionality.
+Description & \begin{description}
+              \item{$\mathbf{F}$ is the force (N)}
+              \item{$m$ is the mass (kg)}
+              \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \end{description}
+\\ \midrule \\
+Source & FIXME: This needs to be filled in
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \midrule \\
+Notes & The net force $\mathbf{F}$ (N) on a rigid body is proportional to the acceleration $\mathbf{a}$ ($\frac{\text{m}}{\text{s}^{2}}$) of the rigid body, where $m$ (kg) denotes the mass of the rigid body as the constant of proportionality.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:newtonTL}
+\toprule \textbf{Refname} & \textbf{T:t2NewtonTL}
 \phantomsection 
-\label{T:newtonTL}
+\label{T:t2NewtonTL}
 \\ \midrule \\
-Label & Newton's Third Law of Motion
+Label & Newton's third law of motion
 \\ \midrule \\
-Equation & ${\mathbf{F}_{1}}=-{\mathbf{F}_{2}}$
+Equation & \begin{dmath}
+           {\mathbf{F}_{1}}=-{\mathbf{F}_{2}}
+           \end{dmath}
 \\ \midrule \\
-Description & Every action has an equal and opposite reaction. In other words, the force ${\mathbf{F}_{1}}$ (N) exerted on the second rigid body by the first is equal in magnitude and in the opposite direction to the force ${\mathbf{F}_{2}}$ (N) exerted on the first rigid body by the second.
+Description & \begin{description}
+              \item{${\mathbf{F}_{1}}$ is the force exerted by the first body (on another body) (N)}
+              \item{${\mathbf{F}_{2}}$ is the force exerted by the second body (on another body) (N)}
+              \end{description}
+\\ \midrule \\
+Source & FIXME: This needs to be filled in
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \midrule \\
+Notes & Every action has an equal and opposite reaction. In other words, the force ${\mathbf{F}_{1}}$ (N) exerted on the second rigid body by the first is equal in magnitude and in the opposite direction to the force ${\mathbf{F}_{2}}$ (N) exerted on the first rigid body by the second.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:newtonLUG}
+\toprule \textbf{Refname} & \textbf{T:t3NewtonLUG}
 \phantomsection 
-\label{T:newtonLUG}
+\label{T:t3NewtonLUG}
 \\ \midrule \\
-Label & Newton's Law of Universal Gravitation
+Label & Newton's law of universal gravitation
 \\ \midrule \\
-Equation & $\mathbf{F}=G \frac{{m_{1}} {m_{2}}}{||\mathbf{r}||^{2}} \mathbf{\hat{r}}=G \frac{{m_{1}} {m_{2}}}{||\mathbf{r}||^{2}} \frac{\mathbf{r}}{||\mathbf{r}||}$
+Equation & \begin{dmath}
+           \mathbf{F}=G \frac{{m_{1}} {m_{2}}}{||\mathbf{r}||^{2}} \mathbf{\hat{r}}=G \frac{{m_{1}} {m_{2}}}{||\mathbf{r}||^{2}} \frac{\mathbf{r}}{||\mathbf{r}||}
+           \end{dmath}
 \\ \midrule \\
-Description & Two rigid bodies in the universe attract each other with a force $\mathbf{F}$ (N) that is directly proportional to the product of their masses, ${m_{1}}$ and ${m_{2}}$ (kg), and inversely proportional to the squared distance ${||\mathbf{r}||^{2}}$ ($\text{m}^{2}$) between them. The vector $\mathbf{r}$ (m) is the displacement between the centres of the rigid bodies and $||\mathbf{r}||$ (m) represents the Euclidean norm of the displacement, or absolute distance between the two. $\mathbf{\hat{r}}$ denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, $G$ is the gravitational constant (6.673 * 10E-11) ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$).
+Description & \begin{description}
+              \item{$\mathbf{F}$ is the force (N)}
+              \item{$G$ is the gravitational constant ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$)}
+              \item{${m_{1}}$ is the mass of the first body (kg)}
+              \item{${m_{2}}$ is the mass of the second body (kg)}
+              \item{$||\mathbf{r}||$ is the Euclidean norm of the displacement (m)}
+              \item{$\mathbf{\hat{r}}$ is the displacement unit vector (m)}
+              \item{$\mathbf{r}$ is the displacement (m)}
+              \end{description}
+\\ \midrule \\
+Source & FIXME: This needs to be filled in
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \midrule \\
+Notes & Two rigid bodies in the universe attract each other with a force $\mathbf{F}$ (N) that is directly proportional to the product of their masses, ${m_{1}}$ and ${m_{2}}$ (kg), and inversely proportional to the squared distance ${||\mathbf{r}||^{2}}$ ($\text{m}^{2}$) between them. The vector $\mathbf{r}$ (m) is the displacement between the centres of the rigid bodies and $||\mathbf{r}||$ (m) represents the Euclidean norm of the displacement, or absolute distance between the two. $\mathbf{\hat{r}}$ denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, $G$ is the gravitational constant (6.673 * 10E-11) ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:chaslesThm}
+\toprule \textbf{Refname} & \textbf{T:t4ChaslesThm}
 \phantomsection 
-\label{T:chaslesThm}
+\label{T:t4ChaslesThm}
 \\ \midrule \\
-Label & Chasles' Theorem
+Label & Chasles' theorem
 \\ \midrule \\
 Equation & ${\mathbf{v}_{B}}={\mathbf{v}_{O}}+ω\times{\mathbf{r}_{OB}}$
 \\ \midrule \\
@@ -385,11 +439,11 @@ Description & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:newtonSLR}
+\toprule \textbf{Refname} & \textbf{T:t5NewtonSLR}
 \phantomsection 
-\label{T:newtonSLR}
+\label{T:t5NewtonSLR}
 \\ \midrule \\
-Label & Newton's Second Law for Rotational Motion
+Label & Newton's second law for rotational motion
 \\ \midrule \\
 Equation & $τ=\mathbf{I} α$
 \\ \midrule \\
@@ -405,43 +459,153 @@ This section transforms the problem defined in FIXME REF into one which is expre
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:transMot}
+\toprule \textbf{Refname} & \textbf{IM:im1}
 \phantomsection 
-\label{T:transMot}
+\label{IM:im1}
 \\ \midrule \\
-Label & Force on the Translational Motion of a Set of 2d Rigid Bodies
+Label & Force on the translational motion of a set of 2d rigid bodies
 \\ \midrule \\
-Equation & ${\mathbf{a}_{i}}=\frac{d\,{\mathbf{v}_{i}}\left(t\right)}{d\,t}=g+\frac{{\mathbf{F}_{i}}\left(t\right)}{{m_{j}}}$
+Input & ${\mathbf{v}_{i}}$, $t$, $g$, ${\mathbf{F}_{i}}$, ${m_{j}}$
 \\ \midrule \\
-Description & The above equation expresses the total acceleration of the rigid body (A1, A2) i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using DD2, DD3 and DD4. It is currently assumed that there is no damping (A6) or constraints (A7) involved. ${m_{i}}$ is the mass of the i-th rigid body (kg). $g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$). $t$ is the point in time (s). ${t_{0}}$ is the denotes the initial time (s). ${\mathbf{p}_{CM}}$ is the the mass-weighted average position of a rigid body's particles (m). $\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$). $\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$). ${\mathbf{F}_{i}}$ is the force applied to the i-th body at time t (N).
+Output & ${\mathbf{a}_{i}}$
+\\ \midrule \\
+Input Constraints & \begin{dmath}
+                    {\mathbf{v}_{i}}>0
+                    \end{dmath}
+                    \begin{dmath}
+                    t>0
+                    \end{dmath}
+                    \begin{dmath}
+                    g>0
+                    \end{dmath}
+                    \begin{dmath}
+                    {\mathbf{F}_{i}}>0
+                    \end{dmath}
+                    \begin{dmath}
+                    {m_{j}}>0
+                    \end{dmath}
+\\ \midrule \\
+Output Constraints & 
+\\ \midrule \\
+Equation & \begin{dmath}
+           {\mathbf{a}_{i}}=\frac{d\,{\mathbf{v}_{i}}\left(t\right)}{d\,t}=g+\frac{{\mathbf{F}_{i}}\left(t\right)}{{m_{j}}}
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{description}
+              \item{${\mathbf{a}_{i}}$ is the the i-th body's acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$t$ is the time (s)}
+              \item{${\mathbf{v}_{i}}$ is the velocity of the i-th body's velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${\mathbf{F}_{i}}$ is the force applied to the i-th body at time t (N)}
+              \item{${m_{j}}$ is the mass of the j-th particle (kg)}
+              \end{description}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \midrule \\
+Notes & The above equation expresses the total acceleration of the rigid body (A1, A2) i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using DD2, DD3 and DD4. It is currently assumed that there is no damping (A6) or constraints (A7) involved.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:rotMot}
+\toprule \textbf{Refname} & \textbf{IM:im2}
 \phantomsection 
-\label{T:rotMot}
+\label{IM:im2}
 \\ \midrule \\
-Label & Force on the Rotational Motion of a Set of 2D Rigid Body
+Label & Force on the rotational motion of a set of 2D rigid body
 \\ \midrule \\
-Equation & $α=\frac{d\,ω\left(t\right)}{d\,t}=\frac{{τ_{i}}\left(t\right)}{\mathbf{I}}$
+Input & $ω$, $t$, ${τ_{i}}$, $\mathbf{I}$
 \\ \midrule \\
-Description & The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved. ${m_{i}}$ is the mass of the i-th rigid body (kg). $g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$). $t$ is the point in time (s). ${t_{0}}$ is the denotes the initial time (s). $ϕ$ is the orientation (rad). $ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$). $α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$). ${τ_{i}}$ is the is the torque applied to the i-th body (Nm). ${\mathbf{I}_{k}}$ is the moment of inertia of the k-th rigid body (kg$\text{m}^{2}$).
+Output & $α$
+\\ \midrule \\
+Input Constraints & \begin{dmath}
+                    ω>0
+                    \end{dmath}
+                    \begin{dmath}
+                    t>0
+                    \end{dmath}
+                    \begin{dmath}
+                    {τ_{i}}>0
+                    \end{dmath}
+                    \begin{dmath}
+                    \mathbf{I}>0
+                    \end{dmath}
+\\ \midrule \\
+Output Constraints & \begin{dmath}
+                     α>0
+                     \end{dmath}
+Equation & \begin{dmath}
+            α=\frac{d\,ω\left(t\right)}{d\,t}=\frac{{τ_{i}}\left(t\right)}{\mathbf{I}}
+            \end{dmath}
+\\ \midrule \\
+Description & \begin{description}
+               \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
+               \item{$t$ is the time (s)}
+               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
+               \item{${τ_{i}}$ is the is the torque applied to the i-th body (Nm)}
+               \item{$\mathbf{I}$ is the moment of inertia (kg$\text{m}^{2}$)}
+               \end{description}
+\\ \midrule \\
+Source &
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \midrule \\
+Notes & The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:col2D}
+\toprule \textbf{Refname} & \textbf{IM:im3}
 \phantomsection 
-\label{T:col2D}
+\label{IM:im3}
 \\ \midrule \\
-Label & Collisions on 2D Rigid Bodies
+Label & Collisions on 2D rigid bodies
 \\ \midrule \\
-Equation & ${\mathbf{v}_{A}}\left({t_{c}}\right)={\mathbf{v}_{A}}\left(t\right)+\frac{j}{{m_{A}}} \mathbf{n}$
+Input & $t$, $j$, ${m_{A}}$, $\mathbf{n}$
 \\ \midrule \\
-Description & This instance model is based on our assumptions regarding rigid body (A1, A2) collisions (A5). Again, this does not take damping (A6) or constraints (A7) into account. ${m_{i}}$ is the mass of the i-th rigid body (kg). ${\mathbf{I}_{k}}$ is the moment of inertia of the k-th rigid body (kg$\text{m}^{2}$). $t$ is the point in time (s). ${t_{0}}$ is the denotes the initial time (s). ${t_{c}}$ is the denotes the time at collision (s). ${\mathbf{p}_{CM}}$ is the the mass-weighted average position of a rigid body's particles (m). $\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$). $ϕ$ is the orientation (rad). $ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$). $\mathbf{n}$ is the collision normal vector (m). $j$ is the collision impulse (scalar) (Ns). $P$ is the point of collision (m). ${\mathbf{r}_{kP}}$ is the displacement vector between the centre of mass of rigid body k and contact point P (m).
+Output & ${t_{c}}$
+\\ \midrule \\
+Input Constraints & \begin{dmath}
+                    t>0
+                    \end{dmath}
+                    \begin{dmath}
+                    j>0
+                    \end{dmath}
+                    \begin{dmath}
+                    {m_{A}}>0
+                    \end{dmath}
+                    \begin{dmath}
+                    \mathbf{n}>0
+                    \end{dmath}
+\\ \midrule \\
+Output Constraints & \begin{dmath}
+                     {\mathbf{v}_{A}}>0
+                     \end{dmath}
+                     \begin{dmath}
+                     {t_{c}}>0
+                     \end{dmath}
+\\ \midrule \\
+Equation & \begin{dmath}
+           {\mathbf{v}_{A}}\left({t_{c}}\right)={\mathbf{v}_{A}}\left(t\right)+\frac{j}{{m_{A}}} \mathbf{n}
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{description}
+               \item{${\mathbf{v}_{A}}$ is the velocity at point A ($\frac{\text{m}}{\text{s}}$)}
+               \item{${t_{c}}$ is the denotes the time at collision (s)}
+               \item{$t$ is the time (s)}
+               \item{$j$ is the impulse (scalar) (Ns)}
+               \item{${m_{A}}$ is the mass of rigid body A (kg)}
+               \item{$\mathbf{n}$ is the collision normal vector (m)}
+               \end{description}
+\\ \midrule \\
+Source &
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \midrule \\
+Notes & This instance model is based on our assumptions regarding rigid body (A1, A2) collisions (A5). Again, this does not take damping (A6) or constraints (A7) into account.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Definitions}
@@ -577,7 +741,7 @@ Description & $j$ is the impulse (scalar) (Ns)\newline${C_{R}}$ is the coefficie
 \end{minipage}\\
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. FIXME
+Table~\ref{Table:InDataConstraints}, and Table~\ref{Table:OutDataConstraints} shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. FIXME
 \begin{longtable}{l l l l}
 \toprule
 Var & Physical Constraints & Typical Value & TU
@@ -776,18 +940,18 @@ LC4 (Section~\ref{Sec:LCs}) &  &  &  &  &  &  & X
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:newtonSL]{Definition~T:newtonSL}) & T2 (\hyperref[T:newtonTL]{Definition~T:newtonTL}) & T3 (\hyperref[T:newtonLUG]{Definition~T:newtonLUG}) & T4 (\hyperref[T:chaslesThm]{Definition~T:chaslesThm}) & T5 (\hyperref[T:newtonSLR]{Definition~T:newtonSLR}) & GD1 (Section~\ref{Sec:SolCharSpec}) & GD2 (Section~\ref{Sec:SolCharSpec}) & GD3 (Section~\ref{Sec:SolCharSpec}) & GD4 (Section~\ref{Sec:SolCharSpec}) & GD5 (Section~\ref{Sec:SolCharSpec}) & GD6 (Section~\ref{Sec:SolCharSpec}) & GD7 (Section~\ref{Sec:SolCharSpec}) & DD1 (\hyperref[DD:p.CM]{Definition~DD:p.CM}) & DD2 (\hyperref[DD:linearDisplacement]{Definition~DD:linearDisplacement}) & DD3 (\hyperref[DD:linearVelocity]{Definition~DD:linearVelocity}) & DD4 (\hyperref[DD:linearAcceleration]{Definition~DD:linearAcceleration}) & DD5 (\hyperref[DD:angularDisplacement]{Definition~DD:angularDisplacement}) & DD6 (\hyperref[DD:angularVelocity]{Definition~DD:angularVelocity}) & DD7 (\hyperref[DD:angularAcceleration]{Definition~DD:angularAcceleration}) & DD8 (\hyperref[DD:impulseS]{Definition~DD:impulseS}) & IM1 (\hyperref[T:transMot]{Definition~T:transMot}) & IM2 (\hyperref[T:rotMot]{Definition~T:rotMot}) & IM3 (\hyperref[T:col2D]{Definition~T:col2D})
+ & T1 (\hyperref[T:t1NewtonSL]{Definition~T:t1NewtonSL}) & T2 (\hyperref[T:t2NewtonTL]{Definition~T:t2NewtonTL}) & T3 (\hyperref[T:t3NewtonLUG]{Definition~T:t3NewtonLUG}) & T4 (\hyperref[T:t4ChaslesThm]{Definition~T:t4ChaslesThm}) & T5 (\hyperref[T:t5NewtonSLR]{Definition~T:t5NewtonSLR}) & GD1 (Section~\ref{Sec:SolCharSpec}) & GD2 (Section~\ref{Sec:SolCharSpec}) & GD3 (Section~\ref{Sec:SolCharSpec}) & GD4 (Section~\ref{Sec:SolCharSpec}) & GD5 (Section~\ref{Sec:SolCharSpec}) & GD6 (Section~\ref{Sec:SolCharSpec}) & GD7 (Section~\ref{Sec:SolCharSpec}) & DD1 (\hyperref[DD:p.CM]{Definition~DD:p.CM}) & DD2 (\hyperref[DD:linearDisplacement]{Definition~DD:linearDisplacement}) & DD3 (\hyperref[DD:linearVelocity]{Definition~DD:linearVelocity}) & DD4 (\hyperref[DD:linearAcceleration]{Definition~DD:linearAcceleration}) & DD5 (\hyperref[DD:angularDisplacement]{Definition~DD:angularDisplacement}) & DD6 (\hyperref[DD:angularVelocity]{Definition~DD:angularVelocity}) & DD7 (\hyperref[DD:angularAcceleration]{Definition~DD:angularAcceleration}) & DD8 (\hyperref[DD:impulseS]{Definition~DD:impulseS}) & IM1 (\hyperref[T:im1]{Definition~T:im1}) & IM2 (\hyperref[T:im2]{Definition~T:im2}) & IM3 (\hyperref[T:im3]{Definition~T:im3})
 \\
 \midrule
-T1 (\hyperref[T:newtonSL]{Definition~T:newtonSL}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+T1 (\hyperref[T:t1NewtonSL]{Definition~T:t1NewtonSL}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-T2 (\hyperref[T:newtonTL]{Definition~T:newtonTL}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+T2 (\hyperref[T:t2NewtonTL]{Definition~T:t2NewtonTL}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-T3 (\hyperref[T:newtonLUG]{Definition~T:newtonLUG}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+T3 (\hyperref[T:t3NewtonLUG]{Definition~T:t3NewtonLUG}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-T4 (\hyperref[T:chaslesThm]{Definition~T:chaslesThm}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+T4 (\hyperref[T:t4ChaslesThm]{Definition~T:t4ChaslesThm}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-T5 (\hyperref[T:newtonSLR]{Definition~T:newtonSLR}) &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  & 
+T5 (\hyperref[T:t5NewtonSLR]{Definition~T:t5NewtonSLR}) &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  & 
 \\
 GD1 (Section~\ref{Sec:SolCharSpec}) & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -819,11 +983,11 @@ DD7 (\hyperref[DD:angularAcceleration]{Definition~DD:angularAcceleration}) &  & 
 \\
 DD8 (\hyperref[DD:impulseS]{Definition~DD:impulseS}) &  &  &  & X &  & X &  &  & X & X &  & X &  &  &  &  &  &  &  &  &  &  & X
 \\
-IM1 (\hyperref[T:transMot]{Definition~T:transMot}) & X &  &  &  &  &  &  & X &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
+IM1 (\hyperref[T:im1]{Definition~T:im1}) & X &  &  &  &  &  &  & X &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
 \\
-IM2 (\hyperref[T:rotMot]{Definition~T:rotMot}) &  &  &  &  & X &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
+IM2 (\hyperref[T:im2]{Definition~T:im2}) &  &  &  &  & X &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
 \\
-IM3 (\hyperref[T:col2D]{Definition~T:col2D}) &  &  &  &  &  & X & X &  &  &  & X & X & X &  &  &  &  &  &  & X &  &  & 
+IM3 (\hyperref[T:im3]{Definition~T:im3}) &  &  &  &  &  & X & X &  &  &  & X & X & X &  &  &  &  &  &  & X &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items and Other Sections}

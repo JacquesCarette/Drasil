@@ -61,6 +61,7 @@ printLO (ALUR _ x l i)         = wrap "ul" ["hide-list-style"] $
 printLO (Bib bib)              = makeBib bib
 printLO (Graph _ _ _ _ _)      = empty -- FIXME
 
+
 -- | Called by build, uses 'printLO' to render the layout
 -- objects in Doc format.
 print :: [LayoutObj] -> Doc

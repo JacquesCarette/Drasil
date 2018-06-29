@@ -29,7 +29,7 @@ eBalanceOnWtr_new :: InstanceModel
 eBalanceOnWtr_new = im eBalanceOnWtr [qw time, qw tau_W, qw temp_C, qw eta,
  qw temp_PCM, qw time_final, qw temp_init, qw coil_SA]
   [TCon AssumedCon $ sy temp_init $< sy temp_C] (qw temp_W)
-   [TCon AssumedCon $ 0 $< sy time $< sy time_final] eBalanceOnWtr_deriv_swhs "eBalanceOnWtr"
+   [TCon AssumedCon $ 0 $< sy time $< sy time_final] eBalanceOnWtr_deriv_swhs "eBalanceOnWtr" []
 
 eBalanceOnWtr :: RelationConcept
 eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
@@ -190,7 +190,7 @@ eBalanceOnPCM_new :: InstanceModel
 eBalanceOnPCM_new = im eBalanceOnPCM [qw time, qw tau_W, qw temp_C, qw eta,
  qw temp_PCM, qw time_final, qw temp_init, qw coil_SA]
   [TCon AssumedCon $ sy temp_init $< sy temp_C] (qw temp_W)
-   [TCon AssumedCon $ 0 $< sy time $< sy time_final] eBalanceOnPCM_deriv_swhs "eBalanceOnPCM"
+   [TCon AssumedCon $ 0 $< sy time $< sy time_final] eBalanceOnPCM_deriv_swhs "eBalanceOnPCM" []
 
 eBalanceOnPCM :: RelationConcept
 eBalanceOnPCM = makeRC "eBalanceOnPCM" (nounPhraseSP
@@ -334,7 +334,7 @@ eBalanceOnPCM_deriv_eqns_swhs_im2 = [s4_2_3_eq1_swhs_im2, s4_2_3_eq2_swhs_im2,
 ---------
 heatEInWtr_new :: InstanceModel
 heatEInWtr_new = im heatEInWtr [qw temp_init, qw coil_SA, qw htCap_W, qw w_mass] 
-  [] (qw w_E) [TCon AssumedCon $ 0 $< sy time $< sy time_final] [] "heatEInWtr"
+  [] (qw w_E) [TCon AssumedCon $ 0 $< sy time $< sy time_final] [] "heatEInWtr" []
 
 heatEInWtr :: RelationConcept
 heatEInWtr = makeRC "heatEInWtr" (nounPhraseSP "Heat energy in the water")
@@ -370,7 +370,7 @@ heatEInPCM_new :: InstanceModel
 heatEInPCM_new = im heatEInPCM [qw time, qw tau_W, qw temp_C, qw eta,
  qw temp_PCM, qw time_final, qw temp_init, qw coil_SA]
   [TCon AssumedCon $ sy temp_init $< sy temp_C] (qw temp_W)
-   [TCon AssumedCon $ 0 $< sy time $< sy time_final] [] "heatEInPCM"
+   [TCon AssumedCon $ 0 $< sy time $< sy time_final] [] "heatEInPCM" []
 
 heatEInPCM :: RelationConcept
 heatEInPCM = makeRC "heatEInPCM" (nounPhraseSP "Heat energy in the PCM")

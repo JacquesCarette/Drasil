@@ -44,7 +44,7 @@ import Data.Drasil.Citations (parnasClements1986, smithLai2005)
 
 import Data.Drasil.Concepts.Documentation as Doc (datumConstraint, inModel,
   requirement, section_, traceyGraph, item, assumption, dataDefn,
-  likelyChg, genDefn, thModel, traceyMatrix, model, 
+  likelyChg, unlikelyChg, genDefn, thModel, traceyMatrix, model, 
   output_, quantity, input_, physicalConstraint, condition,
   property, variable, description, symbol_,
   information, value, column, softwareConstraint, goalStmt,

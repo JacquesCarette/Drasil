@@ -5,7 +5,7 @@ import Language.Drasil (DocType(SRS,Website),DocSpec(DocSpec),gen
   , Logging(..), ConstraintBehaviour(..), Structure(..), Comments(..)
   , Lang(..))
 
-import Drasil.NoPCM.Body (nopcm_srs, nopcm_code, nopcm_SymbMap, outputuid)
+import Drasil.NoPCM.Body (nopcm_srs, nopcm_code, nopcm_SymbMap)
 
 nopcm_Choices :: Choices
 nopcm_Choices = Choices {
@@ -21,7 +21,6 @@ nopcm_Choices = Choices {
        
 main :: IO ()            
 main = do
-  mapM_ print outputuid
   gen (DocSpec SRS "NoPCM_SRS") nopcm_srs nopcm_SymbMap
   gen (DocSpec Website "NoPCM_SRS") nopcm_srs nopcm_SymbMap
   genCode nopcm_Choices nopcm_code

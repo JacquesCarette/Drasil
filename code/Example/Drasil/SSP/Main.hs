@@ -4,7 +4,7 @@ import Language.Drasil (Choices(..), Comments(..), ConstraintBehaviour(..),
   DocSpec(DocSpec), DocType(SRS, Website), ImplementationType(..), Lang(..), 
   Logging(..), Structure(..), gen)
 
-import Drasil.SSP.Body (ssp_srs, sspSymMap, outputuid)
+import Drasil.SSP.Body (ssp_srs, sspSymMap)
 
 sspChoices :: Choices
 sspChoices = Choices {

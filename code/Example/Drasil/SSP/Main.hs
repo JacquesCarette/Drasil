@@ -4,7 +4,7 @@ import Language.Drasil (Choices(..), Comments(..), ConstraintBehaviour(..),
   DocSpec(DocSpec), DocType(SRS, Website), ImplementationType(..), Lang(..), 
   Logging(..), Structure(..), gen)
 
-import Drasil.SSP.Body (ssp_srs, sspSymMap)
+import Drasil.SSP.Body (ssp_srs, sspSymMap, outputuid)
 
 sspChoices :: Choices
 sspChoices = Choices {
@@ -20,6 +20,7 @@ sspChoices = Choices {
        
 main :: IO ()            
 main = do
+  mapM_ print outputuid
   gen (DocSpec Website "SSP_SRS") ssp_srs sspSymMap
   gen (DocSpec SRS "SSP_SRS")     ssp_srs sspSymMap
   --genCode ssp_code

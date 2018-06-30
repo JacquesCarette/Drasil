@@ -1,9 +1,9 @@
-module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap) where
+module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap, outputuid) where
 
 import Language.Drasil hiding (organization)
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
-
+import Data.List (nub)
 import Data.Drasil.Concepts.Documentation (analysis, assumption, definition, 
   design, document, effect, element, endUser, goalStmt, inModel, input_, 
   interest, interest, issue, loss, method_, model, organization, physics, 
@@ -83,7 +83,7 @@ ssp_si = SI {
   _authors = [henryFrankis],
   _units = this_si,
   _quants = sspSymbols,
-  _concepts = (sspSymbols),
+  _concepts = (ccs'),
   _definitions = sspDataDefs,
   _inputs = map qw sspInputs,
   _outputs = map qw sspOutputs,
@@ -106,7 +106,7 @@ mkSRS = RefSec (RefProg intro
   IntroSec (IntroProg startIntro kSent
     [IPurpose prpsOfDoc_p1
     , IScope scpIncl scpEnd
-    , IChar (phrase solidMechanics) 
+    , IChar (phrase solidMechanics)
       (phrase undergraduate +:+ S "level 4" +:+ phrase physics)
       EmptyS
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
@@ -117,11 +117,22 @@ mkSRS = RefSec (RefProg intro
 ssp_code :: CodeSpec
 ssp_code = codeSpec ssp_si [sspInputMod]
 
-
 -- SYMBOL MAP HELPERS --
 sspSymMap :: ChunkDB
-sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms) ([] :: [ConceptChunk]) -- FIXME: Fill in Concepts
+sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms) sspSymbols
   this_si
+
+ccss :: Sentence -> [DefinedQuantityDict]
+ccss s = combine s sspSymMap
+
+ccss' :: Expr -> [DefinedQuantityDict]
+ccss' s = combine' s sspSymMap
+
+ccs' :: [DefinedQuantityDict]
+ccs' = nub ((concatMap ccss $ getDoc ssp_srs) ++ (concatMap ccss' $ egetDoc ssp_srs))
+
+outputuid :: [String]
+outputuid = nub ((concatMap snames $ getDoc ssp_srs) ++ (concatMap names $ egetDoc ssp_srs))
 
 -- SECTION 1 --
 --automatically generated in mkSRS -

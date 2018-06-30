@@ -3,7 +3,7 @@ module Drasil.NoPCM.Body where
 import Language.Drasil
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 import Control.Lens ((^.))
-
+import Data.List (nub)
 import Drasil.NoPCM.DataDesc (inputMod)
 import Drasil.NoPCM.Definitions (ht_trans, srs_swhs, acronyms)
 import Drasil.NoPCM.GenDefs (roc_temp_simp_deriv)
@@ -95,6 +95,7 @@ this_si = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigra
 -- This contains the list of symbols used throughout the document
 nopcm_Symbols :: [DefinedQuantityDict]
 nopcm_Symbols = (map dqdWr nopcm_Units) ++ (map dqdWr nopcm_Constraints)
+ ++ [gradient, surface, uNormalVect]
   
 nopcm_SymbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcm_HTC and pcm_SA
@@ -109,7 +110,7 @@ nopcm_Units = map ucw [density, tau, in_SA, out_SA,
   htCap_L, QT.ht_flux, ht_flux_in, ht_flux_out, vol_ht_gen,
   htTransCoeff, mass, tank_vol, QT.temp, QT.heat_cap_spec,
   deltaT, temp_env, thFluxVect, time, ht_flux_C,
-  vol, w_mass, w_vol]
+  vol, w_mass, w_vol, tau_W]
 
 nopcm_Constraints :: [UncertQ]
 nopcm_Constraints =  [coil_SA, w_E, htCap_W, coil_HTC, temp_init,
@@ -160,7 +161,7 @@ nopcm_si = SI {
   _kind = srs,
   _authors = [thulasi],
   _units = this_si,
-  _quants = nopcm_Symbols,
+  _quants = ccs',
   _concepts = (nopcm_Symbols),
   _definitions = [dd1HtFluxC],          --dataDefs
   _inputs = (map qw nopcm_Constraints), --inputs
@@ -183,8 +184,20 @@ nopcm_srs :: Document
 nopcm_srs = mkDoc mkSRS (for) nopcm_si
 
 nopcm_SymbMap :: ChunkDB
-nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) ([] :: [ConceptChunk]) -- FIXME: Fill in Concepts
+nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) nopcm_Symbols
   this_si
+
+ccss :: Sentence -> [DefinedQuantityDict]
+ccss s = combine s nopcm_SymbMap
+
+ccss' :: Expr -> [DefinedQuantityDict]
+ccss' s = combine' s nopcm_SymbMap
+
+ccs' :: [DefinedQuantityDict]
+ccs' = nub ((concatMap ccss $ getDoc nopcm_srs) ++ (concatMap ccss' $ egetDoc nopcm_srs))
+
+outputuid :: [String]
+outputuid = nub ((concatMap snames $ getDoc nopcm_srs) ++ (concatMap names $ egetDoc nopcm_srs))
 
 --------------------------
 --Section 2 : INTRODUCTION

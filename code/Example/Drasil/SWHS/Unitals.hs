@@ -27,7 +27,7 @@ swhsSymbols = (map dqdWr swhsUnits) ++ (map dqdWr swhsUnitless) ++
 swhsSymbolsAll :: [QuantityDict]
 swhsSymbolsAll = (map qw swhsUnits) ++ (map qw swhsUnitless) ++
   (map qw swhsConstrained) ++ (map qw specParamValList) ++
-  (map qw [htFusion_min, htFusion_max, coil_SA_max] ++ [qw gradient])
+  (map qw [htFusion_min, htFusion_max, coil_SA_max])
 
 -- Symbols with Units --
 

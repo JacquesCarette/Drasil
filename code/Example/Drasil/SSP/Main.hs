@@ -20,7 +20,6 @@ sspChoices = Choices {
        
 main :: IO ()            
 main = do
-  mapM_ print outputuid
   gen (DocSpec Website "SSP_SRS") ssp_srs sspSymMap
   gen (DocSpec SRS "SSP_SRS")     ssp_srs sspSymMap
   --genCode ssp_code

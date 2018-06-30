@@ -289,6 +289,7 @@ executable glassbr
     , Drasil.DocumentLanguage.RefHelpers
     , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.GlassBR.Body
+    , Drasil.GlassBR.Changes
     , Drasil.GlassBR.Concepts
     , Drasil.GlassBR.Unitals
     , Drasil.GlassBR.TMods
@@ -333,6 +334,7 @@ executable chipmunkdocs
     , Drasil.DocumentLanguage.RefHelpers
     , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.GamePhysics.Body
+    , Drasil.GamePhysics.Changes
     , Drasil.GamePhysics.Concepts
     , Drasil.GamePhysics.DataDefs
     , Drasil.GamePhysics.TMods

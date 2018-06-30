@@ -36,7 +36,7 @@ genStffness = SM.stffness
 -- HELPERS --
 -------------
 fixme, fsi, fisi, wiif, wla, smsi :: String
-fixme = "FIXME: missing discription"
+fixme = "FIXME: missing description"
 fsi   = "for slice index i"
 fisi  = "for interslice index i"
 wiif  = "without the influence of interslice forces"

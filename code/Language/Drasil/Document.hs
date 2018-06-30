@@ -10,13 +10,15 @@ import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName,
   shortname')
-import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel), 
+  HasRefAddress(getRefAdd))
 import Language.Drasil.UID
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Label (Label, mkLabelRA)
 import Control.Lens ((^.), makeLenses)
+import Language.Drasil.Label.Core (Label)
 
 data ListType = Bullet [ItemType] -- ^ Bulleted list
               | Numeric [ItemType] -- ^ Enumerated List
@@ -58,18 +60,6 @@ data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining
            | TM
            | DD
 
--- | Section Contents are split into subsections or contents, where contents
--- are standard layout objects (see 'Contents')
-data SecCons = Sub Section
-             | Con Contents
-
--- | Sections have a title ('Sentence') and a list of contents ('SecCons')
--- and its shortname
-data Section = Section Title [SecCons] RefAdd ShortName
-
-instance HasShortName  Section where
-  shortname (Section _ _ _ sn) = sn
-
 -- | Types of layout objects we deal with explicitly
 data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
   -- ^ table has: header-row data(rows) label/caption showlabel?
@@ -92,11 +82,30 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
                | Defnt DType [(Identifier, [Contents])] RefAdd
 type Identifier = String
 
+-- | Section Contents are split into subsections or contents, where contents
+-- are standard layout objects (see 'Contents')
+data SecCons = Sub Section
+             | Con Contents
+
+-- | Sections have a title ('Sentence') and a list of contents ('SecCons')
+-- and its shortname
+data Section = Section 
+             { tle :: Title 
+             , cons :: [SecCons] 
+             , _ra :: RefAdd      --Hack to be fixed in later branch
+             , _sn :: ShortName   --Hack to be fixed in later branch 
+             }
+makeLenses ''Section
+
+instance HasShortName  Section where shortname (Section _ _ _ sn) = sn
+
 data LabelledContent = LblC { _uniqueID :: UID
                             , _lbl :: Label
                             , ctype :: Contents
                             }
 makeLenses ''LabelledContent
+
+instance HasRefAddress LabelledContent where getRefAdd = lbl . getRefAdd
 
 -- | Smart constructor for labelled content chunks (should not be exported)
 llcc :: UID -> Label -> Contents -> LabelledContent
@@ -117,6 +126,7 @@ instance HasShortName  Contents where
   shortname (Bib _)               = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
+
 
 ---------------------------------------------------------------------------
 -- smart constructors needed for LabelledContent
@@ -146,7 +156,7 @@ mkDefnt-}
 section :: Sentence -> [Contents] -> [Section] -> String -> ShortName -> Section
 section title intro secs ra sn = Section title (map Con intro ++ map Sub secs) ra sn
 
-section'' :: Sentence -> [Contents] -> [Section] -> String -> Section
+section'' :: Sentence -> [Contents] -> [Section] -> String  -> Section
 section'' title intro secs ra = section title intro secs ra (shortname' ra)
 
 -- | Figure smart constructor. Assumes 100% of page width as max width.

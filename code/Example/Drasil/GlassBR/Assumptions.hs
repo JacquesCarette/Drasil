@@ -15,7 +15,7 @@ import Drasil.GlassBR.Unitals ( lite, explosion, lateral, load_dur, explosion,
   constant_LoadDur, constant_ModElas, constant_M, constant_K, constant_LoadDF, constant_LoadSF)
 import Drasil.GlassBR.Concepts (lShareFac, gLassBR,
   glaSlab, glass, responseTy, cantilever, beam, plane, edge)
-import Drasil.GlassBR.References (gbCitations, astm_LR2009)
+import Drasil.GlassBR.References (gbCitations, astm2009)
  
 gbRefDB :: ReferenceDB
 gbRefDB = rdb [] [] newAssumptions [] [] gbCitations
@@ -54,7 +54,7 @@ a1Desc = foldlSent [S "The standard E1300-09a for",
   S "supported on one side acts as a", phrase cantilever]
 
 a2Desc :: Sentence
-a2Desc = foldlSent [S "Following", cite gbRefDB astm_LR2009 +:+ sParen
+a2Desc = foldlSent [S "Following", cite gbRefDB astm2009 +:+ sParen
   (S "pg. 1") `sC` S "this", phrase practice,
   S "does not apply to any form of", foldlOptions $ map S ["wired",
   "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"],

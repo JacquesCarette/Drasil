@@ -33,7 +33,7 @@ import Data.Drasil.SentenceStructures (acroIM, acroR, foldlSent, sAnd, isThe,
 -- 5.1 : Functional Requirements --
 -----------------------------------
 
-req1, req2, s5_1_2_Eqn1, s5_1_2_Eqn2, req3, req4,
+req1, req2, reqEqn1, reqEqn2, req3, req4,
   req5, req6, req7, req8, req9, req10, req11 :: Contents
 
 req1 = mkRequirement "req1" ( foldlSentCol [
@@ -47,11 +47,11 @@ req2 = mkRequirement "req2" ( foldlSentCol [
   acroIM 4 `sC` S "as follows, where", ch w_vol `isThe` phrase w_vol,
   S "and", ch tank_vol `isThe` phrase tank_vol] ) "Use-Above-Find-Mass-IM1-IM4"
 
-s5_1_2_Eqn1 = eqUnR ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
+reqEqn1 = eqUnR ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
   ((sy tank_vol) - (sy pcm_vol)) * (sy w_density) $=
   (((sy diam) / 2) * (sy tank_length) - (sy pcm_vol)) * (sy w_density)) -- FIXME: Ref Hack
 
-s5_1_2_Eqn2 = eqUnR ((sy pcm_mass) $= (sy pcm_vol) * (sy pcm_density)) -- FIXME: Ref Hack
+reqEqn2 = eqUnR ((sy pcm_mass) $= (sy pcm_vol) * (sy pcm_density)) -- FIXME: Ref Hack
 
 req3 = mkRequirement "req3" ( foldlSent [
   S "Verify that the", plural input_, S "satisfy the required",
@@ -117,8 +117,8 @@ req11 = mkRequirement "req11" ( foldlSent [
 -- 5.2 : Non-functional Requirements --
 ---------------------------------------
 
-s5_2 :: Section
-s5_2 = nonFuncReqF [performance] [correctness, verifiability,
+nonFuncReqs :: Section
+nonFuncReqs = nonFuncReqF [performance] [correctness, verifiability,
   understandability, reusability, maintainability]
   (S "This problem is small in size and relatively simple")
   (S "Any reasonable implementation will be very" +:+

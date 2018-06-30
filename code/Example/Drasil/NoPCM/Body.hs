@@ -145,7 +145,7 @@ mkSRS = RefSec (RefProg intro
       , SSDSolChSpec 
         (SCSProg 
           [ Assumptions 
-          , TMs ([Label] ++ stdFields) [t1ConsThermE_new] -- only have the same T1 with SWHS
+          , TMs ([Label] ++ stdFields ++ [Notes]) [t1ConsThermE_new] -- only have the same T1 with SWHS
           , GDs [Label, Units, DefiningEquation   ---check glassbr
           , Description Verbose IncludeUnits
           , Source, RefBy] generalDefinitions ShowDerivation

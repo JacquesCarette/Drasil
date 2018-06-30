@@ -155,7 +155,7 @@ mkSRS = RefSec (RefProg intro
         , SSDSolChSpec 
           (SCSProg 
             [Assumptions 
-            ,TMs ([Label] ++ stdFields) [fs_rc_new, equilibrium_new, mcShrStrgth_new,
+            ,TMs ([Label] ++ stdFields ++ [Notes]) [fs_rc_new, equilibrium_new, mcShrStrgth_new,
              effStress_new, hookesLaw_new]
             , GDs [Label, Units, DefiningEquation   ---check glassbr
             , Description Verbose IncludeUnits

@@ -168,7 +168,7 @@ mkSRS = RefSec (RefProg intro
       , SSDSolChSpec 
         (SCSProg 
           [ Assumptions
-          , TMs ([Label] ++ stdFields) [t1ConsThermE_new, t2SensHtE_new, t3LatHtE_new]
+          , TMs ([Label] ++ stdFields ++ [Notes]) [t1ConsThermE_new, t2SensHtE_new, t3LatHtE_new]
           , GDs [Label, Units, DefiningEquation   ---check glassbr
           , Description Verbose IncludeUnits
           , Source, RefBy] generalDefinitions ShowDerivation

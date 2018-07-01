@@ -2,7 +2,7 @@ module Main (main) where
 
 import Language.Drasil
 
-import Drasil.GlassBR.Body (gbSymbMap, glassBR_code, glassBR_srs)
+import Drasil.GlassBR.Body (gbSymbMap, glassBR_code, glassBR_srs, outputuid)
 
 glassChoices :: Choices
 glassChoices = Choices {
@@ -18,6 +18,7 @@ glassChoices = Choices {
   
 main :: IO()
 main = do
+  mapM_ print outputuid
   gen (DocSpec SRS "GlassBR_SRS")     glassBR_srs gbSymbMap
   gen (DocSpec Website "GlassBR_SRS") glassBR_srs gbSymbMap
   genCode glassChoices glassBR_code

@@ -2,7 +2,7 @@ module Drasil.GlassBR.Body where
 import Control.Lens ((^.))
 import Language.Drasil hiding (organization)
 import qualified Drasil.SRS as SRS
-
+import Data.List (nub)
 import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
   DocSection(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons), --DocSection uses everything but Verbatim
   IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), LCsSec(..), 
@@ -66,7 +66,7 @@ import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad,
   glassGeo, glass_type, nom_thick, sdx, sdy, sdz, tNT, gBRSpecParamVals,
   loadTypes, load, glassTypes, probBreak, termsWithAccDefn, termsWithDefsOnly,
   gbConstants, gbConstrained, gbOutputs, gbInputs, glBreakage, capacity, 
-  constant_LoadDF)
+  constant_LoadDF, glassBRsymb)
 
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.SpecificSystemDescription (solChSpecF,
@@ -83,8 +83,20 @@ import Data.Drasil.SI_Units (kilogram, metre, millimetre, newton, pascal,
 
 gbSymbMap :: ChunkDB
 gbSymbMap =
-  cdb this_symbols (map nw acronyms ++ map nw this_symbols) ([] :: [ConceptChunk])
+  cdb this_symbols (map nw acronyms ++ map nw this_symbols) glassBRsymb
       (map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton])
+
+ccss :: Sentence -> [DefinedQuantityDict]
+ccss s = combine s gbSymbMap
+
+ccss' :: Expr -> [DefinedQuantityDict]
+ccss' s = combine' s gbSymbMap
+
+ccs' :: [DefinedQuantityDict]
+ccs' = nub ((concatMap ccss $ getDoc glassBR_srs) ++ (concatMap ccss' $ egetDoc glassBR_srs))
+
+outputuid :: [String]
+outputuid = nub ((concatMap snames $ getDoc glassBR_srs) ++ (concatMap names $ egetDoc glassBR_srs))
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GlassBR/"

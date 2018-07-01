@@ -17,7 +17,8 @@ import Data.Drasil.SI_Units (kilogram, kilopascal, metre, millimetre, pascal,
 import Data.Drasil.Utils (mkDataDef)
 
 --FIXME: Many of the current terms can be separated into terms and defns?
-
+glassBRsymb :: [DefinedQuantityDict]
+glassBRsymb = map dqdWr [plate_len, plate_width, char_weight, standOffDist]
 {--}
 
 glassBRSymbolsWithDefns :: [UnitalChunk]

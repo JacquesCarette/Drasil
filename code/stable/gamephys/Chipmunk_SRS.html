@@ -1156,7 +1156,7 @@ The instance models that govern Chipmunk2D are presented in <a href=#Sec:IMs>Ins
 Assumptions
 </h3>
 <p class="paragraph">
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], or Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], or Unlikely Changes [<a href=#Sec:UCs>Unlikely Changes</a>], in which the respective assumption is used.
 </p>
 <ul class="hide-list-style">
 <li>
@@ -1393,7 +1393,6 @@ m<sub>1</sub>&#8239;m<sub>2</sub>
 ||<b>r</b>||
 </span>
 </div></em>
-</p>
 </div>
 </div>
 </td>
@@ -1466,7 +1465,6 @@ Equation
 <div id="">
 <div class="equation">
 <em><b>v</b><sub>B</sub> = <b>v</b><sub>O</sub>&plus;ω&#10799;<b>r</b><sub>OB</sub></em>
-</p>
 </div>
 </div>
 </td>
@@ -1536,7 +1534,6 @@ Equation
 <div id="">
 <div class="equation">
 <em>τ = <b>I</b>&#8239;α</em>
-</p>
 </div>
 </div>
 </td>
@@ -1547,15 +1544,9 @@ Description
 </th>
 <td>
 <div class="list">
-<p>
-<em>τ</em> is the torque (N&sdot;m)
-</p>
-<p>
-<em><b>I</b></em> is the moment of inertia (kg&sdot;m<sup>2</sup>)
-</p>
-<p>
-<em>α</em> is the angular acceleration (rad/s<sup>2</sup>)
-</p>
+<em>τ</em> is the torque (N&sdot;m) <br />
+<em><b>I</b></em> is the moment of inertia (kg&sdot;m<sup>2</sup>) <br />
+<em>α</em> is the angular acceleration (rad/s<sup>2</sup>) <br />
 </div>
 </td>
 </tr>
@@ -1566,7 +1557,6 @@ Source
 <td>
 <p class="paragraph">
 FIXME: This needs to be filled in
-
 </p>
 </td>
 </tr>
@@ -1705,7 +1695,6 @@ d&#8239;t
 m<sub>j</sub>
 </span>
 </div></em>
-</p>
 </div>
 </div>
 </td>
@@ -1716,24 +1705,12 @@ Description
 </th>
 <td>
 <div class="list">
-<p>
-<em><b>a</b><sub>i</sub></em> is the the i-th body's acceleration (m/s<sup>2</sup>)
-</p>
-<p>
-<em>t</em> is the time (s)
-</p>
-<p>
-<em><b>v</b><sub>i</sub></em> is the velocity of the i-th body's velocity (m/s)
-</p>
-<p>
-<em>g</em> is the gravitational acceleration (m/s<sup>2</sup>)
-</p>
-<p>
-<em><b>F</b><sub>i</sub></em> is the force applied to the i-th body at time t (N)
-</p>
-<p>
-<em>m<sub>j</sub></em> is the mass of the j-th particle (kg)
-</p>
+<em><b>a</b><sub>i</sub></em> is the the i-th body's acceleration (m/s<sup>2</sup>) <br />
+<em>t</em> is the time (s) <br />
+<em><b>v</b><sub>i</sub></em> is the velocity of the i-th body's velocity (m/s) <br />
+<em>g</em> is the gravitational acceleration (m/s<sup>2</sup>) <br />
+<em><b>F</b><sub>i</sub></em> is the force applied to the i-th body at time t (N) <br />
+<em>m<sub>j</sub></em> is the mass of the j-th particle (kg) <br />
 </div>
 </td>
 </tr>
@@ -1862,7 +1839,6 @@ d&#8239;t
 <b>I</b>
 </span>
 </div></em>
-</p>
 </div>
 </div>
 </td>
@@ -1873,21 +1849,11 @@ Description
 </th>
 <td>
 <div class="list">
-<p>
-<em>α</em> is the angular acceleration (rad/s<sup>2</sup>)
-</p>
-<p>
-<em>t</em> is the time (s)
-</p>
-<p>
-<em>ω</em> is the angular velocity (rad/s)
-</p>
-<p>
-<em>τ<sub>i</sub></em> is the is the torque applied to the i-th body (N&sdot;m)
-</p>
-<p>
-<em><b>I</b></em> is the moment of inertia (kg&sdot;m<sup>2</sup>)
-</p>
+<em>α</em> is the angular acceleration (rad/s<sup>2</sup>) <br />
+<em>t</em> is the time (s) <br />
+<em>ω</em> is the angular velocity (rad/s) <br />
+<em>τ<sub>i</sub></em> is the is the torque applied to the i-th body (N&sdot;m) <br />
+<em><b>I</b></em> is the moment of inertia (kg&sdot;m<sup>2</sup>) <br />
 </div>
 </td>
 </tr>
@@ -2014,7 +1980,6 @@ j
 m<sub>A</sub>
 </span>
 </div>&#8239;<b>n</b></em>
-</p>
 </div>
 </div>
 </td>
@@ -2025,24 +1990,12 @@ Description
 </th>
 <td>
 <div class="list">
-<p>
-<em><b>v</b><sub>A</sub></em> is the velocity at point A (m/s)
-</p>
-<p>
-<em>t<sub>c</sub></em> is the denotes the time at collision (s)
-</p>
-<p>
-<em>t</em> is the time (s)
-</p>
-<p>
-<em>j</em> is the impulse (scalar) (N&sdot;s)
-</p>
-<p>
-<em>m<sub>A</sub></em> is the mass of rigid body A (kg)
-</p>
-<p>
-<em><b>n</b></em> is the collision normal vector (m)
-</p>
+<em><b>v</b><sub>A</sub></em> is the velocity at point A (m/s) <br />
+<em>t<sub>c</sub></em> is the denotes the time at collision (s) <br />
+<em>t</em> is the time (s) <br />
+<em>j</em> is the impulse (scalar) (N&sdot;s) <br />
+<em>m<sub>A</sub></em> is the mass of rigid body A (kg) <br />
+<em><b>n</b></em> is the collision normal vector (m) <br />
 </div>
 </td>
 </tr>
@@ -2086,7 +2039,7 @@ This instance model is based on our assumptions regarding rigid body (A1, A2) co
 Data Definitions
 </h3>
 <p class="paragraph">
-This section collects and defines all the data needed to build the instance models. The dimension of each quantity is also given.
+This section collects and defines all the data needed to build the instance models.
 </p>
 <div id="DD:p.CM">
 <table class="ddefn">
@@ -2096,7 +2049,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-The Mass-Weighted Average Position of a Rigid Body's Particles
+The mass-weighted average position of a rigid body's particles
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em><b>p</b><sub>CM</sub></em>
 </p>
 </td>
 </tr>
@@ -2117,7 +2080,6 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em><b>p</b><sub>CM</sub> = <div class="fraction">
 <span class="fup">
 &sum;m<sub>j</sub>&#8239;<b>p</b><sub>j</sub>
@@ -2126,7 +2088,6 @@ Equation
 M
 </span>
 </div></em>
-</p>
 </div>
 </div>
 </td>
@@ -2136,8 +2097,31 @@ M
 Description
 </th>
 <td>
+<div class="list">
+<em><b>p</b><sub>CM</sub></em> is the the mass-weighted average position of a rigid body's particles (m) <br />
+<em>m<sub>j</sub></em> is the mass of the j-th particle (kg) <br />
+<em><b>p</b><sub>j</sub></em> is the position vector of the j-th particle (m) <br />
+<em>M</em> is the total mass of the rigid body (kg) <br />
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em><b>p</b><sub>CM</sub></em> is the the mass-weighted average position of a rigid body's particles (m)<br /><em>m<sub>j</sub></em> is the mass of the j-th particle (kg)<br /><em><b>p</b><sub>j</sub></em> is the position vector of the j-th particle (m)<br /><em>M</em> is the total mass of the rigid body (kg)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2157,6 +2141,16 @@ Linear Displacement
 </tr>
 <tr>
 <th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em><b>r</b>(t)</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Units
 </th>
 <td>
@@ -2172,7 +2166,6 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em><b>r</b>(t) = <div class="fraction">
 <span class="fup">
 d&#8239;<b>p</b>(t)
@@ -2181,7 +2174,6 @@ d&#8239;<b>p</b>(t)
 d&#8239;t
 </span>
 </div></em>
-</p>
 </div>
 </div>
 </td>
@@ -2191,8 +2183,30 @@ d&#8239;t
 Description
 </th>
 <td>
+<div class="list">
+<em><b>r</b>(t)</em> is the linear displacement (m) <br />
+<em>t</em> is the time (s) <br />
+<em><b>p</b></em> is the position (m) <br />
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em><b>r</b>(t)</em> is the linear displacement (m)<br /><em>t</em> is the time (s)<br /><em><b>p</b></em> is the position (m)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2207,6 +2221,16 @@ Label
 <td>
 <p class="paragraph">
 Linear Velocity
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em><b>v</b>(t)</em>
 </p>
 </td>
 </tr>
@@ -2227,7 +2251,6 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em><b>v</b>(t) = <div class="fraction">
 <span class="fup">
 d&#8239;<b>r</b>(t)
@@ -2236,7 +2259,6 @@ d&#8239;<b>r</b>(t)
 d&#8239;t
 </span>
 </div></em>
-</p>
 </div>
 </div>
 </td>
@@ -2246,8 +2268,30 @@ d&#8239;t
 Description
 </th>
 <td>
+<div class="list">
+<em><b>v</b>(t)</em> is the linear velocity (m/s) <br />
+<em>t</em> is the time (s) <br />
+<em><b>r</b></em> is the displacement (m) <br />
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em><b>v</b>(t)</em> is the linear velocity (m/s)<br /><em>t</em> is the time (s)<br /><em><b>r</b></em> is the displacement (m)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2262,6 +2306,16 @@ Label
 <td>
 <p class="paragraph">
 Linear Acceleration
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em><b>a</b>(t)</em>
 </p>
 </td>
 </tr>
@@ -2282,7 +2336,6 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em><b>a</b>(t) = <div class="fraction">
 <span class="fup">
 d&#8239;<b>v</b>(t)
@@ -2291,7 +2344,6 @@ d&#8239;<b>v</b>(t)
 d&#8239;t
 </span>
 </div></em>
-</p>
 </div>
 </div>
 </td>
@@ -2301,8 +2353,30 @@ d&#8239;t
 Description
 </th>
 <td>
+<div class="list">
+<em><b>a</b>(t)</em> is the linear acceleration (m/s<sup>2</sup>) <br />
+<em>t</em> is the time (s) <br />
+<em><b>v</b></em> is the velocity (m/s) <br />
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em><b>a</b>(t)</em> is the linear acceleration (m/s<sup>2</sup>)<br /><em>t</em> is the time (s)<br /><em><b>v</b></em> is the velocity (m/s)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2317,6 +2391,16 @@ Label
 <td>
 <p class="paragraph">
 Angular Displacement
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>θ</em>
 </p>
 </td>
 </tr>
@@ -2337,7 +2421,6 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em>θ = <div class="fraction">
 <span class="fup">
 d&#8239;ϕ(t)
@@ -2346,7 +2429,6 @@ d&#8239;ϕ(t)
 d&#8239;t
 </span>
 </div></em>
-</p>
 </div>
 </div>
 </td>
@@ -2356,8 +2438,30 @@ d&#8239;t
 Description
 </th>
 <td>
+<div class="list">
+<em>θ</em> is the angular displacement (rad) <br />
+<em>t</em> is the time (s) <br />
+<em>ϕ</em> is the orientation (rad) <br />
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>θ</em> is the angular displacement (rad)<br /><em>t</em> is the time (s)<br /><em>ϕ</em> is the orientation (rad)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2372,6 +2476,16 @@ Label
 <td>
 <p class="paragraph">
 Angular Velocity
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>ω</em>
 </p>
 </td>
 </tr>
@@ -2392,7 +2506,6 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em>ω = <div class="fraction">
 <span class="fup">
 d&#8239;θ(t)
@@ -2401,7 +2514,6 @@ d&#8239;θ(t)
 d&#8239;t
 </span>
 </div></em>
-</p>
 </div>
 </div>
 </td>

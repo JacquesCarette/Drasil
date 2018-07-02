@@ -2,16 +2,16 @@ module Drasil.GamePhysics.Body where
 
 import Control.Lens ((^.))
 
-import Data.Drasil.Concepts.Computation (algorithm)
-import Data.Drasil.Concepts.Documentation (assumption, body, 
+import Data.Drasil.Concepts.Documentation (assumption, body,
   concept, condition, consumer, dataConst, dataDefn, datumConstraint,
-  document, endUser, game, genDefn, generalSystemDescription, goalStmt,
-  inModel, information, input_, item, library, likelyChg, model, 
-  nonfunctionalRequirement, object, organization, physical, physicalConstraint,
-  physicalProperty, physicalSim, physics, priority, problemDescription, product_,
-  project, property, quantity, realtime, reference, requirement, section_, 
-  simulation, solutionCharSpec, srs, systemConstraint, task, template, termAndDef, 
-  thModel, traceyMatrix, userCharacteristic)
+  document, endUser, environment, game, genDefn, generalSystemDescription,
+  goalStmt, guide, inModel, information, input_, interface, item,
+  model, nonfunctionalRequirement, object, organization, physical,
+  physicalConstraint, physicalProperty, physicalSim, physics, priority,
+  problem, problemDescription, product_, project, property, quantity, realtime,
+  reference, requirement, section_, simulation, software, softwareSys,
+  solutionCharSpec, srs, system, systemConstraint, sysCont, task, template,
+  termAndDef, thModel, traceyMatrix, user, userCharacteristic)
 import Data.Drasil.Concepts.Education (highSchoolCalculus, frstYr,
   highSchoolPhysics)
 import Data.Drasil.Concepts.Software (physLib, understandability, portability,
@@ -24,6 +24,7 @@ import Data.Drasil.SI_Units(metre, kilogram, second, newton, radian)
 import Drasil.DocumentLanguage (DocDesc, TConvention(..), TSIntro(..), 
   TSIntro(..), Emphasis(..), DocSection(..), IntroSub(..), mkDoc, RefSec(..),
   tsymb, RefTab(..), IntroSec(..), IntroSub(..))
+import Drasil.GamePhysics.Changes (likelyChanges, likelyChangesList', unlikelyChanges)
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
 import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs)
 import Drasil.GamePhysics.IMods (iModels)
@@ -47,7 +48,7 @@ import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass,
   dimension)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
   cartesian, friction, rightHand, collision, space, joint, damping)
-import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode, 
+import qualified Data.Drasil.Concepts.Math as CM (equation, surface,
   constraint, law)
 
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
@@ -55,10 +56,10 @@ import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Quantities.Physics as QP (time, 
   position, force, velocity, angularVelocity, linearVelocity)
 import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlList, sOf,
-  sAnd, sOr, maybeChanged, maybeExpanded, foldlSentCol, foldlSP, showingCxnBw)
+  sAnd, sOr, foldlSentCol, foldlSP, foldlSPCol, showingCxnBw)
 import Data.Drasil.Software.Products (videoGame, openSource, sciCompS)
 import Data.Drasil.Utils (makeTMatrix, itemRefToSent, refFromType,
-  makeListRef, enumSimple, enumBullet)
+  makeListRef, bulletFlat, bulletNested, enumSimple, enumBullet)
 
 import qualified Drasil.SRS as SRS
 import qualified Drasil.Sections.ReferenceMaterial as RM
@@ -85,7 +86,7 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
    IScope scope_of_requirements_intro_p1 scope_of_requirements_intro_p2, 
    IChar (S "rigid body dynamics") (phrase highSchoolCalculus) (EmptyS), 
    IOrgSec organization_of_documents_intro inModel solution_characteristics_specification EmptyS]) :
-   Verbatim general_syatem_description :
+   Verbatim general_system_description :
    SSDSec 
     (SSDProg [SSDSubVerb problem_description
       , SSDSolChSpec 
@@ -154,6 +155,9 @@ everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: 
 
 chipCode :: CodeSpec
 chipCode = codeSpec chipmunkSysInfo []
+
+resourcePath :: String
+resourcePath = "../../../datafiles/GamePhysics/"
 
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
@@ -237,15 +241,72 @@ organization_of_documents_intro = foldlSent
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
 --------------------------------------------
 
-general_syatem_description :: Section
-general_syatem_description = assembler chipmunk everything generalSystemDescriptionSect
+general_system_description :: Section
+general_system_description = assembler chipmunk everything generalSystemDescriptionSect
   [userCharacteristicSect, systemConstraintSect]
 
 generalSystemDescriptionSect :: SubSec
 generalSystemDescriptionSect = sSubSec generalSystemDescription []
 
+--------------------------
+-- 3.1 : System Context --
+--------------------------
+
+sysContext :: SubSec
+sysContext = sSubSec sysCont [siSTitl, (siCon [sysCtxIntro, sysCtxFig1,
+  sysCtxDesc, sysCtxList])]
+
+sysCtxIntro :: Contents
+sysCtxIntro = foldlSP
+  [makeRef sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
+   S "A circle represents an external entity outside the" +:+ phrase software
+   `sC` S "the", phrase user, S "in this case. A rectangle represents the",
+   phrase softwareSys, S "itself", (sParen $ short chipmunk) +:+. EmptyS,
+   S "Arrows are used to show the data flow between the" +:+ phrase system,
+   S "and its" +:+ phrase environment]
+
+sysCtxFig1 :: Contents
+sysCtxFig1 = fig (titleize sysCont) (resourcePath ++ "sysctx.png") "sysCtxDiag"
+
+sysCtxDesc :: Contents
+sysCtxDesc = foldlSPCol
+  [S "The interaction between the", phrase product_, S "and the", phrase user,
+   S "is through an application programming" +:+. phrase interface,
+   S "The responsibilities of the", phrase user, S "and the", phrase system,
+   S "are as follows"]
+
+sysCtxUsrResp :: [Sentence]
+sysCtxUsrResp = [S "Provide initial" +:+ plural condition +:+ S "of the" +:+
+    phrase physical +:+ S"state of the" +:+ phrase simulation `sC`
+    plural (CP.rigidBody) +:+ S "present, and" +:+ plural QP.force +:+.
+    S "applied to them",
+  S "Ensure application programming" +:+ phrase interface +:+
+    S "use complies with the" +:+ phrase user +:+. phrase guide,
+  S "Ensure required" +:+ phrase software +:+ plural assumption +:+
+    S "(FIXME REF)" +:+ S "are appropriate for any particular" +:+
+    phrase problem +:+ S "the" +:+ phrase software +:+. S "addresses"]
+
+sysCtxSysResp :: [Sentence]
+sysCtxSysResp = [S "Determine if the" +:+ plural input_ +:+ S "and" +:+
+    phrase simulation +:+ S "state satisfy the required" +:+
+    (phrase physical `sAnd` plural systemConstraint) +:+. S "(FIXME REF)",
+  S "Calculate the new state of all" +:+ plural CP.rigidBody +:+
+    S "within the" +:+ phrase simulation +:+ S "at each" +:+
+    phrase simulation +:+. S "step",
+  S "Provide updated" +:+ phrase physical +:+ S "state of all" +:+
+    plural CP.rigidBody +:+ S "at the end of a" +:+ phrase simulation +:+.
+    S "step"]
+
+sysCtxResp :: [Sentence]
+sysCtxResp = [titleize user +:+ S "Responsibilities",
+  short chipmunk +:+ S "Responsibilities"]
+
+sysCtxList :: Contents
+sysCtxList = Enumeration $ bulletNested sysCtxResp $
+  map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
+
 --------------------------------
--- 3.1 : User Characteristics --
+-- 3.2 : User Characteristics --
 --------------------------------
 
 userCharacteristicSect :: SubSec
@@ -258,7 +319,7 @@ user_characteristics_intro = foldlSP
   plural concept `sAnd` S "an understanding of", phrase highSchoolPhysics]
 
 -------------------------------
--- 3.2 : System Constraints  --
+-- 3.3 : System Constraints  --
 -------------------------------
 
 systemConstraintSect :: SubSec
@@ -347,12 +408,12 @@ goalStatementStruct state inputs wrt adjective outputs objct condition1 conditio
 
 goal_statements_G_linear = goalStatementStruct (plural physicalProperty) 
   (take 2 inputSymbols) (plural QP.force) (S "applied on")
-  (take 2 outputSymbols) CP.rigidBody 
+  (take 2 outputSymbols) CP.rigidBody
   (S "their new") EmptyS
 
 goal_statements_G_angular = goalStatementStruct (plural physicalProperty) 
   (drop 3 $ take 5 inputSymbols) (plural QP.force) (S "applied on")
-  (drop 3 $ take 5 inputSymbols) CP.rigidBody 
+  (drop 3 $ take 5 inputSymbols) CP.rigidBody
   (S "their new") EmptyS
 
 goal_statements_G_detectCollision = goalStatementStruct EmptyS
@@ -368,7 +429,7 @@ goal_statements_G_collision = goalStatementStruct (plural physicalProperty)
   (goalStatement4Inputs) --fixme input symbols
   EmptyS (S "of")
   (goalStatement4Inputs) --fixme input symbols
-  CP.rigidBody (S "the new") (S "of the" +:+ (plural CP.rigidBody) +:+ 
+  CP.rigidBody (S "the new") (S "of the" +:+ (plural CP.rigidBody) +:+
   S "that have undergone a" +:+ (phrase CP.collision))
 
 goal_statements_G_linear, goal_statements_G_angular, goal_statements_G_detectCollision, goal_statements_G_collision :: [Sentence]
@@ -579,44 +640,15 @@ chpmnkPriorityNFReqs = [correctness, understandability, portability,
 nonfunctional_requirements_intro = foldlSP 
   [(titleize' game), S "are resource intensive, so", phrase performance,
   S "is a high" +:+. phrase priority, S "Other", plural nonfunctionalRequirement,
-  S "that are a", phrase priority +: S "are", 
+  S "that are a", phrase priority +: S "are",
   foldlList (map phrase chpmnkPriorityNFReqs)]
 
 --------------------------------
 -- SECTION 6 : LIKELY CHANGES --
 --------------------------------
 
-likely_changes :: Section
-likely_changes_intro, likely_changes_list :: Contents
+s6_intro, s6_list :: Contents
 
-likely_changes = SRS.likeChg [likely_changes_intro, likely_changes_list] []
-
-likely_changes_intro = foldlSP [S "This", (phrase section_), S "lists the", 
-  (plural likelyChg), S "to be made to the", (phrase physics), (phrase game), 
-  (phrase library)]
-
-likely_changes_likelyChg_LC_solver, likely_changes_likelyChg_LC_collisions, likely_changes_likelyChg_LC_damping, 
-  likely_changes_likelyChg_LC_constraints :: Sentence
-
---these statements look like they could be parametrized
-likely_changes_likelyChg_LC_solver = (S "internal" +:+ (getAcc CM.ode) :+: 
-  S "-solving" +:+ phrase algorithm +:+ S "used by the" +:+
-  (phrase library)) `maybeChanged` (S "in the future")
-
-likely_changes_likelyChg_LC_collisions = (phrase library) `maybeExpanded`
-  (S "to deal with edge-to-edge and vertex-to-vertex" +:+ (plural CP.collision))
-
-likely_changes_likelyChg_LC_damping = (phrase library) `maybeExpanded` (
-  S "to include motion with" +:+ (phrase CP.damping))
-
-likely_changes_likelyChg_LC_constraints = (phrase library) `maybeExpanded` (S "to include" +:+ 
-  (plural CP.joint) `sAnd` (plural CM.constraint))
-
-likely_changes_list' :: [Sentence]
-likely_changes_list' = [likely_changes_likelyChg_LC_solver, likely_changes_likelyChg_LC_collisions, likely_changes_likelyChg_LC_damping,
-  likely_changes_likelyChg_LC_constraints]
-
-likely_changes_list = enumSimple 1 (getAcc likelyChg) likely_changes_list'
 
 -----------------------------------------
 -- SECTION 7 : OFF-THE-SHELF SOLUTIONS --
@@ -705,144 +737,179 @@ traceability_matrices_and_graph_likelyChgRef = makeListRef likely_changes_list' 
 
 {-- Matrices generation below --}
 
-gS1_t1, gS2_t1, gS3_t1, gS4_t1, r1_t1, r2_t1, r3_t1, r4_t1, r5_t1, r6_t1, r7_t1, 
-  r8_t1 :: [String]
-gS1_t1 = ["IM1"]
-gS2_t1 = ["IM2"]
-gS3_t1 = ["IM3"]
-gS4_t1 = ["IM3", "R7"]
-r1_t1 = []
-r2_t1 = ["IM1", "IM2", "R4"]
-r3_t1 = ["IM3", "R4"]
-r4_t1 = ["Data Constraints"]
-r5_t1 = ["IM1"]
-r6_t1 = ["IM2"]
-r7_t1 = ["R1"]
-r8_t1 = ["IM3", "R7"]
+traceMatTabReqGoalOtherGS1, traceMatTabReqGoalOtherGS2, traceMatTabReqGoalOtherGS3,
+  traceMatTabReqGoalOtherGS4, traceMatTabReqGoalOtherReq1, traceMatTabReqGoalOtherReq2,
+  traceMatTabReqGoalOtherReq3, traceMatTabReqGoalOtherReq4, traceMatTabReqGoalOtherReq5,
+  traceMatTabReqGoalOtherReq6, traceMatTabReqGoalOtherReq7,
+  traceMatTabReqGoalOtherReq8 :: [String]
+traceMatTabReqGoalOtherGS1 = ["IM1"]
+traceMatTabReqGoalOtherGS2 = ["IM2"]
+traceMatTabReqGoalOtherGS3 = ["IM3"]
+traceMatTabReqGoalOtherGS4 = ["IM3", "R7"]
+traceMatTabReqGoalOtherReq1 = []
+traceMatTabReqGoalOtherReq2 = ["IM1", "IM2", "R4"]
+traceMatTabReqGoalOtherReq3 = ["IM3", "R4"]
+traceMatTabReqGoalOtherReq4 = ["Data Constraints"]
+traceMatTabReqGoalOtherReq5 = ["IM1"]
+traceMatTabReqGoalOtherReq6 = ["IM2"]
+traceMatTabReqGoalOtherReq7 = ["R1"]
+traceMatTabReqGoalOtherReq8 = ["IM3", "R7"]
 
-traceability_matrices_and_graph_row_header_t1, traceability_matrices_and_graph_col_header_t1 :: [Sentence]
-traceability_matrices_and_graph_row_header_t1 = zipWith itemRefToSent traceability_matrices_and_graph_row_t1 (traceability_matrices_and_graph_instaModelRef ++ 
-  (take 3 traceability_matrices_and_graph_funcReqRef) ++ traceability_matrices_and_graph_dataRef)
-traceability_matrices_and_graph_col_header_t1 = zipWith itemRefToSent 
-  (traceability_matrices_and_graph_goalstmt ++ traceability_matrices_and_graph_funcReq) (traceability_matrices_and_graph_goalstmtRef ++ traceability_matrices_and_graph_funcReqRef)
+traceMatTabReqGoalOtherRowHead, traceMatTabReqGoalOtherColHead :: [Sentence]
+traceMatTabReqGoalOtherRowHead = zipWith itemRefToSent traceMatTabReqGoalOtherRow
+  (traceMatInstaModelRef ++ (take 3 traceMatFuncReqRef) ++ traceMatDataRef)
+traceMatTabReqGoalOtherColHead = zipWith itemRefToSent (traceMatGoalStmt ++
+  traceMatFuncReq) (traceMatGoalStmtRef ++ traceMatFuncReqRef)
 
-traceability_matrices_and_graph_row_t1 :: [String]
-traceability_matrices_and_graph_row_t1 = traceability_matrices_and_graph_instaModel ++ ["R1","R4","R7"] ++ traceability_matrices_and_graph_data
+traceMatTabReqGoalOtherRow :: [String]
+traceMatTabReqGoalOtherRow = traceability_matrices_and_graph_instaModel ++ ["R1","R4","R7"] ++
+  traceability_matrices_and_graph_data
 
-traceability_matrices_and_graph_columns_t1 :: [[String]]
-traceability_matrices_and_graph_columns_t1 = [gS1_t1, gS2_t1, gS3_t1, gS4_t1, r1_t1, r2_t1, r3_t1, r4_t1, 
-  r5_t1, r6_t1, r7_t1, r8_t1]
+traceMatTabReqGoalOtherCol :: [[String]]
+traceMatTabReqGoalOtherCol = [traceMatTabReqGoalOtherGS1, traceMatTabReqGoalOtherGS2,
+  traceMatTabReqGoalOtherGS3, traceMatTabReqGoalOtherGS4, traceMatTabReqGoalOtherReq1,
+  traceMatTabReqGoalOtherReq2, traceMatTabReqGoalOtherReq3, traceMatTabReqGoalOtherReq4,
+  traceMatTabReqGoalOtherReq5, traceMatTabReqGoalOtherReq6, traceMatTabReqGoalOtherReq7,
+  traceMatTabReqGoalOtherReq8]
 
-traceability_matrices_and_graph_table1 :: Contents
-traceability_matrices_and_graph_table1 = Table (EmptyS:(traceability_matrices_and_graph_row_header_t1))
-  (makeTMatrix traceability_matrices_and_graph_col_header_t1 traceability_matrices_and_graph_columns_t1 traceability_matrices_and_graph_row_t1)
-  (showingCxnBw (traceyMatrix) (titleize' requirement +:+ sParen (makeRef requirements)
-  `sC` (titleize' goalStmt) +:+ sParen (makeRef problem_description) `sAnd` S "Other" +:+
+traceMatTabReqGoalOther :: Contents
+traceMatTabReqGoalOther = Table (EmptyS:(traceMatTabReqGoalOtherRowHead))
+  (makeTMatrix traceMatTabReqGoalOtherColHead traceMatTabReqGoalOtherCol
+  traceMatTabReqGoalOtherRow)
+  (showingCxnBw (traceyMatrix) (titleize' requirement +:+ sParen (makeRef req)
+  `sC` (titleize' goalStmt) +:+ sParen (makeRef probDesc) `sAnd` S "Other" +:+
   titleize' item)) True "TraceyReqGoalsOther"
 
-traceability_matrices_and_graph_columns_t2 :: [[String]]
-traceability_matrices_and_graph_columns_t2 = [t1_t2, t2_t2, t3_t2, t4_t2, t5_t2, gD1_t2, gD2_t2, gD3_t2,
-  gD4_t2, gD5_t2, gD6_t2, gD7_t2, dD1_t2, dD2_t2, dD3_t2, dD4_t2, dD5_t2, dD6_t2,
-  dD7_t2, dD8_t2, iM1_t2, iM2_t2, iM3_t2, lC1, lC2, lC3, lC4]
+traceMatTabAssumpCol' :: [[String]]
+traceMatTabAssumpCol' = [traceMatTabAssumpMT1, traceMatTabAssumpMT2,
+  traceMatTabAssumpMT3, traceMatTabAssumpMT4, traceMatTabAssumpMT5,
+  traceMatTabAssumpGD1, traceMatTabAssumpGD2, traceMatTabAssumpGD3,
+  traceMatTabAssumpGD4, traceMatTabAssumpGD5, traceMatTabAssumpGD6,
+  traceMatTabAssumpGD7, traceMatTabAssumpDD1, traceMatTabAssumpDD2,
+  traceMatTabAssumpDD3, traceMatTabAssumpDD4, traceMatTabAssumpDD5,
+  traceMatTabAssumpDD6, traceMatTabAssumpDD7, traceMatTabAssumpDD8,
+  traceMatTabAssumpIM1, traceMatTabAssumpIM2, traceMatTabAssumpIM3,
+  traceMatTabAssumpLC1, traceMatTabAssumpLC2, traceMatTabAssumpLC3,
+  traceMatTabAssumpLC4]
 
-t1_t2, t2_t2, t3_t2, t4_t2, t5_t2, gD1_t2, gD2_t2, gD3_t2, gD4_t2, gD5_t2, 
-  gD6_t2, gD7_t2, dD1_t2, dD2_t2, dD3_t2, dD4_t2, dD5_t2, dD6_t2, dD7_t2, dD8_t2, 
-  iM1_t2, iM2_t2, iM3_t2, lC1, lC2, lC3, lC4 :: [String]
-t1_t2 = []
-t2_t2 = []
-t3_t2 = []
-t4_t2 = ["A1"]
-t5_t2 = []
-gD1_t2 = []
-gD2_t2 = []
-gD3_t2 = ["A2","A3"]
-gD4_t2 = []
-gD5_t2 = []
-gD6_t2 = []
-gD7_t2 = []
-dD1_t2 = ["A1","A2"]
-dD2_t2 = ["A1","A2","A6"]
-dD3_t2 = ["A1","A2","A6"]
-dD4_t2 = ["A1","A2","A6"]
-dD5_t2 = ["A1","A2","A6"]
-dD6_t2 = ["A1","A2","A6"]
-dD7_t2 = ["A1","A2","A6"]
-dD8_t2 = ["A1","A2","A4","A5"]
-iM1_t2 = ["A1","A2","A6","A7"]
-iM2_t2 = ["A1","A2","A4","A6","A7"]
-iM3_t2 = ["A1","A2","A5","A6","A7"]
-lC1 = []
-lC2 = ["A5"]
-lC3 = ["A6"]
-lC4 = ["A7"]
+traceMatTabAssumpMT1, traceMatTabAssumpMT2, traceMatTabAssumpMT3,
+  traceMatTabAssumpMT4, traceMatTabAssumpMT5, traceMatTabAssumpGD1,
+  traceMatTabAssumpGD2, traceMatTabAssumpGD3, traceMatTabAssumpGD4,
+  traceMatTabAssumpGD5, traceMatTabAssumpGD6, traceMatTabAssumpGD7,
+  traceMatTabAssumpDD1, traceMatTabAssumpDD2, traceMatTabAssumpDD3,
+  traceMatTabAssumpDD4, traceMatTabAssumpDD5, traceMatTabAssumpDD6,
+  traceMatTabAssumpDD7, traceMatTabAssumpDD8, traceMatTabAssumpIM1,
+  traceMatTabAssumpIM2, traceMatTabAssumpIM3, traceMatTabAssumpLC1,
+  traceMatTabAssumpLC2, traceMatTabAssumpLC3, traceMatTabAssumpLC4 :: [String]
+traceMatTabAssumpMT1 = []
+traceMatTabAssumpMT2 = []
+traceMatTabAssumpMT3 = []
+traceMatTabAssumpMT4 = ["A1"]
+traceMatTabAssumpMT5 = []
+traceMatTabAssumpGD1 = []
+traceMatTabAssumpGD2 = []
+traceMatTabAssumpGD3 = ["A2","A3"]
+traceMatTabAssumpGD4 = []
+traceMatTabAssumpGD5 = []
+traceMatTabAssumpGD6 = []
+traceMatTabAssumpGD7 = []
+traceMatTabAssumpDD1 = ["A1","A2"]
+traceMatTabAssumpDD2 = ["A1","A2","A6"]
+traceMatTabAssumpDD3 = ["A1","A2","A6"]
+traceMatTabAssumpDD4 = ["A1","A2","A6"]
+traceMatTabAssumpDD5 = ["A1","A2","A6"]
+traceMatTabAssumpDD6 = ["A1","A2","A6"]
+traceMatTabAssumpDD7 = ["A1","A2","A6"]
+traceMatTabAssumpDD8 = ["A1","A2","A4","A5"]
+traceMatTabAssumpIM1 = ["A1","A2","A6","A7"]
+traceMatTabAssumpIM2 = ["A1","A2","A4","A6","A7"]
+traceMatTabAssumpIM3 = ["A1","A2","A5","A6","A7"]
+traceMatTabAssumpLC1 = []
+traceMatTabAssumpLC2 = ["A5"]
+traceMatTabAssumpLC3 = ["A6"]
+traceMatTabAssumpLC4 = ["A7"]
 
-traceability_matrices_and_graph_row_t2, traceability_matrices_and_graph_cols_t2 :: [String]
-traceability_matrices_and_graph_row_t2 = traceability_matrices_and_graph_assump
+traceMatTabAssumpRow, traceMatTabAssumpCol :: [String]
+traceMatTabAssumpRow = traceMatAssump
 
-traceability_matrices_and_graph_cols_t2 = (traceability_matrices_and_graph_theoryModel ++ traceability_matrices_and_graph_genDef ++ traceability_matrices_and_graph_dataDef ++ traceability_matrices_and_graph_instaModel ++
-  traceability_matrices_and_graph_likelyChg) 
-traceability_matrices_and_graph_cols_ref_t2 :: [Sentence]
-traceability_matrices_and_graph_cols_ref_t2 = (traceability_matrices_and_graph_theoryModelRef ++ traceability_matrices_and_graph_genDefRef ++ traceability_matrices_and_graph_dataDefRef ++ 
-  traceability_matrices_and_graph_instaModelRef ++ traceability_matrices_and_graph_likelyChgRef)
+traceMatTabAssumpCol = traceMatTheoryModel ++ traceMatGenDef ++
+  traceMatDataDef ++ traceMatInstaModel ++ traceMatLikelyChg
+traceMatTabAssumpColRef :: [Sentence]
+traceMatTabAssumpColRef = traceMatTheoryModelRef ++ traceMatGenDefRef ++
+  traceMatDataDefRef ++ traceMatInstaModelRef ++ traceMatLikelyChgRef
 
-traceability_matrices_and_graph_row_header_t2, traceability_matrices_and_graph_col_header_t2 :: [Sentence]
-traceability_matrices_and_graph_row_header_t2 = zipWith itemRefToSent (traceability_matrices_and_graph_row_t2) (traceability_matrices_and_graph_assumpRef)
-traceability_matrices_and_graph_col_header_t2 = zipWith itemRefToSent (traceability_matrices_and_graph_cols_t2) (traceability_matrices_and_graph_cols_ref_t2)
+traceMatTabAssumpRowHead, traceMatTabAssumpColHead :: [Sentence]
+traceMatTabAssumpRowHead = zipWith itemRefToSent traceMatTabAssumpRow
+  traceMatAssumpRef
+traceMatTabAssumpColHead = zipWith itemRefToSent traceMatTabAssumpCol
+  traceMatTabAssumpColRef
 
-traceability_matrices_and_graph_table2 :: Contents
-traceability_matrices_and_graph_table2 = Table (EmptyS:traceability_matrices_and_graph_row_header_t2)
-  (makeTMatrix traceability_matrices_and_graph_col_header_t2 traceability_matrices_and_graph_columns_t2 traceability_matrices_and_graph_row_t2) 
+traceMatTabAssump :: Contents
+traceMatTabAssump = Table (EmptyS:traceMatTabAssumpRowHead)
+  (makeTMatrix traceMatTabAssumpColHead traceMatTabAssumpCol' traceMatTabAssumpRow)
   (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef problem_description) 
   `sAnd` S "Other" +:+ titleize' item)) True "TraceyAssumpsOther"
 
 
-traceability_matrices_and_graph_columns_t3 :: [[String]]
-traceability_matrices_and_graph_columns_t3 = [t1_t3, t2_t3, t3_t3, t4_t3, t5_t3, gD1_t3, gD2_t3, gD3_t3, 
-  gD4_t3, gD5_t3, gD6_t3, gD7_t3, dD1_t3, dD2_t3, dD3_t3, dD4_t3, dD5_t3, dD6_t3,
-  dD7_t3, dD8_t3, iM1_t3, iM2_t3, iM3_t3]
+traceMatTabDefnModelCol :: [[String]]
+traceMatTabDefnModelCol = [traceMatTabDefnModelTM1, traceMatTabDefnModelTM2,
+  traceMatTabDefnModelTM3, traceMatTabDefnModelTM4, traceMatTabDefnModelTM5,
+  traceMatTabDefnModelGD1, traceMatTabDefnModelGD2, traceMatTabDefnModelGD3,
+  traceMatTabDefnModelGD4, traceMatTabDefnModelGD5, traceMatTabDefnModelGD6,
+  traceMatTabDefnModelGD7, traceMatTabDefnModelDD1, traceMatTabDefnModelDD2,
+  traceMatTabDefnModelDD3, traceMatTabDefnModelDD4, traceMatTabDefnModelDD5,
+  traceMatTabDefnModelDD6, traceMatTabDefnModelDD7, traceMatTabDefnModelDD8,
+  traceMatTabDefnModelIM1, traceMatTabDefnModelIM2, traceMatTabDefnModelIM3]
 
-t1_t3, t2_t3, t3_t3, t4_t3, t5_t3, gD1_t3, gD2_t3, gD3_t3, gD4_t3, gD5_t3, gD6_t3,
-  gD7_t3, dD1_t3, dD2_t3, dD3_t3, dD4_t3, dD5_t3, dD6_t3, dD7_t3, dD8_t3, iM1_t3,
-  iM2_t3, iM3_t3 :: [String]
+traceMatTabDefnModelTM1, traceMatTabDefnModelTM2, traceMatTabDefnModelTM3,
+  traceMatTabDefnModelTM4, traceMatTabDefnModelTM5, traceMatTabDefnModelGD1,
+  traceMatTabDefnModelGD2, traceMatTabDefnModelGD3, traceMatTabDefnModelGD4,
+  traceMatTabDefnModelGD5, traceMatTabDefnModelGD6, traceMatTabDefnModelGD7,
+  traceMatTabDefnModelDD1, traceMatTabDefnModelDD2, traceMatTabDefnModelDD3,
+  traceMatTabDefnModelDD4, traceMatTabDefnModelDD5, traceMatTabDefnModelDD6,
+  traceMatTabDefnModelDD7, traceMatTabDefnModelDD8, traceMatTabDefnModelIM1,
+  traceMatTabDefnModelIM2, traceMatTabDefnModelIM3 :: [String]
 
-t1_t3 = [] 
-t2_t3 = []
-t3_t3 = []
-t4_t3 = []
-t5_t3 = ["GD6", "GD7"]
-gD1_t3 = ["T1"]
-gD2_t3 = ["T2", "GD1"]
-gD3_t3 = ["T1", "T3"]
-gD4_t3 = []
-gD5_t3 = ["GD4"]
-gD6_t3 = []
-gD7_t3 = []
-dD1_t3 = []
-dD2_t3 = []
-dD3_t3 = []
-dD4_t3 = []
-dD5_t3 = []
-dD6_t3 = []
-dD7_t3 = []
-dD8_t3 = ["T4", "GD1","GD4","GD5","GD7","IM3"]
-iM1_t3 = ["T1", "GD3", "DD1","DD2","DD3","DD4"]
-iM2_t3 = ["T5", "DD1", "DD2", "DD3", "DD4"]
-iM3_t3 = ["GD1", "GD2", "GD6", "GD7", "DD1", "DD8"]
+traceMatTabDefnModelTM1 = []
+traceMatTabDefnModelTM2 = []
+traceMatTabDefnModelTM3 = []
+traceMatTabDefnModelTM4 = []
+traceMatTabDefnModelTM5 = ["GD6", "GD7"]
+traceMatTabDefnModelGD1 = ["T1"]
+traceMatTabDefnModelGD2 = ["T2", "GD1"]
+traceMatTabDefnModelGD3 = ["T1", "T3"]
+traceMatTabDefnModelGD4 = []
+traceMatTabDefnModelGD5 = ["GD4"]
+traceMatTabDefnModelGD6 = []
+traceMatTabDefnModelGD7 = []
+traceMatTabDefnModelDD1 = []
+traceMatTabDefnModelDD2 = []
+traceMatTabDefnModelDD3 = []
+traceMatTabDefnModelDD4 = []
+traceMatTabDefnModelDD5 = []
+traceMatTabDefnModelDD6 = []
+traceMatTabDefnModelDD7 = []
+traceMatTabDefnModelDD8 = ["T4", "GD1","GD4","GD5","GD7","IM3"]
+traceMatTabDefnModelIM1 = ["T1", "GD3", "DD1","DD2","DD3","DD4"]
+traceMatTabDefnModelIM2 = ["T5", "DD1", "DD2", "DD3", "DD4"]
+traceMatTabDefnModelIM3 = ["GD1", "GD2", "GD6", "GD7", "DD1", "DD8"]
 
-traceability_matrices_and_graph_row_t3 :: [String]
-traceability_matrices_and_graph_row_ref_t3 :: [Sentence]
-traceability_matrices_and_graph_row_t3 = traceability_matrices_and_graph_theoryModel ++ traceability_matrices_and_graph_genDef ++ traceability_matrices_and_graph_dataDef ++ traceability_matrices_and_graph_instaModel
-traceability_matrices_and_graph_row_ref_t3 = traceability_matrices_and_graph_theoryModelRef ++ traceability_matrices_and_graph_genDefRef ++ traceability_matrices_and_graph_dataDefRef ++ 
-  traceability_matrices_and_graph_instaModelRef
+traceMatTabDefnModelRow :: [String]
+traceMatTabDefnModelRowRef :: [Sentence]
+traceMatTabDefnModelRow = traceMatTheoryModel ++ traceMatGenDef ++
+  traceMatDataDef ++ traceMatInstaModel
+traceMatTabDefnModelRowRef = traceMatTheoryModelRef ++ traceMatGenDefRef ++
+  traceMatDataDefRef ++ traceMatInstaModelRef
 
-traceability_matrices_and_graph_col_header_t3, traceability_matrices_and_graph_row_header_t3 :: [Sentence]
-traceability_matrices_and_graph_col_header_t3 = zipWith itemRefToSent (traceability_matrices_and_graph_row_t3) (traceability_matrices_and_graph_row_ref_t3)
-traceability_matrices_and_graph_row_header_t3 = traceability_matrices_and_graph_col_header_t3
+traceMatTabDefnModelColHead, traceMatTabDefnModelRowHead :: [Sentence]
+traceMatTabDefnModelColHead = zipWith itemRefToSent traceMatTabDefnModelRow
+  traceMatTabDefnModelRowRef
+traceMatTabDefnModelRowHead = traceMatTabDefnModelColHead
 
-traceability_matrices_and_graph_table3 :: Contents
-traceability_matrices_and_graph_table3 = Table (EmptyS:traceability_matrices_and_graph_row_header_t3)
-  (makeTMatrix traceability_matrices_and_graph_col_header_t3 traceability_matrices_and_graph_columns_t3 traceability_matrices_and_graph_row_t3)
-  (showingCxnBw (traceyMatrix) (titleize' item `sAnd` 
+traceMatTabDefnModel :: Contents
+traceMatTabDefnModel = Table (EmptyS:traceMatTabDefnModelRowHead)
+  (makeTMatrix traceMatTabDefnModelColHead traceMatTabDefnModelCol
+  traceMatTabDefnModelRow) (showingCxnBw (traceyMatrix) (titleize' item `sAnd`
   S "Other" +:+ titleize' section_)) True "TraceyItemsSecs"
 
 -----------------------------------

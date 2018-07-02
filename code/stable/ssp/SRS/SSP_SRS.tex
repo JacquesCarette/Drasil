@@ -6,7 +6,6 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{mathtools}
-\usepackage{breqn}
 \usepackage{unicode-math}
 \usepackage{tabu}
 \usepackage{longtable}
@@ -65,9 +64,9 @@ $\{{x_{cs}}{,y_{cs}}\}$ & The Set of X and Y Coordinates: describe the vertices 
 \\
 $(x,y)$ & Cartesian Position Coordinates: y is considered parallel to the direction of the force of gravity and x is considered perpendicular to y & m
 \\
-$a$ & Constant: FIXME: missing discription & m
+$a$ & Constant: FIXME: missing description & m
 \\
-$A$ & Constant: FIXME: missing discription & m
+$A$ & Constant: FIXME: missing description & m
 \\
 $b$ & Base Width of a Slice: in the x-ordinate direction only for slice index i & m
 \\
@@ -205,7 +204,7 @@ $δy$ & Displacement: in the y-ordinate direction for slice index i & m
 \\
 $ε$ & Displacement: in rotated coordinate system & m
 \\
-$κ$ & Constant: FIXME: missing discription & Pa
+$κ$ & Constant: FIXME: missing description & Pa
 \\
 $λ$ & Interslice Normal/shear Force Ratio: applied to all interslices & 
 \\
@@ -321,21 +320,21 @@ This subsection provides a list of terms that are used in the subsequent section
 \label{Sec:PhysSyst}
 Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties. The index convention for referencing which interslice or slice is being used is shown in Figure~\ref{Figure:IndexConvention}.
 \begin{itemize}
-\item{Interslice properties convention is noted by j. The end interslice properties are usually not of interest, therefore use the interslice properties from $1\leq{}i\leq{}n-1$}
-\item{Slice properties convention is noted by. $i$}
+\item{Interslice properties convention is noted by j. The end interslice properties are usually not of interest, therefore use the interslice properties from $1\leq{}i\leq{}n-1$.}
+\item{Slice properties convention is noted by $i$.}
 \end{itemize}
 A free body diagram of the forces acting on the slice is displayed in Figure~\ref{Figure:ForceDiagram}.
 \begin{figure}
 \begin{center}
-\includegraphics[width=\textwidth]{IndexConvention.png}
+\includegraphics[width=\textwidth]{../../../datafiles/SSP/IndexConvention.png}
 \caption{Index convention for numbering slice and interslice force variables}
 \label{Figure:IndexConvention}
 \end{center}
 \end{figure}
 \begin{figure}
 \begin{center}
-\includegraphics[width=\textwidth]{ForceDiagram.png}
-\caption{Forces acting on a slice (Note: Instances of E in the figure is to be relabelled G)}
+\includegraphics[width=\textwidth]{../../../datafiles/SSP/ForceDiagram.png}
+\caption{Forces acting on a slice}
 \label{Figure:ForceDiagram}
 \end{center}
 \end{figure}

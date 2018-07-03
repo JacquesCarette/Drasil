@@ -69,10 +69,10 @@ im' rc i ic o oc sn notes = IM rc i ic o oc [] [] (shortname' sn) (Just notes)
 -- (Sentence is the "concept" definition for the relation concept)
 -- FIXME: get the shortname from the QDefinition?
 imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> InputConstraints -> OutputConstraints -> 
-  String -> InstanceModel
-imQD ctx qd dfn incon ocon sn = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
+  String -> [Sentence] -> InstanceModel
+imQD ctx qd dfn incon ocon sn notes = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
   (sy qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon (qw qd) ocon [] [] 
-  (shortname' sn) Nothing
+  (shortname' sn) (Just notes)
 
 -- Same as `imQD`, with an additional field for notes to be passed in
 -- FIXME: get the shortname from the QDefinition?

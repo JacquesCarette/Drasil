@@ -6,7 +6,6 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{mathtools}
-\usepackage{breqn}
 \usepackage{unicode-math}
 \usepackage{tabu}
 \usepackage{longtable}
@@ -344,9 +343,9 @@ This section focuses on the general equations and laws that Chipmunk2D is based 
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:t1NewtonSL}
+\toprule \textbf{Refname} & \textbf{T:newtonSL}
 \phantomsection 
-\label{T:t1NewtonSL}
+\label{T:newtonSL}
 \\ \midrule \\
 Label & Newton's second law of motion
 \\ \midrule \\
@@ -370,9 +369,9 @@ Notes & The net force $\mathbf{F}$ (N) on a rigid body is proportional to the ac
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:t2NewtonTL}
+\toprule \textbf{Refname} & \textbf{T:newtonTL}
 \phantomsection 
-\label{T:t2NewtonTL}
+\label{T:newtonTL}
 \\ \midrule \\
 Label & Newton's third law of motion
 \\ \midrule \\
@@ -395,9 +394,9 @@ Notes & Every action has an equal and opposite reaction. In other words, the for
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:t3NewtonLUG}
+\toprule \textbf{Refname} & \textbf{T:newtonLUG}
 \phantomsection 
-\label{T:t3NewtonLUG}
+\label{T:newtonLUG}
 \\ \midrule \\
 Label & Newton's law of universal gravitation
 \\ \midrule \\
@@ -425,9 +424,9 @@ Notes & Two rigid bodies in the universe attract each other with a force $\mathb
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:t4ChaslesThm}
+\toprule \textbf{Refname} & \textbf{T:chaslesThm}
 \phantomsection 
-\label{T:t4ChaslesThm}
+\label{T:chaslesThm}
 \\ \midrule \\
 Label & Chasles' theorem
 \\ \midrule \\
@@ -452,9 +451,9 @@ Notes & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of 
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:t5NewtonSLR}
+\toprule \textbf{Refname} & \textbf{T:newtonSLR}
 \phantomsection 
-\label{T:t5NewtonSLR}
+\label{T:newtonSLR}
 \\ \midrule \\
 Label & Newton's second law for rotational motion
 \\ \midrule \\
@@ -484,9 +483,9 @@ This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into o
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{IM:im1}
+\toprule \textbf{Refname} & \textbf{IM:transMot}
 \phantomsection 
-\label{IM:im1}
+\label{IM:transMot}
 \\ \midrule \\
 Label & Force on the translational motion of a set of 2d rigid bodies
 \\ \midrule \\
@@ -535,9 +534,9 @@ Notes & The above equation expresses the total acceleration of the rigid body (A
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{IM:im2}
+\toprule \textbf{Refname} & \textbf{IM:rotMot}
 \phantomsection 
-\label{IM:im2}
+\label{IM:rotMot}
 \\ \midrule \\
 Label & Force on the rotational motion of a set of 2D rigid body
 \\ \midrule \\
@@ -584,9 +583,9 @@ Notes & The above equation for the total angular acceleration of the rigid body 
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{IM:im3}
+\toprule \textbf{Refname} & \textbf{IM:col2D}
 \phantomsection 
-\label{IM:im3}
+\label{IM:col2D}
 \\ \midrule \\
 Label & Collisions on 2D rigid bodies
 \\ \midrule \\
@@ -636,7 +635,7 @@ Notes & This instance model is based on our assumptions regarding rigid body (A1
 \end{minipage}\\
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
-This section collects and defines all the data needed to build the instance models. The dimension of each quantity is also given.
+This section collects and defines all the data needed to build the instance models.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -644,7 +643,7 @@ This section collects and defines all the data needed to build the instance mode
 \phantomsection 
 \label{DD:p.CM}
 \\ \midrule \\
-Label & The Mass-Weighted Average Position of a Rigid Body's Particles
+Label & The mass-weighted average position of a rigid body's particles
 \\ \midrule \\
 Symbol & ${\mathbf{p}_{CM}}$
 \\ \midrule \\
@@ -1071,18 +1070,18 @@ LC4 (Section~\ref{Sec:LCs}) &  &  &  &  &  &  & X
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:t1NewtonSL]{Definition~T:t1NewtonSL}) & T2 (\hyperref[T:t2NewtonTL]{Definition~T:t2NewtonTL}) & T3 (\hyperref[T:t3NewtonLUG]{Definition~T:t3NewtonLUG}) & T4 (\hyperref[T:t4ChaslesThm]{Definition~T:t4ChaslesThm}) & T5 (\hyperref[T:t5NewtonSLR]{Definition~T:t5NewtonSLR}) & GD1 (Section~\ref{Sec:SolCharSpec}) & GD2 (Section~\ref{Sec:SolCharSpec}) & GD3 (Section~\ref{Sec:SolCharSpec}) & GD4 (Section~\ref{Sec:SolCharSpec}) & GD5 (Section~\ref{Sec:SolCharSpec}) & GD6 (Section~\ref{Sec:SolCharSpec}) & GD7 (Section~\ref{Sec:SolCharSpec}) & DD1 (\hyperref[DD:p.CM]{Definition~DD:p.CM}) & DD2 (\hyperref[DD:linearDisplacement]{Definition~DD:linearDisplacement}) & DD3 (\hyperref[DD:linearVelocity]{Definition~DD:linearVelocity}) & DD4 (\hyperref[DD:linearAcceleration]{Definition~DD:linearAcceleration}) & DD5 (\hyperref[DD:angularDisplacement]{Definition~DD:angularDisplacement}) & DD6 (\hyperref[DD:angularVelocity]{Definition~DD:angularVelocity}) & DD7 (\hyperref[DD:angularAcceleration]{Definition~DD:angularAcceleration}) & DD8 (\hyperref[DD:impulseS]{Definition~DD:impulseS}) & IM1 (\hyperref[T:im1]{Definition~T:im1}) & IM2 (\hyperref[T:im2]{Definition~T:im2}) & IM3 (\hyperref[T:im3]{Definition~T:im3})
+ & T1 (\hyperref[T:newtonSL]{Definition~T:newtonSL}) & T2 (\hyperref[T:newtonTL]{Definition~T:newtonTL}) & T3 (\hyperref[T:newtonLUG]{Definition~T:newtonLUG}) & T4 (\hyperref[T:chaslesThm]{Definition~T:chaslesThm}) & T5 (\hyperref[T:newtonSLR]{Definition~T:newtonSLR}) & GD1 (Section~\ref{Sec:SolCharSpec}) & GD2 (Section~\ref{Sec:SolCharSpec}) & GD3 (Section~\ref{Sec:SolCharSpec}) & GD4 (Section~\ref{Sec:SolCharSpec}) & GD5 (Section~\ref{Sec:SolCharSpec}) & GD6 (Section~\ref{Sec:SolCharSpec}) & GD7 (Section~\ref{Sec:SolCharSpec}) & DD1 (\hyperref[DD:p.CM]{Definition~DD:p.CM}) & DD2 (\hyperref[DD:linearDisplacement]{Definition~DD:linearDisplacement}) & DD3 (\hyperref[DD:linearVelocity]{Definition~DD:linearVelocity}) & DD4 (\hyperref[DD:linearAcceleration]{Definition~DD:linearAcceleration}) & DD5 (\hyperref[DD:angularDisplacement]{Definition~DD:angularDisplacement}) & DD6 (\hyperref[DD:angularVelocity]{Definition~DD:angularVelocity}) & DD7 (\hyperref[DD:angularAcceleration]{Definition~DD:angularAcceleration}) & DD8 (\hyperref[DD:impulseS]{Definition~DD:impulseS}) & IM1 (\hyperref[T:transMot]{Definition~T:transMot}) & IM2 (\hyperref[T:rotMot]{Definition~T:rotMot}) & IM3 (\hyperref[T:col2D]{Definition~T:col2D})
 \\
 \midrule
-T1 (\hyperref[T:t1NewtonSL]{Definition~T:t1NewtonSL}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+T1 (\hyperref[T:newtonSL]{Definition~T:newtonSL}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-T2 (\hyperref[T:t2NewtonTL]{Definition~T:t2NewtonTL}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+T2 (\hyperref[T:newtonTL]{Definition~T:newtonTL}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-T3 (\hyperref[T:t3NewtonLUG]{Definition~T:t3NewtonLUG}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+T3 (\hyperref[T:newtonLUG]{Definition~T:newtonLUG}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-T4 (\hyperref[T:t4ChaslesThm]{Definition~T:t4ChaslesThm}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+T4 (\hyperref[T:chaslesThm]{Definition~T:chaslesThm}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-T5 (\hyperref[T:t5NewtonSLR]{Definition~T:t5NewtonSLR}) &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  & 
+T5 (\hyperref[T:newtonSLR]{Definition~T:newtonSLR}) &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  & 
 \\
 GD1 (Section~\ref{Sec:SolCharSpec}) & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1114,11 +1113,11 @@ DD7 (\hyperref[DD:angularAcceleration]{Definition~DD:angularAcceleration}) &  & 
 \\
 DD8 (\hyperref[DD:impulseS]{Definition~DD:impulseS}) &  &  &  & X &  & X &  &  & X & X &  & X &  &  &  &  &  &  &  &  &  &  & X
 \\
-IM1 (\hyperref[T:im1]{Definition~T:im1}) & X &  &  &  &  &  &  & X &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
+IM1 (\hyperref[T:transMot]{Definition~T:transMot}) & X &  &  &  &  &  &  & X &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
 \\
-IM2 (\hyperref[T:im2]{Definition~T:im2}) &  &  &  &  & X &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
+IM2 (\hyperref[T:rotMot]{Definition~T:rotMot}) &  &  &  &  & X &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
 \\
-IM3 (\hyperref[T:im3]{Definition~T:im3}) &  &  &  &  &  & X & X &  &  &  & X & X & X &  &  &  &  &  &  & X &  &  & 
+IM3 (\hyperref[T:col2D]{Definition~T:col2D}) &  &  &  &  &  & X & X &  &  &  & X & X & X &  &  &  &  &  &  & X &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items and Other Sections}

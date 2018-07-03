@@ -38,9 +38,8 @@ intro_ :: (NamedIdea a) => a -> Contents
 intro_ sys = Paragraph $ S "This section first presents the problem" +:+
   S "description, which gives a high-level view of the problem to be" +:+
   S "solved. This is followed by the solution characteristics" +:+
-  S "specification, which presents the assumptions" `sC` S "theories" `sC`
-  S "theoretical models, general definitions, data definitions" `sC` 
-  S "and finally the instance models (ODEs) that model the" +:+. (phrase sys)
+  S "specification, which presents the assumptions" `sC`
+  S "theories, and definitions that are used for the" +:+. (phrase sys)
 
 -- wrapper for specSysDesIntro
 specSysDesF :: Sentence -> [Section] -> Section

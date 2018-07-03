@@ -15,10 +15,11 @@ import Data.Drasil.Utils (getES, weave)
 import Data.Drasil.SentenceStructures (sAnd, foldlList, ofThe, acroGD, foldlSentCol)
 import Data.Drasil.Concepts.Documentation (assumption)
 import Data.Drasil.Quantities.Physics (time)
-import Drasil.SWHS.Assumptions (newA3, newA4, newA5)
+
 roc_temp_simp_deriv :: Derivation
 roc_temp_simp_deriv =
-  [S "Detailed derivation of simplified" +:+ phrase rOfChng +:+ S "of" +:+ phrase temp +:+ S ":"] ++
+  [S "Detailed derivation of simplified" +:+ phrase rOfChng +:+ S "of" +:+.
+    phrase temp] ++
   (weave [roc_temp_simp_deriv_sentences, map E roc_temp_simp_deriv_eqns])
 
 roc_temp_simp_deriv_sentences :: [Sentence]
@@ -27,7 +28,7 @@ roc_temp_simp_deriv_sentences = map foldlSentCol [
   genDefDesc2 gauss_div surface vol thFluxVect uNormalVect unit_,
   genDefDesc3 vol vol_ht_gen,
   genDefDesc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heat_cap_spec
-    QT.temp vol newA3 newA4 newA5,
+    QT.temp vol [S "A3", S "A4", S "A5"],
   genDefDesc5 density mass vol]
 
 genDefDesc1 :: RelationConcept -> UnitalChunk -> [Sentence]
@@ -50,13 +51,13 @@ genDefDesc3 vo vhg = [S "We consider an arbitrary" +:+. phrase vo, S "The",
 
 genDefDesc4 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
-  AssumpChunk -> AssumpChunk -> AssumpChunk -> [Sentence]
-genDefDesc4 hfi hfo iS oS den hcs te vo assump3 assump4 assump5 = [S "Where", getES hfi `sC`
+  [Sentence] -> [Sentence]
+genDefDesc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", getES hfi `sC`
   getES hfo `sC` getES iS `sC` S "and", getES oS, S "are explained in" +:+.
   acroGD 2, S "Assuming", getES den `sC` getES hcs `sAnd` getES te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
-  titleize' assumption, (sParen (makeRef assump3)) `sC` (sParen (makeRef assump4))
-  `sC` S "and", (sParen (makeRef assump5)) `sC` S "we have"]
+  titleize' assumption, (foldlList $ (map sParen)
+  assumps) `sC` S "we have"]
 
 genDefDesc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]
 genDefDesc5 den ma vo = [S "Using the fact that", getES den :+: S "=" :+:

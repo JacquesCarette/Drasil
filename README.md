@@ -52,6 +52,7 @@ nopcm_diff | minimal SWHS example, with PCM removed
 ## Running the example(s)
 
 Please note that if `make` has beeen used, docs are already generated automatically and can be found in build.
+Automated testing can be done on these examples.
 
 After building, you can run the examples by using `stack exec NAME` where NAME is detailed below:
 
@@ -65,7 +66,8 @@ ssp | Slope Stability Analysis (SSP)
 nopcm | SWHS without PCM (NoPCM)
 
 This runs the examples manually from the .stack-work folder after building, and the generated docs will
-appear in this folder (i.e. in the SRS and Website folders).
+appear in this folder (i.e. in the SRS and Website folders). Due to this placement, these generated
+versions will not be subject to automated tests.
 
 ## Finding / Building the Haddock documentation
 

@@ -52,3 +52,15 @@ instance CommonIdea    CommonConcept where abrv = abrv . view comm
 instance ConceptDomain CommonConcept where cdom = dom
 instance Concept       CommonConcept where
 
+data ConceptInstance = ConInst { _cc :: ConceptChunk
+                               , _shnm :: ShortName}
+makeLenses ''ConceptInstance
+
+instance Eq            ConceptInstance where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+instance HasUID        ConceptInstance where uid = cc . idea . uid
+instance NamedIdea     ConceptInstance where term = cc . idea . term
+instance Idea          ConceptInstance where getA = getA . view (cc . idea)
+instance Definition    ConceptInstance where defn = cc . dad . defn'
+instance ConceptDomain ConceptInstance where cdom = cc . dad . cdom'
+instance Concept       ConceptInstance where
+instance HasShortName  ConceptInstance where shortname = view shnm

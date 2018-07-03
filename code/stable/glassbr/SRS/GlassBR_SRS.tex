@@ -260,7 +260,7 @@ GlassBR & Whether or not the glass slab is safe for the calculated load and supp
 The user provides the inputs to GlassBR for use within the analysis. There are two main classes of inputs: glass geometry and blast type. The glass geometry based inputs include the glass type and dimensions of the glass plane. The blast type input includes parameters like weight of charge, TNT equivalent factor and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage. GlassBR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (${P_{b}}$) is less than the tolerable probability (${P_{btol}}$) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
-This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions.
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used for the GlassBR program.
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
 A system is needed to efficiently and correctly predict the blast risk involved with the glass. GlassBR is a computer program developed to interpret the inputs to give out the outputs which predicts whether the glass slab can withstand the blast under the conditions.
@@ -357,9 +357,21 @@ This section focuses on the general equations and laws that GlassBR is based on.
 \\ \midrule \\
 Label & Safety Requirement-1
 \\ \midrule \\
-Equation & $is\_safe1={P_{b}}<{P_{btol}}$
+Equation & \begin{dmath}
+           is\_safe1={P_{b}}<{P_{btol}}
+           \end{dmath}
 \\ \midrule \\
-Description & If $is\_safe1$, the glass is considered safe. $is\_safe1$ and $is\_safe2$ (from \hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[T:probOfBr]{Definition~T:probOfBr}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
+Description & \begin{description}
+              \item{$is\_safe1$ is the true when calculated probability is less than tolerable probability (Unitless)}
+              \item{${P_{b}}$ is the probability of breakage (Unitless)}
+              \item{${P_{btol}}$ is the tolerable probability of breakage (Unitless)}
+              \end{description}
+\\ \midrule \\
+Source & FIXME: This needs to be filled in
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \midrule \\
+Notes & If $is\_safe1$, the glass is considered safe. $is\_safe1$ and $is\_safe2$ (from \hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[T:probOfBr]{Definition~T:probOfBr}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -371,9 +383,21 @@ Description & If $is\_safe1$, the glass is considered safe. $is\_safe1$ and $is\
 \\ \midrule \\
 Label & Safety Requirement-2
 \\ \midrule \\
-Equation & $is\_safe2=LR>q$
+Equation & \begin{dmath}
+           is\_safe2=LR>q
+           \end{dmath}
 \\ \midrule \\
-Description & If $is\_safe2$, the glass is considered safe. $is\_safe1$ (from \hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) and $is\_safe2$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[T:calOfCap]{Definition~T:calOfCap}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[T:calOfDe]{Definition~T:calOfDe}.
+Description & \begin{description}
+              \item{$is\_safe2$ is the true when load resistance (capacity) is greater than load (demand) (Unitless)}
+              \item{$LR$ is the load resistance (Unitless)}
+              \item{$q$ is the applied load (demand) (kPa)}
+              \end{description}
+\\ \midrule \\
+Source & FIXME: This needs to be filled in
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \midrule \\
+Notes & If $is\_safe2$, the glass is considered safe. $is\_safe1$ (from \hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) and $is\_safe2$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[T:calOfCap]{Definition~T:calOfCap}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[T:calOfDe]{Definition~T:calOfDe}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{General Definitions}
@@ -389,13 +413,31 @@ This section collects and defines all the data needed to build the instance mode
 \phantomsection 
 \label{DD:risk.fun}
 \\ \midrule \\
-Label & Risk of Failure
+Label & Risk of failure
+\\ \midrule \\
+Symbol & $B$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $B=\frac{k}{\left(a b\right)^{m-1}} \left(1000 E h^{2}\right)^{m} LDF e^{J}$
+Equation & \begin{dmath}
+           B=\frac{k}{\left(a b\right)^{m-1}} \left(1000 E h^{2}\right)^{m} LDF e^{J}
+           \end{dmath}
 \\ \midrule \\
-Description & $B$ is the risk of failure\newline$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)\newline$a$ is the plate length (long dimension) (m)\newline$b$ is the plate width (short dimension) (m)\newline$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)\newline$E$ is the modulus of elasticity of glass (Pa)\newline$h$ is the actual thickness (m)\newline$LDF$ is the load duration factor\newline$J$ is the stress distribution factor (Function)
+Description & \begin{description}
+              \item{$B$ is the risk of failure (Unitless)}
+              \item{$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
+              \item{$a$ is the plate length (long dimension) (m)}
+              \item{$b$ is the plate width (short dimension) (m)}
+              \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
+              \item{$E$ is the modulus of elasticity of glass (Pa)}
+              \item{$h$ is the actual thickness (m)}
+              \item{$LDF$ is the load duration factor (Unitless)}
+              \item{$J$ is the stress distribution factor (Function) (Unitless)}
+              \end{description}
+\\ \midrule \\
+Source & [4]
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -405,11 +447,14 @@ Description & $B$ is the risk of failure\newline$k$ is the surface flaw paramete
 \phantomsection 
 \label{DD:act.thick}
 \\ \midrule \\
-Label & Actual Thickness
+Label & Actual thickness
+\\ \midrule \\
+Symbol & $h$
 \\ \midrule \\
 Units & m
 \\ \midrule \\
-Equation & $h=\frac{1}{1000} \begin{cases}
+Equation & \begin{dmath}
+           h=\frac{1}{1000} \begin{cases}
 2.16, & t=2.5\\
 2.59, & t=2.7\\
 2.92, & t=3.0\\
@@ -422,9 +467,17 @@ Equation & $h=\frac{1}{1000} \begin{cases}
 15.09, & t=16.0\\
 18.26, & t=19.0\\
 21.44, & t=22.0
-\end{cases}$
+\end{cases}
+           \end{dmath}
 \\ \midrule \\
-Description & $h$ is the actual thickness (m)\newline$t$ is the nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ (mm)
+Description & \begin{description}
+              \item{$h$ is the actual thickness (m)}
+              \item{$t$ is the nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ (mm)}
+              \end{description}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -434,13 +487,27 @@ Description & $h$ is the actual thickness (m)\newline$t$ is the nominal thicknes
 \phantomsection 
 \label{DD:stressDistFac}
 \\ \midrule \\
-Label & Stress Distribution Factor (Function)
+Label & Stress distribution factor (Function)
+\\ \midrule \\
+Symbol & $J$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $J=J\left(\hat{q},\frac{a}{b}\right)$
+Equation & \begin{dmath}
+           J=J\left(\hat{q},\frac{a}{b}\right)
+           \end{dmath}
 \\ \midrule \\
-Description & $J$ is the stress distribution factor (Function)\newline$\hat{q}$ is the dimensionless load\newline$a$ is the plate length (long dimension) (m)\newline$b$ is the plate width (short dimension) (m)
+Description & \begin{description}
+              \item{$J$ is the stress distribution factor (Function) (Unitless)}
+              \item{$J$ is the stress distribution factor (Function) (Unitless)}
+              \item{$\hat{q}$ is the dimensionless load (Unitless)}
+              \item{$a$ is the plate length (long dimension) (m)}
+              \item{$b$ is the plate width (short dimension) (m)}
+              \end{description}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -450,13 +517,28 @@ Description & $J$ is the stress distribution factor (Function)\newline$\hat{q}$ 
 \phantomsection 
 \label{DD:nFL}
 \\ \midrule \\
-Label & Non-Factored Load
+Label & Non-factored load
+\\ \midrule \\
+Symbol & $NFL$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $NFL=\frac{{\hat{q}_{tol}} E h^{4}}{\left(a b\right)^{2}}$
+Equation & \begin{dmath}
+           NFL=\frac{{\hat{q}_{tol}} E h^{4}}{\left(a b\right)^{2}}
+           \end{dmath}
 \\ \midrule \\
-Description & $NFL$ is the non-factored load\newline${\hat{q}_{tol}}$ is the tolerable load\newline$E$ is the modulus of elasticity of glass (Pa)\newline$h$ is the actual thickness (m)\newline$a$ is the plate length (long dimension) (m)\newline$b$ is the plate width (short dimension) (m)
+Description & \begin{description}
+              \item{$NFL$ is the non-factored load (Unitless)}
+              \item{${\hat{q}_{tol}}$ is the tolerable load (Unitless)}
+              \item{$E$ is the modulus of elasticity of glass (Pa)}
+              \item{$h$ is the actual thickness (m)}
+              \item{$a$ is the plate length (long dimension) (m)}
+              \item{$b$ is the plate width (short dimension) (m)}
+              \end{description}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -466,17 +548,28 @@ Description & $NFL$ is the non-factored load\newline${\hat{q}_{tol}}$ is the tol
 \phantomsection 
 \label{DD:gTF}
 \\ \midrule \\
-Label & Glass Type Factor
+Label & Glass type factor
+\\ \midrule \\
+Symbol & $GTF$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $GTF=\begin{cases}
+Equation & \begin{dmath}
+           GTF=\begin{cases}
 1, & g=AN\\
 4, & g=FT\\
 2, & g=HS
-\end{cases}$
+\end{cases}
+           \end{dmath}
 \\ \midrule \\
-Description & $GTF$ is the glass type factor\newline$g$ is the glass type $g\in{}\{AN,FT,HS\}$
+Description & \begin{description}
+              \item{$GTF$ is the glass type factor (Unitless)}
+              \item{$g$ is the glass type $g\in{}\{AN,FT,HS\}$ (Unitless)}
+              \end{description}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -486,13 +579,29 @@ Description & $GTF$ is the glass type factor\newline$g$ is the glass type $g\in{
 \phantomsection 
 \label{DD:dimlessLoad}
 \\ \midrule \\
-Label & Dimensionless Load
+Label & Dimensionless load
+\\ \midrule \\
+Symbol & $\hat{q}$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $\hat{q}=\frac{q \left(a b\right)^{2}}{E h^{4} GTF}$
+Equation & \begin{dmath}
+           \hat{q}=\frac{q \left(a b\right)^{2}}{E h^{4} GTF}
+           \end{dmath}
 \\ \midrule \\
-Description & $\hat{q}$ is the dimensionless load\newline$q$ is the applied load (demand) (kPa)\newline$a$ is the plate length (long dimension) (m)\newline$b$ is the plate width (short dimension) (m)\newline$E$ is the modulus of elasticity of glass (Pa)\newline$h$ is the actual thickness (m)\newline$GTF$ is the glass type factor
+Description & \begin{description}
+              \item{$\hat{q}$ is the dimensionless load (Unitless)}
+              \item{$q$ is the applied load (demand) (kPa)}
+              \item{$a$ is the plate length (long dimension) (m)}
+              \item{$b$ is the plate width (short dimension) (m)}
+              \item{$E$ is the modulus of elasticity of glass (Pa)}
+              \item{$h$ is the actual thickness (m)}
+              \item{$GTF$ is the glass type factor (Unitless)}
+              \end{description}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -502,13 +611,27 @@ Description & $\hat{q}$ is the dimensionless load\newline$q$ is the applied load
 \phantomsection 
 \label{DD:tolLoad}
 \\ \midrule \\
-Label & Tolerable Load
+Label & Tolerable load
+\\ \midrule \\
+Symbol & ${\hat{q}_{tol}}$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & ${\hat{q}_{tol}}={\hat{q}_{tol}}\left({J_{tol}},\frac{a}{b}\right)$
+Equation & \begin{dmath}
+           {\hat{q}_{tol}}={\hat{q}_{tol}}\left({J_{tol}},\frac{a}{b}\right)
+           \end{dmath}
 \\ \midrule \\
-Description & ${\hat{q}_{tol}}$ is the tolerable load\newline${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol\newline$a$ is the plate length (long dimension) (m)\newline$b$ is the plate width (short dimension) (m)
+Description & \begin{description}
+              \item{${\hat{q}_{tol}}$ is the tolerable load (Unitless)}
+              \item{${\hat{q}_{tol}}$ is the tolerable load (Unitless)}
+              \item{${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
+              \item{$a$ is the plate length (long dimension) (m)}
+              \item{$b$ is the plate width (short dimension) (m)}
+              \end{description}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -518,13 +641,31 @@ Description & ${\hat{q}_{tol}}$ is the tolerable load\newline${J_{tol}}$ is the 
 \phantomsection 
 \label{DD:sdf.tol}
 \\ \midrule \\
-Label & Stress Distribution Factor (Function) Based on Pbtol
+Label & Stress distribution factor (Function) based on Pbtol
+\\ \midrule \\
+Symbol & ${J_{tol}}$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & ${J_{tol}}=\log\left(\log\left(\frac{1}{1-{P_{btol}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(1000 E h^{2}\right)^{m} LDF}\right)$
+Equation & \begin{dmath}
+           {J_{tol}}=\log\left(\log\left(\frac{1}{1-{P_{btol}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(1000 E h^{2}\right)^{m} LDF}\right)
+           \end{dmath}
 \\ \midrule \\
-Description & ${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol\newline${P_{btol}}$ is the tolerable probability of breakage\newline$a$ is the plate length (long dimension) (m)\newline$b$ is the plate width (short dimension) (m)\newline$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)\newline$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)\newline$E$ is the modulus of elasticity of glass (Pa)\newline$h$ is the actual thickness (m)\newline$LDF$ is the load duration factor
+Description & \begin{description}
+              \item{${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
+              \item{${P_{btol}}$ is the tolerable probability of breakage (Unitless)}
+              \item{$a$ is the plate length (long dimension) (m)}
+              \item{$b$ is the plate width (short dimension) (m)}
+              \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
+              \item{$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
+              \item{$E$ is the modulus of elasticity of glass (Pa)}
+              \item{$h$ is the actual thickness (m)}
+              \item{$LDF$ is the load duration factor (Unitless)}
+              \end{description}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Instance Models}
@@ -533,43 +674,159 @@ This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into o
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:probOfBr}
+\toprule \textbf{Refname} & \textbf{IM:probOfBr}
 \phantomsection 
-\label{T:probOfBr}
+\label{IM:probOfBr}
 \\ \midrule \\
 Label & Probability of Glass Breakage
 \\ \midrule \\
-Equation & ${P_{b}}=1-e^{-B}$
+Input & $B$
 \\ \midrule \\
-Description & ${P_{b}}$ is the calculated probability of breakage. $B$ is the risk of failure.
+Output & ${P_{b}}$
+\\ \midrule \\
+Input Constraints & \begin{dmath}
+                    B>0
+                    \end{dmath}
+\\ \midrule \\
+Output Constraints & \begin{dmath}
+                     {P_{b}}>0
+                     \end{dmath}
+\\ \midrule \\
+Equation & \begin{dmath}
+           {P_{b}}=1-e^{-B}
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{description}
+              \item{${P_{b}}$ is the probability of breakage (Unitless)}
+              \item{$B$ is the risk of failure (Unitless)}
+              \end{description}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:calOfCap}
+\toprule \textbf{Refname} & \textbf{IM:calOfCap}
 \phantomsection 
-\label{T:calOfCap}
+\label{IM:calOfCap}
 \\ \midrule \\
 Label & Calculation of Capacity(LR)
 \\ \midrule \\
-Equation & $LR=NFL GTF LSF$
+Input & $NFL$, $GTF$, $LSF$
 \\ \midrule \\
-Description & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows A\ref{A:glassConditionA} and A\ref{A:glassTyA} (``In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations'') from [4 (pg. 53)].
+Output & $LR$
+\\ \midrule \\
+Input Constraints & \begin{dmath}
+                    NFL>0
+                    \end{dmath}
+                    \begin{dmath}
+                    GTF>0
+                    \end{dmath}
+                    \begin{dmath}
+                    LSF>0
+                    \end{dmath}
+\\ \midrule \\
+Output Constraints & 
+\\ \midrule \\
+Equation & \begin{dmath}
+           LR=NFL GTF LSF
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{description}
+              \item{$LR$ is the load resistance (Unitless)}
+              \item{$NFL$ is the non-factored load (Unitless)}
+              \item{$GTF$ is the glass type factor (Unitless)}
+              \item{$LSF$ is the load share factor (Unitless)}
+              \end{description}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \midrule \\
+Notes & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows A\ref{A:glassConditionA} and A\ref{A:glassTyA} (``In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations'') from [4 (pg. 53)].
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:calOfDe}
+\toprule \textbf{Refname} & \textbf{IM:calOfDe}
 \phantomsection 
-\label{T:calOfDe}
+\label{IM:calOfDe}
 \\ \midrule \\
 Label & Calculation of Demand(q)
 \\ \midrule \\
-Equation & $q=q\left({w_{TNT}},SD\right)$
+Input & $q$, ${w_{TNT}}$, $SD$
 \\ \midrule \\
-Description & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined as $w TNT$. $w$ is the charge weight. $TNT$ is the TNT equivalent factor. $SD$ is the stand off distance where $\sqrt{{SD_{x}}^{2}+{SD_{y}}^{2}+{SD_{z}}^{2}}$ where (${SD_{x}}$, ${SD_{y}}$, ${SD_{z}}$) are coordinates.
+Output & $q$
+\\ \midrule \\
+Input Constraints & \begin{dmath}
+                    q>0
+                    \end{dmath}
+                    \begin{dmath}
+                    {w_{TNT}}>0
+                    \end{dmath}
+                    \begin{dmath}
+                    SD>0
+                    \end{dmath}
+\\ \midrule \\
+Output Constraints & 
+\\ \midrule \\
+Equation & \begin{dmath}
+           q=q\left({w_{TNT}},SD\right)
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{description}
+              \item{$q$ is the applied load (demand) (kPa)}
+              \item{${w_{TNT}}$ is the explosive mass in equivalent weight of TNT (kg)}
+              \item{$SD$ is the stand off distance (m)}
+              \end{description}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \midrule \\
+Notes & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined as $w TNT$. $SD$. is the stand off distance where $\sqrt{{SD_{x}}^{2}+{SD_{y}}^{2}+{SD_{z}}^{2}}$ where (${SD_{x}}$, ${SD_{y}}$, ${SD_{z}}$) are coordinates.
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{IM:risk\_fun}
+\phantomsection 
+\label{IM:risk\_fun}
+\\ \midrule \\
+Label & Risk of failure
+\\ \midrule \\
+Input & $k$, $a$, $b$, $m$, $E$, $h$, $LDF$, $J$
+\\ \midrule \\
+Output & $B$
+\\ \midrule \\
+Input Constraints & 
+\\ \midrule \\
+Output Constraints & 
+\\ \midrule \\
+Equation & \begin{dmath}
+           B=\frac{k}{\left(a b\right)^{m-1}} \left(1000 E h^{2}\right)^{m} LDF e^{J}
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{description}
+              \item{$B$ is the risk of failure (Unitless)}
+              \item{$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
+              \item{$a$ is the plate length (long dimension) (m)}
+              \item{$b$ is the plate width (short dimension) (m)}
+              \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
+              \item{$E$ is the modulus of elasticity of glass (Pa)}
+              \item{$h$ is the actual thickness (m)}
+              \item{$LDF$ is the load duration factor (Unitless)}
+              \item{$J$ is the stress distribution factor (Function) (Unitless)}
+              \end{description}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Constraints}
@@ -613,19 +870,19 @@ This section provides the functional requirements, the business tasks that the s
 \subsection{Functional Requirements}
 \label{Sec:FRs}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:func.reqs.req1}:]Input the quantities from Table~\ref{Table:R1ReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req1}:]Input the quantities from Table~\ref{Table:R1ReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:func.reqs.req2}:]The system shall set the known values as follows: $m$, $k$, $E$, ${t_{d}}$ following A4, $LDF$ following A8, LSF following A5, $h$ (from \hyperref[DD:act.thick]{Definition~DD:act.thick}), and $GTF$ (from \hyperref[DD:gTF]{Definition~DD:gTF}).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req2}:]The system shall set the known values as follows: $m$, $k$, $E$, ${t_{d}}$ following A4, $LDF$ following A8, LSF following A5, $h$ (from \hyperref[DD:act.thick]{Definition~DD:act.thick}), and $GTF$ (from \hyperref[DD:gTF]{Definition~DD:gTF}).
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:func.reqs.req3}:]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DataConstraints}. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req3}:]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DataConstraints}. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:func.reqs.req4}:]Output the input quantities from R1 and the known quantities from R2.
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req4}:]Output the input quantities from R1 and the known quantities from R2.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:func.reqs.req5}:]If $is\_safe1$ and $is\_safe2$ (from \hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq} and \hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) are true, output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req5}:]If $is\_safe1$ and $is\_safe2$ (from \hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq} and \hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) are true, output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
 \end{description}
 \begin{itemize}
 \item[R6:]Output the following quantities:

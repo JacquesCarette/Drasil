@@ -4,12 +4,13 @@ module Language.Drasil.Chunk.Change
   , lc, ulc
   ) where
 
-import Language.Drasil.Classes (HasUID(uid))
-import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname))
+import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel))
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.UID (UID)
 import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Label.Core (Label)
 
-import Control.Lens ((^.), view, makeLenses)
+import Control.Lens ((^.), makeLenses)
 
 -- FIXME: We need a better way to capture change information. Sentences
 -- are dead information, and larger structures (like Contents) are display-specific.
@@ -31,19 +32,20 @@ data Change = ChC
   { _id      :: UID
   , chngType :: ChngType 
   , chng     :: Sentence
-  , _refName :: ShortName
+  , _lb      :: Label
   }
 makeLenses ''Change
   
 instance HasUID        Change where uid f (ChC a b c d) = fmap (\x -> ChC x b c d) (f a)
 instance Eq            Change where a == b = a ^. uid == b ^. uid
-instance HasShortName  Change where shortname = view refName
+instance HasLabel      Change where getLabel = lb
+instance HasShortName  Change where shortname = lb . shortname
 
 -- | Smart constructor for requirement chunks (should not be exported)
-chc :: String -> ChngType -> Sentence -> ShortName -> Change
+chc :: String -> ChngType -> Sentence -> Label -> Change
 chc = ChC
 
-lc, ulc :: String -> Sentence -> ShortName -> Change
+lc, ulc :: String -> Sentence -> Label -> Change
 -- | Smart constructor for functional requirement chunks.
 lc i = chc i Likely
 

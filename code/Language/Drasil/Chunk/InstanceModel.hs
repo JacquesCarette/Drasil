@@ -7,10 +7,11 @@ module Language.Drasil.Chunk.InstanceModel
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn),ConceptDomain(cdom), Concept, ExprRelat(relat),
-  HasDerivation(derivations), HasReference(getReferences), HasAdditionalNotes(getNotes))
+  HasDerivation(derivations), HasReference(getReferences), HasAdditionalNotes(getNotes),
+  HasLabel(getLabel))
 import Language.Drasil.Chunk.References (References)
 import Language.Drasil.Chunk.Derivation (Derivation)
-import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.Chunk.Constrained.Core (TheoryConstraint)
 import Language.Drasil.Chunk.Eq (QDefinition, equat)
 import Language.Drasil.Chunk.Relation (RelationConcept, makeRC)
@@ -20,8 +21,9 @@ import Language.Drasil.Expr (($=))
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Expr.Extract (vars)
 import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Label.Core (Label)
 
-import Control.Lens (makeLenses, (^.), view)
+import Control.Lens (makeLenses, (^.))
 
 type Inputs = [QuantityDict]
 type Output = QuantityDict
@@ -38,7 +40,7 @@ data InstanceModel = IM { _rc :: RelationConcept
                         , _outCons :: OutputConstraints
                         , _ref :: References
                         , _deri :: Derivation
-                        , _refName :: ShortName
+                        , _lb :: Label
                         , _notes :: Maybe [Sentence]
                         }
 makeLenses ''InstanceModel
@@ -52,32 +54,33 @@ instance ConceptDomain      InstanceModel where cdom = rc . cdom
 instance ExprRelat          InstanceModel where relat = rc . relat
 instance HasDerivation      InstanceModel where derivations = deri
 instance HasReference       InstanceModel where getReferences = ref
-instance HasShortName       InstanceModel where shortname = view refName
+instance HasLabel           InstanceModel where getLabel = lb
+instance HasShortName       InstanceModel where shortname = lb . shortname
 instance HasAdditionalNotes InstanceModel where getNotes = notes
 
 -- | Smart constructor for instance models
 im :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> String -> InstanceModel
-im rc i ic o oc sn = IM rc i ic o oc [] [] (shortname' sn) Nothing
+  OutputConstraints -> Label -> InstanceModel
+im rc i ic o oc lbe = IM rc i ic o oc [] [] lbe Nothing
 
 -- | Same as `im`, with an additional field for notes to be passed in
 im' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> String -> [Sentence] -> InstanceModel
-im' rc i ic o oc sn notes = IM rc i ic o oc [] [] (shortname' sn) (Just notes)
+  OutputConstraints -> Label -> [Sentence] -> InstanceModel
+im' rc i ic o oc lbe notes = IM rc i ic o oc [] [] lbe (Just notes)
 
 -- | Smart constructor for instance model from qdefinition 
 -- (Sentence is the "concept" definition for the relation concept)
 -- FIXME: get the shortname from the QDefinition?
-imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> InputConstraints -> OutputConstraints -> 
-  String -> InstanceModel
-imQD ctx qd dfn incon ocon sn = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
+imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> 
+  InputConstraints -> OutputConstraints ->  Label -> InstanceModel
+imQD ctx qd dfn incon ocon lbe = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
   (sy qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon (qw qd) ocon [] [] 
-  (shortname' sn) Nothing
+  lbe Nothing
 
 -- Same as `imQD`, with an additional field for notes to be passed in
 -- FIXME: get the shortname from the QDefinition?
-imQD' :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> InputConstraints -> OutputConstraints -> 
-  String -> Maybe [Sentence] -> InstanceModel
-imQD' ctx qd dfn incon ocon sn notes = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
+imQD' :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> 
+  InputConstraints -> OutputConstraints -> Label -> Maybe [Sentence] -> InstanceModel
+imQD' ctx qd dfn incon ocon lbe notes = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
   (sy qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon (qw qd) ocon [] [] 
-  (shortname' sn) notes
+  lbe notes

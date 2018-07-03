@@ -8,8 +8,7 @@ import Language.Drasil.Chunk.Citation (BibRef)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName,
-  shortname')
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel), 
   HasRefAddress(getRefAdd))
 
@@ -94,12 +93,12 @@ data SecCons = Sub Section
 data Section = Section 
              { tle :: Title 
              , cons :: [SecCons] 
-             , _ra :: RefAdd      --Hack to be fixed in later branch
-             , _sn :: ShortName   --Hack to be fixed in later branch 
+             , _lb :: Label
              }
 makeLenses ''Section
 
-instance HasShortName  Section where shortname (Section _ _ _ sn) = sn
+instance HasLabel      Section where getLabel = lb
+instance HasShortName  Section where shortname = lb . shortname
 
 data LabelledContent = LblC { _uniqueID :: UID
                             , _lbl :: Label
@@ -108,11 +107,14 @@ data LabelledContent = LblC { _uniqueID :: UID
 makeLenses ''LabelledContent
 
 instance HasRefAddress LabelledContent where getRefAdd = lbl . getRefAdd
+instance HasLabel      LabelledContent where getLabel = lbl
+instance HasShortName  LabelledContent where shortname = lbl . shortname
 
 -- | Smart constructor for labelled content chunks (should not be exported)
 llcc :: UID -> Label -> Contents -> LabelledContent
 llcc = LblC
 
+{-
 instance HasShortName  Contents where
   shortname (Table _ _ _ _ r)     = shortname' $ "Table:" ++ r
   shortname (Figure _ _ _ r)      = shortname' $ "Figure:" ++ r
@@ -128,7 +130,7 @@ instance HasShortName  Contents where
   shortname (Bib _)               = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
-
+-}
 
 ---------------------------------------------------------------------------
 -- smart constructors needed for LabelledContent
@@ -155,11 +157,11 @@ mkDefnt-}
 
 -- | Smart constructor for creating Sections with introductory contents
 -- (ie. paragraphs, tables, etc.) and a list of subsections.
-section :: Sentence -> [Contents] -> [Section] -> String -> ShortName -> Section
-section title intro secs ra sn = Section title (map Con intro ++ map Sub secs) ra sn
+section :: Sentence -> [Contents] -> [Section] -> Label -> Section
+section title intro secs lbe = Section title (map Con intro ++ map Sub secs) lbe
 
-section'' :: Sentence -> [Contents] -> [Section] -> String  -> Section
-section'' title intro secs ra = section title intro secs ra (shortname' ra)
+section'' :: Sentence -> [Contents] -> [Section] -> Label -> Section
+section'' title intro secs lbe = section title intro secs lbe
 
 -- | Figure smart constructor. Assumes 100% of page width as max width.
 fig :: Lbl -> Filepath -> RefAdd -> Contents

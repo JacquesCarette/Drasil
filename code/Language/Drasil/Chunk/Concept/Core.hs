@@ -37,8 +37,8 @@ instance Idea          ConceptChunk where getA = getA . view idea
 instance Definition    ConceptChunk where defn = dad . defn'
 instance ConceptDomain ConceptChunk where cdom = dad . cdom'
 instance Concept       ConceptChunk where
-instance HasMaybeLabel ConceptChunk where getMaybeLabel = lbl
-instance HasShortName  ConceptChunk where shortname = lbl . shortname
+--instance HasMaybeLabel ConceptChunk where getMaybeLabel = lbl
+--instance HasShortName  ConceptChunk where shortname = lbl . shortname
      
 data CommonConcept = ComConDict { _comm :: CI, _def :: Sentence, _dom :: [UID]}
 makeLenses ''CommonConcept

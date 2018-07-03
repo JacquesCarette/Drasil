@@ -27,7 +27,7 @@ getDerivation :: HasDerivation c => c -> Derivation
 getDerivation c =  c ^. derivations
 
 getShortName :: HasShortName c => c -> Sentence
-getShortName c = snToSentence $ shortname c
+getShortName c = snToSentence $ c ^. shortname
 
 
 snToSentence :: ShortName -> Sentence

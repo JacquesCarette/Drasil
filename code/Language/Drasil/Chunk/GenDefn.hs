@@ -5,12 +5,14 @@ module Language.Drasil.Chunk.GenDefn
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, IsUnit,
-  ExprRelat(relat), HasDerivation(derivations), HasReference(getReferences))
+  ExprRelat(relat), HasDerivation(derivations), HasReference(getReferences),
+  HasLabel(getLabel))
 import Language.Drasil.Chunk.References (References)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Unit (unitWrapper, UnitDefn)
 import Language.Drasil.Chunk.Derivation (Derivation)
-import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
+import Language.Drasil.Label.Core (Label)
 
 import Control.Lens (makeLenses, view)
 
@@ -19,7 +21,7 @@ data GenDefn = GD { _relC :: RelationConcept
                   , gdUnit :: Maybe UnitDefn                  
                   , _deri :: Derivation
                   , _ref :: References
-                  , _refName :: ShortName
+                  , _lb :: Label
                   }
 makeLenses ''GenDefn
 
@@ -32,9 +34,10 @@ instance ConceptDomain GenDefn where cdom = relC . cdom
 instance ExprRelat     GenDefn where relat = relC . relat
 instance HasDerivation GenDefn where derivations = deri
 instance HasReference  GenDefn where getReferences = ref
-instance HasShortName  GenDefn where shortname = view refName
+instance HasLabel      GenDefn where getLabel = lb
+instance HasShortName  GenDefn where shortname = lb . shortname
 
 gd :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
-  Derivation -> String -> GenDefn
-gd r (Just u) derivs sn = GD r (Just (unitWrapper u)) derivs [] (shortname' sn)
-gd r Nothing derivs sn = GD r Nothing derivs [] (shortname' sn)
+  Derivation -> Label -> GenDefn
+gd r (Just u) derivs lbe = GD r (Just (unitWrapper u)) derivs [] lbe
+gd r Nothing derivs lbe = GD r Nothing derivs [] lbe

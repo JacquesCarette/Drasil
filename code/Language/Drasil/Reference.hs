@@ -18,12 +18,13 @@ import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc, refAddr)
 import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..), ReqType(FR))
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName)
 import Language.Drasil.Chunk.Theory (TheoryModel)
-import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid))
+import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), getRefAdd)
 import Language.Drasil.Document (Contents(..), DType(Data, Theory), 
-  Section(Section), getDefName, repUnd)
+  Section(Section), getDefName, repUnd, LabelledContent(LblC))
 import Language.Drasil.RefTypes (RefType(..))
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.UID (UID)
+import Language.Drasil.Label.Core (getAdd)
 
 -- | Database for maintaining references.
 -- The Int is that reference's number.
@@ -209,7 +210,7 @@ instance Referable Change where
   rType (ChC _ Unlikely _ _) = UC
 
 instance Referable Section where
-  refAdd  (Section _ _ r _) = "Sec:" ++ r
+  refAdd  (Section _ _ lb) = "Sec:" ++ (getAdd (lb ^. getRefAdd))
   rType   _               = Sect
 
 instance Referable Citation where
@@ -233,6 +234,10 @@ instance Referable QDefinition where -- FIXME: This could lead to trouble; need
 instance Referable InstanceModel where
   refAdd  i = "IM:" ++ i^.uid
   rType   _ = Def
+
+instance Referable LabelledContent where
+  refAdd (LblC _ lb _) = "LblC:" ++ (getAdd (lb ^. getRefAdd))
+  rType  (LblC _ _ c)  = rType c
 
 instance Referable Contents where
   rType (Table _ _ _ _ _)       = Tab
@@ -281,7 +286,7 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 -- within the recipe (we want to force reference creation to check if the given
 -- item exists in our database of referable objects.
 makeRef :: (HasShortName l, Referable l) => l -> Sentence
-makeRef r = customRef r (shortname r)
+makeRef r = customRef r (r ^. shortname)
 
 -- | Create a reference with a custom 'ShortName'
 customRef :: (HasShortName l, Referable l) => l -> ShortName -> Sentence

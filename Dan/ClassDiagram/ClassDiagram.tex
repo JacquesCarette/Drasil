@@ -35,13 +35,6 @@
 			getA : Sentence + 1
         };
 
-\node (SymbolForm) [class, right=of AuxNode01]
-        {
-            \textbf{SymbolForm}
-            
-			symbol : Symbol
-        };
-
 \node (concept) [class, below=of NamedIdea]
 		{
 			\textbf{Concept}
@@ -72,7 +65,6 @@
 //is-a relations
 
 \draw[myarrow] (NamedIdea.north) -- ++(0,0.8) -| (Chunk.south);
-\draw[line] (NamedIdea.north) -- ++(0,0.8) -| (SymbolForm.north);
 \draw[myarrow] (concept.north) -- ++(0,0.8) -| (NamedIdea.south);
 \draw[myarrow] (unit.north) -- ++ (0, 0.8) -| (concept.south);
 \draw[line] (quantity.north) -- ++ (0, 2.3) -| (concept.north);
@@ -81,8 +73,6 @@
 \node (qtyMayHaveUnit) [mayHave, right=of unit] {may have};
 \draw[greenArrow] (quantity.west) -- ++ (0, 0) -- (unit.east);
 
-\node (qtyMayHaveSymb) [mayHave, below=of SymbolForm] {may have};
-\draw[greenArrow] (quantity.east) -- ++ (0, 0) -| (SymbolForm.south);
 
 \end{tikzpicture}
 \end{center}

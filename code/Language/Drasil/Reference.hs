@@ -4,7 +4,6 @@ module Language.Drasil.Reference where
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
 import Data.List (concatMap, find, groupBy, partition, sortBy)
-import Data.Maybe (fromMaybe)
 import qualified Data.Map as Map
 
 import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
@@ -273,7 +272,10 @@ authorSort :: HasFields c => c -> c -> Ordering
 authorSort = compare `on` getAuthor
 
 getAuthor :: (HasFields c) => c -> People
-getAuthor c = maybe (error "No author found") (\(Author x) -> x) (find ((Author x)==) (c ^. getFields))
+getAuthor c = maybe (error "No author found") (\(Author x) -> x) (find (isAuthor) (c ^. getFields))
+  where isAuthor :: CiteField -> Bool
+        isAuthor (Author _) = True
+        isAuthor _          = False
 
 citationsFromBibMap :: BibMap -> [Citation]
 citationsFromBibMap bm = sortBy uidSort citations

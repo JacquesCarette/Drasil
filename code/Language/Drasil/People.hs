@@ -10,8 +10,11 @@ module Language.Drasil.People
 
 -- | A person can have a given name, middle name(s), and surname, as well
 -- as the naming convention they use.
-data Person = Person { _given :: String, _surname :: String, 
-                       _middle :: [String], _convention :: Conv}
+data Person = Person { _given :: String
+                     , _surname :: String
+                     , _middle :: [String]
+                     , _convention :: Conv
+                     } deriving (Eq, Ord)
 -- ^ Western style conventions are given name followed
 -- by middle names, followed by surname.
 -- Eastern style conventions are surname followed by middle names, 
@@ -23,7 +26,7 @@ type People = [Person]
 -- | Naming conventions.
 data Conv = Western
           | Eastern
-          | Mono
+          | Mono deriving (Eq, Ord)
 
 -- | Constructor for a person using Western naming conventions. 
 -- Used for a person with only a given name and surname.

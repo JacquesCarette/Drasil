@@ -26,8 +26,8 @@ swhsIMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 -- IM1 --
 ---------
 eBalanceOnWtr_new :: InstanceModel
-eBalanceOnWtr_new = im eBalanceOnWtr [qw time, qw tau_W, qw temp_C, qw eta,
- qw temp_PCM, qw time_final, qw temp_init, qw coil_SA]
+eBalanceOnWtr_new = im eBalanceOnWtr [qw w_mass, qw htCap_W, qw coil_HTC, qw pcm_SA,
+ qw pcm_HTC, qw coil_SA, qw temp_PCM, qw time_final, qw temp_C, qw temp_init]
   [TCon AssumedCon $ sy temp_init $< sy temp_C] (qw temp_W)
    [TCon AssumedCon $ 0 $< sy time $< sy time_final] eBalanceOnWtr_deriv_swhs "eBalanceOnWtr" [balWtrDesc']
 

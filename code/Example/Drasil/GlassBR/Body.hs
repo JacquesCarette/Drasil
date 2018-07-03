@@ -109,10 +109,10 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
       [Client gLassBR (S "a" +:+ phrase company
         +:+ S "named Entuitive. It is developed by Dr." +:+ (S $ name mCampidelli)),
       Cstmr gLassBR]) :
-  GSDSec (GSDProg2 [UsrChars [user_chars_bullets endUser gLassBR secondYear
+  GSDSec (GSDProg2 [UsrChars [user_characteristics_bullets endUser gLassBR secondYear
     undergradDegree civilEng structuralEng glBreakage blastRisk],
     SystCons [] []]) :
-  ScpOfProjSec (ScpOfProjProg (short gLassBR) (prod_use_case_table) (indiv_prod_use_case (glaSlab)
+  ScpOfProjSec (ScpOfProjProg (short gLassBR) (product_use_case_table) (individual_product_use_case (glaSlab)
     (capacity) (demandq) (probability))) :
   -- SSDSec (SSDVerb spec_sys_desc) : 
   SSDSec 
@@ -139,7 +139,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     (S "This problem is small in size and relatively simple")
     (S "Any reasonable" +:+ phrase implementation +:+.
     (S "will be very quick" `sAnd` S "use minimal storage"))]) :
-  LCsSec (LCsProg likely_change_list) :
+  LCsSec (LCsProg likely_changes_list) :
   UCsSec (UCsProg unlikely_change_list) :
   TraceabilitySec
     (TraceabilityProg traceyMatrices [traceability_matrices_and_graphs_table1Desc, traceability_matrices_and_graphs_table2Desc, traceability_matrices_and_graphs_table3Desc]
@@ -589,7 +589,6 @@ likely_changes_list = likelyChanges_SRS
 
 {--UNLIKELY CHANGES--}
 
-s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4,
 unlikely_change_list :: [Contents]
 unlikely_change_list = unlikelyChanges_SRS 
 

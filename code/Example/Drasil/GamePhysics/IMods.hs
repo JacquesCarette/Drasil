@@ -17,12 +17,12 @@ iModels = [transMot, rotMot, col2D]
 
 {-- Force on the translational motion  --}
 im1_new :: InstanceModel
-im1_new = im' im1 [qw vel_i, qw QP.time, qw QP.gravitationalAccel, qw force_i, qw mass_i] 
+im1_new = im' transMot [qw vel_i, qw QP.time, qw QP.gravitationalAccel, qw force_i, qw mass_i] 
   [ TCon AssumedCon $ sy vel_i $> 0, TCon AssumedCon $ sy QP.time $> 0, TCon AssumedCon $ sy QP.gravitationalAccel $> 0, 
   TCon AssumedCon $ sy force_i $> 0, TCon AssumedCon $ sy mass_i $> 0 ] (qw acc_i) [] [] [transMotDesc]
 
 transMot :: RelationConcept
-transMot = makeRC "transMot" (transMotNP) (transMotDesc +:+ im1leg) transMotRel
+transMot = makeRC "transMot" (transMotNP) (transMotDesc +:+ transMotLeg) transMotRel
 
 transMotNP :: NP
 transMotNP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
@@ -47,13 +47,13 @@ transMotLeg = foldle1 (+:+) (+:+) $ map defList transMotLegTerms
 {-- Rotational Motion --}
 
 im2_new :: InstanceModel
-im2_new = im' im2 [qw QP.angularVelocity, qw QP.time, qw torque_i, qw QP.momentOfInertia]
+im2_new = im' rotMot [qw QP.angularVelocity, qw QP.time, qw torque_i, qw QP.momentOfInertia]
   [TCon AssumedCon $ sy QP.angularVelocity $> 0, TCon AssumedCon $ sy QP.time $> 0,
   TCon AssumedCon $ sy torque_i $> 0, TCon AssumedCon $ sy QP.momentOfInertia $> 0] 
   (qw QP.angularAccel) [TCon AssumedCon $ sy QP.angularAccel $> 0] [] [rotMotDesc]
 
 rotMot :: RelationConcept
-rotMot = makeRC "rotMot" (rotMotNP) (rotMotDesc +:+ im2leg) rotMotRel
+rotMot = makeRC "rotMot" (rotMotNP) (rotMotDesc +:+ rotMotLeg) rotMotRel
 
 rotMotNP :: NP
 rotMotNP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid body"
@@ -75,7 +75,7 @@ rotMotLeg = foldle1 (+:+) (+:+) $ map defList rotMotLegTerms
 {-- 2D Collision --}
 
 im3_new :: InstanceModel
-im3_new = im' im3 [qw QP.time, qw QP.impulseS, qw mass_A, qw normalVect] [TCon AssumedCon $ sy QP.time $> 0,
+im3_new = im' col2D [qw QP.time, qw QP.impulseS, qw mass_A, qw normalVect] [TCon AssumedCon $ sy QP.time $> 0,
   TCon AssumedCon $ sy QP.impulseS $> 0, TCon AssumedCon $ sy mass_A $> 0, TCon AssumedCon $ sy normalVect $> 0]
   (qw time_c) [TCon AssumedCon $ sy vel_A $> 0, TCon AssumedCon $ sy time_c $> 0] [] [col2DDesc]
 

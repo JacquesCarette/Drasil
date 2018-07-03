@@ -196,8 +196,8 @@ eBalanceOnWtr_deriv_eqns_swhs_im1 = [s4_2_3_eq1_swhs_im1, s4_2_3_eq2_swhs_im1,
 -- IM2 --
 ---------
 eBalanceOnPCM_new :: InstanceModel
-eBalanceOnPCM_new = im eBalanceOnPCM [qw time, qw tau_W, qw temp_C, qw eta,
- qw temp_PCM, qw time_final, qw temp_init, qw coil_SA]
+eBalanceOnPCM_new = im eBalanceOnPCM [qw tau_S_P, qw temp_W,
+ qw temp_melt_P, qw tau_L_P, qw melt_frac]
   [TCon AssumedCon $ sy temp_init $< sy temp_C] (qw temp_W)
    [TCon AssumedCon $ 0 $< sy time $< sy time_final] eBalanceOnPCM_deriv_swhs "eBalanceOnPCM" [balPCMDesc_note]
 

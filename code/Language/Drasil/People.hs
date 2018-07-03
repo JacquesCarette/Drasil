@@ -14,12 +14,14 @@ data Person = Person { _given :: String
                      , _surname :: String
                      , _middle :: [String]
                      , _convention :: Conv
-                     } deriving (Eq, Ord)
+                     } deriving (Eq)
 -- ^ Western style conventions are given name followed
 -- by middle names, followed by surname.
 -- Eastern style conventions are surname followed by middle names, 
 -- followed by given name.
 -- Mononyms are for those people who have only one name (ex. Madonna)
+
+instance Ord Person where (Person _ s1 _ _) `compare` (Person _ s2 _ _) = s1 `compare` s2
 
 type People = [Person]
 

@@ -265,9 +265,8 @@ makeList (Ordered items) = wrap "ol" ["list"] (vcat $ map
   (wrap "li" [] . p_item) items)
 makeList (Unordered items) = wrap "ul" ["list"] (vcat $ map
   (wrap "li" [] . p_item) items)
-makeList (Definitions items) = div_tag ["list"]
-  (vcat $ map (\(b,e) -> ((p_spec b <> text " is the") <+>
-  ((p_item e) <+> p_spec HARDNL))) items)
+makeList (Definitions items) = wrap "ul" ["hide-list-style"] $ 
+  (vcat $ map (\(b,e) -> wrap "li" [] $ ((p_spec b <> text " is the") <+> (p_item e))) items)  
 
 -- | Helper for rendering list items
 p_item :: ItemType -> Doc

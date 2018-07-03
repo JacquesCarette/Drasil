@@ -56,7 +56,7 @@ genDefDesc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", getES hfi `sC`
   getES hfo `sC` getES iS `sC` S "and", getES oS, S "are explained in" +:+.
   acroGD 2, S "Assuming", getES den `sC` getES hcs `sAnd` getES te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
-  titleize' assumption, (foldlList $ (map (\d -> sParen (d)))
+  titleize' assumption, (foldlList $ (map sParen)
   assumps) `sC` S "we have"]
 
 genDefDesc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]

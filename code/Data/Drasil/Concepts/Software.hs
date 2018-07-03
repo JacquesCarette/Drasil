@@ -10,7 +10,7 @@ c, errMsg, physLib, program :: ConceptChunk
 c       = dcc "c" (pn "C") 
   "C programming language"
 physLib = dcc "physLib" (cnIES "physics library") 
-  ("A programming library which provides functions for modelling physical phenomenon.")
+  "A programming library which provides functions for modelling physical phenomenon."
 program = dcc "program" (cn' "program")
   ("A series of coded software instructions to control the operation of a " ++
   "computer or other machine.")

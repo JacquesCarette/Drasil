@@ -62,7 +62,7 @@ thermal_conduction  = dcc "thermal_conduction"
                       "The transfer of heat energy through a substance"
 thermal_conductor   = dcc "thermal_conductor"
                       (cn' "thermal conductor")
-                      ("An object through which thermal energy can be transferred easily")
+                      "An object through which thermal energy can be transferred easily"
 thermal_energy      = dcc "thermal_energy" 
                       (cnIES "thermal energy") "The energy that comes from heat"
 

@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.Concept 
   ( ConceptChunk, dcc, dcc', dccWDS, dccWDS', cc, cc', ccs
   , cw, DefnAndDomain(DAD)
-  , CommonConcept
+  , CommonConcept, ConceptInstance
   )where
 
 import Language.Drasil.Classes (HasUID(uid), Idea, Definition(defn),
@@ -11,8 +11,8 @@ import Language.Drasil.Chunk.NamedIdea(mkIdea,nw)
 import Language.Drasil.Chunk.CommonIdea (commonIdea)
 import Language.Drasil.Spec (Sentence(S))
 import Language.Drasil.NounPhrase (NP)
-import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict), CommonConcept(ComConDict), 
-  DefnAndDomain(DAD))
+import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict), ConceptInstance,
+  CommonConcept(ComConDict), DefnAndDomain(DAD))
 
 
 import Control.Lens ((^.))

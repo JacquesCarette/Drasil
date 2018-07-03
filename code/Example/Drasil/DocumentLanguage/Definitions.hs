@@ -86,9 +86,7 @@ mkTMField t m l@(Description v u) fs = (show l,
 mkTMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkTMField _ _ l@(Source) fs = (show l, fixme) : fs --FIXME: fill this in
 mkTMField t _ l@(Notes) fs = 
-  case (t ^. getNotes) of
-  Nothing -> fs
-  Just ss -> (show l, map Paragraph ss) : fs
+  maybe fs (\ss -> (show l, map Paragraph ss) : fs) (t ^. getNotes)
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
 
@@ -162,9 +160,7 @@ mkIMField i _ l@(InConstraints) fs  = (show l,
 mkIMField i _ l@(OutConstraints) fs = (show l,
   foldr ((:) . eqUnR) [] (map tConToExpr (i ^. outCons))) : fs
 mkIMField i _ l@(Notes) fs = 
-  case (i ^. getNotes) of
-  Nothing -> fs
-  Just ss -> (show l, map Paragraph ss) : fs
+  maybe fs (\ss -> (show l, map Paragraph ss) : fs) (i ^. getNotes)
 mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for instance models"
 

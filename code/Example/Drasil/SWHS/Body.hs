@@ -48,8 +48,8 @@ import Drasil.SWHS.Assumptions (swhsRefDB, swhsAssumptions, assump3, assump4, as
   assump6, assump13, assump15, assump16, assump17, assump18)
 import Drasil.SWHS.Requirements (req1, req2, reqEqn1, reqEqn2,
   req3, req4, req5, req6, req7, req8, req9, req10, req11, nonFuncReqs)
-import Drasil.SWHS.LikelyChanges (likeChg1, likeChg2, likeChg3, likeChg4,
-  likeChg5, likeChg6)
+import Drasil.SWHS.Changes (likeChg1, likeChg2, likeChg3, likeChg4,
+  likeChg5, likeChg6, unlikelyChgs)
 import Drasil.SWHS.DataDesc (swhsInputMod)
 
 import qualified Drasil.SRS as SRS (inModel, missingP, likeChg, unlikeChg,
@@ -157,7 +157,7 @@ mkSRS = [RefSec (RefProg intro
   IOrgSec (orgDocIntro) (inModel) (SRS.inModel SRS.missingP [])
   (orgDocEnd swhs_pcm progName)])] ++
   
-  map Verbatim [genSystDesc, specSystDesc, reqS, likelyChgs, traceMAndG] ++ 
+  map Verbatim [genSystDesc, specSystDesc, reqS, likelyChgs, unlikelyChgs, traceMAndG] ++ 
   [AuxConstntSec (AuxConsProg progName specParamValList)] ++
   (Bibliography : [])
 
@@ -541,7 +541,7 @@ likeChgList = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
 --------------------------------
 -- Section 6b : UNLIKELY CHANGES --
 --------------------------------
-
+{-
 unlikelyChgs :: Section
 unlikelyChgs = SRS.unlikeChg unlikelyChgsList []
 
@@ -550,7 +550,7 @@ unlikelyChgsList = unlikeChgList
 
 unlikeChgList :: [Contents]
 unlikeChgList = []
-
+-}
 --------------------------------------------------
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
 --------------------------------------------------
@@ -906,7 +906,7 @@ systCIntro pro us = foldlSPCol [short pro +:+. S "is mostly self-contained",
 -- User Responsibilities --
 userResp :: NamedChunk -> NamedChunk -> ItemType
 userResp inp dat = Nested (titleize user +: S "Responsibilities")
-  $ Bullet $ map (\c -> Flat c) [
+  $ Bullet $ map Flat [
 
   foldlSent_ [S "Provide the", phrase inp, plural dat, S "to the",
   phrase system `sC` S "ensuring no errors in the", plural dat, S "entry"],
@@ -919,7 +919,7 @@ userResp inp dat = Nested (titleize user +: S "Responsibilities")
 -- SWHS Responsibilities --
 swhsResp :: ItemType
 swhsResp = Nested (short progName +: S "Responsibilities")
-  $ Bullet $ map (\c -> Flat c) [
+  $ Bullet $ map Flat [
 
   foldlSent_ [S "Detect", plural datum, S "type mismatch, such as a string of",
   S "characters instead of a floating point number"],

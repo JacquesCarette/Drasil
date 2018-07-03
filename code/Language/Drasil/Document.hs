@@ -12,11 +12,13 @@ import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName,
   shortname')
 import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel), 
   HasRefAddress(getRefAdd))
-import Language.Drasil.UID
+
 import Language.Drasil.Expr (Expr)
+import Language.Drasil.Label (Label, mkLabelRA)
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Spec (Sentence(..))
-import Language.Drasil.Label (Label, mkLabelRA)
+import Language.Drasil.UID
+
 import Control.Lens ((^.), makeLenses)
 import Language.Drasil.Label.Core (Label)
 

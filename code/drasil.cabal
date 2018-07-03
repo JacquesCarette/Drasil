@@ -198,7 +198,7 @@ executable nopcm
     , Drasil.SWHS.DataDefs
     , Drasil.SWHS.DataDesc
     , Drasil.SWHS.GenDefs
-    , Drasil.SWHS.LikelyChanges
+    , Drasil.SWHS.Changes
     , Drasil.SWHS.References
     , Drasil.SWHS.Requirements
     , Drasil.SWHS.TMods
@@ -390,7 +390,7 @@ executable swhs
     , Drasil.SWHS.DataDesc
     , Drasil.SWHS.GenDefs
     , Drasil.SWHS.Generate
-    , Drasil.SWHS.LikelyChanges
+    , Drasil.SWHS.Changes
     , Drasil.SWHS.References
     , Drasil.SWHS.Requirements
     , Drasil.SWHS.TMods

@@ -24,7 +24,6 @@ import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent,
   foldlSent_, ofThe, sAnd, sOr)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
 import Data.Drasil.Utils (enumBullet, enumSimple, weave)
-
 import Drasil.SSP.Assumptions (sspAssumptions, newA3, sspRefDB, newAssumptions)
 import Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShrDerivation, 
@@ -116,6 +115,7 @@ mkSRS = RefSec (RefProg intro
   
 ssp_code :: CodeSpec
 ssp_code = codeSpec ssp_si [sspInputMod]
+
 
 -- SYMBOL MAP HELPERS --
 sspSymMap :: ChunkDB

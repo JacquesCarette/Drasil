@@ -1,7 +1,7 @@
 module Drasil.GamePhysics.Body where
 
 import Control.Lens ((^.))
-
+import Data.List (nub)
 import Data.Drasil.Concepts.Documentation (assumption, body,
   concept, condition, consumer, dataConst, dataDefn, datumConstraint,
   document, endUser, environment, game, genDefn, generalSystemDescription,
@@ -31,7 +31,7 @@ import Drasil.GamePhysics.IMods (iModels)
 import Drasil.GamePhysics.References (cpCitations)
 import Drasil.GamePhysics.TMods (cpTMods)
 import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
-  inputSymbols, outputSymbols, cpInputConstraints)
+  inputSymbols, outputSymbols, cpInputConstraints, gamephySymbols)
 
 import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Drasil.Sections.Requirements (reqF)
@@ -92,7 +92,7 @@ chipmunkSysInfo = SI {
   _kind = srs,
   _authors = authors,
   _units = chipUnits,
-  _quants = cpSymbolsAll, 
+  _quants = ccs', 
   _concepts = ([] :: [DefinedQuantityDict]),
   _definitions = (cpDDefs), 
   _inputs = (inputSymbols), 
@@ -104,6 +104,18 @@ chipmunkSysInfo = SI {
   _refdb = cpRefDB
 }
 
+ccss :: Sentence -> [DefinedQuantityDict]
+ccss s = combine s everything
+
+ccss' :: Expr -> [DefinedQuantityDict]
+ccss' s = combine' s everything
+
+ccs' :: [DefinedQuantityDict]
+ccs' = nub ((concatMap ccss $ getDoc chipmunkSRS') ++ (concatMap ccss' $ egetDoc chipmunkSRS'))
+
+outputuid :: [String]
+outputuid = nub ((concatMap snames $ getDoc chipmunkSRS') ++ (concatMap names $ egetDoc chipmunkSRS'))
+
 cpRefDB :: ReferenceDB
 cpRefDB = rdb [] [] [] [] [] cpCitations -- FIXME: Convert the rest to new chunk types
 
@@ -113,7 +125,7 @@ chipUnits :: [UnitDefn]
 chipUnits = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [newton, radian]
 
 everything :: ChunkDB
-everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: [ConceptChunk]) -- FIXME: Fill in Concepts
+everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms) gamephySymbols -- FIXME: Fill in Concepts
   chipUnits
 
 chipCode :: CodeSpec

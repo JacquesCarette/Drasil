@@ -10,8 +10,7 @@ import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName,
   shortname')
-import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel), 
-  HasRefAddress(getRefAdd))
+import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd))
 
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label (Label, mkLabelRA)
@@ -20,7 +19,6 @@ import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.UID
 
 import Control.Lens ((^.), makeLenses)
-import Language.Drasil.Label.Core (Label)
 
 data ListType = Bullet [ItemType] -- ^ Bulleted list
               | Numeric [ItemType] -- ^ Enumerated List
@@ -99,7 +97,7 @@ data Section = Section
              }
 makeLenses ''Section
 
-instance HasShortName  Section where shortname (Section _ _ _ sn) = sn
+instance HasShortName  Section where shortname (Section _ _ _ sn') = sn'
 
 data LabelledContent = LblC { _uniqueID :: UID
                             , _lbl :: Label
@@ -134,8 +132,8 @@ instance HasShortName  Contents where
 -- smart constructors needed for LabelledContent
 -- nothing has a shortname right now
 mkTableLC :: String -> String -> String -> String -> Contents -> LabelledContent
-mkTableLC uidForContent labelUID refAdd sn tbl = llcc uidForContent 
-  (mkLabelRA labelUID refAdd sn) tbl
+mkTableLC uidForContent labelUID refAdd sn' tbl = llcc uidForContent 
+  (mkLabelRA labelUID refAdd sn') tbl
 
 {-mkParagraph
 mkEqnBlock
@@ -156,10 +154,10 @@ mkDefnt-}
 -- | Smart constructor for creating Sections with introductory contents
 -- (ie. paragraphs, tables, etc.) and a list of subsections.
 section :: Sentence -> [Contents] -> [Section] -> String -> ShortName -> Section
-section title intro secs ra sn = Section title (map Con intro ++ map Sub secs) ra sn
+section title intro secs r sn' = Section title (map Con intro ++ map Sub secs) r sn'
 
 section'' :: Sentence -> [Contents] -> [Section] -> String  -> Section
-section'' title intro secs ra = section title intro secs ra (shortname' ra)
+section'' title intro secs r = section title intro secs r (shortname' r)
 
 -- | Figure smart constructor. Assumes 100% of page width as max width.
 fig :: Lbl -> Filepath -> RefAdd -> Contents

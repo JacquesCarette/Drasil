@@ -1,7 +1,7 @@
 {-# Language TypeFamilies #-}
 module Language.Drasil.Development.Unit (
     UnitDefn(..), DerUChunk(..) -- data-structures
-  , from_udefn, makeDerU, unitCon
+  , makeDerU, unitCon
   , (^:), (/:), (*:), (*$), (/$), new_unit
   , scale, shift
   , derUC, derUC', derUC'', unitWrapper

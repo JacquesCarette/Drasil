@@ -94,4 +94,4 @@ tm c t sn = TM (cw c) t (shortname' sn) Nothing
 
 -- Same as tm, but with the additional notes argument passed in
 tm' :: Concept c => c -> TheoryChunk -> String -> [Sentence] -> TheoryModel
-tm' c t sn notes = TM (cw c) t (shortname' sn) (Just notes)
+tm' c t sn ns = TM (cw c) t (shortname' sn) (Just ns)

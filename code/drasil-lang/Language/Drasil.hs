@@ -315,7 +315,6 @@ import Language.Drasil.RefTypes(RefAdd)
 
 --Should be in lang-dev package?
 import Language.Drasil.Format(Format(TeX, HTML))
-import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website),DocSpec(DocSpec),Filename)
 import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.HTML.Helpers (makeCSS)

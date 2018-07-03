@@ -54,7 +54,7 @@ funcTerm :: String -> FunctionMap -> String
 funcTerm cname m = maybe "" (\cd -> getStr (phrase $ cd {-^. term-})) (Map.lookup cname m) -- Not sure why commenting out "^. term" works - now the type signatures match
        
 varTerm :: String -> VarMap -> String
-varTerm cname m = maybe "" (\cc -> getStr (phrase $ cc {-^. term-})) (Map.lookup cname m) -- Not sure why commenting out "^. term" works
+varTerm cname m = maybe "" (\cch -> getStr (phrase $ cch {-^. term-})) (Map.lookup cname m) -- Not sure why commenting out "^. term" works
         
 varType :: String -> VarMap -> CodeType
 varType cname m = maybe (error "Variable not found") codeType (Map.lookup cname m)
@@ -235,17 +235,17 @@ modDepMap sm mem ms  = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModD
                                        ("DerivedValues", [ "InputParameters" ] ),
                                        ("InputConstraints", [ "InputParameters" ] )]  -- hardcoded for now
                                                                           -- will fix later
-  where getModDep (Mod name funcs) = 
-          delete name $ nub $ concatMap getDep (concatMap fdep funcs)
+  where getModDep (Mod name' funcs) = 
+          delete name' $ nub $ concatMap getDep (concatMap fdep funcs)
         getDep n = maybe [] (\x -> [x]) (Map.lookup n mem)        
         fdep (FCD cd) = codeName cd:map codeName (codevars  (codeEquat cd) sm)
         fdep (FDef (FuncDef _ i _ fs)) = map codeName (i ++ concatMap (fstdep sm ) fs)
         fdep (FData (FuncData _ d)) = map codeName $ getInputs d   
 
 fstdep :: HasSymbolTable ctx => ctx -> FuncStmt ->[CodeChunk]
-fstdep _  (FDec cc _) = [cc]
-fstdep sm (FAsg cc e) = cc:codevars e sm
-fstdep sm (FFor cc e fs) = delete cc $ nub (codevars  e sm ++ concatMap (fstdep sm ) fs)
+fstdep _  (FDec cch _) = [cch]
+fstdep sm (FAsg cch e) = cch:codevars e sm
+fstdep sm (FFor cch e fs) = delete cch $ nub (codevars  e sm ++ concatMap (fstdep sm ) fs)
 fstdep sm (FWhile e fs) = codevars e sm ++ concatMap (fstdep sm ) fs
 fstdep sm (FCond e tfs efs)  = codevars e sm ++ concatMap (fstdep sm ) tfs ++ concatMap (fstdep sm ) efs
 fstdep sm (FRet e)  = codevars  e sm
@@ -259,9 +259,9 @@ fstdecl :: HasSymbolTable ctx => ctx -> [FuncStmt] -> [CodeChunk]
 fstdecl ctx fsts = (nub $ concatMap (fstvars ctx) fsts) \\ (nub $ concatMap (declared ctx) fsts) 
   where
     fstvars :: HasSymbolTable ctx => ctx -> FuncStmt -> [CodeChunk]
-    fstvars _  (FDec cc _) = [cc]
-    fstvars sm (FAsg cc e) = cc:codevars' e sm
-    fstvars sm (FFor cc e fs) = delete cc $ nub (codevars' e sm ++ concatMap (fstvars sm) fs)
+    fstvars _  (FDec cch _) = [cch]
+    fstvars sm (FAsg cch e) = cch:codevars' e sm
+    fstvars sm (FFor cch e fs) = delete cch $ nub (codevars' e sm ++ concatMap (fstvars sm) fs)
     fstvars sm (FWhile e fs) = codevars' e sm ++ concatMap (fstvars sm) fs
     fstvars sm (FCond e tfs efs) = codevars' e sm ++ concatMap (fstvars sm) tfs ++ concatMap (fstvars sm) efs
     fstvars sm (FRet e) = codevars' e sm
@@ -272,7 +272,7 @@ fstdecl ctx fsts = (nub $ concatMap (fstvars ctx) fsts) \\ (nub $ concatMap (dec
     fstvars sm (FAppend a b) = nub (codevars a sm ++ codevars b sm)
 
     declared :: HasSymbolTable ctx => ctx -> FuncStmt -> [CodeChunk]
-    declared _  (FDec cc _) = [cc]
+    declared _  (FDec cch _) = [cch]
     declared _  (FAsg _ _) = []
     declared sm (FFor _ _ fs) = concatMap (declared sm) fs
     declared sm (FWhile _ fs) = concatMap (declared sm) fs

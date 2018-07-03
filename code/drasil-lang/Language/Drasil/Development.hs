@@ -2,7 +2,7 @@
 module Language.Drasil.Development (
   -- Unit
     UnitDefn(..), DerUChunk(..) -- data-structures
-  , from_udefn, makeDerU, unitCon
+  , makeDerU, unitCon
   , (^:), (/:), (*:), (*$), (/$), new_unit
   , scale, shift
   , derUC, derUC', derUC'', unitWrapper
@@ -13,7 +13,7 @@ module Language.Drasil.Development (
   ) where
 
 import Language.Drasil.Development.Unit (DerUChunk(..), UnitDefn(..), (^:), (/:), 
-  (*:), (*$), (/$), comp_unitdefn, derUC, derUC', derUC'', from_udefn, fund,
-  makeDerU, new_unit, scale, shift, unitCon, unitWrapper)
+  (*:), (*$), (/$), comp_unitdefn, derUC, derUC', derUC'', fund, makeDerU,
+  new_unit, scale, shift, unitCon, unitWrapper)
 import Language.Drasil.Development.UnitLang (UDefn(..), USymb(US), comp_usymb,
   from_udefn)

@@ -893,7 +893,7 @@ systCIntro pro us = foldlSPCol [short pro +:+. S "is mostly self-contained",
 -- User Responsibilities --
 userResp :: NamedChunk -> NamedChunk -> ItemType
 userResp inp dat = Nested (titleize user +: S "Responsibilities")
-  $ Bullet $ map (\c -> Flat c) [
+  $ Bullet $ map Flat [
 
   foldlSent_ [S "Provide the", phrase inp, plural dat, S "to the",
   phrase system `sC` S "ensuring no errors in the", plural dat, S "entry"],
@@ -906,7 +906,7 @@ userResp inp dat = Nested (titleize user +: S "Responsibilities")
 -- SWHS Responsibilities --
 swhsResp :: ItemType
 swhsResp = Nested (short progName +: S "Responsibilities")
-  $ Bullet $ map (\c -> Flat c) [
+  $ Bullet $ map Flat [
 
   foldlSent_ [S "Detect", plural datum, S "type mismatch, such as a string of",
   S "characters instead of a floating point number"],

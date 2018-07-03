@@ -42,6 +42,7 @@ module Language.Drasil (
   -- Classes
   , HasUID(uid)
   , NamedIdea(term)
+  , HasAdditionalNotes(getNotes)
   , Idea(getA)
   , Definition(defn)
   , ConceptDomain(cdom)
@@ -82,7 +83,7 @@ module Language.Drasil (
   , GenDefn, gd, gdUnit
   -- Chunk.InstanceModel
   , InstanceModel
-  , inCons, outCons, imOutput, imInputs, im, imQD
+  , inCons, outCons, imOutput, imInputs, im, imQD, im', imQD'
   -- Chunk.Quantity
   , Quantity(..), QuantityDict, qw, mkQuant
   -- Chunk.UncertainQuantity
@@ -176,7 +177,7 @@ module Language.Drasil (
   --, entry, listEntry, junk, singleton, junkLine, singleLine, multiLine
   --, multiLine', straight, repeated, repeated', Ind(..)
   -- Chunk.Theory
-  , Theory(..), tc', TheoryChunk, TheoryModel, tm
+  , Theory(..), tc', TheoryChunk, TheoryModel, tm, tm'
   -- Chunk.SymbolForm
   , Stage(Equational,Implementation), HasSymbol(symbol), eqSymb, codeSymb, hasStageSymbol
   -- ChunkDB
@@ -230,10 +231,10 @@ import Language.Drasil.Development.UnitLang -- all of it
 import Language.Drasil.Development.Unit -- all of it
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), 
-  HasSpace(typ), HasUnitSymbol(usymb), IsUnit, CommonIdea(abrv),
-  Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), 
-  HasDerivation(derivations), HasReference(getReferences))
+  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),HasSpace(typ),  HasUnitSymbol(usymb),
+  IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes),
+  Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations),
+  HasReference(getReferences))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Derivation (Derivation)

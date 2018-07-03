@@ -232,8 +232,8 @@ data AppndxSec = AppndxVerb Section | AppndxProg [Contents]
 
 -- | Creates a document from a document description and system information
 mkDoc :: DocDesc -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
-mkDoc l comb si@(SI {_sys = sys, _kind = kind, _authors = authors}) = Document
-  ((nw kind) `comb` (nw sys)) (S $ manyNames authors) (mkSections si l)
+mkDoc l comb si@SI {_sys = sys, _kind = kind, _authors = authors} = Document
+  (nw kind `comb` nw sys) (S $ manyNames authors) (mkSections si l)
 
 -- | Helper for creating the document sections
 mkSections :: SystemInformation -> DocDesc -> [Section]
@@ -251,7 +251,7 @@ mkSections si l = map doit l
     doit (ScpOfProjSec sop)  = mkScpOfProjSec sop
     doit (ReqrmntSec r)      = mkReqrmntSec r
     doit (LCsSec lc')        = mkLCsSec lc'
-    doit (UCsSec ulc)        = mkUCsSec ulc
+    doit (UCsSec ulcs)       = mkUCsSec ulcs
     doit (TraceabilitySec t) = mkTraceabilitySec t
     doit (AppndxSec a)       = mkAppndxSec a
 
@@ -263,19 +263,19 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
   (map (mkSubRef si) l) "RefMat"
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
-    mkSubRef (SI {_sysinfodb = db})  TUnits =
+    mkSubRef SI {_sysinfodb = db}  TUnits =
         table_of_units (sortBy comp_unitdefn $ Map.elems $ db ^. unitTable) (tuIntro defaultTUI)
-    mkSubRef (SI {_sysinfodb = db}) (TUnits' con) =
+    mkSubRef SI {_sysinfodb = db} (TUnits' con) =
         table_of_units (sortBy comp_unitdefn $ Map.elems $ db ^. unitTable) (tuIntro con)
-    mkSubRef (SI {_quants = v}) (TSymb con) =
+    mkSubRef SI {_quants = v} (TSymb con) =
       SRS.tOfSymb
-      [tsIntro con, (table Equational (
+      [tsIntro con, table Equational (
          sortBy (compsy `on` eqSymb) $
-         filter (\q -> hasStageSymbol q Equational)
-         (nub v)) at_start)] []
-    mkSubRef (SI {_concepts = cccs}) (TSymb' f con) = (mkTSymb cccs f con)
-    mkSubRef (SI {_sysinfodb = db}) TAandA =
-      (table_of_abb_and_acronyms $ nub $ Map.elems (db ^. termTable))
+         filter (`hasStageSymbol` Equational)
+         (nub v)) at_start] []
+    mkSubRef SI {_concepts = cccs} (TSymb' f con) = mkTSymb cccs f con
+    mkSubRef SI {_sysinfodb = db} TAandA =
+      table_of_abb_and_acronyms $ nub $ Map.elems (db ^. termTable)
     mkSubRef _              (TVerb s) = s
 
 -- | Helper for creating the table of symbols
@@ -283,16 +283,16 @@ mkTSymb :: (Quantity e, Concept e, Eq e) =>
   [e] -> LFunc -> [TSIntro] -> Section
 mkTSymb v f c = SRS.tOfSymb [tsIntro c,
   table Equational
-    (sortBy (compsy `on` eqSymb) $ filter (\q -> hasStageSymbol q Equational) (nub v))
+    (sortBy (compsy `on` eqSymb) $ filter (`hasStageSymbol` Equational) (nub v))
     (lf f)] []
   where lf Term = at_start
         lf Defn = (^. defn)
-        lf (TermExcept cs) = (\x -> if (x ^. uid) `elem` (map (^. uid) cs) then
-          (x ^. defn) else (at_start x)) --Compare chunk uids, since we don't
+        lf (TermExcept cs) = \x -> if (x ^. uid) `elem` map (^. uid) cs then
+          x ^. defn else at_start x --Compare chunk uids, since we don't
           --actually care about the chunks themselves in LFunc.
-        lf (DefnExcept cs) = (\x -> if (x ^. uid) `elem` (map (^.uid) cs) then
-          (at_start x) else (x ^. defn))
-        lf TAD = (\tDef -> titleize tDef :+: S ":" +:+ (tDef ^. defn))
+        lf (DefnExcept cs) = \x -> if (x ^. uid) `elem` map (^.uid) cs then
+          at_start x else x ^. defn
+        lf TAD = \tDef -> titleize tDef :+: S ":" +:+ (tDef ^. defn)
 
 -- | table of symbols constructor
 tsymb, tsymb' :: [TSIntro] -> RefTab
@@ -305,7 +305,7 @@ tsymb'' intro lfunc = TSymb' lfunc intro -- ^ Custom function and intro.
 
 -- | table of symbols intro builder. Used by mkRefSec
 tsIntro :: [TSIntro] -> Contents
-tsIntro x = Paragraph $ foldr (+:+) (EmptyS) (map tsI x)
+tsIntro x = Paragraph $ foldr ((+:+) . tsI) EmptyS x
 
 -- | table of symbols intro writer. Translates a TSIntro to a list of Sentences
 tsI :: TSIntro -> Sentence
@@ -319,14 +319,14 @@ tsI TSPurpose = S "The table that follows summarizes the symbols used in" +:+
 -- to a sentence
 typogConvention :: [TConvention] -> Sentence
 typogConvention [] = error "No arguments given for typographic conventions"
-typogConvention ts = S "Throughout the document" `sC` (makeSentence ts)
-  where makeSentence (x:[]) = tcon x :+: S "."
-        makeSentence (x:y:[]) = tcon x +:+ S "and" +:+. tcon y
-        makeSentence (x:y:z:[]) = tcon x `sC` tcon y `sC` S "and" +:+. tcon z
-        makeSentence (x:xs) = tcon x `sC` makeSentence xs
-        makeSentence _ = error "How did you get here?"
-        tcon (Vector emph) = S ("symbols in " ++ show emph ++
-                                " will represent vectors, and scalars otherwise")
+typogConvention ts = S "Throughout the document" `sC` makeSentence ts
+  where makeSentence [x]     = tcon x :+: S "."
+        makeSentence [x,y]   = tcon x +:+ S "and" +:+. tcon y
+        makeSentence [x,y,z] = tcon x `sC` tcon y `sC` S "and" +:+. tcon z
+        makeSentence (x:xs)  = tcon x `sC` makeSentence xs
+        makeSentence  _      = error "How did you get here?"
+        tcon (Vector emph)   = S ("symbols in " ++ show emph ++
+                               " will represent vectors, and scalars otherwise")
         tcon (Verb s) = s
 
 -- | symbolic convention writer.
@@ -334,19 +334,19 @@ symbConvention :: [Literature] -> Sentence
 symbConvention [] = error "Attempting to reference no literature for SymbConvention"
 symbConvention scs = S "The choice of symbols was made to be consistent with the" +:+
                       makeSentence scs
-  where makeSentence (x:[]) = scon x :+: S "."
-        makeSentence (x:y:[]) = scon x +:+ S "and with" +:+. scon y
-        makeSentence (x:y:z:[]) = scon x `sC` scon y `sC` S "and" +:+. scon z
-        makeSentence (x:xs) = scon x `sC` makeSentence xs
-        makeSentence _ = error "How did you get here?"
-        scon (Lit x) = phrase x +:+ S "literature"
-        scon (Doc x) = S "existing documentation for" +:+ (phrase x)
-        scon (Doc' x)   = S "existing documentation for" +:+ (plural x)
-        scon (Manual x) = S "that used in the" +:+ (phrase x) +:+ S "manual"
+  where makeSentence [x]     = scon x :+: S "."
+        makeSentence [x,y]   = scon x +:+ S "and with" +:+. scon y
+        makeSentence [x,y,z] = scon x `sC` scon y `sC` S "and" +:+. scon z
+        makeSentence (x:xs)  = scon x `sC` makeSentence xs
+        makeSentence  _      = error "How did you get here?"
+        scon (Lit x)         = phrase x +:+ S "literature"
+        scon (Doc x)         = S "existing documentation for" +:+ phrase x
+        scon (Doc' x)        = S "existing documentation for" +:+ plural x
+        scon (Manual x)      = S "that used in the" +:+ phrase x +:+ S "manual"
 
 -- | Table of units intro builder. Used by mkRefSec
 tuIntro :: [TUIntro] -> Contents
-tuIntro x = Paragraph $ foldr (+:+) (EmptyS) (map tuI x)
+tuIntro x = Paragraph $ foldr ((+:+) . tuI) EmptyS x
 
 -- | table of units intro writer. Translates a TUIntro to a Sentence.
 tuI :: TUIntro -> Sentence
@@ -368,10 +368,10 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
   where
     mkSubIntro :: SystemInformation -> IntroSub -> Section
     mkSubIntro _ (IVerb s) = s
-    mkSubIntro si (IPurpose intro) = Intro.purposeOfDoc (getRefDB si) intro
-    mkSubIntro (SI {_sys = sys}) (IScope main intendedPurp) =
+    mkSubIntro si' (IPurpose intro) = Intro.purposeOfDoc (getRefDB si') intro
+    mkSubIntro SI {_sys = sys} (IScope main intendedPurp) =
       Intro.scopeOfRequirements main sys intendedPurp
-    mkSubIntro (SI {_sys = sys}) (IChar know understand appStandd) =
+    mkSubIntro SI {_sys = sys} (IChar know understand appStandd) =
       Intro.charIntRdrF know understand sys appStandd (SRS.userChar [] [])
     mkSubIntro _ (IOrgSec i b s t)  = Intro.orgSec i b s t
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated
@@ -379,7 +379,7 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
 -- | Helper for making the 'Stakeholders' section
 mkStkhldrSec :: StkhldrSec -> Section
 mkStkhldrSec (StkhldrVerb s) = s
-mkStkhldrSec (StkhldrProg key details) = (Stk.stakehldrGeneral key details)
+mkStkhldrSec (StkhldrProg key details) = Stk.stakehldrGeneral key details
 mkStkhldrSec (StkhldrProg2 l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkSubs l
   where
     mkSubs :: StkhldrSub -> Section
@@ -435,22 +435,22 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (TMs fields ts) =
       SSD.thModF (siSys si') (map (tmodel fields (_sysinfodb si')) ts)
     mkSubSCS si' (DDs fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS (concat (map (\x -> ddefn fields (_sysinfodb si') x : derivation x) dds))
+      SSD.dataDefnF EmptyS (concatMap (\x -> ddefn fields (_sysinfodb si') x : derivation x) dds)
     mkSubSCS si' (DDs fields dds _) =
       SSD.dataDefnF EmptyS (map (ddefn fields (_sysinfodb si')) dds)
     mkSubSCS si' (GDs fields gs' ShowDerivation) =
-      SSD.genDefnF (concat (map (\x -> gdefn fields (_sysinfodb si') x : derivation x) gs'))
+      SSD.genDefnF (concatMap (\x -> gdefn fields (_sysinfodb si') x : derivation x) gs')
     mkSubSCS si' (GDs fields gs' _) =
       SSD.genDefnF (map (gdefn fields (_sysinfodb si')) gs')
     mkSubSCS si' (IMs fields ims ShowDerivation) = 
-      SSD.inModelF pdStub ddStub tmStub gdStub (concat (map (\x -> instanceModel fields (_sysinfodb si') x : derivation x) ims))
+      SSD.inModelF pdStub ddStub tmStub gdStub (concatMap (\x -> instanceModel fields (_sysinfodb si') x : derivation x) ims)
     mkSubSCS si' (IMs fields ims _)= 
       SSD.inModelF pdStub ddStub tmStub gdStub (map (instanceModel fields (_sysinfodb si')) ims)
-    mkSubSCS (SI {_refdb = db}) Assumptions =
-      (SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
-      (map Assumption $ assumptionsFromDB (db ^. assumpRefTable)))
-    mkSubSCS _ (Constraints a b c d) = (SSD.datConF a b c d)
-    inModSec = (SRS.inModel [Paragraph EmptyS] [])
+    mkSubSCS SI {_refdb = db} Assumptions =
+      SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
+      (map Assumption $ assumptionsFromDB (db ^. assumpRefTable))
+    mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
+    inModSec = SRS.inModel [Paragraph EmptyS] []
     --FIXME: inModSec should be replaced with a walk
     -- over the SCSProg and generate a relevant intro.
     -- Could start with just a quick check of whether or not IM is included and
@@ -505,7 +505,7 @@ mkTraceabilitySec (TraceabilityProg refs trailing otherContents subSec) =
 -- | Helper for making the 'Values of Auxiliary Constants' section
 mkAuxConsSec :: AuxConstntSec -> Section
 mkAuxConsSec (AuxConsVerb s) = s
-mkAuxConsSec (AuxConsProg key listOfCons) = (AC.valsOfAuxConstantsF key listOfCons)
+mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key listOfCons
 
 {--}
 
@@ -524,7 +524,7 @@ mkAppndxSec (AppndxProg cs) = SRS.appendix cs []
 
 -- Helper
 siSys :: SystemInformation -> IdeaDict
-siSys (SI {_sys = sys}) = nw sys
+siSys SI {_sys = sys} = nw sys
 
 --BELOW IS IN THIS FILE TEMPORARILY--
 --Creates Contents using an uid and description (passed in as a Sentence).

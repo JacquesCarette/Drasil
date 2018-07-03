@@ -1196,6 +1196,16 @@ Description
 </tr>
 <tr>
 <th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+If <em>is_safe1</em>, the glass is considered safe. <em>is_safe1</em> and <em>is_safe2</em> (from <a href=#T:t2SafetyReq>T:t2SafetyReq</a>) are either both True or both False. <em>P<sub>b</sub></em> is the probability of breakage, as calculated in <a href=#T:probOfBr>T:probOfBr</a>. <em>P<sub>btol</sub></em> is the tolerable probability of breakage entered by the user.
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Source
 </th>
 <td>
@@ -1211,16 +1221,6 @@ RefBy
 <td>
 <p class="paragraph">
 FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-If <em>is_safe1</em>, the glass is considered safe. <em>is_safe1</em> and <em>is_safe2</em> (from <a href=#T:t2SafetyReq>T:t2SafetyReq</a>) are either both True or both False. <em>P<sub>b</sub></em> is the probability of breakage, as calculated in <a href=#T:probOfBr>T:probOfBr</a>. <em>P<sub>btol</sub></em> is the tolerable probability of breakage entered by the user.
 </p>
 </td>
 </tr>
@@ -1270,6 +1270,16 @@ Description
 </tr>
 <tr>
 <th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+If <em>is_safe2</em>, the glass is considered safe. <em>is_safe1</em> (from <a href=#T:t1SafetyReq>T:t1SafetyReq</a>) and <em>is_safe2</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#T:calOfCap>T:calOfCap</a>. <em>q</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#T:calOfDe>T:calOfDe</a>.
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Source
 </th>
 <td>
@@ -1285,16 +1295,6 @@ RefBy
 <td>
 <p class="paragraph">
 FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-If <em>is_safe2</em>, the glass is considered safe. <em>is_safe1</em> (from <a href=#T:t1SafetyReq>T:t1SafetyReq</a>) and <em>is_safe2</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#T:calOfCap>T:calOfCap</a>. <em>q</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#T:calOfDe>T:calOfDe</a>.
 </p>
 </td>
 </tr>
@@ -2405,6 +2405,16 @@ Description
 </tr>
 <tr>
 <th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>LR</em> is the load resistance, which is also called capacity. <em>NFL</em> is the non-factored load. <em>GTF</em> is the glass type factor. <em>LSF</em> is the load share factor. Follows <a href=#A:glassConditionA>glassCondition</a> and <a href=#A:glassTyA>glassTy</a> (&quot;In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations&quot;) from [4 (pg. 53)].
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Source
 </th>
 <td>
@@ -2420,16 +2430,6 @@ RefBy
 <td>
 <p class="paragraph">
 FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-<em>LR</em> is the load resistance, which is also called capacity. <em>NFL</em> is the non-factored load. <em>GTF</em> is the glass type factor. <em>LSF</em> is the load share factor. Follows <a href=#A:glassConditionA>glassCondition</a> and <a href=#A:glassTyA>glassTy</a> (&quot;In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations&quot;) from [4 (pg. 53)].
 </p>
 </td>
 </tr>
@@ -2528,6 +2528,16 @@ Description
 </tr>
 <tr>
 <th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>q</em> or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (<em>SD</em>) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined as <em>w&#8239;TNT</em>. <em>SD</em>. is the stand off distance where <em>&radic;(SD<sub>x</sub><sup>2</sup>&plus;SD<sub>y</sub><sup>2</sup>&plus;SD<sub>z</sub><sup>2</sup>)</em> where (<em>SD<sub>x</sub></em>, <em>SD<sub>y</sub></em>, <em>SD<sub>z</sub></em>) are coordinates.
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Source
 </th>
 <td>
@@ -2543,16 +2553,6 @@ RefBy
 <td>
 <p class="paragraph">
 FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-<em>q</em> or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (<em>SD</em>) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined as <em>w&#8239;TNT</em>. <em>SD</em>. is the stand off distance where <em>&radic;(SD<sub>x</sub><sup>2</sup>&plus;SD<sub>y</sub><sup>2</sup>&plus;SD<sub>z</sub><sup>2</sup>)</em> where (<em>SD<sub>x</sub></em>, <em>SD<sub>y</sub></em>, <em>SD<sub>z</sub></em>) are coordinates.
 </p>
 </td>
 </tr>

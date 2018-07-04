@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.InstanceModel 
   ( InstanceModel
   , inCons, outCons, imOutput, imInputs
-  , im, imQD, im', imQD'
+  , im, imQD, im', imQD', im'', im'''
   )where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
@@ -56,14 +56,22 @@ instance HasShortName       InstanceModel where shortname = view refName
 instance HasAdditionalNotes InstanceModel where getNotes = notes
 
 -- | Smart constructor for instance models
-im :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
+im'' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> Derivation -> String -> [Sentence] -> InstanceModel
-im rc i ic o oc der sn notes = IM rc i ic o oc [] der (shortname' sn) (Just notes)
+im'' rc i ic o oc der sn notes = IM rc i ic o oc [] der (shortname' sn) (Just notes)
+
+im :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
+  OutputConstraints -> String -> InstanceModel
+im rc i ic o oc sn = IM rc i ic o oc [] [] (shortname' sn) Nothing
 
 -- | Same as `im`, with an additional field for notes to be passed in
 im' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> String -> [Sentence] -> InstanceModel
 im' rc i ic o oc sn notes = IM rc i ic o oc [] [] (shortname' sn) (Just notes)
+
+im''' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
+  OutputConstraints -> Derivation -> String -> InstanceModel
+im''' rc i ic o oc der sn = IM rc i ic o oc [] der (shortname' sn) Nothing
 
 -- | Smart constructor for instance model from qdefinition 
 -- (Sentence is the "concept" definition for the relation concept)

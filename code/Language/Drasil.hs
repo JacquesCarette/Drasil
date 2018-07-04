@@ -69,7 +69,7 @@ module Language.Drasil (
   , GenDefn, gd, gdUnit
   -- Chunk.InstanceModel
   , InstanceModel
-  , inCons, outCons, imOutput, imInputs, im, imQD, im', imQD'
+  , inCons, outCons, imOutput, imInputs, im, imQD, im', imQD', im'', im'''
   -- Chunk.Quantity
   , Quantity(..), QuantityDict, qw, mkQuant
   -- Chunk.UncertainQuantity

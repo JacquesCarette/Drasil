@@ -66,7 +66,7 @@ sspIMods_new = [fctSfty_new, nrmShrFor_new, intsliceFs_new, forDisEqlb_new,
 
 --
 fctSfty_new :: InstanceModel
-fctSfty_new = im fctSfty [qw shearRNoIntsl, qw shearFNoIntsl,
+fctSfty_new = im'' fctSfty [qw shearRNoIntsl, qw shearFNoIntsl,
  qw mobShrC, qw shrResC, qw varblV]
   [] (qw fs) [] fctSfty_deriv_ssp "fctSfty" [fcSfty_desc]
 
@@ -95,7 +95,7 @@ fcSfty_desc = foldlSent [S "Equation for the", titleize fs `isThe` S "ratio",
 
 --
 nrmShrFor_new :: InstanceModel
-nrmShrFor_new = im nrmShrFor [qw baseWthX, qw scalFunc,
+nrmShrFor_new = im'' nrmShrFor [qw baseWthX, qw scalFunc,
  qw watrForce, qw baseAngle, qw midpntHght, 
  qw earthqkLoadFctr, qw slcWght, qw surfHydroForce]
   [TCon AssumedCon $ sy fixme1 $< sy fixme1] (qw shearFunc)
@@ -143,7 +143,7 @@ nrmShrF_desc = foldlSent [getES normToShear `isThe` S "magnitude ratio",
 --
 
 intsliceFs_new :: InstanceModel
-intsliceFs_new = im intsliceFs [qw index, qw fs,
+intsliceFs_new = im'' intsliceFs [qw index, qw fs,
   qw shearRNoIntsl, qw shearFNoIntsl,
  qw mobShrC, qw shrResC]
   [] (qw intNormForce) [] intrSlc_deriv_ssp "intsliceFs" [sliceFs_desc]
@@ -171,7 +171,7 @@ sliceFs_desc = foldlSent [S "The value of the interslice normal force",
 
 --
 forDisEqlb_new :: InstanceModel
-forDisEqlb_new = im forDisEqlb [qw baseAngle,
+forDisEqlb_new = im'' forDisEqlb [qw baseAngle,
  qw baseHydroForce, qw surfHydroForce, qw surfAngle, qw surfLoad, qw impLoadAngle,
  qw surfLngth, qw nrmStiffIntsl, qw dx_i, qw effStiffA, qw dy_i, qw baseLngth, qw effStiffB]
   [] (qw earthqkLoadFctr) [] rigDis_deriv_ssp "forDisEqlb" [fDisEq_desc']
@@ -229,9 +229,9 @@ fDisEq_desc = foldlSent [
 
 --
 rfemFoS_new :: InstanceModel
-rfemFoS_new = im rfemFoS [qw cohesion, qw nrmStiffBase, qw nrmDispl,
+rfemFoS_new = im''' rfemFoS [qw cohesion, qw nrmStiffBase, qw nrmDispl,
  qw fricAngle, qw shrStiffBase, qw shrDispl, qw baseLngth]
-  [] (qw fsloc) [] rigFoS_deriv_ssp "rfemFoS" []
+  [] (qw fsloc) [] rigFoS_deriv_ssp "rfemFoS"
 
 
 rfemFoS :: RelationConcept
@@ -265,8 +265,8 @@ rfemFoS_desc = foldlSent [
 
 --
 crtSlpId_new :: InstanceModel
-crtSlpId_new = im crtSlpId []
-  [] (qw fs_min) [] [] "crtSlpId" [crtSlpId_desc]
+crtSlpId_new = im' crtSlpId []
+  [] (qw fs_min) [] "crtSlpId" [crtSlpId_desc]
 
 crtSlpId :: RelationConcept
 crtSlpId = makeRC "crtSlpId" (nounPhraseSP "critical slip identification")

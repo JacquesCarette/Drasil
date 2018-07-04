@@ -229,10 +229,9 @@ fDisEq_desc = foldlSent [
 
 --
 rfemFoS_new :: InstanceModel
-rfemFoS_new = im rfemFoS [qw fsloc, qw cohesion, qw nrmStiffBase, qw nrmDispl,
+rfemFoS_new = im rfemFoS [qw cohesion, qw nrmStiffBase, qw nrmDispl,
  qw fricAngle, qw shrStiffBase, qw shrDispl, qw baseLngth]
-  [TCon AssumedCon $ inxi fsloc $< inxi fsloc] (qw fsloc)
-   [TCon AssumedCon $ 0 $< inxi fsloc $< inxi fsloc] rigFoS_deriv_ssp "rfemFoS" []
+  [] (qw fsloc) [] rigFoS_deriv_ssp "rfemFoS" []
 
 
 rfemFoS :: RelationConcept

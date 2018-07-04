@@ -26,7 +26,7 @@ module Language.Drasil.Code (
   cSharpLabel, cppLabel, goolLabel, javaLabel, objectiveCLabel, pythonLabel, luaLabel,
   makeCode, createCodeFiles, toAbsCode, getClassName, buildModule, moduleName,
   Options(..),
-  ($:=), Choices(..), CodeSpec, Comments(CommentNone), ConstraintBehaviour(Warning), Func, 
+  ($:=), Choices(..), CodeSpec, Comments(CommentNone), ConstraintBehaviour(..), Func, 
   FuncStmt(..), ImplementationType(..), Lang(..), Logging(LogNone), Mod(Mod), Structure(..),
   asExpr, asVC, codeSpec, fdec, ffor, funcData, funcDef, packmod, relToQD,
   gen, genCode, 

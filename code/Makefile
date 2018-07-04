@@ -136,15 +136,11 @@ docs:
 	stack haddock drasil-code $(haddockArgs)
 
 clean: clean_build
-	stack clean
-	mkdir -p $(LANG_DIR)
-	cd $(LANG_DIR) && stack clean
-	mkdir -p $(CODE_DIR)
-	cd $(CODE_DIR) && stack clean
-	mkdir -p $(DATA_DIR)
-	cd $(DATA_DIR) && stack clean
-	mkdir -p $(EXAM_DIR)
-	cd $(EXAM_DIR) && stack clean
+	- stack clean
+	- cd $(LANG_DIR) && stack clean
+	- cd $(CODE_DIR) && stack clean
+	- cd $(DATA_DIR) && stack clean
+	- cd $(EXAM_DIR) && stack clean
 
 clean_build: clean_logs
 	- rm -r ./build

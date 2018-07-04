@@ -28,7 +28,7 @@ module Language.Drasil.Code (
   Options(..),
   ($:=), Choices(..), CodeSpec, Comments(CommentNone), ConstraintBehaviour(Warning), Func, 
   FuncStmt(..), ImplementationType(..), Lang(..), Logging(LogNone), Mod(Mod), Structure(..),
-  asExpr, asVC, codeSpec, fdec, ffor, funcData, funcDef, packmod, 
+  asExpr, asVC, codeSpec, fdec, ffor, funcData, funcDef, packmod, relToQD,
   gen, genCode, 
   Ind(..), junk, junkLine, listEntry, multiLine, repeated, singleLine, singleton
 ) where
@@ -41,5 +41,5 @@ import Language.Drasil.Code.CodeGeneration
 import Language.Drasil.Code.DataDesc (Ind(..), junk, junkLine, listEntry, multiLine, repeated, singleLine, singleton)
 import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec, Comments(..), ConstraintBehaviour(..), Func, 
   FuncStmt(..), ImplementationType(..), Lang(..), Logging(..), Mod(Mod), Structure(..), asExpr, asVC, codeSpec, fdec, 
-  ffor, funcData, funcDef, packmod)
+  ffor, funcData, funcDef, packmod, relToQD)
 import Language.Drasil.Generate (gen, genCode)

@@ -1,6 +1,7 @@
 module Drasil.GlassBR.Body where
 import Control.Lens ((^.))
 import Language.Drasil hiding (organization)
+import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
 import qualified Drasil.SRS as SRS
 
 import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..), 

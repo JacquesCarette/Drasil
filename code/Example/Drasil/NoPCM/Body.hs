@@ -188,7 +188,7 @@ nopcm_si = SI {
 }
 
 nopcmRefDB :: ReferenceDB
-nopcmRefDB = rdb [] [] [] [] [] referencesRefList -- FIXME: Convert the rest to new chunk types
+nopcmRefDB = rdb [] [] assumps_Nopcm_list_new [] [] referencesRefList -- FIXME: Convert the rest to new chunk types
 
 nopcm_code :: CodeSpec
 nopcm_code = codeSpec nopcm_si [inputMod]
@@ -202,8 +202,8 @@ nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) (
   this_si
 
 assumps_Nopcm_list_new :: [AssumpChunk]
-assumps_Nopcm_list_new = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10,
-  newA11, newA12, newA13, newA14]
+assumps_Nopcm_list_new = [newA1, newA2, newA3, newA5, newA6, newA7, newA8, newA9, 
+  newA11, newA14]
 --------------------------
 --Section 2 : INTRODUCTION
 --------------------------

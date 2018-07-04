@@ -39,8 +39,8 @@ symbToCodeName (Special sp) = specialToCodeName sp
 --symbToCodeName (Greek g) = greekToCodeName g
 symbToCodeName (Atop d s) = decorate (symbToCodeName s) d
 symbToCodeName (Corners ul ll ur lr b) =
-  (cleft ul) ++ (cleft ll) ++ (symbToCodeName b)
-    ++ (cright lr) ++ (cright ur)
+  cleft ul ++ cleft ll ++ symbToCodeName b
+    ++ cright lr ++ cright ur
   where cleft :: [Symbol] -> String
         cleft [] = ""
         cleft (s:syms) = symbToCodeName s ++ "_" ++ cleft syms
@@ -200,7 +200,7 @@ codeEquat cd = cd ^. def
 type ConstraintMap = Map.Map UID [Constraint]
 
 constraintMap :: (HasUID c, Constrained c) => [c] -> ConstraintMap
-constraintMap = Map.fromList . map (\x -> ((x ^. uid), (x ^. constraints)))
+constraintMap = Map.fromList . map (\x -> (x ^. uid, x ^. constraints))
 
 physLookup :: (Quantity q) => ConstraintMap -> q -> (q,[Constraint])
 physLookup m q = constraintLookup' q m (filter isPhysC)

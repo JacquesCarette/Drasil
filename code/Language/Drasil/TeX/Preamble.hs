@@ -28,6 +28,7 @@ data Package = AMSMath
              | URL
              | FontSpec -- for utf-8 encoding in lualatex
              | Unicode -- for unicode-math in lualatex
+             | EnumItem
              deriving Eq
 
 addPackage :: Package -> D
@@ -53,6 +54,7 @@ addPackage Mathtools = usepackage "mathtools"
 addPackage URL       = usepackage "url"
 addPackage FontSpec  = usepackage "fontspec"
 addPackage Unicode   = usepackage "unicode-math"
+addPackage EnumItem  = usepackage "enumitem"
 
 data Def = AssumpCounter
          | LCCounter
@@ -61,6 +63,8 @@ data Def = AssumpCounter
          | Bibliography
          | TabuLine
          | SetMathFont
+         | SymbDescriptionP1
+         | SymbDescriptionP2
          deriving Eq
 
 addDef :: Def -> D
@@ -75,6 +79,8 @@ addDef UCCounter     = count "ucnum" %%
 addDef Bibliography  = command "bibliography" bibFname
 addDef TabuLine      = command0 "global\\tabulinesep=1mm"
 addDef SetMathFont   = command "setmathfont" "Latin Modern Math"
+addDef SymbDescriptionP1 = command3 "newlist" "symbDescription" "description" "1"
+addDef SymbDescriptionP2 = command1o "setlist" (Just "symbDescription") "noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt"
 
 genPreamble :: [LayoutObj] -> D
 genPreamble los = let (pkgs, defs) = parseDoc los
@@ -83,9 +89,9 @@ genPreamble los = let (pkgs, defs) = parseDoc los
 
 parseDoc :: [LayoutObj] -> ([Package], [Def])
 parseDoc los' = 
-  ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Unicode] ++ 
+  ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Unicode, EnumItem] ++ 
    (nub $ concat $ map fst res)
-  , [SetMathFont] ++ (nub $ concat $ map snd res))
+  , [SymbDescriptionP1, SymbDescriptionP2, SetMathFont] ++ (nub $ concat $ map snd res))
   where 
     res = map parseDoc' los'
     parseDoc' :: LayoutObj -> ([Package], [Def])

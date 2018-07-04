@@ -1,6 +1,5 @@
 module Drasil.SWHS.DataDesc (swhsInputMod) where
 
-import Language.Drasil
 import Language.Drasil.Code (Func, Mod(Mod), funcData, junkLine, singleton)
 
 import Drasil.SWHS.Unitals (tank_length, diam, pcm_vol, pcm_SA, pcm_density,

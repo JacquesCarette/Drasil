@@ -54,6 +54,10 @@ command0 s = pure $ H.bslash TP.<> text s
 command2 :: String -> String -> String -> D
 command2 s a0 a1 = pure $ (H.bslash TP.<> text s) TP.<> H.br a0 TP.<> H.br a1
 
+-- 3-argument command
+command3 :: String -> String -> String -> String -> D
+command3 s a0 a1 a2 = pure $ (H.bslash TP.<> text s) TP.<> H.br a0 TP.<> H.br a1 TP.<> H.br a2
+
 -- Encapsulate environments
 mkEnv :: String -> D -> D
 mkEnv nm d =
@@ -132,7 +136,8 @@ newline = command0 "newline"
 newpage = command0 "newpage"
 centering = command0 "centering"
 
-code, itemize, enumerate, description, figure, center, document, equation :: D -> D
+code, itemize, enumerate, description, figure, center, document, 
+  equation, symbDescription :: D -> D
 code        = mkEnv "lstlisting"
 itemize     = mkEnv "itemize"
 enumerate   = mkEnv "enumerate"
@@ -141,6 +146,7 @@ figure      = mkEnv "figure"
 center      = mkEnv "center"
 document    = mkEnv "document"
 equation    = mkEnv "dmath" --displays math and wraps long lines
+symbDescription = mkEnv "symbDescription"
 
 docclass, exdoc :: Maybe String -> String -> D
 docclass = command1o "documentclass"

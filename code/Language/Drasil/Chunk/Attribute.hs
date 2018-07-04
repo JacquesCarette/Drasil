@@ -21,7 +21,7 @@ getSource c = sourceRef $ c ^. getReferences
   where
     sourceRef :: References -> Sentence
     sourceRef []                 = EmptyS
-    sourceRef ((SourceRef x):xs) = x +:+ (sourceRef xs)
+    sourceRef (SourceRef x:xs) = x +:+ sourceRef xs
 
 getDerivation :: HasDerivation c => c -> Derivation
 getDerivation c =  c ^. derivations

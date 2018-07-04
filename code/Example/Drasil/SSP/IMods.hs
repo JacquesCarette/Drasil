@@ -95,11 +95,10 @@ fcSfty_desc = foldlSent [S "Equation for the", titleize fs `isThe` S "ratio",
 
 --
 nrmShrFor_new :: InstanceModel
-nrmShrFor_new = im nrmShrFor [qw normFunc, qw shearFunc, qw baseWthX, qw scalFunc,
- qw intNormForce, qw index, qw numbSlices, qw watrForce, qw baseAngle, qw midpntHght, 
- qw earthqkLoadFctr, qw slcWght, qw surfHydroForce, qw surfLoad, qw impLoadAngle,
- qw fixme1, qw fixme2]
-  [TCon AssumedCon $ sy fixme1 $< sy fixme1] (qw fixme1)
+nrmShrFor_new = im nrmShrFor [qw baseWthX, qw scalFunc,
+ qw watrForce, qw baseAngle, qw midpntHght, 
+ qw earthqkLoadFctr, qw slcWght, qw surfHydroForce]
+  [TCon AssumedCon $ sy fixme1 $< sy fixme1] (qw shearFunc)
    [TCon AssumedCon $ 0 $< sy fixme1 $< sy fixme1] nrmShr_deriv_ssp "nrmShrFor" [nrmShrF_desc]
 
 nrmShrFor :: RelationConcept
@@ -144,10 +143,10 @@ nrmShrF_desc = foldlSent [getES normToShear `isThe` S "magnitude ratio",
 --
 
 intsliceFs_new :: InstanceModel
-intsliceFs_new = im intsliceFs [qw normFunc, qw shearFunc, qw intNormForce, qw index,
- qw numbSlices, qw shearFNoIntsl, qw fs]
-  [TCon AssumedCon $ sy fs $< sy fs] (qw fs)
-   [TCon AssumedCon $ 0 $< sy fs $< sy fs] intrSlc_deriv_ssp "intsliceFs" [sliceFs_desc]
+intsliceFs_new = im intsliceFs [qw index, qw fs,
+  qw shearRNoIntsl, qw shearFNoIntsl,
+ qw mobShrC, qw shrResC]
+  [] (qw intNormForce) [] intrSlc_deriv_ssp "intsliceFs" [sliceFs_desc]
 
 intsliceFs :: RelationConcept
 intsliceFs = makeRC "intsliceFs" (nounPhraseSP "interslice forces")
@@ -172,11 +171,10 @@ sliceFs_desc = foldlSent [S "The value of the interslice normal force",
 
 --
 forDisEqlb_new :: InstanceModel
-forDisEqlb_new = im forDisEqlb [qw watrForceDif, qw earthqkLoadFctr, qw slcWght, qw baseAngle,
+forDisEqlb_new = im forDisEqlb [qw baseAngle,
  qw baseHydroForce, qw surfHydroForce, qw surfAngle, qw surfLoad, qw impLoadAngle,
  qw surfLngth, qw nrmStiffIntsl, qw dx_i, qw effStiffA, qw dy_i, qw baseLngth, qw effStiffB]
-  [TCon AssumedCon $ sy earthqkLoadFctr $< sy earthqkLoadFctr] (qw earthqkLoadFctr)
-   [TCon AssumedCon $ 0 $< sy earthqkLoadFctr $< sy earthqkLoadFctr] rigDis_deriv_ssp "forDisEqlb" [fDisEq_desc']
+  [] (qw earthqkLoadFctr) [] rigDis_deriv_ssp "forDisEqlb" [fDisEq_desc']
 
 forDisEqlb :: RelationConcept
 forDisEqlb = makeRC "forDisEqlb"

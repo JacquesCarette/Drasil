@@ -1,6 +1,8 @@
 module Drasil.SWHS.Generate (generate) where
 
-import Language.Drasil
+import Language.Drasil (DocType(SRS,Website), DocSpec(DocSpec))
+import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..), 
+  ImplementationType(..), Lang(..), Logging(..), Structure(..), gen)
 
 import Drasil.SWHS.Body (swhs_srs', swhsSymMap)
 

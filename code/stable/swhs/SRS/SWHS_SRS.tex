@@ -24,6 +24,8 @@
 \newcommand{\rthereqnum}{R\thereqnum}
 \newcounter{lcnum}
 \newcommand{\lcthelcnum}{LC\thelcnum}
+\newcounter{ucnum}
+\newcommand{\uctheucnum}{UC\theucnum}
 \bibliography{bibfile}
 \title{Software Requirements Specification for Solar Water Heating Systems Incorporating PCM}
 \author{Thulasi Jegatheesan, Brooks MacLachlan, and W. Spencer Smith}
@@ -860,6 +862,14 @@ This problem is small in size and relatively simple, so performance is not a pri
 \end{description}
 \begin{description}
 \item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg6}:]A\ref{A:assump15} - Any real tank cannot be perfectly insulated and will lose heat.
+\end{description}
+\section{Unlikely Changes}
+\label{Sec:UCs}
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC:unlikeChg1}:]A\ref{A:assump14}  ,  A\ref{A:assump18} - It is unlikely for the changeof water from liquid to a solid or the state change of the phase change material from a liquid to a gas to be considered.
+\end{description}
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC:unlikeChg1}:]A\ref{A:assump16} - Is used for the derivations of IM1 and IM2 (Hack: need Label to fix).
 \end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}

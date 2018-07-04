@@ -53,7 +53,7 @@ import Drasil.SWHS.Changes (likeChg1, likeChg2, likeChg3, likeChg4,
   likeChg5, likeChg6, unlikelyChgs)
 import Drasil.SWHS.DataDesc (swhsInputMod)
 
-import qualified Drasil.SRS as SRS (inModel, missingP, likeChg, unlikeChg,
+import qualified Drasil.SRS as SRS (inModel, missingP, likeChg,
   funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
   sysCont, reference)
 

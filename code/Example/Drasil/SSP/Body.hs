@@ -171,8 +171,8 @@ mkSRS = RefSec (RefProg intro
       ): --Testing General Definitions.-}
   -- comment spec_sys_desc out to cut off the redundant section being generated
   --spec_sys_desc,gen_sys_desc,
-  map Verbatim [req, likely_chg, aux_cons] 
-   ++ (Bibliography : [])
+  map Verbatim [req] ++ [LCsSec (LCsProg likelyChanges_SRS)] 
+  ++ [UCsSec (UCsProg unlikelyChanges_SRS)] ++[Verbatim aux_cons] ++ (Bibliography : [])
 
 {--normForcEq, bsShrFEq, resShr, mobShr,
   normShrR, momentEql, netForcex, netForcey, hookesLaw2d, displVect-}

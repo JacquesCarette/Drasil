@@ -265,9 +265,8 @@ rfemFoS_desc = foldlSent [
 
 --
 crtSlpId_new :: InstanceModel
-crtSlpId_new = im crtSlpId [qw fs_min]
-  [TCon AssumedCon $ sy fs_min $< sy fs_min] (qw fs_min)
-   [TCon AssumedCon $ 0 $< sy fs_min $< sy fs_min] [] "crtSlpId" [crtSlpId_desc]
+crtSlpId_new = im crtSlpId []
+  [] (qw fs_min) [] [] "crtSlpId" [crtSlpId_desc]
 
 crtSlpId :: RelationConcept
 crtSlpId = makeRC "crtSlpId" (nounPhraseSP "critical slip identification")

@@ -4419,7 +4419,7 @@ Instance Models
 <p class="paragraph">
 This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
 </p>
-<a id="IM:fctSfty">
+<div id="IM:fctSfty">
 <table class="idefn">
 <tr>
 <th>
@@ -4427,11 +4427,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-<<<<<<< HEAD
 Factor of safety
-=======
-The Morgenstern Price method is a vertical slice, limit equilibrium slope stability analysis method. Analysis is performed by breaking the assumed failure surface into a series of vertical slices of mass. Static equilibrium analysis using two force equilibrium, and one moment equation as in T2. The problem is statically indeterminate with only these 3 equations and one constitutive equation (the Mohr Coulomb shear strength of T3) so the assumption of GD5 is used. Solving for force equilibrium allows definitions of all forces in terms of the physical properties of <a href=#DD:W.i>DD1</a> to <a href=#DD:l.s,i>DD9</a>, as done in <a href=#DD:K.c>DD10</a>, <a href=#DD:Q.i>DD11</a>.
->>>>>>> master
 </p>
 </td>
 </tr>
@@ -4441,17 +4437,10 @@ Input
 </th>
 <td>
 <p class="paragraph">
-<<<<<<< HEAD
-<em>FS</em>, <em>R</em>, <em>T</em>, <em>i</em>, <em>n</em>, <em>&Psi;</em>, <em>u</em>, <em>&Phi;</em>, <em>v</em>
+<em>R</em>, <em>T</em>, <em>Ψ</em>, <em>Φ</em>, <em>v</em>
 </p>
 </td>
 </tr>
-=======
-The values of the interslice normal force <em>G</em> the interslice normal/shear force ratio <em>λ</em>, and the Factor of Safety (<em>FS</em>), are unknown. Equations for the unknowns are written in terms of only the values in <a href=#DD:W.i>DD1</a> to <a href=#DD:l.s,i>DD9</a>, the values of <em>R</em>, and <em>T</em> in <a href=#DD:K.c>DD10</a> and <a href=#DD:Q.i>DD11</a>, and each other. The relationships between the unknowns are non linear, and therefore explicit equations cannot be derived and an iterative solutions method is required.
-</p>
-<div id="T:fctSfty">
-<table class="tdefn">
->>>>>>> master
 <tr>
 <th>
 Output
@@ -4467,11 +4456,6 @@ Output
 Input Constraints
 </th>
 <td>
-<a id="">
-<div class="equation">
-<em>FS&thinsp;&lt;&thinsp;FS</em>
-</div>
-</a>
 </td>
 </tr>
 <tr>
@@ -4479,11 +4463,6 @@ Input Constraints
 Output Constraints
 </th>
 <td>
-<a id="">
-<div class="equation">
-<em>0&thinsp;&lt;&thinsp;FS&thinsp;&lt;&thinsp;FS</em>
-</div>
-</a>
 </td>
 </tr>
 <tr>
@@ -4525,30 +4504,14 @@ Description
 </th>
 <td>
 <div class="list">
-<p>
-<em>FS</em> is the factor of safety (Unitless)
-</p>
-<p>
-<em>R</em> is the resistive shear force (N)
-</p>
-<p>
-<em>v</em> is the local index (Unitless)
-</p>
-<p>
-<em>&Psi;</em> is the constant (N)
-</p>
-<p>
-<em>u</em> is the local index (Unitless)
-</p>
-<p>
-<em>&Phi;</em> is the constant (N)
-</p>
-<p>
-<em>n</em> is the number of slices (Unitless)
-</p>
-<p>
-<em>T</em> is the mobilized shear force (N)
-</p>
+<em>FS</em> is the factor of safety (Unitless) <br />
+<em>R</em> is the resistive shear force (N) <br />
+<em>v</em> is the local index (Unitless) <br />
+<em>Ψ</em> is the constant (N) <br />
+<em>u</em> is the local index (Unitless) <br />
+<em>Φ</em> is the constant (N) <br />
+<em>n</em> is the number of slices (Unitless) <br />
+<em>T</em> is the mobilized shear force (N) <br />
 </div>
 </td>
 </tr>
@@ -4568,22 +4531,24 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<<<<<<< HEAD
 FIXME: This needs to be filled in
-=======
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
 Equation for the Factor of Safety is the ratio between resistive and mobile shear of the slip surface. The sum of values from each slice is taken to find the total resistive and mobile shear for the slip surface. The constants <em>Φ</em> and <em>Ψ</em> convert the resistive and mobile shear without the inluence of interslice forces, to a calculation considering the interslice forces.
->>>>>>> master
 </p>
 </td>
 </tr>
 </table>
 </div>
 <p class="paragraph">
-<<<<<<< HEAD
-Using equation (21) from IM3, rearranging, and applying the boundary condition that <em>E<sub>0</sub></em> and <em>E<sub>n</sub></em> are equal to <em>0</em>, an equation for the factor of safety is found as equation (12), also seen in IM1:
-=======
-Using equation (21) from IM3, rearranging, and applying the boundary condition that <em>G<sub>0</sub></em> and <em>G<sub>n</sub></em> are equal to <em>0</em>, an equation for the factor of safety is found as equation (12), also seen in IM1.
->>>>>>> master
+Using equation (21) from IM3, rearranging, and applying the boundary condition that <em>G<sub>0</sub></em> and <em>G<sub>n</sub></em> are equal to <em>0</em>, an equation for the factor of safety is found as equation (12), also seen in IM1:
 </p>
 <div id="">
 <div class="equation">
@@ -4614,13 +4579,8 @@ Using equation (21) from IM3, rearranging, and applying the boundary condition t
 <p class="paragraph">
 The constants <em>Ψ</em> and <em>Φ</em> described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio <em>λ</em> (IM2) and the factor of safety <em>FS</em> (IM1).
 </p>
-<<<<<<< HEAD
-<a id="IM:nrmShrFor">
+<div id="IM:nrmShrFor">
 <table class="idefn">
-=======
-<div id="T:nrmShrFor">
-<table class="tdefn">
->>>>>>> master
 <tr>
 <th>
 Label
@@ -4637,7 +4597,7 @@ Input
 </th>
 <td>
 <p class="paragraph">
-<em>C1</em>, <em>C2</em>, <em>b</em>, <em>f</em>, <em>E</em>, <em>i</em>, <em>n</em>, <em>H</em>, <em>&alpha;</em>, <em>h</em>, <em>K<sub>c</sub></em>, <em>W</em>, <em>U<sub>t</sub></em>, <em>Q</em>, <em>&omega;</em>, <em>SpencerFixme1Please</em>, <em>SpencerFixme2Please</em>
+<em>b</em>, <em>f</em>, <em>H</em>, <em>α</em>, <em>h</em>, <em>K<sub>c</sub></em>, <em>W</em>, <em>U<sub>t</sub></em>
 </p>
 </td>
 </tr>
@@ -4647,7 +4607,7 @@ Output
 </th>
 <td>
 <p class="paragraph">
-<em>SpencerFixme1Please</em>
+<em>C2<sub>i</sub></em>
 </p>
 </td>
 </tr>
@@ -4656,11 +4616,11 @@ Output
 Input Constraints
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <em>SpencerFixme1Please&thinsp;&lt;&thinsp;SpencerFixme1Please</em>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -4668,11 +4628,11 @@ Input Constraints
 Output Constraints
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <em>0&thinsp;&lt;&thinsp;SpencerFixme1Please&thinsp;&lt;&thinsp;SpencerFixme1Please</em>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -4738,63 +4698,25 @@ Description
 </th>
 <td>
 <div class="list">
-<p>
-<em>C1</em> is the interslice normal force function (N&sdot;m)
-</p>
-<p>
-<em>i</em> is the index (Unitless)
-</p>
-<p>
-<em>b</em> is the base width of a slice (m)
-</p>
-<p>
-<em>E</em> is the interslice normal force (N)
-</p>
-<p>
-<em>H</em> is the interslice water force (N)
-</p>
-<p>
-<em>&alpha;</em> is the angle (&deg;)
-</p>
-<p>
-<em>SpencerFixme1Please</em> is the fixme (Unitless)
-</p>
-<p>
-<em>SpencerFixme2Please</em> is the fixme (Unitless)
-</p>
-<p>
-<em>h</em> is the midpoint height (m)
-</p>
-<p>
-<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
-</p>
-<p>
-<em>W</em> is the weight (N)
-</p>
-<p>
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
-</p>
-<p>
-<em>&beta;</em> is the angle (&deg;)
-</p>
-<p>
-<em>Q</em> is the imposed surface load (N)
-</p>
-<p>
-<em>&omega;</em> is the angle (&deg;)
-</p>
-<p>
-<em>n</em> is the number of slices (Unitless)
-</p>
-<p>
-<em>C2</em> is the interslice shear force function (N&sdot;m)
-</p>
-<p>
-<em>f</em> is the scaling function (Unitless)
-</p>
-<p>
-<em>&lambda;</em> is the interslice normal/shear force ratio (Unitless)
-</p>
+<em>C1<sub>i</sub></em> is the interslice normal force function (N&sdot;m) <br />
+<em>b</em> is the base width of a slice (m) <br />
+<em>G</em> is the interslice normal force (N) <br />
+<em>H</em> is the interslice water force (N) <br />
+<em>α</em> is the angle (&deg;) <br />
+<em>i</em> is the index (Unitless) <br />
+<em>SpencerFixme1Please</em> is the fixme (Unitless) <br />
+<em>SpencerFixme2Please</em> is the fixme (Unitless) <br />
+<em>h</em> is the midpoint height (m) <br />
+<em>K<sub>c</sub></em> is the earthquake load factor (Unitless) <br />
+<em>W</em> is the weight (N) <br />
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N) <br />
+<em>β</em> is the angle (&deg;) <br />
+<em>Q</em> is the imposed surface load (N) <br />
+<em>ω</em> is the angle (&deg;) <br />
+<em>n</em> is the number of slices (Unitless) <br />
+<em>C2<sub>i</sub></em> is the interslice shear force function (N&sdot;m) <br />
+<em>f</em> is the scaling function (Unitless) <br />
+<em>λ</em> is the interslice normal/shear force ratio (Unitless) <br />
 </div>
 </td>
 </tr>
@@ -4814,11 +4736,17 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<<<<<<< HEAD
 FIXME: This needs to be filled in
-=======
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
 <em>λ</em> is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in GD5 The inclination function <em>f</em> determines the relative magnitude ratio between the different interslices, while <em>λ</em> determines the magnitude. <em>λ</em> uses the sum of interslice normal and shear forces taken from each interslice.
->>>>>>> master
 </p>
 </td>
 </tr>
@@ -4875,11 +4803,7 @@ K<sub>c</sub>&#8239;W<sub>i</sub>&#8239;h<sub>i</sub>
 </div>
 </div>
 <p class="paragraph">
-<<<<<<< HEAD
-The equation in terms of <em>&lambda;</em> leads to equation (14):
-=======
-The equation in terms of <em>λ</em> leads to equation (14).
->>>>>>> master
+The equation in terms of <em>λ</em> leads to equation (14):
 </p>
 <div id="">
 <div class="equation">
@@ -4936,11 +4860,7 @@ b<sub>i</sub>
 </div>
 </div>
 <p class="paragraph">
-<<<<<<< HEAD
-Taking a summation of each slice, and applying the boundary condition that <em>E<sub>0</sub></em> and <em>E<sub>n</sub></em> are equal to <em>0</em>, a general equation for the constant <em>&lambda;</em> is developed in equation (15), also found in IM2:
-=======
-Taking a summation of each slice, and applying the boundary condition that <em>G<sub>0</sub></em> and <em>G<sub>n</sub></em> are equal to <em>0</em>, a general equation for the constant <em>λ</em> is developed in equation (15), also found in IM2.
->>>>>>> master
+Taking a summation of each slice, and applying the boundary condition that <em>G<sub>0</sub></em> and <em>G<sub>n</sub></em> are equal to <em>0</em>, a general equation for the constant <em>λ</em> is developed in equation (15), also found in IM2:
 </p>
 <div id="">
 <div class="equation">
@@ -4957,13 +4877,8 @@ Taking a summation of each slice, and applying the boundary condition that <em>G
 <p class="paragraph">
 equation (15) for <em>λ</em>, is a function of the unknown interslice normal force <em>G</em> IM3.
 </p>
-<<<<<<< HEAD
-<a id="IM:intsliceFs">
+<div id="IM:intsliceFs">
 <table class="idefn">
-=======
-<div id="T:intsliceFs">
-<table class="tdefn">
->>>>>>> master
 <tr>
 <th>
 Label
@@ -4980,7 +4895,7 @@ Input
 </th>
 <td>
 <p class="paragraph">
-<em>C1</em>, <em>C2</em>, <em>E</em>, <em>i</em>, <em>n</em>, <em>T</em>, <em>FS</em>
+<em>i</em>, <em>FS</em>, <em>R</em>, <em>T</em>, <em>Ψ</em>, <em>Φ</em>
 </p>
 </td>
 </tr>
@@ -4990,7 +4905,7 @@ Output
 </th>
 <td>
 <p class="paragraph">
-<em>FS</em>
+<em>G</em>
 </p>
 </td>
 </tr>
@@ -4999,11 +4914,6 @@ Output
 Input Constraints
 </th>
 <td>
-<a id="">
-<div class="equation">
-<em>FS&thinsp;&lt;&thinsp;FS</em>
-</div>
-</a>
 </td>
 </tr>
 <tr>
@@ -5011,11 +4921,6 @@ Input Constraints
 Output Constraints
 </th>
 <td>
-<a id="">
-<div class="equation">
-<em>0&thinsp;&lt;&thinsp;FS&thinsp;&lt;&thinsp;FS</em>
-</div>
-</a>
 </td>
 </tr>
 <tr>
@@ -5025,12 +4930,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<<<<<<< HEAD
-<em>E<sub>i</sub> = <span class="casebr">
-=======
-<p class="paragraph">
 <em>G<sub>i</sub> = <span class="casebr">
->>>>>>> master
 {
 </span>
 <div class="cases">
@@ -5065,7 +4965,7 @@ i = 0 &or; i = n
 </span>
 </div></em>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -5074,35 +4974,15 @@ Description
 </th>
 <td>
 <div class="list">
-<p>
-<em>E</em> is the interslice normal force (N)
-</p>
-<p>
-<em>i</em> is the index (Unitless)
-</p>
-<p>
-<em>FS</em> is the factor of safety (Unitless)
-</p>
-<p>
-<em>T</em> is the mobilized shear force (N)
-</p>
-<p>
-<em>R</em> is the resistive shear force (N)
-</p>
-<p>
-<em>&Phi;</em> is the constant (N)
-</p>
-<p>
-<em>&Psi;</em> is the constant (N)
-</p>
-<p>
-<em>n</em> is the number of slices (Unitless)
-</p>
+<em>G</em> is the interslice normal force (N) <br />
+<em>i</em> is the index (Unitless) <br />
+<em>FS</em> is the factor of safety (Unitless) <br />
+<em>T</em> is the mobilized shear force (N) <br />
+<em>R</em> is the resistive shear force (N) <br />
+<em>Φ</em> is the constant (N) <br />
+<em>Ψ</em> is the constant (N) <br />
+<em>n</em> is the number of slices (Unitless) <br />
 </div>
-<<<<<<< HEAD
-=======
-</div>
->>>>>>> master
 </td>
 </tr>
 <tr>
@@ -5121,11 +5001,17 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<<<<<<< HEAD
 FIXME: This needs to be filled in
-=======
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
 The value of the interslice normal force <em>G</em> at interface <em>i</em> The net force. is the weight of the slices adjacent to interface <em>i</em> exert horizontally on each other.
->>>>>>> master
 </p>
 </td>
 </tr>
@@ -5163,11 +5049,7 @@ Substituting the equation for <em>N&prime;</em> from equation (16) into equation
 </div>
 </div>
 <p class="paragraph">
-<<<<<<< HEAD
-Where <em>R</em> and <em>T</em> are the resistive and mobile shear of the slice, without the influence of interslice forces <em>E</em> and <em>X</em>, as defined in DD10 and DD11 Making use of the constants, and with full equations found below in equation (19) and equation (20) respectively, then equation (18) can be simplified to equation (21), also seen in IM3:
-=======
-Where <em>R</em> and <em>T</em> are the resistive and mobile shear of the slice, without the influence of interslice forces <em>G</em> and <em>X</em>, as defined in <a href=#DD:K.c>DD10</a> and <a href=#DD:Q.i>DD11</a> Making use of the constants, and with full equations found below in equation (19) and equation (20) respectively, then equation (18) can be simplified to equation (21), also seen in IM3.
->>>>>>> master
+Where <em>R</em> and <em>T</em> are the resistive and mobile shear of the slice, without the influence of interslice forces <em>G</em> and <em>X</em>, as defined in <a href=#DD:R.i>DD13</a> and <a href=#DD:T.i>DD14</a> Making use of the constants, and with full equations found below in equation (19) and equation (20) respectively, then equation (18) can be simplified to equation (21), also seen in IM3:
 </p>
 <div id="">
 <div class="equation">
@@ -5194,13 +5076,8 @@ Where <em>R</em> and <em>T</em> are the resistive and mobile shear of the slice,
 <p class="paragraph">
 The constants <em>Ψ</em> and <em>Φ</em> described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio <em>λ</em> (IM2) and the factor of safety <em>FS</em> (IM1).
 </p>
-<<<<<<< HEAD
-<a id="IM:forDisEqlb">
+<div id="IM:forDisEqlb">
 <table class="idefn">
-=======
-<div id="T:forDisEqlb">
-<table class="tdefn">
->>>>>>> master
 <tr>
 <th>
 Label
@@ -5217,7 +5094,7 @@ Input
 </th>
 <td>
 <p class="paragraph">
-<em>&Delta;H</em>, <em>K<sub>c</sub></em>, <em>W</em>, <em>&alpha;</em>, <em>U<sub>b</sub></em>, <em>U<sub>t</sub></em>, <em>&beta;</em>, <em>Q</em>, <em>&omega;</em>, <em>&#8467;<sub>s</sub></em>, <em>K<sub>sn</sub></em>, <em>&delta;x</em>, <em>K<sub>bA</sub></em>, <em>&delta;y</em>, <em>&#8467;<sub>b</sub></em>, <em>K<sub>bB</sub></em>
+<em>α</em>, <em>U<sub>b</sub></em>, <em>U<sub>t</sub></em>, <em>β</em>, <em>Q</em>, <em>ω</em>, <em>ℓ<sub>s</sub></em>, <em>K<sub>sn</sub></em>, <em>δx</em>, <em>K<sub>bA</sub></em>, <em>δy</em>, <em>ℓ<sub>b</sub></em>, <em>K<sub>bB</sub></em>
 </p>
 </td>
 </tr>
@@ -5236,11 +5113,6 @@ Output
 Input Constraints
 </th>
 <td>
-<a id="">
-<div class="equation">
-<em>K<sub>c</sub>&thinsp;&lt;&thinsp;K<sub>c</sub></em>
-</div>
-</a>
 </td>
 </tr>
 <tr>
@@ -5248,11 +5120,6 @@ Input Constraints
 Output Constraints
 </th>
 <td>
-<a id="">
-<div class="equation">
-<em>0&thinsp;&lt;&thinsp;K<sub>c</sub>&thinsp;&lt;&thinsp;K<sub>c</sub></em>
-</div>
-</a>
 </td>
 </tr>
 <tr>
@@ -5262,13 +5129,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<<<<<<< HEAD
-<em>&minus;&Delta;H<sub>i</sub>&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;U<sub>b,i</sub>&#8239;sin(&alpha;<sub>i</sub>)&plus;U<sub>t,i</sub>&#8239;sin(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(&omega;<sub>i</sub>) = &delta;x<sub>i&minus;1</sub>&#8239;&minus;&#8467;<sub>s,i&minus;1</sub>&#8239;K<sub>sn,i&minus;1</sub>&plus;&delta;x<sub>i</sub>&#8239;(&minus;&#8467;<sub>s,i&minus;1</sub>&#8239;K<sub>sn,i&minus;1</sub>&plus;&#8467;<sub>s,i</sub>&#8239;K<sub>sn,i</sub>&plus;&#8467;<sub>b,i</sub>&#8239;K<sub>bA,i</sub>)&plus;&delta;x<sub>i&plus;1</sub>&#8239;&minus;&#8467;<sub>s,i</sub>&#8239;K<sub>sn,i</sub>&plus;&delta;y<sub>i</sub>&#8239;&minus;&#8467;<sub>b,i</sub>&#8239;K<sub>bB,i</sub> = &minus;W<sub>i</sub>&minus;U<sub>b,i</sub>&#8239;cos(&alpha;<sub>i</sub>)&plus;U<sub>t,i</sub>&#8239;cos(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(&omega;<sub>i</sub>) = &delta;y<sub>i&minus;1</sub>&#8239;&minus;&#8467;<sub>s,i&minus;1</sub>&#8239;K<sub>st,i&minus;1</sub>&plus;&delta;y<sub>i</sub>&#8239;(&minus;&#8467;<sub>s,i&minus;1</sub>&#8239;K<sub>st,i&minus;1</sub>&plus;&#8467;<sub>s,i</sub>&#8239;K<sub>sn,i</sub>&plus;&#8467;<sub>b,i</sub>&#8239;K<sub>bA,i</sub>)&plus;&delta;y<sub>i&plus;1</sub>&#8239;&minus;&#8467;<sub>s,i</sub>&#8239;K<sub>st,i</sub>&plus;&delta;x<sub>i</sub>&#8239;&minus;&#8467;<sub>b,i</sub>&#8239;K<sub>bB,i</sub></em>
-=======
-<p class="paragraph">
 <em>&minus;ΔH<sub>i</sub>&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;U<sub>b,i</sub>&#8239;sin(α<sub>i</sub>)&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>) = δx<sub>i&minus;1</sub>&#8239;&minus;ℓ<sub>s,i&minus;1</sub>&#8239;K<sub>sn,i&minus;1</sub>&plus;δx<sub>i</sub>&#8239;(&minus;ℓ<sub>s,i&minus;1</sub>&#8239;K<sub>sn,i&minus;1</sub>&plus;ℓ<sub>s,i</sub>&#8239;K<sub>sn,i</sub>&plus;ℓ<sub>b,i</sub>&#8239;K<sub>bA,i</sub>)&plus;δx<sub>i&plus;1</sub>&#8239;&minus;ℓ<sub>s,i</sub>&#8239;K<sub>sn,i</sub>&plus;δy<sub>i</sub>&#8239;&minus;ℓ<sub>b,i</sub>&#8239;K<sub>bB,i</sub> = &minus;W<sub>i</sub>&minus;U<sub>b,i</sub>&#8239;cos(α<sub>i</sub>)&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>) = δy<sub>i&minus;1</sub>&#8239;&minus;ℓ<sub>s,i&minus;1</sub>&#8239;K<sub>st,i&minus;1</sub>&plus;δy<sub>i</sub>&#8239;(&minus;ℓ<sub>s,i&minus;1</sub>&#8239;K<sub>st,i&minus;1</sub>&plus;ℓ<sub>s,i</sub>&#8239;K<sub>sn,i</sub>&plus;ℓ<sub>b,i</sub>&#8239;K<sub>bA,i</sub>)&plus;δy<sub>i&plus;1</sub>&#8239;&minus;ℓ<sub>s,i</sub>&#8239;K<sub>st,i</sub>&plus;δx<sub>i</sub>&#8239;&minus;ℓ<sub>b,i</sub>&#8239;K<sub>bB,i</sub></em>
-</p>
->>>>>>> master
 </div>
 </div>
 </td>
@@ -5279,60 +5140,24 @@ Description
 </th>
 <td>
 <div class="list">
-<p>
-<em>&Delta;H</em> is the difference between interslice forces (N)
-</p>
-<p>
-<em>i</em> is the index (Unitless)
-</p>
-<p>
-<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
-</p>
-<p>
-<em>W</em> is the weight (N)
-</p>
-<p>
-<em>U<sub>b</sub></em> is the base hydrostatic force (N)
-</p>
-<p>
-<em>&alpha;</em> is the angle (&deg;)
-</p>
-<p>
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
-</p>
-<p>
-<em>&beta;</em> is the angle (&deg;)
-</p>
-<p>
-<em>Q</em> is the imposed surface load (N)
-</p>
-<p>
-<em>&omega;</em> is the angle (&deg;)
-</p>
-<p>
-<em>&delta;x</em> is the displacement (m)
-</p>
-<p>
-<em>&#8467;<sub>s</sub></em> is the length of an interslice surface (m)
-</p>
-<p>
-<em>K<sub>sn</sub></em> is the normal stiffness (Pa/m)
-</p>
-<p>
-<em>&#8467;<sub>b</sub></em> is the total base length of a slice (m)
-</p>
-<p>
-<em>K<sub>bA</sub></em> is the effective base stiffness A (Pa/m)
-</p>
-<p>
-<em>&delta;y</em> is the displacement (m)
-</p>
-<p>
-<em>K<sub>bB</sub></em> is the effective base stiffness A (Pa/m)
-</p>
-<p>
-<em>K<sub>st</sub></em> is the shear stiffness (Pa/m)
-</p>
+<em>ΔH</em> is the difference between interslice forces (N) <br />
+<em>i</em> is the index (Unitless) <br />
+<em>K<sub>c</sub></em> is the earthquake load factor (Unitless) <br />
+<em>W</em> is the weight (N) <br />
+<em>U<sub>b</sub></em> is the base hydrostatic force (N) <br />
+<em>α</em> is the angle (&deg;) <br />
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N) <br />
+<em>β</em> is the angle (&deg;) <br />
+<em>Q</em> is the imposed surface load (N) <br />
+<em>ω</em> is the angle (&deg;) <br />
+<em>δx</em> is the displacement (m) <br />
+<em>ℓ<sub>s</sub></em> is the length of an interslice surface (m) <br />
+<em>K<sub>sn</sub></em> is the normal stiffness (Pa/m) <br />
+<em>ℓ<sub>b</sub></em> is the total base length of a slice (m) <br />
+<em>K<sub>bA</sub></em> is the effective base stiffness A (Pa/m) <br />
+<em>δy</em> is the displacement (m) <br />
+<em>K<sub>bB</sub></em> is the effective base stiffness A (Pa/m) <br />
+<em>K<sub>st</sub></em> is the shear stiffness (Pa/m) <br />
 </div>
 </td>
 </tr>
@@ -5352,22 +5177,24 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<<<<<<< HEAD
 FIXME: This needs to be filled in
-=======
-There is one set of force displacement equilibrium equations in the x and y directions for each element. System of equations solved for displacements ( <em>δx</em> and <em>δy</em> ) <em>ΔH</em> = <em>H</em> is the net hydrostatic force across a slice. <em>K<sub>c</sub></em> is the earthquake load factor. <em>W</em> is the weight of the slice. <em>U<sub>b</sub></em> is the pore water pressure acting on the slice base. <em>U<sub>t</sub></em> is the pore water pressure acting on the slice surface. <em>α</em> is the angle of the base with the horizontal. <em>β</em> is the angle of the surface with the horizontal. <em>δx</em> is the x displacement of slice i. <em>δy</em> is the y displacement of slice i. <em>ℓ<sub>s</sub></em> is the length of the interslice surface i. <em>ℓ<sub>b</sub></em> is the length of the base surface i. <em>K<sub>st</sub></em> is the interslice shear stiffness at surface i.  Kst,i-1 is the interslice normal stiffness at surface i. KbA,i, and KbB,i are the base stiffness values for slice i.
->>>>>>> master
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+There is one set of force displacement equilibrium equations in the x and y directions for each element. System of equations solved for displacements ( <em>δx</em> and <em>δy</em> ).
 </p>
 </td>
 </tr>
 </table>
 </div>
 <p class="paragraph">
-<<<<<<< HEAD
-Using the net force-displacement equilibrium equation of a slice from DD13 with the definitions of the stiffness matrices from DD12 and the force definitions from GD7 a broken down force displacement equilibrium equation can be derived. equation (22) gives the broken down equation in the <em>x</em> direction, and equation (23) gives the broken down equation in the <em>y</em> direction:
-=======
-Using the net force-displacement equilibrium equation of a slice from <a href=#DD:R.i>DD13</a> with the definitions of the stiffness matrices from <a href=#DD:X.i>DD12</a> and the force definitions from GD7 a broken down force displacement equilibrium equation can be derived. equation (22) gives the broken down equation in the <em>x</em> direction, and equation (23) gives the broken down equation in the <em>y</em> direction.
->>>>>>> master
+Using the net force-displacement equilibrium equation of a slice from <a href=#DD:force>DD17</a> with the definitions of the stiffness matrices from <a href=#DD:pressure>DD16</a> and the force definitions from GD7 a broken down force displacement equilibrium equation can be derived. equation (22) gives the broken down equation in the <em>x</em> direction, and equation (23) gives the broken down equation in the <em>y</em> direction:
 </p>
 <div id="">
 <div class="equation">
@@ -5375,17 +5202,10 @@ Using the net force-displacement equilibrium equation of a slice from <a href=#D
 </div>
 </div>
 <p class="paragraph">
-<<<<<<< HEAD
-Using the known input assumption of A2, the force variable definitions of DD1 to DD8 on the left side of the equations can be solved for. The only unknown in the variables to solve for the stiffness values from DD14 is the displacements. Therefore taking the equation from each slice a set of <em>2&#8239;n</em> equations, with <em>2&#8239;n</em> unknown displacements in the <em>x</em> and <em>y</em> directions of each slice can be derived. Solutions for the displacements of each slice can then be found. The use of displacement in the definition of the stiffness values makes the equation implicit, which means an iterative solution method, with an initial guess for the displacements in the stiffness values is required:
+Using the known input assumption of A2, the force variable definitions of <a href=#DD:W.i>DD1</a> to <a href=#DD:Q.i>DD11</a> on the left side of the equations can be solved for. The only unknown in the variables to solve for the stiffness values from <a href=#DD:K.bt,i>DD18</a> is the displacements. Therefore taking the equation from each slice a set of <em>2&#8239;n</em> equations, with <em>2&#8239;n</em> unknown displacements in the <em>x</em> and <em>y</em> directions of each slice can be derived. Solutions for the displacements of each slice can then be found. The use of displacement in the definition of the stiffness values makes the equation implicit, which means an iterative solution method, with an initial guess for the displacements in the stiffness values is required:
 </p>
-<a id="IM:rfemFoS">
+<div id="IM:rfemFoS">
 <table class="idefn">
-=======
-Using the known input assumption of <a href=#A:Geo-Slope-Mat-Props-of-Soil-Inputs>Geo-Slope-Mat-Props-of-Soil-Inputs</a>, the force variable definitions of <a href=#DD:W.i>DD1</a> to <a href=#DD:l.b,i>DD8</a> on the left side of the equations can be solved for. The only unknown in the variables to solve for the stiffness values from <a href=#DD:T.i>DD14</a> is the displacements. Therefore taking the equation from each slice a set of <em>2&#8239;n</em> equations, with <em>2&#8239;n</em> unknown displacements in the <em>x</em> and <em>y</em> directions of each slice can be derived. Solutions for the displacements of each slice can then be found. The use of displacement in the definition of the stiffness values makes the equation implicit, which means an iterative solution method, with an initial guess for the displacements in the stiffness values is required.
-</p>
-<div id="T:rfemFoS">
-<table class="tdefn">
->>>>>>> master
 <tr>
 <th>
 Label
@@ -5402,7 +5222,7 @@ Input
 </th>
 <td>
 <p class="paragraph">
-<em>FS<sub>Loc,i</sub></em>, <em>c&prime;</em>, <em>K<sub>bn</sub></em>, <em>&delta;v</em>, <em>&phiv;&prime;</em>, <em>K<sub>bt</sub></em>, <em>&delta;u</em>, <em>&#8467;<sub>b</sub></em>
+<em>c&prime;</em>, <em>K<sub>bn</sub></em>, <em>δv</em>, <em>φ&prime;</em>, <em>K<sub>bt</sub></em>, <em>δu</em>, <em>ℓ<sub>b</sub></em>
 </p>
 </td>
 </tr>
@@ -5421,11 +5241,6 @@ Output
 Input Constraints
 </th>
 <td>
-<a id="">
-<div class="equation">
-<em>FS<sub>Loc,i,i</sub>&thinsp;&lt;&thinsp;FS<sub>Loc,i,i</sub></em>
-</div>
-</a>
 </td>
 </tr>
 <tr>
@@ -5433,11 +5248,6 @@ Input Constraints
 Output Constraints
 </th>
 <td>
-<a id="">
-<div class="equation">
-<em>0&thinsp;&lt;&thinsp;FS<sub>Loc,i,i</sub>&thinsp;&lt;&thinsp;FS<sub>Loc,i,i</sub></em>
-</div>
-</a>
 </td>
 </tr>
 <tr>
@@ -5472,33 +5282,15 @@ Description
 </th>
 <td>
 <div class="list">
-<p>
-<em>FS<sub>Loc,i</sub></em> is the local factor of safety (Unitless)
-</p>
-<p>
-<em>i</em> is the index (Unitless)
-</p>
-<p>
-<em>c&prime;</em> is the effective cohesion (Pa)
-</p>
-<p>
-<em>K<sub>bn</sub></em> is the normal stiffness (Pa/m)
-</p>
-<p>
-<em>&delta;v</em> is the displacement (m)
-</p>
-<p>
-<em>&phiv;&prime;</em> is the effective angle of friction (&deg;)
-</p>
-<p>
-<em>K<sub>bt</sub></em> is the shear stiffness (Pa/m)
-</p>
-<p>
-<em>&delta;u</em> is the displacement (m)
-</p>
-<p>
-<em>&#8467;<sub>b</sub></em> is the total base length of a slice (m)
-</p>
+<em>FS<sub>Loc,i</sub></em> is the local factor of safety (Unitless) <br />
+<em>i</em> is the index (Unitless) <br />
+<em>c&prime;</em> is the effective cohesion (Pa) <br />
+<em>K<sub>bn</sub></em> is the normal stiffness (Pa/m) <br />
+<em>δv</em> is the displacement (m) <br />
+<em>φ&prime;</em> is the effective angle of friction (&deg;) <br />
+<em>K<sub>bt</sub></em> is the shear stiffness (Pa/m) <br />
+<em>δu</em> is the displacement (m) <br />
+<em>ℓ<sub>b</sub></em> is the total base length of a slice (m) <br />
 </div>
 </td>
 </tr>
@@ -5518,12 +5310,15 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<<<<<<< HEAD
 FIXME: This needs to be filled in
-=======
-<em>FS<sub>Loc,i</sub></em> is the factor of safety for slice i. <em>FS</em> is the factor of safety for the entire slip surface. <em>c&prime;</em> is the cohesion of slice i's base. <em>φ&prime;</em> is the effective angle of friction of slice i's base. <em>δv</em> is the normal displacement of slice i. <em>δu</em> is the shear displacement of slice i. <em>K<sub>bt</sub></em> is the length of the base of slice i. <em>K<sub>bn</sub></em> is the base normal stiffness at surface i. <em>n</em> is the number of slices in the slip surface.
->>>>>>> master
 </p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
 </td>
 </tr>
 </table>
@@ -5542,11 +5337,7 @@ RFEM analysis can also be used to calculate the factor of safety for the slope. 
 </div>
 </div>
 <p class="paragraph">
-<<<<<<< HEAD
-With the definition of normal stiffness from DD14 to find the normal stiffness of the base <em>K<sub>bn</sub></em> and the now known base displacement perpendicular to the surface <em>&delta;v</em> from equation (25) the normal base stress can be calculated from the force-displacement relationship of T5. Stress <em>&sigma;</em> is used in place of force <em>F</em> as the stiffness hasn't been normalized for the length of the base. Results in equation (26):
-=======
-With the definition of normal stiffness from <a href=#DD:T.i>DD14</a> to find the normal stiffness of the base <em>K<sub>bn</sub></em> and the now known base displacement perpendicular to the surface <em>δv</em> from equation (25) the normal base stress can be calculated from the force-displacement relationship of T5. Stress <em>σ</em> is used in place of force <em>F</em> as the stiffness hasn't been normalized for the length of the base. Results in equation (26).
->>>>>>> master
+With the definition of normal stiffness from <a href=#DD:K.bt,i>DD18</a> to find the normal stiffness of the base <em>K<sub>bn</sub></em> and the now known base displacement perpendicular to the surface <em>δv</em> from equation (25) the normal base stress can be calculated from the force-displacement relationship of T5. Stress <em>σ</em> is used in place of force <em>F</em> as the stiffness hasn't been normalized for the length of the base. Results in equation (26):
 </p>
 <div id="">
 <div class="equation">
@@ -5554,11 +5345,7 @@ With the definition of normal stiffness from <a href=#DD:T.i>DD14</a> to find th
 </div>
 </div>
 <p class="paragraph">
-<<<<<<< HEAD
-The resistive shear to calculate the factor of safety <em>FS</em> is found from the Mohr Coulomb resistive strength of soil in T3 Using the normal stress <em>&sigma;</em> from equation (26) as the stress, the resistive shear of the slice can be calculated from equation (27):
-=======
-The resistive shear to calculate the factor of safety <em>FS</em> is found from the Mohr Coulomb resistive strength of soil in T3 Using the normal stress <em>σ</em> from equation (26) as the stress, the resistive shear of the slice can be calculated from equation (27).
->>>>>>> master
+The resistive shear to calculate the factor of safety <em>FS</em> is found from the Mohr Coulomb resistive strength of soil in T3 Using the normal stress <em>σ</em> from equation (26) as the stress, the resistive shear of the slice can be calculated from equation (27):
 </p>
 <div id="">
 <div class="equation">
@@ -5566,11 +5353,7 @@ The resistive shear to calculate the factor of safety <em>FS</em> is found from 
 </div>
 </div>
 <p class="paragraph">
-<<<<<<< HEAD
-Previously the value of the shear stiffness <em>K<sub>bt</sub></em> as seen in equation (28) was unsolvable because the normal stress <em>&sigma;</em> was unknown. With the definition of <em>&sigma;</em> from equation (26) and the definition of displacement shear to the base <em>&delta;u</em> from equation (25), the value of <em>K<sub>bt</sub></em> becomes solvable:
-=======
-Previously the value of the shear stiffness <em>K<sub>bt</sub></em> as seen in equation (28) was unsolvable because the normal stress <em>σ</em> was unknown. With the definition of <em>σ</em> from equation (26) and the definition of displacement shear to the base <em>δu</em> from equation (25), the value of <em>K<sub>bt</sub></em> becomes solvable.
->>>>>>> master
+Previously the value of the shear stiffness <em>K<sub>bt</sub></em> as seen in equation (28) was unsolvable because the normal stress <em>σ</em> was unknown. With the definition of <em>σ</em> from equation (26) and the definition of displacement shear to the base <em>δu</em> from equation (25), the value of <em>K<sub>bt</sub></em> becomes solvable:
 </p>
 <div id="">
 <div class="equation">
@@ -5599,11 +5382,7 @@ c&prime;<sub>i</sub>&minus;σ<sub>i</sub>&#8239;tan(φ&prime;<sub>i</sub>)
 </div>
 </div>
 <p class="paragraph">
-<<<<<<< HEAD
-With shear stiffness <em>K<sub>bt</sub></em> calculated in equation (28) and shear displacement <em>&delta;u</em> calculated in equation (24) values now known the resistive shear stress acting on the base of a slice <em>&tau;</em> can be calculated using T5, as done in equation (29). Again, stress <em>&tau;</em> is used in place of force <em>F</em> as the stiffness has not been normalized for the length of the base:
-=======
-With shear stiffness <em>K<sub>bt</sub></em> calculated in equation (28) and shear displacement <em>δu</em> calculated in equation (24) values now known the resistive shear stress acting on the base of a slice <em>τ</em> can be calculated using T5, as done in equation (29). Again, stress <em>τ</em> is used in place of force <em>F</em> as the stiffness has not been normalized for the length of the base.
->>>>>>> master
+With shear stiffness <em>K<sub>bt</sub></em> calculated in equation (28) and shear displacement <em>δu</em> calculated in equation (24) values now known the resistive shear stress acting on the base of a slice <em>τ</em> can be calculated using T5, as done in equation (29). Again, stress <em>τ</em> is used in place of force <em>F</em> as the stiffness has not been normalized for the length of the base:
 </p>
 <div id="">
 <div class="equation">
@@ -5611,11 +5390,7 @@ With shear stiffness <em>K<sub>bt</sub></em> calculated in equation (28) and she
 </div>
 </div>
 <p class="paragraph">
-<<<<<<< HEAD
-The resistive shear stress acting on the base of a slice <em>&tau;</em> acts as the mobile shear acting on the base. Using the definition Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice <em>s</em> from equation (27) and resistive shear stress <em>&tau;</em> from equation (29) the local factor of safety <em>FS<sub>Loc,i</sub></em> can be found from as seen in equation (30) and IM5:
-=======
-The resistive shear stress acting on the base of a slice <em>τ</em> acts as the mobile shear acting on the base. Using the definition Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice <em>s</em> from equation (27) and resistive shear stress <em>τ</em> from equation (29) the local factor of safety <em>FS<sub>Loc,i</sub></em> can be found from as seen in equation (30) and IM5.
->>>>>>> master
+The resistive shear stress acting on the base of a slice <em>τ</em> acts as the mobile shear acting on the base. Using the definition Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice <em>s</em> from equation (27) and resistive shear stress <em>τ</em> from equation (29) the local factor of safety <em>FS<sub>Loc,i</sub></em> can be found from as seen in equation (30) and IM5:
 </p>
 <div id="">
 <div class="equation">
@@ -5657,15 +5432,9 @@ The global Factor of Safety is then the ratio of the summation of the resistive 
 </span>
 </div></em>
 </div>
-<<<<<<< HEAD
-</a>
-<a id="IM:crtSlpId">
-<table class="idefn">
-=======
 </div>
-<div id="T:crtSlpId">
-<table class="tdefn">
->>>>>>> master
+<div id="IM:crtSlpId">
+<table class="idefn">
 <tr>
 <th>
 Label
@@ -5682,7 +5451,7 @@ Input
 </th>
 <td>
 <p class="paragraph">
-<em>FS<sub>min</sub></em>
+
 </p>
 </td>
 </tr>
@@ -5701,11 +5470,6 @@ Output
 Input Constraints
 </th>
 <td>
-<a id="">
-<div class="equation">
-<em>FS<sub>min</sub>&thinsp;&lt;&thinsp;FS<sub>min</sub></em>
-</div>
-</a>
 </td>
 </tr>
 <tr>
@@ -5713,11 +5477,6 @@ Input Constraints
 Output Constraints
 </th>
 <td>
-<a id="">
-<div class="equation">
-<em>0&thinsp;&lt;&thinsp;FS<sub>min</sub>&thinsp;&lt;&thinsp;FS<sub>min</sub></em>
-</div>
-</a>
 </td>
 </tr>
 <tr>
@@ -5727,13 +5486,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<<<<<<< HEAD
-<em>FS<sub>min</sub> = &Upsilon;({x<sub>cs</sub>,y<sub>cs</sub>})</em>
-=======
-<p class="paragraph">
 <em>FS<sub>min</sub> = Υ({x<sub>cs</sub>,y<sub>cs</sub>})</em>
-</p>
->>>>>>> master
 </div>
 </div>
 </td>
@@ -5744,15 +5497,9 @@ Description
 </th>
 <td>
 <div class="list">
-<p>
-<em>FS<sub>min</sub></em> is the minimum factor of safety (Unitless)
-</p>
-<p>
-<em>&Upsilon;</em> is the function (Unitless)
-</p>
-<p>
-<em>{x<sub>cs</sub>,y<sub>cs</sub>}</em> is the the set of x and y coordinates (m)
-</p>
+<em>FS<sub>min</sub></em> is the minimum factor of safety (Unitless) <br />
+<em>Υ</em> is the function (Unitless) <br />
+<em>{x<sub>cs</sub>,y<sub>cs</sub>}</em> is the the set of x and y coordinates (m) <br />
 </div>
 </td>
 </tr>
@@ -5772,11 +5519,17 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<<<<<<< HEAD
 FIXME: This needs to be filled in
-=======
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
 Given the necessary slope inputs, a minimization algorithm or function <em>Υ</em> will identify the critical slip surface of the slope, with the critical slip coordinates <em>{x<sub>cs</sub>,y<sub>cs</sub>}</em> and the minimum factor of safety <em>FS<sub>min</sub></em> that results.
->>>>>>> master
 </p>
 </td>
 </tr>

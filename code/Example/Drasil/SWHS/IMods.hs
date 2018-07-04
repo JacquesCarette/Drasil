@@ -196,9 +196,9 @@ eBalanceOnWtr_deriv_eqns_swhs_im1 = [s4_2_3_eq1_swhs_im1, s4_2_3_eq2_swhs_im1,
 -- IM2 --
 ---------
 eBalanceOnPCM_new :: InstanceModel
-eBalanceOnPCM_new = im eBalanceOnPCM [qw tau_S_P, qw temp_W,
- qw temp_melt_P, qw tau_L_P, qw melt_frac]
-  [TCon AssumedCon $ sy temp_init $< sy temp_C] (qw temp_W)
+eBalanceOnPCM_new = im eBalanceOnPCM [qw temp_melt_P, qw time_final, qw temp_init, qw pcm_SA,
+ qw pcm_HTC, qw pcm_mass, qw htCap_S_P, qw htCap_L_P]
+  [TCon AssumedCon $ sy temp_init $< sy temp_melt_P] (qw temp_PCM)
    [TCon AssumedCon $ 0 $< sy time $< sy time_final] eBalanceOnPCM_deriv_swhs "eBalanceOnPCM" [balPCMDesc_note]
 
 eBalanceOnPCM :: RelationConcept
@@ -351,7 +351,7 @@ eBalanceOnPCM_deriv_eqns_swhs_im2 = [s4_2_3_eq1_swhs_im2, s4_2_3_eq2_swhs_im2,
 -- IM3 --
 ---------
 heatEInWtr_new :: InstanceModel
-heatEInWtr_new = im heatEInWtr [qw temp_init, qw coil_SA, qw htCap_W, qw w_mass] 
+heatEInWtr_new = im heatEInWtr [qw temp_init, qw w_mass, qw htCap_W, qw w_mass] 
   [] (qw w_E) [TCon AssumedCon $ 0 $< sy time $< sy time_final] [] "heatEInWtr" [htWtrDesc]
 
 heatEInWtr :: RelationConcept
@@ -385,8 +385,8 @@ htWtrDesc = foldlSent [S "The above", phrase equation,
 -- IM4 --
 ---------
 heatEInPCM_new :: InstanceModel
-heatEInPCM_new = im heatEInPCM [qw time, qw tau_W, qw temp_C, qw eta,
- qw temp_PCM, qw time_final, qw temp_init, qw coil_SA]
+heatEInPCM_new = im heatEInPCM [qw temp_melt_P, qw time_final, qw temp_init, qw pcm_SA,
+ qw pcm_HTC, qw pcm_mass, qw htCap_S_P, qw htCap_L_P, qw temp_PCM, qw htFusion, qw t_init_melt]
   [TCon AssumedCon $ sy temp_init $< sy temp_C] (qw temp_W)
    [TCon AssumedCon $ 0 $< sy time $< sy time_final] [] "heatEInPCM" [htPCMDesc]
 

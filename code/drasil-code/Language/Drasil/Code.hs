@@ -27,8 +27,8 @@ module Language.Drasil.Code (
   makeCode, createCodeFiles, toAbsCode, getClassName, buildModule, moduleName,
   Options(..),
   Choices(..), CodeSpec, Comments(CommentNone), ConstraintBehaviour(Warning), Func, 
-  ImplementationType(Program), Lang(..), Logging(LogNone), Mod(Mod), Structure(AsClass), codeSpec, funcData, 
-  gen, junkLine, singleton
+  ImplementationType(Program), Lang(..), Logging(LogNone), Mod(Mod), Structure(..), codeSpec, funcData, 
+  gen, genCode, junkLine, singleton
 ) where
 
 import Prelude hiding (break, print, return, log, exp)
@@ -39,4 +39,4 @@ import Language.Drasil.Code.CodeGeneration
 import Language.Drasil.Code.DataDesc (junkLine, singleton)
 import Language.Drasil.CodeSpec (Choices(..), CodeSpec, Comments(..), ConstraintBehaviour(..), Func, 
   ImplementationType(..), Lang(..), Logging(..), Mod(Mod), Structure(..), codeSpec, funcData)
-import Language.Drasil.Generate (gen)
+import Language.Drasil.Generate (gen, genCode)

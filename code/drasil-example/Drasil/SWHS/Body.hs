@@ -1,6 +1,7 @@
 module Drasil.SWHS.Body where
 
 import Language.Drasil hiding (organization)
+import Language.Drasil.Code (CodeSpec, codeSpec)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 import Control.Lens ((^.))
 

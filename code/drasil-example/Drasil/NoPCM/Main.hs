@@ -1,9 +1,9 @@
 module Main (main) where
 
-import Language.Drasil (DocType(SRS,Website),DocSpec(DocSpec),gen
-  , genCode, Choices(..), ImplementationType(..)
-  , Logging(..), ConstraintBehaviour(..), Structure(..), Comments(..)
-  , Lang(..))
+import Language.Drasil (DocType(SRS,Website), DocSpec(DocSpec))
+
+import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..), 
+  ImplementationType(..), Lang(..), Logging(..), Structure(..), gen, genCode)
 
 import Drasil.NoPCM.Body (nopcm_srs, nopcm_code, nopcm_SymbMap)
 

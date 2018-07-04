@@ -1,6 +1,7 @@
 module Drasil.NoPCM.DataDesc (inputMod) where
 
 import Language.Drasil
+import Language.Drasil.Code (Func, Mod(Mod), funcData, junkLine, singleton)
 import Drasil.SWHS.Unitals (tank_length, diam, coil_SA, temp_C, w_density,
   htCap_W, coil_HTC, temp_init, tau, time_final, abs_tol, rel_tol, cons_tol)
 

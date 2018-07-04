@@ -35,7 +35,7 @@ import Drasil.NoPCM.IMods (eBalanceOnWtr, eBalanceOnWtr_new)
 import Drasil.NoPCM.Unitals (temp_init)
 import Drasil.SWHS.References (ref2, ref3, ref4)
 import Drasil.SWHS.Requirements (nonFuncReqs)
-import Drasil.SWHS.LikelyChanges (likeChg2, likeChg3, likeChg6)
+import Drasil.SWHS.Changes (likeChg2, likeChg3, likeChg6)
 
 import Data.Drasil.People (thulasi)
 import Data.Drasil.Utils (enumSimple, getES, refFromType,

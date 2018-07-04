@@ -54,8 +54,8 @@ import Drasil.SWHS.Assumptions (newA1, newA2, newA3, newA4, newA5, newA6, newA7,
   assump15, assump16, assump17, assump18, assump19, assump20, newAssumptions, swhsAssumptions)
 import Drasil.SWHS.Requirements (req1, req2, reqEqn1, reqEqn2,
   req3, req4, req5, req6, req7, req8, req9, req10, req11, nonFuncReqs)
-import Drasil.SWHS.LikelyChanges (likeChg1, likeChg2, likeChg3, likeChg4,
-  likeChg5, likeChg6)
+import Drasil.SWHS.Changes (likeChg1, likeChg2, likeChg3, likeChg4,
+  likeChg5, likeChg6, unlikelyChgs)
 import Drasil.SWHS.DataDesc (swhsInputMod)
 
 import qualified Drasil.SRS as SRS (inModel, missingP, likeChg,
@@ -183,7 +183,7 @@ mkSRS = RefSec (RefProg intro
       ]
     ): --Testing General Definitions.-}
   
-  map Verbatim [reqS, likelyChgs, traceMAndG] ++ 
+  map Verbatim [reqS, likelyChgs, unlikelyChgs, traceMAndG] ++ 
     [AuxConstntSec (AuxConsProg progName specParamValList)] ++ 
     (Bibliography : [])
 
@@ -574,7 +574,7 @@ likeChgList = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
 --------------------------------
 -- Section 6b : UNLIKELY CHANGES --
 --------------------------------
-
+{-
 unlikelyChgs :: Section
 unlikelyChgs = SRS.unlikeChg unlikelyChgsList []
 
@@ -583,7 +583,7 @@ unlikelyChgsList = unlikeChgList
 
 unlikeChgList :: [Contents]
 unlikeChgList = []
-
+-}
 --------------------------------------------------
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
 --------------------------------------------------

@@ -10,12 +10,15 @@ import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName,
   shortname')
-import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel))
-import Language.Drasil.UID
+import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel), 
+  HasRefAddress(getRefAdd))
+
 import Language.Drasil.Expr (Expr)
+import Language.Drasil.Label (Label, mkLabelRA)
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Spec (Sentence(..))
-import Language.Drasil.Label (Label, mkLabelRA)
+import Language.Drasil.UID
+
 import Control.Lens ((^.), makeLenses)
 import Language.Drasil.Label.Core (Label)
 
@@ -104,6 +107,8 @@ data LabelledContent = LblC { _uniqueID :: UID
                             }
 makeLenses ''LabelledContent
 
+instance HasRefAddress LabelledContent where getRefAdd = lbl . getRefAdd
+
 -- | Smart constructor for labelled content chunks (should not be exported)
 llcc :: UID -> Label -> Contents -> LabelledContent
 llcc = LblC
@@ -123,6 +128,7 @@ instance HasShortName  Contents where
   shortname (Bib _)               = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
+
 
 ---------------------------------------------------------------------------
 -- smart constructors needed for LabelledContent

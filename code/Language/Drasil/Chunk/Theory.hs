@@ -1,18 +1,20 @@
 {-# Language TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.Theory 
   ( tc',
-   Theory(..), TheoryChunk, TheoryModel, tm,
+   Theory(..), TheoryChunk, TheoryModel, tm, tm'
   )where
 
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, HasReference(getReferences))
+  Definition(defn), ConceptDomain(cdom), Concept, HasReference(getReferences),
+  HasAdditionalNotes(getNotes))
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import Language.Drasil.Chunk.Constrained.Core (TheoryConstraint)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.Quantity (Quantity, QuantityDict, qw)
 import Language.Drasil.Chunk.References (References)
 import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
+import Language.Drasil.Spec (Sentence)
 
 import Control.Lens (Lens', view, makeLenses)
 
@@ -55,18 +57,20 @@ instance HasReference  TheoryChunk where getReferences = ref
 data TheoryModel = TM { _con :: ConceptChunk
                       , _thy :: TheoryChunk
                       , _refName :: ShortName
+                      , _notes :: Maybe [Sentence]
                       }
 makeLenses ''TheoryModel
 
-instance HasUID        TheoryModel where uid = con . uid
-instance NamedIdea     TheoryModel where term = con . term
-instance Idea          TheoryModel where getA = getA . view con
-instance Definition    TheoryModel where defn = con . defn
-instance HasReference  TheoryModel where getReferences = thy . getReferences
-instance HasShortName  TheoryModel where shortname = view refName
-instance ConceptDomain TheoryModel where cdom = con . cdom
-instance Concept       TheoryModel where
-instance Theory        TheoryModel where
+instance HasUID             TheoryModel where uid = con . uid
+instance NamedIdea          TheoryModel where term = con . term
+instance Idea               TheoryModel where getA = getA . view con
+instance Definition         TheoryModel where defn = con . defn
+instance HasReference       TheoryModel where getReferences = thy . getReferences
+instance HasShortName       TheoryModel where shortname = view refName
+instance ConceptDomain      TheoryModel where cdom = con . cdom
+instance HasAdditionalNotes TheoryModel where getNotes = notes
+instance Concept            TheoryModel where
+instance Theory             TheoryModel where
   valid_context = thy . valid_context
   spaces        = thy . spaces
   quantities    = thy . quantities
@@ -86,4 +90,8 @@ tc' :: (Quantity q, Concept c) =>
 tc' cid q c = tc cid ([] :: [TheoryChunk]) [] q c
 
 tm :: Concept c => c -> TheoryChunk -> String -> TheoryModel
-tm c t sn = TM (cw c) t (shortname' sn)
+tm c t sn = TM (cw c) t (shortname' sn) Nothing
+
+-- Same as tm, but with the additional notes argument passed in
+tm' :: Concept c => c -> TheoryChunk -> String -> [Sentence] -> TheoryModel
+tm' c t sn notes = TM (cw c) t (shortname' sn) (Just notes)

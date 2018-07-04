@@ -923,7 +923,7 @@ The user provides the inputs to GlassBR for use within the analysis. There are t
 Specific System Description
 </h1>
 <p class="paragraph">
-This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions.
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used for the GlassBR program.
 </p>
 <div id="Sec:ProbDesc">
 <div class="subsection">
@@ -967,7 +967,7 @@ Glass Type:
 Annealed glass (AN) - A flat, monolithic, glass lite which has uniform thickness where the residual surface stresses are almost zero, as defined in [5].
 </li>
 <li>
-Fully tempered glass (FT) - A flat and monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 69 MPa (10 000 psi) or the edge compression not less than 67 MPa (9700 psi), as defined in [6].
+Fully tempered glass (FT) - A flat, monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 69 MPa (10 000 psi) or the edge compression not less than 67 MPa (9700 psi), as defined in [6].
 </li>
 <li>
 Heat strengthened glass (HS) - A flat, monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 24 MPa (3500psi) or greater than 52 MPa (7500 psi), as defined in [6].
@@ -987,7 +987,7 @@ Non-factored load (NFL) - Three second duration uniform load associated with a p
 Glass weight load - The dead load component of the glass weight.
 </li>
 <li>
-Short duration load - Any load lasting 3s or less.
+Short duration load - Any load lasting 3 seconds or less.
 </li>
 <li>
 Specified design load - The magnitude in kPa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority.
@@ -1082,7 +1082,7 @@ glassTy: The standard E1300-09a for calculation applies only to monolithic, lami
 <ul class="hide-list-style">
 <li>
 <div id="A:glassConditionA">
-glassCondition: Following <a href=#astm.LR2009>astm_LR2009</a> (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
+glassCondition: Following <a href=#astm2009>astm2009</a> (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
 </div>
 </li>
 </ul>
@@ -1171,9 +1171,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em>is_safe1 = P<sub>b</sub>&thinsp;&lt;&thinsp;P<sub>btol</sub></em>
-</p>
 </div>
 </div>
 </td>
@@ -1181,6 +1179,38 @@ Equation
 <tr>
 <th>
 Description
+</th>
+<td>
+<div class="list">
+<em>is_safe1</em> is the true when calculated probability is less than tolerable probability (Unitless) <br />
+<em>P<sub>b</sub></em> is the probability of breakage (Unitless) <br />
+<em>P<sub>btol</sub></em> is the tolerable probability of breakage (Unitless) <br />
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
 </th>
 <td>
 <p class="paragraph">
@@ -1209,9 +1239,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em>is_safe2 = LR&thinsp;&gt;&thinsp;q</em>
-</p>
 </div>
 </div>
 </td>
@@ -1219,6 +1247,38 @@ Equation
 <tr>
 <th>
 Description
+</th>
+<td>
+<div class="list">
+<em>is_safe2</em> is the true when load resistance (capacity) is greater than load (demand) (Unitless) <br />
+<em>LR</em> is the load resistance (Unitless) <br />
+<em>q</em> is the applied load (demand) (kPa) <br />
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
 </th>
 <td>
 <p class="paragraph">
@@ -1256,7 +1316,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Risk of Failure
+Risk of failure
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>B</em>
 </p>
 </td>
 </tr>
@@ -1277,7 +1347,6 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em>B = <div class="fraction">
 <span class="fup">
 k
@@ -1286,7 +1355,6 @@ k
 (a&#8239;b)<sup>m&minus;1</sup>
 </span>
 </div>&#8239;(1000&#8239;E&#8239;h<sup>2</sup>)<sup>m</sup>&#8239;LDF&#8239;e<sup>J</sup></em>
-</p>
 </div>
 </div>
 </td>
@@ -1296,8 +1364,36 @@ k
 Description
 </th>
 <td>
+<div class="list">
+<em>B</em> is the risk of failure (Unitless) <br />
+<em>k</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>) <br />
+<em>a</em> is the plate length (long dimension) (m) <br />
+<em>b</em> is the plate width (short dimension) (m) <br />
+<em>m</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>) <br />
+<em>E</em> is the modulus of elasticity of glass (Pa) <br />
+<em>h</em> is the actual thickness (m) <br />
+<em>LDF</em> is the load duration factor (Unitless) <br />
+<em>J</em> is the stress distribution factor (Function) (Unitless) <br />
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>B</em> is the risk of failure<br /><em>k</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>)<br /><em>a</em> is the plate length (long dimension) (m)<br /><em>b</em> is the plate width (short dimension) (m)<br /><em>m</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>)<br /><em>E</em> is the modulus of elasticity of glass (Pa)<br /><em>h</em> is the actual thickness (m)<br /><em>LDF</em> is the load duration factor<br /><em>J</em> is the stress distribution factor (Function)
+[4]
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1311,7 +1407,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Actual Thickness
+Actual thickness
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>h</em>
 </p>
 </td>
 </tr>
@@ -1332,7 +1438,6 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em>h = <div class="fraction">
 <span class="fup">
 1
@@ -1405,7 +1510,6 @@ t = 22.0
 </span>
 </span>
 </div></em>
-</p>
 </div>
 </div>
 </td>
@@ -1415,8 +1519,29 @@ t = 22.0
 Description
 </th>
 <td>
+<div class="list">
+<em>h</em> is the actual thickness (m) <br />
+<em>t</em> is the nominal thickness <em>t&thinsp;&isin;&thinsp;{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0}</em> (mm) <br />
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>h</em> is the actual thickness (m)<br /><em>t</em> is the nominal thickness <em>t&thinsp;&isin;&thinsp;{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0}</em> (mm)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1430,7 +1555,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Stress Distribution Factor (Function)
+Stress distribution factor (Function)
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>J</em>
 </p>
 </td>
 </tr>
@@ -1451,7 +1586,6 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em>J = J(q&#770;,<div class="fraction">
 <span class="fup">
 a
@@ -1460,7 +1594,6 @@ a
 b
 </span>
 </div>)</em>
-</p>
 </div>
 </div>
 </td>
@@ -1470,8 +1603,32 @@ b
 Description
 </th>
 <td>
+<div class="list">
+<em>J</em> is the stress distribution factor (Function) (Unitless) <br />
+<em>J</em> is the stress distribution factor (Function) (Unitless) <br />
+<em>q&#770;</em> is the dimensionless load (Unitless) <br />
+<em>a</em> is the plate length (long dimension) (m) <br />
+<em>b</em> is the plate width (short dimension) (m) <br />
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>J</em> is the stress distribution factor (Function)<br /><em>q&#770;</em> is the dimensionless load<br /><em>a</em> is the plate length (long dimension) (m)<br /><em>b</em> is the plate width (short dimension) (m)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1485,7 +1642,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Non-Factored Load
+Non-factored load
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>NFL</em>
 </p>
 </td>
 </tr>
@@ -1506,7 +1673,6 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em>NFL = <div class="fraction">
 <span class="fup">
 q&#770;<sub>tol</sub>&#8239;E&#8239;h<sup>4</sup>
@@ -1515,7 +1681,6 @@ q&#770;<sub>tol</sub>&#8239;E&#8239;h<sup>4</sup>
 (a&#8239;b)<sup>2</sup>
 </span>
 </div></em>
-</p>
 </div>
 </div>
 </td>
@@ -1525,8 +1690,33 @@ q&#770;<sub>tol</sub>&#8239;E&#8239;h<sup>4</sup>
 Description
 </th>
 <td>
+<div class="list">
+<em>NFL</em> is the non-factored load (Unitless) <br />
+<em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless) <br />
+<em>E</em> is the modulus of elasticity of glass (Pa) <br />
+<em>h</em> is the actual thickness (m) <br />
+<em>a</em> is the plate length (long dimension) (m) <br />
+<em>b</em> is the plate width (short dimension) (m) <br />
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>NFL</em> is the non-factored load<br /><em>q&#770;<sub>tol</sub></em> is the tolerable load<br /><em>E</em> is the modulus of elasticity of glass (Pa)<br /><em>h</em> is the actual thickness (m)<br /><em>a</em> is the plate length (long dimension) (m)<br /><em>b</em> is the plate width (short dimension) (m)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1540,7 +1730,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Glass Type Factor
+Glass type factor
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>GTF</em>
 </p>
 </td>
 </tr>
@@ -1561,7 +1761,6 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em>GTF = <span class="casebr">
 {
 </span>
@@ -1582,7 +1781,6 @@ g = HS
 </span>
 </span>
 </div></em>
-</p>
 </div>
 </div>
 </td>
@@ -1592,8 +1790,29 @@ g = HS
 Description
 </th>
 <td>
+<div class="list">
+<em>GTF</em> is the glass type factor (Unitless) <br />
+<em>g</em> is the glass type <em>g&thinsp;&isin;&thinsp;{AN,FT,HS}</em> (Unitless) <br />
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>GTF</em> is the glass type factor<br /><em>g</em> is the glass type <em>g&thinsp;&isin;&thinsp;{AN,FT,HS}</em>
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1607,7 +1826,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Dimensionless Load
+Dimensionless load
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>q&#770;</em>
 </p>
 </td>
 </tr>
@@ -1628,7 +1857,6 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em>q&#770; = <div class="fraction">
 <span class="fup">
 q&#8239;(a&#8239;b)<sup>2</sup>
@@ -1637,7 +1865,6 @@ q&#8239;(a&#8239;b)<sup>2</sup>
 E&#8239;h<sup>4</sup>&#8239;GTF
 </span>
 </div></em>
-</p>
 </div>
 </div>
 </td>
@@ -1647,8 +1874,34 @@ E&#8239;h<sup>4</sup>&#8239;GTF
 Description
 </th>
 <td>
+<div class="list">
+<em>q&#770;</em> is the dimensionless load (Unitless) <br />
+<em>q</em> is the applied load (demand) (kPa) <br />
+<em>a</em> is the plate length (long dimension) (m) <br />
+<em>b</em> is the plate width (short dimension) (m) <br />
+<em>E</em> is the modulus of elasticity of glass (Pa) <br />
+<em>h</em> is the actual thickness (m) <br />
+<em>GTF</em> is the glass type factor (Unitless) <br />
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>q&#770;</em> is the dimensionless load<br /><em>q</em> is the applied load (demand) (kPa)<br /><em>a</em> is the plate length (long dimension) (m)<br /><em>b</em> is the plate width (short dimension) (m)<br /><em>E</em> is the modulus of elasticity of glass (Pa)<br /><em>h</em> is the actual thickness (m)<br /><em>GTF</em> is the glass type factor
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1662,7 +1915,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Tolerable Load
+Tolerable load
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>q&#770;<sub>tol</sub></em>
 </p>
 </td>
 </tr>
@@ -1683,7 +1946,6 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em>q&#770;<sub>tol</sub> = q&#770;<sub>tol</sub>(J<sub>tol</sub>,<div class="fraction">
 <span class="fup">
 a
@@ -1692,7 +1954,6 @@ a
 b
 </span>
 </div>)</em>
-</p>
 </div>
 </div>
 </td>
@@ -1702,8 +1963,32 @@ b
 Description
 </th>
 <td>
+<div class="list">
+<em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless) <br />
+<em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless) <br />
+<em>J<sub>tol</sub></em> is the stress distribution factor (Function) based on Pbtol (Unitless) <br />
+<em>a</em> is the plate length (long dimension) (m) <br />
+<em>b</em> is the plate width (short dimension) (m) <br />
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>q&#770;<sub>tol</sub></em> is the tolerable load<br /><em>J<sub>tol</sub></em> is the stress distribution factor (Function) based on Pbtol<br /><em>a</em> is the plate length (long dimension) (m)<br /><em>b</em> is the plate width (short dimension) (m)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1717,7 +2002,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Stress Distribution Factor (Function) Based on Pbtol
+Stress distribution factor (Function) based on Pbtol
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>J<sub>tol</sub></em>
 </p>
 </td>
 </tr>
@@ -1738,7 +2033,6 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em>J<sub>tol</sub> = log(log(<div class="fraction">
 <span class="fup">
 1
@@ -1754,7 +2048,6 @@ Equation
 k&#8239;(1000&#8239;E&#8239;h<sup>2</sup>)<sup>m</sup>&#8239;LDF
 </span>
 </div>)</em>
-</p>
 </div>
 </div>
 </td>
@@ -1764,8 +2057,36 @@ k&#8239;(1000&#8239;E&#8239;h<sup>2</sup>)<sup>m</sup>&#8239;LDF
 Description
 </th>
 <td>
+<div class="list">
+<em>J<sub>tol</sub></em> is the stress distribution factor (Function) based on Pbtol (Unitless) <br />
+<em>P<sub>btol</sub></em> is the tolerable probability of breakage (Unitless) <br />
+<em>a</em> is the plate length (long dimension) (m) <br />
+<em>b</em> is the plate width (short dimension) (m) <br />
+<em>m</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>) <br />
+<em>k</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>) <br />
+<em>E</em> is the modulus of elasticity of glass (Pa) <br />
+<em>h</em> is the actual thickness (m) <br />
+<em>LDF</em> is the load duration factor (Unitless) <br />
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>J<sub>tol</sub></em> is the stress distribution factor (Function) based on Pbtol<br /><em>P<sub>btol</sub></em> is the tolerable probability of breakage<br /><em>a</em> is the plate length (long dimension) (m)<br /><em>b</em> is the plate width (short dimension) (m)<br /><em>m</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>)<br /><em>k</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>)<br /><em>E</em> is the modulus of elasticity of glass (Pa)<br /><em>h</em> is the actual thickness (m)<br /><em>LDF</em> is the load duration factor
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1781,8 +2102,8 @@ Instance Models
 <p class="paragraph">
 This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
 </p>
-<div id="T:probOfBr">
-<table class="tdefn">
+<div id="IM:probOfBr">
+<table class="idefn">
 <tr>
 <th>
 Label
@@ -1795,14 +2116,56 @@ Probability of Glass Breakage
 </tr>
 <tr>
 <th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>B</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>P<sub>b</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<div id="">
+<div class="equation">
+<em>B&thinsp;&gt;&thinsp;0</em>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+<div id="">
+<div class="equation">
+<em>P<sub>b</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<th>
 Equation
 </th>
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em>P<sub>b</sub> = 1&minus;e<sup>&minus;B</sup></em>
-</p>
 </div>
 </div>
 </td>
@@ -1812,15 +2175,36 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<em>P<sub>b</sub></em> is the probability of breakage (Unitless) <br />
+<em>B</em> is the risk of failure (Unitless) <br />
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>P<sub>b</sub></em> is the calculated probability of breakage. <em>B</em> is the risk of failure.
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
 </table>
 </div>
-<div id="T:calOfCap">
-<table class="tdefn">
+<div id="IM:calOfCap">
+<table class="idefn">
 <tr>
 <th>
 Label
@@ -1833,14 +2217,61 @@ Calculation of Capacity(LR)
 </tr>
 <tr>
 <th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>NFL</em>, <em>GTF</em>, <em>LSF</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>LR</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<div id="">
+<div class="equation">
+<em>NFL&thinsp;&gt;&thinsp;0</em>
+</div>
+</div>
+<div id="">
+<div class="equation">
+<em>GTF&thinsp;&gt;&thinsp;0</em>
+</div>
+</div>
+<div id="">
+<div class="equation">
+<em>LSF&thinsp;&gt;&thinsp;0</em>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+</td>
+</tr>
+<tr>
+<th>
 Equation
 </th>
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em>LR = NFL&#8239;GTF&#8239;LSF</em>
-</p>
 </div>
 </div>
 </td>
@@ -1850,6 +2281,39 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<em>LR</em> is the load resistance (Unitless) <br />
+<em>NFL</em> is the non-factored load (Unitless) <br />
+<em>GTF</em> is the glass type factor (Unitless) <br />
+<em>LSF</em> is the load share factor (Unitless) <br />
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
 <p class="paragraph">
 <em>LR</em> is the load resistance, which is also called capacity. <em>NFL</em> is the non-factored load. <em>GTF</em> is the glass type factor. <em>LSF</em> is the load share factor. Follows <a href=#A:glassConditionA>glassCondition</a> and <a href=#A:glassTyA>glassTy</a> (&quot;In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations&quot;) from [4 (pg. 53)].
 </p>
@@ -1857,8 +2321,8 @@ Description
 </tr>
 </table>
 </div>
-<div id="T:calOfDe">
-<table class="tdefn">
+<div id="IM:calOfDe">
+<table class="idefn">
 <tr>
 <th>
 Label
@@ -1871,14 +2335,61 @@ Calculation of Demand(q)
 </tr>
 <tr>
 <th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>q</em>, <em>w<sub>TNT</sub></em>, <em>SD</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>q</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<div id="">
+<div class="equation">
+<em>q&thinsp;&gt;&thinsp;0</em>
+</div>
+</div>
+<div id="">
+<div class="equation">
+<em>w<sub>TNT</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
+</div>
+<div id="">
+<div class="equation">
+<em>SD&thinsp;&gt;&thinsp;0</em>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+</td>
+</tr>
+<tr>
+<th>
 Equation
 </th>
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em>q = q(w<sub>TNT</sub>,SD)</em>
-</p>
 </div>
 </div>
 </td>
@@ -1888,8 +2399,145 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<em>q</em> is the applied load (demand) (kPa) <br />
+<em>w<sub>TNT</sub></em> is the explosive mass in equivalent weight of TNT (kg) <br />
+<em>SD</em> is the stand off distance (m) <br />
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>q</em> or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (<em>SD</em>) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined as <em>w&#8239;TNT</em>. <em>w</em> is the charge weight. <em>TNT</em> is the TNT equivalent factor. <em>SD</em> is the stand off distance where <em>&radic;(SD<sub>x</sub><sup>2</sup>&plus;SD<sub>y</sub><sup>2</sup>&plus;SD<sub>z</sub><sup>2</sup>)</em> where (<em>SD<sub>x</sub></em>, <em>SD<sub>y</sub></em>, <em>SD<sub>z</sub></em>) are coordinates.
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>q</em> or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (<em>SD</em>) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined as <em>w&#8239;TNT</em>. <em>SD</em>. is the stand off distance where <em>&radic;(SD<sub>x</sub><sup>2</sup>&plus;SD<sub>y</sub><sup>2</sup>&plus;SD<sub>z</sub><sup>2</sup>)</em> where (<em>SD<sub>x</sub></em>, <em>SD<sub>y</sub></em>, <em>SD<sub>z</sub></em>) are coordinates.
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="IM:risk_fun">
+<table class="idefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Risk of failure
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>k</em>, <em>a</em>, <em>b</em>, <em>m</em>, <em>E</em>, <em>h</em>, <em>LDF</em>, <em>J</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>B</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div id="">
+<div class="equation">
+<em>B = <div class="fraction">
+<span class="fup">
+k
+</span>
+<span class="fdn">
+(a&#8239;b)<sup>m&minus;1</sup>
+</span>
+</div>&#8239;(1000&#8239;E&#8239;h<sup>2</sup>)<sup>m</sup>&#8239;LDF&#8239;e<sup>J</sup></em>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<div class="list">
+<em>B</em> is the risk of failure (Unitless) <br />
+<em>k</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>) <br />
+<em>a</em> is the plate length (long dimension) (m) <br />
+<em>b</em> is the plate width (short dimension) (m) <br />
+<em>m</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>) <br />
+<em>E</em> is the modulus of elasticity of glass (Pa) <br />
+<em>h</em> is the actual thickness (m) <br />
+<em>LDF</em> is the load duration factor (Unitless) <br />
+<em>J</em> is the stress distribution factor (Function) (Unitless) <br />
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2082,35 +2730,35 @@ Functional Requirements
 </h2>
 <ul class="hide-list-style">
 <li>
-<div id="FR:func.reqs.req1">
+<div id="FR:functional.requirements.req1">
 Input-Glass-Props: Input the quantities from <a href=#Table:R1ReqInputs>Table:R1ReqInputs</a>, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: <em>a</em> and <em>b</em> will be input in terms of millimetres and will be converted to the equivalent value in metres.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="FR:func.reqs.req2">
+<div id="FR:functional.requirements.req2">
 System-Set-Values-Following-Assumptions: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following A4, <em>LDF</em> following A8, LSF following A5, <em>h</em> (from <a href=#DD:act.thick>act_thick</a>), and <em>GTF</em> (from <a href=#DD:gTF>gTF</a>).
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="FR:func.reqs.req3">
+<div id="FR:functional.requirements.req3">
 Check-Input-with-Data_Constraints: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Data Constraints</a>. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="FR:func.reqs.req4">
+<div id="FR:functional.requirements.req4">
 Output-Values-and-Known-Quantities: Output the input quantities from R1 and the known quantities from R2.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="FR:func.reqs.req5">
+<div id="FR:functional.requirements.req5">
 Check-Glass-Safety: If <em>is_safe1</em> and <em>is_safe2</em> (from <a href=#T:t1SafetyReq>T:t1SafetyReq</a> and <a href=#T:t2SafetyReq>T:t2SafetyReq</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
 </div>
 </li>
@@ -4412,20 +5060,6 @@ kg
 </tr>
 <tr>
 <td>
-<em>SD<sub>min</sub></em>
-</td>
-<td>
-minimum stand off distance permissible for input
-</td>
-<td>
-<em>6.0</em>
-</td>
-<td>
-m
-</td>
-</tr>
-<tr>
-<td>
 <em>SD<sub>max</sub></em>
 </td>
 <td>
@@ -4433,6 +5067,20 @@ maximum stand off distance permissible for input
 </td>
 <td>
 <em>130.0</em>
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>SD<sub>min</sub></em>
+</td>
+<td>
+minimum stand off distance permissible for input
+</td>
+<td>
+<em>6.0</em>
 </td>
 <td>
 m
@@ -4452,22 +5100,22 @@ References
 </h1>
 <ul class="hide-list-style">
 <li>
-<div id="astm_C1036">
-[1]: ASTM C1036-16. <em>Standard specification for Flat Glass</em>. West Conshohocken, PA: ASTM International, 2016. www.astm.org.
+<div id="astm2009">
+[1]: ASTM. <em>Standard Practice for Determining Load Resistance of Glass in Buildings</em>. <em>Standard E1300-09a</em>. ASTM International, 2009. www.astm.org.
 </div>
 </li>
 <li>
-<div id="astm_C1048">
-[2]: ASTM C1048-04. <em>Specification for Heat-Treated Flat Glass-Kind HS, Kind FT Coated and Uncoated Glass</em>. West Conshohocken, PA: ASTM International, 2009. www.astm.org.
+<div id="astm2012">
+[2]: ASTM. <em>Standard Specification for Heat-Strengthened and Fully Tempered Flat Glass</em>. West Conshohocken, PA: ASTM International, 2012. https://doi.org/10.1520/C1048-12E01.
 </div>
 </li>
 <li>
-<div id="astm_LR2009">
-[3]: ASTM E1300-09. <em>Standard Practice for Determining Load Resistance of Glass in Buildings</em>. <em>Standard E1300-09a</em>. ASTM International, 2009. www.astm.org.
+<div id="astm2016">
+[3]: ASTM. <em>Standard specification for Flat Glass</em>. West Conshohocken, PA: ASTM International, 2016. https://doi.org/10.1520/C1036-16.
 </div>
 </li>
 <li>
-<div id="glThick1998">
+<div id="beasonEtAl1998">
 [4]: Beason, W. Lynn, Kohutek, Terry L., and Bracci, Joseph M. <em>Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts</em>. <em>ASCE Library</em>. February, 1998. doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215).
 </div>
 </li>

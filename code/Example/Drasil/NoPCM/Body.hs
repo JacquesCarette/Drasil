@@ -34,7 +34,7 @@ import Drasil.NoPCM.IMods (eBalanceOnWtr)
 import Drasil.NoPCM.Unitals (temp_init)
 import Drasil.SWHS.References (ref2, ref3, ref4)
 import Drasil.SWHS.Requirements (nonFuncReqs)
-import Drasil.SWHS.LikelyChanges (likeChg2, likeChg3, likeChg6)
+import Drasil.SWHS.Changes (likeChg2, likeChg3, likeChg6)
 
 import Data.Drasil.People (thulasi)
 import Data.Drasil.Utils (enumSimple, getES, refFromType,
@@ -43,7 +43,7 @@ import Data.Drasil.Citations (parnasClements1986, smithLai2005)
 
 import Data.Drasil.Concepts.Documentation as Doc (datumConstraint, inModel,
   requirement, section_, traceyGraph, item, assumption, dataDefn,
-  likelyChg, genDefn, thModel, traceyMatrix, model, 
+  likelyChg, unlikelyChg, genDefn, thModel, traceyMatrix, model, 
   output_, quantity, input_, physicalConstraint, condition,
   property, variable, description, symbol_,
   information, value, column, softwareConstraint, goalStmt,

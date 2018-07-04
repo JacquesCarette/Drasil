@@ -60,7 +60,8 @@ import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
 import Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq, t1IsSafe, t2IsSafe)
-import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr, probOfBreak, calofCapacity, calofDemand)
+import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr, probOfBreak, 
+  calofCapacity, calofDemand)
 
 import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad, 
   lateralLoad, sflawParamM, char_weight, sD, demand, demandq, 
@@ -73,13 +74,13 @@ import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad,
   constant_LoadDF)
 
 import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.Sections.SpecificSystemDescription (solChSpecF,
-  inDataConstTbl, outDataConstTbl, dataConstraintUncertainty, goalStmtF,
-  physSystDesc, termDefnF, probDescF, specSysDesF)
+import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, 
+  outDataConstTbl, dataConstraintUncertainty, goalStmtF, physSystDesc, termDefnF, 
+  probDescF)
 import Drasil.Sections.TraceabilityMandGs (traceGIntro)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.People (spencerSmith, nikitha, mCampidelli)
-import Data.Drasil.Phrase(for'')
+import Data.Drasil.Phrase (for'')
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, newton, pascal, 
   second)
 

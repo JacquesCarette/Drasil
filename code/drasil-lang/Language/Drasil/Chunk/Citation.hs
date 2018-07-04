@@ -126,7 +126,7 @@ data CitationKind = Article
 -- Implicitly uses the EntryID as the chunk i.
 cArticle :: String -> People -> Sentence -> Sentence -> Int -> [CiteField] -> Citation
 cArticle i aut t journ yr opt = cite i Article $
-  (author aut) : (title t) : (journal journ) : (year yr) : opt
+  author aut : title t : journal journ : year yr : opt
 
 -- | Book citation requires author or editor, title, publisher, year.
 -- Optional fields can be volume or number, series, address, edition, month, and note.

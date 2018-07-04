@@ -387,7 +387,7 @@ htWtrDesc = foldlSent [S "The above", phrase equation,
 heatEInPCM_new :: InstanceModel
 heatEInPCM_new = im heatEInPCM [qw temp_melt_P, qw time_final, qw temp_init, qw pcm_SA,
  qw pcm_HTC, qw pcm_mass, qw htCap_S_P, qw htCap_L_P, qw temp_PCM, qw htFusion, qw t_init_melt]
-  [TCon AssumedCon $ sy temp_init $< sy temp_C] (qw temp_W)
+  [TCon AssumedCon $ sy temp_init $< sy temp_melt_P] (qw pcm_E)
    [TCon AssumedCon $ 0 $< sy time $< sy time_final] [] "heatEInPCM" [htPCMDesc]
 
 heatEInPCM :: RelationConcept

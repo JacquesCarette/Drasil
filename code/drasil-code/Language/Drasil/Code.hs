@@ -26,7 +26,9 @@ module Language.Drasil.Code (
   cSharpLabel, cppLabel, goolLabel, javaLabel, objectiveCLabel, pythonLabel, luaLabel,
   makeCode, createCodeFiles, toAbsCode, getClassName, buildModule, moduleName,
   Options(..),
-  CodeSpec, codeSpec, Func, Mod
+  Choices(..), CodeSpec, Comments(CommentNone), ConstraintBehaviour(Warning), Func, 
+  ImplementationType(Program), Lang(..), Logging(LogNone), Mod, Structure(AsClass), codeSpec,
+  gen
 ) where
 
 import Prelude hiding (break, print, return, log, exp)
@@ -34,4 +36,6 @@ import Language.Drasil.Code.Imperative.AST
 import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser
 import Language.Drasil.Code.CodeGeneration
-import Language.Drasil.CodeSpec (CodeSpec, Func, Mod, codeSpec)
+import Language.Drasil.CodeSpec (Choices(..), CodeSpec, Comments(..), ConstraintBehaviour(..), Func, 
+  ImplementationType(..), Lang(..), Logging(..), Mod, Structure(..), codeSpec)
+import Language.Drasil.Generate (gen)

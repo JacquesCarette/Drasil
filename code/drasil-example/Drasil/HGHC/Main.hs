@@ -1,6 +1,7 @@
 module Main (main) where
 
 import Language.Drasil
+import Language.Drasil.Code hiding (for)
 
 import Drasil.HGHC.HGHC (allSymbols, srsBody)
 

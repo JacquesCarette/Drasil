@@ -12,6 +12,7 @@ import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latent_heat)
 import Data.Drasil.Utils (mkDataDef)
 
+ddRef :: QDefinition -> Sentence
 ddRef = refDD (ddRefDB swhsRefMDB)
 
 swhsRefMDB :: ModelDB

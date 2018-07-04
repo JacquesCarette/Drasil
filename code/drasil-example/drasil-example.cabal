@@ -187,7 +187,8 @@ executable glassbr
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
     drasil-lang >= 0.1.0,
-    drasil-data >= 0.1.0
+    drasil-data >= 0.1.0,
+    drasil-code >= 0.1.0    
   default-language: Haskell2010
   ghc-options:      -Wall
 
@@ -230,7 +231,8 @@ executable chipmunkdocs
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
     drasil-lang >= 0.1.0,
-    drasil-data >= 0.1.0
+    drasil-data >= 0.1.0,
+    drasil-code >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall
 
@@ -277,7 +279,8 @@ executable swhs
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
     drasil-lang >= 0.1.0,
-    drasil-data >= 0.1.0
+    drasil-data >= 0.1.0,
+    drasil-code >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall
 

@@ -1,6 +1,7 @@
 module Drasil.GlassBR.Symbols where
 
 import Language.Drasil
+import Language.Drasil.Code (Mod(Mod), asVC)
 
 import Drasil.GlassBR.ModuleDefs (allMods, implVars)
 import Drasil.GlassBR.Unitals (gbInputDataConstraints, gbInputs, 

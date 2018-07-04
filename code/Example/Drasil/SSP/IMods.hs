@@ -66,10 +66,9 @@ sspIMods_new = [fctSfty_new, nrmShrFor_new, intsliceFs_new, forDisEqlb_new,
 
 --
 fctSfty_new :: InstanceModel
-fctSfty_new = im fctSfty [qw fs, qw shearRNoIntsl, qw shearFNoIntsl, qw index,
- qw numbSlices, qw mobShrC, qw varblU, qw shrResC, qw varblV]
-  [TCon AssumedCon $ sy fs $< sy fs] (qw fs)
-   [TCon AssumedCon $ 0 $< sy fs $< sy fs] fctSfty_deriv_ssp "fctSfty" [fcSfty_desc]
+fctSfty_new = im fctSfty [qw shearRNoIntsl, qw shearFNoIntsl,
+ qw mobShrC, qw shrResC, qw varblV]
+  [] (qw fs) [] fctSfty_deriv_ssp "fctSfty" [fcSfty_desc]
 
 fctSfty :: RelationConcept
 fctSfty = makeRC "fctSfty" factorOfSafety fcSfty_desc fcSfty_rel 

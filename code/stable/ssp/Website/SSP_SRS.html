@@ -1261,7 +1261,7 @@ There are no system constraints.
 Specific System Description
 </h1>
 <p class="paragraph">
-This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, theoretical models, general definitions, data definitions, and finally the instance models (ODEs) that model the slope stability analysis.
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used for the slope stability analysis.
 </p>
 <div id="Sec:ProbDesc">
 <div class="subsection">
@@ -1380,60 +1380,6 @@ The instance models that govern SSA are presented in <a href=#Sec:IMs>Instance M
 Assumptions
 </h3>
 <p class="paragraph">
-<<<<<<< HEAD
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], or Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], in which the respective assumption is used.
-</p>
-<a id="A:assump1">
-<ul>
-assump1: The slip surface is concave with respect to the slope surface. The <em>(x,y)</em> coordinates of the failure surface follow a monotonic function.
-</ul>
-</a>
-<a id="A:assump2">
-<ul>
-assump2: The geometry of the slope, and the material properties of the soil layers are given as inputs.
-</ul>
-</a>
-<a id="A:assump3">
-<ul>
-assump3: The different layers of the soil are homogeneous, with consistent soil properties throughout, and independent of dry or saturated conditions, with the exception of unit weight.
-</ul>
-</a>
-<a id="A:assump4">
-<ul>
-assump4: Soil layers are treated as if they have isotropic properties.
-</ul>
-</a>
-<a id="A:assump5">
-<ul>
-assump5: Interslice normal and shear forces have a linear relationship, proportional to a constant (<em>&lambda;</em>) and an interslice force function (<em>f</em>) depending on x position.
-</ul>
-</a>
-<a id="A:assump6">
-<ul>
-assump6: Slice to base normal and shear forces have a linear relationship, dependent on the factor of safety <em>FS</em>, and the Coulomb sliding law.
-</ul>
-</a>
-<a id="A:assump7">
-<ul>
-assump7: The stress - strain curve for interslice relationships is linear with a constant slope.
-</ul>
-</a>
-<a id="A:assump8">
-<ul>
-assump8: The slope and slip surface extends far into and out of the geometry (z coordinate). This implies plane strain conditions, making 2D analysis appropriate.
-</ul>
-</a>
-<a id="A:assump9">
-<ul>
-assump9: The effective normal stress is large enough that the resistive shear to effective normal stress relationship can be approximated as a linear relationship.
-</ul>
-</a>
-<a id="A:assump10">
-<ul>
-assump10: The surface and base of a slice between interslice nodes are approximated as straight lines.
-</ul>
-</a>
-=======
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], or Unlikely Changes [<a href=#Sec:UCs>Unlikely Changes</a>], in which the respective assumption is used.
 </p>
 <ul class="hide-list-style">
@@ -1447,7 +1393,6 @@ Slip-Surface-Concave: The slip surface is concave with respect to the slope surf
 <li>
 <div id="A:Geo-Slope-Mat-Props-of-Soil-Inputs">
 Geo-Slope-Mat-Props-of-Soil-Inputs: The geometry of the slope, and the material properties of the soil layers are given as inputs.
->>>>>>> master
 </div>
 </li>
 </ul>
@@ -1517,7 +1462,7 @@ Theoretical Models
 <p class="paragraph">
 This section focuses on the general equations and laws that SSA is based on.
 </p>
-<div id="T:fs.rc">
+<div id="T:fs_rc">
 <table class="tdefn">
 <tr>
 <th>
@@ -1554,15 +1499,9 @@ Description
 </th>
 <td>
 <div class="list">
-<p>
-<em>FS</em> is the factor of safety (Unitless)
-</p>
-<p>
-<em>P</em> is the resistive shear force (N)
-</p>
-<p>
-<em>S</em> is the mobilized shear force (N)
-</p>
+<em>FS</em> is the factor of safety (Unitless) <br />
+<em>P</em> is the resistive shear force (N) <br />
+<em>S</em> is the mobilized shear force (N) <br />
 </div>
 </td>
 </tr>
@@ -1583,6 +1522,16 @@ RefBy
 <td>
 <p class="paragraph">
 FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+The stability metric of the slope, known as the factor of safety (<em>FS</em>), is determined by the ratio of the shear force at the base of the slope (<em>S</em>), and the resistive shear (<em>P</em>).
 </p>
 </td>
 </tr>
@@ -1618,15 +1567,9 @@ Description
 </th>
 <td>
 <div class="list">
-<p>
-<em>F<sub>x</sub></em> is the x-component of the net force (N)
-</p>
-<p>
-<em>F<sub>y</sub></em> is the y-component of the net force (N)
-</p>
-<p>
-<em>M</em> is the moment of a body (N&sdot;m)
-</p>
+<em>F<sub>x</sub></em> is the x-component of the net force (N) <br />
+<em>F<sub>y</sub></em> is the y-component of the net force (N) <br />
+<em>M</em> is the moment (N&sdot;m) <br />
 </div>
 </td>
 </tr>
@@ -1646,11 +1589,17 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<<<<<<< HEAD
 FIXME: This needs to be filled in
-=======
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
 For a body in static equilibrium, the net forces and net moments acting on the body will cancel out. Assuming a 2D problem (<a href=#A:Plane-Strain-Conditions>Plane-Strain-Conditions</a>) the x-component of the net force <em>F<sub>x</sub></em> and y-component of the net force <em>F<sub>y</sub></em> will be equal to <em>0</em>. All forces and their distance from the chosen point of rotation will create a net moment equal to <em>0</em>.
->>>>>>> master
 </p>
 </td>
 </tr>
@@ -1675,13 +1624,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<<<<<<< HEAD
-<em>&tau; = &sigma;&#8239;tan(&phiv;&prime;)&plus;c&prime;</em>
-=======
-<p class="paragraph">
 <em>τ = σ&#8239;tan(φ&prime;)&plus;c&prime;</em>
-</p>
->>>>>>> master
 </div>
 </div>
 </td>
@@ -1692,18 +1635,10 @@ Description
 </th>
 <td>
 <div class="list">
-<p>
-<em>&tau;</em> is the resistive shear stress (Pa)
-</p>
-<p>
-<em>&sigma;</em> is the normal stress (Pa)
-</p>
-<p>
-<em>&phiv;&prime;</em> is the effective angle of friction (&deg;)
-</p>
-<p>
-<em>c&prime;</em> is the effective cohesion (Pa)
-</p>
+<em>τ</em> is the resistive shear stress (Pa) <br />
+<em>σ</em> is the normal stress (Pa) <br />
+<em>φ&prime;</em> is the effective angle of friction (&deg;) <br />
+<em>c&prime;</em> is the effective cohesion (Pa) <br />
 </div>
 </td>
 </tr>
@@ -1723,11 +1658,17 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<<<<<<< HEAD
 FIXME: This needs to be filled in
-=======
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
 For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the resistive shear stress <em>τ</em> is proportional to the product of the normal stress on the plane <em>σ</em> with it's static friction in the angular form <em>tan(φ&prime;) = U<sub>t</sub></em>. The <em>τ</em> versus <em>σ</em> relationship is not truly linear, but assuming the effective normal force is strong enough, it can be approximated with a linear fit (<a href=#A:Effective-Norm-Stress-Large>Effective-Norm-Stress-Large</a>) where the cohesion <em>c&prime;</em> represents the <em>τ</em> intercept of the fitted line.
->>>>>>> master
 </p>
 </td>
 </tr>
@@ -1752,13 +1693,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<<<<<<< HEAD
-<em>&sigma; = &sigma;&minus;&mu;</em>
-=======
-<p class="paragraph">
 <em>σ = σ&minus;μ</em>
-</p>
->>>>>>> master
 </div>
 </div>
 </td>
@@ -1769,12 +1704,8 @@ Description
 </th>
 <td>
 <div class="list">
-<p>
-<em>&sigma;</em> is the normal stress (Pa)
-</p>
-<p>
-<em>&mu;</em> is the pore pressure (Pa)
-</p>
+<em>σ</em> is the normal stress (Pa) <br />
+<em>μ</em> is the pore pressure (Pa) <br />
 </div>
 </td>
 </tr>
@@ -1794,11 +1725,17 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<<<<<<< HEAD
 FIXME: This needs to be filled in
-=======
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
 <em>σ</em> is the total stress a soil mass needs to maintain itself as a rigid collection of particles. The source of the stress can be provided by the soil skeleton <em>σ</em>, or by the pore pressure from water within the soil <em>μ</em>. The stress from the soil skeleton is known as the effective stress <em>σ</em> and is the difference between the total stress <em>σ</em> and the pore stress <em>μ</em>.
->>>>>>> master
 </p>
 </td>
 </tr>
@@ -1823,13 +1760,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<<<<<<< HEAD
-<em>F = K&#8239;&delta;</em>
-=======
-<p class="paragraph">
 <em>F = K&#8239;δ</em>
-</p>
->>>>>>> master
 </div>
 </div>
 </td>
@@ -1840,15 +1771,9 @@ Description
 </th>
 <td>
 <div class="list">
-<p>
-<em>F</em> is the force (N)
-</p>
-<p>
-<em>K</em> is the stiffness (N/m)
-</p>
-<p>
-<em>&delta;</em> is the displacement (m)
-</p>
+<em>F</em> is the force (N) <br />
+<em>K</em> is the stiffness (N/m) <br />
+<em>δ</em> is the displacement (m) <br />
 </div>
 </td>
 </tr>
@@ -1868,11 +1793,17 @@ RefBy
 </th>
 <td>
 <p class="paragraph">
-<<<<<<< HEAD
 FIXME: This needs to be filled in
-=======
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
 Stiffness <em>K</em> is the resistance of a body to deformation by displacement <em>δ</em> when subject to a force <em>F</em>, along the same direction. A body with high stiffness will experience little deformation when subject to a force.
->>>>>>> master
 </p>
 </td>
 </tr>

@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs #-}
 module Language.Drasil.CodeSpec where
 
-import Language.Drasil.Classes (term, CommonIdea, ExprRelat(relat))
+import Language.Drasil.Classes (term, CommonIdea, ExprRelat(relat), HasLabel(getLabel))
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity -- for hack
@@ -22,6 +22,7 @@ import Language.Drasil.Code.Imperative.Lang
 import qualified Data.Map as Map
 import Control.Lens ((^.))
 import Data.List (nub, delete, (\\))
+import Language.Drasil.Label.Core (Label)
 
 import Prelude hiding (const)
 
@@ -151,11 +152,11 @@ defaultChoices = Choices {
 type Name = String
 
 -- medium hacks ---
-relToQD :: (ExprRelat c, HasShortName c, HasSymbolTable ctx) => ctx -> c -> QDefinition
-relToQD sm r = convertRel sm (r ^. relat) (shortname r)
+relToQD :: (ExprRelat c, HasLabel c, HasSymbolTable ctx) => ctx -> c -> QDefinition
+relToQD sm r = convertRel sm (r ^. relat) (r ^. getLabel)
 
-convertRel :: (HasSymbolTable ctx) => ctx -> Expr -> ShortName -> QDefinition
-convertRel sm (BinaryOp Eq (C x) r) sn = ec (symbLookup x (sm ^. symbolTable)) r sn
+convertRel :: (HasSymbolTable ctx) => ctx -> Expr -> Label -> QDefinition
+convertRel sm (BinaryOp Eq (C x) r) lbe = ec (symbLookup x (sm ^. symbolTable)) r lbe
 convertRel _ _ _ = error "Conversion failed"
 
 data Mod = Mod Name [Func]

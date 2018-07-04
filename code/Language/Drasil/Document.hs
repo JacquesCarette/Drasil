@@ -106,6 +106,7 @@ data LabelledContent = LblC { _uniqueID :: UID
                             }
 makeLenses ''LabelledContent
 
+instance HasUID        LabelledContent where uid = uniqueID
 instance HasRefAddress LabelledContent where getRefAdd = lbl . getRefAdd
 instance HasLabel      LabelledContent where getLabel = lbl
 instance HasShortName  LabelledContent where shortname = lbl . shortname

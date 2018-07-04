@@ -19,7 +19,6 @@ import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.UID
 
 import Control.Lens ((^.), makeLenses)
-import Language.Drasil.Label.Core (Label)
 
 data ListType = Bullet [ItemType] -- ^ Bulleted list
               | Numeric [ItemType] -- ^ Enumerated List
@@ -140,9 +139,12 @@ mkTableLC :: String -> String -> String -> String -> Contents -> LabelledContent
 mkTableLC uidForContent labelUID refAdd sn tbl = llcc uidForContent 
   (mkLabelRA labelUID refAdd sn) tbl
 
+mkDefinitionLC :: String -> String -> String -> String -> Contents -> LabelledContent
+mkDefinitionLC uidForContent labelUID refAdd sn dfn = llcc uidForContent 
+  (mkLabelRA labelUID refAdd sn) dfn
+
 {-mkParagraph
 mkEqnBlock
-mkDefinition
 mkEnumeration
 mkFigure
 mkRequirement

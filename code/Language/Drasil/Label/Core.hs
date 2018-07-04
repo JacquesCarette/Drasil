@@ -22,6 +22,5 @@ data Label = Lbl
   }
 makeLenses ''Label
 
-
 instance HasShortName Label where shortname = sn
 --instance HasShortName (Maybe Label) where shortname = sn

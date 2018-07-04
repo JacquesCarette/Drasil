@@ -42,6 +42,7 @@ module Language.Drasil (
   , HasReasVal(reasVal)
   , ExprRelat(relat)
   , HasDerivation(derivations)
+  , HasLabel(getLabel)
   -- Chunk.VarChunk
   , VarChunk
   , vc, implVar
@@ -192,6 +193,8 @@ module Language.Drasil (
   , PhysSystDesc, pSysDes, psd
   -- RefTypes
   , RefAdd
+  -- Label
+  , Label
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -221,7 +224,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
   IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes),
   Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations),
-  HasReference(getReferences))
+  HasReference(getReferences), HasLabel(getLabel))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Derivation (Derivation)
@@ -299,3 +302,4 @@ import Language.Drasil.CodeSpec hiding (outputs, inputs)
 import Language.Drasil.DataDesc
 import Language.Drasil.Code.Imperative.Lang
 import Language.Drasil.RefTypes(RefAdd)
+import Language.Drasil.Label.Core (Label)

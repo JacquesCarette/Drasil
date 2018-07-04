@@ -27,7 +27,8 @@ module Language.Drasil.Code (
   makeCode, createCodeFiles, toAbsCode, getClassName, buildModule, moduleName,
   Options(..),
   Choices(..), CodeSpec, Comments(CommentNone), ConstraintBehaviour(Warning), Func, 
-  ImplementationType(..), Lang(..), Logging(LogNone), Mod(Mod), Structure(..), codeSpec, funcData, 
+  ImplementationType(..), Lang(..), Logging(LogNone), Mod(Mod), Structure(..), codeSpec, 
+  funcData, packmod, 
   gen, genCode, junkLine, singleton
 ) where
 
@@ -38,5 +39,5 @@ import Language.Drasil.Code.Imperative.Parsers.ConfigParser
 import Language.Drasil.Code.CodeGeneration
 import Language.Drasil.Code.DataDesc (junkLine, singleton)
 import Language.Drasil.CodeSpec (Choices(..), CodeSpec, Comments(..), ConstraintBehaviour(..), Func, 
-  ImplementationType(..), Lang(..), Logging(..), Mod(Mod), Structure(..), codeSpec, funcData)
+  ImplementationType(..), Lang(..), Logging(..), Mod(Mod), Structure(..), codeSpec, funcData, packmod)
 import Language.Drasil.Generate (gen, genCode)

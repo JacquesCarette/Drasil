@@ -5,6 +5,7 @@
 module Drasil.GlassBR.ModuleDefs (allMods, implVars) where
 
 import Language.Drasil
+import Language.Drasil.Code (Func, Mod, funcData, junkLine, packmod, singleton)
 
 import Drasil.GlassBR.Unitals (char_weight, glass_type, nom_thick, pb_tol, 
   plate_len, plate_width, sdx, sdy, sdz, tNT)

@@ -1,6 +1,7 @@
 module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap) where
 
 import Language.Drasil hiding (organization)
+import Language.Drasil.Code (CodeSpec, codeSpec)
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
 

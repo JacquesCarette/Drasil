@@ -1,6 +1,6 @@
 module Drasil.SSP.DataDesc (sspInputMod) where
 
-import Language.Drasil
+import Language.Drasil.Code (Func, Mod(Mod), funcData, junkLine, singleton)
 --import Drasil.SSP.Unitals (elasticMod, cohesion,
   --poissnsRatio, fricAngle, dryWeight, satWeight, waterWeight)
 

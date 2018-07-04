@@ -5,9 +5,8 @@ import Language.Drasil
 import Drasil.GlassBR.Assumptions (gbRefDB, newA1, newA2)
 import Drasil.GlassBR.Concepts (glassTypeFac, lResistance, lShareFac)
 import Drasil.GlassBR.DataDefs (glaTyFac, nonFL, risk)
-import Drasil.GlassBR.Unitals (char_weight, demand, demandq, eqTNTWeight, lRe, 
-  loadSF, prob_br, risk_fun, sdVectorSent, sdWithEqn, standOffDist, tNT,
-  wtntWithEqn)
+import Drasil.GlassBR.Unitals (demand, demandq, eqTNTWeight, lRe, loadSF, 
+  prob_br, risk_fun, sdVectorSent, sdWithEqn, standOffDist, wtntWithEqn)
 
 import Drasil.DocumentLanguage.RefHelpers (refA)
 

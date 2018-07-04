@@ -26,10 +26,11 @@ module Language.Drasil.Code (
   cSharpLabel, cppLabel, goolLabel, javaLabel, objectiveCLabel, pythonLabel, luaLabel,
   makeCode, createCodeFiles, toAbsCode, getClassName, buildModule, moduleName,
   Options(..),
-  Choices(..), CodeSpec, Comments(CommentNone), ConstraintBehaviour(Warning), Func, 
-  ImplementationType(..), Lang(..), Logging(LogNone), Mod(Mod), Structure(..), codeSpec, 
-  funcData, packmod, 
-  gen, genCode, junkLine, singleton
+  ($:=), Choices(..), CodeSpec, Comments(CommentNone), ConstraintBehaviour(Warning), Func, 
+  FuncStmt(..), ImplementationType(..), Lang(..), Logging(LogNone), Mod(Mod), Structure(..),
+  asExpr, codeSpec, fdec, ffor, funcData, funcDef, packmod, 
+  gen, genCode, 
+  Ind(..), junk, junkLine, listEntry, multiLine, repeated, singleLine, singleton
 ) where
 
 import Prelude hiding (break, print, return, log, exp)
@@ -37,7 +38,8 @@ import Language.Drasil.Code.Imperative.AST
 import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser
 import Language.Drasil.Code.CodeGeneration
-import Language.Drasil.Code.DataDesc (junkLine, singleton)
-import Language.Drasil.CodeSpec (Choices(..), CodeSpec, Comments(..), ConstraintBehaviour(..), Func, 
-  ImplementationType(..), Lang(..), Logging(..), Mod(Mod), Structure(..), codeSpec, funcData, packmod)
+import Language.Drasil.Code.DataDesc (Ind(..), junk, junkLine, listEntry, multiLine, repeated, singleLine, singleton)
+import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec, Comments(..), ConstraintBehaviour(..), Func, 
+  FuncStmt(..), ImplementationType(..), Lang(..), Logging(..), Mod(Mod), Structure(..), asExpr, codeSpec, fdec, ffor, 
+  funcData, funcDef, packmod)
 import Language.Drasil.Generate (gen, genCode)

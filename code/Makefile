@@ -135,7 +135,18 @@ nopcm_prog: nopcm_build
 docs:
 	stack haddock drasil-code $(haddockArgs)
 
-clean: clean_logs
+clean: clean_build
+	stack clean
+	mkdir -p $(LANG_DIR)
+	cd $(LANG_DIR) && stack clean
+	mkdir -p $(CODE_DIR)
+	cd $(CODE_DIR) && stack clean
+	mkdir -p $(DATA_DIR)
+	cd $(DATA_DIR) && stack clean
+	mkdir -p $(EXAM_DIR)
+	cd $(EXAM_DIR) && stack clean
+
+clean_build: clean_logs
 	- rm -r ./build
 
 clean_logs:

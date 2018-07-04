@@ -9,7 +9,7 @@ import qualified Data.Map as Map
 import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
 import Language.Drasil.Chunk.Change as Ch (Change(..), ChngType(..))
 import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID))
-import Language.Drasil.Chunk.Concept (ConceptChunk)
+import Language.Drasil.Chunk.Concept (ConceptInstance)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
 import Language.Drasil.Chunk.Goal as G (Goal, refAddr)
@@ -45,7 +45,7 @@ type ChangeMap = RefMap Change
 -- | Citation Database (bibliography information)
 type BibMap = RefMap Citation
 -- | ConceptChunk Database
-type ConceptMap = RefMap ConceptChunk
+type ConceptMap = RefMap ConceptInstance
 
 
 -- | Database for internal references.
@@ -100,19 +100,19 @@ bibMap cs = Map.fromList $ zip (map (^. uid) scs) (zip scs [1..])
         -- (as it sorts them and would change the order).
         -- We can always change the sorting to whatever makes most sense
 
-conGrp :: ConceptChunk -> ConceptChunk -> Bool
+conGrp :: ConceptInstance -> ConceptInstance -> Bool
 conGrp a b = (cdl a) == (cdl b) where
-  cdl :: ConceptChunk -> UID
+  cdl :: ConceptInstance -> UID
   cdl x = sDom $ x ^. cdom where
     sDom [d] = d
     sDom d = error $ "Expected ConceptDomain for: " ++ (x ^. uid) ++
                      " to have a single domain, found " ++ (show $ length d) ++
                      " instead."
 
-conceptMap :: [ConceptChunk] -> ConceptMap
+conceptMap :: [ConceptInstance] -> ConceptMap
 conceptMap cs = Map.fromList $ zip (map (^. uid) (concat grp)) $ concatMap
   (\x -> zip x [1..]) grp
-  where grp :: [[ConceptChunk]]
+  where grp :: [[ConceptInstance]]
         grp = groupBy conGrp $ sortBy uidSort cs
 
 psdLookup :: HasUID c => c -> PhysSystDescMap -> (PhysSystDesc, Int)
@@ -151,8 +151,8 @@ citeLookup c m = getS $ Map.lookup (c ^. uid) m
         getS Nothing = error $ "Change: " ++ (c ^. uid) ++
           " referencing information not found in Change Map"
 
-conceptLookup :: HasUID c => c -> ConceptMap -> (ConceptChunk, Int)
-conceptLookup c = maybe (error $ "ConceptChunk: " ++ (c ^. uid) ++
+conceptLookup :: HasUID c => c -> ConceptMap -> (ConceptInstance, Int)
+conceptLookup c = maybe (error $ "ConceptInstance: " ++ (c ^. uid) ++
           " referencing information not found in Concept Map") id .
           Map.lookup (c ^. uid)
 

@@ -1,5 +1,7 @@
 module Drasil.GamePhysics.Body where
 
+import Language.Drasil hiding (Vector, organization)
+import Language.Drasil.Code (CodeSpec, codeSpec)
 import Control.Lens ((^.))
 
 import Data.Drasil.Concepts.Documentation (assumption, body,
@@ -41,8 +43,6 @@ import Drasil.Sections.SolutionCharacterSpec (SubSec, siUQI, siSent, siDDef,
 import Drasil.Sections.SpecificSystemDescription (specSysDescr, dataConstraintUncertainty,
   inDataConstTbl, outDataConstTbl)
 import Drasil.Sections.TraceabilityMandGs (traceMGF)
-
-import Language.Drasil hiding (organization)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, 
   dimension)

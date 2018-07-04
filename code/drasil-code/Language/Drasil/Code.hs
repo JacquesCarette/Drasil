@@ -27,7 +27,7 @@ module Language.Drasil.Code (
   makeCode, createCodeFiles, toAbsCode, getClassName, buildModule, moduleName,
   Options(..),
   Choices(..), CodeSpec, Comments(CommentNone), ConstraintBehaviour(Warning), Func, 
-  ImplementationType(Program), Lang(..), Logging(LogNone), Mod(Mod), Structure(..), codeSpec, funcData, 
+  ImplementationType(..), Lang(..), Logging(LogNone), Mod(Mod), Structure(..), codeSpec, funcData, 
   gen, genCode, junkLine, singleton
 ) where
 

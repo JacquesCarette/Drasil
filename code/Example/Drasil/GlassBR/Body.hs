@@ -121,10 +121,10 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
       , SSDSolChSpec 
         (SCSProg
           [ Assumptions
-          , TMs ([Label] ++ stdFields ++ [Notes]) [t1IsSafe, t2IsSafe]
+          , TMs ([Label] ++ stdFields) [t1IsSafe, t2IsSafe]
           , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
           , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields ++ [Notes]) [probOfBreak, calofCapacity, calofDemand, testIMFromQD] HideDerivation
+          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand, testIMFromQD] HideDerivation
           , Constraints (EmptyS) (dataConstraintUncertainty) 
                         (foldlSent [(makeRef (SRS.valsOfAuxCons SRS.missingP [])), S "gives", (plural value `ofThe` S "specification"), 
                         plural parameter, S "used in", (makeRef inputDataConstraints)] +:+ instance_models_intro2)
@@ -149,7 +149,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   AppndxSec (AppndxProg [appendix_intro, fig_5, fig_6]) : []
  
 stdFields :: Fields
-stdFields = [DefiningEquation, Description Verbose IncludeUnits, Source, RefBy]
+stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 glassSystInfo :: SystemInformation
 glassSystInfo = SI {

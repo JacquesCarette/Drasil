@@ -7,6 +7,7 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{unicode-math}
+\usepackage{enumitem}
 \usepackage{tabu}
 \usepackage{longtable}
 \usepackage{booktabs}
@@ -15,6 +16,8 @@
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
+\newlist{symbDescription}{description}{1}
+\setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \setmathfont{Latin Modern Math}
 \global\tabulinesep=1mm
 \newcounter{assumpnum}
@@ -353,17 +356,17 @@ Equation & \begin{dmath}
            \mathbf{F}=m \mathbf{a}
            \end{dmath}
 \\ \midrule \\
-Description & \begin{description}
+Description & \begin{symbDescription}
               \item{$\mathbf{F}$ is the force (N)}
               \item{$m$ is the mass (kg)}
               \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-              \end{description}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The net force $\mathbf{F}$ (N) on a rigid body is proportional to the acceleration $\mathbf{a}$ ($\frac{\text{m}}{\text{s}^{2}}$) of the rigid body, where $m$ (kg) denotes the mass of the rigid body as the constant of proportionality.
 \\ \midrule \\
 Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
-\\ \midrule \\
-Notes & The net force $\mathbf{F}$ (N) on a rigid body is proportional to the acceleration $\mathbf{a}$ ($\frac{\text{m}}{\text{s}^{2}}$) of the rigid body, where $m$ (kg) denotes the mass of the rigid body as the constant of proportionality.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -379,16 +382,16 @@ Equation & \begin{dmath}
            {\mathbf{F}_{1}}=-{\mathbf{F}_{2}}
            \end{dmath}
 \\ \midrule \\
-Description & \begin{description}
+Description & \begin{symbDescription}
               \item{${\mathbf{F}_{1}}$ is the force exerted by the first body (on another body) (N)}
               \item{${\mathbf{F}_{2}}$ is the force exerted by the second body (on another body) (N)}
-              \end{description}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & Every action has an equal and opposite reaction. In other words, the force ${\mathbf{F}_{1}}$ (N) exerted on the second rigid body by the first is equal in magnitude and in the opposite direction to the force ${\mathbf{F}_{2}}$ (N) exerted on the first rigid body by the second.
 \\ \midrule \\
 Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
-\\ \midrule \\
-Notes & Every action has an equal and opposite reaction. In other words, the force ${\mathbf{F}_{1}}$ (N) exerted on the second rigid body by the first is equal in magnitude and in the opposite direction to the force ${\mathbf{F}_{2}}$ (N) exerted on the first rigid body by the second.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -404,7 +407,7 @@ Equation & \begin{dmath}
            \mathbf{F}=G \frac{{m_{1}} {m_{2}}}{||\mathbf{r}||^{2}} \mathbf{\hat{r}}=G \frac{{m_{1}} {m_{2}}}{||\mathbf{r}||^{2}} \frac{\mathbf{r}}{||\mathbf{r}||}
            \end{dmath}
 \\ \midrule \\
-Description & \begin{description}
+Description & \begin{symbDescription}
               \item{$\mathbf{F}$ is the force (N)}
               \item{$G$ is the gravitational constant ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$)}
               \item{${m_{1}}$ is the mass of the first body (kg)}
@@ -412,13 +415,13 @@ Description & \begin{description}
               \item{$||\mathbf{r}||$ is the Euclidean norm of the displacement (m)}
               \item{$\mathbf{\hat{r}}$ is the displacement unit vector (m)}
               \item{$\mathbf{r}$ is the displacement (m)}
-              \end{description}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & Two rigid bodies in the universe attract each other with a force $\mathbf{F}$ (N) that is directly proportional to the product of their masses, ${m_{1}}$ and ${m_{2}}$ (kg), and inversely proportional to the squared distance ${||\mathbf{r}||^{2}}$ ($\text{m}^{2}$) between them. The vector $\mathbf{r}$ (m) is the displacement between the centres of the rigid bodies and $||\mathbf{r}||$ (m) represents the Euclidean norm of the displacement, or absolute distance between the two. $\mathbf{\hat{r}}$ denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, $G$ is the gravitational constant (6.673 * 10E-11) ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$).
 \\ \midrule \\
 Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
-\\ \midrule \\
-Notes & Two rigid bodies in the universe attract each other with a force $\mathbf{F}$ (N) that is directly proportional to the product of their masses, ${m_{1}}$ and ${m_{2}}$ (kg), and inversely proportional to the squared distance ${||\mathbf{r}||^{2}}$ ($\text{m}^{2}$) between them. The vector $\mathbf{r}$ (m) is the displacement between the centres of the rigid bodies and $||\mathbf{r}||$ (m) represents the Euclidean norm of the displacement, or absolute distance between the two. $\mathbf{\hat{r}}$ denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, $G$ is the gravitational constant (6.673 * 10E-11) ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -434,18 +437,18 @@ Equation & \begin{dmath}
            {\mathbf{v}_{B}}={\mathbf{v}_{O}}+ω\times{\mathbf{r}_{OB}}
            \end{dmath}
 \\ \midrule \\
-Description & \begin{description}
+Description & \begin{symbDescription}
               \item{${\mathbf{v}_{B}}$ is the velocity at point B ($\frac{\text{m}}{\text{s}}$)}
               \item{${\mathbf{v}_{O}}$ is the velocity at point origin ($\frac{\text{m}}{\text{s}}$)}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
               \item{${\mathbf{r}_{OB}}$ is the displacement vector between the origin and point B (m)}
-              \end{description}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body is the sum of the linear velocity ${\mathbf{v}_{O}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{OB}}$ (m).
 \\ \midrule \\
 Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
-\\ \midrule \\
-Notes & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body is the sum of the linear velocity ${\mathbf{v}_{O}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{OB}}$ (m).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -461,17 +464,17 @@ Equation & \begin{dmath}
            τ=\mathbf{I} α
            \end{dmath}
 \\ \midrule \\
-Description & \begin{description}
+Description & \begin{symbDescription}
               \item{$τ$ is the torque (Nm)}
               \item{$\mathbf{I}$ is the moment of inertia (kg$\text{m}^{2}$)}
               \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
-              \end{description}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The net torque $τ$ (Nm) on a rigid body is proportional to its angular acceleration $α$ ($\frac{\text{rad}}{\text{s}^{2}}$). Here, $\mathbf{I}$ (kg$\text{m}^{2}$) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional (A2).
 \\ \midrule \\
 Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
-\\ \midrule \\
-Notes & The net torque $τ$ (Nm) on a rigid body is proportional to its angular acceleration $α$ ($\frac{\text{rad}}{\text{s}^{2}}$). Here, $\mathbf{I}$ (kg$\text{m}^{2}$) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional (A2).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{General Definitions}
@@ -515,20 +518,20 @@ Equation & \begin{dmath}
            {\mathbf{a}_{i}}=\frac{d\,{\mathbf{v}_{i}}\left(t\right)}{d\,t}=g+\frac{{\mathbf{F}_{i}}\left(t\right)}{{m_{j}}}
            \end{dmath}
 \\ \midrule \\
-Description & \begin{description}
+Description & \begin{symbDescription}
               \item{${\mathbf{a}_{i}}$ is the the i-th body's acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (s)}
               \item{${\mathbf{v}_{i}}$ is the velocity of the i-th body's velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${\mathbf{F}_{i}}$ is the force applied to the i-th body at time t (N)}
               \item{${m_{j}}$ is the mass of the j-th particle (kg)}
-              \end{description}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The above equation expresses the total acceleration of the rigid body (A1, A2) i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using DD2, DD3 and DD4. It is currently assumed that there is no damping (A6) or constraints (A7) involved.
 \\ \midrule \\
 Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
-\\ \midrule \\
-Notes & The above equation expresses the total acceleration of the rigid body (A1, A2) i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using DD2, DD3 and DD4. It is currently assumed that there is no damping (A6) or constraints (A7) involved.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -565,19 +568,19 @@ Equation & \begin{dmath}
            α=\frac{d\,ω\left(t\right)}{d\,t}=\frac{{τ_{i}}\left(t\right)}{\mathbf{I}}
            \end{dmath}
 \\ \midrule \\
-Description & \begin{description}
+Description & \begin{symbDescription}
               \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
               \item{$t$ is the time (s)}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
               \item{${τ_{i}}$ is the is the torque applied to the i-th body (Nm)}
               \item{$\mathbf{I}$ is the moment of inertia (kg$\text{m}^{2}$)}
-              \end{description}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved.
 \\ \midrule \\
 Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
-\\ \midrule \\
-Notes & The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -617,20 +620,20 @@ Equation & \begin{dmath}
            {\mathbf{v}_{A}}\left({t_{c}}\right)={\mathbf{v}_{A}}\left(t\right)+\frac{j}{{m_{A}}} \mathbf{n}
            \end{dmath}
 \\ \midrule \\
-Description & \begin{description}
+Description & \begin{symbDescription}
               \item{${\mathbf{v}_{A}}$ is the velocity at point A ($\frac{\text{m}}{\text{s}}$)}
               \item{${t_{c}}$ is the denotes the time at collision (s)}
               \item{$t$ is the time (s)}
               \item{$j$ is the impulse (scalar) (Ns)}
               \item{${m_{A}}$ is the mass of rigid body A (kg)}
               \item{$\mathbf{n}$ is the collision normal vector (m)}
-              \end{description}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & This instance model is based on our assumptions regarding rigid body (A1, A2) collisions (A5). Again, this does not take damping (A6) or constraints (A7) into account.
 \\ \midrule \\
 Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
-\\ \midrule \\
-Notes & This instance model is based on our assumptions regarding rigid body (A1, A2) collisions (A5). Again, this does not take damping (A6) or constraints (A7) into account.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Definitions}
@@ -653,12 +656,12 @@ Equation & \begin{dmath}
            {\mathbf{p}_{CM}}=\frac{\displaystyle\sum{{m_{j}} {\mathbf{p}_{j}}}}{M}
            \end{dmath}
 \\ \midrule \\
-Description & \begin{description}
+Description & \begin{symbDescription}
               \item{${\mathbf{p}_{CM}}$ is the the mass-weighted average position of a rigid body's particles (m)}
               \item{${m_{j}}$ is the mass of the j-th particle (kg)}
               \item{${\mathbf{p}_{j}}$ is the position vector of the j-th particle (m)}
               \item{$M$ is the total mass of the rigid body (kg)}
-              \end{description}
+              \end{symbDescription}
 \\ \midrule \\
 Source & 
 \\ \midrule \\
@@ -682,11 +685,11 @@ Equation & \begin{dmath}
            \mathbf{r}(t)=\frac{d\,\mathbf{p}\left(t\right)}{d\,t}
            \end{dmath}
 \\ \midrule \\
-Description & \begin{description}
+Description & \begin{symbDescription}
               \item{$\mathbf{r}(t)$ is the linear displacement (m)}
               \item{$t$ is the time (s)}
               \item{$\mathbf{p}$ is the position (m)}
-              \end{description}
+              \end{symbDescription}
 \\ \midrule \\
 Source & 
 \\ \midrule \\
@@ -710,11 +713,11 @@ Equation & \begin{dmath}
            \mathbf{v}(t)=\frac{d\,\mathbf{r}\left(t\right)}{d\,t}
            \end{dmath}
 \\ \midrule \\
-Description & \begin{description}
+Description & \begin{symbDescription}
               \item{$\mathbf{v}(t)$ is the linear velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$t$ is the time (s)}
               \item{$\mathbf{r}$ is the displacement (m)}
-              \end{description}
+              \end{symbDescription}
 \\ \midrule \\
 Source & 
 \\ \midrule \\
@@ -738,11 +741,11 @@ Equation & \begin{dmath}
            \mathbf{a}(t)=\frac{d\,\mathbf{v}\left(t\right)}{d\,t}
            \end{dmath}
 \\ \midrule \\
-Description & \begin{description}
+Description & \begin{symbDescription}
               \item{$\mathbf{a}(t)$ is the linear acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (s)}
               \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
-              \end{description}
+              \end{symbDescription}
 \\ \midrule \\
 Source & 
 \\ \midrule \\
@@ -766,11 +769,11 @@ Equation & \begin{dmath}
            θ=\frac{d\,ϕ\left(t\right)}{d\,t}
            \end{dmath}
 \\ \midrule \\
-Description & \begin{description}
+Description & \begin{symbDescription}
               \item{$θ$ is the angular displacement (rad)}
               \item{$t$ is the time (s)}
               \item{$ϕ$ is the orientation (rad)}
-              \end{description}
+              \end{symbDescription}
 \\ \midrule \\
 Source & 
 \\ \midrule \\
@@ -794,11 +797,11 @@ Equation & \begin{dmath}
            ω=\frac{d\,θ\left(t\right)}{d\,t}
            \end{dmath}
 \\ \midrule \\
-Description & \begin{description}
+Description & \begin{symbDescription}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
               \item{$t$ is the time (s)}
               \item{$θ$ is the angular displacement (rad)}
-              \end{description}
+              \end{symbDescription}
 \\ \midrule \\
 Source & 
 \\ \midrule \\
@@ -822,11 +825,11 @@ Equation & \begin{dmath}
            α=\frac{d\,ω\left(t\right)}{d\,t}
            \end{dmath}
 \\ \midrule \\
-Description & \begin{description}
+Description & \begin{symbDescription}
               \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
               \item{$t$ is the time (s)}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-              \end{description}
+              \end{symbDescription}
 \\ \midrule \\
 Source & 
 \\ \midrule \\
@@ -850,7 +853,7 @@ Equation & \begin{dmath}
            j=\frac{-\left(1+{C_{R}}\right) {{\mathbf{v}_{i}}^{AB}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{A}}}+\frac{1}{{m_{B}}}\right) ||\mathbf{n}||^{2}+\frac{||{\mathbf{r}_{AP}}*\mathbf{n}||^{2}}{{\mathbf{I}_{A}}}+\frac{||{\mathbf{r}_{BP}}*\mathbf{n}||^{2}}{{\mathbf{I}_{B}}}}
            \end{dmath}
 \\ \midrule \\
-Description & \begin{description}
+Description & \begin{symbDescription}
               \item{$j$ is the impulse (scalar) (Ns)}
               \item{${C_{R}}$ is the coefficient of restitution (Unitless)}
               \item{${{\mathbf{v}_{i}}^{AB}}$ is the relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
@@ -862,7 +865,7 @@ Description & \begin{description}
               \item{${\mathbf{I}_{A}}$ is the moment of inertia of rigid body A (kg$\text{m}^{2}$)}
               \item{$||{\mathbf{r}_{BP}}*\mathbf{n}||$ is the length of the perpendicular vector to the contact displacement vector of rigid body B (m)}
               \item{${\mathbf{I}_{B}}$ is the moment of inertia of rigid body B (kg$\text{m}^{2}$)}
-              \end{description}
+              \end{symbDescription}
 \\ \midrule \\
 Source & 
 \\ \midrule \\

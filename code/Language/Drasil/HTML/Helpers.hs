@@ -195,7 +195,12 @@ makeCSS _ = vcat [
   vcat [
     text "ul.hide-list-style {",
     text "  list-style-type: none;}"
-    ]
+    ],
+  vcat [
+    text "ul.hide-list-style-no-indent {",
+    text "  list-style-type: none;",
+    text "padding: 0;}"
+    ] 
   ]
 
 -- | Create the link to the necessary CSS file

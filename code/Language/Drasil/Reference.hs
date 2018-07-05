@@ -3,7 +3,7 @@ module Language.Drasil.Reference where
 
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
-import Data.List (concatMap, groupBy, partition, sortBy)
+import Data.List (concatMap, groupBy, partition, sort, sortBy)
 import qualified Data.Map as Map
 
 import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
@@ -95,7 +95,7 @@ changeMap cs = Map.fromList $ zip (map (^. uid) (lcs ++ ulcs))
 bibMap :: [Citation] -> BibMap
 bibMap cs = Map.fromList $ zip (map (^. uid) scs) (zip scs [1..])
   where scs :: [Citation]
-        scs = sortBy uidSort cs
+        scs = sort cs
         -- Sorting is necessary if using elems to pull all the citations
         -- (as it sorts them and would change the order).
         -- We can always change the sorting to whatever makes most sense
@@ -173,12 +173,12 @@ class HasConceptRefs s where
   conceptRefTable :: Simple Lens s ConceptMap
 
 instance HasGoalRefs ReferenceDB where goalRefTable = goalDB
-instance HasPSDRefs ReferenceDB where psdRefTable = physSystDescDB
-instance HasAssumpRefs ReferenceDB where assumpRefTable = assumpDB
-instance HasReqRefs ReferenceDB where reqRefTable = reqDB
-instance HasChangeRefs ReferenceDB where changeRefTable = changeDB
+instance HasPSDRefs      ReferenceDB where psdRefTable = physSystDescDB
+instance HasAssumpRefs   ReferenceDB where assumpRefTable = assumpDB
+instance HasReqRefs      ReferenceDB where reqRefTable = reqDB
+instance HasChangeRefs   ReferenceDB where changeRefTable = changeDB
 instance HasCitationRefs ReferenceDB where citationRefTable = citationDB
-instance HasConceptRefs ReferenceDB where conceptRefTable = conceptDB
+instance HasConceptRefs  ReferenceDB where conceptRefTable = conceptDB
 
 
 class Referable s where
@@ -267,7 +267,7 @@ uidSort :: HasUID c => c -> c -> Ordering
 uidSort = compare `on` (^. uid)
 
 citationsFromBibMap :: BibMap -> [Citation]
-citationsFromBibMap bm = sortBy uidSort citations
+citationsFromBibMap bm = sort citations
   where citations :: [Citation]
         citations = map (\(x,_) -> x) (Map.elems bm)
 

@@ -21,7 +21,7 @@ import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Chunk.SymbolForm (eqSymb)
 import Language.Drasil.ChunkDB (getUnitLup, HasSymbolTable(..),symbLookup)
 import Language.Drasil.Chunk.ReqChunk (requires)
-import Language.Drasil.Chunk.Citation ( Citation, CiteField(..), HP(..)
+import Language.Drasil.Chunk.Citation ( Citation, CiteField(..), HP(..), HasFields(getFields)
                                       , citeID, externRefT, fields)
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Expr.Extract
@@ -293,7 +293,7 @@ lay sm (Bib bib)              = T.Bib $ map (layCite sm) bib
 
 -- | For importing bibliography
 layCite :: HasSymbolTable ctx => ctx -> Citation -> P.Citation
-layCite sm c = P.Cite (citeID c) (externRefT c) (map (layField sm) (fields c))
+layCite sm c = P.Cite (citeID c) (externRefT c) (map (layField sm) (c ^. getFields))
 
 layField :: HasSymbolTable ctx => ctx -> CiteField -> P.CiteField
 layField sm (Address      s) = P.Address      $ spec sm s

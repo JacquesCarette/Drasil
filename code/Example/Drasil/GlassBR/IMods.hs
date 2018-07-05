@@ -62,8 +62,8 @@ capdescr =
   (S "In the development of this procedure, it was assumed that" +:+
   S "all four edges of the glass are simply supported and free to slip" +:+
   S "in the plane of the glass. This boundary condition has been shown" +:+
-  S "to be typical of many glass installations")) +:+ S "from [4 (pg. 53)]"
-  {-astm_LR2009-}]
+  S "to be typical of many glass installations")) +:+ S "from [1 (pg. 53)]"
+  {-astm2009-}]
 
 {--}
 

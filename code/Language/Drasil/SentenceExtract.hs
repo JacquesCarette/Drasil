@@ -44,13 +44,19 @@ getCon (EqnBlock _ _) = []
 getCon (Definition d) = getDtype d
 getCon (Enumeration lst) = getLT lst
 getCon (Figure l _ _ _) = [l]
-getCon (Requirement reqc) = getReq reqc 
+getCon (Requirement reqc) = getReq reqc
 getCon (Assumption assc) = getAss assc
 getCon (Change chg) = getChg chg
 getCon (Bib bref) = getBib bref
 getCon (Graph [(s1, s2)] _ _ l _) = s1 : s2 : [l]
-getCon (Defnt dt [(_, con)] _) = getDtype dt ++ concatMap getCon con
-getCon _ = []
+-- | Defnt DType [(Identifier, [Contents])] RefAdd
+--getCon (Defnt Instance ((_, [con]):fs) a) = (concatMap getCon [con]) ++ getCon (Defnt Instance fs a)
+--getCon (Defnt Instance ((_, _):fs) a) = getCon (Defnt Instance fs a)
+--getCon (Defnt Instance [] a) = []
+getCon (Defnt dt ((b, con):fs) a) = (concatMap getCon con) ++ getCon (Defnt dt fs a) 
+getCon (Defnt dt [] a) = [] ++ getDtype dt 
+getCon (_) = []
+
 
 getDtype :: DType -> [Sentence]
 getDtype (Data q) = getQDef q

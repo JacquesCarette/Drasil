@@ -12,6 +12,7 @@ import Language.Drasil.Symbol (Symbol,Stage)
 import Language.Drasil.Space (Space)
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Unit(UnitDefn)
+import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
 
 -- | A Quantity is an 'Idea' with a 'Space' and a symbol and 
 -- may have units

@@ -22,10 +22,9 @@ import Control.Lens ((^.))
 -- DATA DEFINITIONS --
 ----------------------
 
-dim_maxDD :: DataDefinition
-dim_maxDD = mkDD dim_max [{-references-}] [{-derivation-}] ""{-temporary-} Nothing
-
 --dataDefns :: [DataDefinition] 
+--dataDefns = [riskDD, hFromtDD, strDisFacDD, nonFLDD, glaTyFacDD, dimLLDD,
+--  tolPreDD, tolStrDisFacDD]
 dataDefns :: [QDefinition]
 dataDefns = [risk, hFromt, strDisFac, nonFL, glaTyFac, dimLL, tolPre,
   tolStrDisFac]
@@ -46,6 +45,11 @@ risk_eq = ((sy sflawParamK) /
 -- FIXME [4] !!!
 risk :: QDefinition
 risk = mkDataDef' risk_fun risk_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ jRef) [sourceref $ S "[4]"]
+--risk = mkDataDef risk_fun risk_eq
+
+riskDD :: DataDefinition
+riskDD = mkDD risk [sourceref $ S "[4]"] [{-derivation-}] ""{-temporary-} 
+  (Just $ aGrtrThanB : hRef : ldfRef : jRef : [])
 
 --DD2--
 
@@ -58,8 +62,13 @@ hFromt_helper result condition = (dbl result, (sy nom_thick) $= dbl condition)
 
 hFromt :: QDefinition
 hFromt = mkDataDef' act_thick hFromt_eq (hMin) []
+--hFromt = mkDataDef act_thick hFromt_eq
 
---DD3--
+hFromtDD :: DataDefinition
+hFromtDD = mkDD hFromt [{-references-}] [{-derivation-}] ""--temporary
+  (Just $ [hMin])
+
+--DD3-- (#749)
 
 -- loadDF_eq :: Expr 
 -- loadDF_eq = (sy load_dur / 60) $^ (sy sflawParamM / 16)
@@ -76,6 +85,11 @@ strDisFac_eq = apply (sy stressDistFac)
   
 strDisFac :: QDefinition
 strDisFac = mkDataDef' stressDistFac strDisFac_eq (jRef2 +:+ qHtRef +:+ aGrtrThanB) []
+--strDisFac = mkDataDef stressDistFac strDisFac_eq
+
+strDisFacDD :: DataDefinition
+strDisFacDD = mkDD strDisFac [{-references-}] [{-derivation-}] ""--temporary
+  (Just $ [jRef2] ++ [qHtRef] ++ [aGrtrThanB])
 
 --DD5--
 
@@ -85,6 +99,11 @@ nonFL_eq = ((sy tolLoad) * (sy mod_elas) * (sy act_thick) $^ 4) /
 
 nonFL :: QDefinition
 nonFL = mkDataDef' nonFactorL nonFL_eq (aGrtrThanB +:+ hRef +:+ qHtTlTolRef) []
+--nonFL = mkDataDef nonFactorL nonFL_eq
+
+nonFLDD :: DataDefinition
+nonFLDD = mkDD nonFL [{-references-}] [{-derivation-}] ""--temporary
+  (Just $ aGrtrThanB : hRef : qHtTlTolRef : [])
 
 --DD6--
 
@@ -97,6 +116,10 @@ glaTyFac_helper result condition = (int result, (sy glass_type) $= str condition
 glaTyFac :: QDefinition
 glaTyFac = mkDataDef gTF glaTyFac_eq
 
+glaTyFacDD :: DataDefinition
+glaTyFacDD = mkDD glaTyFac [{-references-}] [{-derivation-}] ""--temporary
+  Nothing
+
 --DD7--
 
 dimLL_eq :: Expr
@@ -105,6 +128,11 @@ dimLL_eq = ((sy demand) * (square (sy plate_len * sy plate_width)))
 
 dimLL :: QDefinition
 dimLL = mkDataDef' dimlessLoad dimLL_eq (qRef +:+ aGrtrThanB +:+ hRef +:+ gtfRef) []
+--dimLL = mkDataDef dimlessLoad dimLL_eq
+
+dimLLDD :: DataDefinition
+dimLLDD = mkDD dimLL [{-references-}] [{-derivation-}] ""--temporary
+  (Just $ qRef : aGrtrThanB : hRef : gtfRef : [])
 
 --DD8--
 
@@ -114,6 +142,11 @@ tolPre_eq = apply (sy tolLoad) [sy sdf_tol, (sy plate_len) / (sy plate_width)]
 
 tolPre :: QDefinition
 tolPre = mkDataDef' tolLoad tolPre_eq (qHtTlExtra) []
+--tolPre = mkDataDef tolLoad tolPre_eq
+
+tolPreDD :: DataDefinition
+tolPreDD = mkDD tolPre [{-references-}] [{-derivation-}] ""--temporary
+  (Just $ qHtTlExtra : [])
 
 --DD9--
 
@@ -125,8 +158,13 @@ tolStrDisFac_eq = log (log (1 / (1 - (sy pb_tol)))
 
 tolStrDisFac :: QDefinition
 tolStrDisFac = mkDataDef' sdf_tol tolStrDisFac_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ pbTolUsr) []
+--tolStrDisFac = mkDataDef sdf_tol tolStrDisFac_eq []
 
---Issue #350
+tolStrDisFacDD :: DataDefinition
+tolStrDisFacDD = mkDD tolStrDisFac [{-references-}] [{-derivation-}] ""--temporary
+  (Just $ aGrtrThanB : hRef : ldfRef : pbTolUsr : [])
+
+--Additional Notes--
 
 aGrtrThanB :: Sentence
 aGrtrThanB = ((getES plate_len) `sC` (getES plate_width) +:+ 

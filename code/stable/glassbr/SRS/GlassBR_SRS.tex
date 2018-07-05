@@ -131,6 +131,8 @@ ${SD_{y}}$ & Stand off distance (y-component) & m
 \\
 ${SD_{z}}$ & Stand off distance (z-component) & m
 \\
+$SD$ & Stand off distance & m
+\\
 $t$ & Nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ & mm
 \\
 ${t_{d}}$ & Duration of load & s
@@ -671,6 +673,35 @@ Source &
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:sd}
+\phantomsection 
+\label{DD:sd}
+\\ \midrule \\
+Label & Stand off distance
+\\ \midrule \\
+Symbol & $SD$
+\\ \midrule \\
+Units & m
+\\ \midrule \\
+Equation & \begin{dmath}
+           SD=\sqrt{{SD_{x}}^{2}+{SD_{y}}^{2}+{SD_{z}}^{2}}
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$SD$ is the stand off distance (m)}
+              \item{${SD_{x}}$ is the stand off distance (x-component) (m)}
+              \item{${SD_{y}}$ is the stand off distance (y-component) (m)}
+              \item{${SD_{z}}$ is the stand off distance (z-component) (m)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DDs} to replace the abstract symbols in the models identified in Section~\ref{Sec:TMs} and Section~\ref{Sec:GDs}.
@@ -876,7 +907,7 @@ This section provides the functional requirements, the business tasks that the s
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req1}:]Input the quantities from Table~\ref{Table:R1ReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req2}:]The system shall set the known values as follows: $m$, $k$, $E$, ${t_{d}}$ following A4, $LDF$ following A8, LSF following A5, $h$ (from \hyperref[DD:act.thick]{Definition~DD:act.thick}), and $GTF$ (from \hyperref[DD:gTF]{Definition~DD:gTF}).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req2}:]The system shall set the known values as follows: $m$, $k$, $E$, ${t_{d}}$ following A4, $LDF$ following A8, LSF following A5, $h$ (from \hyperref[DD:act.thick]{Definition~DD:act.thick}), $GTF$ (from \hyperref[DD:gTF]{Definition~DD:gTF}), and $SD$ (from \hyperref[DD:sd]{Definition~DD:sd}).
 \end{description}
 \begin{description}
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req3}:]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DataConstraints}. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.

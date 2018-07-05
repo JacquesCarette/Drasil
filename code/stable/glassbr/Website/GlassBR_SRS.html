@@ -464,6 +464,17 @@ m
 </tr>
 <tr>
 <td>
+<em>SD</em>
+</td>
+<td>
+Stand off distance
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
 <em>t</em>
 </td>
 <td>
@@ -2194,6 +2205,93 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
+<div id="DD:sd">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Stand off distance
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>SD</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+m
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div id="">
+<div class="equation">
+<em>SD = &radic;(SD<sub>x</sub><sup>2</sup>&plus;SD<sub>y</sub><sup>2</sup>&plus;SD<sub>z</sub><sup>2</sup>)</em>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>SD</em> is the stand off distance (m)
+</li>
+<li>
+<em>SD<sub>x</sub></em> is the stand off distance (x-component) (m)
+</li>
+<li>
+<em>SD<sub>y</sub></em> is the stand off distance (y-component) (m)
+</li>
+<li>
+<em>SD<sub>z</sub></em> is the stand off distance (z-component) (m)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div id="Sec:IMs">
@@ -2876,7 +2974,7 @@ Input-Glass-Props: Input the quantities from <a href=#Table:R1ReqInputs>Table:R1
 <ul class="hide-list-style">
 <li>
 <div id="FR:functional.requirements.req2">
-System-Set-Values-Following-Assumptions: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following A4, <em>LDF</em> following A8, LSF following A5, <em>h</em> (from <a href=#DD:act.thick>act_thick</a>), and <em>GTF</em> (from <a href=#DD:gTF>gTF</a>).
+System-Set-Values-Following-Assumptions: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following A4, <em>LDF</em> following A8, LSF following A5, <em>h</em> (from <a href=#DD:act.thick>act_thick</a>), <em>GTF</em> (from <a href=#DD:gTF>gTF</a>), and <em>SD</em> (from <a href=#DD:sd>sd</a>).
 </div>
 </li>
 </ul>

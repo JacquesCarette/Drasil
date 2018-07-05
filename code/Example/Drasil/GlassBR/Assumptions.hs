@@ -82,7 +82,7 @@ a5Desc = foldlSent [at_start glass, S "under consideration",
 
 a6Desc :: Sentence
 a6Desc = foldlSent [S "Boundary", plural condition, S "for the",
-  phrase glaSlab, S "is assumed to be 4-sided support for",
+  phrase glaSlab, S "are assumed to be 4-sided support for",
   plural calculation]
 
 a7Desc :: Sentence

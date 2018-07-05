@@ -393,7 +393,7 @@ start = foldlSent [S "A", phrase system,
   phrase blastRisk +:+ S "involved with the glass"]
 ending = foldl (+:+) EmptyS [S "interpret the", plural input_,
   S "to give out the", plural output_,
-  S "which predicts whether the", phrase glaSlab,
+  S "which predict whether the", phrase glaSlab,
   S "can withstand the", phrase blast, S "under the",
   plural condition]
 

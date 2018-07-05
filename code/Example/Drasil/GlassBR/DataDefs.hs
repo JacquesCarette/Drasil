@@ -22,12 +22,9 @@ import Control.Lens ((^.))
 -- DATA DEFINITIONS --
 ----------------------
 
---dataDefns :: [DataDefinition] 
---dataDefns = [riskDD, hFromtDD, strDisFacDD, nonFLDD, glaTyFacDD, dimLLDD,
---  tolPreDD, tolStrDisFacDD]
-dataDefns :: [QDefinition]
-dataDefns = [risk, hFromt, strDisFac, nonFL, glaTyFac, dimLL, tolPre,
-  tolStrDisFac]
+dataDefns :: [DataDefinition] 
+dataDefns = [riskDD, hFromtDD, strDisFacDD, nonFLDD, glaTyFacDD, dimLLDD,
+  tolPreDD, tolStrDisFacDD]
 
 gbQDefns :: [Block QDefinition]
 gbQDefns = [Parallel hFromt {-DD2-} [glaTyFac {-DD6-}]] ++ --can be calculated on their own

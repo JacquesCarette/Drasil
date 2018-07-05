@@ -50,6 +50,9 @@ tmodel fs m t = Defnt TM (foldr (mkTMField t m) [] fs) (refAdd t)
 ddefn :: HasSymbolTable ctx => Fields -> ctx -> QDefinition -> Contents
 ddefn fs m d = Defnt DD (foldr (mkQField d m) [] fs) (refAdd d)
 
+ddefn' :: HasSymbolTable ctx => Fields -> ctx -> DataDefinition -> Contents
+ddefn' fs m d = Defnt DD (foldr (mkQField d m) [] fs) (refAdd d)
+
 -- | Create a general definition using a list of fields, database of symbols,
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'
 -- program)
@@ -97,7 +100,8 @@ tConToExpr (TCon AssumedCon x) = x
 -- TODO: buildDescription gets list of constraints to expr and ignores 't'.
 
 -- | Create the fields for a definition from a QDefinition (used by ddefn)
-mkQField :: HasSymbolTable ctx => QDefinition -> ctx -> Field -> ModRow -> ModRow
+mkQField :: (HasUID d, HasShortName d, HasSymbol d, HasAdditionalNotes d, ExprRelat d, HasSymbolTable ctx) => 
+  d -> ctx -> Field -> ModRow -> ModRow
 mkQField d _ l@Label fs = (show l, (Paragraph $ at_start d):[]) : fs
 mkQField d _ l@Symbol fs = (show l, (Paragraph $ (P $ eqSymb d)):[]) : fs
 mkQField d _ l@Units fs = (show l, (Paragraph $ (unit'2Contents d)):[]) : fs

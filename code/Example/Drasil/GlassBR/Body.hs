@@ -123,7 +123,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           [ Assumptions
           , TMs ([Label] ++ stdFields) [t1IsSafe, t2IsSafe]
           , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
-          , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+          , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand, testIMFromQD] HideDerivation
           , Constraints (EmptyS) (dataConstraintUncertainty) 
                         (foldlSent [(makeRef (SRS.valsOfAuxCons SRS.missingP [])), S "gives", (plural value `ofThe` S "specification"), 
@@ -159,7 +159,7 @@ glassSystInfo = SI {
   _units       = map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton],
   _quants      = this_symbols,
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = dataDefns ++ 
+  _definitions = (map (relToQD gbSymbMap) dataDefns) ++ 
                  (map (relToQD gbSymbMap) iModels {-[RelationConcept]-}) ++ 
                  (map (relToQD gbSymbMap) tModels {-[RelationConcept]-}) ++
                   [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears
@@ -620,7 +620,7 @@ traceability_matrices_and_graphs_instaModel = ["IM1", "IM2", "IM3"]
 traceability_matrices_and_graphs_instaModelRef = map (refFromType Theory) iModels
 
 traceability_matrices_and_graphs_dataDef =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
-traceability_matrices_and_graphs_dataDefRef = map (refFromType Data) dataDefns
+traceability_matrices_and_graphs_dataDefRef = map (refFromType Data') dataDefns
 
 traceability_matrices_and_graphs_data  = ["Data Constraints"]
 traceability_matrices_and_graphs_dataRef = [makeRef (SRS.datCon SRS.missingP [])]

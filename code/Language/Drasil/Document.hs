@@ -6,6 +6,7 @@ import Language.Drasil.Chunk.AssumpChunk (AssumpChunk)
 import Language.Drasil.Chunk.Change (Change)
 import Language.Drasil.Chunk.Citation (BibRef)
 import Language.Drasil.Chunk.Eq (QDefinition)
+import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName,
@@ -55,6 +56,7 @@ data Document = Document Title Author [Section]
 -- | Types of definitions
 data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining 
                               -- equation used to generate the Data Definition
+           | Data' DataDefinition
            | General
            | Theory RelationConcept -- ^ Theoretical models use a relation as
                                     -- their definition

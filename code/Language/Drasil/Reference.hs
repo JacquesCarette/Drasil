@@ -24,6 +24,7 @@ import Language.Drasil.Document (Contents(..), DType(Data, Theory),
 import Language.Drasil.RefTypes (RefType(..))
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.UID (UID)
+import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 
 -- | Database for maintaining references.
 -- The Int is that reference's number.
@@ -227,6 +228,10 @@ instance Referable GenDefn where
 instance Referable QDefinition where -- FIXME: This could lead to trouble; need
                                      -- to ensure sanity checking when building
                                      -- Refs. Double-check QDef is a DD before allowing
+  refAdd  d = "DD:" ++ concatMap repUnd (d ^. uid)
+  rType   _ = Def
+
+instance Referable DataDefinition where
   refAdd  d = "DD:" ++ concatMap repUnd (d ^. uid)
   rType   _ = Def
 

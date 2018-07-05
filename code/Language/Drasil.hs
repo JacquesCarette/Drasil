@@ -66,7 +66,7 @@ module Language.Drasil (
   -- Chunk.Eq
   , QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec
   -- Chunk.DataDefinition
-  , DataDefinition, mkDataDef, mkDataDef'
+  , DataDefinition, mkDataDef, mkDataDef', mkDD
   -- Chunk.GenDefn
   , GenDefn, gd, gdUnit
   -- Chunk.InstanceModel

@@ -42,3 +42,7 @@ mkDataDef' cncpt equation extraInfo refs = datadef $ getUnit cncpt
                            (eqSymb cncpt) a equation refs (cncpt ^. uid) --shortname
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) extraInfo
                            (eqSymb cncpt) equation refs (cncpt ^. uid) --shortname
+
+-- | Smart constructor for data definitions 
+mkDD :: QDefinition -> References -> Derivation -> Label -> Maybe [Sentence] -> DataDefinition
+mkDD = DD

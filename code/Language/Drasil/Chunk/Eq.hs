@@ -25,10 +25,10 @@ import Language.Drasil.Spec (Sentence)
 data QDefinition = EC
           { _qua :: QuantityDict
           , _equat :: Expr
-          , _ref :: References
-          , _deri :: Derivation
-          , _refName :: ShortName
-          , _notes :: Maybe [Sentence]
+          , _ref :: References -- FIXME: to be removed
+          , _deri :: Derivation -- FIXME: to be removed
+          , _refName :: ShortName -- FIXME: to be removed
+          , _notes :: Maybe [Sentence] -- FIXME: to be removed
           }
 makeLenses ''QDefinition
 

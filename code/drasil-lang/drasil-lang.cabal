@@ -49,6 +49,7 @@ library
     , Language.Drasil.Chunk.Concept.Core
     , Language.Drasil.Chunk.Constrained
     , Language.Drasil.Chunk.Constrained.Core
+    , Language.Drasil.Chunk.DataDefinition
     , Language.Drasil.Chunk.DefinedQuantity
     , Language.Drasil.Chunk.Derivation
     , Language.Drasil.Chunk.Eq

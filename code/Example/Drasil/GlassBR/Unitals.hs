@@ -275,7 +275,7 @@ blastTy       = dcc "blastTy"     (nounPhraseSP "blast type")
 bomb          = dcc "bomb"        (nounPhraseSP "bomb") ("a container filled " ++
   "with a destructive substance designed to exlode on impact or via detonation")
 capacity      = dcc "capacity"    (nounPhraseSP "capacity")
-  "the load resistance calculated"
+  "load resistance calculated"
 demandq       = dcc "demandq"     (nounPhraseSP "demand") 
   "3 second duration equivalent pressure"
 eqTNTChar     = dcc "eqTNTChar"   (nounPhraseSP "equivalent TNT charge mass")

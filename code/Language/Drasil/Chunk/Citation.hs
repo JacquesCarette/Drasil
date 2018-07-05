@@ -33,6 +33,7 @@ import Language.Drasil.Printing.Helpers (noSpaces)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), shortname')
 
 import Control.Lens ((^.), Lens', makeLenses)
+import Data.List (find)
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces
@@ -126,10 +127,28 @@ class HasFields c where
 cite :: EntryID -> CitationKind -> [CiteField] -> Citation
 cite i = Cite i (noSpaces i)
 
+getAuthor :: (HasFields c) => c -> People
+getAuthor c = maybe (error "No author found") (\(Author x) -> x) (find (isAuthor) (c ^. getFields))
+  where isAuthor :: CiteField -> Bool
+        isAuthor (Author _) = True
+        isAuthor _          = False
+
+
+getYear :: (HasFields c) => c -> Int
+getYear c = maybe (error "No year found") (\(Year x) -> x) (find (isYear) (c ^. getFields))
+  where isYear :: CiteField -> Bool
+        isYear (Year _) = True
+        isYear _          = False
+
 -- | Citations are chunks.
 instance HasUID       Citation where uid f (Cite a b c d) = fmap (\x -> Cite x b c d) (f a)
 instance HasShortName Citation where shortname c = shortname' $ citeID c
 instance HasFields    Citation where getFields = fields
+instance Eq           Citation where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+instance Ord          Citation where
+  c1 `compare` c2
+    | (getAuthor c1) /= (getAuthor c2) = (getAuthor c1) `compare` (getAuthor c2)
+    | otherwise                        =   (getYear c1) `compare` (getYear c2)
 
 -- | Article citation requires author(s), title, journal, year.
 -- Optional fields can be: volume, number, pages, month, and note.

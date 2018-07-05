@@ -16,7 +16,7 @@ rbrtsn2012 = cMisc "rbrtsn2012" [author [jRobertson, sRobertson], title
   howPublishedU (S "https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e5" :+: 
     S "87e09880561dbe22.pdf"), year 2012]
 
-astm2009 = cMisc "zastm2009" [author [mononym "ASTM"],
+astm2009 = cMisc "astm2009" [author [mononym "ASTM"],
   title (S "Standard Practice for Determining Load Resistance of Glass in Buildings"),
   publisher (S "ASTM International"),
   bookTitle (S "Standard E1300-09a"),

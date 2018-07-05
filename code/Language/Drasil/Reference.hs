@@ -3,13 +3,13 @@ module Language.Drasil.Reference where
 
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
-import Data.List (concatMap, find, groupBy, partition, sortBy)
+import Data.List (concatMap, groupBy, partition, sort, sortBy)
 import qualified Data.Map as Map
 
 import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
 import Language.Drasil.Chunk.Change as Ch (Change(..), ChngType(..))
-import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID), CiteField(Author), HasFields(getFields))
-import Language.Drasil.Chunk.Concept (ConceptChunk, ConceptInstance)
+import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID))
+import Language.Drasil.Chunk.Concept (ConceptInstance)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
 import Language.Drasil.Chunk.Goal as G (Goal, refAddr)
@@ -21,11 +21,9 @@ import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid))
 import Language.Drasil.Document (Contents(..), DType(Data, Theory), 
   Section(Section), getDefName, repUnd)
-import Language.Drasil.People (People)
 import Language.Drasil.RefTypes (RefType(..))
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.UID (UID)
-
 
 -- | Database for maintaining references.
 -- The Int is that reference's number.
@@ -97,7 +95,7 @@ changeMap cs = Map.fromList $ zip (map (^. uid) (lcs ++ ulcs))
 bibMap :: [Citation] -> BibMap
 bibMap cs = Map.fromList $ zip (map (^. uid) scs) (zip scs [1..])
   where scs :: [Citation]
-        scs = sortBy authorSort cs
+        scs = sort cs
         -- Sorting is necessary if using elems to pull all the citations
         -- (as it sorts them and would change the order).
         -- We can always change the sorting to whatever makes most sense
@@ -268,17 +266,8 @@ instance Referable Contents where
 uidSort :: HasUID c => c -> c -> Ordering
 uidSort = compare `on` (^. uid)
 
-authorSort :: HasFields c => c -> c -> Ordering
-authorSort = compare `on` getAuthor
-
-getAuthor :: (HasFields c) => c -> People
-getAuthor c = maybe (error "No author found") (\(Author x) -> x) (find (isAuthor) (c ^. getFields))
-  where isAuthor :: CiteField -> Bool
-        isAuthor (Author _) = True
-        isAuthor _          = False
-
 citationsFromBibMap :: BibMap -> [Citation]
-citationsFromBibMap bm = sortBy uidSort citations
+citationsFromBibMap bm = sort citations
   where citations :: [Citation]
         citations = map (\(x,_) -> x) (Map.elems bm)
 

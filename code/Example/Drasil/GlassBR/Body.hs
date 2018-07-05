@@ -271,7 +271,7 @@ undIR = foldlList [phrase scndYrCalculus, phrase structuralMechanics,
 appStanddIR = foldlSent [S "In addition" `sC` plural reviewer,
   S "should be familiar with the applicable", plural standard,
   S "for constructions using glass from",
-  sSqBr (S "4-6" {-astm_LR2009, astm_C1036, astm_C1048-}) `sIn`
+  sSqBr (S "1-3" {-astm2009, astm2012, astm2016-}) `sIn`
   (makeRef (SRS.reference SRS.missingP []))]
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
   S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
@@ -402,7 +402,7 @@ problem_description = probDescF start gLassBR ending [terminology_and_descriptio
 {--Terminology and Definitions--}
 
 terminology_and_description = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
-  S "are extracted from" +:+ (sSqBrNum 4 {-astm_LR2009-}) `sIn`
+  S "are extracted from" +:+ (sSqBrNum 1 {-astm2009-}) `sIn`
   (makeRef (SRS.reference SRS.missingP [])))) [terminology_and_description_bullets]
 
 {--Physical System Description--}

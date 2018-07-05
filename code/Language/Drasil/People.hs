@@ -21,7 +21,11 @@ data Person = Person { _given :: String
 -- followed by given name.
 -- Mononyms are for those people who have only one name (ex. Madonna)
 
-instance Ord Person where (Person _ s1 _ _) `compare` (Person _ s2 _ _) = s1 `compare` s2
+instance Ord Person where 
+  Person f1 l1 _ _ `compare` Person f2 l2 _ _ 
+    | l1 /= l2  = l1 `compare` l2
+    | otherwise = f1 `compare` f2
+
 
 type People = [Person]
 

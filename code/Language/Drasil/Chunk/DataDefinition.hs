@@ -24,7 +24,7 @@ import Language.Drasil.Chunk.Eq(fromEqn, fromEqn')
 data DataDefinition = DD { _qd :: QDefinition
                          , _ref :: References 
                          , _deri :: Derivation 
-                         , _lbl :: ShortName {-Upgrade to Label-}
+                         , _lbl :: ShortName {-FIXME: Upgrade to Label-}
                          , _notes :: Maybe [Sentence]
                          }
 makeLenses ''DataDefinition
@@ -42,6 +42,17 @@ instance Eq                 DataDefinition where a == b = (a ^. uid) == (b ^. ui
 instance HasDerivation      DataDefinition where derivations = deri
 instance HasAdditionalNotes DataDefinition where getNotes = notes
 instance HasShortName       DataDefinition where shortname = view lbl
+
+{-dim_max     = mkDataDef (unitary "dim_max"
+  (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
+  (sub lD (Atomic "max")) millimetre Real) (dbl 5)
+
+fromEqn :: (IsUnit u, ConceptDomain u) => 
+  String -> NP -> Sentence -> Symbol -> u -> Expr -> References -> String -> QDefinition
+fromEqn nm desc _ symb un eqn refs sn = 
+  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) --Quantity (stay)
+   eqn -- expr (stay)
+   refs [] (shortname' sn) Nothing-}
 
 -- Used to help make Qdefinitions when uid, term, and symbol come from the same source
 mkDataDef :: (Quantity c) => c -> Expr -> QDefinition
@@ -62,4 +73,4 @@ mkDataDef' cncpt equation extraInfo refs = datadef $ getUnit cncpt
 
 -- | Smart constructor for data definitions 
 mkDD :: QDefinition -> References -> Derivation -> String{-Label-} -> Maybe [Sentence] -> DataDefinition
-mkDD a b c d e = DD a b c (shortname' d) e 
+mkDD a b c _ e = DD a b c (shortname' $ a ^. uid  {-shortname' d-}) e -- FIXME: should the shortname be passed in or derived?

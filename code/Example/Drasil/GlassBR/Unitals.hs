@@ -124,6 +124,10 @@ prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
 
 {--}
 
+dim_maxDD :: DataDefinition
+dim_maxDD = mkDD dim_max [{-references-}] [{-derivation-}] ""{-temporary-} Nothing
+
+--gBRSpecParamVals :: [DataDefinition]
 gBRSpecParamVals :: [QDefinition]
 gBRSpecParamVals = [dim_max, dim_min, ar_max, cWeightMax, cWeightMin,
   sd_max, sd_min]

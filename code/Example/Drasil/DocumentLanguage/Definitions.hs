@@ -86,9 +86,7 @@ mkTMField t m l@(Description v u) fs = (show l,
 mkTMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkTMField _ _ l@(Source) fs = (show l, fixme) : fs --FIXME: fill this in
 mkTMField t _ l@(Notes) fs = 
-  case (t ^. getNotes) of
-  Nothing -> fs
-  Just ss -> (show l, map Paragraph ss) : fs
+  maybe fs (\ss -> (show l, map Paragraph ss) : fs) (t ^. getNotes)
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
 
@@ -108,8 +106,10 @@ mkQField d m l@(Description v u) fs =
   (show l, buildDDescription v u d m) : fs
 mkQField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkQField d _ l@(Source) fs = (show l, [Paragraph $ getSource d]) : fs
+mkQField d _ l@(Notes) fs = maybe fs (\ss -> (show l, map Paragraph ss) : fs) (d ^. getNotes)
 mkQField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for data definitions"
+
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a model / general definition
@@ -162,9 +162,7 @@ mkIMField i _ l@(InConstraints) fs  = (show l,
 mkIMField i _ l@(OutConstraints) fs = (show l,
   foldr ((:) . eqUnR) [] (map tConToExpr (i ^. outCons))) : fs
 mkIMField i _ l@(Notes) fs = 
-  case (i ^. getNotes) of
-  Nothing -> fs
-  Just ss -> (show l, map Paragraph ss) : fs
+  maybe fs (\ss -> (show l, map Paragraph ss) : fs) (i ^. getNotes)
 mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for instance models"
 

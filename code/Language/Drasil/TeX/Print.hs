@@ -359,7 +359,7 @@ makeList (Simple items)      = itemize     $ vcat (sim_item items)
 makeList (Desc items)        = description $ vcat (sim_item items)
 makeList (Unordered items)   = itemize     $ vcat (map p_item items)
 makeList (Ordered items)     = enumerate   $ vcat (map p_item items)
-makeList (Definitions items) = description $ vcat (def_item items)
+makeList (Definitions items) = symbDescription $ vcat (def_item items)
 
 p_item :: ItemType -> D
 p_item (Flat s) = item (spec s)

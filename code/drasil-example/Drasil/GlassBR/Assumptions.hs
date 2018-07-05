@@ -19,7 +19,7 @@ import Drasil.GlassBR.Concepts (lShareFac, gLassBR,
 import Drasil.GlassBR.References (gbCitations, astm2009)
  
 gbRefDB :: ReferenceDB
-gbRefDB = rdb [] [] newAssumptions [] [] gbCitations
+gbRefDB = rdb [] [] newAssumptions [] [] gbCitations []
 
 assumptionConstants :: [QDefinition]
 assumptionConstants = [constant_M, constant_K, constant_ModElas,

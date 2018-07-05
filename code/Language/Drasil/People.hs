@@ -32,7 +32,7 @@ type People = [Person]
 -- | Naming conventions.
 data Conv = Western
           | Eastern
-          | Mono deriving (Eq, Ord)
+          | Mono deriving (Eq)
 
 -- | Constructor for a person using Western naming conventions. 
 -- Used for a person with only a given name and surname.

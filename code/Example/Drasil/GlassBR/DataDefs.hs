@@ -22,6 +22,10 @@ import Control.Lens ((^.))
 -- DATA DEFINITIONS --
 ----------------------
 
+dim_maxDD :: DataDefinition
+dim_maxDD = mkDD dim_max [{-references-}] [{-derivation-}] ""{-temporary-} Nothing
+
+--dataDefns :: [DataDefinition] 
 dataDefns :: [QDefinition]
 dataDefns = [risk, hFromt, strDisFac, nonFL, glaTyFac, dimLL, tolPre,
   tolStrDisFac]

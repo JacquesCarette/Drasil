@@ -43,17 +43,6 @@ instance HasDerivation      DataDefinition where derivations = deri
 instance HasAdditionalNotes DataDefinition where getNotes = notes
 instance HasShortName       DataDefinition where shortname = view lbl
 
-{-dim_max     = mkDataDef (unitary "dim_max"
-  (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
-  (sub lD (Atomic "max")) millimetre Real) (dbl 5)
-
-fromEqn :: (IsUnit u, ConceptDomain u) => 
-  String -> NP -> Sentence -> Symbol -> u -> Expr -> References -> String -> QDefinition
-fromEqn nm desc _ symb un eqn refs sn = 
-  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) --Quantity (stay)
-   eqn -- expr (stay)
-   refs [] (shortname' sn) Nothing-}
-
 -- Used to help make Qdefinitions when uid, term, and symbol come from the same source
 mkDataDef :: (Quantity c) => c -> Expr -> QDefinition
 mkDataDef cncpt equation = datadef $ getUnit cncpt --should references be passed in at this point?

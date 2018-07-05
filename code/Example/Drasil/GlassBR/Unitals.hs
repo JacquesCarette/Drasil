@@ -271,7 +271,7 @@ blastResisGla = dcc "blastResisGla"    (nounPhraseSP "blast resistant glazing")
     "by explosions.")
 blastTy       = dcc "blastTy"     (nounPhraseSP "blast type")
   ("The blast type input includes parameters like weight of charge, TNT " ++
-    "equivalent factor and stand off distance from the point of explosion.")
+    "equivalent factor, and stand off distance from the point of explosion.")
 bomb          = dcc "bomb"        (nounPhraseSP "bomb") ("a container filled " ++
   "with a destructive substance designed to exlode on impact or via detonation")
 capacity      = dcc "capacity"    (nounPhraseSP "capacity")

@@ -91,7 +91,7 @@ a7Desc = foldlSent [S "The", phrase responseTy, S "considered in",
 
 a8Desc :: QDefinition -> Sentence
 a8Desc mainConcept = foldlSent [S "With", phrase reference, S "to",
-  (refA gbRefDB newA4), S "the", phrase value `sOf`
+  (refA gbRefDB newA4) `sC` S "the", phrase value `sOf`
   phrase mainConcept, sParen (getES mainConcept), S "is a", phrase constant,
   S "in" +:+. short gLassBR, S "It is calculated by the" +: phrase equation +:+.
   E (sy mainConcept $= mainConcept^.equat), S "Using this" `sC`

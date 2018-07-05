@@ -257,7 +257,7 @@ startIntro :: NamedChunk -> Sentence -> CI -> Sentence
 startIntro prgm sfwrPredicts progName = foldlSent [
   at_start prgm, S "is helpful to efficiently" `sAnd` S "correctly predict the"
   +:+. sfwrPredicts, underConsidertn blast,
-  S "The", phrase prgm `sC` S "herein called", short progName,
+  S "The", phrase prgm `sC` S "herein called", short progName `sC`
   S "aims to predict the", sfwrPredicts, S "using an intuitive",
   phrase interface]
 
@@ -375,9 +375,9 @@ individual_product_use_case mainObj compare1 compare2 factorOfComparison =
   sParen (getES prob_br), S "is less than the tolerable",
   phrase factorOfComparison, sParen (getES pb_tol),
   S "which is obtained from the", phrase user, S "as an" +:+. phrase input_,
-  S "If both", plural condition, S "return true then it's shown that the",
+  S "If both", plural condition, S "return true, then it's shown that the",
   phrase mainObj, S "is safe to use" `sC`
-  S "else if both return false then the", phrase mainObj +:+.
+  S "else if both return false, then the", phrase mainObj +:+.
   S "is considered unsafe", S "All the supporting calculated", plural value,
   S "are also displayed as", phrase output_]
 

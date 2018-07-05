@@ -320,7 +320,7 @@ loadResis     = cc lResistance
     "[4 (pg. 1, 53)], following A2 and A1 respectively." {-astm_LR2009-})
 loadShareFac  = cc' lShareFac
   (foldlSent [S "A multiplying factor derived from the load sharing between the",
-  S "double glazing, of equal or different thickness's and types (including the",
+  S "double glazing, of equal or different thicknesses and types (including the",
   S "layered behaviour of", (getAcc lGlass), S "under long duration",
   S "loads), in a sealed", (getAcc iGlass), S "unit"])
 longDurLoad   = dcc "longDurLoad"        (nounPhraseSP "long duration load")

@@ -51,10 +51,10 @@ assocToMap :: CodeIdea a => [a] -> Map.Map String a
 assocToMap = Map.fromList . map (\x -> (codeName x, x))
 
 funcTerm :: String -> FunctionMap -> String
-funcTerm cname m = maybe "" (\cd -> getStr (phrase $ cd {- ^. term-})) (Map.lookup cname m) -- Not sure why commenting out "^. term" works - now the type signatures match
+funcTerm cname m = maybe "" (\cd -> getStr (phrase cd)) (Map.lookup cname m)
        
 varTerm :: String -> VarMap -> String
-varTerm cname m = maybe "" (\cch -> getStr (phrase $ cch {- ^. term-})) (Map.lookup cname m) -- Not sure why commenting out "^. term" works
+varTerm cname m = maybe "" (\cch -> getStr (phrase cch)) (Map.lookup cname m)
         
 varType :: String -> VarMap -> CodeType
 varType cname m = maybe (error "Variable not found") codeType (Map.lookup cname m)

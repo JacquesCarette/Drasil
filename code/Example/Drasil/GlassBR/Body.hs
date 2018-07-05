@@ -421,7 +421,7 @@ physical_system_description_list_physys2 :: NamedIdea n => n -> Sentence
 
 physical_system_description_list_physys = [physical_system_description_list_physys1, physical_system_description_list_physys2 (ptOfExplsn)]
 
-physical_system_description_list_physys1 = at_start glaSlab
+physical_system_description_list_physys1 = S "The" +:+. phrase glaSlab
 
 physical_system_description_list_physys2 imprtntElem = foldlSent [S "The"
   +:+. phrase imprtntElem, S "Where the", phrase bomb `sC`

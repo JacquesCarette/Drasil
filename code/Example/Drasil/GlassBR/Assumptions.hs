@@ -76,7 +76,7 @@ a4Desc mainIdea = foldlSent [S "The", plural value, S "provided in",
 
 a5Desc :: Sentence
 a5Desc = foldlSent [at_start glass, S "under consideration",
-  S "is assumed to be a single" +:+. phrase lite, S "Hence the",
+  S "is assumed to be a single", phrase lite `semiCol` S "hence, the",
   phrase value `sOf` short lShareFac, S "is equal to 1 for all",
   plural calculation `sIn` short gLassBR]
 

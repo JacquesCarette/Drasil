@@ -14,7 +14,7 @@ import Data.Drasil.Concepts.Documentation (datum, user)
 import Data.Drasil.Concepts.Math (probability, parameter, calculation)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.SentenceStructures (sAnd)
-import Data.Drasil.Utils (getES, mkDataDef, mkDataDef')
+import Data.Drasil.Utils (getES)
 
 import Control.Lens ((^.))
 

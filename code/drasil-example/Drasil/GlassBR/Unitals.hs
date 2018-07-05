@@ -213,11 +213,11 @@ dimlessLoad   = vc "dimlessLoad" (nounPhraseSP "dimensionless load")
 
 gTF           = vc "gTF"             (glassTypeFac ^. term) (Atomic "GTF") Integer
 
-is_safe1      = vc "is_safe1"        (nounPhraseSP $ "true when calculated" ++
+is_safe1      = vc "is_safe1"        (nounPhraseSP $ "variable that is assigned true when calculated" ++
   " probability is less than tolerable probability")
   (Concat [Atomic "is", Special UScore, Atomic "safe1"]) Boolean
 
-is_safe2      = vc "is_safe2"        (nounPhraseSP $ "true when load resistance"
+is_safe2      = vc "is_safe2"        (nounPhraseSP $ "variable that is assigned true when load resistance"
   ++ " (capacity) is greater than load (demand)")
   (Concat [Atomic "is", Special UScore, Atomic "safe2"]) Boolean
 

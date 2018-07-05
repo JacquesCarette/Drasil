@@ -102,6 +102,7 @@ library
     , Language.Drasil.Chunk.GenDefn
     , Language.Drasil.Chunk.Goal
     , Language.Drasil.Chunk.InstanceModel
+    , Language.Drasil.Chunk.DataDefinition
     , Language.Drasil.Chunk.NamedIdea
     , Language.Drasil.Chunk.PhysSystDesc
     , Language.Drasil.Chunk.Quantity

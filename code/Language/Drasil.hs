@@ -65,6 +65,8 @@ module Language.Drasil (
   , cnstrw
   -- Chunk.Eq
   , QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec
+  -- Chunk.DataDefinition
+  , DataDefinition, mkDataDef, mkDataDef'
   -- Chunk.GenDefn
   , GenDefn, gd, gdUnit
   -- Chunk.InstanceModel
@@ -299,3 +301,4 @@ import Language.Drasil.CodeSpec hiding (outputs, inputs)
 import Language.Drasil.DataDesc
 import Language.Drasil.Code.Imperative.Lang
 import Language.Drasil.RefTypes(RefAdd)
+import Language.Drasil.Chunk.DataDefinition

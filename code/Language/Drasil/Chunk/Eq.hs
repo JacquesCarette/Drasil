@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.Eq
 
 import Control.Lens ((^.), makeLenses, view)
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA),
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), ConceptDomain, HasAdditionalNotes(getNotes))
 import Language.Drasil.Chunk.References (References)

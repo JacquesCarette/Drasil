@@ -29,7 +29,7 @@ data QDefinition = EC
           , _equat :: Expr
           , _ref :: References -- FIXME: to be removed
           , _deri :: Derivation -- FIXME: to be removed
-          , _refName :: ShortName -- FIXME: to be removed
+          , _lb :: Label -- FIXME: to be removed
           , _notes :: Maybe [Sentence] -- FIXME: to be removed
           }
 makeLenses ''QDefinition

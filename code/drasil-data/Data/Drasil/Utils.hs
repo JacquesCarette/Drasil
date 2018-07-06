@@ -175,25 +175,6 @@ unwrap :: (Maybe UnitDefn) -> Sentence
 unwrap (Just a) = Sy (a ^. usymb)
 unwrap Nothing  = EmptyS
 
-<<<<<<< HEAD
--- Used to help make Qdefinitions when uid, term, and symbol come from the same source
-mkDataDef :: (Quantity c) => c -> Expr -> Label -> QDefinition
-mkDataDef cncpt equation lbl = datadef (getUnit cncpt) lbl
-  where datadef (Just a) lbl = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) a equation [] lbl
-        datadef Nothing lbl  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) equation [] lbl
-
--- Same as 'mkDataDef', but with an additional Sentence that can be taken as "extra information"; issue #350
-mkDataDef' :: (Quantity c) => c -> Expr -> Sentence -> References -> Label -> QDefinition
-mkDataDef' cncpt equation extraInfo refs lbl = datadef (getUnit cncpt) lbl
-  where datadef (Just a) lbl = fromEqn  (cncpt ^. uid) (cncpt ^. term) extraInfo
-                              (eqSymb cncpt) a equation refs lbl
-        datadef Nothing  lbl = fromEqn' (cncpt ^. uid) (cncpt ^. term) extraInfo
-                               (eqSymb cncpt) equation refs lbl
-
-=======
->>>>>>> master
 prodUCTbl :: [[Sentence]] -> Contents
 prodUCTbl cases = Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
   cases

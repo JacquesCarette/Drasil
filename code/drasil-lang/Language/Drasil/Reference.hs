@@ -65,15 +65,15 @@ data RefBy = ByName
            | ByNum -- If applicable
 
 rdb :: [PhysSystDesc] -> [Goal] -> [AssumpChunk] -> [ReqChunk] -> [Change] ->
-  BibRef -> ReferenceDB
-rdb psds goals assumps reqs changes citations = RDB
+  BibRef -> [ConceptInstance] -> ReferenceDB
+rdb psds goals assumps reqs changes citations con = RDB
   (simpleMap psds)
   (simpleMap goals)
   (simpleMap assumps)
   (reqMap reqs)
   (changeMap changes)
   (bibMap citations)
-  (conceptMap [])
+  (conceptMap con)
 
 simpleMap :: HasUID a => [a] -> RefMap a
 simpleMap xs = Map.fromList $ zip (map (^. uid) xs) (zip xs [1..])

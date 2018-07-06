@@ -1,12 +1,13 @@
 module Language.Drasil.Generate (gen, genCode) where
 
-import System.IO
-import Text.PrettyPrint.HughesPJ
+import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
+import Text.PrettyPrint.HughesPJ (Doc, render)
 import Prelude hiding (id)
-import System.Directory
+import System.Directory (createDirectoryIfMissing, getCurrentDirectory,
+  setCurrentDirectory)
 
 import Language.Drasil
-import Language.Drasil.CodeSpec
+import Language.Drasil.CodeSpec (Choices, CodeSpec)
 import Language.Drasil.Code.Imperative.Import (generator, generateCode)
 
 -- | Generate a number of artifacts based on a list of recipes.

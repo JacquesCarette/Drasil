@@ -1,5 +1,5 @@
 Name:		drasil-docLang
-Version:	0.1.0
+Version:	0.1.1
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -13,6 +13,19 @@ library
     , Drasil.DocumentLanguage.Definitions
     , Drasil.DocumentLanguage.RefHelpers
     , Drasil.DocumentLanguage.TraceabilityMatrix
+    , Drasil.Sections.AuxiliaryConstants
+    , Drasil.Sections.GeneralSystDesc
+    , Drasil.Sections.Introduction
+    , Drasil.Sections.ReferenceMaterial
+    , Drasil.Sections.Requirements
+    , Drasil.Sections.ScopeOfTheProject
+    , Drasil.Sections.SolutionCharacterSpec
+    , Drasil.Sections.SpecificSystemDescription
+    , Drasil.Sections.Stakeholders
+    , Drasil.Sections.TableOfAbbAndAcronyms
+    , Drasil.Sections.TableOfSymbols
+    , Drasil.Sections.TableOfUnits
+    , Drasil.Sections.TraceabilityMandGs
     , Drasil.SRS
 
   Build-Depends:

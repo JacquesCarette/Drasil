@@ -18,16 +18,11 @@ executable tiny
     , Drasil.Sections.TraceabilityMandGs
     , Drasil.Sections.Requirements
     , Drasil.Sections.GeneralSystDesc
-    , Drasil.DocumentLanguage
-    , Drasil.DocumentLanguage.Definitions
-    , Drasil.DocumentLanguage.RefHelpers
-    , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.TableOfUnits
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.SolutionCharacterSpec
     , Drasil.Sections.Stakeholders
-    , Drasil.SRS
     , Drasil.Sections.Introduction
   Build-Depends:
     base >= 4.7,
@@ -70,12 +65,7 @@ executable nopcm
     , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.Stakeholders
     , Drasil.Sections.ScopeOfTheProject
-    , Drasil.SRS
     , Drasil.Sections.TableOfAbbAndAcronyms
-    , Drasil.DocumentLanguage
-    , Drasil.DocumentLanguage.Definitions
-    , Drasil.DocumentLanguage.RefHelpers
-    , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction
     , Drasil.Sections.Requirements
@@ -101,7 +91,6 @@ executable ssp
   main-is: Drasil/SSP/Main.hs
   other-modules:
       Drasil.Sections.ReferenceMaterial
-    , Drasil.SRS
     , Drasil.SSP.Assumptions
     , Drasil.SSP.Body
     , Drasil.SSP.Changes
@@ -121,10 +110,6 @@ executable ssp
     , Drasil.Sections.Stakeholders
     , Drasil.Sections.ScopeOfTheProject
     , Drasil.Sections.TraceabilityMandGs
-    , Drasil.DocumentLanguage
-    , Drasil.DocumentLanguage.Definitions
-    , Drasil.DocumentLanguage.RefHelpers
-    , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.Sections.TableOfUnits
     , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.SpecificSystemDescription
@@ -150,9 +135,6 @@ executable glassbr
   main-is: Drasil/GlassBR/Main.hs
   other-modules:
       Drasil.DocumentLanguage
-    , Drasil.DocumentLanguage.Definitions
-    , Drasil.DocumentLanguage.RefHelpers
-    , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.GlassBR.Body
     , Drasil.GlassBR.Changes
     , Drasil.GlassBR.Concepts
@@ -174,7 +156,6 @@ executable glassbr
     , Drasil.Sections.Stakeholders
     , Drasil.Sections.ScopeOfTheProject
     , Drasil.Sections.ReferenceMaterial
-    , Drasil.SRS
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.TableOfUnits
@@ -197,9 +178,6 @@ executable chipmunkdocs
   main-is: Drasil/GamePhysics/Main.hs
   other-modules:
       Drasil.DocumentLanguage
-    , Drasil.DocumentLanguage.Definitions
-    , Drasil.DocumentLanguage.RefHelpers
-    , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.GamePhysics.Body
     , Drasil.GamePhysics.Changes
     , Drasil.GamePhysics.Concepts
@@ -218,7 +196,6 @@ executable chipmunkdocs
     , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.Stakeholders
     , Drasil.Sections.ScopeOfTheProject
-    , Drasil.SRS
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.TableOfUnits
@@ -241,9 +218,6 @@ executable swhs
   main-is: Drasil/SWHS/Main.hs
   other-modules:
       Drasil.DocumentLanguage
-    , Drasil.DocumentLanguage.Definitions
-    , Drasil.DocumentLanguage.RefHelpers
-    , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction
     , Drasil.Sections.Requirements
@@ -251,7 +225,6 @@ executable swhs
     , Drasil.Sections.TraceabilityMandGs
     , Drasil.Sections.ReferenceMaterial
     , Drasil.Sections.ScopeOfTheProject
-    , Drasil.SRS
     , Drasil.SWHS.Assumptions
     , Drasil.SWHS.Body
     , Drasil.SWHS.Concepts

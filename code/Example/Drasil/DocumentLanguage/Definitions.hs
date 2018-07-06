@@ -29,6 +29,7 @@ data Field = Label
            | Output
            | InConstraints
            | OutConstraints
+           | Notes
            | Source --  I think using attribute makes most sense, as sources can and
               -- will be modified across applications; the underlying knowledge won't.
            | RefBy --TODO: Fill in the field.
@@ -72,7 +73,7 @@ makeDerivationContents (E e) = EqnBlock e "" -- HACK -> FIXME: reference-able?
 makeDerivationContents s     = Paragraph s
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
-type ModRow = [(String,[Contents])]
+type ModRow = [(String, [Contents])]
 
 -- | Create the fields for a model from a relation concept (used by tmodel)
 mkTMField :: HasSymbolTable ctx => TheoryModel -> ctx -> Field -> ModRow -> ModRow
@@ -84,6 +85,8 @@ mkTMField t m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] (map tConToExpr (t ^. invariants))) : fs
 mkTMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkTMField _ _ l@(Source) fs = (show l, fixme) : fs --FIXME: fill this in
+mkTMField t _ l@(Notes) fs = 
+  maybe fs (\ss -> (show l, map Paragraph ss) : fs) (t ^. getNotes)
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
 
@@ -98,13 +101,15 @@ mkQField :: HasSymbolTable ctx => QDefinition -> ctx -> Field -> ModRow -> ModRo
 mkQField d _ l@Label fs = (show l, (Paragraph $ at_start d):[]) : fs
 mkQField d _ l@Symbol fs = (show l, (Paragraph $ (P $ eqSymb d)):[]) : fs
 mkQField d _ l@Units fs = (show l, (Paragraph $ (unit'2Contents d)):[]) : fs
-mkQField d _ l@DefiningEquation fs = (show l, (eqUnR $ d ^. equat):[]) : fs
+mkQField d _ l@DefiningEquation fs = (show l, (eqUnR $ sy d $= d ^. equat):[]) : fs --FIXME: appending symbol should be done in the printing stage
 mkQField d m l@(Description v u) fs =
   (show l, buildDDescription v u d m) : fs
 mkQField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkQField d _ l@(Source) fs = (show l, [Paragraph $ getSource d]) : fs
+mkQField d _ l@(Notes) fs = maybe fs (\ss -> (show l, map Paragraph ss) : fs) (d ^. getNotes)
 mkQField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for data definitions"
+
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a model / general definition
@@ -156,6 +161,8 @@ mkIMField i _ l@(InConstraints) fs  = (show l,
   foldr ((:) . eqUnR) [] (map tConToExpr (i ^. inCons))) : fs
 mkIMField i _ l@(OutConstraints) fs = (show l,
   foldr ((:) . eqUnR) [] (map tConToExpr (i ^. outCons))) : fs
+mkIMField i _ l@(Notes) fs = 
+  maybe fs (\ss -> (show l, map Paragraph ss) : fs) (i ^. getNotes)
 mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for instance models"
 
@@ -185,6 +192,7 @@ instance Show Field where
   show OutConstraints    = "Output Constraints"
   show DefiningEquation  = "Equation"
   show (Description _ _) = "Description"
+  show Notes             = "Notes"
 
 fixme :: [Contents]
 fixme = [Paragraph $ S "FIXME: This needs to be filled in"]

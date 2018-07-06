@@ -61,6 +61,7 @@ printLO (ALUR _ x l i)         = wrap "ul" ["hide-list-style"] $
 printLO (Bib bib)              = makeBib bib
 printLO (Graph _ _ _ _ _)      = empty -- FIXME
 
+
 -- | Called by build, uses 'printLO' to render the layout
 -- objects in Doc format.
 print :: [LayoutObj] -> Doc
@@ -264,9 +265,8 @@ makeList (Ordered items) = wrap "ol" ["list"] (vcat $ map
   (wrap "li" [] . p_item) items)
 makeList (Unordered items) = wrap "ul" ["list"] (vcat $ map
   (wrap "li" [] . p_item) items)
-makeList (Definitions items) = div_tag ["list"]
-  (vcat $ map (\(b,e) -> wrap "p" [] ((p_spec b <> text " is the") <+>
-  (p_item e))) items)
+makeList (Definitions items) = wrap "ul" ["hide-list-style-no-indent"] $ 
+  (vcat $ map (\(b,e) -> wrap "li" [] $ ((p_spec b <> text " is the") <+> (p_item e))) items)  
 
 -- | Helper for rendering list items
 p_item :: ItemType -> Doc

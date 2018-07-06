@@ -131,7 +131,7 @@ chipmunkSysInfo = SI {
 }
 
 cpRefDB :: ReferenceDB
-cpRefDB = rdb [] [] newAssumptions [] [] cpCitations -- FIXME: Convert the rest to new chunk types
+cpRefDB = rdb [] [] newAssumptions [] [] cpCitations [] -- FIXME: Convert the rest to new chunk types
 
 newAssumptions :: [AssumpChunk]
 newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7]

@@ -2,9 +2,11 @@
 module Language.Drasil.CodeSpec where
 
 import Language.Drasil
-import Language.Drasil.Chunk.Code
-import Language.Drasil.Code.Code
-import Language.Drasil.Code.DataDesc
+import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, CodeIdea, ConstraintMap,
+  codevar, codeEquat, funcPrefix, codeName, spaceToCodeType, toCodeName, constraintMap,
+  qtov, qtoc, symbToCodeName, codeType)
+import Language.Drasil.Code.Code (CodeType)
+import Language.Drasil.Code.DataDesc (DataDesc, getInputs)
 
 import qualified Data.Map as Map
 import Control.Lens ((^.))

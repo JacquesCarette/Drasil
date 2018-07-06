@@ -1,6 +1,6 @@
 module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 
-import Language.Drasil hiding (int)
+import Language.Drasil hiding (int, getLabel)
 import Language.Drasil.Code.Code as C
 import Language.Drasil.Code.Imperative.AST as I hiding ((&=), State, assign, return, 
   Not, Tan, Cos, Sin, Exp, Abs, Log, And, Or)

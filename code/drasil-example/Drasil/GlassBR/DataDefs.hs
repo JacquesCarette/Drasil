@@ -44,8 +44,7 @@ risk_eq = ((sy sflawParamK) /
 
 -- FIXME [4] !!!
 risk :: QDefinition
-risk = mkDataDef' risk_fun risk_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ jRef) [sourceref $ S "[4]"]
---risk = mkDataDef risk_fun risk_eq
+risk = mkDataDef risk_fun risk_eq
 
 riskDD :: DataDefinition
 riskDD = mkDD risk [sourceref $ S "[4]"] [{-derivation-}] ""{-temporary-} 
@@ -61,8 +60,7 @@ hFromt_helper :: Double -> Double -> (Expr, Relation)
 hFromt_helper result condition = (dbl result, (sy nom_thick) $= dbl condition)
 
 hFromt :: QDefinition
-hFromt = mkDataDef' act_thick hFromt_eq (hMin) []
---hFromt = mkDataDef act_thick hFromt_eq
+hFromt = mkDataDef act_thick hFromt_eq
 
 hFromtDD :: DataDefinition
 hFromtDD = mkDD hFromt [{-references-}] [{-derivation-}] ""--temporary
@@ -84,8 +82,7 @@ strDisFac_eq = apply (sy stressDistFac)
 --strDisFac_eq = FCall (asExpr interpZ) [V "SDF.txt", (sy plate_len) / (sy plate_width), sy dimlessLoad]
   
 strDisFac :: QDefinition
-strDisFac = mkDataDef' stressDistFac strDisFac_eq (jRef2 +:+ qHtRef +:+ aGrtrThanB) []
---strDisFac = mkDataDef stressDistFac strDisFac_eq
+strDisFac = mkDataDef stressDistFac strDisFac_eq
 
 strDisFacDD :: DataDefinition
 strDisFacDD = mkDD strDisFac [{-references-}] [{-derivation-}] ""--temporary
@@ -98,8 +95,7 @@ nonFL_eq = ((sy tolLoad) * (sy mod_elas) * (sy act_thick) $^ 4) /
   (square (sy plate_len * sy plate_width))
 
 nonFL :: QDefinition
-nonFL = mkDataDef' nonFactorL nonFL_eq (aGrtrThanB +:+ hRef +:+ qHtTlTolRef) []
---nonFL = mkDataDef nonFactorL nonFL_eq
+nonFL = mkDataDef nonFactorL nonFL_eq
 
 nonFLDD :: DataDefinition
 nonFLDD = mkDD nonFL [{-references-}] [{-derivation-}] ""--temporary
@@ -127,8 +123,7 @@ dimLL_eq = ((sy demand) * (square (sy plate_len * sy plate_width)))
   / ((sy mod_elas) * (sy act_thick $^ 4) * (sy gTF))
 
 dimLL :: QDefinition
-dimLL = mkDataDef' dimlessLoad dimLL_eq (qRef +:+ aGrtrThanB +:+ hRef +:+ gtfRef) []
---dimLL = mkDataDef dimlessLoad dimLL_eq
+dimLL = mkDataDef dimlessLoad dimLL_eq
 
 dimLLDD :: DataDefinition
 dimLLDD = mkDD dimLL [{-references-}] [{-derivation-}] ""--temporary
@@ -141,8 +136,7 @@ tolPre_eq = apply (sy tolLoad) [sy sdf_tol, (sy plate_len) / (sy plate_width)]
 --tolPre_eq = FCall (asExpr interpY) [V "SDF.txt", (sy plate_len) / (sy plate_width), sy sdf_tol]
 
 tolPre :: QDefinition
-tolPre = mkDataDef' tolLoad tolPre_eq (qHtTlExtra) []
---tolPre = mkDataDef tolLoad tolPre_eq
+tolPre = mkDataDef tolLoad tolPre_eq
 
 tolPreDD :: DataDefinition
 tolPreDD = mkDD tolPre [{-references-}] [{-derivation-}] ""--temporary
@@ -157,8 +151,7 @@ tolStrDisFac_eq = log (log (1 / (1 - (sy pb_tol)))
     (square (sy act_thick)))) $^ (sy sflawParamM) * (sy lDurFac)))))
 
 tolStrDisFac :: QDefinition
-tolStrDisFac = mkDataDef' sdf_tol tolStrDisFac_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ pbTolUsr) []
---tolStrDisFac = mkDataDef sdf_tol tolStrDisFac_eq []
+tolStrDisFac = mkDataDef sdf_tol tolStrDisFac_eq
 
 tolStrDisFacDD :: DataDefinition
 tolStrDisFacDD = mkDD tolStrDisFac [{-references-}] [{-derivation-}] ""--temporary

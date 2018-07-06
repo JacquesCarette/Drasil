@@ -51,15 +51,6 @@ mkDataDef cncpt equation = datadef $ getUnit cncpt --should references be passed
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
                            (eqSymb cncpt) equation [] (cncpt ^. uid) --shortname
 
--- FIXME: should be removed soon
--- Same as 'mkDataDef', but with an additional Sentence that can be taken as "extra information"; issue #350
-mkDataDef' :: (Quantity c) => c -> Expr -> Sentence -> References -> QDefinition
-mkDataDef' cncpt equation extraInfo refs = datadef $ getUnit cncpt
-  where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) extraInfo
-                           (eqSymb cncpt) a equation refs (cncpt ^. uid) --shortname
-        datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) extraInfo
-                           (eqSymb cncpt) equation refs (cncpt ^. uid) --shortname
-
 -- | Smart constructor for data definitions 
 mkDD :: QDefinition -> References -> Derivation -> String{-Label-} -> Maybe [Sentence] -> DataDefinition
 mkDD a b c _ e = DD a b c (shortname' $ a ^. uid  {-shortname' d-}) e -- FIXME: should the shortname be passed in or derived?

@@ -1,21 +1,25 @@
 module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 
 import Language.Drasil hiding (int)
-import Language.Drasil.Code.Code as C
+import Language.Drasil.Code.Code as C (CodeType(List, File, Char, Float, Object, 
+  String, Boolean, Integer))
 import Language.Drasil.Code.Imperative.AST as I hiding ((&=), State, assign, return, 
   Not, Tan, Cos, Sin, Exp, Abs, Log, And, Or)
 import qualified Language.Drasil.Code.Imperative.AST as I (assign, return)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel, cppLabel, cSharpLabel, javaLabel)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
-import Language.Drasil.Chunk.Code
+import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, codeName, codeType, 
+  codevar, codefunc, codeEquat, funcPrefix, physLookup, sfwrLookup, programName)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
-import Language.Drasil.Code.DataDesc
+import Language.Drasil.Code.DataDesc (Ind(WithPattern, WithLine, Explicit), 
+  Entry(JunkEntry, ListEntry, Entry), LinePattern(Repeat, Straight), 
+  Data(Line, Lines, JunkData, Singleton), DataDesc, getInputs)
 
 import Prelude hiding (log, exp, const)
 import Data.List (intersperse, (\\), stripPrefix)
-import System.Directory
+import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (maybe)

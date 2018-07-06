@@ -1,0 +1,48 @@
+Name:		  drasil-code
+Version:	0.1.1
+Cabal-Version:  >= 1.18
+Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
+build-type:     Simple
+Synopsis:	A framework for code and document generation for scientific software - Code SubPackage
+
+library
+  exposed-modules:
+      Language.Drasil.Code
+  other-modules:
+      Language.Drasil.Code.Code
+    , Language.Drasil.Code.DataDesc
+    , Language.Drasil.Code.Imperative.AST
+    , Language.Drasil.Code.Imperative.Helpers
+    , Language.Drasil.Code.Imperative.Import
+    , Language.Drasil.Code.Imperative.LanguageRenderer
+    , Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer
+    , Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer
+    , Language.Drasil.Code.Imperative.LanguageRenderer.GOOLRenderer
+    , Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer
+    , Language.Drasil.Code.Imperative.LanguageRenderer.LuaRenderer
+    , Language.Drasil.Code.Imperative.LanguageRenderer.ObjectiveCRenderer
+    , Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer
+    , Language.Drasil.Code.CodeGeneration
+    , Language.Drasil.Code.Imperative.Parsers.ConfigParser
+    , Language.Drasil.Chunk.Code
+    , Language.Drasil.CodeSpec
+    , Language.Drasil.Generate
+
+  Build-Depends:
+    base >= 4.7,
+    lens >= 4.12,
+    containers >= 0.5.5.1,
+    pretty >= 1.1.1.1,
+    mtl >= 2.2.1,
+    directory >= 1.2.6.2,
+    split >= 0.2.3.1,
+    drasil-lang >= 0.1.0,
+    MissingH >= 1.4.0.1,
+    parsec >= 3.1.9
+  default-language: Haskell2010
+  ghc-options:      -Wall -O2
+
+source-repository head
+  type:     git
+  location: git://github.com/JacquesCarette/Drasil.git
+  subdir: code

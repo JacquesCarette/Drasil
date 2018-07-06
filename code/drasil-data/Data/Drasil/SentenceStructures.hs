@@ -122,7 +122,7 @@ acroT  numVar = short thModel     :+: S (show numVar)
 
 
 {--** Miscellaneous **--}
-tableShows :: Contents -> Sentence -> Sentence
+tableShows :: LabelledContent -> Sentence -> Sentence
 tableShows ref trailing = (makeRef ref) +:+ S "shows the" +:+ 
   plural dependency +:+ S "of" +:+ trailing
 

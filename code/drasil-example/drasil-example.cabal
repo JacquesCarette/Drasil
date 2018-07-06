@@ -37,7 +37,7 @@ executable tiny
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil-lang >= 0.1.2,
+    drasil-lang >= 0.1.3,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1
   default-language: Haskell2010
@@ -90,7 +90,7 @@ executable nopcm
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil-lang >= 0.1.2,
+    drasil-lang >= 0.1.3,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1
   default-language: Haskell2010
@@ -139,7 +139,7 @@ executable ssp
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil-lang >= 0.1.2,
+    drasil-lang >= 0.1.3,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1
   default-language: Haskell2010
@@ -186,7 +186,7 @@ executable glassbr
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil-lang >= 0.1.2,
+    drasil-lang >= 0.1.3,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1    
   default-language: Haskell2010
@@ -230,7 +230,7 @@ executable chipmunkdocs
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil-lang >= 0.1.2,
+    drasil-lang >= 0.1.3,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1
   default-language: Haskell2010
@@ -278,7 +278,7 @@ executable swhs
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil-lang >= 0.1.2,
+    drasil-lang >= 0.1.3,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1
   default-language: Haskell2010

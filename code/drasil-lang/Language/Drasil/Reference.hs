@@ -3,12 +3,12 @@ module Language.Drasil.Reference where
 
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
-import Data.List (concatMap, groupBy, partition, sort, sortBy)
+import Data.List (concatMap, find, groupBy, partition, sortBy)
 import qualified Data.Map as Map
 
 import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
 import Language.Drasil.Chunk.Change as Ch (Change(..), ChngType(..))
-import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID))
+import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID), CiteField(Author, Title, Year), HasFields(getFields))
 import Language.Drasil.Chunk.Concept (ConceptInstance)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
@@ -21,8 +21,9 @@ import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid))
 import Language.Drasil.Document (Contents(..), DType(Data, Theory), 
   Section(Section), getDefName, repUnd)
+import Language.Drasil.People (People)
 import Language.Drasil.RefTypes (RefType(..))
-import Language.Drasil.Spec (Sentence(Ref))
+import Language.Drasil.Spec (Sentence((:+:), Ref, S))
 import Language.Drasil.UID (UID)
 
 -- | Database for maintaining references.
@@ -95,7 +96,7 @@ changeMap cs = Map.fromList $ zip (map (^. uid) (lcs ++ ulcs))
 bibMap :: [Citation] -> BibMap
 bibMap cs = Map.fromList $ zip (map (^. uid) scs) (zip scs [1..])
   where scs :: [Citation]
-        scs = sort cs
+        scs = sortBy compareAuthYearTitle cs
         -- Sorting is necessary if using elems to pull all the citations
         -- (as it sorts them and would change the order).
         -- We can always change the sorting to whatever makes most sense
@@ -266,8 +267,36 @@ instance Referable Contents where
 uidSort :: HasUID c => c -> c -> Ordering
 uidSort = compare `on` (^. uid)
 
+compareAuthYearTitle :: (HasFields c) => c -> c -> Ordering
+compareAuthYearTitle c1 c2
+  | (getAuthor c1) /= (getAuthor c2) = (getAuthor c1) `compare` (getAuthor c2)
+  |   (getYear c1) /= (getYear c2)   =   (getYear c1) `compare` (getYear c2)
+  | otherwise                        =  (getTitle c1) `compare` (getTitle c2)
+
+getAuthor :: (HasFields c) => c -> People
+getAuthor c = maybe (error "No author found") (\(Author x) -> x) (find (isAuthor) (c ^. getFields))
+  where isAuthor :: CiteField -> Bool
+        isAuthor (Author _) = True
+        isAuthor _          = False
+
+getYear :: (HasFields c) => c -> Int
+getYear c = maybe (error "No year found") (\(Year x) -> x) (find (isYear) (c ^. getFields))
+  where isYear :: CiteField -> Bool
+        isYear (Year _) = True
+        isYear _        = False
+
+getTitle :: (HasFields c) => c -> String
+getTitle c = getStr $ maybe (error "No title found") (\(Title x) -> x) (find (isTitle) (c ^. getFields))
+  where isTitle :: CiteField -> Bool
+        isTitle (Title _) = True
+        isTitle _         = False
+        getStr :: Sentence -> String
+        getStr (S s) = s
+        getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
+        getStr _ = error "Term is not a string" 
+
 citationsFromBibMap :: BibMap -> [Citation]
-citationsFromBibMap bm = sort citations
+citationsFromBibMap bm = sortBy compareAuthYearTitle citations
   where citations :: [Citation]
         citations = map (\(x,_) -> x) (Map.elems bm)
 

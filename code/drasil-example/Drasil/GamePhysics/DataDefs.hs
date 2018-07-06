@@ -9,7 +9,6 @@ import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
   angularDisplacement, angularVelocity, displacement, impulseS, linearAccel, 
   linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity)
-import Data.Drasil.Utils (mkDataDef)
 
 ----- Data Definitions -----
 

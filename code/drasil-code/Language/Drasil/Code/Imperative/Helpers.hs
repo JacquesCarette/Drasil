@@ -9,7 +9,8 @@ import Control.Monad (filterM)
 import Data.Char (toUpper)
 import Data.String.Utils (replace)
 import Data.List (nub,intersperse)
-import Text.PrettyPrint.HughesPJ
+import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
+  (<>), ($+$), comma, punctuate, nest)
 
 blank :: Doc
 blank = text ""

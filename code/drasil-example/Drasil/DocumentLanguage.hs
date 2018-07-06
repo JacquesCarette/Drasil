@@ -7,7 +7,7 @@
 -- instead.
 module Drasil.DocumentLanguage where
 
-import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation, 
+import Drasil.DocumentLanguage.Definitions (Fields, ddefn, ddefn', derivation, 
   instanceModel, gdefn, tmodel)
 
 import Language.Drasil hiding (Manual, Vector) -- Manual - Citation name conflict. FIXME: Move to different namespace
@@ -441,9 +441,9 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (DDs fields dds _) =
       SSD.dataDefnF EmptyS (map (ddefn fields (_sysinfodb si')) dds)
     mkSubSCS si' (DDs' fields dds ShowDerivation) = --FIXME: need to keep track of DD intro. --FIXME: temporary duplicate
-      SSD.dataDefnF EmptyS (concatMap (\x -> ddefn fields (_sysinfodb si') x : derivation x) dds)
+      SSD.dataDefnF EmptyS (concatMap (\x -> ddefn' fields (_sysinfodb si') x : derivation x) dds)
     mkSubSCS si' (DDs' fields dds _) = --FIXME: temporary duplicate
-      SSD.dataDefnF EmptyS (map (ddefn fields (_sysinfodb si')) dds)
+      SSD.dataDefnF EmptyS (map (ddefn' fields (_sysinfodb si')) dds)
     mkSubSCS si' (GDs fields gs' ShowDerivation) =
       SSD.genDefnF (concatMap (\x -> gdefn fields (_sysinfodb si') x : derivation x) gs')
     mkSubSCS si' (GDs fields gs' _) =

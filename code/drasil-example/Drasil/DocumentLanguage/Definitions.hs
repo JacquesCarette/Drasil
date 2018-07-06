@@ -5,7 +5,7 @@ module Drasil.DocumentLanguage.Definitions
   , Field(..)
   , Verbosity(..)
   , tmodel
-  , ddefn
+  , ddefn, ddefn'
   , gdefn, derivation
   , instanceModel
   , InclUnits(..)
@@ -51,7 +51,7 @@ ddefn :: HasSymbolTable ctx => Fields -> ctx -> QDefinition -> Contents
 ddefn fs m d = Defnt DD (foldr (mkQField d m) [] fs) (refAdd d)
 
 ddefn' :: HasSymbolTable ctx => Fields -> ctx -> DataDefinition -> Contents
-ddefn' fs m d = Defnt DD (foldr (mkQField d m) [] fs) (refAdd d)
+ddefn' fs m d = Defnt DD (foldr (mkDDField d m) [] fs) (refAdd d)
 
 -- | Create a general definition using a list of fields, database of symbols,
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'
@@ -100,8 +100,7 @@ tConToExpr (TCon AssumedCon x) = x
 -- TODO: buildDescription gets list of constraints to expr and ignores 't'.
 
 -- | Create the fields for a definition from a QDefinition (used by ddefn)
-mkQField :: (HasUID d, HasShortName d, HasSymbol d, HasAdditionalNotes d, ExprRelat d, HasSymbolTable ctx) => 
-  d -> ctx -> Field -> ModRow -> ModRow
+mkQField :: (HasSymbolTable ctx) => QDefinition -> ctx -> Field -> ModRow -> ModRow
 mkQField d _ l@Label fs = (show l, (Paragraph $ at_start d):[]) : fs
 mkQField d _ l@Symbol fs = (show l, (Paragraph $ (P $ eqSymb d)):[]) : fs
 mkQField d _ l@Units fs = (show l, (Paragraph $ (unit'2Contents d)):[]) : fs
@@ -114,6 +113,19 @@ mkQField d _ l@(Notes) fs = maybe fs (\ss -> (show l, map Paragraph ss) : fs) (d
 mkQField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for data definitions"
 
+-- | Create the fields for a definition from a QDefinition (used by ddefn)
+mkDDField :: (HasSymbolTable ctx) => DataDefinition -> ctx -> Field -> ModRow -> ModRow
+mkDDField d _ l@Label fs = (show l, (Paragraph $ at_start d):[]) : fs
+mkDDField d _ l@Symbol fs = (show l, (Paragraph $ (P $ eqSymb d)):[]) : fs
+mkDDField d _ l@Units fs = (show l, (Paragraph $ (unit'2Contents d)):[]) : fs
+mkDDField  d _ l@DefiningEquation fs = (show l, (eqUnR $ sy d $= d ^. relat):[]) : fs --FIXME: appending symbol should be done in the printing stage
+mkDDField d m l@(Description v u) fs =
+  (show l, buildDDescription' v u d m) : fs
+mkDDField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
+mkDDField d _ l@(Source) fs = (show l, [Paragraph $ getSource d]) : fs
+mkDDField d _ l@(Notes) fs = maybe fs (\ss -> (show l, map Paragraph ss) : fs) (d ^. getNotes)
+mkDDField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
+  "for data definitions"
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a model / general definition
@@ -130,6 +142,14 @@ buildDDescription :: HasSymbolTable ctx => Verbosity -> InclUnits -> QDefinition
 buildDDescription Succinct u d _ = [Enumeration (Definitions $ (firstPair u d):[])]
 buildDDescription Verbose u d m = [Enumeration (Definitions
   (firstPair u d : descPairs u (vars (d^.equat) m)))]
+
+-- | Create the description field (if necessary) using the given verbosity and
+-- including or ignoring units for a data definition
+buildDDescription' :: HasSymbolTable ctx => Verbosity -> InclUnits -> DataDefinition -> ctx ->
+  [Contents]
+buildDDescription' Succinct u d _ = [Enumeration (Definitions $ (firstPair' u d):[])]
+buildDDescription' Verbose u d m = [Enumeration (Definitions
+  (firstPair' u d : descPairs u (vars (d^.relat) m)))]
 
 -- | Create the fields for a general definition from a 'GenDefn' chunk.
 mkGDField :: HasSymbolTable ctx => GenDefn -> ctx -> Field -> ModRow -> ModRow
@@ -176,6 +196,12 @@ mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
 firstPair :: InclUnits -> QDefinition -> ListPair
 firstPair (IgnoreUnits) d  = (P (eqSymb d), Flat (phrase d))
 firstPair (IncludeUnits) d = (P (eqSymb d), Flat (phrase d +:+ sParen (unit'2Contents d)))
+
+-- | Used for definitions. The first pair is the symbol of the quantity we are
+-- defining.
+firstPair' :: InclUnits -> DataDefinition -> ListPair
+firstPair' (IgnoreUnits) d  = (P (eqSymb d), Flat (phrase d))
+firstPair' (IncludeUnits) d = (P (eqSymb d), Flat (phrase d +:+ sParen (unit'2Contents d)))
 
 -- | Create the descriptions for each symbol in the relation/equation
 descPairs :: (Quantity q) => InclUnits -> [q] -> [ListPair]

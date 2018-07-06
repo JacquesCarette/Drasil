@@ -72,15 +72,16 @@ im' rc i ic o oc lbe notes = IM rc i ic o oc [] [] lbe (Just notes)
 -- (Sentence is the "concept" definition for the relation concept)
 -- FIXME: get the shortname from the QDefinition?
 imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> 
-  InputConstraints -> OutputConstraints ->  Label -> InstanceModel
-imQD ctx qd dfn incon ocon lbe = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
-  (sy qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon (qw qd) ocon [] [] 
-  lbe Nothing
+  InputConstraints -> OutputConstraints -> Label -> Maybe Label -> InstanceModel
+imQD ctx qd dfn incon ocon lblForIM lblForRC = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
+  (sy qd $= qd ^. equat) lblForRC) (vars (qd^.equat) ctx) incon (qw qd) ocon [] [] 
+  lblForIM Nothing 
 
 -- Same as `imQD`, with an additional field for notes to be passed in
 -- FIXME: get the shortname from the QDefinition?
 imQD' :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> 
-  InputConstraints -> OutputConstraints -> Label -> Maybe [Sentence] -> InstanceModel
-imQD' ctx qd dfn incon ocon lbe notes = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
-  (sy qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon (qw qd) ocon [] [] 
-  lbe notes
+  InputConstraints -> OutputConstraints -> Label -> Maybe [Sentence] -> 
+  Maybe Label -> InstanceModel
+imQD' ctx qd dfn incon ocon lblForIM notes lblForRC = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
+  (sy qd $= qd ^. equat) lblForRC) (vars (qd^.equat) ctx) incon (qw qd) ocon [] [] 
+  lblForIM notes

@@ -59,9 +59,9 @@ build_data: build_code
 	stack install $(stackArgs) drasil-data
 
 build_docl: build_data
-	mkdir -p $(DATA_DIR)
-	cd $(DATA_DIR) && stack build -j2 $(stackArgs) drasil-data 
-	stack install $(stackArgs) drasil-data
+	mkdir -p $(DOCL_DIR)
+	cd $(DOCl_DIR) && stack build -j2 $(stackArgs) drasil-docLang
+	stack install $(stackArgs) drasil-docLang
 
 build_exam: build_docl
 	mkdir -p $(EXAM_DIR)

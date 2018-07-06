@@ -57,7 +57,6 @@ module Language.Drasil (
   , HasReasVal(reasVal)
   , ExprRelat(relat)
   , HasDerivation(derivations)
-  , HasLabel(getLabel)
   -- Chunk.VarChunk
   , VarChunk, codeVC
   , vc, implVar
@@ -145,7 +144,7 @@ module Language.Drasil (
   -- Document
   , Referable(..), Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListPair
-  , LabelledContent
+  , LabelledContent, llcc
   , section, fig, figWithWidth, section'' 
   , datadefn, reldefn
   -- Reference
@@ -234,7 +233,7 @@ import Language.Drasil.Document (Document(..), DType(..)
   , section, fig, figWithWidth, section''
   , datadefn, reldefn
   , ListPair
-  , LabelledContent)
+  , LabelledContent, llcc)
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Development.UnitLang -- all of it
 import Language.Drasil.Development.Unit -- all of it

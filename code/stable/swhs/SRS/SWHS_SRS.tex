@@ -7,6 +7,7 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{unicode-math}
+\usepackage{enumitem}
 \usepackage{tabu}
 \usepackage{longtable}
 \usepackage{booktabs}
@@ -15,6 +16,8 @@
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
+\newlist{symbDescription}{description}{1}
+\setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \setmathfont{Latin Modern Math}
 \global\tabulinesep=1mm
 \newcounter{assumpnum}
@@ -867,7 +870,7 @@ This problem is small in size and relatively simple, so performance is not a pri
 \section{Unlikely Changes}
 \label{Sec:UCs}
 \begin{description}
-\item[\refstepcounter{ucnum}\uctheucnum\label{UC:unlikeChg1}:]A\ref{A:assump14}  ,  A\ref{A:assump18} - It is unlikely for the changeof water from liquid to a solid or the state change of the phase change material from a liquid to a gas to be considered.
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC:unlikeChg1}:]A\ref{A:assump14} ,  A\ref{A:assump18} - It is unlikely for the changeof water from liquid to a solid or the state change of the phase change material from a liquid to a gas to be considered.
 \end{description}
 \begin{description}
 \item[\refstepcounter{ucnum}\uctheucnum\label{UC:unlikeChg1}:]A\ref{A:assump16} - Is used for the derivations of IM1 and IM2 (Hack: need Label to fix).

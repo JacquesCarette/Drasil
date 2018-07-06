@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.Eq
 
 import Control.Lens ((^.), makeLenses, view)
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA),
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), ConceptDomain, HasLabel(getLabel),
   HasAdditionalNotes(getNotes))
@@ -27,10 +27,10 @@ import Language.Drasil.Spec (Sentence)
 data QDefinition = EC
           { _qua :: QuantityDict
           , _equat :: Expr
-          , _ref :: References
-          , _deri :: Derivation
-          , _lb :: Label
-          , _notes :: Maybe [Sentence]
+          , _ref :: References -- FIXME: to be removed
+          , _deri :: Derivation -- FIXME: to be removed
+          , _refName :: ShortName -- FIXME: to be removed
+          , _notes :: Maybe [Sentence] -- FIXME: to be removed
           }
 makeLenses ''QDefinition
 

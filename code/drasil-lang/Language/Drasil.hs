@@ -41,6 +41,7 @@ module Language.Drasil (
   , UID
   -- Classes
   , HasUID(uid)
+  , HasLabel(getLabel)
   , NamedIdea(term)
   , HasAdditionalNotes(getNotes)
   , Idea(getA)
@@ -80,6 +81,8 @@ module Language.Drasil (
   , cnstrw
   -- Chunk.Eq
   , QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec
+  -- Chunk.DataDefinition
+  , DataDefinition, mkDataDef, mkDD
   -- Chunk.GenDefn
   , GenDefn, gd, gdUnit
   -- Chunk.InstanceModel
@@ -241,7 +244,10 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasUnitSymbol(usymb), IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes),
   Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations),
   HasReference(getReferences), HasLabel(getLabel))
+<<<<<<< HEAD
 import Language.Drasil.Label.Core (Label)
+=======
+>>>>>>> master
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Derivation (Derivation)
@@ -276,6 +282,7 @@ import Language.Drasil.Chunk.Constrained.Core (physc, sfwrc, enumc, isPhysC, isS
   Constraint(..), ConstraintReason(..), Reason(..), TheoryConstraint(..))
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec)
+import Language.Drasil.Chunk.DataDefinition (DataDefinition, mkDataDef, mkDD)
 import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.Goal (Goal, mkGoal)
 import Language.Drasil.Chunk.InstanceModel
@@ -316,6 +323,7 @@ import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 --import Language.Drasil.Generate -- moved in SubPackages
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
                                ,person', personWM, personWM', mononym, name)
+
 --import Language.Drasil.CodeSpec hiding (outputs, inputs) -- moved in SubPackages
 --import Language.Drasil.Code.DataDesc -- moved in SubPackages
 --import Language.Drasil.Code.Imperative.Lang -- moved in SubPackages

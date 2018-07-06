@@ -22,7 +22,6 @@ module Data.Drasil.Utils
   , fmtU
   , unwrap
   , fterms
-  , mkDataDef, mkDataDef'
   , prodUCTbl
   , eqUnR
   ) where
@@ -176,6 +175,7 @@ unwrap :: (Maybe UnitDefn) -> Sentence
 unwrap (Just a) = Sy (a ^. usymb)
 unwrap Nothing  = EmptyS
 
+<<<<<<< HEAD
 -- Used to help make Qdefinitions when uid, term, and symbol come from the same source
 mkDataDef :: (Quantity c) => c -> Expr -> Label -> QDefinition
 mkDataDef cncpt equation lbl = datadef (getUnit cncpt) lbl
@@ -192,6 +192,8 @@ mkDataDef' cncpt equation extraInfo refs lbl = datadef (getUnit cncpt) lbl
         datadef Nothing  lbl = fromEqn' (cncpt ^. uid) (cncpt ^. term) extraInfo
                                (eqSymb cncpt) equation refs lbl
 
+=======
+>>>>>>> master
 prodUCTbl :: [[Sentence]] -> Contents
 prodUCTbl cases = Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
   cases

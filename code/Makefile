@@ -15,6 +15,7 @@ GAME_DIR = Chipmunk
 LANG_DIR = drasil-lang
 CODE_DIR = drasil-code
 DATA_DIR = drasil-data
+DOCL_DIR = drasil-docLang
 EXAM_DIR = drasil-example
 
 GAME_EXE = chipmunkdocs
@@ -24,7 +25,7 @@ NoPCM_EXE  = nopcm
 SSP_EXE  = ssp
 GLASS_EXE= glassbr
 
-DIRS = $(SWHS_DIR) $(NoPCM_DIR) $(TINY_DIR) $(SSP_DIR) $(GLASS_DIR) $(GAME_DIR) $(DATA_DIR) $(LANG_DIR) $(EXAM_DIR)
+DIRS = $(SWHS_DIR) $(NoPCM_DIR) $(TINY_DIR) $(SSP_DIR) $(GLASS_DIR) $(GAME_DIR) $(DATA_DIR) $(LANG_DIR) $(DOCL_DIR) $(EXAM_DIR)
 DIFF = diff --strip-trailing-cr --ignore-all-space
 
 TESTS = swhs_diff tiny_diff ssp_diff glassbr_diff gamephys_diff nopcm_diff
@@ -52,12 +53,17 @@ build_code: build
 	cd $(CODE_DIR) && stack build -j2 $(stackArgs) drasil-code
 	stack install $(stackArgs) drasil-code
 
-build_data: build
+build_data: build_code
 	mkdir -p $(DATA_DIR)
 	cd $(DATA_DIR) && stack build -j2 $(stackArgs) drasil-data 
 	stack install $(stackArgs) drasil-data
 
-build_exam: build
+build_docl: build_data
+	mkdir -p $(DATA_DIR)
+	cd $(DATA_DIR) && stack build -j2 $(stackArgs) drasil-data 
+	stack install $(stackArgs) drasil-data
+
+build_exam: build_docl
 	mkdir -p $(EXAM_DIR)
 	cd $(EXAM_DIR) && stack build -j2 $(stackArgs) drasil-example 
 	stack install $(stackArgs) drasil-example

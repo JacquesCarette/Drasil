@@ -162,7 +162,7 @@ tolStrDisFac = mkDataDef' sdf_tol tolStrDisFac_eq (aGrtrThanB +:+ hRef +:+ ldfRe
 
 tolStrDisFacDD :: DataDefinition
 tolStrDisFacDD = mkDD tolStrDisFac [{-references-}] [{-derivation-}] ""--temporary
-  (Just $ aGrtrThanB : hRef : ldfRef : pbTolUsr : [])
+  (Just $ jtolRelToPbtol : aGrtrThanB : hRef : ldfRef : pbTolUsr : [])
 
 --Additional Notes--
 
@@ -214,3 +214,6 @@ jRef2 :: Sentence
 jRef2 = (getES stressDistFac +:+ S "is the" +:+ phrase stressDistFac `sC` 
   S "which is obtained by" +:+ S "interpolating from" +:+ plural datum +:+. 
   S "shown in Figure 7")
+
+jtolRelToPbtol :: Sentence
+jtolRelToPbtol = (getES sdf_tol +:+ S " is calculated with reference to " +:+. getES pb_tol)

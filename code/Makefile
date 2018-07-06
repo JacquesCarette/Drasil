@@ -60,7 +60,7 @@ build_data: build_code
 
 build_docl: build_data
 	mkdir -p $(DOCL_DIR)
-	cd $(DOCl_DIR) && stack build -j2 $(stackArgs) drasil-docLang
+	cd $(DOCL_DIR) && stack build -j2 $(stackArgs) drasil-docLang
 	stack install $(stackArgs) drasil-docLang
 
 build_exam: build_docl

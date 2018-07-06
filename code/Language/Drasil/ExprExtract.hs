@@ -34,10 +34,8 @@ egetSecCon (Con c) = egetCon c
 egetCon :: Contents -> [Expr]
 egetCon (EqnBlock e _) = [e]
 egetCon (Definition d) = egetDtype d 
-egetCon (Defnt td ((b, [con]):fs) a) = (concatMap egetCon [con]) ++ egetCon (Defnt DD fs a) 
-egetCon (Defnt td [] a) = [] ++ egetDtype td
---egetCon (Defnt Instance ((b, [con]):fs) a) = (concatMap egetCon [con]) ++ egetCon (Defnt Instance fs a) 
---egetCon (Defnt Instance ((b, [con]):[]) a) = concatMap egetCon [con] 
+egetCon (Defnt dt (hd:fs) a) = (concatMap egetCon $ snd hd) ++ egetCon (Defnt dt fs a)
+egetCon (Defnt dt [] a) = []
 egetCon _ = []
 
 egetDtype :: DType -> [Expr]

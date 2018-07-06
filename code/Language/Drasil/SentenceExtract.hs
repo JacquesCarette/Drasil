@@ -49,12 +49,8 @@ getCon (Assumption assc) = getAss assc
 getCon (Change chg) = getChg chg
 getCon (Bib bref) = getBib bref
 getCon (Graph [(s1, s2)] _ _ l _) = s1 : s2 : [l]
--- | Defnt DType [(Identifier, [Contents])] RefAdd
---getCon (Defnt Instance ((_, [con]):fs) a) = (concatMap getCon [con]) ++ getCon (Defnt Instance fs a)
---getCon (Defnt Instance ((_, _):fs) a) = getCon (Defnt Instance fs a)
---getCon (Defnt Instance [] a) = []
-getCon (Defnt dt ((b, con):fs) a) = (concatMap getCon con) ++ getCon (Defnt dt fs a) 
-getCon (Defnt dt [] a) = [] ++ getDtype dt 
+getCon (Defnt dt (hd:fs) a) = (concatMap getCon $ snd hd) ++ getCon (Defnt dt fs a)
+getCon (Defnt dt [] a) = []
 getCon (_) = []
 
 

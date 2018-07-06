@@ -46,10 +46,6 @@ type ListPair = (Title,ItemType) -- ^ Title: Item
 type Filepath = String
 type Lbl    = Sentence
 
--- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and Sections
--- which hold the contents of the document
-data Document = Document Title Author [Section]
-
 --FIXME: Remove Data and Theory from below.
 -- | Types of definitions
 data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining 
@@ -84,23 +80,6 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
                | Defnt DType [(Identifier, [Contents])] RefAdd
 type Identifier = String
 
--- | Section Contents are split into subsections or contents, where contents
--- are standard layout objects (see 'Contents')
-data SecCons = Sub Section
-             | Con Contents
-
--- | Sections have a title ('Sentence') and a list of contents ('SecCons')
--- and its shortname
-data Section = Section 
-             { tle :: Title 
-             , cons :: [SecCons] 
-             , _lb :: Label
-             }
-makeLenses ''Section
-
-instance HasLabel      Section where getLabel = lb
-instance HasShortName  Section where shortname = lb . shortname
-
 data LabelledContent = LblC { _uniqueID :: UID
                             , _lbl :: Label
                             , ctype :: Contents
@@ -116,6 +95,28 @@ instance HasShortName  LabelledContent where shortname = lbl . shortname
 llcc :: UID -> Label -> Contents -> LabelledContent
 llcc = LblC
 
+-- | Section Contents are split into subsections or contents, where contents
+-- are standard layout objects (see 'Contents')
+data SecCons = Sub   Section
+             | Con   Contents
+             | LCon  LabelledContent
+
+-- | Sections have a title ('Sentence') and a list of contents ('SecCons')
+-- and its shortname
+data Section = Section 
+             { tle :: Title 
+             , cons :: [SecCons] 
+             , _lb :: Label
+             }
+makeLenses ''Section
+
+instance HasLabel      Section where getLabel = lb
+instance HasShortName  Section where shortname = lb . shortname
+
+-- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and Sections
+-- which hold the contents of the document
+data Document = Document Title Author [Section]
+             
 {-
 instance HasShortName  Contents where
   shortname (Table _ _ _ _ r)     = shortname' $ "Table:" ++ r
@@ -167,6 +168,9 @@ section title intro secs lbe = Section title (map Con intro ++ map Sub secs) lbe
 
 section'' :: Sentence -> [Contents] -> [Section] -> Label -> Section
 section'' title intro secs lbe = section title intro secs lbe
+
+sectionLC :: Sentence -> [LabelledContent] -> [Section] -> Label -> Section
+sectionLC title intro secs lbe = Section title (map LCon intro ++ map Sub secs) lbe
 
 -- | Figure smart constructor. Assumes 100% of page width as max width.
 fig :: Lbl -> Filepath -> RefAdd -> Contents

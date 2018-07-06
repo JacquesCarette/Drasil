@@ -41,7 +41,7 @@ doc' sys authors secs = Document (Doc.srs `forTT'` sys) authors secs
 intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
   genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
   probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assumpt, thModel,
-  genDefn, inModel, dataDefn, datCon, propCorSol, require, nonfuncReq, funcReq, likeChg, traceyMandG, tOfSymb,
+  genDefn, inModel, dataDefn, propCorSol, require, nonfuncReq, funcReq, likeChg, traceyMandG, tOfSymb,
   appendix, reference, offShelfSol, valsOfAuxCons, unlikeChg :: [Contents] -> [Section] -> Section
 
 intro       cs ss = section' (titleize Doc.introduction) cs ss "Intro"
@@ -75,7 +75,6 @@ thModel     cs ss = section' (titleize' Doc.thModel)           cs ss "TMs"
 genDefn     cs ss = section' (titleize' Doc.genDefn)           cs ss "GDs"
 inModel     cs ss = section' (titleize' Doc.inModel)           cs ss "IMs"
 dataDefn    cs ss = section' (titleize' Doc.dataDefn)          cs ss "DDs"
-datCon      cs ss = section' (titleize' Doc.datumConstraint)   cs ss "DataConstraints"
 
 propCorSol  cs ss = section' (titleize' Doc.propOfCorSol)      cs ss "CorSolProps"
 
@@ -97,15 +96,13 @@ offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "ExistingSol
 
 tOfSymb cs ss = section' (titleize Doc.tOfSymb) cs ss "ToS"
 
+
+datCon :: [LabelledContent] -> [Section] -> Section
+datCon cs ss = sectionLC (titleize' Doc.datumConstraint) cs ss (mkLabelRA "DataConstraints")
+
 --function that sets the shortname of each section to be the reference address
 section' :: Sentence -> [Contents] -> [Section] -> RefAdd -> Section
 section' a b c d = section a b c (mkLabelRA' (d ++ "Label") d)
-  where
-    getStr :: Sentence -> String
-    getStr (S s) = s
-    getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
-    getStr _ = error "Term is not a string" 
-
 --
 missingP :: [Contents]
 missingP = [Paragraph $ S "..."]

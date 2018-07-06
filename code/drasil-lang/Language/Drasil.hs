@@ -145,7 +145,7 @@ module Language.Drasil (
   , Referable(..), Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListPair
   , LabelledContent, llcc
-  , section, fig, figWithWidth, section'' 
+  , section, fig, figWithWidth, section'', sectionLC
   , datadefn, reldefn
   -- Reference
   , makeRef, acroTest, find'
@@ -231,7 +231,7 @@ import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website), DocSpec(DocS
 import Language.Drasil.Document (Document(..), DType(..)
   , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..)
   , section, fig, figWithWidth, section''
-  , datadefn, reldefn
+  , datadefn, reldefn, sectionLC
   , ListPair
   , LabelledContent, llcc)
 import Language.Drasil.Unicode -- all of it

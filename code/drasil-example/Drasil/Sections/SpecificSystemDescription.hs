@@ -112,7 +112,7 @@ solChSpecF progName (probDes, likeChg, unlikeChg) ddEndSent (mid, hasUncertainty
         generDefn    = genDefnF g
         dataDefin    = dataDefnF ddEndSent dd
         instModels   = inModelF  probDes dataDefin theModels generDefn i
-        dataConstr   = datConF mid hasUncertainty trail dc
+        dataConstr   = datConF mid hasUncertainty trail (llcc "dataConstraintsSection" (mkLabelRA'' "dataConstraintsSection") dc)
 
 
 solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
@@ -194,9 +194,10 @@ inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_,
     where end = S " and" +:+ (makeRef r4)
 
 -- wrapper for datConPar
-datConF :: Sentence -> Sentence -> Sentence -> [Contents] -> Section
+datConF :: Sentence -> Sentence -> Sentence -> [LabelledContent] -> Section
 datConF hasUncertainty mid trailing tables = SRS.datCon 
-  ((dataConstraintParagraph hasUncertainty (listofTablesToRefs tables) mid trailing):tables) []
+  ((llcc "dataConsIntro" (mkLabelRA'' "dataConsSection") $ 
+    dataConstraintParagraph hasUncertainty (listofTablesToRefs tables) mid trailing):tables) []
   
 -- reference to the input/ ouput tables -> optional middle sentence(s) (use EmptyS if not wanted) -> 
 -- True if standard ending sentence wanted -> optional trailing sentence(s) -> Contents

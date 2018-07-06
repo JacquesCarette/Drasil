@@ -209,6 +209,7 @@ module Language.Drasil (
   , RefAdd
   -- Label
   , Label 
+  , mkLabelRA, mkLabelRA'
   ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -247,6 +248,7 @@ import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.References (References)
 import Language.Drasil.Chunk.ShortName (ShortName, shortname', HasShortName(shortname))
 import Language.Drasil.Chunk.Change
+import Language.Drasil.Label (mkLabelRA, mkLabelRA')
 import Language.Drasil.Chunk.Citation (
   -- Types
     Citation, BibRef, CiteField, Month(..), HP, CitationKind(..)

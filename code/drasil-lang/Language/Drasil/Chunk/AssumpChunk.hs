@@ -7,10 +7,9 @@ module Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Spec (Sentence)
-import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
-import Control.Lens (makeLenses, (^.), view)
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
+import Control.Lens (makeLenses, (^.))
 import Language.Drasil.Label.Core (Label)
-import Language.Drasil.Label (mkLabelRA)
 import Language.Drasil.Classes (HasLabel(getLabel))
 
 -- | Assumption chunk type. Has id, what is being assumed, and a shortname.

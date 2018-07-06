@@ -1,4 +1,4 @@
-module Language.Drasil.Label (Label, mkLabelRA) where
+module Language.Drasil.Label (Label, mkLabelRA, mkLabelRA') where
 
 import Language.Drasil.Label.Core
 import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd))
@@ -14,6 +14,10 @@ instance HasRefAddress Label where getRefAdd = lblType
 -- shortn ==> the shortname - what a person/user will see (can include spaces, accents, etc. (unicode))
 mkLabelRA :: String -> String -> String -> Label
 mkLabelRA i ref shortn = Lbl i (RefAdd $ ensureASCII ref) (shortname' shortn)
+
+-- for when reference address and the display should be the same
+mkLabelRA' :: String -> String -> Label
+mkLabelRA' i refAndshortn = Lbl i (RefAdd $ ensureASCII refAndshortn) (shortname' refAndshortn)
 
 mkLabelML :: String -> String -> String -> Label
 mkLabelML i ref shortn = Lbl i (MetaLink $ ensureASCII ref) (shortname' shortn)

@@ -55,7 +55,7 @@ import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist, glaSlab, 
   blastRisk, glass, glaPlane, glassBRProg, ptOfExplsn, acronyms)
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
-  dimLL, glaTyFac, tolStrDisFac, tolPre, risk)
+  dimLL, glaTyFac, tolStrDisFac, tolPre, risk, qDefns)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
@@ -161,7 +161,7 @@ glassSystInfo = SI {
   _units       = map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton],
   _quants      = this_symbols,
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = (map (relToQD gbSymbMap) dataDefns) ++ 
+  _definitions = qDefns ++ 
                  (map (relToQD gbSymbMap) iModels {-[RelationConcept]-}) ++ 
                  (map (relToQD gbSymbMap) tModels {-[RelationConcept]-}) ++
                   [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears

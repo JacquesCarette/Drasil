@@ -1,5 +1,5 @@
 module Drasil.GlassBR.DataDefs (dataDefns, dimLL, gbQDefns, glaTyFac, hFromt,
-  nonFL, risk, strDisFac, tolPre, tolStrDisFac) where
+  nonFL, risk, strDisFac, tolPre, tolStrDisFac, qDefns) where
 
 import Language.Drasil
 
@@ -25,6 +25,9 @@ import Control.Lens ((^.))
 dataDefns :: [DataDefinition] 
 dataDefns = [riskDD, hFromtDD, strDisFacDD, nonFLDD, glaTyFacDD, dimLLDD,
   tolPreDD, tolStrDisFacDD]
+
+qDefns :: [QDefinition] 
+qDefns = [risk, hFromt, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac]
 
 gbQDefns :: [Block QDefinition]
 gbQDefns = [Parallel hFromt {-DD2-} [glaTyFac {-DD6-}]] ++ --can be calculated on their own

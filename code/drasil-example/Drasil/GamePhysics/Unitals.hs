@@ -86,7 +86,7 @@ velParam n w = dqdEL
 
 angParam n w = dqdEL
  (dccWDS ("angular velocity" ++ n) (compoundPhrase'
-  (cn $ "is the " ++ n ++ " body's") (QP.angularVelocity ^. term))
+  (cn $ n ++ " body's") (QP.angularVelocity ^. term))
   (phrase QP.angularVelocity)) (sub (eqSymb QP.angularVelocity) w) Real angVelU
 
 perpParam n w = dqdEL
@@ -147,7 +147,7 @@ r_OB    = uc' "r_OB"
   (sub (eqSymb QP.displacement) (Concat [cO, cB])) metre
 
 pos_CM = ucs "p_CM" (nounPhraseSP $ 
-  "the mass-weighted average position of a rigid " ++
+  "mass-weighted average position of a rigid " ++
   "body's particles") 
   "FIXME: Define this or remove the need for definitions" 
   (sub (eqSymb QP.position) (Atomic "CM")) metre Real
@@ -175,7 +175,7 @@ vel_i = ucFromDQD accI
 
 torque_i = ucFromDQD torI
   where torI = dqdEL (dccWDS "torque_i" 
-               (cn "is the torque applied to the i-th body")
+               (cn "torque applied to the i-th body")
                (phrase QP.torque)) (sub (eqSymb QP.torque) lI) Real torqueU
 
 mTot = ucFromDQD mtotal

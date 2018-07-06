@@ -7,7 +7,7 @@
 -- instead.
 module Drasil.DocumentLanguage where
 
-import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation, 
+import Drasil.DocumentLanguage.Definitions (Fields, ddefn, ddefn', derivation, 
   instanceModel, gdefn, tmodel)
 
 import Language.Drasil hiding (Manual, Vector) -- Manual - Citation name conflict. FIXME: Move to different namespace
@@ -193,6 +193,7 @@ data SCSSub where
   TMs         :: Fields  -> [TheoryModel] -> SCSSub
   GDs         :: Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
   DDs         :: Fields  -> [QDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
+  DDs'        :: Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro -- should eventually replace and be renamed to DDs
   IMs         :: Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
   Constraints :: Sentence -> Sentence -> Sentence -> [Contents] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
 --FIXME: Work in Progress ^
@@ -430,7 +431,8 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS _ (SCSSubVerb s)  = s
     mkSubSCS _ (TMs _ [])   = error "There are no Theoretical Models"
     mkSubSCS _ (GDs _ [] _) = SSD.genDefnF []
-    mkSubSCS _ (DDs _ [] _) = error "There are no Data Definitions"
+    mkSubSCS _ (DDs _ [] _) = error "There are no Data Definitions" 
+    mkSubSCS _ (DDs' _ [] _) = error "There are no Data Definitions" --FIXME: temporary duplicate 
     mkSubSCS _ (IMs _ [] _)  = error "There are no Instance Models"
     mkSubSCS si' (TMs fields ts) =
       SSD.thModF (siSys si') (map (tmodel fields (_sysinfodb si')) ts)
@@ -438,6 +440,10 @@ mkSolChSpec si (SCSProg l) =
       SSD.dataDefnF EmptyS (concatMap (\x -> ddefn fields (_sysinfodb si') x : derivation x) dds)
     mkSubSCS si' (DDs fields dds _) =
       SSD.dataDefnF EmptyS (map (ddefn fields (_sysinfodb si')) dds)
+    mkSubSCS si' (DDs' fields dds ShowDerivation) = --FIXME: need to keep track of DD intro. --FIXME: temporary duplicate
+      SSD.dataDefnF EmptyS (concatMap (\x -> ddefn' fields (_sysinfodb si') x : derivation x) dds)
+    mkSubSCS si' (DDs' fields dds _) = --FIXME: temporary duplicate
+      SSD.dataDefnF EmptyS (map (ddefn' fields (_sysinfodb si')) dds)
     mkSubSCS si' (GDs fields gs' ShowDerivation) =
       SSD.genDefnF (concatMap (\x -> gdefn fields (_sysinfodb si') x : derivation x) gs')
     mkSubSCS si' (GDs fields gs' _) =

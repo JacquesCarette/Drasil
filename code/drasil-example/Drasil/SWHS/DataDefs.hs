@@ -10,7 +10,6 @@ import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcm_mass,
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latent_heat)
-import Data.Drasil.Utils (mkDataDef)
 
 ddRef :: QDefinition -> Sentence
 ddRef = refDD (ddRefDB swhsRefMDB)

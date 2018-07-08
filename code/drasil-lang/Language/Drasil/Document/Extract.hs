@@ -49,17 +49,17 @@ egetSecCon (Con c) = egetCon c
 egetCon :: Contents -> [Expr]
 egetCon (EqnBlock e _) = [e]
 egetCon (Definition d) = egetDtype d 
-egetCon (Defnt dt (hd:fs) a) = (concatMap egetCon $ snd hd) ++ egetCon (Defnt dt fs a)
+egetCon (Defnt dt (hd:tl) a) = (concatMap egetCon $ snd hd) ++ egetCon (Defnt dt tl a)
 egetCon (Defnt dt [] a) = []
 egetCon _ = []
 
 egetDtype :: DType -> [Expr]
 egetDtype (Data q) = egetQDef q
-egetDtype (Theory t) = [(t ^. relat)]
+egetDtype (Theory t) = [t ^. relat]
 egetDtype _ = []
 
 egetQDef :: QDefinition -> [Expr]
-egetQDef a = [(a ^. relat)]
+egetQDef a = [a ^. relat]
 
 
 getDoc :: Document -> [Sentence]
@@ -128,13 +128,13 @@ getDefn :: (Definition a) => a -> [Sentence]
 getDefn a = [a ^. defn]
 
 getReq :: ReqChunk -> [Sentence]
-getReq a = [(requires a)]
+getReq a = [requires a]
 
 getAss :: AssumpChunk -> [Sentence]
-getAss a = [(assuming a)]
+getAss a = [assuming a]
 
 getChg :: Change -> [Sentence]
-getChg a = [(chng a)]
+getChg a = [chng a]
 
 getLT :: ListType -> [Sentence]
 getLT (Bullet it) = concatMap getIL it
@@ -167,6 +167,3 @@ getField (Series s) = [s]
 getField (Title s) = [s]
 getField (Type s) = [s]
 getField _ = []
-
-               
-

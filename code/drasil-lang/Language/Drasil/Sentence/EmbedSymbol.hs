@@ -1,4 +1,4 @@
-module Language.Drasil.Sentence.Math (ch) where
+module Language.Drasil.Sentence.EmbedSymbol (ch) where
 
 import Control.Lens ((^.))
 import Language.Drasil.Classes (HasUID(uid), HasSymbol)

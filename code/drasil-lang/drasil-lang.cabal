@@ -29,7 +29,7 @@ library
     , Language.Drasil.RefTypes
     , Language.Drasil.Reference
     , Language.Drasil.Sentence.Extract
-    , Language.Drasil.Sentence.Math
+    , Language.Drasil.Sentence.EmbedSymbol
     , Language.Drasil.Space
     , Language.Drasil.Spec
     , Language.Drasil.Symbol

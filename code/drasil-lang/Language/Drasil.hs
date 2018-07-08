@@ -207,7 +207,7 @@ module Language.Drasil (
   , RefAdd
   -- SentenceExtract
   , vars
-  -- Chunk.Sentence.Math
+  -- Chunk.Sentence.EmbedSymbol
   , ch
   -- Chunk.Sentence.Extract
   , sdep, vars',snames, combine
@@ -232,7 +232,7 @@ import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, co
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
 import Language.Drasil.Document.Extract(egetDoc, getDoc)
 import Language.Drasil.Expr.Extract (dep, names', vars, names, combine')
-import Language.Drasil.Sentence.Math(ch)
+import Language.Drasil.Sentence.EmbedSymbol(ch)
 import Language.Drasil.Sentence.Extract(sdep, vars', snames, combine)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website), DocSpec(DocSpec), Filename)
 import Language.Drasil.Document (Document(..), DType(..)

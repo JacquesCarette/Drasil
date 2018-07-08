@@ -4,7 +4,7 @@ module Language.Drasil.Expr where
 
 import Data.Ratio (denominator, numerator)
 import Prelude hiding (sqrt)
-import Language.Drasil.Symbol
+
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UID (UID)

@@ -13,7 +13,6 @@ import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.ShortName
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Citation
 import Language.Drasil.Chunk.ReqChunk
 import Language.Drasil.Chunk.Eq (QDefinition)
@@ -21,9 +20,9 @@ import Language.Drasil.Chunk.References
 
 import Language.Drasil.Development.Unit(UnitDefn)
 
-import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA),
-  HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
-  HasReference(getReferences), ConceptDomain, Definition(defn))
+import Language.Drasil.Classes (NamedIdea(term),
+  ExprRelat(relat), HasDerivation(derivations), 
+  HasReference(getReferences), Definition(defn))
 
 
 egetDoc :: Document -> [Expr]
@@ -40,7 +39,6 @@ egetDoc (Document _ _ s) = concatMap egetSec s
 egetSec :: Section -> [Expr]
 egetSec (Section _ _ _ (ShortNm "RefMat")) = []
 egetSec (Section _ sc _ _) = concatMap egetSecCon sc
-egetSec (Section _ _ _ _) = []
 
 egetSecCon :: SecCons -> [Expr]
 egetSecCon (Sub s) = egetSec s
@@ -50,7 +48,7 @@ egetCon :: Contents -> [Expr]
 egetCon (EqnBlock e _) = [e]
 egetCon (Definition d) = egetDtype d 
 egetCon (Defnt dt (hd:tl) a) = (concatMap egetCon $ snd hd) ++ egetCon (Defnt dt tl a)
-egetCon (Defnt dt [] a) = []
+egetCon (Defnt dt [] _) = [] ++ egetDtype dt
 egetCon _ = []
 
 egetDtype :: DType -> [Expr]
@@ -74,13 +72,12 @@ getSecCon (Sub s) = getSec s
 getSecCon (Con c) = getCon c
 
 isVar :: ([Sentence], [[Sentence]]) -> [Sentence]
-isVar (((S "Var") : tl), s) = head s
-isVar ((hd : tl, s)) = isVar (tl, tail s)
+isVar (((S "Var") : _), s) = head s
+isVar ((_ : tl, s)) = isVar (tl, tail s)
 isVar ([], _) = []
-isVar (_, []) = []
 
 getCon :: Contents -> [Sentence]
-getCon (Table s1 s2 t _ _) = isVar (s1, transpose s2) --s1 ++ concat s2 ++ [t]
+getCon (Table s1 s2 t _ _) = isVar (s1, transpose s2) ++ [t]
 getCon (Paragraph s) = [s]
 getCon (EqnBlock _ _) = []
 getCon (Definition d) = getDtype d
@@ -92,7 +89,7 @@ getCon (Change chg) = getChg chg
 getCon (Bib bref) = getBib bref
 getCon (Graph [(s1, s2)] _ _ l _) = s1 : s2 : [l]
 getCon (Defnt dt (hd:fs) a) = (concatMap getCon $ snd hd) ++ getCon (Defnt dt fs a)
-getCon (Defnt dt [] a) = []
+getCon (Defnt _ [] _) = []
 getCon (_) = []
 
 

@@ -206,7 +206,6 @@ module Language.Drasil (
   -- RefTypes
   , RefAdd
   -- SentenceExtract
-  , getDoc
   , vars
   -- Chunk.Sentence.Math
   , ch
@@ -214,8 +213,8 @@ module Language.Drasil (
   , sdep, vars',snames, combine
   -- Chunk.Expr.Extract
   , names, combine'
-  -- ExprExtract
-  , egetDoc
+  -- Document.Extract
+  , egetDoc, getDoc
 ) where
 
 
@@ -231,9 +230,8 @@ import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, co
           apply, apply1, apply2,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
-import Language.Drasil.ExprExtract(egetDoc)
+import Language.Drasil.Document.Extract(egetDoc, getDoc)
 import Language.Drasil.Expr.Extract (dep, names', vars, names, combine')
-import Language.Drasil.SentenceExtract (getDoc)
 import Language.Drasil.Sentence.Math(ch)
 import Language.Drasil.Sentence.Extract(sdep, vars', snames, combine)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website), DocSpec(DocSpec), Filename)

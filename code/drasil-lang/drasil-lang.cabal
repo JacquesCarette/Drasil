@@ -15,10 +15,10 @@ library
     , Language.Drasil.Expr.Extract
     , Language.Drasil.Expr.Math
     , Language.Drasil.Expr.Precedence
-    , Language.Drasil.ExprExtract
     , Language.Drasil.Classes
     , Language.Drasil.Config
     , Language.Drasil.Document
+    , Language.Drasil.Document.Extract
     , Language.Drasil.Format
     , Language.Drasil.Label.Core
     , Language.Drasil.Label
@@ -30,7 +30,6 @@ library
     , Language.Drasil.Reference
     , Language.Drasil.Sentence.Extract
     , Language.Drasil.Sentence.Math
-    , Language.Drasil.SentenceExtract
     , Language.Drasil.Space
     , Language.Drasil.Spec
     , Language.Drasil.Symbol

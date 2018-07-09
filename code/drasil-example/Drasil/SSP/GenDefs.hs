@@ -2,8 +2,7 @@ module Drasil.SSP.GenDefs (sspGenDefs) where
 
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
-
-import Drasil.DocumentLanguage.RefHelpers (refA)
+import Drasil.DocLang (refA)
 
 import Drasil.SSP.Assumptions (newA5, sspRefDB)
 import Drasil.SSP.BasicExprs (displMtx, eqlExpr, momExpr, rotMtx)

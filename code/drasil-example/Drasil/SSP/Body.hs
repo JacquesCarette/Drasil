@@ -5,6 +5,12 @@ import Language.Drasil.Code (CodeSpec, codeSpec)
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
 
+import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..), 
+  LCsSec(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), --TSIntro, 
+  TSIntro(..), UCsSec(..), dataConstraintUncertainty, genSysF, goalStmtF, 
+  inDataConstTbl, intro, mkDoc, nonFuncReqF, outDataConstTbl, probDescF, reqF, 
+  solChSpecF, specSysDesF, termDefnF, tsymb'', valsOfAuxConstantsF)
+
 import Data.Drasil.Concepts.Documentation (analysis, definition, 
   design, document, effect, element, endUser, goalStmt, inModel, input_, 
   interest, interest, issue, loss, method_, model, organization, physics, 
@@ -45,19 +51,6 @@ import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs,
 
 import qualified Drasil.SRS as SRS (funcReq, inModel, likeChg, unlikeChg, missingP, 
   physSyst)
-
-import Drasil.DocumentLanguage (DocDesc, DocSection(..), IntroSec(..), 
-  IntroSub(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), TSIntro, 
-  TSIntro(..), LCsSec(..), UCsSec(..), mkDoc, tsymb'')
-
-import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
-import Drasil.Sections.GeneralSystDesc (genSysF)
-import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.Sections.Requirements (reqF, nonFuncReqF)
-import Drasil.Sections.SpecificSystemDescription (dataConstraintUncertainty, 
-  goalStmtF, inDataConstTbl, outDataConstTbl, probDescF, solChSpecF, 
-  specSysDesF, termDefnF)
-
 
 --type declarations for sections--
 s3, s4, s5, s7 :: Section

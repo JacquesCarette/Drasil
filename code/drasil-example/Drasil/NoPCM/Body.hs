@@ -35,7 +35,7 @@ import Drasil.NoPCM.IMods (eBalanceOnWtr)
 import Drasil.NoPCM.Unitals (temp_init)
 import Drasil.SWHS.References (ref2, ref3, ref4)
 import Drasil.SWHS.Requirements (nonFuncReqs)
-import Drasil.SWHS.Changes (likeChg2, likeChg3, likeChg6)
+import Drasil.SWHS.Changes (chgsStart, likeChg2, likeChg3, likeChg6, unlikeChg2)
 
 import Data.Drasil.People (thulasi)
 import Data.Drasil.Utils (enumSimple, getES, refFromType,
@@ -148,7 +148,7 @@ mkSRS = RefSec (RefProg intro
            , Description Verbose IncludeUnits
            , Source, RefBy] generalDefinitions ShowDerivation)])]) : --Testing General Definitions.-}
   Verbatim specSystDesc: -- Comment this out and the above in for testing GDs.
-  map Verbatim [reqS, likelyChgs, traceMAndG, specParamVal] ++ (Bibliography : [])
+  map Verbatim [reqS, likelyChgs, unlikelyChgs, traceMAndG, specParamVal] ++ (Bibliography : [])
 
 generalDefinitions :: [GenDefn]
 generalDefinitions = [gd nwtnCooling (Just thermal_flux) ([] :: Derivation) "nwtnCooling",
@@ -774,7 +774,13 @@ likeChg3_npcm = mkLklyChnk "likeChg3" (
 unlikelyChgs = SRS.unlikeChg unlikelyChgsList []
 
 unlikelyChgsList :: [Contents]
-unlikelyChgsList = []
+unlikelyChgsList = [unlikeChg1, unlikeChg2]
+
+unlikeChg1 :: Contents 
+unlikeChg1 = mkUnLklyChnk "unlikeChg1" (
+  foldlSent [chgsStart assump14, S "It is unlikely for the change of",
+  phrase water, S "from liquid to a solid, or from liquid to gas to be considered"]) 
+  "Water-Fixed-States" 
 
 ----------------------------------------------
 --Section 7:  TRACEABILITY MATRICES AND GRAPHS

@@ -1,14 +1,7 @@
 module Language.Drasil.Expr.Extract(dep, names, names') where
 
 import Data.List (nub)
-import Control.Lens ((^.))
 import Language.Drasil.Expr (Expr(..), RealInterval(..))
-import Language.Drasil.ChunkDB (HasSymbolTable, symbLookup, symbolTable, HasDefinitionTable,
- defLookup, defTable)
-import Language.Drasil.Chunk.Quantity (QuantityDict)
-import Language.Drasil.Chunk.Concept (ConceptChunk)
-import Language.Drasil.Spec(Sentence(..))
-import Language.Drasil.Chunk.DefinedQuantity
 -- | Generic traverse of all positions that could lead to names
 names :: Expr -> [String]
 names (AssocA _ l)   = concatMap names l
@@ -63,25 +56,3 @@ names'_ri (UpFrom il)     = names' (snd il)
 -- | Get dependencies from an equation  
 dep :: Expr -> [String]
 dep = nub . names
-
--- | Get a list of quantities (QuantityDict) from an equation in order to print
-vars :: (HasSymbolTable s) => Expr -> s -> [QuantityDict]
-vars e m = map resolve $ dep e
-  where resolve x = symbLookup x $ m ^. symbolTable
-
-{-- | Get a list of CodeChunks from an equation
-codevars :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
-codevars e m = map resolve $ dep e
-  where resolve x = codevar (symbLookup x $ m ^. symbolTable)
-
--- | Get a list of CodeChunks from an equation (no functions)
-codevars' :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
-codevars' e m = map resolve $ nub $ names' e
-  where  resolve x = codevar (symbLookup x (m ^. symbolTable))--}
-
-concpt' :: (HasDefinitionTable s) => Expr -> s -> [ConceptChunk]
-concpt' a m = map resolve $ dep a
-  where resolve x = defLookup x $ m ^. defTable
-
-combine' :: (HasSymbolTable s, HasDefinitionTable s) => Expr -> s -> [DefinedQuantityDict]
-combine' a m = zipWith dqdQd (vars a m) (concpt' a m)

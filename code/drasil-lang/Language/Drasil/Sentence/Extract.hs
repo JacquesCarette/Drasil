@@ -1,15 +1,8 @@
 module Language.Drasil.Sentence.Extract(sdep, snames) where
 
 import Data.List (nub)
-import Control.Lens ((^.))
-import Language.Drasil.Expr (Expr(..), RealInterval(..))
-import Language.Drasil.ChunkDB (HasSymbolTable, symbLookup, symbolTable, HasDefinitionTable,
- defLookup, defTable)
-import Language.Drasil.Chunk.Quantity (QuantityDict)
-import Language.Drasil.Chunk.Concept (ConceptChunk)
 import Language.Drasil.Spec(Sentence(..))
 import Language.Drasil.Expr.Extract(names)
-import Language.Drasil.Chunk.DefinedQuantity
 -- | Generic traverse of all positions that could lead to names from sentences
 snames   :: Sentence -> [String]
 snames (Ch a)       = [a]

@@ -1409,6 +1409,25 @@ Description
 </tr>
 <tr>
 <th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
+</p>
+<p class="paragraph">
+<em>t</em> is the true thickness, which is based on the nominal thicknesses as shown in DD2.
+</p>
+<p class="paragraph">
+<em>LDF</em> is the load duration factor as defined by DD3.
+</p>
+<p class="paragraph">
+<em>J</em> is the stress distribution factor (Function) , as defined in DD4.
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Source
 </th>
 <td>
@@ -1561,6 +1580,16 @@ Description
 </tr>
 <tr>
 <th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>t</em> is a function that maps from the nominal thickness (<em>h</em>) to the minimum thickness.
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Source
 </th>
 <td>
@@ -1654,6 +1683,22 @@ Description
 <em>b</em> is the plate width (short dimension) (m)
 </li>
 </ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>J</em> is the stress distribution factor (Function), which is obtained by interpolating from data shown in Figure 7.
+</p>
+<p class="paragraph">
+<em>q&#770;</em> is the dimensionless load defined in DD7.
+</p>
+<p class="paragraph">
+<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
+</p>
 </td>
 </tr>
 <tr>
@@ -1754,6 +1799,22 @@ Description
 <em>b</em> is the plate width (short dimension) (m)
 </li>
 </ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
+</p>
+<p class="paragraph">
+<em>t</em> is the true thickness, which is based on the nominal thicknesses as shown in DD2.
+</p>
+<p class="paragraph">
+<em>q&#770;<sub>tol</sub></em> is the tolerable pressure defined in DD8.
+</p>
 </td>
 </tr>
 <tr>
@@ -1961,6 +2022,25 @@ Description
 </tr>
 <tr>
 <th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>q</em> is the 3 second equivalent pressure, as given in IM3.
+</p>
+<p class="paragraph">
+<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
+</p>
+<p class="paragraph">
+<em>t</em> is the true thickness, which is based on the nominal thicknesses as shown in DD2.
+</p>
+<p class="paragraph">
+<em>GTF</em> is the glass type factor, as given by DD6.
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Source
 </th>
 <td>
@@ -2054,6 +2134,23 @@ Description
 <em>b</em> is the plate width (short dimension) (m)
 </li>
 </ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>q&#770;<sub>tol</sub></em> is the tolerable pressure which is obtained from Figure 7 using <em>J<sub>tol</sub></em> and aspect ratio (<em>AR = <div class="fraction">
+<span class="fup">
+a
+</span>
+<span class="fdn">
+b
+</span>
+</div></em>) as parameters using interpolation. Calculation of <em>J<sub>tol</sub></em> is defined in DD9.
+</p>
 </td>
 </tr>
 <tr>
@@ -2170,6 +2267,28 @@ Description
 <em>LDF</em> is the load duration factor (Unitless)
 </li>
 </ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>J<sub>tol</sub></em>  is calculated with reference to  <em>P<sub>btol</sub></em>.
+</p>
+<p class="paragraph">
+<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
+</p>
+<p class="paragraph">
+<em>t</em> is the true thickness, which is based on the nominal thicknesses as shown in DD2.
+</p>
+<p class="paragraph">
+<em>LDF</em> is the load duration factor as defined by DD3.
+</p>
+<p class="paragraph">
+<em>P<sub>btol</sub></em> is the tolerable probability entered by the user.
+</p>
 </td>
 </tr>
 <tr>

@@ -6,6 +6,7 @@ import Language.Drasil.Chunk.AssumpChunk (AssumpChunk)
 import Language.Drasil.Chunk.Change (Change)
 import Language.Drasil.Chunk.Citation (BibRef)
 import Language.Drasil.Chunk.Eq (QDefinition)
+import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName,
@@ -53,6 +54,7 @@ data Document = Document Title Author [Section]
 -- | Types of definitions
 data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining 
                               -- equation used to generate the Data Definition
+           | Data' DataDefinition
            | General
            | Theory RelationConcept -- ^ Theoretical models use a relation as
                                     -- their definition
@@ -127,7 +129,6 @@ instance HasShortName  Contents where
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
 
-
 ---------------------------------------------------------------------------
 -- smart constructors needed for LabelledContent
 -- nothing has a shortname right now
@@ -176,6 +177,7 @@ reldefn = Definition . Theory
 -- | Automatically create the label for a definition
 getDefName :: DType -> String
 getDefName (Data c)   = "DD:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
+getDefName (Data' c)  = "DD:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
 getDefName (Theory c) = "T:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
 getDefName TM         = "T:"
 getDefName DD         = "DD:"

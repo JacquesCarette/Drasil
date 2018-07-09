@@ -13,8 +13,6 @@ import Language.Drasil.ChunkDB (HasSymbolTable, symbLookup, symbolTable, HasDefi
  defLookup, defTable, ChunkDB)
 import Language.Drasil.Chunk.Concept(ConceptChunk)
 import Language.Drasil.Chunk.DefinedQuantity(DefinedQuantityDict, dqdQd)
-import Language.Drasil.Classes (ExprRelat(relat), HasDerivation(derivations), 
-  HasReference(getReferences), Definition(defn))
 
 
 -- | Get a list of quantities (QuantityDict) from an equation in order to print

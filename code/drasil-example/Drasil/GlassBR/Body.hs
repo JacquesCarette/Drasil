@@ -91,14 +91,14 @@ gbSymbMap =
   cdb this_symbols (map nw acronyms ++ map nw this_symbols) glassBRsymb
       (map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton])
 
-ccss :: Sentence -> [DefinedQuantityDict]
-ccss s = combine s gbSymbMap
+ccss'' :: Sentence -> [DefinedQuantityDict]
+ccss'' s = combine s gbSymbMap
 
 ccss' :: Expr -> [DefinedQuantityDict]
 ccss' s = combine' s gbSymbMap
 
 ccs' :: [DefinedQuantityDict]
-ccs' = nub ((concatMap ccss $ getDoc glassBR_srs) ++ (concatMap ccss' $ egetDoc glassBR_srs))
+ccs' = nub ((concatMap ccss'' $ getDoc glassBR_srs) ++ (concatMap ccss' $ egetDoc glassBR_srs))
 
 outputuid :: [String]
 outputuid = nub ((concatMap snames $ getDoc glassBR_srs) ++ (concatMap names $ egetDoc glassBR_srs))

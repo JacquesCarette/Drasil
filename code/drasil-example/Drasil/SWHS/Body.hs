@@ -105,7 +105,7 @@ swhs_si = SI {
   _authors = swhsPeople,
   _units = this_si,
   _quants = swhsSymbols,
-  _concepts = (ccs'),
+  _concepts = symbT,
   _definitions = swhsDataDefs,
   _inputs = map qw swhsInputs,
   _outputs = map qw swhsOutputs,
@@ -125,11 +125,10 @@ swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) swhsSymb
     -- Will still likely be a better way to do this.
   --FIXME: Should be all Named, not just acronyms at the end.
 
-ccss :: [Sentence] -> [Expr]-> [DefinedQuantityDict]
-ccss s e = (concatMap (\x -> combine x swhsSymMap) s) ++ (concatMap (\x -> combine' x swhsSymMap) e)
-
-ccs' :: [DefinedQuantityDict]
-ccs' = nub $ ccss (getDoc swhs_srs') (egetDoc swhs_srs')
+--nubBy (\x y -> mod x 3 == mod y 3) [1,2,4,5,6]
+--nubBy (\x y -> x ^. uid == y ^. uid)
+symbT :: [DefinedQuantityDict]
+symbT =  ccss (getDoc swhs_srs') (egetDoc swhs_srs') swhsSymMap
 
 swhsPeople :: [Person]
 swhsPeople = [thulasi, brooks, spencerSmith]

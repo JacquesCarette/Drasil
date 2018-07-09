@@ -83,7 +83,7 @@ ssp_si = SI {
   _authors = [henryFrankis],
   _units = this_si,
   _quants = sspSymbols,
-  _concepts = (ccs'),
+  _concepts = symbT,
   _definitions = sspDataDefs,
   _inputs = map qw sspInputs,
   _outputs = map qw sspOutputs,
@@ -123,11 +123,8 @@ sspSymMap :: ChunkDB
 sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms) sspSymbols
   this_si
 
-ccss :: [Sentence] -> [Expr]-> [DefinedQuantityDict]
-ccss s e = (concatMap (\x -> combine x sspSymMap) s) ++ (concatMap (\x -> combine' x sspSymMap) e)
-
-ccs' :: [DefinedQuantityDict]
-ccs' = nub $ ccss (getDoc ssp_srs) (egetDoc ssp_srs)
+symbT :: [DefinedQuantityDict]
+symbT = ccss (getDoc ssp_srs) (egetDoc ssp_srs) sspSymMap
 
 -- SECTION 1 --
 --automatically generated in mkSRS -

@@ -1,4 +1,4 @@
-module Language.Drasil.Sentence.Extract(sdep, vars',snames, combine) where
+module Language.Drasil.Sentence.Extract(sdep, snames) where
 
 import Data.List (nub)
 import Control.Lens ((^.))
@@ -26,14 +26,3 @@ snames (EmptyS)     = []
 -- And now implement the exported traversals all in terms of the above
 sdep :: Sentence -> [String]
 sdep = nub . snames
-
-vars' :: (HasSymbolTable s) => Sentence -> s -> [QuantityDict]
-vars' a m = map resolve $ sdep a
-  where resolve x = symbLookup x $ m ^. symbolTable
-
-concpt :: (HasDefinitionTable s) => Sentence -> s -> [ConceptChunk]
-concpt a m = map resolve $ sdep a
-  where resolve x = defLookup x $ m ^. defTable
-
-combine :: (HasSymbolTable s, HasDefinitionTable s) => Sentence -> s -> [DefinedQuantityDict]
-combine a m = zipWith dqdQd (vars' a m) (concpt a m)

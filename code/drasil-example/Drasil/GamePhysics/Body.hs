@@ -117,7 +117,7 @@ chipmunkSysInfo = SI {
   _kind = srs,
   _authors = authors,
   _units = chipUnits,
-  _quants = ccs', 
+  _quants = symbT, 
   _concepts = ([] :: [DefinedQuantityDict]),
   _definitions = (cpDDefs), 
   _inputs = (inputSymbols), 
@@ -129,11 +129,9 @@ chipmunkSysInfo = SI {
   _refdb = cpRefDB
 }
 
-ccss :: [Sentence] -> [Expr]-> [DefinedQuantityDict]
-ccss s e = (concatMap (\x -> combine x everything) s) ++ (concatMap (\x -> combine' x everything) e)
 
-ccs' :: [DefinedQuantityDict]
-ccs' = nub $ ccss (getDoc chipmunkSRS') (egetDoc chipmunkSRS')
+symbT :: [DefinedQuantityDict]
+symbT = ccss (getDoc chipmunkSRS') (egetDoc chipmunkSRS') everything
 
 cpRefDB :: ReferenceDB
 cpRefDB = rdb [] [] newAssumptions [] [] cpCitations [] -- FIXME: Convert the rest to new chunk types

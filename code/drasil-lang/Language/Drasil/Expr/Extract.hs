@@ -1,4 +1,4 @@
-module Language.Drasil.Expr.Extract(dep, vars, names, names', combine') where
+module Language.Drasil.Expr.Extract(dep, names, names') where
 
 import Data.List (nub)
 import Control.Lens ((^.))

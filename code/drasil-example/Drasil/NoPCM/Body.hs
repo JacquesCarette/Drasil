@@ -161,7 +161,7 @@ nopcm_si = SI {
   _kind = srs,
   _authors = [thulasi],
   _units = this_si,
-  _quants = ccs',
+  _quants = symbT,
   _concepts = (nopcm_Symbols),
   _definitions = [dd1HtFluxC],          --dataDefs
   _inputs = (map qw nopcm_Constraints), --inputs
@@ -187,11 +187,8 @@ nopcm_SymbMap :: ChunkDB
 nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) nopcm_Symbols
   this_si
 
-ccss :: [Sentence] -> [Expr]-> [DefinedQuantityDict]
-ccss s e = (concatMap (\x -> combine x nopcm_SymbMap) s) ++ (concatMap (\x -> combine' x nopcm_SymbMap) e)
-
-ccs' :: [DefinedQuantityDict]
-ccs' = nub $ ccss (getDoc nopcm_srs) (egetDoc nopcm_srs)
+symbT :: [DefinedQuantityDict]
+symbT = ccss (getDoc nopcm_srs) (egetDoc nopcm_srs) nopcm_SymbMap
 
 --------------------------
 --Section 2 : INTRODUCTION

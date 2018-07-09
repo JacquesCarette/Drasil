@@ -64,12 +64,11 @@ s3, s4, s5, s7 :: Section
 
 s1_2_intro :: [TSIntro]
 
-s4_1, s4_1_1, s4_1_2,
-  s4_1_3, s4_2, s5_1, s5_2 :: Section
+s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2, s5_1, s5_2 :: Section
 
-s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
-  s4_1_2_p2, goals_list, 
-  s5_1_list :: Contents
+s4_1_1_list, goals_list, s5_1_list :: Contents
+
+s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2 :: LabelledContent
 
 s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, s4_2_5_IMods :: [Contents]
 
@@ -258,7 +257,8 @@ s4_1_1_list = Enumeration $ Simple $
 s4_1_2 = SRS.physSyst
   [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, fig_indexconv, fig_forceacting] []
 
-s4_1_2_p1 = physSystIntro slope how intrslce slice (S "slice base")
+s4_1_2_p1 = llcc "sspPSDIntro" (mkLabelRA'' "sspPSDIntro") $ physSystIntro 
+  slope how intrslce slice (S "slice base")
   fig_indexconv
   where how = S "as a series of" +:+ phrase slice +:+. plural element
 
@@ -271,7 +271,8 @@ physSystIntro what how p1 p2 p3 indexref = foldlSP [
   p3 +:+. plural property, S "The index convention for referencing which",
   phrase p1 `sOr` phrase p2, S "is being used is shown in", makeRef indexref]
 
-s4_1_2_bullets = enumBullet $ map foldlSent_ [
+s4_1_2_bullets = llcc "sspPSDPoints" (mkLabelRA'' "sspPSDPoints") $ 
+  enumBullet $ map foldlSent_ [
 
   [at_start' itslPrpty, S "convention is noted by j. The end",
   plural itslPrpty, S "are usually not of", phrase interest `sC`
@@ -282,7 +283,8 @@ s4_1_2_bullets = enumBullet $ map foldlSent_ [
   [at_start slice, plural property +:+ S "convention is noted by" +:+.
   getES index]]
 
-s4_1_2_p2 = foldlSP [S "A", phrase fbd, S "of the", plural force,
+s4_1_2_p2 = llcc "sspPSDSent" (mkLabelRA'' "sspPSDSent") $ 
+  foldlSP [S "A", phrase fbd, S "of the", plural force,
   S "acting on the", phrase slice, S "is displayed in",
   makeRef fig_forceacting]
 
@@ -292,8 +294,9 @@ fig_indexconv = llcc "fig_indexconv" (mkLabelRA'' "fig_indexconv") $
   phrase slice `sAnd` phrase intrslce,
   phrase force, plural variable]) (resourcePath ++ "IndexConvention.png") "IndexConvention"
 
-fig_forceacting :: Contents
-fig_forceacting = fig (at_start' force +:+ S "acting on a" +:+
+fig_forceacting :: LabelledContent
+fig_forceacting = llcc "fig_forceacting" (mkLabelRA'' "fig_forceacting") $ 
+  fig (at_start' force +:+ S "acting on a" +:+
   phrase slice) (resourcePath ++ "ForceDiagram.png") "ForceDiagram"
 
 -- SECTION 4.1.3 --

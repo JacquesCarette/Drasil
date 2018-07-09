@@ -83,7 +83,7 @@ termDefnF end otherContents = SRS.termAndDefn ((intro):otherContents) []
                     S "understand the", plural requirement :+: (lastF end)]
 
 --general introduction for Physical System Description
-physSystDesc :: Sentence -> Contents -> [Contents] -> Section
+physSystDesc :: Sentence -> LabelledContent -> [Contents] -> Section
 physSystDesc progName fg otherContents = SRS.physSyst ((intro):otherContents) []
   where intro = Paragraph $ foldle (+:+) (+:) (EmptyS)
                 [S "The", (phrase physicalSystem), S "of", progName `sC`
@@ -101,7 +101,7 @@ goalStmtF givenInputs otherContents = SRS.goalStmt (intro:otherContents) []
 --  the last input is a tupple of lists of Sections for each Subsection in order.
 solChSpecF :: (Idea a) => a -> (Section, Section, Section) -> Sentence -> 
   (Sentence, Sentence, Sentence) -> 
-  ([Contents], [Contents], [Contents], [Contents], [Contents], [Contents]) -> 
+  ([Contents], [Contents], [Contents], [Contents], [Contents], [LabelledContent]) -> 
   [Section] -> Section
 solChSpecF progName (probDes, likeChg, unlikeChg) ddEndSent (mid, hasUncertainty, trail) (a, t, g, dd, i, dc) adSubSec = 
   SRS.solCharSpec [solutionCharSpecIntro progName instModels] (subSec)
@@ -112,7 +112,7 @@ solChSpecF progName (probDes, likeChg, unlikeChg) ddEndSent (mid, hasUncertainty
         generDefn    = genDefnF g
         dataDefin    = dataDefnF ddEndSent dd
         instModels   = inModelF  probDes dataDefin theModels generDefn i
-        dataConstr   = datConF mid hasUncertainty trail (llcc "dataConstraintsSection" (mkLabelRA'' "dataConstraintsSection") dc)
+        dataConstr   = datConF mid hasUncertainty trail dc
 
 
 solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
@@ -196,8 +196,9 @@ inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_,
 -- wrapper for datConPar
 datConF :: Sentence -> Sentence -> Sentence -> [LabelledContent] -> Section
 datConF hasUncertainty mid trailing tables = SRS.datCon 
-  ((llcc "dataConsIntro" (mkLabelRA'' "dataConsSection") $ 
-    dataConstraintParagraph hasUncertainty (listofTablesToRefs tables) mid trailing):tables) []
+  ((llcc "dataConstraintsIntro" (mkLabelRA'' "dataConsSection") $
+    dataConstraintParagraph hasUncertainty (listofTablesToRefs tables) mid trailing):
+    tables) []
   
 -- reference to the input/ ouput tables -> optional middle sentence(s) (use EmptyS if not wanted) -> 
 -- True if standard ending sentence wanted -> optional trailing sentence(s) -> Contents

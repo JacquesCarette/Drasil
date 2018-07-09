@@ -98,7 +98,7 @@ tOfSymb cs ss = section' (titleize Doc.tOfSymb) cs ss "ToS"
 
 
 datCon :: [LabelledContent] -> [Section] -> Section
-datCon cs ss = sectionLC (titleize' Doc.datumConstraint) cs ss (mkLabelRA "DataConstraints")
+datCon cs ss = sectionLC (titleize' Doc.datumConstraint) cs ss (mkLabelRA'' "DataConstraints")
 
 --function that sets the shortname of each section to be the reference address
 section' :: Sentence -> [Contents] -> [Section] -> RefAdd -> Section

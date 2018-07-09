@@ -1,4 +1,4 @@
-module Language.Drasil.Document.ChunkBack (vars, combine', vars', combine, ccss)where
+module Language.Drasil.Document.GetChunk (vars, combine', vars', combine, ccss)where
 
 import Control.Lens ((^.))
 import Data.List(transpose, head, tail, nub)

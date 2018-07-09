@@ -23,7 +23,7 @@ import Language.Drasil.ChunkDB (getUnitLup, HasSymbolTable(..),symbLookup)
 import Language.Drasil.Chunk.ReqChunk (requires)
 import Language.Drasil.Chunk.Citation ( Citation, CiteField(..), HP(..)
                                       , citeID, externRefT, fields)
-import Language.Drasil.Document.ChunkBack
+import Language.Drasil.Document.GetChunk
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Symbol

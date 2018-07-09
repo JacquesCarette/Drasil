@@ -205,7 +205,7 @@ module Language.Drasil (
   , PhysSystDesc, pSysDes, psd
   -- RefTypes
   , RefAdd
-  -- Document.ChunkBack
+  -- Document.getChunk
   , vars, combine', ccss
   -- Chunk.Sentence.EmbedSymbol
   , ch
@@ -249,7 +249,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes),
   Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations),
   HasReference(getReferences))
-import Language.Drasil.Document.ChunkBack(vars, combine', vars', combine, ccss)
+import Language.Drasil.Document.GetChunk(vars, combine', vars', combine, ccss)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Derivation (Derivation)

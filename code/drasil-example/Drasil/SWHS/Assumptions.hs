@@ -14,7 +14,7 @@ import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, temp_init, temp_W,
   temp_PCM, htCap_L_P, htCap_W, htCap_S_P, w_density, pcm_density, pcm_vol)
 import Drasil.SWHS.TMods (t1ConsThermE)
 import Drasil.SWHS.Labels (assump1Label, assump14Label, assump18Label, 
-  assump19Label)
+  assump19Label, assump10Label)
 
 import Data.Drasil.Quantities.PhysicalProperties (vol)
 import Data.Drasil.Quantities.Physics (time, energy)
@@ -51,7 +51,7 @@ newA6 = assump "Specific-Heat-Energy-Constant-over-Volume" assumpS6 (mkLabelRA''
 newA7 = assump "Law-Convective-Cooling-Coil-Water" assumpS7 (mkLabelRA'' "Newton-Law-Convective-Cooling-Coil-Water" )
 newA8 = assump "Temp-Heating-Coil-Constant-over-Time" assumpS8 (mkLabelRA'' "Temp-Heating-Coil-Constant-over-Time" )
 newA9 = assump "Temp-Heating-Coil-Constant-over-Length" assumpS9 (mkLabelRA'' "Temp-Heating-Coil-Constant-over-Length" )
-newA10 = assump "Law-Convective-Cooling-Water-PCM" assumpS10 (mkLabelRA'' "Law-Convective-Cooling-Water-PCM" )
+newA10 = assump "Law-Convective-Cooling-Water-PCM" assumpS10 assump10Label
 newA11 = assump "Charging-Tank-No-Temp-Discharge" assumpS11 (mkLabelRA'' "Charging-Tank-No-Temp-Discharge" )
 newA12 = assump "Same-Initial-Temp-Water-PCM" assumpS12 (mkLabelRA'' "Same-Initial-Temp-Water-PCM" )
 newA13 = assump "PCM-Initialli-Soild" assumpS13 (mkLabelRA'' "PCM-Initialli-Soild") 

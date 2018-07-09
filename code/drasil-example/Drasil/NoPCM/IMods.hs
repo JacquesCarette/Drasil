@@ -11,6 +11,7 @@ import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
 import Data.Drasil.Concepts.Thermodynamics (melting, boil_pt)
+import Drasil.SWHS.Labels (assump10Label)
 
 ---------
 -- IM1 --
@@ -18,6 +19,7 @@ import Data.Drasil.Concepts.Thermodynamics (melting, boil_pt)
 eBalanceOnWtr :: RelationConcept
 eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
   "water to find the temperature of the water") balWtrDesc balWtr_Rel
+  Nothing--label
 
 balWtr_Rel :: Relation
 balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
@@ -35,8 +37,4 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively",
-  sParen (makeRef a10)]
-
--- FIXME
-a10 :: Contents
-a10 = Assumption $ assump "assump10" EmptyS "assump10"
+  sParen (makeRef assump10Label)]

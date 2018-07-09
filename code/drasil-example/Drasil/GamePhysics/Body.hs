@@ -58,8 +58,8 @@ import qualified Data.Drasil.Quantities.Physics as QP (time,
 import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlList, sOf,
   sAnd, sOr, foldlSentCol, foldlSP, foldlSPCol, showingCxnBw)
 import Data.Drasil.Software.Products (videoGame, openSource, sciCompS)
-import Data.Drasil.Utils (makeTMatrix, itemRefToSent, refFromType,
-  makeListRef, bulletFlat, bulletNested, enumSimple, enumBullet)
+import Data.Drasil.Utils (makeTMatrix, itemRefToSent, makeListRef, bulletFlat,
+  bulletNested, enumSimple, enumBullet)
 
 import qualified Drasil.SRS as SRS
 import qualified Drasil.Sections.ReferenceMaterial as RM
@@ -705,13 +705,13 @@ traceMatInstaModelRef, traceMatAssumpRef, traceMatFuncReqRef, traceMatGoalStmtRe
   traceMatLikelyChgRef, traceMatDataRef :: [Sentence]
 
 traceMatInstaModel = ["IM1", "IM2", "IM3"]
-traceMatInstaModelRef = map (refFromType Theory) iModels
+traceMatInstaModelRef = map makeRef iModels
 
 traceMatTheoryModel = ["T1", "T2", "T3", "T4", "T5"]
-traceMatTheoryModelRef = map (refFromType Theory) cpTMods
+traceMatTheoryModelRef = map makeRef cpTMods
 
 traceMatDataDef = ["DD1","DD2","DD3","DD4","DD5","DD6","DD7","DD8"]
-traceMatDataDefRef = map (refFromType Data) cpDDefs
+traceMatDataDefRef = map makeRef cpDDefs
 
 traceMatAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
 traceMatAssumpRef = makeListRef assumptions_list_a problem_description

@@ -38,8 +38,8 @@ import Drasil.SWHS.Requirements (nonFuncReqs)
 import Drasil.SWHS.Changes (likeChg2, likeChg3, likeChg6)
 
 import Data.Drasil.People (thulasi)
-import Data.Drasil.Utils (enumSimple, getES, refFromType,
-  itemRefToSent, makeTMatrix, itemRefToSent, weave, eqUnR)
+import Data.Drasil.Utils (enumSimple, getES, itemRefToSent, makeTMatrix,
+  itemRefToSent, weave, eqUnR)
 import Data.Drasil.Citations (parnasClements1986, smithLai2005)
 
 import Data.Drasil.Concepts.Documentation as Doc (datumConstraint, inModel,
@@ -793,7 +793,7 @@ traceDataRef, traceFuncReqRef, traceInstaModelRef, traceAssumpRef, traceTheories
   traceDataDefRef, traceLikelyChgRef, traceGenDefRef :: [Sentence]
 
 traceInstaModel = ["IM1", "IM2"]
-traceInstaModelRef = map (refFromType Theory) [eBalanceOnWtr,
+traceInstaModelRef = map makeRef [eBalanceOnWtr,
   heatEInWtr]
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
@@ -808,13 +808,13 @@ traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
 traceAssumpRef = map (\x -> (makeRef (find' x npcmAssumptions))) npcmAssumptions--makeListRef s7_assump (SRS.inModel SRS.missingP [])
 
 traceTheories = ["T1"]
-traceTheoriesRef = map (refFromType Theory) [t1ConsThermE]
+traceTheoriesRef = map makeRef [t1ConsThermE]
 
 traceGenDefs = ["GD1", "GD2"]
-traceGenDefRef = map (refFromType Theory) swhsGenDefs
+traceGenDefRef = map makeRef swhsGenDefs
 
 traceDataDefs = ["DD1"]
-traceDataDefRef = map (refFromType Data) [dd1HtFluxC]
+traceDataDefRef = map makeRef [dd1HtFluxC]
 
 traceLikelyChg = ["LC1", "LC2", "LC3", "LC4"]
 traceLikelyChgRef = map (\x -> (makeRef (find' x likelyChgsList))) likelyChgsList--makeListRef s7_likelyChg s6

@@ -289,13 +289,13 @@ s4_1_2_p2 = llcc "sspPSDSent" (mkLabelRA'' "sspPSDSent") $
   makeRef fig_forceacting]
 
 fig_indexconv :: LabelledContent 
-fig_indexconv = llcc "fig_indexconv" (mkLabelRA'' "fig_indexconv") $ 
+fig_indexconv = llcc "fig_indexconv" (mkLabelRA'' "fig_indexconvLabel") $ 
   fig (foldlSent_ [S "Index convention for numbering",
   phrase slice `sAnd` phrase intrslce,
   phrase force, plural variable]) (resourcePath ++ "IndexConvention.png") "IndexConvention"
 
 fig_forceacting :: LabelledContent
-fig_forceacting = llcc "fig_forceacting" (mkLabelRA'' "fig_forceacting") $ 
+fig_forceacting = llcc "fig_forceacting" (mkLabelRA'' "fig_forceactingLabel") $ 
   fig (at_start' force +:+ S "acting on a" +:+
   phrase slice) (resourcePath ++ "ForceDiagram.png") "ForceDiagram"
 

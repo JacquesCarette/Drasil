@@ -36,13 +36,16 @@ import Data.Drasil.SentenceStructures (acroIM, acroR, foldlSent, sAnd, isThe,
 req1, req2, reqEqn1, reqEqn2, req3, req4,
   req5, req6, req7, req8, req9, req10, req11 :: Contents
 
+req1Labelled :: LabelledContent
+req1Labelled = llcc "req1LabelledC" (mkLabelRA'' "req1Label") req1
+
 req1 = mkRequirement "req1" ( foldlSentCol [
   titleize input_, S "the following", plural quantity `sC`
   S "which define the", phrase tank, plural parameter `sC` S "material",
   plural property, S "and initial", plural condition] ) "Input-Initial-Quantities"
 
 req2 = mkRequirement "req2" ( foldlSentCol [
-  S "Use the", plural input_, S "in", makeRef req1,
+  S "Use the", plural input_, S "in", makeRef req1Labelled,
   S "to find the", phrase mass, S "needed for", acroIM 1, S "to",
   acroIM 4 `sC` S "as follows, where", getES w_vol `isThe` phrase w_vol,
   S "and", getES tank_vol `isThe` phrase tank_vol] ) "Use-Above-Find-Mass-IM1-IM4"

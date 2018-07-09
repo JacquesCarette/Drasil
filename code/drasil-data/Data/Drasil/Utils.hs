@@ -7,7 +7,6 @@ module Data.Drasil.Utils
   , zipSentList
   , makeTMatrix
   , itemRefToSent
-  , refFromType
   , makeListRef
   , bulletFlat
   , bulletNested
@@ -132,11 +131,6 @@ mkInputDatTb inputVar = Table [titleize symbol_, titleize unit_,
 -- b - Sentence containing the full reference
 itemRefToSent :: String -> Sentence -> Sentence
 itemRefToSent a b = S a +:+ sParen b
-
--- | refFromType takes a function and returns a reference sentence 
--- FIXME: should be removed 
---refFromType :: (HasShortName a, Referable a) -> a -> Sentence
-refFromType f = makeRef f
 
 -- | makeListRef takes a list and a reference and generates references to 
 --   match the length of the list

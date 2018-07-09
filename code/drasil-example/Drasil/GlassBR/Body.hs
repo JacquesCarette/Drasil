@@ -47,7 +47,7 @@ import Data.Drasil.SentenceStructures (acroR, sVersus, sAnd, foldlSP,
   tAndDWAcc, tAndDOnly, tAndDWSym, andThe)
 import Data.Drasil.Software.Products (sciCompS)
 import Data.Drasil.Utils (getES, makeTMatrix, makeListRef, itemRefToSent,
-  refFromType, enumSimple, enumBullet, prodUCTbl)
+  enumSimple, enumBullet, prodUCTbl)
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptionDescs,
   gbRefDB, newAssumptions)
@@ -616,13 +616,13 @@ traceability_matrices_and_graphs_theorysRef, traceability_matrices_and_graphs_in
   traceability_matrices_and_graphs_assumpRef, traceability_matrices_and_graphs_likelyChgRef :: [Sentence]
 
 traceability_matrices_and_graphs_theorys = ["T1", "T2"]
-traceability_matrices_and_graphs_theorysRef = map (refFromType Theory) tModels
+traceability_matrices_and_graphs_theorysRef = map makeRef tModels
 
 traceability_matrices_and_graphs_instaModel = ["IM1", "IM2", "IM3"]
-traceability_matrices_and_graphs_instaModelRef = map (refFromType Theory) iModels
+traceability_matrices_and_graphs_instaModelRef = map makeRef iModels
 
 traceability_matrices_and_graphs_dataDef =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
-traceability_matrices_and_graphs_dataDefRef = map (refFromType Data') dataDefns
+traceability_matrices_and_graphs_dataDefRef = map makeRef dataDefns
 
 traceability_matrices_and_graphs_data  = ["Data Constraints"]
 traceability_matrices_and_graphs_dataRef = [makeRef (SRS.datCon SRS.missingP [])]

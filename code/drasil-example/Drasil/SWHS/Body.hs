@@ -77,7 +77,7 @@ import Drasil.Sections.Requirements (reqF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
 
 import Data.Drasil.Utils (enumSimple, weave, getES, itemRefToSent, makeListRef,
-  makeTMatrix, refFromType, eqUnR)
+  makeTMatrix, eqUnR)
 import Data.Drasil.SentenceStructures (acroIM, acroGD, acroGS, showingCxnBw,
   foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe,
   ofThe', sAnd, sOf, foldlList)
@@ -281,15 +281,15 @@ tAndDMap c = Flat $ foldlSent [at_start c +: EmptyS, (c ^. defn)]
 -----------------------------------------
 
 physSystDescription :: Section
-physSystDescription = physSystDesc (short progName) (fig_tank) [physSystDescList, fig_tank]
+physSystDescription = physSystDesc (short progName) fig_tank [physSystDescList, fig_tank]
 
 -- Above paragraph is general except for progName and figure. However, not
 -- every example has a physical system. Also, the SSP example is different, so
 -- this paragraph can not be abstracted out as is.
 
-physSystDescList :: Contents
-physSystDescList = enumSimple 1 (short physSyst) $
-  map foldlSent_ systDescList
+physSystDescList :: LabelledContent
+physSystDescList = llcc "sspPSDPoints" (mkLabelRA'' "sspPSDPoints") $
+  enumSimple 1 (short physSyst) $ map foldlSent_ systDescList
 
 systDescList :: [[Sentence]]
 systDescList = [physSyst1 tank water, physSyst2 coil tank ht_flux_C,
@@ -561,7 +561,7 @@ traceDataRef, traceFuncReqRef, traceInstaModelRef, traceAssumpRef, traceTheories
   traceDataDefRef, traceLikelyChgRef, traceGenDefRef :: [Sentence]
 
 traceInstaModel = ["IM1", "IM2", "IM3", "IM4"]
-traceInstaModelRef = map (refFromType Theory) swhsIMods
+traceInstaModelRef = map makeRef swhsIMods
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
   "R11"]
@@ -575,13 +575,13 @@ traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
 traceAssumpRef = makeListRef traceAssump assumps
 
 traceTheories = ["T1", "T2", "T3"]
-traceTheoriesRef = map (refFromType Theory) tModels
+traceTheoriesRef = map makeRef tModels
 
 traceGenDefs = ["GD1", "GD2"]
-traceGenDefRef = map (refFromType Theory) swhsGenDefs
+traceGenDefRef = map makeRef swhsGenDefs
 
 traceDataDefs = ["DD1", "DD2", "DD3", "DD4"]
-traceDataDefRef = map (refFromType Data) swhsDataDefs
+traceDataDefRef = map makeRef swhsDataDefs
 
 traceLikelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
 traceLikelyChgRef = makeListRef traceLikelyChg likelyChgs
@@ -984,8 +984,8 @@ physSyst3 pcmat ta hfp = [short pcmat, S "suspended in" +:+. phrase ta,
 -- Structure of list would be same between examples but content is completely
 -- different
 
-fig_tank :: Contents
-fig_tank = fig (
+fig_tank :: LabelledContent
+fig_tank = llcc "fig_tank" (mkLabelRA'' "fig_tankLabel") $ fig (
   foldlSent_ [at_start sWHT `sC` S "with", phrase ht_flux_C, S "of",
   getES ht_flux_C `sAnd` phrase ht_flux_P, S "of", getES ht_flux_P])
   "Tank.png" "Tank"
@@ -1464,11 +1464,16 @@ traceTable3 = Table (EmptyS:traceMRowHeader3)
 ------------------------
 
 traceIntro2 :: [Contents]
-traceIntro2 = traceGIntro [traceFig1, traceFig2]
+traceIntro2 = traceGIntro [traceFig1LC, traceFig2LC]
 
   [foldlSent [foldlList $ map plural renameList1, S "on each other"],
 
   foldlSent_ [foldlList $ map plural renameList2, S "on each other"]]
+
+traceFig1LC, traceFig2LC :: LabelledContent
+
+traceFig1LC = llcc "traceFig1LC" (mkLabelRA'' "traceFig1LabelSWHS") traceFig1
+traceFig2LC = llcc "traceFig2LC" (mkLabelRA'' "traceFig2LabelSWHS") traceFig2
 
 traceFig1 :: Contents
 traceFig1 = fig (showingCxnBw traceyGraph (titleize' item +:+

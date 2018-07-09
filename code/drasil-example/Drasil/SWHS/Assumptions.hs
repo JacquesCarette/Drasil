@@ -13,6 +13,7 @@ import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfect_insul,
 import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, temp_init, temp_W,
   temp_PCM, htCap_L_P, htCap_W, htCap_S_P, w_density, pcm_density, pcm_vol)
 import Drasil.SWHS.TMods (t1ConsThermE)
+import Drasil.SWHS.Labels (assump1Label)
 
 import Data.Drasil.Quantities.PhysicalProperties (vol)
 import Data.Drasil.Quantities.Physics (time, energy)
@@ -40,26 +41,26 @@ newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9,
 newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10,
   newA11, newA12, newA13, newA14, newA15, newA16, newA17, newA18, newA19, newA20 :: AssumpChunk
 
-newA1 = assump "Thermal-Energy-Only" assumpS1 "Thermal-Energy-Only" 
-newA2 = assump "Heat-Transfer-Coeffs-Constant" assumpS2 "Heat-Transfer-Coeffs-Constant"  
-newA3 = assump "Constant-Water-Temp-Across-Tank" assumpS3 "Constant-Water-Temp-Across-Tank" 
-newA4 = assump "Temp-PCM-Constant-Across-Volume" assumpS4 "Temp-PCM-Constant-Across-Volume" 
-newA5 = assump "Density-Water-PCM-Constant-over-Volume" assumpS5 "Density-Water-PCM-Constant-over-Volume"  
-newA6 = assump "Specific-Heat-Energy-Constant-over-Volume" assumpS6 "Specific-Heat-Energy-Constant-over-Volume" 
-newA7 = assump "Law-Convective-Cooling-Coil-Water" assumpS7 "Newton-Law-Convective-Cooling-Coil-Water" 
-newA8 = assump "Temp-Heating-Coil-Constant-over-Time" assumpS8 "Temp-Heating-Coil-Constant-over-Time" 
-newA9 = assump "Temp-Heating-Coil-Constant-over-Length" assumpS9 "Temp-Heating-Coil-Constant-over-Length" 
-newA10 = assump "Law-Convective-Cooling-Water-PCM" assumpS10 "Law-Convective-Cooling-Water-PCM" 
-newA11 = assump "Charging-Tank-No-Temp-Discharge" assumpS11 "Charging-Tank-No-Temp-Discharge" 
-newA12 = assump "Same-Initial-Temp-Water-PCM" assumpS12 "Same-Initial-Temp-Water-PCM" 
-newA13 = assump "PCM-Initialli-Soild" assumpS13 "PCM-Initialli-Soild" 
-newA14 = assump "Water-Always-Liquid" assumpS14 "Water-Always-Liquid" 
-newA15 = assump "Perfect-Insulation-Tank" assumpS15 "Perfect-Insulation-Tank" 
-newA16 = assump "No-Internal-Heat-Generation-By-Water-PCM" assumpS16 "No-Internal-Heat-Generation-By-Water-PCM" 
-newA17 = assump "Volume-Change-Melting-PCM-Negligible" assumpS17 "Volume-Change-Melting-PCM-Negligible" 
-newA18 = assump "No-Gaseous-State-PCM" assumpS18 "No-Gaseous-State-PCM" 
-newA19 = assump "Atmospheric-Pressure-Tank" assumpS19 "Atmospheric-Pressure-Tank" 
-newA20 = assump "Volume-Coil-Negligible" assumpS20 "Volume-Coil-Negligible" 
+newA1 = assump "Thermal-Energy-Only" assumpS1 assump1Label
+newA2 = assump "Heat-Transfer-Coeffs-Constant" assumpS2 (mkLabelRA'' "Heat-Transfer-Coeffs-Constant"  )
+newA3 = assump "Constant-Water-Temp-Across-Tank" assumpS3 (mkLabelRA'' "Constant-Water-Temp-Across-Tank" )
+newA4 = assump "Temp-PCM-Constant-Across-Volume" assumpS4 (mkLabelRA'' "Temp-PCM-Constant-Across-Volume") 
+newA5 = assump "Density-Water-PCM-Constant-over-Volume" assumpS5 (mkLabelRA'' "Density-Water-PCM-Constant-over-Volume"  )
+newA6 = assump "Specific-Heat-Energy-Constant-over-Volume" assumpS6 (mkLabelRA'' "Specific-Heat-Energy-Constant-over-Volume" )
+newA7 = assump "Law-Convective-Cooling-Coil-Water" assumpS7 (mkLabelRA'' "Newton-Law-Convective-Cooling-Coil-Water" )
+newA8 = assump "Temp-Heating-Coil-Constant-over-Time" assumpS8 (mkLabelRA'' "Temp-Heating-Coil-Constant-over-Time" )
+newA9 = assump "Temp-Heating-Coil-Constant-over-Length" assumpS9 (mkLabelRA'' "Temp-Heating-Coil-Constant-over-Length" )
+newA10 = assump "Law-Convective-Cooling-Water-PCM" assumpS10 (mkLabelRA'' "Law-Convective-Cooling-Water-PCM" )
+newA11 = assump "Charging-Tank-No-Temp-Discharge" assumpS11 (mkLabelRA'' "Charging-Tank-No-Temp-Discharge" )
+newA12 = assump "Same-Initial-Temp-Water-PCM" assumpS12 (mkLabelRA'' "Same-Initial-Temp-Water-PCM" )
+newA13 = assump "PCM-Initialli-Soild" assumpS13 (mkLabelRA'' "PCM-Initialli-Soild") 
+newA14 = assump "Water-Always-Liquid" assumpS14 (mkLabelRA'' "Water-Always-Liquid") 
+newA15 = assump "Perfect-Insulation-Tank" assumpS15 (mkLabelRA'' "Perfect-Insulation-Tank" )
+newA16 = assump "No-Internal-Heat-Generation-By-Water-PCM" assumpS16 (mkLabelRA'' "No-Internal-Heat-Generation-By-Water-PCM" )
+newA17 = assump "Volume-Change-Melting-PCM-Negligible" assumpS17 (mkLabelRA'' "Volume-Change-Melting-PCM-Negligible" )
+newA18 = assump "No-Gaseous-State-PCM" assumpS18 (mkLabelRA'' "No-Gaseous-State-PCM" )
+newA19 = assump "Atmospheric-Pressure-Tank" assumpS19 (mkLabelRA'' "Atmospheric-Pressure-Tank" )
+newA20 = assump "Volume-Coil-Negligible" assumpS20 (mkLabelRA'' "Volume-Coil-Negligible" )
 
 swhsAssumptionsS:: [Sentence]
 swhsAssumptionsS = [assumpS1, assumpS2, assumpS3, assumpS4, assumpS5,

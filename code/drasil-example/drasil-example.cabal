@@ -1,5 +1,5 @@
 Name:		drasil-example
-Version:	0.1.4
+Version:	0.1.5
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -54,6 +54,7 @@ executable nopcm
     , Drasil.NoPCM.IMods
     , Drasil.NoPCM.GenDefs
     , Drasil.SWHS.Assumptions
+    , Drasil.SWHS.Labels
     , Drasil.SWHS.Body
     , Drasil.SWHS.Concepts
     , Drasil.SWHS.DataDefs

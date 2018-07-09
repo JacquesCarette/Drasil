@@ -23,6 +23,7 @@ import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCap_V, htCap_S,
   htCap_L, vol_ht_gen, thFluxVect)
 import Drasil.SWHS.Concepts (transient)
 import Drasil.SWHS.DataDefs (dd3HtFusion)
+import Drasil.SWHS.Labels (assump1Label)
 
 tModels :: [RelationConcept]
 tModels = [t1ConsThermE, t2SensHtE, t3LatHtE]
@@ -39,7 +40,7 @@ tMod1 = [reldefn t1ConsThermE]
 
 t1ConsThermE :: RelationConcept
 t1ConsThermE = makeRC "t1ConsThermE"
-  (nounPhraseSP "Conservation of thermal energy") t1descr consThermERel
+  (nounPhraseSP "Conservation of thermal energy") t1descr consThermERel Nothing--label
 
 consThermERel :: Relation
 consThermERel = (negate (sy gradient)) $. (sy thFluxVect) + (sy vol_ht_gen) $=
@@ -65,12 +66,7 @@ t1descr = foldlSent [
   S "is the" +:+. (gradient ^. defn), S "For this", phrase equation,
   S "to apply" `sC` S "other forms of", phrase energy `sC` S "such as",
   phrase mech_energy `sC`
-  S "are assumed to be negligible in the", phrase system, sParen (makeRef a1)]
-
---referencing within a simple list is not yet implemented.
--- FIXME
-a1 :: Contents
-a1 = Assumption $ assump "assump1" EmptyS "assump1" 
+  S "are assumed to be negligible in the", phrase system, sParen (makeRef assump1Label)]
 
 -------------------------
 -- Theoretical Model 2 --
@@ -81,7 +77,7 @@ tMod2 = [reldefn t2SensHtE]
 
 t2SensHtE :: RelationConcept
 t2SensHtE = makeRC "t2SensHtE"
-  (nounPhraseSP "Sensible heat energy") t2descr sensHtEEqn 
+  (nounPhraseSP "Sensible heat energy") t2descr sensHtEEqn Nothing--label
 
 sensHtEEqn :: Relation
 sensHtEEqn = (sy sens_heat) $= case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
@@ -135,7 +131,7 @@ tMod3 = [reldefn t3LatHtE]
 
 t3LatHtE :: RelationConcept
 t3LatHtE = makeRC "t3LatHtE"
-  (nounPhraseSP "Latent heat energy") t3descr latHtEEqn
+  (nounPhraseSP "Latent heat energy") t3descr latHtEEqn Nothing--label
 
 latHtEEqn :: Relation
 latHtEEqn = apply1 latent_heat time $= 

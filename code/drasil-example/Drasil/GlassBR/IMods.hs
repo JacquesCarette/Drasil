@@ -26,13 +26,13 @@ iModels = [probOfBr, calOfCap, calOfDe]
 probOfBreak :: InstanceModel
 probOfBreak = im probOfBr [qw risk] 
   [TCon AssumedCon $ sy risk $> 0] (qw prob_br) [TCon AssumedCon $ sy prob_br $> 0]
-  "probOfBrIM" --shortname
+  (mkLabelRA'' "probOfBrIM")
 
 {--}
 
 probOfBr :: RelationConcept
 probOfBr = makeRC "probOfBr" (nounPhraseSP "Probability of Glass Breakage")
-  pbdescr ( (sy prob_br) $= 1 - (exp (negate (sy risk)))) 
+  pbdescr ( (sy prob_br) $= 1 - (exp (negate (sy risk)))) Nothing--label
 
 pbdescr :: Sentence
 pbdescr =
@@ -42,14 +42,15 @@ pbdescr =
 {--}
 
 calofCapacity :: InstanceModel
-calofCapacity = im' calOfCap [qw nonFL, qw glaTyFac, qw loadSF] [TCon AssumedCon $ sy nonFL $> 0,
-  TCon AssumedCon $ sy glaTyFac $> 0, TCon AssumedCon $ sy loadSF $> 0] (qw lRe) [] [] [capdescr]
+calofCapacity = im' calOfCap [qw nonFL, qw glaTyFac, qw loadSF] 
+  [TCon AssumedCon $ sy nonFL $> 0, TCon AssumedCon $ sy glaTyFac $> 0,
+  TCon AssumedCon $ sy loadSF $> 0] (qw lRe) [] (mkLabelRA'' "calOfCapLabel") [capdescr]
 
 {--}
 
 calOfCap :: RelationConcept
 calOfCap = makeRC "calOfCap" (nounPhraseSP "Calculation of Capacity(LR)") 
-  capdescr ( (sy lRe) $= ((sy nonFL) * (sy glaTyFac) * (sy loadSF)))
+  capdescr ( (sy lRe) $= ((sy nonFL) * (sy glaTyFac) * (sy loadSF))) Nothing--label
 
 capdescr :: Sentence
 capdescr =
@@ -67,14 +68,17 @@ capdescr =
 {--}
 
 calofDemand :: InstanceModel
-calofDemand = im' calOfDe [qw demand, qw eqTNTWeight, qw standOffDist] [TCon AssumedCon $ sy demand $> 0,
-  TCon AssumedCon $ sy eqTNTWeight $> 0, TCon AssumedCon $ sy standOffDist $> 0] (qw demand) [] [] [dedescr]
+calofDemand = im' calOfDe [qw demand, qw eqTNTWeight, qw standOffDist]
+  [TCon AssumedCon $ sy demand $> 0, TCon AssumedCon $ sy eqTNTWeight $> 0,
+   TCon AssumedCon $ sy standOffDist $> 0] (qw demand) [] (mkLabelRA'' "calOfDeLabel")
+  [dedescr]
+
 
 {--}
 
 calOfDe :: RelationConcept
 calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)") 
-  dedescr ( (sy demand) $= apply2 demand eqTNTWeight standOffDist)
+  dedescr ( (sy demand) $= apply2 demand eqTNTWeight standOffDist) Nothing--label
   --dedescr $ (C demand) $= FCall (asExpr interpY) [V "TSD.txt", sy standOffDist, sy eqTNTWeight] 
   
 dedescr :: Sentence

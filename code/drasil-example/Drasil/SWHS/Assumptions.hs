@@ -13,7 +13,8 @@ import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfect_insul,
 import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, temp_init, temp_W,
   temp_PCM, htCap_L_P, htCap_W, htCap_S_P, w_density, pcm_density, pcm_vol)
 import Drasil.SWHS.TMods (t1ConsThermE)
-import Drasil.SWHS.Labels (assump1Label)
+import Drasil.SWHS.Labels (assump1Label, assump14Label, assump18Label, 
+  assump19Label)
 
 import Data.Drasil.Quantities.PhysicalProperties (vol)
 import Data.Drasil.Quantities.Physics (time, energy)
@@ -54,13 +55,14 @@ newA10 = assump "Law-Convective-Cooling-Water-PCM" assumpS10 (mkLabelRA'' "Law-C
 newA11 = assump "Charging-Tank-No-Temp-Discharge" assumpS11 (mkLabelRA'' "Charging-Tank-No-Temp-Discharge" )
 newA12 = assump "Same-Initial-Temp-Water-PCM" assumpS12 (mkLabelRA'' "Same-Initial-Temp-Water-PCM" )
 newA13 = assump "PCM-Initialli-Soild" assumpS13 (mkLabelRA'' "PCM-Initialli-Soild") 
-newA14 = assump "Water-Always-Liquid" assumpS14 (mkLabelRA'' "Water-Always-Liquid") 
+newA14 = assump "Water-Always-Liquid" assumpS14 assump14Label
 newA15 = assump "Perfect-Insulation-Tank" assumpS15 (mkLabelRA'' "Perfect-Insulation-Tank" )
 newA16 = assump "No-Internal-Heat-Generation-By-Water-PCM" assumpS16 (mkLabelRA'' "No-Internal-Heat-Generation-By-Water-PCM" )
 newA17 = assump "Volume-Change-Melting-PCM-Negligible" assumpS17 (mkLabelRA'' "Volume-Change-Melting-PCM-Negligible" )
-newA18 = assump "No-Gaseous-State-PCM" assumpS18 (mkLabelRA'' "No-Gaseous-State-PCM" )
-newA19 = assump "Atmospheric-Pressure-Tank" assumpS19 (mkLabelRA'' "Atmospheric-Pressure-Tank" )
+newA18 = assump "No-Gaseous-State-PCM" assumpS18 assump18Label
+newA19 = assump "Atmospheric-Pressure-Tank" assumpS19 assump19Label
 newA20 = assump "Volume-Coil-Negligible" assumpS20 (mkLabelRA'' "Volume-Coil-Negligible" )
+
 
 swhsAssumptionsS:: [Sentence]
 swhsAssumptionsS = [assumpS1, assumpS2, assumpS3, assumpS4, assumpS5,
@@ -76,7 +78,8 @@ assumpS1 = foldlSent [
   S "relevant for this", phrase problem, S "is" +:+. 
   phrase CT.thermal_energy, S "All other forms of", phrase energy `sC`
   S "such as", phrase mech_energy `sC` S "are assumed to be negligible",
-  sSqBr $ makeRef $ reldefn t1ConsThermE]
+  sSqBr $ makeRef $ llcc "t1ConsThermELC" (mkLabelRA'' "t1ConsThermELabel") $
+   reldefn t1ConsThermE] -- FIXME: reference maybe label cleanly
 assumpS2 = foldlSent [
   S "All", phrase CT.heat_trans, S "coefficients are constant over",
   phrase time, sSqBr $ acroGD 1]
@@ -84,11 +87,10 @@ assumpS3 = foldlSent [
   S "The", phrase water, S "in the", phrase tank,
   S "is fully mixed, so the", phrase temp_W `isThe` 
   S "same throughout the entire", phrase tank,
-  sSqBr $ acroGD 2 `sC` (makeRef $ datadefn dd2HtFluxP)]
+  sSqBr $ acroGD 2 `sC` (makeRef dd2HtFluxP)]
 assumpS4 = foldlSent [
   S "The", phrase temp_PCM `isThe` S "same throughout the", phrase pcm_vol,
-  sSqBr $ acroGD 2 `sC`
-  (makeRef $ datadefn dd2HtFluxP)]
+  sSqBr $ acroGD 2 `sC` (makeRef dd2HtFluxP)]
   --FIXME `sC` makeRef likeChg1]
 assumpS5 = foldlSent [
   S "The", phrase w_density `sAnd` phrase pcm_density,
@@ -103,25 +105,25 @@ assumpS6 = foldlSent [
 assumpS7 = foldlSent [
   CT.law_conv_cooling ^. defn, S "applies between the",
   phrase coil `sAnd` S "the", phrase water,
-  sSqBr $ makeRef $ datadefn dd1HtFluxC]
+  sSqBr $ makeRef dd1HtFluxC]
 assumpS8 = foldlSent [
   S "The", phrase temp_C, S "is constant over", phrase time,
-  sSqBr $ makeRef $ datadefn dd1HtFluxC]
+  sSqBr $ makeRef dd1HtFluxC]
   --FIXME `sC` makeRef likeChg2]
 assumpS9 = foldlSent [
   S "The", phrase temp_C, S "does not vary along its length",
-  sSqBr $ makeRef $ datadefn dd1HtFluxC]
+  sSqBr $ makeRef dd1HtFluxC]
   --FIXME `sC` makeRef likeChg3]
 assumpS10 = foldlSent [
   CT.law_conv_cooling ^. defn, S "applies between the",
   phrase water `sAnd` S "the", short phsChgMtrl,
-  sSqBr $ makeRef $ datadefn dd2HtFluxP]
+  sSqBr $ makeRef dd2HtFluxP]
 assumpS11 = foldlSent [
   S "The", phrase model, S "only accounts for", (charging ^. defn) `sC`
   S "not" +:+. phrase discharging, S "The", phrase temp_W `sAnd`
   phrase temp_PCM, S "can only increase, or remain",
   S "constant; they do not decrease. This implies that the",
-  phrase temp_init, sSqBr $ makeRef assump12, S "is less than (or equal)",
+  phrase temp_init, sSqBr $ makeRef newA12, S "is less than (or equal)",
   S "to the", phrase temp_C, sSqBr $ acroIM 1]
   --FIXME `sC` makeRef likeChg4]
 assumpS12 = foldlSent [
@@ -177,26 +179,26 @@ assump1, assump2, assump3, assump4, assump5, assump6, assump7,
   assump8, assump9, assump10, assump11, assump12, assump13, assump14,
   assump15, assump16, assump17, assump18, assump19, assump20 :: Contents
 
-assump1 = let a1 = "assump1" in Assumption $ assump a1 assumpS1 a1 
-assump2 = let a2 = "assump2" in Assumption $ assump a2 assumpS2 a2 
-assump3 = let a3 = "assump3" in Assumption $ assump a3 assumpS3 a3 
-assump4 = let a4 = "assump4" in Assumption $ assump a4 assumpS4 a4 
-assump5 = let a5 = "assump5" in Assumption $ assump a5 assumpS5 a5 
-assump6 = let a6 = "assump6" in Assumption $ assump a6 assumpS6 a6 
-assump7 = let a7 = "assump7" in Assumption $ assump a7 assumpS7 a7 
-assump8 = let a8 = "assump8" in Assumption $ assump a8 assumpS8 a8 
-assump9 = let a9 = "assump9" in Assumption $ assump a9 assumpS9 a9 
-assump10 = let a10 = "assump10" in Assumption $ assump a10 assumpS10 a10 
-assump11 = let a11 = "assump11" in Assumption $ assump a11 assumpS11 a11 
-assump12 = let a12 = "assump12" in Assumption $ assump a12 assumpS12 a12 
-assump13 = let a13 = "assump13" in Assumption $ assump a13 assumpS13 a13 
-assump14 = let a14 = "assump14" in Assumption $ assump a14 assumpS14 a14 
-assump15 = let a15 = "assump15" in Assumption $ assump a15 assumpS15 a15 
-assump16 = let a16 = "assump16" in Assumption $ assump a16 assumpS16 a16 
-assump17 = let a17 = "assump17" in Assumption $ assump a17 assumpS17 a17 
-assump18 = let a18 = "assump18" in Assumption $ assump a18 assumpS18 a18 
-assump19 = let a19 = "assump19" in Assumption $ assump a19 assumpS19 a19 
-assump20 = let a20 = "assump20" in Assumption $ assump a20 assumpS20 a20 
+assump1 = let a1 = "assump1" in Assumption $ assump a1 assumpS1 (mkLabelRA'' a1) 
+assump2 = let a2 = "assump2" in Assumption $ assump a2 assumpS2 (mkLabelRA'' a2) 
+assump3 = let a3 = "assump3" in Assumption $ assump a3 assumpS3 (mkLabelRA'' a3) 
+assump4 = let a4 = "assump4" in Assumption $ assump a4 assumpS4 (mkLabelRA'' a4) 
+assump5 = let a5 = "assump5" in Assumption $ assump a5 assumpS5 (mkLabelRA'' a5) 
+assump6 = let a6 = "assump6" in Assumption $ assump a6 assumpS6 (mkLabelRA'' a6) 
+assump7 = let a7 = "assump7" in Assumption $ assump a7 assumpS7 (mkLabelRA'' a7) 
+assump8 = let a8 = "assump8" in Assumption $ assump a8 assumpS8 (mkLabelRA'' a8) 
+assump9 = let a9 = "assump9" in Assumption $ assump a9 assumpS9 (mkLabelRA'' a9) 
+assump10 = let a10 = "assump10" in Assumption $ assump a10 assumpS10 (mkLabelRA'' a10) 
+assump11 = let a11 = "assump11" in Assumption $ assump a11 assumpS11 (mkLabelRA'' a11) 
+assump12 = let a12 = "assump12" in Assumption $ assump a12 assumpS12 (mkLabelRA'' a12) 
+assump13 = let a13 = "assump13" in Assumption $ assump a13 assumpS13 (mkLabelRA'' a13) 
+assump14 = let a14 = "assump14" in Assumption $ assump a14 assumpS14 (mkLabelRA'' a14) 
+assump15 = let a15 = "assump15" in Assumption $ assump a15 assumpS15 (mkLabelRA'' a15) 
+assump16 = let a16 = "assump16" in Assumption $ assump a16 assumpS16 (mkLabelRA'' a16) 
+assump17 = let a17 = "assump17" in Assumption $ assump a17 assumpS17 (mkLabelRA'' a17) 
+assump18 = let a18 = "assump18" in Assumption $ assump a18 assumpS18 (mkLabelRA'' a18) 
+assump19 = let a19 = "assump19" in Assumption $ assump a19 assumpS19 (mkLabelRA'' a19) 
+assump20 = let a20 = "assump20" in Assumption $ assump a20 assumpS20 (mkLabelRA'' a20) 
 
 -- Again, list structure is same between all examples.
 

@@ -17,6 +17,7 @@ import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, mass)
 import Data.Drasil.Concepts.Thermodynamics (boiling, heat, temp, melting,
   latent_heat, sens_heat, heat_cap_spec, thermal_energy, boil_pt)
 import Drasil.SWHS.DataDefs (ddRef, dd3HtFusion)
+import Drasil.SWHS.Labels (assump14Label, assump19Label, assump18Label)
 
 swhsIMods :: [RelationConcept]
 swhsIMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
@@ -26,7 +27,7 @@ swhsIMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 ---------
 eBalanceOnWtr :: RelationConcept
 eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
-  "water to find the temperature of the water") balWtrDesc balWtr_Rel 
+  "water to find the temperature of the water") balWtrDesc balWtr_Rel Nothing--label
 
 balWtr_Rel :: Relation
 balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
@@ -48,7 +49,7 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively",
-  sParen (makeRef a14 `sC` makeRef a19)]
+  sParen (makeRef assump14Label `sC` makeRef assump19Label)]
 
 
 ---------
@@ -58,7 +59,7 @@ eBalanceOnPCM :: RelationConcept
 eBalanceOnPCM = makeRC "eBalanceOnPCM" (nounPhraseSP
   "Energy balance on PCM to find T_p")
   --FIXME: T_p should be called from symbol
-  balPCMDesc balPCM_Rel 
+  balPCMDesc balPCM_Rel Nothing--label
 
 balPCM_Rel :: Relation
 balPCM_Rel = (deriv (sy temp_PCM) time) $= case_ [case1, case2, case3, case4]
@@ -88,7 +89,7 @@ balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
 ---------
 heatEInWtr :: RelationConcept
 heatEInWtr = makeRC "heatEInWtr" (nounPhraseSP "Heat energy in the water")
-  htWtrDesc htWtr_Rel 
+  htWtrDesc htWtr_Rel Nothing--label
 
 htWtr_Rel :: Relation
 htWtr_Rel = (apply1 w_E time) $= (sy htCap_W) * (sy w_mass) *
@@ -111,14 +112,14 @@ htWtrDesc = foldlSent [S "The above", phrase equation,
   sParen (unwrap $ getUnit temp_init), S "This", phrase equation,
   S "applies as long as", (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100)))
   :+: (unwrap $ getUnit temp_W),
-  sParen $ makeRef a14 `sC` makeRef a19]
+  sParen $ makeRef assump14Label `sC` makeRef assump19Label]
 
 ---------
 -- IM4 --
 ---------
 heatEInPCM :: RelationConcept
 heatEInPCM = makeRC "heatEInPCM" (nounPhraseSP "Heat energy in the PCM")
-  htPCMDesc htPCM_Rel 
+  htPCMDesc htPCM_Rel Nothing--label
 
 htPCM_Rel :: Relation
 htPCM_Rel = sy pcm_E $= case_ [case1, case2, case3, case4]
@@ -171,11 +172,4 @@ htPCMDesc = foldlSent [S "The above", phrase equation,
   S "for", phrase boiling, S "of the", short phsChgMtrl,
   S "is not detailed" `sC` S "since the", short phsChgMtrl,
   S "is assumed to either be in a", phrase solid, S "or", phrase liquid,
-  S "state", sParen (makeRef a18)]
-
----------------
--- FIXME, hacks
-a14, a18, a19 :: Contents
-a14 = Assumption $ assump "assump14" EmptyS "assump14" 
-a18 = Assumption $ assump "assump18" EmptyS "assump18" 
-a19 = Assumption $ assump "assump19" EmptyS "assump19" 
+  S "state", sParen (makeRef assump18Label)]

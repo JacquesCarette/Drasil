@@ -37,7 +37,7 @@ executable tiny
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil-lang >= 0.1.11,
+    drasil-lang >= 0.1.12,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1
   default-language: Haskell2010

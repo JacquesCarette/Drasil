@@ -111,8 +111,10 @@ t2descr = foldlSent [
   getES temp :+: S "=" :+: getES boil_pt,
   S "or", getES temp :+: S "=" +. getES melt_pt,
   S "If this" `isThe` S "case, refer to",
-  (makeRef $ reldefn t3LatHtE) `sC`
-  at_start latent_heat, phrase energy]
+  --(makeRef $ reldefn t3LatHtE) `sC` --FIXME: referencing a Maybe Label
+  (makeRef $ llcc "t3LatHtELabelLC" (mkLabelRA'' "t3LatHtELabel") 
+    $ reldefn t3LatHtE) `sC` at_start latent_heat,
+  phrase energy]
  
 
 --How to have new lines in the description?
@@ -153,7 +155,7 @@ t3descr = foldlSent [
   phrase phase_change, S "is not complete. The status of",
   S "the", phrase phase_change,
   S "depends on the", phrase melt_frac `sC`
-  (makeRef $ datadefn dd3HtFusion) :+: S ".",
+  (makeRef dd3HtFusion) :+: S ".",
   getES melt_pt, S "and", getES boil_pt, S "are the",
   phrase melt_pt, S "and", phrase boil_pt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),

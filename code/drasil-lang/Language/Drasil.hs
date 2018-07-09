@@ -57,6 +57,7 @@ module Language.Drasil (
   , HasReasVal(reasVal)
   , ExprRelat(relat)
   , HasDerivation(derivations)
+  , HasMaybeLabel(getMaybeLabel)
   -- Chunk.VarChunk
   , VarChunk, codeVC
   , vc, implVar
@@ -242,7 +243,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),HasSpace(typ),  
   HasUnitSymbol(usymb), IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes),
   Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations),
-  HasReference(getReferences), HasLabel(getLabel))
+  HasReference(getReferences), HasLabel(getLabel), HasMaybeLabel(getMaybeLabel))
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute

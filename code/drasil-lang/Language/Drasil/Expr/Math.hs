@@ -8,7 +8,6 @@ import Language.Drasil.Expr (Expr(..), RealInterval, Relation,
   ArithOper(..), UFunc(..))
 import Language.Drasil.Space (Space)
 import Language.Drasil.Classes (HasUID(uid), HasSymbol)
-import Language.Drasil.Spec(Sentence(..))
 
 -- | Smart constructor to take the log of an expression
 log :: Expr -> Expr

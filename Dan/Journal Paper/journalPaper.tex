@@ -2,6 +2,7 @@
 
 \usepackage{booktabs} % For formal tables
 \usepackage{tikz}
+\usetikzlibrary{positioning,fit,calc,shapes,shadows,arrows}
 \usepackage{forest}
 \usetikzlibrary{arrows.meta}
 \usepackage[ruled]{algorithm2e} % For algorithms
@@ -11,7 +12,7 @@
 \SetAlCapNameFnt{\small}
 \SetAlCapHSkip{0pt}
 \IncMargin{-\parindent}
-
+\usepackage{hyperref}
 
 % Metadata Information
 \acmJournal{TOSEM}
@@ -40,6 +41,16 @@
 %\received[revised]{March 2009}
 %\received[accepted]{June 2009}
 
+\newcommand{\dl}{drasil-lang}
+\newcommand{\dc}{drasil-code}
+\newcommand{\dd}{drasil-data}
+\newcommand{\de}{drasil-example}
+
+\newcommand{\edl}{\emph{\dl}}
+\newcommand{\edc}{\emph{\dc}}
+\newcommand{\edd}{\emph{\dd}}
+\newcommand{\ede}{\emph{\de}}
+
 %% Comments
 \newif\ifcomments\commentstrue
 
@@ -56,6 +67,14 @@
 
 % Document starts
 \begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%
+% Tikz Styles
+\tikzstyle{class}=[rectangle, draw=black, rounded corners, fill=white!40, drop 
+shadow,
+text centered, anchor=north, text=black, text width=3cm]
+\tikzstyle{myarrow}=[->, >=triangle 90, thick]
+%%%%%%%%%%%%%%%%%%%%%
 
 % Title portion. Note the short title for running heads
 \title[headertitle]{TITLE}
@@ -684,13 +703,15 @@ artifacts, those particular disadvantages disappear.
 - Intro to Drasil
     \fgr{} Knowledge tree
   - What it is and does
-    - Domain Specific Language
+    - Domain Specific Language(s)
     - Generate all the things!
   - Dev to date.
   - How is Knowledge Capture handled in Drasil? - chunks!
   - What do transformations look like? Recipes!
     \fgr{} SmithEtAl template for SRS = Drasil.DocumentLanguage
   - Key components of the generator / renderer
+
+- Haddock % Drasil is documented -- available on the repo if you make docs.
 
 \subsection{Developing Drasil - A grounded theory} %DS Should this be here or 
 													%in bg?
@@ -703,7 +724,133 @@ studies and abstracting them out.
 - Allows for rapid progress -> constant iteration based on what we find in the 
 data.
 
+\subsection{Packaging Drasil}
+
+The current version (0.1.1 as of this writing) of Drasil is built as a 
+group of Haskell packages (see Figure~\ref{Fig:Packages}). The core components, 
+including those for document generation, are stored in a package named 
+\edl{} and code-generation related components are in 
+\edc{}. We maintain our current knowledge-base in 
+\edd{} and our case study examples in \ede{}.
+
+\begin{figure}
+\begin{tikzpicture}
+
+%TODO: Fix this
+
+\node (drasil-lang) [class] {\dl};
+\node (drasil-code) [class, below left=1 and 0.2cm of drasil-lang] 
+{\dc};
+\node (drasil-data) [class, below right=1 and 4cm of drasil-code] {\dd};
+\node (drasil-example) [class, below left=1 and 0.54cm of drasil-data] 
+{\de};
+%lang coords
+\coordinate [above=2.785cm of drasil-data] (rightl);
+\coordinate [above=1.28cm of drasil-code] (leftl);
+%code coords
+\coordinate [below=1.25 of drasil-code] (underc);
+\coordinate [below left=1.53 and 0.5 of underc] (underleftc);
+\coordinate [left=0.5 of drasil-code.south] (leftc);
+%data coords
+\coordinate [below=1.285 of drasil-data] (underd);
+
+%code
+\draw [myarrow] (drasil-code.north) -- (leftl) -- (drasil-lang.west);
+
+%data
+\draw [myarrow] (drasil-data.north) -- (rightl) -- (drasil-lang.east);
+\draw [myarrow] (drasil-data.west)  -- (underc) -- (drasil-code.south);
+
+%example
+\draw [myarrow] (drasil-example.north) -- (drasil-lang);
+\draw [myarrow] (drasil-example.west) -- (underleftc) -- (leftc) node[midway, 
+left]{depends};
+\draw [myarrow] (drasil-example.east) -- (underd) -- (drasil-data.south);
+
+\end{tikzpicture}
+\caption{Drasil package dependencies}
+\label{Fig:Packages}
+\end{figure}
+
+\subsubsection{\dl}
+
+The core language used within the Drasil framework, including all of the 
+building blocks for our knowledge-base are stored within \edl{} under the 
+exported module \texttt{Language.Drasil}. This package also exports a second 
+module with functionality targeted to developers of Drasil known as 
+\texttt{Language.Drasil.Development}.
+
+\texttt{Language.Drasil} presently contains the expression DSL, document layout 
+DSL, printing DSL, and the generator back-end. Every other \emph{drasil-*} 
+package relies on, and builds off, this core. Some of these, notably the 
+printing DSL and generator back-end, may be moved to their own packages in the 
+near future.
+
+With \texttt{Language.Drasil} alone we can capture knowledge and generate 
+artifacts nearly identical to those shown in Section~\ref{S:IntroCases}. 
+However this is a much lower-level approach than we would like to use and could 
+be seen as being akin to programming in a language like C, or even assembly. 
+
+\subsubsection{\dc}
+
+The code generation DSL used within the Drasil framework is stored here under 
+the namespace \texttt{Language.Drasil.Code}. The code generation framework 
+incorporates \emph{GOOL}, a Generic Object-Oriented 
+Language~\cite{Costabile2012}, to give us the 
+ability to target multiple languages -- C++, C\#, Objective C, Java, Lua, and 
+Python.
+
+\subsubsection{\dd}
+
+The knowledge-base common to all Drasil programs is curated and maintained 
+within this package under the \texttt{Data.Drasil} name. Currently we have 
+captured 
+knowledge in a range of domains including, but not limited to, Computation, 
+Education, Math, Physics, and Software. We have also captured meta-knowledge 
+related to documentation, physical properties, and more.
+
+A more detailed breakdown of \texttt{Data.Drasil} will be given in 
+Section~\ref{S:Data}.
+
+\subsubsection{\de}
+
+All of the code required to generate artifacts for our case study examples is 
+maintained in this one package. Each case study has a unique namespace 
+containing everything, other than common knowledge from \edd{}, required to 
+generate that particular case study's artifacts. These namespaces can be seen 
+in Table~\ref{Tab:Namespaces}. 
+
+\begin{table}
+\caption{Case study namespaces in \ede{}}
+\label{Tab:Namespaces}
+\begin{tabular}[]{ l | l}
+		Case Study 		& 				Namespace 						\\
+\hline{}
+		GlassBR 		& 	\texttt{	Drasil.GlassBR			} 		\\
+\hline{}
+		GamePhysics 	& 	\texttt{	Drasil.GamePhysics		}	 	\\
+\hline{}
+		SSP 			& 	\texttt{	Drasil.SSP				}		\\
+\hline{}
+		SWHS 			& 	\texttt{	Drasil.SWHS				}		\\
+\hline{}
+		NoPCM 			& 	\texttt{	Drasil.NoPCM			} 		\\
+\hline{}
+		Tiny 			& 	\texttt{	Drasil.HGHC				} 		\\
+\end{tabular}
+\end{table}
+
+The \ede{} package also contains an example recipe, found in 
+\texttt{Drasil.DocumentLanguage} targeted at recreating the 
+SmithEtAl SRS template\cite{SmithEtAl????}. %DS Gotta add the year.
+Keeping the recipe with the examples is less than ideal, hence why it will soon 
+be moved out of \ede{} and into its own package soon, along with other recipes 
+as they are created.
+We will discuss the recipe and document language specifics in 
+Section~\ref{S:DrasilToday}.
+
 \subsection{Drasil Today}
+\label{S:DrasilToday}
 
 - Sentence and Document
 - Explain the chunk hierarchy (refer to Section~\ref{S:KnowCapt} figure)
@@ -733,6 +880,7 @@ data.
   get started.}
 
 \subsection{Data.Drasil}
+\label{S:Data}
 
 - Common knowledge
   \fgr{} SI\_Units
@@ -790,7 +938,7 @@ data.
   reference those things which are defined in our system. 
 - Sanity-checks are run every time artifacts are generated.
 
-\subsection{Results}
+\section{Results}
 
 - Here we discuss the results we've seen so far.
 - Had some of these case studies attempted to be certified, they would (should) 
@@ -820,10 +968,22 @@ through = maybe better?
 
 \subsection{Pervasive Bugs}
 
-- Mistakes in knowledge can be found in all artifacts - more likely to be 
-caught!
-- Easy to track down errors (smart error messages point to the exact chunk 
-causing the problem).
+One of the utmost benefits of the knowledge-based approach using Drasil is the 
+introduction of ``pervasive bugs". These are typically mistakes made in the 
+captured knowledge which propagate across all generated artifacts wherein that 
+knowledge is used. Calling this a benefit may seem counter-intuitive, but when 
+an error appears in a multitude of locations it is far more likely to be caught 
+then if it were hiding in the corner of one artifact.
+
+Not only is it more likely that we will find an error, it is also far easier to 
+track down the source of said error -- we need only go to the knowledge base 
+and find the requisite chunk. We can also tune error messages to point us at 
+the exact chunk causing the problem if we so desire.
+
+Correcting an error in a chunk of knowledge is also trivial. It only needs to 
+be fixed once to be fixed across all of our software artifacts. No need to 
+\texttt{grep}, find-and-replace, or the like.
+
 
 \section{Future Work}
 
@@ -845,6 +1005,13 @@ Drasil.
 - Run an experiment to see how easy it is to find and remove errors with Drasil
 
 - Experiment to see time saved in maintenance while using Drasil vs. not
+
+- Create drasil-gen package
+
+- Design language
+
+- Open issues (as of writing there are \#\#\# %DS 147
+issues currently open on the Drasil repository).
 
 \section{Conclusion}
 

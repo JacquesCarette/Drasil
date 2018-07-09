@@ -4,6 +4,12 @@ import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 import Control.Lens ((^.))
+import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, 
+  DocSection (AuxConstntSec, Bibliography, IntroSec, RefSec, Verbatim), 
+  LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
+  IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
+  RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
+  mkDoc, tsymb'')
 
 import Data.Drasil.People (thulasi, brooks, spencerSmith)
 import Data.Drasil.Phrase (for)
@@ -56,17 +62,6 @@ import Drasil.SWHS.DataDesc (swhsInputMod)
 import qualified Drasil.SRS as SRS (inModel, missingP, likeChg,
   funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
   sysCont, reference)
-
-import Drasil.DocumentLanguage (DocDesc, mkDoc, tsymb'',
-  LFunc (TermExcept),
-  Literature (Lit, Doc'),
-  TSIntro (SymbOrder, SymbConvention, TSPurpose),
-  DocSection (Verbatim, IntroSec, RefSec, Bibliography, AuxConstntSec), 
-  IntroSub(IOrgSec, IChar, IScope, IPurpose),
-  IntroSec (IntroProg),
-  RefTab (TAandA, TUnits),
-  RefSec (RefProg),
-  AuxConstntSec (AuxConsProg))
 
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.SpecificSystemDescription (inModelF, assumpF,

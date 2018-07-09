@@ -1,8 +1,9 @@
 module Drasil.SWHS.Changes where
 
 import Language.Drasil
+import Drasil.DocLang (mkLklyChnk, mkUnLklyChnk)
+import qualified Drasil.SRS as SRS (unlikeChg)
 
-import Drasil.DocumentLanguage (mkLklyChnk, mkUnLklyChnk)
 import Data.Drasil.Concepts.Documentation (assumption, value, simulation,
   model)
 
@@ -16,7 +17,6 @@ import Data.Drasil.Concepts.Thermodynamics as CT (heat,
 import Data.Drasil.Quantities.Physics (energy)
 
 import Data.Drasil.SentenceStructures (foldlSent, sAnd, ofThe)
-import qualified Drasil.SRS as SRS (unlikeChg)
 
 --------------------------------
 -- Section 6 : LIKELY CHANGES --

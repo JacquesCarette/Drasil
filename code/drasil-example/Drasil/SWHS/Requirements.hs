@@ -5,8 +5,7 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (output_, simulation, quantity, 
   input_, physical, constraint, condition, property)
 import Data.Drasil.Utils (getES, eqUnR)
-import Drasil.DocumentLanguage (mkRequirement)
-import Drasil.Sections.Requirements (nonFuncReqF)
+import Drasil.DocLang (mkRequirement, nonFuncReqF)
 
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics (time, energy)

@@ -3,7 +3,7 @@ module Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp) where
 import Prelude hiding (sin, cos, tan)
 
 import Language.Drasil
-import Drasil.DocumentLanguage.RefHelpers (refA)
+import Drasil.DocLang (refA)
 
 import Data.Drasil.SentenceStructures (foldlSent)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (vol, mass)

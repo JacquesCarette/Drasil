@@ -4,6 +4,7 @@ module Language.Drasil.Reference where
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
 import Data.List (concatMap, find, groupBy, partition, sortBy)
+import Data.Maybe (fromJust)
 import qualified Data.Map as Map
 
 import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
@@ -21,7 +22,7 @@ import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid))
 import Language.Drasil.Document (Contents(..), DType(Data, Theory), 
   Section(Section), getDefName, repUnd)
-import Language.Drasil.People (People)
+import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.RefTypes (RefType(..))
 import Language.Drasil.Spec (Sentence((:+:), Ref, S))
 import Language.Drasil.UID (UID)
@@ -274,15 +275,16 @@ uidSort = compare `on` (^. uid)
 
 compareAuthYearTitle :: (HasFields c) => c -> c -> Ordering
 compareAuthYearTitle c1 c2
-  | (getAuthor c1) /= (getAuthor c2) = (getAuthor c1) `compare` (getAuthor c2)
-  |   (getYear c1) /= (getYear c2)   =   (getYear c1) `compare` (getYear c2)
-  | otherwise                        =  (getTitle c1) `compare` (getTitle c2)
+  | comparePeople (getAuthor c1) (getAuthor c2) /= Nothing = fromJust $ comparePeople (getAuthor c1) (getAuthor c2)
+  | (getYear c1)  /= (getYear c2)  = (getYear c1)  `compare` (getYear c2)
+  | (getTitle c1) /= (getTitle c2) = (getTitle c1) `compare` (getTitle c2)
+  | otherwise                      = error "Couldn't sort authors"
 
 getAuthor :: (HasFields c) => c -> People
 getAuthor c = maybe (error "No author found") (\(Author x) -> x) (find (isAuthor) (c ^. getFields))
   where isAuthor :: CiteField -> Bool
         isAuthor (Author _) = True
-        isAuthor _          = False
+        isAuthor _          = False 
 
 getYear :: (HasFields c) => c -> Int
 getYear c = maybe (error "No year found") (\(Year x) -> x) (find (isYear) (c ^. getFields))

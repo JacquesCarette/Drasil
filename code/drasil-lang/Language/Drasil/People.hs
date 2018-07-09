@@ -6,6 +6,7 @@ module Language.Drasil.People
   , Conv(..) --This is needed to unwrap names for the bibliography
   , lstName
   , rendPersLFM, rendPersLFM', rendPersLFM''
+  , comparePeople --For sorting references
   ) where
 
 -- | A person can have a given name, middle name(s), and surname, as well
@@ -21,11 +22,14 @@ data Person = Person { _given :: String
 -- followed by given name.
 -- Mononyms are for those people who have only one name (ex. Madonna)
 
-instance Ord Person where 
-  Person f1 l1 _ _ `compare` Person f2 l2 _ _ 
-    | l1 /= l2  = l1 `compare` l2
-    | otherwise = f1 `compare` f2
-
+comparePeople :: [Person] -> [Person] -> Maybe Ordering
+comparePeople [] [] = Nothing
+comparePeople _  [] = Nothing
+comparePeople []  _ = Nothing
+comparePeople ((Person f1 l1 _ _):xs) ((Person f2 l2 _ _):ys)
+  | l1 /= l2  = Just $ l1 `compare` l2
+  | f1 /= f2  = Just $ f1 `compare` f2
+  | otherwise = comparePeople xs ys
 
 type People = [Person]
 

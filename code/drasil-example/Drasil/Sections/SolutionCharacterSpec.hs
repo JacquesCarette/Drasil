@@ -35,6 +35,7 @@ import qualified Drasil.SRS as SRS
 
 data SecItem where 
   Cont      :: [Contents] -> SecItem
+  LC        :: [LabelledContent] -> SecItem
   Sect      :: [Section] -> SecItem
   TMods     :: [RelationConcept] -> SecItem
   IMods     :: [RelationConcept] -> SecItem
@@ -59,6 +60,9 @@ sSubSec sectionName xs = SectionModel sectionName xs
 
 siCon :: [Contents] -> SecItem
 siCon xs = Cont xs
+
+siLC :: [LabelledContent] -> SecItem
+siLC xs = LC xs
 
 siSect :: [Section] -> SecItem
 siSect xs = Sect xs
@@ -104,6 +108,10 @@ hasTitle _               = False
 hasCont :: SecItem -> Bool
 hasCont (Cont _) = True
 hasCont _        = False
+
+hasLC :: SecItem -> Bool
+hasLC (LC _) = True
+hasLC _        = False
 
 hasSect :: SecItem -> Bool
 hasSect (Sect _) = True
@@ -155,6 +163,11 @@ getSecContents (Just (Cont xs)) = xs
 getSecContents (Just _) = []
 getSecContents Nothing = []
 
+getSecLC :: (Maybe SecItem) -> [LabelledContent]
+getSecLC (Just (LC xs)) = xs
+getSecLC (Just _) = []
+getSecLC Nothing = []
+
 getSent :: (Maybe SecItem) -> [Sentence]
 getSent (Just (Sent xs)) = xs
 getSent (Just _)         = []
@@ -204,6 +217,9 @@ pullSections xs = pullFunc xs getSection hasSect
 
 pullContents :: [SecItem] -> [Contents]
 pullContents xs = pullFunc xs getSecContents hasCont
+
+pullLC :: [SecItem] -> [LabelledContent]
+pullLC xs = pullFunc xs getSecLC hasLC
 
 pullSents :: [SecItem] -> [Sentence]
 pullSents xs = pullFunc xs getSent hasSent
@@ -273,7 +289,7 @@ render progName symMap item@(SectionModel niname _)
 
 genericSect :: SubSec -> Section
 genericSect (SectionModel niname xs) = section'' (pullTitle xs niname) 
-  (pullContents xs) (pullSections xs) (niname ^. uid)
+  (pullContents xs) (pullSections xs) (mkLabelRA'' (niname ^. uid))
 
 ------------------------------------------------
 -- GENERAL SYSTEM DESCRIPTION SECTION BUILDER --
@@ -336,8 +352,10 @@ dataDefinitionSect (SectionModel _ xs) _ = SRS.dataDefn
 
 dataConstraintSect :: SubSec -> Section
 dataConstraintSect (SectionModel _ xs) = SRS.datCon
-  ([dataConIntro, inputTable, outputTable] ++ (pullContents xs)) (pullSections xs)
-  where dataConIntro = dataConstraintParagraph (pullContents xs) (pullSents xs)
+  ([dataConIntro, inputTable, outputTable] ++ (pullLC xs)) (pullSections xs)
+  where dataConIntro = llcc "dataConstraintsIntroFIXME" (mkLabelRA'' "dataConsSectionFIXME") 
+                       $ dataConstraintParagraph (pullLC xs) (pullSents xs)
+                       --FIXME: `datConF` also added a Label in SpecifcSystemDescription ^
         inputTable  = inDataConstTbl $ pullUQI xs
         outputTable = outDataConstTbl $ pullUQO xs
 
@@ -489,14 +507,14 @@ iModIntro = foldlSP [S "This", phrase Doc.section_,
 
 -- reference to the input/ ouput tables -> optional middle sentence(s) (use EmptyS if not wanted) -> 
 -- True if standard ending sentence wanted -> optional trailing sentence(s) -> Contents
-dataConstraintParagraph :: [Contents] -> [Sentence] -> Contents
+dataConstraintParagraph :: [LabelledContent] -> [Sentence] -> Contents
 dataConstraintParagraph tableRef [] = Paragraph $ 
   (dataConstraintIntroSent tableRef) +:+ (dataConstraintClosingSent [EmptyS])
 dataConstraintParagraph tableRef (mid:xs) = Paragraph $
   (dataConstraintIntroSent tableRef) +:+ mid +:+ 
   (dataConstraintClosingSent xs)
 
-dataConstraintIntroSent :: [Contents] -> Sentence
+dataConstraintIntroSent :: [LabelledContent] -> Sentence
 dataConstraintIntroSent tableRef = foldlSent [(listofTablesToRefs tableRef), 
   S "the", plural Doc.datumConstraint, S "on the", phrase Doc.input_
   `sAnd` phrase Doc.output_ +:+. (plural Doc.variable `sC` S "respectively"), 

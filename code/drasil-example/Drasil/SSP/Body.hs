@@ -313,8 +313,7 @@ s4_2 = solChSpecF ssa (s4_1, SRS.likeChg [] [], SRS.unlikeChg [] []) ddEnding
   (EmptyS, dataConstraintUncertainty, EmptyS)
   (s4_2_1_list, s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, 
   instModIntro1:instModIntro2:s4_2_5_IMods, 
-  [(llcc "inDataConstTblSSP" (mkLabelRA'' "inDataConstTbl") s4_2_6Table2),
-    (llcc "outDataConstTblSSP" (mkLabelRA'' "outDataConstTbl") s4_2_6Table3)]) []
+  [s4_2_6Table2, s4_2_6Table3]) []
 
   where ddEnding = foldlSent [at_start' definition, ddRef sliceWght, S "to", ddRef lengthLb,
           S "are the", phrase force, plural variable, S "that can be solved",
@@ -380,7 +379,7 @@ slopeVert = verticesConst $ phrase slope
 -}
 {-input and output tables-}
 
-s4_2_6Table2, s4_2_6Table3 :: Contents
+s4_2_6Table2, s4_2_6Table3 :: LabelledContent
 s4_2_6Table2 = inDataConstTbl sspInputs --FIXME: issue #295
 s4_2_6Table3 = outDataConstTbl sspOutputs
 

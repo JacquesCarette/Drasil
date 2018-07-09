@@ -10,7 +10,7 @@ import Data.Drasil.Concepts.Documentation (symbol_, description)
 -- | Table of units section builder. Takes a list of units and an introduction
 table_of_units :: IsUnit s => [s] -> Contents -> Section
 table_of_units u intro = Section (S "Table of Units") [Con intro, Con (unit_table u)] 
-  "ToU" (shortname' "TblOfUnits")
+  (mkLabelRA'' "ToU") --"TblOfUnits"
 
 -- | Creates the actual table of units from a list of units
 unit_table :: IsUnit s => [s] -> Contents

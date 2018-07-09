@@ -11,12 +11,12 @@ import Data.Drasil.Concepts.Math (matrix, graph)
 import qualified Drasil.SRS as SRS
 
 -- wrapper for traceMGIntro
-traceMGF :: [Contents] -> [Sentence] -> [Contents] -> [Section] -> Section
+traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> [Section] -> Section
 traceMGF refs trailing otherContents subSec = SRS.traceyMandG ((traceMIntro refs trailing):otherContents) subSec
 
 -- generalized traceability matrix and graph introduction: variables are references to the three tables
 -- generally found in this section (in order of being mentioned)
-traceMIntro :: [Contents] -> [Sentence] -> Contents
+traceMIntro :: [LabelledContent] -> [Sentence] -> Contents
 traceMIntro refs trailings = Paragraph $ foldlSent [(phrase purpose) `ofThe'` (plural traceyMatrix),
         S "is to provide easy", plural reference, S "on what has to be additionally modified if a certain",
         phrase component, S "is changed. Every time a", phrase component, S "is changed, the", 
@@ -26,7 +26,7 @@ traceMIntro refs trailings = Paragraph $ foldlSent [(phrase purpose) `ofThe'` (p
 
 -- generalized traceability matrix and graph introduction: variables are references to the three tables
 -- generally found in this section (in order of being mentioned)
-traceGIntro :: [Contents] -> [Sentence] -> [Contents]
+traceGIntro :: [LabelledContent] -> [Sentence] -> [Contents]
 traceGIntro refs trailings = [Paragraph $ foldlSent
         [(phrase purpose) `ofThe'` (plural traceyGraph),
         S "is also to provide easy", plural reference, S "on what has to be",

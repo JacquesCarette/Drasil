@@ -195,7 +195,7 @@ data SCSSub where
   DDs         :: Fields  -> [QDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
   DDs'        :: Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro -- should eventually replace and be renamed to DDs
   IMs         :: Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
-  Constraints :: Sentence -> Sentence -> Sentence -> [Contents] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
+  Constraints :: Sentence -> Sentence -> Sentence -> [LabelledContent] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
 --FIXME: Work in Progress ^
 data DerivationDisplay = ShowDerivation
                        | HideDerivation
@@ -218,7 +218,7 @@ data UCsSec = UCsVerb Section | UCsProg [Contents]
 
 {--}
 
-data TraceabilitySec = TraceabilityVerb Section | TraceabilityProg [Contents] [Sentence] [Contents] [Section]
+data TraceabilitySec = TraceabilityVerb Section | TraceabilityProg [LabelledContent] [Sentence] [Contents] [Section]
 
 {--}
 
@@ -261,7 +261,7 @@ mkSections si l = map doit l
 mkRefSec :: SystemInformation -> RefSec -> Section
 mkRefSec _  (RefVerb s) = s
 mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
-  (map (mkSubRef si) l) "RefMat"
+  (map (mkSubRef si) l) (mkLabelRA'' "RefMat")
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
     mkSubRef SI {_sysinfodb = db}  TUnits =
@@ -538,10 +538,10 @@ siSys SI {_sys = sys} = nw sys
 -- mkAssump i desc = Assumption $ ac' i desc
 
 mkRequirement :: String -> Sentence -> String -> Contents
-mkRequirement i desc shrtn = Requirement $ frc i desc (shortname' shrtn)
+mkRequirement i desc lbl = Requirement $ frc i desc (mkLabelRA'' lbl)
 
 mkLklyChnk :: String -> Sentence -> String -> Contents
-mkLklyChnk i desc shrtn = Change $ lc i desc (shortname' shrtn)
+mkLklyChnk i desc lbl = Change $ lc i desc (mkLabelRA'' lbl)
 
 mkUnLklyChnk :: String -> Sentence -> String -> Contents
-mkUnLklyChnk i desc shrtn = Change $ ulc i desc (shortname' shrtn)
+mkUnLklyChnk i desc lbl = Change $ ulc i desc (mkLabelRA'' lbl)

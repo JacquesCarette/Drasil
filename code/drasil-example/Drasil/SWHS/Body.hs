@@ -125,8 +125,6 @@ swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) swhsSymb
     -- Will still likely be a better way to do this.
   --FIXME: Should be all Named, not just acronyms at the end.
 
---nubBy (\x y -> mod x 3 == mod y 3) [1,2,4,5,6]
---nubBy (\x y -> x ^. uid == y ^. uid)
 symbT :: [DefinedQuantityDict]
 symbT =  ccss (getDoc swhs_srs') (egetDoc swhs_srs') swhsSymMap
 

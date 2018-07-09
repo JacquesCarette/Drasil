@@ -37,7 +37,7 @@ egetDoc (Document _ _ s) = concatMap egetSec s
 -- values (like min, max) that are used for defined basic Chunk.
 -- These values should not appear in the basic Table of symbol.
 egetSec :: Section -> [Expr]
-egetSec (Section _ _ _ (ShortNm "RefMat")) = []
+egetSec (Section _ _ _  (ShortNm "RefMat")) = []
 egetSec (Section _ sc _ _) = concatMap egetSecCon sc
 
 egetSecCon :: SecCons -> [Expr]
@@ -64,7 +64,8 @@ getDoc :: Document -> [Sentence]
 getDoc (Document t a s) = t : a : concatMap getSec s
 
 getSec :: Section -> [Sentence]
-getSec (Section _ _ ("AuxConstants") _) = []
+getSec (Section _ _ _ (ShortNm "AuxConstants")) = []
+getSec (Section _ _ _ (ShortNm "RefMat")) = []
 getSec (Section t sc _ _) = t : concatMap getSecCon sc
 
 getSecCon :: SecCons -> [Sentence]

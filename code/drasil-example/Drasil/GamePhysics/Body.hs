@@ -3,6 +3,16 @@ module Drasil.GamePhysics.Body where
 import Language.Drasil hiding (Vector, organization)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Control.Lens ((^.))
+import qualified Drasil.SRS as SRS
+
+import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..), 
+  Emphasis(..), Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), 
+  IntroSub(..), RefSec(..), RefTab(..), SCSSub(..), SSDSec(SSDProg), 
+  SSDSub(SSDSubVerb, SSDSolChSpec), SolChSpec(SCSProg), SubSec, TConvention(..), 
+  TSIntro(..), Verbosity(Verbose), assembler, dataConstraintUncertainty, 
+  inDataConstTbl, intro, mkDoc, outDataConstTbl, reqF, sSubSec, siCon, siDDef, 
+  siIMod, siSTitl, siSent, siTMod, siUQI, siUQO, specSysDescr, traceMGF, tsymb, 
+  valsOfAuxConstantsF)
 
 import Data.Drasil.Concepts.Documentation (assumption, body,
   concept, condition, consumer, dataConst, dataDefn, datumConstraint,
@@ -23,26 +33,15 @@ import Data.Drasil.People (alex, luthfi)
 import Data.Drasil.Phrase(for')
 import Data.Drasil.SI_Units(metre, kilogram, second, newton, radian)
 
-import Drasil.DocumentLanguage (DocDesc, TConvention(..), TSIntro(..), 
-  TSIntro(..), Emphasis(..), DocSection(..), IntroSub(..), mkDoc, RefSec(..),
-  tsymb, RefTab(..), IntroSec(..), IntroSub(..))
 import Drasil.GamePhysics.Changes (likelyChanges, likelyChangesList', unlikelyChanges)
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
 import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs)
-import Drasil.GamePhysics.IMods (iModels)
+import Drasil.GamePhysics.IMods (iModels, im1_new, im2_new, im3_new)
 import Drasil.GamePhysics.References (cpCitations)
 import Drasil.GamePhysics.TMods (cpTMods, t1NewtonSL_new, t2NewtonTL_new, 
   t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new)
 import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
   inputSymbols, outputSymbols, cpInputConstraints)
-
-import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
-import Drasil.Sections.Requirements (reqF)
-import Drasil.Sections.SolutionCharacterSpec (SubSec, siUQI, siSent, siDDef, 
-  sSubSec, siIMod, siUQO, siCon, siTMod, assembler, siSTitl)
-import Drasil.Sections.SpecificSystemDescription (specSysDescr, dataConstraintUncertainty,
-  inDataConstTbl, outDataConstTbl)
-import Drasil.Sections.TraceabilityMandGs (traceMGF)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, 
   dimension)
@@ -61,14 +60,6 @@ import Data.Drasil.Software.Products (videoGame, openSource, sciCompS)
 import Data.Drasil.Utils (makeTMatrix, itemRefToSent, refFromType,
   makeListRef, bulletFlat, bulletNested, enumSimple, enumBullet)
 
-import qualified Drasil.SRS as SRS
-import qualified Drasil.Sections.ReferenceMaterial as RM
-
-import Drasil.GamePhysics.IMods (im1_new, im2_new, im3_new)
-
-import Drasil.DocumentLanguage
-import Drasil.DocumentLanguage.Definitions
-
 authors :: People
 authors = [alex, luthfi]
 
@@ -79,7 +70,7 @@ chipmunkSRS' :: Document
 chipmunkSRS' = mkDoc mkSRS for' chipmunkSysInfo
 
 mkSRS :: DocDesc 
-mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
+mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
   IntroSec (
     IntroProg para1_introduction_intro (short chipmunk) 
   [IPurpose (para1_purpose_of_document_intro),

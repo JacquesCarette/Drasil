@@ -4,8 +4,8 @@ import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
-import Data.List (nub)
-import Data.Drasil.Concepts.Documentation (analysis, assumption, definition, 
+
+import Data.Drasil.Concepts.Documentation (analysis, definition, 
   design, document, effect, element, endUser, goalStmt, inModel, input_, 
   interest, interest, issue, loss, method_, model, organization, physics, 
   problem, property, requirement, srs, table_, template, value, variable)
@@ -25,7 +25,7 @@ import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent,
   foldlSent_, ofThe, sAnd, sOr)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
 import Data.Drasil.Utils (enumBullet, enumSimple, weave)
-import Drasil.SSP.Assumptions (sspAssumptions, newA3, sspRefDB, newAssumptions)
+import Drasil.SSP.Assumptions (sspRefDB, newAssumptions)
 import Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShrDerivation, 
   resShrDerivation, sliceWght, sspDataDefs, stfMtrxDerivation)

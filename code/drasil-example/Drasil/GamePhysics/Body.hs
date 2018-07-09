@@ -3,7 +3,7 @@ module Drasil.GamePhysics.Body where
 import Language.Drasil hiding (Vector, organization)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Control.Lens ((^.))
-import Data.List (nub)
+
 import Data.Drasil.Concepts.Documentation (assumption, body,
   concept, condition, consumer, dataConst, dataDefn, datumConstraint,
   document, endUser, environment, game, genDefn, generalSystemDescription,

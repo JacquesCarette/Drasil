@@ -1,24 +1,19 @@
 module Language.Drasil.Document.GetChunk (vars, combine', vars', combine, ccss)where
 
 import Control.Lens ((^.))
-import Data.List(transpose, head, tail, nub)
+import Data.List(nub)
 
-import Language.Drasil.Document
 import Language.Drasil.Expr
 import Language.Drasil.Spec
-
 import Language.Drasil.Expr.Extract(dep)
 import Language.Drasil.Sentence.Extract(sdep)
 
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.Eq (QDefinition)
-import Language.Drasil.Chunk.References
 import Language.Drasil.ChunkDB (HasSymbolTable, symbLookup, symbolTable, HasDefinitionTable,
  defLookup, defTable, ChunkDB)
 import Language.Drasil.Chunk.Concept(ConceptChunk)
 import Language.Drasil.Chunk.DefinedQuantity(DefinedQuantityDict, dqdQd)
-import Language.Drasil.Classes (NamedIdea(term),
-  ExprRelat(relat), HasDerivation(derivations), 
+import Language.Drasil.Classes (ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), Definition(defn))
 
 

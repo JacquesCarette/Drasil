@@ -20,7 +20,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb, refDD)
 
 import Data.Drasil.Quantities.SolidMechanics as SM (poissnsR)
-import Data.Drasil.Utils (eqUnR, mkDataDef)
+import Data.Drasil.Utils (eqUnR)
 
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (definition, element, value)

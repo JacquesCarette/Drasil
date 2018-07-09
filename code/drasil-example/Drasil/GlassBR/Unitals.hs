@@ -14,7 +14,6 @@ import Data.Drasil.SentenceStructures (displayConstrntsAsSet, foldlSent,
   foldlsC, foldlOptions)
 import Data.Drasil.SI_Units (kilogram, kilopascal, metre, millimetre, pascal, 
   second)
-import Data.Drasil.Utils (mkDataDef)
 
 --FIXME: Many of the current terms can be separated into terms and defns?
 glassBRsymb :: [DefinedQuantityDict]

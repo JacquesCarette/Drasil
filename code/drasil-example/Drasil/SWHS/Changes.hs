@@ -73,11 +73,11 @@ unlikeChgList = [unlikeChg1, unlikeChg2]
 unlikeChg1, unlikeChg2 :: Contents
 
 unlikeChg1 = mkUnLklyChnk "unlikeChg1" ( 
-  foldlSent [makeRef assump14, S ", ", chgsStart assump18, S "It is unlikely for the changeof", 
+  foldlSent [makeRef assump14, S ", ", chgsStart assump18, S "It is unlikely for the change of", 
   phrase water, S "from liquid to a solid or the state change of the", phrase phsChgMtrl, 
   S "from a liquid to a gas to be considered"] ) "Water-PCM-Fixed-States"
 --
-unlikeChg2 = mkUnLklyChnk "unlikeChg1" (
+unlikeChg2 = mkUnLklyChnk "unlikeChg2" (
   foldlSent [chgsStart assump16, S "Is used for the derivations of IM1 and IM2",
   S "(Hack: need Label to fix)"] ) "No-Internal-Heat-Generation"
 --

@@ -8,8 +8,7 @@
 
 module Language.Drasil.Code.AST where
 
-import Language.Drasil.Chunk
-import Language.Drasil.Chunk.Eq
+import Language.Drasil
 
 type HighLevelCode = [Module]
 type Name = String

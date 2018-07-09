@@ -2,8 +2,8 @@ module Drasil.GlassBR.DataDefs (dataDefns, dimLL, gbQDefns, glaTyFac, hFromt,
   nonFL, risk, strDisFac, tolPre, tolStrDisFac, qDefns) where
 
 import Language.Drasil
-
 import Prelude hiding (log, exp)
+
 import Drasil.GlassBR.Unitals (act_thick, actualThicknesses, aspectR, 
   aspectRWithEqn, demand, dimlessLoad, gTF, glassTypeAbbrsStr, 
   glassTypeFactors, glass_type, lDurFac, mod_elas, nom_thick, 

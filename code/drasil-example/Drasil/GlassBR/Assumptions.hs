@@ -3,7 +3,7 @@ import Control.Lens ((^.))
 import Language.Drasil hiding (organization)
 import qualified Drasil.SRS as SRS (valsOfAuxCons, missingP)
 
-import Drasil.DocumentLanguage.RefHelpers (cite, refA)
+import Drasil.DocLang (cite, refA)
 
 import Data.Drasil.Concepts.Documentation as Doc (condition, constant, practice, reference, scenario, 
   system, value)

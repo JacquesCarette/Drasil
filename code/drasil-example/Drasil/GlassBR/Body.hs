@@ -4,20 +4,17 @@ import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
 import qualified Drasil.SRS as SRS
 
-import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..), 
-  DerivationDisplay(..),
-  DocSection(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons), --DocSection uses everything but Verbatim
-  IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), LCsSec(..), 
-  ProblemDescription(..),
-  RefSec(RefProg), RefTab(TAandA, TUnits), ReqrmntSec(..), 
-  UCsSec(..), RefSec(RefProg), RefTab(TAandA, TUnits), ReqrmntSec(..),   ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SCSSub(..), 
-  SSDSec(..), SSDSub(..), SolChSpec(..), 
-  StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), 
-  TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose), DocDesc, 
-  mkDoc, mkRequirement, tsymb)
-import Drasil.DocumentLanguage.Definitions 
-  (Field(..), InclUnits(IncludeUnits), Verbosity(Verbose), Fields)
-import Drasil.DocumentLanguage.RefHelpers (cite)
+import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
+  DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), 
+  GSDSub(UsrChars, SystCons), InclUnits(IncludeUnits), IntroSec(IntroProg), 
+  IntroSub(IChar, IOrgSec, IPurpose, IScope), LCsSec(..), ProblemDescription(..), RefSec(RefProg), RefTab(TAandA, TUnits), 
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg),
+  SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
+  StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
+  TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), cite, 
+  dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
+  mkRequirement, outDataConstTbl, physSystDesc, probDescF, termDefnF, 
+  traceGIntro, tsymb)
 
 import Data.Drasil.Concepts.Computation (computerApp, inParam,
   computerLiteracy, inValue, inQty)
@@ -73,11 +70,6 @@ import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad,
   gbConstants, gbConstrained, gbOutputs, gbInputs, glBreakage, capacity, 
   constant_LoadDF)
 
-import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, 
-  outDataConstTbl, dataConstraintUncertainty, goalStmtF, physSystDesc, termDefnF, 
-  probDescF)
-import Drasil.Sections.TraceabilityMandGs (traceGIntro)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.People (spencerSmith, nikitha, mCampidelli)
 import Data.Drasil.Phrase (for'')

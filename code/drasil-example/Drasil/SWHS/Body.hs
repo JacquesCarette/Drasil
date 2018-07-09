@@ -4,12 +4,18 @@ import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 import Control.Lens ((^.))
+
 import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, 
   DocSection (AuxConstntSec, Bibliography, IntroSec, RefSec, Verbatim), 
   LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
   IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
   RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
-  mkDoc, tsymb'')
+  assumpF, dataConstraintUncertainty, genSysF, inDataConstTbl, inModelF, intro, 
+  mkDoc, outDataConstTbl, physSystDesc, reqF, solChSpecF, specSysDesF, 
+  termDefnF, traceGIntro, traceMGF, tsymb'')
+import qualified Drasil.SRS as SRS (inModel, missingP, likeChg,
+  funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
+  sysCont, reference)
 
 import Data.Drasil.People (thulasi, brooks, spencerSmith)
 import Data.Drasil.Phrase (for)
@@ -58,18 +64,6 @@ import Drasil.SWHS.Requirements (req1, req2, reqEqn1, reqEqn2,
 import Drasil.SWHS.Changes (likeChg1, likeChg2, likeChg3, likeChg4,
   likeChg5, likeChg6, unlikelyChgs)
 import Drasil.SWHS.DataDesc (swhsInputMod)
-
-import qualified Drasil.SRS as SRS (inModel, missingP, likeChg,
-  funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
-  sysCont, reference)
-
-import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.Sections.SpecificSystemDescription (inModelF, assumpF,
-  inDataConstTbl, outDataConstTbl, dataConstraintUncertainty, solChSpecF,
-  termDefnF, specSysDesF, physSystDesc)
-import Drasil.Sections.TraceabilityMandGs (traceMGF, traceGIntro)
-import Drasil.Sections.Requirements (reqF)
-import Drasil.Sections.GeneralSystDesc (genSysF)
 
 import Data.Drasil.Utils (enumSimple, weave, getES, itemRefToSent, makeListRef,
   makeTMatrix, refFromType, eqUnR)

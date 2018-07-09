@@ -1,7 +1,7 @@
 module Language.Drasil.Document.Extract (getDoc, egetDoc)where
 
 import Control.Lens ((^.))
-import Data.List(transpose, head, tail)
+import Data.List(transpose)
 
 import Language.Drasil.Document
 import Language.Drasil.Expr
@@ -71,10 +71,14 @@ getSecCon :: SecCons -> [Sentence]
 getSecCon (Sub s) = getSec s
 getSecCon (Con c) = getCon c
 
+-- This function is used in collecting sentence from table.
+-- Since only the table's first Column titled "Var" should be collected,
+-- this function is used to filter out only the first Column of Sentence. 
 isVar :: ([Sentence], [[Sentence]]) -> [Sentence]
-isVar (((S "Var") : _), s) = head s
-isVar ((_ : tl, s)) = isVar (tl, tail s)
+isVar (((S "Var") : _), hd1 : _) = hd1
+isVar ((_ : tl, _ : tl1)) = isVar (tl, tl1)
 isVar ([], _) = []
+isVar (_, []) = []
 
 getCon :: Contents -> [Sentence]
 getCon (Table s1 s2 t _ _) = isVar (s1, transpose s2) ++ [t]

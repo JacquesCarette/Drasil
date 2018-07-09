@@ -20,8 +20,9 @@ module Drasil.DocLang (
     -- Sections.ScopeOfTheProject
     -- Sections.SolutionCharacterSpec
     -- Sections.SpecificSystemDescription
-    assumpF, dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, inModelF, 
-    outDataConstTbl, physSystDesc, probDescF, solChSpecF, specSysDesF, termDefnF,
+    assumpF, dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, 
+    inModelF, outDataConstTbl, physSystDesc, probDescF, solChSpecF, specSysDesF, 
+    termDefnF,
     -- Sections.Stakeholders
     -- Sections.TableOfAbbAndAcronyms
     -- Sections.TableOfSymbols

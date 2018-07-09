@@ -35,7 +35,7 @@ import Drasil.NoPCM.IMods (eBalanceOnWtr)
 import Drasil.NoPCM.Unitals (temp_init)
 import Drasil.SWHS.References (ref2, ref3, ref4)
 import Drasil.SWHS.Requirements (nonFuncReqs)
-import Drasil.SWHS.Changes (chgsStart, likeChg2, likeChg3, likeChg6, unlikeChg2)
+import Drasil.SWHS.Changes (chgsStart, likeChg2, likeChg3, likeChg6)
 
 import Data.Drasil.People (thulasi)
 import Data.Drasil.Utils (enumSimple, getES, refFromType,
@@ -781,6 +781,11 @@ unlikeChg1 = mkUnLklyChnk "unlikeChg1" (
   foldlSent [chgsStart assump14, S "It is unlikely for the change of",
   phrase water, S "from liquid to a solid, or from liquid to gas to be considered"]) 
   "Water-Fixed-States" 
+
+unlikeChg2 :: Contents
+unlikeChg2 = mkUnLklyChnk "unlikeChg2" (
+  foldlSent [chgsStart assump12, S "Is used for the derivations of IM1",
+  S "(Hack: need Label to fix)"] ) "No-Internal-Heat-Generation"
 
 ----------------------------------------------
 --Section 7:  TRACEABILITY MATRICES AND GRAPHS

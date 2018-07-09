@@ -138,9 +138,21 @@ gamephys_prog: gamephys_build
 
 nopcm_prog: nopcm_build
 
-docs:
+docs: lang-docs code-docs data-docs example-docs
+	
+	
+lang-docs:
+	stack haddock drasil-lang $(haddockArgs)
+	
+code-docs:
 	stack haddock drasil-code $(haddockArgs)
-
+	
+data-docs:
+	stack haddock drasil-data $(haddockArgs)
+	
+example-docs:
+	stack haddock drasil-example $(haddockArgs)
+	
 clean: clean_build
 	- stack clean
 	- cd $(LANG_DIR) && stack clean

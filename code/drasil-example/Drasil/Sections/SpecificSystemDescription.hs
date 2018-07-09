@@ -83,9 +83,10 @@ termDefnF end otherContents = SRS.termAndDefn ((intro):otherContents) []
                     S "understand the", plural requirement :+: (lastF end)]
 
 --general introduction for Physical System Description
-physSystDesc :: Sentence -> LabelledContent -> [Contents] -> Section
+physSystDesc :: Sentence -> LabelledContent -> [LabelledContent] -> Section
 physSystDesc progName fg otherContents = SRS.physSyst ((intro):otherContents) []
-  where intro = Paragraph $ foldle (+:+) (+:) (EmptyS)
+  where intro = llcc "physSystDescIntro" (mkLabelRA'' "physSystDescSection") $ 
+                Paragraph $ foldle (+:+) (+:) (EmptyS)
                 [S "The", (phrase physicalSystem), S "of", progName `sC`
                 S "as shown in", (makeRef fg) `sC` S "includes the following", 
                 plural element]

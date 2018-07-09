@@ -286,8 +286,9 @@ s4_1_2_p2 = foldlSP [S "A", phrase fbd, S "of the", plural force,
   S "acting on the", phrase slice, S "is displayed in",
   makeRef fig_forceacting]
 
-fig_indexconv :: Contents
-fig_indexconv = fig (foldlSent_ [S "Index convention for numbering",
+fig_indexconv :: LabelledContent 
+fig_indexconv = llcc "fig_indexconv" (mkLabelRA'' "fig_indexconv") $ 
+  fig (foldlSent_ [S "Index convention for numbering",
   phrase slice `sAnd` phrase intrslce,
   phrase force, plural variable]) (resourcePath ++ "IndexConvention.png") "IndexConvention"
 
@@ -308,7 +309,9 @@ goals_list = enumSimple 1 (short goalStmt) sspGoals
 s4_2 = solChSpecF ssa (s4_1, SRS.likeChg [] [], SRS.unlikeChg [] []) ddEnding
   (EmptyS, dataConstraintUncertainty, EmptyS)
   (s4_2_1_list, s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, 
-  instModIntro1:instModIntro2:s4_2_5_IMods, [s4_2_6Table2, s4_2_6Table3]) []
+  instModIntro1:instModIntro2:s4_2_5_IMods, 
+  [(llcc "inDataConstTblSSP" (mkLabelRA'' "inDataConstTbl") s4_2_6Table2),
+    (llcc "outDataConstTblSSP" (mkLabelRA'' "outDataConstTbl") s4_2_6Table3)]) []
 
   where ddEnding = foldlSent [at_start' definition, ddRef sliceWght, S "to", ddRef lengthLb,
           S "are the", phrase force, plural variable, S "that can be solved",

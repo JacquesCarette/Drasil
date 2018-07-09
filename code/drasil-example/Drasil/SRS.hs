@@ -4,7 +4,8 @@ module Drasil.SRS
   probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assumpt, thModel,
   genDefn, inModel, dataDefn, datCon, require, nonfuncReq, funcReq, likeChg, unlikeChg, 
   traceyMandG, appendix, reference, propCorSol, offShelfSol, missingP, valsOfAuxCons,
-  tOfSymb) where
+  tOfSymb, 
+  physSystLabel) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
@@ -40,7 +41,7 @@ doc' sys authors secs = Document (Doc.srs `forTT'` sys) authors secs
 -- | Standard SRS section builders
 intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
   genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
-  probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assumpt, thModel,
+  probDesc, termAndDefn, termogy, goalStmt, solCharSpec, assumpt, thModel,
   genDefn, inModel, dataDefn, propCorSol, require, nonfuncReq, funcReq, likeChg, traceyMandG, tOfSymb,
   appendix, reference, offShelfSol, valsOfAuxCons, unlikeChg :: [Contents] -> [Section] -> Section
 
@@ -67,7 +68,6 @@ specSysDes  cs ss = section' (titleize Doc.specificsystemdescription) cs ss "Spe
 probDesc    cs ss = section' (titleize Doc.problemDescription) cs ss "ProbDesc"
 termAndDefn cs ss = section' (titleize' Doc.termAndDef)        cs ss "TermDefs"
 termogy     cs ss = section' (titleize Doc.terminology)        cs ss "Terminology"
-physSyst    cs ss = section' (titleize Doc.physSyst)           cs ss "PhysSyst"
 goalStmt    cs ss = section' (titleize' Doc.goalStmt)          cs ss "GoalStmt"
 solCharSpec cs ss = section' (titleize Doc.solutionCharSpec)   cs ss "SolCharSpec"
 assumpt     cs ss = section' (titleize' Doc.assumption)        cs ss "Assumps"
@@ -97,8 +97,9 @@ offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "ExistingSol
 tOfSymb cs ss = section' (titleize Doc.tOfSymb) cs ss "ToS"
 
 
-datCon :: [LabelledContent] -> [Section] -> Section
-datCon cs ss = sectionLC (titleize' Doc.datumConstraint) cs ss (mkLabelRA'' "DataConstraints")
+datCon, physSyst :: [LabelledContent] -> [Section] -> Section
+datCon   cs ss = sectionLC (titleize' Doc.datumConstraint) cs ss (mkLabelRA'' "DataConstraints")
+physSyst cs ss = sectionLC (titleize Doc.physSyst)         cs ss physSystLabel
 
 --function that sets the shortname of each section to be the reference address
 section' :: Sentence -> [Contents] -> [Section] -> RefAdd -> Section
@@ -106,3 +107,7 @@ section' a b c d = section a b c (mkLabelRA' (d ++ "Label") d)
 --
 missingP :: [Contents]
 missingP = [Paragraph $ S "..."]
+
+--Labels--
+physSystLabel :: Label
+physSystLabel = mkLabelRA'' "PhysSyst"

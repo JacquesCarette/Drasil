@@ -26,6 +26,7 @@ import Language.Drasil.Spec (Sentence(Ref))
 import Language.Drasil.UID (UID)
 import Language.Drasil.Label.Core (getAdd)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
+import Language.Drasil.Label.Core (Label)
 
 -- | Database for maintaining references.
 -- The Int is that reference's number.
@@ -243,6 +244,9 @@ instance Referable InstanceModel where
 instance Referable LabelledContent where
   refAdd (LblC _ lb _) = "LblC:" ++ (getAdd (lb ^. getRefAdd))
   rType  (LblC _ _ c)  = rType c
+
+instance Referable Label where
+  refAdd lb = getAdd (lb ^. getRefAdd)
 
 instance Referable Contents where
   rType (Table _ _ _ _ _)       = Tab

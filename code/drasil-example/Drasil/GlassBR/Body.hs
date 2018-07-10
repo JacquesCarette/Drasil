@@ -117,7 +117,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     [IPurpose (purpose_of_document_intro_p1 document gLassBR glaSlab),
      IScope incScoR endScoR,
      IChar (rdrKnldgbleIn glBreakage blastRisk) undIR appStanddIR,
-     IOrgSec char_intended_reader_intro dataDefn (SRS.dataDefn SRS.missingP []) char_intended_reader_intro_end]) :
+     IOrgSec org_of_doc_intro dataDefn (SRS.dataDefn SRS.missingP []) org_of_doc_intro_end]) :
   StkhldrSec
     (StkhldrProg2
       [Client gLassBR (S "a" +:+ phrase company
@@ -271,7 +271,7 @@ startIntro :: NamedChunk -> Sentence -> CI -> Sentence
 startIntro prgm sfwrPredicts progName = foldlSent [
   at_start prgm, S "is helpful to efficiently" `sAnd` S "correctly predict the"
   +:+. sfwrPredicts, underConsidertn blast,
-  S "The", phrase prgm `sC` S "herein called", short progName,
+  S "The", phrase prgm `sC` S "herein called", short progName `sC`
   S "aims to predict the", sfwrPredicts, S "using an intuitive",
   phrase interface]
 
@@ -282,7 +282,7 @@ rdrKnldgbleIn undrstd1 undrstd2 = (phrase theory +:+ S "behind" +:+
 undIR, appStanddIR, incScoR, endScoR :: Sentence
 undIR = foldlList [phrase scndYrCalculus, phrase structuralMechanics,
   plural computerApp `sIn` phrase civilEng]
-appStanddIR = foldlSent [S "In addition" `sC` plural reviewer,
+appStanddIR = foldlSent [S " In addition" `sC` plural reviewer, -- FIXME: space before "In" is a hack to get proper spacing
   S "should be familiar with the applicable", plural standard,
   S "for constructions using glass from",
   sSqBr (S "4-6" {-astm_LR2009, astm_C1036, astm_C1048-}) `sIn`
@@ -314,15 +314,15 @@ purpose_of_document_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", p
 
 {--Organization of Document--}
 
-char_intended_reader_intro_end, char_intended_reader_intro :: Sentence
-char_intended_reader_intro = foldlSent [S "The", phrase organization, S "of this",
+org_of_doc_intro_end, org_of_doc_intro :: Sentence
+org_of_doc_intro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an", short srs,
   S "for", phrase sciCompS, S "proposed by" +:+ cite gbRefDB koothoor2013
   `sAnd` cite gbRefDB smithLai2005 `sC` S "with some", 
   plural aspect, S "taken from Volere", phrase template,
   S "16", cite gbRefDB rbrtsn2012]
 
-char_intended_reader_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
+org_of_doc_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
   S "are used to support", (plural definition `ofThe` S "different"),
   plural model]
 
@@ -389,9 +389,9 @@ individual_product_use_case mainObj compare1 compare2 factorOfComparison =
   sParen (ch prob_br), S "is less than the tolerable",
   phrase factorOfComparison, sParen (ch pb_tol),
   S "which is obtained from the", phrase user, S "as an" +:+. phrase input_,
-  S "If both", plural condition, S "return true then it's shown that the",
+  S "If both", plural condition, S "return true, then it's shown that the",
   phrase mainObj, S "is safe to use" `sC`
-  S "else if both return false then the", phrase mainObj +:+.
+  S "else if both return false, then the", phrase mainObj +:+.
   S "is considered unsafe", S "All the supporting calculated", plural value,
   S "are also displayed as", phrase output_]
 
@@ -407,7 +407,7 @@ start = foldlSent [S "A", phrase system,
   phrase blastRisk +:+ S "involved with the glass"]
 ending = foldl (+:+) EmptyS [S "interpret the", plural input_,
   S "to give out the", plural output_,
-  S "which predicts whether the", phrase glaSlab,
+  S "which predict whether the", phrase glaSlab,
   S "can withstand the", phrase blast, S "under the",
   plural condition]
 
@@ -435,7 +435,7 @@ physical_system_description_list_physys2 :: NamedIdea n => n -> Sentence
 
 physical_system_description_list_physys = [physical_system_description_list_physys1, physical_system_description_list_physys2 (ptOfExplsn)]
 
-physical_system_description_list_physys1 = at_start glaSlab
+physical_system_description_list_physys1 = S "The" +:+. phrase glaSlab
 
 physical_system_description_list_physys2 imprtntElem = foldlSent [S "The"
   +:+. phrase imprtntElem, S "Where the", phrase bomb `sC`

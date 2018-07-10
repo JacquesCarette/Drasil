@@ -7,7 +7,7 @@ import Drasil.SWHS.Unitals (temp_W, temp_C, tau_W, w_mass, htCap_W, coil_HTC, co
   , time_final, w_vol, ht_flux_C, vol_ht_gen)
 import Data.Drasil.Utils (unwrap, weave)
 import Data.Drasil.SentenceStructures (foldlSent, isThe,
-  sAnd, foldlList, ofThe, acroGD, foldlSentCol, sOf, getES)
+  sAnd, foldlList, ofThe, acroGD, foldlSentCol, sOf)
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Concepts.Math (equation, rOfChng)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
@@ -109,7 +109,7 @@ eq1:: Expr
 eq1 = (sy w_mass) * (sy htCap_W)
 
 eq2:: [Sentence]
-eq2 = [getES tau_W, S "=", getES w_mass, getES htCap_W, S "/", getES coil_HTC, getES coil_SA]
+eq2 = [ch tau_W, S "=", ch w_mass, ch htCap_W, S "/", ch coil_HTC, ch coil_SA]
 
 s4_2_3_eq1_nopcm, s4_2_3_eq2_nopcm, s4_2_3_eq3_nopcm, s4_2_3_eq4_nopcm :: Expr
 

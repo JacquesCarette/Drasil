@@ -13,16 +13,21 @@ module Drasil.Sections.SpecificSystemDescription
   , inModelF
   , datConF
   , dataConstraintUncertainty
-  , inDataConstTbl, outDataConstTbl
+  , inDataConstTbl, outDataConstTbl 
   , listofTablesToRefs
   ) where
 
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation (physical, column, input_, uncertainty, physicalConstraint,
+  softwareConstraint, typUnc, user, model, value, quantity, information, constraint, variable,
+  output_, symbol_, limitation, problem, inModel, datum, datumConstraint, section_, dataDefn,
+  general, genDefn, problemDescription, solutionCharSpec, assumption, thModel, physicalSystem,
+  likelyChg, unlikelyChg, goalStmt, theory, purpose, requirement, element)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Utils (foldle, getES, fmtU, getRVal)
-import Data.Drasil.SentenceStructures
+import Data.Drasil.Utils (foldle, fmtU, getRVal)
+import Data.Drasil.SentenceStructures (fmtPhys, fmtSfwr, mkTableFromColumns, foldlSent, foldlSP,
+  typUncr, ofThe, foldlList)
 import qualified Drasil.SRS as SRS
 
 
@@ -32,8 +37,6 @@ specSysDescr sys subs = SRS.specSysDes [intro_ sys] subs
 
 -- FIXME: this all should be broken down and mostly generated.
 -- Generates an introduction based on the system.
---theoretical models, general definitions, data definitions, and finally 
---the instance models (ODEs) that model the solar water heating systems incorporating PCM.
 intro_ :: (NamedIdea a) => a -> Contents
 intro_ sys = Paragraph $ S "This section first presents the problem" +:+
   S "description, which gives a high-level view of the problem to be" +:+
@@ -226,7 +229,6 @@ dataConstraintClosingSent uncertaintySent trailingSent = foldlSent
   plural value, S "is intended to provide a feel for a common scenario"]
   +:+ uncertaintySent +:+ trailingSent
 
-
 dataConstraintUncertainty :: Sentence
 dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase column,
   S "provides an", S "estimate of the confidence with which the", phrase physical,
@@ -238,7 +240,7 @@ dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase colum
 inDataConstTbl :: (UncertainQuantity c, Constrained c, HasReasVal c) => [c] -> Contents
 inDataConstTbl qlst = Table titl cts (S "Input Data Constraints") True "InDataConstraints"
   where
-   columns = [(S "Var", map getES qlst),
+   columns = [(S "Var", map ch qlst),
             (titleize' physicalConstraint, map fmtPhys qlst),
             (titleize' softwareConstraint, map fmtSfwr qlst),
             (S "Typical Value", map (\q -> fmtU (E $ getRVal q) q) qlst),
@@ -251,7 +253,7 @@ inDataConstTbl qlst = Table titl cts (S "Input Data Constraints") True "InDataCo
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> Contents
 outDataConstTbl qlst = Table titl cts (S "Output Data Constraints") True "OutDataConstraints"
   where
-   columns = [(S "Var", map getES qlst),
+   columns = [(S "Var", map ch qlst),
             (titleize' physicalConstraint, map fmtPhys qlst),
             (titleize' softwareConstraint, map fmtSfwr qlst)]
    tbl = mkTableFromColumns columns

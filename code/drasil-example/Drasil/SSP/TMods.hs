@@ -22,7 +22,6 @@ import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 
 import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe',
   sAnd, sOf)
-import Data.Drasil.Utils (getES)
 
 --------------------------
 --  Theoretical Models  --
@@ -50,10 +49,10 @@ fs_rel = (sy fs) $= (sy shearRes) / (sy mobShear)
 fs_desc :: Sentence
 fs_desc = foldlSent [
   S "The stability metric of the", phrase slope `sC` S "known as the",
-  phrase factor `sOf` phrase safety, sParen (getES fs) `sC`
+  phrase factor `sOf` phrase safety, sParen (ch fs) `sC`
   S "is determined by", S "ratio" `ofThe` phrase shearForce,
-  S "at the base of the", phrase slope, sParen (getES mobShear) `sC`
-  S "and the resistive shear", sParen (getES shearRes)]
+  S "at the base of the", phrase slope, sParen (ch mobShear) `sC`
+  S "and the resistive shear", sParen (ch shearRes)]
 
 --
 ------------- New Chunck -----------
@@ -103,16 +102,16 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
   S "can experience while remaining rigid, analogous to",
   S "a maximum" +:+. phrase normForce, S "In this", phrase model, S "the",
   getTandS shrStress, S "is proportional to the product of the",
-  phrase normStress, S "on the plane", getES normStress,
+  phrase normStress, S "on the plane", ch normStress,
   S "with it's static", phrase friction, S "in the angular form" +:+.
   (E $ tan (sy fricAngle) $= sy surfHydroForce),
   --FIXME: sould say U_s but there is no way to say that yet
-  S "The", getES shrStress, S "versus", getES normStress,
+  S "The", ch shrStress, S "versus", ch normStress,
   S "relationship is not truly",
   phrase linear `sC` S "but assuming the effective", phrase normForce, 
   S "is strong enough, it can be approximated with a", phrase linear,
-  S "fit", sParen (refA sspRefDB newA9), S "where the cohesion", getES cohesion,
-  S "represents the", getES shrStress, S "intercept of the fitted line"]
+  S "fit", sParen (refA sspRefDB newA9), S "where the cohesion", ch cohesion,
+  S "represents the", ch shrStress, S "intercept of the fitted line"]
 
 --
 ------------- New Chunck -----------
@@ -132,17 +131,17 @@ effS_rel = (sy normStress) $= (sy normStress) - (sy porePressure)
 
 effS_desc :: Sentence --FIXME: these are not normStress but they are sigma.
                       -- Add a prime. Symbol inconsistency 
-effS_desc = foldlSent [getES normStress, S "is the total", phrase stress,
+effS_desc = foldlSent [ch normStress, S "is the total", phrase stress,
   S "a soil", phrase mass,
   S "needs to maintain itself as a rigid collection of particles.",
   phrase source `ofThe'` phrase stress,
-  S "can be provided by the soil skeleton", getES normStress `sC`
+  S "can be provided by the soil skeleton", ch normStress `sC`
   S "or by the pore pressure from water within the soil" +:+.
-  getES porePressure, S "The", phrase stress,
+  ch porePressure, S "The", phrase stress,
   S "from the soil skeleton is known as the effective",
-  phrase stress, getES normStress, S "and is the difference between the",
-  S "total", phrase stress, getES normStress, S "and the pore",
-  phrase stress, getES porePressure]
+  phrase stress, ch normStress, S "and is the difference between the",
+  S "total", phrase stress, ch normStress, S "and the pore",
+  phrase stress, ch porePressure]
 
 --
 ------------- New Chunck -----------
@@ -161,8 +160,8 @@ hksLw_rel :: Relation
 hksLw_rel = (sy genForce) $= (sy stffness) * (sy genDisplace)
 
 hksLw_desc :: Sentence
-hksLw_desc = foldlSent [S "Stiffness", getES stffness, S "is the",
+hksLw_desc = foldlSent [S "Stiffness", ch stffness, S "is the",
   S "resistance of a body to deformation by", phrase displacement,
-  getES genDisplace, S "when subject to a", phrase force, getES genForce `sC`
+  ch genDisplace, S "when subject to a", phrase force, ch genForce `sC`
   S "along the same direction. A body with high stiffness will experience",
   S "little deformation when subject to a", phrase force]

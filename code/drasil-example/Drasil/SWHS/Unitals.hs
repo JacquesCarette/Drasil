@@ -26,7 +26,7 @@ swhsSymbols = (map dqdWr swhsUnits) ++ (map dqdWr swhsUnitless) ++
 swhsSymbolsAll :: [QuantityDict]
 swhsSymbolsAll = (map qw swhsUnits) ++ (map qw swhsUnitless) ++
   (map qw swhsConstrained) ++ (map qw specParamValList) ++
-  (map qw [htFusion_min, htFusion_max, coil_SA_max] ++ [qw gradient])
+  (map qw [htFusion_min, htFusion_max, coil_SA_max])
 
 -- Symbols with Units --
 
@@ -37,7 +37,7 @@ swhsUnits = map ucw [in_SA, out_SA, heat_cap_spec, htCap_L,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp,boil_pt, temp_env, melt_pt, t_init_melt,
   t_final_melt, vol, tank_vol, w_vol, deltaT,
-  density, tau, tau_L_P, tau_S_P, tau_W] ++
+  density, tau, tau_L_P, tau_S_P, tau_W, thickness] ++
   map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]
 
 in_SA, out_SA, htCap_L, htCap_S, htCap_V,
@@ -46,7 +46,7 @@ in_SA, out_SA, htCap_L, htCap_S, htCap_V,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp_env, t_init_melt,
   t_final_melt, tank_vol, w_vol, deltaT,
-  tau, tau_L_P, tau_S_P, tau_W, sim_time :: UnitalChunk
+  tau, tau_L_P, tau_S_P, tau_W, sim_time, thickness:: UnitalChunk
 
 ---------------------
 -- Regular Symbols --
@@ -182,14 +182,17 @@ sim_time = uc' "sim_time" (compoundPhrase' (simulation ^. term)
   (time ^. term)) "Time over which the simulation runs"
   lT second
 
+thickness = uc'  "thickness" (nounPhraseSP "Minimum thickness of a sheet of PCM")
+  "The minimum thickness of a sheet of PCM"
+  (sub lH (Atomic "min")) metre
 ----------------------
 -- Unitless symbols --
 ----------------------
 
 swhsUnitless :: [DefinedQuantityDict]
-swhsUnitless = [uNormalVect, surface, eta, melt_frac, frac_min]
+swhsUnitless = [uNormalVect, surface, eta, melt_frac, gradient, frac_min]
 
-eta, melt_frac, frac_min :: DefinedQuantityDict
+eta, melt_frac, frac_min:: DefinedQuantityDict
 
 -- FIXME: should this have units?
 eta = dqd' (dcc "eta" (nounPhraseSP "ODE parameter")
@@ -253,7 +256,7 @@ pcm_SA = uqc "pcm_SA"
   "Area covered by the outermost layer of the phase change material"
   (sub cA cP) m_2 Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Inc, sy pcm_vol) (Inc, (2 / sy htTransCoeff_min) * sy tank_vol)]
+  sfwrc $ Bounded (Inc, sy pcm_vol) (Inc, (2 / sy thickness) * sy tank_vol)]
   (dbl 1.2) 0.1
 
 -- Constraint 5
@@ -420,13 +423,13 @@ cons_tol = uvc "pb_tol"
 -------------------------
 
 specParamValList :: [QDefinition]
-specParamValList = [tank_length_min, tank_length_max, htTransCoeff_min,
+specParamValList = [tank_length_min, tank_length_max,
   pcm_density_min, pcm_density_max, w_density_min, w_density_max,
   htCap_S_P_min, htCap_S_P_max, htCap_L_P_min, htCap_L_P_max,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max,
   pcm_HTC_min, pcm_HTC_max, time_final_max]
 
-tank_length_min, tank_length_max, htTransCoeff_min, pcm_density_min, 
+tank_length_min, tank_length_max, pcm_density_min, 
   pcm_density_max, w_density_min, w_density_max, htCap_S_P_min, 
   htCap_S_P_max, htCap_L_P_min, htCap_L_P_max,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, pcm_HTC_min,
@@ -442,12 +445,6 @@ tank_length_min = mkDataDef (unitary "tank_length_min"
 tank_length_max = mkDataDef (unitary "tank_length_max"
   (nounPhraseSP "maximum length of tank")
   (sub (eqSymb tank_length) (Atomic "max")) metre Rational) 50
-
--- Used in Constraint 4
-htTransCoeff_min = mkDataDef (unitary "htTransCoeff_min"
-  (nounPhraseSP "minimum convective heat transfer coefficient")
-  (sub (eqSymb htTransCoeff) (Atomic "min")) UT.heat_transfer_coef Rational)
-  (dbl 0.001)
 
 -- Used in Constraint 5
 pcm_density_min = mkDataDef (unitary "pcm_density_min"

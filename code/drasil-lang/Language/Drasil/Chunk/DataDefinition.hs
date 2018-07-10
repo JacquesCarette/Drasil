@@ -3,15 +3,13 @@ module Language.Drasil.Chunk.DataDefinition where
 
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Spec (Sentence(EmptyS))
-import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Chunk.References (References)
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.Chunk.Quantity (Quantity(getUnit), HasSpace(typ), QuantityDict,
-  mkQuant, qw)
+import Language.Drasil.Chunk.Quantity (Quantity(getUnit), HasSpace(typ))
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
-  HasReference(getReferences), ConceptDomain, HasAdditionalNotes(getNotes))
+  HasSymbol(symbol), ExprRelat(relat), HasDerivation(derivations), 
+  HasReference(getReferences), HasAdditionalNotes(getNotes))
 import Language.Drasil.Chunk.SymbolForm (eqSymb)
 import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
 

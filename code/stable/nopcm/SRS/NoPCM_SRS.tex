@@ -75,8 +75,6 @@ ${A_{in}}$ & Surface area over which heat is transferred in & $\text{m}^{2}$
 \\
 ${A_{out}}$ & Surface area over which heat is transferred out & $\text{m}^{2}$
 \\
-${C^{L}}$ & Specific heat capacity of a liquid & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
-\\
 $C$ & Specific heat capacity & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
 ${C_{W}}$ & Specific heat capacity of water & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
@@ -97,17 +95,21 @@ $m$ & Mass & kg
 \\
 ${m_{W}}$ & Mass of water & kg
 \\
-$q$ & Heat flux & $\frac{\text{W}}{\text{m}^{2}}$
+$\mathbf{\hat{n}}$ & Normal Vector & 
+\\
+${q_{C}}$ & Heat flux into the water from the coil & $\frac{\text{W}}{\text{m}^{2}}$
+\\
+$\mathbf{q}$ & Thermal flux vector & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 ${q_{in}}$ & Heat flux input & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 ${q_{out}}$ & Heat flux output & $\frac{\text{W}}{\text{m}^{2}}$
 \\
-$\mathbf{q}$ & Thermal flux vector & $\frac{\text{W}}{\text{m}^{2}}$
-\\
-${q_{C}}$ & Heat flux into the water from the coil & $\frac{\text{W}}{\text{m}^{2}}$
+$S$ & Surface & $\text{m}^{2}$
 \\
 $T$ & Temperature & ${}^{\circ}$C
+\\
+$t$ & Time & s
 \\
 $ΔT$ & Change in temperature & ${}^{\circ}$C
 \\
@@ -115,17 +117,15 @@ ${T_{C}}$ & Temperature of the heating coil & ${}^{\circ}$C
 \\
 ${T_{env}}$ & Temperature of the environment & ${}^{\circ}$C
 \\
-$t$ & Time & s
-\\
 ${t_{final}}$ & Final time & s
 \\
 ${T_{init}}$ & Initial temperature & ${}^{\circ}$C
 \\
 ${T_{W}}$ & Temperature of the water & ${}^{\circ}$C
 \\
-${V_{tank}}$ & Volume of the cylindrical tank & $\text{m}^{3}$
-\\
 $V$ & Volume & $\text{m}^{3}$
+\\
+${V_{tank}}$ & Volume of the cylindrical tank & $\text{m}^{3}$
 \\
 ${V_{W}}$ & Volume of water & $\text{m}^{3}$
 \\
@@ -133,7 +133,9 @@ $ρ$ & Density & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 ${ρ_{W}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-$τ$ & Dummy variable for integration over time & s
+${τ_{W}}$ & ODE parameter for water & s
+\\
+$∇$ & Gradient & 
 \\
 \bottomrule
 \label{Table:ToS}
@@ -752,8 +754,6 @@ Symbol & Description & Value & Unit
 ${L_{min}}$ & minimum length of tank & $0.1$ & m
 \\
 ${L_{max}}$ & maximum length of tank & $50$ & m
-\\
-${h_{min}}$ & minimum convective heat transfer coefficient & $0.001$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\
 ${{ρ_{W}}^{min}}$ & minimum density of water & $950$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \\

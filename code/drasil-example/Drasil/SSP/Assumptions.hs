@@ -6,7 +6,6 @@ import Drasil.SSP.Defs (slpSrf, slopeSrf, slope,
   mtrlPrpty, soil, soilLyr, soilPrpty, intrslce, slice)
 import Drasil.SSP.Unitals (coords, normToShear, scalFunc, fs)
 import Drasil.SSP.References (sspCitations)
-import Data.Drasil.Utils (getES)
 import Data.Drasil.SentenceStructures (ofThe, ofThe', getTandS, foldlSent)
 
 import Data.Drasil.Concepts.Documentation (condition)
@@ -15,7 +14,6 @@ import Data.Drasil.Concepts.Math (surface, unit_)
 import Data.Drasil.Concepts.Physics (force, strain, stress)
 import Data.Drasil.Concepts.SolidMechanics (shearForce)
 import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe')
-import Data.Drasil.Utils (getES)
 
 sspRefDB :: ReferenceDB
 sspRefDB = rdb [] [] newAssumptions [] [] sspCitations []
@@ -46,7 +44,7 @@ monotonicF, slopeG, homogeneousL, isotropicP, linearS,
 
 monotonicF = foldlSent [S "The", phrase slpSrf,
   S "is concave with respect to", S "the" +:+. phrase slopeSrf,
-  ((getES coords +:+ S "coordinates") `ofThe'` S "failure"),
+  ((ch coords +:+ S "coordinates") `ofThe'` S "failure"),
   phrase surface, S "follow a monotonic function"]
 
 slopeG = foldlSent [S "geometry" `ofThe'` phrase slope `sC` S "and",
@@ -62,8 +60,8 @@ isotropicP = foldlSent [at_start' soilLyr, S "are treated as if they have",
 
 linearS = foldlSent [at_start intrslce, S "normal and", plural shearForce,
   S "have a linear relationship, proportional to a constant",
-  sParen (getES normToShear), S "and an", phrase intrslce, phrase force,
-  S "function", sParen (getES scalFunc), S "depending on x position"]
+  sParen (ch normToShear), S "and an", phrase intrslce, phrase force,
+  S "function", sParen (ch scalFunc), S "depending on x position"]
 
 linearF = foldlSent [at_start slice, S "to base normal and",
   plural shearForce, S "have", S "a linear relationship, dependent on the",

@@ -16,7 +16,6 @@ import Data.Drasil.Quantities.Thermodynamics (temp, heat_cap_spec,
   latent_heat, melt_pt, boil_pt, sens_heat, heat_cap_spec)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density)
 import Data.Drasil.Quantities.Physics (energy, time)
-import Data.Drasil.Utils (getES)
 import Data.Drasil.SentenceStructures (foldlSent, isThe)
 
 import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCap_V, htCap_S,
@@ -58,17 +57,17 @@ t1descr = foldlSent [
   phrase law_cons_energy, S "for",
   phrase transient, phrase heat_trans,
   S "in a material of", phrase heat_cap_spec,
-  getES heat_cap_spec, sParen (Sy (unit_symb heat_cap_spec)),
+  ch heat_cap_spec, sParen (Sy (unit_symb heat_cap_spec)),
   S "and", phrase density `sC`
-  getES density, sParen (Sy (unit_symb density)) `sC`
-  S "where", getES thFluxVect `isThe`
+  ch density, sParen (Sy (unit_symb density)) `sC`
+  S "where", ch thFluxVect `isThe`
   phrase thFluxVect, sParen (Sy (unit_symb thFluxVect)) `sC`
-  getES vol_ht_gen `isThe`
+  ch vol_ht_gen `isThe`
   phrase vol_ht_gen, sParen (Sy (unit_symb vol_ht_gen)) `sC`
-  getES temp `isThe`
+  ch temp `isThe`
   phrase temp, sParen (Sy (unit_symb temp)) `sC`
-  getES time, S "is", phrase time,
-  sParen (Sy (unit_symb time)) `sC` S "and", getES gradient,
+  ch time, S "is", phrase time,
+  sParen (Sy (unit_symb time)) `sC` S "and", ch gradient,
   S "is the" +:+. (gradient ^. defn), S "For this", phrase equation,
   S "to apply" `sC` S "other forms of", phrase energy `sC` S "such as",
   phrase mech_energy `sC`
@@ -108,24 +107,24 @@ sensHtEEqn = (sy sens_heat) $= case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
 -- were implemented incorrectly.
 t2descr :: Sentence
 t2descr = foldlSent [
-  getES sens_heat `isThe` S "change in",
+  ch sens_heat `isThe` S "change in",
   phrase sens_heat, phrase energy +:+. sParen (Sy (joule ^. usymb)),
-  getES htCap_S `sC` getES htCap_L `sC` getES htCap_V, S "are the",
+  ch htCap_S `sC` ch htCap_L `sC` ch htCap_V, S "are the",
   phrase htCap_S `sC` phrase htCap_L `sC` S "and", phrase htCap_V `sC`
   S "respectively" +:+. sParen (Sy (unit_symb heat_cap_spec)),
-  getES mass `isThe` phrase mass +:+. sParen (Sy (unit_symb mass)),
-  getES temp `isThe` phrase temp,
-  sParen (Sy (unit_symb temp)) `sC` S "and", getES deltaT `isThe`
+  ch mass `isThe` phrase mass +:+. sParen (Sy (unit_symb mass)),
+  ch temp `isThe` phrase temp,
+  sParen (Sy (unit_symb temp)) `sC` S "and", ch deltaT `isThe`
   phrase deltaT +:+. sParen (Sy (unit_symb deltaT)),
-  getES melt_pt, S "and", getES boil_pt,
+  ch melt_pt, S "and", ch boil_pt,
   S "are the", phrase melt_pt, S "and", phrase boil_pt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),
   at_start sens_heat :+: S "ing occurs as long as the material does",
   S "not reach a", phrase temp, S "where a" +:+
   phrase phase_change, S "occurs. A",
   phrase phase_change, S "occurs if",
-  getES temp :+: S "=" :+: getES boil_pt,
-  S "or", getES temp :+: S "=" +. getES melt_pt,
+  ch temp :+: S "=" :+: ch boil_pt,
+  S "or", ch temp :+: S "=" +. ch melt_pt,
   S "If this" `isThe` S "case, refer to",
   (makeRef $ reldefn t3LatHtE) `sC`
   at_start latent_heat, phrase energy]
@@ -161,20 +160,20 @@ latHtEEqn = apply1 latent_heat time $=
 
 t3descr :: Sentence
 t3descr = foldlSent [
-  getES latent_heat `isThe` S "change in",
+  ch latent_heat `isThe` S "change in",
   phrase thermal_energy, sParen (Sy (joule ^. usymb)) `sC`
   phrase latent_heat +:+. phrase energy,
   E latHtEEqn `isThe` phrase rOfChng, S "of",
-  getES latent_heat, S "with respect",
-  S "to", phrase time, getES tau +:+.
-  sParen (Sy (unit_symb tau)), getES time `isThe`
+  ch latent_heat, S "with respect",
+  S "to", phrase time, ch tau +:+.
+  sParen (Sy (unit_symb tau)), ch time `isThe`
   phrase time, sParen (Sy (unit_symb time)),
   S "elapsed, as long as the",
   phrase phase_change, S "is not complete. The status of",
   S "the", phrase phase_change,
   S "depends on the", phrase melt_frac `sC`
   (makeRef $ datadefn dd3HtFusion) :+: S ".",
-  getES melt_pt, S "and", getES boil_pt, S "are the",
+  ch melt_pt, S "and", ch boil_pt, S "are the",
   phrase melt_pt, S "and", phrase boil_pt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),
   at_start latent_heat :+: S "ing stops when all material has",

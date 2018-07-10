@@ -153,8 +153,8 @@ getIL (Nested h lt) = h : getLT lt
 getLP :: ListPair -> [Sentence]
 getLP (t, it) = t : getIL it
 
-getBib :: BibRef -> [Sentence]
-getBib a = concatMap getField $ concatMap fields a
+getBib :: (HasFields c) => [c] -> [Sentence]
+getBib a = concatMap getField $ concatMap (^. getFields) a
 
 getField :: CiteField -> [Sentence]
 getField (Address s) = [s]

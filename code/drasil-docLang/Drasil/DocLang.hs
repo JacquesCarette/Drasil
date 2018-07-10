@@ -52,21 +52,23 @@ import Drasil.DocumentLanguage.Definitions (Field(..), Fields,
     InclUnits(IncludeUnits), Verbosity(Verbose))
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, cite, ddRefDB, mdb, refA, 
     refDD)
-import Drasil.DocumentLanguage.TraceabilityMatrix
+--import Drasil.DocumentLanguage.TraceabilityMatrix
 import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
-import Drasil.Sections.Introduction
+--import Drasil.Sections.Introduction
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.Requirements (nonFuncReqF, reqF)
-import Drasil.Sections.ScopeOfTheProject
+--import Drasil.Sections.ScopeOfTheProject
 import Drasil.Sections.SolutionCharacterSpec (SubSec, assembler, sSubSec, siCon, 
     siDDef, siIMod, siSTitl, siSent, siTMod, siUQI, siUQO)
 import Drasil.Sections.SpecificSystemDescription (assumpF, 
     dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, inModelF, 
     outDataConstTbl, physSystDesc, probDescF, solChSpecF, specSysDesF,
     specSysDescr, termDefnF)
-import Drasil.Sections.Stakeholders
-import Drasil.Sections.TableOfAbbAndAcronyms
-import Drasil.Sections.TableOfSymbols
-import Drasil.Sections.TableOfUnits
+--import Drasil.Sections.Stakeholders
+--import Drasil.Sections.TableOfAbbAndAcronyms
+--import Drasil.Sections.TableOfSymbols
+--import Drasil.Sections.TableOfUnits
 import Drasil.Sections.TraceabilityMandGs (traceGIntro, traceMGF)
+
+-- Commented out modules aren't used - uncomment if this changes

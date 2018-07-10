@@ -282,7 +282,7 @@ rdrKnldgbleIn undrstd1 undrstd2 = (phrase theory +:+ S "behind" +:+
 undIR, appStanddIR, incScoR, endScoR :: Sentence
 undIR = foldlList [phrase scndYrCalculus, phrase structuralMechanics,
   plural computerApp `sIn` phrase civilEng]
-appStanddIR = foldlSent [S "In addition" `sC` plural reviewer,
+appStanddIR = foldlSent [S " In addition" `sC` plural reviewer, -- FIXME: space before "In" is a hack to get proper spacing
   S "should be familiar with the applicable", plural standard,
   S "for constructions using glass from",
   sSqBr (S "4-6" {-astm_LR2009, astm_C1036, astm_C1048-}) `sIn`

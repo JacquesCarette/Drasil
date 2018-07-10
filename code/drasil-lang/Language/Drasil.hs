@@ -41,6 +41,7 @@ module Language.Drasil (
   , UID
   -- Classes
   , HasUID(uid)
+  , HasLabel(getLabel)
   , NamedIdea(term)
   , HasAdditionalNotes(getNotes)
   , Idea(getA)
@@ -59,9 +60,9 @@ module Language.Drasil (
   -- Chunk.VarChunk
   , VarChunk, codeVC
   , vc, implVar
-  , dcc, dcc', dccWDS, dccWDS', vc'', ccs, cc, cc'
+  , dcc, dcc', dccWDS, dccWDS', vc'', ccs, cc, cc', cic
   -- Chunk.Concept
-  , cw , ConceptChunk , CommonConcept
+  , cw , ConceptChunk , CommonConcept, ConceptInstance
   -- Chunk.CommonIdea
   , commonIdea, CI, getAcc
   -- Chunk.NamedIdea
@@ -79,6 +80,8 @@ module Language.Drasil (
   , cnstrw
   -- Chunk.Eq
   , QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec
+  -- Chunk.DataDefinition
+  , DataDefinition, mkDataDef, mkDD
   -- Chunk.GenDefn
   , GenDefn, gd, gdUnit
   -- Chunk.InstanceModel
@@ -205,7 +208,18 @@ module Language.Drasil (
   , PhysSystDesc, pSysDes, psd
   -- RefTypes
   , RefAdd
+  -- Document.getChunk
+  , vars, combine', ccss
+  -- Chunk.Sentence.EmbedSymbol
+  , ch
+  -- Chunk.Sentence.Extract
+  , sdep, vars',snames, combine
+  -- Chunk.Expr.Extract
+  , names
+  -- Document.Extract
+  , egetDoc, getDoc
 ) where
+
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.SystemInformation
@@ -219,7 +233,10 @@ import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, co
           apply, apply1, apply2,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
-import Language.Drasil.Expr.Extract (dep, names', vars)
+import Language.Drasil.Document.Extract(egetDoc, getDoc)
+import Language.Drasil.Expr.Extract (dep, names', names)
+import Language.Drasil.Sentence.EmbedSymbol(ch)
+import Language.Drasil.Sentence.Extract(sdep,  snames)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website), DocSpec(DocSpec), Filename)
 import Language.Drasil.Document (Document(..), DType(..)
   , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..)
@@ -234,7 +251,8 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),HasSpace(typ),  HasUnitSymbol(usymb),
   IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes),
   Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations),
-  HasReference(getReferences))
+  HasReference(getReferences), HasLabel(getLabel))
+import Language.Drasil.Document.GetChunk(vars, combine', vars', combine, ccss)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Derivation (Derivation)
@@ -268,6 +286,7 @@ import Language.Drasil.Chunk.Constrained.Core (physc, sfwrc, enumc, isPhysC, isS
   Constraint(..), ConstraintReason(..), Reason(..), TheoryConstraint(..))
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec)
+import Language.Drasil.Chunk.DataDefinition (DataDefinition, mkDataDef, mkDD)
 import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.Goal (Goal, mkGoal)
 import Language.Drasil.Chunk.InstanceModel
@@ -308,6 +327,7 @@ import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 --import Language.Drasil.Generate -- moved in SubPackages
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
                                ,person', personWM, personWM', mononym, name)
+
 --import Language.Drasil.CodeSpec hiding (outputs, inputs) -- moved in SubPackages
 --import Language.Drasil.Code.DataDesc -- moved in SubPackages
 --import Language.Drasil.Code.Imperative.Lang -- moved in SubPackages

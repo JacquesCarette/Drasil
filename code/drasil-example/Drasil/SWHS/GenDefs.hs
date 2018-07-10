@@ -13,7 +13,7 @@ import Data.Drasil.Quantities.Physics as QP (time)
 import Drasil.SWHS.Unitals (vol_ht_gen, deltaT, temp_env, pcm_SA,
   out_SA, in_SA, ht_flux_in, ht_flux_out, htTransCoeff, thFluxVect)
 import Data.Drasil.SentenceStructures (isThe, sAnd)
-import Data.Drasil.Utils (getES, unwrap)
+import Data.Drasil.Utils (unwrap)
 import Data.Drasil.Concepts.Math (equation, rOfChng, rate)
 import Data.Drasil.Concepts.Thermodynamics (law_conv_cooling)
 import Drasil.SWHS.Assumptions (swhsRefDB, newA2)
@@ -42,8 +42,8 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
   S "difference in", plural temp, S "between the body" +:+.
   S "and its surroundings", E (apply1 thFluxVect QP.time) `isThe`
   S "thermal flux" +:+. sParen (Sy $ unit_symb thFluxVect),
-  getES htTransCoeff `isThe` S "heat transfer coefficient" `sC`
-  S "assumed independant of", getES QT.temp, sParen (refA swhsRefDB newA2) +:+.
+  ch htTransCoeff `isThe` S "heat transfer coefficient" `sC`
+  S "assumed independant of", ch QT.temp, sParen (refA swhsRefDB newA2) +:+.
   sParen (Sy $ unit_symb htTransCoeff),
   E (apply1 deltaT QP.time $= apply1 temp QP.time -
   apply1 temp_env QP.time) `isThe` S "time-dependant thermal gradient",
@@ -63,16 +63,16 @@ rocTempSimp_rel = (sy QPP.mass) * (sy QT.heat_cap_spec) *
 rocTempSimp_desc :: Sentence
 rocTempSimp_desc = foldlSent [S "The basic", phrase equation,
   S "governing the", phrase rOfChng, S "of", phrase temp `sC`
-  S "for a given", phrase QPP.vol, getES QPP.vol `sC` S "with" +:+.
-  phrase QP.time, getES QPP.mass `isThe` phrase QPP.mass +:+.
-  sParen (Sy $ unit_symb QPP.mass), getES QT.heat_cap_spec `isThe` 
+  S "for a given", phrase QPP.vol, ch QPP.vol `sC` S "with" +:+.
+  phrase QP.time, ch QPP.mass `isThe` phrase QPP.mass +:+.
+  sParen (Sy $ unit_symb QPP.mass), ch QT.heat_cap_spec `isThe` 
   phrase QT.heat_cap_spec +:+. sParen (Sy $ unit_symb QT.heat_cap_spec),
-  getES temp `isThe` phrase temp, sParen (Sy $ unit_symb temp) `sAnd`
-  getES QP.time `isThe` phrase QP.time +:+. sParen (Sy $ unit_symb QP.time),
-  getES ht_flux_in `sAnd` getES ht_flux_out, S "are the in and out heat",
+  ch temp `isThe` phrase temp, sParen (Sy $ unit_symb temp) `sAnd`
+  ch QP.time `isThe` phrase QP.time +:+. sParen (Sy $ unit_symb QP.time),
+  ch ht_flux_in `sAnd` ch ht_flux_out, S "are the in and out heat",
   S "transfer rates, respectively" +:+. sParen (Sy $ unit_symb QT.ht_flux),
-  getES in_SA `sAnd` getES out_SA, S "are the surface areas over which the",
+  ch in_SA `sAnd` ch out_SA, S "are the surface areas over which the",
   S "heat is being transferred in and out, respectively" +:+.
-  sParen (unwrap $ getUnit pcm_SA), getES vol_ht_gen `isThe`
+  sParen (unwrap $ getUnit pcm_SA), ch vol_ht_gen `isThe`
   S "volumetric heat generated" +:+. sParen (Sy $ unit_symb vol_ht_gen),
-  getES QPP.vol `isThe` phrase QPP.vol, sParen (Sy $ unit_symb QPP.vol)]
+  ch QPP.vol `isThe` phrase QPP.vol, sParen (Sy $ unit_symb QPP.vol)]

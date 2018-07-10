@@ -19,7 +19,7 @@ import Language.Drasil.Chunk.Quantity (QuantityDict, qw)
 import Language.Drasil.ChunkDB (HasSymbolTable)
 import Language.Drasil.Expr (($=))
 import Language.Drasil.Expr.Math (sy)
-import Language.Drasil.Expr.Extract (vars)
+import Language.Drasil.Document.GetChunk (vars)
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Label.Core (Label)
 

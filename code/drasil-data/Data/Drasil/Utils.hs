@@ -14,7 +14,6 @@ module Data.Drasil.Utils
   , enumBullet
   , mkRefsList
   , mkInputDatTb
-  , getES
   , getRVal
   , addPercent
   , weave
@@ -31,7 +30,7 @@ import Language.Drasil {-(Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
   ItemType(Flat), sParen, sSqBr, Contents(Definition, Enumeration), 
   makeRef, DType, Section, ListType(Simple, Bullet), getUnit, Quantity,
   symbol, SymbolForm, symbolMap, UnitDefn, usymb, Chunk, Expr(..),
-  phrase, titleize, titleize', mkTable, Contents(Table), fromEqn, fromEqn', 
+  phrase, titleize, titleize', Contents(Table), fromEqn, fromEqn', 
   UnitalChunk, QDefinition, term, uid, unit, ucw)-}
 import Data.Drasil.Concepts.Documentation (fterms, input_, output_, symbol_, 
   useCaseTable)
@@ -85,10 +84,6 @@ enumWithSquBrk start = [sSqBr $ S $ show x | x <- [start..]]
 fmtU :: (Quantity a) => Sentence -> a -> Sentence
 fmtU n u  = n +:+ (unwrap $ getUnit u)
 
--- | gets 'presentation' symbol from chunk
-getES :: (HasSymbol a) => a -> Sentence
-getES = P . eqSymb
-
 -- | gets a reasonable or typical value from a Constrained chunk
 getRVal :: (HasUID c, HasReasVal c) => c -> Expr
 getRVal c = uns (c ^. reasVal)
@@ -123,7 +118,7 @@ makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- 
 mkInputDatTb :: (Quantity a) => [a] -> Contents
 mkInputDatTb inputVar = Table [titleize symbol_, titleize unit_, 
   S "Name"]
-  (mkTable [getES , fmtU EmptyS, phrase] inputVar) 
+  (mkTable [ch , fmtU EmptyS, phrase] inputVar) 
   (S "Required" +:+ titleize' input_) True "inDataTable"
 
 -- | makes sentences from an item and its reference 

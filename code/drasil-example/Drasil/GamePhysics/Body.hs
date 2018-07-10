@@ -34,7 +34,7 @@ import Drasil.GamePhysics.References (cpCitations)
 import Drasil.GamePhysics.TMods (cpTMods, t1NewtonSL_new, t2NewtonTL_new, 
   t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new)
 import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
-  inputSymbols, outputSymbols, cpInputConstraints)
+  inputSymbols, outputSymbols, cpInputConstraints, gamephySymbols)
 
 import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Drasil.Sections.Requirements (reqF)
@@ -92,11 +92,10 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
       , SSDSolChSpec 
         (SCSProg 
           [ Assumptions
-          , TMs ([Label] ++ stdFields) [t1NewtonSL_new, t2NewtonTL_new, t3NewtonLUG_new, 
+          , TMs ([Label]++ stdFields) [t1NewtonSL_new, t2NewtonTL_new, t3NewtonLUG_new, 
             t4ChaslesThm_new, t5NewtonSLR_new]
           , GDs [] [] HideDerivation -- No Gen Defs for Gamephysics
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) 
-            [im1_new, im2_new, im3_new] ShowDerivation
+          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [im1_new, im2_new, im3_new] ShowDerivation
           , DDs ([Label, Symbol, Units] ++ stdFields) cpDDefs ShowDerivation
           , Constraints EmptyS dataConstraintUncertainty (S "FIXME") [inDataConstTbl cpInputConstraints, outDataConstTbl cpOutputConstraints]
           ]
@@ -118,7 +117,7 @@ chipmunkSysInfo = SI {
   _kind = srs,
   _authors = authors,
   _units = chipUnits,
-  _quants = cpSymbolsAll, 
+  _quants = symbT, 
   _concepts = ([] :: [DefinedQuantityDict]),
   _definitions = (cpDDefs), 
   _inputs = (inputSymbols), 
@@ -129,6 +128,10 @@ chipmunkSysInfo = SI {
   _sysinfodb = everything,
   _refdb = cpRefDB
 }
+
+
+symbT :: [DefinedQuantityDict]
+symbT = ccss (getDoc chipmunkSRS') (egetDoc chipmunkSRS') everything
 
 cpRefDB :: ReferenceDB
 cpRefDB = rdb [] [] newAssumptions [] [] cpCitations [] -- FIXME: Convert the rest to new chunk types
@@ -150,7 +153,7 @@ chipUnits :: [UnitDefn]
 chipUnits = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [newton, radian]
 
 everything :: ChunkDB
-everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: [ConceptChunk]) -- FIXME: Fill in Concepts
+everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms) gamephySymbols -- FIXME: Fill in Concepts
   chipUnits
 
 chipCode :: CodeSpec

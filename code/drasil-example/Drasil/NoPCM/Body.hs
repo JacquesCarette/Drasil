@@ -4,7 +4,6 @@ import Language.Drasil
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 import Control.Lens ((^.))
-
 import Drasil.NoPCM.DataDesc (inputMod)
 import Drasil.NoPCM.Definitions (ht_trans, srs_swhs, acronyms)
 import Drasil.NoPCM.GenDefs (roc_temp_simp_deriv)
@@ -24,7 +23,7 @@ import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
   w_mass, diam, coil_SA, temp_C, w_density, htCap_W, time_final,
   in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, ht_flux_out, tau, htCap_L,
   htTransCoeff, temp_env, diam, tank_length, ht_flux_C, coil_HTC,
-  deltaT, w_E, tank_length_min, tank_length_max, htTransCoeff_min,
+  deltaT, w_E, tank_length_min, tank_length_max,
   w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
   coil_HTC_max, time_final_max, sim_time, coil_SA_max, eta)
 import Drasil.SWHS.DataDefs(dd1HtFluxC, swhsDD1)
@@ -35,11 +34,12 @@ import Drasil.NoPCM.IMods (eBalanceOnWtr)
 import Drasil.NoPCM.Unitals (temp_init)
 import Drasil.SWHS.References (ref2, ref3, ref4)
 import Drasil.SWHS.Requirements (nonFuncReqs)
-import Drasil.SWHS.Changes (likeChg2, likeChg3, likeChg6)
+import Drasil.SWHS.Changes (chgsStart, likeChg2, likeChg3, likeChg6)
 
 import Data.Drasil.People (thulasi)
-import Data.Drasil.Utils (enumSimple, getES, itemRefToSent, makeTMatrix,
-  itemRefToSent, weave, eqUnR)
+import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix,
+  weave, eqUnR)
+
 import Data.Drasil.Citations (parnasClements1986, smithLai2005)
 
 import Data.Drasil.Concepts.Documentation as Doc (datumConstraint, inModel,
@@ -95,6 +95,7 @@ this_si = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigra
 -- This contains the list of symbols used throughout the document
 nopcm_Symbols :: [DefinedQuantityDict]
 nopcm_Symbols = (map dqdWr nopcm_Units) ++ (map dqdWr nopcm_Constraints)
+ ++ [gradient, surface, uNormalVect]
   
 nopcm_SymbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcm_HTC and pcm_SA
@@ -109,7 +110,7 @@ nopcm_Units = map ucw [density, tau, in_SA, out_SA,
   htCap_L, QT.ht_flux, ht_flux_in, ht_flux_out, vol_ht_gen,
   htTransCoeff, mass, tank_vol, QT.temp, QT.heat_cap_spec,
   deltaT, temp_env, thFluxVect, time, ht_flux_C,
-  vol, w_mass, w_vol]
+  vol, w_mass, w_vol, tau_W]
 
 nopcm_Constraints :: [UncertQ]
 nopcm_Constraints =  [coil_SA, w_E, htCap_W, coil_HTC, temp_init,
@@ -148,7 +149,7 @@ mkSRS = RefSec (RefProg intro
            , Description Verbose IncludeUnits
            , Source, RefBy] generalDefinitions ShowDerivation)])]) : --Testing General Definitions.-}
   Verbatim specSystDesc: -- Comment this out and the above in for testing GDs.
-  map Verbatim [reqS, likelyChgs, traceMAndG, specParamVal] ++ (Bibliography : [])
+  map Verbatim [reqS, likelyChgs, unlikelyChgs, traceMAndG, specParamVal] ++ (Bibliography : [])
 
 generalDefinitions :: [GenDefn]
 generalDefinitions = [gd nwtnCooling (Just thermal_flux) ([] :: Derivation) "nwtnCooling",
@@ -160,7 +161,7 @@ nopcm_si = SI {
   _kind = srs,
   _authors = [thulasi],
   _units = this_si,
-  _quants = nopcm_Symbols,
+  _quants = symbT,
   _concepts = (nopcm_Symbols),
   _definitions = [dd1HtFluxC],          --dataDefs
   _inputs = (map qw nopcm_Constraints), --inputs
@@ -183,8 +184,11 @@ nopcm_srs :: Document
 nopcm_srs = mkDoc mkSRS (for) nopcm_si
 
 nopcm_SymbMap :: ChunkDB
-nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) ([] :: [ConceptChunk]) -- FIXME: Fill in Concepts
+nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) nopcm_Symbols
   this_si
+
+symbT :: [DefinedQuantityDict]
+symbT = ccss (getDoc nopcm_srs) (egetDoc nopcm_srs) nopcm_SymbMap
 
 --------------------------
 --Section 2 : INTRODUCTION
@@ -351,7 +355,7 @@ physSystDescription = physSystDesc (getAcc progName) fig_tank
 
 fig_tank :: Contents
 fig_tank = fig (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
-  S "from" +:+ phrase coil `sOf` getES ht_flux_C)
+  S "from" +:+ phrase coil `sOf` ch ht_flux_C)
   "TankWaterOnly.png" "Tank"
 
 physSystDescList :: Contents
@@ -462,15 +466,15 @@ genDefnDescription = map foldlSPCol [
 genDefnDesc1 :: RelationConcept -> UnitalChunk -> [Sentence]
 genDefnDesc1 t1C vo =
   [S "Integrating", makeRef $ reldefn t1C,
-  S "over a", phrase vo, sParen (getES vo) `sC` S "we have"]
+  S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
 genDefnDesc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]
 genDefnDesc2 g_d su vo tfv unv un =
   [S "Applying", titleize g_d, S "to the first term over",
-  (phrase su +:+ getES su `ofThe` phrase vo) `sC` S "with",
-  getES tfv, S "as the", phrase tfv, S "for the",
-  phrase su `sAnd` getES unv, S "as a", phrase un,
+  (phrase su +:+ ch su `ofThe` phrase vo) `sC` S "with",
+  ch tfv, S "as the", phrase tfv, S "for the",
+  phrase su `sAnd` ch unv, S "as a", phrase un,
   S "outward", phrase unv, S "for a", phrase su]
 
 genDefnDesc3 :: UnitalChunk -> UnitalChunk -> [Sentence]
@@ -480,16 +484,16 @@ genDefnDesc3 vo vhg = [S "We consider an arbitrary" +:+. phrase vo, S "The",
 genDefnDesc4 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   [Contents] -> [Sentence]
-genDefnDesc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", getES hfi `sC`
-  getES hfo `sC` getES iS `sC` S "and", getES oS, S "are explained in" +:+.
-  acroGD 2, S "Assuming", getES den `sC` getES hcs `sAnd` getES te,
+genDefnDesc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
+  ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
+  acroGD 2, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
   titleize' assumption, (foldlList $ (map (\d -> sParen (makeRef (find' d npcmAssumptions))))
   assumps) `sC` S "we have"]
 
 genDefnDesc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]
-genDefnDesc5 den ma vo = [S "Using the fact that", getES den :+: S "=" :+:
-  getES ma :+: S "/" :+: getES vo `sC` S "(2) can be written as"]
+genDefnDesc5 den ma vo = [S "Using the fact that", ch den :+: S "=" :+:
+  ch ma :+: S "/" :+: ch vo `sC` S "(2) can be written as"]
 
 genDefnEq1, genDefnEq2, genDefnEq3, genDefnEq4, genDefnEq5 :: Expr
 
@@ -537,13 +541,13 @@ iModDesc1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
   UncertQ -> ConceptChunk -> UnitalChunk -> UncertQ -> ConceptChunk ->
   ConceptChunk -> Contents -> UnitalChunk -> Contents -> [Sentence]
 iModDesc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin a11 vhg a12 =
-  [S "To find the", phrase roc `sOf` getES temw `sC`
+  [S "To find the", phrase roc `sOf` ch temw `sC`
   S "we look at the", phrase en, S "balance on" +:+.
   phrase wa, S "The", phrase vo, S "being considered" `isThe`
-  phrase wv, getES wv `sC` S "which has", phrase ma +:+.
-  (getES wm `sAnd` (phrase hcw `sC` getES hcw)),
-  at_start ht, S "occurs in the water from the coil as", (getES hfc
-  `sC` S "over area") +:+. getES csa, S "No",
+  phrase wv, ch wv `sC` S "which has", phrase ma +:+.
+  (ch wm `sAnd` (phrase hcw `sC` ch hcw)),
+  at_start ht, S "occurs in the water from the coil as", (ch hfc
+  `sC` S "over area") +:+. ch csa, S "No",
   phrase ht, S "occurs to", (S "outside" `ofThe`
   phrase ta) `sC` S "since it has been assumed to be",
   phrase purin +:+. sParen (makeRef (find' a11 npcmAssumptions)), S "Assuming no",
@@ -555,13 +559,13 @@ iModDesc2 :: QDefinition -> [Sentence]
 iModDesc2 d1hf = [S "Using", (makeRef $ datadefn d1hf) `sC` S "this can be written as"]
 
 iModDesc3 :: UnitalChunk -> UncertQ -> [Sentence]
-iModDesc3 wm hcw = [S "Dividing (3) by", getES wm :+: getES hcw `sC`
+iModDesc3 wm hcw = [S "Dividing (3) by", ch wm :+: ch hcw `sC`
   S "we obtain"]
 
 iModDesc4 :: UnitalChunk -> UnitalChunk -> UncertQ -> UncertQ ->
   UncertQ -> [Sentence]
-iModDesc4 temw wm hcw chtc csa = [S "Setting", (getES temw :+: S "=" :+:
-  getES wm :+: getES hcw :+: S "/" :+: getES chtc :+: getES csa)
+iModDesc4 temw wm hcw chtc csa = [S "Setting", (ch temw :+: S "=" :+:
+  ch wm :+: ch hcw :+: S "/" :+: ch chtc :+: ch csa)
   `sC` titleize M.equation, S "(4) can be written in its final form as"]
 
 iModEquation :: [Contents]
@@ -627,7 +631,7 @@ funcReqsListItems :: [Contents]
 funcReqsListItems = [
 
   Table [titleize symbol_, titleize M.unit_, titleize description]
-  (mkTable [getES,
+  (mkTable [ch,
   unit'2Contents,
   phrase] inputVar)
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False "fr1list",
@@ -645,23 +649,23 @@ funcReqsListItems = [
 
   -- [S "Use the", plural input_, S "in", acroR 1, S "to find the",
   -- phrase mass, S "needed for", acroIM 1, S "to", acroIM 4 `sC`
-  -- S "as follows, where", getES w_vol `isThe` phrase w_vol,
-  -- S "and" +: (getES tank_vol `isThe` phrase tank_vol)],
+  -- S "as follows, where", ch w_vol `isThe` phrase w_vol,
+  -- S "and" +: (ch tank_vol `isThe` phrase tank_vol)],
 
   -- [S "Verify that the", plural input_, S "satisfy the required",
   -- phrase physicalConstraint, S "shown in" +:+. makeRef s4_2_6_table1],
 
   -- [titleize' output_, S "and", plural input_, plural quantity, S "and derived",
   -- plural quantity, S "in the following list: the", plural quantity, S "from",
-  -- (acroR 1) `sC` S "the", phrase mass, S "from", acroR 2, S "and", getES tau_W +:+.
+  -- (acroR 1) `sC` S "the", phrase mass, S "from", acroR 2, S "and", ch tau_W +:+.
   -- sParen(S "from" +:+ acroIM 1)],
 
   -- [S "Calculate and output the", phrase temp, S "of the", phrase water,
-  -- sParen (getES temp_W :+: sParen (getES time)), S "over the", phrase simulation +:+.
+  -- sParen (ch temp_W :+: sParen (ch time)), S "over the", phrase simulation +:+.
   -- phrase time],
 
   -- [S "Calculate and", phrase output_, S "the", phrase w_E,
-  -- sParen (getES w_E :+: sParen (getES time)), S "over the",
+  -- sParen (ch w_E :+: sParen (ch time)), S "over the",
   -- phrase simulation, phrase time +:+. sParen (S "from" +:+ acroIM 3)]
   -- ]
 
@@ -679,8 +683,8 @@ req2 = mkRequirement "req2" (
   S "Use the" +:+ plural input_ +:+ S "in" +:+
   (makeRef (find' req1 funcReqsListWordsNum)) +:+ S "to find the" +:+ phrase mass +:+
   S "needed for" +:+ acroIM 1 +:+ S "to" +:+ acroIM 2 `sC`
-  S "as follows, where" +:+ getES w_vol `isThe` phrase w_vol +:+
-  S "and" +: (getES tank_vol `isThe` phrase tank_vol) ) "Use-Above-Find-Mass-IM1-IM2"
+  S "as follows, where" +:+ ch w_vol `isThe` phrase w_vol +:+
+  S "and" +: (ch tank_vol `isThe` phrase tank_vol) ) "Use-Above-Find-Mass-IM1-IM2"
 req3 = mkRequirement "req3" (
   S "Verify that the" +:+ plural input_ +:+ S "satisfy the required"
   +:+ phrase physicalConstraint +:+ S "shown in" +:+. makeRef dataConstTable1 ) "Check-Inputs-Satisfy-Physical-Constraints"
@@ -689,14 +693,14 @@ req4 = mkRequirement "req4" (
   +:+ S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
   plural quantity +:+ S "from" +:+ (makeRef (find' req1 funcReqsListWordsNum)) `sC`
   S "the" +:+ phrase mass +:+ S "from" +:+ (makeRef (find' req2 funcReqsListWordsNum))
-  `sAnd` getES tau_W +:+. sParen(S "from" +:+ acroIM 1) ) "Output-Input-Derivied-Quantities"
+  `sAnd` ch tau_W +:+. sParen(S "from" +:+ acroIM 1) ) "Output-Input-Derivied-Quantities"
 req5 = mkRequirement "req5" (
   S "Calculate and output the" +:+ phrase temp_W +:+
-  sParen (getES temp_W :+: sParen (getES time)) +:+ S "over the" +:+
+  sParen (ch temp_W :+: sParen (ch time)) +:+ S "over the" +:+
   phrase sim_time ) "Calculate-Temperature-Water-Over-Time"
 req6 = mkRequirement "req6" (
   S "Calculate and" +:+ phrase output_ +:+ S "the" +:+ phrase w_E
-  +:+ sParen (getES w_E :+: sParen (getES time)) +:+ S "over the" +:+
+  +:+ sParen (ch w_E :+: sParen (ch time)) +:+ S "over the" +:+
   phrase sim_time +:+. sParen (S "from" +:+ acroIM 3) ) "Calculate-Change-Heat_Energy-Water-Time"
 
 -------------------------------------------
@@ -774,7 +778,18 @@ likeChg3_npcm = mkLklyChnk "likeChg3" (
 unlikelyChgs = SRS.unlikeChg unlikelyChgsList []
 
 unlikelyChgsList :: [Contents]
-unlikelyChgsList = []
+unlikelyChgsList = [unlikeChg1, unlikeChg2]
+
+unlikeChg1 :: Contents 
+unlikeChg1 = mkUnLklyChnk "unlikeChg1" (
+  foldlSent [chgsStart assump14, S "It is unlikely for the change of",
+  phrase water, S "from liquid to a solid, or from liquid to gas to be considered"]) 
+  "Water-Fixed-States" 
+
+unlikeChg2 :: Contents
+unlikeChg2 = mkUnLklyChnk "unlikeChg2" (
+  foldlSent [chgsStart assump12, S "Is used for the derivations of IM1",
+  S "(Hack: need Label to fix)"] ) "No-Internal-Heat-Generation"
 
 ----------------------------------------------
 --Section 7:  TRACEABILITY MATRICES AND GRAPHS
@@ -959,7 +974,7 @@ traceFig2 = fig (showingCxnBw traceyGraph (titleize' requirement `sC`
 ------------------------------------------
 
 specParamValList :: [QDefinition]
-specParamValList = [tank_length_min, tank_length_max, htTransCoeff_min,
+specParamValList = [tank_length_min, tank_length_max,
   w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
   coil_HTC_max, time_final_max]
 

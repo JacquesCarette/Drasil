@@ -213,7 +213,18 @@ module Language.Drasil (
   -- Label
   , Label 
   , mkLabelRA, mkLabelRA', mkLabelRA''
-  ) where
+  -- Document.getChunk
+  , vars, combine', ccss
+  -- Chunk.Sentence.EmbedSymbol
+  , ch
+  -- Chunk.Sentence.Extract
+  , sdep, vars',snames, combine
+  -- Chunk.Expr.Extract
+  , names
+  -- Document.Extract
+  , egetDoc, getDoc
+) where
+
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.SystemInformation
@@ -227,7 +238,10 @@ import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, co
           apply, apply1, apply2,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
-import Language.Drasil.Expr.Extract (dep, names', vars)
+import Language.Drasil.Document.Extract(egetDoc, getDoc)
+import Language.Drasil.Expr.Extract (dep, names', names)
+import Language.Drasil.Sentence.EmbedSymbol(ch)
+import Language.Drasil.Sentence.Extract(sdep,  snames)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website), DocSpec(DocSpec), Filename)
 import Language.Drasil.Document (Document(..), DType(..)
   , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..)
@@ -245,6 +259,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations),
   HasReference(getReferences), HasLabel(getLabel), HasMaybeLabel(getMaybeLabel))
 import Language.Drasil.Label.Core (Label)
+import Language.Drasil.Document.GetChunk(vars, combine', vars', combine, ccss)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Derivation (Derivation)

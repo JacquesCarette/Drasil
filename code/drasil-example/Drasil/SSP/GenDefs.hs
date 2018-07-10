@@ -28,7 +28,6 @@ import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 
 import Data.Drasil.SentenceStructures (acroGD, acroT, foldlSent, getTandS, 
   isThe, ofThe, sAnd)
-import Data.Drasil.Utils (getES)
 
 import Drasil.SRS as SRS (physSyst, missingP, physSystLabel)
 
@@ -55,7 +54,7 @@ nmFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   S "equilibrium to satisfy", acroT 2, S "in the direction",
   phrase perp, S "to" +:+. (S "base" +:+ phrase surface `ofThe`
   phrase slice), S "Rearranged to solve for", (phrase normForce `ofThe`
-  phrase surface) +:+. getES totNrmForce, at_start force, S "equilibrium is",
+  phrase surface) +:+. ch totNrmForce, at_start force, S "equilibrium is",
   S "derived from the free body diagram of",
   makeRef SRS.physSystLabel, S "Index i",
   S "refers to", (plural value `ofThe` plural property), S "for",
@@ -79,7 +78,7 @@ bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   S "equilibrium to satisfy", acroT 2, S "in the direction",
   S "parallel to" +:+. (S "base" +:+ phrase surface `ofThe`
   phrase slice), S "Rearranged to solve for the", phrase shearForce,
-  S "on the base" +:+. getES mobShrI, at_start force, S "equilibrium is",
+  S "on the base" +:+. ch mobShrI, at_start force, S "equilibrium is",
   S "derived from the free body diagram of",
   makeRef SRS.physSystLabel, S "Index", getES index,
   S "refers to", (plural value `ofThe` plural property), S "for",
@@ -102,13 +101,13 @@ resShr_rel = inxi shrResI $= shrResEqn
 
 resShr_desc :: Sentence
 resShr_desc = foldlSent [S "The Mohr-Coulomb resistive shear strength of a",
-  phrase slice, getES shrStress, S "from", acroT 3,
+  phrase slice, ch shrStress, S "from", acroT 3,
   S "is multiplied by the area", E $ sy baseWthX * sec(sy baseAngle) * 1,
   S "to obtain the" +:+. getTandS shrResI, S "Note the extra", E 1,
   S "is to represent a unit of width which is multiplied by the",
   getTandS baseLngth, S "of the plane where the", phrase normal,
   S "occurs, where", (E $ sy baseLngth $= sy baseWthX * sec(sy baseAngle))
-  `sAnd` getES baseWthX, S "is the x width of the base. This accounts for the",
+  `sAnd` ch baseWthX, S "is the x width of the base. This accounts for the",
   phrase nrmFSubWat, E $ sy nrmFSubWat $= sy totNrmForce - sy baseHydroForce,
   S "of a soil from", -- FIXME: add prime to nrmStrss
   acroT 4, S "where the", phrase nrmStrss,
@@ -127,10 +126,10 @@ mobShr_rel = inxi mobShrI $= inxi shrResI / sy fs $= shrResEqn / sy fs
 mobShr_desc :: Sentence
 mobShr_desc = foldlSent [
   S "From", phrase definition `ofThe` phrase fs, S "in", acroT 1 `sC`
-  S "and the new", phrase definition, S "of", getES shrResI `sC` S "a new",
+  S "and the new", phrase definition, S "of", ch shrResI `sC` S "a new",
   S "relation for", S "net mobile" +:+ phrase shearForce `ofThe` phrase slice,
-  getES shearFNoIntsl, S "is found as the resistive shear", getES shrResI,
-  sParen (acroGD 3), S "divided by the factor of safety", getES fs]
+  ch shearFNoIntsl, S "is found as the resistive shear", ch shrResI,
+  sParen (acroGD 3), S "divided by the factor of safety", ch fs]
 
 --
 normShrR :: RelationConcept
@@ -144,13 +143,13 @@ nmShrR_rel = sy intShrForce $= sy normToShear * sy scalFunc * sy intNormForce
 nmShrR_desc :: Sentence
 nmShrR_desc = foldlSent [S "The", phrase assumption,
   S "for the Morgenstern Price", phrase method_, sParen (refA sspRefDB newA5),
-  S "that the", phrase intrslce, phrase shearForce, getES xi,
+  S "that the", phrase intrslce, phrase shearForce, ch xi,
   S "is proportional to the", phrase intrslce, 
-  phrase normForce, getES intNormForce, S "by a proportionality constant",
-  getES normToShear, S "and a predetermined scaling function",
-  getES scalFunc `sC` S "that changes",
+  phrase normForce, ch intNormForce, S "by a proportionality constant",
+  ch normToShear, S "and a predetermined scaling function",
+  ch scalFunc `sC` S "that changes",
   (S "proportionality as a function" `ofThe`
-  S "x-ordinate position of the") +:+. phrase intrslce, getES scalFunc,
+  S "x-ordinate position of the") +:+. phrase intrslce, ch scalFunc,
   S "is typically either a half-sine along the", phrase slpSrf `sC`
   S "or a constant"]
 
@@ -202,19 +201,19 @@ fNet_desc :: Sentence
 fNet_desc = foldlSent [S "These equations show the net sum of the",
   plural force, S "acting on a", phrase slice, 
   S "for the RFEM", phrase model, S "and the", plural force,
-  S "that create an applied load on the" +:+. phrase slice, getES fx,
+  S "that create an applied load on the" +:+. phrase slice, ch fx,
   S "refers to the load in the direction", phrase perp, S "to the",
   S "direction of the", phrase force, S "of gravity for", phrase slice,
-  getES index `sC` S "while", getES fy, S "refers to the load in the",
+  ch index `sC` S "while", ch fy, S "refers to the load in the",
   S "direction parallel to the", phrase force, S "of gravity for", 
-  phrase slice +:+. getES index, at_start' force, 
+  phrase slice +:+. ch index, at_start' force, 
   S "are found in the free body diagram of" +:+.
   makeRef SRS.physSystLabel, S "In this", phrase model,
   --FIXME: hacked link
   S "the", plural element, S "are not exerting", plural force,
   S "on each other" `sC` S "so the", phrase intrslce, plural force,
-  getES intNormForce, S "and", getES intShrForce, S "are not a part of the"
-  +:+. phrase model, S "Index", getES index, 
+  ch intNormForce, S "and", ch intShrForce, S "are not a part of the"
+  +:+. phrase model, S "Index", ch index, 
   S "refers to", (plural value `ofThe` plural property), S "for",
   phrase slice :+: S "/" :+: plural intrslce, S "following", 
   S "convention in" +:+. makeRef SRS.physSystLabel,
@@ -234,9 +233,9 @@ hooke2d_rel = vec2D (inxi genPressure) (inxi genPressure) $=
 hooke2d_desc :: Sentence
 hooke2d_desc = foldlSent [
   S "A 2D component implementation of Hooke's law as seen in" +:+.
-  acroT 5, getES elmPrllDispl, S "is", phrase displacement `ofThe`
+  acroT 5, ch elmPrllDispl, S "is", phrase displacement `ofThe`
   phrase element, S "normal to the", phrase surface, S "and",
-  getES elmNrmDispl, S "is", phrase displacement `ofThe` phrase element,
+  ch elmNrmDispl, S "is", phrase displacement `ofThe` phrase element,
   S "parallel to the" +:+. phrase surface, S "Pn,i",
   S "is the net pressure acting normal to the", phrase surface `sC`
   S "and", S "Pt,i", S "is the net pressure acting parallel to the" +:+.
@@ -265,19 +264,19 @@ disVec_rel = inxi rotatedDispl $= vec2D (inxi shrDispl) (inxi nrmDispl) $=
 
 disVec_desc :: Sentence
 disVec_desc = foldlSent [at_start' vector, S "describing the",
-  phrase displacement, S "of", phrase slice +:+. getES index,
-  getES genDisplace `isThe` phrase displacement,
+  phrase displacement, S "of", phrase slice +:+. ch index,
+  ch genDisplace `isThe` phrase displacement,
   S "in the unrotated coordinate system" `sC` S "where",
-  getES dx_i `isThe` phrase displacement, S "of the", phrase slice,
-  phrase perp, S "to the direction of gravity, and", getES dy_i `isThe`
+  ch dx_i `isThe` phrase displacement, S "of the", phrase slice,
+  phrase perp, S "to the direction of gravity, and", ch dy_i `isThe`
   phrase displacement, S "of the", phrase slice, S "parallel to the", 
-  phrase force +:+. S "of gravity", getES rotatedDispl `isThe`
+  phrase force +:+. S "of gravity", ch rotatedDispl `isThe`
   phrase displacement, S "in the rotated coordinate", phrase system `sC`
-  S "where", getES shrDispl `isThe` phrase displacement, S "of the",
+  S "where", ch shrDispl `isThe` phrase displacement, S "of the",
   phrase slice, S "parallel to the", phrase slice, S "base, and", 
-  getES dy_i `isThe` phrase displacement, S "of the", phrase slice,
-  phrase perp, S "to the", phrase slice +:+. S "base", getES rotatedDispl,
-  S "can also be found by rotating", getES genDisplace,
-  S "clockwise by the base", phrase angle `sC` getES baseAngle,
+  ch dy_i `isThe` phrase displacement, S "of the", phrase slice,
+  phrase perp, S "to the", phrase slice +:+. S "base", ch rotatedDispl,
+  S "can also be found by rotating", ch genDisplace,
+  S "clockwise by the base", phrase angle `sC` ch baseAngle,
   S "through a rotation", phrase matrix, S "as shown"]
   --FIXME: some symbols need to be vectors

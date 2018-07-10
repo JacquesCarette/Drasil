@@ -1,9 +1,9 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.Eq 
   (QDefinition, fromEqn, fromEqn', fromEqn'', equat, getVC
-  , ec) where
+  , ec, qua) where
 
-import Control.Lens ((^.), makeLenses, view)
+import Control.Lens ((^.), makeLenses)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
@@ -51,6 +51,7 @@ instance HasShortName  QDefinition where -- FIXME: This could lead to trouble; n
                                          -- to ensure sanity checking when building
                                          -- Refs. Double-check QDef is a DD before allowing
   shortname = lb . shortname
+ 
 
 -- | Create a 'QDefinition' with a uid, noun phrase (term), definition, symbol,
 -- unit, and defining equation.  And it ignores the definition...

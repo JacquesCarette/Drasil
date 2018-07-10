@@ -1,7 +1,7 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.ReqChunk 
   ( ReqChunk(..), ReqType(..)
-  , frc, nfrc
+  , frc, nfrc,
   ) where
 
 import Language.Drasil.UID (UID)

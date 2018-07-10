@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.Relation
   ( RelationConcept(..)
-  , makeRC, makeRC'
+  , makeRC, makeRC', conc
   ) where
 
 import Control.Lens (makeLenses, (^.))

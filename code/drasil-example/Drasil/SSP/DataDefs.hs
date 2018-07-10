@@ -19,7 +19,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
   watrForceDif, wiif)
 
 import Data.Drasil.Quantities.SolidMechanics as SM (poissnsR)
-import Data.Drasil.Utils (eqUnR, getES)
+import Data.Drasil.Utils (eqUnR)
 
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (definition, element, value)
@@ -267,8 +267,8 @@ resShrDerivation :: [Contents]
 resShrDerivation = [
 
   foldlSP [S "The", phrase shrResI, S "of a slice is", 
-  S "defined as", getES shrResI, S "in" +:+. acroGD 3, S "The",
-  phrase nrmFSubWat, S "in the", phrase equation, S "for", getES shrResI,
+  S "defined as", ch shrResI, S "in" +:+. acroGD 3, S "The",
+  phrase nrmFSubWat, S "in the", phrase equation, S "for", ch shrResI,
   S "of the soil is defined in the perpendicular force equilibrium",
   S "of a slice from", acroGD 2 `sC` S "using the", getTandS nrmFSubWat,
   S "of", acroT 4, S "shown in", eqN 1],
@@ -277,12 +277,12 @@ resShrDerivation = [
   inxiM1 intShrForce + inxi intShrForce + y) - inxi baseHydroForce,
   
   foldlSP [plural value `ofThe'` S "interslice forces",
-  getES intNormForce `sAnd` getES intShrForce, S "in the", phrase equation,
+  ch intNormForce `sAnd` ch intShrForce, S "in the", phrase equation,
   S "are unknown, while the other", plural value,
   S "are found from the physical force", plural definition, S "of",
   ddRef sliceWght, S "to" +:+. ddRef lengthLs,
   S "Consider a force equilibrium without the affect of interslice forces" `sC`
-  S "to obtain a solvable value as done for", getES nrmFNoIntsl, S "in", eqN 2],
+  S "to obtain a solvable value as done for", ch nrmFNoIntsl, S "in", eqN 2],
 
   eqUnR $
   (inxi nrmFNoIntsl) $= (((inxi slcWght) + (inxi surfHydroForce) *
@@ -292,7 +292,7 @@ resShrDerivation = [
   sin (inxi surfAngle) + (inxi surfLoad) * (sin (inxi impLoadAngle))) *
   (sin (inxi baseAngle)) - (inxi baseHydroForce)),
   
-  foldlSP [S "Using", getES nrmFNoIntsl `sC` S "a", phrase shearRNoIntsl,
+  foldlSP [S "Using", ch nrmFNoIntsl `sC` S "a", phrase shearRNoIntsl,
   shearRNoIntsl ^. defn, S "can be solved for in terms of all known",
   plural value, S "as done in", eqN 3],
   
@@ -313,7 +313,7 @@ mobShrDerivation :: [Contents]
 mobShrDerivation = [
 
   foldlSP [S "The", phrase mobShrI, S "acting on a slice is defined as",
-  getES mobShrI, S "from the force equilibrium in", acroGD 2 `sC`
+  ch mobShrI, S "from the force equilibrium in", acroGD 2 `sC`
   S "also shown in", eqN 4],
   
   eqUnR $ inxi mobShrI $= eqlExpr sin cos
@@ -331,8 +331,8 @@ mobShrDerivation = [
   (inxi watrForceDif) + (inxi surfHydroForce) * sin (inxi surfAngle) +
   (inxi surfLoad) * (sin (inxi impLoadAngle))) * (cos (inxi baseAngle)),
   
-  foldlSP [S "The", plural value, S "of", getES shearRNoIntsl `sAnd`
-  getES shearFNoIntsl, S "are now defined completely in terms of the",
+  foldlSP [S "The", plural value, S "of", ch shearRNoIntsl `sAnd`
+  ch shearFNoIntsl, S "are now defined completely in terms of the",
   S "known force property", plural value, S "of", ddRef sliceWght, S "to", 
   ddRef lengthLs]
 
@@ -356,7 +356,7 @@ stfMtrxDerivation :: [Contents]
 stfMtrxDerivation = [
 
   foldlSP [S "Using the force-displacement relationship of", 
-  acroGD 8, S "to define stiffness matrix", getES shrStiffIntsl `sC`
+  acroGD 8, S "to define stiffness matrix", ch shrStiffIntsl `sC`
   S "as seen in", eqN 6],
   
   eqUnR $ inxi shrStiffIntsl $=
@@ -364,10 +364,10 @@ stfMtrxDerivation = [
   
   foldlSP [S "For interslice surfaces the stiffness constants" `sAnd`
   S "displacements refer to an unrotated coordinate system" `sC`
-  getES genDisplace, S "of" +:+. ddRef lengthLs, S "The interslice elements",
+  ch genDisplace, S "of" +:+. ddRef lengthLs, S "The interslice elements",
   S "are left in their standard coordinate system" `sC`
   S "and therefore are described by the same", phrase equation,
-  S "from" +:+. acroGD 8, S "Seen as", getES shrStiffIntsl, S "in" +:+.
+  S "from" +:+. acroGD 8, S "Seen as", ch shrStiffIntsl, S "in" +:+.
   ddRef intrsliceF, isElemInMx shrStiffIntsl "shear" `sC` --FIXEME: add matrix symbols?
   S "and", isElemInMx nrmStiffIntsl "normal" `sC` S "calculated as in", ddRef mobShearWO],
   
@@ -375,12 +375,12 @@ stfMtrxDerivation = [
   S "displacements refer to a system rotated for the base angle alpha" +:+.
   sParen (ddRef angleA), S "To analyze the effect of force-displacement",
   S "relationships occurring on both basal" `sAnd`
-  S "interslice surfaces of an", phrase element, getES index,
+  S "interslice surfaces of an", phrase element, ch index,
   S "they must reference the same coordinate",
   S "system. The basal stiffness matrix must be rotated counter clockwise",
   S "to align with" +:+. (phrase angle `ofThe` S "basal surface"),
   S "The base stiffness counter clockwise rotation is applied in", eqN 7,
-  S "to the new matrix", getES nrmFNoIntsl],
+  S "to the new matrix", ch nrmFNoIntsl],
   
   eqUnR $ inxi shrStiffIntsl $=
   m2x2 (cos(inxi baseAngle)) (negate $ sin(inxi baseAngle))
@@ -389,14 +389,14 @@ stfMtrxDerivation = [
   
   foldlSP [S "The Hooke's law force displacement relationship of", acroGD 8,
   S "applied to the base also references a displacement vector",
-  getES rotatedDispl, S "of", acroGD 9, S "rotated for", S "base angle" `ofThe`
-  S "slice", getES baseAngle +:+. S "The basal displacement vector",
-  getES genDisplace,  S "is rotated clockwise to align with the",
+  ch rotatedDispl, S "of", acroGD 9, S "rotated for", S "base angle" `ofThe`
+  S "slice", ch baseAngle +:+. S "The basal displacement vector",
+  ch genDisplace,  S "is rotated clockwise to align with the",
   phrase intrslce, S "displacement vector",
-  getES genDisplace `sC` S "applying the", phrase definition, S "of", 
-  getES rotatedDispl, S "in terms of", getES genDisplace, S "as seen in" +:+.
+  ch genDisplace `sC` S "applying the", phrase definition, S "of", 
+  ch rotatedDispl, S "in terms of", ch genDisplace, S "as seen in" +:+.
   acroGD 9, S "Using this with base stiffness matrix",
-  getES shrStiffBase --FIXME: should be K*i"
+  ch shrStiffBase --FIXME: should be K*i"
   `sC` S "a basal force displacement relationship in the same coordinate",
   S "system as the interslice relationship can be derived as done in", eqN 8],
   
@@ -404,14 +404,14 @@ stfMtrxDerivation = [
   inxi shrStiffBase * sy rotatedDispl $= --FIXME: add more symbols?
   kiStar * rotMtx * displMtx $= kiPrime * displMtx,
   
-  foldlSP [S "The new effective base stiffness matrix", getES shrStiffBase,
+  foldlSP [S "The new effective base stiffness matrix", ch shrStiffBase,
   --FIXME: add symbol?
   S "as derived in", eqN 7, S "is defined in" +:+. eqN 9,
-  S "This is seen as matrix", getES shrStiffBase, S "in" +:+.
+  S "This is seen as matrix", ch shrStiffBase, S "in" +:+.
   acroGD 12, isElemInMx shrStiffBase "shear" `sC` S "and",
   isElemInMx nrmStiffBase "normal" `sC` S "calculated as in" +:+. ddRef mobShearWO,
   S "The notation is simplified by", S "introduction" `ofThe` S "constants",
-  getES effStiffA `sAnd` getES effStiffB `sC` S "defined in", eqN 10 `sAnd`
+  ch effStiffA `sAnd` ch effStiffB `sC` S "defined in", eqN 10 `sAnd`
   eqN 11, S "respectively"],
   
   eqUnR $ inxi shrStiffBase $= kiPrime
@@ -425,13 +425,13 @@ stfMtrxDerivation = [
   (inxi effStiffB) $= ((inxi shrStiffBase)-(inxi nrmStiffBase)) *
   (sin (inxi baseAngle)) * (cos (inxi baseAngle)),
   
-  foldlSP [S "A force-displacement relationship for an element", getES index,
+  foldlSP [S "A force-displacement relationship for an element", ch index,
   S "can be written in terms of displacements occurring in the unrotated", 
-  S "coordinate system", getES genDisplace `sOf` acroGD 9, S "using the matrix",
-  getES shrStiffBase `sC` --FIXME: index 
-  S "and", getES shrStiffBase, S "as seen in", ddRef intrsliceF]
+  S "coordinate system", ch genDisplace `sOf` acroGD 9, S "using the matrix",
+  ch shrStiffBase `sC` --FIXME: index 
+  S "and", ch shrStiffBase, S "as seen in", ddRef intrsliceF]
   
   ]
 
 isElemInMx :: (Quantity a) => a -> String -> Sentence
-isElemInMx sym kword = getES sym `isThe` S kword +:+ S "element in the matrix"
+isElemInMx sym kword = ch sym `isThe` S kword +:+ S "element in the matrix"

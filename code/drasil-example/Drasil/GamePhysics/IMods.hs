@@ -10,7 +10,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
   angularAccel, force, gravitationalAccel, momentOfInertia, angularVelocity, 
   time, impulseS)
 import Data.Drasil.SentenceStructures (foldlSent)
-import Data.Drasil.Utils (fmtU, foldle1, getES)
+import Data.Drasil.Utils (fmtU, foldle1)
 
 
 iModels :: [RelationConcept]
@@ -115,7 +115,7 @@ col2DDesc = foldlSent [S "This instance model is based on our assumptions",
 --}
 
 defList :: (Quantity a) => a -> Sentence
-defList thing = foldlSent [(getES thing), S "is the", (phrase thing), sParen (fmtU EmptyS thing)]
+defList thing = foldlSent [(ch thing), S "is the", (phrase thing), sParen (fmtU EmptyS thing)]
 
 col2DLeg = foldle1 (+:+) (+:+) $ map defList col2DLegTerms
   

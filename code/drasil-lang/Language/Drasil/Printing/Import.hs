@@ -23,8 +23,8 @@ import Language.Drasil.ChunkDB (getUnitLup, HasSymbolTable(..),symbLookup)
 import Language.Drasil.Chunk.ReqChunk (requires)
 import Language.Drasil.Chunk.Citation ( Citation, CiteField(..), HP(..)
                                       , citeID, externRefT, fields)
+import Language.Drasil.Document.GetChunk
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
-import Language.Drasil.Expr.Extract
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Symbol
 import Language.Drasil.Unicode (Special(Partial))
@@ -240,7 +240,8 @@ spec _ (S s)           = P.S s
 spec _ (Sy s)          = P.Sy s
 spec _ (Sp s)          = P.Sp s
 spec _ (P s)           = P.E $ symbol s
-spec sm (Ref t r s)   = P.Ref t r (spec sm (snToSentence s)) s --FIXME: sn passed in twice?
+spec sm (Ch s)         = P.E $ symbol $ lookupC sm s 
+spec sm (Ref t r sn)   = P.Ref t r (spec sm (snToSentence sn)) sn --FIXME: sn passed in twice?
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm

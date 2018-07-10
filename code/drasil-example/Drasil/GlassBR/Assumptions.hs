@@ -8,7 +8,6 @@ import Drasil.DocLang (cite, refA)
 import Data.Drasil.Concepts.Documentation as Doc (condition, constant, practice, reference, scenario, 
   system, value)
 import Data.Drasil.Concepts.Math (calculation, surface, equation, shape)
-import Data.Drasil.Utils (getES)
 import Data.Drasil.SentenceStructures (sAnd, foldlSent, foldlOptions, foldlList, sOf, sIn)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 
@@ -70,8 +69,8 @@ a3Desc = foldlSent [S "This", phrase system,
 a4Desc :: UnitaryChunk -> Sentence
 a4Desc mainIdea = foldlSent [S "The", plural value, S "provided in",
   makeRef (SRS.valsOfAuxCons SRS.missingP []), S "are assumed for the",
-  phrase mainIdea, sParen (getES mainIdea) `sC` S "and the",
-  plural materialProprty `sOf` foldlList (map getES
+  phrase mainIdea, sParen (ch mainIdea) `sC` S "and the",
+  plural materialProprty `sOf` foldlList (map ch
   (take 3 assumptionConstants))]
 
 a5Desc :: Sentence
@@ -92,7 +91,7 @@ a7Desc = foldlSent [S "The", phrase responseTy, S "considered in",
 a8Desc :: QDefinition -> Sentence
 a8Desc mainConcept = foldlSent [S "With", phrase reference, S "to",
   (refA gbRefDB newA4), S "the", phrase value `sOf`
-  phrase mainConcept, sParen (getES mainConcept), S "is a", phrase constant,
+  phrase mainConcept, sParen (ch mainConcept), S "is a", phrase constant,
   S "in" +:+. short gLassBR, S "It is calculated by the" +: phrase equation +:+.
   E (sy mainConcept $= mainConcept^.equat), S "Using this" `sC`
   E (sy mainConcept $= dbl 0.27)]

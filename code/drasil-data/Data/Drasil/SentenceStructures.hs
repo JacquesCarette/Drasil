@@ -12,13 +12,13 @@ module Data.Drasil.SentenceStructures
   , getTandS, getTDS
   , eqN
   , displayConstrntsAsSet
-  , getES, fmtPhys, fmtSfwr, typUncr
+  , fmtPhys, fmtSfwr, typUncr
   , mkTableFromColumns
   , acroA, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, acroT
   ) where
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle, foldle1, getES, addPercent)
+import Data.Drasil.Utils (foldle, foldle1, addPercent)
 import Data.Drasil.Concepts.Documentation hiding (constraint)
 import Data.Drasil.Concepts.Math (equation)
 
@@ -172,7 +172,7 @@ tAndDWAcc temp = Flat $ ((at_start temp) :+: sParenDash (short temp) :+: (temp ^
 -- term (symbol) - definition
 tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
 tAndDWSym tD sym = Flat $ ((at_start tD) :+: 
-  sParenDash (getES sym)) :+: (tD ^. defn)
+  sParenDash (ch sym)) :+: (tD ^. defn)
 -- term - definition
 tAndDOnly :: Concept s => s -> ItemType
 tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
@@ -182,11 +182,11 @@ preceding `followA` num = preceding +:+ S "following" +:+ acroA num
 
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
 getTandS :: (Quantity a, NamedIdea a) => a -> Sentence
-getTandS a = phrase a +:+ getES a
+getTandS a = phrase a +:+ ch a
 
 -- | get term, definition, and symbol
 getTDS :: (Quantity a, Concept a) => a -> Sentence
-getTDS a = phrase a +:+ (a ^. defn) +:+ getES a
+getTDS a = phrase a +:+ (a ^. defn) +:+ ch a
 
 --Ideally this would create a reference to the equation too
 eqN :: Int -> Sentence

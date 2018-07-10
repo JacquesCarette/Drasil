@@ -1,7 +1,7 @@
 module Language.Drasil.Printing.LayoutObj where
 
 import Language.Drasil.Document (MaxWidthPercent, DType)
-import Language.Drasil.Printing.AST
+import Language.Drasil.Printing.AST (ListType, Spec, Title)
 import Language.Drasil.Printing.Citation (BibRef)
 
 data Document = Document Title Author [LayoutObj]

@@ -1,5 +1,5 @@
 module Drasil.SWHS.TMods (tModels, t1ConsThermE, 
-  swhsTMods, tMod1, swhsTModsAsLCs) where
+  swhsTMods, tMod1, swhsTModsAsLCs, tMod1LC) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -33,13 +33,16 @@ swhsTMods = [tMod1] ++ [tMod2] ++ [tMod3]
 --FIXME: temporary hack resulting from inability to use makeRef on RelationConcept
 -- since RelationConcept has a 'Maybe Label' instead of 'Label'
 swhsTModsAsLCs :: [LabelledContent]
-swhsTModsAsLCs = [llcc "tMod1LC" (mkLabelRA'' "tMod1Label") tMod1] ++
+swhsTModsAsLCs = [tMod1LC] ++
                  [llcc "tMod2LC" (mkLabelRA'' "tMod2Label") tMod2] ++
                  [llcc "tMod3LC" (mkLabelRA'' "tMod3Label") tMod3]
 
 -------------------------
 -- Theoretical Model 1 --
 -------------------------
+
+tMod1LC :: LabelledContent
+tMod1LC = llcc "tMod1LC" (mkLabelRA'' "tMod1Label") tMod1
 
 tMod1 :: Contents
 tMod1 = reldefn t1ConsThermE

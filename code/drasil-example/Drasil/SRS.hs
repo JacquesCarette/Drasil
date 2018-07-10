@@ -40,7 +40,7 @@ doc' sys authors secs = Document (Doc.srs `forTT'` sys) authors secs
 
 -- | Standard SRS section builders
 intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
-  genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
+  genSysDes, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
   probDesc, termAndDefn, termogy, goalStmt, solCharSpec, assumpt, thModel,
   genDefn, inModel, dataDefn, propCorSol, require, nonfuncReq, funcReq, likeChg, tOfSymb,
   appendix, reference, offShelfSol, valsOfAuxCons, unlikeChg :: [Contents] -> [Section] -> Section
@@ -56,7 +56,6 @@ theCustomer cs ss = section' (titleize $ the Doc.customer) cs ss "Customer"
 theClient   cs ss = section' (titleize $ the Doc.client) cs ss "Client"
 
 genSysDes   cs ss = section' (titleize Doc.generalSystemDescription) cs ss "GenSysDesc"
-sysCont     cs ss = section' (titleize Doc.sysCont)              cs ss  "SysContext"
 userChar    cs ss = section' (titleize' Doc.userCharacteristic)  cs ss  "UserChars"
 sysCon      cs ss = section' (titleize' Doc.systemConstraint)    cs ss  "SysConstraints"
 
@@ -96,10 +95,11 @@ offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "ExistingSol
 tOfSymb cs ss = section' (titleize Doc.tOfSymb) cs ss "ToS"
 
 
-datCon, physSyst, traceyMandG :: [LabelledContent] -> [Section] -> Section
+datCon, physSyst, sysCont, traceyMandG :: [LabelledContent] -> [Section] -> Section
 
 datCon      cs ss = sectionLC (titleize' Doc.datumConstraint) cs ss (mkLabelRA'' "DataConstraints")
 physSyst    cs ss = sectionLC (titleize Doc.physSyst)         cs ss physSystLabel
+sysCont     cs ss = sectionLC (titleize Doc.sysCont)          cs ss  (mkLabelRA'' "SysContext")
 traceyMandG cs ss = sectionLC (titleize' Doc.traceyMandG)     cs ss (mkLabelRA'' "TraceMatrices")
 
 --function that sets the shortname of each section to be the reference address

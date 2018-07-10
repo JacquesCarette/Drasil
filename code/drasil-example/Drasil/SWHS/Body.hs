@@ -41,7 +41,7 @@ import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
 import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
   coil, perfect_insul, tank, transient, gauss_div, swhs_pcm,
   phase_change_material, tank_pcm)
-import Drasil.SWHS.TMods (t1ConsThermE, swhsTMods, swhsTModsAsLCs)
+import Drasil.SWHS.TMods (t1ConsThermE, swhsTMods, swhsTModsAsLCs, tMod1LC)
 import Drasil.SWHS.IMods (swhsIMods, swhsIMods')
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, swhsDDefs, swhsDataDefs)
 import Drasil.SWHS.GenDefs (swhsGenDefs, swhsGDs)
@@ -231,9 +231,9 @@ systCont :: Section
 systCont = SRS.sysCont [systCContents progName, sys_context_fig, systCIntro 
   progName user, systContRespBullets] []
 
-systContRespBullets :: Contents
-systContRespBullets = Enumeration $ Bullet $ [userResp input_ datum,
-  swhsResp]
+systContRespBullets :: LabelledContent
+systContRespBullets = llcc "systContRespBullets" (mkLabelRA'' "systContRespBulletsLabel") $ 
+  Enumeration $ Bullet $ [userResp input_ datum, swhsResp]
 
 --------------------------------
 -- 3.2 : User Characteristics --
@@ -362,7 +362,7 @@ genDefs = map reldefn swhsGenDefs
 
 genDefsDeriv :: [Contents]
 genDefsDeriv = [genDefDeriv1 rOfChng temp,
-  genDefDeriv2 t1ConsThermE vol,
+  genDefDeriv2 tMod1LC vol,
   genDefDeriv3,
   genDefDeriv4 gauss_div surface vol thFluxVect uNormalVect unit_,
   genDefDeriv5,
@@ -877,22 +877,24 @@ orgDocEnd sp pro = foldlSent_ [S "The", plural inModel,
 -- 3.1 : System Context --
 --------------------------
 
-systCContents :: CI -> Contents
-systCContents pro = foldlSP [makeRef sys_context_fig, S "shows the" +:+.
-  phrase sysCont, S "A circle represents an external entity outside the",
+systCContents :: CI -> LabelledContent
+systCContents pro = llcc "systCSWHS" (mkLabelRA'' "systCContentsLabel") $
+  foldlSP [makeRef sys_context_fig, S "shows the" +:+. phrase sysCont, 
+  S "A circle represents an external entity outside the",
   phrase software `sC` S "the", phrase user, S "in this case. A",
   S "rectangle represents the", phrase softwareSys, S "itself" +:+.
   sParen (short pro), S "Arrows are used to show the",
   plural datum, S "flow between the", phrase system `sAnd`
   S "its", phrase environment]
 
-sys_context_fig :: Contents
-sys_context_fig = fig (foldlSent_
-  [makeRef sys_context_fig +: EmptyS, titleize sysCont])
+sys_context_fig :: LabelledContent
+sys_context_fig = llcc "sys_context_fig" (mkLabelRA'' "sys_context_figLabel") $
+  fig (foldlSent_ [makeRef sys_context_fig +: EmptyS, titleize sysCont])
   "SystemContextFigure.png" "SysCon"
 
-systCIntro :: CI -> NamedChunk -> Contents
-systCIntro pro us = foldlSPCol [short pro +:+. S "is mostly self-contained",
+systCIntro :: CI -> NamedChunk -> LabelledContent
+systCIntro pro us = llcc "systCIntroSWHS" (mkLabelRA'' "systCIntroSWHSLabel") $ 
+  foldlSPCol [short pro +:+. S "is mostly self-contained",
   S "The only external interaction is through the", phrase us +:+.
   S "interface", S "responsibilities" `ofThe'` phrase us `sAnd`
   S "the", phrase system, S "are as follows"]
@@ -1045,8 +1047,8 @@ genDefDeriv1 :: ConceptChunk -> UnitalChunk -> Contents
 genDefDeriv1 roc tem = foldlSPCol [S "Detailed derivation of simplified",
   phrase roc, S "of", phrase tem]
 
-genDefDeriv2 :: RelationConcept -> UnitalChunk -> Contents
-genDefDeriv2 t1ct vo = foldlSPCol [S "Integrating", makeRef $ reldefn t1ct,
+genDefDeriv2 :: LabelledContent -> UnitalChunk -> Contents
+genDefDeriv2 t1ct vo = foldlSPCol [S "Integrating", makeRef t1ct,
   S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
 genDefDeriv3 = eqUnR
@@ -1155,8 +1157,8 @@ iMod1Sent1 roc temw en wa vo wvo wma hcw hfc hfp csa psa ht ta purin vhg
 
 iMod1Sent2 :: QDefinition -> QDefinition -> UnitalChunk ->
   UnitalChunk -> [Sentence]
-iMod1Sent2 d1hf d2hf hfc hfp = [S "Using", (makeRef $ datadefn d1hf) `sAnd`
-  (makeRef $ datadefn d2hf), S "for", ch hfc `sAnd`
+iMod1Sent2 d1hf d2hf hfc hfp = [S "Using", (makeRef d1hf) `sAnd`
+  (makeRef d2hf), S "for", ch hfc `sAnd`
   ch hfp, S "respectively, this can be written as"]
 
 iMod1Sent3 :: UnitalChunk -> UncertQ -> [Sentence]
@@ -1225,7 +1227,7 @@ iMod1Eqn7 = (deriv (sy temp_W) time $= (1 / (sy tau_W)) *
 -- Fractions in paragraph?
 
 iMod2Sent1 :: QDefinition -> UnitalChunk -> [Sentence]
-iMod2Sent1 d2hfp hfp = [S "Using", makeRef $ datadefn d2hfp, S "for", 
+iMod2Sent1 d2hfp hfp = [S "Using", makeRef d2hfp, S "for", 
   ch hfp `sC` S "this", phrase equation, S "can be written as"]
 
 iMod2Sent2 :: [Sentence]

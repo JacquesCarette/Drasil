@@ -25,8 +25,13 @@ swhsIMods :: [RelationConcept]
 swhsIMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 
 -- FIXME: use/define below until `swhsIMods :: [RelationConcept]` is Referable
-swhsIMods' :: [InstanceModel]
-swhsIMods' = map (\x -> im x [] [] [] [] (mkLabelRA'' $ (x ^.uid) ++ "Label")) swhsIMods
+--swhsIMods' :: [InstanceModel]
+--swhsIMods' = map (\x -> im x [] [] (mkQuant "fixmePlease" ( nounPhraseSP "fixmePlease") 
+--  cA Real Nothing Nothing) [] (mkLabelRA'' $ (x ^.uid) ++ "Label")) swhsIMods
+
+-- FIXME: the above lambda function as a hack can be removed once yuzhi branch is merged into master
+-- See https://github.com/JacquesCarette/Drasil/compare/yuzhi#diff-9de3590e3f6541a739713d985f90b267
+-- this was implemented to get past an error on this branch
 
 ---------
 -- IM1 --

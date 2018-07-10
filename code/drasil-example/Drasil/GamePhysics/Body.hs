@@ -3,7 +3,7 @@ module Drasil.GamePhysics.Body where
 import Language.Drasil hiding (Vector, organization)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Control.Lens ((^.))
-import qualified Drasil.SRS as SRS
+import qualified Drasil.DocLang.SRS as SRS
 
 import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..), 
   Emphasis(..), Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), 

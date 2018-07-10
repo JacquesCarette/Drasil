@@ -48,7 +48,7 @@ import Drasil.SSP.TMods (sspTMods)
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
   sspOutputs, sspSymbols)
 
-import qualified Drasil.SRS as SRS (funcReq, inModel, likeChg, unlikeChg, missingP, 
+import qualified Drasil.DocLang.SRS as SRS (funcReq, inModel, likeChg, unlikeChg, missingP, 
   physSyst)
 
 --type declarations for sections--

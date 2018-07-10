@@ -8,7 +8,7 @@ Synopsis:	A framework for code and document generation for scientific software -
 library
   exposed-modules:
       Drasil.DocLang
-    , Drasil.SRS
+    , Drasil.DocLang.SRS
   other-modules:
       Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Definitions

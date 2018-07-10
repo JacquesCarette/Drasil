@@ -1,7 +1,7 @@
 module Drasil.GlassBR.Assumptions where
 import Control.Lens ((^.))
 import Language.Drasil hiding (organization)
-import qualified Drasil.SRS as SRS (valsOfAuxCons, missingP)
+import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons, missingP)
 
 import Drasil.DocLang (cite, refA)
 

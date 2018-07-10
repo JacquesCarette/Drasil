@@ -2,7 +2,7 @@ module Drasil.SWHS.Changes where
 
 import Language.Drasil
 import Drasil.DocLang (mkLklyChnk, mkUnLklyChnk)
-import qualified Drasil.SRS as SRS (unlikeChg)
+import qualified Drasil.DocLang.SRS as SRS (unlikeChg)
 
 import Data.Drasil.Concepts.Documentation (assumption, value, simulation,
   model)

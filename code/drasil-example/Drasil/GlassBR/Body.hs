@@ -5,7 +5,7 @@ import Data.List (nub)
 
 import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
-import qualified Drasil.SRS as SRS
+import qualified Drasil.DocLang.SRS as SRS
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), 

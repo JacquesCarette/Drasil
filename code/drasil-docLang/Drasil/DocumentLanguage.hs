@@ -19,7 +19,7 @@ import qualified Data.Map as Map (elems)
 import Drasil.Sections.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
 import Drasil.Sections.TableOfSymbols (table)
 import Drasil.Sections.TableOfUnits (table_of_units)
-import qualified Drasil.SRS as SRS (appendix, dataDefn, genDefn, genSysDes, 
+import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn, genSysDes, 
   inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec, stakeholder,
   thModel, tOfSymb, userChar)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)

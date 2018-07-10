@@ -2,7 +2,7 @@ module Drasil.Sections.ScopeOfTheProject
   (scopeOfTheProjF) where
 
 import Language.Drasil
-import qualified Drasil.SRS as SRS
+import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.SentenceStructures (foldlSP, sAnd)
 import Data.Drasil.Concepts.Documentation (section_, input_, output_, useCase, scpOfTheProj)
 

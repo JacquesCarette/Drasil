@@ -3,7 +3,7 @@ module Drasil.GamePhysics.Changes where
 --A list of likely and unlikely changes for GamePhysics
 
 import Language.Drasil
-import qualified Drasil.SRS as SRS (likeChg, unlikeChg)
+import qualified Drasil.DocLang.SRS as SRS (likeChg, unlikeChg)
 
 import Data.Drasil.SentenceStructures (foldlSent, foldlSP, maybeChanged, maybeExpanded, sAnd)
 import Data.Drasil.Concepts.Documentation (section_, likelyChg, unlikelyChg, physics, game, library)

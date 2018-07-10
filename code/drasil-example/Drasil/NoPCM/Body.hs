@@ -62,7 +62,7 @@ import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Software.Products (compPro)
 
-import qualified Drasil.SRS as SRS (funcReq, likeChg, unlikeChg, probDesc, goalStmt,
+import qualified Drasil.DocLang.SRS as SRS (funcReq, likeChg, unlikeChg, probDesc, goalStmt,
   inModel, missingP)
 import Drasil.DocLang (DocDesc, 
   DocSection(Verbatim, Bibliography, IntroSec, RefSec), IntroSec(IntroProg),

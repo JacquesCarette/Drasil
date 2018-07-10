@@ -7,7 +7,7 @@ module Drasil.Sections.Introduction
    ) where
 
 import Language.Drasil
-import qualified Drasil.SRS as SRS (intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc)
+import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc)
 import Data.Drasil.SentenceStructures (ofThe, ofThe',
   foldlList, foldlsC, refineChain, foldlSP)
 import Data.Drasil.Concepts.Documentation as Doc (goal, organization, thModel, inModel, goalStmt,

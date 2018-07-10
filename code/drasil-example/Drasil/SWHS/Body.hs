@@ -13,7 +13,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   assumpF, dataConstraintUncertainty, genSysF, inDataConstTbl, inModelF, intro, 
   mkDoc, outDataConstTbl, physSystDesc, reqF, solChSpecF, specSysDesF, 
   termDefnF, traceGIntro, traceMGF, tsymb'')
-import qualified Drasil.SRS as SRS (inModel, missingP, likeChg,
+import qualified Drasil.DocLang.SRS as SRS (inModel, missingP, likeChg,
   funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
   sysCont, reference)
 

@@ -28,7 +28,7 @@ import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 import Data.Drasil.SentenceStructures (acroGD, acroT, foldlSent, getTandS, 
   isThe, ofThe, sAnd)
 
-import Drasil.SRS as SRS (physSyst, missingP)
+import Drasil.DocLang.SRS as SRS (physSyst, missingP)
 
 ---------------------------
 --  General Definitions  --

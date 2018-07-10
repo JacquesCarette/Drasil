@@ -13,29 +13,35 @@ import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (term, defn, usymb, relat)
 import qualified Language.Drasil.Chunk.SymbolForm as SF
-import Language.Drasil.Chunk.AssumpChunk
+import Language.Drasil.Chunk.AssumpChunk (assuming)
 import Language.Drasil.Chunk.Attribute (getShortName, snToSentence)
 import Language.Drasil.Chunk.Change (chng, chngType, ChngType(Likely))
-import Language.Drasil.Chunk.Eq
+import Language.Drasil.Chunk.Eq (QDefinition, equat)
 import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Chunk.SymbolForm (eqSymb)
 import Language.Drasil.ChunkDB (getUnitLup, HasSymbolTable(..),symbLookup)
 import Language.Drasil.Chunk.ReqChunk (requires)
-import Language.Drasil.Chunk.Citation ( Citation, CiteField(..), HP(..), HasFields(getFields)
-                                      , citeID, externRefT)
-import Language.Drasil.Document.GetChunk
+import Language.Drasil.Chunk.Citation (Citation, CiteField(..), HP(..), HasFields(getFields), 
+  citeID, externRefT)
+import Language.Drasil.Document.GetChunk (vars)
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Expr.Math (sy)
-import Language.Drasil.Symbol
+import Language.Drasil.Symbol (Symbol(Empty, Atop, Corners, Concat, Special, Atomic), 
+  Decoration(Prime, Vector, Hat))
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.NounPhrase (phrase, titleize)
-import Language.Drasil.Reference
-import Language.Drasil.Document
+import Language.Drasil.Reference (refAdd)
+import Language.Drasil.Document (DType(DD, TM, Instance, General, Theory, Data), 
+  ItemType(Nested, Flat), ListType(Definitions, Desc, Simple, Numeric, Bullet), 
+  Contents(Bib, Graph, Defnt, Assumption, Change, Figure, Requirement, Enumeration, 
+  Definition, EqnBlock, Paragraph, Table), Section(Section), SecCons(Sub, Con), 
+  Document(Document))
 
 import Control.Lens ((^.))
-import Language.Drasil.Space
+import Language.Drasil.Space (Space(DiscreteS, DiscreteD, DiscreteI, Vect, Radians, 
+  String, Char, Boolean, Natural, Real, Rational, Integer))
 import Data.List (intersperse)
 
 -- | Render a Space

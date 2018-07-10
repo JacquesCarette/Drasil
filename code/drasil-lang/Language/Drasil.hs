@@ -60,9 +60,9 @@ module Language.Drasil (
   -- Chunk.VarChunk
   , VarChunk, codeVC
   , vc, implVar
-  , dcc, dcc', dccWDS, dccWDS', vc'', ccs, cc, cc'
+  , dcc, dcc', dccWDS, dccWDS', vc'', ccs, cc, cc', cic
   -- Chunk.Concept
-  , cw , ConceptChunk , CommonConcept
+  , cw , ConceptChunk , CommonConcept, ConceptInstance
   -- Chunk.CommonIdea
   , commonIdea, CI, getAcc
   -- Chunk.NamedIdea

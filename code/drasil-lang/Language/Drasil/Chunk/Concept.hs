@@ -1,18 +1,19 @@
 {-# Language TypeFamilies #-}
 module Language.Drasil.Chunk.Concept 
-  ( ConceptChunk, dcc, dcc', dccWDS, dccWDS', cc, cc', ccs
+  ( ConceptChunk, dcc, dcc', dccWDS, dccWDS', cc, cc', ccs, cic
   , cw, DefnAndDomain(DAD)
   , CommonConcept, ConceptInstance
   )where
 
 import Language.Drasil.Classes (HasUID(uid), Idea, Definition(defn),
   ConceptDomain(cdom), Concept)
-import Language.Drasil.Chunk.NamedIdea(mkIdea,nw)
+import Language.Drasil.Chunk.NamedIdea(mkIdea,nw, nc)
 import Language.Drasil.Chunk.CommonIdea (commonIdea)
 import Language.Drasil.Spec (Sentence(S))
-import Language.Drasil.NounPhrase (NP)
-import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict), ConceptInstance,
-  CommonConcept(ComConDict), DefnAndDomain(DAD))
+import Language.Drasil.NounPhrase (NP, pn)
+import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict),
+  ConceptInstance(ConInst), CommonConcept(ComConDict), DefnAndDomain(DAD))
+import Language.Drasil.Chunk.ShortName (shortname')
 
 
 import Control.Lens ((^.))
@@ -53,3 +54,6 @@ ccs n d l = ConDict (nw n) $ DAD d $ map (\x -> x ^. uid) l
 -- | For projecting out to the ConceptChunk data-type
 cw :: Concept c => c -> ConceptChunk
 cw c = ConDict (nw c) $ DAD (c ^. defn) (c ^. cdom)
+
+cic :: Concept c => String -> Sentence -> c -> String -> ConceptInstance
+cic u d dom sn = ConInst (ccs (nc u $ pn sn) d [dom]) $ shortname' sn

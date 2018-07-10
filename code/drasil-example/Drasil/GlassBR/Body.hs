@@ -117,7 +117,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     [IPurpose (purpose_of_document_intro_p1 document gLassBR glaSlab),
      IScope incScoR endScoR,
      IChar (rdrKnldgbleIn glBreakage blastRisk) undIR appStanddIR,
-     IOrgSec char_intended_reader_intro dataDefn (SRS.dataDefn SRS.missingP []) char_intended_reader_intro_end]) :
+     IOrgSec org_of_doc_intro dataDefn (SRS.dataDefn SRS.missingP []) org_of_doc_intro_end]) :
   StkhldrSec
     (StkhldrProg2
       [Client gLassBR (S "a" +:+ phrase company
@@ -314,15 +314,15 @@ purpose_of_document_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", p
 
 {--Organization of Document--}
 
-char_intended_reader_intro_end, char_intended_reader_intro :: Sentence
-char_intended_reader_intro = foldlSent [S "The", phrase organization, S "of this",
+org_of_doc_intro_end, org_of_doc_intro :: Sentence
+org_of_doc_intro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an", short srs,
   S "for", phrase sciCompS, S "proposed by" +:+ cite gbRefDB koothoor2013
   `sAnd` cite gbRefDB smithLai2005 `sC` S "with some", 
   plural aspect, S "taken from Volere", phrase template,
   S "16", cite gbRefDB rbrtsn2012]
 
-char_intended_reader_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
+org_of_doc_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
   S "are used to support", (plural definition `ofThe` S "different"),
   plural model]
 

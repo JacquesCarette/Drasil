@@ -17,11 +17,14 @@ import Control.Lens(makeLenses, (^.), view)
 
 import Language.Drasil.Chunk.Eq(fromEqn, fromEqn')
 
+data Scope = Local {-only visible within a limited scope-} | Global {-visible everywhere-}
+
 -- A data definition is a QDefinition that may have additional notes. 
 -- It also has attributes like derivation, source, etc.
 data DataDefinition = DD { _qd :: QDefinition
-                         , _ref :: References 
-                         , _deri :: Derivation 
+                         , _scp :: Scope
+                         , _ref :: References
+                         , _deri :: Derivation
                          , _lbl :: ShortName {-FIXME: Upgrade to Label-}
                          , _notes :: Maybe [Sentence]
                          }
@@ -33,7 +36,7 @@ instance NamedIdea          DataDefinition where term = qd . term
 instance Idea               DataDefinition where getA c = getA $ c ^. qd
 instance HasSpace           DataDefinition where typ = qd . typ
 instance HasSymbol          DataDefinition where symbol e st = symbol (e^.qd) st
-instance Quantity           DataDefinition where getUnit (DD a _ _ _ _) = getUnit a
+instance Quantity           DataDefinition where getUnit (DD a _ _ _ _ _) = getUnit a
 instance ExprRelat          DataDefinition where relat = qd . relat
 instance HasReference       DataDefinition where getReferences = ref
 instance Eq                 DataDefinition where a == b = (a ^. uid) == (b ^. uid)
@@ -51,4 +54,4 @@ mkDataDef cncpt equation = datadef $ getUnit cncpt --should references be passed
 
 -- | Smart constructor for data definitions 
 mkDD :: QDefinition -> References -> Derivation -> String{-Label-} -> Maybe [Sentence] -> DataDefinition
-mkDD a b c _ e = DD a b c (shortname' $ a ^. uid  {-shortname' d-}) e -- FIXME: should the shortname be passed in or derived?
+mkDD a b c _ e = DD a Global b c (shortname' $ a ^. uid  {-shortname' d-}) e -- FIXME: should the shortname be passed in or derived?

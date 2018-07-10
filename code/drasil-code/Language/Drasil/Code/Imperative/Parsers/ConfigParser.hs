@@ -10,11 +10,13 @@ module Language.Drasil.Code.Imperative.Parsers.ConfigParser (
     readConfig
 ) where
 
-import Control.Monad
-import Text.Parsec.Perm
+import Control.Monad (liftM)
+import Text.Parsec.Perm ((<|?>), (<$?>), (<$$>), (<||>), permute)
 import qualified Text.Parsec.Token as P
-import Text.ParserCombinators.Parsec
-import Text.ParserCombinators.Parsec.Language
+import Text.ParserCombinators.Parsec (Parser, ParseError, parse, try, noneOf)
+import Text.ParserCombinators.Parsec.Language (caseSensitive, reservedNames, reservedOpNames,
+  opLetter, opStart, identLetter, identStart, nestedComments, commentLine, commentStart, 
+  commentEnd, LanguageDef, emptyDef)
 
 import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 

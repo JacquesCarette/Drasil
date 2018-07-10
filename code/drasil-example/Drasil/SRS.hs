@@ -42,7 +42,7 @@ doc' sys authors secs = Document (Doc.srs `forTT'` sys) authors secs
 intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
   genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
   probDesc, termAndDefn, termogy, goalStmt, solCharSpec, assumpt, thModel,
-  genDefn, inModel, dataDefn, propCorSol, require, nonfuncReq, funcReq, likeChg, traceyMandG, tOfSymb,
+  genDefn, inModel, dataDefn, propCorSol, require, nonfuncReq, funcReq, likeChg, tOfSymb,
   appendix, reference, offShelfSol, valsOfAuxCons, unlikeChg :: [Contents] -> [Section] -> Section
 
 intro       cs ss = section' (titleize Doc.introduction) cs ss "Intro"
@@ -85,7 +85,6 @@ funcReq     cs ss = section' (titleize' Doc.functionalRequirement) cs ss "FRs"
 likeChg     cs ss = section' (titleize' Doc.likelyChg)        cs ss "LCs"
 unlikeChg   cs ss = section' (titleize' Doc.unlikelyChg)      cs ss "UCs"
 
-traceyMandG cs ss = section' (titleize' Doc.traceyMandG)      cs ss "TraceMatrices"
 
 valsOfAuxCons cs ss = section' (titleize Doc.consVals)        cs ss "AuxConstants"
 
@@ -97,9 +96,11 @@ offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "ExistingSol
 tOfSymb cs ss = section' (titleize Doc.tOfSymb) cs ss "ToS"
 
 
-datCon, physSyst :: [LabelledContent] -> [Section] -> Section
-datCon   cs ss = sectionLC (titleize' Doc.datumConstraint) cs ss (mkLabelRA'' "DataConstraints")
-physSyst cs ss = sectionLC (titleize Doc.physSyst)         cs ss physSystLabel
+datCon, physSyst, traceyMandG :: [LabelledContent] -> [Section] -> Section
+
+datCon      cs ss = sectionLC (titleize' Doc.datumConstraint) cs ss (mkLabelRA'' "DataConstraints")
+physSyst    cs ss = sectionLC (titleize Doc.physSyst)         cs ss physSystLabel
+traceyMandG cs ss = sectionLC (titleize' Doc.traceyMandG)     cs ss (mkLabelRA'' "TraceMatrices")
 
 --function that sets the shortname of each section to be the reference address
 section' :: Sentence -> [Contents] -> [Section] -> RefAdd -> Section

@@ -1,4 +1,4 @@
-module Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp) where
+module Drasil.SWHS.GenDefs (swhsGenDefs, swhsGDs, nwtnCooling, rocTempSimp) where
 
 import Prelude hiding (sin, cos, tan)
 
@@ -25,7 +25,19 @@ import Drasil.SWHS.Assumptions (swhsRefDB, newA2)
 swhsGenDefs :: [RelationConcept]
 swhsGenDefs = [nwtnCooling, rocTempSimp]
 
+--FIXME: swhsGDs, nwtnCoolingGD, and rocTempSimpGD were added--
+--since referencing implementation for RelationConcept hasn't--
+--stabilized yet (since RelationConcept isn't an instance of --
+--the Referable class.                                       --
+swhsGDs :: [GenDefn]
+swhsGDs = [nwtnCoolingGD, rocTempSimpGD] 
+
+--nwtnCoolingGD, rocTempSimpGD :: GenDefn
+nwtnCoolingGD = gdNoUnitDef nwtnCooling [] (mkLabelRA'' "nwtnCoolingLabel")
+rocTempSimpGD = gdNoUnitDef rocTempSimp [] (mkLabelRA'' "rocTempSimpLabel")
+
 --
+
 nwtnCooling :: RelationConcept
 nwtnCooling = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling") 
   nwtnCooling_desc nwtnCooling_rel Nothing--label

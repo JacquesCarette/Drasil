@@ -1,5 +1,5 @@
 module Drasil.SWHS.TMods (tModels, t1ConsThermE, 
-  swhsTMods, tMod1) where
+  swhsTMods, tMod1, swhsTModsAsLCs) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -28,14 +28,21 @@ tModels :: [RelationConcept]
 tModels = [t1ConsThermE, t2SensHtE, t3LatHtE]
 
 swhsTMods :: [Contents]
-swhsTMods = (tMod1 ++ tMod2 ++ tMod3)
+swhsTMods = [tMod1] ++ [tMod2] ++ [tMod3]
+
+--FIXME: temporary hack resulting from inability to use makeRef on RelationConcept
+-- since RelationConcept has a 'Maybe Label' instead of 'Label'
+swhsTModsAsLCs :: [LabelledContent]
+swhsTModsAsLCs = [llcc "tMod1LC" (mkLabelRA'' "tMod1Label") tMod1] ++
+                 [llcc "tMod2LC" (mkLabelRA'' "tMod2Label") tMod2] ++
+                 [llcc "tMod3LC" (mkLabelRA'' "tMod3Label") tMod3]
 
 -------------------------
 -- Theoretical Model 1 --
 -------------------------
 
-tMod1 :: [Contents]
-tMod1 = [reldefn t1ConsThermE]
+tMod1 :: Contents
+tMod1 = reldefn t1ConsThermE
 
 t1ConsThermE :: RelationConcept
 t1ConsThermE = makeRC "t1ConsThermE"
@@ -71,8 +78,8 @@ t1descr = foldlSent [
 -- Theoretical Model 2 --
 -------------------------
 
-tMod2 :: [Contents]
-tMod2 = [reldefn t2SensHtE]
+tMod2 :: Contents
+tMod2 = reldefn t2SensHtE
 
 t2SensHtE :: RelationConcept
 t2SensHtE = makeRC "t2SensHtE"
@@ -127,8 +134,8 @@ t2descr = foldlSent [
 -- Theoretical Model 3 --
 -------------------------
 
-tMod3 :: [Contents]
-tMod3 = [reldefn t3LatHtE]
+tMod3 :: Contents
+tMod3 = reldefn t3LatHtE
 
 t3LatHtE :: RelationConcept
 t3LatHtE = makeRC "t3LatHtE"

@@ -218,7 +218,8 @@ data UCsSec = UCsVerb Section | UCsProg [Contents]
 
 {--}
 
-data TraceabilitySec = TraceabilityVerb Section | TraceabilityProg [LabelledContent] [Sentence] [Contents] [Section]
+data TraceabilitySec = TraceabilityVerb Section 
+                     | TraceabilityProg [LabelledContent] [Sentence] [LabelledContent] [Section]
 
 {--}
 

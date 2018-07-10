@@ -84,7 +84,7 @@ module Language.Drasil (
   -- Chunk.DataDefinition
   , DataDefinition, mkDataDef, mkDD
   -- Chunk.GenDefn
-  , GenDefn, gd, gdUnit
+  , GenDefn, gd, gdUnit, gdNoUnitDef
   -- Chunk.InstanceModel
   , InstanceModel
   , inCons, outCons, imOutput, imInputs, im, imQD, im', imQD'

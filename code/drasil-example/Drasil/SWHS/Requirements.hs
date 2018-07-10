@@ -132,3 +132,14 @@ nonFuncReqs = nonFuncReqF [performance] [correctness, verifiability,
 -- repeated, but it is always either stating that performance is a priority or
 -- performance is not a priority. This is probably something that can be
 -- abstracted out.
+
+-- FIXME: Related to #792 --
+newReq9 :: ReqChunk
+newReq9 = frc "req9" ( foldlSent [
+  S "Verify that the", phrase energy, plural output_,
+  sParen (ch w_E :+: sParen (ch time) `sAnd` ch pcm_E :+:
+  sParen (ch time)), S "follow the", phrase CT.law_cons_energy, {-`sC`
+  S "as outlined in"
+  --FIXME , makeRef s4_2_7 `sC` -} 
+  S "with relative error no greater than 0.001%"] ) 
+  (mkLabelRA'' "Verify-Energy-Output-follow-Conservation-of-Energy_Label")

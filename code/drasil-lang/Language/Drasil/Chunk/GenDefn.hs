@@ -1,6 +1,7 @@
 {-# Language TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.GenDefn
   ( GenDefn, gd, gdUnit
+  , gdNoUnitDef
   ) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
@@ -41,3 +42,6 @@ gd :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
   Derivation -> Label -> GenDefn
 gd r (Just u) derivs lbe = GD r (Just (unitWrapper u)) derivs [] lbe
 gd r Nothing derivs lbe = GD r Nothing derivs [] lbe
+
+gdNoUnitDef :: RelationConcept -> Derivation -> Label -> GenDefn
+gdNoUnitDef r derivs lbe = GD r Nothing derivs [] lbe

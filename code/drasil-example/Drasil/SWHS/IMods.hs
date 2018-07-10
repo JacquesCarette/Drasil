@@ -1,4 +1,4 @@
-module Drasil.SWHS.IMods (swhsIMods,
+module Drasil.SWHS.IMods (swhsIMods, swhsIMods',
   eBalanceOnWtr, heatEInWtr) where
 
 import Language.Drasil
@@ -19,8 +19,14 @@ import Data.Drasil.Concepts.Thermodynamics (boiling, heat, temp, melting,
 import Drasil.SWHS.DataDefs (ddRef, dd3HtFusion)
 import Drasil.SWHS.Labels (assump14Label, assump19Label, assump18Label)
 
+import Control.Lens ((^.))
+
 swhsIMods :: [RelationConcept]
 swhsIMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
+
+-- FIXME: use/define below until `swhsIMods :: [RelationConcept]` is Referable
+swhsIMods' :: [InstanceModel]
+swhsIMods' = map (\x -> im x [] [] [] [] (mkLabelRA'' $ (x ^.uid) ++ "Label")) swhsIMods
 
 ---------
 -- IM1 --

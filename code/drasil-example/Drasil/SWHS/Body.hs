@@ -41,14 +41,14 @@ import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
 import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
   coil, perfect_insul, tank, transient, gauss_div, swhs_pcm,
   phase_change_material, tank_pcm)
-import Drasil.SWHS.TMods (tModels, t1ConsThermE, swhsTMods)
-import Drasil.SWHS.IMods (swhsIMods)
+import Drasil.SWHS.TMods (t1ConsThermE, swhsTMods, swhsTModsAsLCs)
+import Drasil.SWHS.IMods (swhsIMods, swhsIMods')
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, swhsDDefs, swhsDataDefs)
-import Drasil.SWHS.GenDefs (swhsGenDefs)
-import Drasil.SWHS.Assumptions (swhsRefDB, swhsAssumptions, assump3, assump4, assump5,
-  assump6, assump13, assump15, assump16, assump17, assump18)
+import Drasil.SWHS.GenDefs (swhsGenDefs, swhsGDs)
+import Drasil.SWHS.Assumptions (swhsRefDB, swhsAssumptions, newA3, newA4, newA5,
+  newA6, newA13, newA15, newA16, newA17, newA18)
 import Drasil.SWHS.Requirements (req1, req2, reqEqn1, reqEqn2,
-  req3, req4, req5, req6, req7, req8, req9, req10, req11, nonFuncReqs)
+  req3, req4, req5, req6, req7, req8, req9, newReq9, req10, req11, nonFuncReqs)
 import Drasil.SWHS.Changes (likeChg1, likeChg2, likeChg3, likeChg4,
   likeChg5, likeChg6, unlikelyChgs)
 import Drasil.SWHS.DataDesc (swhsInputMod)
@@ -369,7 +369,7 @@ genDefsDeriv = [genDefDeriv1 rOfChng temp,
   genDefDeriv6 vol vol_ht_gen,
   genDefDeriv7,
   genDefDeriv8 ht_flux_in ht_flux_out in_SA out_SA density heat_cap_spec
-    temp vol assumption assump3 assump4 assump5 assump6,
+    temp vol assumption newA3 newA4 newA5 newA6,
   genDefDeriv9,
   genDefDeriv10 density mass vol,
   genDefDeriv11]
@@ -407,7 +407,7 @@ iMod1EqnList = map eqUnR [iMod1Eqn1, iMod1Eqn2,
 iMod1SentList = map foldlSPCol
   [iMod1Sent1 rOfChng temp_W energy water vol w_vol w_mass htCap_W 
     ht_flux_C ht_flux_P coil_SA pcm_SA CT.heat_trans tank perfect_insul 
-    vol_ht_gen assump15 assump16,
+    vol_ht_gen newA15 newA16,
   iMod1Sent2 dd1HtFluxC dd2HtFluxP ht_flux_C ht_flux_P,
   iMod1Sent3 w_mass htCap_W,
   iMod1Sent4 rightSide coil_HTC coil_SA,
@@ -416,7 +416,7 @@ iMod1SentList = map foldlSPCol
 iModDeriv2 :: [Contents]
 iModDeriv2 =
   (iMod2StartPara energy phsChgMtrl sens_heat rOfChng temp_PCM vol pcm_vol
-    pcm_mass htCap_S_P ht_flux_P pcm_SA ht_flux_out vol_ht_gen assump16 ++
+    pcm_mass htCap_S_P ht_flux_P pcm_SA ht_flux_out vol_ht_gen newA16 ++
   (weave [iMod2EqnList, iMod2SentList]) ++ (iMod2EndPara 
   phsChgMtrl htCap_S_P htCap_L_P tau_S_P tau_L_P surface CT.melting vol 
   temp_PCM temp_melt_P CT.boiling solid liquid))
@@ -434,10 +434,10 @@ iMod2EqnList = map eqUnR [iMod2Eqn1, iMod2Eqn2,
 -- Data Constraint: Table 1 --
 ------------------------------
 
-dataConTables :: [Contents]
+dataConTables :: [LabelledContent]
 dataConTables = [dataConTable1, dataConTable3]
 
-dataConTable1 :: Contents
+dataConTable1 :: LabelledContent
 dataConTable1 = inDataConstTbl inputConstraints
 
 inputConstraints :: [UncertQ]
@@ -453,7 +453,7 @@ inputConstraints = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
 -- Data Constraint: Table 3 --
 ------------------------------
 
-dataConTable3 :: Contents
+dataConTable3 :: LabelledContent
 dataConTable3 = outDataConstTbl outputConstraints
 --FIXME: add "(by A11)" in Physical Constraints of `temp_W` and `temp_PCM`?
 
@@ -550,7 +550,7 @@ unlikeChgList = []
 
 traceMAndG :: Section
 traceMAndG = traceMGF traceRefList traceTrailing
-  (traceRefList ++ traceIntro2 ++ [traceFig1, traceFig2])
+  (traceRefList ++ traceIntro2 ++ [traceFig1LC, traceFig2LC])
   []
 
 traceRefList :: [LabelledContent]
@@ -566,7 +566,7 @@ traceDataRef, traceFuncReqRef, traceInstaModelRef, traceAssumpRef, traceTheories
   traceDataDefRef, traceLikelyChgRef, traceGenDefRef :: [Sentence]
 
 traceInstaModel = ["IM1", "IM2", "IM3", "IM4"]
-traceInstaModelRef = map makeRef swhsIMods
+traceInstaModelRef = map makeRef swhsIMods' --FIXME: swhsIMods' is a hack?
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
   "R11"]
@@ -580,10 +580,10 @@ traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
 traceAssumpRef = makeListRef traceAssump assumps
 
 traceTheories = ["T1", "T2", "T3"]
-traceTheoriesRef = map makeRef tModels
+traceTheoriesRef = map makeRef swhsTModsAsLCs --FIXME: swhsTModsAsLCs is a hack?
 
 traceGenDefs = ["GD1", "GD2"]
-traceGenDefRef = map makeRef swhsGenDefs
+traceGenDefRef = map makeRef swhsGDs --FIXME: swhsGDs is a hack?
 
 traceDataDefs = ["DD1", "DD2", "DD3", "DD4"]
 traceDataDefRef = map makeRef swhsDataDefs
@@ -1078,8 +1078,8 @@ genDefDeriv7 = eqUnR
   (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
 
 genDefDeriv8 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
-  UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk -> CI -> Contents ->
-  Contents -> Contents -> Contents -> Contents
+  UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk -> CI -> AssumpChunk ->
+  AssumpChunk -> AssumpChunk -> AssumpChunk -> Contents
 genDefDeriv8 hfi hfo isa osa den hcs tem vo assu a3 a4 a5 a6 = foldlSPCol 
   [S "Where", foldlList (map ch [hfi, hfo, isa, osa]), 
   S "are explained in" +:+. acroGD 2, S "Assuming", ch den `sC` ch hcs
@@ -1135,7 +1135,7 @@ iMod1Para en wa = [foldlSPCol [S "Derivation of the",
 iMod1Sent1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
   UnitalChunk -> UnitalChunk -> UnitalChunk -> UncertQ -> UnitalChunk -> 
   UnitalChunk -> UncertQ -> UncertQ -> ConceptChunk -> ConceptChunk -> 
-  ConceptChunk -> UnitalChunk -> Contents -> Contents -> [Sentence]
+  ConceptChunk -> UnitalChunk -> AssumpChunk -> AssumpChunk -> [Sentence]
 iMod1Sent1 roc temw en wa vo wvo wma hcw hfc hfp csa psa ht ta purin vhg
   a15 a16 = [S "To find the", phrase roc, S "of", ch temw `sC`
   S "we look at the", phrase en, S "balance on" +:+.
@@ -1257,7 +1257,7 @@ iMod1EqnList, iMod1SentList, iMod2EqnList,
 iMod2StartPara :: UnitalChunk -> CI -> UnitalChunk -> ConceptChunk ->
   UncertQ -> UnitalChunk -> UncertQ -> UnitalChunk -> UncertQ -> 
   UnitalChunk -> UncertQ -> UnitalChunk -> UnitalChunk ->
-  Contents -> [Contents]
+  AssumpChunk -> [Contents]
 iMod2StartPara en pcmat sh roc ptem vo pvo pma hcsp hfp psa hfo vhg a16 =
   map foldlSPCol [
 
@@ -1296,7 +1296,7 @@ iMod2EndPara pcmat hcsp hclp tsp tlp sur mel vo ptem tmp boi so li = map
   S "this is not included, since",
   (phrase vo +:+ S "change" `ofThe` short pcmat),
   S "with", phrase mel,
-  S "is assumed to be negligible", sParen (makeRef assump17)],
+  S "is assumed to be negligible", sParen (makeRef newA17)],
 
   [S "In the case where", ch ptem :+: S "=" :+:
   ch tmp `sAnd` S "not all of the", short pcmat,
@@ -1307,7 +1307,7 @@ iMod2EndPara pcmat hcsp hclp tsp tlp sur mel vo ptem tmp boi so li = map
   [S "This derivation does not consider",
   (phrase boi `ofThe` short pcmat) `sC` S "as the", short pcmat,
   S "is assumed to either be in a", (so ^. defn),
-  S "or a", (li ^. defn), sParen (makeRef assump18)]
+  S "or a", (li ^. defn), sParen (makeRef newA18)]
 
   ]
 
@@ -1339,7 +1339,7 @@ dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
   S "or there will be a divide by zero in the", phrase model],
 
   [sParen (S "+"), S "These", plural qua, S "cannot be zero" `sC`
-  S "or there would be freezing", sParen (makeRef assump13)],
+  S "or there would be freezing", sParen (makeRef newA13)],
 
   [sParen (Sp Hash), S "The", plural constraint, S "on the", phrase sa,
   S "are calculated by considering the", phrase sa, S "to", phrase vo +:+.
@@ -1379,7 +1379,7 @@ propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
   phrase input_, S "from the", phrase co `sAnd` S "the",
   phrase en, phrase output_, S "to the" +:+. short pcmat,
   S "This can be shown as an", phrase equation, S "by taking",
-  (makeRef $ datadefn d1hfc) `sAnd` (makeRef $ datadefn d2hfp) `sC`
+  (makeRef d1hfc) `sAnd` (makeRef d2hfp) `sC`
   S "multiplying each by their respective", phrase su,
   S "area of", phrase ht `sC` S "and integrating each",
   S "over the", phrase sim_time `sC` S "as follows"]
@@ -1411,7 +1411,7 @@ propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)"
   S "computed by" +:+. short pro, S "The relative",
   S "error between the results computed by", short pro `sAnd`
   S "the results calculated from the", short rs, S "of these",
-  plural eq, S "should be less than 0.001%", makeRef req9]
+  plural eq, S "should be less than 0.001%", makeRef newReq9]
 
 -- Above section only occurs in this example (although maybe it SHOULD be in
 -- the others).
@@ -1472,8 +1472,7 @@ traceTable3 = llcc "traceTable3SWHS" (mkLabelRA'' "traceTable3SWHSLabel") $
 ------------------------
 
 traceIntro2 :: [LabelledContent]
-traceIntro2 = [llcc "traceIntro2SWHS" (mkLabelRA'' "traceIntro2SWHSLabel") $
-  traceGIntro [traceFig1LC, traceFig2LC]
+traceIntro2 = [traceGIntro [traceFig1LC, traceFig2LC]
 
   [foldlSent [foldlList $ map plural renameList1, S "on each other"],
   foldlSent_ [foldlList $ map plural renameList2, S "on each other"]]]

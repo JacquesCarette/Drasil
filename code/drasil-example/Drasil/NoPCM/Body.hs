@@ -16,7 +16,7 @@ import Drasil.SWHS.Assumptions (assumpS1, assumpS2, assumpS7, assumpS8, assumpS9
   assump14, assump15, assump20)
 import Drasil.SWHS.Body (charReader1, charReader2, orgDocIntro,
   genSystDesc, physSyst1, physSyst2, dataDefIntroEnd, iMod1Para,
-  traceTrailing)
+  traceTrailing, traceFig1, traceFig2)
 import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil,
   transient, perfect_insul, tank_para)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
@@ -948,7 +948,7 @@ traceTable3 = Table (EmptyS : traceRowHeader3)
 tempName :: [CI]
 tempName = [thModel, genDefn, dataDefn, inModel, likelyChg, assumption]
 
-traceIntro2 :: [Contents]
+traceIntro2 :: LabelledContent
 traceIntro2 = traceGIntro [traceFig1, traceFig2]
 
   [(foldlList $ map plural tempName) +:+. S "on each other",
@@ -956,18 +956,7 @@ traceIntro2 = traceGIntro [traceFig1, traceFig2]
   foldlSent_ [plural inModel `sC` plural requirement `sC`
   S "and", plural datumConstraint, S "on each other"]]
 
-traceFig1 :: Contents
-traceFig1 = fig (showingCxnBw traceyGraph (titleize' item +:+
-  S "of Different" +:+ titleize' section_)) "ATrace.png" "TraceA"
-
-traceFig2 :: Contents
-traceFig2 = fig (showingCxnBw traceyGraph (titleize' requirement `sC`
-  titleize' inModel `sC` S "and" +:+ titleize' datumConstraint)) "RTrace.png" 
-  "TraceR"
-
-  -- Using the SWHS graphs as place holders until ones can be generated for NoPCM 
-
-
+-- Using the SWHS graphs as place holders until ones can be generated for NoPCM
 
 ------------------------------------------
 --Section 8: SPECIFICATION PARAMETER VALUE

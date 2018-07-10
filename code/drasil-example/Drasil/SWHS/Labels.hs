@@ -14,3 +14,7 @@ assump14Label = mkLabelRA'' "Water-Always-Liquid_Label"
 assump18Label = mkLabelRA'' "No-Gaseous-State-PCM_Label"
 
 assump19Label = mkLabelRA'' "Atmospheric-Pressure-Tank_Label"
+
+traceFig1LC, traceFig2LC :: Label
+traceFig1LC = mkLabelRA'' "traceFig1LabelSWHS"
+traceFig2LC = mkLabelRA'' "traceFig2LabelSWHS"

@@ -52,6 +52,7 @@ import Drasil.SWHS.Requirements (req1, req2, reqEqn1, reqEqn2,
 import Drasil.SWHS.Changes (likeChg1, likeChg2, likeChg3, likeChg4,
   likeChg5, likeChg6, unlikelyChgs)
 import Drasil.SWHS.DataDesc (swhsInputMod)
+import Drasil.SWHS.Labels (traceFig1LC, traceFig2LC)
 
 import qualified Drasil.SRS as SRS (inModel, missingP, likeChg,
   funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
@@ -550,7 +551,7 @@ unlikeChgList = []
 
 traceMAndG :: Section
 traceMAndG = traceMGF traceRefList traceTrailing
-  (traceRefList ++ traceIntro2 ++ [traceFig1LC, traceFig2LC])
+  (traceRefList ++ traceIntro2 ++ [traceFig1, traceFig2])
   []
 
 traceRefList :: [LabelledContent]
@@ -1474,22 +1475,19 @@ traceTable3 = llcc "traceTable3SWHS" (mkLabelRA'' "traceTable3SWHSLabel") $
 ------------------------
 
 traceIntro2 :: [LabelledContent]
-traceIntro2 = [traceGIntro [traceFig1LC, traceFig2LC]
+traceIntro2 = [traceGIntro [traceFig1, traceFig2]
 
   [foldlSent [foldlList $ map plural renameList1, S "on each other"],
   foldlSent_ [foldlList $ map plural renameList2, S "on each other"]]]
 
-traceFig1LC, traceFig2LC :: LabelledContent
-
-traceFig1LC = llcc "traceFig1LC" (mkLabelRA'' "traceFig1LabelSWHS") traceFig1
-traceFig2LC = llcc "traceFig2LC" (mkLabelRA'' "traceFig2LabelSWHS") traceFig2
-
-traceFig1 :: Contents
-traceFig1 = fig (showingCxnBw traceyGraph (titleize' item +:+
+traceFig1 :: LabelledContent
+traceFig1 = llcc "traceFig1LC" traceFig1LC $ 
+  fig (showingCxnBw traceyGraph (titleize' item +:+
   S "of Different" +:+ titleize' section_)) "ATrace.png" "TraceyA"
 
-traceFig2 :: Contents
-traceFig2 = fig (showingCxnBw traceyGraph (foldlList $ map titleize' 
+traceFig2 :: LabelledContent
+traceFig2 = llcc "traceFig2LC" traceFig2LC $ 
+  fig (showingCxnBw traceyGraph (foldlList $ map titleize' 
   renameList2)) "RTrace.png" "TraceyR"
 
 -------------------------------------------------

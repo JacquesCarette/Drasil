@@ -1,0 +1,56 @@
+Name:		drasil-data
+Version:	0.1.1
+Cabal-Version:  >= 1.18
+Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
+build-type:     Simple
+Synopsis:	A framework for code and document generation for scientific software - Data SubPackage
+
+library
+  exposed-modules:
+    Data.Drasil.People
+    Data.Drasil.Citations
+    Data.Drasil.Constraints
+    Data.Drasil.SentenceStructures
+    Data.Drasil.SI_Units
+    Data.Drasil.Phrase
+    Data.Drasil.Utils
+    Data.Drasil.Concepts.Computation
+    Data.Drasil.Concepts.Documentation
+    Data.Drasil.Concepts.Thermodynamics
+    Data.Drasil.Concepts.PhysicalProperties
+    Data.Drasil.Concepts.Education
+    Data.Drasil.Concepts.Physics
+    Data.Drasil.Concepts.Software
+    Data.Drasil.Concepts.Math
+    Data.Drasil.Concepts.SolidMechanics
+    Data.Drasil.Software.Products
+    Data.Drasil.Quantities.Thermodynamics
+    Data.Drasil.Quantities.PhysicalProperties
+    Data.Drasil.Quantities.Physics
+    Data.Drasil.Quantities.Math
+    Data.Drasil.Quantities.SolidMechanics
+    Data.Drasil.Units.Thermodynamics
+    Data.Drasil.Units.PhysicalProperties
+    Data.Drasil.Units.Physics
+    Data.Drasil.Units.SolidMechanics
+
+  Build-Depends:
+    base >= 4.7,
+    lens >= 4.12,
+    containers >= 0.5.5.1,
+    pretty >= 1.1.1.1,
+    mtl >= 2.2.1,
+    directory >= 1.2.6.2,
+    split >= 0.2.3.1,
+    drasil-lang >= 0.1.2,
+    MissingH >= 1.4.0.1,
+    parsec >= 3.1.9,
+    data-fix (>= 0.0.4 && <= 1.0),
+    drasil-lang >= 0.1.1
+  default-language: Haskell2010
+  ghc-options:      -Wall
+
+source-repository head
+  type:     git
+  location: git://github.com/JacquesCarette/Data.Drasil.git
+  subdir: code/Data

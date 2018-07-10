@@ -550,10 +550,10 @@ unlikeChgList = []
 
 traceMAndG :: Section
 traceMAndG = traceMGF traceRefList traceTrailing
-  ([traceTable1, traceTable2, traceTable3] ++
-  (traceIntro2) ++ [traceFig1, traceFig2]) []
+  (traceRefList ++ traceIntro2 ++ [traceFig1, traceFig2])
+  []
 
-traceRefList :: [Contents]
+traceRefList :: [LabelledContent]
 traceRefList = [traceTable1, traceTable2, traceTable3]
 
 traceTrailing :: [Sentence]
@@ -663,8 +663,9 @@ trace2R9 = ["IM3", "IM4"]
 trace2R10 = ["IM2"]
 trace2R11 = ["IM2"]
 
-traceTable2 :: Contents
-traceTable2 = Table (EmptyS:traceMRowHeader2)
+traceTable2 :: LabelledContent
+traceTable2 = llcc "traceTable2SWHS" (mkLabelRA'' "traceTable2SWHSLabel") $
+  Table (EmptyS:traceMRowHeader2)
   (makeTMatrix (traceMColHeader2) (traceMColumns2) (traceMRow2))
   (showingCxnBw traceyMatrix
   (titleize' requirement `sAnd` titleize' inModel)) True "Tracey1"
@@ -1449,14 +1450,16 @@ traceTrailing2 = foldlSent [foldlList $ map plural renameList2,
 traceTrailing3 = foldlSent_ [foldlList $ map plural (take 5 renameList1),
   S "on the", plural assumption]
 
-traceTable1 :: Contents
-traceTable1 = Table (EmptyS:traceMRowHeader1)
+traceTable1 :: LabelledContent
+traceTable1 = llcc "traceTable1SWHS" (mkLabelRA'' "traceTable1SWHSLabel") $
+  Table (EmptyS:traceMRowHeader1)
   (makeTMatrix (traceMRowHeader1) (traceMColumns1) (traceMRow1))
   (showingCxnBw traceyMatrix
   (titleize' item +:+ S "of Different" +:+ titleize' section_)) True "Tracey2"
 
-traceTable3 :: Contents
-traceTable3 = Table (EmptyS:traceMRowHeader3)
+traceTable3 :: LabelledContent
+traceTable3 = llcc "traceTable3SWHS" (mkLabelRA'' "traceTable3SWHSLabel") $
+  Table (EmptyS:traceMRowHeader3)
   (makeTMatrix traceMColHeader3 traceMColumns3 traceMRow3)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+
   titleize' item)) True "Tracey3"
@@ -1468,11 +1471,10 @@ traceTable3 = Table (EmptyS:traceMRowHeader3)
 -- Traceabilty Graphs --
 ------------------------
 
-traceIntro2 :: [Contents]
+traceIntro2 :: [LabelledContent]
 traceIntro2 = traceGIntro [traceFig1LC, traceFig2LC]
 
   [foldlSent [foldlList $ map plural renameList1, S "on each other"],
-
   foldlSent_ [foldlList $ map plural renameList2, S "on each other"]]
 
 traceFig1LC, traceFig2LC :: LabelledContent

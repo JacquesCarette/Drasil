@@ -35,7 +35,7 @@ genDefDesc1 :: RelationConcept -> UnitalChunk -> [Sentence]
 genDefDesc1 t1c vo =
   [S "Integrating", makeRef $ --FIXME: reference maybe label from RelationConcept instead of conversion to LabelledContent
   llcc "relConceptFIXME" (mkLabelRA'' "t1cLabel") $ reldefn t1c,
-  S "over a", phrase vo, sParen (getES vo) `sC` S "we have"]
+  S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
 genDefDesc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]

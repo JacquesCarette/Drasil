@@ -155,7 +155,7 @@ t3descr = foldlSent [
   S "the", phrase phase_change,
   S "depends on the", phrase melt_frac `sC`
   (makeRef dd3HtFusion) :+: S ".",
-  getES melt_pt, S "and", getES boil_pt, S "are the",
+  ch melt_pt, S "and", ch boil_pt, S "are the",
   phrase melt_pt, S "and", phrase boil_pt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),
   at_start latent_heat :+: S "ing stops when all material has",

@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.Eq 
   (QDefinition, fromEqn, fromEqn', fromEqn'', equat, getVC
-  , ec) where
+  , ec, qua) where
 
 import Control.Lens ((^.), makeLenses, view)
 import Language.Drasil.Expr (Expr)
@@ -48,7 +48,7 @@ instance HasShortName  QDefinition where -- FIXME: This could lead to trouble; n
                                          -- to ensure sanity checking when building
                                          -- Refs. Double-check QDef is a DD before allowing
   shortname = view refName
-
+ 
 -- | Create a 'QDefinition' with a uid, noun phrase (term), definition, symbol,
 -- unit, and defining equation.  And it ignores the definition...
 --FIXME: Space hack

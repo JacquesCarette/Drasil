@@ -9,7 +9,6 @@ import Language.Drasil
 import Control.Lens ((^.))
 
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
-import Data.Drasil.Utils (getES)
 
 {--}
 
@@ -32,10 +31,10 @@ t1SafetyReq = makeRC "t1SafetyReq" (nounPhraseSP "Safety Requirement-1")
 t1descr :: Sentence
 t1descr = tDescr (is_safe1) s ending
   where 
-    s = (getES is_safe1) `sAnd` (getES is_safe2) +:+ sParen (S "from" +:+ 
+    s = (ch is_safe1) `sAnd` (ch is_safe2) +:+ sParen (S "from" +:+ 
       (ref t2SafetyReq))
-    ending = ((getES prob_br) `isThe` (phrase prob_br)) `sC` S "as calculated in" +:+.
-      (ref probOfBr) +:+ (getES pb_tol) `isThe` (phrase pb_tol) +:+ S "entered by the user"
+    ending = ((ch prob_br) `isThe` (phrase prob_br)) `sC` S "as calculated in" +:+.
+      (ref probOfBr) +:+ (ch pb_tol) `isThe` (phrase pb_tol) +:+ S "entered by the user"
 
 
 t2IsSafe :: TheoryModel
@@ -51,16 +50,16 @@ t2SafetyReq = makeRC "t2SafetyReq" (nounPhraseSP "Safety Requirement-2")
 t2descr :: Sentence
 t2descr = tDescr (is_safe2) s ending
   where 
-    s = ((getES is_safe1) +:+ sParen (S "from" +:+ (makeRef ((Definition . Theory) 
-        t1SafetyReq))) `sAnd` (getES is_safe2))
+    s = ((ch is_safe1) +:+ sParen (S "from" +:+ (makeRef ((Definition . Theory) 
+        t1SafetyReq))) `sAnd` (ch is_safe2))
     ending = (short lResistance) `isThe` (phrase lResistance) +:+ 
       sParen (S "also called capacity") `sC` S "as defined in" +:+. 
-      (ref calOfCap) +:+ (getES demand) +:+ sParen (S "also referred as the" +:+ 
+      (ref calOfCap) +:+ (ch demand) +:+ sParen (S "also referred as the" +:+ 
       (titleize demandq)) `isThe` (demandq ^. defn) `sC` S "as defined in" +:+ 
       ref calOfDe
 
 tDescr :: VarChunk -> Sentence -> Sentence -> Sentence
-tDescr main s ending = foldlSent [S "If", getES main `sC` S "the glass is" +:+.
+tDescr main s ending = foldlSent [S "If", ch main `sC` S "the glass is" +:+.
   S "considered safe", s +:+. S "are either both True or both False", ending]
 
 ref :: RelationConcept -> Sentence

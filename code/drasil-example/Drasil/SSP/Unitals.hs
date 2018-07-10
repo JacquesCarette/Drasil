@@ -400,7 +400,7 @@ sspUnitless = [earthqkLoadFctr, normToShear,scalFunc,
   ufixme1, ufixme2]
 
 earthqkLoadFctr, normToShear, scalFunc, numbSlices,
-  minFunction, fsloc, index, varblU, varblV :: DefinedQuantityDict
+  minFunction, fsloc, index, varblU, varblV, ufixme1, ufixme2 :: DefinedQuantityDict
 
 earthqkLoadFctr = dqd' (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
   ("proportionality factor of force that " ++

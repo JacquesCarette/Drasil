@@ -3,8 +3,8 @@ import Control.Lens ((^.))
 import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
 import qualified Drasil.SRS as SRS
-
-import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..), 
+import Data.List (nub)
+import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..),
   DocSection(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons), --DocSection uses everything but Verbatim
   IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), LCsSec(..), 
@@ -46,7 +46,7 @@ import Data.Drasil.SentenceStructures (acroR, sVersus, sAnd, foldlSP,
   foldlsC, sOf, followA, ofThe, sIn, isThe, isExpctdToHv, sOr, underConsidertn,
   tAndDWAcc, tAndDOnly, tAndDWSym, andThe)
 import Data.Drasil.Software.Products (sciCompS)
-import Data.Drasil.Utils (getES, makeTMatrix, makeListRef, itemRefToSent,
+import Data.Drasil.Utils (makeTMatrix, makeListRef, itemRefToSent,
   refFromType, enumSimple, enumBullet, prodUCTbl)
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptionDescs,
@@ -71,7 +71,7 @@ import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad,
   glassGeo, glass_type, nom_thick, sdx, sdy, sdz, tNT, gBRSpecParamVals,
   loadTypes, load, glassTypes, probBreak, termsWithAccDefn, termsWithDefsOnly,
   gbConstants, gbConstrained, gbOutputs, gbInputs, glBreakage, capacity, 
-  constant_LoadDF)
+  constant_LoadDF, glassBRsymb)
 
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, 
@@ -88,8 +88,20 @@ import Data.Drasil.SI_Units (kilogram, metre, millimetre, newton, pascal,
 
 gbSymbMap :: ChunkDB
 gbSymbMap =
-  cdb this_symbols (map nw acronyms ++ map nw this_symbols) ([] :: [ConceptChunk])
+  cdb this_symbols (map nw acronyms ++ map nw this_symbols) glassBRsymb
       (map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton])
+
+ccss'' :: Sentence -> [DefinedQuantityDict]
+ccss'' s = combine s gbSymbMap
+
+ccss' :: Expr -> [DefinedQuantityDict]
+ccss' s = combine' s gbSymbMap
+
+ccs' :: [DefinedQuantityDict]
+ccs' = nub ((concatMap ccss'' $ getDoc glassBR_srs) ++ (concatMap ccss' $ egetDoc glassBR_srs))
+
+outputuid :: [String]
+outputuid = nub ((concatMap snames $ getDoc glassBR_srs) ++ (concatMap names $ egetDoc glassBR_srs))
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GlassBR/"
@@ -374,8 +386,8 @@ individual_product_use_case mainObj compare1 compare2 factorOfComparison =
   `sAnd` (phrase compare2 `isThe` phrase requirement) +:+.
   (S "which" `isThe` (compare2 ^. defn)), S "The second", phrase condition,
   S "is to check whether the calculated", phrase factorOfComparison,
-  sParen (getES prob_br), S "is less than the tolerable",
-  phrase factorOfComparison, sParen (getES pb_tol),
+  sParen (ch prob_br), S "is less than the tolerable",
+  phrase factorOfComparison, sParen (ch pb_tol),
   S "which is obtained from the", phrase user, S "as an" +:+. phrase input_,
   S "If both", plural condition, S "return true then it's shown that the",
   phrase mainObj, S "is safe to use" `sC`
@@ -515,7 +527,7 @@ req1Desc = foldlSent [at_start input_, S "the", plural quantity, S "from",
   plural dimension `sC` (glassTy ^. defn) `sC` S "tolerable",
   phrase probability `sOf` phrase failure, S "and",
   (plural characteristic `ofThe` phrase blast), S "Note:",
-  getES plate_len `sAnd` getES plate_width,
+  ch plate_len `sAnd` ch plate_width,
   S "will be input in terms of", plural millimetre `sAnd`
   S "will be converted to the equivalent value in", plural metre]
 
@@ -523,16 +535,16 @@ functional_requirements_req1Table :: Contents
 functional_requirements_req1Table = Table
   [at_start symbol_, at_start description, S "Units"]
   (mkTable
-  [getES,
+  [ch,
    at_start, unit'2Contents] requiredInputs)
   (S "Required Inputs following R1") True "R1ReqInputs"
 
 req2Desc = foldlSent [S "The", phrase system,
   S "shall set the known", plural value +: S "as follows",
-  foldlList [(foldlsC (map getES (take 4 assumptionConstants)) `followA` 4),
-  ((getES constant_LoadDF) `followA` 8), (short lShareFac `followA` 5),
-  (getES hFromt) +:+ sParen (S "from" +:+ (makeRef hFromt)), 
-  (getES glaTyFac) +:+ sParen (S "from" +:+ (makeRef glaTyFac))]]
+  foldlList [(foldlsC (map ch (take 4 assumptionConstants)) `followA` 4),
+  ((ch constant_LoadDF) `followA` 8), (short lShareFac `followA` 5),
+  (ch hFromt) +:+ sParen (S "from" +:+ (makeRef hFromt)), 
+  (ch glaTyFac) +:+ sParen (S "from" +:+ (makeRef glaTyFac))]]
 
 --ItemType
 {-functional_requirements_req2 = (Nested (S "The" +:+ phrase system +:+
@@ -556,7 +568,7 @@ req4Desc = foldlSent [titleize output_, S "the", plural inQty,
   S "from", acroR 1 `andThe` S "known", plural quantity,
   S "from", acroR 2]
 
-req5Desc cmd = foldlSent_ [S "If", (getES is_safe1) `sAnd` (getES is_safe2),
+req5Desc cmd = foldlSent_ [S "If", (ch is_safe1) `sAnd` (ch is_safe2),
   sParen (S "from" +:+ (makeRef (reldefn t1SafetyReq))
   `sAnd` (makeRef (reldefn t2SafetyReq))), S "are true" `sC`
   phrase cmd, S "the", phrase message, Quote (safeMessage ^. defn),
@@ -572,13 +584,13 @@ testing1 = [probOfBr, calOfCap, calOfDe]
 functional_requirements_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $
-    map (\(a, d) -> Flat $ (at_start a) +:+ sParen (getES a) +:+
+    map (\(a, d) -> Flat $ (at_start a) +:+ sParen (ch a) +:+
     sParen (makeRef (reldefn d))) (zip testing testing1)
     ++
-    map (\d -> Flat $ (at_start d) +:+ sParen (getES d) +:+
+    map (\d -> Flat $ (at_start d) +:+ sParen (ch d) +:+
     sParen (makeRef (datadefn d))) functional_requirements_req6_pulledList
     ++
-    [Flat $ (titleize aspectR) +:+ sParen (getES aspectR) +:+
+    [Flat $ (titleize aspectR) +:+ sParen (ch aspectR) +:+
     E (aspectRWithEqn^.equat)]
     ))])]
 
@@ -590,9 +602,8 @@ likely_changes_list :: [Contents]
 likely_changes_list = likelyChanges_SRS 
 
 {--UNLIKELY CHANGES--}
-
 unlikely_change_list :: [Contents]
-unlikely_change_list = unlikelyChanges_SRS 
+unlikely_change_list = unlikelyChanges_SRS
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
 
@@ -788,14 +799,14 @@ appendix_intro = foldlSP [
   S "used for interpolating", plural value, S "needed in the", plural model]
 
 fig_5 = fig (titleize figure +: S "5" +:+ (demandq ^. defn) +:+
-  sParen (getES demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
-  `sVersus` at_start char_weight +:+ sParen (getES sflawParamM))
+  sParen (ch demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
+  `sVersus` at_start char_weight +:+ sParen (ch sflawParamM))
   (resourcePath ++ "ASTM_F2248-09.png") "demandVSsod"
 
 fig_6 = fig (titleize figure +: S "6" +:+ S "Non dimensional" +:+
-  phrase lateralLoad +:+ sParen (getES dimlessLoad)
+  phrase lateralLoad +:+ sParen (ch dimlessLoad)
   `sVersus` titleize aspectR +:+ sParen (getAcc aR)
-  `sVersus` at_start stressDistFac +:+ sParen (getES stressDistFac))
+  `sVersus` at_start stressDistFac +:+ sParen (ch stressDistFac))
   (resourcePath ++ "ASTM_F2248-09_BeasonEtAl.png") "dimlessloadVSaspect"
 
 blstRskInvWGlassSlab :: Sentence

@@ -26,8 +26,8 @@ traceMIntro refs trailings = Paragraph $ foldlSent [(phrase purpose) `ofThe'` (p
 
 -- generalized traceability matrix and graph introduction: variables are references to the three tables
 -- generally found in this section (in order of being mentioned)
-traceGIntro :: [LabelledContent] -> [Sentence] -> [Contents]
-traceGIntro refs trailings = [Paragraph $ foldlSent
+traceGIntro :: [LabelledContent] -> [Sentence] -> Contents
+traceGIntro refs trailings = Paragraph $ foldlSent
         [(phrase purpose) `ofThe'` (plural traceyGraph),
         S "is also to provide easy", plural reference, S "on what has to be",
         S "additionally modified if a certain", phrase component +:+. S "is changed", 
@@ -35,7 +35,7 @@ traceGIntro refs trailings = [Paragraph $ foldlSent
         plural dependency, S "The", phrase component, S "at the tail of an arrow",
         S "is depended on by the", phrase component, S "at the head of that arrow. Therefore, if a",
         phrase component, S "is changed, the", plural component, S "that it points to should also",
-        S "be changed"] +:+ foldlSent (zipWith tableShows refs trailings),
-        Paragraph $ foldlSent [S "NOTE: Building a tool to automatically generate", 
-        S "graphical representation" `ofThe` (phrase matrix), S "by scanning the",
-        plural label, S "and", phrase reference, S "can be future work"]]
+        S "be changed"] +:+ foldlSent (zipWith tableShows refs trailings)
+        --Paragraph $ foldlSent [S "NOTE: Building a tool to automatically generate", 
+        --S "graphical representation" `ofThe` (phrase matrix), S "by scanning the",
+        --plural label, S "and", phrase reference, S "can be future work"]]

@@ -1472,10 +1472,11 @@ traceTable3 = llcc "traceTable3SWHS" (mkLabelRA'' "traceTable3SWHSLabel") $
 ------------------------
 
 traceIntro2 :: [LabelledContent]
-traceIntro2 = traceGIntro [traceFig1LC, traceFig2LC]
+traceIntro2 = [llcc "traceIntro2SWHS" (mkLabelRA'' "traceIntro2SWHSLabel") $
+  traceGIntro [traceFig1LC, traceFig2LC]
 
   [foldlSent [foldlList $ map plural renameList1, S "on each other"],
-  foldlSent_ [foldlList $ map plural renameList2, S "on each other"]]
+  foldlSent_ [foldlList $ map plural renameList2, S "on each other"]]]
 
 traceFig1LC, traceFig2LC :: LabelledContent
 

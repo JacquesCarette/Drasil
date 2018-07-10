@@ -281,19 +281,19 @@ compareAuthYearTitle c1 c2
   | otherwise                      = error "Couldn't sort authors"
 
 getAuthor :: (HasFields c) => c -> People
-getAuthor c = maybe (error "No author found") (\(Author x) -> x) (find (isAuthor) (c ^. getFields))
+getAuthor c = maybe (error "No author found") (\(Author x) -> x) (find isAuthor (c ^. getFields))
   where isAuthor :: CiteField -> Bool
         isAuthor (Author _) = True
         isAuthor _          = False 
 
 getYear :: (HasFields c) => c -> Int
-getYear c = maybe (error "No year found") (\(Year x) -> x) (find (isYear) (c ^. getFields))
+getYear c = maybe (error "No year found") (\(Year x) -> x) (find isYear (c ^. getFields))
   where isYear :: CiteField -> Bool
         isYear (Year _) = True
         isYear _        = False
 
 getTitle :: (HasFields c) => c -> String
-getTitle c = getStr $ maybe (error "No title found") (\(Title x) -> x) (find (isTitle) (c ^. getFields))
+getTitle c = getStr $ maybe (error "No title found") (\(Title x) -> x) (find isTitle (c ^. getFields))
   where isTitle :: CiteField -> Bool
         isTitle (Title _) = True
         isTitle _         = False
@@ -305,7 +305,7 @@ getTitle c = getStr $ maybe (error "No title found") (\(Title x) -> x) (find (is
 citationsFromBibMap :: BibMap -> [Citation]
 citationsFromBibMap bm = sortBy compareAuthYearTitle citations
   where citations :: [Citation]
-        citations = map (\(x,_) -> x) (Map.elems bm)
+        citations = map fst (Map.elems bm)
 
 assumptionsFromDB :: AssumpMap -> [AssumpChunk]
 assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions

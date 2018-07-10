@@ -182,6 +182,9 @@ CONCLUSIONS: With good tool support and a front-loaded time investment, we can
 automate the generation of software artifacts required for certification. 
 (fill in later)?????
 
+\wss{The abstract doesn't have anything from Jacques ``bottom up'' viewpoint.
+  Can you work in something about consistency by construction?}
+
 \end{abstract}
 
 
@@ -252,9 +255,17 @@ and easily for a modest up-front time investment. By front-loading the costs of
 maintenance and rolling them into the development cycle, we can save time and 
 money in the long run.
 
+\wss{The bottom up justification should also be part of the introduction.}
+
 %DS Maybe throw in a figure here to show off a bunch of common artifacts.
 
 %DS Should everything after this point go into Background? Maybe not
+
+\wss{We can certainly wait to do it, but I like a ``roadmap'' paragraph at the
+  end of the introduction.  The roadmap explains how the paper is organized.
+  More importantly, it provides an opportunity to present your ``story,''
+  assuming that the organization of the paper follows the story.}
+
 \subsection{Software (Re-)certification}
 
 When we talk about software certification, we are specifically discussing the 
@@ -305,7 +316,8 @@ We intend to alleviate some of this cost-burden through a strategic, generative
 approach to Software Engineering (SE). With the automated generation of 
 artifacts we can ensure they are \emph{consistent by construction}, implement 
 changes 
-quickly, and automatically update relevant and/or dependent artifacts.
+quickly, and automatically update relevant and/or dependent artifacts.  \wss{I
+  was looking for consistent by construction here, and I found it.  :-)}
 
 \subsection{Scope} %DS Should this be here? Maybe, as long as the above clarifies the problem.
 
@@ -313,6 +325,14 @@ quickly, and automatically update relevant and/or dependent artifacts.
 - Why? Many highly specialized SCS require certification. Ex. Control sfwr 
 in nuclear power, x-ray machines, and other safety-critical contexts.
 - Well understood domain -> theories underpinning the work being done.
+
+\wss{We definitely want a scope section.  What do we do is important, but what
+  we don't do is also important information to convey.  We discussed this
+  recently.  Many people want us to jump to the more interesting/more
+  challenging problems, but we recognize that there is much to be gained by
+  first tackling the more mundane problems.  We allow for many classes of
+  practical changes to be made quickly and easily.  This has real value.  We can
+  discuss in the future work section the more interesting ideas.}
 
 \wss{My suggestion is to stop writing Section 1 for now and focus on Sections 5
 	and 6.  Section 1 is a good start, but it feels like we need more current
@@ -322,13 +342,20 @@ in nuclear power, x-ray machines, and other safety-critical contexts.
 
 \section{Background}
 
-Reducing the costs of (re-)certification efforts and automating the generation of software artifacts has been attempted in differing scopes by many others. We look to them for insight and in an attempt to combine the fruits of their labours into something more versatile.
+Reducing the costs of (re-)certification efforts and automating the generation
+of software artifacts has been attempted in differing scopes by many others. We
+look to them for insight and in an attempt to combine the fruits of their
+labours into something more versatile.
 
-In this section we will explore previous efforts in automating software artifact generation, as well as take a look at the current state of Model Driven Engineering and scientific knowledge ontologies.
+In this section we will explore previous efforts in automating software artifact
+generation, as well as take a look at the current state of Model Driven
+Engineering and scientific knowledge ontologies.
 
 \subsection{Software Artifact Reuse and Generation} %DS Is this subsect necessary?
 
-Previous attempts at generating software artifacts were primarily focused on artifact reuse. One aim of these approaches was to remove the burden of replicating some artifacts.
+Previous attempts at generating software artifacts were primarily focused on
+artifact reuse. One aim of these approaches was to remove the burden of
+replicating some artifacts.
 
 We will start by looking at Compendia~\cite{GentlemanAndLang} 
 
@@ -384,8 +411,6 @@ saying.
 - An obvious commonality across many projects in SCS -- SI and derived Units.
 
 \subsection{Common software artifacts}
-
-
 
 - Compare and contrast different software artifacts.
 	- SRS vs. detailed design vs. code
@@ -462,6 +487,11 @@ usually a term and definition. Depending on what we're looking at, there may
 not be a symbolic representation, or perhaps we have a quantity that is 
 unit-less. These special cases help us see the underlying root structure from 
 which our knowledge buds. %DS Tree metaphor! Wooo!
+
+\wss{Going through the GlassBR example like this seems like a good motivating
+  example to me.  I'm assuming that you will also be able to reuse it later when
+  you discuss the advantages of our approach for consistency and maintainability
+  (with respect to change).}
 
 -Discuss the breakdown of knowledge into classes. Refer to 
 Table~\ref{Tab:KnowledgeClasses} for more.  \wss{This table looks like a good
@@ -546,6 +576,8 @@ sounds.
 With that in mind, we have decided to restrict our focus to KBSE for Scientific 
 Computing Software (SCS) as it is a field rich in knowledge we can use.
 
+\wss{This feels like introductory material.  It should likely go earlier in the paper.}
+
 \subsection{Capturing Knowledge}
 \label{S:KnowCapt}
 
@@ -558,7 +590,8 @@ Different types of information are required for encoding each of the various
 pieces of knowledge we intend to use. Some types of knowledge lack specific 
 information bindings, for example a \emph{named idea} does not necessarily have 
 a symbol associated with it, however, a \emph{quantity} \emph{must} have a 
-symbol alongside its \emph{term} -- the fundamental information in a named idea.
+symbol alongside its \emph{term} -- the fundamental information in a named
+idea.  \wss{Should this information go closer to the GlassBR example above?}
 
 We borrow, and expand, the idea of \emph{Chunks} from Literate Programming 
 (LP)~\cite{Knuth1984} to facilitate our knowledge-capture. A chunk in its most 
@@ -648,9 +681,10 @@ hierarchy in Section~\ref{S:Drasil}.
 When we capture knowledge, we try to encode all of the information surrounding 
 that piece of knowledge in an artifact-agnostic manner. We are not concerned 
 with which views will be used by our artifacts, only what the underlying 
-knowledge is and how it should be captured.
+knowledge is and how it should be captured.  \wss{Great point.}
 
-Once we have properly captured the relevant knowledge, we shouldn't have to 
+Once we have properly captured the relevant knowledge, we shouldn't \wss{avoid
+  contractions} have to 
 capture it again to reuse it in a different project. Any given piece of 
 knowledge should only be added to the knowledge-base once!
 
@@ -676,7 +710,10 @@ Transformations represent the different 'views' of the knowledge we want based
 on how abstract we need it to be, what audience we are targeting, and a host of 
 other factors. We use transformations to translate knowledge into its requisite 
 forms, whether they be equations, descriptions, code, or something else 
-entirely.
+entirely.  \wss{Can we call what we are doing transformation?  I've always
+  thought of what we are doing as model transformation, but in a conversation
+  Wolfram Kahl implied that it isn't.  I didn't quite catch his point, but I
+  think there was a concern that we do not do bidirectional transformation?}
 
 We can also use transformations to expose variabilities. These are what define 
 project families -- projects which solve the same general problem, but with 
@@ -849,6 +886,8 @@ as they are created.
 We will discuss the recipe and document language specifics in 
 Section~\ref{S:DrasilToday}.
 
+\wss{I like the explanation of the packages}
+
 \subsection{Drasil Today}
 \label{S:DrasilToday}
 
@@ -949,6 +988,7 @@ have failed.
 
 - A number of undefined symbols even after multiple passes by humans. 
 (Auto-generating the symbol table and including sanity-checking revealed them)
+\wss{You are giving specific examples below, right?}
 
 \subsection{NoPCM and SWHS}
 

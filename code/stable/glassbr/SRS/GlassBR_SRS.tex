@@ -202,7 +202,7 @@ UC & Unlikely Change
 \end{longtable*}
 \section{Introduction}
 \label{Sec:Intro}
-Software is helpful to efficiently and correctly predict the blast risk involved with the glass slab. The blast under consideration is any kind of man-made explosion. The software, herein called GlassBR aims to predict the blast risk involved with the glass slab using an intuitive interface.
+Software is helpful to efficiently and correctly predict the blast risk involved with the glass slab. The blast under consideration is any kind of man-made explosion. The software, herein called GlassBR, aims to predict the blast risk involved with the glass slab using an intuitive interface.
 The following section provides an overview of the Software Requirements Specification (SRS) for GlassBR. This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
@@ -213,7 +213,7 @@ This document will be used as a starting point for subsequent development phases
 The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given the appropriate inputs, the code for GlassBR is intended to use the data and predict whether the glass slab is safe to use or not.
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
-Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering.In addition, reviewers should be familiar with the applicable standards for constructions using glass from {[}4-6{]} in Section~\ref{Sec:References}. The users of GlassBR can have a lower level of expertise, as explained in Section~\ref{Sec:UserChars}.
+Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering. In addition, reviewers should be familiar with the applicable standards for constructions using glass from {[}4-6{]} in Section~\ref{Sec:References}. The users of GlassBR can have a lower level of expertise, as explained in Section~\ref{Sec:UserChars}.
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
 The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013} and \cite{smithLai2005}, with some aspects taken from Volere template 16 \cite{rbrtsn2012}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in Section~\ref{Sec:DDs} and trace back to find any additional information they require.
@@ -260,13 +260,13 @@ GlassBR & Whether or not the glass slab is safe for the calculated load and supp
 \end{longtabu}
 \subsection{Individual Product Use Cases}
 \label{Sec:IndividualProdUC}
-The user provides the inputs to GlassBR for use within the analysis. There are two main classes of inputs: glass geometry and blast type. The glass geometry based inputs include the glass type and dimensions of the glass plane. The blast type input includes parameters like weight of charge, TNT equivalent factor and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage. GlassBR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (${P_{b}}$) is less than the tolerable probability (${P_{btol}}$) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
+The user provides the inputs to GlassBR for use within the analysis. There are two main classes of inputs: glass geometry and blast type. The glass geometry based inputs include the glass type and dimensions of the glass plane. The blast type input includes parameters like weight of charge, TNT equivalent factor, and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage. GlassBR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (${P_{b}}$) is less than the tolerable probability (${P_{btol}}$) which is obtained from the user as an input. If both conditions return true, then it's shown that the glass slab is safe to use, else if both return false, then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used for the GlassBR program.
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
-A system is needed to efficiently and correctly predict the blast risk involved with the glass. GlassBR is a computer program developed to interpret the inputs to give out the outputs which predicts whether the glass slab can withstand the blast under the conditions.
+A system is needed to efficiently and correctly predict the blast risk involved with the glass. GlassBR is a computer program developed to interpret the inputs to give out the outputs which predict whether the glass slab can withstand the blast under the conditions.
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermDefs}
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from {[}4{]} in Section~\ref{Sec:References}.
@@ -293,7 +293,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Long duration load - Any load lasting approximately 30 days.}
 \end{itemize}
 \item{Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge. It is represented by the coordinates (${SD_{x}}$, ${SD_{y}}$, ${SD_{z}}$).}
-\item{Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thickness's and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.}
+\item{Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thicknesses and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.}
 \item{Glass type factor (GTF) - A multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions.}
 \item{Aspect ratio (AR) - The ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5.}
 \item{Probability of breakage (${P_{b}}$) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000.}
@@ -302,7 +302,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \label{Sec:PhysSyst}
 The physical system of GlassBR, as shown in Figure~\ref{Figure:physSystImage}, includes the following elements:
 \begin{itemize}
-\item[PS1:]Glass slab
+\item[PS1:]The glass slab.
 \item[PS2:]The point of explosion. Where the bomb, or any kind of man-made explosion, is located. The stand off distance is the distance between the point of explosion and the glass.
 \end{itemize}
 \begin{figure}
@@ -337,16 +337,16 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:standardValuesA}:]The values provided in Section~\ref{Sec:AuxConstants} are assumed for the duration of load (${t_{d}}$), and the material properties of $m$, $k$, and $E$.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:glassLiteA}:]Glass under consideration is assumed to be a single lite. Hence the value of LSF is equal to 1 for all calculations in GlassBR.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:glassLiteA}:]Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:bndryConditionsA}:]Boundary conditions for the glass slab is assumed to be 4-sided support for calculations.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:bndryConditionsA}:]Boundary conditions for the glass slab are assumed to be 4-sided support for calculations.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:responseTyA}:]The response type considered in GlassBR is flexural.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:ldfConstantA}:]With reference to A\ref{A:standardValuesA} the value of load duration factor ($LDF$) is a constant in GlassBR. It is calculated by the equation: $LDF=\left(\frac{{t_{d}}}{60}\right)^{\frac{m}{16}}$. Using this, $LDF=0.27$.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:ldfConstantA}:]With reference to A\ref{A:standardValuesA}, the value of load duration factor ($LDF$) is a constant in GlassBR. It is calculated by the equation: $LDF=\left(\frac{{t_{d}}}{60}\right)^{\frac{m}{16}}$. Using this, $LDF=0.27$.
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -552,7 +552,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & $a$, $b$ are dimensions of the plate, where ($a>b$).
         $t$ is the true thickness, which is based on the nominal thicknesses as shown in DD2.
-        ${\hat{q}_{tol}}$ is the tolerable pressure defined in DD8.
+        ${\hat{q}_{tol}}$ is the tolerable load defined in DD8.
 \\ \midrule \\
 Source & 
 \\ \midrule \\
@@ -652,7 +652,7 @@ Description & \begin{symbDescription}
               \item{$b$ is the plate width (short dimension) (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${\hat{q}_{tol}}$ is the tolerable pressure which is obtained from Figure 7 using ${J_{tol}}$ and aspect ratio ($AR=\frac{a}{b}$) as parameters using interpolation. Calculation of ${J_{tol}}$ is defined in DD9.
+Notes & ${\hat{q}_{tol}}$ is the tolerable load which is obtained from Figure 7 using ${J_{tol}}$ and aspect ratio ($AR=\frac{a}{b}$) as parameters using interpolation. Calculation of ${J_{tol}}$ is defined in DD9.
 \\ \midrule \\
 Source & 
 \\ \midrule \\

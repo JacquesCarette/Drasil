@@ -184,13 +184,13 @@ hMin = (ch nom_thick +:+ S "is a function that maps from the nominal thickness"
   +:+ sParen (ch act_thick) +:+. S "to the minimum thickness")
 
 qHtTlExtra :: Sentence
-qHtTlExtra = (ch tolLoad +:+ S "is the tolerable pressure which is obtained from Figure 7 using" 
+qHtTlExtra = (ch tolLoad +:+ S "is the tolerable load which is obtained from Figure 7 using" 
   +:+ ch sdf_tol `sAnd` phrase aspectR +:+ sParen (E $ aspectRWithEqn^.equat) +:+
   S "as" +:+ plural parameter +:+. S "using interpolation" +:+ titleize calculation +:+
   S "of" +:+ ch sdf_tol +:+. S "is defined in DD9")
 
 qHtTlTolRef :: Sentence
-qHtTlTolRef = (ch tolLoad +:+. S "is the tolerable pressure defined in DD8")
+qHtTlTolRef = (ch tolLoad +:+. S "is the tolerable load defined in DD8")
 
 qRef :: Sentence
 qRef = (ch demand +:+. S "is the 3 second equivalent pressure, as given in IM3")

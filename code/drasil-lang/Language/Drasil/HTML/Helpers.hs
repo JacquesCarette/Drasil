@@ -1,6 +1,6 @@
 module Language.Drasil.HTML.Helpers where
 
-import Text.PrettyPrint
+import Text.PrettyPrint (Doc, text, render, empty, ($$), (<>), vcat, hcat)
 import Data.List (intersperse)
 
 import Language.Drasil.Document (Document, MaxWidthPercent)

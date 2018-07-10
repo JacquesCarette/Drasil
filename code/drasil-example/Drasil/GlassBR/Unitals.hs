@@ -271,7 +271,7 @@ blastResisGla = dcc "blastResisGla"    (nounPhraseSP "blast resistant glazing")
     "by explosions.")
 blastTy       = dcc "blastTy"     (nounPhraseSP "blast type")
   ("The blast type input includes parameters like weight of charge, TNT " ++
-    "equivalent factor and stand off distance from the point of explosion.")
+    "equivalent factor, and stand off distance from the point of explosion.")
 bomb          = dcc "bomb"        (nounPhraseSP "bomb") ("a container filled " ++
   "with a destructive substance designed to exlode on impact or via detonation")
 capacity      = dcc "capacity"    (nounPhraseSP "capacity")
@@ -320,7 +320,7 @@ loadResis     = cc lResistance
     "[1 (pg. 1, 53)], following A2 and A1 respectively." {-astm2009-})
 loadShareFac  = cc' lShareFac
   (foldlSent [S "A multiplying factor derived from the load sharing between the",
-  S "double glazing, of equal or different thickness's and types (including the",
+  S "double glazing, of equal or different thicknesses and types (including the",
   S "layered behaviour of", (getAcc lGlass), S "under long duration",
   S "loads), in a sealed", (getAcc iGlass), S "unit"])
 longDurLoad   = dcc "longDurLoad"        (nounPhraseSP "long duration load")

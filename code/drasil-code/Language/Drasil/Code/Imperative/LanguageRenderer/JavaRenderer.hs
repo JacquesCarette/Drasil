@@ -6,28 +6,28 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (
 
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST hiding (body,comment,bool,int,float,char)
-import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source, Header),
+import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source),
   DecDef(Dec, Def), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc,
   valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
   scopeDoc, retDoc, printDoc, patternDoc, paramDoc, paramListDoc, classDoc, objAccessDoc,
   objVarDoc, clsDecListDoc, clsDecDoc, litDoc, iterationDoc, funcDoc, funcAppDoc, exprDoc,
   exceptionDoc, declarationDoc, enumElementsDoc, conditionalDoc, callFuncParamList,
-  blockDoc, bodyDoc,binOpDoc, body, bottom, top, assignDoc, elseIf, ifBodyStart, blockEnd,
+  blockDoc, bodyDoc, binOpDoc, body, bottom, top, assignDoc, elseIf, ifBodyStart, blockEnd,
   printFunc, printFileFunc, printFileLnFunc, printLnFunc, stateType, blockStart, clsDec,
   listObj, package, list, iterInLabel, iterForEachLabel, inherit, inputFunc, include,
   includeScope, fileName, ext, dir, enumsEqualInts, commentStart, endStatement, bitArray,
-  renderCode, argsList, Options, ioDocD, StatementLocation(NoLoop, Loop), dot, inputDocD,
-  valueDocD, valueDocD', methodDocD, methodDocD', methodListDocD, paramDocD, paramListDocD,
-  objAccessDocD, iterationDocD, funcDocD, declarationDocD', assignDocD, stateTypeD, fileCode,
+  renderCode, argsList, Options, ioDocD, StatementLocation(NoLoop), dot, inputDocD,
+  valueDocD, methodDocD, methodListDocD, paramDocD, paramListDocD,
+  objAccessDocD, iterationDocD, funcDocD, assignDocD, stateTypeD, fileCode,
   functionListDocD, methodTypeDocD, unOpDocD, statementDocD, scopeDocD, stateDocD, stateListDocD,
   doubleSlash, retDocD, patternDocD, clsDecListDocD, clsDecDocD, funcAppDocD, enumElementsDocD,
-  exprDocD', litDocD, conditionalDocD'', callFuncParamListD, bodyDocD, blockDocD, binOpDocD,
-  classDec, namespaceD, includeD, fileNameD, cpplist, new, exprDocD'', declarationDocD,
+  litDocD, conditionalDocD'', callFuncParamListD, bodyDocD, blockDocD, binOpDocD,
+  classDec, includeD, fileNameD, new, exprDocD'', declarationDocD,
   typeOfLit, functionDocD, printDocD, objVarDocD, classDocD, forLabel, javalist)
 import Language.Drasil.Code.Imperative.Helpers (blank,angles,oneTab,vibmap)
 
 import Prelude hiding (break,print)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals, comma,
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals, 
   semi, vcat, lbrace, rbrace, doubleQuotes, render, colon)
 
 validListTypes :: [Label]

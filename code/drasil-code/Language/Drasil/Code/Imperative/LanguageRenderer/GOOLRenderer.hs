@@ -6,8 +6,8 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.GOOLRenderer (
 
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST hiding (body,comment,bool,int,float,char)
-import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source, Header),
-  DecDef(Dec, Def), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc,
+import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source),
+  DecDef(Dec), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc,
   valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
   scopeDoc, retDoc, printDoc, patternDoc, paramDoc, paramListDoc, classDoc, objAccessDoc,
   objVarDoc, clsDecListDoc, clsDecDoc, litDoc, iterationDoc, funcDoc, funcAppDoc, exprDoc,
@@ -16,14 +16,10 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   printFunc, printFileFunc, printFileLnFunc, printLnFunc, stateType, blockStart, clsDec,
   listObj, package, list, iterInLabel, iterForEachLabel, inherit, inputFunc, include,
   includeScope, fileName, ext, dir, enumsEqualInts, commentStart, endStatement, bitArray,
-  renderCode, argsList, Options, ioDocD, StatementLocation(NoLoop, Loop), dot, inputDocD,
-  valueDocD, valueDocD', methodDocD, methodDocD', methodListDocD, paramDocD, paramListDocD,
-  objAccessDocD, iterationDocD, funcDocD, declarationDocD', assignDocD, stateTypeD, fileCode,
-  functionListDocD, methodTypeDocD, unOpDocD, statementDocD, scopeDocD, stateDocD, stateListDocD,
-  doubleSlash, retDocD, patternDocD, clsDecListDocD, clsDecDocD, funcAppDocD, enumElementsDocD,
-  exprDocD', litDocD, conditionalDocD'', callFuncParamListD, bodyDocD, blockDocD, binOpDocD,
-  classDec, namespaceD, includeD, fileNameD, cpplist, complexDocD, conditionalDocD, functionDocD,
-  hsModule)
+  renderCode, argsList, Options, ioDocD, StatementLocation(NoLoop), inputDocD,
+  valueDocD, iterationDocD, fileCode, functionListDocD, statementDocD, 
+  retDocD, patternDocD, includeD, fileNameD, complexDocD, 
+  conditionalDocD, functionDocD, hsModule)
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,oneTabbed,
                             doubleQuotedText,verticalComma,himap,vibcat,vibmap)
 

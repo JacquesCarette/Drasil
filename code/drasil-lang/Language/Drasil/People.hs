@@ -24,8 +24,8 @@ data Person = Person { _given :: String
 
 comparePeople :: [Person] -> [Person] -> Maybe Ordering
 comparePeople [] [] = Nothing
-comparePeople _  [] = Nothing
-comparePeople []  _ = Nothing
+comparePeople _  [] = Just $ GT -- this makes sure that if the authors are the same 
+comparePeople []  _ = Just $ LT -- up to a point, the citation with more goes last
 comparePeople ((Person f1 l1 _ _):xs) ((Person f2 l2 _ _):ys)
   | l1 /= l2  = Just $ l1 `compare` l2
   | f1 /= f2  = Just $ f1 `compare` f2

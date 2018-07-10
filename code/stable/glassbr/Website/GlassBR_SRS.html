@@ -236,7 +236,7 @@ m
 <em>is_safe1</em>
 </td>
 <td>
-True when calculated probability is less than tolerable probability
+Variable that is assigned true when calculated probability is less than tolerable probability
 </td>
 <td>
 
@@ -247,7 +247,7 @@ True when calculated probability is less than tolerable probability
 <em>is_safe2</em>
 </td>
 <td>
-True when load resistance (capacity) is greater than load (demand)
+Variable that is assigned true when load resistance (capacity) is greater than load (demand)
 </td>
 <td>
 
@@ -911,7 +911,7 @@ Use Case Table
 Individual Product Use Cases
 </h2>
 <p class="paragraph">
-The user provides the inputs to GlassBR for use within the analysis. There are two main classes of inputs: glass geometry and blast type. The glass geometry based inputs include the glass type and dimensions of the glass plane. The blast type input includes parameters like weight of charge, TNT equivalent factor and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage. GlassBR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (<em>P<sub>b</sub></em>) is less than the tolerable probability (<em>P<sub>btol</sub></em>) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
+The user provides the inputs to GlassBR for use within the analysis. There are two main classes of inputs: glass geometry and blast type. The glass geometry based inputs include the glass type and dimensions of the glass plane. The blast type input includes parameters like weight of charge, TNT equivalent factor and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage. GlassBR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (<em>P<sub>b</sub></em>) is less than the tolerable probability (<em>P<sub>btol</sub></em>) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
 </p>
 </div>
 </div>
@@ -1183,7 +1183,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>is_safe1</em> is the true when calculated probability is less than tolerable probability (Unitless)
+<em>is_safe1</em> is the variable that is assigned true when calculated probability is less than tolerable probability (Unitless)
 </li>
 <li>
 <em>P<sub>b</sub></em> is the probability of breakage (Unitless)
@@ -1257,7 +1257,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>is_safe2</em> is the true when load resistance (capacity) is greater than load (demand) (Unitless)
+<em>is_safe2</em> is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)
 </li>
 <li>
 <em>LR</em> is the load resistance (Unitless)
@@ -1405,6 +1405,25 @@ Description
 <em>J</em> is the stress distribution factor (Function) (Unitless)
 </li>
 </ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
+</p>
+<p class="paragraph">
+<em>t</em> is the true thickness, which is based on the nominal thicknesses as shown in DD2.
+</p>
+<p class="paragraph">
+<em>LDF</em> is the load duration factor as defined by DD3.
+</p>
+<p class="paragraph">
+<em>J</em> is the stress distribution factor (Function) , as defined in DD4.
+</p>
 </td>
 </tr>
 <tr>
@@ -1561,6 +1580,16 @@ Description
 </tr>
 <tr>
 <th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>t</em> is a function that maps from the nominal thickness (<em>h</em>) to the minimum thickness.
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Source
 </th>
 <td>
@@ -1654,6 +1683,22 @@ Description
 <em>b</em> is the plate width (short dimension) (m)
 </li>
 </ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>J</em> is the stress distribution factor (Function), which is obtained by interpolating from data shown in Figure 7.
+</p>
+<p class="paragraph">
+<em>q&#770;</em> is the dimensionless load defined in DD7.
+</p>
+<p class="paragraph">
+<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
+</p>
 </td>
 </tr>
 <tr>
@@ -1754,6 +1799,22 @@ Description
 <em>b</em> is the plate width (short dimension) (m)
 </li>
 </ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
+</p>
+<p class="paragraph">
+<em>t</em> is the true thickness, which is based on the nominal thicknesses as shown in DD2.
+</p>
+<p class="paragraph">
+<em>q&#770;<sub>tol</sub></em> is the tolerable pressure defined in DD8.
+</p>
 </td>
 </tr>
 <tr>
@@ -1961,6 +2022,25 @@ Description
 </tr>
 <tr>
 <th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>q</em> is the 3 second equivalent pressure, as given in IM3.
+</p>
+<p class="paragraph">
+<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
+</p>
+<p class="paragraph">
+<em>t</em> is the true thickness, which is based on the nominal thicknesses as shown in DD2.
+</p>
+<p class="paragraph">
+<em>GTF</em> is the glass type factor, as given by DD6.
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Source
 </th>
 <td>
@@ -2054,6 +2134,23 @@ Description
 <em>b</em> is the plate width (short dimension) (m)
 </li>
 </ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>q&#770;<sub>tol</sub></em> is the tolerable pressure which is obtained from Figure 7 using <em>J<sub>tol</sub></em> and aspect ratio (<em>AR = <div class="fraction">
+<span class="fup">
+a
+</span>
+<span class="fdn">
+b
+</span>
+</div></em>) as parameters using interpolation. Calculation of <em>J<sub>tol</sub></em> is defined in DD9.
+</p>
 </td>
 </tr>
 <tr>
@@ -2170,6 +2267,28 @@ Description
 <em>LDF</em> is the load duration factor (Unitless)
 </li>
 </ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>J<sub>tol</sub></em>  is calculated with reference to  <em>P<sub>btol</sub></em>.
+</p>
+<p class="paragraph">
+<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
+</p>
+<p class="paragraph">
+<em>t</em> is the true thickness, which is based on the nominal thicknesses as shown in DD2.
+</p>
+<p class="paragraph">
+<em>LDF</em> is the load duration factor as defined by DD3.
+</p>
+<p class="paragraph">
+<em>P<sub>btol</sub></em> is the tolerable probability entered by the user.
+</p>
 </td>
 </tr>
 <tr>

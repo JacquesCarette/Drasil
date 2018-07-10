@@ -89,9 +89,9 @@ $GTF$ & Glass type factor &
 \\
 $h$ & Actual thickness & m
 \\
-$is\_safe1$ & True when calculated probability is less than tolerable probability & 
+$is\_safe1$ & Variable that is assigned true when calculated probability is less than tolerable probability & 
 \\
-$is\_safe2$ & True when load resistance (capacity) is greater than load (demand) & 
+$is\_safe2$ & Variable that is assigned true when load resistance (capacity) is greater than load (demand) & 
 \\
 $J$ & Stress distribution factor (Function) & 
 \\
@@ -260,7 +260,7 @@ GlassBR & Whether or not the glass slab is safe for the calculated load and supp
 \end{longtabu}
 \subsection{Individual Product Use Cases}
 \label{Sec:IndividualProdUC}
-The user provides the inputs to GlassBR for use within the analysis. There are two main classes of inputs: glass geometry and blast type. The glass geometry based inputs include the glass type and dimensions of the glass plane. The blast type input includes parameters like weight of charge, TNT equivalent factor and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage. GlassBR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (${P_{b}}$) is less than the tolerable probability (${P_{btol}}$) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
+The user provides the inputs to GlassBR for use within the analysis. There are two main classes of inputs: glass geometry and blast type. The glass geometry based inputs include the glass type and dimensions of the glass plane. The blast type input includes parameters like weight of charge, TNT equivalent factor and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage. GlassBR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (${P_{b}}$) is less than the tolerable probability (${P_{btol}}$) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used for the GlassBR program.
@@ -365,7 +365,7 @@ Equation & \begin{dmath}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$is\_safe1$ is the true when calculated probability is less than tolerable probability (Unitless)}
+              \item{$is\_safe1$ is the variable that is assigned true when calculated probability is less than tolerable probability (Unitless)}
               \item{${P_{b}}$ is the probability of breakage (Unitless)}
               \item{${P_{btol}}$ is the tolerable probability of breakage (Unitless)}
               \end{symbDescription}
@@ -391,7 +391,7 @@ Equation & \begin{dmath}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$is\_safe2$ is the true when load resistance (capacity) is greater than load (demand) (Unitless)}
+              \item{$is\_safe2$ is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)}
               \item{$LR$ is the load resistance (Unitless)}
               \item{$q$ is the applied load (demand) (kPa)}
               \end{symbDescription}
@@ -438,6 +438,11 @@ Description & \begin{symbDescription}
               \item{$J$ is the stress distribution factor (Function) (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
+Notes & $a$, $b$ are dimensions of the plate, where ($a>b$).
+        $t$ is the true thickness, which is based on the nominal thicknesses as shown in DD2.
+        $LDF$ is the load duration factor as defined by DD3.
+        $J$ is the stress distribution factor (Function) , as defined in DD4.
+\\ \midrule \\
 Source & [4]
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
@@ -478,6 +483,8 @@ Description & \begin{symbDescription}
               \item{$t$ is the nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ (mm)}
               \end{symbDescription}
 \\ \midrule \\
+Notes & $t$ is a function that maps from the nominal thickness ($h$) to the minimum thickness.
+\\ \midrule \\
 Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
@@ -507,6 +514,10 @@ Description & \begin{symbDescription}
               \item{$a$ is the plate length (long dimension) (m)}
               \item{$b$ is the plate width (short dimension) (m)}
               \end{symbDescription}
+\\ \midrule \\
+Notes & $J$ is the stress distribution factor (Function), which is obtained by interpolating from data shown in Figure 7.
+        $\hat{q}$ is the dimensionless load defined in DD7.
+        $a$, $b$ are dimensions of the plate, where ($a>b$).
 \\ \midrule \\
 Source & 
 \\ \midrule \\
@@ -538,6 +549,10 @@ Description & \begin{symbDescription}
               \item{$a$ is the plate length (long dimension) (m)}
               \item{$b$ is the plate width (short dimension) (m)}
               \end{symbDescription}
+\\ \midrule \\
+Notes & $a$, $b$ are dimensions of the plate, where ($a>b$).
+        $t$ is the true thickness, which is based on the nominal thicknesses as shown in DD2.
+        ${\hat{q}_{tol}}$ is the tolerable pressure defined in DD8.
 \\ \midrule \\
 Source & 
 \\ \midrule \\
@@ -602,6 +617,11 @@ Description & \begin{symbDescription}
               \item{$GTF$ is the glass type factor (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
+Notes & $q$ is the 3 second equivalent pressure, as given in IM3.
+        $a$, $b$ are dimensions of the plate, where ($a>b$).
+        $t$ is the true thickness, which is based on the nominal thicknesses as shown in DD2.
+        $GTF$ is the glass type factor, as given by DD6.
+\\ \midrule \\
 Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
@@ -631,6 +651,8 @@ Description & \begin{symbDescription}
               \item{$a$ is the plate length (long dimension) (m)}
               \item{$b$ is the plate width (short dimension) (m)}
               \end{symbDescription}
+\\ \midrule \\
+Notes & ${\hat{q}_{tol}}$ is the tolerable pressure which is obtained from Figure 7 using ${J_{tol}}$ and aspect ratio ($AR=\frac{a}{b}$) as parameters using interpolation. Calculation of ${J_{tol}}$ is defined in DD9.
 \\ \midrule \\
 Source & 
 \\ \midrule \\
@@ -665,6 +687,12 @@ Description & \begin{symbDescription}
               \item{$h$ is the actual thickness (m)}
               \item{$LDF$ is the load duration factor (Unitless)}
               \end{symbDescription}
+\\ \midrule \\
+Notes & ${J_{tol}}$  is calculated with reference to  ${P_{btol}}$.
+        $a$, $b$ are dimensions of the plate, where ($a>b$).
+        $t$ is the true thickness, which is based on the nominal thicknesses as shown in DD2.
+        $LDF$ is the load duration factor as defined by DD3.
+        ${P_{btol}}$ is the tolerable probability entered by the user.
 \\ \midrule \\
 Source & 
 \\ \midrule \\

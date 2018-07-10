@@ -1,0 +1,290 @@
+Name:		drasil-example
+Version:	0.1.3
+Cabal-Version:  >= 1.18
+Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
+build-type:     Simple
+Synopsis:	A framework for code and document generation for scientific software - Example SubPackage
+
+executable tiny
+  hs-source-dirs: .
+  main-is: Drasil/HGHC/Main.hs
+  other-modules:
+      Drasil.HGHC.HGHC
+    , Drasil.HGHC.HeatTransfer
+    , Drasil.Sections.TableOfSymbols
+    , Drasil.Sections.ReferenceMaterial
+    , Drasil.Sections.TableOfAbbAndAcronyms
+    , Drasil.Sections.ScopeOfTheProject
+    , Drasil.Sections.TraceabilityMandGs
+    , Drasil.Sections.Requirements
+    , Drasil.Sections.GeneralSystDesc
+    , Drasil.DocumentLanguage
+    , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers
+    , Drasil.DocumentLanguage.TraceabilityMatrix
+    , Drasil.Sections.AuxiliaryConstants
+    , Drasil.Sections.TableOfUnits
+    , Drasil.Sections.SpecificSystemDescription
+    , Drasil.Sections.SolutionCharacterSpec
+    , Drasil.Sections.Stakeholders
+    , Drasil.SRS
+    , Drasil.Sections.Introduction
+  Build-Depends:
+    base >= 4.7,
+    lens >= 4.12,
+    containers >= 0.5.5.1,
+    pretty >= 1.1.1.1,
+    mtl >= 2.2.1,
+    directory >= 1.2.6.2,
+    split >= 0.2.3.1,
+    drasil-lang >= 0.1.2,
+    drasil-data >= 0.1.1,
+    drasil-code >= 0.1.1
+  default-language: Haskell2010
+  ghc-options:      -Wall -O2
+
+executable nopcm
+  hs-source-dirs: .
+  main-is: Drasil/NoPCM/Main.hs
+  other-modules:
+      Drasil.NoPCM.Body
+    , Drasil.NoPCM.Unitals
+    , Drasil.NoPCM.Definitions
+    , Drasil.NoPCM.DataDesc
+    , Drasil.NoPCM.IMods
+    , Drasil.NoPCM.GenDefs
+    , Drasil.SWHS.Assumptions
+    , Drasil.SWHS.Body
+    , Drasil.SWHS.Concepts
+    , Drasil.SWHS.DataDefs
+    , Drasil.SWHS.DataDesc
+    , Drasil.SWHS.GenDefs
+    , Drasil.SWHS.Changes
+    , Drasil.SWHS.References
+    , Drasil.SWHS.Requirements
+    , Drasil.SWHS.TMods
+    , Drasil.SWHS.IMods
+    , Drasil.SWHS.Unitals
+    , Drasil.Sections.TraceabilityMandGs
+    , Drasil.Sections.ReferenceMaterial
+    , Drasil.Sections.AuxiliaryConstants
+    , Drasil.Sections.Stakeholders
+    , Drasil.Sections.ScopeOfTheProject
+    , Drasil.SRS
+    , Drasil.Sections.TableOfAbbAndAcronyms
+    , Drasil.DocumentLanguage
+    , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers
+    , Drasil.DocumentLanguage.TraceabilityMatrix
+    , Drasil.Sections.SpecificSystemDescription
+    , Drasil.Sections.Introduction
+    , Drasil.Sections.Requirements
+    , Drasil.Sections.GeneralSystDesc
+    , Drasil.Sections.TableOfSymbols
+    , Drasil.Sections.TableOfUnits
+  Build-Depends:
+    base >= 4.7,
+    lens >= 4.12,
+    containers >= 0.5.5.1,
+    pretty >= 1.1.1.1,
+    mtl >= 2.2.1,
+    directory >= 1.2.6.2,
+    split >= 0.2.3.1,
+    drasil-lang >= 0.1.1,
+    drasil-data >= 0.1.1,
+    drasil-code >= 0.1.1
+  default-language: Haskell2010
+  ghc-options:      -Wall -O2
+
+executable ssp
+  hs-source-dirs: .
+  main-is: Drasil/SSP/Main.hs
+  other-modules:
+      Drasil.Sections.ReferenceMaterial
+    , Drasil.SRS
+    , Drasil.SSP.Assumptions
+    , Drasil.SSP.Body
+    , Drasil.SSP.Changes
+    , Drasil.SSP.DataDefs
+    , Drasil.SSP.DataDesc
+    , Drasil.SSP.Defs
+    , Drasil.SSP.GenDefs
+    , Drasil.SSP.Goals
+    , Drasil.SSP.IMods
+    , Drasil.SSP.References
+    , Drasil.SSP.Requirements
+    , Drasil.SSP.TMods
+    , Drasil.SSP.Unitals
+    , Drasil.SSP.BasicExprs
+    , Drasil.Sections.TableOfAbbAndAcronyms
+    , Drasil.Sections.TableOfSymbols
+    , Drasil.Sections.Stakeholders
+    , Drasil.Sections.ScopeOfTheProject
+    , Drasil.Sections.TraceabilityMandGs
+    , Drasil.DocumentLanguage
+    , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers
+    , Drasil.DocumentLanguage.TraceabilityMatrix
+    , Drasil.Sections.TableOfUnits
+    , Drasil.Sections.AuxiliaryConstants
+    , Drasil.Sections.SpecificSystemDescription
+    , Drasil.Sections.Introduction
+    , Drasil.Sections.Requirements
+    , Drasil.Sections.GeneralSystDesc
+  Build-Depends:
+    base >= 4.7,
+    lens >= 4.12,
+    containers >= 0.5.5.1,
+    pretty >= 1.1.1.1,
+    mtl >= 2.2.1,
+    directory >= 1.2.6.2,
+    split >= 0.2.3.1,
+    drasil-lang >= 0.1.1,
+    drasil-data >= 0.1.1,
+    drasil-code >= 0.1.1
+  default-language: Haskell2010
+  ghc-options:      -Wall
+
+executable glassbr
+  hs-source-dirs: .
+  main-is: Drasil/GlassBR/Main.hs
+  other-modules:
+      Drasil.DocumentLanguage
+    , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers
+    , Drasil.DocumentLanguage.TraceabilityMatrix
+    , Drasil.GlassBR.Body
+    , Drasil.GlassBR.Changes
+    , Drasil.GlassBR.Concepts
+    , Drasil.GlassBR.Unitals
+    , Drasil.GlassBR.TMods
+    , Drasil.GlassBR.IMods
+    , Drasil.GlassBR.DataDefs
+    , Drasil.GlassBR.References
+    , Drasil.GlassBR.Units
+    , Drasil.GlassBR.ModuleDefs
+    , Drasil.GlassBR.Symbols
+    , Drasil.GlassBR.Assumptions
+    , Drasil.Sections.SpecificSystemDescription
+    , Drasil.Sections.Introduction
+    , Drasil.Sections.Requirements
+    , Drasil.Sections.GeneralSystDesc
+    , Drasil.Sections.TraceabilityMandGs
+    , Drasil.Sections.AuxiliaryConstants
+    , Drasil.Sections.Stakeholders
+    , Drasil.Sections.ScopeOfTheProject
+    , Drasil.Sections.ReferenceMaterial
+    , Drasil.SRS
+    , Drasil.Sections.TableOfAbbAndAcronyms
+    , Drasil.Sections.TableOfSymbols
+    , Drasil.Sections.TableOfUnits
+  Build-Depends:
+    base >= 4.7,
+    lens >= 4.12,
+    containers >= 0.5.5.1,
+    pretty >= 1.1.1.1,
+    mtl >= 2.2.1,
+    directory >= 1.2.6.2,
+    split >= 0.2.3.1,
+    drasil-lang >= 0.1.1,
+    drasil-data >= 0.1.1,
+    drasil-code >= 0.1.1    
+  default-language: Haskell2010
+  ghc-options:      -Wall
+
+executable chipmunkdocs
+  hs-source-dirs: .
+  main-is: Drasil/GamePhysics/Main.hs
+  other-modules:
+      Drasil.DocumentLanguage
+    , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers
+    , Drasil.DocumentLanguage.TraceabilityMatrix
+    , Drasil.GamePhysics.Body
+    , Drasil.GamePhysics.Changes
+    , Drasil.GamePhysics.Concepts
+    , Drasil.GamePhysics.DataDefs
+    , Drasil.GamePhysics.TMods
+    , Drasil.GamePhysics.Unitals
+    , Drasil.GamePhysics.IMods
+    , Drasil.GamePhysics.References
+    , Drasil.Sections.SpecificSystemDescription
+    , Drasil.Sections.SolutionCharacterSpec
+    , Drasil.Sections.GeneralSystDesc
+    , Drasil.Sections.Introduction
+    , Drasil.Sections.Requirements
+    , Drasil.Sections.TraceabilityMandGs
+    , Drasil.Sections.ReferenceMaterial
+    , Drasil.Sections.AuxiliaryConstants
+    , Drasil.Sections.Stakeholders
+    , Drasil.Sections.ScopeOfTheProject
+    , Drasil.SRS
+    , Drasil.Sections.TableOfAbbAndAcronyms
+    , Drasil.Sections.TableOfSymbols
+    , Drasil.Sections.TableOfUnits
+  Build-Depends:
+    base >= 4.7,
+    lens >= 4.12,
+    containers >= 0.5.5.1,
+    pretty >= 1.1.1.1,
+    mtl >= 2.2.1,
+    directory >= 1.2.6.2,
+    split >= 0.2.3.1,
+    drasil-lang >= 0.1.1,
+    drasil-data >= 0.1.1,
+    drasil-code >= 0.1.1
+  default-language: Haskell2010
+  ghc-options:      -Wall
+
+executable swhs
+  hs-source-dirs: .
+  main-is: Drasil/SWHS/Main.hs
+  other-modules:
+      Drasil.DocumentLanguage
+    , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers
+    , Drasil.DocumentLanguage.TraceabilityMatrix
+    , Drasil.Sections.SpecificSystemDescription
+    , Drasil.Sections.Introduction
+    , Drasil.Sections.Requirements
+    , Drasil.Sections.GeneralSystDesc
+    , Drasil.Sections.TraceabilityMandGs
+    , Drasil.Sections.ReferenceMaterial
+    , Drasil.Sections.ScopeOfTheProject
+    , Drasil.SRS
+    , Drasil.SWHS.Assumptions
+    , Drasil.SWHS.Body
+    , Drasil.SWHS.Concepts
+    , Drasil.SWHS.DataDefs
+    , Drasil.SWHS.DataDesc
+    , Drasil.SWHS.GenDefs
+    , Drasil.SWHS.Generate
+    , Drasil.SWHS.Changes
+    , Drasil.SWHS.References
+    , Drasil.SWHS.Requirements
+    , Drasil.SWHS.TMods
+    , Drasil.SWHS.IMods
+    , Drasil.SWHS.Unitals
+    , Drasil.Sections.TableOfAbbAndAcronyms
+    , Drasil.Sections.TableOfSymbols
+    , Drasil.Sections.TableOfUnits
+    , Drasil.Sections.AuxiliaryConstants
+    , Drasil.Sections.Stakeholders
+  Build-Depends:
+    base >= 4.7,
+    lens >= 4.12,
+    containers >= 0.5.5.1,
+    pretty >= 1.1.1.1,
+    mtl >= 2.2.1,
+    directory >= 1.2.6.2,
+    split >= 0.2.3.1,
+    drasil-lang >= 0.1.1,
+    drasil-data >= 0.1.1,
+    drasil-code >= 0.1.1
+  default-language: Haskell2010
+  ghc-options:      -Wall
+
+source-repository head
+  type:     git
+  location: git://github.com/JacquesCarette/Drasil.git
+  subdir: code

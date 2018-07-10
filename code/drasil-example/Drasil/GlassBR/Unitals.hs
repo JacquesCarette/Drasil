@@ -14,10 +14,10 @@ import Data.Drasil.SentenceStructures (displayConstrntsAsSet, foldlSent,
   foldlsC, foldlOptions)
 import Data.Drasil.SI_Units (kilogram, kilopascal, metre, millimetre, pascal, 
   second)
-import Data.Drasil.Utils (getES)
 
 --FIXME: Many of the current terms can be separated into terms and defns?
-
+glassBRsymb :: [DefinedQuantityDict]
+glassBRsymb = map dqdWr [plate_len, plate_width, char_weight, standOffDist]
 {--}
 
 glassBRSymbolsWithDefns :: [UnitalChunk]
@@ -380,7 +380,7 @@ sdCalculation :: Relation
 sdCalculation = euclidean (map sy sdVector)
 
 sdVectorSent :: Sentence
-sdVectorSent = foldlsC (map (getES) sdVector)
+sdVectorSent = foldlsC (map (ch) sdVector)
 
 sdVector :: [UnitaryChunk]
 sdVector = [sdx, sdy, sdz]

@@ -47,7 +47,7 @@ type ReqMap = RefMap ReqChunk
 type ChangeMap = RefMap Change
 -- | Citation Database (bibliography information)
 type BibMap = RefMap Citation
--- | ConceptChunk Database
+-- | ConceptInstance Database
 type ConceptMap = RefMap ConceptInstance
 
 

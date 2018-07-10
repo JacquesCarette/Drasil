@@ -109,23 +109,19 @@ ${h_{C}}$ & Convective heat transfer coefficient between coil and water & $\frac
 \\
 ${H_{f}}$ & Specific latent heat of fusion & $\frac{\text{J}}{\text{kg}}$
 \\
+${h_{min}}$ & Minimum thickness of a sheet of PCM & m
+\\
 ${h_{P}}$ & Convective heat transfer coefficient between PCM and water & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\
 $L$ & Length of tank & m
+\\
+$m$ & Mass & kg
 \\
 ${m_{P}}$ & Mass of phase change material & kg
 \\
 ${m_{W}}$ & Mass of water & kg
 \\
-$m$ & Mass & kg
-\\
 $\mathbf{\hat{n}}$ & Unit outward normal vector for a surface & 
-\\
-$q$ & Heat flux & $\frac{\text{W}}{\text{m}^{2}}$
-\\
-$Q$ & Latent heat & J
-\\
-$\mathbf{q}$ & Thermal flux vector & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 ${q_{C}}$ & Heat flux into the water from the coil & $\frac{\text{W}}{\text{m}^{2}}$
 \\
@@ -135,11 +131,19 @@ ${q_{out}}$ & Heat flux output & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 ${q_{P}}$ & Heat flux into the PCM from water & $\frac{\text{W}}{\text{m}^{2}}$
 \\
+$\mathbf{q}$ & Thermal flux vector & $\frac{\text{W}}{\text{m}^{2}}$
+\\
+$Q$ & Latent heat & J
+\\
 ${Q_{P}}$ & Latent heat energy added to PCM & J
 \\
 $S$ & Surface & $\text{m}^{2}$
 \\
 $T$ & Temperature & ${}^{\circ}$C
+\\
+$t$ & Time & s
+\\
+$ΔT$ & Change in temperature & ${}^{\circ}$C
 \\
 ${{t_{melt}}^{final}}$ & Time at which melting of PCM ends & s
 \\
@@ -158,10 +162,6 @@ ${t_{final}}$ & Final time & s
 ${T_{init}}$ & Initial temperature & ${}^{\circ}$C
 \\
 ${T_{melt}}$ & Melting point temperature & ${}^{\circ}$C
-\\
-$ΔT$ & Change in temperature & ${}^{\circ}$C
-\\
-$t$ & Time & s
 \\
 ${T_{P}}$ & Temperature of the phase change material & ${}^{\circ}$C
 \\
@@ -192,6 +192,8 @@ ${{τ_{P}}^{S}}$ & ODE parameter for solid PCM & s
 ${τ_{W}}$ & ODE parameter for water & s
 \\
 $ϕ$ & Melt fraction & 
+\\
+$∇$ & Gradient & 
 \\
 \bottomrule
 \label{Table:ToS}
@@ -1024,8 +1026,6 @@ Symbol & Description & Value & Unit
 ${L_{min}}$ & minimum length of tank & $0.1$ & m
 \\
 ${L_{max}}$ & maximum length of tank & $50$ & m
-\\
-${h_{min}}$ & minimum convective heat transfer coefficient & $0.001$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\
 ${{ρ_{P}}^{min}}$ & minimum density of PCM & $500$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \\

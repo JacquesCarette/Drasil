@@ -153,6 +153,17 @@ m<sup>2</sup>
 </tr>
 <tr>
 <td>
+<em>C<sup>L</sup></em>
+</td>
+<td>
+Specific heat capacity of a liquid
+</td>
+<td>
+J/(kg&sdot;&deg;C)
+</td>
+</tr>
+<tr>
+<td>
 <em>C</em>
 </td>
 <td>
@@ -263,32 +274,10 @@ kg
 </tr>
 <tr>
 <td>
-<em><b>n&#770;</b></em>
+<em>q</em>
 </td>
 <td>
-Normal Vector
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-<em>q<sub>C</sub></em>
-</td>
-<td>
-Heat flux into the water from the coil
-</td>
-<td>
-W/m<sup>2</sup>
-</td>
-</tr>
-<tr>
-<td>
-<em><b>q</b></em>
-</td>
-<td>
-Thermal flux vector
+Heat flux
 </td>
 <td>
 W/m<sup>2</sup>
@@ -318,13 +307,24 @@ W/m<sup>2</sup>
 </tr>
 <tr>
 <td>
-<em>S</em>
+<em><b>q</b></em>
 </td>
 <td>
-Surface
+Thermal flux vector
 </td>
 <td>
-m<sup>2</sup>
+W/m<sup>2</sup>
+</td>
+</tr>
+<tr>
+<td>
+<em>q<sub>C</sub></em>
+</td>
+<td>
+Heat flux into the water from the coil
+</td>
+<td>
+W/m<sup>2</sup>
 </td>
 </tr>
 <tr>
@@ -336,17 +336,6 @@ Temperature
 </td>
 <td>
 &deg;C
-</td>
-</tr>
-<tr>
-<td>
-<em>t</em>
-</td>
-<td>
-Time
-</td>
-<td>
-s
 </td>
 </tr>
 <tr>
@@ -384,6 +373,17 @@ Temperature of the environment
 </tr>
 <tr>
 <td>
+<em>t</em>
+</td>
+<td>
+Time
+</td>
+<td>
+s
+</td>
+</tr>
+<tr>
+<td>
 <em>t<sub>final</sub></em>
 </td>
 <td>
@@ -417,10 +417,10 @@ Temperature of the water
 </tr>
 <tr>
 <td>
-<em>V</em>
+<em>V<sub>tank</sub></em>
 </td>
 <td>
-Volume
+Volume of the cylindrical tank
 </td>
 <td>
 m<sup>3</sup>
@@ -428,10 +428,10 @@ m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>V<sub>tank</sub></em>
+<em>V</em>
 </td>
 <td>
-Volume of the cylindrical tank
+Volume
 </td>
 <td>
 m<sup>3</sup>
@@ -472,24 +472,13 @@ kg/m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>τ<sub>W</sub></em>
+<em>τ</em>
 </td>
 <td>
-ODE parameter for water
+Dummy variable for integration over time
 </td>
 <td>
 s
-</td>
-</tr>
-<tr>
-<td>
-<em>∇</em>
-</td>
-<td>
-Gradient
-</td>
-<td>
-
 </td>
 </tr>
 </table>
@@ -2120,27 +2109,6 @@ Tank-Lose-Heat: <a href=#A:assump15>assump15</a> - Any real tank cannot be perfe
 </ul>
 </div>
 </div>
-<div id="Sec:UCs">
-<div class="section">
-<h1>
-Unlikely Changes
-</h1>
-<ul class="hide-list-style">
-<li>
-<div id="UC:unlikeChg1">
-Water-Fixed-States: <a href=#A:assump14>assump14</a> - It is unlikely for the change of water from liquid to a solid, or from liquid to gas to be considered.
-</div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="UC:unlikeChg2">
-No-Internal-Heat-Generation: <a href=#A:assump12>assump12</a> - Is used for the derivations of IM1 (Hack: need Label to fix).
-</div>
-</li>
-</ul>
-</div>
-</div>
 <div id="Sec:TraceMatrices">
 <div class="section">
 <h1>
@@ -3206,6 +3174,20 @@ maximum length of tank
 </td>
 <td>
 m
+</td>
+</tr>
+<tr>
+<td>
+<em>h<sub>min</sub></em>
+</td>
+<td>
+minimum convective heat transfer coefficient
+</td>
+<td>
+<em>0.001</em>
+</td>
+<td>
+W/(m<sup>2</sup>&sdot;&deg;C)
 </td>
 </tr>
 <tr>

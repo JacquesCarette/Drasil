@@ -7,7 +7,6 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{unicode-math}
-\usepackage{enumitem}
 \usepackage{tabu}
 \usepackage{longtable}
 \usepackage{booktabs}
@@ -16,8 +15,6 @@
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
-\newlist{symbDescription}{description}{1}
-\setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \setmathfont{Latin Modern Math}
 \global\tabulinesep=1mm
 \newcounter{assumpnum}
@@ -81,13 +78,13 @@ ${C2_{i}}$ & Interslice Shear Force Function: the shear force at the interslice 
 \\
 $E$ & Elastic Modulus: The ratio of the stress exerted on a body to the resulting strain. & Pa
 \\
-$f$ & Scaling Function: magnitude of interslice forces as a function of the x coordinatefor interslice index i; can be constant or a half-sine & 
+$F$ & Force: An interaction that tends to produce change in the motion of an object & N
 \\
 ${F_{x}}$ & X-Component of the Net Force:  & N
 \\
 ${F_{y}}$ & Y-Component of the Net Force:  & N
 \\
-$F$ & Force: An interaction that tends to produce change in the motion of an object & N
+$f$ & Scaling Function: magnitude of interslice forces as a function of the x coordinatefor interslice index i; can be constant or a half-sine & 
 \\
 $FS$ & Factor of Safety: The global stability of a surface in a slope & 
 \\
@@ -97,19 +94,19 @@ ${FS_{min}}$ & Minimum Factor of Safety: The minimum factor of safety &
 \\
 $G$ & Interslice Normal Force: exerted between adjacent slices for interslice index i & N
 \\
-$ΔH$ & Difference Between Interslice Forces: exerted in the x-ordinate direction between adjacent slices for interslice index i & N
-\\
 $H$ & Interslice Water Force: exerted in the x-ordinate direction between adjacent slices for interslice index i & N
+\\
+$ΔH$ & Difference Between Interslice Forces: exerted in the x-ordinate direction between adjacent slices for interslice index i & N
 \\
 $h$ & Midpoint Height: distance from the slip base to the slope surface in a vertical line from the midpoint of the slice for slice index i & m
 \\
 $i$ & Index: used to show a quantity applies to only one slice & 
 \\
-$K$ & Stiffness: The extent a body resists strain. & $\frac{\text{N}}{\text{m}}$
-\\
 ${K_{bA}}$ & Effective Base Stiffness a: for rotated coordinates of a slice base surface, for slice index i & $\frac{\text{Pa}}{\text{m}}$
 \\
 ${K_{bB}}$ & Effective Base Stiffness a: for rotated coordinates of a slice base surface, for slice index i & $\frac{\text{Pa}}{\text{m}}$
+\\
+$K$ & Stiffness: The extent a body resists strain. & $\frac{\text{N}}{\text{m}}$
 \\
 ${K_{bn}}$ & Normal Stiffness: for a slice base surface, without length adjustment for slice index i & $\frac{\text{Pa}}{\text{m}}$
 \\
@@ -117,23 +114,27 @@ ${K_{bt}}$ & Shear Stiffness: for a slice base surface, without length adjustmen
 \\
 ${K_{c}}$ & Earthquake Load Factor: proportionality factor of force that weight pushes outwards; caused by seismic earth movements & 
 \\
+${K_{no}}$ & Normal Stiffness: residual strength & $\frac{\text{Pa}}{\text{m}}$
+\\
 ${K_{sn}}$ & Normal Stiffness: for an interslice surface, without length adjustment for interslice index i & $\frac{\text{Pa}}{\text{m}}$
 \\
 ${K_{st}}$ & Shear Stiffness: for interslice surface, without length adjustment for interslice index i & $\frac{\text{Pa}}{\text{m}}$
 \\
-$M$ & Moment: a measure of the tendency of a body to rotate about a specific point or axis & Nm
+${K_{tr}}$ & Shear Stiffness: residual strength & $\frac{\text{Pa}}{\text{m}}$
 \\
-$n$ & Number of Slices: the slip mass has been divided into & 
+$M$ & Moment: a measure of the tendency of a body to rotate about a specific point or axis & Nm
 \\
 $N$ & Normal Force: total reactive force for a soil surface subject to a body resting on it & N
 \\
 $N'$ & Effective Normal Force: for a soil surface, subtracting pore water reactive force from total reactive force & N
 \\
+$n$ & Number of Slices: the slip mass has been divided into & 
+\\
 $N*$ & Effective Normal Force: for a soil surface, without the influence of interslice forces & N
 \\
-$P$ & Resistive Shear Force: Mohr Coulomb frictional force that describes the limit of mobilized shear force the slice i can withstand before failure & N
-\\
 $p$ & Pressure: A force exerted over an area & Pa
+\\
+$P$ & Resistive Shear Force: Mohr Coulomb frictional force that describes the limit of mobilized shear force the slice i can withstand before failure & N
 \\
 $Q$ & Imposed Surface Load: a downward force acting into the surface from midpoint of slice i & N
 \\
@@ -161,19 +162,19 @@ $W$ & Weight: downward force caused by gravity on slice i & N
 \\
 $x$ & X Ordinate: refers to either slice i midpoint, or slice interface i & m
 \\
-$X$ & Interslice Shear Force: exerted between adjacent slices for interslice index i & N
-\\
 ${x_{slip}}$ & X Ordinate: distance of the slip surface at i, refers to either slice i midpoint, or slice interface i & m
 \\
 ${x_{us}}$ & X Ordinate: distance of the edge of the slope at i, refers to either slice i midpoint, or slice interface i & m
 \\
-$y$ & Y Ordinate: refers to either slice i midpoint, or slice interface i & m
+$X$ & Interslice Shear Force: exerted between adjacent slices for interslice index i & N
 \\
 ${y_{slip}}$ & Y Ordinate: height of the slip surface at i, refers to either slice i midpoint, or slice interface i & m
 \\
 ${y_{us}}$ & Y Ordinate: height of the top of the slope at i, refers to either slice i midpoint, or slice interface i & m
 \\
 ${y_{wt}}$ & Y Ordinate: height of the water table at i, refers to either slice i midpoint, or slice interface i & m
+\\
+$y$ & Y Ordinate: refers to either slice i midpoint, or slice interface i & m
 \\
 $z$ & Center of Slice Height: the distance from the lowest part of the slice to the height of the centers of slice & m
 \\

@@ -7,7 +7,6 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{unicode-math}
-\usepackage{enumitem}
 \usepackage{tabu}
 \usepackage{longtable}
 \usepackage{booktabs}
@@ -16,8 +15,6 @@
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
-\newlist{symbDescription}{description}{1}
-\setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \setmathfont{Latin Modern Math}
 \global\tabulinesep=1mm
 \newcounter{assumpnum}
@@ -26,8 +23,6 @@
 \newcommand{\rthereqnum}{R\thereqnum}
 \newcounter{lcnum}
 \newcommand{\lcthelcnum}{LC\thelcnum}
-\newcounter{ucnum}
-\newcommand{\uctheucnum}{UC\theucnum}
 \bibliography{bibfile}
 \title{Software Requirements Specification for Solar Water Heating Systems}
 \author{Thulasi Jegatheesan}
@@ -75,6 +70,8 @@ ${A_{in}}$ & Surface area over which heat is transferred in & $\text{m}^{2}$
 \\
 ${A_{out}}$ & Surface area over which heat is transferred out & $\text{m}^{2}$
 \\
+${C^{L}}$ & Specific heat capacity of a liquid & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
+\\
 $C$ & Specific heat capacity & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
 ${C_{W}}$ & Specific heat capacity of water & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
@@ -95,21 +92,17 @@ $m$ & Mass & kg
 \\
 ${m_{W}}$ & Mass of water & kg
 \\
-$\mathbf{\hat{n}}$ & Normal Vector & 
-\\
-${q_{C}}$ & Heat flux into the water from the coil & $\frac{\text{W}}{\text{m}^{2}}$
-\\
-$\mathbf{q}$ & Thermal flux vector & $\frac{\text{W}}{\text{m}^{2}}$
+$q$ & Heat flux & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 ${q_{in}}$ & Heat flux input & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 ${q_{out}}$ & Heat flux output & $\frac{\text{W}}{\text{m}^{2}}$
 \\
-$S$ & Surface & $\text{m}^{2}$
+$\mathbf{q}$ & Thermal flux vector & $\frac{\text{W}}{\text{m}^{2}}$
+\\
+${q_{C}}$ & Heat flux into the water from the coil & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 $T$ & Temperature & ${}^{\circ}$C
-\\
-$t$ & Time & s
 \\
 $ΔT$ & Change in temperature & ${}^{\circ}$C
 \\
@@ -117,15 +110,17 @@ ${T_{C}}$ & Temperature of the heating coil & ${}^{\circ}$C
 \\
 ${T_{env}}$ & Temperature of the environment & ${}^{\circ}$C
 \\
+$t$ & Time & s
+\\
 ${t_{final}}$ & Final time & s
 \\
 ${T_{init}}$ & Initial temperature & ${}^{\circ}$C
 \\
 ${T_{W}}$ & Temperature of the water & ${}^{\circ}$C
 \\
-$V$ & Volume & $\text{m}^{3}$
-\\
 ${V_{tank}}$ & Volume of the cylindrical tank & $\text{m}^{3}$
+\\
+$V$ & Volume & $\text{m}^{3}$
 \\
 ${V_{W}}$ & Volume of water & $\text{m}^{3}$
 \\
@@ -133,9 +128,7 @@ $ρ$ & Density & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 ${ρ_{W}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${τ_{W}}$ & ODE parameter for water & s
-\\
-$∇$ & Gradient & 
+$τ$ & Dummy variable for integration over time & s
 \\
 \bottomrule
 \label{Table:ToS}
@@ -641,14 +634,6 @@ This problem is small in size and relatively simple, so performance is not a pri
 \begin{description}
 \item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg6}:]A\ref{A:assump15} - Any real tank cannot be perfectly insulated and will lose heat.
 \end{description}
-\section{Unlikely Changes}
-\label{Sec:UCs}
-\begin{description}
-\item[\refstepcounter{ucnum}\uctheucnum\label{UC:unlikeChg1}:]A\ref{A:assump14} - It is unlikely for the change of water from liquid to a solid, or from liquid to gas to be considered.
-\end{description}
-\begin{description}
-\item[\refstepcounter{ucnum}\uctheucnum\label{UC:unlikeChg2}:]A\ref{A:assump12} - Is used for the derivations of IM1 (Hack: need Label to fix).
-\end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. Table~\ref{Table:TraceyRI} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:TraceyRIs} shows the dependencies of instance models, requirements, and data constraints on each other. Table~\ref{Table:TraceyAI} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
@@ -754,6 +739,8 @@ Symbol & Description & Value & Unit
 ${L_{min}}$ & minimum length of tank & $0.1$ & m
 \\
 ${L_{max}}$ & maximum length of tank & $50$ & m
+\\
+${h_{min}}$ & minimum convective heat transfer coefficient & $0.001$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\
 ${{ρ_{W}}^{min}}$ & minimum density of water & $950$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \\

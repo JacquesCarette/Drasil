@@ -236,7 +236,7 @@ m
 <em>is_safe1</em>
 </td>
 <td>
-Variable that is assigned true when calculated probability is less than tolerable probability
+True when calculated probability is less than tolerable probability
 </td>
 <td>
 
@@ -247,7 +247,7 @@ Variable that is assigned true when calculated probability is less than tolerabl
 <em>is_safe2</em>
 </td>
 <td>
-Variable that is assigned true when load resistance (capacity) is greater than load (demand)
+True when load resistance (capacity) is greater than load (demand)
 </td>
 <td>
 
@@ -911,7 +911,7 @@ Use Case Table
 Individual Product Use Cases
 </h2>
 <p class="paragraph">
-The user provides the inputs to GlassBR for use within the analysis. There are two main classes of inputs: glass geometry and blast type. The glass geometry based inputs include the glass type and dimensions of the glass plane. The blast type input includes parameters like weight of charge, TNT equivalent factor and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage. GlassBR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (<em>P<sub>b</sub></em>) is less than the tolerable probability (<em>P<sub>btol</sub></em>) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
+The user provides the inputs to GlassBR for use within the analysis. There are two main classes of inputs: glass geometry and blast type. The glass geometry based inputs include the glass type and dimensions of the glass plane. The blast type input includes parameters like weight of charge, TNT equivalent factor and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage. GlassBR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (<em>P<sub>b</sub></em>) is less than the tolerable probability (<em>P<sub>btol</sub></em>) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
 </p>
 </div>
 </div>
@@ -1181,27 +1181,11 @@ Equation
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>is_safe1</em> is the variable that is assigned true when calculated probability is less than tolerable probability (Unitless)
-</li>
-<li>
-<em>P<sub>b</sub></em> is the probability of breakage (Unitless)
-</li>
-<li>
-<em>P<sub>btol</sub></em> is the tolerable probability of breakage (Unitless)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-If <em>is_safe1</em>, the glass is considered safe. <em>is_safe1</em> and <em>is_safe2</em> (from <a href=#T:t2SafetyReq>T:t2SafetyReq</a>) are either both True or both False. <em>P<sub>b</sub></em> is the probability of breakage, as calculated in <a href=#T:probOfBr>T:probOfBr</a>. <em>P<sub>btol</sub></em> is the tolerable probability of breakage entered by the user.
-</p>
+<div class="list">
+<em>is_safe1</em> is the true when calculated probability is less than tolerable probability (Unitless) <br />
+<em>P<sub>b</sub></em> is the probability of breakage (Unitless) <br />
+<em>P<sub>btol</sub></em> is the tolerable probability of breakage (Unitless) <br />
+</div>
 </td>
 </tr>
 <tr>
@@ -1221,6 +1205,16 @@ RefBy
 <td>
 <p class="paragraph">
 FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+If <em>is_safe1</em>, the glass is considered safe. <em>is_safe1</em> and <em>is_safe2</em> (from <a href=#T:t2SafetyReq>T:t2SafetyReq</a>) are either both True or both False. <em>P<sub>b</sub></em> is the probability of breakage, as calculated in <a href=#T:probOfBr>T:probOfBr</a>. <em>P<sub>btol</sub></em> is the tolerable probability of breakage entered by the user.
 </p>
 </td>
 </tr>
@@ -1255,27 +1249,11 @@ Equation
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>is_safe2</em> is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)
-</li>
-<li>
-<em>LR</em> is the load resistance (Unitless)
-</li>
-<li>
-<em>q</em> is the applied load (demand) (kPa)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-If <em>is_safe2</em>, the glass is considered safe. <em>is_safe1</em> (from <a href=#T:t1SafetyReq>T:t1SafetyReq</a>) and <em>is_safe2</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#T:calOfCap>T:calOfCap</a>. <em>q</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#T:calOfDe>T:calOfDe</a>.
-</p>
+<div class="list">
+<em>is_safe2</em> is the true when load resistance (capacity) is greater than load (demand) (Unitless) <br />
+<em>LR</em> is the load resistance (Unitless) <br />
+<em>q</em> is the applied load (demand) (kPa) <br />
+</div>
 </td>
 </tr>
 <tr>
@@ -1295,6 +1273,16 @@ RefBy
 <td>
 <p class="paragraph">
 FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+If <em>is_safe2</em>, the glass is considered safe. <em>is_safe1</em> (from <a href=#T:t1SafetyReq>T:t1SafetyReq</a>) and <em>is_safe2</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#T:calOfCap>T:calOfCap</a>. <em>q</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#T:calOfDe>T:calOfDe</a>.
 </p>
 </td>
 </tr>
@@ -1376,54 +1364,17 @@ k
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>B</em> is the risk of failure (Unitless)
-</li>
-<li>
-<em>k</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>)
-</li>
-<li>
-<em>a</em> is the plate length (long dimension) (m)
-</li>
-<li>
-<em>b</em> is the plate width (short dimension) (m)
-</li>
-<li>
-<em>m</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>)
-</li>
-<li>
-<em>E</em> is the modulus of elasticity of glass (Pa)
-</li>
-<li>
-<em>h</em> is the actual thickness (m)
-</li>
-<li>
-<em>LDF</em> is the load duration factor (Unitless)
-</li>
-<li>
-<em>J</em> is the stress distribution factor (Function) (Unitless)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
-</p>
-<p class="paragraph">
-<em>t</em> is the true thickness, which is based on the nominal thicknesses as shown in DD2.
-</p>
-<p class="paragraph">
-<em>LDF</em> is the load duration factor as defined by DD3.
-</p>
-<p class="paragraph">
-<em>J</em> is the stress distribution factor (Function) , as defined in DD4.
-</p>
+<div class="list">
+<em>B</em> is the risk of failure (Unitless) <br />
+<em>k</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>) <br />
+<em>a</em> is the plate length (long dimension) (m) <br />
+<em>b</em> is the plate width (short dimension) (m) <br />
+<em>m</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>) <br />
+<em>E</em> is the modulus of elasticity of glass (Pa) <br />
+<em>h</em> is the actual thickness (m) <br />
+<em>LDF</em> is the load duration factor (Unitless) <br />
+<em>J</em> is the stress distribution factor (Function) (Unitless) <br />
+</div>
 </td>
 </tr>
 <tr>
@@ -1568,24 +1519,10 @@ t = 22.0
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>h</em> is the actual thickness (m)
-</li>
-<li>
-<em>t</em> is the nominal thickness <em>t&thinsp;&isin;&thinsp;{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0}</em> (mm)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-<em>t</em> is a function that maps from the nominal thickness (<em>h</em>) to the minimum thickness.
-</p>
+<div class="list">
+<em>h</em> is the actual thickness (m) <br />
+<em>t</em> is the nominal thickness <em>t&thinsp;&isin;&thinsp;{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0}</em> (mm) <br />
+</div>
 </td>
 </tr>
 <tr>
@@ -1666,39 +1603,13 @@ b
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>J</em> is the stress distribution factor (Function) (Unitless)
-</li>
-<li>
-<em>J</em> is the stress distribution factor (Function) (Unitless)
-</li>
-<li>
-<em>q&#770;</em> is the dimensionless load (Unitless)
-</li>
-<li>
-<em>a</em> is the plate length (long dimension) (m)
-</li>
-<li>
-<em>b</em> is the plate width (short dimension) (m)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-<em>J</em> is the stress distribution factor (Function), which is obtained by interpolating from data shown in Figure 7.
-</p>
-<p class="paragraph">
-<em>q&#770;</em> is the dimensionless load defined in DD7.
-</p>
-<p class="paragraph">
-<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
-</p>
+<div class="list">
+<em>J</em> is the stress distribution factor (Function) (Unitless) <br />
+<em>J</em> is the stress distribution factor (Function) (Unitless) <br />
+<em>q&#770;</em> is the dimensionless load (Unitless) <br />
+<em>a</em> is the plate length (long dimension) (m) <br />
+<em>b</em> is the plate width (short dimension) (m) <br />
+</div>
 </td>
 </tr>
 <tr>
@@ -1779,42 +1690,14 @@ q&#770;<sub>tol</sub>&#8239;E&#8239;h<sup>4</sup>
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>NFL</em> is the non-factored load (Unitless)
-</li>
-<li>
-<em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless)
-</li>
-<li>
-<em>E</em> is the modulus of elasticity of glass (Pa)
-</li>
-<li>
-<em>h</em> is the actual thickness (m)
-</li>
-<li>
-<em>a</em> is the plate length (long dimension) (m)
-</li>
-<li>
-<em>b</em> is the plate width (short dimension) (m)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
-</p>
-<p class="paragraph">
-<em>t</em> is the true thickness, which is based on the nominal thicknesses as shown in DD2.
-</p>
-<p class="paragraph">
-<em>q&#770;<sub>tol</sub></em> is the tolerable pressure defined in DD8.
-</p>
+<div class="list">
+<em>NFL</em> is the non-factored load (Unitless) <br />
+<em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless) <br />
+<em>E</em> is the modulus of elasticity of glass (Pa) <br />
+<em>h</em> is the actual thickness (m) <br />
+<em>a</em> is the plate length (long dimension) (m) <br />
+<em>b</em> is the plate width (short dimension) (m) <br />
+</div>
 </td>
 </tr>
 <tr>
@@ -1907,14 +1790,10 @@ g = HS
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>GTF</em> is the glass type factor (Unitless)
-</li>
-<li>
-<em>g</em> is the glass type <em>g&thinsp;&isin;&thinsp;{AN,FT,HS}</em> (Unitless)
-</li>
-</ul>
+<div class="list">
+<em>GTF</em> is the glass type factor (Unitless) <br />
+<em>g</em> is the glass type <em>g&thinsp;&isin;&thinsp;{AN,FT,HS}</em> (Unitless) <br />
+</div>
 </td>
 </tr>
 <tr>
@@ -1995,48 +1874,15 @@ E&#8239;h<sup>4</sup>&#8239;GTF
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>q&#770;</em> is the dimensionless load (Unitless)
-</li>
-<li>
-<em>q</em> is the applied load (demand) (kPa)
-</li>
-<li>
-<em>a</em> is the plate length (long dimension) (m)
-</li>
-<li>
-<em>b</em> is the plate width (short dimension) (m)
-</li>
-<li>
-<em>E</em> is the modulus of elasticity of glass (Pa)
-</li>
-<li>
-<em>h</em> is the actual thickness (m)
-</li>
-<li>
-<em>GTF</em> is the glass type factor (Unitless)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-<em>q</em> is the 3 second equivalent pressure, as given in IM3.
-</p>
-<p class="paragraph">
-<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
-</p>
-<p class="paragraph">
-<em>t</em> is the true thickness, which is based on the nominal thicknesses as shown in DD2.
-</p>
-<p class="paragraph">
-<em>GTF</em> is the glass type factor, as given by DD6.
-</p>
+<div class="list">
+<em>q&#770;</em> is the dimensionless load (Unitless) <br />
+<em>q</em> is the applied load (demand) (kPa) <br />
+<em>a</em> is the plate length (long dimension) (m) <br />
+<em>b</em> is the plate width (short dimension) (m) <br />
+<em>E</em> is the modulus of elasticity of glass (Pa) <br />
+<em>h</em> is the actual thickness (m) <br />
+<em>GTF</em> is the glass type factor (Unitless) <br />
+</div>
 </td>
 </tr>
 <tr>
@@ -2117,40 +1963,13 @@ b
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless)
-</li>
-<li>
-<em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless)
-</li>
-<li>
-<em>J<sub>tol</sub></em> is the stress distribution factor (Function) based on Pbtol (Unitless)
-</li>
-<li>
-<em>a</em> is the plate length (long dimension) (m)
-</li>
-<li>
-<em>b</em> is the plate width (short dimension) (m)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-<em>q&#770;<sub>tol</sub></em> is the tolerable pressure which is obtained from Figure 7 using <em>J<sub>tol</sub></em> and aspect ratio (<em>AR = <div class="fraction">
-<span class="fup">
-a
-</span>
-<span class="fdn">
-b
-</span>
-</div></em>) as parameters using interpolation. Calculation of <em>J<sub>tol</sub></em> is defined in DD9.
-</p>
+<div class="list">
+<em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless) <br />
+<em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless) <br />
+<em>J<sub>tol</sub></em> is the stress distribution factor (Function) based on Pbtol (Unitless) <br />
+<em>a</em> is the plate length (long dimension) (m) <br />
+<em>b</em> is the plate width (short dimension) (m) <br />
+</div>
 </td>
 </tr>
 <tr>
@@ -2238,57 +2057,17 @@ k&#8239;(1000&#8239;E&#8239;h<sup>2</sup>)<sup>m</sup>&#8239;LDF
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>J<sub>tol</sub></em> is the stress distribution factor (Function) based on Pbtol (Unitless)
-</li>
-<li>
-<em>P<sub>btol</sub></em> is the tolerable probability of breakage (Unitless)
-</li>
-<li>
-<em>a</em> is the plate length (long dimension) (m)
-</li>
-<li>
-<em>b</em> is the plate width (short dimension) (m)
-</li>
-<li>
-<em>m</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>)
-</li>
-<li>
-<em>k</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>)
-</li>
-<li>
-<em>E</em> is the modulus of elasticity of glass (Pa)
-</li>
-<li>
-<em>h</em> is the actual thickness (m)
-</li>
-<li>
-<em>LDF</em> is the load duration factor (Unitless)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-<em>J<sub>tol</sub></em>  is calculated with reference to  <em>P<sub>btol</sub></em>.
-</p>
-<p class="paragraph">
-<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
-</p>
-<p class="paragraph">
-<em>t</em> is the true thickness, which is based on the nominal thicknesses as shown in DD2.
-</p>
-<p class="paragraph">
-<em>LDF</em> is the load duration factor as defined by DD3.
-</p>
-<p class="paragraph">
-<em>P<sub>btol</sub></em> is the tolerable probability entered by the user.
-</p>
+<div class="list">
+<em>J<sub>tol</sub></em> is the stress distribution factor (Function) based on Pbtol (Unitless) <br />
+<em>P<sub>btol</sub></em> is the tolerable probability of breakage (Unitless) <br />
+<em>a</em> is the plate length (long dimension) (m) <br />
+<em>b</em> is the plate width (short dimension) (m) <br />
+<em>m</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>) <br />
+<em>k</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>) <br />
+<em>E</em> is the modulus of elasticity of glass (Pa) <br />
+<em>h</em> is the actual thickness (m) <br />
+<em>LDF</em> is the load duration factor (Unitless) <br />
+</div>
 </td>
 </tr>
 <tr>
@@ -2396,14 +2175,10 @@ Equation
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>P<sub>b</sub></em> is the probability of breakage (Unitless)
-</li>
-<li>
-<em>B</em> is the risk of failure (Unitless)
-</li>
-</ul>
+<div class="list">
+<em>P<sub>b</sub></em> is the probability of breakage (Unitless) <br />
+<em>B</em> is the risk of failure (Unitless) <br />
+</div>
 </td>
 </tr>
 <tr>
@@ -2506,30 +2281,12 @@ Equation
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>LR</em> is the load resistance (Unitless)
-</li>
-<li>
-<em>NFL</em> is the non-factored load (Unitless)
-</li>
-<li>
-<em>GTF</em> is the glass type factor (Unitless)
-</li>
-<li>
-<em>LSF</em> is the load share factor (Unitless)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-<em>LR</em> is the load resistance, which is also called capacity. <em>NFL</em> is the non-factored load. <em>GTF</em> is the glass type factor. <em>LSF</em> is the load share factor. Follows <a href=#A:glassConditionA>glassCondition</a> and <a href=#A:glassTyA>glassTy</a> (&quot;In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations&quot;) from [4 (pg. 53)].
-</p>
+<div class="list">
+<em>LR</em> is the load resistance (Unitless) <br />
+<em>NFL</em> is the non-factored load (Unitless) <br />
+<em>GTF</em> is the glass type factor (Unitless) <br />
+<em>LSF</em> is the load share factor (Unitless) <br />
+</div>
 </td>
 </tr>
 <tr>
@@ -2549,6 +2306,16 @@ RefBy
 <td>
 <p class="paragraph">
 FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>LR</em> is the load resistance, which is also called capacity. <em>NFL</em> is the non-factored load. <em>GTF</em> is the glass type factor. <em>LSF</em> is the load share factor. Follows <a href=#A:glassConditionA>glassCondition</a> and <a href=#A:glassTyA>glassTy</a> (&quot;In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations&quot;) from [4 (pg. 53)].
 </p>
 </td>
 </tr>
@@ -2632,27 +2399,11 @@ Equation
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>q</em> is the applied load (demand) (kPa)
-</li>
-<li>
-<em>w<sub>TNT</sub></em> is the explosive mass in equivalent weight of TNT (kg)
-</li>
-<li>
-<em>SD</em> is the stand off distance (m)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-<em>q</em> or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (<em>SD</em>) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined as <em>w&#8239;TNT</em>. <em>SD</em>. is the stand off distance where <em>&radic;(SD<sub>x</sub><sup>2</sup>&plus;SD<sub>y</sub><sup>2</sup>&plus;SD<sub>z</sub><sup>2</sup>)</em> where (<em>SD<sub>x</sub></em>, <em>SD<sub>y</sub></em>, <em>SD<sub>z</sub></em>) are coordinates.
-</p>
+<div class="list">
+<em>q</em> is the applied load (demand) (kPa) <br />
+<em>w<sub>TNT</sub></em> is the explosive mass in equivalent weight of TNT (kg) <br />
+<em>SD</em> is the stand off distance (m) <br />
+</div>
 </td>
 </tr>
 <tr>
@@ -2672,6 +2423,16 @@ RefBy
 <td>
 <p class="paragraph">
 FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>q</em> or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (<em>SD</em>) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined as <em>w&#8239;TNT</em>. <em>SD</em>. is the stand off distance where <em>&radic;(SD<sub>x</sub><sup>2</sup>&plus;SD<sub>y</sub><sup>2</sup>&plus;SD<sub>z</sub><sup>2</sup>)</em> where (<em>SD<sub>x</sub></em>, <em>SD<sub>y</sub></em>, <em>SD<sub>z</sub></em>) are coordinates.
 </p>
 </td>
 </tr>
@@ -2747,35 +2508,17 @@ k
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>B</em> is the risk of failure (Unitless)
-</li>
-<li>
-<em>k</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>)
-</li>
-<li>
-<em>a</em> is the plate length (long dimension) (m)
-</li>
-<li>
-<em>b</em> is the plate width (short dimension) (m)
-</li>
-<li>
-<em>m</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>)
-</li>
-<li>
-<em>E</em> is the modulus of elasticity of glass (Pa)
-</li>
-<li>
-<em>h</em> is the actual thickness (m)
-</li>
-<li>
-<em>LDF</em> is the load duration factor (Unitless)
-</li>
-<li>
-<em>J</em> is the stress distribution factor (Function) (Unitless)
-</li>
-</ul>
+<div class="list">
+<em>B</em> is the risk of failure (Unitless) <br />
+<em>k</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>) <br />
+<em>a</em> is the plate length (long dimension) (m) <br />
+<em>b</em> is the plate width (short dimension) (m) <br />
+<em>m</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>) <br />
+<em>E</em> is the modulus of elasticity of glass (Pa) <br />
+<em>h</em> is the actual thickness (m) <br />
+<em>LDF</em> is the load duration factor (Unitless) <br />
+<em>J</em> is the stress distribution factor (Function) (Unitless) <br />
+</div>
 </td>
 </tr>
 <tr>

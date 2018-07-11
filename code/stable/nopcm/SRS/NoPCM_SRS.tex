@@ -7,6 +7,7 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{unicode-math}
+\usepackage{enumitem}
 \usepackage{tabu}
 \usepackage{longtable}
 \usepackage{booktabs}
@@ -15,6 +16,8 @@
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
+\newlist{symbDescription}{description}{1}
+\setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \setmathfont{Latin Modern Math}
 \global\tabulinesep=1mm
 \newcounter{assumpnum}
@@ -70,8 +73,6 @@ ${A_{in}}$ & Surface area over which heat is transferred in & $\text{m}^{2}$
 \\
 ${A_{out}}$ & Surface area over which heat is transferred out & $\text{m}^{2}$
 \\
-${C^{L}}$ & Specific heat capacity of a liquid & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
-\\
 $C$ & Specific heat capacity & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
 ${C_{W}}$ & Specific heat capacity of water & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
@@ -92,17 +93,21 @@ $m$ & Mass & kg
 \\
 ${m_{W}}$ & Mass of water & kg
 \\
-$q$ & Heat flux & $\frac{\text{W}}{\text{m}^{2}}$
+$\mathbf{\hat{n}}$ & Normal Vector & 
+\\
+${q_{C}}$ & Heat flux into the water from the coil & $\frac{\text{W}}{\text{m}^{2}}$
+\\
+$\mathbf{q}$ & Thermal flux vector & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 ${q_{in}}$ & Heat flux input & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 ${q_{out}}$ & Heat flux output & $\frac{\text{W}}{\text{m}^{2}}$
 \\
-$\mathbf{q}$ & Thermal flux vector & $\frac{\text{W}}{\text{m}^{2}}$
-\\
-${q_{C}}$ & Heat flux into the water from the coil & $\frac{\text{W}}{\text{m}^{2}}$
+$S$ & Surface & $\text{m}^{2}$
 \\
 $T$ & Temperature & ${}^{\circ}$C
+\\
+$t$ & Time & s
 \\
 $ΔT$ & Change in temperature & ${}^{\circ}$C
 \\
@@ -110,17 +115,15 @@ ${T_{C}}$ & Temperature of the heating coil & ${}^{\circ}$C
 \\
 ${T_{env}}$ & Temperature of the environment & ${}^{\circ}$C
 \\
-$t$ & Time & s
-\\
 ${t_{final}}$ & Final time & s
 \\
 ${T_{init}}$ & Initial temperature & ${}^{\circ}$C
 \\
 ${T_{W}}$ & Temperature of the water & ${}^{\circ}$C
 \\
-${V_{tank}}$ & Volume of the cylindrical tank & $\text{m}^{3}$
-\\
 $V$ & Volume & $\text{m}^{3}$
+\\
+${V_{tank}}$ & Volume of the cylindrical tank & $\text{m}^{3}$
 \\
 ${V_{W}}$ & Volume of water & $\text{m}^{3}$
 \\
@@ -128,7 +131,9 @@ $ρ$ & Density & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 ${ρ_{W}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-$τ$ & Dummy variable for integration over time & s
+${τ_{W}}$ & ODE parameter for water & s
+\\
+$∇$ & Gradient & 
 \\
 \bottomrule
 \label{Table:ToS}
@@ -322,17 +327,17 @@ Equation & \begin{dmath}
            -∇\cdot{}\mathbf{q}+g=ρ C \frac{\partial{}\,T}{\partial{}\,t}
            \end{dmath}
 \\ \midrule \\
-Description & \begin{description}
+Description & \begin{symbDescription}
               \item{$∇$ is the gradient (Unitless)}
               \item{$\mathbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$)}
-              \item{$g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}
-}$)}
+              \item{$g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$)}
               \item{$ρ$ is the density ($\frac{\text{kg}}{\text{m}^{3}}$)}
-              \item{$C$ is the specific heat capacity ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$)
-}
+              \item{$C$ is the specific heat capacity ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$)}
               \item{$t$ is the time (s)}
               \item{$T$ is the temperature (${}^{\circ}$C)}
-              \end{description}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity $C$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and density, $ρ$ ($\frac{\text{kg}}{\text{m}^{3}}$), where $\mathbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$), $g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$), $T$ is the temperature (${}^{\circ}$C), $t$ is time (s), and $∇$ is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (A\ref{A:assump1}).
 \\ \midrule \\
 Source & FIXME: This needs to be filled in
 \\ \midrule \\
@@ -351,18 +356,22 @@ This section collects the laws and equations that will be used in deriving the d
 \\ \midrule \\
 Label & Newton's law of cooling
 \\ \midrule \\
+Units & $\frac{\text{W}}{\text{m}^{2}}$
+\\ \midrule \\
 Equation & \begin{dmath}
            \mathbf{q}\left(t\right)=h ΔT\left(t\right)
            \end{dmath}
 \\ \midrule \\
-Description & \begin{description}
+Description & \begin{symbDescription}
               \item{$\mathbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$)}
               \item{$t$ is the time (s)}
               \item{$h$ is the convective heat transfer coefficient ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$)}
               \item{$ΔT$ is the change in temperature (${}^{\circ}$C)}
-              \end{description}
+              \end{symbDescription}
 \\ \midrule \\
-Source &
+Notes & Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. $\mathbf{q}\left(t\right)$ is the thermal flux ($\frac{\text{W}}{\text{m}^{2}}$). $h$ is the heat transfer coefficient, assumed independant of $T$ (A\ref{A:Heat-Transfer-Coeffs-Constant}) ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$). $ΔT\left(t\right)=T\left(t\right)-{T_{env}}\left(t\right)$ is the time-dependant thermal gradient between the environment and the object (${}^{\circ}$C).
+\\ \midrule \\
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -380,7 +389,7 @@ Equation & \begin{dmath}
            m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
            \end{dmath}
 \\ \midrule \\
-Description & \begin{description}
+Description & \begin{symbDescription}
               \item{$m$ is the mass (kg)}
               \item{$C$ is the specific heat capacity ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$)}
               \item{$t$ is the time (s)}
@@ -391,14 +400,16 @@ Description & \begin{description}
               \item{${A_{out}}$ is the surface area over which heat is transferred out ($\text{m}^{2}$)}
               \item{$g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$)}
               \item{$V$ is the volume ($\text{m}^{3}$)}
-              \end{description}
+              \end{symbDescription}
 \\ \midrule \\
-Source &
+Notes & The basic equation governing the rate of change of temperature, for a given volume $V$, with time. $m$ is the mass (kg). $C$ is the specific heat capacity ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$). $T$ is the temperature (${}^{\circ}$C) and $t$ is the time (s). ${q_{in}}$ and ${q_{out}}$ are the in and out heat transfer rates, respectively ($\frac{\text{W}}{\text{m}^{2}}$). ${A_{in}}$ and ${A_{out}}$ are the surface areas over which the heat is being transferred in and out, respectively ($\text{m}^{2}$). $g$ is the volumetric heat generated ($\frac{\text{W}}{\text{m}^{3}}$). $V$ is the volume ($\text{m}^{3}$).
+\\ \midrule \\
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
-Detailed derivation of simplified rate of change of temperature:
+Detailed derivation of simplified rate of change of temperature.
 Integrating \hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE} over a volume ($V$), we have:
 \begin{dmath}
 -\int_{V}{∇\cdot{}\mathbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
@@ -411,7 +422,7 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 \begin{dmath}
 {q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
 \end{dmath}
-Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in GD2. Assuming $ρ$, $C$ and $T$ are constant over the volume, which is true in our case by Assumptions (A\ref{A:assump3}), (A\ref{A:assump4}), and (A\ref{A:assump5}), we have:
+Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in GD2. Assuming $ρ$, $C$ and $T$ are constant over the volume, which is true in our case by Assumptions (A3), (A4), and (A5), we have:
 \begin{dmath}
 ρ C V \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \end{dmath}
@@ -431,21 +442,23 @@ This section collects and defines all the data needed to build the instance mode
 \\ \midrule \\
 Label & Heat flux into the water from the coil
 \\ \midrule \\
+Symbol & ${q_{C}}$
+\\ \midrule \\
 Units & $\frac{\text{W}}{\text{m}^{2}}$
 \\ \midrule \\
 Equation & \begin{dmath}
            {q_{C}}={h_{C}} \left({T_{C}}-{T_{W}}\left(t\right)\right)
            \end{dmath}
 \\ \midrule \\
-Description & \begin{description}
+Description & \begin{symbDescription}
               \item{${q_{C}}$ is the heat flux into the water from the coil ($\frac{\text{W}}{\text{m}^{2}}$)}
               \item{${h_{C}}$ is the convective heat transfer coefficient between coil and water ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$)}
               \item{${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C)}
               \item{${T_{W}}$ is the temperature of the water (${}^{\circ}$C)}
               \item{$t$ is the time (s)}
-              \end{description}
+              \end{symbDescription}
 \\ \midrule \\
-Source &
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -462,28 +475,42 @@ This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into o
 \\ \midrule \\
 Label & Energy balance on water to find the temperature of the water
 \\ \midrule \\
+Input & ${T_{C}}$, ${T_{init}}$, ${t_{final}}$, ${A_{C}}$, ${h_{C}}$, ${C_{W}}$, ${m_{W}}$
+\\ \midrule \\
+Output & ${T_{W}}$
+\\ \midrule \\
+Input Constraints & \begin{dmath}
+                    {T_{init}}\leq{}{T_{C}}
+                    \end{dmath}
+\\ \midrule \\
+Output Constraints & \begin{dmath}
+                     0<t<{t_{final}}
+                     \end{dmath}
+\\ \midrule \\
 Equation & \begin{dmath}
            \frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\left(t\right)\right)
            \end{dmath}
 \\ \midrule \\
-Description & \begin{description}
+Description & \begin{symbDescription}
               \item{$t$ is the time (s)}
               \item{${T_{W}}$ is the temperature of the water (${}^{\circ}$C)}
               \item{${τ_{W}}$ is the ODE parameter for water (s)}
               \item{${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C)}
-              \end{description}
+              \end{symbDescription}
 \\ \midrule \\
-Source &
+Notes & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C). ${τ_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ is a constant (s). The above equation applies as long as the water is in liquid form, $0<{T_{W}}<100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (A\ref{A:assump10}).
+\\ \midrule \\
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Derivation of the energy balance on water:
-To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water ${V_{W}}$, which has mass ${m_{W}}$ and specific heat capacity of water, ${C_{W}}$. Heat transfer occurs in the water from the coil as ${q_{C}}$, over area ${A_{C}}$. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (A\ref{A:Charging-Tank-No-Temp-Discharge}). Assuming no volumetric heat generation per unit volume (A\ref{A:Same-Initial-Temp-Water-PCM}), $g=0$. Therefore, the equation for GD2 can be written as:
+To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water ${V_{W}}$, which has mass ${m_{W}}$ and specific heat capacity of water, ${C_{W}}$ . Heat transfer occurs in the water from the coil as ${q_{C}}$, over area ${A_{C}}$. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (A\ref{A:Charging-Tank-No-Temp-Discharge}) . Assuming no volumetric heat generation per unit volume (A\ref{A:Same-Initial-Temp-Water-PCM}), $g=0$ . Therefore, the equation for GD2 can be written as:
 \begin{dmath}
 {m_{W}} {C_{W}} \frac{d\,{T_{W}}}{d\,t}={q_{C}} {A_{C}}
 \end{dmath}
-Using \hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}, this can be written as:
+Using \hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C} , this can be written as:
 \begin{dmath}
 {m_{W}} {C_{W}} \frac{d\,{T_{W}}}{d\,t}={h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\right)
 \end{dmath}
@@ -491,7 +518,7 @@ Dividing (3) by ${m_{W}}$${C_{W}}$, we obtain:
 \begin{dmath}
 \frac{d\,{T_{W}}}{d\,t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)
 \end{dmath}
-Setting ${τ_{W}}$=${m_{W}}$${C_{W}}$/${h_{C}}$${A_{C}}$, Equation (4) can be written in its final form as:
+Setting ${τ_{W}}$ = ${m_{W}}$ ${C_{W}}$ / ${h_{C}}$ ${A_{C}}$ , Equation (4) can be written in its final form as:
 \begin{dmath}
 \frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\right)
 \end{dmath}
@@ -504,20 +531,32 @@ Setting ${τ_{W}}$=${m_{W}}$${C_{W}}$/${h_{C}}$${A_{C}}$, Equation (4) can be wr
 \\ \midrule \\
 Label & Heat energy in the water
 \\ \midrule \\
+Input & ${T_{init}}$, ${m_{W}}$, ${C_{W}}$, ${m_{W}}$
+\\ \midrule \\
+Output & ${E_{W}}$
+\\ \midrule \\
+Input Constraints & 
+\\ \midrule \\
+Output Constraints & \begin{dmath}
+                     0<t<{t_{final}}
+                     \end{dmath}
+\\ \midrule \\
 Equation & \begin{dmath}
            {E_{W}}\left(t\right)={C_{W}} {m_{W}} \left({T_{W}}\left(t\right)-{T_{init}}\right)
            \end{dmath}
 \\ \midrule \\
-Description & \begin{description}
+Description & \begin{symbDescription}
               \item{${E_{W}}$ is the change in heat energy in the water (J)}
               \item{$t$ is the time (s)}
               \item{${C_{W}}$ is the specific heat capacity of water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$)}
               \item{${m_{W}}$ is the mass of water (kg)}
               \item{${T_{W}}$ is the temperature of the water (${}^{\circ}$C)}
               \item{${T_{init}}$ is the initial temperature (${}^{\circ}$C)}
-              \end{description}
+              \end{symbDescription}
 \\ \midrule \\
-Source &
+Notes & The above equation is derived using T2. ${E_{W}}$ is the change in thermal energy of the liquid water relative to the energy at the initial temperature (${T_{init}}$) (J). ${C_{W}}$ is the specific heat capacity of liquid water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and ${m_{W}}$ is the mass of the water (kg). The change in temperature is the difference between the temperature at time $t$ (s), ${T_{W}}$ and the initial temperature, ${T_{init}}$ (${}^{\circ}$C). This equation applies as long as $0<{T_{W}}<100$${}^{\circ}$C (A\ref{A:assump14}, A\ref{A:assump19}).
+\\ \midrule \\
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -740,8 +779,6 @@ ${L_{min}}$ & minimum length of tank & $0.1$ & m
 \\
 ${L_{max}}$ & maximum length of tank & $50$ & m
 \\
-${h_{min}}$ & minimum convective heat transfer coefficient & $0.001$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
-\\
 ${{ρ_{W}}^{min}}$ & minimum density of water & $950$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 ${{ρ_{W}}^{max}}$ & maximum density of water & $1000$ & $\frac{\text{kg}}{\text{m}^{3}}$
@@ -764,7 +801,7 @@ ${{t_{final}}^{max}}$ & maximum final time & $86400$ & s
 \label{Sec:References}
 \begin{filecontents*}{bibfile.bib}
 @book{incroperaEtAl2007,
-author={Incropera, F.P. and Dewitt, D.P. and Bergman, T.L. and Lavine, A.S.},
+author={Incropera, F. P. and Dewitt, D. P. and Bergman, T. L. and Lavine, A. S.},
 title={Fundamentals of Heat and Mass Transfer},
 publisher={John Wiley and Sons},
 year={2007},

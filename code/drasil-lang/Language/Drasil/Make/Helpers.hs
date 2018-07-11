@@ -1,6 +1,6 @@
 module Language.Drasil.Make.Helpers where
 
-import Text.PrettyPrint
+import Text.PrettyPrint (Doc, text, ($+$))
 
 -- | Helper for rendering OS-specific extensions
 osDefinitions :: Doc

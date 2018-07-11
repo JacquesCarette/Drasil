@@ -1,8 +1,8 @@
 -- | Helper functions for printing
 module Language.Drasil.Printing.Helpers where
 
-import Text.PrettyPrint
-import Data.Char
+import Text.PrettyPrint (text, Doc, nest, (<>))
+import Data.Char (toUpper, toLower)
 
 -- | Basic text-rendering helper function
 bslash,dbs,assign,eq,lt,gt,leq,geq,dlr,ast,pls,hat,slash,hyph,tab,unders :: Doc

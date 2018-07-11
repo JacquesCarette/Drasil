@@ -27,7 +27,7 @@ import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
   deltaT, w_E, tank_length_min, tank_length_max,
   w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
   coil_HTC_max, time_final_max, sim_time, coil_SA_max, eta)
-import Drasil.SWHS.DataDefs(dd1HtFluxC, swhsDD1)
+import Drasil.SWHS.DataDefs(dd1HtFluxC, swhsDD1, dd1HtFluxCDD)
 import Drasil.SWHS.TMods (t1ConsThermE, t1ConsThermE_new, tMod1)
 import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp,
   nwtnCooling_desc, rocTempSimp_desc)
@@ -150,7 +150,7 @@ mkSRS = RefSec (RefProg intro
           , GDs [Label, Units, DefiningEquation   ---check glassbr
           , Description Verbose IncludeUnits, Notes
           , Source, RefBy] generalDefinitions ShowDerivation
-          , DDs ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
+          , DDs' ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxCDD] ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields ++ [Notes])
             [eBalanceOnWtr_new, heatEInWtr_new] ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty dataContMid

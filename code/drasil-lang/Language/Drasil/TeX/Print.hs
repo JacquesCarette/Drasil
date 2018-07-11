@@ -17,7 +17,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat),
   Csc, Sec, Tan, Cos, Sin, Log, Prime, Comma, Boolean, Real, Natural, 
   Rational, Integer, IsIn), Spacing(Thin), Fonts(Emph, Bold), 
   Expr(Spc, Sqrt, Font, Fenced, MO, Over, Sup, Sub, Ident, Spec, Row, 
-  Mtx, Div, Case, Str, Int, Dbl), OverSymb(Hat))
+  Mtx, Div, Case, Str, Int, Dbl), OverSymb(Hat), Label)
 import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished, 
   Year, Volume, Type, Title, Series, School, Publisher, Organization, Pages,
   Month, Number, Note, Journal, Editor, Chapter, Institution, Edition, BookTitle,
@@ -373,23 +373,29 @@ makeEquation contents = toEqn (spec contents)
 -----------------------------------------------------------------
 
 makeList :: ListType -> D
-makeList (Simple items)      = itemize     $ vcat (sim_item items)
-makeList (Desc items)        = description $ vcat (sim_item items)
-makeList (Unordered items)   = itemize     $ vcat (map p_item items)
-makeList (Ordered items)     = enumerate   $ vcat (map p_item items)
-makeList (Definitions items) = symbDescription $ vcat (def_item items)
+makeList (Simple items)      = itemize     $ vcat $ sim_item items
+makeList (Desc items)        = description $ vcat $ sim_item items
+makeList (Unordered items)   = itemize     $ vcat $ map pl_item items
+makeList (Ordered items)     = enumerate   $ vcat $ map pl_item items
+makeList (Definitions items) = symbDescription $ vcat $ def_item items
+
+pl_item :: (ItemType,Maybe Label) -> D
+pl_item (i, l) = mlref l $ p_item i
+
+mlref :: Maybe Label -> D -> D
+mlref = maybe id $ (%%) . label . spec
 
 p_item :: ItemType -> D
-p_item (Flat s) = item (spec s)
-p_item (Nested t s) = vcat [item (spec t), makeList s]
+p_item (Flat s) = item $ spec s
+p_item (Nested t s) = vcat [item $ spec t, makeList s]
 
-sim_item :: [(Spec,ItemType)] -> [D]
-sim_item = map (\(x,y) -> item' (spec (x :+: S ":")) (sp_item y))
+sim_item :: [(Spec,ItemType,Maybe Label)] -> [D]
+sim_item = map (\(x,y,l) -> item' (spec $ x :+: S ":") $ mlref l $ sp_item y)
   where sp_item (Flat s) = spec s
         sp_item (Nested t s) = vcat [spec t, makeList s]
 
-def_item :: [(Spec, ItemType)] -> [D]
-def_item = map (\(x,y) -> item $ spec $ x :+: S " is the " :+: d_item y)
+def_item :: [(Spec, ItemType,Maybe Label)] -> [D]
+def_item = map (\(x,y,l) -> item $ mlref l $ spec $ x :+: S " is the " :+: d_item y)
   where d_item (Flat s) = s
         d_item (Nested _ _) = error "Cannot use sublists in definitions"
 -----------------------------------------------------------------

@@ -14,6 +14,7 @@ data Fence = Paren | Curly | Norm | Abs
 data OverSymb = Hat
 data Fonts = Bold | Emph
 data Spacing = Thin
+type Label = Spec
 
 data Expr = Dbl   Double
           | Int   Integer
@@ -49,11 +50,11 @@ data Spec = E Expr
                           -- so it's not really a big deal ATM.
 type Title    = Spec
 
-data ListType = Ordered [ItemType] 
-              | Unordered [ItemType]
-              | Simple      [(Title,ItemType)]
-              | Desc        [(Title,ItemType)]
-              | Definitions  [(Title,ItemType)]
+data ListType = Ordered [(ItemType,Maybe Label)]
+              | Unordered [(ItemType,Maybe Label)]
+              | Simple      [(Title,ItemType,Maybe Label)]
+              | Desc        [(Title,ItemType,Maybe Label)]
+              | Definitions  [(Title,ItemType,Maybe Label)]
 
 data ItemType = Flat Spec
               | Nested Spec ListType

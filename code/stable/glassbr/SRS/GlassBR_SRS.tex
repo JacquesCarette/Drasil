@@ -822,44 +822,6 @@ Source &
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
-~\newline
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{IM:risk\_fun}
-\phantomsection 
-\label{IM:risk\_fun}
-\\ \midrule \\
-Label & Risk of failure
-\\ \midrule \\
-Input & $k$, $a$, $b$, $m$, $E$, $h$, $LDF$, $J$
-\\ \midrule \\
-Output & $B$
-\\ \midrule \\
-Input Constraints & 
-\\ \midrule \\
-Output Constraints & 
-\\ \midrule \\
-Equation & \begin{dmath}
-           B=\frac{k}{\left(a b\right)^{m-1}} \left(1000 E h^{2}\right)^{m} LDF e^{J}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$B$ is the risk of failure (Unitless)}
-              \item{$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
-              \item{$a$ is the plate length (long dimension) (m)}
-              \item{$b$ is the plate width (short dimension) (m)}
-              \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
-              \item{$E$ is the modulus of elasticity of glass (Pa)}
-              \item{$h$ is the actual thickness (m)}
-              \item{$LDF$ is the load duration factor (Unitless)}
-              \item{$J$ is the stress distribution factor (Function) (Unitless)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & 
-\\ \midrule \\
-RefBy & FIXME: This needs to be filled in
-\\ \bottomrule \end{tabular}
-\end{minipage}\\
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
 Table~\ref{Table:InDataConstraints}, and Table~\ref{Table:OutDataConstraints} shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. Section~\ref{Sec:AuxConstants} gives the values of the specification parameters used in Table~\ref{Table:InDataConstraints}. Table~\ref{Table:OutDataConstraints} shows the constraints that must be satisfied by the output.

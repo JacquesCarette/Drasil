@@ -2794,15 +2794,39 @@ T<sub>P</sub> = T<sub>melt</sub><sup>P</sup>
 Description
 </th>
 <td>
-<div class="list">
-<em>t</em> is the time (s) <br />
-<em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C) <br />
-<em>τ<sub>P</sub><sup>S</sup></em> is the ODE parameter for solid PCM (s) <br />
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C) <br />
-<em>τ<sub>P</sub><sup>L</sup></em> is the ODE parameter for liquid PCM (s) <br />
-<em>T<sub>melt</sub><sup>P</sup></em> is the melting point temperature for PCM (&deg;C) <br />
-<em>ϕ</em> is the melt fraction (Unitless) <br />
-</div>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>t</em> is the time (s)
+</li>
+<li>
+<em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C)
+</li>
+<li>
+<em>τ<sub>P</sub><sup>S</sup></em> is the ODE parameter for solid PCM (s)
+</li>
+<li>
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
+</li>
+<li>
+<em>τ<sub>P</sub><sup>L</sup></em> is the ODE parameter for liquid PCM (s)
+</li>
+<li>
+<em>T<sub>melt</sub><sup>P</sup></em> is the melting point temperature for PCM (&deg;C)
+</li>
+<li>
+<em>ϕ</em> is the melt fraction (Unitless)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>T<sub>P</sub></em>, <em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>, with initial conditions, <em>T<sub>W</sub> = T<sub>P</sub> = T<sub>init</sub></em>, FIXME t_w(0) = t_p(0), <a href=#A:Same-Initial-Temp-Water-PCM>Same-Initial-Temp-Water-PCM</a>, and <em>T<sub>W</sub></em> from IM1, such that the following governing ODE is satisfied. The temperature remains constant at <em>T<sub>melt</sub><sup>P</sup></em>, even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as <em>0&thinsp;&lt;&thinsp;ϕ&thinsp;&lt;&thinsp;1</em> (from <a href=#DD:melt.frac>DD:melt.frac</a> ) is determined as part of the heat energy in the PCM, as given in IM4.
+</p>
 </td>
 </tr>
 <tr>
@@ -2822,16 +2846,6 @@ RefBy
 <td>
 <p class="paragraph">
 FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-<em>T<sub>P</sub></em>, <em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>, with initial conditions, <em>T<sub>W</sub> = T<sub>P</sub> = T<sub>init</sub></em>, FIXME t_w(0) = t_p(0), <a href=#A:Same-Initial-Temp-Water-PCM>Same-Initial-Temp-Water-PCM</a>, and <em>T<sub>W</sub></em> from IM1, such that the following governing ODE is satisfied. The temperature remains constant at <em>T<sub>melt</sub><sup>P</sup></em>, even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as <em>0&thinsp;&lt;&thinsp;ϕ&thinsp;&lt;&thinsp;1</em> (from <a href=#DD:melt.frac>DD:melt.frac</a> ) is determined as part of the heat energy in the PCM, as given in IM4.
 </p>
 </td>
 </tr>

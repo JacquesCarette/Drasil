@@ -117,11 +117,9 @@ specSystDesc, probDescription, termAndDefn, physSystDescription, goalStates, sol
   reqS, funcReqs, likelyChgs, unlikelyChgs, traceMAndG, specParamVal :: Section
 
 
-
 -------------------
 --INPUT INFORMATION
 -------------------
-
 
 --------------------------------
 --Section 1 : REFERENCE MATERIAL
@@ -139,17 +137,14 @@ mkSRS = RefSec (RefProg intro
   IChar (charReader1 ht_trans_theo) (charReader2 M.de) EmptyS,
   IOrgSec orgDocIntro inModel (SRS.inModel SRS.missingP [])
   (orgDocEnd inModel M.ode progName)]) : 
-  Verbatim genSystDesc: --Verbatim gen_sys_desc:
-  ------
+  Verbatim genSystDesc:
   SSDSec 
     (SSDProg [SSDSubVerb probDescription
       , SSDSolChSpec 
         (SCSProg 
           [ Assumptions 
           , TMs ([Label] ++ stdFields) [t1ConsThermE_new] -- only have the same T1 with SWHS
-          , GDs [Label, Units, DefiningEquation   ---check glassbr
-          , Description Verbose IncludeUnits, Notes
-          , Source, RefBy] generalDefinitions ShowDerivation
+          , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
           , DDs' ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxCDD] ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
             [eBalanceOnWtr_new, heatEInWtr_new] ShowDerivation
@@ -158,9 +153,7 @@ mkSRS = RefSec (RefProg intro
           ]
         )
       ]
-    ): --Testing General Definitions.-}
-  
-  --Verbatim spec_sys_des: -- Comment this out and the above in for testing GDs.
+    ):
   map Verbatim [reqS, likelyChgs, traceMAndG, specParamVal] ++ (Bibliography : [])
 
 stdFields :: Fields

@@ -128,7 +128,6 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     SystCons [] []]) :
   ScpOfProjSec (ScpOfProjProg (short gLassBR) (product_use_case_table) (individual_product_use_case (glaSlab)
     (capacity) (demandq) (probability))) :
-  -- SSDSec (SSDVerb spec_sys_desc) : 
   SSDSec 
     (SSDProg
       [SSDProblem  (PDProg start gLassBR ending [terminology_and_description , physical_system_description, goal_statements])

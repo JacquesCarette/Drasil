@@ -146,34 +146,26 @@ swhsPeople :: [Person]
 swhsPeople = [thulasi, brooks, spencerSmith]
 
 mkSRS :: DocDesc
-mkSRS = RefSec (RefProg intro
-  [TUnits, tsymb'' tsymb_intro (TermExcept [uNormalVect]), TAandA]):
-
-  IntroSec (IntroProg (introP1 CT.ener_src energy swhs_pcm phsChgMtrl 
+mkSRS = RefSec (RefProg intro [
+    TUnits, tsymb'' tsymb_intro (TermExcept [uNormalVect]), TAandA]):
+  IntroSec (
+    IntroProg (introP1 CT.ener_src energy swhs_pcm phsChgMtrl 
     progName CT.thermal_energy latent_heat unit_) (introP2 swhs_pcm program
-    progName) [
-   
-  IPurpose (purpDoc swhs_pcm progName),
-  
-  IScope (scopeReqs1 CT.thermal_analysis tank_pcm)
-  (scopeReqs2 temp CT.thermal_energy water phsChgMtrl sWHT),
-   
-  IChar (charReader1 CT.ht_trans_theo) (charReader2 de) (EmptyS),
-  
-  IOrgSec (orgDocIntro) (inModel) (SRS.inModel SRS.missingP [])
-  (orgDocEnd swhs_pcm progName)]):
-  Verbatim genSystDesc: 
-  ------
-  --Constraints :: Sentence -> Sentence -> Sentence -> [Contents]
+    progName) 
+    [IPurpose (purpDoc swhs_pcm progName),
+     IScope (scopeReqs1 CT.thermal_analysis tank_pcm) 
+       (scopeReqs2 temp CT.thermal_energy water phsChgMtrl sWHT),
+     IChar (charReader1 CT.ht_trans_theo) (charReader2 de) (EmptyS),
+     IOrgSec (orgDocIntro) (inModel) (SRS.inModel SRS.missingP [])
+       (orgDocEnd swhs_pcm progName)]):
+  Verbatim genSystDesc:
   SSDSec 
     (SSDProg [SSDSubVerb probDescription
       , SSDSolChSpec 
         (SCSProg 
           [ Assumptions
           , TMs ([Label] ++ stdFields) [t1ConsThermE_new, t2SensHtE_new, t3LatHtE_new]
-          , GDs [Label, Units, DefiningEquation   ---check glassbr
-          , Description Verbose IncludeUnits
-          , Notes, Source, RefBy] generalDefinitions ShowDerivation
+          , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
           , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
            [eBalanceOnWtr_new, eBalanceOnPCM_new, heatEInWtr_new, heatEInPCM_new ] ShowDerivation
@@ -182,12 +174,10 @@ mkSRS = RefSec (RefProg intro
           ]
         )
       ]
-    ): --Testing General Definitions.-}
-  
-  map Verbatim [reqS, likelyChgs, unlikelyChgs, traceMAndG] ++ 
-    [AuxConstntSec (AuxConsProg progName specParamValList)] ++ 
-    (Bibliography : [])
-
+    ):  
+  (map Verbatim [reqS, likelyChgs, unlikelyChgs, traceMAndG]) ++
+    AuxConstntSec (AuxConsProg progName specParamValList) :
+    Bibliography : []
 
 swhsCode :: CodeSpec
 swhsCode = codeSpec swhs_si [swhsInputMod]

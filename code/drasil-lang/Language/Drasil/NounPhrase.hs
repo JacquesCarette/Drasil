@@ -42,11 +42,11 @@ instance NounPhrase NP where
   plural n@(ProperNoun _ p)           = sPlur (phrase n) p
   plural n@(CommonNoun _ p _)         = sPlur (phrase n) p
   plural (Phrase _ p _ _)             = p
-  sentenceCase n@(ProperNoun _ _)   _ = phrase n
+  sentenceCase n@ProperNoun {}   _ = phrase n
   sentenceCase n@(CommonNoun _ _ r) f = cap (f n) r
   sentenceCase n@(Phrase _ _ r _)   f = cap (f n) r
-  titleCase n@(ProperNoun _ _)      _ = phrase n
-  titleCase n@(CommonNoun _ _ _)    f = cap (f n) CapWords
+  titleCase n@ProperNoun {}      _ = phrase n
+  titleCase n@CommonNoun {}    f = cap (f n) CapWords
   titleCase n@(Phrase _ _ _ r)      f = cap (f n) r
   
 -- ===Constructors=== --
@@ -87,17 +87,17 @@ cnIES n = CommonNoun n (IrregPlur (\x -> init x ++ "ies")) CapFirst
 -- | Common noun that pluralizes by dropping the last two letters and adding an 
 -- | "ices" ending (ex. matrix -> matrices)
 cnICES :: String -> NP
-cnICES n = CommonNoun n (IrregPlur (\x -> (init (init x)) ++ "ices")) CapFirst
+cnICES n = CommonNoun n (IrregPlur (\x -> init (init x) ++ "ices")) CapFirst
 
 -- | Common noun that pluralizes by dropping the last two letters and adding
 -- "es" (ex. analysis -> analyses)
 cnIS :: String -> NP
-cnIS n = CommonNoun n (IrregPlur (\x -> (init (init x)) ++ "es")) CapFirst
+cnIS n = CommonNoun n (IrregPlur (\x -> init (init x) ++ "es")) CapFirst
 
 -- | Common noun that pluralizes by dropping the last two letters and adding "a"
 -- (ex. datum -> data)
 cnUM :: String -> NP
-cnUM n = CommonNoun n (IrregPlur (\x -> (init (init x)) ++ "a")) CapFirst
+cnUM n = CommonNoun n (IrregPlur (\x -> init (init x) ++ "a")) CapFirst
 
 -- | Common noun that allows you to specify the pluralization rule 
 -- (as in 'pnIrr')
@@ -132,7 +132,7 @@ nounPhraseSP s = Phrase (S s) (S s) CapFirst CapWords
 
 -- | For Reuirements, Assumptions, LikelyChanges, etc. to allow for referencing.
 nounPhraseSent :: Sentence -> NP
-nounPhraseSent s = Phrase (s) (s) CapFirst CapWords
+nounPhraseSent s = Phrase s s CapFirst CapWords
 
 -- | Combine two noun phrases. The singular form becomes 'phrase' from t1 followed
 -- by phrase of t2. The plural becomes phrase of t1 followed by plural of t2.
@@ -199,10 +199,10 @@ sPlur a _ = S "MISSING PLURAL FOR:" +:+ a
 -- | Capitalization helper function.
 cap :: Sentence -> CapitalizationRule -> Sentence
 cap _ (Replace s) = s
-cap (S (s:ss))   CapFirst = S $ (toUpper s : ss)
-cap (S s)        CapWords = S $ findNotCaps $ findHyph $ concat (intersperse " " 
-  (map (\x -> (toUpper (head x) : (tail x))) (words s)))
-cap ((S s1) :+: (S s2)) r = cap (S (s1++s2)) r
+cap (S (s:ss))   CapFirst = S (toUpper s : ss)
+cap (S s)        CapWords = S $ findNotCaps $ findHyph $ unwords 
+  (map (\x -> toUpper (head x) : tail x) (words s))
+cap (S s1 :+: S s2) r = cap (S (s1 ++ s2)) r
 cap (s1 :+: s2 :+: s3)  CapWords = cap (s1 :+: s2) CapWords +:+ cap s3 CapWords
   --could change associativity of :+: instead?
 cap (s1 :+: s2)  CapWords = cap s1 CapWords :+: cap s2 CapWords
@@ -213,17 +213,17 @@ findHyph :: String -> String
 findHyph "" = ""
 findHyph s
       | [head s] == "-" = "-" ++ [toUpper (head(tail s))] ++ tail (tail s)
-      | otherwise = [head s] ++ findHyph (tail s)
+      | otherwise = head s : findHyph (tail s)
 
 -- Finds words that should not be capitalized in a title and changes them back to lowercase
 findNotCaps :: String -> String
 findNotCaps "" = ""
-findNotCaps s = concat $ intersperse " " ((head $ words s) : map isNotCaps (tail $ words s))
+findNotCaps s = unwords (head (words s) : map isNotCaps (tail $ words s))
 
 isNotCaps :: String -> String
 isNotCaps (c:cs)
-    | not ((isLetter c) && (isLatin1 c)) = (toLower c) : cs
-    | ((toLower c) : cs) `elem` doNotCaps = (toLower c) : cs
+    | not (isLetter c && isLatin1 c)  = toLower c : cs
+    | (toLower c : cs) `elem` doNotCaps = toLower c : cs
 isNotCaps s = s
 
 doNotCaps :: [String]

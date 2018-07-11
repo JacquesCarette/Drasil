@@ -153,17 +153,6 @@ m<sup>2</sup>
 </tr>
 <tr>
 <td>
-<em>C<sup>L</sup></em>
-</td>
-<td>
-Specific heat capacity of a liquid
-</td>
-<td>
-J/(kg&sdot;&deg;C)
-</td>
-</tr>
-<tr>
-<td>
 <em>C</em>
 </td>
 <td>
@@ -274,10 +263,32 @@ kg
 </tr>
 <tr>
 <td>
-<em>q</em>
+<em><b>n&#770;</b></em>
 </td>
 <td>
-Heat flux
+Normal Vector
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<em>q<sub>C</sub></em>
+</td>
+<td>
+Heat flux into the water from the coil
+</td>
+<td>
+W/m<sup>2</sup>
+</td>
+</tr>
+<tr>
+<td>
+<em><b>q</b></em>
+</td>
+<td>
+Thermal flux vector
 </td>
 <td>
 W/m<sup>2</sup>
@@ -307,24 +318,13 @@ W/m<sup>2</sup>
 </tr>
 <tr>
 <td>
-<em><b>q</b></em>
+<em>S</em>
 </td>
 <td>
-Thermal flux vector
+Surface
 </td>
 <td>
-W/m<sup>2</sup>
-</td>
-</tr>
-<tr>
-<td>
-<em>q<sub>C</sub></em>
-</td>
-<td>
-Heat flux into the water from the coil
-</td>
-<td>
-W/m<sup>2</sup>
+m<sup>2</sup>
 </td>
 </tr>
 <tr>
@@ -336,6 +336,17 @@ Temperature
 </td>
 <td>
 &deg;C
+</td>
+</tr>
+<tr>
+<td>
+<em>t</em>
+</td>
+<td>
+Time
+</td>
+<td>
+s
 </td>
 </tr>
 <tr>
@@ -373,17 +384,6 @@ Temperature of the environment
 </tr>
 <tr>
 <td>
-<em>t</em>
-</td>
-<td>
-Time
-</td>
-<td>
-s
-</td>
-</tr>
-<tr>
-<td>
 <em>t<sub>final</sub></em>
 </td>
 <td>
@@ -417,10 +417,10 @@ Temperature of the water
 </tr>
 <tr>
 <td>
-<em>V<sub>tank</sub></em>
+<em>V</em>
 </td>
 <td>
-Volume of the cylindrical tank
+Volume
 </td>
 <td>
 m<sup>3</sup>
@@ -428,10 +428,10 @@ m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>V</em>
+<em>V<sub>tank</sub></em>
 </td>
 <td>
-Volume
+Volume of the cylindrical tank
 </td>
 <td>
 m<sup>3</sup>
@@ -472,13 +472,24 @@ kg/m<sup>3</sup>
 </tr>
 <tr>
 <td>
-<em>τ</em>
+<em>τ<sub>W</sub></em>
 </td>
 <td>
-Dummy variable for integration over time
+ODE parameter for water
 </td>
 <td>
 s
+</td>
+</tr>
+<tr>
+<td>
+<em>∇</em>
+</td>
+<td>
+Gradient
+</td>
+<td>
+
 </td>
 </tr>
 </table>
@@ -969,15 +980,29 @@ Equation
 Description
 </th>
 <td>
-<div class="list">
-<em>∇</em> is the gradient (Unitless) <br />
-<em><b>q</b></em> is the thermal flux vector (W/m<sup>2</sup>) <br />
-<em>g</em> is the volumetric heat generation per unit volume (W/m<sup>3</sup>) <br />
-<em>ρ</em> is the density (kg/m<sup>3</sup>) <br />
-<em>C</em> is the specific heat capacity (J/(kg&sdot;&deg;C)) <br />
-<em>t</em> is the time (s) <br />
-<em>T</em> is the temperature (&deg;C) <br />
-</div>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>∇</em> is the gradient (Unitless)
+</li>
+<li>
+<em><b>q</b></em> is the thermal flux vector (W/m<sup>2</sup>)
+</li>
+<li>
+<em>g</em> is the volumetric heat generation per unit volume (W/m<sup>3</sup>)
+</li>
+<li>
+<em>ρ</em> is the density (kg/m<sup>3</sup>)
+</li>
+<li>
+<em>C</em> is the specific heat capacity (J/(kg&sdot;&deg;C))
+</li>
+<li>
+<em>t</em> is the time (s)
+</li>
+<li>
+<em>T</em> is the temperature (&deg;C)
+</li>
+</ul>
 </td>
 </tr>
 <tr>

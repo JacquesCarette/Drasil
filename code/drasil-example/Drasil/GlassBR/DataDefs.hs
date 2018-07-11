@@ -165,6 +165,10 @@ standOffDis_eq = sqrt ((sy sdx) $^ 2 + (sy sdy) $^ 2 + (sy sdz) $^ 2)
 standOffDis :: QDefinition
 standOffDis = mkDataDef sd standOffDis_eq
 
+standOffDisDD :: DataDefinition
+standOffDisDD = mkDD standOffDis [{-references-}] [{-derivation-}] ""--temporary
+  (Nothing) -- change
+
 --Issue #350
 
 --Additional Notes--

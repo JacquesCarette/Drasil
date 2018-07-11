@@ -1,5 +1,5 @@
 module Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp, roc_temp_simp_deriv,
-  generalDefinitions) where
+  generalDefinitions, nwtnCooling_desc, rocTempSimp_desc) where
 
 import Prelude hiding (sin, cos, tan)
 

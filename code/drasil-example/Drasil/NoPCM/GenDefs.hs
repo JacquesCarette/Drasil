@@ -16,6 +16,7 @@ import Data.Drasil.SentenceStructures (sAnd, foldlList, ofThe, acroGD, foldlSent
 import Data.Drasil.Concepts.Documentation (assumption)
 import Data.Drasil.Quantities.Physics (time)
 
+
 roc_temp_simp_deriv :: Derivation
 roc_temp_simp_deriv =
   [S "Detailed derivation of simplified" +:+ phrase rOfChng +:+ S "of" +:+.

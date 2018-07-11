@@ -29,7 +29,8 @@ import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
   coil_HTC_max, time_final_max, sim_time, coil_SA_max, eta)
 import Drasil.SWHS.DataDefs(dd1HtFluxC, swhsDD1)
 import Drasil.SWHS.TMods (t1ConsThermE, t1ConsThermE_new, tMod1)
-import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp)
+import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp,
+  nwtnCooling_desc, rocTempSimp_desc)
 import Drasil.SWHS.IMods (heatEInWtr, heatEInWtr_new)
 import Drasil.NoPCM.IMods (eBalanceOnWtr, eBalanceOnWtr_new)
 import Drasil.NoPCM.Unitals (temp_init)
@@ -145,9 +146,9 @@ mkSRS = RefSec (RefProg intro
       , SSDSolChSpec 
         (SCSProg 
           [ Assumptions 
-          , TMs ([Label] ++ stdFields ++ [Notes]) [t1ConsThermE_new] -- only have the same T1 with SWHS
+          , TMs ([Label] ++ stdFields) [t1ConsThermE_new] -- only have the same T1 with SWHS
           , GDs [Label, Units, DefiningEquation   ---check glassbr
-          , Description Verbose IncludeUnits
+          , Description Verbose IncludeUnits, Notes
           , Source, RefBy] generalDefinitions ShowDerivation
           , DDs ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields ++ [Notes])
@@ -163,11 +164,11 @@ mkSRS = RefSec (RefProg intro
   map Verbatim [reqS, likelyChgs, traceMAndG, specParamVal] ++ (Bibliography : [])
 
 stdFields :: Fields
-stdFields = [DefiningEquation, Description Verbose IncludeUnits, Source, RefBy]
+stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 generalDefinitions :: [GenDefn]
-generalDefinitions = [gd nwtnCooling (Just thermal_flux) ([] :: Derivation) "nwtnCooling",
-  gd rocTempSimp (Nothing :: Maybe DerUChunk) roc_temp_simp_deriv "rocTempSimp"]
+generalDefinitions = [gd' nwtnCooling (Just thermal_flux) ([] :: Derivation) "nwtnCooling" [nwtnCooling_desc],
+  gd' rocTempSimp (Nothing :: Maybe DerUChunk) roc_temp_simp_deriv "rocTempSimp" [rocTempSimp_desc]]
 
 nopcm_si :: SystemInformation
 nopcm_si = SI {

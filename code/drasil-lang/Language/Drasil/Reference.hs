@@ -82,15 +82,15 @@ simpleMap :: HasUID a => [a] -> RefMap a
 simpleMap xs = Map.fromList $ zip (map (^. uid) xs) (zip xs [1..])
 
 reqMap :: [ReqChunk] -> ReqMap
-reqMap rs = Map.fromList $ zip (map (^. uid) (frs ++ nfrs)) ((zip frs [1..]) ++
-  (zip nfrs [1..]))
+reqMap rs = Map.fromList $ zip (map (^. uid) (frs ++ nfrs)) (zip frs [1..] ++
+  zip nfrs [1..])
   where (frs, nfrs)  = partition (isFuncRec . reqType) rs
         isFuncRec FR = True
         isFuncRec _  = False
 
 changeMap :: [Change] -> ChangeMap
 changeMap cs = Map.fromList $ zip (map (^. uid) (lcs ++ ulcs))
-  ((zip lcs [1..]) ++ (zip ulcs [1..]))
+  (zip lcs [1..] ++ zip ulcs [1..])
   where (lcs, ulcs) = partition (isLikely . chngType) cs
         isLikely Likely = True
         isLikely _ = False
@@ -104,12 +104,12 @@ bibMap cs = Map.fromList $ zip (map (^. uid) scs) (zip scs [1..])
         -- We can always change the sorting to whatever makes most sense
 
 conGrp :: ConceptInstance -> ConceptInstance -> Bool
-conGrp a b = (cdl a) == (cdl b) where
+conGrp a b = cdl a == cdl b where
   cdl :: ConceptInstance -> UID
   cdl x = sDom $ x ^. cdom where
     sDom [d] = d
     sDom d = error $ "Expected ConceptDomain for: " ++ (x ^. uid) ++
-                     " to have a single domain, found " ++ (show $ length d) ++
+                     " to have a single domain, found " ++ show (length d) ++
                      " instead."
 
 conceptMap :: [ConceptInstance] -> ConceptMap
@@ -276,8 +276,8 @@ uidSort = compare `on` (^. uid)
 compareAuthYearTitle :: (HasFields c) => c -> c -> Ordering
 compareAuthYearTitle c1 c2
   | comparePeople (getAuthor c1) (getAuthor c2) /= Nothing = fromJust $ comparePeople (getAuthor c1) (getAuthor c2)
-  | (getYear c1)  /= (getYear c2)  = (getYear c1)  `compare` (getYear c2)
-  | (getTitle c1) /= (getTitle c2) = (getTitle c1) `compare` (getTitle c2)
+  | getYear c1  /= getYear c2  = getYear c1  `compare` getYear c2
+  | getTitle c1 /= getTitle c2 = getTitle c1 `compare` getTitle c2
   | otherwise                      = error "Couldn't sort authors"
 
 getAuthor :: (HasFields c) => c -> People

@@ -1,11 +1,11 @@
 module Language.Drasil.Make.Print where
 
-import Text.PrettyPrint hiding (render)
+import Text.PrettyPrint (Doc, text, (<>), (<+>), ($+$), hsep, vcat) 
 
 import Language.Drasil.Output.Formats (DocSpec(..))
-import Language.Drasil.Make.AST
-import Language.Drasil.Make.Import
-import Language.Drasil.Make.Helpers
+import Language.Drasil.Make.AST (Type(Phony, TeX), Target, Dependencies, Rule, Makefile(M))
+import Language.Drasil.Make.Import (toMake)
+import Language.Drasil.Make.Helpers (addCommonFeatures)
 import Language.Drasil.Printing.Helpers (tab)
 
 -- | Generates the makefile by calling 'build' after 'toMake'

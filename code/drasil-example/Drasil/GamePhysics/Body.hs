@@ -229,7 +229,8 @@ organization_of_documents_intro :: Sentence
 organization_of_documents_intro = foldlSent 
   [S "The", (phrase organization), S "of this", (phrase document), 
   S "follows the", phrase template, S "for an", (getAcc srs), S "for", 
-  (phrase sciCompS), S "proposed by", (sSqBrNum 1) `sAnd` (sSqBrNum 2)]
+  (phrase sciCompS), S "proposed by", (sSqBrNum 3) {-dParnas1972-} `sAnd` 
+  (sSqBrNum 6) {-dParnasPcClements1984-}]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --

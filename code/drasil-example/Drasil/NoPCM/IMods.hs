@@ -28,7 +28,7 @@ eBalanceOnWtr_new = im'' eBalanceOnWtr [qw temp_C, qw temp_init, qw time_final,
   qw coil_SA, qw coil_HTC, qw htCap_W, qw w_mass] 
   [TCon AssumedCon $sy temp_init $<= sy temp_C] (qw temp_W) 
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
-  [TCon AssumedCon $ 0 $< sy time $< sy time_final] eBalanceOnWtr_deriv_nopcm "eBalanceOnWtr" [balWtrDesc_note]
+  [TCon AssumedCon $ 0 $< sy time $< sy time_final] eBalanceOnWtr_deriv_nopcm "eBalanceOnWtr" [balWtrDesc]
 
 eBalanceOnWtr :: RelationConcept
 eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++

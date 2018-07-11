@@ -151,7 +151,7 @@ mkSRS = RefSec (RefProg intro
           , Description Verbose IncludeUnits, Notes
           , Source, RefBy] generalDefinitions ShowDerivation
           , DDs' ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxCDD] ShowDerivation
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields ++ [Notes])
+          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
             [eBalanceOnWtr_new, heatEInWtr_new] ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty dataContMid
            [dataConstTable1, dataConstTable2]

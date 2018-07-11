@@ -138,7 +138,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           , TMs ([Label] ++ stdFields) [t1IsSafe, t2IsSafe]
           , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
           , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand, testIMFromQD] HideDerivation
+          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand] HideDerivation
           , Constraints (EmptyS) (dataConstraintUncertainty) 
                         (foldlSent [(makeRef (SRS.valsOfAuxCons SRS.missingP [])), S "gives", (plural value `ofThe` S "specification"), 
                         plural parameter, S "used in", (makeRef inputDataConstraints)] +:+ instance_models_intro2)
@@ -190,11 +190,8 @@ glassSystInfo = SI {
 }
   --FIXME: All named ideas, not just acronyms.
 
-testIMFromQD :: InstanceModel
-testIMFromQD = imQD gbSymbMap risk EmptyS [] [] "riskFun" --shortname
 glassBR_code :: CodeSpec
 glassBR_code = codeSpec glassSystInfo allMods
-
 
 problem_description, terminology_and_description, 
   physical_system_description, goal_statements :: Section

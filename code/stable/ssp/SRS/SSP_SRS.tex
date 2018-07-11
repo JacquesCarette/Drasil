@@ -81,13 +81,13 @@ ${C2_{i}}$ & Interslice Shear Force Function: the shear force at the interslice 
 \\
 $E$ & Elastic Modulus: The ratio of the stress exerted on a body to the resulting strain. & Pa
 \\
-$F$ & Force: An interaction that tends to produce change in the motion of an object & N
+$f$ & Scaling Function: magnitude of interslice forces as a function of the x coordinatefor interslice index i; can be constant or a half-sine & 
 \\
 ${F_{x}}$ & X-Component of the Net Force:  & N
 \\
 ${F_{y}}$ & Y-Component of the Net Force:  & N
 \\
-$f$ & Scaling Function: magnitude of interslice forces as a function of the x coordinatefor interslice index i; can be constant or a half-sine & 
+$F$ & Force: An interaction that tends to produce change in the motion of an object & N
 \\
 $FS$ & Factor of Safety: The global stability of a surface in a slope & 
 \\
@@ -97,19 +97,19 @@ ${FS_{min}}$ & Minimum Factor of Safety: The minimum factor of safety &
 \\
 $G$ & Interslice Normal Force: exerted between adjacent slices for interslice index i & N
 \\
-$H$ & Interslice Water Force: exerted in the x-ordinate direction between adjacent slices for interslice index i & N
-\\
 $ΔH$ & Difference Between Interslice Forces: exerted in the x-ordinate direction between adjacent slices for interslice index i & N
+\\
+$H$ & Interslice Water Force: exerted in the x-ordinate direction between adjacent slices for interslice index i & N
 \\
 $h$ & Midpoint Height: distance from the slip base to the slope surface in a vertical line from the midpoint of the slice for slice index i & m
 \\
 $i$ & Index: used to show a quantity applies to only one slice & 
 \\
+$K$ & Stiffness: The extent a body resists strain. & $\frac{\text{N}}{\text{m}}$
+\\
 ${K_{bA}}$ & Effective Base Stiffness a: for rotated coordinates of a slice base surface, for slice index i & $\frac{\text{Pa}}{\text{m}}$
 \\
 ${K_{bB}}$ & Effective Base Stiffness a: for rotated coordinates of a slice base surface, for slice index i & $\frac{\text{Pa}}{\text{m}}$
-\\
-$K$ & Stiffness: The extent a body resists strain. & $\frac{\text{N}}{\text{m}}$
 \\
 ${K_{bn}}$ & Normal Stiffness: for a slice base surface, without length adjustment for slice index i & $\frac{\text{Pa}}{\text{m}}$
 \\
@@ -117,27 +117,23 @@ ${K_{bt}}$ & Shear Stiffness: for a slice base surface, without length adjustmen
 \\
 ${K_{c}}$ & Earthquake Load Factor: proportionality factor of force that weight pushes outwards; caused by seismic earth movements & 
 \\
-${K_{no}}$ & Normal Stiffness: residual strength & $\frac{\text{Pa}}{\text{m}}$
-\\
 ${K_{sn}}$ & Normal Stiffness: for an interslice surface, without length adjustment for interslice index i & $\frac{\text{Pa}}{\text{m}}$
 \\
 ${K_{st}}$ & Shear Stiffness: for interslice surface, without length adjustment for interslice index i & $\frac{\text{Pa}}{\text{m}}$
 \\
-${K_{tr}}$ & Shear Stiffness: residual strength & $\frac{\text{Pa}}{\text{m}}$
-\\
 $M$ & Moment: a measure of the tendency of a body to rotate about a specific point or axis & Nm
+\\
+$n$ & Number of Slices: the slip mass has been divided into & 
 \\
 $N$ & Normal Force: total reactive force for a soil surface subject to a body resting on it & N
 \\
 $N'$ & Effective Normal Force: for a soil surface, subtracting pore water reactive force from total reactive force & N
 \\
-$n$ & Number of Slices: the slip mass has been divided into & 
-\\
 $N*$ & Effective Normal Force: for a soil surface, without the influence of interslice forces & N
 \\
-$p$ & Pressure: A force exerted over an area & Pa
-\\
 $P$ & Resistive Shear Force: Mohr Coulomb frictional force that describes the limit of mobilized shear force the slice i can withstand before failure & N
+\\
+$p$ & Pressure: A force exerted over an area & Pa
 \\
 $Q$ & Imposed Surface Load: a downward force acting into the surface from midpoint of slice i & N
 \\
@@ -165,19 +161,19 @@ $W$ & Weight: downward force caused by gravity on slice i & N
 \\
 $x$ & X Ordinate: refers to either slice i midpoint, or slice interface i & m
 \\
+$X$ & Interslice Shear Force: exerted between adjacent slices for interslice index i & N
+\\
 ${x_{slip}}$ & X Ordinate: distance of the slip surface at i, refers to either slice i midpoint, or slice interface i & m
 \\
 ${x_{us}}$ & X Ordinate: distance of the edge of the slope at i, refers to either slice i midpoint, or slice interface i & m
 \\
-$X$ & Interslice Shear Force: exerted between adjacent slices for interslice index i & N
+$y$ & Y Ordinate: refers to either slice i midpoint, or slice interface i & m
 \\
 ${y_{slip}}$ & Y Ordinate: height of the slip surface at i, refers to either slice i midpoint, or slice interface i & m
 \\
 ${y_{us}}$ & Y Ordinate: height of the top of the slope at i, refers to either slice i midpoint, or slice interface i & m
 \\
 ${y_{wt}}$ & Y Ordinate: height of the water table at i, refers to either slice i midpoint, or slice interface i & m
-\\
-$y$ & Y Ordinate: refers to either slice i midpoint, or slice interface i & m
 \\
 $z$ & Center of Slice Height: the distance from the lowest part of the slice to the height of the centers of slice & m
 \\
@@ -1367,16 +1363,6 @@ There are no auxiliary constants.
 \section{References}
 \label{Sec:References}
 \begin{filecontents*}{bibfile.bib}
-@article{chen2005,
-author={Qian, Q. H. and Zhu, D. Y. and Lee, C. F. and Chen, G. R.},
-title={A concise algorithm for computing the factor of safety using the morgenstern price method},
-journal={Canadian Geotechnical Journal},
-year={2005},
-month={feb},
-volume={42},
-number={1},
-pages={"272-278"}}
-
 @article{fredlund1977,
 author={Fredlund, D. G. and Krahn, J.},
 title={Comparison of slope stability methods of analysis},
@@ -1394,16 +1380,6 @@ school={McMaster University},
 year={2013},
 address={Hamilton, ON, Canada}}
 
-@article{li2010,
-author={Yu-Chao, Li and Yun-Min, Chen and Zhan, Tony L. T. and Sao-Sheng, Ling and Cleall, Peter John},
-title={An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm},
-journal={Canadian Geotechnical Journal},
-year={2010},
-month={jun},
-pages={"806-820"},
-volume={47},
-number={7}}
-
 @article{parnasClements1986,
 author={Parnas, David L. and Clements, P. C.},
 title={A rational design process: How and why to fake it},
@@ -1414,6 +1390,16 @@ volume={12},
 number={2},
 pages={"251-257"},
 address={Washington, USA}}
+
+@article{chen2005,
+author={Qian, Q. H. and Zhu, D. Y. and Lee, C. F. and Chen, G. R.},
+title={A concise algorithm for computing the factor of safety using the morgenstern price method},
+journal={Canadian Geotechnical Journal},
+year={2005},
+month={feb},
+volume={42},
+number={1},
+pages={"272-278"}}
 
 @inproceedings{smithLai2005,
 author={Smith, W. Spencer and Lai, Lei},
@@ -1434,6 +1420,16 @@ month={may},
 pages={"653-662"},
 volume={45},
 number={5}}
+
+@article{li2010,
+author={Yu-Chao, Li and Yun-Min, Chen and Zhan, Tony L. T. and Sao-Sheng, Ling and Cleall, Peter John},
+title={An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm},
+journal={Canadian Geotechnical Journal},
+year={2010},
+month={jun},
+pages={"806-820"},
+volume={47},
+number={7}}
 \end{filecontents*}
 \nocite{*}
 \bibstyle{ieeetr}

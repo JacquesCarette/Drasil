@@ -340,6 +340,17 @@ J/kg
 </tr>
 <tr>
 <td>
+<em>h<sub>min</sub></em>
+</td>
+<td>
+Minimum thickness of a sheet of PCM
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
 <em>h<sub>P</sub></em>
 </td>
 <td>
@@ -358,6 +369,17 @@ Length of tank
 </td>
 <td>
 m
+</td>
+</tr>
+<tr>
+<td>
+<em>m</em>
+</td>
+<td>
+Mass
+</td>
+<td>
+kg
 </td>
 </tr>
 <tr>
@@ -384,17 +406,6 @@ kg
 </tr>
 <tr>
 <td>
-<em>m</em>
-</td>
-<td>
-Mass
-</td>
-<td>
-kg
-</td>
-</tr>
-<tr>
-<td>
 <em><b>n&#770;</b></em>
 </td>
 <td>
@@ -402,39 +413,6 @@ Unit outward normal vector for a surface
 </td>
 <td>
 
-</td>
-</tr>
-<tr>
-<td>
-<em>q</em>
-</td>
-<td>
-Heat flux
-</td>
-<td>
-W/m<sup>2</sup>
-</td>
-</tr>
-<tr>
-<td>
-<em>Q</em>
-</td>
-<td>
-Latent heat
-</td>
-<td>
-J
-</td>
-</tr>
-<tr>
-<td>
-<em><b>q</b></em>
-</td>
-<td>
-Thermal flux vector
-</td>
-<td>
-W/m<sup>2</sup>
 </td>
 </tr>
 <tr>
@@ -483,6 +461,28 @@ W/m<sup>2</sup>
 </tr>
 <tr>
 <td>
+<em><b>q</b></em>
+</td>
+<td>
+Thermal flux vector
+</td>
+<td>
+W/m<sup>2</sup>
+</td>
+</tr>
+<tr>
+<td>
+<em>Q</em>
+</td>
+<td>
+Latent heat
+</td>
+<td>
+J
+</td>
+</tr>
+<tr>
+<td>
 <em>Q<sub>P</sub></em>
 </td>
 <td>
@@ -509,6 +509,28 @@ m<sup>2</sup>
 </td>
 <td>
 Temperature
+</td>
+<td>
+&deg;C
+</td>
+</tr>
+<tr>
+<td>
+<em>t</em>
+</td>
+<td>
+Time
+</td>
+<td>
+s
+</td>
+</tr>
+<tr>
+<td>
+<em>ΔT</em>
+</td>
+<td>
+Change in temperature
 </td>
 <td>
 &deg;C
@@ -611,28 +633,6 @@ Melting point temperature
 </td>
 <td>
 &deg;C
-</td>
-</tr>
-<tr>
-<td>
-<em>ΔT</em>
-</td>
-<td>
-Change in temperature
-</td>
-<td>
-&deg;C
-</td>
-</tr>
-<tr>
-<td>
-<em>t</em>
-</td>
-<td>
-Time
-</td>
-<td>
-s
 </td>
 </tr>
 <tr>
@@ -795,6 +795,17 @@ s
 </td>
 <td>
 Melt fraction
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<em>∇</em>
+</td>
+<td>
+Gradient
 </td>
 <td>
 
@@ -3255,13 +3266,13 @@ Unlikely Changes
 <ul class="hide-list-style">
 <li>
 <div id="UC:unlikeChg1">
-Water-PCM-Fixed-States: <a href=#A:assump14>assump14</a> ,  <a href=#A:assump18>assump18</a> - It is unlikely for the changeof water from liquid to a solid or the state change of the phase change material from a liquid to a gas to be considered.
+Water-PCM-Fixed-States: <a href=#A:assump14>assump14</a> ,  <a href=#A:assump18>assump18</a> - It is unlikely for the change of water from liquid to a solid or the state change of the phase change material from a liquid to a gas to be considered.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="UC:unlikeChg1">
+<div id="UC:unlikeChg2">
 No-Internal-Heat-Generation: <a href=#A:assump16>assump16</a> - Is used for the derivations of IM1 and IM2 (Hack: need Label to fix).
 </div>
 </li>
@@ -6071,20 +6082,6 @@ maximum length of tank
 </td>
 <td>
 m
-</td>
-</tr>
-<tr>
-<td>
-<em>h<sub>min</sub></em>
-</td>
-<td>
-minimum convective heat transfer coefficient
-</td>
-<td>
-<em>0.001</em>
-</td>
-<td>
-W/(m<sup>2</sup>&sdot;&deg;C)
 </td>
 </tr>
 <tr>

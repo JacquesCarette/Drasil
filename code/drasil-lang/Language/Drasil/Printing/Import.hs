@@ -328,11 +328,11 @@ layField sm (HowPublished (Verb v)) = P.HowPublished (P.Verb $ spec sm v)
 
 -- | Translates lists
 makeL :: HasSymbolTable ctx => ctx -> ListType -> P.ListType
-makeL sm (Bullet bs)      = P.Unordered   $ map (item sm) bs
-makeL sm (Numeric ns)     = P.Ordered     $ map (item sm) ns
-makeL sm (Simple ps)      = P.Simple      $ map (\(x,y) -> (spec sm x, item sm y)) ps
-makeL sm (Desc ps)        = P.Desc        $ map (\(x,y) -> (spec sm x, item sm y)) ps
-makeL sm (Definitions ps) = P.Definitions $ map (\(x,y) -> (spec sm x, item sm y)) ps
+makeL sm (Bullet bs)      = P.Unordered   $ map (\x -> (item sm x, Nothing)) bs
+makeL sm (Numeric ns)     = P.Ordered     $ map (\x -> (item sm x, Nothing)) ns
+makeL sm (Simple ps)      = P.Simple      $ map (\(x,y) -> (spec sm x, item sm y, Nothing)) ps
+makeL sm (Desc ps)        = P.Desc        $ map (\(x,y) -> (spec sm x, item sm y, Nothing)) ps
+makeL sm (Definitions ps) = P.Definitions $ map (\(x,y) -> (spec sm x, item sm y, Nothing)) ps
 
 -- | Helper for translating list items
 item :: HasSymbolTable ctx => ctx -> ItemType -> P.ItemType

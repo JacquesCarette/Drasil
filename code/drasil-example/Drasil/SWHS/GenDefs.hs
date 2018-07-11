@@ -1,4 +1,5 @@
-module Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp, roc_temp_simp_deriv) where
+module Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp, roc_temp_simp_deriv,
+  generalDefinitions) where
 
 import Prelude hiding (sin, cos, tan)
 
@@ -19,6 +20,7 @@ import Data.Drasil.Concepts.Math (equation, rOfChng, rate, unit_)
 import Data.Drasil.Concepts.Thermodynamics (law_conv_cooling)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Concepts.Documentation (assumption)
+import Data.Drasil.Units.Thermodynamics (thermal_flux)
 
 import Drasil.SWHS.TMods (t1ConsThermE)
 import Drasil.SWHS.Concepts (gauss_div)
@@ -30,6 +32,10 @@ import Drasil.SWHS.Assumptions
 
 swhsGenDefs :: [RelationConcept]
 swhsGenDefs = [nwtnCooling, rocTempSimp]
+
+generalDefinitions :: [GenDefn]
+generalDefinitions = [gd' nwtnCooling (Just thermal_flux) ([] :: Derivation) "nwtnCooling" [nwtnCooling_desc],
+  gd' rocTempSimp (Nothing :: Maybe DerUChunk) roc_temp_simp_deriv "rocTempSimp" [rocTempSimp_desc]]
 
 --
 nwtnCooling :: RelationConcept

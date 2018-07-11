@@ -47,7 +47,8 @@ import Drasil.SWHS.IMods (heatEInWtr_new, eBalanceOnWtr_new,
   heatEInPCM_new, eBalanceOnPCM_new, swhsIMods)
 import Drasil.SWHS.DataDefs (swhsDataDefs,dd1HtFluxC, dd2HtFluxP, dd3HtFusion,
  dd4MeltFrac, swhsDDefs)
-import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp, roc_temp_simp_deriv)
+import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp, roc_temp_simp_deriv,
+  generalDefinitions)
 import Drasil.SWHS.References (ref_swhs_citations)
 import Drasil.SWHS.Assumptions (newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10,
   newA11, newA12, newA13, newA14, newA15, newA16, newA17, newA18, newA19, newA20, assump1, assump2, assump3, 
@@ -169,13 +170,13 @@ mkSRS = RefSec (RefProg intro
       , SSDSolChSpec 
         (SCSProg 
           [ Assumptions
-          , TMs ([Label] ++ stdFields ++ [Notes]) [t1ConsThermE_new, t2SensHtE_new, t3LatHtE_new]
+          , TMs ([Label] ++ stdFields) [t1ConsThermE_new, t2SensHtE_new, t3LatHtE_new]
           , GDs [Label, Units, DefiningEquation   ---check glassbr
           , Description Verbose IncludeUnits
-          , Source, RefBy] generalDefinitions ShowDerivation
+          , Notes, Source, RefBy] generalDefinitions ShowDerivation
           , DDs ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC, dd2HtFluxP, dd3HtFusion,
             dd4MeltFrac] ShowDerivation
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields ++ [Notes])
+          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
            [eBalanceOnWtr_new, eBalanceOnPCM_new, heatEInWtr_new, heatEInPCM_new ] ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty dataConTail
            [dataConTable1, dataConTable3]
@@ -200,13 +201,8 @@ tsymb_intro = [TSPurpose, SymbConvention
 swhs_srs' :: Document
 swhs_srs' = mkDoc mkSRS (for) swhs_si
 
-
-generalDefinitions :: [GenDefn]
-generalDefinitions = [gd nwtnCooling (Just thermal_flux) ([] :: Derivation) "nwtnCooling",
-  gd rocTempSimp (Nothing :: Maybe DerUChunk) roc_temp_simp_deriv "rocTempSimp"]
-
 stdFields :: Fields
-stdFields = [DefiningEquation, Description Verbose IncludeUnits, Source, RefBy]
+stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 -- It is sometimes hard to remember to add new sections both here and above.
 
 -- =================================== --

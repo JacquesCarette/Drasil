@@ -33,7 +33,7 @@ import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty, 
   morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil, soilLyr, ssa)
 import Drasil.SSP.GenDefs (sspGenDefs, normForcEq, bsShrFEq, resShr, mobShr,
-  normShrR, momentEql, netForcex, netForcey, hookesLaw2d, displVect)
+  normShrR, momentEql, netForcex, netForcey, hookesLaw2d, displVect, generalDefinitions)
 import Drasil.SSP.BasicExprs (displMtx, eqlExpr, momExpr, rotMtx)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (fctSftyDerivation, instModIntro1, instModIntro2, 
@@ -155,13 +155,13 @@ mkSRS = RefSec (RefProg intro
         , SSDSolChSpec 
           (SCSProg 
             [Assumptions 
-            ,TMs ([Label] ++ stdFields ++ [Notes]) [fs_rc_new, equilibrium_new, mcShrStrgth_new,
+            ,TMs ([Label] ++ stdFields) [fs_rc_new, equilibrium_new, mcShrStrgth_new,
              effStress_new, hookesLaw_new]
             , GDs [Label, Units, DefiningEquation   ---check glassbr
-            , Description Verbose IncludeUnits
+            , Description Verbose IncludeUnits, Notes
             , Source, RefBy] generalDefinitions ShowDerivation
             , DDs ([Label, Symbol, Units] ++ stdFields) sspDataDefs ShowDerivation
-            , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields ++ [Notes])
+            , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
              sspIMods_new ShowDerivation
             , Constraints  EmptyS dataConstraintUncertainty EmptyS
               [data_constraint_Table2, data_constraint_Table3]
@@ -176,21 +176,10 @@ mkSRS = RefSec (RefProg intro
 
 {--normForcEq, bsShrFEq, resShr, mobShr,
   normShrR, momentEql, netForcex, netForcey, hookesLaw2d, displVect-}
-generalDefinitions :: [GenDefn]
-generalDefinitions = [gd normForcEq (Nothing :: Maybe DerUChunk) ([] :: Derivation) "normForcEq",
-  gd bsShrFEq (Nothing :: Maybe DerUChunk) ([] :: Derivation) "bsShrFEq",
-  gd resShr (Nothing :: Maybe DerUChunk) ([] :: Derivation) "resShr",
-  gd mobShr (Nothing :: Maybe DerUChunk) ([] :: Derivation) "mobShr",
-  gd normShrR (Nothing :: Maybe DerUChunk) ([] :: Derivation) "normShrR",
-  gd momentEql (Nothing :: Maybe DerUChunk) ([] :: Derivation) "momentEql",
-  gd netForcex (Nothing :: Maybe DerUChunk) ([] :: Derivation) "netForcex",
-  gd netForcey (Nothing :: Maybe DerUChunk) ([] :: Derivation) "netForcey",
-  gd hookesLaw2d (Nothing :: Maybe DerUChunk) ([] :: Derivation) "hookesLaw2d",
-  gd displVect (Nothing :: Maybe DerUChunk) ([] :: Derivation) "displVect"]
 
 
 stdFields :: Fields
-stdFields = [DefiningEquation, Description Verbose IncludeUnits, Source, RefBy]
+stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
   
 ssp_code :: CodeSpec
 ssp_code = codeSpec ssp_si [sspInputMod]

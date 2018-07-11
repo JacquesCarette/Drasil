@@ -46,7 +46,7 @@ import Drasil.SWHS.TMods (tModels, t1ConsThermE, t1ConsThermE_new,
 import Drasil.SWHS.IMods (heatEInWtr_new, eBalanceOnWtr_new,
   heatEInPCM_new, eBalanceOnPCM_new, swhsIMods)
 import Drasil.SWHS.DataDefs (swhsDataDefs,dd1HtFluxC, dd2HtFluxP, dd3HtFusion,
- dd4MeltFrac, swhsDDefs)
+ dd4MeltFrac, swhsDDefs, dataDefns)
 import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp, roc_temp_simp_deriv,
   generalDefinitions)
 import Drasil.SWHS.References (ref_swhs_citations)
@@ -174,8 +174,7 @@ mkSRS = RefSec (RefProg intro
           , GDs [Label, Units, DefiningEquation   ---check glassbr
           , Description Verbose IncludeUnits
           , Notes, Source, RefBy] generalDefinitions ShowDerivation
-          , DDs ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC, dd2HtFluxP, dd3HtFusion,
-            dd4MeltFrac] ShowDerivation
+          , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
            [eBalanceOnWtr_new, eBalanceOnPCM_new, heatEInWtr_new, heatEInPCM_new ] ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty dataConTail

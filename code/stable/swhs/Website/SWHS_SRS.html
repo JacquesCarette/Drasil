@@ -2402,14 +2402,50 @@ d&#8239;t
 Description
 </th>
 <td>
-<div class="list">
-<em>t</em> is the time (s) <br />
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C) <br />
-<em>τ<sub>W</sub></em> is the ODE parameter for water (s) <br />
-<em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C) <br />
-<em>η</em> is the ODE parameter (Unitless) <br />
-<em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C) <br />
-</div>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>t</em> is the time (s)
+</li>
+<li>
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
+</li>
+<li>
+<em>τ<sub>W</sub></em> is the ODE parameter for water (s)
+</li>
+<li>
+<em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)
+</li>
+<li>
+<em>η</em> is the ODE parameter (Unitless)
+</li>
+<li>
+<em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>τ<sub>W</sub> = <div class="fraction">
+<span class="fup">
+m<sub>W</sub>&#8239;C<sub>W</sub>
+</span>
+<span class="fdn">
+h<sub>C</sub>&#8239;A<sub>C</sub>
+</span>
+</div></em> is a constant (s). <em>η = <div class="fraction">
+<span class="fup">
+h<sub>P</sub>&#8239;A<sub>P</sub>
+</span>
+<span class="fdn">
+h<sub>C</sub>&#8239;A<sub>C</sub>
+</span>
+</div></em> is a constant (dimensionless). The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#A:assump14>assump14</a>, <a href=#A:assump19>assump19</a>).
+</p>
 </td>
 </tr>
 <tr>
@@ -2429,16 +2465,6 @@ RefBy
 <td>
 <p class="paragraph">
 FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#A:assump14>assump14</a>, <a href=#A:assump19>assump19</a>).
 </p>
 </td>
 </tr>

@@ -1373,13 +1373,23 @@ Equation
 Description
 </th>
 <td>
-<div class="list">
-<em>q<sub>C</sub></em> is the heat flux into the water from the coil (W/m<sup>2</sup>) <br />
-<em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (W/(m<sup>2</sup>&sdot;&deg;C)) <br />
-<em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C) <br />
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C) <br />
-<em>t</em> is the time (s) <br />
-</div>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>q<sub>C</sub></em> is the heat flux into the water from the coil (W/m<sup>2</sup>)
+</li>
+<li>
+<em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (W/(m<sup>2</sup>&sdot;&deg;C))
+</li>
+<li>
+<em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)
+</li>
+<li>
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
+</li>
+<li>
+<em>t</em> is the time (s)
+</li>
+</ul>
 </td>
 </tr>
 <tr>
@@ -1501,12 +1511,37 @@ d&#8239;t
 Description
 </th>
 <td>
-<div class="list">
-<em>t</em> is the time (s) <br />
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C) <br />
-<em>τ<sub>W</sub></em> is the ODE parameter for water (s) <br />
-<em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C) <br />
-</div>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>t</em> is the time (s)
+</li>
+<li>
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
+</li>
+<li>
+<em>τ<sub>W</sub></em> is the ODE parameter for water (s)
+</li>
+<li>
+<em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>τ<sub>W</sub> = <div class="fraction">
+<span class="fup">
+m<sub>W</sub>&#8239;C<sub>W</sub>
+</span>
+<span class="fdn">
+h<sub>C</sub>&#8239;A<sub>C</sub>
+</span>
+</div></em> is a constant (s). The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#A:assump10>assump10</a>).
+</p>
 </td>
 </tr>
 <tr>
@@ -1526,16 +1561,6 @@ RefBy
 <td>
 <p class="paragraph">
 FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#A:assump10>assump10</a>).
 </p>
 </td>
 </tr>
@@ -1686,14 +1711,36 @@ Equation
 Description
 </th>
 <td>
-<div class="list">
-<em>E<sub>W</sub></em> is the change in heat energy in the water (J) <br />
-<em>t</em> is the time (s) <br />
-<em>C<sub>W</sub></em> is the specific heat capacity of water (J/(kg&sdot;&deg;C)) <br />
-<em>m<sub>W</sub></em> is the mass of water (kg) <br />
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C) <br />
-<em>T<sub>init</sub></em> is the initial temperature (&deg;C) <br />
-</div>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>E<sub>W</sub></em> is the change in heat energy in the water (J)
+</li>
+<li>
+<em>t</em> is the time (s)
+</li>
+<li>
+<em>C<sub>W</sub></em> is the specific heat capacity of water (J/(kg&sdot;&deg;C))
+</li>
+<li>
+<em>m<sub>W</sub></em> is the mass of water (kg)
+</li>
+<li>
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
+</li>
+<li>
+<em>T<sub>init</sub></em> is the initial temperature (&deg;C)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+The above equation is derived using T2. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#A:assump14>assump14</a>, <a href=#A:assump19>assump19</a>).
+</p>
 </td>
 </tr>
 <tr>
@@ -1713,16 +1760,6 @@ RefBy
 <td>
 <p class="paragraph">
 FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-The above equation is derived using T2. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#A:assump14>assump14</a>, <a href=#A:assump19>assump19</a>).
 </p>
 </td>
 </tr>

@@ -3156,20 +3156,54 @@ E<sub>P</sub><sub>melt</sub><sup>init</sup>&plus;Q<sub>P</sub>(t) , <span class=
 Description
 </th>
 <td>
-<div class="list">
-<em>E<sub>P</sub></em> is the change in heat energy in the PCM (J) <br />
-<em>C<sub>P</sub><sup>S</sup></em> is the specific heat capacity of PCM as a solid (J/(kg&sdot;&deg;C)) <br />
-<em>m<sub>P</sub></em> is the mass of phase change material (kg) <br />
-<em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C) <br />
-<em>t</em> is the time (s) <br />
-<em>T<sub>init</sub></em> is the initial temperature (&deg;C) <br />
-<em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> is the change in heat energy in the PCM at the instant when melting begins (J) <br />
-<em>H<sub>f</sub></em> is the specific latent heat of fusion (J/kg) <br />
-<em>C<sub>P</sub><sup>L</sup></em> is the specific heat capacity of PCM as a liquid (J/(kg&sdot;&deg;C)) <br />
-<em>T<sub>melt</sub><sup>P</sup></em> is the melting point temperature for PCM (&deg;C) <br />
-<em>Q<sub>P</sub></em> is the latent heat energy added to PCM (J) <br />
-<em>ϕ</em> is the melt fraction (Unitless) <br />
-</div>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>E<sub>P</sub></em> is the change in heat energy in the PCM (J)
+</li>
+<li>
+<em>C<sub>P</sub><sup>S</sup></em> is the specific heat capacity of PCM as a solid (J/(kg&sdot;&deg;C))
+</li>
+<li>
+<em>m<sub>P</sub></em> is the mass of phase change material (kg)
+</li>
+<li>
+<em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C)
+</li>
+<li>
+<em>t</em> is the time (s)
+</li>
+<li>
+<em>T<sub>init</sub></em> is the initial temperature (&deg;C)
+</li>
+<li>
+<em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> is the change in heat energy in the PCM at the instant when melting begins (J)
+</li>
+<li>
+<em>H<sub>f</sub></em> is the specific latent heat of fusion (J/kg)
+</li>
+<li>
+<em>C<sub>P</sub><sup>L</sup></em> is the specific heat capacity of PCM as a liquid (J/(kg&sdot;&deg;C))
+</li>
+<li>
+<em>T<sub>melt</sub><sup>P</sup></em> is the melting point temperature for PCM (&deg;C)
+</li>
+<li>
+<em>Q<sub>P</sub></em> is the latent heat energy added to PCM (J)
+</li>
+<li>
+<em>ϕ</em> is the melt fraction (Unitless)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+The above equation is derived using T2 and T3. <em>E<sub>P</sub></em> is the change in thermal energy of the PCM relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) J. <em>E<sub>P</sub></em> for the solid PCM is found using T2 for sensible heat ing, with the specific heat capacity of the solid PCM, <em>C<sub>P</sub><sup>S</sup></em> (J/(kg&sdot;&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). <em>E<sub>P</sub></em> for the melted PCM (<em>T<sub>P</sub>&thinsp;&gt;&thinsp;E<sub>P</sub><sub>melt</sub><sup>init</sup></em>) is found using T2 for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> (J). The energy required to melt all of the PCM is <em>H<sub>f</sub>&#8239;m<sub>P</sub></em> (J) (<a href=#DD:htFusion>DD3</a>). the specific heat capacity of the liquid PCM is <em>C<sub>P</sub><sup>L</sup></em> (J/(kg&sdot;&deg;C)) and the change in temperature is <em>T<sub>P</sub>&minus;T<sub>melt</sub><sup>P</sup></em> (&deg;C). <em>E<sub>P</sub></em> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> plus the latent heat energy added to the PCM, <em>Q<sub>P</sub></em> (J) since the time when melting began <em>t<sub>melt</sub><sup>init</sup></em> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (<a href=#A:assump18>assump18</a>).
+</p>
 </td>
 </tr>
 <tr>
@@ -3189,16 +3223,6 @@ RefBy
 <td>
 <p class="paragraph">
 FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Notes
-</th>
-<td>
-<p class="paragraph">
-The above equation is derived using T2 and T3. <em>E<sub>P</sub></em> is the change in thermal energy of the PCM relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) J. <em>E<sub>P</sub></em> for the solid PCM is found using T2 for sensible heat ing, with the specific heat capacity of the solid PCM, <em>C<sub>P</sub><sup>S</sup></em> (J/(kg&sdot;&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). <em>E<sub>P</sub></em> for the melted PCM (<em>T<sub>P</sub>&thinsp;&gt;&thinsp;E<sub>P</sub><sub>melt</sub><sup>init</sup></em>) is found using T2 for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> (J). The energy required to melt all of the PCM is <em>H<sub>f</sub>&#8239;m<sub>P</sub></em> (J) (<a href=#DD:htFusion>DD3</a>). the specific heat capacity of the liquid PCM is <em>C<sub>P</sub><sup>L</sup></em> (J/(kg&sdot;&deg;C)) and the change in temperature is <em>T<sub>P</sub>&minus;T<sub>melt</sub><sup>P</sup></em> (&deg;C). <em>E<sub>P</sub></em> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> plus the latent heat energy added to the PCM, <em>Q<sub>P</sub></em> (J) since the time when melting began <em>t<sub>melt</sub><sup>init</sup></em> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (<a href=#A:assump18>assump18</a>).
 </p>
 </td>
 </tr>

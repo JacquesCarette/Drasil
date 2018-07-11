@@ -12,17 +12,19 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasReference(getReferences), HasAdditionalNotes(getNotes))
 import Language.Drasil.Chunk.SymbolForm (eqSymb)
 import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
-
+import Language.Drasil.Label.Core (Label)
 import Control.Lens(makeLenses, (^.), view)
 
-import Language.Drasil.Chunk.Eq(fromEqn, fromEqn')
+import Language.Drasil.Chunk.Eq (fromEqn, fromEqn')
 
-data Scope = Local {-only visible within a limited scope-} | Global {-visible everywhere-}
+data Scope = Scp { _spec :: Label {-indirect reference-}}
+
+data ScopeType = Local Scope {-only visible within a limited scope-} | Global {-visible everywhere-}
 
 -- A data definition is a QDefinition that may have additional notes. 
 -- It also has attributes like derivation, source, etc.
 data DataDefinition = DD { _qd :: QDefinition
-                         , _scp :: Scope
+                         , _scp :: ScopeType
                          , _ref :: References
                          , _deri :: Derivation
                          , _lbl :: ShortName {-FIXME: Upgrade to Label-}

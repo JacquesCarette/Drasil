@@ -84,3 +84,6 @@ th, td {border: 1px solid black; padding: 0.5em;}
   border: 0px;}
 ul.hide-list-style {
   list-style-type: none;}
+ul.hide-list-style-no-indent {
+  list-style-type: none;
+  padding: 0;}

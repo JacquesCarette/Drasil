@@ -173,7 +173,7 @@ intrsliceFEqn = (sy normToShear) * (inxi scalFunc) * (inxi intNormForce)
 --DD10
 
 resShearWO :: QDefinition
-resShearWO = mkDataDef shearRNoIntsl resShearWOEqn
+resShearWO = mkDataDef' shearRNoIntsl resShearWOEqn resShr_deriv_ssp
 
 resShearWOEqn :: Expr
 resShearWOEqn = (((inxi slcWght) + (inxi surfHydroForce) *
@@ -187,7 +187,7 @@ resShearWOEqn = (((inxi slcWght) + (inxi surfHydroForce) *
 --DD11
 
 mobShearWO :: QDefinition
-mobShearWO = mkDataDef shearFNoIntsl mobShearWOEqn
+mobShearWO = mkDataDef' shearFNoIntsl mobShearWOEqn mobShr_deriv_ssp
 
 mobShearWOEqn :: Expr 
 mobShearWOEqn = ((inxi slcWght) + (inxi surfHydroForce) *
@@ -199,14 +199,14 @@ mobShearWOEqn = ((inxi slcWght) + (inxi surfHydroForce) *
 --DD12
 
 displcmntRxnF :: QDefinition
-displcmntRxnF = mkDataDef genPressure displcmntRxnFEqn
+displcmntRxnF = mkDataDef genPressure displcmntRxnFEqn 
 
 displcmntRxnFEqn :: Expr
 displcmntRxnFEqn = dgnl2x2 (inxi shrStiffIntsl) (inxi nrmStiffBase) * displMtx
 
 --DD12.5
 displcmntBasel :: QDefinition
-displcmntBasel = mkDataDef genPressure displcmntBaselEqn
+displcmntBasel = mkDataDef' genPressure displcmntBaselEqn stfMtrx_deriv_ssp
 
 displcmntBaselEqn :: Expr
 displcmntBaselEqn = m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB)
@@ -215,7 +215,7 @@ displcmntBaselEqn = m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB)
 --DD13
 
 netFDsplcmntEqbm :: QDefinition
-netFDsplcmntEqbm = mkDataDef genForce netFDsplcmntEqbmEqn
+netFDsplcmntEqbm = mkDataDef genForce netFDsplcmntEqbmEqn 
 
 netFDsplcmntEqbmEqn :: Expr
 netFDsplcmntEqbmEqn = negate (inx surfLngth (-1)) * (inx nrmStiffIntsl (-1)) *

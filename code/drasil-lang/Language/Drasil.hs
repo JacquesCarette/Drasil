@@ -79,9 +79,9 @@ module Language.Drasil (
   , constrained, cuc, cvc, cvc', constrained', cuc', constrainedNRV'
   , cnstrw
   -- Chunk.Eq
-  , QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec
+  , QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec, fromEqn''', fromEqn''''
   -- Chunk.DataDefinition
-  , DataDefinition, mkDataDef, mkDD
+  , DataDefinition, mkDataDef, mkDD, mkDataDef'
   -- Chunk.GenDefn
   , GenDefn, gd, gdUnit, gd'
   -- Chunk.InstanceModel
@@ -285,8 +285,9 @@ import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Constrained.Core (physc, sfwrc, enumc, isPhysC, isSfwrC,
   Constraint(..), ConstraintReason(..), Reason(..), TheoryConstraint(..))
 import Language.Drasil.Chunk.DefinedQuantity
-import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec)
-import Language.Drasil.Chunk.DataDefinition (DataDefinition, mkDataDef, mkDD)
+import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqn'', getVC,
+ equat, ec, fromEqn''', fromEqn'''')
+import Language.Drasil.Chunk.DataDefinition (DataDefinition, mkDataDef, mkDD, mkDataDef')
 import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.Goal (Goal, mkGoal)
 import Language.Drasil.Chunk.InstanceModel

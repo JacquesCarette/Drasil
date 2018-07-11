@@ -15,7 +15,7 @@ import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shor
 
 import Control.Lens(makeLenses, (^.), view)
 
-import Language.Drasil.Chunk.Eq(fromEqn, fromEqn')
+import Language.Drasil.Chunk.Eq(fromEqn, fromEqn', fromEqn''', fromEqn'''')
 
 -- A data definition is a QDefinition that may have additional notes. 
 -- It also has attributes like derivation, source, etc.
@@ -48,6 +48,13 @@ mkDataDef cncpt equation = datadef $ getUnit cncpt --should references be passed
                            (eqSymb cncpt) a equation [] (cncpt ^. uid) --shortname
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
                            (eqSymb cncpt) equation [] (cncpt ^. uid) --shortname
+
+mkDataDef' :: (Quantity c) => c -> Expr -> Derivation -> QDefinition
+mkDataDef' cncpt equation dv = datadef $ getUnit cncpt --should references be passed in at this point?
+  where datadef (Just a) = fromEqn'''  (cncpt ^. uid) (cncpt ^. term) EmptyS
+                           (eqSymb cncpt) a equation [] dv (cncpt ^. uid) --shortname
+        datadef Nothing  = fromEqn'''' (cncpt ^. uid) (cncpt ^. term) EmptyS
+                           (eqSymb cncpt) equation [] dv (cncpt ^. uid) --shortname
 
 -- | Smart constructor for data definitions 
 mkDD :: QDefinition -> References -> Derivation -> String{-Label-} -> Maybe [Sentence] -> DataDefinition

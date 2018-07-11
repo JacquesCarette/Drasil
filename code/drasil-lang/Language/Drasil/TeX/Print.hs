@@ -8,18 +8,36 @@ import Numeric (showFFloat)
 import Control.Applicative (pure)
 import Control.Arrow (second)
 
-import Language.Drasil.Printing.AST
-import Language.Drasil.Printing.Citation
-import Language.Drasil.Printing.LayoutObj
+import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
+  ListType(Ordered, Unordered, Desc, Definitions, Simple), 
+  Spec(Quote, EmptyS, Ref, S, Sy, Sp, HARDNL, E, (:+:)), 
+  Fence(Norm, Abs, Curly, Paren), Expr, 
+  Ops(Inte, Prod, Summ, Mul, Add, Or, And, Subt, Iff, LEq, GEq, 
+  NEq, Eq, Gt, Lt, Impl, Dot, Cross, Neg, Exp, Dim, Not, Cot,
+  Csc, Sec, Tan, Cos, Sin, Log, Prime, Comma, Boolean, Real, Natural, 
+  Rational, Integer, IsIn), Spacing(Thin), Fonts(Emph, Bold), 
+  Expr(Spc, Sqrt, Font, Fenced, MO, Over, Sup, Sub, Ident, Spec, Row, 
+  Mtx, Div, Case, Str, Int, Dbl), OverSymb(Hat))
+import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished, 
+  Year, Volume, Type, Title, Series, School, Publisher, Organization, Pages,
+  Month, Number, Note, Journal, Editor, Chapter, Institution, Edition, BookTitle,
+  Author, Address), Citation(Cite), BibRef)
+import Language.Drasil.Printing.LayoutObj (LayoutObj(Graph, Bib, ALUR, Figure, Definition,
+  List, Table, EqnBlock, Paragraph, Header, HDiv), Document(Document), 
+  ALUR(LikelyChange, UnlikelyChange, Assumption, Requirement))
 import qualified Language.Drasil.Printing.Import as I
 import qualified Language.Drasil.Spec as LS
 import qualified Language.Drasil.RefTypes as RT
-import Language.Drasil.Development.UnitLang
+import Language.Drasil.Development.UnitLang (USymb(US))
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT,bibFname)
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
-import Language.Drasil.TeX.Helpers
-import Language.Drasil.TeX.Monad
-import Language.Drasil.TeX.Preamble
+import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, item', description,
+  includegraphics, center, figure, item, symbDescription, enumerate, itemize, toEqn, empty,
+  newline, superscript, parens, fraction, quote, ref, ucref, lcref, aref, mref, sref, rref,
+  hyperref, cite, sec, newpage, maketoc, maketitle, document, author, title)
+import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (<>), vcat, (%%), 
+  toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
+import Language.Drasil.TeX.Preamble (genPreamble)
 import           Language.Drasil.Symbol (Symbol(..))
 import qualified Language.Drasil.Symbol as S
 import qualified Language.Drasil.Document as L

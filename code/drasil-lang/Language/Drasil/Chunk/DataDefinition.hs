@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.DataDefinition where
 
-import Language.Drasil.Chunk.Eq (QDefinition)
+import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn')
 import Language.Drasil.Spec (Sentence(EmptyS))
 import Language.Drasil.Chunk.References (References)
 import Language.Drasil.Chunk.Derivation (Derivation)
@@ -14,8 +14,6 @@ import Language.Drasil.Chunk.SymbolForm (eqSymb)
 import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
 
 import Control.Lens(makeLenses, (^.), view)
-
-import Language.Drasil.Chunk.Eq(fromEqn, fromEqn')
 
 -- A data definition is a QDefinition that may have additional notes. 
 -- It also has attributes like derivation, source, etc.

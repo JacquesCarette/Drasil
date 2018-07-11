@@ -49,7 +49,7 @@ cc' n d = ConDict (nw n) $ DAD d []
 
 -- | Constructor for 'ConceptChunk'. Allows explicit tagging.
 ccs :: (Idea c, Concept d) => c -> Sentence -> [d] -> ConceptChunk --Explicit tagging
-ccs n d l = ConDict (nw n) $ DAD d $ map (\x -> x ^. uid) l
+ccs n d l = ConDict (nw n) $ DAD d $ map (^. uid) l
 
 -- | For projecting out to the ConceptChunk data-type
 cw :: Concept c => c -> ConceptChunk

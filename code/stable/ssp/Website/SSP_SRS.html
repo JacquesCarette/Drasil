@@ -2738,7 +2738,7 @@ FIXME: This needs to be filled in
 Data Definitions
 </h3>
 <p class="paragraph">
-This section collects and defines all the data needed to build the instance models.
+This section collects and defines all the data needed to build the instance models. Definitions <a href=#DD:W.i>DD1</a> to <a href=#DD:l.b,i>DD8</a> are the force variables that can be solved by direct analysis of given inputs. The interslice forces <a href=#DD:l.s,i>DD9</a> are force variables that must be written in terms of <a href=#DD:W.i>DD1</a> to <a href=#DD:l.b,i>DD8</a> to solve.
 </p>
 <div id="DD:W.i">
 <table class="ddefn">
@@ -2749,16 +2749,6 @@ Label
 <td>
 <p class="paragraph">
 Weight
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>W</em>
 </p>
 </td>
 </tr>
@@ -2779,6 +2769,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
+<p class="paragraph">
 <em>W = b<sub>i</sub>&#8239;<span class="casebr">
 {
 </span>
@@ -2799,6 +2790,7 @@ y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
 </span>
 </span>
 </div></em>
+</p>
 </div>
 </div>
 </td>
@@ -2808,51 +2800,8 @@ y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>W</em> is the weight (N)
-</li>
-<li>
-<em>b</em> is the base width of a slice (m)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em>y<sub>us</sub></em> is the y ordinate (m)
-</li>
-<li>
-<em>y<sub>slip</sub></em> is the y ordinate (m)
-</li>
-<li>
-<em>γ<sub>Sat</sub></em> is the saturated unit weight (N/m<sup>3</sup>)
-</li>
-<li>
-<em>y<sub>wt</sub></em> is the y ordinate (m)
-</li>
-<li>
-<em>γ</em> is the dry unit weight (N/m<sup>3</sup>)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>W</em> is the weight (N)<br /><em>b</em> is the base width of a slice (m)<br /><em>i</em> is the index<br /><em>y<sub>us</sub></em> is the y ordinate (m)<br /><em>y<sub>slip</sub></em> is the y ordinate (m)<br /><em>γ<sub>Sat</sub></em> is the saturated unit weight (N/m<sup>3</sup>)<br /><em>y<sub>wt</sub></em> is the y ordinate (m)<br /><em>γ</em> is the dry unit weight (N/m<sup>3</sup>)
 </p>
 </td>
 </tr>
@@ -2866,17 +2815,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Base hydrostatic force
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>U<sub>b</sub></em>
+Base Hydrostatic Force
 </p>
 </td>
 </tr>
@@ -2897,6 +2836,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
+<p class="paragraph">
 <em>U<sub>b</sub> = ℓ<sub>b,i</sub>&#8239;<span class="casebr">
 {
 </span>
@@ -2912,6 +2852,7 @@ y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
 </span>
 </span>
 </div></em>
+</p>
 </div>
 </div>
 </td>
@@ -2921,45 +2862,8 @@ y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>U<sub>b</sub></em> is the base hydrostatic force (N)
-</li>
-<li>
-<em>ℓ<sub>b</sub></em> is the total base length of a slice (m)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em>y<sub>wt</sub></em> is the y ordinate (m)
-</li>
-<li>
-<em>y<sub>slip</sub></em> is the y ordinate (m)
-</li>
-<li>
-<em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>U<sub>b</sub></em> is the base hydrostatic force (N)<br /><em>ℓ<sub>b</sub></em> is the total base length of a slice (m)<br /><em>i</em> is the index<br /><em>y<sub>wt</sub></em> is the y ordinate (m)<br /><em>y<sub>slip</sub></em> is the y ordinate (m)<br /><em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
 </p>
 </td>
 </tr>
@@ -2973,17 +2877,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Surface hydrostatic force
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>U<sub>t</sub></em>
+Surface Hydrostatic Force
 </p>
 </td>
 </tr>
@@ -3004,6 +2898,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
+<p class="paragraph">
 <em>U<sub>t</sub> = ℓ<sub>s,i</sub>&#8239;<span class="casebr">
 {
 </span>
@@ -3019,6 +2914,7 @@ y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>us,i</sub>
 </span>
 </span>
 </div></em>
+</p>
 </div>
 </div>
 </td>
@@ -3028,45 +2924,8 @@ y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>us,i</sub>
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
-</li>
-<li>
-<em>ℓ<sub>s</sub></em> is the length of an interslice surface (m)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em>y<sub>wt</sub></em> is the y ordinate (m)
-</li>
-<li>
-<em>y<sub>us</sub></em> is the y ordinate (m)
-</li>
-<li>
-<em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N)<br /><em>ℓ<sub>s</sub></em> is the length of an interslice surface (m)<br /><em>i</em> is the index<br /><em>y<sub>wt</sub></em> is the y ordinate (m)<br /><em>y<sub>us</sub></em> is the y ordinate (m)<br /><em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
 </p>
 </td>
 </tr>
@@ -3080,17 +2939,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Interslice water force
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>H</em>
+Interslice Water Force
 </p>
 </td>
 </tr>
@@ -3111,6 +2960,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
+<p class="paragraph">
 <em>H = <span class="casebr">
 {
 </span>
@@ -3145,6 +2995,7 @@ y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
 </span>
 </span>
 </div></em>
+</p>
 </div>
 </div>
 </td>
@@ -3154,45 +3005,8 @@ y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>H</em> is the interslice water force (N)
-</li>
-<li>
-<em>y<sub>us</sub></em> is the y ordinate (m)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em>y<sub>slip</sub></em> is the y ordinate (m)
-</li>
-<li>
-<em>γ<sub>Sat</sub></em> is the saturated unit weight (N/m<sup>3</sup>)
-</li>
-<li>
-<em>y<sub>wt</sub></em> is the y ordinate (m)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>H</em> is the interslice water force (N)<br /><em>y<sub>us</sub></em> is the y ordinate (m)<br /><em>i</em> is the index<br /><em>y<sub>slip</sub></em> is the y ordinate (m)<br /><em>γ<sub>Sat</sub></em> is the saturated unit weight (N/m<sup>3</sup>)<br /><em>y<sub>wt</sub></em> is the y ordinate (m)
 </p>
 </td>
 </tr>
@@ -3212,16 +3026,6 @@ Angle
 </tr>
 <tr>
 <th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>α</em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Units
 </th>
 <td>
@@ -3237,6 +3041,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
+<p class="paragraph">
 <em>α = <div class="fraction">
 <span class="fup">
 y<sub>slip,i</sub>&minus;y<sub>slip,i&minus;1</sub>
@@ -3245,6 +3050,7 @@ y<sub>slip,i</sub>&minus;y<sub>slip,i&minus;1</sub>
 x<sub>slip,i</sub>&minus;x<sub>slip,i&minus;1</sub>
 </span>
 </div></em>
+</p>
 </div>
 </div>
 </td>
@@ -3254,39 +3060,8 @@ x<sub>slip,i</sub>&minus;x<sub>slip,i&minus;1</sub>
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>α</em> is the angle (&deg;)
-</li>
-<li>
-<em>y<sub>slip</sub></em> is the y ordinate (m)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em>x<sub>slip</sub></em> is the x ordinate (m)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>α</em> is the angle (&deg;)<br /><em>y<sub>slip</sub></em> is the y ordinate (m)<br /><em>i</em> is the index<br /><em>x<sub>slip</sub></em> is the x ordinate (m)
 </p>
 </td>
 </tr>
@@ -3306,16 +3081,6 @@ Angle
 </tr>
 <tr>
 <th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>β</em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Units
 </th>
 <td>
@@ -3331,6 +3096,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
+<p class="paragraph">
 <em>β = <div class="fraction">
 <span class="fup">
 y<sub>us,i</sub>&minus;y<sub>us,i&minus;1</sub>
@@ -3339,6 +3105,7 @@ y<sub>us,i</sub>&minus;y<sub>us,i&minus;1</sub>
 x<sub>us,i</sub>&minus;x<sub>us,i&minus;1</sub>
 </span>
 </div></em>
+</p>
 </div>
 </div>
 </td>
@@ -3348,39 +3115,8 @@ x<sub>us,i</sub>&minus;x<sub>us,i&minus;1</sub>
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>β</em> is the angle (&deg;)
-</li>
-<li>
-<em>y<sub>us</sub></em> is the y ordinate (m)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em>x<sub>us</sub></em> is the x ordinate (m)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>β</em> is the angle (&deg;)<br /><em>y<sub>us</sub></em> is the y ordinate (m)<br /><em>i</em> is the index<br /><em>x<sub>us</sub></em> is the x ordinate (m)
 </p>
 </td>
 </tr>
@@ -3394,17 +3130,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Base width of a slice
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>b</em>
+Base Width of a Slice
 </p>
 </td>
 </tr>
@@ -3425,7 +3151,9 @@ Equation
 <td>
 <div id="">
 <div class="equation">
+<p class="paragraph">
 <em>b = x<sub>slip,i</sub>&minus;x<sub>slip,i&minus;1</sub></em>
+</p>
 </div>
 </div>
 </td>
@@ -3435,36 +3163,8 @@ Equation
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>b</em> is the base width of a slice (m)
-</li>
-<li>
-<em>x<sub>slip</sub></em> is the x ordinate (m)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>b</em> is the base width of a slice (m)<br /><em>x<sub>slip</sub></em> is the x ordinate (m)<br /><em>i</em> is the index
 </p>
 </td>
 </tr>
@@ -3478,17 +3178,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Total base length of a slice
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>ℓ<sub>b</sub></em>
+Total Base Length of a Slice
 </p>
 </td>
 </tr>
@@ -3509,7 +3199,9 @@ Equation
 <td>
 <div id="">
 <div class="equation">
+<p class="paragraph">
 <em>ℓ<sub>b</sub> = b<sub>i</sub>&#8239;sec(α<sub>i</sub>)</em>
+</p>
 </div>
 </div>
 </td>
@@ -3519,39 +3211,8 @@ Equation
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>ℓ<sub>b</sub></em> is the total base length of a slice (m)
-</li>
-<li>
-<em>b</em> is the base width of a slice (m)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em>α</em> is the angle (&deg;)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>ℓ<sub>b</sub></em> is the total base length of a slice (m)<br /><em>b</em> is the base width of a slice (m)<br /><em>i</em> is the index<br /><em>α</em> is the angle (&deg;)
 </p>
 </td>
 </tr>
@@ -3565,17 +3226,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Length of an interslice surface
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>ℓ<sub>s</sub></em>
+Length of an Interslice Surface
 </p>
 </td>
 </tr>
@@ -3596,7 +3247,9 @@ Equation
 <td>
 <div id="">
 <div class="equation">
+<p class="paragraph">
 <em>ℓ<sub>s</sub> = b<sub>i</sub>&#8239;sec(β<sub>i</sub>)</em>
+</p>
 </div>
 </div>
 </td>
@@ -3606,39 +3259,8 @@ Equation
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>ℓ<sub>s</sub></em> is the length of an interslice surface (m)
-</li>
-<li>
-<em>b</em> is the base width of a slice (m)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em>β</em> is the angle (&deg;)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>ℓ<sub>s</sub></em> is the length of an interslice surface (m)<br /><em>b</em> is the base width of a slice (m)<br /><em>i</em> is the index<br /><em>β</em> is the angle (&deg;)
 </p>
 </td>
 </tr>
@@ -3652,17 +3274,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Earthquake load factor
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>K<sub>c</sub></em>
+Earthquake Load Factor
 </p>
 </td>
 </tr>
@@ -3683,7 +3295,9 @@ Equation
 <td>
 <div id="">
 <div class="equation">
+<p class="paragraph">
 <em>K<sub>c</sub> = K<sub>c</sub>&#8239;W<sub>i</sub></em>
+</p>
 </div>
 </div>
 </td>
@@ -3693,39 +3307,8 @@ Equation
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
-</li>
-<li>
-<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
-</li>
-<li>
-<em>W</em> is the weight (N)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>K<sub>c</sub></em> is the earthquake load factor<br /><em>W</em> is the weight (N)<br /><em>i</em> is the index
 </p>
 </td>
 </tr>
@@ -3739,17 +3322,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Imposed surface load
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>Q</em>
+Imposed Surface Load
 </p>
 </td>
 </tr>
@@ -3770,7 +3343,9 @@ Equation
 <td>
 <div id="">
 <div class="equation">
+<p class="paragraph">
 <em>Q = Q<sub>i</sub>&#8239;ω<sub>i</sub></em>
+</p>
 </div>
 </div>
 </td>
@@ -3780,39 +3355,8 @@ Equation
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>Q</em> is the imposed surface load (N)
-</li>
-<li>
-<em>Q</em> is the imposed surface load (N)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em>ω</em> is the angle (&deg;)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>Q</em> is the imposed surface load (N)<br /><em>i</em> is the index<br /><em>ω</em> is the angle (&deg;)
 </p>
 </td>
 </tr>
@@ -3826,17 +3370,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Interslice shear force
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>X</em>
+Interslice Shear Force
 </p>
 </td>
 </tr>
@@ -3857,7 +3391,9 @@ Equation
 <td>
 <div id="">
 <div class="equation">
+<p class="paragraph">
 <em>X = λ&#8239;f<sub>i</sub>&#8239;G<sub>i</sub></em>
+</p>
 </div>
 </div>
 </td>
@@ -3867,42 +3403,8 @@ Equation
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>X</em> is the interslice shear force (N)
-</li>
-<li>
-<em>λ</em> is the interslice normal/shear force ratio (Unitless)
-</li>
-<li>
-<em>f</em> is the scaling function (Unitless)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em>G</em> is the interslice normal force (N)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>X</em> is the interslice shear force (N)<br /><em>λ</em> is the interslice normal/shear force ratio<br /><em>f</em> is the scaling function<br /><em>i</em> is the index<br /><em>G</em> is the interslice normal force (N)
 </p>
 </td>
 </tr>
@@ -3916,17 +3418,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Resistive shear force
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>R</em>
+Resistive Shear Force
 </p>
 </td>
 </tr>
@@ -3947,7 +3439,9 @@ Equation
 <td>
 <div id="">
 <div class="equation">
+<p class="paragraph">
 <em>R = ((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;ΔH<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(α<sub>i</sub>)</em>
+</p>
 </div>
 </div>
 </td>
@@ -3957,73 +3451,36 @@ Equation
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>R</em> is the resistive shear force (N)
-</li>
-<li>
-<em>W</em> is the weight (N)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
-</li>
-<li>
-<em>β</em> is the angle (&deg;)
-</li>
-<li>
-<em>Q</em> is the imposed surface load (N)
-</li>
-<li>
-<em>ω</em> is the angle (&deg;)
-</li>
-<li>
-<em>α</em> is the angle (&deg;)
-</li>
-<li>
-<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
-</li>
-<li>
-<em>ΔH</em> is the difference between interslice forces (N)
-</li>
-<li>
-<em>U<sub>b</sub></em> is the base hydrostatic force (N)
-</li>
-<li>
-<em>φ&prime;</em> is the effective angle of friction (&deg;)
-</li>
-<li>
-<em>c&prime;</em> is the effective cohesion (Pa)
-</li>
-<li>
-<em>b</em> is the base width of a slice (m)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>R</em> is the resistive shear force (N)<br /><em>W</em> is the weight (N)<br /><em>i</em> is the index<br /><em>U<sub>t</sub></em> is the surface hydrostatic force (N)<br /><em>β</em> is the angle (&deg;)<br /><em>Q</em> is the imposed surface load (N)<br /><em>ω</em> is the angle (&deg;)<br /><em>α</em> is the angle (&deg;)<br /><em>K<sub>c</sub></em> is the earthquake load factor<br /><em>ΔH</em> is the difference between interslice forces (N)<br /><em>U<sub>b</sub></em> is the base hydrostatic force (N)<br /><em>φ&prime;</em> is the effective angle of friction (&deg;)<br /><em>c&prime;</em> is the effective cohesion (Pa)<br /><em>b</em> is the base width of a slice (m)
 </p>
 </td>
 </tr>
 </table>
+</div>
+<p class="paragraph">
+The resistive shear force of a slice is defined as <em>P</em> in GD3. The effective normal force in the equation for <em>P</em> of the soil is defined in the perpendicular force equilibrium of a slice from GD2, using the effective normal force <em>N&prime;</em> of T4 shown in equation (1).
+</p>
+<div id="">
+<div class="equation">
+<em>N&prime;<sub>i</sub> = (W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub></em>
+</div>
+</div>
+<p class="paragraph">
+The values of the interslice forces <em>G</em> and <em>X</em> in the equation are unknown, while the other values are found from the physical force definitions of <a href=#DD:W.i>DD1</a> to <a href=#DD:l.s,i>DD9</a>. Consider a force equilibrium without the affect of interslice forces, to obtain a solvable value as done for <em>N*</em> in equation (2).
+</p>
+<div id="">
+<div class="equation">
+<em>N*<sub>i</sub> = (W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub></em>
+</div>
+</div>
+<p class="paragraph">
+Using <em>N*</em>, a resistive shear force without the influence of interslice forces for slice index i can be solved for in terms of all known values as done in equation (3).
+</p>
+<div id="">
+<div class="equation">
+<em>R<sub>i</sub> = N*<sub>i</sub>&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(α<sub>i</sub>) = ((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;ΔH<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(α<sub>i</sub>)</em>
+</div>
 </div>
 <div id="DD:T.i">
 <table class="ddefn">
@@ -4033,17 +3490,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Mobilized shear force
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>T</em>
+Mobilized Shear Force
 </p>
 </td>
 </tr>
@@ -4064,7 +3511,9 @@ Equation
 <td>
 <div id="">
 <div class="equation">
+<p class="paragraph">
 <em>T = (W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;ΔH<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)</em>
+</p>
 </div>
 </div>
 </td>
@@ -4074,62 +3523,32 @@ Equation
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>T</em> is the mobilized shear force (N)
-</li>
-<li>
-<em>W</em> is the weight (N)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
-</li>
-<li>
-<em>β</em> is the angle (&deg;)
-</li>
-<li>
-<em>Q</em> is the imposed surface load (N)
-</li>
-<li>
-<em>ω</em> is the angle (&deg;)
-</li>
-<li>
-<em>α</em> is the angle (&deg;)
-</li>
-<li>
-<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
-</li>
-<li>
-<em>ΔH</em> is the difference between interslice forces (N)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>T</em> is the mobilized shear force (N)<br /><em>W</em> is the weight (N)<br /><em>i</em> is the index<br /><em>U<sub>t</sub></em> is the surface hydrostatic force (N)<br /><em>β</em> is the angle (&deg;)<br /><em>Q</em> is the imposed surface load (N)<br /><em>ω</em> is the angle (&deg;)<br /><em>α</em> is the angle (&deg;)<br /><em>K<sub>c</sub></em> is the earthquake load factor<br /><em>ΔH</em> is the difference between interslice forces (N)
 </p>
 </td>
 </tr>
 </table>
 </div>
+<p class="paragraph">
+The mobilized shear force acting on a slice is defined as <em>S</em> from the force equilibrium in GD2, also shown in equation (4).
+</p>
+<div id="">
+<div class="equation">
+<em>S<sub>i</sub> = (W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)</em>
+</div>
+</div>
+<p class="paragraph">
+The equation is unsolvable, containing the unknown interslice normal force <em>G</em> and interslice shear force <em>X</em>. Consider a force equilibrium without the influence of interslice forces, to obtain the mobilized shear force <em>T</em>, as done in equation (5).
+</p>
+<div id="">
+<div class="equation">
+<em>T<sub>i</sub> = (W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;ΔH<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)</em>
+</div>
+</div>
+<p class="paragraph">
+The values of <em>R</em> and <em>T</em> are now defined completely in terms of the known force property values of <a href=#DD:W.i>DD1</a> to <a href=#DD:l.s,i>DD9</a>.
+</p>
 <div id="DD:pressure">
 <table class="ddefn">
 <tr>
@@ -4139,16 +3558,6 @@ Label
 <td>
 <p class="paragraph">
 Pressure
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>p</em>
 </p>
 </td>
 </tr>
@@ -4169,6 +3578,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
+<p class="paragraph">
 <em>p = <table class="matrix">
 <tr><td>K<sub>st,i</sub></td><td>0</td></tr>
 <tr><td>0</td><td>K<sub>bn,i</sub></td></tr>
@@ -4176,6 +3586,7 @@ Equation
 <tr><td>δx<sub>i</sub></td></tr>
 <tr><td>δy<sub>i</sub></td></tr>
 </table></em>
+</p>
 </div>
 </div>
 </td>
@@ -4185,45 +3596,8 @@ Equation
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>p</em> is the pressure (Pa)
-</li>
-<li>
-<em>K<sub>st</sub></em> is the shear stiffness (Pa/m)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em>K<sub>bn</sub></em> is the normal stiffness (Pa/m)
-</li>
-<li>
-<em>δx</em> is the displacement (m)
-</li>
-<li>
-<em>δy</em> is the displacement (m)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>p</em> is the pressure (Pa)<br /><em>K<sub>st</sub></em> is the shear stiffness (Pa/m)<br /><em>i</em> is the index<br /><em>K<sub>bn</sub></em> is the normal stiffness (Pa/m)<br /><em>δx</em> is the displacement (m)<br /><em>δy</em> is the displacement (m)
 </p>
 </td>
 </tr>
@@ -4238,16 +3612,6 @@ Label
 <td>
 <p class="paragraph">
 Pressure
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>p</em>
 </p>
 </td>
 </tr>
@@ -4268,6 +3632,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
+<p class="paragraph">
 <em>p = <table class="matrix">
 <tr><td>K<sub>bA,i</sub></td><td>K<sub>bB,i</sub></td></tr>
 <tr><td>K<sub>bB,i</sub></td><td>K<sub>bA,i</sub></td></tr>
@@ -4275,6 +3640,7 @@ Equation
 <tr><td>δx<sub>i</sub></td></tr>
 <tr><td>δy<sub>i</sub></td></tr>
 </table></em>
+</p>
 </div>
 </div>
 </td>
@@ -4284,50 +3650,94 @@ Equation
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>p</em> is the pressure (Pa)
-</li>
-<li>
-<em>K<sub>bA</sub></em> is the effective base stiffness A (Pa/m)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em>K<sub>bB</sub></em> is the effective base stiffness A (Pa/m)
-</li>
-<li>
-<em>δx</em> is the displacement (m)
-</li>
-<li>
-<em>δy</em> is the displacement (m)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>p</em> is the pressure (Pa)<br /><em>K<sub>bA</sub></em> is the effective base stiffness A (Pa/m)<br /><em>i</em> is the index<br /><em>K<sub>bB</sub></em> is the effective base stiffness A (Pa/m)<br /><em>δx</em> is the displacement (m)<br /><em>δy</em> is the displacement (m)
 </p>
 </td>
 </tr>
 </table>
 </div>
+<p class="paragraph">
+Using the force-displacement relationship of GD8 to define stiffness matrix <em>K<sub>st</sub></em>, as seen in equation (6).
+</p>
+<div id="">
+<div class="equation">
+<em>K<sub>st,i</sub> = <table class="matrix">
+<tr><td>K<sub>st,i</sub></td><td>0</td></tr>
+<tr><td>0</td><td>K<sub>bn,i</sub></td></tr>
+</table></em>
+</div>
+</div>
+<p class="paragraph">
+For interslice surfaces the stiffness constants and displacements refer to an unrotated coordinate system, <em>δ</em> of <a href=#DD:l.s,i>DD9</a>. The interslice elements are left in their standard coordinate system, and therefore are described by the same equation from GD8. Seen as <em>K<sub>st</sub></em> in <a href=#DD:X.i>DD12</a>. <em>K<sub>st</sub></em> is the shear element in the matrix, and <em>K<sub>sn</sub></em> is the normal element in the matrix, calculated as in <a href=#DD:T.i>DD14</a>.
+</p>
+<p class="paragraph">
+For basal surfaces the stiffness constants and displacements refer to a system rotated for the base angle alpha (<a href=#DD:alpha.i>DD5</a>). To analyze the effect of force-displacement relationships occurring on both basal and interslice surfaces of an element <em>i</em> they must reference the same coordinate system. The basal stiffness matrix must be rotated counter clockwise to align with the angle of the basal surface. The base stiffness counter clockwise rotation is applied in equation (7) to the new matrix <em>N*</em>.
+</p>
+<div id="">
+<div class="equation">
+<em>K<sub>st,i</sub> = <table class="matrix">
+<tr><td>cos(α<sub>i</sub>)</td><td>&minus;sin(α<sub>i</sub>)</td></tr>
+<tr><td>sin(α<sub>i</sub>)</td><td>cos(α<sub>i</sub>)</td></tr>
+</table>&#8239;K<sub>st,i</sub> = <table class="matrix">
+<tr><td>K<sub>bt,i</sub>&#8239;cos(α<sub>i</sub>)</td><td>&minus;K<sub>bn,i</sub>&#8239;sin(α<sub>i</sub>)</td></tr>
+<tr><td>K<sub>bt,i</sub>&#8239;sin(α<sub>i</sub>)</td><td>K<sub>bn,i</sub>&#8239;cos(α<sub>i</sub>)</td></tr>
+</table></em>
+</div>
+</div>
+<p class="paragraph">
+The Hooke's law force displacement relationship of GD8 applied to the base also references a displacement vector <em>ε</em> of GD9 rotated for the base angle of the slice <em>α</em> The basal displacement vector. <em>δ</em> is rotated clockwise to align with the interslice displacement vector <em>δ</em>, applying the definition of <em>ε</em> in terms of <em>δ</em> as seen in GD9. Using this with base stiffness matrix <em>K<sub>bt</sub></em>, a basal force displacement relationship in the same coordinate system as the interslice relationship can be derived as done in equation (8).
+</p>
+<div id="">
+<div class="equation">
+<em><table class="matrix">
+<tr><td>p<sub>i</sub></td></tr>
+<tr><td>p<sub>i</sub></td></tr>
+</table> = K<sub>bt,i</sub>&#8239;ε = <table class="matrix">
+<tr><td>K<sub>bt,i</sub>&#8239;cos(α<sub>i</sub>)</td><td>&minus;K<sub>bn,i</sub>&#8239;sin(α<sub>i</sub>)</td></tr>
+<tr><td>K<sub>bt,i</sub>&#8239;sin(α<sub>i</sub>)</td><td>K<sub>bn,i</sub>&#8239;cos(α<sub>i</sub>)</td></tr>
+</table>&#8239;<table class="matrix">
+<tr><td>cos(α<sub>i</sub>)</td><td>sin(α<sub>i</sub>)</td></tr>
+<tr><td>&minus;sin(α<sub>i</sub>)</td><td>cos(α<sub>i</sub>)</td></tr>
+</table>&#8239;<table class="matrix">
+<tr><td>δx<sub>i</sub></td></tr>
+<tr><td>δy<sub>i</sub></td></tr>
+</table> = <table class="matrix">
+<tr><td>K<sub>bt,i</sub>&#8239;cos(α<sub>i</sub>)<sup>2</sup>&plus;K<sub>sn,i</sub>&#8239;sin(α<sub>i</sub>)<sup>2</sup></td><td>(K<sub>bt,i</sub>&minus;K<sub>bn,i</sub>)&#8239;sin(α<sub>i</sub>)&#8239;cos(α<sub>i</sub>)</td></tr>
+<tr><td>(K<sub>bt,i</sub>&minus;K<sub>bn,i</sub>)&#8239;sin(α<sub>i</sub>)&#8239;cos(α<sub>i</sub>)</td><td>K<sub>bt,i</sub>&#8239;cos(α<sub>i</sub>)<sup>2</sup>&plus;K<sub>sn,i</sub>&#8239;sin(α<sub>i</sub>)<sup>2</sup></td></tr>
+</table>&#8239;<table class="matrix">
+<tr><td>δx<sub>i</sub></td></tr>
+<tr><td>δy<sub>i</sub></td></tr>
+</table></em>
+</div>
+</div>
+<p class="paragraph">
+The new effective base stiffness matrix <em>K<sub>bt</sub></em> as derived in equation (7) is defined in equation (9). This is seen as matrix <em>K<sub>bt</sub></em> in GD12. <em>K<sub>bt</sub></em> is the shear element in the matrix, and <em>K<sub>bn</sub></em> is the normal element in the matrix, calculated as in <a href=#DD:T.i>DD14</a>. The notation is simplified by the introduction of the constants <em>K<sub>bA</sub></em> and <em>K<sub>bB</sub></em>, defined in equation (10) and equation (11) respectively.
+</p>
+<div id="">
+<div class="equation">
+<em>K<sub>bt,i</sub> = <table class="matrix">
+<tr><td>K<sub>bt,i</sub>&#8239;cos(α<sub>i</sub>)<sup>2</sup>&plus;K<sub>sn,i</sub>&#8239;sin(α<sub>i</sub>)<sup>2</sup></td><td>(K<sub>bt,i</sub>&minus;K<sub>bn,i</sub>)&#8239;sin(α<sub>i</sub>)&#8239;cos(α<sub>i</sub>)</td></tr>
+<tr><td>(K<sub>bt,i</sub>&minus;K<sub>bn,i</sub>)&#8239;sin(α<sub>i</sub>)&#8239;cos(α<sub>i</sub>)</td><td>K<sub>bt,i</sub>&#8239;cos(α<sub>i</sub>)<sup>2</sup>&plus;K<sub>sn,i</sub>&#8239;sin(α<sub>i</sub>)<sup>2</sup></td></tr>
+</table> = <table class="matrix">
+<tr><td>K<sub>bA,i</sub></td><td>K<sub>bB,i</sub></td></tr>
+<tr><td>K<sub>bB,i</sub></td><td>K<sub>bA,i</sub></td></tr>
+</table></em>
+</div>
+</div>
+<div id="">
+<div class="equation">
+<em>K<sub>bA,i</sub> = K<sub>bt,i</sub>&#8239;cos(α<sub>i</sub>)<sup>2</sup>&plus;K<sub>bn,i</sub>&#8239;sin(α<sub>i</sub>)<sup>2</sup></em>
+</div>
+</div>
+<div id="">
+<div class="equation">
+<em>K<sub>bB,i</sub> = (K<sub>bt,i</sub>&minus;K<sub>bn,i</sub>)&#8239;sin(α<sub>i</sub>)&#8239;cos(α<sub>i</sub>)</em>
+</div>
+</div>
+<p class="paragraph">
+A force-displacement relationship for an element <em>i</em> can be written in terms of displacements occurring in the unrotated coordinate system <em>δ</em> of GD9 using the matrix <em>K<sub>bt</sub></em>, and <em>K<sub>bt</sub></em> as seen in <a href=#DD:X.i>DD12</a>.
+</p>
 <div id="DD:force">
 <table class="ddefn">
 <tr>
@@ -4342,16 +3752,6 @@ Force
 </tr>
 <tr>
 <th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>F</em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Units
 </th>
 <td>
@@ -4367,7 +3767,9 @@ Equation
 <td>
 <div id="">
 <div class="equation">
+<p class="paragraph">
 <em>F = &minus;ℓ<sub>s,i&minus;1</sub>&#8239;K<sub>sn,i&minus;1</sub>&#8239;δ<sub>i&minus;1</sub>&plus;(ℓ<sub>s,i&minus;1</sub>&#8239;K<sub>sn,i&minus;1</sub>&plus;ℓ<sub>b,i</sub>&#8239;K<sub>bn,i</sub>&plus;ℓ<sub>s,i</sub>&#8239;K<sub>sn,i</sub>)&#8239;δ<sub>i</sub>&minus;ℓ<sub>s,i</sub>&#8239;K<sub>sn,i</sub>&#8239;δ<sub>i&plus;1</sub></em>
+</p>
 </div>
 </div>
 </td>
@@ -4377,48 +3779,8 @@ Equation
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>F</em> is the force (N)
-</li>
-<li>
-<em>ℓ<sub>s</sub></em> is the length of an interslice surface (m)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em>K<sub>sn</sub></em> is the normal stiffness (Pa/m)
-</li>
-<li>
-<em>δ</em> is the displacement (m)
-</li>
-<li>
-<em>ℓ<sub>b</sub></em> is the total base length of a slice (m)
-</li>
-<li>
-<em>K<sub>bn</sub></em> is the normal stiffness (Pa/m)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>F</em> is the force (N)<br /><em>ℓ<sub>s</sub></em> is the length of an interslice surface (m)<br /><em>i</em> is the index<br /><em>K<sub>sn</sub></em> is the normal stiffness (Pa/m)<br /><em>δ</em> is the displacement (m)<br /><em>ℓ<sub>b</sub></em> is the total base length of a slice (m)<br /><em>K<sub>bn</sub></em> is the normal stiffness (Pa/m)
 </p>
 </td>
 </tr>
@@ -4432,17 +3794,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Shear stiffness
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>K<sub>bt</sub></em>
+Shear Stiffness
 </p>
 </td>
 </tr>
@@ -4463,6 +3815,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
+<p class="paragraph">
 <em>K<sub>bt</sub> = <div class="fraction">
 <span class="fup">
 G
@@ -4485,6 +3838,7 @@ c&prime;<sub>i</sub>&minus;σ&#8239;tan(φ&prime;<sub>i</sub>)
 |δu|&plus;a
 </span>
 </div></em>
+</p>
 </div>
 </div>
 </td>
@@ -4494,57 +3848,8 @@ c&prime;<sub>i</sub>&minus;σ&#8239;tan(φ&prime;<sub>i</sub>)
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>K<sub>bt</sub></em> is the shear stiffness (Pa/m)
-</li>
-<li>
-<em>G</em> is the interslice normal force (N)
-</li>
-<li>
-<em>ν</em> is the Poisson's ratio (Unitless)
-</li>
-<li>
-<em>b</em> is the base width of a slice (m)
-</li>
-<li>
-<em>c&prime;</em> is the effective cohesion (Pa)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-<li>
-<em>σ</em> is the normal stress (Pa)
-</li>
-<li>
-<em>φ&prime;</em> is the effective angle of friction (&deg;)
-</li>
-<li>
-<em>δu</em> is the displacement (m)
-</li>
-<li>
-<em>a</em> is the constant (m)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>K<sub>bt</sub></em> is the shear stiffness (Pa/m)<br /><em>G</em> is the interslice normal force (N)<br /><em>ν</em> is the Poisson's ratio<br /><em>b</em> is the base width of a slice (m)<br /><em>c&prime;</em> is the effective cohesion (Pa)<br /><em>i</em> is the index<br /><em>σ</em> is the normal stress (Pa)<br /><em>φ&prime;</em> is the effective angle of friction (&deg;)<br /><em>δu</em> is the displacement (m)<br /><em>a</em> is the constant (m)
 </p>
 </td>
 </tr>
@@ -4558,17 +3863,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Normal stiffness
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>K<sub>bn</sub></em>
+Normal Stiffness
 </p>
 </td>
 </tr>
@@ -4589,6 +3884,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
+<p class="paragraph">
 <em>K<sub>bn</sub> = <span class="casebr">
 {
 </span>
@@ -4625,6 +3921,7 @@ G&#8239;(1&minus;ν)
 </span>
 </span>
 </div></em>
+</p>
 </div>
 </div>
 </td>
@@ -4634,48 +3931,8 @@ G&#8239;(1&minus;ν)
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>K<sub>bn</sub></em> is the normal stiffness (Pa/m)
-</li>
-<li>
-<em>G</em> is the interslice normal force (N)
-</li>
-<li>
-<em>ν</em> is the Poisson's ratio (Unitless)
-</li>
-<li>
-<em>b</em> is the base width of a slice (m)
-</li>
-<li>
-<em>κ</em> is the constant (Pa)
-</li>
-<li>
-<em>δv</em> is the displacement (m)
-</li>
-<li>
-<em>A</em> is the constant (m)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>K<sub>bn</sub></em> is the normal stiffness (Pa/m)<br /><em>G</em> is the interslice normal force (N)<br /><em>ν</em> is the Poisson's ratio<br /><em>b</em> is the base width of a slice (m)<br /><em>κ</em> is the constant (Pa)<br /><em>δv</em> is the displacement (m)<br /><em>A</em> is the constant (m)
 </p>
 </td>
 </tr>
@@ -4695,16 +3952,6 @@ Fixme
 </tr>
 <tr>
 <th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>SpencerFixme1Please</em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Units
 </th>
 <td>
@@ -4720,7 +3967,9 @@ Equation
 <td>
 <div id="">
 <div class="equation">
+<p class="paragraph">
 <em>SpencerFixme1Please = G<sub>i</sub>&plus;G<sub>i&minus;1</sub></em>
+</p>
 </div>
 </div>
 </td>
@@ -4730,36 +3979,8 @@ Equation
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>SpencerFixme1Please</em> is the fixme (Unitless)
-</li>
-<li>
-<em>G</em> is the interslice normal force (N)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>SpencerFixme1Please</em> is the fixme<br /><em>G</em> is the interslice normal force (N)<br /><em>i</em> is the index
 </p>
 </td>
 </tr>
@@ -4779,16 +4000,6 @@ Fixme
 </tr>
 <tr>
 <th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>SpencerFixme2Please</em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Units
 </th>
 <td>
@@ -4804,7 +4015,9 @@ Equation
 <td>
 <div id="">
 <div class="equation">
+<p class="paragraph">
 <em>SpencerFixme2Please = H<sub>i</sub>&plus;H<sub>i&minus;1</sub></em>
+</p>
 </div>
 </div>
 </td>
@@ -4814,36 +4027,8 @@ Equation
 Description
 </th>
 <td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>SpencerFixme2Please</em> is the fixme (Unitless)
-</li>
-<li>
-<em>H</em> is the interslice water force (N)
-</li>
-<li>
-<em>i</em> is the index (Unitless)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>SpencerFixme2Please</em> is the fixme<br /><em>H</em> is the interslice water force (N)<br /><em>i</em> is the index
 </p>
 </td>
 </tr>

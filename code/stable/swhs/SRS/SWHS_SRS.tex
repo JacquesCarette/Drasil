@@ -993,17 +993,6 @@ ${E_{P}}$ & ${E_{P}}\geq{}0$
 \caption{Output Data Constraints}
 \label{Table:OutDataConstraints}
 \end{longtable}
-\subsubsection{Properties of a Correct Solution}
-\label{Sec:CorSolProps}
-A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking \hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C} and \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
-\begin{dmath}
-{E_{W}}=\int_{0}^{t}{{h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\left(t\right)\right)}\,dt-\int_{0}^{t}{{h_{P}} {A_{P}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right)}\,dt
-\end{dmath}
-In addition, the change in heat energy in the PCM should equal the energy input to the PCM from the water. This can be expressed as
-\begin{dmath}
-{E_{P}}=\int_{0}^{t}{{h_{P}} {A_{P}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right)}\,dt
-\end{dmath}
-Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as ``sanity''checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% R\ref{FR:req9}.
 \section{Requirements}
 \label{Sec:Requirements}
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.

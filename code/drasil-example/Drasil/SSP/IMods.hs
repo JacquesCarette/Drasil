@@ -485,7 +485,7 @@ eq9 = (inxi intNormForce) $= (inxiM1 mobShrC * inxiM1 intNormForce +
 
 ---------------------------------------------------------------------------
 rigDis_deriv_ssp :: Derivation
-rigDis_deriv_ssp = weave [rigDisDerivation_new, map E rigDis_deriv_eqns_ssp] ++ [foldlSentCol rigDis_deriv_sentences_ssp_s2]
+rigDis_deriv_ssp = weave [rigDisDerivation_new, map E rigDis_deriv_eqns_ssp] ++ rigDis_deriv_sentences_ssp_s2
 
 rigDis_deriv_sentences_ssp_s1 :: [Sentence]
 rigDis_deriv_sentences_ssp_s1 = [S "Using the net force-displacement equilibrium" +:+
@@ -511,7 +511,7 @@ rigDis_deriv_sentences_ssp_s2 = [S "Using the known input assumption of" +:+ (re
   S "The use of displacement in the" +:+ phrase definition +:+
   S "of the stiffness values makes the" +:+ phrase equation +:+ S "implicit, which means" +:+
   S "an iterative solution method, with an initial guess for the" +:+
-  S "displacements in the stiffness" +:+ plural value +:+ S "is required"]
+  S "displacements in the stiffness" +:+ plural value +:+. S "is required"]
 
 
 rigDisDerivation_new :: [Sentence]

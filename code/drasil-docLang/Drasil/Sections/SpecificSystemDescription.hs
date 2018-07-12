@@ -28,7 +28,7 @@ import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle, fmtU, getRVal)
 import Data.Drasil.SentenceStructures (fmtPhys, fmtSfwr, mkTableFromColumns, foldlSent, foldlSP,
   typUncr, ofThe, foldlList)
-import qualified Drasil.SRS as SRS
+import qualified Drasil.DocLang.SRS as SRS
 
 
 -- | Specific System description section builder. Takes the system and subsections.

@@ -3,8 +3,7 @@ module Drasil.SSP.GenDefs (sspGenDefs, normForcEq, bsShrFEq, resShr, mobShr,
 
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
-
-import Drasil.DocumentLanguage.RefHelpers (refA)
+import Drasil.DocLang (refA)
 
 import Drasil.SSP.Assumptions (newA5, sspRefDB)
 import Drasil.SSP.BasicExprs (displMtx, eqlExpr, momExpr, rotMtx)
@@ -30,7 +29,7 @@ import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 import Data.Drasil.SentenceStructures (acroGD, acroT, foldlSent, getTandS, 
   isThe, ofThe, sAnd)
 
-import Drasil.SRS as SRS (physSyst, missingP)
+import Drasil.DocLang.SRS as SRS (physSyst, missingP)
 
 ---------------------------
 --  General Definitions  --

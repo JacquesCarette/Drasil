@@ -17,12 +17,13 @@ import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.RefTypes (RefType(..))
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
-import Data.List (concatMap, groupBy, partition, sortBy)
+import Data.List (concatMap, find, groupBy, partition, sortBy)
+import Data.Maybe (fromJust)
 import qualified Data.Map as Map
 
 import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
 import Language.Drasil.Chunk.Change as Ch (Change(..), ChngType(..))
-import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID))
+import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID), CiteField(Author, Title, Year), HasFields(getFields))
 import Language.Drasil.Chunk.Concept (ConceptInstance)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
@@ -35,8 +36,9 @@ import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid))
 import Language.Drasil.Document (Contents(..), DType(Data, Theory), 
   Section(Section), getDefName, repUnd)
+import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.RefTypes (RefType(..))
-import Language.Drasil.Spec (Sentence(Ref))
+import Language.Drasil.Spec (Sentence((:+:), Ref, S))
 import Language.Drasil.UID (UID)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 
@@ -94,15 +96,15 @@ simpleMap :: HasUID a => [a] -> RefMap a
 simpleMap xs = Map.fromList $ zip (map (^. uid) xs) (zip xs [1..])
 
 reqMap :: [ReqChunk] -> ReqMap
-reqMap rs = Map.fromList $ zip (map (^. uid) (frs ++ nfrs)) ((zip frs [1..]) ++
-  (zip nfrs [1..]))
+reqMap rs = Map.fromList $ zip (map (^. uid) (frs ++ nfrs)) (zip frs [1..] ++
+  zip nfrs [1..])
   where (frs, nfrs)  = partition (isFuncRec . reqType) rs
         isFuncRec FR = True
         isFuncRec _  = False
 
 changeMap :: [Change] -> ChangeMap
 changeMap cs = Map.fromList $ zip (map (^. uid) (lcs ++ ulcs))
-  ((zip lcs [1..]) ++ (zip ulcs [1..]))
+  (zip lcs [1..] ++ zip ulcs [1..])
   where (lcs, ulcs) = partition (isLikely . chngType) cs
         isLikely Likely = True
         isLikely _ = False
@@ -110,18 +112,18 @@ changeMap cs = Map.fromList $ zip (map (^. uid) (lcs ++ ulcs))
 bibMap :: [Citation] -> BibMap
 bibMap cs = Map.fromList $ zip (map (^. uid) scs) (zip scs [1..])
   where scs :: [Citation]
-        scs = sortBy uidSort cs
+        scs = sortBy compareAuthYearTitle cs
         -- Sorting is necessary if using elems to pull all the citations
         -- (as it sorts them and would change the order).
         -- We can always change the sorting to whatever makes most sense
 
 conGrp :: ConceptInstance -> ConceptInstance -> Bool
-conGrp a b = (cdl a) == (cdl b) where
+conGrp a b = cdl a == cdl b where
   cdl :: ConceptInstance -> UID
   cdl x = sDom $ x ^. cdom where
     sDom [d] = d
     sDom d = error $ "Expected ConceptDomain for: " ++ (x ^. uid) ++
-                     " to have a single domain, found " ++ (show $ length d) ++
+                     " to have a single domain, found " ++ show (length d) ++
                      " instead."
 
 conceptMap :: [ConceptInstance] -> ConceptMap
@@ -188,12 +190,12 @@ class HasConceptRefs s where
   conceptRefTable :: Simple Lens s ConceptMap
 
 instance HasGoalRefs ReferenceDB where goalRefTable = goalDB
-instance HasPSDRefs ReferenceDB where psdRefTable = physSystDescDB
-instance HasAssumpRefs ReferenceDB where assumpRefTable = assumpDB
-instance HasReqRefs ReferenceDB where reqRefTable = reqDB
-instance HasChangeRefs ReferenceDB where changeRefTable = changeDB
+instance HasPSDRefs      ReferenceDB where psdRefTable = physSystDescDB
+instance HasAssumpRefs   ReferenceDB where assumpRefTable = assumpDB
+instance HasReqRefs      ReferenceDB where reqRefTable = reqDB
+instance HasChangeRefs   ReferenceDB where changeRefTable = changeDB
 instance HasCitationRefs ReferenceDB where citationRefTable = citationDB
-instance HasConceptRefs ReferenceDB where conceptRefTable = conceptDB
+instance HasConceptRefs  ReferenceDB where conceptRefTable = conceptDB
 
 
 class Referable s where
@@ -285,10 +287,39 @@ instance Referable Contents where
 uidSort :: HasUID c => c -> c -> Ordering
 uidSort = compare `on` (^. uid)
 
+compareAuthYearTitle :: (HasFields c) => c -> c -> Ordering
+compareAuthYearTitle c1 c2
+  | comparePeople (getAuthor c1) (getAuthor c2) /= Nothing = fromJust $ comparePeople (getAuthor c1) (getAuthor c2)
+  | getYear c1  /= getYear c2  = getYear c1  `compare` getYear c2
+  | getTitle c1 /= getTitle c2 = getTitle c1 `compare` getTitle c2
+  | otherwise                      = error "Couldn't sort authors"
+
+getAuthor :: (HasFields c) => c -> People
+getAuthor c = maybe (error "No author found") (\(Author x) -> x) (find isAuthor (c ^. getFields))
+  where isAuthor :: CiteField -> Bool
+        isAuthor (Author _) = True
+        isAuthor _          = False 
+
+getYear :: (HasFields c) => c -> Int
+getYear c = maybe (error "No year found") (\(Year x) -> x) (find isYear (c ^. getFields))
+  where isYear :: CiteField -> Bool
+        isYear (Year _) = True
+        isYear _        = False
+
+getTitle :: (HasFields c) => c -> String
+getTitle c = getStr $ maybe (error "No title found") (\(Title x) -> x) (find isTitle (c ^. getFields))
+  where isTitle :: CiteField -> Bool
+        isTitle (Title _) = True
+        isTitle _         = False
+        getStr :: Sentence -> String
+        getStr (S s) = s
+        getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
+        getStr _ = error "Term is not a string" 
+
 citationsFromBibMap :: BibMap -> [Citation]
-citationsFromBibMap bm = sortBy uidSort citations
+citationsFromBibMap bm = sortBy compareAuthYearTitle citations
   where citations :: [Citation]
-        citations = map (\(x,_) -> x) (Map.elems bm)
+        citations = map fst (Map.elems bm)
 
 assumptionsFromDB :: AssumpMap -> [AssumpChunk]
 assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions

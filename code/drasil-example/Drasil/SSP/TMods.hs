@@ -3,13 +3,12 @@ module Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_
 
 import Prelude hiding (tan)
 import Language.Drasil
+import Drasil.DocLang (refA)
 
 import Drasil.SSP.Assumptions (newA8, newA9, sspRefDB)
 import Drasil.SSP.Defs (factor, factorOfSafety, slope, soil)
 import Drasil.SSP.Unitals (cohesion, fricAngle, fs, fx, fy, genDisplace,
   genForce, momntOfBdy, normStress, porePressure, shrStress, surfHydroForce)
-
-import Drasil.DocumentLanguage.RefHelpers (refA)
 
 import Data.Drasil.Quantities.Physics (displacement, distance, force)
 import Data.Drasil.Quantities.PhysicalProperties (mass)

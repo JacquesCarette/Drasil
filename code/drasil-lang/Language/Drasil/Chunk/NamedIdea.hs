@@ -86,9 +86,9 @@ compoundNCP1 = compoundNC''' plural
   
 the :: (NamedIdea c) => c -> NamedChunk
 the t = nc ("the" ++ t ^. uid) (nounPhrase''
-  (S "the" +:+ (phrase $ t ^. term)) (S "the" +:+ (plural $ t ^. term))
+  (S "the" +:+ phrase (t ^. term)) (S "the" +:+ plural (t ^. term))
   CapFirst CapWords)
 
 theCustom :: (NamedIdea c) => (c -> Sentence) -> c -> NamedChunk
-theCustom f t = nc ("the" ++ t ^. uid) (nounPhrase''(S "the" +:+ (f t))
-  (S "the" +:+ (f t)) CapFirst CapWords)
+theCustom f t = nc ("the" ++ t ^. uid) (nounPhrase''(S "the" +:+ f t)
+  (S "the" +:+ f t) CapFirst CapWords)

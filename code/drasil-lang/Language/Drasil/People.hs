@@ -6,24 +6,37 @@ module Language.Drasil.People
   , Conv(..) --This is needed to unwrap names for the bibliography
   , lstName
   , rendPersLFM, rendPersLFM', rendPersLFM''
+  , comparePeople --For sorting references
   ) where
 
 -- | A person can have a given name, middle name(s), and surname, as well
 -- as the naming convention they use.
-data Person = Person { _given :: String, _surname :: String, 
-                       _middle :: [String], _convention :: Conv}
+data Person = Person { _given :: String
+                     , _surname :: String
+                     , _middle :: [String]
+                     , _convention :: Conv
+                     } deriving (Eq)
 -- ^ Western style conventions are given name followed
 -- by middle names, followed by surname.
 -- Eastern style conventions are surname followed by middle names, 
 -- followed by given name.
 -- Mononyms are for those people who have only one name (ex. Madonna)
 
+comparePeople :: [Person] -> [Person] -> Maybe Ordering
+comparePeople [] [] = Nothing
+comparePeople _  [] = Just GT -- this makes sure that if the authors are the same 
+comparePeople []  _ = Just LT -- up to a point, the citation with more goes last
+comparePeople (Person f1 l1 _ _:xs) (Person f2 l2 _ _:ys)
+  | l1 /= l2  = Just $ l1 `compare` l2
+  | f1 /= f2  = Just $ f1 `compare` f2
+  | otherwise = comparePeople xs ys
+
 type People = [Person]
 
 -- | Naming conventions.
 data Conv = Western
           | Eastern
-          | Mono
+          | Mono deriving (Eq)
 
 -- | Constructor for a person using Western naming conventions. 
 -- Used for a person with only a given name and surname.
@@ -69,34 +82,34 @@ name = nameStr
 -- make it work for short lists too, but it shouldn't be used that way!
 -- | Used for rendering lists of names (one or more).
 manyNames :: (HasName p) => [p] -> String
-manyNames [x,y] = name x ++ " and " ++ (name y)
+manyNames [x,y] = name x ++ " and " ++ name y
 manyNames names = nameList names
   where nameList [] = ""
         nameList [x] = name x
-        nameList [x,y] = (name x) ++ ", and " ++ (name y)
-        nameList (x : y : rest) = (name x) ++ ", " ++ (nameList (y : rest))
+        nameList [x,y] = name x ++ ", and " ++ name y
+        nameList (x : y : rest) = name x ++ ", " ++ nameList (y : rest)
 
 lstName :: Person -> String
-lstName (Person {_surname = l}) = l
+lstName Person {_surname = l} = l
 
 -- LFM is Last, First Middle
 rendPersLFM :: Person -> String
-rendPersLFM (Person {_surname = n, _convention = Mono}) = n
-rendPersLFM (Person {_given = f, _surname = l, _middle = ms}) =
-  (dotInitial l) ++ ", " ++ (dotInitial f) `nameSep`
-  foldr nameSep "" (map dotInitial ms)
+rendPersLFM Person {_surname = n, _convention = Mono} = n
+rendPersLFM Person {_given = f, _surname = l, _middle = ms} =
+  dotInitial l ++ ", " ++ dotInitial f `nameSep`
+  foldr (nameSep . dotInitial) "" ms
 
 -- LFM' is Last, F. M.
 rendPersLFM' :: Person -> String
-rendPersLFM' (Person {_surname = n, _convention = Mono}) = n
-rendPersLFM' (Person {_given = f, _surname = l, _middle = ms}) =
-  (dotInitial l) ++ ", " ++ foldr nameSep "" (map initial (f:ms))
+rendPersLFM' Person {_surname = n, _convention = Mono} = n
+rendPersLFM' Person {_given = f, _surname = l, _middle = ms} =
+  dotInitial l ++ ", " ++ foldr (nameSep . initial) "" (f:ms)
 
 -- LFM'' is Last, First M.
 rendPersLFM'' :: Person -> String
-rendPersLFM'' (Person {_surname = n, _convention = Mono}) = n
-rendPersLFM'' (Person {_given = f, _surname = l, _middle = ms}) =
-  (dotInitial l) ++ ", " ++ foldr1 nameSep (dotInitial f : (map (initial) ms))
+rendPersLFM'' Person {_surname = n, _convention = Mono} = n
+rendPersLFM'' Person {_given = f, _surname = l, _middle = ms} =
+  dotInitial l ++ ", " ++ foldr1 nameSep (dotInitial f : map initial ms)
 
 initial :: String -> String
 initial []    = [] -- is this right?

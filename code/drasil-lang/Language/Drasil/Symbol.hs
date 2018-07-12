@@ -106,7 +106,7 @@ prime = Atop Prime
 
 -- | Helper for adding {} around a symbol (used for coordinates).
 sCurlyBrSymb :: Symbol -> Symbol
-sCurlyBrSymb x = Concat [(Special CurlyBrOpen), x, (Special CurlyBrClose)]
+sCurlyBrSymb x = Concat [Special CurlyBrOpen, x, Special CurlyBrClose]
 
 --------------
 

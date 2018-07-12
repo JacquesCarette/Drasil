@@ -3,13 +3,12 @@ module Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS) where
 --A list of likely and unlikely changes for GlassBR
 
 import Language.Drasil
+import Drasil.DocLang (mkLklyChnk, mkUnLklyChnk, refA)
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, gbRefDB, newA2, newA3, newA4, newA5, newA6, newA7, newA8)
 import Drasil.GlassBR.Concepts (blastRisk, glaSlab, glass)
 import Drasil.GlassBR.Unitals (explosion, lite)
 
-import Drasil.DocumentLanguage (mkLklyChnk, mkUnLklyChnk)
-import Drasil.DocumentLanguage.RefHelpers (refA)
 import Data.Drasil.Concepts.Documentation (condition, goal, input_, software, 
   system, value, variable)
 import Data.Drasil.Concepts.Math (calculation)

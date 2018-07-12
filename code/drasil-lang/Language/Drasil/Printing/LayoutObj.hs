@@ -1,7 +1,7 @@
 module Language.Drasil.Printing.LayoutObj where
 
 import Language.Drasil.Document (MaxWidthPercent, DType)
-import Language.Drasil.Printing.AST
+import Language.Drasil.Printing.AST (ListType, Spec, Title, Label)
 import Language.Drasil.Printing.Citation (BibRef)
 
 data Document = Document Title Author [LayoutObj]
@@ -12,7 +12,6 @@ type Tags     = [String]
 type Depth    = Int
 type Width    = Float
 type Height   = Float
-type Label    = Spec
 type Filepath = String
 type Caption  = Spec
 

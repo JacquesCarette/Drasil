@@ -1,23 +1,23 @@
 module Drasil.GlassBR.Body where
+
 import Control.Lens ((^.))
+import Data.List (nub)
+
 import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
-import qualified Drasil.SRS as SRS
-import Data.List (nub)
-import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
-  DerivationDisplay(..),
-  DocSection(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons), --DocSection uses everything but Verbatim
-  IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), LCsSec(..), 
-  ProblemDescription(..),
-  RefSec(RefProg), RefTab(TAandA, TUnits), ReqrmntSec(..), 
-  UCsSec(..), RefSec(RefProg), RefTab(TAandA, TUnits), ReqrmntSec(..),   ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SCSSub(..), 
-  SSDSec(..), SSDSub(..), SolChSpec(..), 
-  StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), 
-  TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose), DocDesc, 
-  mkDoc, mkRequirement, tsymb)
-import Drasil.DocumentLanguage.Definitions 
-  (Field(..), InclUnits(IncludeUnits), Verbosity(Verbose), Fields)
-import Drasil.DocumentLanguage.RefHelpers (cite)
+import qualified Drasil.DocLang.SRS as SRS
+
+import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
+  DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), 
+  GSDSub(UsrChars, SystCons), InclUnits(IncludeUnits), IntroSec(IntroProg), 
+  IntroSub(IChar, IOrgSec, IPurpose, IScope), LCsSec(..), ProblemDescription(..), RefSec(RefProg), RefTab(TAandA, TUnits), 
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg),
+  SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
+  StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
+  TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), cite, 
+  dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
+  mkRequirement, outDataConstTbl, physSystDesc, probDescF, termDefnF, 
+  traceGIntro, tsymb)
 
 import Data.Drasil.Concepts.Computation (computerApp, inParam,
   computerLiteracy, inValue, inQty)
@@ -73,11 +73,6 @@ import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad,
   gbConstants, gbConstrained, gbOutputs, gbInputs, glBreakage, capacity, 
   constant_LoadDF, glassBRsymb)
 
-import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, 
-  outDataConstTbl, dataConstraintUncertainty, goalStmtF, physSystDesc, termDefnF, 
-  probDescF)
-import Drasil.Sections.TraceabilityMandGs (traceGIntro)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.People (spencerSmith, nikitha, mCampidelli)
 import Data.Drasil.Phrase (for'')
@@ -117,7 +112,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     [IPurpose (purpose_of_document_intro_p1 document gLassBR glaSlab),
      IScope incScoR endScoR,
      IChar (rdrKnldgbleIn glBreakage blastRisk) undIR appStanddIR,
-     IOrgSec char_intended_reader_intro dataDefn (SRS.dataDefn SRS.missingP []) char_intended_reader_intro_end]) :
+     IOrgSec org_of_doc_intro dataDefn (SRS.dataDefn SRS.missingP []) org_of_doc_intro_end]) :
   StkhldrSec
     (StkhldrProg2
       [Client gLassBR (S "a" +:+ phrase company
@@ -194,7 +189,6 @@ testIMFromQD = imQD gbSymbMap risk EmptyS [] [] "riskFun" [] --shortname
 glassBR_code :: CodeSpec
 glassBR_code = codeSpec glassSystInfo allMods
 
-
 problem_description, terminology_and_description, 
   physical_system_description, goal_statements :: Section
 
@@ -270,7 +264,7 @@ startIntro :: NamedChunk -> Sentence -> CI -> Sentence
 startIntro prgm sfwrPredicts progName = foldlSent [
   at_start prgm, S "is helpful to efficiently" `sAnd` S "correctly predict the"
   +:+. sfwrPredicts, underConsidertn blast,
-  S "The", phrase prgm `sC` S "herein called", short progName,
+  S "The", phrase prgm `sC` S "herein called", short progName `sC`
   S "aims to predict the", sfwrPredicts, S "using an intuitive",
   phrase interface]
 
@@ -281,10 +275,10 @@ rdrKnldgbleIn undrstd1 undrstd2 = (phrase theory +:+ S "behind" +:+
 undIR, appStanddIR, incScoR, endScoR :: Sentence
 undIR = foldlList [phrase scndYrCalculus, phrase structuralMechanics,
   plural computerApp `sIn` phrase civilEng]
-appStanddIR = foldlSent [S "In addition" `sC` plural reviewer,
+appStanddIR = foldlSent [S " In addition" `sC` plural reviewer, -- FIXME: space before "In" is a hack to get proper spacing
   S "should be familiar with the applicable", plural standard,
   S "for constructions using glass from",
-  sSqBr (S "4-6" {-astm_LR2009, astm_C1036, astm_C1048-}) `sIn`
+  sSqBr (S "1-3" {-astm2009, astm2012, astm2016-}) `sIn`
   (makeRef (SRS.reference SRS.missingP []))]
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
   S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
@@ -313,15 +307,15 @@ purpose_of_document_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", p
 
 {--Organization of Document--}
 
-char_intended_reader_intro_end, char_intended_reader_intro :: Sentence
-char_intended_reader_intro = foldlSent [S "The", phrase organization, S "of this",
+org_of_doc_intro_end, org_of_doc_intro :: Sentence
+org_of_doc_intro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an", short srs,
   S "for", phrase sciCompS, S "proposed by" +:+ cite gbRefDB koothoor2013
   `sAnd` cite gbRefDB smithLai2005 `sC` S "with some", 
   plural aspect, S "taken from Volere", phrase template,
   S "16", cite gbRefDB rbrtsn2012]
 
-char_intended_reader_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
+org_of_doc_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
   S "are used to support", (plural definition `ofThe` S "different"),
   plural model]
 
@@ -388,9 +382,9 @@ individual_product_use_case mainObj compare1 compare2 factorOfComparison =
   sParen (ch prob_br), S "is less than the tolerable",
   phrase factorOfComparison, sParen (ch pb_tol),
   S "which is obtained from the", phrase user, S "as an" +:+. phrase input_,
-  S "If both", plural condition, S "return true then it's shown that the",
+  S "If both", plural condition, S "return true, then it's shown that the",
   phrase mainObj, S "is safe to use" `sC`
-  S "else if both return false then the", phrase mainObj +:+.
+  S "else if both return false, then the", phrase mainObj +:+.
   S "is considered unsafe", S "All the supporting calculated", plural value,
   S "are also displayed as", phrase output_]
 
@@ -406,7 +400,7 @@ start = foldlSent [S "A", phrase system,
   phrase blastRisk +:+ S "involved with the glass"]
 ending = foldl (+:+) EmptyS [S "interpret the", plural input_,
   S "to give out the", plural output_,
-  S "which predicts whether the", phrase glaSlab,
+  S "which predict whether the", phrase glaSlab,
   S "can withstand the", phrase blast, S "under the",
   plural condition]
 
@@ -415,7 +409,7 @@ problem_description = probDescF start gLassBR ending [terminology_and_descriptio
 {--Terminology and Definitions--}
 
 terminology_and_description = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
-  S "are extracted from" +:+ (sSqBrNum 4 {-astm_LR2009-}) `sIn`
+  S "are extracted from" +:+ (sSqBrNum 1 {-astm2009-}) `sIn`
   (makeRef (SRS.reference SRS.missingP [])))) [terminology_and_description_bullets]
 
 {--Physical System Description--}
@@ -434,7 +428,7 @@ physical_system_description_list_physys2 :: NamedIdea n => n -> Sentence
 
 physical_system_description_list_physys = [physical_system_description_list_physys1, physical_system_description_list_physys2 (ptOfExplsn)]
 
-physical_system_description_list_physys1 = at_start glaSlab
+physical_system_description_list_physys1 = S "The" +:+. phrase glaSlab
 
 physical_system_description_list_physys2 imprtntElem = foldlSent [S "The"
   +:+. phrase imprtntElem, S "Where the", phrase bomb `sC`

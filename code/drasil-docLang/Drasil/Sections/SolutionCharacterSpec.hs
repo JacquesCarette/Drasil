@@ -31,7 +31,7 @@ import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTb
 
 import Drasil.Sections.GeneralSystDesc(genSysIntro)
 
-import qualified Drasil.SRS as SRS
+import qualified Drasil.DocLang.SRS as SRS
 
 data SecItem where 
   Cont      :: [Contents] -> SecItem

@@ -7,7 +7,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST 
   hiding (body,comment,bool,int,float,char,guard,update)
-import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source, Header),
+import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source),
   DecDef(Dec, Def), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc,
   valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
   scopeDoc, retDoc, printDoc, patternDoc, paramDoc, paramListDoc, classDoc, objAccessDoc,
@@ -18,12 +18,12 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileTyp
   listObj, package, list, iterInLabel, iterForEachLabel, inherit, inputFunc, include,
   includeScope, fileName, ext, dir, enumsEqualInts, commentStart, endStatement, bitArray,
   renderCode, argsList, Options, ioDocD, StatementLocation(NoLoop, Loop), dot, inputDocD,
-  valueDocD, valueDocD', methodDocD, methodDocD', methodListDocD, paramDocD, paramListDocD,
-  objAccessDocD, iterationDocD, funcDocD, declarationDocD', assignDocD, stateTypeD, fileCode,
-  functionListDocD, methodTypeDocD, unOpDocD, statementDocD, scopeDocD, stateDocD, stateListDocD,
-  doubleSlash, retDocD, patternDocD, clsDecListDocD, clsDecDocD, funcAppDocD, enumElementsDocD,
-  exprDocD', litDocD, conditionalDocD'', callFuncParamListD, bodyDocD, blockDocD, binOpDocD,
-  classDec, namespaceD, includeD, fileNameD, cpplist, forLabel, exprDocD, declarationDocD,
+  valueDocD, valueDocD', methodListDocD, paramDocD, paramListDocD,
+  objAccessDocD, iterationDocD, funcDocD, stateTypeD, fileCode,
+  functionListDocD, methodTypeDocD, statementDocD, stateDocD, stateListDocD,
+  retDocD, patternDocD, clsDecListDocD, clsDecDocD, funcAppDocD, 
+  litDocD, callFuncParamListD, bodyDocD, blockDocD, binOpDocD,
+  classDec, fileNameD, forLabel, exprDocD, declarationDocD,
   typeOfLit, fixCtorNames, unOpDocD', conditionalDocD', assignDocD')
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab)
 

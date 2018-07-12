@@ -8,7 +8,7 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (purpose, component, column, label, reference,
   traceyGraph, traceyMatrix, item, dependency)
 import Data.Drasil.Concepts.Math (matrix, graph)
-import qualified Drasil.SRS as SRS
+import qualified Drasil.DocLang.SRS as SRS
 
 -- wrapper for traceMGIntro
 traceMGF :: [Contents] -> [Sentence] -> [Contents] -> [Section] -> Section

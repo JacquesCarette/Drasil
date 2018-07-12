@@ -5,6 +5,12 @@ import Language.Drasil.Code (CodeSpec, codeSpec)
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
 
+import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..), 
+  LCsSec(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), --TSIntro, 
+  TSIntro(..), UCsSec(..), dataConstraintUncertainty, genSysF, goalStmtF, 
+  inDataConstTbl, intro, mkDoc, nonFuncReqF, outDataConstTbl, probDescF, reqF, 
+  solChSpecF, specSysDesF, termDefnF, tsymb'', valsOfAuxConstantsF)
+
 import Data.Drasil.Concepts.Documentation (analysis, definition, 
   design, document, effect, element, endUser, goalStmt, inModel, input_, 
   interest, interest, issue, loss, method_, model, organization, physics, 
@@ -45,60 +51,14 @@ import Drasil.SSP.TMods (sspTMods, fs_rc_new, equilibrium_new, mcShrStrgth_new, 
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
   sspOutputs, sspSymbols)
 
-import qualified Drasil.SRS as SRS (funcReq, inModel, likeChg, unlikeChg, missingP, 
+import qualified Drasil.DocLang.SRS as SRS (funcReq, inModel, likeChg, unlikeChg, missingP, 
   physSyst)
 
-import Drasil.DocumentLanguage (DocDesc, DocSection(..), IntroSec(..), 
-  IntroSub(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), TSIntro, 
-  TSIntro(..), LCsSec(..), UCsSec(..), mkDoc, tsymb'')
-
-import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
-import Drasil.Sections.GeneralSystDesc (genSysF)
-import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.DocumentLanguage (TSIntro, DocDesc, RefSec(..),
-  RefTab(..), tsymb'', LFunc(..),
-  IntroSub(..), TSIntro(..), TConvention(..),
-  DocSection(..), mkDoc, IntroSec(..))
-import Drasil.Sections.SpecificSystemDescription (inDataConstTbl,
-  outDataConstTbl, dataConstraintUncertainty, goalStmtF, termDefnF,
-  probDescF, solChSpecF, specSysDesF)
-import Drasil.Sections.Requirements (reqF, nonFuncReqF)
-import Drasil.Sections.SpecificSystemDescription (dataConstraintUncertainty, 
-  goalStmtF, inDataConstTbl, outDataConstTbl, probDescF, solChSpecF, 
-  specSysDesF, termDefnF)
-
-import Data.Drasil.Concepts.Documentation (srs, physics, inModel,
-  value, effect, loss, interest, problem, design, issue,
-  method_, analysis, input_, organization, document,
-  template, analysis, endUser, definition, model, element,
-  property, interest, variable, table_, goalStmt,
-  assumption, requirement)
-import Data.Drasil.Phrase (for)
-import Data.Drasil.Concepts.Physics (stress, strain, tension,
-  compression, fbd, force)
-import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
-import Data.Drasil.Concepts.Software (program, accuracy,
-  performanceSpd, correctness, understandability,
-  reusability, maintainability)
-import Data.Drasil.Concepts.Math (surface, equation)
-import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
-import Data.Drasil.Software.Products (sciCompS)
-
-import Data.Drasil.Utils (enumBullet, enumSimple, weave)
-import Data.Drasil.SentenceStructures (sOr,
-  foldlSent, ofThe, sAnd, foldlSP, foldlList, foldlSent_)
-import Drasil.DocumentLanguage.Definitions
-import Drasil.DocumentLanguage
 --type declarations for sections--
--- s3, s4, s5, s6, s7
 gen_sys_desc, spec_sys_desc, req, likely_chg, aux_cons :: Section
 
---s1_2_intro
 table_of_symbol_intro :: [TSIntro]
 
---s4_1, s4_1_1, s4_1_2,
---s4_1_3, s4_2, s5_1, s5_2
 problem_desc, termi_defi, phys_sys_desc,
   goal_stmt, sol_charac_spec, func_req, non_func_req :: Section
 
@@ -106,7 +66,6 @@ termi_defi_list, phys_sys_desc_p1, phys_sys_desc_bullets,
   phys_sys_desc_p2, goals_list, assumps_list,
   func_req_list :: Contents
 
---s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, s4_2_5_IMods
 theory_model_tmods, gen_def_genDefs, data_def_dataDefs, insta_model_IMods :: [Contents]
 
 --Document Setup--

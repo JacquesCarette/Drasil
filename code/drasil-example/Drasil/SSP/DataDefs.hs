@@ -3,6 +3,7 @@ module Drasil.SSP.DataDefs where
 
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
+import Drasil.DocLang (ModelDB, ddRefDB, mdb, refDD)
 
 import Drasil.SSP.BasicExprs (displMtx, eqlExpr, rotMtx)
 import Drasil.SSP.Defs (intrslce)
@@ -16,8 +17,6 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
   slcWght, slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce, 
   surfLngth, surfLoad, ufixme1, ufixme2, waterHght, waterWeight, watrForce, 
   watrForceDif, wiif)
-
-import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb, refDD)
 
 import Data.Drasil.Quantities.SolidMechanics as SM (poissnsR)
 import Data.Drasil.Utils (eqUnR, weave)

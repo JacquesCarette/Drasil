@@ -5,6 +5,18 @@ import Language.Drasil.Code (CodeSpec, codeSpec)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 import Control.Lens ((^.))
 
+import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, 
+  DocSection (AuxConstntSec, Bibliography, IntroSec, RefSec, Verbatim), 
+  LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
+  IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
+  RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
+  assumpF, dataConstraintUncertainty, genSysF, inDataConstTbl, inModelF, intro, 
+  mkDoc, outDataConstTbl, physSystDesc, reqF, solChSpecF, specSysDesF, 
+  termDefnF, traceGIntro, traceMGF, tsymb'')
+import qualified Drasil.DocLang.SRS as SRS (inModel, missingP, likeChg,
+  funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
+  sysCont, reference)
+
 import Data.Drasil.People (thulasi, brooks, spencerSmith)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Documentation (section_, traceyGraph, item,
@@ -60,16 +72,7 @@ import qualified Drasil.SRS as SRS (inModel, missingP, likeChg,
   funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
   sysCont, reference)
 
-import Drasil.DocumentLanguage {-(DocDesc, mkDoc, tsymb'',
-  LFunc (TermExcept),
-  Literature (Lit, Doc'),
-  TSIntro (SymbOrder, SymbConvention, TSPurpose),
-  DocSection (Verbatim, IntroSec, RefSec, Bibliography, AuxConstntSec), 
-  IntroSub(IOrgSec, IChar, IScope, IPurpose),
-  IntroSec (IntroProg),
-  RefTab (TAandA, TUnits),
-  RefSec (RefProg),
-  AuxConstntSec (AuxConsProg))-}
+import Drasil.DocumentLanguage
 import Drasil.DocumentLanguage.Definitions
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.SpecificSystemDescription (inModelF, assumpF,
@@ -118,9 +121,6 @@ swhs_si = SI {
   _sysinfodb = swhsSymMap,
   _refdb = swhsRefDB
 }
-
---rdb :: [PhysSystDesc] -> [Goal] -> [AssumpChunk] -> [ReqChunk] -> [Change] ->
---  BibRef -> ReferenceDB
 swhsRefDB :: ReferenceDB
 swhsRefDB = rdb [] [] newAssumptions [] [] ref_swhs_citations []
 

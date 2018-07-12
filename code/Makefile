@@ -14,6 +14,7 @@ GAME_DIR = Chipmunk
 
 LANG_DIR = drasil-lang
 CODE_DIR = drasil-code
+GEN_DIR  = drasil-gen
 DATA_DIR = drasil-data
 DOCL_DIR = drasil-docLang
 EXAM_DIR = drasil-example
@@ -25,7 +26,7 @@ NoPCM_EXE  = nopcm
 SSP_EXE  = ssp
 GLASS_EXE= glassbr
 
-DIRS = $(SWHS_DIR) $(NoPCM_DIR) $(TINY_DIR) $(SSP_DIR) $(GLASS_DIR) $(GAME_DIR) $(DATA_DIR) $(LANG_DIR) $(DOCL_DIR) $(EXAM_DIR)
+DIRS = $(SWHS_DIR) $(NoPCM_DIR) $(TINY_DIR) $(SSP_DIR) $(GLASS_DIR) $(GAME_DIR) $(DATA_DIR) $(LANG_DIR) $(DOCL_DIR) $(EXAM_DIR) $(CODE_DIR) $(GEN_DIR)
 DIFF = diff --strip-trailing-cr --ignore-all-space
 
 TESTS = swhs_diff tiny_diff ssp_diff glassbr_diff gamephys_diff nopcm_diff
@@ -53,7 +54,12 @@ build_code: build
 	cd $(CODE_DIR) && stack build -j2 $(stackArgs) drasil-code
 	stack install $(stackArgs) drasil-code
 
-build_data: build_code
+build_gen: build_code
+	mkdir -p $(GEN_DIR)
+	cd $(GEN_DIR) && stack build -j2 $(stackArgs) drasil-gen
+	stack install $(stackArgs) drasil-gen
+
+build_data: build_gen
 	mkdir -p $(DATA_DIR)
 	cd $(DATA_DIR) && stack build -j2 $(stackArgs) drasil-data 
 	stack install $(stackArgs) drasil-data
@@ -157,7 +163,9 @@ clean: clean_build
 	- stack clean
 	- cd $(LANG_DIR) && stack clean
 	- cd $(CODE_DIR) && stack clean
+	- cd $(GEN_DIR)  && stack clean
 	- cd $(DATA_DIR) && stack clean
+	- cd $(DOCL_DIR) && stack clean
 	- cd $(EXAM_DIR) && stack clean
 
 clean_build: clean_logs

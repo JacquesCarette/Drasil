@@ -2,7 +2,8 @@ module Main where
 
 import Language.Drasil (DocSpec(DocSpec), DocType(SRS, Website))
 import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..), 
-  ImplementationType(..), Lang(..), Logging(..), Structure(..), gen)
+  ImplementationType(..), Lang(..), Logging(..), Structure(..))
+import Language.Drasil.Generate (gen)
 
 import Drasil.GamePhysics.Body (chipmunkSRS', everything)
 

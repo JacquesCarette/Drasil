@@ -139,8 +139,7 @@ s4_2_3_desc7_swhs_im1 :: Expr -> [Sentence]
 s4_2_3_desc7_swhs_im1 eq55 = 
   [S "Finally, factoring out", (E eq55), S ", we are left with the governing ODE for IM1"]
 
-eq1, eq2:: [Sentence]
-eq1 = [ch w_mass, ch htCap_W]
+eq2:: [Sentence]
 eq2 = [ch coil_HTC, ch coil_SA, S "/", ch coil_HTC, ch coil_SA]
 
 eq3, eq4, eq5:: Expr

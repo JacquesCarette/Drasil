@@ -26,20 +26,7 @@ import Drasil.SSP.DataDefs (fixme1,fixme2, ddRef, sliceWght, baseWtrF, surfWtrF,
   soilStiffness)
 import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice, 
   slip, slope, ssa)
-import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
-  cohesion, constant_a, critCoords, dx_i, dy_i, earthqkLoadFctr, effStiffA, 
-  effStiffB, fricAngle, fs, fs_min, fsloc, genDisplace, genForce, impLoadAngle, 
-  index, indx1, indxn, intNormForce, intShrForce, inxi, inxi, inxiM1, inxiP1, 
-  midpntHght, minFunction, mobShrC, mobShrI, mobStress, normFunc, normStress, 
-  normToShear, nrmDispl, nrmFSubWat, nrmStiffBase, nrmStiffIntsl, numbSlices, 
-  poissnsRatio, rotatedDispl, scalFunc, shearFNoIntsl, shearFunc, shearRNoIntsl, 
-  shrDispl, shrResC, shrStiffBase, shrStiffIntsl, shrStress, slcWght, sum1toN, 
-  surfAngle, surfHydroForce, surfLngth, surfLoad, totNrmForce, varblU, varblV,
-  watrForce, watrForceDif, wiif, xi, yi)
 import Drasil.SSP.Assumptions (newA2, sspRefDB)
-
-import Data.Drasil.SentenceStructures (foldlSent, isThe)
-import Data.Drasil.Utils (eqUnR)
 
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (analysis,
@@ -51,9 +38,7 @@ import Data.Drasil.SentenceStructures (andThe, acroA, acroGD,
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (displacement, force)
-import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Drasil.SSP.GenDefs
-import Drasil.SSP.BasicExprs (displMtx, eqlExpr, momExpr, rotMtx)
+import Drasil.SSP.BasicExprs (eqlExpr, momExpr)
 -----------------------
 --  Instance Models  --
 -----------------------

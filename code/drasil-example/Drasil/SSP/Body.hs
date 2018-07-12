@@ -34,16 +34,14 @@ import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent,
   foldlSent_, ofThe, sAnd, sOr)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
 import Data.Drasil.Utils (enumBullet, enumSimple, weave)
-import Drasil.SSP.Assumptions (sspRefDB, newAssumptions, sspAssumptions)
+import Drasil.SSP.Assumptions (sspRefDB, sspAssumptions)
 import Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShrDerivation, 
   resShrDerivation, sliceWght, sspDataDefs, stfMtrxDerivation)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty, 
   morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil, soilLyr, ssa)
-import Drasil.SSP.GenDefs (sspGenDefs, normForcEq, bsShrFEq, resShr, mobShr,
-  normShrR, momentEql, netForcex, netForcey, hookesLaw2d, displVect, generalDefinitions)
-import Drasil.SSP.BasicExprs (displMtx, eqlExpr, momExpr, rotMtx)
+import Drasil.SSP.GenDefs (sspGenDefs, generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (fctSftyDerivation, instModIntro1, instModIntro2, 
   intrSlcDerivation, nrmShrDerivation, rigDisDerivation, rigFoSDerivation, 
@@ -136,9 +134,6 @@ mkSRS = RefSec (RefProg intro
   --spec_sys_desc,gen_sys_desc,
   map Verbatim [req] ++ [LCsSec (LCsProg likelyChanges_SRS)] 
   ++ [UCsSec (UCsProg unlikelyChanges_SRS)] ++[Verbatim aux_cons] ++ (Bibliography : [])
-
-{--normForcEq, bsShrFEq, resShr, mobShr,
-  normShrR, momentEql, netForcex, netForcey, hookesLaw2d, displVect-}
 
 
 stdFields :: Fields

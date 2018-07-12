@@ -483,10 +483,10 @@ stfMtrx_deriv_sentences_ssp_s2 =
   S "to the new matrix" +:+. ch nrmFNoIntsl]
 
 stfMtrx_deriv_sentences_ssp_s3 :: [Sentence]
-stfMtrx_deriv_sentences_ssp_s3 = [S "The Hooke's law force displacement relationship of" +:+ acroGD 8 +:+
+stfMtrx_deriv_sentences_ssp_s3 = [S "The Hooke's law force displacement relationship of" +:+ (acroGD 8) +:+
   S "applied to the base also references a displacement vector" +:+
-  ch rotatedDispl +:+ S "of" +:+ acroGD 9 +:+ S "rotated for" +:+ S "base angle" `ofThe`
-  S "slice" +:+ ch baseAngle +:+. S "The basal displacement vector" +:+
+  ch rotatedDispl +:+ S "of" +:+ acroGD 9 +:+ S "rotated for" +:+ S "base angle of the slice" +:+ 
+  ch baseAngle +:+. S "The basal displacement vector" +:+
   ch genDisplace +:+  S "is rotated clockwise to align with the" +:+
   phrase intrslce +:+ S "displacement vector" +:+
   ch genDisplace `sC` S "applying the" +:+ phrase definition +:+ S "of" +:+ 
@@ -503,8 +503,8 @@ stfMtrx_deriv_sentences_ssp_s4 =
   S "as derived in" +:+ eqN 7 +:+ S "is defined in" +:+. eqN 9 +:+
   S "This is seen as matrix" +:+ ch shrStiffBase +:+ S "in" +:+.
   acroGD 12 +:+ isElemInMx shrStiffBase "shear" `sC` S "and" +:+
-  isElemInMx nrmStiffBase "normal" `sC` S "calculated as in" +:+. ddRef shearStiffness  +:+
-  S "The notation is simplified by" +:+ S "introduction" `ofThe` S "constants" +:+
+  isElemInMx nrmStiffBase "normal" `sC` S "calculated as in" +:+. ddRef mobShearWO  +:+
+  S "The notation is simplified by the introduction of the constants" +:+
   ch effStiffA `sAnd` ch effStiffB `sC` S "defined in" +:+ eqN 10 `sAnd`
   eqN 11 +:+. S "respectively"]
 
@@ -513,7 +513,7 @@ stfMtrx_deriv_sentences_ssp_s5 = [S "A force-displacement relationship for an el
   S "can be written in terms of displacements occurring in the unrotated" +:+
   S "coordinate system" +:+ ch genDisplace `sOf` acroGD 9 +:+ S "using the matrix" +:+
   ch shrStiffBase `sC` --FIXME: index 
-  S "and" +:+ ch shrStiffBase +:+ S "as seen in" +:+. ddRef displcmntRxnF]
+  S "and" +:+ ch shrStiffBase +:+ S "as seen in" +:+. ddRef intrsliceF]
 
 
 eq6, eq7, eq8, eq9, eq10, eq11:: Expr

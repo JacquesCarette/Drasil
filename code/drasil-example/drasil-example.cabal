@@ -22,6 +22,7 @@ executable tiny
     drasil-lang >= 0.1.3,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1,
+    drasil-gen >= 0.1.0,
     drasil-docLang >= 0.1.1
   default-language: Haskell2010
   ghc-options:      -Wall -O2
@@ -59,6 +60,7 @@ executable nopcm
     drasil-lang >= 0.1.3,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1,
+    drasil-gen >= 0.1.0,
     drasil-docLang >= 0.1.1
   default-language: Haskell2010
   ghc-options:      -Wall -O2
@@ -92,6 +94,7 @@ executable ssp
     drasil-lang >= 0.1.3,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1,
+    drasil-gen >= 0.1.0,
     drasil-docLang >= 0.1.1
   default-language: Haskell2010
   ghc-options:      -Wall
@@ -123,6 +126,7 @@ executable glassbr
     drasil-lang >= 0.1.3,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1,
+    drasil-gen >= 0.1.0,
     drasil-docLang >= 0.1.0   
   default-language: Haskell2010
   ghc-options:      -Wall
@@ -150,6 +154,7 @@ executable chipmunkdocs
     drasil-lang >= 0.1.3,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1,
+    drasil-gen >= 0.1.0,
     drasil-docLang >= 0.1.1
   default-language: Haskell2010
   ghc-options:      -Wall
@@ -181,6 +186,7 @@ executable swhs
     drasil-lang >= 0.1.3,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1,
+    drasil-gen >= 0.1.0,
     drasil-docLang >= 0.1.1
   default-language: Haskell2010
   ghc-options:      -Wall

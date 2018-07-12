@@ -485,7 +485,7 @@ stfMtrx_deriv_sentences_ssp_s2 =
 stfMtrx_deriv_sentences_ssp_s3 :: [Sentence]
 stfMtrx_deriv_sentences_ssp_s3 = [S "The Hooke's law force displacement relationship of" +:+ (acroGD 8) +:+
   S "applied to the base also references a displacement vector" +:+
-  ch rotatedDispl +:+ S "of" +:+ acroGD 9 +:+ S "rotated for" +:+ S "base angle of the slice" +:+ 
+  ch rotatedDispl +:+ S "of" +:+ acroGD 9 +:+ S "rotated for the base angle of the slice" +:+ 
   ch baseAngle +:+. S "The basal displacement vector" +:+
   ch genDisplace +:+  S "is rotated clockwise to align with the" +:+
   phrase intrslce +:+ S "displacement vector" +:+

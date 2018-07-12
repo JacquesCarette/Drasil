@@ -7,8 +7,7 @@ import System.Directory (createDirectoryIfMissing, getCurrentDirectory,
   setCurrentDirectory)
 
 import Language.Drasil
-import Language.Drasil.CodeSpec (Choices, CodeSpec)
-import Language.Drasil.Code.Imperative.Import (generator, generateCode)
+import Language.Drasil.Code (generator, generateCode, Choices, CodeSpec)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: HasSymbolTable s => DocSpec -> Document -> s -> IO ()

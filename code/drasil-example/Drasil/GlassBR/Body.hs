@@ -1,23 +1,23 @@
 module Drasil.GlassBR.Body where
+
 import Control.Lens ((^.))
+import Data.List (nub)
+
 import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
-import qualified Drasil.SRS as SRS
-import Data.List (nub)
-import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
-  DerivationDisplay(..),
-  DocSection(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons), --DocSection uses everything but Verbatim
-  IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), LCsSec(..), 
-  ProblemDescription(..),
-  RefSec(RefProg), RefTab(TAandA, TUnits), ReqrmntSec(..), 
-  UCsSec(..), RefSec(RefProg), RefTab(TAandA, TUnits), ReqrmntSec(..),   ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SCSSub(..), 
-  SSDSec(..), SSDSub(..), SolChSpec(..), 
-  StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), 
-  TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose), DocDesc, 
-  mkDoc, mkRequirement, tsymb)
-import Drasil.DocumentLanguage.Definitions 
-  (Field(..), InclUnits(IncludeUnits), Verbosity(Verbose), Fields)
-import Drasil.DocumentLanguage.RefHelpers (cite)
+import qualified Drasil.DocLang.SRS as SRS
+
+import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
+  DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), 
+  GSDSub(UsrChars, SystCons), InclUnits(IncludeUnits), IntroSec(IntroProg), 
+  IntroSub(IChar, IOrgSec, IPurpose, IScope), LCsSec(..), ProblemDescription(..), RefSec(RefProg), RefTab(TAandA, TUnits), 
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg),
+  SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
+  StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
+  TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), cite, 
+  dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
+  mkRequirement, outDataConstTbl, physSystDesc, probDescF, termDefnF, 
+  traceGIntro, tsymb)
 
 import Data.Drasil.Concepts.Computation (computerApp, inParam,
   computerLiteracy, inValue, inQty)
@@ -73,11 +73,6 @@ import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad,
   gbConstants, gbConstrained, gbOutputs, gbInputs, glBreakage, capacity, 
   constant_LoadDF, glassBRsymb)
 
-import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, 
-  outDataConstTbl, dataConstraintUncertainty, goalStmtF, physSystDesc, termDefnF, 
-  probDescF)
-import Drasil.Sections.TraceabilityMandGs (traceGIntro)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.People (spencerSmith, nikitha, mCampidelli)
 import Data.Drasil.Phrase (for'')
@@ -138,7 +133,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           , TMs ([Label] ++ stdFields) [t1IsSafe, t2IsSafe]
           , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
           , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand, testIMFromQD] HideDerivation
+          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand] HideDerivation
           , Constraints (EmptyS) (dataConstraintUncertainty) 
                         (foldlSent [(makeRef (SRS.valsOfAuxCons SRS.missingP [])), S "gives", (plural value `ofThe` S "specification"), 
                         plural parameter, S "used in", (makeRef inputDataConstraints)] +:+ instance_models_intro2)
@@ -190,11 +185,8 @@ glassSystInfo = SI {
 }
   --FIXME: All named ideas, not just acronyms.
 
-testIMFromQD :: InstanceModel
-testIMFromQD = imQD gbSymbMap risk EmptyS [] [] "riskFun" --shortname
 glassBR_code :: CodeSpec
 glassBR_code = codeSpec glassSystInfo allMods
-
 
 problem_description, terminology_and_description, 
   physical_system_description, goal_statements :: Section

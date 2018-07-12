@@ -3,12 +3,12 @@ module Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS) where
 -- A list of likely and unlikely changes for the SSP example
 
 import Language.Drasil
-import Drasil.DocumentLanguage (mkLklyChnk, mkUnLklyChnk)
-import Data.Drasil.SentenceStructures (foldlSent, foldlSP)
+import Drasil.DocLang (mkLklyChnk, mkUnLklyChnk, refA)
+
 import Drasil.SSP.Assumptions (sspRefDB, newA3, newA5, newA6, newA8)
-import Data.Drasil.Concepts.Math (calculation)
-import Drasil.DocumentLanguage.RefHelpers (refA)
+import Data.Drasil.SentenceStructures (foldlSent, foldlSP)
 import Data.Drasil.Concepts.Documentation (system)
+import Data.Drasil.Concepts.Math (calculation)
 
 likelyChanges_SRS :: [Contents]
 likelyChanges_SRS = [likelychg1]

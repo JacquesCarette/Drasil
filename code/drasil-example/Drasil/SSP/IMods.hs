@@ -4,6 +4,7 @@ module Drasil.SSP.IMods where
 import Prelude hiding (tan, product, sin, cos)
 import Language.Drasil
 import Control.Lens ((^.))
+import Drasil.DocLang (refA)
 
 import Drasil.SSP.DataDefs (fixme1,fixme2)
 import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice, 
@@ -18,8 +19,6 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
   shrDispl, shrResC, shrStiffBase, shrStiffIntsl, shrStress, slcWght, sum1toN, 
   surfAngle, surfHydroForce, surfLngth, surfLoad, totNrmForce, varblU, varblV,
   watrForce, watrForceDif, wiif, xi, yi)
-
-import Drasil.DocumentLanguage.RefHelpers(refA)
 
 import Data.Drasil.SentenceStructures (foldlSent, isThe)
 import Data.Drasil.Utils (eqUnR)

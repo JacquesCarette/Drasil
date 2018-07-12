@@ -3,7 +3,8 @@ module Main (main) where
 import Language.Drasil (DocSpec(DocSpec), DocType(SRS, Website))
 
 import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..), 
-  ImplementationType(..), Lang(..), Logging(..), Structure(..), gen)
+  ImplementationType(..), Lang(..), Logging(..), Structure(..))
+import Language.Drasil.Generate (gen)
 
 import Drasil.SSP.Body (ssp_srs, sspSymMap)
 

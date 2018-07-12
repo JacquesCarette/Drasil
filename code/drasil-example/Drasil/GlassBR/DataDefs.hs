@@ -2,8 +2,8 @@ module Drasil.GlassBR.DataDefs (dataDefns, dimLL, gbQDefns, glaTyFac, hFromt,
   nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac, qDefns) where
 
 import Language.Drasil
-
 import Prelude hiding (log, exp, sqrt)
+
 import Drasil.GlassBR.Unitals (act_thick, actualThicknesses, aspectR, 
   aspectRWithEqn, demand, dimlessLoad, gTF, glassTypeAbbrsStr, 
   glassTypeFactors, glass_type, lDurFac, mod_elas, nom_thick, 
@@ -167,7 +167,7 @@ standOffDis = mkDataDef sd standOffDis_eq
 
 standOffDisDD :: DataDefinition
 standOffDisDD = mkDD standOffDis [{-references-}] [{-derivation-}] ""--temporary
-  (Nothing) -- change
+  (Nothing) -- FIXME: Does this need notes?
 
 --Issue #350
 

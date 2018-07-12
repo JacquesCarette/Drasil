@@ -20,9 +20,6 @@ import Drasil.SWHS.Assumptions
 ---------
 -- IM1 --
 ---------
---im :: RelationConcept -> Inputs -> InputConstraints -> Outputs -> 
--- OutputConstraints -> Attributes -> InstanceModel
---Tcon :: Expr -> Constraint
 eBalanceOnWtr_new :: InstanceModel
 eBalanceOnWtr_new = im'' eBalanceOnWtr [qw temp_C, qw temp_init, qw time_final, 
   qw coil_SA, qw coil_HTC, qw htCap_W, qw w_mass] 

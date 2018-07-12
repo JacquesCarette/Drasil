@@ -1272,15 +1272,15 @@ Source &
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
-The resistive shear force of a slice is defined as $P$ in GD3. The effective normal force in the equation for $P$ of the soil is defined in the perpendicular force equilibrium of a slice from GD2, using the effective normal force $N'$ of T4 shown in equation (1).
+The resistive shear force of a slice is defined as $P$ in GD3. The effective normal force in the equation for $P$ of the soil is defined in the perpendicular force equilibrium of a slice from GD2, using the effective normal force $N'$ of T4 shown in equation (1):
 \begin{dmath}
 {N'}_{i}=\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}
 \end{dmath}
-The values of the interslice forces $G$ and $X$ in the equation are unknown, while the other values are found from the physical force definitions of \hyperref[DD:W.i]{Definition~DD:W.i} to \hyperref[DD:l.s,i]{Definition~DD:l.s,i}. Consider a force equilibrium without the affect of interslice forces, to obtain a solvable value as done for $N*$ in equation (2).
+The values of the interslice forces $G$ and $X$ in the equation are unknown, while the other values are found from the physical force definitions of \hyperref[DD:W.i]{Definition~DD:W.i} to \hyperref[DD:l.s,i]{Definition~DD:l.s,i}. Consider a force equilibrium without the affect of interslice forces, to obtain a solvable value as done for $N*$ in equation (2):
 \begin{dmath}
 N*_{i}=\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{K_{c}} W_{i}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}
 \end{dmath}
-Using $N*$, a resistive shear force without the influence of interslice forces for slice index i can be solved for in terms of all known values as done in equation (3).
+Using $N*$, a resistive shear force without the influence of interslice forces for slice index i can be solved for in terms of all known values as done in equation (3):
 \begin{dmath}
 R_{i}=N*_{i} \tan\left({φ'}_{i}\right)+{c'}_{i} b_{i} \sec\left(α_{i}\right)=\left(\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{K_{c}} W_{i}-{ΔH}_{i}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}\right) \tan\left({φ'}_{i}\right)+{c'}_{i} b_{i} \sec\left(α_{i}\right)
 \end{dmath}
@@ -1292,6 +1292,8 @@ R_{i}=N*_{i} \tan\left({φ'}_{i}\right)+{c'}_{i} b_{i} \sec\left(α_{i}\right)=\
 \label{DD:T.i}
 \\ \midrule \\
 Label & Mobilized shear force
+\\ \midrule \\
+Symbol & $T$
 \\ \midrule \\
 Units & N
 \\ \midrule \\
@@ -1317,11 +1319,11 @@ Source &
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
-The mobilized shear force acting on a slice is defined as $S$ from the force equilibrium in GD2, also shown in equation (4).
+The mobilized shear force acting on a slice is defined as $S$ from the force equilibrium in GD2, also shown in equation (4):
 \begin{dmath}
 S_{i}=\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)+\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)
 \end{dmath}
-The equation is unsolvable, containing the unknown interslice normal force $G$ and interslice shear force $X$. Consider a force equilibrium without the influence of interslice forces, to obtain the mobilized shear force $T$, as done in equation (5).
+The equation is unsolvable, containing the unknown interslice normal force $G$ and interslice shear force $X$. Consider a force equilibrium without the influence of interslice forces, to obtain the mobilized shear force $T$, as done in equation (5):
 \begin{dmath}
 T_{i}=\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-\left(-{K_{c}} W_{i}-{ΔH}_{i}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)
 \end{dmath}

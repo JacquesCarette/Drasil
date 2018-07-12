@@ -4556,16 +4556,6 @@ Force
 </tr>
 <tr>
 <th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>F</em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Units
 </th>
 <td>
@@ -4581,7 +4571,86 @@ Equation
 <td>
 <div id="">
 <div class="equation">
+<p class="paragraph">
 <em>F = &minus;ℓ<sub>s,i&minus;1</sub>&#8239;K<sub>sn,i&minus;1</sub>&#8239;δ<sub>i&minus;1</sub>&plus;(ℓ<sub>s,i&minus;1</sub>&#8239;K<sub>sn,i&minus;1</sub>&plus;ℓ<sub>b,i</sub>&#8239;K<sub>bn,i</sub>&plus;ℓ<sub>s,i</sub>&#8239;K<sub>sn,i</sub>)&#8239;δ<sub>i</sub>&minus;ℓ<sub>s,i</sub>&#8239;K<sub>sn,i</sub>&#8239;δ<sub>i&plus;1</sub></em>
+</p>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+<em>F</em> is the force (N)<br /><em>ℓ<sub>s</sub></em> is the length of an interslice surface (m)<br /><em>i</em> is the index<br /><em>K<sub>sn</sub></em> is the normal stiffness (Pa/m)<br /><em>δ</em> is the displacement (m)<br /><em>ℓ<sub>b</sub></em> is the total base length of a slice (m)<br /><em>K<sub>bn</sub></em> is the normal stiffness (Pa/m)
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:K.bt,i">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Shear stiffness
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>K<sub>bt</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+Pa/m
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div id="">
+<div class="equation">
+<em>K<sub>bt</sub> = <div class="fraction">
+<span class="fup">
+G
+</span>
+<span class="fdn">
+2&#8239;(1&plus;ν)
+</span>
+</div>&#8239;<div class="fraction">
+<span class="fup">
+0.1
+</span>
+<span class="fdn">
+b
+</span>
+</div>&plus;<div class="fraction">
+<span class="fup">
+c&prime;<sub>i</sub>&minus;σ&#8239;tan(φ&prime;<sub>i</sub>)
+</span>
+<span class="fdn">
+|δu|&plus;a
+</span>
+</div></em>
 </div>
 </div>
 </td>
@@ -4593,25 +4662,34 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>F</em> is the force (N)
+<em>K<sub>bt</sub></em> is the shear stiffness (Pa/m)
 </li>
 <li>
-<em>ℓ<sub>s</sub></em> is the length of an interslice surface (m)
+<em>G</em> is the interslice normal force (N)
+</li>
+<li>
+<em>ν</em> is the Poisson's ratio (Unitless)
+</li>
+<li>
+<em>b</em> is the base width of a slice (m)
+</li>
+<li>
+<em>c&prime;</em> is the effective cohesion (Pa)
 </li>
 <li>
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>K<sub>sn</sub></em> is the normal stiffness (Pa/m)
+<em>σ</em> is the normal stress (Pa)
 </li>
 <li>
-<em>δ</em> is the displacement (m)
+<em>φ&prime;</em> is the effective angle of friction (&deg;)
 </li>
 <li>
-<em>ℓ<sub>b</sub></em> is the total base length of a slice (m)
+<em>δu</em> is the displacement (m)
 </li>
 <li>
-<em>K<sub>bn</sub></em> is the normal stiffness (Pa/m)
+<em>a</em> is the constant (m)
 </li>
 </ul>
 </td>
@@ -4646,7 +4724,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Normal Stiffness
+Normal stiffness
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>K<sub>bn</sub></em>
 </p>
 </td>
 </tr>
@@ -4667,7 +4755,6 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em>K<sub>bn</sub> = <span class="casebr">
 {
 </span>
@@ -4704,7 +4791,6 @@ G&#8239;(1&minus;ν)
 </span>
 </span>
 </div></em>
-</p>
 </div>
 </div>
 </td>
@@ -4714,8 +4800,48 @@ G&#8239;(1&minus;ν)
 Description
 </th>
 <td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>K<sub>bn</sub></em> is the normal stiffness (Pa/m)
+</li>
+<li>
+<em>G</em> is the interslice normal force (N)
+</li>
+<li>
+<em>ν</em> is the Poisson's ratio (Unitless)
+</li>
+<li>
+<em>b</em> is the base width of a slice (m)
+</li>
+<li>
+<em>κ</em> is the constant (Pa)
+</li>
+<li>
+<em>δv</em> is the displacement (m)
+</li>
+<li>
+<em>A</em> is the constant (m)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>K<sub>bn</sub></em> is the normal stiffness (Pa/m)<br /><em>G</em> is the interslice normal force (N)<br /><em>ν</em> is the Poisson's ratio<br /><em>b</em> is the base width of a slice (m)<br /><em>κ</em> is the constant (Pa)<br /><em>δv</em> is the displacement (m)<br /><em>A</em> is the constant (m)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>

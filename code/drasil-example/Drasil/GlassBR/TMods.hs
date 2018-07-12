@@ -20,15 +20,6 @@ tModels = [t1SafetyReq, t2SafetyReq]
 -- this is the new function but it still uses the t1SafetyReq,
 -- so basiclly we have to combine the old function with the new function
 
-
-{-t1IsSafe :: TheoryModel
-t1IsSafe = tm//all the changes should include this, means theoritical model constructor// (cw//means the constraints wrapper constructor// t1SafetyReq//this is the name of the old chunk, we have to always includes this//) 
-  (tc'//tc' we are using now instead of the td// "isSafe" [qw is_safe1, qw prob_br, qw pb_tol// include all the quantifiers here] ([] :: [CWrapper])
-  []//maybe some quatifiers [TCon Invariant $ (C is_safe1) $= (C prob_br) $< (C pb_tol)] []//maybe the new function, but just in case we have to use it)-}
-
--- in the body file , we have to modify to include more the chunks meaning the import
---grep rn "keyword" folder_name
-
 t1IsSafe :: TheoryModel
 t1IsSafe = tm' (cw t1SafetyReq) 
   (tc' "isSafe" [qw is_safe1, qw prob_br, qw pb_tol] ([] :: [ConceptChunk])

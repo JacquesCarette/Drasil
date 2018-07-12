@@ -105,6 +105,7 @@ swhs_si = SI {
   _quants = swhsSymbols,
   _concepts = symbT,
   _definitions = swhsDataDefs,
+  _datadefs = ([] :: [DataDefinition]),
   _inputs = map qw swhsInputs,
   _outputs = map qw swhsOutputs,
   _defSequence = ([] :: [Block QDefinition]),

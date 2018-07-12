@@ -65,3 +65,6 @@ mkDataDef' cncpt equation dv = datadef $ getUnit cncpt --should references be pa
 -- | Smart constructor for data definitions 
 mkDD :: QDefinition -> References -> Derivation -> String{-Label-} -> Maybe [Sentence] -> DataDefinition
 mkDD a b c _ e = DD a Global b c (shortname' $ a ^. uid  {-shortname' d-}) e -- FIXME: should the shortname be passed in or derived?
+
+qdFromDD :: DataDefinition -> QDefinition
+qdFromDD (DD a _ _ _ _ _) = a

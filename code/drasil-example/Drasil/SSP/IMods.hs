@@ -20,12 +20,10 @@ import Drasil.SSP.Defs (slope, slice, slip,
   intrslce, ssa, morPrice, crtSlpSrf, factorOfSafety)
 import Data.Drasil.SentenceStructures (foldlSent, isThe)
 import Data.Drasil.Utils (eqUnR, weave)
-import Drasil.SSP.DataDefs (fixme1,fixme2, ddRef, sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB,
-  lengthB, lengthLb, lengthLs, seismicLoadF, surfLoads, intrsliceF, resShearWO,
-  mobShearWO, displcmntRxnF, displcmntBasel, netFDsplcmntEqbm, shearStiffness,
-  soilStiffness)
-import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice, 
-  slip, slope, ssa)
+import Drasil.SSP.DataDefs (fixme1,fixme2, ddRef, sliceWght,
+ lengthLb, lengthLs, seismicLoadF, surfLoads, intrsliceF, resShearWO,
+ mobShearWO, displcmntRxnF, displcmntBasel, netFDsplcmntEqbm, shearStiffness,
+ soilStiffness)
 import Drasil.SSP.Assumptions (newA2, sspRefDB)
 
 -- Needed for derivations

@@ -11,7 +11,6 @@ import Data.Drasil.SentenceStructures (ofThe, ofThe', getTandS, foldlSent)
 import Data.Drasil.Concepts.Documentation (condition)
 import Data.Drasil.Concepts.Physics (force, stress, strain)
 import Data.Drasil.Concepts.Math (surface, unit_)
-import Data.Drasil.Concepts.Physics (force, strain, stress)
 import Data.Drasil.Concepts.SolidMechanics (shearForce)
 import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe')
 

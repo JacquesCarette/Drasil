@@ -3,13 +3,14 @@ module Drasil.GamePhysics.Changes where
 --A list of likely and unlikely changes for GamePhysics
 
 import Language.Drasil
+import qualified Drasil.DocLang.SRS as SRS (likeChg, unlikeChg)
+
 import Data.Drasil.SentenceStructures (foldlSent, foldlSP, maybeChanged, maybeExpanded, sAnd)
 import Data.Drasil.Concepts.Documentation (section_, likelyChg, unlikelyChg, physics, game, library)
 import qualified Data.Drasil.Concepts.Math as CM (ode, constraint)
 import Data.Drasil.Concepts.Computation (algorithm)
 import qualified Data.Drasil.Concepts.Physics as CP (collision, damping, joint)
 import Data.Drasil.Utils (enumSimple)
-import qualified Drasil.SRS as SRS (likeChg, unlikeChg)
 
 --------------------------------
 --  LIKELY CHANGES --

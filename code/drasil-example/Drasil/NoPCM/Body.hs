@@ -62,26 +62,17 @@ import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Software.Products (compPro)
 
-import Drasil.Sections.ReferenceMaterial (intro)
-import qualified Drasil.SRS as SRS (funcReq, likeChg, unlikeChg, probDesc, goalStmt,
+import qualified Drasil.DocLang.SRS as SRS (funcReq, likeChg, unlikeChg, probDesc, goalStmt,
   inModel, missingP)
-import Drasil.DocumentLanguage {-(DocDesc,
-  tsymb, mkRequirement, mkLklyChnk, mkAssump, mkDoc,
-  TSIntro (SymbOrder, SymbConvention, TSPurpose),
-  DocSection (Verbatim, Bibliography, IntroSec, RefSec),
-  RefTab (TAandA, TUnits),
-  RefSec (RefProg),
-  IntroSec (IntroProg),
-  IntroSub (IOrgSec, IScope, IChar, IPurpose),
-  Literature (Lit, Doc'))-}
-  
-import Drasil.Sections.SpecificSystemDescription (inDataConstTbl,
-  outDataConstTbl, solChSpecF, dataConstraintUncertainty, physSystDesc,
-  termDefnF, specSysDesF)
-import Drasil.Sections.Requirements (reqF)
-import Drasil.Sections.TraceabilityMandGs (traceGIntro, traceMGF)
-import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
-
+import Drasil.DocLang (DocDesc, 
+  DocSection(Verbatim, Bibliography, IntroSec, RefSec), IntroSec(IntroProg),
+  IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
+  RefSec(RefProg), RefTab(TAandA, TUnits), 
+  TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty, 
+  inDataConstTbl, intro, mkDoc, mkLklyChnk, mkRequirement, mkUnLklyChnk, 
+  outDataConstTbl, physSystDesc, reqF, solChSpecF, specSysDesF, termDefnF, 
+  traceGIntro, traceMGF, tsymb, valsOfAuxConstantsF)
+ 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
   foldlList, isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP, acroIM,
   acroGD)

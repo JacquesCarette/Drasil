@@ -887,15 +887,15 @@ Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the te
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="A:Density-Water-PCM-Constant-over-Volume">
-Density-Water-PCM-Constant-over-Volume: The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume [GD2].
+<div id="A:Density-Water-Constant-over-Volume">
+Density-Water-Constant-over-Volume: The density of water has no spatial variation; that is, it is constant over their entire volume [GD2, <a href=#LC:likeChg2>Temperature-Coil-Variable-Over-Day</a>].
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Specific-Heat-Energy-Constant-over-Volume">
-Specific-Heat-Energy-Constant-over-Volume: The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume [GD2].
+Specific-Heat-Energy-Constant-over-Volume: The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume [GD2].
 </div>
 </li>
 </ul>
@@ -923,7 +923,7 @@ Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does
 <ul class="hide-list-style">
 <li>
 <div id="A:Charging-Tank-No-Temp-Discharge">
-Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature [<a href=#A:assump12>assump12</a>] is less than (or equal) to the temperature of the heating coil [IM1].
+Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil [IM1, <a href=#LC:likeChg3>Temperature-Coil-Variable-Over-Length</a>].
 </div>
 </li>
 </ul>

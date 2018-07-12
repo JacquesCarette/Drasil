@@ -45,15 +45,11 @@ import Drasil.SWHS.TMods (tModels, t1ConsThermE, t1ConsThermE_new,
  t2SensHtE_new, t3LatHtE_new, swhsTMods)
 import Drasil.SWHS.IMods (heatEInWtr_new, eBalanceOnWtr_new,
   heatEInPCM_new, eBalanceOnPCM_new, swhsIMods)
-import Drasil.SWHS.DataDefs (swhsDataDefs,dd1HtFluxC, dd2HtFluxP, dd3HtFusion,
- dd4MeltFrac, swhsDDefs, dataDefns)
-import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp, roc_temp_simp_deriv,
-  generalDefinitions)
+import Drasil.SWHS.DataDefs (swhsDataDefs,dd1HtFluxC, dd2HtFluxP, swhsDDefs, dataDefns)
+import Drasil.SWHS.GenDefs (swhsGenDefs, generalDefinitions)
 import Drasil.SWHS.References (ref_swhs_citations)
-import Drasil.SWHS.Assumptions (newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10,
-  newA11, newA12, newA13, newA14, newA15, newA16, newA17, newA18, newA19, newA20, assump1, assump2, assump3, 
-  assump4, assump5, assump6, assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
-  assump15, assump16, assump17, assump18, assump19, assump20, newAssumptions, swhsAssumptions)
+import Drasil.SWHS.Assumptions (assump3, assump4, assump5, assump6, assump13, 
+  assump15, assump16, assump17, assump18, newAssumptions, swhsAssumptions)
 import Drasil.SWHS.Requirements (req1, req2, reqEqn1, reqEqn2,
   req3, req4, req5, req6, req7, req8, req9, req10, req11, nonFuncReqs)
 import Drasil.SWHS.Changes (likeChg1, likeChg2, likeChg3, likeChg4,
@@ -88,9 +84,7 @@ import Data.Drasil.Utils (enumSimple, weave, itemRefToSent, makeListRef,
 import Data.Drasil.SentenceStructures (acroIM, acroGD, acroGS, showingCxnBw,
   foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe,
   ofThe', sAnd, sOf, foldlList)
-import Data.Drasil.Units.Thermodynamics (thermal_flux)
 
-import qualified Drasil.SRS as SRS
 -------------------------------------------------------------------------------
 
 acronyms :: [CI]
@@ -156,7 +150,7 @@ mkSRS = RefSec (RefProg intro [
      IScope (scopeReqs1 CT.thermal_analysis tank_pcm) 
        (scopeReqs2 temp CT.thermal_energy water phsChgMtrl sWHT),
      IChar (charReader1 CT.ht_trans_theo) (charReader2 de) (EmptyS),
-     IOrgSec (orgDocIntro) (inModel) (SRS.inModel SRS.missingP [])
+     IOrgSec orgDocIntro inModel (SRS.inModel SRS.missingP [])
        (orgDocEnd swhs_pcm progName)]):
   Verbatim genSystDesc:
   SSDSec 
@@ -188,7 +182,7 @@ tsymb_intro = [TSPurpose, SymbConvention
 
 --- The document starts here
 swhs_srs' :: Document
-swhs_srs' = mkDoc mkSRS (for) swhs_si
+swhs_srs' = mkDoc mkSRS for swhs_si
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -313,7 +307,7 @@ tAndDMap c = Flat $ foldlSent [at_start c +: EmptyS, (c ^. defn)]
 -----------------------------------------
 
 physSystDescription :: Section
-physSystDescription = physSystDesc (short progName) (fig_tank) [physSystDescList, fig_tank]
+physSystDescription = physSystDesc (short progName) fig_tank [physSystDescList, fig_tank]
 
 -- Above paragraph is general except for progName and figure. However, not
 -- every example has a physical system. Also, the SSP example is different, so
@@ -336,7 +330,7 @@ goalStates = SRS.goalStmt [goalStateIntro temp_C temp_W temp_PCM, goalStateList]
 
 goalStateList :: Contents
 goalStateList = enumSimple 1 (short goalStmt) $
-  map (goalState) outputConstraints
+  map goalState outputConstraints
 
 -- List structure is repeated between examples. (For all of these lists I am
 -- imagining the potential for something like what was done with the lists in

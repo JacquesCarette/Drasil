@@ -5962,7 +5962,7 @@ Using the net force-displacement equilibrium equation of a slice from <a href=#D
 </div>
 </div>
 <p class="paragraph">
-Using the known input assumption of A2, the force variable definitions of <a href=#DD:W.i>DD1</a> to <a href=#DD:Q.i>DD11</a> on the left side of the equations can be solved for. The only unknown in the variables to solve for the stiffness values from <a href=#DD:K.bt,i>DD18</a> is the displacements. Therefore taking the equation from each slice a set of <em>2&#8239;n</em> equations, with <em>2&#8239;n</em> unknown displacements in the <em>x</em> and <em>y</em> directions of each slice can be derived. Solutions for the displacements of each slice can then be found. The use of displacement in the definition of the stiffness values makes the equation implicit, which means an iterative solution method, with an initial guess for the displacements in the stiffness values is required:
+Using the known input assumption of <a href=#A:Geo-Slope-Mat-Props-of-Soil-Inputs>Geo-Slope-Mat-Props-of-Soil-Inputs</a>, the force variable definitions of <a href=#DD:W.i>DD1</a> to <a href=#DD:Q.i>DD11</a> on the left side of the equations can be solved for. The only unknown in the variables to solve for the stiffness values from <a href=#DD:K.bn,i>DD19</a> is the displacements. Therefore taking the equation from each slice a set of <em>2&#8239;n</em> equations, with <em>2&#8239;n</em> unknown displacements in the <em>x</em> and <em>y</em> directions of each slice can be derived. Solutions for the displacements of each slice can then be found. The use of displacement in the definition of the stiffness values makes the equation implicit, which means an iterative solution method, with an initial guess for the displacements in the stiffness values is required.
 </p>
 <div id="IM:rfemFoS">
 <table class="idefn">
@@ -6108,7 +6108,7 @@ RFEM analysis can also be used to calculate the factor of safety for the slope. 
 </div>
 </div>
 <p class="paragraph">
-With the definition of normal stiffness from <a href=#DD:K.bt,i>DD18</a> to find the normal stiffness of the base <em>K<sub>bn</sub></em> and the now known base displacement perpendicular to the surface <em>δv</em> from equation (25) the normal base stress can be calculated from the force-displacement relationship of T5. Stress <em>σ</em> is used in place of force <em>F</em> as the stiffness hasn't been normalized for the length of the base. Results in equation (26):
+With the definition of normal stiffness from <a href=#DD:K.bn,i>DD19</a> to find the normal stiffness of the base <em>K<sub>bn</sub></em> and the now known base displacement perpendicular to the surface <em>δv</em> from equation (25) the normal base stress can be calculated from the force-displacement relationship of T5. Stress <em>σ</em> is used in place of force <em>F</em> as the stiffness hasn't been normalized for the length of the base. Results in equation (26):
 </p>
 <div id="">
 <div class="equation">

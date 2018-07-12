@@ -1721,6 +1721,8 @@ Description & \begin{symbDescription}
               \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
+Notes & $λ$ is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in GD5 The inclination function $f$ determines the relative magnitude ratio between the different interslices, while $λ$ determines the magnitude. $λ$ uses the sum of interslice normal and shear forces taken from each interslice.
+\\ \midrule \\
 Source &
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
@@ -1748,6 +1750,14 @@ equation (15) for $λ$, is a function of the unknown interslice normal force $G$
 \\ \midrule \\
 Label & Interslice forces
 \\ \midrule \\
+Input & $i$, $FS$, $R$, $T$, $Ψ$, $Φ$
+\\ \midrule \\
+Output & $G$
+\\ \midrule \\
+Input Constraints & 
+\\ \midrule \\
+Output Constraints & 
+\\ \midrule \\
 Equation & \begin{dmath}
            G_{i}=\begin{cases}
 \frac{FS T_{1}-R_{1}}{Φ_{1}}, & i=1\\
@@ -1766,6 +1776,8 @@ Description & \begin{symbDescription}
               \item{$Ψ$ is the constant (N)}
               \item{$n$ is the number of slices (Unitless)}
               \end{symbDescription}
+\\ \midrule \\
+Notes & The value of the interslice normal force $G$ at interface $i$ The net force. is the weight of the slices adjacent to interface $i$ exert horizontally on each other.
 \\ \midrule \\
 Source &
 \\ \midrule \\
@@ -1804,6 +1816,14 @@ The constants $Ψ$ and $Φ$ described in equation (20) and equation (19) are fun
 \\ \midrule \\
 Label & Force displacement equilibrium
 \\ \midrule \\
+Input & $α$, ${U_{b}}$, ${U_{t}}$, $β$, $Q$, $ω$, ${ℓ_{s}}$, ${K_{sn}}$, $δx$, ${K_{bA}}$, $δy$, ${ℓ_{b}}$, ${K_{bB}}$
+\\ \midrule \\
+Output & ${K_{c}}$
+\\ \midrule \\
+Input Constraints & 
+\\ \midrule \\
+Output Constraints & 
+\\ \midrule \\
 Equation & \begin{dmath}
            -{ΔH}_{i}-{K_{c}} W_{i}-{U_{b,i}} \sin\left(α_{i}\right)+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)={δx}_{i-1} -{ℓ_{s,i-1}} {K_{sn,i-1}}+{δx}_{i} \left(-{ℓ_{s,i-1}} {K_{sn,i-1}}+{ℓ_{s,i}} {K_{sn,i}}+{ℓ_{b,i}} {K_{bA,i}}\right)+{δx}_{i+1} -{ℓ_{s,i}} {K_{sn,i}}+{δy}_{i} -{ℓ_{b,i}} {K_{bB,i}}=-W_{i}-{U_{b,i}} \cos\left(α_{i}\right)+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)={δy}_{i-1} -{ℓ_{s,i-1}} {K_{st,i-1}}+{δy}_{i} \left(-{ℓ_{s,i-1}} {K_{st,i-1}}+{ℓ_{s,i}} {K_{sn,i}}+{ℓ_{b,i}} {K_{bA,i}}\right)+{δy}_{i+1} -{ℓ_{s,i}} {K_{st,i}}+{δx}_{i} -{ℓ_{b,i}} {K_{bB,i}}
            \end{dmath}
@@ -1829,6 +1849,8 @@ Description & \begin{symbDescription}
               \item{${K_{st}}$ is the shear stiffness ($\frac{\text{Pa}}{\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
+Notes & There is one set of force displacement equilibrium equations in the x and y directions for each element. System of equations solved for displacements ( $δx$ and $δy$ ).
+\\ \midrule \\
 Source &
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
@@ -1847,6 +1869,14 @@ Using the known input assumption of A\ref{A:Geo-Slope-Mat-Props-of-Soil-Inputs},
 \label{IM:rfemFoS}
 \\ \midrule \\
 Label & RFEM factor of safety
+\\ \midrule \\
+Input & $c'$, ${K_{bn}}$, $δv$, $φ'$, ${K_{bt}}$, $δu$, ${ℓ_{b}}$
+\\ \midrule \\
+Output & ${FS_{Loc,i}}$
+\\ \midrule \\
+Input Constraints & 
+\\ \midrule \\
+Output Constraints & 
 \\ \midrule \\
 Equation & \begin{dmath}
            {FS_{Loc,i,i}}=\frac{{c'}_{i}-{K_{bn,i}} {δv}_{i} \tan\left({φ'}_{i}\right)}{{K_{bt,i}} {δu}_{i}}=\frac{\displaystyle\sum_{i=1}^{n}{{ℓ_{b,i}} \left({c'}_{i}-{K_{bn,i}} {δv}_{i} \tan\left({φ'}_{i}\right)\right)}}{\displaystyle\sum_{i=1}^{n}{{ℓ_{b,i}} {K_{bt,i}} {δu}_{i}}}
@@ -1909,6 +1939,14 @@ FS=\frac{\displaystyle\sum_{i=1}^{n}{{ℓ_{b,i}} s_{i}}}{\displaystyle\sum_{i=1}
 \\ \midrule \\
 Label & Critical slip identification
 \\ \midrule \\
+Input & 
+\\ \midrule \\
+Output & ${FS_{min}}$
+\\ \midrule \\
+Input Constraints & 
+\\ \midrule \\
+Output Constraints & 
+\\ \midrule \\
 Equation & \begin{dmath}
            {FS_{min}}=Υ\left(\{{x_{cs}}{,y_{cs}}\}\right)
            \end{dmath}
@@ -1918,6 +1956,8 @@ Description & \begin{symbDescription}
               \item{$Υ$ is the function (Unitless)}
               \item{$\{{x_{cs}}{,y_{cs}}\}$ is the the set of x and y coordinates (m)}
               \end{symbDescription}
+\\ \midrule \\
+Notes & Given the necessary slope inputs, a minimization algorithm or function $Υ$ will identify the critical slip surface of the slope, with the critical slip coordinates $\{{x_{cs}}{,y_{cs}}\}$ and the minimum factor of safety ${FS_{min}}$ that results.
 \\ \midrule \\
 Source &
 \\ \midrule \\

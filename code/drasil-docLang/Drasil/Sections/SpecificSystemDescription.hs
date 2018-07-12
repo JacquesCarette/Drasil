@@ -25,10 +25,10 @@ import Data.Drasil.Concepts.Documentation (physical, column, input_, uncertainty
   likelyChg, unlikelyChg, goalStmt, theory, purpose, requirement, element)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Utils (foldle, getES, fmtU, getRVal)
+import Data.Drasil.Utils (foldle, fmtU, getRVal)
 import Data.Drasil.SentenceStructures (fmtPhys, fmtSfwr, mkTableFromColumns, foldlSent, foldlSP,
   typUncr, ofThe, foldlList)
-import qualified Drasil.SRS as SRS
+import qualified Drasil.DocLang.SRS as SRS
 
 
 -- | Specific System description section builder. Takes the system and subsections.
@@ -240,7 +240,7 @@ dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase colum
 inDataConstTbl :: (UncertainQuantity c, Constrained c, HasReasVal c) => [c] -> Contents
 inDataConstTbl qlst = Table titl cts (S "Input Data Constraints") True "InDataConstraints"
   where
-   columns = [(S "Var", map getES qlst),
+   columns = [(S "Var", map ch qlst),
             (titleize' physicalConstraint, map fmtPhys qlst),
             (titleize' softwareConstraint, map fmtSfwr qlst),
             (S "Typical Value", map (\q -> fmtU (E $ getRVal q) q) qlst),
@@ -253,7 +253,7 @@ inDataConstTbl qlst = Table titl cts (S "Input Data Constraints") True "InDataCo
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> Contents
 outDataConstTbl qlst = Table titl cts (S "Output Data Constraints") True "OutDataConstraints"
   where
-   columns = [(S "Var", map getES qlst),
+   columns = [(S "Var", map ch qlst),
             (titleize' physicalConstraint, map fmtPhys qlst),
             (titleize' softwareConstraint, map fmtSfwr qlst)]
    tbl = mkTableFromColumns columns

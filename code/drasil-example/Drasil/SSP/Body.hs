@@ -5,6 +5,12 @@ import Language.Drasil.Code (CodeSpec, codeSpec)
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
 
+import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..), 
+  LCsSec(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), --TSIntro, 
+  TSIntro(..), UCsSec(..), dataConstraintUncertainty, genSysF, goalStmtF, 
+  inDataConstTbl, intro, mkDoc, nonFuncReqF, outDataConstTbl, probDescF, reqF, 
+  solChSpecF, specSysDesF, termDefnF, tsymb'', valsOfAuxConstantsF)
+
 import Data.Drasil.Concepts.Documentation (analysis, definition, 
   design, document, effect, element, endUser, goalStmt, inModel, input_, 
   interest, interest, issue, loss, method_, model, organization, physics, 
@@ -24,10 +30,9 @@ import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent, 
   foldlSent_, ofThe, sAnd, sOr)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
-import Data.Drasil.Utils (enumBullet, enumSimple, getES, weave)
+import Data.Drasil.Utils (enumBullet, enumSimple, weave)
 import Drasil.SSP.Assumptions (sspRefDB, newAssumptions)
 import Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
-
 import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShrDerivation, 
   resShrDerivation, sliceWght, sspDataDefs, stfMtrxDerivation)
 import Drasil.SSP.DataDesc (sspInputMod)
@@ -43,21 +48,8 @@ import Drasil.SSP.TMods (sspTMods)
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
   sspOutputs, sspSymbols)
 
-import qualified Drasil.SRS as SRS (funcReq, inModel, likeChg, unlikeChg, missingP, 
+import qualified Drasil.DocLang.SRS as SRS (funcReq, inModel, likeChg, unlikeChg, missingP, 
   physSyst)
-
-import Drasil.DocumentLanguage (DocDesc, DocSection(..), IntroSec(..), 
-  IntroSub(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), TSIntro, 
-  TSIntro(..), LCsSec(..), UCsSec(..), mkDoc, tsymb'')
-
-import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
-import Drasil.Sections.GeneralSystDesc (genSysF)
-import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.Sections.Requirements (reqF, nonFuncReqF)
-import Drasil.Sections.SpecificSystemDescription (dataConstraintUncertainty, 
-  goalStmtF, inDataConstTbl, outDataConstTbl, probDescF, solChSpecF, 
-  specSysDesF, termDefnF)
-
 
 --type declarations for sections--
 s3, s4, s5, s7 :: Section
@@ -84,7 +76,7 @@ ssp_si = SI {
   _authors = [henryFrankis],
   _units = this_si,
   _quants = sspSymbols,
-  _concepts = (sspSymbols),
+  _concepts = symbT,
   _definitions = sspDataDefs,
   _inputs = map qw sspInputs,
   _outputs = map qw sspOutputs,
@@ -107,7 +99,7 @@ mkSRS = RefSec (RefProg intro
   IntroSec (IntroProg startIntro kSent
     [IPurpose prpsOfDoc_p1
     , IScope scpIncl scpEnd
-    , IChar (phrase solidMechanics) 
+    , IChar (phrase solidMechanics)
       (phrase undergraduate +:+ S "level 4" +:+ phrase physics)
       EmptyS
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
@@ -121,8 +113,11 @@ ssp_code = codeSpec ssp_si [sspInputMod]
 
 -- SYMBOL MAP HELPERS --
 sspSymMap :: ChunkDB
-sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms) ([] :: [ConceptChunk]) -- FIXME: Fill in Concepts
+sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms) sspSymbols
   this_si
+
+symbT :: [DefinedQuantityDict]
+symbT = ccss (getDoc ssp_srs) (egetDoc ssp_srs) sspSymMap
 
 -- SECTION 1 --
 --automatically generated in mkSRS -
@@ -134,7 +129,7 @@ sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms) ([] :: [Concep
 --automatically generated in mkSRS using the intro below
 
 s1_2_intro = [TSPurpose, TypogConvention [Verb $ foldlSent_
-  [plural value, S "with a subscript", getES index, S "implies that the",
+  [plural value, S "with a subscript", ch index, S "implies that the",
   phrase value, S "will be taken at and analyzed at a", phrase slice
   `sOr` phrase slice, S "interface composing the total slip", phrase mass]]]
 
@@ -280,7 +275,7 @@ s4_1_2_bullets = enumBullet $ map foldlSent_ [
   -- (E $ 1 $<= sy index $<= (sy numbSlices) - 1)],
 
   [at_start slice, plural property +:+ S "convention is noted by" +:+.
-  getES index]]
+  (ch index)]]
 
 s4_1_2_p2 = foldlSP [S "A", phrase fbd, S "of the", plural force,
   S "acting on the", phrase slice, S "is displayed in",

@@ -9,7 +9,8 @@ import Control.Applicative hiding (empty)
 import Data.Monoid (Monoid(..))
 
 import qualified Language.Drasil.Printing.Helpers as H
-import Language.Drasil.Unicode
+import Language.Drasil.Unicode (RenderSpecial, Special(SqBrClose, SqBrOpen, 
+  CurlyBrClose, CurlyBrOpen, Hash, Percent, UScore, Partial, Circle), special)
 
 -----------------------------------------------------------------------------
 -- Printing monad

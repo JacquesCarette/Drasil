@@ -7,12 +7,30 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST 
   hiding (body,comment,bool,int,float,char,guard,update)
-import Language.Drasil.Code.Imperative.LanguageRenderer
+import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source),
+  DecDef(Dec, Def), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc,
+  valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
+  scopeDoc, retDoc, printDoc, patternDoc, paramDoc, paramListDoc, classDoc, objAccessDoc,
+  objVarDoc, clsDecListDoc, clsDecDoc, litDoc, iterationDoc, funcDoc, funcAppDoc, exprDoc,
+  exceptionDoc, declarationDoc, enumElementsDoc, conditionalDoc, callFuncParamList,
+  blockDoc, bodyDoc,binOpDoc, body, bottom, top, assignDoc, elseIf, ifBodyStart, blockEnd,
+  printFunc, printFileFunc, printFileLnFunc, printLnFunc, stateType, blockStart, clsDec,
+  listObj, package, list, iterInLabel, iterForEachLabel, inherit, inputFunc, include,
+  includeScope, fileName, ext, dir, enumsEqualInts, commentStart, endStatement, bitArray,
+  renderCode, argsList, Options, ioDocD, StatementLocation(NoLoop, Loop), dot, inputDocD,
+  valueDocD, valueDocD', methodListDocD, paramDocD, paramListDocD,
+  objAccessDocD, iterationDocD, funcDocD, stateTypeD, fileCode,
+  functionListDocD, methodTypeDocD, statementDocD, stateDocD, stateListDocD,
+  retDocD, patternDocD, clsDecListDocD, clsDecDocD, funcAppDocD, 
+  litDocD, callFuncParamListD, bodyDocD, blockDocD, binOpDocD,
+  classDec, fileNameD, forLabel, exprDocD, declarationDocD,
+  typeOfLit, fixCtorNames, unOpDocD', conditionalDocD', assignDocD')
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab)
 
 import Data.List (intersperse)
 import Prelude hiding (print)
-import Text.PrettyPrint.HughesPJ
+import Text.PrettyPrint.HughesPJ (Doc, text, semi, colon, parens, (<>), (<+>), empty, equals,
+  brackets, vcat, doubleQuotes, render, char, int, ($+$))
 
 pythonConfig :: Options -> Config -> Config
 pythonConfig _ c = 

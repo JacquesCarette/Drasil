@@ -6,13 +6,27 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.GOOLRenderer (
 
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST hiding (body,comment,bool,int,float,char)
-import Language.Drasil.Code.Imperative.LanguageRenderer
+import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source),
+  DecDef(Dec), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc,
+  valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
+  scopeDoc, retDoc, printDoc, patternDoc, paramDoc, paramListDoc, classDoc, objAccessDoc,
+  objVarDoc, clsDecListDoc, clsDecDoc, litDoc, iterationDoc, funcDoc, funcAppDoc, exprDoc,
+  exceptionDoc, declarationDoc, enumElementsDoc, conditionalDoc, callFuncParamList,
+  blockDoc, bodyDoc,binOpDoc, body, bottom, top, assignDoc, elseIf, ifBodyStart, blockEnd,
+  printFunc, printFileFunc, printFileLnFunc, printLnFunc, stateType, blockStart, clsDec,
+  listObj, package, list, iterInLabel, iterForEachLabel, inherit, inputFunc, include,
+  includeScope, fileName, ext, dir, enumsEqualInts, commentStart, endStatement, bitArray,
+  renderCode, argsList, Options, ioDocD, StatementLocation(NoLoop), inputDocD,
+  valueDocD, iterationDocD, fileCode, functionListDocD, statementDocD, 
+  retDocD, patternDocD, includeD, fileNameD, complexDocD, 
+  conditionalDocD, functionDocD, hsModule)
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,oneTabbed,
                             doubleQuotedText,verticalComma,himap,vibcat,vibmap)
 
 import Data.Char (toLower)
 import Prelude hiding (print)
-import Text.PrettyPrint.HughesPJ
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, vcat, hcat, punctuate,
+  brackets, int, char, quotes, double, integer, equals, empty)
 
 goolConfig :: Options -> Config -> Config
 goolConfig options c = 

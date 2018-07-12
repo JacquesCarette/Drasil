@@ -3,18 +3,17 @@ module Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS) where
 --A list of likely and unlikely changes for GlassBR
 
 import Language.Drasil
+import Drasil.DocLang (mkLklyChnk, mkUnLklyChnk, refA)
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, gbRefDB, newA2, newA3, newA4, newA5, newA6, newA7, newA8)
 import Drasil.GlassBR.Concepts (blastRisk, glaSlab, glass)
 import Drasil.GlassBR.Unitals (explosion, lite)
 
-import Drasil.DocumentLanguage (mkLklyChnk, mkUnLklyChnk)
-import Drasil.DocumentLanguage.RefHelpers (refA)
 import Data.Drasil.Concepts.Documentation (condition, goal, input_, software, 
   system, value, variable)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.PhysicalProperties (flexure)
-import Data.Drasil.SentenceStructures (foldlList, foldlSent, getES)
+import Data.Drasil.SentenceStructures (foldlList, foldlSent)
 
 {--LIKELY CHANGES--}
 
@@ -41,7 +40,7 @@ lc1Desc mainConcept = foldlSent [(refA gbRefDB newA3) `sDash` S "The",
 
 lc2Desc = foldlSent [(refA gbRefDB newA4) `sC` ((refA gbRefDB newA8) `sDash`
   S "Currently the"), plural value, S "for",
-  foldlList (map getES (take 3 assumptionConstants)),
+  foldlList (map ch (take 3 assumptionConstants)),
   S "are assumed to be the same for all" +:+. phrase glass,
   S "In the future these", plural value, S "can be changed to",
   phrase variable, plural input_]

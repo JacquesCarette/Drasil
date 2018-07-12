@@ -1,7 +1,7 @@
 module Language.Drasil.Make.Import where
 
 import Language.Drasil.Output.Formats (DocSpec(..), DocType(..))
-import Language.Drasil.Make.AST
+import Language.Drasil.Make.AST (Rule, Makefile(M), Type(Phony, TeX))
 
 -- | Creates a Makefile (calls 'makeRules')
 toMake :: [DocSpec] -> Makefile

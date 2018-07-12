@@ -8,6 +8,7 @@ import Language.Drasil.Expr (Expr)
 import Language.Drasil.RefTypes (RefAdd, RefType)
 import Language.Drasil.Development.UnitLang (USymb)
 import Language.Drasil.Chunk.ShortName (ShortName)
+import Language.Drasil.UID (UID)
 
 -- | For writing "sentences" via combining smaller elements
 -- Sentences are made up of some known vocabulary of things:
@@ -18,6 +19,7 @@ import Language.Drasil.Chunk.ShortName (ShortName)
 -- - References to specific layout objects
 infixr 5 :+:
 data Sentence where
+  Ch    :: UID -> Sentence
   Sy    :: USymb -> Sentence
   S     :: String -> Sentence       -- Strings, used for Descriptions in Chunks
   Sp    :: Special -> Sentence
@@ -79,7 +81,7 @@ semiCol :: Sentence -> Sentence -> Sentence
 a `semiCol` b = a :+: S ";" +:+ b
 
 sParenDash :: Sentence -> Sentence
-sParenDash = \x -> S " (" :+: x :+: S ") - "
+sParenDash x = S " (" :+: x :+: S ") - "
 
 sDash :: Sentence -> Sentence -> Sentence
 y `sDash` z = y +:+ S "-" +:+ z

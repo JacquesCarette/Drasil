@@ -3,6 +3,16 @@ module Drasil.GamePhysics.Body where
 import Language.Drasil hiding (Vector, organization)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Control.Lens ((^.))
+import qualified Drasil.DocLang.SRS as SRS
+
+import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..), 
+  Emphasis(..), Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), 
+  IntroSub(..), RefSec(..), RefTab(..), SCSSub(..), SSDSec(SSDProg), 
+  SSDSub(SSDSubVerb, SSDSolChSpec), SolChSpec(SCSProg), SubSec, TConvention(..), 
+  TSIntro(..), Verbosity(Verbose), assembler, dataConstraintUncertainty, 
+  inDataConstTbl, intro, mkDoc, outDataConstTbl, reqF, sSubSec, siCon, siDDef, 
+  siIMod, siSTitl, siSent, siTMod, siUQI, siUQO, specSysDescr, traceMGF, tsymb, 
+  valsOfAuxConstantsF)
 
 import Data.Drasil.Concepts.Documentation (assumption, body,
   concept, condition, consumer, dataConst, dataDefn, datumConstraint,
@@ -23,26 +33,15 @@ import Data.Drasil.People (alex, luthfi)
 import Data.Drasil.Phrase(for')
 import Data.Drasil.SI_Units(metre, kilogram, second, newton, radian)
 
-import Drasil.DocumentLanguage (DocDesc, TConvention(..), TSIntro(..), 
-  TSIntro(..), Emphasis(..), DocSection(..), IntroSub(..), mkDoc, RefSec(..),
-  tsymb, RefTab(..), IntroSec(..), IntroSub(..))
 import Drasil.GamePhysics.Changes (likelyChanges, likelyChangesList', unlikelyChanges)
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
 import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs)
-import Drasil.GamePhysics.IMods (iModels)
+import Drasil.GamePhysics.IMods (iModels, im1_new, im2_new, im3_new)
 import Drasil.GamePhysics.References (cpCitations)
 import Drasil.GamePhysics.TMods (cpTMods, t1NewtonSL_new, t2NewtonTL_new, 
   t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new)
 import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
-  inputSymbols, outputSymbols, cpInputConstraints)
-
-import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
-import Drasil.Sections.Requirements (reqF)
-import Drasil.Sections.SolutionCharacterSpec (SubSec, siUQI, siSent, siDDef, 
-  sSubSec, siIMod, siUQO, siCon, siTMod, assembler, siSTitl)
-import Drasil.Sections.SpecificSystemDescription (specSysDescr, dataConstraintUncertainty,
-  inDataConstTbl, outDataConstTbl)
-import Drasil.Sections.TraceabilityMandGs (traceMGF)
+  inputSymbols, outputSymbols, cpInputConstraints, gamephySymbols)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, 
   dimension)
@@ -61,14 +60,6 @@ import Data.Drasil.Software.Products (videoGame, openSource, sciCompS)
 import Data.Drasil.Utils (makeTMatrix, itemRefToSent, refFromType,
   makeListRef, bulletFlat, bulletNested, enumSimple, enumBullet)
 
-import qualified Drasil.SRS as SRS
-import qualified Drasil.Sections.ReferenceMaterial as RM
-
-import Drasil.GamePhysics.IMods (im1_new, im2_new, im3_new)
-
-import Drasil.DocumentLanguage
-import Drasil.DocumentLanguage.Definitions
-
 authors :: People
 authors = [alex, luthfi]
 
@@ -79,7 +70,7 @@ chipmunkSRS' :: Document
 chipmunkSRS' = mkDoc mkSRS for' chipmunkSysInfo
 
 mkSRS :: DocDesc 
-mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
+mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
   IntroSec (
     IntroProg para1_introduction_intro (short chipmunk) 
   [IPurpose (para1_purpose_of_document_intro),
@@ -92,11 +83,10 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
       , SSDSolChSpec 
         (SCSProg 
           [ Assumptions
-          , TMs ([Label] ++ stdFields) [t1NewtonSL_new, t2NewtonTL_new, t3NewtonLUG_new, 
+          , TMs ([Label]++ stdFields) [t1NewtonSL_new, t2NewtonTL_new, t3NewtonLUG_new, 
             t4ChaslesThm_new, t5NewtonSLR_new]
           , GDs [] [] HideDerivation -- No Gen Defs for Gamephysics
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) 
-            [im1_new, im2_new, im3_new] ShowDerivation
+          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [im1_new, im2_new, im3_new] ShowDerivation
           , DDs ([Label, Symbol, Units] ++ stdFields) cpDDefs ShowDerivation
           , Constraints EmptyS dataConstraintUncertainty (S "FIXME") [inDataConstTbl cpInputConstraints, outDataConstTbl cpOutputConstraints]
           ]
@@ -118,7 +108,7 @@ chipmunkSysInfo = SI {
   _kind = srs,
   _authors = authors,
   _units = chipUnits,
-  _quants = cpSymbolsAll, 
+  _quants = symbT, 
   _concepts = ([] :: [DefinedQuantityDict]),
   _definitions = (cpDDefs), 
   _inputs = (inputSymbols), 
@@ -129,6 +119,10 @@ chipmunkSysInfo = SI {
   _sysinfodb = everything,
   _refdb = cpRefDB
 }
+
+
+symbT :: [DefinedQuantityDict]
+symbT = ccss (getDoc chipmunkSRS') (egetDoc chipmunkSRS') everything
 
 cpRefDB :: ReferenceDB
 cpRefDB = rdb [] [] newAssumptions [] [] cpCitations [] -- FIXME: Convert the rest to new chunk types
@@ -150,7 +144,7 @@ chipUnits :: [UnitDefn]
 chipUnits = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [newton, radian]
 
 everything :: ChunkDB
-everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: [ConceptChunk]) -- FIXME: Fill in Concepts
+everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms) gamephySymbols -- FIXME: Fill in Concepts
   chipUnits
 
 chipCode :: CodeSpec
@@ -235,7 +229,8 @@ organization_of_documents_intro :: Sentence
 organization_of_documents_intro = foldlSent 
   [S "The", (phrase organization), S "of this", (phrase document), 
   S "follows the", phrase template, S "for an", (getAcc srs), S "for", 
-  (phrase sciCompS), S "proposed by", (sSqBrNum 1) `sAnd` (sSqBrNum 2)]
+  (phrase sciCompS), S "proposed by", (sSqBrNum 3) {-dParnas1972-} `sAnd` 
+  (sSqBrNum 6) {-dParnasPcClements1984-}]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --

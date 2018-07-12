@@ -1,5 +1,5 @@
 Name:		drasil-lang
-Version:	0.1.1
+Version:	0.1.3
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -18,6 +18,8 @@ library
     , Language.Drasil.Classes
     , Language.Drasil.Config
     , Language.Drasil.Document
+    , Language.Drasil.Document.Extract
+    , Language.Drasil.Document.GetChunk
     , Language.Drasil.Format
     , Language.Drasil.Label.Core
     , Language.Drasil.Label
@@ -27,6 +29,8 @@ library
     , Language.Drasil.People
     , Language.Drasil.RefTypes
     , Language.Drasil.Reference
+    , Language.Drasil.Sentence.Extract
+    , Language.Drasil.Sentence.EmbedSymbol
     , Language.Drasil.Space
     , Language.Drasil.Spec
     , Language.Drasil.Symbol

@@ -2,7 +2,7 @@ module Drasil.SWHS.DataDefs where --exports all of it
 
 import Language.Drasil
 import Control.Lens ((^.))
-import Drasil.DocumentLanguage.RefHelpers (ModelDB, mdb, refDD, ddRefDB)
+import Drasil.DocLang (ModelDB, mdb, refDD, ddRefDB)
 
 import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcm_mass,
   temp_W, temp_PCM, ht_flux_P, pcm_HTC, coil_HTC, temp_C, ht_flux_C)
@@ -10,7 +10,6 @@ import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcm_mass,
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latent_heat)
-import Data.Drasil.Utils (mkDataDef)
 
 ddRef :: QDefinition -> Sentence
 ddRef = refDD (ddRefDB swhsRefMDB)

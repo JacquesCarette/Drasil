@@ -1,11 +1,7 @@
-module Language.Drasil.Expr.Extract(dep, names', vars) where
+module Language.Drasil.Expr.Extract(dep, names, names') where
 
 import Data.List (nub)
-import Control.Lens ((^.))
-import Language.Drasil.ChunkDB (HasSymbolTable, symbLookup, symbolTable)
-import Language.Drasil.Chunk.Quantity (QuantityDict)
 import Language.Drasil.Expr (Expr(..), RealInterval(..))
-
 -- | Generic traverse of all positions that could lead to names
 names :: Expr -> [String]
 names (AssocA _ l)   = concatMap names l
@@ -60,8 +56,3 @@ names'_ri (UpFrom il)     = names' (snd il)
 -- | Get dependencies from an equation  
 dep :: Expr -> [String]
 dep = nub . names
-
--- | Get a list of quantities (QuantityDict) from an equation in order to print
-vars :: (HasSymbolTable s) => Expr -> s -> [QuantityDict]
-vars e m = map resolve $ dep e
-  where resolve x = symbLookup x $ m ^. symbolTable

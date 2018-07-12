@@ -1,15 +1,16 @@
 module Drasil.GamePhysics.IMods (iModels, im1_new, im2_new, im3_new) where
 
+import Language.Drasil
+
 import Drasil.GamePhysics.Unitals(acc_i, force_i, transMotLegTerms, rotMotLegTerms,
   col2DLegTerms, mass_A, mass_i, normalVect, time_c, torque_i, vel_A, vel_i)
 
-import Language.Drasil
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
   angularAccel, force, gravitationalAccel, momentOfInertia, angularVelocity, 
   time, impulseS)
 import Data.Drasil.SentenceStructures (foldlSent)
-import Data.Drasil.Utils (fmtU, foldle1, getES)
+import Data.Drasil.Utils (fmtU, foldle1)
 
 
 iModels :: [RelationConcept]
@@ -114,7 +115,7 @@ col2DDesc = foldlSent [S "This instance model is based on our assumptions",
 --}
 
 defList :: (Quantity a) => a -> Sentence
-defList thing = foldlSent [(getES thing), S "is the", (phrase thing), sParen (fmtU EmptyS thing)]
+defList thing = foldlSent [(ch thing), S "is the", (phrase thing), sParen (fmtU EmptyS thing)]
 
 col2DLeg = foldle1 (+:+) (+:+) $ map defList col2DLegTerms
   

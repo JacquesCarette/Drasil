@@ -69,37 +69,29 @@ $\mathbf{a}(t)$ & Linear Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 ${C_{R}}$ & Coefficient of restitution & 
 \\
+$\mathbf{F}$ & Force & N
+\\
 ${\mathbf{F}_{1}}$ & Force exerted by the first body (on another body) & N
 \\
 ${\mathbf{F}_{2}}$ & Force exerted by the second body (on another body) & N
 \\
 ${\mathbf{F}_{i}}$ & Force Applied to the I-Th Body at Time T & N
 \\
-$\mathbf{F}$ & Force & N
+$G$ & Gravitational constant & $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$
 \\
 $g$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-$G$ & Gravitational constant & $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$
-\\
-$\mathbf{\hat{i}}$ & Horizontal Unit Vector & m
+$\mathbf{I}$ & Moment of inertia & kg$\text{m}^{2}$
 \\
 ${\mathbf{I}_{A}}$ & Moment of Inertia Of Rigid Body a & kg$\text{m}^{2}$
 \\
 ${\mathbf{I}_{B}}$ & Moment of Inertia Of Rigid Body B & kg$\text{m}^{2}$
 \\
-${\mathbf{I}_{k}}$ & Moment of Inertia Of the K-Th Rigid Body & kg$\text{m}^{2}$
-\\
-$\mathbf{I}$ & Moment of inertia & kg$\text{m}^{2}$
-\\
-$\mathbf{J}$ & Impulse (vector) & Ns
-\\
 $j$ & Impulse (scalar) & Ns
 \\
-$\mathbf{\hat{j}}$ & Vertical Unit Vector & m
-\\
-$j$ & Collision Impulse (scalar) & Ns
-\\
 $L$ & Length & m
+\\
+$m$ & Mass & kg
 \\
 ${m_{1}}$ & Mass of the first body & kg
 \\
@@ -109,37 +101,21 @@ ${m_{A}}$ & Mass Of Rigid Body a & kg
 \\
 ${m_{B}}$ & Mass Of Rigid Body B & kg
 \\
-${m_{i}}$ & Mass Of the I-Th Rigid Body & kg
-\\
 ${m_{j}}$ & Mass Of the J-Th Particle & kg
 \\
 $M$ & Total Mass of the Rigid Body & kg
 \\
-$m$ & Mass & kg
-\\
 $\mathbf{n}$ & Collision Normal Vector & m
 \\
-$n$ & Number of particles in a rigid body & 
+$\mathbf{p}$ & Position & m
 \\
 ${\mathbf{p}_{CM}}$ & Mass-weighted average position of a rigid body's particles & m
 \\
 ${\mathbf{p}_{j}}$ & Position Vector of the J-Th Particle & m
 \\
-$P$ & Point of collision & m
-\\
-$\mathbf{p}$ & Position & m
-\\
-$r$ & Distance & m
-\\
 $\mathbf{r}$ & Displacement & m
 \\
 $\mathbf{\hat{r}}$ & Displacement unit vector & m
-\\
-${\mathbf{r}_{AP}}$ & Displacement vector between the centre of mass of rigid body A and contact point P & m
-\\
-${\mathbf{r}_{BP}}$ & Displacement vector between the centre of mass of rigid body B and contact point P & m
-\\
-${\mathbf{r}_{kP}}$ & Displacement vector between the centre of mass of rigid body k and contact point P & m
 \\
 ${\mathbf{r}_{OB}}$ & Displacement vector between the origin and point B & m
 \\
@@ -149,21 +125,17 @@ $t$ & Time & s
 \\
 ${t_{c}}$ & Denotes the time at collision & s
 \\
-$t$ & Point in time & s
-\\
-${t_{0}}$ & Denotes the initial time & s
-\\
 ${{\mathbf{v}_{i}}^{AB}}$ & Relative Velocity Between Rigid Bodies of a and B & $\frac{\text{m}}{\text{s}}$
 \\
-${\mathbf{v}_{A}}$ & Velocity At Point a & $\frac{\text{m}}{\text{s}}$
-\\
 ${\mathbf{v}_{B}}$ & Velocity At Point B & $\frac{\text{m}}{\text{s}}$
-\\
-${\mathbf{v}_{i}}$ & Velocity Of the I-Th Body's Velocity & $\frac{\text{m}}{\text{s}}$
 \\
 ${\mathbf{v}_{O}}$ & Velocity At Point Origin & $\frac{\text{m}}{\text{s}}$
 \\
 $\mathbf{v}$ & Velocity & $\frac{\text{m}}{\text{s}}$
+\\
+${\mathbf{v}_{A}}$ & Velocity At Point a & $\frac{\text{m}}{\text{s}}$
+\\
+${\mathbf{v}_{i}}$ & Velocity Of the I-Th Body's Velocity & $\frac{\text{m}}{\text{s}}$
 \\
 $\mathbf{v}(t)$ & Linear Velocity & $\frac{\text{m}}{\text{s}}$
 \\
@@ -181,15 +153,9 @@ $α$ & Angular Acceleration & $\frac{\text{rad}}{\text{s}^{2}}$
 \\
 $θ$ & Angular Displacement & rad
 \\
-$π$ & pi & 
-\\
-${τ_{i}}$ & Torque applied to the i-th body & Nm
-\\
 $τ$ & Torque & Nm
 \\
-${ω_{A}}$ & A Body's Angular Velocity & $\frac{\text{rad}}{\text{s}}$
-\\
-${ω_{B}}$ & B Body's Angular Velocity & $\frac{\text{rad}}{\text{s}}$
+${τ_{i}}$ & Torque applied to the i-th body & Nm
 \\
 $ω$ & Angular Velocity & $\frac{\text{rad}}{\text{s}}$
 \\
@@ -252,7 +218,7 @@ The scope of the requirements includes the physical simulation of 2D rigid bodie
 Reviewers of this documentation should have a strong knowledge in rigid body dynamics. The reviewers should also have an understanding of high school calculus. The users of Chipmunk2D can have a lower level of expertise, as explained in Section~\ref{Sec:UserChars}.
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
-The organization of this document follows the template for an SRS for scientific computing software proposed by {[}1{]} and {[}2{]}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:SolCharSpec} and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by {[}3{]} and {[}6{]}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:SolCharSpec} and trace back to find any additional information they require.
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models.
 \section{General System Description}
 \label{Sec:GenSysDesc}
@@ -1132,20 +1098,6 @@ There are no auxiliary constants.
 \section{References}
 \label{Sec:References}
 \begin{filecontents*}{bibfile.bib}
-@article{dParnas1972,
-author={Parnas, David L.},
-title={On the Criteria To Be Used in Decomposing Systems into Modules},
-journal={Communications of the ACM},
-year={1972},
-pages={"1053-1058"}}
-
-@inproceedings{dParnasPcClements1984,
-author={Parnas, David L. and Clements, P. C. and Wiess, },
-title={The Modular Structure of Complex Systems},
-booktitle={ICSE '84: Proceedings of the 7th international conference on Software engineering},
-year={1984},
-pages={"408-417"}}
-
 @misc{jfBeucheIntro,
 author={Bueche, J. Frederick},
 title={Introduction to Physics for Scientists, Fourth Edition},
@@ -1158,6 +1110,13 @@ title={A document drive approach to certifying scientific computing software},
 school={McMaster University},
 year={2013},
 address={Hamilton, ON, Canada}}
+
+@article{dParnas1972,
+author={Parnas, David L.},
+title={On the Criteria To Be Used in Decomposing Systems into Modules},
+journal={Communications of the ACM},
+year={1972},
+pages={"1053-1058"}}
 
 @inproceedings{parnas1978,
 author={Parnas, David L.},
@@ -1177,13 +1136,12 @@ number={2},
 pages={"251-257"},
 address={Washington, USA}}
 
-@article{sciComp2013,
-author={Wilson, Greg and Aruliah, D. A. and Titus, C. and Chue Hong, Neil P. and Davis, Matt and Guy, Richard T. and Haddock, Steven H. D. and Huff, Kathryn D. and Mitchell, Ian M. and Plumblet, Mark D. and Waugh, Ben and White, Ethan P. and Wilson, Paul},
-title={Best Practices for Scientific Computing, 2013},
-journal={PLoS Biol},
-year={2013},
-volume={12},
-number={1}}
+@inproceedings{dParnasPcClements1984,
+author={Parnas, David L. and Clements, P. C. and Wiess, },
+title={The Modular Structure of Complex Systems},
+booktitle={ICSE '84: Proceedings of the 7th international conference on Software engineering},
+year={1984},
+pages={"408-417"}}
 
 @inproceedings{smithLai2005,
 author={Smith, W. Spencer and Lai, Lei},
@@ -1194,6 +1152,14 @@ editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
 address={Paris, France},
 pages={"107-121"},
 note={In conjunction with 13th IEEE International Requirements Engineering Conference,}}
+
+@article{sciComp2013,
+author={Wilson, Greg and Aruliah, D. A. and Titus, C. and Chue Hong, Neil P. and Davis, Matt and Guy, Richard T. and Haddock, Steven H. D. and Huff, Kathryn D. and Mitchell, Ian M. and Plumblet, Mark D. and Waugh, Ben and White, Ethan P. and Wilson, Paul},
+title={Best Practices for Scientific Computing, 2013},
+journal={PLoS Biol},
+year={2013},
+volume={12},
+number={1}}
 \end{filecontents*}
 \nocite{*}
 \bibstyle{ieeetr}

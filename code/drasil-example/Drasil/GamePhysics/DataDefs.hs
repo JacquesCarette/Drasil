@@ -1,15 +1,15 @@
 module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs) where
 
+import Language.Drasil
+
 import Drasil.GamePhysics.Unitals (initRelVel, mass_A, mass_B, mass_i,
   momtInert_A, momtInert_B, mTot, normalLen, normalVect,
   perpLen_A, perpLen_B, pos_CM, pos_i)
 
-import Language.Drasil
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
   angularDisplacement, angularVelocity, displacement, impulseS, linearAccel, 
   linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity)
-import Data.Drasil.Utils (mkDataDef)
 
 ----- Data Definitions -----
 

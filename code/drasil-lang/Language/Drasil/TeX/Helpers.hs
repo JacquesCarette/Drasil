@@ -6,7 +6,7 @@ import Control.Applicative (pure)
 
 import Language.Drasil.Config (numberedSections, hyperSettings)
 import qualified Language.Drasil.Printing.Helpers as H
-import Language.Drasil.TeX.Monad
+import Language.Drasil.TeX.Monad (PrintLaTeX(PL), D, MathContext(Math), ($+$), (<>), (%%))
 import Language.Drasil.Document (MaxWidthPercent)
 
 -----------------------------------------------------------------------------

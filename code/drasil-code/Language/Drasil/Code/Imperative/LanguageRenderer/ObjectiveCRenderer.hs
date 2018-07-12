@@ -8,7 +8,24 @@ import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST 
   hiding (body,comment,bool,int,float,char,tryBody,catchBody,initState,guard,
           update,forBody)
-import Language.Drasil.Code.Imperative.LanguageRenderer
+import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source, Header),
+  DecDef(Dec, Def), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc,
+  valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
+  scopeDoc, retDoc, printDoc, patternDoc, paramDoc, paramListDoc, classDoc, objAccessDoc,
+  objVarDoc, clsDecListDoc, clsDecDoc, litDoc, iterationDoc, funcDoc, funcAppDoc, exprDoc,
+  exceptionDoc, declarationDoc, enumElementsDoc, conditionalDoc, callFuncParamList,
+  blockDoc, bodyDoc,binOpDoc, body, bottom, top, assignDoc, elseIf, ifBodyStart, blockEnd,
+  printFunc, printFileFunc, printFileLnFunc, printLnFunc, stateType, blockStart, clsDec,
+  listObj, package, list, iterInLabel, iterForEachLabel, inherit, inputFunc, include,
+  includeScope, fileName, ext, dir, enumsEqualInts, commentStart, endStatement, bitArray,
+  renderCode, argsList, Options, ioDocD, inputDocD,
+  valueDocD, methodDocD, methodDocD', methodListDocD, paramDocD, 
+  objAccessDocD, iterationDocD, funcDocD, declarationDocD', assignDocD, stateTypeD, fileCode,
+  functionListDocD, unOpDocD, statementDocD, scopeDocD, stateDocD, stateListDocD,
+  doubleSlash, retDocD, patternDocD, clsDecListDocD, clsDecDocD, enumElementsDocD,
+  exprDocD', litDocD, conditionalDocD'', bodyDocD, blockDocD, binOpDocD,
+  classDec, includeD, fileNameD, addDefaultCtor, fixCtorNames, complexDocD,
+  functionDocD, objVarDocD, objcstaticlist)
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,oneTabbed,
                                             doubleQuotedText,himap,vmap,vibmap)
 

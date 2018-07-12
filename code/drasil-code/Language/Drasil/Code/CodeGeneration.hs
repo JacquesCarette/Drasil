@@ -23,7 +23,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Options)
 import Data.List (intercalate)
 import qualified Data.Map as Map (fromList,keys,lookup,Map)
 import Text.PrettyPrint.HughesPJ (Doc,render)
-import System.IO
+import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
 import Data.Function (fix)
 
 -- | Map of (label,config) pairs for all supported languages.

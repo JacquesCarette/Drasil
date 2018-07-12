@@ -11,10 +11,9 @@ import Drasil.NoPCM.GenDefs (roc_temp_simp_deriv)
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
-import Drasil.SWHS.Assumptions (assumpS1, assumpS2, assumpS7, assumpS8, assumpS9,
-  assumpS14, assumpS15, assumpS20, assump1, assump2, assump7, assump8, assump9,
-  assump14, assump15, assump20, newA1, newA2, newA3, newA5, newA6, newA7, newA8,
-   newA9, newA11, newA14)
+import Drasil.SWHS.Assumptions (assump1, assump2, assump7, assump8, assump9,
+  assump14, assump15, assump20, newA1, newA2, newA3, newA5, newA6, newA7,
+  newA8, newA9, newA11, newA14, newA15, newA20)
 import Drasil.SWHS.Body (charReader1, charReader2, orgDocIntro,
   genSystDesc, physSyst1, physSyst2, dataDefIntroEnd, iMod1Para,
   traceTrailing, dataContMid)
@@ -76,14 +75,9 @@ import Drasil.Sections.Requirements (reqF)
 import Drasil.Sections.TraceabilityMandGs (traceGIntro, traceMGF)
 import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 
-import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
-  foldlList, isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP, acroIM,
-  acroGD, ofThe', acroLC)
+import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd, foldlList,
+  isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP, acroIM, acroGD)
 import Data.Drasil.Units.Thermodynamics (thermal_flux)
-
-import Data.Drasil.Concepts.Thermodynamics as CT (heat, melting,
-  law_conv_cooling, heat_trans, thermal_energy)
-import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, gaseous)
 
 -- This defines the standard units used throughout the document
 this_si :: [UnitDefn]
@@ -170,7 +164,7 @@ nopcm_si = SI {
   _authors = [thulasi],
   _units = this_si,
   _quants = symbT,
-  _concepts = (nopcm_Symbols),
+  _concepts = nopcm_Symbols,
   _definitions = [dd1HtFluxC],          --dataDefs
   _inputs = (map qw nopcm_Constraints), --inputs
   _outputs = (map qw [temp_W, w_E]),     --outputs
@@ -196,8 +190,9 @@ nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) n
   this_si
 
 assumps_Nopcm_list_new :: [AssumpChunk]
-assumps_Nopcm_list_new = [newA1, newA2, newA3, newA5, newA6, newA7, newA8, newA9, 
-  newA11, newA14]
+assumps_Nopcm_list_new = [newA1, newA2, newA3, newA5, newA6, newA7, newA8, newA9, newA11, newA14, 
+  newA15, newA16, newA19, newA20]
+
 symbT :: [DefinedQuantityDict]
 symbT = ccss (getDoc nopcm_srs) (egetDoc nopcm_srs) nopcm_SymbMap
 
@@ -329,8 +324,6 @@ orgDocEnd im_ od pro = foldlSent_ [S "The", phrase im_,
 
 --TODO: Placeholder value until content can be added
 
-
-
 -----------------------------------------
 --Section 4 : SPECIFIC SYSTEM DESCRIPTION
 -----------------------------------------
@@ -407,11 +400,6 @@ solCharSpec = solChSpecF progName (probDescription, likelyChgs, unlikelyChgs) da
     S "would be part of the input if one were performing an",
     phrase uncertainty, S "quantification exercise"]-}
 
-npcmAssumptionsS :: [Sentence]
-npcmAssumptionsS = [assumpS1, assumpS2, assumpS3, assumpS4, assumpS5,
-  assumpS7, assumpS8, assumpS9, assumpS9_npcm, assumpS14, assumpS15,
-  assumpS12, assumpS13, assumpS20]
-
 npcmAssumptions :: [Contents]
 npcmAssumptions = [assump1, assump2, assump3, assump4, assump5, assump7,
   assump8, assump9, assump9_npcm, assump14, assump15, assump12, assump13,
@@ -451,14 +439,19 @@ assumpS12 =
   sSqBr (acroIM 1)) 
 assump12 = let a12 = "assump12" in Assumption $ assump a12 assumpS12 a12 
 
+newA16 :: AssumpChunk
+newA16 = assump "No-Internal-Heat-Generation-By-Water" assumpS12 "No-Internal-Heat-Generation-By-Water" 
+
 assumpS13 = 
   (S "The pressure in the" +:+ phrase tank +:+ S "is atmospheric, so the" +:+
-  phrase melt_pt `sAnd` phrase boil_pt +:+ S "are" +:+ S (show (0 :: Integer))
+  phrase melt_pt `sAnd` phrase boil_pt +:+ S "of water are" +:+ S (show (0 :: Integer))
   :+: Sy (unit_symb QT.temp) `sAnd` S (show (100 :: Integer)) :+:
   Sy (unit_symb QT.temp) `sC` S "respectively" +:+.
   sSqBr ((acroIM 1) `sC` (acroIM 2)))
 assump13 = let a13 = "assump13" in Assumption $ assump a13 assumpS13 a13
 
+newA19 :: AssumpChunk
+newA19 = assump "Atmospheric-Pressure-Tank" assumpS13 "Atmospheric-Pressure-Tank" 
 
 genDefnParagraph :: ConceptChunk -> ConceptChunk -> [Contents]
 genDefnParagraph roc te = (map reldefn swhsGenDefs) ++ [foldlSPCol
@@ -621,8 +614,6 @@ inputVar :: [QuantityDict]
 inputVar = map qw dataConstListIn 
 
 
-
-
 --------------------------
 --Section 5 : REQUIREMENTS
 --------------------------
@@ -722,8 +713,6 @@ req6 = mkRequirement "req6" (
   -- understandability, reusability, maintainability]
   -- (S "This problem is small in size and relatively simple")
   -- (S "Any reasonable implementation will be very quick and use minimal storage.")
-
-
 
 ----------------------------
 --Section 6 : LIKELY CHANGES
@@ -978,8 +967,6 @@ traceFig2 = fig (showingCxnBw traceyGraph (titleize' requirement `sC`
 
   -- Using the SWHS graphs as place holders until ones can be generated for NoPCM 
 
-
-
 ------------------------------------------
 --Section 8: SPECIFICATION PARAMETER VALUE
 ------------------------------------------
@@ -990,8 +977,6 @@ specParamValList = [tank_length_min, tank_length_max,
   coil_HTC_max, time_final_max]
 
 specParamVal = valsOfAuxConstantsF progName specParamValList
-
-
 
 ------------
 --REFERENCES

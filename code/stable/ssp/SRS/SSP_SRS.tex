@@ -1910,23 +1910,23 @@ With the definition of normal stiffness from \hyperref[DD:K.bn,i]{Definition~DD:
 \begin{dmath}
 σ_{i}={K_{bn,i}} {δv}_{i}
 \end{dmath}
-The resistive shear to calculate the factor of safety $FS$ is found from the Mohr Coulomb resistive strength of soil in T3 Using the normal stress $σ$ from equation (26) as the stress, the resistive shear of the slice can be calculated from equation (27).
+The resistive shear to calculate the factor of safety $FS$ is found from the Mohr Coulomb resistive strength of soil in T3 Using the normal stress $σ$ from equation (26) as the stress, the resistive shear of the slice can be calculated from equation (27):
 \begin{dmath}
 s_{i}={c'}_{i}-σ_{i} \tan\left({φ'}_{i}\right)
 \end{dmath}
-Previously the value of the shear stiffness ${K_{bt}}$ as seen in equation (28) was unsolvable because the normal stress $σ$ was unknown. With the definition of $σ$ from equation (26) and the definition of displacement shear to the base $δu$ from equation (25), the value of ${K_{bt}}$ becomes solvable.
+Previously the value of the shear stiffness ${K_{bt}}$ as seen in equation (28) was unsolvable because the normal stress $σ$ was unknown. With the definition of $σ$ from equation (26) and the definition of displacement shear to the base $δu$ from equation (25), the value of ${K_{bt}}$ becomes solvable:
 \begin{dmath}
 {K_{bt,i}}=\frac{G_{i}}{2 \left(1+ν_{i}\right)} \frac{0.1}{b_{i}}+\frac{{c'}_{i}-σ_{i} \tan\left({φ'}_{i}\right)}{|{δu}_{i}|+a}
 \end{dmath}
-With shear stiffness ${K_{bt}}$ calculated in equation (28) and shear displacement $δu$ calculated in equation (24) values now known the resistive shear stress acting on the base of a slice $τ$ can be calculated using T5, as done in equation (29). Again, stress $τ$ is used in place of force $F$ as the stiffness has not been normalized for the length of the base.
+With shear stiffness ${K_{bt}}$ calculated in equation (28) and shear displacement $δu$ calculated in equation (24) values now known the resistive shear stress acting on the base of a slice $τ$ can be calculated using T5, as done in equation (29). Again, stress $τ$ is used in place of force $F$ as the stiffness has not been normalized for the length of the base:
 \begin{dmath}
 τ_{i}={K_{bt,i}} {δu}_{i}
 \end{dmath}
-The resistive shear stress acting on the base of a slice $τ$ acts as the mobile shear acting on the base. Using the definition Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice $s$ from equation (27) and resistive shear stress $τ$ from equation (29) the local factor of safety ${FS_{Loc,i}}$ can be found from as seen in equation (30) and IM5.
+The resistive shear stress acting on the base of a slice $τ$ acts as the mobile shear acting on the base. Using the definition Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice $s$ from equation (27) and resistive shear stress $τ$ from equation (29) the local factor of safety ${FS_{Loc,i}}$ can be found from as seen in equation (30) and IM5:
 \begin{dmath}
 {FS_{Loc,i}}=\frac{s_{i}}{τ_{i}}=\frac{{c'}_{i}-{K_{bn,i}} {δv}_{i} \tan\left({φ'}_{i}\right)}{{K_{bt,i}} {δu}_{i}}
 \end{dmath}
-The global Factor of Safety is then the ratio of the summation of the resistive and mobile shears for each slice, with a weighting for the length of the slice's base. Shown in equation (31) and IM5.
+The global Factor of Safety is then the ratio of the summation of the resistive and mobile shears for each slice, with a weighting for the length of the slice's base. Shown in equation (31) and IM5:
 \begin{dmath}
 FS=\frac{\displaystyle\sum_{i=1}^{n}{{ℓ_{b,i}} s_{i}}}{\displaystyle\sum_{i=1}^{n}{{ℓ_{b,i}} τ_{i}}}=\frac{\displaystyle\sum_{i=1}^{n}{{ℓ_{b,i}} \left({c'}_{i}-{K_{bn,i}} {δv}_{i} \tan\left({φ'}_{i}\right)\right)}}{\displaystyle\sum_{i=1}^{n}{{ℓ_{b,i}} {K_{bt,i}} {δu}_{i}}}
 \end{dmath}

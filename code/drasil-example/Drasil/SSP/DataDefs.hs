@@ -280,7 +280,7 @@ resShr_deriv_sentences_ssp_s2 = [plural value `ofThe'` S "interslice forces",
   ch intNormForce `sAnd` ch intShrForce, S "in the", phrase equation,
   S "are unknown, while the other", plural value,
   S "are found from the physical force", plural definition, S "of",
-  ddRef sliceWght, S "to" +:+. ddRef intrsliceF,
+  ddRef sliceWght, S "to" +:+. ddRef lengthLs,
   S "Consider a force equilibrium without the affect of interslice forces" `sC`
   S "to obtain a solvable value as done for", ch nrmFNoIntsl, S "in", eqN 2]
 
@@ -367,7 +367,8 @@ resShrDerivation = [
 ------------------------------------------------------------------
 
 mobShr_deriv_ssp :: Derivation
-mobShr_deriv_ssp = weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ssp]
+mobShr_deriv_ssp = (weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ssp]) ++
+  mobShr_deriv_sentences_ssp_s3
 
 mobShr_deriv_sentences_ssp_s1 :: [Sentence]
 mobShr_deriv_sentences_ssp_s1 = [S "The", phrase mobShrI, S "acting on a slice is defined as",
@@ -381,14 +382,13 @@ mobShr_deriv_sentences_ssp_s2 = [S "The", phrase equation, S "is unsolvable, con
   getTandS shearFNoIntsl `sC` S "as done in", eqN 5]
 
 mobShr_deriv_sentences_ssp_s3 :: [Sentence]
-mobShr_deriv_sentences_ssp_s3 = [S "The", plural value, S "of", ch shearRNoIntsl `sAnd`
-  ch shearFNoIntsl, S "are now defined completely in terms of the",
-  S "known force property", plural value, S "of", ddRef sliceWght, S "to", ddRef displcmntRxnF]
+mobShr_deriv_sentences_ssp_s3 = [S "The" +:+ plural value +:+ S "of" +:+ ch shearRNoIntsl `sAnd`
+  ch shearFNoIntsl +:+ S "are now defined completely in terms of the" +:+
+  S "known force property" +:+ plural value +:+ S "of" +:+ ddRef sliceWght +:+ S "to" +:+. ddRef lengthLs]
 
 
 mobShrDerivation_sentence :: [Sentence]
-mobShrDerivation_sentence = map foldlSentCol [mobShr_deriv_sentences_ssp_s1, mobShr_deriv_sentences_ssp_s2,
-  mobShr_deriv_sentences_ssp_s3]
+mobShrDerivation_sentence = map foldlSentCol [mobShr_deriv_sentences_ssp_s1, mobShr_deriv_sentences_ssp_s2]
 
 mobShr_deriv_eqns_ssp :: [Expr]
 mobShr_deriv_eqns_ssp = [eq4, eq5]
@@ -462,12 +462,12 @@ stfMtrx_deriv_ssp = [S "Using the force-displacement relationship of" +:+
 stfMtrx_deriv_sentences_ssp_s1 :: [Sentence]
 stfMtrx_deriv_sentences_ssp_s1 = [S "For interslice surfaces the stiffness constants" `sAnd`
   S "displacements refer to an unrotated coordinate system" `sC`
-  ch genDisplace +:+ S "of" +:+. acroGD 9 +:+ S "The interslice elements" +:+
+  ch genDisplace +:+ S "of" +:+. ddRef lengthLs +:+ S "The interslice elements" +:+
   S "are left in their standard coordinate system" `sC`
   S "and therefore are described by the same" +:+ phrase equation +:+
   S "from" +:+. acroGD 8 +:+ S "Seen as" +:+ ch shrStiffIntsl +:+ S "in" +:+.
-  ddRef displcmntRxnF +:+ isElemInMx shrStiffIntsl "shear" `sC` --FIXEME: add matrix symbols?
-  S "and" +:+ (isElemInMx nrmStiffIntsl "normal" `sC` S "calculated as in") +:+. ddRef shearStiffness]
+  ddRef intrsliceF +:+ isElemInMx shrStiffIntsl "shear" `sC` --FIXEME: add matrix symbols?
+  S "and" +:+ (isElemInMx nrmStiffIntsl "normal" `sC` S "calculated as in") +:+. ddRef mobShearWO]
   
 stfMtrx_deriv_sentences_ssp_s2 :: [Sentence]
 stfMtrx_deriv_sentences_ssp_s2 =

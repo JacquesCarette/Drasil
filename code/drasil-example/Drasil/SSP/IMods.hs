@@ -37,7 +37,6 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
   surfAngle, surfHydroForce, surfLngth, surfLoad, totNrmForce, varblU, varblV,
   watrForce, watrForceDif, wiif, xi, yi)
 import Drasil.SSP.Assumptions (newA2, sspRefDB)
-import Drasil.DocumentLanguage.RefHelpers(refA)
 
 import Data.Drasil.SentenceStructures (foldlSent, isThe)
 import Data.Drasil.Utils (eqUnR)

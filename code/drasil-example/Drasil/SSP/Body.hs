@@ -7,14 +7,17 @@ import Prelude hiding (sin, cos, tan)
 
 import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..), 
   LCsSec(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), --TSIntro, 
-  TSIntro(..), UCsSec(..), dataConstraintUncertainty, genSysF, goalStmtF, 
+  TSIntro(..), UCsSec(..), Fields, Field(..), SSDSec(..), SSDSub(..),
+  Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
+  SCSSub(..),
+  dataConstraintUncertainty, genSysF, goalStmtF, 
   inDataConstTbl, intro, mkDoc, nonFuncReqF, outDataConstTbl, probDescF, reqF, 
   solChSpecF, specSysDesF, termDefnF, tsymb'', valsOfAuxConstantsF)
 
 import Data.Drasil.Concepts.Documentation (analysis, definition, 
   design, document, effect, element, endUser, goalStmt, inModel, input_, 
   interest, interest, issue, loss, method_, model, organization, physics, 
-  problem, property, requirement, srs, table_, template, value, variable)
+  problem, property, requirement, srs, table_, template, value, variable, assumption)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)

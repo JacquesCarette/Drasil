@@ -1631,6 +1631,14 @@ The values of the interslice normal force $G$ the interslice normal/shear force 
 \\ \midrule \\
 Label & Factor of safety
 \\ \midrule \\
+Input & $R$, $T$, $Ψ$, $Φ$, $v$
+\\ \midrule \\
+Output & $FS$
+\\ \midrule \\
+Input Constraints & 
+\\ \midrule \\
+Output Constraints & 
+\\ \midrule \\
 Equation & \begin{dmath}
            FS=\frac{\displaystyle\sum_{v=1}^{n-1}{R_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{Ψ_{u}}{Φ_{u}}}}+R_{n}}{\displaystyle\sum_{v=1}^{n-1}{T_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{Ψ_{u}}{Φ_{u}}}}+T_{n}}
            \end{dmath}
@@ -1645,6 +1653,8 @@ Description & \begin{symbDescription}
               \item{$n$ is the number of slices (Unitless)}
               \item{$T$ is the mobilized shear force (N)}
               \end{symbDescription}
+\\ \midrule \\
+ Notes & Equation for the Factor of Safety is the ratio between resistive and mobile shear of the slip surface. The sum of values from each slice is taken to find the total resistive and mobile shear for the slip surface. The constants $Φ$ and $Ψ$ convert the resistive and mobile shear without the inluence of interslice forces, to a calculation considering the interslice forces.
 \\ \midrule \\
 Source &
 \\ \midrule \\

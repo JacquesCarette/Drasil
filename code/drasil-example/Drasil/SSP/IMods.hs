@@ -498,11 +498,11 @@ rigDis_deriv_sentences_ssp_s1 = [S "Using the net force-displacement equilibrium
   phrase equation +:+ S "in the" +:+ ch yi +:+ S "direction"]
 
 rigDis_deriv_sentences_ssp_s2 :: [Sentence]
-rigDis_deriv_sentences_ssp_s2 = [S "Using the known input assumption of" +:+ acroA 2 `sC`
+rigDis_deriv_sentences_ssp_s2 = [S "Using the known input assumption of" +:+ (refA sspRefDB newA2) `sC`
   S "the force variable" +:+ plural definition +:+ S "of" +:+ ddRef sliceWght +:+ S "to" +:+
   ddRef surfLoads +:+ S "on the" +:+ S "left side of the" +:+ plural equation +:+
   S "can be solved for. The only unknown in the variables to solve" +:+
-  S "for the stiffness values from" +:+ ddRef shearStiffness +:+. 
+  S "for the stiffness values from" +:+ ddRef soilStiffness +:+. 
   S "is the displacements" +:+ S "Therefore taking the" +:+ phrase equation +:+ 
   S "from each slice a set of" +:+ (E $ 2 * sy numbSlices) +:+ plural equation
   `sC` S "with" +:+ (E $ 2 * sy numbSlices) +:+ S "unknown displacements in the" +:+ 
@@ -539,7 +539,7 @@ rigFoS_deriv_sentences_ssp_s1 = [S "RFEM analysis can also be used to calculate 
 
 rigFoS_deriv_sentences_ssp_s2 :: [Sentence]
 rigFoS_deriv_sentences_ssp_s2 = [S "With the", phrase definition, S "of normal stiffness from",
-  ddRef shearStiffness, --FIXME: grab nrmStiffBase's term name?
+  ddRef soilStiffness, --FIXME: grab nrmStiffBase's term name?
   S "to find", S "the normal stiffness of the base", ch nrmStiffBase,
   S "and the now known base displacement perpendicular to the surface",
   ch nrmDispl, S "from", eqN 25, S "the normal base stress",

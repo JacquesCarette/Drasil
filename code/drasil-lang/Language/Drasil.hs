@@ -81,7 +81,7 @@ module Language.Drasil (
   -- Chunk.Eq
   , QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec
   -- Chunk.DataDefinition
-  , DataDefinition, mkDataDef, mkDD
+  , DataDefinition, mkDataDef, mkDD, qdFromDD
   -- Chunk.GenDefn
   , GenDefn, gd, gdUnit
   -- Chunk.InstanceModel
@@ -286,7 +286,7 @@ import Language.Drasil.Chunk.Constrained.Core (physc, sfwrc, enumc, isPhysC, isS
   Constraint(..), ConstraintReason(..), Reason(..), TheoryConstraint(..))
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec)
-import Language.Drasil.Chunk.DataDefinition (DataDefinition, mkDataDef, mkDD)
+import Language.Drasil.Chunk.DataDefinition (DataDefinition, mkDataDef, mkDD, qdFromDD)
 import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.Goal (Goal, mkGoal)
 import Language.Drasil.Chunk.InstanceModel

@@ -78,6 +78,7 @@ ssp_si = SI {
   _quants = sspSymbols,
   _concepts = symbT,
   _definitions = sspDataDefs,
+  _datadefs = ([] :: [DataDefinition]),
   _inputs = map qw sspInputs,
   _outputs = map qw sspOutputs,
   _defSequence = [Parallel (head sspDataDefs) (tail sspDataDefs)],

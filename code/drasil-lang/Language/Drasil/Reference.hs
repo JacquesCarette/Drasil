@@ -1,19 +1,6 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Reference where
 
-import Language.Drasil.Classes (HasUID(uid))
-import Language.Drasil.Chunk.AssumpChunk as A
-import Language.Drasil.Chunk.Change as Ch
-import Language.Drasil.Chunk.Citation as Ci
-import Language.Drasil.Chunk.Eq
-import Language.Drasil.Chunk.GenDefn
-import Language.Drasil.Chunk.Goal as G
-import Language.Drasil.Chunk.InstanceModel
-import Language.Drasil.Chunk.PhysSystDesc as PD
-import Language.Drasil.Chunk.ReqChunk as R
-import Language.Drasil.Chunk.Theory
-import Language.Drasil.Document
-import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.RefTypes (RefType(..))
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)

@@ -374,8 +374,6 @@ data_def_dataDefs = (map datadefn (take 13 sspDataDefs)) ++ resShrDerivation ++
 insta_model_IMods = concat $ weave [map (\x -> [reldefn x]) sspIMods,
   [fctSftyDerivation, nrmShrDerivation, intrSlcDerivation, rigDisDerivation, rigFoSDerivation]]
 
---fctSftyDerivation, nrmShrDerivation, intrSlcDerivation, rigDisDerivation, rigFoSDerivation
-
   --FIXME: derivations should be with the appropriate IMod
 
 -- SECTION 4.2.6 --

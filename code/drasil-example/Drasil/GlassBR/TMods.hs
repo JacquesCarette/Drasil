@@ -2,7 +2,7 @@ module Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq,t1IsSafe,t2IsSafe
 
 import Drasil.GlassBR.Unitals (demand, demandq, is_safe1, is_safe2, lRe,
   pb_tol, prob_br)
-import Drasil.GlassBR.IMods (calOfCap, calOfDe, probOfBr)
+import Drasil.GlassBR.IMods (calofCapacity, calofDemand, probOfBreak)
 import Drasil.GlassBR.Concepts (lResistance)
 
 import Language.Drasil
@@ -34,9 +34,9 @@ t1descr :: Sentence
 t1descr = tDescr (is_safe1) s ending
   where 
     s = (ch is_safe1) `sAnd` (ch is_safe2) +:+ sParen (S "from" +:+ 
-      (ref t2SafetyReq))
+      (makeRef t2IsSafe))
     ending = ((ch prob_br) `isThe` (phrase prob_br)) `sC` S "as calculated in" +:+.
-      (ref probOfBr) +:+ (ch pb_tol) `isThe` (phrase pb_tol) +:+ S "entered by the user"
+      (makeRef probOfBreak) +:+ (ch pb_tol) `isThe` (phrase pb_tol) +:+ S "entered by the user"
 
 
 t2IsSafe :: TheoryModel
@@ -52,17 +52,14 @@ t2SafetyReq = makeRC "t2SafetyReq" (nounPhraseSP "Safety Requirement-2")
 t2descr :: Sentence
 t2descr = tDescr (is_safe2) s ending
   where 
-    s = ((ch is_safe1) +:+ sParen (S "from" +:+ (ref t1SafetyReq)))
+    s = ((ch is_safe1) +:+ sParen (S "from" +:+ (makeRef t1IsSafe)))
      `sAnd` (ch is_safe2)
     ending = (short lResistance) `isThe` (phrase lResistance) +:+ 
       sParen (S "also called capacity") `sC` S "as defined in" +:+. 
-      (ref calOfCap) +:+ (ch demand) +:+ sParen (S "also referred as the" +:+ 
+      (makeRef calofCapacity) +:+ (ch demand) +:+ sParen (S "also referred as the" +:+ 
       (titleize demandq)) `isThe` (demandq ^. defn) `sC` S "as defined in" +:+ 
-      makeRef calOfDe
+      makeRef calofDemand
 
 tDescr :: VarChunk -> Sentence -> Sentence -> Sentence
 tDescr main s ending = foldlSent [S "If", ch main `sC` S "the glass is" +:+.
   S "considered safe", s +:+. S "are either both True or both False", ending]
-
-ref :: RelationConcept -> Sentence
-ref x = makeRef (x ^. getMaybeLabel)

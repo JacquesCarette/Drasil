@@ -90,7 +90,7 @@ char_weight = uqcND "char_weight" (nounPhraseSP "charge weight")
 
 tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
   (Atomic "TNT") Real
-  [ gtZeroConstr ] (1) defaultUncrt
+  [ gtZeroConstr ] (dbl 1.0) defaultUncrt
 
 standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance") 
   (Atomic "SD") metre Real

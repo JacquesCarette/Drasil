@@ -136,7 +136,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand, testIMFromQD] HideDerivation
           , Constraints EmptyS dataConstraintUncertainty
                         (foldlSent [(makeRef (SRS.valsOfAuxCons SRS.missingP [])), S "gives", (plural value `ofThe` S "specification"), 
-                        plural parameter, S "used in", (makeRef inputDataConstraints)] +:+ instance_models_intro2)
+                        plural parameter, S "used in", (makeRef inputDataConstraints)])
                         [inputDataConstraints, outputDataConstraints]
           ]
         )
@@ -477,10 +477,6 @@ assumptions = fst (foldr (\s (ls, n) -> ((Assumption $ assump ("A" ++ show n) s 
 
 inputDataConstraints = inDataConstTbl gbInputDataConstraints
 outputDataConstraints = outDataConstTbl [prob_br]
-
-instance_models_intro2 :: Sentence
-instance_models_intro2 = foldlSent [makeRef outputDataConstraints, S "shows the",
-  plural constraint, S "that must be satisfied by the", phrase output_]
 
 {--REQUIREMENTS--}
 

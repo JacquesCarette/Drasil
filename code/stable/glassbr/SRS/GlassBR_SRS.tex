@@ -445,7 +445,7 @@ Notes & $a$, $b$ are dimensions of the plate, where ($a>b$).
         $LDF$ is the load duration factor as defined by DD3.
         $J$ is the stress distribution factor (Function) , as defined in DD4.
 \\ \midrule \\
-Source & [4]
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -487,7 +487,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & $t$ is a function that maps from the nominal thickness ($h$) to the minimum thickness.
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -549,7 +549,7 @@ Notes & $J$ is the stress distribution factor (Function), which is obtained by i
         $\hat{q}$ is the dimensionless load defined in DD7.
         $a$, $b$ are dimensions of the plate, where ($a>b$).
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -584,7 +584,7 @@ Notes & $a$, $b$ are dimensions of the plate, where ($a>b$).
         $t$ is the true thickness, which is based on the nominal thicknesses as shown in DD2.
         ${\hat{q}_{tol}}$ is the tolerable load defined in DD8.
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -615,7 +615,7 @@ Description & \begin{symbDescription}
               \item{$g$ is the glass type $g\in{}\{AN,FT,HS\}$ (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -652,7 +652,7 @@ Notes & $q$ is the 3 second equivalent pressure, as given in IM3.
         $t$ is the true thickness, which is based on the nominal thicknesses as shown in DD2.
         $GTF$ is the glass type factor, as given by DD6.
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -684,7 +684,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & ${\hat{q}_{tol}}$ is the tolerable load which is obtained from Figure 7 using ${J_{tol}}$ and aspect ratio as parameters using interpolation. Calculations of ${J_{tol}}$ and $AR$ are defined in DD9 and DD11, respectively.
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -724,7 +724,7 @@ Notes & ${J_{tol}}$  is calculated with reference to  ${P_{btol}}$.
         $LDF$ is the load duration factor as defined by DD3.
         ${P_{btol}}$ is the tolerable probability entered by the user.
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -821,7 +821,7 @@ Description & \begin{symbDescription}
               \item{$B$ is the risk of failure (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -864,7 +864,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows A\ref{A:glassConditionA} and A\ref{A:glassTyA} (``In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations'') from [1 (pg. 53)].
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -906,7 +906,47 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined as $w TNT$. $SD$ is the stand off distance as defined in DD10.
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{IM:risk\_fun}
+\phantomsection 
+\label{IM:risk\_fun}
+\\ \midrule \\
+Label & Risk of failure
+\\ \midrule \\
+Input & $k$, $a$, $b$, $m$, $E$, $h$, $LDF$, $J$
+\\ \midrule \\
+Output & $B$
+\\ \midrule \\
+Input Constraints & 
+\\ \midrule \\
+Output Constraints & 
+\\ \midrule \\
+Equation & \begin{dmath}
+           B=\frac{k}{\left(a b\right)^{m-1}} \left(1000 E h^{2}\right)^{m} LDF e^{J}
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$B$ is the risk of failure (Unitless)}
+              \item{$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
+              \item{$a$ is the plate length (long dimension) (m)}
+              \item{$b$ is the plate width (short dimension) (m)}
+              \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
+              \item{$E$ is the modulus of elasticity of glass (Pa)}
+              \item{$h$ is the actual thickness (m)}
+              \item{$LDF$ is the load duration factor (Unitless)}
+              \item{$J$ is the stress distribution factor (Function) (Unitless)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & 
+\\ \midrule \\
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}

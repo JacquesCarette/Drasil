@@ -1,5 +1,5 @@
 Name:		drasil-data
-Version:	0.1.1
+Version:	0.1.3
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple

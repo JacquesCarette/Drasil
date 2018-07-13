@@ -17,6 +17,9 @@ tModels = [t1SafetyReq, t2SafetyReq]
 
 -- FIXME: This is a hack to see if TheoryModel printing will work. This chunk
 -- needs to be updated properly.
+-- this is the new function but it still uses the t1SafetyReq,
+-- so basiclly we have to combine the old function with the new function
+
 t1IsSafe :: TheoryModel
 t1IsSafe = tm' (cw t1SafetyReq) 
   (tc' "isSafe" [qw is_safe1, qw prob_br, qw pb_tol] ([] :: [ConceptChunk])

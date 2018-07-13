@@ -1,6 +1,7 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Reference where
 
+import Language.Drasil.RefTypes (RefType(..))
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
 import Data.List (concatMap, find, groupBy, partition, sortBy)

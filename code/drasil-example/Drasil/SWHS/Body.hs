@@ -508,17 +508,14 @@ reqS = reqF [funcReqs, nonFuncReqs]
 funcReqs :: Section
 funcReqs = SRS.funcReq funcReqsList []
 
-funcReqsList :: [Contents]
-funcReqsList = ([req1]) ++ [funcReqsTable] ++ ([req2]) ++
-  [reqEqn1, reqEqn2] ++ (reqs) 
+funcReqsList :: [LabelledContent]
+funcReqsList = [req1] ++ [funcReqsTable] ++ [req2] ++
+  [reqEqn1, reqEqn2] ++ reqs
 
 funcReqsTable :: Contents
 funcReqsTable = (Table [titleize symbol_, titleize unit_, titleize description]
   (mkTable
-  [ch,
-  --(\ch -> Sy (unit_symb ch)),
-  unit'2Contents,
-  phrase] (map qw inputConstraints))
+  [ch, unit'2Contents, phrase] (map qw inputConstraints))
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False)
   "InConstraints"
 

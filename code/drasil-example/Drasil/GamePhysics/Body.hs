@@ -36,7 +36,7 @@ import Data.Drasil.SI_Units(metre, kilogram, second, newton, radian)
 import Drasil.GamePhysics.Changes (likelyChanges, likelyChangesList', unlikelyChanges)
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
 import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs)
-import Drasil.GamePhysics.IMods (iModels, im1_new, im2_new, im3_new)
+import Drasil.GamePhysics.IMods (iModels, iModels_new, im1_new, im2_new, im3_new)
 import Drasil.GamePhysics.References (cpCitations)
 import Drasil.GamePhysics.TMods (cpTMods, t1NewtonSL_new, t2NewtonTL_new, 
   t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, cpTMods_new)
@@ -253,8 +253,7 @@ generalSystemDescriptionSect = sSubSec generalSystemDescription []
 --------------------------
 
 sysContext :: SubSec
-sysContext = sSubSec sysCont [siSTitl, (siCon [sysCtxIntro, sysCtxFig1,
-  sysCtxDesc, sysCtxList])]
+sysContext = sSubSec sysCont [siSTitl, (siLC [sysCtxIntro, sysCtxFig1, sysCtxDesc, sysCtxList])]
 
 sysCtxIntro :: LabelledContent
 sysCtxIntro = llcc "sysCtxIntroCP" (mkLabelRA'' "sysCtxIntroLabelCP") $ foldlSP
@@ -567,7 +566,7 @@ requirements = reqF [functional_requirements, nonfunctional_requirements]
 -----------------------------------
 
 functional_requirements :: Section
-functional_requirements_list :: Contents
+functional_requirements_list :: LabelledContent
 
 functional_requirements = SRS.funcReq [functional_requirements_list] []
 
@@ -630,7 +629,8 @@ functional_requirements_list' = [functional_requirements_req1,
   functional_requirements_req6, functional_requirements_req7, 
   functional_requirements_req8]
 
-functional_requirements_list = enumSimple 1 (getAcc requirement) functional_requirements_list'
+functional_requirements_list = llcc "frListCP" (mkLabelRA'' "frListCPLabel") $ 
+  enumSimple 1 (getAcc requirement) functional_requirements_list'
 
 --------------------------------------
 -- 5.2 : Nonfunctional Requirements --
@@ -720,7 +720,7 @@ traceMatInstaModelRef, traceMatAssumpRef, traceMatFuncReqRef, traceMatGoalStmtRe
   traceMatLikelyChgRef, traceMatDataRef :: [Sentence]
 
 traceMatInstaModel = ["IM1", "IM2", "IM3"]
-traceMatInstaModelRef = map makeRef iModels
+traceMatInstaModelRef = map makeRef iModels_new
 
 traceMatTheoryModel = ["T1", "T2", "T3", "T4", "T5"]
 traceMatTheoryModelRef = map makeRef cpTMods_new

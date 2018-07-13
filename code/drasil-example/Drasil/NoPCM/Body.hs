@@ -617,7 +617,7 @@ dataConstListIn :: [UncertQ]
 dataConstListIn = [tank_length, diam, coil_SA, temp_C, w_density, htCap_W,
   coil_HTC, temp_init, time_final]
 
-dataConstTable2 :: Contents
+dataConstTable2 :: LabelledContent
 dataConstTable2 = outDataConstTbl dataConstListOut
 -- s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint]
   -- (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_conListOut)
@@ -642,18 +642,18 @@ reqS = reqF [funcReqs, nonFuncReqs]
 
 funcReqs = SRS.funcReq funcReqsList [] --TODO: Placeholder values until content can be added
 
-funcReqsList :: [Contents]
+funcReqsList :: [LabelledContent]
 funcReqsList = weave [funcReqsListWordsNum, funcReqsListItems]
 
-funcReqsListItems :: [Contents]
-funcReqsListItems = [
+funcReqsListItems :: [LabelledContent]
+funcReqsListItems = [ llcc "fr1list" (mkLabelRA'' "fr1listLabel") $ 
 
   Table [titleize symbol_, titleize M.unit_, titleize description]
   (mkTable [ch,
   unit'2Contents,
   phrase] inputVar)
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False "fr1list",
-
+  llcc "eqnNoPCM" (mkLabelRA'' "eqnNoPCMLabel") $ --FIXME: proper label?
   eqUnR ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
   (((sy diam) / 2) * (sy tank_length) * (sy w_density)))
   ]
@@ -689,10 +689,9 @@ funcReqsListItems = [
 
 -- FIXME: these contents should be converted to become reqchunks
 funcReqsListWordsNum :: [LabelledContent]
-funcReqsListWordsNum = map (\x -> llcc (x ^. uid ++ "LC") (mkLabelRA'' (x ^. uid ++ "Label") x))
-  [req1, req2, req3, req4, req5, req6] 
+funcReqsListWordsNum = [req1, req2, req3, req4, req5, req6] 
 
-req1, req2, req3, req4, req5, req6 :: Contents
+req1, req2, req3, req4, req5, req6 :: LabelledContent
 
 --Empty list is supposed to take a ModuleChunk. Not sure what to put there.
 req1 = mkRequirement "req1" (
@@ -707,12 +706,13 @@ req2 = mkRequirement "req2" (
   S "and" +: (ch tank_vol `isThe` phrase tank_vol) ) "Use-Above-Find-Mass-IM1-IM2"
 req3 = mkRequirement "req3" (
   S "Verify that the" +:+ plural input_ +:+ S "satisfy the required"
-  +:+ phrase physicalConstraint +:+ S "shown in" +:+. makeRef dataConstTable1 ) "Check-Inputs-Satisfy-Physical-Constraints"
+  +:+ phrase physicalConstraint +:+ S "shown in" +:+. makeRef dataConstTable1 ) 
+  "Check-Inputs-Satisfy-Physical-Constraints"
 req4 = mkRequirement "req4" (
   titleize' output_ `sAnd` plural input_ +:+ plural quantity
   +:+ S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
   plural quantity +:+ S "from" +:+ (makeRef (find' req1 funcReqsListWordsNum)) `sC`
-  S "the" +:+ phrase mass +:+ S "from" +:+ (makeRef (find' req2 funcReqsListWordsNum))
+  S "the" +:+ phrase mass +:+ S "from" +:+ (makeRef req2)
   `sAnd` ch tau_W +:+. sParen(S "from" +:+ acroIM 1) ) "Output-Input-Derivied-Quantities"
 req5 = mkRequirement "req5" (
   S "Calculate and output the" +:+ phrase temp_W +:+
@@ -739,8 +739,7 @@ req6 = mkRequirement "req6" (
 likelyChgs = SRS.likeChg likelyChgsList []
 
 likelyChgsList :: [LabelledContent] --FIXME: this can be removed by implementin NoPCM's LCs as the correct chunk ()
-likelyChgsList = map (\x -> llcc (x ^. uid ++ "LC") (mkLabelRA'' (x ^. uid ++ "Label")) x)
-  [likeChg2, likeChg3, likeChg3_npcm, likeChg6]
+likelyChgsList = [likeChg2, likeChg3, likeChg3_npcm, likeChg6]
 
 -- likeChg1, likeChg2, likeChg3, likeChg4 :: Contents
 
@@ -755,8 +754,9 @@ likelyChgsList = map (\x -> llcc (x ^. uid ++ "LC") (mkLabelRA'' (x ^. uid ++ "L
   -- S "will actually change along its length as the" +:+ phrase water +:+
   -- S "within it cools."))
   -- []) EmptyS
-likeChg3_npcm :: Contents
-likeChg3_npcm = mkLklyChnk "likeChg3" (
+likeChg3_npcm :: LabelledContent
+likeChg3_npcm = llcc "likeChg3" (mkLabelRA'' "Discharging-Tank") $
+  mkLklyChnk "likeChg3" (
   (makeRef newA9NoPCM) :+: S "- The" +:+ phrase model +:+
   S "currently only accounts for charging of the tank. That is, increasing the" +:+ phrase temp +:+
   S "of the water to match the" +:+ phrase temp +:+ S "of the coil. A more complete"  

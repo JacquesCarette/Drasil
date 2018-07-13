@@ -205,7 +205,7 @@ data ReqrmntSec = ReqsVerb Section | ReqsProg [ReqsSub]
 
 data ReqsSub where
   ReqsSubVerb :: Section -> ReqsSub
-  FReqsSub :: [Contents] -> ReqsSub
+  FReqsSub :: [LabelledContent] -> ReqsSub --FIXME: Should be ReqChunks?
   NonFReqsSub :: (Concept c) => [c] -> [c] -> Sentence -> Sentence -> ReqsSub
 
 {--}
@@ -535,14 +535,12 @@ siSys SI {_sys = sys} = nw sys
 
 --BELOW IS IN THIS FILE TEMPORARILY--
 --Creates Contents using an uid and description (passed in as a Sentence).
--- mkAssump :: String -> Sentence -> Contents
--- mkAssump i desc = Assumption $ ac' i desc
 
-mkRequirement :: String -> Sentence -> String -> Contents
-mkRequirement i desc lbl = Requirement $ frc i desc (mkLabelRA'' lbl)
+mkRequirement :: String -> Sentence -> String -> LabelledContent
+mkRequirement i desc lbl = llcc i (mkLabelRA'' lbl) $ Requirement $ frc i desc (mkLabelRA'' lbl)
 
-mkLklyChnk :: String -> Sentence -> String -> Contents
-mkLklyChnk i desc lbl = Change $ lc i desc (mkLabelRA'' lbl)
+mkLklyChnk :: String -> Sentence -> String -> LabelledContent
+mkLklyChnk i desc lbl = llcc i (mkLabelRA'' lbl) $ Change $ lc i desc (mkLabelRA'' lbl)
 
-mkUnLklyChnk :: String -> Sentence -> String -> Contents
-mkUnLklyChnk i desc lbl = Change $ ulc i desc (mkLabelRA'' lbl)
+mkUnLklyChnk :: String -> Sentence -> String -> LabelledContent
+mkUnLklyChnk i desc lbl = llcc i (mkLabelRA'' lbl) $ Change $ ulc i desc (mkLabelRA'' lbl)

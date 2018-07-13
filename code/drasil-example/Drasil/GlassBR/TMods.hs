@@ -53,7 +53,7 @@ t2descr :: Sentence
 t2descr = tDescr (is_safe2) s ending
   where 
     s = ((ch is_safe1) +:+ sParen (S "from" +:+ (ref t1SafetyReq)))
-     `sAnd` (ch is_safe2))
+     `sAnd` (ch is_safe2)
     ending = (short lResistance) `isThe` (phrase lResistance) +:+ 
       sParen (S "also called capacity") `sC` S "as defined in" +:+. 
       (ref calOfCap) +:+ (ch demand) +:+ sParen (S "also referred as the" +:+ 

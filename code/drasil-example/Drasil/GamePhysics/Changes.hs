@@ -17,13 +17,13 @@ import Data.Drasil.Utils (enumSimple)
 --------------------------------
 
 likelyChanges :: Section
-likelyChangesIntro, likelyChangesList :: Contents
+likelyChangesIntro, likelyChangesList :: LabelledContent
 
 likelyChanges = SRS.likeChg [likelyChangesIntro, likelyChangesList] []
 
-likelyChangesIntro = foldlSP [S "This", (phrase section_), S "lists the",
-  (plural likelyChg), S "to be made to the", (phrase game), (phrase physics), 
-  (phrase library)]
+likelyChangesIntro = llcc "LCIntroCP" (mkLabelRA'' "LCIntroCPLabel") $ 
+  foldlSP [S "This", (phrase section_), S "lists the", (plural likelyChg),
+  S "to be made to the", (phrase game), (phrase physics), (phrase library)]
 
 likelyChangesStmt1, likelyChangesStmt2, likelyChangesStmt3,
   likelyChangesStmt4 :: Sentence
@@ -46,7 +46,8 @@ likelyChangesList' :: [Sentence]
 likelyChangesList' = [likelyChangesStmt1, likelyChangesStmt2, likelyChangesStmt3,
   likelyChangesStmt4]
 
-likelyChangesList = enumSimple 1 (getAcc likelyChg) likelyChangesList'
+likelyChangesList = llcc "LCListCP" (mkLabelRA'' "LCListCPLabel") $ 
+  enumSimple 1 (getAcc likelyChg) likelyChangesList'
 
 --------------------------------
 --UNLIKELY CHANGES --

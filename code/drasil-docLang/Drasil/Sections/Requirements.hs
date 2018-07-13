@@ -14,8 +14,8 @@ import qualified Drasil.DocLang.SRS as SRS
 reqF :: [Section] -> Section
 reqF = SRS.require [reqIntro]
 
-fReqF :: [Contents] -> Section
-fReqF listOfReqs = SRS.funcReq (listOfReqs) []
+fReqF :: [LabelledContent] -> Section
+fReqF listOfReqs = SRS.funcReq listOfReqs []
 
 --generalized requirements introduction
 reqIntro :: Contents

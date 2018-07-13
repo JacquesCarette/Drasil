@@ -124,8 +124,8 @@ roc_temp_simp_deriv_sentences = map foldlSentCol [
 
 s4_2_3_desc1 :: RelationConcept -> UnitalChunk -> [Sentence]
 s4_2_3_desc1 t1c vo =
-  [S "Integrating", makeRef $ reldefn t1c,
-  S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
+  [S "Integrating", makeRef $ llcc "t1cLC" (mkLabelRA'' "t1cLCLabel") $ --FIXME
+  reldefn t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
 s4_2_3_desc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]

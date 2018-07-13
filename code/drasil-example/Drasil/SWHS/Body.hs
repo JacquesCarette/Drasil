@@ -114,8 +114,6 @@ swhs_si = SI {
   _sysinfodb = swhsSymMap,
   _refdb = swhsRefDB
 }
-swhsRefDB :: ReferenceDB
-swhsRefDB = rdb [] [] newAssumptions [] [] ref_swhs_citations []
 
 swhsSymMap :: ChunkDB
 swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) swhsSymbols

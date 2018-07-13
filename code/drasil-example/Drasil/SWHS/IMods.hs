@@ -12,7 +12,7 @@ import Drasil.SWHS.Unitals (t_init_melt, latentE_P, pcm_E, pcm_initMltE,
 import Drasil.SWHS.DataDefs(dd1HtFluxC, dd2HtFluxP, dd3HtFusion, ddRef, dd4MeltFrac)
 import Data.Drasil.Utils (unwrap, weave)
 import Data.Drasil.SentenceStructures (acroT, foldlSent, isThe,
-  sAnd, ofThe, foldlSent, isThe, foldlList, acroGD, foldlSentCol, sOf)
+  sAnd, ofThe, foldlSent, isThe, acroGD, foldlSentCol, sOf)
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Concepts.Math (equation, change, rOfChng, surface, area)
 import Drasil.SWHS.Concepts (phsChgMtrl, water, coil, tank)
@@ -20,11 +20,9 @@ import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, mass, vol)
 import Data.Drasil.Concepts.Thermodynamics (boiling, heat, temp, melting,
   latent_heat, sens_heat, heat_cap_spec, thermal_energy, boil_pt, heat_trans,
   phase_change, ht_flux)
-import Drasil.SWHS.DataDefs (ddRef, dd3HtFusion)
 import Drasil.SWHS.Labels (assump14Label, assump19Label, assump18Label)
 import Drasil.SWHS.Assumptions (newA12, newA15, newA16, newA17, newA18, newA14, newA19)
 
-import Control.Lens ((^.))
 
 swhsIMods :: [RelationConcept]
 swhsIMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
@@ -51,6 +49,7 @@ balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
   (((sy temp_C) - (apply1 temp_W time)) +
   (sy eta) * ((apply1 temp_PCM time) - (apply1 temp_W time)))
 
+--FIXME: can this be removed?
 balWtrDesc' :: Sentence
 balWtrDesc' = foldlSent [S "The above", phrase equation, S "applies as long as the", phrase water,
   S "is in", phrase liquid, S "form" `sC` (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100))),

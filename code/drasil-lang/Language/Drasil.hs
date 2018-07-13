@@ -61,9 +61,9 @@ module Language.Drasil (
   -- Chunk.VarChunk
   , VarChunk, codeVC
   , vc, implVar
-  , dcc, dcc', dccWDS, dccWDS', vc'', ccs, cc, cc'
+  , dcc, dcc', dccWDS, dccWDS', vc'', ccs, cc, cc', cic
   -- Chunk.Concept
-  , cw , ConceptChunk , CommonConcept
+  , cw , ConceptChunk , CommonConcept, ConceptInstance
   -- Chunk.CommonIdea
   , commonIdea, CI, getAcc
   -- Chunk.NamedIdea
@@ -80,14 +80,14 @@ module Language.Drasil (
   , constrained, cuc, cvc, cvc', constrained', cuc', constrainedNRV'
   , cnstrw
   -- Chunk.Eq
-  , QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec
+  , QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec, fromEqn''', fromEqn''''
   -- Chunk.DataDefinition
-  , DataDefinition, mkDataDef, mkDD
+  , DataDefinition, mkDataDef, mkDD, mkDataDef', qdFromDD
   -- Chunk.GenDefn
-  , GenDefn, gd, gdUnit, gdNoUnitDef
+  , GenDefn, gd, gdUnit, gdNoUnitDef, gd'
   -- Chunk.InstanceModel
   , InstanceModel
-  , inCons, outCons, imOutput, imInputs, im, imQD, im', imQD'
+  , inCons, outCons, imOutput, imInputs, im, imQD, im', imQD', im'', im'''
   -- Chunk.Quantity
   , Quantity(..), QuantityDict, qw, mkQuant
   -- Chunk.UncertainQuantity
@@ -293,8 +293,10 @@ import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Constrained.Core (physc, sfwrc, enumc, isPhysC, isSfwrC,
   Constraint(..), ConstraintReason(..), Reason(..), TheoryConstraint(..))
 import Language.Drasil.Chunk.DefinedQuantity
-import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec)
-import Language.Drasil.Chunk.DataDefinition (DataDefinition, mkDataDef, mkDD)
+import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqn'', getVC,
+ equat, ec, fromEqn''', fromEqn'''')
+import Language.Drasil.Chunk.DataDefinition (DataDefinition, mkDataDef, mkDD, mkDataDef',
+  qdFromDD)
 import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.Goal (Goal, mkGoal)
 import Language.Drasil.Chunk.InstanceModel

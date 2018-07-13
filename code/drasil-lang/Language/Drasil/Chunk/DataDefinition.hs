@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.DataDefinition where
 
-import Language.Drasil.Chunk.Eq (QDefinition)
+import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn')
 import Language.Drasil.Spec (Sentence(EmptyS))
 import Language.Drasil.Chunk.References (References)
 import Language.Drasil.Chunk.Derivation (Derivation)
@@ -15,18 +15,24 @@ import Language.Drasil.Label.Core (Label)
 
 import Language.Drasil.Chunk.SymbolForm (eqSymb)
 import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
-
+import Language.Drasil.Label.Core (Label)
 import Control.Lens(makeLenses, (^.), view)
+import Language.Drasil.Chunk.Eq (fromEqn, fromEqn')
 
-import Language.Drasil.Chunk.Eq(fromEqn, fromEqn')
+import Language.Drasil.Chunk.Eq(fromEqn, fromEqn', fromEqn''', fromEqn'''')
+
+data Scope = Scp { _spec :: Label {-indirect reference-}}
+
+data ScopeType = Local Scope {-only visible within a limited scope-} | Global {-visible everywhere-}
 
 import Language.Drasil.Label (mkLabelRA')
 
 -- A data definition is a QDefinition that may have additional notes. 
 -- It also has attributes like derivation, source, etc.
 data DataDefinition = DD { _qd :: QDefinition
-                         , _ref :: References 
-                         , _deri :: Derivation 
+                         , _scp :: ScopeType
+                         , _ref :: References
+                         , _deri :: Derivation
                          , _lbl :: Label
                          , _notes :: Maybe [Sentence]
                          }
@@ -38,7 +44,7 @@ instance NamedIdea          DataDefinition where term = qd . term
 instance Idea               DataDefinition where getA c = getA $ c ^. qd
 instance HasSpace           DataDefinition where typ = qd . typ
 instance HasSymbol          DataDefinition where symbol e st = symbol (e^.qd) st
-instance Quantity           DataDefinition where getUnit (DD a _ _ _ _) = getUnit a
+instance Quantity           DataDefinition where getUnit (DD a _ _ _ _ _) = getUnit a
 instance ExprRelat          DataDefinition where relat = qd . relat
 instance HasReference       DataDefinition where getReferences = ref
 instance Eq                 DataDefinition where a == b = (a ^. uid) == (b ^. uid)
@@ -56,6 +62,16 @@ mkDataDef cncpt equation = datadef $ getUnit cncpt --should references be passed
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
                            (eqSymb cncpt) equation [] (mkLabelRA' ((cncpt ^. uid) ++ "Label") (cncpt ^. uid))
 
+mkDataDef' :: (Quantity c) => c -> Expr -> Derivation -> QDefinition
+mkDataDef' cncpt equation dv = datadef $ getUnit cncpt --should references be passed in at this point?
+  where datadef (Just a) = fromEqn'''  (cncpt ^. uid) (cncpt ^. term) EmptyS
+                           (eqSymb cncpt) a equation [] dv (cncpt ^. uid) --shortname
+        datadef Nothing  = fromEqn'''' (cncpt ^. uid) (cncpt ^. term) EmptyS
+                           (eqSymb cncpt) equation [] dv (cncpt ^. uid) --shortname
+
 -- | Smart constructor for data definitions 
 mkDD :: QDefinition -> References -> Derivation -> String{-Label-} -> Maybe [Sentence] -> DataDefinition
-mkDD a b c _ e = DD a b c (mkLabelRA' ((a ^. uid) ++ "Label") (a ^. uid)) e -- FIXME: should the Label be passed in or derived?
+mkDD a b c _ e = DD a Global b c (mkLabelRA' ((a ^. uid) ++ "Label") (a ^. uid)) e -- FIXME: should the Label be passed in or derived?
+
+qdFromDD :: DataDefinition -> QDefinition
+qdFromDD (DD a _ _ _ _ _) = a

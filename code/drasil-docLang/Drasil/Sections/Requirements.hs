@@ -8,7 +8,7 @@ import Data.Drasil.Concepts.Documentation (priority, software, nonfunctionalRequ
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.SentenceStructures (foldlSP, foldlList)
 
-import qualified Drasil.SRS as SRS
+import qualified Drasil.DocLang.SRS as SRS
 
 -- wrapper for reqIntro
 reqF :: [Section] -> Section

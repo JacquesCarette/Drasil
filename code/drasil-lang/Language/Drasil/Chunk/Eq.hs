@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.Eq 
   (QDefinition, fromEqn, fromEqn', fromEqn'', equat, getVC
-  , ec, qua) where
+  , ec, qua, fromEqn''', fromEqn'''') where
 
 import Control.Lens ((^.), makeLenses)
 import Language.Drasil.Expr (Expr)
@@ -72,6 +72,15 @@ fromEqn'' :: (IsUnit u, ConceptDomain u) => String -> NP -> Sentence ->
  Symbol -> String -> Maybe u -> Expr -> References -> Label -> QDefinition
 fromEqn'' nm desc _ symb abbr u eqn refs lbe = 
   EC (mkQuant nm desc symb Real (fmap unitWrapper u) (Just abbr)) eqn refs [] lbe Nothing
+
+
+fromEqn''' :: (IsUnit u, ConceptDomain u) => 
+  String -> NP -> Sentence -> Symbol -> u -> Expr -> References -> Derivation -> String -> QDefinition
+fromEqn''' nm desc _ symb un eqn refs dv sn = 
+  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) eqn refs dv (shortname' sn) Nothing
+
+fromEqn'''' :: String -> NP -> Sentence -> Symbol -> Expr -> References -> Derivation -> String -> QDefinition
+fromEqn'''' nm desc _ symb eqn refs dv sn = EC (mkQuant nm desc symb Real Nothing Nothing) eqn refs dv (shortname' sn) Nothing
 
 -- | Smart constructor for QDefinitions. Requires a quantity and its defining 
 -- equation

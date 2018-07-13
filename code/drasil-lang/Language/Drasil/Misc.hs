@@ -41,13 +41,13 @@ unitHidingUnitless x = maybe (S "") (\y -> Sy (y ^. usymb)) (getUnit x)
 -- | Helper for getting the unit's symbol from a chunk, 
 -- as opposed to the symbols of the chunk itself.
 unit_symb :: (Unitary c) => c -> USymb
-unit_symb c = (unit c) ^. usymb
+unit_symb c = unit c ^. usymb
 
 -- | Helper for common pattern of introducing the title-case version of a 
 -- noun phrase (from a NamedIdea)
 -- followed by its abbreviation in parentheses.
 introduceAbb :: Idea n => n -> Sentence
-introduceAbb n = (NP.titleize $ n ^. term) +:+ (sParen (short n))
+introduceAbb n = NP.titleize (n ^. term) +:+ sParen (short n)
 
 -- | Helper function for getting the sentence case of a noun phrase from a 
 -- NamedIdea.
@@ -82,8 +82,8 @@ plural's a = plural a :+: S "'"
 -- Returns the string if it doesn't contain spaces and throws an error if it does
 noSpaces :: String -> String
 noSpaces s
-  | (' ' `elem` s) == False = s
-  | otherwise               = error "String has at least one space in it."
+  | not (' ' `elem` s) = s
+  | otherwise          = error "String has at least one space in it."
 
 {-
 --------------------- WIP ---------------------

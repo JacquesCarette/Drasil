@@ -1,9 +1,11 @@
-{-# LANGUAGE TemplateHaskell #-}
+{-# Language TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.Citation
   ( -- Types
     Citation, BibRef, CiteField(..), Month(..), HP(..), CitationKind(..), EntryID
+    -- Class for Reference.hs
+  , HasFields(getFields)
     -- Accessors
-  , citeID, externRefT, fields
+  , citeID, externRefT
     -- CiteFields smart constructors
       -- People -> CiteField
   , author, editor
@@ -33,6 +35,9 @@ import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel))
 import Language.Drasil.Misc (noSpaces)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), shortname')
 import Language.Drasil.Label.Core (Label)
+
+import Control.Lens ((^.), Lens', makeLenses)
+import Data.List (find)
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces
@@ -128,6 +133,11 @@ cite i = Cite i (noSpaces i)
 instance HasUID Citation where uid f (Cite a b c d l) = fmap (\x -> Cite x b c d l) (f a)
 instance HasLabel Citation where getLabel = lb
 instance HasShortName  Citation where shortname = lb . shortname
+instance HasFields    Citation where getFields = fields
+=======
+
+class HasFields c where
+  getFields :: Lens' c [CiteField]
 
 -- | Article citation requires author(s), title, journal, year.
 -- Optional fields can be: volume, number, pages, month, and note.

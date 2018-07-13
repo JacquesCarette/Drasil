@@ -5,8 +5,7 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (output_, simulation, quantity, 
   input_, physical, constraint, condition, property)
 import Data.Drasil.Utils (eqUnR)
-import Drasil.DocumentLanguage (mkRequirement)
-import Drasil.Sections.Requirements (nonFuncReqF)
+import Drasil.DocLang (mkRequirement, nonFuncReqF)
 
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics (time, energy)
@@ -36,14 +35,16 @@ import Data.Drasil.SentenceStructures (acroIM, acroR, foldlSent, sAnd, isThe,
 req1, req2, reqEqn1, reqEqn2, req3, req4,
   req5, req6, req7, req8, req9, req10, req11 :: Contents
 
+<<<<<<< HEAD
 req1Labelled :: LabelledContent
 req1Labelled = llcc "req1LabelledC" (mkLabelRA'' "req1Label") req1
 
 req1 = mkRequirement "req1" ( foldlSentCol [
   titleize input_, S "the following", plural quantity `sC`
   S "which define the", phrase tank, plural parameter `sC` S "material",
-  plural property, S "and initial", plural condition] ) "Input-Initial-Quantities"
+  plural property, S "and initial", plural condition]) "Input-Initial-Quantities"
 
+<<<<<<< HEAD
 req2 = mkRequirement "req2" ( foldlSentCol [
   S "Use the", plural input_, S "in", makeRef req1Labelled,
   S "to find the", phrase mass, S "needed for", acroIM 1, S "to",

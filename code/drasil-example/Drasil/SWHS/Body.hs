@@ -5,6 +5,20 @@ import Language.Drasil.Code (CodeSpec, codeSpec)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 import Control.Lens ((^.))
 
+import Drasil.DocLang {--(AuxConstntSec (AuxConsProg), DocDesc, 
+  DocSection (AuxConstntSec, Bibliography, IntroSec, RefSec, Verbatim), 
+  LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
+  IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
+  RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
+  Fields, Field(..),SSDSub(..), SolChSpec( SCSProg ), SSDSec, SSDSec(..), 
+  Verbosity(..), InclUnits(..), DerivationDisplay(..), SCSSub(..),
+  assumpF, dataConstraintUncertainty, genSysF, inDataConstTbl, inModelF, intro, 
+  mkDoc, outDataConstTbl, physSystDesc, reqF, solChSpecF, specSysDesF, 
+  termDefnF, traceGIntro, traceMGF, tsymb'')--}
+import qualified Drasil.DocLang.SRS as SRS (inModel, missingP, likeChg,
+  funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
+  sysCont, reference)
+
 import Data.Drasil.People (thulasi, brooks, spencerSmith)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Documentation (section_, traceyGraph, item,
@@ -41,41 +55,23 @@ import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
 import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
   coil, perfect_insul, tank, transient, gauss_div, swhs_pcm,
   phase_change_material, tank_pcm)
-import Drasil.SWHS.TMods (t1ConsThermE, swhsTMods, swhsTModsAsLCs, tMod1LC)
-import Drasil.SWHS.IMods (swhsIMods, swhsIMods')
-import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, swhsDDefs, swhsDataDefs)
-import Drasil.SWHS.GenDefs (swhsGenDefs, swhsGDs)
 import Drasil.SWHS.Assumptions (swhsRefDB, swhsAssumptions, newA3, newA4, newA5,
-  newA6, newA13, newA15, newA16, newA17, newA18)
+  newA6, newA13, newA15, newA16, newA17, newA18, newAssumptions)
+import Drasil.SWHS.TMods (tModels, t1ConsThermE, t1ConsThermE_new,
+ t2SensHtE_new, t3LatHtE_new, swhsTMods, swhsTMods, 
+ swhsTModsAsLCs, tMod1LC)
+import Drasil.SWHS.IMods (heatEInWtr_new, eBalanceOnWtr_new,
+  heatEInPCM_new, eBalanceOnPCM_new, swhsIMods, swhsIMods')
+import Drasil.SWHS.DataDefs (swhsDataDefs,dd1HtFluxC, dd2HtFluxP, swhsDDefs, dataDefns,
+  dd1HtFluxC, dd2HtFluxP)
+import Drasil.SWHS.GenDefs (swhsGenDefs, swhsGDs, generalDefinitions)
+import Drasil.SWHS.References (ref_swhs_citations)
 import Drasil.SWHS.Requirements (req1, req2, reqEqn1, reqEqn2,
   req3, req4, req5, req6, req7, req8, req9, newReq9, req10, req11, nonFuncReqs)
 import Drasil.SWHS.Changes (likeChg1, likeChg2, likeChg3, likeChg4,
   likeChg5, likeChg6, unlikelyChgs)
 import Drasil.SWHS.DataDesc (swhsInputMod)
 import Drasil.SWHS.Labels (traceFig1LC, traceFig2LC)
-
-import qualified Drasil.SRS as SRS (inModel, missingP, likeChg,
-  funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
-  sysCont, reference)
-
-import Drasil.DocumentLanguage (DocDesc, mkDoc, tsymb'',
-  LFunc (TermExcept),
-  Literature (Lit, Doc'),
-  TSIntro (SymbOrder, SymbConvention, TSPurpose),
-  DocSection (Verbatim, IntroSec, RefSec, Bibliography, AuxConstntSec), 
-  IntroSub(IOrgSec, IChar, IScope, IPurpose),
-  IntroSec (IntroProg),
-  RefTab (TAandA, TUnits),
-  RefSec (RefProg),
-  AuxConstntSec (AuxConsProg))
-
-import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.Sections.SpecificSystemDescription (inModelF, assumpF,
-  inDataConstTbl, outDataConstTbl, dataConstraintUncertainty, solChSpecF,
-  termDefnF, specSysDesF, physSystDesc)
-import Drasil.Sections.TraceabilityMandGs (traceMGF, traceGIntro)
-import Drasil.Sections.Requirements (reqF)
-import Drasil.Sections.GeneralSystDesc (genSysF)
 
 import Data.Drasil.Utils (enumSimple, weave, itemRefToSent, makeListRef,
   makeTMatrix, eqUnR)
@@ -109,6 +105,7 @@ swhs_si = SI {
   _quants = swhsSymbols,
   _concepts = symbT,
   _definitions = swhsDataDefs,
+  _datadefs = ([] :: [DataDefinition]),
   _inputs = map qw swhsInputs,
   _outputs = map qw swhsOutputs,
   _defSequence = ([] :: [Block QDefinition]),
@@ -117,6 +114,8 @@ swhs_si = SI {
   _sysinfodb = swhsSymMap,
   _refdb = swhsRefDB
 }
+swhsRefDB :: ReferenceDB
+swhsRefDB = rdb [] [] newAssumptions [] [] ref_swhs_citations []
 
 swhsSymMap :: ChunkDB
 swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) swhsSymbols
@@ -134,26 +133,38 @@ swhsPeople :: [Person]
 swhsPeople = [thulasi, brooks, spencerSmith]
 
 mkSRS :: DocDesc
-mkSRS = [RefSec (RefProg intro
-  [TUnits, tsymb'' tsymb_intro (TermExcept [uNormalVect]), TAandA])] ++
-
-  [IntroSec (IntroProg (introP1 CT.ener_src energy swhs_pcm phsChgMtrl 
+mkSRS = RefSec (RefProg intro [
+    TUnits, tsymb'' tsymb_intro (TermExcept [uNormalVect]), TAandA]):
+  IntroSec (
+    IntroProg (introP1 CT.ener_src energy swhs_pcm phsChgMtrl 
     progName CT.thermal_energy latent_heat unit_) (introP2 swhs_pcm program
-    progName) [
-   
-  IPurpose (purpDoc swhs_pcm progName),
-  
-  IScope (scopeReqs1 CT.thermal_analysis tank_pcm)
-  (scopeReqs2 temp CT.thermal_energy water phsChgMtrl sWHT),
-   
-  IChar (charReader1 CT.ht_trans_theo) (charReader2 de) (EmptyS),
-  
-  IOrgSec (orgDocIntro) (inModel) (SRS.inModel SRS.missingP [])
-  (orgDocEnd swhs_pcm progName)])] ++
-  
-  map Verbatim [genSystDesc, specSystDesc, reqS, likelyChgs, unlikelyChgs, traceMAndG] ++ 
-  [AuxConstntSec (AuxConsProg progName specParamValList)] ++
-  (Bibliography : [])
+    progName) 
+    [IPurpose (purpDoc swhs_pcm progName),
+     IScope (scopeReqs1 CT.thermal_analysis tank_pcm) 
+       (scopeReqs2 temp CT.thermal_energy water phsChgMtrl sWHT),
+     IChar (charReader1 CT.ht_trans_theo) (charReader2 de) (EmptyS),
+     IOrgSec orgDocIntro inModel (SRS.inModel SRS.missingP [])
+       (orgDocEnd swhs_pcm progName)]):
+  Verbatim genSystDesc:
+  SSDSec 
+    (SSDProg [SSDSubVerb probDescription
+      , SSDSolChSpec 
+        (SCSProg 
+          [ Assumptions
+          , TMs ([Label] ++ stdFields) [t1ConsThermE_new, t2SensHtE_new, t3LatHtE_new]
+          , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
+          , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+           [eBalanceOnWtr_new, eBalanceOnPCM_new, heatEInWtr_new, heatEInPCM_new ] ShowDerivation
+          , Constraints  EmptyS dataConstraintUncertainty dataConTail
+           [dataConTable1, dataConTable3]
+          ]
+        )
+      ]
+    ):  
+  (map Verbatim [reqS, likelyChgs, unlikelyChgs, traceMAndG]) ++
+    AuxConstntSec (AuxConsProg progName specParamValList) :
+    Bibliography : []
 
 swhsCode :: CodeSpec
 swhsCode = codeSpec swhs_si [swhsInputMod]
@@ -164,8 +175,10 @@ tsymb_intro = [TSPurpose, SymbConvention
 
 --- The document starts here
 swhs_srs' :: Document
-swhs_srs' = mkDoc mkSRS (for) swhs_si
+swhs_srs' = mkDoc mkSRS for swhs_si
 
+stdFields :: Fields
+stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 -- It is sometimes hard to remember to add new sections both here and above.
 
 -- =================================== --
@@ -310,7 +323,7 @@ goalStates = SRS.goalStmt [goalStateIntro temp_C temp_W temp_PCM, goalStateList]
 
 goalStateList :: Contents
 goalStateList = enumSimple 1 (short goalStmt) $
-  map (goalState) outputConstraints
+  map goalState outputConstraints
 
 -- List structure is repeated between examples. (For all of these lists I am
 -- imagining the potential for something like what was done with the lists in
@@ -1329,6 +1342,10 @@ dataContMid :: Sentence
 dataContMid = foldlSent [S "The", phrase column, S "for", phrase software,
   plural constraint, S "restricts the range of",
   plural input_, S "to reasonable", plural value]
+
+dataConTail :: Sentence
+dataConTail = dataContMid :+:
+  (dataContFooter quantity surArea vol thickness phsChgMtrl)
 
 ------------------------------
 -- Data Constraint: Table 1 --

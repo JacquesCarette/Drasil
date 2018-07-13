@@ -1,6 +1,9 @@
 module Drasil.GlassBR.IMods (iModels, probOfBr, calOfCap, calOfDe, probOfBreak, calofCapacity, calofDemand) where
 
+import Prelude hiding (exp)
+import Control.Lens ((^.))
 import Language.Drasil
+import Drasil.DocLang (refA)
 
 import Drasil.GlassBR.Assumptions (gbRefDB, newA1, newA2)
 import Drasil.GlassBR.Concepts (glassTypeFac, lResistance, lShareFac)
@@ -8,14 +11,9 @@ import Drasil.GlassBR.DataDefs (glaTyFac, nonFL, risk)
 import Drasil.GlassBR.Unitals (demand, demandq, eqTNTWeight, lRe, loadSF, 
   prob_br, risk_fun, sdVectorSent, sdWithEqn, standOffDist, wtntWithEqn)
 
-import Drasil.DocumentLanguage.RefHelpers (refA)
-
 import Data.Drasil.Concepts.Documentation (coordinate)
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
-
-import Prelude hiding (exp)
-import Control.Lens ((^.))
 
 iModels :: [RelationConcept]
 iModels = [probOfBr, calOfCap, calOfDe]
@@ -61,8 +59,8 @@ capdescr =
   (S "In the development of this procedure, it was assumed that" +:+
   S "all four edges of the glass are simply supported and free to slip" +:+
   S "in the plane of the glass. This boundary condition has been shown" +:+
-  S "to be typical of many glass installations")) +:+ S "from [4 (pg. 53)]"
-  {-astm_LR2009-}]
+  S "to be typical of many glass installations")) +:+ S "from [1 (pg. 53)]"
+  {-astm2009-}]
 
 {--}
 

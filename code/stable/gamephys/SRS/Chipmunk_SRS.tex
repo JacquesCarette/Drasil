@@ -218,7 +218,7 @@ The scope of the requirements includes the physical simulation of 2D rigid bodie
 Reviewers of this documentation should have a strong knowledge in rigid body dynamics. The reviewers should also have an understanding of high school calculus. The users of Chipmunk2D can have a lower level of expertise, as explained in Section~\ref{Sec:UserChars}.
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
-The organization of this document follows the template for an SRS for scientific computing software proposed by {[}1{]} and {[}2{]}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:SolCharSpec} and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by {[}3{]} and {[}6{]}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:SolCharSpec} and trace back to find any additional information they require.
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models.
 \section{General System Description}
 \label{Sec:GenSysDesc}
@@ -495,7 +495,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & The above equation expresses the total acceleration of the rigid body (A1, A2) i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using DD2, DD3 and DD4. It is currently assumed that there is no damping (A6) or constraints (A7) involved.
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -544,7 +544,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved.
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -597,7 +597,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & This instance model is based on our assumptions regarding rigid body (A1, A2) collisions (A5). Again, this does not take damping (A6) or constraints (A7) into account.
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -629,7 +629,7 @@ Description & \begin{symbDescription}
               \item{$M$ is the total mass of the rigid body (kg)}
               \end{symbDescription}
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -657,7 +657,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{p}$ is the position (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -685,7 +685,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{r}$ is the displacement (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -713,7 +713,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -741,7 +741,7 @@ Description & \begin{symbDescription}
               \item{$ϕ$ is the orientation (rad)}
               \end{symbDescription}
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -769,7 +769,7 @@ Description & \begin{symbDescription}
               \item{$θ$ is the angular displacement (rad)}
               \end{symbDescription}
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -797,7 +797,7 @@ Description & \begin{symbDescription}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -833,7 +833,7 @@ Description & \begin{symbDescription}
               \item{${\mathbf{I}_{B}}$ is the moment of inertia of rigid body B (kg$\text{m}^{2}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1098,20 +1098,6 @@ There are no auxiliary constants.
 \section{References}
 \label{Sec:References}
 \begin{filecontents*}{bibfile.bib}
-@article{dParnas1972,
-author={Parnas, David L.},
-title={On the Criteria To Be Used in Decomposing Systems into Modules},
-journal={Communications of the ACM},
-year={1972},
-pages={"1053-1058"}}
-
-@inproceedings{dParnasPcClements1984,
-author={Parnas, David L. and Clements, P. C. and Wiess, },
-title={The Modular Structure of Complex Systems},
-booktitle={ICSE '84: Proceedings of the 7th international conference on Software engineering},
-year={1984},
-pages={"408-417"}}
-
 @misc{jfBeucheIntro,
 author={Bueche, J. Frederick},
 title={Introduction to Physics for Scientists, Fourth Edition},
@@ -1124,6 +1110,13 @@ title={A document drive approach to certifying scientific computing software},
 school={McMaster University},
 year={2013},
 address={Hamilton, ON, Canada}}
+
+@article{dParnas1972,
+author={Parnas, David L.},
+title={On the Criteria To Be Used in Decomposing Systems into Modules},
+journal={Communications of the ACM},
+year={1972},
+pages={"1053-1058"}}
 
 @inproceedings{parnas1978,
 author={Parnas, David L.},
@@ -1143,13 +1136,12 @@ number={2},
 pages={"251-257"},
 address={Washington, USA}}
 
-@article{sciComp2013,
-author={Wilson, Greg and Aruliah, D. A. and Titus, C. and Chue Hong, Neil P. and Davis, Matt and Guy, Richard T. and Haddock, Steven H. D. and Huff, Kathryn D. and Mitchell, Ian M. and Plumblet, Mark D. and Waugh, Ben and White, Ethan P. and Wilson, Paul},
-title={Best Practices for Scientific Computing, 2013},
-journal={PLoS Biol},
-year={2013},
-volume={12},
-number={1}}
+@inproceedings{dParnasPcClements1984,
+author={Parnas, David L. and Clements, P. C. and Wiess, },
+title={The Modular Structure of Complex Systems},
+booktitle={ICSE '84: Proceedings of the 7th international conference on Software engineering},
+year={1984},
+pages={"408-417"}}
 
 @inproceedings{smithLai2005,
 author={Smith, W. Spencer and Lai, Lei},
@@ -1160,6 +1152,14 @@ editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
 address={Paris, France},
 pages={"107-121"},
 note={In conjunction with 13th IEEE International Requirements Engineering Conference,}}
+
+@article{sciComp2013,
+author={Wilson, Greg and Aruliah, D. A. and Titus, C. and Chue Hong, Neil P. and Davis, Matt and Guy, Richard T. and Haddock, Steven H. D. and Huff, Kathryn D. and Mitchell, Ian M. and Plumblet, Mark D. and Waugh, Ben and White, Ethan P. and Wilson, Paul},
+title={Best Practices for Scientific Computing, 2013},
+journal={PLoS Biol},
+year={2013},
+volume={12},
+number={1}}
 \end{filecontents*}
 \nocite{*}
 \bibstyle{ieeetr}

@@ -2,14 +2,15 @@ module Drasil.SSP.Assumptions where
 
 import Language.Drasil
 
-import Drasil.SSP.Defs (intrslce, mtrlPrpty, slice, slope, slopeSrf, slpSrf, 
-    soil, soilLyr, soilPrpty)
+import Drasil.SSP.Defs (slpSrf, slopeSrf, slope,
+  mtrlPrpty, soil, soilLyr, soilPrpty, intrslce, slice)
+import Drasil.SSP.Unitals (coords, normToShear, scalFunc, fs)
 import Drasil.SSP.References (sspCitations)
-import Drasil.SSP.Unitals (coords, fs, normToShear, scalFunc)
+import Data.Drasil.SentenceStructures (ofThe, ofThe', getTandS, foldlSent)
 
 import Data.Drasil.Concepts.Documentation (condition)
+import Data.Drasil.Concepts.Physics (force, stress, strain)
 import Data.Drasil.Concepts.Math (surface, unit_)
-import Data.Drasil.Concepts.Physics (force, strain, stress)
 import Data.Drasil.Concepts.SolidMechanics (shearForce)
 import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe')
 
@@ -32,6 +33,7 @@ newA8 = assump "Plane-Strain-Conditions" planeS (mkLabelRA'' "Plane-Strain-Condi
 newA9 = assump "Effective-Norm-Stress-Large" largeN (mkLabelRA'' "Effective-Norm-Stress-Large")
 newA10 = assump "Surface-Base-Slice-between-Interslice-Straight-Lines" straightS 
            (mkLabelRA'' "Surface-Base-Slice-between-Interslice-Straight-Lines")
+
 
 sspAssumptions :: [Sentence]
 sspAssumptions = [monotonicF, slopeG, homogeneousL, isotropicP,

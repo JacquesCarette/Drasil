@@ -1,14 +1,14 @@
-module Drasil.SSP.TMods (sspTMods) where
+module Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_new
+  , effStress_new, sspTMods) where
 
 import Prelude hiding (tan)
 import Language.Drasil
+import Drasil.DocLang (refA)
 
 import Drasil.SSP.Assumptions (newA8, newA9, sspRefDB)
 import Drasil.SSP.Defs (factor, factorOfSafety, slope, soil)
 import Drasil.SSP.Unitals (cohesion, fricAngle, fs, fx, fy, genDisplace,
   genForce, momntOfBdy, normStress, porePressure, shrStress, surfHydroForce)
-
-import Drasil.DocumentLanguage.RefHelpers (refA)
 
 import Data.Drasil.Quantities.Physics (displacement, distance, force)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
@@ -26,11 +26,19 @@ import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe',
 --  Theoretical Models  --
 --------------------------
 
+
 sspTMods :: [RelationConcept]
-sspTMods = [fs_rc, equilibrium, mcShrStrgth, effStress, hookesLaw]
+sspTMods = [fs_rc, equilibrium, mcShrStrgth, hookesLaw
+  , effStress]
 
 -- 
+------------- New Chunck -----------
+fs_rc_new :: TheoryModel
+fs_rc_new = tm' (cw fs_rc)
+  (tc' "fs_rc_new" [qw fs, qw shearRes, qw mobShear] ([] :: [ConceptChunk])
+  [] [TCon Invariant fs_rel] []) "fs_rc" [fs_desc]
 
+------------------------------------
 fs_rc :: RelationConcept
 fs_rc = makeRC "fs_rc" factorOfSafety fs_desc fs_rel Nothing --label
 
@@ -46,7 +54,13 @@ fs_desc = foldlSent [
   S "and the resistive shear", sParen (ch shearRes)]
 
 --
-  
+------------- New Chunck -----------
+equilibrium_new :: TheoryModel
+equilibrium_new = tm' (cw equilibrium)
+  (tc' "equilibrium_new" [qw fx] ([] :: [ConceptChunk])
+  [] [TCon Invariant eq_rel] []) "equilibrium" [eq_desc]
+
+------------------------------------  
 equilibrium :: RelationConcept
 equilibrium = makeRC "equilibrium" (nounPhraseSP "equilibrium") eq_desc eq_rel Nothing --label
 
@@ -64,6 +78,14 @@ eq_desc = foldlSent [S "For a body in static equilibrium, the net",
   S "will create a net moment equal to" +:+ E 0]
 
 --
+------------- New Chunck -----------
+mcShrStrgth_new :: TheoryModel
+mcShrStrgth_new = tm' (cw mcShrStrgth)
+  (tc' "mcShrStrgth_new" [qw shrStress, qw normStress, qw fricAngle, qw cohesion] 
+  ([] :: [ConceptChunk])
+  [] [TCon Invariant mcSS_rel] []) "mcShrStrgth" [mcSS_desc]
+
+------------------------------------
 mcShrStrgth :: RelationConcept
 mcShrStrgth = makeRC "mcShrStrgth" (nounPhraseSP "Mohr-Coulumb shear strength")
   mcSS_desc mcSS_rel Nothing --label
@@ -91,7 +113,14 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
   S "represents the", ch shrStress, S "intercept of the fitted line"]
 
 --
+------------- New Chunck -----------
+effStress_new :: TheoryModel
+effStress_new = tm' (cw effStress)
+  (tc' "effStress_new" [qw normStress, qw porePressure] 
+  ([] :: [ConceptChunk])
+  [] [TCon Invariant effS_rel] []) "effStress" [effS_desc]
 
+------------------------------------
 effStress :: RelationConcept
 effStress = makeRC "effStress"
   (nounPhraseSP "effective stress") effS_desc effS_rel Nothing --label
@@ -114,6 +143,14 @@ effS_desc = foldlSent [ch normStress, S "is the total", phrase stress,
   phrase stress, ch porePressure]
 
 --
+------------- New Chunck -----------
+hookesLaw_new :: TheoryModel
+hookesLaw_new = tm' (cw hookesLaw)
+  (tc' "effStress_new" [qw genForce, qw stffness, qw genDisplace] 
+  ([] :: [ConceptChunk])
+  [] [TCon Invariant hksLw_rel] []) "hookesLaw" [hksLw_desc]
+
+------------------------------------
 hookesLaw :: RelationConcept
 hookesLaw = makeRC "hookesLaw"
   (nounPhraseSP "Hooke's law") hksLw_desc hksLw_rel

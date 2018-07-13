@@ -256,7 +256,7 @@ aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
 
 annealedGl    = cc annealedGlass
   ("A flat, monolithic, glass lite which has uniform thickness where the " ++
-    "residual surface stresses are almost zero, as defined in [5]." {-astm_C1036-})
+    "residual surface stresses are almost zero, as defined in [3]." {-astm2016-})
 aspectRatio   = cc aR
   ("The ratio of the long dimension of the glass to the short dimension of " ++
     "the glass. For glass supported on four sides, the aspect ratio is " ++
@@ -271,7 +271,7 @@ blastResisGla = dcc "blastResisGla"    (nounPhraseSP "blast resistant glazing")
     "by explosions.")
 blastTy       = dcc "blastTy"     (nounPhraseSP "blast type")
   ("The blast type input includes parameters like weight of charge, TNT " ++
-    "equivalent factor and stand off distance from the point of explosion.")
+    "equivalent factor, and stand off distance from the point of explosion.")
 bomb          = dcc "bomb"        (nounPhraseSP "bomb") ("a container filled " ++
   "with a destructive substance designed to exlode on impact or via detonation")
 capacity      = dcc "capacity"    (nounPhraseSP "capacity")
@@ -287,7 +287,7 @@ fTemperedGl   = cc fullyTGlass
   ("A flat, monolithic, glass lite of uniform thickness that has been " ++
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 69 MPa (10 000 psi) or the edge " ++
-    "compression not less than 67 MPa (9700 psi), as defined in [6]." {-astm_C1048-})
+    "compression not less than 67 MPa (9700 psi), as defined in [2]." {-astm2012-})
 glassGeo      = dccWDS "glassGeo"    (nounPhraseSP "glass geometry")
   (S "The glass geometry based inputs include the dimensions of the" +:+ 
     phrase glaPlane `sC` phrase glassTy `sC` S "and" +:+.  phrase responseTy)
@@ -306,7 +306,7 @@ hStrengthGl   = cc heatSGlass
   ("A flat, monolithic, glass lite of uniform thickness that has been " ++
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 24 MPa (3500psi) or greater " ++
-    "than 52 MPa (7500 psi), as defined in [6]." {-astm_C1048-})
+    "than 52 MPa (7500 psi), as defined in [2]." {-astm2012-})
 lateral       = dcc "lateral"     (nounPhraseSP "lateral") 
   "Perpendicular to the glass surface."
 lite          = dcc "lite"        (cn' "lite")
@@ -317,10 +317,10 @@ load          = dcc "load"        (nounPhraseSP "load")
 loadResis     = cc lResistance
   ("The uniform lateral load that a glass construction can sustain based " ++
     "upon a given probability of breakage and load duration as defined in " ++
-    "[4 (pg. 1, 53)], following A2 and A1 respectively." {-astm_LR2009-})
+    "[1 (pg. 1, 53)], following A2 and A1 respectively." {-astm2009-})
 loadShareFac  = cc' lShareFac
   (foldlSent [S "A multiplying factor derived from the load sharing between the",
-  S "double glazing, of equal or different thickness's and types (including the",
+  S "double glazing, of equal or different thicknesses and types (including the",
   S "layered behaviour of", (getAcc lGlass), S "under long duration",
   S "loads), in a sealed", (getAcc iGlass), S "unit"])
 longDurLoad   = dcc "longDurLoad"        (nounPhraseSP "long duration load")

@@ -1,9 +1,9 @@
-module Drasil.SSP.GenDefs (sspGenDefs) where
+module Drasil.SSP.GenDefs (sspGenDefs, normForcEq, bsShrFEq, resShr, mobShr,
+  normShrR, momentEql, netForcex, netForcey, hookesLaw2d, displVect, generalDefinitions) where
 
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
-
-import Drasil.DocumentLanguage.RefHelpers (refA)
+import Drasil.DocLang (refA)
 
 import Drasil.SSP.Assumptions (newA5, sspRefDB)
 import Drasil.SSP.BasicExprs (displMtx, eqlExpr, momExpr, rotMtx)
@@ -29,11 +29,22 @@ import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 import Data.Drasil.SentenceStructures (acroGD, acroT, foldlSent, getTandS, 
   isThe, ofThe, sAnd)
 
-import Drasil.SRS as SRS (physSyst, missingP, physSystLabel)
+import Drasil.DocLang.SRS as SRS (physSyst, missingP, physSystLabel)
 
 ---------------------------
 --  General Definitions  --
 ---------------------------
+generalDefinitions :: [GenDefn]
+generalDefinitions = [gd' normForcEq (Nothing :: Maybe DerUChunk) ([] :: Derivation) "normForcEq" [nmFEq_desc],
+  gd' bsShrFEq (Nothing :: Maybe DerUChunk) ([] :: Derivation) "bsShrFEq" [bShFEq_desc],
+  gd' resShr (Nothing :: Maybe DerUChunk) ([] :: Derivation) "resShr" [resShr_desc],
+  gd' mobShr (Nothing :: Maybe DerUChunk) ([] :: Derivation) "mobShr" [mobShr_desc],
+  gd' normShrR (Nothing :: Maybe DerUChunk) ([] :: Derivation) "normShrR" [nmShrR_desc],
+  gd' momentEql (Nothing :: Maybe DerUChunk) ([] :: Derivation) "momentEql" [momEql_desc],
+  gd netForcex (Nothing :: Maybe DerUChunk) ([] :: Derivation) "netForcex",
+  gd' netForcey (Nothing :: Maybe DerUChunk) ([] :: Derivation) "netForcey" [fNet_desc],
+  gd' hookesLaw2d (Nothing :: Maybe DerUChunk) ([] :: Derivation) "hookesLaw2d" [hooke2d_desc],
+  gd' displVect (Nothing :: Maybe DerUChunk) ([] :: Derivation) "displVect" [disVec_desc]]
 
 sspGenDefs :: [RelationConcept]
 sspGenDefs = [normForcEq, bsShrFEq, resShr, mobShr,
@@ -153,7 +164,6 @@ nmShrR_desc = foldlSent [S "The", phrase assumption,
   S "is typically either a half-sine along the", phrase slpSrf `sC`
   S "or a constant"]
 
---
 momentEql :: RelationConcept
 momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")
   momEql_desc momEql_rel Nothing --label 

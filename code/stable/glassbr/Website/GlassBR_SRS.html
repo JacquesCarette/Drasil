@@ -738,7 +738,7 @@ Unlikely Change
 Introduction
 </h1>
 <p class="paragraph">
-Software is helpful to efficiently and correctly predict the blast risk involved with the glass slab. The blast under consideration is any kind of man-made explosion. The software, herein called GlassBR aims to predict the blast risk involved with the glass slab using an intuitive interface.
+Software is helpful to efficiently and correctly predict the blast risk involved with the glass slab. The blast under consideration is any kind of man-made explosion. The software, herein called GlassBR, aims to predict the blast risk involved with the glass slab using an intuitive interface.
 </p>
 <p class="paragraph">
 The following section provides an overview of the Software Requirements Specification (SRS) for GlassBR. This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
@@ -772,7 +772,7 @@ The scope of the requirements includes getting all input parameters related to t
 Characteristics of Intended Reader
 </h2>
 <p class="paragraph">
-Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering.In addition, reviewers should be familiar with the applicable standards for constructions using glass from [4-6] in <a href=#Sec:References>References</a>. The users of GlassBR can have a lower level of expertise, as explained in <a href=#Sec:UserChars>User Characteristics</a>.
+Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering. In addition, reviewers should be familiar with the applicable standards for constructions using glass from [1-3] in <a href=#Sec:References>References</a>. The users of GlassBR can have a lower level of expertise, as explained in <a href=#Sec:UserChars>User Characteristics</a>.
 </p>
 </div>
 </div>
@@ -911,7 +911,7 @@ Use Case Table
 Individual Product Use Cases
 </h2>
 <p class="paragraph">
-The user provides the inputs to GlassBR for use within the analysis. There are two main classes of inputs: glass geometry and blast type. The glass geometry based inputs include the glass type and dimensions of the glass plane. The blast type input includes parameters like weight of charge, TNT equivalent factor and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage. GlassBR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (<em>P<sub>b</sub></em>) is less than the tolerable probability (<em>P<sub>btol</sub></em>) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
+The user provides the inputs to GlassBR for use within the analysis. There are two main classes of inputs: glass geometry and blast type. The glass geometry based inputs include the glass type and dimensions of the glass plane. The blast type input includes parameters like weight of charge, TNT equivalent factor, and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage. GlassBR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (<em>P<sub>b</sub></em>) is less than the tolerable probability (<em>P<sub>btol</sub></em>) which is obtained from the user as an input. If both conditions return true, then it's shown that the glass slab is safe to use, else if both return false, then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
 </p>
 </div>
 </div>
@@ -931,7 +931,7 @@ This section first presents the problem description, which gives a high-level vi
 Problem Description
 </h2>
 <p class="paragraph">
-A system is needed to efficiently and correctly predict the blast risk involved with the glass. GlassBR is a computer program developed to interpret the inputs to give out the outputs which predicts whether the glass slab can withstand the blast under the conditions.
+A system is needed to efficiently and correctly predict the blast risk involved with the glass. GlassBR is a computer program developed to interpret the inputs to give out the outputs which predict whether the glass slab can withstand the blast under the conditions.
 </p>
 <div id="Sec:TermDefs">
 <div class="subsubsection">
@@ -939,7 +939,7 @@ A system is needed to efficiently and correctly predict the blast risk involved 
 Terminology and Definitions
 </h3>
 <p class="paragraph">
-This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from [4] in <a href=#Sec:References>References</a>.
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from [1] in <a href=#Sec:References>References</a>.
 </p>
 <ol class="list">
 <li>
@@ -964,13 +964,13 @@ Equivalent TNT charge mass - Mass of TNT placed on the ground in a hemisphere th
 Glass Type:
 <ul class="list">
 <li>
-Annealed glass (AN) - A flat, monolithic, glass lite which has uniform thickness where the residual surface stresses are almost zero, as defined in [5].
+Annealed glass (AN) - A flat, monolithic, glass lite which has uniform thickness where the residual surface stresses are almost zero, as defined in [3].
 </li>
 <li>
-Fully tempered glass (FT) - A flat, monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 69 MPa (10 000 psi) or the edge compression not less than 67 MPa (9700 psi), as defined in [6].
+Fully tempered glass (FT) - A flat, monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 69 MPa (10 000 psi) or the edge compression not less than 67 MPa (9700 psi), as defined in [2].
 </li>
 <li>
-Heat strengthened glass (HS) - A flat, monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 24 MPa (3500psi) or greater than 52 MPa (7500 psi), as defined in [6].
+Heat strengthened glass (HS) - A flat, monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 24 MPa (3500psi) or greater than 52 MPa (7500 psi), as defined in [2].
 </li>
 </ul>
 </li>
@@ -978,7 +978,7 @@ Heat strengthened glass (HS) - A flat, monolithic, glass lite of uniform thickne
 Load:
 <ul class="list">
 <li>
-Load resistance (LR) - The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in [4 (pg. 1, 53)], following A2 and A1 respectively.
+Load resistance (LR) - The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in [1 (pg. 1, 53)], following A2 and A1 respectively.
 </li>
 <li>
 Non-factored load (NFL) - Three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass.
@@ -1001,7 +1001,7 @@ Long duration load - Any load lasting approximately 30 days.
 Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge. It is represented by the coordinates (<em>SD<sub>x</sub></em>, <em>SD<sub>y</sub></em>, <em>SD<sub>z</sub></em>).
 </li>
 <li>
-Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thickness's and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.
+Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thicknesses and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.
 </li>
 <li>
 Glass type factor (GTF) - A multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions.
@@ -1025,7 +1025,7 @@ The physical system of GlassBR, as shown in <a href=#Figure:physSystImage>Figure
 </p>
 <div class="list">
 <p>
-PS1: Glass slab
+PS1: The glass slab.
 </p>
 <p>
 PS2: The point of explosion. Where the bomb, or any kind of man-made explosion, is located. The stand off distance is the distance between the point of explosion and the glass.
@@ -1103,14 +1103,14 @@ StandardValues: The values provided in <a href=#Sec:AuxConstants>Values of Auxil
 <ul class="hide-list-style">
 <li>
 <div id="A:glassLiteA">
-glassLite: Glass under consideration is assumed to be a single lite. Hence the value of LSF is equal to 1 for all calculations in GlassBR.
+glassLite: Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:bndryConditionsA">
-boundaryConditions: Boundary conditions for the glass slab is assumed to be 4-sided support for calculations.
+boundaryConditions: Boundary conditions for the glass slab are assumed to be 4-sided support for calculations.
 </div>
 </li>
 </ul>
@@ -1124,7 +1124,7 @@ responseType: The response type considered in GlassBR is flexural.
 <ul class="hide-list-style">
 <li>
 <div id="A:ldfConstantA">
-ldfConstant: With reference to <a href=#A:standardValuesA>StandardValues</a> the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. It is calculated by the equation: <em>LDF = (<div class="fraction">
+ldfConstant: With reference to <a href=#A:standardValuesA>StandardValues</a>, the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. It is calculated by the equation: <em>LDF = (<div class="fraction">
 <span class="fup">
 t<sub>d</sub>
 </span>
@@ -1432,7 +1432,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-[4]
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1594,7 +1594,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1707,7 +1707,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1813,7 +1813,7 @@ Notes
 <em>t</em> is the true thickness, which is based on the nominal thicknesses as shown in DD2.
 </p>
 <p class="paragraph">
-<em>q&#770;<sub>tol</sub></em> is the tolerable pressure defined in DD8.
+<em>q&#770;<sub>tol</sub></em> is the tolerable load defined in DD8.
 </p>
 </td>
 </tr>
@@ -1823,7 +1823,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1923,7 +1923,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2045,7 +2045,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2142,7 +2142,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>q&#770;<sub>tol</sub></em> is the tolerable pressure which is obtained from Figure 7 using <em>J<sub>tol</sub></em> and aspect ratio (<em>AR = <div class="fraction">
+<em>q&#770;<sub>tol</sub></em> is the tolerable load which is obtained from Figure 7 using <em>J<sub>tol</sub></em> and aspect ratio (<em>AR = <div class="fraction">
 <span class="fup">
 a
 </span>
@@ -2159,7 +2159,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2297,7 +2297,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2412,7 +2412,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2528,7 +2528,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>LR</em> is the load resistance, which is also called capacity. <em>NFL</em> is the non-factored load. <em>GTF</em> is the glass type factor. <em>LSF</em> is the load share factor. Follows <a href=#A:glassConditionA>glassCondition</a> and <a href=#A:glassTyA>glassTy</a> (&quot;In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations&quot;) from [4 (pg. 53)].
+<em>LR</em> is the load resistance, which is also called capacity. <em>NFL</em> is the non-factored load. <em>GTF</em> is the glass type factor. <em>LSF</em> is the load share factor. Follows <a href=#A:glassConditionA>glassCondition</a> and <a href=#A:glassTyA>glassTy</a> (&quot;In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations&quot;) from [1 (pg. 53)].
 </p>
 </td>
 </tr>
@@ -2538,7 +2538,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2661,7 +2661,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2780,11 +2780,18 @@ Description
 </tr>
 <tr>
 <th>
+Notes
+</th>
+<td>
+</td>
+</tr>
+<tr>
+<th>
 Source
 </th>
 <td>
 <p class="paragraph">
-
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>

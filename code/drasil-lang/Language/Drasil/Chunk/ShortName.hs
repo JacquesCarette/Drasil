@@ -1,4 +1,3 @@
-{-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.ShortName where
 
 import Control.Lens (Lens')

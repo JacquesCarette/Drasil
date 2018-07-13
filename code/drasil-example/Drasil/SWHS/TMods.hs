@@ -1,5 +1,6 @@
-module Drasil.SWHS.TMods (tModels, t1ConsThermE, 
-  swhsTMods, tMod1, swhsTModsAsLCs, tMod1LC) where
+module Drasil.SWHS.TMods (tModels, t1ConsThermE, swhsTMods, tMod1,
+  swhsTModsAsLCs, tMod1LC, t1ConsThermE_new, t2SensHtE_new, 
+  t2SensHtE, t3LatHtE_new) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -40,6 +41,13 @@ swhsTModsAsLCs = [tMod1LC] ++
 -------------------------
 -- Theoretical Model 1 --
 -------------------------
+--s4_2_2_T1
+------------- New Chunck -----------
+t1ConsThermE_new :: TheoryModel
+t1ConsThermE_new = tm' t1ConsThermE
+  (tc' "ConsThermE_new" [qw thFluxVect, qw gradient, qw vol_ht_gen, 
+    qw density, qw heat_cap_spec, qw temp, qw time] ([] :: [ConceptChunk])
+  [] [TCon Invariant consThermERel] []) "t1ConsThermE" [t1descr]
 
 tMod1LC :: LabelledContent
 tMod1LC = llcc "tMod1LC" (mkLabelRA'' "tMod1Label") tMod1
@@ -80,6 +88,11 @@ t1descr = foldlSent [
 -------------------------
 -- Theoretical Model 2 --
 -------------------------
+t2SensHtE_new :: TheoryModel
+t2SensHtE_new = tm' t2SensHtE
+  (tc' "SensHtE_new" [qw sens_heat, qw htCap_S, qw mass, 
+    qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [ConceptChunk])
+  [] [TCon Invariant sensHtEEqn] []) "t2SensHtE" [t2descr]
 
 tMod2 :: Contents
 tMod2 = reldefn t2SensHtE
@@ -136,6 +149,10 @@ t2descr = foldlSent [
 -------------------------
 -- Theoretical Model 3 --
 -------------------------
+t3LatHtE_new :: TheoryModel
+t3LatHtE_new = tm' t3LatHtE
+  (tc' "SensHtE_new" [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
+  [] [TCon Invariant latHtEEqn] []) "t3LatHtE" [t3descr]
 
 tMod3 :: Contents
 tMod3 = reldefn t3LatHtE

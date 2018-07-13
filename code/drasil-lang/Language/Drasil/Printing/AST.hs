@@ -3,7 +3,7 @@ module Language.Drasil.Printing.AST where
 import Language.Drasil.Development.UnitLang (USymb)
 import Language.Drasil.RefTypes (RefType, RefAdd)
 import Language.Drasil.Unicode (Special)
-import Language.Drasil.Chunk.ShortName
+import Language.Drasil.Chunk.ShortName (ShortName)
 
 data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime | Log
   | Sin | Cos | Tan | Sec | Csc | Cot | Not | Dim | Exp | Neg | Cross
@@ -14,6 +14,7 @@ data Fence = Paren | Curly | Norm | Abs
 data OverSymb = Hat
 data Fonts = Bold | Emph
 data Spacing = Thin
+type Label = Spec
 
 data Expr = Dbl   Double
           | Int   Integer
@@ -49,11 +50,11 @@ data Spec = E Expr
                           -- so it's not really a big deal ATM.
 type Title    = Spec
 
-data ListType = Ordered [ItemType] 
-              | Unordered [ItemType]
-              | Simple      [(Title,ItemType)]
-              | Desc        [(Title,ItemType)]
-              | Definitions  [(Title,ItemType)]
+data ListType = Ordered [(ItemType,Maybe Label)]
+              | Unordered [(ItemType,Maybe Label)]
+              | Simple      [(Title,ItemType,Maybe Label)]
+              | Desc        [(Title,ItemType,Maybe Label)]
+              | Definitions  [(Title,ItemType,Maybe Label)]
 
 data ItemType = Flat Spec
               | Nested Spec ListType

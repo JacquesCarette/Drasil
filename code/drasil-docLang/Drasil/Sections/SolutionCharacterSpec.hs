@@ -31,7 +31,7 @@ import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTb
 
 import Drasil.Sections.GeneralSystDesc(genSysIntro)
 
-import qualified Drasil.SRS as SRS
+import qualified Drasil.DocLang.SRS as SRS
 
 data SecItem where 
   Cont      :: [Contents] -> SecItem
@@ -522,6 +522,7 @@ dataConstraintIntroSent tableRef = foldlSent [(listofTablesToRefs tableRef),
   plural Doc.constraint, S "gives the", phrase Doc.physical, 
   plural Doc.limitation, S "on the range of", plural Doc.value, 
   S "that can be taken by the", phrase Doc.variable]
+
 
 dataConstraintClosingSent :: [Sentence] -> Sentence
 dataConstraintClosingSent trailing = (foldlSent

@@ -2,7 +2,7 @@ module Drasil.SWHS.Assumptions where --all of this file is exported
 
 import Language.Drasil
 import Control.Lens ((^.))
-import Drasil.SWHS.References (s9_swhs_citations)
+import Drasil.SWHS.References (ref_swhs_citations)
 
 import Data.Drasil.Concepts.Documentation (system, simulation, model, 
   problem)
@@ -33,7 +33,7 @@ import Data.Drasil.SentenceStructures (acroGD, acroIM, foldlSent, ofThe,
 -- 4.2.1 : Assumptions --
 -------------------------
 swhsRefDB :: ReferenceDB
-swhsRefDB = rdb [] [] newAssumptions [] [] s9_swhs_citations []
+swhsRefDB = rdb [] [] newAssumptions [] [] ref_swhs_citations []
 
 newAssumptions :: [AssumpChunk]
 newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10,

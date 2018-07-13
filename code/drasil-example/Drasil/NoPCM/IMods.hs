@@ -58,7 +58,7 @@ balWtrDesc_note = foldlSent [S "The above", phrase equation, S "applies as long 
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively",
-  sParen (makeRef assump10)]
+  sParen (makeRef assump10Label)]
   
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --
@@ -95,7 +95,7 @@ s4_2_3_desc1_nopcm roc tw en wt vo wvo ms wms hcs hw ht hfc cs tk ass11 ass12 vh
 
 s4_2_3_desc2_nopcm :: QDefinition -> [Sentence]
 s4_2_3_desc2_nopcm dd1HtFluxC =
-  [S "Using", makeRef $ datadefn dd1HtFluxC, S ", this can be written as"]
+  [S "Using", makeRef dd1HtFluxC, S ", this can be written as"]
 
 s4_2_3_desc3_nopcm :: Expr-> [Sentence]
 s4_2_3_desc3_nopcm eq11 = [S "Dividing (3) by", (E eq11) `sC` S "we obtain"]
@@ -128,4 +128,3 @@ s4_2_3_eq4_nopcm =
 
 eBalanceOnWtr_deriv_eqns_nopcm :: [Expr]
 eBalanceOnWtr_deriv_eqns_nopcm = [s4_2_3_eq1_nopcm, s4_2_3_eq2_nopcm, s4_2_3_eq3_nopcm, s4_2_3_eq4_nopcm]
->>>>>>> master

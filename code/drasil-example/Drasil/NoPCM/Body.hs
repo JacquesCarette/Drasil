@@ -73,7 +73,7 @@ import Drasil.DocLang {--(DocDesc,
   RefSec(RefProg), RefTab(TAandA, TUnits), 
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty, 
   inDataConstTbl, intro, mkDoc, mkLklyChnk, mkRequirement, mkUnLklyChnk, 
-  outDataConstTbl, physSystDesc, reqF, solChSpecF, specSysDesF, termDefnF, 
+  outDataConstTbl, physSystDesc, reqF, specSysDesF, termDefnF, 
   traceGIntro, traceMGF, tsymb, valsOfAuxConstantsF)--}
  
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
@@ -508,7 +508,7 @@ genDefnDesc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
   ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
   acroGD 2, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
-  titleize' assumption, (foldlList $ (map (\d -> sParen (makeRef (find' d npcmAssumptions))))
+  titleize' assumption, (foldlList $ (map (\d -> sParen (makeRef assumps_Nopcm_list_new)))
   assumps) `sC` S "we have"]
 
 genDefnDesc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]
@@ -570,8 +570,8 @@ iModDesc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin a11 vhg a12 =
   `sC` S "over area") +:+. ch csa, S "No",
   phrase ht, S "occurs to", (S "outside" `ofThe`
   phrase ta) `sC` S "since it has been assumed to be",
-  phrase purin +:+. sParen (makeRef (find' a11 npcmAssumptions)), S "Assuming no",
-  phrase vhg +:+. (sParen (makeRef (find' a12 npcmAssumptions)) `sC`
+  phrase purin +:+. sParen (makeRef newA11), S "Assuming no",
+  phrase vhg +:+. (sParen (makeRef newA12) `sC`
   E (sy vhg $= 0)), S "Therefore, the", phrase M.equation, S "for",
   acroGD 2, S "can be written as"]
 
@@ -687,8 +687,10 @@ funcReqsListItems = [
   -- phrase simulation, phrase time +:+. sParen (S "from" +:+ acroIM 3)]
   -- ]
 
-funcReqsListWordsNum :: [Contents]
-funcReqsListWordsNum = [req1, req2, req3, req4, req5, req6] 
+-- FIXME: these contents should be converted to become reqchunks
+funcReqsListWordsNum :: [LabelledContent]
+funcReqsListWordsNum = map (\x -> llcc (x ^. uid ++ "LC") (mkLabelRA'' (x ^. uid ++ "Label") x))
+  [req1, req2, req3, req4, req5, req6] 
 
 req1, req2, req3, req4, req5, req6 :: Contents
 
@@ -736,8 +738,9 @@ req6 = mkRequirement "req6" (
 
 likelyChgs = SRS.likeChg likelyChgsList []
 
-likelyChgsList :: [Contents]
-likelyChgsList = [likeChg2, likeChg3, likeChg3_npcm, likeChg6]
+likelyChgsList :: [LabelledContent] --FIXME: this can be removed by implementin NoPCM's LCs as the correct chunk ()
+likelyChgsList = map (\x -> llcc (x ^. uid ++ "LC") (mkLabelRA'' (x ^. uid ++ "Label")) x)
+  [likeChg2, likeChg3, likeChg3_npcm, likeChg6]
 
 -- likeChg1, likeChg2, likeChg3, likeChg4 :: Contents
 
@@ -754,7 +757,7 @@ likelyChgsList = [likeChg2, likeChg3, likeChg3_npcm, likeChg6]
   -- []) EmptyS
 likeChg3_npcm :: Contents
 likeChg3_npcm = mkLklyChnk "likeChg3" (
-  (makeRef (find' assump9_npcm npcmAssumptions)) :+: S "- The" +:+ phrase model +:+
+  (makeRef newA9NoPCM) :+: S "- The" +:+ phrase model +:+
   S "currently only accounts for charging of the tank. That is, increasing the" +:+ phrase temp +:+
   S "of the water to match the" +:+ phrase temp +:+ S "of the coil. A more complete"  
   +:+ phrase model +:+. S "would also account for discharging of the tank") "Discharging-Tank"
@@ -812,10 +815,9 @@ unlikeChg2 = mkUnLklyChnk "unlikeChg2" (
 ----------------------------------------------
 
 traceMAndG = traceMGF traceRefList traceTrailing
-  ([traceTable1, traceTable2, traceTable3] ++
-  (traceIntro2) ++ [traceFig1, traceFig2]) []
+  (traceRefList ++ [traceIntro2] ++ [traceFig1, traceFig2]) []
 
-traceRefList :: [Contents]
+traceRefList :: [LabelledContent]
 traceRefList = [traceTable1, traceTable2, traceTable3]
 
 traceInstaModel, traceData, traceFuncReq, traceLikelyChg, traceDataDefs, traceGenDefs,
@@ -824,19 +826,17 @@ traceDataRef, traceFuncReqRef, traceInstaModelRef, traceAssumpRef, traceTheories
   traceDataDefRef, traceLikelyChgRef, traceGenDefRef :: [Sentence]
 
 traceInstaModel = ["IM1", "IM2"]
-traceInstaModelRef = map makeRef [eBalanceOnWtr,
-  heatEInWtr]
+traceInstaModelRef = map makeRef [eBalanceOnWtr, heatEInWtr]
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-traceFuncReqRef = map (\x -> (makeRef (find' x funcReqsListWordsNum)))
-  funcReqsListWordsNum--makeListRef s7_funcReq s5_1
+traceFuncReqRef = map makeRef funcReqsListWordsNum
 
 traceData = ["Data Constraints"]
 traceDataRef = [makeRef dataConstTable1] --FIXME: Reference section?
 
 traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14"]
-traceAssumpRef = map (\x -> (makeRef (find' x npcmAssumptions))) npcmAssumptions--makeListRef s7_assump (SRS.inModel SRS.missingP [])
+traceAssumpRef = map makeRef assumps_Nopcm_list_new
 
 traceTheories = ["T1"]
 traceTheoriesRef = map makeRef [t1ConsThermE]
@@ -848,7 +848,7 @@ traceDataDefs = ["DD1"]
 traceDataDefRef = map makeRef [dd1HtFluxC]
 
 traceLikelyChg = ["LC1", "LC2", "LC3", "LC4"]
-traceLikelyChgRef = map (\x -> (makeRef (find' x likelyChgsList))) likelyChgsList--makeListRef s7_likelyChg s6
+traceLikelyChgRef = map makeRef likelyChgsList
 
 {-Traceability Matrix 1-}
 
@@ -873,8 +873,9 @@ trace1DD1 = ["GD1"]
 trace1IM1 = ["GD2", "DD1"]
 trace1IM2 = []
 
-traceTable1 :: Contents
-traceTable1 = Table (EmptyS : traceRowHeader1)
+traceTable1 :: LabelledContent
+traceTable1 = llcc "TraceyRI" (mkLabelRA'' "TraceyRILabel") $
+  Table (EmptyS : traceRowHeader1)
   (makeTMatrix (traceRowHeader1) (traceColumns1) (traceRow1))
   (showingCxnBw traceyMatrix
   (titleize' requirement `sAnd` titleize' inModel)) True "TraceyRI"
@@ -911,8 +912,9 @@ trace2R4 = ["R1", "R2", "IM1"]
 trace2R5 = ["IM1"]
 trace2R6 = ["IM2"]
 
-traceTable2 :: Contents
-traceTable2 = Table (EmptyS : traceRowHeader2)
+traceTable2 :: LabelledContent
+traceTable2 = llcc "TraceyRIs" (mkLabelRA'' "TraceyRIsLabel") $ 
+  Table (EmptyS : traceRowHeader2)
   (makeTMatrix (traceColHeader2) (traceColumns2) (traceRow2))
   (showingCxnBw traceyMatrix
   (titleize' requirement `sAnd` titleize' inModel)) True "TraceyRIs"
@@ -948,8 +950,9 @@ trace3LC2 = ["A8"]
 trace3LC3 = ["A9"]
 trace3LC4 = ["A11"]
 
-traceTable3 :: Contents
-traceTable3 = Table (EmptyS : traceRowHeader3)
+traceTable3 :: LabelledContent
+traceTable3 = llcc "TraceyAI" (mkLabelRA'' "TraceyAILabel") $ 
+  Table (EmptyS : traceRowHeader3)
   (makeTMatrix traceColHeader3 traceColumns3 traceRow3)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+
   titleize' item)) True "TraceyAI"

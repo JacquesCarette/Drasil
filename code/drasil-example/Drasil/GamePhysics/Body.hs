@@ -10,7 +10,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   IntroSub(..), RefSec(..), RefTab(..), SCSSub(..), SSDSec(SSDProg), 
   SSDSub(SSDSubVerb, SSDSolChSpec), SolChSpec(SCSProg), SubSec, TConvention(..), 
   TSIntro(..), Verbosity(Verbose), assembler, dataConstraintUncertainty, 
-  inDataConstTbl, intro, mkDoc, outDataConstTbl, reqF, sSubSec, siCon, siDDef, 
+  inDataConstTbl, intro, mkDoc, outDataConstTbl, reqF, sSubSec, siCon, siLC, siDDef, 
   siIMod, siSTitl, siSent, siTMod, siUQI, siUQO, specSysDescr, traceMGF, tsymb, 
   valsOfAuxConstantsF)
 
@@ -39,7 +39,7 @@ import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs)
 import Drasil.GamePhysics.IMods (iModels, im1_new, im2_new, im3_new)
 import Drasil.GamePhysics.References (cpCitations)
 import Drasil.GamePhysics.TMods (cpTMods, t1NewtonSL_new, t2NewtonTL_new, 
-  t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new)
+  t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, cpTMods_new)
 import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
   inputSymbols, outputSymbols, cpInputConstraints, gamephySymbols)
 
@@ -135,13 +135,13 @@ newAssumptions :: [AssumpChunk]
 newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7]
 
 newA1, newA2, newA3, newA4, newA5, newA6, newA7 :: AssumpChunk
-newA1 = assump "objectTyA" (foldlSent assumptions_assum1) "objectTy"
-newA2 = assump "objectDimensionA" (foldlSent assumptions_assum2) "objectDimension"
-newA3 = assump "coordinatesystemTyA" (foldlSent assumptions_assum3) "coordinatesystemTy"
-newA4 = assump "axesDefinedA" (foldlSent assumptions_assum4) "axesDefined"
-newA5 = assump "collisionTypeA" (foldlSent assumptions_assum5) "collisionType"
-newA6 = assump "dampingInvolvementA" (foldlSent assumptions_assum6) "dampingInvolvement"
-newA7 = assump "constraints_and_jointsInvolvementA" (foldlSent assumptions_assum7) "constraints_and_jointsInvolvement"
+newA1 = assump "objectTyA" (foldlSent assumptions_assum1) (mkLabelRA'' "objectTy")
+newA2 = assump "objectDimensionA" (foldlSent assumptions_assum2) (mkLabelRA'' "objectDimension")
+newA3 = assump "coordinatesystemTyA" (foldlSent assumptions_assum3) (mkLabelRA'' "coordinatesystemTy")
+newA4 = assump "axesDefinedA" (foldlSent assumptions_assum4) (mkLabelRA'' "axesDefined")
+newA5 = assump "collisionTypeA" (foldlSent assumptions_assum5) (mkLabelRA'' "collisionType")
+newA6 = assump "dampingInvolvementA" (foldlSent assumptions_assum6) (mkLabelRA'' "dampingInvolvement")
+newA7 = assump "constraints_and_jointsInvolvementA" (foldlSent assumptions_assum7) (mkLabelRA'' "constraints_and_jointsInvolvement")
 --FIXME: All named ideas, not just acronyms.
 
 chipUnits :: [UnitDefn]
@@ -256,8 +256,8 @@ sysContext :: SubSec
 sysContext = sSubSec sysCont [siSTitl, (siCon [sysCtxIntro, sysCtxFig1,
   sysCtxDesc, sysCtxList])]
 
-sysCtxIntro :: Contents
-sysCtxIntro = foldlSP
+sysCtxIntro :: LabelledContent
+sysCtxIntro = llcc "sysCtxIntroCP" (mkLabelRA'' "sysCtxIntroLabelCP") $ foldlSP
   [makeRef sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
    `sC` S "the", phrase user, S "in this case. A rectangle represents the",
@@ -265,11 +265,12 @@ sysCtxIntro = foldlSP
    S "Arrows are used to show the data flow between the" +:+ phrase system,
    S "and its" +:+ phrase environment]
 
-sysCtxFig1 :: Contents
-sysCtxFig1 = fig (titleize sysCont) (resourcePath ++ "sysctx.png") "sysCtxDiag"
+sysCtxFig1 :: LabelledContent
+sysCtxFig1 = llcc "sysCtxDiag" (mkLabelRA'' "sysCtxDiagLabel") $ 
+  fig (titleize sysCont) (resourcePath ++ "sysctx.png") "sysCtxDiag"
 
-sysCtxDesc :: Contents
-sysCtxDesc = foldlSPCol
+sysCtxDesc :: LabelledContent
+sysCtxDesc = llcc "sysCtxDescCP" (mkLabelRA'' "sysCtxDescCPLabel") $ foldlSPCol
   [S "The interaction between the", phrase product_, S "and the", phrase user,
    S "is through an application programming" +:+. phrase interface,
    S "The responsibilities of the", phrase user, S "and the", phrase system,
@@ -301,9 +302,9 @@ sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
   short chipmunk +:+ S "Responsibilities"]
 
-sysCtxList :: Contents
-sysCtxList = Enumeration $ bulletNested sysCtxResp $
-  map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
+sysCtxList :: LabelledContent
+sysCtxList = llcc "sysCtxList" (mkLabelRA'' "sysCtxListLabel") $ 
+  Enumeration $ bulletNested sysCtxResp $ map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
 
 --------------------------------
 -- 3.2 : User Characteristics --
@@ -722,7 +723,7 @@ traceMatInstaModel = ["IM1", "IM2", "IM3"]
 traceMatInstaModelRef = map makeRef iModels
 
 traceMatTheoryModel = ["T1", "T2", "T3", "T4", "T5"]
-traceMatTheoryModelRef = map makeRef cpTMods
+traceMatTheoryModelRef = map makeRef cpTMods_new
 
 traceMatDataDef = ["DD1","DD2","DD3","DD4","DD5","DD6","DD7","DD8"]
 traceMatDataDefRef = map makeRef cpDDefs
@@ -783,8 +784,9 @@ traceMatTabReqGoalOtherCol = [traceMatTabReqGoalOtherGS1, traceMatTabReqGoalOthe
   traceMatTabReqGoalOtherReq5, traceMatTabReqGoalOtherReq6, traceMatTabReqGoalOtherReq7,
   traceMatTabReqGoalOtherReq8]
 
-traceMatTabReqGoalOther :: Contents
-traceMatTabReqGoalOther = Table (EmptyS:(traceMatTabReqGoalOtherRowHead))
+traceMatTabReqGoalOther :: LabelledContent
+traceMatTabReqGoalOther = llcc "TraceyReqGoalsOther" (mkLabelRA'' "TraceyReqGoalsOtherLabel") $ 
+  Table (EmptyS:(traceMatTabReqGoalOtherRowHead))
   (makeTMatrix traceMatTabReqGoalOtherColHead traceMatTabReqGoalOtherCol
   traceMatTabReqGoalOtherRow)
   (showingCxnBw (traceyMatrix) (titleize' requirement +:+ sParen (makeRef requirements)
@@ -855,8 +857,9 @@ traceMatTabAssumpRowHead = zipWith itemRefToSent traceMatTabAssumpRow
 traceMatTabAssumpColHead = zipWith itemRefToSent traceMatTabAssumpCol
   traceMatTabAssumpColRef
 
-traceMatTabAssump :: Contents
-traceMatTabAssump = Table (EmptyS:traceMatTabAssumpRowHead)
+traceMatTabAssump :: LabelledContent
+traceMatTabAssump = llcc "TraceyAssumpsOther" (mkLabelRA'' "TraceyAssumpsOtherLabel") $ 
+  Table (EmptyS:traceMatTabAssumpRowHead)
   (makeTMatrix traceMatTabAssumpColHead traceMatTabAssumpCol' traceMatTabAssumpRow)
   (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef problem_description) 
   `sAnd` S "Other" +:+ titleize' item)) True "TraceyAssumpsOther"
@@ -917,8 +920,9 @@ traceMatTabDefnModelColHead = zipWith itemRefToSent traceMatTabDefnModelRow
   traceMatTabDefnModelRowRef
 traceMatTabDefnModelRowHead = traceMatTabDefnModelColHead
 
-traceMatTabDefnModel :: Contents
-traceMatTabDefnModel = Table (EmptyS:traceMatTabDefnModelRowHead)
+traceMatTabDefnModel :: LabelledContent
+traceMatTabDefnModel = llcc "TraceyItemsSecs" (mkLabelRA'' "TraceyItemsSecsLabel") $ 
+  Table (EmptyS:traceMatTabDefnModelRowHead)
   (makeTMatrix traceMatTabDefnModelColHead traceMatTabDefnModelCol
   traceMatTabDefnModelRow) (showingCxnBw (traceyMatrix) (titleize' item `sAnd`
   S "Other" +:+ titleize' section_)) True "TraceyItemsSecs"

@@ -210,7 +210,7 @@ data ReqsSub where
 
 {--}
 
-data LCsSec = LCsVerb Section | LCsProg [Contents]
+data LCsSec = LCsVerb Section | LCsProg [LabelledContent] --FIXME:Should become [LikelyChanges]
 
 {--}
 

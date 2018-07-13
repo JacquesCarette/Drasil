@@ -56,16 +56,14 @@ import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
   coil, perfect_insul, tank, transient, gauss_div, swhs_pcm,
   phase_change_material, tank_pcm)
 import Drasil.SWHS.Assumptions (swhsRefDB, swhsAssumptions, newA3, newA4, newA5,
-  newA6, newA13, newA15, newA16, newA17, newA18, newAssumptions)
-import Drasil.SWHS.TMods (tModels, t1ConsThermE, t1ConsThermE_new,
- t2SensHtE_new, t3LatHtE_new, swhsTMods, swhsTMods, 
- swhsTModsAsLCs, tMod1LC)
+  newA6, newA13, newA15, newA16, newA17, newA18)
+import Drasil.SWHS.TMods (t1ConsThermE_new, t2SensHtE_new, 
+  t3LatHtE_new, swhsTMods, swhsTMods, swhsTModsAsLCs, tMod1LC)
 import Drasil.SWHS.IMods (heatEInWtr_new, eBalanceOnWtr_new,
   heatEInPCM_new, eBalanceOnPCM_new, swhsIMods, swhsIMods')
 import Drasil.SWHS.DataDefs (swhsDataDefs,dd1HtFluxC, dd2HtFluxP, swhsDDefs, dataDefns,
   dd1HtFluxC, dd2HtFluxP)
 import Drasil.SWHS.GenDefs (swhsGenDefs, swhsGDs, generalDefinitions)
-import Drasil.SWHS.References (ref_swhs_citations)
 import Drasil.SWHS.Requirements (req1, req2, reqEqn1, reqEqn2,
   req3, req4, req5, req6, req7, req8, req9, newReq9, req10, req11, nonFuncReqs)
 import Drasil.SWHS.Changes (likeChg1, likeChg2, likeChg3, likeChg4,
@@ -537,25 +535,14 @@ reqs = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
 likelyChgs :: Section
 likelyChgs = SRS.likeChg likelyChgsList []
 
-likelyChgsList :: [Contents]
-likelyChgsList = likeChgList 
-
-likeChgList :: [Contents]
-likeChgList = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
+-- FIXME: the lambda funciton will be removed once likely changes are converted to the correct type
+likelyChgsList :: [LabelledContent]
+likelyChgsList = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
 
 --------------------------------
 -- Section 6b : UNLIKELY CHANGES --
 --------------------------------
-{-
-unlikelyChgs :: Section
-unlikelyChgs = SRS.unlikeChg unlikelyChgsList []
 
-unlikelyChgsList :: [Contents]
-unlikelyChgsList = unlikeChgList 
-
-unlikeChgList :: [Contents]
-unlikeChgList = []
--}
 --------------------------------------------------
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
 --------------------------------------------------

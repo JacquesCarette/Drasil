@@ -6,6 +6,7 @@ module Drasil.Sections.SolutionCharacterSpec
   sSubSec,
   assembler,
   siCon,
+  siLC,
   siSect,
   siTMod,
   siIMod,

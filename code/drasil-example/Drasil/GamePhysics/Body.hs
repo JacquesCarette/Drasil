@@ -83,17 +83,20 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
       , SSDSolChSpec 
         (SCSProg 
           [ Assumptions
-          , TMs ([Label]++ stdFields) [t1NewtonSL_new, t2NewtonTL_new, t3NewtonLUG_new, 
-            t4ChaslesThm_new, t5NewtonSLR_new]
+          , TMs ([Label]++ stdFields) 
+              [t1NewtonSL_new, t2NewtonTL_new, t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new]
           , GDs [] [] HideDerivation -- No Gen Defs for Gamephysics
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [im1_new, im2_new, im3_new] ShowDerivation
+          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) 
+              [im1_new, im2_new, im3_new] ShowDerivation
           , DDs ([Label, Symbol, Units] ++ stdFields) cpDDefs ShowDerivation
-          , Constraints EmptyS dataConstraintUncertainty (S "FIXME") [inDataConstTbl cpInputConstraints, outDataConstTbl cpOutputConstraints]
+          , Constraints EmptyS dataConstraintUncertainty (S "FIXME") 
+              [inDataConstTbl cpInputConstraints, outDataConstTbl cpOutputConstraints]
           ]
         )
       ]
     ):
-  (map Verbatim [requirements, likelyChanges, unlikelyChanges, off_the_shelf_solutions, traceability_matrices_and_graph, values_of_auxiliary_constatnts]) ++ 
+  (map Verbatim [requirements, likelyChanges, unlikelyChanges, off_the_shelf_solutions, 
+    traceability_matrices_and_graph, values_of_auxiliary_constatnts]) ++ 
   (Bibliography : [])
     where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
@@ -187,8 +190,8 @@ detailsAndGoal :: [CI]
 detailsAndGoal = [thModel, goalStmt]
 
 para1_purpose_of_document_intro :: Sentence
-para1_purpose_of_document_intro = para1_purpose_of_document_param chipmunk document programDescription 
-  (plural game) (map plural detailsAndGoal)
+para1_purpose_of_document_intro = para1_purpose_of_document_param chipmunk 
+  document programDescription (plural game) (map plural detailsAndGoal)
 
 programDescription :: Sentence
 programDescription = foldlSent_ [(phrase openSource), getAcc twoD, 
@@ -238,7 +241,8 @@ organization_of_documents_intro = foldlSent
 --------------------------------------------
 
 general_system_description :: Section
-general_system_description = assembler chipmunk everything generalSystemDescriptionSect
+general_system_description = assembler chipmunk everything 
+  generalSystemDescriptionSect
   [sysContext, userCharacteristicSect, systemConstraintSect]
 
 generalSystemDescriptionSect :: SubSec
@@ -428,10 +432,12 @@ goal_statements_G_collision = goalStatementStruct (plural physicalProperty)
   CP.rigidBody (S "the new") (S "of the" +:+ (plural CP.rigidBody) +:+
   S "that have undergone a" +:+ (phrase CP.collision))
 
-goal_statements_G_linear, goal_statements_G_angular, goal_statements_G_detectCollision, goal_statements_G_collision :: [Sentence]
+goal_statements_G_linear, goal_statements_G_angular, 
+  goal_statements_G_detectCollision, goal_statements_G_collision :: [Sentence]
 
 goal_statements_list' :: [Sentence]
-goal_statements_list' = map (foldlSent) [goal_statements_G_linear, goal_statements_G_angular, goal_statements_G_detectCollision, 
+goal_statements_list' = map (foldlSent) [goal_statements_G_linear, 
+  goal_statements_G_angular, goal_statements_G_detectCollision, 
   goal_statements_G_collision]
 
 goal_statements_list = enumSimple 1 (getAcc goalStmt) goal_statements_list'
@@ -441,8 +447,8 @@ goal_statements_list = enumSimple 1 (getAcc goalStmt) goal_statements_list'
 --------------------------------------------------
 
 solution_characteristics_specification :: Section
-solution_characteristics_specification = assembler chipmunk everything scsSect [assumSec, tModSec, genDefSec,
-  iModSec, dataDefSec, dataConSec]
+solution_characteristics_specification = assembler chipmunk everything 
+  scsSect [assumSec, tModSec, genDefSec, iModSec, dataDefSec, dataConSec]
 
 assumSec, tModSec, genDefSec, iModSec, dataDefSec, dataConSec, scsSect :: SubSec
 scsSect = sSubSec solutionCharSpec []
@@ -564,7 +570,9 @@ functional_requirements_list :: Contents
 
 functional_requirements = SRS.funcReq [functional_requirements_list] []
 
-functional_requirements_req1, functional_requirements_req2, functional_requirements_req3, functional_requirements_req4, functional_requirements_req5, functional_requirements_req6,
+functional_requirements_req1, functional_requirements_req2, 
+  functional_requirements_req3, functional_requirements_req4,
+  functional_requirements_req5, functional_requirements_req6,
   functional_requirements_req7, functional_requirements_req8 :: Sentence
 
   -- | template for requirements
@@ -615,8 +623,11 @@ functional_requirements_req8 = requirementS (QP.position) (QP.velocity)
 -- Currently need separate chunks for plurals like rigid bodies,
 -- velocities, etc.
 functional_requirements_list' :: [Sentence]
-functional_requirements_list' = [functional_requirements_req1, functional_requirements_req2, functional_requirements_req3, functional_requirements_req4, functional_requirements_req5, functional_requirements_req6,
-  functional_requirements_req7, functional_requirements_req8]
+functional_requirements_list' = [functional_requirements_req1, 
+  functional_requirements_req2, functional_requirements_req3, 
+  functional_requirements_req4, functional_requirements_req5, 
+  functional_requirements_req6, functional_requirements_req7, 
+  functional_requirements_req8]
 
 functional_requirements_list = enumSimple 1 (getAcc requirement) functional_requirements_list'
 
@@ -648,9 +659,11 @@ nonfunctional_requirements_intro = foldlSP
 -----------------------------------------
 
 off_the_shelf_solutions :: Section
-off_the_shelf_solutions_intro, off_the_shelf_solutions_2dlist, off_the_shelf_solutions_mid, off_the_shelf_solutions_3dlist :: Contents
+off_the_shelf_solutions_intro, off_the_shelf_solutions_2dlist, 
+  off_the_shelf_solutions_mid, off_the_shelf_solutions_3dlist :: Contents
 
-off_the_shelf_solutions = SRS.offShelfSol [off_the_shelf_solutions_intro, off_the_shelf_solutions_2dlist, off_the_shelf_solutions_mid, off_the_shelf_solutions_3dlist] []
+off_the_shelf_solutions = SRS.offShelfSol [off_the_shelf_solutions_intro, 
+  off_the_shelf_solutions_2dlist, off_the_shelf_solutions_mid, off_the_shelf_solutions_3dlist] []
 
 off_the_shelf_solutions_intro = off_the_shelf_solutions_intro_param problem_description physLib
 
@@ -676,14 +689,19 @@ off_the_shelf_solutions_3dlist = enumBullet [
 -----------------------------------------------------
 
 traceability_matrices_and_graph :: Section
-traceability_matrices_and_graph = traceMGF [traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel] traceability_matrices_and_graph_traces 
+traceability_matrices_and_graph = traceMGF 
+  [traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]
+  traceability_matrices_and_graph_traces
   [traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel] []
 
-traceability_matrices_and_graph_traces, traceability_matrices_and_graph_trace1, traceability_matrices_and_graph_trace2, traceability_matrices_and_graph_trace3 :: [Sentence]
-traceability_matrices_and_graph_traces = map (foldlList) [traceability_matrices_and_graph_trace1, traceability_matrices_and_graph_trace2, traceability_matrices_and_graph_trace3]
+traceability_matrices_and_graph_traces, traceability_matrices_and_graph_trace1, 
+  traceability_matrices_and_graph_trace2, traceability_matrices_and_graph_trace3 :: [Sentence]
+traceability_matrices_and_graph_traces = map (foldlList) 
+  [traceability_matrices_and_graph_trace1, traceability_matrices_and_graph_trace2,
+    traceability_matrices_and_graph_trace3]
 
-traceability_matrices_and_graph_trace1 = [(plural goalStmt), (plural requirement), (plural inModel), 
-  (plural datumConstraint) +:+. S "with each other"]
+traceability_matrices_and_graph_trace1 = [(plural goalStmt), 
+  (plural requirement), (plural inModel), (plural datumConstraint) +:+. S "with each other"]
 
 traceability_matrices_and_graph_trace2 = [(plural thModel), (plural genDefn), (plural dataDefn), 
   (plural inModel), S "on the" +:+. plural assumption]
@@ -915,5 +933,4 @@ values_of_auxiliary_constatnts = valsOfAuxConstantsF chipmunk []
 ----------------
 -- REFERENCES --
 ----------------
---}
 -- To be added --

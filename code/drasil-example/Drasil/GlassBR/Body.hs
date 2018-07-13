@@ -133,7 +133,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           , TMs ([Label] ++ stdFields) [t1IsSafe, t2IsSafe]
           , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
           , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand, testIMFromQD] HideDerivation
+          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand] HideDerivation
           , Constraints EmptyS dataConstraintUncertainty
                         (foldlSent [(makeRef (SRS.valsOfAuxCons SRS.missingP [])), S "gives", (plural value `ofThe` S "specification"), 
                         plural parameter, S "used in", (makeRef inputDataConstraints)] +:+ instance_models_intro2)
@@ -185,8 +185,6 @@ glassSystInfo = SI {
 }
   --FIXME: All named ideas, not just acronyms.
 
-testIMFromQD :: InstanceModel
-testIMFromQD = imQD gbSymbMap risk EmptyS [] [] "riskFun" [] --shortname
 glassBR_code :: CodeSpec
 glassBR_code = codeSpec glassSystInfo allMods
 
@@ -194,13 +192,13 @@ problem_description, terminology_and_description,
   physical_system_description, goal_statements :: Section
 
 product_use_case_table,
-  physical_system_description_list, inputDataConstraints,
-  outputDataConstraints, traceability_matrices_and_graphs_table1,
-  traceability_matrices_and_graphs_table2, traceability_matrices_and_graphs_table3, appendix_intro,
-  fig_glassbr, fig_2, fig_3, fig_4, fig_5,
-  fig_6 :: Contents
+  traceability_matrices_and_graphs_table1,
+  traceability_matrices_and_graphs_table2, traceability_matrices_and_graphs_table3 :: Contents
 
-functional_requirements_list, traceability_matrices_and_graphs_intro2 :: [Contents]
+physical_system_description_list, inputDataConstraints, outputDataConstraints, fig_2, fig_3, fig_4,
+  traceability_matrices_and_graphs_intro2, fig_6, fig_5, fig_glassbr, appendix_intro :: LabelledContent
+
+functional_requirements_list :: [LabelledContent]
 
 --------------------------------------------------------------------------------
 terminology_and_description_bullets :: Contents
@@ -231,8 +229,10 @@ goal_statements_list :: Contents
 goal_statements_list = enumSimple 1 (short goalStmt) goal_statements_list_goalStmt1
 
 --Used in "Traceability Matrices and Graphs" Section--
-traceyMatrices, traceyGraphs :: [Contents]
+traceyMatrices :: [Contents]
 traceyMatrices = [traceability_matrices_and_graphs_table1, traceability_matrices_and_graphs_table2, traceability_matrices_and_graphs_table3]
+
+traceyGraphs :: [LabelledContent]
 traceyGraphs = [fig_2, fig_3, fig_4]
 
 solChSpecSubsections :: [CI]
@@ -417,10 +417,12 @@ terminology_and_description = termDefnF (Just (S "All" `sOf` S "the" +:+ plural 
 
 physical_system_description = physSystDesc (short gLassBR) fig_glassbr [physical_system_description_list, fig_glassbr]
 
-fig_glassbr = fig (at_start $ the physicalSystem) (resourcePath ++ "physicalsystimage.png")
+fig_glassbr = llcc "physSystImage" (mkLabelRA'' "physSystImageLabel") $ 
+  fig (at_start $ the physicalSystem) (resourcePath ++ "physicalsystimage.png")
   "physSystImage"
 
-physical_system_description_list = enumSimple 1 (short physSyst) physical_system_description_list_physys
+physical_system_description_list = llcc "psdlistGBr" (mkLabelRA'' "psdlistGBrLabel") $
+  enumSimple 1 (short physSyst) physical_system_description_list_physys
 
 --"Dead" knowledge?
 physical_system_description_list_physys :: [Sentence]
@@ -462,7 +464,7 @@ assumpList :: [AssumpChunk] -> [Contents]
 assumpList = map Assumption
 
 assumptions :: [Contents] -- FIXME: Remove this entirely and use new refs + docLang.
-assumptions = fst (foldr (\s (ls, n) -> ((Assumption $ assump ("A" ++ show n) s ("A" ++ show n)) : ls, n-1))
+assumptions = fst (foldr (\s (ls, n) -> ((Assumption $ assump ("A" ++ show n) s (mkLabelRA'' $ "A" ++ show n)) : ls, n-1))
  ([], (length assumptionDescs)::Int) assumptionDescs)
 -- These correspond to glassTyAssumps, glassCondition, explsnScenario,
 -- standardValues, glassLiteAssmp, bndryConditions, responseTyAssump, ldfConstant
@@ -486,15 +488,19 @@ instance_models_intro2 = foldlSent [makeRef outputDataConstraints, S "shows the"
 
 {--Functional Requirements--}
 
-functional_requirements_list = functional_requirements_listOfReqs ++ functional_requirements_req6 ++ [functional_requirements_req1Table]
+functional_requirements_list = functional_requirements_listOfReqs ++ [functional_requirements_req6] ++ 
+  [functional_requirements_req1Table]
 
-functional_requirements_req1, functional_requirements_req2, functional_requirements_req3, functional_requirements_req4, functional_requirements_req5 :: Contents
+functional_requirements_req1, functional_requirements_req2, functional_requirements_req3, functional_requirements_req4,
+  functional_requirements_req5 :: LabelledContent
+
 req1Desc, req2Desc, req3Desc, req4Desc :: Sentence
 req5Desc :: NamedChunk -> Sentence
-functional_requirements_req6 :: [Contents] --FIXME: Issue #327
+functional_requirements_req6 :: LabelledContent --FIXME: Issue #327
 
-functional_requirements_listOfReqs :: [Contents]
-functional_requirements_listOfReqs = [functional_requirements_req1, functional_requirements_req2, functional_requirements_req3, functional_requirements_req4, functional_requirements_req5]
+functional_requirements_listOfReqs :: [LabelledContent]
+functional_requirements_listOfReqs = [functional_requirements_req1, functional_requirements_req2,
+  functional_requirements_req3, functional_requirements_req4, functional_requirements_req5]
 
 functional_requirements_req1 = mkRequirement "functional_requirements_req1" req1Desc "Input-Glass-Props"
 functional_requirements_req2 = mkRequirement "functional_requirements_req2" req2Desc "System-Set-Values-Following-Assumptions"
@@ -511,8 +517,9 @@ req1Desc = foldlSent [at_start input_, S "the", plural quantity, S "from",
   S "will be input in terms of", plural millimetre `sAnd`
   S "will be converted to the equivalent value in", plural metre]
 
-functional_requirements_req1Table :: Contents
-functional_requirements_req1Table = Table
+functional_requirements_req1Table :: LabelledContent
+functional_requirements_req1Table = llcc "R1ReqInputs" (mkLabelRA'' "R1ReqInputsLabel") $ 
+  Table
   [at_start symbol_, at_start description, S "Units"]
   (mkTable
   [ch,
@@ -539,10 +546,9 @@ req2Desc = foldlSent [S "The", phrase system,
 
 req3Desc = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",
-  plural datumConstraint, S "mentioned in" +:+. makeRef
-  (SRS.datCon SRS.missingP []), S "If any" `sOf` S "the", plural inParam,
-  S "is out" `sOf` S "bounds" `sC` S "an", phrase errMsg, S "is displayed"
-  `andThe` plural calculation, S "stop"]
+  plural datumConstraint, S "mentioned in" +:+. makeRef SRS.datCon, 
+  S "If any" `sOf` S "the", plural inParam, S "is out" `sOf` S "bounds" `sC`
+  S "an", phrase errMsg, S "is displayed" `andThe` plural calculation, S "stop"]
 
 req4Desc = foldlSent [titleize output_, S "the", plural inQty,
   S "from", acroR 1 `andThe` S "known", plural quantity,
@@ -561,7 +567,8 @@ testing1 :: [RelationConcept]
 testing1 = [probOfBr, calOfCap, calOfDe]
 --FIXME: rename or find better implementation?
 
-functional_requirements_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
+functional_requirements_req6 = llcc "frR6GBr" (mkLabelRA'' "frR6GBrLabel") $ 
+  Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $
     map (\(a, d) -> Flat $ (at_start a) +:+ sParen (ch a) +:+
@@ -572,17 +579,17 @@ functional_requirements_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (title
     ++
     [Flat $ (titleize aspectR) +:+ sParen (ch aspectR) +:+
     E (aspectRWithEqn^.equat)]
-    ))])]
+    ))]
 
 {--Nonfunctional Requirements--}
 
 {--LIKELY CHANGES--}
 
-likely_changes_list :: [Contents]
+likely_changes_list :: [LabelledContent]
 likely_changes_list = likelyChanges_SRS 
 
 {--UNLIKELY CHANGES--}
-unlikely_change_list :: [Contents]
+unlikely_change_list :: [LabelledContent]
 unlikely_change_list = unlikelyChanges_SRS
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
@@ -616,16 +623,16 @@ traceability_matrices_and_graphs_dataDef =  ["DD1", "DD2", "DD3", "DD4", "DD5", 
 traceability_matrices_and_graphs_dataDefRef = map makeRef dataDefns
 
 traceability_matrices_and_graphs_data  = ["Data Constraints"]
-traceability_matrices_and_graphs_dataRef = [makeRef (SRS.datCon SRS.missingP [])]
+traceability_matrices_and_graphs_dataRef = [makeRef SRS.datCon]
 
 traceability_matrices_and_graphs_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-traceability_matrices_and_graphs_funcReqRef = makeListRef traceability_matrices_and_graphs_funcReq (SRS.funcReq SRS.missingP [])
+traceability_matrices_and_graphs_funcReqRef = map makeRef functional_requirements_list
 
 traceability_matrices_and_graphs_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
 traceability_matrices_and_graphs_assumpRef = makeListRef traceability_matrices_and_graphs_assump (SRS.assumpt SRS.missingP [])
 
 traceability_matrices_and_graphs_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5"]
-traceability_matrices_and_graphs_likelyChgRef = makeListRef traceability_matrices_and_graphs_likelyChg (SRS.likeChg SRS.missingP [])
+traceability_matrices_and_graphs_likelyChgRef = map makeRef likelyChanges_SRS
 
 traceability_matrices_and_graphs_row_t1 :: [String]
 traceability_matrices_and_graphs_row_t1 = traceability_matrices_and_graphs_theorys ++ traceability_matrices_and_graphs_instaModel ++ traceability_matrices_and_graphs_dataDef
@@ -755,15 +762,18 @@ traceability_matrices_and_graphs_intro2 = traceGIntro traceyGraphs
   (foldlList ((map plural (take 3 solChSpecSubsections))++
   [plural requirement, plural likelyChg +:+ S "on" +:+ plural assumption]))]
 
-fig_2 = figureLabel 2 traceyMatrix
+fig_2 = llcc "TraceyItemSecs" (mkLabelRA'' "TraceyItemSecsLabel") $ 
+  figureLabel 2 traceyMatrix
   (titleize' item +:+ S "of Different" +:+ titleize' section_)
   (resourcePath ++ "Trace.png") "TraceyItemSecs"
 
-fig_3 = figureLabel 3 traceyMatrix
+fig_3 = llcc "TraceyReqsItems" (mkLabelRA'' "TraceyReqsItemsLabel") $ 
+  figureLabel 3 traceyMatrix
   (titleize' requirement `sAnd` S "Other" +:+ titleize' item)
   (resourcePath ++ "RTrace.png") "TraceyReqsItems"
 
-fig_4 = figureLabel 4 traceyMatrix
+fig_4 = llcc "TraceyAssumpsOthers" (mkLabelRA'' "TraceyAssumpsOthersLabel") $ 
+  figureLabel 4 traceyMatrix
   (titleize' assumption `sAnd` S "Other" +:+ titleize' item)
   (resourcePath ++ "ATrace.png") "TraceyAssumpsOthers"
 
@@ -773,17 +783,20 @@ fig_4 = figureLabel 4 traceyMatrix
 
 {--APPENDIX--}
 
-appendix_intro = foldlSP [
+appendix_intro = llcc "appndxIntroGB" (mkLabelRA'' "appndxIntroGBLabel") $
+  foldlSP [
   S "This", phrase appendix, S "holds the", plural graph,
   sParen ((makeRef fig_5) `sAnd` (makeRef fig_6)),
   S "used for interpolating", plural value, S "needed in the", plural model]
 
-fig_5 = fig (titleize figure +: S "5" +:+ (demandq ^. defn) +:+
+fig_5 = llcc "demandVSsod" (mkLabelRA'' "demandVSsodLabel") $
+  fig (titleize figure +: S "5" +:+ (demandq ^. defn) +:+
   sParen (ch demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
   `sVersus` at_start char_weight +:+ sParen (ch sflawParamM))
   (resourcePath ++ "ASTM_F2248-09.png") "demandVSsod"
 
-fig_6 = fig (titleize figure +: S "6" +:+ S "Non dimensional" +:+
+fig_6 = llcc "dimlessloadVSaspect" (mkLabelRA'' "dimlessloadVSaspectLabel") $
+  fig (titleize figure +: S "6" +:+ S "Non dimensional" +:+
   phrase lateralLoad +:+ sParen (ch dimlessLoad)
   `sVersus` titleize aspectR +:+ sParen (getAcc aR)
   `sVersus` at_start stressDistFac +:+ sParen (ch stressDistFac))

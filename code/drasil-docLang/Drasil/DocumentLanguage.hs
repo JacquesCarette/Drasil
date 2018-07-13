@@ -228,7 +228,7 @@ data AuxConstntSec = AuxConsProg CI [QDefinition] | AuxConsVerb Section
 
 {--}
 
-data AppndxSec = AppndxVerb Section | AppndxProg [Contents]
+data AppndxSec = AppndxVerb Section | AppndxProg [LabelledContent]
 
 {--}
 

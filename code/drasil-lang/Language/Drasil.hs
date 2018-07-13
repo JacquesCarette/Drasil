@@ -79,14 +79,14 @@ module Language.Drasil (
   , constrained, cuc, cvc, cvc', constrained', cuc', constrainedNRV'
   , cnstrw
   -- Chunk.Eq
-  , QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec
+  , QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec, fromEqn''', fromEqn''''
   -- Chunk.DataDefinition
-  , DataDefinition, mkDataDef, mkDD, qdFromDD
+  , DataDefinition, mkDataDef, mkDD, mkDataDef', qdFromDD
   -- Chunk.GenDefn
-  , GenDefn, gd, gdUnit
+  , GenDefn, gd, gdUnit, gd'
   -- Chunk.InstanceModel
   , InstanceModel
-  , inCons, outCons, imOutput, imInputs, im, imQD, im', imQD'
+  , inCons, outCons, imOutput, imInputs, im, imQD, im', imQD', im'', im'''
   -- Chunk.Quantity
   , Quantity(..), QuantityDict, qw, mkQuant
   -- Chunk.UncertainQuantity
@@ -285,8 +285,10 @@ import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Constrained.Core (physc, sfwrc, enumc, isPhysC, isSfwrC,
   Constraint(..), ConstraintReason(..), Reason(..), TheoryConstraint(..))
 import Language.Drasil.Chunk.DefinedQuantity
-import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec)
-import Language.Drasil.Chunk.DataDefinition (DataDefinition, mkDataDef, mkDD, qdFromDD)
+import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqn'', getVC,
+ equat, ec, fromEqn''', fromEqn'''')
+import Language.Drasil.Chunk.DataDefinition (DataDefinition, mkDataDef, mkDD, mkDataDef',
+  qdFromDD)
 import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.Goal (Goal, mkGoal)
 import Language.Drasil.Chunk.InstanceModel

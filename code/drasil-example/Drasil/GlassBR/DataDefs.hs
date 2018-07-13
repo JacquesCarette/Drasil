@@ -1,14 +1,14 @@
 module Drasil.GlassBR.DataDefs (dataDefns, dimLL, gbQDefns, glaTyFac, hFromt,
-  nonFL, risk, strDisFac, tolPre, tolStrDisFac) where
+  nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac) where
 
 import Language.Drasil
-import Prelude hiding (log, exp)
+import Prelude hiding (log, exp, sqrt)
 
 import Drasil.GlassBR.Unitals (act_thick, actualThicknesses, aspectR, 
-  aspectRWithEqn, demand, dimlessLoad, gTF, glassTypeAbbrsStr, 
-  glassTypeFactors, glass_type, lDurFac, mod_elas, nom_thick, 
-  nominalThicknesses, nonFactorL, pb_tol, plate_len, plate_width, risk_fun,
-  sdf_tol, sflawParamK, sflawParamM, stressDistFac, tolLoad)
+  demand, dimlessLoad, gTF, glassTypeAbbrsStr, glassTypeFactors, glass_type, 
+  lDurFac, load_dur, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pb_tol, 
+  plate_len, plate_width, risk_fun, sdf_tol, sdx, sdy, sdz, sd, sflawParamK, 
+  sflawParamM, stressDistFac, tolLoad)
 
 import Data.Drasil.Concepts.Documentation (datum, user)
 import Data.Drasil.Concepts.Math (probability, parameter, calculation)
@@ -22,8 +22,8 @@ import Control.Lens ((^.))
 ----------------------
 
 dataDefns :: [DataDefinition] 
-dataDefns = [riskDD, hFromtDD, strDisFacDD, nonFLDD, glaTyFacDD, dimLLDD,
-  tolPreDD, tolStrDisFacDD]
+dataDefns = [riskDD, hFromtDD, loadDFDD, strDisFacDD, nonFLDD, glaTyFacDD, 
+  dimLLDD, tolPreDD, tolStrDisFacDD, standOffDisDD, aspRatDD]
 
 gbQDefns :: [Block QDefinition]
 gbQDefns = [Parallel hFromt {-DD2-} [glaTyFac {-DD6-}]] ++ --can be calculated on their own
@@ -64,11 +64,15 @@ hFromtDD = mkDD hFromt [{-references-}] [{-derivation-}] ""--temporary
 
 --DD3-- (#749)
 
--- loadDF_eq :: Expr 
--- loadDF_eq = (sy load_dur / 60) $^ (sy sflawParamM / 16)
+loadDF_eq :: Expr 
+loadDF_eq = (sy load_dur / 60) $^ (sy sflawParamM / 16)
 
--- loadDF :: QDefinition
--- loadDF = mkDataDef lDurFac loadDF_eq
+loadDF :: QDefinition
+loadDF = mkDataDef lDurFac loadDF_eq
+
+loadDFDD :: DataDefinition
+loadDFDD = mkDD loadDF [{-references-}] [{-derivation-}] ""--temporary
+  Nothing
 
 --DD4--
 
@@ -153,6 +157,30 @@ tolStrDisFacDD :: DataDefinition
 tolStrDisFacDD = mkDD tolStrDisFac [{-references-}] [{-derivation-}] ""--temporary
   (Just $ jtolRelToPbtol : aGrtrThanB : hRef : ldfRef : pbTolUsr : [])
 
+--DD10--
+
+standOffDis_eq :: Expr
+standOffDis_eq = sqrt ((sy sdx) $^ 2 + (sy sdy) $^ 2 + (sy sdz) $^ 2)
+
+standOffDis :: QDefinition
+standOffDis = mkDataDef sd standOffDis_eq
+
+standOffDisDD :: DataDefinition
+standOffDisDD = mkDD standOffDis [{-references-}] [{-derivation-}] ""--temporary
+  Nothing
+
+--DD11--
+
+aspRat_eq :: Expr
+aspRat_eq = (sy plate_len) / (sy plate_width)
+
+aspRat :: QDefinition
+aspRat = mkDataDef aspectR aspRat_eq
+
+aspRatDD :: DataDefinition
+aspRatDD = mkDD aspRat [{-references-}] [{-derivation-}] ""--temporary
+  (Just $ aGrtrThanB : [])
+
 --Additional Notes--
 
 aGrtrThanB :: Sentence
@@ -182,9 +210,9 @@ hMin = (ch nom_thick +:+ S "is a function that maps from the nominal thickness"
 
 qHtTlExtra :: Sentence
 qHtTlExtra = (ch tolLoad +:+ S "is the tolerable load which is obtained from Figure 7 using" 
-  +:+ ch sdf_tol `sAnd` phrase aspectR +:+ sParen (E $ aspectRWithEqn^.equat) +:+
-  S "as" +:+ plural parameter +:+. S "using interpolation" +:+ titleize calculation +:+
-  S "of" +:+ ch sdf_tol +:+. S "is defined in DD9")
+  +:+ ch sdf_tol `sAnd` phrase aspectR +:+ S "as" +:+ plural parameter +:+. S "using interpolation" 
+  +:+ titleize' calculation +:+ S "of" +:+ ch sdf_tol `sAnd` ch aspectR +:+. 
+  S "are defined in DD9 and DD11, respectively")
 
 qHtTlTolRef :: Sentence
 qHtTlTolRef = (ch tolLoad +:+. S "is the tolerable load defined in DD8")

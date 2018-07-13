@@ -72,7 +72,7 @@ loadDF = mkDataDef lDurFac loadDF_eq
 
 loadDFDD :: DataDefinition
 loadDFDD = mkDD loadDF [{-references-}] [{-derivation-}] ""--temporary
-    Nothing -- FIXME: FIXME: Does this need notes?
+  Nothing
 
 --DD4--
 
@@ -167,7 +167,7 @@ standOffDis = mkDataDef sd standOffDis_eq
 
 standOffDisDD :: DataDefinition
 standOffDisDD = mkDD standOffDis [{-references-}] [{-derivation-}] ""--temporary
-  (Nothing) -- FIXME: Does this need notes?
+  Nothing
 
 --DD11--
 
@@ -179,7 +179,7 @@ aspRat = mkDataDef aspectR aspRat_eq
 
 aspRatDD :: DataDefinition
 aspRatDD = mkDD aspRat [{-references-}] [{-derivation-}] ""--temporary
-  (Nothing) -- FIXME: Does this need notes?
+  (Just $ aGrtrThanB : [])
 
 --Additional Notes--
 

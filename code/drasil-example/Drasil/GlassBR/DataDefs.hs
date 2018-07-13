@@ -145,7 +145,7 @@ tolPreDD = mkDD tolPre [{-references-}] [{-derivation-}] ""--temporary
 --DD9--
 
 tolStrDisFac_eq :: Expr
-tolStrDisFac_eq = log (log (1 / (1 - (sy pb_tol)))
+tolStrDisFac_eq = ln (ln (1 / (1 - (sy pb_tol)))
   * ((((sy plate_len) * (sy plate_width)) $^ (sy sflawParamM - 1) / 
     ((sy sflawParamK) * ((1000 * sy mod_elas *
     (square (sy act_thick)))) $^ (sy sflawParamM) * (sy lDurFac)))))

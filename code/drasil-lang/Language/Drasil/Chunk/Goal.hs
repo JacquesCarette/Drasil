@@ -13,7 +13,7 @@ import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.RefTypes (RefAdd)
 
-import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Classes (HasLabel(getLabel))
 

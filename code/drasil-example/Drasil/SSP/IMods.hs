@@ -22,15 +22,14 @@ import Data.Drasil.SentenceStructures (foldlSent, isThe)
 import Data.Drasil.Utils (eqUnR, weave)
 import Drasil.SSP.DataDefs (fixme1,fixme2, ddRef, sliceWght,
  lengthLb, lengthLs, seismicLoadF, surfLoads, intrsliceF, resShearWO,
- mobShearWO, displcmntRxnF, displcmntBasel, netFDsplcmntEqbm, shearStiffness,
- soilStiffness)
+ mobShearWO, displcmntRxnF, netFDsplcmntEqbm, soilStiffness)
 import Drasil.SSP.Assumptions (newA2, sspRefDB)
 
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (analysis,
   solution, definition, value, assumption, physicalProperty,
   problem, method_)
-import Data.Drasil.SentenceStructures (andThe, acroA, acroGD,
+import Data.Drasil.SentenceStructures (andThe, acroGD,
   sIs, sIn, getTDS, getTandS, ofThe, ofThe', sAnd, sOf, acroIM, acroT,
   eqN, foldlSP, foldlSent_,foldlSentCol)
 import Data.Drasil.Concepts.Math (equation, surface)
@@ -251,7 +250,7 @@ rfemFoS_desc = foldlSent [
 --
 crtSlpId_new :: InstanceModel
 crtSlpId_new = im' crtSlpId []
-  [] (qw fs_min) [] "crtSlpId" [crtSlpId_desc]
+  [] (qw fs_min) [] (mkLabelRA'' "crtSlpId") [crtSlpId_desc]
 
 crtSlpId :: RelationConcept
 crtSlpId = makeRC "crtSlpId" (nounPhraseSP "critical slip identification")

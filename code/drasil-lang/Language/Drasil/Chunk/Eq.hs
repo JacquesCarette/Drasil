@@ -19,6 +19,7 @@ import Language.Drasil.Space (Space(Real))
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.Label.Core (Label)
+import Language.Drasil.Label (mkLabelRA'')
 
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Spec (Sentence)
@@ -71,16 +72,19 @@ fromEqn' nm desc _ symb eqn refs lbe = EC (mkQuant nm desc symb Real Nothing Not
 fromEqn'' :: (IsUnit u, ConceptDomain u) => String -> NP -> Sentence ->
  Symbol -> String -> Maybe u -> Expr -> References -> Label -> QDefinition
 fromEqn'' nm desc _ symb abbr u eqn refs lbe = 
-  EC (mkQuant nm desc symb Real (fmap unitWrapper u) (Just abbr)) eqn refs [] lbe Nothing
+  EC (mkQuant nm desc symb Real (fmap unitWrapper u) (Just abbr)) 
+  eqn refs [] lbe Nothing
 
 
 fromEqn''' :: (IsUnit u, ConceptDomain u) => 
   String -> NP -> Sentence -> Symbol -> u -> Expr -> References -> Derivation -> String -> QDefinition
 fromEqn''' nm desc _ symb un eqn refs dv sn = 
-  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) eqn refs dv (shortname' sn) Nothing
+  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) 
+  eqn refs dv (mkLabelRA'' sn) Nothing
 
 fromEqn'''' :: String -> NP -> Sentence -> Symbol -> Expr -> References -> Derivation -> String -> QDefinition
-fromEqn'''' nm desc _ symb eqn refs dv sn = EC (mkQuant nm desc symb Real Nothing Nothing) eqn refs dv (shortname' sn) Nothing
+fromEqn'''' nm desc _ symb eqn refs dv sn = EC (mkQuant nm desc symb Real Nothing Nothing)
+  eqn refs dv (mkLabelRA'' sn) Nothing
 
 -- | Smart constructor for QDefinitions. Requires a quantity and its defining 
 -- equation

@@ -29,15 +29,12 @@ import Language.Drasil.People (People)
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.UID (UID)
 
-import Control.Lens (makeLenses)
-
 import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel))
 import Language.Drasil.Misc (noSpaces)
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname), shortname')
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.Label.Core (Label)
 
-import Control.Lens ((^.), Lens', makeLenses)
-import Data.List (find)
+import Control.Lens (Lens', makeLenses)
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces
@@ -120,7 +117,7 @@ data Citation = Cite
   { _id :: UID
   , citeID :: EntryID
   , externRefT :: CitationKind
-  , fields :: [CiteField]
+  , _fields :: [CiteField]
   , _lb :: Label
   }
 makeLenses ''Citation
@@ -130,11 +127,10 @@ cite :: EntryID -> CitationKind -> [CiteField] -> Label -> Citation
 cite i = Cite i (noSpaces i)
 
 -- | Citations are chunks.
-instance HasUID Citation where uid f (Cite a b c d l) = fmap (\x -> Cite x b c d l) (f a)
-instance HasLabel Citation where getLabel = lb
+instance HasUID        Citation where uid f (Cite a b c d l) = fmap (\x -> Cite x b c d l) (f a)
+instance HasLabel      Citation where getLabel = lb
 instance HasShortName  Citation where shortname = lb . shortname
-instance HasFields    Citation where getFields = fields
-=======
+instance HasFields     Citation where getFields = fields
 
 class HasFields c where
   getFields :: Lens' c [CiteField]

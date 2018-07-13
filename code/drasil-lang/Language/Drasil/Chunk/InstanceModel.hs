@@ -22,6 +22,7 @@ import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Document.GetChunk (vars)
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Label.Core (Label)
+import Language.Drasil.Label (mkLabelRA'')
 
 import Control.Lens (makeLenses, (^.))
 
@@ -58,11 +59,6 @@ instance HasLabel           InstanceModel where getLabel = lb
 instance HasShortName       InstanceModel where shortname = lb . shortname
 instance HasAdditionalNotes InstanceModel where getNotes = notes
 
--- | Smart constructor for instance models
-im'' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> Derivation -> String -> [Sentence] -> InstanceModel
-im'' rc i ic o oc der sn notes = IM rc i ic o oc [] der (shortname' sn) (Just notes)
-
 im :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> Label -> InstanceModel
 im rc i ic o oc lbe = IM rc i ic o oc [] [] lbe Nothing
@@ -72,14 +68,18 @@ im' :: RelationConcept -> Inputs -> InputConstraints -> Output ->
   OutputConstraints -> Label -> [Sentence] -> InstanceModel
 im' rc i ic o oc lbe notes = IM rc i ic o oc [] [] lbe (Just notes)
 
+-- | Smart constructor for instance models
+im'' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
+  OutputConstraints -> Derivation -> String -> [Sentence] -> InstanceModel
+im'' rc i ic o oc der sn notes = IM rc i ic o oc [] der (mkLabelRA'' sn) (Just notes)
+
 im''' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> Derivation -> String -> InstanceModel
-im''' rc i ic o oc der sn = IM rc i ic o oc [] der (shortname' sn) Nothing
+im''' rc i ic o oc der sn = IM rc i ic o oc [] der (mkLabelRA'' sn) Nothing
 
 -- | Smart constructor for instance model from qdefinition 
 -- (Sentence is the "concept" definition for the relation concept)
 -- FIXME: get the shortname from the QDefinition?
-<<<<<<< HEAD
 imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> 
   InputConstraints -> OutputConstraints -> Label -> Maybe Label -> InstanceModel
 imQD ctx qd dfn incon ocon lblForIM lblForRC = IM (makeRC (qd ^. uid) (qd ^. term) dfn 

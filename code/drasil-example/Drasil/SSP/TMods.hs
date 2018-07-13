@@ -36,7 +36,7 @@ sspTMods = [fs_rc, equilibrium, mcShrStrgth, hookesLaw
 fs_rc_new :: TheoryModel
 fs_rc_new = tm' (cw fs_rc)
   (tc' "fs_rc_new" [qw fs, qw shearRes, qw mobShear] ([] :: [ConceptChunk])
-  [] [TCon Invariant fs_rel] []) "fs_rc" [fs_desc]
+  [] [TCon Invariant fs_rel] []) (mkLabelRA'' "fs_rc") [fs_desc]
 
 ------------------------------------
 fs_rc :: RelationConcept
@@ -58,7 +58,7 @@ fs_desc = foldlSent [
 equilibrium_new :: TheoryModel
 equilibrium_new = tm' (cw equilibrium)
   (tc' "equilibrium_new" [qw fx] ([] :: [ConceptChunk])
-  [] [TCon Invariant eq_rel] []) "equilibrium" [eq_desc]
+  [] [TCon Invariant eq_rel] []) (mkLabelRA'' "equilibrium") [eq_desc]
 
 ------------------------------------  
 equilibrium :: RelationConcept
@@ -83,7 +83,7 @@ mcShrStrgth_new :: TheoryModel
 mcShrStrgth_new = tm' (cw mcShrStrgth)
   (tc' "mcShrStrgth_new" [qw shrStress, qw normStress, qw fricAngle, qw cohesion] 
   ([] :: [ConceptChunk])
-  [] [TCon Invariant mcSS_rel] []) "mcShrStrgth" [mcSS_desc]
+  [] [TCon Invariant mcSS_rel] []) (mkLabelRA'' "mcShrStrgth") [mcSS_desc]
 
 ------------------------------------
 mcShrStrgth :: RelationConcept
@@ -118,7 +118,7 @@ effStress_new :: TheoryModel
 effStress_new = tm' (cw effStress)
   (tc' "effStress_new" [qw normStress, qw porePressure] 
   ([] :: [ConceptChunk])
-  [] [TCon Invariant effS_rel] []) "effStress" [effS_desc]
+  [] [TCon Invariant effS_rel] []) (mkLabelRA'' "effStress") [effS_desc]
 
 ------------------------------------
 effStress :: RelationConcept
@@ -148,7 +148,7 @@ hookesLaw_new :: TheoryModel
 hookesLaw_new = tm' (cw hookesLaw)
   (tc' "effStress_new" [qw genForce, qw stffness, qw genDisplace] 
   ([] :: [ConceptChunk])
-  [] [TCon Invariant hksLw_rel] []) "hookesLaw" [hksLw_desc]
+  [] [TCon Invariant hksLw_rel] []) (mkLabelRA'' "hookesLaw") [hksLw_desc]
 
 ------------------------------------
 hookesLaw :: RelationConcept

@@ -12,12 +12,13 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.References (References)
 import Language.Drasil.Chunk.Relation (RelationConcept)
-import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.Development.Unit (unitWrapper, UnitDefn)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Label (mkLabelRA'')
 
-import Control.Lens (makeLenses, view)
+import Control.Lens (makeLenses)
 
 -- | A GenDefn is a RelationConcept that may have units
 data GenDefn = GD { _relC :: RelationConcept
@@ -48,7 +49,7 @@ gd r (Just u) derivs lbe = GD r (Just (unitWrapper u)) derivs [] lbe Nothing
 gd r Nothing derivs lbe = GD r Nothing derivs [] lbe Nothing
 
 gdNoUnitDef :: RelationConcept -> Derivation -> Label -> GenDefn
-gdNoUnitDef r derivs lbe = GD r Nothing derivs [] lbe
+gdNoUnitDef r derivs lbe = GD r Nothing derivs [] lbe Nothing
 
 gd' :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
   Derivation -> String -> [Sentence] -> GenDefn

@@ -18,7 +18,7 @@ stakehldrGeneral kWord clientDetails = (SRS.stakeholder) [stakeholderIntro] subs
 -- general stakeholders introduction
 stakeholderIntro :: Contents
 stakeholderIntro = foldlSP [S "This", (phrase section_),
-            S "describes the" +: (titleize' stakeholder), S "the people who have an",
+            S "describes the" +: (plural stakeholder), S "the people who have an",
             (phrase interest), S "in", (phrase $ the product_)]
 
 tClientF :: (Idea a) => a -> Sentence ->  Section

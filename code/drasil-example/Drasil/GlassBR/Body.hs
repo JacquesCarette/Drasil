@@ -126,7 +126,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     capacity demandq probability)) :
   SSDSec 
     (SSDProg
-      [SSDProblem  (PDProg start gLassBR ending [terminology_and_description , physical_system_description, goal_statements])
+      [SSDProblem  (PDProg start gLassBR ending [terminology_and_description, physical_system_description, goal_statements])
       , SSDSolChSpec 
         (SCSProg
           [ Assumptions

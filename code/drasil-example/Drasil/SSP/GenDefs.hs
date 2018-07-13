@@ -29,7 +29,7 @@ import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 import Data.Drasil.SentenceStructures (acroGD, acroT, foldlSent, getTandS, 
   isThe, ofThe, sAnd)
 
-import Drasil.DocLang.SRS as SRS (physSyst, missingP, physSystLabel)
+import Drasil.DocLang.SRS as SRS (physSystLabel)
 
 ---------------------------
 --  General Definitions  --
@@ -41,7 +41,7 @@ generalDefinitions = [gd' normForcEq (Nothing :: Maybe DerUChunk) ([] :: Derivat
   gd' mobShr (Nothing :: Maybe DerUChunk) ([] :: Derivation) "mobShr" [mobShr_desc],
   gd' normShrR (Nothing :: Maybe DerUChunk) ([] :: Derivation) "normShrR" [nmShrR_desc],
   gd' momentEql (Nothing :: Maybe DerUChunk) ([] :: Derivation) "momentEql" [momEql_desc],
-  gd netForcex (Nothing :: Maybe DerUChunk) ([] :: Derivation) "netForcex",
+  gd netForcex (Nothing :: Maybe DerUChunk) ([] :: Derivation) (mkLabelRA'' "netForcex"),
   gd' netForcey (Nothing :: Maybe DerUChunk) ([] :: Derivation) "netForcey" [fNet_desc],
   gd' hookesLaw2d (Nothing :: Maybe DerUChunk) ([] :: Derivation) "hookesLaw2d" [hooke2d_desc],
   gd' displVect (Nothing :: Maybe DerUChunk) ([] :: Derivation) "displVect" [disVec_desc]]
@@ -91,7 +91,7 @@ bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   phrase slice), S "Rearranged to solve for the", phrase shearForce,
   S "on the base" +:+. ch mobShrI, at_start force, S "equilibrium is",
   S "derived from the free body diagram of",
-  makeRef SRS.physSystLabel, S "Index", getES index,
+  makeRef SRS.physSystLabel, S "Index", ch index,
   S "refers to", (plural value `ofThe` plural property), S "for",
   phrase slice :+: S "/" :+: plural intrslce, S "following convention in" +:+.
   makeRef SRS.physSystLabel, at_start force, phrase variable,

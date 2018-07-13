@@ -1,5 +1,5 @@
 module Drasil.GlassBR.DataDefs (dataDefns, dimLL, gbQDefns, glaTyFac, hFromt,
-  nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac, qDefns) where
+  nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac) where
 
 import Language.Drasil
 import Prelude hiding (log, exp, sqrt)
@@ -24,10 +24,6 @@ import Control.Lens ((^.))
 dataDefns :: [DataDefinition] 
 dataDefns = [riskDD, hFromtDD, loadDFDD, strDisFacDD, nonFLDD, glaTyFacDD, 
   dimLLDD, tolPreDD, tolStrDisFacDD, standOffDisDD, aspRatDD]
-
-qDefns :: [QDefinition] 
-qDefns = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, dimLL, tolPre, 
-  tolStrDisFac, standOffDis, aspRat]
 
 gbQDefns :: [Block QDefinition]
 gbQDefns = [Parallel hFromt {-DD2-} [glaTyFac {-DD6-}]] ++ --can be calculated on their own

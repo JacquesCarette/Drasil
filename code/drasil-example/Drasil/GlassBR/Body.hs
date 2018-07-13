@@ -9,10 +9,11 @@ import qualified Drasil.DocLang.SRS as SRS
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), 
-  GSDSub(UsrChars, SystCons), InclUnits(IncludeUnits), IntroSec(IntroProg), 
-  IntroSub(IChar, IOrgSec, IPurpose, IScope), LCsSec(..), ProblemDescription(..), RefSec(RefProg), RefTab(TAandA, TUnits), 
-  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg),
-  SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
+  GSDSub(UsrChars, SystCons), InclUnits(IncludeUnits), IntroSec(IntroProg),
+  IntroSub(IChar, IOrgSec, IPurpose, IScope), LCsSec(..), ProblemDescription(..), 
+  RefSec(RefProg), RefTab(TAandA, TUnits), ReqrmntSec(..), 
+  ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SCSSub(..), 
+  SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), cite, 
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
@@ -55,7 +56,7 @@ import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist, glaSlab, 
   blastRisk, glass, glaPlane, glassBRProg, ptOfExplsn, acronyms)
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
-  dimLL, glaTyFac, tolStrDisFac, tolPre, risk, standOffDis, qDefns)
+  dimLL, glaTyFac, tolStrDisFac, tolPre, standOffDis)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
@@ -121,9 +122,8 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   GSDSec (GSDProg2 [UsrChars [user_characteristics_bullets endUser gLassBR secondYear
     undergradDegree civilEng structuralEng glBreakage blastRisk],
     SystCons [] []]) :
-  ScpOfProjSec (ScpOfProjProg (short gLassBR) (product_use_case_table) (individual_product_use_case (glaSlab)
-    (capacity) (demandq) (probability))) :
-  -- SSDSec (SSDVerb spec_sys_desc) : 
+  ScpOfProjSec (ScpOfProjProg (short gLassBR) product_use_case_table (individual_product_use_case glaSlab
+    capacity demandq probability)) :
   SSDSec 
     (SSDProg
       [SSDProblem  (PDProg start gLassBR ending [terminology_and_description , physical_system_description, goal_statements])
@@ -134,7 +134,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
           , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand] HideDerivation
-          , Constraints (EmptyS) (dataConstraintUncertainty) 
+          , Constraints EmptyS dataConstraintUncertainty
                         (foldlSent [(makeRef (SRS.valsOfAuxCons SRS.missingP [])), S "gives", (plural value `ofThe` S "specification"), 
                         plural parameter, S "used in", (makeRef inputDataConstraints)] +:+ instance_models_intro2)
                         [inputDataConstraints, outputDataConstraints]
@@ -168,13 +168,13 @@ glassSystInfo = SI {
   _units       = map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton],
   _quants      = this_symbols,
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = qDefns ++ 
-                 (map (relToQD gbSymbMap) iModels {-[RelationConcept]-}) ++ 
+  _definitions = (map (relToQD gbSymbMap) iModels {-[RelationConcept]-}) ++ 
                  (map (relToQD gbSymbMap) tModels {-[RelationConcept]-}) ++
                   [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears
                                              -- in the description of the Calculation of Demand instance model;
                                              -- should this be included as a Data Definition?
                                              -- (same for sdWithEqn)
+  _datadefs    = dataDefns,
   _inputs      = map qw gbInputs,
   _outputs     = map qw gbOutputs,
   _defSequence = gbQDefns,
@@ -192,7 +192,7 @@ problem_description, terminology_and_description,
   physical_system_description, goal_statements :: Section
 
 product_use_case_table,
-  physical_system_description_list, {-solution_characteristics_specification_intro,-} inputDataConstraints,
+  physical_system_description_list, inputDataConstraints,
   outputDataConstraints, traceability_matrices_and_graphs_table1,
   traceability_matrices_and_graphs_table2, traceability_matrices_and_graphs_table3, appendix_intro,
   fig_glassbr, fig_2, fig_3, fig_4, fig_5,
@@ -216,10 +216,10 @@ terminology_and_description_bullets = Enumeration $ (Numeric $
 
 terminology_and_description_bullets_glTySubSec, terminology_and_description_bullets_loadSubSec :: [ItemType]
 
-terminology_and_description_bullets_glTySubSec = [Nested (((titleize glassTy) :+: S ":"))
+terminology_and_description_bullets_glTySubSec = [Nested ((titleize glassTy) :+: S ":")
   (Bullet $ map tAndDWAcc glassTypes)]
 
-terminology_and_description_bullets_loadSubSec = [Nested (((at_start load) :+: S ":"))
+terminology_and_description_bullets_loadSubSec = [Nested ((at_start load) :+: S ":")
   (Bullet $ map tAndDWAcc (take 2 loadTypes)
   ++
   map tAndDOnly (drop 2 loadTypes))]
@@ -335,7 +335,7 @@ user_characteristics_bullets intendedIndvdl progName yr degreeType prog1 prog2 u
   `isExpctdToHv` S "completed at least", (S "equivalent" `ofThe` (phrase yr)),
   S "of an", phrase degreeType `sIn` phrase prog1 `sOr` phrase prog2],
   (phrase intendedIndvdl `isExpctdToHv` S "an understanding of" +:+.
-  rdrKnldgbleIn (undrstd1) (undrstd2)), foldlSent [phrase intendedIndvdl
+  rdrKnldgbleIn undrstd1 undrstd2), foldlSent [phrase intendedIndvdl
   `isExpctdToHv` S "basic", phrase computerLiteracy, S "to handle the",
   phrase software]]
 
@@ -389,7 +389,7 @@ individual_product_use_case mainObj compare1 compare2 factorOfComparison =
 
 {--SPECIFIC SYSTEM DESCRIPTION--}
 
---specific_sysytem_description = specSysDesF (S "and" +:+ plural definition) [problem_description, solution_characteristics_specification]
+--Automatically generated
 
 {--PROBLEM DESCRIPTION--}
 
@@ -413,7 +413,7 @@ terminology_and_description = termDefnF (Just (S "All" `sOf` S "the" +:+ plural 
 
 {--Physical System Description--}
 
-physical_system_description = physSystDesc (short gLassBR) (fig_glassbr) [physical_system_description_list, fig_glassbr]
+physical_system_description = physSystDesc (short gLassBR) fig_glassbr [physical_system_description_list, fig_glassbr]
 
 fig_glassbr = fig (at_start $ the physicalSystem) (resourcePath ++ "physicalsystimage.png")
   "physSystImage"
@@ -449,22 +449,8 @@ goal_statements_list_goalStmt1 = [foldlSent [S "Analyze" `sAnd` S "predict wheth
 
 {--SOLUTION CHARACTERISTICS SPECIFICATION--}
 
-{-
-solution_characteristics_specification = solChSpecF gLassBR (problem_description, (SRS.likeChg SRS.missingP []), (SRS.unlikeChg SRS.missingP [])) EmptyS
- (EmptyS, dataConstraintUncertainty, end)
- (assumptions_list, map reldefn tModels, [], map datadefn dataDefns,
-  map reldefn iModels,
-  [inputDataConstraints, outputDataConstraints]) []
-  where
-    end = foldlSent [(makeRef (SRS.valsOfAuxCons SRS.missingP [])),
-      S "gives", (plural value `ofThe` S "specification"),
-      plural parameter, S "used in", (makeRef inputDataConstraints)]
-      +:+ instance_models_intro2
+--Automatically generated
 
-solution_characteristics_specification_intro = foldlSP [S "This", phrase section_, S "explains all the",
-  plural assumption, S "considered" `sAnd` S "the", plural thModel,
-  S "which are supported by the", plural dataDefn]
--}
 {--Assumptions--}
 
 assumptions_list :: [Contents]
@@ -674,7 +660,7 @@ traceability_matrices_and_graphs_t1_DD8 = ["DD2"]
 
 traceability_matrices_and_graphs_table1 = Table (EmptyS:traceability_matrices_and_graphs_row_header_t1)
   (makeTMatrix traceability_matrices_and_graphs_row_header_t1 traceability_matrices_and_graphs_columns_t1 traceability_matrices_and_graphs_row_t1)
-  (showingCxnBw (traceyMatrix)
+  (showingCxnBw traceyMatrix
   (titleize' item +:+ S "of Different" +:+ titleize' section_)) True "TraceyItemSecs"
 
 --
@@ -703,7 +689,7 @@ traceability_matrices_and_graphs_t2_r6 = ["IM1", "IM2", "IM3", "DD2", "DD3", "DD
 
 traceability_matrices_and_graphs_table2 = Table (EmptyS:traceability_matrices_and_graphs_row_header_t2)
   (makeTMatrix traceability_matrices_and_graphs_col_header_t2 traceability_matrices_and_graphs_columns_t2 traceability_matrices_and_graphs_row_t2)
-  (showingCxnBw (traceyMatrix) (titleize' requirement `sAnd` S "Other" +:+
+  (showingCxnBw traceyMatrix (titleize' requirement `sAnd` S "Other" +:+
   titleize' item)) True "TraceyReqsItems"
 
 --
@@ -756,7 +742,7 @@ traceability_matrices_and_graphs_t3_r6  = []
 
 traceability_matrices_and_graphs_table3 = Table (EmptyS:traceability_matrices_and_graphs_row_header_t3)
   (makeTMatrix traceability_matrices_and_graphs_col_header_t3 traceability_matrices_and_graphs_columns_t3 traceability_matrices_and_graphs_row_t3)
-  (showingCxnBw (traceyMatrix) (titleize' assumption `sAnd` S "Other"
+  (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other"
   +:+ titleize' item)) True "TraceyAssumpsOthers"
 
 --
@@ -768,15 +754,15 @@ traceability_matrices_and_graphs_intro2 = traceGIntro traceyGraphs
   (foldlList ((map plural (take 3 solChSpecSubsections))++
   [plural requirement, plural likelyChg +:+ S "on" +:+ plural assumption]))]
 
-fig_2 = figureLabel 2 (traceyMatrix)
+fig_2 = figureLabel 2 traceyMatrix
   (titleize' item +:+ S "of Different" +:+ titleize' section_)
   (resourcePath ++ "Trace.png") "TraceyItemSecs"
 
-fig_3 = figureLabel 3 (traceyMatrix)
+fig_3 = figureLabel 3 traceyMatrix
   (titleize' requirement `sAnd` S "Other" +:+ titleize' item)
   (resourcePath ++ "RTrace.png") "TraceyReqsItems"
 
-fig_4 = figureLabel 4 (traceyMatrix)
+fig_4 = figureLabel 4 traceyMatrix
   (titleize' assumption `sAnd` S "Other" +:+ titleize' item)
   (resourcePath ++ "ATrace.png") "TraceyAssumpsOthers"
 

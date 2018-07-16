@@ -5,7 +5,8 @@ module Drasil.DocLang.SRS
   genDefn, inModel, dataDefn, datCon, require, nonfuncReq, funcReq, likeChg, unlikeChg, 
   traceyMandG, appendix, reference, propCorSol, offShelfSol, missingP, valsOfAuxCons,
   tOfSymb, 
-  physSystLabel, datConLabel) where
+  physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, inModelLabel,
+  likeChgLabel, unlikeChgLabel) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
@@ -70,9 +71,9 @@ termogy     cs ss = section' (titleize Doc.terminology)        cs ss "Terminolog
 goalStmt    cs ss = section' (titleize' Doc.goalStmt)          cs ss "GoalStmt"
 solCharSpec cs ss = section' (titleize Doc.solutionCharSpec)   cs ss "SolCharSpec"
 assumpt     cs ss = section' (titleize' Doc.assumption)        cs ss "Assumps"
-thModel     cs ss = section' (titleize' Doc.thModel)           cs ss "TMs"
-inModel     cs ss = section' (titleize' Doc.inModel)           cs ss "IMs"
-dataDefn    cs ss = section' (titleize' Doc.dataDefn)          cs ss "DDs"
+thModel     cs ss = section' (titleize' Doc.thModel)           cs ss "TMs" --FIXME: label is available
+inModel     cs ss = section' (titleize' Doc.inModel)           cs ss "IMs" --FIXME: label is available
+dataDefn    cs ss = section' (titleize' Doc.dataDefn)          cs ss "DDs" --FIXME: label is available
 
 propCorSol  cs ss = section' (titleize' Doc.propOfCorSol)      cs ss "CorSolProps"
 
@@ -93,12 +94,12 @@ appendix, datCon, funcReq, genDefn, likeChg, physSyst, sysCont, traceyMandG,
 appendix    cs ss = sectionLC (titleize Doc.appendix)               cs ss (mkLabelRA'' "Appendix")
 datCon      cs ss = sectionLC (titleize' Doc.datumConstraint)       cs ss datConLabel
 funcReq     cs ss = sectionLC (titleize' Doc.functionalRequirement) cs ss (mkLabelRA'' "FRs")
-genDefn     cs ss = sectionLC (titleize' Doc.genDefn)               cs ss (mkLabelRA'' "GDs")
-likeChg     cs ss = sectionLC (titleize' Doc.likelyChg)             cs ss (mkLabelRA'' "LCs")
+genDefn     cs ss = sectionLC (titleize' Doc.genDefn)               cs ss genDefnLabel
+likeChg     cs ss = sectionLC (titleize' Doc.likelyChg)             cs ss likeChgLabel
 physSyst    cs ss = sectionLC (titleize Doc.physSyst)               cs ss physSystLabel
 sysCont     cs ss = sectionLC (titleize Doc.sysCont)                cs ss (mkLabelRA'' "SysContext")
 traceyMandG cs ss = sectionLC (titleize' Doc.traceyMandG)           cs ss (mkLabelRA'' "TraceMatrices")
-unlikeChg   cs ss = sectionLC (titleize' Doc.unlikelyChg)           cs ss (mkLabelRA'' "UCs")
+unlikeChg   cs ss = sectionLC (titleize' Doc.unlikelyChg)           cs ss unlikeChgLabel
 
 --function that sets the shortname of each section to be the reference address
 section' :: Sentence -> [Contents] -> [Section] -> RefAdd -> Section
@@ -108,6 +109,13 @@ missingP :: [Contents]
 missingP = [Paragraph $ S "..."]
 
 --Labels--
-physSystLabel, datConLabel :: Label
+physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, inModelLabel, likeChgLabel
+  :: Label
 physSystLabel = mkLabelRA'' "PhysSyst"
 datConLabel   = mkLabelRA'' "DataConstraints"
+genDefnLabel  = mkLabelRA'' "GDs"
+thModelLabel  = mkLabelRA'' "TMs"
+dataDefnLabel = mkLabelRA'' "DDs"
+inModelLabel  = mkLabelRA'' "IMs"
+likeChgLabel  = mkLabelRA'' "LCs"
+unlikeChgLabel  = mkLabelRA'' "UCs"

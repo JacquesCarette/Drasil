@@ -29,7 +29,7 @@ module Drasil.DocLang (
     siUQI, siUQO, siLC,
     -- Sections.SpecificSystemDescription
     assumpF, dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, 
-    inModelF, outDataConstTbl, physSystDesc, probDescF, solChSpecF, specSysDescr, 
+    inModelF, outDataConstTbl, physSystDesc, probDescF, specSysDescr, 
     specSysDesF, termDefnF,
     -- Sections.Stakeholders
     -- Sections.TableOfAbbAndAcronyms
@@ -63,7 +63,7 @@ import Drasil.Sections.SolutionCharacterSpec (SubSec, assembler, sSubSec, siCon,
     siDDef, siIMod, siSTitl, siSent, siTMod, siUQI, siUQO, siLC)
 import Drasil.Sections.SpecificSystemDescription (assumpF, 
     dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, inModelF, 
-    outDataConstTbl, physSystDesc, probDescF, solChSpecF, specSysDesF,
+    outDataConstTbl, physSystDesc, probDescF, specSysDesF,
     specSysDescr, termDefnF)
 --import Drasil.Sections.Stakeholders
 --import Drasil.Sections.TableOfAbbAndAcronyms

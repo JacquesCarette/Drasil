@@ -21,7 +21,8 @@ import Drasil.Sections.TableOfSymbols (table)
 import Drasil.Sections.TableOfUnits (table_of_units)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn, genSysDes, 
   inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec, stakeholder,
-  thModel, tOfSymb, userChar)
+  thModel, tOfSymb, userChar, genDefnLabel, thModelLabel, dataDefnLabel, inModelLabel,
+  likeChgLabel, unlikeChgLabel)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF)
@@ -450,11 +451,12 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (GDs fields gs' _) =
       SSD.genDefnF (map (gdefn fields (_sysinfodb si')) gs')
     mkSubSCS si' (IMs fields ims ShowDerivation) = 
-      SSD.inModelF pdStub ddStub tmStub gdStub (concatMap (\x -> instanceModel fields (_sysinfodb si') x : derivation x) ims)
+      SSD.inModelF pdStub ddStub tmStub SRS.genDefnLabel (concatMap (\x -> instanceModel fields (_sysinfodb si') x : derivation x) ims)
     mkSubSCS si' (IMs fields ims _)= 
-      SSD.inModelF pdStub ddStub tmStub gdStub (map (instanceModel fields (_sysinfodb si')) ims)
+      SSD.inModelF pdStub ddStub tmStub SRS.genDefnLabel (map (instanceModel fields (_sysinfodb si')) ims)
     mkSubSCS SI {_refdb = db} Assumptions =
-      SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
+      SSD.assumpF SRS.thModelLabel SRS.genDefnLabel SRS.dataDefnLabel SRS.inModelLabel 
+      SRS.likeChgLabel SRS.unlikeChgLabel
       (map Assumption $ assumptionsFromDB (db ^. assumpRefTable))
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
     inModSec = SRS.inModel [Paragraph EmptyS] []

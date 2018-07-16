@@ -15,8 +15,6 @@ import Data.Drasil.Concepts.Math (probability, parameter, calculation)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.SentenceStructures (sAnd)
 
-import Control.Lens ((^.))
-
 ----------------------
 -- DATA DEFINITIONS --
 ----------------------

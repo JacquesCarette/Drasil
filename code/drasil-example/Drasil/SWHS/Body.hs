@@ -13,11 +13,11 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   Fields, Field(..), SSDSub(..), SolChSpec( SCSProg ), SSDSec(..), 
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SCSSub(..),
   assumpF, dataConstraintUncertainty, genSysF, inDataConstTbl, inModelF, intro, 
-  mkDoc, outDataConstTbl, physSystDesc, reqF, solChSpecF, specSysDesF, 
+  mkDoc, outDataConstTbl, physSystDesc, reqF, specSysDesF, 
   termDefnF, traceGIntro, traceMGF, tsymb'')
 import qualified Drasil.DocLang.SRS as SRS (inModel, missingP, likeChg,
-  funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
-  sysCont, reference)
+  funcReq, propCorSol, dataDefn, thModel, probDesc, goalStmt,
+  sysCont, reference, genDefnLabel, dataDefnLabel, thModelLabel)
 
 import Data.Drasil.People (thulasi, brooks, spencerSmith)
 import Data.Drasil.Phrase (for)
@@ -61,7 +61,7 @@ import Drasil.SWHS.TMods (t1ConsThermE_new, t2SensHtE_new,
   t3LatHtE_new, swhsTMods, swhsTMods, swhsTModsAsLCs, tMod1LC)
 import Drasil.SWHS.IMods (heatEInWtr_new, eBalanceOnWtr_new,
   heatEInPCM_new, eBalanceOnPCM_new, swhsIMods, swhsIMods')
-import Drasil.SWHS.DataDefs (swhsDataDefs,dd1HtFluxC, dd2HtFluxP, swhsDDefs, dataDefns,
+import Drasil.SWHS.DataDefs (swhsDataDefs, dd1HtFluxC, dd2HtFluxP, dataDefns,
   dd1HtFluxC, dd2HtFluxP)
 import Drasil.SWHS.GenDefs (swhsGenDefs, swhsGDs, generalDefinitions)
 import Drasil.SWHS.Requirements (req1, req2, reqEqn1, reqEqn2,
@@ -257,8 +257,8 @@ systContRespBullets = llcc "systContRespBullets" (mkLabelRA'' "systContRespBulle
 -- Section 4 : SPECIFIC SYSTEM DESCRIPTION --
 ---------------------------------------------
 
-specSystDesc :: Section
-specSystDesc = specSysDesF (specSystDescIntroEnd swhs_pcm) [probDescription, solCharSpec]
+--specSystDesc :: Section
+--specSystDesc = specSysDesF (specSystDescIntroEnd swhs_pcm) [probDescription, solCharSpec]
 
 -------------------------------
 -- 4.1 : Problem Description --
@@ -331,12 +331,12 @@ goalStateList = enumSimple 1 (short goalStmt) $
 -- 4.2 : Solution Characteristics Specification --
 --------------------------------------------------
 
-solCharSpec :: Section
+{-solCharSpec :: Section
 solCharSpec = solChSpecF progName (probDescription, likelyChgs, unlikelyChgs) dataDefIntroEnd
   (dataContMid, dataConstraintUncertainty, dataContFooter quantity surArea
   vol thickness phsChgMtrl) (swhsAssumptions, 
   swhsTMods, genDefs ++ genDefsDeriv,
-  swhsDDefs, iModsWithDerivs, dataConTables) [propsCorrSol]
+  swhsDDefs, iModsWithDerivs, dataConTables) [propsCorrSol]-}
 
 -------------------------
 -- 4.2.1 : Assumptions --
@@ -344,9 +344,8 @@ solCharSpec = solChSpecF progName (probDescription, likelyChgs, unlikelyChgs) da
 
 assumps :: Section
 assumps = assumpF
-  (SRS.thModel SRS.missingP [])
-  (SRS.genDefn SRS.missingP [])
-  (SRS.dataDefn SRS.missingP [])
+  SRS.thModelLabel SRS.genDefnLabel 
+  SRS.dataDefnLabel
   iMods likelyChgs unlikelyChgs swhsAssumptions
 
 -- Again, list structure is same between all examples.
@@ -396,8 +395,7 @@ iMods :: Section
 iMods = inModelF probDescription
   (SRS.dataDefn SRS.missingP [])
   (SRS.thModel SRS.missingP [])
-  (SRS.genDefn SRS.missingP [])
-  iModsWithDerivs
+  SRS.genDefnLabel iModsWithDerivs
 
 iModsWithDerivs :: [Contents]
 iModsWithDerivs = concat $ weave [iModsDerivations,

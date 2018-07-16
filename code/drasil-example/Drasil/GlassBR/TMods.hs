@@ -1,4 +1,4 @@
-module Drasil.GlassBR.TMods (tModels, gbrTMods, t1IsSafe,t2IsSafe) where
+module Drasil.GlassBR.TMods (gbrTMods, t1IsSafe,t2IsSafe) where
 
 import Drasil.GlassBR.Unitals (demand, demandq, is_safe1, is_safe2, lRe,
   pb_tol, prob_br)
@@ -11,9 +11,6 @@ import Control.Lens ((^.))
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
 
 {--}
-
-tModels :: [RelationConcept]
-tModels = [t1SafetyReq, t2SafetyReq]
 
 gbrTMods :: [TheoryModel]
 gbrTMods = [t1IsSafe, t2IsSafe]

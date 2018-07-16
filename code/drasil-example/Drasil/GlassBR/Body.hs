@@ -60,7 +60,7 @@ import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt, strDisFac, nonFL,
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
-import Drasil.GlassBR.TMods (tModels, gbrTMods, t1IsSafe, t2IsSafe)
+import Drasil.GlassBR.TMods (gbrTMods, t1IsSafe, t2IsSafe)
 import Drasil.GlassBR.IMods (probOfBreak, 
   calofCapacity, calofDemand, gbrIMods)
 

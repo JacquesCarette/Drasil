@@ -77,15 +77,6 @@ dd4MeltFracDD = mkDD dd4MeltFrac [] [] "" Nothing
 
 --Need to add units to data definition descriptions
 
-swhsDDefs :: [Contents]
-swhsDDefs = [swhsDD1, swhsDD2, swhsDD3, swhsDD4] 
-
-swhsDD1, swhsDD2, swhsDD3, swhsDD4 :: Contents
-swhsDD1 = datadefn dd1HtFluxC
-swhsDD2 = datadefn dd2HtFluxP
-swhsDD3 = datadefn dd3HtFusion
-swhsDD4 = datadefn dd4MeltFrac
-
 --Symbol appears as "Label"
 --There is no actual label
 --Units section doesn't appear

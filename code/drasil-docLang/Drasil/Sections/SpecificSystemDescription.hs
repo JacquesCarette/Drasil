@@ -4,7 +4,7 @@ module Drasil.Sections.SpecificSystemDescription
   , termDefnF
   , physSystDesc
   , goalStmtF
-  , solChSpecF
+  --, solChSpecF
   , solutionCharSpecIntro 
   , assumpF
   , thModF
@@ -97,7 +97,7 @@ goalStmtF givenInputs otherContents = SRS.goalStmt (intro:otherContents) []
   where intro = Paragraph $ S "Given" +:+ foldlList givenInputs `sC` S "the" +:+ 
                 plural goalStmt +: S "are"
 
--- progName (ex ssp, progName), the two sections, gendef is True if you want general definitions sections, 
+{-- progName (ex ssp, progName), the two sections, gendef is True if you want general definitions sections, 
 --  ddEndSent is the ending sentence for Data Definitions, this is a 4-tuple of inputs for Data Constraints, 
 --  the last input is a tupple of lists of Sections for each Subsection in order.
 solChSpecF :: (Idea a) => a -> (Section, Section, Section) -> Sentence -> 
@@ -112,9 +112,9 @@ solChSpecF progName (probDes, likeChg, unlikeChg) ddEndSent (mid, hasUncertainty
         theModels    = thModF progName t
         generDefn    = genDefnF g
         dataDefin    = dataDefnF ddEndSent dd
-        instModels   = inModelF  probDes dataDefin theModels generDefn i
+        instModels   = inModelF probDes dataDefin theModels generDefn i
         dataConstr   = datConF mid hasUncertainty trail dc
-
+-}
 
 solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
 solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inModel, 
@@ -126,24 +126,25 @@ solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inMod
 
 
 -- wrappers for assumpIntro. Use assumpF' if genDefs is not needed
-assumpF :: Section -> Section -> Section -> Section -> Section -> Section -> [Contents] -> Section
+assumpF :: (HasShortName a, Referable a, HasShortName b, Referable b, HasShortName c, Referable c) => 
+  Label -> Label -> Label -> b -> c -> a -> [Contents] -> Section
 assumpF theMod genDef dataDef inMod likeChg unlikeChg otherContents = 
       SRS.assumpt ((assumpIntro theMod genDef dataDef inMod likeChg unlikeChg):otherContents) []
 
 
 -- takes a bunch of references to things discribed in the wrapper
-assumpIntro :: Section -> Section -> Section -> Section -> Section -> Section-> Contents
+assumpIntro :: (HasShortName a, Referable a, HasShortName b, Referable b, HasShortName c, Referable c) =>
+  Label -> Label -> Label -> b -> c -> a -> Contents
 assumpIntro r1 r2 r3 r4 r5 r6 = Paragraph $ foldlSent 
           [S "This", (phrase section_), S "simplifies the original", (phrase problem), 
           S "and helps in developing the", (phrase thModel), S "by filling in the", 
           S "missing", (phrase information), S "for the" +:+. (phrase physicalSystem), 
           S "The numbers given in the square brackets refer to the", 
-          foldr1 sC (map (refs) (itemsAndRefs)) `sC` (refs (likelyChg, r5)) `sC` S "or", 
-          refs (unlikelyChg, r6) `sC` S "in which the respective", 
+          foldr1 sC (map refs itemsAndRefs) `sC` (refs (inModel, r4)) `sC` (refs (likelyChg, r5)) `sC`
+          S "or", refs (unlikelyChg, r6) `sC` S "in which the respective", 
           (phrase assumption), S "is used"] --FIXME: use some clever "zipWith"
           where refs (chunk, ref) = (titleize' chunk) +:+ sSqBr (makeRef ref) 
-                itemsAndRefs = [(thModel, r1), (genDefn, r2), (dataDefn, r3), 
-                                (inModel, r4)]
+                itemsAndRefs = [(thModel, r1), (genDefn, r2), (dataDefn, r3)]
 
 --wrapper for thModelIntro
 thModF :: (Idea a) => a -> [Contents] -> Section
@@ -182,11 +183,11 @@ dataDefinitionIntro closingSent = Paragraph $ (foldlSent [S "This", phrase secti
     S "needed to build the", plural inModel] +:+ closingSent)
 
 -- wrappers for inModelIntro. Use inModelF' if genDef are not needed
-inModelF :: Section -> Section -> Section -> Section -> [Contents] -> Section
+inModelF :: Section -> Section -> Section -> Label -> [Contents] -> Section
 inModelF probDes datDef theMod genDef otherContents = SRS.inModel ((inModelIntro probDes datDef theMod genDef):otherContents) []
 
 -- just need to provide the four references in order to this function. Nothing can be input into r4 if only three tables are present
-inModelIntro :: Section -> Section -> Section -> Section -> Contents
+inModelIntro :: Section -> Section -> Section -> Label -> Contents
 inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_, 
   S "transforms the", phrase problem, S "defined in", (makeRef r1), 
   S "into one which is expressed in mathematical terms. It uses concrete", 

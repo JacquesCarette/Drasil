@@ -65,14 +65,13 @@ import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr, probOfBreak,
   calofCapacity, calofDemand)
 
 import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad, 
-  lateralLoad, sflawParamM, char_weight, sD, demand, demandq, 
-  aspectRWithEqn, aspectR, lRe, wtntWithEqn, sdWithEqn, prob_br, notSafe, 
-  safeMessage, is_safe1, is_safe2, plate_width, plate_len, blast, glassTy, 
-  gbInputDataConstraints, explosion, pb_tol, blast, bomb, blastTy, 
-  glassGeo, glass_type, nom_thick, sdx, sdy, sdz, tNT, gBRSpecParamVals,
-  loadTypes, load, glassTypes, probBreak, termsWithAccDefn, termsWithDefsOnly,
-  gbConstants, gbConstrained, gbOutputs, gbInputs, glBreakage, capacity, 
-  constant_LoadDF, glassBRsymb)
+  lateralLoad, char_weight, sD, demand, demandq, aspectR, lRe, wtntWithEqn, 
+  sdWithEqn, prob_br, notSafe, safeMessage, is_safe1, is_safe2, plate_width, 
+  plate_len, blast, glassTy, gbInputDataConstraints, explosion, pb_tol, 
+  blast, bomb, blastTy, glassGeo, glass_type, nom_thick, sdx, sdy, sdz, tNT, 
+  gBRSpecParamVals, loadTypes, load, glassTypes, probBreak, termsWithAccDefn, 
+  termsWithDefsOnly, gbConstants, gbConstrained, gbOutputs, gbInputs, glBreakage, 
+  capacity, constant_LoadDF, glassBRsymb)
 
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.People (spencerSmith, nikitha, mCampidelli)
@@ -221,7 +220,7 @@ terminology_and_description_bullets_glTySubSec, terminology_and_description_bull
 terminology_and_description_bullets_glTySubSec = [Nested ((titleize glassTy) :+: S ":")
   (Bullet $ map tAndDWAcc glassTypes)]
 
-terminology_and_description_bullets_loadSubSec = [Nested ((at_start load) :+: S ":")
+terminology_and_description_bullets_loadSubSec = [Nested ((at_start load) +:+ S "-" +:+ (load ^. defn))
   (Bullet $ map tAndDWAcc (take 2 loadTypes)
   ++
   map tAndDOnly (drop 2 loadTypes))]

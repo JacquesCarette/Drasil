@@ -5,16 +5,16 @@ import Language.Drasil.Code (CodeSpec, codeSpec)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 import Control.Lens ((^.))
 
-import Drasil.DocLang {--(AuxConstntSec (AuxConsProg), DocDesc, 
-  DocSection (AuxConstntSec, Bibliography, IntroSec, RefSec, Verbatim), 
+import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, 
+  DocSection (SSDSec, AuxConstntSec, Bibliography, IntroSec, RefSec, Verbatim), 
   LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
   IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
   RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
-  Fields, Field(..),SSDSub(..), SolChSpec( SCSProg ), SSDSec, SSDSec(..), 
+  Fields, Field(..), SSDSub(..), SolChSpec( SCSProg ), SSDSec(..), 
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SCSSub(..),
   assumpF, dataConstraintUncertainty, genSysF, inDataConstTbl, inModelF, intro, 
   mkDoc, outDataConstTbl, physSystDesc, reqF, solChSpecF, specSysDesF, 
-  termDefnF, traceGIntro, traceMGF, tsymb'')--}
+  termDefnF, traceGIntro, traceMGF, tsymb'')
 import qualified Drasil.DocLang.SRS as SRS (inModel, missingP, likeChg,
   funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
   sysCont, reference)

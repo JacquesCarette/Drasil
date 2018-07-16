@@ -67,14 +67,16 @@ import Data.Drasil.Software.Products (compPro)
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, likeChg, unlikeChg, probDesc, goalStmt,
   inModel, missingP)
-import Drasil.DocLang {--(DocDesc, 
-  DocSection(Verbatim, Bibliography, IntroSec, RefSec), IntroSec(IntroProg),
+import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose), 
+  InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
+  SolChSpec(..), SSDSec(..),
+  DocSection(SSDSec, Verbatim, Bibliography, IntroSec, RefSec), IntroSec(IntroProg),
   IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
   RefSec(RefProg), RefTab(TAandA, TUnits), 
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty, 
   inDataConstTbl, intro, mkDoc, mkLklyChnk, mkRequirement, mkUnLklyChnk, 
-  outDataConstTbl, physSystDesc, reqF, specSysDesF, termDefnF, 
-  traceGIntro, traceMGF, tsymb, valsOfAuxConstantsF)--}
+  outDataConstTbl, physSystDesc, reqF, solChSpecF, specSysDesF, termDefnF, 
+  traceGIntro, traceMGF, tsymb, valsOfAuxConstantsF)
  
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
   foldlList, isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP, acroIM,

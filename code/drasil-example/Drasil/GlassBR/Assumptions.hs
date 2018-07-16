@@ -22,7 +22,7 @@ gbRefDB = rdb [] [] newAssumptions [] [] gbCitations []
 
 assumptionConstants :: [QDefinition]
 assumptionConstants = [constant_M, constant_K, constant_ModElas,
-  constant_LoadDur, constant_LoadDF, constant_LoadSF]
+  constant_LoadDur, constant_LoadSF]
 
 newAssumptions :: [AssumpChunk] -- For testing
 newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8]
@@ -92,6 +92,4 @@ a8Desc :: QDefinition -> Sentence
 a8Desc mainConcept = foldlSent [S "With", phrase reference, S "to",
   (refA gbRefDB newA4) `sC` S "the", phrase value `sOf`
   phrase mainConcept, sParen (ch mainConcept), S "is a", phrase constant,
-  S "in" +:+. short gLassBR, S "It is calculated by the" +: phrase equation +:+.
-  E (sy mainConcept $= mainConcept^.equat), S "Using this" `sC`
-  E (sy mainConcept $= dbl 0.27)]
+  S "in", short gLassBR]

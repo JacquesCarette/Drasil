@@ -56,7 +56,7 @@ import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist, glaSlab, 
   blastRisk, glass, glaPlane, glassBRProg, ptOfExplsn, acronyms)
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
-  dimLL, glaTyFac, tolStrDisFac, tolPre, risk)
+  dimLL, glaTyFac, tolStrDisFac, tolPre, risk, standOffDis)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
@@ -531,7 +531,8 @@ req2Desc = foldlSent [S "The", phrase system,
   foldlList [(foldlsC (map ch (take 4 assumptionConstants)) `followA` 4),
   ((ch constant_LoadDF) `followA` 8), (short lShareFac `followA` 5),
   (ch hFromt) +:+ sParen (S "from" +:+ (makeRef hFromt)), 
-  (ch glaTyFac) +:+ sParen (S "from" +:+ (makeRef glaTyFac))]]
+  (ch glaTyFac) +:+ sParen (S "from" +:+ (makeRef glaTyFac)),
+  (ch standOffDis) +:+ sParen (S "from" +:+ (makeRef standOffDis))]]
 
 --ItemType
 {-functional_requirements_req2 = (Nested (S "The" +:+ phrase system +:+

@@ -211,7 +211,8 @@ dataConstraintParagraph hasUncertainty tableRef middleSent trailingSent = Paragr
 listofTablesToRefs :: (HasShortName l, Referable l) => [l] -> Sentence
 listofTablesToRefs  []     = EmptyS
 listofTablesToRefs  [x]    = (makeRef x) +:+ S "shows"
-listofTablesToRefs  [x,y]  = (makeRef x) `sC` S "and" +:+ listofTablesToRefs [y]
+listofTablesToRefs  [x,y]  = (makeRef x) +:+ S "and" +:+ (makeRef y) +:+ S "show" -- for proper grammar with multiple tables
+                                                                                  -- no Oxford comma in case there is only two tables to be referenced
 listofTablesToRefs  (x:xs) = (makeRef x) `sC` listofTablesToRefs (xs)
  
 dataConstraintIntroSent :: Sentence -> Sentence

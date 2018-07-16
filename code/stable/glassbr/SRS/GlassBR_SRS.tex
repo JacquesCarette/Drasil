@@ -87,7 +87,7 @@ $g$ & Glass type $g\in{}\{AN,FT,HS\}$ &
 \\
 $GTF$ & Glass type factor & 
 \\
-$h$ & Actual thickness & m
+$h$ & Minimum thickness & m
 \\
 $is\_safe1$ & Variable that is assigned true when calculated probability is less than tolerable probability & 
 \\
@@ -433,7 +433,7 @@ Description & \begin{symbDescription}
               \item{$b$ is the plate width (short dimension) (m)}
               \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
               \item{$E$ is the modulus of elasticity of glass (Pa)}
-              \item{$h$ is the actual thickness (m)}
+              \item{$h$ is the minimum thickness (m)}
               \item{$LDF$ is the load duration factor (Unitless)}
               \item{$J$ is the stress distribution factor (Function) (Unitless)}
               \end{symbDescription}
@@ -451,11 +451,11 @@ RefBy & FIXME: This needs to be filled in
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:act.thick}
+\toprule \textbf{Refname} & \textbf{DD:min.thick}
 \phantomsection 
-\label{DD:act.thick}
+\label{DD:min.thick}
 \\ \midrule \\
-Label & Actual thickness
+Label & Minimum thickness
 \\ \midrule \\
 Symbol & $h$
 \\ \midrule \\
@@ -479,7 +479,7 @@ Equation & \begin{dmath}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$h$ is the actual thickness (m)}
+              \item{$h$ is the minimum thickness (m)}
               \item{$t$ is the nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ (mm)}
               \end{symbDescription}
 \\ \midrule \\
@@ -573,7 +573,7 @@ Description & \begin{symbDescription}
               \item{$NFL$ is the non-factored load (Unitless)}
               \item{${\hat{q}_{tol}}$ is the tolerable load (Unitless)}
               \item{$E$ is the modulus of elasticity of glass (Pa)}
-              \item{$h$ is the actual thickness (m)}
+              \item{$h$ is the minimum thickness (m)}
               \item{$a$ is the plate length (long dimension) (m)}
               \item{$b$ is the plate width (short dimension) (m)}
               \end{symbDescription}
@@ -641,7 +641,7 @@ Description & \begin{symbDescription}
               \item{$a$ is the plate length (long dimension) (m)}
               \item{$b$ is the plate width (short dimension) (m)}
               \item{$E$ is the modulus of elasticity of glass (Pa)}
-              \item{$h$ is the actual thickness (m)}
+              \item{$h$ is the minimum thickness (m)}
               \item{$GTF$ is the glass type factor (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
@@ -712,7 +712,7 @@ Description & \begin{symbDescription}
               \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
               \item{$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
               \item{$E$ is the modulus of elasticity of glass (Pa)}
-              \item{$h$ is the actual thickness (m)}
+              \item{$h$ is the minimum thickness (m)}
               \item{$LDF$ is the load duration factor (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
@@ -937,7 +937,7 @@ Description & \begin{symbDescription}
               \item{$b$ is the plate width (short dimension) (m)}
               \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
               \item{$E$ is the modulus of elasticity of glass (Pa)}
-              \item{$h$ is the actual thickness (m)}
+              \item{$h$ is the minimum thickness (m)}
               \item{$LDF$ is the load duration factor (Unitless)}
               \item{$J$ is the stress distribution factor (Function) (Unitless)}
               \end{symbDescription}
@@ -993,7 +993,7 @@ This section provides the functional requirements, the business tasks that the s
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req1}:]Input the quantities from Table~\ref{Table:R1ReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req2}:]The system shall set the known values as follows: $m$, $k$, $E$, ${t_{d}}$ following A4, $LDF$ following A8, LSF following A5, $h$ (from \hyperref[DD:act.thick]{Definition~DD:act.thick}), $GTF$ (from \hyperref[DD:gTF]{Definition~DD:gTF}), and $SD$ (from \hyperref[DD:sd]{Definition~DD:sd}).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req2}:]The system shall set the known values as follows: $m$, $k$, $E$, ${t_{d}}$ following A4, $LDF$ following A8, LSF following A5, $h$ (from \hyperref[DD:min.thick]{Definition~DD:min.thick}), $GTF$ (from \hyperref[DD:gTF]{Definition~DD:gTF}), and $SD$ (from \hyperref[DD:sd]{Definition~DD:sd}).
 \end{description}
 \begin{description}
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req3}:]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DataConstraints}. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
@@ -1016,7 +1016,7 @@ This section provides the functional requirements, the business tasks that the s
           \item{Tolerable load (${\hat{q}_{tol}}$) (\hyperref[DD:tolLoad]{Definition~DD:tolLoad})}
           \item{Stress distribution factor (Function) based on Pbtol (${J_{tol}}$) (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol})}
           \item{Stress distribution factor (Function) ($J$) (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac})}
-          \item{Actual thickness ($h$) (\hyperref[DD:act.thick]{Definition~DD:act.thick})}
+          \item{Minimum thickness ($h$) (\hyperref[DD:min.thick]{Definition~DD:min.thick})}
           \item{Aspect Ratio ($AR$) $AR=\frac{a}{b}$}
           \end{itemize}
 \end{itemize}
@@ -1082,7 +1082,7 @@ This problem is small in size and relatively simple, so performance is not a pri
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. Table~\ref{Table:TraceyItemSecs} shows the dependencies of theoretical models, instance models, and data definitions with each other. Table~\ref{Table:TraceyReqsItems} shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. Table~\ref{Table:TraceyAssumpsOthers} shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) & T2 (\hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) & IM1 (\hyperref[T:probOfBr]{Definition~T:probOfBr}) & IM2 (\hyperref[T:calOfCap]{Definition~T:calOfCap}) & IM3 (\hyperref[T:calOfDe]{Definition~T:calOfDe}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:act.thick]{Definition~DD:act.thick}) & DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) & DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad})
+ & T1 (\hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) & T2 (\hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) & IM1 (\hyperref[T:probOfBr]{Definition~T:probOfBr}) & IM2 (\hyperref[T:calOfCap]{Definition~T:calOfCap}) & IM3 (\hyperref[T:calOfDe]{Definition~T:calOfDe}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) & DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) & DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad})
 \\
 \midrule
 T1 (\hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) &  & X & X &  &  &  &  &  &  &  &  &  & 
@@ -1097,7 +1097,7 @@ IM3 (\hyperref[T:calOfDe]{Definition~T:calOfDe}) &  &  &  &  &  &  &  &  &  &  &
 \\
 DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD2 (\hyperref[DD:act.thick]{Definition~DD:act.thick}) &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD2 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) &  &  &  &  &  &  &  &  &  &  & X &  & 
 \\
@@ -1117,7 +1117,7 @@ DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) &  &  &  &  &  &  & X &  &  &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) & T2 (\hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) & IM1 (\hyperref[T:probOfBr]{Definition~T:probOfBr}) & IM2 (\hyperref[T:calOfCap]{Definition~T:calOfCap}) & IM3 (\hyperref[T:calOfDe]{Definition~T:calOfDe}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:act.thick]{Definition~DD:act.thick}) & DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) & DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & Data Constraints (Section~\ref{Sec:DataConstraints}) & R1 (Section~\ref{Sec:FRs}) & R2 (Section~\ref{Sec:FRs}) & R3 (Section~\ref{Sec:FRs}) & R4 (Section~\ref{Sec:FRs}) & R5 (Section~\ref{Sec:FRs}) & R6 (Section~\ref{Sec:FRs})
+ & T1 (\hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) & T2 (\hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) & IM1 (\hyperref[T:probOfBr]{Definition~T:probOfBr}) & IM2 (\hyperref[T:calOfCap]{Definition~T:calOfCap}) & IM3 (\hyperref[T:calOfDe]{Definition~T:calOfDe}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) & DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) & DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & Data Constraints (Section~\ref{Sec:DataConstraints}) & R1 (Section~\ref{Sec:FRs}) & R2 (Section~\ref{Sec:FRs}) & R3 (Section~\ref{Sec:FRs}) & R4 (Section~\ref{Sec:FRs}) & R5 (Section~\ref{Sec:FRs}) & R6 (Section~\ref{Sec:FRs})
 \\
 \midrule
 R1 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1153,7 +1153,7 @@ IM3 (\hyperref[T:calOfDe]{Definition~T:calOfDe}) &  &  &  &  &  &  &  &
 \\
 DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) &  &  &  &  &  &  &  & 
 \\
-DD2 (\hyperref[DD:act.thick]{Definition~DD:act.thick}) &  &  &  &  &  &  &  & 
+DD2 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) &  &  &  &  &  &  &  & 
 \\
 DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) &  &  &  &  &  &  &  & 
 \\

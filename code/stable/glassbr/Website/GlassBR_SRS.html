@@ -225,7 +225,7 @@ Glass type factor
 <em>h</em>
 </td>
 <td>
-Actual thickness
+Minimum thickness
 </td>
 <td>
 m
@@ -1385,7 +1385,7 @@ Description
 <em>E</em> is the modulus of elasticity of glass (Pa)
 </li>
 <li>
-<em>h</em> is the actual thickness (m)
+<em>h</em> is the minimum thickness (m)
 </li>
 <li>
 <em>LDF</em> is the load duration factor (Unitless)
@@ -1437,7 +1437,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:act.thick">
+<div id="DD:min.thick">
 <table class="ddefn">
 <tr>
 <th>
@@ -1445,7 +1445,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Actual thickness
+Minimum thickness
 </p>
 </td>
 </tr>
@@ -1559,7 +1559,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>h</em> is the actual thickness (m)
+<em>h</em> is the minimum thickness (m)
 </li>
 <li>
 <em>t</em> is the nominal thickness <em>t&thinsp;&isin;&thinsp;{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0}</em> (mm)
@@ -1877,7 +1877,7 @@ Description
 <em>E</em> is the modulus of elasticity of glass (Pa)
 </li>
 <li>
-<em>h</em> is the actual thickness (m)
+<em>h</em> is the minimum thickness (m)
 </li>
 <li>
 <em>a</em> is the plate length (long dimension) (m)
@@ -2099,7 +2099,7 @@ Description
 <em>E</em> is the modulus of elasticity of glass (Pa)
 </li>
 <li>
-<em>h</em> is the actual thickness (m)
+<em>h</em> is the minimum thickness (m)
 </li>
 <li>
 <em>GTF</em> is the glass type factor (Unitless)
@@ -2341,7 +2341,7 @@ Description
 <em>E</em> is the modulus of elasticity of glass (Pa)
 </li>
 <li>
-<em>h</em> is the actual thickness (m)
+<em>h</em> is the minimum thickness (m)
 </li>
 <li>
 <em>LDF</em> is the load duration factor (Unitless)
@@ -3035,7 +3035,7 @@ Description
 <em>E</em> is the modulus of elasticity of glass (Pa)
 </li>
 <li>
-<em>h</em> is the actual thickness (m)
+<em>h</em> is the minimum thickness (m)
 </li>
 <li>
 <em>LDF</em> is the load duration factor (Unitless)
@@ -3270,7 +3270,7 @@ Input-Glass-Props: Input the quantities from <a href=#Table:R1ReqInputs>Table:R1
 <ul class="hide-list-style">
 <li>
 <div id="FR:functional.requirements.req2">
-System-Set-Values-Following-Assumptions: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following A4, <em>LDF</em> following A8, LSF following A5, <em>h</em> (from <a href=#DD:act.thick>act_thick</a>), <em>GTF</em> (from <a href=#DD:gTF>gTF</a>), and <em>SD</em> (from <a href=#DD:sd>sd</a>).
+System-Set-Values-Following-Assumptions: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following A4, <em>LDF</em> following A8, LSF following A5, <em>h</em> (from <a href=#DD:min.thick>min_thick</a>), <em>GTF</em> (from <a href=#DD:gTF>gTF</a>), and <em>SD</em> (from <a href=#DD:sd>sd</a>).
 </div>
 </li>
 </ul>
@@ -3327,7 +3327,7 @@ R6: Output the following quantities:
     Stress distribution factor (Function) (<em>J</em>) (<a href=#DD:stressDistFac>DD:stressDistFac</a>)
     </li>
     <li>
-    Actual thickness (<em>h</em>) (<a href=#DD:act.thick>DD:act.thick</a>)
+    Minimum thickness (<em>h</em>) (<a href=#DD:min.thick>DD:min.thick</a>)
     </li>
     <li>
     Aspect Ratio (<em>AR</em>) <em>AR = <div class="fraction">
@@ -3580,7 +3580,7 @@ IM3 (<a href=#T:calOfDe>T:calOfDe</a>)
 DD1 (<a href=#DD:risk.fun>DD:risk.fun</a>)
 </th>
 <th>
-DD2 (<a href=#DD:act.thick>DD:act.thick</a>)
+DD2 (<a href=#DD:min.thick>DD:min.thick</a>)
 </th>
 <th>
 DD3 (<a href=#DD:loadDurFactor>DD:loadDurFactor</a>)
@@ -3867,7 +3867,7 @@ DD1 (<a href=#DD:risk.fun>DD:risk.fun</a>)
 </tr>
 <tr>
 <td>
-DD2 (<a href=#DD:act.thick>DD:act.thick</a>)
+DD2 (<a href=#DD:min.thick>DD:min.thick</a>)
 </td>
 <td>
 
@@ -4203,7 +4203,7 @@ IM3 (<a href=#T:calOfDe>T:calOfDe</a>)
 DD1 (<a href=#DD:risk.fun>DD:risk.fun</a>)
 </th>
 <th>
-DD2 (<a href=#DD:act.thick>DD:act.thick</a>)
+DD2 (<a href=#DD:min.thick>DD:min.thick</a>)
 </th>
 <th>
 DD3 (<a href=#DD:loadDurFactor>DD:loadDurFactor</a>)
@@ -4847,7 +4847,7 @@ DD1 (<a href=#DD:risk.fun>DD:risk.fun</a>)
 </tr>
 <tr>
 <td>
-DD2 (<a href=#DD:act.thick>DD:act.thick</a>)
+DD2 (<a href=#DD:min.thick>DD:min.thick</a>)
 </td>
 <td>
 

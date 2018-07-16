@@ -4,9 +4,9 @@ module Drasil.GlassBR.DataDefs (dataDefns, dimLL, gbQDefns, glaTyFac, hFromt,
 import Language.Drasil
 import Prelude hiding (log, exp, sqrt)
 
-import Drasil.GlassBR.Unitals (act_thick, actualThicknesses, aspectR, 
+import Drasil.GlassBR.Unitals (actualThicknesses, aspectR, 
   demand, dimlessLoad, gTF, glassTypeAbbrsStr, glassTypeFactors, glass_type, 
-  lDurFac, load_dur, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pb_tol, 
+  lDurFac, load_dur, min_thick, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pb_tol, 
   plate_len, plate_width, risk_fun, sdf_tol, sdx, sdy, sdz, sd, sflawParamK, 
   sflawParamM, stressDistFac, tolLoad)
 
@@ -35,7 +35,7 @@ gbQDefns = [Parallel hFromt {-DD2-} [glaTyFac {-DD6-}]] ++ --can be calculated o
 risk_eq :: Expr
 risk_eq = ((sy sflawParamK) / 
   ((sy plate_len) * (sy plate_width)) $^ ((sy sflawParamM) - 1) *
-  (1000 * sy mod_elas * (square $ sy act_thick)) $^ (sy sflawParamM) 
+  (1000 * sy mod_elas * (square $ sy min_thick)) $^ (sy sflawParamM) 
   * (sy lDurFac) * (exp (sy stressDistFac)))
 
 -- FIXME [4] !!!
@@ -56,7 +56,7 @@ hFromt_helper :: Double -> Double -> (Expr, Relation)
 hFromt_helper result condition = (dbl result, (sy nom_thick) $= dbl condition)
 
 hFromt :: QDefinition
-hFromt = mkDataDef act_thick hFromt_eq
+hFromt = mkDataDef min_thick hFromt_eq
 
 hFromtDD :: DataDefinition
 hFromtDD = mkDD hFromt [{-references-}] [{-derivation-}] ""--temporary
@@ -91,7 +91,7 @@ strDisFacDD = mkDD strDisFac [{-references-}] [{-derivation-}] ""--temporary
 --DD5--
 
 nonFL_eq :: Expr
-nonFL_eq = ((sy tolLoad) * (sy mod_elas) * (sy act_thick) $^ 4) /
+nonFL_eq = ((sy tolLoad) * (sy mod_elas) * (sy min_thick) $^ 4) /
   (square (sy plate_len * sy plate_width))
 
 nonFL :: QDefinition
@@ -120,7 +120,7 @@ glaTyFacDD = mkDD glaTyFac [{-references-}] [{-derivation-}] ""--temporary
 
 dimLL_eq :: Expr
 dimLL_eq = ((sy demand) * (square (sy plate_len * sy plate_width)))
-  / ((sy mod_elas) * (sy act_thick $^ 4) * (sy gTF))
+  / ((sy mod_elas) * (sy min_thick $^ 4) * (sy gTF))
 
 dimLL :: QDefinition
 dimLL = mkDataDef dimlessLoad dimLL_eq
@@ -148,7 +148,7 @@ tolStrDisFac_eq :: Expr
 tolStrDisFac_eq = log (log (1 / (1 - (sy pb_tol)))
   * ((((sy plate_len) * (sy plate_width)) $^ (sy sflawParamM - 1) / 
     ((sy sflawParamK) * ((1000 * sy mod_elas *
-    (square (sy act_thick)))) $^ (sy sflawParamM) * (sy lDurFac)))))
+    (square (sy min_thick)))) $^ (sy sflawParamM) * (sy lDurFac)))))
 
 tolStrDisFac :: QDefinition
 tolStrDisFac = mkDataDef sdf_tol tolStrDisFac_eq
@@ -206,7 +206,7 @@ jRef = (ch stressDistFac +:+ S "is the" +:+ phrase stressDistFac +:+.
 
 hMin :: Sentence
 hMin = (ch nom_thick +:+ S "is a function that maps from the nominal thickness"
-  +:+ sParen (ch act_thick) +:+. S "to the minimum thickness")
+  +:+ sParen (ch min_thick) +:+. S "to the minimum thickness")
 
 qHtTlExtra :: Sentence
 qHtTlExtra = (ch tolLoad +:+ S "is the tolerable load which is obtained from Figure 7 using" 

@@ -163,14 +163,11 @@ sd_min     = mkDataDef (unitary "sd_min"
 {--}
 
 glassBRSymbols :: [UnitaryChunk]
-glassBRSymbols = [act_thick, sflawParamK, sflawParamM, demand, sd, load_dur,
+glassBRSymbols = [min_thick, sflawParamK, sflawParamM, demand, sd, load_dur,
   eqTNTWeight]
 
-act_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, sd, load_dur,
+min_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, sd, load_dur,
   eqTNTWeight :: UnitaryChunk
-
-act_thick   = unitary "act_thick"   (nounPhraseSP "actual thickness")
-  lH metre Rational
 
 demand      = unitary "demand"      (nounPhraseSP "applied load (demand)")
   lQ kilopascal Rational --correct Space used?
@@ -181,6 +178,9 @@ eqTNTWeight = unitary "eqTNTWeight"
 
 load_dur    = unitary "load_dur"    (nounPhraseSP "duration of load")
   (sub lT lD) second Real
+
+min_thick   = unitary "min_thick"   (nounPhraseSP "minimum thickness")
+  lH metre Rational
 
 sdx         = unitary "sdx" (nounPhraseSP "stand off distance (x-component)")
   (sub (eqSymb standOffDist) lX) metre Real

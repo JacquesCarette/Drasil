@@ -22,9 +22,8 @@ import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName)
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), getRefAdd)
 import Language.Drasil.Document (Contents(..), DType(Data, Theory), 
-  Section(Section), getDefName, repUnd, LabelledContent(LblC))
+  Section(Section), repUnd, LabelledContent(LblC))
 import Language.Drasil.People (People, comparePeople)
-import Language.Drasil.RefTypes (RefType(..))
 import Language.Drasil.Spec (Sentence((:+:), Ref, S))
 import Language.Drasil.UID (UID)
 import Language.Drasil.Label.Core (getAdd)
@@ -246,12 +245,33 @@ instance Referable InstanceModel where
 
 instance Referable LabelledContent where
   refAdd (LblC _ lb _) = "LblC:" ++ (getAdd (lb ^. getRefAdd))
-  rType  (LblC _ _ c)  = rType c
+  rType  (LblC _ _ c)  = temp c
 
 instance Referable Label where
   refAdd lb = getAdd (lb ^. getRefAdd)
+  rType _   = Lbl --FIXME?
 
-instance Referable Contents where
+temp :: Contents -> RefType
+temp (Table _ _ _ _ _)       = Tab
+temp (Figure _ _ _ _)        = Fig
+temp (Graph _ _ _ _ _)       = Fig
+temp (Definition (Data _))   = Def
+temp (Definition (Theory _)) = Def
+temp (Definition _)          = Def
+temp (Defnt _ _ _)           = Def
+temp (Requirement r)         = rType r
+temp (Assumption a)          = rType a
+temp (Change l)              = rType l --rType lc
+temp (EqnBlock _ _)          = EqnB
+temp (Enumeration _)         = Cntnts 
+temp (Paragraph _)           = Cntnts
+temp (Bib _)                 = error $
+    "Bibliography list of references cannot be referenced. " ++
+    "You must reference the Section or an individual citation."
+temp _                       =
+    error "Attempting to reference unimplemented reference type"
+
+{-instance Referable Contents where
   rType (Table _ _ _ _ _)       = Tab
   rType (Figure _ _ _ _)        = Fig
   rType (Definition (Data _))   = Def
@@ -265,20 +285,12 @@ instance Referable Contents where
   rType (EqnBlock _ _)          = EqnB
   rType _                       =
     error "Attempting to reference unimplemented reference type"
-  refAdd (Table _ _ _ _ r)      = "Table:" ++ r
-  refAdd (Figure _ _ _ r)       = "Figure:" ++ r
-  refAdd (Graph _ _ _ _ r)      = "Figure:" ++ r
-  refAdd (EqnBlock _ r)         = "Equation:" ++ r
-  refAdd (Definition d)         = getDefName d
-  refAdd (Defnt _ _ r)          = r
-  refAdd (Requirement rc)       = refAdd rc
-  refAdd (Assumption ca)        = refAdd ca
-  refAdd (Change lcc)           = refAdd lcc
   refAdd (Enumeration _)        = error "Can't reference lists"
-  refAdd (Paragraph _)          = error "Can't reference paragraphs"
+  refAdd (Paragraph _)          = refAdd error "Can't reference paragraphs"
   refAdd (Bib _)                = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
+-}
 
 uidSort :: HasUID c => c -> c -> Ordering
 uidSort = compare `on` (^. uid)

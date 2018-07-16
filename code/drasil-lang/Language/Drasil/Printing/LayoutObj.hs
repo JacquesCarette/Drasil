@@ -19,13 +19,13 @@ data ALUR = Assumption | LikelyChange | UnlikelyChange | Requirement
 data LayoutObj = 
      Table Tags [[Spec]] Label Bool Caption
    | Header Depth Title Label
-   | Paragraph Contents
-   | EqnBlock Contents
+   | Paragraph Contents Label
+   | EqnBlock Contents Label
    | Definition DType [(String,[LayoutObj])] Label
-   | List ListType
+   | List ListType Label
    | Figure Label Caption Filepath MaxWidthPercent
    | ALUR ALUR Contents Label Label -- two labels?
    | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label
    | HDiv Tags [LayoutObj] Label
    -- this shouldn't be here, it should have been expanded.
-   | Bib BibRef
+   | Bib BibRef Label

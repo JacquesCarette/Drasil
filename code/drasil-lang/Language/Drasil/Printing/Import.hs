@@ -36,8 +36,8 @@ import Language.Drasil.Reference (refAdd)
 import Language.Drasil.Document (DType(DD, TM, Instance, General, Theory, Data), 
   ItemType(Nested, Flat), ListType(Definitions, Desc, Simple, Numeric, Bullet), 
   Contents(Bib, Graph, Defnt, Assumption, Change, Figure, Requirement, Enumeration, 
-  Definition, EqnBlock, Paragraph, Table), Section(Section), SecCons(Sub, Con), 
-  Document(Document))
+  Definition, EqnBlock, Paragraph, Table), Section(Section), SecCons(Sub, Con, LCon),
+  Document(Document), LabelledContent, accessContents)
 
 import Control.Lens ((^.))
 import Language.Drasil.Space (Space(DiscreteS, DiscreteD, DiscreteI, Vect, Radians, 
@@ -259,8 +259,10 @@ makeDocument sm (Document title author sections) =
 
 -- | Translates from LayoutObj to the Printing representation of LayoutObj
 layout :: HasSymbolTable ctx => ctx -> Int -> SecCons -> T.LayoutObj
-layout sm currDepth (Sub s) = sec sm (currDepth+1) s
-layout sm _         (Con c) = lay sm c
+layout sm currDepth (Sub s)   = sec sm (currDepth+1) s
+--layout sm _         (Con c)   = lay sm c
+layout sm _         (Con c)   = error "Contents is still used"
+layout sm _         (LCon lc) = lay' sm lc (accessContents lc)
 
 -- | Helper function for creating sections as layout objects
 createLayout :: HasSymbolTable ctx => ctx -> [Section] -> [T.LayoutObj]
@@ -274,7 +276,7 @@ sec sm depth x@(Section title contents _) = --FIXME: should ShortName be used so
   (T.Header depth (spec sm title) ref :
    map (layout sm depth) contents) ref
 
--- | Translates from Contents to the Printing Representation of LayoutObj.
+{-- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.
 lay :: HasSymbolTable ctx => ctx -> Contents -> T.LayoutObj
 lay sm x@(Table hdr lls t b _) = T.Table ["table"]
@@ -296,7 +298,27 @@ lay sm x@(Graph ps w h t _)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) 
                                w h (spec sm t) (P.S (refAdd x))
 lay sm (Defnt dtyp pairs rn)  = T.Definition dtyp (layPairs pairs) (P.S rn)
   where layPairs = map (\(x,y) -> (x, map (lay sm) y))
-lay sm (Bib bib)              = T.Bib $ map (layCite sm) bib
+lay sm (Bib bib)              = T.Bib map (layCite sm) bib-}
+
+lay' :: HasSymbolTable ctx => ctx -> LabelledContent -> Contents -> T.LayoutObj
+lay' sm lc (Table hdr lls t b _) = T.Table ["table"]
+  ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S (refAdd lc)) b (spec sm t)
+lay' sm lc (Paragraph x)         = T.Paragraph (spec sm x) (P.S (refAdd lc))
+lay' sm lc (EqnBlock c _)        = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm)) (P.S (refAdd lc))] (P.S (refAdd lc)) --FIXME: 2 labels?
+lay' sm lc (Definition c)        = T.Definition c (makePairs sm c) (P.S (refAdd lc))
+lay' sm lc (Enumeration cs)      = T.List (makeL sm cs) (P.S (refAdd lc))
+lay' sm lc (Figure c f wp _)     = T.Figure (P.S (refAdd lc)) (spec sm c) f wp
+lay' sm lc (Requirement r)       = T.ALUR T.Requirement (spec sm $ requires r) 
+  (P.S $ refAdd lc) (spec sm $ getShortName r) --FIXME: 2 labels?
+lay' sm lc (Assumption a)        = T.ALUR T.Assumption (spec sm (assuming a)) 
+  (P.S (refAdd lc)) (spec sm $ getShortName a) --FIXME: 2 labels?
+lay' sm lc (Change x)           = T.ALUR (if (chngType x) == Likely then T.LikelyChange else T.UnlikelyChange)
+  (spec sm (chng x)) (P.S (refAdd lc)) (spec sm $ getShortName lc) --FIXME: 2 labels?
+lay' sm lc (Graph ps w h t _)    = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps) w h (spec sm t) 
+  (P.S (refAdd lc))
+lay' sm lc (Defnt dtyp pairs _)  = T.Definition dtyp (layPairs pairs) (P.S $ refAdd lc)
+  where layPairs = map (\(x,y) -> (x, map (lay' sm lc) y))
+lay' sm lc (Bib bib)                = T.Bib (map (layCite sm) bib) (P.S $ refAdd lc)
 
 -- | For importing bibliography
 layCite :: HasSymbolTable ctx => ctx -> Citation -> P.Citation
@@ -343,15 +365,15 @@ item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
 -- (Data defs, General defs, Theoretical models, etc.)
 makePairs :: HasSymbolTable ctx => ctx -> DType -> [(String,[T.LayoutObj])]
 makePairs m (Data c) = [
-  ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
-  ("Units",       [T.Paragraph $ spec m (unit'2Contents c)]),
-  ("Equation",    [T.HDiv ["equation"] [eqnStyle numberedDDEquations $ buildEqn m c] P.EmptyS]),
-  ("Description", [T.Paragraph $ buildDDDescription m c])
+  ("Label",       [T.Paragraph (spec m (titleize $ c ^. term)) P.EmptyS]),
+  ("Units",       [T.Paragraph (spec m (unit'2Contents c)) P.EmptyS]),
+  ("Equation",    [T.HDiv ["equation"] [eqnStyle numberedDDEquations (buildEqn m c) P.EmptyS] P.EmptyS]),--FIXME: empty label?
+  ("Description", [T.Paragraph (buildDDDescription m c) P.EmptyS]) --FIXME: empty label?
   ]
 makePairs m (Theory c) = [
-  ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
-  ("Equation",    [T.HDiv ["equation"] [eqnStyle numberedTMEquations $ P.E (expr (c ^. relat) m)] P.EmptyS]),
-  ("Description", [T.Paragraph (spec m (c ^. defn))])
+  ("Label",       [T.Paragraph (spec m (titleize $ c ^. term)) P.EmptyS]), --FIXME: empty label?
+  ("Equation",    [T.HDiv ["equation"] [eqnStyle numberedTMEquations (P.E (expr (c ^. relat) m)) P.EmptyS] P.EmptyS]),--FIXME: empty label?
+  ("Description", [T.Paragraph (spec m (c ^. defn)) P.EmptyS]) --FIXME: empty label?
   ]
 makePairs _ General  = error "Not yet implemented"
 makePairs _ Instance = error "Not yet implemented"
@@ -359,7 +381,7 @@ makePairs _ TM       = error "Not yet implemented"
 makePairs _ DD       = error "Not yet implemented"
 
 -- Toggle equation style
-eqnStyle :: Bool -> T.Contents -> T.LayoutObj
+eqnStyle :: Bool -> T.Contents -> P.Label -> T.LayoutObj
 eqnStyle b = if b then T.EqnBlock else T.Paragraph
 
 -- | Translates the defining equation from a QDefinition to

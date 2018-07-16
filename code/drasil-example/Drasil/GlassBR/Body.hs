@@ -55,7 +55,7 @@ import Drasil.GlassBR.Assumptions (assumptionConstants, assumptionDescs,
 import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist, glaSlab, 
   blastRisk, glass, glaPlane, glassBRProg, ptOfExplsn, acronyms)
-import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
+import Drasil.GlassBR.DataDefs (aspRat, dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
   dimLL, glaTyFac, tolStrDisFac, tolPre, risk, standOffDis)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (rbrtsn2012)
@@ -249,8 +249,8 @@ requiredInputs = (map qw [plate_len, plate_width, char_weight])
   ++ (map qw [glass_type, nom_thick])
 
 functional_requirements_req6_pulledList :: [QDefinition]
-functional_requirements_req6_pulledList = [nonFL, glaTyFac, dimLL, tolPre,
-  tolStrDisFac, strDisFac, hFromt]
+functional_requirements_req6_pulledList = [risk, strDisFac, nonFL, glaTyFac, dimLL, 
+  tolPre, tolStrDisFac, hFromt, aspRat]
 
 --Used in "Non-Functional Requirements" Section--
 gBRpriorityNFReqs :: [ConceptChunk]
@@ -569,11 +569,7 @@ functional_requirements_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (title
     sParen (makeRef (reldefn d))) (zip testing testing1)
     ++
     map (\d -> Flat $ (at_start d) +:+ sParen (ch d) +:+
-    sParen (makeRef (datadefn d))) functional_requirements_req6_pulledList
-    ++
-    [Flat $ (titleize aspectR) +:+ sParen (ch aspectR) +:+
-    E (aspectRWithEqn^.equat)]
-    ))])]
+    sParen (makeRef (datadefn d))) functional_requirements_req6_pulledList))])]
 
 {--Nonfunctional Requirements--}
 

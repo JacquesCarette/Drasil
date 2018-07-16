@@ -39,7 +39,7 @@ import Drasil.SWHS.Changes (chgsStart, likeChg2, likeChg3, likeChg6)
 
 import Data.Drasil.People (thulasi)
 import Data.Drasil.Utils (enumSimple, refFromType,
-  itemRefToSent, makeTMatrix, itemRefToSent, weave, eqUnR)
+  itemRefToSent, makeTMatrix, itemRefToSent, weave, eqUnR, noRefs)
 import Data.Drasil.Citations (parnasClements1986, smithLai2005)
 
 import Data.Drasil.Concepts.Documentation as Doc (datumConstraint, inModel,
@@ -357,9 +357,9 @@ probDescIntro pro cp wa sw = foldlSP [getAcc pro, S "is a",
 termAndDefn = termDefnF Nothing [termAndDefnBullets]
 
 termAndDefnBullets :: Contents
-termAndDefnBullets = Enumeration $ (Bullet $ map (\x -> Flat $
-  (at_start x) :+: S ":" +:+ (x ^. defn))
-  [ht_flux, heat_cap_spec, thermal_conduction, transient])
+termAndDefnBullets = Enumeration $ Bullet $ noRefs $ map (\x -> Flat $
+  at_start x :+: S ":" +:+ (x ^. defn))
+  [ht_flux, heat_cap_spec, thermal_conduction, transient]
   
 physSystDescription = physSystDesc (getAcc progName) fig_tank
   [physSystDescList, fig_tank]

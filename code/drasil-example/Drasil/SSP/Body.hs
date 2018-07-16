@@ -33,7 +33,7 @@ import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent, 
   foldlSent_, ofThe, sAnd, sOr)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
-import Data.Drasil.Utils (enumBullet, enumSimple, weave)
+import Data.Drasil.Utils (enumBullet, enumSimple, weave, noRefsLT)
 import Drasil.SSP.Assumptions (sspRefDB, sspAssumptions)
 import Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShrDerivation, 
@@ -273,7 +273,7 @@ problem_desc = probDescF EmptyS ssa ending [termi_defi, phys_sys_desc, goal_stmt
 -- SECTION 4.1.1 --
 termi_defi = termDefnF Nothing [termi_defi_list]
 
-termi_defi_list = Enumeration $ Simple $
+termi_defi_list = Enumeration $ Simple $ noRefsLT $
   map (\x -> (titleize $ x, Flat $ x ^. defn))
   [fs_concept, crtSlpSrf, stress, strain, normForce,
   shearForce, tension, compression, plnStrn]

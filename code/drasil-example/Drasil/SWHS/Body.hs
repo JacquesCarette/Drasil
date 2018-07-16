@@ -71,7 +71,7 @@ import Drasil.SWHS.Changes (likeChg1, likeChg2, likeChg3, likeChg4,
 import Drasil.SWHS.DataDesc (swhsInputMod)
 
 import Data.Drasil.Utils (enumSimple, weave, itemRefToSent, makeListRef,
-  makeTMatrix, refFromType, eqUnR)
+  makeTMatrix, refFromType, eqUnR, noRefs)
 import Data.Drasil.SentenceStructures (acroIM, acroGD, acroGS, showingCxnBw,
   foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe,
   ofThe', sAnd, sOf, foldlList)
@@ -242,7 +242,7 @@ systCont = SRS.sysCont [systCContents progName, sys_context_fig, systCIntro
   progName user, systContRespBullets] []
 
 systContRespBullets :: Contents
-systContRespBullets = Enumeration $ Bullet $ [userResp input_ datum,
+systContRespBullets = Enumeration $ Bullet $ noRefs [userResp input_ datum,
   swhsResp]
 
 --------------------------------
@@ -279,9 +279,9 @@ termAndDefn = termDefnF Nothing [termAndDefnBullets]
 -- GlassBR has an additional sentence with a reference at the end.)
 
 termAndDefnBullets :: Contents
-termAndDefnBullets = Enumeration (Bullet $ map tAndDMap
+termAndDefnBullets = Enumeration $ Bullet $ noRefs $ map tAndDMap
   [CT.ht_flux, phase_change_material, CT.heat_cap_spec,
-  CT.thermal_conduction, transient])
+  CT.thermal_conduction, transient]
 
 tAndDMap :: Concept c => c -> ItemType
 tAndDMap c = Flat $ foldlSent [at_start c +: EmptyS, (c ^. defn)]
@@ -909,7 +909,7 @@ systCIntro pro us = foldlSPCol [short pro +:+. S "is mostly self-contained",
 -- User Responsibilities --
 userResp :: NamedChunk -> NamedChunk -> ItemType
 userResp inp dat = Nested (titleize user +: S "Responsibilities")
-  $ Bullet $ map Flat [
+  $ Bullet $ noRefs $ map Flat [
 
   foldlSent_ [S "Provide the", phrase inp, plural dat, S "to the",
   phrase system `sC` S "ensuring no errors in the", plural dat, S "entry"],
@@ -922,7 +922,7 @@ userResp inp dat = Nested (titleize user +: S "Responsibilities")
 -- SWHS Responsibilities --
 swhsResp :: ItemType
 swhsResp = Nested (short progName +: S "Responsibilities")
-  $ Bullet $ map Flat [
+  $ Bullet $ noRefs $ map Flat [
 
   foldlSent_ [S "Detect", plural datum, S "type mismatch, such as a string of",
   S "characters instead of a floating point number"],

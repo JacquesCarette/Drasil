@@ -781,7 +781,7 @@ appendix_intro = foldlSP [
 
 fig_5 = fig (titleize figure +: S "5" +:+ (demandq ^. defn) +:+
   sParen (ch demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
-  `sVersus` at_start char_weight +:+ sParen (ch sflawParamM))
+  `sVersus` at_start char_weight +:+ sParen (ch char_weight))
   (resourcePath ++ "ASTM_F2248-09.png") "demandVSsod"
 
 fig_6 = fig (titleize figure +: S "6" +:+ S "Non dimensional" +:+

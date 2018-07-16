@@ -189,7 +189,7 @@ aGrtrThanB = ((ch plate_len) `sC` (ch plate_width) +:+
   sParen (E (sy plate_len $> sy plate_width)))
 
 hRef :: Sentence
-hRef = (ch nom_thick +:+ S "is the true thickness" `sC` 
+hRef = (ch min_thick +:+ S "is the true thickness" `sC` 
   S "which is based on the nominal thicknesses" +:+. S "as shown in DD2")
 
 ldfRef :: Sentence

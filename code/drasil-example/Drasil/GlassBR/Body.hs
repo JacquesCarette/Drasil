@@ -565,8 +565,6 @@ req5Desc cmd = foldlSent_ [S "If", (ch is_safe1) `sAnd` (ch is_safe2),
 
 testing :: [QuantityDict]
 testing = qw prob_br : qw lRe : qw demand : [] -- all different types!
-testing1 :: [RelationConcept]
-testing1 = [probOfBr, calOfCap, calOfDe]
 --FIXME: rename or find better implementation?
 
 functional_requirements_req6 = llcc "frR6GBr" (mkLabelRA'' "frR6GBrLabel") $ 
@@ -574,7 +572,7 @@ functional_requirements_req6 = llcc "frR6GBr" (mkLabelRA'' "frR6GBrLabel") $
   S "the following" +: plural quantity)
   (Bullet $
     map (\(a, d) -> Flat $ (at_start a) +:+ sParen (ch a) +:+
-    sParen (makeRef d)) (zip testing testing1)
+    sParen (makeRef d)) (zip testing gbrIMods)
     ++
     map (\d -> Flat $ (at_start d) +:+ sParen (ch d) +:+
     sParen (makeRef d)) functional_requirements_req6_pulledList

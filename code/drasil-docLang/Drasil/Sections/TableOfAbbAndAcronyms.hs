@@ -25,7 +25,7 @@ select (x:xs) = case getA x of
 -- | The actual table creation function.
 table :: (Idea s) => [s] -> Contents
 table ls = let chunks = sortBy (compare `on` fst) $ select ls in
-  Table (map (at_start) [symbol_, description]) (mkTable
+  Table [S "Abbreviation", S "Full Form"] (mkTable
   [(\(a,_) -> S a),
    (\(_,b) -> titleize b)]
   chunks)

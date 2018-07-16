@@ -19,7 +19,7 @@ module Drasil.Sections.SpecificSystemDescription
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (physical, column, input_, uncertainty, physicalConstraint,
-  softwareConstraint, typUnc, user, model, value, quantity, information, constraint, variable,
+  softwareConstraint, user, model, value, quantity, information, constraint, variable,
   output_, symbol_, limitation, problem, inModel, datum, datumConstraint, section_, dataDefn,
   general, genDefn, problemDescription, solutionCharSpec, assumption, thModel, physicalSystem,
   likelyChg, unlikelyChg, goalStmt, theory, purpose, requirement, element)
@@ -231,7 +231,8 @@ dataConstraintClosingSent uncertaintySent trailingSent = foldlSent
 
 dataConstraintUncertainty :: Sentence
 dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase column,
-  S "provides an", S "estimate of the confidence with which the", phrase physical,
+  sParen (S "\"Uncert.\" stands for \"Uncertainty\""), 
+  S "provides an estimate of the confidence with which the", phrase physical,
   plural quantity +:+. S "can be measured", S "This", phrase information,
   S "would be part of the", phrase input_, S "if one were performing an",
   phrase uncertainty, S "quantification exercise"]
@@ -244,7 +245,7 @@ inDataConstTbl qlst = Table titl cts (S "Input Data Constraints") True "InDataCo
             (titleize' physicalConstraint, map fmtPhys qlst),
             (titleize' softwareConstraint, map fmtSfwr qlst),
             (S "Typical Value", map (\q -> fmtU (E $ getRVal q) q) qlst),
-            (short typUnc, map typUncr qlst)]
+            (S "Uncert.", map typUncr qlst)]
    tbl = mkTableFromColumns columns
    titl = fst tbl
    cts = snd tbl

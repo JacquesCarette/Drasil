@@ -9,7 +9,7 @@ import Control.Lens ((^.))
 --import qualified Language.Drasil.NounPhrase as NP (plural)
 
 assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
-  unlikelyChg, physSyst, requirement, thModel, mg, notApp, typUnc, srs :: CI
+  unlikelyChg, physSyst, requirement, thModel, mg, notApp, srs :: CI
 
 -------------------------------------------------------------------------------------------------
 -- | CI       |           |    uid      |         term                        | abbreviation | --
@@ -28,7 +28,6 @@ requirement = commonIdea "requirement" (cn' "requirement")                      
 thModel     = commonIdea "thModel"     (cn' "theoretical model")                           "T"
 mg          = commonIdea "mg"          (fterms compoundPhrase module_ guide)               "MG"
 notApp      = commonIdea "notApp"      (nounPhraseSP "not applicable")                     "N/A"
-typUnc      = commonIdea "typUnc"      (cn' "typical uncertainty")                         "TU"
 
 srs = commonIdea "srs" 
   (compoundPhraseP1 (softwareReq ^. term) (specification ^. term))

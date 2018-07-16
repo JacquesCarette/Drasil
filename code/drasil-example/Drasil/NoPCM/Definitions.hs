@@ -4,7 +4,7 @@ import Language.Drasil
 
 import Data.Drasil.Concepts.Documentation (thModel, srs, physSyst,
   requirement, inModel, likelyChg, genDefn, goalStmt, assumption,
-  dataDefn, unlikelyChg, typUnc)
+  dataDefn, unlikelyChg)
 import Data.Drasil.Concepts.Math (ode)
 
 --Common Terms
@@ -29,4 +29,4 @@ sWHT  = commonIdea "sWHT"  (cn' "solar water heating tank")    "SWHT"
 ----Acronyms-----
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode, 
-            physSyst, requirement, srs, sWHS, thModel, typUnc, unlikelyChg]
+            physSyst, requirement, srs, sWHS, thModel, unlikelyChg]

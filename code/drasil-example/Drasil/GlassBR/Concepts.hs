@@ -4,7 +4,7 @@ import Language.Drasil
 
 import Data.Drasil.Concepts.Documentation (assumption, 
   dataDefn, goalStmt, inModel, likelyChg, unlikelyChg, notApp,
-  physSyst, response, requirement, srs, thModel, type_, typUnc)
+  physSyst, response, requirement, srs, thModel, type_)
 
 {--}
 
@@ -17,8 +17,7 @@ acronyms :: [CI]
 acronyms = [assumption, annealedGlass, aR, dataDefn, fullyTGlass,
   goalStmt, glassTypeFac, heatSGlass, iGlass, inModel, likelyChg, 
   loadDurFactor, lGlass, lResistance, lShareFac, notApp, nFL,
-  physSyst, requirement, stdOffDist, srs, thModel, eqTNT, typUnc,
-  unlikelyChg]
+  physSyst, requirement, stdOffDist, srs, thModel, eqTNT, unlikelyChg]
 
 annealedGlass, aR, fullyTGlass, glassTypeFac, heatSGlass, loadDurFactor,
   iGlass, lGlass, lResistance, lShareFac, eqTNT, gLassBR, stdOffDist, nFL :: CI

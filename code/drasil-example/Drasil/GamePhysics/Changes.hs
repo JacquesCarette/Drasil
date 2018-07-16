@@ -54,13 +54,13 @@ likelyChangesList = llcc "LCListCP" (mkLabelRA'' "LCListCPLabel") $
 --------------------------------
 
 unlikelyChanges :: Section
-unlikelyChangesIntro, unlikelyChangesList :: Contents
+unlikelyChangesIntro, unlikelyChangesList :: LabelledContent
 
 unlikelyChanges = SRS.unlikeChg [unlikelyChangesIntro, unlikelyChangesList] []
 
-unlikelyChangesIntro = foldlSP [S "This", (phrase section_), S "lists the",
-  (plural unlikelyChg), S "to be made to the", (phrase game), (phrase physics), 
-  (phrase library)]
+unlikelyChangesIntro = llcc "unlikelyChangesIntroCP" (mkLabelRA'' "unlikelyChangesIntroCPLbl") $
+  foldlSP [S "This", phrase section_, S "lists the", plural unlikelyChg, S "to be made to the",
+  phrase game, phrase physics, phrase library]
 
 unlikelyChangesStmt1, unlikelyChangesStmt2,
   unlikelyChangesStmt3, unlikelyChangesStmt4 :: Sentence
@@ -76,5 +76,6 @@ unlikelyChangesList' :: [Sentence]
 unlikelyChangesList' = [unlikelyChangesStmt1, unlikelyChangesStmt2,
   unlikelyChangesStmt3, unlikelyChangesStmt4]
 
-unlikelyChangesList = enumSimple 1 (getAcc unlikelyChg) unlikelyChangesList'
+unlikelyChangesList = llcc "unlikelyChangesListCP" (mkLabelRA'' "unlikelyChangesListCPLabel") $ 
+  enumSimple 1 (getAcc unlikelyChg) unlikelyChangesList'
   

@@ -1,5 +1,4 @@
 module Drasil.GlassBR.Assumptions where
-import Control.Lens ((^.))
 import Language.Drasil hiding (organization)
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons, missingP)
 
@@ -7,7 +6,7 @@ import Drasil.DocLang (cite, refA)
 
 import Data.Drasil.Concepts.Documentation as Doc (condition, constant, practice, reference, scenario, 
   system, value)
-import Data.Drasil.Concepts.Math (calculation, surface, equation, shape)
+import Data.Drasil.Concepts.Math (calculation, surface, shape)
 import Data.Drasil.SentenceStructures (sAnd, foldlSent, foldlOptions, foldlList, sOf, sIn)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 

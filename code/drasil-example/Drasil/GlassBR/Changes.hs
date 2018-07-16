@@ -63,8 +63,8 @@ unlikelyChanges_SRS = [unlikelychg1, unlikelychg2]
 
 unlikelychg1, unlikelychg2 :: LabelledContent
 
-unlikelychg1 = mkUnLklyChnk "unlikelychg1" (uc1Desc) "Predict-Withstanding-of-Certain-Degree"
-unlikelychg2 = mkUnLklyChnk "unlikelychg2" (uc2Desc) "Accommodate-Altered-Glass"
+unlikelychg1 = mkUnLklyChnk "unlikelychg1" uc1Desc "Predict-Withstanding-of-Certain-Degree"
+unlikelychg2 = mkUnLklyChnk "unlikelychg2" uc2Desc "Accommodate-Altered-Glass"
 
 uc1Desc, uc2Desc :: Sentence
 

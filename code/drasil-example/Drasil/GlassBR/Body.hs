@@ -60,9 +60,9 @@ import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt, strDisFac, nonFL,
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
-import Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq, t1IsSafe, t2IsSafe)
+import Drasil.GlassBR.TMods (tModels, gbrTMods, t1SafetyReq, t2SafetyReq, t1IsSafe, t2IsSafe)
 import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr, probOfBreak, 
-  calofCapacity, calofDemand)
+  calofCapacity, calofDemand, gbrIMods)
 
 import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad, 
   lateralLoad, sflawParamM, char_weight, sD, demand, demandq, 
@@ -152,7 +152,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   UCsSec (UCsProg unlikely_change_list) :
   TraceabilitySec
     (TraceabilityProg traceyMatrices [traceability_matrices_and_graphs_table1Desc, traceability_matrices_and_graphs_table2Desc, traceability_matrices_and_graphs_table3Desc]
-    (traceyMatrices ++ traceability_matrices_and_graphs_intro2 ++ traceyGraphs) []) :
+    (traceyMatrices ++ [traceability_matrices_and_graphs_intro2] ++ traceyGraphs) []) :
   AuxConstntSec (AuxConsProg gLassBR auxiliaryConstants) :
   Bibliography :
   AppndxSec (AppndxProg [appendix_intro, fig_5, fig_6]) : []
@@ -191,12 +191,12 @@ glassBR_code = codeSpec glassSystInfo allMods
 problem_description, terminology_and_description, 
   physical_system_description, goal_statements :: Section
 
-product_use_case_table,
-  traceability_matrices_and_graphs_table1,
-  traceability_matrices_and_graphs_table2, traceability_matrices_and_graphs_table3 :: Contents
+product_use_case_table :: Contents
 
 physical_system_description_list, inputDataConstraints, outputDataConstraints, fig_2, fig_3, fig_4,
-  traceability_matrices_and_graphs_intro2, fig_6, fig_5, fig_glassbr, appendix_intro :: LabelledContent
+  traceability_matrices_and_graphs_intro2, fig_6, fig_5, fig_glassbr, appendix_intro,
+  traceability_matrices_and_graphs_table1, traceability_matrices_and_graphs_table2, 
+  traceability_matrices_and_graphs_table3  :: LabelledContent
 
 functional_requirements_list :: [LabelledContent]
 
@@ -229,8 +229,9 @@ goal_statements_list :: Contents
 goal_statements_list = enumSimple 1 (short goalStmt) goal_statements_list_goalStmt1
 
 --Used in "Traceability Matrices and Graphs" Section--
-traceyMatrices :: [Contents]
-traceyMatrices = [traceability_matrices_and_graphs_table1, traceability_matrices_and_graphs_table2, traceability_matrices_and_graphs_table3]
+traceyMatrices :: [LabelledContent]
+traceyMatrices = [traceability_matrices_and_graphs_table1, traceability_matrices_and_graphs_table2, 
+  traceability_matrices_and_graphs_table3]
 
 traceyGraphs :: [LabelledContent]
 traceyGraphs = [fig_2, fig_3, fig_4]
@@ -547,7 +548,7 @@ req2Desc = foldlSent [S "The", phrase system,
 
 req3Desc = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",
-  plural datumConstraint, S "mentioned in" +:+. makeRef SRS.datCon, 
+  plural datumConstraint, S "mentioned in" +:+. makeRef SRS.datConLabel, 
   S "If any" `sOf` S "the", plural inParam, S "is out" `sOf` S "bounds" `sC`
   S "an", phrase errMsg, S "is displayed" `andThe` plural calculation, S "stop"]
 
@@ -556,8 +557,8 @@ req4Desc = foldlSent [titleize output_, S "the", plural inQty,
   S "from", acroR 2]
 
 req5Desc cmd = foldlSent_ [S "If", (ch is_safe1) `sAnd` (ch is_safe2),
-  sParen (S "from" +:+ (makeRef (reldefn t1SafetyReq))
-  `sAnd` (makeRef (reldefn t2SafetyReq))), S "are true" `sC`
+  sParen (S "from" +:+ (makeRef t1IsSafe)
+  `sAnd` (makeRef t2IsSafe)), S "are true" `sC`
   phrase cmd, S "the", phrase message, Quote (safeMessage ^. defn),
   S "If the", phrase condition, S "is false, then", phrase cmd,
   S "the", phrase message, Quote (notSafe ^. defn)]
@@ -573,10 +574,10 @@ functional_requirements_req6 = llcc "frR6GBr" (mkLabelRA'' "frR6GBrLabel") $
   S "the following" +: plural quantity)
   (Bullet $
     map (\(a, d) -> Flat $ (at_start a) +:+ sParen (ch a) +:+
-    sParen (makeRef (reldefn d))) (zip testing testing1)
+    sParen (makeRef d)) (zip testing testing1)
     ++
     map (\d -> Flat $ (at_start d) +:+ sParen (ch d) +:+
-    sParen (makeRef (datadefn d))) functional_requirements_req6_pulledList
+    sParen (makeRef d)) functional_requirements_req6_pulledList
     ++
     [Flat $ (titleize aspectR) +:+ sParen (ch aspectR) +:+
     E (aspectRWithEqn^.equat)]
@@ -611,20 +612,22 @@ traceability_matrices_and_graphs_table3Desc = foldlsC (map plural (take 3 solChS
 traceability_matrices_and_graphs_theorys, traceability_matrices_and_graphs_instaModel, traceability_matrices_and_graphs_dataDef, traceability_matrices_and_graphs_data, traceability_matrices_and_graphs_funcReq, traceability_matrices_and_graphs_assump,
   traceability_matrices_and_graphs_likelyChg :: [String]
 
-traceability_matrices_and_graphs_theorysRef, traceability_matrices_and_graphs_instaModelRef, traceability_matrices_and_graphs_dataDefRef, traceability_matrices_and_graphs_dataRef, traceability_matrices_and_graphs_funcReqRef,
-  traceability_matrices_and_graphs_assumpRef, traceability_matrices_and_graphs_likelyChgRef :: [Sentence]
+traceability_matrices_and_graphs_theorysRef, traceability_matrices_and_graphs_instaModelRef, 
+  traceability_matrices_and_graphs_dataDefRef, traceability_matrices_and_graphs_dataRef, 
+  traceability_matrices_and_graphs_funcReqRef, traceability_matrices_and_graphs_assumpRef,
+  traceability_matrices_and_graphs_likelyChgRef :: [Sentence]
 
 traceability_matrices_and_graphs_theorys = ["T1", "T2"]
-traceability_matrices_and_graphs_theorysRef = map makeRef tModels
+traceability_matrices_and_graphs_theorysRef = map makeRef gbrTMods
 
 traceability_matrices_and_graphs_instaModel = ["IM1", "IM2", "IM3"]
-traceability_matrices_and_graphs_instaModelRef = map makeRef iModels
+traceability_matrices_and_graphs_instaModelRef = map makeRef gbrIMods
 
 traceability_matrices_and_graphs_dataDef =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
 traceability_matrices_and_graphs_dataDefRef = map makeRef dataDefns
 
 traceability_matrices_and_graphs_data  = ["Data Constraints"]
-traceability_matrices_and_graphs_dataRef = [makeRef SRS.datCon]
+traceability_matrices_and_graphs_dataRef = [makeRef SRS.datConLabel]
 
 traceability_matrices_and_graphs_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
 traceability_matrices_and_graphs_funcReqRef = map makeRef functional_requirements_list
@@ -667,7 +670,8 @@ traceability_matrices_and_graphs_t1_DD6 = ["IM3", "DD2", "DD5"]
 traceability_matrices_and_graphs_t1_DD7 = ["DD8"]
 traceability_matrices_and_graphs_t1_DD8 = ["DD2"]
 
-traceability_matrices_and_graphs_table1 = Table (EmptyS:traceability_matrices_and_graphs_row_header_t1)
+traceability_matrices_and_graphs_table1 = llcc "TraceyItemSecs" (mkLabelRA'' "TraceyItemSecsLabel") $ 
+  Table (EmptyS:traceability_matrices_and_graphs_row_header_t1)
   (makeTMatrix traceability_matrices_and_graphs_row_header_t1 traceability_matrices_and_graphs_columns_t1 traceability_matrices_and_graphs_row_t1)
   (showingCxnBw traceyMatrix
   (titleize' item +:+ S "of Different" +:+ titleize' section_)) True "TraceyItemSecs"
@@ -696,7 +700,8 @@ traceability_matrices_and_graphs_t2_r4 = ["R1", "R2"]
 traceability_matrices_and_graphs_t2_r5 = ["T1", "T2"]
 traceability_matrices_and_graphs_t2_r6 = ["IM1", "IM2", "IM3", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
 
-traceability_matrices_and_graphs_table2 = Table (EmptyS:traceability_matrices_and_graphs_row_header_t2)
+traceability_matrices_and_graphs_table2 = llcc "TraceyReqsItems" (mkLabelRA'' "TraceyReqsItemsLabel") $ 
+  Table (EmptyS:traceability_matrices_and_graphs_row_header_t2)
   (makeTMatrix traceability_matrices_and_graphs_col_header_t2 traceability_matrices_and_graphs_columns_t2 traceability_matrices_and_graphs_row_t2)
   (showingCxnBw traceyMatrix (titleize' requirement `sAnd` S "Other" +:+
   titleize' item)) True "TraceyReqsItems"
@@ -749,8 +754,10 @@ traceability_matrices_and_graphs_t3_r4  = []
 traceability_matrices_and_graphs_t3_r5  = []
 traceability_matrices_and_graphs_t3_r6  = []
 
-traceability_matrices_and_graphs_table3 = Table (EmptyS:traceability_matrices_and_graphs_row_header_t3)
-  (makeTMatrix traceability_matrices_and_graphs_col_header_t3 traceability_matrices_and_graphs_columns_t3 traceability_matrices_and_graphs_row_t3)
+traceability_matrices_and_graphs_table3 = llcc "TraceyAssumpsOthers" (mkLabelRA'' "TraceyAssumpsOthersLabel") $
+  Table (EmptyS:traceability_matrices_and_graphs_row_header_t3)
+  (makeTMatrix traceability_matrices_and_graphs_col_header_t3
+    traceability_matrices_and_graphs_columns_t3 traceability_matrices_and_graphs_row_t3)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other"
   +:+ titleize' item)) True "TraceyAssumpsOthers"
 

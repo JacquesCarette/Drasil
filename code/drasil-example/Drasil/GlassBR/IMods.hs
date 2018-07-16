@@ -1,4 +1,5 @@
-module Drasil.GlassBR.IMods (iModels, probOfBr, calOfCap, calOfDe, probOfBreak, calofCapacity, calofDemand) where
+module Drasil.GlassBR.IMods (iModels, gbrIMods, probOfBr, calOfCap, 
+  calOfDe, probOfBreak, calofCapacity, calofDemand) where
 
 import Prelude hiding (exp)
 import Control.Lens ((^.))
@@ -18,14 +19,15 @@ import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
 iModels :: [RelationConcept]
 iModels = [probOfBr, calOfCap, calOfDe]
 
+gbrIMods :: [InstanceModel]
+gbrIMods = [probOfBreak, calofCapacity, calofDemand]
+
 {--}
 
 probOfBreak :: InstanceModel
 probOfBreak = im probOfBr [qw risk] 
   [TCon AssumedCon $ sy risk $> 0] (qw prob_br) [TCon AssumedCon $ sy prob_br $> 0]
   (mkLabelRA'' "probOfBrIM")
-
-{--}
 
 probOfBr :: RelationConcept
 probOfBr = makeRC "probOfBr" (nounPhraseSP "Probability of Glass Breakage")
@@ -42,8 +44,6 @@ calofCapacity :: InstanceModel
 calofCapacity = im' calOfCap [qw nonFL, qw glaTyFac, qw loadSF] 
   [TCon AssumedCon $ sy nonFL $> 0, TCon AssumedCon $ sy glaTyFac $> 0,
   TCon AssumedCon $ sy loadSF $> 0] (qw lRe) [] (mkLabelRA'' "calOfCapLabel") [capdescr]
-
-{--}
 
 calOfCap :: RelationConcept
 calOfCap = makeRC "calOfCap" (nounPhraseSP "Calculation of Capacity(LR)") 
@@ -69,9 +69,6 @@ calofDemand = im' calOfDe [qw demand, qw eqTNTWeight, qw standOffDist]
   [TCon AssumedCon $ sy demand $> 0, TCon AssumedCon $ sy eqTNTWeight $> 0,
    TCon AssumedCon $ sy standOffDist $> 0] (qw demand) [] (mkLabelRA'' "calOfDeLabel")
   [dedescr]
-
-
-{--}
 
 calOfDe :: RelationConcept
 calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)") 

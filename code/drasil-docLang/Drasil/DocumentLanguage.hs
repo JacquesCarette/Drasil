@@ -214,7 +214,7 @@ data LCsSec = LCsVerb Section | LCsProg [LabelledContent] --FIXME:Should become 
 
 {--}
 
-data UCsSec = UCsVerb Section | UCsProg [Contents]
+data UCsSec = UCsVerb Section | UCsProg [LabelledContent]
 
 {--}
 

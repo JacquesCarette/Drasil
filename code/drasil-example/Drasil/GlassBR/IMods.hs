@@ -1,5 +1,5 @@
-module Drasil.GlassBR.IMods (iModels, gbrIMods, probOfBr, calOfCap, 
-  calOfDe, probOfBreak, calofCapacity, calofDemand) where
+module Drasil.GlassBR.IMods (gbrIMods, probOfBreak,
+  calofCapacity, calofDemand) where
 
 import Prelude hiding (exp)
 import Control.Lens ((^.))
@@ -15,9 +15,6 @@ import Drasil.GlassBR.Unitals (demand, demandq, eqTNTWeight, lRe, loadSF,
 import Data.Drasil.Concepts.Documentation (coordinate)
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
-
-iModels :: [RelationConcept]
-iModels = [probOfBr, calOfCap, calOfDe]
 
 gbrIMods :: [InstanceModel]
 gbrIMods = [probOfBreak, calofCapacity, calofDemand]

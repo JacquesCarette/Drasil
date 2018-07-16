@@ -56,12 +56,12 @@ import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist, glaSlab, 
   blastRisk, glass, glaPlane, glassBRProg, ptOfExplsn, acronyms)
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
-  dimLL, glaTyFac, tolStrDisFac, tolPre, risk, standOffDis)
+  dimLL, glaTyFac, tolStrDisFac, tolPre, standOffDis)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
-import Drasil.GlassBR.TMods (tModels, gbrTMods, t1SafetyReq, t2SafetyReq, t1IsSafe, t2IsSafe)
-import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr, probOfBreak, 
+import Drasil.GlassBR.TMods (tModels, gbrTMods, t1IsSafe, t2IsSafe)
+import Drasil.GlassBR.IMods (probOfBreak, 
   calofCapacity, calofDemand, gbrIMods)
 
 import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad, 
@@ -169,7 +169,7 @@ glassSystInfo = SI {
   _quants      = this_symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _definitions = (map (relToQD gbSymbMap) gbrIMods) ++ 
-                 (map (relToQD gbSymbMap) gbrTMods) ++
+                 --FIXME: #891 (map (relToQD gbSymbMap) gbrTMods) ++
                   [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears
                                              -- in the description of the Calculation of Demand instance model;
                                              -- should this be included as a Data Definition?

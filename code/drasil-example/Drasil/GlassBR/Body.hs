@@ -168,8 +168,8 @@ glassSystInfo = SI {
   _units       = map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton],
   _quants      = this_symbols,
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = (map (relToQD gbSymbMap) iModels {-[RelationConcept]-}) ++ 
-                 (map (relToQD gbSymbMap) tModels {-[RelationConcept]-}) ++
+  _definitions = (map (relToQD gbSymbMap) gbrIMods) ++ 
+                 (map (relToQD gbSymbMap) gbrTMods) ++
                   [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears
                                              -- in the description of the Calculation of Demand instance model;
                                              -- should this be included as a Data Definition?

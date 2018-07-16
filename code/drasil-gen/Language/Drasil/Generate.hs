@@ -8,6 +8,8 @@ import System.Directory (createDirectoryIfMissing, getCurrentDirectory,
 
 import Language.Drasil
 import Language.Drasil.Code (generator, generateCode, Choices, CodeSpec)
+import Language.Drasil.Printers (Format(TeX,HTML), DocSpec, DocType(MG, MIS, Website),
+  Filename)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: HasSymbolTable s => DocSpec -> Document -> s -> IO ()

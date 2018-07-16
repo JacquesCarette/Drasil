@@ -8,6 +8,8 @@ import Numeric (showFFloat)
 import Control.Applicative (pure)
 import Control.Arrow (second)
 
+import Language.Drasil
+
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
   ListType(Ordered, Unordered, Desc, Definitions, Simple), 
   Spec(Quote, EmptyS, Ref, S, Sy, Sp, HARDNL, E, (:+:)), 
@@ -26,18 +28,20 @@ import Language.Drasil.Printing.LayoutObj (LayoutObj(Graph, Bib, ALUR, Figure, D
   List, Table, EqnBlock, Paragraph, Header, HDiv), Document(Document), 
   ALUR(LikelyChange, UnlikelyChange, Assumption, Requirement))
 import qualified Language.Drasil.Printing.Import as I
-import qualified Language.Drasil.Spec as LS
-import qualified Language.Drasil.RefTypes as RT
-import Language.Drasil.Development.UnitLang (USymb(US))
-import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT,bibFname)
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, item', description,
   includegraphics, center, figure, item, symbDescription, enumerate, itemize, toEqn, empty,
   newline, superscript, parens, fraction, quote, ref, ucref, lcref, aref, mref, sref, rref,
   hyperref, cite, sec, newpage, maketoc, maketitle, document, author, title)
-import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (<>), vcat, (%%), 
+import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (<>), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
 import Language.Drasil.TeX.Preamble (genPreamble)
+
+{-
+import qualified Language.Drasil.Spec as LS
+import qualified Language.Drasil.RefTypes as RT
+import Language.Drasil.Development.UnitLang (USymb(US))
+import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT,bibFname)
 import           Language.Drasil.Symbol (Symbol(..))
 import qualified Language.Drasil.Symbol as S
 import qualified Language.Drasil.Document as L
@@ -45,6 +49,7 @@ import Language.Drasil.Unicode (RenderSpecial(..))
 import Language.Drasil.People (People,rendPersLFM)
 import Language.Drasil.ChunkDB (HasSymbolTable)
 import Language.Drasil.Chunk.Citation (CitationKind(..), Month(..))
+-}
 
 genTeX :: HasSymbolTable ctx => L.Document -> ctx -> TP.Doc
 genTeX doc sm = runPrint (buildStd sm $ I.makeDocument sm doc) Text

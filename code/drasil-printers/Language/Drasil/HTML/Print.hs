@@ -6,6 +6,14 @@ import Text.PrettyPrint hiding (render, Str)
 import Numeric (showFFloat)
 import Control.Arrow (second)
 
+import Language.Drasil
+
+import Language.Drasil.HTML.Monad (unPH)
+import Language.Drasil.HTML.Helpers (em, wrap, refwrap, caption, image, div_tag,
+  td, th, tr, bold, sub, sup, cases, fraction, reflink, paragraph, h, html, body,
+  author, article_title, title, linkCSS, head_tag)
+import qualified Language.Drasil.Output.Formats as F
+
 import Language.Drasil.Printing.Import (makeDocument)
 import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),  
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, Fence(Curly, Paren, Abs, Norm),
@@ -22,24 +30,21 @@ import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title,
 import Language.Drasil.Printing.LayoutObj (Tags, ALUR, Document(Document),
   LayoutObj(Graph, Bib, List, Header, Figure, Definition, Table, EqnBlock, Paragraph, 
   HDiv, ALUR))
-import qualified Language.Drasil.Output.Formats as F
-import Language.Drasil.Development.UnitLang (USymb(US))
-
-import Language.Drasil.HTML.Helpers (em, wrap, refwrap, caption, image, div_tag, 
-  td, th, tr, bold, sub, sup, cases, fraction, reflink, paragraph, h, html, body,
-  author, article_title, title, linkCSS, head_tag)
 import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac)
+
+{-
+import Language.Drasil.Development.UnitLang (USymb(US))
 import Language.Drasil.Unicode (special)
 import           Language.Drasil.Symbol (Symbol(..))
 import qualified Language.Drasil.Symbol as S
 import qualified Language.Drasil.Document as L
-import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.People (People, Person(..), rendPersLFM', rendPersLFM'',
   nameStr, rendPersLFM)
 import Language.Drasil.Config (StyleGuide(..), bibStyleH)
 import Language.Drasil.ChunkDB(HasSymbolTable)
 
 import Language.Drasil.Chunk.Citation (CitationKind(..))
+-}
 
 data OpenClose = Open | Close
 

@@ -1,8 +1,10 @@
 module Language.Drasil.HTML.Monad where
 
-import Language.Drasil.Unicode (RenderSpecial, 
-  Special(SqBrClose, SqBrOpen, CurlyBrOpen, CurlyBrClose, Hash, UScore, Circle, Partial, Percent),
-  special)
+import Language.Drasil
+
+--import Language.Drasil.Unicode (RenderSpecial, 
+  --Special(SqBrClose, SqBrOpen, CurlyBrOpen, CurlyBrClose, Hash, UScore, Circle, Partial, Percent),
+  --special)
 
 -----------------------------------------------------------------------------
 -- | Printing "monad".  Don't need context, so Identity (under another name)

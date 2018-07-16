@@ -43,7 +43,7 @@ import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty,
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods_new)
-import Drasil.SSP.Requirements (sspInputDataTable, sspRequirements)
+import Drasil.SSP.Requirements (sspInputDataTableLC, sspRequirements)
 import Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_new
   , effStress_new)
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
@@ -57,8 +57,8 @@ gen_sys_desc, req, aux_cons :: Section
 table_of_symbol_intro :: [TSIntro]
 
 problem_desc, termi_defi, phys_sys_desc, goal_stmt, func_req, non_func_req :: Section
-goals_list, func_req_list, termi_defi_list :: Contents
-phys_sys_desc_p1, phys_sys_desc_bullets, phys_sys_desc_p2 :: LabelledContent
+goals_list, termi_defi_list :: Contents
+phys_sys_desc_p1, phys_sys_desc_bullets, phys_sys_desc_p2, func_req_list :: LabelledContent
 
 --Document Setup--
 this_si :: [UnitDefn]
@@ -375,9 +375,10 @@ req = reqF [func_req, non_func_req]
 
 -- SECTION 5.1 --
 func_req = SRS.funcReq
-  [func_req_list, sspInputDataTable] []
+  [func_req_list, sspInputDataTableLC] []
 
-func_req_list = enumSimple 1 (short requirement) sspRequirements
+func_req_list = llcc "func_req_listSSP" (mkLabelRA'' "func_req_listSSPLabel") $
+  enumSimple 1 (short requirement) sspRequirements
 
 -- SECTION 5.2 --
 non_func_req = nonFuncReqF [accuracy, performanceSpd]

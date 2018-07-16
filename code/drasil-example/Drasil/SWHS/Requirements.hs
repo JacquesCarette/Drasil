@@ -32,11 +32,10 @@ import Data.Drasil.SentenceStructures (acroIM, acroR, foldlSent, sAnd, isThe,
 -- 5.1 : Functional Requirements --
 -----------------------------------
 
-req1, req2, reqEqn1, reqEqn2, req3, req4,
-  req5, req6, req7, req8, req9, req10, req11 :: Contents
+req1, req2, req3, req4,
+  req5, req6, req7, req8, req9, req10, req11 :: LabelledContent
 
-req1Labelled :: LabelledContent
-req1Labelled = llcc "req1LabelledC" (mkLabelRA'' "req1Label") req1
+reqEqn1, reqEqn2 :: LabelledContent --Fixme: rename labels
 
 req1 = mkRequirement "req1" ( foldlSentCol [
   titleize input_, S "the following", plural quantity `sC`
@@ -44,16 +43,18 @@ req1 = mkRequirement "req1" ( foldlSentCol [
   plural property, S "and initial", plural condition]) "Input-Initial-Quantities"
 
 req2 = mkRequirement "req2" ( foldlSentCol [
-  S "Use the", plural input_, S "in", makeRef req1Labelled,
+  S "Use the", plural input_, S "in", makeRef req1,
   S "to find the", phrase mass, S "needed for", acroIM 1, S "to",
   acroIM 4 `sC` S "as follows, where", ch w_vol `isThe` phrase w_vol,
   S "and", ch tank_vol `isThe` phrase tank_vol] ) "Use-Above-Find-Mass-IM1-IM4"
 
-reqEqn1 = eqUnR ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
+reqEqn1 = llcc "reqEqn1" (mkLabelRA'' "reqEqn1Label") $ 
+  eqUnR ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
   ((sy tank_vol) - (sy pcm_vol)) * (sy w_density) $=
   (((sy diam) / 2) * (sy tank_length) - (sy pcm_vol)) * (sy w_density)) -- FIXME: Ref Hack
 
-reqEqn2 = eqUnR ((sy pcm_mass) $= (sy pcm_vol) * (sy pcm_density)) -- FIXME: Ref Hack
+reqEqn2 = llcc "reqEqn1" (mkLabelRA'' "reqEqn1Label") $ 
+  eqUnR ((sy pcm_mass) $= (sy pcm_vol) * (sy pcm_density)) -- FIXME: Ref Hack
 
 req3 = mkRequirement "req3" ( foldlSent [
   S "Verify that the", plural input_, S "satisfy the required",

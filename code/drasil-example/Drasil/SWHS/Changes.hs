@@ -27,39 +27,33 @@ chgsStart a = makeRef a +:+ S "-"
 
 likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6 :: LabelledContent
 
-likeChg1 = llcc "likeChg1" (mkLabelRA'' "Uniform-Temperature-PCMLabel") $ 
-  mkLklyChnk "likeChg1" ( -- FIXME: mkLklyChnk is a hack since UID isn't used
+likeChg1 = mkLklyChnk "likeChg1" ( -- FIXME: mkLklyChnk is a hack since UID isn't used
   foldlSent [chgsStart newA4, short phsChgMtrl, S "is actually a poor", 
   phrase CT.thermal_conductor `sC` S "so the", phrase assumption, 
   S "of uniform", phrase temp_PCM, S "is not likely"] ) "Uniform-Temperature-PCM"
 --
-likeChg2 = llcc "likeChg2" (mkLabelRA'' "Temperature-Coil-Variable-Over-Day") $
-  mkLklyChnk "likeChg2" (
+likeChg2 = mkLklyChnk "likeChg2" (
   foldlSent [chgsStart newA8, S "The", phrase temp_C, S "will change over", 
   (S "course" `ofThe` S "day, depending"), S "on the", phrase energy, 
   S "received from the sun"] ) "Temperature-Coil-Variable-Over-Day"
 --
-likeChg3 = llcc "likeChg3" (mkLabelRA'' "Temperature-Coil-Variable-Over-Length") $
-  mkLklyChnk "likeChg3" (
+likeChg3 = mkLklyChnk "likeChg3" (
   foldlSent [chgsStart newA9, S "The", phrase temp_C,
   S "will actually change along its length as the", phrase water,
   S "within it cools"] ) "Temperature-Coil-Variable-Over-Length"
 --
-likeChg4 = llcc "likeChg4" (mkLabelRA'' "Discharging-Tank") $
-  mkLklyChnk "likeChg4" (
+likeChg4 = mkLklyChnk "likeChg4" (
   foldlSent [chgsStart newA11, S "The", phrase model, S "currently only", 
   S "accounts for charging of the tank. A more complete", phrase model, 
   S "would also account for discharging of the tank"] ) "Discharging-Tank"
 --
-likeChg5 = llcc "likeChg5" (mkLabelRA'' "Different-Initial-Temps-PCM-Water") $
-  mkLklyChnk "likeChg5" (
+likeChg5 = mkLklyChnk "likeChg5" (
   foldlSent [chgsStart newA12, S "To add more flexibility to the", 
   phrase simulation `sC` (phrase temp_init `ofThe` phrase water) `sAnd`
   S "the", short phsChgMtrl, S "could be allowed to have different", 
   plural value] ) "Different-Initial-Temps-PCM-Water"
 --
-likeChg6 = llcc "likeChg6" (mkLabelRA'' "Tank-Lose-Heat") $
-  mkLklyChnk "likeChg6" (
+likeChg6 = mkLklyChnk "likeChg6" (
   foldlSent [chgsStart newA15, S "Any real", phrase tank, S "cannot", 
   S "be perfectly insulated and will lose", phrase CT.heat] ) "Tank-Lose-Heat"
 
@@ -70,13 +64,10 @@ likeChg6 = llcc "likeChg6" (mkLabelRA'' "Tank-Lose-Heat") $
 unlikelyChgs :: Section
 unlikelyChgs = SRS.unlikeChg unlikelyChgsList []
 
-unlikelyChgsList :: [Contents]
-unlikelyChgsList = unlikeChgList
+unlikelyChgsList :: [LabelledContent]
+unlikelyChgsList = [unlikeChg1, unlikeChg2]
 
-unlikeChgList :: [Contents]
-unlikeChgList = [unlikeChg1, unlikeChg2]
-
-unlikeChg1, unlikeChg2 :: Contents
+unlikeChg1, unlikeChg2 :: LabelledContent
 
 unlikeChg1 = mkUnLklyChnk "unlikeChg1" ( 
   foldlSent [makeRef newA14, S ", ", chgsStart newA18, S "It is unlikely for the changeof", 

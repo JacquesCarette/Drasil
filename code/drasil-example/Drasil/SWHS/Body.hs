@@ -512,14 +512,15 @@ funcReqsList :: [LabelledContent]
 funcReqsList = [req1] ++ [funcReqsTable] ++ [req2] ++
   [reqEqn1, reqEqn2] ++ reqs
 
-funcReqsTable :: Contents
-funcReqsTable = (Table [titleize symbol_, titleize unit_, titleize description]
+funcReqsTable :: LabelledContent
+funcReqsTable = llcc "InConstraints" (mkLabelRA'' "funcReqsTableLabel") $ 
+  (Table [titleize symbol_, titleize unit_, titleize description]
   (mkTable
   [ch, unit'2Contents, phrase] (map qw inputConstraints))
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False)
   "InConstraints"
 
-reqs :: [Contents]
+reqs :: [LabelledContent]
 reqs = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
 
 ---------------------------------------

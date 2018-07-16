@@ -40,7 +40,7 @@ swhsGenDefs = [nwtnCooling, rocTempSimp]
 swhsGDs :: [GenDefn]
 swhsGDs = [nwtnCoolingGD, rocTempSimpGD] 
 
---nwtnCoolingGD, rocTempSimpGD :: GenDefn
+nwtnCoolingGD, rocTempSimpGD :: GenDefn
 nwtnCoolingGD = gdNoUnitDef nwtnCooling [] (mkLabelRA'' "nwtnCoolingLabel")
 rocTempSimpGD = gdNoUnitDef rocTempSimp [] (mkLabelRA'' "rocTempSimpLabel")
 

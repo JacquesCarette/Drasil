@@ -10,10 +10,10 @@ import Data.Drasil.SentenceStructures (foldlSent, foldlSP)
 import Data.Drasil.Concepts.Documentation (system)
 import Data.Drasil.Concepts.Math (calculation)
 
-likelyChanges_SRS :: [Contents]
+likelyChanges_SRS :: [LabelledContent]
 likelyChanges_SRS = [likelychg1]
 
-likelychg1 :: Contents
+likelychg1 :: LabelledContent
 likelychg1 = mkLklyChnk "LC_inhomogeneous" lc1Desc "Calculate-Inhomogeneous-Soil-Layers"
 
 lc1Desc :: Sentence
@@ -22,10 +22,10 @@ lc1Desc = foldlSent [(refA sspRefDB newA3) `sDash` S "The",
   S "In the future,", plural calculation,
   S "can be added for inconsistent soil properties throughout"]
 
-unlikelyChanges_SRS :: [Contents]
+unlikelyChanges_SRS :: [LabelledContent]
 unlikelyChanges_SRS = [ucIntro, unlikelychg1, unlikelychg2]
 
-unlikelychg1, unlikelychg2 :: Contents
+unlikelychg1, unlikelychg2 :: LabelledContent
 
 unlikelychg1 = mkUnLklyChnk "UC_normshearlinear" uc1Desc "Normal-And-Shear-Linear-Only"
 unlikelychg2 = mkUnLklyChnk "UC_2donly"          uc2Desc "2D-Analysis-Only"
@@ -42,6 +42,7 @@ uc2Desc = foldlSent [(refA sspRefDB newA8), S "allows for 2D analysis" +:+.
   S "These models do not take into account stress in the z-direction, and",
   S "therefore cannot be without manipulation to attempt 3d analysis"]
 
-ucIntro :: Contents
-ucIntro = foldlSP [S "If changes were to be made with regard to the following" `sC`
+ucIntro :: LabelledContent
+ucIntro = llcc "ucIntro" (mkLabelRA'' "ucIntroLabel") $ 
+  foldlSP [S "If changes were to be made with regard to the following" `sC`
   S "a different algorithm would be needed"]

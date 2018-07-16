@@ -42,7 +42,7 @@ doc' sys authors secs = Document (Doc.srs `forTT'` sys) authors secs
 intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
   genSysDes, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
   probDesc, termAndDefn, termogy, goalStmt, solCharSpec, assumpt, thModel,
-  genDefn, inModel, dataDefn, propCorSol, require, nonfuncReq, tOfSymb,
+  inModel, dataDefn, propCorSol, require, nonfuncReq, tOfSymb,
   reference, offShelfSol, valsOfAuxCons :: [Contents] -> [Section] -> Section
 
 intro       cs ss = section' (titleize Doc.introduction) cs ss "Intro"
@@ -71,7 +71,6 @@ goalStmt    cs ss = section' (titleize' Doc.goalStmt)          cs ss "GoalStmt"
 solCharSpec cs ss = section' (titleize Doc.solutionCharSpec)   cs ss "SolCharSpec"
 assumpt     cs ss = section' (titleize' Doc.assumption)        cs ss "Assumps"
 thModel     cs ss = section' (titleize' Doc.thModel)           cs ss "TMs"
-genDefn     cs ss = section' (titleize' Doc.genDefn)           cs ss "GDs"
 inModel     cs ss = section' (titleize' Doc.inModel)           cs ss "IMs"
 dataDefn    cs ss = section' (titleize' Doc.dataDefn)          cs ss "DDs"
 
@@ -80,9 +79,7 @@ propCorSol  cs ss = section' (titleize' Doc.propOfCorSol)      cs ss "CorSolProp
 require     cs ss = section' (titleize' Doc.requirement)      cs ss "Requirements"
 nonfuncReq  cs ss = section' (titleize' Doc.nonfunctionalRequirement) cs ss "NFRs"
 
-
 valsOfAuxCons cs ss = section' (titleize Doc.consVals)        cs ss "AuxConstants"
-
 
 reference   cs ss = section' (titleize' Doc.reference)        cs ss "References"
 offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "ExistingSolns"
@@ -90,12 +87,13 @@ offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "ExistingSol
 tOfSymb cs ss = section' (titleize Doc.tOfSymb) cs ss "ToS"
 
 
-appendix, datCon, funcReq, likeChg, physSyst, sysCont, traceyMandG, unlikeChg :: 
-  [LabelledContent] -> [Section] -> Section
+appendix, datCon, funcReq, genDefn, likeChg, physSyst, sysCont, traceyMandG,
+ unlikeChg :: [LabelledContent] -> [Section] -> Section
 
 appendix    cs ss = sectionLC (titleize Doc.appendix)               cs ss (mkLabelRA'' "Appendix")
 datCon      cs ss = sectionLC (titleize' Doc.datumConstraint)       cs ss datConLabel
 funcReq     cs ss = sectionLC (titleize' Doc.functionalRequirement) cs ss (mkLabelRA'' "FRs")
+genDefn     cs ss = sectionLC (titleize' Doc.genDefn)               cs ss (mkLabelRA'' "GDs")
 likeChg     cs ss = sectionLC (titleize' Doc.likelyChg)             cs ss (mkLabelRA'' "LCs")
 physSyst    cs ss = sectionLC (titleize Doc.physSyst)               cs ss physSystLabel
 sysCont     cs ss = sectionLC (titleize Doc.sysCont)                cs ss (mkLabelRA'' "SysContext")

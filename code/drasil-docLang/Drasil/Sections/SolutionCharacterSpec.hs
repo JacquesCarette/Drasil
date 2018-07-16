@@ -331,9 +331,10 @@ theoreticalModelSect (SectionModel _ xs) _ progName = SRS.thModel
 
 generalDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
 generalDefinitionSect (SectionModel _ xs) _ = SRS.genDefn
-  (generalDefsIntro:contents) (pullSections xs)
+  ((llcc "gdIntroLC" (mkLabelRA'' "gdIntroLC") generalDefsIntro):contents)
+  (pullSections xs)
   where generalDefsIntro = generalDefinitionIntro contents
-        contents         = (pullContents xs)
+        contents         = pullLC xs
 
 
 instanceModelSect :: (HasSymbolTable s) => SubSec -> s -> Section

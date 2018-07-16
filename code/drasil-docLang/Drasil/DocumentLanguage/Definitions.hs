@@ -7,6 +7,7 @@ module Drasil.DocumentLanguage.Definitions
   , tmodel
   , ddefn, ddefn'
   , gdefn, derivation
+  , derivation' 
   , instanceModel
   , InclUnits(..)
   )where
@@ -56,8 +57,9 @@ ddefn' fs m d = Defnt DD (foldr (mkDDField d m) [] fs) (refAdd d)
 -- | Create a general definition using a list of fields, database of symbols,
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'
 -- program)
-gdefn :: HasSymbolTable ctx => Fields -> ctx -> GenDefn -> Contents
-gdefn fs m g = Defnt General (foldr (mkGDField g m) [] fs) (refAdd g)
+gdefn :: HasSymbolTable ctx => Fields -> ctx -> GenDefn -> LabelledContent
+gdefn fs m g = llcc (g ^. uid ++ "LC") (g ^. getLabel) $ Defnt General (foldr (mkGDField g m) [] fs) (refAdd g) 
+--FIXME: should this produce a LabelledContent? GenDefn has it's own label...
 
 -- | Create an instance model using a list of fields, database of symbols,
 -- and an 'InstanceModel' chunk (called automatically by 'SCSSub' program)
@@ -69,11 +71,22 @@ instanceModel fs m i = Defnt Instance (foldr (mkIMField i m) [] fs) (refAdd i)
 derivation :: HasDerivation c => c -> [Contents]
 derivation g = map makeDerivationContents (getDerivation g)
 
+-- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
+-- or IM definition automatically (called automatically by 'SCSSub' program)
+derivation' :: HasDerivation c => c -> [LabelledContent]
+derivation' g = map makeDerivationContents' (getDerivation g)
+
 -- | Helper function for creating the layout objects
 -- (paragraphs and equation blocks) for a derivation.
 makeDerivationContents :: Sentence -> Contents
 makeDerivationContents (E e) = EqnBlock e "" -- HACK -> FIXME: reference-able?
 makeDerivationContents s     = Paragraph s
+
+-- | Helper function for creating the layout objects
+-- (paragraphs and equation blocks) for a derivation.
+makeDerivationContents' :: Sentence -> LabelledContent
+makeDerivationContents' (E e) = llcc "" (mkLabelRA'' "") $ EqnBlock e "" --FIXME! non-referble sentences!
+makeDerivationContents' s     = llcc "" (mkLabelRA'' "") $ Paragraph s  --FIXME: non-referble sentences!
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
 type ModRow = [(String, [Contents])]

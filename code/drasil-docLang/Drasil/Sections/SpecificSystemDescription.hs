@@ -102,7 +102,7 @@ goalStmtF givenInputs otherContents = SRS.goalStmt (intro:otherContents) []
 --  the last input is a tupple of lists of Sections for each Subsection in order.
 solChSpecF :: (Idea a) => a -> (Section, Section, Section) -> Sentence -> 
   (Sentence, Sentence, Sentence) -> 
-  ([Contents], [Contents], [Contents], [Contents], [Contents], [LabelledContent]) -> 
+  ([Contents], [Contents], [LabelledContent], [Contents], [Contents], [LabelledContent]) -> 
   [Section] -> Section
 solChSpecF progName (probDes, likeChg, unlikeChg) ddEndSent (mid, hasUncertainty, trail) (a, t, g, dd, i, dc) adSubSec = 
   SRS.solCharSpec [solutionCharSpecIntro progName instModels] (subSec)
@@ -157,8 +157,9 @@ thModIntro progName = foldlSP
           S "laws that", short progName, S "is based on"]
 
 -- just supply the other contents for General Definition. Use empty list if none needed
-genDefnF :: [Contents] -> Section
-genDefnF otherContents = SRS.genDefn (generalDefinitionIntro otherContents:otherContents) []
+genDefnF :: [LabelledContent] -> Section
+genDefnF otherContents = SRS.genDefn ((llcc "gdIntroLC" (mkLabelRA'' "gdIntroLC") $ 
+  generalDefinitionIntro otherContents):otherContents) []
 
 generalDefinitionIntro :: (Referable t) => [t] -> Contents
 generalDefinitionIntro [] = Paragraph $ S "There are no general definitions."

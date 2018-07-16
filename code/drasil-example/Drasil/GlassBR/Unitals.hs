@@ -4,8 +4,8 @@ import Language.Drasil
 import Control.Lens ((^.))
 import Prelude hiding (log, sqrt)
 
-import Drasil.GlassBR.Concepts (aR, annealedGlass, fullyTGlass, glaPlane, 
-  glassTypeFac, heatSGlass, iGlass, lGlass, lResistance, lShareFac, 
+import Drasil.GlassBR.Concepts (aR, annealed, fullyT, glaPlane, 
+  glassTypeFac, heatS, iGlass, lGlass, lResistance, lShareFac, 
   loadDurFactor, nFL, responseTy, stdOffDist)
 import Drasil.GlassBR.Units (sFlawPU)
 
@@ -257,7 +257,7 @@ aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
   sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage, notSafe, bomb,
   explosion :: ConceptChunk
 
-annealedGl    = cc annealedGlass
+annealedGl    = cc annealed
   ("A flat, monolithic, glass lite which has uniform thickness where the " ++
     "residual surface stresses are almost zero, as defined in [3]." {-astm2016-})
 aspectRatio   = cc aR
@@ -286,7 +286,7 @@ eqTNTChar     = dcc "eqTNTChar"   (nounPhraseSP "equivalent TNT charge mass")
     "design explosive threat.")
 explosion     = dcc "explosion"   (nounPhraseSP "explosion") 
   "a destructive shattering of something"
-fTemperedGl   = cc fullyTGlass
+fTemperedGl   = cc fullyT
   ("A flat, monolithic, glass lite of uniform thickness that has been " ++
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 69 MPa (10 000 psi) or the edge " ++
@@ -305,7 +305,7 @@ glTyFac       = cc' glassTypeFac
   S "of different glass type, that is,", foldlOptions glassTypeAbbrs
   `sC` S "in monolithic glass" `sC` (getAcc lGlass), sParen (titleize lGlass) `sC`
    S "or", (getAcc iGlass), sParen (titleize iGlass), S "constructions"])
-hStrengthGl   = cc heatSGlass
+hStrengthGl   = cc heatS
   ("A flat, monolithic, glass lite of uniform thickness that has been " ++
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 24 MPa (3500psi) or greater " ++
@@ -331,7 +331,7 @@ longDurLoad   = dcc "longDurLoad"        (nounPhraseSP "long duration load")
 nonFactoredL  = cc' nFL
   (foldlSent [S "Three second duration uniform load associated with a", 
     S "probability of breakage less than or equal to 8", (plural lite),
-    S "per 1000 for monolithic", (getAcc annealedGlass), S "glass"])
+    S "per 1000 for monolithic", (getAcc annealed), S "glass"])
 notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
   ("For the given input parameters, the glass is NOT considered safe.")
 probBreak     = cc prob_br
@@ -432,7 +432,7 @@ glassTypeAbbrs :: [Sentence]
 glassTypeAbbrs = map S glassTypeAbbrsStr
 
 glassConcepts :: [CI]
-glassConcepts = [annealedGlass, fullyTGlass, heatSGlass]
+glassConcepts = [annealed, fullyT, heatS]
 
 -- FIXME: this String is really an awful cheat...
 type GlassType = [(Integer, String)] -- [(Factor, Abbreviation)]
@@ -440,7 +440,7 @@ type GlassThickness = [(Double, Double)] --[(Nominal, Actual)]
 
 glassType :: GlassType
 -- What it should really be:
--- glassType = [(1, annealedGlass), (4, fullyTGlass), (2, heatSGlass)]
+-- glassType = [(1, annealed), (4, fullyT), (2, heatS)]
 glassType = [(1, "AN"), (4, "FT"), (2, "HS")]
 
 glassThickness :: GlassThickness

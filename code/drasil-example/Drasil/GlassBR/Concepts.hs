@@ -14,21 +14,21 @@ glassBRProg = dcc' "glassBRProg" (nounPhraseSP "GlassBR program")
 
 {-Acronyms-}
 acronyms :: [CI]
-acronyms = [assumption, annealedGlass, aR, dataDefn, fullyTGlass,
-  goalStmt, glassTypeFac, heatSGlass, iGlass, inModel, likelyChg, 
-  loadDurFactor, lGlass, lResistance, lShareFac, notApp, nFL,
-  physSyst, requirement, stdOffDist, srs, thModel, eqTNT, unlikelyChg]
+acronyms = [assumption, annealed, aR, dataDefn, fullyT, goalStmt, 
+  glassTypeFac, heatS, iGlass, inModel, likelyChg, loadDurFactor, 
+  lGlass, lResistance, lShareFac, notApp, nFL, physSyst, requirement, 
+  stdOffDist, srs, thModel, eqTNT, unlikelyChg]
 
-annealedGlass, aR, fullyTGlass, glassTypeFac, heatSGlass, loadDurFactor,
-  iGlass, lGlass, lResistance, lShareFac, eqTNT, gLassBR, stdOffDist, nFL :: CI
+annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass, 
+  lResistance, lShareFac, eqTNT, gLassBR, stdOffDist, nFL :: CI
 
 --FIXME: Add compound nounphrases
 
-annealedGlass = commonIdea "annealedGlass" (nounPhraseSP "annealed glass")          "AN"
+annealed      = commonIdea "annealed"      (nounPhraseSP "annealed")                "AN"
 aR            = commonIdea "aR"            (nounPhraseSP "aspect ratio")            "AR"
-fullyTGlass   = commonIdea "fullyTGlass"   (nounPhraseSP "fully tempered glass")    "FT"
+fullyT        = commonIdea "fullyT"        (nounPhraseSP "fully tempered")          "FT"
 glassTypeFac  = commonIdea "glassTypeFac"  (nounPhraseSP "glass type factor")       "GTF"
-heatSGlass    = commonIdea "heatSGlass"    (nounPhraseSP "heat strengthened glass") "HS"
+heatS         = commonIdea "heatS"         (nounPhraseSP "heat strengthened")       "HS"
 iGlass        = commonIdea "iGlass"        (nounPhraseSP "insulating glass")        "IG"
 lGlass        = commonIdea "lGlass"        (nounPhraseSP "laminated glass")         "LG"
 lResistance   = commonIdea "lResistance"   (nounPhraseSP "load resistance")         "LR"

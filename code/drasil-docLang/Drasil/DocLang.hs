@@ -10,7 +10,7 @@ module Drasil.DocLang (
     TSIntro(..), UCsSec(..), mkDoc, mkLklyChnk, mkRequirement, mkUnLklyChnk, 
     tsymb, tsymb'',
     -- DocumentLanguage.Definitions
-    Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose),
+    Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose), ddefn',
     -- DocumentLanguage.RefHelpers 
     ModelDB, cite, ddRefDB, mdb, refA, refDD,
     -- DocumentLanguage.TraceabilityMatrix
@@ -49,7 +49,7 @@ import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
     TSIntro(..), UCsSec(..), mkDoc, mkLklyChnk, mkRequirement, mkUnLklyChnk, 
     tsymb, tsymb'')
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, 
-    InclUnits(IncludeUnits), Verbosity(Verbose))
+    InclUnits(IncludeUnits), Verbosity(Verbose), ddefn')
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, cite, ddRefDB, mdb, refA, 
     refDD)
 --import Drasil.DocumentLanguage.TraceabilityMatrix

@@ -170,12 +170,10 @@ generalDefinitionIntro _ = foldlSP [S "This", phrase section_,
   plural dataDefn `sC` S "which in turn are used to", S "build the", 
   plural inModel]
 
-                       
 -- uses EmptyS if ending sentence is not needed
 dataDefnF :: Sentence -> [Contents] -> Section                      
 dataDefnF endingSent otherContents = SRS.dataDefn 
   ((dataDefinitionIntro endingSent):otherContents) []
-
 
 dataDefinitionIntro :: Sentence -> Contents
 dataDefinitionIntro closingSent = Paragraph $ (foldlSent [S "This", phrase section_, 

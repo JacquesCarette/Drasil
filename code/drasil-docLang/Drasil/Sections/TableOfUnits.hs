@@ -10,11 +10,11 @@ import Data.Drasil.Concepts.Documentation (symbol_, description)
 -- | Table of units section builder. Takes a list of units and an introduction
 table_of_units :: IsUnit s => [s] -> LabelledContent -> Section
 table_of_units u intro = Section (S "Table of Units") [LCon intro, LCon (unit_table u)] 
-  (mkLabelRA'' "Section:ToU") --"TblOfUnits"
+  (mkLabelRA'' "ToU")
 
 -- | Creates the actual table of units from a list of units
 unit_table :: IsUnit s => [s] -> LabelledContent
-unit_table u = llcc "ToULC" (mkLabelRA'' "ToU") $ Table
+unit_table u = llcc "ToULC" (mkLabelRA'' "TblOfUnits") $ Table
   (map (at_start) [symbol_, description])  (mkTable
   [(\x -> Sy (x ^. usymb)),
    (\x -> (x ^. defn) +:+ sParen (phrase x))

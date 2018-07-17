@@ -232,6 +232,8 @@ instance Referable GenDefn where
 instance Referable QDefinition where -- FIXME: This could lead to trouble; need
                                      -- to ensure sanity checking when building
                                      -- Refs. Double-check QDef is a DD before allowing
+                                     -- FIXME: QDefinition should no longer be referable
+                                     -- after its Label is removed.
   refAdd  d = "DD:" ++ concatMap repUnd (d ^. uid)
   rType   _ = Def
 

@@ -50,6 +50,12 @@ instance HasAdditionalNotes DataDefinition where getNotes = notes
 instance HasLabel       DataDefinition where getLabel = qd . getLabel --FIXME: will eventually just be viewed from here
 instance HasShortName       DataDefinition where shortname = lbl . shortname
 
+-- | Smart constructor for data definitions 
+mkDD :: QDefinition -> References -> Derivation -> String{-Label-} -> Maybe [Sentence] -> DataDefinition
+mkDD a b c _ e = DD a Global b c (mkLabelRA' ((a ^. uid) ++ "Label") (a ^. uid)) e -- FIXME: should the Label be passed in or derived?
+
+qdFromDD :: DataDefinition -> QDefinition
+qdFromDD (DD a _ _ _ _ _) = a
 
 -- Used to help make Qdefinitions when uid, term, and symbol come from the same source
 mkDataDef :: (Quantity c) => c -> Expr -> QDefinition
@@ -66,9 +72,3 @@ mkDataDef' cncpt equation dv = datadef $ getUnit cncpt --should references be pa
         datadef Nothing  = fromEqn'''' (cncpt ^. uid) (cncpt ^. term) EmptyS
                            (eqSymb cncpt) equation [] dv (cncpt ^. uid) --shortname
 
--- | Smart constructor for data definitions 
-mkDD :: QDefinition -> References -> Derivation -> String{-Label-} -> Maybe [Sentence] -> DataDefinition
-mkDD a b c _ e = DD a Global b c (mkLabelRA' ((a ^. uid) ++ "Label") (a ^. uid)) e -- FIXME: should the Label be passed in or derived?
-
-qdFromDD :: DataDefinition -> QDefinition
-qdFromDD (DD a _ _ _ _ _) = a

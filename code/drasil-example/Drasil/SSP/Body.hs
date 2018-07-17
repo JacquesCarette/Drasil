@@ -12,12 +12,12 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   SCSSub(..),
   dataConstraintUncertainty, genSysF, goalStmtF, 
   inDataConstTbl, intro, mkDoc, nonFuncReqF, outDataConstTbl, probDescF, reqF, 
-  solChSpecF, specSysDesF, termDefnF, tsymb'', valsOfAuxConstantsF)
+  termDefnF, tsymb'', valsOfAuxConstantsF)
 
-import Data.Drasil.Concepts.Documentation (analysis, definition, 
+import Data.Drasil.Concepts.Documentation (analysis, 
   design, document, effect, element, endUser, goalStmt, inModel, input_, 
-  interest, interest, issue, loss, method_, model, organization, physics, 
-  problem, property, requirement, srs, table_, template, value, variable, assumption)
+  interest, interest, issue, loss, method_, organization, physics, 
+  problem, property, requirement, srs, table_, template, value, variable)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
@@ -33,41 +33,35 @@ import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent, 
   foldlSent_, ofThe, sAnd, sOr)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
-import Data.Drasil.Utils (enumBullet, enumSimple, weave)
-import Drasil.SSP.Assumptions (sspRefDB, sspAssumptions)
+import Data.Drasil.Utils (enumBullet, enumSimple)
+import Drasil.SSP.Assumptions (sspRefDB)
 import Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
-import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShrDerivation, 
-  resShrDerivation, sliceWght, sspDataDefs, stfMtrxDerivation)
+import Drasil.SSP.DataDefs (sspDataDefs)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty, 
   morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil, soilLyr, ssa)
-import Drasil.SSP.GenDefs (sspGenDefs, generalDefinitions)
+import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
-import Drasil.SSP.IMods (fctSftyDerivation, instModIntro1, instModIntro2, 
-  intrSlcDerivation, nrmShrDerivation, rigDisDerivation, rigFoSDerivation, 
-  sspIMods, sspIMods_new)
+import Drasil.SSP.IMods (sspIMods_new)
 import Drasil.SSP.Requirements (sspInputDataTable, sspRequirements)
-import Drasil.SSP.TMods (sspTMods, fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_new
+import Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_new
   , effStress_new)
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
   sspOutputs, sspSymbols)
 
-import qualified Drasil.DocLang.SRS as SRS (funcReq, inModel, likeChg, unlikeChg, missingP, 
-  physSyst)
+import qualified Drasil.DocLang.SRS as SRS (funcReq, inModel, missingP, physSyst)
 
 --type declarations for sections--
-gen_sys_desc, spec_sys_desc, req, likely_chg, aux_cons :: Section
+gen_sys_desc, req, aux_cons :: Section
 
 table_of_symbol_intro :: [TSIntro]
 
 problem_desc, termi_defi, phys_sys_desc,
-  goal_stmt, sol_charac_spec, func_req, non_func_req :: Section
+  goal_stmt, func_req, non_func_req :: Section
 
 termi_defi_list, phys_sys_desc_p1, phys_sys_desc_bullets,
-  phys_sys_desc_p2, goals_list, assumps_list,
+  phys_sys_desc_p2, goals_list, 
   func_req_list :: Contents
-
-theory_model_tmods, gen_def_genDefs, data_def_dataDefs, insta_model_IMods :: [Contents]
 
 --Document Setup--
 this_si :: [UnitDefn]
@@ -260,9 +254,6 @@ userChar pname understandings familiarities = foldlSP [
 -- System Constraints automatically generated in genSysF
 
 -- SECTION 4 --
-spec_sys_desc = specSysDesF end [problem_desc, sol_charac_spec]
-  where end = foldlSent_ [plural definition, S "and finally the",
-          plural inModel, S "that", phrase model, S "the", phrase slope]
 
 -- SECTION 4.1 --
 problem_desc = probDescF EmptyS ssa ending [termi_defi, phys_sys_desc, goal_stmt]
@@ -333,46 +324,24 @@ goal_stmt = goalStmtF (map (\(x, y) -> x `ofThe` y) [
 goals_list = enumSimple 1 (short goalStmt) sspGoals
 
 -- SECTION 4.2 --
-sol_charac_spec = solChSpecF ssa (problem_desc, SRS.likeChg [] [], SRS.unlikeChg [] []) ddEnding
-  (EmptyS, dataConstraintUncertainty, EmptyS)
-  ([assumps_list], theory_model_tmods, gen_def_genDefs, data_def_dataDefs, 
-  instModIntro1:instModIntro2:insta_model_IMods, [data_constraint_Table2, data_constraint_Table3]) []
-
-  where ddEnding = foldlSent [at_start' definition, ddRef sliceWght, S "to", ddRef lengthLb,
-          S "are the", phrase force, plural variable, S "that can be solved",
-          S "by direct analysis of given" +:+. plural input_, S "The", 
-          phrase intrslce, S "forces", ddRef lengthLs, S "are", phrase force,
-          plural variable, S "that must be written in terms of", ddRef sliceWght, 
-          S "to", ddRef lengthLb, S "to solve"]
 
 -- SECTION 4.2.1 --
 -- Assumptions is automatically generated in solChSpecF using the list below
 --s4_2_1_list
-assumps_list = enumSimple 1 (short assumption) sspAssumptions
 
 -- SECTION 4.2.2 --
 -- TModels is automatically generated in solChSpecF using the tmods below
 
-theory_model_tmods = map reldefn sspTMods
-
 -- SECTION 4.2.3 --
 -- General Definitions is automatically generated in solChSpecF
-gen_def_genDefs = map reldefn sspGenDefs
 
 -- SECTION 4.2.4 --
 -- Data Definitions is automatically generated in solChSpecF
-data_def_dataDefs = (map datadefn (take 13 sspDataDefs)) ++ resShrDerivation ++
-  [datadefn (sspDataDefs !! 13)] ++ mobShrDerivation ++
-  map datadefn [sspDataDefs !! 14, sspDataDefs !! 15] ++
-  stfMtrxDerivation ++ (map datadefn (drop 16 sspDataDefs))
   --FIXME: derivations should be with the appropriate DataDef
 
 -- SECTION 4.2.5 --
 -- Instance Models is automatically generated in solChSpecF
 -- using the paragraphs below
-
-insta_model_IMods = concat $ weave [map (\x -> [reldefn x]) sspIMods,
-  [fctSftyDerivation, nrmShrDerivation, intrSlcDerivation, rigDisDerivation, rigFoSDerivation]]
 
   --FIXME: derivations should be with the appropriate IMod
 
@@ -418,7 +387,6 @@ non_func_req = nonFuncReqF [accuracy, performanceSpd]
   where r = (short ssa) +:+ S "is intended to be an educational tool"
 
 -- SECTION 6 --
-likely_chg = SRS.likeChg [] []
 
 -- SECTION 7 --
 aux_cons = valsOfAuxConstantsF ssa []

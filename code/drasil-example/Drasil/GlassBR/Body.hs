@@ -22,16 +22,14 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
 
 import Data.Drasil.Concepts.Computation (computerApp, inParam,
   computerLiteracy, inValue, inQty)
-import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
-  characteristic, class_, code, condition, constraint, content,
-  datum, definition, description, document, emphasis, endUser, failure,
-  figure, goal, implementation, information, interface, input_, item,
-  message, model, organization, output_, problem, purpose,
-  quantity, reference, reviewer, section_, software, standard,
-  symbol_, system, template, term_, theory, traceyMatrix, user, value,
-  physicalSystem, datumConstraint, userInput, assumption, dataDefn,
-  goalStmt, inModel, likelyChg, physSyst, requirement, srs, thModel,
-  dataConst, company)
+import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
+  assumption, characteristic, class_, code, company, condition, content, dataConst, 
+  dataDefn, datum, datumConstraint, definition, description, document, emphasis, 
+  endUser, failure, figure, goal, goalStmt, implementation, information, inModel, 
+  input_, interface, item, likelyChg, message, model, organization, output_, 
+  physicalSystem, physSyst, problem, purpose, quantity, reference, requirement, 
+  reviewer, section_, software, srs, standard, symbol_, system, template, term_, 
+  theory, thModel, traceyMatrix, user, userInput, value)
 import Data.Drasil.Concepts.Education (secondYear, undergradDegree,
   civilEng, structuralEng, scndYrCalculus, structuralMechanics)
 import Data.Drasil.Concepts.Math (graph, calculation, probability,
@@ -132,7 +130,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           , TMs ([Label] ++ stdFields) [t1IsSafe, t2IsSafe]
           , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
           , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand, testIMFromQD] HideDerivation
+          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand] HideDerivation
           , Constraints EmptyS dataConstraintUncertainty
                         (foldlSent [(makeRef (SRS.valsOfAuxCons SRS.missingP [])), S "gives", (plural value `ofThe` S "specification"), 
                         plural parameter, S "used in", (makeRef inputDataConstraints)])
@@ -184,8 +182,6 @@ glassSystInfo = SI {
 }
   --FIXME: All named ideas, not just acronyms.
 
-testIMFromQD :: InstanceModel
-testIMFromQD = imQD gbSymbMap risk EmptyS [] [] "riskFun" [] --shortname
 glassBR_code :: CodeSpec
 glassBR_code = codeSpec glassSystInfo allMods
 

@@ -163,10 +163,10 @@ sd_min     = mkDataDef (unitary "sd_min"
 {--}
 
 glassBRSymbols :: [UnitaryChunk]
-glassBRSymbols = [act_thick, sflawParamK, sflawParamM, demand, sd, load_dur,
+glassBRSymbols = [act_thick, sflawParamK, sflawParamM, demand, load_dur,
   eqTNTWeight]
 
-act_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, sd, load_dur,
+act_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, load_dur,
   eqTNTWeight :: UnitaryChunk
 
 act_thick   = unitary "act_thick"   (nounPhraseSP "actual thickness")
@@ -190,9 +190,6 @@ sdy         = unitary "sdy" (nounPhraseSP "stand off distance (y-component)")
 
 sdz         = unitary "sdz" (nounPhraseSP "stand off distance (z-component)")
   (sub (eqSymb standOffDist) lZ) metre Real
-
-sd          = unitary "sd" (nounPhraseSP "stand off distance")
-  (eqSymb standOffDist) metre Real
 
 sflawParamK = unitary "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?
   lK sFlawPU Real

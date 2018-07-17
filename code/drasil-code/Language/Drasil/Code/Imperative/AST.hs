@@ -28,7 +28,7 @@ module Language.Drasil.Code.Imperative.AST (
     (#~),(#/^),(#|),(#+),(#-),(#*),(#/),(#%),(#^),
     (&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),(&.+=),(&.-=),(&.++),(&.~-),
     ($->),($.),($:),
-    log,exp,sin,cos,tan,csc,sec,cot,alwaysDel,neverDel,
+    log,ln,exp,sin,cos,tan,csc,sec,cot,alwaysDel,neverDel,
     assign,at,binExpr,break,cast,cast',constDecDef,extends,for,forEach,ifCond,ifExists,listDec,listDecValues,listDec',
     listOf,litBool,litChar,litFloat,litInt,litObj,litObj',litString,noElse,noParent,objDecDef,oneLiner,
     param,params,paramToVar,
@@ -172,7 +172,7 @@ data Expression = UnaryExpr UnaryOp Value
                 | Exists Value      --used to check whether the specified variable/list element/etc. is null
     deriving (Eq, Show)
 data UnaryOp = Negate | SquareRoot | Abs
-             | Not | Log | Exp
+             | Not | Log | Ln | Exp
              | Sin | Cos | Tan
     deriving (Eq, Show)
 data BinaryOp = Equal | NotEqual | Greater | GreaterEqual | Less | LessEqual
@@ -446,6 +446,9 @@ n $: e = EnumElement n e
 
 log :: Value -> Value
 log = unExpr Log
+
+ln :: Value -> Value
+ln = unExpr Ln
 
 exp :: Value -> Value
 exp = unExpr Exp

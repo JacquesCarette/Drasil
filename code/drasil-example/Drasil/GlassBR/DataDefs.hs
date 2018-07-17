@@ -78,7 +78,7 @@ loadDFDD = mkDD loadDF [{-references-}] [{-derivation-}] ""--temporary
 
 strDisFac_eq :: Expr
 strDisFac_eq = apply (sy stressDistFac) 
-  [sy dimlessLoad, (sy plate_len) / (sy plate_width)]
+  [sy dimlessLoad, sy aspectR]
 --strDisFac_eq = FCall (asExpr interpZ) [V "SDF.txt", (sy plate_len) / (sy plate_width), sy dimlessLoad]
   
 strDisFac :: QDefinition
@@ -86,7 +86,7 @@ strDisFac = mkDataDef stressDistFac strDisFac_eq
 
 strDisFacDD :: DataDefinition
 strDisFacDD = mkDD strDisFac [{-references-}] [{-derivation-}] ""--temporary
-  (Just $ [jRef2] ++ [qHtRef] ++ [aGrtrThanB])
+  (Just $ jRef2 : qHtRef : arRef : [])
 
 --DD5--
 
@@ -145,7 +145,7 @@ tolPreDD = mkDD tolPre [{-references-}] [{-derivation-}] ""--temporary
 --DD9--
 
 tolStrDisFac_eq :: Expr
-tolStrDisFac_eq = log (log (1 / (1 - (sy pb_tol)))
+tolStrDisFac_eq = ln (ln (1 / (1 - (sy pb_tol)))
   * ((((sy plate_len) * (sy plate_width)) $^ (sy sflawParamM - 1) / 
     ((sy sflawParamK) * ((1000 * sy mod_elas *
     (square (sy act_thick)))) $^ (sy sflawParamM) * (sy lDurFac)))))
@@ -187,6 +187,10 @@ aGrtrThanB :: Sentence
 aGrtrThanB = ((ch plate_len) `sC` (ch plate_width) +:+ 
   S "are" +:+ plural dimension +:+ S "of the plate" `sC` S "where" +:+. 
   sParen (E (sy plate_len $> sy plate_width)))
+
+arRef :: Sentence
+arRef = (ch aspectR +:+ S "is the" +:+ phrase aspectR +:+.
+  S "defined in DD11")
 
 hRef :: Sentence
 hRef = (ch nom_thick +:+ S "is the true thickness" `sC` 

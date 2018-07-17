@@ -90,7 +90,7 @@ char_weight = uqcND "char_weight" (nounPhraseSP "charge weight")
 
 tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
   (Atomic "TNT") Real
-  [ gtZeroConstr ] (1) defaultUncrt
+  [ gtZeroConstr ] (dbl 1.0) defaultUncrt
 
 standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance") 
   (Atomic "SD") metre Real
@@ -337,7 +337,7 @@ notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
 probBreak     = cc prob_br
   ("The fraction of glass lites or plies that would break at the first " ++
     "occurrence of a specified load and duration, typically expressed " ++
-    "in lites per 1000.")
+    "in lites per 1000 [3]." {-astm2016-})
 safeMessage   = dcc "safeMessage" (nounPhraseSP "safe")
   ("For the given input parameters, the glass is considered safe.")
 sD            = cc' stdOffDist

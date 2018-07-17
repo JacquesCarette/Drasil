@@ -191,7 +191,7 @@ arRef = (ch aspectR +:+ S "is the" +:+ phrase aspectR +:+.
   S "defined in DD11")
 
 hRef :: Sentence
-hRef = (ch min_thick +:+ S "is the true thickness" `sC` 
+hRef = (ch min_thick +:+ S "is the minimum thickness" `sC` 
   S "which is based on the nominal thicknesses" +:+. S "as shown in DD2")
 
 ldfRef :: Sentence

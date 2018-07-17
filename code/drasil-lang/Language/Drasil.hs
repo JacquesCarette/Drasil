@@ -149,7 +149,7 @@ module Language.Drasil (
   , section, fig, figWithWidth, section'', sectionLC
   , datadefn, reldefn
   -- Reference
-  , makeRef, acroTest, find'
+  , makeRef
   -- Space
   , Space(..)
   -- Symbol
@@ -321,14 +321,14 @@ import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (Sentence(..),
   sParen, sParenNum, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
   semiCol, sParenDash, sDash)
-import Language.Drasil.Reference (makeRef, acroTest, ReferenceDB, assumpDB, reqDB
+import Language.Drasil.Reference (makeRef, ReferenceDB, assumpDB, reqDB
                                  , AssumpMap, assumpLookup, HasAssumpRefs
                                  , assumpRefTable, assumptionsFromDB
                                  , rdb, reqRefTable, reqLookup, RefBy(..)
                                  , HasReqRefs, Referable(..), customRef
                                  , HasChangeRefs, changeRefTable, changeLookup
                                  , citationRefTable, citeLookup, RefMap
-                                 , simpleMap, find')
+                                 , simpleMap)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 
   prime, sCurlyBrSymb, compsy, Stage(..))
 import Language.Drasil.SymbolAlphabet

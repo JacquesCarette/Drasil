@@ -55,8 +55,8 @@ import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
 import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
   coil, perfect_insul, tank, transient, gauss_div, swhs_pcm,
   phase_change_material, tank_pcm)
-import Drasil.SWHS.Assumptions (swhsRefDB, swhsAssumptions, newA3, newA4, newA5,
-  newA6, newA13, newA15, newA16, newA17, newA18)
+import Drasil.SWHS.Assumptions (swhsRefDB, newA3, newA4, newA5,
+  newA6, newA13, newA15, newA16, newA17, newA18, newAssumptions)
 import Drasil.SWHS.TMods (t1ConsThermE_new, t2SensHtE_new, 
   t3LatHtE_new, swhsTMods, swhsTMods, swhsTModsAsLCs, tMod1LC)
 import Drasil.SWHS.IMods (heatEInWtr_new, eBalanceOnWtr_new,
@@ -346,7 +346,7 @@ assumps :: Section
 assumps = assumpF
   SRS.thModelLabel SRS.genDefnLabel 
   SRS.dataDefnLabel
-  iMods likelyChgs unlikelyChgs swhsAssumptions
+  iMods likelyChgs unlikelyChgs newAssumptions
 
 -- Again, list structure is same between all examples.
 

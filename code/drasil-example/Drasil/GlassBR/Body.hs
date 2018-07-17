@@ -284,9 +284,8 @@ appStanddIR = foldlSent [S " In addition" `sC` plural reviewer, -- FIXME: space 
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
   S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
   S "related to", phrase blastTy]
-endScoR = foldl (+:+) EmptyS [S "use the", plural datum `sAnd`
-  S "predict whether the", phrase glaSlab, S "is safe to use" `sOr`
-  S "not"]
+endScoR = foldl (+:+) EmptyS [S "predicts whether a", phrase glaSlab, 
+  S "is safe" `sOr` S "not"]
 
 {--Purpose of Document--}
 

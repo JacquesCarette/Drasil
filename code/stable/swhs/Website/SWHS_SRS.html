@@ -186,32 +186,10 @@ J/(kg&sdot;&deg;C)
 </tr>
 <tr>
 <td>
-<em>C<sub>P</sub><sup>L</sup></em>
-</td>
-<td>
-Specific heat capacity of PCM as a liquid
-</td>
-<td>
-J/(kg&sdot;&deg;C)
-</td>
-</tr>
-<tr>
-<td>
 <em>C<sup>S</sup></em>
 </td>
 <td>
 Specific heat capacity of a solid
-</td>
-<td>
-J/(kg&sdot;&deg;C)
-</td>
-</tr>
-<tr>
-<td>
-<em>C<sub>P</sub><sup>S</sup></em>
-</td>
-<td>
-Specific heat capacity of PCM as a solid
 </td>
 <td>
 J/(kg&sdot;&deg;C)
@@ -241,6 +219,28 @@ J/(kg&sdot;&deg;C)
 </tr>
 <tr>
 <td>
+<em>C<sub>P</sub><sup>L</sup></em>
+</td>
+<td>
+Specific heat capacity of PCM as a liquid
+</td>
+<td>
+J/(kg&sdot;&deg;C)
+</td>
+</tr>
+<tr>
+<td>
+<em>C<sub>P</sub><sup>S</sup></em>
+</td>
+<td>
+Specific heat capacity of PCM as a solid
+</td>
+<td>
+J/(kg&sdot;&deg;C)
+</td>
+</tr>
+<tr>
+<td>
 <em>D</em>
 </td>
 <td>
@@ -263,17 +263,6 @@ J
 </tr>
 <tr>
 <td>
-<em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em>
-</td>
-<td>
-Change in heat energy in the PCM at the instant when melting begins
-</td>
-<td>
-J
-</td>
-</tr>
-<tr>
-<td>
 <em>E<sub>P</sub></em>
 </td>
 <td>
@@ -289,6 +278,17 @@ J
 </td>
 <td>
 Change in heat energy in the water
+</td>
+<td>
+J
+</td>
+</tr>
+<tr>
+<td>
+<em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em>
+</td>
+<td>
+Change in heat energy in the PCM at the instant when melting begins
 </td>
 <td>
 J
@@ -417,6 +417,17 @@ Unit outward normal vector for a surface
 </tr>
 <tr>
 <td>
+<em>Q</em>
+</td>
+<td>
+Latent heat
+</td>
+<td>
+J
+</td>
+</tr>
+<tr>
+<td>
 <em>q<sub>C</sub></em>
 </td>
 <td>
@@ -461,28 +472,6 @@ W/m<sup>2</sup>
 </tr>
 <tr>
 <td>
-<em><b>q</b></em>
-</td>
-<td>
-Thermal flux vector
-</td>
-<td>
-W/m<sup>2</sup>
-</td>
-</tr>
-<tr>
-<td>
-<em>Q</em>
-</td>
-<td>
-Latent heat
-</td>
-<td>
-J
-</td>
-</tr>
-<tr>
-<td>
 <em>Q<sub>P</sub></em>
 </td>
 <td>
@@ -490,6 +479,17 @@ Latent heat energy added to PCM
 </td>
 <td>
 J
+</td>
+</tr>
+<tr>
+<td>
+<em><b>q</b></em>
+</td>
+<td>
+Thermal flux vector
+</td>
+<td>
+W/m<sup>2</sup>
 </td>
 </tr>
 <tr>
@@ -531,39 +531,6 @@ s
 </td>
 <td>
 Change in temperature
-</td>
-<td>
-&deg;C
-</td>
-</tr>
-<tr>
-<td>
-<em>t<sub>melt</sub><sup>final</sup></em>
-</td>
-<td>
-Time at which melting of PCM ends
-</td>
-<td>
-s
-</td>
-</tr>
-<tr>
-<td>
-<em>t<sub>melt</sub><sup>init</sup></em>
-</td>
-<td>
-Time at which melting of PCM begins
-</td>
-<td>
-s
-</td>
-</tr>
-<tr>
-<td>
-<em>T<sub>melt</sub><sup>P</sup></em>
-</td>
-<td>
-Melting point temperature for PCM
 </td>
 <td>
 &deg;C
@@ -652,6 +619,39 @@ Temperature of the phase change material
 </td>
 <td>
 Temperature of the water
+</td>
+<td>
+&deg;C
+</td>
+</tr>
+<tr>
+<td>
+<em>t<sub>melt</sub><sup>final</sup></em>
+</td>
+<td>
+Time at which melting of PCM ends
+</td>
+<td>
+s
+</td>
+</tr>
+<tr>
+<td>
+<em>t<sub>melt</sub><sup>init</sup></em>
+</td>
+<td>
+Time at which melting of PCM begins
+</td>
+<td>
+s
+</td>
+</tr>
+<tr>
+<td>
+<em>T<sub>melt</sub><sup>P</sup></em>
+</td>
+<td>
+Melting point temperature for PCM
 </td>
 <td>
 &deg;C
@@ -758,6 +758,17 @@ s
 </tr>
 <tr>
 <td>
+<em>τ<sub>W</sub></em>
+</td>
+<td>
+ODE parameter for water
+</td>
+<td>
+s
+</td>
+</tr>
+<tr>
+<td>
 <em>τ<sub>P</sub><sup>L</sup></em>
 </td>
 <td>
@@ -773,17 +784,6 @@ s
 </td>
 <td>
 ODE parameter for solid PCM
-</td>
-<td>
-s
-</td>
-</tr>
-<tr>
-<td>
-<em>τ<sub>W</sub></em>
-</td>
-<td>
-ODE parameter for water
 </td>
 <td>
 s

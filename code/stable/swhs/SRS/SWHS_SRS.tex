@@ -81,25 +81,25 @@ $C$ & Specific heat capacity & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
 ${C^{L}}$ & Specific heat capacity of a liquid & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
-${{C_{P}}^{L}}$ & Specific heat capacity of PCM as a liquid & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
-\\
 ${C^{S}}$ & Specific heat capacity of a solid & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
-\\
-${{C_{P}}^{S}}$ & Specific heat capacity of PCM as a solid & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
 ${C^{V}}$ & Specific heat capacity of a vapour & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
 ${C_{W}}$ & Specific heat capacity of water & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
+${{C_{P}}^{L}}$ & Specific heat capacity of PCM as a liquid & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
+\\
+${{C_{P}}^{S}}$ & Specific heat capacity of PCM as a solid & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
+\\
 $D$ & Diameter of tank & m
 \\
 $E$ & Sensible heat & J
 \\
-${{{E_{P}}_{melt}}^{init}}$ & Change in heat energy in the PCM at the instant when melting begins & J
-\\
 ${E_{P}}$ & Change in heat energy in the PCM & J
 \\
 ${E_{W}}$ & Change in heat energy in the water & J
+\\
+${{{E_{P}}_{melt}}^{init}}$ & Change in heat energy in the PCM at the instant when melting begins & J
 \\
 $g$ & Volumetric heat generation per unit volume & $\frac{\text{W}}{\text{m}^{3}}$
 \\
@@ -123,6 +123,8 @@ ${m_{W}}$ & Mass of water & kg
 \\
 $\mathbf{\hat{n}}$ & Unit outward normal vector for a surface & 
 \\
+$Q$ & Latent heat & J
+\\
 ${q_{C}}$ & Heat flux into the water from the coil & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 ${q_{in}}$ & Heat flux input & $\frac{\text{W}}{\text{m}^{2}}$
@@ -131,11 +133,9 @@ ${q_{out}}$ & Heat flux output & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 ${q_{P}}$ & Heat flux into the PCM from water & $\frac{\text{W}}{\text{m}^{2}}$
 \\
-$\mathbf{q}$ & Thermal flux vector & $\frac{\text{W}}{\text{m}^{2}}$
-\\
-$Q$ & Latent heat & J
-\\
 ${Q_{P}}$ & Latent heat energy added to PCM & J
+\\
+$\mathbf{q}$ & Thermal flux vector & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 $S$ & Surface & $\text{m}^{2}$
 \\
@@ -144,12 +144,6 @@ $T$ & Temperature & ${}^{\circ}$C
 $t$ & Time & s
 \\
 $ΔT$ & Change in temperature & ${}^{\circ}$C
-\\
-${{t_{melt}}^{final}}$ & Time at which melting of PCM ends & s
-\\
-${{t_{melt}}^{init}}$ & Time at which melting of PCM begins & s
-\\
-${{T_{melt}}^{P}}$ & Melting point temperature for PCM & ${}^{\circ}$C
 \\
 ${T_{boil}}$ & Boiling point temperature & ${}^{\circ}$C
 \\
@@ -166,6 +160,12 @@ ${T_{melt}}$ & Melting point temperature & ${}^{\circ}$C
 ${T_{P}}$ & Temperature of the phase change material & ${}^{\circ}$C
 \\
 ${T_{W}}$ & Temperature of the water & ${}^{\circ}$C
+\\
+${{t_{melt}}^{final}}$ & Time at which melting of PCM ends & s
+\\
+${{t_{melt}}^{init}}$ & Time at which melting of PCM begins & s
+\\
+${{T_{melt}}^{P}}$ & Melting point temperature for PCM & ${}^{\circ}$C
 \\
 $V$ & Volume & $\text{m}^{3}$
 \\
@@ -185,11 +185,11 @@ ${ρ_{W}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 $τ$ & Dummy variable for integration over time & s
 \\
+${τ_{W}}$ & ODE parameter for water & s
+\\
 ${{τ_{P}}^{L}}$ & ODE parameter for liquid PCM & s
 \\
 ${{τ_{P}}^{S}}$ & ODE parameter for solid PCM & s
-\\
-${τ_{W}}$ & ODE parameter for water & s
 \\
 $ϕ$ & Melt fraction & 
 \\

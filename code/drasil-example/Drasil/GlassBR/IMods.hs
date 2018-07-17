@@ -82,6 +82,5 @@ dedescr =
   (phrase standOffDist), sParen (ch standOffDist) `sAnd`
   (ch eqTNTWeight), S "as" +:+. plural parameter, 
   (ch eqTNTWeight), S "is defined as" +:+.
-  E (wtntWithEqn^.equat) +:+. (ch standOffDist) `isThe`
-  (phrase standOffDist), S "where", E (sdWithEqn^.equat), S "where",
-  sParen (sdVectorSent), S "are", plural coordinate]
+  E (wtntWithEqn^.equat), (ch standOffDist) `isThe`
+  (phrase standOffDist), S "as defined in DD10" {-standOffDisDD-}]

@@ -5,8 +5,8 @@ import Language.Drasil.RefTypes (RefType, RefAdd)
 import Language.Drasil.Unicode (Special)
 import Language.Drasil.Chunk.ShortName (ShortName)
 
-data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime | Log
-  | Sin | Cos | Tan | Sec | Csc | Cot | Not | Dim | Exp | Neg | Cross
+data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime | Log 
+  | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Not | Dim | Exp | Neg | Cross
   | Dot | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Subt | And | Or
   | Add | Mul | Summ | Inte | Prod
 

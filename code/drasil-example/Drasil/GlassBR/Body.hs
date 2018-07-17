@@ -56,7 +56,7 @@ import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist, glaSlab, 
   blastRisk, glass, glaPlane, glassBRProg, ptOfExplsn, acronyms)
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
-  dimLL, glaTyFac, tolStrDisFac, tolPre, risk)
+  dimLL, glaTyFac, tolStrDisFac, tolPre, risk, standOffDis)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
@@ -126,7 +126,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     capacity demandq probability)) :
   SSDSec 
     (SSDProg
-      [SSDProblem  (PDProg start gLassBR ending [terminology_and_description , physical_system_description, goal_statements])
+      [SSDProblem  (PDProg start gLassBR ending [terminology_and_description, physical_system_description, goal_statements])
       , SSDSolChSpec 
         (SCSProg
           [ Assumptions
@@ -136,7 +136,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand, testIMFromQD] HideDerivation
           , Constraints EmptyS dataConstraintUncertainty
                         (foldlSent [(makeRef (SRS.valsOfAuxCons SRS.missingP [])), S "gives", (plural value `ofThe` S "specification"), 
-                        plural parameter, S "used in", (makeRef inputDataConstraints)] +:+ instance_models_intro2)
+                        plural parameter, S "used in", (makeRef inputDataConstraints)])
                         [inputDataConstraints, outputDataConstraints]
           ]
         )
@@ -478,10 +478,6 @@ assumptions = fst (foldr (\s (ls, n) -> ((Assumption $ assump ("A" ++ show n) s 
 inputDataConstraints = inDataConstTbl gbInputDataConstraints
 outputDataConstraints = outDataConstTbl [prob_br]
 
-instance_models_intro2 :: Sentence
-instance_models_intro2 = foldlSent [makeRef outputDataConstraints, S "shows the",
-  plural constraint, S "that must be satisfied by the", phrase output_]
-
 {--REQUIREMENTS--}
 
 {--Functional Requirements--}
@@ -524,7 +520,8 @@ req2Desc = foldlSent [S "The", phrase system,
   foldlList [(foldlsC (map ch (take 4 assumptionConstants)) `followA` 4),
   ((ch constant_LoadDF) `followA` 8), (short lShareFac `followA` 5),
   (ch hFromt) +:+ sParen (S "from" +:+ (makeRef hFromt)), 
-  (ch glaTyFac) +:+ sParen (S "from" +:+ (makeRef glaTyFac))]]
+  (ch glaTyFac) +:+ sParen (S "from" +:+ (makeRef glaTyFac)),
+  (ch standOffDis) +:+ sParen (S "from" +:+ (makeRef standOffDis))]]
 
 --ItemType
 {-functional_requirements_req2 = (Nested (S "The" +:+ phrase system +:+

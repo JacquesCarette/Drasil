@@ -90,7 +90,7 @@ char_weight = uqcND "char_weight" (nounPhraseSP "charge weight")
 
 tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
   (Atomic "TNT") Real
-  [ gtZeroConstr ] (1) defaultUncrt
+  [ gtZeroConstr ] (dbl 1.0) defaultUncrt
 
 standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance") 
   (Atomic "SD") metre Real
@@ -163,10 +163,10 @@ sd_min     = mkDataDef (unitary "sd_min"
 {--}
 
 glassBRSymbols :: [UnitaryChunk]
-glassBRSymbols = [act_thick, sflawParamK, sflawParamM, demand, load_dur,
+glassBRSymbols = [act_thick, sflawParamK, sflawParamM, demand, sd, load_dur,
   eqTNTWeight]
 
-act_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, load_dur,
+act_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, sd, load_dur,
   eqTNTWeight :: UnitaryChunk
 
 act_thick   = unitary "act_thick"   (nounPhraseSP "actual thickness")
@@ -190,6 +190,9 @@ sdy         = unitary "sdy" (nounPhraseSP "stand off distance (y-component)")
 
 sdz         = unitary "sdz" (nounPhraseSP "stand off distance (z-component)")
   (sub (eqSymb standOffDist) lZ) metre Real
+
+sd          = unitary "sd" (nounPhraseSP "stand off distance")
+  (eqSymb standOffDist) metre Real
 
 sflawParamK = unitary "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?
   lK sFlawPU Real
@@ -334,7 +337,7 @@ notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
 probBreak     = cc prob_br
   ("The fraction of glass lites or plies that would break at the first " ++
     "occurrence of a specified load and duration, typically expressed " ++
-    "in lites per 1000.")
+    "in lites per 1000 [3]." {-astm2016-})
 safeMessage   = dcc "safeMessage" (nounPhraseSP "safe")
   ("For the given input parameters, the glass is considered safe.")
 sD            = cc' stdOffDist

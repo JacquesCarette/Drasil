@@ -512,10 +512,10 @@ mkTraceabilitySec (TraceabilityProg refs trailing otherContents subSec) =
 -- | Helper for making the 'Values of Auxiliary Constants' section
 mkAuxConsSec :: AuxConstntSec -> Section
 mkAuxConsSec (AuxConsVerb s) = s
-mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key (sortBy compareQD listOfCons)
+mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key (sortBy compareBySymbol listOfCons)
 
-compareQD :: QDefinition -> QDefinition -> Ordering
-compareQD a b = compsy (symbol a Implementation) (symbol b Implementation)
+compareBySymbol :: (HasSymbol a) => a -> a -> Ordering
+compareBySymbol a b = compsy (symbol a Implementation) (symbol b Implementation)
 
 {--}
 

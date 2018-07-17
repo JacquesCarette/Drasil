@@ -7,8 +7,8 @@ module Drasil.DocLang (
     ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), 
     SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2),
     StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg), 
-    TSIntro(..), UCsSec(..), mkDoc, mkLklyChnk, mkRequirement, mkUnLklyChnk, 
-    tsymb, tsymb'',
+    TSIntro(..), UCsSec(..), compareBySymbol, mkDoc, mkLklyChnk, mkRequirement, 
+    mkUnLklyChnk, tsymb, tsymb'',
     -- DocumentLanguage.Definitions
     Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose),
     -- DocumentLanguage.RefHelpers 
@@ -46,8 +46,8 @@ import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
     ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), 
     SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
     StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg), 
-    TSIntro(..), UCsSec(..), mkDoc, mkLklyChnk, mkRequirement, mkUnLklyChnk, 
-    tsymb, tsymb'')
+    TSIntro(..), UCsSec(..), compareBySymbol, mkDoc, mkLklyChnk, mkRequirement, 
+    mkUnLklyChnk, tsymb, tsymb'')
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, 
     InclUnits(IncludeUnits), Verbosity(Verbose))
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, cite, ddRefDB, mdb, refA, 

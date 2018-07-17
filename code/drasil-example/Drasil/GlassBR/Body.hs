@@ -1,7 +1,7 @@
 module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
-import Data.List (nub)
+import Data.List (nub, sortBy)
 
 import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
@@ -15,8 +15,8 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SCSSub(..), 
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
-  TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), cite, 
-  dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
+  TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), compareBySymbol, 
+  cite, dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
   mkRequirement, outDataConstTbl, physSystDesc, probDescF, termDefnF, 
   traceGIntro, tsymb)
 
@@ -475,7 +475,7 @@ assumptions = fst (foldr (\s (ls, n) -> ((Assumption $ assump ("A" ++ show n) s 
 
 {-input and output tables-}
 
-inputDataConstraints = inDataConstTbl gbInputDataConstraints
+inputDataConstraints = inDataConstTbl (sortBy compareBySymbol gbInputDataConstraints)
 outputDataConstraints = outDataConstTbl [prob_br]
 
 {--REQUIREMENTS--}

@@ -2,7 +2,7 @@
 -- gets rendered as a (unique) symbol.  This is actually NOT based on
 -- semantics at all, but just a description of how things look.
 
-module Language.Drasil.Symbol(Decoration(..), Symbol(..), compsy, 
+module Language.Drasil.Symbol(Decoration(..), Symbol(..), compsy, compsy', 
  upper_left, sub, sup, hat, vec, prime, sCurlyBrSymb, Stage(..)) where
 
 import Language.Drasil.Unicode (Special(CurlyBrClose, CurlyBrOpen))
@@ -73,9 +73,106 @@ compsy (Atomic x)             (Atomic y)            =
 compsy (Special a)           (Special b)            = compare a b
 compsy (Special _)            _                     = LT
 compsy _                     (Special _)            = GT
-compsy (Atomic _)             _                     = LT
-compsy  _                    (Atomic _)             = GT
+compsy (Atomic _)             _                     = GT
+compsy  _                    (Atomic _)             = LT
 compsy  Empty                 Empty                 = EQ
+
+compsy' :: Symbol -> Symbol -> Ordering
+compsy' (Concat (Atomic "Δ":x:xs))          b = 
+  case compsy' x b of
+    EQ -> GT
+    other -> other
+compsy' a (Concat (Atomic "Δ":y:ys)) = 
+  case compsy' a y of
+    EQ -> LT
+    other -> other 
+compsy' (Corners _ _ [] l b) (Corners _ _ [] l' b') =
+  case compsy' b b' of
+    EQ -> complsy l l'
+    other -> other
+compsy' (Corners _ _ [] l b) (Corners _ _ u' l' b') =
+  case compsy' b b' of
+    EQ -> case complsy l l' of
+      EQ -> LT
+      other -> other
+    other -> other
+compsy' (Corners _ _ u l b) (Corners _ _ [] l' b') =
+  case compsy' b b' of
+    EQ -> case complsy l l' of
+      EQ -> GT
+      other -> other
+    other -> other
+compsy' (Corners _ _ u [] b) (Corners _ _ u' [] b') =
+  case compsy' b b' of
+    EQ -> complsy u u'
+    other -> other
+compsy' (Corners _ _ u [] b) (Corners _ _ u' l' b') =
+  case compsy' b b' of
+    EQ -> LT
+    other -> other
+compsy' (Corners _ _ u l b) (Corners _ _ u' [] b') =
+  case compsy' b b' of
+    EQ -> GT
+    other -> other
+compsy' (Corners _ _ [] l b) (Corners _ _ u' [] b') =
+  case compsy' b b' of
+    EQ -> GT
+    other -> other
+compsy' (Corners _ _ u [] b) (Corners _ _ [] l' b') =
+  case compsy' b b' of
+    EQ -> LT
+    other -> other
+compsy' (Corners _ _ u l b) (Corners _ _ u' l' b') =
+  case compsy' b b' of
+    EQ -> case complsy l l' of
+      EQ -> complsy u u'
+      other -> other
+    other -> other
+compsy' (Atomic a) (Corners _ _ _ _ b) = 
+  case compsy' (Atomic a) b of
+    EQ -> LT
+    other -> other
+compsy' (Corners _ _ _ _ b) (Atomic a)  = 
+  case compsy' b (Atomic a) of
+    EQ -> GT
+    other -> other
+compsy' (Special a) (Corners _ _ _ _ b) = 
+  case compsy' (Special a) b of
+    EQ -> LT
+    other -> other
+compsy' (Corners _ _ _ _ b) (Special a)  = 
+  case compsy' b (Special a) of
+    EQ -> GT
+    other -> other
+compsy' (Atop _ a) (Corners _ _ _ _ b) = 
+  case compsy' a b of
+    EQ -> LT
+    other -> other
+compsy' (Corners _ _ _ _ b) (Atop _ a)  = 
+  case compsy' b a of
+    EQ -> GT
+    other -> other
+compsy' (Atomic b) (Atop _ a)  = 
+  case compsy' (Atomic b) a of
+    EQ -> LT
+    other -> other
+compsy' (Atop _ b) (Atomic a)  = 
+  case compsy' b (Atomic a) of
+    EQ -> GT
+    other -> other
+compsy' (Atop d1 a)           (Atop d2 a')           = 
+  case compsy' a a' of
+    EQ -> compare d1 d2
+    other -> other
+compsy' (Special a) (Special b) = compare a b
+compsy' (Atomic x)  (Atomic y)            = 
+  compare (map toLower x) (map toLower y)
+compsy'  Empty Empty                 = EQ
+compsy' _ _ = EQ
+
+
+
+
 
 -- | Helper for creating a symbol with a superscript on the left side of the symbol.
 -- Arguments: Base symbol, then superscripted symbol.

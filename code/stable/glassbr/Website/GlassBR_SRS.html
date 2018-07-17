@@ -800,7 +800,7 @@ The goal statements are refined to the theoretical models, and the theoretical m
 Stakeholders
 </h1>
 <p class="paragraph">
-This section describes the Stakeholders: the people who have an interest in the product.
+This section describes the stakeholders: the people who have an interest in the product.
 </p>
 <div id="Sec:Client">
 <div class="subsection">
@@ -1013,7 +1013,7 @@ Glass type factor (GTF) - A multiplying factor for adjusting the LR of different
 Aspect ratio (AR) - The ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5.
 </li>
 <li>
-Probability of breakage (<em>P<sub>b</sub></em>) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000.
+Probability of breakage (<em>P<sub>b</sub></em>) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 [3].
 </li>
 </ol>
 </div>
@@ -1736,14 +1736,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<em>J = J(q&#770;,<div class="fraction">
-<span class="fup">
-a
-</span>
-<span class="fdn">
-b
-</span>
-</div>)</em>
+<em>J = J(q&#770;,AR)</em>
 </div>
 </div>
 </td>
@@ -1764,10 +1757,7 @@ Description
 <em>q&#770;</em> is the dimensionless load (Unitless)
 </li>
 <li>
-<em>a</em> is the plate length (long dimension) (m)
-</li>
-<li>
-<em>b</em> is the plate width (short dimension) (m)
+<em>AR</em> is the aspect ratio (Unitless)
 </li>
 </ul>
 </td>
@@ -1784,7 +1774,7 @@ Notes
 <em>q&#770;</em> is the dimensionless load defined in DD7.
 </p>
 <p class="paragraph">
-<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
+<em>AR</em> is the aspect ratio defined in DD11.
 </p>
 </td>
 </tr>
@@ -2294,7 +2284,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<em>J<sub>tol</sub> = log(log(<div class="fraction">
+<em>J<sub>tol</sub> = ln(ln(<div class="fraction">
 <span class="fup">
 1
 </span>
@@ -3083,7 +3073,7 @@ FIXME: This needs to be filled in
 Data Constraints
 </h3>
 <p class="paragraph">
-<a href=#Table:InDataConstraints>Table:InDataConstraints</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column ("Uncert." stands for "Uncertainty") provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> gives the values of the specification parameters used in <a href=#Table:InDataConstraints>Table:InDataConstraints</a>. <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the constraints that must be satisfied by the output.
+<a href=#Table:InDataConstraints>Table:InDataConstraints</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column ("Uncert." stands for "Uncertainty") provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> gives the values of the specification parameters used in <a href=#Table:InDataConstraints>Table:InDataConstraints</a>.
 </p>
 <div id="Table:InDataConstraints">
 <table class="table">
@@ -3207,7 +3197,7 @@ None
 None
 </td>
 <td>
-<em>1</em>
+<em>1.0</em>
 </td>
 <td>
 10.0%

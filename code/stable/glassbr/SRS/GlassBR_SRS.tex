@@ -220,7 +220,7 @@ The organization of this document follows the template for an SRS for scientific
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The data definitions are used to support the definitions of the different models.
 \section{Stakeholders}
 \label{Sec:Stakeholder}
-This section describes the Stakeholders: the people who have an interest in the product.
+This section describes the stakeholders: the people who have an interest in the product.
 \subsection{The Client}
 \label{Sec:Client}
 The client for GlassBR is a company named Entuitive. It is developed by Dr. Manuel Campidelli. The client has the final say on acceptance of the product.
@@ -296,7 +296,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thicknesses and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.}
 \item{Glass type factor (GTF) - A multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions.}
 \item{Aspect ratio (AR) - The ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5.}
-\item{Probability of breakage (${P_{b}}$) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000.}
+\item{Probability of breakage (${P_{b}}$) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 [3].}
 \end{enumerate}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
@@ -532,20 +532,19 @@ Symbol & $J$
 Units & Unitless
 \\ \midrule \\
 Equation & \begin{dmath}
-           J=J\left(\hat{q},\frac{a}{b}\right)
+           J=J\left(\hat{q},AR\right)
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$J$ is the stress distribution factor (Function) (Unitless)}
               \item{$J$ is the stress distribution factor (Function) (Unitless)}
               \item{$\hat{q}$ is the dimensionless load (Unitless)}
-              \item{$a$ is the plate length (long dimension) (m)}
-              \item{$b$ is the plate width (short dimension) (m)}
+              \item{$AR$ is the aspect ratio (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & $J$ is the stress distribution factor (Function), which is obtained by interpolating from data shown in Figure 7.
         $\hat{q}$ is the dimensionless load defined in DD7.
-        $a$, $b$ are dimensions of the plate, where ($a>b$).
+        $AR$ is the aspect ratio defined in DD11.
 \\ \midrule \\
 Source & FIXME: This needs to be filled in
 \\ \midrule \\
@@ -701,7 +700,7 @@ Symbol & ${J_{tol}}$
 Units & Unitless
 \\ \midrule \\
 Equation & \begin{dmath}
-           {J_{tol}}=\log\left(\log\left(\frac{1}{1-{P_{btol}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(1000 E h^{2}\right)^{m} LDF}\right)
+           {J_{tol}}=\ln\left(\ln\left(\frac{1}{1-{P_{btol}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(1000 E h^{2}\right)^{m} LDF}\right)
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -951,7 +950,7 @@ RefBy & FIXME: This needs to be filled in
 \end{minipage}\\
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-Table~\ref{Table:InDataConstraints} and Table~\ref{Table:OutDataConstraints} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column ("Uncert." stands for "Uncertainty") provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. Section~\ref{Sec:AuxConstants} gives the values of the specification parameters used in Table~\ref{Table:InDataConstraints}. Table~\ref{Table:OutDataConstraints} shows the constraints that must be satisfied by the output.
+Table~\ref{Table:InDataConstraints} and Table~\ref{Table:OutDataConstraints} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column ("Uncert." stands for "Uncertainty") provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. Section~\ref{Sec:AuxConstants} gives the values of the specification parameters used in Table~\ref{Table:InDataConstraints}.
 \begin{longtable}{l l l l l}
 \toprule
 Var & Physical Constraints & Software Constraints & Typical Value & Uncert.
@@ -967,7 +966,7 @@ $w$ & $w>0$ & ${w_{min}}\leq{}w\leq{}{w_{max}}$ & $42.0$ kg & 10.0\%
 \\
 ${P_{btol}}$ & $0<{P_{btol}}<1$ & None & $0.008$ & 0.1\%
 \\
-$TNT$ & $TNT>0$ & None & $1$ & 10.0\%
+$TNT$ & $TNT>0$ & None & $1.0$ & 10.0\%
 \\
 \bottomrule
 \caption{Input Data Constraints}

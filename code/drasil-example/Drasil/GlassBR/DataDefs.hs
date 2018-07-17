@@ -1,14 +1,14 @@
 module Drasil.GlassBR.DataDefs (dataDefns, dimLL, gbQDefns, glaTyFac, hFromt,
-  nonFL, risk, strDisFac, tolPre, tolStrDisFac, qDefns) where
+  nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac) where
 
 import Language.Drasil
+import Prelude hiding (log, exp, sqrt)
 
-import Prelude hiding (log, exp)
 import Drasil.GlassBR.Unitals (act_thick, actualThicknesses, aspectR, 
-  aspectRWithEqn, demand, dimlessLoad, gTF, glassTypeAbbrsStr, 
-  glassTypeFactors, glass_type, lDurFac, mod_elas, nom_thick, 
-  nominalThicknesses, nonFactorL, pb_tol, plate_len, plate_width, risk_fun,
-  sdf_tol, sflawParamK, sflawParamM, stressDistFac, tolLoad)
+  demand, dimlessLoad, gTF, glassTypeAbbrsStr, glassTypeFactors, glass_type, 
+  lDurFac, load_dur, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pb_tol, 
+  plate_len, plate_width, risk_fun, sdf_tol, sdx, sdy, sdz, sd, sflawParamK, 
+  sflawParamM, stressDistFac, tolLoad)
 
 import Data.Drasil.Concepts.Documentation (datum, user)
 import Data.Drasil.Concepts.Math (probability, parameter, calculation)
@@ -22,11 +22,8 @@ import Control.Lens ((^.))
 ----------------------
 
 dataDefns :: [DataDefinition] 
-dataDefns = [riskDD, hFromtDD, strDisFacDD, nonFLDD, glaTyFacDD, dimLLDD,
-  tolPreDD, tolStrDisFacDD]
-
-qDefns :: [QDefinition] 
-qDefns = [risk, hFromt, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac]
+dataDefns = [riskDD, hFromtDD, loadDFDD, strDisFacDD, nonFLDD, glaTyFacDD, 
+  dimLLDD, tolPreDD, tolStrDisFacDD, standOffDisDD, aspRatDD]
 
 gbQDefns :: [Block QDefinition]
 gbQDefns = [Parallel hFromt {-DD2-} [glaTyFac {-DD6-}]] ++ --can be calculated on their own
@@ -67,17 +64,21 @@ hFromtDD = mkDD hFromt [{-references-}] [{-derivation-}] ""--temporary
 
 --DD3-- (#749)
 
--- loadDF_eq :: Expr 
--- loadDF_eq = (sy load_dur / 60) $^ (sy sflawParamM / 16)
+loadDF_eq :: Expr 
+loadDF_eq = (sy load_dur / 60) $^ (sy sflawParamM / 16)
 
--- loadDF :: QDefinition
--- loadDF = mkDataDef lDurFac loadDF_eq
+loadDF :: QDefinition
+loadDF = mkDataDef lDurFac loadDF_eq
+
+loadDFDD :: DataDefinition
+loadDFDD = mkDD loadDF [{-references-}] [{-derivation-}] ""--temporary
+  Nothing
 
 --DD4--
 
 strDisFac_eq :: Expr
 strDisFac_eq = apply (sy stressDistFac) 
-  [sy dimlessLoad, (sy plate_len) / (sy plate_width)]
+  [sy dimlessLoad, sy aspectR]
 --strDisFac_eq = FCall (asExpr interpZ) [V "SDF.txt", (sy plate_len) / (sy plate_width), sy dimlessLoad]
   
 strDisFac :: QDefinition
@@ -85,7 +86,7 @@ strDisFac = mkDataDef stressDistFac strDisFac_eq
 
 strDisFacDD :: DataDefinition
 strDisFacDD = mkDD strDisFac [{-references-}] [{-derivation-}] ""--temporary
-  (Just $ [jRef2] ++ [qHtRef] ++ [aGrtrThanB])
+  (Just $ jRef2 : qHtRef : arRef : [])
 
 --DD5--
 
@@ -144,7 +145,7 @@ tolPreDD = mkDD tolPre [{-references-}] [{-derivation-}] ""--temporary
 --DD9--
 
 tolStrDisFac_eq :: Expr
-tolStrDisFac_eq = log (log (1 / (1 - (sy pb_tol)))
+tolStrDisFac_eq = ln (ln (1 / (1 - (sy pb_tol)))
   * ((((sy plate_len) * (sy plate_width)) $^ (sy sflawParamM - 1) / 
     ((sy sflawParamK) * ((1000 * sy mod_elas *
     (square (sy act_thick)))) $^ (sy sflawParamM) * (sy lDurFac)))))
@@ -156,12 +157,40 @@ tolStrDisFacDD :: DataDefinition
 tolStrDisFacDD = mkDD tolStrDisFac [{-references-}] [{-derivation-}] ""--temporary
   (Just $ jtolRelToPbtol : aGrtrThanB : hRef : ldfRef : pbTolUsr : [])
 
+--DD10--
+
+standOffDis_eq :: Expr
+standOffDis_eq = sqrt ((sy sdx) $^ 2 + (sy sdy) $^ 2 + (sy sdz) $^ 2)
+
+standOffDis :: QDefinition
+standOffDis = mkDataDef sd standOffDis_eq
+
+standOffDisDD :: DataDefinition
+standOffDisDD = mkDD standOffDis [{-references-}] [{-derivation-}] ""--temporary
+  Nothing
+
+--DD11--
+
+aspRat_eq :: Expr
+aspRat_eq = (sy plate_len) / (sy plate_width)
+
+aspRat :: QDefinition
+aspRat = mkDataDef aspectR aspRat_eq
+
+aspRatDD :: DataDefinition
+aspRatDD = mkDD aspRat [{-references-}] [{-derivation-}] ""--temporary
+  (Just $ aGrtrThanB : [])
+
 --Additional Notes--
 
 aGrtrThanB :: Sentence
 aGrtrThanB = ((ch plate_len) `sC` (ch plate_width) +:+ 
   S "are" +:+ plural dimension +:+ S "of the plate" `sC` S "where" +:+. 
   sParen (E (sy plate_len $> sy plate_width)))
+
+arRef :: Sentence
+arRef = (ch aspectR +:+ S "is the" +:+ phrase aspectR +:+.
+  S "defined in DD11")
 
 hRef :: Sentence
 hRef = (ch nom_thick +:+ S "is the true thickness" `sC` 
@@ -184,13 +213,13 @@ hMin = (ch nom_thick +:+ S "is a function that maps from the nominal thickness"
   +:+ sParen (ch act_thick) +:+. S "to the minimum thickness")
 
 qHtTlExtra :: Sentence
-qHtTlExtra = (ch tolLoad +:+ S "is the tolerable pressure which is obtained from Figure 7 using" 
-  +:+ ch sdf_tol `sAnd` phrase aspectR +:+ sParen (E $ aspectRWithEqn^.equat) +:+
-  S "as" +:+ plural parameter +:+. S "using interpolation" +:+ titleize calculation +:+
-  S "of" +:+ ch sdf_tol +:+. S "is defined in DD9")
+qHtTlExtra = (ch tolLoad +:+ S "is the tolerable load which is obtained from Figure 7 using" 
+  +:+ ch sdf_tol `sAnd` phrase aspectR +:+ S "as" +:+ plural parameter +:+. S "using interpolation" 
+  +:+ titleize' calculation +:+ S "of" +:+ ch sdf_tol `sAnd` ch aspectR +:+. 
+  S "are defined in DD9 and DD11, respectively")
 
 qHtTlTolRef :: Sentence
-qHtTlTolRef = (ch tolLoad +:+. S "is the tolerable pressure defined in DD8")
+qHtTlTolRef = (ch tolLoad +:+. S "is the tolerable load defined in DD8")
 
 qRef :: Sentence
 qRef = (ch demand +:+. S "is the 3 second equivalent pressure, as given in IM3")

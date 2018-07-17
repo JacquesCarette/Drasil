@@ -14,6 +14,8 @@ import Language.Drasil.Reference (ReferenceDB, citationsFromBibMap,
 
 import Control.Lens ((^.))
 
+import Language.Drasil.Chunk.DataDefinition (DataDefinition)
+
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artefact generation
 data SystemInformation where
@@ -31,7 +33,8 @@ data SystemInformation where
   , _units :: [d]
   , _quants :: [e]
   , _concepts :: [f]
-  , _definitions :: [QDefinition]
+  , _definitions :: [QDefinition] --FIXME: will be removed upon migration to use of [DataDefinition] below
+  , _datadefs :: [DataDefinition]
   , _inputs :: [h]
   , _outputs :: [i]
   , _defSequence :: [Block QDefinition]

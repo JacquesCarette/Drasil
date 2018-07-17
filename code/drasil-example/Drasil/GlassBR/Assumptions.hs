@@ -1,9 +1,9 @@
 module Drasil.GlassBR.Assumptions where
 import Control.Lens ((^.))
 import Language.Drasil hiding (organization)
-import qualified Drasil.SRS as SRS (valsOfAuxCons, missingP)
+import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons, missingP)
 
-import Drasil.DocumentLanguage.RefHelpers (cite, refA)
+import Drasil.DocLang (cite, refA)
 
 import Data.Drasil.Concepts.Documentation as Doc (condition, constant, practice, reference, scenario, 
   system, value)
@@ -22,7 +22,7 @@ gbRefDB = rdb [] [] newAssumptions [] [] gbCitations []
 
 assumptionConstants :: [QDefinition]
 assumptionConstants = [constant_M, constant_K, constant_ModElas,
-  constant_LoadDur, constant_LoadDF, constant_LoadSF]
+  constant_LoadDur, constant_LoadSF]
 
 newAssumptions :: [AssumpChunk] -- For testing
 newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8]
@@ -75,13 +75,13 @@ a4Desc mainIdea = foldlSent [S "The", plural value, S "provided in",
 
 a5Desc :: Sentence
 a5Desc = foldlSent [at_start glass, S "under consideration",
-  S "is assumed to be a single" +:+. phrase lite, S "Hence the",
+  S "is assumed to be a single", phrase lite `semiCol` S "hence, the",
   phrase value `sOf` short lShareFac, S "is equal to 1 for all",
   plural calculation `sIn` short gLassBR]
 
 a6Desc :: Sentence
 a6Desc = foldlSent [S "Boundary", plural condition, S "for the",
-  phrase glaSlab, S "is assumed to be 4-sided support for",
+  phrase glaSlab, S "are assumed to be 4-sided support for",
   plural calculation]
 
 a7Desc :: Sentence
@@ -90,8 +90,6 @@ a7Desc = foldlSent [S "The", phrase responseTy, S "considered in",
 
 a8Desc :: QDefinition -> Sentence
 a8Desc mainConcept = foldlSent [S "With", phrase reference, S "to",
-  (refA gbRefDB newA4), S "the", phrase value `sOf`
+  (refA gbRefDB newA4) `sC` S "the", phrase value `sOf`
   phrase mainConcept, sParen (ch mainConcept), S "is a", phrase constant,
-  S "in" +:+. short gLassBR, S "It is calculated by the" +: phrase equation +:+.
-  E (sy mainConcept $= mainConcept^.equat), S "Using this" `sC`
-  E (sy mainConcept $= dbl 0.27)]
+  S "in", short gLassBR]

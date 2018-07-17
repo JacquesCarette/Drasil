@@ -13,29 +13,35 @@ import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (term, defn, usymb, relat)
 import qualified Language.Drasil.Chunk.SymbolForm as SF
-import Language.Drasil.Chunk.AssumpChunk
+import Language.Drasil.Chunk.AssumpChunk (assuming)
 import Language.Drasil.Chunk.Attribute (getShortName, snToSentence)
 import Language.Drasil.Chunk.Change (chng, chngType, ChngType(Likely))
-import Language.Drasil.Chunk.Eq
+import Language.Drasil.Chunk.Eq (QDefinition, equat)
 import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Chunk.SymbolForm (eqSymb)
 import Language.Drasil.ChunkDB (getUnitLup, HasSymbolTable(..),symbLookup)
 import Language.Drasil.Chunk.ReqChunk (requires)
-import Language.Drasil.Chunk.Citation ( Citation, CiteField(..), HP(..)
-                                      , citeID, externRefT, fields)
-import Language.Drasil.Document.GetChunk
+import Language.Drasil.Chunk.Citation (Citation, CiteField(..), HP(..), HasFields(getFields), 
+  citeID, externRefT)
+import Language.Drasil.Document.GetChunk (vars)
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Expr.Math (sy)
-import Language.Drasil.Symbol
+import Language.Drasil.Symbol (Symbol(Empty, Atop, Corners, Concat, Special, Atomic), 
+  Decoration(Prime, Vector, Hat))
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.NounPhrase (phrase, titleize)
-import Language.Drasil.Reference
-import Language.Drasil.Document
+import Language.Drasil.Reference (refAdd)
+import Language.Drasil.Document (DType(DD, TM, Instance, General, Theory, Data), 
+  ItemType(Nested, Flat), ListType(Definitions, Desc, Simple, Numeric, Bullet), 
+  Contents(Bib, Graph, Defnt, Assumption, Change, Figure, Requirement, Enumeration, 
+  Definition, EqnBlock, Paragraph, Table), Section(Section), SecCons(Sub, Con), 
+  Document(Document))
 
 import Control.Lens ((^.))
-import Language.Drasil.Space
+import Language.Drasil.Space (Space(DiscreteS, DiscreteD, DiscreteI, Vect, Radians, 
+  String, Char, Boolean, Natural, Real, Rational, Integer))
 import Data.List (intersperse)
 
 -- | Render a Space
@@ -91,6 +97,7 @@ expr (Case ps)        sm = if length ps < 2 then
                     else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
 expr (Matrix a)         sm = P.Mtx $ map (map (flip expr sm)) a
 expr (UnaryOp Log u)    sm = mkCall sm P.Log u
+expr (UnaryOp Ln u)     sm = mkCall sm P.Ln u
 expr (UnaryOp Sin u)    sm = mkCall sm P.Sin u
 expr (UnaryOp Cos u)    sm = mkCall sm P.Cos u
 expr (UnaryOp Tan u)    sm = mkCall sm P.Tan u
@@ -294,7 +301,7 @@ lay sm (Bib bib)              = T.Bib $ map (layCite sm) bib
 
 -- | For importing bibliography
 layCite :: HasSymbolTable ctx => ctx -> Citation -> P.Citation
-layCite sm c = P.Cite (citeID c) (externRefT c) (map (layField sm) (fields c))
+layCite sm c = P.Cite (citeID c) (externRefT c) (map (layField sm) (c ^. getFields))
 
 layField :: HasSymbolTable ctx => ctx -> CiteField -> P.CiteField
 layField sm (Address      s) = P.Address      $ spec sm s
@@ -322,11 +329,11 @@ layField sm (HowPublished (Verb v)) = P.HowPublished (P.Verb $ spec sm v)
 
 -- | Translates lists
 makeL :: HasSymbolTable ctx => ctx -> ListType -> P.ListType
-makeL sm (Bullet bs)      = P.Unordered   $ map (item sm) bs
-makeL sm (Numeric ns)     = P.Ordered     $ map (item sm) ns
-makeL sm (Simple ps)      = P.Simple      $ map (\(x,y) -> (spec sm x, item sm y)) ps
-makeL sm (Desc ps)        = P.Desc        $ map (\(x,y) -> (spec sm x, item sm y)) ps
-makeL sm (Definitions ps) = P.Definitions $ map (\(x,y) -> (spec sm x, item sm y)) ps
+makeL sm (Bullet bs)      = P.Unordered   $ map (\x -> (item sm x, Nothing)) bs
+makeL sm (Numeric ns)     = P.Ordered     $ map (\x -> (item sm x, Nothing)) ns
+makeL sm (Simple ps)      = P.Simple      $ map (\(x,y) -> (spec sm x, item sm y, Nothing)) ps
+makeL sm (Desc ps)        = P.Desc        $ map (\(x,y) -> (spec sm x, item sm y, Nothing)) ps
+makeL sm (Definitions ps) = P.Definitions $ map (\(x,y) -> (spec sm x, item sm y, Nothing)) ps
 
 -- | Helper for translating list items
 item :: HasSymbolTable ctx => ctx -> ItemType -> P.ItemType

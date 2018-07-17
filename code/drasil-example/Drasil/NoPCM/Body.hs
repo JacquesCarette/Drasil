@@ -11,12 +11,12 @@ import Drasil.NoPCM.GenDefs (roc_temp_simp_deriv)
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
-import Drasil.SWHS.Assumptions (assumpS1, assumpS2, assumpS7, assumpS8, assumpS9,
-  assumpS14, assumpS15, assumpS20, assump1, assump2, assump7, assump8, assump9,
-  assump14, assump15, assump20)
+import Drasil.SWHS.Assumptions (assump1, assump2, assump7, assump8, assump9,
+  assump14, assump15, assump20, newA1, newA2, newA3, newA7, newA8, newA9, 
+  newA14, newA15, newA20)
 import Drasil.SWHS.Body (charReader1, charReader2, orgDocIntro,
   genSystDesc, physSyst1, physSyst2, dataDefIntroEnd, iMod1Para,
-  traceTrailing)
+  traceTrailing, dataContMid)
 import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil,
   transient, perfect_insul, tank_para)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
@@ -26,11 +26,12 @@ import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
   deltaT, w_E, tank_length_min, tank_length_max,
   w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
   coil_HTC_max, time_final_max, sim_time, coil_SA_max, eta)
-import Drasil.SWHS.DataDefs(dd1HtFluxC, swhsDD1)
-import Drasil.SWHS.TMods (tMod1, t1ConsThermE)
-import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp)
-import Drasil.SWHS.IMods (heatEInWtr)
-import Drasil.NoPCM.IMods (eBalanceOnWtr)
+import Drasil.SWHS.DataDefs(dd1HtFluxC, swhsDD1, dd1HtFluxCDD)
+import Drasil.SWHS.TMods (t1ConsThermE, t1ConsThermE_new, tMod1)
+import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp,
+  nwtnCooling_desc, rocTempSimp_desc)
+import Drasil.SWHS.IMods (heatEInWtr, heatEInWtr_new)
+import Drasil.NoPCM.IMods (eBalanceOnWtr, eBalanceOnWtr_new)
 import Drasil.NoPCM.Unitals (temp_init)
 import Drasil.SWHS.References (ref2, ref3, ref4)
 import Drasil.SWHS.Requirements (nonFuncReqs)
@@ -62,26 +63,19 @@ import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Software.Products (compPro)
 
-import Drasil.Sections.ReferenceMaterial (intro)
-import qualified Drasil.SRS as SRS (funcReq, likeChg, unlikeChg, probDesc, goalStmt,
+import qualified Drasil.DocLang.SRS as SRS (funcReq, likeChg, unlikeChg, probDesc, goalStmt,
   inModel, missingP)
-import Drasil.DocumentLanguage {-(DocDesc,
-  tsymb, mkRequirement, mkLklyChnk, mkAssump, mkDoc,
-  TSIntro (SymbOrder, SymbConvention, TSPurpose),
-  DocSection (Verbatim, Bibliography, IntroSec, RefSec),
-  RefTab (TAandA, TUnits),
-  RefSec (RefProg),
-  IntroSec (IntroProg),
-  IntroSub (IOrgSec, IScope, IChar, IPurpose),
-  Literature (Lit, Doc'))-}
-  
-import Drasil.Sections.SpecificSystemDescription (inDataConstTbl,
-  outDataConstTbl, solChSpecF, dataConstraintUncertainty, physSystDesc,
-  termDefnF, specSysDesF)
-import Drasil.Sections.Requirements (reqF)
-import Drasil.Sections.TraceabilityMandGs (traceGIntro, traceMGF)
-import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
-
+import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose), 
+  InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
+  SolChSpec(..), SSDSec(..),
+  DocSection(SSDSec, Verbatim, Bibliography, IntroSec, RefSec), IntroSec(IntroProg),
+  IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
+  RefSec(RefProg), RefTab(TAandA, TUnits), 
+  TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty, 
+  inDataConstTbl, intro, mkDoc, mkLklyChnk, mkRequirement, mkUnLklyChnk, 
+  outDataConstTbl, physSystDesc, reqF, solChSpecF, specSysDesF, termDefnF, 
+  traceGIntro, traceMGF, tsymb, valsOfAuxConstantsF)
+ 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
   foldlList, isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP, acroIM,
   acroGD)
@@ -142,17 +136,31 @@ mkSRS = RefSec (RefProg intro
   IOrgSec orgDocIntro inModel (SRS.inModel SRS.missingP [])
   (orgDocEnd inModel M.ode progName)]) : 
   Verbatim genSystDesc:
-  {-SSDSec (SSDProg [SSDSubVerb s4_1, 
-    SSDSolChSpec (SCSProg [
-      (GDs [Label, Units, DefiningEquation
-           , Description Verbose IncludeUnits
-           , Source, RefBy] generalDefinitions ShowDerivation)])]) : --Testing General Definitions.-}
-  Verbatim specSystDesc: -- Comment this out and the above in for testing GDs.
-  map Verbatim [reqS, likelyChgs, unlikelyChgs, traceMAndG, specParamVal] ++ (Bibliography : [])
+  SSDSec 
+    (SSDProg [SSDSubVerb probDescription
+      , SSDSolChSpec 
+        (SCSProg 
+          [ Assumptions 
+          , TMs ([Label] ++ stdFields) [t1ConsThermE_new] -- only have the same T1 with SWHS
+          , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
+          , DDs' ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxCDD] ShowDerivation
+          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+            [eBalanceOnWtr_new, heatEInWtr_new] ShowDerivation
+          , Constraints  EmptyS dataConstraintUncertainty dataContMid
+           [dataConstTable1, dataConstTable2]
+          ]
+        )
+      ]
+    ):
+  map Verbatim [reqS, likelyChgs, traceMAndG, specParamVal] ++ (Bibliography : [])
+
+stdFields :: Fields
+stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 generalDefinitions :: [GenDefn]
-generalDefinitions = [gd nwtnCooling (Just thermal_flux) ([] :: Derivation) "nwtnCooling",
-  gd rocTempSimp (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv "rocTempSimp"]
+generalDefinitions = [gd' nwtnCooling (Just thermal_flux) ([] :: Derivation) "nwtnCooling" [nwtnCooling_desc],
+  gd' rocTempSimp (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv "rocTempSimp" [rocTempSimp_desc]]
+
 
 nopcm_si :: SystemInformation
 nopcm_si = SI {
@@ -161,8 +169,9 @@ nopcm_si = SI {
   _authors = [thulasi],
   _units = this_si,
   _quants = symbT,
-  _concepts = (nopcm_Symbols),
+  _concepts = nopcm_Symbols,
   _definitions = [dd1HtFluxC],          --dataDefs
+  _datadefs = ([] :: [DataDefinition]),
   _inputs = (map qw nopcm_Constraints), --inputs
   _outputs = (map qw [temp_W, w_E]),     --outputs
   _defSequence = [Parallel dd1HtFluxC []],
@@ -173,7 +182,7 @@ nopcm_si = SI {
 }
 
 nopcmRefDB :: ReferenceDB
-nopcmRefDB = rdb [] [] [] [] [] referencesRefList [] -- FIXME: Convert the rest to new chunk types
+nopcmRefDB = rdb [] [] assumps_Nopcm_list_new [] [] referencesRefList []-- FIXME: Convert the rest to new chunk types
 
 nopcm_code :: CodeSpec
 nopcm_code = codeSpec nopcm_si [inputMod]
@@ -185,6 +194,10 @@ nopcm_srs = mkDoc mkSRS (for) nopcm_si
 nopcm_SymbMap :: ChunkDB
 nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) nopcm_Symbols
   this_si
+
+assumps_Nopcm_list_new :: [AssumpChunk]
+assumps_Nopcm_list_new = [newA1, newA2, newA3, newA5NoPCM, newA6NoPCM, newA7, newA8, newA9, 
+  newA9NoPCM, newA14, newA15, newA16, newA19, newA20]
 
 symbT :: [DefinedQuantityDict]
 symbT = ccss (getDoc nopcm_srs) (egetDoc nopcm_srs) nopcm_SymbMap
@@ -393,12 +406,7 @@ solCharSpec = solChSpecF progName (probDescription, likelyChgs, unlikelyChgs) da
     S "provides an estimate of the confidence with which the physical",
     plural quantity, S "can be measured. This", phrase information,
     S "would be part of the input if one were performing an",
-    phrase uncertainty, S "quantification exercise"]--}
-
-npcmAssumptionsS :: [Sentence]
-npcmAssumptionsS = [assumpS1, assumpS2, assumpS3, assumpS4, assumpS5,
-  assumpS7, assumpS8, assumpS9, assumpS9_npcm, assumpS14, assumpS15,
-  assumpS12, assumpS13, assumpS20]
+    phrase uncertainty, S "quantification exercise"]-}
 
 npcmAssumptions :: [Contents]
 npcmAssumptions = [assump1, assump2, assump3, assump4, assump5, assump7,
@@ -420,10 +428,16 @@ assumpS4 =
   (makeRef (find' likeChg2 likelyChgsList) ))]) 
 assump4 = let a4 = "assump4" in Assumption $ assump a4 assumpS4 a4 
 
+newA5NoPCM :: AssumpChunk
+newA5NoPCM = assump "Density-Water-Constant-over-Volume" assumpS4 "Density-Water-Constant-over-Volume"  
+
 assumpS5 = 
   (foldlSent [S "The", phrase htCap_W, S "has no spatial variation; that", 
   S "is, it is constant over its entire", phrase vol, sSqBr (acroGD 2)]) 
 assump5 = let a5 = "assump5" in Assumption $ assump a5 assumpS5 a5 
+
+newA6NoPCM :: AssumpChunk
+newA6NoPCM = assump "Specific-Heat-Energy-Constant-over-Volume" assumpS5 "Specific-Heat-Energy-Constant-over-Volume" 
 
 assumpS9_npcm = 
   (foldlSent [S "The", phrase model, S "only accounts for charging",
@@ -433,20 +447,28 @@ assumpS9_npcm =
   sSqBr ((acroIM 1) `sC` (makeRef (find' likeChg3_npcm likelyChgsList)))])
 assump9_npcm = let a9 = "assump9_npcm" in Assumption $ assump a9 assumpS9_npcm a9 
 
+newA9NoPCM :: AssumpChunk
+newA9NoPCM = assump "Charging-Tank-No-Temp-Discharge" assumpS9_npcm "Charging-Tank-No-Temp-Discharge" 
+
 assumpS12 = 
   (S "No internal" +:+ phrase heat +:+ S "is generated by the" +:+ phrase water
   `semiCol` S "therefore, the" +:+ phrase vol_ht_gen +:+ S "is zero" +:+.
   sSqBr (acroIM 1)) 
 assump12 = let a12 = "assump12" in Assumption $ assump a12 assumpS12 a12 
 
+newA16 :: AssumpChunk
+newA16 = assump "No-Internal-Heat-Generation-By-Water" assumpS12 "No-Internal-Heat-Generation-By-Water" 
+
 assumpS13 = 
   (S "The pressure in the" +:+ phrase tank +:+ S "is atmospheric, so the" +:+
-  phrase melt_pt `sAnd` phrase boil_pt +:+ S "are" +:+ S (show (0 :: Integer))
+  phrase melt_pt `sAnd` phrase boil_pt +:+ S "of water are" +:+ S (show (0 :: Integer))
   :+: Sy (unit_symb QT.temp) `sAnd` S (show (100 :: Integer)) :+:
   Sy (unit_symb QT.temp) `sC` S "respectively" +:+.
   sSqBr ((acroIM 1) `sC` (acroIM 2)))
-assump13 = let a13 = "assump13" in Assumption $ assump a13 assumpS13 a13 
+assump13 = let a13 = "assump13" in Assumption $ assump a13 assumpS13 a13
 
+newA19 :: AssumpChunk
+newA19 = assump "Atmospheric-Pressure-Tank" assumpS13 "Atmospheric-Pressure-Tank" 
 
 genDefnParagraph :: ConceptChunk -> ConceptChunk -> [Contents]
 genDefnParagraph roc te = (map reldefn swhsGenDefs) ++ [foldlSPCol
@@ -590,7 +612,7 @@ dataConstTable1 = inDataConstTbl dataConstListIn
 -- s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+
   -- titleize' constraint, S "Typical" +:+ titleize value, titleize uncertainty]
   -- (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)]
-  -- s4_2_6_conListIn) (titleize input_ +:+ titleize' variable) True
+  -- data_constraint_conListIn) (titleize input_ +:+ titleize' variable) True
 
 dataConstListIn :: [UncertQ]
 dataConstListIn = [tank_length, diam, coil_SA, temp_C, w_density, htCap_W,
@@ -607,8 +629,6 @@ dataConstListOut = [temp_W, w_E]
 
 inputVar :: [QuantityDict]
 inputVar = map qw dataConstListIn 
-
-
 
 
 --------------------------
@@ -652,7 +672,7 @@ funcReqsListItems = [
   -- S "and" +: (ch tank_vol `isThe` phrase tank_vol)],
 
   -- [S "Verify that the", plural input_, S "satisfy the required",
-  -- phrase physicalConstraint, S "shown in" +:+. makeRef s4_2_6_table1],
+  -- phrase physicalConstraint, S "shown in" +:+. makeRef data_constraint_table1],
 
   -- [titleize' output_, S "and", plural input_, plural quantity, S "and derived",
   -- plural quantity, S "in the following list: the", plural quantity, S "from",
@@ -710,8 +730,6 @@ req6 = mkRequirement "req6" (
   -- understandability, reusability, maintainability]
   -- (S "This problem is small in size and relatively simple")
   -- (S "Any reasonable implementation will be very quick and use minimal storage.")
-
-
 
 ----------------------------
 --Section 6 : LIKELY CHANGES
@@ -966,8 +984,6 @@ traceFig2 = fig (showingCxnBw traceyGraph (titleize' requirement `sC`
 
   -- Using the SWHS graphs as place holders until ones can be generated for NoPCM 
 
-
-
 ------------------------------------------
 --Section 8: SPECIFICATION PARAMETER VALUE
 ------------------------------------------
@@ -978,8 +994,6 @@ specParamValList = [tank_length_min, tank_length_max,
   coil_HTC_max, time_final_max]
 
 specParamVal = valsOfAuxConstantsF progName specParamValList
-
-
 
 ------------
 --REFERENCES

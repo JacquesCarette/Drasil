@@ -7,19 +7,33 @@ import Numeric (showFFloat)
 import Control.Arrow (second)
 
 import Language.Drasil.Printing.Import (makeDocument)
-import Language.Drasil.Printing.AST
-import Language.Drasil.Printing.Citation
-import Language.Drasil.Printing.LayoutObj
+import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),  
+  ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, Fence(Curly, Paren, Abs, Norm),
+  Ops(Prod, Inte, Mul, Summ, Or, Add, And, Subt, Iff, Impl, GEq, LEq, Lt, Gt, NEq, Eq,
+  Dot, Cross, Neg, Exp, Not, Dim, Cot, Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, 
+  Real, Rational, Natural, Integer, IsIn), 
+  Expr(Sub, Sup, Over, Sqrt, Spc, Font, MO, Fenced, Spec, Ident, Row, Mtx, Case, Div, Str, 
+  Int, Dbl), Spec(Quote, EmptyS, Ref, HARDNL, Sp, Sy, S, E, (:+:)),
+  Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label)
+import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author, 
+  Editor, Pages, Type, Month, Organization, Institution, Chapter, HowPublished, School, Note,
+  Journal, BookTitle, Publisher, Series, Address, Edition), HP(URL, Verb), 
+  Citation(Cite), BibRef)
+import Language.Drasil.Printing.LayoutObj (Tags, ALUR, Document(Document),
+  LayoutObj(Graph, Bib, List, Header, Figure, Definition, Table, EqnBlock, Paragraph, 
+  HDiv, ALUR))
 import qualified Language.Drasil.Output.Formats as F
-import Language.Drasil.Development.UnitLang
+import Language.Drasil.Development.UnitLang (USymb(US))
 
-import Language.Drasil.HTML.Helpers
-import Language.Drasil.Printing.Helpers
-import Language.Drasil.Unicode
+import Language.Drasil.HTML.Helpers (em, wrap, refwrap, caption, image, div_tag, 
+  td, th, tr, bold, sub, sup, cases, fraction, reflink, paragraph, h, html, body,
+  author, article_title, title, linkCSS, head_tag)
+import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac)
+import Language.Drasil.Unicode (special)
 import           Language.Drasil.Symbol (Symbol(..))
 import qualified Language.Drasil.Symbol as S
 import qualified Language.Drasil.Document as L
-import Language.Drasil.HTML.Monad
+import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.People (People, Person(..), rendPersLFM', rendPersLFM'',
   nameStr, rendPersLFM)
 import Language.Drasil.Config (StyleGuide(..), bibStyleH)
@@ -160,6 +174,7 @@ p_ops Boolean  = "&#120121;"
 p_ops Comma    = ","
 p_ops Prime    = "&prime;"
 p_ops Log      = "log"
+p_ops Ln       = "ln"
 p_ops Sin      = "sin"
 p_ops Cos      = "cos"
 p_ops Tan      = "tan"
@@ -255,18 +270,24 @@ makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ map printLO d)) $$ makeDRow
 -----------------------------------------------------------------
 
 -- | Renders lists
-makeList :: ListType -> Doc
-makeList (Simple items) = div_tag ["list"]
-  (vcat $ map (\(b,e) -> wrap "p" [] ((p_spec b <> text ": ") <> (p_item e))) items)
-makeList (Desc items)   = div_tag ["list"]
-  (vcat $ map (\(b,e) -> wrap "p" [] ((wrap "b" [] (p_spec b <> text ": ")
-   <> (p_item e)))) items)
+makeList :: ListType -> Doc -- FIXME: ref id's should be folded into the li
+makeList (Simple items) = div_tag ["list"] $
+  vcat $ map (\(b,e,l) -> wrap "p" [] $ mlref l $ p_spec b <> text ": "
+   <> p_item e) items
+makeList (Desc items)   = div_tag ["list"] $
+  vcat $ map (\(b,e,l) -> wrap "p" [] $ mlref l $ wrap "b" [] $ p_spec b
+   <> text ": " <> p_item e) items
 makeList (Ordered items) = wrap "ol" ["list"] (vcat $ map
-  (wrap "li" [] . p_item) items)
+  (wrap "li" [] . \(i,l) -> mlref l $ p_item i) items)
 makeList (Unordered items) = wrap "ul" ["list"] (vcat $ map
-  (wrap "li" [] . p_item) items)
-makeList (Definitions items) = wrap "ul" ["hide-list-style-no-indent"] $ 
-  (vcat $ map (\(b,e) -> wrap "li" [] $ ((p_spec b <> text " is the") <+> (p_item e))) items)  
+  (wrap "li" [] . \(i,l) -> mlref l $ p_item i) items)
+makeList (Definitions items) = wrap "ul" ["hide-list-style-no-indent"] $
+  vcat $ map (\(b,e,l) -> wrap "li" [] $ mlref l $ p_spec b <> text " is the"
+   <+> p_item e) items
+
+-- | Helper for setting up references
+mlref :: Maybe Label -> Doc -> Doc
+mlref = maybe id $ refwrap . p_spec
 
 -- | Helper for rendering list items
 p_item :: ItemType -> Doc

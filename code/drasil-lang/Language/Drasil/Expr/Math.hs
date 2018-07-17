@@ -13,6 +13,10 @@ import Language.Drasil.Classes (HasUID(uid), HasSymbol)
 log :: Expr -> Expr
 log = UnaryOp Log
 
+-- | Smart constructor to take the ln of an expression
+ln :: Expr -> Expr
+ln = UnaryOp Ln
+
 -- | Smart constructor to take the square root of an expression
 sqrt :: Expr -> Expr
 sqrt = UnaryOp Sqrt

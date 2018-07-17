@@ -26,10 +26,10 @@ module Language.Drasil.Code (
   cSharpLabel, cppLabel, goolLabel, javaLabel, objectiveCLabel, pythonLabel, luaLabel,
   makeCode, createCodeFiles, toAbsCode, getClassName, buildModule, moduleName,
   Options(..),
+  generator, generateCode,
   ($:=), Choices(..), CodeSpec, Comments(CommentNone), ConstraintBehaviour(..), Func, 
   FuncStmt(..), ImplementationType(..), Lang(..), Logging(LogNone), Mod(Mod), Structure(..),
   asExpr, asVC, codeSpec, fdec, ffor, funcData, funcDef, packmod, relToQD,
-  gen, genCode, 
   Ind(..), junk, junkLine, listEntry, multiLine, repeated, singleLine, singleton
 ) where
 
@@ -60,6 +60,8 @@ import Language.Drasil.Code.Imperative.AST (alwaysDel, neverDel, assign, at, bin
   pubClass, privClass, privMVar, pubMVar, pubGVar, privMethod, pubMethod, constructor,
   mainMethod)
 
+import Language.Drasil.Code.Imperative.Import (generator, generateCode)
+
 import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser (cSharpLabel, cppLabel, 
@@ -74,4 +76,3 @@ import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec, Comments(..), Con
   asExpr, asVC, codeSpec, fdec, ffor, funcData, funcDef, packmod, relToQD,
   )
 
-import Language.Drasil.Generate (gen, genCode)

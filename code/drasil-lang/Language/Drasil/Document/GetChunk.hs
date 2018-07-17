@@ -28,7 +28,7 @@ combine' :: (HasSymbolTable s, HasDefinitionTable s) => Expr -> s -> [DefinedQua
 combine' a m = zipWith dqdQd (vars a m) (concpt' a m)
 
 ccss :: [Sentence] -> [Expr]-> ChunkDB -> [DefinedQuantityDict]
-ccss s e c = nub $ (concatMap (\x -> combine x c) s) ++ (concatMap (\x -> combine' x c) e)
+ccss s e c = nub $ concatMap (`combine` c) s ++ concatMap (`combine'` c) e
 
 vars' :: (HasSymbolTable s) => Sentence -> s -> [QuantityDict]
 vars' a m = map resolve $ sdep a

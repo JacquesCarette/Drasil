@@ -105,7 +105,7 @@ data SecCons = Sub   Section
 -- and its shortname
 data Section = Section 
              { tle :: Title 
-             , cons :: [SecCons] 
+             , cons :: [SecCons]
              , _lb :: Label
              }
 makeLenses ''Section

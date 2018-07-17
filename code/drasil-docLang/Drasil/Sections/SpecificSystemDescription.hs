@@ -127,15 +127,15 @@ solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inMod
 
 -- wrappers for assumpIntro. Use assumpF' if genDefs is not needed
 assumpF :: (HasShortName a, Referable a, HasShortName b, Referable b, HasShortName c, Referable c) => 
-  Label -> Label -> Label -> b -> c -> a -> [Contents] -> Section
+  Label -> Label -> Label -> b -> c -> a -> [LabelledContent] -> Section
 assumpF theMod genDef dataDef inMod likeChg unlikeChg otherContents = 
       SRS.assumpt ((assumpIntro theMod genDef dataDef inMod likeChg unlikeChg):otherContents) []
 
 
 -- takes a bunch of references to things discribed in the wrapper
 assumpIntro :: (HasShortName a, Referable a, HasShortName b, Referable b, HasShortName c, Referable c) =>
-  Label -> Label -> Label -> b -> c -> a -> Contents
-assumpIntro r1 r2 r3 r4 r5 r6 = Paragraph $ foldlSent 
+  Label -> Label -> Label -> b -> c -> a -> LabelledContent
+assumpIntro r1 r2 r3 r4 r5 r6 = llcc "assumpIntroLC" (mkLabelRA'' "assumpIntro") $ Paragraph $ foldlSent 
           [S "This", (phrase section_), S "simplifies the original", (phrase problem), 
           S "and helps in developing the", (phrase thModel), S "by filling in the", 
           S "missing", (phrase information), S "for the" +:+. (phrase physicalSystem), 

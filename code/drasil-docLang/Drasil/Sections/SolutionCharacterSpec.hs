@@ -318,7 +318,7 @@ goalStatementSect (SectionModel _ xs) = SRS.goalStmt
 
 assumptionSect :: SubSec -> Section
 assumptionSect (SectionModel _ xs) = SRS.assumpt
-  (assumpIntro:(pullContents xs)) (pullSections xs)
+  (assumpIntro:(pullLC xs)) (pullSections xs)
 
 
 theoreticalModelSect :: (Idea a, HasSymbolTable s) => SubSec -> s -> a -> Section
@@ -447,8 +447,8 @@ scsIntro progName = foldlSP [S "The", plural Doc.inModel,
 -----------------
 
 -- takes a bunch of references to things discribed in the wrapper
-assumpIntro :: Contents
-assumpIntro = Paragraph $ foldlSent 
+assumpIntro :: LabelledContent
+assumpIntro = llcc "notused" (mkLabelRA'' "notused") $ Paragraph $ foldlSent 
   [S "This", (phrase Doc.section_), S "simplifies the original", 
   (phrase Doc.problem), S "and helps in developing the", (phrase Doc.thModel), 
   S "by filling in the missing", (phrase Doc.information), S "for the" +:+. 

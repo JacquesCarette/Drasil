@@ -459,7 +459,7 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS SI {_refdb = db} Assumptions =
       SSD.assumpF SRS.thModelLabel SRS.genDefnLabel SRS.dataDefnLabel SRS.inModelLabel 
       SRS.likeChgLabel SRS.unlikeChgLabel
-      (map Assumption $ assumptionsFromDB (db ^. assumpRefTable))
+      (map (\x -> llcc (x ^. uid ++ "LC") (x ^. getLabel) $ Assumption x) $ assumptionsFromDB (db ^. assumpRefTable))
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
     inModSec = SRS.inModel [Paragraph EmptyS] []
     --FIXME: inModSec should be replaced with a walk

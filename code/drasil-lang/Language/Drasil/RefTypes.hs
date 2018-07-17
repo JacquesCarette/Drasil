@@ -36,3 +36,4 @@ instance Show RefType where
   show PSD    = "Physical System Description"
   show EqnB   = "Equation"
   show Lbl    = "Label"
+  show Cntnts = "Content"

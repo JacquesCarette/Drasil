@@ -260,8 +260,7 @@ makeDocument sm (Document title author sections) =
 -- | Translates from LayoutObj to the Printing representation of LayoutObj
 layout :: HasSymbolTable ctx => ctx -> Int -> SecCons -> T.LayoutObj
 layout sm currDepth (Sub s)   = sec sm (currDepth+1) s
---layout sm _         (Con c)   = lay sm c
-layout sm _         (Con c)   = error "Contents is still used"
+layout sm _         (Con c)   = lay sm c
 layout sm _         (LCon lc) = lay' sm lc (accessContents lc)
 
 -- | Helper function for creating sections as layout objects
@@ -276,29 +275,29 @@ sec sm depth x@(Section title contents _) = --FIXME: should ShortName be used so
   (T.Header depth (spec sm title) ref :
    map (layout sm depth) contents) ref
 
-{-- | Translates from Contents to the Printing Representation of LayoutObj.
+-- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.
 lay :: HasSymbolTable ctx => ctx -> Contents -> T.LayoutObj
 lay sm x@(Table hdr lls t b _) = T.Table ["table"]
-  ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S (refAdd x)) b (spec sm t)
-lay sm (Paragraph c)          = T.Paragraph (spec sm c)
-lay sm (EqnBlock c _)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
+  ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S "fixmelabel0") b (spec sm t)
+lay sm (Paragraph c)          = T.Paragraph (spec sm c) (P.S "fixmelabel1")
+lay sm (EqnBlock c _)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm)) (P.S "fixmelabel2")] (P.S "fixmelabel3")
                               -- FIXME: Make equations referable
-lay sm x@(Definition c)       = T.Definition c (makePairs sm c) (P.S (refAdd x))
-lay sm (Enumeration cs)       = T.List $ makeL sm cs
-lay sm x@(Figure c f wp _)    = T.Figure (P.S (refAdd x)) (spec sm c) f wp
+lay sm x@(Definition c)       = T.Definition c (makePairs sm c) (P.S "fixmelabel4")
+lay sm (Enumeration cs)       = T.List (makeL sm cs) (P.S "fixmelabel5")
+lay sm x@(Figure c f wp _)    = T.Figure (P.S "fixmelabel6") (spec sm c) f wp
 lay sm x@(Requirement r)      = T.ALUR T.Requirement
-  (spec sm $ requires r) (P.S $ refAdd x) (spec sm $ getShortName r)
+  (spec sm $ requires r) (P.S "fixmelabel7") (spec sm $ getShortName r)
 lay sm x@(Assumption a)       = T.ALUR T.Assumption
-  (spec sm (assuming a)) (P.S (refAdd x)) (spec sm $ getShortName a)
+  (spec sm (assuming a)) (P.S "fixmelabel8") (spec sm $ getShortName a)
 lay sm x@(Change lc)          = T.ALUR
   (if (chngType lc) == Likely then T.LikelyChange else T.UnlikelyChange)
-  (spec sm (chng lc)) (P.S (refAdd x)) (spec sm $ getShortName lc)
+  (spec sm (chng lc)) (P.S "fixmelabel9") (spec sm $ getShortName lc)
 lay sm x@(Graph ps w h t _)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
-                               w h (spec sm t) (P.S (refAdd x))
+                               w h (spec sm t) (P.S "fixmelabel10")
 lay sm (Defnt dtyp pairs rn)  = T.Definition dtyp (layPairs pairs) (P.S rn)
   where layPairs = map (\(x,y) -> (x, map (lay sm) y))
-lay sm (Bib bib)              = T.Bib map (layCite sm) bib-}
+lay sm (Bib bib)              = T.Bib (map (layCite sm) bib) (P.S "fixmelabel11")
 
 lay' :: HasSymbolTable ctx => ctx -> LabelledContent -> Contents -> T.LayoutObj
 lay' sm lc (Table hdr lls t b _) = T.Table ["table"]

@@ -302,7 +302,7 @@ lay sm (Bib bib)              = T.Bib (map (layCite sm) bib) (P.S "fixmelabel11"
 
 lay' :: HasSymbolTable ctx => ctx -> LabelledContent -> Contents -> T.LayoutObj
 lay' sm lc (Table hdr lls t b _) = T.Table ["table"]
-  ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S (refAdd lc)) b (spec sm t)
+  ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S ("Table:" ++ refAdd lc)) b (spec sm t)
 lay' sm lc (Paragraph x)         = T.Paragraph (spec sm x) (P.S (refAdd lc))
 lay' sm lc (EqnBlock c _)        = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm)) (P.S (refAdd lc))] (P.S (refAdd lc)) --FIXME: 2 labels?
 lay' sm lc (Definition c)        = T.Definition c (makePairs sm c) (P.S (refAdd lc))

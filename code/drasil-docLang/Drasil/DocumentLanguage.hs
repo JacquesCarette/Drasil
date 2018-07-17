@@ -307,8 +307,9 @@ tsymb'' :: [TSIntro] -> LFunc -> RefTab
 tsymb'' intro lfunc = TSymb' lfunc intro -- ^ Custom function and intro.
 
 -- | table of symbols intro builder. Used by mkRefSec
-tsIntro :: [TSIntro] -> Contents
-tsIntro x = Paragraph $ foldr ((+:+) . tsI) EmptyS x
+tsIntro :: [TSIntro] -> LabelledContent
+tsIntro x = llcc "tsIntro" (mkLabelRA'' "tsIntroLabel") $
+  Paragraph $ foldr ((+:+) . tsI) EmptyS x
 
 -- | table of symbols intro writer. Translates a TSIntro to a list of Sentences
 tsI :: TSIntro -> Sentence
@@ -348,8 +349,9 @@ symbConvention scs = S "The choice of symbols was made to be consistent with the
         scon (Manual x)      = S "that used in the" +:+ phrase x +:+ S "manual"
 
 -- | Table of units intro builder. Used by mkRefSec
-tuIntro :: [TUIntro] -> Contents
-tuIntro x = Paragraph $ foldr ((+:+) . tuI) EmptyS x
+tuIntro :: [TUIntro] -> LabelledContent
+tuIntro x = llcc "tuIntro" (mkLabelRA'' "tuIntroLabel") $
+  Paragraph $ foldr ((+:+) . tuI) EmptyS x
 
 -- | table of units intro writer. Translates a TUIntro to a Sentence.
 tuI :: TUIntro -> Sentence

@@ -8,11 +8,9 @@ import Data.Drasil.Concepts.Documentation (symbol_, description, tOfSymb)
  
 --Removed SymbolForm Constraint and filtered non-symbol'd chunks 
 -- | table of symbols creation function
-table :: (Quantity s) => Stage -> [s] -> (s -> Sentence) -> Contents
-table st ls f = Table 
+table :: (Quantity s) => Stage -> [s] -> (s -> Sentence) -> LabelledContent
+table st ls f = llcc "ToSLC" (mkLabelRA'' "ToS") $ Table 
   [at_start symbol_, at_start description, at_start' CM.unit_]
   (mkTable [P . (flip symbol st), f, unitHidingUnitless]
   (filter (\q -> hasStageSymbol q st) ls))
   (titleize tOfSymb) False "ToS"
-
--- ^. defn

@@ -244,7 +244,7 @@ instance Referable InstanceModel where
   rType   _ = Def
 
 instance Referable LabelledContent where
-  refAdd (LblC _ lb _) = "LblC:" ++ (getAdd (lb ^. getRefAdd))
+  refAdd (LblC _ lb _) = getAdd (lb ^. getRefAdd)
   rType  (LblC _ _ c)  = temp c
 
 instance Referable Label where

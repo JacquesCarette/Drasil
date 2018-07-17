@@ -12,7 +12,7 @@ import Data.Function (on)
 -- given list of abbreviated chunks
 table_of_abb_and_acronyms :: (Idea s) => [s] -> Section
 table_of_abb_and_acronyms ls = Section (S "Abbreviations and Acronyms") 
-  [Con (table ls)] (mkLabelRA'' "TAbbAcc") --"TblOfAA"
+  [LCon (table ls)] (mkLabelRA'' "Section:TAbbAcc") --"TblOfAA"
 
 select :: (Idea s) => [s] -> [(String, s)]
 select [] = []
@@ -23,8 +23,9 @@ select (x:xs) = case getA x of
 --FIXME? Should it be called Symbol or something like Abbreviation/Acronym?
 --FIXME? Should it be "Description" or "Term" or something else?
 -- | The actual table creation function.
-table :: (Idea s) => [s] -> Contents
+table :: (Idea s) => [s] -> LabelledContent
 table ls = let chunks = sortBy (compare `on` fst) $ select ls in
+  llcc "TAbbAccLC" (mkLabelRA'' "TAbbAcc") $ 
   Table (map (at_start) [symbol_, description]) (mkTable
   [(\(a,_) -> S a),
    (\(_,b) -> titleize b)]

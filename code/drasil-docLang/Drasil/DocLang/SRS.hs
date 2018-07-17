@@ -6,7 +6,7 @@ module Drasil.DocLang.SRS
   traceyMandG, appendix, reference, propCorSol, offShelfSol, missingP, valsOfAuxCons,
   tOfSymb, 
   physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, inModelLabel,
-  likeChgLabel, unlikeChgLabel) where
+  likeChgLabel, unlikeChgLabel, valsOfAuxConsLabel) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
@@ -43,8 +43,8 @@ doc' sys authors secs = Document (Doc.srs `forTT'` sys) authors secs
 intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
   genSysDes, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
   probDesc, termAndDefn, termogy, goalStmt, solCharSpec, assumpt, thModel,
-  inModel, dataDefn, propCorSol, require, nonfuncReq, tOfSymb,
-  reference, offShelfSol, valsOfAuxCons :: [Contents] -> [Section] -> Section
+  inModel, dataDefn, propCorSol, require, nonfuncReq, 
+  reference, offShelfSol :: [Contents] -> [Section] -> Section
 
 intro       cs ss = section' (titleize Doc.introduction) cs ss "Intro"
 prpsOfDoc   cs ss = section' (titleize Doc.prpsOfDoc) cs ss "DocPurpose"
@@ -80,26 +80,26 @@ propCorSol  cs ss = section' (titleize' Doc.propOfCorSol)      cs ss "CorSolProp
 require     cs ss = section' (titleize' Doc.requirement)      cs ss "Requirements"
 nonfuncReq  cs ss = section' (titleize' Doc.nonfunctionalRequirement) cs ss "NFRs"
 
-valsOfAuxCons cs ss = section' (titleize Doc.consVals)        cs ss "AuxConstants"
 
 reference   cs ss = section' (titleize' Doc.reference)        cs ss "References"
 offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "ExistingSolns"
 
-tOfSymb cs ss = section' (titleize Doc.tOfSymb) cs ss "ToS"
 
 
 appendix, datCon, funcReq, genDefn, likeChg, physSyst, sysCont, traceyMandG,
- unlikeChg :: [LabelledContent] -> [Section] -> Section
+ unlikeChg, tOfSymb, valsOfAuxCons :: [LabelledContent] -> [Section] -> Section
 
-appendix    cs ss = sectionLC (titleize Doc.appendix)               cs ss (mkLabelRA'' "Appendix")
-datCon      cs ss = sectionLC (titleize' Doc.datumConstraint)       cs ss datConLabel
-funcReq     cs ss = sectionLC (titleize' Doc.functionalRequirement) cs ss (mkLabelRA'' "FRs")
-genDefn     cs ss = sectionLC (titleize' Doc.genDefn)               cs ss genDefnLabel
-likeChg     cs ss = sectionLC (titleize' Doc.likelyChg)             cs ss likeChgLabel
-physSyst    cs ss = sectionLC (titleize Doc.physSyst)               cs ss physSystLabel
-sysCont     cs ss = sectionLC (titleize Doc.sysCont)                cs ss (mkLabelRA'' "SysContext")
-traceyMandG cs ss = sectionLC (titleize' Doc.traceyMandG)           cs ss (mkLabelRA'' "TraceMatrices")
-unlikeChg   cs ss = sectionLC (titleize' Doc.unlikelyChg)           cs ss unlikeChgLabel
+appendix      cs ss = sectionLC (titleize Doc.appendix)               cs ss (mkLabelRA'' "Appendix")
+datCon        cs ss = sectionLC (titleize' Doc.datumConstraint)       cs ss datConLabel
+funcReq       cs ss = sectionLC (titleize' Doc.functionalRequirement) cs ss (mkLabelRA'' "FRs")
+genDefn       cs ss = sectionLC (titleize' Doc.genDefn)               cs ss genDefnLabel
+likeChg       cs ss = sectionLC (titleize' Doc.likelyChg)             cs ss likeChgLabel
+physSyst      cs ss = sectionLC (titleize Doc.physSyst)               cs ss physSystLabel
+sysCont       cs ss = sectionLC (titleize Doc.sysCont)                cs ss (mkLabelRA'' "SysContext")
+tOfSymb       cs ss = sectionLC (titleize Doc.tOfSymb)                cs ss tOfSymbLabel
+traceyMandG   cs ss = sectionLC (titleize' Doc.traceyMandG)           cs ss (mkLabelRA'' "TraceMatrices")
+unlikeChg     cs ss = sectionLC (titleize' Doc.unlikelyChg)           cs ss unlikeChgLabel
+valsOfAuxCons cs ss = sectionLC (titleize Doc.consVals)               cs ss valsOfAuxConsLabel
 
 --function that sets the shortname of each section to be the reference address
 section' :: Sentence -> [Contents] -> [Section] -> RefAdd -> Section
@@ -109,13 +109,15 @@ missingP :: [Contents]
 missingP = [Paragraph $ S "..."]
 
 --Labels--
-physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, inModelLabel, likeChgLabel
-  :: Label
-physSystLabel = mkLabelRA'' "PhysSyst"
-datConLabel   = mkLabelRA'' "DataConstraints"
-genDefnLabel  = mkLabelRA'' "GDs"
-thModelLabel  = mkLabelRA'' "TMs"
-dataDefnLabel = mkLabelRA'' "DDs"
-inModelLabel  = mkLabelRA'' "IMs"
-likeChgLabel  = mkLabelRA'' "LCs"
-unlikeChgLabel  = mkLabelRA'' "UCs"
+physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
+  inModelLabel, likeChgLabel, tOfSymbLabel :: Label
+physSystLabel      = mkLabelRA'' "PhysSyst"
+datConLabel        = mkLabelRA'' "DataConstraints"
+genDefnLabel       = mkLabelRA'' "GDs"
+thModelLabel       = mkLabelRA'' "TMs"
+dataDefnLabel      = mkLabelRA'' "DDs"
+inModelLabel       = mkLabelRA'' "IMs"
+likeChgLabel       = mkLabelRA'' "LCs"
+unlikeChgLabel     = mkLabelRA'' "UCs"
+tOfSymbLabel       = mkLabelRA'' "ToS"
+valsOfAuxConsLabel = mkLabelRA'' "AuxConstants"

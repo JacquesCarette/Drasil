@@ -2,7 +2,7 @@
 -- gets rendered as a (unique) symbol.  This is actually NOT based on
 -- semantics at all, but just a description of how things look.
 
-module Language.Drasil.Symbol(Decoration(..), Symbol(..), compsy, compsy', 
+module Language.Drasil.Symbol(Decoration(..), Symbol(..), compsy,
  upper_left, sub, sup, hat, vec, prime, sCurlyBrSymb, Stage(..)) where
 
 import Language.Drasil.Unicode (Special(CurlyBrClose, CurlyBrOpen))
@@ -47,128 +47,58 @@ complsy _  [] = GT
 complsy (x : xs) (y : ys) = compsy x y `mappend` complsy xs ys
 
 compsy :: Symbol -> Symbol -> Ordering
-compsy (Concat (x:[]))       (Concat (y:[]))        = compsy x y
-compsy (Concat (Atomic "Δ":xs))                b = compsy (Concat xs) b 
-compsy a                (Concat (Atomic "Δ":ys)) = compsy a           (Concat ys)
-compsy (Concat (x:xs))       (Concat (y:ys))       = --The above two lines ensure symbols like "x" and "delta x" stay together
+compsy (Concat (x:[]))       (Concat (y:[]))       = compsy x y
+compsy (Concat (Atomic "Δ":x:xs))          b       = 
+  case compsy x b of
+    EQ -> GT
+    other -> other
+compsy a           (Concat (Atomic "Δ":y:ys))      = 
+  case compsy a y of
+    EQ -> LT
+    other -> other
+compsy (Concat (x:xs))       (Concat (y:ys))       = 
  compsy x y `mappend` complsy xs ys
-compsy (Concat a)             b                     = complsy a [b]
-compsy b                      (Concat a)            = complsy [b] a
-compsy (Corners _ _ ur lr b) (Corners _ _ u' l' b') = 
+compsy (Concat a)             b                    = complsy a [b]
+compsy b                      (Concat a)           = complsy [b] a
+compsy (Corners _ _ u l b) (Corners _ _ u' l' b')  =
   case compsy b b' of
-    EQ -> case complsy lr l' of
-          EQ -> complsy ur u'
-          other -> other
-    other -> other
-compsy (Corners _ _ _ _ a)    b                     = compsy a b
-compsy b                      (Corners _ _ _ _ a)   = compsy b a
-compsy (Atop d1 a)           (Atop d2 a')           = 
-  case compsy a a' of
-    EQ -> compare d1 d2
-    other -> other
-compsy (Atop _ a)             b                     = compsy a b  
-compsy b                      (Atop _ a)            = compsy b a
-compsy (Atomic x)             (Atomic y)            = 
-  compare (map toLower x) (map toLower y)
-compsy (Special a)           (Special b)            = compare a b
-compsy (Special _)            _                     = LT
-compsy _                     (Special _)            = GT
-compsy (Atomic _)             _                     = GT
-compsy  _                    (Atomic _)             = LT
-compsy  Empty                 Empty                 = EQ
-
-compsy' :: Symbol -> Symbol -> Ordering
-compsy' (Concat (Atomic "Δ":x:xs))          b = 
-  case compsy' x b of
-    EQ -> GT
-    other -> other
-compsy' a (Concat (Atomic "Δ":y:ys)) = 
-  case compsy' a y of
-    EQ -> LT
-    other -> other 
-compsy' (Corners _ _ [] l b) (Corners _ _ [] l' b') =
-  case compsy' b b' of
-    EQ -> complsy l l'
-    other -> other
-compsy' (Corners _ _ [] l b) (Corners _ _ u' l' b') =
-  case compsy' b b' of
-    EQ -> case complsy l l' of
-      EQ -> LT
-      other -> other
-    other -> other
-compsy' (Corners _ _ u l b) (Corners _ _ [] l' b') =
-  case compsy' b b' of
-    EQ -> case complsy l l' of
-      EQ -> GT
-      other -> other
-    other -> other
-compsy' (Corners _ _ u [] b) (Corners _ _ u' [] b') =
-  case compsy' b b' of
-    EQ -> complsy u u'
-    other -> other
-compsy' (Corners _ _ u [] b) (Corners _ _ u' l' b') =
-  case compsy' b b' of
-    EQ -> LT
-    other -> other
-compsy' (Corners _ _ u l b) (Corners _ _ u' [] b') =
-  case compsy' b b' of
-    EQ -> GT
-    other -> other
-compsy' (Corners _ _ [] l b) (Corners _ _ u' [] b') =
-  case compsy' b b' of
-    EQ -> GT
-    other -> other
-compsy' (Corners _ _ u [] b) (Corners _ _ [] l' b') =
-  case compsy' b b' of
-    EQ -> LT
-    other -> other
-compsy' (Corners _ _ u l b) (Corners _ _ u' l' b') =
-  case compsy' b b' of
     EQ -> case complsy l l' of
       EQ -> complsy u u'
       other -> other
     other -> other
-compsy' (Atomic a) (Corners _ _ _ _ b) = 
-  case compsy' (Atomic a) b of
+compsy (Atomic a)              (Corners _ _ _ _ b) = 
+  case compsy (Atomic a) b of
     EQ -> LT
     other -> other
-compsy' (Corners _ _ _ _ b) (Atomic a)  = 
-  case compsy' b (Atomic a) of
+compsy (Corners _ _ _ _ b)     (Atomic a)          = 
+  case compsy b (Atomic a) of
     EQ -> GT
     other -> other
-compsy' (Special a) (Corners _ _ _ _ b) = 
-  case compsy' (Special a) b of
+compsy (Corners _ _ _ _ b)     a                   = compsy b a
+compsy a                       (Corners _ _ _ _ b) = compsy a b
+compsy (Atomic b)              (Atop _ a)          = 
+  case compsy (Atomic b) a of
     EQ -> LT
     other -> other
-compsy' (Corners _ _ _ _ b) (Special a)  = 
-  case compsy' b (Special a) of
+compsy (Atop _ b)              (Atomic a)          = 
+  case compsy b (Atomic a) of
     EQ -> GT
     other -> other
-compsy' (Atop _ a) (Corners _ _ _ _ b) = 
-  case compsy' a b of
-    EQ -> LT
-    other -> other
-compsy' (Corners _ _ _ _ b) (Atop _ a)  = 
-  case compsy' b a of
-    EQ -> GT
-    other -> other
-compsy' (Atomic b) (Atop _ a)  = 
-  case compsy' (Atomic b) a of
-    EQ -> LT
-    other -> other
-compsy' (Atop _ b) (Atomic a)  = 
-  case compsy' b (Atomic a) of
-    EQ -> GT
-    other -> other
-compsy' (Atop d1 a)           (Atop d2 a')           = 
-  case compsy' a a' of
+compsy (Atop d1 a)             (Atop d2 a')        = 
+  case compsy a a' of
     EQ -> compare d1 d2
     other -> other
-compsy' (Special a) (Special b) = compare a b
-compsy' (Atomic x)  (Atomic y)            = 
+compsy (Atop _ a)              b                   = compsy a b  
+compsy b                       (Atop _ a)          = compsy b a
+compsy (Special a)             (Special b)         = compare a b
+compsy _                       (Special _)         = GT
+compsy (Special _)             _                   = LT
+compsy (Atomic x)              (Atomic y)          = 
   compare (map toLower x) (map toLower y)
-compsy'  Empty Empty                 = EQ
-compsy' _ _ = EQ
+compsy (Atomic _)              _                   = LT
+compsy  _                      (Atomic _)          = GT
+compsy  Empty                  Empty               = EQ
+
 
 
 

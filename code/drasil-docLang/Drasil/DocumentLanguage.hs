@@ -40,6 +40,7 @@ import Data.Drasil.Concepts.Documentation (refmat)
 
 import Data.Function (on)
 import Data.List (nub, sortBy)
+import Data.Ord (comparing)
 
 type System = Sentence
 type DocKind = Sentence
@@ -246,7 +247,7 @@ mkSections si l = map doit l
     doit (IntroSec is)       = mkIntroSec si is
     doit (StkhldrSec sts)    = mkStkhldrSec sts
     doit (SSDSec ss)         = mkSSDSec si ss
-    doit (AuxConstntSec acs) = mkAuxConsSec acs
+    doit (AuxConstntSec acs) = mkAuxConsSec acs 
     doit Bibliography        = mkBib (citeDB si)
     doit (GSDSec gs')        = mkGSDSec gs'
     doit (ScpOfProjSec sop)  = mkScpOfProjSec sop
@@ -511,7 +512,10 @@ mkTraceabilitySec (TraceabilityProg refs trailing otherContents subSec) =
 -- | Helper for making the 'Values of Auxiliary Constants' section
 mkAuxConsSec :: AuxConstntSec -> Section
 mkAuxConsSec (AuxConsVerb s) = s
-mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key listOfCons
+mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key (sortBy compareQD listOfCons)
+
+compareQD :: QDefinition -> QDefinition -> Ordering
+compareQD a b = compsy (symbol a Implementation) (symbol b Implementation)
 
 {--}
 

@@ -6790,94 +6790,24 @@ Unit
 </tr>
 <tr>
 <td>
-<em>L<sub>min</sub></em>
+<em>C<sub>P</sub><sup>L</sup><sub>max</sub></em>
 </td>
 <td>
-minimum length of tank
+maximum specific heat capacity of PCM as a liquid
 </td>
 <td>
-<em>0.1</em>
+<em>5000</em>
 </td>
 <td>
-m
-</td>
-</tr>
-<tr>
-<td>
-<em>L<sub>max</sub></em>
-</td>
-<td>
-maximum length of tank
-</td>
-<td>
-<em>50</em>
-</td>
-<td>
-m
+J/(kg&sdot;&deg;C)
 </td>
 </tr>
 <tr>
 <td>
-<em>ρ<sub>P</sub><sup>min</sup></em>
+<em>C<sub>P</sub><sup>L</sup><sub>min</sub></em>
 </td>
 <td>
-minimum density of PCM
-</td>
-<td>
-<em>500</em>
-</td>
-<td>
-kg/m<sup>3</sup>
-</td>
-</tr>
-<tr>
-<td>
-<em>ρ<sub>P</sub><sup>max</sup></em>
-</td>
-<td>
-maximum density of PCM
-</td>
-<td>
-<em>20000</em>
-</td>
-<td>
-kg/m<sup>3</sup>
-</td>
-</tr>
-<tr>
-<td>
-<em>ρ<sub>W</sub><sup>min</sup></em>
-</td>
-<td>
-minimum density of water
-</td>
-<td>
-<em>950</em>
-</td>
-<td>
-kg/m<sup>3</sup>
-</td>
-</tr>
-<tr>
-<td>
-<em>ρ<sub>W</sub><sup>max</sup></em>
-</td>
-<td>
-maximum density of water
-</td>
-<td>
-<em>1000</em>
-</td>
-<td>
-kg/m<sup>3</sup>
-</td>
-</tr>
-<tr>
-<td>
-<em>C<sub>P</sub><sup>S</sup><sub>min</sub></em>
-</td>
-<td>
-minimum specific heat capacity of PCM as a solid
+minimum specific heat capacity of PCM as a liquid
 </td>
 <td>
 <em>100</em>
@@ -6902,41 +6832,13 @@ J/(kg&sdot;&deg;C)
 </tr>
 <tr>
 <td>
-<em>C<sub>P</sub><sup>L</sup><sub>min</sub></em>
+<em>C<sub>P</sub><sup>S</sup><sub>min</sub></em>
 </td>
 <td>
-minimum specific heat capacity of PCM as a liquid
+minimum specific heat capacity of PCM as a solid
 </td>
 <td>
 <em>100</em>
-</td>
-<td>
-J/(kg&sdot;&deg;C)
-</td>
-</tr>
-<tr>
-<td>
-<em>C<sub>P</sub><sup>L</sup><sub>max</sub></em>
-</td>
-<td>
-maximum specific heat capacity of PCM as a liquid
-</td>
-<td>
-<em>5000</em>
-</td>
-<td>
-J/(kg&sdot;&deg;C)
-</td>
-</tr>
-<tr>
-<td>
-<em>C<sub>W</sub><sup>min</sup></em>
-</td>
-<td>
-minimum specific heat capacity of water
-</td>
-<td>
-<em>4170</em>
 </td>
 <td>
 J/(kg&sdot;&deg;C)
@@ -6958,16 +6860,16 @@ J/(kg&sdot;&deg;C)
 </tr>
 <tr>
 <td>
-<em>h<sub>C</sub><sup>min</sup></em>
+<em>C<sub>W</sub><sup>min</sup></em>
 </td>
 <td>
-minimum convective heat transfer coefficient between coil and water
+minimum specific heat capacity of water
 </td>
 <td>
-<em>10</em>
+<em>4170</em>
 </td>
 <td>
-W/(m<sup>2</sup>&sdot;&deg;C)
+J/(kg&sdot;&deg;C)
 </td>
 </tr>
 <tr>
@@ -6986,10 +6888,10 @@ W/(m<sup>2</sup>&sdot;&deg;C)
 </tr>
 <tr>
 <td>
-<em>h<sub>P</sub><sup>min</sup></em>
+<em>h<sub>C</sub><sup>min</sup></em>
 </td>
 <td>
-minimum convective heat transfer coefficient between PCM and water
+minimum convective heat transfer coefficient between coil and water
 </td>
 <td>
 <em>10</em>
@@ -7014,6 +6916,48 @@ W/(m<sup>2</sup>&sdot;&deg;C)
 </tr>
 <tr>
 <td>
+<em>h<sub>P</sub><sup>min</sup></em>
+</td>
+<td>
+minimum convective heat transfer coefficient between PCM and water
+</td>
+<td>
+<em>10</em>
+</td>
+<td>
+W/(m<sup>2</sup>&sdot;&deg;C)
+</td>
+</tr>
+<tr>
+<td>
+<em>L<sub>max</sub></em>
+</td>
+<td>
+maximum length of tank
+</td>
+<td>
+<em>50</em>
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>L<sub>min</sub></em>
+</td>
+<td>
+minimum length of tank
+</td>
+<td>
+<em>0.1</em>
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
 <em>t<sub>final</sub><sup>max</sup></em>
 </td>
 <td>
@@ -7024,6 +6968,62 @@ maximum final time
 </td>
 <td>
 s
+</td>
+</tr>
+<tr>
+<td>
+<em>ρ<sub>P</sub><sup>max</sup></em>
+</td>
+<td>
+maximum density of PCM
+</td>
+<td>
+<em>20000</em>
+</td>
+<td>
+kg/m<sup>3</sup>
+</td>
+</tr>
+<tr>
+<td>
+<em>ρ<sub>P</sub><sup>min</sup></em>
+</td>
+<td>
+minimum density of PCM
+</td>
+<td>
+<em>500</em>
+</td>
+<td>
+kg/m<sup>3</sup>
+</td>
+</tr>
+<tr>
+<td>
+<em>ρ<sub>W</sub><sup>max</sup></em>
+</td>
+<td>
+maximum density of water
+</td>
+<td>
+<em>1000</em>
+</td>
+<td>
+kg/m<sup>3</sup>
+</td>
+</tr>
+<tr>
+<td>
+<em>ρ<sub>W</sub><sup>min</sup></em>
+</td>
+<td>
+minimum density of water
+</td>
+<td>
+<em>950</em>
+</td>
+<td>
+kg/m<sup>3</sup>
 </td>
 </tr>
 </table>

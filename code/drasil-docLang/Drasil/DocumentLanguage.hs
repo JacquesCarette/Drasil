@@ -271,7 +271,7 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
     mkSubRef SI {_quants = v} (TSymb con) =
       SRS.tOfSymb
       [tsIntro con, table Equational (
-         sortBy (compsy' `on` eqSymb) $
+         sortBy (compsy `on` eqSymb) $
          filter (`hasStageSymbol` Equational)
          (nub v)) at_start] []
     mkSubRef SI {_concepts = cccs} (TSymb' f con) = mkTSymb cccs f con
@@ -284,7 +284,7 @@ mkTSymb :: (Quantity e, Concept e, Eq e) =>
   [e] -> LFunc -> [TSIntro] -> Section
 mkTSymb v f c = SRS.tOfSymb [tsIntro c,
   table Equational
-    (sortBy (compsy' `on` eqSymb) $ filter (`hasStageSymbol` Equational) (nub v))
+    (sortBy (compsy `on` eqSymb) $ filter (`hasStageSymbol` Equational) (nub v))
     (lf f)] []
   where lf Term = at_start
         lf Defn = (^. defn)

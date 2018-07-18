@@ -18,16 +18,17 @@ module Drasil.Sections.SpecificSystemDescription
   ) where
 
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation (physical, column, input_, uncertainty, physicalConstraint,
-  softwareConstraint, user, model, value, quantity, information, constraint, variable,
-  output_, symbol_, limitation, problem, inModel, datum, datumConstraint, section_, dataDefn,
-  general, genDefn, problemDescription, solutionCharSpec, assumption, thModel, physicalSystem,
-  likelyChg, unlikelyChg, goalStmt, theory, purpose, requirement, element)
+import Data.Drasil.Concepts.Documentation (assumption, column, constraint, dataDefn, 
+  datum, datumConstraint, element, genDefn, general, goalStmt, information, inModel, 
+  input_, likelyChg, limitation, model, output_, physical, physicalConstraint, 
+  physicalSystem, problem, problemDescription, purpose, quantity, requirement, 
+  section_, softwareConstraint, solutionCharSpec, symbol_, theory, thModel, typUnc, 
+  uncertainty, unlikelyChg, user, value, variable)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle, fmtU, getRVal)
-import Data.Drasil.SentenceStructures (fmtPhys, fmtSfwr, mkTableFromColumns, foldlSent, foldlSP,
-  typUncr, ofThe, foldlList)
+import Data.Drasil.SentenceStructures (fmtPhys, fmtSfwr, mkTableFromColumns, foldlSent, 
+  foldlSP, typUncr, ofThe, foldlList)
 import qualified Drasil.DocLang.SRS as SRS
 
 
@@ -232,7 +233,6 @@ dataConstraintClosingSent uncertaintySent trailingSent = foldlSent
 
 dataConstraintUncertainty :: Sentence
 dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase column,
-  sParen (S "\"Uncert.\" stands for \"Uncertainty\""), 
   S "provides an estimate of the confidence with which the", phrase physical,
   plural quantity +:+. S "can be measured", S "This", phrase information,
   S "would be part of the", phrase input_, S "if one were performing an",
@@ -246,7 +246,7 @@ inDataConstTbl qlst = Table titl cts (S "Input Data Constraints") True "InDataCo
             (titleize' physicalConstraint, map fmtPhys qlst),
             (titleize' softwareConstraint, map fmtSfwr qlst),
             (S "Typical Value", map (\q -> fmtU (E $ getRVal q) q) qlst),
-            (S "Uncert.", map typUncr qlst)]
+            (short typUnc, map typUncr qlst)]
    tbl = mkTableFromColumns columns
    titl = fst tbl
    cts = snd tbl

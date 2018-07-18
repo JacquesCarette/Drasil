@@ -2,9 +2,9 @@ module Drasil.GlassBR.Concepts where --whole file is used
 
 import Language.Drasil
 
-import Data.Drasil.Concepts.Documentation (assumption, 
-  dataDefn, goalStmt, inModel, likelyChg, unlikelyChg, notApp,
-  physSyst, response, requirement, srs, thModel, type_)
+import Data.Drasil.Concepts.Documentation (assumption, dataDefn, goalStmt, inModel, 
+    likelyChg, notApp, physSyst, response, requirement, srs, thModel, type_, typUnc, 
+    unlikelyChg)
 
 {--}
 
@@ -17,7 +17,7 @@ acronyms :: [CI]
 acronyms = [assumption, annealed, aR, dataDefn, fullyT, goalStmt, 
   glassTypeFac, heatS, iGlass, inModel, likelyChg, loadDurFactor, 
   lGlass, lResistance, lShareFac, notApp, nFL, physSyst, requirement, 
-  stdOffDist, srs, thModel, eqTNT, unlikelyChg]
+  stdOffDist, srs, thModel, eqTNT, typUnc, unlikelyChg]
 
 annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass, 
   lResistance, lShareFac, eqTNT, gLassBR, stdOffDist, nFL :: CI

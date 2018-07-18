@@ -3,7 +3,7 @@ module Drasil.SSP.Defs where --export all of this file
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn, 
   goalStmt, inModel, likelyChg, physSyst, property, requirement, safety, srs,
-  thModel, unlikelyChg)
+  thModel, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (surface)
 
 import Data.Drasil.Phrase(of_'')
@@ -11,7 +11,7 @@ import Data.Drasil.Phrase(of_'')
 ----Acronyms-----
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
-  physSyst, requirement, srs, ssa, thModel, unlikelyChg]
+  physSyst, requirement, srs, ssa, thModel, typUnc, unlikelyChg]
   
 ssa, ssp :: CI
 ssa = commonIdea "ssa" (cnIS "slope stability analysis") "SSA"

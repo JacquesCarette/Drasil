@@ -27,7 +27,8 @@ import Data.Drasil.Concepts.Documentation (section_, traceyGraph, item,
   value, software, column, model, goalStmt, quantity, property, condition, 
   physics, user, physical, datum, system, variable, sysCont, environment, 
   srs, softwareSys, organization, document, problem, content, information, 
-  reference, definition, purpose, description, symbol_, physSyst, unlikelyChg)
+  reference, definition, purpose, description, symbol_, physSyst, typUnc, 
+  unlikelyChg)
 
 import Data.Drasil.Concepts.PhysicalProperties (liquid, solid)
 import qualified Data.Drasil.Concepts.Thermodynamics as CT (boiling,
@@ -79,7 +80,7 @@ import Data.Drasil.SentenceStructures (acroIM, acroGD, acroGS, showingCxnBw,
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
-  phsChgMtrl, physSyst, requirement, rightSide, srs, progName, thModel, unlikelyChg]
+  phsChgMtrl, physSyst, requirement, rightSide, srs, progName, thModel, typUnc, unlikelyChg]
 
 this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, kilogram, second] ++ 

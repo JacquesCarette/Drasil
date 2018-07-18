@@ -511,7 +511,7 @@ functional_requirements_req1Table = Table
   [at_start symbol_, at_start description, S "Units"]
   (mkTable
   [ch,
-   at_start, unit'2Contents] requiredInputs)
+   at_start, unitToSentence] requiredInputs)
   (S "Required Inputs following R1") True "R1ReqInputs"
 
 req2Desc = foldlSent [S "The", phrase system,

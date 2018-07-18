@@ -250,7 +250,7 @@ The main purpose of this document is to describe the modelling of solar water he
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
-The scope of the requirements includes thermal analysis of a single solar water heating tank incorporating PCM. Given the appropriate inputs, the code for SWHS is intended to predict the temperature and thermal energy histories for the water and the PCM. This entire document is written assuming that the substances inside the solar water heating tank are water and PCM.
+The scope of the requirements includes thermal analysis of a single solar water heating tank incorporating PCM. Given the appropriate inputs, SWHS predicts the temperature and thermal energy histories for the water and the PCM. This entire document is written assuming that the substances inside the solar water heating tank are water and PCM.
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
 Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of SWHS can have a lower level of expertise, as explained in Section~\ref{Sec:UserChars}.
@@ -414,7 +414,7 @@ Equation & \begin{dmath}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$∇$ is the gradient (Unitless)}
+              \item{$∇$ is the gradient (--)}
               \item{$\mathbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$)}
               \item{$g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$)}
               \item{$ρ$ is the density ($\frac{\text{kg}}{\text{m}^{3}}$)}
@@ -680,14 +680,14 @@ Label & Melt fraction
 \\ \midrule \\
 Symbol & $ϕ$
 \\ \midrule \\
-Units & Unitless
+Units & --
 \\ \midrule \\
 Equation & \begin{dmath}
            ϕ=\frac{{Q_{P}}}{{H_{f}} {m_{P}}}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$ϕ$ is the melt fraction (Unitless)}
+              \item{$ϕ$ is the melt fraction (--)}
               \item{${Q_{P}}$ is the latent heat energy added to PCM (J)}
               \item{${H_{f}}$ is the specific latent heat of fusion ($\frac{\text{J}}{\text{kg}}$)}
               \item{${m_{P}}$ is the mass of phase change material (kg)}
@@ -731,7 +731,7 @@ Description & \begin{symbDescription}
               \item{${T_{W}}$ is the temperature of the water (${}^{\circ}$C)}
               \item{${τ_{W}}$ is the ODE parameter for water (s)}
               \item{${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C)}
-              \item{$η$ is the ODE parameter (Unitless)}
+              \item{$η$ is the ODE parameter (--)}
               \item{${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
@@ -808,7 +808,7 @@ Description & \begin{symbDescription}
               \item{${T_{W}}$ is the temperature of the water (${}^{\circ}$C)}
               \item{${{τ_{P}}^{L}}$ is the ODE parameter for liquid PCM (s)}
               \item{${{T_{melt}}^{P}}$ is the melting point temperature for PCM (${}^{\circ}$C)}
-              \item{$ϕ$ is the melt fraction (Unitless)}
+              \item{$ϕ$ is the melt fraction (--)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${T_{P}}$, $0<t<{t_{final}}$, with initial conditions, ${T_{W}}={T_{P}}={T_{init}}$, FIXME t\_w(0) = t\_p(0), A\ref{A:Same-Initial-Temp-Water-PCM}, and ${T_{W}}$ from IM1, such that the following governing ODE is satisfied. The temperature remains constant at ${{T_{melt}}^{P}}$, even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as $0<ϕ<1$ (from \hyperref[DD:melt.frac]{Definition~DD:melt.frac} ) is determined as part of the heat energy in the PCM, as given in IM4.
@@ -919,7 +919,7 @@ Description & \begin{symbDescription}
               \item{${{C_{P}}^{L}}$ is the specific heat capacity of PCM as a liquid ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$)}
               \item{${{T_{melt}}^{P}}$ is the melting point temperature for PCM (${}^{\circ}$C)}
               \item{${Q_{P}}$ is the latent heat energy added to PCM (J)}
-              \item{$ϕ$ is the melt fraction (Unitless)}
+              \item{$ϕ$ is the melt fraction (--)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The above equation is derived using T2 and T3. ${E_{P}}$ is the change in thermal energy of the PCM relative to the energy at the initial temperature (${T_{init}}$) J. ${E_{P}}$ for the solid PCM is found using T2 for sensible heat ing, with the specific heat capacity of the solid PCM, ${{C_{P}}^{S}}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and the change in the PCM temperature from the initial temperature (${}^{\circ}$C). ${E_{P}}$ for the melted PCM (${T_{P}}>{{{E_{P}}_{melt}}^{init}}$) is found using T2 for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is ${{{E_{P}}_{melt}}^{init}}$ (J). The energy required to melt all of the PCM is ${H_{f}} {m_{P}}$ (J) (\hyperref[DD:htFusion]{Definition~DD:htFusion}). the specific heat capacity of the liquid PCM is ${{C_{P}}^{L}}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and the change in temperature is ${T_{P}}-{{T_{melt}}^{P}}$ (${}^{\circ}$C). ${E_{P}}$ during melting of the PCM is found using the energy required at the instant melting of the PCM begins, ${{{E_{P}}_{melt}}^{init}}$ plus the latent heat energy added to the PCM, ${Q_{P}}$ (J) since the time when melting began ${{t_{melt}}^{init}}$ (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (A\ref{A:assump18}).
@@ -939,15 +939,15 @@ Var & Physical Constraints & Software Constraints & Typical Value & TU
 \midrule
 $L$ & $L>0$ & ${L_{min}}\leq{}L\leq{}{L_{max}}$ & $1.5$ m & 10.0\%
 \\
-$D$ & $D>0$ & None & $0.412$ m & 10.0\%
+$D$ & $D>0$ & -- & $0.412$ m & 10.0\%
 \\
-${V_{P}}$ & $0<{V_{P}}<{V_{tank}}$ & None & $0.05$ $\text{m}^{3}$ & 10.0\%
+${V_{P}}$ & $0<{V_{P}}<{V_{tank}}$ & -- & $0.05$ $\text{m}^{3}$ & 10.0\%
 \\
 ${A_{P}}$ & ${A_{P}}>0$ & ${V_{P}}\leq{}{A_{P}}\leq{}\frac{2}{{h_{min}}} {V_{tank}}$ & $1.2$ $\text{m}^{2}$ & 10.0\%
 \\
-${ρ_{P}}$ & ${{ρ_{P}}^{min}}<{ρ_{P}}<{{ρ_{P}}^{max}}$ & None & $1007.0$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10.0\%
+${ρ_{P}}$ & ${{ρ_{P}}^{min}}<{ρ_{P}}<{{ρ_{P}}^{max}}$ & -- & $1007.0$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10.0\%
 \\
-${{T_{melt}}^{P}}$ & $0<{{T_{melt}}^{P}}<{T_{C}}$ & None & $44.2$ ${}^{\circ}$C & 10.0\%
+${{T_{melt}}^{P}}$ & $0<{{T_{melt}}^{P}}<{T_{C}}$ & -- & $44.2$ ${}^{\circ}$C & 10.0\%
 \\
 ${{C_{P}}^{S}}$ & ${{C_{P}}^{S}}>0$ & ${{{C_{P}}^{S}}_{min}}<{{C_{P}}^{S}}<{{{C_{P}}^{S}}_{max}}$ & $1760.0$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10.0\%
 \\
@@ -957,7 +957,7 @@ ${H_{f}}$ & ${H_{f}}>0$ & ${{H_{f}}_{min}}<{H_{f}}<{{H_{f}}_{max}}$ & $211600.0$
 \\
 ${A_{C}}$ & ${A_{C}}>0$ & ${A_{C}}\leq{}{{A_{C}}^{max}}$ & $0.12$ $\text{m}^{2}$ & 10.0\%
 \\
-${T_{C}}$ & $0<{T_{C}}<100$ & None & $50.0$ ${}^{\circ}$C & 10.0\%
+${T_{C}}$ & $0<{T_{C}}<100$ & -- & $50.0$ ${}^{\circ}$C & 10.0\%
 \\
 ${ρ_{W}}$ & ${ρ_{W}}>0$ & ${{ρ_{W}}^{min}}<{ρ_{W}}\leq{}{{ρ_{W}}^{max}}$ & $1000.0$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10.0\%
 \\
@@ -967,7 +967,7 @@ ${h_{C}}$ & ${h_{C}}>0$ & ${{h_{C}}^{min}}\leq{}{h_{C}}\leq{}{{h_{C}}^{max}}$ & 
 \\
 ${h_{P}}$ & ${h_{P}}>0$ & ${{h_{P}}^{min}}\leq{}{h_{P}}\leq{}{{h_{P}}^{max}}$ & $1000.0$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$ & 10.0\%
 \\
-${T_{init}}$ & $0<{T_{init}}<{T_{melt}}$ & None & $40.0$ ${}^{\circ}$C & 10.0\%
+${T_{init}}$ & $0<{T_{init}}<{T_{melt}}$ & -- & $40.0$ ${}^{\circ}$C & 10.0\%
 \\
 ${t_{final}}$ & ${t_{final}}>0$ & ${t_{final}}<{{t_{final}}^{max}}$ & $50000.0$ s & 10.0\%
 \\

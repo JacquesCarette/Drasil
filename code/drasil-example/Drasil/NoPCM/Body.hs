@@ -650,7 +650,7 @@ funcReqsListItems = [
 
   Table [titleize symbol_, titleize M.unit_, titleize description]
   (mkTable [ch,
-  unit'2Contents,
+  unitToSentence,
   phrase] inputVar)
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False "fr1list",
 

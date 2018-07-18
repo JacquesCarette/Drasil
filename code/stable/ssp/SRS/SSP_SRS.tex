@@ -278,7 +278,7 @@ The SSA program determines the critical slip surface, and its respective factor 
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
-The scope of the requirements includes stability analysis of a 2 dimensional slope, composed of homogeneous soil layers. Given the appropriate inputs, the code for SSA is intended to identify the most likely failure surface within the possible input range, and find the factor of safety for the slope as well as displacement of soil that will occur on the slope.
+The scope of the requirements includes stability analysis of a 2 dimensional slope, composed of homogeneous soil layers. Given the appropriate inputs, SSA identifies the most likely failure surface within the possible input range, and finds the factor of safety for the slope as well as displacement of soil that will occur on the slope.
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
 Reviewers of this documentation should have a strong knowledge in solid mechanics. The reviewers should also have an understanding of undergraduate level 4 physics. The users of SSA can have a lower level of expertise, as explained in Section~\ref{Sec:UserChars}.
@@ -398,7 +398,7 @@ Equation & \begin{dmath}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$FS$ is the factor of safety (Unitless)}
+              \item{$FS$ is the factor of safety (--)}
               \item{$P$ is the resistive shear force (N)}
               \item{$S$ is the mobilized shear force (N)}
               \end{symbDescription}
@@ -532,7 +532,7 @@ Equation & \begin{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$N$ is the normal force (N)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{$W$ is the weight (N)}
               \item{$X$ is the interslice shear force (N)}
               \item{${U_{t}}$ is the surface hydrostatic force (N)}
@@ -540,7 +540,7 @@ Description & \begin{symbDescription}
               \item{$Q$ is the imposed surface load (N)}
               \item{$ω$ is the angle (${}^{\circ}$)}
               \item{$α$ is the angle (${}^{\circ}$)}
-              \item{${K_{c}}$ is the earthquake load factor (Unitless)}
+              \item{${K_{c}}$ is the earthquake load factor (--)}
               \item{$G$ is the interslice normal force (N)}
               \item{$H$ is the interslice water force (N)}
               \end{symbDescription}
@@ -567,7 +567,7 @@ Equation & \begin{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$S$ is the mobilized shear force (N)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{$W$ is the weight (N)}
               \item{$X$ is the interslice shear force (N)}
               \item{${U_{t}}$ is the surface hydrostatic force (N)}
@@ -575,7 +575,7 @@ Description & \begin{symbDescription}
               \item{$Q$ is the imposed surface load (N)}
               \item{$ω$ is the angle (${}^{\circ}$)}
               \item{$α$ is the angle (${}^{\circ}$)}
-              \item{${K_{c}}$ is the earthquake load factor (Unitless)}
+              \item{${K_{c}}$ is the earthquake load factor (--)}
               \item{$G$ is the interslice normal force (N)}
               \item{$H$ is the interslice water force (N)}
               \end{symbDescription}
@@ -602,7 +602,7 @@ Equation & \begin{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$P$ is the resistive shear force (N)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{$N'$ is the effective normal force (N)}
               \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
               \item{$c'$ is the effective cohesion (Pa)}
@@ -632,9 +632,9 @@ Equation & \begin{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$S$ is the mobilized shear force (N)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{$P$ is the resistive shear force (N)}
-              \item{$FS$ is the factor of safety (Unitless)}
+              \item{$FS$ is the factor of safety (--)}
               \item{$N'$ is the effective normal force (N)}
               \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
               \item{$c'$ is the effective cohesion (Pa)}
@@ -664,8 +664,8 @@ Equation & \begin{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$X$ is the interslice shear force (N)}
-              \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
-              \item{$f$ is the scaling function (Unitless)}
+              \item{$λ$ is the interslice normal/shear force ratio (--)}
+              \item{$f$ is the scaling function (--)}
               \item{$G$ is the interslice normal force (N)}
               \end{symbDescription}
 \\ \midrule \\
@@ -691,13 +691,13 @@ Equation & \begin{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$G$ is the interslice normal force (N)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{$z$ is the center of slice height (m)}
               \item{$b$ is the base width of a slice (m)}
               \item{$α$ is the angle (${}^{\circ}$)}
               \item{$H$ is the interslice water force (N)}
               \item{$X$ is the interslice shear force (N)}
-              \item{${K_{c}}$ is the earthquake load factor (Unitless)}
+              \item{${K_{c}}$ is the earthquake load factor (--)}
               \item{$W$ is the weight (N)}
               \item{$h$ is the midpoint height (m)}
               \item{${U_{t}}$ is the surface hydrostatic force (N)}
@@ -728,9 +728,9 @@ Equation & \begin{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${F_{x}}$ is the x-component of the net force (N)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{$ΔH$ is the difference between interslice forces (N)}
-              \item{${K_{c}}$ is the earthquake load factor (Unitless)}
+              \item{${K_{c}}$ is the earthquake load factor (--)}
               \item{$W$ is the weight (N)}
               \item{${U_{b}}$ is the base hydrostatic force (N)}
               \item{$α$ is the angle (${}^{\circ}$)}
@@ -760,7 +760,7 @@ Equation & \begin{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${F_{y}}$ is the y-component of the net force (N)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{$W$ is the weight (N)}
               \item{${U_{b}}$ is the base hydrostatic force (N)}
               \item{$α$ is the angle (${}^{\circ}$)}
@@ -801,7 +801,7 @@ p_{i}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$p$ is the pressure (Pa)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{${K_{st}}$ is the shear stiffness ($\frac{\text{Pa}}{\text{m}}$)}
               \item{${K_{bn}}$ is the normal stiffness ($\frac{\text{Pa}}{\text{m}}$)}
               \item{$δx$ is the displacement (m)}
@@ -842,7 +842,7 @@ Equation & \begin{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$ε$ is the displacement (m)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{$δu$ is the displacement (m)}
               \item{$δv$ is the displacement (m)}
               \item{$α$ is the angle (${}^{\circ}$)}
@@ -885,7 +885,7 @@ Equation & \begin{dmath}
 Description & \begin{symbDescription}
               \item{$W$ is the weight (N)}
               \item{$b$ is the base width of a slice (m)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{${y_{us}}$ is the y ordinate (m)}
               \item{${y_{slip}}$ is the y ordinate (m)}
               \item{${γ_{Sat}}$ is the saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
@@ -921,7 +921,7 @@ Equation & \begin{dmath}
 Description & \begin{symbDescription}
               \item{${U_{b}}$ is the base hydrostatic force (N)}
               \item{${ℓ_{b}}$ is the total base length of a slice (m)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{${y_{wt}}$ is the y ordinate (m)}
               \item{${y_{slip}}$ is the y ordinate (m)}
               \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
@@ -955,7 +955,7 @@ Equation & \begin{dmath}
 Description & \begin{symbDescription}
               \item{${U_{t}}$ is the surface hydrostatic force (N)}
               \item{${ℓ_{s}}$ is the length of an interslice surface (m)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{${y_{wt}}$ is the y ordinate (m)}
               \item{${y_{us}}$ is the y ordinate (m)}
               \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
@@ -990,7 +990,7 @@ Equation & \begin{dmath}
 Description & \begin{symbDescription}
               \item{$H$ is the interslice water force (N)}
               \item{${y_{us}}$ is the y ordinate (m)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{${y_{slip}}$ is the y ordinate (m)}
               \item{${γ_{Sat}}$ is the saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
               \item{${y_{wt}}$ is the y ordinate (m)}
@@ -1021,7 +1021,7 @@ Equation & \begin{dmath}
 Description & \begin{symbDescription}
               \item{$α$ is the angle (${}^{\circ}$)}
               \item{${y_{slip}}$ is the y ordinate (m)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{${x_{slip}}$ is the x ordinate (m)}
               \end{symbDescription}
 \\ \midrule \\
@@ -1050,7 +1050,7 @@ Equation & \begin{dmath}
 Description & \begin{symbDescription}
               \item{$β$ is the angle (${}^{\circ}$)}
               \item{${y_{us}}$ is the y ordinate (m)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{${x_{us}}$ is the x ordinate (m)}
               \end{symbDescription}
 \\ \midrule \\
@@ -1079,7 +1079,7 @@ Equation & \begin{dmath}
 Description & \begin{symbDescription}
               \item{$b$ is the base width of a slice (m)}
               \item{${x_{slip}}$ is the x ordinate (m)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \end{symbDescription}
 \\ \midrule \\
 Source & FIXME: This needs to be filled in
@@ -1107,7 +1107,7 @@ Equation & \begin{dmath}
 Description & \begin{symbDescription}
               \item{${ℓ_{b}}$ is the total base length of a slice (m)}
               \item{$b$ is the base width of a slice (m)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{$α$ is the angle (${}^{\circ}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -1136,7 +1136,7 @@ Equation & \begin{dmath}
 Description & \begin{symbDescription}
               \item{${ℓ_{s}}$ is the length of an interslice surface (m)}
               \item{$b$ is the base width of a slice (m)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{$β$ is the angle (${}^{\circ}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -1156,17 +1156,17 @@ Label & Earthquake load factor
 \\ \midrule \\
 Symbol & ${K_{c}}$
 \\ \midrule \\
-Units & Unitless
+Units & --
 \\ \midrule \\
 Equation & \begin{dmath}
            {K_{c}}={K_{c}} W_{i}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${K_{c}}$ is the earthquake load factor (Unitless)}
-              \item{${K_{c}}$ is the earthquake load factor (Unitless)}
+              \item{${K_{c}}$ is the earthquake load factor (--)}
+              \item{${K_{c}}$ is the earthquake load factor (--)}
               \item{$W$ is the weight (N)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \end{symbDescription}
 \\ \midrule \\
 Source & FIXME: This needs to be filled in
@@ -1194,7 +1194,7 @@ Equation & \begin{dmath}
 Description & \begin{symbDescription}
               \item{$Q$ is the imposed surface load (N)}
               \item{$Q$ is the imposed surface load (N)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{$ω$ is the angle (${}^{\circ}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -1222,9 +1222,9 @@ Equation & \begin{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$X$ is the interslice shear force (N)}
-              \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
-              \item{$f$ is the scaling function (Unitless)}
-              \item{$i$ is the index (Unitless)}
+              \item{$λ$ is the interslice normal/shear force ratio (--)}
+              \item{$f$ is the scaling function (--)}
+              \item{$i$ is the index (--)}
               \item{$G$ is the interslice normal force (N)}
               \end{symbDescription}
 \\ \midrule \\
@@ -1253,13 +1253,13 @@ Equation & \begin{dmath}
 Description & \begin{symbDescription}
               \item{$R$ is the resistive shear force (N)}
               \item{$W$ is the weight (N)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{${U_{t}}$ is the surface hydrostatic force (N)}
               \item{$β$ is the angle (${}^{\circ}$)}
               \item{$Q$ is the imposed surface load (N)}
               \item{$ω$ is the angle (${}^{\circ}$)}
               \item{$α$ is the angle (${}^{\circ}$)}
-              \item{${K_{c}}$ is the earthquake load factor (Unitless)}
+              \item{${K_{c}}$ is the earthquake load factor (--)}
               \item{$ΔH$ is the difference between interslice forces (N)}
               \item{${U_{b}}$ is the base hydrostatic force (N)}
               \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
@@ -1304,13 +1304,13 @@ Equation & \begin{dmath}
 Description & \begin{symbDescription}
               \item{$T$ is the mobilized shear force (N)}
               \item{$W$ is the weight (N)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{${U_{t}}$ is the surface hydrostatic force (N)}
               \item{$β$ is the angle (${}^{\circ}$)}
               \item{$Q$ is the imposed surface load (N)}
               \item{$ω$ is the angle (${}^{\circ}$)}
               \item{$α$ is the angle (${}^{\circ}$)}
-              \item{${K_{c}}$ is the earthquake load factor (Unitless)}
+              \item{${K_{c}}$ is the earthquake load factor (--)}
               \item{$ΔH$ is the difference between interslice forces (N)}
               \end{symbDescription}
 \\ \midrule \\
@@ -1354,7 +1354,7 @@ Equation & \begin{dmath}
 Description & \begin{symbDescription}
               \item{$p$ is the pressure (Pa)}
               \item{${K_{st}}$ is the shear stiffness ($\frac{\text{Pa}}{\text{m}}$)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{${K_{bn}}$ is the normal stiffness ($\frac{\text{Pa}}{\text{m}}$)}
               \item{$δx$ is the displacement (m)}
               \item{$δy$ is the displacement (m)}
@@ -1391,7 +1391,7 @@ Equation & \begin{dmath}
 Description & \begin{symbDescription}
               \item{$p$ is the pressure (Pa)}
               \item{${K_{bA}}$ is the effective base stiffness A ($\frac{\text{Pa}}{\text{m}}$)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{${K_{bB}}$ is the effective base stiffness A ($\frac{\text{Pa}}{\text{m}}$)}
               \item{$δx$ is the displacement (m)}
               \item{$δy$ is the displacement (m)}
@@ -1479,7 +1479,7 @@ Equation & \begin{dmath}
 Description & \begin{symbDescription}
               \item{$F$ is the force (N)}
               \item{${ℓ_{s}}$ is the length of an interslice surface (m)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{${K_{sn}}$ is the normal stiffness ($\frac{\text{Pa}}{\text{m}}$)}
               \item{$δ$ is the displacement (m)}
               \item{${ℓ_{b}}$ is the total base length of a slice (m)}
@@ -1511,10 +1511,10 @@ Equation & \begin{dmath}
 Description & \begin{symbDescription}
               \item{${K_{bt}}$ is the shear stiffness ($\frac{\text{Pa}}{\text{m}}$)}
               \item{$G$ is the interslice normal force (N)}
-              \item{$ν$ is the Poisson's ratio (Unitless)}
+              \item{$ν$ is the Poisson's ratio (--)}
               \item{$b$ is the base width of a slice (m)}
               \item{$c'$ is the effective cohesion (Pa)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \item{$σ$ is the normal stress (Pa)}
               \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
               \item{$δu$ is the displacement (m)}
@@ -1549,7 +1549,7 @@ Equation & \begin{dmath}
 Description & \begin{symbDescription}
               \item{${K_{bn}}$ is the normal stiffness ($\frac{\text{Pa}}{\text{m}}$)}
               \item{$G$ is the interslice normal force (N)}
-              \item{$ν$ is the Poisson's ratio (Unitless)}
+              \item{$ν$ is the Poisson's ratio (--)}
               \item{$b$ is the base width of a slice (m)}
               \item{$κ$ is the constant (Pa)}
               \item{$δv$ is the displacement (m)}
@@ -1572,16 +1572,16 @@ Label & Fixme
 \\ \midrule \\
 Symbol & $SpencerFixme1Please$
 \\ \midrule \\
-Units & Unitless
+Units & --
 \\ \midrule \\
 Equation & \begin{dmath}
            SpencerFixme1Please=G_{i}+G_{i-1}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$SpencerFixme1Please$ is the fixme (Unitless)}
+              \item{$SpencerFixme1Please$ is the fixme (--)}
               \item{$G$ is the interslice normal force (N)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \end{symbDescription}
 \\ \midrule \\
 Source & FIXME: This needs to be filled in
@@ -1600,16 +1600,16 @@ Label & Fixme
 \\ \midrule \\
 Symbol & $SpencerFixme2Please$
 \\ \midrule \\
-Units & Unitless
+Units & --
 \\ \midrule \\
 Equation & \begin{dmath}
            SpencerFixme2Please=H_{i}+H_{i-1}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$SpencerFixme2Please$ is the fixme (Unitless)}
+              \item{$SpencerFixme2Please$ is the fixme (--)}
               \item{$H$ is the interslice water force (N)}
-              \item{$i$ is the index (Unitless)}
+              \item{$i$ is the index (--)}
               \end{symbDescription}
 \\ \midrule \\
 Source & FIXME: This needs to be filled in
@@ -1642,13 +1642,13 @@ Equation & \begin{dmath}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$FS$ is the factor of safety (Unitless)}
+              \item{$FS$ is the factor of safety (--)}
               \item{$R$ is the resistive shear force (N)}
-              \item{$v$ is the local index (Unitless)}
+              \item{$v$ is the local index (--)}
               \item{$Ψ$ is the constant (N)}
-              \item{$u$ is the local index (Unitless)}
+              \item{$u$ is the local index (--)}
               \item{$Φ$ is the constant (N)}
-              \item{$n$ is the number of slices (Unitless)}
+              \item{$n$ is the number of slices (--)}
               \item{$T$ is the mobilized shear force (N)}
               \end{symbDescription}
 \\ \midrule \\
@@ -1703,20 +1703,20 @@ Description & \begin{symbDescription}
               \item{$G$ is the interslice normal force (N)}
               \item{$H$ is the interslice water force (N)}
               \item{$α$ is the angle (${}^{\circ}$)}
-              \item{$i$ is the index (Unitless)}
-              \item{$SpencerFixme1Please$ is the fixme (Unitless)}
-              \item{$SpencerFixme2Please$ is the fixme (Unitless)}
+              \item{$i$ is the index (--)}
+              \item{$SpencerFixme1Please$ is the fixme (--)}
+              \item{$SpencerFixme2Please$ is the fixme (--)}
               \item{$h$ is the midpoint height (m)}
-              \item{${K_{c}}$ is the earthquake load factor (Unitless)}
+              \item{${K_{c}}$ is the earthquake load factor (--)}
               \item{$W$ is the weight (N)}
               \item{${U_{t}}$ is the surface hydrostatic force (N)}
               \item{$β$ is the angle (${}^{\circ}$)}
               \item{$Q$ is the imposed surface load (N)}
               \item{$ω$ is the angle (${}^{\circ}$)}
-              \item{$n$ is the number of slices (Unitless)}
+              \item{$n$ is the number of slices (--)}
               \item{${C2_{i}}$ is the interslice shear force function (Nm)}
-              \item{$f$ is the scaling function (Unitless)}
-              \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
+              \item{$f$ is the scaling function (--)}
+              \item{$λ$ is the interslice normal/shear force ratio (--)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & $λ$ is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in GD5 The inclination function $f$ determines the relative magnitude ratio between the different interslices, while $λ$ determines the magnitude. $λ$ uses the sum of interslice normal and shear forces taken from each interslice.
@@ -1766,13 +1766,13 @@ Equation & \begin{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$G$ is the interslice normal force (N)}
-              \item{$i$ is the index (Unitless)}
-              \item{$FS$ is the factor of safety (Unitless)}
+              \item{$i$ is the index (--)}
+              \item{$FS$ is the factor of safety (--)}
               \item{$T$ is the mobilized shear force (N)}
               \item{$R$ is the resistive shear force (N)}
               \item{$Φ$ is the constant (N)}
               \item{$Ψ$ is the constant (N)}
-              \item{$n$ is the number of slices (Unitless)}
+              \item{$n$ is the number of slices (--)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The value of the interslice normal force $G$ at interface $i$ The net force. is the weight of the slices adjacent to interface $i$ exert horizontally on each other.
@@ -1828,8 +1828,8 @@ Equation & \begin{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$ΔH$ is the difference between interslice forces (N)}
-              \item{$i$ is the index (Unitless)}
-              \item{${K_{c}}$ is the earthquake load factor (Unitless)}
+              \item{$i$ is the index (--)}
+              \item{${K_{c}}$ is the earthquake load factor (--)}
               \item{$W$ is the weight (N)}
               \item{${U_{b}}$ is the base hydrostatic force (N)}
               \item{$α$ is the angle (${}^{\circ}$)}
@@ -1881,8 +1881,8 @@ Equation & \begin{dmath}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${FS_{Loc,i}}$ is the local factor of safety (Unitless)}
-              \item{$i$ is the index (Unitless)}
+              \item{${FS_{Loc,i}}$ is the local factor of safety (--)}
+              \item{$i$ is the index (--)}
               \item{$c'$ is the effective cohesion (Pa)}
               \item{${K_{bn}}$ is the normal stiffness ($\frac{\text{Pa}}{\text{m}}$)}
               \item{$δv$ is the displacement (m)}
@@ -1950,8 +1950,8 @@ Equation & \begin{dmath}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${FS_{min}}$ is the minimum factor of safety (Unitless)}
-              \item{$Υ$ is the function (Unitless)}
+              \item{${FS_{min}}$ is the minimum factor of safety (--)}
+              \item{$Υ$ is the function (--)}
               \item{$\{{x_{cs}}{,y_{cs}}\}$ is the the set of x and y coordinates (m)}
               \end{symbDescription}
 \\ \midrule \\
@@ -1984,11 +1984,11 @@ ${γ_{Sat}}$ & ${γ_{Sat}}>0$ & $20.0$ $\frac{\text{N}}{\text{m}^{3}}$ & 10.0\%
 \\
 ${γ_{w}}$ & ${γ_{w}}>0$ & $9.8$ $\frac{\text{N}}{\text{m}^{3}}$ & 10.0\%
 \\
-$a$ & None & $0.0$ m & 10.0\%
+$a$ & -- & $0.0$ m & 10.0\%
 \\
-$A$ & None & $0.0$ m & 10.0\%
+$A$ & -- & $0.0$ m & 10.0\%
 \\
-$κ$ & None & $0.0$ Pa & 10.0\%
+$κ$ & -- & $0.0$ Pa & 10.0\%
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -2001,11 +2001,11 @@ Var & Physical Constraints
 \midrule
 $FS$ & $FS>0$
 \\
-$(x,y)$ & None
+$(x,y)$ & --
 \\
-$δx$ & None
+$δx$ & --
 \\
-$δy$ & None
+$δy$ & --
 \\
 \bottomrule
 \caption{Output Data Constraints}

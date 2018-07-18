@@ -517,7 +517,7 @@ funcReqsTable = (Table [titleize symbol_, titleize unit_, titleize description]
   (mkTable
   [ch,
   --(\ch -> Sy (unit_symb ch)),
-  unit'2Contents,
+  unitToSentence,
   phrase] (map qw inputConstraints))
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False)
   "InConstraints"

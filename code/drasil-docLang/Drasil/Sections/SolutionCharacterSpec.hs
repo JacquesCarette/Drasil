@@ -277,7 +277,6 @@ render progName symMap item@(SectionModel niname _)
   | compareID niname (Doc.thModel ^. uid)          = theoreticalModelSect  item symMap progName
   | compareID niname (Doc.genDefn ^. uid)          = generalDefinitionSect item symMap
   | compareID niname (Doc.inModel ^. uid)          = instanceModelSect     item symMap
-  | compareID niname (Doc.dataDefn ^. uid)         = dataDefinitionSect    item symMap
   | compareID niname (Doc.dataConst ^. uid)        = dataConstraintSect    item 
   | compareID niname (Doc.termAndDef ^. uid)       = termDefinitionSect    item
   | compareID niname (Doc.goalStmt ^. uid)         = goalStatementSect     item
@@ -344,12 +343,12 @@ instanceModelSect (SectionModel _ xs) _ = SRS.inModel
         instanceModels = map symMap $ pullIMods xs
 
 
-dataDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
+{-dataDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
 dataDefinitionSect (SectionModel _ xs) _ = SRS.dataDefn
-  (dataIntro:dataDefinitions ++ (pullContents xs)) (pullSections xs)
+  (dataIntro:dataDefinitions ++ (pullLC xs)) (pullSections xs)
   where dataIntro       = dataDefinitionIntro $ pullSents xs
         symMap          = Definition . Data
-        dataDefinitions = map symMap $ pullDDefs xs
+        dataDefinitions = map symMap $ pullDDefs xs-}
 
 
 dataConstraintSect :: SubSec -> Section
@@ -484,8 +483,9 @@ generalDefinitionIntro _ = foldlSP [S "This", phrase Doc.section_,
 -- DATA DEFINITIONS --
 ----------------------
 
-dataDefinitionIntro :: [Sentence] -> Contents
-dataDefinitionIntro xs = Paragraph $ (foldlSent [S "This", phrase Doc.section_, 
+dataDefinitionIntro :: [Sentence] -> LabelledContent
+dataDefinitionIntro xs = llcc "notused" (mkLabelRA'' "notused") $ 
+  Paragraph $ (foldlSent [S "This", phrase Doc.section_, 
     S "collects and defines all the", plural Doc.datum, 
     S "needed to build the", plural Doc.inModel] +:+ foldl (+:+) EmptyS xs)
 

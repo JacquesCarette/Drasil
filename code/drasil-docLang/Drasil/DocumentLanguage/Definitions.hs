@@ -48,11 +48,11 @@ tmodel fs m t = Defnt TM (foldr (mkTMField t m) [] fs) (refAdd t)
 
 -- | Create a data definition using a list of fields, a database of symbols, and a
 -- QDefinition (called automatically by 'SCSSub' program)
-ddefn :: HasSymbolTable ctx => Fields -> ctx -> QDefinition -> Contents
-ddefn fs m d = Defnt DD (foldr (mkQField d m) [] fs) (refAdd d)
+ddefn :: HasSymbolTable ctx => Fields -> ctx -> QDefinition -> LabelledContent
+ddefn fs m d = llcc (d ^. uid ++ "LC") (d ^. getLabel) $ Defnt DD (foldr (mkQField d m) [] fs) (refAdd d)
 
-ddefn' :: HasSymbolTable ctx => Fields -> ctx -> DataDefinition -> Contents
-ddefn' fs m d = Defnt DD (foldr (mkDDField d m) [] fs) (refAdd d)
+ddefn' :: HasSymbolTable ctx => Fields -> ctx -> DataDefinition -> LabelledContent
+ddefn' fs m d = llcc (d ^. uid ++ "LC") (d ^. getLabel) $ Defnt DD (foldr (mkDDField d m) [] fs) (refAdd d)
 
 -- | Create a general definition using a list of fields, database of symbols,
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'

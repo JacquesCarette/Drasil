@@ -441,11 +441,11 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (TMs fields ts) =
       SSD.thModF (siSys si') (map (tmodel fields (_sysinfodb si')) ts)
     mkSubSCS si' (DDs fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS (concatMap (\x -> ddefn fields (_sysinfodb si') x : derivation x) dds)
+      SSD.dataDefnF EmptyS (concatMap (\x -> ddefn fields (_sysinfodb si') x : derivation' x) dds)
     mkSubSCS si' (DDs fields dds _) =
       SSD.dataDefnF EmptyS (map (ddefn fields (_sysinfodb si')) dds)
     mkSubSCS si' (DDs' fields dds ShowDerivation) = --FIXME: need to keep track of DD intro. --FIXME: temporary duplicate
-      SSD.dataDefnF EmptyS (concatMap (\x -> ddefn' fields (_sysinfodb si') x : derivation x) dds)
+      SSD.dataDefnF EmptyS (concatMap (\x -> ddefn' fields (_sysinfodb si') x : derivation' x) dds)
     mkSubSCS si' (DDs' fields dds _) = --FIXME: temporary duplicate
       SSD.dataDefnF EmptyS (map (ddefn' fields (_sysinfodb si')) dds)
     mkSubSCS si' (GDs fields gs' ShowDerivation) =

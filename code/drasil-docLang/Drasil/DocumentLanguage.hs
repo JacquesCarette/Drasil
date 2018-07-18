@@ -21,7 +21,7 @@ import Drasil.Sections.TableOfSymbols (table)
 import Drasil.Sections.TableOfUnits (table_of_units)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn, genSysDes, 
   inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec, stakeholder,
-  thModel, tOfSymb, userChar)
+  thModel, tOfSymb, userChar,dataDefn, offShelfSol)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF)
@@ -64,6 +64,7 @@ data DocSection = Verbatim Section
                 | AuxConstntSec AuxConstntSec
                 | Bibliography
                 | AppndxSec AppndxSec
+                | ExistingSolnSec ExistingSolnSec
 
 --FIXME: anything with 'Verb' in it should eventually go
 
@@ -222,6 +223,11 @@ data TraceabilitySec = TraceabilityVerb Section | TraceabilityProg [Contents] [S
 
 {--}
 
+-- | Off-The-Shelf Solutions section 
+data ExistingSolnSec = ExistSolnVerb Section | ExistSolnProg [Contents]
+
+{--}
+
 -- | Values of Auxiliary Constants section
 data AuxConstntSec = AuxConsProg CI [QDefinition] | AuxConsVerb Section
 
@@ -255,6 +261,7 @@ mkSections si l = map doit l
     doit (UCsSec ulcs)       = mkUCsSec ulcs
     doit (TraceabilitySec t) = mkTraceabilitySec t
     doit (AppndxSec a)       = mkAppndxSec a
+    doit (ExistingSolnSec o) = mkExistingSolnSec o
 
 
 -- | Helper for creating the reference section and subsections
@@ -505,6 +512,13 @@ mkTraceabilitySec :: TraceabilitySec -> Section
 mkTraceabilitySec (TraceabilityVerb s) = s
 mkTraceabilitySec (TraceabilityProg refs trailing otherContents subSec) =
   TMG.traceMGF refs trailing otherContents subSec
+
+{--}
+
+-- | Helper for making the 'Off-the-Shelf Solutions' section
+mkExistingSolnSec :: ExistingSolnSec -> Section
+mkExistingSolnSec (ExistSolnVerb s) = s
+mkExistingSolnSec (ExistSolnProg cs) = SRS.offShelfSol cs [] 
 
 {--}
 

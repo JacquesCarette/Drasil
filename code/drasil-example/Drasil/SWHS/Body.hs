@@ -478,7 +478,7 @@ outputConstraints = [temp_W, temp_PCM, w_E, pcm_E]
 ----------------------------------------------
 
 propsCorrSol :: Section
-propsCorrSol = SRS.propCorSol (propsDeriv) []
+propsCorrSol = SRS.propCorSol propsDeriv []
 
 propsDeriv :: [Contents]
 propsDeriv =

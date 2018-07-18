@@ -9,10 +9,10 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   Emphasis(..), Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), 
   IntroSub(..), RefSec(..), RefTab(..), SCSSub(..), SSDSec(SSDProg), 
   SSDSub(SSDSubVerb, SSDSolChSpec), SolChSpec(SCSProg), SubSec, TConvention(..), 
-  TSIntro(..), Verbosity(Verbose), assembler, dataConstraintUncertainty, 
-  inDataConstTbl, intro, mkDoc, outDataConstTbl, reqF, sSubSec, siCon, siDDef, 
-  siIMod, siSTitl, siSent, siTMod, siUQI, siUQO, specSysDescr, traceMGF, tsymb, 
-  valsOfAuxConstantsF)
+  TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), assembler, 
+  dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, outDataConstTbl, reqF,
+  sSubSec, siCon, siDDef, siIMod, siSTitl, siSent, siTMod, siUQI, siUQO,
+  specSysDescr, traceMGF, tsymb, valsOfAuxConstantsF)
 
 import Data.Drasil.Concepts.Documentation (assumption, body,
   concept, condition, consumer, dataConst, dataDefn, datumConstraint,
@@ -30,8 +30,8 @@ import Data.Drasil.Concepts.Software (physLib, understandability, portability,
   reliability, maintainability, performance, correctness)
 
 import Data.Drasil.People (alex, luthfi)
-import Data.Drasil.Phrase(for')
-import Data.Drasil.SI_Units(metre, kilogram, second, newton, radian)
+import Data.Drasil.Phrase (for')
+import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian)
 
 import Drasil.GamePhysics.Changes (likelyChanges, likelyChangesList', unlikelyChanges)
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
@@ -93,7 +93,9 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
         )
       ]
     ):
-  (map Verbatim [requirements, likelyChanges, unlikelyChanges, off_the_shelf_solutions, traceability_matrices_and_graph, values_of_auxiliary_constatnts]) ++ 
+  (map Verbatim [requirements, likelyChanges, unlikelyChanges]) ++
+  [ExistingSolnSec (ExistSolnVerb  off_the_shelf_solutions)] ++
+  (map Verbatim [traceability_matrices_and_graph, values_of_auxiliary_constatnts]) ++
   (Bibliography : [])
     where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
@@ -648,9 +650,9 @@ nonfunctional_requirements_intro = foldlSP
 -----------------------------------------
 
 off_the_shelf_solutions :: Section
-off_the_shelf_solutions_intro, off_the_shelf_solutions_2dlist, off_the_shelf_solutions_mid, off_the_shelf_solutions_3dlist :: Contents
-
 off_the_shelf_solutions = SRS.offShelfSol [off_the_shelf_solutions_intro, off_the_shelf_solutions_2dlist, off_the_shelf_solutions_mid, off_the_shelf_solutions_3dlist] []
+
+off_the_shelf_solutions_intro, off_the_shelf_solutions_2dlist, off_the_shelf_solutions_mid, off_the_shelf_solutions_3dlist :: Contents
 
 off_the_shelf_solutions_intro = off_the_shelf_solutions_intro_param problem_description physLib
 

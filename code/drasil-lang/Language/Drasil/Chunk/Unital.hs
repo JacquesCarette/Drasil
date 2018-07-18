@@ -8,7 +8,6 @@ module Language.Drasil.Chunk.Unital
   , ucs
   , ucs'
   , ucsWS
-  , ucc'
   ) where
 
 import Control.Lens (makeLenses, view, (^.))
@@ -62,12 +61,6 @@ uc' :: (IsUnit u, ConceptDomain u) => String -> NP -> String -> Symbol ->
   u -> UnitalChunk
 uc' i t d s u = UC (dqd (dcc i t d) s Real (Just un)) un
  where un = unitWrapper u
-
-ucc' :: String -> NP -> String -> Symbol ->
- UnitDefn -> {-Attributes -> -} UnitalChunk
-ucc' i t d s u {-atts-} = UC (dqd (dcc i t d) s Real (Just un)) un
- where un = unitWrapper u
-
 
 -- | Same as 'uc'', but does not assume the 'Space'
 ucs :: (IsUnit u, ConceptDomain u) => String -> NP ->

@@ -93,7 +93,7 @@ module Language.Drasil (
   , UncertainQuantity(..), UncertainChunk(..), UncertQ, uq, uqNU, uqc, uqcNU, uqcND, uncrtnChunk, uvc
   , uncrtnw
   -- Chunk.Unital
-  , UnitalChunk(..), makeUCWDS, ucc'
+  , UnitalChunk(..), makeUCWDS
   , uc, uc', ucs, ucs', ucsWS, ucFromDQD
   -- Chunk.Unitary
   , Unitary(..), UnitaryChunk, unitary
@@ -302,7 +302,7 @@ import Language.Drasil.Chunk.SymbolForm (eqSymb, codeSymb, hasStageSymbol)
 import Language.Drasil.Chunk.Theory
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS,
-                                   uc, uc', ucs, ucs', ucsWS, ucFromDQD, ucc')
+                                   uc, uc', ucs, ucs', ucsWS, ucFromDQD)
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.UnitaryConcept
 import Language.Drasil.Chunk.VarChunk

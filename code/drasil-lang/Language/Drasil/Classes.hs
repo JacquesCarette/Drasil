@@ -22,6 +22,7 @@ module Language.Drasil.Classes (
   , HasDerivation(derivations)
   , HasAdditionalNotes(getNotes)
   , HasRefAddress(getRefAdd)
+  , HasUnits(getUnits)
   ) where
 
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
@@ -132,3 +133,6 @@ class UnitEq u where
 -- TODO : there is a design bug here not at all apparent from its definition; have to come back to it (Pull Request #532)
 class ExprRelat c where
   relat :: Lens' c Expr
+
+class HasUnits c where
+  getUnits :: c -> [UID]

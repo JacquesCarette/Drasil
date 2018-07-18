@@ -6,7 +6,7 @@ module Language.Drasil.Development.Unit (
   , scale, shift, fshift, fscale
   , derUC, derUC', derUC'', unitWrapper
   , fund, comp_unitdefn, derCUC, derCUC', derCUC'', getsymb
-  , makeDerU, getunit, unitWrapper',getCu
+  , makeDerU, unitWrapper',getCu
   ) where
 
 import Control.Lens (Simple, Lens', Lens, (^.), makeLenses, view)
@@ -14,7 +14,7 @@ import Control.Arrow (second)
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), HasUnitSymbol(usymb), IsUnit(udefn),
-  UnitEq(uniteq))
+  UnitEq(uniteq), HasUnits(getUnits))
 import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cc')
 import Language.Drasil.Symbol (Symbol(Atomic))
 import Language.Drasil.Development.UnitLang (USymb(US),
@@ -40,9 +40,7 @@ instance ConceptDomain UnitDefn where
   cdom = vc . cdom
 instance HasUnitSymbol UnitDefn where usymb f (UD a b c e d) = fmap (\x -> UD a x c e d) (f b)
 instance IsUnit        UnitDefn where udefn = ud
-
-getunit :: UnitDefn -> [UID]
-getunit a = view cu a
+instance HasUnits      UnitDefn where getUnits c = c ^. cu
 
 data UnitEquation = UE {_contributingUnit :: [UID], _us :: USymb}
 makeLenses ''UnitEquation
@@ -90,7 +88,7 @@ unitWrapper :: (IsUnit u)  => u -> UnitDefn
 unitWrapper u = UD (cc' u (u ^. defn)) (u ^. usymb) Nothing (u ^. udefn) []
 
 unitWrapper' :: UnitDefn -> UnitDefn
-unitWrapper' u = UD (cc' u (u ^. defn)) (u ^. usymb) Nothing (u ^. udefn) (getunit u)
+unitWrapper' u = UD (cc' u (u ^. defn)) (u ^. usymb) Nothing (u ^. udefn) (getUnits u)
 
 helperUnit :: UnitDefn -> [UID]
 helperUnit a = case a ^. udefn of
@@ -98,7 +96,7 @@ helperUnit a = case a ^. udefn of
     FUSynonym _ -> [a ^. uid]
     FUScale _ _ -> [a ^. uid]
     FUShift _ _ -> [a ^. uid]
-    _ -> getunit a
+    _ -> getUnits a
   Nothing -> [a ^. uid]
 
 --- These conveniences go here, because we need the class

@@ -11,13 +11,13 @@ import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
   HasSpace(typ), IsUnit, HasDerivation(derivations),
-  IsUnit(udefn))
+  IsUnit(udefn), HasUnits(getUnits))
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import qualified Language.Drasil.Chunk.Quantity as Q
 import Language.Drasil.UID
 import Language.Drasil.Symbol (Symbol, Stage)
 import Language.Drasil.Space (Space)
-import Language.Drasil.Development.Unit (UnitDefn, unitWrapper, getunit)
+import Language.Drasil.Development.Unit (UnitDefn, unitWrapper)
 import Language.Drasil.Chunk.Derivation (Derivation)
 
 import Control.Lens ((^.), makeLenses, view)
@@ -43,6 +43,9 @@ instance Q.HasSpace    DefinedQuantityDict where typ = spa
 instance HasSymbol     DefinedQuantityDict where symbol = view symb
 instance Q.Quantity    DefinedQuantityDict where getUnit = view unit'
 instance HasDerivation DefinedQuantityDict where derivations = deri
+instance HasUnits      DefinedQuantityDict where getUnits c = case c ^. unit' of
+                                                                Nothing -> []
+                                                                Just a -> getUnits a
 
 -- For when the symbol is constant through stages
 dqd :: ConceptChunk -> Symbol -> Space -> Maybe UnitDefn -> DefinedQuantityDict
@@ -71,4 +74,4 @@ uwMUnitDefn (Just a) = [a]
 uwMUnitDefn Nothing  = []
 
 uwMUnitDefnL :: [DefinedQuantityDict] -> [UID]
-uwMUnitDefnL l = concat (map getunit $ concat (map uwMUnitDefn $ uwDQDL l))
+uwMUnitDefnL l = concatMap getUnits l

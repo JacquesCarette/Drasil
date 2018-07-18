@@ -36,7 +36,7 @@ module Language.Drasil (
   -- Unit
   , UnitDefn(..), unitWrapper
   , unitCon, fund, comp_unitdefn, makeDerU, unitWrapper'
-  , (^:), (/:), (*:), (*$), (/$), (^$), new_unit, getsymb,getCu,getunit
+  , (^:), (/:), (*:), (*$), (/$), (^$), new_unit, getsymb, getCu
    -- UID
   , UID
   -- Classes

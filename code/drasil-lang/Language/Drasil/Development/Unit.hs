@@ -5,7 +5,7 @@ module Language.Drasil.Development.Unit (
   , (^:), (/:), (*:), (*$), (/$),(^$), new_unit
   , scale, shift, fshift, fscale
   , derUC, derUC', derUC''
-  , fund, comp_unitdefn, derCUC, derCUC', derCUC'', getsymb
+  , fund, comp_unitdefn, derCUC, derCUC', derCUC''
   , makeDerU, unitWrapper, getCu
   ) where
 
@@ -44,21 +44,19 @@ instance IsUnit        UnitDefn where udefn = ud
 
 data UnitEquation = UE {_contributingUnit :: [UID], _us :: USymb}
 makeLenses ''UnitEquation
-
-getsymb :: UnitEquation -> USymb
-getsymb a = view us a
+instance HasUnitSymbol UnitEquation where usymb = us
 
 getCu :: UnitEquation -> [UID]
 getCu a = view contributingUnit a
 
 -- | Create a derived unit chunk from a concept and a unit equation
 makeDerU :: ConceptChunk -> UnitEquation -> UnitDefn
-makeDerU concept eqn = UD concept (from_udefn $ USynonym $ getsymb eqn) Nothing (Just $ USynonym $ getsymb eqn) (getCu eqn)
+makeDerU concept eqn = UD concept (from_udefn $ USynonym $ eqn ^. usymb) Nothing (Just $ USynonym $ eqn ^. usymb) (getCu eqn)
 
 -- | Create a SI_Unit with two symbol representations
 derCUC, derCUC' :: String -> String -> String -> Symbol -> UnitEquation -> UnitDefn
-derCUC a b c s ue = UD (dcc a (cn b) c) (US [(s,1)]) (Just $ getsymb ue) (Just $ FUSynonym $ getsymb ue) (getCu ue)
-derCUC' a b c s ue = UD (dcc a (cn' b) c) (US [(s,1)]) (Just $ getsymb ue) (Just $ FUSynonym $ getsymb ue) (getCu ue)
+derCUC a b c s ue = UD (dcc a (cn b) c) (US [(s,1)]) (Just $ ue ^. usymb) (Just $ FUSynonym $ ue ^. usymb) (getCu ue)
+derCUC' a b c s ue = UD (dcc a (cn' b) c) (US [(s,1)]) (Just $ ue ^. usymb) (Just $ FUSynonym $ ue ^. usymb) (getCu ue)
 -- | 
 -- | Create a derived unit chunk from an id, term (as 'String'), definition,
 -- symbol, and unit equation
@@ -69,7 +67,7 @@ derUC  a b c s u = UD (dcc a (cn b) c) (US [(s,1)]) (Just $ from_udefn u) (Just 
 derUC' a b c s u = UD (dcc a (cn' b) c) (US [(s,1)]) (Just $ from_udefn u) (Just u) []
 
 derCUC'' :: String -> NP -> String -> Symbol -> UnitEquation -> UnitDefn
-derCUC'' a b c s ue = UD (dcc a b c) (US [(s,1)]) (Just $ getsymb ue) (Just $ FUSynonym $ getsymb ue) (getCu ue)
+derCUC'' a b c s ue = UD (dcc a b c) (US [(s,1)]) (Just $ ue ^. usymb) (Just $ FUSynonym $ ue ^. usymb) (getCu ue)
 -- | Create a derived unit chunk from an id, term (as noun phrase), definition, 
 -- symbol, and unit equation
 derUC'' :: String -> NP -> String -> Symbol -> UDefn -> UnitDefn
@@ -119,19 +117,19 @@ u1 *: u2 = let US l1 = u1 ^. usymb
 -- | Combinator for multiplying a unit and a symbol
 (*$) :: UnitDefn -> UnitEquation -> UnitEquation
 u1 *$ u2 = let US l1 = u1 ^. usymb
-               US l2 = getsymb u2 in
+               US l2 = u2 ^. usymb in
   UE ((helperUnit u1) ++(getCu u2)) (US $ l1 ++ l2)
 
 -- | Combinator for dividing a unit and a symbol
 (/$) :: UnitDefn -> UnitEquation -> UnitEquation
 u1 /$ u2 = let US l1 = u1 ^. usymb
-               US l2 = getsymb u2 in
+               US l2 = u2 ^. usymb in
   UE ((helperUnit u1) ++ (getCu u2)) (US $ l1 ++ map (second negate) l2)
 
 -- | Combinator for mulitiplying two unit equations
 (^$) :: UnitEquation -> UnitEquation -> UnitEquation
-u1 ^$ u2 = let US l1 = getsymb u1
-               US l2 = getsymb u2 in
+u1 ^$ u2 = let US l1 = u1 ^. usymb
+               US l2 = u2 ^. usymb in
   UE ((getCu u1)++(getCu u2)) (US $ l1 ++ l2)
  
 -- | Combinator for scaling one unit by some number

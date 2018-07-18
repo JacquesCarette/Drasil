@@ -35,6 +35,9 @@ mkTable fl (c:cl) = map ($ c) fl : mkTable fl cl
 unitToSentence :: Quantity u => u -> Sentence
 unitToSentence x = maybe (S "--") (\y -> Sy (y ^. usymb)) (getUnit x)
 
+unitToSentenceUnitless :: Quantity u => u -> Sentence
+unitToSentenceUnitless x = maybe (S "Unitless") (\y -> Sy (y ^. usymb)) (getUnit x)
+
 -- | Helper for getting the unit's symbol from a chunk, 
 -- as opposed to the symbols of the chunk itself.
 unit_symb :: (Unitary c) => c -> USymb

@@ -161,7 +161,7 @@ module Language.Drasil (
   , lChi, cChi, lPsi, cPsi, lOmega, cOmega, lNabla, lEll
   -- Misc
   , mkTable, unit_symb, introduceAbb, phrase, plural, phrase's, plural's, at_start, at_start'
-  , unitToSentence
+  , unitToSentence, unitToSentenceUnitless
   -- Printing.Helpers
   , capitalize, paren, sqbrac
   -- Generate

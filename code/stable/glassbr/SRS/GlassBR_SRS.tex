@@ -367,9 +367,9 @@ Equation & \begin{dmath}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$is\_safe1$ is the variable that is assigned true when calculated probability is less than tolerable probability (--)}
-              \item{${P_{b}}$ is the probability of breakage (--)}
-              \item{${P_{btol}}$ is the tolerable probability of breakage (--)}
+              \item{$is\_safe1$ is the variable that is assigned true when calculated probability is less than tolerable probability (Unitless)}
+              \item{${P_{b}}$ is the probability of breakage (Unitless)}
+              \item{${P_{btol}}$ is the tolerable probability of breakage (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & If $is\_safe1$, the glass is considered safe. $is\_safe1$ and $is\_safe2$ (from \hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[T:probOfBr]{Definition~T:probOfBr}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
@@ -393,8 +393,8 @@ Equation & \begin{dmath}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$is\_safe2$ is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (--)}
-              \item{$LR$ is the load resistance (--)}
+              \item{$is\_safe2$ is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)}
+              \item{$LR$ is the load resistance (Unitless)}
               \item{$q$ is the applied load (demand) (kPa)}
               \end{symbDescription}
 \\ \midrule \\
@@ -422,22 +422,22 @@ Label & Risk of failure
 \\ \midrule \\
 Symbol & $B$
 \\ \midrule \\
-Units & --
+Units & Unitless
 \\ \midrule \\
 Equation & \begin{dmath}
            B=\frac{k}{\left(a b\right)^{m-1}} \left(1000 E h^{2}\right)^{m} LDF e^{J}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$B$ is the risk of failure (--)}
+              \item{$B$ is the risk of failure (Unitless)}
               \item{$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
               \item{$a$ is the plate length (long dimension) (m)}
               \item{$b$ is the plate width (short dimension) (m)}
               \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
               \item{$E$ is the modulus of elasticity of glass (Pa)}
               \item{$h$ is the actual thickness (m)}
-              \item{$LDF$ is the load duration factor (--)}
-              \item{$J$ is the stress distribution factor (Function) (--)}
+              \item{$LDF$ is the load duration factor (Unitless)}
+              \item{$J$ is the stress distribution factor (Function) (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & $a$, $b$ are dimensions of the plate, where ($a>b$).
@@ -503,14 +503,14 @@ Label & Load duration factor
 \\ \midrule \\
 Symbol & $LDF$
 \\ \midrule \\
-Units & --
+Units & Unitless
 \\ \midrule \\
 Equation & \begin{dmath}
            LDF=\left(\frac{{t_{d}}}{60}\right)^{\frac{m}{16}}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$LDF$ is the load duration factor (--)}
+              \item{$LDF$ is the load duration factor (Unitless)}
               \item{${t_{d}}$ is the duration of load (s)}
               \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
               \end{symbDescription}
@@ -531,17 +531,17 @@ Label & Stress distribution factor (Function)
 \\ \midrule \\
 Symbol & $J$
 \\ \midrule \\
-Units & --
+Units & Unitless
 \\ \midrule \\
 Equation & \begin{dmath}
            J=J\left(\hat{q},AR\right)
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$J$ is the stress distribution factor (Function) (--)}
-              \item{$J$ is the stress distribution factor (Function) (--)}
-              \item{$\hat{q}$ is the dimensionless load (--)}
-              \item{$AR$ is the aspect ratio (--)}
+              \item{$J$ is the stress distribution factor (Function) (Unitless)}
+              \item{$J$ is the stress distribution factor (Function) (Unitless)}
+              \item{$\hat{q}$ is the dimensionless load (Unitless)}
+              \item{$AR$ is the aspect ratio (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & $J$ is the stress distribution factor (Function), which is obtained by interpolating from data shown in Figure 7.
@@ -564,15 +564,15 @@ Label & Non-factored load
 \\ \midrule \\
 Symbol & $NFL$
 \\ \midrule \\
-Units & --
+Units & Unitless
 \\ \midrule \\
 Equation & \begin{dmath}
            NFL=\frac{{\hat{q}_{tol}} E h^{4}}{\left(a b\right)^{2}}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$NFL$ is the non-factored load (--)}
-              \item{${\hat{q}_{tol}}$ is the tolerable load (--)}
+              \item{$NFL$ is the non-factored load (Unitless)}
+              \item{${\hat{q}_{tol}}$ is the tolerable load (Unitless)}
               \item{$E$ is the modulus of elasticity of glass (Pa)}
               \item{$h$ is the actual thickness (m)}
               \item{$a$ is the plate length (long dimension) (m)}
@@ -599,7 +599,7 @@ Label & Glass type factor
 \\ \midrule \\
 Symbol & $GTF$
 \\ \midrule \\
-Units & --
+Units & Unitless
 \\ \midrule \\
 Equation & \begin{dmath}
            GTF=\begin{cases}
@@ -610,8 +610,8 @@ Equation & \begin{dmath}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$GTF$ is the glass type factor (--)}
-              \item{$g$ is the glass type $g\in{}\{AN,FT,HS\}$ (--)}
+              \item{$GTF$ is the glass type factor (Unitless)}
+              \item{$g$ is the glass type $g\in{}\{AN,FT,HS\}$ (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
 Source & FIXME: This needs to be filled in
@@ -630,20 +630,20 @@ Label & Dimensionless load
 \\ \midrule \\
 Symbol & $\hat{q}$
 \\ \midrule \\
-Units & --
+Units & Unitless
 \\ \midrule \\
 Equation & \begin{dmath}
            \hat{q}=\frac{q \left(a b\right)^{2}}{E h^{4} GTF}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\hat{q}$ is the dimensionless load (--)}
+              \item{$\hat{q}$ is the dimensionless load (Unitless)}
               \item{$q$ is the applied load (demand) (kPa)}
               \item{$a$ is the plate length (long dimension) (m)}
               \item{$b$ is the plate width (short dimension) (m)}
               \item{$E$ is the modulus of elasticity of glass (Pa)}
               \item{$h$ is the actual thickness (m)}
-              \item{$GTF$ is the glass type factor (--)}
+              \item{$GTF$ is the glass type factor (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & $q$ is the 3 second equivalent pressure, as given in IM3.
@@ -667,16 +667,16 @@ Label & Tolerable load
 \\ \midrule \\
 Symbol & ${\hat{q}_{tol}}$
 \\ \midrule \\
-Units & --
+Units & Unitless
 \\ \midrule \\
 Equation & \begin{dmath}
            {\hat{q}_{tol}}={\hat{q}_{tol}}\left({J_{tol}},\frac{a}{b}\right)
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${\hat{q}_{tol}}$ is the tolerable load (--)}
-              \item{${\hat{q}_{tol}}$ is the tolerable load (--)}
-              \item{${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol (--)}
+              \item{${\hat{q}_{tol}}$ is the tolerable load (Unitless)}
+              \item{${\hat{q}_{tol}}$ is the tolerable load (Unitless)}
+              \item{${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
               \item{$a$ is the plate length (long dimension) (m)}
               \item{$b$ is the plate width (short dimension) (m)}
               \end{symbDescription}
@@ -699,22 +699,22 @@ Label & Stress distribution factor (Function) based on Pbtol
 \\ \midrule \\
 Symbol & ${J_{tol}}$
 \\ \midrule \\
-Units & --
+Units & Unitless
 \\ \midrule \\
 Equation & \begin{dmath}
            {J_{tol}}=\ln\left(\ln\left(\frac{1}{1-{P_{btol}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(1000 E h^{2}\right)^{m} LDF}\right)
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol (--)}
-              \item{${P_{btol}}$ is the tolerable probability of breakage (--)}
+              \item{${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
+              \item{${P_{btol}}$ is the tolerable probability of breakage (Unitless)}
               \item{$a$ is the plate length (long dimension) (m)}
               \item{$b$ is the plate width (short dimension) (m)}
               \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
               \item{$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
               \item{$E$ is the modulus of elasticity of glass (Pa)}
               \item{$h$ is the actual thickness (m)}
-              \item{$LDF$ is the load duration factor (--)}
+              \item{$LDF$ is the load duration factor (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${J_{tol}}$  is calculated with reference to  ${P_{btol}}$.
@@ -768,14 +768,14 @@ Label & Aspect ratio
 \\ \midrule \\
 Symbol & $AR$
 \\ \midrule \\
-Units & --
+Units & Unitless
 \\ \midrule \\
 Equation & \begin{dmath}
            AR=\frac{a}{b}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$AR$ is the aspect ratio (--)}
+              \item{$AR$ is the aspect ratio (Unitless)}
               \item{$a$ is the plate length (long dimension) (m)}
               \item{$b$ is the plate width (short dimension) (m)}
               \end{symbDescription}
@@ -816,8 +816,8 @@ Equation & \begin{dmath}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${P_{b}}$ is the probability of breakage (--)}
-              \item{$B$ is the risk of failure (--)}
+              \item{${P_{b}}$ is the probability of breakage (Unitless)}
+              \item{$B$ is the risk of failure (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
 Source & FIXME: This needs to be filled in
@@ -855,10 +855,10 @@ Equation & \begin{dmath}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$LR$ is the load resistance (--)}
-              \item{$NFL$ is the non-factored load (--)}
-              \item{$GTF$ is the glass type factor (--)}
-              \item{$LSF$ is the load share factor (--)}
+              \item{$LR$ is the load resistance (Unitless)}
+              \item{$NFL$ is the non-factored load (Unitless)}
+              \item{$GTF$ is the glass type factor (Unitless)}
+              \item{$LSF$ is the load share factor (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows A\ref{A:glassConditionA} and A\ref{A:glassTyA} (``In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations'') from [1 (pg. 53)].
@@ -932,15 +932,15 @@ Equation & \begin{dmath}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$B$ is the risk of failure (--)}
+              \item{$B$ is the risk of failure (Unitless)}
               \item{$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
               \item{$a$ is the plate length (long dimension) (m)}
               \item{$b$ is the plate width (short dimension) (m)}
               \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
               \item{$E$ is the modulus of elasticity of glass (Pa)}
               \item{$h$ is the actual thickness (m)}
-              \item{$LDF$ is the load duration factor (--)}
-              \item{$J$ is the stress distribution factor (Function) (--)}
+              \item{$LDF$ is the load duration factor (Unitless)}
+              \item{$J$ is the stress distribution factor (Function) (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & 

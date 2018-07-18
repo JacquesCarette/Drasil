@@ -14,8 +14,8 @@ newtype USymb = US [(Symbol, Integer)] -- can be negative, should not be 0
   deriving (Eq)
 
 data UDefn = USynonym USymb      -- ^ to define straight synonyms
-       | UScale Double USymb -- ^ scale, i.e. *
-       | UShift Double USymb -- ^ shift, i.e. +
+           | UScale Double USymb -- ^ scale, i.e. *
+           | UShift Double USymb -- ^ shift, i.e. +
 
 -- | Can generate a default symbol
 from_udefn :: UDefn -> USymb

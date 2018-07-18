@@ -4,16 +4,16 @@ module Language.Drasil.Development.Unit (
   , from_udefn, unitCon, makeDerU
   , (^:), (/:), (*:), (*$), (/$),(^$), new_unit
   , scale, shift, fshift, fscale
-  , derUC, derUC', derUC'', unitWrapper
+  , derUC, derUC', derUC''
   , fund, comp_unitdefn, derCUC, derCUC', derCUC'', getsymb
-  , makeDerU, getunit, unitWrapper',getCu
+  , makeDerU, unitWrapper, getCu
   ) where
 
 import Control.Lens (Simple, Lens', Lens, (^.), makeLenses, view)
 import Control.Arrow (second)
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), HasUnitSymbol(usymb), IsUnit(udefn),
+  Definition(defn), ConceptDomain(cdom), HasUnitSymbol(usymb), IsUnit(udefn, getUnits),
   UnitEq(uniteq))
 import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cc')
 import Language.Drasil.Symbol (Symbol(Atomic))
@@ -40,9 +40,7 @@ instance ConceptDomain UnitDefn where
   cdom = vc . cdom
 instance HasUnitSymbol UnitDefn where usymb f (UD a b c e d) = fmap (\x -> UD a x c e d) (f b)
 instance IsUnit        UnitDefn where udefn = ud
-
-getunit :: UnitDefn -> [UID]
-getunit a = view cu a
+                                      getUnits = cu
 
 data UnitEquation = UE {_contributingUnit :: [UID], _us :: USymb}
 makeLenses ''UnitEquation
@@ -87,10 +85,7 @@ unitCon s = dcc s (cn' s) s
 -- | For allowing lists to mix the two, thus forgetting
 -- the definition part
 unitWrapper :: (IsUnit u)  => u -> UnitDefn
-unitWrapper u = UD (cc' u (u ^. defn)) (u ^. usymb) Nothing (u ^. udefn) []
-
-unitWrapper' :: UnitDefn -> UnitDefn
-unitWrapper' u = UD (cc' u (u ^. defn)) (u ^. usymb) Nothing (u ^. udefn) (getunit u)
+unitWrapper u = UD (cc' u (u ^. defn)) (u ^. usymb) Nothing (u ^. udefn) (u ^. getUnits)
 
 helperUnit :: UnitDefn -> [UID]
 helperUnit a = case a ^. udefn of
@@ -98,7 +93,7 @@ helperUnit a = case a ^. udefn of
     FUSynonym _ -> [a ^. uid]
     FUScale _ _ -> [a ^. uid]
     FUShift _ _ -> [a ^. uid]
-    _ -> getunit a
+    _ -> a ^. getUnits
   Nothing -> [a ^. uid]
 
 --- These conveniences go here, because we need the class

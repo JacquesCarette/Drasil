@@ -73,12 +73,19 @@ theory_model_tmods, gen_def_genDefs, data_def_dataDefs, insta_model_IMods :: [Co
 this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, degree] ++ map unitWrapper [newton, pascal]
 
+filterr :: Maybe UnitDefn -> [UnitDefn]
+filterr (Just a) = [a]
+filterr Nothing = []
+
+check_si :: [UnitDefn]
+check_si = map unitWrapper' $ concatMap filterr $ map (\x -> getUnitLup' x sspSymMap) symbT 
+
 ssp_si :: SystemInformation
 ssp_si = SI {
   _sys = ssa, 
   _kind = srs, 
   _authors = [henryFrankis],
-  _units = this_si,
+  _units = check_si,
   _quants = sspSymbols,
   _concepts = symbT,
   _definitions = sspDataDefs,

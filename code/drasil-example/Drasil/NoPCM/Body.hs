@@ -85,6 +85,13 @@ import Data.Drasil.Units.Thermodynamics (thermal_flux)
 this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
 
+filterr :: Maybe UnitDefn -> [UnitDefn]
+filterr (Just a) = [a]
+filterr Nothing = []
+
+check_si :: [UnitDefn]
+check_si = map unitWrapper' $ concatMap filterr $ map (\x -> getUnitLup' x nopcm_SymbMap) symbT 
+
 -- This contains the list of symbols used throughout the document
 nopcm_Symbols :: [DefinedQuantityDict]
 nopcm_Symbols = (map dqdWr nopcm_Units) ++ (map dqdWr nopcm_Constraints)
@@ -167,7 +174,7 @@ nopcm_si = SI {
   _sys = srs_swhs,
   _kind = srs,
   _authors = [thulasi],
-  _units = this_si,
+  _units = check_si,
   _quants = symbT,
   _concepts = nopcm_Symbols,
   _definitions = [dd1HtFluxC],          --dataDefs

@@ -69,6 +69,13 @@ auths = S $ manyNames authors
 chipmunkSRS' :: Document
 chipmunkSRS' = mkDoc mkSRS for' chipmunkSysInfo
 
+filterr :: Maybe UnitDefn -> [UnitDefn]
+filterr (Just a) = [a]
+filterr Nothing = []
+
+check_si :: [UnitDefn]
+check_si = map unitWrapper' $ concatMap filterr $ map (\x -> getUnitLup' x everything) symbT 
+
 mkSRS :: DocDesc 
 mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
   IntroSec (

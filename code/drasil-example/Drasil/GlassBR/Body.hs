@@ -99,6 +99,16 @@ ccs' = nub ((concatMap ccss'' $ getDoc glassBR_srs) ++ (concatMap ccss' $ egetDo
 outputuid :: [String]
 outputuid = nub ((concatMap snames $ getDoc glassBR_srs) ++ (concatMap names $ egetDoc glassBR_srs))
 
+this_si :: [UnitDefn]
+this_si = map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton]
+
+filterr :: Maybe UnitDefn -> [UnitDefn]
+filterr (Just a) = [a]
+filterr Nothing = []
+
+check_si :: [UnitDefn]
+check_si = map unitWrapper' $ concatMap filterr $ map (\x -> getUnitLup' x gbSymbMap) this_symbols 
+
 resourcePath :: String
 resourcePath = "../../../datafiles/GlassBR/"
 
@@ -165,7 +175,7 @@ glassSystInfo = SI {
   _sys         = glassBRProg,
   _kind        = srs,
   _authors     = [nikitha, spencerSmith],
-  _units       = map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton],
+  _units       = check_si,
   _quants      = this_symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _definitions = (map (relToQD gbSymbMap) iModels {-[RelationConcept]-}) ++ 

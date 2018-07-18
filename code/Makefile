@@ -72,7 +72,7 @@ build_docl: build_data
 build_exam: build_docl
 	mkdir -p $(EXAM_DIR)
 	cd $(EXAM_DIR) && stack build -j2 $(stackArgs) drasil-example 
-	stack install $(stackArgs) drasil-example
+	stack install $(stackArgs) drasil-example --force-dirty
 
 swhs_build: build_exam
 	mkdir -p build/$(SWHS_DIR)

@@ -107,7 +107,7 @@ filterr (Just a) = [a]
 filterr Nothing = []
 
 check_si :: [UnitDefn]
-check_si = map unitWrapper' $ concatMap filterr $ map (\x -> getUnitLup' x gbSymbMap) this_symbols 
+check_si = map unitWrapper' $ concatMap filterr $ map (\x -> getUnitLup x gbSymbMap) this_symbols 
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GlassBR/"

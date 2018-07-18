@@ -185,7 +185,7 @@ module Language.Drasil (
   , Stage(Equational,Implementation), HasSymbol(symbol), eqSymb, codeSymb, hasStageSymbol
   -- ChunkDB
   , ChunkDB, cdb
-  , HasSymbolTable, symbolMap, symbLookup, getUnitLup, symbolTable, getUnitLup'
+  , HasSymbolTable, symbolMap, symbLookup, symbolTable, getUnitLup
   , HasTermTable, termLookup, termTable
   , HasDefinitionTable, conceptMap, defTable
   , HasUnitTable, unitMap, unitTable

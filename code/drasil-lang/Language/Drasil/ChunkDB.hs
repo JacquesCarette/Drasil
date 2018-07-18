@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.ChunkDB 
   ( ChunkDB, cdb
-  , HasSymbolTable(..), symbolMap, symbLookup, getUnitLup, getUnitLup'
+  , HasSymbolTable(..), symbolMap, symbLookup, getUnitLup
   , HasTermTable(..), termLookup
   , HasDefinitionTable(..), conceptMap, defLookup
   , HasUnitTable(..), unitMap
@@ -77,11 +77,8 @@ class HasUnitTable s where
   unitTable :: Lens' s UnitMap
 
 -- | Gets a unit if it exists, or Nothing.        
-getUnitLup :: HasSymbolTable s => (HasUID c) => c -> s -> Maybe UnitDefn
+getUnitLup :: HasSymbolTable s => (HasUID c, Quantity c) => c -> s -> Maybe UnitDefn
 getUnitLup c m = getUnit $ symbLookup (c ^. uid) (m ^. symbolTable)
-
-getUnitLup' :: HasSymbolTable s => (HasUID c, Quantity c) => c -> s -> Maybe UnitDefn
-getUnitLup' c m = getUnit $ symbLookup (c ^. uid) (m ^. symbolTable)
 
 -- | Looks up an uid in the term table. If nothing is found, an error is thrown
 termLookup :: (HasUID c) => c -> TermMap -> IdeaDict

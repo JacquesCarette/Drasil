@@ -74,7 +74,7 @@ filterr (Just a) = [a]
 filterr Nothing = []
 
 check_si :: [UnitDefn]
-check_si = map unitWrapper' $ concatMap filterr $ map (\x -> getUnitLup' x everything) symbT 
+check_si = map unitWrapper' $ concatMap filterr $ map (\x -> getUnitLup x everything) symbT 
 
 mkSRS :: DocDesc 
 mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :

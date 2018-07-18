@@ -90,7 +90,7 @@ filterr (Just a) = [a]
 filterr Nothing = []
 
 check_si :: [UnitDefn]
-check_si = map unitWrapper' $ concatMap filterr $ map (\x -> getUnitLup' x nopcm_SymbMap) symbT 
+check_si = map unitWrapper' $ concatMap filterr $ map (\x -> getUnitLup x nopcm_SymbMap) symbT 
 
 -- This contains the list of symbols used throughout the document
 nopcm_Symbols :: [DefinedQuantityDict]

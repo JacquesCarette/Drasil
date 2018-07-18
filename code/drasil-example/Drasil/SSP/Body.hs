@@ -78,7 +78,7 @@ filterr (Just a) = [a]
 filterr Nothing = []
 
 check_si :: [UnitDefn]
-check_si = map unitWrapper' $ concatMap filterr $ map (\x -> getUnitLup' x sspSymMap) symbT 
+check_si = map unitWrapper' $ concatMap filterr $ map (\x -> getUnitLup x sspSymMap) symbT 
 
 ssp_si :: SystemInformation
 ssp_si = SI {

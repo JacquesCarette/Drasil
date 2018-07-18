@@ -93,7 +93,7 @@ filterr (Just a) = [a]
 filterr Nothing = []
 
 check_si :: [UnitDefn]
-check_si = map unitWrapper' $ concatMap filterr $ map (\x -> getUnitLup' x swhsSymMap) symbT 
+check_si = map unitWrapper' $ concatMap filterr $ map (\x -> getUnitLup x swhsSymMap) symbT 
 
 swhsAuthors :: Sentence
 swhsAuthors = S $ manyNames swhsPeople

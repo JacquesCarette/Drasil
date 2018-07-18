@@ -24,7 +24,7 @@ import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn, genSysD
   thModel, tOfSymb, userChar,dataDefn, offShelfSol, propCorSol)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
-  systCon, usrCharsF)
+  systCon, usrCharsF, sysContxt)
 import qualified Drasil.Sections.Introduction as Intro (charIntRdrF, 
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
 import qualified Drasil.Sections.Requirements as R (fReqF, nonFuncReqF, reqF)
@@ -158,6 +158,7 @@ data GSDSec = GSDVerb Section
 
 data GSDSub where
   GSDSubVerb :: Section -> GSDSub
+  SysCntxt   :: [Contents] -> GSDSub
   UsrChars   :: [Contents] -> GSDSub
   SystCons   :: [Contents] -> [Section] -> GSDSub
 
@@ -404,6 +405,7 @@ mkGSDSec (GSDProg2 l) = SRS.genSysDes [GSD.genSysIntro] $ map mkSubs l
    where
      mkSubs :: GSDSub -> Section
      mkSubs (GSDSubVerb s)           = s
+     mkSubs (SysCntxt cs)            = GSD.sysContxt cs
      mkSubs (UsrChars intro)         = GSD.usrCharsF intro
      mkSubs (SystCons cntnts subsec) = GSD.systCon cntnts subsec
 

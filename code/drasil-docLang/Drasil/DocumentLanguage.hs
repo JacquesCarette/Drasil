@@ -21,7 +21,7 @@ import Drasil.Sections.TableOfSymbols (table)
 import Drasil.Sections.TableOfUnits (table_of_units)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn, genSysDes, 
   inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec, stakeholder,
-  thModel, tOfSymb, userChar,dataDefn, offShelfSol)
+  thModel, tOfSymb, userChar,dataDefn, offShelfSol, propCorSol)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF)
@@ -189,15 +189,16 @@ data SolChSpec where
 
 -- | Solution Characteristics Specification subsections
 data SCSSub where
-  SCSSubVerb  :: Section -> SCSSub
-  Assumptions :: SCSSub
-  TMs         :: Fields  -> [TheoryModel] -> SCSSub
-  GDs         :: Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
-  DDs         :: Fields  -> [QDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
-  DDs'        :: Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro -- should eventually replace and be renamed to DDs
-  IMs         :: Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
-  Constraints :: Sentence -> Sentence -> Sentence -> [Contents] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
+  SCSSubVerb     :: Section -> SCSSub
+  Assumptions    :: SCSSub
+  TMs            :: Fields  -> [TheoryModel] -> SCSSub
+  GDs            :: Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
+  DDs            :: Fields  -> [QDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
+  DDs'           :: Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro -- should eventually replace and be renamed to DDs
+  IMs            :: Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
+  Constraints    :: Sentence -> Sentence -> Sentence -> [Contents] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
 --FIXME: Work in Progress ^
+  CorrSolnPpties :: [Contents] -> SCSSub
 data DerivationDisplay = ShowDerivation
                        | HideDerivation
 {--}
@@ -462,7 +463,8 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS SI {_refdb = db} Assumptions =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
       (map Assumption $ assumptionsFromDB (db ^. assumpRefTable))
-    mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
+    mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
+    mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d 
     inModSec = SRS.inModel [Paragraph EmptyS] []
     --FIXME: inModSec should be replaced with a walk
     -- over the SCSProg and generate a relevant intro.

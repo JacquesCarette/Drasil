@@ -154,6 +154,7 @@ mkSRS = RefSec (RefProg intro [
            [eBalanceOnWtr_new, eBalanceOnPCM_new, heatEInWtr_new, heatEInPCM_new ] ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty dataConTail
            [dataConTable1, dataConTable3]
+          , CorrSolnPpties propsDeriv
           ]
         )
       ]
@@ -336,7 +337,7 @@ solCharSpec = solChSpecF progName (probDescription, likelyChgs, unlikelyChgs) da
   (dataContMid, dataConstraintUncertainty, dataContFooter quantity surArea
   vol thickness phsChgMtrl) (swhsAssumptions, 
   swhsTMods, genDefs ++ genDefsDeriv,
-  swhsDDefs, iModsWithDerivs, dataConTables) [propsCorrSol]
+  swhsDDefs, iModsWithDerivs, dataConTables) [{-propsCorrSol-}]
 
 -------------------------
 -- 4.2.1 : Assumptions --
@@ -476,9 +477,6 @@ outputConstraints = [temp_W, temp_PCM, w_E, pcm_E]
 ----------------------------------------------
 -- 4.2.7 : Properties of A Correct Solution --
 ----------------------------------------------
-
-propsCorrSol :: Section
-propsCorrSol = SRS.propCorSol propsDeriv []
 
 propsDeriv :: [Contents]
 propsDeriv =

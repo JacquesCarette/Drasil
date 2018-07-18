@@ -401,7 +401,7 @@ assumpS4, assumpS5, assumpS9_npcm, assumpS12, assumpS13 :: Sentence
 assumpS4 = 
   (foldlSent [S "The", phrase w_density, S "has no spatial variation; that is"
   `sC` S "it is constant over their entire", phrase vol, sSqBr ((acroGD 2)`sC`
-  (makeRef likeChg2)))]) 
+  (makeRef likeChg2))]) 
 
 newA5NoPCM :: AssumpChunk
 newA5NoPCM = assump "Density-Water-Constant-over-Volume" assumpS4 (mkLabelRA'' "Density-Water-Constant-over-Volume")  
@@ -418,7 +418,7 @@ assumpS9_npcm =
   S "of the tank" `sC` S "not discharging. The", phrase temp_W, S "can only",
   S "increase, or remain constant; it cannot decrease. This implies that the",
   phrase temp_init, S "is less than (or equal to) the", phrase temp_C,
-  sSqBr ((acroIM 1) `sC` (makeRef likeChg3_npcm)))])
+  sSqBr ((acroIM 1) `sC` (makeRef likeChg3_npcm))])
 
 newA9NoPCM :: AssumpChunk
 newA9NoPCM = assump "Charging-Tank-No-Temp-Discharge" assumpS9_npcm (mkLabelRA'' "Charging-Tank-No-Temp-Discharge")
@@ -682,7 +682,7 @@ req3 = mkRequirement "req3" (
 req4 = mkRequirement "req4" (
   titleize' output_ `sAnd` plural input_ +:+ plural quantity
   +:+ S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
-  plural quantity +:+ S "from" +:+ (makeRef req1)) `sC`
+  plural quantity +:+ S "from" +:+ (makeRef req1) `sC`
   S "the" +:+ phrase mass +:+ S "from" +:+ (makeRef req2)
   `sAnd` ch tau_W +:+. sParen(S "from" +:+ acroIM 1) ) "Output-Input-Derivied-Quantities"
 req5 = mkRequirement "req5" (

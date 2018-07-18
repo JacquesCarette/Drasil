@@ -12,12 +12,12 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
   Fields, Field(..), SSDSub(..), SolChSpec( SCSProg ), SSDSec(..), 
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SCSSub(..),
-  assumpF, dataConstraintUncertainty, genSysF, inDataConstTbl, inModelF, intro, 
-  mkDoc, outDataConstTbl, physSystDesc, reqF, specSysDesF, 
-  termDefnF, traceGIntro, traceMGF, tsymb'')
+  dataConstraintUncertainty, genSysF, inDataConstTbl, inModelF, intro,
+  mkDoc, outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro,
+  traceMGF, tsymb'')
 import qualified Drasil.DocLang.SRS as SRS (inModel, missingP, likeChg,
   funcReq, propCorSol, dataDefn, thModel, probDesc, goalStmt,
-  sysCont, reference, genDefnLabel, dataDefnLabel, thModelLabel)
+  sysCont, reference, genDefnLabel)
 
 import Data.Drasil.People (thulasi, brooks, spencerSmith)
 import Data.Drasil.Phrase (for)
@@ -58,7 +58,7 @@ import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
 import Drasil.SWHS.Assumptions (swhsRefDB, newA3, newA4, newA5,
   newA6, newA13, newA15, newA16, newA17, newA18, newAssumptions)
 import Drasil.SWHS.TMods (t1ConsThermE_new, t2SensHtE_new, 
-  t3LatHtE_new, swhsTMods, swhsTMods, swhsTModsAsLCs, tMod1LC)
+  t3LatHtE_new, swhsTModsAsLCs, tMod1LC)
 import Drasil.SWHS.IMods (heatEInWtr_new, eBalanceOnWtr_new,
   heatEInPCM_new, eBalanceOnPCM_new, swhsIMods, swhsIMods')
 import Drasil.SWHS.DataDefs (swhsDataDefs, dd1HtFluxC, dd2HtFluxP, dataDefns,
@@ -342,12 +342,6 @@ solCharSpec = solChSpecF progName (probDescription, likelyChgs, unlikelyChgs) da
 -- 4.2.1 : Assumptions --
 -------------------------
 
-assumps :: Section
-assumps = assumpF
-  SRS.thModelLabel SRS.genDefnLabel 
-  SRS.dataDefnLabel
-  iMods likelyChgs unlikelyChgs newAssumptions
-
 -- Again, list structure is same between all examples.
 
 -- Can booktabs colored links be used? The box links completely cover nearby
@@ -572,7 +566,7 @@ traceDataRef = [makeRef dataConTable1] --FIXME: Reference section?
 
 traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19"]
-traceAssumpRef = makeListRef traceAssump assumps
+traceAssumpRef = map makeRef newAssumptions 
 
 traceTheories = ["T1", "T2", "T3"]
 traceTheoriesRef = map makeRef swhsTModsAsLCs --FIXME: swhsTModsAsLCs is a hack?

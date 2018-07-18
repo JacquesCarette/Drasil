@@ -23,7 +23,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
 import Data.Drasil.Concepts.Computation (computerApp, inParam,
   computerLiteracy, inValue, inQty)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
-  characteristic, class_, code, condition, constraint, content,
+  characteristic, class_, code, condition, content,
   datum, definition, description, document, emphasis, endUser, failure,
   figure, goal, implementation, information, interface, input_, item,
   message, model, organization, output_, problem, purpose,
@@ -47,7 +47,7 @@ import Data.Drasil.SentenceStructures (acroR, sVersus, sAnd, foldlSP,
   foldlsC, sOf, followA, ofThe, sIn, isThe, isExpctdToHv, sOr, underConsidertn,
   tAndDWAcc, tAndDOnly, tAndDWSym, andThe)
 import Data.Drasil.Software.Products (sciCompS)
-import Data.Drasil.Utils (makeTMatrix, makeListRef, itemRefToSent,
+import Data.Drasil.Utils (makeTMatrix, itemRefToSent,
   enumSimple, enumBullet, prodUCTbl)
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptionDescs,
@@ -627,7 +627,7 @@ traceability_matrices_and_graphs_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
 traceability_matrices_and_graphs_funcReqRef = map makeRef functional_requirements_list
 
 traceability_matrices_and_graphs_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
-traceability_matrices_and_graphs_assumpRef = makeListRef traceability_matrices_and_graphs_assump (SRS.assumpt SRS.missingP [])
+traceability_matrices_and_graphs_assumpRef = map makeRef newAssumptions
 
 traceability_matrices_and_graphs_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5"]
 traceability_matrices_and_graphs_likelyChgRef = map makeRef likelyChanges_SRS

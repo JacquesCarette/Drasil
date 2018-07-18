@@ -1,4 +1,4 @@
-module Drasil.SWHS.TMods (tModels, t1ConsThermE, swhsTMods, tMod1,
+module Drasil.SWHS.TMods (tModels, t1ConsThermE, tMod1,
   swhsTModsAsLCs, tMod1LC, t1ConsThermE_new, t2SensHtE_new, 
   t2SensHtE, t3LatHtE_new) where
 
@@ -27,9 +27,6 @@ import Drasil.SWHS.Labels (assump1Label)
 
 tModels :: [RelationConcept]
 tModels = [t1ConsThermE, t2SensHtE, t3LatHtE]
-
-swhsTMods :: [Contents]
-swhsTMods = [tMod1] ++ [tMod2] ++ [tMod3]
 
 --FIXME: temporary hack resulting from inability to use makeRef on RelationConcept
 -- since RelationConcept has a 'Maybe Label' instead of 'Label'

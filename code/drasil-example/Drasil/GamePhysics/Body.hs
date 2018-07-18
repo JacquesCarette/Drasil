@@ -9,9 +9,9 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   Emphasis(..), Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), 
   IntroSub(..), RefSec(..), RefTab(..), SCSSub(..), SSDSec(SSDProg), 
   SSDSub(SSDSubVerb, SSDSolChSpec), SolChSpec(SCSProg), SubSec, TConvention(..), 
-  TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), assembler, 
-  dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, outDataConstTbl, reqF,
-  sSubSec, siCon, siDDef, siIMod, siSTitl, siSent, siTMod, siUQI, siUQO,
+  TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
+  assembler, dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, outDataConstTbl,
+  reqF, sSubSec, siCon, siDDef, siIMod, siSTitl, siSent, siTMod, siUQI, siUQO,
   specSysDescr, traceMGF, tsymb, valsOfAuxConstantsF)
 
 import Data.Drasil.Concepts.Documentation (assumption, body,
@@ -77,7 +77,8 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
    IScope scope_of_requirements_intro_p1 scope_of_requirements_intro_p2, 
    IChar (S "rigid body dynamics") (phrase highSchoolCalculus) (EmptyS), 
    IOrgSec organization_of_documents_intro inModel solution_characteristics_specification EmptyS]) :
-   Verbatim general_system_description :
+   GSDSec (GSDProg2 [SysCntxt [sysCtxIntro, sysCtxFig1, sysCtxDesc, sysCtxList], 
+    UsrChars [user_characteristics_intro], SystCons [] [] ]) :
    SSDSec 
     (SSDProg [SSDSubVerb problem_description
       , SSDSolChSpec 

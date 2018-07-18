@@ -10,7 +10,7 @@ module Drasil.DocumentLanguage where
 import Drasil.DocumentLanguage.Definitions (Fields, ddefn, ddefn', derivation, 
   instanceModel, gdefn, tmodel)
 
-import Language.Drasil hiding (Manual, Vector) -- Manual - Citation name conflict. FIXME: Move to different namespace
+import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                -- Vector - Name conflict (defined in file)
 
 import Control.Lens ((^.))

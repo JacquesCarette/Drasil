@@ -7,7 +7,7 @@ module Language.Drasil (
   , Relation, RealInterval(..), Inclusive(..), RTopology(..), DomainDesc(AllDD, BoundedDD)
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   -- Expr.Math
-  , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, vars
+  , log, ln, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, vars
   , dim, idx, int, dbl, str, isin, case_
   , sum_all, defsum, prod_all, defprod, defint, int_all
   , real_interval
@@ -157,7 +157,7 @@ module Language.Drasil (
   --, gen, genCode
   -- People
   , People, Person, person, HasName, name, manyNames, person', personWM
-  , personWM', mononym
+  , personWM', mononym, nameStr, rendPersLFM, rendPersLFM', rendPersLFM''
   -- CodeSpec
   --, CodeSpec, codeSpec, Choices(..), ImplementationType(..)
   --, Logging(..), ConstraintBehaviour(..), Structure(..), Comments(..)
@@ -211,6 +211,8 @@ module Language.Drasil (
   , egetDoc, getDoc
   -- Config
   , StyleGuide(..), verboseDDDescription, numberedTMEquations, numberedDDEquations
+  , bibStyleH, numberedSections, hyperSettings, fontSize, bibFname, bibStyleT, colBwidth
+  , colAwidth
 ) where
 
 
@@ -220,7 +222,7 @@ import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..), Deri
           BoolOper(..), Relation, RealInterval(..), Inclusive(..), RTopology(..), 
           DomainDesc(AllDD, BoundedDD),
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
-import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
+import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
           dim, idx, int, dbl, str, isin, case_,
           sum_all, defsum, prod_all, defprod,
           real_interval,
@@ -248,7 +250,8 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasReference(getReferences), HasLabel(getLabel))
 import Language.Drasil.Document.GetChunk(vars, combine', vars', combine, ccss)
 import Language.Drasil.Config (StyleGuide(..), verboseDDDescription, numberedTMEquations,
-  numberedDDEquations)
+  numberedDDEquations, bibStyleH, numberedSections, hyperSettings, bibFname, fontSize,
+  colAwidth, colBwidth, bibStyleT)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Derivation (Derivation)
@@ -324,7 +327,8 @@ import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it
 --import Language.Drasil.Generate -- moved in SubPackages
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
-                               ,person', personWM, personWM', mononym, name)
+  , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
+  rendPersLFM', rendPersLFM'')
 
 --import Language.Drasil.CodeSpec hiding (outputs, inputs) -- moved in SubPackages
 --import Language.Drasil.Code.DataDesc -- moved in SubPackages

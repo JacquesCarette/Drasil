@@ -2,7 +2,8 @@ module Language.Drasil.TeX.Preamble(genPreamble) where
 
 import Data.List (nub)
 
-import Language.Drasil
+import Language.Drasil hiding (EqnBlock, Paragraph, URL, Bib, Graph, 
+  Assumption, Requirement, Figure, Table, Definition)
 
 import Language.Drasil.Printing.LayoutObj (LayoutObj(Paragraph, Header, Bib, Graph, 
   List, EqnBlock, Figure, ALUR, Table, Definition, HDiv), 

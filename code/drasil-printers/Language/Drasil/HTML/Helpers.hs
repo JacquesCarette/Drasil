@@ -3,10 +3,10 @@ module Language.Drasil.HTML.Helpers where
 import Text.PrettyPrint (Doc, text, render, empty, ($$), (<>), vcat, hcat)
 import Data.List (intersperse)
 
-import Language.Drasil
+import Language.Drasil hiding (Expr)
 
 --import Language.Drasil.Document (Document, MaxWidthPercent)
---import Language.Drasil.Printing.AST (Expr)
+import Language.Drasil.Printing.AST (Expr)
 
 html, head_tag, body, title, paragraph, code, tr, th, td :: Doc -> Doc
 -- | HTML tag wrapper

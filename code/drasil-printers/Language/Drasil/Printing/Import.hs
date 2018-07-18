@@ -104,6 +104,7 @@ expr (Case ps)        sm = if length ps < 2 then
                     else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
 expr (Matrix a)         sm = P.Mtx $ map (map (flip expr sm)) a
 expr (UnaryOp Log u)    sm = mkCall sm P.Log u
+expr (UnaryOp Ln u)     sm = mkCall sm P.Ln u
 expr (UnaryOp Sin u)    sm = mkCall sm P.Sin u
 expr (UnaryOp Cos u)    sm = mkCall sm P.Cos u
 expr (UnaryOp Tan u)    sm = mkCall sm P.Tan u

@@ -53,7 +53,7 @@ calorie = derUC "calorie"
 
 centigrade = derUC "centigrade" 
   "centigrade" "temperature" ((Concat [Special Circle, Atomic "C"]))
-  (fshift 273.15 kelvin)
+  (shift 273.15 kelvin)
 
 coulomb = derCUC' "coulomb" 
   "coulomb" "electric charge" (Atomic "C") (ampere *: second)
@@ -79,13 +79,13 @@ katal = derCUC' "katal"
 
 kilopascal = derUC' "kilopascal" 
   "kilopascal" "pressure"
-  (Concat [Atomic "k", Atomic "Pa"]) (fscale 1000 pascal)
+  (Concat [Atomic "k", Atomic "Pa"]) (scale 1000 pascal)
 
 kilowatt = derUC' "kilowatt" 
-  "kilowatt" "power" (Concat [Atomic "k", Atomic "W"]) (fscale 1000 watt)
+  "kilowatt" "power" (Concat [Atomic "k", Atomic "W"]) (scale 1000 watt)
   
 litre = derUC' "litre"
-  "litre" "volume" (Atomic "L") (fscale (1/1000) m_3)
+  "litre" "volume" (Atomic "L") (scale (1/1000) m_3)
 
 lumen = derCUC' "lumen" 
   "lumen" "luminous flux" (Atomic "lm") (candela *: steradian)
@@ -94,7 +94,7 @@ lux = derCUC "lux"
   "lux" "illuminance" (Atomic "lx") (lumen /: m_2)
 
 millimetre = derUC' "millimetre"
-  "millimetre" "length" (Atomic "mm") (fscale 0.0001 metre)
+  "millimetre" "length" (Atomic "mm") (scale 0.0001 metre)
 
 newton = derCUC' "newton"
   "newton" "force" (Atomic "N") (kilogram *$ (second ^: (-2)))

@@ -3,7 +3,7 @@ module Language.Drasil.Development.Unit (
     UnitDefn(..)
   , from_udefn, unitCon, makeDerU
   , (^:), (/:), (*:), (*$), (/$),(^$), new_unit
-  , scale, shift, fshift, fscale
+  , scale, shift
   , derUC, derUC', derUC''
   , fund, comp_unitdefn, derCUC, derCUC', derCUC''
   , makeDerU, unitWrapper, getCu
@@ -18,7 +18,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
 import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cc')
 import Language.Drasil.Symbol (Symbol(Atomic))
 import Language.Drasil.Development.UnitLang (USymb(US),
- UDefn(UScale, USynonym, UShift, FUSynonym, FUScale, FUShift), comp_usymb, from_udefn)
+ UDefn(UScale, USynonym, UShift), comp_usymb, from_udefn)
 import Language.Drasil.UID
 import Language.Drasil.NounPhrase (cn,cn',NP)
 
@@ -46,6 +46,9 @@ data UnitEquation = UE {_contributingUnit :: [UID], _us :: USymb}
 makeLenses ''UnitEquation
 instance HasUnitSymbol UnitEquation where usymb = us
 
+getSecondSymb :: UnitDefn -> Maybe USymb
+getSecondSymb c = view dsymb c
+
 getCu :: UnitEquation -> [UID]
 getCu a = view contributingUnit a
 
@@ -55,8 +58,8 @@ makeDerU concept eqn = UD concept (from_udefn $ USynonym $ eqn ^. usymb) Nothing
 
 -- | Create a SI_Unit with two symbol representations
 derCUC, derCUC' :: String -> String -> String -> Symbol -> UnitEquation -> UnitDefn
-derCUC a b c s ue = UD (dcc a (cn b) c) (US [(s,1)]) (Just $ ue ^. usymb) (Just $ FUSynonym $ ue ^. usymb) (getCu ue)
-derCUC' a b c s ue = UD (dcc a (cn' b) c) (US [(s,1)]) (Just $ ue ^. usymb) (Just $ FUSynonym $ ue ^. usymb) (getCu ue)
+derCUC a b c s ue = UD (dcc a (cn b) c) (US [(s,1)]) (Just $ ue ^. usymb) (Just $ USynonym $ ue ^. usymb) (getCu ue)
+derCUC' a b c s ue = UD (dcc a (cn' b) c) (US [(s,1)]) (Just $ ue ^. usymb) (Just $ USynonym $ ue ^. usymb) (getCu ue)
 -- | 
 -- | Create a derived unit chunk from an id, term (as 'String'), definition,
 -- symbol, and unit equation
@@ -67,7 +70,7 @@ derUC  a b c s u = UD (dcc a (cn b) c) (US [(s,1)]) (Just $ from_udefn u) (Just 
 derUC' a b c s u = UD (dcc a (cn' b) c) (US [(s,1)]) (Just $ from_udefn u) (Just u) []
 
 derCUC'' :: String -> NP -> String -> Symbol -> UnitEquation -> UnitDefn
-derCUC'' a b c s ue = UD (dcc a b c) (US [(s,1)]) (Just $ ue ^. usymb) (Just $ FUSynonym $ ue ^. usymb) (getCu ue)
+derCUC'' a b c s ue = UD (dcc a b c) (US [(s,1)]) (Just $ ue ^. usymb) (Just $ USynonym $ ue ^. usymb) (getCu ue)
 -- | Create a derived unit chunk from an id, term (as noun phrase), definition, 
 -- symbol, and unit equation
 derUC'' :: String -> NP -> String -> Symbol -> UDefn -> UnitDefn
@@ -86,13 +89,9 @@ unitWrapper :: (IsUnit u)  => u -> UnitDefn
 unitWrapper u = UD (cc' u (u ^. defn)) (u ^. usymb) Nothing (u ^. udefn) (u ^. getUnits)
 
 helperUnit :: UnitDefn -> [UID]
-helperUnit a = case a ^. udefn of
-  Just x -> case x of
-    FUSynonym _ -> [a ^. uid]
-    FUScale _ _ -> [a ^. uid]
-    FUShift _ _ -> [a ^. uid]
-    _ -> a ^. getUnits
-  Nothing -> [a ^. uid]
+helperUnit a = case getSecondSymb a of
+  Just _ -> [a ^. uid]
+  Nothing -> a ^. getUnits
 
 --- These conveniences go here, because we need the class
 -- | Combinator for raising a unit to a power
@@ -136,15 +135,15 @@ u1 ^$ u2 = let US l1 = u1 ^. usymb
 scale :: IsUnit s => Double -> s -> UDefn
 scale a b = UScale a (b ^. usymb)
 
-fscale :: IsUnit s => Double -> s -> UDefn
-fscale a b = FUScale a (b ^. usymb)
+{--fscale :: IsUnit s => Double -> s -> UDefn
+fscale a b = FUScale a (b ^. usymb)--}
 
 -- | Combinator for shifting one unit by some number
 shift :: IsUnit s => Double -> s -> UDefn
 shift a b = UShift a (b ^. usymb)
 
-fshift :: IsUnit s => Double -> s -> UDefn
-fshift a b = FUShift a (b ^. usymb)
+{--fshift :: IsUnit s => Double -> s -> UDefn
+fshift a b = FUShift a (b ^. usymb)--}
 -- | Smart constructor for new derived units from existing units.
 new_unit :: String -> UnitEquation -> UnitDefn
 new_unit s u = makeDerU (unitCon s) u

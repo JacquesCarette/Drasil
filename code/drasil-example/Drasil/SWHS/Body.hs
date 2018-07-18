@@ -85,24 +85,15 @@ acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
 
 this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, kilogram, second] ++ 
-  map unitWrapper [centigrade, joule, watt] --map unitWrapper' middleV'
+  map unitWrapper [centigrade, joule, watt]
 --Will there be a table of contents?
-
-check_si :: [UnitDefn]
-check_si = map unitWrapper' middleV'
-
-middleValue :: UID -> Maybe UnitDefn
-middleValue a = getUnitLup' a swhsSymMap
-
-aa :: [Maybe UnitDefn]
-aa = map middleValue (uwMUnitDefnL swhsSymbols)
-
-middleV' :: [UnitDefn]
-middleV' = concatMap filterr aa
 
 filterr :: Maybe UnitDefn -> [UnitDefn]
 filterr (Just a) = [a]
 filterr Nothing = []
+
+check_si :: [UnitDefn]
+check_si = map unitWrapper' $ concatMap filterr $ map (\x -> getUnitLup' x swhsSymMap) symbT 
 
 swhsAuthors :: Sentence
 swhsAuthors = S $ manyNames swhsPeople

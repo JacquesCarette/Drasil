@@ -88,10 +88,6 @@ this_si = map unitWrapper [metre, kilogram, second] ++
   map unitWrapper [centigrade, joule, watt]
 --Will there be a table of contents?
 
-filterr :: Maybe UnitDefn -> [UnitDefn]
-filterr (Just a) = [a]
-filterr Nothing = []
-
 check_si :: [UnitDefn]
 check_si = map unitWrapper $ concatMap filterr $ map (\x -> getUnitLup x swhsSymMap) symbT 
 

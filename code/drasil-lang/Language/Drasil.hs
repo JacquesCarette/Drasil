@@ -35,7 +35,7 @@ module Language.Drasil (
   , UDefn(..), from_udefn
   -- Unit
   , UnitDefn(..), unitWrapper
-  , unitCon, fund, comp_unitdefn, makeDerU
+  , unitCon, fund, comp_unitdefn, makeDerU, filterr
   , (^:), (/:), (*:), (*$), (/$), (^$), new_unit, getCu
    -- UID
   , UID

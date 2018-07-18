@@ -6,7 +6,7 @@ module Language.Drasil.Development.Unit (
   , scale, shift
   , derUC, derUC', derUC''
   , fund, comp_unitdefn, derCUC, derCUC', derCUC''
-  , makeDerU, unitWrapper, getCu
+  , makeDerU, unitWrapper, getCu, filterr
   ) where
 
 import Control.Lens (Simple, Lens', Lens, (^.), makeLenses, view)
@@ -148,3 +148,7 @@ fund nam desc sym = UD (dcc nam (cn' nam) desc) (US [(Atomic sym, 1)]) Nothing N
 
 comp_unitdefn :: UnitDefn -> UnitDefn -> Ordering
 comp_unitdefn a b = comp_usymb (a ^. usymb) (b ^. usymb)
+
+filterr :: Maybe UnitDefn -> [UnitDefn]
+filterr (Just a) = [a]
+filterr Nothing = []

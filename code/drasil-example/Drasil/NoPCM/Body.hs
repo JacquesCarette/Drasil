@@ -85,10 +85,6 @@ import Data.Drasil.Units.Thermodynamics (thermal_flux)
 this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
 
-filterr :: Maybe UnitDefn -> [UnitDefn]
-filterr (Just a) = [a]
-filterr Nothing = []
-
 check_si :: [UnitDefn]
 check_si = map unitWrapper $ concatMap filterr $ map (\x -> getUnitLup x nopcm_SymbMap) symbT 
 

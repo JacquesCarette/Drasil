@@ -102,10 +102,6 @@ outputuid = nub ((concatMap snames $ getDoc glassBR_srs) ++ (concatMap names $ e
 this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton]
 
-filterr :: Maybe UnitDefn -> [UnitDefn]
-filterr (Just a) = [a]
-filterr Nothing = []
-
 check_si :: [UnitDefn]
 check_si = map unitWrapper $ concatMap filterr $ map (\x -> getUnitLup x gbSymbMap) this_symbols 
 

@@ -7,7 +7,7 @@ import Drasil.SWHS.Unitals (temp_W, temp_C, tau_W, w_mass, htCap_W, coil_HTC, co
   , time_final, w_vol, ht_flux_C, vol_ht_gen)
 import Data.Drasil.Utils (unwrap, weave)
 import Data.Drasil.SentenceStructures (foldlSent, isThe,
-  sAnd, foldlList, ofThe, acroGD, foldlSentCol, sOf)
+  sAnd, ofThe, acroGD, foldlSentCol, sOf)
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Concepts.Math (equation, rOfChng)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)

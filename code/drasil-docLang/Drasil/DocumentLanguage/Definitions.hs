@@ -49,16 +49,16 @@ tmodel fs m t = Defnt TM (foldr (mkTMField t m) [] fs) (refAdd t)
 -- | Create a data definition using a list of fields, a database of symbols, and a
 -- QDefinition (called automatically by 'SCSSub' program)
 ddefn :: HasSymbolTable ctx => Fields -> ctx -> QDefinition -> LabelledContent
-ddefn fs m d = llcc (d ^. uid ++ "LC") (d ^. getLabel) $ Defnt DD (foldr (mkQField d m) [] fs) (refAdd d)
+ddefn fs m d = llcc (d ^. uid) (d ^. getLabel) $ Defnt DD (foldr (mkQField d m) [] fs) (refAdd d)
 
 ddefn' :: HasSymbolTable ctx => Fields -> ctx -> DataDefinition -> LabelledContent
-ddefn' fs m d = llcc (d ^. uid ++ "LC") (d ^. getLabel) $ Defnt DD (foldr (mkDDField d m) [] fs) (refAdd d)
+ddefn' fs m d = llcc (d ^. uid) (d ^. getLabel) $ Defnt DD (foldr (mkDDField d m) [] fs) (refAdd d)
 
 -- | Create a general definition using a list of fields, database of symbols,
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'
 -- program)
 gdefn :: HasSymbolTable ctx => Fields -> ctx -> GenDefn -> LabelledContent
-gdefn fs m g = llcc (g ^. uid ++ "LC") (g ^. getLabel) $ Defnt General (foldr (mkGDField g m) [] fs) (refAdd g) 
+gdefn fs m g = llcc (g ^. uid) (g ^. getLabel) $ Defnt General (foldr (mkGDField g m) [] fs) (refAdd g) 
 --FIXME: should this produce a LabelledContent? GenDefn has it's own label...
 
 -- | Create an instance model using a list of fields, database of symbols,

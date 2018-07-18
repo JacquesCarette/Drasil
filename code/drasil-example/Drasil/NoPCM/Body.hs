@@ -62,7 +62,7 @@ import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Software.Products (compPro)
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, likeChg, unlikeChg, probDesc, goalStmt,
-  inModel, missingP)
+  inModel, missingP, inModelLabel)
 import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose), 
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
   SolChSpec(..), SSDSec(..),
@@ -131,8 +131,7 @@ mkSRS = RefSec (RefProg intro
   IScope (scopeReqStart thermal_analysis sWHT) (scopeReqEnd temp thermal_energy
     water),
   IChar (charReader1 ht_trans_theo) (charReader2 M.de) EmptyS,
-  IOrgSec orgDocIntro inModel (SRS.inModel SRS.missingP [])
-  (orgDocEnd inModel M.ode progName)]) : 
+  IOrgSec orgDocIntro inModel SRS.inModelLabel (orgDocEnd inModel M.ode progName)]) : 
   Verbatim genSystDesc:
   SSDSec 
     (SSDProg [SSDSubVerb probDescription
@@ -278,7 +277,7 @@ s2_3 = charIntRdrF knowledge understanding sWHS EmptyS
 
 orgDocEnd :: CI -> CI -> CI -> Sentence
 orgDocEnd im_ od pro = foldlSent_ [S "The", phrase im_,
-  sParen (makeRef (SRS.inModel SRS.missingP [])),
+  sParen (makeRef SRS.inModelLabel),
   S "to be solved is referred to as" +:+. acroIM 1,
   S "The", phrase im_, S "provides the",
   titleize od, sParen (short od), S "that model the"

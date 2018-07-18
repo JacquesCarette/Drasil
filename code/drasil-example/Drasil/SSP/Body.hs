@@ -49,7 +49,7 @@ import Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
   sspOutputs, sspSymbols)
 
-import qualified Drasil.DocLang.SRS as SRS (funcReq, inModel, missingP, physSyst)
+import qualified Drasil.DocLang.SRS as SRS (funcReq, inModel, missingP, physSyst, inModelLabel)
 
 --type declarations for sections--
 gen_sys_desc, req, aux_cons :: Section
@@ -98,7 +98,7 @@ mkSRS = RefSec (RefProg intro
     , IChar (phrase solidMechanics)
       (phrase undergraduate +:+ S "level 4" +:+ phrase physics)
       EmptyS
-    , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
+    , IOrgSec orgSecStart inModel SRS.inModelLabel orgSecEnd]) :
     --FIXME: issue #235
     Verbatim gen_sys_desc: 
   ------

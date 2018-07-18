@@ -12,12 +12,11 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
   Fields, Field(..), SSDSub(..), SolChSpec( SCSProg ), SSDSec(..), 
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SCSSub(..),
-  dataConstraintUncertainty, genSysF, inDataConstTbl, inModelF, intro,
+  dataConstraintUncertainty, genSysF, inDataConstTbl, intro,
   mkDoc, outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro,
   traceMGF, tsymb'')
 import qualified Drasil.DocLang.SRS as SRS (inModel, missingP, likeChg,
-  funcReq, propCorSol, dataDefn, thModel, probDesc, goalStmt,
-  sysCont, reference, genDefnLabel)
+  funcReq, propCorSol, probDesc, goalStmt, sysCont, reference, inModelLabel)
 
 import Data.Drasil.People (thulasi, brooks, spencerSmith)
 import Data.Drasil.Phrase (for)
@@ -139,7 +138,7 @@ mkSRS = RefSec (RefProg intro [
      IScope (scopeReqs1 CT.thermal_analysis tank_pcm) 
        (scopeReqs2 temp CT.thermal_energy water phsChgMtrl sWHT),
      IChar (charReader1 CT.ht_trans_theo) (charReader2 de) (EmptyS),
-     IOrgSec orgDocIntro inModel (SRS.inModel SRS.missingP [])
+     IOrgSec orgDocIntro inModel SRS.inModelLabel
        (orgDocEnd swhs_pcm progName)]):
   Verbatim genSystDesc:
   SSDSec 
@@ -384,12 +383,6 @@ genDefsDeriv = [genDefDeriv1 rOfChng temp,
 -----------------------------
 -- 4.2.5 : Instance Models --
 -----------------------------
-
-iMods :: Section
-iMods = inModelF probDescription
-  (SRS.dataDefn SRS.missingP [])
-  (SRS.thModel SRS.missingP [])
-  SRS.genDefnLabel iModsWithDerivs
 
 iModsWithDerivs :: [Contents]
 iModsWithDerivs = concat $ weave [iModsDerivations,

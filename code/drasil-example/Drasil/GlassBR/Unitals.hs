@@ -73,8 +73,7 @@ plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
 
 plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
   lB metre Real
-  [ gtZeroConstr,
-    physc $ Bounded (Exc,0) (Exc, sy plate_len),
+  [ physc $ Bounded (Exc,0) (Exc, sy plate_len),
     sfwrc $ Bounded (Inc, sy dim_min) (Inc, sy dim_max),
     sfwrc $ UpTo (Exc, sy plate_len / sy ar_max)] (dbl 1.2) defaultUncrt
 

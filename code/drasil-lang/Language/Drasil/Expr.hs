@@ -32,7 +32,7 @@ data ArithOper = Add | Mul deriving (Eq)
 data BoolOper = And | Or deriving (Eq)
 
 -- | Unary functions
-data UFunc = Norm | Abs | Log | Sin | Cos | Tan | Sec | Csc | Cot | Exp
+data UFunc = Norm | Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Exp
   | Sqrt | Not | Neg | Dim
 
 -- | Drasil Expressions

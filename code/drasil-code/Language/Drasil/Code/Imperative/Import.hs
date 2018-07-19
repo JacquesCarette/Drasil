@@ -4,7 +4,7 @@ import Language.Drasil hiding (int, getLabel)
 import Language.Drasil.Code.Code as C (CodeType(List, File, Char, Float, Object, 
   String, Boolean, Integer))
 import Language.Drasil.Code.Imperative.AST as I hiding ((&=), State, assign, return, 
-  Not, Tan, Cos, Sin, Exp, Abs, Log, And, Or)
+  Not, Tan, Cos, Sin, Exp, Abs, Log, Ln, And, Or)
 import qualified Language.Drasil.Code.Imperative.AST as I (assign, return)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel, cppLabel, cSharpLabel, javaLabel)
@@ -497,6 +497,7 @@ renderRealInt s (UpFrom (Exc,a))  = sy s $>  a
 unop :: UFunc -> (Value -> Value)
 unop Sqrt = (#/^)
 unop Log  = I.log
+unop Ln   = I.ln
 unop Abs  = (#|)
 unop Exp  = I.exp
 unop Sin  = I.sin

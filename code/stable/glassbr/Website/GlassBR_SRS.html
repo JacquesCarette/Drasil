@@ -464,6 +464,17 @@ m
 </tr>
 <tr>
 <td>
+<em>SD</em>
+</td>
+<td>
+Stand off distance
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
 <em>t</em>
 </td>
 <td>
@@ -797,7 +808,7 @@ The goal statements are refined to the theoretical models, and the theoretical m
 Stakeholders
 </h1>
 <p class="paragraph">
-This section describes the Stakeholders: the people who have an interest in the product.
+This section describes the stakeholders: the people who have an interest in the product.
 </p>
 <div id="Sec:Client">
 <div class="subsection">
@@ -1010,7 +1021,7 @@ Glass type factor (GTF) - A multiplying factor for adjusting the LR of different
 Aspect ratio (AR) - The ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5.
 </li>
 <li>
-Probability of breakage (<em>P<sub>b</sub></em>) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000.
+Probability of breakage (<em>P<sub>b</sub></em>) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 [3].
 </li>
 </ol>
 </div>
@@ -1124,21 +1135,7 @@ responseType: The response type considered in GlassBR is flexural.
 <ul class="hide-list-style">
 <li>
 <div id="A:ldfConstantA">
-ldfConstant: With reference to <a href=#A:standardValuesA>StandardValues</a>, the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. It is calculated by the equation: <em>LDF = (<div class="fraction">
-<span class="fup">
-t<sub>d</sub>
-</span>
-<span class="fdn">
-60
-</span>
-</div>)<sup><div class="fraction">
-<span class="fup">
-m
-</span>
-<span class="fdn">
-16
-</span>
-</div></sup></em>. Using this, <em>LDF = 0.27</em>.
+ldfConstant: With reference to <a href=#A:standardValuesA>StandardValues</a>, the value of load duration factor (<em>LDF</em>) is a constant in GlassBR.
 </div>
 </li>
 </ul>
@@ -1432,7 +1429,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-[4]
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1594,7 +1591,105 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:loadDurFactor">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Load duration factor
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>LDF</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+Unitless
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div id="">
+<div class="equation">
+<em>LDF = (<div class="fraction">
+<span class="fup">
+t<sub>d</sub>
+</span>
+<span class="fdn">
+60
+</span>
+</div>)<sup><div class="fraction">
+<span class="fup">
+m
+</span>
+<span class="fdn">
+16
+</span>
+</div></sup></em>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>LDF</em> is the load duration factor (Unitless)
+</li>
+<li>
+<em>t<sub>d</sub></em> is the duration of load (s)
+</li>
+<li>
+<em>m</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1649,14 +1744,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<em>J = J(q&#770;,<div class="fraction">
-<span class="fup">
-a
-</span>
-<span class="fdn">
-b
-</span>
-</div>)</em>
+<em>J = J(q&#770;,AR)</em>
 </div>
 </div>
 </td>
@@ -1677,10 +1765,7 @@ Description
 <em>q&#770;</em> is the dimensionless load (Unitless)
 </li>
 <li>
-<em>a</em> is the plate length (long dimension) (m)
-</li>
-<li>
-<em>b</em> is the plate width (short dimension) (m)
+<em>AR</em> is the aspect ratio (Unitless)
 </li>
 </ul>
 </td>
@@ -1697,7 +1782,7 @@ Notes
 <em>q&#770;</em> is the dimensionless load defined in DD7.
 </p>
 <p class="paragraph">
-<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
+<em>AR</em> is the aspect ratio defined in DD11.
 </p>
 </td>
 </tr>
@@ -1707,7 +1792,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1823,7 +1908,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1923,7 +2008,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2045,7 +2130,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2142,14 +2227,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>q&#770;<sub>tol</sub></em> is the tolerable load which is obtained from Figure 7 using <em>J<sub>tol</sub></em> and aspect ratio (<em>AR = <div class="fraction">
-<span class="fup">
-a
-</span>
-<span class="fdn">
-b
-</span>
-</div></em>) as parameters using interpolation. Calculation of <em>J<sub>tol</sub></em> is defined in DD9.
+<em>q&#770;<sub>tol</sub></em> is the tolerable load which is obtained from Figure 7 using <em>J<sub>tol</sub></em> and aspect ratio as parameters using interpolation. Calculations of <em>J<sub>tol</sub></em> and <em>AR</em> are defined in DD9 and DD11, respectively.
 </p>
 </td>
 </tr>
@@ -2159,7 +2237,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2214,7 +2292,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<em>J<sub>tol</sub> = log(log(<div class="fraction">
+<em>J<sub>tol</sub> = ln(ln(<div class="fraction">
 <span class="fup">
 1
 </span>
@@ -2297,7 +2375,195 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:sd">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Stand off distance
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>SD</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+m
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div id="">
+<div class="equation">
+<em>SD = &radic;(SD<sub>x</sub><sup>2</sup>&plus;SD<sub>y</sub><sup>2</sup>&plus;SD<sub>z</sub><sup>2</sup>)</em>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>SD</em> is the stand off distance (m)
+</li>
+<li>
+<em>SD<sub>x</sub></em> is the stand off distance (x-component) (m)
+</li>
+<li>
+<em>SD<sub>y</sub></em> is the stand off distance (y-component) (m)
+</li>
+<li>
+<em>SD<sub>z</sub></em> is the stand off distance (z-component) (m)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:aspectR">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Aspect ratio
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>AR</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+Unitless
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div id="">
+<div class="equation">
+<em>AR = <div class="fraction">
+<span class="fup">
+a
+</span>
+<span class="fdn">
+b
+</span>
+</div></em>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>AR</em> is the aspect ratio (Unitless)
+</li>
+<li>
+<em>a</em> is the plate length (long dimension) (m)
+</li>
+<li>
+<em>b</em> is the plate width (short dimension) (m)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2412,7 +2678,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2538,7 +2804,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2651,7 +2917,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>q</em> or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (<em>SD</em>) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined as <em>w&#8239;TNT</em>. <em>SD</em>. is the stand off distance where <em>&radic;(SD<sub>x</sub><sup>2</sup>&plus;SD<sub>y</sub><sup>2</sup>&plus;SD<sub>z</sub><sup>2</sup>)</em> where (<em>SD<sub>x</sub></em>, <em>SD<sub>y</sub></em>, <em>SD<sub>z</sub></em>) are coordinates.
+<em>q</em> or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (<em>SD</em>) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined as <em>w&#8239;TNT</em>. <em>SD</em> is the stand off distance as defined in DD10.
 </p>
 </td>
 </tr>
@@ -2661,7 +2927,137 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="IM:risk_fun">
+<table class="idefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Risk of failure
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>k</em>, <em>a</em>, <em>b</em>, <em>m</em>, <em>E</em>, <em>h</em>, <em>LDF</em>, <em>J</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>B</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div id="">
+<div class="equation">
+<em>B = <div class="fraction">
+<span class="fup">
+k
+</span>
+<span class="fdn">
+(a&#8239;b)<sup>m&minus;1</sup>
+</span>
+</div>&#8239;(1000&#8239;E&#8239;h<sup>2</sup>)<sup>m</sup>&#8239;LDF&#8239;e<sup>J</sup></em>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>B</em> is the risk of failure (Unitless)
+</li>
+<li>
+<em>k</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>)
+</li>
+<li>
+<em>a</em> is the plate length (long dimension) (m)
+</li>
+<li>
+<em>b</em> is the plate width (short dimension) (m)
+</li>
+<li>
+<em>m</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>)
+</li>
+<li>
+<em>E</em> is the modulus of elasticity of glass (Pa)
+</li>
+<li>
+<em>h</em> is the actual thickness (m)
+</li>
+<li>
+<em>LDF</em> is the load duration factor (Unitless)
+</li>
+<li>
+<em>J</em> is the stress distribution factor (Function) (Unitless)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2685,7 +3081,7 @@ FIXME: This needs to be filled in
 Data Constraints
 </h3>
 <p class="paragraph">
-<a href=#Table:InDataConstraints>Table:InDataConstraints</a>, and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> gives the values of the specification parameters used in <a href=#Table:InDataConstraints>Table:InDataConstraints</a>. <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the constraints that must be satisfied by the output.
+<a href=#Table:InDataConstraints>Table:InDataConstraints</a>, and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> gives the values of the specification parameters used in <a href=#Table:InDataConstraints>Table:InDataConstraints</a>.
 </p>
 <div id="Table:InDataConstraints">
 <table class="table">
@@ -2809,7 +3205,7 @@ None
 None
 </td>
 <td>
-<em>1</em>
+<em>1.0</em>
 </td>
 <td>
 10.0%
@@ -2872,7 +3268,7 @@ Input-Glass-Props: Input the quantities from <a href=#Table:R1ReqInputs>Table:R1
 <ul class="hide-list-style">
 <li>
 <div id="FR:functional.requirements.req2">
-System-Set-Values-Following-Assumptions: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following A4, <em>LDF</em> following A8, LSF following A5, <em>h</em> (from <a href=#DD:act.thick>act_thick</a>), and <em>GTF</em> (from <a href=#DD:gTF>gTF</a>).
+System-Set-Values-Following-Assumptions: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following A4, <em>LDF</em> following A8, LSF following A5, <em>h</em> (from <a href=#DD:act.thick>act_thick</a>), <em>GTF</em> (from <a href=#DD:gTF>gTF</a>), and <em>SD</em> (from <a href=#DD:sd>sd</a>).
 </div>
 </li>
 </ul>
@@ -3185,22 +3581,22 @@ DD1 (<a href=#DD:risk.fun>DD:risk.fun</a>)
 DD2 (<a href=#DD:act.thick>DD:act.thick</a>)
 </th>
 <th>
-DD3 (<a href=#DD:stressDistFac>DD:stressDistFac</a>)
+DD3 (<a href=#DD:loadDurFactor>DD:loadDurFactor</a>)
 </th>
 <th>
-DD4 (<a href=#DD:nFL>DD:nFL</a>)
+DD4 (<a href=#DD:stressDistFac>DD:stressDistFac</a>)
 </th>
 <th>
-DD5 (<a href=#DD:gTF>DD:gTF</a>)
+DD5 (<a href=#DD:nFL>DD:nFL</a>)
 </th>
 <th>
-DD6 (<a href=#DD:dimlessLoad>DD:dimlessLoad</a>)
+DD6 (<a href=#DD:gTF>DD:gTF</a>)
 </th>
 <th>
-DD7 (<a href=#DD:tolLoad>DD:tolLoad</a>)
+DD7 (<a href=#DD:dimlessLoad>DD:dimlessLoad</a>)
 </th>
 <th>
-DD8 (<a href=#DD:sdf.tol>DD:sdf.tol</a>)
+DD8 (<a href=#DD:tolLoad>DD:tolLoad</a>)
 </th>
 </tr>
 <tr>
@@ -3513,7 +3909,7 @@ DD2 (<a href=#DD:act.thick>DD:act.thick</a>)
 </tr>
 <tr>
 <td>
-DD3 (<a href=#DD:stressDistFac>DD:stressDistFac</a>)
+DD3 (<a href=#DD:loadDurFactor>DD:loadDurFactor</a>)
 </td>
 <td>
 
@@ -3557,7 +3953,7 @@ X
 </tr>
 <tr>
 <td>
-DD4 (<a href=#DD:nFL>DD:nFL</a>)
+DD4 (<a href=#DD:stressDistFac>DD:stressDistFac</a>)
 </td>
 <td>
 
@@ -3601,7 +3997,7 @@ X
 </tr>
 <tr>
 <td>
-DD5 (<a href=#DD:gTF>DD:gTF</a>)
+DD5 (<a href=#DD:nFL>DD:nFL</a>)
 </td>
 <td>
 
@@ -3645,7 +4041,7 @@ DD5 (<a href=#DD:gTF>DD:gTF</a>)
 </tr>
 <tr>
 <td>
-DD6 (<a href=#DD:dimlessLoad>DD:dimlessLoad</a>)
+DD6 (<a href=#DD:gTF>DD:gTF</a>)
 </td>
 <td>
 
@@ -3689,7 +4085,7 @@ X
 </tr>
 <tr>
 <td>
-DD7 (<a href=#DD:tolLoad>DD:tolLoad</a>)
+DD7 (<a href=#DD:dimlessLoad>DD:dimlessLoad</a>)
 </td>
 <td>
 
@@ -3733,7 +4129,7 @@ X
 </tr>
 <tr>
 <td>
-DD8 (<a href=#DD:sdf.tol>DD:sdf.tol</a>)
+DD8 (<a href=#DD:tolLoad>DD:tolLoad</a>)
 </td>
 <td>
 
@@ -3808,22 +4204,22 @@ DD1 (<a href=#DD:risk.fun>DD:risk.fun</a>)
 DD2 (<a href=#DD:act.thick>DD:act.thick</a>)
 </th>
 <th>
-DD3 (<a href=#DD:stressDistFac>DD:stressDistFac</a>)
+DD3 (<a href=#DD:loadDurFactor>DD:loadDurFactor</a>)
 </th>
 <th>
-DD4 (<a href=#DD:nFL>DD:nFL</a>)
+DD4 (<a href=#DD:stressDistFac>DD:stressDistFac</a>)
 </th>
 <th>
-DD5 (<a href=#DD:gTF>DD:gTF</a>)
+DD5 (<a href=#DD:nFL>DD:nFL</a>)
 </th>
 <th>
-DD6 (<a href=#DD:dimlessLoad>DD:dimlessLoad</a>)
+DD6 (<a href=#DD:gTF>DD:gTF</a>)
 </th>
 <th>
-DD7 (<a href=#DD:tolLoad>DD:tolLoad</a>)
+DD7 (<a href=#DD:dimlessLoad>DD:dimlessLoad</a>)
 </th>
 <th>
-DD8 (<a href=#DD:sdf.tol>DD:sdf.tol</a>)
+DD8 (<a href=#DD:tolLoad>DD:tolLoad</a>)
 </th>
 <th>
 Data Constraints (<a href=#Sec:DataConstraints>Data Constraints</a>)
@@ -4478,7 +4874,7 @@ DD2 (<a href=#DD:act.thick>DD:act.thick</a>)
 </tr>
 <tr>
 <td>
-DD3 (<a href=#DD:stressDistFac>DD:stressDistFac</a>)
+DD3 (<a href=#DD:loadDurFactor>DD:loadDurFactor</a>)
 </td>
 <td>
 
@@ -4507,7 +4903,7 @@ DD3 (<a href=#DD:stressDistFac>DD:stressDistFac</a>)
 </tr>
 <tr>
 <td>
-DD4 (<a href=#DD:nFL>DD:nFL</a>)
+DD4 (<a href=#DD:stressDistFac>DD:stressDistFac</a>)
 </td>
 <td>
 
@@ -4536,7 +4932,7 @@ X
 </tr>
 <tr>
 <td>
-DD5 (<a href=#DD:gTF>DD:gTF</a>)
+DD5 (<a href=#DD:nFL>DD:nFL</a>)
 </td>
 <td>
 
@@ -4565,7 +4961,7 @@ DD5 (<a href=#DD:gTF>DD:gTF</a>)
 </tr>
 <tr>
 <td>
-DD6 (<a href=#DD:dimlessLoad>DD:dimlessLoad</a>)
+DD6 (<a href=#DD:gTF>DD:gTF</a>)
 </td>
 <td>
 
@@ -4594,7 +4990,7 @@ X
 </tr>
 <tr>
 <td>
-DD7 (<a href=#DD:tolLoad>DD:tolLoad</a>)
+DD7 (<a href=#DD:dimlessLoad>DD:dimlessLoad</a>)
 </td>
 <td>
 
@@ -4623,7 +5019,7 @@ DD7 (<a href=#DD:tolLoad>DD:tolLoad</a>)
 </tr>
 <tr>
 <td>
-DD8 (<a href=#DD:sdf.tol>DD:sdf.tol</a>)
+DD8 (<a href=#DD:tolLoad>DD:tolLoad</a>)
 </td>
 <td>
 
@@ -5078,34 +5474,6 @@ duration of load
 </td>
 <td>
 s
-</td>
-</tr>
-<tr>
-<td>
-<em>LDF</em>
-</td>
-<td>
-load duration factor
-</td>
-<td>
-<em>(<div class="fraction">
-<span class="fup">
-t<sub>d</sub>
-</span>
-<span class="fdn">
-60
-</span>
-</div>)<sup><div class="fraction">
-<span class="fup">
-m
-</span>
-<span class="fdn">
-16
-</span>
-</div></sup></em>
-</td>
-<td>
-Unitless
 </td>
 </tr>
 <tr>

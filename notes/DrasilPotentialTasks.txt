@@ -74,7 +74,6 @@ POTENTIAL TASKS (Proto-issues)
   - Code.Imperative.AST: needs a full redesign...
   - Code.Code: why are these things defined here?
   - (skipping all the LanguageRenderer since the AST needs redesigned)
-  - Code: this re-exports lots of stuff. Should be exposed?
   - Expr: make Expr into a type constructor
   - Chunk:
     - SymbolForm: better names. Show not a good idea.
@@ -88,8 +87,6 @@ POTENTIAL TASKS (Proto-issues)
   - Remove multiple occurrences of definition of DD as Data Definition
 
 - Structural:
-  - break Drasil into packages.  Likely drasil-lang, drasil-data,
-    drasil-code and drasil-examples. As a start.
   - make sure the generated code compiles and runs correctly and html is clean, tex 
     compiles (at least on travis?)
   - investigate

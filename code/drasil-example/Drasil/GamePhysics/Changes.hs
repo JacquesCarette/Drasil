@@ -22,7 +22,7 @@ likelyChangesIntro, likelyChangesList :: Contents
 likelyChanges = SRS.likeChg [likelyChangesIntro, likelyChangesList] []
 
 likelyChangesIntro = foldlSP [S "This", (phrase section_), S "lists the",
-  (plural likelyChg), S "to be made to the", (phrase game), (phrase physics),
+  (plural likelyChg), S "to be made to the", (phrase game), (phrase physics), 
   (phrase library)]
 
 likelyChangesStmt1, likelyChangesStmt2, likelyChangesStmt3,

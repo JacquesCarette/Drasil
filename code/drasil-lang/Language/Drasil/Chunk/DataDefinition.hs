@@ -16,6 +16,8 @@ import Language.Drasil.Label.Core (Label)
 import Control.Lens(makeLenses, (^.), view)
 import Language.Drasil.Chunk.Eq (fromEqn, fromEqn')
 
+import Language.Drasil.Chunk.Eq(fromEqn, fromEqn', fromEqn''', fromEqn'''')
+
 data Scope = Scp { _spec :: Label {-indirect reference-}}
 
 data ScopeType = Local Scope {-only visible within a limited scope-} | Global {-visible everywhere-}
@@ -53,6 +55,16 @@ mkDataDef cncpt equation = datadef $ getUnit cncpt --should references be passed
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
                            (eqSymb cncpt) equation [] (cncpt ^. uid) --shortname
 
+mkDataDef' :: (Quantity c) => c -> Expr -> Derivation -> QDefinition
+mkDataDef' cncpt equation dv = datadef $ getUnit cncpt --should references be passed in at this point?
+  where datadef (Just a) = fromEqn'''  (cncpt ^. uid) (cncpt ^. term) EmptyS
+                           (eqSymb cncpt) a equation [] dv (cncpt ^. uid) --shortname
+        datadef Nothing  = fromEqn'''' (cncpt ^. uid) (cncpt ^. term) EmptyS
+                           (eqSymb cncpt) equation [] dv (cncpt ^. uid) --shortname
+
 -- | Smart constructor for data definitions 
 mkDD :: QDefinition -> References -> Derivation -> String{-Label-} -> Maybe [Sentence] -> DataDefinition
 mkDD a b c _ e = DD a Global b c (shortname' $ a ^. uid  {-shortname' d-}) e -- FIXME: should the shortname be passed in or derived?
+
+qdFromDD :: DataDefinition -> QDefinition
+qdFromDD (DD a _ _ _ _ _) = a

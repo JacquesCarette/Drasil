@@ -26,6 +26,7 @@ thisSI = SI {
   _quants = symbols,
   _concepts = ([] :: [UnitaryConceptDict]),
   _definitions = hghcVars,
+  _datadefs = ([] :: [DataDefinition]),
   _inputs = htInputs,
   _outputs = htOutputs,
   _defSequence = ([] :: [Block QDefinition]),

@@ -131,6 +131,8 @@ ${SD_{y}}$ & Stand off distance (y-component) & m
 \\
 ${SD_{z}}$ & Stand off distance (z-component) & m
 \\
+$SD$ & Stand off distance & m
+\\
 $t$ & Nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ & mm
 \\
 ${t_{d}}$ & Duration of load & s
@@ -220,7 +222,7 @@ The organization of this document follows the template for an SRS for scientific
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The data definitions are used to support the definitions of the different models.
 \section{Stakeholders}
 \label{Sec:Stakeholder}
-This section describes the Stakeholders: the people who have an interest in the product.
+This section describes the stakeholders: the people who have an interest in the product.
 \subsection{The Client}
 \label{Sec:Client}
 The client for GlassBR is a company named Entuitive. It is developed by Dr. Manuel Campidelli. The client has the final say on acceptance of the product.
@@ -296,7 +298,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thicknesses and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.}
 \item{Glass type factor (GTF) - A multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions.}
 \item{Aspect ratio (AR) - The ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5.}
-\item{Probability of breakage (${P_{b}}$) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000.}
+\item{Probability of breakage (${P_{b}}$) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 [3].}
 \end{enumerate}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
@@ -346,7 +348,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:responseTyA}:]The response type considered in GlassBR is flexural.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:ldfConstantA}:]With reference to A\ref{A:standardValuesA}, the value of load duration factor ($LDF$) is a constant in GlassBR. It is calculated by the equation: $LDF=\left(\frac{{t_{d}}}{60}\right)^{\frac{m}{16}}$. Using this, $LDF=0.27$.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:ldfConstantA}:]With reference to A\ref{A:standardValuesA}, the value of load duration factor ($LDF$) is a constant in GlassBR.
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -443,7 +445,7 @@ Notes & $a$, $b$ are dimensions of the plate, where ($a>b$).
         $LDF$ is the load duration factor as defined by DD3.
         $J$ is the stress distribution factor (Function) , as defined in DD4.
 \\ \midrule \\
-Source & [4]
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -485,7 +487,35 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & $t$ is a function that maps from the nominal thickness ($h$) to the minimum thickness.
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:loadDurFactor}
+\phantomsection 
+\label{DD:loadDurFactor}
+\\ \midrule \\
+Label & Load duration factor
+\\ \midrule \\
+Symbol & $LDF$
+\\ \midrule \\
+Units & Unitless
+\\ \midrule \\
+Equation & \begin{dmath}
+           LDF=\left(\frac{{t_{d}}}{60}\right)^{\frac{m}{16}}
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$LDF$ is the load duration factor (Unitless)}
+              \item{${t_{d}}$ is the duration of load (s)}
+              \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -504,22 +534,21 @@ Symbol & $J$
 Units & Unitless
 \\ \midrule \\
 Equation & \begin{dmath}
-           J=J\left(\hat{q},\frac{a}{b}\right)
+           J=J\left(\hat{q},AR\right)
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$J$ is the stress distribution factor (Function) (Unitless)}
               \item{$J$ is the stress distribution factor (Function) (Unitless)}
               \item{$\hat{q}$ is the dimensionless load (Unitless)}
-              \item{$a$ is the plate length (long dimension) (m)}
-              \item{$b$ is the plate width (short dimension) (m)}
+              \item{$AR$ is the aspect ratio (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & $J$ is the stress distribution factor (Function), which is obtained by interpolating from data shown in Figure 7.
         $\hat{q}$ is the dimensionless load defined in DD7.
-        $a$, $b$ are dimensions of the plate, where ($a>b$).
+        $AR$ is the aspect ratio defined in DD11.
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -554,7 +583,7 @@ Notes & $a$, $b$ are dimensions of the plate, where ($a>b$).
         $t$ is the true thickness, which is based on the nominal thicknesses as shown in DD2.
         ${\hat{q}_{tol}}$ is the tolerable load defined in DD8.
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -585,7 +614,7 @@ Description & \begin{symbDescription}
               \item{$g$ is the glass type $g\in{}\{AN,FT,HS\}$ (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -622,7 +651,7 @@ Notes & $q$ is the 3 second equivalent pressure, as given in IM3.
         $t$ is the true thickness, which is based on the nominal thicknesses as shown in DD2.
         $GTF$ is the glass type factor, as given by DD6.
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -652,9 +681,9 @@ Description & \begin{symbDescription}
               \item{$b$ is the plate width (short dimension) (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${\hat{q}_{tol}}$ is the tolerable load which is obtained from Figure 7 using ${J_{tol}}$ and aspect ratio ($AR=\frac{a}{b}$) as parameters using interpolation. Calculation of ${J_{tol}}$ is defined in DD9.
+Notes & ${\hat{q}_{tol}}$ is the tolerable load which is obtained from Figure 7 using ${J_{tol}}$ and aspect ratio as parameters using interpolation. Calculations of ${J_{tol}}$ and $AR$ are defined in DD9 and DD11, respectively.
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -673,7 +702,7 @@ Symbol & ${J_{tol}}$
 Units & Unitless
 \\ \midrule \\
 Equation & \begin{dmath}
-           {J_{tol}}=\log\left(\log\left(\frac{1}{1-{P_{btol}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(1000 E h^{2}\right)^{m} LDF}\right)
+           {J_{tol}}=\ln\left(\ln\left(\frac{1}{1-{P_{btol}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(1000 E h^{2}\right)^{m} LDF}\right)
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -694,7 +723,66 @@ Notes & ${J_{tol}}$  is calculated with reference to  ${P_{btol}}$.
         $LDF$ is the load duration factor as defined by DD3.
         ${P_{btol}}$ is the tolerable probability entered by the user.
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:sd}
+\phantomsection 
+\label{DD:sd}
+\\ \midrule \\
+Label & Stand off distance
+\\ \midrule \\
+Symbol & $SD$
+\\ \midrule \\
+Units & m
+\\ \midrule \\
+Equation & \begin{dmath}
+           SD=\sqrt{{SD_{x}}^{2}+{SD_{y}}^{2}+{SD_{z}}^{2}}
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$SD$ is the stand off distance (m)}
+              \item{${SD_{x}}$ is the stand off distance (x-component) (m)}
+              \item{${SD_{y}}$ is the stand off distance (y-component) (m)}
+              \item{${SD_{z}}$ is the stand off distance (z-component) (m)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & FIXME: This needs to be filled in
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:aspectR}
+\phantomsection 
+\label{DD:aspectR}
+\\ \midrule \\
+Label & Aspect ratio
+\\ \midrule \\
+Symbol & $AR$
+\\ \midrule \\
+Units & Unitless
+\\ \midrule \\
+Equation & \begin{dmath}
+           AR=\frac{a}{b}
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$AR$ is the aspect ratio (Unitless)}
+              \item{$a$ is the plate length (long dimension) (m)}
+              \item{$b$ is the plate width (short dimension) (m)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & $a$, $b$ are dimensions of the plate, where ($a>b$).
+\\ \midrule \\
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -732,7 +820,7 @@ Description & \begin{symbDescription}
               \item{$B$ is the risk of failure (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -775,7 +863,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows A\ref{A:glassConditionA} and A\ref{A:glassTyA} (``In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations'') from [1 (pg. 53)].
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -815,16 +903,56 @@ Description & \begin{symbDescription}
               \item{$SD$ is the stand off distance (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined as $w TNT$. $SD$. is the stand off distance where $\sqrt{{SD_{x}}^{2}+{SD_{y}}^{2}+{SD_{z}}^{2}}$ where (${SD_{x}}$, ${SD_{y}}$, ${SD_{z}}$) are coordinates.
+Notes & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined as $w TNT$. $SD$ is the stand off distance as defined in DD10.
 \\ \midrule \\
-Source & 
+Source & FIXME: This needs to be filled in
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{IM:risk\_fun}
+\phantomsection 
+\label{IM:risk\_fun}
+\\ \midrule \\
+Label & Risk of failure
+\\ \midrule \\
+Input & $k$, $a$, $b$, $m$, $E$, $h$, $LDF$, $J$
+\\ \midrule \\
+Output & $B$
+\\ \midrule \\
+Input Constraints & 
+\\ \midrule \\
+Output Constraints & 
+\\ \midrule \\
+Equation & \begin{dmath}
+           B=\frac{k}{\left(a b\right)^{m-1}} \left(1000 E h^{2}\right)^{m} LDF e^{J}
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$B$ is the risk of failure (Unitless)}
+              \item{$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
+              \item{$a$ is the plate length (long dimension) (m)}
+              \item{$b$ is the plate width (short dimension) (m)}
+              \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
+              \item{$E$ is the modulus of elasticity of glass (Pa)}
+              \item{$h$ is the actual thickness (m)}
+              \item{$LDF$ is the load duration factor (Unitless)}
+              \item{$J$ is the stress distribution factor (Function) (Unitless)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & 
+\\ \midrule \\
+Source & FIXME: This needs to be filled in
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-Table~\ref{Table:InDataConstraints}, and Table~\ref{Table:OutDataConstraints} shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. Section~\ref{Sec:AuxConstants} gives the values of the specification parameters used in Table~\ref{Table:InDataConstraints}. Table~\ref{Table:OutDataConstraints} shows the constraints that must be satisfied by the output.
+Table~\ref{Table:InDataConstraints}, and Table~\ref{Table:OutDataConstraints} shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. Section~\ref{Sec:AuxConstants} gives the values of the specification parameters used in Table~\ref{Table:InDataConstraints}.
 \begin{longtable}{l l l l l}
 \toprule
 Var & Physical Constraints & Software Constraints & Typical Value & TU
@@ -840,7 +968,7 @@ $w$ & $w>0$ & ${w_{min}}\leq{}w\leq{}{w_{max}}$ & $42.0$ kg & 10.0\%
 \\
 ${P_{btol}}$ & $0<{P_{btol}}<1$ & None & $0.008$ & 0.1\%
 \\
-$TNT$ & $TNT>0$ & None & $1$ & 10.0\%
+$TNT$ & $TNT>0$ & None & $1.0$ & 10.0\%
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -866,7 +994,7 @@ This section provides the functional requirements, the business tasks that the s
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req1}:]Input the quantities from Table~\ref{Table:R1ReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req2}:]The system shall set the known values as follows: $m$, $k$, $E$, ${t_{d}}$ following A4, $LDF$ following A8, LSF following A5, $h$ (from \hyperref[DD:act.thick]{Definition~DD:act.thick}), and $GTF$ (from \hyperref[DD:gTF]{Definition~DD:gTF}).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req2}:]The system shall set the known values as follows: $m$, $k$, $E$, ${t_{d}}$ following A4, $LDF$ following A8, LSF following A5, $h$ (from \hyperref[DD:act.thick]{Definition~DD:act.thick}), $GTF$ (from \hyperref[DD:gTF]{Definition~DD:gTF}), and $SD$ (from \hyperref[DD:sd]{Definition~DD:sd}).
 \end{description}
 \begin{description}
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req3}:]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DataConstraints}. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
@@ -955,7 +1083,7 @@ This problem is small in size and relatively simple, so performance is not a pri
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. Table~\ref{Table:TraceyItemSecs} shows the dependencies of theoretical models, instance models, and data definitions with each other. Table~\ref{Table:TraceyReqsItems} shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. Table~\ref{Table:TraceyAssumpsOthers} shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) & T2 (\hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) & IM1 (\hyperref[T:probOfBr]{Definition~T:probOfBr}) & IM2 (\hyperref[T:calOfCap]{Definition~T:calOfCap}) & IM3 (\hyperref[T:calOfDe]{Definition~T:calOfDe}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:act.thick]{Definition~DD:act.thick}) & DD3 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD4 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD5 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD6 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD7 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & DD8 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol})
+ & T1 (\hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) & T2 (\hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) & IM1 (\hyperref[T:probOfBr]{Definition~T:probOfBr}) & IM2 (\hyperref[T:calOfCap]{Definition~T:calOfCap}) & IM3 (\hyperref[T:calOfDe]{Definition~T:calOfDe}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:act.thick]{Definition~DD:act.thick}) & DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) & DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad})
 \\
 \midrule
 T1 (\hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) &  & X & X &  &  &  &  &  &  &  &  &  & 
@@ -972,17 +1100,17 @@ DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) &  &  &  &  &  &  &  &  &  
 \\
 DD2 (\hyperref[DD:act.thick]{Definition~DD:act.thick}) &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD3 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) &  &  &  &  &  &  &  &  &  &  & X &  & 
+DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) &  &  &  &  &  &  &  &  &  &  & X &  & 
 \\
-DD4 (\hyperref[DD:nFL]{Definition~DD:nFL}) &  &  &  &  &  &  & X &  &  &  & X &  & 
+DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) &  &  &  &  &  &  & X &  &  &  & X &  & 
 \\
-DD5 (\hyperref[DD:gTF]{Definition~DD:gTF}) &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD6 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) &  &  &  &  & X &  & X &  &  & X &  &  & 
+DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) &  &  &  &  & X &  & X &  &  & X &  &  & 
 \\
-DD7 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) &  &  &  &  &  &  &  &  &  &  &  &  & X
+DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) &  &  &  &  &  &  &  &  &  &  &  &  & X
 \\
-DD8 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}) &  &  &  &  &  &  & X &  &  &  &  &  & 
+DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) &  &  &  &  &  &  & X &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
@@ -990,7 +1118,7 @@ DD8 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}) &  &  &  &  &  &  & X &  &  &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) & T2 (\hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) & IM1 (\hyperref[T:probOfBr]{Definition~T:probOfBr}) & IM2 (\hyperref[T:calOfCap]{Definition~T:calOfCap}) & IM3 (\hyperref[T:calOfDe]{Definition~T:calOfDe}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:act.thick]{Definition~DD:act.thick}) & DD3 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD4 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD5 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD6 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD7 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & DD8 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}) & Data Constraints (Section~\ref{Sec:DataConstraints}) & R1 (Section~\ref{Sec:FRs}) & R2 (Section~\ref{Sec:FRs}) & R3 (Section~\ref{Sec:FRs}) & R4 (Section~\ref{Sec:FRs}) & R5 (Section~\ref{Sec:FRs}) & R6 (Section~\ref{Sec:FRs})
+ & T1 (\hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) & T2 (\hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) & IM1 (\hyperref[T:probOfBr]{Definition~T:probOfBr}) & IM2 (\hyperref[T:calOfCap]{Definition~T:calOfCap}) & IM3 (\hyperref[T:calOfDe]{Definition~T:calOfDe}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:act.thick]{Definition~DD:act.thick}) & DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) & DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & Data Constraints (Section~\ref{Sec:DataConstraints}) & R1 (Section~\ref{Sec:FRs}) & R2 (Section~\ref{Sec:FRs}) & R3 (Section~\ref{Sec:FRs}) & R4 (Section~\ref{Sec:FRs}) & R5 (Section~\ref{Sec:FRs}) & R6 (Section~\ref{Sec:FRs})
 \\
 \midrule
 R1 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1028,17 +1156,17 @@ DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) &  &  &  &  &  &  &  &
 \\
 DD2 (\hyperref[DD:act.thick]{Definition~DD:act.thick}) &  &  &  &  &  &  &  & 
 \\
-DD3 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) &  &  &  &  &  &  &  & 
+DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) &  &  &  &  &  &  &  & 
 \\
-DD4 (\hyperref[DD:nFL]{Definition~DD:nFL}) &  &  &  & X &  &  &  & 
+DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) &  &  &  & X &  &  &  & 
 \\
-DD5 (\hyperref[DD:gTF]{Definition~DD:gTF}) &  &  &  &  &  &  &  & 
+DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) &  &  &  &  &  &  &  & 
 \\
-DD6 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) &  &  &  &  & X &  &  & 
+DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) &  &  &  &  & X &  &  & 
 \\
-DD7 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) &  &  &  &  &  &  &  & 
+DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) &  &  &  &  &  &  &  & 
 \\
-DD8 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}) &  &  &  & X &  &  &  & 
+DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) &  &  &  & X &  &  &  & 
 \\
 LC1 (Section~\ref{Sec:LCs}) &  &  & X &  &  &  &  & 
 \\
@@ -1104,8 +1232,6 @@ $k$ & surface flaw parameter & $2.86 10^{-53}$ & $\frac{\text{m}^{12}}{\text{N}^
 $E$ & modulus of elasticity of glass & $7.17 10^{7}$ & Pa
 \\
 ${t_{d}}$ & duration of load & $3$ & s
-\\
-$LDF$ & load duration factor & $\left(\frac{{t_{d}}}{60}\right)^{\frac{m}{16}}$ & Unitless
 \\
 $LSF$ & load share factor & $1$ & Unitless
 \\

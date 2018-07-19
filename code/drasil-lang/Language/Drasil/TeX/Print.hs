@@ -14,7 +14,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat),
   Fence(Norm, Abs, Curly, Paren), Expr, 
   Ops(Inte, Prod, Summ, Mul, Add, Or, And, Subt, Iff, LEq, GEq, 
   NEq, Eq, Gt, Lt, Impl, Dot, Cross, Neg, Exp, Dim, Not, Cot,
-  Csc, Sec, Tan, Cos, Sin, Log, Prime, Comma, Boolean, Real, Natural, 
+  Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, Real, Natural, 
   Rational, Integer, IsIn), Spacing(Thin), Fonts(Emph, Bold), 
   Expr(Spc, Sqrt, Font, Fenced, MO, Over, Sup, Sub, Ident, Spec, Row, 
   Mtx, Div, Case, Str, Int, Dbl), OverSymb(Hat), Label)
@@ -130,7 +130,7 @@ p_expr (Spc Thin) = "\\,"
 p_expr (Sqrt e)  = "\\sqrt{" ++ p_expr e ++ "}"
 
 p_ops :: Ops -> String
-p_ops IsIn = "\\in{}"
+p_ops IsIn     = "\\in{}"
 p_ops Integer  = "\\mathbb{Z}"
 p_ops Rational = "\\mathbb{Q}"
 p_ops Real     = "\\mathbb{R}"
@@ -139,6 +139,7 @@ p_ops Boolean  = "\\mathbb{B}"
 p_ops Comma    = ","
 p_ops Prime    = "'"
 p_ops Log      = "\\log"
+p_ops Ln       = "\\ln"
 p_ops Sin      = "\\sin"
 p_ops Cos      = "\\cos"
 p_ops Tan      = "\\tan"
@@ -151,22 +152,22 @@ p_ops Exp      = "e"
 p_ops Neg      = "-"
 p_ops Cross    = "\\times"
 p_ops Dot      = "\\cdot{}"
-p_ops Eq = "="
-p_ops NEq = "\\neq{}"
-p_ops Lt = "<"
-p_ops Gt = ">"
-p_ops GEq = "\\geq{}"
-p_ops LEq = "\\leq{}"
-p_ops Impl = "\\implies{}"
-p_ops Iff = "\\iff{}"
-p_ops Subt = "-"
-p_ops And = "\\land{}"
-p_ops Or  = "\\lor{}"
-p_ops Add = "+"
-p_ops Mul = " "
-p_ops Summ = "\\displaystyle\\sum"
-p_ops Prod = "\\displaystyle\\prod"
-p_ops Inte = "\\int"
+p_ops Eq       = "="
+p_ops NEq      = "\\neq{}"
+p_ops Lt       = "<"
+p_ops Gt       = ">"
+p_ops GEq      = "\\geq{}"
+p_ops LEq      = "\\leq{}"
+p_ops Impl     = "\\implies{}"
+p_ops Iff      = "\\iff{}"
+p_ops Subt     = "-"
+p_ops And      = "\\land{}"
+p_ops Or       = "\\lor{}"
+p_ops Add      = "+"
+p_ops Mul      = " "
+p_ops Summ     = "\\displaystyle\\sum"
+p_ops Prod     = "\\displaystyle\\prod"
+p_ops Inte     = "\\int"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "\\left("

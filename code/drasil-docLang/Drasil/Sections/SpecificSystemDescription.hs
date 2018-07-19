@@ -92,6 +92,7 @@ goalStmtF givenInputs otherContents = SRS.goalStmt (intro:otherContents) []
   where intro = Paragraph $ S "Given" +:+ foldlList givenInputs `sC` S "the" +:+ 
                 plural goalStmt +: S "are"
 
+
 solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
 solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inModel, 
   S "that govern", short progName, S "are presented in" +:+. 

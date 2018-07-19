@@ -44,12 +44,14 @@ import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods_new)
 import Drasil.SSP.Requirements (sspInputDataTableLC, sspRequirements)
+
 import Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_new
   , effStress_new)
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
   sspOutputs, sspSymbols)
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, physSyst, inModelLabel)
+
 
 --type declarations for sections--
 gen_sys_desc, req, aux_cons :: Section
@@ -59,6 +61,7 @@ table_of_symbol_intro :: [TSIntro]
 problem_desc, termi_defi, phys_sys_desc, goal_stmt, func_req, non_func_req :: Section
 goals_list, termi_defi_list :: Contents
 phys_sys_desc_p1, phys_sys_desc_bullets, phys_sys_desc_p2, func_req_list :: LabelledContent
+
 
 --Document Setup--
 this_si :: [UnitDefn]

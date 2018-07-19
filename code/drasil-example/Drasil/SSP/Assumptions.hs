@@ -33,7 +33,6 @@ newA9 = assump "Effective-Norm-Stress-Large" largeN (mkLabelRA'' "Effective-Norm
 newA10 = assump "Surface-Base-Slice-between-Interslice-Straight-Lines" straightS 
            (mkLabelRA'' "Surface-Base-Slice-between-Interslice-Straight-Lines")
 
-
 monotonicF, slopeG, homogeneousL, isotropicP, linearS,
   linearF, stressC, planeS, largeN, straightS :: Sentence
 

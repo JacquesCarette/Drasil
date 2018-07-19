@@ -12,7 +12,7 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   SCSSub(..),
   dataConstraintUncertainty, genSysF, goalStmtF, 
   inDataConstTbl, intro, mkDoc, nonFuncReqF, outDataConstTbl, probDescF, reqF, 
-  solChSpecF, specSysDesF, termDefnF, tsymb'', valsOfAuxConstantsF)
+  termDefnF, tsymb'', valsOfAuxConstantsF)
 
 import Data.Drasil.Concepts.Documentation (analysis, definition, 
   design, document, effect, element, endUser, goalStmt, inModel, input_, 
@@ -56,18 +56,15 @@ import qualified Drasil.DocLang.SRS as SRS (funcReq, inModel, likeChg, unlikeChg
   physSyst)
 
 --type declarations for sections--
-gen_sys_desc, spec_sys_desc, req, likely_chg, aux_cons :: Section
+gen_sys_desc, req, likely_chg, aux_cons :: Section
 
 table_of_symbol_intro :: [TSIntro]
 
 problem_desc, termi_defi, phys_sys_desc,
-  goal_stmt, sol_charac_spec, func_req, non_func_req :: Section
+  goal_stmt, func_req, non_func_req :: Section
 
 termi_defi_list, phys_sys_desc_p1, phys_sys_desc_bullets,
-  phys_sys_desc_p2, goals_list, assumps_list,
-  func_req_list :: Contents
-
-theory_model_tmods, gen_def_genDefs, data_def_dataDefs, insta_model_IMods :: [Contents]
+  phys_sys_desc_p2, goals_list, func_req_list :: Contents
 
 --Document Setup--
 this_si :: [UnitDefn]
@@ -129,9 +126,8 @@ mkSRS = RefSec (RefProg intro
             ]
           )
         ]
-      ): --Testing General Definitions.-}
-  -- comment spec_sys_desc out to cut off the redundant section being generated
-  --spec_sys_desc,gen_sys_desc,
+      ):  
+  --gen_sys_desc,
   map Verbatim [req] ++ [LCsSec (LCsProg likelyChanges_SRS)] 
   ++ [UCsSec (UCsProg unlikelyChanges_SRS)] ++[Verbatim aux_cons] ++ (Bibliography : [])
 
@@ -260,9 +256,6 @@ userChar pname understandings familiarities = foldlSP [
 -- System Constraints automatically generated in genSysF
 
 -- SECTION 4 --
-spec_sys_desc = specSysDesF end [problem_desc, sol_charac_spec]
-  where end = foldlSent_ [plural definition, S "and finally the",
-          plural inModel, S "that", phrase model, S "the", phrase slope]
 
 -- SECTION 4.1 --
 problem_desc = probDescF EmptyS ssa ending [termi_defi, phys_sys_desc, goal_stmt]
@@ -333,52 +326,24 @@ goal_stmt = goalStmtF (map (\(x, y) -> x `ofThe` y) [
 goals_list = enumSimple 1 (short goalStmt) sspGoals
 
 -- SECTION 4.2 --
-sol_charac_spec = solChSpecF ssa (problem_desc, SRS.likeChg [] [], SRS.unlikeChg [] []) ddEnding
-  (EmptyS, dataConstraintUncertainty, EmptyS)
-  ([assumps_list], theory_model_tmods, gen_def_genDefs, data_def_dataDefs, 
-  instModIntro1:instModIntro2:insta_model_IMods, [data_constraint_Table2, data_constraint_Table3]) []
-
-  where ddEnding = foldlSent [at_start' definition, ddRef sliceWght, S "to", ddRef lengthLb,
-          S "are the", phrase force, plural variable, S "that can be solved",
-          S "by direct analysis of given" +:+. plural input_, S "The", 
-          phrase intrslce, S "forces", ddRef lengthLs, S "are", phrase force,
-          plural variable, S "that must be written in terms of", ddRef sliceWght, 
-          S "to", ddRef lengthLb, S "to solve"]
 
 -- SECTION 4.2.1 --
--- Assumptions is automatically generated in solChSpecF using the list below
---s4_2_1_list
-assumps_list = enumSimple 1 (short assumption) sspAssumptions
+-- Assumptions is automatically generated
 
 -- SECTION 4.2.2 --
--- TModels is automatically generated in solChSpecF using the tmods below
-
-theory_model_tmods = map reldefn sspTMods
+-- TModels is automatically generated
 
 -- SECTION 4.2.3 --
--- General Definitions is automatically generated in solChSpecF
-gen_def_genDefs = map reldefn sspGenDefs
+-- General Definitions is automatically generated
 
 -- SECTION 4.2.4 --
--- Data Definitions is automatically generated in solChSpecF
-data_def_dataDefs = (map datadefn (take 13 sspDataDefs)) ++ resShrDerivation ++
-  [datadefn (sspDataDefs !! 13)] ++ mobShrDerivation ++
-  map datadefn [sspDataDefs !! 14, sspDataDefs !! 15] ++
-  stfMtrxDerivation ++ (map datadefn (drop 16 sspDataDefs))
-  --FIXME: derivations should be with the appropriate DataDef
+-- Data Definitions is automatically generated
 
 -- SECTION 4.2.5 --
--- Instance Models is automatically generated in solChSpecF
--- using the paragraphs below
-
-insta_model_IMods = concat $ weave [map (\x -> [reldefn x]) sspIMods,
-  [fctSftyDerivation, nrmShrDerivation, intrSlcDerivation, rigDisDerivation, rigFoSDerivation]]
-
-  --FIXME: derivations should be with the appropriate IMod
+-- Instance Models is automatically generated
 
 -- SECTION 4.2.6 --
--- Data Constraints is automatically generated in solChSpecF
--- using the tables below
+-- Data Constraints is automatically generated
 
 {-
 {-input data-}

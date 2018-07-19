@@ -14,10 +14,10 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   inDataConstTbl, intro, mkDoc, nonFuncReqF, outDataConstTbl, probDescF, reqF, 
   termDefnF, tsymb'', valsOfAuxConstantsF)
 
-import Data.Drasil.Concepts.Documentation (analysis, definition, 
+import Data.Drasil.Concepts.Documentation (analysis, 
   design, document, effect, element, endUser, goalStmt, inModel, input_, 
-  interest, interest, issue, loss, method_, model, organization, physics, 
-  problem, property, requirement, srs, table_, template, value, variable, assumption)
+  interest, interest, issue, loss, method_, organization, physics, 
+  problem, property, requirement, srs, table_, template, value, variable)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
@@ -33,30 +33,26 @@ import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent, 
   foldlSent_, ofThe, sAnd, sOr)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
-import Data.Drasil.Utils (enumBullet, enumSimple, weave)
-import Drasil.SSP.Assumptions (sspRefDB, sspAssumptions)
+import Data.Drasil.Utils (enumBullet, enumSimple)
+import Drasil.SSP.Assumptions (sspRefDB)
 import Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
-import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShrDerivation, 
-  resShrDerivation, sliceWght, sspDataDefs, stfMtrxDerivation)
+import Drasil.SSP.DataDefs (sspDataDefs)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty, 
   morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil, soilLyr, ssa)
-import Drasil.SSP.GenDefs (sspGenDefs, generalDefinitions)
+import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
-import Drasil.SSP.IMods (fctSftyDerivation, instModIntro1, instModIntro2, 
-  intrSlcDerivation, nrmShrDerivation, rigDisDerivation, rigFoSDerivation, 
-  sspIMods, sspIMods_new)
+import Drasil.SSP.IMods (sspIMods_new)
 import Drasil.SSP.Requirements (sspInputDataTable, sspRequirements)
-import Drasil.SSP.TMods (sspTMods, fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_new
+import Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_new
   , effStress_new)
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
   sspOutputs, sspSymbols)
 
-import qualified Drasil.DocLang.SRS as SRS (funcReq, inModel, likeChg, unlikeChg, missingP, 
-  physSyst)
+import qualified Drasil.DocLang.SRS as SRS (funcReq, inModel, missingP, physSyst)
 
 --type declarations for sections--
-gen_sys_desc, req, likely_chg, aux_cons :: Section
+gen_sys_desc, req, aux_cons :: Section
 
 table_of_symbol_intro :: [TSIntro]
 
@@ -383,7 +379,7 @@ non_func_req = nonFuncReqF [accuracy, performanceSpd]
   where r = (short ssa) +:+ S "is intended to be an educational tool"
 
 -- SECTION 6 --
-likely_chg = SRS.likeChg [] []
+--Likely Changes is automatically generated
 
 -- SECTION 7 --
 aux_cons = valsOfAuxConstantsF ssa []

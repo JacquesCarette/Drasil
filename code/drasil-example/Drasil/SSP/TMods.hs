@@ -26,9 +26,6 @@ import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe',
 --  Theoretical Models  --
 --------------------------
 
-
-
-
 ------------- New Chunk -----------
 fs_rc_new :: TheoryModel
 fs_rc_new = tm' (cw fs_rc)

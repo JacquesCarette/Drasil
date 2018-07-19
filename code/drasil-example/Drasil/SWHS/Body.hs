@@ -13,8 +13,8 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   Fields, Field(..), SSDSub(..), SolChSpec( SCSProg ), SSDSec(..), 
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SCSSub(..),
   assumpF, dataConstraintUncertainty, genSysF, inDataConstTbl, inModelF, intro, 
-  mkDoc, outDataConstTbl, physSystDesc, reqF, solChSpecF, specSysDesF, 
-  termDefnF, traceGIntro, traceMGF, tsymb'')
+  mkDoc, outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF,
+  tsymb'')
 import qualified Drasil.DocLang.SRS as SRS (inModel, missingP, likeChg,
   funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
   sysCont, reference)
@@ -257,9 +257,6 @@ systContRespBullets = Enumeration $ Bullet $ [userResp input_ datum,
 -- Section 4 : SPECIFIC SYSTEM DESCRIPTION --
 ---------------------------------------------
 
-specSystDesc :: Section
-specSystDesc = specSysDesF (specSystDescIntroEnd swhs_pcm) [probDescription, solCharSpec]
-
 -------------------------------
 -- 4.1 : Problem Description --
 -------------------------------
@@ -331,13 +328,6 @@ goalStateList = enumSimple 1 (short goalStmt) $
 -- 4.2 : Solution Characteristics Specification --
 --------------------------------------------------
 
-solCharSpec :: Section
-solCharSpec = solChSpecF progName (probDescription, likelyChgs, unlikelyChgs) dataDefIntroEnd
-  (dataContMid, dataConstraintUncertainty, dataContFooter quantity surArea
-  vol thickness phsChgMtrl) (swhsAssumptions, 
-  swhsTMods, genDefs ++ genDefsDeriv,
-  swhsDDefs, iModsWithDerivs, dataConTables) [propsCorrSol]
-
 -------------------------
 -- 4.2.1 : Assumptions --
 -------------------------
@@ -366,23 +356,7 @@ assumps = assumpF
 ---------------------------------
 
 -- SECTION 4.2.3 --
--- General Definitions is automatically generated in solChSpecF
-genDefs :: [Contents]
-genDefs = map reldefn swhsGenDefs
-
-genDefsDeriv :: [Contents]
-genDefsDeriv = [genDefDeriv1 rOfChng temp,
-  genDefDeriv2 t1ConsThermE vol,
-  genDefDeriv3,
-  genDefDeriv4 gauss_div surface vol thFluxVect uNormalVect unit_,
-  genDefDeriv5,
-  genDefDeriv6 vol vol_ht_gen,
-  genDefDeriv7,
-  genDefDeriv8 ht_flux_in ht_flux_out in_SA out_SA density heat_cap_spec
-    temp vol assumption assump3 assump4 assump5 assump6,
-  genDefDeriv9,
-  genDefDeriv10 density mass vol,
-  genDefDeriv11]
+-- General Definitions is automatically generated
 
 
 ------------------------------
@@ -954,11 +928,6 @@ userCharContents pro = foldlSP [S "The end", phrase user, S "of",
 -- Section 4 : SPECIFIC SYSTEM DESCRIPTION --
 ---------------------------------------------
 
-specSystDescIntroEnd :: NamedIdea ni => ni -> Sentence
-specSystDescIntroEnd sw = foldlSent_ [foldlsC (map plural (take 3 renameList1))
-  `sC` S "and finally the", plural inModel, sParen (short ode :+: S "s"),
-  S "that", phrase model, S "the", phrase sw]
-
 -- Completely general except for solar water heating tank (object of analysis)
 -- and similar between all examples; can be abstracted out.
 
@@ -983,7 +952,6 @@ probDescIntro pro pcmat sw = foldlSP [short pro, S "is a", phrase compPro,
 -----------------------------------------
 -- 4.1.2 : Physical System Description --
 -----------------------------------------
-
 
 physSyst1 :: ConceptChunk -> ConceptChunk -> [Sentence]
 physSyst1 ta wa = [at_start ta, S "containing" +:+. phrase wa]

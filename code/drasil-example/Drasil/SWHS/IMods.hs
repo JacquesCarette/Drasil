@@ -49,7 +49,6 @@ balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
   (((sy temp_C) - (apply1 temp_W time)) +
   (sy eta) * ((apply1 temp_PCM time) - (apply1 temp_W time)))
 
---FIXME: can this be removed?
 balWtrDesc' :: Sentence
 balWtrDesc' = foldlSent [S "The above", phrase equation, S "applies as long as the", phrase water,
   S "is in", phrase liquid, S "form" `sC` (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100))),
@@ -58,6 +57,7 @@ balWtrDesc' = foldlSent [S "The above", phrase equation, S "applies as long as t
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively",
   sParen (makeRef newA14 `sC` makeRef newA19)]
+
 
 balWtrDesc :: Sentence
 balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.

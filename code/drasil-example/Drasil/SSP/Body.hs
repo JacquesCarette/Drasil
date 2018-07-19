@@ -49,7 +49,7 @@ import Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
   sspOutputs, sspSymbols)
 
-import qualified Drasil.DocLang.SRS as SRS (funcReq, inModel, missingP, physSyst, inModelLabel)
+import qualified Drasil.DocLang.SRS as SRS (funcReq, physSyst, inModelLabel)
 
 --type declarations for sections--
 gen_sys_desc, req, aux_cons :: Section
@@ -120,9 +120,8 @@ mkSRS = RefSec (RefProg intro
             ]
           )
         ]
-      ): --Testing General Definitions.-}
-  -- comment spec_sys_desc out to cut off the redundant section being generated
-  --spec_sys_desc,gen_sys_desc,
+      ):  
+  --gen_sys_desc,
   map Verbatim [req] ++ [LCsSec (LCsProg likelyChanges_SRS)] 
   ++ [UCsSec (UCsProg unlikelyChanges_SRS)] ++[Verbatim aux_cons] ++ (Bibliography : [])
 
@@ -331,7 +330,7 @@ goals_list = enumSimple 1 (short goalStmt) sspGoals
 -- Assumptions is automatically generated
 
 -- SECTION 4.2.2 --
--- TMods
+-- TModels is automatically generated
 
 -- SECTION 4.2.3 --
 -- General Definitions is automatically generated
@@ -386,6 +385,7 @@ non_func_req = nonFuncReqF [accuracy, performanceSpd]
   where r = (short ssa) +:+ S "is intended to be an educational tool"
 
 -- SECTION 6 --
+--Likely Changes is automatically generated
 
 -- SECTION 7 --
 aux_cons = valsOfAuxConstantsF ssa []

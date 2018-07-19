@@ -51,15 +51,6 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   plural boil_pt, S "of", phrase water `sC` S "respectively",
   sParen (makeRef assump10Label)]
 
-balWtrDesc_note :: Sentence
-balWtrDesc_note = foldlSent [S "The above", phrase equation, S "applies as long as the", phrase water,
-  S "is in", phrase liquid, S "form" `sC` (E $ 0 $< sy temp_W $< 100),
-  sParen (unwrap $ getUnit temp_W), S "where", E 0,
-  sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
-  sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
-  plural boil_pt, S "of", phrase water `sC` S "respectively",
-  sParen (makeRef assump10Label)]
-  
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --
 ----------------------------------------------

@@ -15,7 +15,6 @@ import Drasil.SWHS.Assumptions (newA1, newA2, newA3, newA7, newA8, newA9,
   newA14, newA15, newA20, newA12, newA11)
 import Drasil.SWHS.Body (charReader1, charReader2, orgDocIntro,
   genSystDesc, physSyst1, physSyst2, traceTrailing, traceFig1, traceFig2, dataContMid)
-
 import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil,
   transient, perfect_insul, tank_para)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
@@ -111,11 +110,9 @@ probDescription, termAndDefn, physSystDescription, goalStates,
   reqS, funcReqs, likelyChgs, unlikelyChgs, traceMAndG, specParamVal :: Section
 
 
-
 -------------------
 --INPUT INFORMATION
 -------------------
-
 
 --------------------------------
 --Section 1 : REFERENCE MATERIAL
@@ -333,11 +330,6 @@ orgDocEnd im_ od pro = foldlSent_ [S "The", phrase im_,
 -----------------------------------------
 
 --TODO: finish filling in the subsections
-{-specSystDesc = specSysDesF (words_ sWHT) [probDescription, solCharSpec]
-  where
-  words_ sw = (plural definition `sAnd` S "finally the" +:+
-    phrase inModel +:+ sParen (getAcc M.ode) +:+
-    S "that" +:+ plural model +:+ S "the" +:+ phrase sw)-}
 
 -----------------------------------
 --Section 4.1 : PROBLEM DESCRIPTION

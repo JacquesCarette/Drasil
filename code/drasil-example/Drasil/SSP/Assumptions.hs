@@ -34,10 +34,6 @@ newA10 = assump "Surface-Base-Slice-between-Interslice-Straight-Lines" straightS
            (mkLabelRA'' "Surface-Base-Slice-between-Interslice-Straight-Lines")
 
 
-sspAssumptions :: [Sentence]
-sspAssumptions = [monotonicF, slopeG, homogeneousL, isotropicP,
-  linearS, linearF, stressC, planeS, largeN, straightS]
-
 monotonicF, slopeG, homogeneousL, isotropicP, linearS,
   linearF, stressC, planeS, largeN, straightS :: Sentence
 

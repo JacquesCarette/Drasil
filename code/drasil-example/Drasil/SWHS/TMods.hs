@@ -1,5 +1,5 @@
 module Drasil.SWHS.TMods (tModels, t1ConsThermE, tMod1,
-  swhsTModsAsLCs, tMod1LC, t1ConsThermE_new, t2SensHtE_new, 
+  swhsTModsAsLCs, t1ConsThermE_new, t2SensHtE_new, 
   t2SensHtE, t3LatHtE_new) where
 
 import Language.Drasil
@@ -34,6 +34,7 @@ swhsTModsAsLCs :: [LabelledContent]
 swhsTModsAsLCs = [tMod1LC] ++
                  [llcc "tMod2LC" (mkLabelRA'' "tMod2Label") tMod2] ++
                  [llcc "tMod3LC" (mkLabelRA'' "tMod3Label") tMod3]
+
 
 -------------------------
 -- Theoretical Model 1 --
@@ -90,9 +91,6 @@ t2SensHtE_new = tm' t2SensHtE
   (tc' "SensHtE_new" [qw sens_heat, qw htCap_S, qw mass, 
     qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [ConceptChunk])
   [] [TCon Invariant sensHtEEqn] []) (mkLabelRA'' "t2SensHtE") [t2descr]
-
-tMod2 :: Contents
-tMod2 = reldefn t2SensHtE
 
 t2SensHtE :: RelationConcept
 t2SensHtE = makeRC "t2SensHtE"
@@ -151,9 +149,6 @@ t3LatHtE_new = tm' t3LatHtE
   (tc' "SensHtE_new" [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
   [] [TCon Invariant latHtEEqn] []) (mkLabelRA'' "t3LatHtE") [t3descr]
 
-tMod3 :: Contents
-tMod3 = reldefn t3LatHtE
-
 t3LatHtE :: RelationConcept
 t3LatHtE = makeRC "t3LatHtE"
   (nounPhraseSP "Latent heat energy") t3descr latHtEEqn Nothing--label
@@ -184,3 +179,9 @@ t3descr = foldlSent [
   S "respectively" +:+. sParen (Sy (unit_symb temp)),
   at_start latent_heat :+: S "ing stops when all material has",
   S "changed to the new phase"]
+
+tMod2 :: Contents
+tMod2 = reldefn t2SensHtE
+
+tMod3 :: Contents
+tMod3 = reldefn t3LatHtE

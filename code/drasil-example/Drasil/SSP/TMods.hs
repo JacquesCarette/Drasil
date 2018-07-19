@@ -1,5 +1,5 @@
 module Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_new
-  , effStress_new, sspTMods) where
+  , effStress_new) where
 
 import Prelude hiding (tan)
 import Language.Drasil
@@ -26,13 +26,7 @@ import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe',
 --  Theoretical Models  --
 --------------------------
 
-
-sspTMods :: [RelationConcept]
-sspTMods = [fs_rc, equilibrium, mcShrStrgth, hookesLaw
-  , effStress]
-
--- 
-------------- New Chunck -----------
+------------- New Chunk -----------
 fs_rc_new :: TheoryModel
 fs_rc_new = tm' (cw fs_rc)
   (tc' "fs_rc_new" [qw fs, qw shearRes, qw mobShear] ([] :: [ConceptChunk])
@@ -54,7 +48,7 @@ fs_desc = foldlSent [
   S "and the resistive shear", sParen (ch shearRes)]
 
 --
-------------- New Chunck -----------
+------------- New Chunk -----------
 equilibrium_new :: TheoryModel
 equilibrium_new = tm' (cw equilibrium)
   (tc' "equilibrium_new" [qw fx] ([] :: [ConceptChunk])
@@ -78,7 +72,7 @@ eq_desc = foldlSent [S "For a body in static equilibrium, the net",
   S "will create a net moment equal to" +:+ E 0]
 
 --
-------------- New Chunck -----------
+------------- New Chunk -----------
 mcShrStrgth_new :: TheoryModel
 mcShrStrgth_new = tm' (cw mcShrStrgth)
   (tc' "mcShrStrgth_new" [qw shrStress, qw normStress, qw fricAngle, qw cohesion] 
@@ -113,7 +107,7 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
   S "represents the", ch shrStress, S "intercept of the fitted line"]
 
 --
-------------- New Chunck -----------
+------------- New Chunk -----------
 effStress_new :: TheoryModel
 effStress_new = tm' (cw effStress)
   (tc' "effStress_new" [qw normStress, qw porePressure] 
@@ -129,7 +123,7 @@ effS_rel :: Relation
 effS_rel = (sy normStress) $= (sy normStress) - (sy porePressure)
 
 effS_desc :: Sentence --FIXME: these are not normStress but they are sigma.
-                      -- Add a prime. Symbol inconsistency 
+                      -- Add a prime. Symbol inconsistency.
 effS_desc = foldlSent [ch normStress, S "is the total", phrase stress,
   S "a soil", phrase mass,
   S "needs to maintain itself as a rigid collection of particles.",
@@ -143,7 +137,7 @@ effS_desc = foldlSent [ch normStress, S "is the total", phrase stress,
   phrase stress, ch porePressure]
 
 --
-------------- New Chunck -----------
+------------- New Chunk -----------
 hookesLaw_new :: TheoryModel
 hookesLaw_new = tm' (cw hookesLaw)
   (tc' "effStress_new" [qw genForce, qw stffness, qw genDisplace] 

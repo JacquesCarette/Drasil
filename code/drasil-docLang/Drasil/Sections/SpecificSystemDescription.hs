@@ -1,5 +1,5 @@
 module Drasil.Sections.SpecificSystemDescription 
-  ( specSysDesF, specSysDescr
+  ( specSysDescr
   , probDescF
   , termDefnF
   , physSystDesc
@@ -42,10 +42,6 @@ intro_ sys = Paragraph $ S "This section first presents the problem" +:+
   S "solved. This is followed by the solution characteristics" +:+
   S "specification, which presents the assumptions" `sC`
   S "theories, and definitions that are used for the" +:+. (phrase sys)
-
--- wrapper for specSysDesIntro
-specSysDesF :: Sentence -> [Section] -> Section
-specSysDesF l_eND subSec = SRS.specSysDes [specSysDesIntro l_eND] subSec
 
 -- generalized specific system description introduction: boolean identifies whether the user wants the extended
 -- or shortened ending (True) -> identifies key word pertaining to topic or Nothing

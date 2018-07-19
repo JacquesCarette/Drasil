@@ -334,9 +334,12 @@ goals_list = enumSimple 1 (short goalStmt) sspGoals
 
 -- SECTION 4.2.4 --
 -- Data Definitions is automatically generated
+  --FIXME: derivations should be with the appropriate DataDef
 
 -- SECTION 4.2.5 --
 -- Instance Models is automatically generated
+
+  --FIXME: derivations should be with the appropriate IMod
 
 -- SECTION 4.2.6 --
 -- Data Constraints is automatically generated

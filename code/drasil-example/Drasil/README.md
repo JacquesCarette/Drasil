@@ -2,6 +2,7 @@ This folder contains our working examples (implementations in Drasil of the prev
 
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
+Last updated: July 19, 2018
 --------------------------------------------------
 **GamePhysics**
   - Contains the current state of the Chipmunk2D case study implemented in Drasil

@@ -4,7 +4,6 @@ module Drasil.Sections.SpecificSystemDescription
   , termDefnF
   , physSystDesc
   , goalStmtF
-  , solChSpecF
   , solutionCharSpecIntro 
   , assumpF
   , thModF
@@ -95,24 +94,6 @@ goalStmtF :: [Sentence] -> [Contents] -> Section
 goalStmtF givenInputs otherContents = SRS.goalStmt (intro:otherContents) []
   where intro = Paragraph $ S "Given" +:+ foldlList givenInputs `sC` S "the" +:+ 
                 plural goalStmt +: S "are"
-
--- progName (ex ssp, progName), the two sections, gendef is True if you want general definitions sections, 
---  ddEndSent is the ending sentence for Data Definitions, this is a 4-tuple of inputs for Data Constraints, 
---  the last input is a tupple of lists of Sections for each Subsection in order.
-solChSpecF :: (Idea a) => a -> (Section, Section, Section) -> Sentence -> 
-  (Sentence, Sentence, Sentence) -> 
-  ([Contents], [Contents], [Contents], [Contents], [Contents], [Contents]) -> 
-  [Section] -> Section
-solChSpecF progName (probDes, likeChg, unlikeChg) ddEndSent (mid, hasUncertainty, trail) (a, t, g, dd, i, dc) adSubSec = 
-  SRS.solCharSpec [solutionCharSpecIntro progName instModels] (subSec)
-  where subSec = [assumption_, theModels, generDefn, 
-                        dataDefin, instModels, dataConstr] ++ adSubSec
-        assumption_  = assumpF  theModels generDefn dataDefin instModels likeChg unlikeChg a
-        theModels    = thModF progName t
-        generDefn    = genDefnF g
-        dataDefin    = dataDefnF ddEndSent dd
-        instModels   = inModelF  probDes dataDefin theModels generDefn i
-        dataConstr   = datConF mid hasUncertainty trail dc
 
 
 solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents

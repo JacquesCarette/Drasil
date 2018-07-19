@@ -19,7 +19,7 @@ import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title,
   Editor, Pages, Type, Month, Organization, Institution, Chapter, HowPublished, School, Note,
   Journal, BookTitle, Publisher, Series, Address, Edition), HP(URL, Verb), 
   Citation(Cite), BibRef)
-import Language.Drasil.Printing.LayoutObj (Tags, ALUR, Document(Document),
+import Language.Drasil.Printing.LayoutObj (Tags, Document(Document),
   LayoutObj(Graph, Bib, List, Header, Figure, Definition, Table, EqnBlock, Paragraph, 
   HDiv, ALUR))
 import qualified Language.Drasil.Output.Formats as F
@@ -253,6 +253,7 @@ makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
 makeDefn _ [] _  = error "Empty definition"
 makeDefn dt ps l = refwrap l $ wrap "table" [dtag dt] (makeDRows ps)
   where dtag (L.Data _)   = "ddefn"
+        dtag (L.Data' _)  = "ddefn"
         dtag (L.Theory _) = "tdefn"
         dtag (L.General)  = "gdefn"
         dtag (L.Instance) = "idefn"

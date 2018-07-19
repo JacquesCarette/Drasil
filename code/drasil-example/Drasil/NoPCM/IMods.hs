@@ -83,8 +83,8 @@ s4_2_3_desc1_nopcm roc tw en wt vo wvo ms wms hcs hw ht hfc cs tk ass11 ass12 vh
      acroGD 2, S "can be written as"]
 
 s4_2_3_desc2_nopcm :: QDefinition -> [Sentence]
-s4_2_3_desc2_nopcm dd1HtFluxC =
-  [S "Using", makeRef $ datadefn dd1HtFluxC, S ", this can be written as"]
+s4_2_3_desc2_nopcm dd1 =
+  [S "Using", makeRef $ datadefn dd1, S ", this can be written as"]
 
 s4_2_3_desc3_nopcm :: Expr-> [Sentence]
 s4_2_3_desc3_nopcm eq11 = [S "Dividing (3) by", (E eq11) `sC` S "we obtain"]

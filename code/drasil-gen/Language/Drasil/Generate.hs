@@ -57,9 +57,9 @@ writeDoc _    _  _   _ = error "we can only write TeX/HTML (for now)"
 
 -- | Calls the code generator
 genCode :: Choices -> CodeSpec -> IO ()
-genCode ch spec = do 
+genCode chs spec = do 
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False "src"
   setCurrentDirectory "src"
-  generateCode ch $ generator ch spec
+  generateCode chs $ generator chs spec
   setCurrentDirectory workingDir

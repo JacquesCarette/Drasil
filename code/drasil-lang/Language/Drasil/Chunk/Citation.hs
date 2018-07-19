@@ -32,8 +32,7 @@ import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Misc (noSpaces)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), shortname')
 
-import Control.Lens ((^.), Lens', makeLenses)
-import Data.List (find)
+import Control.Lens (Lens', makeLenses)
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces

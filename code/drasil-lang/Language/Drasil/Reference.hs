@@ -24,7 +24,6 @@ import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid))
 import Language.Drasil.Document (Contents(..), DType(Data, Theory), 
   Section(Section), getDefName, repUnd)
 import Language.Drasil.People (People, comparePeople)
-import Language.Drasil.RefTypes (RefType(..))
 import Language.Drasil.Spec (Sentence((:+:), Ref, S))
 import Language.Drasil.UID (UID)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)

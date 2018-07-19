@@ -58,34 +58,34 @@ instance HasAdditionalNotes InstanceModel where getNotes = notes
 -- | Smart constructor for instance models
 im'' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> Derivation -> String -> [Sentence] -> InstanceModel
-im'' rc i ic o oc der sn notes = IM rc i ic o oc [] der (shortname' sn) (Just notes)
+im'' rcon i ic o oc der sn notesInfo = IM rcon i ic o oc [] der (shortname' sn) (Just notesInfo)
 
 im :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> String -> InstanceModel
-im rc i ic o oc sn = IM rc i ic o oc [] [] (shortname' sn) Nothing
+im rcon i ic o oc sn = IM rcon i ic o oc [] [] (shortname' sn) Nothing
 
 -- | Same as `im`, with an additional field for notes to be passed in
 im' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> String -> [Sentence] -> InstanceModel
-im' rc i ic o oc sn notes = IM rc i ic o oc [] [] (shortname' sn) (Just notes)
+im' rcon i ic o oc sn notesInfo = IM rcon i ic o oc [] [] (shortname' sn) (Just notesInfo)
 
 im''' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> Derivation -> String -> InstanceModel
-im''' rc i ic o oc der sn = IM rc i ic o oc [] der (shortname' sn) Nothing
+im''' rcon i ic o oc der sn = IM rcon i ic o oc [] der (shortname' sn) Nothing
 
 -- | Smart constructor for instance model from qdefinition 
 -- (Sentence is the "concept" definition for the relation concept)
 -- FIXME: get the shortname from the QDefinition?
 imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> InputConstraints -> OutputConstraints -> 
   String -> [Sentence] -> InstanceModel
-imQD ctx qd dfn incon ocon sn notes = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
+imQD ctx qd dfn incon ocon sn notesInfo = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
   (sy qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon (qw qd) ocon [] [] 
-  (shortname' sn) (Just notes)
+  (shortname' sn) (Just notesInfo)
 
 -- Same as `imQD`, with an additional field for notes to be passed in
 -- FIXME: get the shortname from the QDefinition?
 imQD' :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> InputConstraints -> OutputConstraints -> 
   String -> Maybe [Sentence] -> InstanceModel
-imQD' ctx qd dfn incon ocon sn notes = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
+imQD' ctx qd dfn incon ocon sn notesInfo = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
   (sy qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon (qw qd) ocon [] [] 
-  (shortname' sn) notes
+  (shortname' sn) notesInfo

@@ -95,7 +95,7 @@ Updating Haddock index for local packages in
 --------------------------------------------------
 
 **drasil-code**
-  - Contains the code for Drasil
+  - Contains the code for code generation in Drasil
 
 **drasil-data**
   - Contains the current common-knowledge base for Drasil

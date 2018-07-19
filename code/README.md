@@ -93,13 +93,22 @@ Updating Haddock index for local packages in
 ### Summary of Folder Structure and File Contents
 --------------------------------------------------
 
-**Data**
+**drasil-code**
+  - Contains the code for Drasil
+
+**drasil-data**
   - Contains the current common-knowledge base for Drasil
+
+**drasil-docLang**
+  - Contains the document language for Drasil
   
-**Example**
+**drasil-example**
   - Contains the currently implemented examples
+
+**drasil-gen**
+  - Contains the generation file(s) for actually generating code
   
-**Language**
+**drasil-lang**
   - Contains the base for the Drasil language
   
 **stable**
@@ -114,9 +123,6 @@ README.md
 countCommand.txt
   - A text file containing instructions on how to count all unique words 
   within a file using bash commands
-  
-drasil.cabal
-  - Cabal file, used by stack to build Drasil
   
 log_check.sh
   - A shell script for comparing the generated output to the expected output for

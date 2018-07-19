@@ -53,17 +53,16 @@ import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
   temp_melt_P, pcm_vol, diam, tau_L_P, tank_length,
   w_vol, swhsConstrained, swhsOutputs, swhsInputs, swhsSymbols, swhsSymbolsAll)
 import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
-  coil, perfect_insul, tank, transient, gauss_div, swhs_pcm,
-  phase_change_material, tank_pcm)
-import Drasil.SWHS.TMods (tModels, t1ConsThermE, t1ConsThermE_new,
- t2SensHtE_new, t3LatHtE_new, swhsTMods)
+  coil, perfect_insul, tank, transient, swhs_pcm, phase_change_material, tank_pcm)
+import Drasil.SWHS.TMods (tModels, t1ConsThermE_new,
+ t2SensHtE_new, t3LatHtE_new)
 import Drasil.SWHS.IMods (heatEInWtr_new, eBalanceOnWtr_new,
   heatEInPCM_new, eBalanceOnPCM_new, swhsIMods)
-import Drasil.SWHS.DataDefs (swhsDataDefs,dd1HtFluxC, dd2HtFluxP, swhsDDefs, dataDefns)
+import Drasil.SWHS.DataDefs (swhsDataDefs,dd1HtFluxC, dd2HtFluxP, dataDefns)
 import Drasil.SWHS.GenDefs (swhsGenDefs, generalDefinitions)
 import Drasil.SWHS.References (ref_swhs_citations)
-import Drasil.SWHS.Assumptions (assump3, assump4, assump5, assump6, assump13, 
-  assump15, assump16, assump17, assump18, newAssumptions, swhsAssumptions)
+import Drasil.SWHS.Assumptions (assump13, assump15, assump16, assump17, assump18,
+  newAssumptions, swhsAssumptions)
 import Drasil.SWHS.Requirements (req1, req2, reqEqn1, reqEqn2,
   req3, req4, req5, req6, req7, req8, req9, req10, req11, nonFuncReqs)
 import Drasil.SWHS.Changes (likeChg1, likeChg2, likeChg3, likeChg4,
@@ -73,7 +72,7 @@ import Drasil.SWHS.DataDesc (swhsInputMod)
 import Data.Drasil.Utils (enumSimple, weave, itemRefToSent, makeListRef,
   makeTMatrix, refFromType, eqUnR)
 import Data.Drasil.SentenceStructures (acroIM, acroGD, acroGS, showingCxnBw,
-  foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe,
+  foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, isThe, ofThe,
   ofThe', sAnd, sOf, foldlList)
 
 -------------------------------------------------------------------------------

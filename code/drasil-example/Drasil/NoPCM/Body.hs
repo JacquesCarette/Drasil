@@ -73,7 +73,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   RefSec(RefProg), RefTab(TAandA, TUnits), 
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty, 
   inDataConstTbl, intro, mkDoc, mkLklyChnk, mkRequirement, mkUnLklyChnk, 
-  outDataConstTbl, physSystDesc, reqF, solChSpecF, specSysDesF, termDefnF, 
+  outDataConstTbl, physSystDesc, reqF, specSysDesF, termDefnF, 
   traceGIntro, traceMGF, tsymb, valsOfAuxConstantsF)
  
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
@@ -109,7 +109,7 @@ nopcm_Constraints :: [UncertQ]
 nopcm_Constraints =  [coil_SA, w_E, htCap_W, coil_HTC, temp_init,
   time_final, tank_length, temp_C, w_density, diam, temp_W]
 
-specSystDesc, probDescription, termAndDefn, physSystDescription, goalStates, solCharSpec,
+probDescription, termAndDefn, physSystDescription, goalStates,
   reqS, funcReqs, likelyChgs, unlikelyChgs, traceMAndG, specParamVal :: Section
 
 
@@ -336,11 +336,6 @@ orgDocEnd im_ od pro = foldlSent_ [S "The", phrase im_,
 -----------------------------------------
 
 --TODO: finish filling in the subsections
-specSystDesc = specSysDesF (words_ sWHT) [probDescription, solCharSpec]
-  where
-  words_ sw = (plural definition `sAnd` S "finally the" +:+
-    phrase inModel +:+ sParen (getAcc M.ode) +:+
-    S "that" +:+ plural model +:+ S "the" +:+ phrase sw)
 
 -----------------------------------
 --Section 4.1 : PROBLEM DESCRIPTION
@@ -390,17 +385,6 @@ goalStatesList temw we = enumSimple 1 (short goalStmt) [
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
 ------------------------------------------------------
   
-solCharSpec = solChSpecF progName (probDescription, likelyChgs, unlikelyChgs) dataDefIntroEnd (mid,
-  dataConstraintUncertainty, EmptyS) (npcmAssumptions, tMod1,
-  genDefnParagraph M.rOfChng temp, [swhsDD1],
-  [reldefn eBalanceOnWtr] ++ (iMod1Para energy water) ++
-  iModParagraph ++ [reldefn heatEInWtr], [dataConstTable1, dataConstTable2])
-  []
-  where
-  mid = foldlSent [S "The", phrase column, S "for",
-    plural softwareConstraint, S "restricts the range of",
-    plural input_, S "to reasonable", plural value]
-
   {--end = foldlSent [S "The", phrase uncertCol,
     S "provides an estimate of the confidence with which the physical",
     plural quantity, S "can be measured. This", phrase information,

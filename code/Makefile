@@ -67,7 +67,7 @@ build_gen: build_print
 
 build_data: build_gen
 	mkdir -p $(DATA_DIR)
-	cd $(DATA_DIR) && stack build -j2 $(stackArgs) drasil-data 
+	cd $(DATA_DIR) && stack build -j2 $(stackArgs) drasil-data
 	stack install $(stackArgs) drasil-data
 
 build_docl: build_data
@@ -77,7 +77,7 @@ build_docl: build_data
 
 build_exam: build_docl
 	mkdir -p $(EXAM_DIR)
-	cd $(EXAM_DIR) && stack build -j2 $(stackArgs) drasil-example 
+	cd $(EXAM_DIR) && stack build -j2 $(stackArgs) drasil-example
 	stack install $(stackArgs) drasil-example --force-dirty
 
 swhs_build: build_exam
@@ -150,21 +150,29 @@ gamephys_prog: gamephys_build
 
 nopcm_prog: nopcm_build
 
-docs: lang-docs code-docs data-docs example-docs
-	
-	
+docs: lang-docs code-docs data-docs example-docs gen-docs printers-docs 
+
 lang-docs:
 	stack haddock drasil-lang $(haddockArgs)
-	
+
 code-docs:
 	stack haddock drasil-code $(haddockArgs)
-	
+
 data-docs:
 	stack haddock drasil-data $(haddockArgs)
-	
+
 example-docs:
 	stack haddock drasil-example $(haddockArgs)
-	
+
+gen-docs:
+	stack haddock drasil-gen $(haddockArgs)
+
+printers-docs:
+	stack haddock drasil-printers $(haddockArgs)
+
+docLang-docs:
+	stack haddock drasil-docLang $(haddockArgs)
+
 clean: clean_build
 	- stack clean
 	- cd $(LANG_DIR)  && stack clean

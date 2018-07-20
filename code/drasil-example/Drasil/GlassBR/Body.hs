@@ -23,6 +23,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
 import Data.Drasil.Concepts.Computation (computerApp, inParam,
   computerLiteracy, inValue, inQty)
 
+
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
   assumption, characteristic, class_, code, company, condition, constraint, content, 
   dataConst, dataDefn, datum, datumConstraint, definition, description, document, emphasis, 
@@ -32,6 +33,7 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   reference, requirement, reviewer, section_, software, softwareSys, srs, standard, symbol_,  
   sysCont, system, systemConstraint, template, term_, theory, thModel, traceyMatrix, user,
   userCharacteristic, userInput, value)
+
 import Data.Drasil.Concepts.Education (secondYear, undergradDegree,
   civilEng, structuralEng, scndYrCalculus, structuralMechanics)
 import Data.Drasil.Concepts.Math (graph, calculation, probability,

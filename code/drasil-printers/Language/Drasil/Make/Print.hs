@@ -2,6 +2,8 @@ module Language.Drasil.Make.Print where
 
 import Text.PrettyPrint (Doc, text, (<>), (<+>), ($+$), hsep, vcat) 
 
+import Language.Drasil
+
 import Language.Drasil.Output.Formats (DocSpec(..))
 import Language.Drasil.Make.AST (Type(Phony, TeX), Target, Dependencies, Rule, Makefile(M))
 import Language.Drasil.Make.Import (toMake)

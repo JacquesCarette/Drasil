@@ -7,6 +7,9 @@ import System.Directory (createDirectoryIfMissing, getCurrentDirectory,
   setCurrentDirectory)
 
 import Language.Drasil
+import Language.Drasil.Printers (Format(TeX, HTML), DocSpec(DocSpec), 
+  DocType(SRS, MG, MIS, Website), Filename, makeCSS, genMake, genHTML,
+  genTeX)
 import Language.Drasil.Code (generator, generateCode, Choices, CodeSpec)
 
 -- | Generate a number of artifacts based on a list of recipes.

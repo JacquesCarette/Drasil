@@ -464,17 +464,6 @@ m
 </tr>
 <tr>
 <td>
-<em>SD</em>
-</td>
-<td>
-Stand off distance
-</td>
-<td>
-m
-</td>
-</tr>
-<tr>
-<td>
 <em>t</em>
 </td>
 <td>
@@ -1149,7 +1138,7 @@ Theoretical Models
 <p class="paragraph">
 This section focuses on the general equations and laws that GlassBR is based on.
 </p>
-<div id="T:t1SafetyReq">
+<div id="T:safetyReqPb">
 <table class="tdefn">
 <tr>
 <th>
@@ -1157,7 +1146,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Safety Requirement-1
+Safety Req-Pb
 </p>
 </td>
 </tr>
@@ -1197,7 +1186,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-If <em>is_safe1</em>, the glass is considered safe. <em>is_safe1</em> and <em>is_safe2</em> (from <a href=#T:t2SafetyReq>T:t2SafetyReq</a>) are either both True or both False. <em>P<sub>b</sub></em> is the probability of breakage, as calculated in <a href=#T:probOfBr>T:probOfBr</a>. <em>P<sub>btol</sub></em> is the tolerable probability of breakage entered by the user.
+If <em>is_safe1</em>, the glass is considered safe. <em>is_safe1</em> and <em>is_safe2</em> (from <a href=#T:safetyReqLR>T:safetyReqLR</a>) are either both True or both False. <em>P<sub>b</sub></em> is the probability of breakage, as calculated in <a href=#T:probOfBr>T:probOfBr</a>. <em>P<sub>btol</sub></em> is the tolerable probability of breakage entered by the user.
 </p>
 </td>
 </tr>
@@ -1223,7 +1212,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="T:t2SafetyReq">
+<div id="T:safetyReqLR">
 <table class="tdefn">
 <tr>
 <th>
@@ -1231,7 +1220,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Safety Requirement-2
+Safety Req-LR
 </p>
 </td>
 </tr>
@@ -1271,7 +1260,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-If <em>is_safe2</em>, the glass is considered safe. <em>is_safe1</em> (from <a href=#T:t1SafetyReq>T:t1SafetyReq</a>) and <em>is_safe2</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#T:calOfCap>T:calOfCap</a>. <em>q</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#T:calOfDe>T:calOfDe</a>.
+If <em>is_safe2</em>, the glass is considered safe. <em>is_safe1</em> (from <a href=#T:safetyReqPb>T:safetyReqPb</a>) and <em>is_safe2</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#T:calOfCap>T:calOfCap</a>. <em>q</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#T:calOfDe>T:calOfDe</a>.
 </p>
 </td>
 </tr>
@@ -2391,7 +2380,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:sd">
+<div id="DD:standOffDist">
 <table class="ddefn">
 <tr>
 <th>
@@ -3138,7 +3127,7 @@ Input-Glass-Props: Input the quantities from <a href=#Table:R1ReqInputs>Table:R1
 <ul class="hide-list-style">
 <li>
 <div id="FR:functional.requirements.req2">
-System-Set-Values-Following-Assumptions: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following A4, <em>LDF</em> following A8, LSF following A5, <em>h</em> (from <a href=#DD:min.thick>min_thick</a>), <em>GTF</em> (from <a href=#DD:gTF>gTF</a>), and <em>SD</em> (from <a href=#DD:sd>sd</a>).
+System-Set-Values-Following-Assumptions: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following A4, <em>LDF</em> following A8, LSF following A5, <em>h</em> (from <a href=#DD:min.thick>min_thick</a>), <em>GTF</em> (from <a href=#DD:gTF>gTF</a>), and <em>SD</em> (from <a href=#DD:standOffDist>standOffDist</a>).
 </div>
 </li>
 </ul>
@@ -3159,7 +3148,7 @@ Output-Values-and-Known-Quantities: Output the input quantities from R1 and the 
 <ul class="hide-list-style">
 <li>
 <div id="FR:functional.requirements.req5">
-Check-Glass-Safety: If <em>is_safe1</em> ∧ <em>is_safe2</em> (from <a href=#T:t1SafetyReq>T:t1SafetyReq</a> and <a href=#T:t2SafetyReq>T:t2SafetyReq</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
+Check-Glass-Safety: If <em>is_safe1</em> ∧ <em>is_safe2</em> (from <a href=#T:safetyReqPb>T:safetyReqPb</a> and <a href=#T:safetyReqLR>T:safetyReqLR</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
 </div>
 </li>
 </ul>
@@ -3426,10 +3415,10 @@ The purpose of the traceability matrices is to provide easy references on what h
 
 </th>
 <th>
-T1 (<a href=#T:t1SafetyReq>T:t1SafetyReq</a>)
+T1 (<a href=#T:safetyReqPb>T:safetyReqPb</a>)
 </th>
 <th>
-T2 (<a href=#T:t2SafetyReq>T:t2SafetyReq</a>)
+T2 (<a href=#T:safetyReqLR>T:safetyReqLR</a>)
 </th>
 <th>
 IM1 (<a href=#T:probOfBr>T:probOfBr</a>)
@@ -3467,7 +3456,7 @@ DD8 (<a href=#DD:tolLoad>DD:tolLoad</a>)
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:t1SafetyReq>T:t1SafetyReq</a>)
+T1 (<a href=#T:safetyReqPb>T:safetyReqPb</a>)
 </td>
 <td>
 
@@ -3511,7 +3500,7 @@ X
 </tr>
 <tr>
 <td>
-T2 (<a href=#T:t2SafetyReq>T:t2SafetyReq</a>)
+T2 (<a href=#T:safetyReqLR>T:safetyReqLR</a>)
 </td>
 <td>
 X
@@ -4049,10 +4038,10 @@ Traceability Matrix Showing the Connections Between Items of Different Sections
 
 </th>
 <th>
-T1 (<a href=#T:t1SafetyReq>T:t1SafetyReq</a>)
+T1 (<a href=#T:safetyReqPb>T:safetyReqPb</a>)
 </th>
 <th>
-T2 (<a href=#T:t2SafetyReq>T:t2SafetyReq</a>)
+T2 (<a href=#T:safetyReqLR>T:safetyReqLR</a>)
 </th>
 <th>
 IM1 (<a href=#T:probOfBr>T:probOfBr</a>)
@@ -4537,7 +4526,7 @@ A8 (<a href=#Sec:Assumps>Assumptions</a>)
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:t1SafetyReq>T:t1SafetyReq</a>)
+T1 (<a href=#T:safetyReqPb>T:safetyReqPb</a>)
 </td>
 <td>
 
@@ -4566,7 +4555,7 @@ T1 (<a href=#T:t1SafetyReq>T:t1SafetyReq</a>)
 </tr>
 <tr>
 <td>
-T2 (<a href=#T:t2SafetyReq>T:t2SafetyReq</a>)
+T2 (<a href=#T:safetyReqLR>T:safetyReqLR</a>)
 </td>
 <td>
 

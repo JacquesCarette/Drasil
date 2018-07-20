@@ -9,6 +9,8 @@ library
   exposed-modules:
       Language.Drasil
     , Language.Drasil.Development
+    , Language.Drasil.NounPhrase
+    , Language.Drasil.RefTypes
   other-modules:
       Language.Drasil.SystemInformation
     , Language.Drasil.Expr
@@ -20,14 +22,11 @@ library
     , Language.Drasil.Document
     , Language.Drasil.Document.Extract
     , Language.Drasil.Document.GetChunk
-    , Language.Drasil.Format
     , Language.Drasil.Label.Core
     , Language.Drasil.Label
     , Language.Drasil.Misc
     , Language.Drasil.NounPhrase.Core
-    , Language.Drasil.NounPhrase
     , Language.Drasil.People
-    , Language.Drasil.RefTypes
     , Language.Drasil.Reference
     , Language.Drasil.Sentence.Extract
     , Language.Drasil.Sentence.EmbedSymbol
@@ -37,13 +36,6 @@ library
     , Language.Drasil.SymbolAlphabet
     , Language.Drasil.UID
     , Language.Drasil.Unicode
-    , Language.Drasil.HTML.Helpers
-    , Language.Drasil.HTML.Print
-    , Language.Drasil.HTML.Monad
-    , Language.Drasil.TeX.Helpers
-    , Language.Drasil.TeX.Print
-    , Language.Drasil.TeX.Monad
-    , Language.Drasil.TeX.Preamble
     , Language.Drasil.Chunk.AssumpChunk
     , Language.Drasil.Chunk.Attribute
     , Language.Drasil.Chunk.Change
@@ -75,16 +67,6 @@ library
     , Language.Drasil.Chunk.UnitaryConcept
     , Language.Drasil.Chunk.VarChunk
     , Language.Drasil.ChunkDB
-    , Language.Drasil.Make.AST
-    , Language.Drasil.Make.Helpers
-    , Language.Drasil.Make.Import
-    , Language.Drasil.Make.Print
-    , Language.Drasil.Output.Formats
-    , Language.Drasil.Printing.Helpers
-    , Language.Drasil.Printing.AST
-    , Language.Drasil.Printing.Citation
-    , Language.Drasil.Printing.Import
-    , Language.Drasil.Printing.LayoutObj
     , Language.Drasil.Development.Unit
     , Language.Drasil.Development.UnitLang
 

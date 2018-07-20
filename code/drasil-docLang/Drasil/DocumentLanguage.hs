@@ -10,7 +10,7 @@ module Drasil.DocumentLanguage where
 import Drasil.DocumentLanguage.Definitions (Fields, ddefn, ddefn', derivation, 
   instanceModel, gdefn, tmodel)
 
-import Language.Drasil hiding (Manual, Vector) -- Manual - Citation name conflict. FIXME: Move to different namespace
+import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                -- Vector - Name conflict (defined in file)
 
 import Control.Lens ((^.))
@@ -306,12 +306,16 @@ mkTSymb v f c = SRS.tOfSymb [tsIntro c,
 
 -- | table of symbols constructor
 tsymb, tsymb' :: [TSIntro] -> RefTab
-tsymb intro = TSymb intro                -- ^ Default Term and given intro
-tsymb' intro = TSymb' Defn intro         -- ^ Default Defn and given intro
+tsymb intro = TSymb intro 
+-- ^ Default Term and given intro
+
+tsymb' intro = TSymb' Defn intro
+-- ^ Default Defn and given intro
 
 -- | Custom table of symbols constructor
 tsymb'' :: [TSIntro] -> LFunc -> RefTab
-tsymb'' intro lfunc = TSymb' lfunc intro -- ^ Custom function and intro.
+tsymb'' intro lfunc = TSymb' lfunc intro 
+-- ^ Custom function and intro.
 
 -- | table of symbols intro builder. Used by mkRefSec
 tsIntro :: [TSIntro] -> Contents

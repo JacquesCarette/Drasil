@@ -50,6 +50,7 @@ dataDefns = [sliceWght_new, baseWtrF_new, surfWtrF_new, intersliceWtrF_new,
   surfLoads_new, intrsliceF_new, resShearWO_new, mobShearWO_new, displcmntRxnF_new,
   displcmntBasel_new, netFDsplcmntEqbm_new, shearStiffness_new, soilStiffness_new,
   fixme1_new, fixme2_new]
+--FIXME: data definitions need renaming
 
 --DD1
 

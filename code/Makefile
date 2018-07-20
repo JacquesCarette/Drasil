@@ -170,8 +170,8 @@ gen-docs:
 printers-docs:
 	stack haddock drasil-printers $(haddockArgs)
 
-#docLang-docs:
-#	stack haddock drasil-docLang $(haddockArgs)
+docLang-docs:
+	stack haddock drasil-docLang $(haddockArgs)
 
 clean: clean_build
 	- stack clean

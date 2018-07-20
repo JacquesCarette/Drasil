@@ -3614,6 +3614,32 @@ Output Data Constraints
 </div>
 </div>
 </div>
+<div id="Sec:CorSolProps">
+<div class="subsubsection">
+<h3>
+Properties of a Correct Solution
+</h3>
+<p class="paragraph">
+A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking <a href=#DD:ht.flux.C>DD:ht.flux.C</a> and <a href=#DD:ht.flux.P>DD:ht.flux.P</a>, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
+</p>
+<div id="">
+<div class="equation">
+<em>E<sub>W</sub> = &int;<sub>0</sub><sup>t</sup>h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))&#8239;dt&minus;&int;<sub>0</sub><sup>t</sup>h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t))&#8239;dt</em>
+</div>
+</div>
+<p class="paragraph">
+In addition, the change in heat energy in the PCM should equal the energy input to the PCM from the water. This can be expressed as
+</p>
+<div id="">
+<div class="equation">
+<em>E<sub>P</sub> = &int;<sub>0</sub><sup>t</sup>h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t))&#8239;dt</em>
+</div>
+</div>
+<p class="paragraph">
+Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as &quot;sanity&quot;checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% <a href=#FR:req9>Verify-Energy-Output-follow-Conservation-of-Energy</a>.
+</p>
+</div>
+</div>
 </div>
 </div>
 </div>

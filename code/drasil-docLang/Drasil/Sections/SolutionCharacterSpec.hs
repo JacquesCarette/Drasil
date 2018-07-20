@@ -518,11 +518,10 @@ dataConstraintClosingSent trailing = (foldlSent
 
 dataConstraintUncertainty :: Sentence
 dataConstraintUncertainty = foldlSent [S "The", phrase Doc.uncertainty, 
-  phrase Doc.column, S "provides an", 
-  S "estimate of the confidence with which the", phrase Doc.physical,
-  plural Doc.quantity +:+. S "can be measured", S "This", phrase Doc.information,
-  S "would be part of the", phrase Doc.input_, S "if one were performing an",
-  phrase Doc.uncertainty, S "quantification exercise"]
+  phrase Doc.column, S "provides an estimate of the confidence with which the", 
+  phrase Doc.physical, plural Doc.quantity +:+. S "can be measured", 
+  S "This", phrase Doc.information, S "would be part of the", phrase Doc.input_, 
+  S "if one were performing an", phrase Doc.uncertainty, S "quantification exercise"]
 
 ------------------
 -- REQUIREMENTS --

@@ -412,7 +412,7 @@ kg
 Unit outward normal vector for a surface
 </td>
 <td>
-
+--
 </td>
 </tr>
 <tr>
@@ -490,6 +490,17 @@ Latent heat energy added to PCM
 </td>
 <td>
 J
+</td>
+</tr>
+<tr>
+<td>
+<em>q</em>
+</td>
+<td>
+Heat flux
+</td>
+<td>
+W/m<sup>2</sup>
 </td>
 </tr>
 <tr>
@@ -709,7 +720,7 @@ m<sup>3</sup>
 ODE parameter
 </td>
 <td>
-
+--
 </td>
 </tr>
 <tr>
@@ -797,7 +808,7 @@ s
 Melt fraction
 </td>
 <td>
-
+--
 </td>
 </tr>
 <tr>
@@ -808,7 +819,7 @@ Melt fraction
 Gradient
 </td>
 <td>
-
+--
 </td>
 </tr>
 </table>
@@ -824,10 +835,10 @@ Abbreviations and Acronyms
 <table class="table">
 <tr>
 <th>
-Symbol
+Abbreviation
 </th>
 <th>
-Description
+Full Form
 </th>
 </tr>
 <tr>
@@ -944,18 +955,18 @@ Theoretical Model
 </tr>
 <tr>
 <td>
-TU
-</td>
-<td>
-Typical Uncertainty
-</td>
-</tr>
-<tr>
-<td>
 UC
 </td>
 <td>
 Unlikely Change
+</td>
+</tr>
+<tr>
+<td>
+Uncert.
+</td>
+<td>
+Typical Uncertainty
 </td>
 </tr>
 </table>
@@ -994,7 +1005,7 @@ This document will be used as a starting point for subsequent development phases
 Scope of Requirements
 </h2>
 <p class="paragraph">
-The scope of the requirements includes thermal analysis of a single solar water heating tank incorporating PCM. Given the appropriate inputs, the code for SWHS is intended to predict the temperature and thermal energy histories for the water and the PCM. This entire document is written assuming that the substances inside the solar water heating tank are water and PCM.
+The scope of the requirements includes thermal analysis of a single solar water heating tank incorporating PCM. Given the appropriate inputs, SWHS predicts the temperature and thermal energy histories for the water and the PCM. This entire document is written assuming that the substances inside the solar water heating tank are water and PCM.
 </p>
 </div>
 </div>
@@ -1692,7 +1703,7 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<em><b>q</b>(t) = h&#8239;ΔT(t)</em>
+<em>q(t) = h&#8239;ΔT(t)</em>
 </div>
 </div>
 </td>
@@ -1704,7 +1715,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em><b>q</b></em> is the thermal flux vector (W/m<sup>2</sup>)
+<em>q</em> is the heat flux (W/m<sup>2</sup>)
 </li>
 <li>
 <em>t</em> is the time (s)
@@ -3236,7 +3247,7 @@ FIXME: This needs to be filled in
 Data Constraints
 </h3>
 <p class="paragraph">
-<a href=#Table:InDataConstraints>Table:InDataConstraints</a>, and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.(*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#A:assump13>assump13</a>). (#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <em><div class="fraction">
+<a href=#Table:InDataConstraints>Table:InDataConstraints</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.(*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#A:assump13>assump13</a>). (#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <em><div class="fraction">
 <span class="fup">
 2
 </span>
@@ -3261,7 +3272,7 @@ Software Constraints
 Typical Value
 </th>
 <th>
-TU
+Uncert.
 </th>
 </tr>
 <tr>
@@ -3289,7 +3300,7 @@ TU
 <em>D&thinsp;&gt;&thinsp;0</em>
 </td>
 <td>
-None
+--
 </td>
 <td>
 <em>0.412</em> m
@@ -3306,7 +3317,7 @@ None
 <em>0&thinsp;&lt;&thinsp;V<sub>P</sub>&thinsp;&lt;&thinsp;V<sub>tank</sub></em>
 </td>
 <td>
-None
+--
 </td>
 <td>
 <em>0.05</em> m<sup>3</sup>
@@ -3347,7 +3358,7 @@ h<sub>min</sub>
 <em>ρ<sub>P</sub><sup>min</sup>&thinsp;&lt;&thinsp;ρ<sub>P</sub>&thinsp;&lt;&thinsp;ρ<sub>P</sub><sup>max</sup></em>
 </td>
 <td>
-None
+--
 </td>
 <td>
 <em>1007.0</em> kg/m<sup>3</sup>
@@ -3364,7 +3375,7 @@ None
 <em>0&thinsp;&lt;&thinsp;T<sub>melt</sub><sup>P</sup>&thinsp;&lt;&thinsp;T<sub>C</sub></em>
 </td>
 <td>
-None
+--
 </td>
 <td>
 <em>44.2</em> &deg;C
@@ -3449,7 +3460,7 @@ None
 <em>0&thinsp;&lt;&thinsp;T<sub>C</sub>&thinsp;&lt;&thinsp;100</em>
 </td>
 <td>
-None
+--
 </td>
 <td>
 <em>50.0</em> &deg;C
@@ -3534,7 +3545,7 @@ None
 <em>0&thinsp;&lt;&thinsp;T<sub>init</sub>&thinsp;&lt;&thinsp;T<sub>melt</sub></em>
 </td>
 <td>
-None
+--
 </td>
 <td>
 <em>40.0</em> &deg;C
@@ -3612,6 +3623,32 @@ Physical Constraints
 Output Data Constraints
 </p>
 </div>
+</div>
+</div>
+<div id="Sec:CorSolProps">
+<div class="subsubsection">
+<h3>
+Properties of a Correct Solution
+</h3>
+<p class="paragraph">
+A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking <a href=#DD:ht.flux.C>DD:ht.flux.C</a> and <a href=#DD:ht.flux.P>DD:ht.flux.P</a>, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
+</p>
+<div id="">
+<div class="equation">
+<em>E<sub>W</sub> = &int;<sub>0</sub><sup>t</sup>h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))&#8239;dt&minus;&int;<sub>0</sub><sup>t</sup>h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t))&#8239;dt</em>
+</div>
+</div>
+<p class="paragraph">
+In addition, the change in heat energy in the PCM should equal the energy input to the PCM from the water. This can be expressed as
+</p>
+<div id="">
+<div class="equation">
+<em>E<sub>P</sub> = &int;<sub>0</sub><sup>t</sup>h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t))&#8239;dt</em>
+</div>
+</div>
+<p class="paragraph">
+Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as &quot;sanity&quot;checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% <a href=#FR:req9>Verify-Energy-Output-follow-Conservation-of-Energy</a>.
+</p>
 </div>
 </div>
 </div>

@@ -1,9 +1,9 @@
 -- | Standard code to make a table of symbols.
 module Drasil.Sections.TableOfAbbAndAcronyms
-  ( table_of_abb_and_acronyms ) where
+  (table_of_abb_and_acronyms) where
 
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation (symbol_, description)
+import Data.Drasil.Concepts.Documentation (abbreviation, fullForm)
 
 import Data.List (sortBy)
 import Data.Function (on)
@@ -20,12 +20,10 @@ select (x:xs) = case getA x of
   Nothing -> select xs
   Just y  -> (y, x) : select xs
 
---FIXME? Should it be called Symbol or something like Abbreviation/Acronym?
---FIXME? Should it be "Description" or "Term" or something else?
 -- | The actual table creation function.
 table :: (Idea s) => [s] -> Contents
 table ls = let chunks = sortBy (compare `on` fst) $ select ls in
-  Table (map (at_start) [symbol_, description]) (mkTable
+  Table (map (titleize) [abbreviation, fullForm]) (mkTable
   [(\(a,_) -> S a),
    (\(_,b) -> titleize b)]
   chunks)

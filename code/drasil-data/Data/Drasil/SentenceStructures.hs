@@ -1,5 +1,5 @@
 module Data.Drasil.SentenceStructures
-  ( foldlSent, foldlSent_, foldlSentCol, foldlsC, foldlList
+  ( foldlSent, foldlSent_, foldlSentCol, foldlsC, foldlList, foldlNumberList
   , sAnd, andIts, andThe, sAre, sIn, sVersus
   , sIs, isThe, sOf, sOr, ofThe, ofThe'
   , ofGiv, ofGiv'
@@ -49,21 +49,32 @@ foldlSP_ = Paragraph . foldlSent_
 foldlSPCol :: [Sentence] -> Contents
 foldlSPCol = Paragraph . foldlSentCol
 
--- | creates a list of elements seperated by commas, including the last element
+-- | creates a list of elements separated by commas, including the last element
 foldlsC :: [Sentence] -> Sentence
 foldlsC = mconcat . intersperse (S ", ")
 
--- | creates a list of elements seperated by commas, ending in a "_, and _"
+-- | creates a list of elements separated by commas, ending in a "_, and _"
 foldlList :: [Sentence] -> Sentence
 foldlList []    = EmptyS
 foldlList [a,b] = a `sAnd` b
 foldlList lst   = foldle1 sC (\a b -> a `sC` S "and" +:+ b) lst
 
--- | creates a list of elements seperated by commas, ending in a "_, or _"
+-- | creates a list of elements separated by commas, ending in a "_, or _"
 foldlOptions :: [Sentence] -> Sentence
 foldlOptions []    = EmptyS
 foldlOptions [a,b] = a `sOr` b
 foldlOptions lst   = foldle1 sC (\a b -> a `sC` S "or" +:+ b) lst
+
+-- | creates an list of elements with numbers in parentheses, separated by a separator, and ending with "and"
+foldlNumberList :: Sentence -> [Sentence] -> Sentence
+foldlNumberList sep lst = makeList sep $ map (\(a, b) -> a +:+ b) $ zip (map sParenNum [1..(length lst)]) lst
+  where
+    sParenNum :: Int -> Sentence
+    sParenNum y = sParen (S (show y))
+    makeList :: Sentence -> [Sentence] -> Sentence
+    makeList  _  []     = EmptyS
+    makeList sep [a,b]  = a :+: sep `sAnd` b
+    makeList sep (x:xs) = x :+: sep +:+ makeList sep xs
 
 {--** Combinators **--}
 sAnd, andIts :: Sentence -> Sentence -> Sentence

@@ -13,14 +13,6 @@ import qualified Language.Drasil as L (People, Person, StyleGuide(APA, MLA, Chic
   Decoration(Prime, Hat, Vector), Document, HasSymbolTable, nameStr, 
   rendPersLFM, rendPersLFM', rendPersLFM'', special, bibStyleH)
 
---import Language.Drasil hiding ((:+:), S, EmptyS, Year, Number, And, Add, Subt, Or, Expr,
-  --CiteField, Title, Volume, School, HowPublished, Editor, Pages, Author, Iff, Impl, GEq,
-  --Eq, NEq, LEq, Gt, title, Organization, Type, URL, Verb, Institution, Chapter, Month, Note,
-  --Journal, Series, Edition, Publisher, Address, Type, BookTitle, Cite, ListType, Simple,
-  --Citation, BibRef, Nested, Flat, ItemType, Definition, Definitions, Table, EqnBlock, Figure,
-  --Desc, Norm, Abs, Mul, Lt, Sqrt, Sub, Case, Str, Int, Dbl, Quote, Ref, Sp, Sy, E, Neg, Dot, 
-  --Cross, Exp, symbol)
-
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (em, wrap, refwrap, caption, image, div_tag,
   td, th, tr, bold, sub, sup, cases, fraction, reflink, paragraph, h, html, body,
@@ -271,7 +263,6 @@ makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
 makeDefn _ [] _  = error "L.Empty definition"
 makeDefn dt ps l = refwrap l $ wrap "table" [dtag dt] (makeDRows ps)
   where dtag (L.Data _)   = "ddefn"
-        dtag (L.Data' _)  = "ddefn"
         dtag (L.Theory _) = "tdefn"
         dtag (L.General)  = "gdefn"
         dtag (L.Instance) = "idefn"

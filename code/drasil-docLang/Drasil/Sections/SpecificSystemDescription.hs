@@ -18,16 +18,17 @@ module Drasil.Sections.SpecificSystemDescription
   ) where
 
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation (physical, column, input_, uncertainty, physicalConstraint,
-  softwareConstraint, typUnc, user, model, value, quantity, information, constraint, variable,
-  output_, symbol_, limitation, problem, inModel, datum, datumConstraint, section_, dataDefn,
-  general, genDefn, problemDescription, solutionCharSpec, assumption, thModel, physicalSystem,
-  likelyChg, unlikelyChg, goalStmt, theory, purpose, requirement, element)
+import Data.Drasil.Concepts.Documentation (assumption, column, constraint, dataDefn, 
+  datum, datumConstraint, element, genDefn, general, goalStmt, information, inModel, 
+  input_, likelyChg, limitation, model, output_, physical, physicalConstraint, 
+  physicalSystem, problem, problemDescription, purpose, quantity, requirement, 
+  section_, softwareConstraint, solutionCharSpec, symbol_, theory, thModel, typUnc, 
+  uncertainty, unlikelyChg, user, value, variable)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle, fmtU, getRVal)
-import Data.Drasil.SentenceStructures (fmtPhys, fmtSfwr, mkTableFromColumns, foldlSent, foldlSP,
-  typUncr, ofThe, foldlList)
+import Data.Drasil.SentenceStructures (fmtPhys, fmtSfwr, mkTableFromColumns, foldlSent, 
+  foldlSP, typUncr, ofThe, foldlList)
 import qualified Drasil.DocLang.SRS as SRS
 
 
@@ -211,7 +212,8 @@ dataConstraintParagraph hasUncertainty tableRef middleSent trailingSent = Paragr
 listofTablesToRefs :: (HasShortName l, Referable l) => [l] -> Sentence
 listofTablesToRefs  []     = EmptyS
 listofTablesToRefs  [x]    = (makeRef x) +:+ S "shows"
-listofTablesToRefs  [x,y]  = (makeRef x) `sC` S "and" +:+ listofTablesToRefs [y]
+listofTablesToRefs  [x,y]  = (makeRef x) +:+ S "and" +:+ (makeRef y) +:+ S "show" -- for proper grammar with multiple tables
+                                                                                  -- no Oxford comma in case there is only two tables to be referenced
 listofTablesToRefs  (x:xs) = (makeRef x) `sC` listofTablesToRefs (xs)
  
 dataConstraintIntroSent :: Sentence -> Sentence
@@ -231,7 +233,7 @@ dataConstraintClosingSent uncertaintySent trailingSent = foldlSent
 
 dataConstraintUncertainty :: Sentence
 dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase column,
-  S "provides an", S "estimate of the confidence with which the", phrase physical,
+  S "provides an estimate of the confidence with which the", phrase physical,
   plural quantity +:+. S "can be measured", S "This", phrase information,
   S "would be part of the", phrase input_, S "if one were performing an",
   phrase uncertainty, S "quantification exercise"]

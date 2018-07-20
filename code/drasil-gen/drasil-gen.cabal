@@ -20,7 +20,8 @@ library
     MissingH >= 1.4.0.1,
     parsec >= 3.1.9,
     drasil-lang >= 0.1.5,
-    drasil-code >= 0.1.3
+    drasil-code >= 0.1.3,
+    drasil-printers >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall -O2
 

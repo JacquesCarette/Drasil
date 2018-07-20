@@ -32,11 +32,11 @@ mkTable fl (c:cl) = map ($ c) fl : mkTable fl cl
 
 -- where should this go?
 -- | Get the units, if they exist, and wrap them as a Sentence
-unit'2Contents :: Quantity u => u -> Sentence
-unit'2Contents x = maybe (S "Unitless") (\y -> Sy (y ^. usymb)) (getUnit x)
+unitToSentence :: Quantity u => u -> Sentence
+unitToSentence x = maybe (S "--") (\y -> Sy (y ^. usymb)) (getUnit x)
 
-unitHidingUnitless :: Quantity u => u -> Sentence
-unitHidingUnitless x = maybe (S "") (\y -> Sy (y ^. usymb)) (getUnit x)
+unitToSentenceUnitless :: Quantity u => u -> Sentence
+unitToSentenceUnitless x = maybe (S "Unitless") (\y -> Sy (y ^. usymb)) (getUnit x)
 
 -- | Helper for getting the unit's symbol from a chunk, 
 -- as opposed to the symbols of the chunk itself.

@@ -1,8 +1,11 @@
 module Language.Drasil.Printing.Citation where
 
-import Language.Drasil.People (People)
-import Language.Drasil.Chunk.Citation (Month, EntryID, CitationKind)
+import Language.Drasil hiding (CiteField, HP, Citation)
+
 import Language.Drasil.Printing.AST (Spec)
+
+--import Language.Drasil.People (People)
+--import Language.Drasil.Chunk.Citation (Month, EntryID, CitationKind)
 
 type BibRef = [Citation]
 

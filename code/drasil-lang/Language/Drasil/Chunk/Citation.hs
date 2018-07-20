@@ -32,8 +32,7 @@ import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Misc (noSpaces)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), shortname')
 
-import Control.Lens ((^.), Lens', makeLenses)
-import Data.List (find)
+import Control.Lens (Lens', makeLenses)
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces
@@ -113,7 +112,7 @@ data CitationKind = Article
 -- We will also have an EntryID (String) used for creating reference links.
 -- Finally we will have the reference information (type and fields).
 data Citation = Cite
-  { _id :: UID
+  { _cid :: UID
   , citeID :: EntryID
   , externRefT :: CitationKind
   , _fields :: [CiteField]
@@ -128,7 +127,7 @@ cite :: EntryID -> CitationKind -> [CiteField] -> Citation
 cite i = Cite i (noSpaces i)
 
 -- | Citations are chunks.
-instance HasUID       Citation where uid f (Cite a b c d) = fmap (\x -> Cite x b c d) (f a)
+instance HasUID       Citation where uid = cid
 instance HasShortName Citation where shortname c = shortname' $ citeID c
 instance HasFields    Citation where getFields = fields
 

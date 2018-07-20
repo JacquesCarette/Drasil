@@ -21,10 +21,9 @@ import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..), ReqType(FR))
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName)
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid))
-import Language.Drasil.Document (Contents(..), DType(Data, Theory), 
+import Language.Drasil.Document (Contents(..), DType(Data, Theory),
   Section(Section), getDefName, repUnd)
 import Language.Drasil.People (People, comparePeople)
-import Language.Drasil.RefTypes (RefType(..))
 import Language.Drasil.Spec (Sentence((:+:), Ref, S))
 import Language.Drasil.UID (UID)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
@@ -285,7 +284,7 @@ getAuthor :: (HasFields c) => c -> People
 getAuthor c = maybe (error "No author found") (\(Author x) -> x) (find isAuthor (c ^. getFields))
   where isAuthor :: CiteField -> Bool
         isAuthor (Author _) = True
-        isAuthor _          = False 
+        isAuthor _          = False
 
 getYear :: (HasFields c) => c -> Int
 getYear c = maybe (error "No year found") (\(Year x) -> x) (find isYear (c ^. getFields))
@@ -301,7 +300,7 @@ getTitle c = getStr $ maybe (error "No title found") (\(Title x) -> x) (find isT
         getStr :: Sentence -> String
         getStr (S s) = s
         getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
-        getStr _ = error "Term is not a string" 
+        getStr _ = error "Term is not a string"
 
 citationsFromBibMap :: BibMap -> [Citation]
 citationsFromBibMap bm = sortBy compareAuthYearTitle citations

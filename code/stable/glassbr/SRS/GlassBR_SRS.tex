@@ -354,11 +354,11 @@ This section focuses on the general equations and laws that GlassBR is based on.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:t1SafetyReq}
+\toprule \textbf{Refname} & \textbf{T:safetyReqPb}
 \phantomsection 
-\label{T:t1SafetyReq}
+\label{T:safetyReqPb}
 \\ \midrule \\
-Label & Safety Requirement-1
+Label & Safety Req-Pb
 \\ \midrule \\
 Equation & \begin{dmath}
            is\_safe1={P_{b}}<{P_{btol}}
@@ -370,7 +370,7 @@ Description & \begin{symbDescription}
               \item{${P_{btol}}$ is the tolerable probability of breakage (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is\_safe1$, the glass is considered safe. $is\_safe1$ and $is\_safe2$ (from \hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[T:probOfBr]{Definition~T:probOfBr}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
+Notes & If $is\_safe1$, the glass is considered safe. $is\_safe1$ and $is\_safe2$ (from \hyperref[T:safetyReqLR]{Definition~T:safetyReqLR}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[T:probOfBr]{Definition~T:probOfBr}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
 \\ \midrule \\
 Source & FIXME: This needs to be filled in
 \\ \midrule \\
@@ -380,11 +380,11 @@ RefBy & FIXME: This needs to be filled in
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:t2SafetyReq}
+\toprule \textbf{Refname} & \textbf{T:safetyReqLR}
 \phantomsection 
-\label{T:t2SafetyReq}
+\label{T:safetyReqLR}
 \\ \midrule \\
-Label & Safety Requirement-2
+Label & Safety Req-LR
 \\ \midrule \\
 Equation & \begin{dmath}
            is\_safe2=LR>q
@@ -396,7 +396,7 @@ Description & \begin{symbDescription}
               \item{$q$ is the applied load (demand) (kPa)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is\_safe2$, the glass is considered safe. $is\_safe1$ (from \hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) and $is\_safe2$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[T:calOfCap]{Definition~T:calOfCap}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[T:calOfDe]{Definition~T:calOfDe}.
+Notes & If $is\_safe2$, the glass is considered safe. $is\_safe1$ (from \hyperref[T:safetyReqPb]{Definition~T:safetyReqPb}) and $is\_safe2$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[T:calOfCap]{Definition~T:calOfCap}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[T:calOfDe]{Definition~T:calOfDe}.
 \\ \midrule \\
 Source & FIXME: This needs to be filled in
 \\ \midrule \\
@@ -961,7 +961,7 @@ This section provides the functional requirements, the business tasks that the s
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req4}:]Output the input quantities from R1 and the known quantities from R2.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req5}:]If $is\_safe1$ ∧ $is\_safe2$ (from \hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq} and \hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) are true, output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req5}:]If $is\_safe1$ ∧ $is\_safe2$ (from \hyperref[T:safetyReqPb]{Definition~T:safetyReqPb} and \hyperref[T:safetyReqLR]{Definition~T:safetyReqLR}) are true, output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
 \end{description}
 \begin{itemize}
 \item[R6:]Output the following quantities:
@@ -1042,12 +1042,12 @@ This problem is small in size and relatively simple, so performance is not a pri
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. Table~\ref{Table:TraceyItemSecs} shows the dependencies of theoretical models, instance models, and data definitions with each other. Table~\ref{Table:TraceyReqsItems} shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. Table~\ref{Table:TraceyAssumpsOthers} shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) & T2 (\hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) & IM1 (\hyperref[T:probOfBr]{Definition~T:probOfBr}) & IM2 (\hyperref[T:calOfCap]{Definition~T:calOfCap}) & IM3 (\hyperref[T:calOfDe]{Definition~T:calOfDe}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) & DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) & DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad})
+ & T1 (\hyperref[T:safetyReqPb]{Definition~T:safetyReqPb}) & T2 (\hyperref[T:safetyReqLR]{Definition~T:safetyReqLR}) & IM1 (\hyperref[T:probOfBr]{Definition~T:probOfBr}) & IM2 (\hyperref[T:calOfCap]{Definition~T:calOfCap}) & IM3 (\hyperref[T:calOfDe]{Definition~T:calOfDe}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) & DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) & DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad})
 \\
 \midrule
-T1 (\hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) &  & X & X &  &  &  &  &  &  &  &  &  & 
+T1 (\hyperref[T:safetyReqPb]{Definition~T:safetyReqPb}) &  & X & X &  &  &  &  &  &  &  &  &  & 
 \\
-T2 (\hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) & X &  &  & X & X &  &  &  &  &  &  &  & 
+T2 (\hyperref[T:safetyReqLR]{Definition~T:safetyReqLR}) & X &  &  & X & X &  &  &  &  &  &  &  & 
 \\
 IM1 (\hyperref[T:probOfBr]{Definition~T:probOfBr}) &  &  &  &  &  & X & X & X &  &  &  &  & 
 \\
@@ -1077,7 +1077,7 @@ DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) &  &  &  &  &  &  & X &  &  &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) & T2 (\hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) & IM1 (\hyperref[T:probOfBr]{Definition~T:probOfBr}) & IM2 (\hyperref[T:calOfCap]{Definition~T:calOfCap}) & IM3 (\hyperref[T:calOfDe]{Definition~T:calOfDe}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) & DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) & DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & Data Constraints (Section~\ref{Sec:DataConstraints}) & R1 (Section~\ref{Sec:FRs}) & R2 (Section~\ref{Sec:FRs}) & R3 (Section~\ref{Sec:FRs}) & R4 (Section~\ref{Sec:FRs}) & R5 (Section~\ref{Sec:FRs}) & R6 (Section~\ref{Sec:FRs})
+ & T1 (\hyperref[T:safetyReqPb]{Definition~T:safetyReqPb}) & T2 (\hyperref[T:safetyReqLR]{Definition~T:safetyReqLR}) & IM1 (\hyperref[T:probOfBr]{Definition~T:probOfBr}) & IM2 (\hyperref[T:calOfCap]{Definition~T:calOfCap}) & IM3 (\hyperref[T:calOfDe]{Definition~T:calOfDe}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) & DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) & DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & Data Constraints (Section~\ref{Sec:DataConstraints}) & R1 (Section~\ref{Sec:FRs}) & R2 (Section~\ref{Sec:FRs}) & R3 (Section~\ref{Sec:FRs}) & R4 (Section~\ref{Sec:FRs}) & R5 (Section~\ref{Sec:FRs}) & R6 (Section~\ref{Sec:FRs})
 \\
 \midrule
 R1 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1101,9 +1101,9 @@ R6 (in Section~\ref{Sec:FRs}) &  &  & X & X & X &  & X & X & X & X & X & X & X &
  & A1 (Section~\ref{Sec:Assumps}) & A2 (Section~\ref{Sec:Assumps}) & A3 (Section~\ref{Sec:Assumps}) & A4 (Section~\ref{Sec:Assumps}) & A5 (Section~\ref{Sec:Assumps}) & A6 (Section~\ref{Sec:Assumps}) & A7 (Section~\ref{Sec:Assumps}) & A8 (Section~\ref{Sec:Assumps})
 \\
 \midrule
-T1 (\hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) &  &  &  &  &  &  &  & 
+T1 (\hyperref[T:safetyReqPb]{Definition~T:safetyReqPb}) &  &  &  &  &  &  &  & 
 \\
-T2 (\hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) &  &  &  &  &  &  &  & 
+T2 (\hyperref[T:safetyReqLR]{Definition~T:safetyReqLR}) &  &  &  &  &  &  &  & 
 \\
 IM1 (\hyperref[T:probOfBr]{Definition~T:probOfBr}) &  &  &  & X &  & X & X & 
 \\

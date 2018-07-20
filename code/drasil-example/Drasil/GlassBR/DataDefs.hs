@@ -6,9 +6,9 @@ import Prelude hiding (log, exp, sqrt)
 
 import Drasil.GlassBR.Unitals (actualThicknesses, aspectR, 
   demand, dimlessLoad, gTF, glassTypeAbbrsStr, glassTypeFactors, glass_type, 
-  lDurFac, load_dur, mod_elas, min_thick, nom_thick, nominalThicknesses, nonFactorL, pb_tol, 
+  lDurFac, load_dur, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pb_tol, 
   plate_len, plate_width, risk_fun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
-  sflawParamM, stressDistFac, tolLoad)
+  sflawParamM, stressDistFac, tolLoad, min_thick)
 
 import Data.Drasil.Concepts.Documentation (datum, user)
 import Data.Drasil.Concepts.Math (probability, parameter, calculation)

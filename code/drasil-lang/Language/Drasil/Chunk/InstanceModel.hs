@@ -1,5 +1,5 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
-module Language.Drasil.Chunk.InstanceModel 
+module Language.Drasil.Chunk.InstanceModel
   ( InstanceModel
   , inCons, outCons, imOutput, imInputs
   , im, imQD, im', imQD', im'', im'''
@@ -42,7 +42,7 @@ data InstanceModel = IM { _rc :: RelationConcept
                         , _notes :: Maybe [Sentence]
                         }
 makeLenses ''InstanceModel
-  
+
 instance HasUID             InstanceModel where uid = rc . uid
 instance NamedIdea          InstanceModel where term = rc . term
 instance Idea               InstanceModel where getA (IM a _ _ _ _ _ _ _ _) = getA a
@@ -56,36 +56,36 @@ instance HasShortName       InstanceModel where shortname = view refName
 instance HasAdditionalNotes InstanceModel where getNotes = notes
 
 -- | Smart constructor for instance models
-im'' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
+im'' :: RelationConcept -> Inputs -> InputConstraints -> Output ->
   OutputConstraints -> Derivation -> String -> [Sentence] -> InstanceModel
-im'' rc i ic o oc der sn notes = IM rc i ic o oc [] der (shortname' sn) (Just notes)
+im'' rcon i ic o oc der sn addNotes = IM rcon i ic o oc [] der (shortname' sn) (Just addNotes)
 
-im :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
+im :: RelationConcept -> Inputs -> InputConstraints -> Output ->
   OutputConstraints -> String -> InstanceModel
-im rc i ic o oc sn = IM rc i ic o oc [] [] (shortname' sn) Nothing
+im rcon i ic o oc sn = IM rcon i ic o oc [] [] (shortname' sn) Nothing
 
 -- | Same as `im`, with an additional field for notes to be passed in
-im' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
+im' :: RelationConcept -> Inputs -> InputConstraints -> Output ->
   OutputConstraints -> String -> [Sentence] -> InstanceModel
-im' rc i ic o oc sn notes = IM rc i ic o oc [] [] (shortname' sn) (Just notes)
+im' rcon i ic o oc sn addNotes = IM rcon i ic o oc [] [] (shortname' sn) (Just addNotes)
 
-im''' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
+im''' :: RelationConcept -> Inputs -> InputConstraints -> Output ->
   OutputConstraints -> Derivation -> String -> InstanceModel
-im''' rc i ic o oc der sn = IM rc i ic o oc [] der (shortname' sn) Nothing
+im''' rcon i ic o oc der sn = IM rcon i ic o oc [] der (shortname' sn) Nothing
 
--- | Smart constructor for instance model from qdefinition 
+-- | Smart constructor for instance model from qdefinition
 -- (Sentence is the "concept" definition for the relation concept)
 -- FIXME: get the shortname from the QDefinition?
-imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> InputConstraints -> OutputConstraints -> 
+imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> InputConstraints -> OutputConstraints ->
   String -> [Sentence] -> InstanceModel
-imQD ctx qd dfn incon ocon sn notes = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
-  (sy qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon (qw qd) ocon [] [] 
-  (shortname' sn) (Just notes)
+imQD ctx qd dfn incon ocon sn addNotes = IM (makeRC (qd ^. uid) (qd ^. term) dfn
+  (sy qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon (qw qd) ocon [] []
+  (shortname' sn) (Just addNotes)
 
 -- Same as `imQD`, with an additional field for notes to be passed in
 -- FIXME: get the shortname from the QDefinition?
-imQD' :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> InputConstraints -> OutputConstraints -> 
+imQD' :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> InputConstraints -> OutputConstraints ->
   String -> Maybe [Sentence] -> InstanceModel
-imQD' ctx qd dfn incon ocon sn notes = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
-  (sy qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon (qw qd) ocon [] [] 
-  (shortname' sn) notes
+imQD' ctx qd dfn incon ocon sn addNotes = IM (makeRC (qd ^. uid) (qd ^. term) dfn
+  (sy qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon (qw qd) ocon [] []
+  (shortname' sn) addNotes

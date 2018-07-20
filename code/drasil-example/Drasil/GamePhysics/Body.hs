@@ -217,7 +217,7 @@ scope_of_requirements_intro_p1 = foldlSent_
   [S "the", (phrase physicalSim) `sOf` (getAcc twoD), 
   (plural CP.rigidBody), S "acted on by", plural QP.force]
   
-scope_of_requirements_intro_p2 = foldlSent_ [S "simulate how these", 
+scope_of_requirements_intro_p2 = foldlSent_ [S "simulates how these", 
   (plural CP.rigidBody), S "interact with one another"]
 
 ----------------------------------------------

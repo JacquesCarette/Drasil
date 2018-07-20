@@ -514,7 +514,7 @@ funcReqsTable = (Table [titleize symbol_, titleize unit_, titleize description]
   (mkTable
   [ch,
   --(\ch -> Sy (unit_symb ch)),
-  unit'2Contents,
+  unitToSentence,
   phrase] (map qw inputConstraints))
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False)
   "InConstraints"
@@ -810,7 +810,7 @@ scopeReqs1 ta tp = foldlSent_ [phrase ta,
 
 scopeReqs2 :: UnitalChunk -> ConceptChunk -> ConceptChunk -> CI ->
   ConceptChunk -> Sentence
-scopeReqs2 t te wa pcmat sw = foldlSent_ [S "predict the",
+scopeReqs2 t te wa pcmat sw = foldlSent_ [S "predicts the",
   phrase t `sAnd` phrase te,
   S "histories for the", phrase wa `sAnd` S "the" +:+.
   short pcmat, S "This entire", phrase document,

@@ -279,9 +279,8 @@ appStanddIR = foldlSent [S " In addition" `sC` plural reviewer, -- FIXME: space 
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
   S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
   S "related to", phrase blastTy]
-endScoR = foldl (+:+) EmptyS [S "use the", plural datum `sAnd`
-  S "predict whether the", phrase glaSlab, S "is safe to use" `sOr`
-  S "not"]
+endScoR = foldl (+:+) EmptyS [S "predicts whether a", phrase glaSlab, 
+  S "is safe" `sOr` S "not"]
 
 {--Purpose of Document--}
 
@@ -412,7 +411,7 @@ terminology_and_description = termDefnF (Just (S "All" `sOf` S "the" +:+ plural 
 
 physical_system_description = physSystDesc (short gLassBR) fig_glassbr [physical_system_description_list, fig_glassbr]
 
-fig_glassbr = fig (at_start $ the physicalSystem) (resourcePath ++ "physicalsystimage.png")
+fig_glassbr = figWithWidth (at_start $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
   "physSystImage"
 
 physical_system_description_list = enumSimple 1 (short physSyst) physical_system_description_list_physys
@@ -507,7 +506,7 @@ functional_requirements_req1Table = Table
   [at_start symbol_, at_start description, S "Units"]
   (mkTable
   [ch,
-   at_start, unit'2Contents] requiredInputs)
+   at_start, unitToSentence] requiredInputs)
   (S "Required Inputs following R1") True "R1ReqInputs"
 
 req2Desc = foldlSent [S "The", phrase system,

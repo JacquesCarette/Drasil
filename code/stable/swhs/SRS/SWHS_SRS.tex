@@ -121,7 +121,7 @@ ${m_{P}}$ & Mass of phase change material & kg
 \\
 ${m_{W}}$ & Mass of water & kg
 \\
-$\mathbf{\hat{n}}$ & Unit outward normal vector for a surface & 
+$\mathbf{\hat{n}}$ & Unit outward normal vector for a surface & --
 \\
 ${q_{C}}$ & Heat flux into the water from the coil & $\frac{\text{W}}{\text{m}^{2}}$
 \\
@@ -175,7 +175,7 @@ ${V_{tank}}$ & Volume of the cylindrical tank & $\text{m}^{3}$
 \\
 ${V_{W}}$ & Volume of water & $\text{m}^{3}$
 \\
-$η$ & ODE parameter & 
+$η$ & ODE parameter & --
 \\
 $ρ$ & Density & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
@@ -191,9 +191,9 @@ ${{τ_{P}}^{S}}$ & ODE parameter for solid PCM & s
 \\
 ${τ_{W}}$ & ODE parameter for water & s
 \\
-$ϕ$ & Melt fraction & 
+$ϕ$ & Melt fraction & --
 \\
-$∇$ & Gradient & 
+$∇$ & Gradient & --
 \\
 \bottomrule
 \label{Table:ToS}
@@ -250,7 +250,7 @@ The main purpose of this document is to describe the modelling of solar water he
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
-The scope of the requirements includes thermal analysis of a single solar water heating tank incorporating PCM. Given the appropriate inputs, the code for SWHS is intended to predict the temperature and thermal energy histories for the water and the PCM. This entire document is written assuming that the substances inside the solar water heating tank are water and PCM.
+The scope of the requirements includes thermal analysis of a single solar water heating tank incorporating PCM. Given the appropriate inputs, SWHS predicts the temperature and thermal energy histories for the water and the PCM. This entire document is written assuming that the substances inside the solar water heating tank are water and PCM.
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
 Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of SWHS can have a lower level of expertise, as explained in Section~\ref{Sec:UserChars}.
@@ -939,15 +939,15 @@ Var & Physical Constraints & Software Constraints & Typical Value & Uncert.
 \midrule
 $L$ & $L>0$ & ${L_{min}}\leq{}L\leq{}{L_{max}}$ & $1.5$ m & 10.0\%
 \\
-$D$ & $D>0$ & None & $0.412$ m & 10.0\%
+$D$ & $D>0$ & -- & $0.412$ m & 10.0\%
 \\
-${V_{P}}$ & $0<{V_{P}}<{V_{tank}}$ & None & $0.05$ $\text{m}^{3}$ & 10.0\%
+${V_{P}}$ & $0<{V_{P}}<{V_{tank}}$ & -- & $0.05$ $\text{m}^{3}$ & 10.0\%
 \\
 ${A_{P}}$ & ${A_{P}}>0$ & ${V_{P}}\leq{}{A_{P}}\leq{}\frac{2}{{h_{min}}} {V_{tank}}$ & $1.2$ $\text{m}^{2}$ & 10.0\%
 \\
-${ρ_{P}}$ & ${{ρ_{P}}^{min}}<{ρ_{P}}<{{ρ_{P}}^{max}}$ & None & $1007.0$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10.0\%
+${ρ_{P}}$ & ${{ρ_{P}}^{min}}<{ρ_{P}}<{{ρ_{P}}^{max}}$ & -- & $1007.0$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10.0\%
 \\
-${{T_{melt}}^{P}}$ & $0<{{T_{melt}}^{P}}<{T_{C}}$ & None & $44.2$ ${}^{\circ}$C & 10.0\%
+${{T_{melt}}^{P}}$ & $0<{{T_{melt}}^{P}}<{T_{C}}$ & -- & $44.2$ ${}^{\circ}$C & 10.0\%
 \\
 ${{C_{P}}^{S}}$ & ${{C_{P}}^{S}}>0$ & ${{{C_{P}}^{S}}_{min}}<{{C_{P}}^{S}}<{{{C_{P}}^{S}}_{max}}$ & $1760.0$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10.0\%
 \\
@@ -957,7 +957,7 @@ ${H_{f}}$ & ${H_{f}}>0$ & ${{H_{f}}_{min}}<{H_{f}}<{{H_{f}}_{max}}$ & $211600.0$
 \\
 ${A_{C}}$ & ${A_{C}}>0$ & ${A_{C}}\leq{}{{A_{C}}^{max}}$ & $0.12$ $\text{m}^{2}$ & 10.0\%
 \\
-${T_{C}}$ & $0<{T_{C}}<100$ & None & $50.0$ ${}^{\circ}$C & 10.0\%
+${T_{C}}$ & $0<{T_{C}}<100$ & -- & $50.0$ ${}^{\circ}$C & 10.0\%
 \\
 ${ρ_{W}}$ & ${ρ_{W}}>0$ & ${{ρ_{W}}^{min}}<{ρ_{W}}\leq{}{{ρ_{W}}^{max}}$ & $1000.0$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10.0\%
 \\
@@ -967,7 +967,7 @@ ${h_{C}}$ & ${h_{C}}>0$ & ${{h_{C}}^{min}}\leq{}{h_{C}}\leq{}{{h_{C}}^{max}}$ & 
 \\
 ${h_{P}}$ & ${h_{P}}>0$ & ${{h_{P}}^{min}}\leq{}{h_{P}}\leq{}{{h_{P}}^{max}}$ & $1000.0$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$ & 10.0\%
 \\
-${T_{init}}$ & $0<{T_{init}}<{T_{melt}}$ & None & $40.0$ ${}^{\circ}$C & 10.0\%
+${T_{init}}$ & $0<{T_{init}}<{T_{melt}}$ & -- & $40.0$ ${}^{\circ}$C & 10.0\%
 \\
 ${t_{final}}$ & ${t_{final}}>0$ & ${t_{final}}<{{t_{final}}^{max}}$ & $50000.0$ s & 10.0\%
 \\

@@ -307,12 +307,16 @@ mkTSymb v f c = SRS.tOfSymb [tsIntro c,
 
 -- | table of symbols constructor
 tsymb, tsymb' :: [TSIntro] -> RefTab
-tsymb intro = TSymb intro                -- ^ Default Term and given intro
-tsymb' intro = TSymb' Defn intro         -- ^ Default Defn and given intro
+tsymb intro = TSymb intro 
+-- ^ Default Term and given intro
+
+tsymb' intro = TSymb' Defn intro
+-- ^ Default Defn and given intro
 
 -- | Custom table of symbols constructor
 tsymb'' :: [TSIntro] -> LFunc -> RefTab
-tsymb'' intro lfunc = TSymb' lfunc intro -- ^ Custom function and intro.
+tsymb'' intro lfunc = TSymb' lfunc intro 
+-- ^ Custom function and intro.
 
 -- | table of symbols intro builder. Used by mkRefSec
 tsIntro :: [TSIntro] -> Contents

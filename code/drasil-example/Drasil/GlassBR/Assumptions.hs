@@ -8,8 +8,8 @@ import Drasil.DocLang (cite, refA)
 import Data.Drasil.Concepts.Documentation as Doc (condition, constant, practice, reference, scenario, 
   system, value)
 import Data.Drasil.Concepts.Math (calculation, surface, shape)
-import Data.Drasil.SentenceStructures (sAnd, foldlSent, foldlSent_, foldlOptions, 
-  foldlList, foldlNumberList, sOf, sIn)
+import Data.Drasil.SentenceStructures (EnumType(Numb) ,sAnd, foldlSent, foldlSent_, foldlOptions, 
+  foldlList, foldlInlineList, sOf, sIn)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 
 import Drasil.GlassBR.Unitals ( lite, explosion, lateral, load_dur, explosion,
@@ -47,7 +47,7 @@ a1Desc = foldlSent [S "The standard E1300-09a for",
   "laminated", "insulating"], S "glass constructions" `sOf` S "rectangular",
   phrase shape, S "with continuous", phrase lateral, S "support along",
   (foldlOptions $ map S ["one", "two", "three", "four"]) +:+. plural edge, S "This",
-  phrase practice +: S "assumes that", (foldlNumberList (S ";") $ map foldlSent_
+  phrase practice +: S "assumes that", (foldlInlineList Numb (S ";") $ map foldlSent_
   [[S "the supported glass", plural edge, S "for two, three" `sAnd` S "four-sided support",
   plural condition, S "are simply supported" `sAnd` S "free to slip in",
   phrase plane], [S "glass supported on two sides acts as a simply supported", phrase beam], 

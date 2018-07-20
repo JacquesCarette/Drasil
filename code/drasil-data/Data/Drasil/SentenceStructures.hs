@@ -1,5 +1,5 @@
 module Data.Drasil.SentenceStructures
-  ( foldlSent, foldlSent_, foldlSentCol, foldlsC, foldlList, foldlNumberList
+  ( foldlSent, foldlSent_, foldlSentCol, foldlsC, foldlList, foldlInlineList
   , sAnd, andIts, andThe, sAre, sIn, sVersus
   , sIs, isThe, sOf, sOr, ofThe, ofThe'
   , ofGiv, ofGiv'
@@ -15,6 +15,7 @@ module Data.Drasil.SentenceStructures
   , fmtPhys, fmtSfwr, typUncr
   , mkTableFromColumns
   , acroA, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, acroT
+  , EnumType(..)
   ) where
 
 import Language.Drasil
@@ -65,16 +66,19 @@ foldlOptions []    = EmptyS
 foldlOptions [a,b] = a `sOr` b
 foldlOptions lst   = foldle1 sC (\a b -> a `sC` S "or" +:+ b) lst
 
--- | creates an list of elements with numbers in parentheses, separated by a separator, and ending with "and"
-foldlNumberList :: Sentence -> [Sentence] -> Sentence
-foldlNumberList sep lst = makeList sep $ map (\(a, b) -> a +:+ b) $ zip (map sParenNum [1..(length lst)]) lst
-  where
-    sParenNum :: Int -> Sentence
-    sParenNum y = sParen (S (show y))
-    makeList :: Sentence -> [Sentence] -> Sentence
-    makeList  _  []     = EmptyS
-    makeList sep [a,b]  = a :+: sep `sAnd` b
-    makeList sep (x:xs) = x :+: sep +:+ makeList sep xs
+data EnumType = Numb | Upper | Lower
+
+-- | creates an list of elements with "enumerators" in "wrappers", separated by a sep, and ending with "and"
+foldlInlineList :: EnumType -> Sentence -> [Sentence] -> Sentence
+foldlInlineList Numb  sep lst = makeList sep $ map (\(a, b) -> a +:+ b) $ zip (map (\x -> sParen $ S $ show x) [1..(length lst)]) lst
+foldlInlineList Upper sep lst = makeList sep $ map (\(a, b) -> a +:+ b) $ zip (map (\x -> sParen $ S $ [x]) (take (length lst) ['A'..'Z'])) lst
+foldlInlineList Lower sep lst = makeList sep $ map (\(a, b) -> a +:+ b) $ zip (map (\x -> sParen $ S $ [x]) (take (length lst) ['a'..'z'])) lst
+
+-- Helper function to foldlInlineList - not exported
+makeList :: Sentence -> [Sentence] -> Sentence
+makeList  _  []     = EmptyS
+makeList sep [a,b]  = a :+: sep `sAnd` b
+makeList sep (x:xs) = x :+: sep +:+ makeList sep xs
 
 {--** Combinators **--}
 sAnd, andIts :: Sentence -> Sentence -> Sentence

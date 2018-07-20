@@ -6,9 +6,9 @@ import Prelude hiding (log, exp, sqrt)
 
 import Drasil.GlassBR.Unitals (actualThicknesses, aspectR, 
   demand, dimlessLoad, gTF, glassTypeAbbrsStr, glassTypeFactors, glass_type, 
-  lDurFac, load_dur, min_thick, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pb_tol, 
-  plate_len, plate_width, risk_fun, sdf_tol, sdx, sdy, sdz, sd, sflawParamK, 
-  sflawParamM, stressDistFac, tolLoad)
+  lDurFac, load_dur, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pb_tol, 
+  plate_len, plate_width, risk_fun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
+  sflawParamM, stressDistFac, tolLoad, min_thick)
 
 import Data.Drasil.Concepts.Documentation (datum, user)
 import Data.Drasil.Concepts.Math (probability, parameter, calculation)
@@ -161,7 +161,7 @@ standOffDis_eq :: Expr
 standOffDis_eq = sqrt ((sy sdx) $^ 2 + (sy sdy) $^ 2 + (sy sdz) $^ 2)
 
 standOffDis :: QDefinition
-standOffDis = mkDataDef sd standOffDis_eq
+standOffDis = mkDataDef standOffDist standOffDis_eq
 
 standOffDisDD :: DataDefinition
 standOffDisDD = mkDD standOffDis [{-references-}] [{-derivation-}] ""--temporary

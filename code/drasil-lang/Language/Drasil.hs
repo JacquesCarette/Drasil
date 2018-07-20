@@ -7,7 +7,7 @@ module Language.Drasil (
   , Relation, RealInterval(..), Inclusive(..), RTopology(..), DomainDesc(AllDD, BoundedDD)
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   -- Expr.Math
-  , log, ln, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, vars
+  , log, ln, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean
   , dim, idx, int, dbl, str, isin, case_
   , sum_all, defsum, prod_all, defprod, defint, int_all
   , real_interval

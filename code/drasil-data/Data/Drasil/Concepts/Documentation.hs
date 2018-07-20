@@ -6,10 +6,9 @@ import Data.Drasil.Concepts.Math (graph)
 import Data.Drasil.Phrase (andRT, and_, and_', ofA, of_, of_', of__)
 
 import Control.Lens ((^.))
---import qualified Language.Drasil.NounPhrase as NP (plural)
 
 assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
-  unlikelyChg, physSyst, requirement, thModel, mg, notApp, typUnc, srs :: CI
+  unlikelyChg, physSyst, requirement, thModel, mg, notApp, srs, typUnc :: CI
 
 -------------------------------------------------------------------------------------------------
 -- | CI       |           |    uid      |         term                        | abbreviation | --
@@ -28,7 +27,7 @@ requirement = commonIdea "requirement" (cn' "requirement")                      
 thModel     = commonIdea "thModel"     (cn' "theoretical model")                           "T"
 mg          = commonIdea "mg"          (fterms compoundPhrase module_ guide)               "MG"
 notApp      = commonIdea "notApp"      (nounPhraseSP "not applicable")                     "N/A"
-typUnc      = commonIdea "typUnc"      (cn' "typical uncertainty")                         "TU"
+typUnc      = commonIdea "typUnc"      (cn' "typical uncertainty")                         "Uncert."
 
 srs = commonIdea "srs" 
   (compoundPhraseP1 (softwareReq ^. term) (specification ^. term))
@@ -38,14 +37,14 @@ srs = commonIdea "srs"
 
 -- concepts relating to the templates and their contents
 
-analysis, appendix, aspect, body, characteristic, class_, client, code, column,
-  company, component, concept, condition, connection, constant, constraint, 
-  consumer, content, context, coordinate, customer, datum, decision, definition,
-  dependency, description, design, document, documentation, effect, element,
-  emphasis, endUser, environment, failure, figure, first, functional, game,
-  general, goal, guide, implementation, individual, information, interest, 
-  interface, input_, instance_, intReader, introduction, issue, item, loss,
-  label, library, limitation, literacy, material_, message, method_, module_,
+abbreviation, analysis, appendix, aspect, body, characteristic, class_, client, 
+  code, column, company, component, concept, condition, connection, constant,
+  constraint, consumer, content, context, coordinate, customer, datum, decision, 
+  definition, dependency, description, design, document, documentation, effect, 
+  element, emphasis, endUser, environment, failure, figure, first, form, full, 
+  functional, game, general, goal, guide, implementation, individual, information, 
+  interest, interface, input_, instance_, intReader, introduction, issue, item, 
+  loss, label, library, limitation, literacy, material_, message, method_, module_,
   model, name_, nonfunctional, object, offShelf, open, organization, output_,
   physics, physical, plan, practice, priority, problem, product_, project,
   property, purpose, quantity, realtime, reference, requirement_, response, 
@@ -55,6 +54,7 @@ analysis, appendix, aspect, body, characteristic, class_, client, code, column,
   terminology, theory, traceyGraph, traceyMatrix, type_, uncertainty, user,
   useCase, validation, value, variable, video, verification, year :: NamedChunk
 
+abbreviation    = nc "abbreviation"   (cn'    "abbreviation"       )
 analysis        = nc "analysis"       (cnIS   "analysis"           )
 appendix        = nc "appendix"       (cnICES "appendix"           )
 aspect          = nc "aspect"         (cn'    "aspect"             )
@@ -92,6 +92,8 @@ environment     = nc "environment"    (cn'    "environment"        ) -- Is this 
 failure         = nc "failure"        (cn'    "failure"            )
 figure          = nc "figure"         (cn'    "figure"             )
 first           = nc "first"          (cn'    "first"              ) --Does it make sense for this to be here?
+form            = nc "form"           (cn'    "form"               ) 
+full            = nc "full"           (cn'    "full"               ) --FIXME: Adjective
 functional      = nc "functional"     (cn'    "functional"         ) --FIXME: Adjective
 game            = nc "game"           (cn'    "game"               )
 general         = nc "general"        (cn'    "general"            ) --FIXME: Adjective
@@ -199,7 +201,7 @@ scpOfTheProj oper = nc "scpOfTheProj" (scope `of_` theCustom oper project) -- re
 
 -- compounds
 
-designDoc, generalSystemDescription, indPRCase,
+designDoc, fullForm, generalSystemDescription, indPRCase,
   physicalConstraint, physicalSystem, problemDescription, prodUCTable,
   specificsystemdescription, systemdescription, systemConstraint, sysCont,
   userCharacteristic, datumConstraint, functionalRequirement,
@@ -210,6 +212,7 @@ designDoc, generalSystemDescription, indPRCase,
  
 datumConstraint              = compoundNC' datum constraint
 designDoc                    = compoundNC design document
+fullForm                     = compoundNC full form
 functionalRequirement        = compoundNC functional requirement_
 generalSystemDescription     = compoundNC general systemdescription
 indPRCase                    = compoundNC individual productUC

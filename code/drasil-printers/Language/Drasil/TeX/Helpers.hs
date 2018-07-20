@@ -4,10 +4,13 @@ import Text.PrettyPrint (text)
 import qualified Text.PrettyPrint as TP
 import Control.Applicative (pure)
 
-import Language.Drasil.Config (numberedSections, hyperSettings)
+import Language.Drasil (numberedSections, hyperSettings, MaxWidthPercent)
+
 import qualified Language.Drasil.Printing.Helpers as H
 import Language.Drasil.TeX.Monad (PrintLaTeX(PL), D, MathContext(Math), ($+$), (<>), (%%))
-import Language.Drasil.Document (MaxWidthPercent)
+
+--import Language.Drasil.Config (numberedSections, hyperSettings)
+--import Language.Drasil.Document (MaxWidthPercent)
 
 -----------------------------------------------------------------------------
 -- Infrastructre for defining commands, environments, etc.

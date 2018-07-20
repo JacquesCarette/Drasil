@@ -9,9 +9,8 @@ import Drasil.GlassBR.Assumptions (gbRefDB, newA1, newA2)
 import Drasil.GlassBR.Concepts (glassTypeFac, lResistance, lShareFac)
 import Drasil.GlassBR.DataDefs (glaTyFac, nonFL, risk)
 import Drasil.GlassBR.Unitals (demand, demandq, eqTNTWeight, lRe, loadSF, 
-  prob_br, risk_fun, sdVectorSent, sdWithEqn, standOffDist, wtntWithEqn)
+  prob_br, risk_fun, standOffDist, wtntWithEqn)
 
-import Data.Drasil.Concepts.Documentation (coordinate)
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
 

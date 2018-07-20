@@ -1,15 +1,23 @@
 module Language.Drasil.Printing.Import(space,expr,symbol,spec,makeDocument) where
 
+import Data.List (intersperse)
+
+import Language.Drasil hiding (sec, symbol, phrase, titleize)
+
+import Control.Lens ((^.))
+
+import qualified Language.Drasil.Printing.AST as P
+import qualified Language.Drasil.Printing.Citation as P
+import qualified Language.Drasil.Printing.LayoutObj as T
+
+import Language.Drasil.NounPhrase (titleize, phrase)
+{-
 import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..),
     BoolOper(..), RTopology(..),
     DerivType(..), DomainDesc(..),
     RealInterval(..),Inclusive(..),
     ($=))
 import Language.Drasil.Expr.Precedence (precA, precB, eprec)
-import qualified Language.Drasil.Printing.AST as P
-import qualified Language.Drasil.Printing.Citation as P
-import qualified Language.Drasil.Printing.LayoutObj as T
-
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (term, defn, usymb, relat)
 import qualified Language.Drasil.Chunk.SymbolForm as SF
@@ -30,7 +38,7 @@ import Language.Drasil.Symbol (Symbol(Empty, Atop, Corners, Concat, Special, Ato
   Decoration(Prime, Vector, Hat))
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Spec (Sentence(..))
-import Language.Drasil.Misc (unit'2Contents)
+import Language.Drasil.Misc (unitToSentence)
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Reference (refAdd)
 import Language.Drasil.Document (DType(DD, TM, Instance, General, Theory, Data), 
@@ -39,10 +47,9 @@ import Language.Drasil.Document (DType(DD, TM, Instance, General, Theory, Data),
   Definition, EqnBlock, Paragraph, Table), Section(Section), SecCons(Sub, Con), 
   Document(Document))
 
-import Control.Lens ((^.))
 import Language.Drasil.Space (Space(DiscreteS, DiscreteD, DiscreteI, Vect, Radians, 
   String, Char, Boolean, Natural, Real, Rational, Integer))
-import Data.List (intersperse)
+-}
 
 -- | Render a Space
 space :: Space -> P.Expr
@@ -84,10 +91,10 @@ expr (AssocA Mul l)    sm = P.Row $ intersperse (P.MO P.Mul) $ map (expr' sm (pr
 expr (Deriv Part a b) sm =
   P.Div (P.Row [P.Spec Partial, P.Spc P.Thin, expr a sm])
         (P.Row [P.Spec Partial, P.Spc P.Thin,
-                symbol $ SF.eqSymb $ symbLookup b $ sm^.symbolTable])
+                symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
 expr (Deriv Total a b)sm =
   P.Div (P.Row [P.Ident "d", P.Spc P.Thin, expr a sm])
-        (P.Row [P.Ident "d", P.Spc P.Thin, symbol $ SF.eqSymb $ symbLookup b $ sm^.symbolTable])
+        (P.Row [P.Ident "d", P.Spc P.Thin, symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
 expr (C c)            sm = symbol $ lookupC sm c
 expr (FCall f [x])    sm = P.Row [expr f sm, parens $ expr x sm]
 expr (FCall f l)      sm = P.Row [expr f sm,
@@ -130,7 +137,7 @@ expr (IsIn  a b)          sm = P.Row  [expr a sm, P.MO P.IsIn, space b]
 expr (RealI c ri)         sm = renderRealInt sm (lookupC sm c) ri
 
 lookupC :: HasSymbolTable s => s -> UID -> Symbol
-lookupC sm c = SF.eqSymb $ symbLookup c $ sm^.symbolTable
+lookupC sm c = eqSymb $ symbLookup c $ sm^.symbolTable
 
 mkCall :: HasSymbolTable ctx => ctx -> P.Ops -> Expr -> P.Expr
 mkCall s o e = P.Row [P.MO o, parens $ expr e s]
@@ -163,7 +170,7 @@ indx :: HasSymbolTable ctx => ctx -> Expr -> Expr -> P.Expr
 indx sm (C c) i = f s
   where
     i' = expr i sm
-    s = SF.eqSymb $ symbLookup c $ sm^.symbolTable
+    s = eqSymb $ symbLookup c $ sm^.symbolTable
     f (Corners [] [] [] [b] e) =
       let e' = symbol e
           b' = symbol b in
@@ -345,7 +352,7 @@ item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
 makePairs :: HasSymbolTable ctx => ctx -> DType -> [(String,[T.LayoutObj])]
 makePairs m (Data c) = [
   ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
-  ("Units",       [T.Paragraph $ spec m (unit'2Contents c)]),
+  ("Units",       [T.Paragraph $ spec m (unitToSentence c)]),
   ("Equation",    [T.HDiv ["equation"] [eqnStyle numberedDDEquations $ buildEqn m c] P.EmptyS]),
   ("Description", [T.Paragraph $ buildDDDescription m c])
   ]

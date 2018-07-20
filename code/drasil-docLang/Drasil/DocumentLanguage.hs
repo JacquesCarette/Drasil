@@ -10,7 +10,7 @@ module Drasil.DocumentLanguage where
 import Drasil.DocumentLanguage.Definitions (Fields, ddefn, ddefn', derivation, 
   instanceModel, gdefn, tmodel)
 
-import Language.Drasil hiding (Manual, Vector) -- Manual - Citation name conflict. FIXME: Move to different namespace
+import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                -- Vector - Name conflict (defined in file)
 
 import Control.Lens ((^.))
@@ -21,10 +21,10 @@ import Drasil.Sections.TableOfSymbols (table)
 import Drasil.Sections.TableOfUnits (table_of_units)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn, genSysDes, 
   inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec, stakeholder,
-  thModel, tOfSymb, userChar)
+  thModel, tOfSymb, userChar,dataDefn, offShelfSol, propCorSol)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
-  systCon, usrCharsF)
+  systCon, usrCharsF, sysContxt)
 import qualified Drasil.Sections.Introduction as Intro (charIntRdrF, 
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
 import qualified Drasil.Sections.Requirements as R (fReqF, nonFuncReqF, reqF)
@@ -65,6 +65,7 @@ data DocSection = Verbatim Section
                 | AuxConstntSec AuxConstntSec
                 | Bibliography
                 | AppndxSec AppndxSec
+                | ExistingSolnSec ExistingSolnSec
 
 --FIXME: anything with 'Verb' in it should eventually go
 
@@ -158,6 +159,7 @@ data GSDSec = GSDVerb Section
 
 data GSDSub where
   GSDSubVerb :: Section -> GSDSub
+  SysCntxt   :: [Contents] -> GSDSub
   UsrChars   :: [Contents] -> GSDSub
   SystCons   :: [Contents] -> [Section] -> GSDSub
 
@@ -189,15 +191,16 @@ data SolChSpec where
 
 -- | Solution Characteristics Specification subsections
 data SCSSub where
-  SCSSubVerb  :: Section -> SCSSub
-  Assumptions :: SCSSub
-  TMs         :: Fields  -> [TheoryModel] -> SCSSub
-  GDs         :: Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
-  DDs         :: Fields  -> [QDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
-  DDs'        :: Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro -- should eventually replace and be renamed to DDs
-  IMs         :: Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
-  Constraints :: Sentence -> Sentence -> Sentence -> [Contents] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
+  SCSSubVerb     :: Section -> SCSSub
+  Assumptions    :: SCSSub
+  TMs            :: Fields  -> [TheoryModel] -> SCSSub
+  GDs            :: Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
+  DDs            :: Fields  -> [QDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
+  DDs'           :: Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro -- should eventually replace and be renamed to DDs
+  IMs            :: Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
+  Constraints    :: Sentence -> Sentence -> Sentence -> [Contents] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
 --FIXME: Work in Progress ^
+  CorrSolnPpties :: [Contents] -> SCSSub
 data DerivationDisplay = ShowDerivation
                        | HideDerivation
 {--}
@@ -220,6 +223,11 @@ data UCsSec = UCsVerb Section | UCsProg [Contents]
 {--}
 
 data TraceabilitySec = TraceabilityVerb Section | TraceabilityProg [Contents] [Sentence] [Contents] [Section]
+
+{--}
+
+-- | Off-The-Shelf Solutions section 
+data ExistingSolnSec = ExistSolnVerb Section | ExistSolnProg [Contents]
 
 {--}
 
@@ -256,6 +264,7 @@ mkSections si l = map doit l
     doit (UCsSec ulcs)       = mkUCsSec ulcs
     doit (TraceabilitySec t) = mkTraceabilitySec t
     doit (AppndxSec a)       = mkAppndxSec a
+    doit (ExistingSolnSec o) = mkExistingSolnSec o
 
 
 -- | Helper for creating the reference section and subsections
@@ -397,6 +406,7 @@ mkGSDSec (GSDProg2 l) = SRS.genSysDes [GSD.genSysIntro] $ map mkSubs l
    where
      mkSubs :: GSDSub -> Section
      mkSubs (GSDSubVerb s)           = s
+     mkSubs (SysCntxt cs)            = GSD.sysContxt cs
      mkSubs (UsrChars intro)         = GSD.usrCharsF intro
      mkSubs (SystCons cntnts subsec) = GSD.systCon cntnts subsec
 
@@ -456,7 +466,8 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS SI {_refdb = db} Assumptions =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
       (map Assumption $ assumptionsFromDB (db ^. assumpRefTable))
-    mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
+    mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
+    mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d 
     inModSec = SRS.inModel [Paragraph EmptyS] []
     --FIXME: inModSec should be replaced with a walk
     -- over the SCSProg and generate a relevant intro.
@@ -506,6 +517,13 @@ mkTraceabilitySec :: TraceabilitySec -> Section
 mkTraceabilitySec (TraceabilityVerb s) = s
 mkTraceabilitySec (TraceabilityProg refs trailing otherContents subSec) =
   TMG.traceMGF refs trailing otherContents subSec
+
+{--}
+
+-- | Helper for making the 'Off-the-Shelf Solutions' section
+mkExistingSolnSec :: ExistingSolnSec -> Section
+mkExistingSolnSec (ExistSolnVerb s) = s
+mkExistingSolnSec (ExistSolnProg cs) = SRS.offShelfSol cs [] 
 
 {--}
 

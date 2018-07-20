@@ -28,7 +28,7 @@ t1IsSafe = tm' (cw t1SafetyReq)
   [t1descr]
 
 t1SafetyReq :: RelationConcept
-t1SafetyReq = makeRC "t1SafetyReq" (nounPhraseSP "Safety Requirement-1")
+t1SafetyReq = makeRC "safetyReqPb" (nounPhraseSP "Safety Req-Pb")
   t1descr ((sy is_safe1) $= (sy prob_br) $< (sy pb_tol))
 
 t1descr :: Sentence
@@ -47,7 +47,7 @@ t2IsSafe = tm' (cw t2SafetyReq)
    [t2descr]
 
 t2SafetyReq :: RelationConcept
-t2SafetyReq = makeRC "t2SafetyReq" (nounPhraseSP "Safety Requirement-2")
+t2SafetyReq = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
   t2descr ( (sy is_safe2) $= (sy lRe) $> (sy demand))
 
 t2descr :: Sentence

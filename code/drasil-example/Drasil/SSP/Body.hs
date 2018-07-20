@@ -118,9 +118,7 @@ mkSRS = RefSec (RefProg intro
             [Assumptions 
             ,TMs ([Label] ++ stdFields) [fs_rc_new, equilibrium_new, mcShrStrgth_new,
              effStress_new, hookesLaw_new]
-            , GDs [Label, Units, DefiningEquation   ---check glassbr
-            , Description Verbose IncludeUnits, Notes
-            , Source, RefBy] generalDefinitions ShowDerivation
+            , GDs [Label, Units, DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy] generalDefinitions ShowDerivation
             , DDs ([Label, Symbol, Units] ++ stdFields) sspDataDefs ShowDerivation
             , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
              sspIMods_new ShowDerivation

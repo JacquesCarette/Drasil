@@ -2,7 +2,7 @@ If you are looking for **build instructions**, find them in the README file [her
 
 --------------------------------------------------
 ### Drasil Coding Style Guide
-Last updated: July 19, 2018
+Last updated: July 20, 2018
 --------------------------------------------------
 
 1. Use spaces instead of tabs. Preferably 2 spaces per indent level. Ex:
@@ -111,6 +111,9 @@ Updating Haddock index for local packages in
   
 **drasil-lang**
   - Contains the base for the Drasil language
+
+**drasil-printers**
+  - Containts the printers for the Drasil language
   
 **stable**
   - Contains the (currently) expected output for each of the examples

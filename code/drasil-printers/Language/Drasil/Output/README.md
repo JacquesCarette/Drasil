@@ -1,6 +1,6 @@
 ----------------------------------------------------------
 ### Quick Summary of Folder Structure and File Contents
-April 29, 2018
+Last updated: July 20, 2018
 ----------------------------------------------------------
 
 Formats.hs

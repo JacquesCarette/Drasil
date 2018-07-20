@@ -1,6 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 19, 2018
+Last updated: July 20, 2018
 --------------------------------------------------
 
 **Chunk**
@@ -15,29 +15,14 @@ Last updated: July 19, 2018
 **Expr**
   - Contains helpers for the expression language
 
-**HTML**
-  - HTML Renderer - necessary files for HTML output generation
-
 **Label**
   - Defines the Label type
-
-**Make**
-  - AST for makefile creation for each of the output formats
 
 **NounPhrase**
   - Defines the NP type
 
-**Output**
-  - List of output formats
-
-**Printing**
-  - AST for printing TeX and HTML, as well as helper functions for printing
-
 **Sentence**
   - Contains helpers for the Sentence type
-
-**TeX**
-  - TeX Renderer - necessary files for TeX output generation
 
 **URI**
   - URI AST
@@ -59,9 +44,6 @@ Document.hs
 
 Expr.hs
   - Internal Drasil expression language
-
-Format.hs
-  - Ouput formatting of documents (TeX, HTML, or Plain)
 
 Label.hs
   - Helper functions for the Label type

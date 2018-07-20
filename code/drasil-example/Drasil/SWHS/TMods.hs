@@ -1,5 +1,5 @@
-module Drasil.SWHS.TMods (tModels, t1ConsThermE, 
-  t1ConsThermE_new, t2SensHtE_new, t2SensHtE, t3LatHtE_new, swhsTMods, tMod1) where
+module Drasil.SWHS.TMods (tModels, t1ConsThermE_new, t2SensHtE_new,
+  t3LatHtE_new, t1ConsThermE, tMod1) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -25,9 +25,6 @@ import Drasil.SWHS.DataDefs (dd3HtFusion)
 
 tModels :: [RelationConcept]
 tModels = [t1ConsThermE, t2SensHtE, t3LatHtE]
-
-swhsTMods :: [Contents]
-swhsTMods = (tMod1 ++ tMod2 ++ tMod3)
 
 -------------------------
 -- Theoretical Model 1 --
@@ -87,9 +84,6 @@ t2SensHtE_new = tm' t2SensHtE
     qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [ConceptChunk])
   [] [TCon Invariant sensHtEEqn] []) "t2SensHtE" [t2descr]
 
-tMod2 :: [Contents]
-tMod2 = [reldefn t2SensHtE]
-
 t2SensHtE :: RelationConcept
 t2SensHtE = makeRC "t2SensHtE"
   (nounPhraseSP "Sensible heat energy") t2descr sensHtEEqn 
@@ -144,9 +138,6 @@ t3LatHtE_new :: TheoryModel
 t3LatHtE_new = tm' t3LatHtE
   (tc' "SensHtE_new" [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
   [] [TCon Invariant latHtEEqn] []) "t3LatHtE" [t3descr]
-
-tMod3 :: [Contents]
-tMod3 = [reldefn t3LatHtE]
 
 t3LatHtE :: RelationConcept
 t3LatHtE = makeRC "t3LatHtE"

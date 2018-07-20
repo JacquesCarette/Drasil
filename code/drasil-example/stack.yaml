@@ -39,6 +39,7 @@ packages:
 - ../drasil-lang
 - ../drasil-data
 - ../drasil-code
+- ../drasil-printers
 - ../drasil-gen
 - ../drasil-docLang
 - ./

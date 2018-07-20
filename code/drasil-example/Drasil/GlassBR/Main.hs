@@ -1,9 +1,9 @@
 module Main (main) where
 
-import Language.Drasil (DocType(SRS,Website), DocSpec(DocSpec))
 import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..), 
   ImplementationType(..), Lang(..), Logging(..), Structure(..))
 import Language.Drasil.Generate (gen, genCode)
+import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
 import Drasil.GlassBR.Body (gbSymbMap, glassBR_code, glassBR_srs)
 

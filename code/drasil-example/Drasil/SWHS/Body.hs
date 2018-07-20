@@ -27,8 +27,8 @@ import Data.Drasil.Concepts.Documentation (section_, traceyGraph, item,
   value, software, column, model, goalStmt, quantity, property, condition, 
   physics, user, physical, datum, system, variable, sysCont, environment, 
   srs, softwareSys, organization, document, problem, content, information, 
-  reference, definition, purpose, description, symbol_, physSyst,
-  typUnc, unlikelyChg)
+  reference, definition, purpose, description, symbol_, physSyst, typUnc, 
+  unlikelyChg)
 
 import Data.Drasil.Concepts.PhysicalProperties (liquid, solid)
 import qualified Data.Drasil.Concepts.Thermodynamics as CT (boiling,
@@ -80,8 +80,7 @@ import Data.Drasil.SentenceStructures (acroIM, acroGD, acroGS, showingCxnBw,
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
-  phsChgMtrl, physSyst, requirement, rightSide, srs, progName, thModel, typUnc,
-  unlikelyChg]
+  phsChgMtrl, physSyst, requirement, rightSide, srs, progName, thModel, typUnc, unlikelyChg]
 
 this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, kilogram, second] ++ 
@@ -154,6 +153,7 @@ mkSRS = RefSec (RefProg intro [
            [eBalanceOnWtr_new, eBalanceOnPCM_new, heatEInWtr_new, heatEInPCM_new ] ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty dataConTail
            [dataConTable1, dataConTable3]
+          , CorrSolnPpties propsDeriv
           ]
         )
       ]
@@ -336,7 +336,7 @@ solCharSpec = solChSpecF progName (probDescription, likelyChgs, unlikelyChgs) da
   (dataContMid, dataConstraintUncertainty, dataContFooter quantity surArea
   vol thickness phsChgMtrl) (swhsAssumptions, 
   swhsTMods, genDefs ++ genDefsDeriv,
-  swhsDDefs, iModsWithDerivs, dataConTables) [propsCorrSol]
+  swhsDDefs, iModsWithDerivs, dataConTables) [{-propsCorrSol-}]
 
 -------------------------
 -- 4.2.1 : Assumptions --
@@ -477,9 +477,6 @@ outputConstraints = [temp_W, temp_PCM, w_E, pcm_E]
 -- 4.2.7 : Properties of A Correct Solution --
 ----------------------------------------------
 
-propsCorrSol :: Section
-propsCorrSol = SRS.propCorSol (propsDeriv) []
-
 propsDeriv :: [Contents]
 propsDeriv =
   [propCorSolDeriv1 CT.law_cons_energy w_E energy coil phsChgMtrl dd1HtFluxC
@@ -517,7 +514,7 @@ funcReqsTable = (Table [titleize symbol_, titleize unit_, titleize description]
   (mkTable
   [ch,
   --(\ch -> Sy (unit_symb ch)),
-  unit'2Contents,
+  unitToSentence,
   phrase] (map qw inputConstraints))
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False)
   "InConstraints"
@@ -813,7 +810,7 @@ scopeReqs1 ta tp = foldlSent_ [phrase ta,
 
 scopeReqs2 :: UnitalChunk -> ConceptChunk -> ConceptChunk -> CI ->
   ConceptChunk -> Sentence
-scopeReqs2 t te wa pcmat sw = foldlSent_ [S "predict the",
+scopeReqs2 t te wa pcmat sw = foldlSent_ [S "predicts the",
   phrase t `sAnd` phrase te,
   S "histories for the", phrase wa `sAnd` S "the" +:+.
   short pcmat, S "This entire", phrase document,

@@ -151,7 +151,7 @@ m/s<sup>2</sup>
 Coefficient of restitution
 </td>
 <td>
-
+--
 </td>
 </tr>
 <tr>
@@ -673,10 +673,10 @@ Abbreviations and Acronyms
 <table class="table">
 <tr>
 <th>
-Symbol
+Abbreviation
 </th>
 <th>
-Description
+Full Form
 </th>
 </tr>
 <tr>
@@ -791,6 +791,14 @@ UC
 Unlikely Change
 </td>
 </tr>
+<tr>
+<td>
+Uncert.
+</td>
+<td>
+Typical Uncertainty
+</td>
+</tr>
 </table>
 </div>
 </div>
@@ -827,7 +835,7 @@ This document will be used as a starting point for subsequent development phases
 Scope of Requirements
 </h2>
 <p class="paragraph">
-The scope of the requirements includes the physical simulation of 2D rigid bodies acted on by forces. Given the appropriate inputs, the code for Chipmunk2D is intended to simulate how these rigid bodies interact with one another.
+The scope of the requirements includes the physical simulation of 2D rigid bodies acted on by forces. Given the appropriate inputs, Chipmunk2D simulates how these rigid bodies interact with one another.
 </p>
 </div>
 </div>
@@ -864,7 +872,7 @@ General System Description
 <p class="paragraph">
 This section provides general information about the system including identifying the interfaces between the system and its environment (system context), describing the user characteristics and listing the system constraints.
 </p>
-<div id="Sec:systemcontext">
+<div id="Sec:SysContext">
 <div class="subsection">
 <h2>
 System Context
@@ -913,7 +921,7 @@ Provide updated physical state of all rigid bodies at the end of a simulation st
 </ul>
 </div>
 </div>
-<div id="Sec:usercharacteristic">
+<div id="Sec:UserChars">
 <div class="subsection">
 <h2>
 User Characteristics
@@ -2766,7 +2774,7 @@ FIXME: This needs to be filled in
 Data Constraints
 </h3>
 <p class="paragraph">
-<a href=#Table:InDataConstraints>Table:InDataConstraints</a>, and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. FIXME
+<a href=#Table:InDataConstraints>Table:InDataConstraints</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. FIXME
 </p>
 <div id="Table:InDataConstraints">
 <table class="table">
@@ -2781,7 +2789,7 @@ Physical Constraints
 Typical Value
 </th>
 <th>
-TU
+Uncert.
 </th>
 </tr>
 <tr>
@@ -2831,7 +2839,7 @@ TU
 <em>G</em>
 </td>
 <td>
-None
+--
 </td>
 <td>
 <em>9.8</em> m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)
@@ -2845,7 +2853,7 @@ None
 <em><b>p</b></em>
 </td>
 <td>
-None
+--
 </td>
 <td>
 <em>0.412</em> m
@@ -2859,7 +2867,7 @@ None
 <em>ϕ</em>
 </td>
 <td>
-None
+--
 </td>
 <td>
 <em><div class="fraction">
@@ -2880,7 +2888,7 @@ None
 <em><b>v</b></em>
 </td>
 <td>
-None
+--
 </td>
 <td>
 <em>2.51</em> m/s
@@ -2894,7 +2902,7 @@ None
 <em>ω</em>
 </td>
 <td>
-None
+--
 </td>
 <td>
 <em>2.1</em> rad/s
@@ -2908,7 +2916,7 @@ None
 <em><b>F</b></em>
 </td>
 <td>
-None
+--
 </td>
 <td>
 <em>98.1</em> N
@@ -2922,7 +2930,7 @@ None
 <em>τ</em>
 </td>
 <td>
-None
+--
 </td>
 <td>
 <em>200.0</em> N&sdot;m

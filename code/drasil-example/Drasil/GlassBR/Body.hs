@@ -24,7 +24,7 @@ import Data.Drasil.Concepts.Computation (computerApp, inParam,
   computerLiteracy, inValue, inQty)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   characteristic, class_, code, condition, content,
-  datum, definition, description, document, emphasis, endUser, failure,
+  definition, description, document, emphasis, endUser, failure,
   figure, goal, implementation, information, interface, input_, item,
   message, model, organization, output_, problem, purpose,
   quantity, reference, reviewer, section_, software, standard,
@@ -570,7 +570,7 @@ functional_requirements_req6 = llcc "frR6GBr" (mkLabelRA'' "frR6GBrLabel") $
     sParen (makeRef d)) (zip testing gbrIMods)
     ++
     map (\d -> Flat $ (at_start d) +:+ sParen (ch d) +:+
-    sParen (makeRef (datadefn d))) functional_requirements_req6_pulledList))])]
+    sParen (makeRef d)) functional_requirements_req6_pulledList))]
 
 {--Nonfunctional Requirements--}
 

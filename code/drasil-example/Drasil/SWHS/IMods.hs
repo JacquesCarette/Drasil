@@ -21,7 +21,7 @@ import Data.Drasil.Concepts.Thermodynamics (boiling, heat, temp, melting,
   latent_heat, sens_heat, heat_cap_spec, thermal_energy, boil_pt, heat_trans,
   phase_change, ht_flux)
 import Drasil.SWHS.Labels (assump14Label, assump19Label, assump18Label)
-import Drasil.SWHS.Assumptions (newA12, newA15, newA16, newA17, newA18, newA14, newA19)
+import Drasil.SWHS.Assumptions (newA12, newA15, newA16, newA17, newA18)
 
 
 swhsIMods :: [RelationConcept]

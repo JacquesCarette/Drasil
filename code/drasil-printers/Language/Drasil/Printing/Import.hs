@@ -373,7 +373,7 @@ item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
 makePairs :: HasSymbolTable ctx => ctx -> DType -> [(String,[T.LayoutObj])]
 makePairs m (Data c) = [
   ("Label",       [T.Paragraph (spec m (titleize $ c ^. term)) P.EmptyS]),
-  ("Units",       [T.Paragraph (spec m (unit'2Contents c)) P.EmptyS]),
+  ("Units",       [T.Paragraph (spec m (unitToSentence c)) P.EmptyS]),
   ("Equation",    [T.HDiv ["equation"] [eqnStyle numberedDDEquations (buildEqn m c) P.EmptyS] P.EmptyS]),--FIXME: empty label?
   ("Description", [T.Paragraph (buildDDDescription m c) P.EmptyS]) --FIXME: empty label?
   ]

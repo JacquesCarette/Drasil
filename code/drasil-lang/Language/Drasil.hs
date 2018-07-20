@@ -137,7 +137,7 @@ module Language.Drasil (
   , Referable(..), Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListPair
   , LabelledContent, llcc
-  , section, fig, figWithWidth, section'', sectionLC
+  , section, fig, figWithWidth, section'', sectionLC, accessContents
   , datadefn, reldefn, MaxWidthPercent
   -- Reference
   , makeRef
@@ -243,7 +243,7 @@ import Language.Drasil.Sentence.Extract(sdep,  snames)
 import Language.Drasil.Document (Document(..), DType(..)
   , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..)
   , section, fig, figWithWidth, section''
-  , datadefn, reldefn, sectionLC
+  , datadefn, reldefn, sectionLC, accessContents
   , ListPair, MaxWidthPercent
   , LabelledContent, llcc)
 import Language.Drasil.Unicode -- all of it

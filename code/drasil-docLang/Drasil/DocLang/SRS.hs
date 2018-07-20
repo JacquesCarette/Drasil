@@ -108,7 +108,7 @@ missingP = [Paragraph $ S "..."]
 
 --Labels--
 physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
-  inModelLabel, likeChgLabel, tOfSymbLabel :: Label
+  inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel :: Label
 physSystLabel      = mkLabelRA'' "PhysSyst"
 datConLabel        = mkLabelRA'' "DataConstraints"
 genDefnLabel       = mkLabelRA'' "GDs"

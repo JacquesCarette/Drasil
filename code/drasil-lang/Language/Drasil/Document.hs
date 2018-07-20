@@ -46,10 +46,6 @@ type ListPair = (Title,ItemType) -- ^ Title: Item
 type Filepath = String
 type Lbl      = Sentence
 
--- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and Sections
--- which hold the contents of the document
-data Document = Document Title Author [Section]
-
 --FIXME: Remove Data, Data', and Theory from below.
 -- | Types of definitions
 data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining 

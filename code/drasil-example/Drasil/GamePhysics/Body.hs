@@ -668,8 +668,6 @@ off_the_shelf_solutions_intro, off_the_shelf_solutions_2dlist,
 off_the_shelf_solutions = SRS.offShelfSol [off_the_shelf_solutions_intro, 
   off_the_shelf_solutions_2dlist, off_the_shelf_solutions_mid, off_the_shelf_solutions_3dlist] []
 
-off_the_shelf_solutions_intro, off_the_shelf_solutions_2dlist, off_the_shelf_solutions_mid, off_the_shelf_solutions_3dlist :: Contents
-
 off_the_shelf_solutions_intro = off_the_shelf_solutions_intro_param problem_description physLib
 
 off_the_shelf_solutions_intro_param :: NamedIdea n => Section -> n -> Contents

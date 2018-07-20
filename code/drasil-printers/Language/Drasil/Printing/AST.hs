@@ -1,6 +1,6 @@
 module Language.Drasil.Printing.AST where
 
-import Language.Drasil hiding (ItemType, ListType, Expr)
+import Language.Drasil hiding (ItemType, ListType, Expr, Label)
 
 {-
 import Language.Drasil.Development.UnitLang (USymb)

@@ -16,7 +16,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   mkDoc, outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro,
   traceMGF, tsymb'')
 import qualified Drasil.DocLang.SRS as SRS (inModel, missingP, likeChg,
-  funcReq, propCorSol, probDesc, goalStmt, sysCont, reference, inModelLabel)
+  funcReq, probDesc, goalStmt, sysCont, reference, inModelLabel)
 
 import Data.Drasil.People (thulasi, brooks, spencerSmith)
 import Data.Drasil.Phrase (for)

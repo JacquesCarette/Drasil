@@ -22,7 +22,7 @@ import Drasil.Sections.TableOfUnits (table_of_units)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn, genSysDes, 
   inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec, stakeholder,
   thModel, tOfSymb, userChar, genDefnLabel, thModelLabel, dataDefnLabel, inModelLabel,
-  likeChgLabel, unlikeChgLabel)
+  likeChgLabel, unlikeChgLabel, propCorSol, offShelfSol)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)
@@ -159,7 +159,7 @@ data GSDSec = GSDVerb Section
 
 data GSDSub where
   GSDSubVerb :: Section -> GSDSub
-  SysCntxt   :: [Contents] -> GSDSub
+  SysCntxt   :: [LabelledContent] -> GSDSub
   UsrChars   :: [Contents] -> GSDSub
   SystCons   :: [Contents] -> [Section] -> GSDSub
 

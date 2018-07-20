@@ -1,5 +1,5 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
-module Language.Drasil.Chunk.InstanceModel 
+module Language.Drasil.Chunk.InstanceModel
   ( InstanceModel
   , inCons, outCons, imOutput, imInputs
   , im, imQD, im', imQD', im'', im'''
@@ -45,7 +45,7 @@ data InstanceModel = IM { _rc :: RelationConcept
                         , _notes :: Maybe [Sentence]
                         }
 makeLenses ''InstanceModel
-  
+
 instance HasUID             InstanceModel where uid = rc . uid
 instance NamedIdea          InstanceModel where term = rc . term
 instance Idea               InstanceModel where getA (IM a _ _ _ _ _ _ _ _) = getA a
@@ -61,23 +61,23 @@ instance HasAdditionalNotes InstanceModel where getNotes = notes
 
 im :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> Label -> InstanceModel
-im rc i ic o oc lbe = IM rc i ic o oc [] [] lbe Nothing
+im rcon i ic o oc lbe = IM rcon i ic o oc [] [] lbe Nothing
 
 -- | Same as `im`, with an additional field for notes to be passed in
 im' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> Label -> [Sentence] -> InstanceModel
-im' rc i ic o oc lbe notes = IM rc i ic o oc [] [] lbe (Just notes)
+im' rcon i ic o oc lbe addNotes = IM rcon i ic o oc [] [] lbe (Just addNotes)
 
 -- | Smart constructor for instance models
 im'' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> Derivation -> String -> [Sentence] -> InstanceModel
-im'' rc i ic o oc der sn notes = IM rc i ic o oc [] der (mkLabelRA'' sn) (Just notes)
+im'' rcon i ic o oc der sn addNotes = IM rcon i ic o oc [] der (mkLabelRA'' sn) (Just addNotes)
 
-im''' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
+im''' :: RelationConcept -> Inputs -> InputConstraints -> Output ->
   OutputConstraints -> Derivation -> String -> InstanceModel
-im''' rc i ic o oc der sn = IM rc i ic o oc [] der (mkLabelRA'' sn) Nothing
+im''' rcon i ic o oc der sn = IM rcon i ic o oc [] der (mkLabelRA'' sn) Nothing
 
--- | Smart constructor for instance model from qdefinition 
+-- | Smart constructor for instance model from qdefinition
 -- (Sentence is the "concept" definition for the relation concept)
 -- FIXME: get the shortname from the QDefinition?
 imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> 
@@ -91,6 +91,6 @@ imQD ctx qd dfn incon ocon lblForIM lblForRC = IM (makeRC (qd ^. uid) (qd ^. ter
 imQD' :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> 
   InputConstraints -> OutputConstraints -> Label -> Maybe [Sentence] -> 
   Maybe Label -> InstanceModel
-imQD' ctx qd dfn incon ocon lblForIM notes lblForRC = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
+imQD' ctx qd dfn incon ocon lblForIM addNotes lblForRC = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
   (sy qd $= qd ^. equat) lblForRC) (vars (qd^.equat) ctx) incon (qw qd) ocon [] [] 
-  lblForIM notes
+  lblForIM addNotes

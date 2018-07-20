@@ -25,7 +25,7 @@ tableOfConstants :: [QDefinition] -> LabelledContent
 tableOfConstants f = llcc "TAuxConstsLC" (mkLabelRA'' "TAuxConsts") $
   Table
   [titleize symbol_, titleize description, titleize value, titleize CM.unit_]
-  (mkTable [ch, phrase, (\c -> E $ c^.equat), unit'2Contents] f)
+  (mkTable [ch, phrase, (\c -> E $ c^.equat), unitToSentence] f)
   (S "Auxiliary Constants")
   True
   "TAuxConsts"

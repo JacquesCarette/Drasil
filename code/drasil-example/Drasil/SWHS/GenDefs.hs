@@ -56,7 +56,7 @@ nwtnCooling = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling")
   nwtnCooling_desc nwtnCooling_rel Nothing--label
 
 nwtnCooling_rel :: Relation
-nwtnCooling_rel = apply1 thFluxVect QP.time $= sy htTransCoeff *
+nwtnCooling_rel = apply1 ht_flux QP.time $= sy htTransCoeff *
   apply1 deltaT QP.time
 
 nwtnCooling_desc :: Sentence
@@ -129,8 +129,8 @@ s4_2_3_desc1 t1c vo =
 
 s4_2_3_desc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]
-s4_2_3_desc2 gd su vo tfv unv un =
-  [S "Applying", titleize gd, S "to the first term over",
+s4_2_3_desc2 cchn su vo tfv unv un =
+  [S "Applying", titleize cchn, S "to the first term over",
   (phrase su +:+ ch su `ofThe` phrase vo) `sC` S "with",
   ch tfv, S "as the", phrase tfv, S "for the",
   phrase su `sAnd` ch unv, S "as a", phrase un,

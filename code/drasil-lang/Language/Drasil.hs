@@ -1,23 +1,13 @@
 {- re-export many things to simplify external use -}
 module Language.Drasil (
-  -- Output.Formats
-    DocType(SRS,MG,MIS,Website), DocSpec(DocSpec), Filename
-  --TeX.Print 
-  , genTeX
-  -- HTML.Print 
-  , genHTML
-  -- HTML.Helpers
-  , makeCSS
-  -- Make.Print 
-  , genMake
   -- SystemInformation
-  , SystemInformation(..), Block(..), citeDB, getRefDB
+    SystemInformation(..), Block(..), citeDB, getRefDB
   -- Expr
-  , Expr(..), BinOp(..), UFunc(..), ArithOper(..), BoolOper(..)
-  , Relation, RealInterval(..), Inclusive(..)
+  , Expr(..), BinOp(..), UFunc(..), ArithOper(..), BoolOper(..), DerivType(..)
+  , Relation, RealInterval(..), Inclusive(..), RTopology(..), DomainDesc(AllDD, BoundedDD)
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   -- Expr.Math
-  , log, ln, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, vars
+  , log, ln, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean
   , dim, idx, int, dbl, str, isin, case_
   , sum_all, defsum, prod_all, defprod, defint, int_all
   , real_interval
@@ -27,10 +17,10 @@ module Language.Drasil (
   , cross, m2x2, vec2D, dgnl2x2
   -- Expr.Extract
   , dep, names'
-  -- Format
-  , Format(TeX, HTML)
+  -- Expr.Precendence
+  , precA, precB, eprec
   -- all the stuff from Unicode
-  ,Special(..)
+  , Special(..), RenderSpecial(..)
   -- UnitLang
   , UDefn(..), from_udefn
   -- Unit
@@ -112,7 +102,8 @@ module Language.Drasil (
   -- Chunk.ShortName
   , ShortName, shortname', HasShortName(shortname)
   --Citations
-  , Citation, BibRef, CiteField, Month(..), HP
+  , Citation(..), EntryID, BibRef, CiteField(..), Month(..), HP(..)
+  , HasFields(..)
     -- CiteFields smart constructors
       -- People -> CiteField
   , author, editor
@@ -147,7 +138,7 @@ module Language.Drasil (
   , SecCons(..), ListType(..), ItemType(..), ListPair
   , LabelledContent, llcc
   , section, fig, figWithWidth, section'', sectionLC
-  , datadefn, reldefn
+  , datadefn, reldefn, MaxWidthPercent
   -- Reference
   , makeRef
   -- Space
@@ -162,15 +153,14 @@ module Language.Drasil (
   , lOmicron, cOmicron, lPi, cPi, lRho, cRho, lSigma, cSigma, lTau, cTau, lUpsilon, cUpsilon, lPhi, vPhi, cPhi
   , lChi, cChi, lPsi, cPsi, lOmega, cOmega, lNabla, lEll
   -- Misc
-  , mkTable, unit'2Contents, unit_symb, introduceAbb, phrase, plural, phrase's, plural's, at_start, at_start'
-  , unitHidingUnitless
-  -- Printing.Helpers
-  , capitalize, paren, sqbrac
+  , mkTable, unit_symb, introduceAbb, phrase, plural, phrase's 
+  , plural's, at_start, at_start'
+  , unitToSentence, unitToSentenceUnitless
   -- Generate
   --, gen, genCode
   -- People
   , People, Person, person, HasName, name, manyNames, person', personWM
-  , personWM', mononym
+  , personWM', mononym, nameStr, rendPersLFM, rendPersLFM', rendPersLFM''
   -- CodeSpec
   --, CodeSpec, codeSpec, Choices(..), ImplementationType(..)
   --, Logging(..), ConstraintBehaviour(..), Structure(..), Comments(..)
@@ -193,6 +183,8 @@ module Language.Drasil (
   , HasUnitTable, unitMap, unitTable
   -- AssumpChunk
   , AssumpChunk, assuming, assump
+  -- Attribute
+  , snToSentence
   -- Referencing
   , ReferenceDB, AssumpMap, assumpLookup, assumptionsFromDB
   , rdb, assumpRefTable, customRef
@@ -209,7 +201,7 @@ module Language.Drasil (
   -- PhysSystDesc
   , PhysSystDesc, pSysDes, psd
   -- RefTypes
-  , RefAdd
+  , RefAdd, RefType(Cite)
   -- Label
   , Label 
   , mkLabelRA, mkLabelRA', mkLabelRA''
@@ -223,13 +215,18 @@ module Language.Drasil (
   , names
   -- Document.Extract
   , egetDoc, getDoc
+  -- Config
+  , StyleGuide(..), verboseDDDescription, numberedTMEquations, numberedDDEquations
+  , bibStyleH, numberedSections, hyperSettings, fontSize, bibFname, bibStyleT, colBwidth
+  , colAwidth
 ) where
 
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.SystemInformation
-import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..), 
-          BoolOper(..), Relation, RealInterval(..), Inclusive(..), 
+import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..), DerivType(..),
+          BoolOper(..), Relation, RealInterval(..), Inclusive(..), RTopology(..), 
+          DomainDesc(AllDD, BoundedDD),
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
 import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
           dim, idx, int, dbl, str, isin, case_,
@@ -240,14 +237,14 @@ import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, csc
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
 import Language.Drasil.Document.Extract(egetDoc, getDoc)
 import Language.Drasil.Expr.Extract (dep, names', names)
+import Language.Drasil.Expr.Precedence (precA, precB, eprec)
 import Language.Drasil.Sentence.EmbedSymbol(ch)
 import Language.Drasil.Sentence.Extract(sdep,  snames)
-import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website), DocSpec(DocSpec), Filename)
 import Language.Drasil.Document (Document(..), DType(..)
   , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..)
   , section, fig, figWithWidth, section''
   , datadefn, reldefn, sectionLC
-  , ListPair
+  , ListPair, MaxWidthPercent
   , LabelledContent, llcc)
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Development.UnitLang -- all of it
@@ -260,6 +257,9 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasReference(getReferences), HasLabel(getLabel), HasMaybeLabel(getMaybeLabel))
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Document.GetChunk(vars, combine', vars', combine, ccss)
+import Language.Drasil.Config (StyleGuide(..), verboseDDDescription, numberedTMEquations,
+  numberedDDEquations, bibStyleH, numberedSections, hyperSettings, bibFname, fontSize,
+  colAwidth, colBwidth, bibStyleT)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Derivation (Derivation)
@@ -269,7 +269,8 @@ import Language.Drasil.Chunk.Change
 import Language.Drasil.Label (mkLabelRA, mkLabelRA', mkLabelRA'')
 import Language.Drasil.Chunk.Citation (
   -- Types
-    Citation, BibRef, CiteField, Month(..), HP, CitationKind(..)
+    Citation(..), EntryID, BibRef, CiteField(..), Month(..), HP(..), CitationKind(..)
+  , HasFields(..)
     -- CiteFields smart constructors
       -- People -> CiteField
   , author, editor
@@ -333,19 +334,10 @@ import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat,
   prime, sCurlyBrSymb, compsy, Stage(..))
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it
-import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 --import Language.Drasil.Generate -- moved in SubPackages
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
-                               ,person', personWM, personWM', mononym, name)
-
---import Language.Drasil.CodeSpec hiding (outputs, inputs) -- moved in SubPackages
---import Language.Drasil.Code.DataDesc -- moved in SubPackages
---import Language.Drasil.Code.Imperative.Lang -- moved in SubPackages
-import Language.Drasil.RefTypes(RefAdd)
+  , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
+  rendPersLFM', rendPersLFM'')
+import Language.Drasil.RefTypes(RefAdd, RefType(Cite))
 
 --Should be in lang-dev package?
-import Language.Drasil.Format(Format(TeX, HTML))
-import Language.Drasil.TeX.Print (genTeX)
-import Language.Drasil.HTML.Print (genHTML)
-import Language.Drasil.HTML.Helpers (makeCSS)
-import Language.Drasil.Make.Print (genMake)

@@ -20,13 +20,13 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (physical, column, input_, uncertainty, physicalConstraint,
   softwareConstraint, typUnc, user, model, value, quantity, information, constraint, variable,
   output_, symbol_, limitation, problem, inModel, datum, datumConstraint, section_, dataDefn,
-  general, genDefn, problemDescription, solutionCharSpec, assumption, thModel, physicalSystem,
-  likelyChg, unlikelyChg, goalStmt, theory, purpose, requirement, element)
+  general, genDefn, assumption, thModel, physicalSystem,
+  likelyChg, unlikelyChg, goalStmt, purpose, requirement, element)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle, fmtU, getRVal)
-import Data.Drasil.SentenceStructures (fmtPhys, fmtSfwr, mkTableFromColumns, foldlSent, foldlSP,
-  typUncr, ofThe, foldlList)
+import Data.Drasil.SentenceStructures (fmtPhys, fmtSfwr, mkTableFromColumns, foldlSent, 
+  foldlSP, typUncr, ofThe, foldlList)
 import qualified Drasil.DocLang.SRS as SRS
 
 
@@ -42,16 +42,6 @@ intro_ sys = Paragraph $ S "This section first presents the problem" +:+
   S "solved. This is followed by the solution characteristics" +:+
   S "specification, which presents the assumptions" `sC`
   S "theories, and definitions that are used for the" +:+. (phrase sys)
-
--- generalized specific system description introduction: boolean identifies whether the user wants the extended
--- or shortened ending (True) -> identifies key word pertaining to topic or Nothing
-specSysDesIntro ::  Sentence -> Contents
-specSysDesIntro l_end = foldlSP
-            [S "This", phrase section_, S "first presents the", 
-            phrase problemDescription `sC` S "which gives a high-level view of the", 
-            phrase problem, S "to be solved. This is followed by the", 
-            phrase solutionCharSpec `sC` S "which presents the", 
-            plural assumption `sC` plural theory `sC` l_end]
 
 --Up to change, decide on what ending sentence structure we would like to employ
 --Using Verbatim for now.
@@ -192,7 +182,8 @@ dataConstraintParagraph hasUncertainty tableRef middleSent trailingSent = Paragr
 listofTablesToRefs :: (HasShortName l, Referable l) => [l] -> Sentence
 listofTablesToRefs  []     = EmptyS
 listofTablesToRefs  [x]    = (makeRef x) +:+ S "shows"
-listofTablesToRefs  [x,y]  = (makeRef x) `sC` S "and" +:+ listofTablesToRefs [y]
+listofTablesToRefs  [x,y]  = (makeRef x) +:+ S "and" +:+ (makeRef y) +:+ S "show" -- for proper grammar with multiple tables
+                                                                                  -- no Oxford comma in case there is only two tables to be referenced
 listofTablesToRefs  (x:xs) = (makeRef x) `sC` listofTablesToRefs (xs)
  
 dataConstraintIntroSent :: Sentence -> Sentence
@@ -212,7 +203,7 @@ dataConstraintClosingSent uncertaintySent trailingSent = foldlSent
 
 dataConstraintUncertainty :: Sentence
 dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase column,
-  S "provides an", S "estimate of the confidence with which the", phrase physical,
+  S "provides an estimate of the confidence with which the", phrase physical,
   plural quantity +:+. S "can be measured", S "This", phrase information,
   S "would be part of the", phrase input_, S "if one were performing an",
   phrase uncertainty, S "quantification exercise"]

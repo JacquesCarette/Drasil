@@ -11,6 +11,6 @@ import Data.Drasil.Concepts.Documentation (symbol_, description, tOfSymb)
 table :: (Quantity s) => Stage -> [s] -> (s -> Sentence) -> LabelledContent
 table st ls f = llcc "ToSLC" (mkLabelRA'' "ToS") $ Table 
   [at_start symbol_, at_start description, at_start' CM.unit_]
-  (mkTable [P . (flip symbol st), f, unitHidingUnitless]
+  (mkTable [P . (flip symbol st), f, unitToSentence]
   (filter (\q -> hasStageSymbol q st) ls))
   (titleize tOfSymb) False "ToS"

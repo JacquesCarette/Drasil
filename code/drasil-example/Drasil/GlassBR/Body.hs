@@ -32,6 +32,7 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   physicalSystem, datumConstraint, userInput, assumption, dataDefn,
   goalStmt, inModel, likelyChg, physSyst, requirement, srs, thModel,
   dataConst, company)
+
 import Data.Drasil.Concepts.Education (secondYear, undergradDegree,
   civilEng, structuralEng, scndYrCalculus, structuralMechanics)
 import Data.Drasil.Concepts.Math (graph, calculation, probability,
@@ -55,8 +56,8 @@ import Drasil.GlassBR.Assumptions (assumptionConstants, assumptionDescs,
 import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist, glaSlab, 
   blastRisk, glass, glaPlane, glassBRProg, ptOfExplsn, acronyms)
-import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
-  dimLL, glaTyFac, tolStrDisFac, tolPre, standOffDis)
+import Drasil.GlassBR.DataDefs (aspRat, dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
+  dimLL, glaTyFac, tolStrDisFac, tolPre, risk, standOffDis)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
@@ -65,14 +66,13 @@ import Drasil.GlassBR.IMods (probOfBreak,
   calofCapacity, calofDemand, gbrIMods)
 
 import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad, 
-  lateralLoad, sflawParamM, char_weight, sD, demand, demandq, 
-  aspectRWithEqn, aspectR, lRe, wtntWithEqn, sdWithEqn, prob_br, notSafe, 
-  safeMessage, is_safe1, is_safe2, plate_width, plate_len, blast, glassTy, 
-  gbInputDataConstraints, explosion, pb_tol, blast, bomb, blastTy, 
-  glassGeo, glass_type, nom_thick, sdx, sdy, sdz, tNT, gBRSpecParamVals,
-  loadTypes, load, glassTypes, probBreak, termsWithAccDefn, termsWithDefsOnly,
-  gbConstants, gbConstrained, gbOutputs, gbInputs, glBreakage, capacity, 
-  constant_LoadDF, glassBRsymb)
+  lateralLoad, char_weight, sD, demand, demandq, aspectR, lRe, wtntWithEqn, 
+  sdWithEqn, prob_br, notSafe, safeMessage, is_safe1, is_safe2, plate_width, 
+  plate_len, blast, glassTy, gbInputDataConstraints, explosion, pb_tol, 
+  blast, bomb, blastTy, glassGeo, glass_type, nom_thick, sdx, sdy, sdz, tNT, 
+  gBRSpecParamVals, loadTypes, load, glassTypes, probBreak, termsWithAccDefn, 
+  termsWithDefsOnly, gbConstants, gbConstrained, gbOutputs, gbInputs, glBreakage, 
+  capacity, constant_LoadDF, glassBRsymb)
 
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.People (spencerSmith, nikitha, mCampidelli)
@@ -219,7 +219,7 @@ terminology_and_description_bullets_glTySubSec, terminology_and_description_bull
 terminology_and_description_bullets_glTySubSec = [Nested ((titleize glassTy) :+: S ":")
   (Bullet $ map tAndDWAcc glassTypes)]
 
-terminology_and_description_bullets_loadSubSec = [Nested ((at_start load) :+: S ":")
+terminology_and_description_bullets_loadSubSec = [Nested ((at_start load) +:+ S "-" +:+ (load ^. defn))
   (Bullet $ map tAndDWAcc (take 2 loadTypes)
   ++
   map tAndDOnly (drop 2 loadTypes))]
@@ -250,8 +250,8 @@ requiredInputs = (map qw [plate_len, plate_width, char_weight])
   ++ (map qw [glass_type, nom_thick])
 
 functional_requirements_req6_pulledList :: [QDefinition]
-functional_requirements_req6_pulledList = [nonFL, glaTyFac, dimLL, tolPre,
-  tolStrDisFac, strDisFac, hFromt]
+functional_requirements_req6_pulledList = [risk, strDisFac, nonFL, glaTyFac, dimLL, 
+  tolPre, tolStrDisFac, hFromt, aspRat]
 
 --Used in "Non-Functional Requirements" Section--
 gBRpriorityNFReqs :: [ConceptChunk]
@@ -285,9 +285,8 @@ appStanddIR = foldlSent [S " In addition" `sC` plural reviewer, -- FIXME: space 
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
   S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
   S "related to", phrase blastTy]
-endScoR = foldl (+:+) EmptyS [S "use the", plural datum `sAnd`
-  S "predict whether the", phrase glaSlab, S "is safe to use" `sOr`
-  S "not"]
+endScoR = foldl (+:+) EmptyS [S "predicts whether a", phrase glaSlab, 
+  S "is safe" `sOr` S "not"]
 
 {--Purpose of Document--}
 
@@ -418,8 +417,8 @@ terminology_and_description = termDefnF (Just (S "All" `sOf` S "the" +:+ plural 
 
 physical_system_description = physSystDesc (short gLassBR) fig_glassbr [physical_system_description_list, fig_glassbr]
 
-fig_glassbr = llcc "physSystImage" (mkLabelRA'' "physSystImageLabel") $ 
-  fig (at_start $ the physicalSystem) (resourcePath ++ "physicalsystimage.png")
+fig_glassbr = llcc "physSystImage" (mkLabelRA'' "physSystImageLabel") $
+  figWithWidth (at_start $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
   "physSystImage"
 
 physical_system_description_list = llcc "psdlistGBr" (mkLabelRA'' "psdlistGBrLabel") $
@@ -520,7 +519,7 @@ functional_requirements_req1Table = llcc "R1ReqInputs" (mkLabelRA'' "R1ReqInputs
   [at_start symbol_, at_start description, S "Units"]
   (mkTable
   [ch,
-   at_start, unit'2Contents] requiredInputs)
+   at_start, unitToSentence] requiredInputs)
   (S "Required Inputs following R1") True "R1ReqInputs"
 
 req2Desc = foldlSent [S "The", phrase system,
@@ -552,7 +551,7 @@ req4Desc = foldlSent [titleize output_, S "the", plural inQty,
   S "from", acroR 1 `andThe` S "known", plural quantity,
   S "from", acroR 2]
 
-req5Desc cmd = foldlSent_ [S "If", (ch is_safe1) `sAnd` (ch is_safe2),
+req5Desc cmd = foldlSent_ [S "If", (ch is_safe1), S "∧", (ch is_safe2),
   sParen (S "from" +:+ (makeRef t1IsSafe)
   `sAnd` (makeRef t2IsSafe)), S "are true" `sC`
   phrase cmd, S "the", phrase message, Quote (safeMessage ^. defn),
@@ -571,11 +570,7 @@ functional_requirements_req6 = llcc "frR6GBr" (mkLabelRA'' "frR6GBrLabel") $
     sParen (makeRef d)) (zip testing gbrIMods)
     ++
     map (\d -> Flat $ (at_start d) +:+ sParen (ch d) +:+
-    sParen (makeRef d)) functional_requirements_req6_pulledList
-    ++
-    [Flat $ (titleize aspectR) +:+ sParen (ch aspectR) +:+
-    E (aspectRWithEqn^.equat)]
-    ))]
+    sParen (makeRef (datadefn d))) functional_requirements_req6_pulledList))])]
 
 {--Nonfunctional Requirements--}
 
@@ -794,7 +789,7 @@ appendix_intro = llcc "appndxIntroGB" (mkLabelRA'' "appndxIntroGBLabel") $
 fig_5 = llcc "demandVSsod" (mkLabelRA'' "demandVSsodLabel") $
   fig (titleize figure +: S "5" +:+ (demandq ^. defn) +:+
   sParen (ch demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
-  `sVersus` at_start char_weight +:+ sParen (ch sflawParamM))
+  `sVersus` at_start char_weight +:+ sParen (ch char_weight))
   (resourcePath ++ "ASTM_F2248-09.png") "demandVSsod"
 
 fig_6 = llcc "dimlessloadVSaspect" (mkLabelRA'' "dimlessloadVSaspectLabel") $

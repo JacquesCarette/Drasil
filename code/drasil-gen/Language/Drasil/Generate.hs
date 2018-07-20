@@ -7,6 +7,9 @@ import System.Directory (createDirectoryIfMissing, getCurrentDirectory,
   setCurrentDirectory)
 
 import Language.Drasil
+import Language.Drasil.Printers (Format(TeX, HTML), DocSpec(DocSpec), 
+  DocType(SRS, MG, MIS, Website), Filename, makeCSS, genMake, genHTML,
+  genTeX)
 import Language.Drasil.Code (generator, generateCode, Choices, CodeSpec)
 
 -- | Generate a number of artifacts based on a list of recipes.
@@ -57,9 +60,9 @@ writeDoc _    _  _   _ = error "we can only write TeX/HTML (for now)"
 
 -- | Calls the code generator
 genCode :: Choices -> CodeSpec -> IO ()
-genCode ch spec = do 
+genCode chs spec = do 
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False "src"
   setCurrentDirectory "src"
-  generateCode ch $ generator ch spec
+  generateCode chs $ generator chs spec
   setCurrentDirectory workingDir

@@ -35,14 +35,14 @@ lc2Desc, lc3Desc, lc4Desc, lc5Desc :: Sentence
 
 lc1Desc mainConcept = foldlSent [(refA gbRefDB newA3) `sDash` S "The",
   phrase system, S "currently only calculates for external" +:+.
-  phrase mainConcept, S "In the future", plural calculation,
+  phrase mainConcept, S "In the future,", plural calculation,
   S "can be added for the internal", phrase mainConcept]
 
 lc2Desc = foldlSent [(refA gbRefDB newA4) `sC` ((refA gbRefDB newA8) `sDash`
-  S "Currently the"), plural value, S "for",
+  S "Currently, the"), plural value, S "for",
   foldlList (map ch (take 3 assumptionConstants)),
   S "are assumed to be the same for all" +:+. phrase glass,
-  S "In the future these", plural value, S "can be changed to",
+  S "In the future, these", plural value, S "can be changed to",
   phrase variable, plural input_]
 
 lc3Desc = foldlSent [(refA gbRefDB newA5) `sDash` S "The", phrase software,

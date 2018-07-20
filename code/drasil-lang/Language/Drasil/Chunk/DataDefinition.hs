@@ -19,6 +19,7 @@ import Control.Lens(makeLenses, (^.))
 import Language.Drasil.Chunk.Eq(fromEqn, fromEqn', fromEqn''', fromEqn'''')
 import Language.Drasil.Label (mkLabelRA')
 
+
 data Scope = Scp { _spec :: Label {-indirect reference-}}
 
 data ScopeType = Local Scope {-only visible within a limited scope-} | Global {-visible everywhere-}

@@ -22,6 +22,7 @@ executable tiny
     drasil-lang >= 0.1.12,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1,
+    drasil-printers >= 0.1.0,
     drasil-gen >= 0.1.0,
     drasil-docLang >= 0.1.1
   default-language: Haskell2010
@@ -61,6 +62,7 @@ executable nopcm
     drasil-lang >= 0.1.5,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1,
+    drasil-printers >= 0.1.0,
     drasil-gen >= 0.1.0,
     drasil-docLang >= 0.1.1
   default-language: Haskell2010
@@ -95,6 +97,7 @@ executable ssp
     drasil-lang >= 0.1.5,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1,
+    drasil-printers >= 0.1.0,
     drasil-gen >= 0.1.0,
     drasil-docLang >= 0.1.1
   default-language: Haskell2010
@@ -127,6 +130,7 @@ executable glassbr
     drasil-lang >= 0.1.5,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1,
+    drasil-printers >= 0.1.0,
     drasil-gen >= 0.1.0,
     drasil-docLang >= 0.1.0   
   default-language: Haskell2010
@@ -155,6 +159,7 @@ executable chipmunkdocs
     drasil-lang >= 0.1.5,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1,
+    drasil-printers >= 0.1.0,
     drasil-gen >= 0.1.0,
     drasil-docLang >= 0.1.1
   default-language: Haskell2010
@@ -188,6 +193,7 @@ executable swhs
     drasil-lang >= 0.1.5,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1,
+    drasil-printers >= 0.1.0,
     drasil-gen >= 0.1.0,
     drasil-docLang >= 0.1.1
   default-language: Haskell2010

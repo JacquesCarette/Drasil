@@ -114,7 +114,7 @@ data CitationKind = Article
 -- We will also have an EntryID (String) used for creating reference links.
 -- Finally we will have the reference information (type and fields).
 data Citation = Cite
-  { _id :: UID
+  { _cid :: UID
   , citeID :: EntryID
   , externRefT :: CitationKind
   , _fields :: [CiteField]
@@ -127,13 +127,13 @@ cite :: EntryID -> CitationKind -> [CiteField] -> Label -> Citation
 cite i = Cite i (noSpaces i)
 
 -- | Citations are chunks.
-instance HasUID        Citation where uid f (Cite a b c d l) = fmap (\x -> Cite x b c d l) (f a)
-instance HasLabel      Citation where getLabel = lb
-instance HasShortName  Citation where shortname = lb . shortname
-instance HasFields     Citation where getFields = fields
-
 class HasFields c where
   getFields :: Lens' c [CiteField]
+
+instance HasUID       Citation where uid = cid
+instance HasLabel      Citation where getLabel = lb
+instance HasShortName  Citation where shortname = lb . shortname
+instance HasFields    Citation where getFields = fields
 
 -- | Article citation requires author(s), title, journal, year.
 -- Optional fields can be: volume, number, pages, month, and note.

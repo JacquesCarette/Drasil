@@ -22,7 +22,7 @@ import Control.Lens (makeLenses, (^.))
 
 data Goal = GS
           { _gid :: UID
-          , goal :: Sentence
+          , __ :: Sentence -- The goal
           , _refAddr :: RefAdd
           , _lbl :: Label
           }

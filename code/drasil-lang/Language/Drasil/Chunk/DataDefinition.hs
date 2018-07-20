@@ -15,7 +15,7 @@ import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shor
 import Language.Drasil.Label.Core (Label)
 import Control.Lens(makeLenses, (^.), view)
 
-import Language.Drasil.Chunk.Eq(fromEqn, fromEqn', fromEqn''', fromEqn'''')
+import Language.Drasil.Chunk.Eq(fromEqn''', fromEqn'''')
 
 data Scope = Scp { _spec :: Label {-indirect reference-}}
 

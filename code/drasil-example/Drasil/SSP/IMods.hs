@@ -1,5 +1,4 @@
 module Drasil.SSP.IMods where
---(sspIMods), currently weaves the derivations in body.hs
 
 import Prelude hiding (tan, product, sin, cos)
 import Control.Lens ((^.))
@@ -22,17 +21,16 @@ import Data.Drasil.SentenceStructures (foldlSent, isThe)
 import Data.Drasil.Utils (eqUnR, weave)
 import Drasil.SSP.DataDefs (fixme1,fixme2, ddRef, sliceWght,
  lengthLb, lengthLs, seismicLoadF, surfLoads, intrsliceF, resShearWO,
- mobShearWO, displcmntRxnF, displcmntBasel, netFDsplcmntEqbm, shearStiffness,
- soilStiffness)
+ mobShearWO, displcmntRxnF, netFDsplcmntEqbm, soilStiffness)
 import Drasil.SSP.Assumptions (newA2, sspRefDB)
 
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (analysis,
   solution, definition, value, assumption, physicalProperty,
   problem, method_)
-import Data.Drasil.SentenceStructures (andThe, acroA, acroGD,
+import Data.Drasil.SentenceStructures (andThe, acroGD,
   sIs, sIn, getTDS, getTandS, ofThe, ofThe', sAnd, sOf, acroIM, acroT,
-  eqN, foldlSP, foldlSent_,foldlSentCol)
+  eqN, foldlSP, foldlSent_, foldlSentCol)
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (displacement, force)
@@ -40,9 +38,6 @@ import Drasil.SSP.BasicExprs (eqlExpr, momExpr)
 -----------------------
 --  Instance Models  --
 -----------------------
-
-sspIMods :: [RelationConcept]
-sspIMods = [fctSfty, nrmShrFor, intsliceFs, forDisEqlb, rfemFoS, crtSlpId]
 
 sspIMods_new :: [InstanceModel]
 sspIMods_new = [fctSfty_new, nrmShrFor_new, intsliceFs_new, forDisEqlb_new,

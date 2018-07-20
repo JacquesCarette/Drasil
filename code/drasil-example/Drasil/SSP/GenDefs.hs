@@ -1,4 +1,4 @@
-module Drasil.SSP.GenDefs (sspGenDefs, normForcEq, bsShrFEq, resShr, mobShr,
+module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
   normShrR, momentEql, netForcex, netForcey, hookesLaw2d, displVect, generalDefinitions) where
 
 import Prelude hiding (sin, cos, tan)
@@ -45,10 +45,6 @@ generalDefinitions = [gd' normForcEq (Nothing :: Maybe DerUChunk) ([] :: Derivat
   gd' netForcey (Nothing :: Maybe DerUChunk) ([] :: Derivation) "netForcey" [fNet_desc],
   gd' hookesLaw2d (Nothing :: Maybe DerUChunk) ([] :: Derivation) "hookesLaw2d" [hooke2d_desc],
   gd' displVect (Nothing :: Maybe DerUChunk) ([] :: Derivation) "displVect" [disVec_desc]]
-
-sspGenDefs :: [RelationConcept]
-sspGenDefs = [normForcEq, bsShrFEq, resShr, mobShr,
-  normShrR, momentEql, netForcex, netForcey, hookesLaw2d, displVect]
 
 --
 normForcEq :: RelationConcept

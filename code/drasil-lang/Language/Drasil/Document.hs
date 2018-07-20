@@ -50,7 +50,7 @@ type Lbl      = Sentence
 -- which hold the contents of the document
 data Document = Document Title Author [Section]
 
---FIXME: Remove Data and Theory from below.
+--FIXME: Remove Data, Data', and Theory from below.
 -- | Types of definitions
 data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining 
                               -- equation used to generate the Data Definition

@@ -1,5 +1,7 @@
-module Drasil.SSP.DataDefs where
---(sspDataDefs) FIXME: weaves derivations in body.hs
+module Drasil.SSP.DataDefs (dataDefns, soilStiffness, netFDsplcmntEqbm, 
+  mobShearWO, displcmntRxnF, intrsliceF, surfLoads, seismicLoadF, 
+  resShearWO, lengthLs, lengthLb, sliceWght, ddRef, fixme1, 
+  stfMtrxDerivation, mobShrDerivation, resShrDerivation, fixme2) where 
 
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
@@ -38,6 +40,7 @@ ddRef = refDD (ddRefDB sspRefMDB)
 sspRefMDB :: ModelDB
 sspRefMDB = mdb [] [] sspDataDefs [] 
 
+--FIXME:should be deleted eventually?
 sspDataDefs :: [QDefinition]
 sspDataDefs = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB,
   lengthB, lengthLb, lengthLs, seismicLoadF, surfLoads, intrsliceF, resShearWO,

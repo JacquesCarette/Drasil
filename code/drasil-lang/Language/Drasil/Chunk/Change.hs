@@ -1,5 +1,5 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.Change 
+module Language.Drasil.Chunk.Change
   ( Change(..), ChngType(..)
   , lc, ulc
   ) where
@@ -19,7 +19,7 @@ import Control.Lens ((^.), view, makeLenses)
 data ChngType = Likely -- ^ Likely Change
               | Unlikely -- ^ Unlikely Change
   deriving Eq
-  
+
 instance Show ChngType where
   show Likely = "LC"
   show Unlikely = "UC"
@@ -27,15 +27,15 @@ instance Show ChngType where
 -- | Requirement chunk type. Has an id, the type of requirement
 -- (Functional/Non-Functional) from 'ChngType', a sentence describing what is
 -- required (TODO: Change this), and a short name for reference display.
-data Change = ChC 
-  { _id      :: UID
-  , chngType :: ChngType 
+data Change = ChC
+  { _cid      :: UID
+  , chngType :: ChngType
   , chng     :: Sentence
   , _refName :: ShortName
   }
 makeLenses ''Change
-  
-instance HasUID        Change where uid f (ChC a b c d) = fmap (\x -> ChC x b c d) (f a)
+
+instance HasUID        Change where uid = cid
 instance Eq            Change where a == b = a ^. uid == b ^. uid
 instance HasShortName  Change where shortname = view refName
 

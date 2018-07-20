@@ -84,7 +84,7 @@ publicMethod mt l pl u = do
   genMethodCall Public Static (commented g) (logKind g) mt l pl u
 
 generateCode :: Choices -> State -> IO ()
-generateCode ch g =
+generateCode chs g =
   do workingDir <- getCurrentDirectory
      mapM_ (\x -> do
           createDirectoryIfMissing False (getDir x)
@@ -95,7 +95,7 @@ generateCode ch g =
             (getLabel x)
             (Options Nothing Nothing Nothing (Just "Code"))
             (toAbsCode prog modules)
-          setCurrentDirectory workingDir) (lang $ ch)
+          setCurrentDirectory workingDir) (lang $ chs)
   where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
         modules = runReader genModules g
 
@@ -150,20 +150,20 @@ genInputClass = do
   let ins          = inputs $ codeSpec g
       inputVars    =
           map (\x -> pubMVar 0 (convType $ codeType x) (codeName x)) ins
-      vars         = map svToVar inputVars
+      varsList     = map svToVar inputVars
       vals         = map (defaultValue' . convType . codeType) ins
-  asgs <- zipWithM assign vars vals
+  asgs <- zipWithM assign varsList vals
   return $ pubClass "InputParameters" Nothing inputVars
     [ constructor "InputParameters" [] [block asgs] ]
 
 genInputConstraints :: Reader State Method
 genInputConstraints = do
   g <- ask
-  let vars   = inputs $ codeSpec g
-      cm     = cMap $ codeSpec g
-      sfwrCs = concatMap (renderC . sfwrLookup cm) vars
-      physCs = concatMap (renderC . physLookup cm) vars
-  parms <- getParams vars
+  let varsList = inputs $ codeSpec g
+      cm       = cMap $ codeSpec g
+      sfwrCs   = concatMap (renderC . sfwrLookup cm) varsList
+      physCs   = concatMap (renderC . physLookup cm) varsList
+  parms <- getParams varsList
   sf <- mapM (\x -> do { e <- convExpr x; return $ ifCond [((?!) e, sfwrCBody g x)] noElse}) sfwrCs
   hw <- mapM (\x -> do { e <- convExpr x; return $ ifCond [((?!) e, physCBody g x)] noElse}) physCs
   publicMethod methodTypeVoid "input_constraints" parms
@@ -328,8 +328,8 @@ genMainFunc =
     ic <- fApp "input_constraints" [v_params]
     varDef <- mapM (\x -> do
       args <- args1 x
-      cn <- fApp (codeName x) args
-      return $ varDecDef (nopfx $ codeName x) (convType $ codeType x) cn) (execOrder $ codeSpec g)
+      cnargs <- fApp (codeName x) args
+      return $ varDecDef (nopfx $ codeName x) (convType $ codeType x) cnargs) (execOrder $ codeSpec g)
     wo <- fApp "write_output" args2
     return $ mainMethod $ body $ [
       varDecDef l_filename string $ arg 0 ,
@@ -580,10 +580,10 @@ convStmt (FAppend a b) = fmap valStmt $
 
 -- this is really ugly!!
 genDataFunc :: Name -> DataDesc -> Reader State Method
-genDataFunc name dd = do
+genDataFunc nameTitle dd = do
     parms <- getParams $ getInputs dd
     inD <- mapM inData dd
-    publicMethod methodTypeVoid name (p_filename : parms) $
+    publicMethod methodTypeVoid nameTitle (p_filename : parms) $
       return $ body $ [
       varDec l_infile infile,
       varDec l_line string,
@@ -598,21 +598,21 @@ genDataFunc name dd = do
           return [getFileInput v_infile (convType $ codeType v) vv]
         inData JunkData = return [discardFileLine v_infile]
         inData (Line lp d) = do
-          ln <- lineData lp (litInt 0)
-          return $ [ getFileInputLine v_infile v_line, stringSplit v_linetokens v_line d ] ++ ln
+          lnI <- lineData lp (litInt 0)
+          return $ [ getFileInputLine v_infile v_line, stringSplit v_linetokens v_line d ] ++ lnI
         inData (Lines lp Nothing d) = do
-          ln <- lineData lp v_i
+          lnV <- lineData lp v_i
           return $ [ getFileInputAll v_infile v_lines,
               for (varDecDef l_i int (litInt 0)) (v_i ?< v_lines I.$.listSize) ((&++) v_i)
-                ( body ( [ stringSplit v_linetokens (v_lines I.$.(listAccess v_i)) d ] ++ ln))
+                ( body ( [ stringSplit v_linetokens (v_lines I.$.(listAccess v_i)) d ] ++ lnV))
             ]
         inData (Lines lp (Just numLines) d) = do
-          ln <- lineData lp v_i
+          lnV <- lineData lp v_i
           return $ [ for (varDecDef l_i int (litInt 0)) (v_i ?< (litInt numLines)) ((&++) v_i)
               ( body
                 ( [ getFileInputLine v_infile v_line,
                     stringSplit v_linetokens v_line d
-                  ] ++ ln
+                  ] ++ lnV
                 )
               )
             ]

@@ -209,7 +209,7 @@ Pa
 Scaling Function: magnitude of interslice forces as a function of the x coordinatefor interslice index i; can be constant or a half-sine
 </td>
 <td>
-
+--
 </td>
 </tr>
 <tr>
@@ -253,7 +253,7 @@ N
 Factor of Safety: The global stability of a surface in a slope
 </td>
 <td>
-
+--
 </td>
 </tr>
 <tr>
@@ -264,7 +264,7 @@ Factor of Safety: The global stability of a surface in a slope
 Local Factor of Safety: for slice index i
 </td>
 <td>
-
+--
 </td>
 </tr>
 <tr>
@@ -275,7 +275,7 @@ Local Factor of Safety: for slice index i
 Minimum Factor of Safety: The minimum factor of safety
 </td>
 <td>
-
+--
 </td>
 </tr>
 <tr>
@@ -330,7 +330,7 @@ N
 Index: used to show a quantity applies to only one slice
 </td>
 <td>
-
+--
 </td>
 </tr>
 <tr>
@@ -396,7 +396,7 @@ Pa/m
 Earthquake Load Factor: proportionality factor of force that weight pushes outwards; caused by seismic earth movements
 </td>
 <td>
-
+--
 </td>
 </tr>
 <tr>
@@ -440,7 +440,7 @@ N&sdot;m
 Number of Slices: the slip mass has been divided into
 </td>
 <td>
-
+--
 </td>
 </tr>
 <tr>
@@ -550,7 +550,7 @@ Pa
 Fixme: What is this value?
 </td>
 <td>
-
+--
 </td>
 </tr>
 <tr>
@@ -561,7 +561,7 @@ Fixme: What is this value?
 Fixme: What is this value?
 </td>
 <td>
-
+--
 </td>
 </tr>
 <tr>
@@ -605,7 +605,7 @@ N
 Local Index: used as a bound variable index in calculations
 </td>
 <td>
-
+--
 </td>
 </tr>
 <tr>
@@ -616,7 +616,7 @@ Local Index: used as a bound variable index in calculations
 Local Index: used as a bound variable index in calculations
 </td>
 <td>
-
+--
 </td>
 </tr>
 <tr>
@@ -891,7 +891,7 @@ Pa
 Interslice Normal/shear Force Ratio: applied to all interslices
 </td>
 <td>
-
+--
 </td>
 </tr>
 <tr>
@@ -913,7 +913,7 @@ Pa
 Poisson's Ratio: The ratio of perpendicular strain to parallel strain.
 </td>
 <td>
-
+--
 </td>
 </tr>
 <tr>
@@ -946,7 +946,7 @@ Pa
 Function: generic minimization function or algorithm
 </td>
 <td>
-
+--
 </td>
 </tr>
 <tr>
@@ -1028,10 +1028,10 @@ Abbreviations and Acronyms
 <table class="table">
 <tr>
 <th>
-Symbol
+Abbreviation
 </th>
 <th>
-Description
+Full Form
 </th>
 </tr>
 <tr>
@@ -1124,18 +1124,18 @@ Theoretical Model
 </tr>
 <tr>
 <td>
-TU
-</td>
-<td>
-Typical Uncertainty
-</td>
-</tr>
-<tr>
-<td>
 UC
 </td>
 <td>
 Unlikely Change
+</td>
+</tr>
+<tr>
+<td>
+Uncert.
+</td>
+<td>
+Typical Uncertainty
 </td>
 </tr>
 </table>
@@ -1174,7 +1174,7 @@ This document will be used as a starting point for subsequent development phases
 Scope of Requirements
 </h2>
 <p class="paragraph">
-The scope of the requirements includes stability analysis of a 2 dimensional slope, composed of homogeneous soil layers. Given the appropriate inputs, the code for SSA is intended to identify the most likely failure surface within the possible input range, and find the factor of safety for the slope as well as displacement of soil that will occur on the slope.
+The scope of the requirements includes stability analysis of a 2 dimensional slope, composed of homogeneous soil layers. Given the appropriate inputs, SSA identifies the most likely failure surface within the possible input range, and finds the factor of safety for the slope as well as displacement of soil that will occur on the slope.
 </p>
 </div>
 </div>
@@ -6320,7 +6320,7 @@ FIXME: This needs to be filled in
 Data Constraints
 </h3>
 <p class="paragraph">
-<a href=#Table:InDataConstraints>Table:InDataConstraints</a>, and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+<a href=#Table:InDataConstraints>Table:InDataConstraints</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
 </p>
 <div id="Table:InDataConstraints">
 <table class="table">
@@ -6335,7 +6335,7 @@ Physical Constraints
 Typical Value
 </th>
 <th>
-TU
+Uncert.
 </th>
 </tr>
 <tr>
@@ -6441,7 +6441,7 @@ TU
 <em>a</em>
 </td>
 <td>
-None
+--
 </td>
 <td>
 <em>0.0</em> m
@@ -6455,7 +6455,7 @@ None
 <em>A</em>
 </td>
 <td>
-None
+--
 </td>
 <td>
 <em>0.0</em> m
@@ -6469,7 +6469,7 @@ None
 <em>κ</em>
 </td>
 <td>
-None
+--
 </td>
 <td>
 <em>0.0</em> Pa
@@ -6506,7 +6506,7 @@ Physical Constraints
 <em>(x,y)</em>
 </td>
 <td>
-None
+--
 </td>
 </tr>
 <tr>
@@ -6514,7 +6514,7 @@ None
 <em>δx</em>
 </td>
 <td>
-None
+--
 </td>
 </tr>
 <tr>
@@ -6522,7 +6522,7 @@ None
 <em>δy</em>
 </td>
 <td>
-None
+--
 </td>
 </tr>
 </table>

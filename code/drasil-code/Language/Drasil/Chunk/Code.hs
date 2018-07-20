@@ -177,7 +177,7 @@ instance Quantity      CodeDefinition where getUnit = getUnit . view quant
 instance CodeIdea      CodeDefinition where codeName = (^. ci)
 instance Eq            CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 
-qtoc :: QDefinition  -> CodeDefinition
+qtoc :: (Quantity q, ExprRelat q, HasSymbol q) => q -> CodeDefinition
 qtoc q = CD (qw q) (funcPrefix ++ symbToCodeName (codeSymb q)) (q ^. relat)
 
 qtov :: QDefinition -> CodeDefinition

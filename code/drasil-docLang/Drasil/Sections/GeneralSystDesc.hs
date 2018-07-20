@@ -5,7 +5,7 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (interface, system, environment,
   userCharacteristic, systemConstraint, information, section_)
 import Data.Drasil.SentenceStructures (sAnd, foldlSP)
-import qualified Drasil.DocLang.SRS as SRS (genSysDes, userChar, sysCon)
+import qualified Drasil.DocLang.SRS as SRS (genSysDes, userChar, sysCon, sysCont)
 
 -- wrapper for general system description
 genSysF :: [Section] -> Contents -> [Contents] -> [Section] -> Section
@@ -31,3 +31,7 @@ systCon :: [Contents] -> [Section] -> Section
 systCon [] subSec  = SRS.sysCon [systCon_none] subSec
             where systCon_none = Paragraph (S "There are no" +:+. plural systemConstraint)
 systCon a subSec = SRS.sysCon a subSec
+
+--System Context
+sysContxt :: [Contents] -> Section
+sysContxt cs = SRS.sysCont cs []

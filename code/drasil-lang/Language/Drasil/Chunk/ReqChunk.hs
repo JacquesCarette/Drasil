@@ -32,14 +32,14 @@ instance Show ReqType where
 -- (Functional/Non-Functional) from 'ReqType', a sentence describing what is
 -- required (TODO: Change this), and a short name.
 data ReqChunk = RC 
-  { _id        :: UID
+  { _rid        :: UID
   , reqType    :: ReqType 
   , requires   :: Sentence
   , _refName   :: ShortName
   }
 makeLenses ''ReqChunk
   
-instance HasUID        ReqChunk where uid f (RC a b c d) = fmap (\x -> RC x b c d) (f a)
+instance HasUID        ReqChunk where uid = rid
 instance Eq            ReqChunk where a == b = a ^. uid == b ^. uid
 instance HasShortName  ReqChunk where shortname = view refName
 

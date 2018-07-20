@@ -9,10 +9,10 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   Emphasis(..), Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), 
   IntroSub(..), RefSec(..), RefTab(..), SCSSub(..), SSDSec(SSDProg), 
   SSDSub(SSDSubVerb, SSDSolChSpec), SolChSpec(SCSProg), SubSec, TConvention(..), 
-  TSIntro(..), Verbosity(Verbose), assembler, dataConstraintUncertainty, 
-  inDataConstTbl, intro, mkDoc, outDataConstTbl, reqF, sSubSec, siCon, siDDef, 
-  siIMod, siSTitl, siSent, siTMod, siUQI, siUQO, specSysDescr, traceMGF, tsymb, 
-  valsOfAuxConstantsF)
+  TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
+  assembler, dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, outDataConstTbl,
+  reqF, sSubSec, siCon, siDDef, siIMod, siSTitl, siSent, siTMod, siUQI, siUQO,
+  specSysDescr, traceMGF, tsymb, valsOfAuxConstantsF)
 
 import Data.Drasil.Concepts.Documentation (assumption, body,
   concept, condition, consumer, dataConst, dataDefn, datumConstraint,
@@ -30,8 +30,8 @@ import Data.Drasil.Concepts.Software (physLib, understandability, portability,
   reliability, maintainability, performance, correctness)
 
 import Data.Drasil.People (alex, luthfi)
-import Data.Drasil.Phrase(for')
-import Data.Drasil.SI_Units(metre, kilogram, second, newton, radian)
+import Data.Drasil.Phrase (for')
+import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian)
 
 import Drasil.GamePhysics.Changes (likelyChanges, likelyChangesList', unlikelyChanges)
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
@@ -80,7 +80,8 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
    IScope scope_of_requirements_intro_p1 scope_of_requirements_intro_p2, 
    IChar (S "rigid body dynamics") (phrase highSchoolCalculus) (EmptyS), 
    IOrgSec organization_of_documents_intro inModel solution_characteristics_specification EmptyS]) :
-   Verbatim general_system_description :
+   GSDSec (GSDProg2 [SysCntxt [sysCtxIntro, sysCtxFig1, sysCtxDesc, sysCtxList], 
+    UsrChars [user_characteristics_intro], SystCons [] [] ]) :
    SSDSec 
     (SSDProg [SSDSubVerb problem_description
       , SSDSolChSpec 
@@ -96,7 +97,9 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
         )
       ]
     ):
-  (map Verbatim [requirements, likelyChanges, unlikelyChanges, off_the_shelf_solutions, traceability_matrices_and_graph, values_of_auxiliary_constatnts]) ++ 
+  (map Verbatim [requirements, likelyChanges, unlikelyChanges]) ++
+  [ExistingSolnSec (ExistSolnVerb  off_the_shelf_solutions)] ++
+  (map Verbatim [traceability_matrices_and_graph, values_of_auxiliary_constatnts]) ++
   (Bibliography : [])
     where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
@@ -217,7 +220,7 @@ scope_of_requirements_intro_p1 = foldlSent_
   [S "the", (phrase physicalSim) `sOf` (getAcc twoD), 
   (plural CP.rigidBody), S "acted on by", plural QP.force]
   
-scope_of_requirements_intro_p2 = foldlSent_ [S "simulate how these", 
+scope_of_requirements_intro_p2 = foldlSent_ [S "simulates how these", 
   (plural CP.rigidBody), S "interact with one another"]
 
 ----------------------------------------------
@@ -651,9 +654,9 @@ nonfunctional_requirements_intro = foldlSP
 -----------------------------------------
 
 off_the_shelf_solutions :: Section
-off_the_shelf_solutions_intro, off_the_shelf_solutions_2dlist, off_the_shelf_solutions_mid, off_the_shelf_solutions_3dlist :: Contents
-
 off_the_shelf_solutions = SRS.offShelfSol [off_the_shelf_solutions_intro, off_the_shelf_solutions_2dlist, off_the_shelf_solutions_mid, off_the_shelf_solutions_3dlist] []
+
+off_the_shelf_solutions_intro, off_the_shelf_solutions_2dlist, off_the_shelf_solutions_mid, off_the_shelf_solutions_3dlist :: Contents
 
 off_the_shelf_solutions_intro = off_the_shelf_solutions_intro_param problem_description physLib
 

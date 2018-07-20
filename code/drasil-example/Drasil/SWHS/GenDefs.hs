@@ -43,7 +43,7 @@ nwtnCooling = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling")
   nwtnCooling_desc nwtnCooling_rel
 
 nwtnCooling_rel :: Relation
-nwtnCooling_rel = apply1 thFluxVect QP.time $= sy htTransCoeff *
+nwtnCooling_rel = apply1 ht_flux QP.time $= sy htTransCoeff *
   apply1 deltaT QP.time
 
 nwtnCooling_desc :: Sentence

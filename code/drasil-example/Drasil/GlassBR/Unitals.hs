@@ -4,8 +4,8 @@ import Language.Drasil
 import Control.Lens ((^.))
 import Prelude hiding (log, sqrt)
 
-import Drasil.GlassBR.Concepts (aR, annealedGlass, fullyTGlass, glaPlane, 
-  glassTypeFac, heatSGlass, iGlass, lGlass, lResistance, lShareFac, 
+import Drasil.GlassBR.Concepts (aR, annealed, fullyT, glaPlane, 
+  glassTypeFac, heatS, iGlass, lGlass, lResistance, lShareFac, 
   loadDurFactor, nFL, responseTy, stdOffDist)
 import Drasil.GlassBR.Units (sFlawPU)
 
@@ -73,8 +73,7 @@ plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
 
 plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
   lB metre Real
-  [ gtZeroConstr,
-    physc $ Bounded (Exc,0) (Exc, sy plate_len),
+  [ physc $ Bounded (Exc,0) (Exc, sy plate_len),
     sfwrc $ Bounded (Inc, sy dim_min) (Inc, sy dim_max),
     sfwrc $ UpTo (Exc, sy plate_len / sy ar_max)] (dbl 1.2) defaultUncrt
 
@@ -163,14 +162,11 @@ sd_min     = mkDataDef (unitary "sd_min"
 {--}
 
 glassBRSymbols :: [UnitaryChunk]
-glassBRSymbols = [act_thick, sflawParamK, sflawParamM, demand, sd, load_dur,
+glassBRSymbols = [min_thick, sflawParamK, sflawParamM, demand, load_dur,
   eqTNTWeight]
 
-act_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, sd, load_dur,
+min_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, load_dur,
   eqTNTWeight :: UnitaryChunk
-
-act_thick   = unitary "act_thick"   (nounPhraseSP "actual thickness")
-  lH metre Rational
 
 demand      = unitary "demand"      (nounPhraseSP "applied load (demand)")
   lQ kilopascal Rational --correct Space used?
@@ -182,6 +178,9 @@ eqTNTWeight = unitary "eqTNTWeight"
 load_dur    = unitary "load_dur"    (nounPhraseSP "duration of load")
   (sub lT lD) second Real
 
+min_thick   = unitary "min_thick"   (nounPhraseSP "minimum thickness")
+  lH metre Rational
+
 sdx         = unitary "sdx" (nounPhraseSP "stand off distance (x-component)")
   (sub (eqSymb standOffDist) lX) metre Real
 
@@ -190,9 +189,6 @@ sdy         = unitary "sdy" (nounPhraseSP "stand off distance (y-component)")
 
 sdz         = unitary "sdz" (nounPhraseSP "stand off distance (z-component)")
   (sub (eqSymb standOffDist) lZ) metre Real
-
-sd          = unitary "sd" (nounPhraseSP "stand off distance")
-  (eqSymb standOffDist) metre Real
 
 sflawParamK = unitary "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?
   lK sFlawPU Real
@@ -257,7 +253,7 @@ aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
   sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage, notSafe, bomb,
   explosion :: ConceptChunk
 
-annealedGl    = cc annealedGlass
+annealedGl    = cc annealed
   ("A flat, monolithic, glass lite which has uniform thickness where the " ++
     "residual surface stresses are almost zero, as defined in [3]." {-astm2016-})
 aspectRatio   = cc aR
@@ -286,7 +282,7 @@ eqTNTChar     = dcc "eqTNTChar"   (nounPhraseSP "equivalent TNT charge mass")
     "design explosive threat.")
 explosion     = dcc "explosion"   (nounPhraseSP "explosion") 
   "a destructive shattering of something"
-fTemperedGl   = cc fullyTGlass
+fTemperedGl   = cc fullyT
   ("A flat, monolithic, glass lite of uniform thickness that has been " ++
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 69 MPa (10 000 psi) or the edge " ++
@@ -305,7 +301,7 @@ glTyFac       = cc' glassTypeFac
   S "of different glass type, that is,", foldlOptions glassTypeAbbrs
   `sC` S "in monolithic glass" `sC` (getAcc lGlass), sParen (titleize lGlass) `sC`
    S "or", (getAcc iGlass), sParen (titleize iGlass), S "constructions"])
-hStrengthGl   = cc heatSGlass
+hStrengthGl   = cc heatS
   ("A flat, monolithic, glass lite of uniform thickness that has been " ++
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 24 MPa (3500psi) or greater " ++
@@ -331,7 +327,7 @@ longDurLoad   = dcc "longDurLoad"        (nounPhraseSP "long duration load")
 nonFactoredL  = cc' nFL
   (foldlSent [S "Three second duration uniform load associated with a", 
     S "probability of breakage less than or equal to 8", (plural lite),
-    S "per 1000 for monolithic", (getAcc annealedGlass), S "glass"])
+    S "per 1000 for monolithic", (getAcc annealed), S "glass"])
 notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
   ("For the given input parameters, the glass is NOT considered safe.")
 probBreak     = cc prob_br
@@ -432,7 +428,7 @@ glassTypeAbbrs :: [Sentence]
 glassTypeAbbrs = map S glassTypeAbbrsStr
 
 glassConcepts :: [CI]
-glassConcepts = [annealedGlass, fullyTGlass, heatSGlass]
+glassConcepts = [annealed, fullyT, heatS]
 
 -- FIXME: this String is really an awful cheat...
 type GlassType = [(Integer, String)] -- [(Factor, Abbreviation)]
@@ -440,7 +436,7 @@ type GlassThickness = [(Double, Double)] --[(Nominal, Actual)]
 
 glassType :: GlassType
 -- What it should really be:
--- glassType = [(1, annealedGlass), (4, fullyTGlass), (2, heatSGlass)]
+-- glassType = [(1, annealed), (4, fullyT), (2, heatS)]
 glassType = [(1, "AN"), (4, "FT"), (2, "HS")]
 
 glassThickness :: GlassThickness

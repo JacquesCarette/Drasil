@@ -242,7 +242,7 @@ scopeReqStart :: ConceptChunk -> ConceptChunk -> Sentence
 scopeReqStart ta sw = foldlSent_ [phrase ta, S "of a single", phrase sw]
 
 scopeReqEnd :: ConceptChunk -> ConceptChunk -> ConceptChunk -> Sentence
-scopeReqEnd tem te wa = foldlSent_ [S "predict the",
+scopeReqEnd tem te wa = foldlSent_ [S "predicts the",
   phrase tem `sAnd` phrase te,
   S "histories for the", phrase wa]
 
@@ -650,7 +650,7 @@ funcReqsListItems = [
 
   Table [titleize symbol_, titleize M.unit_, titleize description]
   (mkTable [ch,
-  unit'2Contents,
+  unitToSentence,
   phrase] inputVar)
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False "fr1list",
 

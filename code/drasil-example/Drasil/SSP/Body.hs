@@ -9,7 +9,7 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   LCsSec(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), --TSIntro, 
   TSIntro(..), UCsSec(..), Fields, Field(..), SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
-  SCSSub(..),
+  SCSSub(..), GSDSec(..), GSDSub(..),
   dataConstraintUncertainty, genSysF, goalStmtF, 
   inDataConstTbl, intro, mkDoc, nonFuncReqF, outDataConstTbl, probDescF, reqF, 
   termDefnF, tsymb'', valsOfAuxConstantsF)
@@ -52,7 +52,7 @@ import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs,
 import qualified Drasil.DocLang.SRS as SRS (funcReq, inModel, missingP, physSyst)
 
 --type declarations for sections--
-gen_sys_desc, req, aux_cons :: Section
+req, aux_cons :: Section
 
 table_of_symbol_intro :: [TSIntro]
 
@@ -102,8 +102,7 @@ mkSRS = RefSec (RefProg intro
       EmptyS
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
     --FIXME: issue #235
-    Verbatim gen_sys_desc: 
-  ------
+    (GSDSec $ GSDProg2 [SysCntxt [], UsrChars [userCharIntro]]):
     SSDSec 
       (SSDProg [SSDSubVerb problem_desc
         , SSDSolChSpec 
@@ -122,8 +121,7 @@ mkSRS = RefSec (RefProg intro
             ]
           )
         ]
-      ):  
-  --gen_sys_desc,
+      ):
   map Verbatim [req] ++ [LCsSec (LCsProg likelyChanges_SRS)] 
   ++ [UCsSec (UCsProg unlikelyChanges_SRS)] ++[Verbatim aux_cons] ++ (Bibliography : [])
 
@@ -231,10 +229,11 @@ orgSecEnd   = S "The" +:+ plural inModel +:+ S "provide the set of" +:+
   +:+ S "to perform a" +:+ titleize morPrice +:+ titleize analysis
 
 -- SECTION 3 --
-gen_sys_desc = genSysF [] userCharIntro [] []
-
 -- SECTION 3.1 --
--- User Characteristics automatically generated in genSysF with the
+-- System Context automatically generated 
+
+-- SECTION 3.2 --
+-- User Characteristics automatically generated with the
 -- userContraints intro below
 
 userCharIntro :: Contents

@@ -44,7 +44,7 @@ type Width    = Float
 type Height   = Float
 type ListPair = (Title,ItemType) -- ^ Title: Item
 type Filepath = String
-type Lbl    = Sentence
+type Lbl      = Sentence
 
 -- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and Sections
 -- which hold the contents of the document

@@ -38,7 +38,7 @@ import Language.Drasil.Symbol (Symbol(Empty, Atop, Corners, Concat, Special, Ato
   Decoration(Prime, Vector, Hat))
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Spec (Sentence(..))
-import Language.Drasil.Misc (unit'2Contents)
+import Language.Drasil.Misc (unitToSentence)
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Reference (refAdd)
 import Language.Drasil.Document (DType(DD, TM, Instance, General, Theory, Data), 
@@ -352,7 +352,7 @@ item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
 makePairs :: HasSymbolTable ctx => ctx -> DType -> [(String,[T.LayoutObj])]
 makePairs m (Data c) = [
   ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
-  ("Units",       [T.Paragraph $ spec m (unit'2Contents c)]),
+  ("Units",       [T.Paragraph $ spec m (unitToSentence c)]),
   ("Equation",    [T.HDiv ["equation"] [eqnStyle numberedDDEquations $ buildEqn m c] P.EmptyS]),
   ("Description", [T.Paragraph $ buildDDDescription m c])
   ]

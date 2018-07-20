@@ -103,7 +103,7 @@ tConToExpr (TCon AssumedCon x) = x
 mkQField :: (HasSymbolTable ctx) => QDefinition -> ctx -> Field -> ModRow -> ModRow
 mkQField d _ l@Label fs = (show l, (Paragraph $ at_start d):[]) : fs
 mkQField d _ l@Symbol fs = (show l, (Paragraph $ (P $ eqSymb d)):[]) : fs
-mkQField d _ l@Units fs = (show l, (Paragraph $ (unit'2Contents d)):[]) : fs
+mkQField d _ l@Units fs = (show l, (Paragraph $ (unitToSentenceUnitless d)):[]) : fs
 mkQField d _ l@DefiningEquation fs = (show l, (eqUnR $ sy d $= d ^. equat):[]) : fs --FIXME: appending symbol should be done in the printing stage
 mkQField d m l@(Description v u) fs =
   (show l, buildDDescription v u d m) : fs
@@ -117,7 +117,7 @@ mkQField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
 mkDDField :: (HasSymbolTable ctx) => DataDefinition -> ctx -> Field -> ModRow -> ModRow
 mkDDField d _ l@Label fs = (show l, (Paragraph $ at_start d):[]) : fs
 mkDDField d _ l@Symbol fs = (show l, (Paragraph $ (P $ eqSymb d)):[]) : fs
-mkDDField d _ l@Units fs = (show l, (Paragraph $ (unit'2Contents d)):[]) : fs
+mkDDField d _ l@Units fs = (show l, (Paragraph $ (unitToSentenceUnitless d)):[]) : fs
 mkDDField  d _ l@DefiningEquation fs = (show l, (eqUnR $ sy d $= d ^. relat):[]) : fs --FIXME: appending symbol should be done in the printing stage
 mkDDField d m l@(Description v u) fs =
   (show l, buildDDescription' v u d m) : fs
@@ -196,19 +196,19 @@ mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
 -- defining.
 firstPair :: InclUnits -> QDefinition -> ListPair
 firstPair (IgnoreUnits) d  = (P (eqSymb d), Flat (phrase d))
-firstPair (IncludeUnits) d = (P (eqSymb d), Flat (phrase d +:+ sParen (unit'2Contents d)))
+firstPair (IncludeUnits) d = (P (eqSymb d), Flat (phrase d +:+ sParen (unitToSentenceUnitless d)))
 
 -- | Used for definitions. The first pair is the symbol of the quantity we are
 -- defining.
 firstPair' :: InclUnits -> DataDefinition -> ListPair
 firstPair' (IgnoreUnits) d  = (P (eqSymb d), Flat (phrase d))
-firstPair' (IncludeUnits) d = (P (eqSymb d), Flat (phrase d +:+ sParen (unit'2Contents d)))
+firstPair' (IncludeUnits) d = (P (eqSymb d), Flat (phrase d +:+ sParen (unitToSentenceUnitless d)))
 
 -- | Create the descriptions for each symbol in the relation/equation
 descPairs :: (Quantity q) => InclUnits -> [q] -> [ListPair]
 descPairs IgnoreUnits = map (\x -> (P (eqSymb x), Flat $ phrase x))
 descPairs IncludeUnits =
-  map (\x -> ((P (eqSymb x)), Flat $ phrase x +:+ sParen (unit'2Contents x)))
+  map (\x -> ((P (eqSymb x)), Flat $ phrase x +:+ sParen (unitToSentenceUnitless x)))
   -- FIXME: Need a Units map for looking up units from variables
 
 instance Show Field where

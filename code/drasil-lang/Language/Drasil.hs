@@ -151,8 +151,9 @@ module Language.Drasil (
   , lOmicron, cOmicron, lPi, cPi, lRho, cRho, lSigma, cSigma, lTau, cTau, lUpsilon, cUpsilon, lPhi, vPhi, cPhi
   , lChi, cChi, lPsi, cPsi, lOmega, cOmega, lNabla, lEll
   -- Misc
-  , mkTable, unit'2Contents, unit_symb, introduceAbb, phrase, plural, phrase's, plural's, at_start, at_start'
-  , unitHidingUnitless
+  , mkTable, unit_symb, introduceAbb, phrase, plural, phrase's 
+  , plural's, at_start, at_start'
+  , unitToSentence, unitToSentenceUnitless
   -- Generate
   --, gen, genCode
   -- People
@@ -329,10 +330,6 @@ import Language.Drasil.Misc -- all of it
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
-
---import Language.Drasil.CodeSpec hiding (outputs, inputs) -- moved in SubPackages
---import Language.Drasil.Code.DataDesc -- moved in SubPackages
---import Language.Drasil.Code.Imperative.Lang -- moved in SubPackages
 import Language.Drasil.RefTypes(RefAdd, RefType(Cite))
 
 --Should be in lang-dev package?

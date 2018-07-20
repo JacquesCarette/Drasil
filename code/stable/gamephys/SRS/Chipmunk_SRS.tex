@@ -67,7 +67,7 @@ ${\mathbf{a}_{i}}$ & The I-Th Body's Acceleration & $\frac{\text{m}}{\text{s}^{2
 \\
 $\mathbf{a}(t)$ & Linear Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-${C_{R}}$ & Coefficient of restitution & 
+${C_{R}}$ & Coefficient of restitution & --
 \\
 $\mathbf{F}$ & Force & N
 \\
@@ -168,7 +168,7 @@ $ϕ$ & Orientation & rad
 \label{Sec:TAbbAcc}
 \begin{longtable*}{l l}
 \toprule
-Symbol & Description
+Abbreviation & Full Form
 \\
 \midrule
 2D & Two-Dimensional
@@ -199,6 +199,8 @@ T & Theoretical Model
 \\
 UC & Unlikely Change
 \\
+Uncert. & Typical Uncertainty
+\\
 \bottomrule
 \label{Table:TAbbAcc}
 \end{longtable*}
@@ -212,7 +214,7 @@ This document descibes the modeling of an open source 2D rigid body physics libr
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
-The scope of the requirements includes the physical simulation of 2D rigid bodies acted on by forces. Given the appropriate inputs, the code for Chipmunk2D is intended to simulate how these rigid bodies interact with one another.
+The scope of the requirements includes the physical simulation of 2D rigid bodies acted on by forces. Given the appropriate inputs, Chipmunk2D simulates how these rigid bodies interact with one another.
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
 Reviewers of this documentation should have a strong knowledge in rigid body dynamics. The reviewers should also have an understanding of high school calculus. The users of Chipmunk2D can have a lower level of expertise, as explained in Section~\ref{Sec:UserChars}.
@@ -224,7 +226,7 @@ The goal statements are refined to the theoretical models, and the theoretical m
 \label{Sec:GenSysDesc}
 This section provides general information about the system including identifying the interfaces between the system and its environment (system context), describing the user characteristics and listing the system constraints.
 \subsection{System Context}
-\label{Sec:systemcontext}
+\label{Sec:SysContext}
 Figure~\ref{Figure:sysCtxDiag} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (Chipmunk2D). Arrows are used to show the data flow between the system and its environment.
 \begin{figure}
 \begin{center}
@@ -249,7 +251,7 @@ The interaction between the product and the user is through an application progr
 \end{itemize}
 \end{itemize}
 \subsection{User Characteristics}
-\label{Sec:usercharacteristic}
+\label{Sec:UserChars}
 The end user of Chipmunk2D should have an understanding of first year programming concepts and an understanding of high school physics.
 \subsection{System Constraints}
 \label{Sec:SysConstraints}
@@ -840,10 +842,10 @@ RefBy & FIXME: This needs to be filled in
 \end{minipage}\\
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-Table~\ref{Table:InDataConstraints}, and Table~\ref{Table:OutDataConstraints} shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. FIXME
+Table~\ref{Table:InDataConstraints} and Table~\ref{Table:OutDataConstraints} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. FIXME
 \begin{longtable}{l l l l}
 \toprule
-Var & Physical Constraints & Typical Value & TU
+Var & Physical Constraints & Typical Value & Uncert.
 \\
 \midrule
 $L$ & $L\geq{}0$ & $44.2$ m & 10.0\%
@@ -852,19 +854,19 @@ $m$ & $m\geq{}0$ & $56.2$ kg & 10.0\%
 \\
 $\mathbf{I}$ & $\mathbf{I}\geq{}0$ & $74.5$ kg$\text{m}^{2}$ & 10.0\%
 \\
-$G$ & None & $9.8$ $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$ & 10.0\%
+$G$ & -- & $9.8$ $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$ & 10.0\%
 \\
-$\mathbf{p}$ & None & $0.412$ m & 10.0\%
+$\mathbf{p}$ & -- & $0.412$ m & 10.0\%
 \\
-$ϕ$ & None & $\frac{π}{2}$ rad & 10.0\%
+$ϕ$ & -- & $\frac{π}{2}$ rad & 10.0\%
 \\
-$\mathbf{v}$ & None & $2.51$ $\frac{\text{m}}{\text{s}}$ & 10.0\%
+$\mathbf{v}$ & -- & $2.51$ $\frac{\text{m}}{\text{s}}$ & 10.0\%
 \\
-$ω$ & None & $2.1$ $\frac{\text{rad}}{\text{s}}$ & 10.0\%
+$ω$ & -- & $2.1$ $\frac{\text{rad}}{\text{s}}$ & 10.0\%
 \\
-$\mathbf{F}$ & None & $98.1$ N & 10.0\%
+$\mathbf{F}$ & -- & $98.1$ N & 10.0\%
 \\
-$τ$ & None & $200.0$ Nm & 10.0\%
+$τ$ & -- & $200.0$ Nm & 10.0\%
 \\
 ${C_{R}}$ & $0\leq{}{C_{R}}\leq{}1$ & $0.8$ & 10.0\%
 \\

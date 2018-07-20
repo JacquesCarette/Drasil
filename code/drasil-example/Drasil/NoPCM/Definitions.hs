@@ -4,7 +4,7 @@ import Language.Drasil
 
 import Data.Drasil.Concepts.Documentation (thModel, srs, physSyst,
   requirement, inModel, likelyChg, genDefn, goalStmt, assumption,
-  dataDefn, unlikelyChg, typUnc)
+  dataDefn, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (ode)
 
 --Common Terms

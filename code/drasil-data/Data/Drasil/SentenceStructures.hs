@@ -207,7 +207,7 @@ mkTableFromColumns l =
     isEmpty _      = False
 
 none :: Sentence
-none = S "None"
+none = S "--"
 
 found :: Double -> Sentence
 found x = (addPercent . realToFrac) (x*100)

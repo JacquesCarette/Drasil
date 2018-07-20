@@ -85,8 +85,8 @@ purposeOfDoc refdb purposeOfProgramParagraph = SRS.prpsOfDoc
 scopeOfRequirements :: (Idea a, CommonIdea a) => Sentence -> a -> Sentence -> Section
 scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq [intro] []
   where intro = foldlSP [(phrase scope) `ofThe'` (plural requirement),
-                S "includes" +:+. mainRequirement, S "Given the appropriate inputs, the code for",
-                short programName, S "is intended to" +:+ intendedPurpose]
+                S "includes" +:+. mainRequirement, S "Given the appropriate inputs,",
+                short programName +:+ intendedPurpose]
 
 -- | constructor for characteristics of the intended reader subsection
 -- know

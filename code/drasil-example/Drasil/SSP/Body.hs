@@ -230,7 +230,9 @@ orgSecEnd   = S "The" +:+ plural inModel +:+ S "provide the set of" +:+
 
 -- SECTION 3 --
 -- SECTION 3.1 --
--- System Context automatically generated 
+-- System Context automatically generated (need to fill in)
+
+
 
 -- SECTION 3.2 --
 -- User Characteristics automatically generated with the
@@ -248,7 +250,7 @@ userChar pname understandings familiarities = foldlSP [
   S "and be familiar with", foldlList familiarities]
 
 -- SECTION 3.2 --
--- System Constraints automatically generated in genSysF
+-- System Constraints automatically generated
 
 -- SECTION 4 --
 

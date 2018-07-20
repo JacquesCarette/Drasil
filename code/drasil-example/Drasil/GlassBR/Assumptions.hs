@@ -1,5 +1,5 @@
 module Drasil.GlassBR.Assumptions where
-import Control.Lens ((^.))
+
 import Language.Drasil hiding (organization)
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons, missingP)
 
@@ -7,7 +7,7 @@ import Drasil.DocLang (cite, refA)
 
 import Data.Drasil.Concepts.Documentation as Doc (condition, constant, practice, reference, scenario, 
   system, value)
-import Data.Drasil.Concepts.Math (calculation, surface, equation, shape)
+import Data.Drasil.Concepts.Math (calculation, surface, shape)
 import Data.Drasil.SentenceStructures (sAnd, foldlSent, foldlOptions, foldlList, sOf, sIn)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 
@@ -71,25 +71,25 @@ a4Desc mainIdea = foldlSent [S "The", plural value, S "provided in",
   makeRef (SRS.valsOfAuxCons SRS.missingP []), S "are assumed for the",
   phrase mainIdea, sParen (ch mainIdea) `sC` S "and the",
   plural materialProprty `sOf` foldlList (map ch
-  (take 3 assumptionConstants))]
+  (take 3 assumptionConstants))] +:+ S "[IM1, DD3, DD5, DD7, DD9]"
 
 a5Desc :: Sentence
 a5Desc = foldlSent [at_start glass, S "under consideration",
   S "is assumed to be a single", phrase lite `semiCol` S "hence, the",
   phrase value `sOf` short lShareFac, S "is equal to 1 for all",
-  plural calculation `sIn` short gLassBR]
+  plural calculation `sIn` short gLassBR] +:+ S "[IM2, DD7]"
 
 a6Desc :: Sentence
 a6Desc = foldlSent [S "Boundary", plural condition, S "for the",
   phrase glaSlab, S "are assumed to be 4-sided support for",
-  plural calculation]
+  plural calculation] +:+ S "[IM1]"
 
 a7Desc :: Sentence
 a7Desc = foldlSent [S "The", phrase responseTy, S "considered in",
-  short gLassBR, S "is flexural"]
+  short gLassBR, S "is flexural"] +:+ S "[IM1]"
 
 a8Desc :: QDefinition -> Sentence
 a8Desc mainConcept = foldlSent [S "With", phrase reference, S "to",
   (refA gbRefDB newA4) `sC` S "the", phrase value `sOf`
   phrase mainConcept, sParen (ch mainConcept), S "is a", phrase constant,
-  S "in", short gLassBR]
+  S "in", short gLassBR] +:+ S "[DD3]"

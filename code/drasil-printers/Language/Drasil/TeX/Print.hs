@@ -8,6 +8,11 @@ import Numeric (showFFloat)
 import Control.Applicative (pure)
 import Control.Arrow (second)
 
+import qualified Language.Drasil as L (USymb(US), colAwidth, colBwidth, bibStyleT, 
+  bibFname, RenderSpecial(..), People, rendPersLFM, HasSymbolTable,
+  CitationKind(..), Month(..), Symbol(..), Sentence(S), (+:+), MaxWidthPercent,
+  Decoration(Prime, Hat, Vector), Document, special)
+
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
   ListType(Ordered, Unordered, Desc, Definitions, Simple), 
   Spec(Quote, EmptyS, Ref, S, Sy, Sp, HARDNL, E, (:+:)), 
@@ -26,18 +31,21 @@ import Language.Drasil.Printing.LayoutObj (LayoutObj(Graph, Bib, ALUR, Figure, D
   List, Table, EqnBlock, Paragraph, Header, HDiv), Document(Document), 
   ALUR(LikelyChange, UnlikelyChange, Assumption, Requirement))
 import qualified Language.Drasil.Printing.Import as I
-import qualified Language.Drasil.Spec as LS
-import qualified Language.Drasil.RefTypes as RT
-import Language.Drasil.Development.UnitLang (USymb(US))
-import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT,bibFname)
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, item', description,
   includegraphics, center, figure, item, symbDescription, enumerate, itemize, toEqn, empty,
   newline, superscript, parens, fraction, quote, ref, ucref, lcref, aref, mref, sref, rref,
   hyperref, cite, sec, newpage, maketoc, maketitle, document, author, title)
-import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (<>), vcat, (%%), 
+import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (<>), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
 import Language.Drasil.TeX.Preamble (genPreamble)
+import qualified Language.Drasil.RefTypes as RT
+
+{-
+import qualified Language.Drasil.Spec as LS
+import qualified Language.Drasil.RefTypes as RT
+import Language.Drasil.Development.UnitLang (USymb(US))
+import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT,bibFname)
 import           Language.Drasil.Symbol (Symbol(..))
 import qualified Language.Drasil.Symbol as S
 import qualified Language.Drasil.Document as L
@@ -45,11 +53,12 @@ import Language.Drasil.Unicode (RenderSpecial(..))
 import Language.Drasil.People (People,rendPersLFM)
 import Language.Drasil.ChunkDB (HasSymbolTable)
 import Language.Drasil.Chunk.Citation (CitationKind(..), Month(..))
+-}
 
-genTeX :: HasSymbolTable ctx => L.Document -> ctx -> TP.Doc
+genTeX :: L.HasSymbolTable ctx => L.Document -> ctx -> TP.Doc
 genTeX doc sm = runPrint (buildStd sm $ I.makeDocument sm doc) Text
 
-buildStd :: HasSymbolTable s => s -> Document -> D
+buildStd :: L.HasSymbolTable s => s -> Document -> D
 buildStd sm (Document t a c) =
   genPreamble c %%
   title (spec t) %%
@@ -57,7 +66,7 @@ buildStd sm (Document t a c) =
   document (maketitle %% maketoc %% newpage %% print sm c)
 
 -- clean until here; lo needs its sub-functions fixed first though
-lo :: HasSymbolTable s => LayoutObj -> s -> D
+lo :: L.HasSymbolTable s => LayoutObj -> s -> D
 lo (Header d t l)       _  = sec d (spec t) %% label (spec l)
 lo (HDiv _ con _)       sm = print sm con -- FIXME ignoring 2 arguments?
 lo (Paragraph contents) _  = toText $ spec contents
@@ -77,29 +86,29 @@ lo (Graph ps w h c l)   _  = toText $ makeGraph
   (pure $ text $ maybe "" (\x -> "minimum height = " ++ show x ++ "em, ") h)
   (spec c) (spec l)
 
-print :: HasSymbolTable s => s -> [LayoutObj] -> D
+print :: L.HasSymbolTable s => s -> [LayoutObj] -> D
 print sm l = foldr ($+$) empty $ map (flip lo sm) l
 
 ------------------ Symbol ----------------------------
-symbol :: Symbol -> String
-symbol (Atomic s)  = s
-symbol (Special s) = unPL $ special s
+symbol :: L.Symbol -> String
+symbol (L.Atomic s)  = s
+symbol (L.Special s) = unPL $ L.special s
 --symbol (Greek g)   = unPL $ greek g
-symbol (Concat sl) = foldr (++) "" $ map symbol sl
+symbol (L.Concat sl) = foldr (++) "" $ map symbol sl
 --
 -- handle the special cases first, then general case
-symbol (Corners [] [] [x] [] s) = brace $ (symbol s) ++"^"++ brace (symbol x)
-symbol (Corners [] [] [] [x] s) = brace $ (symbol s) ++"_"++ brace (symbol x)
-symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
-symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
-symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
-symbol (Atop f s) = sFormat f s
-symbol (Empty)    = ""
+symbol (L.Corners [] [] [x] [] s) = brace $ (symbol s) ++"^"++ brace (symbol x)
+symbol (L.Corners [] [] [] [x] s) = brace $ (symbol s) ++"_"++ brace (symbol x)
+symbol (L.Corners [_] [] [] [] _) = error "rendering of ul prescript"
+symbol (L.Corners [] [_] [] [] _) = error "rendering of ll prescript"
+symbol (L.Corners _ _ _ _ _)      = error "rendering of Corners (general)"
+symbol (L.Atop f s) = sFormat f s
+symbol (L.Empty)    = ""
 
-sFormat :: S.Decoration -> Symbol -> String
-sFormat S.Hat    s = "\\hat{" ++ symbol s ++ "}"
-sFormat S.Vector s = "\\mathbf{" ++ symbol s ++ "}"
-sFormat S.Prime  s = symbol s ++ "'"
+sFormat :: L.Decoration -> L.Symbol -> String
+sFormat L.Hat    s = "\\hat{" ++ symbol s ++ "}"
+sFormat L.Vector s = "\\mathbf{" ++ symbol s ++ "}"
+sFormat L.Prime  s = symbol s ++ "'"
 
 data OpenClose = Open | Close
 
@@ -117,7 +126,7 @@ p_expr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
 p_expr (Row [x]) = brace $ p_expr x -- a bit of a hack...
 p_expr (Row l) = concatMap p_expr l
 p_expr (Ident s) = s
-p_expr (Spec s) = unPL $ special s
+p_expr (Spec s) = unPL $ L.special s
 --p_expr (Gr g) = unPL $ greek g
 p_expr (Sub e) = "_" ++ brace (p_expr e)
 p_expr (Sup e) = "^" ++ brace (p_expr e)
@@ -262,7 +271,7 @@ spec a@(s :+: t) = s' <> t'
 spec (E ex)      = toMath $ pure $ text $ p_expr ex
 spec (S s)       = pure $ text (concatMap escapeChars s)
 spec (Sy s)      = p_unit s
-spec (Sp s)      = pure $ text $ unPL $ special s
+spec (Sp s)      = pure $ text $ unPL $ L.special s
 spec HARDNL      = pure $ text "\\newline"
 spec (Ref t@RT.Sect r _ _) = sref (show t) (pure $ text r)
 spec (Ref t@RT.Def r _ _)  = hyperref (show t) (pure $ text r)
@@ -280,33 +289,33 @@ escapeChars :: Char -> String
 escapeChars '_' = "\\_"
 escapeChars c = c : []
 
-symbol_needs :: Symbol -> MathContext
-symbol_needs (Atomic _)          = Text
-symbol_needs (Special _)         = Math
+symbol_needs :: L.Symbol -> MathContext
+symbol_needs (L.Atomic _)          = Text
+symbol_needs (L.Special _)         = Math
 --symbol_needs (Greek _)           = Math
-symbol_needs (Concat [])         = Math
-symbol_needs (Concat (s:_))      = symbol_needs s
-symbol_needs (Corners _ _ _ _ _) = Math
-symbol_needs (Atop _ _)          = Math
-symbol_needs Empty               = Curr
+symbol_needs (L.Concat [])         = Math
+symbol_needs (L.Concat (s:_))      = symbol_needs s
+symbol_needs (L.Corners _ _ _ _ _) = Math
+symbol_needs (L.Atop _ _)          = Math
+symbol_needs L.Empty               = Curr
 
-p_unit :: USymb -> D
-p_unit (US ls) = formatu t b
+p_unit :: L.USymb -> D
+p_unit (L.US ls) = formatu t b
   where
     (t,b) = partition ((> 0) . snd) ls
-    formatu :: [(Symbol,Integer)] -> [(Symbol,Integer)] -> D
+    formatu :: [(L.Symbol,Integer)] -> [(L.Symbol,Integer)] -> D
     formatu [] l = line l 
     formatu l [] = foldr (<>) empty $ map pow l
     formatu nu de = toMath $ fraction (line nu) (line $ map (second negate) de)
-    line :: [(Symbol,Integer)] -> D
+    line :: [(L.Symbol,Integer)] -> D
     line []  = empty
     line [n] = pow n
     line l   = parens $ foldr (<>) empty $ map pow l
-    pow :: (Symbol,Integer) -> D
+    pow :: (L.Symbol,Integer) -> D
     pow (n,1) = p_symb n
     pow (n,p) = toMath $ superscript (p_symb n) (pure $ text $ show p)
     -- printing of unit symbols is done weirdly... FIXME?
-    p_symb (Concat s) = foldl (<>) empty $ map p_symb s
+    p_symb (L.Concat s) = foldl (<>) empty $ map p_symb s
     p_symb n = let cn = symbol_needs n in switch (const cn) (pure $ text $ symbol n)
 
 {-
@@ -328,7 +337,7 @@ p_unit (UDiv n d) = toMath $
 ------------------ DATA DEFINITION PRINTING-----------------
 -----------------------------------------------------------------
 
-makeDefn :: HasSymbolTable s => s -> [(String,[LayoutObj])] -> D -> D
+makeDefn :: L.HasSymbolTable s => s -> [(String,[LayoutObj])] -> D -> D
 makeDefn _  [] _ = error "Empty definition"
 makeDefn sm ps l = beginDefn %% makeDefTable sm ps l %% endDefn
 
@@ -339,17 +348,18 @@ beginDefn = (pure $ text "~") <> newline
 endDefn :: D
 endDefn = pure $ text "\\end{minipage}" TP.<> dbs
 
-makeDefTable :: HasSymbolTable s => s -> [(String,[LayoutObj])] -> D -> D
+makeDefTable :: L.HasSymbolTable s => s -> [(String,[LayoutObj])] -> D -> D
 makeDefTable _ [] _ = error "Trying to make empty Data Defn"
 makeDefTable sm ps l = vcat [
-  pure $ text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
+  pure $ text 
+  $ "\\begin{tabular}{p{"++show L.colAwidth++"\\textwidth} p{"++show L.colBwidth++"\\textwidth}}",
   (pure $ text "\\toprule \\textbf{Refname} & \\textbf{") <> l <> (pure $ text "}"), --shortname instead of refname?
   (pure $ text "\\phantomsection "), label l,
   makeDRows sm ps,
   pure $ dbs <+> text ("\\bottomrule \\end{tabular}")
   ]
 
-makeDRows :: HasSymbolTable s => s -> [(String,[LayoutObj])] -> D
+makeDRows :: L.HasSymbolTable s => s -> [(String,[LayoutObj])] -> D
 makeDRows _  []         = error "No fields to create Defn table"
 makeDRows sm ((f,d):[]) = dBoilerplate %% (pure $ text (f ++ " & ")) <>
   (vcat $ map (flip lo sm) d)
@@ -481,9 +491,9 @@ makeGraph ps w h c l =
 -- Bibliography Printing --
 ---------------------------
 -- **THE MAIN FUNCTION** --
-makeBib :: HasSymbolTable s => s -> BibRef -> D
+makeBib :: L.HasSymbolTable s => s -> BibRef -> D
 makeBib sm bib = spec $
-  S ("\\begin{filecontents*}{"++bibFname++".bib}\n") :+: --bibFname is in Config.hs
+  S ("\\begin{filecontents*}{"++L.bibFname++".bib}\n") :+: --bibFname is in Config.hs
   mkBibRef sm bib :+:
   S "\n\\end{filecontents*}\n" :+:
   S bibLines
@@ -491,33 +501,33 @@ makeBib sm bib = spec $
 bibLines :: String
 bibLines =
   "\\nocite{*}\n" ++
-  "\\bibstyle{" ++ bibStyleT ++ "}\n" ++ --bibStyle is in Config.hs
+  "\\bibstyle{" ++ L.bibStyleT ++ "}\n" ++ --bibStyle is in Config.hs
   "\\printbibliography[heading=none]"
 
-mkBibRef :: HasSymbolTable s => s -> BibRef -> Spec
+mkBibRef :: L.HasSymbolTable s => s -> BibRef -> Spec
 mkBibRef sm = foldl1 (\x y -> x :+: S "\n\n" :+: y) . map (renderF sm)
 
-renderF :: HasSymbolTable s => s -> Citation -> Spec
+renderF :: L.HasSymbolTable s => s -> Citation -> Spec
 renderF sm (Cite cid refType fields) =
   S (showT refType) :+: S ("{" ++ cid ++ ",\n") :+:
   (foldl1 (:+:) . intersperse (S ",\n") . map (showBibTeX sm)) fields :+: S "}"
 
-showT :: CitationKind -> String
-showT Article       = "@article"
-showT Book          = "@book"
-showT Booklet       = "@booklet"
-showT InBook        = "@inbook"
-showT InCollection  = "@incollection"
-showT InProceedings = "@inproceedings"
-showT Manual        = "@manual"
-showT MThesis       = "@mastersthesis"
-showT Misc          = "@misc"
-showT PhDThesis     = "@phdthesis"
-showT Proceedings   = "@proceedings"
-showT TechReport    = "@techreport"
-showT Unpublished   = "@unpublished"
+showT :: L.CitationKind -> String
+showT L.Article       = "@article"
+showT L.Book          = "@book"
+showT L.Booklet       = "@booklet"
+showT L.InBook        = "@inbook"
+showT L.InCollection  = "@incollection"
+showT L.InProceedings = "@inproceedings"
+showT L.Manual        = "@manual"
+showT L.MThesis       = "@mastersthesis"
+showT L.Misc          = "@misc"
+showT L.PhDThesis     = "@phdthesis"
+showT L.Proceedings   = "@proceedings"
+showT L.TechReport    = "@techreport"
+showT L.Unpublished   = "@unpublished"
 
-showBibTeX :: HasSymbolTable s => s -> CiteField -> Spec
+showBibTeX :: L.HasSymbolTable s => s -> CiteField -> Spec
 showBibTeX  _ (Address      s) = showField "address" s
 showBibTeX sm (Author       p) = showField "author" (rendPeople sm p)
 showBibTeX  _ (BookTitle    b) = showField "booktitle" b
@@ -550,24 +560,24 @@ showBibTeX  _ (HowPublished (Verb v)) = showField "howpublished" v
 showField :: String -> Spec -> Spec
 showField f s = S f :+: S "={" :+: s :+: S "}"
 
-rendPeople :: HasSymbolTable ctx => ctx -> People -> Spec
+rendPeople :: L.HasSymbolTable ctx => ctx -> L.People -> Spec
 rendPeople _ []  = S "N.a." -- "No authors given"
 rendPeople sm people = I.spec sm $
-  foldl1 (\x y -> x LS.+:+ LS.S "and" LS.+:+ y) $ map (LS.S . rendPersLFM) people
+  foldl1 (\x y -> x L.+:+ L.S "and" L.+:+ y) $ map (L.S . L.rendPersLFM) people
 
-bibTeXMonth :: Month -> Spec
-bibTeXMonth Jan = S "jan"
-bibTeXMonth Feb = S "feb"
-bibTeXMonth Mar = S "mar"
-bibTeXMonth Apr = S "apr"
-bibTeXMonth May = S "may"
-bibTeXMonth Jun = S "jun"
-bibTeXMonth Jul = S "jul"
-bibTeXMonth Aug = S "aug"
-bibTeXMonth Sep = S "sep"
-bibTeXMonth Oct = S "oct"
-bibTeXMonth Nov = S "nov"
-bibTeXMonth Dec = S "dec"
+bibTeXMonth :: L.Month -> Spec
+bibTeXMonth L.Jan = S "jan"
+bibTeXMonth L.Feb = S "feb"
+bibTeXMonth L.Mar = S "mar"
+bibTeXMonth L.Apr = S "apr"
+bibTeXMonth L.May = S "may"
+bibTeXMonth L.Jun = S "jun"
+bibTeXMonth L.Jul = S "jul"
+bibTeXMonth L.Aug = S "aug"
+bibTeXMonth L.Sep = S "sep"
+bibTeXMonth L.Oct = S "oct"
+bibTeXMonth L.Nov = S "nov"
+bibTeXMonth L.Dec = S "dec"
 
 wrapS :: Show a => a -> Spec
 wrapS = S . show

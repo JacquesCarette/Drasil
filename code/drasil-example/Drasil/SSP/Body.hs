@@ -1,6 +1,6 @@
 module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap) where
 
-import Language.Drasil hiding (organization)
+import Language.Drasil hiding (organization, Verb)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
@@ -218,9 +218,9 @@ purposeDoc pname what calculates how introduces analysizes =
 scpIncl, scpEnd :: Sentence
 scpIncl = S "stability analysis of a 2 dimensional" +:+ phrase slope `sC`
   S "composed of homogeneous" +:+ plural soilLyr
-scpEnd  = S "identify the most likely failure" +:+
+scpEnd  = S "identifies the most likely failure" +:+
   phrase surface +:+ S "within the possible" +:+ phrase input_ +:+ 
-  S "range" `sC` S "and find the" +:+ phrase fs +:+ S "for the" +:+
+  S "range" `sC` S "and finds the" +:+ phrase fs +:+ S "for the" +:+
   phrase slope +:+ S "as well as displacement of" +:+ phrase soil +:+
   S "that will occur on the" +:+ phrase slope
 

@@ -47,7 +47,7 @@ beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
 beam         = nc "beam"       (nounPhraseSP "beam")
 blastRisk    = nc "blastRisk"  (nounPhraseSP "blast risk")
 cantilever   = nc "cantilever" (nounPhraseSP "cantilever")
-edge         = nc "edge"       (nounPhraseSP "edge")
+edge         = nc "edge"       (cn'          "edge")
 glass        = nc "glass"      (nounPhraseSP "glass")
 glaSlab      = nc "glaSlab"    (nounPhraseSP "glass slab")
 plane        = nc "plane"      (nounPhraseSP "plane")

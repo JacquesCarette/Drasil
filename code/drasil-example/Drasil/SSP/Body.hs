@@ -34,10 +34,10 @@ import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent, 
   foldlSent_, ofThe, sAnd, sOr, foldlSPCol)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
-import Data.Drasil.Utils (enumBullet, enumSimple, bulletNested, bulletFlat)
+import Data.Drasil.Utils (enumBullet, enumSimple, noRefsLT, bulletNested, bulletFlat)
 import Drasil.SSP.Assumptions (sspRefDB)
 import Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
-import Drasil.SSP.DataDefs (sspDataDefs)
+import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty, 
   morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil, soilLyr, ssa, ssp)
@@ -75,11 +75,11 @@ ssp_si = SI {
   _units = this_si,
   _quants = sspSymbols,
   _concepts = symbT,
-  _definitions = sspDataDefs,
-  _datadefs = ([] :: [DataDefinition]),
+  _definitions = ([] :: [QDefinition]),
+  _datadefs = dataDefns,
   _inputs = map qw sspInputs,
   _outputs = map qw sspOutputs,
-  _defSequence = [Parallel (head sspDataDefs) (tail sspDataDefs)],
+  _defSequence = [Parallel (qdFromDD (head dataDefns)) (map qdFromDD (tail dataDefns))],
   _constraints = sspConstrained,
   _constants = [],
   _sysinfodb = sspSymMap,
@@ -113,7 +113,7 @@ mkSRS = RefSec (RefProg intro
             ,TMs ([Label] ++ stdFields) [fs_rc_new, equilibrium_new, mcShrStrgth_new,
              effStress_new, hookesLaw_new]
             , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
-            , DDs ([Label, Symbol, Units] ++ stdFields) sspDataDefs ShowDerivation
+            , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
             , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
              sspIMods_new ShowDerivation
             , Constraints  EmptyS dataConstraintUncertainty EmptyS
@@ -303,7 +303,7 @@ problem_desc = probDescF EmptyS ssa ending [termi_defi, phys_sys_desc, goal_stmt
 -- SECTION 4.1.1 --
 termi_defi = termDefnF Nothing [termi_defi_list]
 
-termi_defi_list = Enumeration $ Simple $
+termi_defi_list = Enumeration $ Simple $ noRefsLT $
   map (\x -> (titleize $ x, Flat $ x ^. defn))
   [fs_concept, crtSlpSrf, stress, strain, normForce,
   shearForce, tension, compression, plnStrn]

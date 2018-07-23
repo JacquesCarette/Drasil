@@ -194,21 +194,23 @@ mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
 
 -- | Used for definitions. The first pair is the symbol of the quantity we are
 -- defining.
-firstPair :: InclUnits -> QDefinition -> ListPair
-firstPair (IgnoreUnits) d  = (P (eqSymb d), Flat (phrase d))
-firstPair (IncludeUnits) d = (P (eqSymb d), Flat (phrase d +:+ sParen (unitToSentenceUnitless d)))
+firstPair :: InclUnits -> QDefinition -> ListTuple
+firstPair (IgnoreUnits) d  = (P $ eqSymb d, Flat $ phrase d, Nothing)
+firstPair (IncludeUnits) d = (P $ eqSymb d, Flat $ phrase d +:+ (sParen $
+  unitToSentenceUnitless d), Nothing)
 
 -- | Used for definitions. The first pair is the symbol of the quantity we are
 -- defining.
-firstPair' :: InclUnits -> DataDefinition -> ListPair
-firstPair' (IgnoreUnits) d  = (P (eqSymb d), Flat (phrase d))
-firstPair' (IncludeUnits) d = (P (eqSymb d), Flat (phrase d +:+ sParen (unitToSentenceUnitless d)))
+firstPair' :: InclUnits -> DataDefinition -> ListTuple
+firstPair' (IgnoreUnits) d  = (P $ eqSymb d, Flat $ phrase d, Nothing)
+firstPair' (IncludeUnits) d = (P $ eqSymb d, Flat $ phrase d +:+ (sParen $
+  unitToSentenceUnitless d), Nothing)
 
 -- | Create the descriptions for each symbol in the relation/equation
-descPairs :: (Quantity q) => InclUnits -> [q] -> [ListPair]
-descPairs IgnoreUnits = map (\x -> (P (eqSymb x), Flat $ phrase x))
+descPairs :: (Quantity q) => InclUnits -> [q] -> [ListTuple]
+descPairs IgnoreUnits = map (\x -> (P $ eqSymb x, Flat $ phrase x, Nothing))
 descPairs IncludeUnits =
-  map (\x -> ((P (eqSymb x)), Flat $ phrase x +:+ sParen (unitToSentenceUnitless x)))
+  map (\x -> (P $ eqSymb x, Flat $ phrase x +:+ (sParen $ unitToSentenceUnitless x), Nothing))
   -- FIXME: Need a Units map for looking up units from variables
 
 instance Show Field where

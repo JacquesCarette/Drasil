@@ -139,8 +139,8 @@ getChg :: Change -> [Sentence]
 getChg a = [chng a]
 
 getLT :: ListType -> [Sentence]
-getLT (Bullet it) = concatMap getIL it
-getLT (Numeric it) = concatMap getIL it
+getLT (Bullet it) = concatMap getIL $ map fst it
+getLT (Numeric it) = concatMap getIL $ map fst it
 getLT (Simple lp) = concatMap getLP lp
 getLT (Desc lp) = concatMap getLP lp
 getLT (Definitions lp) = concatMap getLP lp
@@ -150,8 +150,8 @@ getIL :: ItemType -> [Sentence]
 getIL (Flat s) = [s]
 getIL (Nested h lt) = h : getLT lt
 
-getLP :: ListPair -> [Sentence]
-getLP (t, it) = t : getIL it
+getLP :: ListTuple -> [Sentence]
+getLP (t, it, _) = t : getIL it
 
 getBib :: (HasFields c) => [c] -> [Sentence]
 getBib a = concatMap getField $ concatMap (^. getFields) a

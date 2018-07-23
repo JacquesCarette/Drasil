@@ -41,7 +41,7 @@ intro_ sys = Paragraph $ S "This section first presents the problem" +:+
   S "description, which gives a high-level view of the problem to be" +:+
   S "solved. This is followed by the solution characteristics" +:+
   S "specification, which presents the assumptions" `sC`
-  S "theories, and definitions that are used for the" +:+. (phrase sys)
+  S "theories, and definitions that are used for" +:+. (phrase sys)
 
 --Up to change, decide on what ending sentence structure we would like to employ
 --Using Verbatim for now.

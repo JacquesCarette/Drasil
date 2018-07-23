@@ -15,7 +15,7 @@ module Data.Drasil.SentenceStructures
   , fmtPhys, fmtSfwr, typUncr
   , mkTableFromColumns
   , acroA, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, acroT
-  , EnumType(..)
+  , EnumType(..), WrapType(..)
   ) where
 
 import Language.Drasil
@@ -67,17 +67,20 @@ foldlOptions [a,b] = a `sOr` b
 foldlOptions lst   = foldle1 sC (\a b -> a `sC` S "or" +:+ b) lst
 
 data EnumType = Numb | Upper | Lower
+data WrapType = Parens | Paren | Period
 
 -- | creates an list of elements with "enumerators" in "wrappers", separated by a sep, and ending with "and"
-foldlInlineList :: EnumType -> Sentence -> [Sentence] -> Sentence
-foldlInlineList enum sep lst = makeList sep $ map (\(a, b) -> a +:+ b) $ zip (numList enum $ length lst) lst
+foldlInlineList :: EnumType -> WrapType -> Sentence -> [Sentence] -> Sentence
+foldlInlineList e w sep lst = makeList sep $ map (\(a, b) -> a +:+ b) $ zip (numList e w $ length lst) lst
   where
-    numList :: EnumType -> Int -> [Sentence]
-    numList Numb  len = map (\x -> wrap $ S $ show x) [1..len]
-    numList Upper len = map (\x -> wrap $ S $ [x]) (take len ['A'..'Z'])
-    numList Lower len = map (\x -> wrap $ S $ [x]) (take len ['a'..'z'])
-    wrap :: Sentence -> Sentence
-    wrap = sParen
+    numList :: EnumType -> WrapType -> Int -> [Sentence]
+    numList Numb  w len = map (\x -> wrap w $ S $ show x) [1..len]
+    numList Upper w len = map (\x -> wrap w $ S $ [x]) (take len ['A'..'Z'])
+    numList Lower w len = map (\x -> wrap w $ S $ [x]) (take len ['a'..'z'])
+    wrap :: WrapType -> Sentence -> Sentence
+    wrap Parens x = sParen x
+    wrap Paren  x = x :+: S ")"
+    wrap Period x = x :+: S "."
 
 -- Helper function to foldlInlineList - not exported
 makeList :: Sentence -> [Sentence] -> Sentence

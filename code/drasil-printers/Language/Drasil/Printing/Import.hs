@@ -309,24 +309,34 @@ lay sm (Bib bib)              = T.Bib (map (layCite sm) bib) (P.S "fixmelabel11"
 
 lay' :: HasSymbolTable ctx => ctx -> LabelledContent -> Contents -> T.LayoutObj
 lay' sm lc (Table hdr lls t b _) = T.Table ["table"]
-  ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S ("Table:" ++ refAdd lc)) b (spec sm t)
-lay' sm lc (Paragraph x)         = T.Paragraph (spec sm x) (P.S (refAdd lc))
-lay' sm lc (EqnBlock c _)        = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm)) (P.S (refAdd lc))] (P.S (refAdd lc)) --FIXME: 2 labels?
-lay' sm lc (Definition c)        = T.Definition c (makePairs sm c) (P.S (refAdd lc))
-lay' sm lc (Enumeration cs)      = T.List (makeL sm cs) (P.S (refAdd lc))
-lay' sm lc (Figure c f wp _)     = T.Figure (P.S (refAdd lc)) (spec sm c) f wp
+  ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S ("Table:" ++ refAdd' lc)) b (spec sm t)
+lay' sm lc (Paragraph x)         = T.Paragraph (spec sm x) (P.S (refAdd' lc))
+lay' sm lc (EqnBlock c _)        = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm)) (P.S (refAdd' lc))] (P.S (refAdd' lc)) --FIXME: 2 labels?
+lay' sm lc (Definition c)        = T.Definition c (makePairs sm c) (P.S (refAdd' lc))
+lay' sm lc (Enumeration cs)      = T.List (makeL sm cs) (P.S (refAdd' lc))
+lay' sm lc (Figure c f wp _)     = T.Figure (P.S (refAdd' lc)) (spec sm c) f wp
 lay' sm lc (Requirement r)       = T.ALUR T.Requirement (spec sm $ requires r) 
-  (P.S $ refAdd lc) (spec sm $ getShortName r) --FIXME: 2 labels?
+  (P.S $ refAdd' lc) (spec sm $ S "refAddr") --FIXME: 2 labels?
 lay' sm lc (Assumption a)        = T.ALUR T.Assumption (spec sm (assuming a)) 
-  (P.S (refAdd lc)) (spec sm $ getShortName a) --FIXME: 2 labels?
+  (P.S (refAdd' lc)) (spec sm $ S "refAdda") --FIXME: 2 labels?
 lay' sm lc (Change x)           = T.ALUR (if (chngType x) == Likely then T.LikelyChange else T.UnlikelyChange)
-  (spec sm (chng x)) (P.S (refAdd lc)) (spec sm $ getShortName lc) --FIXME: 2 labels?
+  (spec sm (chng x)) (P.S (refAdd' lc)) (spec sm $ S "refAddx") --FIXME: 2 labels?
 lay' sm lc (Graph ps w h t _)    = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps) w h (spec sm t) 
-  (P.S (refAdd lc))
-lay' sm lc (Defnt dtyp pairs _)  = T.Definition dtyp (layPairs pairs) (P.S $ refAdd lc)
+  (P.S (refAdd' lc))
+lay' sm lc (Defnt dtyp pairs _)  = T.Definition dtyp (layPairs pairs) (P.S $ refAdd' lc)
   where layPairs = map (\(x,y) -> (x, map (lay' sm lc) y))
-lay' sm lc (Bib bib)                = T.Bib (map (layCite sm) bib) (P.S $ refAdd lc)
+lay' sm lc (Bib bib)                = T.Bib (map (layCite sm) bib) (P.S $ refAdd' lc)
 
+refAdd' :: LabelledContent -> String
+refAdd' lc = midRef' (lc ^. getMaybeLabel)
+  where 
+    midRef' :: Maybe Label -> String
+    midRef' (Just r) = refAdd r
+    midRef' Nothing  = error "Cannot be referenced."
+--FIXME: similar to makeRef, midRef, and customRef defined in Reference.hs
+--       ; look into why both are needed 
+
+-----------------------------------------------------------
 -- | For importing bibliography
 layCite :: HasSymbolTable ctx => ctx -> Citation -> P.Citation
 layCite sm c = P.Cite (citeID c) (externRefT c) (map (layField sm) (c ^. getFields))

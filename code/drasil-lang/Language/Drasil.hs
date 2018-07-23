@@ -140,7 +140,7 @@ module Language.Drasil (
   , section, fig, figWithWidth, section'', sectionLC, accessContents
   , datadefn, reldefn, MaxWidthPercent
   -- Reference
-  , makeRef
+  , makeRef, makeRefSec
   -- Space
   , Space(..)
   -- Symbol
@@ -322,7 +322,7 @@ import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (Sentence(..),
   sParen, sParenNum, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
   semiCol, sParenDash, sDash)
-import Language.Drasil.Reference (makeRef, ReferenceDB, assumpDB, reqDB
+import Language.Drasil.Reference (makeRef, makeRefSec, ReferenceDB, assumpDB, reqDB
                                  , AssumpMap, assumpLookup, HasAssumpRefs
                                  , assumpRefTable, assumptionsFromDB
                                  , rdb, reqRefTable, reqLookup, RefBy(..)

@@ -85,8 +85,8 @@ makeDerivationContents s     = Paragraph s
 -- | Helper function for creating the layout objects
 -- (paragraphs and equation blocks) for a derivation.
 makeDerivationContents' :: Sentence -> LabelledContent
-makeDerivationContents' (E e) = llcc "" (mkLabelRA'' "") $ EqnBlock e "" --FIXME! non-referble sentences!
-makeDerivationContents' s     = llcc "" (mkLabelRA'' "") $ Paragraph s  --FIXME: non-referble sentences!
+makeDerivationContents' (E e) = llcc "" (Just (mkLabelRA'' "")) $ EqnBlock e "" --FIXME! non-referble sentences!
+makeDerivationContents' s     = llcc "" Nothing $ Paragraph s  --FIXME: non-referble sentences!
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
 type ModRow = [(String, [Contents])]

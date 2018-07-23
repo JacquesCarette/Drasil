@@ -11,7 +11,7 @@ import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel), 
-  HasRefAddress(getRefAdd))
+  HasRefAddress(getRefAdd), HasMaybeLabel(getMaybeLabel))
 
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label (Label, mkLabelRA)
@@ -81,18 +81,18 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
 type Identifier = String
 
 data LabelledContent = LblC { _uniqueID :: UID
-                            , _lbl :: Label
+                            , _lbl :: Maybe Label
                             , ctype :: Contents
                             }
 makeLenses ''LabelledContent
 
 instance HasUID        LabelledContent where uid = uniqueID
-instance HasRefAddress LabelledContent where getRefAdd = lbl . getRefAdd
-instance HasLabel      LabelledContent where getLabel = lbl
-instance HasShortName  LabelledContent where shortname = lbl . shortname
+--instance HasRefAddress LabelledContent where getRefAdd = lbl . getRefAdd
+instance HasMaybeLabel LabelledContent where getMaybeLabel = lbl
+--instance HasShortName  LabelledContent where shortname = lbl . shortname
 
 -- | Smart constructor for labelled content chunks (should not be exported)
-llcc :: UID -> Label -> Contents -> LabelledContent
+llcc :: UID -> Maybe Label -> Contents -> LabelledContent
 llcc = LblC
 
 -- | Section Contents are split into subsections or contents, where contents
@@ -119,7 +119,7 @@ accessContents = ctype
 -- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and Sections
 -- which hold the contents of the document
 data Document = Document Title Author [Section]
-             
+
 {-
 instance HasShortName  Contents where
   shortname (Table _ _ _ _ r)     = shortname' $ "Table:" ++ r
@@ -141,7 +141,11 @@ instance HasShortName  Contents where
 ---------------------------------------------------------------------------
 -- smart constructors needed for LabelledContent
 -- nothing has a shortname right now
-mkTableLC :: String -> String -> String -> String -> Contents -> LabelledContent
+
+mkParagraph :: String -> Contents -> LabelledContent
+mkParagraph lcUID c = llcc lcUID Nothing c 
+
+{-mkTableLC :: String -> String -> String -> String -> Contents -> LabelledContent
 mkTableLC uidForContent labelUID refAdd sn' tbl = llcc uidForContent 
   (mkLabelRA labelUID refAdd sn') tbl
 
@@ -149,7 +153,6 @@ mkDefinitionLC :: String -> String -> String -> String -> Contents -> LabelledCo
 mkDefinitionLC uidForContent labelUID refAdd sn dfn = llcc uidForContent 
   (mkLabelRA labelUID refAdd sn) dfn
 
-{-mkParagraph
 mkEqnBlock
 mkEnumeration
 mkFigure

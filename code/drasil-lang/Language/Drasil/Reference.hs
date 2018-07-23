@@ -20,7 +20,8 @@ import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc, refAddr)
 import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..), ReqType(FR))
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName)
 import Language.Drasil.Chunk.Theory (TheoryModel)
-import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), getRefAdd)
+import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), getRefAdd, 
+  HasMaybeLabel(getMaybeLabel), getLabel)
 import Language.Drasil.Document (Contents(..), DType(Data, Theory), 
   Section(Section), repUnd, LabelledContent(LblC))
 import Language.Drasil.People (People, comparePeople)
@@ -245,9 +246,9 @@ instance Referable InstanceModel where
   refAdd  i = "IM:" ++ i^.uid
   rType   _ = Def
 
-instance Referable LabelledContent where
-  refAdd (LblC _ lb _) = getAdd (lb ^. getRefAdd)
-  rType  (LblC _ _ c)  = temp c
+--instance Referable LabelledContent where
+--  refAdd (LblC _ lb _) = getAdd (lb ^. getRefAdd)
+--  rType  (LblC _ _ c)  = temp c
 
 instance Referable Label where
   refAdd lb = getAdd (lb ^. getRefAdd)
@@ -340,8 +341,21 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 -- This should not be exported to the end-user, but should be usable
 -- within the recipe (we want to force reference creation to check if the given
 -- item exists in our database of referable objects.
-makeRef :: (HasShortName l, Referable l) => l -> Sentence
-makeRef r = customRef r (r ^. shortname)
+{-makeRef :: (HasMaybeLabel l) => l -> Sentence
+makeRef (Just r) = customRef r (r ^. shortname)--(shortname . getLabel . r)
+makeRef Nothing  = error "Cannot reference this item."
+-}
+
+--for referencing Sections; original makeRef function
+makeRefSec :: (HasShortName l, Referable l) => l -> Sentence
+makeRefSec r = customRef r (r ^. shortname)
+
+makeRef :: (HasMaybeLabel l) => l -> Sentence
+makeRef r = midRef (r ^. getMaybeLabel)
+
+midRef :: Maybe Label -> Sentence
+midRef (Just r) = customRef r (r ^. shortname)
+midRef Nothing  = error "Cannot reference this item."
 
 -- | Create a reference with a custom 'ShortName'
 customRef :: (HasShortName l, Referable l) => l -> ShortName -> Sentence

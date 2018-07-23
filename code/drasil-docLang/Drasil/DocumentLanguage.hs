@@ -467,7 +467,7 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (GDs fields gs' _) =
       SSD.genDefnF (map (gdefn fields (_sysinfodb si')) gs')
     mkSubSCS si' (IMs fields ims ShowDerivation) = 
-      SSD.inModelF pdStub ddStub tmStub SRS.genDefnLabel (concatMap (\x -> instanceModel fields (_sysinfodb si') x : derivation x) ims)
+      SSD.inModelF pdStub ddStub tmStub SRS.genDefnLabel (concatMap (\x -> instanceModel fields (_sysinfodb si') x : derivation' x) ims)
     mkSubSCS si' (IMs fields ims _)= 
       SSD.inModelF pdStub ddStub tmStub SRS.genDefnLabel (map (instanceModel fields (_sysinfodb si')) ims)
     mkSubSCS SI {_refdb = db} Assumptions =
@@ -476,7 +476,7 @@ mkSolChSpec si (SCSProg l) =
       (map (\x -> llcc (x ^. uid) (x ^. getLabel) $ Assumption x) $ assumptionsFromDB (db ^. assumpRefTable))
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
-    inModSec = SRS.inModel [Paragraph EmptyS] []
+    inModSec = SRS.inModel [mkParagraph EmptyS] []
     --FIXME: inModSec should be replaced with a walk
     -- over the SCSProg and generate a relevant intro.
     -- Could start with just a quick check of whether or not IM is included and

@@ -63,8 +63,8 @@ gdefn fs m g = llcc (g ^. uid) (g ^. getLabel) $ Defnt General (foldr (mkGDField
 
 -- | Create an instance model using a list of fields, database of symbols,
 -- and an 'InstanceModel' chunk (called automatically by 'SCSSub' program)
-instanceModel :: HasSymbolTable ctx => Fields -> ctx -> InstanceModel -> Contents
-instanceModel fs m i = Defnt Instance (foldr (mkIMField i m) [] fs) (refAdd i)
+instanceModel :: HasSymbolTable ctx => Fields -> ctx -> InstanceModel -> LabelledContent
+instanceModel fs m i = llcc (i ^. uid) (i ^. getLabel) $ Defnt Instance (foldr (mkIMField i m) [] fs) (refAdd i)
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
 -- or IM definition automatically (called automatically by 'SCSSub' program)

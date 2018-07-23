@@ -149,12 +149,12 @@ dataDefinitionIntro closingSent = llcc "ddIntroLC" (mkLabelRA'' "ddIntro") $
     S "needed to build the", plural inModel] +:+ closingSent)
 
 -- wrappers for inModelIntro. Use inModelF' if genDef are not needed
-inModelF :: Section -> Section -> Section -> Label -> [Contents] -> Section
+inModelF :: Section -> Section -> Section -> Label -> [LabelledContent] -> Section
 inModelF probDes datDef theMod genDef otherContents = SRS.inModel ((inModelIntro probDes datDef theMod genDef):otherContents) []
 
 -- just need to provide the four references in order to this function. Nothing can be input into r4 if only three tables are present
-inModelIntro :: Section -> Section -> Section -> Label -> Contents
-inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_, 
+inModelIntro :: Section -> Section -> Section -> Label -> LabelledContent
+inModelIntro r1 r2 r3 r4 = llccNoLabel $ foldlSP [S "This", phrase section_, 
   S "transforms the", phrase problem, S "defined in", (makeRefSec r1), 
   S "into one which is expressed in mathematical terms. It uses concrete", 
   plural symbol_, S "defined in", (makeRefSec r2), 

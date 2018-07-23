@@ -276,7 +276,6 @@ render progName symMap item@(SectionModel niname _)
   | compareID niname (Doc.assumption ^. uid)       = assumptionSect        item
   | compareID niname (Doc.thModel ^. uid)          = theoreticalModelSect  item symMap progName
   | compareID niname (Doc.genDefn ^. uid)          = generalDefinitionSect item symMap
-  | compareID niname (Doc.inModel ^. uid)          = instanceModelSect     item symMap
   | compareID niname (Doc.dataConst ^. uid)        = dataConstraintSect    item 
   | compareID niname (Doc.termAndDef ^. uid)       = termDefinitionSect    item
   | compareID niname (Doc.goalStmt ^. uid)         = goalStatementSect     item
@@ -336,14 +335,14 @@ generalDefinitionSect (SectionModel _ xs) _ = SRS.genDefn
         contents         = pullLC xs
 
 
-instanceModelSect :: (HasSymbolTable s) => SubSec -> s -> Section
+{-instanceModelSect :: (HasSymbolTable s) => SubSec -> s -> Section
 instanceModelSect (SectionModel _ xs) _ = SRS.inModel
   (iModIntro:instanceModels ++ (pullContents xs)) (pullSections xs)
   where symMap         = Definition . Theory
         instanceModels = map symMap $ pullIMods xs
 
 
-{-dataDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
+dataDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
 dataDefinitionSect (SectionModel _ xs) _ = SRS.dataDefn
   (dataIntro:dataDefinitions ++ (pullLC xs)) (pullSections xs)
   where dataIntro       = dataDefinitionIntro $ pullSents xs

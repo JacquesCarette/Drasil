@@ -68,7 +68,6 @@ compsy (Concat (x:xs))       (Concat (y:ys))       =
  compsy x y `mappend` complsy xs ys
 compsy (Concat a)             b                    = complsy a [b]
 compsy b                      (Concat a)           = complsy [b] a
-
 compsy (Corners _ _ u l (Atomic b)) (Corners _ _ u' l' (Atomic b'))  =
   case compare (map toLower b) (map toLower b') of
     EQ -> case complsy l l' of
@@ -95,7 +94,6 @@ compsy (Corners _ _ _ _ (Atomic b))     (Atomic a)          =
       other -> other
 compsy (Corners _ _ _ _ b)     a                   = compsy b a
 compsy a                       (Corners _ _ _ _ b) = compsy a b
-
 compsy (Atop d1 a)             (Atop d2 a')        = 
   case compsy a a' of
     EQ -> compare d1 d2
@@ -112,7 +110,6 @@ compsy (Atop _ (Atomic b))              (Atomic a)          =
     other -> case compare (map toLower b) (map toLower a) of
       EQ -> GT
       other -> other
-
 compsy (Atop _ a)              b                   = compsy a b  
 compsy b                       (Atop _ a)          = compsy b a
 compsy (Special a)             (Special b)         = compare a b

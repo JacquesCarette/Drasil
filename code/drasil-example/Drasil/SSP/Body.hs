@@ -10,15 +10,15 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   TSIntro(..), UCsSec(..), Fields, Field(..), SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..),
-  dataConstraintUncertainty, genSysF, goalStmtF, 
-  inDataConstTbl, intro, mkDoc, nonFuncReqF, outDataConstTbl, probDescF, reqF, 
-  termDefnF, tsymb'', valsOfAuxConstantsF)
+  dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
+  nonFuncReqF, outDataConstTbl, probDescF, reqF, termDefnF, tsymb'',
+  valsOfAuxConstantsF)
 
-import Data.Drasil.Concepts.Documentation (analysis, 
-  design, document, effect, element, endUser, goalStmt, inModel, input_, 
-  interest, interest, issue, loss, method_, organization, physics, 
-  problem, property, requirement, srs, table_, template, user, value,
-  variable)
+import Data.Drasil.Concepts.Documentation (analysis, assumption,
+  design, document, effect, element, endUser, environment, goalStmt, inModel, 
+  input_, interest, interest, interface, issue, loss, method_, organization, 
+  physics, problem, product_, property, requirement, software, softwareSys, 
+  srs, sysCont, system, table_, template, user, value, variable)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
@@ -32,7 +32,7 @@ import Data.Drasil.Software.Products (sciCompS)
 import Data.Drasil.People (henryFrankis)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent, 
-  foldlSent_, ofThe, sAnd, sOr)
+  foldlSent_, ofThe, sAnd, sOr, foldlSPCol)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
 import Data.Drasil.Utils (enumBullet, enumSimple, bulletNested, bulletFlat)
 import Drasil.SSP.Assumptions (sspRefDB)

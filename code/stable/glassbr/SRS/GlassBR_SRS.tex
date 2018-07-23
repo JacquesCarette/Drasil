@@ -423,7 +423,7 @@ Symbol & $B$
 Units & Unitless
 \\ \midrule \\
 Equation & \begin{dmath}
-           B=\frac{k}{\left(a b\right)^{m-1}} \left(1000 E h^{2}\right)^{m} LDF e^{J}
+           B=\frac{k}{\left(a b\right)^{m-1}} \left(E h^{2}\right)^{m} LDF e^{J}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -443,7 +443,7 @@ Notes & $a$, $b$ are dimensions of the plate, where ($a>b$).
         $LDF$ is the load duration factor as defined by DD3.
         $J$ is the stress distribution factor (Function) , as defined in DD4.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & [4] [5, Eq. 14]
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -485,7 +485,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & $t$ is a function that maps from the nominal thickness ($h$) to the minimum thickness.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -513,7 +513,7 @@ Description & \begin{symbDescription}
               \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -546,7 +546,7 @@ Notes & $J$ is the stress distribution factor (Function), which is obtained by i
         $\hat{q}$ is the dimensionless load defined in DD7.
         $AR$ is the aspect ratio defined in DD11.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -581,7 +581,7 @@ Notes & $a$, $b$ are dimensions of the plate, where ($a>b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in DD2.
         ${\hat{q}_{tol}}$ is the tolerable load defined in DD8.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -612,7 +612,7 @@ Description & \begin{symbDescription}
               \item{$g$ is the glass type $g\in{}\{AN,FT,HS\}$ (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -648,8 +648,9 @@ Notes & $q$ is the 3 second equivalent pressure, as given in IM3.
         $a$, $b$ are dimensions of the plate, where ($a>b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in DD2.
         $GTF$ is the glass type factor, as given by DD6.
+        $\hat{q}$ is calculated with reference to A\ref{A:glassLiteA}.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & [5, Eq. 7]
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -681,7 +682,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & ${\hat{q}_{tol}}$ is the tolerable load which is obtained from Figure 7 using ${J_{tol}}$ and aspect ratio as parameters using interpolation. Calculations of ${J_{tol}}$ and $AR$ are defined in DD9 and DD11, respectively.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -721,7 +722,7 @@ Notes & ${J_{tol}}$  is calculated with reference to  ${P_{btol}}$.
         $LDF$ is the load duration factor as defined by DD3.
         ${P_{btol}}$ is the tolerable probability entered by the user.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source &
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -750,7 +751,7 @@ Description & \begin{symbDescription}
               \item{${SD_{z}}$ is the stand off distance (z-component) (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -780,7 +781,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & $a$, $b$ are dimensions of the plate, where ($a>b$).
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source &
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1246,6 +1247,10 @@ booktitle={ASCE Library},
 month={feb},
 year={1998},
 howpublished={\url{doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)}}}
+
+@booklet{campidelli,
+title={Glass-BR Software for the design and risk assessment of glass facades subjected to blast loading},
+author={Campidelli, Manuel}}
 
 @mastersthesis{koothoor2013,
 author={Koothoor, Nirmitha},

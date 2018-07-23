@@ -283,7 +283,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Fully tempered (FT) - A flat, monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 69 MPa (10 000 psi) or the edge compression not less than 67 MPa (9700 psi), as defined in [2].}
 \item{Heat strengthened (HS) - A flat, monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 24 MPa (3500psi) or greater than 52 MPa (7500 psi), as defined in [2].}
 \end{itemize}
-\item{Load - A uniformly distributed lateral pressure.}
+\item{Load- A uniformly distributed lateral pressure.}
 \begin{itemize}
 \item{Load resistance (LR) - The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in [1 (pg. 1, 53)], following A2 and A1 respectively.}
 \item{Non-factored load (NFL) - Three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass.}
@@ -423,7 +423,7 @@ Symbol & $B$
 Units & Unitless
 \\ \midrule \\
 Equation & \begin{dmath}
-           B=\frac{k}{\left(a b\right)^{m-1}} \left(1000 E h^{2}\right)^{m} LDF e^{J}
+           B=\frac{k}{\left(a b\right)^{m-1}} \left(E h^{2}\right)^{m} LDF e^{J}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -443,7 +443,7 @@ Notes & $a$, $b$ are dimensions of the plate, where ($a>b$).
         $LDF$ is the load duration factor as defined by DD3.
         $J$ is the stress distribution factor (Function) , as defined in DD4.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & [4] [5, Eq. 14]
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -485,7 +485,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & $t$ is a function that maps from the nominal thickness ($h$) to the minimum thickness.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -513,7 +513,7 @@ Description & \begin{symbDescription}
               \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -546,7 +546,7 @@ Notes & $J$ is the stress distribution factor (Function), which is obtained by i
         $\hat{q}$ is the dimensionless load defined in DD7.
         $AR$ is the aspect ratio defined in DD11.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -581,7 +581,7 @@ Notes & $a$, $b$ are dimensions of the plate, where ($a>b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in DD2.
         ${\hat{q}_{tol}}$ is the tolerable load defined in DD8.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -612,7 +612,7 @@ Description & \begin{symbDescription}
               \item{$g$ is the glass type $g\in{}\{AN,FT,HS\}$ (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -648,8 +648,9 @@ Notes & $q$ is the 3 second equivalent pressure, as given in IM3.
         $a$, $b$ are dimensions of the plate, where ($a>b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in DD2.
         $GTF$ is the glass type factor, as given by DD6.
+        $\hat{q}$ is calculated with reference to A\ref{A:glassLiteA}.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & [5, Eq. 7]
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -681,7 +682,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & ${\hat{q}_{tol}}$ is the tolerable load which is obtained from Figure 7 using ${J_{tol}}$ and aspect ratio as parameters using interpolation. Calculations of ${J_{tol}}$ and $AR$ are defined in DD9 and DD11, respectively.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -721,7 +722,7 @@ Notes & ${J_{tol}}$  is calculated with reference to  ${P_{btol}}$.
         $LDF$ is the load duration factor as defined by DD3.
         ${P_{btol}}$ is the tolerable probability entered by the user.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source &
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -750,7 +751,7 @@ Description & \begin{symbDescription}
               \item{${SD_{z}}$ is the stand off distance (z-component) (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -780,7 +781,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & $a$, $b$ are dimensions of the plate, where ($a>b$).
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source &
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -920,13 +921,13 @@ $a$ & $a>0$ and $a\geq{}b$ & ${d_{min}}\leq{}a\leq{}{d_{max}}$ and $a<{AR_{max}}
 \\
 $b$ & $0<b<a$ & ${d_{min}}\leq{}b\leq{}{d_{max}}$ and $b<\frac{a}{{AR_{max}}}$ & $1.2$ m & 10.0\%
 \\
-$SD$ & $SD>0$ & ${SD_{min}}<SD<{SD_{max}}$ & $45.0$ m & 10.0\%
-\\
-$w$ & $w>0$ & ${w_{min}}\leq{}w\leq{}{w_{max}}$ & $42.0$ kg & 10.0\%
-\\
 ${P_{btol}}$ & $0<{P_{btol}}<1$ & -- & $0.008$ & 0.1\%
 \\
+$SD$ & $SD>0$ & ${SD_{min}}<SD<{SD_{max}}$ & $45.0$ m & 10.0\%
+\\
 $TNT$ & $TNT>0$ & -- & $1.0$ & 10.0\%
+\\
+$w$ & $w>0$ & ${w_{min}}\leq{}w\leq{}{w_{max}}$ & $42.0$ kg & 10.0\%
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -1184,29 +1185,29 @@ This section contains the standard values that are used for calculations in Glas
 Symbol & Description & Value & Unit
 \\
 \midrule
-$m$ & surface flaw parameter & $7$ & $\frac{\text{m}^{12}}{\text{N}^{7}}$
-\\
-$k$ & surface flaw parameter & $2.86 10^{-53}$ & $\frac{\text{m}^{12}}{\text{N}^{7}}$
-\\
-$E$ & modulus of elasticity of glass & $7.17 10^{7}$ & Pa
-\\
-${t_{d}}$ & duration of load & $3$ & s
-\\
-$LSF$ & load share factor & $1$ & --
+${AR_{max}}$ & maximum aspect ratio & $5.0$ & --
 \\
 ${d_{max}}$ & maximum value for one of the dimensions of the glass plate & $5.0$ & mm
 \\
 ${d_{min}}$ & minimum value for one of the dimensions of the glass plate & $0.1$ & mm
 \\
-${AR_{max}}$ & maximum aspect ratio & $5.0$ & --
+$E$ & modulus of elasticity of glass & $7.17 10^{7}$ & Pa
 \\
-${w_{max}}$ & maximum permissible input charge weight & $910.0$ & kg
+$k$ & surface flaw parameter & $2.86 10^{-53}$ & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
-${w_{min}}$ & minimum permissible input charge weight & $4.5$ & kg
+$LSF$ & load share factor & $1$ & --
+\\
+$m$ & surface flaw parameter & $7$ & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
 ${SD_{max}}$ & maximum stand off distance permissible for input & $130.0$ & m
 \\
 ${SD_{min}}$ & minimum stand off distance permissible for input & $6.0$ & m
+\\
+${t_{d}}$ & duration of load & $3$ & s
+\\
+${w_{max}}$ & maximum permissible input charge weight & $910.0$ & kg
+\\
+${w_{min}}$ & minimum permissible input charge weight & $4.5$ & kg
 \\
 \bottomrule
 \caption{Auxiliary Constants}
@@ -1246,6 +1247,10 @@ booktitle={ASCE Library},
 month={feb},
 year={1998},
 howpublished={\url{doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)}}}
+
+@booklet{campidelli,
+title={Glass-BR Software for the design and risk assessment of glass facades subjected to blast loading},
+author={Campidelli, Manuel}}
 
 @mastersthesis{koothoor2013,
 author={Koothoor, Nirmitha},

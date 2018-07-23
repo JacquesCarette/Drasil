@@ -26,10 +26,10 @@ import Data.Drasil.SentenceStructures (ofThe, foldlSP, foldlSent, foldlList, sAn
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import Data.List (find)
 import Control.Lens ((^.))
-import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl,
-  listofTablesToRefs)
 
 import Drasil.Sections.GeneralSystDesc(genSysIntro)
+import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl,
+  listofTablesToRefs)
 
 import qualified Drasil.DocLang.SRS as SRS
 

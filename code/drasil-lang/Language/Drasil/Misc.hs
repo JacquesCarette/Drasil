@@ -1,11 +1,15 @@
 module Language.Drasil.Misc where
 
-import Language.Drasil.Classes (HasUnitSymbol(usymb), NamedIdea(term), Idea)
+import Language.Drasil.Classes (HasSymbol(symbol), HasUnitSymbol(usymb), 
+  NamedIdea(term), Idea)
 import Language.Drasil.Chunk.NamedIdea (short)
 import Language.Drasil.Chunk.Quantity (Quantity, getUnit)
 import Language.Drasil.Chunk.Unitary (Unitary, unit)
 import Language.Drasil.Spec ((+:+), Sentence((:+:), S, Sy), sParen)
+import Language.Drasil.Symbol (Stage(Implementation), compsy)
 import Language.Drasil.Development.UnitLang (USymb)
+
+import Data.List (sortBy)
 
 import qualified Language.Drasil.NounPhrase as NP
 
@@ -84,6 +88,13 @@ noSpaces :: String -> String
 noSpaces s
   | not (' ' `elem` s) = s
   | otherwise          = error "String has at least one space in it."
+
+-- Sorts a list of HasSymbols by Symbol
+sortBySymbol :: (HasSymbol a) => [a] -> [a]
+sortBySymbol = sortBy compareBySymbol
+  where
+    compareBySymbol :: (HasSymbol a) => a -> a -> Ordering
+    compareBySymbol a b = compsy (symbol a Implementation) (symbol b Implementation)
 
 {-
 --------------------- WIP ---------------------

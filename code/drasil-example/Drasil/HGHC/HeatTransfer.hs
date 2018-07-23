@@ -9,6 +9,9 @@ import Data.Drasil.Units.Thermodynamics (heat_transfer_coef)
 symbols :: [QuantityDict]
 symbols = map qw hghcVars ++ map qw htVars
 
+hghcVarsDD :: [DataDefinition]
+hghcVarsDD = [htTransCladFuelDD, htTransCladCoolDD]
+
 hghcVars :: [QDefinition]
 hghcVars = [htTransCladFuel, htTransCladCool]
 
@@ -31,6 +34,10 @@ cladCond     = vc "cladCond"     (cnIES "clad conductivity") (lK `sub` lC) Real
 htTransCladCool_eq, htTransCladFuel_eq :: Expr
 htTransCladCool, htTransCladFuel :: QDefinition
 
+htTransCladCoolDD :: DataDefinition
+htTransCladCoolDD = mkDD htTransCladCool [] [] ""
+  Nothing
+
 htTransCladCool = fromEqn "htTransCladCool" (nounPhraseSP 
   "convective heat transfer coefficient between clad and coolant")
   EmptyS
@@ -40,6 +47,10 @@ htTransCladCool = fromEqn "htTransCladCool" (nounPhraseSP
 htTransCladCool_eq =
   (2 * (sy cladCond) * (sy coolFilmCond) / (2 * (sy cladCond) + (sy cladThick) 
   * (sy coolFilmCond)))
+
+htTransCladFuelDD :: DataDefinition
+htTransCladFuelDD = mkDD htTransCladFuel [] [] ""
+  Nothing
 
 htTransCladFuel = fromEqn "htTransCladFuel" (nounPhraseSP
   "effective heat transfer coefficient between clad and fuel surface")

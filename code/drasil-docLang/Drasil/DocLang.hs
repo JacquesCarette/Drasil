@@ -8,7 +8,7 @@ module Drasil.DocLang (
     SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), ExistingSolnSec(..),
     StkhldrSec(StkhldrProg2),
     StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg), 
-    TSIntro(..), UCsSec(..), compareBySymbol, mkDoc, mkLklyChnk, mkRequirement, 
+    TSIntro(..), UCsSec(..), mkDoc, mkLklyChnk, mkRequirement, 
     mkUnLklyChnk, tsymb, tsymb'',
     -- DocumentLanguage.Definitions
     Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose),
@@ -46,7 +46,7 @@ import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
     RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), 
     ScpOfProjSec(ScpOfProjProg), SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), 
     StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), TConvention(..), 
-    TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..), compareBySymbol, mkDoc, 
+    TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..), mkDoc, 
     mkLklyChnk, mkRequirement, mkUnLklyChnk, tsymb, tsymb'')
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, 
     InclUnits(IncludeUnits), Verbosity(Verbose))

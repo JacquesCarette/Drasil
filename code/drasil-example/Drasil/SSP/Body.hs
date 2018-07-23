@@ -4,7 +4,6 @@ import Language.Drasil hiding (organization, Verb)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
-import Data.Maybe
 
 import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..), 
   LCsSec(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), --TSIntro, 
@@ -75,7 +74,7 @@ this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, degree] ++ map unitWrapper [newton, pascal]
 
 check_si :: [UnitDefn]
-check_si = map unitWrapper $ concatMap maybeToList $ map (\x -> getUnitLup x sspSymMap) symbT 
+check_si = collectUnits sspSymMap symbT 
 
 ssp_si :: SystemInformation
 ssp_si = SI {

@@ -4,7 +4,6 @@ import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 import Control.Lens ((^.))
-import Data.Maybe
 
 import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, 
   DocSection (SSDSec, AuxConstntSec, Bibliography, IntroSec, RefSec, Verbatim), 
@@ -89,7 +88,7 @@ this_si = map unitWrapper [metre, kilogram, second] ++
 --Will there be a table of contents?
 
 check_si :: [UnitDefn]
-check_si = map unitWrapper $ concatMap maybeToList $ map (\x -> getUnitLup x swhsSymMap) symbT 
+check_si = collectUnits swhsSymMap symbT 
 
 swhsAuthors :: Sentence
 swhsAuthors = S $ manyNames swhsPeople

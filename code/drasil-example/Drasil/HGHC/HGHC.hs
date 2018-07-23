@@ -5,7 +5,6 @@ import Language.Drasil.Code (CodeSpec, codeSpec)
 import Drasil.DocLang (DocSection(RefSec, Verbatim), Literature(Lit, Manual), 
     RefSec(..), RefTab(TUnits), TSIntro(SymbConvention, TSPurpose), DocDesc, 
     dataDefnF, intro, mkDoc, tsymb)
-import Data.Maybe
 
 import Drasil.HGHC.HeatTransfer (fp, hghc, hghcVars, htInputs, htOutputs, 
     nuclearPhys, symbols)
@@ -38,7 +37,7 @@ thisSI = SI {
 }
 
 check_si :: [UnitDefn]
-check_si = map unitWrapper $ concatMap maybeToList $ map (\x -> getUnitLup x allSymbols) symbols 
+check_si = collectUnits allSymbols symbols 
 
 allSymbols :: ChunkDB
 allSymbols = cdb symbols (map nw symbols) ([] :: [ConceptChunk]) -- FIXME: Fill in concepts

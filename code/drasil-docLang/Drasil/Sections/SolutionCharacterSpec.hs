@@ -471,7 +471,7 @@ tModIntro progName = foldlSP [S "This", phrase Doc.section_, S "focuses on",
 -- GENERAL DEFINITIONS --
 -------------------------
 
-generalDefinitionIntro :: (Referable t) => [t] -> Contents
+generalDefinitionIntro :: (HasMaybeLabel t) => [t] -> Contents
 generalDefinitionIntro [] = Paragraph $ S "There are no general definitions."
 generalDefinitionIntro _ = foldlSP [S "This", phrase Doc.section_, 
   S "collects the", (plural law) `sAnd` (plural equation), 

@@ -110,13 +110,13 @@ intReaderIntro EmptyS topic2 progName stdrd sectionRef =
   [foldlSP [S "Reviewers of this",
   (phrase documentation), S "should have an understanding of" +:+. topic2 :+:
   stdrd, S "The", (plural user), S "of", (short progName),
-  S "can have a lower level of expertise, as explained in", (makeRef sectionRef)]]
+  S "can have a lower level of expertise, as explained in", (makeRefSec sectionRef)]]
 intReaderIntro topic1 topic2 progName stdrd sectionRef = 
   [foldlSP [S "Reviewers of this",
   (phrase documentation), S "should have a strong knowledge in" +:+. topic1,
   S "The reviewers should also have an understanding of" +:+. topic2 :+:
   stdrd, S "The", (plural user), S "of", (short progName),
-  S "can have a lower level of expertise, as explained in", (makeRef sectionRef)]]
+  S "can have a lower level of expertise, as explained in", (makeRefSec sectionRef)]]
 
 -- | Doc.organization of the document section constructor.  => Sentence -> c -> Section -> Sentence -> Section
 orgSec :: NamedIdea c => Sentence -> c -> Label -> Sentence -> Section
@@ -130,7 +130,7 @@ orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
           (foldlsC $ map (plural) [Doc.goal, theory, definition]) `sC` S "and assumptions.",
           S "For readers that would like a more bottom up approach" `sC`
           S "they can start reading the", plural bottom, 
-          S "in", makeRef bottomSec +:+
+          S "in", makeRefSec bottomSec +:+
           S "and trace back to find any additional information they require"],
           Paragraph $ lastS trailingSentence]
           where lastS EmptyS = refineChain [goalStmt, thModel, inModel]

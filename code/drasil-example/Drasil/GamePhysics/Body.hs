@@ -364,7 +364,7 @@ problem_description_intro_param lib app = foldlSent
   (phrase app), S "developers to include", (phrase physics), S "in their" +:+. 
   (plural product_), S "There are a few free" `sC` (phrase openSource) `sAnd` S "high quality",
   (plural lib), S "available to be used for", phrase consumer, plural product_ +:+. 
-  (sParen $ makeRef off_the_shelf_solutions), S "By creating a simple, lightweight, fast and portable",
+  (sParen $ makeRefSec off_the_shelf_solutions), S "By creating a simple, lightweight, fast and portable",
   (getAcc twoD), (phrase CP.rigidBody), (phrase lib) `sC` (phrase app),
   S "development will be more accessible to the masses" `sAnd` S "higher quality",
   (plural product_), S "will be produced"]
@@ -608,7 +608,7 @@ functional_requirements_req3 = foldlSent [S "Input the", (phrase CM.surface),
 
 functional_requirements_req4 = foldlSent [S "Verify that the", plural input_,
   S "satisfy the required", plural physicalConstraint, S "from", 
-  (makeRef solution_characteristics_specification)]
+  (makeRefSec solution_characteristics_specification)]
 
 functional_requirements_req5 = requirementS (QP.position) (QP.velocity) 
   (S "acted upon by a" +:+ (phrase QP.force))
@@ -672,7 +672,7 @@ off_the_shelf_solutions_intro = off_the_shelf_solutions_intro_param problem_desc
 
 off_the_shelf_solutions_intro_param :: NamedIdea n => Section -> n -> Contents
 off_the_shelf_solutions_intro_param problmDescSec lib = Paragraph $ foldlSentCol 
-  [S "As mentioned in", (makeRef problmDescSec) `sC`
+  [S "As mentioned in", (makeRefSec problmDescSec) `sC`
   S "there already exist free", (phrase openSource), (phrase game) +:+.
   (plural lib), S "Similar", (getAcc twoD), (plural lib), S "are"]
 
@@ -722,13 +722,13 @@ traceMatInstaModelRef, traceMatAssumpRef, traceMatFuncReqRef, traceMatGoalStmtRe
   traceMatLikelyChgRef, traceMatDataRef :: [Sentence]
 
 traceMatInstaModel = ["IM1", "IM2", "IM3"]
-traceMatInstaModelRef = map makeRef iModels_new
+traceMatInstaModelRef = map makeRefSec iModels_new
 
 traceMatTheoryModel = ["T1", "T2", "T3", "T4", "T5"]
-traceMatTheoryModelRef = map makeRef cpTMods_new
+traceMatTheoryModelRef = map makeRefSec cpTMods_new
 
 traceMatDataDef = ["DD1","DD2","DD3","DD4","DD5","DD6","DD7","DD8"]
-traceMatDataDefRef = map makeRef cpDDefs
+traceMatDataDefRef = map makeRefSec cpDDefs
 
 traceMatAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
 traceMatAssumpRef = makeListRef assumptions_list_a problem_description
@@ -737,7 +737,7 @@ traceMatFuncReq =  ["R1","R2","R3", "R4", "R5", "R6", "R7", "R8"]
 traceMatFuncReqRef = makeListRef functional_requirements_list' functional_requirements
 
 traceMatData = ["Data Constraints"]
-traceMatDataRef = [makeRef solution_characteristics_specification]
+traceMatDataRef = [makeRefSec solution_characteristics_specification]
 
 traceMatGoalStmt = ["GS1", "GS2", "GS3", "GS4"]
 traceMatGoalStmtRef = makeListRef goal_statements_list' problem_description
@@ -791,8 +791,8 @@ traceMatTabReqGoalOther = llcc "TraceyReqGoalsOther" (mkLabelRA'' "TraceyReqGoal
   Table (EmptyS:(traceMatTabReqGoalOtherRowHead))
   (makeTMatrix traceMatTabReqGoalOtherColHead traceMatTabReqGoalOtherCol
   traceMatTabReqGoalOtherRow)
-  (showingCxnBw (traceyMatrix) (titleize' requirement +:+ sParen (makeRef requirements)
-  `sC` (titleize' goalStmt) +:+ sParen (makeRef problem_description) `sAnd` S "Other" +:+
+  (showingCxnBw (traceyMatrix) (titleize' requirement +:+ sParen (makeRefSec requirements)
+  `sC` (titleize' goalStmt) +:+ sParen (makeRefSec problem_description) `sAnd` S "Other" +:+
   titleize' item)) True "TraceyReqGoalsOther"
 
 traceMatTabAssumpCol' :: [[String]]
@@ -863,7 +863,7 @@ traceMatTabAssump :: LabelledContent
 traceMatTabAssump = llcc "TraceyAssumpsOther" (mkLabelRA'' "TraceyAssumpsOtherLabel") $ 
   Table (EmptyS:traceMatTabAssumpRowHead)
   (makeTMatrix traceMatTabAssumpColHead traceMatTabAssumpCol' traceMatTabAssumpRow)
-  (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef problem_description) 
+  (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRefSec problem_description)
   `sAnd` S "Other" +:+ titleize' item)) True "TraceyAssumpsOther"
 
 

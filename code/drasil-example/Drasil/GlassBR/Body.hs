@@ -135,7 +135,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand] HideDerivation
           , Constraints EmptyS dataConstraintUncertainty
-                        (foldlSent [makeRef SRS.valsOfAuxConsLabel, S "gives", (plural value `ofThe` S "specification"),
+                        (foldlSent [makeRefSec SRS.valsOfAuxConsLabel, S "gives", (plural value `ofThe` S "specification"),
                         plural parameter, S "used in", (makeRef inputDataConstraints)])
                         [inputDataConstraints, outputDataConstraints]
           ]
@@ -281,7 +281,7 @@ appStanddIR = foldlSent [S " In addition" `sC` plural reviewer, -- FIXME: space 
   S "should be familiar with the applicable", plural standard,
   S "for constructions using glass from",
   sSqBr (S "1-3" {-astm2009, astm2012, astm2016-}) `sIn`
-  (makeRef (SRS.reference SRS.missingP []))]
+  (makeRefSec (SRS.reference SRS.missingP []))]
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
   S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
   S "related to", phrase blastTy]
@@ -353,7 +353,7 @@ product_use_case_table_UC1, product_use_case_table_UC2 :: [Sentence]
 
 product_use_case_table_UC1 = [titleize user, titleize' characteristic +:+ S "of the"
   +:+ phrase glaSlab `sAnd` S "of the" +:+. phrase blast +:+ S "Details in"
-  +:+ makeRef (SRS.indPRCase SRS.missingP [])]
+  +:+ makeRefSec (SRS.indPRCase SRS.missingP [])]
 
 product_use_case_table_UC2 = [short gLassBR, S "Whether" `sOr` S "not the" +:+
   phrase glaSlab +:+ S "is safe for the" +:+ S "calculated" +:+ phrase load
@@ -411,7 +411,7 @@ problem_description = probDescF start gLassBR ending [terminology_and_descriptio
 
 terminology_and_description = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
   S "are extracted from" +:+ (sSqBrNum 1 {-astm2009-}) `sIn`
-  (makeRef (SRS.reference SRS.missingP [])))) [terminology_and_description_bullets]
+  (makeRefSec (SRS.reference SRS.missingP [])))) [terminology_and_description_bullets]
 
 {--Physical System Description--}
 
@@ -526,9 +526,9 @@ req2Desc = foldlSent [S "The", phrase system,
   S "shall set the known", plural value +: S "as follows",
   foldlList [(foldlsC (map ch (take 4 assumptionConstants)) `followA` 4),
   ((ch constant_LoadDF) `followA` 8), (short lShareFac `followA` 5),
-  (ch hFromt) +:+ sParen (S "from" +:+ (makeRef hFromt)), 
-  (ch glaTyFac) +:+ sParen (S "from" +:+ (makeRef glaTyFac)),
-  (ch standOffDis) +:+ sParen (S "from" +:+ (makeRef standOffDis))]]
+  (ch hFromt) +:+ sParen (S "from" +:+ (makeRefSec hFromt)), 
+  (ch glaTyFac) +:+ sParen (S "from" +:+ (makeRefSec glaTyFac)),
+  (ch standOffDis) +:+ sParen (S "from" +:+ (makeRefSec standOffDis))]]
 
 --ItemType
 {-functional_requirements_req2 = (Nested (S "The" +:+ phrase system +:+
@@ -543,7 +543,7 @@ req2Desc = foldlSent [S "The", phrase system,
 
 req3Desc = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",
-  plural datumConstraint, S "mentioned in" +:+. makeRef SRS.datConLabel, 
+  plural datumConstraint, S "mentioned in" +:+. makeRefSec SRS.datConLabel, 
   S "If any" `sOf` S "the", plural inParam, S "is out" `sOf` S "bounds" `sC`
   S "an", phrase errMsg, S "is displayed" `andThe` plural calculation, S "stop"]
 
@@ -552,8 +552,8 @@ req4Desc = foldlSent [titleize output_, S "the", plural inQty,
   S "from", acroR 2]
 
 req5Desc cmd = foldlSent_ [S "If", (ch is_safe1), S "∧", (ch is_safe2),
-  sParen (S "from" +:+ (makeRef t1IsSafe)
-  `sAnd` (makeRef t2IsSafe)), S "are true" `sC`
+  sParen (S "from" +:+ (makeRefSec t1IsSafe)
+  `sAnd` (makeRefSec t2IsSafe)), S "are true" `sC`
   phrase cmd, S "the", phrase message, Quote (safeMessage ^. defn),
   S "If the", phrase condition, S "is false, then", phrase cmd,
   S "the", phrase message, Quote (notSafe ^. defn)]
@@ -567,10 +567,10 @@ functional_requirements_req6 = llcc "frR6GBr" (mkLabelRA'' "frR6GBrLabel") $
   S "the following" +: plural quantity)
   (Bullet $
     map (\(a, d) -> Flat $ (at_start a) +:+ sParen (ch a) +:+
-    sParen (makeRef d)) (zip testing gbrIMods)
+    sParen (makeRefSec d)) (zip testing gbrIMods)
     ++
     map (\d -> Flat $ (at_start d) +:+ sParen (ch d) +:+
-    sParen (makeRef d)) functional_requirements_req6_pulledList))]
+    sParen (makeRefSec d)) functional_requirements_req6_pulledList))]
 
 {--Nonfunctional Requirements--}
 
@@ -607,22 +607,22 @@ traceability_matrices_and_graphs_theorysRef, traceability_matrices_and_graphs_in
   traceability_matrices_and_graphs_likelyChgRef :: [Sentence]
 
 traceability_matrices_and_graphs_theorys = ["T1", "T2"]
-traceability_matrices_and_graphs_theorysRef = map makeRef gbrTMods
+traceability_matrices_and_graphs_theorysRef = map makeRefSec gbrTMods
 
 traceability_matrices_and_graphs_instaModel = ["IM1", "IM2", "IM3"]
-traceability_matrices_and_graphs_instaModelRef = map makeRef gbrIMods
+traceability_matrices_and_graphs_instaModelRef = map makeRefSec gbrIMods
 
 traceability_matrices_and_graphs_dataDef =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
-traceability_matrices_and_graphs_dataDefRef = map makeRef dataDefns
+traceability_matrices_and_graphs_dataDefRef = map makeRefSec dataDefns
 
 traceability_matrices_and_graphs_data  = ["Data Constraints"]
-traceability_matrices_and_graphs_dataRef = [makeRef SRS.datConLabel]
+traceability_matrices_and_graphs_dataRef = [makeRefSec SRS.datConLabel]
 
 traceability_matrices_and_graphs_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
 traceability_matrices_and_graphs_funcReqRef = map makeRef functional_requirements_list
 
 traceability_matrices_and_graphs_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
-traceability_matrices_and_graphs_assumpRef = map makeRef newAssumptions
+traceability_matrices_and_graphs_assumpRef = map makeRefSec newAssumptions
 
 traceability_matrices_and_graphs_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5"]
 traceability_matrices_and_graphs_likelyChgRef = map makeRef likelyChanges_SRS

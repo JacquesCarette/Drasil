@@ -87,10 +87,10 @@ assumpS3 = foldlSent [
   S "The", phrase water, S "in the", phrase tank,
   S "is fully mixed, so the", phrase temp_W `isThe` 
   S "same throughout the entire", phrase tank,
-  sSqBr $ acroGD 2 `sC` (makeRef dd2HtFluxP)]
+  sSqBr $ acroGD 2 `sC` (makeRefSec dd2HtFluxP)]
 assumpS4 = foldlSent [
   S "The", phrase temp_PCM `isThe` S "same throughout the", phrase pcm_vol,
-  sSqBr $ acroGD 2 `sC` (makeRef dd2HtFluxP)]
+  sSqBr $ acroGD 2 `sC` (makeRefSec dd2HtFluxP)]
   --FIXME `sC` makeRef likeChg1]
 assumpS5 = foldlSent [
   S "The", phrase w_density `sAnd` phrase pcm_density,
@@ -105,25 +105,25 @@ assumpS6 = foldlSent [
 assumpS7 = foldlSent [
   CT.law_conv_cooling ^. defn, S "applies between the",
   phrase coil `sAnd` S "the", phrase water,
-  sSqBr $ makeRef dd1HtFluxC]
+  sSqBr $ makeRefSec dd1HtFluxC]
 assumpS8 = foldlSent [
   S "The", phrase temp_C, S "is constant over", phrase time,
-  sSqBr $ makeRef dd1HtFluxC]
+  sSqBr $ makeRefSec dd1HtFluxC]
   --FIXME `sC` makeRef likeChg2]
 assumpS9 = foldlSent [
   S "The", phrase temp_C, S "does not vary along its length",
-  sSqBr $ makeRef dd1HtFluxC]
+  sSqBr $ makeRefSec dd1HtFluxC]
   --FIXME `sC` makeRef likeChg3]
 assumpS10 = foldlSent [
   CT.law_conv_cooling ^. defn, S "applies between the",
   phrase water `sAnd` S "the", short phsChgMtrl,
-  sSqBr $ makeRef dd2HtFluxP]
+  sSqBr $ makeRefSec dd2HtFluxP]
 assumpS11 = foldlSent [
   S "The", phrase model, S "only accounts for", (charging ^. defn) `sC`
   S "not" +:+. phrase discharging, S "The", phrase temp_W `sAnd`
   phrase temp_PCM, S "can only increase, or remain",
   S "constant; they do not decrease. This implies that the",
-  phrase temp_init, sSqBr $ makeRef newA12, S "is less than (or equal)",
+  phrase temp_init, sSqBr $ makeRefSec newA12, S "is less than (or equal)",
   S "to the", phrase temp_C, sSqBr $ acroIM 1]
   --FIXME `sC` makeRef likeChg4]
 assumpS12 = foldlSent [

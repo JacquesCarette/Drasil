@@ -38,9 +38,9 @@ t1descr :: Sentence
 t1descr = tDescr (is_safe1) s ending
   where 
     s = (ch is_safe1) `sAnd` (ch is_safe2) +:+ sParen (S "from" +:+ 
-      (makeRef t2IsSafe))
+      (makeRefSec t2IsSafe))
     ending = ((ch prob_br) `isThe` (phrase prob_br)) `sC` S "as calculated in" +:+.
-      (makeRef probOfBreak) +:+ (ch pb_tol) `isThe` (phrase pb_tol) +:+ S "entered by the user"
+      (makeRefSec probOfBreak) +:+ (ch pb_tol) `isThe` (phrase pb_tol) +:+ S "entered by the user"
 
 
 t2IsSafe :: TheoryModel
@@ -56,13 +56,13 @@ t2SafetyReq = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
 t2descr :: Sentence
 t2descr = tDescr (is_safe2) s ending
   where 
-    s = ((ch is_safe1) +:+ sParen (S "from" +:+ (makeRef t1IsSafe)))
+    s = ((ch is_safe1) +:+ sParen (S "from" +:+ (makeRefSec t1IsSafe)))
      `sAnd` (ch is_safe2)
     ending = (short lResistance) `isThe` (phrase lResistance) +:+ 
       sParen (S "also called capacity") `sC` S "as defined in" +:+. 
-      (makeRef calofCapacity) +:+ (ch demand) +:+ sParen (S "also referred as the" +:+ 
+      (makeRefSec calofCapacity) +:+ (ch demand) +:+ sParen (S "also referred as the" +:+ 
       (titleize demandq)) `isThe` (demandq ^. defn) `sC` S "as defined in" +:+ 
-      makeRef calofDemand
+      makeRefSec calofDemand
 
 tDescr :: VarChunk -> Sentence -> Sentence -> Sentence
 tDescr main s ending = foldlSent [S "If", ch main `sC` S "the glass is" +:+.

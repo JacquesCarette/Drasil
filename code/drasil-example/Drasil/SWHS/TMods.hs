@@ -82,7 +82,8 @@ t1descr = foldlSent [
   S "is the" +:+. (gradient ^. defn), S "For this", phrase equation,
   S "to apply" `sC` S "other forms of", phrase energy `sC` S "such as",
   phrase mech_energy `sC`
-  S "are assumed to be negligible in the", phrase system, sParen (makeRef assump1Label)]
+  S "are assumed to be negligible in the", phrase system, 
+  sParen (makeRefSec assump1Label)]
 
 -------------------------
 -- Theoretical Model 2 --
@@ -174,7 +175,7 @@ t3descr = foldlSent [
   phrase phase_change, S "is not complete. The status of",
   S "the", phrase phase_change,
   S "depends on the", phrase melt_frac `sC`
-  (makeRef dd3HtFusion) :+: S ".",
+  (makeRefSec dd3HtFusion) :+: S ".",
   ch melt_pt, S "and", ch boil_pt, S "are the",
   phrase melt_pt, S "and", phrase boil_pt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),

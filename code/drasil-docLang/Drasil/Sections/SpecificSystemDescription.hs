@@ -86,7 +86,7 @@ goalStmtF givenInputs otherContents = SRS.goalStmt (intro:otherContents) []
 solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
 solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inModel, 
   S "that govern", short progName, S "are presented in" +:+. 
-  makeRef (instModelSection), S "The", phrase information, S "to understand", 
+  makeRefSec (instModelSection), S "The", phrase information, S "to understand", 
   (S "meaning" `ofThe` plural inModel), 
   S "and their derivation is also presented, so that the", plural inModel, 
   S "can be verified"]
@@ -110,7 +110,7 @@ assumpIntro r1 r2 r3 r4 r5 r6 = llcc "assumpIntroLC" (mkLabelRA'' "assumpIntro")
           foldr1 sC (map refs itemsAndRefs) `sC` (refs (inModel, r4)) `sC` (refs (likelyChg, r5)) `sC`
           S "or", refs (unlikelyChg, r6) `sC` S "in which the respective", 
           (phrase assumption), S "is used"] --FIXME: use some clever "zipWith"
-          where refs (chunk, ref) = (titleize' chunk) +:+ sSqBr (makeRef ref) 
+          where refs (chunk, ref) = (titleize' chunk) +:+ sSqBr (makeRefSec ref) 
                 itemsAndRefs = [(thModel, r1), (genDefn, r2), (dataDefn, r3)]
 
 --wrapper for thModelIntro
@@ -126,10 +126,10 @@ thModIntro progName = foldlSP
 
 -- just supply the other contents for General Definition. Use empty list if none needed
 genDefnF :: [LabelledContent] -> Section
-genDefnF otherContents = SRS.genDefn ((llcc "gdIntroLC" (mkLabelRA'' "gdIntroLC") $ 
+genDefnF otherContents = SRS.genDefn ((llcc "gdIntroLC" (mkLabelRA'' "gdIntroLC") $
   generalDefinitionIntro otherContents):otherContents) []
 
-generalDefinitionIntro :: (Referable t) => [t] -> Contents
+generalDefinitionIntro :: (HasMaybeLabel t) => [t] -> Contents
 generalDefinitionIntro [] = Paragraph $ S "There are no general definitions."
 generalDefinitionIntro _ = foldlSP [S "This", phrase section_, 
   S "collects the", S "laws and", (plural equation), 
@@ -155,12 +155,12 @@ inModelF probDes datDef theMod genDef otherContents = SRS.inModel ((inModelIntro
 -- just need to provide the four references in order to this function. Nothing can be input into r4 if only three tables are present
 inModelIntro :: Section -> Section -> Section -> Label -> Contents
 inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_, 
-  S "transforms the", phrase problem, S "defined in", (makeRef r1), 
+  S "transforms the", phrase problem, S "defined in", (makeRefSec r1), 
   S "into one which is expressed in mathematical terms. It uses concrete", 
-  plural symbol_, S "defined in", (makeRef r2), 
+  plural symbol_, S "defined in", (makeRefSec r2), 
   S "to replace the abstract", plural symbol_, S "in the", 
-  plural model, S "identified in", (makeRef r3) :+: end]
-    where end = S " and" +:+ (makeRef r4)
+  plural model, S "identified in", (makeRefSec r3) :+: end]
+    where end = S " and" +:+ (makeRefSec r4)
 
 -- wrapper for datConPar
 datConF :: Sentence -> Sentence -> Sentence -> [LabelledContent] -> Section
@@ -179,11 +179,11 @@ dataConstraintParagraph hasUncertainty tableRef middleSent trailingSent = Paragr
 -- makes a list of references to tables takes
 -- l  list of layout objects that can be referenced
 -- outputs a sentence containing references to the layout objects 
-listofTablesToRefs :: (HasShortName l, Referable l) => [l] -> Sentence
+listofTablesToRefs :: (HasMaybeLabel l) => [l] -> Sentence
 listofTablesToRefs  []     = EmptyS
 listofTablesToRefs  [x]    = (makeRef x) +:+ S "shows"
 listofTablesToRefs  [x,y]  = (makeRef x) +:+ S "and" +:+ (makeRef y) +:+ S "show" -- for proper grammar with multiple tables
-                                                                                  -- no Oxford comma in case there is only two tables to be referenced
+                                                                                     -- no Oxford comma in case there is only two tables to be referenced
 listofTablesToRefs  (x:xs) = (makeRef x) `sC` listofTablesToRefs (xs)
  
 dataConstraintIntroSent :: Sentence -> Sentence

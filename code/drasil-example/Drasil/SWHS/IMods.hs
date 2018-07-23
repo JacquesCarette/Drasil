@@ -64,7 +64,7 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively",
-  sParen (makeRef assump14Label `sC` makeRef assump19Label)]
+  sParen (makeRefSec assump14Label `sC` makeRefSec assump19Label)]
 
 
   ----------------------------------------------
@@ -104,14 +104,14 @@ s4_2_3_desc1_swhs_im1 roc tw en wt vo wvo ms wms hcs hw ht cl hfc cs ps tk hfp s
     (E $ sy cs) `sAnd` (E $ sy ps) `sC` S "respectively.",  S "No", phrase ht,
     S "occurs to", S "outside" `ofThe` phrase tk `sC` 
     S "since it has been assumed to be perfectly insulated", 
-    sParen (makeRef newA15) :+: S ". Assuming no volumetric", 
+    sParen (makeRefSec newA15) :+: S ". Assuming no volumetric", 
     S "heat generation per unit", phrase vo +:+.
-    (sParen (makeRef newA16) `sC` (E $ sy vhg $= 0)), S "Therefore, the equation for",
+    (sParen (makeRefSec newA16) `sC` (E $ sy vhg $= 0)), S "Therefore, the equation for",
      acroGD 2, S "can be written as"]
 
 s4_2_3_desc2_swhs_im1 :: QDefinition -> QDefinition -> [Sentence]
 s4_2_3_desc2_swhs_im1 dd1 dd2 =
-  [S "Using", makeRef dd1, S "and", makeRef dd2, S "for", 
+  [S "Using", makeRefSec dd1, S "and", makeRefSec dd2, S "for", 
   (E $ sy dd1) `sAnd` (E $ sy dd2),
   S "respectively, this can be written as"]
 
@@ -230,13 +230,15 @@ balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   S "is a constant", sParen (unwrap $ getUnit tau_S_P)]
 
 balPCMDesc_note :: Sentence
-balPCMDesc_note = foldlSent [(E $ (sy temp_PCM)) `sC` (E $ (0 $< sy time $< sy time_final)) `sC` (S "with initial conditions")
-  `sC` (E $ (sy temp_W $= sy temp_PCM $= sy temp_init)) `sC` (S "FIXME t_w(0) = t_p(0)") `sC` makeRef newA12 `sC`
-  (S "and"), (E $ (sy temp_W)), S "from IM1, such that the following governing ODE is satisfied.", 
+balPCMDesc_note = foldlSent [(E $ (sy temp_PCM)) `sC` (E $ (0 $< sy time $< sy time_final)) `sC`
+  (S "with initial conditions")
+  `sC` (E $ (sy temp_W $= sy temp_PCM $= sy temp_init)) `sC` (S "FIXME t_w(0) = t_p(0)") `sC` 
+  makeRefSec newA12 `sC` (S "and"), (E $ (sy temp_W)), 
+  S "from IM1, such that the following governing ODE is satisfied.", 
   S "The temperature remains constant at",
   (E $ (sy temp_melt_P)) `sC` 
   (S "even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as"),
-  (E $ (0 $< sy melt_frac $< 1)), S "(from", makeRef dd4MeltFrac,
+  (E $ (0 $< sy melt_frac $< 1)), S "(from", makeRefSec dd4MeltFrac,
   S ") is determined as part of the heat energy in the PCM, as given in IM4"]
 
 
@@ -275,12 +277,12 @@ s4_2_3_desc1_swhs_im2 roc tempP en wt vo pcmvo pm hcs hsp hf hfp pc ps ht ass16 
    S "into the PCM from", phrase wt, S "is", (E $ sy hfp), S "over", phrase pc, 
    S "material surface area" +:+. (E $ sy ps), S "There is no", phrase hf +:+. S "output",
    S "Assuming no volumetric", phrase ht, S "generation per unit", phrase vo,
-   (sParen (makeRef ass16)) `sC` (E $ sy vhg $= 0), S ", the equation for",
+   (sParen (makeRefSec ass16)) `sC` (E $ sy vhg $= 0), S ", the equation for",
      acroGD 2, S "can be written as"]
 
 s4_2_3_desc2_swhs_im2 :: QDefinition -> UnitalChunk -> [Sentence]
 s4_2_3_desc2_swhs_im2 dd2 hfp =
-  [S "Using", makeRef dd2, S "for", (E $ sy hfp) `sC` 
+  [S "Using", makeRefSec dd2, S "for", (E $ sy hfp) `sC` 
   S "this equation can be written as"]
 
 s4_2_3_desc3_swhs_im2 :: [Sentence] -> [Sentence]
@@ -299,7 +301,7 @@ s4_2_3_desc5_swhs_im2 hsp hlp tsp tlp sur ar melt vo ass17=
    S "and thus" +:+ (E $ sy tsp) +:+ S "is replaced by" +:+. (E $ sy tlp) +:+ S "Although a small change in" +:+
    phrase sur +:+ phrase ar +:+ S "would be expected with" +:+ phrase melt `sC` S "this is not included" `sC`
    S "since the" +:+ phrase vo +:+ S "change of the PCM with" +:+ phrase melting +:+ S "is assumed to be negligible" +:+.
-   (sParen (makeRef ass17))]
+   (sParen (makeRefSec ass17))]
 
 s4_2_3_desc6_swhs_im2 :: UncertQ -> [Sentence]
 s4_2_3_desc6_swhs_im2 tp =
@@ -311,7 +313,7 @@ s4_2_3_desc7_swhs_im2 :: ConceptChunk -> ConceptChunk -> ConceptChunk -> AssumpC
 s4_2_3_desc7_swhs_im2 boil sld lqd assp18=
    [S "This derivation does not consider the" +:+
    phrase boil +:+ S "of the PCM" `sC` S "as the PCM is assumed to either be in a" +:+ phrase sld +:+ S "state or a" +:+
-   phrase lqd +:+ S "state" +:+. (sParen (makeRef assp18))]
+   phrase lqd +:+ S "state" +:+. (sParen (makeRefSec assp18))]
 --(E $ ((deriv (sy temp_PCm) time) $= 0)
 eq6:: [Sentence]
 eq6 = [ch pcm_mass, ch htCap_S_P]
@@ -380,7 +382,7 @@ htWtrDesc = foldlSent [S "The above", phrase equation,
   sParen (unwrap $ getUnit temp_init), S "This", phrase equation,
   S "applies as long as", (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100)))
   :+: (unwrap $ getUnit temp_W),
-  sParen $ makeRef assump14Label `sC` makeRef assump19Label]
+  sParen $ makeRefSec assump14Label `sC` makeRefSec assump19Label]
 
 ---------
 -- IM4 --
@@ -446,4 +448,4 @@ htPCMDesc = foldlSent [S "The above", phrase equation,
   S "for", phrase boiling, S "of the", short phsChgMtrl,
   S "is not detailed" `sC` S "since the", short phsChgMtrl,
   S "is assumed to either be in a", phrase solid, S "or", phrase liquid,
-  S "state", sParen (makeRef assump18Label)]
+  S "state", sParen (makeRefSec assump18Label)]

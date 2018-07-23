@@ -519,7 +519,7 @@ traceDataRef, traceFuncReqRef, traceInstaModelRef, traceAssumpRef, traceTheories
   traceDataDefRef, traceLikelyChgRef, traceGenDefRef :: [Sentence]
 
 traceInstaModel = ["IM1", "IM2", "IM3", "IM4"]
-traceInstaModelRef = map makeRef swhsIMods' --FIXME: swhsIMods' is a hack?
+traceInstaModelRef = map makeRefSec swhsIMods' --FIXME: swhsIMods' is a hack?
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
   "R11"]
@@ -530,16 +530,16 @@ traceDataRef = [makeRef dataConTable1] --FIXME: Reference section?
 
 traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19"]
-traceAssumpRef = map makeRef newAssumptions 
+traceAssumpRef = map makeRefSec newAssumptions 
 
 traceTheories = ["T1", "T2", "T3"]
 traceTheoriesRef = map makeRef swhsTModsAsLCs --FIXME: swhsTModsAsLCs is a hack?
 
 traceGenDefs = ["GD1", "GD2"]
-traceGenDefRef = map makeRef swhsGDs --FIXME: swhsGDs is a hack?
+traceGenDefRef = map makeRefSec swhsGDs --FIXME: swhsGDs is a hack?
 
 traceDataDefs = ["DD1", "DD2", "DD3", "DD4"]
-traceDataDefRef = map makeRef swhsDataDefs
+traceDataDefRef = map makeRefSec swhsDataDefs
 
 traceLikelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
 traceLikelyChgRef = makeListRef traceLikelyChg likelyChgs
@@ -794,11 +794,11 @@ orgDocIntro :: Sentence
 orgDocIntro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the template for an", short srs,
   S "for", phrase sciCompS, S "proposed by", (sSqBrNum 3) `sAnd`
-  (sSqBrNum 6), sParen (makeRef (SRS.reference SRS.missingP []))]
+  (sSqBrNum 6), sParen (makeRefSec (SRS.reference SRS.missingP []))]
 
 orgDocEnd :: NamedIdea ni => ni -> CI -> Sentence
 orgDocEnd sp pro = foldlSent_ [S "The", plural inModel,
-  sParen (makeRef (SRS.inModel SRS.missingP [])),
+  sParen (makeRefSec (SRS.inModel SRS.missingP [])),
   S "to be solved are referred to as", acroIM 1,
   S "to" +:+. acroIM 4, S "The", plural inModel,
   S "provide the", phrase ode, sParen (short ode :+: S "s")
@@ -1034,7 +1034,7 @@ genDefDeriv8 hfi hfo isa osa den hcs tem vo assu a3 a4 a5 a6 = foldlSPCol
   S "are explained in" +:+. acroGD 2, S "Assuming", ch den `sC` ch hcs
   `sAnd` ch tem, S "are constant over the", phrase vo `sC` S "which is true",
   S "in our case by", titleize' assu, 
-  foldlList (map (\c -> sParen (makeRef c)) [a3, a4, a5, a6]) `sC` S "we have"]
+  foldlList (map (\c -> sParen (makeRefSec c)) [a3, a4, a5, a6]) `sC` S "we have"]
 
 genDefDeriv9 = eqUnR
   ((sy density) * (sy heat_cap_spec) * (sy vol) * deriv (sy temp)
@@ -1097,15 +1097,15 @@ iMod1Sent1 roc temw en wa vo wvo wma hcw hfc hfp csa psa ht ta purin vhg
   ch csa `sAnd` ch psa `sC` S "respectively. No",
   phrase ht, S "occurs to", (S "outside" `ofThe`
   phrase ta) `sC` S "since it has been assumed to be",
-  phrase purin +:+. sParen (makeRef a15), S "Assuming no",
-  phrase vhg +:+. (sParen (makeRef a16) `sC`
+  phrase purin +:+. sParen (makeRefSec a15), S "Assuming no",
+  phrase vhg +:+. (sParen (makeRefSec a16) `sC`
   (E $ sy vhg $= 0)), S "Therefore, the", phrase equation, S "for",
   acroGD 2, S "can be written as"]
 
 iMod1Sent2 :: QDefinition -> QDefinition -> UnitalChunk ->
   UnitalChunk -> [Sentence]
-iMod1Sent2 d1hf d2hf hfc hfp = [S "Using", (makeRef d1hf) `sAnd`
-  (makeRef d2hf), S "for", ch hfc `sAnd`
+iMod1Sent2 d1hf d2hf hfc hfp = [S "Using", (makeRefSec d1hf) `sAnd`
+  (makeRefSec d2hf), S "for", ch hfc `sAnd`
   ch hfp, S "respectively, this can be written as"]
 
 iMod1Sent3 :: UnitalChunk -> UncertQ -> [Sentence]
@@ -1174,7 +1174,7 @@ iMod1Eqn7 = (deriv (sy temp_W) time $= (1 / (sy tau_W)) *
 -- Fractions in paragraph?
 
 iMod2Sent1 :: QDefinition -> UnitalChunk -> [Sentence]
-iMod2Sent1 d2hfp hfp = [S "Using", makeRef d2hfp, S "for", 
+iMod2Sent1 d2hfp hfp = [S "Using", makeRefSec d2hfp, S "for", 
   ch hfp `sC` S "this", phrase equation, S "can be written as"]
 
 iMod2Sent2 :: [Sentence]
@@ -1222,7 +1222,7 @@ iMod2StartPara en pcmat sh roc ptem vo pvo pma hcsp hfp psa hfo vhg a16 =
   ch pma `sAnd` S "the", phrase hcsp, S "is" +:+. ch hcsp,
   S "The", phrase hfp, S "is", ch hfp, S "over",
   phrase psa +:+. ch psa, S "There is no" +:+. phrase hfo,
-  S "Assuming no", phrase vhg, sParen (makeRef a16) `sC`
+  S "Assuming no", phrase vhg, sParen (makeRefSec a16) `sC`
   ch vhg :+: S "=0, the", phrase equation, S "for", acroGD 2,
   S "can be written as"]
 
@@ -1245,7 +1245,7 @@ iMod2EndPara pcmat hcsp hclp tsp tlp sur mel vo ptem tmp boi so li = map
   S "this is not included, since",
   (phrase vo +:+ S "change" `ofThe` short pcmat),
   S "with", phrase mel,
-  S "is assumed to be negligible", sParen (makeRef newA17)],
+  S "is assumed to be negligible", sParen (makeRefSec newA17)],
 
   [S "In the case where", ch ptem :+: S "=" :+:
   ch tmp `sAnd` S "not all of the", short pcmat,
@@ -1256,7 +1256,7 @@ iMod2EndPara pcmat hcsp hclp tsp tlp sur mel vo ptem tmp boi so li = map
   [S "This derivation does not consider",
   (phrase boi `ofThe` short pcmat) `sC` S "as the", short pcmat,
   S "is assumed to either be in a", (so ^. defn),
-  S "or a", (li ^. defn), sParen (makeRef newA18)]
+  S "or a", (li ^. defn), sParen (makeRefSec newA18)]
 
   ]
 
@@ -1292,7 +1292,7 @@ dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
   S "or there will be a divide by zero in the", phrase model],
 
   [sParen (S "+"), S "These", plural qua, S "cannot be zero" `sC`
-  S "or there would be freezing", sParen (makeRef newA13)],
+  S "or there would be freezing", sParen (makeRefSec newA13)],
 
   [sParen (Sp Hash), S "The", plural constraint, S "on the", phrase sa,
   S "are calculated by considering the", phrase sa, S "to", phrase vo +:+.
@@ -1332,7 +1332,7 @@ propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
   phrase input_, S "from the", phrase co `sAnd` S "the",
   phrase en, phrase output_, S "to the" +:+. short pcmat,
   S "This can be shown as an", phrase equation, S "by taking",
-  (makeRef d1hfc) `sAnd` (makeRef d2hfp) `sC`
+  (makeRefSec d1hfc) `sAnd` (makeRefSec d2hfp) `sC`
   S "multiplying each by their respective", phrase su,
   S "area of", phrase ht `sC` S "and integrating each",
   S "over the", phrase sim_time `sC` S "as follows"]
@@ -1364,7 +1364,7 @@ propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)"
   S "computed by" +:+. short pro, S "The relative",
   S "error between the results computed by", short pro `sAnd`
   S "the results calculated from the", short rs, S "of these",
-  plural eq, S "should be less than 0.001%", makeRef newReq9]
+  plural eq, S "should be less than 0.001%", makeRefSec newReq9]
 
 -- Above section only occurs in this example (although maybe it SHOULD be in
 -- the others).

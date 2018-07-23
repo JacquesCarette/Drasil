@@ -23,7 +23,7 @@ import Data.Drasil.SentenceStructures (foldlSent, sAnd, ofThe)
 --------------------------------
 
 chgsStart :: (Referable l, HasShortName l) => l -> Sentence
-chgsStart a = makeRef a +:+ S "-"
+chgsStart a = makeRefSec a +:+ S "-"
 
 likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6 :: LabelledContent
 
@@ -70,7 +70,7 @@ unlikelyChgsList = [unlikeChg1, unlikeChg2]
 unlikeChg1, unlikeChg2 :: LabelledContent
 
 unlikeChg1 = mkUnLklyChnk "unlikeChg1" ( 
-  foldlSent [makeRef newA14, S ", ", chgsStart newA18, S "It is unlikely for the changeof", 
+  foldlSent [makeRefSec newA14, S ", ", chgsStart newA18, S "It is unlikely for the changeof", 
   phrase water, S "from liquid to a solid or the state change of the", phrase phsChgMtrl, 
   S "from a liquid to a gas to be considered"] ) "Water-PCM-Fixed-States"
 --

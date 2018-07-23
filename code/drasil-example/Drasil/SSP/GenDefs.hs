@@ -63,10 +63,10 @@ nmFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   phrase slice), S "Rearranged to solve for", (phrase normForce `ofThe`
   phrase surface) +:+. ch totNrmForce, at_start force, S "equilibrium is",
   S "derived from the free body diagram of",
-  makeRef SRS.physSystLabel, S "Index i",
+  makeRefSec SRS.physSystLabel, S "Index i",
   S "refers to", (plural value `ofThe` plural property), S "for",
   phrase slice :+: S "/" :+: plural intrslce, S "following convention in" +:+.
-  makeRef SRS.physSystLabel, at_start force, phrase variable,
+  makeRefSec SRS.physSystLabel, at_start force, phrase variable,
   plural definition, S "can be found in", ddRef sliceWght, S "to",
   ddRef lengthLs]
 
@@ -87,10 +87,10 @@ bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   phrase slice), S "Rearranged to solve for the", phrase shearForce,
   S "on the base" +:+. ch mobShrI, at_start force, S "equilibrium is",
   S "derived from the free body diagram of",
-  makeRef SRS.physSystLabel, S "Index", ch index,
+  makeRefSec SRS.physSystLabel, S "Index", ch index,
   S "refers to", (plural value `ofThe` plural property), S "for",
   phrase slice :+: S "/" :+: plural intrslce, S "following convention in" +:+.
-  makeRef SRS.physSystLabel, at_start force, phrase variable,
+  makeRefSec SRS.physSystLabel, at_start force, phrase variable,
   plural definition, S "can be found in", ddRef sliceWght, S "to",
   ddRef lengthLs]
 
@@ -174,10 +174,10 @@ momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   S "in the direction", phrase perp,
   S "to" +:+. (S "base" +:+ phrase surface `ofThe` phrase slice),
   S "Moment equilibrium is derived from the free body diagram of" +:+.
-  makeRef SRS.physSystLabel, S "Index i refers to",
+  makeRefSec SRS.physSystLabel, S "Index i refers to",
   plural value `ofThe` plural property, S "for", phrase slice :+: S "/" :+:
   plural intrslce, S "following convention in" +:+.
-  makeRef SRS.physSystLabel, at_start variable, plural definition,
+  makeRefSec SRS.physSystLabel, at_start variable, plural definition,
   S "can be found in", ddRef sliceWght, S "to", ddRef lengthLs]
 
 --
@@ -214,7 +214,7 @@ fNet_desc = foldlSent [S "These equations show the net sum of the",
   S "direction parallel to the", phrase force, S "of gravity for", 
   phrase slice +:+. ch index, at_start' force, 
   S "are found in the free body diagram of" +:+.
-  makeRef SRS.physSystLabel, S "In this", phrase model,
+  makeRefSec SRS.physSystLabel, S "In this", phrase model,
   --FIXME: hacked link
   S "the", plural element, S "are not exerting", plural force,
   S "on each other" `sC` S "so the", phrase intrslce, plural force,
@@ -222,7 +222,7 @@ fNet_desc = foldlSent [S "These equations show the net sum of the",
   +:+. phrase model, S "Index", ch index, 
   S "refers to", (plural value `ofThe` plural property), S "for",
   phrase slice :+: S "/" :+: plural intrslce, S "following", 
-  S "convention in" +:+. makeRef SRS.physSystLabel,
+  S "convention in" +:+. makeRefSec SRS.physSystLabel,
   at_start force, phrase variable, plural definition, S "can be found in",
   ddRef sliceWght, S "to", ddRef lengthLb]
 

@@ -58,7 +58,7 @@ ddefn' fs m d = llcc (d ^. uid) (d ^. getLabel) $ Defnt DD (foldr (mkDDField d m
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'
 -- program)
 gdefn :: HasSymbolTable ctx => Fields -> ctx -> GenDefn -> LabelledContent
-gdefn fs m g = llcc (g ^. uid) (g ^. getLabel) $ Defnt General (foldr (mkGDField g m) [] fs) (refAdd g) 
+gdefn fs m g = llcc (g ^. uid) (g ^. getLabel) $ Defnt General (foldr (mkGDField g m) [] fs) (refAdd g)
 --FIXME: should this produce a LabelledContent? GenDefn has it's own label...
 
 -- | Create an instance model using a list of fields, database of symbols,
@@ -85,8 +85,8 @@ makeDerivationContents s     = Paragraph s
 -- | Helper function for creating the layout objects
 -- (paragraphs and equation blocks) for a derivation.
 makeDerivationContents' :: Sentence -> LabelledContent
-makeDerivationContents' (E e) = llcc "" (Just (mkLabelRA'' "")) $ EqnBlock e "" --FIXME! non-referble sentences!
-makeDerivationContents' s     = llcc "" Nothing $ Paragraph s  --FIXME: non-referble sentences!
+makeDerivationContents' (E e) = llcc "" (mkLabelRA'' "") $ EqnBlock e "" --FIXME! non-referble sentences!
+makeDerivationContents' s     = mkParagraph "" $ Paragraph s
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
 type ModRow = [(String, [Contents])]

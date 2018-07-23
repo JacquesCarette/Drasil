@@ -281,7 +281,7 @@ phys_sys_desc_p1 = llcc "sspPSDIntro" (mkLabelRA'' "sspPSDIntro") $ physSystIntr
   fig_indexconv
   where how = S "as a series of" +:+ phrase slice +:+. plural element
 
-physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, HasShortName d, Referable d) =>
+physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, HasMaybeLabel d) =>
   a -> Sentence -> b -> c -> Sentence -> d -> Contents
 physSystIntro what how p1 p2 p3 indexref = foldlSP [
   at_start analysis, S "of the", phrase what, S "is performed by looking at",

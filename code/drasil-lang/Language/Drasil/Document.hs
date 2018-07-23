@@ -92,8 +92,8 @@ instance HasMaybeLabel LabelledContent where getMaybeLabel = lbl
 --instance HasShortName  LabelledContent where shortname = lbl . shortname
 
 -- | Smart constructor for labelled content chunks (should not be exported)
-llcc :: UID -> Maybe Label -> Contents -> LabelledContent
-llcc = LblC
+llcc :: UID -> Label -> Contents -> LabelledContent
+llcc a b c = LblC a (Just b) c
 
 -- | Section Contents are split into subsections or contents, where contents
 -- are standard layout objects (see 'Contents')
@@ -143,7 +143,7 @@ instance HasShortName  Contents where
 -- nothing has a shortname right now
 
 mkParagraph :: String -> Contents -> LabelledContent
-mkParagraph lcUID c = llcc lcUID Nothing c 
+mkParagraph lcUID c = LblC lcUID Nothing c 
 
 {-mkTableLC :: String -> String -> String -> String -> Contents -> LabelledContent
 mkTableLC uidForContent labelUID refAdd sn' tbl = llcc uidForContent 

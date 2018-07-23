@@ -275,7 +275,7 @@ s2_3 = charIntRdrF knowledge understanding sWHS EmptyS
 
 orgDocEnd :: CI -> CI -> CI -> Sentence
 orgDocEnd im_ od pro = foldlSent_ [S "The", phrase im_,
-  sParen (makeRef SRS.inModelLabel),
+  sParen (makeRefSec SRS.inModelLabel),
   S "to be solved is referred to as" +:+. acroIM 1,
   S "The", phrase im_, S "provides the",
   titleize od, sParen (short od), S "that model the"
@@ -449,7 +449,7 @@ genDefnDescription = map foldlSPCol [
 
 genDefnDesc1 :: TheoryModel -> UnitalChunk -> [Sentence]
 genDefnDesc1 t1C vo =
-  [S "Integrating", makeRef t1C, S "over a", phrase vo,
+  [S "Integrating", makeRefSec t1C, S "over a", phrase vo,
   sParen (ch vo) `sC` S "we have"]
 
 genDefnDesc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
@@ -472,7 +472,7 @@ genDefnDesc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
   ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
   acroGD 2, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
-  titleize' assumption, (foldlList $ map sParen $ (map makeRef assumps)) 
+  titleize' assumption, (foldlList $ map sParen $ (map makeRefSec assumps)) 
   `sC` S "we have"]
 
 genDefnDesc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]
@@ -533,13 +533,13 @@ iModDesc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin vhg =
   `sC` S "over area") +:+. ch csa, S "No",
   phrase ht, S "occurs to", (S "outside" `ofThe`
   phrase ta) `sC` S "since it has been assumed to be",
-  phrase purin +:+. sParen (makeRef newA11), S "Assuming no",
-  phrase vhg +:+. (sParen (makeRef newA12) `sC`
+  phrase purin +:+. sParen (makeRefSec newA11), S "Assuming no",
+  phrase vhg +:+. (sParen (makeRefSec newA12) `sC`
   E (sy vhg $= 0)), S "Therefore, the", phrase M.equation, S "for",
   acroGD 2, S "can be written as"]
 
 iModDesc2 :: QDefinition -> [Sentence]
-iModDesc2 d1hf = [S "Using", (makeRef d1hf) `sC` S "this can be written as"]
+iModDesc2 d1hf = [S "Using", (makeRefSec d1hf) `sC` S "this can be written as"]
 
 iModDesc3 :: UnitalChunk -> UncertQ -> [Sentence]
 iModDesc3 wm hcw = [S "Dividing (3) by", ch wm :+: ch hcw `sC`
@@ -719,7 +719,7 @@ likelyChgsList = [likeChg2, likeChg3, likeChg3_npcm, likeChg6]
   -- []) EmptyS
 likeChg3_npcm :: LabelledContent
 likeChg3_npcm = mkLklyChnk "likeChg3" (
-  (makeRef newA9NoPCM) :+: S "- The" +:+ phrase model +:+
+  (makeRefSec newA9NoPCM) :+: S "- The" +:+ phrase model +:+
   S "currently only accounts for charging of the tank. That is, increasing the" +:+ phrase temp +:+
   S "of the water to match the" +:+ phrase temp +:+ S "of the coil. A more complete"  
   +:+ phrase model +:+. S "would also account for discharging of the tank") "Discharging-Tank"
@@ -788,7 +788,7 @@ traceDataRef, traceFuncReqRef, traceInstaModelRef, traceAssumpRef, traceTheories
   traceDataDefRef, traceLikelyChgRef, traceGenDefRef :: [Sentence]
 
 traceInstaModel = ["IM1", "IM2"]
-traceInstaModelRef = map makeRef [eBalanceOnWtr_new, heatEInWtr_new]
+traceInstaModelRef = map makeRefSec [eBalanceOnWtr_new, heatEInWtr_new]
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
 traceFuncReqRef = map makeRef funcReqsListWordsNum
@@ -798,16 +798,16 @@ traceDataRef = [makeRef dataConstTable1] --FIXME: Reference section?
 
 traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14"]
-traceAssumpRef = map makeRef assumps_Nopcm_list_new
+traceAssumpRef = map makeRefSec assumps_Nopcm_list_new
 
 traceTheories = ["T1"]
-traceTheoriesRef = map makeRef [t1ConsThermE_new]
+traceTheoriesRef = map makeRefSec [t1ConsThermE_new]
 
 traceGenDefs = ["GD1", "GD2"]
-traceGenDefRef = map makeRef swhsGDs
+traceGenDefRef = map makeRefSec swhsGDs
 
 traceDataDefs = ["DD1"]
-traceDataDefRef = map makeRef [dd1HtFluxC]
+traceDataDefRef = map makeRefSec [dd1HtFluxC]
 
 traceLikelyChg = ["LC1", "LC2", "LC3", "LC4"]
 traceLikelyChgRef = map makeRef likelyChgsList

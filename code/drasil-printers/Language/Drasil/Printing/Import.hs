@@ -41,6 +41,7 @@ import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Misc (unitToSentence)
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Reference (refAdd)
+import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Document (DType(DD, TM, Instance, General, Theory, Data), 
   ItemType(Nested, Flat), ListType(Definitions, Desc, Simple, Numeric, Bullet), 
   Contents(Bib, Graph, Defnt, Assumption, Change, Figure, Requirement, Enumeration, 
@@ -336,16 +337,19 @@ layField sm (HowPublished (Verb v)) = P.HowPublished (P.Verb $ spec sm v)
 
 -- | Translates lists
 makeL :: HasSymbolTable ctx => ctx -> ListType -> P.ListType
-makeL sm (Bullet bs)      = P.Unordered   $ map (\x -> (item sm x, Nothing)) bs
-makeL sm (Numeric ns)     = P.Ordered     $ map (\x -> (item sm x, Nothing)) ns
-makeL sm (Simple ps)      = P.Simple      $ map (\(x,y) -> (spec sm x, item sm y, Nothing)) ps
-makeL sm (Desc ps)        = P.Desc        $ map (\(x,y) -> (spec sm x, item sm y, Nothing)) ps
-makeL sm (Definitions ps) = P.Definitions $ map (\(x,y) -> (spec sm x, item sm y, Nothing)) ps
+makeL sm (Bullet bs)      = P.Unordered   $ map (\(x,y) -> (item sm x, labref y)) bs
+makeL sm (Numeric ns)     = P.Ordered     $ map (\(x,y) -> (item sm x, labref y)) ns
+makeL sm (Simple ps)      = P.Simple      $ map (\(x,y,z) -> (spec sm x, item sm y, labref z)) ps
+makeL sm (Desc ps)        = P.Desc        $ map (\(x,y,z) -> (spec sm x, item sm y, labref z)) ps
+makeL sm (Definitions ps) = P.Definitions $ map (\(x,y,z) -> (spec sm x, item sm y, labref z)) ps
 
 -- | Helper for translating list items
 item :: HasSymbolTable ctx => ctx -> ItemType -> P.ItemType
 item sm (Flat i)     = P.Flat $ spec sm i
 item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
+
+labref :: Maybe RefAdd -> Maybe P.Spec
+labref l = maybe Nothing (\z -> Just $ P.S z) l
 
 -- | Translates definitions
 -- (Data defs, General defs, Theoretical models, etc.)

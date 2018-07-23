@@ -134,7 +134,7 @@ module Language.Drasil (
   , titleize, titleize', nounPhrase'', nounPhraseSP, nounPhraseSent
   -- Document
   , Referable(..), Document(..), DType(..), Section(..), Contents(..)
-  , SecCons(..), ListType(..), ItemType(..), ListPair
+  , SecCons(..), ListType(..), ItemType(..), ListTuple
   , section, fig, figWithWidth, section'' 
   , datadefn, reldefn, MaxWidthPercent
   -- Reference
@@ -239,7 +239,7 @@ import Language.Drasil.Document (Document(..), DType(..)
   , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..)
   , section, fig, figWithWidth, section''
   , datadefn, reldefn
-  , ListPair, MaxWidthPercent)
+  , ListTuple, MaxWidthPercent)
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Development.UnitLang -- all of it
 import Language.Drasil.Development.Unit -- all of it

@@ -4,6 +4,7 @@ module Drasil.GlassBR.DataDefs (aspRat, dataDefns, dimLL, gbQDefns, glaTyFac,
 import Language.Drasil
 import Prelude hiding (log, exp, sqrt)
 
+import Drasil.GlassBR.Concepts (annealed, fullyT, heatS)
 import Drasil.GlassBR.Unitals (actualThicknesses, aspectR, 
   demand, dimlessLoad, gTF, glassTypeAbbrsStr, glassTypeFactors, glass_type, 
   lDurFac, load_dur, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pb_tol, 
@@ -112,7 +113,7 @@ glaTyFac = mkDataDef gTF glaTyFac_eq
 
 glaTyFacDD :: DataDefinition
 glaTyFacDD = mkDD glaTyFac [{-references-}] [{-derivation-}] ""--temporary
-  Nothing
+  (Just $ anGlass : ftGlass : hsGlass : [])
 
 --DD7--
 
@@ -182,17 +183,26 @@ aspRatDD = mkDD aspRat [{-references-}] [{-derivation-}] ""--temporary
 --Additional Notes--
 
 aGrtrThanB :: Sentence
-aGrtrThanB = ((ch plate_len) `sC` (ch plate_width) +:+ 
+aGrtrThanB = (ch plate_len `sC` ch plate_width +:+ 
   S "are" +:+ plural dimension +:+ S "of the plate" `sC` S "where" +:+. 
   sParen (E (sy plate_len $> sy plate_width)))
+
+anGlass :: Sentence
+anGlass = (getAcc annealed +:+ S "is" +:+ phrase annealed +:+ S "glass")
 
 arRef :: Sentence
 arRef = (ch aspectR +:+ S "is the" +:+ phrase aspectR +:+.
   S "defined in DD11")
 
+ftGlass :: Sentence
+ftGlass = (getAcc fullyT +:+ S "is" +:+ phrase fullyT +:+ S "glass")
+
 hRef :: Sentence
 hRef = (ch min_thick +:+ S "is the minimum thickness" `sC` 
   S "which is based on the nominal thicknesses" +:+. S "as shown in DD2")
+
+hsGlass :: Sentence
+hsGlass = (getAcc heatS +:+ S "is" +:+ phrase heatS +:+ S "glass")
 
 ldfRef :: Sentence
 ldfRef = (ch lDurFac +:+ S "is the" +:+ phrase lDurFac +:+. 

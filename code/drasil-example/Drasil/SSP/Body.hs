@@ -103,7 +103,8 @@ mkSRS = RefSec (RefProg intro
       EmptyS
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
     --FIXME: issue #235
-    (GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, sysCtxFig1, sysCtxDesc, sysCtxList], UsrChars [userCharIntro]]):
+    (GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, sysCtxFig1, sysCtxDesc, sysCtxList], 
+      UsrChars [userCharIntro], SystCons [] []]):
     SSDSec 
       (SSDProg [SSDSubVerb problem_desc
         , SSDSolChSpec 
@@ -253,8 +254,8 @@ sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = [S "Provide the input data related to the soil layer(s) and water" +:+
   S "table (if applicable), ensuring no errors in the data entry",
   S "Ensure that consistent units are used for input variables",
-  S "Ensure required" +:+ phrase software +:+ plural assumption +:+
-  makeRef (SRS.assumpt SRS.missingP []) +:+ S "are appropriate for any particular" +:+
+  S "Ensure required" +:+ phrase software +:+ plural assumption +:+ sParen ( 
+  makeRef (SRS.assumpt SRS.missingP [])) +:+ S "are appropriate for any particular" +:+
   phrase problem +:+ S "input to the" +:+ phrase software]
   
 sysCtxSysResp :: [Sentence]
@@ -263,7 +264,7 @@ sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +
   S "Determine if the inputs satisfy the required physical and software constraints",
   S "Identify the most likely failure surface within the possible input range",
   S "Find the factor of safety for the slope",
-  S "Fint the displacement of soil that will occur on the slope"]
+  S "Find the displacement of soil that will occur on the slope"]
   
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",

@@ -14,7 +14,6 @@ import Language.Drasil.Classes (Concept, ConceptDomain, HasUID(uid), Idea,
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw)
 import Language.Drasil.Chunk.Quantity (Quantity, QuantityDict, getUnit, qw)
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
-import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict)
 import Language.Drasil.Development.Unit (UnitDefn, unitWrapper)
 
 import Control.Lens ((^.), Lens', makeLenses)
@@ -112,7 +111,6 @@ instance HasSymbolTable     ChunkDB where symbolTable = csymbs
 instance HasTermTable       ChunkDB where termTable   = cterms
 instance HasDefinitionTable ChunkDB where defTable    = cdefs
 instance HasUnitTable       ChunkDB where unitTable   = cunitDB
-
 
 collectUnits :: HasSymbolTable s => (HasUID c, Quantity c) => s -> [c] -> [UnitDefn]
 collectUnits m symb = map unitWrapper $ concatMap maybeToList $ map (\x -> getUnitLup x m) symb

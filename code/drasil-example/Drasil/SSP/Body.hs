@@ -33,10 +33,10 @@ import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent, 
   foldlSent_, ofThe, sAnd, sOr)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
-import Data.Drasil.Utils (enumBullet, enumSimple)
+import Data.Drasil.Utils (enumBullet, enumSimple, noRefsLT)
 import Drasil.SSP.Assumptions (sspRefDB)
 import Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
-import Drasil.SSP.DataDefs (sspDataDefs)
+import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty, 
   morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil, soilLyr, ssa)
@@ -74,11 +74,11 @@ ssp_si = SI {
   _units = this_si,
   _quants = sspSymbols,
   _concepts = symbT,
-  _definitions = sspDataDefs,
-  _datadefs = ([] :: [DataDefinition]),
+  _definitions = ([] :: [QDefinition]),
+  _datadefs = dataDefns,
   _inputs = map qw sspInputs,
   _outputs = map qw sspOutputs,
-  _defSequence = [Parallel (head sspDataDefs) (tail sspDataDefs)],
+  _defSequence = [Parallel (qdFromDD (head dataDefns)) (map qdFromDD (tail dataDefns))],
   _constraints = sspConstrained,
   _constants = [],
   _sysinfodb = sspSymMap,
@@ -111,10 +111,8 @@ mkSRS = RefSec (RefProg intro
             [Assumptions 
             ,TMs ([Label] ++ stdFields) [fs_rc_new, equilibrium_new, mcShrStrgth_new,
              effStress_new, hookesLaw_new]
-            , GDs [Label, Units, DefiningEquation   ---check glassbr
-            , Description Verbose IncludeUnits, Notes
-            , Source, RefBy] generalDefinitions ShowDerivation
-            , DDs ([Label, Symbol, Units] ++ stdFields) sspDataDefs ShowDerivation
+            , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
+            , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
             , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
              sspIMods_new ShowDerivation
             , Constraints  EmptyS dataConstraintUncertainty EmptyS
@@ -122,8 +120,7 @@ mkSRS = RefSec (RefProg intro
             ]
           )
         ]
-      ):  
-  --gen_sys_desc,
+        ):
   map Verbatim [req] ++ [LCsSec (LCsProg likelyChanges_SRS)] 
   ++ [UCsSec (UCsProg unlikelyChanges_SRS)] ++[Verbatim aux_cons] ++ (Bibliography : [])
 
@@ -262,7 +259,7 @@ problem_desc = probDescF EmptyS ssa ending [termi_defi, phys_sys_desc, goal_stmt
 -- SECTION 4.1.1 --
 termi_defi = termDefnF Nothing [termi_defi_list]
 
-termi_defi_list = Enumeration $ Simple $
+termi_defi_list = Enumeration $ Simple $ noRefsLT $
   map (\x -> (titleize $ x, Flat $ x ^. defn))
   [fs_concept, crtSlpSrf, stress, strain, normForce,
   shearForce, tension, compression, plnStrn]

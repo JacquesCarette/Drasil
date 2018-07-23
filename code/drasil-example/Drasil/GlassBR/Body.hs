@@ -49,9 +49,8 @@ import Data.Drasil.SentenceStructures (acroR, sVersus, sAnd, foldlSP,
   foldlsC, sOf, followA, ofThe, sIn, isThe, isExpctdToHv, sOr, underConsidertn,
   tAndDWAcc, tAndDOnly, tAndDWSym, andThe, foldlSPCol)
 import Data.Drasil.Software.Products (sciCompS)
-import Data.Drasil.Utils (makeTMatrix, makeListRef, itemRefToSent,
+import Data.Drasil.Utils (makeTMatrix, makeListRef, itemRefToSent, noRefs,
   refFromType, enumSimple, enumBullet, prodUCTbl, bulletFlat, bulletNested)
-
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptionDescs,
   gbRefDB, newAssumptions)
 import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
@@ -205,8 +204,8 @@ functional_requirements_list, traceability_matrices_and_graphs_intro2 :: [Conten
 
 --------------------------------------------------------------------------------
 terminology_and_description_bullets :: Contents
-terminology_and_description_bullets = Enumeration $ (Numeric $
-  map tAndDOnly termsWithDefsOnly
+terminology_and_description_bullets = Enumeration $ Numeric $
+  noRefs $ map tAndDOnly termsWithDefsOnly
   ++
   terminology_and_description_bullets_glTySubSec
   ++
@@ -214,18 +213,18 @@ terminology_and_description_bullets = Enumeration $ (Numeric $
   ++
   map tAndDWAcc termsWithAccDefn
   ++
-  [tAndDWSym probBreak prob_br])
+  [tAndDWSym probBreak prob_br]
    --FIXME: merge? Needs 2 arguments because there is no instance for (SymbolForm ConceptChunk)...
 
 terminology_and_description_bullets_glTySubSec, terminology_and_description_bullets_loadSubSec :: [ItemType]
 
-terminology_and_description_bullets_glTySubSec = [Nested ((titleize glassTy) :+: S ":")
-  (Bullet $ map tAndDWAcc glassTypes)]
+terminology_and_description_bullets_glTySubSec = [Nested (titleize glassTy :+: S ":") $
+  Bullet $ noRefs $ map tAndDWAcc glassTypes]
 
-terminology_and_description_bullets_loadSubSec = [Nested ((at_start load) +:+ S "-" +:+ (load ^. defn))
-  (Bullet $ map tAndDWAcc (take 2 loadTypes)
+terminology_and_description_bullets_loadSubSec = [Nested (at_start load :+: S "-" +:+ (load ^.defn)) $
+  Bullet $ noRefs $ (map tAndDWAcc $ take 2 loadTypes)
   ++
-  map tAndDOnly (drop 2 loadTypes))]
+  (map tAndDOnly $ drop 2 loadTypes)]
 
 --Used in "Goal Statements" Section--
 goal_statements_list :: Contents
@@ -615,14 +614,15 @@ testing1 :: [RelationConcept]
 testing1 = [probOfBr, calOfCap, calOfDe]
 --FIXME: rename or find better implementation?
 
-functional_requirements_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
+functional_requirements_req6 = [Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)
-  (Bullet $
-    map (\(a, d) -> Flat $ (at_start a) +:+ sParen (ch a) +:+
-    sParen (makeRef (reldefn d))) (zip testing testing1)
+  $ Bullet $ noRefs $
+    map (\(a, d) -> Flat $ at_start a +:+ sParen (ch a) +:+
+    sParen (makeRef $ reldefn d)) (zip testing testing1)
     ++
-    map (\d -> Flat $ (at_start d) +:+ sParen (ch d) +:+
-    sParen (makeRef (datadefn d))) functional_requirements_req6_pulledList))])]
+    map (\d -> Flat $ at_start d +:+ sParen (ch d) +:+
+    sParen (makeRef $ datadefn d)) functional_requirements_req6_pulledList
+    , Nothing)]]
 
 {--Nonfunctional Requirements--}
 

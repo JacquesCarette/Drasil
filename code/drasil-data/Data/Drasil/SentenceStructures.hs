@@ -70,9 +70,14 @@ data EnumType = Numb | Upper | Lower
 
 -- | creates an list of elements with "enumerators" in "wrappers", separated by a sep, and ending with "and"
 foldlInlineList :: EnumType -> Sentence -> [Sentence] -> Sentence
-foldlInlineList Numb  sep lst = makeList sep $ map (\(a, b) -> a +:+ b) $ zip (map (\x -> sParen $ S $ show x) [1..(length lst)]) lst
-foldlInlineList Upper sep lst = makeList sep $ map (\(a, b) -> a +:+ b) $ zip (map (\x -> sParen $ S $ [x]) (take (length lst) ['A'..'Z'])) lst
-foldlInlineList Lower sep lst = makeList sep $ map (\(a, b) -> a +:+ b) $ zip (map (\x -> sParen $ S $ [x]) (take (length lst) ['a'..'z'])) lst
+foldlInlineList enum sep lst = makeList sep $ map (\(a, b) -> a +:+ b) $ zip (numList enum $ length lst) lst
+  where
+    numList :: EnumType -> Int -> [Sentence]
+    numList Numb  len = map (\x -> wrap $ S $ show x) [1..len]
+    numList Upper len = map (\x -> wrap $ S $ [x]) (take len ['A'..'Z'])
+    numList Lower len = map (\x -> wrap $ S $ [x]) (take len ['a'..'z'])
+    wrap :: Sentence -> Sentence
+    wrap = sParen
 
 -- Helper function to foldlInlineList - not exported
 makeList :: Sentence -> [Sentence] -> Sentence

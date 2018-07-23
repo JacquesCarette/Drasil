@@ -13,6 +13,7 @@
 \SetAlCapHSkip{0pt}
 \IncMargin{-\parindent}
 \usepackage{hyperref}
+\usepackage{ulem}
 
 % Metadata Information
 \acmJournal{TOSEM}
@@ -64,6 +65,7 @@
 
 \newcommand{\wss}[1]{\authornotes{blue}{SS}{#1}}
 \newcommand{\jc}[1]{\authornotes{red}{JC}{#1}}
+\newcommand{\ds}[1]{\authornotes{olive}{DS}{#1}}
 
 % Document starts
 \begin{document}
@@ -300,7 +302,7 @@ artifacts. From there, we should be able to continue through our proposed
 verification and validation plans, and should eventually end up in the V\&V 
 report.
 
-%DS rework the following paragraph
+\ds{rework the following paragraph}
 Ensuring this traceability and, in fact, getting anything certified has many 
 costs associated with it. There is a massive time investment, fees, and costs 
 associated with contracting out a third-party verifier. Overall it is a 
@@ -319,7 +321,9 @@ changes
 quickly, and automatically update relevant and/or dependent artifacts.  \wss{I
   was looking for consistent by construction here, and I found it.  :-)}
 
-\subsection{Scope} %DS Should this be here? Maybe, as long as the above clarifies the problem.
+\subsection{Scope} %DS Should this be here? Maybe, as long as the above 
+%clarifies the problem.
+\label{S:Scope}
 
 - Scientific Computing Software
 - Why? Many highly specialized SCS require certification. Ex. Control sfwr 
@@ -341,6 +345,7 @@ in nuclear power, x-ray machines, and other safety-critical contexts.
 
 
 \section{Background}
+\label{S:BG}
 
 Reducing the costs of (re-)certification efforts and automating the generation
 of software artifacts has been attempted in differing scopes by many others. We
@@ -362,7 +367,7 @@ We will start by looking at Compendia~\cite{GentlemanAndLang}
 Previous attempts at automating / reducing the artifact burden.
 
 - Compendia - Trying to solve the problem of reproducibility 
-%DS or whichever appropriate R goes here -- see Gentleman & Lang
+\ds{or whichever appropriate R goes here -- see Gentleman \& Lang}
   - Fits with goals of certification
   - focused on good science and being able to re-run experiments exactly
   - Not focused on DDD or its benefits, moreso 
@@ -382,8 +387,70 @@ Previous attempts at automating / reducing the artifact burden.
   - common underlying knowledge between projects is duplicated as there is no
    real cross-project reuse mechanism in place with these tools.
 
-%DS - Really need an intro to the basics of grounded theory here, for section 
-%3.1 (S:IntroCases) and subsequently 4.2 (S:KReUse)
+\ds{Really need an intro to the basics of grounded theory here, for section 
+3.1 (S:IntroCases) and subsequently 4.2 (S:KReUse) if we keep the references to 
+grounded theory}
+
+\subsection{Knowledge-Based Software Engineering (KBSE)}
+\label{S:KBSE}
+
+\ds{Pull apart this section and move the pieces around as necessary. Some of 
+this is intro, some is our approach, etc.}
+
+Knowledge-Based Software Engineering (KBSE) was originally defined as an
+``engineering discipline that includes the integration of knowledge into 
+software systems in order to solve complex problems, which would normally 
+require rather high level of human 
+expertise''~\cite{FeigenbaumAndMcCorduck1983}.
+This is a solid definition, provided we understand what ``knowledge'' is. So 
+then, what exactly is knowledge?
+
+Knowledge ``presents understanding of a subject area. It includes concepts and 
+facts ... as well as relations ... and mechanisms for how to combine them to 
+solve problems in that area''~\cite{Durkin1994}.
+
+\ds{Red here is used elsewhere}
+\textcolor{red}{
+For our purposes, we extend and tighten this definition to include the 
+additional constraint that a piece of knowledge has a structured encoding, as 
+opposed to natural language encoding, which then allows it to be automatically 
+reused. For example, the first law of thermodynamics is a piece of knowledge 
+that can be simply expressed as ``total energy within a closed system must be 
+conserved'', but this is not a structured encoding. One such encoding would 
+allow us to view the knowledge in those relatively simple terms, or just as 
+easily, we could view it as:
+\begin{equation*}
+\Delta{}U = Q - W
+\end{equation*}
+where we define a \emph{closed system} as one which cannot exchange matter with 
+its surroundings, but energy can be transferred. $\Delta{}U$ is then the change 
+in internal energy of a closed system, $Q$ is the amount of energy supplied to 
+the system, and $W$ is the amount of energy lost to the system's surroundings 
+as a result of work.}
+
+\textcolor{red}{
+Regardless of our view, we have not changed the underlying structured knowledge 
+encoding -- we merely project out what is relevant to our current audience.}
+
+\textcolor{red}{
+For our KBSE approach to succeed, there are two major requirements. First off, 
+we must capture the underlying knowledge in a meaningful way that can be reused 
+across artifacts. We want a single source for our knowledge, regardless where 
+it ends up or how it is viewed. This allows us, using the right 
+transformations, to automatically generate our software artifacts from the 
+underlying knowledge-base.}
+
+\textcolor{red}{
+The second requirement is that we restrict our scope to well-understood domains 
+as we need a solid theoretical underpinning. Both mathematics and the physical 
+sciences are good examples of well-understood domains as the knowledge has 
+already been formalized and, to an extent, structured. These are also good 
+candidate domains since we need to explain the underlying knowledge to 
+computers in a nontrivial way, which from our experience, is harder than it 
+sounds.}
+
+With that in mind, we have decided to restrict our focus to KBSE for Scientific 
+Computing Software (SCS) as it is a field rich in knowledge we can use.
 
 \wss{Should MDL show up here?}
 
@@ -421,8 +488,10 @@ saying.
 	- \fgr: Attempt to show generalized overlap via Venn diagram?
 
 \subsection{Emerging structures} 
-%DS want to fit this into the analysis but it would make more sense --after-- 
-%the intro to KBSE
+\sout{\ds{want to fit this into the analysis but it would make more sense 
+--after-- the intro to KBSE}}
+
+\ds{Makes more sense now that intro to KBSE has been moved.}
 \label{S:KnowStruct}
 
 - As shown above, 
@@ -483,7 +552,7 @@ fundamental !SI UNITS!. %!FILL IN?!
 Similar examples of knowledge crop up over all the artifacts. Some have the 
 same depth of information, whereas others do not. Regardless, all of our 
 knowledge shares some components in common. We will always have a label, and 
-usually a term and definition. Depending on what we're looking at, there may 
+usually a term and definition. Depending on what we are looking at, there may 
 not be a symbolic representation, or perhaps we have a quantity that is 
 unit-less. These special cases help us see the underlying root structure from 
 which our knowledge buds. %DS Tree metaphor! Wooo!
@@ -519,28 +588,22 @@ Legend: X - Mandatory; O - Optional
 
 \end{table}
 
-\section{Knowledge-Based Software Engineering (KBSE)}
-\label{S:KBSE}
+\section{Our solution -- A combined approach}
+\label{S:solution}
 
-Knowledge-Based Software Engineering (KBSE) was originally defined as an
-``engineering discipline that includes the integration of knowledge into 
-software systems in order to solve complex problems, which would normally 
-require rather high level of human expertise''~\cite{FeigenbaumAndMcCorduck1983}.
-This is a solid definition, provided we understand what ``knowledge'' is. So 
-then, what exactly is knowledge?
+With inspiration from similar problem domains, as mentioned in 
+Section~\ref{S:BG}, we combine a number of ideas to tackle the problems of 
+duplication, inter-/intra-artifact inconsistency, design for change, lack of 
+reusability, and difficulty with (re-)certifiability.
 
-Knowledge ``presents understanding of a subject area. It includes concepts and 
-facts ... as well as relations ... and mechanisms for how to combine them to 
-solve problems in that area''~\cite{Durkin1994}.
-
-For our purposes, we extend and tighten this definition to include the 
-additional constraint that a piece of knowledge has a structured encoding, as 
-opposed to natural language encoding, which then allows it to be automatically 
-reused. For example, the first law of thermodynamics is a piece of knowledge 
-that can be simply expressed as ``total energy within a closed system must be 
-conserved'', but this is not a structured encoding. One such encoding would 
-allow us to view the knowledge in those relatively simple terms, or just as 
-easily, we could view it as:
+For our purposes, we extend and tighten the definition of knowledge introduced 
+in Section~\ref{S:KBSE} to include the additional constraint that a piece of 
+knowledge has a structured encoding, as opposed to natural language encoding, 
+which then allows it to be automatically reused. For example, the first law of 
+thermodynamics is a piece of knowledge that can be simply expressed as ``total 
+energy within a closed system must be conserved'', but this is not a structured 
+encoding. One such encoding would allow us to view the knowledge in those 
+relatively simple terms, or just as easily, we could view it as:
 \begin{equation*}
 \Delta{}U = Q - W
 \end{equation*}
@@ -550,33 +613,31 @@ in internal energy of a closed system, $Q$ is the amount of energy supplied to
 the system, and $W$ is the amount of energy lost to the system's surroundings 
 as a result of work.
 
-%\wss{What are you trying to say with this equation?  I think I like where you
-%  are going, but this equation will need significantly more explanation to make
-%  this work.  You need to say what $U$, $Q$ and $W$ represent.  You would also
-%  need to define closed system.  Maybe we can use an example that has already
-%  been worked out in our examples, like the conservation of thermal energy?}
 Regardless of our view, we have not changed the underlying structured knowledge 
 encoding -- we merely project out what is relevant to our current audience.
 
-For our KBSE approach to succeed, there are two major requirements. First off, 
-we must capture the underlying knowledge in a meaningful way that can be reused 
-across artifacts. We want a single source for our knowledge, regardless where 
-it ends up or how it is viewed. This allows us, using the right 
-transformations, to automatically generate our software artifacts from the 
-underlying knowledge-base.
+Our approaches involves using this underlying idea in the creation and 
+maintenance of a singular knowledge-base that we can pull from to implement our 
+software. With knowledge coming from a single source, we have guaranteed 
+consistency. We are able to mix and match knowledge as needed, which allows for 
+greater reuse across projects, and we use generators to produce the software 
+artifacts we need.
+
+For our approach to succeed we must satisfy two major requirements. First off, 
+we must capture the underlying knowledge in a meaningful and reusable 
+(artifact-independent) way. We want a single source for our knowledge, 
+regardless where it ends up or how it is viewed. Thus, using the right 
+transformations %DS Conversions?
+and projections, we can automatically generate our software artifacts from the 
+knowledge-base.
 
 The second requirement is that we restrict our scope to well-understood domains 
 as we need a solid theoretical underpinning. Both mathematics and the physical 
 sciences are good examples of well-understood domains as the knowledge has 
 already been formalized and, to an extent, structured. These are also good 
 candidate domains since we need to explain the underlying knowledge to 
-computers in a nontrivial way, which from our experience, is harder than it 
-sounds.
-
-With that in mind, we have decided to restrict our focus to KBSE for Scientific 
-Computing Software (SCS) as it is a field rich in knowledge we can use.
-
-\wss{This feels like introductory material.  It should likely go earlier in the paper.}
+computers in a nontrivial way, which from our experience is harder than it 
+sounds. Hence the reduction in scope we mentioned in Section~\ref{S:Scope}
 
 \subsection{Capturing Knowledge}
 \label{S:KnowCapt}
@@ -683,8 +744,7 @@ that piece of knowledge in an artifact-agnostic manner. We are not concerned
 with which views will be used by our artifacts, only what the underlying 
 knowledge is and how it should be captured.  \wss{Great point.}
 
-Once we have properly captured the relevant knowledge, we shouldn't \wss{avoid
-  contractions} have to 
+Once we have properly captured the relevant knowledge, we should not have to 
 capture it again to reuse it in a different project. Any given piece of 
 knowledge should only be added to the knowledge-base once!
 
@@ -894,7 +954,7 @@ Section~\ref{S:DrasilToday}.
 - Sentence and Document
 - Explain the chunk hierarchy (refer to Section~\ref{S:KnowCapt} figure)
 - Data.Drasil
-  \fgr{} Knowledge areas we've started to capture (See: SE-CSE paper)
+  \fgr{} Knowledge areas we have started to capture (See: SE-CSE paper)
 - Recipe Language(s) -- Refer to:
   \fgr{} Drasil.DocumentLanguage
 - The generator

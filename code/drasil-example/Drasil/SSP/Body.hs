@@ -9,15 +9,16 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   LCsSec(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), --TSIntro, 
   TSIntro(..), UCsSec(..), Fields, Field(..), SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
-  SCSSub(..),
-  dataConstraintUncertainty, genSysF, goalStmtF, 
-  inDataConstTbl, intro, mkDoc, nonFuncReqF, outDataConstTbl, probDescF, reqF, 
-  solChSpecF, specSysDesF, termDefnF, tsymb'', valsOfAuxConstantsF)
+  SCSSub(..), GSDSec(..), GSDSub(..),
+  dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
+  nonFuncReqF, outDataConstTbl, probDescF, reqF, termDefnF, tsymb'',
+  valsOfAuxConstantsF)
 
-import Data.Drasil.Concepts.Documentation (analysis, definition, 
-  design, document, effect, element, endUser, goalStmt, inModel, input_, 
-  interest, interest, issue, loss, method_, model, organization, physics, 
-  problem, property, requirement, srs, table_, template, value, variable, assumption)
+import Data.Drasil.Concepts.Documentation (analysis, assumption,
+  design, document, effect, element, endUser, environment, goalStmt, inModel, 
+  input_, interest, interest, interface, issue, loss, method_, organization, 
+  physics, problem, product_, property, requirement, software, softwareSys, 
+  srs, sysCont, system, table_, template, user, value, variable)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
@@ -31,43 +32,36 @@ import Data.Drasil.Software.Products (sciCompS)
 import Data.Drasil.People (henryFrankis)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent, 
-  foldlSent_, ofThe, sAnd, sOr)
+  foldlSent_, ofThe, sAnd, sOr, foldlSPCol)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
-import Data.Drasil.Utils (enumBullet, enumSimple, weave)
-import Drasil.SSP.Assumptions (sspRefDB, sspAssumptions)
+import Data.Drasil.Utils (enumBullet, enumSimple, noRefsLT, bulletNested, bulletFlat)
+import Drasil.SSP.Assumptions (sspRefDB)
 import Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
-import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShrDerivation, 
-  resShrDerivation, sliceWght, sspDataDefs, stfMtrxDerivation)
+import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty, 
-  morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil, soilLyr, ssa)
-import Drasil.SSP.GenDefs (sspGenDefs, generalDefinitions)
+  morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil, soilLyr, ssa, ssp)
+import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
-import Drasil.SSP.IMods (fctSftyDerivation, instModIntro1, instModIntro2, 
-  intrSlcDerivation, nrmShrDerivation, rigDisDerivation, rigFoSDerivation, 
-  sspIMods, sspIMods_new)
+import Drasil.SSP.IMods (sspIMods_new)
 import Drasil.SSP.Requirements (sspInputDataTable, sspRequirements)
-import Drasil.SSP.TMods (sspTMods, fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_new
+import Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_new
   , effStress_new)
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
   sspOutputs, sspSymbols)
 
-import qualified Drasil.DocLang.SRS as SRS (funcReq, inModel, likeChg, unlikeChg, missingP, 
-  physSyst)
+import qualified Drasil.DocLang.SRS as SRS (funcReq, assumpt, inModel, missingP, physSyst)
 
 --type declarations for sections--
-gen_sys_desc, spec_sys_desc, req, likely_chg, aux_cons :: Section
+req, aux_cons :: Section
 
 table_of_symbol_intro :: [TSIntro]
 
 problem_desc, termi_defi, phys_sys_desc,
-  goal_stmt, sol_charac_spec, func_req, non_func_req :: Section
+  goal_stmt, func_req, non_func_req :: Section
 
 termi_defi_list, phys_sys_desc_p1, phys_sys_desc_bullets,
-  phys_sys_desc_p2, goals_list, assumps_list,
-  func_req_list :: Contents
-
-theory_model_tmods, gen_def_genDefs, data_def_dataDefs, insta_model_IMods :: [Contents]
+  phys_sys_desc_p2, goals_list, func_req_list :: Contents
 
 --Document Setup--
 this_si :: [UnitDefn]
@@ -84,11 +78,11 @@ ssp_si = SI {
   _units = check_si,
   _quants = sspSymbols,
   _concepts = symbT,
-  _definitions = sspDataDefs,
-  _datadefs = ([] :: [DataDefinition]),
+  _definitions = ([] :: [QDefinition]),
+  _datadefs = dataDefns,
   _inputs = map qw sspInputs,
   _outputs = map qw sspOutputs,
-  _defSequence = [Parallel (head sspDataDefs) (tail sspDataDefs)],
+  _defSequence = [Parallel (qdFromDD (head dataDefns)) (map qdFromDD (tail dataDefns))],
   _constraints = sspConstrained,
   _constants = [],
   _sysinfodb = sspSymMap,
@@ -99,7 +93,7 @@ resourcePath :: String
 resourcePath = "../../../datafiles/SSP/"
 
 ssp_srs :: Document
-ssp_srs = mkDoc mkSRS (for) ssp_si
+ssp_srs = mkDoc mkSRS for ssp_si
   
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
@@ -112,8 +106,8 @@ mkSRS = RefSec (RefProg intro
       EmptyS
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
     --FIXME: issue #235
-    Verbatim gen_sys_desc: 
-  ------
+    (GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, sysCtxFig1, sysCtxDesc, sysCtxList], 
+      UsrChars [userCharIntro], SystCons [] []]):
     SSDSec 
       (SSDProg [SSDSubVerb problem_desc
         , SSDSolChSpec 
@@ -121,10 +115,8 @@ mkSRS = RefSec (RefProg intro
             [Assumptions 
             ,TMs ([Label] ++ stdFields) [fs_rc_new, equilibrium_new, mcShrStrgth_new,
              effStress_new, hookesLaw_new]
-            , GDs [Label, Units, DefiningEquation   ---check glassbr
-            , Description Verbose IncludeUnits, Notes
-            , Source, RefBy] generalDefinitions ShowDerivation
-            , DDs ([Label, Symbol, Units] ++ stdFields) sspDataDefs ShowDerivation
+            , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
+            , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
             , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
              sspIMods_new ShowDerivation
             , Constraints  EmptyS dataConstraintUncertainty EmptyS
@@ -132,9 +124,7 @@ mkSRS = RefSec (RefProg intro
             ]
           )
         ]
-      ): --Testing General Definitions.-}
-  -- comment spec_sys_desc out to cut off the redundant section being generated
-  --spec_sys_desc,gen_sys_desc,
+      ):
   map Verbatim [req] ++ [LCsSec (LCsProg likelyChanges_SRS)] 
   ++ [UCsSec (UCsProg unlikelyChanges_SRS)] ++[Verbatim aux_cons] ++ (Bibliography : [])
 
@@ -242,10 +232,53 @@ orgSecEnd   = S "The" +:+ plural inModel +:+ S "provide the set of" +:+
   +:+ S "to perform a" +:+ titleize morPrice +:+ titleize analysis
 
 -- SECTION 3 --
-gen_sys_desc = genSysF [] userCharIntro [] []
-
 -- SECTION 3.1 --
--- User Characteristics automatically generated in genSysF with the
+-- System Context automatically generated
+sysCtxIntro :: Contents
+sysCtxIntro = foldlSP
+  [makeRef sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
+   S "A circle represents an external entity outside the" +:+ phrase software
+   `sC` S "the", phrase user, S "in this case. A rectangle represents the",
+   phrase softwareSys, S "itself" +:+. (sParen $ short ssp),
+   S "Arrows are used to show the data flow between the" +:+ phrase system,
+   S "and its" +:+ phrase environment]
+   
+sysCtxFig1 :: Contents
+sysCtxFig1 = fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png") "sysCtxDiag"
+
+sysCtxDesc :: Contents
+sysCtxDesc = foldlSPCol
+  [S "The interaction between the", phrase product_, S "and the", phrase user,
+   S "is through a user" +:+. phrase interface,
+   S "The responsibilities of the", phrase user, S "and the", phrase system,
+   S "are as follows"]
+   
+sysCtxUsrResp :: [Sentence]
+sysCtxUsrResp = [S "Provide the input data related to the soil layer(s) and water" +:+
+  S "table (if applicable), ensuring no errors in the data entry",
+  S "Ensure that consistent units are used for input variables",
+  S "Ensure required" +:+ phrase software +:+ plural assumption +:+ sParen ( 
+  makeRef (SRS.assumpt SRS.missingP [])) +:+ S "are appropriate for any particular" +:+
+  phrase problem +:+ S "input to the" +:+ phrase software]
+  
+sysCtxSysResp :: [Sentence]
+sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +:+ 
+  S " input instead of a floating point number",
+  S "Determine if the inputs satisfy the required physical and software constraints",
+  S "Identify the most likely failure surface within the possible input range",
+  S "Find the factor of safety for the slope",
+  S "Find the displacement of soil that will occur on the slope"]
+  
+sysCtxResp :: [Sentence]
+sysCtxResp = [titleize user +:+ S "Responsibilities",
+  short ssp +:+ S "Responsibilities"]
+
+sysCtxList :: Contents
+sysCtxList = Enumeration $ bulletNested sysCtxResp $
+  map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
+
+-- SECTION 3.2 --
+-- User Characteristics automatically generated with the
 -- userContraints intro below
 
 userCharIntro :: Contents
@@ -260,12 +293,9 @@ userChar pname understandings familiarities = foldlSP [
   S "and be familiar with", foldlList familiarities]
 
 -- SECTION 3.2 --
--- System Constraints automatically generated in genSysF
+-- System Constraints automatically generated
 
 -- SECTION 4 --
-spec_sys_desc = specSysDesF end [problem_desc, sol_charac_spec]
-  where end = foldlSent_ [plural definition, S "and finally the",
-          plural inModel, S "that", phrase model, S "the", phrase slope]
 
 -- SECTION 4.1 --
 problem_desc = probDescF EmptyS ssa ending [termi_defi, phys_sys_desc, goal_stmt]
@@ -276,7 +306,7 @@ problem_desc = probDescF EmptyS ssa ending [termi_defi, phys_sys_desc, goal_stmt
 -- SECTION 4.1.1 --
 termi_defi = termDefnF Nothing [termi_defi_list]
 
-termi_defi_list = Enumeration $ Simple $
+termi_defi_list = Enumeration $ Simple $ noRefsLT $
   map (\x -> (titleize $ x, Flat $ x ^. defn))
   [fs_concept, crtSlpSrf, stress, strain, normForce,
   shearForce, tension, compression, plnStrn]
@@ -336,52 +366,27 @@ goal_stmt = goalStmtF (map (\(x, y) -> x `ofThe` y) [
 goals_list = enumSimple 1 (short goalStmt) sspGoals
 
 -- SECTION 4.2 --
-sol_charac_spec = solChSpecF ssa (problem_desc, SRS.likeChg [] [], SRS.unlikeChg [] []) ddEnding
-  (EmptyS, dataConstraintUncertainty, EmptyS)
-  ([assumps_list], theory_model_tmods, gen_def_genDefs, data_def_dataDefs, 
-  instModIntro1:instModIntro2:insta_model_IMods, [data_constraint_Table2, data_constraint_Table3]) []
-
-  where ddEnding = foldlSent [at_start' definition, ddRef sliceWght, S "to", ddRef lengthLb,
-          S "are the", phrase force, plural variable, S "that can be solved",
-          S "by direct analysis of given" +:+. plural input_, S "The", 
-          phrase intrslce, S "forces", ddRef lengthLs, S "are", phrase force,
-          plural variable, S "that must be written in terms of", ddRef sliceWght, 
-          S "to", ddRef lengthLb, S "to solve"]
 
 -- SECTION 4.2.1 --
--- Assumptions is automatically generated in solChSpecF using the list below
---s4_2_1_list
-assumps_list = enumSimple 1 (short assumption) sspAssumptions
+-- Assumptions is automatically generated
 
 -- SECTION 4.2.2 --
--- TModels is automatically generated in solChSpecF using the tmods below
-
-theory_model_tmods = map reldefn sspTMods
+-- TModels is automatically generated
 
 -- SECTION 4.2.3 --
--- General Definitions is automatically generated in solChSpecF
-gen_def_genDefs = map reldefn sspGenDefs
+-- General Definitions is automatically generated
 
 -- SECTION 4.2.4 --
--- Data Definitions is automatically generated in solChSpecF
-data_def_dataDefs = (map datadefn (take 13 sspDataDefs)) ++ resShrDerivation ++
-  [datadefn (sspDataDefs !! 13)] ++ mobShrDerivation ++
-  map datadefn [sspDataDefs !! 14, sspDataDefs !! 15] ++
-  stfMtrxDerivation ++ (map datadefn (drop 16 sspDataDefs))
+-- Data Definitions is automatically generated
   --FIXME: derivations should be with the appropriate DataDef
 
 -- SECTION 4.2.5 --
--- Instance Models is automatically generated in solChSpecF
--- using the paragraphs below
-
-insta_model_IMods = concat $ weave [map (\x -> [reldefn x]) sspIMods,
-  [fctSftyDerivation, nrmShrDerivation, intrSlcDerivation, rigDisDerivation, rigFoSDerivation]]
+-- Instance Models is automatically generated
 
   --FIXME: derivations should be with the appropriate IMod
 
 -- SECTION 4.2.6 --
--- Data Constraints is automatically generated in solChSpecF
--- using the tables below
+-- Data Constraints is automatically generated
 
 {-
 {-input data-}
@@ -421,7 +426,7 @@ non_func_req = nonFuncReqF [accuracy, performanceSpd]
   where r = (short ssa) +:+ S "is intended to be an educational tool"
 
 -- SECTION 6 --
-likely_chg = SRS.likeChg [] []
+--Likely Changes is automatically generated
 
 -- SECTION 7 --
 aux_cons = valsOfAuxConstantsF ssa []

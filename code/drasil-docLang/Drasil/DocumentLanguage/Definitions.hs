@@ -86,23 +86,23 @@ makeDerivationContents s     = Paragraph s
 -- (paragraphs and equation blocks) for a derivation.
 makeDerivationContents' :: Sentence -> LabelledContent
 makeDerivationContents' (E e) = llcc "" (mkLabelRA'' "") $ EqnBlock e "" --FIXME! non-referble sentences!
-makeDerivationContents' s     = mkParagraph "" $ Paragraph s
+makeDerivationContents' s     = mkParagraph s
 
--- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
+-- | Synonym for easy reading. Model rows are just 'String',['LabelledContent'] pairs
 type ModRow = [(String, [LabelledContent])]
 
 -- | Create the fields for a model from a relation concept (used by tmodel)
 mkTMField :: HasSymbolTable ctx => TheoryModel -> ctx -> Field -> ModRow -> ModRow
-mkTMField t _ l@Label fs  = (show l, (Paragraph $ at_start t):[]) : fs
+mkTMField t _ l@Label fs  = (show l, (mkParagraph $ at_start t):[]) : fs
 mkTMField t _ l@DefiningEquation fs =
-  (show l, (map eqUnR (map tConToExpr (t ^. invariants)))) : fs
-  --FIXME: EqnBlock Ref HACK.
+  (show l, (map (\x -> eqUnR' "" (mkLabelRA'' "tmEqn") x) (map tConToExpr (t ^. invariants)))) : fs
+  --FIXME: EqnBlock Ref HACK
 mkTMField t m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] (map tConToExpr (t ^. invariants))) : fs
 mkTMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkTMField _ _ l@(Source) fs = (show l, fixme) : fs --FIXME: fill this in
 mkTMField t _ l@(Notes) fs = 
-  maybe fs (\ss -> (show l, map Paragraph ss) : fs) (t ^. getNotes)
+  maybe fs (\ss -> (show l, map mkParagraph ss) : fs) (t ^. getNotes)
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
 
@@ -114,69 +114,74 @@ tConToExpr (TCon AssumedCon x) = x
 
 -- | Create the fields for a definition from a QDefinition (used by ddefn)
 mkQField :: (HasSymbolTable ctx) => QDefinition -> ctx -> Field -> ModRow -> ModRow
-mkQField d _ l@Label fs = (show l, (Paragraph $ at_start d):[]) : fs
-mkQField d _ l@Symbol fs = (show l, (Paragraph $ (P $ eqSymb d)):[]) : fs
-mkQField d _ l@Units fs = (show l, (Paragraph $ (unitToSentenceUnitless d)):[]) : fs
-mkQField d _ l@DefiningEquation fs = (show l, (eqUnR $ sy d $= d ^. equat):[]) : fs --FIXME: appending symbol should be done in the printing stage
+mkQField d _ l@Label fs = (show l, (mkParagraph $ at_start d):[]) : fs
+mkQField d _ l@Symbol fs = (show l, (mkParagraph $ (P $ eqSymb d)):[]) : fs
+mkQField d _ l@Units fs = (show l, (mkParagraph $ (unitToSentenceUnitless d)):[]) : fs
+mkQField d _ l@DefiningEquation fs = (show l, ((eqUnR' (d ^. uid) 
+  (mkLabelRA'' $ (d ^. uid)++"eqn") (sy d $= d ^. relat)):[])) : fs --FIXME: appending symbol should be done in the printing stage
 mkQField d m l@(Description v u) fs =
   (show l, buildDDescription v u d m) : fs
 mkQField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
-mkQField _ _ l@(Source) fs = (show l, fixme) : fs
-mkQField d _ l@(Notes) fs = maybe fs (\ss -> (show l, map Paragraph ss) : fs) (d ^. getNotes)
+mkQField _ _ l@(Source) fs = (show l, fixme) : fs --FIXME: fill this in
+mkQField d _ l@(Notes) fs = maybe fs (\ss -> (show l, map mkParagraph ss) : fs) (d ^. getNotes)
 mkQField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for data definitions"
 
 -- | Create the fields for a definition from a QDefinition (used by ddefn)
 mkDDField :: (HasSymbolTable ctx) => DataDefinition -> ctx -> Field -> ModRow -> ModRow
-mkDDField d _ l@Label fs = (show l, (Paragraph $ at_start d):[]) : fs
-mkDDField d _ l@Symbol fs = (show l, (Paragraph $ (P $ eqSymb d)):[]) : fs
-mkDDField d _ l@Units fs = (show l, (Paragraph $ (unitToSentenceUnitless d)):[]) : fs
-mkDDField d _ l@DefiningEquation fs = (show l, (eqUnR $ sy d $= d ^. relat):[]) : fs --FIXME: appending symbol should be done in the printing stage
+mkDDField d _ l@Label fs = (show l, (mkParagraph $ at_start d):[]) : fs
+mkDDField d _ l@Symbol fs = (show l, (mkParagraph $ (P $ eqSymb d)):[]) : fs
+mkDDField d _ l@Units fs = (show l, (mkParagraph $ (unitToSentenceUnitless d)):[]) : fs
+mkDDField d _ l@DefiningEquation fs = (show l, ((eqUnR' (d ^. uid) 
+  (mkLabelRA'' $ (d ^. uid)++"eqn") (sy d $= d ^. relat)):[])) : fs --FIXME: appending symbol should be done in the printing stage
 mkDDField d m l@(Description v u) fs =
   (show l, buildDDescription' v u d m) : fs
 mkDDField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
-mkDDField _ _ l@(Source) fs = (show l, fixme) : fs
-mkDDField d _ l@(Notes) fs = maybe fs (\ss -> (show l, map Paragraph ss) : fs) (d ^. getNotes)
+mkDDField _ _ l@(Source) fs = (show l, fixme) : fs --FIXME: fill this in
+mkDDField d _ l@(Notes) fs = 
+  maybe fs (\ss -> (show l, map mkParagraph ss) : fs) (d ^. getNotes)
 mkDDField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for data definitions"
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a model / general definition
-buildDescription :: HasSymbolTable ctx => Verbosity -> InclUnits -> Expr -> ctx -> [LabelledContent] 
+buildDescription :: HasSymbolTable ctx => Verbosity -> InclUnits -> Expr -> ctx -> [LabelledContent]
   -> [LabelledContent]
 buildDescription Succinct _ _ _ _ = []
-buildDescription Verbose u e m cs = llccNoLabel $ Enumeration (
-  Definitions (descPairs u (vars e m))) : cs
+buildDescription Verbose u e m cs = (llccNoLabel (Enumeration (
+  Definitions (descPairs u (vars e m))))) : cs
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a data definition
 buildDDescription :: HasSymbolTable ctx => Verbosity -> InclUnits -> QDefinition -> ctx ->
-  [Contents]
-buildDDescription Succinct u d _ = [Enumeration (Definitions $ (firstPair u d):[])]
-buildDDescription Verbose u d m = [Enumeration (Definitions
+  [LabelledContent]
+buildDDescription Succinct u d _ = [llccNoLabel $ Enumeration (Definitions $ (firstPair u d):[])]
+buildDDescription Verbose u d m = [llccNoLabel $ Enumeration (Definitions
   (firstPair u d : descPairs u (vars (d^.equat) m)))]
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a data definition
 buildDDescription' :: HasSymbolTable ctx => Verbosity -> InclUnits -> DataDefinition -> ctx ->
-  [Contents]
-buildDDescription' Succinct u d _ = [Enumeration (Definitions $ (firstPair' u d):[])]
-buildDDescription' Verbose u d m = [Enumeration (Definitions
+  [LabelledContent]
+buildDDescription' Succinct u d _ = [llccNoLabel $ Enumeration (Definitions $ (firstPair' u d):[])]
+buildDDescription' Verbose u d m = [llccNoLabel $ Enumeration (Definitions
   (firstPair' u d : descPairs u (vars (d^.relat) m)))]
 
 -- | Create the fields for a general definition from a 'GenDefn' chunk.
 mkGDField :: HasSymbolTable ctx => GenDefn -> ctx -> Field -> ModRow -> ModRow
-mkGDField g _ l@Label fs = (show l, (Paragraph $ at_start g):[]) : fs
+mkGDField g _ l@Label fs = (show l, (mkParagraph $ at_start g):[]) : fs
 mkGDField g _ l@Units fs =
   let u = gdUnit g in
     case u of Nothing   -> fs
-              Just udef -> (show l, (Paragraph $ Sy (udef ^. usymb)):[]) : fs
-mkGDField g _ l@DefiningEquation fs = (show l, (eqUnR (g ^. relat)):[]) : fs
+              Just udef -> (show l, (mkParagraph $ Sy (udef ^. usymb)):[]) : fs
+mkGDField g _ l@DefiningEquation fs = (show l, 
+  (eqUnR' (g ^. uid) (mkLabelRA'' $ (g ^. uid)++"eqn") (g ^. relat)):[]) : fs
 mkGDField g m l@(Description v u) fs = (show l,
   (buildDescription v u (g ^. relat) m) []) : fs
 mkGDField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
-mkGDField _ _ l@(Source) fs = (show l, fixme) : fs
-mkGDField d _ l@(Notes) fs = maybe fs (\ss -> (show l, map Paragraph ss) : fs) (d ^. getNotes)
+mkGDField _ _ l@(Source) fs = (show l, fixme) : fs --FIXME: fill this in
+mkGDField g _ l@(Notes) fs = 
+  maybe fs (\ss -> (show l, map mkParagraph ss) : fs) (g ^. getNotes)
 mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 
 -- | Create the fields for an instance model from an 'InstanceModel' chunk

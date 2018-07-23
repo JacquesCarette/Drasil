@@ -47,7 +47,7 @@ egetSecCon (Con c) = egetCon c
 egetCon :: Contents -> [Expr]
 egetCon (EqnBlock e _) = [e]
 egetCon (Definition d) = egetDtype d 
-egetCon (Defnt dt (hd:tl) a) = concatMap egetCon (snd hd) ++ egetCon (Defnt dt tl a)
+egetCon (Defnt dt (hd:tl) a) = concatMap egetCon (map accessContents $ snd hd) ++ egetCon (Defnt dt tl a)
 egetCon (Defnt dt [] _) = [] ++ egetDtype dt
 egetCon _ = []
 
@@ -58,7 +58,6 @@ egetDtype _ = []
 
 egetQDef :: QDefinition -> [Expr]
 egetQDef a = [a ^. relat]
-
 
 getDoc :: Document -> [Sentence]
 getDoc (Document t a s) = t : a : concatMap getSec s
@@ -71,6 +70,7 @@ getSec (Section t sc _) = t : concatMap getSecCon sc
 getSecCon :: SecCons -> [Sentence]
 getSecCon (Sub s) = getSec s
 getSecCon (Con c) = getCon c
+--getSecCon (LCon lc) = getLC lc
 
 -- This function is used in collecting sentence from table.
 -- Since only the table's first Column titled "Var" should be collected,
@@ -93,10 +93,9 @@ getCon (Assumption assc)   = getAss assc
 getCon (Change chg)        = getChg chg
 getCon (Bib bref)          = getBib bref
 getCon (Graph [(s1, s2)] _ _ l _) = s1 : s2 : [l]
-getCon (Defnt dt (hd:fs) a) = concatMap getCon (snd hd) ++ getCon (Defnt dt fs a)
+getCon (Defnt dt (hd:fs) a) = concatMap getCon (map accessContents $ snd hd) ++ getCon (Defnt dt fs a)
 getCon (Defnt _ [] _) = []
 getCon  _ = []
-
 
 getDtype :: DType -> [Sentence]
 getDtype (Data q) = getQDef q

@@ -304,7 +304,7 @@ lay sm x@(Change lc)          = T.ALUR
 lay sm x@(Graph ps w h t _)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S "fixmelabel10")
 lay sm (Defnt dtyp pairs rn)  = T.Definition dtyp (layPairs pairs) (P.S rn)
-  where layPairs = map (\(x,y) -> (x, map (lay sm) y))
+  where layPairs = map (\(x,y) -> (x, map (lay sm) (map accessContents y)))
 lay sm (Bib bib)              = T.Bib (map (layCite sm) bib) (P.S "fixmelabel11")
 
 lay' :: HasSymbolTable ctx => ctx -> LabelledContent -> Contents -> T.LayoutObj
@@ -324,7 +324,7 @@ lay' sm lc (Change x)           = T.ALUR (if (chngType x) == Likely then T.Likel
 lay' sm lc (Graph ps w h t _)    = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps) w h (spec sm t) 
   (P.S (refAdd' lc))
 lay' sm lc (Defnt dtyp pairs _)  = T.Definition dtyp (layPairs pairs) (P.S $ refAdd' lc)
-  where layPairs = map (\(x,y) -> (x, map (lay' sm lc) y))
+  where layPairs = map (\(x,y) -> (x, map (lay' sm lc) (map accessContents y)))
 lay' sm lc (Bib bib)                = T.Bib (map (layCite sm) bib) (P.S $ refAdd' lc)
 
 refAdd' :: LabelledContent -> String

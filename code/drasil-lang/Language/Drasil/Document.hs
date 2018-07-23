@@ -77,7 +77,7 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
                ------NEW TMOD/DDEF/IM/GD BEGINS HERE------
                ---- FIXME: The above Definition will need to be removed ----
                --------------------------------------------
-               | Defnt DType [(Identifier, [Contents])] RefAdd
+               | Defnt DType [(Identifier, [LabelledContent])] RefAdd
 type Identifier = String
 
 data LabelledContent = LblC { _uniqueID :: UID

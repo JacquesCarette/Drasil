@@ -114,12 +114,12 @@ assumpIntro r1 r2 r3 r4 r5 r6 = llcc "assumpIntroLC" (mkLabelRA'' "assumpIntro")
                 itemsAndRefs = [(thModel, r1), (genDefn, r2), (dataDefn, r3)]
 
 --wrapper for thModelIntro
-thModF :: (Idea a) => a -> [Contents] -> Section
+thModF :: (Idea a) => a -> [LabelledContent] -> Section
 thModF progName otherContents = SRS.thModel ((thModIntro progName):otherContents) []
 
 -- generalized theoretical model introduction: identifies key word pertaining to topic
-thModIntro :: (Idea a) => a -> Contents
-thModIntro progName = foldlSP
+thModIntro :: (Idea a) => a -> LabelledContent
+thModIntro progName = llccNoLabel $ foldlSP
           [S "This", phrase section_, S "focuses on", 
           S "the", phrase general, (plural equation), S "and", 
           S "laws that", short progName, S "is based on"]

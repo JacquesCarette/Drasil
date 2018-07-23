@@ -41,9 +41,8 @@ doc' sys authors secs = Document (Doc.srs `forTT'` sys) authors secs
 -- | Standard SRS section builders
 intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
   genSysDes, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
-  probDesc, termAndDefn, termogy, goalStmt, solCharSpec, thModel,
-  propCorSol, require, nonfuncReq, 
-  reference, offShelfSol :: [Contents] -> [Section] -> Section
+  probDesc, termAndDefn, termogy, goalStmt, solCharSpec, require, 
+  nonfuncReq, reference, offShelfSol :: [Contents] -> [Section] -> Section
 
 intro       cs ss = section' (titleize Doc.introduction) cs ss "Intro"
 prpsOfDoc   cs ss = section' (titleize Doc.prpsOfDoc) cs ss "DocPurpose"
@@ -69,9 +68,7 @@ termAndDefn cs ss = section' (titleize' Doc.termAndDef)        cs ss "TermDefs"
 termogy     cs ss = section' (titleize Doc.terminology)        cs ss "Terminology"
 goalStmt    cs ss = section' (titleize' Doc.goalStmt)          cs ss "GoalStmt"
 solCharSpec cs ss = section' (titleize Doc.solutionCharSpec)   cs ss "SolCharSpec"
-thModel     cs ss = section' (titleize' Doc.thModel)           cs ss "TMs" --FIXME: label is available
 
-propCorSol  cs ss = section' (titleize' Doc.propOfCorSol)      cs ss "CorSolProps"
 
 require     cs ss = section' (titleize' Doc.requirement)      cs ss "Requirements"
 nonfuncReq  cs ss = section' (titleize' Doc.nonfunctionalRequirement) cs ss "NFRs"
@@ -82,7 +79,8 @@ offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "ExistingSol
 
 
 appendix, datCon, funcReq, genDefn, likeChg, physSyst, sysCont, traceyMandG,
- unlikeChg, tOfSymb, valsOfAuxCons, assumpt, dataDefn, inModel :: [LabelledContent] -> [Section] -> Section
+ unlikeChg, tOfSymb, valsOfAuxCons, assumpt, dataDefn, inModel, thModel,
+ propCorSol :: [LabelledContent] -> [Section] -> Section
 
 appendix      cs ss = sectionLC (titleize Doc.appendix)               cs ss (mkLabelRA'' "Appendix")
 assumpt       cs ss = sectionLC (titleize' Doc.assumption)            cs ss (mkLabelRA'' "Assumps")
@@ -93,7 +91,9 @@ genDefn       cs ss = sectionLC (titleize' Doc.genDefn)               cs ss genD
 inModel       cs ss = sectionLC (titleize' Doc.inModel)               cs ss inModelLabel
 likeChg       cs ss = sectionLC (titleize' Doc.likelyChg)             cs ss likeChgLabel
 physSyst      cs ss = sectionLC (titleize Doc.physSyst)               cs ss physSystLabel
+propCorSol    cs ss = sectionLC (titleize' Doc.propOfCorSol)          cs ss (mkLabelRA'' "CorSolProps")
 sysCont       cs ss = sectionLC (titleize Doc.sysCont)                cs ss (mkLabelRA'' "SysContext")
+thModel       cs ss = sectionLC (titleize' Doc.thModel)               cs ss thModelLabel
 tOfSymb       cs ss = sectionLC (titleize Doc.tOfSymb)                cs ss tOfSymbLabel
 traceyMandG   cs ss = sectionLC (titleize' Doc.traceyMandG)           cs ss (mkLabelRA'' "TraceMatrices")
 unlikeChg     cs ss = sectionLC (titleize' Doc.unlikelyChg)           cs ss unlikeChgLabel

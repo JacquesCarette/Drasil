@@ -43,8 +43,8 @@ data InclUnits = IncludeUnits -- In description field (for other symbols)
 
 -- | Create a theoretical model using a list of fields to be displayed, a database of symbols,
 -- and a RelationConcept (called automatically by 'SCSSub' program)
-tmodel :: HasSymbolTable ctx => Fields -> ctx -> TheoryModel -> Contents
-tmodel fs m t = Defnt TM (foldr (mkTMField t m) [] fs) (refAdd t)
+tmodel :: HasSymbolTable ctx => Fields -> ctx -> TheoryModel -> LabelledContent
+tmodel fs m t = llcc (t ^. uid) (t ^. getLabel) $ Defnt TM (foldr (mkTMField t m) [] fs) (refAdd t)
 
 -- | Create a data definition using a list of fields, a database of symbols, and a
 -- QDefinition (called automatically by 'SCSSub' program)

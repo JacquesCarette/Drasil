@@ -200,7 +200,7 @@ data SCSSub where
   IMs            :: Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
   Constraints    :: Sentence -> Sentence -> Sentence -> [LabelledContent] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
 --FIXME: Work in Progress ^
-  CorrSolnPpties :: [Contents] -> SCSSub
+  CorrSolnPpties :: [LabelledContent] -> SCSSub
 data DerivationDisplay = ShowDerivation
                        | HideDerivation
 {--}

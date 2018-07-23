@@ -1344,7 +1344,7 @@ k
 <span class="fdn">
 (a&#8239;b)<sup>m&minus;1</sup>
 </span>
-</div>&#8239;(1000&#8239;E&#8239;h<sup>2</sup>)<sup>m</sup>&#8239;LDF&#8239;e<sup>J</sup></em>
+</div>&#8239;(E&#8239;h<sup>2</sup>)<sup>m</sup>&#8239;LDF&#8239;e<sup>J</sup></em>
 </div>
 </div>
 </td>
@@ -1410,7 +1410,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+[4] [5, Eq. 14]
 </p>
 </td>
 </tr>
@@ -1572,7 +1572,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -1670,7 +1670,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -1773,7 +1773,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -1889,7 +1889,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -1989,7 +1989,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -2103,6 +2103,9 @@ Notes
 <p class="paragraph">
 <em>GTF</em> is the glass type factor, as given by DD6.
 </p>
+<p class="paragraph">
+<em>q&#770;</em> is calculated with reference to <a href=#A:glassLiteA>glassLite</a>.
+</p>
 </td>
 </tr>
 <tr>
@@ -2111,7 +2114,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+[5, Eq. 7]
 </p>
 </td>
 </tr>
@@ -2218,7 +2221,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -2356,7 +2359,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -2443,7 +2446,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -2544,7 +2547,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -2996,40 +2999,6 @@ AR<sub>max</sub>
 </tr>
 <tr>
 <td>
-<em>SD</em>
-</td>
-<td>
-<em>SD&thinsp;&gt;&thinsp;0</em>
-</td>
-<td>
-<em>SD<sub>min</sub>&thinsp;&lt;&thinsp;SD&thinsp;&lt;&thinsp;SD<sub>max</sub></em>
-</td>
-<td>
-<em>45.0</em> m
-</td>
-<td>
-10.0%
-</td>
-</tr>
-<tr>
-<td>
-<em>w</em>
-</td>
-<td>
-<em>w&thinsp;&gt;&thinsp;0</em>
-</td>
-<td>
-<em>w<sub>min</sub>&thinsp;&le;&thinsp;w&thinsp;&le;&thinsp;w<sub>max</sub></em>
-</td>
-<td>
-<em>42.0</em> kg
-</td>
-<td>
-10.0%
-</td>
-</tr>
-<tr>
-<td>
 <em>P<sub>btol</sub></em>
 </td>
 <td>
@@ -3047,6 +3016,23 @@ AR<sub>max</sub>
 </tr>
 <tr>
 <td>
+<em>SD</em>
+</td>
+<td>
+<em>SD&thinsp;&gt;&thinsp;0</em>
+</td>
+<td>
+<em>SD<sub>min</sub>&thinsp;&lt;&thinsp;SD&thinsp;&lt;&thinsp;SD<sub>max</sub></em>
+</td>
+<td>
+<em>45.0</em> m
+</td>
+<td>
+10.0%
+</td>
+</tr>
+<tr>
+<td>
 <em>TNT</em>
 </td>
 <td>
@@ -3057,6 +3043,23 @@ AR<sub>max</sub>
 </td>
 <td>
 <em>1.0</em>
+</td>
+<td>
+10.0%
+</td>
+</tr>
+<tr>
+<td>
+<em>w</em>
+</td>
+<td>
+<em>w&thinsp;&gt;&thinsp;0</em>
+</td>
+<td>
+<em>w<sub>min</sub>&thinsp;&le;&thinsp;w&thinsp;&le;&thinsp;w<sub>max</sub></em>
+</td>
+<td>
+<em>42.0</em> kg
 </td>
 <td>
 10.0%
@@ -5269,69 +5272,13 @@ Unit
 </tr>
 <tr>
 <td>
-<em>m</em>
+<em>AR<sub>max</sub></em>
 </td>
 <td>
-surface flaw parameter
+maximum aspect ratio
 </td>
 <td>
-<em>7</em>
-</td>
-<td>
-m<sup>12</sup>/N<sup>7</sup>
-</td>
-</tr>
-<tr>
-<td>
-<em>k</em>
-</td>
-<td>
-surface flaw parameter
-</td>
-<td>
-<em>2.86&#8239;10<sup>&minus;53</sup></em>
-</td>
-<td>
-m<sup>12</sup>/N<sup>7</sup>
-</td>
-</tr>
-<tr>
-<td>
-<em>E</em>
-</td>
-<td>
-modulus of elasticity of glass
-</td>
-<td>
-<em>7.17&#8239;10<sup>7</sup></em>
-</td>
-<td>
-Pa
-</td>
-</tr>
-<tr>
-<td>
-<em>t<sub>d</sub></em>
-</td>
-<td>
-duration of load
-</td>
-<td>
-<em>3</em>
-</td>
-<td>
-s
-</td>
-</tr>
-<tr>
-<td>
-<em>LSF</em>
-</td>
-<td>
-load share factor
-</td>
-<td>
-<em>1</em>
+<em>5.0</em>
 </td>
 <td>
 --
@@ -5367,13 +5314,41 @@ mm
 </tr>
 <tr>
 <td>
-<em>AR<sub>max</sub></em>
+<em>E</em>
 </td>
 <td>
-maximum aspect ratio
+modulus of elasticity of glass
 </td>
 <td>
-<em>5.0</em>
+<em>7.17&#8239;10<sup>7</sup></em>
+</td>
+<td>
+Pa
+</td>
+</tr>
+<tr>
+<td>
+<em>k</em>
+</td>
+<td>
+surface flaw parameter
+</td>
+<td>
+<em>2.86&#8239;10<sup>&minus;53</sup></em>
+</td>
+<td>
+m<sup>12</sup>/N<sup>7</sup>
+</td>
+</tr>
+<tr>
+<td>
+<em>LSF</em>
+</td>
+<td>
+load share factor
+</td>
+<td>
+<em>1</em>
 </td>
 <td>
 --
@@ -5381,30 +5356,16 @@ maximum aspect ratio
 </tr>
 <tr>
 <td>
-<em>w<sub>max</sub></em>
+<em>m</em>
 </td>
 <td>
-maximum permissible input charge weight
+surface flaw parameter
 </td>
 <td>
-<em>910.0</em>
+<em>7</em>
 </td>
 <td>
-kg
-</td>
-</tr>
-<tr>
-<td>
-<em>w<sub>min</sub></em>
-</td>
-<td>
-minimum permissible input charge weight
-</td>
-<td>
-<em>4.5</em>
-</td>
-<td>
-kg
+m<sup>12</sup>/N<sup>7</sup>
 </td>
 </tr>
 <tr>
@@ -5433,6 +5394,48 @@ minimum stand off distance permissible for input
 </td>
 <td>
 m
+</td>
+</tr>
+<tr>
+<td>
+<em>t<sub>d</sub></em>
+</td>
+<td>
+duration of load
+</td>
+<td>
+<em>3</em>
+</td>
+<td>
+s
+</td>
+</tr>
+<tr>
+<td>
+<em>w<sub>max</sub></em>
+</td>
+<td>
+maximum permissible input charge weight
+</td>
+<td>
+<em>910.0</em>
+</td>
+<td>
+kg
+</td>
+</tr>
+<tr>
+<td>
+<em>w<sub>min</sub></em>
+</td>
+<td>
+minimum permissible input charge weight
+</td>
+<td>
+<em>4.5</em>
+</td>
+<td>
+kg
 </td>
 </tr>
 </table>
@@ -5469,23 +5472,28 @@ References
 </div>
 </li>
 <li>
+<div id="campidelli">
+[5]: Campidelli, Manuel. "Glass-BR Software for the design and risk assessment of glass facades subjected to blast loading."
+</div>
+</li>
+<li>
 <div id="koothoor2013">
-[5]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
+[6]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
 </div>
 </li>
 <li>
 <div id="parnasClements1986">
-[6]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
+[7]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
 </div>
 </li>
 <li>
 <div id="rbrtsn2012">
-[7]: Robertson, James and Robertson, Suzanne. <em>Volere requirements specification template edition 16</em>. 2012. https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e09880561dbe22.pdf.
+[8]: Robertson, James and Robertson, Suzanne. <em>Volere requirements specification template edition 16</em>. 2012. https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e09880561dbe22.pdf.
 </div>
 </li>
 <li>
 <div id="smithLai2005">
-[8]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+[9]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
 </div>
 </li>
 </ul>

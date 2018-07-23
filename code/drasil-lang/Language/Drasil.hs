@@ -137,7 +137,7 @@ module Language.Drasil (
   , Referable(..), Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListPair
   , LabelledContent, llcc
-  , mkParagraph
+  , mkParagraph, llccNoLabel
   , section, fig, figWithWidth, section'', sectionLC, accessContents
   , datadefn, reldefn, MaxWidthPercent
   -- Reference
@@ -247,7 +247,7 @@ import Language.Drasil.Document (Document(..), DType(..)
   , datadefn, reldefn, sectionLC, accessContents
   , ListPair, MaxWidthPercent
   , LabelledContent, llcc
-  , mkParagraph)
+  , mkParagraph, llccNoLabel)
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Development.UnitLang -- all of it
 import Language.Drasil.Development.Unit -- all of it

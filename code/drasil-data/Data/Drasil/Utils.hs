@@ -21,7 +21,7 @@ module Data.Drasil.Utils
   , unwrap
   , fterms
   , prodUCTbl
-  , eqUnR
+  , eqUnR, eqUnR'
   ) where
 
 import Data.List (transpose)
@@ -39,6 +39,9 @@ import Data.Drasil.Concepts.Math (unit_)
 eqUnR :: Expr -> Contents -- FIXME: Unreferable equations
 eqUnR e = EqnBlock e ""
   
+eqUnR' :: String -> Label -> Expr -> LabelledContent -- FIXME: Actually use this in implementation
+eqUnR' lcUID eqnLabel e = llcc lcUID eqnLabel $ EqnBlock e ""
+
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
 foldle :: (a -> a -> a) -> (a -> a -> a) -> a -> [a] -> a

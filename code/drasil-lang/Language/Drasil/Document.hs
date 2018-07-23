@@ -142,8 +142,12 @@ instance HasShortName  Contents where
 -- smart constructors needed for LabelledContent
 -- nothing has a shortname right now
 
-mkParagraph :: String -> Contents -> LabelledContent
-mkParagraph lcUID c = LblC lcUID Nothing c 
+--FIXME: design needed or new constructor needed wherever used?
+llccNoLabel :: Contents -> LabelledContent
+llccNoLabel x = LblC "" Nothing x
+
+mkParagraph :: Sentence -> LabelledContent
+mkParagraph c = LblC "" Nothing $ Paragraph c 
 
 {-mkTableLC :: String -> String -> String -> String -> Contents -> LabelledContent
 mkTableLC uidForContent labelUID refAdd sn' tbl = llcc uidForContent 

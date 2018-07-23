@@ -13,7 +13,7 @@ module Drasil.DocumentLanguage.Definitions
   )where
 
 import Language.Drasil
-import Data.Drasil.Utils (eqUnR)
+import Data.Drasil.Utils (eqUnR, eqUnR')
 
 import Control.Lens ((^.))
 
@@ -89,7 +89,7 @@ makeDerivationContents' (E e) = llcc "" (mkLabelRA'' "") $ EqnBlock e "" --FIXME
 makeDerivationContents' s     = mkParagraph "" $ Paragraph s
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
-type ModRow = [(String, [Contents])]
+type ModRow = [(String, [LabelledContent])]
 
 -- | Create the fields for a model from a relation concept (used by tmodel)
 mkTMField :: HasSymbolTable ctx => TheoryModel -> ctx -> Field -> ModRow -> ModRow
@@ -142,11 +142,11 @@ mkDDField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a model / general definition
-buildDescription :: HasSymbolTable ctx => Verbosity -> InclUnits -> Expr -> ctx -> [Contents] ->
-  [Contents]
+buildDescription :: HasSymbolTable ctx => Verbosity -> InclUnits -> Expr -> ctx -> [LabelledContent] 
+  -> [LabelledContent]
 buildDescription Succinct _ _ _ _ = []
-buildDescription Verbose u e m cs =
-  Enumeration (Definitions (descPairs u (vars e m))) : cs
+buildDescription Verbose u e m cs = llccNoLabel $ Enumeration (
+  Definitions (descPairs u (vars e m))) : cs
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a data definition
@@ -181,26 +181,26 @@ mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 
 -- | Create the fields for an instance model from an 'InstanceModel' chunk
 mkIMField :: HasSymbolTable ctx => InstanceModel -> ctx -> Field -> ModRow -> ModRow
-mkIMField i _ l@Label fs  = (show l, (Paragraph $ at_start i):[]) : fs
+mkIMField i _ l@Label fs  = (show l, (mkParagraph $ at_start i):[]) : fs
 mkIMField i _ l@DefiningEquation fs =
-  (show l, (eqUnR (i ^. relat)):[]) : fs
+  (show l, (eqUnR' (i ^. uid) (mkLabelRA'' $ (i ^. uid)++"eqn") (i ^. relat)):[]) : fs
 mkIMField i m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] [i ^. relat]) : fs
-mkIMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
-mkIMField _ _ l@(Source) fs = (show l, fixme) : fs --FIXME: fill this in
-mkIMField i _ l@(Output) fs = (show l, [Paragraph x]) : fs
+mkIMField _ _ l@(RefBy) fs = (show l, fixme) : fs   --FIXME: fill this in
+mkIMField _ _ l@(Source) fs = (show l, fixme) : fs  --FIXME: fill this in
+mkIMField i _ l@(Output) fs = (show l, [mkParagraph x]) : fs
   where x = P . eqSymb $ i ^. imOutput
 mkIMField i _ l@(Input) fs = 
   case (i ^. imInputs) of
-  [] -> (show l, [Paragraph EmptyS]) : fs -- FIXME? Should an empty input list be allowed?
-  (_:_) -> (show l, [Paragraph $ foldl (sC) x xs]) : fs
+  [] -> (show l, [mkParagraph EmptyS]) : fs -- FIXME: Should an empty input list be allowed?
+  (_:_) -> (show l, [mkParagraph $ foldl (sC) x xs]) : fs
   where (x:xs) = map (P . eqSymb) (i ^. imInputs)
 mkIMField i _ l@(InConstraints) fs  = (show l,
-  foldr ((:) . eqUnR) [] (map tConToExpr (i ^. inCons))) : fs
-mkIMField i _ l@(OutConstraints) fs = (show l,
-  foldr ((:) . eqUnR) [] (map tConToExpr (i ^. outCons))) : fs
+  foldr ((:) . llccNoLabel . eqUnR) [] (map tConToExpr (i ^. inCons))) : fs
+mkIMField i _ l@(OutConstraints) fs = (show l, 
+  foldr ((:) . llccNoLabel . eqUnR) [] (map tConToExpr (i ^. outCons))) : fs
 mkIMField i _ l@(Notes) fs = 
-  maybe fs (\ss -> (show l, map Paragraph ss) : fs) (i ^. getNotes)
+  maybe fs (\ss -> (show l, map mkParagraph ss) : fs) (i ^. getNotes)
 mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for instance models"
 
@@ -238,6 +238,6 @@ instance Show Field where
   show (Description _ _) = "Description"
   show Notes             = "Notes"
 
-fixme :: [Contents]
-fixme = [Paragraph $ S "FIXME: This needs to be filled in"]
+fixme :: [LabelledContent]
+fixme = [mkParagraph $ S "FIXME: This needs to be filled in"]
 

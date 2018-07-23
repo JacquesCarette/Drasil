@@ -241,4 +241,4 @@ jtolRelToPbtol :: Sentence
 jtolRelToPbtol = (ch sdf_tol +:+ S " is calculated with reference to " +:+. ch pb_tol)
 
 a5Ref :: Sentence 
-a5Ref = (ch dimlessLoad +:+ S "is calculated with reference to " :+: (refA gbRefDB newA5))
+a5Ref = (ch dimlessLoad +:+ S "is calculated with reference to" +:+. (refA gbRefDB newA5))

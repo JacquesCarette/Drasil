@@ -17,7 +17,8 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
 import Data.Drasil.Concepts.Documentation (analysis, 
   design, document, effect, element, endUser, goalStmt, inModel, input_, 
   interest, interest, issue, loss, method_, organization, physics, 
-  problem, property, requirement, srs, table_, template, value, variable)
+  problem, property, requirement, srs, table_, template, user, value,
+  variable)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
@@ -33,13 +34,13 @@ import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent, 
   foldlSent_, ofThe, sAnd, sOr)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
-import Data.Drasil.Utils (enumBullet, enumSimple)
+import Data.Drasil.Utils (enumBullet, enumSimple, bulletNested, bulletFlat)
 import Drasil.SSP.Assumptions (sspRefDB)
 import Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.SSP.DataDefs (sspDataDefs)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty, 
-  morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil, soilLyr, ssa)
+  morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil, soilLyr, ssa, ssp)
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods_new)
@@ -49,7 +50,7 @@ import Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
   sspOutputs, sspSymbols)
 
-import qualified Drasil.DocLang.SRS as SRS (funcReq, inModel, missingP, physSyst)
+import qualified Drasil.DocLang.SRS as SRS (funcReq, assumpt, inModel, missingP, physSyst)
 
 --type declarations for sections--
 req, aux_cons :: Section
@@ -89,7 +90,7 @@ resourcePath :: String
 resourcePath = "../../../datafiles/SSP/"
 
 ssp_srs :: Document
-ssp_srs = mkDoc mkSRS (for) ssp_si
+ssp_srs = mkDoc mkSRS for ssp_si
   
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
@@ -102,7 +103,7 @@ mkSRS = RefSec (RefProg intro
       EmptyS
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
     --FIXME: issue #235
-    (GSDSec $ GSDProg2 [SysCntxt [], UsrChars [userCharIntro]]):
+    (GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, sysCtxFig1, sysCtxDesc, sysCtxList], UsrChars [userCharIntro]]):
     SSDSec 
       (SSDProg [SSDSubVerb problem_desc
         , SSDSolChSpec 
@@ -110,9 +111,7 @@ mkSRS = RefSec (RefProg intro
             [Assumptions 
             ,TMs ([Label] ++ stdFields) [fs_rc_new, equilibrium_new, mcShrStrgth_new,
              effStress_new, hookesLaw_new]
-            , GDs [Label, Units, DefiningEquation   ---check glassbr
-            , Description Verbose IncludeUnits, Notes
-            , Source, RefBy] generalDefinitions ShowDerivation
+            , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
             , DDs ([Label, Symbol, Units] ++ stdFields) sspDataDefs ShowDerivation
             , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
              sspIMods_new ShowDerivation
@@ -230,9 +229,49 @@ orgSecEnd   = S "The" +:+ plural inModel +:+ S "provide the set of" +:+
 
 -- SECTION 3 --
 -- SECTION 3.1 --
--- System Context automatically generated (need to fill in)
+-- System Context automatically generated
+sysCtxIntro :: Contents
+sysCtxIntro = foldlSP
+  [makeRef sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
+   S "A circle represents an external entity outside the" +:+ phrase software
+   `sC` S "the", phrase user, S "in this case. A rectangle represents the",
+   phrase softwareSys, S "itself" +:+. (sParen $ short ssp),
+   S "Arrows are used to show the data flow between the" +:+ phrase system,
+   S "and its" +:+ phrase environment]
+   
+sysCtxFig1 :: Contents
+sysCtxFig1 = fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png") "sysCtxDiag"
 
+sysCtxDesc :: Contents
+sysCtxDesc = foldlSPCol
+  [S "The interaction between the", phrase product_, S "and the", phrase user,
+   S "is through a user" +:+. phrase interface,
+   S "The responsibilities of the", phrase user, S "and the", phrase system,
+   S "are as follows"]
+   
+sysCtxUsrResp :: [Sentence]
+sysCtxUsrResp = [S "Provide the input data related to the soil layer(s) and water" +:+
+  S "table (if applicable), ensuring no errors in the data entry",
+  S "Ensure that consistent units are used for input variables",
+  S "Ensure required" +:+ phrase software +:+ plural assumption +:+
+  makeRef (SRS.assumpt SRS.missingP []) +:+ S "are appropriate for any particular" +:+
+  phrase problem +:+ S "input to the" +:+ phrase software]
+  
+sysCtxSysResp :: [Sentence]
+sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +:+ 
+  S " input instead of a floating point number",
+  S "Determine if the inputs satisfy the required physical and software constraints",
+  S "Identify the most likely failure surface within the possible input range",
+  S "Find the factor of safety for the slope",
+  S "Fint the displacement of soil that will occur on the slope"]
+  
+sysCtxResp :: [Sentence]
+sysCtxResp = [titleize user +:+ S "Responsibilities",
+  short ssp +:+ S "Responsibilities"]
 
+sysCtxList :: Contents
+sysCtxList = Enumeration $ bulletNested sysCtxResp $
+  map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
 
 -- SECTION 3.2 --
 -- User Characteristics automatically generated with the

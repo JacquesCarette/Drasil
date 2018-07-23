@@ -114,7 +114,7 @@ instance HasLabel      Section where getLabel = lb
 instance HasShortName  Section where shortname = lb . shortname
 
 accessContents :: LabelledContent -> Contents
-accessContents (LblC _ _ x) = x
+accessContents = ctype
 
 -- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and Sections
 -- which hold the contents of the document

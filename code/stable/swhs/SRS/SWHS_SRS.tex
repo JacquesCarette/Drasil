@@ -608,7 +608,7 @@ Description & \begin{symbDescription}
               \item{$t$ is the time (s)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -638,7 +638,7 @@ Description & \begin{symbDescription}
               \item{${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -666,7 +666,7 @@ Description & \begin{symbDescription}
               \item{$m$ is the mass (kg)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -695,7 +695,7 @@ Description & \begin{symbDescription}
               \item{${m_{P}}$ is the mass of phase change material (kg)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -939,39 +939,39 @@ Table~\ref{Table:InDataConstraints} and Table~\ref{Table:OutDataConstraints} sho
 Var & Physical Constraints & Software Constraints & Typical Value & Uncert.
 \\
 \midrule
-$L$ & $L>0$ & ${L_{min}}\leq{}L\leq{}{L_{max}}$ & $1.5$ m & 10.0\%
-\\
-$D$ & $D>0$ & -- & $0.412$ m & 10.0\%
-\\
-${V_{P}}$ & $0<{V_{P}}<{V_{tank}}$ & -- & $0.05$ $\text{m}^{3}$ & 10.0\%
+${A_{C}}$ & ${A_{C}}>0$ & ${A_{C}}\leq{}{{A_{C}}^{max}}$ & $0.12$ $\text{m}^{2}$ & 10.0\%
 \\
 ${A_{P}}$ & ${A_{P}}>0$ & ${V_{P}}\leq{}{A_{P}}\leq{}\frac{2}{{h_{min}}} {V_{tank}}$ & $1.2$ $\text{m}^{2}$ & 10.0\%
 \\
-${ρ_{P}}$ & ${{ρ_{P}}^{min}}<{ρ_{P}}<{{ρ_{P}}^{max}}$ & -- & $1007.0$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10.0\%
-\\
-${{T_{melt}}^{P}}$ & $0<{{T_{melt}}^{P}}<{T_{C}}$ & -- & $44.2$ ${}^{\circ}$C & 10.0\%
+${{C_{P}}^{L}}$ & ${{C_{P}}^{L}}>0$ & ${{{C_{P}}^{L}}_{min}}<{{C_{P}}^{L}}<{{{C_{P}}^{L}}_{max}}$ & $2270.0$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10.0\%
 \\
 ${{C_{P}}^{S}}$ & ${{C_{P}}^{S}}>0$ & ${{{C_{P}}^{S}}_{min}}<{{C_{P}}^{S}}<{{{C_{P}}^{S}}_{max}}$ & $1760.0$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10.0\%
 \\
-${{C_{P}}^{L}}$ & ${{C_{P}}^{L}}>0$ & ${{{C_{P}}^{L}}_{min}}<{{C_{P}}^{L}}<{{{C_{P}}^{L}}_{max}}$ & $2270.0$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10.0\%
-\\
-${H_{f}}$ & ${H_{f}}>0$ & ${{H_{f}}_{min}}<{H_{f}}<{{H_{f}}_{max}}$ & $211600.0$ $\frac{\text{J}}{\text{kg}}$ & 10.0\%
-\\
-${A_{C}}$ & ${A_{C}}>0$ & ${A_{C}}\leq{}{{A_{C}}^{max}}$ & $0.12$ $\text{m}^{2}$ & 10.0\%
-\\
-${T_{C}}$ & $0<{T_{C}}<100$ & -- & $50.0$ ${}^{\circ}$C & 10.0\%
-\\
-${ρ_{W}}$ & ${ρ_{W}}>0$ & ${{ρ_{W}}^{min}}<{ρ_{W}}\leq{}{{ρ_{W}}^{max}}$ & $1000.0$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10.0\%
-\\
 ${C_{W}}$ & ${C_{W}}>0$ & ${{C_{W}}^{min}}<{C_{W}}<{{C_{W}}^{max}}$ & $4186.0$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10.0\%
+\\
+$D$ & $D>0$ & -- & $0.412$ m & 10.0\%
 \\
 ${h_{C}}$ & ${h_{C}}>0$ & ${{h_{C}}^{min}}\leq{}{h_{C}}\leq{}{{h_{C}}^{max}}$ & $1000.0$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$ & 10.0\%
 \\
+${H_{f}}$ & ${H_{f}}>0$ & ${{H_{f}}_{min}}<{H_{f}}<{{H_{f}}_{max}}$ & $211600.0$ $\frac{\text{J}}{\text{kg}}$ & 10.0\%
+\\
 ${h_{P}}$ & ${h_{P}}>0$ & ${{h_{P}}^{min}}\leq{}{h_{P}}\leq{}{{h_{P}}^{max}}$ & $1000.0$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$ & 10.0\%
+\\
+$L$ & $L>0$ & ${L_{min}}\leq{}L\leq{}{L_{max}}$ & $1.5$ m & 10.0\%
+\\
+${{T_{melt}}^{P}}$ & $0<{{T_{melt}}^{P}}<{T_{C}}$ & -- & $44.2$ ${}^{\circ}$C & 10.0\%
+\\
+${T_{C}}$ & $0<{T_{C}}<100$ & -- & $50.0$ ${}^{\circ}$C & 10.0\%
+\\
+${t_{final}}$ & ${t_{final}}>0$ & ${t_{final}}<{{t_{final}}^{max}}$ & $50000.0$ s & 10.0\%
 \\
 ${T_{init}}$ & $0<{T_{init}}<{T_{melt}}$ & -- & $40.0$ ${}^{\circ}$C & 10.0\%
 \\
-${t_{final}}$ & ${t_{final}}>0$ & ${t_{final}}<{{t_{final}}^{max}}$ & $50000.0$ s & 10.0\%
+${V_{P}}$ & $0<{V_{P}}<{V_{tank}}$ & -- & $0.05$ $\text{m}^{3}$ & 10.0\%
+\\
+${ρ_{P}}$ & ${{ρ_{P}}^{min}}<{ρ_{P}}<{{ρ_{P}}^{max}}$ & -- & $1007.0$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10.0\%
+\\
+${ρ_{W}}$ & ${ρ_{W}}>0$ & ${{ρ_{W}}^{min}}<{ρ_{W}}\leq{}{{ρ_{W}}^{max}}$ & $1000.0$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10.0\%
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -1270,39 +1270,39 @@ This section contains the standard values that are used for calculations in SWHS
 Symbol & Description & Value & Unit
 \\
 \midrule
-${L_{min}}$ & minimum length of tank & $0.1$ & m
-\\
-${L_{max}}$ & maximum length of tank & $50$ & m
-\\
-${{ρ_{P}}^{min}}$ & minimum density of PCM & $500$ & $\frac{\text{kg}}{\text{m}^{3}}$
-\\
-${{ρ_{P}}^{max}}$ & maximum density of PCM & $20000$ & $\frac{\text{kg}}{\text{m}^{3}}$
-\\
-${{ρ_{W}}^{min}}$ & minimum density of water & $950$ & $\frac{\text{kg}}{\text{m}^{3}}$
-\\
-${{ρ_{W}}^{max}}$ & maximum density of water & $1000$ & $\frac{\text{kg}}{\text{m}^{3}}$
-\\
-${{{C_{P}}^{S}}_{min}}$ & minimum specific heat capacity of PCM as a solid & $100$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
-\\
-${{{C_{P}}^{S}}_{max}}$ & maximum specific heat capacity of PCM as a solid & $4000$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
+${{{C_{P}}^{L}}_{max}}$ & maximum specific heat capacity of PCM as a liquid & $5000$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
 ${{{C_{P}}^{L}}_{min}}$ & minimum specific heat capacity of PCM as a liquid & $100$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
-${{{C_{P}}^{L}}_{max}}$ & maximum specific heat capacity of PCM as a liquid & $5000$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
+${{{C_{P}}^{S}}_{max}}$ & maximum specific heat capacity of PCM as a solid & $4000$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
-${{C_{W}}^{min}}$ & minimum specific heat capacity of water & $4170$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
+${{{C_{P}}^{S}}_{min}}$ & minimum specific heat capacity of PCM as a solid & $100$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
 ${{C_{W}}^{max}}$ & maximum specific heat capacity of water & $4210$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
-${{h_{C}}^{min}}$ & minimum convective heat transfer coefficient between coil and water & $10$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
+${{C_{W}}^{min}}$ & minimum specific heat capacity of water & $4170$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
 ${{h_{C}}^{max}}$ & maximum convective heat transfer coefficient between coil and water & $10000$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\
-${{h_{P}}^{min}}$ & minimum convective heat transfer coefficient between PCM and water & $10$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
+${{h_{C}}^{min}}$ & minimum convective heat transfer coefficient between coil and water & $10$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\
 ${{h_{P}}^{max}}$ & maximum convective heat transfer coefficient between PCM and water & $10000$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\
+${{h_{P}}^{min}}$ & minimum convective heat transfer coefficient between PCM and water & $10$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
+\\
+${L_{max}}$ & maximum length of tank & $50$ & m
+\\
+${L_{min}}$ & minimum length of tank & $0.1$ & m
+\\
 ${{t_{final}}^{max}}$ & maximum final time & $86400$ & s
+\\
+${{ρ_{P}}^{max}}$ & maximum density of PCM & $20000$ & $\frac{\text{kg}}{\text{m}^{3}}$
+\\
+${{ρ_{P}}^{min}}$ & minimum density of PCM & $500$ & $\frac{\text{kg}}{\text{m}^{3}}$
+\\
+${{ρ_{W}}^{max}}$ & maximum density of water & $1000$ & $\frac{\text{kg}}{\text{m}^{3}}$
+\\
+${{ρ_{W}}^{min}}$ & minimum density of water & $950$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 \bottomrule
 \caption{Auxiliary Constants}

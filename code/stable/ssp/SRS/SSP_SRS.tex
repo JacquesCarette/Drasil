@@ -289,6 +289,33 @@ The goal statements are refined to the theoretical models, and the theoretical m
 \section{General System Description}
 \label{Sec:GenSysDesc}
 This section provides general information about the system including identifying the interfaces between the system and its environment (system context), describing the user characteristics and listing the system constraints.
+\subsection{System Context}
+\label{Sec:SysContext}
+Figure~\ref{Figure:sysCtxDiag} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SSP). Arrows are used to show the data flow between the system and its environment.
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{../../../datafiles/SSP/SystemContextFigure.png}
+\caption{System Context}
+\label{Figure:sysCtxDiag}
+\end{center}
+\end{figure}
+The interaction between the product and the user is through a user interface. The responsibilities of the user and the system are as follows:
+\begin{itemize}
+\item{User Responsibilities}
+\begin{itemize}
+\item{Provide the input data related to the soil layer(s) and water table (if applicable), ensuring no errors in the data entry}
+\item{Ensure that consistent units are used for input variables}
+\item{Ensure required software assumptions (Section~\ref{Sec:Assumps}) are appropriate for any particular problem input to the software}
+\end{itemize}
+\item{SSP Responsibilities}
+\begin{itemize}
+\item{Detect data type mismatch, such as a string of characters  input instead of a floating point number}
+\item{Determine if the inputs satisfy the required physical and software constraints}
+\item{Identify the most likely failure surface within the possible input range}
+\item{Find the factor of safety for the slope}
+\item{Find the displacement of soil that will occur on the slope}
+\end{itemize}
+\end{itemize}
 \subsection{User Characteristics}
 \label{Sec:UserChars}
 The end user of SSA should have an understanding of undergraduate Level 1 Calculus and Physics, and be familiar with soil and material properties.
@@ -893,7 +920,7 @@ Description & \begin{symbDescription}
               \item{$γ$ is the dry unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -927,7 +954,7 @@ Description & \begin{symbDescription}
               \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -961,7 +988,7 @@ Description & \begin{symbDescription}
               \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -996,7 +1023,7 @@ Description & \begin{symbDescription}
               \item{${y_{wt}}$ is the y ordinate (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1025,7 +1052,7 @@ Description & \begin{symbDescription}
               \item{${x_{slip}}$ is the x ordinate (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1054,7 +1081,7 @@ Description & \begin{symbDescription}
               \item{${x_{us}}$ is the x ordinate (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1082,7 +1109,7 @@ Description & \begin{symbDescription}
               \item{$i$ is the index (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1111,7 +1138,7 @@ Description & \begin{symbDescription}
               \item{$α$ is the angle (${}^{\circ}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1140,7 +1167,7 @@ Description & \begin{symbDescription}
               \item{$β$ is the angle (${}^{\circ}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source &
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1169,7 +1196,7 @@ Description & \begin{symbDescription}
               \item{$i$ is the index (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1198,7 +1225,7 @@ Description & \begin{symbDescription}
               \item{$ω$ is the angle (${}^{\circ}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1228,7 +1255,7 @@ Description & \begin{symbDescription}
               \item{$G$ is the interslice normal force (N)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1267,7 +1294,7 @@ Description & \begin{symbDescription}
               \item{$b$ is the base width of a slice (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1314,7 +1341,7 @@ Description & \begin{symbDescription}
               \item{$ΔH$ is the difference between interslice forces (N)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1360,7 +1387,7 @@ Description & \begin{symbDescription}
               \item{$δy$ is the displacement (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1397,7 +1424,7 @@ Description & \begin{symbDescription}
               \item{$δy$ is the displacement (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1486,7 +1513,7 @@ Description & \begin{symbDescription}
               \item{${K_{bn}}$ is the normal stiffness ($\frac{\text{Pa}}{\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1521,7 +1548,7 @@ Description & \begin{symbDescription}
               \item{$a$ is the constant (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1556,7 +1583,7 @@ Description & \begin{symbDescription}
               \item{$A$ is the constant (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1584,7 +1611,7 @@ Description & \begin{symbDescription}
               \item{$i$ is the index (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1612,7 +1639,7 @@ Description & \begin{symbDescription}
               \item{$i$ is the index (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1970,13 +1997,13 @@ Table~\ref{Table:InDataConstraints} and Table~\ref{Table:OutDataConstraints} sho
 Var & Physical Constraints & Typical Value & Uncert.
 \\
 \midrule
-$E$ & $E>0$ & $15000.0$ Pa & 10.0\%
+$a$ & -- & $0.0$ m & 10.0\%
+\\
+$A$ & -- & $0.0$ m & 10.0\%
 \\
 $c'$ & $c'>0$ & $10.0$ Pa & 10.0\%
 \\
-$ν$ & $0<ν<1$ & $0.4$ & 10.0\%
-\\
-$φ'$ & $0<φ'<90$ & $25.0$ ${}^{\circ}$ & 10.0\%
+$E$ & $E>0$ & $15000.0$ Pa & 10.0\%
 \\
 $γ$ & $γ>0$ & $20.0$ $\frac{\text{N}}{\text{m}^{3}}$ & 10.0\%
 \\
@@ -1984,11 +2011,11 @@ ${γ_{Sat}}$ & ${γ_{Sat}}>0$ & $20.0$ $\frac{\text{N}}{\text{m}^{3}}$ & 10.0\%
 \\
 ${γ_{w}}$ & ${γ_{w}}>0$ & $9.8$ $\frac{\text{N}}{\text{m}^{3}}$ & 10.0\%
 \\
-$a$ & -- & $0.0$ m & 10.0\%
-\\
-$A$ & -- & $0.0$ m & 10.0\%
-\\
 $κ$ & -- & $0.0$ Pa & 10.0\%
+\\
+$ν$ & $0<ν<1$ & $0.4$ & 10.0\%
+\\
+$φ'$ & $0<φ'<90$ & $25.0$ ${}^{\circ}$ & 10.0\%
 \\
 \bottomrule
 \caption{Input Data Constraints}

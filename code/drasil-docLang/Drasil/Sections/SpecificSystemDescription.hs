@@ -27,6 +27,8 @@ import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle, fmtU, getRVal)
 import Data.Drasil.SentenceStructures (fmtPhys, fmtSfwr, mkTableFromColumns, foldlSent, 
   foldlSP, typUncr, ofThe, foldlList)
+import Data.List (sortBy)
+
 import qualified Drasil.DocLang.SRS as SRS
 
 
@@ -208,11 +210,11 @@ dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase colum
 inDataConstTbl :: (UncertainQuantity c, Constrained c, HasReasVal c) => [c] -> Contents
 inDataConstTbl qlst = Table titl cts (S "Input Data Constraints") True "InDataConstraints"
   where
-   columns = [(S "Var", map ch qlst),
-            (titleize' physicalConstraint, map fmtPhys qlst),
-            (titleize' softwareConstraint, map fmtSfwr qlst),
-            (S "Typical Value", map (\q -> fmtU (E $ getRVal q) q) qlst),
-            (short typUnc, map typUncr qlst)]
+   columns = [(S "Var", map ch $ sortBySymbol qlst),
+            (titleize' physicalConstraint, map fmtPhys $ sortBySymbol qlst),
+            (titleize' softwareConstraint, map fmtSfwr $ sortBySymbol qlst),
+            (S "Typical Value", map (\q -> fmtU (E $ getRVal q) q) $ sortBySymbol qlst),
+            (short typUnc, map typUncr $ sortBySymbol qlst)] 
    tbl = mkTableFromColumns columns
    titl = fst tbl
    cts = snd tbl

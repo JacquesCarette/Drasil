@@ -159,7 +159,7 @@ data GSDSec = GSDVerb Section
 
 data GSDSub where
   GSDSubVerb :: Section -> GSDSub
-  SysCntxt   :: [Contents] -> GSDSub
+  SysCntxt   :: [Contents] -> GSDSub --FIXME: partially automate
   UsrChars   :: [Contents] -> GSDSub
   SystCons   :: [Contents] -> [Section] -> GSDSub
 

@@ -1211,6 +1211,61 @@ General System Description
 <p class="paragraph">
 This section provides general information about the system including identifying the interfaces between the system and its environment (system context), describing the user characteristics and listing the system constraints.
 </p>
+<div id="Sec:SysContext">
+<div class="subsection">
+<h2>
+System Context
+</h2>
+<p class="paragraph">
+<a href=#Figure:sysCtxDiag>Figure:sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SSP). Arrows are used to show the data flow between the system and its environment.
+</p>
+<div id="Figure:sysCtxDiag">
+<img class="figure" src="../../../datafiles/SSP/SystemContextFigure.png" alt="System Context"></img>
+<p class="caption">
+System Context
+</p>
+</div>
+<p class="paragraph">
+The interaction between the product and the user is through a user interface. The responsibilities of the user and the system are as follows:
+</p>
+<ul class="list">
+<li>
+User Responsibilities
+<ul class="list">
+<li>
+Provide the input data related to the soil layer(s) and water table (if applicable), ensuring no errors in the data entry
+</li>
+<li>
+Ensure that consistent units are used for input variables
+</li>
+<li>
+Ensure required software assumptions (<a href=#Sec:Assumps>Assumptions</a>) are appropriate for any particular problem input to the software
+</li>
+</ul>
+</li>
+<li>
+SSP Responsibilities
+<ul class="list">
+<li>
+Detect data type mismatch, such as a string of characters  input instead of a floating point number
+</li>
+<li>
+Determine if the inputs satisfy the required physical and software constraints
+</li>
+<li>
+Identify the most likely failure surface within the possible input range
+</li>
+<li>
+Find the factor of safety for the slope
+</li>
+<li>
+Find the displacement of soil that will occur on the slope
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
 <div id="Sec:UserChars">
 <div class="subsection">
 <h2>

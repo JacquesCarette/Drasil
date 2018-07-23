@@ -125,7 +125,7 @@ class HasUnitSymbol u where
 -- They must also be explicitly declared to be instances of IsUnit
 class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u where
    udefn :: Lens' u (Maybe UDefn)
-   getUnits :: Lens' u [UID]
+   getUnits :: u -> [UID]
 -- Investigate (TODO): is this really needed?
 class UnitEq u where
    uniteq :: Lens' u UDefn

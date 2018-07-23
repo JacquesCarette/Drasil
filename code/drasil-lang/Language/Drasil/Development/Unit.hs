@@ -40,7 +40,7 @@ instance ConceptDomain UnitDefn where
   cdom = vc . cdom
 instance HasUnitSymbol UnitDefn where usymb f (UD a b c e d) = fmap (\x -> UD a x c e d) (f b)
 instance IsUnit        UnitDefn where udefn = ud
-                                      getUnits = cu
+                                      getUnits u = view cu u
 
 data UnitEquation = UE {_contributingUnit :: [UID], _us :: USymb}
 makeLenses ''UnitEquation
@@ -86,12 +86,12 @@ unitCon s = dcc s (cn' s) s
 -- | For allowing lists to mix the two, thus forgetting
 -- the definition part
 unitWrapper :: (IsUnit u)  => u -> UnitDefn
-unitWrapper u = UD (cc' u (u ^. defn)) (u ^. usymb) Nothing (u ^. udefn) (u ^. getUnits)
+unitWrapper u = UD (cc' u (u ^. defn)) (u ^. usymb) Nothing (u ^. udefn) (getUnits u)
 
 helperUnit :: UnitDefn -> [UID]
 helperUnit a = case getSecondSymb a of
   Just _ -> [a ^. uid]
-  Nothing -> a ^. getUnits
+  Nothing -> getUnits a
 
 --- These conveniences go here, because we need the class
 -- | Combinator for raising a unit to a power

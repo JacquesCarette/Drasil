@@ -16,8 +16,7 @@ import Drasil.SWHS.Assumptions (assump1, assump2, assump7, assump8, assump9,
   assump14, assump15, assump20, newA1, newA2, newA3, newA7, newA8, newA9, 
   newA14, newA15, newA20)
 import Drasil.SWHS.Body (charReader1, charReader2, orgDocIntro,
-  genSystDesc, physSyst1, physSyst2, dataDefIntroEnd, iMod1Para,
-  traceTrailing, dataContMid)
+  genSystDesc, physSyst1, physSyst2, traceTrailing, dataContMid)
 import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil,
   transient, perfect_insul, tank_para)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
@@ -27,8 +26,8 @@ import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
   deltaT, w_E, tank_length_min, tank_length_max,
   w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
   coil_HTC_max, time_final_max, sim_time, coil_SA_max, eta)
-import Drasil.SWHS.DataDefs(dd1HtFluxC, swhsDD1, dd1HtFluxCDD)
-import Drasil.SWHS.TMods (t1ConsThermE, t1ConsThermE_new, tMod1)
+import Drasil.SWHS.DataDefs(dd1HtFluxC, dd1HtFluxCDD)
+import Drasil.SWHS.TMods (t1ConsThermE, t1ConsThermE_new)
 import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp,
   nwtnCooling_desc, rocTempSimp_desc)
 import Drasil.SWHS.IMods (heatEInWtr, heatEInWtr_new)
@@ -40,16 +39,15 @@ import Drasil.SWHS.Changes (chgsStart, likeChg2, likeChg3, likeChg6)
 
 import Data.Drasil.People (thulasi)
 import Data.Drasil.Utils (enumSimple, refFromType,
-  itemRefToSent, makeTMatrix, itemRefToSent, weave, eqUnR)
+  itemRefToSent, makeTMatrix, itemRefToSent, weave, eqUnR, noRefs)
 import Data.Drasil.Citations (parnasClements1986, smithLai2005)
 
 import Data.Drasil.Concepts.Documentation as Doc (datumConstraint, inModel,
   requirement, section_, traceyGraph, item, assumption, dataDefn,
   likelyChg, genDefn, thModel, traceyMatrix, model, output_, quantity, input_, 
   physicalConstraint, condition, property, variable, description, symbol_,
-  information, value, column, softwareConstraint, goalStmt,
-  physSyst, problem, definition, srs, content, reference, document,
-  goal, purpose)
+  information, goalStmt, physSyst, problem, definition, srs, content, reference,
+  document, goal, purpose)
 
 import qualified Data.Drasil.Concepts.Math as M (ode, de, rOfChng, unit_, equation)
 import Data.Drasil.Concepts.Software (program)
@@ -74,8 +72,8 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   RefSec(RefProg), RefTab(TAandA, TUnits), 
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty, 
   inDataConstTbl, intro, mkDoc, mkLklyChnk, mkRequirement, mkUnLklyChnk, 
-  outDataConstTbl, physSystDesc, reqF, solChSpecF, specSysDesF, termDefnF, 
-  traceGIntro, traceMGF, tsymb, valsOfAuxConstantsF)
+  outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF, 
+  tsymb, valsOfAuxConstantsF)
  
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
   foldlList, isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP, acroIM,
@@ -113,15 +111,13 @@ nopcm_Constraints :: [UncertQ]
 nopcm_Constraints =  [coil_SA, w_E, htCap_W, coil_HTC, temp_init,
   time_final, tank_length, temp_C, w_density, diam, temp_W]
 
-specSystDesc, probDescription, termAndDefn, physSystDescription, goalStates, solCharSpec,
+probDescription, termAndDefn, physSystDescription, goalStates,
   reqS, funcReqs, likelyChgs, unlikelyChgs, traceMAndG, specParamVal :: Section
-
 
 
 -------------------
 --INPUT INFORMATION
 -------------------
-
 
 --------------------------------
 --Section 1 : REFERENCE MATERIAL
@@ -174,7 +170,7 @@ nopcm_si = SI {
   _quants = symbT,
   _concepts = nopcm_Symbols,
   _definitions = [dd1HtFluxC],          --dataDefs
-  _datadefs = ([] :: [DataDefinition]),
+  _datadefs = [dd1HtFluxCDD],
   _inputs = (map qw nopcm_Constraints), --inputs
   _outputs = (map qw [temp_W, w_E]),     --outputs
   _defSequence = [Parallel dd1HtFluxC []],
@@ -340,11 +336,6 @@ orgDocEnd im_ od pro = foldlSent_ [S "The", phrase im_,
 -----------------------------------------
 
 --TODO: finish filling in the subsections
-specSystDesc = specSysDesF (words_ sWHT) [probDescription, solCharSpec]
-  where
-  words_ sw = (plural definition `sAnd` S "finally the" +:+
-    phrase inModel +:+ sParen (getAcc M.ode) +:+
-    S "that" +:+ plural model +:+ S "the" +:+ phrase sw)
 
 -----------------------------------
 --Section 4.1 : PROBLEM DESCRIPTION
@@ -361,9 +352,9 @@ probDescIntro pro cp wa sw = foldlSP [getAcc pro, S "is a",
 termAndDefn = termDefnF Nothing [termAndDefnBullets]
 
 termAndDefnBullets :: Contents
-termAndDefnBullets = Enumeration $ (Bullet $ map (\x -> Flat $
-  (at_start x) :+: S ":" +:+ (x ^. defn))
-  [ht_flux, heat_cap_spec, thermal_conduction, transient])
+termAndDefnBullets = Enumeration $ Bullet $ noRefs $ map (\x -> Flat $
+  at_start x :+: S ":" +:+ (x ^. defn))
+  [ht_flux, heat_cap_spec, thermal_conduction, transient]
   
 physSystDescription = physSystDesc (getAcc progName) fig_tank
   [physSystDescList, fig_tank]
@@ -394,17 +385,6 @@ goalStatesList temw we = enumSimple 1 (short goalStmt) [
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
 ------------------------------------------------------
   
-solCharSpec = solChSpecF progName (probDescription, likelyChgs, unlikelyChgs) dataDefIntroEnd (mid,
-  dataConstraintUncertainty, EmptyS) (npcmAssumptions, tMod1,
-  genDefnParagraph M.rOfChng temp, [swhsDD1],
-  [reldefn eBalanceOnWtr] ++ (iMod1Para energy water) ++
-  iModParagraph ++ [reldefn heatEInWtr], [dataConstTable1, dataConstTable2])
-  []
-  where
-  mid = foldlSent [S "The", phrase column, S "for",
-    plural softwareConstraint, S "restricts the range of",
-    plural input_, S "to reasonable", plural value]
-
   {--end = foldlSent [S "The", phrase uncertCol,
     S "provides an estimate of the confidence with which the physical",
     plural quantity, S "can be measured. This", phrase information,

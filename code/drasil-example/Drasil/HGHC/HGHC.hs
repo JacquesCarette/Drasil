@@ -4,10 +4,13 @@ import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Drasil.DocLang (DocSection(RefSec, Verbatim), Literature(Lit, Manual), 
     RefSec(..), RefTab(TUnits), TSIntro(SymbConvention, TSPurpose), DocDesc, 
-    dataDefnF, intro, mkDoc, tsymb)
+    dataDefnF, intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
+    Field(DefiningEquation, Description, Label, Symbol, Units), SolChSpec(SCSProg), 
+    SCSSub(DDs'), DerivationDisplay(HideDerivation), SSDSub(SSDSolChSpec), 
+    SSDSec(SSDProg), DocSection(SSDSec))
 import Data.Maybe
 
-import Drasil.HGHC.HeatTransfer (fp, hghc, hghcVars, htInputs, htOutputs, 
+import Drasil.HGHC.HeatTransfer (fp, hghc, hghcVarsDD, hghcVars, htInputs, htOutputs, 
     nuclearPhys, symbols)
 
 import Data.Drasil.SI_Units (si_units)
@@ -27,7 +30,7 @@ thisSI = SI {
   _quants = symbols,
   _concepts = ([] :: [UnitaryConceptDict]),
   _definitions = hghcVars,
-  _datadefs = ([] :: [DataDefinition]),
+  _datadefs = hghcVarsDD,
   _inputs = htInputs,
   _outputs = htOutputs,
   _defSequence = ([] :: [Block QDefinition]),
@@ -48,14 +51,13 @@ thisSRS :: DocDesc
 thisSRS = RefSec (RefProg intro 
   [TUnits, 
   tsymb [TSPurpose, SymbConvention [Lit (nw nuclearPhys), Manual (nw fp)]]]) : 
---  SSDSec ( SSDProg [ SSDSolChSpec 
---  (SCSProg [DDs [Label, Symbol, Units, DefiningEquation,
---  Description Verbose IncludeUnits (S "")] hghcVars ]) ] ) :
+  [SSDSec ( SSDProg [SSDSolChSpec 
+  (SCSProg [DDs' [Label, Symbol, Units, DefiningEquation,
+  Description Verbose IncludeUnits] hghcVarsDD HideDerivation]) ] ) ]
 -- Above Data Defs not yet implemented.
-  [Verbatim s3]
   
-s3 :: Section --, s4 
-s3 = dataDefnF EmptyS (map (Definition . Data) hghcVars)
+--s3 :: Section --, s4 
+--s3 = dataDefnF EmptyS (map (Definition . DD) hghcVarsDD)
   
 srsBody :: Document
 srsBody = mkDoc thisSRS (for) thisSI

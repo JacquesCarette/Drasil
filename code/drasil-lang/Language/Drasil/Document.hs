@@ -21,11 +21,11 @@ import Language.Drasil.UID
 
 import Control.Lens ((^.), makeLenses)
 
-data ListType = Bullet [ItemType] -- ^ Bulleted list
-              | Numeric [ItemType] -- ^ Enumerated List
-              | Simple [ListPair] -- ^ Simple list with items denoted by @-@
-              | Desc [ListPair] -- ^ Descriptive list, renders as "Title: Item" (see 'ListPair')
-              | Definitions [ListPair] -- ^ Renders a list of "@Title@ is the @Item@"
+data ListType = Bullet [(ItemType,Maybe RefAdd)] -- ^ Bulleted list
+              | Numeric [(ItemType,Maybe RefAdd)] -- ^ Enumerated List
+              | Simple [ListTuple] -- ^ Simple list with items denoted by @-@
+              | Desc [ListTuple] -- ^ Descriptive list, renders as "Title: Item" (see 'ListTuple')
+              | Definitions [ListTuple] -- ^ Renders a list of "@Title@ is the @Item@"
 
 data ItemType = Flat Sentence -- ^ Standard singular item
               | Nested Header ListType -- ^ Nest a list as an item
@@ -42,7 +42,7 @@ type Header   = Sentence -- Used when creating sublists
 type Depth    = Int
 type Width    = Float
 type Height   = Float
-type ListPair = (Title,ItemType) -- ^ Title: Item
+type ListTuple = (Title,ItemType,Maybe RefAdd) -- ^ Title: Item
 type Filepath = String
 type Lbl      = Sentence
 
@@ -50,7 +50,7 @@ type Lbl      = Sentence
 -- which hold the contents of the document
 data Document = Document Title Author [Section]
 
---FIXME: Remove Data and Theory from below.
+--FIXME: Remove Data, Data', and Theory from below.
 -- | Types of definitions
 data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining 
                               -- equation used to generate the Data Definition

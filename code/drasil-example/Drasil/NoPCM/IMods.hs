@@ -7,7 +7,7 @@ import Drasil.SWHS.Unitals (temp_W, temp_C, tau_W, w_mass, htCap_W, coil_HTC, co
   , time_final, w_vol, ht_flux_C, vol_ht_gen)
 import Data.Drasil.Utils (unwrap, weave)
 import Data.Drasil.SentenceStructures (foldlSent, isThe,
-  sAnd, foldlList, ofThe, acroGD, foldlSentCol, sOf)
+  sAnd, ofThe, acroGD, foldlSentCol, sOf)
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Concepts.Math (equation, rOfChng)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
@@ -49,15 +49,6 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   plural boil_pt, S "of", phrase water `sC` S "respectively",
   sParen (makeRef assump10)]
 
-balWtrDesc_note :: Sentence
-balWtrDesc_note = foldlSent [S "The above", phrase equation, S "applies as long as the", phrase water,
-  S "is in", phrase liquid, S "form" `sC` (E $ 0 $< sy temp_W $< 100),
-  sParen (unwrap $ getUnit temp_W), S "where", E 0,
-  sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
-  sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
-  plural boil_pt, S "of", phrase water `sC` S "respectively",
-  sParen (makeRef assump10)]
-  
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --
 ----------------------------------------------
@@ -92,8 +83,8 @@ s4_2_3_desc1_nopcm roc tw en wt vo wvo ms wms hcs hw ht hfc cs tk ass11 ass12 vh
      acroGD 2, S "can be written as"]
 
 s4_2_3_desc2_nopcm :: QDefinition -> [Sentence]
-s4_2_3_desc2_nopcm dd1HtFluxC =
-  [S "Using", makeRef $ datadefn dd1HtFluxC, S ", this can be written as"]
+s4_2_3_desc2_nopcm dd1 =
+  [S "Using", makeRef $ datadefn dd1, S ", this can be written as"]
 
 s4_2_3_desc3_nopcm :: Expr-> [Sentence]
 s4_2_3_desc3_nopcm eq11 = [S "Dividing (3) by", (E eq11) `sC` S "we obtain"]

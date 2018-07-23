@@ -12,7 +12,6 @@ import Data.Drasil.Concepts.Documentation (condition)
 import Data.Drasil.Concepts.Physics (force, stress, strain)
 import Data.Drasil.Concepts.Math (surface, unit_)
 import Data.Drasil.Concepts.SolidMechanics (shearForce)
-import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe')
 
 sspRefDB :: ReferenceDB
 sspRefDB = rdb [] [] newAssumptions [] [] sspCitations []
@@ -33,10 +32,6 @@ newA8 = assump "Plane-Strain-Conditions" planeS "Plane-Strain-Conditions"
 newA9 = assump "Effective-Norm-Stress-Large" largeN "Effective-Norm-Stress-Large"
 newA10 = assump "Surface-Base-Slice-between-Interslice-Straight-Lines" straightS "Surface-Base-Slice-between-Interslice-Straight-Lines"
 
-
-sspAssumptions :: [Sentence]
-sspAssumptions = [monotonicF, slopeG, homogeneousL, isotropicP,
-  linearS, linearF, stressC, planeS, largeN, straightS]
 
 monotonicF, slopeG, homogeneousL, isotropicP, linearS,
   linearF, stressC, planeS, largeN, straightS :: Sentence

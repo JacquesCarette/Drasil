@@ -1,5 +1,5 @@
 Name:		drasil-example
-Version:	0.1.4
+Version:	0.1.5
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -19,9 +19,10 @@ executable tiny
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil-lang >= 0.1.3,
+    drasil-lang >= 0.1.5,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1,
+    drasil-printers >= 0.1.0,
     drasil-gen >= 0.1.0,
     drasil-docLang >= 0.1.1
   default-language: Haskell2010
@@ -57,9 +58,10 @@ executable nopcm
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil-lang >= 0.1.3,
+    drasil-lang >= 0.1.5,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1,
+    drasil-printers >= 0.1.0,
     drasil-gen >= 0.1.0,
     drasil-docLang >= 0.1.1
   default-language: Haskell2010
@@ -91,9 +93,10 @@ executable ssp
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil-lang >= 0.1.3,
+    drasil-lang >= 0.1.5,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1,
+    drasil-printers >= 0.1.0,
     drasil-gen >= 0.1.0,
     drasil-docLang >= 0.1.1
   default-language: Haskell2010
@@ -123,9 +126,10 @@ executable glassbr
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil-lang >= 0.1.3,
+    drasil-lang >= 0.1.5,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1,
+    drasil-printers >= 0.1.0,
     drasil-gen >= 0.1.0,
     drasil-docLang >= 0.1.0   
   default-language: Haskell2010
@@ -151,9 +155,10 @@ executable chipmunkdocs
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil-lang >= 0.1.3,
+    drasil-lang >= 0.1.5,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1,
+    drasil-printers >= 0.1.0,
     drasil-gen >= 0.1.0,
     drasil-docLang >= 0.1.1
   default-language: Haskell2010
@@ -183,9 +188,10 @@ executable swhs
     pretty >= 1.1.1.1,
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
-    drasil-lang >= 0.1.3,
+    drasil-lang >= 0.1.5,
     drasil-data >= 0.1.1,
     drasil-code >= 0.1.1,
+    drasil-printers >= 0.1.0,
     drasil-gen >= 0.1.0,
     drasil-docLang >= 0.1.1
   default-language: Haskell2010

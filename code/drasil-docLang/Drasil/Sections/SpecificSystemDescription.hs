@@ -1,10 +1,9 @@
 module Drasil.Sections.SpecificSystemDescription 
-  ( specSysDesF, specSysDescr
+  ( specSysDescr
   , probDescF
   , termDefnF
   , physSystDesc
   , goalStmtF
-  , solChSpecF
   , solutionCharSpecIntro 
   , assumpF
   , thModF
@@ -21,13 +20,13 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (physical, column, input_, uncertainty, physicalConstraint,
   softwareConstraint, typUnc, user, model, value, quantity, information, constraint, variable,
   output_, symbol_, limitation, problem, inModel, datum, datumConstraint, section_, dataDefn,
-  general, genDefn, problemDescription, solutionCharSpec, assumption, thModel, physicalSystem,
-  likelyChg, unlikelyChg, goalStmt, theory, purpose, requirement, element)
+  general, genDefn, assumption, thModel, physicalSystem,
+  likelyChg, unlikelyChg, goalStmt, purpose, requirement, element)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle, fmtU, getRVal)
-import Data.Drasil.SentenceStructures (fmtPhys, fmtSfwr, mkTableFromColumns, foldlSent, foldlSP,
-  typUncr, ofThe, foldlList)
+import Data.Drasil.SentenceStructures (fmtPhys, fmtSfwr, mkTableFromColumns, foldlSent, 
+  foldlSP, typUncr, ofThe, foldlList)
 import qualified Drasil.DocLang.SRS as SRS
 
 
@@ -43,20 +42,6 @@ intro_ sys = Paragraph $ S "This section first presents the problem" +:+
   S "solved. This is followed by the solution characteristics" +:+
   S "specification, which presents the assumptions" `sC`
   S "theories, and definitions that are used for the" +:+. (phrase sys)
-
--- wrapper for specSysDesIntro
-specSysDesF :: Sentence -> [Section] -> Section
-specSysDesF l_eND subSec = SRS.specSysDes [specSysDesIntro l_eND] subSec
-
--- generalized specific system description introduction: boolean identifies whether the user wants the extended
--- or shortened ending (True) -> identifies key word pertaining to topic or Nothing
-specSysDesIntro ::  Sentence -> Contents
-specSysDesIntro l_end = foldlSP
-            [S "This", phrase section_, S "first presents the", 
-            phrase problemDescription `sC` S "which gives a high-level view of the", 
-            phrase problem, S "to be solved. This is followed by the", 
-            phrase solutionCharSpec `sC` S "which presents the", 
-            plural assumption `sC` plural theory `sC` l_end]
 
 --Up to change, decide on what ending sentence structure we would like to employ
 --Using Verbatim for now.
@@ -95,24 +80,6 @@ goalStmtF :: [Sentence] -> [Contents] -> Section
 goalStmtF givenInputs otherContents = SRS.goalStmt (intro:otherContents) []
   where intro = Paragraph $ S "Given" +:+ foldlList givenInputs `sC` S "the" +:+ 
                 plural goalStmt +: S "are"
-
--- progName (ex ssp, progName), the two sections, gendef is True if you want general definitions sections, 
---  ddEndSent is the ending sentence for Data Definitions, this is a 4-tuple of inputs for Data Constraints, 
---  the last input is a tupple of lists of Sections for each Subsection in order.
-solChSpecF :: (Idea a) => a -> (Section, Section, Section) -> Sentence -> 
-  (Sentence, Sentence, Sentence) -> 
-  ([Contents], [Contents], [Contents], [Contents], [Contents], [Contents]) -> 
-  [Section] -> Section
-solChSpecF progName (probDes, likeChg, unlikeChg) ddEndSent (mid, hasUncertainty, trail) (a, t, g, dd, i, dc) adSubSec = 
-  SRS.solCharSpec [solutionCharSpecIntro progName instModels] (subSec)
-  where subSec = [assumption_, theModels, generDefn, 
-                        dataDefin, instModels, dataConstr] ++ adSubSec
-        assumption_  = assumpF  theModels generDefn dataDefin instModels likeChg unlikeChg a
-        theModels    = thModF progName t
-        generDefn    = genDefnF g
-        dataDefin    = dataDefnF ddEndSent dd
-        instModels   = inModelF  probDes dataDefin theModels generDefn i
-        dataConstr   = datConF mid hasUncertainty trail dc
 
 
 solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
@@ -211,7 +178,8 @@ dataConstraintParagraph hasUncertainty tableRef middleSent trailingSent = Paragr
 listofTablesToRefs :: (HasShortName l, Referable l) => [l] -> Sentence
 listofTablesToRefs  []     = EmptyS
 listofTablesToRefs  [x]    = (makeRef x) +:+ S "shows"
-listofTablesToRefs  [x,y]  = (makeRef x) `sC` S "and" +:+ listofTablesToRefs [y]
+listofTablesToRefs  [x,y]  = (makeRef x) +:+ S "and" +:+ (makeRef y) +:+ S "show" -- for proper grammar with multiple tables
+                                                                                  -- no Oxford comma in case there is only two tables to be referenced
 listofTablesToRefs  (x:xs) = (makeRef x) `sC` listofTablesToRefs (xs)
  
 dataConstraintIntroSent :: Sentence -> Sentence
@@ -231,7 +199,7 @@ dataConstraintClosingSent uncertaintySent trailingSent = foldlSent
 
 dataConstraintUncertainty :: Sentence
 dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase column,
-  S "provides an", S "estimate of the confidence with which the", phrase physical,
+  S "provides an estimate of the confidence with which the", phrase physical,
   plural quantity +:+. S "can be measured", S "This", phrase information,
   S "would be part of the", phrase input_, S "if one were performing an",
   phrase uncertainty, S "quantification exercise"]

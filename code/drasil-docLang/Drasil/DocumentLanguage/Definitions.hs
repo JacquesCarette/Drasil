@@ -103,12 +103,12 @@ tConToExpr (TCon AssumedCon x) = x
 mkQField :: (HasSymbolTable ctx) => QDefinition -> ctx -> Field -> ModRow -> ModRow
 mkQField d _ l@Label fs = (show l, (Paragraph $ at_start d):[]) : fs
 mkQField d _ l@Symbol fs = (show l, (Paragraph $ (P $ eqSymb d)):[]) : fs
-mkQField d _ l@Units fs = (show l, (Paragraph $ (unit'2Contents d)):[]) : fs
+mkQField d _ l@Units fs = (show l, (Paragraph $ (unitToSentenceUnitless d)):[]) : fs
 mkQField d _ l@DefiningEquation fs = (show l, (eqUnR $ sy d $= d ^. equat):[]) : fs --FIXME: appending symbol should be done in the printing stage
 mkQField d m l@(Description v u) fs =
   (show l, buildDDescription v u d m) : fs
 mkQField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
-mkQField d _ l@(Source) fs = (show l, fixme) : fs
+mkQField _ _ l@(Source) fs = (show l, fixme) : fs
 mkQField d _ l@(Notes) fs = maybe fs (\ss -> (show l, map Paragraph ss) : fs) (d ^. getNotes)
 mkQField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for data definitions"
@@ -117,12 +117,12 @@ mkQField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
 mkDDField :: (HasSymbolTable ctx) => DataDefinition -> ctx -> Field -> ModRow -> ModRow
 mkDDField d _ l@Label fs = (show l, (Paragraph $ at_start d):[]) : fs
 mkDDField d _ l@Symbol fs = (show l, (Paragraph $ (P $ eqSymb d)):[]) : fs
-mkDDField d _ l@Units fs = (show l, (Paragraph $ (unit'2Contents d)):[]) : fs
-mkDDField  d _ l@DefiningEquation fs = (show l, (eqUnR $ sy d $= d ^. relat):[]) : fs --FIXME: appending symbol should be done in the printing stage
+mkDDField d _ l@Units fs = (show l, (Paragraph $ (unitToSentenceUnitless d)):[]) : fs
+mkDDField d _ l@DefiningEquation fs = (show l, (eqUnR $ sy d $= d ^. relat):[]) : fs --FIXME: appending symbol should be done in the printing stage
 mkDDField d m l@(Description v u) fs =
   (show l, buildDDescription' v u d m) : fs
 mkDDField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
-mkDDField d _ l@(Source) fs = (show l, fixme) : fs
+mkDDField _ _ l@(Source) fs = (show l, fixme) : fs
 mkDDField d _ l@(Notes) fs = maybe fs (\ss -> (show l, map Paragraph ss) : fs) (d ^. getNotes)
 mkDDField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for data definitions"
@@ -162,7 +162,7 @@ mkGDField g _ l@DefiningEquation fs = (show l, (eqUnR (g ^. relat)):[]) : fs
 mkGDField g m l@(Description v u) fs = (show l,
   (buildDescription v u (g ^. relat) m) []) : fs
 mkGDField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
-mkGDField g _ l@(Source) fs = (show l, fixme) : fs
+mkGDField _ _ l@(Source) fs = (show l, fixme) : fs
 mkGDField d _ l@(Notes) fs = maybe fs (\ss -> (show l, map Paragraph ss) : fs) (d ^. getNotes)
 mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 
@@ -174,7 +174,7 @@ mkIMField i _ l@DefiningEquation fs =
 mkIMField i m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] [i ^. relat]) : fs
 mkIMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
-mkIMField i _ l@(Source) fs = (show l, fixme) : fs --FIXME: fill this in
+mkIMField _ _ l@(Source) fs = (show l, fixme) : fs --FIXME: fill this in
 mkIMField i _ l@(Output) fs = (show l, [Paragraph x]) : fs
   where x = P . eqSymb $ i ^. imOutput
 mkIMField i _ l@(Input) fs = 
@@ -197,20 +197,20 @@ mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
 firstPair :: InclUnits -> QDefinition -> ListTuple
 firstPair (IgnoreUnits) d  = (P $ eqSymb d, Flat $ phrase d, Nothing)
 firstPair (IncludeUnits) d = (P $ eqSymb d, Flat $ phrase d +:+ (sParen $
-  unit'2Contents d), Nothing)
+  unitToSentenceUnitless d), Nothing)
 
 -- | Used for definitions. The first pair is the symbol of the quantity we are
 -- defining.
 firstPair' :: InclUnits -> DataDefinition -> ListTuple
 firstPair' (IgnoreUnits) d  = (P $ eqSymb d, Flat $ phrase d, Nothing)
 firstPair' (IncludeUnits) d = (P $ eqSymb d, Flat $ phrase d +:+ (sParen $
-  unit'2Contents d), Nothing)
+  unitToSentenceUnitless d), Nothing)
 
 -- | Create the descriptions for each symbol in the relation/equation
 descPairs :: (Quantity q) => InclUnits -> [q] -> [ListTuple]
 descPairs IgnoreUnits = map (\x -> (P $ eqSymb x, Flat $ phrase x, Nothing))
 descPairs IncludeUnits =
-  map (\x -> (P $ eqSymb x, Flat $ phrase x +:+ (sParen $ unit'2Contents x), Nothing))
+  map (\x -> (P $ eqSymb x, Flat $ phrase x +:+ (sParen $ unitToSentenceUnitless x), Nothing))
   -- FIXME: Need a Units map for looking up units from variables
 
 instance Show Field where

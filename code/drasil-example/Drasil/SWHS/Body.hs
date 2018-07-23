@@ -13,8 +13,8 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   Fields, Field(..), SSDSub(..), SolChSpec( SCSProg ), SSDSec(..), 
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SCSSub(..),
   assumpF, dataConstraintUncertainty, genSysF, inDataConstTbl, inModelF, intro, 
-  mkDoc, outDataConstTbl, physSystDesc, reqF, solChSpecF, specSysDesF, 
-  termDefnF, traceGIntro, traceMGF, tsymb'')
+  mkDoc, outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF,
+  tsymb'')
 import qualified Drasil.DocLang.SRS as SRS (inModel, missingP, likeChg,
   funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
   sysCont, reference)
@@ -27,8 +27,8 @@ import Data.Drasil.Concepts.Documentation (section_, traceyGraph, item,
   value, software, column, model, goalStmt, quantity, property, condition, 
   physics, user, physical, datum, system, variable, sysCont, environment, 
   srs, softwareSys, organization, document, problem, content, information, 
-  reference, definition, purpose, description, symbol_, physSyst,
-  typUnc, unlikelyChg)
+  reference, definition, purpose, description, symbol_, physSyst, typUnc, 
+  unlikelyChg)
 
 import Data.Drasil.Concepts.PhysicalProperties (liquid, solid)
 import qualified Data.Drasil.Concepts.Thermodynamics as CT (boiling,
@@ -53,17 +53,16 @@ import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
   temp_melt_P, pcm_vol, diam, tau_L_P, tank_length,
   w_vol, swhsConstrained, swhsOutputs, swhsInputs, swhsSymbols, swhsSymbolsAll)
 import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
-  coil, perfect_insul, tank, transient, gauss_div, swhs_pcm,
-  phase_change_material, tank_pcm)
-import Drasil.SWHS.TMods (tModels, t1ConsThermE, t1ConsThermE_new,
- t2SensHtE_new, t3LatHtE_new, swhsTMods)
+  coil, perfect_insul, tank, transient, swhs_pcm, phase_change_material, tank_pcm)
+import Drasil.SWHS.TMods (tModels, t1ConsThermE_new,
+ t2SensHtE_new, t3LatHtE_new)
 import Drasil.SWHS.IMods (heatEInWtr_new, eBalanceOnWtr_new,
   heatEInPCM_new, eBalanceOnPCM_new, swhsIMods)
-import Drasil.SWHS.DataDefs (swhsDataDefs,dd1HtFluxC, dd2HtFluxP, swhsDDefs, dataDefns)
+import Drasil.SWHS.DataDefs (swhsDataDefs,dd1HtFluxC, dd2HtFluxP, dataDefns)
 import Drasil.SWHS.GenDefs (swhsGenDefs, generalDefinitions)
 import Drasil.SWHS.References (ref_swhs_citations)
-import Drasil.SWHS.Assumptions (assump3, assump4, assump5, assump6, assump13, 
-  assump15, assump16, assump17, assump18, newAssumptions, swhsAssumptions)
+import Drasil.SWHS.Assumptions (assump13, assump15, assump16, assump17, assump18,
+  newAssumptions, swhsAssumptions)
 import Drasil.SWHS.Requirements (req1, req2, reqEqn1, reqEqn2,
   req3, req4, req5, req6, req7, req8, req9, req10, req11, nonFuncReqs)
 import Drasil.SWHS.Changes (likeChg1, likeChg2, likeChg3, likeChg4,
@@ -73,15 +72,14 @@ import Drasil.SWHS.DataDesc (swhsInputMod)
 import Data.Drasil.Utils (enumSimple, weave, itemRefToSent, makeListRef,
   makeTMatrix, refFromType, eqUnR, noRefs)
 import Data.Drasil.SentenceStructures (acroIM, acroGD, acroGS, showingCxnBw,
-  foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe,
+  foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, isThe, ofThe,
   ofThe', sAnd, sOf, foldlList)
 
 -------------------------------------------------------------------------------
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
-  phsChgMtrl, physSyst, requirement, rightSide, srs, progName, thModel, typUnc,
-  unlikelyChg]
+  phsChgMtrl, physSyst, requirement, rightSide, srs, progName, thModel, typUnc, unlikelyChg]
 
 this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, kilogram, second] ++ 
@@ -101,7 +99,7 @@ swhs_si = SI {
   _quants = swhsSymbols,
   _concepts = symbT,
   _definitions = swhsDataDefs,
-  _datadefs = ([] :: [DataDefinition]),
+  _datadefs = dataDefns,
   _inputs = map qw swhsInputs,
   _outputs = map qw swhsOutputs,
   _defSequence = ([] :: [Block QDefinition]),
@@ -154,6 +152,7 @@ mkSRS = RefSec (RefProg intro [
            [eBalanceOnWtr_new, eBalanceOnPCM_new, heatEInWtr_new, heatEInPCM_new ] ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty dataConTail
            [dataConTable1, dataConTable3]
+          , CorrSolnPpties propsDeriv
           ]
         )
       ]
@@ -257,9 +256,6 @@ systContRespBullets = Enumeration $ Bullet $ noRefs [userResp input_ datum,
 -- Section 4 : SPECIFIC SYSTEM DESCRIPTION --
 ---------------------------------------------
 
-specSystDesc :: Section
-specSystDesc = specSysDesF (specSystDescIntroEnd swhs_pcm) [probDescription, solCharSpec]
-
 -------------------------------
 -- 4.1 : Problem Description --
 -------------------------------
@@ -331,13 +327,6 @@ goalStateList = enumSimple 1 (short goalStmt) $
 -- 4.2 : Solution Characteristics Specification --
 --------------------------------------------------
 
-solCharSpec :: Section
-solCharSpec = solChSpecF progName (probDescription, likelyChgs, unlikelyChgs) dataDefIntroEnd
-  (dataContMid, dataConstraintUncertainty, dataContFooter quantity surArea
-  vol thickness phsChgMtrl) (swhsAssumptions, 
-  swhsTMods, genDefs ++ genDefsDeriv,
-  swhsDDefs, iModsWithDerivs, dataConTables) [propsCorrSol]
-
 -------------------------
 -- 4.2.1 : Assumptions --
 -------------------------
@@ -366,23 +355,7 @@ assumps = assumpF
 ---------------------------------
 
 -- SECTION 4.2.3 --
--- General Definitions is automatically generated in solChSpecF
-genDefs :: [Contents]
-genDefs = map reldefn swhsGenDefs
-
-genDefsDeriv :: [Contents]
-genDefsDeriv = [genDefDeriv1 rOfChng temp,
-  genDefDeriv2 t1ConsThermE vol,
-  genDefDeriv3,
-  genDefDeriv4 gauss_div surface vol thFluxVect uNormalVect unit_,
-  genDefDeriv5,
-  genDefDeriv6 vol vol_ht_gen,
-  genDefDeriv7,
-  genDefDeriv8 ht_flux_in ht_flux_out in_SA out_SA density heat_cap_spec
-    temp vol assumption assump3 assump4 assump5 assump6,
-  genDefDeriv9,
-  genDefDeriv10 density mass vol,
-  genDefDeriv11]
+-- General Definitions is automatically generated
 
 
 ------------------------------
@@ -477,9 +450,6 @@ outputConstraints = [temp_W, temp_PCM, w_E, pcm_E]
 -- 4.2.7 : Properties of A Correct Solution --
 ----------------------------------------------
 
-propsCorrSol :: Section
-propsCorrSol = SRS.propCorSol (propsDeriv) []
-
 propsDeriv :: [Contents]
 propsDeriv =
   [propCorSolDeriv1 CT.law_cons_energy w_E energy coil phsChgMtrl dd1HtFluxC
@@ -517,7 +487,7 @@ funcReqsTable = (Table [titleize symbol_, titleize unit_, titleize description]
   (mkTable
   [ch,
   --(\ch -> Sy (unit_symb ch)),
-  unit'2Contents,
+  unitToSentence,
   phrase] (map qw inputConstraints))
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False)
   "InConstraints"
@@ -813,7 +783,7 @@ scopeReqs1 ta tp = foldlSent_ [phrase ta,
 
 scopeReqs2 :: UnitalChunk -> ConceptChunk -> ConceptChunk -> CI ->
   ConceptChunk -> Sentence
-scopeReqs2 t te wa pcmat sw = foldlSent_ [S "predict the",
+scopeReqs2 t te wa pcmat sw = foldlSent_ [S "predicts the",
   phrase t `sAnd` phrase te,
   S "histories for the", phrase wa `sAnd` S "the" +:+.
   short pcmat, S "This entire", phrase document,
@@ -954,11 +924,6 @@ userCharContents pro = foldlSP [S "The end", phrase user, S "of",
 -- Section 4 : SPECIFIC SYSTEM DESCRIPTION --
 ---------------------------------------------
 
-specSystDescIntroEnd :: NamedIdea ni => ni -> Sentence
-specSystDescIntroEnd sw = foldlSent_ [foldlsC (map plural (take 3 renameList1))
-  `sC` S "and finally the", plural inModel, sParen (short ode :+: S "s"),
-  S "that", phrase model, S "the", phrase sw]
-
 -- Completely general except for solar water heating tank (object of analysis)
 -- and similar between all examples; can be abstracted out.
 
@@ -983,7 +948,6 @@ probDescIntro pro pcmat sw = foldlSP [short pro, S "is a", phrase compPro,
 -----------------------------------------
 -- 4.1.2 : Physical System Description --
 -----------------------------------------
-
 
 physSyst1 :: ConceptChunk -> ConceptChunk -> [Sentence]
 physSyst1 ta wa = [at_start ta, S "containing" +:+. phrase wa]

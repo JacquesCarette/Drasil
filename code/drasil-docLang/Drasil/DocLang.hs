@@ -1,11 +1,12 @@
 module Drasil.DocLang (
     -- DocumentLanguage
     AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), DocDesc, 
-    DocSection(..), Emphasis(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons), 
+    DocSection(..), Emphasis(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons, SysCntxt), 
     IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..), 
     Literature(Doc', Lit, Manual), ProblemDescription(..), RefSec(..), RefTab(..), 
     ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), 
-    SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2),
+    SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), ExistingSolnSec(..),
+    StkhldrSec(StkhldrProg2),
     StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg), 
     TSIntro(..), UCsSec(..), mkDoc, mkLklyChnk, mkRequirement, mkUnLklyChnk, 
     tsymb, tsymb'',
@@ -29,8 +30,7 @@ module Drasil.DocLang (
     siUQI, siUQO,
     -- Sections.SpecificSystemDescription
     assumpF, dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, 
-    inModelF, outDataConstTbl, physSystDesc, probDescF, solChSpecF, specSysDescr, 
-    specSysDesF, termDefnF,
+    inModelF, outDataConstTbl, physSystDesc, probDescF, specSysDescr, termDefnF,
     -- Sections.Stakeholders
     -- Sections.TableOfAbbAndAcronyms
     -- Sections.TableOfSymbols
@@ -41,13 +41,13 @@ module Drasil.DocLang (
 
 import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..), 
     DerivationDisplay(..), DocDesc, DocSection(..), Emphasis(..), GSDSec(GSDProg2), 
-    GSDSub(UsrChars, SystCons), IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..), 
+    GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..), 
     Literature(Doc', Lit, Manual), ProblemDescription(..), RefSec(..), RefTab(..), 
     ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), 
     SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
     StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg), 
     TSIntro(..), UCsSec(..), mkDoc, mkLklyChnk, mkRequirement, mkUnLklyChnk, 
-    tsymb, tsymb'')
+    tsymb, tsymb'', ExistingSolnSec(..))
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, 
     InclUnits(IncludeUnits), Verbosity(Verbose))
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, cite, ddRefDB, mdb, refA, 
@@ -63,8 +63,7 @@ import Drasil.Sections.SolutionCharacterSpec (SubSec, assembler, sSubSec, siCon,
     siDDef, siIMod, siSTitl, siSent, siTMod, siUQI, siUQO)
 import Drasil.Sections.SpecificSystemDescription (assumpF, 
     dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, inModelF, 
-    outDataConstTbl, physSystDesc, probDescF, solChSpecF, specSysDesF,
-    specSysDescr, termDefnF)
+    outDataConstTbl, physSystDesc, probDescF, specSysDescr, termDefnF)
 --import Drasil.Sections.Stakeholders
 --import Drasil.Sections.TableOfAbbAndAcronyms
 --import Drasil.Sections.TableOfSymbols

@@ -2,6 +2,7 @@ module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
 import Data.List (nub)
+import Data.Maybe
 
 import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
@@ -100,7 +101,7 @@ this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton]
 
 check_si :: [UnitDefn]
-check_si = map unitWrapper $ concatMap filterr $ map (\x -> getUnitLup x gbSymbMap) this_symbols 
+check_si = map unitWrapper $ concatMap maybeToList $ map (\x -> getUnitLup x gbSymbMap) this_symbols 
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GlassBR/"

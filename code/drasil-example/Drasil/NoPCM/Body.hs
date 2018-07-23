@@ -4,6 +4,7 @@ import Language.Drasil
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 import Control.Lens ((^.))
+import Data.Maybe
 import Drasil.NoPCM.DataDesc (inputMod)
 import Drasil.NoPCM.Definitions (ht_trans, srs_swhs, acronyms)
 import Drasil.NoPCM.GenDefs (roc_temp_simp_deriv)
@@ -86,7 +87,7 @@ this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
 
 check_si :: [UnitDefn]
-check_si = map unitWrapper $ concatMap filterr $ map (\x -> getUnitLup x nopcm_SymbMap) symbT 
+check_si = map unitWrapper $ concatMap maybeToList $ map (\x -> getUnitLup x nopcm_SymbMap) symbT 
 
 -- This contains the list of symbols used throughout the document
 nopcm_Symbols :: [DefinedQuantityDict]

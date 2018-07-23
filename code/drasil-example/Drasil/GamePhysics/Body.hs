@@ -3,6 +3,7 @@ module Drasil.GamePhysics.Body where
 import Language.Drasil hiding (Vector, organization)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Control.Lens ((^.))
+import Data.Maybe
 import qualified Drasil.DocLang.SRS as SRS
 
 import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..), 
@@ -70,7 +71,7 @@ chipmunkSRS' :: Document
 chipmunkSRS' = mkDoc mkSRS for' chipmunkSysInfo
 
 check_si :: [UnitDefn]
-check_si = map unitWrapper $ concatMap filterr $ map (\x -> getUnitLup x everything) symbT 
+check_si = map unitWrapper $ concatMap maybeToList $ map (\x -> getUnitLup x everything) symbT 
 
 mkSRS :: DocDesc 
 mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :

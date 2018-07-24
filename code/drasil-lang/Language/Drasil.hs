@@ -32,6 +32,7 @@ module Language.Drasil (
   -- Classes
   , HasUID(uid)
   , HasLabel(getLabel)
+  , MayHaveLabel(getMaybeLabel)
   , NamedIdea(term)
   , HasAdditionalNotes(getNotes)
   , Idea(getA)
@@ -248,7 +249,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),HasSpace(typ),  HasUnitSymbol(usymb),
   IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes),
   Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations),
-  HasReference(getReferences), HasLabel(getLabel))
+  HasReference(getReferences), HasLabel(getLabel), MayHaveLabel(getMaybeLabel))
 import Language.Drasil.Document.GetChunk(vars, combine', vars', combine, ccss)
 import Language.Drasil.Config (StyleGuide(..), verboseDDDescription, numberedTMEquations,
   numberedDDEquations, bibStyleH, numberedSections, hyperSettings, bibFname, fontSize,

@@ -8,9 +8,9 @@ import Data.Drasil.Concepts.Documentation (assumption, dataDefn, goalStmt, inMod
 
 {--}
 
-glassBRProg :: CommonConcept
+{-glassBRProg :: CommonConcept
 glassBRProg = dcc' "glassBRProg" (nounPhraseSP "GlassBR program")
-  "The glass safety analysis program" "GlassBR" 
+  "The glass safety analysis program" "GlassBR"-}
 
 {-Acronyms-}
 acronyms :: [CI]

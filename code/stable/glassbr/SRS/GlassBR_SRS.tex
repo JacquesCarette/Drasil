@@ -29,7 +29,7 @@
 \newcounter{ucnum}
 \newcommand{\uctheucnum}{UC\theucnum}
 \bibliography{bibfile}
-\title{Software Requirements Specification for GlassBR program}
+\title{Software Requirements Specification for GlassBR}
 \author{Nikitha Krithnan and W. Spencer Smith}
 \begin{document}
 \maketitle
@@ -263,7 +263,7 @@ GlassBR & Whether or not the glass slab is safe for the calculated load and supp
 The user provides the inputs to GlassBR for use within the analysis. There are two main classes of inputs: glass geometry and blast type. The glass geometry based inputs include the glass type and dimensions of the glass plane. The blast type input includes parameters like weight of charge, TNT equivalent factor, and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage. GlassBR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (${P_{b}}$) is less than the tolerable probability (${P_{btol}}$) which is obtained from the user as an input. If both conditions return true, then it's shown that the glass slab is safe to use, else if both return false, then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
-This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used for the GlassBR program.
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
 A system is needed to efficiently and correctly predict the blast risk involved with the glass. GlassBR is a computer program developed to interpret the inputs to give out the outputs which predict whether the glass slab can withstand the blast under the conditions.
@@ -726,7 +726,7 @@ Notes & ${J_{tol}}$  is calculated with reference to  ${P_{btol}}$.
         $LDF$ is the load duration factor as defined by DD3.
         ${P_{btol}}$ is the tolerable probability entered by the user.
 \\ \midrule \\
-Source &
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -785,7 +785,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & $a$, $b$ are dimensions of the plate, where ($a>b$).
 \\ \midrule \\
-Source &
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}

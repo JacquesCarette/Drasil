@@ -54,8 +54,8 @@ import Data.Drasil.Utils (makeTMatrix, makeListRef, itemRefToSent, noRefs,
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptionDescs,
   gbRefDB, newAssumptions)
 import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
-import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist, glaSlab, 
-  blastRisk, glass, glaPlane, glassBRProg, ptOfExplsn, acronyms)
+import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, 
+  glass, gLassBR, lShareFac, ptOfExplsn, stdOffDist)
 import Drasil.GlassBR.DataDefs (aspRat, dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
   dimLL, glaTyFac, tolStrDisFac, tolPre, risk, standOffDis)
 import Drasil.GlassBR.ModuleDefs (allMods)
@@ -162,7 +162,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 glassSystInfo :: SystemInformation
 glassSystInfo = SI {
-  _sys         = glassBRProg,
+  _sys         = gLassBR,
   _kind        = srs,
   _authors     = [nikitha, spencerSmith],
   _units       = map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton],

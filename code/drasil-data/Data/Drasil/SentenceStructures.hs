@@ -5,7 +5,7 @@ module Data.Drasil.SentenceStructures
   , ofGiv, ofGiv'
   , toThe, tableShows, figureLabel
   , isExpctdToHv, underConsidertn, showingCxnBw, refineChain
-  , foldlSP, foldlSP_, foldlSPCol,foldlOptions
+  , foldlSP, foldlSP_, foldlSPCol
   , maybeChanged, maybeExpanded, maybeWOVerb
   , tAndDWAcc, tAndDWSym, tAndDOnly
   , followA
@@ -54,18 +54,12 @@ foldlSPCol = Paragraph . foldlSentCol
 foldlsC :: [Sentence] -> Sentence
 foldlsC = mconcat . intersperse (S ", ")
 
--- | creates a list of elements separated by commas, ending in a "_, or _"
-foldlOptions :: [Sentence] -> Sentence
-foldlOptions []    = EmptyS
-foldlOptions [a,b] = a `sOr` b
-foldlOptions lst   = foldle1 sC (\a b -> a `sC` S "or" +:+ b) lst
-
 data EnumType = Numb | Upper | Lower
 data WrapType = Parens | Period
 data SepType  = Comma | SemiCol
 data FoldType = List | Options deriving (Eq)
 
--- | creates an list of elements with "enumerators" in "wrappers", using foldlList
+-- | creates an list of elements with "enumerators" in "wrappers" using foldlList
 foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
 foldlEnumList e w s l lst = foldlList s l $ map (\(a, b) -> a +:+ b) $ zip (numList e w $ length lst) lst
   where
@@ -77,7 +71,7 @@ foldlEnumList e w s l lst = foldlList s l $ map (\(a, b) -> a +:+ b) $ zip (numL
     wrap Parens x = sParen x
     wrap Period x = x :+: S "."
 
--- | creates a list of elements separated by separators, ending with "and" or "or"
+-- | creates a list of elements separated by a "separator", ending with "and" or "or"
 foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
 foldlList _ _ [] = EmptyS
 foldlList _ l [a, b] 

@@ -2,13 +2,13 @@ module Drasil.GlassBR.References where
 
 import Language.Drasil
 
-import Data.Drasil.Citations (koothoor2013, smithLai2005, parnasClements1986)
+import Data.Drasil.Citations (campidelli, koothoor2013, smithLai2005, parnasClements1986)
 import Data.Drasil.People (jRobertson, jmBracci, sRobertson, tlKohutek, wlBeason)
 
 rbrtsn2012, astm2009, astm2016, astm2012, beasonEtAl1998 :: Citation
 
 gbCitations :: BibRef
-gbCitations = [koothoor2013, smithLai2005, rbrtsn2012, astm2009, astm2016,
+gbCitations = [campidelli, koothoor2013, smithLai2005, rbrtsn2012, astm2009, astm2016,
   astm2012, beasonEtAl1998, parnasClements1986]
 
 rbrtsn2012 = cMisc "rbrtsn2012" [author [jRobertson, sRobertson], title

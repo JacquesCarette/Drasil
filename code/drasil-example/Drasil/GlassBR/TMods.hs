@@ -1,4 +1,4 @@
-module Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq,t1IsSafe,t2IsSafe) where
+module Drasil.GlassBR.TMods (tModels, pbSafetyReq, lrSafetyReq, pbIsSafe, lrIsSafe) where
 
 import Drasil.GlassBR.Unitals (demand, demandq, is_safe1, is_safe2, lRe,
   pb_tol, prob_br)
@@ -13,48 +13,47 @@ import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
 {--}
 
 tModels :: [RelationConcept]
-tModels = [t1SafetyReq, t2SafetyReq]
+tModels = [pbSafetyReq, lrSafetyReq]
 
 -- FIXME: This is a hack to see if TheoryModel printing will work. This chunk
 -- needs to be updated properly.
--- this is the new function but it still uses the t1SafetyReq,
--- so basiclly we have to combine the old function with the new function
+-- this is the new function but it still uses the pbSafetyReq,
+-- so basically we have to combine the old function with the new function
 
-t1IsSafe :: TheoryModel
-t1IsSafe = tm' (cw t1SafetyReq) 
+pbIsSafe :: TheoryModel
+pbIsSafe = tm' (cw pbSafetyReq) 
   (tc' "isSafe" [qw is_safe1, qw prob_br, qw pb_tol] ([] :: [ConceptChunk])
   [] [TCon Invariant $ (sy is_safe1) $= (sy prob_br) $< (sy pb_tol)] [])
   "isSafe" --shortname
-  [t1descr]
+  [pbSafeDescr]
 
-t1SafetyReq :: RelationConcept
-t1SafetyReq = makeRC "safetyReqPb" (nounPhraseSP "Safety Req-Pb")
-  t1descr ((sy is_safe1) $= (sy prob_br) $< (sy pb_tol))
+pbSafetyReq :: RelationConcept
+pbSafetyReq = makeRC "safetyReqPb" (nounPhraseSP "Safety Req-Pb")
+  pbSafeDescr ((sy is_safe1) $= (sy prob_br) $< (sy pb_tol))
 
-t1descr :: Sentence
-t1descr = tDescr (is_safe1) s ending
+pbSafeDescr :: Sentence
+pbSafeDescr = tDescr (is_safe1) s ending
   where 
     s = (ch is_safe1) `sAnd` (ch is_safe2) +:+ sParen (S "from" +:+ 
-      (ref t2SafetyReq))
+      (ref lrSafetyReq))
     ending = ((ch prob_br) `isThe` (phrase prob_br)) `sC` S "as calculated in" +:+.
       (ref probOfBr) +:+ (ch pb_tol) `isThe` (phrase pb_tol) +:+ S "entered by the user"
 
-
-t2IsSafe :: TheoryModel
-t2IsSafe = tm' (cw t2SafetyReq)
+lrIsSafe :: TheoryModel
+lrIsSafe = tm' (cw lrSafetyReq)
    (tc' "isSafe2" [qw is_safe2, qw lRe, qw demand] ([] :: [ConceptChunk])
    [] [TCon Invariant $ (sy is_safe2) $= (sy lRe) $> (sy demand)] []) "isSafe2"
-   [t2descr]
+   [lrSafeDescr]
 
-t2SafetyReq :: RelationConcept
-t2SafetyReq = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
-  t2descr ( (sy is_safe2) $= (sy lRe) $> (sy demand))
+lrSafetyReq :: RelationConcept
+lrSafetyReq = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
+  lrSafeDescr ( (sy is_safe2) $= (sy lRe) $> (sy demand))
 
-t2descr :: Sentence
-t2descr = tDescr (is_safe2) s ending
+lrSafeDescr :: Sentence
+lrSafeDescr = tDescr (is_safe2) s ending
   where 
     s = ((ch is_safe1) +:+ sParen (S "from" +:+ (makeRef ((Definition . Theory) 
-        t1SafetyReq))) `sAnd` (ch is_safe2))
+        pbSafetyReq))) `sAnd` (ch is_safe2))
     ending = (short lResistance) `isThe` (phrase lResistance) +:+ 
       sParen (S "also called capacity") `sC` S "as defined in" +:+. 
       (ref calOfCap) +:+ (ch demand) +:+ sParen (S "also referred as the" +:+ 

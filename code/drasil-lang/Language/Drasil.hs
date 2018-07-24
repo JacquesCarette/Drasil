@@ -153,7 +153,7 @@ module Language.Drasil (
   -- Misc
   , mkTable, unit_symb, introduceAbb, phrase, plural, phrase's 
   , plural's, at_start, at_start'
-  , unitToSentence, unitToSentenceUnitless
+  , unitToSentence, unitToSentenceUnitless, sortBySymbol
   -- Generate
   --, gen, genCode
   -- People

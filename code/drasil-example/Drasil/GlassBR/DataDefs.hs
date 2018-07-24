@@ -3,12 +3,15 @@ module Drasil.GlassBR.DataDefs (aspRat, dataDefns, dimLL, gbQDefns, glaTyFac,
 
 import Language.Drasil
 import Prelude hiding (log, exp, sqrt)
+import Drasil.DocLang (refA)
 
+import Drasil.GlassBR.Concepts (annealed, fullyT, heatS)
 import Drasil.GlassBR.Unitals (actualThicknesses, aspectR, 
   demand, dimlessLoad, gTF, glassTypeAbbrsStr, glassTypeFactors, glass_type, 
   lDurFac, load_dur, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pb_tol, 
   plate_len, plate_width, risk_fun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
   sflawParamM, stressDistFac, tolLoad, min_thick)
+import Drasil.GlassBR.Assumptions (gbRefDB, newA5)
 
 import Data.Drasil.Concepts.Documentation (datum, user)
 import Data.Drasil.Concepts.Math (probability, parameter, calculation)
@@ -33,7 +36,7 @@ gbQDefns = [Parallel hFromt {-DD2-} [glaTyFac {-DD6-}]] ++ --can be calculated o
 risk_eq :: Expr
 risk_eq = ((sy sflawParamK) / 
   ((sy plate_len) * (sy plate_width)) $^ ((sy sflawParamM) - 1) *
-  (1000 * sy mod_elas * (square $ sy min_thick)) $^ (sy sflawParamM) 
+  (sy mod_elas * (square $ sy min_thick)) $^ (sy sflawParamM) 
   * (sy lDurFac) * (exp (sy stressDistFac)))
 
 -- FIXME [4] !!!
@@ -41,7 +44,8 @@ risk :: QDefinition
 risk = mkDataDef risk_fun risk_eq
 
 riskDD :: DataDefinition
-riskDD = mkDD risk [sourceref $ S "[4]"] [{-derivation-}] ""{-temporary-} 
+riskDD = mkDD risk [(sourceref (S "[4]")), (sourceref (S "[5, Eq. 14]"))] 
+  [{-derivation-}] ""{-temporary-} 
   (Just $ aGrtrThanB : hRef : ldfRef : jRef : [])
 
 --DD2--
@@ -112,7 +116,7 @@ glaTyFac = mkDataDef gTF glaTyFac_eq
 
 glaTyFacDD :: DataDefinition
 glaTyFacDD = mkDD glaTyFac [{-references-}] [{-derivation-}] ""--temporary
-  Nothing
+  (Just $ anGlass : ftGlass : hsGlass : [])
 
 --DD7--
 
@@ -124,8 +128,8 @@ dimLL :: QDefinition
 dimLL = mkDataDef dimlessLoad dimLL_eq
 
 dimLLDD :: DataDefinition
-dimLLDD = mkDD dimLL [{-references-}] [{-derivation-}] ""--temporary
-  (Just $ qRef : aGrtrThanB : hRef : gtfRef : [])
+dimLLDD = mkDD dimLL [sourceref $ S "[5, Eq. 7]"] [{-derivation-}] ""--temporary
+  (Just $ qRef : aGrtrThanB : hRef : gtfRef : a5Ref : [])
 
 --DD8--
 
@@ -182,17 +186,26 @@ aspRatDD = mkDD aspRat [{-references-}] [{-derivation-}] ""--temporary
 --Additional Notes--
 
 aGrtrThanB :: Sentence
-aGrtrThanB = ((ch plate_len) `sC` (ch plate_width) +:+ 
+aGrtrThanB = (ch plate_len `sC` ch plate_width +:+ 
   S "are" +:+ plural dimension +:+ S "of the plate" `sC` S "where" +:+. 
   sParen (E (sy plate_len $> sy plate_width)))
+
+anGlass :: Sentence
+anGlass = (getAcc annealed +:+ S "is" +:+ phrase annealed +:+ S "glass")
 
 arRef :: Sentence
 arRef = (ch aspectR +:+ S "is the" +:+ phrase aspectR +:+.
   S "defined in DD11")
 
+ftGlass :: Sentence
+ftGlass = (getAcc fullyT +:+ S "is" +:+ phrase fullyT +:+ S "glass")
+
 hRef :: Sentence
 hRef = (ch min_thick +:+ S "is the minimum thickness" `sC` 
   S "which is based on the nominal thicknesses" +:+. S "as shown in DD2")
+
+hsGlass :: Sentence
+hsGlass = (getAcc heatS +:+ S "is" +:+ phrase heatS +:+ S "glass")
 
 ldfRef :: Sentence
 ldfRef = (ch lDurFac +:+ S "is the" +:+ phrase lDurFac +:+. 
@@ -236,3 +249,6 @@ jRef2 = (ch stressDistFac +:+ S "is the" +:+ phrase stressDistFac `sC`
 
 jtolRelToPbtol :: Sentence
 jtolRelToPbtol = (ch sdf_tol +:+ S " is calculated with reference to " +:+. ch pb_tol)
+
+a5Ref :: Sentence 
+a5Ref = (ch dimlessLoad +:+ S "is calculated with reference to" +:+. (refA gbRefDB newA5))

@@ -108,7 +108,7 @@ mkQField d _ l@DefiningEquation fs = (show l, (eqUnR $ sy d $= d ^. equat):[]) :
 mkQField d m l@(Description v u) fs =
   (show l, buildDDescription v u d m) : fs
 mkQField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
-mkQField _ _ l@(Source) fs = (show l, fixme) : fs
+mkQField d _ l@(Source) fs = (show l, [Paragraph $ getSource d]) : fs
 mkQField d _ l@(Notes) fs = maybe fs (\ss -> (show l, map Paragraph ss) : fs) (d ^. getNotes)
 mkQField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for data definitions"
@@ -122,7 +122,7 @@ mkDDField d _ l@DefiningEquation fs = (show l, (eqUnR $ sy d $= d ^. relat):[]) 
 mkDDField d m l@(Description v u) fs =
   (show l, buildDDescription' v u d m) : fs
 mkDDField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
-mkDDField _ _ l@(Source) fs = (show l, fixme) : fs
+mkDDField d _ l@(Source) fs = (show l, [Paragraph $ getSource d]) : fs
 mkDDField d _ l@(Notes) fs = maybe fs (\ss -> (show l, map Paragraph ss) : fs) (d ^. getNotes)
 mkDDField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for data definitions"

@@ -3,7 +3,7 @@
 <head>
 <link rel="stylesheet" type="text/css" href="GlassBR_SRS.css">
 <title>
-Software Requirements Specification for GlassBR program
+Software Requirements Specification for GlassBR
 </title>
 <meta charset="utf-8">
 <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
@@ -11,7 +11,7 @@ Software Requirements Specification for GlassBR program
 <body>
 <div class="title">
 <h1>
-Software Requirements Specification for GlassBR program
+Software Requirements Specification for GlassBR
 </h1>
 </div>
 <div class="author">
@@ -123,6 +123,17 @@ m
 </tr>
 <tr>
 <td>
+<em>AR</em>
+</td>
+<td>
+Aspect ratio
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
 <em>AR<sub>max</sub></em>
 </td>
 <td>
@@ -134,10 +145,10 @@ Maximum aspect ratio
 </tr>
 <tr>
 <td>
-<em>AR</em>
+<em>B</em>
 </td>
 <td>
-Aspect ratio
+Risk of failure
 </td>
 <td>
 --
@@ -152,17 +163,6 @@ Plate width (short dimension)
 </td>
 <td>
 m
-</td>
-</tr>
-<tr>
-<td>
-<em>B</em>
-</td>
-<td>
-Risk of failure
-</td>
-<td>
---
 </td>
 </tr>
 <tr>
@@ -704,14 +704,6 @@ Theoretical Model
 </tr>
 <tr>
 <td>
-TNT
-</td>
-<td>
-TNT (Trinitrotoluene) Equivalent Factor
-</td>
-</tr>
-<tr>
-<td>
 UC
 </td>
 <td>
@@ -923,7 +915,7 @@ The user provides the inputs to GlassBR for use within the analysis. There are t
 Specific System Description
 </h1>
 <p class="paragraph">
-This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used for the GlassBR program.
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
 </p>
 <div id="Sec:ProbDesc">
 <div class="subsection">
@@ -1989,6 +1981,22 @@ Description
 <em>g</em> is the glass type <em>g&thinsp;&isin;&thinsp;{AN,FT,HS}</em> (Unitless)
 </li>
 </ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+AN is annealed glass
+</p>
+<p class="paragraph">
+FT is fully tempered glass
+</p>
+<p class="paragraph">
+HS is heat strengthened glass
+</p>
 </td>
 </tr>
 <tr>

@@ -424,7 +424,7 @@ mkScpOfProjSec (ScpOfProjProg kWrd uCTCntnts indCases) =
 mkSSDSec :: SystemInformation -> SSDSec -> Section
 mkSSDSec _ (SSDVerb s) = s
 mkSSDSec si (SSDProg l) =
-  SSD.specSysDescr (siSys si) $ map (mkSubSSD si) l
+  SSD.specSysDescr $ map (mkSubSSD si) l
   where
     mkSubSSD :: SystemInformation -> SSDSub -> Section
     mkSubSSD _ (SSDSubVerb s)        = s

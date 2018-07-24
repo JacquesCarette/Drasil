@@ -77,9 +77,9 @@ $B$ & Risk of failure & --
 \\
 $b$ & Plate width (short dimension) & m
 \\
-${d_{max}}$ & Maximum value for one of the dimensions of the glass plate & mm
+${d_{max}}$ & Maximum value for one of the dimensions of the glass plate & m
 \\
-${d_{min}}$ & Minimum value for one of the dimensions of the glass plate & mm
+${d_{min}}$ & Minimum value for one of the dimensions of the glass plate & m
 \\
 $E$ & Modulus of elasticity of glass & Pa
 \\
@@ -113,7 +113,7 @@ ${P_{b}}$ & Probability of breakage & --
 \\
 ${P_{btol}}$ & Tolerable probability of breakage & --
 \\
-$q$ & Applied load (demand) & kPa
+$q$ & Applied load (demand) & Pa
 \\
 $\hat{q}$ & Dimensionless load & --
 \\
@@ -287,7 +287,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Non-factored load (NFL) - Three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass.}
 \item{Glass weight load - The dead load component of the glass weight.}
 \item{Short duration load - Any load lasting 3 seconds or less.}
-\item{Specified design load - The magnitude in kPa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority.}
+\item{Specified design load - The magnitude in Pa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority.}
 \item{Long duration load - Any load lasting approximately 30 days.}
 \end{itemize}
 \item{Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge. It is represented by the coordinates (${SD_{x}}$, ${SD_{y}}$, ${SD_{z}}$).}
@@ -391,7 +391,7 @@ Equation & \begin{dmath}
 Description & \begin{symbDescription}
               \item{$is\_safe2$ is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)}
               \item{$LR$ is the load resistance (Unitless)}
-              \item{$q$ is the applied load (demand) (kPa)}
+              \item{$q$ is the applied load (demand) (Pa)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & If $is\_safe2$, the glass is considered safe. $is\_safe1$ (from \hyperref[T:safetyReqPb]{Definition~T:safetyReqPb}) and $is\_safe2$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[T:calOfCap]{Definition~T:calOfCap}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[T:calOfDe]{Definition~T:calOfDe}.
@@ -638,7 +638,7 @@ Equation & \begin{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\hat{q}$ is the dimensionless load (Unitless)}
-              \item{$q$ is the applied load (demand) (kPa)}
+              \item{$q$ is the applied load (demand) (Pa)}
               \item{$a$ is the plate length (long dimension) (m)}
               \item{$b$ is the plate width (short dimension) (m)}
               \item{$E$ is the modulus of elasticity of glass (Pa)}
@@ -899,7 +899,7 @@ Equation & \begin{dmath}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$q$ is the applied load (demand) (kPa)}
+              \item{$q$ is the applied load (demand) (Pa)}
               \item{${w_{TNT}}$ is the explosive mass in equivalent weight of TNT (kg)}
               \item{$SD$ is the stand off distance (m)}
               \end{symbDescription}
@@ -1189,9 +1189,9 @@ Symbol & Description & Value & Unit
 \midrule
 ${AR_{max}}$ & maximum aspect ratio & $5.0$ & --
 \\
-${d_{max}}$ & maximum value for one of the dimensions of the glass plate & $5.0$ & mm
+${d_{max}}$ & maximum value for one of the dimensions of the glass plate & $5.0$ & m
 \\
-${d_{min}}$ & minimum value for one of the dimensions of the glass plate & $0.1$ & mm
+${d_{min}}$ & minimum value for one of the dimensions of the glass plate & $0.1$ & m
 \\
 $E$ & modulus of elasticity of glass & $7.17 10^{7}$ & Pa
 \\

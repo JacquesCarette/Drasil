@@ -15,8 +15,8 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SCSSub(..), 
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
-  TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), cite, 
-  dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
+  TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), 
+  cite, dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
   mkRequirement, outDataConstTbl, physSystDesc, probDescF, termDefnF, 
   traceGIntro, tsymb)
 
@@ -48,20 +48,20 @@ import Data.Drasil.SentenceStructures (acroR, sVersus, sAnd, foldlSP,
   foldlsC, sOf, followA, ofThe, sIn, isThe, isExpctdToHv, sOr, underConsidertn,
   tAndDWAcc, tAndDOnly, tAndDWSym, andThe)
 import Data.Drasil.Software.Products (sciCompS)
-import Data.Drasil.Utils (makeTMatrix, makeListRef, itemRefToSent,
+import Data.Drasil.Utils (makeTMatrix, makeListRef, itemRefToSent, noRefs,
   refFromType, enumSimple, enumBullet, prodUCTbl)
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptionDescs,
   gbRefDB, newAssumptions)
 import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
-import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist, glaSlab, 
-  blastRisk, glass, glaPlane, glassBRProg, ptOfExplsn, acronyms)
+import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, 
+  glass, gLassBR, lShareFac, ptOfExplsn, stdOffDist)
 import Drasil.GlassBR.DataDefs (aspRat, dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
   dimLL, glaTyFac, tolStrDisFac, tolPre, risk, standOffDis)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
-import Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq, t1IsSafe, t2IsSafe)
+import Drasil.GlassBR.TMods (tModels, pbSafetyReq, lrSafetyReq, pbIsSafe, lrIsSafe)
 import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr, probOfBreak, 
   calofCapacity, calofDemand)
 
@@ -130,7 +130,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
       , SSDSolChSpec 
         (SCSProg
           [ Assumptions
-          , TMs ([Label] ++ stdFields) [t1IsSafe, t2IsSafe]
+          , TMs ([Label] ++ stdFields) [pbIsSafe, lrIsSafe]
           , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
           , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand] HideDerivation
@@ -162,7 +162,7 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 glassSystInfo :: SystemInformation
 glassSystInfo = SI {
-  _sys         = glassBRProg,
+  _sys         = gLassBR,
   _kind        = srs,
   _authors     = [nikitha, spencerSmith],
   _units       = map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton],
@@ -202,8 +202,8 @@ functional_requirements_list, traceability_matrices_and_graphs_intro2 :: [Conten
 
 --------------------------------------------------------------------------------
 terminology_and_description_bullets :: Contents
-terminology_and_description_bullets = Enumeration $ (Numeric $
-  map tAndDOnly termsWithDefsOnly
+terminology_and_description_bullets = Enumeration $ Numeric $
+  noRefs $ map tAndDOnly termsWithDefsOnly
   ++
   terminology_and_description_bullets_glTySubSec
   ++
@@ -211,18 +211,18 @@ terminology_and_description_bullets = Enumeration $ (Numeric $
   ++
   map tAndDWAcc termsWithAccDefn
   ++
-  [tAndDWSym probBreak prob_br])
+  [tAndDWSym probBreak prob_br]
    --FIXME: merge? Needs 2 arguments because there is no instance for (SymbolForm ConceptChunk)...
 
 terminology_and_description_bullets_glTySubSec, terminology_and_description_bullets_loadSubSec :: [ItemType]
 
-terminology_and_description_bullets_glTySubSec = [Nested ((titleize glassTy) :+: S ":")
-  (Bullet $ map tAndDWAcc glassTypes)]
+terminology_and_description_bullets_glTySubSec = [Nested (titleize glassTy :+: S ":") $
+  Bullet $ noRefs $ map tAndDWAcc glassTypes]
 
-terminology_and_description_bullets_loadSubSec = [Nested ((at_start load) +:+ S "-" +:+ (load ^. defn))
-  (Bullet $ map tAndDWAcc (take 2 loadTypes)
+terminology_and_description_bullets_loadSubSec = [Nested (at_start load :+: S "-" +:+ (load ^.defn)) $
+  Bullet $ noRefs $ (map tAndDWAcc $ take 2 loadTypes)
   ++
-  map tAndDOnly (drop 2 loadTypes))]
+  (map tAndDOnly $ drop 2 loadTypes)]
 
 --Used in "Goal Statements" Section--
 goal_statements_list :: Contents
@@ -543,8 +543,8 @@ req4Desc = foldlSent [titleize output_, S "the", plural inQty,
   S "from", acroR 2]
 
 req5Desc cmd = foldlSent_ [S "If", (ch is_safe1), S "∧", (ch is_safe2),
-  sParen (S "from" +:+ (makeRef (reldefn t1SafetyReq))
-  `sAnd` (makeRef (reldefn t2SafetyReq))), S "are true" `sC`
+  sParen (S "from" +:+ (makeRef (reldefn pbSafetyReq))
+  `sAnd` (makeRef (reldefn lrSafetyReq))), S "are true" `sC`
   phrase cmd, S "the", phrase message, Quote (safeMessage ^. defn),
   S "If the", phrase condition, S "is false, then", phrase cmd,
   S "the", phrase message, Quote (notSafe ^. defn)]
@@ -555,14 +555,15 @@ testing1 :: [RelationConcept]
 testing1 = [probOfBr, calOfCap, calOfDe]
 --FIXME: rename or find better implementation?
 
-functional_requirements_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
+functional_requirements_req6 = [Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)
-  (Bullet $
-    map (\(a, d) -> Flat $ (at_start a) +:+ sParen (ch a) +:+
-    sParen (makeRef (reldefn d))) (zip testing testing1)
+  $ Bullet $ noRefs $
+    map (\(a, d) -> Flat $ at_start a +:+ sParen (ch a) +:+
+    sParen (makeRef $ reldefn d)) (zip testing testing1)
     ++
-    map (\d -> Flat $ (at_start d) +:+ sParen (ch d) +:+
-    sParen (makeRef (datadefn d))) functional_requirements_req6_pulledList))])]
+    map (\d -> Flat $ at_start d +:+ sParen (ch d) +:+
+    sParen (makeRef $ datadefn d)) functional_requirements_req6_pulledList
+    , Nothing)]]
 
 {--Nonfunctional Requirements--}
 

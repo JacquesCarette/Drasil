@@ -8,6 +8,8 @@ module Data.Drasil.Utils
   , makeTMatrix
   , itemRefToSent
   , refFromType
+  , noRefs
+  , noRefsLT
   , makeListRef
   , bulletFlat
   , bulletNested
@@ -66,13 +68,14 @@ enumWithAbbrev start abbrev = [abbrev :+: (S $ show x) | x <- [start..]]
 -- t - the title of the list
 -- l - the list to be enumerated
 mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
-mkEnumAbbrevList s t l = zip (enumWithAbbrev s t) (map Flat l)
+mkEnumAbbrevList s t l = zip (enumWithAbbrev s t) $ map Flat l
 
 -- | creates a list of references from l starting from s
 -- s - start indices
 -- l - list of references
 mkRefsList :: Integer -> [Sentence] -> Contents
-mkRefsList s l = Enumeration $ Simple $ zip (enumWithSquBrk s) (map Flat l)
+mkRefsList s l = Enumeration $ Simple $ noRefsLT $ zip (enumWithSquBrk s) $
+  map Flat l
 
 -- | creates a list of sentences of the form "[#]"
 -- start - start indices
@@ -141,13 +144,13 @@ makeListRef l r = take (length l) $ repeat $ makeRef r
 
 -- | bulletFlat applies Bullet and Flat to a list.
 bulletFlat :: [Sentence] -> ListType
-bulletFlat = Bullet . map Flat
+bulletFlat = Bullet . noRefs . map Flat
 
 -- | bulletNested applies Bullets and headers to a Nested ListType.
 -- t - Headers of the Nested lists.
 -- l - Lists of ListType.
 bulletNested :: [Sentence] -> [ListType] -> ListType
-bulletNested t l = Bullet . map (\(h,c) -> Nested h c) $ zip t l
+bulletNested t l = Bullet . map (\(h,c) -> (Nested h c, Nothing)) $ zip t l
 
 -- | enumBullet apply Enumeration, Bullet and Flat to a list
 enumBullet ::[Sentence] -> Contents
@@ -158,7 +161,7 @@ enumBullet = Enumeration . bulletFlat
 -- t - title of the list
 -- l - list to be enumerated
 enumSimple :: Integer -> Sentence -> [Sentence] -> Contents
-enumSimple s t l = Enumeration $ Simple $ mkEnumAbbrevList s t l
+enumSimple s t l = Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
 
 -- | interweaves two lists together [[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]
 weave :: [[a]] -> [a]
@@ -168,6 +171,16 @@ weave = concat . transpose
 unwrap :: (Maybe UnitDefn) -> Sentence
 unwrap (Just a) = Sy (a ^. usymb)
 unwrap Nothing  = EmptyS
+
+-- | noRefs converts lists of simple ItemTypes into a lists which may be used
+-- in Contents but not directly referable.
+noRefs :: [ItemType] -> [(ItemType, Maybe RefAdd)]
+noRefs a = zip a $ repeat Nothing
+
+-- | noRefsLT converts lists of tuples containing a title and ItemType into
+-- a ListTuple which can be used with Contents but not directly referable.
+noRefsLT :: [(Sentence, ItemType)] -> [ListTuple]
+noRefsLT a = uncurry zip3 (unzip a) $ repeat Nothing
 
 prodUCTbl :: [[Sentence]] -> Contents
 prodUCTbl cases = Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]

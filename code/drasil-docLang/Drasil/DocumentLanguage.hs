@@ -40,6 +40,7 @@ import Data.Drasil.Concepts.Documentation (refmat)
 
 import Data.Function (on)
 import Data.List (nub, sortBy)
+import Data.Ord (comparing)
 
 type System = Sentence
 type DocKind = Sentence
@@ -158,7 +159,7 @@ data GSDSec = GSDVerb Section
 
 data GSDSub where
   GSDSubVerb :: Section -> GSDSub
-  SysCntxt   :: [Contents] -> GSDSub
+  SysCntxt   :: [Contents] -> GSDSub --FIXME: partially automate
   UsrChars   :: [Contents] -> GSDSub
   SystCons   :: [Contents] -> [Section] -> GSDSub
 
@@ -254,7 +255,7 @@ mkSections si l = map doit l
     doit (IntroSec is)       = mkIntroSec si is
     doit (StkhldrSec sts)    = mkStkhldrSec sts
     doit (SSDSec ss)         = mkSSDSec si ss
-    doit (AuxConstntSec acs) = mkAuxConsSec acs
+    doit (AuxConstntSec acs) = mkAuxConsSec acs 
     doit Bibliography        = mkBib (citeDB si)
     doit (GSDSec gs')        = mkGSDSec gs'
     doit (ScpOfProjSec sop)  = mkScpOfProjSec sop
@@ -423,7 +424,7 @@ mkScpOfProjSec (ScpOfProjProg kWrd uCTCntnts indCases) =
 mkSSDSec :: SystemInformation -> SSDSec -> Section
 mkSSDSec _ (SSDVerb s) = s
 mkSSDSec si (SSDProg l) =
-  SSD.specSysDescr (siSys si) $ map (mkSubSSD si) l
+  SSD.specSysDescr $ map (mkSubSSD si) l
   where
     mkSubSSD :: SystemInformation -> SSDSub -> Section
     mkSubSSD _ (SSDSubVerb s)        = s
@@ -533,7 +534,7 @@ mkExistingSolnSec (ExistSolnProg cs) = SRS.offShelfSol cs []
 -- | Helper for making the 'Values of Auxiliary Constants' section
 mkAuxConsSec :: AuxConstntSec -> Section
 mkAuxConsSec (AuxConsVerb s) = s
-mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key listOfCons
+mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortBySymbol listOfCons
 
 {--}
 

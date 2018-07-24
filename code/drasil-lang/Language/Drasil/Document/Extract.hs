@@ -42,9 +42,9 @@ egetSec (Section _ sc _ _) = concatMap egetSecCon sc
 
 egetSecCon :: SecCons -> [Expr]
 egetSecCon (Sub s) = egetSec s
-egetSecCon (Con c) = egetCon c
+egetSecCon (Con c) = egetCon (c ^. accessContents)
 
-egetCon :: Contents -> [Expr]
+egetCon :: RawContent -> [Expr]
 egetCon (EqnBlock e _) = [e]
 egetCon (Definition d) = egetDtype d 
 egetCon (Defnt dt (hd:tl) a) = concatMap egetCon (snd hd) ++ egetCon (Defnt dt tl a)
@@ -70,7 +70,7 @@ getSec (Section t sc _ _) = t : concatMap getSecCon sc
 
 getSecCon :: SecCons -> [Sentence]
 getSecCon (Sub s) = getSec s
-getSecCon (Con c) = getCon c
+getSecCon (Con c) = getCon' c
 
 -- This function is used in collecting sentence from table.
 -- Since only the table's first Column titled "Var" should be collected,
@@ -81,7 +81,10 @@ isVar (_ : tl, _ : tl1) = isVar (tl, tl1)
 isVar ([], _) = []
 isVar (_, []) = []
 
-getCon :: Contents -> [Sentence]
+getCon' :: Contents -> [Sentence]
+getCon' c = getCon (c ^. accessContents)
+
+getCon :: RawContent -> [Sentence]
 getCon (Table s1 s2 t _ _) = isVar (s1, transpose s2) ++ [t]
 getCon (Paragraph s)       = [s]
 getCon (EqnBlock _ _)      = []
@@ -96,7 +99,6 @@ getCon (Graph [(s1, s2)] _ _ l _) = s1 : s2 : [l]
 getCon (Defnt dt (hd:fs) a) = concatMap getCon (snd hd) ++ getCon (Defnt dt fs a)
 getCon (Defnt _ [] _) = []
 getCon  _ = []
-
 
 getDtype :: DType -> [Sentence]
 getDtype (Data q) = getQDef q

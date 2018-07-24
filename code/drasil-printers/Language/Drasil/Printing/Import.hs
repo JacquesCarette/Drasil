@@ -269,7 +269,7 @@ makeDocument sm (Document title author sections) =
 -- | Translates from LayoutObj to the Printing representation of LayoutObj
 layout :: HasSymbolTable ctx => ctx -> Int -> SecCons -> T.LayoutObj
 layout sm currDepth (Sub s) = sec sm (currDepth+1) s
-layout sm _         (Con c) = lay sm c
+layout sm _         (Con c) = lay sm (c ^. accessContents)
 
 -- | Helper function for creating sections as layout objects
 createLayout :: HasSymbolTable ctx => ctx -> [Section] -> [T.LayoutObj]
@@ -285,7 +285,7 @@ sec sm depth x@(Section title contents _ _) = --FIXME: should ShortName be used 
 
 -- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.
-lay :: HasSymbolTable ctx => ctx -> Contents -> T.LayoutObj
+lay :: HasSymbolTable ctx => ctx -> RawContent -> T.LayoutObj
 lay sm x@(Table hdr lls t b _) = T.Table ["table"]
   ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S (refAdd x)) b (spec sm t)
 lay sm (Paragraph c)          = T.Paragraph (spec sm c)

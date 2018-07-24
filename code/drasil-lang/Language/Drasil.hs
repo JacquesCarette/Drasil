@@ -137,9 +137,11 @@ module Language.Drasil (
   , Referable(..), Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListTuple
   , section, fig, figWithWidth, section'' 
-  , datadefn, reldefn, MaxWidthPercent
+  , datadefn, reldefn, MaxWidthPercent  
+  , RawContent(..)
+  , HasContents(accessContents)
   -- Reference
-  , makeRef, acroTest, find'
+  , makeRef
   -- Space
   , Space(..)
   -- Symbol
@@ -240,7 +242,8 @@ import Language.Drasil.Document (Document(..), DType(..)
   , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..)
   , section, fig, figWithWidth, section''
   , datadefn, reldefn
-  , ListTuple, MaxWidthPercent)
+  , ListTuple, MaxWidthPercent
+  , RawContent(..), HasContents(accessContents))
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Development.UnitLang -- all of it
 import Language.Drasil.Development.Unit -- all of it
@@ -315,14 +318,14 @@ import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (Sentence(..),
   sParen, sParenNum, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
   semiCol, sParenDash, sDash)
-import Language.Drasil.Reference (makeRef, acroTest, ReferenceDB, assumpDB, reqDB
+import Language.Drasil.Reference (makeRef, ReferenceDB, assumpDB, reqDB
                                  , AssumpMap, assumpLookup, HasAssumpRefs
                                  , assumpRefTable, assumptionsFromDB
                                  , rdb, reqRefTable, reqLookup, RefBy(..)
                                  , HasReqRefs, Referable(..), customRef
                                  , HasChangeRefs, changeRefTable, changeLookup
                                  , citationRefTable, citeLookup, RefMap
-                                 , simpleMap, find')
+                                 , simpleMap)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 
   prime, sCurlyBrSymb, compsy, Stage(..))
 import Language.Drasil.SymbolAlphabet

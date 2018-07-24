@@ -182,7 +182,7 @@ noRefs a = zip a $ repeat Nothing
 noRefsLT :: [(Sentence, ItemType)] -> [ListTuple]
 noRefsLT a = uncurry zip3 (unzip a) $ repeat Nothing
 
-prodUCTbl :: [[Sentence]] -> Contents
+prodUCTbl :: [[Sentence]] -> RawContent
 prodUCTbl cases = Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
   cases
   (titleize useCaseTable) True "useCaseTable"

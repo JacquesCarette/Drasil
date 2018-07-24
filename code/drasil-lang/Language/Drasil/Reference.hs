@@ -22,7 +22,7 @@ import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName)
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid))
 import Language.Drasil.Document (Contents(..), DType(Data, Theory),
-  Section(Section), getDefName, repUnd)
+  Section(Section), getDefName, repUnd, RawContent(..))
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.Spec (Sentence((:+:), Ref, S))
 import Language.Drasil.UID (UID)
@@ -241,7 +241,8 @@ instance Referable InstanceModel where
   refAdd  i = "IM:" ++ i^.uid
   rType   _ = Def
 
-instance Referable Contents where
+--Fixme: should become "instance Referable Contents where"
+instance Referable RawContent where
   rType (Table _ _ _ _ _)       = Tab
   rType (Figure _ _ _ _)        = Fig
   rType (Definition (Data _))   = Def
@@ -327,25 +328,3 @@ customRef r n = Ref (rType r) (refAdd r) n
 -- Requirements and Likely Changes but I question whether we should use it.
 -- Pass it the item to be referenced and the enumerated list of the respective
 -- contents for that file. Change rType values to implement.
-
-acroTest :: Contents -> [Contents] -> Sentence
-acroTest ref reflst = makeRef $ find' ref reflst
-
-find' :: Contents -> [Contents] -> Contents
-find' _ [] = error "This object does not match any of the enumerated objects provided by the list."
-find' itm@(Assumption comp1) (frst@(Assumption comp2):lst)
-  | (comp1 ^. uid) == (comp2 ^. uid) = frst
-  | otherwise = find' itm lst
-find' itm@(Definition (Data comp1)) (frst@(Definition (Data comp2)):lst)
-  | (comp1 ^. uid) == (comp2 ^. uid) = frst
-  | otherwise = find' itm lst
-find' itm@(Definition (Theory comp1)) (frst@(Definition (Theory comp2)):lst)
-  | (comp1 ^. uid) == (comp2 ^. uid) = frst
-  | otherwise = find' itm lst
-find' itm@(Requirement comp1) (frst@(Requirement comp2):lst)
-  | (comp1 ^. uid) == (comp2 ^. uid) = frst
-  | otherwise = find' itm lst
-find' itm@(Change comp1) (frst@(Change comp2):lst)
-  | (comp1 ^. uid) == (comp2 ^. uid) = frst
-  | otherwise = find' itm lst
-find' _ _ = error "Error: Attempting to find unimplemented type"

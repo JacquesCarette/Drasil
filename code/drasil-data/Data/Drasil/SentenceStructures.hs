@@ -1,5 +1,5 @@
 module Data.Drasil.SentenceStructures
-  ( foldlSent, foldlSent_, foldlSentCol, foldlsC, foldlList, foldlInlineList, makeList
+  ( foldlSent, foldlSent_, foldlSentCol, foldlsC, foldlList, foldlInlineList
   , sAnd, andIts, andThe, sAre, sIn, sVersus
   , sIs, isThe, sOf, sOr, ofThe, ofThe'
   , ofGiv, ofGiv'
@@ -54,12 +54,6 @@ foldlSPCol = Paragraph . foldlSentCol
 foldlsC :: [Sentence] -> Sentence
 foldlsC = mconcat . intersperse (S ", ")
 
--- | creates a list of elements separated by commas, ending in a "_, and _"
-foldlList :: [Sentence] -> Sentence
-foldlList []    = EmptyS
-foldlList [a,b] = a `sAnd` b
-foldlList lst   = foldle1 sC (\a b -> a `sC` S "and" +:+ b) lst
-
 -- | creates a list of elements separated by commas, ending in a "_, or _"
 foldlOptions :: [Sentence] -> Sentence
 foldlOptions []    = EmptyS
@@ -67,13 +61,13 @@ foldlOptions [a,b] = a `sOr` b
 foldlOptions lst   = foldle1 sC (\a b -> a `sC` S "or" +:+ b) lst
 
 data EnumType = Numb | Upper | Lower
-data WrapType = Parens | Paren | Period
+data WrapType = Parens | Period
 data SepType  = Comma | SemiCol
 data FoldType = List | Options deriving (Eq)
 
 -- | creates an list of elements with "enumerators" in "wrappers", separated by a "separator", and ending with "and" or "or"
 foldlInlineList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
-foldlInlineList e w s l lst = makeList s l $ map (\(a, b) -> a +:+ b) $ zip (numList e w $ length lst) lst
+foldlInlineList e w s l lst = foldlList s l $ map (\(a, b) -> a +:+ b) $ zip (numList e w $ length lst) lst
   where
     numList :: EnumType -> WrapType -> Int -> [Sentence]
     numList Numb  w len = map (\x -> wrap w $ S $ show x) [1..len]
@@ -83,17 +77,17 @@ foldlInlineList e w s l lst = makeList s l $ map (\(a, b) -> a +:+ b) $ zip (num
     wrap Parens x = sParen x
     wrap Period x = x :+: S "."
 
--- Helper function to foldlInlineList - not exported
-makeList :: SepType -> FoldType -> [Sentence] -> Sentence
-makeList _ _ [] = EmptyS
-makeList _ l [a, b] 
+-- Helper function to foldlInlineList
+foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
+foldlList _ _ [] = EmptyS
+foldlList _ l [a, b] 
   | l == List    = a `sAnd` b
   | l == Options = a `sOr`  b 
-makeList s l lst 
+foldlList s l lst 
   | l == List    = foldle1 (getSep s) (\a b -> (getSep s) a (S "and" +:+ b)) lst
   | l == Options = foldle1 (getSep s) (\a b -> (getSep s) a (S "or" +:+ b))  lst
 
---Helper function to makeList - not exported
+--Helper function to foldlList - not exported
 getSep :: SepType -> (Sentence -> Sentence -> Sentence)
 getSep Comma   = sC
 getSep SemiCol = semiCol
@@ -255,10 +249,10 @@ constraintToExpr c (EnumeratedStr _ l) = isin (sy c) (DiscreteS l)
 
 --Formatters for the constraints
 fmtPhys :: (Constrained c, Quantity c) => c -> Sentence
-fmtPhys c = foldlList $ map (E . constraintToExpr c) $ filter isPhysC (c ^. constraints)
+fmtPhys c = foldlList Comma List $ map (E . constraintToExpr c) $ filter isPhysC (c ^. constraints)
 
 fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
-fmtSfwr c = foldlList $ map (E . constraintToExpr c) $ filter isSfwrC (c ^. constraints)
+fmtSfwr c = foldlList Comma List $ map (E . constraintToExpr c) $ filter isSfwrC (c ^. constraints)
 
 replaceEmptyS :: Sentence -> Sentence
 replaceEmptyS EmptyS = none

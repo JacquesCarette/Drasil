@@ -9,7 +9,7 @@ module Drasil.Sections.Introduction
 import Language.Drasil
 import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc)
 import Data.Drasil.SentenceStructures (ofThe, ofThe',
-  foldlList, foldlsC, refineChain, foldlSP)
+  foldlList, SepType(Comma), FoldType(List), foldlsC, refineChain, foldlSP)
 import Data.Drasil.Concepts.Documentation as Doc (goal, organization, thModel, inModel, goalStmt,
   documentation, user, theory, definition, scope, requirement, section_, document, purpose,
   system, model, design, intReader, srs, characteristic, designDoc, decision, environment,
@@ -44,7 +44,7 @@ developmentProcessParagraph refdb = foldlSP [S "This", phrase document,
 
 -- | Sentence containing the subsections of the introduction
 introductionSubsections :: Sentence
-introductionSubsections = foldlList (map (\(x,y) -> x `ofThe` y) 
+introductionSubsections = foldlList Comma List (map (\(x,y) -> x `ofThe` y) 
   [(phrase scope, phrase system), 
   (phrase Doc.organization, phrase document), 
   (plural characteristic, phrase intReader)])

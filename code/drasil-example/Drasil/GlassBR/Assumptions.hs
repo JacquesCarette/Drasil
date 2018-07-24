@@ -8,7 +8,7 @@ import Drasil.DocLang (cite, refA)
 import Data.Drasil.Concepts.Documentation as Doc (condition, constant, practice, reference, scenario, 
   system, value)
 import Data.Drasil.Concepts.Math (calculation, surface, shape)
-import Data.Drasil.SentenceStructures (EnumType(Numb), WrapType(Parens), SepType(SemiCol), 
+import Data.Drasil.SentenceStructures (EnumType(Numb), WrapType(Parens), SepType(..), 
   FoldType(List), foldlSent, foldlSent_, foldlOptions, foldlList, foldlInlineList, 
   sAnd, sIn, sOf)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
@@ -71,7 +71,7 @@ a4Desc :: UnitaryChunk -> Sentence
 a4Desc mainIdea = foldlSent [S "The", plural value, S "provided in",
   makeRef (SRS.valsOfAuxCons SRS.missingP []), S "are assumed for the",
   phrase mainIdea, sParen (ch mainIdea) `sC` S "and the",
-  plural materialProprty `sOf` foldlList (map ch
+  plural materialProprty `sOf` foldlList Comma List (map ch
   (take 3 assumptionConstants))] +:+ S "[IM1, DD3, DD5, DD7, DD9]"
 
 a5Desc :: Sentence

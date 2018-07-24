@@ -75,8 +75,8 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   tsymb, valsOfAuxConstantsF)
  
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
-  foldlList, isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP, acroIM,
-  acroGD)
+  foldlList, SepType(Comma), FoldType(List), isThe, sOf, ofThe, foldlSPCol, 
+  foldlSent, foldlSP, acroIM, acroGD)
 import Data.Drasil.Units.Thermodynamics (thermal_flux)
 
 -- This defines the standard units used throughout the document
@@ -488,7 +488,7 @@ genDefnDesc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
   ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
   acroGD 2, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
-  titleize' assumption, (foldlList $ (map (\d -> sParen (makeRef (find' d npcmAssumptions))))
+  titleize' assumption, (foldlList Comma List $ (map (\d -> sParen (makeRef (find' d npcmAssumptions))))
   assumps) `sC` S "we have"]
 
 genDefnDesc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]
@@ -947,7 +947,7 @@ tempName = [thModel, genDefn, dataDefn, inModel, likelyChg, assumption]
 traceIntro2 :: [Contents]
 traceIntro2 = traceGIntro [traceFig1, traceFig2]
 
-  [(foldlList $ map plural tempName) +:+. S "on each other",
+  [(foldlList Comma List $ map plural tempName) +:+. S "on each other",
 
   foldlSent_ [plural inModel `sC` plural requirement `sC`
   S "and", plural datumConstraint, S "on each other"]]

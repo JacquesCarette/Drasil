@@ -37,12 +37,18 @@ egetDoc (Document _ _ s) = concatMap egetSec s
 -- values (like min, max) that are used for defined basic Chunk.
 -- These values should not appear in the basic Table of symbol.
 egetSec :: Section -> [Expr]
-egetSec (Section _ _ _) = []
+egetSec (Section _ sc lb) = case lb ^. shortname of
+	(ShortNm "RefMat") -> []
+	_ -> concatMap egetSecCon sc
 egetSec (Section _ sc _) = concatMap egetSecCon sc
 
 egetSecCon :: SecCons -> [Expr]
-egetSecCon (Sub s) = egetSec s
-egetSecCon (Con c) = egetCon c
+egetSecCon (Sub  s)  = egetSec s
+egetSecCon (Con  c)  = egetCon c
+egetSecCon (LCon lc) = egetLCon lc
+
+egetLCon :: LabelledContent -> [Expr]
+egetLCon lc = egetCon $ accessContents lc
 
 egetCon :: Contents -> [Expr]
 egetCon (EqnBlock e _) = [e]
@@ -63,14 +69,19 @@ getDoc :: Document -> [Sentence]
 getDoc (Document t a s) = t : a : concatMap getSec s
 
 getSec :: Section -> [Sentence]
+getSec (Section t sc lb) = case lb ^. shortname of
+	(ShortNm "AuxConstants") -> []
+	(ShortNm "RefMat") -> []
+	_ -> t : concatMap getSecCon sc
 getSec (Section _ _ _) = []
-getSec (Section _ _ _) = []
-getSec (Section t sc _) = t : concatMap getSecCon sc
 
 getSecCon :: SecCons -> [Sentence]
 getSecCon (Sub s) = getSec s
 getSecCon (Con c) = getCon c
---getSecCon (LCon lc) = getLC lc
+getSecCon (LCon lc) = getLCon lc
+
+getLCon :: LabelledContent -> [Sentence]
+getLCon lc = getCon $ accessContents lc
 
 -- This function is used in collecting sentence from table.
 -- Since only the table's first Column titled "Var" should be collected,
@@ -93,7 +104,7 @@ getCon (Assumption assc)   = getAss assc
 getCon (Change chg)        = getChg chg
 getCon (Bib bref)          = getBib bref
 getCon (Graph [(s1, s2)] _ _ l _) = s1 : s2 : [l]
-getCon (Defnt dt (hd:fs) a) = concatMap getCon (map accessContents $ snd hd) ++ getCon (Defnt dt fs a)
+getCon (Defnt dt (hd:fs) a) = concatMap getLCon (snd hd) ++ getCon (Defnt dt fs a)
 getCon (Defnt _ [] _) = []
 getCon  _ = []
 

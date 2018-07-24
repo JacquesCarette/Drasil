@@ -15,7 +15,7 @@ module Data.Drasil.SentenceStructures
   , fmtPhys, fmtSfwr, typUncr
   , mkTableFromColumns
   , acroA, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, acroT
-  , EnumType(..), WrapType(..), FoldType(..)
+  , EnumType(..), WrapType(..), SepType(..), FoldType(..)
   ) where
 
 import Language.Drasil
@@ -68,11 +68,12 @@ foldlOptions lst   = foldle1 sC (\a b -> a `sC` S "or" +:+ b) lst
 
 data EnumType = Numb | Upper | Lower
 data WrapType = Parens | Paren | Period
+data SepType  = Comma | SemiCol
 data FoldType = List | Options deriving (Eq)
 
--- | creates an list of elements with "enumerators" in "wrappers", separated by a sep, and ending with "and" or "or"
-foldlInlineList :: EnumType -> WrapType -> Sentence -> FoldType -> [Sentence] -> Sentence
-foldlInlineList e w sep l lst = makeList sep l $ map (\(a, b) -> a +:+ b) $ zip (numList e w $ length lst) lst
+-- | creates an list of elements with "enumerators" in "wrappers", separated by a "separator", and ending with "and" or "or"
+foldlInlineList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
+foldlInlineList e w s l lst = makeList s l $ map (\(a, b) -> a +:+ b) $ zip (numList e w $ length lst) lst
   where
     numList :: EnumType -> WrapType -> Int -> [Sentence]
     numList Numb  w len = map (\x -> wrap w $ S $ show x) [1..len]
@@ -84,14 +85,19 @@ foldlInlineList e w sep l lst = makeList sep l $ map (\(a, b) -> a +:+ b) $ zip 
     wrap Period x = x :+: S "."
 
 -- Helper function to foldlInlineList - not exported
-makeList :: Sentence -> FoldType -> [Sentence] -> Sentence
-makeList _ _ []     = EmptyS
+makeList :: SepType -> FoldType -> [Sentence] -> Sentence
+makeList _ _ [] = EmptyS
 makeList _ l [a, b] 
   | l == List    = a `sAnd` b
   | l == Options = a `sOr`  b 
 makeList s l lst 
-  | l == List    = foldle1 sC (\a b -> a `sC` S "and" +:+ b) lst
-  | l == Options = foldle1 sC (\a b -> a `sC` S "or"  +:+ b) lst
+  | l == List    = foldle1 (getSep s) (\a b -> (getSep s) a (S "and" +:+ b)) lst
+  | l == Options = foldle1 (getSep s) (\a b -> (getSep s) a (S "or" +:+ b))  lst
+
+--Helper function to makeList - not exported
+getSep :: SepType -> (Sentence -> Sentence -> Sentence)
+getSep Comma   = sC
+getSep SemiCol = semiCol
 
 {--** Combinators **--}
 sAnd, andIts :: Sentence -> Sentence -> Sentence

@@ -101,8 +101,7 @@ makeLenses ''Section
 
 instance HasShortName  Section where shortname (Section _ _ _ sn') = sn'
 
-data LabelledContent = LblC { _uniqueID :: UID
-                            , _lbl :: Label
+data LabelledContent = LblC { _lbl :: Label
                             , ctype :: Contents
                             }
 makeLenses ''LabelledContent
@@ -110,7 +109,7 @@ makeLenses ''LabelledContent
 instance HasRefAddress LabelledContent where getRefAdd = lbl . getRefAdd
 
 -- | Smart constructor for labelled content chunks (should not be exported)
-llcc :: UID -> Label -> Contents -> LabelledContent
+llcc :: Label -> Contents -> LabelledContent
 llcc = LblC
 
 instance HasShortName  Contents where
@@ -132,9 +131,8 @@ instance HasShortName  Contents where
 ---------------------------------------------------------------------------
 -- smart constructors needed for LabelledContent
 -- nothing has a shortname right now
-mkTableLC :: String -> String -> String -> String -> Contents -> LabelledContent
-mkTableLC uidForContent labelUID refAdd sn' tbl = llcc uidForContent 
-  (mkLabelRA labelUID refAdd sn') tbl
+mkTableLC :: String -> String -> String -> Contents -> LabelledContent
+mkTableLC labelUID refAdd sn' tbl = llcc (mkLabelRA labelUID refAdd sn') tbl
 
 {-mkParagraph
 mkEqnBlock

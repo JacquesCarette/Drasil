@@ -1,5 +1,5 @@
 module Data.Drasil.SentenceStructures
-  ( foldlSent, foldlSent_, foldlSentCol, foldlsC, foldlList, foldlInlineList
+  ( foldlSent, foldlSent_, foldlSentCol, foldlsC, foldlList, foldlEnumList
   , sAnd, andIts, andThe, sAre, sIn, sVersus
   , sIs, isThe, sOf, sOr, ofThe, ofThe'
   , ofGiv, ofGiv'
@@ -65,9 +65,9 @@ data WrapType = Parens | Period
 data SepType  = Comma | SemiCol
 data FoldType = List | Options deriving (Eq)
 
--- | creates an list of elements with "enumerators" in "wrappers", separated by a "separator", and ending with "and" or "or"
-foldlInlineList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
-foldlInlineList e w s l lst = foldlList s l $ map (\(a, b) -> a +:+ b) $ zip (numList e w $ length lst) lst
+-- | creates an list of elements with "enumerators" in "wrappers", using foldlList
+foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
+foldlEnumList e w s l lst = foldlList s l $ map (\(a, b) -> a +:+ b) $ zip (numList e w $ length lst) lst
   where
     numList :: EnumType -> WrapType -> Int -> [Sentence]
     numList Numb  w len = map (\x -> wrap w $ S $ show x) [1..len]
@@ -77,7 +77,7 @@ foldlInlineList e w s l lst = foldlList s l $ map (\(a, b) -> a +:+ b) $ zip (nu
     wrap Parens x = sParen x
     wrap Period x = x :+: S "."
 
--- Helper function to foldlInlineList
+-- | creates a list of elements separated by separators, ending with "and" or "or"
 foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
 foldlList _ _ [] = EmptyS
 foldlList _ l [a, b] 

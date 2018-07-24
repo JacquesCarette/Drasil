@@ -3,10 +3,10 @@ module Drasil.DocLang.SRS
   genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
   probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assumpt, thModel,
   genDefn, inModel, dataDefn, datCon, require, nonfuncReq, funcReq, likeChg, unlikeChg, 
-  traceyMandG, appendix, reference, propCorSol, offShelfSol, missingP, valsOfAuxCons,
+  traceyMandG, appendix, reference, propCorSol, offShelfSol, valsOfAuxCons,
   tOfSymb, 
   physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, inModelLabel,
-  likeChgLabel, unlikeChgLabel, valsOfAuxConsLabel) where
+  likeChgLabel, unlikeChgLabel, valsOfAuxConsLabel, referenceLabel, indPRCaseLabel) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
@@ -60,7 +60,7 @@ sysCon      cs ss = section' (titleize' Doc.systemConstraint)    cs ss  "SysCons
 
 scpOfTheProj cs ss = section' (at_start (Doc.scpOfTheProj titleize)) cs ss "ProjScope"
 prodUCTable cs ss = section' (titleize Doc.prodUCTable)      cs ss      "UseCaseTable"
-indPRCase   cs ss = section' (titleize' Doc.indPRCase)       cs ss      "IndividualProdUC"
+indPRCase   cs ss = section' (titleize' Doc.indPRCase)       cs ss      "IndividualProdUC" --FIXME: label is available
 
 specSysDes  cs ss = section' (titleize Doc.specificsystemdescription) cs ss "SpecSystDesc"
 probDesc    cs ss = section' (titleize Doc.problemDescription) cs ss "ProbDesc"
@@ -73,7 +73,7 @@ solCharSpec cs ss = section' (titleize Doc.solutionCharSpec)   cs ss "SolCharSpe
 require     cs ss = section' (titleize' Doc.requirement)      cs ss "Requirements"
 nonfuncReq  cs ss = section' (titleize' Doc.nonfunctionalRequirement) cs ss "NFRs"
 
-reference   cs ss = section' (titleize' Doc.reference)        cs ss "References"
+reference   cs ss = section' (titleize' Doc.reference)        cs ss "References" --FIXME: label is available
 offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "ExistingSolns"
 
 
@@ -102,13 +102,11 @@ valsOfAuxCons cs ss = sectionLC (titleize Doc.consVals)               cs ss vals
 --function that sets the shortname of each section to be the reference address
 section' :: Sentence -> [Contents] -> [Section] -> RefAdd -> Section
 section' a b c d = section a b c (mkLabelRA' (d ++ "Label") d)
---
-missingP :: [Contents]
-missingP = [Paragraph $ S "..."]
 
 --Labels--
 physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
-  inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel :: Label
+  inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
+  indPRCaseLabel :: Label
 physSystLabel      = mkLabelRA'' "PhysSyst"
 datConLabel        = mkLabelRA'' "DataConstraints"
 genDefnLabel       = mkLabelRA'' "GDs"
@@ -119,3 +117,5 @@ likeChgLabel       = mkLabelRA'' "LCs"
 unlikeChgLabel     = mkLabelRA'' "UCs"
 tOfSymbLabel       = mkLabelRA'' "ToS"
 valsOfAuxConsLabel = mkLabelRA'' "AuxConstants"
+referenceLabel     = mkLabelRA'' "References"
+indPRCaseLabel     = mkLabelRA'' "IndividualProdUC"

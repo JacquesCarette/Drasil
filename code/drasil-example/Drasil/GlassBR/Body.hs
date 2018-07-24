@@ -281,7 +281,7 @@ appStanddIR = foldlSent [S " In addition" `sC` plural reviewer, -- FIXME: space 
   S "should be familiar with the applicable", plural standard,
   S "for constructions using glass from",
   sSqBr (S "1-3" {-astm2009, astm2012, astm2016-}) `sIn`
-  (makeRefSec (SRS.reference SRS.missingP []))]
+  (makeRefSec SRS.referenceLabel)]
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
   S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
   S "related to", phrase blastTy]
@@ -353,7 +353,7 @@ product_use_case_table_UC1, product_use_case_table_UC2 :: [Sentence]
 
 product_use_case_table_UC1 = [titleize user, titleize' characteristic +:+ S "of the"
   +:+ phrase glaSlab `sAnd` S "of the" +:+. phrase blast +:+ S "Details in"
-  +:+ makeRefSec (SRS.indPRCase SRS.missingP [])]
+  +:+ makeRefSec SRS.indPRCaseLabel]
 
 product_use_case_table_UC2 = [short gLassBR, S "Whether" `sOr` S "not the" +:+
   phrase glaSlab +:+ S "is safe for the" +:+ S "calculated" +:+ phrase load
@@ -411,7 +411,7 @@ problem_description = probDescF start gLassBR ending [terminology_and_descriptio
 
 terminology_and_description = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
   S "are extracted from" +:+ (sSqBrNum 1 {-astm2009-}) `sIn`
-  (makeRefSec (SRS.reference SRS.missingP [])))) [terminology_and_description_bullets]
+  (makeRefSec SRS.referenceLabel))) [terminology_and_description_bullets]
 
 {--Physical System Description--}
 

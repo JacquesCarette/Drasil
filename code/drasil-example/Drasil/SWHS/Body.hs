@@ -15,7 +15,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   dataConstraintUncertainty, genSysF, inDataConstTbl, intro,
   mkDoc, outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro,
   traceMGF, tsymb'')
-import qualified Drasil.DocLang.SRS as SRS (missingP, likeChg,
+import qualified Drasil.DocLang.SRS as SRS (likeChg, referenceLabel,
   funcReq, probDesc, goalStmt, sysCont, reference, inModelLabel)
 
 import Data.Drasil.People (thulasi, brooks, spencerSmith)
@@ -837,7 +837,7 @@ orgDocIntro :: Sentence
 orgDocIntro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the template for an", short srs,
   S "for", phrase sciCompS, S "proposed by", (sSqBrNum 3) `sAnd`
-  (sSqBrNum 6), sParen (makeRefSec (SRS.reference SRS.missingP []))]
+  (sSqBrNum 6), sParen (makeRefSec SRS.referenceLabel)]
 
 orgDocEnd :: NamedIdea ni => ni -> CI -> Sentence
 orgDocEnd sp pro = foldlSent_ [S "The", plural inModel,

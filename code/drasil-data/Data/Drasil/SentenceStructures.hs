@@ -1,5 +1,5 @@
 module Data.Drasil.SentenceStructures
-  ( foldlSent, foldlSent_, foldlSentCol, foldlsC, foldlList, foldlInlineList
+  ( foldlSent, foldlSent_, foldlSentCol, foldlsC, foldlList, foldlInlineList, makeList
   , sAnd, andIts, andThe, sAre, sIn, sVersus
   , sIs, isThe, sOf, sOr, ofThe, ofThe'
   , ofGiv, ofGiv'
@@ -15,7 +15,7 @@ module Data.Drasil.SentenceStructures
   , fmtPhys, fmtSfwr, typUncr
   , mkTableFromColumns
   , acroA, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, acroT
-  , EnumType(..), WrapType(..)
+  , EnumType(..), WrapType(..), FoldType(..)
   ) where
 
 import Language.Drasil
@@ -68,10 +68,11 @@ foldlOptions lst   = foldle1 sC (\a b -> a `sC` S "or" +:+ b) lst
 
 data EnumType = Numb | Upper | Lower
 data WrapType = Parens | Paren | Period
+data FoldType = List | Options deriving (Eq)
 
--- | creates an list of elements with "enumerators" in "wrappers", separated by a sep, and ending with "and"
-foldlInlineList :: EnumType -> WrapType -> Sentence -> [Sentence] -> Sentence
-foldlInlineList e w sep lst = makeList sep $ map (\(a, b) -> a +:+ b) $ zip (numList e w $ length lst) lst
+-- | creates an list of elements with "enumerators" in "wrappers", separated by a sep, and ending with "and" or "or"
+foldlInlineList :: EnumType -> WrapType -> Sentence -> FoldType -> [Sentence] -> Sentence
+foldlInlineList e w sep l lst = makeList sep l $ map (\(a, b) -> a +:+ b) $ zip (numList e w $ length lst) lst
   where
     numList :: EnumType -> WrapType -> Int -> [Sentence]
     numList Numb  w len = map (\x -> wrap w $ S $ show x) [1..len]
@@ -83,10 +84,14 @@ foldlInlineList e w sep lst = makeList sep $ map (\(a, b) -> a +:+ b) $ zip (num
     wrap Period x = x :+: S "."
 
 -- Helper function to foldlInlineList - not exported
-makeList :: Sentence -> [Sentence] -> Sentence
-makeList  _  []     = EmptyS
-makeList sep [a,b]  = a :+: sep `sAnd` b
-makeList sep (x:xs) = x :+: sep +:+ makeList sep xs
+makeList :: Sentence -> FoldType -> [Sentence] -> Sentence
+makeList _ _ []     = EmptyS
+makeList _ l [a, b] 
+  | l == List    = a `sAnd` b
+  | l == Options = a `sOr`  b 
+makeList s l lst 
+  | l == List    = foldle1 sC (\a b -> a `sC` S "and" +:+ b) lst
+  | l == Options = foldle1 sC (\a b -> a `sC` S "or"  +:+ b) lst
 
 {--** Combinators **--}
 sAnd, andIts :: Sentence -> Sentence -> Sentence

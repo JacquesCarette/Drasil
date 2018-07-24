@@ -35,7 +35,6 @@ data Package = AMSMath
              | URL
              | FontSpec -- for utf-8 encoding in lualatex
              | Unicode -- for unicode-math in lualatex
-             | EnumItem -- for allowing inline lists and changing list characters
              deriving Eq
 
 addPackage :: Package -> D
@@ -61,7 +60,6 @@ addPackage Mathtools = usepackage "mathtools"
 addPackage URL       = usepackage "url"
 addPackage FontSpec  = usepackage "fontspec"
 addPackage Unicode   = usepackage "unicode-math"
-addPackage EnumItem  = usepackage "enumitem"
 
 data Def = AssumpCounter
          | LCCounter
@@ -96,7 +94,7 @@ genPreamble los = let (pkgs, defs) = parseDoc los
 
 parseDoc :: [LayoutObj] -> ([Package], [Def])
 parseDoc los' = 
-  ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Unicode, EnumItem] ++ 
+  ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Unicode] ++ 
    (nub $ concat $ map fst res)
   , [SymbDescriptionP1, SymbDescriptionP2, SetMathFont] ++ (nub $ concat $ map snd res))
   where 

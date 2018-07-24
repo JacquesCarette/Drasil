@@ -81,7 +81,6 @@ foldlInlineList e w s l lst = makeList s l $ map (\(a, b) -> a +:+ b) $ zip (num
     numList Lower w len = map (\x -> wrap w $ S $ [x]) (take len ['a'..'z'])
     wrap :: WrapType -> Sentence -> Sentence
     wrap Parens x = sParen x
-    wrap Paren  x = x :+: S ")"
     wrap Period x = x :+: S "."
 
 -- Helper function to foldlInlineList - not exported

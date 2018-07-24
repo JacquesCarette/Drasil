@@ -148,7 +148,7 @@ mkSRS = RefSec (RefProg intro
         )
       ]
     ):
-  map Verbatim [reqS, likelyChgs, traceMAndG, specParamVal] ++ (Bibliography : [])
+  map Verbatim [reqS, likelyChgs, unlikelyChgs, traceMAndG, specParamVal] ++ (Bibliography : [])
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

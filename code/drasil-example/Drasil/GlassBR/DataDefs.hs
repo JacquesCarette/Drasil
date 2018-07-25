@@ -188,7 +188,7 @@ aspRatDD = mkDD aspRat [{-references-}] [{-derivation-}] ""--temporary
 aGrtrThanB :: Sentence
 aGrtrThanB = (ch plate_len `sC` ch plate_width +:+ 
   S "are" +:+ plural dimension +:+ S "of the plate" `sC` S "where" +:+. 
-  sParen (E (sy plate_len $> sy plate_width)))
+  sParen (E (sy plate_len $>= sy plate_width)))
 
 anGlass :: Sentence
 anGlass = (getAcc annealed +:+ S "is" +:+ phrase annealed +:+ S "glass")

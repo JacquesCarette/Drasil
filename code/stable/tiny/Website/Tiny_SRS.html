@@ -414,11 +414,27 @@ Clad thickness
 </div>
 </div>
 </div>
-<div id="Sec:DDs">
+<div id="Sec:SpecSystDesc">
 <div class="section">
 <h1>
-Data Definitions
+Specific System Description
 </h1>
+<p class="paragraph">
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
+</p>
+<div id="Sec:SolCharSpec">
+<div class="subsection">
+<h2>
+Solution Characteristics Specification
+</h2>
+<p class="paragraph">
+The instance models that govern HGHC are presented in <a href=#Sec:IMs>Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+</p>
+<div id="Sec:DDs">
+<div class="subsubsection">
+<h3>
+Data Definitions
+</h3>
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models.
 </p>
@@ -430,7 +446,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Effective Heat Transfer Coefficient Between Clad and Fuel Surface
+Effective heat transfer coefficient between clad and fuel surface
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>h<sub>g</sub></em>
 </p>
 </td>
 </tr>
@@ -451,7 +477,6 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em>h<sub>g</sub> = <div class="fraction">
 <span class="fup">
 2&#8239;k<sub>c</sub>&#8239;h<sub>p</sub>
@@ -460,7 +485,6 @@ Equation
 2&#8239;k<sub>c</sub>&plus;τ<sub>c</sub>&#8239;h<sub>p</sub>
 </span>
 </div></em>
-</p>
 </div>
 </div>
 </td>
@@ -470,9 +494,20 @@ Equation
 Description
 </th>
 <td>
-<p class="paragraph">
-<em>h<sub>g</sub></em> is the effective heat transfer coefficient between clad and fuel surface (W/(m<sup>2</sup>&sdot;&deg;C))<br /><em>k<sub>c</sub></em> is the clad conductivity<br /><em>h<sub>p</sub></em> is the initial gap film conductance<br /><em>τ<sub>c</sub></em> is the clad thickness
-</p>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>h<sub>g</sub></em> is the effective heat transfer coefficient between clad and fuel surface (W/(m<sup>2</sup>&sdot;&deg;C))
+</li>
+<li>
+<em>k<sub>c</sub></em> is the clad conductivity (Unitless)
+</li>
+<li>
+<em>h<sub>p</sub></em> is the initial gap film conductance (Unitless)
+</li>
+<li>
+<em>τ<sub>c</sub></em> is the clad thickness (Unitless)
+</li>
+</ul>
 </td>
 </tr>
 </table>
@@ -485,7 +520,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Convective Heat Transfer Coefficient Between Clad and Coolant
+Convective heat transfer coefficient between clad and coolant
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>h<sub>c</sub></em>
 </p>
 </td>
 </tr>
@@ -506,7 +551,6 @@ Equation
 <td>
 <div id="">
 <div class="equation">
-<p class="paragraph">
 <em>h<sub>c</sub> = <div class="fraction">
 <span class="fup">
 2&#8239;k<sub>c</sub>&#8239;h<sub>b</sub>
@@ -515,7 +559,6 @@ Equation
 2&#8239;k<sub>c</sub>&plus;τ<sub>c</sub>&#8239;h<sub>b</sub>
 </span>
 </div></em>
-</p>
 </div>
 </div>
 </td>
@@ -525,12 +568,27 @@ Equation
 Description
 </th>
 <td>
-<p class="paragraph">
-<em>h<sub>c</sub></em> is the convective heat transfer coefficient between clad and coolant (W/(m<sup>2</sup>&sdot;&deg;C))<br /><em>k<sub>c</sub></em> is the clad conductivity<br /><em>h<sub>b</sub></em> is the initial coolant film conductance<br /><em>τ<sub>c</sub></em> is the clad thickness
-</p>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>h<sub>c</sub></em> is the convective heat transfer coefficient between clad and coolant (W/(m<sup>2</sup>&sdot;&deg;C))
+</li>
+<li>
+<em>k<sub>c</sub></em> is the clad conductivity (Unitless)
+</li>
+<li>
+<em>h<sub>b</sub></em> is the initial coolant film conductance (Unitless)
+</li>
+<li>
+<em>τ<sub>c</sub></em> is the clad thickness (Unitless)
+</li>
+</ul>
 </td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>

@@ -84,8 +84,10 @@ acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
 this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, kilogram, second] ++ 
   map unitWrapper [centigrade, joule, watt]
-
 --Will there be a table of contents?
+
+check_si :: [UnitDefn]
+check_si = collectUnits swhsSymMap symbT 
 
 swhsAuthors :: Sentence
 swhsAuthors = S $ manyNames swhsPeople
@@ -95,7 +97,7 @@ swhs_si = SI {
   _sys = swhs_pcm,
   _kind = srs, 
   _authors = swhsPeople,
-  _units = this_si,
+  _units = check_si,
   _quants = swhsSymbols,
   _concepts = symbT,
   _definitions = swhsDataDefs,

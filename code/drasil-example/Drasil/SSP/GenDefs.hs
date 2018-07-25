@@ -35,16 +35,16 @@ import Drasil.DocLang.SRS as SRS (physSyst, missingP)
 --  General Definitions  --
 ---------------------------
 generalDefinitions :: [GenDefn]
-generalDefinitions = [gd' normForcEq (Nothing :: Maybe DerUChunk) ([] :: Derivation) "normForcEq" [nmFEq_desc],
-  gd' bsShrFEq (Nothing :: Maybe DerUChunk) ([] :: Derivation) "bsShrFEq" [bShFEq_desc],
-  gd' resShr (Nothing :: Maybe DerUChunk) ([] :: Derivation) "resShr" [resShr_desc],
-  gd' mobShr (Nothing :: Maybe DerUChunk) ([] :: Derivation) "mobShr" [mobShr_desc],
-  gd' normShrR (Nothing :: Maybe DerUChunk) ([] :: Derivation) "normShrR" [nmShrR_desc],
-  gd' momentEql (Nothing :: Maybe DerUChunk) ([] :: Derivation) "momentEql" [momEql_desc],
-  gd netForcex (Nothing :: Maybe DerUChunk) ([] :: Derivation) "netForcex",
-  gd' netForcey (Nothing :: Maybe DerUChunk) ([] :: Derivation) "netForcey" [fNet_desc],
-  gd' hookesLaw2d (Nothing :: Maybe DerUChunk) ([] :: Derivation) "hookesLaw2d" [hooke2d_desc],
-  gd' displVect (Nothing :: Maybe DerUChunk) ([] :: Derivation) "displVect" [disVec_desc]]
+generalDefinitions = [gd'' normForcEq "normForcEq" [nmFEq_desc],
+  gd'' bsShrFEq "bsShrFEq" [bShFEq_desc],
+  gd'' resShr "resShr" [resShr_desc],
+  gd'' mobShr "mobShr" [mobShr_desc],
+  gd'' normShrR "normShrR" [nmShrR_desc],
+  gd'' momentEql "momentEql" [momEql_desc],
+  gd'' netForcex "netForcex" [],
+  gd'' netForcey "netForcey" [fNet_desc],
+  gd'' hookesLaw2d "hookesLaw2d" [hooke2d_desc],
+  gd'' displVect "displVect" [disVec_desc]]
 
 --
 normForcEq :: RelationConcept

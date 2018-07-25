@@ -823,11 +823,11 @@ orgDocIntro :: Sentence
 orgDocIntro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the template for an", short srs,
   S "for", phrase sciCompS, S "proposed by", (sSqBrNum 3) `sAnd`
-  (sSqBrNum 6), sParen (makeRef SRS.referenceLabel)]
+  (sSqBrNum 6), sParen (midRef SRS.referenceLabel)]
 
 orgDocEnd :: NamedIdea ni => ni -> CI -> Sentence
 orgDocEnd sp pro = foldlSent_ [S "The", plural inModel,
-  sParen (makeRef SRS.inModelLabel)),
+  sParen (midRef SRS.inModelLabel)),
   S "to be solved are referred to as", acroIM 1,
   S "to" +:+. acroIM 4, S "The", plural inModel,
   S "provide the", phrase ode, sParen (short ode :+: S "s")

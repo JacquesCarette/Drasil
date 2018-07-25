@@ -352,7 +352,7 @@ dataDefinitionSect (SectionModel _ xs) _ = SRS.dataDefn
 
 dataConstraintSect :: SubSec -> Section
 dataConstraintSect (SectionModel _ xs) = SRS.datCon
-  ([dataConIntro, inputTable, LlC outputTable] ++ (pullContents xs)) (pullSections xs)
+  ([dataConIntro, LlC inputTable, LlC outputTable] ++ (pullContents xs)) (pullSections xs)
   where dataConIntro = dataConstraintmkParagraph (pullLC xs) (pullSents xs)
         inputTable  = inDataConstTbl $ pullUQI xs
         outputTable = outDataConstTbl $ pullUQO xs
@@ -468,7 +468,7 @@ tModIntro progName = foldlSP [S "This", phrase Doc.section_, S "focuses on",
 -- GENERAL DEFINITIONS --
 -------------------------
 
---generalDefinitionIntro :: (Referable t) => [t] -> Contents
+generalDefinitionIntro :: [t] -> Contents
 generalDefinitionIntro [] = mkParagraph $ S "There are no general definitions."
 generalDefinitionIntro _ = foldlSP [S "This", phrase Doc.section_, 
   S "collects the", (plural law) `sAnd` (plural equation), 

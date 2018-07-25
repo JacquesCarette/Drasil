@@ -108,6 +108,9 @@ mkTableLC labelUID refAdd sn' tbl = llcc (mkLabelRA labelUID refAdd sn') tbl
 
 mkParagraph x = UlC $ ulcc $ Paragraph x
 
+mkFig :: Label -> RawContent -> Contents
+mkFig x y = LlC $ llcc x y
+
 {-
 mkEqnBlock
 mkDefinition

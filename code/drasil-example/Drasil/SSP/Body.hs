@@ -107,7 +107,7 @@ mkSRS = RefSec (RefProg intro
       EmptyS
     , IOrgSec orgSecStart inModel SRS.inModelLabel orgSecEnd]) :
     --FIXME: issue #235
-    (GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, sysCtxFig1, sysCtxDesc, sysCtxList], 
+    (GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList], 
       UsrChars [userCharIntro], SystCons [] []]):
     SSDSec 
       (SSDProg [SSDSubVerb problem_desc
@@ -237,15 +237,15 @@ orgSecEnd   = S "The" +:+ plural inModel +:+ S "provide the set of" +:+
 -- System Context automatically generated
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
-  [makeRef sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
+  [mkRefFrmLbl sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
    `sC` S "the", phrase user, S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself" +:+. (sParen $ short ssp),
    S "Arrows are used to show the data flow between the" +:+ phrase system,
    S "and its" +:+ phrase environment]
    
-sysCtxFig1 :: Contents
-sysCtxFig1 = fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png") "sysCtxDiag"
+sysCtxFig1 :: LabelledContent
+sysCtxFig1 = llcc (mkLabelRA'' "sysCtxDiag") $ fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png") "sysCtxDiag"
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol
@@ -259,7 +259,7 @@ sysCtxUsrResp = [S "Provide the input data related to the soil layer(s) and wate
   S "table (if applicable), ensuring no errors in the data entry",
   S "Ensure that consistent units are used for input variables",
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+ sParen ( 
-  makeRef SRS.assumptLabel) +:+ S "are appropriate for any particular" +:+
+  midRef SRS.assumptLabel) +:+ S "are appropriate for any particular" +:+
   phrase problem +:+ S "input to the" +:+ phrase software]
   
 sysCtxSysResp :: [Sentence]
@@ -275,7 +275,7 @@ sysCtxResp = [titleize user +:+ S "Responsibilities",
   short ssp +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
-sysCtxList = Enumeration $ bulletNested sysCtxResp $
+sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
   map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
 
 -- SECTION 3.2 --
@@ -307,7 +307,7 @@ problem_desc = probDescF EmptyS ssa ending [termi_defi, phys_sys_desc, goal_stmt
 -- SECTION 4.1.1 --
 termi_defi = termDefnF Nothing [termi_defi_list]
 
-termi_defi_list = Enumeration $ Simple $ noRefsLT $
+termi_defi_list = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
   map (\x -> (titleize $ x, Flat $ x ^. defn))
   [fs_concept, crtSlpSrf, stress, strain, normForce,
   shearForce, tension, compression, plnStrn]
@@ -318,20 +318,20 @@ termi_defi_list = Enumeration $ Simple $ noRefsLT $
 -- SECTION 4.1.2 --
 phys_sys_desc = SRS.physSyst
   [phys_sys_desc_p1, phys_sys_desc_bullets, phys_sys_desc_p2,
-   fig_indexconv, fig_forceacting] []
+   LlC fig_indexconv, LlC fig_forceacting] []
 
 phys_sys_desc_p1 = physSystIntro slope how intrslce slice (S "slice base")
   fig_indexconv
   where how = S "as a series of" +:+ phrase slice +:+. plural element
 
-physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, HasShortName d, Referable d) =>
+physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, HasLabel d) =>
   a -> Sentence -> b -> c -> Sentence -> d -> Contents
 physSystIntro what how p1 p2 p3 indexref = foldlSP [
   at_start analysis, S "of the", phrase what, S "is performed by looking at",
   plural property, S "of the", phrase what, how, S "Some", plural property,
   S "are", phrase p1, plural property `sC` S "and some are", phrase p2 `sOr`
   p3 +:+. plural property, S "The index convention for referencing which",
-  phrase p1 `sOr` phrase p2, S "is being used is shown in", makeRef indexref]
+  phrase p1 `sOr` phrase p2, S "is being used is shown in", mkRefFrmLbl indexref]
 
 phys_sys_desc_bullets = enumBullet $ map foldlSent_ [
 
@@ -346,15 +346,17 @@ phys_sys_desc_bullets = enumBullet $ map foldlSent_ [
 
 phys_sys_desc_p2 = foldlSP [S "A", phrase fbd, S "of the", plural force,
   S "acting on the", phrase slice, S "is displayed in",
-  makeRef fig_forceacting]
+  mkRefFrmLbl fig_forceacting]
 
-fig_indexconv :: Contents
-fig_indexconv = fig (foldlSent_ [S "Index convention for numbering",
+fig_indexconv :: LabelledContent
+fig_indexconv = llcc (mkLabelRA'' "IndexConvention") $ 
+  fig (foldlSent_ [S "Index convention for numbering",
   phrase slice `sAnd` phrase intrslce,
   phrase force, plural variable]) (resourcePath ++ "IndexConvention.png") "IndexConvention"
 
-fig_forceacting :: Contents
-fig_forceacting = fig (at_start' force +:+ S "acting on a" +:+
+fig_forceacting :: LabelledContent
+fig_forceacting = llcc (mkLabelRA'' "ForceDiagram") $
+  fig (at_start' force +:+ S "acting on a" +:+
   phrase slice) (resourcePath ++ "ForceDiagram.png") "ForceDiagram"
 
 -- SECTION 4.1.3 --
@@ -407,8 +409,8 @@ slipVert  = verticesConst $ phrase slip
 slopeVert = verticesConst $ phrase slope
 -}
 {-input and output tables-}
---s4_2_6Table2, s4_2_6Table3
-data_constraint_Table2, data_constraint_Table3 :: Contents
+
+data_constraint_Table2, data_constraint_Table3 :: LabelledContent
 data_constraint_Table2 = inDataConstTbl sspInputs --FIXME: issue #295
 data_constraint_Table3 = outDataConstTbl sspOutputs
 
@@ -417,7 +419,7 @@ req = reqF [func_req, non_func_req]
 
 -- SECTION 5.1 --
 func_req = SRS.funcReq
-  [func_req_list, sspInputDataTable] []
+  [func_req_list, LlC sspInputDataTable] []
 
 func_req_list = enumSimple 1 (short requirement) sspRequirements
 

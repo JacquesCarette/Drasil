@@ -137,7 +137,7 @@ data IntroSub where
   IPurpose :: Sentence -> IntroSub
   IScope   :: Sentence -> Sentence -> IntroSub
   IChar    :: Sentence -> Sentence -> Sentence -> IntroSub
-  IOrgSec  :: Sentence -> CI -> Section -> Sentence -> IntroSub
+  IOrgSec  :: Sentence -> CI -> Label -> Sentence -> IntroSub
 
 {--}
 

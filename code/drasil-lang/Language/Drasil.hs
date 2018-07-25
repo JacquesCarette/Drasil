@@ -142,9 +142,9 @@ module Language.Drasil (
   , HasContents(accessContents)
   , LabelledContent, UnlabelledContent
   , llcc, ulcc
-  , mkParagraph
+  , mkParagraph, mkFig
   -- Reference
-  , makeRef, mkRefFrmLbl
+  , makeRef, mkRefFrmLbl, midRef
   -- Space
   , Space(..)
   -- Symbol
@@ -247,7 +247,7 @@ import Language.Drasil.Document (section, fig, figWithWidth, section''
   , datadefn, reldefn, Section(..), SecCons(..) 
   , llcc, ulcc, Document(..)
   , HasContents(accessContents)
-  , mkParagraph)
+  , mkParagraph, mkFig)
 import Language.Drasil.Document.Core (DType(..)
   , Contents(..), ListType(..), ItemType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
@@ -326,7 +326,7 @@ import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (Sentence(..),
   sParen, sParenNum, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
   semiCol, sParenDash, sDash)
-import Language.Drasil.Reference (makeRef, mkRefFrmLbl, ReferenceDB, assumpDB, reqDB
+import Language.Drasil.Reference (makeRef, midRef, mkRefFrmLbl, ReferenceDB, assumpDB, reqDB
                                  , AssumpMap, assumpLookup, HasAssumpRefs
                                  , assumpRefTable, assumptionsFromDB
                                  , rdb, reqRefTable, reqLookup, RefBy(..)

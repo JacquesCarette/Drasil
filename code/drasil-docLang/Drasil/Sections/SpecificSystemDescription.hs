@@ -120,7 +120,7 @@ thModIntro progName = foldlSP
 genDefnF :: [Contents] -> Section
 genDefnF otherContents = SRS.genDefn (generalDefinitionIntro otherContents:otherContents) []
 
---generalDefinitionIntro :: (Referable t) => [t] -> Contents
+generalDefinitionIntro :: [t] -> Contents
 generalDefinitionIntro [] = mkParagraph $ S "There are no general definitions."
 generalDefinitionIntro _ = foldlSP [S "This", phrase section_, 
   S "collects the", S "laws and", (plural equation), 
@@ -199,8 +199,8 @@ dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase colum
   phrase uncertainty, S "quantification exercise"]
 
 -- Creates the input Data Constraints Table
-inDataConstTbl :: (UncertainQuantity c, Constrained c, HasReasVal c) => [c] -> Contents
-inDataConstTbl qlst = LlC $ llcc (mkLabelRA'' "InDataConstraints") $ Table 
+inDataConstTbl :: (UncertainQuantity c, Constrained c, HasReasVal c) => [c] -> LabelledContent
+inDataConstTbl qlst = llcc (mkLabelRA'' "InDataConstraints") $ Table 
   titl cts (S "Input Data Constraints") True "InDataConstraints"
   where
    columns = [(S "Var", map ch $ sortBySymbol qlst),

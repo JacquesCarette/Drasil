@@ -1,7 +1,7 @@
 module Data.Drasil.Units.Thermodynamics where
 
 import Language.Drasil (UnitDefn, dccWDS, cnIES, cn, cn', cn'',
-  UDefn(..), (/:), dcc, (*:), (/$), Sentence(S), new_unit, makeDerU)
+  (/:), dcc, (*:), (/$), Sentence(S), new_unit, makeDerU)
 import Data.Drasil.SI_Units (centigrade, joule, kilogram, watt, m_2, m_3)
 
 heat_capacity :: UnitDefn

@@ -23,7 +23,7 @@ readAndStore, generateCSS, testSlipSrf, prepareSlipS,
 
 readAndStore = foldlSent [S "Read the", phrase input_,
   S "file, and store the" +:+. plural datum, S "Necessary",
-  plural inDatum, S "summarized in", makeRef sspInputDataTable]
+  plural inDatum, S "summarized in", mkRefFrmLbl sspInputDataTable]
 
 generateCSS  = foldlSent [S "Generate potential", phrase crtSlpSrf :+:
   S "'s for the", phrase input_, phrase slope]
@@ -63,6 +63,6 @@ displayGraph = foldlSent [S "Display the", phrase crtSlpSrf, S "and the",
   S "by the", titleize morPrice, phrase method_]
 
 ------------------
-sspInputDataTable :: Contents
+sspInputDataTable :: LabelledContent
 sspInputDataTable = mkInputDatTb ([dqdWr coords] ++ map dqdWr sspInputs)
   --FIXME: this has to be seperate since coords is a different type

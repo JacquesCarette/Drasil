@@ -143,7 +143,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand] HideDerivation
           , Constraints EmptyS dataConstraintUncertainty
-                        (foldlSent [(makeRef SRS.valsOfAuxConsLabel), S "gives", (plural value `ofThe` S "specification"), 
+                        (foldlSent [(midRef SRS.valsOfAuxConsLabel), S "gives", (plural value `ofThe` S "specification"), 
                         plural parameter, S "used in", (makeRef inputDataConstraints)])
                         [inputDataConstraints, outputDataConstraints]
           ]
@@ -286,7 +286,7 @@ appStanddIR = foldlSent [S " In addition" `sC` plural reviewer, -- FIXME: space 
   S "should be familiar with the applicable", plural standard,
   S "for constructions using glass from",
   sSqBr (S "1-3" {-astm2009, astm2012, astm2016-}) `sIn`
-  (makeRef SRS.referenceLabel)]
+  (midRef SRS.referenceLabel)]
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
   S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
   S "related to", phrase blastTy]
@@ -358,7 +358,7 @@ product_use_case_table_UC1, product_use_case_table_UC2 :: [Sentence]
 
 product_use_case_table_UC1 = [titleize user, titleize' characteristic +:+ S "of the"
   +:+ phrase glaSlab `sAnd` S "of the" +:+. phrase blast +:+ S "Details in"
-  +:+ makeRef SRS.indPRCaseLabel]
+  +:+ midRef SRS.indPRCaseLabel]
 
 product_use_case_table_UC2 = [short gLassBR, S "Whether" `sOr` S "not the" +:+
   phrase glaSlab +:+ S "is safe for the" +:+ S "calculated" +:+ phrase load
@@ -416,7 +416,7 @@ problem_description = probDescF start gLassBR ending [terminology_and_descriptio
 
 terminology_and_description = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
   S "are extracted from" +:+ (sSqBrNum 1 {-astm2009-}) `sIn`
-  (makeRef SRS.referenceLabel))) [terminology_and_description_bullets]
+  (midRef SRS.referenceLabel))) [terminology_and_description_bullets]
 
 {--Physical System Description--}
 
@@ -615,7 +615,7 @@ traceability_matrices_and_graphs_dataDef =  ["DD1", "DD2", "DD3", "DD4", "DD5", 
 traceability_matrices_and_graphs_dataDefRef = map (refFromType Data') dataDefns
 
 traceability_matrices_and_graphs_data  = ["Data Constraints"]
-traceability_matrices_and_graphs_dataRef = [makeRef SRS.datConLabel]
+traceability_matrices_and_graphs_dataRef = [midRef SRS.datConLabel]
 
 traceability_matrices_and_graphs_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
 traceability_matrices_and_graphs_funcReqRef = makeListRef traceability_matrices_and_graphs_funcReq SRS.funcReqLabel

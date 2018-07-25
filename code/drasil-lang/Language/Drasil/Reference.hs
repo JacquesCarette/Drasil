@@ -323,12 +323,14 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 -- This should not be exported to the end-user, but should be usable
 -- within the recipe (we want to force reference creation to check if the given
 -- item exists in our database of referable objects.
+--FIXME: completely shift to using mkRefFrmLbl?
 makeRef :: (HasShortName l, Referable l) => l -> Sentence
 makeRef r = customRef r (shortname r)
 
 mkRefFrmLbl :: (HasLabel l) => l -> Sentence
 mkRefFrmLbl r = midRef (r ^. getLabel) 
 
+--FIXME: should be removed from Examples once sections have labels
 midRef :: Label -> Sentence
 midRef r = customRef r (shortname r)
 

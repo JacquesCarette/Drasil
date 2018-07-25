@@ -23,7 +23,7 @@ module Data.Drasil.Utils
   , unwrap
   , fterms
   , prodUCTbl
-  , eqUnR
+  , eqUnR, eqUnR'
   ) where
 
 import Language.Drasil
@@ -36,7 +36,10 @@ import Data.Drasil.Concepts.Math (unit_)
 
 eqUnR :: Expr -> Label -> LabelledContent
 eqUnR e lbl = llcc lbl $ EqnBlock e
-  
+
+eqUnR' :: Label -> Expr -> LabelledContent
+eqUnR' lbl e = llcc lbl $ EqnBlock e
+
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
 foldle :: (a -> a -> a) -> (a -> a -> a) -> a -> [a] -> a
@@ -64,11 +67,6 @@ enumWithAbbrev start abbrev = [abbrev :+: (S $ show x) | x <- [start..]]
 -- l - the list to be enumerated
 mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
 mkEnumAbbrevList s t l = zip (enumWithAbbrev s t) $ map Flat l
-
--- | creates a list of sentences of the form "[#]"
--- start - start indices
-enumWithSquBrk :: Integer -> [Sentence]
-enumWithSquBrk start = [sSqBr $ S $ show x | x <- [start..]]
 
 -- | takes a amount and adds a unit to it
 -- n - sentenc representing an amount
@@ -142,15 +140,15 @@ bulletNested :: [Sentence] -> [ListType] -> ListType
 bulletNested t l = Bullet . map (\(h,c) -> (Nested h c, Nothing)) $ zip t l
 
 -- | enumBullet apply Enumeration, Bullet and Flat to a list
-enumBullet :: Label -> [Sentence] -> LabelledContent
-enumBullet lbl s = llcc lbl $ Enumeration $ bulletFlat s
+enumBullet :: [Sentence] -> Contents --FIXME: should Enumeration be labelled?
+enumBullet s = UlC $ ulcc $ Enumeration $ bulletFlat s
 
 -- | enumSimple enumerates a list and applies simple and enumeration to it
 -- s - start index for the enumeration
 -- t - title of the list
 -- l - list to be enumerated
-enumSimple :: Integer -> Sentence -> [Sentence] -> RawContent
-enumSimple s t l = Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
+enumSimple :: Integer -> Sentence -> [Sentence] -> Contents --FIXME: should Enumeration be labelled?
+enumSimple s t l = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
 
 -- | interweaves two lists together [[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]
 weave :: [[a]] -> [a]

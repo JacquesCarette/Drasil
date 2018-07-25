@@ -40,7 +40,6 @@ import Data.Drasil.Concepts.Documentation (refmat)
 
 import Data.Function (on)
 import Data.List (nub, sortBy)
-import Data.Ord (comparing)
 
 type System = Sentence
 type DocKind = Sentence
@@ -279,11 +278,11 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
     mkSubRef SI {_sysinfodb = db} (TUnits' con) =
         table_of_units (sortBy comp_unitdefn $ Map.elems $ db ^. unitTable) (tuIntro con)
     mkSubRef SI {_quants = v} (TSymb con) =
-      SRS.tOfSymb
-      [tsIntro con, table Equational (
-         sortBy (compsy `on` eqSymb) $
-         filter (`hasStageSymbol` Equational)
-         (nub v)) at_start] []
+      SRS.tOfSymb 
+      [tsIntro con, LlC $ table Equational (
+                sortBy (compsy `on` eqSymb) $
+                filter (`hasStageSymbol` Equational)
+                (nub v)) at_start] []
     mkSubRef SI {_concepts = cccs} (TSymb' f con) = mkTSymb cccs f con
     mkSubRef SI {_sysinfodb = db} TAandA =
       table_of_abb_and_acronyms $ nub $ Map.elems (db ^. termTable)
@@ -293,7 +292,7 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
 mkTSymb :: (Quantity e, Concept e, Eq e) =>
   [e] -> LFunc -> [TSIntro] -> Section
 mkTSymb v f c = SRS.tOfSymb [tsIntro c,
-  table Equational
+  LlC $ table Equational
     (sortBy (compsy `on` eqSymb) $ filter (`hasStageSymbol` Equational) (nub v))
     (lf f)] []
   where lf Term = at_start
@@ -320,7 +319,7 @@ tsymb'' intro lfunc = TSymb' lfunc intro
 
 -- | table of symbols intro builder. Used by mkRefSec
 tsIntro :: [TSIntro] -> Contents
-tsIntro x = Paragraph $ foldr ((+:+) . tsI) EmptyS x
+tsIntro x = mkParagraph $ foldr ((+:+) . tsI) EmptyS x
 
 -- | table of symbols intro writer. Translates a TSIntro to a list of Sentences
 tsI :: TSIntro -> Sentence
@@ -361,7 +360,7 @@ symbConvention scs = S "The choice of symbols was made to be consistent with the
 
 -- | Table of units intro builder. Used by mkRefSec
 tuIntro :: [TUIntro] -> Contents
-tuIntro x = Paragraph $ foldr ((+:+) . tuI) EmptyS x
+tuIntro x = mkParagraph $ foldr ((+:+) . tuI) EmptyS x
 
 -- | table of units intro writer. Translates a TUIntro to a Sentence.
 tuI :: TUIntro -> Sentence
@@ -450,19 +449,19 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS _ (DDs' _ [] _) = error "There are no Data Definitions" --FIXME: temporary duplicate 
     mkSubSCS _ (IMs _ [] _)  = error "There are no Instance Models"
     mkSubSCS si' (TMs fields ts) =
-      SSD.thModF (siSys si') (map (tmodel fields (_sysinfodb si')) ts)
+      SSD.thModF (siSys si') (map LlC (map (tmodel fields (_sysinfodb si')) ts))
     mkSubSCS si' (DDs fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS (concatMap (\x -> ddefn fields (_sysinfodb si') x : derivation x) dds)
+      SSD.dataDefnF EmptyS (map LlC (concatMap (\x -> ddefn fields (_sysinfodb si') x : derivation x) dds))
     mkSubSCS si' (DDs fields dds _) =
-      SSD.dataDefnF EmptyS (map (ddefn fields (_sysinfodb si')) dds)
+      SSD.dataDefnF EmptyS (map LlC (map (ddefn fields (_sysinfodb si')) dds))
     mkSubSCS si' (DDs' fields dds ShowDerivation) = --FIXME: need to keep track of DD intro. --FIXME: temporary duplicate
-      SSD.dataDefnF EmptyS (concatMap (\x -> ddefn' fields (_sysinfodb si') x : derivation x) dds)
+      SSD.dataDefnF EmptyS (map LlC (concatMap (\x -> ddefn' fields (_sysinfodb si') x : derivation x) dds))
     mkSubSCS si' (DDs' fields dds _) = --FIXME: temporary duplicate
-      SSD.dataDefnF EmptyS (map (ddefn' fields (_sysinfodb si')) dds)
+      SSD.dataDefnF EmptyS (map LlC (map (ddefn' fields (_sysinfodb si')) dds))
     mkSubSCS si' (GDs fields gs' ShowDerivation) =
-      SSD.genDefnF (concatMap (\x -> gdefn fields (_sysinfodb si') x : derivation x) gs')
+      SSD.genDefnF (map LlC (concatMap (\x -> gdefn fields (_sysinfodb si') x : derivation x) gs'))
     mkSubSCS si' (GDs fields gs' _) =
-      SSD.genDefnF (map (gdefn fields (_sysinfodb si')) gs')
+      SSD.genDefnF (map LlC (map (gdefn fields (_sysinfodb si')) gs'))
     mkSubSCS si' (IMs fields ims ShowDerivation) = 
       SSD.inModelF pdStub ddStub tmStub gdStub (concatMap (\x -> instanceModel fields (_sysinfodb si') x : derivation x) ims)
     mkSubSCS si' (IMs fields ims _)= 

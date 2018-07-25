@@ -66,14 +66,14 @@ instanceModel fs m i = llcc mkEmptyLabel $ Defnt Instance (foldr (mkIMField i m)
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
 -- or IM definition automatically (called automatically by 'SCSSub' program)
-derivation :: HasDerivation c => c -> [Contents]
+derivation :: HasDerivation c => c -> [LabelledContent]
 derivation g = map makeDerivationContents (getDerivation g)
 
 -- | Helper function for creating the layout objects
 -- (paragraphs and equation blocks) for a derivation.
-makeDerivationContents :: Sentence -> Contents
-makeDerivationContents (E e) = LlC $ llcc mkEmptyLabel (EqnBlock e) --FIXME: Derivation needs labels for it's equations
-makeDerivationContents s     = mkParagraph s
+makeDerivationContents :: Sentence -> LabelledContent
+makeDerivationContents (E e) = llcc mkEmptyLabel (EqnBlock e) --FIXME: Derivation needs labels for it's equations
+makeDerivationContents s     = llcc mkEmptyLabel $ Paragraph s  --FIXME: should this be LabelledContent?
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
 type ModRow = [(String, [Contents])]

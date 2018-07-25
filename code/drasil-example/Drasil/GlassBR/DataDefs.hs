@@ -6,7 +6,7 @@ import Prelude hiding (log, exp, sqrt)
 import Drasil.DocLang (refA)
 
 import Drasil.GlassBR.Concepts (annealed, fullyT, heatS)
-import Drasil.GlassBR.Unitals (actualThicknesses, aspectR, 
+import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, 
   demand, dimlessLoad, gTF, glassTypeAbbrsStr, glassTypeFactors, glass_type, 
   lDurFac, load_dur, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pb_tol, 
   plate_len, plate_width, risk_fun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
@@ -80,7 +80,7 @@ loadDFDD = mkDD loadDF [{-references-}] [{-derivation-}] ""--temporary
 
 strDisFac_eq :: Expr
 strDisFac_eq = apply (sy stressDistFac) 
-  [sy dimlessLoad, sy aspectR]
+  [sy dimlessLoad, sy aspect_ratio]
 --strDisFac_eq = FCall (asExpr interpZ) [V "SDF.txt", (sy plate_len) / (sy plate_width), sy dimlessLoad]
   
 strDisFac :: QDefinition
@@ -177,7 +177,7 @@ aspRat_eq :: Expr
 aspRat_eq = (sy plate_len) / (sy plate_width)
 
 aspRat :: QDefinition
-aspRat = mkDataDef aspectR aspRat_eq
+aspRat = mkDataDef aspect_ratio aspRat_eq
 
 aspRatDD :: DataDefinition
 aspRatDD = mkDD aspRat [{-references-}] [{-derivation-}] ""--temporary
@@ -194,7 +194,7 @@ anGlass :: Sentence
 anGlass = (getAcc annealed +:+ S "is" +:+ phrase annealed +:+ S "glass")
 
 arRef :: Sentence
-arRef = (ch aspectR +:+ S "is the" +:+ phrase aspectR +:+.
+arRef = (ch aspect_ratio +:+ S "is the" +:+ phrase aspect_ratio +:+.
   S "defined in DD11")
 
 ftGlass :: Sentence
@@ -225,8 +225,8 @@ hMin = (ch nom_thick +:+ S "is a function that maps from the nominal thickness"
 
 qHtTlExtra :: Sentence
 qHtTlExtra = (ch tolLoad +:+ S "is the tolerable load which is obtained from Figure 7 using" 
-  +:+ ch sdf_tol `sAnd` phrase aspectR +:+ S "as" +:+ plural parameter +:+. S "using interpolation" 
-  +:+ titleize' calculation +:+ S "of" +:+ ch sdf_tol `sAnd` ch aspectR +:+. 
+  +:+ ch sdf_tol `sAnd` phrase aspect_ratio +:+ S "as" +:+ plural parameter +:+. S "using interpolation" 
+  +:+ titleize' calculation +:+ S "of" +:+ ch sdf_tol `sAnd` ch aspect_ratio +:+. 
   S "are defined in DD9 and DD11, respectively")
 
 qHtTlTolRef :: Sentence

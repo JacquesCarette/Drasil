@@ -77,7 +77,7 @@ plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
     sfwrc $ Bounded (Inc, sy dim_min) (Inc, sy dim_max),
     sfwrc $ UpTo (Exc, sy plate_len / sy ar_max)] (dbl 1.2) defaultUncrt
 
-aspect_ratio = uvc "aspect_ratio" (nounPhraseSP "aspect ratio")
+aspect_ratio = uvc "aspect_ratio" (aR ^. term)
   (Atomic "AR") Real
   [ physc $ UpFrom (Inc, 1), 
     sfwrc $ UpTo (Exc, sy ar_max)] (dbl 1.5) defaultUncrt
@@ -205,12 +205,10 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 
 glassBRUnitless :: [VarChunk]
 glassBRUnitless = [risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
-  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL, aspectR]
+  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL]
 
-aspectR, risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
+risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL :: VarChunk
-
-aspectR       = vc "aspectR"     (aR ^. term) (Atomic "AR") Real
 
 dimlessLoad   = vc "dimlessLoad" (nounPhraseSP "dimensionless load")
   (hat lQ) Real
@@ -400,10 +398,10 @@ wtntCalculation = (sy char_weight) * (sy tNT)
 --
 
 aspectRWithEqn :: QDefinition
-aspectRWithEqn = mkDataDef aspectR aspectRCalculation
+aspectRWithEqn = mkDataDef aspect_ratio aspectRCalculation
 
 aspectRCalculation :: Relation
-aspectRCalculation = (sy aspectR) $= (sy plate_len)/(sy plate_width)
+aspectRCalculation = (sy aspect_ratio) $= (sy plate_len)/(sy plate_width)
 
 --
 --Pulled to be used in "Terms And Definitions" Section--

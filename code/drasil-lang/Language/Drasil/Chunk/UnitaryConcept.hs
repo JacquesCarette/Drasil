@@ -1,12 +1,14 @@
 {-# Language TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.UnitaryConcept (ucw, UnitaryConceptDict) where
 
+import Control.Lens ((^.), makeLenses, view)
+
 import Language.Drasil.Chunk.Concept (DefnAndDomain(DAD))
 import Language.Drasil.Chunk.Unitary (UnitaryChunk, mkUnitary, Unitary)
 import Language.Drasil.Chunk.Quantity (Quantity(getUnit), HasSpace(typ))
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol))
-import Control.Lens ((^.), makeLenses, view)
+import Language.Drasil.Development.Unit (MayHaveUnit(unitOpt), UnitDefn(..))
 
 data UnitaryConceptDict = UCC { _unitary :: UnitaryChunk
                               , _dad :: DefnAndDomain
@@ -22,8 +24,8 @@ instance Concept       UnitaryConceptDict where
 instance HasSpace      UnitaryConceptDict where typ = unitary . typ
 instance HasSymbol     UnitaryConceptDict where symbol c stage = symbol (c^.unitary) stage
 instance Quantity      UnitaryConceptDict where getUnit = getUnit . view unitary
-
 instance Eq            UnitaryConceptDict where a == b = (a ^. uid) == (b ^. uid)
+instance MayHaveUnit   UnitaryConceptDict where unitOpt u = unitOpt $ u ^. unitary
 
 ucw :: (Unitary c, Concept c) => c -> UnitaryConceptDict
 ucw c = UCC (mkUnitary c) (DAD (c ^. defn) (c ^. cdom))

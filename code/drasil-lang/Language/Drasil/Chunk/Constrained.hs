@@ -18,7 +18,7 @@ import Language.Drasil.Chunk.VarChunk (vc)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
   IsUnit, Constrained(constraints), HasReasVal(reasVal))
-import Language.Drasil.Development.Unit (unitWrapper)
+import Language.Drasil.Development.Unit (unitWrapper, MayHaveUnit(unitOpt), UnitDefn(..))
 import Language.Drasil.Expr (Expr(..))
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space)
@@ -41,6 +41,7 @@ instance Quantity      ConstrainedChunk where getUnit = getUnit . view qd
 instance Constrained   ConstrainedChunk where constraints = constr
 instance HasReasVal    ConstrainedChunk where reasVal     = reasV
 instance Eq            ConstrainedChunk where c1 == c2 = (c1 ^. qd . uid) == (c2 ^. qd . uid)
+instance MayHaveUnit   ConstrainedChunk where unitOpt u = unitOpt $ u ^. qd
 
 -- | Creates a constrained chunk from a symbolic quantity
 constrained :: (Quantity c) => c -> [Constraint] -> Expr -> ConstrainedChunk

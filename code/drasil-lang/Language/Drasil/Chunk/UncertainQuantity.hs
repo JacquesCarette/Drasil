@@ -11,16 +11,17 @@ module Language.Drasil.Chunk.UncertainQuantity
   , uncrtnChunk, uvc
   , uncrtnw
   ) where
-  
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
-  IsUnit, Constrained(constraints), HasReasVal(reasVal))
+ 
 import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(..), getUnit)
 import Language.Drasil.Chunk.DefinedQuantity (dqd')
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Chunk.Constrained (ConstrConcept(..), ConstrainedChunk,
   cuc', cnstrw, cvc)
-import Language.Drasil.Chunk.Concept(cw)
+import Language.Drasil.Chunk.Concept(cw) 
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
+  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
+  IsUnit, Constrained(constraints), HasReasVal(reasVal))
+import Language.Drasil.Development.Unit (MayHaveUnit(unitOpt), UnitDefn(..))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase(NP)
 import Language.Drasil.Space (Space)
@@ -58,6 +59,7 @@ instance Quantity          UncertainChunk where getUnit (UCh c _) = getUnit c
 instance Constrained       UncertainChunk where constraints = conc . constraints
 instance HasReasVal        UncertainChunk where reasVal = conc . reasVal
 instance UncertainQuantity UncertainChunk where uncert = unc'
+instance MayHaveUnit       UncertainChunk where unitOpt (UCh c _) = unitOpt c
 
 {-- Constructors --}
 uncrtnChunk :: (Quantity c, Constrained c, HasReasVal c) => c -> Double -> UncertainChunk

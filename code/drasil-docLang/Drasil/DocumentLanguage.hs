@@ -198,7 +198,7 @@ data SCSSub where
   DDs            :: Fields  -> [QDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
   DDs'           :: Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro -- should eventually replace and be renamed to DDs
   IMs            :: Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
-  Constraints    :: Sentence -> Sentence -> Sentence -> [Contents] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
+  Constraints    :: Sentence -> Sentence -> Sentence -> [LabelledContent] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
 --FIXME: Work in Progress ^
   CorrSolnPpties :: [Contents] -> SCSSub
 data DerivationDisplay = ShowDerivation
@@ -222,7 +222,7 @@ data UCsSec = UCsVerb Section | UCsProg [Contents]
 
 {--}
 
-data TraceabilitySec = TraceabilityVerb Section | TraceabilityProg [Contents] [Sentence] [Contents] [Section]
+data TraceabilitySec = TraceabilityVerb Section | TraceabilityProg [LabelledContent] [Sentence] [Contents] [Section]
 
 {--}
 
@@ -469,10 +469,10 @@ mkSolChSpec si (SCSProg l) =
       SSD.inModelF pdStub ddStub tmStub gdStub (map (instanceModel fields (_sysinfodb si')) ims)
     mkSubSCS SI {_refdb = db} Assumptions =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
-      (map Assumption $ assumptionsFromDB (db ^. assumpRefTable))
+      (map (\x -> LlC $ llcc mkEmptyLabel x) $ map Assumption $ assumptionsFromDB (db ^. assumpRefTable))
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d 
-    inModSec = SRS.inModel [Paragraph EmptyS] []
+    inModSec = SRS.inModel [mkParagraph EmptyS] []
     --FIXME: inModSec should be replaced with a walk
     -- over the SCSProg and generate a relevant intro.
     -- Could start with just a quick check of whether or not IM is included and
@@ -540,7 +540,7 @@ mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortByS
 
 -- | Helper for making the bibliography section
 mkBib :: BibRef -> Section
-mkBib bib = SRS.reference [Bib bib] []
+mkBib bib = SRS.reference [LlC $ llcc mkEmptyLabel $ Bib bib] []
 
 {--}
 
@@ -561,10 +561,10 @@ siSys SI {_sys = sys} = nw sys
 -- mkAssump i desc = Assumption $ ac' i desc
 
 mkRequirement :: String -> Sentence -> String -> Contents
-mkRequirement i desc shrtn = Requirement $ frc i desc (shortname' shrtn)
+mkRequirement i desc shrtn = LlC $ llcc (mkLabelRA'' shrtn) $ Requirement $ frc i desc (shortname' shrtn)
 
 mkLklyChnk :: String -> Sentence -> String -> Contents
-mkLklyChnk i desc shrtn = Change $ lc i desc (shortname' shrtn)
+mkLklyChnk i desc shrtn = LlC $ llcc (mkLabelRA'' shrtn) $ Change $ lc i desc (shortname' shrtn)
 
 mkUnLklyChnk :: String -> Sentence -> String -> Contents
-mkUnLklyChnk i desc shrtn = Change $ ulc i desc (shortname' shrtn)
+mkUnLklyChnk i desc shrtn = LlC $ llcc (mkLabelRA'' shrtn) $ Change $ ulc i desc (shortname' shrtn)

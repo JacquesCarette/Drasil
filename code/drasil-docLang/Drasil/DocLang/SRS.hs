@@ -7,7 +7,7 @@ module Drasil.DocLang.SRS
   tOfSymb,
   physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
   inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
-  indPRCaseLabel) where
+  indPRCaseLabel, unlikeChgLabel) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
@@ -111,7 +111,7 @@ section' a b c d = section a b c d (shortname' $ getStr a) --FIXME: getStr hack
 --Labels--
 physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
   inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
-  indPRCaseLabel :: Label
+  indPRCaseLabel, unlikeChgLabel :: Label
 physSystLabel      = mkLabelRA'' "PhysSyst"
 datConLabel        = mkLabelRA'' "DataConstraints"
 genDefnLabel       = mkLabelRA'' "GDs"

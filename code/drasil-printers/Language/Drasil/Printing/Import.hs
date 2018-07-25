@@ -88,6 +88,14 @@ expr (Str s)            _ = P.Str   s
 expr (AssocB And l)    sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (precB And)) l
 expr (AssocB Or l)     sm = P.Row $ intersperse (P.MO P.Or ) $ map (expr' sm (precB Or)) l
 expr (AssocA Add l)    sm = P.Row $ intersperse (P.MO P.Add) $ map (expr' sm (precA Add)) l
+expr (AssocA Mul [(Dbl n), (Int n')])    sm =
+  P.Row $ intersperse (P.MO P.Mul) $ map (expr' sm (precA Mul)) [(Dbl n), (Int n')]
+expr (AssocA Mul [(Int n), (Dbl n')])    sm =
+  P.Row $ intersperse (P.MO P.Mul) $ map (expr' sm (precA Mul)) [(Int n), (Dbl n')]
+expr (AssocA Mul [(Int n), h])    sm =
+  P.Row $ map (expr' sm (precA Mul)) [(Int n), h]
+expr (AssocA Mul [(Dbl n), h])    sm =
+  P.Row $ map (expr' sm (precA Mul)) [(Dbl n), h]
 expr (AssocA Mul l)    sm = P.Row $ intersperse (P.MO P.Mul) $ map (expr' sm (precA Mul)) l
 expr (Deriv Part a b) sm =
   P.Div (P.Row [P.Spec Partial, P.Spc P.Thin, expr a sm])

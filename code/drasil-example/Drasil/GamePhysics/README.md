@@ -1,7 +1,10 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 19, 2018
+Last updated: July 25, 2018
 --------------------------------------------------
+
+**DesignDec**
+  - Chipmunk's arbiters and vectors
 
 Body.hs
   - The main document body representation for the Chipmunk example

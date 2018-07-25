@@ -1,6 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 19, 2018
+Last updated: July 25, 2018
 --------------------------------------------------
 
 **Concepts**
@@ -26,6 +26,9 @@ People.hs
 
 Phrase.hs
   - Contains functions for building `Noun Phrase`s
+
+README.md
+  - This file
 
 SentenceStructures.hs
   - Contains functions for building `Sentence`s

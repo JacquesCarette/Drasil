@@ -57,29 +57,27 @@ foldlsC = mconcat . intersperse (S ", ")
 data EnumType = Numb | Upper | Lower
 data WrapType = Parens | Period
 data SepType  = Comma | SemiCol
-data FoldType = List | Options deriving (Eq)
+data FoldType = List | Options
 
 -- | creates an list of elements with "enumerators" in "wrappers" using foldlList
 foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
 foldlEnumList e w s l lst = foldlList s l $ map (\(a, b) -> a +:+ b) $ zip (numList e w $ length lst) lst
   where
     numList :: EnumType -> WrapType -> Int -> [Sentence]
-    numList Numb  w len = map (\x -> wrap w $ S $ show x) [1..len]
-    numList Upper w len = map (\x -> wrap w $ S $ [x]) (take len ['A'..'Z'])
-    numList Lower w len = map (\x -> wrap w $ S $ [x]) (take len ['a'..'z'])
+    numList Numb  wt len = map (\x -> wrap wt $ S $ show x) [1..len]
+    numList Upper wt len = map (\x -> wrap wt $ S $ [x]) (take len ['A'..'Z'])
+    numList Lower wt len = map (\x -> wrap wt $ S $ [x]) (take len ['a'..'z'])
     wrap :: WrapType -> Sentence -> Sentence
     wrap Parens x = sParen x
     wrap Period x = x :+: S "."
 
 -- | creates a list of elements separated by a "separator", ending with "and" or "or"
 foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
-foldlList _ _ [] = EmptyS
-foldlList _ l [a, b] 
-  | l == List    = a `sAnd` b
-  | l == Options = a `sOr`  b 
-foldlList s l lst 
-  | l == List    = foldle1 (getSep s) (\a b -> (getSep s) a (S "and" +:+ b)) lst
-  | l == Options = foldle1 (getSep s) (\a b -> (getSep s) a (S "or" +:+ b))  lst
+foldlList _ _       []     = EmptyS
+foldlList _ List    [a, b] = a `sAnd` b
+foldlList _ Options [a, b] = a `sOr` b
+foldlList s List    lst    = foldle1 (getSep s) (\a b -> (getSep s) a (S "and" +:+ b)) lst
+foldlList s Options lst    = foldle1 (getSep s) (\a b -> (getSep s) a (S "or" +:+ b))  lst
 
 --Helper function to foldlList - not exported
 getSep :: SepType -> (Sentence -> Sentence -> Sentence)

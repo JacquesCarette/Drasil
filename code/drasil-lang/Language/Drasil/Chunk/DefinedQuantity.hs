@@ -14,7 +14,8 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
   HasSpace(typ), IsUnit, HasDerivation(derivations),
   IsUnit(udefn))
-import Language.Drasil.Development.Unit (UnitDefn, unitWrapper)
+import Language.Drasil.Development.Unit (UnitDefn, unitWrapper,
+  MayHaveUnit(unitOpt))
 import Language.Drasil.Space (Space)
 import Language.Drasil.Symbol (Symbol, Stage)
 import Language.Drasil.UID
@@ -40,6 +41,7 @@ instance Q.HasSpace    DefinedQuantityDict where typ = spa
 instance HasSymbol     DefinedQuantityDict where symbol = view symb
 instance Q.Quantity    DefinedQuantityDict where getUnit = view unit'
 instance HasDerivation DefinedQuantityDict where derivations = deri
+instance MayHaveUnit   DefinedQuantityDict where unitOpt u = u ^. unit'
 
 -- For when the symbol is constant through stages
 dqd :: ConceptChunk -> Symbol -> Space -> Maybe UnitDefn -> DefinedQuantityDict

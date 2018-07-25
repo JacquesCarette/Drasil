@@ -2,6 +2,7 @@
 module Language.Drasil.Chunk.GenDefn
   ( GenDefn, gd, gdUnit, gd', gd''
   ) where
+import Control.Lens (makeLenses, view)
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, IsUnit,
@@ -11,10 +12,10 @@ import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.References (References)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
-import Language.Drasil.Development.Unit (unitWrapper, UnitDefn)
+import Language.Drasil.Development.Unit (unitWrapper, UnitDefn, MayHaveUnit(unitOpt))
 import Language.Drasil.Spec (Sentence)
 
-import Control.Lens (makeLenses, view)
+
 
 -- | A GenDefn is a RelationConcept that may have units
 data GenDefn = GD { _relC :: RelationConcept
@@ -37,6 +38,7 @@ instance HasDerivation GenDefn where derivations = deri
 instance HasReference  GenDefn where getReferences = ref
 instance HasShortName  GenDefn where shortname = view refName
 instance HasAdditionalNotes GenDefn where getNotes = notes
+instance MayHaveUnit   GenDefn where unitOpt u = gdUnit u
 
 gd :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
   Derivation -> String -> GenDefn

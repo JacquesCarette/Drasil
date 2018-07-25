@@ -142,6 +142,7 @@ module Language.Drasil (
   , HasContents(accessContents)
   , LabelledContent, UnlabelledContent
   , llcc, ulcc
+  , mkParagraph
   -- Reference
   , makeRef, mkRefFrmLbl
   -- Space
@@ -220,7 +221,7 @@ module Language.Drasil (
   , bibStyleH, numberedSections, hyperSettings, fontSize, bibFname, bibStyleT, colBwidth
   , colAwidth
   --Label
-  , Label, mkLabelRA, mkLabelRA''
+  , Label, mkLabelRA, mkLabelRA'', mkEmptyLabel
 ) where
 
 
@@ -242,13 +243,15 @@ import Language.Drasil.Expr.Extract (dep, names', names)
 import Language.Drasil.Expr.Precedence (precA, precB, eprec)
 import Language.Drasil.Sentence.EmbedSymbol(ch)
 import Language.Drasil.Sentence.Extract(sdep,  snames)
-import Language.Drasil.Document (Document(..), DType(..)
-  , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..)
-  , section, fig, figWithWidth, section''
-  , datadefn, reldefn
-  , ListTuple, MaxWidthPercent
-  , RawContent(..), HasContents(accessContents)
-  , LabelledContent, UnlabelledContent, llcc, ulcc)
+import Language.Drasil.Document (section, fig, figWithWidth, section''
+  , datadefn, reldefn, Section(..), SecCons(..) 
+  , llcc, ulcc, Document(..)
+  , HasContents(accessContents)
+  , mkParagraph)
+import Language.Drasil.Document.Core (DType(..)
+  , Contents(..), ListType(..), ItemType(..)
+  , RawContent(..), ListTuple, MaxWidthPercent
+  , LabelledContent, UnlabelledContent, )
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Development.UnitLang -- all of it
 import Language.Drasil.Development.Unit -- all of it
@@ -340,5 +343,5 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
 import Language.Drasil.RefTypes(RefAdd, RefType(Cite))
-import Language.Drasil.Label (Label, mkLabelRA, mkLabelRA'')
+import Language.Drasil.Label (Label, mkLabelRA, mkLabelRA'', mkEmptyLabel)
 --Should be in lang-dev package?

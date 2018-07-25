@@ -15,9 +15,10 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   assumpF, dataConstraintUncertainty, genSysF, inDataConstTbl, inModelF, intro, 
   mkDoc, outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF,
   tsymb'')
-import qualified Drasil.DocLang.SRS as SRS (inModel, missingP, likeChg,
+import qualified Drasil.DocLang.SRS as SRS (inModel, likeChg,
   funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
-  sysCont, reference)
+  sysCont, reference,
+  inModelLabel, thModelLabel, dataDefnLabel, genDefnLabel, referenceLabel)
 
 import Data.Drasil.People (thulasi, brooks, spencerSmith)
 import Data.Drasil.Phrase (for)
@@ -139,7 +140,7 @@ mkSRS = RefSec (RefProg intro [
      IScope (scopeReqs1 CT.thermal_analysis tank_pcm) 
        (scopeReqs2 temp CT.thermal_energy water phsChgMtrl sWHT),
      IChar (charReader1 CT.ht_trans_theo) (charReader2 de) (EmptyS),
-     IOrgSec orgDocIntro inModel (SRS.inModel SRS.missingP [])
+     IOrgSec orgDocIntro inModel SRS.inModelLabel
        (orgDocEnd swhs_pcm progName)]):
   Verbatim genSystDesc:
   SSDSec 
@@ -335,9 +336,9 @@ goalStateList = enumSimple 1 (short goalStmt) $
 
 assumps :: Section
 assumps = assumpF
-  (SRS.thModel SRS.missingP [])
-  (SRS.genDefn SRS.missingP [])
-  (SRS.dataDefn SRS.missingP [])
+  SRS.thModelLabel
+  SRS.genDefnLabel
+  SRS.dataDefnLabel
   iMods likelyChgs unlikelyChgs swhsAssumptions
 
 -- Again, list structure is same between all examples.
@@ -369,9 +370,9 @@ assumps = assumpF
 
 iMods :: Section
 iMods = inModelF probDescription
-  (SRS.dataDefn SRS.missingP [])
-  (SRS.thModel SRS.missingP [])
-  (SRS.genDefn SRS.missingP [])
+  SRS.dataDefnLabel
+  SRS.thModel
+  SRS.genDefn
   iModsWithDerivs
 
 iModsWithDerivs :: [Contents]
@@ -822,11 +823,11 @@ orgDocIntro :: Sentence
 orgDocIntro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the template for an", short srs,
   S "for", phrase sciCompS, S "proposed by", (sSqBrNum 3) `sAnd`
-  (sSqBrNum 6), sParen (makeRef (SRS.reference SRS.missingP []))]
+  (sSqBrNum 6), sParen (makeRef SRS.referenceLabel)]
 
 orgDocEnd :: NamedIdea ni => ni -> CI -> Sentence
 orgDocEnd sp pro = foldlSent_ [S "The", plural inModel,
-  sParen (makeRef (SRS.inModel SRS.missingP [])),
+  sParen (makeRef SRS.inModelLabel)),
   S "to be solved are referred to as", acroIM 1,
   S "to" +:+. acroIM 4, S "The", plural inModel,
   S "provide the", phrase ode, sParen (short ode :+: S "s")

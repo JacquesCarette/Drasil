@@ -23,7 +23,7 @@ import Drasil.DocumentLanguage.RefHelpers (cite)
 -----------------------
 
 -- | Contents explaining the development process of this program
-developmentProcessParagraph :: ReferenceDB -> Contents
+developmentProcessParagraph :: ReferenceDB -> UnlabelledContent
 developmentProcessParagraph refdb = foldlSP [S "This", phrase document, 
   S "will be used as a starting point for subsequent development", 
   S "phases, including writing the", phrase desSpec, S "and the", 
@@ -124,7 +124,7 @@ orgSec i b s t = SRS.orgOfDoc (orgIntro i b s t) []
 
 -- Intro -> Bottom (for bottom up approach) -> Section that contains bottom ->
 --    trailing sentences -> [Contents]
-orgIntro :: (NamedIdea c) => Sentence -> c -> Section -> Sentence -> [Contents]
+orgIntro :: (NamedIdea c) => Sentence -> c -> Section -> Sentence -> [UnlabelledContent]
 orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
           intro, S "The presentation follows the standard pattern of presenting",
           (foldlsC $ map (plural) [Doc.goal, theory, definition]) `sC` S "and assumptions.",
@@ -132,6 +132,6 @@ orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
           S "they can start reading the", plural bottom, 
           S "in", makeRef bottomSec +:+
           S "and trace back to find any additional information they require"],
-          Paragraph $ lastS trailingSentence]
+          mkParagraph $ lastS trailingSentence]
           where lastS EmptyS = refineChain [goalStmt, thModel, inModel]
                 lastS t = refineChain [goalStmt, thModel, inModel] +:+. t

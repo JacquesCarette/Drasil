@@ -5,7 +5,9 @@ import Data.List (nub)
 
 import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
-import qualified Drasil.DocLang.SRS as SRS
+import qualified Drasil.DocLang.SRS as SRS (dataDefnLabel, 
+  valsOfAuxConsLabel, referenceLabel, indPRCaseLabel,
+  datConLabel, funcReqLabel, assumptLabel, likeChgLabel)
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), 
@@ -119,7 +121,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     [IPurpose (purpose_of_document_intro_p1 document gLassBR glaSlab),
      IScope incScoR endScoR,
      IChar (rdrKnldgbleIn glBreakage blastRisk) undIR appStanddIR,
-     IOrgSec org_of_doc_intro dataDefn (SRS.dataDefn SRS.missingP []) org_of_doc_intro_end]) :
+     IOrgSec org_of_doc_intro dataDefn SRS.dataDefnLabel org_of_doc_intro_end]) :
   StkhldrSec
     (StkhldrProg2
       [Client gLassBR (S "a" +:+ phrase company
@@ -141,7 +143,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand] HideDerivation
           , Constraints EmptyS dataConstraintUncertainty
-                        (foldlSent [(makeRef (SRS.valsOfAuxCons SRS.missingP [])), S "gives", (plural value `ofThe` S "specification"), 
+                        (foldlSent [(makeRef SRS.valsOfAuxConsLabel), S "gives", (plural value `ofThe` S "specification"), 
                         plural parameter, S "used in", (makeRef inputDataConstraints)])
                         [inputDataConstraints, outputDataConstraints]
           ]
@@ -284,7 +286,7 @@ appStanddIR = foldlSent [S " In addition" `sC` plural reviewer, -- FIXME: space 
   S "should be familiar with the applicable", plural standard,
   S "for constructions using glass from",
   sSqBr (S "1-3" {-astm2009, astm2012, astm2016-}) `sIn`
-  (makeRef (SRS.reference SRS.missingP []))]
+  (makeRef SRS.referenceLabel)]
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
   S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
   S "related to", phrase blastTy]
@@ -356,7 +358,7 @@ product_use_case_table_UC1, product_use_case_table_UC2 :: [Sentence]
 
 product_use_case_table_UC1 = [titleize user, titleize' characteristic +:+ S "of the"
   +:+ phrase glaSlab `sAnd` S "of the" +:+. phrase blast +:+ S "Details in"
-  +:+ makeRef (SRS.indPRCase SRS.missingP [])]
+  +:+ makeRef SRS.indPRCaseLabel]
 
 product_use_case_table_UC2 = [short gLassBR, S "Whether" `sOr` S "not the" +:+
   phrase glaSlab +:+ S "is safe for the" +:+ S "calculated" +:+ phrase load
@@ -414,7 +416,7 @@ problem_description = probDescF start gLassBR ending [terminology_and_descriptio
 
 terminology_and_description = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
   S "are extracted from" +:+ (sSqBrNum 1 {-astm2009-}) `sIn`
-  (makeRef (SRS.reference SRS.missingP [])))) [terminology_and_description_bullets]
+  (makeRef SRS.referenceLabel))) [terminology_and_description_bullets]
 
 {--Physical System Description--}
 
@@ -540,7 +542,7 @@ req2Desc = foldlSent [S "The", phrase system,
 req3Desc = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",
   plural datumConstraint, S "mentioned in" +:+. makeRef
-  (SRS.datCon SRS.missingP []), S "If any" `sOf` S "the", plural inParam,
+  SRS.datConLabel, S "If any" `sOf` S "the", plural inParam,
   S "is out" `sOf` S "bounds" `sC` S "an", phrase errMsg, S "is displayed"
   `andThe` plural calculation, S "stop"]
 
@@ -613,16 +615,16 @@ traceability_matrices_and_graphs_dataDef =  ["DD1", "DD2", "DD3", "DD4", "DD5", 
 traceability_matrices_and_graphs_dataDefRef = map (refFromType Data') dataDefns
 
 traceability_matrices_and_graphs_data  = ["Data Constraints"]
-traceability_matrices_and_graphs_dataRef = [makeRef (SRS.datCon SRS.missingP [])]
+traceability_matrices_and_graphs_dataRef = [makeRef SRS.datConLabel]
 
 traceability_matrices_and_graphs_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-traceability_matrices_and_graphs_funcReqRef = makeListRef traceability_matrices_and_graphs_funcReq (SRS.funcReq SRS.missingP [])
+traceability_matrices_and_graphs_funcReqRef = makeListRef traceability_matrices_and_graphs_funcReq SRS.funcReqLabel
 
 traceability_matrices_and_graphs_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
-traceability_matrices_and_graphs_assumpRef = makeListRef traceability_matrices_and_graphs_assump (SRS.assumpt SRS.missingP [])
+traceability_matrices_and_graphs_assumpRef = makeListRef traceability_matrices_and_graphs_assump SRS.assumptLabel
 
 traceability_matrices_and_graphs_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5"]
-traceability_matrices_and_graphs_likelyChgRef = makeListRef traceability_matrices_and_graphs_likelyChg (SRS.likeChg SRS.missingP [])
+traceability_matrices_and_graphs_likelyChgRef = makeListRef traceability_matrices_and_graphs_likelyChg SRS.likeChgLabel
 
 traceability_matrices_and_graphs_row_t1 :: [String]
 traceability_matrices_and_graphs_row_t1 = traceability_matrices_and_graphs_theorys ++ traceability_matrices_and_graphs_instaModel ++ traceability_matrices_and_graphs_dataDef

@@ -7,5 +7,5 @@ If anything, this could be called by the recipes that need it
 import Language.Drasil
 
 -- | Default reference section introduction
-intro :: Contents
-intro = Paragraph $ S "This section records information for easy reference."
+intro :: UnlabelledContent
+intro = ulcc $ Paragraph $ S "This section records information for easy reference."

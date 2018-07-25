@@ -35,7 +35,7 @@ import Data.Drasil.Concepts.Documentation (fterms, input_, output_, symbol_,
 import Data.Drasil.Concepts.Math (unit_)
 
 eqUnR :: Expr -> Label -> LabelledContent
-eqUnR e lbl = llcc lbl $ EqnBlock e ""
+eqUnR e lbl = llcc lbl $ EqnBlock e
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator

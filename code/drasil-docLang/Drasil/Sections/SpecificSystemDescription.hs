@@ -219,8 +219,9 @@ inDataConstTbl qlst = Table titl cts (S "Input Data Constraints") True "InDataCo
    cts = snd tbl
 
 -- Creates the output Data Constraints Table
-outDataConstTbl :: (Quantity c, Constrained c) => [c] -> Contents
-outDataConstTbl qlst = Table titl cts (S "Output Data Constraints") True "OutDataConstraints"
+outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent
+outDataConstTbl qlst = llcc (mkLabelRA'' "OutDataConstraints") $ Table 
+  titl cts (S "Output Data Constraints") True "OutDataConstraints"
   where
    columns = [(S "Var", map ch qlst),
             (titleize' physicalConstraint, map fmtPhys qlst),

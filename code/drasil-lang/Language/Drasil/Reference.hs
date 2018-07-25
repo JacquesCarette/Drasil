@@ -21,8 +21,8 @@ import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..), ReqType(FR))
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName)
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel), HasRefAddress(getRefAdd))
-import Language.Drasil.Document (Contents(..), DType(Data, Theory),
-  Section(Section), getDefName, repUnd, RawContent(..))
+import Language.Drasil.Document (Section(Section), getDefName, repUnd)
+import Language.Drasil.Document.Core (Contents(..), DType(Data, Theory), RawContent(..))
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.Spec (Sentence((:+:), Ref, S))
 import Language.Drasil.UID (UID)
@@ -259,13 +259,13 @@ instance Referable RawContent where
   rType (Assumption a)          = rType a
   rType (Change l)              = rType l --rType lc
   rType (Graph _ _ _ _ _)       = Fig
-  rType (EqnBlock _ _)          = EqnB
+  rType (EqnBlock _)          = EqnB
   rType _                       =
     error "Attempting to reference unimplemented reference type"
   refAdd (Table _ _ _ _ r)      = "Table:" ++ r
   refAdd (Figure _ _ _ r)       = "Figure:" ++ r
   refAdd (Graph _ _ _ _ r)      = "Figure:" ++ r
-  refAdd (EqnBlock _ r)         = "Equation:" ++ r
+  refAdd (EqnBlock _)           = "Equation:"
   refAdd (Definition d)         = getDefName d
   refAdd (Defnt _ _ r)          = r
   refAdd (Requirement rc)       = refAdd rc

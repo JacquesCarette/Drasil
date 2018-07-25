@@ -11,46 +11,6 @@ import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as T
 
 import Language.Drasil.NounPhrase (titleize, phrase)
-{-
-import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..),
-    BoolOper(..), RTopology(..),
-    DerivType(..), DomainDesc(..),
-    RealInterval(..),Inclusive(..),
-    ($=))
-import Language.Drasil.Expr.Precedence (precA, precB, eprec)
-import Language.Drasil.UID (UID)
-import Language.Drasil.Classes (term, defn, usymb, relat)
-import qualified Language.Drasil.Chunk.SymbolForm as SF
-import Language.Drasil.Chunk.AssumpChunk (assuming)
-import Language.Drasil.Chunk.Attribute (getShortName, snToSentence)
-import Language.Drasil.Chunk.Change (chng, chngType, ChngType(Likely))
-import Language.Drasil.Chunk.Eq (QDefinition, equat)
-import Language.Drasil.Chunk.Quantity (Quantity(..))
-import Language.Drasil.Chunk.SymbolForm (eqSymb)
-import Language.Drasil.ChunkDB (getUnitLup, HasSymbolTable(..),symbLookup)
-import Language.Drasil.Chunk.ReqChunk (requires)
-import Language.Drasil.Chunk.Citation (Citation, CiteField(..), HP(..), HasFields(getFields), 
-  citeID, externRefT)
-import Language.Drasil.Document.GetChunk (vars)
-import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
-import Language.Drasil.Expr.Math (sy)
-import Language.Drasil.Symbol (Symbol(Empty, Atop, Corners, Concat, Special, Atomic), 
-  Decoration(Prime, Vector, Hat))
-import Language.Drasil.Unicode (Special(Partial))
-import Language.Drasil.Spec (Sentence(..))
-import Language.Drasil.Misc (unitToSentence)
-import Language.Drasil.NounPhrase (phrase, titleize)
-import Language.Drasil.Reference (refAdd)
-import Language.Drasil.RefTypes (RefAdd)
-import Language.Drasil.Document (DType(DD, TM, Instance, General, Theory, Data), 
-  ItemType(Nested, Flat), ListType(Definitions, Desc, Simple, Numeric, Bullet), 
-  Contents(Bib, Graph, Defnt, Assumption, Change, Figure, Requirement, Enumeration, 
-  Definition, EqnBlock, Paragraph, Table), Section(Section), SecCons(Sub, Con), 
-  Document(Document))
-
-import Language.Drasil.Space (Space(DiscreteS, DiscreteD, DiscreteI, Vect, Radians, 
-  String, Char, Boolean, Natural, Real, Rational, Integer))
--}
 
 -- | Render a Space
 space :: Space -> P.Expr
@@ -289,7 +249,7 @@ lay :: HasSymbolTable ctx => ctx -> RawContent -> T.LayoutObj
 lay sm x@(Table hdr lls t b _) = T.Table ["table"]
   ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S (refAdd x)) b (spec sm t)
 lay sm (Paragraph c)          = T.Paragraph (spec sm c)
-lay sm (EqnBlock c _)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
+lay sm (EqnBlock c)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
                               -- FIXME: Make equations referable
 lay sm x@(Definition c)       = T.Definition c (makePairs sm c) (P.S (refAdd x))
 lay sm (Enumeration cs)       = T.List $ makeL sm cs
@@ -304,7 +264,8 @@ lay sm x@(Change lc)          = T.ALUR
 lay sm x@(Graph ps w h t _)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S (refAdd x))
 lay sm (Defnt dtyp pairs rn)  = T.Definition dtyp (layPairs pairs) (P.S rn)
-  where layPairs = map (\(x,y) -> (x, map (lay sm) y))
+  where layPairs = map (\(x,y) -> (x, map temp y ))
+        temp  y   = lay sm (y ^. accessContents)
 lay sm (Bib bib)              = T.Bib $ map (layCite sm) bib
 
 -- | For importing bibliography

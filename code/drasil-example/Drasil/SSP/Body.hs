@@ -50,7 +50,8 @@ import Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
   sspOutputs, sspSymbols)
 
-import qualified Drasil.DocLang.SRS as SRS (funcReq, assumpt, inModel, missingP, physSyst)
+import qualified Drasil.DocLang.SRS as SRS (funcReq, assumpt, inModel, inModelLabel, 
+  assumptLabel, physSyst)
 
 --type declarations for sections--
 req, aux_cons :: Section
@@ -104,7 +105,7 @@ mkSRS = RefSec (RefProg intro
     , IChar (phrase solidMechanics)
       (phrase undergraduate +:+ S "level 4" +:+ phrase physics)
       EmptyS
-    , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
+    , IOrgSec orgSecStart inModel SRS.inModelLabel orgSecEnd]) :
     --FIXME: issue #235
     (GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, sysCtxFig1, sysCtxDesc, sysCtxList], 
       UsrChars [userCharIntro], SystCons [] []]):
@@ -258,7 +259,7 @@ sysCtxUsrResp = [S "Provide the input data related to the soil layer(s) and wate
   S "table (if applicable), ensuring no errors in the data entry",
   S "Ensure that consistent units are used for input variables",
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+ sParen ( 
-  makeRef (SRS.assumpt SRS.missingP [])) +:+ S "are appropriate for any particular" +:+
+  makeRef SRS.assumptLabel) +:+ S "are appropriate for any particular" +:+
   phrase problem +:+ S "input to the" +:+ phrase software]
   
 sysCtxSysResp :: [Sentence]

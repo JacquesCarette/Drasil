@@ -2,6 +2,7 @@
 -- | Document Description Language
 module Language.Drasil.Document where
 
+import Language.Drasil.Document.Core
 import Language.Drasil.Chunk.AssumpChunk (AssumpChunk)
 import Language.Drasil.Chunk.Change (Change)
 import Language.Drasil.Chunk.Citation (BibRef)
@@ -21,68 +22,20 @@ import Language.Drasil.Spec (Sentence(..))
 
 import Control.Lens ((^.), makeLenses, Lens')
 
-data ListType = Bullet [(ItemType,Maybe RefAdd)] -- ^ Bulleted list
-              | Numeric [(ItemType,Maybe RefAdd)] -- ^ Enumerated List
-              | Simple [ListTuple] -- ^ Simple list with items denoted by @-@
-              | Desc [ListTuple] -- ^ Descriptive list, renders as "Title: Item" (see 'ListTuple')
-              | Definitions [ListTuple] -- ^ Renders a list of "@Title@ is the @Item@"
+makeLenses ''LabelledContent
+makeLenses ''UnlabelledContent
 
-data ItemType = Flat Sentence -- ^ Standard singular item
-              | Nested Header ListType -- ^ Nest a list as an item
+instance HasRefAddress LabelledContent where getRefAdd = lbl . getRefAdd
+instance HasLabel      LabelledContent where getLabel = lbl
+instance MayHaveLabel  LabelledContent where getMaybeLabel x = Just (x ^. getLabel)
+instance HasContents   LabelledContent where accessContents = ctype
 
--- | MaxWidthPercent should be kept in the range 1-100. 
--- Values outside this range may have unexpected results.
--- Used for specifying max figure width as
--- pagewidth*MaxWidthPercent/100.
-type MaxWidthPercent = Float
-
-type Title    = Sentence
-type Author   = Sentence
-type Header   = Sentence -- Used when creating sublists
-type Depth    = Int
-type Width    = Float
-type Height   = Float
-type ListTuple = (Title,ItemType,Maybe RefAdd) -- ^ Title: Item
-type Filepath = String
-type Lbl      = Sentence
+instance MayHaveLabel UnlabelledContent where getMaybeLabel _ = Nothing
+instance HasContents  UnlabelledContent where accessContents = cntnts
 
 -- FIXME: this is here temporarily due to import cycles
 class HasContents c where
   accessContents :: Lens' c RawContent
-
---FIXME: Remove Data, Data', and Theory from below.
--- | Types of definitions
-data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining 
-                              -- equation used to generate the Data Definition
-           | Data' DataDefinition
-           | General
-           | Theory RelationConcept -- ^ Theoretical models use a relation as
-                                    -- their definition
-           | Instance
-           | TM
-           | DD
-
--- | Types of layout objects we deal with explicitly
-data RawContent = Table [Sentence] [[Sentence]] Title Bool RefAdd
-  -- ^ table has: header-row data(rows) label/caption showlabel?
-               | Paragraph Sentence -- ^ Paragraphs are just sentences.
-               | EqnBlock Expr RefAdd
-     --        CodeBlock Code   -- GOOL complicates this.  Removed for now.
-               | Definition DType
-               | Enumeration ListType -- ^ Lists
-               | Figure Lbl Filepath MaxWidthPercent RefAdd-- ^ Should use relative file path.
-               | Requirement ReqChunk
-               | Assumption AssumpChunk
-               | Change Change
-               | Bib BibRef
-     --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
-               | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl RefAdd
-               -- ^ TODO: Fill this one in.
-               ------NEW TMOD/DDEF/IM/GD BEGINS HERE------
-               ---- FIXME: The above Definition will need to be removed ----
-               --------------------------------------------
-               | Defnt DType [(Identifier, [RawContent])] RefAdd
-type Identifier = String
 
 repUnd :: Char -> String
 repUnd '_' = "."
@@ -103,7 +56,7 @@ instance HasShortName  RawContent where
   shortname (Table _ _ _ _ r)     = shortname' $ "Table:" ++ r
   shortname (Figure _ _ _ r)      = shortname' $ "Figure:" ++ r
   shortname (Graph _ _ _ _ r)     = shortname' $ "Figure:" ++ r
-  shortname (EqnBlock _ r)        = shortname' $ "Equation:" ++ r
+  shortname (EqnBlock _)          = shortname' $ "Equation:"
   shortname (Definition d)        = shortname' $ getDefName d
   shortname (Defnt _ _ r)         = shortname' r
   shortname (Requirement rc)      = shortname rc
@@ -114,25 +67,6 @@ instance HasShortName  RawContent where
   shortname (Bib _)               = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
-
-
-data LabelledContent = LblC { _lbl :: Label
-                            , _ctype :: RawContent
-                            }
-makeLenses ''LabelledContent
-
-instance HasRefAddress LabelledContent where getRefAdd = lbl . getRefAdd
-instance HasLabel      LabelledContent where getLabel = lbl
-instance MayHaveLabel  LabelledContent where getMaybeLabel x = Just (x ^. getLabel)
-instance HasContents   LabelledContent where accessContents = ctype
-
-data UnlabelledContent = UnlblC { _cntnts :: RawContent }
-makeLenses ''UnlabelledContent
-
-instance MayHaveLabel UnlabelledContent where getMaybeLabel _ = Nothing
-instance HasContents  UnlabelledContent where accessContents = cntnts
-
-data Contents = UlC UnlabelledContent | LlC LabelledContent
 
 instance HasContents  Contents where 
   accessContents = accessContents
@@ -172,7 +106,9 @@ ulcc = UnlblC
 mkTableLC :: String -> String -> String -> RawContent -> LabelledContent
 mkTableLC labelUID refAdd sn' tbl = llcc (mkLabelRA labelUID refAdd sn') tbl
 
-{-mkParagraph
+mkParagraph x = UlC $ ulcc $ Paragraph x
+
+{-
 mkEqnBlock
 mkDefinition
 mkEnumeration

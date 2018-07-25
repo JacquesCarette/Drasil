@@ -11,7 +11,7 @@ scopeOfTheProjF kWord useCaseTableContents indCases = SRS.scpOfTheProj
   [introSOTP kWord]
   [prodUCTF useCaseTableContents, indPRCaseF indCases]
 
-introSOTP :: Sentence -> UnlabelledContent
+introSOTP :: Sentence -> Contents
 introSOTP kWord = foldlSP [S "This", phrase section_, 
   S "presents the" +:+. phrase (scpOfTheProj phrase), 
   S "It describes the expected use of", kWord,

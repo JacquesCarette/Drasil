@@ -40,14 +40,14 @@ foldlSentCol :: [Sentence] -> Sentence
 foldlSentCol = foldle (+:+) (+:) EmptyS
 
 -- | fold sentences then turns into content
-foldlSP :: [Sentence] -> UnlabelledContent
-foldlSP = ulcc . Paragraph . foldlSent
+foldlSP :: [Sentence] -> Contents
+foldlSP = mkParagraph . foldlSent
 
-foldlSP_ :: [Sentence] -> UnlabelledContent
-foldlSP_ = ulcc . Paragraph . foldlSent_
+foldlSP_ :: [Sentence] -> Contents
+foldlSP_ = mkParagraph . foldlSent_
 
-foldlSPCol :: [Sentence] -> UnlabelledContent
-foldlSPCol = ulcc . Paragraph . foldlSentCol
+foldlSPCol :: [Sentence] -> Contents
+foldlSPCol = mkParagraph . foldlSentCol
 
 -- | creates a list of elements seperated by commas, including the last element
 foldlsC :: [Sentence] -> Sentence

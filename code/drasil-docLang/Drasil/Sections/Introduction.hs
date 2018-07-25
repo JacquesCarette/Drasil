@@ -23,7 +23,7 @@ import Drasil.DocumentLanguage.RefHelpers (cite)
 -----------------------
 
 -- | Contents explaining the development process of this program
-developmentProcessParagraph :: ReferenceDB -> UnlabelledContent
+developmentProcessParagraph :: ReferenceDB -> Contents
 developmentProcessParagraph refdb = foldlSP [S "This", phrase document, 
   S "will be used as a starting point for subsequent development", 
   S "phases, including writing the", phrase desSpec, S "and the", 
@@ -59,7 +59,7 @@ introductionSubsections = foldlList (map (\(x,y) -> x `ofThe` y)
 -- subSections        - List of subsections for this section
 introductionSection :: Sentence -> Sentence -> [Section] -> Section
 introductionSection problemIntroduction programDefinition subSections = SRS.intro 
-  [Paragraph problemIntroduction, (overviewParagraph programDefinition)] subSections
+  [mkParagraph problemIntroduction, (overviewParagraph programDefinition)] subSections
 
 
 -- | Constructor for the overview paragraph for the introduction
@@ -75,7 +75,7 @@ overviewParagraph programDefinition = foldlSP [S "The following", phrase section
 -- example
 purposeOfDoc :: ReferenceDB -> Sentence -> Section
 purposeOfDoc refdb purposeOfProgramParagraph = SRS.prpsOfDoc 
-  [Paragraph purposeOfProgramParagraph, developmentProcessParagraph refdb] []
+  [mkParagraph purposeOfProgramParagraph, developmentProcessParagraph refdb] []
 
 
 -- | constructor for scope of requirements subsection
@@ -124,7 +124,7 @@ orgSec i b s t = SRS.orgOfDoc (orgIntro i b s t) []
 
 -- Intro -> Bottom (for bottom up approach) -> Section that contains bottom ->
 --    trailing sentences -> [Contents]
-orgIntro :: (NamedIdea c) => Sentence -> c -> Section -> Sentence -> [UnlabelledContent]
+orgIntro :: (NamedIdea c) => Sentence -> c -> Section -> Sentence -> [Contents]
 orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
           intro, S "The presentation follows the standard pattern of presenting",
           (foldlsC $ map (plural) [Doc.goal, theory, definition]) `sC` S "and assumptions.",

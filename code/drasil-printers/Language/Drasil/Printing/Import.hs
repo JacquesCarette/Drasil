@@ -88,6 +88,10 @@ expr (Str s)            _ = P.Str   s
 expr (AssocB And l)    sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (precB And)) l
 expr (AssocB Or l)     sm = P.Row $ intersperse (P.MO P.Or ) $ map (expr' sm (precB Or)) l
 expr (AssocA Add l)    sm = P.Row $ intersperse (P.MO P.Add) $ map (expr' sm (precA Add)) l
+expr (AssocA Mul [b', (BinaryOp Pow (Int b) a)])    sm =
+  P.Row $ intersperse (P.MO P.Cross) $ map (expr' sm (precA Mul)) [b', (BinaryOp Pow (Int b) a)]
+expr (AssocA Mul [b', (BinaryOp Pow (Dbl b) a)])    sm =
+  P.Row $ intersperse (P.MO P.Cross) $ map (expr' sm (precA Mul)) [b', (BinaryOp Pow (Dbl b) a)]
 expr (AssocA Mul [(Dbl n), (Int n')])    sm =
   P.Row $ intersperse (P.MO P.Mul) $ map (expr' sm (precA Mul)) [(Dbl n), (Int n')]
 expr (AssocA Mul [(Int n), (Dbl n')])    sm =

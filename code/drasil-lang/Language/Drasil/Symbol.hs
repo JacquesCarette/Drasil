@@ -46,6 +46,9 @@ complsy [] _  = LT
 complsy _  [] = GT
 complsy (x : xs) (y : ys) = compsy x y `mappend` complsy xs ys
 
+-- The default compare function sorts all the lower case after the upper case
+-- Comparation is used twice for each case,
+-- Once for making sure they are the same letter, once for case sensitive.
 compsy :: Symbol -> Symbol -> Ordering
 compsy (Concat (x:[]))       (Concat (y:[]))       = compsy x y
 compsy (Concat (Atomic "Δ":(Atomic x):xs)) (Atomic y)      = 
@@ -122,11 +125,6 @@ compsy (Atomic x)              (Atomic y)          =
 compsy (Atomic _)              _                   = LT
 compsy  _                      (Atomic _)          = GT
 compsy  Empty                  Empty               = EQ
-
-
-
-
-
 
 -- | Helper for creating a symbol with a superscript on the left side of the symbol.
 -- Arguments: Base symbol, then superscripted symbol.

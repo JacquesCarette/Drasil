@@ -942,11 +942,11 @@ ${A_{C}}$ & ${A_{C}}>0$ & ${A_{C}}\leq{}{{A_{C}}^{max}}$ & $0.12$ $\text{m}^{2}$
 \\
 ${A_{P}}$ & ${A_{P}}>0$ & ${V_{P}}\leq{}{A_{P}}\leq{}\frac{2}{{h_{min}}} {V_{tank}}$ & $1.2$ $\text{m}^{2}$ & 10.0\%
 \\
+${C_{W}}$ & ${C_{W}}>0$ & ${{C_{W}}^{min}}<{C_{W}}<{{C_{W}}^{max}}$ & $4186.0$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10.0\%
+\\
 ${{C_{P}}^{L}}$ & ${{C_{P}}^{L}}>0$ & ${{{C_{P}}^{L}}_{min}}<{{C_{P}}^{L}}<{{{C_{P}}^{L}}_{max}}$ & $2270.0$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10.0\%
 \\
 ${{C_{P}}^{S}}$ & ${{C_{P}}^{S}}>0$ & ${{{C_{P}}^{S}}_{min}}<{{C_{P}}^{S}}<{{{C_{P}}^{S}}_{max}}$ & $1760.0$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10.0\%
-\\
-${C_{W}}$ & ${C_{W}}>0$ & ${{C_{W}}^{min}}<{C_{W}}<{{C_{W}}^{max}}$ & $4186.0$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10.0\%
 \\
 $D$ & $D>0$ & -- & $0.412$ m & 10.0\%
 \\
@@ -958,13 +958,13 @@ ${h_{P}}$ & ${h_{P}}>0$ & ${{h_{P}}^{min}}\leq{}{h_{P}}\leq{}{{h_{P}}^{max}}$ & 
 \\
 $L$ & $L>0$ & ${L_{min}}\leq{}L\leq{}{L_{max}}$ & $1.5$ m & 10.0\%
 \\
-${{T_{melt}}^{P}}$ & $0<{{T_{melt}}^{P}}<{T_{C}}$ & -- & $44.2$ ${}^{\circ}$C & 10.0\%
-\\
 ${T_{C}}$ & $0<{T_{C}}<100$ & -- & $50.0$ ${}^{\circ}$C & 10.0\%
 \\
 ${t_{final}}$ & ${t_{final}}>0$ & ${t_{final}}<{{t_{final}}^{max}}$ & $50000.0$ s & 10.0\%
 \\
 ${T_{init}}$ & $0<{T_{init}}<{T_{melt}}$ & -- & $40.0$ ${}^{\circ}$C & 10.0\%
+\\
+${{T_{melt}}^{P}}$ & $0<{{T_{melt}}^{P}}<{T_{C}}$ & -- & $44.2$ ${}^{\circ}$C & 10.0\%
 \\
 ${V_{P}}$ & $0<{V_{P}}<{V_{tank}}$ & -- & $0.05$ $\text{m}^{3}$ & 10.0\%
 \\
@@ -1269,6 +1269,10 @@ This section contains the standard values that are used for calculations in SWHS
 Symbol & Description & Value & Unit
 \\
 \midrule
+${{C_{W}}^{max}}$ & maximum specific heat capacity of water & $4210$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
+\\
+${{C_{W}}^{min}}$ & minimum specific heat capacity of water & $4170$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
+\\
 ${{{C_{P}}^{L}}_{max}}$ & maximum specific heat capacity of PCM as a liquid & $5000$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
 ${{{C_{P}}^{L}}_{min}}$ & minimum specific heat capacity of PCM as a liquid & $100$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
@@ -1276,10 +1280,6 @@ ${{{C_{P}}^{L}}_{min}}$ & minimum specific heat capacity of PCM as a liquid & $1
 ${{{C_{P}}^{S}}_{max}}$ & maximum specific heat capacity of PCM as a solid & $4000$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
 ${{{C_{P}}^{S}}_{min}}$ & minimum specific heat capacity of PCM as a solid & $100$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
-\\
-${{C_{W}}^{max}}$ & maximum specific heat capacity of water & $4210$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
-\\
-${{C_{W}}^{min}}$ & minimum specific heat capacity of water & $4170$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
 ${{h_{C}}^{max}}$ & maximum convective heat transfer coefficient between coil and water & $10000$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\

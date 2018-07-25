@@ -132,11 +132,11 @@ dim_max, dim_min, ar_max, cWeightMax, cWeightMin, sd_max,
 
 dim_max     = mkDataDef (unitary "dim_max"
   (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
-  (sub lD (Atomic "max")) millimetre Real) (dbl 5)
+  (sub lD (Atomic "max")) metre Real) (dbl 5)
 
 dim_min     = mkDataDef (unitary "dim_min"
   (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 
-  (sub lD (Atomic "min")) millimetre Real) (dbl 0.1)
+  (sub lD (Atomic "min")) metre Real) (dbl 0.1)
 
 ar_max     = mkDataDef (vc "ar_max"
   (nounPhraseSP "maximum aspect ratio")
@@ -169,7 +169,7 @@ min_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, load_dur,
   eqTNTWeight :: UnitaryChunk
 
 demand      = unitary "demand"      (nounPhraseSP "applied load (demand)")
-  lQ kilopascal Rational --correct Space used?
+  lQ pascal Rational --correct Space used?
 
 eqTNTWeight = unitary "eqTNTWeight" 
   (nounPhraseSP "explosive mass in equivalent weight of TNT")
@@ -349,7 +349,7 @@ specA         = dcc "specA"       (nounPhraseSP "specifying authority")
     "values used to calculate the specified design load, and furnishing" ++
     " other information required to perform this practice.")
 specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
-  ("The magnitude in kPa (psf), type (for example, wind or snow) and " ++
+  ("The magnitude in Pa (psf), type (for example, wind or snow) and " ++
     "duration of the load given by the specifying authority.")
 
 {--}

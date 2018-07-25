@@ -25,7 +25,7 @@ thisSI = SI {
   _sys = hghc,
   _kind = srs,
   _authors = [spencerSmith],
-  _units = si_units,  
+  _units = check_si,  
   _quants = symbols,
   _concepts = ([] :: [UnitaryConceptDict]),
   _definitions = hghcVars,
@@ -38,6 +38,9 @@ thisSI = SI {
   _sysinfodb = allSymbols,
   _refdb = rdb [] [] [] [] [] [] [] -- FIXME?
 }
+
+check_si :: [UnitDefn]
+check_si = collectUnits allSymbols symbols 
 
 allSymbols :: ChunkDB
 allSymbols = cdb symbols (map nw symbols) ([] :: [ConceptChunk]) -- FIXME: Fill in concepts

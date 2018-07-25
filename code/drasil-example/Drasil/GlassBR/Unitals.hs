@@ -68,14 +68,12 @@ plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA metre Real 
   [ gtZeroConstr,
     physc $ UpFrom (Inc, sy plate_width),
-    sfwrc $ Bounded (Inc , sy dim_min) (Inc , sy dim_max),
-    sfwrc $ UpTo (Exc, sy ar_max * sy plate_width)] (dbl 1.5) defaultUncrt
+    sfwrc $ Bounded (Inc , sy dim_min) (Inc , sy dim_max)] (dbl 1.5) defaultUncrt
 
 plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
   lB metre Real
   [ physc $ Bounded (Exc,0) (Inc, sy plate_len),
-    sfwrc $ Bounded (Inc, sy dim_min) (Inc, sy dim_max),
-    sfwrc $ UpTo (Exc, sy plate_len / sy ar_max)] (dbl 1.2) defaultUncrt
+    sfwrc $ Bounded (Inc, sy dim_min) (Inc, sy dim_max)] (dbl 1.2) defaultUncrt
 
 aspect_ratio = uvc "aspect_ratio" (aR ^. term)
   (Atomic "AR") Real

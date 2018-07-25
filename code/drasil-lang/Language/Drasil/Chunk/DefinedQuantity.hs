@@ -1,20 +1,23 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 
 module Language.Drasil.Chunk.DefinedQuantity
-  ( dqd, dqd', DefinedQuantityDict, dqdWr, dqdEL, dqdQd
-  ) where
+  ( dqd, dqd', dqdEL, DefinedQuantityDict, dqdWr
+  , dqdQd) where
+import Control.Lens ((^.), makeLenses, view)
 
 import qualified Language.Drasil.Chunk.Quantity as Q
 
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import Language.Drasil.Chunk.Derivation (Derivation)
+import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
-  HasSpace(typ), IsUnit, HasDerivation(derivations))
+  HasSpace(typ), IsUnit, HasDerivation(derivations),
+  IsUnit(udefn))
 import Language.Drasil.Development.Unit (UnitDefn, unitWrapper)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Symbol (Symbol, Stage)
-import Control.Lens ((^.), makeLenses, view)
+import Language.Drasil.UID
 
 -- | DefinedQuantity = Concept + Quantity
 data DefinedQuantityDict = DQD { _con :: ConceptChunk

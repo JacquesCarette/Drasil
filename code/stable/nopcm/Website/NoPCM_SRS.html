@@ -274,10 +274,10 @@ Normal Vector
 </tr>
 <tr>
 <td>
-<em>q<sub>C</sub></em>
+<em>q</em>
 </td>
 <td>
-Heat flux into the water from the coil
+Heat flux
 </td>
 <td>
 W/m<sup>2</sup>
@@ -285,10 +285,10 @@ W/m<sup>2</sup>
 </tr>
 <tr>
 <td>
-<em><b>q</b></em>
+<em>q<sub>C</sub></em>
 </td>
 <td>
-Thermal flux vector
+Heat flux into the water from the coil
 </td>
 <td>
 W/m<sup>2</sup>
@@ -318,10 +318,10 @@ W/m<sup>2</sup>
 </tr>
 <tr>
 <td>
-<em>q</em>
+<em><b>q</b></em>
 </td>
 <td>
-Heat flux
+Thermal flux vector
 </td>
 <td>
 W/m<sup>2</sup>
@@ -781,7 +781,7 @@ There are no system constraints.
 Specific System Description
 </h1>
 <p class="paragraph">
-This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used for the Solar Water Heating Systems.
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
 </p>
 <div id="Sec:ProbDesc">
 <div class="subsection">
@@ -1437,7 +1437,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -1835,40 +1835,6 @@ Uncert.
 </tr>
 <tr>
 <td>
-<em>L</em>
-</td>
-<td>
-<em>L&thinsp;&gt;&thinsp;0</em>
-</td>
-<td>
-<em>L<sub>min</sub>&thinsp;&le;&thinsp;L&thinsp;&le;&thinsp;L<sub>max</sub></em>
-</td>
-<td>
-<em>1.5</em> m
-</td>
-<td>
-10.0%
-</td>
-</tr>
-<tr>
-<td>
-<em>D</em>
-</td>
-<td>
-<em>D&thinsp;&gt;&thinsp;0</em>
-</td>
-<td>
---
-</td>
-<td>
-<em>0.412</em> m
-</td>
-<td>
-10.0%
-</td>
-</tr>
-<tr>
-<td>
 <em>A<sub>C</sub></em>
 </td>
 <td>
@@ -1879,40 +1845,6 @@ Uncert.
 </td>
 <td>
 <em>0.12</em> m<sup>2</sup>
-</td>
-<td>
-10.0%
-</td>
-</tr>
-<tr>
-<td>
-<em>T<sub>C</sub></em>
-</td>
-<td>
-<em>0&thinsp;&lt;&thinsp;T<sub>C</sub>&thinsp;&lt;&thinsp;100</em>
-</td>
-<td>
---
-</td>
-<td>
-<em>50.0</em> &deg;C
-</td>
-<td>
-10.0%
-</td>
-</tr>
-<tr>
-<td>
-<em>ρ<sub>W</sub></em>
-</td>
-<td>
-<em>ρ<sub>W</sub>&thinsp;&gt;&thinsp;0</em>
-</td>
-<td>
-<em>ρ<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;ρ<sub>W</sub>&thinsp;&le;&thinsp;ρ<sub>W</sub><sup>max</sup></em>
-</td>
-<td>
-<em>1000.0</em> kg/m<sup>3</sup>
 </td>
 <td>
 10.0%
@@ -1937,6 +1869,23 @@ Uncert.
 </tr>
 <tr>
 <td>
+<em>D</em>
+</td>
+<td>
+<em>D&thinsp;&gt;&thinsp;0</em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>0.412</em> m
+</td>
+<td>
+10.0%
+</td>
+</tr>
+<tr>
+<td>
 <em>h<sub>C</sub></em>
 </td>
 <td>
@@ -1947,6 +1896,57 @@ Uncert.
 </td>
 <td>
 <em>1000.0</em> W/(m<sup>2</sup>&sdot;&deg;C)
+</td>
+<td>
+10.0%
+</td>
+</tr>
+<tr>
+<td>
+<em>L</em>
+</td>
+<td>
+<em>L&thinsp;&gt;&thinsp;0</em>
+</td>
+<td>
+<em>L<sub>min</sub>&thinsp;&le;&thinsp;L&thinsp;&le;&thinsp;L<sub>max</sub></em>
+</td>
+<td>
+<em>1.5</em> m
+</td>
+<td>
+10.0%
+</td>
+</tr>
+<tr>
+<td>
+<em>T<sub>C</sub></em>
+</td>
+<td>
+<em>0&thinsp;&lt;&thinsp;T<sub>C</sub>&thinsp;&lt;&thinsp;100</em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>50.0</em> &deg;C
+</td>
+<td>
+10.0%
+</td>
+</tr>
+<tr>
+<td>
+<em>t<sub>final</sub></em>
+</td>
+<td>
+<em>t<sub>final</sub>&thinsp;&gt;&thinsp;0</em>
+</td>
+<td>
+<em>t<sub>final</sub>&thinsp;&lt;&thinsp;t<sub>final</sub><sup>max</sup></em>
+</td>
+<td>
+<em>50000.0</em> s
 </td>
 <td>
 10.0%
@@ -1971,16 +1971,16 @@ Uncert.
 </tr>
 <tr>
 <td>
-<em>t<sub>final</sub></em>
+<em>ρ<sub>W</sub></em>
 </td>
 <td>
-<em>t<sub>final</sub>&thinsp;&gt;&thinsp;0</em>
+<em>ρ<sub>W</sub>&thinsp;&gt;&thinsp;0</em>
 </td>
 <td>
-<em>t<sub>final</sub>&thinsp;&lt;&thinsp;t<sub>final</sub><sup>max</sup></em>
+<em>ρ<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;ρ<sub>W</sub>&thinsp;&le;&thinsp;ρ<sub>W</sub><sup>max</sup></em>
 </td>
 <td>
-<em>50000.0</em> s
+<em>1000.0</em> kg/m<sup>3</sup>
 </td>
 <td>
 10.0%
@@ -2253,6 +2253,27 @@ Discharging-Tank: <a href=#A:assump9.npcm>assump9_npcm</a>- The model currently 
 <li>
 <div id="LC:likeChg6">
 Tank-Lose-Heat: <a href=#A:assump15>assump15</a> - Any real tank cannot be perfectly insulated and will lose heat.
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div id="Sec:UCs">
+<div class="section">
+<h1>
+Unlikely Changes
+</h1>
+<ul class="hide-list-style">
+<li>
+<div id="UC:unlikeChg1">
+Water-Fixed-States: <a href=#A:assump14>assump14</a> - It is unlikely for the change of water from liquid to a solid, or from liquid to gas to be considered.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="UC:unlikeChg2">
+No-Internal-Heat-Generation: <a href=#A:assump12>assump12</a> - Is used for the derivations of IM1 (Hack: need Label to fix).
 </div>
 </li>
 </ul>

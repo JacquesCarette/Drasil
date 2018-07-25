@@ -69,6 +69,9 @@ auths = S $ manyNames authors
 chipmunkSRS' :: Document
 chipmunkSRS' = mkDoc mkSRS for' chipmunkSysInfo
 
+check_si :: [UnitDefn]
+check_si = collectUnits everything symbT 
+
 mkSRS :: DocDesc 
 mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
   IntroSec (
@@ -332,7 +335,7 @@ systemConstraintSect = sSubSec systemConstraint []
 -- have not been encoded.
 
 specific_system_description :: Section
-specific_system_description = specSysDescr physLib [problem_description, solution_characteristics_specification]
+specific_system_description = specSysDescr [problem_description, solution_characteristics_specification]
 
 -------------------------------
 -- 4.1 : Problem Description --

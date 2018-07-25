@@ -26,6 +26,8 @@
 \newcommand{\rthereqnum}{R\thereqnum}
 \newcounter{lcnum}
 \newcommand{\lcthelcnum}{LC\thelcnum}
+\newcounter{ucnum}
+\newcommand{\uctheucnum}{UC\theucnum}
 \bibliography{bibfile}
 \title{Software Requirements Specification for Solar Water Heating Systems}
 \author{Thulasi Jegatheesan}
@@ -95,15 +97,15 @@ ${m_{W}}$ & Mass of water & kg
 \\
 $\mathbf{\hat{n}}$ & Normal Vector & --
 \\
-${q_{C}}$ & Heat flux into the water from the coil & $\frac{\text{W}}{\text{m}^{2}}$
+$q$ & Heat flux & $\frac{\text{W}}{\text{m}^{2}}$
 \\
-$\mathbf{q}$ & Thermal flux vector & $\frac{\text{W}}{\text{m}^{2}}$
+${q_{C}}$ & Heat flux into the water from the coil & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 ${q_{in}}$ & Heat flux input & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 ${q_{out}}$ & Heat flux output & $\frac{\text{W}}{\text{m}^{2}}$
 \\
-$q$ & Heat flux & $\frac{\text{W}}{\text{m}^{2}}$
+$\mathbf{q}$ & Thermal flux vector & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 $S$ & Surface & $\text{m}^{2}$
 \\
@@ -231,7 +233,7 @@ The end user of SWHS should have an understanding of undergraduate Level 1 Calcu
 There are no system constraints.
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
-This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used for the Solar Water Heating Systems.
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
 SWHS is a computer program developed to investigate the heating of water in a solar water heating tank.
@@ -460,7 +462,7 @@ Description & \begin{symbDescription}
               \item{$t$ is the time (s)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -571,23 +573,23 @@ Table~\ref{Table:InDataConstraints} and Table~\ref{Table:OutDataConstraints} sho
 Var & Physical Constraints & Software Constraints & Typical Value & Uncert.
 \\
 \midrule
-$L$ & $L>0$ & ${L_{min}}\leq{}L\leq{}{L_{max}}$ & $1.5$ m & 10.0\%
-\\
-$D$ & $D>0$ & -- & $0.412$ m & 10.0\%
-\\
 ${A_{C}}$ & ${A_{C}}>0$ & ${A_{C}}\leq{}{{A_{C}}^{max}}$ & $0.12$ $\text{m}^{2}$ & 10.0\%
-\\
-${T_{C}}$ & $0<{T_{C}}<100$ & -- & $50.0$ ${}^{\circ}$C & 10.0\%
-\\
-${ρ_{W}}$ & ${ρ_{W}}>0$ & ${{ρ_{W}}^{min}}<{ρ_{W}}\leq{}{{ρ_{W}}^{max}}$ & $1000.0$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10.0\%
 \\
 ${C_{W}}$ & ${C_{W}}>0$ & ${{C_{W}}^{min}}<{C_{W}}<{{C_{W}}^{max}}$ & $4186.0$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10.0\%
 \\
+$D$ & $D>0$ & -- & $0.412$ m & 10.0\%
+\\
 ${h_{C}}$ & ${h_{C}}>0$ & ${{h_{C}}^{min}}\leq{}{h_{C}}\leq{}{{h_{C}}^{max}}$ & $1000.0$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$ & 10.0\%
+\\
+$L$ & $L>0$ & ${L_{min}}\leq{}L\leq{}{L_{max}}$ & $1.5$ m & 10.0\%
+\\
+${T_{C}}$ & $0<{T_{C}}<100$ & -- & $50.0$ ${}^{\circ}$C & 10.0\%
+\\
+${t_{final}}$ & ${t_{final}}>0$ & ${t_{final}}<{{t_{final}}^{max}}$ & $50000.0$ s & 10.0\%
 \\
 ${T_{init}}$ & $0<{T_{init}}<100$ & -- & $40.0$ ${}^{\circ}$C & 10.0\%
 \\
-${t_{final}}$ & ${t_{final}}>0$ & ${t_{final}}<{{t_{final}}^{max}}$ & $50000.0$ s & 10.0\%
+${ρ_{W}}$ & ${ρ_{W}}>0$ & ${{ρ_{W}}^{min}}<{ρ_{W}}\leq{}{{ρ_{W}}^{max}}$ & $1000.0$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10.0\%
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -674,6 +676,14 @@ This problem is small in size and relatively simple, so performance is not a pri
 \end{description}
 \begin{description}
 \item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg6}:]A\ref{A:assump15} - Any real tank cannot be perfectly insulated and will lose heat.
+\end{description}
+\section{Unlikely Changes}
+\label{Sec:UCs}
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC:unlikeChg1}:]A\ref{A:assump14} - It is unlikely for the change of water from liquid to a solid, or from liquid to gas to be considered.
+\end{description}
+\begin{description}
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC:unlikeChg2}:]A\ref{A:assump12} - Is used for the derivations of IM1 (Hack: need Label to fix).
 \end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}

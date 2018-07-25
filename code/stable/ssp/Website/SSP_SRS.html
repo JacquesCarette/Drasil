@@ -126,7 +126,7 @@ m
 </tr>
 <tr>
 <td>
-<em>a</em>
+<em>A</em>
 </td>
 <td>
 Constant: FIXME: missing description
@@ -137,7 +137,7 @@ m
 </tr>
 <tr>
 <td>
-<em>A</em>
+<em>a</em>
 </td>
 <td>
 Constant: FIXME: missing description
@@ -155,17 +155,6 @@ Base Width of a Slice: in the x-ordinate direction only for slice index i
 </td>
 <td>
 m
-</td>
-</tr>
-<tr>
-<td>
-<em>c&prime;</em>
-</td>
-<td>
-Effective Cohesion: internal pressure that sticks particles of soil together
-</td>
-<td>
-Pa
 </td>
 </tr>
 <tr>
@@ -192,6 +181,17 @@ N&sdot;m
 </tr>
 <tr>
 <td>
+<em>c&prime;</em>
+</td>
+<td>
+Effective Cohesion: internal pressure that sticks particles of soil together
+</td>
+<td>
+Pa
+</td>
+</tr>
+<tr>
+<td>
 <em>E</em>
 </td>
 <td>
@@ -199,6 +199,17 @@ Elastic Modulus: The ratio of the stress exerted on a body to the resulting stra
 </td>
 <td>
 Pa
+</td>
+</tr>
+<tr>
+<td>
+<em>F</em>
+</td>
+<td>
+Force: An interaction that tends to produce change in the motion of an object
+</td>
+<td>
+N
 </td>
 </tr>
 <tr>
@@ -229,17 +240,6 @@ N
 </td>
 <td>
 Y-Component of the Net Force: 
-</td>
-<td>
-N
-</td>
-</tr>
-<tr>
-<td>
-<em>F</em>
-</td>
-<td>
-Force: An interaction that tends to produce change in the motion of an object
 </td>
 <td>
 N
@@ -434,17 +434,6 @@ N&sdot;m
 </tr>
 <tr>
 <td>
-<em>n</em>
-</td>
-<td>
-Number of Slices: the slip mass has been divided into
-</td>
-<td>
---
-</td>
-</tr>
-<tr>
-<td>
 <em>N</em>
 </td>
 <td>
@@ -452,6 +441,17 @@ Normal Force: total reactive force for a soil surface subject to a body resting 
 </td>
 <td>
 N
+</td>
+</tr>
+<tr>
+<td>
+<em>n</em>
+</td>
+<td>
+Number of Slices: the slip mass has been divided into
+</td>
+<td>
+--
 </td>
 </tr>
 <tr>
@@ -577,6 +577,17 @@ N
 </tr>
 <tr>
 <td>
+<em>u</em>
+</td>
+<td>
+Local Index: used as a bound variable index in calculations
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
 <em>U<sub>b</sub></em>
 </td>
 <td>
@@ -595,17 +606,6 @@ Surface Hydrostatic Force: from water pressure acting into the slice from standi
 </td>
 <td>
 N
-</td>
-</tr>
-<tr>
-<td>
-<em>u</em>
-</td>
-<td>
-Local Index: used as a bound variable index in calculations
-</td>
-<td>
---
 </td>
 </tr>
 <tr>
@@ -632,17 +632,6 @@ N
 </tr>
 <tr>
 <td>
-<em>x</em>
-</td>
-<td>
-X Ordinate: refers to either slice i midpoint, or slice interface i
-</td>
-<td>
-m
-</td>
-</tr>
-<tr>
-<td>
 <em>X</em>
 </td>
 <td>
@@ -650,6 +639,17 @@ Interslice Shear Force: exerted between adjacent slices for interslice index i
 </td>
 <td>
 N
+</td>
+</tr>
+<tr>
+<td>
+<em>x</em>
+</td>
+<td>
+X Ordinate: refers to either slice i midpoint, or slice interface i
+</td>
+<td>
+m
 </td>
 </tr>
 <tr>
@@ -951,17 +951,6 @@ Function: generic minimization function or algorithm
 </tr>
 <tr>
 <td>
-<em>φ&prime;</em>
-</td>
-<td>
-Effective Angle of Friction: The angle of inclination with respect to the horizontal axis of the Mohr-Coulomb shear resistance line
-</td>
-<td>
-&deg;
-</td>
-</tr>
-<tr>
-<td>
 <em>Φ</em>
 </td>
 <td>
@@ -969,6 +958,17 @@ Constant: converts resistive shear without the influence of interslice forces, t
 </td>
 <td>
 N
+</td>
+</tr>
+<tr>
+<td>
+<em>φ&prime;</em>
+</td>
+<td>
+Effective Angle of Friction: The angle of inclination with respect to the horizontal axis of the Mohr-Coulomb shear resistance line
+</td>
+<td>
+&deg;
 </td>
 </tr>
 <tr>
@@ -1211,6 +1211,61 @@ General System Description
 <p class="paragraph">
 This section provides general information about the system including identifying the interfaces between the system and its environment (system context), describing the user characteristics and listing the system constraints.
 </p>
+<div id="Sec:SysContext">
+<div class="subsection">
+<h2>
+System Context
+</h2>
+<p class="paragraph">
+<a href=#Figure:sysCtxDiag>Figure:sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SSP). Arrows are used to show the data flow between the system and its environment.
+</p>
+<div id="Figure:sysCtxDiag">
+<img class="figure" src="../../../datafiles/SSP/SystemContextFigure.png" alt="System Context"></img>
+<p class="caption">
+System Context
+</p>
+</div>
+<p class="paragraph">
+The interaction between the product and the user is through a user interface. The responsibilities of the user and the system are as follows:
+</p>
+<ul class="list">
+<li>
+User Responsibilities
+<ul class="list">
+<li>
+Provide the input data related to the soil layer(s) and water table (if applicable), ensuring no errors in the data entry
+</li>
+<li>
+Ensure that consistent units are used for input variables
+</li>
+<li>
+Ensure required software assumptions (<a href=#Sec:Assumps>Assumptions</a>) are appropriate for any particular problem input to the software
+</li>
+</ul>
+</li>
+<li>
+SSP Responsibilities
+<ul class="list">
+<li>
+Detect data type mismatch, such as a string of characters  input instead of a floating point number
+</li>
+<li>
+Determine if the inputs satisfy the required physical and software constraints
+</li>
+<li>
+Identify the most likely failure surface within the possible input range
+</li>
+<li>
+Find the factor of safety for the slope
+</li>
+<li>
+Find the displacement of soil that will occur on the slope
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
 <div id="Sec:UserChars">
 <div class="subsection">
 <h2>
@@ -1239,7 +1294,7 @@ There are no system constraints.
 Specific System Description
 </h1>
 <p class="paragraph">
-This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used for the slope stability analysis.
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
 </p>
 <div id="Sec:ProbDesc">
 <div class="subsection">
@@ -2932,7 +2987,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -3039,7 +3094,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -3146,7 +3201,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -3272,7 +3327,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -3366,7 +3421,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -3460,7 +3515,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -3544,7 +3599,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -3631,7 +3686,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -3718,7 +3773,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -3805,7 +3860,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -3892,7 +3947,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -3982,7 +4037,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -4099,7 +4154,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -4228,7 +4283,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -4346,7 +4401,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -4445,7 +4500,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -4622,7 +4677,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -4748,7 +4803,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -4879,7 +4934,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -4963,7 +5018,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -5047,7 +5102,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -6340,13 +6395,27 @@ Uncert.
 </tr>
 <tr>
 <td>
-<em>E</em>
+<em>A</em>
 </td>
 <td>
-<em>E&thinsp;&gt;&thinsp;0</em>
+--
 </td>
 <td>
-<em>15000.0</em> Pa
+<em>0.0</em> m
+</td>
+<td>
+10.0%
+</td>
+</tr>
+<tr>
+<td>
+<em>a</em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>0.0</em> m
 </td>
 <td>
 10.0%
@@ -6368,27 +6437,13 @@ Uncert.
 </tr>
 <tr>
 <td>
-<em>ν</em>
+<em>E</em>
 </td>
 <td>
-<em>0&thinsp;&lt;&thinsp;ν&thinsp;&lt;&thinsp;1</em>
+<em>E&thinsp;&gt;&thinsp;0</em>
 </td>
 <td>
-<em>0.4</em>
-</td>
-<td>
-10.0%
-</td>
-</tr>
-<tr>
-<td>
-<em>φ&prime;</em>
-</td>
-<td>
-<em>0&thinsp;&lt;&thinsp;φ&prime;&thinsp;&lt;&thinsp;90</em>
-</td>
-<td>
-<em>25.0</em> &deg;
+<em>15000.0</em> Pa
 </td>
 <td>
 10.0%
@@ -6438,34 +6493,6 @@ Uncert.
 </tr>
 <tr>
 <td>
-<em>a</em>
-</td>
-<td>
---
-</td>
-<td>
-<em>0.0</em> m
-</td>
-<td>
-10.0%
-</td>
-</tr>
-<tr>
-<td>
-<em>A</em>
-</td>
-<td>
---
-</td>
-<td>
-<em>0.0</em> m
-</td>
-<td>
-10.0%
-</td>
-</tr>
-<tr>
-<td>
 <em>κ</em>
 </td>
 <td>
@@ -6473,6 +6500,34 @@ Uncert.
 </td>
 <td>
 <em>0.0</em> Pa
+</td>
+<td>
+10.0%
+</td>
+</tr>
+<tr>
+<td>
+<em>ν</em>
+</td>
+<td>
+<em>0&thinsp;&lt;&thinsp;ν&thinsp;&lt;&thinsp;1</em>
+</td>
+<td>
+<em>0.4</em>
+</td>
+<td>
+10.0%
+</td>
+</tr>
+<tr>
+<td>
+<em>φ&prime;</em>
+</td>
+<td>
+<em>0&thinsp;&lt;&thinsp;φ&prime;&thinsp;&lt;&thinsp;90</em>
+</td>
+<td>
+<em>25.0</em> &deg;
 </td>
 <td>
 10.0%

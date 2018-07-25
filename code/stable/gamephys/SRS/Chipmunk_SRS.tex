@@ -91,6 +91,8 @@ $j$ & Impulse (scalar) & Ns
 \\
 $L$ & Length & m
 \\
+$M$ & Total Mass of the Rigid Body & kg
+\\
 $m$ & Mass & kg
 \\
 ${m_{1}}$ & Mass of the first body & kg
@@ -103,8 +105,6 @@ ${m_{B}}$ & Mass Of Rigid Body B & kg
 \\
 ${m_{j}}$ & Mass Of the J-Th Particle & kg
 \\
-$M$ & Total Mass of the Rigid Body & kg
-\\
 $\mathbf{n}$ & Collision Normal Vector & m
 \\
 $\mathbf{p}$ & Position & m
@@ -115,11 +115,11 @@ ${\mathbf{p}_{j}}$ & Position Vector of the J-Th Particle & m
 \\
 $\mathbf{r}$ & Displacement & m
 \\
-$\mathbf{\hat{r}}$ & Displacement unit vector & m
-\\
 ${\mathbf{r}_{OB}}$ & Displacement vector between the origin and point B & m
 \\
 $\mathbf{r}(t)$ & Linear Displacement & m
+\\
+$\mathbf{\hat{r}}$ & Displacement unit vector & m
 \\
 $t$ & Time & s
 \\
@@ -258,7 +258,7 @@ The end user of Chipmunk2D should have an understanding of first year programmin
 There are no system constraints.
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
-This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used for the Chipmunk2D game physics library.
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
 Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (Section~\ref{Sec:ExistingSolns}). By creating a simple, lightweight, fast and portable 2D rigid body physics library, game development will be more accessible to the masses and higher quality products will be produced.
@@ -631,7 +631,7 @@ Description & \begin{symbDescription}
               \item{$M$ is the total mass of the rigid body (kg)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -659,7 +659,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{p}$ is the position (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -687,7 +687,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{r}$ is the displacement (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -715,7 +715,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -743,7 +743,7 @@ Description & \begin{symbDescription}
               \item{$ϕ$ is the orientation (rad)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -771,7 +771,7 @@ Description & \begin{symbDescription}
               \item{$θ$ is the angular displacement (rad)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -799,7 +799,7 @@ Description & \begin{symbDescription}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -835,7 +835,7 @@ Description & \begin{symbDescription}
               \item{${\mathbf{I}_{B}}$ is the moment of inertia of rigid body B (kg$\text{m}^{2}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -848,27 +848,27 @@ Table~\ref{Table:InDataConstraints} and Table~\ref{Table:OutDataConstraints} sho
 Var & Physical Constraints & Typical Value & Uncert.
 \\
 \midrule
+${C_{R}}$ & $0\leq{}{C_{R}}\leq{}1$ & $0.8$ & 10.0\%
+\\
+$\mathbf{F}$ & -- & $98.1$ N & 10.0\%
+\\
+$G$ & -- & $9.8$ $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$ & 10.0\%
+\\
+$\mathbf{I}$ & $\mathbf{I}\geq{}0$ & $74.5$ kg$\text{m}^{2}$ & 10.0\%
+\\
 $L$ & $L\geq{}0$ & $44.2$ m & 10.0\%
 \\
 $m$ & $m\geq{}0$ & $56.2$ kg & 10.0\%
 \\
-$\mathbf{I}$ & $\mathbf{I}\geq{}0$ & $74.5$ kg$\text{m}^{2}$ & 10.0\%
-\\
-$G$ & -- & $9.8$ $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$ & 10.0\%
-\\
 $\mathbf{p}$ & -- & $0.412$ m & 10.0\%
-\\
-$ϕ$ & -- & $\frac{π}{2}$ rad & 10.0\%
 \\
 $\mathbf{v}$ & -- & $2.51$ $\frac{\text{m}}{\text{s}}$ & 10.0\%
 \\
-$ω$ & -- & $2.1$ $\frac{\text{rad}}{\text{s}}$ & 10.0\%
-\\
-$\mathbf{F}$ & -- & $98.1$ N & 10.0\%
-\\
 $τ$ & -- & $200.0$ Nm & 10.0\%
 \\
-${C_{R}}$ & $0\leq{}{C_{R}}\leq{}1$ & $0.8$ & 10.0\%
+$ω$ & -- & $2.1$ $\frac{\text{rad}}{\text{s}}$ & 10.0\%
+\\
+$ϕ$ & -- & $\frac{π}{2}$ rad & 10.0\%
 \\
 \bottomrule
 \caption{Input Data Constraints}

@@ -24,10 +24,10 @@ module Language.Drasil (
   -- UnitLang
   , UDefn(..), from_udefn
   -- Unit
-  , DerUChunk(..), UnitDefn(..), unitWrapper
-  , makeDerU, unitCon, fund, comp_unitdefn
-  , (^:), (/:), (*:), (*$), (/$), new_unit
-  -- UID
+  , UnitDefn(..), unitWrapper
+  , unitCon, fund, comp_unitdefn, makeDerU
+  , (^:), (/:), (*:), (*$), (/$), (^$), new_unit, getCu
+   -- UID
   , UID
   -- Classes
   , HasUID(uid)
@@ -73,7 +73,7 @@ module Language.Drasil (
   -- Chunk.DataDefinition
   , DataDefinition, mkDataDef, mkDD, mkDataDef', qdFromDD
   -- Chunk.GenDefn
-  , GenDefn, gd, gdUnit, gd'
+  , GenDefn, gd, gdUnit, gd', gd''
   -- Chunk.InstanceModel
   , InstanceModel
   , inCons, outCons, imOutput, imInputs, im, imQD, im', imQD', im'', im'''
@@ -90,12 +90,12 @@ module Language.Drasil (
   -- Chunk.Relation
   , RelationConcept, makeRC, makeRC'
   --Chunk.DefinedQuantity
-  , dqd, dqd', DefinedQuantityDict, dqdWr, dqdEL
+  , dqd, dqd', dqdEL, DefinedQuantityDict, dqdWr
   -- Chunk.UnitaryConcept
   , ucw, UnitaryConceptDict
   -- Chunk.Attributes --FIXME: Changed a lot
   , getSource
-  , Derivation, getDerivation, getShortName
+  , Derivation, getDerivation, getShortName, shortname'
   , sourceref
   , References
   -- Chunk.ShortName
@@ -153,7 +153,7 @@ module Language.Drasil (
   -- Misc
   , mkTable, unit_symb, introduceAbb, phrase, plural, phrase's 
   , plural's, at_start, at_start'
-  , unitToSentence, unitToSentenceUnitless
+  , unitToSentence, unitToSentenceUnitless, sortBySymbol
   -- Generate
   --, gen, genCode
   -- People
@@ -175,10 +175,10 @@ module Language.Drasil (
   , Stage(Equational,Implementation), HasSymbol(symbol), eqSymb, codeSymb, hasStageSymbol
   -- ChunkDB
   , ChunkDB, cdb
-  , HasSymbolTable, symbolMap, symbLookup, getUnitLup, symbolTable
+  , HasSymbolTable, symbolMap, symbLookup, symbolTable, getUnitLup
   , HasTermTable, termLookup, termTable
   , HasDefinitionTable, conceptMap, defTable
-  , HasUnitTable, unitMap, unitTable
+  , HasUnitTable, unitMap, unitTable, collectUnits
   -- AssumpChunk
   , AssumpChunk, assuming, assump
   -- Attribute

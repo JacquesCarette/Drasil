@@ -15,7 +15,6 @@ module Data.Drasil.Utils
   , bulletNested
   , enumSimple
   , enumBullet
-  , mkRefsList
   , mkInputDatTb
   , getRVal
   , addPercent
@@ -27,20 +26,16 @@ module Data.Drasil.Utils
   , eqUnR
   ) where
 
-import Data.List (transpose)
+import Language.Drasil
 import Control.Lens ((^.))
-import Language.Drasil {-(Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
-  ItemType(Flat), sParen, sSqBr, Contents(Definition, Enumeration), 
-  makeRef, DType, Section, ListType(Simple, Bullet), getUnit, Quantity,
-  symbol, SymbolForm, symbolMap, UnitDefn, usymb, Chunk, Expr(..),
-  phrase, titleize, titleize', Contents(Table), fromEqn, fromEqn', 
-  UnitalChunk, QDefinition, term, uid, unit, ucw)-}
+
+import Data.List (transpose)
 import Data.Drasil.Concepts.Documentation (fterms, input_, output_, symbol_, 
   useCaseTable)
 import Data.Drasil.Concepts.Math (unit_)
 
-eqUnR :: Expr -> Contents -- FIXME: Unreferable equations
-eqUnR e = EqnBlock e ""
+eqUnR :: Expr -> Label -> LabelledContent
+eqUnR e lbl = llcc lbl $ EqnBlock e ""
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -69,13 +64,6 @@ enumWithAbbrev start abbrev = [abbrev :+: (S $ show x) | x <- [start..]]
 -- l - the list to be enumerated
 mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
 mkEnumAbbrevList s t l = zip (enumWithAbbrev s t) $ map Flat l
-
--- | creates a list of references from l starting from s
--- s - start indices
--- l - list of references
-mkRefsList :: Integer -> [Sentence] -> Contents
-mkRefsList s l = Enumeration $ Simple $ noRefsLT $ zip (enumWithSquBrk s) $
-  map Flat l
 
 -- | creates a list of sentences of the form "[#]"
 -- start - start indices
@@ -119,8 +107,9 @@ makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
 makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- col] 
 
 -- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
-mkInputDatTb :: (Quantity a) => [a] -> Contents
-mkInputDatTb inputVar = Table [titleize symbol_, titleize unit_, 
+mkInputDatTb :: (Quantity a) => [a] -> LabelledContent
+mkInputDatTb inputVar = llcc (mkLabelRA'' "inDataTable") $ 
+  Table [titleize symbol_, titleize unit_, 
   S "Name"]
   (mkTable [ch , fmtU EmptyS, phrase] inputVar) 
   (S "Required" +:+ titleize' input_) True "inDataTable"
@@ -153,14 +142,14 @@ bulletNested :: [Sentence] -> [ListType] -> ListType
 bulletNested t l = Bullet . map (\(h,c) -> (Nested h c, Nothing)) $ zip t l
 
 -- | enumBullet apply Enumeration, Bullet and Flat to a list
-enumBullet ::[Sentence] -> Contents
-enumBullet = Enumeration . bulletFlat
+enumBullet :: Label -> [Sentence] -> LabelledContent
+enumBullet lbl s = llcc lbl $ Enumeration $ bulletFlat s
 
 -- | enumSimple enumerates a list and applies simple and enumeration to it
 -- s - start index for the enumeration
 -- t - title of the list
 -- l - list to be enumerated
-enumSimple :: Integer -> Sentence -> [Sentence] -> Contents
+enumSimple :: Integer -> Sentence -> [Sentence] -> RawContent
 enumSimple s t l = Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
 
 -- | interweaves two lists together [[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]
@@ -182,7 +171,8 @@ noRefs a = zip a $ repeat Nothing
 noRefsLT :: [(Sentence, ItemType)] -> [ListTuple]
 noRefsLT a = uncurry zip3 (unzip a) $ repeat Nothing
 
-prodUCTbl :: [[Sentence]] -> RawContent
-prodUCTbl cases = Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
+prodUCTbl :: [[Sentence]] -> LabelledContent
+prodUCTbl cases = llcc (mkLabelRA'' "useCaseTable") $ --FIXME: do we want labels across examples to be unique?
+  Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
   cases
   (titleize useCaseTable) True "useCaseTable"

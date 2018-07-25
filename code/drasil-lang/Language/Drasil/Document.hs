@@ -158,9 +158,13 @@ instance HasShortName  Section where shortname (Section _ _ _ sn') = sn'
 -- which hold the contents of the document
 data Document = Document Title Author [Section]
 
--- | Smart constructor for labelled content chunks (should not be exported)
+-- | Smart constructor for labelled content chunks
 llcc :: Label -> RawContent -> LabelledContent
 llcc = LblC
+
+-- | Smart constructor for unlabelled content chunks
+ulcc :: RawContent -> UnlabelledContent
+ulcc = UnlblC
 
 ---------------------------------------------------------------------------
 -- smart constructors needed for LabelledContent

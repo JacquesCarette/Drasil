@@ -18,6 +18,7 @@ data RefType = Tab    -- ^ Table
              | Cite   -- ^ Citation
              | Goal   -- ^ Goal Statement
              | PSD    -- ^ Physical System Description
+             | Lbl    -- ^ Label
              
 instance Show RefType where
   show Tab    = "Table"
@@ -33,3 +34,4 @@ instance Show RefType where
   show Goal   = "Goal Statement"
   show PSD    = "Physical System Description"
   show EqnB   = "Equation"
+  show Lbl    = "Label"

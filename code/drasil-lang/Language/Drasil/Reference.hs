@@ -20,13 +20,15 @@ import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc, refAddr)
 import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..), ReqType(FR))
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName)
 import Language.Drasil.Chunk.Theory (TheoryModel)
-import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid))
+import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel), HasRefAddress(getRefAdd))
 import Language.Drasil.Document (Contents(..), DType(Data, Theory),
   Section(Section), getDefName, repUnd, RawContent(..))
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.Spec (Sentence((:+:), Ref, S))
 import Language.Drasil.UID (UID)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
+import Language.Drasil.Label (Label)
+import Language.Drasil.Label.Core (getAdd)
 
 -- | Database for maintaining references.
 -- The Int is that reference's number.
@@ -241,6 +243,10 @@ instance Referable InstanceModel where
   refAdd  i = "IM:" ++ i^.uid
   rType   _ = Def
 
+instance Referable Label where
+  refAdd lb = getAdd (lb ^. getRefAdd)
+  rType _   = Lbl --FIXME?
+
 --Fixme: should become "instance Referable Contents where"
 instance Referable RawContent where
   rType (Table _ _ _ _ _)       = Tab
@@ -319,6 +325,12 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 -- item exists in our database of referable objects.
 makeRef :: (HasShortName l, Referable l) => l -> Sentence
 makeRef r = customRef r (shortname r)
+
+mkRefFrmLbl :: (HasLabel l) => l -> Sentence
+mkRefFrmLbl r = midRef (r ^. getLabel) 
+
+midRef :: Label -> Sentence
+midRef r = customRef r (shortname r)
 
 -- | Create a reference with a custom 'ShortName'
 customRef :: (HasShortName l, Referable l) => l -> ShortName -> Sentence

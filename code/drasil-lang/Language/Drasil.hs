@@ -140,8 +140,10 @@ module Language.Drasil (
   , datadefn, reldefn, MaxWidthPercent  
   , RawContent(..)
   , HasContents(accessContents)
+  , LabelledContent, UnlabelledContent
+  , llcc, ulcc
   -- Reference
-  , makeRef
+  , makeRef, mkRefFrmLbl
   -- Space
   , Space(..)
   -- Symbol
@@ -217,6 +219,8 @@ module Language.Drasil (
   , StyleGuide(..), verboseDDDescription, numberedTMEquations, numberedDDEquations
   , bibStyleH, numberedSections, hyperSettings, fontSize, bibFname, bibStyleT, colBwidth
   , colAwidth
+  --Label
+  , Label, mkLabelRA, mkLabelRA''
 ) where
 
 
@@ -243,7 +247,8 @@ import Language.Drasil.Document (Document(..), DType(..)
   , section, fig, figWithWidth, section''
   , datadefn, reldefn
   , ListTuple, MaxWidthPercent
-  , RawContent(..), HasContents(accessContents))
+  , RawContent(..), HasContents(accessContents)
+  , LabelledContent, UnlabelledContent, llcc, ulcc)
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Development.UnitLang -- all of it
 import Language.Drasil.Development.Unit -- all of it
@@ -318,7 +323,7 @@ import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (Sentence(..),
   sParen, sParenNum, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
   semiCol, sParenDash, sDash)
-import Language.Drasil.Reference (makeRef, ReferenceDB, assumpDB, reqDB
+import Language.Drasil.Reference (makeRef, mkRefFrmLbl, ReferenceDB, assumpDB, reqDB
                                  , AssumpMap, assumpLookup, HasAssumpRefs
                                  , assumpRefTable, assumptionsFromDB
                                  , rdb, reqRefTable, reqLookup, RefBy(..)
@@ -335,5 +340,5 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
 import Language.Drasil.RefTypes(RefAdd, RefType(Cite))
-
+import Language.Drasil.Label (Label, mkLabelRA, mkLabelRA'')
 --Should be in lang-dev package?

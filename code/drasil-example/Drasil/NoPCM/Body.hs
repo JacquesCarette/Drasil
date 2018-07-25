@@ -980,12 +980,6 @@ specParamVal = valsOfAuxConstantsF progName specParamValList
 ------------
 --REFERENCES
 ------------
---
---s9 = SRS.reference [s9_refs] []
-
---s9_refs :: Contents
-
--- s9_refs = mkRefsList 1 $ map foldlsC s9_refList
 
 referencesRefList :: BibRef
 referencesRefList = [ref2, ref3, ref4, parnasClements1986, smithLai2005]

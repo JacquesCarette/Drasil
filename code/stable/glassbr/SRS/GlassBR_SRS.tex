@@ -436,7 +436,7 @@ Description & \begin{symbDescription}
               \item{$J$ is the stress distribution factor (Function) (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $a$, $b$ are dimensions of the plate, where ($a>b$).
+Notes & $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in DD2.
         $LDF$ is the load duration factor as defined by DD3.
         $J$ is the stress distribution factor (Function) , as defined in DD4.
@@ -575,7 +575,7 @@ Description & \begin{symbDescription}
               \item{$b$ is the plate width (short dimension) (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $a$, $b$ are dimensions of the plate, where ($a>b$).
+Notes & $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in DD2.
         ${\hat{q}_{tol}}$ is the tolerable load defined in DD8.
 \\ \midrule \\
@@ -647,7 +647,7 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & $q$ is the 3 second equivalent pressure, as given in IM3.
-        $a$, $b$ are dimensions of the plate, where ($a>b$).
+        $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in DD2.
         $GTF$ is the glass type factor, as given by DD6.
         $\hat{q}$ is calculated with reference to A\ref{A:glassLiteA}.
@@ -719,7 +719,7 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${J_{tol}}$  is calculated with reference to  ${P_{btol}}$.
-        $a$, $b$ are dimensions of the plate, where ($a>b$).
+        $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in DD2.
         $LDF$ is the load duration factor as defined by DD3.
         ${P_{btol}}$ is the tolerable probability entered by the user.
@@ -761,9 +761,9 @@ RefBy & FIXME: This needs to be filled in
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:aspectR}
+\toprule \textbf{Refname} & \textbf{DD:aspect.ratio}
 \phantomsection 
-\label{DD:aspectR}
+\label{DD:aspect.ratio}
 \\ \midrule \\
 Label & Aspect ratio
 \\ \midrule \\
@@ -781,7 +781,7 @@ Description & \begin{symbDescription}
               \item{$b$ is the plate width (short dimension) (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $a$, $b$ are dimensions of the plate, where ($a>b$).
+Notes & $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
 \\ \midrule \\
 Source & 
 \\ \midrule \\
@@ -919,9 +919,11 @@ Table~\ref{Table:InDataConstraints} and Table~\ref{Table:OutDataConstraints} sho
 Var & Physical Constraints & Software Constraints & Typical Value & Uncert.
 \\
 \midrule
-$a$ & $a>0$ and $a\geq{}b$ & ${d_{min}}\leq{}a\leq{}{d_{max}}$ and $a<{AR_{max}} b$ & $1.5$ m & 10.0\%
+$a$ & $a>0$ and $a\geq{}b$ & ${d_{min}}\leq{}a\leq{}{d_{max}}$ & $1.5$ m & 10.0\%
 \\
-$b$ & $0<b<a$ & ${d_{min}}\leq{}b\leq{}{d_{max}}$ and $b<\frac{a}{{AR_{max}}}$ & $1.2$ m & 10.0\%
+$AR$ & $AR\geq{}1$ & $AR<{AR_{max}}$ & $1.5$ & 10.0\%
+\\
+$b$ & $0<b\leq{}a$ & ${d_{min}}\leq{}b\leq{}{d_{max}}$ & $1.2$ m & 10.0\%
 \\
 ${P_{btol}}$ & $0<{P_{btol}}<1$ & -- & $0.008$ & 0.1\%
 \\
@@ -980,7 +982,7 @@ This section provides the functional requirements, the business tasks that the s
           \item{Tolerable load (${\hat{q}_{tol}}$) (\hyperref[DD:tolLoad]{Definition~DD:tolLoad})}
           \item{Stress distribution factor (Function) based on Pbtol (${J_{tol}}$) (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol})}
           \item{Minimum thickness ($h$) (\hyperref[DD:min.thick]{Definition~DD:min.thick})}
-          \item{Aspect ratio ($AR$) (\hyperref[DD:aspectR]{Definition~DD:aspectR})}
+          \item{Aspect ratio ($AR$) (\hyperref[DD:aspect.ratio]{Definition~DD:aspect.ratio})}
           \end{itemize}
 \end{itemize}
 \begin{longtabu}{l X[l] l}

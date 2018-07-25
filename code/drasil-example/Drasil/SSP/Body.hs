@@ -67,12 +67,15 @@ termi_defi_list, phys_sys_desc_p1, phys_sys_desc_bullets,
 this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, degree] ++ map unitWrapper [newton, pascal]
 
+check_si :: [UnitDefn]
+check_si = collectUnits sspSymMap symbT 
+
 ssp_si :: SystemInformation
 ssp_si = SI {
   _sys = ssa, 
   _kind = srs, 
   _authors = [henryFrankis],
-  _units = this_si,
+  _units = check_si,
   _quants = sspSymbols,
   _concepts = symbT,
   _definitions = ([] :: [QDefinition]),

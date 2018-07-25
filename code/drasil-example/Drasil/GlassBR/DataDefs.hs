@@ -44,7 +44,8 @@ risk :: QDefinition
 risk = mkDataDef risk_fun risk_eq
 
 riskDD :: DataDefinition
-riskDD = mkDD risk [(sourceref (S "[4]")), (sourceref (S "[5, Eq. 14]"))] 
+riskDD = mkDD risk 
+  [(sourceref (S "[1]")), (sourceref (S "[4, Eq. 4-5]")), (sourceref (S "[5, Eq. 14]"))] 
   [{-derivation-}] ""{-temporary-} 
   (Just $ aGrtrThanB : hRef : ldfRef : jRef : [])
 

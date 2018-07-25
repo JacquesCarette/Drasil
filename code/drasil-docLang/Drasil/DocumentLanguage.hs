@@ -559,8 +559,8 @@ siSys SI {_sys = sys} = nw sys
 -- mkAssump :: String -> Sentence -> Contents
 -- mkAssump i desc = Assumption $ ac' i desc
 
-mkRequirement :: String -> Sentence -> String -> Contents
-mkRequirement i desc shrtn = LlC $ llcc (mkLabelRA'' shrtn) $ Requirement $ frc i desc (shortname' shrtn)
+mkRequirement :: String -> Sentence -> String -> LabelledContent
+mkRequirement i desc shrtn = llcc (mkLabelRA'' shrtn) $ Requirement $ frc i desc (shortname' shrtn)
 
 mkLklyChnk :: String -> Sentence -> String -> Contents
 mkLklyChnk i desc shrtn = LlC $ llcc (mkLabelRA'' shrtn) $ Change $ lc i desc (shortname' shrtn)

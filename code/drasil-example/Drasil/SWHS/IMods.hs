@@ -60,7 +60,7 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively",
-  sParen (makeRef a14 `sC` makeRef a19)]
+  sParen (mkRefFrmLbl a14 `sC` mkRefFrmLbl a19)]
 
 
   ----------------------------------------------
@@ -107,8 +107,8 @@ s4_2_3_desc1_swhs_im1 roc tw en wt vo wvo ms wms hcs hw ht cl hfc cs ps tk hfp s
 
 s4_2_3_desc2_swhs_im1 :: QDefinition -> QDefinition -> [Sentence]
 s4_2_3_desc2_swhs_im1 dd1 dd2 =
-  [S "Using", makeRef $ datadefn dd1, S "and",
-  makeRef $ datadefn dd2,
+  [S "Using", mkRefFrmLbl $ llcc mkEmptyLabel $ datadefn dd1, S "and",
+  mkRefFrmLbl $ llcc mkEmptyLabel $ datadefn dd2,
    S "for", (E $ sy dd1) `sAnd` (E $ sy dd2), S "respectively, this can be written as"]
 
 s4_2_3_desc3_swhs_im1 ::  UnitalChunk -> UncertQ -> [Sentence]
@@ -275,7 +275,7 @@ s4_2_3_desc1_swhs_im2 roc tempP en wt vo pcmvo pm hcs hsp hf hfp pc ps ht ass16 
 
 s4_2_3_desc2_swhs_im2 :: QDefinition -> UnitalChunk -> [Sentence]
 s4_2_3_desc2_swhs_im2 dd2 hfp =
-  [S "Using", makeRef $ datadefn dd2,
+  [S "Using", mkRefFrmLbl $ llcc mkEmptyLabel $ datadefn dd2,
    S "for", (E $ sy hfp) `sC` S "this equation can be written as"]
 
 s4_2_3_desc3_swhs_im2 :: [Sentence] -> [Sentence]
@@ -374,7 +374,7 @@ htWtrDesc = foldlSent [S "The above", phrase equation,
   sParen (unwrap $ getUnit temp_init), S "This", phrase equation,
   S "applies as long as", (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100)))
   :+: (unwrap $ getUnit temp_W),
-  sParen $ makeRef a14 `sC` makeRef a19]
+  sParen $ mkRefFrmLbl a14 `sC` mkRefFrmLbl a19]
 
 ---------
 -- IM4 --
@@ -440,11 +440,11 @@ htPCMDesc = foldlSent [S "The above", phrase equation,
   S "for", phrase boiling, S "of the", short phsChgMtrl,
   S "is not detailed" `sC` S "since the", short phsChgMtrl,
   S "is assumed to either be in a", phrase solid, S "or", phrase liquid,
-  S "state", sParen (makeRef a18)]
+  S "state", sParen (mkRefFrmLbl a18)]
 
 ---------------
 -- FIXME, hacks
-a14, a18, a19 :: Contents
-a14 = Assumption $ assump "assump14" EmptyS "assump14" 
-a18 = Assumption $ assump "assump18" EmptyS "assump18" 
-a19 = Assumption $ assump "assump19" EmptyS "assump19" 
+a14, a18, a19 :: LabelledContent
+a14 = llcc (mkLabelRA'' "assump14") $ Assumption $ assump "assump14" EmptyS "assump14" 
+a18 = llcc (mkLabelRA'' "assump18") $ Assumption $ assump "assump18" EmptyS "assump18" 
+a19 = llcc (mkLabelRA'' "assump19") $ Assumption $ assump "assump19" EmptyS "assump19"

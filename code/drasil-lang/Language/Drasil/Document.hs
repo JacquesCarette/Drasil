@@ -111,6 +111,7 @@ mkParagraph x = UlC $ ulcc $ Paragraph x
 mkFig :: Label -> RawContent -> Contents
 mkFig x y = LlC $ llcc x y
 
+
 {-
 mkEqnBlock
 mkDefinition

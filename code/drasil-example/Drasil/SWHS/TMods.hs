@@ -1,5 +1,5 @@
 module Drasil.SWHS.TMods (tModels, t1ConsThermE_new, t2SensHtE_new,
-  t3LatHtE_new, t1ConsThermE, tMod1) where
+  t3LatHtE_new, t1ConsThermE) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -37,9 +37,6 @@ t1ConsThermE_new = tm' t1ConsThermE
     qw density, qw heat_cap_spec, qw temp, qw time] ([] :: [ConceptChunk])
   [] [TCon Invariant consThermERel] []) "t1ConsThermE" [t1descr]
 
-tMod1 :: [Contents]
-tMod1 = [reldefn t1ConsThermE]
-
 t1ConsThermE :: RelationConcept
 t1ConsThermE = makeRC "t1ConsThermE"
   (nounPhraseSP "Conservation of thermal energy") t1descr consThermERel
@@ -68,12 +65,12 @@ t1descr = foldlSent [
   S "is the" +:+. (gradient ^. defn), S "For this", phrase equation,
   S "to apply" `sC` S "other forms of", phrase energy `sC` S "such as",
   phrase mech_energy `sC`
-  S "are assumed to be negligible in the", phrase system, sParen (makeRef a1)]
+  S "are assumed to be negligible in the", phrase system, sParen (mkRefFrmLbl a1)]
 
---referencing within a simple list is not yet implemented.
--- FIXME
-a1 :: Contents
-a1 = Assumption $ assump "assump1" EmptyS "assump1" 
+--referencing within a simple list is not yet implemented
+-- FIXME: this hack will be removed once labels are defined in their own file
+a1 :: LabelledContent
+a1 = llcc (mkLabelRA'' "assump1") $ Assumption $ assump "assump1" EmptyS "assump1" 
 
 -------------------------
 -- Theoretical Model 2 --

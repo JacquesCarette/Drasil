@@ -120,7 +120,7 @@ assumpS11 = foldlSent [
   S "not" +:+. phrase discharging, S "The", phrase temp_W `sAnd`
   phrase temp_PCM, S "can only increase, or remain",
   S "constant; they do not decrease. This implies that the",
-  phrase temp_init, sSqBr $ makeRef assump12, S "is less than (or equal)",
+  phrase temp_init, sSqBr $ mkRefFrmLbl assump12, S "is less than (or equal)",
   S "to the", phrase temp_C, sSqBr $ acroIM 1]
   --FIXME `sC` makeRef likeChg4]
 assumpS12 = foldlSent [
@@ -168,36 +168,35 @@ assumpS20 = foldlSent [
   --FIXME , sSqBr $ makeRef req2]
 
 swhsAssumptions :: [Contents]
-swhsAssumptions = [assump1, assump2, assump3, assump4, assump5,
+swhsAssumptions = map LlC [assump1, assump2, assump3, assump4, assump5,
   assump6, assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
   assump15, assump16, assump17, assump18, assump19, assump20]
 
 assump1, assump2, assump3, assump4, assump5, assump6, assump7,
   assump8, assump9, assump10, assump11, assump12, assump13, assump14,
-  assump15, assump16, assump17, assump18, assump19, assump20 :: Contents
+  assump15, assump16, assump17, assump18, assump19, assump20 :: LabelledContent
 
-assump1 = let a1 = "assump1" in Assumption $ assump a1 assumpS1 a1 
-assump2 = let a2 = "assump2" in Assumption $ assump a2 assumpS2 a2 
-assump3 = let a3 = "assump3" in Assumption $ assump a3 assumpS3 a3 
-assump4 = let a4 = "assump4" in Assumption $ assump a4 assumpS4 a4 
-assump5 = let a5 = "assump5" in Assumption $ assump a5 assumpS5 a5 
-assump6 = let a6 = "assump6" in Assumption $ assump a6 assumpS6 a6 
-assump7 = let a7 = "assump7" in Assumption $ assump a7 assumpS7 a7 
-assump8 = let a8 = "assump8" in Assumption $ assump a8 assumpS8 a8 
-assump9 = let a9 = "assump9" in Assumption $ assump a9 assumpS9 a9 
-assump10 = let a10 = "assump10" in Assumption $ assump a10 assumpS10 a10 
-assump11 = let a11 = "assump11" in Assumption $ assump a11 assumpS11 a11 
-assump12 = let a12 = "assump12" in Assumption $ assump a12 assumpS12 a12 
-assump13 = let a13 = "assump13" in Assumption $ assump a13 assumpS13 a13 
-assump14 = let a14 = "assump14" in Assumption $ assump a14 assumpS14 a14 
-assump15 = let a15 = "assump15" in Assumption $ assump a15 assumpS15 a15 
-assump16 = let a16 = "assump16" in Assumption $ assump a16 assumpS16 a16 
-assump17 = let a17 = "assump17" in Assumption $ assump a17 assumpS17 a17 
-assump18 = let a18 = "assump18" in Assumption $ assump a18 assumpS18 a18 
-assump19 = let a19 = "assump19" in Assumption $ assump a19 assumpS19 a19 
-assump20 = let a20 = "assump20" in Assumption $ assump a20 assumpS20 a20 
+assump1 = let a1 = "assump1" in llcc (mkLabelRA'' a1) $ Assumption $ assump a1 assumpS1 a1 
+assump2 = let a2 = "assump2" in llcc (mkLabelRA'' a2) $ Assumption $ assump a2 assumpS2 a2 
+assump3 = let a3 = "assump3" in llcc (mkLabelRA'' a3) $ Assumption $ assump a3 assumpS3 a3 
+assump4 = let a4 = "assump4" in llcc (mkLabelRA'' a4) $ Assumption $ assump a4 assumpS4 a4 
+assump5 = let a5 = "assump5" in llcc (mkLabelRA'' a5) $ Assumption $ assump a5 assumpS5 a5 
+assump6 = let a6 = "assump6" in llcc (mkLabelRA'' a6) $ Assumption $ assump a6 assumpS6 a6 
+assump7 = let a7 = "assump7" in llcc (mkLabelRA'' a7) $ Assumption $ assump a7 assumpS7 a7 
+assump8 = let a8 = "assump8" in llcc (mkLabelRA'' a8) $ Assumption $ assump a8 assumpS8 a8 
+assump9 = let a9 = "assump9" in llcc (mkLabelRA'' a9) $ Assumption $ assump a9 assumpS9 a9 
+assump10 = let a10 = "assump10" in llcc (mkLabelRA'' a10) $ Assumption $ assump a10 assumpS10 a10 
+assump11 = let a11 = "assump11" in llcc (mkLabelRA'' a11) $ Assumption $ assump a11 assumpS11 a11 
+assump12 = let a12 = "assump12" in llcc (mkLabelRA'' a12) $ Assumption $ assump a12 assumpS12 a12 
+assump13 = let a13 = "assump13" in llcc (mkLabelRA'' a13) $ Assumption $ assump a13 assumpS13 a13 
+assump14 = let a14 = "assump14" in llcc (mkLabelRA'' a14) $ Assumption $ assump a14 assumpS14 a14 
+assump15 = let a15 = "assump15" in llcc (mkLabelRA'' a15) $ Assumption $ assump a15 assumpS15 a15 
+assump16 = let a16 = "assump16" in llcc (mkLabelRA'' a16) $ Assumption $ assump a16 assumpS16 a16 
+assump17 = let a17 = "assump17" in llcc (mkLabelRA'' a17) $ Assumption $ assump a17 assumpS17 a17 
+assump18 = let a18 = "assump18" in llcc (mkLabelRA'' a18) $ Assumption $ assump a18 assumpS18 a18 
+assump19 = let a19 = "assump19" in llcc (mkLabelRA'' a19) $ Assumption $ assump a19 assumpS19 a19 
+assump20 = let a20 = "assump20" in llcc (mkLabelRA'' a20) $ Assumption $ assump a20 assumpS20 a20 
 
--- Again, list structure is same between all examples.
-
+--- Again, list structure is same between all examples.
 -- Can booktabs colored links be used? The box links completely cover nearby
 -- punctuation.

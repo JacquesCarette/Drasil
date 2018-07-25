@@ -9,7 +9,7 @@ import qualified Drasil.DocLang.SRS as SRS
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), 
-  GSDSub(UsrChars, SystCons), InclUnits(IncludeUnits), IntroSec(IntroProg),
+  GSDSub(..), InclUnits(IncludeUnits), IntroSec(IntroProg),
   IntroSub(IChar, IOrgSec, IPurpose, IScope), LCsSec(..), ProblemDescription(..), 
   RefSec(RefProg), RefTab(TAandA, TUnits), ReqrmntSec(..), 
   ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SCSSub(..), 
@@ -22,8 +22,6 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
 
 import Data.Drasil.Concepts.Computation (computerApp, inParam,
   computerLiteracy, inValue, inQty)
-
-
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
   assumption, characteristic, class_, code, company, condition, constraint, content, 
   dataConst, dataDefn, datum, datumConstraint, definition, description, document, emphasis, 
@@ -33,7 +31,6 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   reference, requirement, reviewer, section_, software, softwareSys, srs, standard, symbol_,  
   sysCont, system, systemConstraint, template, term_, theory, thModel, traceyMatrix, user,
   userCharacteristic, userInput, value)
-
 import Data.Drasil.Concepts.Education (secondYear, undergradDegree,
   civilEng, structuralEng, scndYrCalculus, structuralMechanics)
 import Data.Drasil.Concepts.Math (graph, calculation, probability,
@@ -119,13 +116,10 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
       [Client gLassBR (S "a" +:+ phrase company
         +:+ S "named Entuitive. It is developed by Dr." +:+ (S $ name mCampidelli)),
       Cstmr gLassBR]) :
-  {--GSDSec (GSDProg2 [UsrChars [user_characteristics_bullets endUser gLassBR secondYear
-    undergradDegree civilEng structuralEng glBreakage blastRisk],
-    SystCons [] []]) :--}
-	Verbatim general_system_description :	
+  GSDSec (GSDProg2 [SysCntxt [sysCtxIntro, sysCtxFig1, sysCtxDesc, sysCtxList], 
+    UsrChars [user_characteristics_intro], SystCons [] [] ]) :
   ScpOfProjSec (ScpOfProjProg (short gLassBR) product_use_case_table (individual_product_use_case glaSlab
     capacity demandq probability)) :
-  -- SSDSec (SSDVerb spec_sys_desc) : 
   SSDSec 
     (SSDProg
       [SSDProblem  (PDProg start gLassBR ending [terminology_and_description, physical_system_description, goal_statements])

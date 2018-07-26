@@ -85,7 +85,7 @@ rocTempSimp_desc = foldlSent [S "The basic", phrase equation,
   S "transfer rates, respectively" +:+. sParen (Sy $ unit_symb QT.ht_flux),
   ch in_SA `sAnd` ch out_SA, S "are the surface areas over which the",
   S "heat is being transferred in and out, respectively" +:+.
-  sParen (unwrap $ getUnit pcm_SA), ch vol_ht_gen `isThe`
+  sParen (unwrap $ unitOpt pcm_SA), ch vol_ht_gen `isThe`
   S "volumetric heat generated" +:+. sParen (Sy $ unit_symb vol_ht_gen),
   ch QPP.vol `isThe` phrase QPP.vol, sParen (Sy $ unit_symb QPP.vol)]
 

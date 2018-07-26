@@ -47,18 +47,18 @@ balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
 
 balWtrDesc :: Sentence
 balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
-  sParen (unwrap $ getUnit temp_W), (E $ sy temp_PCM) `isThe`
-  phrase temp_PCM +:+. sParen (unwrap $ getUnit temp_PCM),
-  (E $ sy temp_C) `isThe` phrase temp_C +:+. sParen (unwrap $ getUnit temp_C),
+  sParen (unwrap $ unitOpt temp_W), (E $ sy temp_PCM) `isThe`
+  phrase temp_PCM +:+. sParen (unwrap $ unitOpt temp_PCM),
+  (E $ sy temp_C) `isThe` phrase temp_C +:+. sParen (unwrap $ unitOpt temp_C),
   (E $ sy tau_W $= (sy w_mass * sy htCap_W) / (sy coil_HTC * sy coil_SA)),
-  S "is a constant" +:+. sParen (unwrap $ getUnit tau_W),
+  S "is a constant" +:+. sParen (unwrap $ unitOpt tau_W),
   (E $ sy eta $= (sy pcm_HTC * sy pcm_SA) / (sy coil_HTC * sy coil_SA)),
   S "is a constant" +:+. sParen (S "dimensionless"),
   S "The above", phrase equation, S "applies as long as the", phrase water,
   S "is in", phrase liquid, S "form" `sC` (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100))),
-  sParen (unwrap $ getUnit temp_W), S "where", E 0,
-  sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
-  sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
+  sParen (unwrap $ unitOpt temp_W), S "where", E 0,
+  sParen (unwrap $ unitOpt temp_W) `sAnd` (E 100),
+  sParen (unwrap $ unitOpt temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively",
   sParen (makeRef a14 `sC` makeRef a19)]
 
@@ -216,13 +216,13 @@ balPCM_Rel = (deriv (sy temp_PCM) time) $= case_ [case1, case2, case3, case4]
 
 balPCMDesc :: Sentence
 balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
-  sParen (unwrap $ getUnit temp_W), (E $ sy temp_PCM) `isThe`
-  phrase temp_PCM +:+. sParen (unwrap $ getUnit temp_PCM),
+  sParen (unwrap $ unitOpt temp_W), (E $ sy temp_PCM) `isThe`
+  phrase temp_PCM +:+. sParen (unwrap $ unitOpt temp_PCM),
   (E $ (sy tau_S_P) $= ((sy pcm_mass) * (sy htCap_S_P)) /
   ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant" +:+.
-  sParen (unwrap $ getUnit tau_S_P), (E $ (sy tau_L_P) $=
+  sParen (unwrap $ unitOpt tau_S_P), (E $ (sy tau_L_P) $=
   ((sy pcm_mass) * (sy htCap_L_P)) / ((sy pcm_HTC) * (sy pcm_SA))),
-  S "is a constant", sParen (unwrap $ getUnit tau_S_P)]
+  S "is a constant", sParen (unwrap $ unitOpt tau_S_P)]
 
 balPCMDesc_note :: Sentence
 balPCMDesc_note = foldlSent [(E $ (sy temp_PCM)) `sC` (E $ (0 $< sy time $< sy time_final)) `sC` (S "with initial conditions")
@@ -363,17 +363,17 @@ htWtrDesc = foldlSent [S "The above", phrase equation,
   S "in", phrase thermal_energy, S "of the", phrase liquid,
   phrase water, S "relative to the", phrase energy, S "at the initial",
   phrase temp, sParen (ch temp_init) +:+.
-  sParen (unwrap $ getUnit pcm_initMltE), (ch htCap_W) `isThe`
+  sParen (unwrap $ unitOpt pcm_initMltE), (ch htCap_W) `isThe`
   phrase heat_cap_spec, S "of", phrase liquid, phrase water,
-  sParen (unwrap $ getUnit htCap_S_P) `sAnd` (ch w_mass)
+  sParen (unwrap $ unitOpt htCap_S_P) `sAnd` (ch w_mass)
   `isThe` phrase mass, S "of the", phrase water +:+.
-  sParen (unwrap $ getUnit w_mass), S "The", phrase change, S "in",
+  sParen (unwrap $ unitOpt w_mass), S "The", phrase change, S "in",
   phrase temp, S "is the difference between the", phrase temp, S "at",
-  phrase time, ch time, sParen (unwrap $ getUnit t_init_melt) `sC`
+  phrase time, ch time, sParen (unwrap $ unitOpt t_init_melt) `sC`
   (ch temp_W) `sAnd` S "the", phrase temp_init `sC` ch temp_init +:+.
-  sParen (unwrap $ getUnit temp_init), S "This", phrase equation,
+  sParen (unwrap $ unitOpt temp_init), S "This", phrase equation,
   S "applies as long as", (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100)))
-  :+: (unwrap $ getUnit temp_W),
+  :+: (unwrap $ unitOpt temp_W),
   sParen $ makeRef a14 `sC` makeRef a19]
 
 ---------
@@ -409,34 +409,34 @@ htPCMDesc = foldlSent [S "The above", phrase equation,
   S "is derived using" +:+. (acroT 2 `sAnd` acroT 3), ch pcm_E `isThe`
   phrase change, S "in", phrase thermal_energy, S "of the", short phsChgMtrl,
   S "relative to the", phrase energy, S "at the", phrase temp_init,
-  sParen (ch temp_init) +:+. (unwrap $ getUnit pcm_initMltE), ch pcm_E,
+  sParen (ch temp_init) +:+. (unwrap $ unitOpt pcm_initMltE), ch pcm_E,
   S "for the", phrase solid, short phsChgMtrl, S "is found using", acroT 2,
   S "for", phrase sens_heat, S "ing, with", phrase heat_cap_spec `ofThe`
   phrase solid, short phsChgMtrl `sC` ch htCap_S_P,
-  sParen (unwrap $ getUnit htCap_S_P), S "and the", phrase change, S "in the",
+  sParen (unwrap $ unitOpt htCap_S_P), S "and the", phrase change, S "in the",
   short phsChgMtrl, phrase temp, S "from the", phrase temp_init +:+.
-  sParen (unwrap $ getUnit temp_init), ch pcm_E, S "for the melted",
+  sParen (unwrap $ unitOpt temp_init), ch pcm_E, S "for the melted",
   short phsChgMtrl, sParen (E (sy temp_PCM $> sy pcm_initMltE)),
   S "is found using", acroT 2, S "for", phrase sens_heat, S "of the" +:+.
   phrase liquid, short phsChgMtrl, S "plus the", phrase energy, S "when",
   phrase melting, S "starts, plus the", phrase energy,
   S "required to melt all of the", short phsChgMtrl, S "The", phrase energy,
   S "when", phrase melting, S "starts is", ch pcm_initMltE +:+.
-  sParen (unwrap $ getUnit pcm_initMltE), S "The", phrase energy,
+  sParen (unwrap $ unitOpt pcm_initMltE), S "The", phrase energy,
   S "required to melt all of the", short phsChgMtrl, S "is",
-  E (sy htFusion * sy pcm_mass), sParen (unwrap $ getUnit pcm_initMltE) +:+.
+  E (sy htFusion * sy pcm_mass), sParen (unwrap $ unitOpt pcm_initMltE) +:+.
   sParen (ddRef dd3HtFusion), phrase heat_cap_spec `ofThe` phrase liquid,
   short phsChgMtrl, S "is", ch htCap_L_P,
-  sParen (unwrap $ getUnit htCap_L_P) `sAnd` S "the", phrase change, S "in",
+  sParen (unwrap $ unitOpt htCap_L_P) `sAnd` S "the", phrase change, S "in",
   phrase temp, S "is", E (sy temp_PCM - sy temp_melt_P) +:+.
-  sParen (unwrap $ getUnit temp_melt_P), ch pcm_E, S "during",
+  sParen (unwrap $ unitOpt temp_melt_P), ch pcm_E, S "during",
   phrase melting, S "of the", short phsChgMtrl, S "is found using the", 
   phrase energy, S "required at", S "instant" +:+ phrase melting `ofThe`
   short phsChgMtrl, S "begins" `sC` ch pcm_initMltE, S "plus the",
   phrase latent_heat, phrase energy, S "added to the", short phsChgMtrl `sC`
-  ch latentE_P, sParen (unwrap $ getUnit latentE_P), S "since the",
+  ch latentE_P, sParen (unwrap $ unitOpt latentE_P), S "since the",
   phrase time, S "when", phrase melting, S "began", ch t_init_melt +:+.
-  sParen (unwrap $ getUnit t_init_melt), S "The", phrase heat, phrase energy,
+  sParen (unwrap $ unitOpt t_init_melt), S "The", phrase heat, phrase energy,
   S "for", phrase boiling, S "of the", short phsChgMtrl,
   S "is not detailed" `sC` S "since the", short phsChgMtrl,
   S "is assumed to either be in a", phrase solid, S "or", phrase liquid,

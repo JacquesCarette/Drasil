@@ -7,7 +7,7 @@ module Drasil.DocLang.SRS
   tOfSymb,
   physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
   inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
-  indPRCaseLabel, unlikeChgLabel, assumptLabel) where
+  indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
@@ -63,41 +63,41 @@ sysCon      cs ss = section' (titleize' Doc.systemConstraint)    cs ss  "SysCons
 
 scpOfTheProj cs ss = section' (at_start (Doc.scpOfTheProj titleize)) cs ss "ProjScope"
 prodUCTable cs ss = section' (titleize Doc.prodUCTable)      cs ss      "UseCaseTable"
-indPRCase   cs ss = section' (titleize' Doc.indPRCase)       cs ss      "IndividualProdUC"
+indPRCase   cs ss = section' (titleize' Doc.indPRCase)       cs ss      "IndividualProdUC" --FIXME: label is available
 
 specSysDes  cs ss = section' (titleize Doc.specificsystemdescription) cs ss "SpecSystDesc"
 probDesc    cs ss = section' (titleize Doc.problemDescription) cs ss "ProbDesc"
 termAndDefn cs ss = section' (titleize' Doc.termAndDef)        cs ss "TermDefs"
 termogy     cs ss = section' (titleize Doc.terminology)        cs ss "Terminology"
-physSyst    cs ss = section' (titleize Doc.physSyst)           cs ss "PhysSyst"
+physSyst    cs ss = section' (titleize Doc.physSyst)           cs ss "PhysSyst" --FIXME: label is available
 goalStmt    cs ss = section' (titleize' Doc.goalStmt)          cs ss "GoalStmt"
 solCharSpec cs ss = section' (titleize Doc.solutionCharSpec)   cs ss "SolCharSpec"
-assumpt     cs ss = section' (titleize' Doc.assumption)        cs ss "Assumps"
-thModel     cs ss = section' (titleize' Doc.thModel)           cs ss "TMs"
-genDefn     cs ss = section' (titleize' Doc.genDefn)           cs ss "GDs"
-inModel     cs ss = section' (titleize' Doc.inModel)           cs ss "IMs"
-dataDefn    cs ss = section' (titleize' Doc.dataDefn)          cs ss "DDs"
-datCon      cs ss = section' (titleize' Doc.datumConstraint)   cs ss "DataConstraints"
+assumpt     cs ss = section' (titleize' Doc.assumption)        cs ss "Assumps" --FIXME: label is available
+thModel     cs ss = section' (titleize' Doc.thModel)           cs ss "TMs" --FIXME: label is available
+genDefn     cs ss = section' (titleize' Doc.genDefn)           cs ss "GDs" --FIXME: label is available
+inModel     cs ss = section' (titleize' Doc.inModel)           cs ss "IMs" --FIXME: label is available
+dataDefn    cs ss = section' (titleize' Doc.dataDefn)          cs ss "DDs" --FIXME: label is available
+datCon      cs ss = section' (titleize' Doc.datumConstraint)   cs ss "DataConstraints" --FIXME: label is available
 
 propCorSol  cs ss = section' (titleize' Doc.propOfCorSol)      cs ss "CorSolProps"
 
 require     cs ss = section' (titleize' Doc.requirement)      cs ss "Requirements"
 nonfuncReq  cs ss = section' (titleize' Doc.nonfunctionalRequirement) cs ss "NFRs"
-funcReq     cs ss = section' (titleize' Doc.functionalRequirement) cs ss "FRs"
+funcReq     cs ss = section' (titleize' Doc.functionalRequirement) cs ss "FRs" --FIXME: label is available
 
-likeChg     cs ss = section' (titleize' Doc.likelyChg)        cs ss "LCs"
-unlikeChg   cs ss = section' (titleize' Doc.unlikelyChg)      cs ss "UCs"
+likeChg     cs ss = section' (titleize' Doc.likelyChg)        cs ss "LCs" --FIXME: label is available
+unlikeChg   cs ss = section' (titleize' Doc.unlikelyChg)      cs ss "UCs" --FIXME: label is available
 
 traceyMandG cs ss = section' (titleize' Doc.traceyMandG)      cs ss "TraceMatrices"
 
-valsOfAuxCons cs ss = section' (titleize Doc.consVals)        cs ss "AuxConstants"
+valsOfAuxCons cs ss = section' (titleize Doc.consVals)        cs ss "AuxConstants" --FIXME: label is available
 
 appendix    cs ss = section' (titleize Doc.appendix)          cs ss "Appendix"
 
-reference   cs ss = section' (titleize' Doc.reference)        cs ss "References"
+reference   cs ss = section' (titleize' Doc.reference)        cs ss "References" --FIXME: label is available
 offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "ExistingSolns"
 
-tOfSymb cs ss = section' (titleize Doc.tOfSymb) cs ss "ToS"
+tOfSymb cs ss = section' (titleize Doc.tOfSymb) cs ss "ToS" --FIXME: label is available
 
 --function that sets the shortname of each section to be the reference address
 section' :: Sentence -> [Contents] -> [Section] -> RefAdd -> Section
@@ -111,7 +111,7 @@ section' a b c d = section a b c d (shortname' $ getStr a) --FIXME: getStr hack
 --Labels--
 physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
   inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
-  indPRCaseLabel, unlikeChgLabel, assumptLabel :: Label
+  indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel :: Label
 physSystLabel      = mkLabelRA'' "PhysSyst"
 datConLabel        = mkLabelRA'' "DataConstraints"
 genDefnLabel       = mkLabelRA'' "GDs"
@@ -125,3 +125,4 @@ valsOfAuxConsLabel = mkLabelRA'' "AuxConstants"
 referenceLabel     = mkLabelRA'' "References"
 indPRCaseLabel     = mkLabelRA'' "IndividualProdUC"
 assumptLabel       = mkLabelRA'' "Assumps"
+funcReqLabel       = mkLabelRA'' "FRs"

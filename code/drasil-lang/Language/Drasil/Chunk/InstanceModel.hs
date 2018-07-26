@@ -61,8 +61,8 @@ im'' :: RelationConcept -> Inputs -> InputConstraints -> Output ->
 im'' rcon i ic o oc der sn addNotes = IM rcon i ic o oc [] der (shortname' sn) (Just addNotes)
 
 im :: RelationConcept -> Inputs -> InputConstraints -> Output ->
-  OutputConstraints -> String -> InstanceModel
-im rcon i ic o oc sn = IM rcon i ic o oc [] [] (shortname' sn) Nothing
+  OutputConstraints -> References -> String -> InstanceModel
+im rcon i ic o oc src sn = IM rcon i ic o oc src [] (shortname' sn) Nothing
 
 -- | Same as `im`, with an additional field for notes to be passed in
 im' :: RelationConcept -> Inputs -> InputConstraints -> Output ->

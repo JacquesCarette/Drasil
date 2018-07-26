@@ -480,24 +480,12 @@ likelyChgs :: Section
 likelyChgs = SRS.likeChg likelyChgsList []
 
 likelyChgsList :: [Contents]
-likelyChgsList = likeChgList 
-
-likeChgList :: [Contents]
-likeChgList = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
+likelyChgsList = [likeChg1, LlC likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
 
 --------------------------------
 -- Section 6b : UNLIKELY CHANGES --
 --------------------------------
-{-
-unlikelyChgs :: Section
-unlikelyChgs = SRS.unlikeChg unlikelyChgsList []
 
-unlikelyChgsList :: [Contents]
-unlikelyChgsList = unlikeChgList 
-
-unlikeChgList :: [Contents]
-unlikeChgList = []
--}
 --------------------------------------------------
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
 --------------------------------------------------

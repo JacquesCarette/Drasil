@@ -14,7 +14,7 @@ import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), ConceptDomain, HasAdditionalNotes(getNotes))
-import Language.Drasil.Development.Unit(unitWrapper, MayHaveUnit(unitOpt), UnitDefn(..))
+import Language.Drasil.Development.Unit(unitWrapper, MayHaveUnit(getUnit), UnitDefn(..))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space(Real))
@@ -50,7 +50,7 @@ instance HasShortName  QDefinition where -- FIXME: This could lead to trouble; n
                                          -- to ensure sanity checking when building
                                          -- Refs. Double-check QDef is a DD before allowing
   shortname = view refName
-instance MayHaveUnit   QDefinition where unitOpt (EC a _ _ _ _ _)   = unitOpt a
+instance MayHaveUnit   QDefinition where getUnit (EC a _ _ _ _ _)   = getUnit a
 
  
 -- | Create a 'QDefinition' with a uid, noun phrase (term), definition, symbol,

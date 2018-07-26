@@ -15,7 +15,7 @@ import Language.Drasil.Classes (Concept, ConceptDomain, HasUID(uid), Idea,
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw)
 import Language.Drasil.Chunk.Quantity (Quantity, QuantityDict, qw)
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
-import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(unitOpt), unitWrapper)
+import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(getUnit), unitWrapper)
 import qualified Data.Map as Map
 
 -- The misnomers below are not actually a bad thing, we want to ensure data can't
@@ -78,7 +78,7 @@ class HasUnitTable s where
 
 -- | Gets a unit if it exists, or Nothing.        
 getUnitLup :: HasSymbolTable s => (HasUID c, MayHaveUnit c) => c -> s -> Maybe UnitDefn
-getUnitLup c m = unitOpt $ symbLookup (c ^. uid) (m ^. symbolTable)
+getUnitLup c m = getUnit $ symbLookup (c ^. uid) (m ^. symbolTable)
 
 -- | Looks up an uid in the term table. If nothing is found, an error is thrown
 termLookup :: (HasUID c) => c -> TermMap -> IdeaDict

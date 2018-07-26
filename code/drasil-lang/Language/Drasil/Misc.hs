@@ -7,7 +7,7 @@ import Language.Drasil.Classes (HasSymbol(symbol), HasUnitSymbol(usymb),
 import Language.Drasil.Chunk.NamedIdea (short)
 import Language.Drasil.Chunk.Quantity (Quantity)
 import Language.Drasil.Chunk.Unitary (Unitary, unit)
-import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(unitOpt))
+import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.Development.UnitLang (USymb)
 import Language.Drasil.Spec ((+:+), Sentence((:+:), S, Sy), sParen)
 import Language.Drasil.Symbol (Stage(Implementation), compsy)
@@ -35,10 +35,10 @@ mkTable fl (c:cl) = map ($ c) fl : mkTable fl cl
 -- where should this go?
 -- | Get the units, if they exist, and wrap them as a Sentence
 unitToSentence :: Quantity u => u -> Sentence
-unitToSentence x = maybe (S "--") (\y -> Sy (y ^. usymb)) (unitOpt x)
+unitToSentence x = maybe (S "--") (\y -> Sy (y ^. usymb)) (getUnit x)
 
 unitToSentenceUnitless :: Quantity u => u -> Sentence
-unitToSentenceUnitless x = maybe (S "Unitless") (\y -> Sy (y ^. usymb)) (unitOpt x)
+unitToSentenceUnitless x = maybe (S "Unitless") (\y -> Sy (y ^. usymb)) (getUnit x)
 
 -- | Helper for getting the unit's symbol from a chunk, 
 -- as opposed to the symbols of the chunk itself.

@@ -7,7 +7,7 @@ import Control.Lens ((^.),makeLenses,view)
 import Language.Drasil.Chunk.NamedIdea (IdeaDict,nw,mkIdea)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), HasSpace(typ))
-import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(unitOpt))
+import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Symbol (Symbol, Stage)
@@ -32,10 +32,10 @@ instance HasSpace      QuantityDict where typ = typ'
 instance HasSymbol     QuantityDict where symbol = view symb'
 instance Quantity      QuantityDict where 
 instance Eq            QuantityDict where a == b = (a ^. uid) == (b ^. uid)
-instance MayHaveUnit   QuantityDict where unitOpt u = u ^. unit'
+instance MayHaveUnit   QuantityDict where getUnit u = u ^. unit'
 
 qw :: (Quantity q) => q -> QuantityDict
-qw q = QD (nw q) (q^.typ) (symbol q) (unitOpt q)
+qw q = QD (nw q) (q^.typ) (symbol q) (getUnit q)
 
 -- For when the symbol is constant through stages
 mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> QuantityDict

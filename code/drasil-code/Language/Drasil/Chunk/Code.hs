@@ -138,7 +138,7 @@ instance CodeIdea    CodeChunk where
   codeName (CodeC c Var) = symbToCodeName (codeSymb c)
   codeName (CodeC c Func) = funcPrefix ++ symbToCodeName (codeSymb c)
 instance Eq          CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
-instance MayHaveUnit CodeChunk where unitOpt u = unitOpt $ u ^. qc
+instance MayHaveUnit CodeChunk where getUnit u = getUnit $ u ^. qc
 
 spaceToCodeType :: Space -> G.CodeType
 spaceToCodeType Integer       = G.Integer
@@ -177,7 +177,7 @@ instance HasSymbol     CodeDefinition where symbol c = symbol (c ^. quant)
 instance Quantity      CodeDefinition where 
 instance CodeIdea      CodeDefinition where codeName = (^. ci)
 instance Eq            CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
-instance MayHaveUnit   CodeDefinition where unitOpt u = unitOpt $ u ^. quant
+instance MayHaveUnit   CodeDefinition where getUnit u = getUnit $ u ^. quant
 
 qtoc :: (Quantity q, ExprRelat q, HasSymbol q) => q -> CodeDefinition
 qtoc q = CD (qw q) (funcPrefix ++ symbToCodeName (codeSymb q)) (q ^. relat)

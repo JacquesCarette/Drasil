@@ -18,7 +18,7 @@ import Language.Drasil.Chunk.Unitary (Unitary(..))
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
   IsUnit)
-import Language.Drasil.Development.Unit (MayHaveUnit(unitOpt), UnitDefn, unitWrapper)
+import Language.Drasil.Development.Unit (MayHaveUnit(getUnit), UnitDefn, unitWrapper)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (Sentence)
@@ -41,7 +41,7 @@ instance HasSpace      UnitalChunk where typ = defq' . typ
 instance HasSymbol     UnitalChunk where symbol c st = symbol (c^.defq') st
 instance Quantity      UnitalChunk where 
 instance Unitary       UnitalChunk where unit = view uni
-instance MayHaveUnit   UnitalChunk where unitOpt u = Just (unit u)
+instance MayHaveUnit   UnitalChunk where getUnit u = Just (unit u)
 
 --{BEGIN HELPER FUNCTIONS}--
 
@@ -87,4 +87,4 @@ makeUCWDS nam trm desc sym un = UC (dqd (dccWDS nam trm desc) sym Real (Just uu)
 -- fail otherwise
 ucFromDQD :: DefinedQuantityDict -> UnitalChunk
 ucFromDQD defq = UC defq (unitWrapper uu) 
-  where uu = maybe (error "ucFromDQD must be called on a DQD with a unit") id (unitOpt defq)
+  where uu = maybe (error "ucFromDQD must be called on a DQD with a unit") id (getUnit defq)

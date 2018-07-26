@@ -18,7 +18,7 @@ import Language.Drasil.Chunk.VarChunk (vc)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
   IsUnit, Constrained(constraints), HasReasVal(reasVal))
-import Language.Drasil.Development.Unit (unitWrapper, MayHaveUnit(unitOpt), UnitDefn(..))
+import Language.Drasil.Development.Unit (unitWrapper, MayHaveUnit(getUnit), UnitDefn(..))
 import Language.Drasil.Expr (Expr(..))
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space)
@@ -41,7 +41,7 @@ instance Quantity      ConstrainedChunk where
 instance Constrained   ConstrainedChunk where constraints = constr
 instance HasReasVal    ConstrainedChunk where reasVal     = reasV
 instance Eq            ConstrainedChunk where c1 == c2 = (c1 ^. qd . uid) == (c2 ^. qd . uid)
-instance MayHaveUnit   ConstrainedChunk where unitOpt u = unitOpt $ u ^. qd
+instance MayHaveUnit   ConstrainedChunk where getUnit u = getUnit $ u ^. qd
 
 -- | Creates a constrained chunk from a symbolic quantity
 constrained :: (Quantity c) => c -> [Constraint] -> Expr -> ConstrainedChunk
@@ -83,15 +83,15 @@ instance Concept       ConstrConcept where
 instance Constrained   ConstrConcept where constraints  = constr'
 instance HasReasVal    ConstrConcept where reasVal      = reasV'
 instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.defq.uid)
-instance MayHaveUnit   ConstrConcept where unitOpt u = unitOpt $ u ^. defq
+instance MayHaveUnit   ConstrConcept where getUnit u = getUnit $ u ^. defq
 
 constrained' :: (HasSpace c, HasSymbol c, Concept c, Quantity c) =>
   c -> [Constraint] -> Expr -> ConstrConcept
-constrained' q cs rv = ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (unitOpt q)) cs (Just rv)
+constrained' q cs rv = ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit q)) cs (Just rv)
 
 constrainedNRV' :: (HasSpace c, HasSymbol c, Concept c, Quantity c) =>
   c -> [Constraint] -> ConstrConcept
-constrainedNRV' q cs = ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (unitOpt q)) cs Nothing
+constrainedNRV' q cs = ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit q)) cs Nothing
 
 cuc' :: (IsUnit u, ConceptDomain u) => String -> NP -> String -> Symbol -> u
             -> Space -> [Constraint] -> Expr -> ConstrConcept

@@ -15,7 +15,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSpace(typ), IsUnit, HasDerivation(derivations),
   IsUnit(udefn))
 import Language.Drasil.Development.Unit (UnitDefn, unitWrapper,
-  MayHaveUnit(unitOpt))
+  MayHaveUnit(getUnit))
 import Language.Drasil.Space (Space)
 import Language.Drasil.Symbol (Symbol, Stage)
 import Language.Drasil.UID
@@ -41,7 +41,7 @@ instance Q.HasSpace    DefinedQuantityDict where typ = spa
 instance HasSymbol     DefinedQuantityDict where symbol = view symb
 instance Q.Quantity    DefinedQuantityDict where 
 instance HasDerivation DefinedQuantityDict where derivations = deri
-instance MayHaveUnit   DefinedQuantityDict where unitOpt u = u ^. unit'
+instance MayHaveUnit   DefinedQuantityDict where getUnit u = u ^. unit'
 
 -- For when the symbol is constant through stages
 dqd :: ConceptChunk -> Symbol -> Space -> Maybe UnitDefn -> DefinedQuantityDict
@@ -57,7 +57,7 @@ dqdEL c s sp un = DQD c (\_ -> s) sp uu []
   where uu = Just $ unitWrapper un
 
 dqdWr :: (Q.Quantity c, Concept c, Q.HasSpace c, HasSymbol c) => c -> DefinedQuantityDict
-dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (unitOpt c) []
+dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c) []
 
 dqdQd :: (Q.Quantity c, Q.HasSpace c, HasSymbol c) => c -> ConceptChunk -> DefinedQuantityDict
-dqdQd c cc = DQD cc (symbol c) (c ^. typ) (unitOpt c) []
+dqdQd c cc = DQD cc (symbol c) (c ^. typ) (getUnit c) []

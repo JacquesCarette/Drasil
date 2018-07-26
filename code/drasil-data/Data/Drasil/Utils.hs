@@ -86,7 +86,7 @@ enumWithSquBrk start = [sSqBr $ S $ show x | x <- [start..]]
 -- n - sentenc representing an amount
 -- u - unit we want to attach to amount
 fmtU :: (Quantity a) => Sentence -> a -> Sentence
-fmtU n u  = n +:+ (unwrap $ unitOpt u)
+fmtU n u  = n +:+ (unwrap $ getUnit u)
 
 -- | gets a reasonable or typical value from a Constrained chunk
 getRVal :: (HasUID c, HasReasVal c) => c -> Expr

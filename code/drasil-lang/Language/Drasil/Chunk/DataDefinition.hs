@@ -13,7 +13,7 @@ import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shor
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), HasAdditionalNotes(getNotes))
-import Language.Drasil.Development.Unit(MayHaveUnit(unitOpt), UnitDefn(..))
+import Language.Drasil.Development.Unit(MayHaveUnit(getUnit), UnitDefn(..))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Spec (Sentence(EmptyS))
@@ -46,18 +46,18 @@ instance Eq                 DataDefinition where a == b = (a ^. uid) == (b ^. ui
 instance HasDerivation      DataDefinition where derivations = deri
 instance HasAdditionalNotes DataDefinition where getNotes = notes
 instance HasShortName       DataDefinition where shortname = view lbl
-instance MayHaveUnit        DataDefinition where unitOpt (DD a _ _ _ _ _) = unitOpt a 
+instance MayHaveUnit        DataDefinition where getUnit (DD a _ _ _ _ _) = getUnit a 
 
 -- Used to help make Qdefinitions when uid, term, and symbol come from the same source
 mkDataDef :: (Quantity c) => c -> Expr -> QDefinition
-mkDataDef cncpt equation = datadef $ unitOpt cncpt --should references be passed in at this point?
+mkDataDef cncpt equation = datadef $ getUnit cncpt --should references be passed in at this point?
   where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS
                            (eqSymb cncpt) a equation [] (cncpt ^. uid) --shortname
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
                            (eqSymb cncpt) equation [] (cncpt ^. uid) --shortname
 
 mkDataDef' :: (Quantity c) => c -> Expr -> Derivation -> QDefinition
-mkDataDef' cncpt equation dv = datadef $ unitOpt cncpt --should references be passed in at this point?
+mkDataDef' cncpt equation dv = datadef $ getUnit cncpt --should references be passed in at this point?
   where datadef (Just a) = fromEqn'''  (cncpt ^. uid) (cncpt ^. term) EmptyS
                            (eqSymb cncpt) a equation [] dv (cncpt ^. uid) --shortname
         datadef Nothing  = fromEqn'''' (cncpt ^. uid) (cncpt ^. term) EmptyS

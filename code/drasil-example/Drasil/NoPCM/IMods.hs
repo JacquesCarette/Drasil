@@ -37,15 +37,15 @@ balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
 
 balWtrDesc :: Sentence
 balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
-  sParen (unwrap $ unitOpt temp_W), 
-  (E $ sy temp_C) `isThe` phrase temp_C +:+. sParen (unwrap $ unitOpt temp_C),
+  sParen (unwrap $ getUnit temp_W), 
+  (E $ sy temp_C) `isThe` phrase temp_C +:+. sParen (unwrap $ getUnit temp_C),
   (E $ sy tau_W $= (sy w_mass * sy htCap_W) / (sy coil_HTC * sy coil_SA)),
-  S "is a constant" +:+. sParen (unwrap $ unitOpt tau_W),
+  S "is a constant" +:+. sParen (unwrap $ getUnit tau_W),
   S "The above", phrase equation, S "applies as long as the", phrase water,
   S "is in", phrase liquid, S "form" `sC` (E $ 0 $< sy temp_W $< 100),
-  sParen (unwrap $ unitOpt temp_W), S "where", E 0,
-  sParen (unwrap $ unitOpt temp_W) `sAnd` (E 100),
-  sParen (unwrap $ unitOpt temp_W), S "are the", phrase melting `sAnd`
+  sParen (unwrap $ getUnit temp_W), S "where", E 0,
+  sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
+  sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively",
   sParen (makeRef assump10)]
 

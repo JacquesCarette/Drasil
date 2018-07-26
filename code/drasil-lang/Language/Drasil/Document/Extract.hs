@@ -18,7 +18,7 @@ import Language.Drasil.Chunk.ReqChunk
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.References
 
-import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(unitOpt))
+import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(getUnit))
 
 import Language.Drasil.Classes (NamedIdea(term),
   ExprRelat(relat), HasDerivation(derivations), 
@@ -105,7 +105,7 @@ getDtype _ = []
 
 
 getQDef :: QDefinition -> [Sentence]
-getQDef a = concatMap getRef (a ^. getReferences) ++ (a ^. derivations) ++ getTerm a ++ getUnitD (unitOpt a)
+getQDef a = concatMap getRef (a ^. getReferences) ++ (a ^. derivations) ++ getTerm a ++ getUnitD (getUnit a)
 
 getRef :: Reference -> [Sentence]
 getRef (SourceRef s) = [s]

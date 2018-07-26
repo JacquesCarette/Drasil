@@ -8,7 +8,7 @@ import Language.Drasil.Chunk.Unitary (UnitaryChunk, mkUnitary, Unitary)
 import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(typ))
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol))
-import Language.Drasil.Development.Unit (MayHaveUnit(unitOpt), UnitDefn(..))
+import Language.Drasil.Development.Unit (MayHaveUnit(getUnit), UnitDefn(..))
 
 data UnitaryConceptDict = UCC { _unitary :: UnitaryChunk
                               , _dad :: DefnAndDomain
@@ -25,7 +25,7 @@ instance HasSpace      UnitaryConceptDict where typ = unitary . typ
 instance HasSymbol     UnitaryConceptDict where symbol c stage = symbol (c^.unitary) stage
 instance Quantity      UnitaryConceptDict where 
 instance Eq            UnitaryConceptDict where a == b = (a ^. uid) == (b ^. uid)
-instance MayHaveUnit   UnitaryConceptDict where unitOpt u = unitOpt $ u ^. unitary
+instance MayHaveUnit   UnitaryConceptDict where getUnit u = getUnit $ u ^. unitary
 
 ucw :: (Unitary c, Concept c) => c -> UnitaryConceptDict
 ucw c = UCC (mkUnitary c) (DAD (c ^. defn) (c ^. cdom))

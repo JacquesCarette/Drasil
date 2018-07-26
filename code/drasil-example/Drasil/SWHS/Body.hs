@@ -17,7 +17,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   tsymb'')
 import qualified Drasil.DocLang.SRS as SRS (inModel, likeChg,
   funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
-  sysCont, reference,
+  sysCont, reference, assumpt, 
   inModelLabel, thModelLabel, dataDefnLabel, genDefnLabel, referenceLabel)
 
 import Data.Drasil.People (thulasi, brooks, spencerSmith)
@@ -240,7 +240,7 @@ genSystDesc = genSysF [systCont] (userCharContents progName) [] []
 --------------------------
 
 systCont :: Section
-systCont = SRS.sysCont [systCContents progName, sys_context_fig, systCIntro 
+systCont = SRS.sysCont [systCContents progName, LlC sys_context_fig, systCIntro 
   progName user, systContRespBullets] []
 
 systContRespBullets :: Contents
@@ -334,15 +334,6 @@ goalStateList = enumSimple 1 (short goalStmt) $
 -- 4.2.1 : Assumptions --
 -------------------------
 
-assumps :: Section
-assumps = assumpF
-  SRS.thModelLabel
-  SRS.genDefnLabel
-  SRS.dataDefnLabel
-  iMods likelyChgs unlikelyChgs swhsAssumptions
-
--- Again, list structure is same between all examples.
-
 -- Can booktabs colored links be used? The box links completely cover nearby
 -- punctuation.
 
@@ -368,22 +359,6 @@ assumps = assumpF
 -- 4.2.5 : Instance Models --
 -----------------------------
 
-iMods :: Section
-iMods = inModelF probDescription
-  SRS.dataDefnLabel SRS.thModelLabel
-  SRS.genDefnLabel iModsWithDerivs
-
-iModsWithDerivs :: [LabelledContent]
-iModsWithDerivs = concat $ weave [iModsDerivations,
-  map (\x -> [llcc mkEmptyLabel $ reldefn x]) swhsIMods]
-
-iModsDerivations :: [[LabelledContent]]
-iModsDerivations = [iModSubpar solution temp_W temp_PCM pcm_E 
-  CT.phase_change, iModDeriv1, iModDeriv2]
-  
-iModDeriv1 :: [Contents]
-iModDeriv1 = (iMod1Para energy water) ++
-  (weave [iMod1SentList, iMod1EqnList])
 
 iMod1EqnList = map (\x -> LlC $ eqUnR' mkEmptyLabel x) [iMod1Eqn1, iMod1Eqn2,
   iMod1Eqn3, iMod1Eqn4, iMod1Eqn5, iMod1Eqn6, iMod1Eqn7]
@@ -552,11 +527,11 @@ traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
 traceFuncReqRef = makeListRef traceFuncReq funcReqs
 
 traceData = ["Data Constraints"]
-traceDataRef = [makeRef dataConTable1] --FIXME: Reference section?
+traceDataRef = [mkRefFrmLbl dataConTable1] --FIXME: Reference section?
 
 traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19"]
-traceAssumpRef = makeListRef traceAssump assumps
+traceAssumpRef = makeListRef traceAssump (SRS.assumpt [] []) --Fixme:replace with actual assumptions!
 
 traceTheories = ["T1", "T2", "T3"]
 traceTheoriesRef = map (refFromType Theory) tModels
@@ -858,7 +833,7 @@ orgDocEnd sp pro = foldlSent_ [S "The", plural inModel,
 --------------------------
 
 systCContents :: CI -> Contents
-systCContents pro = foldlSP [makeRef sys_context_fig, S "shows the" +:+.
+systCContents pro = foldlSP [mkRefFrmLbl sys_context_fig, S "shows the" +:+.
   phrase sysCont, S "A circle represents an external entity outside the",
   phrase software `sC` S "the", phrase user, S "in this case. A",
   S "rectangle represents the", phrase softwareSys, S "itself" +:+.
@@ -866,9 +841,9 @@ systCContents pro = foldlSP [makeRef sys_context_fig, S "shows the" +:+.
   plural datum, S "flow between the", phrase system `sAnd`
   S "its", phrase environment]
 
-sys_context_fig :: Contents
-sys_context_fig = mkFig (mkLabelRA'' "SysCon") $ fig (foldlSent_
-  [makeRef sys_context_fig +: EmptyS, titleize sysCont])
+sys_context_fig :: LabelledContent
+sys_context_fig = llcc (mkLabelRA'' "SysCon") $ fig (foldlSent_
+  [mkRefFrmLbl sys_context_fig +: EmptyS, titleize sysCont])
   "SystemContextFigure.png" "SysCon"
 
 systCIntro :: CI -> NamedChunk -> Contents
@@ -1050,16 +1025,6 @@ genDefDeriv7 = LlC $ eqUnR' mkEmptyLabel $
   ((sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
   (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
-
-genDefDeriv8 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
-  UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk -> CI -> Contents ->
-  Contents -> Contents -> Contents -> Contents
-genDefDeriv8 hfi hfo isa osa den hcs tem vo assu a3 a4 a5 a6 = foldlSPCol 
-  [S "Where", foldlList (map ch [hfi, hfo, isa, osa]), 
-  S "are explained in" +:+. acroGD 2, S "Assuming", ch den `sC` ch hcs
-  `sAnd` ch tem, S "are constant over the", phrase vo `sC` S "which is true",
-  S "in our case by", titleize' assu, 
-  foldlList (map (\c -> sParen (makeRef c)) [a3, a4, a5, a6]) `sC` S "we have"]
 
 genDefDeriv9 = LlC $ eqUnR' mkEmptyLabel $ 
   ((sy density) * (sy heat_cap_spec) * (sy vol) * deriv (sy temp)
@@ -1270,7 +1235,7 @@ iMod2EndPara pcmat hcsp hclp tsp tlp sur mel vo ptem tmp boi so li = map
   S "this is not included, since",
   (phrase vo +:+ S "change" `ofThe` short pcmat),
   S "with", phrase mel,
-  S "is assumed to be negligible", sParen (makeRef assump17)],
+  S "is assumed to be negligible", sParen (mkRefFrmLbl assump17)],
 
   [S "In the case where", ch ptem :+: S "=" :+:
   ch tmp `sAnd` S "not all of the", short pcmat,
@@ -1281,14 +1246,13 @@ iMod2EndPara pcmat hcsp hclp tsp tlp sur mel vo ptem tmp boi so li = map
   [S "This derivation does not consider",
   (phrase boi `ofThe` short pcmat) `sC` S "as the", short pcmat,
   S "is assumed to either be in a", (so ^. defn),
-  S "or a", (li ^. defn), sParen (makeRef assump18)]
+  S "or a", (li ^. defn), sParen (mkRefFrmLbl assump18)]
 
   ]
 
 -- Add GD, A, and EqnBlock references when available
--- Replace derivs with regular derivative when available
+-- FIXME: Replace derivs with regular derivative when available
 -- derivative notation in paragraph?
-
 
 ----------------------------
 -- 4.2.6 Data Constraints --
@@ -1317,7 +1281,7 @@ dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
   S "or there will be a divide by zero in the", phrase model],
 
   [sParen (S "+"), S "These", plural qua, S "cannot be zero" `sC`
-  S "or there would be freezing", sParen (makeRef assump13)],
+  S "or there would be freezing", sParen (mkRefFrmLbl assump13)],
 
   [sParen (Sp Hash), S "The", plural constraint, S "on the", phrase sa,
   S "are calculated by considering the", phrase sa, S "to", phrase vo +:+.
@@ -1389,7 +1353,7 @@ propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)"
   S "computed by" +:+. short pro, S "The relative",
   S "error between the results computed by", short pro `sAnd`
   S "the results calculated from the", short rs, S "of these",
-  plural eq, S "should be less than 0.001%", makeRef req9]
+  plural eq, S "should be less than 0.001%", mkRefFrmLbl req9]
 
 -- Above section only occurs in this example (although maybe it SHOULD be in
 -- the others).

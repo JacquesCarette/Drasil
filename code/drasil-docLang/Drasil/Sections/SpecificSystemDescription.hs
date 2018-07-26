@@ -26,7 +26,7 @@ import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle, fmtU, getRVal)
 import Data.Drasil.SentenceStructures (fmtPhys, fmtSfwr, mkTableFromColumns, foldlSent, 
-  foldlSP, typUncr, ofThe, foldlList)
+  foldlSP, typUncr, ofThe, foldlList, SepType(Comma), FoldType(List))
 import Data.List (sortBy)
 
 import qualified Drasil.DocLang.SRS as SRS
@@ -42,7 +42,7 @@ intro_ :: Contents
 intro_ = Paragraph $ foldlSent [S "This", phrase section_, S "first presents the", 
   phrase problemDescription `sC` S "which gives a high-level view of the", phrase problem,
   S "to be solved. This is followed by the", plural solutionCharacteristic, phrase specification `sC` 
-  S "which presents the", foldlList (map S ["assumptions", "theories", "definitions"]), S "that are used"]
+  S "which presents the", foldlList Comma List (map S ["assumptions", "theories", "definitions"]), S "that are used"]
 
 --Up to change, decide on what ending sentence structure we would like to employ
 --Using Verbatim for now.
@@ -79,7 +79,7 @@ physSystDesc progName fg otherContents = SRS.physSyst ((intro):otherContents) []
 --List all the given inputs. Might be possible to use ofThe combinator from utils.hs
 goalStmtF :: [Sentence] -> [Contents] -> Section
 goalStmtF givenInputs otherContents = SRS.goalStmt (intro:otherContents) []
-  where intro = Paragraph $ S "Given" +:+ foldlList givenInputs `sC` S "the" +:+ 
+  where intro = Paragraph $ S "Given" +:+ foldlList Comma List givenInputs `sC` S "the" +:+ 
                 plural goalStmt +: S "are"
 
 

@@ -31,8 +31,8 @@ import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.People (henryFrankis)
 import Data.Drasil.Phrase (for)
-import Data.Drasil.SentenceStructures (foldlList, foldlSP, foldlSent, 
-  foldlSent_, ofThe, sAnd, sOr, foldlSPCol)
+import Data.Drasil.SentenceStructures (foldlList, SepType(Comma), FoldType(List), 
+  foldlSP, foldlSent, foldlSent_, ofThe, sAnd, sOr, foldlSPCol)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
 import Data.Drasil.Utils (enumBullet, enumSimple, noRefsLT, bulletNested, bulletFlat)
 import Drasil.SSP.Assumptions (sspRefDB)
@@ -289,8 +289,8 @@ userChar :: (Idea a) => a -> [Sentence] -> [Sentence] -> Contents
 userChar pname understandings familiarities = foldlSP [
   S "The", phrase endUser, S "of", short pname,
   S "should have an understanding of undergraduate Level 1",
-  foldlList understandings `sC`
-  S "and be familiar with", foldlList familiarities]
+  foldlList Comma List understandings `sC`
+  S "and be familiar with", foldlList Comma List familiarities]
 
 -- SECTION 3.2 --
 -- System Constraints automatically generated

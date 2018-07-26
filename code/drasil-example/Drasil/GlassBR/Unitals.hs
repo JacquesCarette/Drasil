@@ -11,7 +11,7 @@ import Drasil.GlassBR.Units (sFlawPU)
 
 import Data.Drasil.Constraints
 import Data.Drasil.SentenceStructures (displayConstrntsAsSet, foldlSent,
-  foldlsC, foldlOptions)
+  foldlsC, foldlList, SepType(Comma), FoldType(Options))
 import Data.Drasil.SI_Units (kilogram, kilopascal, metre, millimetre, pascal, 
   second)
 
@@ -299,7 +299,7 @@ glBreakage    = dcc "glBreakage"  (nounPhraseSP "glass breakage")
     "or insulating glass.")
 glTyFac       = cc' glassTypeFac
   (foldlSent [S "A multiplying factor for adjusting the", (getAcc lResistance), 
-  S "of different glass type, that is,", foldlOptions glassTypeAbbrs
+  S "of different glass type, that is,", foldlList Comma Options glassTypeAbbrs
   `sC` S "in monolithic glass" `sC` (getAcc lGlass), sParen (titleize lGlass) `sC`
    S "or", (getAcc iGlass), sParen (titleize iGlass), S "constructions"])
 hStrengthGl   = cc heatS

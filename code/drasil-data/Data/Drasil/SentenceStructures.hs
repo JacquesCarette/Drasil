@@ -1,11 +1,11 @@
 module Data.Drasil.SentenceStructures
-  ( foldlSent, foldlSent_, foldlSentCol, foldlsC, foldlList
+  ( foldlSent, foldlSent_, foldlSentCol, foldlsC, foldlList, foldlEnumList
   , sAnd, andIts, andThe, sAre, sIn, sVersus
   , sIs, isThe, sOf, sOr, ofThe, ofThe'
   , ofGiv, ofGiv'
   , toThe, tableShows, figureLabel
   , isExpctdToHv, underConsidertn, showingCxnBw, refineChain
-  , foldlSP, foldlSP_, foldlSPCol,foldlOptions
+  , foldlSP, foldlSP_, foldlSPCol
   , maybeChanged, maybeExpanded, maybeWOVerb
   , tAndDWAcc, tAndDWSym, tAndDOnly
   , followA
@@ -15,6 +15,7 @@ module Data.Drasil.SentenceStructures
   , fmtPhys, fmtSfwr, typUncr
   , mkTableFromColumns
   , acroA, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, acroT
+  , EnumType(..), WrapType(..), SepType(..), FoldType(..)
   ) where
 
 import Language.Drasil
@@ -49,21 +50,39 @@ foldlSP_ = Paragraph . foldlSent_
 foldlSPCol :: [Sentence] -> Contents
 foldlSPCol = Paragraph . foldlSentCol
 
--- | creates a list of elements seperated by commas, including the last element
+-- | creates a list of elements separated by commas, including the last element
 foldlsC :: [Sentence] -> Sentence
 foldlsC = mconcat . intersperse (S ", ")
 
--- | creates a list of elements seperated by commas, ending in a "_, and _"
-foldlList :: [Sentence] -> Sentence
-foldlList []    = EmptyS
-foldlList [a,b] = a `sAnd` b
-foldlList lst   = foldle1 sC (\a b -> a `sC` S "and" +:+ b) lst
+data EnumType = Numb | Upper | Lower
+data WrapType = Parens | Period
+data SepType  = Comma | SemiCol
+data FoldType = List | Options
 
--- | creates a list of elements seperated by commas, ending in a "_, or _"
-foldlOptions :: [Sentence] -> Sentence
-foldlOptions []    = EmptyS
-foldlOptions [a,b] = a `sOr` b
-foldlOptions lst   = foldle1 sC (\a b -> a `sC` S "or" +:+ b) lst
+-- | creates an list of elements with "enumerators" in "wrappers" using foldlList
+foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
+foldlEnumList e w s l lst = foldlList s l $ map (\(a, b) -> a +:+ b) $ zip (numList e w $ length lst) lst
+  where
+    numList :: EnumType -> WrapType -> Int -> [Sentence]
+    numList Numb  wt len = map (\x -> wrap wt $ S $ show x) [1..len]
+    numList Upper wt len = map (\x -> wrap wt $ S $ [x]) (take len ['A'..'Z'])
+    numList Lower wt len = map (\x -> wrap wt $ S $ [x]) (take len ['a'..'z'])
+    wrap :: WrapType -> Sentence -> Sentence
+    wrap Parens x = sParen x
+    wrap Period x = x :+: S "."
+
+-- | creates a list of elements separated by a "separator", ending with "and" or "or"
+foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
+foldlList _ _       []     = EmptyS
+foldlList _ List    [a, b] = a `sAnd` b
+foldlList _ Options [a, b] = a `sOr` b
+foldlList s List    lst    = foldle1 (getSep s) (\a b -> (getSep s) a (S "and" +:+ b)) lst
+foldlList s Options lst    = foldle1 (getSep s) (\a b -> (getSep s) a (S "or" +:+ b))  lst
+
+--Helper function to foldlList - not exported
+getSep :: SepType -> (Sentence -> Sentence -> Sentence)
+getSep Comma   = sC
+getSep SemiCol = semiCol
 
 {--** Combinators **--}
 sAnd, andIts :: Sentence -> Sentence -> Sentence
@@ -222,10 +241,10 @@ constraintToExpr c (EnumeratedStr _ l) = isin (sy c) (DiscreteS l)
 
 --Formatters for the constraints
 fmtPhys :: (Constrained c, Quantity c) => c -> Sentence
-fmtPhys c = foldlList $ map (E . constraintToExpr c) $ filter isPhysC (c ^. constraints)
+fmtPhys c = foldlList Comma List $ map (E . constraintToExpr c) $ filter isPhysC (c ^. constraints)
 
 fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
-fmtSfwr c = foldlList $ map (E . constraintToExpr c) $ filter isSfwrC (c ^. constraints)
+fmtSfwr c = foldlList Comma List $ map (E . constraintToExpr c) $ filter isSfwrC (c ^. constraints)
 
 replaceEmptyS :: Sentence -> Sentence
 replaceEmptyS EmptyS = none

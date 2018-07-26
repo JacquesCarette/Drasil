@@ -4,6 +4,7 @@ import Prelude hiding (print)
 import Data.List (intersperse, transpose, partition)
 import Text.PrettyPrint (text, (<+>))
 import qualified Text.PrettyPrint as TP
+import Text.Printf
 import Numeric (showFFloat)
 import Control.Applicative (pure)
 import Control.Arrow (second)

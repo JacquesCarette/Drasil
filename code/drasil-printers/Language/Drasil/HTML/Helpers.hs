@@ -226,3 +226,13 @@ makeCases [] _ = empty
 makeCases (p:ps) p_expr = ((span_tag [] (p_expr (fst p) ++ " , " ++
                             (render $ span_tag ["case"] (p_expr (snd p))))) $$
                             makeCases ps p_expr)
+
+decompose :: Double -> (Double,Int)
+decompose val = if mant2 > 0 
+                     then (mant10,ex10)
+                     else (-mant10,ex10)
+  where
+        (mant2,ex2) = decodeFloat val
+        res = logBase 10 (fromIntegral (abs mant2)::Double) + logBase 10 (2 ** (fromIntegral ex2::Double)) 
+        ex10 = floor res
+        mant10 = 10**(res - (fromIntegral ex10::Double))

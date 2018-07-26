@@ -16,7 +16,7 @@ import qualified Language.Drasil as L (People, Person, StyleGuide(APA, MLA, Chic
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (em, wrap, refwrap, caption, image, div_tag,
   td, th, tr, bold, sub, sup, cases, fraction, reflink, paragraph, h, html, body,
-  author, article_title, title, linkCSS, head_tag)
+  author, article_title, title, linkCSS, head_tag, decompose)
 import qualified Language.Drasil.Output.Formats as F
 
 import Language.Drasil.Printing.Import (makeDocument)
@@ -154,7 +154,8 @@ uSymb (L.US ls) = formatu t b
 -----------------------------------------------------------------
 -- | Renders expressions in the HTML (called by multiple functions)
 p_expr :: Expr -> String
-p_expr (Dbl d)        = showFFloat Nothing d ""
+p_expr (Dbl d)        = case decompose d of
+  (a, b) -> (show a) ++ "&sdot;" ++ "10" ++ sup (show b)--showFFloat Nothing d ""
 p_expr (Int i)        = show i
 p_expr (Str s)        = s
 p_expr (Div a b)      = fraction (p_expr a) (p_expr b)

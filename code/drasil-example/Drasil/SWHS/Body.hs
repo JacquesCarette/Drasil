@@ -12,7 +12,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
   Fields, Field(..), SSDSub(..), SolChSpec( SCSProg ), SSDSec(..), 
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SCSSub(..),
-  assumpF, dataConstraintUncertainty, genSysF, inDataConstTbl, inModelF, intro, 
+  dataConstraintUncertainty, genSysF, inDataConstTbl, intro, 
   mkDoc, outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF,
   tsymb'')
 import qualified Drasil.DocLang.SRS as SRS (inModel, likeChg,
@@ -33,7 +33,7 @@ import Data.Drasil.Concepts.Documentation (section_, traceyGraph, item,
 
 import Data.Drasil.Concepts.PhysicalProperties (liquid, solid)
 import qualified Data.Drasil.Concepts.Thermodynamics as CT (boiling,
-  law_cons_energy, heat_trans, phase_change, melting, thermal_conduction,
+  law_cons_energy, heat_trans, melting, thermal_conduction,
   ht_flux, heat_cap_spec, thermal_energy, ht_trans_theo, thermal_analysis,
   ener_src)
 import Data.Drasil.Concepts.Math (ode, de, unit_, rOfChng, equation)
@@ -63,7 +63,7 @@ import Drasil.SWHS.DataDefs (swhsDataDefs,dd1HtFluxC, dd2HtFluxP, dataDefns)
 import Drasil.SWHS.GenDefs (swhsGenDefs, generalDefinitions)
 import Drasil.SWHS.References (ref_swhs_citations)
 import Drasil.SWHS.Assumptions (assump13, assump15, assump16, assump17, assump18,
-  newAssumptions, swhsAssumptions)
+  newAssumptions)
 import Drasil.SWHS.Requirements (req1, req2, reqEqn1, reqEqn2,
   req3, req4, req5, req6, req7, req8, req9, req10, req11, nonFuncReqs)
 import Drasil.SWHS.Changes (likeChg1, likeChg2, likeChg3, likeChg4,

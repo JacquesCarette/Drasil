@@ -167,11 +167,6 @@ assumpS20 = foldlSent [
   S "is assumed to be negligible"]
   --FIXME , sSqBr $ makeRef req2]
 
-swhsAssumptions :: [Contents]
-swhsAssumptions = map LlC [assump1, assump2, assump3, assump4, assump5,
-  assump6, assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
-  assump15, assump16, assump17, assump18, assump19, assump20]
-
 assump1, assump2, assump3, assump4, assump5, assump6, assump7,
   assump8, assump9, assump10, assump11, assump12, assump13, assump14,
   assump15, assump16, assump17, assump18, assump19, assump20 :: LabelledContent

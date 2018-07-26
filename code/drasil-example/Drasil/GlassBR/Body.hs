@@ -65,8 +65,8 @@ import Drasil.GlassBR.TMods (tModels, pbSafetyReq, lrSafetyReq, pbIsSafe, lrIsSa
 import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr, probOfBreak, 
   calofCapacity, calofDemand)
 
-import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad, 
-  lateralLoad, char_weight, sD, demand, demandq, aspectR, lRe, wtntWithEqn, 
+import Drasil.GlassBR.Unitals (stressDistFac, aspect_ratio, dimlessLoad, 
+  lateralLoad, char_weight, sD, demand, demandq, lRe, wtntWithEqn, 
   sdWithEqn, prob_br, notSafe, safeMessage, is_safe1, is_safe2, plate_width, 
   plate_len, blast, glassTy, gbInputDataConstraints, explosion, pb_tol, 
   blast, bomb, blastTy, glassGeo, glass_type, nom_thick, sdx, sdy, sdz, tNT, 
@@ -782,7 +782,7 @@ fig_5 = fig (titleize figure +: S "5" +:+ (demandq ^. defn) +:+
 
 fig_6 = fig (titleize figure +: S "6" +:+ S "Non dimensional" +:+
   phrase lateralLoad +:+ sParen (ch dimlessLoad)
-  `sVersus` titleize aspectR +:+ sParen (getAcc aR)
+  `sVersus` titleize aspect_ratio +:+ sParen (getAcc aR)
   `sVersus` at_start stressDistFac +:+ sParen (ch stressDistFac))
   (resourcePath ++ "ASTM_F2248-09_BeasonEtAl.png") "dimlessloadVSaspect"
 

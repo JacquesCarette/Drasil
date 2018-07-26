@@ -5,7 +5,7 @@ import Control.Lens ((^.), makeLenses, view)
 
 import Language.Drasil.Chunk.Concept (DefnAndDomain(DAD))
 import Language.Drasil.Chunk.Unitary (UnitaryChunk, mkUnitary, Unitary)
-import Language.Drasil.Chunk.Quantity (Quantity(getUnit), HasSpace(typ))
+import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(typ))
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol))
 import Language.Drasil.Development.Unit (MayHaveUnit(unitOpt), UnitDefn(..))
@@ -23,7 +23,7 @@ instance ConceptDomain UnitaryConceptDict where cdom = dad . cdom
 instance Concept       UnitaryConceptDict where
 instance HasSpace      UnitaryConceptDict where typ = unitary . typ
 instance HasSymbol     UnitaryConceptDict where symbol c stage = symbol (c^.unitary) stage
-instance Quantity      UnitaryConceptDict where getUnit = getUnit . view unitary
+instance Quantity      UnitaryConceptDict where 
 instance Eq            UnitaryConceptDict where a == b = (a ^. uid) == (b ^. uid)
 instance MayHaveUnit   UnitaryConceptDict where unitOpt u = unitOpt $ u ^. unitary
 

@@ -14,10 +14,9 @@ import Language.Drasil.Symbol (Symbol, Stage)
 
 -- | A Quantity is an 'Idea' with a 'Space' and a symbol and 
 -- may have units
-class (Idea c, HasSpace c, HasSymbol c) => Quantity c where
+class (Idea c, HasSpace c, HasSymbol c, MayHaveUnit c) => Quantity c where
   -- | Provides the units a quantity is measured in, if any, otherwise returns
   -- 'Nothing'
-  getUnit  :: c -> Maybe UnitDefn
 
 data QuantityDict = QD { _id' :: IdeaDict
                        , _typ' :: Space
@@ -31,12 +30,12 @@ instance NamedIdea     QuantityDict where term = id' . term
 instance Idea          QuantityDict where getA  qd = getA (qd ^. id')
 instance HasSpace      QuantityDict where typ = typ'
 instance HasSymbol     QuantityDict where symbol = view symb'
-instance Quantity      QuantityDict where getUnit = view unit'
+instance Quantity      QuantityDict where 
 instance Eq            QuantityDict where a == b = (a ^. uid) == (b ^. uid)
 instance MayHaveUnit   QuantityDict where unitOpt u = u ^. unit'
 
 qw :: (Quantity q) => q -> QuantityDict
-qw q = QD (nw q) (q^.typ) (symbol q) (getUnit q)
+qw q = QD (nw q) (q^.typ) (symbol q) (unitOpt q)
 
 -- For when the symbol is constant through stages
 mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> QuantityDict

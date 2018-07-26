@@ -27,6 +27,7 @@ module Language.Drasil (
   , UnitDefn(..), unitWrapper
   , unitCon, fund, comp_unitdefn, makeDerU
   , (^:), (/:), (*:), (*$), (/$), (^$), new_unit, getCu
+  , MayHaveUnit(unitOpt)
    -- UID
   , UID
   -- Classes

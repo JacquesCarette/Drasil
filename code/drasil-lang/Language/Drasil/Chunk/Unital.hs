@@ -39,7 +39,7 @@ instance ConceptDomain UnitalChunk where cdom = defq' . cdom
 instance Concept       UnitalChunk where
 instance HasSpace      UnitalChunk where typ = defq' . typ
 instance HasSymbol     UnitalChunk where symbol c st = symbol (c^.defq') st
-instance Quantity      UnitalChunk where getUnit defq = Just (unit defq)
+instance Quantity      UnitalChunk where 
 instance Unitary       UnitalChunk where unit = view uni
 instance MayHaveUnit   UnitalChunk where unitOpt u = Just (unit u)
 
@@ -87,4 +87,4 @@ makeUCWDS nam trm desc sym un = UC (dqd (dccWDS nam trm desc) sym Real (Just uu)
 -- fail otherwise
 ucFromDQD :: DefinedQuantityDict -> UnitalChunk
 ucFromDQD defq = UC defq (unitWrapper uu) 
-  where uu = maybe (error "ucFromDQD must be called on a DQD with a unit") id (getUnit defq)
+  where uu = maybe (error "ucFromDQD must be called on a DQD with a unit") id (unitOpt defq)

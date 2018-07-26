@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.VarChunk(VarChunk,implVar,codeVC,vc,vcSt,vc'') where
 
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw, nc)
-import Language.Drasil.Chunk.Quantity (Quantity(getUnit))
+import Language.Drasil.Chunk.Quantity (Quantity)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), HasSpace(typ))
 import Language.Drasil.Development.Unit (MayHaveUnit(unitOpt), UnitDefn(..))
@@ -26,7 +26,7 @@ instance NamedIdea     VarChunk where term = ni . term
 instance Idea          VarChunk where getA = getA . view ni
 instance HasSymbol     VarChunk where symbol = (^. vsymb)
 instance HasSpace      VarChunk where typ = vtyp
-instance Quantity      VarChunk where getUnit _  = Nothing
+instance Quantity      VarChunk where 
 instance MayHaveUnit   VarChunk where unitOpt _  = Nothing
 
 -- | implVar makes an variable that is implementation-only

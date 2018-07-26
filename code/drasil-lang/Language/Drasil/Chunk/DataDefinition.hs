@@ -7,7 +7,7 @@ import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn',
   fromEqn''', fromEqn'''')
 import Language.Drasil.Chunk.References (References)
 import Language.Drasil.Chunk.Derivation (Derivation)
-import Language.Drasil.Chunk.Quantity (Quantity(getUnit), HasSpace(typ))
+import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(typ))
 import Language.Drasil.Chunk.SymbolForm (eqSymb)
 import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
@@ -39,7 +39,7 @@ instance NamedIdea          DataDefinition where term = qd . term
 instance Idea               DataDefinition where getA c = getA $ c ^. qd
 instance HasSpace           DataDefinition where typ = qd . typ
 instance HasSymbol          DataDefinition where symbol e st = symbol (e^.qd) st
-instance Quantity           DataDefinition where getUnit (DD a _ _ _ _ _) = getUnit a
+instance Quantity           DataDefinition where 
 instance ExprRelat          DataDefinition where relat = qd . relat
 instance HasReference       DataDefinition where getReferences = ref
 instance Eq                 DataDefinition where a == b = (a ^. uid) == (b ^. uid)
@@ -50,14 +50,14 @@ instance MayHaveUnit        DataDefinition where unitOpt (DD a _ _ _ _ _) = unit
 
 -- Used to help make Qdefinitions when uid, term, and symbol come from the same source
 mkDataDef :: (Quantity c) => c -> Expr -> QDefinition
-mkDataDef cncpt equation = datadef $ getUnit cncpt --should references be passed in at this point?
+mkDataDef cncpt equation = datadef $ unitOpt cncpt --should references be passed in at this point?
   where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS
                            (eqSymb cncpt) a equation [] (cncpt ^. uid) --shortname
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
                            (eqSymb cncpt) equation [] (cncpt ^. uid) --shortname
 
 mkDataDef' :: (Quantity c) => c -> Expr -> Derivation -> QDefinition
-mkDataDef' cncpt equation dv = datadef $ getUnit cncpt --should references be passed in at this point?
+mkDataDef' cncpt equation dv = datadef $ unitOpt cncpt --should references be passed in at this point?
   where datadef (Just a) = fromEqn'''  (cncpt ^. uid) (cncpt ^. term) EmptyS
                            (eqSymb cncpt) a equation [] dv (cncpt ^. uid) --shortname
         datadef Nothing  = fromEqn'''' (cncpt ^. uid) (cncpt ^. term) EmptyS

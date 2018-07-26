@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.Eq
 import Control.Lens ((^.), makeLenses, view)
 
 import Language.Drasil.Chunk.Derivation (Derivation)
-import Language.Drasil.Chunk.Quantity (Quantity(getUnit), HasSpace(typ), QuantityDict,
+import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(typ), QuantityDict,
   mkQuant, qw)
 import Language.Drasil.Chunk.References (References)
 import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
@@ -40,7 +40,7 @@ instance NamedIdea     QDefinition where term = qua . term
 instance Idea          QDefinition where getA c = getA $ c ^. qua
 instance HasSpace      QDefinition where typ = qua . typ
 instance HasSymbol     QDefinition where symbol e st = symbol (e^.qua) st
-instance Quantity      QDefinition where getUnit (EC a _ _ _ _ _)   = getUnit a
+instance Quantity      QDefinition where 
 instance ExprRelat     QDefinition where relat = equat
 instance HasReference  QDefinition where getReferences = ref
 instance Eq            QDefinition where a == b = (a ^. uid) == (b ^. uid)

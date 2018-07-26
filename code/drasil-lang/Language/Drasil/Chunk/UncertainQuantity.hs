@@ -12,7 +12,7 @@ module Language.Drasil.Chunk.UncertainQuantity
   , uncrtnw
   ) where
  
-import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(..), getUnit)
+import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(..))
 import Language.Drasil.Chunk.DefinedQuantity (dqd')
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Chunk.Constrained (ConstrConcept(..), ConstrainedChunk,
@@ -55,7 +55,7 @@ instance NamedIdea         UncertainChunk where term = conc . term
 instance Idea              UncertainChunk where getA (UCh n _) = getA n
 instance HasSpace          UncertainChunk where typ = conc . typ
 instance HasSymbol         UncertainChunk where symbol c = symbol (c^.conc)
-instance Quantity          UncertainChunk where getUnit (UCh c _) = getUnit c
+instance Quantity          UncertainChunk where 
 instance Constrained       UncertainChunk where constraints = conc . constraints
 instance HasReasVal        UncertainChunk where reasVal = conc . reasVal
 instance UncertainQuantity UncertainChunk where uncert = unc'
@@ -86,23 +86,24 @@ instance NamedIdea         UncertQ where term = coco . term
 instance Idea              UncertQ where getA (UQ q _) = getA q
 instance HasSpace          UncertQ where typ = coco . typ
 instance HasSymbol         UncertQ where symbol c = symbol (c^.coco)
-instance Quantity          UncertQ where getUnit (UQ q _) = getUnit q
+instance Quantity          UncertQ where 
 instance UncertainQuantity UncertQ where uncert = unc
 instance Constrained       UncertQ where constraints = coco . constraints
 instance HasReasVal        UncertQ where reasVal = coco . reasVal
 instance Definition        UncertQ where defn = coco . defn
 instance ConceptDomain     UncertQ where cdom = coco . cdom
 instance Concept           UncertQ where
+instance MayHaveUnit       UncertQ where unitOpt (UQ q _) = unitOpt q
 
 {-- Constructors --}
 -- | The UncertainQuantity constructor. Requires a Quantity, a percentage, and a typical value
 uq :: (Quantity c, Constrained c, Concept c, HasReasVal c) =>
   c -> Double -> UncertQ
-uq q u = UQ (ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit q)) (q ^. constraints) (q ^. reasVal)) (bw0And1 u)
+uq q u = UQ (ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (unitOpt q)) (q ^. constraints) (q ^. reasVal)) (bw0And1 u)
 
 uqNU :: (Quantity c, Constrained c, Concept c, HasReasVal c) =>
   c -> UncertQ
-uqNU q = UQ (ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit q)) (q ^. constraints) (q ^. reasVal)) Nothing 
+uqNU q = UQ (ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (unitOpt q)) (q ^. constraints) (q ^. reasVal)) Nothing 
 
 --FIXME: this is kind of crazy and probably shouldn't be used!
 uqc :: (IsUnit u, ConceptDomain u) => String -> NP -> String -> Symbol -> u -> Space

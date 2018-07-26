@@ -243,6 +243,10 @@ instance Referable InstanceModel where
   refAdd  i = "IM:" ++ i^.uid
   rType   _ = Def
 
+instance Referable ConceptInstance where
+  refAdd i = i ^. uid
+  rType _ = Def
+
 instance Referable Label where
   refAdd lb = getAdd (lb ^. getRefAdd)
   rType _   = Lbl --FIXME?

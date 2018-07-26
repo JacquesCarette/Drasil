@@ -204,9 +204,10 @@ melt_frac = dqd' (dcc "melt_frac" (nounPhraseSP "melt fraction")
   --FIXME: Not sure if definition is exactly correct
   (const lPhi) Real Nothing
 
-frac_min = dqd' (dcc "frac_min" (nounPhraseSP "minmum fraction")
-  "minmum fraction") (const $ Atomic "minfract") Real Nothing
-
+frac_min = dqd' (dcc "frac_min" 
+  (nounPhraseSP "minimum fraction of the tank volume taken up by the PCM")
+  "minimum fraction of the tank volume taken up by the PCM")
+   (const $ Atomic "MINFRACT") Real Nothing
 
 -----------------
 -- Constraints --
@@ -243,8 +244,8 @@ diam = uqc "diam" (nounPhraseSP "diameter of tank")
 pcm_vol = uqc "pcm_vol" (nounPhraseSP "volume of PCM")
   "The amount of space occupied by a given quantity of phase change material"
   (sub (eqSymb vol) cP) m_3 Rational
-  [physc $ Bounded (Exc,0) (Exc, sy tank_vol)]
-  -- FIXME: this made no sense sfwrc $ \c -> c $>= sy tank_vol] 
+  [physc $ Bounded (Exc,0) (Exc, sy tank_vol),
+   sfwrc $ UpFrom (Inc, (sy frac_min)*(sy tank_vol))] 
   (dbl 0.05) 0.1
   -- needs to add (D,L)*minfract to end of last constraint
 
@@ -427,13 +428,13 @@ specParamValList = [tank_length_min, tank_length_max,
   pcm_density_min, pcm_density_max, w_density_min, w_density_max,
   htCap_S_P_min, htCap_S_P_max, htCap_L_P_min, htCap_L_P_max,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max,
-  pcm_HTC_min, pcm_HTC_max, time_final_max]
+  pcm_HTC_min, pcm_HTC_max, time_final_max, frac_min_aux]
 
 tank_length_min, tank_length_max, pcm_density_min, 
   pcm_density_max, w_density_min, w_density_max, htCap_S_P_min, 
   htCap_S_P_max, htCap_L_P_min, htCap_L_P_max,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, pcm_HTC_min,
-  pcm_HTC_max, time_final_max :: QDefinition
+  pcm_HTC_max, time_final_max, frac_min_aux :: QDefinition
 
 htFusion_min, htFusion_max, coil_SA_max :: UnitaryChunk
 
@@ -445,6 +446,8 @@ tank_length_min = mkDataDef (unitary "tank_length_min"
 tank_length_max = mkDataDef (unitary "tank_length_max"
   (nounPhraseSP "maximum length of tank")
   (sub (eqSymb tank_length) (Atomic "max")) metre Rational) 50
+
+frac_min_aux    = mkDataDef frac_min $ (dbl 1.0) * (10 $^ (negate 6))
 
 -- Used in Constraint 5
 pcm_density_min = mkDataDef (unitary "pcm_density_min"

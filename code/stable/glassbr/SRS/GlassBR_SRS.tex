@@ -77,9 +77,9 @@ $B$ & Risk of failure & --
 \\
 $b$ & Plate width (short dimension) & m
 \\
-${d_{max}}$ & Maximum value for one of the dimensions of the glass plate & mm
+${d_{max}}$ & Maximum value for one of the dimensions of the glass plate & m
 \\
-${d_{min}}$ & Minimum value for one of the dimensions of the glass plate & mm
+${d_{min}}$ & Minimum value for one of the dimensions of the glass plate & m
 \\
 $E$ & Modulus of elasticity of glass & Pa
 \\
@@ -113,7 +113,7 @@ ${P_{b}}$ & Probability of breakage & --
 \\
 ${P_{btol}}$ & Tolerable probability of breakage & --
 \\
-$q$ & Applied load (demand) & kPa
+$q$ & Applied load (demand) & Pa
 \\
 $\hat{q}$ & Dimensionless load & --
 \\
@@ -287,7 +287,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Non-factored load (NFL) - Three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass.}
 \item{Glass weight load - The dead load component of the glass weight.}
 \item{Short duration load - Any load lasting 3 seconds or less.}
-\item{Specified design load - The magnitude in kPa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority.}
+\item{Specified design load - The magnitude in Pa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority.}
 \item{Long duration load - Any load lasting approximately 30 days.}
 \end{itemize}
 \item{Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge. It is represented by the coordinates (${SD_{x}}$, ${SD_{y}}$, ${SD_{z}}$).}
@@ -391,7 +391,7 @@ Equation & \begin{dmath}
 Description & \begin{symbDescription}
               \item{$is\_safe2$ is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)}
               \item{$LR$ is the load resistance (Unitless)}
-              \item{$q$ is the applied load (demand) (kPa)}
+              \item{$q$ is the applied load (demand) (Pa)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & If $is\_safe2$, the glass is considered safe. $is\_safe1$ (from \hyperref[T:safetyReqPb]{Definition~T:safetyReqPb}) and $is\_safe2$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[T:calOfCap]{Definition~T:calOfCap}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[T:calOfDe]{Definition~T:calOfDe}.
@@ -436,12 +436,12 @@ Description & \begin{symbDescription}
               \item{$J$ is the stress distribution factor (Function) (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $a$, $b$ are dimensions of the plate, where ($a>b$).
+Notes & $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in DD2.
         $LDF$ is the load duration factor as defined by DD3.
         $J$ is the stress distribution factor (Function) , as defined in DD4.
 \\ \midrule \\
-Source & [4] [5, Eq. 14]
+Source & [1] [4, Eq. 4-5] [5, Eq. 14]
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -575,7 +575,7 @@ Description & \begin{symbDescription}
               \item{$b$ is the plate width (short dimension) (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $a$, $b$ are dimensions of the plate, where ($a>b$).
+Notes & $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in DD2.
         ${\hat{q}_{tol}}$ is the tolerable load defined in DD8.
 \\ \midrule \\
@@ -638,7 +638,7 @@ Equation & \begin{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\hat{q}$ is the dimensionless load (Unitless)}
-              \item{$q$ is the applied load (demand) (kPa)}
+              \item{$q$ is the applied load (demand) (Pa)}
               \item{$a$ is the plate length (long dimension) (m)}
               \item{$b$ is the plate width (short dimension) (m)}
               \item{$E$ is the modulus of elasticity of glass (Pa)}
@@ -647,7 +647,7 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & $q$ is the 3 second equivalent pressure, as given in IM3.
-        $a$, $b$ are dimensions of the plate, where ($a>b$).
+        $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in DD2.
         $GTF$ is the glass type factor, as given by DD6.
         $\hat{q}$ is calculated with reference to A\ref{A:glassLiteA}.
@@ -719,7 +719,7 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${J_{tol}}$  is calculated with reference to  ${P_{btol}}$.
-        $a$, $b$ are dimensions of the plate, where ($a>b$).
+        $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in DD2.
         $LDF$ is the load duration factor as defined by DD3.
         ${P_{btol}}$ is the tolerable probability entered by the user.
@@ -761,9 +761,9 @@ RefBy & FIXME: This needs to be filled in
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:aspectR}
+\toprule \textbf{Refname} & \textbf{DD:aspect.ratio}
 \phantomsection 
-\label{DD:aspectR}
+\label{DD:aspect.ratio}
 \\ \midrule \\
 Label & Aspect ratio
 \\ \midrule \\
@@ -781,7 +781,7 @@ Description & \begin{symbDescription}
               \item{$b$ is the plate width (short dimension) (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $a$, $b$ are dimensions of the plate, where ($a>b$).
+Notes & $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
 \\ \midrule \\
 Source & 
 \\ \midrule \\
@@ -821,7 +821,7 @@ Description & \begin{symbDescription}
               \item{$B$ is the risk of failure (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & [1] [4]
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -864,7 +864,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows A\ref{A:glassConditionA} and A\ref{A:glassTyA} (``In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations'') from [1 (pg. 53)].
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -899,14 +899,14 @@ Equation & \begin{dmath}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$q$ is the applied load (demand) (kPa)}
+              \item{$q$ is the applied load (demand) (Pa)}
               \item{${w_{TNT}}$ is the explosive mass in equivalent weight of TNT (kg)}
               \item{$SD$ is the stand off distance (m)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined as $w TNT$. $SD$ is the stand off distance as defined in DD10.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -919,13 +919,15 @@ Table~\ref{Table:InDataConstraints} and Table~\ref{Table:OutDataConstraints} sho
 Var & Physical Constraints & Software Constraints & Typical Value & Uncert.
 \\
 \midrule
-$a$ & $a>0$ and $a\geq{}b$ & ${d_{min}}\leq{}a\leq{}{d_{max}}$ and $a<{AR_{max}} b$ & $1.5$ m & 10.0\%
+$a$ & $a>0$ and $a\geq{}b$ & ${d_{min}}\leq{}a\leq{}{d_{max}}$ & $1.5$ m & 10.0\%
 \\
-$b$ & $0<b<a$ & ${d_{min}}\leq{}b\leq{}{d_{max}}$ and $b<\frac{a}{{AR_{max}}}$ & $1.2$ m & 10.0\%
+$AR$ & $AR\geq{}1$ & $AR\leq{}{AR_{max}}$ & $1.5$ & 10.0\%
+\\
+$b$ & $0<b\leq{}a$ & ${d_{min}}\leq{}b\leq{}{d_{max}}$ & $1.2$ m & 10.0\%
 \\
 ${P_{btol}}$ & $0<{P_{btol}}<1$ & -- & $0.008$ & 0.1\%
 \\
-$SD$ & $SD>0$ & ${SD_{min}}<SD<{SD_{max}}$ & $45.0$ m & 10.0\%
+$SD$ & $SD>0$ & ${SD_{min}}\leq{}SD\leq{}{SD_{max}}$ & $45.0$ m & 10.0\%
 \\
 $TNT$ & $TNT>0$ & -- & $1.0$ & 10.0\%
 \\
@@ -980,7 +982,7 @@ This section provides the functional requirements, the business tasks that the s
           \item{Tolerable load (${\hat{q}_{tol}}$) (\hyperref[DD:tolLoad]{Definition~DD:tolLoad})}
           \item{Stress distribution factor (Function) based on Pbtol (${J_{tol}}$) (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol})}
           \item{Minimum thickness ($h$) (\hyperref[DD:min.thick]{Definition~DD:min.thick})}
-          \item{Aspect ratio ($AR$) (\hyperref[DD:aspectR]{Definition~DD:aspectR})}
+          \item{Aspect ratio ($AR$) (\hyperref[DD:aspect.ratio]{Definition~DD:aspect.ratio})}
           \end{itemize}
 \end{itemize}
 \begin{longtabu}{l X[l] l}
@@ -1189,9 +1191,9 @@ Symbol & Description & Value & Unit
 \midrule
 ${AR_{max}}$ & maximum aspect ratio & $5.0$ & --
 \\
-${d_{max}}$ & maximum value for one of the dimensions of the glass plate & $5.0$ & mm
+${d_{max}}$ & maximum value for one of the dimensions of the glass plate & $5.0$ & m
 \\
-${d_{min}}$ & minimum value for one of the dimensions of the glass plate & $0.1$ & mm
+${d_{min}}$ & minimum value for one of the dimensions of the glass plate & $0.1$ & m
 \\
 $E$ & modulus of elasticity of glass & $7.17 10^{7}$ & Pa
 \\

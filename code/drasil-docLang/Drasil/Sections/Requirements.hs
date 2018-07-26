@@ -1,14 +1,16 @@
 module Drasil.Sections.Requirements
-  (fReqF, reqF, nonFuncReqF) where
+  (fReqF, reqF, nonFuncReqF, funcReqDom) where
 
 import Language.Drasil
 
-import Data.Drasil.Concepts.Documentation (priority, software, nonfunctionalRequirement,
+import Data.Drasil.Concepts.Documentation (priority, software, requirement, nonfunctionalRequirement,
   functionalRequirement, section_)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.SentenceStructures (foldlSP, foldlList)
+import Data.Drasil.SentenceStructures (foldlSP, foldlList, foldlSent)
 
 import qualified Drasil.DocLang.SRS as SRS
+
+import Control.Lens ((^.))
 
 -- wrapper for reqIntro
 reqF :: [Section] -> Section
@@ -18,13 +20,23 @@ fReqF :: [Contents] -> Section
 fReqF listOfReqs = SRS.funcReq (listOfReqs) []
 
 --generalized requirements introduction
-reqIntro :: Contents
-reqIntro = foldlSP
+reqIntroS :: Sentence
+reqIntroS = foldlSent
         [S "This", (phrase section_), S "provides the",
         (plural functionalRequirement) `sC` S "the business tasks that the",
         (phrase software), S "is expected to complete" `sC` S "and the", 
         (plural nonfunctionalRequirement) `sC` S "the qualities that the",
         (phrase software), S "is expected to exhibit"]
+
+reqIntro :: Contents
+reqIntro = Paragraph reqIntroS
+
+-- Requirements Domains
+reqDom :: ConceptChunk
+reqDom = ccs (nc "reqDom" $ requirement ^. term) reqIntroS [SRS.srsDom]
+
+funcReqDom :: ConceptChunk
+funcReqDom = ccs (nc "funcReqDom" $ functionalRequirement ^. term) EmptyS [reqDom]
 
 -- wrapper for nonfuncReq
 nonFuncReqF :: (Concept c) => [c] -> [c] -> Sentence -> Sentence -> Section

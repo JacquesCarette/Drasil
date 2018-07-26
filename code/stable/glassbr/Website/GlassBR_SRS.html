@@ -1391,7 +1391,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
+<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
 </p>
 <p class="paragraph">
 <em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in DD2.
@@ -1410,7 +1410,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-[4] [5, Eq. 14]
+[1] [4, Eq. 4-5] [5, Eq. 14]
 </p>
 </td>
 </tr>
@@ -1873,7 +1873,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
+<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
 </p>
 <p class="paragraph">
 <em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in DD2.
@@ -2111,7 +2111,7 @@ Notes
 <em>q</em> is the 3 second equivalent pressure, as given in IM3.
 </p>
 <p class="paragraph">
-<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
+<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
 </p>
 <p class="paragraph">
 <em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in DD2.
@@ -2356,7 +2356,7 @@ Notes
 <em>J<sub>tol</sub></em>  is calculated with reference to  <em>P<sub>btol</sub></em>.
 </p>
 <p class="paragraph">
-<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
+<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
 </p>
 <p class="paragraph">
 <em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in DD2.
@@ -2478,7 +2478,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:aspectR">
+<div id="DD:aspect.ratio">
 <table class="ddefn">
 <tr>
 <th>
@@ -2553,7 +2553,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&gt;&thinsp;b</em>).
+<em>a</em>, <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
 </p>
 </td>
 </tr>
@@ -2678,7 +2678,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+[1] [4]
 </p>
 </td>
 </tr>
@@ -2804,7 +2804,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -2927,7 +2927,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -2980,7 +2980,7 @@ Uncert.
 <em>a&thinsp;&gt;&thinsp;0</em> and <em>a&thinsp;&ge;&thinsp;b</em>
 </td>
 <td>
-<em>d<sub>min</sub>&thinsp;&le;&thinsp;a&thinsp;&le;&thinsp;d<sub>max</sub></em> and <em>a&thinsp;&lt;&thinsp;AR<sub>max</sub>&#8239;b</em>
+<em>d<sub>min</sub>&thinsp;&le;&thinsp;a&thinsp;&le;&thinsp;d<sub>max</sub></em>
 </td>
 <td>
 <em>1.5</em> m
@@ -2991,20 +2991,30 @@ Uncert.
 </tr>
 <tr>
 <td>
+<em>AR</em>
+</td>
+<td>
+<em>AR&thinsp;&ge;&thinsp;1</em>
+</td>
+<td>
+<em>AR&thinsp;&le;&thinsp;AR<sub>max</sub></em>
+</td>
+<td>
+<em>1.5</em>
+</td>
+<td>
+10.0%
+</td>
+</tr>
+<tr>
+<td>
 <em>b</em>
 </td>
 <td>
-<em>0&thinsp;&lt;&thinsp;b&thinsp;&lt;&thinsp;a</em>
+<em>0&thinsp;&lt;&thinsp;b&thinsp;&le;&thinsp;a</em>
 </td>
 <td>
-<em>d<sub>min</sub>&thinsp;&le;&thinsp;b&thinsp;&le;&thinsp;d<sub>max</sub></em> and <em>b&thinsp;&lt;&thinsp;<div class="fraction">
-<span class="fup">
-a
-</span>
-<span class="fdn">
-AR<sub>max</sub>
-</span>
-</div></em>
+<em>d<sub>min</sub>&thinsp;&le;&thinsp;b&thinsp;&le;&thinsp;d<sub>max</sub></em>
 </td>
 <td>
 <em>1.2</em> m
@@ -3038,7 +3048,7 @@ AR<sub>max</sub>
 <em>SD&thinsp;&gt;&thinsp;0</em>
 </td>
 <td>
-<em>SD<sub>min</sub>&thinsp;&lt;&thinsp;SD&thinsp;&lt;&thinsp;SD<sub>max</sub></em>
+<em>SD<sub>min</sub>&thinsp;&le;&thinsp;SD&thinsp;&le;&thinsp;SD<sub>max</sub></em>
 </td>
 <td>
 <em>45.0</em> m
@@ -3201,7 +3211,7 @@ R6: Output the following quantities:
     Minimum thickness (<em>h</em>) (<a href=#DD:min.thick>DD:min.thick</a>)
     </li>
     <li>
-    Aspect ratio (<em>AR</em>) (<a href=#DD:aspectR>DD:aspectR</a>)
+    Aspect ratio (<em>AR</em>) (<a href=#DD:aspect.ratio>DD:aspect.ratio</a>)
     </li>
     </ul>
 </p>

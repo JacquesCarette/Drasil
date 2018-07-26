@@ -241,6 +241,10 @@ instance Referable InstanceModel where
   refAdd  i = "IM:" ++ i^.uid
   rType   _ = Def
 
+instance Referable ConceptInstance where
+  refAdd i = i ^. uid
+  rType _ = Def
+
 instance Referable Contents where
   rType (Table _ _ _ _ _)       = Tab
   rType (Figure _ _ _ _)        = Fig

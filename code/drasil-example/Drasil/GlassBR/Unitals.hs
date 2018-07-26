@@ -35,7 +35,7 @@ gbConstrained = (map cnstrw gbInputsWUncrtn) ++
   (map cnstrw gbInputsWUnitsUncrtn) ++ [cnstrw prob_br]
 
 plate_len, plate_width, char_weight, standOffDist :: UncertQ
-pb_tol, tNT :: UncertainChunk
+aspect_ratio, pb_tol, tNT :: UncertainChunk
 glass_type, nom_thick :: ConstrainedChunk
 
 {--}
@@ -53,7 +53,7 @@ gbInputsWUnitsUncrtn = [plate_len, plate_width, standOffDist, char_weight]
 
 --inputs with uncertainties and no units
 gbInputsWUncrtn :: [UncertainChunk]
-gbInputsWUncrtn = [pb_tol, tNT]
+gbInputsWUncrtn = [aspect_ratio, pb_tol, tNT]
 
 --inputs with no uncertainties
 gbInputsNoUncrtn :: [ConstrainedChunk]
@@ -68,14 +68,17 @@ plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA metre Real 
   [ gtZeroConstr,
     physc $ UpFrom (Inc, sy plate_width),
-    sfwrc $ Bounded (Inc , sy dim_min) (Inc , sy dim_max),
-    sfwrc $ UpTo (Exc, sy ar_max * sy plate_width)] (dbl 1.5) defaultUncrt
+    sfwrc $ Bounded (Inc , sy dim_min) (Inc , sy dim_max)] (dbl 1.5) defaultUncrt
 
 plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
   lB metre Real
-  [ physc $ Bounded (Exc,0) (Exc, sy plate_len),
-    sfwrc $ Bounded (Inc, sy dim_min) (Inc, sy dim_max),
-    sfwrc $ UpTo (Exc, sy plate_len / sy ar_max)] (dbl 1.2) defaultUncrt
+  [ physc $ Bounded (Exc,0) (Inc, sy plate_len),
+    sfwrc $ Bounded (Inc, sy dim_min) (Inc, sy dim_max)] (dbl 1.2) defaultUncrt
+
+aspect_ratio = uvc "aspect_ratio" (aR ^. term)
+  (Atomic "AR") Real
+  [ physc $ UpFrom (Inc, 1), 
+    sfwrc $ UpTo (Inc, sy ar_max)] (dbl 1.5) defaultUncrt
 
 pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Real
@@ -94,7 +97,7 @@ tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
 standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance") 
   (Atomic "SD") metre Real
   [ gtZeroConstr,
-    sfwrc $ Bounded (Exc, sy sd_min) (Exc, sy sd_max)]
+    sfwrc $ Bounded (Inc, sy sd_min) (Inc, sy sd_max)]
   (dbl 45) defaultUncrt
 --FIXME: ^ incorporate definition in here?
 
@@ -200,12 +203,10 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 
 glassBRUnitless :: [VarChunk]
 glassBRUnitless = [risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
-  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL, aspectR]
+  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL]
 
-aspectR, risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
+risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL :: VarChunk
-
-aspectR       = vc "aspectR"     (aR ^. term) (Atomic "AR") Real
 
 dimlessLoad   = vc "dimlessLoad" (nounPhraseSP "dimensionless load")
   (hat lQ) Real
@@ -395,10 +396,10 @@ wtntCalculation = (sy char_weight) * (sy tNT)
 --
 
 aspectRWithEqn :: QDefinition
-aspectRWithEqn = mkDataDef aspectR aspectRCalculation
+aspectRWithEqn = mkDataDef aspect_ratio aspectRCalculation
 
 aspectRCalculation :: Relation
-aspectRCalculation = (sy aspectR) $= (sy plate_len)/(sy plate_width)
+aspectRCalculation = (sy aspect_ratio) $= (sy plate_len)/(sy plate_width)
 
 --
 --Pulled to be used in "Terms And Definitions" Section--

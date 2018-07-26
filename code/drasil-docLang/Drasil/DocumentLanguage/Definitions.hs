@@ -174,7 +174,7 @@ mkIMField i _ l@DefiningEquation fs =
 mkIMField i m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] [i ^. relat]) : fs
 mkIMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
-mkIMField _ _ l@(Source) fs = (show l, fixme) : fs --FIXME: fill this in
+mkIMField i _ l@(Source) fs = (show l, [Paragraph $ getSource i]) : fs --FIXME: fill this in
 mkIMField i _ l@(Output) fs = (show l, [Paragraph x]) : fs
   where x = P . eqSymb $ i ^. imOutput
 mkIMField i _ l@(Input) fs = 

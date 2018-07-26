@@ -16,7 +16,7 @@ import qualified Language.Drasil as L (People, Person, StyleGuide(APA, MLA, Chic
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (em, wrap, refwrap, caption, image, div_tag,
   td, th, tr, bold, sub, sup, cases, fraction, reflink, paragraph, h, html, body,
-  author, article_title, title, linkCSS, head_tag, decompose)
+  author, article_title, title, linkCSS, head_tag)
 import qualified Language.Drasil.Output.Formats as F
 
 import Language.Drasil.Printing.Import (makeDocument)
@@ -35,7 +35,7 @@ import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title,
 import Language.Drasil.Printing.LayoutObj (Tags, Document(Document),
   LayoutObj(Graph, Bib, List, Header, Figure, Definition, Table, EqnBlock, Paragraph, 
   HDiv, ALUR))
-import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac)
+import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac, getBaseTen)
 
 {-
 import Language.Drasil.Development.UnitLang (L.USymb(L.US))
@@ -154,7 +154,7 @@ uSymb (L.US ls) = formatu t b
 -----------------------------------------------------------------
 -- | Renders expressions in the HTML (called by multiple functions)
 p_expr :: Expr -> String
-p_expr (Dbl d)        = case decompose d of
+p_expr (Dbl d)        = case getBaseTen d 0 of
   (a, b) -> (show a) ++ "&sdot;" ++ "10" ++ sup (show b)--showFFloat Nothing d ""
 p_expr (Int i)        = show i
 p_expr (Str s)        = s

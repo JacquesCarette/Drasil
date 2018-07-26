@@ -18,7 +18,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), 
   cite, dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
   mkRequirement, outDataConstTbl, physSystDesc, probDescF, termDefnF, 
-  traceGIntro, tsymb, assembler, SubSec, sSubSec, siSTitl, siCon)
+  traceGIntro, tsymb)
 
 import Data.Drasil.Concepts.Computation (computerApp, inParam,
   computerLiteracy, inValue, inQty)
@@ -326,18 +326,7 @@ org_of_doc_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
 
 {--GENERAL SYSTEM DESCRIPTION--}
 
-general_system_description :: Section
-general_system_description = assembler gLassBR gbSymbMap generalSystemDescriptionSect
-  [sysContext, userCharacteristicSect, systemConstraintSect]
-
-generalSystemDescriptionSect :: SubSec
-generalSystemDescriptionSect = sSubSec generalSystemDescription []
-
 {--System Context--}
-
-sysContext :: SubSec
-sysContext = sSubSec sysCont [siSTitl, (siCon [sysCtxIntro, sysCtxFig1,
-  sysCtxDesc, sysCtxList])]
   
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
@@ -382,9 +371,6 @@ sysCtxList = Enumeration $ bulletNested sysCtxResp $
    
 {--User Characteristics--}
 
-userCharacteristicSect :: SubSec
-userCharacteristicSect = sSubSec userCharacteristic [(siCon [user_characteristics_intro])]
-
 user_characteristics_intro :: Contents
 user_characteristics_intro = enumBullet $ map foldlSent
   [[S "The end user of GlassBR is expected to have completed at least the",
@@ -393,11 +379,7 @@ user_characteristics_intro = enumBullet $ map foldlSent
     S "breakage and blast risk"],
   [S "The end user is expected to have basic computer literacy to handle the software"]]
 
-
 {--System Constraints--}
-
-systemConstraintSect :: SubSec
-systemConstraintSect = sSubSec systemConstraint []
 
 {--SCOPE OF THE PROJECT-}
 

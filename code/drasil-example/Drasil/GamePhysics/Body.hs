@@ -12,11 +12,11 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
   assembler, dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, outDataConstTbl,
   reqF, sSubSec, siCon, siDDef, siIMod, siSTitl, siSent, siTMod, siUQI, siUQO,
-  specSysDescr, traceMGF, tsymb, valsOfAuxConstantsF)
+  traceMGF, tsymb, valsOfAuxConstantsF)
 
 import Data.Drasil.Concepts.Documentation (assumption, body,
   concept, condition, consumer, dataConst, dataDefn, datumConstraint,
-  document, endUser, environment, game, genDefn, generalSystemDescription,
+  document, endUser, environment, game, genDefn,
   goalStmt, guide, inModel, information, input_, interface, item,
   model, nonfunctionalRequirement, object, organization, physical,
   physicalConstraint, physicalProperty, physicalSim, physics, priority,

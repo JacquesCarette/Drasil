@@ -29,7 +29,7 @@ reqIntroS = foldlSent
         (phrase software), S "is expected to exhibit"]
 
 reqIntro :: Contents
-reqIntro = Paragraph reqIntroS
+reqIntro = mkParagraph reqIntroS
 
 -- Requirements Domains
 reqDom :: ConceptChunk

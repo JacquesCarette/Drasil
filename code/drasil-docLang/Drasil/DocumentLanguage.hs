@@ -375,7 +375,7 @@ mkConCC' f = mkConCC f id
 -- | mkEnumCC is a convenience function for converting ConceptInstances to an
 -- enumeration.
 mkEnumCC :: (ConceptInstance -> ListTuple) -> [ConceptInstance] -> [Contents]
-mkEnumCC f = mkConCC f (replicate 1 . Enumeration . Simple)
+mkEnumCC f = mkConCC f (replicate 1 . UlC . ulcc . Enumeration . Simple)
 
 -- | table of units intro writer. Translates a TUIntro to a Sentence.
 tuI :: TUIntro -> Sentence

@@ -35,7 +35,7 @@ swhsGenDefs = [nwtnCooling, rocTempSimp]
 
 generalDefinitions :: [GenDefn]
 generalDefinitions = [gd' nwtnCooling (Just thermal_flux) ([] :: Derivation) "nwtnCooling" [nwtnCooling_desc],
-  gd' rocTempSimp (Nothing :: Maybe DerUChunk) roc_temp_simp_deriv "rocTempSimp" [rocTempSimp_desc]]
+  gd' rocTempSimp (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv "rocTempSimp" [rocTempSimp_desc]]
 
 --
 nwtnCooling :: RelationConcept

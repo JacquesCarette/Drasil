@@ -2465,7 +2465,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -2846,7 +2846,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -3054,7 +3054,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -3223,7 +3223,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+
 </p>
 </td>
 </tr>
@@ -3318,6 +3318,23 @@ h<sub>min</sub>
 </tr>
 <tr>
 <td>
+<em>C<sub>W</sub></em>
+</td>
+<td>
+<em>C<sub>W</sub>&thinsp;&gt;&thinsp;0</em>
+</td>
+<td>
+<em>C<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;C<sub>W</sub>&thinsp;&lt;&thinsp;C<sub>W</sub><sup>max</sup></em>
+</td>
+<td>
+<em>4186.0</em> J/(kg&sdot;&deg;C)
+</td>
+<td>
+10.0%
+</td>
+</tr>
+<tr>
+<td>
 <em>C<sub>P</sub><sup>L</sup></em>
 </td>
 <td>
@@ -3345,23 +3362,6 @@ h<sub>min</sub>
 </td>
 <td>
 <em>1760.0</em> J/(kg&sdot;&deg;C)
-</td>
-<td>
-10.0%
-</td>
-</tr>
-<tr>
-<td>
-<em>C<sub>W</sub></em>
-</td>
-<td>
-<em>C<sub>W</sub>&thinsp;&gt;&thinsp;0</em>
-</td>
-<td>
-<em>C<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;C<sub>W</sub>&thinsp;&lt;&thinsp;C<sub>W</sub><sup>max</sup></em>
-</td>
-<td>
-<em>4186.0</em> J/(kg&sdot;&deg;C)
 </td>
 <td>
 10.0%
@@ -3454,23 +3454,6 @@ h<sub>min</sub>
 </tr>
 <tr>
 <td>
-<em>T<sub>melt</sub><sup>P</sup></em>
-</td>
-<td>
-<em>0&thinsp;&lt;&thinsp;T<sub>melt</sub><sup>P</sup>&thinsp;&lt;&thinsp;T<sub>C</sub></em>
-</td>
-<td>
---
-</td>
-<td>
-<em>44.2</em> &deg;C
-</td>
-<td>
-10.0%
-</td>
-</tr>
-<tr>
-<td>
 <em>T<sub>C</sub></em>
 </td>
 <td>
@@ -3522,13 +3505,30 @@ h<sub>min</sub>
 </tr>
 <tr>
 <td>
+<em>T<sub>melt</sub><sup>P</sup></em>
+</td>
+<td>
+<em>0&thinsp;&lt;&thinsp;T<sub>melt</sub><sup>P</sup>&thinsp;&lt;&thinsp;T<sub>C</sub></em>
+</td>
+<td>
+--
+</td>
+<td>
+<em>44.2</em> &deg;C
+</td>
+<td>
+10.0%
+</td>
+</tr>
+<tr>
+<td>
 <em>V<sub>P</sub></em>
 </td>
 <td>
 <em>0&thinsp;&lt;&thinsp;V<sub>P</sub>&thinsp;&lt;&thinsp;V<sub>tank</sub></em>
 </td>
 <td>
---
+<em>V<sub>P</sub>&thinsp;&ge;&thinsp;MINFRACT&#8239;V<sub>tank</sub></em>
 </td>
 <td>
 <em>0.05</em> m<sup>3</sup>
@@ -6827,6 +6827,34 @@ Unit
 </tr>
 <tr>
 <td>
+<em>C<sub>W</sub><sup>max</sup></em>
+</td>
+<td>
+maximum specific heat capacity of water
+</td>
+<td>
+<em>4210</em>
+</td>
+<td>
+J/(kg&sdot;&deg;C)
+</td>
+</tr>
+<tr>
+<td>
+<em>C<sub>W</sub><sup>min</sup></em>
+</td>
+<td>
+minimum specific heat capacity of water
+</td>
+<td>
+<em>4170</em>
+</td>
+<td>
+J/(kg&sdot;&deg;C)
+</td>
+</tr>
+<tr>
+<td>
 <em>C<sub>P</sub><sup>L</sup><sub>max</sub></em>
 </td>
 <td>
@@ -6876,34 +6904,6 @@ minimum specific heat capacity of PCM as a solid
 </td>
 <td>
 <em>100</em>
-</td>
-<td>
-J/(kg&sdot;&deg;C)
-</td>
-</tr>
-<tr>
-<td>
-<em>C<sub>W</sub><sup>max</sup></em>
-</td>
-<td>
-maximum specific heat capacity of water
-</td>
-<td>
-<em>4210</em>
-</td>
-<td>
-J/(kg&sdot;&deg;C)
-</td>
-</tr>
-<tr>
-<td>
-<em>C<sub>W</sub><sup>min</sup></em>
-</td>
-<td>
-minimum specific heat capacity of water
-</td>
-<td>
-<em>4170</em>
 </td>
 <td>
 J/(kg&sdot;&deg;C)
@@ -6991,6 +6991,20 @@ minimum length of tank
 </td>
 <td>
 m
+</td>
+</tr>
+<tr>
+<td>
+<em>MINFRACT</em>
+</td>
+<td>
+minimum fraction of the tank volume taken up by the PCM
+</td>
+<td>
+<em>1.0&#8239;10<sup>&minus;6</sup></em>
+</td>
+<td>
+--
 </td>
 </tr>
 <tr>

@@ -1,10 +1,10 @@
 module Drasil.DocLang.SRS
- (doc, doc', intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
+ (doc, doc', intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient,
   genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
   probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assumpt, thModel,
-  genDefn, inModel, dataDefn, datCon, require, nonfuncReq, funcReq, likeChg, unlikeChg, 
+  genDefn, inModel, dataDefn, datCon, require, nonfuncReq, funcReq, likeChg, unlikeChg,
   traceyMandG, appendix, reference, propCorSol, offShelfSol, missingP, valsOfAuxCons,
-  tOfSymb) where
+  tOfSymb, srsDom) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
@@ -21,6 +21,8 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (appendix,
     systemConstraint, termAndDef, terminology, thModel, traceyMandG, tOfSymb, 
     userCharacteristic)
 import Data.Drasil.Phrase (for'')
+
+import Control.Lens ((^.))
 
 -- Local function to keep things looking clean, not exported.
 forTT :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
@@ -95,6 +97,10 @@ reference   cs ss = section' (titleize' Doc.reference)        cs ss "References"
 offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "ExistingSolns"
 
 tOfSymb cs ss = section' (titleize Doc.tOfSymb) cs ss "ToS"
+
+--Root SRS Domain
+srsDom :: CommonConcept
+srsDom = dcc' "srsDom" (Doc.srs ^. term) "srs" ""
 
 --function that sets the shortname of each section to be the reference address
 section' :: Sentence -> [Contents] -> [Section] -> RefAdd -> Section

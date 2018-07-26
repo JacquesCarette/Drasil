@@ -55,5 +55,5 @@ ccs n d l = ConDict (nw n) $ DAD d $ map (^. uid) l
 cw :: Concept c => c -> ConceptChunk
 cw c = ConDict (nw c) $ DAD (c ^. defn) (c ^. cdom)
 
-cic :: Concept c => String -> Sentence -> c -> String -> ConceptInstance
-cic u d dom sn = ConInst (ccs (nc u $ pn sn) d [dom]) $ shortname' sn
+cic :: Concept c => String -> Sentence -> String -> c -> ConceptInstance
+cic u d sn dom = ConInst (ccs (nc u $ pn sn) d [dom]) $ shortname' sn

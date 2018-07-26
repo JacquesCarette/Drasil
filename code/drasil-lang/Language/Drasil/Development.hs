@@ -1,19 +1,24 @@
 {- re-export many things to simplify external use -}
 module Language.Drasil.Development (
   -- Unit
-    UnitDefn(..), DerUChunk(..) -- data-structures
-  , makeDerU, unitCon
-  , (^:), (/:), (*:), (*$), (/$), new_unit
+    UnitDefn(..)
+  , from_udefn, unitCon, makeDerU
+  , (^:), (/:), (*:), (*$), (/$),(^$), new_unit
   , scale, shift
-  , derUC, derUC', derUC'', unitWrapper
-  , fund, comp_unitdefn
+  , derUC, derUC', derUC''
+  , fund, comp_unitdefn, derCUC, derCUC', derCUC''
+  , makeDerU, unitWrapper, getCu
   -- UnitLang
   , USymb(US), UDefn(..)
   , from_udefn, comp_usymb
   ) where
 
-import Language.Drasil.Development.Unit (DerUChunk(..), UnitDefn(..), (^:), (/:), 
-  (*:), (*$), (/$), comp_unitdefn, derUC, derUC', derUC'', fund, makeDerU,
-  new_unit, scale, shift, unitCon, unitWrapper)
+import Language.Drasil.Development.Unit (UnitDefn(..)
+  , from_udefn, unitCon, makeDerU
+  , (^:), (/:), (*:), (*$), (/$),(^$), new_unit
+  , scale, shift
+  , derUC, derUC', derUC''
+  , fund, comp_unitdefn, derCUC, derCUC', derCUC''
+  , makeDerU, unitWrapper, getCu)
 import Language.Drasil.Development.UnitLang (UDefn(..), USymb(US), comp_usymb,
   from_udefn)

@@ -1,12 +1,12 @@
 module Data.Drasil.SI_Units where
-
 import Language.Drasil
-import Language.Drasil.Development (derUC, derUC', derUC'', scale, shift)
+import Language.Drasil.Development(derUC, derUC', derUC'', scale, shift
+  , derCUC, derCUC', derCUC'')
 
 fundamentals :: [UnitDefn]
 fundamentals = [metre, kilogram, second, kelvin, mole, ampere, candela]
 
-derived :: [DerUChunk]
+derived :: [UnitDefn]
 derived = [becquerel, calorie, centigrade, coulomb, farad, gray, henry, hertz, joule,
   katal, kilopascal, kilowatt, litre, lumen, lux,  millimetre, newton, ohm,
   pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber]
@@ -28,14 +28,14 @@ candela  = fund "candela"  "luminous intensity"   "cd"
 ------------- Commonly defined units -------------------------------------------
 
 degree :: UnitDefn --FIXME: define degree in terms of radians and pi
-degree = UD (dcc "degree" (cn' "degree") "angle") (US [(Special Circle,1)])
+degree = UD (dcc "degree" (cn' "degree") "angle") (US [(Special Circle,1)]) Nothing Nothing []
 
 -- Some of these units are easiest to define via others less common names, 
 -- which we define first.
-s_2 :: DerUChunk
+s_2 :: UnitDefn
 s_2 = new_unit "seconds squared" $ second ^: 2
 
-m_2, m_3 :: DerUChunk
+m_2, m_3 :: UnitDefn
 m_2 = new_unit "square metres"   $ metre ^: 2
 m_3 = new_unit "cubic metres"    $ metre ^: 3
 
@@ -43,40 +43,40 @@ m_3 = new_unit "cubic metres"    $ metre ^: 3
 
 becquerel, calorie, centigrade, coulomb, farad, gray, henry, hertz, joule,
   katal, kilopascal, kilowatt, litre, lumen, lux,  millimetre, newton, ohm,
-  pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber :: DerUChunk
+  pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber :: UnitDefn
 
-becquerel = derUC' "becquerel" 
+becquerel = derCUC' "becquerel" 
   "becquerel" "activity" (Atomic "Bq") --of a Radionuclide
-  (USynonym (second ^: (-1)))
+  (second ^: (-1))
   
-calorie = derUC' "calorie" 
+calorie = derUC "calorie" 
   "calorie" "energy" (Atomic "cal") (scale 4.184 joule)
 
 centigrade = derUC "centigrade" 
   "centigrade" "temperature" ((Concat [Special Circle, Atomic "C"]))
   (shift 273.15 kelvin)
 
-coulomb = derUC' "coulomb" 
-  "coulomb" "electric charge" (Atomic "C") (USynonym (ampere *: second))
+coulomb = derCUC' "coulomb" 
+  "coulomb" "electric charge" (Atomic "C") (ampere *: second)
 
-farad = derUC' "farad" 
-  "farad" "capacitance" (Atomic "F") (USynonym (coulomb /: volt))
+farad = derCUC' "farad" 
+  "farad" "capacitance" (Atomic "F") (coulomb /: volt)
 
-gray = derUC' "gray" 
-  "gray" "absorbed dose" (Atomic "Gy") (USynonym (joule /: kilogram))
+gray = derCUC' "gray" 
+  "gray" "absorbed dose" (Atomic "Gy") (joule /: kilogram)
   
-henry = derUC'' "henry" 
-  (cnIES "henry") "inductance" (Atomic "H") (USynonym (weber /: ampere))
+henry = derCUC'' "henry" 
+  (cnIES "henry") "inductance" (Atomic "H") (weber /: ampere)
   
-hertz = derUC "hertz" 
-  "hertz" "frequency" (Atomic "Hz") (USynonym (second ^: (-1)))
+hertz = derCUC "hertz" 
+  "hertz" "frequency" (Atomic "Hz") (second ^: (-1))
 
-joule = derUC' "joule" 
+joule = derCUC' "joule" 
   "joule" "energy" (Atomic "J") 
-  (USynonym $ kilogram *$ (m_2 *$ (second ^: (-2))))
+ (kilogram *$ (m_2 *$ (second ^: (-2))))
 
-katal = derUC' "katal" 
-  "katal" "catalytic activity" (Atomic "kat") (USynonym (mole /: second))
+katal = derCUC' "katal" 
+  "katal" "catalytic activity" (Atomic "kat") (mole /: second)
 
 kilopascal = derUC' "kilopascal" 
   "kilopascal" "pressure"
@@ -88,58 +88,57 @@ kilowatt = derUC' "kilowatt"
 litre = derUC' "litre"
   "litre" "volume" (Atomic "L") (scale (1/1000) m_3)
 
-lumen = derUC' "lumen" 
-  "lumen" "luminous flux" (Atomic "lm") (USynonym (candela *: steradian))
+lumen = derCUC' "lumen" 
+  "lumen" "luminous flux" (Atomic "lm") (candela *: steradian)
 
-lux = derUC "lux" 
-  "lux" "illuminance" (Atomic "lx") (USynonym (lumen /: m_2))
+lux = derCUC "lux" 
+  "lux" "illuminance" (Atomic "lx") (lumen /: m_2)
 
 millimetre = derUC' "millimetre"
   "millimetre" "length" (Atomic "mm") (scale 0.0001 metre)
 
-newton = derUC' "newton"
-  "newton" "force" (Atomic "N") (USynonym $ kilogram *$ (second ^: (-2)))
+newton = derCUC' "newton"
+  "newton" "force" (Atomic "N") (kilogram *$ (second ^: (-2)))
   
-ohm = derUC' "ohm"
-  "ohm" "resistance" cOmega (USynonym (volt /: ampere))
+ohm = derCUC' "ohm"
+  "ohm" "resistance" cOmega (volt /: ampere)
   
-pascal = derUC' "pascal" 
+pascal = derCUC' "pascal" 
   "pascal" "pressure" (Atomic "Pa")
-  (USynonym $ kilogram /$ (metre *$ (second ^: 2)))
+  (kilogram /$ (metre *$ (second ^: 2)))
   
-radian = derUC' "radian" 
-  "radian" "angle" (Atomic "rad") (USynonym (metre /: metre))
+radian = derCUC' "radian" 
+  "radian" "angle" (Atomic "rad") (metre /: metre)
             
-siemens = derUC "siemens" 
-  "siemens" "conductance" (Atomic "S") (USynonym (ohm ^: (-1)))
+siemens = derCUC "siemens" 
+  "siemens" "conductance" (Atomic "S") (ohm ^: (-1))
   
-sievert = derUC' "sievert" 
+sievert = derCUC' "sievert" 
   "sievert" "dose equivalent" (Atomic "Sv")
-  (USynonym (joule /: kilogram))
+  (joule /: kilogram)
             
-steradian = derUC' "steradian" 
-  "steradian" "solid angle" (Atomic "sr") (USynonym (m_2 /: m_2 ))
+steradian = derCUC' "steradian" 
+  "steradian" "solid angle" (Atomic "sr") (m_2 /: m_2 )
   
-tesla = derUC "tesla"
-  "tesla" "magnetic flux density" (Atomic "T") (USynonym (weber /: m_2))
+tesla = derCUC "tesla"
+  "tesla" "magnetic flux density" (Atomic "T") (weber /: m_2)
 
-volt = derUC' "volt" 
-  "volt" "voltage" (Atomic "V") (USynonym (watt /: ampere))
+volt = derCUC' "volt" 
+  "volt" "voltage" (Atomic "V") (watt /: ampere)
 
-watt = derUC' "watt" "watt" "power" (Atomic "W")
-  (USynonym $ kilogram *$ (m_2 *$ (second ^: (-3))))
+watt = derCUC' "watt" "watt" "power" (Atomic "W")
+  (kilogram *$ (m_2 *$ (second ^: (-3))))
           
-weber = derUC' "weber"
-  "weber" "magnetic flux" (Atomic "Wb") (USynonym (volt *: second))
+weber = derCUC' "weber"
+  "weber" "magnetic flux" (Atomic "Wb") (volt *: second)
   
-specificE :: DerUChunk
+specificE :: UnitDefn
 specificE = makeDerU (dcc "specificE" (cnIES "specific energy") 
-  "energy per unit mass") $ USynonym (joule /: kilogram)
+  "energy per unit mass") (joule /: kilogram)
 
-specific_weight :: DerUChunk
+specific_weight :: UnitDefn
 specific_weight = makeDerU (dcc "specific_weight" (cn' "specific weight")
-  "weight per unit volume") $
-  USynonym $ newton *$ (metre ^: (-3))
+  "weight per unit volume") (newton *$ (metre ^: (-3)))
   
 -- FIXME: Need to add pi 
 --degrees = DUC

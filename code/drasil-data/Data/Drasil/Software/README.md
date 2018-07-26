@@ -3,8 +3,8 @@
 Last updated: July 25, 2018
 --------------------------------------------------
 
-**Drasil**
-  - Contains the code for Drasil
- 
+Products.hs
+  - Contains common-knowledge software
+  
 README.md
   - This file

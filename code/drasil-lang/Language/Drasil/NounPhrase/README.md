@@ -3,8 +3,8 @@
 Last updated: July 25, 2018
 --------------------------------------------------
 
-**Drasil**
-  - Contains the code for Drasil
- 
+Core.hs
+  - Noun phrase representations in Drasil
+
 README.md
   - This file

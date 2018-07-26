@@ -3,8 +3,8 @@
 Last updated: July 25, 2018
 --------------------------------------------------
 
-**Drasil**
-  - Contains the code for Drasil
- 
+Core.hs
+  - Defines the Label type
+
 README.md
   - This file

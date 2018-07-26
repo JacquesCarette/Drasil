@@ -1,10 +1,10 @@
 ----------------------------------------------------------
 ### Quick Summary of Folder Structure and File Contents
-Last updated: July 20, 2018
+Last updated: July 25, 2018
 ----------------------------------------------------------
 
-Formats.hs
-  - Defines artifact types and parameters.
+Core.hs
+  - DefnAndDomain ConceptChunk, CommonConcept, and ConceptInstance data types
 
 README.md
-  - This file.
+  - This file

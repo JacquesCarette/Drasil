@@ -1,10 +1,10 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 25, 2018
+Last updated: July 19, 2018
 --------------------------------------------------
 
-**Drasil**
-  - Contains the code for Drasil
- 
+Generate.hs
+  - Code for generating artefacts
+
 README.md
   - This file

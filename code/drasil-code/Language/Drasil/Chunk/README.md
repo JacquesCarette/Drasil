@@ -3,8 +3,8 @@
 Last updated: July 25, 2018
 --------------------------------------------------
 
-**Drasil**
-  - Contains the code for Drasil
- 
+Code.hs
+  - Contains helpers for code generation
+
 README.md
   - This file

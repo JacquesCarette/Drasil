@@ -1,64 +1,64 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: June 28, 2018
+Last updated: July 19, 2018
 --------------------------------------------------
 
 Assumptions.hs
-  - A list of assumptions for GlassBR.
+  - GlassBR's assumptions
 
 ASTM_F2248-09.png
-  - Figure for the documentation.
+  - Figure for the documentation
   
 ASTM_F2248-09_BeasonEtAl.png
-  - Figure for the documentation.
+  - Figure for the documentation
   
 ATrace.png
-  - Figure of the Assumption traceability graph for the documentation.
+  - Figure of the Assumption traceability graph for the documentation
 
 Body.hs
-  - The main document body representation for the GlassBR example.
+  - The main document body representation for the GlassBR example
   
 Changes.hs
-  - A list of likely and unlikely changes to the GlassBR example.
+  - A list of likely and unlikely changes to the GlassBR example
   
 Concepts.hs
-  - Example-specific concepts for GlassBR.
+  - GlassBR's example-specific concepts
   
 DataDefs.hs
-  - GlassBR's specific knowledge-base for data definitions.
+  - GlassBR's data definitions
 
 IMods.hs
-  - GlassBR's specific knowledge-base for instance models.
+  - GlassBR's instance models
 
 Main.hs 
-  - A list of what should be generated.
+  - A list of what should be generated
   
 ModuleDefs.hs
-  - A list of modules for GlassBR's design document.
+  - A list of modules for GlassBR's design document
 
 physicalsystimage.png
-  - Figure for the documentation.
+  - Figure for the documentation
 
 README.md
-  - This file.
+  - This file
 
 References.hs
-  - A list of source citations for GlassBR.
+  - GlassBR's references
 
 RTrace.png
-  - Requirements traceability graph.
+  - Requirements traceability graph
 
 Symbols.hs
-  - A list of symbols for GlassBR.
+  - GlassBR's symbols
 
 TMods.hs
-  - GlassBR's specific knowledge-base for theoretical models.
+  - GlassBR's theoretical models
   
 Trace.png
-  - Theoretical/Data Definition traceability graph.
+  - Theoretical/Data Definition traceability graph
   
 Unitals.hs
-  - GlassBR's specific knowledge-base. Includes different chunk types that are wrapped using QSWrapper.
+  - GlassBR's example-specific quantities. Includes different chunk types that are wrapped using QSWrapper
 
 Units.hs
-  - Derived units specific to GlassBR.
+  - Derived units specific to GlassBR

@@ -3,8 +3,11 @@
 Last updated: July 25, 2018
 --------------------------------------------------
 
-**Drasil**
-  - Contains the code for Drasil
- 
+Arbiter.hs 
+  - Defines arbiters for Chipmunk
+  
 README.md
   - This file
+  
+Vector.hs
+  - Defines vectors for Chipmunk

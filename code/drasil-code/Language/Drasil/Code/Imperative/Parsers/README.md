@@ -3,8 +3,8 @@
 Last updated: July 25, 2018
 --------------------------------------------------
 
-**Drasil**
-  - Contains the code for Drasil
- 
+ConfigParser.hs
+  - Defines functions for processing configurations
+
 README.md
   - This file

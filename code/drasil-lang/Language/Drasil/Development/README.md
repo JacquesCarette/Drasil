@@ -1,10 +1,13 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 25, 2018
+Last updated: July 19, 2018
 --------------------------------------------------
 
-**Drasil**
-  - Contains the code for Drasil
- 
 README.md
   - This file
+
+Unit.hs
+  - Language of Units - Combinators, etc
+  
+UnitLang.hs
+  - Base Unit data types

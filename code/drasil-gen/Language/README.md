@@ -4,7 +4,7 @@ Last updated: July 25, 2018
 --------------------------------------------------
 
 **Drasil**
-  - Contains the code for Drasil
+  - Contains the generation file(s) for actually generating code
  
 README.md
   - This file

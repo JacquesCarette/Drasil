@@ -11,7 +11,7 @@ import Drasil.GlassBR.Units (sFlawPU)
 
 import Data.Drasil.Constraints
 import Data.Drasil.SentenceStructures (displayConstrntsAsSet, foldlSent,
-  foldlsC, foldlOptions, foldlList, SepType(Comma), FoldType(Options))
+  foldlsC, foldlList, SepType(Comma), FoldType(Options))
 import Data.Drasil.SI_Units (kilogram, kilopascal, metre, millimetre, pascal, 
   second)
 

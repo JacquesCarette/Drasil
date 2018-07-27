@@ -1413,8 +1413,8 @@ traceFig1 = llcc (mkLabelRA'' "TraceyA") $ fig (showingCxnBw traceyGraph (titlei
   S "of Different" +:+ titleize' section_)) "ATrace.png" "TraceyA"
 
 traceFig2 :: LabelledContent
-traceFig2 = llcc (mkLabelRA'' "TraceyR") $ fig (showingCxnBw traceyGraph (foldlList $ map titleize' 
-  renameList2)) "RTrace.png" "TraceyR"
+traceFig2 = llcc (mkLabelRA'' "TraceyR") $ fig (showingCxnBw traceyGraph (foldlList Comma List
+  $ map titleize' renameList2)) "RTrace.png" "TraceyR"
 
 -------------------------------------------------
 -- Section 8 :  Specification Parameter Values --

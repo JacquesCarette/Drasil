@@ -118,7 +118,7 @@ section' a b c d = section a b c d (shortname' $ getStr a) --FIXME: getStr hack
 physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
   inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
   indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel :: Label
-physSystLabel      = mkLabelRA'' "PhysSyst"
+physSystLabel      = mkLabelRA   "PhysSyst" "PhysSyst" "Physical System Description"
 datConLabel        = mkLabelRA'' "DataConstraints"
 genDefnLabel       = mkLabelRA'' "GDs"
 thModelLabel       = mkLabelRA'' "TMs"
@@ -128,7 +128,7 @@ likeChgLabel       = mkLabelRA'' "LCs"
 unlikeChgLabel     = mkLabelRA'' "UCs"
 tOfSymbLabel       = mkLabelRA'' "ToS"
 valsOfAuxConsLabel = mkLabelRA   "AuxConstants" "AuxConstants" "Values of Auxiliary Constants"
-referenceLabel     = mkLabelRA'' "References"
+referenceLabel     = mkLabelRA'' "References" 
 indPRCaseLabel     = mkLabelRA   "IndividualProdUC" "IndividualProdUC" "Individual Product Use Cases"
-assumptLabel       = mkLabelRA'' "Assumps"
-funcReqLabel       = mkLabelRA'' "FRs"
+assumptLabel       = mkLabelRA   "Assumps" "Assumps" "Assumptions"
+funcReqLabel       = mkLabelRA   "FRs" "FRs" "Functional Requirements"

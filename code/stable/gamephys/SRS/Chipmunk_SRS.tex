@@ -220,7 +220,7 @@ The scope of the requirements includes the physical simulation of 2D rigid bodie
 Reviewers of this documentation should have a strong knowledge in rigid body dynamics. The reviewers should also have an understanding of high school calculus. The users of Chipmunk2D can have a lower level of expertise, as explained in Section~\ref{Sec:UserChars}.
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
-The organization of this document follows the template for an SRS for scientific computing software proposed by {[}3{]} and {[}6{]}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:SolCharSpec} and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by {[}3{]} and {[}6{]}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:IMs} and trace back to find any additional information they require.
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models.
 \section{General System Description}
 \label{Sec:GenSysDesc}
@@ -288,25 +288,25 @@ The instance models that govern Chipmunk2D are presented in Section~\ref{Sec:IMs
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TMs}{]}, General Definitions {[}Section~\ref{Sec:GDs}{]}, Data Definitions {[}Section~\ref{Sec:DDs}{]}, Instance Models {[}Section~\ref{Sec:IMs}{]}, Likely Changes {[}Section~\ref{Sec:LCs}{]}, or Unlikely Changes {[}Section~\ref{Sec:UCs}{]}, in which the respective assumption is used.
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:objectTyA}:]All objects are rigid bodies.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]All objects are rigid bodies.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:objectDimensionA}:]All objects are 2D.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]All objects are 2D.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:coordinatesystemTyA}:]The library uses a Cartesian coordinate system.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The library uses a Cartesian coordinate system.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:axesDefinedA}:]The axes are defined using right-handed coordinate system.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The axes are defined using right-handed coordinate system.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:collisionTypeA}:]All rigid bodies collisions are vertex-to-edge collisions.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]All rigid bodies collisions are vertex-to-edge collisions.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:dampingInvolvementA}:]There is no damping involved throughout the simulation.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]There is no damping involved throughout the simulation.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:constraints.and.jointsInvolvementA}:]There are no constraints and joints involved throughout the simulation.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]There are no constraints and joints involved throughout the simulation.
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}

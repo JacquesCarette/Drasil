@@ -734,6 +734,7 @@ trace1DD1 = ["GD1"]
 trace1IM1 = ["GD2", "DD1"]
 trace1IM2 = []
 
+traceTable1 :: LabelledContent
 traceTable1 = llcc (mkLabelRA'' "TraceyRI") $ Table (EmptyS : traceRowHeader1)
   (makeTMatrix (traceRowHeader1) (traceColumns1) (traceRow1))
   (showingCxnBw traceyMatrix
@@ -771,6 +772,7 @@ trace2R4 = ["R1", "R2", "IM1"]
 trace2R5 = ["IM1"]
 trace2R6 = ["IM2"]
 
+traceTable2 :: LabelledContent
 traceTable2 = llcc (mkLabelRA'' "TraceyRIs") $ Table
   (EmptyS : traceRowHeader2)
   (makeTMatrix (traceColHeader2) (traceColumns2) (traceRow2))

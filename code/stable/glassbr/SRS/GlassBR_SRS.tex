@@ -323,28 +323,28 @@ The instance models that govern GlassBR are presented in Section~\ref{Sec:IMs}. 
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TMs}{]}, General Definitions {[}Section~\ref{Sec:GDs}{]}, Data Definitions {[}Section~\ref{Sec:DDs}{]}, Instance Models {[}Section~\ref{Sec:IMs}{]}, Likely Changes {[}Section~\ref{Sec:LCs}{]}, or Unlikely Changes {[}Section~\ref{Sec:UCs}{]}, in which the respective assumption is used.
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:glassTyA}:]The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along. one, two, three, or four edge This practice assumes that (1) the supported glass edge for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam and (3) glass supported on one side acts as a cantilever.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along. one, two, three, or four edge This practice assumes that (1) the supported glass edge for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam and (3) glass supported on one side acts as a cantilever.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:glassConditionA}:]Following \cite{astm2009} (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]Following \cite{astm2009} (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:explsnScenarioA}:]This system only considers the external explosion scenario for its calculations.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]This system only considers the external explosion scenario for its calculations.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:standardValuesA}:]The values provided in Section~\ref{Sec:AuxConstants} are assumed for the duration of load (${t_{d}}$), and the material properties of $m$, $k$, and $E$. [IM1, DD3, DD5, DD7, DD9]
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The values provided in Section~\ref{Sec:AuxConstants} are assumed for the duration of load (${t_{d}}$), and the material properties of $m$, $k$, and $E$. [IM1, DD3, DD5, DD7, DD9]
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:glassLiteA}:]Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. [IM2, DD7]
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. [IM2, DD7]
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:bndryConditionsA}:]Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. [IM1]
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. [IM1]
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:responseTyA}:]The response type considered in GlassBR is flexural. [IM1]
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The response type considered in GlassBR is flexural. [IM1]
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:ldfConstantA}:]With reference to A\ref{A:standardValuesA}, the value of load duration factor ($LDF$) is a constant in GlassBR. [DD3]
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]With reference to A\ref{A:standardValuesA}, the value of load duration factor ($LDF$) is a constant in GlassBR. [DD3]
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -954,19 +954,19 @@ This section provides the functional requirements, the business tasks that the s
 \subsection{Functional Requirements}
 \label{Sec:FRs}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req1}:]Input the quantities from Table~\ref{Table:R1ReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
+\item[\refstepcounter{reqnum}\rthereqnum\label{Input-Glass-Props}:]Input the quantities from Table~\ref{Table:R1ReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req2}:]The system shall set the known values as follows: $m$, $k$, $E$, ${t_{d}}$ following A4, $LDF$ following A8, LSF following A5, $h$ (from \hyperref[DD:min.thick]{Definition~DD:min.thick}), $GTF$ (from \hyperref[DD:gTF]{Definition~DD:gTF}), and $SD$ (from \hyperref[DD:standOffDist]{Definition~DD:standOffDist}).
+\item[\refstepcounter{reqnum}\rthereqnum\label{System-Set-Values-Following-Assumptions}:]The system shall set the known values as follows: $m$, $k$, $E$, ${t_{d}}$ following A4, $LDF$ following A8, LSF following A5, $h$ (from \hyperref[DD:min.thick]{Definition~DD:min.thick}), $GTF$ (from \hyperref[DD:gTF]{Definition~DD:gTF}), and $SD$ (from \hyperref[DD:standOffDist]{Definition~DD:standOffDist}).
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req3}:]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DataConstraints}. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
+\item[\refstepcounter{reqnum}\rthereqnum\label{Check-Input-with-Data\_Constraints}:]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DataConstraints}. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req4}:]Output the input quantities from R1 and the known quantities from R2.
+\item[\refstepcounter{reqnum}\rthereqnum\label{Output-Values-and-Known-Quantities}:]Output the input quantities from R1 and the known quantities from R2.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req5}:]If $is\_safe1$ ∧ $is\_safe2$ (from \hyperref[T:safetyReqPb]{Definition~T:safetyReqPb} and \hyperref[T:safetyReqLR]{Definition~T:safetyReqLR}) are true, output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
+\item[\refstepcounter{reqnum}\rthereqnum\label{Check-Glass-Safety}:]If $is\_safe1$ ∧ $is\_safe2$ (from \hyperref[T:safetyReqPb]{Definition~T:safetyReqPb} and \hyperref[T:safetyReqLR]{Definition~T:safetyReqLR}) are true, output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
 \end{description}
 \begin{itemize}
 \item[R6:]Output the following quantities:
@@ -1020,27 +1020,27 @@ This problem is small in size and relatively simple, so performance is not a pri
 \section{Likely Changes}
 \label{Sec:LCs}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likelychg1}:]A\ref{A:explsnScenarioA} - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{Calculate-Internal-Blask-Risk}:]A\ref{A:explsnScenarioA} - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likelychg2}:]A\ref{A:standardValuesA}, A\ref{A:ldfConstantA} - Currently, the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future, these values can be changed to variable inputs.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{Variable-Values-of-m,k,E}:]A\ref{A:standardValuesA}, A\ref{A:ldfConstantA} - Currently, the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future, these values can be changed to variable inputs.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likelychg3}:]A\ref{A:glassLiteA} - The software may be changed to accommodate more than a single lite.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{Accomodate-More-than-Single-Lite}:]A\ref{A:glassLiteA} - The software may be changed to accommodate more than a single lite.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likelychg4}:]A\ref{A:bndryConditionsA} - The software may be changed to accommodate more boundary conditions than 4-sided support.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{Accomodate-More-Boundary-Conditions}:]A\ref{A:bndryConditionsA} - The software may be changed to accommodate more boundary conditions than 4-sided support.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likelychg5}:]A\ref{A:responseTyA} - The software may be changed to consider more than just flexure of the glass.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{Consider-More-than-Flexure-Glass}:]A\ref{A:responseTyA} - The software may be changed to consider more than just flexure of the glass.
 \end{description}
 \section{Unlikely Changes}
 \label{Sec:UCs}
 \begin{description}
-\item[\refstepcounter{ucnum}\uctheucnum\label{UC:unlikelychg1}:]The goal of the system is to predict whether the glass slab under consideration can withstand an explosion of a certain degree.
+\item[\refstepcounter{ucnum}\uctheucnum\label{Predict-Withstanding-of-Certain-Degree}:]The goal of the system is to predict whether the glass slab under consideration can withstand an explosion of a certain degree.
 \end{description}
 \begin{description}
-\item[\refstepcounter{ucnum}\uctheucnum\label{UC:unlikelychg2}:]A\ref{A:glassConditionA} requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.
+\item[\refstepcounter{ucnum}\uctheucnum\label{Accommodate-Altered-Glass}:]A\ref{A:glassConditionA} requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.
 \end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}

@@ -1409,12 +1409,12 @@ traceIntro2 = traceGIntro [traceFig1, traceFig2]
   foldlSent_ [foldlList $ map plural renameList2, S "on each other"]]
 
 traceFig1 :: LabelledContent
-traceFig1 = llcc (mkLabelRA'' "TraceyA") $ fig (showingCxnBw traceyGraph (titleize' item +:+
-  S "of Different" +:+ titleize' section_)) "ATrace.png" "TraceyA"
+traceFig1 = llcc (mkLabelRA'' "TraceA") $ fig (showingCxnBw traceyGraph (titleize' item +:+
+  S "of Different" +:+ titleize' section_)) "ATrace.png" "TraceA"
 
 traceFig2 :: LabelledContent
-traceFig2 = llcc (mkLabelRA'' "TraceyR") $ fig (showingCxnBw traceyGraph (foldlList $ map titleize' 
-  renameList2)) "RTrace.png" "TraceyR"
+traceFig2 = llcc (mkLabelRA'' "TraceR") $ fig (showingCxnBw traceyGraph (foldlList $ map titleize' 
+  renameList2)) "RTrace.png" "TraceR"
 
 -------------------------------------------------
 -- Section 8 :  Specification Parameter Values --

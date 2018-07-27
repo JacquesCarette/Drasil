@@ -42,9 +42,9 @@ import Data.Drasil.Concepts.Software (correctness, verifiability,
   performance, errMsg)
 import Data.Drasil.Concepts.Thermodynamics (degree_')
 import Data.Drasil.SentenceStructures (acroR, sVersus, sAnd, foldlSP,
-  foldlSent, foldlSent_, figureLabel, foldlList, showingCxnBw,
-  foldlsC, sOf, followA, ofThe, sIn, isThe, isExpctdToHv, sOr, underConsidertn,
-  tAndDWAcc, tAndDOnly, tAndDWSym, andThe, foldlSPCol)
+  foldlSent, foldlSent_, figureLabel, foldlList, SepType(Comma), FoldType(List),
+  showingCxnBw, foldlsC, sOf, followA, ofThe, sIn, isThe, isExpctdToHv, sOr, 
+  underConsidertn, tAndDWAcc, tAndDOnly, tAndDWSym, andThe)
 import Data.Drasil.Software.Products (sciCompS)
 import Data.Drasil.Utils (makeTMatrix, makeListRef, itemRefToSent, noRefs,
   refFromType, enumSimple, enumBullet, prodUCTbl, bulletFlat, bulletNested)
@@ -274,7 +274,7 @@ rdrKnldgbleIn undrstd1 undrstd2 = (phrase theory +:+ S "behind" +:+
   phrase undrstd1 `sAnd` phrase undrstd2)
 
 undIR, appStanddIR, incScoR, endScoR :: Sentence
-undIR = foldlList [phrase scndYrCalculus, phrase structuralMechanics,
+undIR = foldlList Comma List [phrase scndYrCalculus, phrase structuralMechanics,
   plural computerApp `sIn` phrase civilEng]
 appStanddIR = foldlSent [S " In addition" `sC` plural reviewer, -- FIXME: space before "In" is a hack to get proper spacing
   S "should be familiar with the applicable", plural standard,
@@ -477,7 +477,7 @@ physical_system_description_list_physys2 imprtntElem = foldlSent [S "The"
 
 {--Goal Statements--}
 
-goal_statements = goalStmtF [foldlList [plural dimension `ofThe` phrase glaPlane,
+goal_statements = goalStmtF [foldlList Comma List [plural dimension `ofThe` phrase glaPlane,
   phrase glassTy, plural characteristic `ofThe` phrase explosion,
   S "the" +:+ phrase pb_tol]] [goal_statements_list]
 
@@ -555,7 +555,7 @@ functional_requirements_req1Table = Table
 
 req2Desc = foldlSent [S "The", phrase system,
   S "shall set the known", plural value +: S "as follows",
-  foldlList [(foldlsC (map ch (take 4 assumptionConstants)) `followA` 4),
+  foldlList Comma List [(foldlsC (map ch (take 4 assumptionConstants)) `followA` 4),
   ((ch constant_LoadDF) `followA` 8), (short lShareFac `followA` 5),
   (ch hFromt) +:+ sParen (S "from" +:+ (makeRef hFromt)), 
   (ch glaTyFac) +:+ sParen (S "from" +:+ (makeRef glaTyFac)),
@@ -620,11 +620,11 @@ unlikely_change_list = unlikelyChanges_SRS
 {--TRACEABLITY MATRICES AND GRAPHS--}
 
 traceability_matrices_and_graphs_table1Desc :: Sentence
-traceability_matrices_and_graphs_table1Desc = foldlList (map plural (take 3 solChSpecSubsections)) +:+.
+traceability_matrices_and_graphs_table1Desc = foldlList Comma List (map plural (take 3 solChSpecSubsections)) +:+.
   S "with each other"
 
 traceability_matrices_and_graphs_table2Desc :: Sentence
-traceability_matrices_and_graphs_table2Desc = plural requirement +:+ S "on" +:+. foldlList
+traceability_matrices_and_graphs_table2Desc = plural requirement +:+ S "on" +:+. foldlList Comma List
   (map plural solChSpecSubsections)
 
 traceability_matrices_and_graphs_table3Desc :: Sentence
@@ -781,10 +781,10 @@ traceability_matrices_and_graphs_table3 = Table (EmptyS:traceability_matrices_an
 --
 
 traceability_matrices_and_graphs_intro2 = traceGIntro traceyGraphs
-  [(foldlList (map plural (take 3 solChSpecSubsections)) +:+.
-  S "on each other"), (plural requirement +:+ S "on" +:+. foldlList
+  [(foldlList Comma List (map plural (take 3 solChSpecSubsections)) +:+.
+  S "on each other"), (plural requirement +:+ S "on" +:+. foldlList Comma List
   (map plural solChSpecSubsections)),
-  (foldlList ((map plural (take 3 solChSpecSubsections))++
+  (foldlList Comma List ((map plural (take 3 solChSpecSubsections))++
   [plural requirement, plural likelyChg +:+ S "on" +:+ plural assumption]))]
 
 fig_2 = figureLabel 2 traceyMatrix

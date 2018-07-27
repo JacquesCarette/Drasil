@@ -41,9 +41,6 @@ instance Monoid Sentence where
 sParen :: Sentence -> Sentence
 sParen x = S "(" :+: x :+: S ")"
 
-sParenNum :: Int -> Sentence
-sParenNum y = sParen (S (show y))
-
 -- | Helper function for wrapping sentences in square brackets.
 sSqBr :: Sentence -> Sentence
 sSqBr x = Sp SqBrOpen :+: x :+: Sp SqBrClose

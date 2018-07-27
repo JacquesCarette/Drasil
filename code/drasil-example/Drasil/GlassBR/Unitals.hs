@@ -11,7 +11,7 @@ import Drasil.GlassBR.Units (sFlawPU)
 
 import Data.Drasil.Constraints
 import Data.Drasil.SentenceStructures (displayConstrntsAsSet, foldlSent,
-  foldlsC, foldlOptions)
+  foldlsC, foldlList, SepType(Comma), FoldType(Options))
 import Data.Drasil.SI_Units (kilogram, kilopascal, metre, millimetre, pascal, 
   second)
 
@@ -78,7 +78,7 @@ plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
 aspect_ratio = uvc "aspect_ratio" (aR ^. term)
   (Atomic "AR") Real
   [ physc $ UpFrom (Inc, 1), 
-    sfwrc $ UpTo (Exc, sy ar_max)] (dbl 1.5) defaultUncrt
+    sfwrc $ UpTo (Inc, sy ar_max)] (dbl 1.5) defaultUncrt
 
 pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Real
@@ -97,7 +97,7 @@ tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
 standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance") 
   (Atomic "SD") metre Real
   [ gtZeroConstr,
-    sfwrc $ Bounded (Exc, sy sd_min) (Exc, sy sd_max)]
+    sfwrc $ Bounded (Inc, sy sd_min) (Inc, sy sd_max)]
   (dbl 45) defaultUncrt
 --FIXME: ^ incorporate definition in here?
 
@@ -299,7 +299,7 @@ glBreakage    = dcc "glBreakage"  (nounPhraseSP "glass breakage")
     "or insulating glass.")
 glTyFac       = cc' glassTypeFac
   (foldlSent [S "A multiplying factor for adjusting the", (getAcc lResistance), 
-  S "of different glass type, that is,", foldlOptions glassTypeAbbrs
+  S "of different glass type, that is,", foldlList Comma Options glassTypeAbbrs
   `sC` S "in monolithic glass" `sC` (getAcc lGlass), sParen (titleize lGlass) `sC`
    S "or", (getAcc iGlass), sParen (titleize iGlass), S "constructions"])
 hStrengthGl   = cc heatS

@@ -73,7 +73,7 @@ import Data.Drasil.Utils (enumSimple, weave, itemRefToSent, makeListRef,
   makeTMatrix, refFromType, eqUnR, noRefs)
 import Data.Drasil.SentenceStructures (acroIM, acroGD, acroGS, showingCxnBw,
   foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, isThe, ofThe,
-  ofThe', sAnd, sOf, foldlList)
+  ofThe', sAnd, sOf, foldlList, SepType(Comma), FoldType(List))
 
 -------------------------------------------------------------------------------
 
@@ -723,7 +723,7 @@ trace3LC6 = ["A15"]
 introP1 :: (NamedIdea en, Definition en) => ConceptChunk -> UnitalChunk -> en -> CI -> CI ->
   ConceptChunk -> UnitalChunk -> ConceptChunk -> Sentence
 introP1 es en sp pcmat pro te lh un = foldlSent [
-  S "Due to", foldlList (map S ["increasing cost", "diminishing availability",
+  S "Due to", foldlList Comma List (map S ["increasing cost", "diminishing availability",
     "negative environmental impact of fossil fuels"]) `sC`
   S "there is a higher demand for renewable", plural es `sAnd` phrase en +:+.
   S "storage technology", sp ^. defn, sParen (short pcmat), S "use renewable",
@@ -1056,11 +1056,11 @@ genDefDeriv8 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk -> CI -> Contents ->
   Contents -> Contents -> Contents -> Contents
 genDefDeriv8 hfi hfo isa osa den hcs tem vo assu a3 a4 a5 a6 = foldlSPCol 
-  [S "Where", foldlList (map ch [hfi, hfo, isa, osa]), 
+  [S "Where", foldlList Comma List (map ch [hfi, hfo, isa, osa]), 
   S "are explained in" +:+. acroGD 2, S "Assuming", ch den `sC` ch hcs
   `sAnd` ch tem, S "are constant over the", phrase vo `sC` S "which is true",
   S "in our case by", titleize' assu, 
-  foldlList (map (\c -> sParen (makeRef c)) [a3, a4, a5, a6]) `sC` S "we have"]
+  foldlList Comma List (map (\c -> sParen (makeRef c)) [a3, a4, a5, a6]) `sC` S "we have"]
 
 genDefDeriv9 = eqUnR
   ((sy density) * (sy heat_cap_spec) * (sy vol) * deriv (sy temp)
@@ -1420,13 +1420,13 @@ renameList2  = [inModel, requirement, dataConst]
 
 traceTrailing1, traceTrailing2, traceTrailing3 :: Sentence
 
-traceTrailing1 = foldlSent [foldlList $ map plural (take 4 renameList1), 
+traceTrailing1 = foldlSent [foldlList Comma List $ map plural (take 4 renameList1), 
   S "with each other"]
 
-traceTrailing2 = foldlSent [foldlList $ map plural renameList2, 
+traceTrailing2 = foldlSent [foldlList Comma List $ map plural renameList2, 
   S "on each other"]
 
-traceTrailing3 = foldlSent_ [foldlList $ map plural (take 5 renameList1),
+traceTrailing3 = foldlSent_ [foldlList Comma List $ map plural (take 5 renameList1),
   S "on the", plural assumption]
 
 traceTable1 :: Contents
@@ -1451,16 +1451,16 @@ traceTable3 = Table (EmptyS:traceMRowHeader3)
 traceIntro2 :: [Contents]
 traceIntro2 = traceGIntro [traceFig1, traceFig2]
 
-  [foldlSent [foldlList $ map plural renameList1, S "on each other"],
+  [foldlSent [foldlList Comma List $ map plural renameList1, S "on each other"],
 
-  foldlSent_ [foldlList $ map plural renameList2, S "on each other"]]
+  foldlSent_ [foldlList Comma List $ map plural renameList2, S "on each other"]]
 
 traceFig1 :: Contents
 traceFig1 = fig (showingCxnBw traceyGraph (titleize' item +:+
   S "of Different" +:+ titleize' section_)) "ATrace.png" "TraceyA"
 
 traceFig2 :: Contents
-traceFig2 = fig (showingCxnBw traceyGraph (foldlList $ map titleize' 
+traceFig2 = fig (showingCxnBw traceyGraph (foldlList Comma List $ map titleize' 
   renameList2)) "RTrace.png" "TraceyR"
 
 -------------------------------------------------

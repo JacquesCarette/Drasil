@@ -8,7 +8,8 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   ConceptDomain, HasSymbol(symbol), IsUnit)
 import Language.Drasil.Chunk.Quantity (Quantity(..), QuantityDict, mkQuant, qw, 
   HasSpace(typ))
-import Language.Drasil.Development.Unit (UnitDefn, unitWrapper)
+import Language.Drasil.Development.Unit (UnitDefn, unitWrapper,
+  MayHaveUnit(getUnit))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space)
 import Language.Drasil.NounPhrase (NP)
@@ -30,8 +31,9 @@ instance NamedIdea     UnitaryChunk where term = quant . term
 instance Idea          UnitaryChunk where getA uc = getA $ uc ^. quant
 instance HasSpace      UnitaryChunk where typ = quant . typ
 instance HasSymbol     UnitaryChunk where symbol u st = symbol (u^.quant) st
-instance Quantity      UnitaryChunk where getUnit = Just . _un
+instance Quantity      UnitaryChunk where 
 instance Unitary       UnitaryChunk where unit x = x ^. un
+instance MayHaveUnit   UnitaryChunk where getUnit u = Just $ u ^. un
 
 -- Builds the Quantity part from the uid, term, symbol and space.
 -- assumes there's no abbreviation.

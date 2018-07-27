@@ -4,22 +4,24 @@ module Language.Drasil.Chunk.Eq
   , ec, qua, fromEqn''', fromEqn'''') where
 
 import Control.Lens ((^.), makeLenses, view)
-import Language.Drasil.Expr (Expr)
+
+import Language.Drasil.Chunk.Derivation (Derivation)
+import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(typ), QuantityDict,
+  mkQuant, qw)
+import Language.Drasil.Chunk.References (References)
+import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
+import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), ConceptDomain, HasAdditionalNotes(getNotes))
-import Language.Drasil.Chunk.References (References)
-import Language.Drasil.Chunk.Quantity (Quantity(getUnit), HasSpace(typ), QuantityDict,
-  mkQuant, qw)
-import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
-import Language.Drasil.Development.Unit (unitWrapper)
-import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.Space (Space(Real))
-import Language.Drasil.Chunk.Derivation (Derivation)
-import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
-
+import Language.Drasil.Development.Unit(unitWrapper, MayHaveUnit(getUnit), UnitDefn(..))
+import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase (NP)
+import Language.Drasil.Space (Space(Real))
 import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Symbol (Symbol)
+
+
 
 -- | A QDefinition is a 'Quantity' with a defining equation.
 data QDefinition = EC
@@ -38,7 +40,7 @@ instance NamedIdea     QDefinition where term = qua . term
 instance Idea          QDefinition where getA c = getA $ c ^. qua
 instance HasSpace      QDefinition where typ = qua . typ
 instance HasSymbol     QDefinition where symbol e st = symbol (e^.qua) st
-instance Quantity      QDefinition where getUnit (EC a _ _ _ _ _)   = getUnit a
+instance Quantity      QDefinition where 
 instance ExprRelat     QDefinition where relat = equat
 instance HasReference  QDefinition where getReferences = ref
 instance Eq            QDefinition where a == b = (a ^. uid) == (b ^. uid)
@@ -48,6 +50,8 @@ instance HasShortName  QDefinition where -- FIXME: This could lead to trouble; n
                                          -- to ensure sanity checking when building
                                          -- Refs. Double-check QDef is a DD before allowing
   shortname = view refName
+instance MayHaveUnit   QDefinition where getUnit = getUnit . view qua
+
  
 -- | Create a 'QDefinition' with a uid, noun phrase (term), definition, symbol,
 -- unit, and defining equation.  And it ignores the definition...

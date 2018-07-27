@@ -27,7 +27,7 @@ module Language.Drasil.Classes (
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.References (References)
-import Language.Drasil.Development.UnitLang (UDefn, USymb)
+import Language.Drasil.Development.UnitLang(UDefn, USymb)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label, LblType)
 import Language.Drasil.NounPhrase.Core (NP)

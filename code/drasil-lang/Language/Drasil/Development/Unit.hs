@@ -6,7 +6,7 @@ module Language.Drasil.Development.Unit (
   , scale, shift
   , derUC, derUC', derUC''
   , fund, comp_unitdefn, derCUC, derCUC', derCUC''
-  , makeDerU, unitWrapper, getCu
+  , makeDerU, unitWrapper, getCu, MayHaveUnit(getUnit)
   ) where
 
 import Control.Lens (Simple, Lens', Lens, (^.), makeLenses, view)
@@ -41,6 +41,8 @@ instance ConceptDomain UnitDefn where
 instance HasUnitSymbol UnitDefn where usymb f (UD a b c e d) = fmap (\x -> UD a x c e d) (f b)
 instance IsUnit        UnitDefn where udefn = ud
                                       getUnits u = view cu u
+class MayHaveUnit u where
+   getUnit :: u -> Maybe UnitDefn
 
 data UnitEquation = UE {_contributingUnit :: [UID], _us :: USymb}
 makeLenses ''UnitEquation

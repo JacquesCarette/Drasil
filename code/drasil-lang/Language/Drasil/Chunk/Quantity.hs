@@ -32,7 +32,7 @@ instance HasSpace      QuantityDict where typ = typ'
 instance HasSymbol     QuantityDict where symbol = view symb'
 instance Quantity      QuantityDict where 
 instance Eq            QuantityDict where a == b = (a ^. uid) == (b ^. uid)
-instance MayHaveUnit   QuantityDict where getUnit u = u ^. unit'
+instance MayHaveUnit   QuantityDict where getUnit = view unit'
 
 qw :: (Quantity q) => q -> QuantityDict
 qw q = QD (nw q) (q^.typ) (symbol q) (getUnit q)

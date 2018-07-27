@@ -46,7 +46,7 @@ instance Eq                 DataDefinition where a == b = (a ^. uid) == (b ^. ui
 instance HasDerivation      DataDefinition where derivations = deri
 instance HasAdditionalNotes DataDefinition where getNotes = notes
 instance HasShortName       DataDefinition where shortname = view lbl
-instance MayHaveUnit        DataDefinition where getUnit (DD a _ _ _ _ _) = getUnit a 
+instance MayHaveUnit        DataDefinition where getUnit = getUnit . view qd 
 
 -- Used to help make Qdefinitions when uid, term, and symbol come from the same source
 mkDataDef :: (Quantity c) => c -> Expr -> QDefinition

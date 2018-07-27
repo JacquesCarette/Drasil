@@ -26,7 +26,7 @@ import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase(NP)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Symbol (Symbol)
-import Control.Lens ((^.), Lens', makeLenses)
+import Control.Lens ((^.), Lens', makeLenses, view)
 
 -- | An UncertainQuantity is just a Quantity with some uncertainty associated to it.
 -- This uncertainty is represented as a decimal value between 0 and 1 (percentage).
@@ -59,7 +59,7 @@ instance Quantity          UncertainChunk where
 instance Constrained       UncertainChunk where constraints = conc . constraints
 instance HasReasVal        UncertainChunk where reasVal = conc . reasVal
 instance UncertainQuantity UncertainChunk where uncert = unc'
-instance MayHaveUnit       UncertainChunk where getUnit (UCh c _) = getUnit c
+instance MayHaveUnit       UncertainChunk where getUnit = getUnit . view conc
 
 {-- Constructors --}
 uncrtnChunk :: (Quantity c, Constrained c, HasReasVal c) => c -> Double -> UncertainChunk
@@ -93,7 +93,7 @@ instance HasReasVal        UncertQ where reasVal = coco . reasVal
 instance Definition        UncertQ where defn = coco . defn
 instance ConceptDomain     UncertQ where cdom = coco . cdom
 instance Concept           UncertQ where
-instance MayHaveUnit       UncertQ where getUnit (UQ q _) = getUnit q
+instance MayHaveUnit       UncertQ where getUnit = getUnit . view coco
 
 {-- Constructors --}
 -- | The UncertainQuantity constructor. Requires a Quantity, a percentage, and a typical value

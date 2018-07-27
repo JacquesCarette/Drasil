@@ -41,7 +41,7 @@ instance HasSpace      UnitalChunk where typ = defq' . typ
 instance HasSymbol     UnitalChunk where symbol c st = symbol (c^.defq') st
 instance Quantity      UnitalChunk where 
 instance Unitary       UnitalChunk where unit = view uni
-instance MayHaveUnit   UnitalChunk where getUnit u = Just (unit u)
+instance MayHaveUnit   UnitalChunk where getUnit = Just . view uni
 
 --{BEGIN HELPER FUNCTIONS}--
 

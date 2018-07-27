@@ -41,7 +41,7 @@ instance Quantity      ConstrainedChunk where
 instance Constrained   ConstrainedChunk where constraints = constr
 instance HasReasVal    ConstrainedChunk where reasVal     = reasV
 instance Eq            ConstrainedChunk where c1 == c2 = (c1 ^. qd . uid) == (c2 ^. qd . uid)
-instance MayHaveUnit   ConstrainedChunk where getUnit u = getUnit $ u ^. qd
+instance MayHaveUnit   ConstrainedChunk where getUnit = getUnit . view qd
 
 -- | Creates a constrained chunk from a symbolic quantity
 constrained :: (Quantity c) => c -> [Constraint] -> Expr -> ConstrainedChunk
@@ -83,7 +83,7 @@ instance Concept       ConstrConcept where
 instance Constrained   ConstrConcept where constraints  = constr'
 instance HasReasVal    ConstrConcept where reasVal      = reasV'
 instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.defq.uid)
-instance MayHaveUnit   ConstrConcept where getUnit u = getUnit $ u ^. defq
+instance MayHaveUnit   ConstrConcept where getUnit = getUnit . view defq
 
 constrained' :: (HasSpace c, HasSymbol c, Concept c, Quantity c) =>
   c -> [Constraint] -> Expr -> ConstrConcept

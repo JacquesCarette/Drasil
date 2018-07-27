@@ -50,7 +50,7 @@ instance HasShortName  QDefinition where -- FIXME: This could lead to trouble; n
                                          -- to ensure sanity checking when building
                                          -- Refs. Double-check QDef is a DD before allowing
   shortname = view refName
-instance MayHaveUnit   QDefinition where getUnit (EC a _ _ _ _ _)   = getUnit a
+instance MayHaveUnit   QDefinition where getUnit = getUnit . view qua
 
  
 -- | Create a 'QDefinition' with a uid, noun phrase (term), definition, symbol,

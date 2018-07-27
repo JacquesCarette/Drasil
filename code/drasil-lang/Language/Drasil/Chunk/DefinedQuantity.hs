@@ -41,7 +41,7 @@ instance Q.HasSpace    DefinedQuantityDict where typ = spa
 instance HasSymbol     DefinedQuantityDict where symbol = view symb
 instance Q.Quantity    DefinedQuantityDict where 
 instance HasDerivation DefinedQuantityDict where derivations = deri
-instance MayHaveUnit   DefinedQuantityDict where getUnit u = u ^. unit'
+instance MayHaveUnit   DefinedQuantityDict where getUnit = view unit'
 
 -- For when the symbol is constant through stages
 dqd :: ConceptChunk -> Symbol -> Space -> Maybe UnitDefn -> DefinedQuantityDict

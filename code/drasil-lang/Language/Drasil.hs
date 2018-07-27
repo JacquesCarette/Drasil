@@ -140,7 +140,7 @@ module Language.Drasil (
   , datadefn, reldefn, MaxWidthPercent  
   , RawContent(..)
   , HasContents(accessContents)
-  , LabelledContent, UnlabelledContent
+  , LabelledContent(..), UnlabelledContent(..)
   , llcc, ulcc
   , mkParagraph, mkFig
   -- Reference
@@ -251,7 +251,7 @@ import Language.Drasil.Document (section, fig, figWithWidth, section''
 import Language.Drasil.Document.Core (DType(..)
   , Contents(..), ListType(..), ItemType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
-  , LabelledContent, UnlabelledContent, )
+  , LabelledContent(..), UnlabelledContent(..) )
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Development.UnitLang -- all of it
 import Language.Drasil.Development.Unit -- all of it

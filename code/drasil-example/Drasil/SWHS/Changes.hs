@@ -35,7 +35,7 @@ likeChg1 = mkLklyChnk "likeChg1" (
   S "of uniform", phrase temp_PCM, S "is not likely"] ) "Uniform-Temperature-PCM"
 
 --
-likeChg2 = llcc (mkLabelRA'' "Discharging-Tank") $ Change $ lc "likeChg2"
+likeChg2 = llcc (mkLabelRA'' "Temperature-Coil-Variable-Over-Day") $ Change $ lc "likeChg2"
   (foldlSent [chgsStart assump8, S "The", phrase temp_C, S "will change over", 
   (S "course" `ofThe` S "day, depending"), S "on the", phrase energy, 
   S "received from the sun"] ) (shortname' "Temperature-Coil-Variable-Over-Day")

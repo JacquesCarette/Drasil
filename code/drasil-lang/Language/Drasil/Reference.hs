@@ -18,11 +18,11 @@ import Language.Drasil.Chunk.Goal as G (Goal, refAddr)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
 import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc, refAddr)
 import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..), ReqType(FR))
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName)
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname, shortnameLens), ShortName)
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel), HasRefAddress(getRefAdd))
 import Language.Drasil.Document (Section(Section), getDefName, repUnd)
-import Language.Drasil.Document.Core (Contents(..), DType(Data, Theory), RawContent(..))
+import Language.Drasil.Document.Core (Contents(..), DType(Data, Theory), RawContent(..), LabelledContent(..))
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.Spec (Sentence((:+:), Ref, S))
 import Language.Drasil.UID (UID)
@@ -251,35 +251,41 @@ instance Referable Label where
   refAdd lb = getAdd (lb ^. getRefAdd)
   rType _   = Lbl --FIXME?
 
---Fixme: should become "instance Referable Contents where"
-instance Referable RawContent where
-  rType (Table _ _ _ _ _)       = Tab
-  rType (Figure _ _ _ _)        = Fig
-  rType (Definition (Data _))   = Def
-  rType (Definition (Theory _)) = Def
-  rType (Definition _)          = Def
-  rType (Defnt _ _ _)           = Def
-  rType (Requirement r)         = rType r
-  rType (Assumption a)          = rType a
-  rType (Change l)              = rType l --rType lc
-  rType (Graph _ _ _ _ _)       = Fig
-  rType (EqnBlock _)          = EqnB
-  rType _                       =
-    error "Attempting to reference unimplemented reference type"
-  refAdd (Table _ _ _ _ r)      = "Table:" ++ r
-  refAdd (Figure _ _ _ r)       = "Figure:" ++ r
-  refAdd (Graph _ _ _ _ r)      = "Figure:" ++ r
-  refAdd (EqnBlock _)           = "Equation:"
-  refAdd (Definition d)         = getDefName d
-  refAdd (Defnt _ _ r)          = r
-  refAdd (Requirement rc)       = refAdd rc
-  refAdd (Assumption ca)        = refAdd ca
-  refAdd (Change lcc)           = refAdd lcc
-  refAdd (Enumeration _)        = error "Can't reference lists"
-  refAdd (Paragraph _)          = error "Can't reference paragraphs"
-  refAdd (Bib _)                = error $
+instance Referable LabelledContent where
+  refAdd (LblC lb c) = temp' (getAdd (lb ^. getRefAdd)) c 
+  rType  (LblC _ c)  = temp c
+
+temp' :: String -> RawContent -> String
+temp' r (Table _ _ _ _ _)      = "Table:" ++ r
+temp' r (Figure _ _ _ _)       = "Figure:" ++ r
+temp' r (Graph _ _ _ _ _)      = "Figure:" ++ r
+temp' r (EqnBlock _)           = "Equation:" ++ r
+temp' _ (Definition d)         = getDefName d --fixme: to be removed
+temp' r (Defnt _ _ _)          = r
+temp' _ (Requirement rc)       = refAdd rc
+temp' _ (Assumption ca)        = refAdd ca
+temp' _ (Change lcc)           = refAdd lcc
+temp' _ (Enumeration _)        = error "Shouldn't reference lists"
+temp' _ (Paragraph _)          = error "Shouldn't reference paragraphs"
+temp' r (Bib _)                = r
+
+temp :: RawContent -> RefType
+temp (Table _ _ _ _ _)       = Tab
+temp (Figure _ _ _ _)        = Fig
+temp (Graph _ _ _ _ _)       = Fig
+temp (Definition _)          = Def
+temp (Defnt _ _ _)           = Def
+temp (Requirement r)         = rType r
+temp (Assumption a)          = rType a
+temp (Change l)              = rType l
+temp (EqnBlock _)            = EqnB
+temp (Enumeration _)         = error "Shouldn't reference lists" 
+temp (Paragraph _)           = error "Shouldn't reference paragraphs"
+temp (Bib _)                 = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
+temp _                       =
+    error "Attempting to reference unimplemented reference type"
 
 uidSort :: HasUID c => c -> c -> Ordering
 uidSort = compare `on` (^. uid)
@@ -327,12 +333,14 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 -- This should not be exported to the end-user, but should be usable
 -- within the recipe (we want to force reference creation to check if the given
 -- item exists in our database of referable objects.
---FIXME: completely shift to using mkRefFrmLbl?
+--FIXME: completely shift to being `HasLabel` since customeref checks for 
+--  `HasShortName` and `Referable`?
 makeRef :: (HasShortName l, Referable l) => l -> Sentence
 makeRef r = customRef r (shortname r)
 
-mkRefFrmLbl :: (HasLabel l) => l -> Sentence
-mkRefFrmLbl r = midRef (r ^. getLabel) 
+--FIXME: needs design (HasShortName, Referable only possible when HasLabel)
+mkRefFrmLbl :: (HasLabel l, HasShortName l, Referable l) => l -> Sentence
+mkRefFrmLbl r = makeRef r
 
 --FIXME: should be removed from Examples once sections have labels
 midRef :: Label -> Sentence

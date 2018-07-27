@@ -10,7 +10,7 @@ import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName,
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname, shortnameLens), ShortName,
   shortname')
 import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd),
   MayHaveLabel(getMaybeLabel), HasLabel(getLabel))
@@ -29,6 +29,7 @@ instance HasRefAddress LabelledContent where getRefAdd = lbl . getRefAdd
 instance HasLabel      LabelledContent where getLabel = lbl
 instance MayHaveLabel  LabelledContent where getMaybeLabel x = Just (x ^. getLabel)
 instance HasContents   LabelledContent where accessContents = ctype
+instance HasShortName  LabelledContent where shortnameLens = lbl . shortnameLens
 
 instance MayHaveLabel UnlabelledContent where getMaybeLabel _ = Nothing
 instance HasContents  UnlabelledContent where accessContents = cntnts
@@ -51,22 +52,23 @@ getDefName DD         = "DD:"
 getDefName Instance   = "IM:"
 getDefName General    = "GD:"
 
---FIXME: needs to be removed!
-instance HasShortName  RawContent where
-  shortname (Table _ _ _ _ r)     = shortname' $ "Table:" ++ r
-  shortname (Figure _ _ _ r)      = shortname' $ "Figure:" ++ r
-  shortname (Graph _ _ _ _ r)     = shortname' $ "Figure:" ++ r
-  shortname (EqnBlock _)          = shortname' $ "Equation:"
-  shortname (Definition d)        = shortname' $ getDefName d
-  shortname (Defnt _ _ r)         = shortname' r
-  shortname (Requirement rc)      = shortname rc
-  shortname (Assumption ca)       = shortname ca
-  shortname (Change lcc)          = shortname lcc
-  shortname (Enumeration _)       = error "Can't reference lists"
-  shortname (Paragraph _)         = error "Can't reference paragraphs"
-  shortname (Bib _)               = error $
+
+{---FIXME: needs to be removed!
+instance HasShortName  LabelledContent where
+  shortname (LblC r (Table _ _ _ _ _))     = shortname' $ "Table:" ++ r
+  shortname (LblC r (Figure _ _ _ _))      = shortname' $ "Figure:" ++ r
+  shortname (LblC r (Graph _ _ _ _ _))     = shortname' $ "Figure:" ++ r
+  shortname (LblC _ (EqnBlock _))          = shortname' $ "Equation:"
+  shortname (LblC _ (Definition d))        = shortname' $ getDefName d
+  shortname (LblC r (Defnt _ _ _))         = shortname' r
+  shortname (LblC _ (Requirement rc))      = shortname rc
+  shortname (LblC _ (Assumption ca))       = shortname ca
+  shortname (LblC _ (Change lcc))          = shortname lcc
+  shortname (LblC _ (Enumeration _))       = error "Can't reference lists"
+  shortname (LblC _ (Paragraph _))         = error "Can't reference paragraphs"
+  shortname (LblC _ (Bib _))               = error $
     "Bibliography list of references cannot be referenced. " ++
-    "You must reference the Section or an individual citation."
+    "You must reference the Section or an individual citation."-}
 
 instance HasContents Contents where
   accessContents f (UlC c) = fmap (UlC . (\x -> set cntnts x c)) (f $ c ^. cntnts)

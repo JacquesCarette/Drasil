@@ -53,10 +53,6 @@ thisSRS = RefSec (RefProg intro
   [SSDSec ( SSDProg [SSDSolChSpec 
   (SCSProg [DDs' [Label, Symbol, Units, DefiningEquation,
   Description Verbose IncludeUnits] hghcVarsDD HideDerivation]) ] ) ]
--- Above Data Defs not yet implemented.
-  
---s3 :: Section --, s4 
---s3 = dataDefnF EmptyS (map (Definition . DD) hghcVarsDD)
   
 srsBody :: Document
 srsBody = mkDoc thisSRS (for) thisSI

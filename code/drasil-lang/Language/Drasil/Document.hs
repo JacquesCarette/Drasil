@@ -16,7 +16,7 @@ import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd),
   MayHaveLabel(getMaybeLabel), HasLabel(getLabel))
 
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.Label (Label, mkLabelRA)
+import Language.Drasil.Label (Label, mkLabelRA, mkEmptyLabel)
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Spec (Sentence(..))
 
@@ -109,6 +109,7 @@ ulcc = UnlblC
 mkTableLC :: String -> String -> String -> RawContent -> LabelledContent
 mkTableLC labelUID refAdd sn' tbl = llcc (mkLabelRA labelUID refAdd sn') tbl
 
+mkParagraph :: Sentence -> Contents
 mkParagraph x = UlC $ ulcc $ Paragraph x
 
 mkFig :: Label -> RawContent -> Contents
@@ -147,8 +148,9 @@ fig l f = Figure l f 100
 figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RefAdd -> RawContent
 figWithWidth = Figure
 
-datadefn :: QDefinition -> RawContent
-datadefn = Definition . Data
+--FIXME: to be removed when QDefinition becomes referable
+datadefn :: QDefinition -> LabelledContent
+datadefn = (\x -> llcc mkEmptyLabel x) . Definition . Data
 
 reldefn :: RelationConcept -> RawContent
 reldefn = Definition . Theory

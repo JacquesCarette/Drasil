@@ -120,7 +120,7 @@ assumpS11 = foldlSent [
   S "not" +:+. phrase discharging, S "The", phrase temp_W `sAnd`
   phrase temp_PCM, S "can only increase, or remain",
   S "constant; they do not decrease. This implies that the",
-  phrase temp_init, sSqBr $ mkRefFrmLbl assump12, S "is less than (or equal)",
+  phrase temp_init, sSqBr $ makeRef assump12, S "is less than (or equal)",
   S "to the", phrase temp_C, sSqBr $ acroIM 1]
   --FIXME `sC` makeRef likeChg4]
 assumpS12 = foldlSent [

@@ -364,7 +364,7 @@ assump3 = let a3 = "assump3" in llcc (mkLabelRA'' a3) $ Assumption $ assump a3 a
 assumpS4 = 
   (foldlSent [S "The", phrase w_density, S "has no spatial variation; that is"
   `sC` S "it is constant over their entire", phrase vol, sSqBr ((acroGD 2)`sC`
-  (mkRefFrmLbl likeChg2))]) --FIXME: likely change should have a label
+  (makeRef likeChg2))]) --FIXME: likely change should have a label
 assump4 = let a4 = "assump4" in llcc (mkLabelRA'' a4) $ Assumption $ assump a4 assumpS4 a4 
 
 newA5NoPCM :: AssumpChunk
@@ -383,7 +383,7 @@ assumpS9_npcm =
   S "of the tank" `sC` S "not discharging. The", phrase temp_W, S "can only",
   S "increase, or remain constant; it cannot decrease. This implies that the",
   phrase temp_init, S "is less than (or equal to) the", phrase temp_C,
-  sSqBr ((acroIM 1) `sC` (mkRefFrmLbl likeChg3_npcm))])
+  sSqBr ((acroIM 1) `sC` (makeRef likeChg3_npcm))])
 assump9_npcm = let a9 = "assump9_npcm" in llcc (mkLabelRA'' a9) $Assumption $ assump a9 assumpS9_npcm a9 
 
 newA9NoPCM :: AssumpChunk
@@ -568,18 +568,18 @@ req1 = mkRequirement "req1" (
   plural property +:+ S "and initial" +: plural condition) "Input-Inital-Values"
 req2 = mkRequirement "req2" (
   S "Use the" +:+ plural input_ +:+ S "in" +:+
-  (mkRefFrmLbl req1) +:+ S "to find the" +:+ phrase mass +:+
+  (makeRef req1) +:+ S "to find the" +:+ phrase mass +:+
   S "needed for" +:+ acroIM 1 +:+ S "to" +:+ acroIM 2 `sC`
   S "as follows, where" +:+ ch w_vol `isThe` phrase w_vol +:+
   S "and" +: (ch tank_vol `isThe` phrase tank_vol) ) "Use-Above-Find-Mass-IM1-IM2"
 req3 = mkRequirement "req3" (
   S "Verify that the" +:+ plural input_ +:+ S "satisfy the required"
-  +:+ phrase physicalConstraint +:+ S "shown in" +:+. mkRefFrmLbl dataConstTable1 ) "Check-Inputs-Satisfy-Physical-Constraints"
+  +:+ phrase physicalConstraint +:+ S "shown in" +:+. makeRef dataConstTable1 ) "Check-Inputs-Satisfy-Physical-Constraints"
 req4 = mkRequirement "req4" (
   titleize' output_ `sAnd` plural input_ +:+ plural quantity
   +:+ S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
-  plural quantity +:+ S "from" +:+ (mkRefFrmLbl req1) `sC`
-  S "the" +:+ phrase mass +:+ S "from" +:+ (mkRefFrmLbl req2)
+  plural quantity +:+ S "from" +:+ (makeRef req1) `sC`
+  S "the" +:+ phrase mass +:+ S "from" +:+ (makeRef req2)
   `sAnd` ch tau_W +:+. sParen(S "from" +:+ acroIM 1) ) "Output-Input-Derivied-Quantities"
 req5 = mkRequirement "req5" (
   S "Calculate and output the" +:+ phrase temp_W +:+
@@ -690,10 +690,10 @@ traceInstaModelRef = map (refFromType Theory) [eBalanceOnWtr,
   heatEInWtr]
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-traceFuncReqRef = map mkRefFrmLbl funcReqsListWordsNum--makeListRef s7_funcReq s5_1
+traceFuncReqRef = map makeRef funcReqsListWordsNum--makeListRef s7_funcReq s5_1
 
 traceData = ["Data Constraints"]
-traceDataRef = [mkRefFrmLbl dataConstTable1] --FIXME: Reference section?
+traceDataRef = [makeRef dataConstTable1] --FIXME: Reference section?
 
 traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14"]

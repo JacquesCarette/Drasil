@@ -145,7 +145,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand] HideDerivation
           , Constraints EmptyS dataConstraintUncertainty
                         (foldlSent [(midRef SRS.valsOfAuxConsLabel), S "gives", (plural value `ofThe` S "specification"), 
-                        plural parameter, S "used in", (mkRefFrmLbl inputDataConstraints)])
+                        plural parameter, S "used in", (makeRef inputDataConstraints)])
                         [inputDataConstraints, outputDataConstraints]
           ]
         )
@@ -499,7 +499,7 @@ functional_requirements_req4 = mkRequirement "functional_requirements_req4" req4
 functional_requirements_req5 = mkRequirement "functional_requirements_req5" (req5Desc (output_)) "Check-Glass-Safety"
 
 req1Desc = foldlSent [at_start input_, S "the", plural quantity, S "from",
-  mkRefFrmLbl functional_requirements_req1Table `sC` S "which define the", phrase glass,
+  makeRef functional_requirements_req1Table `sC` S "which define the", phrase glass,
   plural dimension `sC` (glassTy ^. defn) `sC` S "tolerable",
   phrase probability `sOf` phrase failure, S "and",
   (plural characteristic `ofThe` phrase blast), S "Note:",
@@ -773,7 +773,7 @@ fig_4 = figureLabel 4 traceyMatrix
 
 appendix_intro = foldlSP [
   S "This", phrase appendix, S "holds the", plural graph,
-  sParen ((mkRefFrmLbl fig_5) `sAnd` (mkRefFrmLbl fig_6)),
+  sParen ((makeRef fig_5) `sAnd` (makeRef fig_6)),
   S "used for interpolating", plural value, S "needed in the", plural model]
 
 fig_5 = llcc (mkLabelRA'' "demandVSsod") $ fig (titleize figure +: S "5" +:+ (demandq ^. defn) +:+

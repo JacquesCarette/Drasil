@@ -65,7 +65,7 @@ t1descr = foldlSent [
   S "is the" +:+. (gradient ^. defn), S "For this", phrase equation,
   S "to apply" `sC` S "other forms of", phrase energy `sC` S "such as",
   phrase mech_energy `sC`
-  S "are assumed to be negligible in the", phrase system, sParen (mkRefFrmLbl a1)]
+  S "are assumed to be negligible in the", phrase system, sParen (makeRef a1)]
 
 --referencing within a simple list is not yet implemented
 -- FIXME: this hack will be removed once labels are defined in their own file

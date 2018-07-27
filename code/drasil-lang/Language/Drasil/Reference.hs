@@ -186,6 +186,7 @@ instance HasCitationRefs ReferenceDB where citationRefTable = citationDB
 instance HasConceptRefs  ReferenceDB where conceptRefTable = conceptDB
 
 
+--FIXME: "class (HasLabel s) => Referable s where" instead?
 class Referable s where
   refAdd  :: s -> String  -- The plaintext referencing address (what we're linking to).
                           -- Should be string with no spaces/special chars.

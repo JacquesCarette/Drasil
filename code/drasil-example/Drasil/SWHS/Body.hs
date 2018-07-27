@@ -515,7 +515,7 @@ traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
 traceFuncReqRef = makeListRef traceFuncReq funcReqs
 
 traceData = ["Data Constraints"]
-traceDataRef = [mkRefFrmLbl dataConTable1] --FIXME: Reference section?
+traceDataRef = [makeRef dataConTable1] --FIXME: Reference section?
 
 traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19"]
@@ -821,7 +821,7 @@ orgDocEnd sp pro = foldlSent_ [S "The", plural inModel,
 --------------------------
 
 systCContents :: CI -> Contents
-systCContents pro = foldlSP [mkRefFrmLbl sys_context_fig, S "shows the" +:+.
+systCContents pro = foldlSP [makeRef sys_context_fig, S "shows the" +:+.
   phrase sysCont, S "A circle represents an external entity outside the",
   phrase software `sC` S "the", phrase user, S "in this case. A",
   S "rectangle represents the", phrase softwareSys, S "itself" +:+.
@@ -831,7 +831,7 @@ systCContents pro = foldlSP [mkRefFrmLbl sys_context_fig, S "shows the" +:+.
 
 sys_context_fig :: LabelledContent
 sys_context_fig = llcc (mkLabelRA'' "SysCon") $ fig (foldlSent_
-  [mkRefFrmLbl sys_context_fig +: EmptyS, titleize sysCont])
+  [makeRef sys_context_fig +: EmptyS, titleize sysCont])
   "SystemContextFigure.png" "SysCon"
 
 systCIntro :: CI -> NamedChunk -> Contents
@@ -1075,8 +1075,8 @@ iMod1Sent1 roc temw en wa vo wvo wma hcw hfc hfp csa psa ht ta purin vhg
   ch csa `sAnd` ch psa `sC` S "respectively. No",
   phrase ht, S "occurs to", (S "outside" `ofThe`
   phrase ta) `sC` S "since it has been assumed to be",
-  phrase purin +:+. sParen (mkRefFrmLbl a15), S "Assuming no",
-  phrase vhg +:+. (sParen (mkRefFrmLbl a16) `sC`
+  phrase purin +:+. sParen (makeRef a15), S "Assuming no",
+  phrase vhg +:+. (sParen (makeRef a16) `sC`
   (E $ sy vhg $= 0)), S "Therefore, the", phrase equation, S "for",
   acroGD 2, S "can be written as"]
 
@@ -1200,7 +1200,7 @@ iMod2StartPara en pcmat sh roc ptem vo pvo pma hcsp hfp psa hfo vhg a16 =
   ch pma `sAnd` S "the", phrase hcsp, S "is" +:+. ch hcsp,
   S "The", phrase hfp, S "is", ch hfp, S "over",
   phrase psa +:+. ch psa, S "There is no" +:+. phrase hfo,
-  S "Assuming no", phrase vhg, sParen (mkRefFrmLbl a16) `sC`
+  S "Assuming no", phrase vhg, sParen (makeRef a16) `sC`
   ch vhg :+: S "=0, the", phrase equation, S "for", acroGD 2,
   S "can be written as"]
 
@@ -1223,7 +1223,7 @@ iMod2EndPara pcmat hcsp hclp tsp tlp sur mel vo ptem tmp boi so li = map
   S "this is not included, since",
   (phrase vo +:+ S "change" `ofThe` short pcmat),
   S "with", phrase mel,
-  S "is assumed to be negligible", sParen (mkRefFrmLbl assump17)],
+  S "is assumed to be negligible", sParen (makeRef assump17)],
 
   [S "In the case where", ch ptem :+: S "=" :+:
   ch tmp `sAnd` S "not all of the", short pcmat,
@@ -1234,7 +1234,7 @@ iMod2EndPara pcmat hcsp hclp tsp tlp sur mel vo ptem tmp boi so li = map
   [S "This derivation does not consider",
   (phrase boi `ofThe` short pcmat) `sC` S "as the", short pcmat,
   S "is assumed to either be in a", (so ^. defn),
-  S "or a", (li ^. defn), sParen (mkRefFrmLbl assump18)]
+  S "or a", (li ^. defn), sParen (makeRef assump18)]
 
   ]
 
@@ -1269,7 +1269,7 @@ dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
   S "or there will be a divide by zero in the", phrase model],
 
   [sParen (S "+"), S "These", plural qua, S "cannot be zero" `sC`
-  S "or there would be freezing", sParen (mkRefFrmLbl assump13)],
+  S "or there would be freezing", sParen (makeRef assump13)],
 
   [sParen (Sp Hash), S "The", plural constraint, S "on the", phrase sa,
   S "are calculated by considering the", phrase sa, S "to", phrase vo +:+.
@@ -1341,7 +1341,7 @@ propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)"
   S "computed by" +:+. short pro, S "The relative",
   S "error between the results computed by", short pro `sAnd`
   S "the results calculated from the", short rs, S "of these",
-  plural eq, S "should be less than 0.001%", mkRefFrmLbl req9]
+  plural eq, S "should be less than 0.001%", makeRef req9]
 
 -- Above section only occurs in this example (although maybe it SHOULD be in
 -- the others).

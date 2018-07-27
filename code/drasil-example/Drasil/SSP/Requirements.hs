@@ -23,7 +23,7 @@ readAndStore, generateCSS, testSlipSrf, prepareSlipS,
 
 readAndStore = foldlSent [S "Read the", phrase input_,
   S "file, and store the" +:+. plural datum, S "Necessary",
-  plural inDatum, S "summarized in", mkRefFrmLbl sspInputDataTable]
+  plural inDatum, S "summarized in", makeRef sspInputDataTable]
 
 generateCSS  = foldlSent [S "Generate potential", phrase crtSlpSrf :+:
   S "'s for the", phrase input_, phrase slope]

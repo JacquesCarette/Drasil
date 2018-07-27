@@ -119,8 +119,9 @@ itemRefToSent :: String -> Sentence -> Sentence
 itemRefToSent a b = S a +:+ sParen b
 
 -- | refFromType takes a function and returns a reference sentence
+--FIXME: will be removed when labels are added to all data types
 refFromType :: (a -> DType) -> a -> Sentence
-refFromType f = (makeRef . Definition . f)
+refFromType f = makeRef . llcc mkEmptyLabel . Definition . f
 
 -- | makeListRef takes a list and a reference and generates references to 
 --   match the length of the list

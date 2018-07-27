@@ -27,7 +27,6 @@ import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle, fmtU, getRVal)
 import Data.Drasil.SentenceStructures (fmtPhys, fmtSfwr, mkTableFromColumns, foldlSent, 
   foldlSP, typUncr, ofThe, foldlList)
-import Data.List (sortBy)
 
 import qualified Drasil.DocLang.SRS as SRS
 
@@ -66,7 +65,7 @@ physSystDesc :: Sentence -> LabelledContent -> [Contents] -> Section
 physSystDesc progName fg otherContents = SRS.physSyst ((intro):otherContents) []
   where intro = mkParagraph $ foldle (+:+) (+:) (EmptyS)
                 [S "The", (phrase physicalSystem), S "of", progName `sC`
-                S "as shown in", (mkRefFrmLbl fg) `sC` S "includes the following", 
+                S "as shown in", (makeRef fg) `sC` S "includes the following", 
                 plural element]
 
 --List all the given inputs. Might be possible to use ofThe combinator from utils.hs
@@ -169,12 +168,12 @@ dataConstraintParagraph hasUncertainty tableRef middleSent trailingSent = mkPara
 -- makes a list of references to tables takes
 -- l  list of layout objects that can be referenced
 -- outputs a sentence containing references to the layout objects 
-listofTablesToRefs :: (HasLabel l) => [l] -> Sentence
+listofTablesToRefs :: (HasShortName l, Referable l) => [l] -> Sentence
 listofTablesToRefs  []     = EmptyS
-listofTablesToRefs  [x]    = (mkRefFrmLbl x) +:+ S "shows"
-listofTablesToRefs  [x,y]  = (mkRefFrmLbl x) +:+ S "and" +:+ (mkRefFrmLbl y) +:+ S "show" -- for proper grammar with multiple tables
+listofTablesToRefs  [x]    = (makeRef x) +:+ S "shows"
+listofTablesToRefs  [x,y]  = (makeRef x) +:+ S "and" +:+ (makeRef y) +:+ S "show" -- for proper grammar with multiple tables
                                                                                   -- no Oxford comma in case there is only two tables to be referenced
-listofTablesToRefs  (x:xs) = (mkRefFrmLbl x) `sC` listofTablesToRefs (xs)
+listofTablesToRefs  (x:xs) = (makeRef x) `sC` listofTablesToRefs (xs)
  
 dataConstraintIntroSent :: Sentence -> Sentence
 dataConstraintIntroSent tableRef = foldlSent [tableRef, S "the", plural datumConstraint, S "on the", phrase input_, 

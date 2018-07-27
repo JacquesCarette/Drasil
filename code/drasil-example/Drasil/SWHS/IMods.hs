@@ -60,7 +60,7 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively",
-  sParen (mkRefFrmLbl a14 `sC` mkRefFrmLbl a19)]
+  sParen (makeRef a14 `sC` makeRef a19)]
 
 
   ----------------------------------------------
@@ -107,8 +107,8 @@ s4_2_3_desc1_swhs_im1 roc tw en wt vo wvo ms wms hcs hw ht cl hfc cs ps tk hfp s
 
 s4_2_3_desc2_swhs_im1 :: QDefinition -> QDefinition -> [Sentence]
 s4_2_3_desc2_swhs_im1 dd1 dd2 =
-  [S "Using", mkRefFrmLbl $ llcc mkEmptyLabel $ datadefn dd1, S "and",
-  mkRefFrmLbl $ llcc mkEmptyLabel $ datadefn dd2,
+  [S "Using", makeRef $ llcc mkEmptyLabel $ datadefn dd1, S "and",
+  makeRef $ llcc mkEmptyLabel $ datadefn dd2,
    S "for", (E $ sy dd1) `sAnd` (E $ sy dd2), S "respectively, this can be written as"]
 
 s4_2_3_desc3_swhs_im1 ::  UnitalChunk -> UncertQ -> [Sentence]
@@ -275,7 +275,7 @@ s4_2_3_desc1_swhs_im2 roc tempP en wt vo pcmvo pm hcs hsp hf hfp pc ps ht ass16 
 
 s4_2_3_desc2_swhs_im2 :: QDefinition -> UnitalChunk -> [Sentence]
 s4_2_3_desc2_swhs_im2 dd2 hfp =
-  [S "Using", mkRefFrmLbl $ llcc mkEmptyLabel $ datadefn dd2,
+  [S "Using", makeRef $ llcc mkEmptyLabel $ datadefn dd2,
    S "for", (E $ sy hfp) `sC` S "this equation can be written as"]
 
 s4_2_3_desc3_swhs_im2 :: [Sentence] -> [Sentence]
@@ -374,7 +374,7 @@ htWtrDesc = foldlSent [S "The above", phrase equation,
   sParen (unwrap $ getUnit temp_init), S "This", phrase equation,
   S "applies as long as", (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100)))
   :+: (unwrap $ getUnit temp_W),
-  sParen $ mkRefFrmLbl a14 `sC` mkRefFrmLbl a19]
+  sParen $ makeRef a14 `sC` makeRef a19]
 
 ---------
 -- IM4 --
@@ -440,7 +440,7 @@ htPCMDesc = foldlSent [S "The above", phrase equation,
   S "for", phrase boiling, S "of the", short phsChgMtrl,
   S "is not detailed" `sC` S "since the", short phsChgMtrl,
   S "is assumed to either be in a", phrase solid, S "or", phrase liquid,
-  S "state", sParen (mkRefFrmLbl a18)]
+  S "state", sParen (makeRef a18)]
 
 ---------------
 -- FIXME, hacks

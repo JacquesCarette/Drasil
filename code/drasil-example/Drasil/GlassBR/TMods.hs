@@ -52,8 +52,7 @@ lrSafetyReq = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
 lrSafeDescr :: Sentence
 lrSafeDescr = tDescr (is_safe2) s ending
   where 
-    s = ((ch is_safe1) +:+ sParen (S "from" +:+ (makeRef ((Definition . Theory) 
-        pbSafetyReq))) `sAnd` (ch is_safe2))
+    s = ((ch is_safe1) +:+ sParen (S "from" +:+ (ref pbSafetyReq)) `sAnd` (ch is_safe2))
     ending = (short lResistance) `isThe` (phrase lResistance) +:+ 
       sParen (S "also called capacity") `sC` S "as defined in" +:+. 
       (ref calOfCap) +:+ (ch demand) +:+ sParen (S "also referred as the" +:+ 
@@ -65,4 +64,4 @@ tDescr main s ending = foldlSent [S "If", ch main `sC` S "the glass is" +:+.
   S "considered safe", s +:+. S "are either both True or both False", ending]
 
 ref :: RelationConcept -> Sentence
-ref = makeRef . (Definition . Theory)
+ref = makeRef . reldefn

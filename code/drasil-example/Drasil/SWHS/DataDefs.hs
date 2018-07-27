@@ -79,10 +79,10 @@ dd4MeltFracDD = mkDD dd4MeltFrac [] [] "" Nothing
 
 --Fixme: should be removed with proper addition of labels
 swhsDD1, swhsDD2, swhsDD3, swhsDD4 :: Contents
-swhsDD1 = LlC $ llcc mkEmptyLabel $ datadefn dd1HtFluxC
-swhsDD2 = LlC $ llcc mkEmptyLabel $ datadefn dd2HtFluxP
-swhsDD3 = LlC $ llcc mkEmptyLabel $ datadefn dd3HtFusion
-swhsDD4 = LlC $ llcc mkEmptyLabel $ datadefn dd4MeltFrac
+swhsDD1 = LlC $ datadefn dd1HtFluxC
+swhsDD2 = LlC $ datadefn dd2HtFluxP
+swhsDD3 = LlC $ datadefn dd3HtFusion
+swhsDD4 = LlC $ datadefn dd4MeltFrac
 
 --Symbol appears as "Label"
 --There is no actual label

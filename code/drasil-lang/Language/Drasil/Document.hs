@@ -152,5 +152,5 @@ figWithWidth = Figure
 datadefn :: QDefinition -> LabelledContent
 datadefn = (\x -> llcc mkEmptyLabel x) . Definition . Data
 
-reldefn :: RelationConcept -> RawContent
-reldefn = Definition . Theory
+reldefn :: RelationConcept -> LabelledContent
+reldefn = (\x -> llcc mkEmptyLabel x) . Definition . Theory

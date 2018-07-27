@@ -107,8 +107,8 @@ s4_2_3_desc1_swhs_im1 roc tw en wt vo wvo ms wms hcs hw ht cl hfc cs ps tk hfp s
 
 s4_2_3_desc2_swhs_im1 :: QDefinition -> QDefinition -> [Sentence]
 s4_2_3_desc2_swhs_im1 dd1 dd2 =
-  [S "Using", makeRef $ llcc mkEmptyLabel $ datadefn dd1, S "and",
-  makeRef $ llcc mkEmptyLabel $ datadefn dd2,
+  [S "Using", makeRef $ datadefn dd1, S "and",
+  makeRef $ datadefn dd2,
    S "for", (E $ sy dd1) `sAnd` (E $ sy dd2), S "respectively, this can be written as"]
 
 s4_2_3_desc3_swhs_im1 ::  UnitalChunk -> UncertQ -> [Sentence]
@@ -275,7 +275,7 @@ s4_2_3_desc1_swhs_im2 roc tempP en wt vo pcmvo pm hcs hsp hf hfp pc ps ht ass16 
 
 s4_2_3_desc2_swhs_im2 :: QDefinition -> UnitalChunk -> [Sentence]
 s4_2_3_desc2_swhs_im2 dd2 hfp =
-  [S "Using", makeRef $ llcc mkEmptyLabel $ datadefn dd2,
+  [S "Using", makeRef $ datadefn dd2,
    S "for", (E $ sy hfp) `sC` S "this equation can be written as"]
 
 s4_2_3_desc3_swhs_im2 :: [Sentence] -> [Sentence]

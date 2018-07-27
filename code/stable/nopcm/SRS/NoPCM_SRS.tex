@@ -21,8 +21,6 @@
 \global\tabulinesep=1mm
 \newcounter{assumpnum}
 \newcommand{\atheassumpnum}{A\theassumpnum}
-\newcounter{reqnum}
-\newcommand{\rthereqnum}{R\thereqnum}
 \newcounter{lcnum}
 \newcommand{\lcthelcnum}{LC\thelcnum}
 \newcounter{ucnum}
@@ -612,9 +610,20 @@ ${E_{W}}$ & ${E_{W}}\geq{}0$
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
 \label{Sec:FRs}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{Input-Inital-Values}:]Input the following quantities, which define the tank parameters, material properties and initial conditions:
-\end{description}
+\begin{itemize}
+\item[Input-Inital-Values:]\label{nr1}
+                           Input the quantities described in Table~\ref{Table:Input-Variable-Requirements}, which define the tank parameters, material properties and initial conditions.
+\item[Find-Mass:]\label{nr2}
+                 Use the inputs in \hyperref[nr1]{Definition~nr1} to find the mass needed for IM1 to IM2, as follows, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank: ${m_{W}}={V_{W}} {ρ_{W}}=\frac{D}{2} L {ρ_{W}}$
+\item[Check-Inputs-Satisfy-Physical-Constraints:]\label{nr3}
+                                                 Verify that the inputs satisfy the required physical constraint shown in Table~\ref{Table:InDataConstraints}.
+\item[Output-Input-Derivied-Quantities:]\label{nr4}
+                                        Outputs and inputs quantities and derived quantities in the following list: the quantities from \hyperref[nr1]{Definition~nr1}, the mass from \hyperref[nr2]{Definition~nr2} and ${τ_{W}}$ (from IM1).
+\item[Calculate-Temperature-Water-Over-Time:]\label{nr5}
+                                             Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time
+\item[Calculate-Change-Heat\_Energy-Water-Time:]\label{nr6}
+                                                Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from IM3).
+\end{itemize}
 \begin{longtabu}{l l X[l]}
 \toprule
 Symbol & Unit & Description
@@ -639,26 +648,9 @@ ${T_{init}}$ & ${}^{\circ}$C & initial temperature
 ${t_{final}}$ & s & final time
 \\
 \bottomrule
-\label{Table:fr1list}
+\caption{Input Variable Requirements}
+\label{Table:Input-Variable-Requirements}
 \end{longtabu}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{Use-Above-Find-Mass-IM1-IM2}:]Use the inputs in R\ref{FR:req1} to find the mass needed for IM1 to IM2, as follows, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank:
-\end{description}
-\begin{dmath}
-{m_{W}}={V_{W}} {ρ_{W}}=\frac{D}{2} L {ρ_{W}}
-\end{dmath}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{Check-Inputs-Satisfy-Physical-Constraints}:]Verify that the inputs satisfy the required physical constraint shown in Table~\ref{Table:InDataConstraints}.
-\end{description}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{Output-Input-Derivied-Quantities}:]Outputs and inputs quantities and derived quantities in the following list: the quantities from R\ref{FR:req1}, the mass from R\ref{FR:req2} and ${τ_{W}}$ (from IM1).
-\end{description}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{Calculate-Temperature-Water-Over-Time}:]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time
-\end{description}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{Calculate-Change-Heat\_Energy-Water-Time}:]Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from IM3).
-\end{description}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
 This problem is small in size and relatively simple, so performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the non-functional requirement priorities are correctness, verifiability, understandability, reusability, and maintainability.
@@ -710,24 +702,24 @@ IM2 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) &  &  &  &  &  &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l}
 \toprule
- & IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) & IM2 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) & Data Constraints (Table~\ref{Table:InDataConstraints}) & R1 (R\ref{FR:req1}) & R2 (R\ref{FR:req2}) & R3 (R\ref{FR:req3}) & R4 (R\ref{FR:req4}) & R5 (R\ref{FR:req5}) & R6 (R\ref{FR:req6})
+ & IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) & IM2 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) & Data Constraints (Table~\ref{Table:InDataConstraints}) & R1 (\hyperref[nr1]{Definition~nr1}) & R2 (\hyperref[nr2]{Definition~nr2}) & R3 (\hyperref[nr3]{Definition~nr3}) & R4 (\hyperref[nr4]{Definition~nr4}) & R5 (\hyperref[nr5]{Definition~nr5}) & R6 (\hyperref[nr6]{Definition~nr6})
 \\
 \midrule
 IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) &  &  &  &  &  &  &  &  & 
 \\
 IM2 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) &  &  &  &  &  &  &  &  & 
 \\
-R1 (R\ref{FR:req1}) &  &  &  &  &  &  &  &  & 
+R1 (\hyperref[nr1]{Definition~nr1}) &  &  &  &  &  &  &  &  & 
 \\
-R2 (R\ref{FR:req2}) &  &  &  & X &  &  &  &  & 
+R2 (\hyperref[nr2]{Definition~nr2}) &  &  &  & X &  &  &  &  & 
 \\
-R3 (R\ref{FR:req3}) &  &  & X &  &  &  &  &  & 
+R3 (\hyperref[nr3]{Definition~nr3}) &  &  & X &  &  &  &  &  & 
 \\
-R4 (R\ref{FR:req4}) &  &  &  & X & X &  &  &  & 
+R4 (\hyperref[nr4]{Definition~nr4}) &  &  &  & X & X &  &  &  & 
 \\
-R5 (R\ref{FR:req5}) & X &  &  &  &  &  &  &  & 
+R5 (\hyperref[nr5]{Definition~nr5}) & X &  &  &  &  &  &  &  & 
 \\
-R6 (R\ref{FR:req6}) &  & X &  &  &  &  &  &  & 
+R6 (\hyperref[nr6]{Definition~nr6}) &  & X &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}

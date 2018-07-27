@@ -8,7 +8,8 @@ import Drasil.DocLang (cite, refA)
 import Data.Drasil.Concepts.Documentation as Doc (condition, constant, practice, reference, scenario, 
   system, value)
 import Data.Drasil.Concepts.Math (calculation, surface, shape)
-import Data.Drasil.SentenceStructures (sAnd, foldlSent, foldlOptions, foldlList, sOf, sIn)
+import Data.Drasil.SentenceStructures (EnumType(Numb), WrapType(Parens), SepType(..), 
+  FoldType(..), foldlSent, foldlSent_, foldlList, foldlEnumList, sAnd, sIn, sOf)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 
 import Drasil.GlassBR.Unitals ( lite, explosion, lateral, load_dur, explosion,
@@ -42,21 +43,20 @@ assumptionDescs = [a1Desc, a2Desc, a3Desc, a4Desc load_dur, a5Desc, a6Desc, a7De
 
 a1Desc :: Sentence
 a1Desc = foldlSent [S "The standard E1300-09a for",
-  phrase calculation, S "applies only to", foldlOptions $ map S ["monolithic",
+  phrase calculation, S "applies only to", foldlList Comma Options $ map S ["monolithic",
   "laminated", "insulating"], S "glass constructions" `sOf` S "rectangular",
-  phrase shape, S "with continuous", phrase lateral +:+. S "support along",
-  foldlOptions $ map S ["one", "two", "three", "four"], plural edge, S "This",
-  phrase practice, S "assumes that", sParenNum 1, S "the supported glass",
-  plural edge, S "for two, three" `sAnd` S "four-sided support",
+  phrase shape, S "with continuous", phrase lateral, S "support along",
+  (foldlList Comma Options $ map S ["one", "two", "three", "four"]) +:+. plural edge, S "This",
+  phrase practice +: S "assumes that", (foldlEnumList Numb Parens SemiCol List $ map foldlSent_
+  [[S "the supported glass", plural edge, S "for two, three" `sAnd` S "four-sided support",
   plural condition, S "are simply supported" `sAnd` S "free to slip in",
-  phrase plane `semiCol` (sParenNum 2), S "glass supported on two sides acts",
-  S "as a simply supported", phrase beam `sAnd` (sParenNum 3), S "glass",
-  S "supported on one side acts as a", phrase cantilever]
+  phrase plane], [S "glass supported on two sides acts as a simply supported", phrase beam], 
+  [S "glass supported on one side acts as a", phrase cantilever]])]
 
 a2Desc :: Sentence
 a2Desc = foldlSent [S "Following", cite gbRefDB astm2009 +:+ sParen
   (S "pg. 1") `sC` S "this", phrase practice,
-  S "does not apply to any form of", foldlOptions $ map S ["wired",
+  S "does not apply to any form of", foldlList Comma Options $ map S ["wired",
   "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"],
   S "with", phrase surface `sAnd`
   S "edge treatments that alter the glass strength"]
@@ -70,7 +70,7 @@ a4Desc :: UnitaryChunk -> Sentence
 a4Desc mainIdea = foldlSent [S "The", plural value, S "provided in",
   makeRef SRS.valsOfAuxConsLabel, S "are assumed for the",
   phrase mainIdea, sParen (ch mainIdea) `sC` S "and the",
-  plural materialProprty `sOf` foldlList (map ch
+  plural materialProprty `sOf` foldlList Comma List (map ch
   (take 3 assumptionConstants))] +:+ S "[IM1, DD3, DD5, DD7, DD9]"
 
 a5Desc :: Sentence

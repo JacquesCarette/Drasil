@@ -74,7 +74,7 @@ import Data.Drasil.Utils (enumSimple, weave, itemRefToSent, makeListRef,
   makeTMatrix, refFromType, eqUnR', noRefs)
 import Data.Drasil.SentenceStructures (acroIM, acroGD, acroGS, showingCxnBw,
   foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, isThe, ofThe,
-  ofThe', sAnd, sOf, foldlList)
+  ofThe', sAnd, sOf, foldlList, SepType(Comma), FoldType(List))
 
 -------------------------------------------------------------------------------
 
@@ -685,7 +685,7 @@ trace3LC6 = ["A15"]
 introP1 :: (NamedIdea en, Definition en) => ConceptChunk -> UnitalChunk -> en -> CI -> CI ->
   ConceptChunk -> UnitalChunk -> ConceptChunk -> Sentence
 introP1 es en sp pcmat pro te lh un = foldlSent [
-  S "Due to", foldlList (map S ["increasing cost", "diminishing availability",
+  S "Due to", foldlList Comma List (map S ["increasing cost", "diminishing availability",
     "negative environmental impact of fossil fuels"]) `sC`
   S "there is a higher demand for renewable", plural es `sAnd` phrase en +:+.
   S "storage technology", sp ^. defn, sParen (short pcmat), S "use renewable",
@@ -1371,13 +1371,13 @@ renameList2  = [inModel, requirement, dataConst]
 
 traceTrailing1, traceTrailing2, traceTrailing3 :: Sentence
 
-traceTrailing1 = foldlSent [foldlList $ map plural (take 4 renameList1), 
+traceTrailing1 = foldlSent [foldlList Comma List $ map plural (take 4 renameList1), 
   S "with each other"]
 
-traceTrailing2 = foldlSent [foldlList $ map plural renameList2, 
+traceTrailing2 = foldlSent [foldlList Comma List $ map plural renameList2, 
   S "on each other"]
 
-traceTrailing3 = foldlSent_ [foldlList $ map plural (take 5 renameList1),
+traceTrailing3 = foldlSent_ [foldlList Comma List $ map plural (take 5 renameList1),
   S "on the", plural assumption]
 
 traceTable1 :: LabelledContent
@@ -1404,9 +1404,9 @@ traceTable3 = llcc (mkLabelRA'' "Tracey3") $ Table
 traceIntro2 :: [UnlabelledContent]
 traceIntro2 = traceGIntro [traceFig1, traceFig2]
 
-  [foldlSent [foldlList $ map plural renameList1, S "on each other"],
+  [foldlSent [foldlList Comma List $ map plural renameList1, S "on each other"],
 
-  foldlSent_ [foldlList $ map plural renameList2, S "on each other"]]
+  foldlSent_ [foldlList Comma List $ map plural renameList2, S "on each other"]]
 
 traceFig1 :: LabelledContent
 traceFig1 = llcc (mkLabelRA'' "TraceyA") $ fig (showingCxnBw traceyGraph (titleize' item +:+

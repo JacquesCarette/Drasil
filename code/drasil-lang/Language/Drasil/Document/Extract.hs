@@ -19,7 +19,7 @@ import Language.Drasil.Chunk.ReqChunk
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.References
 
-import Language.Drasil.Development.Unit(UnitDefn)
+import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(getUnit))
 
 import Language.Drasil.Classes (NamedIdea(term),
   ExprRelat(relat), HasDerivation(derivations), 

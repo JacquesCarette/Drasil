@@ -1,19 +1,17 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
+Last updated: July 19, 2018
 --------------------------------------------------
 
 HGHC.hs
-  - The main document body representation for the tiny example
+  - The main document body representation for the Tiny example
   
 HeatTransfer.hs
-  - tiny's specific knowledge-base. Includes different chunk types, 
+  - Tiny's specific knowledge-base. Includes different chunk types, 
     equations, etc.
   
 Main.hs 
   - A list of what should be generated
-  
-Modules.hs
-  - A list of modules for tiny's design document
   
 README.md
   - This file

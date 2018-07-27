@@ -76,8 +76,8 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   tsymb, valsOfAuxConstantsF)
  
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
-  foldlList, isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP, acroIM,
-  acroGD)
+  foldlList, SepType(Comma), FoldType(List), isThe, sOf, ofThe, foldlSPCol, 
+  foldlSent, foldlSP, acroIM, acroGD)
 import Data.Drasil.Units.Thermodynamics (thermal_flux)
 
 -- This defines the standard units used throughout the document

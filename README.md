@@ -51,7 +51,7 @@ nopcm_diff | minimal SWHS example, with PCM removed
 
 ## Running the example(s)
 
-Please note that if `make` has beeen used, docs are already generated automatically and can be found in build.
+Please note that if `make` has been used, docs are already generated automatically and can be found in build.
 Automated testing can be done on these examples.
 
 After building, you can run the examples by using `stack exec NAME` where NAME is detailed below:
@@ -83,9 +83,6 @@ in ./code/ for more information.
 **Dan**
   - Subdirectory for Dan Szymczak's work. Mostly papers and presentations
   
-**FamilyOfGamePhysicsEngines**
-  - Subdirectory containing papers on Families of Physics Engines / Material Models
-  
 **GOOLCodeGen**
   - An isolated compilation space for creating GOOL code for the examples.
   
@@ -94,10 +91,7 @@ in ./code/ for more information.
   
 **RelatedCode**
   - Contains the *Generic Object Oriented Language* (GOOL) code.
-  
-**SRS_LPM_Example**
-  - SRS for a fuel pin (more comprehensive than HGHC)
-  
+
 **Steve**
   - Steven Palmer's work
   

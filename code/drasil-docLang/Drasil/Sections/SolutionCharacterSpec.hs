@@ -22,7 +22,8 @@ import Data.Drasil.Concepts.Math (equation, law)
 import Data.Drasil.Concepts.Computation (computer)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle)
-import Data.Drasil.SentenceStructures (ofThe, foldlSP, foldlSent, foldlList, sAnd)
+import Data.Drasil.SentenceStructures (ofThe, foldlSP, foldlSent, foldlList, 
+  SepType(Comma), FoldType(List), sAnd)
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import Data.List (find)
 import Control.Lens ((^.))
@@ -422,7 +423,7 @@ goalStatementIntro :: [Sentence] -> Contents
 goalStatementIntro inputs = mkParagraph $ foldl (+:+) EmptyS [S "Given", 
   (inputToSystem inputs), plural Doc.goalStmt +: S "are"]
   where inputToSystem [] = S "the inputs" `sC` S "the" --FIXME add ref input variables if none are given?
-        inputToSystem listInputs = (foldlList listInputs) `sC` S "the"
+        inputToSystem listInputs = (foldlList Comma List listInputs) `sC` S "the"
 
 
 -------------------------------------------

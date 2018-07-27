@@ -54,8 +54,9 @@ import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Quantities.Physics as QP (time, 
   position, force, velocity, angularVelocity, linearVelocity)
-import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlList, sOf,
-  sAnd, sOr, foldlSentCol, foldlSP, foldlSPCol, showingCxnBw)
+import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlList, 
+  SepType(Comma), FoldType(List), sOf,sAnd, sOr, foldlSentCol, foldlSP, 
+  foldlSPCol, showingCxnBw)
 import Data.Drasil.Software.Products (videoGame, openSource, sciCompS)
 import Data.Drasil.Utils (makeTMatrix, itemRefToSent, refFromType,
   makeListRef, bulletFlat, bulletNested, enumSimple, enumBullet)
@@ -205,7 +206,7 @@ para1_purpose_of_document_param :: (Idea a, NamedIdea b) => a -> b -> Sentence -
 para1_purpose_of_document_param progName typeOf progDescrip appOf listOf = foldlSent 
   [S "This", (phrase typeOf), S "descibes the modeling of an",
   progDescrip, S "used for" +:+. appOf, S "The", 
-  foldlList listOf, S "used in", (short progName), 
+  foldlList Comma List listOf, S "used in", (short progName), 
   S "are provided. This", (phrase typeOf), 
   S "is intended to be used as a", (phrase reference), 
   S "to provide all necessary", (phrase information), 
@@ -390,9 +391,9 @@ goalStatementStruct state inputs wrt adjective outputs objct condition1 conditio
   S "over a period of", (phrase QP.time), condition2]
   where initial EmptyS      = S "initial"
         initial p           = p `sC` (S "initial")
-        listOfInputs EmptyS = (foldlList $ map plural inputs)
-        listOfInputs i      = (foldlList $ map plural inputs) `sC` S "and" +:+ i
-        listOfOutputs       = (foldlList $ map plural outputs)
+        listOfInputs EmptyS = (foldlList Comma List $ map plural inputs)
+        listOfInputs i      = (foldlList Comma List $ map plural inputs) `sC` S "and" +:+ i
+        listOfOutputs       = (foldlList Comma List $ map plural outputs)
 
 goal_statements_G_linear = goalStatementStruct (plural physicalProperty) 
   (take 2 inputSymbols) (plural QP.force) (S "applied on")
@@ -462,7 +463,7 @@ allObject thing = [S "All objects are", thing]
 thereNo :: [Sentence] -> [Sentence]
 thereNo [x]      = [S "There is no", x, S "involved throughout the", 
   (phrase simulation)]
-thereNo l        = [S "There are no", foldlList l, S "involved throughout the", 
+thereNo l        = [S "There are no", foldlList Comma List l, S "involved throughout the", 
   (phrase simulation)]
 
 assumptions_assum1 = allObject (plural CP.rigidBody)
@@ -626,7 +627,7 @@ nonfunctional_requirements_intro = foldlSP
   [(titleize' game), S "are resource intensive, so", phrase performance,
   S "is a high" +:+. phrase priority, S "Other", plural nonfunctionalRequirement,
   S "that are a", phrase priority +: S "are",
-  foldlList (map phrase chpmnkPriorityNFReqs)]
+  foldlList Comma List (map phrase chpmnkPriorityNFReqs)]
 
 --------------------------------
 -- SECTION 6 : LIKELY CHANGES --
@@ -669,7 +670,7 @@ traceability_matrices_and_graph = traceMGF [traceMatTabReqGoalOther, traceMatTab
   (map LlC [traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) []
 
 traceability_matrices_and_graph_traces, traceability_matrices_and_graph_trace1, traceability_matrices_and_graph_trace2, traceability_matrices_and_graph_trace3 :: [Sentence]
-traceability_matrices_and_graph_traces = map (foldlList) [traceability_matrices_and_graph_trace1, traceability_matrices_and_graph_trace2, traceability_matrices_and_graph_trace3]
+traceability_matrices_and_graph_traces = map (foldlList Comma List) [traceability_matrices_and_graph_trace1, traceability_matrices_and_graph_trace2, traceability_matrices_and_graph_trace3]
 
 traceability_matrices_and_graph_trace1 = [(plural goalStmt), (plural requirement), (plural inModel), 
   (plural datumConstraint) +:+. S "with each other"]

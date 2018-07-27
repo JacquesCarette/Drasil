@@ -27,6 +27,7 @@ module Language.Drasil (
   , UnitDefn(..), unitWrapper
   , unitCon, fund, comp_unitdefn, makeDerU
   , (^:), (/:), (*:), (*$), (/$), (^$), new_unit, getCu
+  , MayHaveUnit(getUnit)
    -- UID
   , UID
   -- Classes
@@ -124,7 +125,7 @@ module Language.Drasil (
   , cProceedings, cTechReport, cUnpublished
   , CitationKind(..)
   -- Spec
-  , USymb(..), Sentence(..), sParen, sParenNum, sSqBr, sSqBrNum
+  , USymb(..), Sentence(..), sParen, sSqBr, sSqBrNum
   , (+:+), (+:+.), (+.), sC, (+:), semiCol, sParenDash
   , sDash
   -- NounPhrase
@@ -327,7 +328,7 @@ import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
                                           , titleize', phrase, plural)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (Sentence(..),
-  sParen, sParenNum, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
+  sParen, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
   semiCol, sParenDash, sDash)
 import Language.Drasil.Reference (makeRef, midRef, mkRefFrmLbl, ReferenceDB, assumpDB, reqDB
                                  , AssumpMap, assumpLookup, HasAssumpRefs

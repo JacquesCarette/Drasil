@@ -6,7 +6,7 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (priority, software, requirement, nonfunctionalRequirement,
   functionalRequirement, section_)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.SentenceStructures (foldlSP, foldlList, foldlSent)
+import Data.Drasil.SentenceStructures (foldlSP, foldlList, foldlSent, SepType(Comma), FoldType(List))
 
 import qualified Drasil.DocLang.SRS as SRS
 
@@ -51,10 +51,10 @@ nonFuncReq noPriority priority_ reason_ explanation_ = mkParagraph $ reason_ `sC
 listO :: Sentence -> [Sentence] -> [Sentence] -> Sentence
 listO explanation_ [] [] = S "so there are no" +:+ (plural priority) +:+ explanation_
 listO explanation_ [] priority_ = S "so" +:+ head priority_ +:+ S "is a high" +:+. (phrase priority) +:+ explanation_ +:+ S "The other" +:+. listT (tail priority_)
-listO explanation_ [s] priority_ = S "so" +:+ s +:+ S "is not a" +:+. (phrase priority) +:+ explanation_ +:+ S "Rather than" +:+ s `sC` S "the" +:+. listT priority_
-listO explanation_ s priority_ = S "so" +:+ foldlList s +:+ S "are not" +:+. (plural priority) +:+ explanation_ +:+ S "Rather, the" +:+. listT priority_
+listO explanation_ [s] priority_ = S "so" +:+ s +:+ S "is not a" +:+. phrase priority +:+ explanation_ +:+ S "Rather than" +:+ s `sC` S "the" +:+. listT priority_
+listO explanation_ s priority_ = S "so" +:+ foldlList Comma List s +:+ S "are not" +:+. (plural priority) +:+ explanation_ +:+ S "Rather, the" +:+. listT priority_
 
 listT :: [Sentence] -> Sentence
-listT [] = (phrase program) +:+ S "does not possess a" +:+ (phrase priority) +:+ (phrase $ nonfunctionalRequirement)
+listT [] = (phrase program) +:+ S "does not possess a" +:+ (phrase priority) +:+ (phrase nonfunctionalRequirement)
 listT [s] = (phrase nonfunctionalRequirement) +:+ (phrase priority) +:+ S "is" +:+ s
-listT s = (phrase nonfunctionalRequirement) +:+ (plural priority) +:+ S "are" +:+ foldlList s
+listT s = (phrase nonfunctionalRequirement) +:+ (plural priority) +:+ S "are" +:+ foldlList Comma List s

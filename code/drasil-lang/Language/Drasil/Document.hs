@@ -12,7 +12,7 @@ import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName,
   shortname')
-import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd), 
+import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd),
   MayHaveLabel(getMaybeLabel), HasLabel(getLabel))
 
 import Language.Drasil.Expr (Expr)
@@ -20,7 +20,7 @@ import Language.Drasil.Label (Label, mkLabelRA)
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Spec (Sentence(..))
 
-import Control.Lens ((^.), makeLenses, Lens')
+import Control.Lens ((^.), makeLenses, Lens', set)
 
 makeLenses ''LabelledContent
 makeLenses ''UnlabelledContent
@@ -68,8 +68,9 @@ instance HasShortName  RawContent where
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
 
-instance HasContents  Contents where 
-  accessContents = accessContents
+instance HasContents Contents where
+  accessContents f (UlC c) = fmap (UlC . (\x -> set cntnts x c)) (f $ c ^. cntnts)
+  accessContents f (LlC c) = fmap (LlC . (\x -> set ctype x c)) (f $ c ^. ctype)
 
 -- | Section Contents are split into subsections or contents, where contents
 -- are standard layout objects (see 'Contents')
@@ -78,11 +79,11 @@ data SecCons = Sub Section
 
 -- | Sections have a title ('Sentence') and a list of contents ('SecCons')
 -- and its shortname
-data Section = Section 
-             { tle :: Title 
-             , cons :: [SecCons] 
+data Section = Section
+             { tle :: Title
+             , cons :: [SecCons]
              , _ra :: RefAdd      --Hack to be fixed in later branch
-             , _sn :: ShortName   --Hack to be fixed in later branch 
+             , _sn :: ShortName   --Hack to be fixed in later branch
              }
 makeLenses ''Section
 
@@ -125,7 +126,7 @@ mkGraph
 mkDefnt-}
 ---------------------------------------------------------------------------
 -- smart constructors and combinators for making instances of the above
--- data types.  Over time, the types should no longer be exported, and 
+-- data types.  Over time, the types should no longer be exported, and
 -- only these used
 
 -- | Smart constructor for creating Sections with introductory contents

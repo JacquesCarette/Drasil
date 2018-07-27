@@ -9,7 +9,7 @@ import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName,
   shortname')
-import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd), 
+import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd),
   MayHaveLabel(getMaybeLabel), HasLabel(getLabel))
 
 import Language.Drasil.Expr (Expr)
@@ -27,7 +27,7 @@ data ListType = Bullet [(ItemType,Maybe RefAdd)] -- ^ Bulleted list
 data ItemType = Flat Sentence -- ^ Standard singular item
               | Nested Header ListType -- ^ Nest a list as an item
 
--- | MaxWidthPercent should be kept in the range 1-100. 
+-- | MaxWidthPercent should be kept in the range 1-100.
 -- Values outside this range may have unexpected results.
 -- Used for specifying max figure width as
 -- pagewidth*MaxWidthPercent/100.
@@ -46,7 +46,7 @@ type Lbl      = Sentence
 
 --FIXME: Remove Data, Data', and Theory from below.
 -- | Types of definitions
-data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining 
+data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining
                               -- equation used to generate the Data Definition
            | Data' DataDefinition
            | General
@@ -84,4 +84,5 @@ data LabelledContent = LblC { _lbl :: Label
 
 data UnlabelledContent = UnlblC { _cntnts :: RawContent }
 
-data Contents = UlC UnlabelledContent | LlC LabelledContent
+data Contents = UlC UnlabelledContent
+              | LlC LabelledContent

@@ -55,4 +55,4 @@ thisSRS = RefSec (RefProg intro
   Description Verbose IncludeUnits] hghcVarsDD HideDerivation]) ] ) ]
   
 srsBody :: Document
-srsBody = mkDoc thisSRS (for) thisSI
+srsBody = mkDoc thisSRS for thisSI

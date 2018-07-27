@@ -20,4 +20,3 @@ unit_table u = llcc (mkLabelRA'' "ToU") $ Table
    (\x -> (x ^. defn) +:+ sParen (phrase x))
   ] u)
   (S "Table of Units") False "ToU"
-

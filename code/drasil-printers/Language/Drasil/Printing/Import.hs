@@ -251,7 +251,8 @@ lay sm (UlC x) = layUnlabelled sm (x ^. accessContents)
 
 layLabelled :: HasSymbolTable ctx => ctx -> LabelledContent -> T.LayoutObj
 layLabelled sm x@(LblC _ (Table hdr lls t b _)) = T.Table ["table"]
-  ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S $ (getAdd (x ^. getRefAdd))) 
+  ((map (spec sm) hdr) : (map (map (spec sm)) lls)) 
+  (P.S $ "Table:" ++ (getAdd (x ^. getRefAdd)))
   b (spec sm t)
 layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"] 
   [T.EqnBlock (P.E (expr c sm))] (P.S $ (getAdd (x ^. getRefAdd)))

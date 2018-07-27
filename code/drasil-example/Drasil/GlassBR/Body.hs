@@ -44,7 +44,7 @@ import Data.Drasil.Concepts.Thermodynamics (degree_')
 import Data.Drasil.SentenceStructures (acroR, sVersus, sAnd, foldlSP,
   foldlSent, foldlSent_, figureLabel, foldlList, SepType(Comma), FoldType(List),
   showingCxnBw, foldlsC, sOf, followA, ofThe, sIn, isThe, isExpctdToHv, sOr, 
-  underConsidertn, tAndDWAcc, tAndDOnly, tAndDWSym, andThe)
+  underConsidertn, tAndDWAcc, tAndDOnly, tAndDWSym, andThe, foldlSPCol)
 import Data.Drasil.Software.Products (sciCompS)
 import Data.Drasil.Utils (makeTMatrix, makeListRef, itemRefToSent, noRefs,
   refFromType, enumSimple, enumBullet, prodUCTbl, bulletFlat, bulletNested)

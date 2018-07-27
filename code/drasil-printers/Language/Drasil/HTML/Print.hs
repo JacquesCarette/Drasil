@@ -26,7 +26,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),
   Dot, Cross, Neg, Exp, Not, Dim, Cot, Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, 
   Real, Rational, Natural, Integer, IsIn), 
   Expr(Sub, Sup, Over, Sqrt, Spc, Font, MO, Fenced, Spec, Ident, Row, Mtx, Case, Div, Str, 
-  Int, Dbl), Spec(Quote, EmptyS, Ref, HARDNL, Sp, Sy, S, E, (:+:)),
+  Int, Dbl, Integ), Spec(Quote, EmptyS, Ref, HARDNL, Sp, Sy, S, E, (:+:)),
   Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label)
 import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author, 
   Editor, Pages, Type, Month, Organization, Institution, Chapter, HowPublished, School, Note,
@@ -154,9 +154,9 @@ uSymb (L.US ls) = formatu t b
 -----------------------------------------------------------------
 -- | Renders expressions in the HTML (called by multiple functions)
 p_expr :: Expr -> String
-p_expr (Dbl d)        = case getBaseTen d 0 of
-  (a, b) -> (show a) ++ "&sdot;" ++ "10" ++ sup (show b)--showFFloat Nothing d ""
+p_expr (Dbl d)        = showFFloat Nothing d ""
 p_expr (Int i)        = show i
+p_expr (Integ i)    = show i
 p_expr (Str s)        = s
 p_expr (Div a b)      = fraction (p_expr a) (p_expr b)
 p_expr (Case ps)      = cases ps p_expr

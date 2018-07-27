@@ -73,19 +73,6 @@ sufx _ = "th"
 sufxer :: Int -> String
 sufxer = (\x -> x ++ ".") . sufx . mod 10
 
-
-
--- Transfer Int to scientific notation
-{--decompose :: Double -> (Double,Int)
-decompose val = if mant2 > 0 
-                     then (mant10,ex10)
-                     else (-mant10,ex10)
-  where
-        (mant10,ex10) = getBaseTen val
-        res = logBase 10 (fromIntegral (abs mant2)::Double) + logBase 10 (2 ** (fromIntegral ex2::Double)) 
-        ex10 = floor res
-        mant10 = 10**(res - (fromIntegral ex10::Double))--}
-
 getBaseTen :: Double -> Int -> (Double, Int)
 getBaseTen b c 
    | b >= 1 && b < 10  = (b, c)

@@ -11,6 +11,7 @@ import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as T
 
 import Language.Drasil.NounPhrase (titleize, phrase)
+import Language.Drasil.Printing.Helpers (getBaseTen)
 {-
 import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..),
     BoolOper(..), RTopology(..),
@@ -82,7 +83,8 @@ parens = P.Fenced P.Paren P.Paren
 
 -- | expr translation function from Drasil to layout AST
 expr :: HasSymbolTable s => Expr -> s -> P.Expr
-expr (Dbl d)            _ = P.Dbl   d
+expr (Dbl d)           sm = case getBaseTen d 0 of
+  (a, b) -> P.Row $ [(P.Dbl a), (P.MO P.Dot), (P.Int 10), (P.Sup $ P.Integ b)]   
 expr (Int i)            _ = P.Int   i
 expr (Str s)            _ = P.Str   s
 expr (AssocB And l)    sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (precB And)) l

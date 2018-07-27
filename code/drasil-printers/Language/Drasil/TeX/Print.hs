@@ -23,7 +23,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat),
   Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, Real, Natural, 
   Rational, Integer, IsIn), Spacing(Thin), Fonts(Emph, Bold), 
   Expr(Spc, Sqrt, Font, Fenced, MO, Over, Sup, Sub, Ident, Spec, Row, 
-  Mtx, Div, Case, Str, Int, Dbl), OverSymb(Hat), Label)
+  Mtx, Div, Case, Str, Int, Dbl, Integ), OverSymb(Hat), Label)
 import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished, 
   Year, Volume, Type, Title, Series, School, Publisher, Organization, Pages,
   Month, Number, Note, Journal, Editor, Chapter, Institution, Edition, BookTitle,
@@ -118,8 +118,9 @@ data OpenClose = Open | Close
 -----------------------------------------------------------------
 -- (Since this is all implicitly in Math, leave it as String for now)
 p_expr :: Expr -> String
-p_expr (Dbl d)    = showFFloat Nothing d ""
+p_expr (Dbl d)    = show d
 p_expr (Int i)    = show i
+p_expr (Integ i)    = show i
 p_expr (Str s)    = s  -- FIXME this is probably the wrong way to print strings
 p_expr (Div n d) = "\\frac{" ++ p_expr n ++ "}{" ++ p_expr d ++"}"
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"

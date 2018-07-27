@@ -214,6 +214,7 @@ module Language.Drasil (
   , StyleGuide(..), verboseDDDescription, numberedTMEquations, numberedDDEquations
   , bibStyleH, numberedSections, hyperSettings, fontSize, bibFname, bibStyleT, colBwidth
   , colAwidth
+  , PrintingInformation(..), getSetting
 ) where
 
 
@@ -331,5 +332,5 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
 import Language.Drasil.RefTypes(RefAdd, RefType(Cite))
-
+import Language.Drasil.PrintingInformation
 --Should be in lang-dev package?

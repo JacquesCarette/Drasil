@@ -3,7 +3,7 @@ module Language.Drasil.Label.Core where
 
 import Control.Lens (makeLenses)
 import Language.Drasil.UID (UID)
-import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortnameLens))
+import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname))
 
 -- import reference address from Language.Drasil.References?
 data LblType = RefAdd String | MetaLink String | URI String
@@ -16,7 +16,7 @@ data Label = Lbl
   }
 makeLenses ''Label
 
-instance HasShortName Label where shortnameLens = sn
+instance HasShortName Label where shortname (Lbl _ _ x) = x
 
 getAdd :: LblType -> String
 getAdd (RefAdd s)   = s

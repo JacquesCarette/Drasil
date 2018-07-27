@@ -10,7 +10,7 @@ class HasShortName  s where
                             -- A short name used for referencing within a document that can 
                             -- include symbols and whatnot if required.
                             -- Visible in the typeset documents (pdf)
-  shortnameLens :: Lens' s ShortName --FIXME: shortname should become a lens!
+  --FIXME: shortname should become a lens!
 
 shortname' :: String -> ShortName
 shortname' = ShortNm

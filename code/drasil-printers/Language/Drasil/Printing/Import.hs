@@ -251,35 +251,34 @@ lay sm (UlC x) = layUnlabelled sm (x ^. accessContents)
 
 layLabelled :: HasSymbolTable ctx => ctx -> LabelledContent -> T.LayoutObj
 layLabelled sm x@(LblC _ (Table hdr lls t b _)) = T.Table ["table"]
-  ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S $ getStr (makeRef x)) 
+  ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S $ (getAdd (x ^. getRefAdd))) 
   b (spec sm t)
 layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"] 
-  [T.EqnBlock (P.E (expr c sm))] (P.S $ getStr (makeRef x))
+  [T.EqnBlock (P.E (expr c sm))] (P.S $ (getAdd (x ^. getRefAdd)))
 layLabelled sm x@(LblC _ (Figure c f wp _))     = T.Figure 
-  (P.S $ getStr (makeRef x)) (spec sm c) f wp
+  (P.S $ (getAdd (x ^. getRefAdd))) (spec sm c) f wp
 layLabelled sm x@(LblC _ (Requirement r))       = T.ALUR T.Requirement
-  (spec sm $ requires r) (P.S $ getStr (makeRef x)) 
+  (spec sm $ requires r) (P.S $ (getAdd (x ^. getRefAdd))) 
   (spec sm $ getShortName r)
 layLabelled sm x@(LblC _ (Assumption a))        = T.ALUR T.Assumption
-  (spec sm (assuming a)) (P.S $ getStr (makeRef x))
+  (spec sm (assuming a)) (P.S $ (getAdd (x ^. getRefAdd)))
   (spec sm $ getShortName a)
 layLabelled sm x@(LblC _ (Change lc))           = T.ALUR
   (if (chngType lc) == Likely then T.LikelyChange else T.UnlikelyChange)
-  (spec sm (chng lc)) (P.S $ getStr (makeRef x)) 
+  (spec sm (chng lc)) (P.S $ (getAdd (x ^. getRefAdd))) 
   (spec sm $ getShortName lc)
 layLabelled sm x@(LblC _ (Graph ps w h t _))    = T.Graph 
   (map (\(y,z) -> (spec sm y, spec sm z)) ps) w h (spec sm t)
-  (P.S $ getStr (makeRef x))
+  (P.S $ (getAdd (x ^. getRefAdd)))
 layLabelled sm x@(LblC _ (Defnt dtyp pairs rn)) = T.Definition 
   dtyp (layPairs pairs) (P.S rn)
   where layPairs = map (\(x,y) -> (x, map temp y))
         temp  y   = lay sm y
-layLabelled _ _ = error "other fields cannot be referenced"
-
-getStr :: Sentence -> String
-getStr (S s) = s
-getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
-getStr _ = error "Term is not a string"
+layLabelled sm (LblC _ (Paragraph c))           = T.Paragraph (spec sm c)
+layLabelled sm (LblC _ (Definition c))          = T.Definition c (makePairs sm c)
+  (P.S "nolabel6")
+layLabelled sm (LblC _ (Enumeration cs))        = T.List $ makeL sm cs
+layLabelled sm (LblC _ (Bib bib))               = T.Bib $ map (layCite sm) bib
 
 -- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.

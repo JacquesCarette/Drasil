@@ -10,7 +10,7 @@ import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname, shortnameLens), ShortName,
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName,
   shortname')
 import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd),
   MayHaveLabel(getMaybeLabel), HasLabel(getLabel))
@@ -29,7 +29,7 @@ instance HasRefAddress LabelledContent where getRefAdd = lbl . getRefAdd
 instance HasLabel      LabelledContent where getLabel = lbl
 instance MayHaveLabel  LabelledContent where getMaybeLabel x = Just (x ^. getLabel)
 instance HasContents   LabelledContent where accessContents = ctype
-instance HasShortName  LabelledContent where shortnameLens = lbl . shortnameLens
+instance HasShortName  LabelledContent where shortname (LblC x _) = shortname x
 
 instance MayHaveLabel UnlabelledContent where getMaybeLabel _ = Nothing
 instance HasContents  UnlabelledContent where accessContents = cntnts

@@ -48,6 +48,7 @@ module Language.Drasil (
   , HasReasVal(reasVal)
   , ExprRelat(relat)
   , HasDerivation(derivations)
+  , HasRefAddress(getRefAdd)
   -- Chunk.VarChunk
   , VarChunk, codeVC
   , vc, implVar
@@ -222,6 +223,7 @@ module Language.Drasil (
   , colAwidth
   --Label
   , Label, mkLabelRA, mkLabelRA'', mkEmptyLabel
+  , getAdd
 ) where
 
 
@@ -260,7 +262,8 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),HasSpace(typ),  HasUnitSymbol(usymb),
   IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes),
   Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations),
-  HasReference(getReferences), HasLabel(getLabel), MayHaveLabel(getMaybeLabel))
+  HasReference(getReferences), HasLabel(getLabel), MayHaveLabel(getMaybeLabel),
+  HasRefAddress(getRefAdd))
 import Language.Drasil.Document.GetChunk(vars, combine', vars', combine, ccss)
 import Language.Drasil.Config (StyleGuide(..), verboseDDDescription, numberedTMEquations,
   numberedDDEquations, bibStyleH, numberedSections, hyperSettings, bibFname, fontSize,
@@ -344,4 +347,5 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   rendPersLFM', rendPersLFM'')
 import Language.Drasil.RefTypes(RefAdd, RefType(Cite))
 import Language.Drasil.Label (Label, mkLabelRA, mkLabelRA'', mkEmptyLabel)
+import Language.Drasil.Label.Core (getAdd)
 --Should be in lang-dev package?

@@ -117,6 +117,9 @@ swhsSymMap :: ChunkDB
 swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) swhsSymbols
   this_si
 
+printSetting :: PrintingInformation
+printSetting = PI swhsSymMap "scientific"
+
   --Note: The second swhsSymbols here is
     -- Redundant b/c the unitals are not really concepts (yet). There
     -- Will still likely be a better way to do this.

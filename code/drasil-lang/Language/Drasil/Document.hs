@@ -53,23 +53,6 @@ getDefName Instance   = "IM:"
 getDefName General    = "GD:"
 
 
-{---FIXME: needs to be removed!
-instance HasShortName  LabelledContent where
-  shortname (LblC r (Table _ _ _ _ _))     = shortname' $ "Table:" ++ r
-  shortname (LblC r (Figure _ _ _ _))      = shortname' $ "Figure:" ++ r
-  shortname (LblC r (Graph _ _ _ _ _))     = shortname' $ "Figure:" ++ r
-  shortname (LblC _ (EqnBlock _))          = shortname' $ "Equation:"
-  shortname (LblC _ (Definition d))        = shortname' $ getDefName d
-  shortname (LblC r (Defnt _ _ _))         = shortname' r
-  shortname (LblC _ (Requirement rc))      = shortname rc
-  shortname (LblC _ (Assumption ca))       = shortname ca
-  shortname (LblC _ (Change lcc))          = shortname lcc
-  shortname (LblC _ (Enumeration _))       = error "Can't reference lists"
-  shortname (LblC _ (Paragraph _))         = error "Can't reference paragraphs"
-  shortname (LblC _ (Bib _))               = error $
-    "Bibliography list of references cannot be referenced. " ++
-    "You must reference the Section or an individual citation."-}
-
 instance HasContents Contents where
   accessContents f (UlC c) = fmap (UlC . (\x -> set cntnts x c)) (f $ c ^. cntnts)
   accessContents f (LlC c) = fmap (LlC . (\x -> set ctype x c)) (f $ c ^. ctype)

@@ -24,6 +24,7 @@ instance Show RefType where
   show Tab    = "Table"
   show Fig    = "Figure"
   show Sect   = "Section"
+  show Lbl    = "Section" --FIXME: hack until section has labels
   show Mod    = "Module"
   show Def    = "Definition"
   show Req    = "Requirement"
@@ -34,4 +35,3 @@ instance Show RefType where
   show Goal   = "Goal Statement"
   show PSD    = "Physical System Description"
   show EqnB   = "Equation"
-  show Lbl    = "Label"

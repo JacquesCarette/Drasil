@@ -29,7 +29,7 @@ reqIntroS = foldlSent
         (phrase software), S "is expected to exhibit"]
 
 reqIntro :: Contents
-reqIntro = Paragraph reqIntroS
+reqIntro = mkParagraph reqIntroS
 
 -- Requirements Domains
 reqDom :: ConceptChunk
@@ -46,7 +46,7 @@ nonFuncReqF noPriority priority_ reason_ explanation_ = SRS.nonfuncReq
 -- generalized non-functional requirements paragraph: list of non-priority requirements, list of priority requirements,
 -- reason for initial priority choice, explanation for how priority choice can be achieved.
 nonFuncReq :: [Sentence] -> [Sentence] -> Sentence -> Sentence -> Contents
-nonFuncReq noPriority priority_ reason_ explanation_ = Paragraph $ reason_ `sC` (listO explanation_ noPriority priority_)
+nonFuncReq noPriority priority_ reason_ explanation_ = mkParagraph $ reason_ `sC` (listO explanation_ noPriority priority_)
 
 listO :: Sentence -> [Sentence] -> [Sentence] -> Sentence
 listO explanation_ [] [] = S "so there are no" +:+ (plural priority) +:+ explanation_

@@ -59,7 +59,7 @@ introductionSubsections = foldlList Comma List (map (\(x,y) -> x `ofThe` y)
 -- subSections        - List of subsections for this section
 introductionSection :: Sentence -> Sentence -> [Section] -> Section
 introductionSection problemIntroduction programDefinition subSections = SRS.intro 
-  [Paragraph problemIntroduction, (overviewParagraph programDefinition)] subSections
+  [mkParagraph problemIntroduction, (overviewParagraph programDefinition)] subSections
 
 
 -- | Constructor for the overview paragraph for the introduction
@@ -75,7 +75,7 @@ overviewParagraph programDefinition = foldlSP [S "The following", phrase section
 -- example
 purposeOfDoc :: ReferenceDB -> Sentence -> Section
 purposeOfDoc refdb purposeOfProgramParagraph = SRS.prpsOfDoc 
-  [Paragraph purposeOfProgramParagraph, developmentProcessParagraph refdb] []
+  [mkParagraph purposeOfProgramParagraph, developmentProcessParagraph refdb] []
 
 
 -- | constructor for scope of requirements subsection
@@ -119,19 +119,19 @@ intReaderIntro topic1 topic2 progName stdrd sectionRef =
   S "can have a lower level of expertise, as explained in", (makeRef sectionRef)]]
 
 -- | Doc.organization of the document section constructor.  => Sentence -> c -> Section -> Sentence -> Section
-orgSec :: NamedIdea c => Sentence -> c -> Section -> Sentence -> Section
+orgSec :: (NamedIdea c) => Sentence -> c -> Label -> Sentence -> Section
 orgSec i b s t = SRS.orgOfDoc (orgIntro i b s t) []
 
 -- Intro -> Bottom (for bottom up approach) -> Section that contains bottom ->
 --    trailing sentences -> [Contents]
-orgIntro :: (NamedIdea c) => Sentence -> c -> Section -> Sentence -> [Contents]
+orgIntro :: (NamedIdea c) => Sentence -> c -> Label -> Sentence -> [Contents]
 orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
           intro, S "The presentation follows the standard pattern of presenting",
           (foldlsC $ map (plural) [Doc.goal, theory, definition]) `sC` S "and assumptions.",
           S "For readers that would like a more bottom up approach" `sC`
           S "they can start reading the", plural bottom, 
-          S "in", makeRef bottomSec +:+
+          S "in", midRef bottomSec +:+
           S "and trace back to find any additional information they require"],
-          Paragraph $ lastS trailingSentence]
+          mkParagraph $ lastS trailingSentence]
           where lastS EmptyS = refineChain [goalStmt, thModel, inModel]
                 lastS t = refineChain [goalStmt, thModel, inModel] +:+. t

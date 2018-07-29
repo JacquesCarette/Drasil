@@ -12,11 +12,11 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
   assembler, dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, outDataConstTbl,
   reqF, sSubSec, siCon, siDDef, siIMod, siSTitl, siSent, siTMod, siUQI, siUQO,
-  specSysDescr, traceMGF, tsymb, valsOfAuxConstantsF)
+  traceMGF, tsymb, valsOfAuxConstantsF)
 
 import Data.Drasil.Concepts.Documentation (assumption, body,
   concept, condition, consumer, dataConst, dataDefn, datumConstraint,
-  document, endUser, environment, game, genDefn, generalSystemDescription,
+  document, endUser, environment, game, genDefn,
   goalStmt, guide, inModel, information, input_, interface, item,
   model, nonfunctionalRequirement, object, organization, physical,
   physicalConstraint, physicalProperty, physicalSim, physics, priority,
@@ -80,8 +80,8 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
   [IPurpose (para1_purpose_of_document_intro),
    IScope scope_of_requirements_intro_p1 scope_of_requirements_intro_p2, 
    IChar (S "rigid body dynamics") (phrase highSchoolCalculus) (EmptyS), 
-   IOrgSec organization_of_documents_intro inModel solution_characteristics_specification EmptyS]) :
-   GSDSec (GSDProg2 [SysCntxt [sysCtxIntro, sysCtxFig1, sysCtxDesc, sysCtxList], 
+   IOrgSec organization_of_documents_intro inModel SRS.inModelLabel EmptyS]) :
+   GSDSec (GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList], 
     UsrChars [user_characteristics_intro], SystCons [] [] ]) :
    SSDSec 
     (SSDProg [SSDSubVerb problem_description
@@ -244,20 +244,9 @@ organization_of_documents_intro = foldlSent
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
 --------------------------------------------
 
-general_system_description :: Section
-general_system_description = assembler chipmunk everything generalSystemDescriptionSect
-  [sysContext, userCharacteristicSect, systemConstraintSect]
-
-generalSystemDescriptionSect :: SubSec
-generalSystemDescriptionSect = sSubSec generalSystemDescription []
-
 --------------------------
 -- 3.1 : System Context --
 --------------------------
-
-sysContext :: SubSec
-sysContext = sSubSec sysCont [siSTitl, (siCon [sysCtxIntro, sysCtxFig1,
-  sysCtxDesc, sysCtxList])]
 
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
@@ -268,8 +257,8 @@ sysCtxIntro = foldlSP
    S "Arrows are used to show the data flow between the" +:+ phrase system,
    S "and its" +:+ phrase environment]
 
-sysCtxFig1 :: Contents
-sysCtxFig1 = fig (titleize sysCont) (resourcePath ++ "sysctx.png") "sysCtxDiag"
+sysCtxFig1 :: LabelledContent
+sysCtxFig1 = llcc (mkLabelRA'' "sysCtxDiag") $ fig (titleize sysCont) (resourcePath ++ "sysctx.png") "sysCtxDiag"
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol
@@ -305,7 +294,7 @@ sysCtxResp = [titleize user +:+ S "Responsibilities",
   short chipmunk +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
-sysCtxList = Enumeration $ bulletNested sysCtxResp $
+sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
   map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
 
 --------------------------------
@@ -334,9 +323,6 @@ systemConstraintSect = sSubSec systemConstraint []
 
 -- NOTE: Section 4 remains incomplete. General definitions and instance models
 -- have not been encoded.
-
-specific_system_description :: Section
-specific_system_description = specSysDescr [problem_description, solution_characteristics_specification]
 
 -------------------------------
 -- 4.1 : Problem Description --
@@ -466,10 +452,7 @@ dataConSec = (sSubSec dataConst [(siUQI cpInputConstraints), (siUQO cpOutputCons
 -------------------------
 
 assumptions_list :: [Contents]
-assumptions_list = assumpList newAssumptions
-
-assumpList :: [AssumpChunk] -> [Contents]
-assumpList = map Assumption
+assumptions_list = map (\x -> LlC $ llcc mkEmptyLabel $ Assumption x) newAssumptions
 
 assumptions_assum1, assumptions_assum2, assumptions_assum3, assumptions_assum4, assumptions_assum5, 
   assumptions_assum6, assumptions_assum7 :: [Sentence]
@@ -662,7 +645,7 @@ off_the_shelf_solutions_intro, off_the_shelf_solutions_2dlist, off_the_shelf_sol
 off_the_shelf_solutions_intro = off_the_shelf_solutions_intro_param problem_description physLib
 
 off_the_shelf_solutions_intro_param :: NamedIdea n => Section -> n -> Contents
-off_the_shelf_solutions_intro_param problmDescSec lib = Paragraph $ foldlSentCol 
+off_the_shelf_solutions_intro_param problmDescSec lib = mkParagraph $ foldlSentCol 
   [S "As mentioned in", (makeRef problmDescSec) `sC`
   S "there already exist free", (phrase openSource), (phrase game) +:+.
   (plural lib), S "Similar", (getAcc twoD), (plural lib), S "are"]
@@ -670,7 +653,7 @@ off_the_shelf_solutions_intro_param problmDescSec lib = Paragraph $ foldlSentCol
 off_the_shelf_solutions_2dlist = enumBullet [(S "Box2D: http://box2d.org/"),
   (S "Nape Physics Engine: http://napephys.com/")]
 
-off_the_shelf_solutions_mid = Paragraph $ foldl (+:+) (EmptyS) [S "Free", (phrase openSource), 
+off_the_shelf_solutions_mid = mkParagraph $ foldl (+:+) (EmptyS) [S "Free", (phrase openSource), 
         S "3D", (phrase game), (plural physLib), S "include:"]
 
 off_the_shelf_solutions_3dlist = enumBullet [
@@ -683,8 +666,8 @@ off_the_shelf_solutions_3dlist = enumBullet [
 -----------------------------------------------------
 
 traceability_matrices_and_graph :: Section
-traceability_matrices_and_graph = traceMGF [traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel] traceability_matrices_and_graph_traces 
-  [traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel] []
+traceability_matrices_and_graph = traceMGF [traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel] traceability_matrices_and_graph_traces
+  (map LlC [traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) []
 
 traceability_matrices_and_graph_traces, traceability_matrices_and_graph_trace1, traceability_matrices_and_graph_trace2, traceability_matrices_and_graph_trace3 :: [Sentence]
 traceability_matrices_and_graph_traces = map (foldlList Comma List) [traceability_matrices_and_graph_trace1, traceability_matrices_and_graph_trace2, traceability_matrices_and_graph_trace3]
@@ -772,8 +755,9 @@ traceMatTabReqGoalOtherCol = [traceMatTabReqGoalOtherGS1, traceMatTabReqGoalOthe
   traceMatTabReqGoalOtherReq5, traceMatTabReqGoalOtherReq6, traceMatTabReqGoalOtherReq7,
   traceMatTabReqGoalOtherReq8]
 
-traceMatTabReqGoalOther :: Contents
-traceMatTabReqGoalOther = Table (EmptyS:(traceMatTabReqGoalOtherRowHead))
+traceMatTabReqGoalOther :: LabelledContent
+traceMatTabReqGoalOther = llcc (mkLabelRA'' "TraceyReqGoalsOther") $ Table
+  (EmptyS:(traceMatTabReqGoalOtherRowHead))
   (makeTMatrix traceMatTabReqGoalOtherColHead traceMatTabReqGoalOtherCol
   traceMatTabReqGoalOtherRow)
   (showingCxnBw (traceyMatrix) (titleize' requirement +:+ sParen (makeRef requirements)
@@ -844,12 +828,12 @@ traceMatTabAssumpRowHead = zipWith itemRefToSent traceMatTabAssumpRow
 traceMatTabAssumpColHead = zipWith itemRefToSent traceMatTabAssumpCol
   traceMatTabAssumpColRef
 
-traceMatTabAssump :: Contents
-traceMatTabAssump = Table (EmptyS:traceMatTabAssumpRowHead)
+traceMatTabAssump :: LabelledContent
+traceMatTabAssump = llcc (mkLabelRA'' "TraceyAssumpsOther") $ Table
+  (EmptyS:traceMatTabAssumpRowHead)
   (makeTMatrix traceMatTabAssumpColHead traceMatTabAssumpCol' traceMatTabAssumpRow)
   (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef problem_description) 
   `sAnd` S "Other" +:+ titleize' item)) True "TraceyAssumpsOther"
-
 
 traceMatTabDefnModelCol :: [[String]]
 traceMatTabDefnModelCol = [traceMatTabDefnModelTM1, traceMatTabDefnModelTM2,
@@ -906,8 +890,9 @@ traceMatTabDefnModelColHead = zipWith itemRefToSent traceMatTabDefnModelRow
   traceMatTabDefnModelRowRef
 traceMatTabDefnModelRowHead = traceMatTabDefnModelColHead
 
-traceMatTabDefnModel :: Contents
-traceMatTabDefnModel = Table (EmptyS:traceMatTabDefnModelRowHead)
+traceMatTabDefnModel :: LabelledContent
+traceMatTabDefnModel = llcc (mkLabelRA'' "TraceyItemsSecs") $ Table 
+  (EmptyS:traceMatTabDefnModelRowHead)
   (makeTMatrix traceMatTabDefnModelColHead traceMatTabDefnModelCol
   traceMatTabDefnModelRow) (showingCxnBw (traceyMatrix) (titleize' item `sAnd`
   S "Other" +:+ titleize' section_)) True "TraceyItemsSecs"

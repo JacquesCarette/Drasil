@@ -70,7 +70,7 @@ import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr, probOfBreak,
 
 import Drasil.GlassBR.Unitals (stressDistFac, aspect_ratio, dimlessLoad, 
   lateralLoad, char_weight, sD, demand, demandq, lRe, wtntWithEqn, 
-  sdWithEqn, prob_br, notSafe, safeMessage, is_safe1, is_safe2, plate_width, 
+  sdWithEqn, prob_br, notSafe, safeMessage, is_safePb, is_safeLR, plate_width, 
   plate_len, blast, glassTy, gbInputDataConstraints, explosion, pb_tol, 
   blast, bomb, blastTy, glassGeo, glass_type, nom_thick, sdx, sdy, sdz, tNT, 
   gBRSpecParamVals, loadTypes, load, glassTypes, probBreak, termsWithAccDefn, 
@@ -534,7 +534,7 @@ req4Desc = foldlSent [titleize output_, S "the", plural inQty,
   S "from", acroR 1 `andThe` S "known", plural quantity,
   S "from", acroR 2]
 
-req5Desc cmd = foldlSent_ [S "If", (ch is_safe1), S "∧", (ch is_safe2),
+req5Desc cmd = foldlSent_ [S "If", (ch is_safePb), S "∧", (ch is_safeLR),
   sParen (S "from" +:+ (makeRef (reldefn pbSafetyReq))
   `sAnd` (makeRef (reldefn lrSafetyReq))), S "are true" `sC`
   phrase cmd, S "the", phrase message, Quote (safeMessage ^. defn),

@@ -233,10 +233,10 @@ m
 </tr>
 <tr>
 <td>
-<em>is_safe1</em>
+<em>is_safeLR</em>
 </td>
 <td>
-Variable that is assigned true when calculated probability is less than tolerable probability
+Variable that is assigned true when load resistance (capacity) is greater than load (demand)
 </td>
 <td>
 --
@@ -244,10 +244,10 @@ Variable that is assigned true when calculated probability is less than tolerabl
 </tr>
 <tr>
 <td>
-<em>is_safe2</em>
+<em>is_safePb</em>
 </td>
 <td>
-Variable that is assigned true when load resistance (capacity) is greater than load (demand)
+Variable that is assigned true when calculated probability is less than tolerable probability
 </td>
 <td>
 --
@@ -1149,7 +1149,7 @@ Equation
 <td>
 <div id="Eqn:empty">
 <div class="equation">
-<em>is_safe1 = P<sub>b</sub>&thinsp;&lt;&thinsp;P<sub>btol</sub></em>
+<em>is_safePb = P<sub>b</sub>&thinsp;&lt;&thinsp;P<sub>btol</sub></em>
 </div>
 </div>
 </td>
@@ -1161,7 +1161,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>is_safe1</em> is the variable that is assigned true when calculated probability is less than tolerable probability (Unitless)
+<em>is_safePb</em> is the variable that is assigned true when calculated probability is less than tolerable probability (Unitless)
 </li>
 <li>
 <em>P<sub>b</sub></em> is the probability of breakage (Unitless)
@@ -1178,7 +1178,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-If <em>is_safe1</em>, the glass is considered safe. <em>is_safe1</em> and <em>is_safe2</em> (from <a href=#T:safetyReqLR>empty</a>) are either both True or both False. <em>P<sub>b</sub></em> is the probability of breakage, as calculated in <a href=#T:probOfBr>empty</a>. <em>P<sub>btol</sub></em> is the tolerable probability of breakage entered by the user.
+If <em>is_safePb</em>, the glass is considered safe. <em>is_safePb</em> and <em>is_safeLR</em> (from <a href=#T:safetyReqLR>empty</a>) are either both True or both False. <em>P<sub>b</sub></em> is the probability of breakage, as calculated in <a href=#T:probOfBr>empty</a>. <em>P<sub>btol</sub></em> is the tolerable probability of breakage entered by the user.
 </p>
 </td>
 </tr>
@@ -1223,7 +1223,7 @@ Equation
 <td>
 <div id="Eqn:empty">
 <div class="equation">
-<em>is_safe2 = LR&thinsp;&gt;&thinsp;q</em>
+<em>is_safeLR = LR&thinsp;&gt;&thinsp;q</em>
 </div>
 </div>
 </td>
@@ -1235,7 +1235,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>is_safe2</em> is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)
+<em>is_safeLR</em> is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)
 </li>
 <li>
 <em>LR</em> is the load resistance (Unitless)
@@ -1252,7 +1252,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-If <em>is_safe2</em>, the glass is considered safe. <em>is_safe1</em> (from <a href=#T:safetyReqPb>empty</a>) and <em>is_safe2</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#T:calOfCap>empty</a>. <em>q</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#T:calOfDe>empty</a>.
+If <em>is_safeLR</em>, the glass is considered safe. <em>is_safePb</em> (from <a href=#T:safetyReqPb>empty</a>) and <em>is_safeLR</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#T:calOfCap>empty</a>. <em>q</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#T:calOfDe>empty</a>.
 </p>
 </td>
 </tr>
@@ -3169,7 +3169,7 @@ Output-Values-and-Known-Quantities: Output the input quantities from R1 and the 
 <ul class="hide-list-style">
 <li>
 <div id="Check-Glass-Safety">
-Check-Glass-Safety: If <em>is_safe1</em> ∧ <em>is_safe2</em> (from <a href=#T:safetyReqPb>empty</a> and <a href=#T:safetyReqLR>empty</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
+Check-Glass-Safety: If <em>is_safePb</em> ∧ <em>is_safeLR</em> (from <a href=#T:safetyReqPb>empty</a> and <a href=#T:safetyReqLR>empty</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
 </div>
 </li>
 </ul>

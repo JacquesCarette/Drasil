@@ -1,4 +1,4 @@
-module Drasil.SWHS.GenDefs (swhsGenDefs, swhsGDs, nwtnCooling, rocTempSimp, 
+module Drasil.SWHS.GenDefs (swhsGDs, nwtnCooling, rocTempSimp, 
   roc_temp_simp_deriv, generalDefinitions, nwtnCooling_desc, rocTempSimp_desc) where
 
 import Prelude hiding (sin, cos, tan)
@@ -29,9 +29,6 @@ import Drasil.SWHS.Assumptions
 ---------------------------
 --  General Definitions  --
 ---------------------------
-
-swhsGenDefs :: [RelationConcept]
-swhsGenDefs = [nwtnCooling, rocTempSimp]
 
 --FIXME: swhsGDs, nwtnCoolingGD, and rocTempSimpGD were added--
 --since referencing implementation for RelationConcept hasn't--

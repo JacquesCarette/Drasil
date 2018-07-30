@@ -49,7 +49,7 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively",
-  sParen (makeRefSec assump10Label)]
+  sParen (makeRef assump10Label)]
 
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --
@@ -79,14 +79,14 @@ s4_2_3_desc1_nopcm roc tw en wt vo wvo ms wms hcs hw ht hfc cs tk ass11 ass12 vh
     (E $ sy hfc) `sC` S "over area" +:+. (E $ sy cs), S "No", phrase ht,
     S "occurs to", S "outside" `ofThe` phrase tk `sC` 
     S "since it has been assumed to be perfectly insulated", 
-    (sParen (makeRefSec ass11)), S ". Assuming no volumetric", 
+    (sParen (makeRef ass11)), S ". Assuming no volumetric", 
     S "heat generation per unit", phrase vo,
-    (sParen (makeRefSec ass12)) `sC` (E $ sy vhg $= 0), S ". Therefore, the equation for",
+    (sParen (makeRef ass12)) `sC` (E $ sy vhg $= 0), S ". Therefore, the equation for",
      acroGD 2, S "can be written as"]
 
 s4_2_3_desc2_nopcm :: QDefinition -> [Sentence]
 s4_2_3_desc2_nopcm dd1 =
-  [S "Using", makeRefSec dd1, S ", this can be written as"]
+  [S "Using", makeRef dd1, S ", this can be written as"]
 
 s4_2_3_desc3_nopcm :: Expr-> [Sentence]
 s4_2_3_desc3_nopcm eq11 = [S "Dividing (3) by", (E eq11) `sC` S "we obtain"]

@@ -59,4 +59,4 @@ gd' r Nothing derivs sn note = GD r Nothing derivs [] (mkLabelRA'' sn) (Just not
 
 gd'' :: RelationConcept -> String -> [Sentence] -> GenDefn
 gd'' r sn []   = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) [] (mkLabelRA'' sn) Nothing
-gd'' r sn note = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) [] (mkLableRA'' sn) (Just note)
+gd'' r sn note = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) [] (mkLabelRA'' sn) (Just note)

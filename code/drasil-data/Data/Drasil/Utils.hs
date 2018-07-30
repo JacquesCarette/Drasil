@@ -7,7 +7,6 @@ module Data.Drasil.Utils
   , zipSentList
   , makeTMatrix
   , itemRefToSent
-  , refFromType
   , noRefs
   , noRefsLT
   , makeListRef
@@ -123,7 +122,7 @@ itemRefToSent a b = S a +:+ sParen b
 -- l - list whos length is to be matched
 -- r - reference to be repeated
 makeListRef :: [a] -> Section -> [Sentence]
-makeListRef l r = take (length l) $ repeat $ makeRefSec r
+makeListRef l r = take (length l) $ repeat $ makeRef r
 
 -- | bulletFlat applies Bullet and Flat to a list.
 bulletFlat :: [Sentence] -> ListType

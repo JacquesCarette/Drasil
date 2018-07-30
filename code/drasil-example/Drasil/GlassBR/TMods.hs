@@ -1,4 +1,4 @@
-module Drasil.GlassBR.TMods (tModels, pbSafetyReq, lrSafetyReq, pbIsSafe, lrIsSafe) where
+module Drasil.GlassBR.TMods (gbrTMods, tModels, pbSafetyReq, lrSafetyReq, pbIsSafe, lrIsSafe) where
 
 import Drasil.GlassBR.Unitals (demand, demandq, is_safe1, is_safe2, lRe,
   pb_tol, prob_br)
@@ -33,6 +33,7 @@ pbIsSafe = tm' (cw pbSafetyReq)
 pbSafetyReq :: RelationConcept
 pbSafetyReq = makeRC "safetyReqPb" (nounPhraseSP "Safety Req-Pb")
   pbSafeDescr ((sy is_safe1) $= (sy prob_br) $< (sy pb_tol))
+  Nothing--label
 
 pbSafeDescr :: Sentence
 pbSafeDescr = tDescr (is_safe1) s ending
@@ -40,7 +41,7 @@ pbSafeDescr = tDescr (is_safe1) s ending
     s = (ch is_safe1) `sAnd` (ch is_safe2) +:+ sParen (S "from" +:+
       (ref lrSafetyReq))
     ending = ((ch prob_br) `isThe` (phrase prob_br)) `sC` S "as calculated in" +:+.
-      (makeRefSec probOfBreak) +:+ (ch pb_tol) `isThe` (phrase pb_tol) +:+ S "entered by the user"
+      (makeRef probOfBreak) +:+ (ch pb_tol) `isThe` (phrase pb_tol) +:+ S "entered by the user"
 
 lrIsSafe :: TheoryModel
 lrIsSafe = tm' (cw lrSafetyReq)
@@ -51,6 +52,7 @@ lrIsSafe = tm' (cw lrSafetyReq)
 lrSafetyReq :: RelationConcept
 lrSafetyReq = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
   lrSafeDescr ( (sy is_safe2) $= (sy lRe) $> (sy demand))
+  Nothing--label
 
 lrSafeDescr :: Sentence
 lrSafeDescr = tDescr (is_safe2) s ending
@@ -58,9 +60,9 @@ lrSafeDescr = tDescr (is_safe2) s ending
     s = ((ch is_safe1) +:+ sParen (S "from" +:+ (ref pbSafetyReq)) `sAnd` (ch is_safe2))
     ending = (short lResistance) `isThe` (phrase lResistance) +:+ 
       sParen (S "also called capacity") `sC` S "as defined in" +:+. 
-      (makeRefSec calofCapacity) +:+ (ch demand) +:+ sParen (S "also referred as the" +:+ 
+      (makeRef calofCapacity) +:+ (ch demand) +:+ sParen (S "also referred as the" +:+ 
       (titleize demandq)) `isThe` (demandq ^. defn) `sC` S "as defined in" +:+ 
-      makeRefSec calofDemand
+      makeRef calofDemand
 
 tDescr :: VarChunk -> Sentence -> Sentence -> Sentence
 tDescr main s ending = foldlSent [S "If", ch main `sC` S "the glass is" +:+.

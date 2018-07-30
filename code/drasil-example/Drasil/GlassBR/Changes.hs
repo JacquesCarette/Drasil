@@ -17,12 +17,12 @@ import Data.Drasil.SentenceStructures (foldlList, SepType(Comma), FoldType(List)
 
 {--LIKELY CHANGES--}
 
-likelyChanges_SRS :: [LabelledContent]
+likelyChanges_SRS :: [Contents]
 likelyChanges_SRS = [likelychg1, likelychg2, likelychg3,
   likelychg4, likelychg5]
 
 likelychg1, likelychg2, likelychg3, likelychg4,
-  likelychg5 :: LabelledContent
+  likelychg5 :: Contents
 
 likelychg1 = mkLklyChnk "likelychg1" (lc1Desc (blastRisk)) "Calculate-Internal-Blask-Risk"
 likelychg2 = mkLklyChnk "likelychg2" (lc2Desc) "Variable-Values-of-m,k,E"
@@ -58,10 +58,10 @@ lc5Desc = foldlSent [(refA gbRefDB newA7) `sDash` S "The", phrase software,
 
 {--UNLIKELY CHANGES--}
 
-unlikelyChanges_SRS :: [LabelledContent]
+unlikelyChanges_SRS :: [Contents]
 unlikelyChanges_SRS = [unlikelychg1, unlikelychg2]
 
-unlikelychg1, unlikelychg2 :: LabelledContent
+unlikelychg1, unlikelychg2 :: Contents
 
 unlikelychg1 = mkUnLklyChnk "unlikelychg1" uc1Desc "Predict-Withstanding-of-Certain-Degree"
 unlikelychg2 = mkUnLklyChnk "unlikelychg2" uc2Desc "Accommodate-Altered-Glass"

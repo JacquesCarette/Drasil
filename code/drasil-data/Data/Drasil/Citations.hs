@@ -10,10 +10,15 @@ import Data.Drasil.Software.Products (sciCompS)
 -- CITATIONS --
 ---------------
 
-koothoor2013, parnasClements1986, smithLai2005 :: Citation
+campidelli, koothoor2013, parnasClements1986, smithLai2005 :: Citation
 
 campidelli = cBooklet "campidelli"
-  (S "Glass-BR Software for the design and risk assessment of glass facades subjected to blast loading")  [author [mCampidelli]]
+  (S "Glass-BR Software for the design and risk assessment of glass facades subjected to blast loading")
+  [author [mCampidelli]]
+  campidelliLabel
+  where
+    campidelliLabel :: Label
+    campidelliLabel = mkLabelRA' "campidelliLabel" "campidelli"
 
 koothoor2013 = 
   cMThesis "koothoor2013" [nKoothoor] 

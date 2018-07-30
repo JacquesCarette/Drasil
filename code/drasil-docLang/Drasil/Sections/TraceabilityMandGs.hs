@@ -36,4 +36,4 @@ traceGIntro refs trailings = map ulcc [Paragraph $ foldlSent
         plural dependency, S "The", phrase component, S "at the tail of an arrow",
         S "is depended on by the", phrase component, S "at the head of that arrow. Therefore, if a",
         phrase component, S "is changed, the", plural component, S "that it points to should also",
-        S "be changed"] +:+ foldlSent (zipWith tableShows refs trailings)
+        S "be changed"] +:+ foldlSent (zipWith tableShows refs trailings)]

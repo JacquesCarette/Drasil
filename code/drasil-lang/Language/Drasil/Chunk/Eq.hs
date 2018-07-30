@@ -8,7 +8,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasReference(getReferences), ConceptDomain, HasLabel(getLabel),
   HasAdditionalNotes(getNotes))
 import Language.Drasil.Chunk.References (References)
-import Language.Drasil.Chunk.Quantity (Quantity(getUnit), HasSpace(typ), QuantityDict,
+import Language.Drasil.Chunk.Quantity (HasSpace(typ), QuantityDict,
   mkQuant, qw)
 import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
 import Language.Drasil.Symbol (Symbol)

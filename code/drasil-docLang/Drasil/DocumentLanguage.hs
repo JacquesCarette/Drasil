@@ -200,7 +200,7 @@ data SCSSub where
   IMs            :: Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
   Constraints    :: Sentence -> Sentence -> Sentence -> [LabelledContent] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
 --FIXME: Work in Progress ^
-  CorrSolnPpties :: [LabelledContent] -> SCSSub
+  CorrSolnPpties :: [Contents] -> SCSSub
 data DerivationDisplay = ShowDerivation
                        | HideDerivation
 {--}
@@ -513,7 +513,7 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
   where
     mkSubs :: ReqsSub -> Section
     mkSubs (ReqsSubVerb s) = s
-    mkSubs (FReqsSub reqs) = R.fReqF reqs
+    mkSubs (FReqsSub reqs) = R.fReqF (map LlC reqs)
     mkSubs (NonFReqsSub noPrrty prrty rsn explain) = R.nonFuncReqF noPrrty prrty rsn explain
 
 {--}
@@ -521,14 +521,14 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 -- | Helper for making the 'LikelyChanges' section
 mkLCsSec :: LCsSec -> Section
 mkLCsSec (LCsVerb s) = s
-mkLCsSec (LCsProg c) = SRS.likeChg c []
+mkLCsSec (LCsProg c) = SRS.likeChg (map LlC c) []
 
 {--}
 
 -- | Helper for making the 'UnikelyChanges' section
 mkUCsSec :: UCsSec -> Section
 mkUCsSec (UCsVerb s) = s
-mkUCsSec (UCsProg c) = SRS.unlikeChg c []
+mkUCsSec (UCsProg c) = SRS.unlikeChg (map LlC c) []
 
 {--}
 
@@ -563,7 +563,7 @@ mkBib bib = SRS.reference [LlC $ llcc mkEmptyLabel $ Bib bib] []
 -- | Helper for making the 'Appendix' section
 mkAppndxSec :: AppndxSec -> Section
 mkAppndxSec (AppndxVerb s)  = s
-mkAppndxSec (AppndxProg cs) = SRS.appendix cs []
+mkAppndxSec (AppndxProg cs) = SRS.appendix (map LlC cs) []
 
 {--}
 
@@ -575,10 +575,10 @@ siSys SI {_sys = sys} = nw sys
 --Creates Contents using an uid and description (passed in as a Sentence).
 
 mkRequirement :: String -> Sentence -> String -> LabelledContent
-mkRequirement i desc shrtn = llcc (mkLabelRA'' shrtn) $ Requirement $ frc i desc (shortname' shrtn)
+mkRequirement i desc shrtn = llcc (mkLabelRA'' shrtn) $ Requirement $ frc i desc (mkLabelRA'' shrtn) --FIXME: label made twice?
 
 mkLklyChnk :: String -> Sentence -> String -> Contents
-mkLklyChnk i desc shrtn = LlC $ llcc (mkLabelRA'' shrtn) $ Change $ lc i desc (shortname' shrtn)
+mkLklyChnk i desc shrtn = LlC $ llcc (mkLabelRA'' shrtn) $ Change $ lc i desc (mkLabelRA'' shrtn) --FIXME: label made twice?
 
 mkUnLklyChnk :: String -> Sentence -> String -> Contents
-mkUnLklyChnk i desc shrtn = LlC $ llcc (mkLabelRA'' shrtn) $ Change $ ulc i desc (shortname' shrtn)
+mkUnLklyChnk i desc shrtn = LlC $ llcc (mkLabelRA'' shrtn) $ Change $ ulc i desc (mkLabelRA'' shrtn) --FIXME: label made twice?

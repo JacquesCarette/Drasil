@@ -228,9 +228,8 @@ makeDocument sm (Document title author sections) =
 
 -- | Translates from LayoutObj to the Printing representation of LayoutObj
 layout :: HasSymbolTable ctx => ctx -> Int -> SecCons -> T.LayoutObj
-layout sm currDepth (Sub s)   = sec sm (currDepth+1) s
-layout sm _         (Con c)   = lay sm c
-layout sm _         (LCon lc) = lay' sm lc (accessContents lc)
+layout sm currDepth (Sub s) = sec sm (currDepth+1) s
+layout sm _         (Con c) = lay sm c
 
 -- | Helper function for creating sections as layout objects
 createLayout :: HasSymbolTable ctx => ctx -> [Section] -> [T.LayoutObj]
@@ -360,15 +359,15 @@ labref l = maybe Nothing (\z -> Just $ P.S z) l
 -- (Data defs, General defs, Theoretical models, etc.)
 makePairs :: HasSymbolTable ctx => ctx -> DType -> [(String,[T.LayoutObj])]
 makePairs m (Data c) = [
-  ("Label",       [T.Paragraph (spec m (titleize $ c ^. term)) P.EmptyS]),
-  ("Units",       [T.Paragraph (spec m (unitToSentence c)) P.EmptyS]),
-  ("Equation",    [T.HDiv ["equation"] [eqnStyle numberedDDEquations (buildEqn m c) P.EmptyS] P.EmptyS]),--FIXME: empty label?
-  ("Description", [T.Paragraph (buildDDDescription m c) P.EmptyS]) --FIXME: empty label?
+  ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
+  ("Units",       [T.Paragraph $ spec m (unitToSentence c)]),
+  ("Equation",    [T.HDiv ["equation"] [eqnStyle numberedDDEquations $ buildEqn m c] P.EmptyS]),
+  ("Description", [T.Paragraph $ buildDDDescription m c])
   ]
 makePairs m (Theory c) = [
-  ("Label",       [T.Paragraph (spec m (titleize $ c ^. term)) P.EmptyS]), --FIXME: empty label?
-  ("Equation",    [T.HDiv ["equation"] [eqnStyle numberedTMEquations (P.E (expr (c ^. relat) m)) P.EmptyS] P.EmptyS]),--FIXME: empty label?
-  ("Description", [T.Paragraph (spec m (c ^. defn)) P.EmptyS]) --FIXME: empty label?
+  ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
+  ("Equation",    [T.HDiv ["equation"] [eqnStyle numberedTMEquations $ P.E (expr (c ^. relat) m)] P.EmptyS]),
+  ("Description", [T.Paragraph (spec m (c ^. defn))])
   ]
 makePairs _ General  = error "Not yet implemented"
 makePairs _ Instance = error "Not yet implemented"
@@ -376,7 +375,7 @@ makePairs _ TM       = error "Not yet implemented"
 makePairs _ DD       = error "Not yet implemented"
 
 -- Toggle equation style
-eqnStyle :: Bool -> T.Contents -> P.Label -> T.LayoutObj
+eqnStyle :: Bool -> T.Contents -> T.LayoutObj
 eqnStyle b = if b then T.EqnBlock else T.Paragraph
 
 -- | Translates the defining equation from a QDefinition to

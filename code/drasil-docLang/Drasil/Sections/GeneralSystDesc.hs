@@ -33,5 +33,5 @@ systCon [] subSec  = SRS.sysCon [systCon_none] subSec
 systCon a subSec = SRS.sysCon a subSec
 
 --System Context
-sysContxt :: [LabelledContent] -> Section
+sysContxt :: [Contents] -> Section
 sysContxt cs = SRS.sysCont cs []

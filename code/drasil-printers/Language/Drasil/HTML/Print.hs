@@ -73,16 +73,16 @@ build fn (Document t a c) =
 printLO :: LayoutObj -> Doc
 printLO (HDiv ts layoutObs l)  = refwrap (p_spec l) $
                                  div_tag ts (vcat (map printLO layoutObs))
-printLO (Paragraph contents _)   = paragraph $ p_spec contents
-printLO (EqnBlock contents _)    = p_spec contents
+printLO (Paragraph contents)   = paragraph $ p_spec contents
+printLO (EqnBlock contents)    = p_spec contents
 printLO (Table ts rows r b t)  = makeTable ts rows (p_spec r) b (p_spec t)
 printLO (Definition dt ssPs l) = makeDefn dt ssPs (p_spec l)
 printLO (Header n contents _)  = h (n + 1) $ p_spec contents -- FIXME
-printLO (List t _)               = makeList t
+printLO (List t)               = makeList t
 printLO (Figure r c f wp)      = makeFigure (p_spec r) (p_spec c) (text f) wp
 printLO (ALUR _ x l i)         = wrap "ul" ["hide-list-style"] $
   makeRefList (p_spec x) (p_spec l) (p_spec i)
-printLO (Bib bib _)              = makeBib bib
+printLO (Bib bib)              = makeBib bib
 printLO (Graph _ _ _ _ _)      = empty -- FIXME
 
 

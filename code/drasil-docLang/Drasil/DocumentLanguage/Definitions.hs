@@ -7,13 +7,13 @@ module Drasil.DocumentLanguage.Definitions
   , tmodel
   , ddefn, ddefn'
   , gdefn, derivation
-  , derivation' 
+  , derivation'
   , instanceModel
   , InclUnits(..)
   )where
 
 import Language.Drasil
-import Data.Drasil.Utils (eqUnR, eqUnR')
+import Data.Drasil.Utils (eqUnR)
 
 import Control.Lens ((^.))
 
@@ -59,7 +59,6 @@ ddefn' fs m d = llcc mkEmptyLabel $ Defnt DD (foldr (mkDDField d m) [] fs) (refA
 -- program)
 gdefn :: HasSymbolTable ctx => Fields -> ctx -> GenDefn -> LabelledContent
 gdefn fs m g = llcc mkEmptyLabel $ Defnt General (foldr (mkGDField g m) [] fs) (refAdd g)
---FIXME: should this produce a LabelledContent? GenDefn has it's own label...
 
 -- | Create an instance model using a list of fields, database of symbols,
 -- and an 'InstanceModel' chunk (called automatically by 'SCSSub' program)
@@ -74,7 +73,7 @@ derivation g = map makeDerivationContents (getDerivation g)
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
 -- or IM definition automatically (called automatically by 'SCSSub' program)
 derivation' :: HasDerivation c => c -> [LabelledContent]
-derivation' g = map makeDerivationContents' (getDerivation g)
+derivation' g = map makeDerivationContents (getDerivation g)
 
 -- | Helper function for creating the layout objects
 -- (paragraphs and equation blocks) for a derivation.
@@ -82,20 +81,14 @@ makeDerivationContents :: Sentence -> LabelledContent
 makeDerivationContents (E e) = llcc mkEmptyLabel (EqnBlock e) --FIXME: Derivation needs labels for it's equations
 makeDerivationContents s     = llcc mkEmptyLabel $ Paragraph s  --FIXME: should this be LabelledContent?
 
--- | Helper function for creating the layout objects
--- (paragraphs and equation blocks) for a derivation.
-makeDerivationContents' :: Sentence -> LabelledContent
-makeDerivationContents' (E e) = llcc "" (mkLabelRA'' "") $ EqnBlock e "" --FIXME! non-referble sentences!
-makeDerivationContents' s     = mkParagraph s
-
--- | Synonym for easy reading. Model rows are just 'String',['LabelledContent'] pairs
-type ModRow = [(String, [LabelledContent])]
+-- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
+type ModRow = [(String, [Contents])]
 
 -- | Create the fields for a model from a relation concept (used by tmodel)
 mkTMField :: HasSymbolTable ctx => TheoryModel -> ctx -> Field -> ModRow -> ModRow
 mkTMField t _ l@Label fs  = (show l, (mkParagraph $ at_start t):[]) : fs
 mkTMField t _ l@DefiningEquation fs =
-  (show l, (map (\x -> LlC $ eqUnR x mkEmptyLabel) (map tConToExpr (t ^. invariants)))) : fs
+  (show l, (map (\x -> LlC $ eqUnR x mkEmptyLabel) (map tConToExpr (t ^. invariants)))) : fs --FIXME: should this have labels?
 mkTMField t m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] (map tConToExpr (t ^. invariants))) : fs
 mkTMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
@@ -141,8 +134,8 @@ mkDDField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a model / general definition
-buildDescription :: HasSymbolTable ctx => Verbosity -> InclUnits -> Expr -> ctx -> [LabelledContent]
-  -> [LabelledContent]
+buildDescription :: HasSymbolTable ctx => Verbosity -> InclUnits -> Expr -> ctx -> [Contents] ->
+  [Contents]
 buildDescription Succinct _ _ _ _ = []
 buildDescription Verbose u e m cs = (UlC $ ulcc $
   Enumeration (Definitions (descPairs u (vars e m)))) : cs
@@ -174,7 +167,7 @@ mkGDField g _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (g ^. relat) mkEmpty
 mkGDField g m l@(Description v u) fs = (show l,
   (buildDescription v u (g ^. relat) m) []) : fs
 mkGDField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
-mkGDField _ _ l@(Source) fs = (show l, fixme) : fs --FIXME: fill this in
+mkGDField _ _ l@(Source) fs = (show l, fixme) : fs
 mkGDField d _ l@(Notes) fs = maybe fs (\ss -> (show l, map mkParagraph ss) : fs) (d ^. getNotes)
 mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 
@@ -239,5 +232,4 @@ instance Show Field where
   show Notes             = "Notes"
 
 fixme :: [Contents]
-fixme = [mkParagraph $ S "FIXME: This needs to be filled in"]
-
+fixme = [UlC $ ulcc $ Paragraph $ S "FIXME: This needs to be filled in"]

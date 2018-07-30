@@ -10,12 +10,10 @@ import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName,
-  shortname')
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd),
   MayHaveLabel(getMaybeLabel), HasLabel(getLabel))
 
-import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label (Label, mkLabelRA, mkEmptyLabel)
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Spec (Sentence(..))
@@ -29,7 +27,7 @@ instance HasRefAddress LabelledContent where getRefAdd = lbl . getRefAdd
 instance HasLabel      LabelledContent where getLabel = lbl
 instance MayHaveLabel  LabelledContent where getMaybeLabel x = Just (x ^. getLabel)
 instance HasContents   LabelledContent where accessContents = ctype
-instance HasShortName  LabelledContent where shortname (LblC x _) = shortname x
+instance HasShortName  LabelledContent where shortname = lbl . shortname
 
 instance MayHaveLabel UnlabelledContent where getMaybeLabel _ = Nothing
 instance HasContents  UnlabelledContent where accessContents = cntnts
@@ -56,28 +54,11 @@ getDefName General    = "GD:"
 instance HasContents Contents where
   accessContents f (UlC c) = fmap (UlC . (\x -> set cntnts x c)) (f $ c ^. cntnts)
   accessContents f (LlC c) = fmap (LlC . (\x -> set ctype x c)) (f $ c ^. ctype)
->>>>>>> master
-
-data LabelledContent = LblC { _uniqueID :: UID
-                            , _lbl :: Maybe Label
-                            , ctype :: Contents
-                            }
-makeLenses ''LabelledContent
-
-instance HasUID        LabelledContent where uid = uniqueID
---instance HasRefAddress LabelledContent where getRefAdd = lbl . getRefAdd
-instance HasMaybeLabel LabelledContent where getMaybeLabel = lbl
---instance HasShortName  LabelledContent where shortname = lbl . shortname
-
--- | Smart constructor for labelled content chunks (should not be exported)
-llcc :: UID -> Label -> Contents -> LabelledContent
-llcc a b c = LblC a (Just b) c
 
 -- | Section Contents are split into subsections or contents, where contents
 -- are standard layout objects (see 'Contents')
 data SecCons = Sub   Section
              | Con   Contents
-             | LCon  LabelledContent
 
 -- | Sections have a title ('Sentence') and a list of contents ('SecCons')
 -- and its shortname
@@ -90,9 +71,6 @@ makeLenses ''Section
 
 instance HasLabel      Section where getLabel = lb
 instance HasShortName  Section where shortname = lb . shortname
-
-accessContents :: LabelledContent -> Contents
-accessContents = ctype
 
 -- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and Sections
 -- which hold the contents of the document
@@ -118,16 +96,9 @@ mkParagraph x = UlC $ ulcc $ Paragraph x
 mkFig :: Label -> RawContent -> Contents
 mkFig x y = LlC $ llcc x y
 
-mkTableLC :: String -> String -> String -> String -> Contents -> LabelledContent
-mkTableLC uidForContent labelUID refAdd sn' tbl = llcc uidForContent 
-  (mkLabelRA labelUID refAdd sn') tbl
+mkDefinitionLC :: String -> String -> String -> RawContent -> LabelledContent
+mkDefinitionLC labelUID refAdd sn dfn = llcc (mkLabelRA labelUID refAdd sn) dfn
 
-mkDefinitionLC :: String -> String -> String -> String -> Contents -> LabelledContent
-mkDefinitionLC uidForContent labelUID refAdd sn dfn = llcc uidForContent 
-  (mkLabelRA labelUID refAdd sn) dfn
-
-
->>>>>>> master
 {-mkEqnBlock
 mkEnumeration
 mkFigure
@@ -149,9 +120,6 @@ section title intro secs lbe = Section title (map Con intro ++ map Sub secs) lbe
 
 section'' :: Sentence -> [Contents] -> [Section] -> Label -> Section
 section'' title intro secs lbe = section title intro secs lbe
-
-sectionLC :: Sentence -> [LabelledContent] -> [Section] -> Label -> Section
-sectionLC title intro secs lbe = Section title (map LCon intro ++ map Sub secs) lbe
 
 -- | Figure smart constructor. Assumes 100% of page width as max width.
 fig :: Lbl -> Filepath -> RefAdd -> RawContent

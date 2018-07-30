@@ -43,9 +43,10 @@ doc' sys authors secs = Document (Doc.srs `forTT'` sys) authors secs
 
 -- | Standard SRS section builders
 intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
-  genSysDes, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
-  probDesc, termAndDefn, termogy, goalStmt, solCharSpec, require, 
-  nonfuncReq, reference, offShelfSol :: [Contents] -> [Section] -> Section
+  genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
+  probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assumpt, thModel,
+  genDefn, inModel, dataDefn, datCon, propCorSol, require, nonfuncReq, funcReq, likeChg, traceyMandG, tOfSymb,
+  appendix, reference, offShelfSol, valsOfAuxCons, unlikeChg :: [Contents] -> [Section] -> Section
 
 intro       cs ss = section' (titleize Doc.introduction) cs ss "Intro"
 prpsOfDoc   cs ss = section' (titleize Doc.prpsOfDoc) cs ss "DocPurpose"
@@ -58,6 +59,7 @@ theCustomer cs ss = section' (titleize $ the Doc.customer) cs ss "Customer"
 theClient   cs ss = section' (titleize $ the Doc.client) cs ss "Client"
 
 genSysDes   cs ss = section' (titleize Doc.generalSystemDescription) cs ss "GenSysDesc"
+sysCont     cs ss = section' (titleize Doc.sysCont)              cs ss  "SysContext"
 userChar    cs ss = section' (titleize' Doc.userCharacteristic)  cs ss  "UserChars"
 sysCon      cs ss = section' (titleize' Doc.systemConstraint)    cs ss  "SysConstraints"
 
@@ -69,13 +71,20 @@ specSysDes  cs ss = section' (titleize Doc.specificsystemdescription) cs ss "Spe
 probDesc    cs ss = section' (titleize Doc.problemDescription) cs ss "ProbDesc"
 termAndDefn cs ss = section' (titleize' Doc.termAndDef)        cs ss "TermDefs"
 termogy     cs ss = section' (titleize Doc.terminology)        cs ss "Terminology"
-
+physSyst    cs ss = section' (titleize Doc.physSyst)           cs ss "PhysSyst" --FIXME: label is available
 goalStmt    cs ss = section' (titleize' Doc.goalStmt)          cs ss "GoalStmt"
 solCharSpec cs ss = section' (titleize Doc.solutionCharSpec)   cs ss "SolCharSpec"
+assumpt     cs ss = section' (titleize' Doc.assumption)        cs ss "Assumps" --FIXME: label is available
+thModel     cs ss = section' (titleize' Doc.thModel)           cs ss "TMs" --FIXME: label is available
+genDefn     cs ss = section' (titleize' Doc.genDefn)           cs ss "GDs" --FIXME: label is available
+inModel     cs ss = section' (titleize' Doc.inModel)           cs ss "IMs" --FIXME: label is available
+dataDefn    cs ss = section' (titleize' Doc.dataDefn)          cs ss "DDs" --FIXME: label is available
+datCon      cs ss = section' (titleize' Doc.datumConstraint)   cs ss "DataConstraints" --FIXME: label is available
+
+propCorSol  cs ss = section' (titleize' Doc.propOfCorSol)      cs ss "CorSolProps"
 
 require     cs ss = section' (titleize' Doc.requirement)      cs ss "Requirements"
 nonfuncReq  cs ss = section' (titleize' Doc.nonfunctionalRequirement) cs ss "NFRs"
-
 funcReq     cs ss = section' (titleize' Doc.functionalRequirement) cs ss "FRs" --FIXME: label is available
 
 likeChg     cs ss = section' (titleize' Doc.likelyChg)        cs ss "LCs" --FIXME: label is available
@@ -85,44 +94,20 @@ traceyMandG cs ss = section' (titleize' Doc.traceyMandG)      cs ss "TraceMatric
 
 valsOfAuxCons cs ss = section' (titleize Doc.consVals)        cs ss "AuxConstants" --FIXME: label is available
 
+appendix    cs ss = section' (titleize Doc.appendix)          cs ss "Appendix"
+
 reference   cs ss = section' (titleize' Doc.reference)        cs ss "References" --FIXME: label is available
 offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "ExistingSolns"
 
 tOfSymb cs ss = section' (titleize Doc.tOfSymb) cs ss "ToS" --FIXME: label is available
-
-
-appendix, datCon, funcReq, genDefn, likeChg, physSyst, sysCont, traceyMandG,
- unlikeChg, tOfSymb, valsOfAuxCons, assumpt, dataDefn, inModel, thModel,
- propCorSol :: [LabelledContent] -> [Section] -> Section
-
-appendix      cs ss = sectionLC (titleize Doc.appendix)               cs ss (mkLabelRA'' "Appendix")
-assumpt       cs ss = sectionLC (titleize' Doc.assumption)            cs ss (mkLabelRA'' "Assumps")
-datCon        cs ss = sectionLC (titleize' Doc.datumConstraint)       cs ss datConLabel
-dataDefn      cs ss = sectionLC (titleize' Doc.dataDefn)              cs ss dataDefnLabel
-funcReq       cs ss = sectionLC (titleize' Doc.functionalRequirement) cs ss (mkLabelRA'' "FRs")
-genDefn       cs ss = sectionLC (titleize' Doc.genDefn)               cs ss genDefnLabel
-inModel       cs ss = sectionLC (titleize' Doc.inModel)               cs ss inModelLabel
-likeChg       cs ss = sectionLC (titleize' Doc.likelyChg)             cs ss likeChgLabel
-physSyst      cs ss = sectionLC (titleize Doc.physSyst)               cs ss physSystLabel
-propCorSol    cs ss = sectionLC (titleize' Doc.propOfCorSol)          cs ss (mkLabelRA'' "CorSolProps")
-sysCont       cs ss = sectionLC (titleize Doc.sysCont)                cs ss (mkLabelRA'' "SysContext")
-thModel       cs ss = sectionLC (titleize' Doc.thModel)               cs ss thModelLabel
-tOfSymb       cs ss = sectionLC (titleize Doc.tOfSymb)                cs ss tOfSymbLabel
-traceyMandG   cs ss = sectionLC (titleize' Doc.traceyMandG)           cs ss (mkLabelRA'' "TraceMatrices")
-unlikeChg     cs ss = sectionLC (titleize' Doc.unlikelyChg)           cs ss unlikeChgLabel
-valsOfAuxCons cs ss = sectionLC (titleize Doc.consVals)               cs ss valsOfAuxConsLabel
-
---function that sets the shortname of each section to be the reference address
-section' :: Sentence -> [Contents] -> [Section] -> RefAdd -> Section
-section' a b c d = section a b c (mkLabelRA' (d ++ "Label") d)
 
 --Root SRS Domain
 srsDom :: CommonConcept
 srsDom = dcc' "srsDom" (Doc.srs ^. term) "srs" ""
 
 --function that sets the shortname of each section to be the reference address
-section' :: Sentence -> [Contents] -> [Section] -> RefAdd -> Section
-section' a b c d = section a b c d (shortname' $ getStr a) --FIXME: getStr hack 
+section' :: Sentence -> [Contents] -> [Section] -> String -> Section
+section' a b c d = section a b c (mkLabelRA'' $ getStr a) --FIXME: getStr hack
   where
     getStr :: Sentence -> String
     getStr (S s) = s
@@ -132,16 +117,18 @@ section' a b c d = section a b c d (shortname' $ getStr a) --FIXME: getStr hack
 --Labels--
 physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
   inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
-  indPRCaseLabel, unlikeChgLabel :: Label
-physSystLabel      = mkLabelRA'' "PhysSyst"
+  indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel :: Label
+physSystLabel      = mkLabelRA   "PhysSyst" "PhysSyst" "Physical System Description"
 datConLabel        = mkLabelRA'' "DataConstraints"
 genDefnLabel       = mkLabelRA'' "GDs"
 thModelLabel       = mkLabelRA'' "TMs"
-dataDefnLabel      = mkLabelRA'' "DDs"
+dataDefnLabel      = mkLabelRA   "DDs" "DDs" "Data Definitions"
 inModelLabel       = mkLabelRA'' "IMs"
 likeChgLabel       = mkLabelRA'' "LCs"
 unlikeChgLabel     = mkLabelRA'' "UCs"
 tOfSymbLabel       = mkLabelRA'' "ToS"
-valsOfAuxConsLabel = mkLabelRA'' "AuxConstants"
-referenceLabel     = mkLabelRA'' "References"
-indPRCaseLabel     = mkLabelRA'' "IndividualProdUC"
+valsOfAuxConsLabel = mkLabelRA   "AuxConstants" "AuxConstants" "Values of Auxiliary Constants"
+referenceLabel     = mkLabelRA'' "References" 
+indPRCaseLabel     = mkLabelRA   "IndividualProdUC" "IndividualProdUC" "Individual Product Use Cases"
+assumptLabel       = mkLabelRA   "Assumps" "Assumps" "Assumptions"
+funcReqLabel       = mkLabelRA   "FRs" "FRs" "Functional Requirements"

@@ -52,7 +52,7 @@ refACustom :: ReferenceDB -> RefBy -> AssumpChunk -> Sentence
 refACustom rfdb ByNum  a = customRef a (shortname' $ "A" ++
   numLookup rfdb assumpRefTable assumpLookup a)
 refACustom rfdb ByName a =
-  makeRefSec (chunkLookup rfdb assumpRefTable assumpLookup a)
+  makeRef (chunkLookup rfdb assumpRefTable assumpLookup a)
 
 modelLookup :: HasUID a => a -> RefMap a -> (a, Int)
 modelLookup c db = getS $ Map.lookup (c ^. uid) db
@@ -94,7 +94,7 @@ refRByNum rfdb = refRCustom rfdb ByNum
 refRCustom :: ReferenceDB -> RefBy -> ReqChunk -> Sentence
 refRCustom rfdb ByNum  r = customRef r (shortname' $ show (reqType r) ++
   numLookup rfdb reqRefTable reqLookup r)
-refRCustom rfdb ByName r = makeRefSec (chunkLookup rfdb reqRefTable reqLookup r)
+refRCustom rfdb ByName r = makeRef (chunkLookup rfdb reqRefTable reqLookup r)
 
 -- | Smart constructors for likely/unlikely change referencing by name or by number.
 refChng, refChngByNum :: ReferenceDB -> Change -> Sentence
@@ -106,7 +106,7 @@ refChngCustom :: ReferenceDB -> RefBy -> Change -> Sentence
 refChngCustom chdb ByNum  c = customRef c (shortname' $ show (chngType c) ++
   numLookup chdb changeRefTable changeLookup c)
 refChngCustom chdb ByName c =
-  makeRefSec (chunkLookup chdb changeRefTable changeLookup c)
+  makeRef (chunkLookup chdb changeRefTable changeLookup c)
 
 -- | Smart constructors for citation referencing by name or by number.
 cite, citeByNum :: ReferenceDB -> Citation -> Sentence
@@ -118,4 +118,4 @@ citeCustom :: ReferenceDB -> RefBy -> Citation -> Sentence
 citeCustom rfdb ByNum  c = customRef c
   (shortname' $ "[" ++ numLookup rfdb citationRefTable citeLookup c ++ "]")
 citeCustom rfdb ByName c =
-  makeRefSec (chunkLookup rfdb citationRefTable citeLookup c)
+  makeRef (chunkLookup rfdb citationRefTable citeLookup c)

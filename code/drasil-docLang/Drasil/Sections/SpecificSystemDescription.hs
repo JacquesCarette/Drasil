@@ -27,7 +27,6 @@ import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle, fmtU, getRVal)
 import Data.Drasil.SentenceStructures (fmtPhys, fmtSfwr, mkTableFromColumns, foldlSent, 
   foldlSP, typUncr, ofThe, foldlList, SepType(Comma), FoldType(List))
-import Data.List (sortBy)
 
 import qualified Drasil.DocLang.SRS as SRS
 
@@ -79,15 +78,14 @@ goalStmtF givenInputs otherContents = SRS.goalStmt (intro:otherContents) []
 solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
 solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inModel, 
   S "that govern", short progName, S "are presented in" +:+. 
-  makeRefSec (instModelSection), S "The", phrase information, S "to understand", 
+  makeRef (instModelSection), S "The", phrase information, S "to understand", 
   (S "meaning" `ofThe` plural inModel), 
   S "and their derivation is also presented, so that the", plural inModel, 
   S "can be verified"]
 
 
 -- wrappers for assumpIntro. Use assumpF' if genDefs is not needed
-assumpF :: (HasShortName a, Referable a, HasShortName b, Referable b, HasShortName c, Referable c) => 
-  Label -> Label -> Label -> b -> c -> a -> [LabelledContent] -> Section
+assumpF :: Section -> Section -> Section -> Section -> Section -> Section -> [Contents] -> Section
 assumpF theMod genDef dataDef inMod likeChg unlikeChg otherContents = 
       SRS.assumpt ((assumpIntro theMod genDef dataDef inMod likeChg unlikeChg):otherContents) []
 
@@ -99,27 +97,27 @@ assumpIntro r1 r2 r3 r4 r5 r6 = mkParagraph $ foldlSent
           S "and helps in developing the", (phrase thModel), S "by filling in the", 
           S "missing", (phrase information), S "for the" +:+. (phrase physicalSystem), 
           S "The numbers given in the square brackets refer to the", 
-          foldr1 sC (map refs itemsAndRefs) `sC` (refs (inModel, r4)) `sC` (refs (likelyChg, r5)) `sC`
-          S "or", refs (unlikelyChg, r6) `sC` S "in which the respective", 
+          foldr1 sC (map (refs) (itemsAndRefs)) `sC` (refs (likelyChg, r5)) `sC` S "or", 
+          refs (unlikelyChg, r6) `sC` S "in which the respective", 
           (phrase assumption), S "is used"] --FIXME: use some clever "zipWith"
           where refs (chunk, ref) = (titleize' chunk) +:+ sSqBr (makeRef ref) 
-                itemsAndRefs = [(thModel, r1), (genDefn, r2), (dataDefn, r3)]
+                itemsAndRefs = [(thModel, r1), (genDefn, r2), (dataDefn, r3), 
+                                (inModel, r4)]
 
 --wrapper for thModelIntro
-thModF :: (Idea a) => a -> [LabelledContent] -> Section
+thModF :: (Idea a) => a -> [Contents] -> Section
 thModF progName otherContents = SRS.thModel ((thModIntro progName):otherContents) []
 
 -- generalized theoretical model introduction: identifies key word pertaining to topic
-thModIntro :: (Idea a) => a -> LabelledContent
-thModIntro progName = llccNoLabel $ foldlSP
+thModIntro :: (Idea a) => a -> Contents
+thModIntro progName = foldlSP
           [S "This", phrase section_, S "focuses on", 
           S "the", phrase general, (plural equation), S "and", 
           S "laws that", short progName, S "is based on"]
 
 -- just supply the other contents for General Definition. Use empty list if none needed
-genDefnF :: [LabelledContent] -> Section
-genDefnF otherContents = SRS.genDefn ((llcc "gdIntroLC" (mkLabelRA'' "gdIntroLC") $
-  generalDefinitionIntro otherContents):otherContents) []
+genDefnF :: [Contents] -> Section
+genDefnF otherContents = SRS.genDefn (generalDefinitionIntro otherContents:otherContents) []
 
 generalDefinitionIntro :: [t] -> Contents
 generalDefinitionIntro [] = mkParagraph $ S "There are no general definitions."
@@ -129,36 +127,36 @@ generalDefinitionIntro _ = foldlSP [S "This", phrase section_,
   plural dataDefn `sC` S "which in turn are used to", S "build the", 
   plural inModel]
 
+                       
 -- uses EmptyS if ending sentence is not needed
-dataDefnF :: Sentence -> [LabelledContent] -> Section                      
+dataDefnF :: Sentence -> [Contents] -> Section                      
 dataDefnF endingSent otherContents = SRS.dataDefn 
   ((dataDefinitionIntro endingSent):otherContents) []
 
+
 dataDefinitionIntro :: Sentence -> Contents
-dataDefinitionIntro closingSent = mkParagraph $ (foldlSent [S "This", phrase section_,
+dataDefinitionIntro closingSent = mkParagraph $ (foldlSent [S "This", phrase section_, 
     S "collects and defines all the", plural datum, 
     S "needed to build the", plural inModel] +:+ closingSent)
 
 -- wrappers for inModelIntro. Use inModelF' if genDef are not needed
-inModelF :: Section -> Section -> Section -> Section -> [LabelledContent] -> Section
-inModelF probDes datDef theMod genDef otherContents = SRS.inModel 
-  ((inModelIntro probDes datDef theMod genDef):(map LlC otherContents)) []
+inModelF :: Section -> Section -> Section -> Label -> [LabelledContent] -> Section
+inModelF probDes datDef theMod genDef otherContents = SRS.inModel ((inModelIntro probDes datDef theMod genDef):(map LlC otherContents)) []
 
 -- just need to provide the four references in order to this function. Nothing can be input into r4 if only three tables are present
-inModelIntro :: Section -> Section -> Section -> Label -> LabelledContent
-inModelIntro r1 r2 r3 r4 = llccNoLabel $ foldlSP [S "This", phrase section_, 
-  S "transforms the", phrase problem, S "defined in", (makeRefSec r1), 
+inModelIntro :: Section -> Section -> Section -> Label -> Contents
+inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_, 
+  S "transforms the", phrase problem, S "defined in", (makeRef r1), 
   S "into one which is expressed in mathematical terms. It uses concrete", 
-  plural symbol_, S "defined in", (makeRefSec r2), 
+  plural symbol_, S "defined in", (makeRef r2), 
   S "to replace the abstract", plural symbol_, S "in the", 
-  plural model, S "identified in", (makeRefSec r3) :+: end]
-    where end = S " and" +:+ (makeRefSec r4)
+  plural model, S "identified in", (makeRef r3) :+: end]
+    where end = S " and" +:+ (makeRef r4)
 
 -- wrapper for datConPar
 datConF :: Sentence -> Sentence -> Sentence -> [LabelledContent] -> Section
 datConF hasUncertainty mid trailing tables = SRS.datCon 
-  ((dataConstraintParagraph hasUncertainty (listofTablesToRefs tables) mid trailing)
-    :(map LlC tables)) []
+  ((dataConstraintParagraph hasUncertainty (listofTablesToRefs tables) mid trailing):(map LlC tables)) []
   
 -- reference to the input/ ouput tables -> optional middle sentence(s) (use EmptyS if not wanted) -> 
 -- True if standard ending sentence wanted -> optional trailing sentence(s) -> Contents
@@ -170,11 +168,11 @@ dataConstraintParagraph hasUncertainty tableRef middleSent trailingSent = mkPara
 -- makes a list of references to tables takes
 -- l  list of layout objects that can be referenced
 -- outputs a sentence containing references to the layout objects 
-listofTablesToRefs :: (HasMaybeLabel l) => [l] -> Sentence
+listofTablesToRefs :: (HasShortName l, Referable l) => [l] -> Sentence
 listofTablesToRefs  []     = EmptyS
 listofTablesToRefs  [x]    = (makeRef x) +:+ S "shows"
 listofTablesToRefs  [x,y]  = (makeRef x) +:+ S "and" +:+ (makeRef y) +:+ S "show" -- for proper grammar with multiple tables
-                                                                                     -- no Oxford comma in case there is only two tables to be referenced
+                                                                                  -- no Oxford comma in case there is only two tables to be referenced
 listofTablesToRefs  (x:xs) = (makeRef x) `sC` listofTablesToRefs (xs)
  
 dataConstraintIntroSent :: Sentence -> Sentence

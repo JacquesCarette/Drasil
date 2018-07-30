@@ -64,7 +64,7 @@ import Drasil.GlassBR.DataDefs (aspRat, dataDefns, gbQDefns, hFromt, strDisFac, 
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
-import Drasil.GlassBR.TMods (gbrTMods, t1IsSafe, t2IsSafe, tModels)
+import Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe, tModels)
 import Drasil.GlassBR.IMods (probOfBreak, 
   calofCapacity, calofDemand, gbrIMods)
 
@@ -157,8 +157,8 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     (S "This problem is small in size and relatively simple")
     (S "Any reasonable" +:+ phrase implementation +:+.
     (S "will be very quick" `sAnd` S "use minimal storage"))]) :
-  LCsSec (LCsProg likely_changes_list) :
-  UCsSec (UCsProg unlikely_change_list) :
+  LCsSec (LCsProg likelyChanges_SRS) :
+  UCsSec (UCsProg unlikelyChanges_SRS) :
   TraceabilitySec
     (TraceabilityProg traceyMatrices [traceability_matrices_and_graphs_table1Desc, traceability_matrices_and_graphs_table2Desc, traceability_matrices_and_graphs_table3Desc]
     ((map LlC traceyMatrices) ++ traceability_matrices_and_graphs_intro2 ++ (map LlC traceyGraphs)) []) :
@@ -206,11 +206,6 @@ product_use_case_table,
 inputDataConstraints, outputDataConstraints, traceability_matrices_and_graphs_table1,
   traceability_matrices_and_graphs_table2, traceability_matrices_and_graphs_table3,
   fig_glassbr, fig_2, fig_3, fig_4, fig_5, fig_6 :: LabelledContent
-
-physical_system_description_list, inputDataConstraints, outputDataConstraints, fig_2, fig_3, fig_4,
-  traceability_matrices_and_graphs_intro2, fig_6, fig_5, fig_glassbr, appendix_intro,
-  traceability_matrices_and_graphs_table1, traceability_matrices_and_graphs_table2, 
-  traceability_matrices_and_graphs_table3  :: LabelledContent
 
 functional_requirements_list :: [LabelledContent]
 
@@ -584,12 +579,7 @@ functional_requirements_req6 = map (UlC . ulcc) [Enumeration $ Simple $
 
 {--LIKELY CHANGES--}
 
-likely_changes_list :: [LabelledContent]
-likely_changes_list = likelyChanges_SRS 
-
 {--UNLIKELY CHANGES--}
-unlikely_change_list :: [LabelledContent]
-unlikely_change_list = unlikelyChanges_SRS
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
 

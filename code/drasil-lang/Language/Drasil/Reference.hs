@@ -22,7 +22,7 @@ import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName)
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel), HasRefAddress(getRefAdd))
 import Language.Drasil.Document (Section(Section), getDefName, repUnd)
-import Language.Drasil.Document.Core (Contents(..), DType(Data, Theory), RawContent(..), LabelledContent(..))
+import Language.Drasil.Document.Core (RawContent(..), LabelledContent(..))
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.Spec (Sentence((:+:), Ref, S))
 import Language.Drasil.UID (UID)
@@ -342,7 +342,7 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 --FIXME: completely shift to being `HasLabel` since customref checks for 
 --  `HasShortName` and `Referable`?
 makeRef :: (HasShortName l, Referable l) => l -> Sentence
-makeRef r = customRef r (shortname r)
+makeRef r = customRef r (r ^. shortname)
 
 --FIXME: needs design (HasShortName, Referable only possible when HasLabel)
 mkRefFrmLbl :: (HasLabel l, HasShortName l, Referable l) => l -> Sentence
@@ -350,7 +350,7 @@ mkRefFrmLbl r = makeRef r
 
 --FIXME: should be removed from Examples once sections have labels
 midRef :: Label -> Sentence
-midRef r = customRef r (shortname r)
+midRef r = customRef r (r ^. shortname)
 
 -- | Create a reference with a custom 'ShortName'
 customRef :: (HasShortName l, Referable l) => l -> ShortName -> Sentence

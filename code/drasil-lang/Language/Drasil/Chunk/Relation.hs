@@ -10,7 +10,7 @@ import Language.Drasil.Chunk.Concept (ConceptChunk, cw, dccWDS, dccWDS')
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term),Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, ExprRelat(relat),
-  HasMaybeLabel(getMaybeLabel))
+  MayHaveLabel(getMaybeLabel))
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Spec (Sentence)
@@ -33,7 +33,7 @@ instance Eq            RelationConcept where a == b = (a ^. uid) == (b ^. uid)
 instance HasShortName  RelationConcept where
   shortname _ = error "No explicit name given for relation concept -- build a custom Ref"
   --should this be an instance of HasShortName?
-instance HasMaybeLabel RelationConcept where getMaybeLabel = lbl
+instance MayHaveLabel RelationConcept where getMaybeLabel (RC _ _ x) = x
 
 -- | Create a RelationConcept from a given id, term, defn, and relation.
 makeRC :: String -> NP -> Sentence -> Relation -> Maybe Label -> RelationConcept

@@ -6,7 +6,6 @@ module Drasil.Sections.SolutionCharacterSpec
   sSubSec,
   assembler,
   siCon,
-  siLC,
   siSect,
   siTMod,
   siIMod,
@@ -62,9 +61,6 @@ sSubSec sectionName xs = SectionModel sectionName xs
 
 siCon :: [Contents] -> SecItem
 siCon xs = Cont xs
-
-siLC :: [LabelledContent] -> SecItem
-siLC xs = LC xs
 
 siSect :: [Section] -> SecItem
 siSect xs = Sect xs
@@ -275,7 +271,10 @@ sectionMap progName (SectionModel niname xs)
 render :: (Idea c, HasSymbolTable s) => c -> s -> SubSec -> Section
 render progName symMap item@(SectionModel niname _)
   | compareID niname (Doc.assumption ^. uid)       = assumptionSect        item
+  | compareID niname (Doc.thModel ^. uid)          = theoreticalModelSect  item symMap progName
   | compareID niname (Doc.genDefn ^. uid)          = generalDefinitionSect item symMap
+  | compareID niname (Doc.inModel ^. uid)          = instanceModelSect     item symMap
+  | compareID niname (Doc.dataDefn ^. uid)         = dataDefinitionSect    item symMap
   | compareID niname (Doc.dataConst ^. uid)        = dataConstraintSect    item 
   | compareID niname (Doc.termAndDef ^. uid)       = termDefinitionSect    item
   | compareID niname (Doc.goalStmt ^. uid)         = goalStatementSect     item
@@ -288,7 +287,7 @@ render progName symMap item@(SectionModel niname _)
 
 genericSect :: SubSec -> Section
 genericSect (SectionModel niname xs) = section'' (pullTitle xs niname) 
-  (pullContents xs) (pullSections xs) (mkLabelRA'' (niname ^. uid))
+  (pullContents xs) (pullSections xs) (mkLabelRA'' (niname ^. uid)) --fixme
 
 ------------------------------------------------
 -- GENERAL SYSTEM DESCRIPTION SECTION BUILDER --
@@ -316,18 +315,8 @@ goalStatementSect (SectionModel _ xs) = SRS.goalStmt
 
 assumptionSect :: SubSec -> Section
 assumptionSect (SectionModel _ xs) = SRS.assumpt
-  (assumpIntro:(pullLC xs)) (pullSections xs)
+  (assumpIntro:(pullContents xs)) (pullSections xs)
 
-
-generalDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
-generalDefinitionSect (SectionModel _ xs) _ = SRS.genDefn
-  ((llcc "gdIntroLC" (mkLabelRA'' "gdIntroLC") generalDefsIntro):contents)
-  (pullSections xs)
-  where generalDefsIntro = generalDefinitionIntro contents
-        contents         = pullLC xs
-
-
-{-
 
 theoreticalModelSect :: (Idea a, HasSymbolTable s) => SubSec -> s -> a -> Section
 theoreticalModelSect (SectionModel _ xs) _ progName = SRS.thModel
@@ -335,6 +324,14 @@ theoreticalModelSect (SectionModel _ xs) _ progName = SRS.thModel
   (pullContents xs)) (pullSections xs)
   where theoreticalModels = map (UlC . ulcc) $ map symMap $ pullTMods xs
         symMap            = Definition . Theory
+
+
+generalDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
+generalDefinitionSect (SectionModel _ xs) _ = SRS.genDefn
+  (generalDefsIntro:contents) (pullSections xs)
+  where generalDefsIntro = generalDefinitionIntro contents
+        contents         = (pullContents xs)
+
 
 instanceModelSect :: (HasSymbolTable s) => SubSec -> s -> Section
 instanceModelSect (SectionModel _ xs) _ = SRS.inModel
@@ -345,10 +342,10 @@ instanceModelSect (SectionModel _ xs) _ = SRS.inModel
 
 dataDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
 dataDefinitionSect (SectionModel _ xs) _ = SRS.dataDefn
-  (dataIntro:dataDefinitions ++ (pullLC xs)) (pullSections xs)
+  (dataIntro:dataDefinitions ++ (pullContents xs)) (pullSections xs)
   where dataIntro       = dataDefinitionIntro $ pullSents xs
         symMap          = Definition . Data
-        dataDefinitions = map (UlC . ulcc . symMap) $ pullDDefs xs-}
+        dataDefinitions = map (UlC . ulcc . symMap) $ pullDDefs xs
 
 
 dataConstraintSect :: SubSec -> Section
@@ -359,6 +356,7 @@ dataConstraintSect (SectionModel _ xs) = SRS.datCon
         outputTable = outDataConstTbl $ pullUQO xs
 
 --FIXME generate tables here
+--
 
 --------------------------------------------
 -- CONTENT BUILDING FUNCTIONS & CONSTANTS --
@@ -484,6 +482,7 @@ dataDefinitionIntro :: [Sentence] -> Contents
 dataDefinitionIntro xs = mkParagraph $ (foldlSent [S "This", phrase Doc.section_, 
     S "collects and defines all the", plural Doc.datum, 
     S "needed to build the", plural Doc.inModel] +:+ foldl (+:+) EmptyS xs)
+
 
 ---------------------
 -- INSTANCE MODELS --

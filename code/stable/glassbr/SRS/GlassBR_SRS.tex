@@ -89,9 +89,9 @@ $GTF$ & Glass type factor & --
 \\
 $h$ & Minimum thickness & m
 \\
-$is\_safe1$ & Variable that is assigned true when calculated probability is less than tolerable probability & --
+$is\_safeLR$ & Variable that is assigned true when load resistance (capacity) is greater than load (demand) & --
 \\
-$is\_safe2$ & Variable that is assigned true when load resistance (capacity) is greater than load (demand) & --
+$is\_safePb$ & Variable that is assigned true when calculated probability is less than tolerable probability & --
 \\
 $J$ & Stress distribution factor (Function) & --
 \\
@@ -359,16 +359,16 @@ This section focuses on the general equations and laws that GlassBR is based on.
 Label & Safety Req-Pb
 \\ \midrule \\
 Equation & \begin{dmath}
-           is\_safe1={P_{b}}<{P_{btol}}
+           is\_safePb={P_{b}}<{P_{btol}}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$is\_safe1$ is the variable that is assigned true when calculated probability is less than tolerable probability (Unitless)}
+              \item{$is\_safePb$ is the variable that is assigned true when calculated probability is less than tolerable probability (Unitless)}
               \item{${P_{b}}$ is the probability of breakage (Unitless)}
               \item{${P_{btol}}$ is the tolerable probability of breakage (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is\_safe1$, the glass is considered safe. $is\_safe1$ and $is\_safe2$ (from \hyperref[T:safetyReqLR]{Definition~T:safetyReqLR}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[T:probOfBr]{Definition~T:probOfBr}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
+Notes & If $is\_safePb$, the glass is considered safe. $is\_safePb$ and $is\_safeLR$ (from \hyperref[T:safetyReqLR]{Definition~T:safetyReqLR}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[T:probOfBr]{Definition~T:probOfBr}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
 \\ \midrule \\
 Source & FIXME: This needs to be filled in
 \\ \midrule \\
@@ -385,16 +385,16 @@ RefBy & FIXME: This needs to be filled in
 Label & Safety Req-LR
 \\ \midrule \\
 Equation & \begin{dmath}
-           is\_safe2=LR>q
+           is\_safeLR=LR>q
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$is\_safe2$ is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)}
+              \item{$is\_safeLR$ is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)}
               \item{$LR$ is the load resistance (Unitless)}
               \item{$q$ is the applied load (demand) (Pa)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is\_safe2$, the glass is considered safe. $is\_safe1$ (from \hyperref[T:safetyReqPb]{Definition~T:safetyReqPb}) and $is\_safe2$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[T:calOfCap]{Definition~T:calOfCap}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[T:calOfDe]{Definition~T:calOfDe}.
+Notes & If $is\_safeLR$, the glass is considered safe. $is\_safePb$ (from \hyperref[T:safetyReqPb]{Definition~T:safetyReqPb}) and $is\_safeLR$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[T:calOfCap]{Definition~T:calOfCap}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[T:calOfDe]{Definition~T:calOfDe}.
 \\ \midrule \\
 Source & FIXME: This needs to be filled in
 \\ \midrule \\
@@ -966,7 +966,7 @@ This section provides the functional requirements, the business tasks that the s
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req4}:]Output the input quantities from R1 and the known quantities from R2.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req5}:]If $is\_safe1$ ∧ $is\_safe2$ (from \hyperref[T:safetyReqPb]{Definition~T:safetyReqPb} and \hyperref[T:safetyReqLR]{Definition~T:safetyReqLR}) are true, output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:functional.requirements.req5}:]If $is\_safePb$ ∧ $is\_safeLR$ (from \hyperref[T:safetyReqPb]{Definition~T:safetyReqPb} and \hyperref[T:safetyReqLR]{Definition~T:safetyReqLR}) are true, output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
 \end{description}
 \begin{itemize}
 \item[R6:]Output the following quantities:

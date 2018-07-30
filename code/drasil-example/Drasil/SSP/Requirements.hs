@@ -1,4 +1,4 @@
-module Drasil.SSP.Requirements (sspRequirements, sspInputDataTableLC) where
+module Drasil.SSP.Requirements (sspRequirements, sspInputDataTable) where
 
 import Language.Drasil
 
@@ -23,7 +23,7 @@ readAndStore, generateCSS, testSlipSrf, prepareSlipS,
 
 readAndStore = foldlSent [S "Read the", phrase input_,
   S "file, and store the" +:+. plural datum, S "Necessary",
-  plural inDatum, S "summarized in", makeRef sspInputDataTableLC]
+  plural inDatum, S "summarized in", makeRef sspInputDataTable]
 
 generateCSS  = foldlSent [S "Generate potential", phrase crtSlpSrf :+:
   S "'s for the", phrase input_, phrase slope]
@@ -66,6 +66,3 @@ displayGraph = foldlSent [S "Display the", phrase crtSlpSrf, S "and the",
 sspInputDataTable :: LabelledContent
 sspInputDataTable = mkInputDatTb ([dqdWr coords] ++ map dqdWr sspInputs)
   --FIXME: this has to be seperate since coords is a different type
-
-sspInputDataTableLC :: LabelledContent
-sspInputDataTableLC = llcc "sspInputDataTable" (mkLabelRA'' "sspInputDataTable") sspInputDataTable

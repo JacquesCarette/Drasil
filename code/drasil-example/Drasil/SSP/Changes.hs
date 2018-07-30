@@ -22,8 +22,8 @@ lc1Desc = foldlSent [(refA sspRefDB newA3) `sDash` S "The",
   S "In the future,", plural calculation,
   S "can be added for inconsistent soil properties throughout"]
 
-unlikelyChanges_SRS :: [LabelledContent]
-unlikelyChanges_SRS = [ucIntro, unlikelychg1, unlikelychg2]
+unlikelyChanges_SRS :: [Contents]
+unlikelyChanges_SRS = [ucIntro, LlC unlikelychg1, LlC unlikelychg2]
 
 unlikelychg1, unlikelychg2 :: LabelledContent
 
@@ -42,7 +42,6 @@ uc2Desc = foldlSent [(refA sspRefDB newA8), S "allows for 2D analysis" +:+.
   S "These models do not take into account stress in the z-direction, and",
   S "therefore cannot be without manipulation to attempt 3d analysis"]
 
-ucIntro :: LabelledContent
-ucIntro = llcc "ucIntro" (mkLabelRA'' "ucIntroLabel") $ 
-  foldlSP [S "If changes were to be made with regard to the following" `sC`
+ucIntro :: Contents
+ucIntro = foldlSP [S "If changes were to be made with regard to the following" `sC`
   S "a different algorithm would be needed"]

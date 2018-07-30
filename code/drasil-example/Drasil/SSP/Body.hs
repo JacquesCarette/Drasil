@@ -44,7 +44,7 @@ import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty,
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods_new)
-import Drasil.SSP.Requirements (sspInputDataTableLC, sspRequirements)
+import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
 
 import Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_new
   , effStress_new)
@@ -60,8 +60,8 @@ req, aux_cons :: Section
 table_of_symbol_intro :: [TSIntro]
 
 problem_desc, termi_defi, phys_sys_desc, goal_stmt, func_req, non_func_req :: Section
-goals_list, termi_defi_list :: Contents
-phys_sys_desc_p1, phys_sys_desc_bullets, phys_sys_desc_p2, func_req_list :: LabelledContent
+goals_list, termi_defi_list, phys_sys_desc_p1, phys_sys_desc_bullets,
+  phys_sys_desc_p2, func_req_list :: Contents
 
 
 --Document Setup--
@@ -126,7 +126,7 @@ mkSRS = RefSec (RefProg intro
           )
         ]
       ):
-  map Verbatim [req] ++ [LCsSec (LCsProg likelyChanges_SRS)] 
+  map Verbatim [req] ++ [LCsSec (LCsProg (map LlC likelyChanges_SRS))] 
   ++ [UCsSec (UCsProg unlikelyChanges_SRS)] ++[Verbatim aux_cons] ++ (Bibliography : [])
 
 
@@ -320,12 +320,11 @@ phys_sys_desc = SRS.physSyst
   [phys_sys_desc_p1, phys_sys_desc_bullets, phys_sys_desc_p2,
    LlC fig_indexconv, LlC fig_forceacting] []
 
-phys_sys_desc_p1 = llcc "sspPSDIntro" (mkLabelRA'' "sspPSDIntro") $ physSystIntro 
-  slope how intrslce slice (S "slice base")
-  fig_indexconv
+phys_sys_desc_p1 = physSystIntro slope how intrslce slice 
+  (S "slice base") fig_indexconv
   where how = S "as a series of" +:+ phrase slice +:+. plural element
 
-physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, HasMaybeLabel d) =>
+physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, HasShortName d, Referable d) =>
   a -> Sentence -> b -> c -> Sentence -> d -> Contents
 physSystIntro what how p1 p2 p3 indexref = foldlSP [
   at_start analysis, S "of the", phrase what, S "is performed by looking at",
@@ -334,8 +333,7 @@ physSystIntro what how p1 p2 p3 indexref = foldlSP [
   p3 +:+. plural property, S "The index convention for referencing which",
   phrase p1 `sOr` phrase p2, S "is being used is shown in", makeRef indexref]
 
-phys_sys_desc_bullets = llcc "sspPSDPoints" (mkLabelRA'' "sspPSDPoints") $ 
-  enumBullet $ map foldlSent_ [
+phys_sys_desc_bullets = enumBullet $ map foldlSent_ [
 
   [at_start' itslPrpty, S "convention is noted by j. The end",
   plural itslPrpty, S "are usually not of", phrase interest `sC`
@@ -346,10 +344,9 @@ phys_sys_desc_bullets = llcc "sspPSDPoints" (mkLabelRA'' "sspPSDPoints") $
   [at_start slice, plural property +:+ S "convention is noted by" +:+.
   (ch index)]]
 
-phys_sys_desc_p2 = llcc "sspPSDSent" (mkLabelRA'' "sspPSDSent") $ 
-  foldlSP [S "A", phrase fbd, S "of the", plural force,
-  S "acting on the", phrase slice, S "is displayed in",
-  makeRef fig_forceacting]
+phys_sys_desc_p2 = foldlSP [S "A", phrase fbd, S "of the", 
+  plural force, S "acting on the", phrase slice, 
+  S "is displayed in", makeRef fig_forceacting]
 
 fig_indexconv :: LabelledContent
 fig_indexconv = llcc (mkLabelRA'' "IndexConvention") $ 
@@ -423,8 +420,7 @@ req = reqF [func_req, non_func_req]
 func_req = SRS.funcReq
   [func_req_list, LlC sspInputDataTable] []
 
-func_req_list = llcc "func_req_listSSP" (mkLabelRA'' "func_req_listSSPLabel") $
-  enumSimple 1 (short requirement) sspRequirements
+func_req_list = enumSimple 1 (short requirement) sspRequirements
 
 -- SECTION 5.2 --
 non_func_req = nonFuncReqF [accuracy, performanceSpd]

@@ -256,10 +256,6 @@ requiredInputs = (map qw [plate_len, plate_width, char_weight])
   ++ (map qw [pb_tol, tNT]) ++ (map qw [sdx, sdy, sdz])
   ++ (map qw [glass_type, nom_thick])
 
-functional_requirements_req6_pulledList :: [QDefinition]
-functional_requirements_req6_pulledList = [risk, strDisFac, nonFL, glaTyFac, dimLL, 
-  tolPre, tolStrDisFac, hFromt, aspRat]
-
 --Used in "Non-Functional Requirements" Section--
 gBRpriorityNFReqs :: [ConceptChunk]
 gBRpriorityNFReqs = [correctness, verifiability, understandability,
@@ -558,6 +554,10 @@ testing = qw prob_br : qw lRe : qw demand : [] -- all different types!
 testing1 :: [RelationConcept]
 testing1 = [probOfBr, calOfCap, calOfDe]
 --FIXME: rename or find better implementation?
+
+functional_requirements_req6_pulledList :: [QDefinition]
+functional_requirements_req6_pulledList = [risk, strDisFac, nonFL, glaTyFac, dimLL, 
+  tolPre, tolStrDisFac, hFromt, aspRat]
 
 functional_requirements_req6 = map (UlC . ulcc) [Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)

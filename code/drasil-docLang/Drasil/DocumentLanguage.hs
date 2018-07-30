@@ -7,8 +7,7 @@
 -- instead.
 module Drasil.DocumentLanguage where
 
-import Drasil.DocumentLanguage.Definitions (Fields, ddefn, ddefn', derivation, derivation',
-  instanceModel, gdefn, tmodel)
+import Drasil.DocumentLanguage.Definitions (Fields, ddefn, ddefn', derivation, instanceModel, gdefn, tmodel)
 
 import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                -- Vector - Name conflict (defined in file)
@@ -468,21 +467,22 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (TMs fields ts) =
       SSD.thModF (siSys si') (map LlC (map (tmodel fields (_sysinfodb si')) ts))
     mkSubSCS si' (DDs fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS (map LlC (concatMap (\x -> ddefn fields (_sysinfodb si') x : derivation x) dds))
+      SSD.dataDefnF EmptyS (concatMap (\x -> LlC (ddefn fields (_sysinfodb si') x) : derivation x) dds)
     mkSubSCS si' (DDs fields dds _) =
       SSD.dataDefnF EmptyS (map LlC (map (ddefn fields (_sysinfodb si')) dds))
     mkSubSCS si' (DDs' fields dds ShowDerivation) = --FIXME: need to keep track of DD intro. --FIXME: temporary duplicate
-      SSD.dataDefnF EmptyS (map LlC (concatMap (\x -> ddefn' fields (_sysinfodb si') x : derivation x) dds))
+      SSD.dataDefnF EmptyS (concatMap (\x -> (LlC $ ddefn' fields (_sysinfodb si') x) : derivation x) dds)
     mkSubSCS si' (DDs' fields dds _) = --FIXME: temporary duplicate
       SSD.dataDefnF EmptyS (map LlC (map (ddefn' fields (_sysinfodb si')) dds))
     mkSubSCS si' (GDs fields gs' ShowDerivation) =
-      SSD.genDefnF (map LlC (concatMap (\x -> gdefn fields (_sysinfodb si') x : derivation x) gs'))
+      SSD.genDefnF (concatMap (\x -> (LlC $ gdefn fields (_sysinfodb si') x) : derivation x) gs')
     mkSubSCS si' (GDs fields gs' _) =
       SSD.genDefnF (map LlC (map (gdefn fields (_sysinfodb si')) gs'))
     mkSubSCS si' (IMs fields ims ShowDerivation) = 
-      SSD.inModelF pdStub ddStub tmStub SRS.genDefnLabel (concatMap (\x -> instanceModel fields (_sysinfodb si') x : derivation' x) ims)
+      SSD.inModelF pdStub ddStub tmStub SRS.genDefnLabel 
+      (concatMap (\x -> LlC (instanceModel fields (_sysinfodb si') x) : derivation x) ims)
     mkSubSCS si' (IMs fields ims _)= 
-      SSD.inModelF pdStub ddStub tmStub SRS.genDefnLabel (map (instanceModel fields (_sysinfodb si')) ims)
+      SSD.inModelF pdStub ddStub tmStub SRS.genDefnLabel (map LlC (map (instanceModel fields (_sysinfodb si')) ims))
     mkSubSCS SI {_refdb = db} Assumptions =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
       (map (\x -> LlC $ llcc mkEmptyLabel x) $ map Assumption $ assumptionsFromDB (db ^. assumpRefTable))

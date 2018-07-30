@@ -140,8 +140,9 @@ dataDefinitionIntro closingSent = mkParagraph $ (foldlSent [S "This", phrase sec
     S "needed to build the", plural inModel] +:+ closingSent)
 
 -- wrappers for inModelIntro. Use inModelF' if genDef are not needed
-inModelF :: Section -> Section -> Section -> Label -> [LabelledContent] -> Section
-inModelF probDes datDef theMod genDef otherContents = SRS.inModel ((inModelIntro probDes datDef theMod genDef):(map LlC otherContents)) []
+inModelF :: Section -> Section -> Section -> Label -> [Contents] -> Section
+inModelF probDes datDef theMod genDef otherContents = SRS.inModel 
+  ((inModelIntro probDes datDef theMod genDef):(otherContents)) []
 
 -- just need to provide the four references in order to this function. Nothing can be input into r4 if only three tables are present
 inModelIntro :: Section -> Section -> Section -> Label -> Contents

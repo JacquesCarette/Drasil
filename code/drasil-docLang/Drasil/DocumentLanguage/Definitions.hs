@@ -7,7 +7,6 @@ module Drasil.DocumentLanguage.Definitions
   , tmodel
   , ddefn, ddefn'
   , gdefn, derivation
-  , derivation'
   , instanceModel
   , InclUnits(..)
   )where
@@ -67,19 +66,14 @@ instanceModel fs m i = llcc (i ^. getLabel) $ Defnt Instance (foldr (mkIMField i
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
 -- or IM definition automatically (called automatically by 'SCSSub' program)
-derivation :: HasDerivation c => c -> [LabelledContent]
+derivation :: HasDerivation c => c -> [Contents]
 derivation g = map makeDerivationContents (getDerivation g)
-
--- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
--- or IM definition automatically (called automatically by 'SCSSub' program)
-derivation' :: HasDerivation c => c -> [LabelledContent]
-derivation' g = map makeDerivationContents (getDerivation g)
 
 -- | Helper function for creating the layout objects
 -- (paragraphs and equation blocks) for a derivation.
-makeDerivationContents :: Sentence -> LabelledContent
-makeDerivationContents (E e) = llcc mkEmptyLabel (EqnBlock e) --FIXME: Derivation needs labels for it's equations
-makeDerivationContents s     = llcc mkEmptyLabel $ Paragraph s  --FIXME: should this be LabelledContent?
+makeDerivationContents :: Sentence -> Contents
+makeDerivationContents (E e) = LlC $ llcc mkEmptyLabel (EqnBlock e) --FIXME: Derivation needs labels for it's equations
+makeDerivationContents s     = UlC $ ulcc $ Paragraph s
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
 type ModRow = [(String, [Contents])]

@@ -262,12 +262,11 @@ sysCtxFig1 :: LabelledContent
 sysCtxFig1 = llcc (mkLabelRA'' "sysCtxDiag") $ fig (titleize sysCont) 
   (resourcePath ++ "sysctx.png") "sysCtxDiag"
 
-sysCtxDesc :: LabelledContent
-sysCtxDesc = llcc "sysCtxDescCP" (mkLabelRA'' "sysCtxDescCPLabel") $ foldlSPCol
-  [S "The interaction between the", phrase product_, S "and the", phrase user,
-   S "is through an application programming" +:+. phrase interface,
-   S "The responsibilities of the", phrase user, S "and the", phrase system,
-   S "are as follows"]
+sysCtxDesc :: Contents
+sysCtxDesc = foldlSPCol [S "The interaction between the", phrase product_,
+   S "and the", phrase user, S "is through an application programming" +:+.
+   phrase interface, S "The responsibilities of the", phrase user, 
+   S "and the", phrase system, S "are as follows"]
 
 sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = [S "Provide initial" +:+ plural condition +:+ S "of the" +:+
@@ -353,7 +352,7 @@ problem_description_intro_param lib app = foldlSent
   (phrase app), S "developers to include", (phrase physics), S "in their" +:+. 
   (plural product_), S "There are a few free" `sC` (phrase openSource) `sAnd` S "high quality",
   (plural lib), S "available to be used for", phrase consumer, plural product_ +:+. 
-  (sParen $ makeRefSec off_the_shelf_solutions), S "By creating a simple, lightweight, fast and portable",
+  (sParen $ makeRef off_the_shelf_solutions), S "By creating a simple, lightweight, fast and portable",
   (getAcc twoD), (phrase CP.rigidBody), (phrase lib) `sC` (phrase app),
   S "development will be more accessible to the masses" `sAnd` S "higher quality",
   (plural product_), S "will be produced"]
@@ -554,7 +553,7 @@ requirements = reqF [functional_requirements, nonfunctional_requirements]
 -----------------------------------
 
 functional_requirements :: Section
-functional_requirements_list :: LabelledContent
+functional_requirements_list :: Contents
 
 functional_requirements = SRS.funcReq [functional_requirements_list] []
 
@@ -594,7 +593,7 @@ functional_requirements_req3 = foldlSent [S "Input the", (phrase CM.surface),
 
 functional_requirements_req4 = foldlSent [S "Verify that the", plural input_,
   S "satisfy the required", plural physicalConstraint, S "from", 
-  (makeRefSec solution_characteristics_specification)]
+  (makeRef solution_characteristics_specification)]
 
 functional_requirements_req5 = requirementS (QP.position) (QP.velocity) 
   (S "acted upon by a" +:+ (phrase QP.force))
@@ -617,8 +616,8 @@ functional_requirements_list' = [functional_requirements_req1,
   functional_requirements_req6, functional_requirements_req7, 
   functional_requirements_req8]
 
-functional_requirements_list = llcc "frListCP" (mkLabelRA'' "frListCPLabel") $ 
-  enumSimple 1 (getAcc requirement) functional_requirements_list'
+functional_requirements_list = enumSimple 1 (getAcc requirement)
+  functional_requirements_list'
 
 --------------------------------------
 -- 5.2 : Nonfunctional Requirements --
@@ -707,13 +706,13 @@ traceMatInstaModelRef, traceMatAssumpRef, traceMatFuncReqRef, traceMatGoalStmtRe
   traceMatLikelyChgRef, traceMatDataRef :: [Sentence]
 
 traceMatInstaModel = ["IM1", "IM2", "IM3"]
-traceMatInstaModelRef = map makeRefSec iModels_new
+traceMatInstaModelRef = map makeRef iModels_new
 
 traceMatTheoryModel = ["T1", "T2", "T3", "T4", "T5"]
-traceMatTheoryModelRef = map makeRefSec cpTMods_new
+traceMatTheoryModelRef = map makeRef cpTMods_new
 
 traceMatDataDef = ["DD1","DD2","DD3","DD4","DD5","DD6","DD7","DD8"]
-traceMatDataDefRef = map makeRefSec cpDDefs
+traceMatDataDefRef = map makeRef cpDDefs
 
 traceMatAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
 traceMatAssumpRef = makeListRef assumptions_list_a problem_description
@@ -722,7 +721,7 @@ traceMatFuncReq =  ["R1","R2","R3", "R4", "R5", "R6", "R7", "R8"]
 traceMatFuncReqRef = makeListRef functional_requirements_list' functional_requirements
 
 traceMatData = ["Data Constraints"]
-traceMatDataRef = [makeRefSec solution_characteristics_specification]
+traceMatDataRef = [makeRef solution_characteristics_specification]
 
 traceMatGoalStmt = ["GS1", "GS2", "GS3", "GS4"]
 traceMatGoalStmtRef = makeListRef goal_statements_list' problem_description
@@ -776,8 +775,8 @@ traceMatTabReqGoalOther = llcc (mkLabelRA'' "TraceyReqGoalsOther") $ Table
   (EmptyS:(traceMatTabReqGoalOtherRowHead))
   (makeTMatrix traceMatTabReqGoalOtherColHead traceMatTabReqGoalOtherCol
   traceMatTabReqGoalOtherRow)
-  (showingCxnBw (traceyMatrix) (titleize' requirement +:+ sParen (makeRefSec requirements)
-  `sC` (titleize' goalStmt) +:+ sParen (makeRefSec problem_description) `sAnd` S "Other" +:+
+  (showingCxnBw (traceyMatrix) (titleize' requirement +:+ sParen (makeRef requirements)
+  `sC` (titleize' goalStmt) +:+ sParen (makeRef problem_description) `sAnd` S "Other" +:+
   titleize' item)) True "TraceyReqGoalsOther"
 
 traceMatTabAssumpCol' :: [[String]]
@@ -848,7 +847,7 @@ traceMatTabAssump :: LabelledContent
 traceMatTabAssump = llcc (mkLabelRA'' "TraceyAssumpsOther") $ Table
   (EmptyS:traceMatTabAssumpRowHead)
   (makeTMatrix traceMatTabAssumpColHead traceMatTabAssumpCol' traceMatTabAssumpRow)
-  (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRefSec problem_description)
+  (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef problem_description)
   `sAnd` S "Other" +:+ titleize' item)) True "TraceyAssumpsOther"
 
 traceMatTabDefnModelCol :: [[String]]

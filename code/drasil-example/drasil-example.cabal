@@ -106,6 +106,7 @@ executable swhs
   main-is: Drasil/SWHS/Main.hs
   other-modules:
       Drasil.SWHS.Assumptions
+    , Drasil.SWHS.Labels
     , Drasil.SWHS.Body
     , Drasil.SWHS.Concepts
     , Drasil.SWHS.DataDefs

@@ -12,18 +12,18 @@ import Data.Drasil.Concepts.Computation (algorithm)
 import qualified Data.Drasil.Concepts.Physics as CP (collision, damping, joint)
 import Data.Drasil.Utils (enumSimple)
 
---------------------------------
+---------------------
 --  LIKELY CHANGES --
---------------------------------
+---------------------
 
 likelyChanges :: Section
-likelyChangesIntro, likelyChangesList :: LabelledContent
+likelyChangesIntro, likelyChangesList :: Contents
 
 likelyChanges = SRS.likeChg [likelyChangesIntro, likelyChangesList] []
 
-likelyChangesIntro = llcc "LCIntroCP" (mkLabelRA'' "LCIntroCPLabel") $ 
-  foldlSP [S "This", (phrase section_), S "lists the", (plural likelyChg),
-  S "to be made to the", (phrase game), (phrase physics), (phrase library)]
+likelyChangesIntro = foldlSP [S "This", phrase section_, 
+  S "lists the", plural likelyChg, S "to be made to the",
+  phrase game, phrase physics, phrase library]
 
 likelyChangesStmt1, likelyChangesStmt2, likelyChangesStmt3,
   likelyChangesStmt4 :: Sentence
@@ -34,7 +34,8 @@ likelyChangesStmt1 = (S "internal" +:+ (getAcc CM.ode) :+:
   (phrase library)) `maybeChanged` (S "in the future")
 
 likelyChangesStmt2 = (phrase library) `maybeExpanded`
-  (S "to deal with edge-to-edge and vertex-to-vertex" +:+ (plural CP.collision))
+  (S "to deal with edge-to-edge and vertex-to-vertex" +:+
+  plural CP.collision)
 
 likelyChangesStmt3 = (phrase library) `maybeExpanded` (
   S "to include motion with" +:+ (phrase CP.damping))
@@ -43,24 +44,23 @@ likelyChangesStmt4 = (phrase library) `maybeExpanded` (S "to include" +:+
   (plural CP.joint) `sAnd` (plural CM.constraint))
 
 likelyChangesList' :: [Sentence]
-likelyChangesList' = [likelyChangesStmt1, likelyChangesStmt2, likelyChangesStmt3,
-  likelyChangesStmt4]
+likelyChangesList' = [likelyChangesStmt1, likelyChangesStmt2, 
+  likelyChangesStmt3, likelyChangesStmt4]
 
-likelyChangesList = llcc "LCListCP" (mkLabelRA'' "LCListCPLabel") $ 
-  enumSimple 1 (getAcc likelyChg) likelyChangesList'
+likelyChangesList = enumSimple 1 (getAcc likelyChg) likelyChangesList'
 
 --------------------------------
 --UNLIKELY CHANGES --
 --------------------------------
 
 unlikelyChanges :: Section
-unlikelyChangesIntro, unlikelyChangesList :: LabelledContent
+unlikelyChangesIntro, unlikelyChangesList :: Contents
 
 unlikelyChanges = SRS.unlikeChg [unlikelyChangesIntro, unlikelyChangesList] []
 
-unlikelyChangesIntro = llcc "unlikelyChangesIntroCP" (mkLabelRA'' "unlikelyChangesIntroCPLbl") $
-  foldlSP [S "This", phrase section_, S "lists the", plural unlikelyChg, S "to be made to the",
-  phrase game, phrase physics, phrase library]
+unlikelyChangesIntro = foldlSP [S "This", phrase section_, S "lists the",
+  plural unlikelyChg, S "to be made to the", phrase game, phrase physics,
+  phrase library]
 
 unlikelyChangesStmt1, unlikelyChangesStmt2,
   unlikelyChangesStmt3, unlikelyChangesStmt4 :: Sentence
@@ -76,6 +76,5 @@ unlikelyChangesList' :: [Sentence]
 unlikelyChangesList' = [unlikelyChangesStmt1, unlikelyChangesStmt2,
   unlikelyChangesStmt3, unlikelyChangesStmt4]
 
-unlikelyChangesList = llcc "unlikelyChangesListCP" (mkLabelRA'' "unlikelyChangesListCPLabel") $ 
-  enumSimple 1 (getAcc unlikelyChg) unlikelyChangesList'
+unlikelyChangesList = enumSimple 1 (getAcc unlikelyChg) unlikelyChangesList'
   

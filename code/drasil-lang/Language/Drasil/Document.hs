@@ -130,4 +130,4 @@ figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RefAdd -> RawContent
 figWithWidth = Figure
 
 reldefn :: RelationConcept -> LabelledContent
-reldefn = (\x -> llcc mkEmptyLabel x) . Definition . Theory
+reldefn = llcc mkEmptyLabel . Definition . Theory

@@ -262,16 +262,16 @@ layLabelled sm x@(LblC _ (Figure c f wp _))     = T.Figure
   (spec sm c) f wp
 layLabelled sm x@(LblC _ (Requirement r))       = T.ALUR T.Requirement
   (spec sm $ requires r) 
-  (P.S $ (getAdd (x ^. getRefAdd))) 
+  (P.S $ getAdd (x ^. getRefAdd)) 
   (spec sm $ getShortName r)
 layLabelled sm x@(LblC _ (Assumption a))        = T.ALUR T.Assumption
   (spec sm (assuming a))
-  (P.S $ (getAdd (x ^. getRefAdd)))
+  (P.S $ getAdd (x ^. getRefAdd))
   (spec sm $ getShortName a)
 layLabelled sm x@(LblC _ (Change lc))           = T.ALUR
   (if (chngType lc) == Likely then T.LikelyChange else T.UnlikelyChange)
   (spec sm (chng lc)) 
-  (P.S $ (getAdd (x ^. getRefAdd))) 
+  (P.S $ getAdd (x ^. getRefAdd)) 
   (spec sm $ getShortName lc)
 layLabelled sm x@(LblC _ (Graph ps w h t _))    = T.Graph 
   (map (\(y,z) -> (spec sm y, spec sm z)) ps) w h (spec sm t)

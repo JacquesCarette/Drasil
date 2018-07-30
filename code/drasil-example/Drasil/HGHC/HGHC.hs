@@ -9,7 +9,7 @@ import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual),
     SCSSub(DDs'), DerivationDisplay(HideDerivation), SSDSub(SSDSolChSpec), 
     SSDSec(SSDProg))
 
-import Drasil.HGHC.HeatTransfer (fp, hghc, hghcVarsDD, hghcVars, htInputs, htOutputs, 
+import Drasil.HGHC.HeatTransfer (fp, hghc, hghcVarsDD, htInputs, htOutputs, 
     nuclearPhys, symbols)
 
 import Data.Drasil.SI_Units (si_units)

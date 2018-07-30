@@ -32,7 +32,6 @@ gapFilmCond  = vc "gapFilmCond"  (cn' "initial gap film conductance")
 cladCond     = vc "cladCond"     (cnIES "clad conductivity") (lK `sub` lC) Real
 
 htTransCladCool_eq, htTransCladFuel_eq :: Expr
-htTransCladCool_new, htTransCladFuel_new :: DataDefinition
 htTransCladCool, htTransCladFuel :: QDefinition
 
 ---

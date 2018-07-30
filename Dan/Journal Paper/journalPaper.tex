@@ -1,5 +1,16 @@
 \documentclass[format=acmsmall, review=false, screen=true]{acmart}
 
+\renewcommand{\texttt}[1]{%
+  \begingroup
+  \ttfamily
+  \begingroup\lccode`~=`/\lowercase{\endgroup\def~}{/\discretionary{}{}{}}%
+  \begingroup\lccode`~=`[\lowercase{\endgroup\def~}{[\discretionary{}{}{}}%
+  \begingroup\lccode`~=`.\lowercase{\endgroup\def~}{.\discretionary{}{}{}}%
+  \catcode`/=\active\catcode`[=\active\catcode`.=\active
+  \scantokens{#1\noexpand}%
+  \endgroup
+}
+
 \usepackage{booktabs} % For formal tables
 \usepackage{tikz}
 \usetikzlibrary{positioning,fit,calc,shapes,shadows,arrows}
@@ -13,7 +24,7 @@
 \SetAlCapHSkip{0pt}
 \IncMargin{-\parindent}
 \usepackage{hyperref}
-\usepackage{ulem}
+\usepackage[normalem]{ulem}
 
 % Metadata Information
 \acmJournal{TOSEM}
@@ -46,11 +57,15 @@
 \newcommand{\dc}{drasil-code}
 \newcommand{\dd}{drasil-data}
 \newcommand{\de}{drasil-example}
+\newcommand{\dg}{drasil-gen}
+\newcommand{\drp}{drasil-printers}
 
 \newcommand{\edl}{\emph{\dl}}
 \newcommand{\edc}{\emph{\dc}}
 \newcommand{\edd}{\emph{\dd}}
 \newcommand{\ede}{\emph{\de}}
+\newcommand{\edg}{\emph{\dg}}
+\newcommand{\edp}{\emph{\drp}}
 
 %% Comments
 \newif\ifcomments\commentstrue
@@ -321,6 +336,12 @@ changes
 quickly, and automatically update relevant and/or dependent artifacts.  \wss{I
   was looking for consistent by construction here, and I found it.  :-)}
 
+\ds{Work the following paragraph in somewhere related to consistency.}
+Consistent documentation has its own advantages while developing or maintaining 
+software~\cite{Hyman1990, Kotula2000}. Similarly, there are many downsides to
+inconsistent documentation~\cite{Kotula2000,Thimbleby1986}.
+
+
 \subsection{Scope} %DS Should this be here? Maybe, as long as the above 
 %clarifies the problem.
 \label{S:Scope}
@@ -352,25 +373,173 @@ of software artifacts has been attempted in differing scopes by many others. We
 look to them for insight and in an attempt to combine the fruits of their
 labours into something more versatile.
 
-In this section we will explore previous efforts in automating software artifact
-generation, as well as take a look at the current state of Model Driven
-Engineering and scientific knowledge ontologies.
+In this section we will first look at the state of SC software 
+development, as we have limited our scope to that domain, and identify 
+practices we can learn from or potentially improve. We 
+then explore previous efforts in automating software artifact
+generation, as well as look at the current state of Model Driven
+Engineering, scientific knowledge ontologies, and other areas that may be of 
+interest.
 
-\subsection{Software Artifact Reuse and Generation} %DS Is this subsect necessary?
+\subsection{SC Software Development}
+
+In many instances of SC software development, the developers are scientists and 
+tend to emphasize their science without necessarily following 
+software development best practices~\cite{Kelly2007}. These developers tend to 
+prefer an agile~\cite{AckroydEtAl2008, CarverEtAl2007, 
+EasterbrookAndJohns2009, Segal2005} or knowledge-acquisition driven 
+process~\cite{Kelly2015} instead. They consider process-heavy approaches 
+too rigid and disagreeable~\cite{CarverEtAl2007}.
+
+Tool use and adoption is also a problem in the SC software development 
+community, especially the use of version control software~\cite{Wilson2006}. 
+There is also a limited use of automated testing~\cite{PatrickEtAl2015} and 
+lack of understanding of what good software testing entails~\cite{Merali2010} 
+with quality assurance having ``a bad name among creative scientists and
+engineers''~\cite[p.~352]{Roache1998}. 
+
+With good science relying on replication and reuse, we see a lack of 
+reuse on the software side. A survey~\cite{Owen1998} showed that of 81 
+different mesh generator packages, 52 generated triangular meshes. Of those 52, 
+37 used the same Delaunay triangulation algorithm. There is no 
+reason for the exact same algorithm to be implemented 37 separate times when it 
+could simply be reused.
+
+Some SC software developers have used advanced techniques, like code 
+generation, quite successfully. Examples that come to mind are 
+FEniCS~\cite{LoggEtAl2012}, FFT~\cite{KiselyovEtAl2004}, Gaussian 
+Elimination~\cite{Carette2006}, and Spiral\cite{PuschelEtAl2005}. The focus of 
+generation techniques, thus far, have been solely on a single software 
+artifact: the source code.
+
+\subsection{Software Artifact Reuse and Generation} %DS Is this subsect 
+%necessary?
 
 Previous attempts at generating software artifacts were primarily focused on
-artifact reuse. One aim of these approaches was to remove the burden of
-replicating some artifacts.
+reusability. One aim of these approaches was to remove the burden of
+replicating some artifacts as, in many cases, replication can become impossible 
+without the help of the original author. Typically this is due to undocumented 
+assumptions, modifications to the finished product, or errors in the original 
+work~\cite{IonescuAndJansson2013}.
 
-We will start by looking at Compendia~\cite{GentlemanAndLang} 
+\subsubsection{Reproducible Research}
+\label{S:RR}
+
+The term \emph{reproducible research} means embedding executable 
+code in research papers to allow readers to reproduce the results 
+described~\cite{SchulteEtAl2012}. However, combining research reports with 
+relevant code and data is not easy, particularly when dealing with publication 
+versions of an author's work, thus the idea of \emph{compendia} were 
+introduced~\cite{GentlemanAndLang2012}.
+
+Compendia provide a means of encapsulating the full scope of a work. They 
+allow readers to see computational details and re-run computations performed by 
+the original author. While Gentleman and Lang intended compendia to be used for 
+peer review in scientific journals, we can also see their use in the realm of 
+software certification. Any requisite artifacts for getting software certified 
+could together be considered a type of compendium.
+
+Alongside compendia, several other tools have been created for reproducible 
+research. Examples include Sweave~\cite{Leisch2002},
+SASweave~\cite{LenthEtAl2007}, Statweave~\cite{Lenth2009},
+Scribble~\cite{FlattEtAl2009}, and Org-mode~\cite{SchulteEtAl2012}. These tools
+maintain a focus on specific computational details and code in general. Sweave 
+(the most popular of the aforementioned examples~\cite{SchulteEtAl2012}) allows 
+for embedding code into a document to be run during typesetting so up-to-date 
+results are always included. The majority of these tools aim to create a 
+singular, linear document like a research report.
+
+\subsubsection{Literate Programming}
+\label{S:LP}
+
+Introduced by Knuth, Literate Programming (LP) changes the focus from writing 
+programs as a list of instructions to explaining (\emph{to humans}) what we 
+want the computer to do~\cite{Knuth1984}.
+
+Developing literate programs involves breaking algorithms down into
+\emph{chunks}~\cite{JohnsonAndJohnson1997} or \emph{sections}~\cite{Knuth1984}
+which are small and easily understandable. These chunks are organized into a 
+``psychological order''~\cite{PieterseKourieAndBoake2004} to promote 
+understanding. One key aspect of LP is that chunks do not have to be written in 
+the order necessary for computation, as that may not be the most understandable.
+
+It should also be noted that in a literate program, the code and
+documentation are kept together in one source. Extracting working source code 
+is done through the \emph{tangle} process. Similarly, \emph{weave}
+is used to extract and typeset the documentation.
+
+Beyond understandability, LP has some key advantages over traditional 
+development. The intent of LP is to update documentation surrounding a piece of 
+source code as a program is developed and updated. There is also some reduction 
+in knowledge duplication through chunking. Adopting proper usage of LP ends up
+with more consistent documentation and code~\cite{ShumAndCook1993}. Keeping in 
+mind the benefits of artifact consistency we can see that more effective and 
+maintainable code can be produced when using 
+LP~\cite{PieterseKourieAndBoake2004}. 
+
+LP has not been very popular due to a couple of main issues: language/text 
+processor dependency and the lack of flexibility on output 
+presentation/suppression~\cite{ShumAndCook1993}. Still, there are
+several successful examples of literate programs in SC. Two such examples are
+VNODE-LP~\cite{Nedialkov2006} and ``Physically Based Rendering: From Theory to
+Implementation''~\cite{PharrAndHumphreys2004}. The latter being a textbook that 
+can be run as a literate program. 
+
+Many attempts to address the issues with LP's popularity have focused on
+changing or removing the output language or text processor dependency. Several
+new tools were developed such as: CWeb (for the C language), DOC++ (for C++),
+noweb (programming language independent), and more. While these tools did not 
+bring LP into the mainstream~\cite{Ramsey1994}, they did help drive the 
+understanding behind what exactly LP tools must do. We can now see LP becoming 
+more standardized in certain domains (for example: Agda, Haskell, and R support 
+LP to some extent). R has good tool support, with the most popular being
+Sweave~\cite{Leisch2002}, however it is mainly used for dynamically generating 
+reports as mentioned in Section~\ref{S:RR}.
+
+New tools led to the introduction of many new features including, but not 
+limited to, a ``What You See Is What You Get'' (WYSIWYG) 
+editor~\cite{FritzsonGunnarssonAndJirstrand2002}, phantom 
+abstracting~\cite{ShumAndCook1993}, and even movement away from the ``one 
+source'' idea~\cite{Simonis2003}.
+
+Tools such as Haddock (for Haskell), javadoc (for Java), and Doxygen (for 
+multiple languages) were also influenced by LP, but differ in that they are 
+merely document extraction tools. They do not contain the chunking features 
+which allow for re-ordering algorithms.
+
+As a final note, LP does not overly simplify the software development process 
+as documentation and code must be written as usual (barring chunk reuse), but 
+with the additional effort of re-ordering chunks.
+
+\subsubsection{Literate Software}
+
+A combination of LP and Box Structure~\cite{Mills1986} was proposed as a new
+method called ``Literate Software Development''
+(LSD)~\cite{AlMatiiAndBoujarwah2002}.
+
+Box structure can be summarized as using 
+different abstractions (views) that communicate the same
+information in differing levels of detail, for distinctive purposes. Box
+structures consist of black box, state machine, and clear boxes. The
+black box gives an external (user) view of the system and consists of stimuli
+and responses; the state machine makes the state data of the system visible -- 
+it defines the data stored between stimuli; and the clear box gives an internal
+(designer's) view describing how data are processed~\cite{Mills1986}. These 
+three structures are nested as necessary to describe a system.
+
+LSD was developed with the intent to overcome the disadvantages of both LP and
+box structure. It was intended to overcome LP's inability to specify interfaces
+between modules; the inability to decompose boxes and implement designs
+created by box structures; and overcome the lack of tool support for box
+structure~\cite{Deck1996}.
+
+``WebBox'' is a framework for LSD which expands LP and box structures in a
+variety of ways. It includes new chunk types and functionality for refining 
+chunks, specifying interfaces and communication between boxes, and decomposing 
+boxes at any level. LSD remains primarily code-focused with little support for 
+other software artifacts.
 
 Previous attempts at automating / reducing the artifact burden.
-
-- Compendia - Trying to solve the problem of reproducibility 
-\ds{or whichever appropriate R goes here -- see Gentleman \& Lang}
-  - Fits with goals of certification
-  - focused on good science and being able to re-run experiments exactly
-  - Not focused on DDD or its benefits, moreso 
 
 - Previous attempts at automatically generating documentation
   - LP, tools like javadoc, Haddock, etc.
@@ -386,6 +555,8 @@ Previous attempts at automating / reducing the artifact burden.
 - One other problem we've identified:
   - common underlying knowledge between projects is duplicated as there is no
    real cross-project reuse mechanism in place with these tools.
+
+
 
 \ds{Really need an intro to the basics of grounded theory here, for section 
 3.1 (S:IntroCases) and subsequently 4.2 (S:KReUse) if we keep the references to 
@@ -825,9 +996,10 @@ data.
 
 The current version (0.1.1 as of this writing) of Drasil is built as a 
 group of Haskell packages (see Figure~\ref{Fig:Packages}). The core components, 
-including those for document generation, are stored in a package named 
-\edl{} and code-generation related components are in 
-\edc{}. We maintain our current knowledge-base in 
+including those for document concepts, are stored in a package named 
+\edl{} and code-related components are in 
+\edc{}. The main generator code is in \edg{}, with the HTML/LaTeX printers in 
+\edp{}. We maintain our current knowledge-base in 
 \edd{} and our case study examples in \ede{}.
 
 \begin{figure}
@@ -836,11 +1008,12 @@ including those for document generation, are stored in a package named
 %TODO: Fix this
 
 \node (drasil-lang) [class] {\dl};
-\node (drasil-code) [class, below left=1 and 0.2cm of drasil-lang] 
-{\dc};
+\node (drasil-code) [class, below left=1 and 0.2cm of drasil-lang] {\dc};
 \node (drasil-data) [class, below right=1 and 4cm of drasil-code] {\dd};
-\node (drasil-example) [class, below left=1 and 0.54cm of drasil-data] 
-{\de};
+\node (drasil-example) [class, below left=1 and 0.54cm of drasil-data] {\de};
+\node (drasil-printers) [class, below right=1 and 1cm of drasil-lang] {\drp};
+\node (drasil-gen) [class, below left=of drasil-printers] {\dg};
+
 %lang coords
 \coordinate [above=2.785cm of drasil-data] (rightl);
 \coordinate [above=1.28cm of drasil-code] (leftl);
@@ -878,15 +1051,20 @@ module with functionality targeted to developers of Drasil known as
 \texttt{Language.Drasil.Development}.
 
 \texttt{Language.Drasil} presently contains the expression DSL, document layout 
-DSL, printing DSL, and the generator back-end. Every other \emph{drasil-*} 
-package relies on, and builds off, this core. Some of these, notably the 
-printing DSL and generator back-end, may be moved to their own packages in the 
-near future.
+DSL, and knowledge capture classes \& data types. Every other \emph{drasil-*} 
+package relies on, and builds off, this core.
 
-With \texttt{Language.Drasil} alone we can capture knowledge and generate 
+With \texttt{Language.Drasil} alone we can capture knowledge for generating
 artifacts nearly identical to those shown in Section~\ref{S:IntroCases}. 
 However this is a much lower-level approach than we would like to use and could 
 be seen as being akin to programming in a language like C, or even assembly. 
+
+\subsubsection{\drp}
+
+The printing DSL for HTML and LaTeX are stored here under the namespace 
+\texttt{Language.Drasil.Printers}. These are the DSLs which translate Drasil 
+specifications to the target language(s). Please note that the 
+printers for source-code are kept in a separate location.
 
 \subsubsection{\dc}
 
@@ -896,6 +1074,17 @@ incorporates \emph{GOOL}, a Generic Object-Oriented
 Language~\cite{Costabile2012}, to give us the 
 ability to target multiple languages -- C++, C\#, Objective C, Java, Lua, and 
 Python.
+
+\subsubsection{\dg}
+
+The main generator functions used by Drasil are stored here under the 
+\texttt{Language.Drasil.Generate} namespace. These functions are used to take a 
+Drasil specification and use the appropriate printers to generate the final 
+output file(s). Both code and document generation are handled through 
+function-calls found here.
+
+The actual body of \edg{} is very small, consisting of only approximately 60 
+lines of Haskell code.
 
 \subsubsection{\dd}
 

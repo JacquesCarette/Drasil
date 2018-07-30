@@ -21,8 +21,8 @@ data Spacing = Thin
 type Label = Spec
 
 data Expr = Dbl   Double
-          | Int   Integer
-          | Integ   Int
+          | Integ Integer
+          | Int   Int
           | Str   String
           | Case  [(Expr,Expr)]
           | Mtx [[Expr]]

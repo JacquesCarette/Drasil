@@ -1,6 +1,6 @@
 module Language.Drasil.Printing.Import(space,expr,symbol,spec,makeDocument) where
 
-import Data.List (intersperse, length, tail, head)
+import Data.List (intersperse)
 
 import Language.Drasil hiding (sec, symbol, phrase, titleize)
 
@@ -84,12 +84,12 @@ parens = P.Fenced P.Paren P.Paren
 --This function takes the digits form `floatToDigits` function
 -- and decimal point position and a counter
 digitsProcess :: [Int] -> Int -> Int -> [P.Expr]
-digitsProcess [0] a b = [P.Integ 0]
+digitsProcess [0] a b = [P.Int 0]
 digitsProcess (hd:tl) a b = if a == b  
-  then [(P.MO P.Point),(P.Integ hd)] ++ (digitsProcess tl a (b+1))
-  else [P.Integ hd] ++ (digitsProcess tl a (b+1))
+  then [(P.MO P.Point),(P.Int hd)] ++ (digitsProcess tl a (b+1))
+  else [P.Int hd] ++ (digitsProcess tl a (b+1))
 digitsProcess [] a b = if a > b
-  then [P.Integ 0] ++ (digitsProcess [] a (b+1))
+  then [P.Int 0] ++ (digitsProcess [] a (b+1))
   else []
 
 -- THis function takes the exponent and the [Int] of base and give out
@@ -111,14 +111,14 @@ processExpo a
 displayExpo :: Int -> [P.Expr]
 displayExpo 0 = []
 displayExpo a = [(P.MO P.Dot),
-   (P.Int 10), (P.Sup $ P.Integ a)]
+   (P.Int 10), (P.Sup $ P.Int a)]
 
 -- | expr translation function from Drasil to layout AST
 expr :: HasSymbolTable s => Expr -> s -> P.Expr
 expr (Dbl d)           sm = case floatToDigits 10 d of
   (a, b) -> P.Row $ ((digitsProcess a (fst $ processExpo b) 0) ++
    (displayExpo $ snd $ processExpo b))
-expr (Int i)            _ = P.Int   i
+expr (Int i)            _ = P.Integ i
 expr (Str s)            _ = P.Str   s
 expr (AssocB And l)    sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (precB And)) l
 expr (AssocB Or l)     sm = P.Row $ intersperse (P.MO P.Or ) $ map (expr' sm (precB Or)) l

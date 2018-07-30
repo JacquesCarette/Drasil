@@ -3,7 +3,7 @@ module Language.Drasil.HTML.Print(genHTML) where
 import Prelude hiding (print)
 import Data.List (sortBy,partition,intersperse)
 import Text.PrettyPrint hiding (render, Str)
-import Numeric (showGFloat, showEFloat)
+import Numeric (showFFloat)
 import Control.Arrow (second)
 
 import qualified Language.Drasil as L (People, Person, StyleGuide(APA, MLA, Chicago), 
@@ -35,7 +35,7 @@ import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title,
 import Language.Drasil.Printing.LayoutObj (Tags, Document(Document),
   LayoutObj(Graph, Bib, List, Header, Figure, Definition, Table, EqnBlock, Paragraph, 
   HDiv, ALUR))
-import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac, getBaseTen)
+import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac)
 
 {-
 import Language.Drasil.Development.UnitLang (L.USymb(L.US))
@@ -154,9 +154,9 @@ uSymb (L.US ls) = formatu t b
 -----------------------------------------------------------------
 -- | Renders expressions in the HTML (called by multiple functions)
 p_expr :: Expr -> String
-p_expr (Dbl d)        = showEFloat Nothing d ""--showGFloat Nothing d ""
+p_expr (Dbl d)        = showFFloat Nothing d ""
 p_expr (Int i)        = show i
-p_expr (Integ i)    = show i
+p_expr (Integ i)      = show i
 p_expr (Str s)        = s
 p_expr (Div a b)      = fraction (p_expr a) (p_expr b)
 p_expr (Case ps)      = cases ps p_expr

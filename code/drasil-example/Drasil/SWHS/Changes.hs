@@ -22,12 +22,10 @@ import Data.Drasil.SentenceStructures (foldlSent, sAnd, ofThe)
 -- Section 6 : LIKELY CHANGES --
 --------------------------------
 
-chgsStart :: LabelledContent -> Sentence
+chgsStart :: (HasShortName x, Referable x) => x -> Sentence
 chgsStart a = makeRef a +:+ S "-"
 
-likeChg1, likeChg3, likeChg4, likeChg5, likeChg6 :: Contents
-
-likeChg2 :: LabelledContent
+likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6 :: LabelledContent
 
 likeChg1 = mkLklyChnk "likeChg1" ( -- FIXME: mkLklyChnk is a hack since UID isn't used
   foldlSent [chgsStart newA4, short phsChgMtrl, S "is actually a poor", 
@@ -36,9 +34,9 @@ likeChg1 = mkLklyChnk "likeChg1" ( -- FIXME: mkLklyChnk is a hack since UID isn'
 
 --
 likeChg2 = llcc (mkLabelRA'' "Temperature-Coil-Variable-Over-Day") $ Change $ lc "likeChg2"
-  (foldlSent [chgsStart assump8, S "The", phrase temp_C, S "will change over",
+  (foldlSent [chgsStart newA8, S "The", phrase temp_C, S "will change over",
   (S "course" `ofThe` S "day, depending"), S "on the", phrase energy, 
-  S "received from the sun"] ) (shortname' "Temperature-Coil-Variable-Over-Day")
+  S "received from the sun"] ) (mkLabelRA'' "Temperature-Coil-Variable-Over-Day")
 --
 likeChg3 = mkLklyChnk "likeChg3" (
   foldlSent [chgsStart newA9, S "The", phrase temp_C,
@@ -66,12 +64,12 @@ unlikelyChgs :: Section
 unlikelyChgs = SRS.unlikeChg unlikelyChgsList []
 
 unlikelyChgsList :: [Contents]
-unlikelyChgsList = [unlikeChg1, unlikeChg2]
+unlikelyChgsList = map LlC [unlikeChg1, unlikeChg2]
 
-unlikeChg1, unlikeChg2 :: Contents
+unlikeChg1, unlikeChg2 :: LabelledContent
 
 unlikeChg1 = mkUnLklyChnk "unlikeChg1" ( 
-  foldlSent [makeRefSec newA14, S ", ", chgsStart newA18, S "It is unlikely for the changeof", 
+  foldlSent [makeRef newA14, S ", ", chgsStart newA18, S "It is unlikely for the changeof", 
   phrase water, S "from liquid to a solid or the state change of the", phrase phsChgMtrl, 
   S "from a liquid to a gas to be considered"] ) "Water-PCM-Fixed-States"
 --

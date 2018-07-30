@@ -22,7 +22,7 @@ import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Concepts.Documentation (assumption)
 import Data.Drasil.Units.Thermodynamics (thermal_flux)
 
-import Drasil.SWHS.TMods (t1ConsThermE)
+import Drasil.SWHS.TMods (t1ConsThermE_new)
 import Drasil.SWHS.Concepts (gauss_div)
 import Drasil.SWHS.Assumptions
 
@@ -114,18 +114,17 @@ roc_temp_simp_deriv =
 
 roc_temp_simp_deriv_sentences :: [Sentence]
 roc_temp_simp_deriv_sentences = map foldlSentCol [
-  s4_2_3_desc1 t1ConsThermE vol,
+  s4_2_3_desc1 t1ConsThermE_new vol,
   s4_2_3_desc2 gauss_div surface vol thFluxVect uNormalVect unit_,
   s4_2_3_desc3 vol vol_ht_gen,
   s4_2_3_desc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heat_cap_spec
-    QT.temp vol [makeRefSec newA3, makeRefSec newA4, 
-                 makeRefSec newA5, makeRefSec newA6],
+    QT.temp vol [makeRef newA3, makeRef newA4, 
+                 makeRef newA5, makeRef newA6],
   s4_2_3_desc5 density mass vol]
 
-s4_2_3_desc1 :: RelationConcept -> UnitalChunk -> [Sentence]
+s4_2_3_desc1 :: (HasShortName x, Referable x) => x -> UnitalChunk -> [Sentence]
 s4_2_3_desc1 t1c vo =
-  [S "Integrating", makeRef $ llcc "t1cLC" (mkLabelRA'' "t1cLCLabel") $ --FIXME
-  reldefn t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
+  [S "Integrating", makeRef t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
 s4_2_3_desc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]

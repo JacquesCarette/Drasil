@@ -1,13 +1,12 @@
-module Drasil.SWHS.TMods (tModels, t1ConsThermE, tMod1,
-  swhsTModsAsLCs, t1ConsThermE_new, t2SensHtE_new, 
-  t2SensHtE, t3LatHtE_new) where
+module Drasil.SWHS.TMods (swhsTMods, t1ConsThermE_new,
+  t2SensHtE_new, t3LatHtE_new) where
 
 import Language.Drasil
 import Control.Lens ((^.))
 
 import Data.Drasil.Concepts.Documentation (system)
 import Data.Drasil.SI_Units (joule)
-
+import Drasil.SWHS.Labels (assump1Label)
 import Data.Drasil.Concepts.Thermodynamics (phase_change, thermal_energy,
   heat_trans, law_cons_energy)
 import Data.Drasil.Concepts.Physics (mech_energy)
@@ -25,17 +24,8 @@ import Drasil.SWHS.Concepts (transient)
 import Drasil.SWHS.DataDefs (dd3HtFusion)
 import Drasil.SWHS.Labels (assump1Label)
 
-tModels :: [RelationConcept]
-tModels = [t1ConsThermE, t2SensHtE, t3LatHtE]
-
---FIXME: temporary hack resulting from inability to use makeRef on RelationConcept
--- since RelationConcept has a 'Maybe Label' instead of 'Label'
-swhsTModsAsLCs :: [LabelledContent]
-swhsTModsAsLCs = [tMod1LC] ++
-                 [llcc "tMod2LC" (mkLabelRA'' "tMod2Label") tMod2] ++
-                 [llcc "tMod3LC" (mkLabelRA'' "tMod3Label") tMod3]
-
-
+swhsTMods :: [TheoryModel]
+swhsTMods = [t1ConsThermE_new, t2SensHtE_new, t3LatHtE_new]
 
 -------------------------
 -- Theoretical Model 1 --
@@ -47,12 +37,6 @@ t1ConsThermE_new = tm' t1ConsThermE
   (tc' "ConsThermE_new" [qw thFluxVect, qw gradient, qw vol_ht_gen, 
     qw density, qw heat_cap_spec, qw temp, qw time] ([] :: [ConceptChunk])
   [] [TCon Invariant consThermERel] []) (mkLabelRA'' "t1ConsThermE") [t1descr]
-
-tMod1LC :: LabelledContent
-tMod1LC = llcc "tMod1LC" (mkLabelRA'' "tMod1Label") tMod1
-
-tMod1 :: Contents
-tMod1 = reldefn t1ConsThermE
 
 t1ConsThermE :: RelationConcept
 t1ConsThermE = makeRC "t1ConsThermE"
@@ -82,12 +66,7 @@ t1descr = foldlSent [
   S "is the" +:+. (gradient ^. defn), S "For this", phrase equation,
   S "to apply" `sC` S "other forms of", phrase energy `sC` S "such as",
   phrase mech_energy `sC`
-  S "are assumed to be negligible in the", phrase system, sParen (makeRef a1)]
-
---referencing within a simple list is not yet implemented
--- FIXME: this hack will be removed once labels are defined in their own file
-a1 :: LabelledContent
-a1 = llcc (mkLabelRA'' "assump1") $ Assumption $ assump "assump1" EmptyS "assump1"
+  S "are assumed to be negligible in the", phrase system, sParen (makeRef assump1Label)]
 
 -------------------------
 -- Theoretical Model 2 --
@@ -134,12 +113,9 @@ t2descr = foldlSent [
   ch temp :+: S "=" :+: ch boil_pt,
   S "or", ch temp :+: S "=" +. ch melt_pt,
   S "If this" `isThe` S "case, refer to",
-  --(makeRef $ reldefn t3LatHtE) `sC` --FIXME: referencing a Maybe Label
-  (makeRef $ llcc "t3LatHtELabelLC" (mkLabelRA'' "t3LatHtELabel") 
-    $ reldefn t3LatHtE) `sC` at_start latent_heat,
+  (makeRef t3LatHtE_new) `sC` at_start latent_heat,
   phrase energy]
  
-
 --How to have new lines in the description?
 --Can't have relation and eqn chunks together since they are called in a list
 ----You can, you just can't map "Definition" over a list
@@ -179,15 +155,9 @@ t3descr = foldlSent [
   phrase phase_change, S "is not complete. The status of",
   S "the", phrase phase_change,
   S "depends on the", phrase melt_frac `sC`
-  (makeRefSec dd3HtFusion) :+: S ".",
+  (makeRef dd3HtFusion) :+: S ".",
   ch melt_pt, S "and", ch boil_pt, S "are the",
   phrase melt_pt, S "and", phrase boil_pt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),
   at_start latent_heat :+: S "ing stops when all material has",
   S "changed to the new phase"]
-
-tMod2 :: Contents
-tMod2 = reldefn t2SensHtE
-
-tMod3 :: Contents
-tMod3 = reldefn t3LatHtE

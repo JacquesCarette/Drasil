@@ -1,5 +1,6 @@
 module Drasil.SWHS.Assumptions where --all of this file is exported
 
+import Drasil.SWHS.Labels (assump1Label)
 import Language.Drasil
 import Control.Lens ((^.))
 import Drasil.SWHS.References (ref_swhs_citations)
@@ -12,7 +13,7 @@ import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfect_insul,
   charging, discharging)
 import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, temp_init, temp_W,
   temp_PCM, htCap_L_P, htCap_W, htCap_S_P, w_density, pcm_density, pcm_vol)
-import Drasil.SWHS.TMods (t1ConsThermE)
+import Drasil.SWHS.TMods (t1ConsThermE_new)
 import Drasil.SWHS.Labels (assump1Label, assump14Label, assump18Label, 
   assump19Label, assump10Label)
 
@@ -78,8 +79,7 @@ assumpS1 = foldlSent [
   S "relevant for this", phrase problem, S "is" +:+. 
   phrase CT.thermal_energy, S "All other forms of", phrase energy `sC`
   S "such as", phrase mech_energy `sC` S "are assumed to be negligible",
-  sSqBr $ makeRef $ llcc "t1ConsThermELC" (mkLabelRA'' "t1ConsThermELabel") $
-   reldefn t1ConsThermE] -- FIXME: reference maybe label cleanly
+  sSqBr $ makeRef t1ConsThermE_new]
 assumpS2 = foldlSent [
   S "All", phrase CT.heat_trans, S "coefficients are constant over",
   phrase time, sSqBr $ acroGD 1]
@@ -87,10 +87,10 @@ assumpS3 = foldlSent [
   S "The", phrase water, S "in the", phrase tank,
   S "is fully mixed, so the", phrase temp_W `isThe` 
   S "same throughout the entire", phrase tank,
-  sSqBr $ acroGD 2 `sC` (makeRefSec dd2HtFluxP)]
+  sSqBr $ acroGD 2 `sC` (makeRef dd2HtFluxP)]
 assumpS4 = foldlSent [
   S "The", phrase temp_PCM `isThe` S "same throughout the", phrase pcm_vol,
-  sSqBr $ acroGD 2 `sC` (makeRefSec dd2HtFluxP)]
+  sSqBr $ acroGD 2 `sC` (makeRef dd2HtFluxP)]
   --FIXME `sC` makeRef likeChg1]
 assumpS5 = foldlSent [
   S "The", phrase w_density `sAnd` phrase pcm_density,
@@ -105,25 +105,25 @@ assumpS6 = foldlSent [
 assumpS7 = foldlSent [
   CT.law_conv_cooling ^. defn, S "applies between the",
   phrase coil `sAnd` S "the", phrase water,
-  sSqBr $ makeRefSec dd1HtFluxC]
+  sSqBr $ makeRef dd1HtFluxC]
 assumpS8 = foldlSent [
   S "The", phrase temp_C, S "is constant over", phrase time,
-  sSqBr $ makeRefSec dd1HtFluxC]
+  sSqBr $ makeRef dd1HtFluxC]
   --FIXME `sC` makeRef likeChg2]
 assumpS9 = foldlSent [
   S "The", phrase temp_C, S "does not vary along its length",
-  sSqBr $ makeRefSec dd1HtFluxC]
+  sSqBr $ makeRef dd1HtFluxC]
   --FIXME `sC` makeRef likeChg3]
 assumpS10 = foldlSent [
   CT.law_conv_cooling ^. defn, S "applies between the",
   phrase water `sAnd` S "the", short phsChgMtrl,
-  sSqBr $ makeRefSec dd2HtFluxP]
+  sSqBr $ makeRef dd2HtFluxP]
 assumpS11 = foldlSent [
   S "The", phrase model, S "only accounts for", (charging ^. defn) `sC`
   S "not" +:+. phrase discharging, S "The", phrase temp_W `sAnd`
   phrase temp_PCM, S "can only increase, or remain",
   S "constant; they do not decrease. This implies that the",
-  phrase temp_init, sSqBr $ makeRefSec newA12, S "is less than (or equal)",
+  phrase temp_init, sSqBr $ makeRef newA12, S "is less than (or equal)",
   S "to the", phrase temp_C, sSqBr $ acroIM 1]
   --FIXME `sC` makeRef likeChg4]
 assumpS12 = foldlSent [
@@ -169,31 +169,6 @@ assumpS20 = foldlSent [
   phrase tank `sC` (phrase vol `ofThe` phrase coil),
   S "is assumed to be negligible"]
   --FIXME , sSqBr $ makeRef req2]
-
-assump1, assump2, assump3, assump4, assump5, assump6, assump7,
-  assump8, assump9, assump10, assump11, assump12, assump13, assump14,
-  assump15, assump16, assump17, assump18, assump19, assump20 :: LabelledContent
-
-assump1 = let a1 = "assump1" in llcc (mkLabelRA'' a1) $ Assumption $ assump a1 assumpS1 a1 
-assump2 = let a2 = "assump2" in llcc (mkLabelRA'' a2) $ Assumption $ assump a2 assumpS2 a2 
-assump3 = let a3 = "assump3" in llcc (mkLabelRA'' a3) $ Assumption $ assump a3 assumpS3 a3 
-assump4 = let a4 = "assump4" in llcc (mkLabelRA'' a4) $ Assumption $ assump a4 assumpS4 a4 
-assump5 = let a5 = "assump5" in llcc (mkLabelRA'' a5) $ Assumption $ assump a5 assumpS5 a5 
-assump6 = let a6 = "assump6" in llcc (mkLabelRA'' a6) $ Assumption $ assump a6 assumpS6 a6 
-assump7 = let a7 = "assump7" in llcc (mkLabelRA'' a7) $ Assumption $ assump a7 assumpS7 a7 
-assump8 = let a8 = "assump8" in llcc (mkLabelRA'' a8) $ Assumption $ assump a8 assumpS8 a8 
-assump9 = let a9 = "assump9" in llcc (mkLabelRA'' a9) $ Assumption $ assump a9 assumpS9 a9 
-assump10 = let a10 = "assump10" in llcc (mkLabelRA'' a10) $ Assumption $ assump a10 assumpS10 a10 
-assump11 = let a11 = "assump11" in llcc (mkLabelRA'' a11) $ Assumption $ assump a11 assumpS11 a11 
-assump12 = let a12 = "assump12" in llcc (mkLabelRA'' a12) $ Assumption $ assump a12 assumpS12 a12 
-assump13 = let a13 = "assump13" in llcc (mkLabelRA'' a13) $ Assumption $ assump a13 assumpS13 a13 
-assump14 = let a14 = "assump14" in llcc (mkLabelRA'' a14) $ Assumption $ assump a14 assumpS14 a14 
-assump15 = let a15 = "assump15" in llcc (mkLabelRA'' a15) $ Assumption $ assump a15 assumpS15 a15 
-assump16 = let a16 = "assump16" in llcc (mkLabelRA'' a16) $ Assumption $ assump a16 assumpS16 a16 
-assump17 = let a17 = "assump17" in llcc (mkLabelRA'' a17) $ Assumption $ assump a17 assumpS17 a17 
-assump18 = let a18 = "assump18" in llcc (mkLabelRA'' a18) $ Assumption $ assump a18 assumpS18 a18 
-assump19 = let a19 = "assump19" in llcc (mkLabelRA'' a19) $ Assumption $ assump a19 assumpS19 a19 
-assump20 = let a20 = "assump20" in llcc (mkLabelRA'' a20) $ Assumption $ assump a20 assumpS20 a20 
 
 --- Again, list structure is same between all examples.
 -- Can booktabs colored links be used? The box links completely cover nearby

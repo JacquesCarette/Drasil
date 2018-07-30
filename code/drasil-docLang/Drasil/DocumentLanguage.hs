@@ -485,7 +485,7 @@ mkSolChSpec si (SCSProg l) =
       SSD.inModelF pdStub ddStub tmStub SRS.genDefnLabel (map LlC (map (instanceModel fields (_sysinfodb si')) ims))
     mkSubSCS SI {_refdb = db} Assumptions =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
-      (map (\x -> LlC $ llcc mkEmptyLabel x) $ map Assumption $ assumptionsFromDB (db ^. assumpRefTable))
+      (map (\x -> LlC $ llcc (x ^. getLabel) (Assumption x)) $ assumptionsFromDB (db ^. assumpRefTable))
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
     inModSec = SRS.inModel [mkParagraph EmptyS] []
@@ -556,7 +556,7 @@ mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortByS
 
 -- | Helper for making the bibliography section
 mkBib :: BibRef -> Section
-mkBib bib = SRS.reference [LlC $ llcc mkEmptyLabel $ Bib bib] []
+mkBib bib = SRS.reference [UlC $ ulcc (Bib bib)] []
 
 {--}
 

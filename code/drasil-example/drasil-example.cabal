@@ -20,13 +20,46 @@ executable tiny
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
     drasil-lang >= 0.1.12,
-    drasil-data >= 0.1.1,
+    drasil-data >= 0.1.4,
     drasil-code >= 0.1.1,
     drasil-printers >= 0.1.0,
     drasil-gen >= 0.1.0,
     drasil-docLang >= 0.1.1
   default-language: Haskell2010
   ghc-options:      -Wall -O2
+
+executable glassbr
+  hs-source-dirs: .
+  main-is: Drasil/GlassBR/Main.hs
+  other-modules:
+      Drasil.GlassBR.Body
+    , Drasil.GlassBR.Changes
+    , Drasil.GlassBR.Concepts
+    , Drasil.GlassBR.Unitals
+    , Drasil.GlassBR.TMods
+    , Drasil.GlassBR.IMods
+    , Drasil.GlassBR.DataDefs
+    , Drasil.GlassBR.References
+    , Drasil.GlassBR.Units
+    , Drasil.GlassBR.ModuleDefs
+    , Drasil.GlassBR.Symbols
+    , Drasil.GlassBR.Assumptions
+  Build-Depends:
+    base >= 4.7,
+    lens >= 4.12,
+    containers >= 0.5.5.1,
+    pretty >= 1.1.1.1,
+    mtl >= 2.2.1,
+    directory >= 1.2.6.2,
+    split >= 0.2.3.1,
+    drasil-lang >= 0.1.6,
+    drasil-data >= 0.1.1,
+    drasil-code >= 0.1.1,
+    drasil-printers >= 0.1.0,
+    drasil-gen >= 0.1.0,
+    drasil-docLang >= 0.1.0   
+  default-language: Haskell2010
+  ghc-options:      -Wall
 
 executable nopcm
   hs-source-dirs: .
@@ -59,14 +92,47 @@ executable nopcm
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil-lang >= 0.1.5,
-    drasil-data >= 0.1.1,
+    drasil-lang >= 0.1.6,
+    drasil-data >= 0.1.4,
     drasil-code >= 0.1.1,
     drasil-printers >= 0.1.0,
     drasil-gen >= 0.1.0,
     drasil-docLang >= 0.1.1
   default-language: Haskell2010
   ghc-options:      -Wall -O2
+
+executable swhs
+  hs-source-dirs: .
+  main-is: Drasil/SWHS/Main.hs
+  other-modules:
+      Drasil.SWHS.Assumptions
+    , Drasil.SWHS.Body
+    , Drasil.SWHS.Concepts
+    , Drasil.SWHS.DataDefs
+    , Drasil.SWHS.DataDesc
+    , Drasil.SWHS.GenDefs
+    , Drasil.SWHS.Generate
+    , Drasil.SWHS.Changes
+    , Drasil.SWHS.References
+    , Drasil.SWHS.Requirements
+    , Drasil.SWHS.TMods
+    , Drasil.SWHS.IMods
+    , Drasil.SWHS.Unitals
+  Build-Depends:
+    base >= 4.7,
+    lens >= 4.12,
+    containers >= 0.5.5.1,
+    pretty >= 1.1.1.1,
+    mtl >= 2.2.1,
+    directory >= 1.2.6.2,
+    drasil-lang >= 0.1.6,
+    drasil-data >= 0.1.4,
+    drasil-code >= 0.1.1,
+    drasil-printers >= 0.1.0,
+    drasil-gen >= 0.1.0,
+    drasil-docLang >= 0.1.1
+  default-language: Haskell2010
+  ghc-options:      -Wall
 
 executable ssp
   hs-source-dirs: .
@@ -94,45 +160,12 @@ executable ssp
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil-lang >= 0.1.5,
-    drasil-data >= 0.1.1,
+    drasil-lang >= 0.1.6,
+    drasil-data >= 0.1.4,
     drasil-code >= 0.1.1,
     drasil-printers >= 0.1.0,
     drasil-gen >= 0.1.0,
     drasil-docLang >= 0.1.1
-  default-language: Haskell2010
-  ghc-options:      -Wall
-
-executable glassbr
-  hs-source-dirs: .
-  main-is: Drasil/GlassBR/Main.hs
-  other-modules:
-      Drasil.GlassBR.Body
-    , Drasil.GlassBR.Changes
-    , Drasil.GlassBR.Concepts
-    , Drasil.GlassBR.Unitals
-    , Drasil.GlassBR.TMods
-    , Drasil.GlassBR.IMods
-    , Drasil.GlassBR.DataDefs
-    , Drasil.GlassBR.References
-    , Drasil.GlassBR.Units
-    , Drasil.GlassBR.ModuleDefs
-    , Drasil.GlassBR.Symbols
-    , Drasil.GlassBR.Assumptions
-  Build-Depends:
-    base >= 4.7,
-    lens >= 4.12,
-    containers >= 0.5.5.1,
-    pretty >= 1.1.1.1,
-    mtl >= 2.2.1,
-    directory >= 1.2.6.2,
-    split >= 0.2.3.1,
-    drasil-lang >= 0.1.5,
-    drasil-data >= 0.1.1,
-    drasil-code >= 0.1.1,
-    drasil-printers >= 0.1.0,
-    drasil-gen >= 0.1.0,
-    drasil-docLang >= 0.1.0   
   default-language: Haskell2010
   ghc-options:      -Wall
 
@@ -156,42 +189,8 @@ executable chipmunkdocs
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil-lang >= 0.1.5,
-    drasil-data >= 0.1.1,
-    drasil-code >= 0.1.1,
-    drasil-printers >= 0.1.0,
-    drasil-gen >= 0.1.0,
-    drasil-docLang >= 0.1.1
-  default-language: Haskell2010
-  ghc-options:      -Wall
-
-executable swhs
-  hs-source-dirs: .
-  main-is: Drasil/SWHS/Main.hs
-  other-modules:
-      Drasil.SWHS.Assumptions
-    , Drasil.SWHS.Labels
-    , Drasil.SWHS.Body
-    , Drasil.SWHS.Concepts
-    , Drasil.SWHS.DataDefs
-    , Drasil.SWHS.DataDesc
-    , Drasil.SWHS.GenDefs
-    , Drasil.SWHS.Generate
-    , Drasil.SWHS.Changes
-    , Drasil.SWHS.References
-    , Drasil.SWHS.Requirements
-    , Drasil.SWHS.TMods
-    , Drasil.SWHS.IMods
-    , Drasil.SWHS.Unitals
-  Build-Depends:
-    base >= 4.7,
-    lens >= 4.12,
-    containers >= 0.5.5.1,
-    pretty >= 1.1.1.1,
-    mtl >= 2.2.1,
-    directory >= 1.2.6.2,
-    drasil-lang >= 0.1.5,
-    drasil-data >= 0.1.1,
+    drasil-lang >= 0.1.6,
+    drasil-data >= 0.1.4,
     drasil-code >= 0.1.1,
     drasil-printers >= 0.1.0,
     drasil-gen >= 0.1.0,

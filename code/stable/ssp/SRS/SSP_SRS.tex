@@ -7,7 +7,6 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{unicode-math}
-\usepackage{enumitem}
 \usepackage{tabu}
 \usepackage{longtable}
 \usepackage{booktabs}
@@ -67,27 +66,27 @@ $\{{x_{cs}}{,y_{cs}}\}$ & The Set of X and Y Coordinates: describe the vertices 
 \\
 $(x,y)$ & Cartesian Position Coordinates: y is considered parallel to the direction of the force of gravity and x is considered perpendicular to y & m
 \\
-$a$ & Constant: FIXME: missing description & m
-\\
 $A$ & Constant: FIXME: missing description & m
 \\
-$b$ & Base Width of a Slice: in the x-ordinate direction only for slice index i & m
+$a$ & Constant: FIXME: missing description & m
 \\
-$c'$ & Effective Cohesion: internal pressure that sticks particles of soil together & Pa
+$b$ & Base Width of a Slice: in the x-ordinate direction only for slice index i & m
 \\
 ${C1_{i}}$ & Interslice Normal Force Function: the normal force at the interslice interface for slice i & Nm
 \\
 ${C2_{i}}$ & Interslice Shear Force Function: the shear force at the interslice interface for slice i & Nm
 \\
+$c'$ & Effective Cohesion: internal pressure that sticks particles of soil together & Pa
+\\
 $E$ & Elastic Modulus: The ratio of the stress exerted on a body to the resulting strain. & Pa
+\\
+$F$ & Force: An interaction that tends to produce change in the motion of an object & N
 \\
 $f$ & Scaling Function: magnitude of interslice forces as a function of the x coordinatefor interslice index i; can be constant or a half-sine & --
 \\
 ${F_{x}}$ & X-Component of the Net Force:  & N
 \\
 ${F_{y}}$ & Y-Component of the Net Force:  & N
-\\
-$F$ & Force: An interaction that tends to produce change in the motion of an object & N
 \\
 $FS$ & Factor of Safety: The global stability of a surface in a slope & --
 \\
@@ -123,9 +122,9 @@ ${K_{st}}$ & Shear Stiffness: for interslice surface, without length adjustment 
 \\
 $M$ & Moment: a measure of the tendency of a body to rotate about a specific point or axis & Nm
 \\
-$n$ & Number of Slices: the slip mass has been divided into & --
-\\
 $N$ & Normal Force: total reactive force for a soil surface subject to a body resting on it & N
+\\
+$n$ & Number of Slices: the slip mass has been divided into & --
 \\
 $N'$ & Effective Normal Force: for a soil surface, subtracting pore water reactive force from total reactive force & N
 \\
@@ -149,19 +148,19 @@ $SpencerFixme2Please$ & Fixme: What is this value? & --
 \\
 $T$ & Mobilized Shear Force: without the influence of interslice forces for slice index i & N
 \\
+$u$ & Local Index: used as a bound variable index in calculations & --
+\\
 ${U_{b}}$ & Base Hydrostatic Force: from water pressure within the slice for slice index i & N
 \\
 ${U_{t}}$ & Surface Hydrostatic Force: from water pressure acting into the slice from standing water on the slope surface for slice index i & N
-\\
-$u$ & Local Index: used as a bound variable index in calculations & --
 \\
 $v$ & Local Index: used as a bound variable index in calculations & --
 \\
 $W$ & Weight: downward force caused by gravity on slice i & N
 \\
-$x$ & X Ordinate: refers to either slice i midpoint, or slice interface i & m
-\\
 $X$ & Interslice Shear Force: exerted between adjacent slices for interslice index i & N
+\\
+$x$ & X Ordinate: refers to either slice i midpoint, or slice interface i & m
 \\
 ${x_{slip}}$ & X Ordinate: distance of the slip surface at i, refers to either slice i midpoint, or slice interface i & m
 \\
@@ -217,9 +216,9 @@ $τ$ & Resistive Shear Stress: acting on the base of a slice & Pa
 \\
 $Υ$ & Function: generic minimization function or algorithm & --
 \\
-$φ'$ & Effective Angle of Friction: The angle of inclination with respect to the horizontal axis of the Mohr-Coulomb shear resistance line & ${}^{\circ}$
-\\
 $Φ$ & Constant: converts resistive shear without the influence of interslice forces, to a calculation considering the interslice forces & N
+\\
+$φ'$ & Effective Angle of Friction: The angle of inclination with respect to the horizontal axis of the Mohr-Coulomb shear resistance line & ${}^{\circ}$
 \\
 $Ψ$ & Constant: converts mobile shear without the influence of interslice forces, to a calculation considering the interslice forces & N
 \\
@@ -289,6 +288,33 @@ The goal statements are refined to the theoretical models, and the theoretical m
 \section{General System Description}
 \label{Sec:GenSysDesc}
 This section provides general information about the system including identifying the interfaces between the system and its environment (system context), describing the user characteristics and listing the system constraints.
+\subsection{System Context}
+\label{Sec:SysContext}
+Figure~\ref{Figure:sysCtxDiag} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SSP). Arrows are used to show the data flow between the system and its environment.
+\begin{figure}
+\begin{center}
+\includegraphics[width=\textwidth]{../../../datafiles/SSP/SystemContextFigure.png}
+\caption{System Context}
+\label{Figure:sysCtxDiag}
+\end{center}
+\end{figure}
+The interaction between the product and the user is through a user interface. The responsibilities of the user and the system are as follows:
+\begin{itemize}
+\item{User Responsibilities}
+\begin{itemize}
+\item{Provide the input data related to the soil layer(s) and water table (if applicable), ensuring no errors in the data entry}
+\item{Ensure that consistent units are used for input variables}
+\item{Ensure required software assumptions (Section~\ref{Sec:Assumps}) are appropriate for any particular problem input to the software}
+\end{itemize}
+\item{SSP Responsibilities}
+\begin{itemize}
+\item{Detect data type mismatch, such as a string of characters  input instead of a floating point number}
+\item{Determine if the inputs satisfy the required physical and software constraints}
+\item{Identify the most likely failure surface within the possible input range}
+\item{Find the factor of safety for the slope}
+\item{Find the displacement of soil that will occur on the slope}
+\end{itemize}
+\end{itemize}
 \subsection{User Characteristics}
 \label{Sec:UserChars}
 The end user of SSA should have an understanding of undergraduate Level 1 Calculus and Physics, and be familiar with soil and material properties.
@@ -297,7 +323,7 @@ The end user of SSA should have an understanding of undergraduate Level 1 Calcul
 There are no system constraints.
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
-This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used for the slope stability analysis.
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
 SSA is a computer program developed to evaluate the factor of safety of a slope's slip surface and to calculate the displacement that the slope will experience.
@@ -352,34 +378,34 @@ The instance models that govern SSA are presented in Section~\ref{Sec:IMs}. The 
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TMs}{]}, General Definitions {[}Section~\ref{Sec:GDs}{]}, Data Definitions {[}Section~\ref{Sec:DDs}{]}, Instance Models {[}Section~\ref{Sec:IMs}{]}, Likely Changes {[}Section~\ref{Sec:LCs}{]}, or Unlikely Changes {[}Section~\ref{Sec:UCs}{]}, in which the respective assumption is used.
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Slip-Surface-Concave}:]The slip surface is concave with respect to the slope surface. The $(x,y)$ coordinates of the failure surface follow a monotonic function.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The slip surface is concave with respect to the slope surface. The $(x,y)$ coordinates of the failure surface follow a monotonic function.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Geo-Slope-Mat-Props-of-Soil-Inputs}:]The geometry of the slope, and the material properties of the soil layers are given as inputs.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The geometry of the slope, and the material properties of the soil layers are given as inputs.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Soil-Layer-Homogeneous}:]The different layers of the soil are homogeneous, with consistent soil properties throughout, and independent of dry or saturated conditions, with the exception of unit weight.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The different layers of the soil are homogeneous, with consistent soil properties throughout, and independent of dry or saturated conditions, with the exception of unit weight.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Soil-Layers-Isotropic}:]Soil layers are treated as if they have isotropic properties.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]Soil layers are treated as if they have isotropic properties.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Interslice-Norm-Shear-Forces-Linear}:]Interslice normal and shear forces have a linear relationship, proportional to a constant ($λ$) and an interslice force function ($f$) depending on x position.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]Interslice normal and shear forces have a linear relationship, proportional to a constant ($λ$) and an interslice force function ($f$) depending on x position.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Base-Norm-Shear-Forces-Linear-on-FS}:]Slice to base normal and shear forces have a linear relationship, dependent on the factor of safety $FS$, and the Coulomb sliding law.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]Slice to base normal and shear forces have a linear relationship, dependent on the factor of safety $FS$, and the Coulomb sliding law.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Stress-Strain-Curve-interslice-Linear}:]The stress - strain curve for interslice relationships is linear with a constant slope.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The stress - strain curve for interslice relationships is linear with a constant slope.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Plane-Strain-Conditions}:]The slope and slip surface extends far into and out of the geometry (z coordinate). This implies plane strain conditions, making 2D analysis appropriate.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The slope and slip surface extends far into and out of the geometry (z coordinate). This implies plane strain conditions, making 2D analysis appropriate.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Effective-Norm-Stress-Large}:]The effective normal stress is large enough that the resistive shear to effective normal stress relationship can be approximated as a linear relationship.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The effective normal stress is large enough that the resistive shear to effective normal stress relationship can be approximated as a linear relationship.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Surface-Base-Slice-between-Interslice-Straight-Lines}:]The surface and base of a slice between interslice nodes are approximated as straight lines.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The surface and base of a slice between interslice nodes are approximated as straight lines.
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -893,7 +919,7 @@ Description & \begin{symbDescription}
               \item{$γ$ is the dry unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -927,7 +953,7 @@ Description & \begin{symbDescription}
               \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -961,7 +987,7 @@ Description & \begin{symbDescription}
               \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -996,7 +1022,7 @@ Description & \begin{symbDescription}
               \item{${y_{wt}}$ is the y ordinate (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1025,7 +1051,7 @@ Description & \begin{symbDescription}
               \item{${x_{slip}}$ is the x ordinate (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1054,7 +1080,7 @@ Description & \begin{symbDescription}
               \item{${x_{us}}$ is the x ordinate (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1082,7 +1108,7 @@ Description & \begin{symbDescription}
               \item{$i$ is the index (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1111,7 +1137,7 @@ Description & \begin{symbDescription}
               \item{$α$ is the angle (${}^{\circ}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1140,7 +1166,7 @@ Description & \begin{symbDescription}
               \item{$β$ is the angle (${}^{\circ}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1169,7 +1195,7 @@ Description & \begin{symbDescription}
               \item{$i$ is the index (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1198,7 +1224,7 @@ Description & \begin{symbDescription}
               \item{$ω$ is the angle (${}^{\circ}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1228,7 +1254,7 @@ Description & \begin{symbDescription}
               \item{$G$ is the interslice normal force (N)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1267,7 +1293,7 @@ Description & \begin{symbDescription}
               \item{$b$ is the base width of a slice (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1314,7 +1340,7 @@ Description & \begin{symbDescription}
               \item{$ΔH$ is the difference between interslice forces (N)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1360,7 +1386,7 @@ Description & \begin{symbDescription}
               \item{$δy$ is the displacement (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1397,7 +1423,7 @@ Description & \begin{symbDescription}
               \item{$δy$ is the displacement (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1486,7 +1512,7 @@ Description & \begin{symbDescription}
               \item{${K_{bn}}$ is the normal stiffness ($\frac{\text{Pa}}{\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1521,7 +1547,7 @@ Description & \begin{symbDescription}
               \item{$a$ is the constant (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1556,7 +1582,7 @@ Description & \begin{symbDescription}
               \item{$A$ is the constant (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1584,7 +1610,7 @@ Description & \begin{symbDescription}
               \item{$i$ is the index (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1612,7 +1638,7 @@ Description & \begin{symbDescription}
               \item{$i$ is the index (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1654,7 +1680,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & Equation for the Factor of Safety is the ratio between resistive and mobile shear of the slip surface. The sum of values from each slice is taken to find the total resistive and mobile shear for the slip surface. The constants $Φ$ and $Ψ$ convert the resistive and mobile shear without the inluence of interslice forces, to a calculation considering the interslice forces.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1721,7 +1747,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & $λ$ is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in GD5 The inclination function $f$ determines the relative magnitude ratio between the different interslices, while $λ$ determines the magnitude. $λ$ uses the sum of interslice normal and shear forces taken from each interslice.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1777,7 +1803,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & The value of the interslice normal force $G$ at interface $i$ The net force. is the weight of the slices adjacent to interface $i$ exert horizontally on each other.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1849,7 +1875,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & There is one set of force displacement equilibrium equations in the x and y directions for each element. System of equations solved for displacements ( $δx$ and $δy$ ).
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1892,7 +1918,7 @@ Description & \begin{symbDescription}
               \item{${ℓ_{b}}$ is the total base length of a slice (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1957,7 +1983,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & Given the necessary slope inputs, a minimization algorithm or function $Υ$ will identify the critical slip surface of the slope, with the critical slip coordinates $\{{x_{cs}}{,y_{cs}}\}$ and the minimum factor of safety ${FS_{min}}$ that results.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -1970,13 +1996,13 @@ Table~\ref{Table:InDataConstraints} and Table~\ref{Table:OutDataConstraints} sho
 Var & Physical Constraints & Typical Value & Uncert.
 \\
 \midrule
-$E$ & $E>0$ & $15000.0$ Pa & 10.0\%
+$A$ & -- & $0.0$ m & 10.0\%
+\\
+$a$ & -- & $0.0$ m & 10.0\%
 \\
 $c'$ & $c'>0$ & $10.0$ Pa & 10.0\%
 \\
-$ν$ & $0<ν<1$ & $0.4$ & 10.0\%
-\\
-$φ'$ & $0<φ'<90$ & $25.0$ ${}^{\circ}$ & 10.0\%
+$E$ & $E>0$ & $15000.0$ Pa & 10.0\%
 \\
 $γ$ & $γ>0$ & $20.0$ $\frac{\text{N}}{\text{m}^{3}}$ & 10.0\%
 \\
@@ -1984,11 +2010,11 @@ ${γ_{Sat}}$ & ${γ_{Sat}}>0$ & $20.0$ $\frac{\text{N}}{\text{m}^{3}}$ & 10.0\%
 \\
 ${γ_{w}}$ & ${γ_{w}}>0$ & $9.8$ $\frac{\text{N}}{\text{m}^{3}}$ & 10.0\%
 \\
-$a$ & -- & $0.0$ m & 10.0\%
-\\
-$A$ & -- & $0.0$ m & 10.0\%
-\\
 $κ$ & -- & $0.0$ Pa & 10.0\%
+\\
+$ν$ & $0<ν<1$ & $0.4$ & 10.0\%
+\\
+$φ'$ & $0<φ'<90$ & $25.0$ ${}^{\circ}$ & 10.0\%
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -2066,16 +2092,16 @@ SSA is intended to be an educational tool, so accuracy and performance are not p
 \section{Likely Changes}
 \label{Sec:LCs}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:LC.inhomogeneous}:]A\ref{A:Soil-Layer-Homogeneous} - The system currently assumes the different layers of the soil are homogeneous. In the future, calculations can be added for inconsistent soil properties throughout.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{Calculate-Inhomogeneous-Soil-Layers}:]A\ref{A:Soil-Layer-Homogeneous} - The system currently assumes the different layers of the soil are homogeneous. In the future, calculations can be added for inconsistent soil properties throughout.
 \end{description}
 \section{Unlikely Changes}
 \label{Sec:UCs}
 If changes were to be made with regard to the following, a different algorithm would be needed.
 \begin{description}
-\item[\refstepcounter{ucnum}\uctheucnum\label{UC:UC.normshearlinear}:]Chages related to A\ref{A:Interslice-Norm-Shear-Forces-Linear} and A\ref{A:Base-Norm-Shear-Forces-Linear-on-FS} are not possible due to the dependency of the calculations on the linear relationship between interslice normal and shear forces.
+\item[\refstepcounter{ucnum}\uctheucnum\label{Normal-And-Shear-Linear-Only}:]Chages related to A\ref{A:Interslice-Norm-Shear-Forces-Linear} and A\ref{A:Base-Norm-Shear-Forces-Linear-on-FS} are not possible due to the dependency of the calculations on the linear relationship between interslice normal and shear forces.
 \end{description}
 \begin{description}
-\item[\refstepcounter{ucnum}\uctheucnum\label{UC:UC.2donly}:]A\ref{A:Plane-Strain-Conditions} allows for 2D analysis with these models only because stress along z-direction is zero. These models do not take into account stress in the z-direction, and therefore cannot be without manipulation to attempt 3d analysis.
+\item[\refstepcounter{ucnum}\uctheucnum\label{2D-Analysis-Only}:]A\ref{A:Plane-Strain-Conditions} allows for 2D analysis with these models only because stress along z-direction is zero. These models do not take into account stress in the z-direction, and therefore cannot be without manipulation to attempt 3d analysis.
 \end{description}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}

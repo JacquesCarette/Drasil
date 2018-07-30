@@ -9,7 +9,7 @@ module Drasil.Sections.Introduction
 import Language.Drasil
 import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc)
 import Data.Drasil.SentenceStructures (ofThe, ofThe',
-  foldlList, foldlsC, refineChain, foldlSP)
+  foldlList, SepType(Comma), FoldType(List), foldlsC, refineChain, foldlSP)
 import Data.Drasil.Concepts.Documentation as Doc (goal, organization, thModel, inModel, goalStmt,
   documentation, user, theory, definition, scope, requirement, section_, document, purpose,
   system, model, design, intReader, srs, characteristic, designDoc, decision, environment,
@@ -44,7 +44,7 @@ developmentProcessParagraph refdb = foldlSP [S "This", phrase document,
 
 -- | Sentence containing the subsections of the introduction
 introductionSubsections :: Sentence
-introductionSubsections = foldlList (map (\(x,y) -> x `ofThe` y) 
+introductionSubsections = foldlList Comma List (map (\(x,y) -> x `ofThe` y) 
   [(phrase scope, phrase system), 
   (phrase Doc.organization, phrase document), 
   (plural characteristic, phrase intReader)])
@@ -59,7 +59,7 @@ introductionSubsections = foldlList (map (\(x,y) -> x `ofThe` y)
 -- subSections        - List of subsections for this section
 introductionSection :: Sentence -> Sentence -> [Section] -> Section
 introductionSection problemIntroduction programDefinition subSections = SRS.intro 
-  [Paragraph problemIntroduction, (overviewParagraph programDefinition)] subSections
+  [mkParagraph problemIntroduction, (overviewParagraph programDefinition)] subSections
 
 
 -- | Constructor for the overview paragraph for the introduction
@@ -75,7 +75,7 @@ overviewParagraph programDefinition = foldlSP [S "The following", phrase section
 -- example
 purposeOfDoc :: ReferenceDB -> Sentence -> Section
 purposeOfDoc refdb purposeOfProgramParagraph = SRS.prpsOfDoc 
-  [Paragraph purposeOfProgramParagraph, developmentProcessParagraph refdb] []
+  [mkParagraph purposeOfProgramParagraph, developmentProcessParagraph refdb] []
 
 
 -- | constructor for scope of requirements subsection
@@ -124,14 +124,14 @@ orgSec i b s t = SRS.orgOfDoc (orgIntro i b s t) []
 
 -- Intro -> Bottom (for bottom up approach) -> Section that contains bottom ->
 --    trailing sentences -> [Contents]
-orgIntro :: (NamedIdea c) => Sentence -> c -> Label -> Sentence -> [Contents]
+orgIntro :: NamedIdea c => Sentence -> c -> Label -> Sentence -> [Contents]
 orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
           intro, S "The presentation follows the standard pattern of presenting",
           (foldlsC $ map (plural) [Doc.goal, theory, definition]) `sC` S "and assumptions.",
           S "For readers that would like a more bottom up approach" `sC`
-          S "they can start reading the", plural bottom, 
-          S "in", makeRefSec bottomSec +:+
+          S "they can start reading the", plural bottom,
+          S "in", midRef bottomSec +:+
           S "and trace back to find any additional information they require"],
-          Paragraph $ lastS trailingSentence]
+          mkParagraph $ lastS trailingSentence]
           where lastS EmptyS = refineChain [goalStmt, thModel, inModel]
                 lastS t = refineChain [goalStmt, thModel, inModel] +:+. t

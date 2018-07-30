@@ -1,9 +1,9 @@
-module Data.Drasil.Citations (koothoor2013, parnasClements1986, smithLai2005, jnlCGJ
+module Data.Drasil.Citations (campidelli, koothoor2013, parnasClements1986, smithLai2005, jnlCGJ
   ) where
 
 import Language.Drasil --(S,(:+:),(+:+),sC,phrase,F,Accent(..),Citation(..),CiteField(..))
 import Data.Drasil.People (dParnas, jRalyte, lLai, nKoothoor, nKraiem, 
-  pcClements, pjAgerfalk, spencerSmith)
+  pcClements, pjAgerfalk, spencerSmith, mCampidelli)
 import Data.Drasil.Software.Products (sciCompS)
 
 ---------------
@@ -11,6 +11,9 @@ import Data.Drasil.Software.Products (sciCompS)
 ---------------
 
 koothoor2013, parnasClements1986, smithLai2005 :: Citation
+
+campidelli = cBooklet "campidelli"
+  (S "Glass-BR Software for the design and risk assessment of glass facades subjected to blast loading")  [author [mCampidelli]]
 
 koothoor2013 = 
   cMThesis "koothoor2013" [nKoothoor] 

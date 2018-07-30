@@ -22,20 +22,23 @@ import Data.Drasil.SentenceStructures (foldlSent, sAnd, ofThe)
 -- Section 6 : LIKELY CHANGES --
 --------------------------------
 
-chgsStart :: (Referable l, HasShortName l) => l -> Sentence
-chgsStart a = makeRefSec a +:+ S "-"
+chgsStart :: LabelledContent -> Sentence
+chgsStart a = makeRef a +:+ S "-"
 
-likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6 :: LabelledContent
+likeChg1, likeChg3, likeChg4, likeChg5, likeChg6 :: Contents
+
+likeChg2 :: LabelledContent
 
 likeChg1 = mkLklyChnk "likeChg1" ( -- FIXME: mkLklyChnk is a hack since UID isn't used
   foldlSent [chgsStart newA4, short phsChgMtrl, S "is actually a poor", 
   phrase CT.thermal_conductor `sC` S "so the", phrase assumption, 
   S "of uniform", phrase temp_PCM, S "is not likely"] ) "Uniform-Temperature-PCM"
+
 --
-likeChg2 = mkLklyChnk "likeChg2" (
-  foldlSent [chgsStart newA8, S "The", phrase temp_C, S "will change over", 
+likeChg2 = llcc (mkLabelRA'' "Temperature-Coil-Variable-Over-Day") $ Change $ lc "likeChg2"
+  (foldlSent [chgsStart assump8, S "The", phrase temp_C, S "will change over",
   (S "course" `ofThe` S "day, depending"), S "on the", phrase energy, 
-  S "received from the sun"] ) "Temperature-Coil-Variable-Over-Day"
+  S "received from the sun"] ) (shortname' "Temperature-Coil-Variable-Over-Day")
 --
 likeChg3 = mkLklyChnk "likeChg3" (
   foldlSent [chgsStart newA9, S "The", phrase temp_C,
@@ -59,15 +62,13 @@ likeChg6 = mkLklyChnk "likeChg6" (
 
 -- List structure same in all examples.
 
---add referencing to assumptions?
-
 unlikelyChgs :: Section
 unlikelyChgs = SRS.unlikeChg unlikelyChgsList []
 
-unlikelyChgsList :: [LabelledContent]
+unlikelyChgsList :: [Contents]
 unlikelyChgsList = [unlikeChg1, unlikeChg2]
 
-unlikeChg1, unlikeChg2 :: LabelledContent
+unlikeChg1, unlikeChg2 :: Contents
 
 unlikeChg1 = mkUnLklyChnk "unlikeChg1" ( 
   foldlSent [makeRefSec newA14, S ", ", chgsStart newA18, S "It is unlikely for the changeof", 

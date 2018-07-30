@@ -59,9 +59,15 @@ instance HasLabel           InstanceModel where getLabel = lb
 instance HasShortName       InstanceModel where shortname = lb . shortname
 instance HasAdditionalNotes InstanceModel where getNotes = notes
 
-im :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> Label -> InstanceModel
-im rcon i ic o oc lbe = IM rcon i ic o oc [] [] lbe Nothing
+-- | Smart constructor for instance models
+im'' :: RelationConcept -> Inputs -> InputConstraints -> Output ->
+  OutputConstraints -> Derivation -> String -> [Sentence] -> InstanceModel
+im'' rcon i ic o oc der sn addNotes = IM rcon i ic o oc [] der (shortname' sn) (Just addNotes)
+
+im :: RelationConcept -> Inputs -> InputConstraints -> Output ->
+  OutputConstraints -> References -> Label -> InstanceModel
+im rcon i ic o oc src sn = IM rcon i ic o oc src [] sn Nothing
+
 
 -- | Same as `im`, with an additional field for notes to be passed in
 im' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 

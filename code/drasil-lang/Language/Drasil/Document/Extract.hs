@@ -1,9 +1,10 @@
-module Language.Drasil.Document.Extract (getDoc, egetDoc)where
+module Language.Drasil.Document.Extract (getDoc, egetDoc) where
 
 import Control.Lens ((^.))
 import Data.List(transpose)
 
 import Language.Drasil.Document
+import Language.Drasil.Document.Core
 import Language.Drasil.Expr
 import Language.Drasil.Spec
 import Language.Drasil.NounPhrase 
@@ -18,7 +19,7 @@ import Language.Drasil.Chunk.ReqChunk
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.References
 
-import Language.Drasil.Development.Unit(UnitDefn)
+import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(getUnit))
 
 import Language.Drasil.Classes (NamedIdea(term),
   ExprRelat(relat), HasDerivation(derivations), 
@@ -43,17 +44,16 @@ egetSec (Section _ sc lb) = case lb ^. shortname of
 egetSec (Section _ sc _) = concatMap egetSecCon sc
 
 egetSecCon :: SecCons -> [Expr]
-egetSecCon (Sub  s)  = egetSec s
-egetSecCon (Con  c)  = egetCon c
-egetSecCon (LCon lc) = egetLCon lc
+egetSecCon (Sub s) = egetSec s
+egetSecCon (Con c) = egetCon' c
 
-egetLCon :: LabelledContent -> [Expr]
-egetLCon lc = egetCon $ accessContents lc
+egetCon' :: Contents -> [Expr]
+egetCon' c = egetCon (c ^. accessContents)
 
-egetCon :: Contents -> [Expr]
-egetCon (EqnBlock e _) = [e]
+egetCon :: RawContent -> [Expr]
+egetCon (EqnBlock e) = [e]
 egetCon (Definition d) = egetDtype d 
-egetCon (Defnt dt (hd:tl) a) = concatMap egetCon (map accessContents $ snd hd) ++ egetCon (Defnt dt tl a)
+egetCon (Defnt dt (hd:tl) a) = concatMap egetCon' (snd hd) ++ egetCon (Defnt dt tl a)
 egetCon (Defnt dt [] _) = [] ++ egetDtype dt
 egetCon _ = []
 
@@ -77,11 +77,7 @@ getSec (Section _ _ _) = []
 
 getSecCon :: SecCons -> [Sentence]
 getSecCon (Sub s) = getSec s
-getSecCon (Con c) = getCon c
-getSecCon (LCon lc) = getLCon lc
-
-getLCon :: LabelledContent -> [Sentence]
-getLCon lc = getCon $ accessContents lc
+getSecCon (Con c) = getCon' c
 
 -- This function is used in collecting sentence from table.
 -- Since only the table's first Column titled "Var" should be collected,
@@ -92,10 +88,13 @@ isVar (_ : tl, _ : tl1) = isVar (tl, tl1)
 isVar ([], _) = []
 isVar (_, []) = []
 
-getCon :: Contents -> [Sentence]
+getCon' :: Contents -> [Sentence]
+getCon' c = getCon (c ^. accessContents)
+
+getCon :: RawContent -> [Sentence]
 getCon (Table s1 s2 t _ _) = isVar (s1, transpose s2) ++ [t]
 getCon (Paragraph s)       = [s]
-getCon (EqnBlock _ _)      = []
+getCon (EqnBlock _)      = []
 getCon (Definition d)      = getDtype d
 getCon (Enumeration lst)   = getLT lst
 getCon (Figure l _ _ _)    = [l]
@@ -104,7 +103,7 @@ getCon (Assumption assc)   = getAss assc
 getCon (Change chg)        = getChg chg
 getCon (Bib bref)          = getBib bref
 getCon (Graph [(s1, s2)] _ _ l _) = s1 : s2 : [l]
-getCon (Defnt dt (hd:fs) a) = concatMap getLCon (snd hd) ++ getCon (Defnt dt fs a)
+getCon (Defnt dt (hd:fs) a) = concatMap getCon' (snd hd) ++ getCon (Defnt dt fs a)
 getCon (Defnt _ [] _) = []
 getCon  _ = []
 
@@ -149,8 +148,8 @@ getChg :: Change -> [Sentence]
 getChg a = [chng a]
 
 getLT :: ListType -> [Sentence]
-getLT (Bullet it) = concatMap getIL it
-getLT (Numeric it) = concatMap getIL it
+getLT (Bullet it) = concatMap getIL $ map fst it
+getLT (Numeric it) = concatMap getIL $ map fst it
 getLT (Simple lp) = concatMap getLP lp
 getLT (Desc lp) = concatMap getLP lp
 getLT (Definitions lp) = concatMap getLP lp
@@ -160,8 +159,8 @@ getIL :: ItemType -> [Sentence]
 getIL (Flat s) = [s]
 getIL (Nested h lt) = h : getLT lt
 
-getLP :: ListPair -> [Sentence]
-getLP (t, it) = t : getIL it
+getLP :: ListTuple -> [Sentence]
+getLP (t, it, _) = t : getIL it
 
 getBib :: (HasFields c) => [c] -> [Sentence]
 getBib a = concatMap getField $ concatMap (^. getFields) a

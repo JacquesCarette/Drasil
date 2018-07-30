@@ -1,12 +1,13 @@
 module Drasil.DocLang.SRS
- (doc, doc', intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
+ (doc, doc', intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient,
   genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
   probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assumpt, thModel,
   genDefn, inModel, dataDefn, datCon, require, nonfuncReq, funcReq, likeChg, unlikeChg, 
   traceyMandG, appendix, reference, propCorSol, offShelfSol, valsOfAuxCons,
-  tOfSymb, 
-  physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, inModelLabel,
-  likeChgLabel, unlikeChgLabel, valsOfAuxConsLabel, referenceLabel, indPRCaseLabel) where
+  physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
+  inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
+  indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel,
+  tOfSymb, srsDom) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
@@ -23,6 +24,8 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (appendix,
     systemConstraint, termAndDef, terminology, thModel, traceyMandG, tOfSymb, 
     userCharacteristic)
 import Data.Drasil.Phrase (for'')
+
+import Control.Lens ((^.))
 
 -- Local function to keep things looking clean, not exported.
 forTT :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
@@ -66,16 +69,26 @@ specSysDes  cs ss = section' (titleize Doc.specificsystemdescription) cs ss "Spe
 probDesc    cs ss = section' (titleize Doc.problemDescription) cs ss "ProbDesc"
 termAndDefn cs ss = section' (titleize' Doc.termAndDef)        cs ss "TermDefs"
 termogy     cs ss = section' (titleize Doc.terminology)        cs ss "Terminology"
+
 goalStmt    cs ss = section' (titleize' Doc.goalStmt)          cs ss "GoalStmt"
 solCharSpec cs ss = section' (titleize Doc.solutionCharSpec)   cs ss "SolCharSpec"
-
 
 require     cs ss = section' (titleize' Doc.requirement)      cs ss "Requirements"
 nonfuncReq  cs ss = section' (titleize' Doc.nonfunctionalRequirement) cs ss "NFRs"
 
+funcReq     cs ss = section' (titleize' Doc.functionalRequirement) cs ss "FRs" --FIXME: label is available
+
+likeChg     cs ss = section' (titleize' Doc.likelyChg)        cs ss "LCs" --FIXME: label is available
+unlikeChg   cs ss = section' (titleize' Doc.unlikelyChg)      cs ss "UCs" --FIXME: label is available
+
+traceyMandG cs ss = section' (titleize' Doc.traceyMandG)      cs ss "TraceMatrices"
+
+valsOfAuxCons cs ss = section' (titleize Doc.consVals)        cs ss "AuxConstants" --FIXME: label is available
+
 reference   cs ss = section' (titleize' Doc.reference)        cs ss "References" --FIXME: label is available
 offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "ExistingSolns"
 
+tOfSymb cs ss = section' (titleize Doc.tOfSymb) cs ss "ToS" --FIXME: label is available
 
 
 appendix, datCon, funcReq, genDefn, likeChg, physSyst, sysCont, traceyMandG,
@@ -103,10 +116,23 @@ valsOfAuxCons cs ss = sectionLC (titleize Doc.consVals)               cs ss vals
 section' :: Sentence -> [Contents] -> [Section] -> RefAdd -> Section
 section' a b c d = section a b c (mkLabelRA' (d ++ "Label") d)
 
+--Root SRS Domain
+srsDom :: CommonConcept
+srsDom = dcc' "srsDom" (Doc.srs ^. term) "srs" ""
+
+--function that sets the shortname of each section to be the reference address
+section' :: Sentence -> [Contents] -> [Section] -> RefAdd -> Section
+section' a b c d = section a b c d (shortname' $ getStr a) --FIXME: getStr hack 
+  where
+    getStr :: Sentence -> String
+    getStr (S s) = s
+    getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
+    getStr _ = error "Term is not a string"
+
 --Labels--
 physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
   inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
-  indPRCaseLabel :: Label
+  indPRCaseLabel, unlikeChgLabel :: Label
 physSystLabel      = mkLabelRA'' "PhysSyst"
 datConLabel        = mkLabelRA'' "DataConstraints"
 genDefnLabel       = mkLabelRA'' "GDs"

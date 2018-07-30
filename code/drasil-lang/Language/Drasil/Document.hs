@@ -2,6 +2,7 @@
 -- | Document Description Language
 module Language.Drasil.Document where
 
+import Language.Drasil.Document.Core
 import Language.Drasil.Chunk.AssumpChunk (AssumpChunk)
 import Language.Drasil.Chunk.Change (Change)
 import Language.Drasil.Chunk.Citation (BibRef)
@@ -9,76 +10,53 @@ import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
-import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel), 
-  HasRefAddress(getRefAdd), HasMaybeLabel(getMaybeLabel))
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName,
+  shortname')
+import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd),
+  MayHaveLabel(getMaybeLabel), HasLabel(getLabel))
 
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.Label (Label, mkLabelRA)
+import Language.Drasil.Label (Label, mkLabelRA, mkEmptyLabel)
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Spec (Sentence(..))
-import Language.Drasil.UID
 
-import Control.Lens ((^.), makeLenses)
+import Control.Lens ((^.), makeLenses, Lens', set)
 
-data ListType = Bullet [ItemType] -- ^ Bulleted list
-              | Numeric [ItemType] -- ^ Enumerated List
-              | Simple [ListPair] -- ^ Simple list with items denoted by @-@
-              | Desc [ListPair] -- ^ Descriptive list, renders as "Title: Item" (see 'ListPair')
-              | Definitions [ListPair] -- ^ Renders a list of "@Title@ is the @Item@"
+makeLenses ''LabelledContent
+makeLenses ''UnlabelledContent
 
-data ItemType = Flat Sentence -- ^ Standard singular item
-              | Nested Header ListType -- ^ Nest a list as an item
+instance HasRefAddress LabelledContent where getRefAdd = lbl . getRefAdd
+instance HasLabel      LabelledContent where getLabel = lbl
+instance MayHaveLabel  LabelledContent where getMaybeLabel x = Just (x ^. getLabel)
+instance HasContents   LabelledContent where accessContents = ctype
+instance HasShortName  LabelledContent where shortname (LblC x _) = shortname x
 
--- | MaxWidthPercent should be kept in the range 1-100. 
--- Values outside this range may have unexpected results.
--- Used for specifying max figure width as
--- pagewidth*MaxWidthPercent/100.
-type MaxWidthPercent = Float
+instance MayHaveLabel UnlabelledContent where getMaybeLabel _ = Nothing
+instance HasContents  UnlabelledContent where accessContents = cntnts
 
-type Title    = Sentence
-type Author   = Sentence
-type Header   = Sentence -- Used when creating sublists
-type Depth    = Int
-type Width    = Float
-type Height   = Float
-type ListPair = (Title,ItemType) -- ^ Title: Item
-type Filepath = String
-type Lbl      = Sentence
+-- FIXME: this is here temporarily due to import cycles
+class HasContents c where
+  accessContents :: Lens' c RawContent
 
---FIXME: Remove Data, Data', and Theory from below.
--- | Types of definitions
-data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining 
-                              -- equation used to generate the Data Definition
-           | Data' DataDefinition
-           | General
-           | Theory RelationConcept -- ^ Theoretical models use a relation as
-                                    -- their definition
-           | Instance
-           | TM
-           | DD
+repUnd :: Char -> String
+repUnd '_' = "."
+repUnd c = c : []
 
--- | Types of layout objects we deal with explicitly
-data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
-  -- ^ table has: header-row data(rows) label/caption showlabel?
-               | Paragraph Sentence -- ^ Paragraphs are just sentences.
-               | EqnBlock Expr RefAdd
-     --        CodeBlock Code   -- GOOL complicates this.  Removed for now.
-               | Definition DType
-               | Enumeration ListType -- ^ Lists
-               | Figure Lbl Filepath MaxWidthPercent RefAdd-- ^ Should use relative file path.
-               | Requirement ReqChunk
-               | Assumption AssumpChunk
-               | Change Change
-               | Bib BibRef
-     --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
-               | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl RefAdd
-               -- ^ TODO: Fill this one in.
-               ------NEW TMOD/DDEF/IM/GD BEGINS HERE------
-               ---- FIXME: The above Definition will need to be removed ----
-               --------------------------------------------
-               | Defnt DType [(Identifier, [LabelledContent])] RefAdd
-type Identifier = String
+-- | Automatically create the label for a definition
+getDefName :: DType -> String
+getDefName (Data c)   = "DD:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
+getDefName (Data' c)  = "DD:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
+getDefName (Theory c) = "T:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
+getDefName TM         = "T:"
+getDefName DD         = "DD:"
+getDefName Instance   = "IM:"
+getDefName General    = "GD:"
+
+
+instance HasContents Contents where
+  accessContents f (UlC c) = fmap (UlC . (\x -> set cntnts x c)) (f $ c ^. cntnts)
+  accessContents f (LlC c) = fmap (LlC . (\x -> set ctype x c)) (f $ c ^. ctype)
+>>>>>>> master
 
 data LabelledContent = LblC { _uniqueID :: UID
                             , _lbl :: Maybe Label
@@ -120,36 +98,27 @@ accessContents = ctype
 -- which hold the contents of the document
 data Document = Document Title Author [Section]
 
-{-
-instance HasShortName  Contents where
-  shortname (Table _ _ _ _ r)     = shortname' $ "Table:" ++ r
-  shortname (Figure _ _ _ r)      = shortname' $ "Figure:" ++ r
-  shortname (Graph _ _ _ _ r)     = shortname' $ "Figure:" ++ r
-  shortname (EqnBlock _ r)        = shortname' $ "Equation:" ++ r
-  shortname (Definition d)        = shortname' $ getDefName d
-  shortname (Defnt _ _ r)         = shortname' r
-  shortname (Requirement rc)      = shortname rc
-  shortname (Assumption ca)       = shortname ca
-  shortname (Change lcc)          = shortname lcc
-  shortname (Enumeration _)       = error "Can't reference lists"
-  shortname (Paragraph _)         = error "Can't reference paragraphs"
-  shortname (Bib _)               = error $
-    "Bibliography list of references cannot be referenced. " ++
-    "You must reference the Section or an individual citation."
--}
+-- | Smart constructor for labelled content chunks
+llcc :: Label -> RawContent -> LabelledContent
+llcc = LblC
+
+-- | Smart constructor for unlabelled content chunks
+ulcc :: RawContent -> UnlabelledContent
+ulcc = UnlblC
 
 ---------------------------------------------------------------------------
 -- smart constructors needed for LabelledContent
 -- nothing has a shortname right now
+mkTableLC :: String -> String -> String -> RawContent -> LabelledContent
+mkTableLC labelUID refAdd sn' tbl = llcc (mkLabelRA labelUID refAdd sn') tbl
 
---FIXME: design needed or new constructor needed wherever used?
-llccNoLabel :: Contents -> LabelledContent
-llccNoLabel x = LblC "" Nothing x
+mkParagraph :: Sentence -> Contents
+mkParagraph x = UlC $ ulcc $ Paragraph x
 
-mkParagraph :: Sentence -> LabelledContent
-mkParagraph c = LblC "" Nothing $ Paragraph c 
+mkFig :: Label -> RawContent -> Contents
+mkFig x y = LlC $ llcc x y
 
-{-mkTableLC :: String -> String -> String -> String -> Contents -> LabelledContent
+mkTableLC :: String -> String -> String -> String -> Contents -> LabelledContent
 mkTableLC uidForContent labelUID refAdd sn' tbl = llcc uidForContent 
   (mkLabelRA labelUID refAdd sn') tbl
 
@@ -157,7 +126,9 @@ mkDefinitionLC :: String -> String -> String -> String -> Contents -> LabelledCo
 mkDefinitionLC uidForContent labelUID refAdd sn dfn = llcc uidForContent 
   (mkLabelRA labelUID refAdd sn) dfn
 
-mkEqnBlock
+
+>>>>>>> master
+{-mkEqnBlock
 mkEnumeration
 mkFigure
 mkRequirement
@@ -168,7 +139,7 @@ mkGraph
 mkDefnt-}
 ---------------------------------------------------------------------------
 -- smart constructors and combinators for making instances of the above
--- data types.  Over time, the types should no longer be exported, and 
+-- data types.  Over time, the types should no longer be exported, and
 -- only these used
 
 -- | Smart constructor for creating Sections with introductory contents
@@ -183,29 +154,16 @@ sectionLC :: Sentence -> [LabelledContent] -> [Section] -> Label -> Section
 sectionLC title intro secs lbe = Section title (map LCon intro ++ map Sub secs) lbe
 
 -- | Figure smart constructor. Assumes 100% of page width as max width.
-fig :: Lbl -> Filepath -> RefAdd -> Contents
+fig :: Lbl -> Filepath -> RefAdd -> RawContent
 fig l f = Figure l f 100
 
 -- | Figure smart constructor for customized max widths.
-figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RefAdd -> Contents
+figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RefAdd -> RawContent
 figWithWidth = Figure
 
-datadefn :: QDefinition -> Contents
-datadefn = Definition . Data
+--FIXME: to be removed when QDefinition becomes referable
+datadefn :: QDefinition -> LabelledContent
+datadefn = (\x -> llcc mkEmptyLabel x) . Definition . Data
 
-reldefn :: RelationConcept -> Contents
-reldefn = Definition . Theory
-
--- | Automatically create the label for a definition
-getDefName :: DType -> String
-getDefName (Data c)   = "DD:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
-getDefName (Data' c)  = "DD:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
-getDefName (Theory c) = "T:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
-getDefName TM         = "T:"
-getDefName DD         = "DD:"
-getDefName Instance   = "IM:"
-getDefName General    = "GD:"
-
-repUnd :: Char -> String
-repUnd '_' = "."
-repUnd c = c : []
+reldefn :: RelationConcept -> LabelledContent
+reldefn = (\x -> llcc mkEmptyLabel x) . Definition . Theory

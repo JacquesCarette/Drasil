@@ -1,6 +1,6 @@
 ----------------------------------------------------------
 ### Quick Summary of Folder Structure and File Contents
-April 29, 2018
+Last updated: July 20, 2018
 ----------------------------------------------------------
 
 Helpers.hs
@@ -13,8 +13,7 @@ Preamble.hs
   - Generates the TeX preamble based on the necessary packages for a doc
 
 Print.hs
-  - Defines the pretty printer for generating the
-  LaTeX documents from the AST representation.
+  - Defines the pretty printer for generating the LaTeX documents from the AST representation
 
 README.md
   - This file.

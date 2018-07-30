@@ -7,10 +7,13 @@ import Data.Drasil.Units.Thermodynamics (heat_transfer_coef)
 {--}
 
 symbols :: [QuantityDict]
-symbols = map qw hghcVars ++ map qw htVars
+symbols = htOutputs ++ htInputs
 
-hghcVars :: [DataDefinition]
-hghcVars = [htTransCladFuel_new, htTransCladCool_new]
+hghcVarsDD :: [DataDefinition]
+hghcVarsDD = [htTransCladFuelDD, htTransCladCoolDD]
+
+hghcVars :: [QDefinition]
+hghcVars = [htTransCladFuel, htTransCladCool]
 
 htVars :: [VarChunk]
 htVars = [cladThick, coolFilmCond, gapFilmCond, cladCond]
@@ -34,7 +37,8 @@ htTransCladCool, htTransCladFuel :: QDefinition
 
 ---
 
-htTransCladCool_new = mkDD htTransCladCool [{-References-}] [{-Derivation-}] "htTransCladCool"--Label
+htTransCladCoolDD :: DataDefinition
+htTransCladCoolDD = mkDD htTransCladCool [{-References-}] [{-Derivation-}] "htTransCladCool"--Label
   Nothing--no additional notes
 
 htTransCladCool = fromEqn "htTransCladCool" (nounPhraseSP
@@ -49,7 +53,8 @@ htTransCladCool_eq =
 
 ---
 
-htTransCladFuel_new = mkDD htTransCladFuel [{-References-}] [{-Derivation-}] "htTransCladFuel"--Label
+htTransCladFuelDD :: DataDefinition
+htTransCladFuelDD = mkDD htTransCladFuel [{-References-}] [{-Derivation-}] "htTransCladFuel"--Label
   Nothing--no additional notes
 
 htTransCladFuel = fromEqn "htTransCladFuel" (nounPhraseSP

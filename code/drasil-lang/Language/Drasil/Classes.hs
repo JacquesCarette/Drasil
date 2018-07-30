@@ -1,7 +1,7 @@
 {-# Language TypeFamilies #-}
 -- | Defining all the classes which represent knowledge-about-knowledge
 module Language.Drasil.Classes (
-    HasUID(uid)
+    HasUID(uid), UID
   , NamedIdea(term)
   , Idea(getA)
   , Definition(defn)
@@ -10,9 +10,9 @@ module Language.Drasil.Classes (
   , HasSymbol(symbol)
   , HasSpace(typ)
   , HasUnitSymbol(usymb)
-  , IsUnit
+  , IsUnit(udefn, getUnits)
   , HasLabel(getLabel)
-  , HasMaybeLabel(getMaybeLabel)
+  , MayHaveLabel(getMaybeLabel)
   , IsLabel
   , UnitEq(uniteq)
   , HasReference(getReferences)
@@ -28,7 +28,7 @@ module Language.Drasil.Classes (
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.References (References)
-import Language.Drasil.Development.UnitLang (UDefn, USymb)
+import Language.Drasil.Development.UnitLang(UDefn, USymb)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label, LblType)
 import Language.Drasil.NounPhrase.Core (NP)
@@ -108,8 +108,8 @@ class HasReasVal c where
 class HasLabel c where
   getLabel      :: Lens' c Label
  
-class HasMaybeLabel c where
-  getMaybeLabel :: Lens' c (Maybe Label)
+class MayHaveLabel c where
+  getMaybeLabel :: c -> Maybe Label
 
 -- HasRefAddress is associated with the HasLabel class due to
 -- the current definition of a Label
@@ -128,7 +128,8 @@ class HasUnitSymbol u where
 -- | Units are Ideas with a Definition which store a unit symbol.
 -- They must also be explicitly declared to be instances of IsUnit
 class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u where
-
+   udefn :: Lens' u (Maybe UDefn)
+   getUnits :: u -> [UID]
 -- Investigate (TODO): is this really needed?
 class UnitEq u where
    uniteq :: Lens' u UDefn

@@ -12,7 +12,8 @@ import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Drasil.SWHS.Unitals (in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, 
                             ht_flux_out)
 import Data.Drasil.Utils (weave)
-import Data.Drasil.SentenceStructures (sAnd, foldlList, ofThe, acroGD, foldlSentCol)
+import Data.Drasil.SentenceStructures (sAnd, foldlList, SepType(Comma), 
+  FoldType(List), ofThe, acroGD, foldlSentCol)
 import Data.Drasil.Concepts.Documentation (assumption)
 import Data.Drasil.Quantities.Physics (time)
 
@@ -57,7 +58,7 @@ genDefDesc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
   ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
   acroGD 2, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
-  titleize' assumption, (foldlList $ (map sParen)
+  titleize' assumption, (foldlList Comma List $ (map sParen)
   assumps) `sC` S "we have"]
 
 genDefDesc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]

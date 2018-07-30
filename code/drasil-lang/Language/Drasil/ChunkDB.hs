@@ -4,18 +4,18 @@ module Language.Drasil.ChunkDB
   , HasSymbolTable(..), symbolMap, symbLookup, getUnitLup
   , HasTermTable(..), termLookup
   , HasDefinitionTable(..), conceptMap, defLookup
-  , HasUnitTable(..), unitMap
+  , HasUnitTable(..), unitMap, collectUnits
   ) where
 
+import Control.Lens ((^.), Lens', makeLenses)
+import Data.Maybe (maybeToList)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (Concept, ConceptDomain, HasUID(uid), Idea, 
     IsUnit)
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw)
-import Language.Drasil.Chunk.Quantity (Quantity, QuantityDict, getUnit, qw)
+import Language.Drasil.Chunk.Quantity (Quantity, QuantityDict, qw)
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
-import Language.Drasil.Development.Unit (UnitDefn, unitWrapper)
-
-import Control.Lens ((^.), Lens', makeLenses)
+import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(getUnit), unitWrapper)
 import qualified Data.Map as Map
 
 -- The misnomers below are not actually a bad thing, we want to ensure data can't
@@ -77,7 +77,7 @@ class HasUnitTable s where
   unitTable :: Lens' s UnitMap
 
 -- | Gets a unit if it exists, or Nothing.        
-getUnitLup :: HasSymbolTable s => (HasUID c) => c -> s -> Maybe UnitDefn
+getUnitLup :: HasSymbolTable s => (HasUID c, MayHaveUnit c) => c -> s -> Maybe UnitDefn
 getUnitLup c m = getUnit $ symbLookup (c ^. uid) (m ^. symbolTable)
 
 -- | Looks up an uid in the term table. If nothing is found, an error is thrown
@@ -111,3 +111,5 @@ instance HasTermTable       ChunkDB where termTable   = cterms
 instance HasDefinitionTable ChunkDB where defTable    = cdefs
 instance HasUnitTable       ChunkDB where unitTable   = cunitDB
 
+collectUnits :: HasSymbolTable s => (HasUID c, Quantity c) => s -> [c] -> [UnitDefn]
+collectUnits m symb = map unitWrapper $ concatMap maybeToList $ map (\x -> getUnitLup x m) symb

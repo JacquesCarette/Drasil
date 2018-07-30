@@ -11,14 +11,14 @@ module Language.Drasil.Chunk.Unital
   ) where
 
 import Control.Lens (makeLenses, view, (^.))
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
-  IsUnit)
 import Language.Drasil.Chunk.Concept (dcc, dccWDS,cw)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd)
 import Language.Drasil.Chunk.Quantity (Quantity(..),HasSpace(typ))
 import Language.Drasil.Chunk.Unitary (Unitary(..))
-import Language.Drasil.Development.Unit (UnitDefn, unitWrapper)
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
+  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
+  IsUnit)
+import Language.Drasil.Development.Unit (MayHaveUnit(getUnit), UnitDefn, unitWrapper)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (Sentence)
@@ -39,8 +39,9 @@ instance ConceptDomain UnitalChunk where cdom = defq' . cdom
 instance Concept       UnitalChunk where
 instance HasSpace      UnitalChunk where typ = defq' . typ
 instance HasSymbol     UnitalChunk where symbol c st = symbol (c^.defq') st
-instance Quantity      UnitalChunk where getUnit defq = Just (unit defq)
+instance Quantity      UnitalChunk where 
 instance Unitary       UnitalChunk where unit = view uni
+instance MayHaveUnit   UnitalChunk where getUnit = Just . view uni
 
 --{BEGIN HELPER FUNCTIONS}--
 

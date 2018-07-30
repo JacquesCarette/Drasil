@@ -1,6 +1,10 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
+Last updated: July 25, 2018
 --------------------------------------------------
+
+**DesignDec**
+  - Chipmunk's arbiters and vectors
 
 Body.hs
   - The main document body representation for the Chipmunk example
@@ -12,23 +16,25 @@ Concepts.hs
   - Example-specific concepts for Chipmunk
   
 DataDefs.hs
-  - Chipmunk's data definitions (for the SRS)
+  - Chipmunk's data definitions
+
+GDef.hs
+  - Chipmunk's general definitions (not currently implemented)
+
+IMods.hs
+  - Chipmunk's instance models
   
 Main.hs 
   - A list of what should be generated
   
-Modules.hs
-  - A list of modules for Chipmunk's design document
-  
 README.md
   - This file
   
-Reqs.hs
-  - A list of requirement chunks for the Chipmunk example
+References.hs
+  - Chipmunk's references
   
 TMods.hs
-  - Chipmunk theoretical models
+  - Chipmunk's theoretical models
   
 Unitals.hs
-  - Example-specific quantities for Chipmunk
-  
+  - Chimpunk's example-specific quantities

@@ -9,11 +9,6 @@ import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname))
 -- import reference address from Language.Drasil.References?
 data LblType = RefAdd String | MetaLink String | URI String
 
-getAdd :: LblType -> String
-getAdd (RefAdd s)   = s
-getAdd (MetaLink s) = s
-getAdd (URI s)      = s
-
 -- Used for referencing; has to be pure ASCII
 data Label = Lbl
   { _uniqueID  :: UID --internal, unique
@@ -23,4 +18,8 @@ data Label = Lbl
 makeLenses ''Label
 
 instance HasShortName Label where shortname = sn
---instance HasShortName (Maybe Label) where shortname = sn
+
+getAdd :: LblType -> String
+getAdd (RefAdd s)   = s
+getAdd (MetaLink s) = s
+getAdd (URI s)      = s

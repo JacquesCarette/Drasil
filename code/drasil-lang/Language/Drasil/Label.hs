@@ -1,4 +1,4 @@
-module Language.Drasil.Label (Label, mkLabelRA, mkLabelRA', mkLabelRA'') where
+module Language.Drasil.Label (Label, mkLabelRA, mkLabelRA', mkLabelRA'', mkEmptyLabel) where
 
 import Language.Drasil.Label.Core
 import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd))
@@ -32,3 +32,7 @@ mkLabelURI i ref shortn = Lbl i (URI $ ensureASCII ref) (shortname' shortn)
 
 ensureASCII :: String -> String
 ensureASCII s = map (\y -> if isAscii y then y else error "Label needs to be pure ASCII.") s
+
+--FIXME: remove upon adding labels to all the data types
+mkEmptyLabel :: Label
+mkEmptyLabel = mkLabelRA'' "empty"

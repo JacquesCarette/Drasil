@@ -20,39 +20,33 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (physical, column, input_, uncertainty, physicalConstraint,
   softwareConstraint, typUnc, user, model, value, quantity, information, constraint, variable,
   output_, symbol_, limitation, problem, inModel, datum, datumConstraint, section_, dataDefn,
-  general, genDefn, assumption, thModel, physicalSystem,
-  likelyChg, unlikelyChg, goalStmt, purpose, requirement, element)
+  general, genDefn, assumption, thModel, physicalSystem, problemDescription, solutionCharacteristic,
+  likelyChg, unlikelyChg, goalStmt, purpose, requirement, element, specification)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle, fmtU, getRVal)
 import Data.Drasil.SentenceStructures (fmtPhys, fmtSfwr, mkTableFromColumns, foldlSent, 
-  foldlSP, typUncr, ofThe, foldlList)
+  foldlSP, typUncr, ofThe, foldlList, SepType(Comma), FoldType(List))
+import Data.List (sortBy)
+
 import qualified Drasil.DocLang.SRS as SRS
 
 
 -- | Specific System description section builder. Takes the system and subsections.
-specSysDescr :: (NamedIdea a) => a -> [Section] -> Section
-specSysDescr sys subs = SRS.specSysDes [intro_ sys] subs
+specSysDescr :: [Section] -> Section
+specSysDescr subs = SRS.specSysDes [intro_] subs
 
 -- FIXME: this all should be broken down and mostly generated.
 -- Generates an introduction based on the system.
-intro_ :: (NamedIdea a) => a -> Contents
-intro_ sys = Paragraph $ S "This section first presents the problem" +:+
-  S "description, which gives a high-level view of the problem to be" +:+
-  S "solved. This is followed by the solution characteristics" +:+
-  S "specification, which presents the assumptions" `sC`
-  S "theories, and definitions that are used for the" +:+. (phrase sys)
-
---Up to change, decide on what ending sentence structure we would like to employ
---Using Verbatim for now.
-{-            where eND (True) = plural definition +:+ S "and finally the" +:+
-                               (phrase $ inModel ^. term) +:+ sParen (getAcc ode)
-                               S "that models the" +:+. word_  --FIXME: We need something to handle the use of nouns as verbs
-                  eND (False) =  S "and" +:+. plural definition-}
+intro_ :: Contents
+intro_ = mkParagraph $ foldlSent [S "This", phrase section_, S "first presents the", 
+  phrase problemDescription `sC` S "which gives a high-level view of the", phrase problem,
+  S "to be solved. This is followed by the", plural solutionCharacteristic, phrase specification `sC` 
+  S "which presents the", foldlList Comma List (map S ["assumptions", "theories", "definitions"]), S "that are used"]
 
 -- give starting sentence(s), the program name, and finish the last sentence
 probDescF :: (Idea a) => Sentence -> a -> Sentence -> [Section] -> Section
-probDescF start progName ending subSec = SRS.probDesc [Paragraph intro] subSec
+probDescF start progName ending subSec = SRS.probDesc [mkParagraph intro] subSec
   where intro = foldlSent [start, (short progName), S "is a computer", 
                 (phrase program), S "developed to", ending]
                   
@@ -68,10 +62,9 @@ termDefnF end otherContents = SRS.termAndDefn ((intro):otherContents) []
                     S "understand the", plural requirement :+: (lastF end)]
 
 --general introduction for Physical System Description
-physSystDesc :: Sentence -> LabelledContent -> [LabelledContent] -> Section
+physSystDesc :: Sentence -> LabelledContent -> [Contents] -> Section
 physSystDesc progName fg otherContents = SRS.physSyst ((intro):otherContents) []
-  where intro = llcc "physSystDescIntro" (mkLabelRA'' "physSystDescSection") $ 
-                Paragraph $ foldle (+:+) (+:) (EmptyS)
+  where intro = mkParagraph $ foldle (+:+) (+:) (EmptyS)
                 [S "The", (phrase physicalSystem), S "of", progName `sC`
                 S "as shown in", (makeRef fg) `sC` S "includes the following", 
                 plural element]
@@ -79,7 +72,7 @@ physSystDesc progName fg otherContents = SRS.physSyst ((intro):otherContents) []
 --List all the given inputs. Might be possible to use ofThe combinator from utils.hs
 goalStmtF :: [Sentence] -> [Contents] -> Section
 goalStmtF givenInputs otherContents = SRS.goalStmt (intro:otherContents) []
-  where intro = Paragraph $ S "Given" +:+ foldlList givenInputs `sC` S "the" +:+ 
+  where intro = mkParagraph $ S "Given" +:+ foldlList Comma List givenInputs `sC` S "the" +:+ 
                 plural goalStmt +: S "are"
 
 
@@ -100,9 +93,8 @@ assumpF theMod genDef dataDef inMod likeChg unlikeChg otherContents =
 
 
 -- takes a bunch of references to things discribed in the wrapper
-assumpIntro :: (HasShortName a, Referable a, HasShortName b, Referable b, HasShortName c, Referable c) =>
-  Label -> Label -> Label -> b -> c -> a -> LabelledContent
-assumpIntro r1 r2 r3 r4 r5 r6 = llcc "assumpIntroLC" (mkLabelRA'' "assumpIntro") $ Paragraph $ foldlSent 
+assumpIntro :: Section -> Section -> Section -> Section -> Section -> Section-> Contents
+assumpIntro r1 r2 r3 r4 r5 r6 = mkParagraph $ foldlSent 
           [S "This", (phrase section_), S "simplifies the original", (phrase problem), 
           S "and helps in developing the", (phrase thModel), S "by filling in the", 
           S "missing", (phrase information), S "for the" +:+. (phrase physicalSystem), 
@@ -110,7 +102,7 @@ assumpIntro r1 r2 r3 r4 r5 r6 = llcc "assumpIntroLC" (mkLabelRA'' "assumpIntro")
           foldr1 sC (map refs itemsAndRefs) `sC` (refs (inModel, r4)) `sC` (refs (likelyChg, r5)) `sC`
           S "or", refs (unlikelyChg, r6) `sC` S "in which the respective", 
           (phrase assumption), S "is used"] --FIXME: use some clever "zipWith"
-          where refs (chunk, ref) = (titleize' chunk) +:+ sSqBr (makeRefSec ref) 
+          where refs (chunk, ref) = (titleize' chunk) +:+ sSqBr (makeRef ref) 
                 itemsAndRefs = [(thModel, r1), (genDefn, r2), (dataDefn, r3)]
 
 --wrapper for thModelIntro
@@ -129,8 +121,8 @@ genDefnF :: [LabelledContent] -> Section
 genDefnF otherContents = SRS.genDefn ((llcc "gdIntroLC" (mkLabelRA'' "gdIntroLC") $
   generalDefinitionIntro otherContents):otherContents) []
 
-generalDefinitionIntro :: (HasMaybeLabel t) => [t] -> Contents
-generalDefinitionIntro [] = Paragraph $ S "There are no general definitions."
+generalDefinitionIntro :: [t] -> Contents
+generalDefinitionIntro [] = mkParagraph $ S "There are no general definitions."
 generalDefinitionIntro _ = foldlSP [S "This", phrase section_, 
   S "collects the", S "laws and", (plural equation), 
   S "that will be used in", S "deriving the", 
@@ -142,15 +134,15 @@ dataDefnF :: Sentence -> [LabelledContent] -> Section
 dataDefnF endingSent otherContents = SRS.dataDefn 
   ((dataDefinitionIntro endingSent):otherContents) []
 
-dataDefinitionIntro :: Sentence -> LabelledContent
-dataDefinitionIntro closingSent = llcc "ddIntroLC" (mkLabelRA'' "ddIntro") $ 
-  Paragraph $ (foldlSent [S "This", phrase section_, 
+dataDefinitionIntro :: Sentence -> Contents
+dataDefinitionIntro closingSent = mkParagraph $ (foldlSent [S "This", phrase section_,
     S "collects and defines all the", plural datum, 
     S "needed to build the", plural inModel] +:+ closingSent)
 
 -- wrappers for inModelIntro. Use inModelF' if genDef are not needed
-inModelF :: Section -> Section -> Section -> Label -> [LabelledContent] -> Section
-inModelF probDes datDef theMod genDef otherContents = SRS.inModel ((inModelIntro probDes datDef theMod genDef):otherContents) []
+inModelF :: Section -> Section -> Section -> Section -> [LabelledContent] -> Section
+inModelF probDes datDef theMod genDef otherContents = SRS.inModel 
+  ((inModelIntro probDes datDef theMod genDef):(map LlC otherContents)) []
 
 -- just need to provide the four references in order to this function. Nothing can be input into r4 if only three tables are present
 inModelIntro :: Section -> Section -> Section -> Label -> LabelledContent
@@ -165,14 +157,13 @@ inModelIntro r1 r2 r3 r4 = llccNoLabel $ foldlSP [S "This", phrase section_,
 -- wrapper for datConPar
 datConF :: Sentence -> Sentence -> Sentence -> [LabelledContent] -> Section
 datConF hasUncertainty mid trailing tables = SRS.datCon 
-  ((llcc "dataConstraintsIntro" (mkLabelRA'' "dataConsSection") $
-    dataConstraintParagraph hasUncertainty (listofTablesToRefs tables) mid trailing):
-    tables) []
+  ((dataConstraintParagraph hasUncertainty (listofTablesToRefs tables) mid trailing)
+    :(map LlC tables)) []
   
 -- reference to the input/ ouput tables -> optional middle sentence(s) (use EmptyS if not wanted) -> 
 -- True if standard ending sentence wanted -> optional trailing sentence(s) -> Contents
 dataConstraintParagraph :: Sentence -> Sentence -> Sentence -> Sentence -> Contents
-dataConstraintParagraph hasUncertainty tableRef middleSent trailingSent = Paragraph $
+dataConstraintParagraph hasUncertainty tableRef middleSent trailingSent = mkParagraph $
   (dataConstraintIntroSent tableRef) +:+ middleSent +:+ 
   (dataConstraintClosingSent hasUncertainty trailingSent)
 
@@ -210,22 +201,22 @@ dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase colum
 
 -- Creates the input Data Constraints Table
 inDataConstTbl :: (UncertainQuantity c, Constrained c, HasReasVal c) => [c] -> LabelledContent
-inDataConstTbl qlst = llcc "InDataConstraints" (mkLabelRA'' "InDataConstraints") $
-  Table titl cts (S "Input Data Constraints") True "InDataConstraints"
+inDataConstTbl qlst = llcc (mkLabelRA'' "InDataConstraints") $ Table 
+  titl cts (S "Input Data Constraints") True "InDataConstraints"
   where
-   columns = [(S "Var", map ch qlst),
-            (titleize' physicalConstraint, map fmtPhys qlst),
-            (titleize' softwareConstraint, map fmtSfwr qlst),
-            (S "Typical Value", map (\q -> fmtU (E $ getRVal q) q) qlst),
-            (short typUnc, map typUncr qlst)]
+   columns = [(S "Var", map ch $ sortBySymbol qlst),
+            (titleize' physicalConstraint, map fmtPhys $ sortBySymbol qlst),
+            (titleize' softwareConstraint, map fmtSfwr $ sortBySymbol qlst),
+            (S "Typical Value", map (\q -> fmtU (E $ getRVal q) q) $ sortBySymbol qlst),
+            (short typUnc, map typUncr $ sortBySymbol qlst)] 
    tbl = mkTableFromColumns columns
    titl = fst tbl
    cts = snd tbl
 
 -- Creates the output Data Constraints Table
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent
-outDataConstTbl qlst = llcc "OutDataConstraints" (mkLabelRA'' "OutDataConstraints") $
-  Table titl cts (S "Output Data Constraints") True "OutDataConstraints"
+outDataConstTbl qlst = llcc (mkLabelRA'' "OutDataConstraints") $ Table 
+  titl cts (S "Output Data Constraints") True "OutDataConstraints"
   where
    columns = [(S "Var", map ch qlst),
             (titleize' physicalConstraint, map fmtPhys qlst),

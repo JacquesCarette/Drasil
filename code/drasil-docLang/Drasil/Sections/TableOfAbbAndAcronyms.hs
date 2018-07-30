@@ -11,8 +11,8 @@ import Data.Function (on)
 -- | Creates a standard table of abbreviations and acronyms section from a
 -- given list of abbreviated chunks
 table_of_abb_and_acronyms :: (Idea s) => [s] -> Section
-table_of_abb_and_acronyms ls = Section (S "Abbreviations and Acronyms") 
-  [LCon (table ls)] (mkLabelRA'' "Section:TAbbAcc") --"TblOfAA"
+table_of_abb_and_acronyms ls = Section (S "Abbreviations and Acronyms")
+  [Con (LlC $ table ls)] (mkLabelRA'' "TblOfAA")
 
 select :: (Idea s) => [s] -> [(String, s)]
 select [] = []
@@ -23,8 +23,8 @@ select (x:xs) = case getA x of
 -- | The actual table creation function.
 table :: (Idea s) => [s] -> LabelledContent
 table ls = let chunks = sortBy (compare `on` fst) $ select ls in
-  llcc "TAbbAccLC" (mkLabelRA'' "TAbbAcc") $ 
-  Table (map (titleize) [abbreviation, fullForm]) (mkTable
+  llcc (mkLabelRA'' "TAbbAcc") $ Table 
+  (map (titleize) [abbreviation, fullForm]) (mkTable
   [(\(a,_) -> S a),
    (\(_,b) -> titleize b)]
   chunks)

@@ -247,18 +247,18 @@ angle (radian)
 </tr>
 <tr>
 <td>
-s
-</td>
-<td>
-time (second)
-</td>
-</tr>
-<tr>
-<td>
 S
 </td>
 <td>
 conductance (siemens)
+</td>
+</tr>
+<tr>
+<td>
+s
+</td>
+<td>
+time (second)
 </td>
 </tr>
 <tr>
@@ -414,11 +414,27 @@ Clad thickness
 </div>
 </div>
 </div>
-<div id="Sec:DDs">
+<div id="Sec:SpecSystDesc">
 <div class="section">
 <h1>
-Data Definitions
+Specific System Description
 </h1>
+<p class="paragraph">
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
+</p>
+<div id="Sec:SolCharSpec">
+<div class="subsection">
+<h2>
+Solution Characteristics Specification
+</h2>
+<p class="paragraph">
+The instance models that govern HGHC are presented in <a href=#Sec:IMs>Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+</p>
+<div id="Sec:DDs">
+<div class="subsubsection">
+<h3>
+Data Definitions
+</h3>
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models.
 </p>
@@ -431,6 +447,16 @@ Label
 <td>
 <p class="paragraph">
 Effective heat transfer coefficient between clad and fuel surface
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>h<sub>g</sub></em>
 </p>
 </td>
 </tr>
@@ -449,7 +475,7 @@ W/(m<sup>2</sup>&sdot;&deg;C)
 Equation
 </th>
 <td>
-<div id="">
+<div id="Eqn:empty">
 <div class="equation">
 <em>h<sub>g</sub> = <div class="fraction">
 <span class="fup">
@@ -500,6 +526,16 @@ Convective heat transfer coefficient between clad and coolant
 </tr>
 <tr>
 <th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>h<sub>c</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Units
 </th>
 <td>
@@ -513,7 +549,7 @@ W/(m<sup>2</sup>&sdot;&deg;C)
 Equation
 </th>
 <td>
-<div id="">
+<div id="Eqn:empty">
 <div class="equation">
 <em>h<sub>c</sub> = <div class="fraction">
 <span class="fup">
@@ -549,6 +585,10 @@ Description
 </td>
 </tr>
 </table>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>

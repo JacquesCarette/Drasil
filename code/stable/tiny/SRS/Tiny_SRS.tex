@@ -7,7 +7,6 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{unicode-math}
-\usepackage{enumitem}
 \usepackage{tabu}
 \usepackage{longtable}
 \usepackage{booktabs}
@@ -83,9 +82,9 @@ Pa & pressure (pascal)
 \\
 rad & angle (radian)
 \\
-s & time (second)
-\\
 S & conductance (siemens)
+\\
+s & time (second)
 \\
 sr & solid angle (steradian)
 \\
@@ -127,7 +126,13 @@ ${τ_{c}}$ & Clad thickness & --
 \bottomrule
 \label{Table:ToS}
 \end{longtabu}
-\section{Data Definitions}
+\section{Specific System Description}
+\label{Sec:SpecSystDesc}
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
+\subsection{Solution Characteristics Specification}
+\label{Sec:SolCharSpec}
+The instance models that govern HGHC are presented in Section~\ref{Sec:IMs}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+\subsubsection{Data Definitions}
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
 ~\newline
@@ -138,6 +143,8 @@ This section collects and defines all the data needed to build the instance mode
 \label{DD:htTransCladFuel}
 \\ \midrule \\
 Label & Effective heat transfer coefficient between clad and fuel surface
+\\ \midrule \\
+Symbol & ${h_{g}}$
 \\ \midrule \\
 Units & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\ \midrule \\
@@ -161,6 +168,8 @@ Description & \begin{symbDescription}
 \label{DD:htTransCladCool}
 \\ \midrule \\
 Label & Convective heat transfer coefficient between clad and coolant
+\\ \midrule \\
+Symbol & ${h_{c}}$
 \\ \midrule \\
 Units & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\ \midrule \\

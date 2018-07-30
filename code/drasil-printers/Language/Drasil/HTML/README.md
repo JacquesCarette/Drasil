@@ -1,17 +1,16 @@
 ----------------------------------------------------------
 ### Quick Summary of Folder Structure and File Contents
-April 29, 2018
+Last updated: July 20, 2018
 ----------------------------------------------------------
 
 Helpers.hs
-  - Defines helper functions for pretty printing HTML.
+  - Defines helper functions for pretty printing HTML
 
 Monad.hs
-  - Defines the helper monad for printing HTML. Defines certain special renderings
+  - Defines the helper monad for printing HTML and certain special renderings
 
 Print.hs
-  - Defines the pretty printer for generating the HTML
-      and CSS documents from the HTML AST representation.
+  - Defines the pretty printer for generating the HTML and CSS documents from the HTML AST representation
 
 README.md
-  - This file.
+  - This file

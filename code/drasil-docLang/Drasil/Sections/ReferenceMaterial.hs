@@ -8,4 +8,4 @@ import Language.Drasil
 
 -- | Default reference section introduction
 intro :: Contents
-intro = Paragraph $ S "This section records information for easy reference."
+intro = mkParagraph $ S "This section records information for easy reference."

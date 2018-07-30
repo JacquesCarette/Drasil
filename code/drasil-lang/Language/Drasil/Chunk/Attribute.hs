@@ -29,11 +29,8 @@ getDerivation c =  c ^. derivations
 getShortName :: HasShortName c => c -> Sentence
 getShortName c = snToSentence $ c ^. shortname
 
-
 snToSentence :: ShortName -> Sentence
 snToSentence (ShortNm s) = S s
-
-
 
 sourceref :: Sentence -> Reference
 sourceref = SourceRef

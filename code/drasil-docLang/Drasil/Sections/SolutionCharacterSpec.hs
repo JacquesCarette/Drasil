@@ -23,14 +23,15 @@ import Data.Drasil.Concepts.Math (equation, law)
 import Data.Drasil.Concepts.Computation (computer)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle)
-import Data.Drasil.SentenceStructures (ofThe, foldlSP, foldlSent, foldlList, sAnd)
+import Data.Drasil.SentenceStructures (ofThe, foldlSP, foldlSent, foldlList, 
+  SepType(Comma), FoldType(List), sAnd)
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import Data.List (find)
 import Control.Lens ((^.))
-import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl,
-  listofTablesToRefs)
 
 import Drasil.Sections.GeneralSystDesc(genSysIntro)
+import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl,
+  listofTablesToRefs)
 
 import qualified Drasil.DocLang.SRS as SRS
 
@@ -112,7 +113,7 @@ hasCont _        = False
 
 hasLC :: SecItem -> Bool
 hasLC (LC _) = True
-hasLC _        = False
+hasLC _      = False
 
 hasSect :: SecItem -> Bool
 hasSect (Sect _) = True
@@ -332,14 +333,14 @@ theoreticalModelSect :: (Idea a, HasSymbolTable s) => SubSec -> s -> a -> Sectio
 theoreticalModelSect (SectionModel _ xs) _ progName = SRS.thModel
  ((tModIntro progName):theoreticalModels ++ 
   (pullContents xs)) (pullSections xs)
-  where theoreticalModels = map symMap $ pullTMods xs
+  where theoreticalModels = map (UlC . ulcc) $ map symMap $ pullTMods xs
         symMap            = Definition . Theory
 
 instanceModelSect :: (HasSymbolTable s) => SubSec -> s -> Section
 instanceModelSect (SectionModel _ xs) _ = SRS.inModel
   (iModIntro:instanceModels ++ (pullContents xs)) (pullSections xs)
   where symMap         = Definition . Theory
-        instanceModels = map symMap $ pullIMods xs
+        instanceModels = map (UlC . ulcc . symMap) $ pullIMods xs
 
 
 dataDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
@@ -347,20 +348,17 @@ dataDefinitionSect (SectionModel _ xs) _ = SRS.dataDefn
   (dataIntro:dataDefinitions ++ (pullLC xs)) (pullSections xs)
   where dataIntro       = dataDefinitionIntro $ pullSents xs
         symMap          = Definition . Data
-        dataDefinitions = map symMap $ pullDDefs xs-}
+        dataDefinitions = map (UlC . ulcc . symMap) $ pullDDefs xs-}
 
 
 dataConstraintSect :: SubSec -> Section
 dataConstraintSect (SectionModel _ xs) = SRS.datCon
-  ([dataConIntro, inputTable, outputTable] ++ (pullLC xs)) (pullSections xs)
-  where dataConIntro = llcc "dataConstraintsIntroFIXME" (mkLabelRA'' "dataConsSectionFIXME") 
-                       $ dataConstraintParagraph (pullLC xs) (pullSents xs)
-                       --FIXME: `datConF` also added a Label in SpecifcSystemDescription ^
+  ([dataConIntro, LlC inputTable, LlC outputTable] ++ (pullContents xs)) (pullSections xs)
+  where dataConIntro = dataConstraintmkParagraph (pullLC xs) (pullSents xs)
         inputTable  = inDataConstTbl $ pullUQI xs
         outputTable = outDataConstTbl $ pullUQO xs
 
 --FIXME generate tables here
---
 
 --------------------------------------------
 -- CONTENT BUILDING FUNCTIONS & CONSTANTS --
@@ -381,7 +379,7 @@ dataConstraintSect (SectionModel _ xs) = SRS.datCon
 ------------------------
 
 systemConstraintIntro :: [Sentence] -> Contents
-systemConstraintIntro [] = Paragraph (S "There are no" +:+.
+systemConstraintIntro [] = mkParagraph (S "There are no" +:+.
   plural Doc.systemConstraint)
 systemConstraintIntro l = foldlSP l
 
@@ -397,7 +395,7 @@ systemConstraintIntro l = foldlSP l
 problemDescriptionIntro :: Idea c => c -> [Sentence] -> Contents
 problemDescriptionIntro progName []       = problemDescriptionSent progName
   EmptyS EmptyS
-problemDescriptionIntro _ [x]      = Paragraph x
+problemDescriptionIntro _ [x]      = mkParagraph x
 problemDescriptionIntro progName (x:y:_) = problemDescriptionSent progName x y
 
 problemDescriptionSent :: Idea c => c -> Sentence -> Sentence -> Contents
@@ -409,7 +407,7 @@ problemDescriptionSent progName start end = foldlSP [start, (short progName),
 --------------------------
 
 termDefinitionIntro :: [Sentence] -> Contents
-termDefinitionIntro end = Paragraph $ foldle (+:+) (+:+) (EmptyS)
+termDefinitionIntro end = mkParagraph $ foldle (+:+) (+:+) (EmptyS)
   [S "This subsection provides a list of terms",
   S "that are used in the subsequent", plural Doc.section_, S "and their",
   S "meaning, with the", phrase Doc.purpose, S "of reducing ambiguity",
@@ -421,10 +419,10 @@ termDefinitionIntro end = Paragraph $ foldle (+:+) (+:+) (EmptyS)
 --------------------
 
 goalStatementIntro :: [Sentence] -> Contents
-goalStatementIntro inputs = Paragraph $ foldl (+:+) EmptyS [S "Given", 
+goalStatementIntro inputs = mkParagraph $ foldl (+:+) EmptyS [S "Given", 
   (inputToSystem inputs), plural Doc.goalStmt +: S "are"]
   where inputToSystem [] = S "the inputs" `sC` S "the" --FIXME add ref input variables if none are given?
-        inputToSystem listInputs = (foldlList listInputs) `sC` S "the"
+        inputToSystem listInputs = (foldlList Comma List listInputs) `sC` S "the"
 
 
 -------------------------------------------
@@ -445,8 +443,8 @@ scsIntro progName = foldlSP [S "The", plural Doc.inModel,
 -----------------
 
 -- takes a bunch of references to things discribed in the wrapper
-assumpIntro :: LabelledContent
-assumpIntro = llcc "notused" (mkLabelRA'' "notused") $ Paragraph $ foldlSent 
+assumpIntro :: Contents
+assumpIntro = mkParagraph $ foldlSent 
   [S "This", (phrase Doc.section_), S "simplifies the original", 
   (phrase Doc.problem), S "and helps in developing the", (phrase Doc.thModel), 
   S "by filling in the missing", (phrase Doc.information), S "for the" +:+. 
@@ -470,8 +468,8 @@ tModIntro progName = foldlSP [S "This", phrase Doc.section_, S "focuses on",
 -- GENERAL DEFINITIONS --
 -------------------------
 
-generalDefinitionIntro :: (HasMaybeLabel t) => [t] -> Contents
-generalDefinitionIntro [] = Paragraph $ S "There are no general definitions."
+generalDefinitionIntro :: [t] -> Contents
+generalDefinitionIntro [] = mkParagraph $ S "There are no general definitions."
 generalDefinitionIntro _ = foldlSP [S "This", phrase Doc.section_, 
   S "collects the", (plural law) `sAnd` (plural equation), 
   S "that will be used in deriving the", 
@@ -482,12 +480,10 @@ generalDefinitionIntro _ = foldlSP [S "This", phrase Doc.section_,
 -- DATA DEFINITIONS --
 ----------------------
 
-dataDefinitionIntro :: [Sentence] -> LabelledContent
-dataDefinitionIntro xs = llcc "notused" (mkLabelRA'' "notused") $ 
-  Paragraph $ (foldlSent [S "This", phrase Doc.section_, 
+dataDefinitionIntro :: [Sentence] -> Contents
+dataDefinitionIntro xs = mkParagraph $ (foldlSent [S "This", phrase Doc.section_, 
     S "collects and defines all the", plural Doc.datum, 
     S "needed to build the", plural Doc.inModel] +:+ foldl (+:+) EmptyS xs)
-
 
 ---------------------
 -- INSTANCE MODELS --
@@ -508,10 +504,10 @@ iModIntro = foldlSP [S "This", phrase Doc.section_,
 
 -- reference to the input/ ouput tables -> optional middle sentence(s) (use EmptyS if not wanted) -> 
 -- True if standard ending sentence wanted -> optional trailing sentence(s) -> Contents
-dataConstraintParagraph :: [LabelledContent] -> [Sentence] -> Contents
-dataConstraintParagraph tableRef [] = Paragraph $ 
+dataConstraintmkParagraph :: [LabelledContent] -> [Sentence] -> Contents
+dataConstraintmkParagraph tableRef [] = mkParagraph $ 
   (dataConstraintIntroSent tableRef) +:+ (dataConstraintClosingSent [EmptyS])
-dataConstraintParagraph tableRef (mid:xs) = Paragraph $
+dataConstraintmkParagraph tableRef (mid:xs) = mkParagraph $
   (dataConstraintIntroSent tableRef) +:+ mid +:+ 
   (dataConstraintClosingSent xs)
 

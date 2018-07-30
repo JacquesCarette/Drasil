@@ -20,16 +20,15 @@ import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc, refAddr)
 import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..), ReqType(FR))
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName)
 import Language.Drasil.Chunk.Theory (TheoryModel)
-import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), getRefAdd, 
-  HasMaybeLabel(getMaybeLabel), getLabel)
-import Language.Drasil.Document (Contents(..), DType(Data, Theory), 
-  Section(Section), repUnd, LabelledContent(LblC))
+import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel), HasRefAddress(getRefAdd))
+import Language.Drasil.Document (Section(Section), getDefName, repUnd)
+import Language.Drasil.Document.Core (Contents(..), DType(Data, Theory), RawContent(..), LabelledContent(..))
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.Spec (Sentence((:+:), Ref, S))
 import Language.Drasil.UID (UID)
 import Language.Drasil.Label.Core (getAdd)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
-import Language.Drasil.Label.Core (Label)
+import Language.Drasil.Label.Core (Label, getAdd)
 
 -- | Database for maintaining references.
 -- The Int is that reference's number.
@@ -187,6 +186,7 @@ instance HasCitationRefs ReferenceDB where citationRefTable = citationDB
 instance HasConceptRefs  ReferenceDB where conceptRefTable = conceptDB
 
 
+--FIXME: "class (HasLabel s) => Referable s where" instead?
 class Referable s where
   refAdd  :: s -> String  -- The plaintext referencing address (what we're linking to).
                           -- Should be string with no spaces/special chars.
@@ -246,54 +246,52 @@ instance Referable InstanceModel where
   refAdd  i = "IM:" ++ i^.uid
   rType   _ = Def
 
---instance Referable LabelledContent where
---  refAdd (LblC _ lb _) = getAdd (lb ^. getRefAdd)
---  rType  (LblC _ _ c)  = temp c
+instance Referable ConceptInstance where
+  refAdd i = i ^. uid
+  rType _ = Def
 
+--FIXME: Label should not be an instance of Referable.
+--Should refer to an object WITH a variable.
+--Can be removed once sections have labels.
 instance Referable Label where
-  refAdd lb = getAdd (lb ^. getRefAdd)
+  refAdd lb = "Sec:" ++ (getAdd (lb ^. getRefAdd))
   rType _   = Lbl --FIXME?
 
-temp :: Contents -> RefType
+instance Referable LabelledContent where
+  refAdd (LblC lb c) = temp' (getAdd (lb ^. getRefAdd)) c 
+  rType  (LblC _ c)  = temp c
+
+temp' :: String -> RawContent -> String
+temp' r (Table _ _ _ _ _)      = "Table:" ++ r
+temp' r (Figure _ _ _ _)       = "Figure:" ++ r
+temp' r (Graph _ _ _ _ _)      = "Figure:" ++ r
+temp' r (EqnBlock _)           = "Equation:" ++ r
+temp' _ (Definition d)         = getDefName d --fixme: to be removed
+temp' r (Defnt _ _ _)          = r
+temp' _ (Requirement rc)       = refAdd rc
+temp' _ (Assumption ca)        = refAdd ca
+temp' _ (Change lcc)           = refAdd lcc
+temp' _ (Enumeration _)        = error "Shouldn't reference lists"
+temp' _ (Paragraph _)          = error "Shouldn't reference paragraphs"
+temp' r (Bib _)                = r
+
+temp :: RawContent -> RefType
 temp (Table _ _ _ _ _)       = Tab
 temp (Figure _ _ _ _)        = Fig
 temp (Graph _ _ _ _ _)       = Fig
-temp (Definition (Data _))   = Def
-temp (Definition (Theory _)) = Def
 temp (Definition _)          = Def
 temp (Defnt _ _ _)           = Def
 temp (Requirement r)         = rType r
 temp (Assumption a)          = rType a
-temp (Change l)              = rType l --rType lc
-temp (EqnBlock _ _)          = EqnB
-temp (Enumeration _)         = Cntnts 
-temp (Paragraph _)           = Cntnts
+temp (Change l)              = rType l
+temp (EqnBlock _)            = EqnB
+temp (Enumeration _)         = error "Shouldn't reference lists" 
+temp (Paragraph _)           = error "Shouldn't reference paragraphs"
 temp (Bib _)                 = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
 temp _                       =
     error "Attempting to reference unimplemented reference type"
-
-{-instance Referable Contents where
-  rType (Table _ _ _ _ _)       = Tab
-  rType (Figure _ _ _ _)        = Fig
-  rType (Definition (Data _))   = Def
-  rType (Definition (Theory _)) = Def
-  rType (Definition _)          = Def
-  rType (Defnt _ _ _)           = Def
-  rType (Requirement r)         = rType r
-  rType (Assumption a)          = rType a
-  rType (Change l)              = rType l --rType lc
-  rType (Graph _ _ _ _ _)       = Fig
-  rType (EqnBlock _ _)          = EqnB
-  rType _                       =
-    error "Attempting to reference unimplemented reference type"
-  refAdd (Enumeration _)        = error "Can't reference lists"
-  refAdd (Paragraph _)          = refAdd error "Can't reference paragraphs"
-  refAdd (Bib _)                = error $
-    "Bibliography list of references cannot be referenced. " ++
-    "You must reference the Section or an individual citation."
--}
 
 uidSort :: HasUID c => c -> c -> Ordering
 uidSort = compare `on` (^. uid)
@@ -341,22 +339,24 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 -- This should not be exported to the end-user, but should be usable
 -- within the recipe (we want to force reference creation to check if the given
 -- item exists in our database of referable objects.
-{-makeRef :: (HasMaybeLabel l) => l -> Sentence
-makeRef (Just r) = customRef r (r ^. shortname)--(shortname . getLabel . r)
-makeRef Nothing  = error "Cannot reference this item."
--}
+--FIXME: completely shift to being `HasLabel` since customref checks for 
+--  `HasShortName` and `Referable`?
+makeRef :: (HasShortName l, Referable l) => l -> Sentence
+makeRef r = customRef r (shortname r)
 
---for referencing Sections; original makeRef function
-makeRefSec :: (HasShortName l, Referable l) => l -> Sentence
-makeRefSec r = customRef r (r ^. shortname)
+--FIXME: needs design (HasShortName, Referable only possible when HasLabel)
+mkRefFrmLbl :: (HasLabel l, HasShortName l, Referable l) => l -> Sentence
+mkRefFrmLbl r = makeRef r
 
-makeRef :: (HasMaybeLabel l) => l -> Sentence
-makeRef r = midRef (r ^. getMaybeLabel)
-
-midRef :: Maybe Label -> Sentence
-midRef (Just r) = customRef r (r ^. shortname)
-midRef Nothing  = error "Cannot reference this item."
+--FIXME: should be removed from Examples once sections have labels
+midRef :: Label -> Sentence
+midRef r = customRef r (shortname r)
 
 -- | Create a reference with a custom 'ShortName'
 customRef :: (HasShortName l, Referable l) => l -> ShortName -> Sentence
 customRef r n = Ref (rType r) (refAdd r) n
+
+-- This works for passing the correct id to the reference generator for Assumptions,
+-- Requirements and Likely Changes but I question whether we should use it.
+-- Pass it the item to be referenced and the enumerated list of the respective
+-- contents for that file. Change rType values to implement.

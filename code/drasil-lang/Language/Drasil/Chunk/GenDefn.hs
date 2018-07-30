@@ -1,7 +1,6 @@
 {-# Language TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.GenDefn
-  ( GenDefn, gd, gdUnit, gd'
-  , gdNoUnitDef
+  ( GenDefn, gd, gdUnit, gd', gd'', gdNoUnitDef
   ) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
@@ -12,13 +11,14 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.References (References)
 import Language.Drasil.Chunk.Relation (RelationConcept)
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
-import Language.Drasil.Development.Unit (unitWrapper, UnitDefn)
-import Language.Drasil.Label.Core (Label)
+import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
+import Language.Drasil.Development.Unit (unitWrapper, UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Label (mkLabelRA'')
 
 import Control.Lens (makeLenses)
+
 
 -- | A GenDefn is a RelationConcept that may have units
 data GenDefn = GD { _relC :: RelationConcept
@@ -42,6 +42,7 @@ instance HasReference  GenDefn where getReferences = ref
 instance HasLabel      GenDefn where getLabel = lb
 instance HasShortName  GenDefn where shortname = lb . shortname
 instance HasAdditionalNotes GenDefn where getNotes = notes
+instance MayHaveUnit   GenDefn where getUnit u = gdUnit u
 
 gd :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
   Derivation -> Label -> GenDefn
@@ -55,3 +56,7 @@ gd' :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
   Derivation -> String -> [Sentence] -> GenDefn
 gd' r (Just u) derivs sn note = GD r (Just (unitWrapper u)) derivs [] (mkLabelRA'' sn) (Just note)
 gd' r Nothing derivs sn note = GD r Nothing derivs [] (mkLabelRA'' sn) (Just note)
+
+gd'' :: RelationConcept -> String -> [Sentence] -> GenDefn
+gd'' r sn []   = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) [] (mkLabelRA'' sn) Nothing
+gd'' r sn note = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) [] (mkLableRA'' sn) (Just note)

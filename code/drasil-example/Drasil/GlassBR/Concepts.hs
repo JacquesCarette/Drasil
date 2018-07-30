@@ -8,19 +8,19 @@ import Data.Drasil.Concepts.Documentation (assumption, dataDefn, goalStmt, inMod
 
 {--}
 
-glassBRProg :: CommonConcept
+{-glassBRProg :: CommonConcept
 glassBRProg = dcc' "glassBRProg" (nounPhraseSP "GlassBR program")
-  "The glass safety analysis program" "GlassBR" 
+  "The glass safety analysis program" "GlassBR"-}
 
 {-Acronyms-}
 acronyms :: [CI]
 acronyms = [assumption, annealed, aR, dataDefn, fullyT, goalStmt, 
   glassTypeFac, heatS, iGlass, inModel, likelyChg, loadDurFactor, 
   lGlass, lResistance, lShareFac, notApp, nFL, physSyst, requirement, 
-  stdOffDist, srs, thModel, eqTNT, typUnc, unlikelyChg]
+  stdOffDist, srs, thModel, typUnc, unlikelyChg]
 
 annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass, 
-  lResistance, lShareFac, eqTNT, gLassBR, stdOffDist, nFL :: CI
+  lResistance, lShareFac, gLassBR, stdOffDist, nFL :: CI
 
 --FIXME: Add compound nounphrases
 
@@ -33,7 +33,6 @@ iGlass        = commonIdea "iGlass"        (nounPhraseSP "insulating glass")    
 lGlass        = commonIdea "lGlass"        (nounPhraseSP "laminated glass")         "LG"
 lResistance   = commonIdea "lResistance"   (nounPhraseSP "load resistance")         "LR"
 lShareFac     = commonIdea "lShareFac"     (nounPhraseSP "load share factor")       "LSF"
-eqTNT         = commonIdea "eqTNT"         (nounPhraseSP "TNT (Trinitrotoluene) Equivalent Factor") "TNT"
 gLassBR       = commonIdea "gLassBR"       (pn "GlassBR")                           "GlassBR"
 stdOffDist    = commonIdea "stdOffDist"    (nounPhraseSP "stand off distance")      "SD"
 loadDurFactor = commonIdea "loadDurFactor" (nounPhraseSP "load duration factor")    "LDF"
@@ -47,7 +46,7 @@ beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
 beam         = nc "beam"       (nounPhraseSP "beam")
 blastRisk    = nc "blastRisk"  (nounPhraseSP "blast risk")
 cantilever   = nc "cantilever" (nounPhraseSP "cantilever")
-edge         = nc "edge"       (nounPhraseSP "edge")
+edge         = nc "edge"       (cn'          "edge")
 glass        = nc "glass"      (nounPhraseSP "glass")
 glaSlab      = nc "glaSlab"    (nounPhraseSP "glass slab")
 plane        = nc "plane"      (nounPhraseSP "plane")

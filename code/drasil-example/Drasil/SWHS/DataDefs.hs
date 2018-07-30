@@ -77,7 +77,6 @@ dd4MeltFracDD = mkDD dd4MeltFrac [] [] "" Nothing
 
 --Need to add units to data definition descriptions
 
-
 --Symbol appears as "Label"
 --There is no actual label
 --Units section doesn't appear

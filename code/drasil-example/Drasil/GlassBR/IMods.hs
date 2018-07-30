@@ -23,7 +23,9 @@ gbrIMods = [probOfBreak, calofCapacity, calofDemand]
 probOfBreak :: InstanceModel
 probOfBreak = im probOfBr [qw risk] 
   [TCon AssumedCon $ sy risk $> 0] (qw prob_br) [TCon AssumedCon $ sy prob_br $> 0]
-  (mkLabelRA'' "probOfBrIM")
+  [(sourceref (S "[1]")), (sourceref (S "[4]"))] (mkLabelRA'' "probOfBrIM")
+
+{--}
 
 probOfBr :: RelationConcept
 probOfBr = makeRC "probOfBr" (nounPhraseSP "Probability of Glass Breakage")

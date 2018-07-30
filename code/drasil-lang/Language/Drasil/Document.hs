@@ -129,9 +129,5 @@ fig l f = Figure l f 100
 figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RefAdd -> RawContent
 figWithWidth = Figure
 
---FIXME: to be removed when QDefinition becomes referable
-datadefn :: QDefinition -> LabelledContent
-datadefn = (\x -> llcc mkEmptyLabel x) . Definition . Data
-
 reldefn :: RelationConcept -> LabelledContent
 reldefn = (\x -> llcc mkEmptyLabel x) . Definition . Theory

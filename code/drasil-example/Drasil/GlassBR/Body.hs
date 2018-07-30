@@ -571,7 +571,7 @@ functional_requirements_req6 = map (llcc mkEmptyLabel) [Enumeration $ Simple $
     sParen (makeRef d)) (zip testing gbrIMods)
     ++
     map (\d -> Flat $ at_start d +:+ sParen (ch d) +:+
-    sParen (makeRef $ datadefn d)) functional_requirements_req6_pulledList
+    sParen (makeRef d)) functional_requirements_req6_pulledList
     , Nothing)]]
 
 {--Nonfunctional Requirements--}

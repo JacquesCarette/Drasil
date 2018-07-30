@@ -143,7 +143,7 @@ module Language.Drasil (
   , mkParagraph
   , llcc, ulcc
   , section, fig, figWithWidth, section''
-  , datadefn, reldefn, MaxWidthPercent
+  , reldefn, MaxWidthPercent
   , HasContents(accessContents)
   , RawContent(..)
   , mkFig
@@ -251,7 +251,7 @@ import Language.Drasil.Sentence.EmbedSymbol(ch)
 import Language.Drasil.Sentence.Extract(sdep,  snames)
 import Language.Drasil.Document (section, fig, figWithWidth
   , section''
-  , datadefn, reldefn, Section(..), SecCons(..) 
+  , reldefn, Section(..), SecCons(..) 
   , llcc, ulcc, Document(..)
   , HasContents(accessContents)
   , mkParagraph, mkFig)

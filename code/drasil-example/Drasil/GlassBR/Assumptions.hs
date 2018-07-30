@@ -38,9 +38,6 @@ newA6 = assump "bndryConditionsA" a6Desc (mkLabelRA'' "boundaryConditions")
 newA7 = assump "responseTyA" a7Desc (mkLabelRA'' "responseType" )
 newA8 = assump "ldfConstantA" (a8Desc constant_LoadDF) (mkLabelRA'' "ldfConstant")
 
-assumptionDescs :: [Sentence]
-assumptionDescs = [a1Desc, a2Desc, a3Desc, a4Desc load_dur, a5Desc, a6Desc, a7Desc, a8Desc constant_LoadDF]
-
 a1Desc :: Sentence
 a1Desc = foldlSent [S "The standard E1300-09a for",
   phrase calculation, S "applies only to", foldlList Comma Options $ map S ["monolithic",

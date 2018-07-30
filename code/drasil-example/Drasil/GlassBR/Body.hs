@@ -54,8 +54,7 @@ import Data.Drasil.Software.Products (sciCompS)
 import Data.Drasil.Utils (makeTMatrix, itemRefToSent, noRefs,
   enumSimple, enumBullet, prodUCTbl)
 
-import Drasil.GlassBR.Assumptions (assumptionConstants, assumptionDescs,
-  gbRefDB, newAssumptions)
+import Drasil.GlassBR.Assumptions (assumptionConstants, gbRefDB, newAssumptions)
 import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, 
   glass, gLassBR, lShareFac, ptOfExplsn, stdOffDist)
@@ -64,7 +63,7 @@ import Drasil.GlassBR.DataDefs (aspRat, dataDefns, gbQDefns, hFromt, strDisFac, 
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
-import Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe, tModels)
+import Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe, tModels, lrSafetyReq, pbSafetyReq)
 import Drasil.GlassBR.IMods (probOfBreak, 
   calofCapacity, calofDemand, gbrIMods)
 
@@ -152,13 +151,13 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
       ]
     ) :
   ReqrmntSec (ReqsProg [
-    FReqsSub functional_requirements_list, 
+    FReqsSub (map LlC functional_requirements_list), 
     NonFReqsSub [performance] (gBRpriorityNFReqs)
     (S "This problem is small in size and relatively simple")
     (S "Any reasonable" +:+ phrase implementation +:+.
     (S "will be very quick" `sAnd` S "use minimal storage"))]) :
-  LCsSec (LCsProg likelyChanges_SRS) :
-  UCsSec (UCsProg unlikelyChanges_SRS) :
+  LCsSec (LCsProg (map LlC likelyChanges_SRS)) :
+  UCsSec (UCsProg (map LlC unlikelyChanges_SRS)) :
   TraceabilitySec
     (TraceabilityProg traceyMatrices [traceability_matrices_and_graphs_table1Desc, traceability_matrices_and_graphs_table2Desc, traceability_matrices_and_graphs_table3Desc]
     ((map LlC traceyMatrices) ++ traceability_matrices_and_graphs_intro2 ++ (map LlC traceyGraphs)) []) :
@@ -432,8 +431,8 @@ fig_glassbr = llcc (mkLabelRA'' "physSystImage") $ figWithWidth
   (at_start $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
   "physSystImage"
 
-physical_system_description_list = llcc "psdlistGBr" (mkLabelRA'' "psdlistGBrLabel") $
-  enumSimple 1 (short physSyst) physical_system_description_list_physys
+physical_system_description_list = enumSimple 1 (short physSyst)
+  physical_system_description_list_physys
 
 --"Dead" knowledge?
 physical_system_description_list_physys :: [Sentence]
@@ -486,16 +485,16 @@ outputDataConstraints = outDataConstTbl [prob_br]
 functional_requirements_list = 
   functional_requirements_listOfReqs ++ 
   functional_requirements_req6 ++ 
-  [LlC functional_requirements_req1Table]
+  [functional_requirements_req1Table]
 
 functional_requirements_req1, functional_requirements_req2, functional_requirements_req3,
   functional_requirements_req4, functional_requirements_req5 :: LabelledContent
 req1Desc, req2Desc, req3Desc, req4Desc :: Sentence
 req5Desc :: NamedChunk -> Sentence
-functional_requirements_req6 :: LabelledContent --FIXME: Issue #327
+functional_requirements_req6 :: [LabelledContent] --FIXME: Issue #327
 
-functional_requirements_listOfReqs :: [Contents]
-functional_requirements_listOfReqs = map LlC $ [functional_requirements_req1,
+functional_requirements_listOfReqs :: [LabelledContent]
+functional_requirements_listOfReqs = [functional_requirements_req1,
   functional_requirements_req2, functional_requirements_req3, 
   functional_requirements_req4, functional_requirements_req5]
 
@@ -527,9 +526,9 @@ req2Desc = foldlSent [S "The", phrase system,
   S "shall set the known", plural value +: S "as follows",
   foldlList Comma List [(foldlsC (map ch (take 4 assumptionConstants)) `followA` 4),
   ((ch constant_LoadDF) `followA` 8), (short lShareFac `followA` 5),
-  (ch hFromt) +:+ sParen (S "from" +:+ (makeRefSec hFromt)), 
-  (ch glaTyFac) +:+ sParen (S "from" +:+ (makeRefSec glaTyFac)),
-  (ch standOffDis) +:+ sParen (S "from" +:+ (makeRefSec standOffDis))]]
+  (ch hFromt) +:+ sParen (S "from" +:+ (makeRef hFromt)), 
+  (ch glaTyFac) +:+ sParen (S "from" +:+ (makeRef glaTyFac)),
+  (ch standOffDis) +:+ sParen (S "from" +:+ (makeRef standOffDis))]]
 
 --ItemType
 {-functional_requirements_req2 = (Nested (S "The" +:+ phrase system +:+
@@ -564,12 +563,12 @@ testing :: [QuantityDict]
 testing = qw prob_br : qw lRe : qw demand : [] -- all different types!
 --FIXME: rename or find better implementation?
 
-functional_requirements_req6 = map (UlC . ulcc) [Enumeration $ Simple $ 
+functional_requirements_req6 = map (llcc mkEmptyLabel) [Enumeration $ Simple $ 
   [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   $ Bullet $ noRefs $
     map (\(a, d) -> Flat $ at_start a +:+ sParen (ch a) +:+
-    sParen (makeRef $ reldefn d)) (zip testing testing1)
+    sParen (makeRef d)) (zip testing gbrIMods)
     ++
     map (\d -> Flat $ at_start d +:+ sParen (ch d) +:+
     sParen (makeRef $ datadefn d)) functional_requirements_req6_pulledList
@@ -605,22 +604,22 @@ traceability_matrices_and_graphs_theorysRef, traceability_matrices_and_graphs_in
   traceability_matrices_and_graphs_likelyChgRef :: [Sentence]
 
 traceability_matrices_and_graphs_theorys = ["T1", "T2"]
-traceability_matrices_and_graphs_theorysRef = map makeRefSec gbrTMods
+traceability_matrices_and_graphs_theorysRef = map makeRef gbrTMods
 
 traceability_matrices_and_graphs_instaModel = ["IM1", "IM2", "IM3"]
-traceability_matrices_and_graphs_instaModelRef = map makeRefSec gbrIMods
+traceability_matrices_and_graphs_instaModelRef = map makeRef gbrIMods
 
 traceability_matrices_and_graphs_dataDef =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
-traceability_matrices_and_graphs_dataDefRef = map makeRefSec dataDefns
+traceability_matrices_and_graphs_dataDefRef = map makeRef dataDefns
 
 traceability_matrices_and_graphs_data  = ["Data Constraints"]
-traceability_matrices_and_graphs_dataRef = [makeRefSec SRS.datConLabel]
+traceability_matrices_and_graphs_dataRef = [makeRef SRS.datConLabel]
 
 traceability_matrices_and_graphs_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-traceability_matrices_and_graphs_funcReqRef = map makeRef functional_requirements_list
+traceability_matrices_and_graphs_funcReqRef = map makeRef functional_requirements_list --fixme: should be reqchunks?
 
 traceability_matrices_and_graphs_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
-traceability_matrices_and_graphs_assumpRef = map makeRefSec newAssumptions
+traceability_matrices_and_graphs_assumpRef = map makeRef newAssumptions
 
 traceability_matrices_and_graphs_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5"]
 traceability_matrices_and_graphs_likelyChgRef = map makeRef likelyChanges_SRS
@@ -752,7 +751,7 @@ traceability_matrices_and_graphs_table3 = llcc (mkLabelRA'' "TraceyAssumpsOthers
   +:+ titleize' item)) True "TraceyAssumpsOthers"
 
 --
-
+traceability_matrices_and_graphs_intro2 :: [Contents]
 traceability_matrices_and_graphs_intro2 = map UlC $ traceGIntro traceyGraphs
   [(foldlList Comma List (map plural (take 3 solChSpecSubsections)) +:+.
   S "on each other"), (plural requirement +:+ S "on" +:+. foldlList Comma List
@@ -760,18 +759,15 @@ traceability_matrices_and_graphs_intro2 = map UlC $ traceGIntro traceyGraphs
   (foldlList Comma List ((map plural (take 3 solChSpecSubsections))++
   [plural requirement, plural likelyChg +:+ S "on" +:+ plural assumption]))]
 
-fig_2 = llcc "TraceyItemSecs" (mkLabelRA'' "TraceyItemSecsLabel") $ 
-  figureLabel 2 traceyMatrix
+fig_2 = figureLabel 2 traceyMatrix
   (titleize' item +:+ S "of Different" +:+ titleize' section_)
   (resourcePath ++ "Trace.png") "TraceyItemSecs"
 
-fig_3 = llcc "TraceyReqsItems" (mkLabelRA'' "TraceyReqsItemsLabel") $ 
-  figureLabel 3 traceyMatrix
+fig_3 = figureLabel 3 traceyMatrix
   (titleize' requirement `sAnd` S "Other" +:+ titleize' item)
   (resourcePath ++ "RTrace.png") "TraceyReqsItems"
 
-fig_4 = llcc "TraceyAssumpsOthers" (mkLabelRA'' "TraceyAssumpsOthersLabel") $ 
-  figureLabel 4 traceyMatrix
+fig_4 = figureLabel 4 traceyMatrix
   (titleize' assumption `sAnd` S "Other" +:+ titleize' item)
   (resourcePath ++ "ATrace.png") "TraceyAssumpsOthers"
 
@@ -781,8 +777,7 @@ fig_4 = llcc "TraceyAssumpsOthers" (mkLabelRA'' "TraceyAssumpsOthersLabel") $
 
 {--APPENDIX--}
 
-appendix_intro = llcc "appndxIntroGB" (mkLabelRA'' "appndxIntroGBLabel") $
-  foldlSP [
+appendix_intro = foldlSP [
   S "This", phrase appendix, S "holds the", plural graph,
   sParen ((makeRef fig_5) `sAnd` (makeRef fig_6)),
   S "used for interpolating", plural value, S "needed in the", plural model]

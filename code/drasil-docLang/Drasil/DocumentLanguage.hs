@@ -209,16 +209,16 @@ data ReqrmntSec = ReqsVerb Section | ReqsProg [ReqsSub]
 
 data ReqsSub where
   ReqsSubVerb :: Section -> ReqsSub
-  FReqsSub :: [LabelledContent] -> ReqsSub --FIXME: Should be ReqChunks?
+  FReqsSub :: [Contents] -> ReqsSub --FIXME: Should be ReqChunks?
   NonFReqsSub :: (Concept c) => [c] -> [c] -> Sentence -> Sentence -> ReqsSub
 
 {--}
 
-data LCsSec = LCsVerb Section | LCsProg [LabelledContent] --FIXME:Should become [LikelyChanges]
+data LCsSec = LCsVerb Section | LCsProg [Contents] --FIXME:Should become [LikelyChanges]
 
 {--}
 
-data UCsSec = UCsVerb Section | UCsProg [LabelledContent]
+data UCsSec = UCsVerb Section | UCsProg [Contents]
 
 {--}
 
@@ -237,7 +237,7 @@ data AuxConstntSec = AuxConsProg CI [QDefinition] | AuxConsVerb Section
 
 {--}
 
-data AppndxSec = AppndxVerb Section | AppndxProg [LabelledContent]
+data AppndxSec = AppndxVerb Section | AppndxProg [Contents]
 
 {--}
 
@@ -513,7 +513,7 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
   where
     mkSubs :: ReqsSub -> Section
     mkSubs (ReqsSubVerb s) = s
-    mkSubs (FReqsSub reqs) = R.fReqF (map LlC reqs)
+    mkSubs (FReqsSub reqs) = R.fReqF reqs
     mkSubs (NonFReqsSub noPrrty prrty rsn explain) = R.nonFuncReqF noPrrty prrty rsn explain
 
 {--}
@@ -521,14 +521,14 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 -- | Helper for making the 'LikelyChanges' section
 mkLCsSec :: LCsSec -> Section
 mkLCsSec (LCsVerb s) = s
-mkLCsSec (LCsProg c) = SRS.likeChg (map LlC c) []
+mkLCsSec (LCsProg c) = SRS.likeChg c []
 
 {--}
 
 -- | Helper for making the 'UnikelyChanges' section
 mkUCsSec :: UCsSec -> Section
 mkUCsSec (UCsVerb s) = s
-mkUCsSec (UCsProg c) = SRS.unlikeChg (map LlC c) []
+mkUCsSec (UCsProg c) = SRS.unlikeChg c []
 
 {--}
 
@@ -563,7 +563,7 @@ mkBib bib = SRS.reference [LlC $ llcc mkEmptyLabel $ Bib bib] []
 -- | Helper for making the 'Appendix' section
 mkAppndxSec :: AppndxSec -> Section
 mkAppndxSec (AppndxVerb s)  = s
-mkAppndxSec (AppndxProg cs) = SRS.appendix (map LlC cs) []
+mkAppndxSec (AppndxProg cs) = SRS.appendix cs []
 
 {--}
 
@@ -577,8 +577,8 @@ siSys SI {_sys = sys} = nw sys
 mkRequirement :: String -> Sentence -> String -> LabelledContent
 mkRequirement i desc shrtn = llcc (mkLabelRA'' shrtn) $ Requirement $ frc i desc (mkLabelRA'' shrtn) --FIXME: label made twice?
 
-mkLklyChnk :: String -> Sentence -> String -> Contents
-mkLklyChnk i desc shrtn = LlC $ llcc (mkLabelRA'' shrtn) $ Change $ lc i desc (mkLabelRA'' shrtn) --FIXME: label made twice?
+mkLklyChnk :: String -> Sentence -> String -> LabelledContent
+mkLklyChnk i desc shrtn = llcc (mkLabelRA'' shrtn) $ Change $ lc i desc (mkLabelRA'' shrtn) --FIXME: label made twice?
 
-mkUnLklyChnk :: String -> Sentence -> String -> Contents
-mkUnLklyChnk i desc shrtn = LlC $ llcc (mkLabelRA'' shrtn) $ Change $ ulc i desc (mkLabelRA'' shrtn) --FIXME: label made twice?
+mkUnLklyChnk :: String -> Sentence -> String -> LabelledContent
+mkUnLklyChnk i desc shrtn = llcc (mkLabelRA'' shrtn) $ Change $ ulc i desc (mkLabelRA'' shrtn) --FIXME: label made twice?

@@ -16,8 +16,8 @@ import Drasil.SWHS.Assumptions (newA1, newA2, newA3, newA7, newA8, newA9,
 import Drasil.SWHS.Body (charReader1, charReader2, orgDocIntro,
   genSystDesc, physSyst1, physSyst2, traceTrailing, dataContMid, traceIntro2,
   traceFig1, traceFig2)
-import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil,
-  transient, perfect_insul, tank_para)
+import Drasil.SWHS.Concepts (progName, water, sWHT, tank, coil,
+  transient, tank_para)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
   w_mass, diam, coil_SA, temp_C, w_density, htCap_W, time_final,
   in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, ht_flux_out, tau, htCap_L,
@@ -43,12 +43,10 @@ import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix,
 import Data.Drasil.Citations (parnasClements1986, smithLai2005)
 
 import Data.Drasil.Concepts.Documentation as Doc (inModel,
-  requirement, item, assumption, thModel, traceyMatrix, model,
-  output_, quantity, input_, physicalConstraint, condition, 
-  property, variable, description, symbol_, information, goalStmt, 
-  physSyst, problem, definition, srs, content, reference, document, 
-  goal, purpose)
-
+  requirement, item, assumption, thModel, traceyMatrix, model, output_, quantity, input_, 
+  physicalConstraint, condition, property, variable, description, symbol_,
+  information, goalStmt, physSyst, problem, definition, srs, content, reference,
+  document, goal, purpose)
 
 import qualified Data.Drasil.Concepts.Math as M (ode, de, unit_, equation)
 import Data.Drasil.Concepts.Software (program)
@@ -64,7 +62,7 @@ import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Software.Products (compPro)
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, likeChg, unlikeChg, probDesc, goalStmt,
-  inModel, inModelLabel)
+  inModelLabel)
 import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose), 
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
   SolChSpec(..), SSDSec(..),

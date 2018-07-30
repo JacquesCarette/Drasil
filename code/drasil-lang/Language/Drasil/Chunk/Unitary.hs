@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.Unitary
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   ConceptDomain, HasSymbol(symbol), IsUnit)
-import Language.Drasil.Chunk.Quantity (Quantity(..), QuantityDict, mkQuant, qw, 
+import Language.Drasil.Chunk.Quantity (Quantity, QuantityDict, mkQuant, qw, 
   HasSpace(typ))
 import Language.Drasil.Development.Unit (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))

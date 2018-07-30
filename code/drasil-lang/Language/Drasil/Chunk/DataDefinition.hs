@@ -9,19 +9,16 @@ import Language.Drasil.Chunk.References (References)
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(typ))
 import Language.Drasil.Chunk.SymbolForm (eqSymb)
-import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), HasAdditionalNotes(getNotes),
   HasLabel(getLabel))
 import Language.Drasil.Label.Core (Label)
 
-import Language.Drasil.Chunk.SymbolForm (eqSymb)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Control.Lens(makeLenses, (^.))
-import Language.Drasil.Chunk.Eq(fromEqn, fromEqn', fromEqn''', fromEqn'''')
 import Language.Drasil.Label (mkLabelRA')
-import Language.Drasil.Development.Unit(MayHaveUnit(getUnit), UnitDefn(..))
+import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Spec (Sentence(EmptyS))
 

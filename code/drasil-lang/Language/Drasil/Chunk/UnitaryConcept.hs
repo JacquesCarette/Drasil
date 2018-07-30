@@ -1,14 +1,14 @@
 {-# Language TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.UnitaryConcept (ucw, UnitaryConceptDict) where
 
-import Control.Lens ((^.), makeLenses, view)
+import Control.Lens ((^.), makeLenses)
 
 import Language.Drasil.Chunk.Concept (DefnAndDomain(DAD))
 import Language.Drasil.Chunk.Unitary (UnitaryChunk, mkUnitary, Unitary)
 import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(typ))
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol))
-import Language.Drasil.Development.Unit (MayHaveUnit(getUnit), UnitDefn(..))
+import Language.Drasil.Development.Unit (MayHaveUnit(getUnit))
 
 data UnitaryConceptDict = UCC { _unitary :: UnitaryChunk
                               , _dad :: DefnAndDomain

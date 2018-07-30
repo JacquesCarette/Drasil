@@ -7,8 +7,7 @@ import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
 import qualified Drasil.DocLang.SRS as SRS (dataDefnLabel, 
   valsOfAuxConsLabel, referenceLabel, indPRCaseLabel,
-  datConLabel, funcReqLabel, assumptLabel, likeChgLabel, 
-  funcReq, assumpt, likeChg)
+  datConLabel, funcReq, assumpt, likeChg)
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), 

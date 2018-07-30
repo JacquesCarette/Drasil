@@ -7,10 +7,10 @@ module Language.Drasil.Development (
   , scale, shift
   , derUC, derUC', derUC''
   , fund, comp_unitdefn, derCUC, derCUC', derCUC''
-  , makeDerU, unitWrapper, getCu, MayHaveUnit(getUnit)
+  , unitWrapper, getCu, MayHaveUnit(getUnit)
   -- UnitLang
   , USymb(US), UDefn(..)
-  , from_udefn, comp_usymb
+  , comp_usymb
   ) where
 
 import Language.Drasil.Development.Unit (UnitDefn(..)

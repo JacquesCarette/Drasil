@@ -22,7 +22,7 @@ import Control.Lens ((^.), makeLenses, view)
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(typ), QuantityDict,
   mkQuant, qw)
-import Language.Drasil.Development.Unit(unitWrapper, MayHaveUnit(getUnit), UnitDefn(..))
+import Language.Drasil.Development.Unit(unitWrapper, MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space(Real))

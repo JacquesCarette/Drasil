@@ -7,7 +7,7 @@ import Language.Drasil.Classes (HasSymbol(symbol), HasUnitSymbol(usymb),
 import Language.Drasil.Chunk.NamedIdea (short)
 import Language.Drasil.Chunk.Quantity (Quantity)
 import Language.Drasil.Chunk.Unitary (Unitary, unit)
-import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(getUnit))
+import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
 import Language.Drasil.Development.UnitLang (USymb)
 import Language.Drasil.Spec ((+:+), Sentence((:+:), S, Sy), sParen)
 import Language.Drasil.Symbol (Stage(Implementation), compsy)

@@ -107,7 +107,7 @@ srsDom = dcc' "srsDom" (Doc.srs ^. term) "srs" ""
 
 --function that sets the shortname of each section to be the reference address
 section' :: Sentence -> [Contents] -> [Section] -> String -> Section
-section' a b c d = section a b c (mkLabelRA'' $ getStr a) --FIXME: getStr hack
+section' a b c d = section a b c (mkLabelRA'' $ d) --FIXME: getStr hack
   where
     getStr :: Sentence -> String
     getStr (S s) = s

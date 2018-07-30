@@ -17,7 +17,8 @@ mkLabelRA i ref shortn = Lbl i (RefAdd $ ensureASCII ref) (shortname' shortn)
 
 -- for when reference address and the display should be the same
 mkLabelRA' :: String -> String -> Label
-mkLabelRA' i refAndshortn = Lbl i (RefAdd $ ensureASCII refAndshortn) (shortname' refAndshortn)
+mkLabelRA' ref shortn = Lbl (ref ++ "Label") (RefAdd $ ensureASCII ref) 
+  (shortname' shortn)
 
 -- for when reference address and the display should be the same
 mkLabelRA'' :: String -> Label

@@ -62,9 +62,6 @@ sSubSec sectionName xs = SectionModel sectionName xs
 siCon :: [Contents] -> SecItem
 siCon xs = Cont xs
 
-siLC :: [LabelledContent] -> SecItem
-siLC xs = LC xs
-
 siSect :: [Section] -> SecItem
 siSect xs = Sect xs
 

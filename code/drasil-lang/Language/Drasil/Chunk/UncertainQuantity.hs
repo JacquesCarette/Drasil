@@ -21,7 +21,7 @@ import Language.Drasil.Chunk.Concept(cw)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
   IsUnit, Constrained(constraints), HasReasVal(reasVal))
-import Language.Drasil.Development.Unit (MayHaveUnit(getUnit), UnitDefn(..))
+import Language.Drasil.Development.Unit (MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase(NP)
 import Language.Drasil.Space (Space)

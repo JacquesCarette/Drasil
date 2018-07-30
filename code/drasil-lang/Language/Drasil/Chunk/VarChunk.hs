@@ -5,7 +5,7 @@ import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw, nc)
 import Language.Drasil.Chunk.Quantity (Quantity)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), HasSpace(typ))
-import Language.Drasil.Development.Unit (MayHaveUnit(getUnit), UnitDefn(..))
+import Language.Drasil.Development.Unit (MayHaveUnit(getUnit))
 import Language.Drasil.Symbol (Symbol(Empty), Stage(..))
 import Language.Drasil.Space (Space)
 

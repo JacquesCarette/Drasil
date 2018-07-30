@@ -27,7 +27,6 @@ import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle, fmtU, getRVal)
 import Data.Drasil.SentenceStructures (fmtPhys, fmtSfwr, mkTableFromColumns, foldlSent, 
   foldlSP, typUncr, ofThe, foldlList, SepType(Comma), FoldType(List))
-import Data.List (sortBy)
 
 import qualified Drasil.DocLang.SRS as SRS
 

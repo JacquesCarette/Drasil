@@ -6,7 +6,7 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (priority, software, requirement, nonfunctionalRequirement,
   functionalRequirement, section_)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.SentenceStructures (foldlSP, foldlList, foldlSent, SepType(Comma), FoldType(List))
+import Data.Drasil.SentenceStructures (foldlList, foldlSent, SepType(Comma), FoldType(List))
 
 import qualified Drasil.DocLang.SRS as SRS
 

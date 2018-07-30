@@ -12,8 +12,7 @@ import Drasil.GlassBR.Units (sFlawPU)
 import Data.Drasil.Constraints
 import Data.Drasil.SentenceStructures (displayConstrntsAsSet, foldlSent,
   foldlsC, foldlList, SepType(Comma), FoldType(Options))
-import Data.Drasil.SI_Units (kilogram, kilopascal, metre, millimetre, pascal, 
-  second)
+import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
 --FIXME: Many of the current terms can be separated into terms and defns?
 glassBRsymb :: [DefinedQuantityDict]

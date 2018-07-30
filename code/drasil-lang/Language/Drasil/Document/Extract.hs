@@ -13,7 +13,6 @@ import Language.Drasil.NounPhrase.Core
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.ShortName
 import Language.Drasil.Chunk.Change
-import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Citation
 import Language.Drasil.Chunk.ReqChunk
 import Language.Drasil.Chunk.Eq (QDefinition)

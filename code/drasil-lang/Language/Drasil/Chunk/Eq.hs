@@ -14,7 +14,7 @@ import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), ConceptDomain, HasAdditionalNotes(getNotes))
-import Language.Drasil.Development.Unit(unitWrapper, MayHaveUnit(getUnit), UnitDefn(..))
+import Language.Drasil.Development.Unit(unitWrapper, MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space(Real))

@@ -15,10 +15,10 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   dataConstraintUncertainty, genSysF, inDataConstTbl, intro, 
   mkDoc, outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF,
   tsymb'')
-import qualified Drasil.DocLang.SRS as SRS (inModel, likeChg,
-  funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
-  sysCont, reference, assumpt, 
-  inModelLabel, thModelLabel, dataDefnLabel, genDefnLabel, referenceLabel)
+import qualified Drasil.DocLang.SRS as SRS (likeChg,
+  funcReq, probDesc, goalStmt,
+  sysCont, assumpt, 
+  inModelLabel, referenceLabel)
 
 import Data.Drasil.People (thulasi, brooks, spencerSmith)
 import Data.Drasil.Phrase (for)

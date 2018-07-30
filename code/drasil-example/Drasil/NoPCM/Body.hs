@@ -17,8 +17,8 @@ import Drasil.SWHS.Assumptions (assump1, assump2, assump7, assump8, assump9,
 import Drasil.SWHS.Body (charReader1, charReader2, orgDocIntro,
   genSystDesc, physSyst1, physSyst2, traceTrailing, dataContMid, traceIntro2,
   traceFig1, traceFig2)
-import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil,
-  transient, perfect_insul, tank_para)
+import Drasil.SWHS.Concepts (progName, water, sWHT, tank, coil,
+  transient, tank_para)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
   w_mass, diam, coil_SA, temp_C, w_density, htCap_W, time_final,
   in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, ht_flux_out, tau, htCap_L,
@@ -42,18 +42,17 @@ import Data.Drasil.Utils (enumSimple, refFromType, makeListRef,
   itemRefToSent, makeTMatrix, itemRefToSent, weave, eqUnR', noRefs)
 import Data.Drasil.Citations (parnasClements1986, smithLai2005)
 
-import Data.Drasil.Concepts.Documentation as Doc (datumConstraint, inModel,
-  requirement, section_, traceyGraph, item, assumption, dataDefn,
-  likelyChg, genDefn, thModel, traceyMatrix, model, output_, quantity, input_, 
+import Data.Drasil.Concepts.Documentation as Doc (inModel,
+  requirement, item, assumption, thModel, traceyMatrix, model, output_, quantity, input_, 
   physicalConstraint, condition, property, variable, description, symbol_,
   information, goalStmt, physSyst, problem, definition, srs, content, reference,
   document, goal, purpose)
 
-import qualified Data.Drasil.Concepts.Math as M (ode, de, rOfChng, unit_, equation)
+import qualified Data.Drasil.Concepts.Math as M (ode, de, unit_, equation)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
-  thermal_energy, ht_trans_theo, heat, melt_pt, boil_pt, heat_trans, ht_flux,
+  thermal_energy, ht_trans_theo, heat, melt_pt, boil_pt, ht_flux,
   heat_cap_spec, thermal_conduction)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heat_cap_spec, ht_flux)
@@ -63,7 +62,7 @@ import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Software.Products (compPro)
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, likeChg, unlikeChg, probDesc, goalStmt,
-  inModel, inModelLabel)
+  inModelLabel)
 import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose), 
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
   SolChSpec(..), SSDSec(..),
@@ -71,13 +70,12 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
   RefSec(RefProg), RefTab(TAandA, TUnits), 
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty, 
-  inDataConstTbl, intro, mkDoc, mkLklyChnk, mkRequirement, mkUnLklyChnk, 
-  outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF, 
+  inDataConstTbl, intro, mkDoc, mkRequirement, mkUnLklyChnk, 
+  outDataConstTbl, physSystDesc, reqF, termDefnF, traceMGF, 
   tsymb, valsOfAuxConstantsF)
  
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
-  foldlList, SepType(Comma), FoldType(List), isThe, sOf, ofThe, foldlSPCol, 
-  foldlSent, foldlSP, acroIM, acroGD)
+  isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP, acroIM, acroGD)
 import Data.Drasil.Units.Thermodynamics (thermal_flux)
 
 -- This defines the standard units used throughout the document
@@ -461,7 +459,7 @@ iModDesc1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
   UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   UncertQ -> ConceptChunk -> UnitalChunk -> UncertQ -> ConceptChunk ->
   ConceptChunk -> Contents -> UnitalChunk -> Contents -> [Sentence]
-iModDesc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin a11 vhg a12 =
+iModDesc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin _ vhg _ =
   [S "To find the", phrase roc `sOf` ch temw `sC`
   S "we look at the", phrase en, S "balance on" +:+.
   phrase wa, S "The", phrase vo, S "being considered" `isThe`

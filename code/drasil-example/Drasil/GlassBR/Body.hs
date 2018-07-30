@@ -7,8 +7,7 @@ import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
 import qualified Drasil.DocLang.SRS as SRS (dataDefnLabel, 
   valsOfAuxConsLabel, referenceLabel, indPRCaseLabel,
-  datConLabel, funcReqLabel, assumptLabel, likeChgLabel, 
-  funcReq, assumpt, likeChg)
+  datConLabel, funcReq, assumpt, likeChg)
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), 
@@ -27,7 +26,7 @@ import Data.Drasil.Concepts.Computation (computerApp, inParam,
   computerLiteracy, inValue, inQty)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   characteristic, class_, code, condition, content,
-  datum, definition, description, document, emphasis, endUser, failure,
+  definition, description, document, emphasis, endUser, failure,
   figure, goal, implementation, information, interface, input_, item,
   message, model, organization, output_, problem, purpose,
   quantity, reference, reviewer, section_, software, standard,
@@ -54,8 +53,7 @@ import Data.Drasil.Software.Products (sciCompS)
 import Data.Drasil.Utils (makeTMatrix, makeListRef, itemRefToSent, noRefs,
   refFromType, enumSimple, enumBullet, prodUCTbl)
 
-import Drasil.GlassBR.Assumptions (assumptionConstants, assumptionDescs,
-  gbRefDB, newAssumptions)
+import Drasil.GlassBR.Assumptions (assumptionConstants, gbRefDB)
 import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, 
   glass, gLassBR, lShareFac, ptOfExplsn, stdOffDist)

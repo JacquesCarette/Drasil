@@ -3,7 +3,7 @@ module Language.Drasil.HTML.Print(genHTML) where
 import Prelude hiding (print)
 import Data.List (sortBy,partition,intersperse)
 import Text.PrettyPrint hiding (render, Str)
-import Numeric (showFFloat)
+import Numeric (showGFloat, showEFloat)
 import Control.Arrow (second)
 
 import qualified Language.Drasil as L (People, Person, StyleGuide(APA, MLA, Chicago), 
@@ -24,7 +24,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, Fence(Curly, Paren, Abs, Norm),
   Ops(Prod, Inte, Mul, Summ, Or, Add, And, Subt, Iff, Impl, GEq, LEq, Lt, Gt, NEq, Eq,
   Dot, Cross, Neg, Exp, Not, Dim, Cot, Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, 
-  Real, Rational, Natural, Integer, IsIn), 
+  Real, Rational, Natural, Integer, IsIn, Point), 
   Expr(Sub, Sup, Over, Sqrt, Spc, Font, MO, Fenced, Spec, Ident, Row, Mtx, Case, Div, Str, 
   Int, Dbl, Integ), Spec(Quote, EmptyS, Ref, HARDNL, Sp, Sy, S, E, (:+:)),
   Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label)
@@ -154,7 +154,7 @@ uSymb (L.US ls) = formatu t b
 -----------------------------------------------------------------
 -- | Renders expressions in the HTML (called by multiple functions)
 p_expr :: Expr -> String
-p_expr (Dbl d)        = showFFloat Nothing d ""
+p_expr (Dbl d)        = showEFloat Nothing d ""--showGFloat Nothing d ""
 p_expr (Int i)        = show i
 p_expr (Integ i)    = show i
 p_expr (Str s)        = s
@@ -214,6 +214,7 @@ p_ops Mul      = "&#8239;"
 p_ops Summ     = "&sum;"
 p_ops Inte     = "&int;"
 p_ops Prod     = "&prod;"
+p_ops Point    = "."
 
 fence :: OpenClose -> Fence -> String
 fence Open  Paren = "("

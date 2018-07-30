@@ -76,6 +76,6 @@ sufxer = (\x -> x ++ ".") . sufx . mod 10
 getBaseTen :: Double -> Int -> (Double, Int)
 getBaseTen b c 
    | b >= 1 && b < 10  = (b, c)
-   | b >= 1            = getBaseTen (b/10) (c+1)
-   | b == 0             = (0, 0)
+   | b >= 10            = getBaseTen (b/10) (c+1)
+   | b == 0             = (0, c)
    | b < 1             = getBaseTen (b*10) (c+1) 

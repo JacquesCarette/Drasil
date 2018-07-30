@@ -21,7 +21,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat),
   Ops(Inte, Prod, Summ, Mul, Add, Or, And, Subt, Iff, LEq, GEq, 
   NEq, Eq, Gt, Lt, Impl, Dot, Cross, Neg, Exp, Dim, Not, Cot,
   Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, Real, Natural, 
-  Rational, Integer, IsIn), Spacing(Thin), Fonts(Emph, Bold), 
+  Rational, Integer, IsIn, Point), Spacing(Thin), Fonts(Emph, Bold), 
   Expr(Spc, Sqrt, Font, Fenced, MO, Over, Sup, Sub, Ident, Spec, Row, 
   Mtx, Div, Case, Str, Int, Dbl, Integ), OverSymb(Hat), Label)
 import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished, 
@@ -179,6 +179,7 @@ p_ops Mul      = " "
 p_ops Summ     = "\\displaystyle\\sum"
 p_ops Prod     = "\\displaystyle\\prod"
 p_ops Inte     = "\\int"
+p_ops Point    = "."
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "\\left("

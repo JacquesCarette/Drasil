@@ -7,6 +7,7 @@
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{unicode-math}
+\usepackage{enumitem}
 \usepackage{tabu}
 \usepackage{longtable}
 \usepackage{booktabs}
@@ -273,46 +274,46 @@ The instance models that govern SWHS are presented in Section~\ref{Sec:IMs}. The
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TMs}{]}, General Definitions {[}Section~\ref{Sec:GDs}{]}, Data Definitions {[}Section~\ref{Sec:DDs}{]}, Instance Models {[}Section~\ref{Sec:IMs}{]}, Likely Changes {[}Section~\ref{Sec:LCs}{]}, or Unlikely Changes {[}Section~\ref{Sec:UCs}{]}, in which the respective assumption is used.
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible {[}\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Thermal-Energy-Only}:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible {[}\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]All heat transfer coefficients are constant over time {[}GD1{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Heat-Transfer-Coeffs-Constant}:]All heat transfer coefficients are constant over time {[}GD1{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank {[}GD2, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Constant-Water-Temp-Across-Tank}:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank {[}GD2, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The density of water has no spatial variation; that is, it is constant over their entire volume {[}GD2, LC\ref{LC:likeChg2}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Density-Water-Constant-over-Volume}:]The density of water has no spatial variation; that is, it is constant over their entire volume {[}GD2, LC\ref{LC:likeChg2}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume {[}GD2{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Specific-Heat-Energy-Constant-over-Volume}:]The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume {[}GD2{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]Newton's law of convective cooling applies between the heating coil and the water {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Law-Convective-Cooling-Coil-Water}:]Newton's law of convective cooling applies between the heating coil and the water {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The temperature of the heating coil is constant over time {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Time}:]The temperature of the heating coil is constant over time {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The temperature of the heating coil does not vary along its length {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Length}:]The temperature of the heating coil does not vary along its length {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil {[}IM1, LC\ref{LC:likeChg3}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Charging-Tank-No-Temp-Discharge}:]The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil {[}IM1, LC\ref{LC:likeChg3}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature {[}IM1, IM3{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Water-Always-Liquid}:]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature {[}IM1, IM3{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The tank is perfectly insulated so that there is no heat loss from the tank {[}IM1{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Perfect-Insulation-Tank}:]The tank is perfectly insulated so that there is no heat loss from the tank {[}IM1{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]No internal heat is generated by the water; therefore, the volumetric heat generation per unit volume is zero {[}IM1{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:No-Internal-Heat-Generation-By-Water}:]No internal heat is generated by the water; therefore, the volumetric heat generation per unit volume is zero {[}IM1{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature of water are 0${}^{\circ}$C and 100${}^{\circ}$C, respectively {[}IM1, IM2{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Atmospheric-Pressure-Tank}:]The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature of water are 0${}^{\circ}$C and 100${}^{\circ}$C, respectively {[}IM1, IM2{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Volume-Coil-Negligible}:]When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible.
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -613,7 +614,7 @@ This section provides the functional requirements, the business tasks that the s
 \subsection{Functional Requirements}
 \label{Sec:FRs}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{Input-Inital-Values}:]Input the following quantities, which define the tank parameters, material properties and initial conditions:
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req1}:]Input the following quantities, which define the tank parameters, material properties and initial conditions:
 \end{description}
 \begin{longtabu}{l l X[l]}
 \toprule
@@ -642,22 +643,22 @@ ${t_{final}}$ & s & final time
 \label{Table:fr1list}
 \end{longtabu}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{Use-Above-Find-Mass-IM1-IM2}:]Use the inputs in R\ref{FR:req1} to find the mass needed for IM1 to IM2, as follows, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank:
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req2}:]Use the inputs in R\ref{FR:req1} to find the mass needed for IM1 to IM2, as follows, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank:
 \end{description}
 \begin{dmath}
 {m_{W}}={V_{W}} {ρ_{W}}=\frac{D}{2} L {ρ_{W}}
 \end{dmath}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{Check-Inputs-Satisfy-Physical-Constraints}:]Verify that the inputs satisfy the required physical constraint shown in Table~\ref{Table:InDataConstraints}.
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req3}:]Verify that the inputs satisfy the required physical constraint shown in Table~\ref{Table:InDataConstraints}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{Output-Input-Derivied-Quantities}:]Outputs and inputs quantities and derived quantities in the following list: the quantities from R\ref{FR:req1}, the mass from R\ref{FR:req2} and ${τ_{W}}$ (from IM1).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req4}:]Outputs and inputs quantities and derived quantities in the following list: the quantities from R\ref{FR:req1}, the mass from R\ref{FR:req2} and ${τ_{W}}$ (from IM1).
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{Calculate-Temperature-Water-Over-Time}:]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req5}:]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{Calculate-Change-Heat\_Energy-Water-Time}:]Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from IM3).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req6}:]Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from IM3).
 \end{description}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
@@ -665,24 +666,24 @@ This problem is small in size and relatively simple, so performance is not a pri
 \section{Likely Changes}
 \label{Sec:LCs}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{Temperature-Coil-Variable-Over-Day}:]A\ref{A:assump8} - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg2}:]A\ref{A:assump8} - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{Temperature-Coil-Variable-Over-Length}:]A\ref{A:assump9} - The temperature of the heating coil will actually change along its length as the water within it cools.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg3}:]A\ref{A:assump9} - The temperature of the heating coil will actually change along its length as the water within it cools.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{Discharging-Tank}:]A\ref{A:Charging-Tank-No-Temp-Discharge}- The model currently only accounts for charging of the tank. That is, increasing the temperature of the water to match the temperature of the coil. A more complete model would also account for discharging of the tank.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg3}:]A\ref{A:assump9.npcm}- The model currently only accounts for charging of the tank. That is, increasing the temperature of the water to match the temperature of the coil. A more complete model would also account for discharging of the tank.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{Tank-Lose-Heat}:]A\ref{A:assump15} - Any real tank cannot be perfectly insulated and will lose heat.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg6}:]A\ref{A:assump15} - Any real tank cannot be perfectly insulated and will lose heat.
 \end{description}
 \section{Unlikely Changes}
 \label{Sec:UCs}
 \begin{description}
-\item[\refstepcounter{ucnum}\uctheucnum\label{Water-Fixed-States}:]A\ref{A:assump14} - It is unlikely for the change of water from liquid to a solid, or from liquid to gas to be considered.
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC:unlikeChg1}:]A\ref{A:assump14} - It is unlikely for the change of water from liquid to a solid, or from liquid to gas to be considered.
 \end{description}
 \begin{description}
-\item[\refstepcounter{ucnum}\uctheucnum\label{No-Internal-Heat-Generation}:]A\ref{A:assump12} - Is used for the derivations of IM1 (Hack: need Label to fix).
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC:unlikeChg2}:]A\ref{A:assump12} - Is used for the derivations of IM1 (Hack: need Label to fix).
 \end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
@@ -735,7 +736,7 @@ R6 (R\ref{FR:req6}) &  & X &  &  &  &  &  &  &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l}
 \toprule
- & A1 (A\ref{A:Thermal-Energy-Only}) & A2 (A\ref{A:Heat-Transfer-Coeffs-Constant}) & A3 (A\ref{A:Constant-Water-Temp-Across-Tank}) & A4 (A\ref{A:Density-Water-Constant-over-Volume}) & A5 (A\ref{A:Specific-Heat-Energy-Constant-over-Volume}) & A6 (A\ref{A:Law-Convective-Cooling-Coil-Water}) & A7 (A\ref{A:Temp-Heating-Coil-Constant-over-Time}) & A8 (A\ref{A:Temp-Heating-Coil-Constant-over-Length}) & A9 (A\ref{A:Charging-Tank-No-Temp-Discharge}) & A10 (A\ref{A:Water-Always-Liquid}) & A11 (A\ref{A:Perfect-Insulation-Tank}) & A12 (A\ref{A:No-Internal-Heat-Generation-By-Water}) & A13 (A\ref{A:Atmospheric-Pressure-Tank}) & A14 (A\ref{A:Volume-Coil-Negligible})
+ & A1 (A\ref{A:assump1}) & A2 (A\ref{A:assump2}) & A3 (A\ref{A:assump3}) & A4 (A\ref{A:assump4}) & A5 (A\ref{A:assump5}) & A6 (A\ref{A:assump7}) & A7 (A\ref{A:assump8}) & A8 (A\ref{A:assump9}) & A9 (A\ref{A:assump9.npcm}) & A10 (A\ref{A:assump14}) & A11 (A\ref{A:assump15}) & A12 (A\ref{A:assump12}) & A13 (A\ref{A:assump13}) & A14 (A\ref{A:assump20})
 \\
 \midrule
 T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) & X &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -750,32 +751,32 @@ IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) &  &  &  &  &  &  &
 \\
 IM2 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) &  &  &  &  &  &  &  &  &  & X &  &  &  & 
 \\
-LC1 (Section~\ref{Sec:LCs}) &  &  &  &  &  &  & X &  &  &  &  &  &  & 
+LC1 (LC\ref{LC:likeChg2}) &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
-LC2 (Section~\ref{Sec:LCs}) &  &  &  &  &  &  &  & X &  &  &  &  &  & 
+LC2 (LC\ref{LC:likeChg3}) &  &  &  &  &  &  &  & X &  &  &  &  &  & 
 \\
-LC3 (Section~\ref{Sec:LCs}) &  &  &  &  &  &  &  &  & X &  &  &  &  & 
+LC3 (LC\ref{LC:likeChg3}) &  &  &  &  &  &  &  &  & X &  &  &  &  & 
 \\
-LC4 (Section~\ref{Sec:LCs}) &  &  &  &  &  &  &  &  &  &  & X &  &  & 
+LC4 (LC\ref{LC:likeChg6}) &  &  &  &  &  &  &  &  &  &  & X &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
 \label{Table:TraceyAI}
 \end{longtable}
-The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. Figure~\ref{Figure:TraceyA} shows the dependencies of theoretical models, general definitions, data definitions, instance models, likely changes, and assumptions on each other. Figure~\ref{Figure:TraceyR} shows the dependencies of instance models, requirements, and data constraints on each other.
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. Figure~\ref{Figure:TraceA} shows the dependencies of theoretical models, general definitions, data definitions, instance models, likely changes, and assumptions on each other. Figure~\ref{Figure:TraceR} shows the dependencies of instance models, requirements, and data constraints on each other.
 NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{ATrace.png}
 \caption{Traceability Graph Showing the Connections Between Items of Different Sections}
-\label{Figure:TraceyA}
+\label{Figure:TraceA}
 \end{center}
 \end{figure}
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{RTrace.png}
-\caption{Traceability Graph Showing the Connections Between Instance Models, Requirements, and Data Constraints}
-\label{Figure:TraceyR}
+\caption{Traceability Graph Showing the Connections Between Requirements, Instance Models, and Data Constraints}
+\label{Figure:TraceR}
 \end{center}
 \end{figure}
 \section{Values of Auxiliary Constants}

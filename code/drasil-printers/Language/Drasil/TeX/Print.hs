@@ -118,7 +118,7 @@ data OpenClose = Open | Close
 -----------------------------------------------------------------
 -- (Since this is all implicitly in Math, leave it as String for now)
 p_expr :: Expr -> String
-p_expr (Dbl d)    = show d
+p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
 p_expr (Integ i)    = show i
 p_expr (Str s)    = s  -- FIXME this is probably the wrong way to print strings

@@ -5,6 +5,9 @@ import Control.Lens (Lens')
 --It is a hack to think of ShortName as a String
 newtype ShortName = ShortNm String
 
+getStringSN :: ShortName -> String
+getStringSN (ShortNm s) = s
+
 class HasShortName  s where
   shortname :: Lens' s ShortName-- String; The text to be displayed for the link.
                             -- A short name used for referencing within a document that can 

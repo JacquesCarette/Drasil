@@ -106,7 +106,7 @@ mkFig x y = LlC $ llcc x y
 mkDefinitionLC :: String -> String -> String -> RawContent -> LabelledContent
 mkDefinitionLC labelUID refAdd sn dfn = llcc (mkLabelRA labelUID refAdd sn) dfn
 
--- no pattern for Bib BibRef of RawContent
+-- FIXME: no pattern for Bib BibRef of RawContent
 mkRawLC :: RawContent -> Label -> LabelledContent
 mkRawLC x@(Table _ _ _ _ _)  lb = llcc (mkLabelRA' ("Table:" ++ (getAdd (lb ^. getRefAdd))) 
   (getStringSN (lb ^. shortname))) x
@@ -125,10 +125,10 @@ mkRawLC x@(Requirement rq)   _  = llcc (mkLabelRA' ("R:" ++ (getAdd ((rq ^. getL
   (getStringSN (rq ^. shortname))) x
 mkRawLC x@(Assumption ac)    _  = llcc (mkLabelRA' ("A:" ++ (getAdd ((ac ^. getLabel) ^. getRefAdd)))
   (getStringSN (ac ^. shortname))) x
-mkRawLC x@(Change (ChC _ Likely _ _))    _  = llcc (mkLabelRA' 
-  ("LC:" ++ (getAdd ((ch ^. getLabel) ^. getRefAdd))) (getStringSN (ch ^. shortname))) x
-mkRawLC x@(Change (ChC _ Unlikely _ _))  _  = llcc (mkLabelRA'
-  ("UC:" ++ (getAdd ((ch ^. getLabel) ^. getRefAdd))) (getStringSN (ch ^. shortname))) x
+mkRawLC x@(Change (ChC _ Likely _ lb))   _  = llcc (mkLabelRA' 
+  ("LC:" ++ (getAdd (lb ^. getRefAdd))) (getStringSN (lb ^. shortname))) x
+mkRawLC x@(Change (ChC _ Unlikely _ lb)) _  = llcc (mkLabelRA'
+  ("UC:" ++ (getAdd (lb ^. getRefAdd))) (getStringSN (lb ^. shortname))) x
 mkRawLC x@(Graph _ _ _ _ _)   lb = llcc (mkLabelRA' ("Graph:" ++ (getAdd (lb ^. getRefAdd)))
   (getStringSN (lb ^. shortname))) x
 mkRawLC x@(Defnt d _ _)       lb = let u = getAdd ((getDefLabel d) ^. getRefAdd) in

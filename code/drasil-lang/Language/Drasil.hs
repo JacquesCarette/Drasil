@@ -140,7 +140,7 @@ module Language.Drasil (
   , Referable(..), Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListTuple
   , LabelledContent(..), UnlabelledContent(..)
-  , mkParagraph
+  , mkParagraph, mkRawLC
   , llcc, ulcc
   , section, fig, figWithWidth, section''
   , reldefn, MaxWidthPercent
@@ -254,7 +254,7 @@ import Language.Drasil.Document (section, fig, figWithWidth
   , reldefn, Section(..), SecCons(..) 
   , llcc, ulcc, Document(..)
   , HasContents(accessContents)
-  , mkParagraph, mkFig)
+  , mkParagraph, mkFig, mkRawLC)
 import Language.Drasil.Document.Core (DType(..)
   , Contents(..), ListType(..), ItemType(..)
   , RawContent(..), ListTuple, MaxWidthPercent

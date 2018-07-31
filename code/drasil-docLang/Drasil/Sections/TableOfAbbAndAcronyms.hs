@@ -28,4 +28,4 @@ table ls = let chunks = sortBy (compare `on` fst) $ select ls in
   [(\(a,_) -> S a),
    (\(_,b) -> titleize b)]
   chunks)
-  (S "Abbreviations and Acronyms") False "TAbbAcc"
+  (S "Abbreviations and Acronyms") False

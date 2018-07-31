@@ -109,7 +109,7 @@ mkInputDatTb inputVar = llcc (mkLabelRA'' "inDataTable") $
   Table [titleize symbol_, titleize unit_, 
   S "Name"]
   (mkTable [ch , fmtU EmptyS, phrase] inputVar) 
-  (S "Required" +:+ titleize' input_) True "inDataTable"
+  (S "Required" +:+ titleize' input_) True
 
 -- | makes sentences from an item and its reference 
 -- a - String title of reference
@@ -167,5 +167,4 @@ noRefsLT a = uncurry zip3 (unzip a) $ repeat Nothing
 prodUCTbl :: [[Sentence]] -> LabelledContent
 prodUCTbl cases = llcc (mkLabelRA'' "useCaseTable") $ --FIXME: do we want labels across examples to be unique?
   Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
-  cases
-  (titleize useCaseTable) True "useCaseTable"
+  cases (titleize useCaseTable) True

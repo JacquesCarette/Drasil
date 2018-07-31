@@ -25,4 +25,3 @@ tableOfConstants f = llcc (mkLabelRA'' "TAuxConsts") $ Table
   (mkTable [ch, phrase, (\c -> E $ c^.equat), unitToSentence] f)
   (S "Auxiliary Constants")
   True
-  "TAuxConsts"

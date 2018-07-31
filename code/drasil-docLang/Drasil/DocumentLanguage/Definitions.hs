@@ -43,26 +43,26 @@ data InclUnits = IncludeUnits -- In description field (for other symbols)
 -- | Create a theoretical model using a list of fields to be displayed, a database of symbols,
 -- and a RelationConcept (called automatically by 'SCSSub' program)
 tmodel :: HasSymbolTable ctx => Fields -> ctx -> TheoryModel -> LabelledContent
-tmodel fs m t = llcc (t ^. getLabel) $ Defnt TM (foldr (mkTMField t m) [] fs) (refAdd t)
+tmodel fs m t = llcc (t ^. getLabel) $ Defnt TM (foldr (mkTMField t m) [] fs)
 
 -- | Create a data definition using a list of fields, a database of symbols, and a
 -- QDefinition (called automatically by 'SCSSub' program)
 ddefn :: HasSymbolTable ctx => Fields -> ctx -> QDefinition -> LabelledContent
-ddefn fs m d = llcc (d ^. getLabel) $ Defnt DD (foldr (mkQField d m) [] fs) (refAdd d)
+ddefn fs m d = llcc (d ^. getLabel) $ Defnt DD (foldr (mkQField d m) [] fs)
 
 ddefn' :: HasSymbolTable ctx => Fields -> ctx -> DataDefinition -> LabelledContent
-ddefn' fs m d = llcc (d ^. getLabel) $ Defnt DD (foldr (mkDDField d m) [] fs) (refAdd d)
+ddefn' fs m d = llcc (d ^. getLabel) $ Defnt DD (foldr (mkDDField d m) [] fs)
 
 -- | Create a general definition using a list of fields, database of symbols,
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'
 -- program)
 gdefn :: HasSymbolTable ctx => Fields -> ctx -> GenDefn -> LabelledContent
-gdefn fs m g = llcc (g ^. getLabel) $ Defnt General (foldr (mkGDField g m) [] fs) (refAdd g)
+gdefn fs m g = llcc (g ^. getLabel) $ Defnt General (foldr (mkGDField g m) [] fs)
 
 -- | Create an instance model using a list of fields, database of symbols,
 -- and an 'InstanceModel' chunk (called automatically by 'SCSSub' program)
 instanceModel :: HasSymbolTable ctx => Fields -> ctx -> InstanceModel -> LabelledContent
-instanceModel fs m i = llcc (i ^. getLabel) $ Defnt Instance (foldr (mkIMField i m) [] fs) (refAdd i)
+instanceModel fs m i = llcc (i ^. getLabel) $ Defnt Instance (foldr (mkIMField i m) [] fs)
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
 -- or IM definition automatically (called automatically by 'SCSSub' program)

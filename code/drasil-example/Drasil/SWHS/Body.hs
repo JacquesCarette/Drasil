@@ -425,7 +425,6 @@ funcReqsTable = LlC $ llcc (mkLabelRA'' "InConstraints") $ (Table
   [ch, --(\ch -> Sy (unit_symb ch)),
   unitToSentence, phrase] (map qw inputConstraints))
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False)
-  "InConstraints"
 
 reqs :: [Contents]
 reqs = map LlC [req3, req4, req5, req6, req7, req8, req9, req10, req11]
@@ -568,11 +567,11 @@ trace2R10 = ["IM2"]
 trace2R11 = ["IM2"]
 
 traceTable2 :: LabelledContent
-traceTable2 = llcc (mkLabelRA'' "traceTable2SWHSLabel") $
+traceTable2 = llcc (mkLabelRA'' "Tracey1") $
   Table (EmptyS:traceMRowHeader2)
   (makeTMatrix (traceMColHeader2) (traceMColumns2) (traceMRow2))
   (showingCxnBw traceyMatrix
-  (titleize' requirement `sAnd` titleize' inModel)) True "Tracey1"
+  (titleize' requirement `sAnd` titleize' inModel)) True
 
 {-Traceability Matrix 3-}
 
@@ -793,7 +792,7 @@ systCContents pro = foldlSP [makeRef sys_context_fig, S "shows the" +:+. phrase 
 sys_context_fig :: LabelledContent
 sys_context_fig = llcc (mkLabelRA'' "SysCon") $ fig (foldlSent_
   [makeRef sys_context_fig +: EmptyS, titleize sysCont])
-  "SystemContextFigure.png" "SysCon"
+  "SystemContextFigure.png"
 
 systCIntro :: CI -> NamedChunk -> Contents
 systCIntro pro us = foldlSPCol [short pro +:+. S "is mostly self-contained",
@@ -892,7 +891,7 @@ fig_tank :: LabelledContent
 fig_tank = llcc (mkLabelRA'' "Tank") $ fig (
   foldlSent_ [at_start sWHT `sC` S "with", phrase ht_flux_C, S "of",
   ch ht_flux_C `sAnd` phrase ht_flux_P, S "of", ch ht_flux_P])
-  "Tank.png" "Tank"
+  "Tank.png"
 
 -----------------------------
 -- 4.1.3 : Goal Statements --
@@ -1255,18 +1254,18 @@ traceTrailing3 = foldlSent_ [foldlList Comma List $ map plural (take 5 renameLis
   S "on the", plural assumption]
 
 traceTable1 :: LabelledContent
-traceTable1 = llcc (mkLabelRA'' "traceTable1SWHS") $ Table
+traceTable1 = llcc (mkLabelRA'' "Tracey2") $ Table
   (EmptyS:traceMRowHeader1)
   (makeTMatrix (traceMRowHeader1) (traceMColumns1) (traceMRow1))
   (showingCxnBw traceyMatrix
-  (titleize' item +:+ S "of Different" +:+ titleize' section_)) True "Tracey2"
+  (titleize' item +:+ S "of Different" +:+ titleize' section_)) True
 
 traceTable3 :: LabelledContent
-traceTable3 = llcc (mkLabelRA'' "traceTable3SWHS") $ Table
+traceTable3 = llcc (mkLabelRA'' "Tracey3") $ Table
   (EmptyS:traceMRowHeader3)
   (makeTMatrix traceMColHeader3 traceMColumns3 traceMRow3)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+
-  titleize' item)) True "Tracey3"
+  titleize' item)) True
 
 -- These matrices can probably be generated automatically when enough info is
 -- abstracted out.
@@ -1284,11 +1283,11 @@ traceIntro2 = traceGIntro [traceFig1, traceFig2]
 
 traceFig1 :: LabelledContent
 traceFig1 = llcc (mkLabelRA'' "TraceyA") $ fig (showingCxnBw traceyGraph (titleize' item +:+
-  S "of Different" +:+ titleize' section_)) "ATrace.png" "TraceyA"
+  S "of Different" +:+ titleize' section_)) "ATrace.png"
 
 traceFig2 :: LabelledContent
 traceFig2 = llcc (mkLabelRA'' "TraceyR") $ fig (showingCxnBw traceyGraph (foldlList Comma List
-  $ map titleize' renameList2)) "RTrace.png" "TraceyR"
+  $ map titleize' renameList2)) "RTrace.png"
 
 -------------------------------------------------
 -- Section 8 :  Specification Parameter Values --

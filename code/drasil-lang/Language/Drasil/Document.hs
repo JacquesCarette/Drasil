@@ -159,11 +159,11 @@ section'' :: Sentence -> [Contents] -> [Section] -> Label -> Section
 section'' title intro secs lbe = section title intro secs lbe
 
 -- | Figure smart constructor. Assumes 100% of page width as max width.
-fig :: Lbl -> Filepath -> RefAdd -> RawContent
+fig :: Lbl -> Filepath -> RawContent
 fig l f = Figure l f 100
 
 -- | Figure smart constructor for customized max widths.
-figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RefAdd -> RawContent
+figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
 figWithWidth = Figure
 
 reldefn :: RelationConcept -> LabelledContent

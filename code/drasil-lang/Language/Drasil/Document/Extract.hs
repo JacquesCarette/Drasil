@@ -52,8 +52,8 @@ egetCon' c = egetCon (c ^. accessContents)
 egetCon :: RawContent -> [Expr]
 egetCon (EqnBlock e) = [e]
 egetCon (Definition d) = egetDtype d 
-egetCon (Defnt dt (hd:tl) a) = concatMap egetCon' (snd hd) ++ egetCon (Defnt dt tl a)
-egetCon (Defnt dt [] _) = [] ++ egetDtype dt
+egetCon (Defnt dt (hd:tl)) = concatMap egetCon' (snd hd) ++ egetCon (Defnt dt tl)
+egetCon (Defnt dt []) = [] ++ egetDtype dt
 egetCon _ = []
 
 egetDtype :: DType -> [Expr]
@@ -91,19 +91,19 @@ getCon' :: Contents -> [Sentence]
 getCon' c = getCon (c ^. accessContents)
 
 getCon :: RawContent -> [Sentence]
-getCon (Table s1 s2 t _ _) = isVar (s1, transpose s2) ++ [t]
+getCon (Table s1 s2 t _) = isVar (s1, transpose s2) ++ [t]
 getCon (Paragraph s)       = [s]
 getCon (EqnBlock _)      = []
 getCon (Definition d)      = getDtype d
 getCon (Enumeration lst)   = getLT lst
-getCon (Figure l _ _ _)    = [l]
+getCon (Figure l _ _)    = [l]
 getCon (Requirement reqc)  = getReq reqc
 getCon (Assumption assc)   = getAss assc
 getCon (Change chg)        = getChg chg
 getCon (Bib bref)          = getBib bref
-getCon (Graph [(s1, s2)] _ _ l _) = s1 : s2 : [l]
-getCon (Defnt dt (hd:fs) a) = concatMap getCon' (snd hd) ++ getCon (Defnt dt fs a)
-getCon (Defnt _ [] _) = []
+getCon (Graph [(s1, s2)] _ _ l) = s1 : s2 : [l]
+getCon (Defnt dt (hd:fs)) = concatMap getCon' (snd hd) ++ getCon (Defnt dt fs)
+getCon (Defnt _ []) = []
 getCon  _ = []
 
 getDtype :: DType -> [Sentence]

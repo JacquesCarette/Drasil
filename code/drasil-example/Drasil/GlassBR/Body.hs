@@ -417,7 +417,6 @@ physSystDescription = physSystDesc (short gLassBR) fig_glassbr
 
 fig_glassbr = llcc (mkLabelRA'' "physSystImage") $ figWithWidth 
   (at_start $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
-  "physSystImage"
 
 physSystDescriptionList = enumSimple 1 (short physSyst) physSystDescriptionListPhysys
 
@@ -501,7 +500,7 @@ funcReqsR1Table = llcc (mkLabelRA'' "R1ReqInputs") $
   (mkTable
   [ch,
    at_start, unitToSentence] requiredInputs)
-  (S "Required Inputs following R1") True "R1ReqInputs"
+  (S "Required Inputs following R1") True
 
 req2Desc = foldlSent [S "The", phrase system,
   S "shall set the known", plural value +: S "as follows",
@@ -649,7 +648,7 @@ traceMatsAndGraphsTable1 = llcc (mkLabelRA'' "TraceyItemSecs") $ Table
   (EmptyS:traceMatsAndGraphsRowHdrT1)
   (makeTMatrix traceMatsAndGraphsRowHdrT1 traceMatsAndGraphsColsT1 traceMatsAndGraphsRowT1)
   (showingCxnBw traceyMatrix
-  (titleize' item +:+ S "of Different" +:+ titleize' section_)) True "TraceyItemSecs"
+  (titleize' item +:+ S "of Different" +:+ titleize' section_)) True
 
 --
 
@@ -679,7 +678,7 @@ traceMatsAndGraphsTable2 = llcc (mkLabelRA'' "TraceyReqsItems") $ Table
   (EmptyS:traceMatsAndGraphsRowHdrT2)
   (makeTMatrix traceMatsAndGraphsColHdrT2 traceMatsAndGraphsColsT2 traceMatsAndGraphsRowT2)
   (showingCxnBw traceyMatrix (titleize' requirement `sAnd` S "Other" +:+
-  titleize' item)) True "TraceyReqsItems"
+  titleize' item)) True
 
 --
 
@@ -733,7 +732,7 @@ traceMatsAndGraphsTable3 = llcc (mkLabelRA'' "TraceyAssumpsOthers") $ Table
   (EmptyS:traceMatsAndGraphsRowHdr3)
   (makeTMatrix traceMatsAndGraphsColHdr3 traceMatsAndGraphsColsT3 traceMatsAndGraphsRowT3)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other"
-  +:+ titleize' item)) True "TraceyAssumpsOthers"
+  +:+ titleize' item)) True
 
 --
 traceMatsAndGraphsIntro2 :: [Contents]
@@ -770,13 +769,13 @@ appdxIntro = foldlSP [
 fig_5 = llcc (mkLabelRA'' "demandVSsod") $ fig (titleize figure +: S "5" +:+ (demandq ^. defn) +:+
   sParen (ch demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
   `sVersus` at_start char_weight +:+ sParen (ch char_weight))
-  (resourcePath ++ "ASTM_F2248-09.png") "demandVSsod"
+  (resourcePath ++ "ASTM_F2248-09.png")
 
 fig_6 = llcc (mkLabelRA'' "dimlessloadVSaspect") $ fig (titleize figure +: S "6" +:+ S "Non dimensional" +:+
   phrase lateralLoad +:+ sParen (ch dimlessLoad)
   `sVersus` titleize aspect_ratio +:+ sParen (getAcc aR)
   `sVersus` at_start stressDistFac +:+ sParen (ch stressDistFac))
-  (resourcePath ++ "ASTM_F2248-09_BeasonEtAl.png") "dimlessloadVSaspect"
+  (resourcePath ++ "ASTM_F2248-09_BeasonEtAl.png")
 
 blstRskInvWGlassSlab :: Sentence
 blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+

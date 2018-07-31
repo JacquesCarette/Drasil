@@ -245,7 +245,7 @@ sysCtxIntro = foldlSP
    S "and its" +:+ phrase environment]
    
 sysCtxFig1 :: LabelledContent
-sysCtxFig1 = llcc (mkLabelRA'' "sysCtxDiag") $ fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png") "sysCtxDiag"
+sysCtxFig1 = llcc (mkLabelRA'' "sysCtxDiag") $ fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png")
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol
@@ -352,12 +352,12 @@ fig_indexconv :: LabelledContent
 fig_indexconv = llcc (mkLabelRA'' "IndexConvention") $ 
   fig (foldlSent_ [S "Index convention for numbering",
   phrase slice `sAnd` phrase intrslce,
-  phrase force, plural variable]) (resourcePath ++ "IndexConvention.png") "IndexConvention"
+  phrase force, plural variable]) (resourcePath ++ "IndexConvention.png")
 
 fig_forceacting :: LabelledContent
 fig_forceacting = llcc (mkLabelRA'' "ForceDiagram") $
   fig (at_start' force +:+ S "acting on a" +:+
-  phrase slice) (resourcePath ++ "ForceDiagram.png") "ForceDiagram"
+  phrase slice) (resourcePath ++ "ForceDiagram.png")
 
 -- SECTION 4.1.3 --
 goal_stmt = goalStmtF (map (\(x, y) -> x `ofThe` y) [

@@ -260,7 +260,7 @@ sysCtxIntro = foldlSP
 
 sysCtxFig1 :: LabelledContent
 sysCtxFig1 = llcc (mkLabelRA'' "sysCtxDiag") $ fig (titleize sysCont) 
-  (resourcePath ++ "sysctx.png") "sysCtxDiag"
+  (resourcePath ++ "sysctx.png")
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol [S "The interaction between the", phrase product_,
@@ -777,7 +777,7 @@ traceMatTabReqGoalOther = llcc (mkLabelRA'' "TraceyReqGoalsOther") $ Table
   traceMatTabReqGoalOtherRow)
   (showingCxnBw (traceyMatrix) (titleize' requirement +:+ sParen (makeRef requirements)
   `sC` (titleize' goalStmt) +:+ sParen (makeRef problem_description) `sAnd` S "Other" +:+
-  titleize' item)) True "TraceyReqGoalsOther"
+  titleize' item)) True
 
 traceMatTabAssumpCol' :: [[String]]
 traceMatTabAssumpCol' = [traceMatTabAssumpMT1, traceMatTabAssumpMT2,
@@ -848,7 +848,7 @@ traceMatTabAssump = llcc (mkLabelRA'' "TraceyAssumpsOther") $ Table
   (EmptyS:traceMatTabAssumpRowHead)
   (makeTMatrix traceMatTabAssumpColHead traceMatTabAssumpCol' traceMatTabAssumpRow)
   (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef problem_description)
-  `sAnd` S "Other" +:+ titleize' item)) True "TraceyAssumpsOther"
+  `sAnd` S "Other" +:+ titleize' item)) True
 
 traceMatTabDefnModelCol :: [[String]]
 traceMatTabDefnModelCol = [traceMatTabDefnModelTM1, traceMatTabDefnModelTM2,
@@ -910,7 +910,7 @@ traceMatTabDefnModel = llcc (mkLabelRA'' "TraceyItemsSecs") $ Table
   (EmptyS:traceMatTabDefnModelRowHead)
   (makeTMatrix traceMatTabDefnModelColHead traceMatTabDefnModelCol
   traceMatTabDefnModelRow) (showingCxnBw (traceyMatrix) (titleize' item `sAnd`
-  S "Other" +:+ titleize' section_)) True "TraceyItemsSecs"
+  S "Other" +:+ titleize' section_)) True
 
 -----------------------------------
 -- VALUES OF AUXILIARY CONSTANTS --

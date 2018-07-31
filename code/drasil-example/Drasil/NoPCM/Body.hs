@@ -315,7 +315,7 @@ physSystDescription = physSystDesc (getAcc progName) fig_tank
 fig_tank :: LabelledContent
 fig_tank = llcc (mkLabelRA'' "Tank") $ fig (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
   S "from" +:+ phrase coil `sOf` ch ht_flux_C)
-  "TankWaterOnly.png" "Tank"
+  "TankWaterOnly.png"
 
 physSystDescList :: Contents
 physSystDescList = enumSimple 1 (short physSyst) $ map foldlSent_
@@ -511,7 +511,7 @@ funcReqsListItems = [ LlC $
   (mkTable [ch,
   unitToSentence,
   phrase] inputVar)
-  (titleize input_ +:+ titleize variable +:+ titleize requirement) False "fr1list",
+  (titleize input_ +:+ titleize variable +:+ titleize requirement) False,
 
   eqUnR' $ ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
   (((sy diam) / 2) * (sy tank_length) * (sy w_density)))
@@ -696,11 +696,11 @@ trace1IM1 = ["GD2", "DD1"]
 trace1IM2 = []
 
 traceTable1 :: LabelledContent
-traceTable1 = llcc (mkLabelRA'' "TraceyRILabel") $
+traceTable1 = llcc (mkLabelRA'' "TraceyRI") $
   Table (EmptyS : traceRowHeader1)
   (makeTMatrix (traceRowHeader1) (traceColumns1) (traceRow1))
   (showingCxnBw traceyMatrix
-  (titleize' requirement `sAnd` titleize' inModel)) True "TraceyRI"
+  (titleize' requirement `sAnd` titleize' inModel)) True
 
 {-Traceability Matrix 2-}
 
@@ -739,7 +739,7 @@ traceTable2 = llcc (mkLabelRA'' "TraceyRIs") $ Table
   (EmptyS : traceRowHeader2)
   (makeTMatrix (traceColHeader2) (traceColumns2) (traceRow2))
   (showingCxnBw traceyMatrix
-  (titleize' requirement `sAnd` titleize' inModel)) True "TraceyRIs"
+  (titleize' requirement `sAnd` titleize' inModel)) True
 
 {-Traceability Matrix 3-}
 
@@ -774,7 +774,7 @@ traceTable3 = llcc (mkLabelRA'' "TraceyAI") $ Table
   (EmptyS : traceRowHeader3)
   (makeTMatrix traceColHeader3 traceColumns3 traceAssump)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+
-  titleize' item)) True "TraceyAI"
+  titleize' item)) True
 
 -- These matrices can probably be generated automatically when enough info is
 -- abstracted out.

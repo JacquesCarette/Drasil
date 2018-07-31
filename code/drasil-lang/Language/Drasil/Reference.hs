@@ -262,35 +262,35 @@ instance Referable LabelledContent where
   rType  (LblC _ c)  = temp c
 
 temp' :: String -> RawContent -> String
-temp' r (Table _ _ _ _ _)      = "Table:" ++ r
-temp' r (Figure _ _ _ _)       = "Figure:" ++ r
-temp' r (Graph _ _ _ _ _)      = "Figure:" ++ r
-temp' r (EqnBlock _)           = "Equation:" ++ r
-temp' _ (Definition d)         = getDefName d --fixme: to be removed
-temp' r (Defnt _ _ _)          = r
-temp' _ (Requirement rc)       = refAdd rc
-temp' _ (Assumption ca)        = refAdd ca
-temp' _ (Change lcc)           = refAdd lcc
-temp' _ (Enumeration _)        = error "Shouldn't reference lists"
-temp' _ (Paragraph _)          = error "Shouldn't reference paragraphs"
-temp' r (Bib _)                = r
+temp' r (Table _ _ _ _)      = "Table:" ++ r
+temp' r (Figure _ _ _)       = "Figure:" ++ r
+temp' r (Graph _ _ _ _)      = "Figure:" ++ r
+temp' r (EqnBlock _)         = "Equation:" ++ r
+temp' _ (Definition d)       = getDefName d --fixme: to be removed
+temp' r (Defnt _ _ )         = r
+temp' _ (Requirement rc)     = refAdd rc
+temp' _ (Assumption ca)      = refAdd ca
+temp' _ (Change lcc)         = refAdd lcc
+temp' _ (Enumeration _)      = error "Shouldn't reference lists"
+temp' _ (Paragraph _)        = error "Shouldn't reference paragraphs"
+temp' r (Bib _)              = r
 
 temp :: RawContent -> RefType
-temp (Table _ _ _ _ _)       = Tab
-temp (Figure _ _ _ _)        = Fig
-temp (Graph _ _ _ _ _)       = Fig
-temp (Definition _)          = Def
-temp (Defnt _ _ _)           = Def
-temp (Requirement r)         = rType r
-temp (Assumption a)          = rType a
-temp (Change l)              = rType l
-temp (EqnBlock _)            = EqnB
-temp (Enumeration _)         = error "Shouldn't reference lists" 
-temp (Paragraph _)           = error "Shouldn't reference paragraphs"
-temp (Bib _)                 = error $
+temp (Table _ _ _ _)       = Tab
+temp (Figure _ _ _)        = Fig
+temp (Graph _ _ _ _)       = Fig
+temp (Definition _)        = Def
+temp (Defnt _ _)           = Def
+temp (Requirement r)       = rType r
+temp (Assumption a)        = rType a
+temp (Change l)            = rType l
+temp (EqnBlock _)          = EqnB
+temp (Enumeration _)       = error "Shouldn't reference lists" 
+temp (Paragraph _)         = error "Shouldn't reference paragraphs"
+temp (Bib _)               = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
-temp _                       =
+temp _                     =
     error "Attempting to reference unimplemented reference type"
 
 uidSort :: HasUID c => c -> c -> Ordering

@@ -13,4 +13,4 @@ table st ls f = llcc (mkLabelRA'' "ToS") $ Table
   [at_start symbol_, at_start description, at_start' CM.unit_]
   (mkTable [P . (flip symbol st), f, unitToSentence]
   (filter (\q -> hasStageSymbol q st) ls))
-  (titleize tOfSymb) False "ToS"
+  (titleize tOfSymb) False

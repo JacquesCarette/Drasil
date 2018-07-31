@@ -23,6 +23,7 @@ library
     , Language.Drasil.Printing.Citation
     , Language.Drasil.Printing.Import
     , Language.Drasil.Printing.LayoutObj
+    , Language.Drasil.Printing.PrintingInformation
     , Language.Drasil.TeX.Helpers
     , Language.Drasil.TeX.Print
     , Language.Drasil.TeX.Monad

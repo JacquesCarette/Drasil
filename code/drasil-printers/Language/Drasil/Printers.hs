@@ -14,6 +14,7 @@ module Language.Drasil.Printers (
   -- TeX
     -- Print
   , genTeX
+  , PrintingInformation(..)
   )
   where
 
@@ -24,3 +25,4 @@ import Language.Drasil.HTML.Helpers (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.Make.Print (genMake)
 import Language.Drasil.TeX.Print (genTeX)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..), getSetting)

@@ -74,7 +74,7 @@ import Data.Drasil.Utils (enumSimple, weave, itemRefToSent, makeListRef,
 import Data.Drasil.SentenceStructures (acroIM, acroGD, acroGS, showingCxnBw,
   foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, isThe, ofThe,
   ofThe', sAnd, sOf, foldlList)
-
+import Language.Drasil.Printers (PrintingInformation(..))
 -------------------------------------------------------------------------------
 
 acronyms :: [CI]

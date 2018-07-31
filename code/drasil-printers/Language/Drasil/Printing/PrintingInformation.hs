@@ -1,18 +1,14 @@
 {-# LANGUAGE GADTs, TemplateHaskell, TypeFamilies #-}
 
-module Language.Drasil.PrintingInformation where
+module Language.Drasil.Printing.PrintingInformation where
 
 import Control.Lens ((^.), makeLenses, view)
 
-import Language.Drasil.ChunkDB (ChunkDB, cdb
-  , HasSymbolTable(..), symbolMap, symbLookup, getUnitLup
-  , HasTermTable(..), termLookup
-  , HasDefinitionTable(..), conceptMap, defLookup
-  , HasUnitTable(..), unitMap, collectUnits
+import Language.Drasil (ChunkDB, HasSymbolTable(..)
+  , HasTermTable(..), HasDefinitionTable(..)
+  , HasUnitTable(..)
   )
 
--- | Data structure for holding all of the requisite information about a system
--- to be used in artefact generation
 data PrintingInformation = PI
                          { _ckdb :: ChunkDB
                          , _scientificSetting :: String

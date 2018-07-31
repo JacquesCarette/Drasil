@@ -578,7 +578,8 @@ mkRequirement :: String -> Sentence -> String -> LabelledContent
 mkRequirement i desc shrtn = llcc (mkLabelRA'' shrtn) $ Requirement $ frc i desc (mkLabelRA'' shrtn) --FIXME: label made twice?
 
 mkLklyChnk :: String -> Sentence -> String -> LabelledContent
-mkLklyChnk i desc shrtn = llcc (mkLabelRA'' shrtn) $ Change $ lc i desc (mkLabelRA'' shrtn) --FIXME: label made twice?
+mkLklyChnk i desc shrtn = mkRawLC (Change (lc i desc (mkLabelRA'' shrtn))) mkEmptyLabel
+  --FIXME: label made twice?
 
 mkUnLklyChnk :: String -> Sentence -> String -> LabelledContent
 mkUnLklyChnk i desc shrtn = llcc (mkLabelRA'' shrtn) $ Change $ ulc i desc (mkLabelRA'' shrtn) --FIXME: label made twice?

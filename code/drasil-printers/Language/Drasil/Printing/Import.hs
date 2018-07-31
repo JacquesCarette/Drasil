@@ -48,11 +48,12 @@ expr (Str s)            _ = P.Str   s
 expr (AssocB And l)    sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (precB And)) l
 expr (AssocB Or l)     sm = P.Row $ intersperse (P.MO P.Or ) $ map (expr' sm (precB Or)) l
 expr (AssocA Add l)    sm = P.Row $ intersperse (P.MO P.Add) $ map (expr' sm (precA Add)) l
-expr (AssocA Mul [a, Int i]) sm =
-  P.Row $ intersperse (P.MO P.Dot) $ map (expr' sm (precA Mul)) [a, Int i]
-expr (AssocA Mul [a, Dbl d]) sm =
-  P.Row $ intersperse (P.MO P.Dot) $ map (expr' sm (precA Mul)) [a, Dbl d]
-expr (AssocA Mul l)    sm = P.Row $ intersperse (P.MO P.Mul) $ map (expr' sm (precA Mul)) l
+expr (AssocA Mul (hd1:hd2:tl))    sm = case (hd1, hd2) of
+  (a, Int i) ->  P.Row $ [expr' sm (precA Mul) a , (P.MO P.Dot), expr (AssocA Mul (hd2:tl)) sm]
+  (a, Dbl d) ->  P.Row $ [expr' sm (precA Mul) a , (P.MO P.Dot), expr (AssocA Mul (hd2:tl)) sm]
+  (a, b)     ->  P.Row $ [expr' sm (precA Mul) a , (P.MO P.Mul), expr (AssocA Mul (hd2:tl)) sm]
+expr (AssocA Mul (hd:[]))    sm = P.Row $ [expr' sm (precA Mul) hd]
+expr (AssocA Mul [])       sm = P.Spc P.Thin
 expr (Deriv Part a b) sm =
   P.Div (P.Row [P.Spec Partial, P.Spc P.Thin, expr a sm])
         (P.Row [P.Spec Partial, P.Spc P.Thin,

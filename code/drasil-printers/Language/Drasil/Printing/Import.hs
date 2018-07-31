@@ -41,15 +41,17 @@ parens :: P.Expr -> P.Expr
 parens = P.Fenced P.Paren P.Paren
 
 --This function takes the digits form `floatToDigits` function
--- and decimal point position and a counter
-digitsProcess :: [Int] -> Int -> Int -> [P.Expr]
-digitsProcess [0] a b = [P.Int 0]
-digitsProcess (hd:tl) a b = if a == b  
-  then [(P.MO P.Point),(P.Int hd)] ++ (digitsProcess tl a (b+1))
-  else [P.Int hd] ++ (digitsProcess tl a (b+1))
-digitsProcess [] a b = if a > b
-  then [P.Int 0] ++ (digitsProcess [] a (b+1))
-  else []
+-- and decimal point position and a counter and exponent
+digitsProcess :: [Int] -> Int -> Int -> Int -> [P.Expr]
+digitsProcess [0] pos coun ex = [P.Int 0, P.MO P.Point, P.Int 0]
+digitsProcess (hd:tl) pos coun ex = if pos == coun  
+  then [P.MO P.Point, P.Int hd] ++ (digitsProcess tl pos (coun+1) ex)
+  else [P.Int hd] ++ (digitsProcess tl pos (coun+1) ex)
+digitsProcess [] pos coun ex = if pos > coun
+  then [P.Int 0] ++ (digitsProcess [] pos (coun+1) ex)
+  else if ex /= 0
+    then [P.MO P.Point, P.Int 0, P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
+    else []
 
 -- THis function takes the exponent and the [Int] of base and give out
 -- the decimal point position and processed exponent
@@ -67,16 +69,10 @@ processExpo a
   | a < 0 && mod (-a+1) 3 == 1 = (1, a-1)
   | a < 0 && mod (-a+1) 3 == 2 = (2, a-2)
 
-displayExpo :: Int -> [P.Expr]
-displayExpo 0 = []
-displayExpo a = [(P.MO P.Dot),
-   (P.Int 10), (P.Sup $ P.Int a)]
-
 -- | expr translation function from Drasil to layout AST
 expr :: HasSymbolTable s => Expr -> s -> P.Expr
 expr (Dbl d)           sm = case floatToDigits 10 d of
-  (a, b) -> P.Row $ ((digitsProcess a (fst $ processExpo b) 0) ++
-   (displayExpo $ snd $ processExpo b))
+  (a, b) -> P.Row $ digitsProcess a (fst $ processExpo b) 0 (snd $ processExpo b)
 expr (Int i)            _ = P.Integ i
 expr (Str s)            _ = P.Str   s
 expr (AssocB And l)    sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (precB And)) l

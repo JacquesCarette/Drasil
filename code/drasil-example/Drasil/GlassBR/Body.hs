@@ -33,7 +33,7 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   reference, requirement, reviewer, section_, software, softwareSys, srs, standard, symbol_,  
   sysCont, system, systemConstraint, template, term_, theory, thModel, traceyMatrix, user,
   userCharacteristic, userInput, value)
-  
+
 import Data.Drasil.Concepts.Education (secondYear, undergradDegree,
   civilEng, structuralEng, scndYrCalculus, structuralMechanics)
 import Data.Drasil.Concepts.Math (graph, calculation, probability,

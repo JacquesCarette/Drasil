@@ -485,7 +485,7 @@ mkSolChSpec si (SCSProg l) =
       SSD.inModelF pdStub ddStub tmStub SRS.genDefnLabel (map LlC (map (instanceModel fields (_sysinfodb si')) ims))
     mkSubSCS SI {_refdb = db} Assumptions =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
-      (map (\x -> LlC $ mkRawLC (Assumption x) mkEmptyLabel) $ assumptionsFromDB (db ^. assumpRefTable))
+      (map (\x -> LlC $ mkRawLC (Assumption x) (x ^. getLabel)) $ assumptionsFromDB (db ^. assumpRefTable))
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
     inModSec = SRS.inModel [mkParagraph EmptyS] []

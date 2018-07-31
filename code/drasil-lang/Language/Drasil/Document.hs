@@ -42,9 +42,9 @@ repUnd c = c : []
 
 -- | Automatically create the label for a definition
 getDefName :: DType -> String
-getDefName (Data c)   = "DD:"
-getDefName (Data' c)  = "DD:"
-getDefName (Theory c) = "T:"
+getDefName (Data c)   = "DD:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
+getDefName (Data' c)  = "DD:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
+getDefName (Theory c) = "T:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
 getDefName TM         = "T:"
 getDefName DD         = "DD:"
 getDefName Instance   = "IM:"

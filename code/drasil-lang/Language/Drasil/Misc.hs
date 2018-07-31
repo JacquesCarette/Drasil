@@ -1,19 +1,17 @@
 module Language.Drasil.Misc where
 
+import Control.Lens ((^.))
+import Data.List (sortBy)
 import Language.Drasil.Classes (HasSymbol(symbol), HasUnitSymbol(usymb), 
   NamedIdea(term), Idea)
 import Language.Drasil.Chunk.NamedIdea (short)
-import Language.Drasil.Chunk.Quantity (Quantity, getUnit)
+import Language.Drasil.Chunk.Quantity (Quantity)
 import Language.Drasil.Chunk.Unitary (Unitary, unit)
+import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
+import Language.Drasil.Development.UnitLang (USymb)
 import Language.Drasil.Spec ((+:+), Sentence((:+:), S, Sy), sParen)
 import Language.Drasil.Symbol (Stage(Implementation), compsy)
-import Language.Drasil.Development.UnitLang (USymb)
-
-import Data.List (sortBy)
-
 import qualified Language.Drasil.NounPhrase as NP
-
-import Control.Lens ((^.))
 
 {- |
   Create a table body (not including header row) by applying the given

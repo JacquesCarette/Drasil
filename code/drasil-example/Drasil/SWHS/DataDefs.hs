@@ -77,11 +77,12 @@ dd4MeltFracDD = mkDD dd4MeltFrac [] [] "" Nothing
 
 --Need to add units to data definition descriptions
 
+--Fixme: should be removed with proper addition of labels
 swhsDD1, swhsDD2, swhsDD3, swhsDD4 :: Contents
-swhsDD1 = datadefn dd1HtFluxC
-swhsDD2 = datadefn dd2HtFluxP
-swhsDD3 = datadefn dd3HtFusion
-swhsDD4 = datadefn dd4MeltFrac
+swhsDD1 = LlC $ datadefn dd1HtFluxC
+swhsDD2 = LlC $ datadefn dd2HtFluxP
+swhsDD3 = LlC $ datadefn dd3HtFusion
+swhsDD4 = LlC $ datadefn dd4MeltFrac
 
 --Symbol appears as "Label"
 --There is no actual label

@@ -11,14 +11,14 @@ import Control.Lens ((^.), makeLenses, view)
 import Language.Drasil.Chunk.Concept (cw)
 import Language.Drasil.Chunk.Constrained.Core (Constraint(..))
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
-import Language.Drasil.Chunk.Quantity (QuantityDict, Quantity(getUnit), HasSpace(typ), qw)
+import Language.Drasil.Chunk.Quantity (QuantityDict, Quantity, HasSpace(typ), qw)
 import Language.Drasil.Chunk.Unital (ucs)
 import Language.Drasil.Chunk.Unitary (unitary)
 import Language.Drasil.Chunk.VarChunk (vc)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
   IsUnit, Constrained(constraints), HasReasVal(reasVal))
-import Language.Drasil.Development.Unit (unitWrapper)
+import Language.Drasil.Development.Unit (unitWrapper, MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr(..))
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space)
@@ -37,10 +37,11 @@ instance NamedIdea     ConstrainedChunk where term = qd . term
 instance Idea          ConstrainedChunk where getA = getA . view qd
 instance HasSpace      ConstrainedChunk where typ = qd . typ
 instance HasSymbol     ConstrainedChunk where symbol c = symbol (c^.qd)
-instance Quantity      ConstrainedChunk where getUnit = getUnit . view qd
+instance Quantity      ConstrainedChunk where 
 instance Constrained   ConstrainedChunk where constraints = constr
 instance HasReasVal    ConstrainedChunk where reasVal     = reasV
 instance Eq            ConstrainedChunk where c1 == c2 = (c1 ^. qd . uid) == (c2 ^. qd . uid)
+instance MayHaveUnit   ConstrainedChunk where getUnit = getUnit . view qd
 
 -- | Creates a constrained chunk from a symbolic quantity
 constrained :: (Quantity c) => c -> [Constraint] -> Expr -> ConstrainedChunk
@@ -75,13 +76,14 @@ instance NamedIdea     ConstrConcept where term = defq . term
 instance Idea          ConstrConcept where getA = getA . view defq
 instance HasSpace      ConstrConcept where typ = defq . typ
 instance HasSymbol     ConstrConcept where symbol c = symbol (c^.defq)
-instance Quantity      ConstrConcept where getUnit = getUnit . view defq
+instance Quantity      ConstrConcept where 
 instance Definition    ConstrConcept where defn = defq . defn
 instance ConceptDomain ConstrConcept where cdom = defq . cdom
 instance Concept       ConstrConcept where
 instance Constrained   ConstrConcept where constraints  = constr'
 instance HasReasVal    ConstrConcept where reasVal      = reasV'
 instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.defq.uid)
+instance MayHaveUnit   ConstrConcept where getUnit = getUnit . view defq
 
 constrained' :: (HasSpace c, HasSymbol c, Concept c, Quantity c) =>
   c -> [Constraint] -> Expr -> ConstrConcept

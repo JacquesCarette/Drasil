@@ -29,7 +29,7 @@ usrCharsF intro = SRS.userChar intro []
 -- generalized if no constraints, but if there are, they can be passed through
 systCon :: [Contents] -> [Section] -> Section
 systCon [] subSec  = SRS.sysCon [systCon_none] subSec
-            where systCon_none = Paragraph (S "There are no" +:+. plural systemConstraint)
+            where systCon_none = mkParagraph (S "There are no" +:+. plural systemConstraint)
 systCon a subSec = SRS.sysCon a subSec
 
 --System Context

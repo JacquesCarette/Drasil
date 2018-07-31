@@ -444,7 +444,7 @@ htPCMDesc = foldlSent [S "The above", phrase equation,
 
 ---------------
 -- FIXME, hacks
-a14, a18, a19 :: Contents
-a14 = Assumption $ assump "assump14" EmptyS "assump14" 
-a18 = Assumption $ assump "assump18" EmptyS "assump18" 
-a19 = Assumption $ assump "assump19" EmptyS "assump19" 
+a14, a18, a19 :: LabelledContent
+a14 = llcc (mkLabelRA'' "assump14") $ Assumption $ assump "assump14" EmptyS "assump14" 
+a18 = llcc (mkLabelRA'' "assump18") $ Assumption $ assump "assump18" EmptyS "assump18" 
+a19 = llcc (mkLabelRA'' "assump19") $ Assumption $ assump "assump19" EmptyS "assump19"

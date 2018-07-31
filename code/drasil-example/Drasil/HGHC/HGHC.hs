@@ -2,9 +2,9 @@ module Drasil.HGHC.HGHC (srsBody, thisCode, allSymbols) where
 
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Language.Drasil.Code (CodeSpec, codeSpec)
-import Drasil.DocLang (DocSection(RefSec, Verbatim), Literature(Lit, Manual), 
+import Drasil.DocLang (DocSection(RefSec), Literature(Lit, Manual), 
     RefSec(..), RefTab(TUnits), TSIntro(SymbConvention, TSPurpose), DocDesc, 
-    dataDefnF, intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
+    intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
     Field(DefiningEquation, Description, Label, Symbol, Units), SolChSpec(SCSProg), 
     SCSSub(DDs'), DerivationDisplay(HideDerivation), SSDSub(SSDSolChSpec), 
     SSDSec(SSDProg), DocSection(SSDSec))
@@ -53,10 +53,6 @@ thisSRS = RefSec (RefProg intro
   [SSDSec ( SSDProg [SSDSolChSpec 
   (SCSProg [DDs' [Label, Symbol, Units, DefiningEquation,
   Description Verbose IncludeUnits] hghcVarsDD HideDerivation]) ] ) ]
--- Above Data Defs not yet implemented.
-  
---s3 :: Section --, s4 
---s3 = dataDefnF EmptyS (map (Definition . DD) hghcVarsDD)
   
 srsBody :: Document
-srsBody = mkDoc thisSRS (for) thisSI
+srsBody = mkDoc thisSRS for thisSI

@@ -193,7 +193,7 @@ executable chipmunkdocs
     drasil-code >= 0.1.1,
     drasil-printers >= 0.1.0,
     drasil-gen >= 0.1.0,
-    drasil-docLang >= 0.1.1
+    drasil-docLang >= 0.1.2
   default-language: Haskell2010
   ghc-options:      -Wall
 

@@ -2,8 +2,7 @@ module Data.Drasil.Units.Physics where
 
 import Data.Drasil.SI_Units (metre, radian, s_2, second, newton, kilogram,
   m_2, m_3, newton)
-import Language.Drasil (new_unit, UnitDefn, (/:), (/$), (*:), cn, UDefn(..)
- , dcc, makeDerU)
+import Language.Drasil (new_unit, UnitDefn, (/:), (/$), (*:), cn, dcc, makeDerU)
 
 accelU, angVelU, angAccelU, momtInertU, momentOfForceU, impulseU, springConstU, torqueU, velU :: UnitDefn
 

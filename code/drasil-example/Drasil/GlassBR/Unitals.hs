@@ -12,8 +12,7 @@ import Drasil.GlassBR.Units (sFlawPU)
 import Data.Drasil.Constraints
 import Data.Drasil.SentenceStructures (displayConstrntsAsSet, foldlSent,
   foldlsC, foldlList, SepType(Comma), FoldType(Options))
-import Data.Drasil.SI_Units (kilogram, kilopascal, metre, millimetre, pascal, 
-  second)
+import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
 --FIXME: Many of the current terms can be separated into terms and defns?
 glassBRsymb :: [DefinedQuantityDict]
@@ -116,7 +115,7 @@ glass_type  = cvc' "glass_type" (nounPhraseSent $ phrase glassTy +:+
 {--}
 
 gbOutputs :: [QuantityDict]
-gbOutputs = map qw [is_safe1, is_safe2] ++ map qw [prob_br]
+gbOutputs = map qw [is_safePb, is_safeLR] ++ map qw [prob_br]
 
 prob_br :: ConstrainedChunk
 prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
@@ -202,10 +201,10 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 {-Quantities-}
 
 glassBRUnitless :: [VarChunk]
-glassBRUnitless = [risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
+glassBRUnitless = [risk_fun, is_safePb, is_safeLR, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL]
 
-risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
+risk_fun, is_safePb, is_safeLR, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL :: VarChunk
 
 dimlessLoad   = vc "dimlessLoad" (nounPhraseSP "dimensionless load")
@@ -213,13 +212,13 @@ dimlessLoad   = vc "dimlessLoad" (nounPhraseSP "dimensionless load")
 
 gTF           = vc "gTF"             (glassTypeFac ^. term) (Atomic "GTF") Integer
 
-is_safe1      = vc "is_safe1"        (nounPhraseSP $ "variable that is assigned true when calculated" ++
+is_safePb      = vc "is_safePb"        (nounPhraseSP $ "variable that is assigned true when calculated" ++
   " probability is less than tolerable probability")
-  (Concat [Atomic "is", Special UScore, Atomic "safe1"]) Boolean
+  (Concat [Atomic "is", Special UScore, Atomic "safePb"]) Boolean
 
-is_safe2      = vc "is_safe2"        (nounPhraseSP $ "variable that is assigned true when load resistance"
+is_safeLR      = vc "is_safeLR"        (nounPhraseSP $ "variable that is assigned true when load resistance"
   ++ " (capacity) is greater than load (demand)")
-  (Concat [Atomic "is", Special UScore, Atomic "safe2"]) Boolean
+  (Concat [Atomic "is", Special UScore, Atomic "safeLR"]) Boolean
 
 lDurFac       = vc'' (loadDurFactor) (Atomic "LDF") Real
 

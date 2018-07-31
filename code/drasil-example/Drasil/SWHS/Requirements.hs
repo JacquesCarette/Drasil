@@ -4,7 +4,7 @@ import Language.Drasil
 
 import Data.Drasil.Concepts.Documentation (output_, simulation, quantity, 
   input_, physical, constraint, condition, property)
-import Data.Drasil.Utils (eqUnR)
+import Data.Drasil.Utils (eqUnR')
 import Drasil.DocLang (mkRequirement, nonFuncReqF)
 
 import Data.Drasil.Quantities.PhysicalProperties (mass)
@@ -32,8 +32,10 @@ import Data.Drasil.SentenceStructures (acroIM, acroR, foldlSent, sAnd, isThe,
 -- 5.1 : Functional Requirements --
 -----------------------------------
 
-req1, req2, reqEqn1, reqEqn2, req3, req4,
-  req5, req6, req7, req8, req9, req10, req11 :: Contents
+req1, req2, req3, req4,
+  req5, req6, req7, req8, req9, req10, req11 :: LabelledContent
+
+reqEqn1, reqEqn2 :: Contents
 
 req1 = mkRequirement "req1" (foldlSentCol [
   titleize input_, S "the following", plural quantity `sC`
@@ -46,11 +48,11 @@ req2 = mkRequirement "req2" (foldlSentCol [
   acroIM 4 `sC` S "as follows, where", ch w_vol `isThe` phrase w_vol,
   S "and", ch tank_vol `isThe` phrase tank_vol] ) "Use-Above-Find-Mass-IM1-IM4"
 
-reqEqn1 = eqUnR ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
+reqEqn1 = LlC $ eqUnR' mkEmptyLabel $ ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
   ((sy tank_vol) - (sy pcm_vol)) * (sy w_density) $=
   (((sy diam) / 2) * (sy tank_length) - (sy pcm_vol)) * (sy w_density)) -- FIXME: Ref Hack
 
-reqEqn2 = eqUnR ((sy pcm_mass) $= (sy pcm_vol) * (sy pcm_density)) -- FIXME: Ref Hack
+reqEqn2 = LlC $ eqUnR' mkEmptyLabel $ ((sy pcm_mass) $= (sy pcm_vol) * (sy pcm_density)) -- FIXME: Ref Hack
 
 req3 = mkRequirement "req3" ( foldlSent [
   S "Verify that the", plural input_, S "satisfy the required",

@@ -42,13 +42,13 @@ foldlSentCol = foldle (+:+) (+:) EmptyS
 
 -- | fold sentences then turns into content
 foldlSP :: [Sentence] -> Contents
-foldlSP = Paragraph . foldlSent
+foldlSP = mkParagraph . foldlSent
 
 foldlSP_ :: [Sentence] -> Contents
-foldlSP_ = Paragraph . foldlSent_
+foldlSP_ = mkParagraph . foldlSent_
 
 foldlSPCol :: [Sentence] -> Contents
-foldlSPCol = Paragraph . foldlSentCol
+foldlSPCol = mkParagraph . foldlSentCol
 
 -- | creates a list of elements separated by commas, including the last element
 foldlsC :: [Sentence] -> Sentence
@@ -141,14 +141,15 @@ acroT  numVar = short thModel     :+: S (show numVar)
 
 
 {--** Miscellaneous **--}
-tableShows :: Contents -> Sentence -> Sentence
-tableShows ref trailing = (makeRef ref) +:+ S "shows the" +:+ 
+tableShows :: LabelledContent -> Sentence -> Sentence
+tableShows ref trailing = (mkRefFrmLbl ref) +:+ S "shows the" +:+ 
   plural dependency +:+ S "of" +:+ trailing
 
 -- | Function that creates (a label for) a figure
 --FIXME: Is `figureLabel` defined in the correct file?
-figureLabel :: NamedIdea c => Int -> c -> Sentence -> [Char]-> String ->Contents
-figureLabel num traceyMG contents filePath rn = Figure (titleize figure +: 
+figureLabel :: NamedIdea c => Int -> c -> Sentence -> [Char]-> String -> LabelledContent
+figureLabel num traceyMG contents filePath rn = llcc (mkLabelRA'' rn) $
+  Figure (titleize figure +: 
   (S (show num)) +:+ (showingCxnBw traceyMG contents)) filePath 100 rn
 
 showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence

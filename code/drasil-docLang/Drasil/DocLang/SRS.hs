@@ -65,41 +65,41 @@ sysCon      cs ss = section' (titleize' Doc.systemConstraint)    cs ss  "SysCons
 
 scpOfTheProj cs ss = section' (at_start (Doc.scpOfTheProj titleize)) cs ss "ProjScope"
 prodUCTable cs ss = section' (titleize Doc.prodUCTable)      cs ss      "UseCaseTable"
-indPRCase   cs ss = section' (titleize' Doc.indPRCase)       cs ss      "IndividualProdUC" --FIXME: label is available
+indPRCase   cs ss = section (titleize' Doc.indPRCase)       cs ss      indPRCaseLabel
 
 specSysDes  cs ss = section' (titleize Doc.specificsystemdescription) cs ss "SpecSystDesc"
 probDesc    cs ss = section' (titleize Doc.problemDescription) cs ss "ProbDesc"
 termAndDefn cs ss = section' (titleize' Doc.termAndDef)        cs ss "TermDefs"
 termogy     cs ss = section' (titleize Doc.terminology)        cs ss "Terminology"
-physSyst    cs ss = section' (titleize Doc.physSyst)           cs ss "PhysSyst" --FIXME: label is available
+physSyst    cs ss = section (titleize Doc.physSyst)           cs ss physSystLabel
 goalStmt    cs ss = section' (titleize' Doc.goalStmt)          cs ss "GoalStmt"
 solCharSpec cs ss = section' (titleize Doc.solutionCharSpec)   cs ss "SolCharSpec"
-assumpt     cs ss = section' (titleize' Doc.assumption)        cs ss "Assumps" --FIXME: label is available
-thModel     cs ss = section' (titleize' Doc.thModel)           cs ss "TMs" --FIXME: label is available
-genDefn     cs ss = section' (titleize' Doc.genDefn)           cs ss "GDs" --FIXME: label is available
-inModel     cs ss = section' (titleize' Doc.inModel)           cs ss "IMs" --FIXME: label is available
-dataDefn    cs ss = section' (titleize' Doc.dataDefn)          cs ss "DDs" --FIXME: label is available
-datCon      cs ss = section' (titleize' Doc.datumConstraint)   cs ss "DataConstraints" --FIXME: label is available
+assumpt     cs ss = section (titleize' Doc.assumption)        cs ss assumptLabel
+thModel     cs ss = section (titleize' Doc.thModel)           cs ss thModelLabel
+genDefn     cs ss = section (titleize' Doc.genDefn)           cs ss genDefnLabel
+inModel     cs ss = section (titleize' Doc.inModel)           cs ss inModelLabel
+dataDefn    cs ss = section (titleize' Doc.dataDefn)          cs ss dataDefnLabel
+datCon      cs ss = section (titleize' Doc.datumConstraint)   cs ss datConLabel
 
 propCorSol  cs ss = section' (titleize' Doc.propOfCorSol)      cs ss "CorSolProps"
 
 require     cs ss = section' (titleize' Doc.requirement)      cs ss "Requirements"
 nonfuncReq  cs ss = section' (titleize' Doc.nonfunctionalRequirement) cs ss "NFRs"
-funcReq     cs ss = section' (titleize' Doc.functionalRequirement) cs ss "FRs" --FIXME: label is available
+funcReq     cs ss = section (titleize' Doc.functionalRequirement) cs ss funcReqLabel
 
-likeChg     cs ss = section' (titleize' Doc.likelyChg)        cs ss "LCs" --FIXME: label is available
-unlikeChg   cs ss = section' (titleize' Doc.unlikelyChg)      cs ss "UCs" --FIXME: label is available
+likeChg     cs ss = section (titleize' Doc.likelyChg)        cs ss likeChgLabel
+unlikeChg   cs ss = section (titleize' Doc.unlikelyChg)      cs ss unlikeChgLabel
 
 traceyMandG cs ss = section' (titleize' Doc.traceyMandG)      cs ss "TraceMatrices"
 
-valsOfAuxCons cs ss = section' (titleize Doc.consVals)        cs ss "AuxConstants" --FIXME: label is available
+valsOfAuxCons cs ss = section (titleize Doc.consVals)        cs ss valsOfAuxConsLabel
 
 appendix    cs ss = section' (titleize Doc.appendix)          cs ss "Appendix"
 
-reference   cs ss = section' (titleize' Doc.reference)        cs ss "References" --FIXME: label is available
+reference   cs ss = section (titleize' Doc.reference)        cs ss referenceLabel
 offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "ExistingSolns"
 
-tOfSymb cs ss = section' (titleize Doc.tOfSymb) cs ss "ToS" --FIXME: label is available
+tOfSymb cs ss = section (titleize Doc.tOfSymb) cs ss tOfSymbLabel
 
 --Root SRS Domain
 srsDom :: CommonConcept
@@ -107,23 +107,29 @@ srsDom = dcc' "srsDom" (Doc.srs ^. term) "srs" ""
 
 --function that sets the shortname of each section to be the reference address
 section' :: Sentence -> [Contents] -> [Section] -> String -> Section
-section' a b c d = section a b c (mkLabelRA'' d)
+section' a b c d = section a b c (mkLabelRA' d (toString a))
+  where
+    toString :: Sentence -> String --FIXME: same as getStr hack, import instead? 
+    toString (S x) = x
+    toString ((:+:) s1 s2) = toString s1 ++ toString s2
+    toString _ = error "Term is not a string"
 
 --Labels--
+--FIXME: create using section information somehow?
 physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
   inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
   indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel :: Label
-physSystLabel      = mkLabelRA   "PhysSyst" "PhysSyst" "Physical System Description"
-datConLabel        = mkLabelRA'' "DataConstraints"
-genDefnLabel       = mkLabelRA'' "GDs"
-thModelLabel       = mkLabelRA'' "TMs"
-dataDefnLabel      = mkLabelRA   "DDs" "DDs" "Data Definitions"
-inModelLabel       = mkLabelRA'' "IMs"
-likeChgLabel       = mkLabelRA'' "LCs"
-unlikeChgLabel     = mkLabelRA'' "UCs"
-tOfSymbLabel       = mkLabelRA'' "ToS"
-valsOfAuxConsLabel = mkLabelRA   "AuxConstants" "AuxConstants" "Values of Auxiliary Constants"
+physSystLabel      = mkLabelRA' "PhysSyst" "Physical System Description"
+datConLabel        = mkLabelRA' "DataConstraints" "Data Constraints"
+genDefnLabel       = mkLabelRA' "GDs" "General Definitions"
+thModelLabel       = mkLabelRA' "TMs" "Theoretical Models"
+dataDefnLabel      = mkLabelRA' "DDs" "Data Definitions"
+inModelLabel       = mkLabelRA' "IMs" "Instance Models"
+likeChgLabel       = mkLabelRA' "LCs" "Likely Changes"
+unlikeChgLabel     = mkLabelRA' "UCs" "Unlikely Changes"
+tOfSymbLabel       = mkLabelRA' "ToS" "Table of Symbols"
+valsOfAuxConsLabel = mkLabelRA' "AuxConstants" "Values of Auxiliary Constants"
 referenceLabel     = mkLabelRA'' "References" 
-indPRCaseLabel     = mkLabelRA   "IndividualProdUC" "IndividualProdUC" "Individual Product Use Cases"
-assumptLabel       = mkLabelRA   "Assumps" "Assumps" "Assumptions"
-funcReqLabel       = mkLabelRA   "FRs" "FRs" "Functional Requirements"
+indPRCaseLabel     = mkLabelRA' "IndividualProdUC" "Individual Product Use Cases"
+assumptLabel       = mkLabelRA' "Assumps" "Assumptions"
+funcReqLabel       = mkLabelRA' "FRs" "Functional Requirements"

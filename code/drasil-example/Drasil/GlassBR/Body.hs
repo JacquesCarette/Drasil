@@ -19,8 +19,8 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), 
   cite, dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
-  mkRequirement, outDataConstTbl, physSystDesc, probDescF, termDefnF, 
-  traceGIntro, tsymb)
+  mkRequirement, outDataConstTbl, physSystDesc, termDefnF, traceGIntro, 
+  tsymb)
 
 import Data.Drasil.Concepts.Computation (computerApp, inParam,
   computerLiteracy, inValue, inQty)

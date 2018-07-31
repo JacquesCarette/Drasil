@@ -15,7 +15,7 @@ instance HasRefAddress Label where getRefAdd = lblType
 mkLabelRA :: String -> String -> String -> Label
 mkLabelRA i ref shortn = Lbl i (RefAdd $ ensureASCII ref) (shortname' shortn)
 
--- for when reference address and the display should be the same
+-- for when reference address and the display should be the different
 mkLabelRA' :: String -> String -> Label
 mkLabelRA' ref shortn = Lbl (ref ++ "Label") (RefAdd $ ensureASCII ref) 
   (shortname' shortn)

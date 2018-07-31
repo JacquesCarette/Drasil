@@ -108,7 +108,7 @@ mkDefinitionLC labelUID refAdd sn dfn = llcc (mkLabelRA labelUID refAdd sn) dfn
 
 -- FIXME: no pattern for Bib BibRef of RawContent
 mkRawLC :: RawContent -> Label -> LabelledContent
-mkRawLC x@(Table _ _ _ _ _)  lb = llcc (mkLabelRA' ("Table:" ++ (getAdd (lb ^. getRefAdd))) 
+mkRawLC x@(Table _ _ _ _)  lb = llcc (mkLabelRA' ("Table:" ++ (getAdd (lb ^. getRefAdd))) 
   (getStringSN (lb ^. shortname))) x
 mkRawLC x@(Paragraph _)      lb = llcc (mkLabelRA' ("Paragraph:" ++ (getAdd (lb ^. getRefAdd)))  
   (getStringSN (lb ^. shortname))) x
@@ -119,7 +119,7 @@ mkRawLC x@(Definition d)     lb = let u = getAdd ((getDefLabel d) ^. getRefAdd) 
                          (getStringSN ((getDefLabel d) ^. shortname))) x 
 mkRawLC x@(Enumeration _)    lb = llcc (mkLabelRA' ("List:" ++ (getAdd (lb ^. getRefAdd)))
   (getStringSN (lb ^. shortname))) x
-mkRawLC x@(Figure _ _ _ _)   lb = llcc (mkLabelRA' ("Figure:" ++ (getAdd (lb ^. getRefAdd)))
+mkRawLC x@(Figure _ _ _)   lb = llcc (mkLabelRA' ("Figure:" ++ (getAdd (lb ^. getRefAdd)))
   (getStringSN (lb ^. shortname))) x
 mkRawLC x@(Requirement rq)   _  = llcc (mkLabelRA' ("R:" ++ (getAdd ((rq ^. getLabel) ^. getRefAdd)))
   (getStringSN (rq ^. shortname))) x
@@ -129,9 +129,9 @@ mkRawLC x@(Change (ChC _ Likely _ lb))   _  = llcc (mkLabelRA'
   ("LC:" ++ (getAdd (lb ^. getRefAdd))) (getStringSN (lb ^. shortname))) x
 mkRawLC x@(Change (ChC _ Unlikely _ lb)) _  = llcc (mkLabelRA'
   ("UC:" ++ (getAdd (lb ^. getRefAdd))) (getStringSN (lb ^. shortname))) x
-mkRawLC x@(Graph _ _ _ _ _)   lb = llcc (mkLabelRA' ("Graph:" ++ (getAdd (lb ^. getRefAdd)))
+mkRawLC x@(Graph _ _ _ _)   lb = llcc (mkLabelRA' ("Graph:" ++ (getAdd (lb ^. getRefAdd)))
   (getStringSN (lb ^. shortname))) x
-mkRawLC x@(Defnt d _ _)       lb = let u = getAdd ((getDefLabel d) ^. getRefAdd) in
+mkRawLC x@(Defnt d _)       lb = let u = getAdd ((getDefLabel d) ^. getRefAdd) in
   case u of "empty" -> llcc (mkLabelRA' ("Definition:" ++ (getAdd (lb ^. getRefAdd)))
                          (getStringSN (lb ^. shortname))) x
             _       -> llcc (mkLabelRA' ((getDefName d) ++ u)

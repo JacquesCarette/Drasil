@@ -455,7 +455,7 @@ dataConSec = (sSubSec dataConst [(siUQI cpInputConstraints), (siUQO cpOutputCons
 -------------------------
 
 assumptions_list :: [Contents]
-assumptions_list = map (\x -> LlC $ llcc mkEmptyLabel $ Assumption x) newAssumptions
+assumptions_list = map (LlC . (\x -> mkRawLC (Assumption x) (x ^. getLabel))) newAssumptions
 
 assumptions_assum1, assumptions_assum2, assumptions_assum3, assumptions_assum4, assumptions_assum5, 
   assumptions_assum6, assumptions_assum7 :: [Sentence]

@@ -90,9 +90,6 @@ data DerivType = Part | Total deriving Eq
 instance Num Expr where
   (Int 0) + b = b
   a + (Int 0) = a
-  (AssocA Add l) + (AssocA Add m) = AssocA Add (l ++ m)
-  (AssocA Add l) + b = AssocA Add (l ++ [b])
-  a + (AssocA Add l) = AssocA Add (a : l)
   a + b = AssocA Add [a, b]
 
   a * b = AssocA Mul [a, b]

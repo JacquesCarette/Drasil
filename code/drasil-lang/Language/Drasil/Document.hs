@@ -130,4 +130,7 @@ figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RefAdd -> RawContent
 figWithWidth = Figure
 
 reldefn :: RelationConcept -> LabelledContent
-reldefn = llcc mkEmptyLabel . Definition . Theory
+reldefn = (\x -> reldefn' (getMaybeLabel x) x)
+  where
+  	reldefn' (Just x) y = llcc x ((Definition . Theory) y)
+  	reldefn' Nothing _  = error "cannot make reference to a Nothing label"

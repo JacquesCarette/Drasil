@@ -946,7 +946,7 @@ genDefDeriv2 :: LabelledContent -> UnitalChunk -> Contents
 genDefDeriv2 t1ct vo = foldlSPCol [S "Integrating", makeRef t1ct,
   S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
-genDefDeriv3 = LlC $ eqUnR' mkEmptyLabel $ 
+genDefDeriv3 = eqUnR' $ 
   ((negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $=
   (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
@@ -959,7 +959,7 @@ genDefDeriv4 gaussdiv su vo tfv unv un = foldlSPCol [S "Applying", titleize gaus
   phrase surface `sAnd` ch unv, S "as a", phrase un,
   S "outward", phrase unv, S "for a", phrase su]
 
-genDefDeriv5 = LlC $ eqUnR' mkEmptyLabel $ 
+genDefDeriv5 = eqUnR' $ 
   ((negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
   (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
@@ -969,7 +969,7 @@ genDefDeriv6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
   phrase vo, S "The", phrase vhg, S "is assumed constant. Then",
   sParen $ S $ show (1 :: Integer), S "can be written as"]
 
-genDefDeriv7 = LlC $ eqUnR' mkEmptyLabel $ 
+genDefDeriv7 = eqUnR' $ 
   ((sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
   (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
@@ -978,7 +978,7 @@ genDefDeriv10 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> Contents
 genDefDeriv10 den ma vo = foldlSPCol [S "Using the fact that", ch den :+:
   S "=" :+: ch ma :+: S "/" :+: ch vo `sC` S "(2) can be written as"]
 
-genDefDeriv11 = LlC $ eqUnR' mkEmptyLabel $ 
+genDefDeriv11 = eqUnR' $ 
   ((sy mass) * (sy heat_cap_spec) * deriv (sy temp)
   time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
   * (sy out_SA) + (sy vol_ht_gen) * (sy vol))
@@ -1189,7 +1189,7 @@ propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
   S "over the", phrase sim_time `sC` S "as follows"]
 
 propCorSolDeriv2 :: Contents
-propCorSolDeriv2 = LlC $ eqUnR' mkEmptyLabel $ 
+propCorSolDeriv2 = eqUnR' $ 
   ((sy w_E) $= (defint (eqSymb time) 0 (sy time)
   ((sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - apply1 temp_W time)))
   - (defint (eqSymb time) 0 (sy time)
@@ -1203,7 +1203,7 @@ propCorSolDeriv3 epcm en pcmat wa =
   S "from the" +:+. phrase wa, S "This can be expressed as"]
 
 propCorSolDeriv4 :: Contents
-propCorSolDeriv4 = LlC $ eqUnR' mkEmptyLabel $ 
+propCorSolDeriv4 = eqUnR' $ 
   ((sy pcm_E) $= (defint (eqSymb time) 0 (sy time)
   ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) - 
   (apply1 temp_PCM time)))))

@@ -12,7 +12,7 @@ import Drasil.NoPCM.GenDefs (roc_temp_simp_deriv)
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
 import Drasil.SWHS.Assumptions (newA1, newA2, newA3, newA7, newA8, newA9,
-  newA14, newA15, newA20, newA12, newA11)
+  newA15, newA20, newA14)
 import Drasil.SWHS.Body (charReader1, charReader2, orgDocIntro,
   genSystDesc, physSyst1, physSyst2, traceTrailing, dataContMid, traceIntro2,
   traceFig1, traceFig2)
@@ -505,7 +505,7 @@ funcReqsList :: [Contents]
 funcReqsList = weave [map LlC funcReqsListWordsNum, funcReqsListItems]
 
 funcReqsListItems :: [Contents]
-funcReqsListItems = map LlC [
+funcReqsListItems = [ LlC $ 
   llcc (mkLabelRA'' "fr1list") $
   Table [titleize symbol_, titleize M.unit_, titleize description]
   (mkTable [ch,
@@ -513,7 +513,7 @@ funcReqsListItems = map LlC [
   phrase] inputVar)
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False "fr1list",
 
-  eqUnR' mkEmptyLabel $ ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
+  eqUnR' $ ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
   (((sy diam) / 2) * (sy tank_length) * (sy w_density)))
   ]
 

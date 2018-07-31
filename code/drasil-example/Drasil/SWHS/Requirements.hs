@@ -48,11 +48,11 @@ req2 = mkRequirement "req2" ( foldlSentCol [
   acroIM 4 `sC` S "as follows, where", ch w_vol `isThe` phrase w_vol,
   S "and", ch tank_vol `isThe` phrase tank_vol] ) "Use-Above-Find-Mass-IM1-IM4"
 
-reqEqn1 = LlC $ eqUnR' mkEmptyLabel $ ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
+reqEqn1 = eqUnR' $ ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
   ((sy tank_vol) - (sy pcm_vol)) * (sy w_density) $=
   (((sy diam) / 2) * (sy tank_length) - (sy pcm_vol)) * (sy w_density)) -- FIXME: Ref Hack
 
-reqEqn2 = LlC $ eqUnR' mkEmptyLabel $ ((sy pcm_mass) $= (sy pcm_vol) * (sy pcm_density)) -- FIXME: Ref Hack
+reqEqn2 = eqUnR' $ ((sy pcm_mass) $= (sy pcm_vol) * (sy pcm_density)) -- FIXME: Ref Hack
 
 req3 = mkRequirement "req3" ( foldlSent [
   S "Verify that the", plural input_, S "satisfy the required",

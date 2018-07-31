@@ -12,47 +12,6 @@ import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.NounPhrase (titleize, phrase)
 import Numeric (floatToDigits)
 import Data.Tuple(fst, snd)
-{-
-import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..),
-    BoolOper(..), RTopology(..),
-    DerivType(..), DomainDesc(..),
-    RealInterval(..),Inclusive(..),
-    ($=))
-import Language.Drasil.Expr.Precedence (precA, precB, eprec)
-import Language.Drasil.UID (UID)
-import Language.Drasil.Classes (term, defn, usymb, relat)
-import qualified Language.Drasil.Chunk.SymbolForm as SF
-import Language.Drasil.Chunk.AssumpChunk (assuming)
-import Language.Drasil.Chunk.Attribute (getShortName, snToSentence)
-import Language.Drasil.Chunk.Change (chng, chngType, ChngType(Likely))
-import Language.Drasil.Chunk.Eq (QDefinition, equat)
-import Language.Drasil.Chunk.Quantity (Quantity(..))
-import Language.Drasil.Chunk.SymbolForm (eqSymb)
-import Language.Drasil.ChunkDB (getUnitLup, HasSymbolTable(..),symbLookup)
-import Language.Drasil.Chunk.ReqChunk (requires)
-import Language.Drasil.Chunk.Citation (Citation, CiteField(..), HP(..), HasFields(getFields), 
-  citeID, externRefT)
-import Language.Drasil.Document.GetChunk (vars)
-import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
-import Language.Drasil.Expr.Math (sy)
-import Language.Drasil.Symbol (Symbol(Empty, Atop, Corners, Concat, Special, Atomic), 
-  Decoration(Prime, Vector, Hat))
-import Language.Drasil.Unicode (Special(Partial))
-import Language.Drasil.Spec (Sentence(..))
-import Language.Drasil.Misc (unitToSentence)
-import Language.Drasil.NounPhrase (phrase, titleize)
-import Language.Drasil.Reference (refAdd)
-import Language.Drasil.RefTypes (RefAdd)
-import Language.Drasil.Document (DType(DD, TM, Instance, General, Theory, Data), 
-  ItemType(Nested, Flat), ListType(Definitions, Desc, Simple, Numeric, Bullet), 
-  Contents(Bib, Graph, Defnt, Assumption, Change, Figure, Requirement, Enumeration, 
-  Definition, EqnBlock, Paragraph, Table), Section(Section), SecCons(Sub, Con), 
-  Document(Document))
-
-import Language.Drasil.Space (Space(DiscreteS, DiscreteD, DiscreteI, Vect, Radians, 
-  String, Char, Boolean, Natural, Real, Rational, Integer))
--}
-
 -- | Render a Space
 space :: Space -> P.Expr
 space Integer = P.MO P.Integer
@@ -298,8 +257,8 @@ spec sm (E e)          = P.E $ expr e sm
 
 -- | Translates from Document to the Printing representation of Document
 makeDocument :: HasSymbolTable ctx => ctx -> Document -> T.Document
-makeDocument sm (Document title author sections) =
-  T.Document (spec sm title) (spec sm author) (createLayout sm sections)
+makeDocument sm (Document titleLb authorName sections) =
+  T.Document (spec sm titleLb) (spec sm authorName) (createLayout sm sections)
 
 -- | Translates from LayoutObj to the Printing representation of LayoutObj
 layout :: HasSymbolTable ctx => ctx -> Int -> SecCons -> T.LayoutObj
@@ -312,35 +271,79 @@ createLayout sm = map (sec sm 0)
 
 -- | Helper function for creating sections at the appropriate depth
 sec :: HasSymbolTable ctx => ctx -> Int -> Section -> T.LayoutObj
-sec sm depth x@(Section title contents _ _) = --FIXME: should ShortName be used somewhere?
+sec sm depth x@(Section titleLb contents _ _) = --FIXME: should ShortName be used somewhere?
   let ref = P.S (refAdd x) in
   T.HDiv [(concat $ replicate depth "sub") ++ "section"]
-  (T.Header depth (spec sm title) ref :
+  (T.Header depth (spec sm titleLb) ref :
    map (layout sm depth) contents) ref
 
 -- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.
 lay :: HasSymbolTable ctx => ctx -> Contents -> T.LayoutObj
-lay sm x@(Table hdr lls t b _) = T.Table ["table"]
-  ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S (refAdd x)) b (spec sm t)
-lay sm (Paragraph c)          = T.Paragraph (spec sm c)
-lay sm (EqnBlock c _)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
-                              -- FIXME: Make equations referable
-lay sm x@(Definition c)       = T.Definition c (makePairs sm c) (P.S (refAdd x))
-lay sm (Enumeration cs)       = T.List $ makeL sm cs
-lay sm x@(Figure c f wp _)    = T.Figure (P.S (refAdd x)) (spec sm c) f wp
-lay sm x@(Requirement r)      = T.ALUR T.Requirement
-  (spec sm $ requires r) (P.S $ refAdd x) (spec sm $ getShortName r)
-lay sm x@(Assumption a)       = T.ALUR T.Assumption
-  (spec sm (assuming a)) (P.S (refAdd x)) (spec sm $ getShortName a)
-lay sm x@(Change lc)          = T.ALUR
-  (if (chngType lc) == Likely then T.LikelyChange else T.UnlikelyChange)
-  (spec sm (chng lc)) (P.S (refAdd x)) (spec sm $ getShortName lc)
-lay sm x@(Graph ps w h t _)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
-                               w h (spec sm t) (P.S (refAdd x))
-lay sm (Defnt dtyp pairs rn)  = T.Definition dtyp (layPairs pairs) (P.S rn)
-  where layPairs = map (\(x,y) -> (x, map (lay sm) y))
-lay sm (Bib bib)              = T.Bib $ map (layCite sm) bib
+lay sm (LlC x) = layLabelled sm x
+lay sm (UlC x) = layUnlabelled sm (x ^. accessContents) 
+
+layLabelled :: HasSymbolTable ctx => ctx -> LabelledContent -> T.LayoutObj
+layLabelled sm x@(LblC _ (Table hdr lls t b _)) = T.Table ["table"]
+  ((map (spec sm) hdr) : (map (map (spec sm)) lls)) 
+  (P.S $ "Table:" ++ (getAdd (x ^. getRefAdd)))
+  b (spec sm t)
+layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"] 
+  [T.EqnBlock (P.E (expr c sm))] 
+  (P.S $ "Eqn:" ++ (getAdd (x ^. getRefAdd)))
+layLabelled sm x@(LblC _ (Figure c f wp _))     = T.Figure 
+  (P.S $ "Figure:" ++ (getAdd (x ^. getRefAdd)))
+  (spec sm c) f wp
+layLabelled sm x@(LblC _ (Requirement r))       = T.ALUR T.Requirement
+  (spec sm $ requires r) 
+  (P.S $ (getAdd (x ^. getRefAdd))) 
+  (spec sm $ getShortName r)
+layLabelled sm x@(LblC _ (Assumption a))        = T.ALUR T.Assumption
+  (spec sm (assuming a))
+  (P.S $ (getAdd (x ^. getRefAdd)))
+  (spec sm $ getShortName a)
+layLabelled sm x@(LblC _ (Change lcs))           = T.ALUR
+  (if (chngType lcs) == Likely then T.LikelyChange else T.UnlikelyChange)
+  (spec sm (chng lcs)) 
+  (P.S $ (getAdd (x ^. getRefAdd))) 
+  (spec sm $ getShortName lcs)
+layLabelled sm x@(LblC _ (Graph ps w h t _))    = T.Graph 
+  (map (\(y,z) -> (spec sm y, spec sm z)) ps) w h (spec sm t)
+  (P.S $ "Figure:" ++ (getAdd (x ^. getRefAdd)))
+layLabelled sm (LblC _ (Defnt dtyp pairs rn)) = T.Definition 
+  dtyp (layPairs pairs) 
+  (P.S rn)
+  where layPairs = map (\(x,y) -> (x, map temp y))
+        temp  y   = lay sm y
+layLabelled sm (LblC _ (Paragraph c))           = T.Paragraph (spec sm c)
+layLabelled sm (LblC _ (Definition c))          = T.Definition c (makePairs sm c)
+  (P.S "nolabel6")
+layLabelled sm (LblC _ (Enumeration cs))        = T.List $ makeL sm cs
+layLabelled sm (LblC _ (Bib bib))               = T.Bib $ map (layCite sm) bib
+
+-- | Translates from Contents to the Printing Representation of LayoutObj.
+-- Called internally by layout.
+layUnlabelled :: HasSymbolTable ctx => ctx -> RawContent -> T.LayoutObj
+layUnlabelled sm (Table hdr lls t b _) = T.Table ["table"]
+  ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S "nolabel0") b (spec sm t)
+layUnlabelled sm (Paragraph c)          = T.Paragraph (spec sm c)
+layUnlabelled sm (EqnBlock c)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
+layUnlabelled sm (Definition c)       = T.Definition c (makePairs sm c) (P.S "nolabel1")
+layUnlabelled sm (Enumeration cs)       = T.List $ makeL sm cs
+layUnlabelled sm (Figure c f wp _)    = T.Figure (P.S "nolabel2") (spec sm c) f wp
+layUnlabelled sm (Requirement r)      = T.ALUR T.Requirement
+  (spec sm $ requires r) (P.S "nolabel3") (spec sm $ getShortName r)
+layUnlabelled sm (Assumption a)       = T.ALUR T.Assumption
+  (spec sm (assuming a)) (P.S "nolabel4") (spec sm $ getShortName a)
+layUnlabelled sm (Change lcs)          = T.ALUR
+  (if (chngType lcs) == Likely then T.LikelyChange else T.UnlikelyChange)
+  (spec sm (chng lcs)) (P.S "nolabel5") (spec sm $ getShortName lcs)
+layUnlabelled sm (Graph ps w h t _)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
+                               w h (spec sm t) (P.S "nolabel6")
+layUnlabelled sm (Defnt dtyp pairs rn)  = T.Definition dtyp (layPairs pairs) (P.S rn)
+  where layPairs = map (\(x,y) -> (x, map temp y ))
+        temp  y   = layUnlabelled sm (y ^. accessContents)
+layUnlabelled sm (Bib bib)              = T.Bib $ map (layCite sm) bib
 
 -- | For importing bibliography
 layCite :: HasSymbolTable ctx => ctx -> Citation -> P.Citation
@@ -423,7 +426,7 @@ buildDDDescription m c =
 descLines :: (HasSymbolTable ctx, Quantity q) => ctx -> [q] -> P.Spec
 descLines m l = foldr (P.:+:) P.EmptyS $ intersperse P.HARDNL $ map descLine l
   where
-    descLine vc = (P.E $ symbol $ eqSymb vc) P.:+:
-      (P.S " is the " P.:+: (spec m (phrase $ vc ^. term)) P.:+:
+    descLine vcs = (P.E $ symbol $ eqSymb vcs) P.:+:
+      (P.S " is the " P.:+: (spec m (phrase $ vcs ^. term)) P.:+:
       maybe P.EmptyS (\a -> P.S " (" P.:+: P.Sy (a ^. usymb) P.:+: P.S ")") 
-            (getUnitLup vc m))
+            (getUnitLup vcs m))

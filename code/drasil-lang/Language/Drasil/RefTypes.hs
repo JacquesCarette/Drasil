@@ -18,11 +18,13 @@ data RefType = Tab    -- ^ Table
              | Cite   -- ^ Citation
              | Goal   -- ^ Goal Statement
              | PSD    -- ^ Physical System Description
+             | Lbl    -- ^ Label
              
 instance Show RefType where
   show Tab    = "Table"
   show Fig    = "Figure"
   show Sect   = "Section"
+  show Lbl    = "Section" --FIXME: hack until section has labels
   show Mod    = "Module"
   show Def    = "Definition"
   show Req    = "Requirement"

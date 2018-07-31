@@ -1,14 +1,10 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
+Last updated: July 25, 2018
 --------------------------------------------------
 
 **Drasil**
-  - Contains the Drasil language
-
-Drasil.hs
-  - Re-exports all of the necessary modules for the Drasil Language.
-  Details can be found in the documentation (run `make docs` and open the
-  **index.html** page that is created).
-  
+  - Contains the code for Drasil
+ 
 README.md
   - This file

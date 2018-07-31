@@ -12,12 +12,13 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
   Fields, Field(..), SSDSub(..), SolChSpec( SCSProg ), SSDSec(..), 
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SCSSub(..),
-  assumpF, dataConstraintUncertainty, genSysF, inDataConstTbl, inModelF, intro, 
+  dataConstraintUncertainty, genSysF, inDataConstTbl, intro, 
   mkDoc, outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF,
   tsymb'')
-import qualified Drasil.DocLang.SRS as SRS (inModel, missingP, likeChg,
-  funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
-  sysCont, reference)
+import qualified Drasil.DocLang.SRS as SRS (likeChg,
+  funcReq, probDesc, goalStmt,
+  sysCont, assumpt, 
+  inModelLabel, referenceLabel)
 
 import Data.Drasil.People (thulasi, brooks, spencerSmith)
 import Data.Drasil.Phrase (for)
@@ -32,7 +33,7 @@ import Data.Drasil.Concepts.Documentation (section_, traceyGraph, item,
 
 import Data.Drasil.Concepts.PhysicalProperties (liquid, solid)
 import qualified Data.Drasil.Concepts.Thermodynamics as CT (boiling,
-  law_cons_energy, heat_trans, phase_change, melting, thermal_conduction,
+  law_cons_energy, heat_trans, melting, thermal_conduction,
   ht_flux, heat_cap_spec, thermal_energy, ht_trans_theo, thermal_analysis,
   ener_src)
 import Data.Drasil.Concepts.Math (ode, de, unit_, rOfChng, equation)
@@ -62,7 +63,7 @@ import Drasil.SWHS.DataDefs (swhsDataDefs,dd1HtFluxC, dd2HtFluxP, dataDefns)
 import Drasil.SWHS.GenDefs (swhsGenDefs, generalDefinitions)
 import Drasil.SWHS.References (ref_swhs_citations)
 import Drasil.SWHS.Assumptions (assump13, assump15, assump16, assump17, assump18,
-  newAssumptions, swhsAssumptions)
+  newAssumptions)
 import Drasil.SWHS.Requirements (req1, req2, reqEqn1, reqEqn2,
   req3, req4, req5, req6, req7, req8, req9, req10, req11, nonFuncReqs)
 import Drasil.SWHS.Changes (likeChg1, likeChg2, likeChg3, likeChg4,
@@ -70,10 +71,10 @@ import Drasil.SWHS.Changes (likeChg1, likeChg2, likeChg3, likeChg4,
 import Drasil.SWHS.DataDesc (swhsInputMod)
 
 import Data.Drasil.Utils (enumSimple, weave, itemRefToSent, makeListRef,
-  makeTMatrix, refFromType, eqUnR, noRefs)
+  makeTMatrix, refFromType, eqUnR', noRefs)
 import Data.Drasil.SentenceStructures (acroIM, acroGD, acroGS, showingCxnBw,
   foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, isThe, ofThe,
-  ofThe', sAnd, sOf, foldlList)
+  ofThe', sAnd, sOf, foldlList, SepType(Comma), FoldType(List))
 import Language.Drasil.Printers (PrintingInformation(..))
 -------------------------------------------------------------------------------
 
@@ -142,7 +143,7 @@ mkSRS = RefSec (RefProg intro [
      IScope (scopeReqs1 CT.thermal_analysis tank_pcm) 
        (scopeReqs2 temp CT.thermal_energy water phsChgMtrl sWHT),
      IChar (charReader1 CT.ht_trans_theo) (charReader2 de) (EmptyS),
-     IOrgSec orgDocIntro inModel (SRS.inModel SRS.missingP [])
+     IOrgSec orgDocIntro inModel SRS.inModelLabel
        (orgDocEnd swhs_pcm progName)]):
   Verbatim genSystDesc:
   SSDSec 
@@ -242,11 +243,11 @@ genSystDesc = genSysF [systCont] (userCharContents progName) [] []
 --------------------------
 
 systCont :: Section
-systCont = SRS.sysCont [systCContents progName, sys_context_fig, systCIntro 
+systCont = SRS.sysCont [systCContents progName, LlC sys_context_fig, systCIntro 
   progName user, systContRespBullets] []
 
 systContRespBullets :: Contents
-systContRespBullets = Enumeration $ Bullet $ noRefs [userResp input_ datum,
+systContRespBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs [userResp input_ datum,
   swhsResp]
 
 --------------------------------
@@ -280,7 +281,7 @@ termAndDefn = termDefnF Nothing [termAndDefnBullets]
 -- GlassBR has an additional sentence with a reference at the end.)
 
 termAndDefnBullets :: Contents
-termAndDefnBullets = Enumeration $ Bullet $ noRefs $ map tAndDMap
+termAndDefnBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ map tAndDMap
   [CT.ht_flux, phase_change_material, CT.heat_cap_spec,
   CT.thermal_conduction, transient]
 
@@ -297,7 +298,7 @@ tAndDMap c = Flat $ foldlSent [at_start c +: EmptyS, (c ^. defn)]
 -----------------------------------------
 
 physSystDescription :: Section
-physSystDescription = physSystDesc (short progName) fig_tank [physSystDescList, fig_tank]
+physSystDescription = physSystDesc (short progName) fig_tank [physSystDescList, LlC fig_tank]
 
 -- Above paragraph is general except for progName and figure. However, not
 -- every example has a physical system. Also, the SSP example is different, so
@@ -336,15 +337,6 @@ goalStateList = enumSimple 1 (short goalStmt) $
 -- 4.2.1 : Assumptions --
 -------------------------
 
-assumps :: Section
-assumps = assumpF
-  (SRS.thModel SRS.missingP [])
-  (SRS.genDefn SRS.missingP [])
-  (SRS.dataDefn SRS.missingP [])
-  iMods likelyChgs unlikelyChgs swhsAssumptions
-
--- Again, list structure is same between all examples.
-
 -- Can booktabs colored links be used? The box links completely cover nearby
 -- punctuation.
 
@@ -370,26 +362,8 @@ assumps = assumpF
 -- 4.2.5 : Instance Models --
 -----------------------------
 
-iMods :: Section
-iMods = inModelF probDescription
-  (SRS.dataDefn SRS.missingP [])
-  (SRS.thModel SRS.missingP [])
-  (SRS.genDefn SRS.missingP [])
-  iModsWithDerivs
 
-iModsWithDerivs :: [Contents]
-iModsWithDerivs = concat $ weave [iModsDerivations,
-  map (\x -> [reldefn x]) swhsIMods]
-
-iModsDerivations :: [[Contents]]
-iModsDerivations = [iModSubpar solution temp_W temp_PCM pcm_E 
-  CT.phase_change, iModDeriv1, iModDeriv2]
-  
-iModDeriv1 :: [Contents]
-iModDeriv1 = (iMod1Para energy water) ++
-  (weave [iMod1SentList, iMod1EqnList])
-
-iMod1EqnList = map eqUnR [iMod1Eqn1, iMod1Eqn2,
+iMod1EqnList = map (\x -> LlC $ eqUnR' mkEmptyLabel x) [iMod1Eqn1, iMod1Eqn2,
   iMod1Eqn3, iMod1Eqn4, iMod1Eqn5, iMod1Eqn6, iMod1Eqn7]
 
 iMod1SentList = map foldlSPCol
@@ -405,14 +379,14 @@ iModDeriv2 :: [Contents]
 iModDeriv2 =
   (iMod2StartPara energy phsChgMtrl sens_heat rOfChng temp_PCM vol pcm_vol
     pcm_mass htCap_S_P ht_flux_P pcm_SA ht_flux_out vol_ht_gen assump16 ++
-  (weave [iMod2EqnList, iMod2SentList]) ++ (iMod2EndPara 
+  (weave [iMod2EqnList, iMod2SentList]) ++ (iMod2EndPara
   phsChgMtrl htCap_S_P htCap_L_P tau_S_P tau_L_P surface CT.melting vol 
   temp_PCM temp_melt_P CT.boiling solid liquid))
 
 iMod2SentList = map foldlSPCol [iMod2Sent1 dd2HtFluxP ht_flux_P,
   iMod2Sent2, iMod2Sent3]
 
-iMod2EqnList = map eqUnR [iMod2Eqn1, iMod2Eqn2,
+iMod2EqnList = map (\x -> LlC $ eqUnR' mkEmptyLabel x) [iMod2Eqn1, iMod2Eqn2,
   iMod2Eqn3, iMod2Eqn4]
 
 ----------------------------
@@ -422,10 +396,7 @@ iMod2EqnList = map eqUnR [iMod2Eqn1, iMod2Eqn2,
 -- Data Constraint: Table 1 --
 ------------------------------
 
-dataConTables :: [Contents]
-dataConTables = [dataConTable1, dataConTable3]
-
-dataConTable1 :: Contents
+dataConTable1 :: LabelledContent
 dataConTable1 = inDataConstTbl inputConstraints
 
 inputConstraints :: [UncertQ]
@@ -441,7 +412,7 @@ inputConstraints = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
 -- Data Constraint: Table 3 --
 ------------------------------
 
-dataConTable3 :: Contents
+dataConTable3 :: LabelledContent
 dataConTable3 = outDataConstTbl outputConstraints
 --FIXME: add "(by A11)" in Physical Constraints of `temp_W` and `temp_PCM`?
 
@@ -484,11 +455,12 @@ funcReqs :: Section
 funcReqs = SRS.funcReq funcReqsList []
 
 funcReqsList :: [Contents]
-funcReqsList = ([req1]) ++ [funcReqsTable] ++ ([req2]) ++
-  [reqEqn1, reqEqn2] ++ (reqs) 
+funcReqsList = [LlC req1] ++ [funcReqsTable] ++ [LlC req2] ++
+  [reqEqn1, reqEqn2] ++ reqs
 
 funcReqsTable :: Contents
-funcReqsTable = (Table [titleize symbol_, titleize unit_, titleize description]
+funcReqsTable = LlC $ llcc (mkLabelRA'' "InConstraints") $ (Table 
+  [titleize symbol_, titleize unit_, titleize description]
   (mkTable
   [ch,
   --(\ch -> Sy (unit_symb ch)),
@@ -498,7 +470,7 @@ funcReqsTable = (Table [titleize symbol_, titleize unit_, titleize description]
   "InConstraints"
 
 reqs :: [Contents]
-reqs = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
+reqs = map LlC [req3, req4, req5, req6, req7, req8, req9, req10, req11]
 
 ---------------------------------------
 -- 5.2 : Non-functional Requirements --
@@ -511,34 +483,22 @@ likelyChgs :: Section
 likelyChgs = SRS.likeChg likelyChgsList []
 
 likelyChgsList :: [Contents]
-likelyChgsList = likeChgList 
-
-likeChgList :: [Contents]
-likeChgList = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
+likelyChgsList = [likeChg1, LlC likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
 
 --------------------------------
 -- Section 6b : UNLIKELY CHANGES --
 --------------------------------
-{-
-unlikelyChgs :: Section
-unlikelyChgs = SRS.unlikeChg unlikelyChgsList []
 
-unlikelyChgsList :: [Contents]
-unlikelyChgsList = unlikeChgList 
-
-unlikeChgList :: [Contents]
-unlikeChgList = []
--}
 --------------------------------------------------
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
 --------------------------------------------------
 
 traceMAndG :: Section
 traceMAndG = traceMGF traceRefList traceTrailing
-  ([traceTable1, traceTable2, traceTable3] ++
-  (traceIntro2) ++ [traceFig1, traceFig2]) []
+  (map LlC traceRefList ++
+  (map UlC traceIntro2) ++ [LlC traceFig1, LlC traceFig2]) []
 
-traceRefList :: [Contents]
+traceRefList :: [LabelledContent]
 traceRefList = [traceTable1, traceTable2, traceTable3]
 
 traceTrailing :: [Sentence]
@@ -562,7 +522,7 @@ traceDataRef = [makeRef dataConTable1] --FIXME: Reference section?
 
 traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19"]
-traceAssumpRef = makeListRef traceAssump assumps
+traceAssumpRef = makeListRef traceAssump (SRS.assumpt [] []) --Fixme:replace with actual assumptions!
 
 traceTheories = ["T1", "T2", "T3"]
 traceTheoriesRef = map (refFromType Theory) tModels
@@ -648,8 +608,10 @@ trace2R9 = ["IM3", "IM4"]
 trace2R10 = ["IM2"]
 trace2R11 = ["IM2"]
 
-traceTable2 :: Contents
-traceTable2 = Table (EmptyS:traceMRowHeader2)
+--FIXME: name mixup between traceTable1 and traceTable2?
+traceTable2 :: LabelledContent
+traceTable2 = llcc (mkLabelRA'' "Tracey1") $ Table
+  (EmptyS:traceMRowHeader2)
   (makeTMatrix (traceMColHeader2) (traceMColumns2) (traceMRow2))
   (showingCxnBw traceyMatrix
   (titleize' requirement `sAnd` titleize' inModel)) True "Tracey1"
@@ -726,7 +688,7 @@ trace3LC6 = ["A15"]
 introP1 :: (NamedIdea en, Definition en) => ConceptChunk -> UnitalChunk -> en -> CI -> CI ->
   ConceptChunk -> UnitalChunk -> ConceptChunk -> Sentence
 introP1 es en sp pcmat pro te lh un = foldlSent [
-  S "Due to", foldlList (map S ["increasing cost", "diminishing availability",
+  S "Due to", foldlList Comma List (map S ["increasing cost", "diminishing availability",
     "negative environmental impact of fossil fuels"]) `sC`
   S "there is a higher demand for renewable", plural es `sAnd` phrase en +:+.
   S "storage technology", sp ^. defn, sParen (short pcmat), S "use renewable",
@@ -825,11 +787,11 @@ orgDocIntro :: Sentence
 orgDocIntro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the template for an", short srs,
   S "for", phrase sciCompS, S "proposed by", (sSqBrNum 3) `sAnd`
-  (sSqBrNum 6), sParen (makeRef (SRS.reference SRS.missingP []))]
+  (sSqBrNum 6), sParen (midRef SRS.referenceLabel)]
 
 orgDocEnd :: NamedIdea ni => ni -> CI -> Sentence
 orgDocEnd sp pro = foldlSent_ [S "The", plural inModel,
-  sParen (makeRef (SRS.inModel SRS.missingP [])),
+  sParen (midRef SRS.inModelLabel),
   S "to be solved are referred to as", acroIM 1,
   S "to" +:+. acroIM 4, S "The", plural inModel,
   S "provide the", phrase ode, sParen (short ode :+: S "s")
@@ -870,8 +832,8 @@ systCContents pro = foldlSP [makeRef sys_context_fig, S "shows the" +:+.
   plural datum, S "flow between the", phrase system `sAnd`
   S "its", phrase environment]
 
-sys_context_fig :: Contents
-sys_context_fig = fig (foldlSent_
+sys_context_fig :: LabelledContent
+sys_context_fig = llcc (mkLabelRA'' "SysCon") $ fig (foldlSent_
   [makeRef sys_context_fig +: EmptyS, titleize sysCont])
   "SystemContextFigure.png" "SysCon"
 
@@ -968,8 +930,8 @@ physSyst3 pcmat ta hfp = [short pcmat, S "suspended in" +:+. phrase ta,
 -- Structure of list would be same between examples but content is completely
 -- different
 
-fig_tank :: Contents
-fig_tank = fig (
+fig_tank :: LabelledContent
+fig_tank = llcc (mkLabelRA'' "Tank") $ fig (
   foldlSent_ [at_start sWHT `sC` S "with", phrase ht_flux_C, S "of",
   ch ht_flux_C `sAnd` phrase ht_flux_P, S "of", ch ht_flux_P])
   "Tank.png" "Tank"
@@ -1027,7 +989,7 @@ genDefDeriv2 :: RelationConcept -> UnitalChunk -> Contents
 genDefDeriv2 t1ct vo = foldlSPCol [S "Integrating", makeRef $ reldefn t1ct,
   S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
-genDefDeriv3 = eqUnR
+genDefDeriv3 = LlC $ eqUnR' mkEmptyLabel $ 
   ((negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $=
   (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
@@ -1040,7 +1002,7 @@ genDefDeriv4 gaussdiv su vo tfv unv un = foldlSPCol [S "Applying", titleize gaus
   phrase surface `sAnd` ch unv, S "as a", phrase un,
   S "outward", phrase unv, S "for a", phrase su]
 
-genDefDeriv5 = eqUnR
+genDefDeriv5 = LlC $ eqUnR' mkEmptyLabel $ 
   ((negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
   (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
@@ -1050,22 +1012,12 @@ genDefDeriv6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
   phrase vo, S "The", phrase vhg, S "is assumed constant. Then",
   sParen $ S $ show (1 :: Integer), S "can be written as"]
 
-genDefDeriv7 = eqUnR
+genDefDeriv7 = LlC $ eqUnR' mkEmptyLabel $ 
   ((sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
   (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
 
-genDefDeriv8 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
-  UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk -> CI -> Contents ->
-  Contents -> Contents -> Contents -> Contents
-genDefDeriv8 hfi hfo isa osa den hcs tem vo assu a3 a4 a5 a6 = foldlSPCol 
-  [S "Where", foldlList (map ch [hfi, hfo, isa, osa]), 
-  S "are explained in" +:+. acroGD 2, S "Assuming", ch den `sC` ch hcs
-  `sAnd` ch tem, S "are constant over the", phrase vo `sC` S "which is true",
-  S "in our case by", titleize' assu, 
-  foldlList (map (\c -> sParen (makeRef c)) [a3, a4, a5, a6]) `sC` S "we have"]
-
-genDefDeriv9 = eqUnR
+genDefDeriv9 = LlC $ eqUnR' mkEmptyLabel $ 
   ((sy density) * (sy heat_cap_spec) * (sy vol) * deriv (sy temp)
   time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol))
@@ -1074,7 +1026,7 @@ genDefDeriv10 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> Contents
 genDefDeriv10 den ma vo = foldlSPCol [S "Using the fact that", ch den :+:
   S "=" :+: ch ma :+: S "/" :+: ch vo `sC` S "(2) can be written as"]
 
-genDefDeriv11 = eqUnR
+genDefDeriv11 = LlC $ eqUnR' mkEmptyLabel $ 
   ((sy mass) * (sy heat_cap_spec) * deriv (sy temp)
   time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
   * (sy out_SA) + (sy vol_ht_gen) * (sy vol))
@@ -1113,7 +1065,7 @@ iMod1Para en wa = [foldlSPCol [S "Derivation of the",
 iMod1Sent1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
   UnitalChunk -> UnitalChunk -> UnitalChunk -> UncertQ -> UnitalChunk -> 
   UnitalChunk -> UncertQ -> UncertQ -> ConceptChunk -> ConceptChunk -> 
-  ConceptChunk -> UnitalChunk -> Contents -> Contents -> [Sentence]
+  ConceptChunk -> UnitalChunk -> LabelledContent -> LabelledContent -> [Sentence]
 iMod1Sent1 roc temw en wa vo wvo wma hcw hfc hfp csa psa ht ta purin vhg
   a15 a16 = [S "To find the", phrase roc, S "of", ch temw `sC`
   S "we look at the", phrase en, S "balance on" +:+.
@@ -1235,7 +1187,7 @@ iMod1EqnList, iMod1SentList, iMod2EqnList,
 iMod2StartPara :: UnitalChunk -> CI -> UnitalChunk -> ConceptChunk ->
   UncertQ -> UnitalChunk -> UncertQ -> UnitalChunk -> UncertQ -> 
   UnitalChunk -> UncertQ -> UnitalChunk -> UnitalChunk ->
-  Contents -> [Contents]
+  LabelledContent -> [Contents]
 iMod2StartPara en pcmat sh roc ptem vo pvo pma hcsp hfp psa hfo vhg a16 =
   map foldlSPCol [
 
@@ -1290,9 +1242,8 @@ iMod2EndPara pcmat hcsp hclp tsp tlp sur mel vo ptem tmp boi so li = map
   ]
 
 -- Add GD, A, and EqnBlock references when available
--- Replace derivs with regular derivative when available
+-- FIXME: Replace derivs with regular derivative when available
 -- derivative notation in paragraph?
-
 
 ----------------------------
 -- 4.2.6 Data Constraints --
@@ -1367,7 +1318,7 @@ propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
   S "over the", phrase sim_time `sC` S "as follows"]
 
 propCorSolDeriv2 :: Contents
-propCorSolDeriv2 = eqUnR
+propCorSolDeriv2 = LlC $ eqUnR' mkEmptyLabel $ 
   ((sy w_E) $= (defint (eqSymb time) 0 (sy time)
   ((sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - apply1 temp_W time)))
   - (defint (eqSymb time) 0 (sy time)
@@ -1381,7 +1332,7 @@ propCorSolDeriv3 epcm en pcmat wa =
   S "from the" +:+. phrase wa, S "This can be expressed as"]
 
 propCorSolDeriv4 :: Contents
-propCorSolDeriv4 = eqUnR
+propCorSolDeriv4 = LlC $ eqUnR' mkEmptyLabel $ 
   ((sy pcm_E) $= (defint (eqSymb time) 0 (sy time)
   ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) - 
   (apply1 temp_PCM time)))))
@@ -1423,23 +1374,25 @@ renameList2  = [inModel, requirement, dataConst]
 
 traceTrailing1, traceTrailing2, traceTrailing3 :: Sentence
 
-traceTrailing1 = foldlSent [foldlList $ map plural (take 4 renameList1), 
+traceTrailing1 = foldlSent [foldlList Comma List $ map plural (take 4 renameList1), 
   S "with each other"]
 
-traceTrailing2 = foldlSent [foldlList $ map plural renameList2, 
+traceTrailing2 = foldlSent [foldlList Comma List $ map plural renameList2, 
   S "on each other"]
 
-traceTrailing3 = foldlSent_ [foldlList $ map plural (take 5 renameList1),
+traceTrailing3 = foldlSent_ [foldlList Comma List $ map plural (take 5 renameList1),
   S "on the", plural assumption]
 
-traceTable1 :: Contents
-traceTable1 = Table (EmptyS:traceMRowHeader1)
+traceTable1 :: LabelledContent
+traceTable1 = llcc (mkLabelRA'' "Tracey2") $ Table
+  (EmptyS:traceMRowHeader1)
   (makeTMatrix (traceMRowHeader1) (traceMColumns1) (traceMRow1))
   (showingCxnBw traceyMatrix
   (titleize' item +:+ S "of Different" +:+ titleize' section_)) True "Tracey2"
 
-traceTable3 :: Contents
-traceTable3 = Table (EmptyS:traceMRowHeader3)
+traceTable3 :: LabelledContent
+traceTable3 = llcc (mkLabelRA'' "Tracey3") $ Table
+  (EmptyS:traceMRowHeader3)
   (makeTMatrix traceMColHeader3 traceMColumns3 traceMRow3)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+
   titleize' item)) True "Tracey3"
@@ -1451,20 +1404,20 @@ traceTable3 = Table (EmptyS:traceMRowHeader3)
 -- Traceabilty Graphs --
 ------------------------
 
-traceIntro2 :: [Contents]
+traceIntro2 :: [UnlabelledContent]
 traceIntro2 = traceGIntro [traceFig1, traceFig2]
 
-  [foldlSent [foldlList $ map plural renameList1, S "on each other"],
+  [foldlSent [foldlList Comma List $ map plural renameList1, S "on each other"],
 
-  foldlSent_ [foldlList $ map plural renameList2, S "on each other"]]
+  foldlSent_ [foldlList Comma List $ map plural renameList2, S "on each other"]]
 
-traceFig1 :: Contents
-traceFig1 = fig (showingCxnBw traceyGraph (titleize' item +:+
+traceFig1 :: LabelledContent
+traceFig1 = llcc (mkLabelRA'' "TraceyA") $ fig (showingCxnBw traceyGraph (titleize' item +:+
   S "of Different" +:+ titleize' section_)) "ATrace.png" "TraceyA"
 
-traceFig2 :: Contents
-traceFig2 = fig (showingCxnBw traceyGraph (foldlList $ map titleize' 
-  renameList2)) "RTrace.png" "TraceyR"
+traceFig2 :: LabelledContent
+traceFig2 = llcc (mkLabelRA'' "TraceyR") $ fig (showingCxnBw traceyGraph (foldlList Comma List
+  $ map titleize' renameList2)) "RTrace.png" "TraceyR"
 
 -------------------------------------------------
 -- Section 8 :  Specification Parameter Values --

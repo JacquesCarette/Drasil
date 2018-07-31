@@ -2,6 +2,7 @@ If you are looking for **build instructions**, find them in the README file [her
 
 --------------------------------------------------
 ### Drasil Coding Style Guide
+Last updated: July 26, 2018
 --------------------------------------------------
 
 1. Use spaces instead of tabs. Preferably 2 spaces per indent level. Ex:
@@ -93,14 +94,29 @@ Updating Haddock index for local packages in
 ### Summary of Folder Structure and File Contents
 --------------------------------------------------
 
-**Data**
+**data-files**
+  - Contains additional "helper" files for each of the examples
+
+**drasil-code**
+  - Contains the code for code generation in Drasil
+
+**drasil-data**
   - Contains the current common-knowledge base for Drasil
+
+**drasil-docLang**
+  - Contains the document language for Drasil
   
-**Example**
+**drasil-example**
   - Contains the currently implemented examples
+
+**drasil-gen**
+  - Contains the generation file(s) for actually generating code
   
-**Language**
+**drasil-lang**
   - Contains the base for the Drasil language
+
+**drasil-printers**
+  - Containts the printers for the Drasil language
   
 **stable**
   - Contains the (currently) expected output for each of the examples
@@ -114,9 +130,6 @@ README.md
 countCommand.txt
   - A text file containing instructions on how to count all unique words 
   within a file using bash commands
-  
-drasil.cabal
-  - Cabal file, used by stack to build Drasil
   
 log_check.sh
   - A shell script for comparing the generated output to the expected output for

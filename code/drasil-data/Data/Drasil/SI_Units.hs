@@ -1,6 +1,6 @@
 module Data.Drasil.SI_Units where
 import Language.Drasil
-import Language.Drasil.Development(derUC, derUC', derUC'', scale, shift
+import Language.Drasil.Development(derUC, derUC', scale, shift
   , derCUC, derCUC', derCUC'')
 
 fundamentals :: [UnitDefn]

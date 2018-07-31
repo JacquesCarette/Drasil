@@ -13,7 +13,7 @@ import Data.Drasil.Quantities.Physics as QP (time)
 import Drasil.SWHS.Unitals (vol_ht_gen, deltaT, temp_env, pcm_SA,
   out_SA, in_SA, ht_flux_in, ht_flux_out, htTransCoeff, thFluxVect)
 import Data.Drasil.SentenceStructures (isThe, sAnd, ofThe, acroGD, foldlSentCol,
-  foldlList)
+  foldlList, SepType(Comma), FoldType(List))
 import Data.Drasil.Utils (unwrap, weave)
 import Data.Drasil.Concepts.Math (equation, rOfChng, rate, unit_)
 import Data.Drasil.Concepts.Thermodynamics (law_conv_cooling)
@@ -133,7 +133,7 @@ s4_2_3_desc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
   ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
   acroGD 2, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
-  titleize' assumption, (foldlList $ (map (\d -> sParen (d)))
+  titleize' assumption, (foldlList Comma List $ (map (\d -> sParen (d)))
   assumps) `sC` S "we have"]
 
 s4_2_3_desc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]

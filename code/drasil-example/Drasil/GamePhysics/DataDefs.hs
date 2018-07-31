@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs) where
+module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns) where
 
 import Language.Drasil
 
@@ -13,6 +13,10 @@ import qualified Data.Drasil.Quantities.Physics as QP (angularAccel,
 
 ----- Data Definitions -----
 
+dataDefns :: [DataDefinition]
+dataDefns = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
+  angVelDD, angAccelDD, impulseDD]
+
 cpDDefs :: [QDefinition]
 cpDDefs = [ctrOfMass, linDisp, linVel, linAcc, angDisp,
   angVel, angAccel, impulse]
@@ -20,6 +24,10 @@ cpDDefs = [ctrOfMass, linDisp, linVel, linAcc, angDisp,
 cpQDefs :: [Block QDefinition]
 cpQDefs = map (\x -> Parallel x []) cpDDefs
 -- DD1 : Centre of mass --
+
+ctrOfMassDD :: DataDefinition
+ctrOfMassDD = mkDD ctrOfMass [{-- References --}] [{-- Derivation --}]
+  "ctrOfMass" Nothing
 
 ctrOfMass :: QDefinition
 ctrOfMass = mkDataDef pos_CM ctrOfMassEqn
@@ -45,6 +53,11 @@ linDispQDef = foldl (+:+) (EmptyS) def
               phrase $ QP.velocity ^. term, S "with respect to",
               phrase $ QP.time ^. term, P $ QP.time ^. symbol]
 -}
+
+linDispDD :: DataDefinition
+linDispDD = mkDD linDisp [{-- References --}] [{-- Derivation --}] "linDisp"
+  Nothing
+
 linDisp :: QDefinition
 linDisp = mkDataDef QP.linearDisplacement dispEqn
 
@@ -71,6 +84,10 @@ linVelQDef = foldl (+:+) (EmptyS) def
               phrase $ QP.time ^. term, P $ QP.time ^. symbol]
 -}
 
+linVelDD :: DataDefinition
+linVelDD = mkDD linVel [{-- References --}] [{-- Derivation --}] "linVel"
+  Nothing
+
 linVel :: QDefinition
 linVel = mkDataDef QP.linearVelocity velEqn
 
@@ -85,6 +102,10 @@ dd3descr = S "linear" +:+ (QP.velocity ^. term) +:+ S "of a" +:+
   S "with respect to" +:+ (QP.time ^. term) +:+ P (QP.time ^. symbol)
 -}
 -- DD4 : Linear acceleration --
+
+linAccDD :: DataDefinition
+linAccDD = mkDD linAcc [{-- References --}] [{-- Derivation --}] "linAcc"
+  Nothing
 
 linAcc :: QDefinition
 linAcc = mkDataDef QP.linearAccel accelEqn
@@ -101,6 +122,10 @@ dd4descr = S "linear" +:+ (accel ^. term) +:+ S "of a" +:+
 -}
 -- DD5 : Angular displacement --
 
+angDispDD :: DataDefinition
+angDispDD = mkDD angDisp [{-- References --}] [{-- Derivation --}] "angDisp"
+  Nothing
+
 angDisp :: QDefinition
 angDisp = mkDataDef QP.angularDisplacement angDispEqn
 
@@ -116,6 +141,10 @@ dd5descr = (QP.angularDisplacement ^. term) +:+ S "of a" +:+
 -}
 -- DD6 : Angular velocity --
 
+angVelDD :: DataDefinition
+angVelDD = mkDD angVel [{-- References --}] [{-- Derivation --}] "angVel"
+  Nothing
+
 angVel :: QDefinition
 angVel = mkDataDef QP.angularVelocity angVelEqn
 
@@ -130,6 +159,10 @@ dd6descr = ((QP.angularVelocity ^. term)) +:+ S "of a" +:+
   S "with respect to" +:+ (QP.time ^. term) +:+ P (QP.time ^. symbol)
 -}
 -- DD7 : Angular acceleration --
+
+angAccelDD :: DataDefinition
+angAccelDD = mkDD angAccel [{-- References --}] [{-- Derivation --}] "angAccel"
+  Nothing
 
 angAccel :: QDefinition
 angAccel = mkDataDef QP.angularAccel angAccelEqn
@@ -148,6 +181,10 @@ dd7descr = (QP.angularAccel ^. term) +:+ S "of a" +:+
 
 -- Currently a super crude implementation requiring lots of custom chunks;
 -- need norms and cross products
+
+impulseDD :: DataDefinition
+impulseDD = mkDD impulse [{-- References --}] [{-- Derivation --}] "impulse"
+  Nothing
 
 impulse :: QDefinition
 impulse = mkDataDef QP.impulseS impulseEqn

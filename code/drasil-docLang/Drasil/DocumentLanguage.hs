@@ -40,7 +40,6 @@ import Data.Drasil.Concepts.Documentation (refmat)
 
 import Data.Function (on)
 import Data.List (nub, sortBy)
-import Data.Ord (comparing)
 
 type System = Sentence
 type DocKind = Sentence
@@ -138,7 +137,7 @@ data IntroSub where
   IPurpose :: Sentence -> IntroSub
   IScope   :: Sentence -> Sentence -> IntroSub
   IChar    :: Sentence -> Sentence -> Sentence -> IntroSub
-  IOrgSec  :: Sentence -> CI -> Section -> Sentence -> IntroSub
+  IOrgSec  :: Sentence -> CI -> Label -> Sentence -> IntroSub
 
 {--}
 
@@ -198,7 +197,7 @@ data SCSSub where
   DDs            :: Fields  -> [QDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
   DDs'           :: Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro -- should eventually replace and be renamed to DDs
   IMs            :: Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
-  Constraints    :: Sentence -> Sentence -> Sentence -> [Contents] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
+  Constraints    :: Sentence -> Sentence -> Sentence -> [LabelledContent] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
 --FIXME: Work in Progress ^
   CorrSolnPpties :: [Contents] -> SCSSub
 data DerivationDisplay = ShowDerivation
@@ -222,7 +221,7 @@ data UCsSec = UCsVerb Section | UCsProg [Contents]
 
 {--}
 
-data TraceabilitySec = TraceabilityVerb Section | TraceabilityProg [Contents] [Sentence] [Contents] [Section]
+data TraceabilitySec = TraceabilityVerb Section | TraceabilityProg [LabelledContent] [Sentence] [Contents] [Section]
 
 {--}
 
@@ -279,11 +278,11 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
     mkSubRef SI {_sysinfodb = db} (TUnits' con) =
         table_of_units (sortBy comp_unitdefn $ Map.elems $ db ^. unitTable) (tuIntro con)
     mkSubRef SI {_quants = v} (TSymb con) =
-      SRS.tOfSymb
-      [tsIntro con, table Equational (
-         sortBy (compsy `on` eqSymb) $
-         filter (`hasStageSymbol` Equational)
-         (nub v)) at_start] []
+      SRS.tOfSymb 
+      [tsIntro con, LlC $ table Equational (
+                sortBy (compsy `on` eqSymb) $
+                filter (`hasStageSymbol` Equational)
+                (nub v)) at_start] []
     mkSubRef SI {_concepts = cccs} (TSymb' f con) = mkTSymb cccs f con
     mkSubRef SI {_sysinfodb = db} TAandA =
       table_of_abb_and_acronyms $ nub $ Map.elems (db ^. termTable)
@@ -293,7 +292,7 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
 mkTSymb :: (Quantity e, Concept e, Eq e) =>
   [e] -> LFunc -> [TSIntro] -> Section
 mkTSymb v f c = SRS.tOfSymb [tsIntro c,
-  table Equational
+  LlC $ table Equational
     (sortBy (compsy `on` eqSymb) $ filter (`hasStageSymbol` Equational) (nub v))
     (lf f)] []
   where lf Term = at_start
@@ -320,7 +319,7 @@ tsymb'' intro lfunc = TSymb' lfunc intro
 
 -- | table of symbols intro builder. Used by mkRefSec
 tsIntro :: [TSIntro] -> Contents
-tsIntro x = Paragraph $ foldr ((+:+) . tsI) EmptyS x
+tsIntro x = mkParagraph $ foldr ((+:+) . tsI) EmptyS x
 
 -- | table of symbols intro writer. Translates a TSIntro to a list of Sentences
 tsI :: TSIntro -> Sentence
@@ -361,7 +360,7 @@ symbConvention scs = S "The choice of symbols was made to be consistent with the
 
 -- | Table of units intro builder. Used by mkRefSec
 tuIntro :: [TUIntro] -> Contents
-tuIntro x = Paragraph $ foldr ((+:+) . tuI) EmptyS x
+tuIntro x = mkParagraph $ foldr ((+:+) . tuI) EmptyS x
 
 -- | mkConCC converts a list of ConceptInstances to Contents using a generic
 -- two-step process for flexibility.
@@ -376,7 +375,7 @@ mkConCC' f = mkConCC f id
 -- | mkEnumCC is a convenience function for converting ConceptInstances to an
 -- enumeration.
 mkEnumCC :: (ConceptInstance -> ListTuple) -> [ConceptInstance] -> [Contents]
-mkEnumCC f = mkConCC f (replicate 1 . Enumeration . Simple)
+mkEnumCC f = mkConCC f (replicate 1 . UlC . ulcc . Enumeration . Simple)
 
 -- | table of units intro writer. Translates a TUIntro to a Sentence.
 tuI :: TUIntro -> Sentence
@@ -465,29 +464,29 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS _ (DDs' _ [] _) = error "There are no Data Definitions" --FIXME: temporary duplicate 
     mkSubSCS _ (IMs _ [] _)  = error "There are no Instance Models"
     mkSubSCS si' (TMs fields ts) =
-      SSD.thModF (siSys si') (map (tmodel fields (_sysinfodb si')) ts)
+      SSD.thModF (siSys si') (map LlC (map (tmodel fields (_sysinfodb si')) ts))
     mkSubSCS si' (DDs fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS (concatMap (\x -> ddefn fields (_sysinfodb si') x : derivation x) dds)
+      SSD.dataDefnF EmptyS (map LlC (concatMap (\x -> ddefn fields (_sysinfodb si') x : derivation x) dds))
     mkSubSCS si' (DDs fields dds _) =
-      SSD.dataDefnF EmptyS (map (ddefn fields (_sysinfodb si')) dds)
+      SSD.dataDefnF EmptyS (map LlC (map (ddefn fields (_sysinfodb si')) dds))
     mkSubSCS si' (DDs' fields dds ShowDerivation) = --FIXME: need to keep track of DD intro. --FIXME: temporary duplicate
-      SSD.dataDefnF EmptyS (concatMap (\x -> ddefn' fields (_sysinfodb si') x : derivation x) dds)
+      SSD.dataDefnF EmptyS (map LlC (concatMap (\x -> ddefn' fields (_sysinfodb si') x : derivation x) dds))
     mkSubSCS si' (DDs' fields dds _) = --FIXME: temporary duplicate
-      SSD.dataDefnF EmptyS (map (ddefn' fields (_sysinfodb si')) dds)
+      SSD.dataDefnF EmptyS (map LlC (map (ddefn' fields (_sysinfodb si')) dds))
     mkSubSCS si' (GDs fields gs' ShowDerivation) =
-      SSD.genDefnF (concatMap (\x -> gdefn fields (_sysinfodb si') x : derivation x) gs')
+      SSD.genDefnF (map LlC (concatMap (\x -> gdefn fields (_sysinfodb si') x : derivation x) gs'))
     mkSubSCS si' (GDs fields gs' _) =
-      SSD.genDefnF (map (gdefn fields (_sysinfodb si')) gs')
+      SSD.genDefnF (map LlC (map (gdefn fields (_sysinfodb si')) gs'))
     mkSubSCS si' (IMs fields ims ShowDerivation) = 
       SSD.inModelF pdStub ddStub tmStub gdStub (concatMap (\x -> instanceModel fields (_sysinfodb si') x : derivation x) ims)
     mkSubSCS si' (IMs fields ims _)= 
       SSD.inModelF pdStub ddStub tmStub gdStub (map (instanceModel fields (_sysinfodb si')) ims)
     mkSubSCS SI {_refdb = db} Assumptions =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
-      (map Assumption $ assumptionsFromDB (db ^. assumpRefTable))
+      (map (\x -> LlC $ llcc mkEmptyLabel x) $ map Assumption $ assumptionsFromDB (db ^. assumpRefTable))
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d 
-    inModSec = SRS.inModel [Paragraph EmptyS] []
+    inModSec = SRS.inModel [mkParagraph EmptyS] []
     --FIXME: inModSec should be replaced with a walk
     -- over the SCSProg and generate a relevant intro.
     -- Could start with just a quick check of whether or not IM is included and
@@ -555,7 +554,7 @@ mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortByS
 
 -- | Helper for making the bibliography section
 mkBib :: BibRef -> Section
-mkBib bib = SRS.reference [Bib bib] []
+mkBib bib = SRS.reference [LlC $ llcc mkEmptyLabel $ Bib bib] []
 
 {--}
 
@@ -575,11 +574,11 @@ siSys SI {_sys = sys} = nw sys
 -- mkAssump :: String -> Sentence -> Contents
 -- mkAssump i desc = Assumption $ ac' i desc
 
-mkRequirement :: String -> Sentence -> String -> Contents
-mkRequirement i desc shrtn = Requirement $ frc i desc (shortname' shrtn)
+mkRequirement :: String -> Sentence -> String -> LabelledContent
+mkRequirement i desc shrtn = llcc (mkLabelRA'' shrtn) $ Requirement $ frc i desc (shortname' shrtn)
 
 mkLklyChnk :: String -> Sentence -> String -> Contents
-mkLklyChnk i desc shrtn = Change $ lc i desc (shortname' shrtn)
+mkLklyChnk i desc shrtn = LlC $ llcc (mkLabelRA'' shrtn) $ Change $ lc i desc (shortname' shrtn)
 
 mkUnLklyChnk :: String -> Sentence -> String -> Contents
-mkUnLklyChnk i desc shrtn = Change $ ulc i desc (shortname' shrtn)
+mkUnLklyChnk i desc shrtn = LlC $ llcc (mkLabelRA'' shrtn) $ Change $ ulc i desc (shortname' shrtn)

@@ -6,15 +6,14 @@ module Language.Drasil.Development.Unit (
   , scale, shift
   , derUC, derUC', derUC''
   , fund, comp_unitdefn, derCUC, derCUC', derCUC''
-  , makeDerU, unitWrapper, getCu
+  , unitWrapper, getCu, MayHaveUnit(getUnit)
   ) where
 
-import Control.Lens (Simple, Lens', Lens, (^.), makeLenses, view)
+import Control.Lens ((^.), makeLenses, view)
 import Control.Arrow (second)
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), HasUnitSymbol(usymb), IsUnit(udefn, getUnits),
-  UnitEq(uniteq))
+  Definition(defn), ConceptDomain(cdom), HasUnitSymbol(usymb), IsUnit(udefn, getUnits))
 import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cc')
 import Language.Drasil.Symbol (Symbol(Atomic))
 import Language.Drasil.Development.UnitLang (USymb(US),
@@ -41,6 +40,8 @@ instance ConceptDomain UnitDefn where
 instance HasUnitSymbol UnitDefn where usymb f (UD a b c e d) = fmap (\x -> UD a x c e d) (f b)
 instance IsUnit        UnitDefn where udefn = ud
                                       getUnits u = view cu u
+class MayHaveUnit u where
+   getUnit :: u -> Maybe UnitDefn
 
 data UnitEquation = UE {_contributingUnit :: [UID], _us :: USymb}
 makeLenses ''UnitEquation

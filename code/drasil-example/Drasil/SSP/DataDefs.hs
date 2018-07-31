@@ -21,7 +21,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
   watrForceDif, wiif)
 
 import Data.Drasil.Quantities.SolidMechanics as SM (poissnsR)
-import Data.Drasil.Utils (eqUnR, weave)
+import Data.Drasil.Utils (eqUnR', weave)
 
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (definition, element, value)
@@ -436,7 +436,7 @@ resShrDerivation = [
   S "of a slice from", acroGD 2 `sC` S "using the", getTandS nrmFSubWat,
   S "of", acroT 4, S "shown in", eqN 1],
   
-  eqUnR $ (inxi nrmFSubWat) $= eqlExpr cos sin (\x y -> x -
+  LlC $ eqUnR' mkEmptyLabel $ (inxi nrmFSubWat) $= eqlExpr cos sin (\x y -> x -
   inxiM1 intShrForce + inxi intShrForce + y) - inxi baseHydroForce,
   
   foldlSP [plural value `ofThe'` S "interslice forces",
@@ -447,7 +447,7 @@ resShrDerivation = [
   S "Consider a force equilibrium without the affect of interslice forces" `sC`
   S "to obtain a solvable value as done for", ch nrmFNoIntsl, S "in", eqN 2],
 
-  eqUnR $
+  LlC $ eqUnR' mkEmptyLabel $
   (inxi nrmFNoIntsl) $= (((inxi slcWght) + (inxi surfHydroForce) *
   (cos (inxi surfAngle)) + (inxi surfLoad) * (cos (inxi impLoadAngle))) *
   (cos (inxi baseAngle)) + (negate (sy earthqkLoadFctr) * (inxi slcWght) -
@@ -459,7 +459,7 @@ resShrDerivation = [
   shearRNoIntsl ^. defn, S "can be solved for in terms of all known",
   plural value, S "as done in", eqN 3],
   
-  eqUnR $
+  LlC $ eqUnR' mkEmptyLabel $
   inxi shearRNoIntsl $= (inxi nrmFNoIntsl) * tan (inxi fricAngle) +
   (inxi cohesion) * (inxi baseWthX) * sec (inxi baseAngle) $=
   (((inxi slcWght) + (inxi surfHydroForce) * (cos (inxi surfAngle)) +
@@ -515,7 +515,7 @@ mobShrDerivation = [
   ch mobShrI, S "from the force equilibrium in", acroGD 2 `sC`
   S "also shown in", eqN 4],
   
-  eqUnR $ inxi mobShrI $= eqlExpr sin cos
+  LlC $ eqUnR' mkEmptyLabel $ inxi mobShrI $= eqlExpr sin cos
     (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y),
   
   foldlSP [S "The", phrase equation, S "is unsolvable, containing the unknown",
@@ -523,7 +523,7 @@ mobShrDerivation = [
   S "Consider a force equilibrium", S wiif `sC` S "to obtain the",
   getTandS shearFNoIntsl `sC` S "as done in", eqN 5],
   
-  eqUnR $
+  LlC $ eqUnR' mkEmptyLabel $
   inxi shearFNoIntsl $= ((inxi slcWght) + (inxi surfHydroForce) *
   (cos (inxi surfAngle)) + (inxi surfLoad) * (cos (inxi impLoadAngle))) *
   (sin (inxi baseAngle)) - (negate (sy earthqkLoadFctr) * (inxi slcWght) -
@@ -640,7 +640,7 @@ stfMtrxDerivation = [
   acroGD 8, S "to define stiffness matrix", ch shrStiffIntsl `sC`
   S "as seen in", eqN 6],
   
-  eqUnR $ inxi shrStiffIntsl $=
+  LlC $ eqUnR' mkEmptyLabel $ inxi shrStiffIntsl $=
   dgnl2x2 (inxi shrStiffIntsl) (inxi nrmStiffBase),
   
   foldlSP [S "For interslice surfaces the stiffness constants" `sAnd`
@@ -663,7 +663,7 @@ stfMtrxDerivation = [
   S "The base stiffness counter clockwise rotation is applied in", eqN 7,
   S "to the new matrix", ch nrmFNoIntsl],
   
-  eqUnR $ inxi shrStiffIntsl $=
+  LlC $ eqUnR' mkEmptyLabel $ inxi shrStiffIntsl $=
   m2x2 (cos(inxi baseAngle)) (negate $ sin(inxi baseAngle))
   (sin(inxi baseAngle)) (cos(inxi baseAngle)) *
   inxi shrStiffIntsl $= kiStar,
@@ -681,7 +681,7 @@ stfMtrxDerivation = [
   `sC` S "a basal force displacement relationship in the same coordinate",
   S "system as the interslice relationship can be derived as done in", eqN 8],
   
-  eqUnR $ vec2D (inxi genPressure) (inxi genPressure) $=
+  LlC $ eqUnR' mkEmptyLabel $ vec2D (inxi genPressure) (inxi genPressure) $=
   inxi shrStiffBase * sy rotatedDispl $= --FIXME: add more symbols?
   kiStar * rotMtx * displMtx $= kiPrime * displMtx,
   
@@ -695,16 +695,17 @@ stfMtrxDerivation = [
   ch effStiffA `sAnd` ch effStiffB `sC` S "defined in", eqN 10 `sAnd`
   eqN 11, S "respectively"],
   
-  eqUnR $ inxi shrStiffBase $= kiPrime
+  LlC $ eqUnR' mkEmptyLabel $ inxi shrStiffBase $= kiPrime
   $= m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB) (inxi effStiffA),
   
-  eqUnR $
+  LlC $ eqUnR' mkEmptyLabel $
   (inxi effStiffA) $= (inxi shrStiffBase) * (cos (inxi baseAngle)) $^ 2 +
   (inxi nrmStiffBase) * (sin (inxi baseAngle)) $^ 2,
   
-  eqUnR $
+  LlC $ eqUnR' mkEmptyLabel $
   (inxi effStiffB) $= ((inxi shrStiffBase)-(inxi nrmStiffBase)) *
   (sin (inxi baseAngle)) * (cos (inxi baseAngle)),
+  --FIXME: should eqUnR' produce Contents instead of LabelledContent?
   
   foldlSP [S "A force-displacement relationship for an element", ch index,
   S "can be written in terms of displacements occurring in the unrotated", 

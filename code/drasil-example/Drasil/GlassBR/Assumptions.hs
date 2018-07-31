@@ -1,7 +1,7 @@
 module Drasil.GlassBR.Assumptions where
 
 import Language.Drasil hiding (organization)
-import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons, missingP)
+import qualified Drasil.DocLang.SRS as SRS (valsOfAuxConsLabel)
 
 import Drasil.DocLang (cite, refA)
 
@@ -68,7 +68,7 @@ a3Desc = foldlSent [S "This", phrase system,
 
 a4Desc :: UnitaryChunk -> Sentence
 a4Desc mainIdea = foldlSent [S "The", plural value, S "provided in",
-  makeRef (SRS.valsOfAuxCons SRS.missingP []), S "are assumed for the",
+  makeRef SRS.valsOfAuxConsLabel, S "are assumed for the",
   phrase mainIdea, sParen (ch mainIdea) `sC` S "and the",
   plural materialProprty `sOf` foldlList Comma List (map ch
   (take 3 assumptionConstants))] +:+ S "[IM1, DD3, DD5, DD7, DD9]"

@@ -12,6 +12,7 @@ module Language.Drasil.Classes (
   , HasUnitSymbol(usymb)
   , IsUnit(udefn, getUnits)
   , HasLabel(getLabel)
+  , MayHaveLabel(getMaybeLabel)
   , IsLabel
   , UnitEq(uniteq)
   , HasReference(getReferences)
@@ -27,7 +28,7 @@ module Language.Drasil.Classes (
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.References (References)
-import Language.Drasil.Development.UnitLang (UDefn, USymb)
+import Language.Drasil.Development.UnitLang(UDefn, USymb)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label, LblType)
 import Language.Drasil.NounPhrase.Core (NP)
@@ -106,6 +107,9 @@ class HasReasVal c where
 -- | For those things which "have a label"
 class HasLabel c where
   getLabel :: Lens' c Label
+
+class MayHaveLabel c where
+  getMaybeLabel :: c -> Maybe Label
 
 -- HasRefAddress is associated with the HasLabel class due to
 -- the current definition of a Label

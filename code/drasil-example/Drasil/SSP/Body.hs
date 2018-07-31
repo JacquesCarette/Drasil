@@ -50,7 +50,8 @@ import Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
   sspOutputs, sspSymbols)
 
-import qualified Drasil.DocLang.SRS as SRS (funcReq, assumpt, inModel, missingP, physSyst)
+import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
+  assumptLabel, physSyst)
 
 --type declarations for sections--
 req, aux_cons :: Section
@@ -104,9 +105,9 @@ mkSRS = RefSec (RefProg intro
     , IChar (phrase solidMechanics)
       (phrase undergraduate +:+ S "level 4" +:+ phrase physics)
       EmptyS
-    , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
+    , IOrgSec orgSecStart inModel SRS.inModelLabel orgSecEnd]) :
     --FIXME: issue #235
-    (GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, sysCtxFig1, sysCtxDesc, sysCtxList], 
+    (GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList], 
       UsrChars [userCharIntro], SystCons [] []]):
     SSDSec 
       (SSDProg [SSDSubVerb problem_desc
@@ -243,8 +244,8 @@ sysCtxIntro = foldlSP
    S "Arrows are used to show the data flow between the" +:+ phrase system,
    S "and its" +:+ phrase environment]
    
-sysCtxFig1 :: Contents
-sysCtxFig1 = fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png") "sysCtxDiag"
+sysCtxFig1 :: LabelledContent
+sysCtxFig1 = llcc (mkLabelRA'' "sysCtxDiag") $ fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png") "sysCtxDiag"
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol
@@ -258,7 +259,7 @@ sysCtxUsrResp = [S "Provide the input data related to the soil layer(s) and wate
   S "table (if applicable), ensuring no errors in the data entry",
   S "Ensure that consistent units are used for input variables",
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+ sParen ( 
-  makeRef (SRS.assumpt SRS.missingP [])) +:+ S "are appropriate for any particular" +:+
+  midRef SRS.assumptLabel) +:+ S "are appropriate for any particular" +:+
   phrase problem +:+ S "input to the" +:+ phrase software]
   
 sysCtxSysResp :: [Sentence]
@@ -274,7 +275,7 @@ sysCtxResp = [titleize user +:+ S "Responsibilities",
   short ssp +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
-sysCtxList = Enumeration $ bulletNested sysCtxResp $
+sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
   map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
 
 -- SECTION 3.2 --
@@ -306,7 +307,7 @@ problem_desc = probDescF EmptyS ssa ending [termi_defi, phys_sys_desc, goal_stmt
 -- SECTION 4.1.1 --
 termi_defi = termDefnF Nothing [termi_defi_list]
 
-termi_defi_list = Enumeration $ Simple $ noRefsLT $
+termi_defi_list = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
   map (\x -> (titleize $ x, Flat $ x ^. defn))
   [fs_concept, crtSlpSrf, stress, strain, normForce,
   shearForce, tension, compression, plnStrn]
@@ -317,7 +318,7 @@ termi_defi_list = Enumeration $ Simple $ noRefsLT $
 -- SECTION 4.1.2 --
 phys_sys_desc = SRS.physSyst
   [phys_sys_desc_p1, phys_sys_desc_bullets, phys_sys_desc_p2,
-   fig_indexconv, fig_forceacting] []
+   LlC fig_indexconv, LlC fig_forceacting] []
 
 phys_sys_desc_p1 = physSystIntro slope how intrslce slice (S "slice base")
   fig_indexconv
@@ -347,13 +348,15 @@ phys_sys_desc_p2 = foldlSP [S "A", phrase fbd, S "of the", plural force,
   S "acting on the", phrase slice, S "is displayed in",
   makeRef fig_forceacting]
 
-fig_indexconv :: Contents
-fig_indexconv = fig (foldlSent_ [S "Index convention for numbering",
+fig_indexconv :: LabelledContent
+fig_indexconv = llcc (mkLabelRA'' "IndexConvention") $ 
+  fig (foldlSent_ [S "Index convention for numbering",
   phrase slice `sAnd` phrase intrslce,
   phrase force, plural variable]) (resourcePath ++ "IndexConvention.png") "IndexConvention"
 
-fig_forceacting :: Contents
-fig_forceacting = fig (at_start' force +:+ S "acting on a" +:+
+fig_forceacting :: LabelledContent
+fig_forceacting = llcc (mkLabelRA'' "ForceDiagram") $
+  fig (at_start' force +:+ S "acting on a" +:+
   phrase slice) (resourcePath ++ "ForceDiagram.png") "ForceDiagram"
 
 -- SECTION 4.1.3 --
@@ -406,8 +409,8 @@ slipVert  = verticesConst $ phrase slip
 slopeVert = verticesConst $ phrase slope
 -}
 {-input and output tables-}
---s4_2_6Table2, s4_2_6Table3
-data_constraint_Table2, data_constraint_Table3 :: Contents
+
+data_constraint_Table2, data_constraint_Table3 :: LabelledContent
 data_constraint_Table2 = inDataConstTbl sspInputs --FIXME: issue #295
 data_constraint_Table3 = outDataConstTbl sspOutputs
 
@@ -416,7 +419,7 @@ req = reqF [func_req, non_func_req]
 
 -- SECTION 5.1 --
 func_req = SRS.funcReq
-  [func_req_list, sspInputDataTable] []
+  [func_req_list, LlC sspInputDataTable] []
 
 func_req_list = enumSimple 1 (short requirement) sspRequirements
 

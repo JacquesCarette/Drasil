@@ -4,8 +4,8 @@ import Language.Drasil
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, gdRefDB, imRefDB, 
     modelsFromDB, refDD, refGD, refIM, refTM, tmRefDB)
 
-modelTraceTable :: ModelDB -> Contents
-modelTraceTable mdb = Table
+modelTraceTable :: ModelDB -> LabelledContent
+modelTraceTable mdb = llcc (mkLabelRA'' "RefAdd") $ Table
   ( EmptyS : crossListItems ) [[{-data (rows)-}]] (S "Title") True {-<-- showLabel?-} "RefAdd"
   where crossListItems = getRefs refTM tmDB ++ getRefs refGD gdDB ++
                          getRefs refDD ddDB ++ getRefs refIM imDB

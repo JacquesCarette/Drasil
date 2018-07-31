@@ -150,7 +150,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
       ]
     ) :
   ReqrmntSec (ReqsProg [
-    FReqsSub (map LlC funcReqsList), 
+    FReqsSub funcReqsList,
     NonFReqsSub [performance] (gBRpriorityNFReqs)
     (S "This problem is small in size and relatively simple")
     (S "Any reasonable" +:+ phrase implementation +:+.
@@ -556,18 +556,18 @@ funcReqsR6 = map (UlC . ulcc) [Enumeration $ Simple $ [(acroR 6, Nested (titleiz
     sParen (makeRef d)) (zip testing gbrIMods)
     ++
     map (\d -> Flat $ at_start d +:+ sParen (ch d) +:+
-    sParen (makeRef $ datadefn d)) funcReqsR6_pulledList
+    sParen (makeRef d)) funcReqsR6_pulledList
     , Nothing)]]
 
 {--Nonfunctional Requirements--}
 
 {--LIKELY CHANGES--}
 
-likelyChgsList :: [Contents]
+likelyChgsList :: [LabelledContent]
 likelyChgsList = likelyChanges_SRS 
 
 {--UNLIKELY CHANGES--}
-unlikelyChgsList :: [Contents]
+unlikelyChgsList :: [LabelledContent]
 unlikelyChgsList = unlikelyChanges_SRS
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
@@ -604,7 +604,8 @@ traceMatsAndGraphsDataCons  = ["Data Constraints"]
 traceMatsAndGraphsDataConsRef = [makeRef SRS.datConLabel]
 
 traceMatsAndGraphsFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-traceMatsAndGraphsFuncReqRef = map makeRef functional_requirements_list --fixme: should be reqchunks?
+traceMatsAndGraphsFuncReqRef = map makeRef [funcReqsR1, funcReqsR2, funcReqsR3, funcReqsR4, funcReqsR5] --fixme: should be reqchunks?
+                                                                                                        --FIXME: revisit this list
 
 traceMatsAndGraphsA = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
 traceMatsAndGraphsARef = map makeRef newAssumptions

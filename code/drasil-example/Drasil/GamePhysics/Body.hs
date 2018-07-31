@@ -715,7 +715,7 @@ traceMatDataDef = ["DD1","DD2","DD3","DD4","DD5","DD6","DD7","DD8"]
 traceMatDataDefRef = map makeRef cpDDefs
 
 traceMatAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
-traceMatAssumpRef = makeListRef assumptions_list_a problem_description
+traceMatAssumpRef = map makeRef newAssumptions
 
 traceMatFuncReq =  ["R1","R2","R3", "R4", "R5", "R6", "R7", "R8"]
 traceMatFuncReqRef = makeListRef functional_requirements_list' functional_requirements

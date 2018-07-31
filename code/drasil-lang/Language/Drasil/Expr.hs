@@ -96,7 +96,7 @@ instance Num Expr where
   a + b = AssocA Add [a, b]
 
   (AssocA Mul l)*(AssocA Mul m) = AssocA Mul (l ++ m)
-  (AssocA Add l)*b = AssocA Mul (l ++ [b])
+  (AssocA Mul l)*b = AssocA Mul (l ++ [b])
   a*(AssocA Mul l) = AssocA Mul (a : l)
   a * b = AssocA Mul [a, b]
   a - b = BinaryOp Subt a b

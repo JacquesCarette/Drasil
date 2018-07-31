@@ -53,7 +53,6 @@ expr (AssocA Mul (hd1:hd2:tl))    sm = case (hd1, hd2) of
   (a, Dbl d) ->  P.Row $ [expr' sm (precA Mul) a , (P.MO P.Dot), expr (AssocA Mul (hd2:tl)) sm]
   (a, b)     ->  P.Row $ [expr' sm (precA Mul) a , (P.MO P.Mul), expr (AssocA Mul (hd2:tl)) sm]
 expr (AssocA Mul (hd:[]))    sm = P.Row $ [expr' sm (precA Mul) hd]
-expr (AssocA Mul [])       sm = P.Spc P.Thin
 expr (Deriv Part a b) sm =
   P.Div (P.Row [P.Spec Partial, P.Spc P.Thin, expr a sm])
         (P.Row [P.Spec Partial, P.Spc P.Thin,

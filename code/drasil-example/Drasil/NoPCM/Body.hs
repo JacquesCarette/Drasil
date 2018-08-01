@@ -12,7 +12,7 @@ import Drasil.NoPCM.GenDefs (roc_temp_simp_deriv)
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
 import Drasil.SWHS.Assumptions (newA1, newA2, newA3, newA7, newA8, newA9,
-  newA15, newA20, newA14)
+  newA15, newA20, newA14, newA11, newA12)
 import Drasil.SWHS.Body (charReader1, charReader2, orgDocIntro,
   genSystDesc, physSyst1, physSyst2, traceTrailing, dataContMid, traceIntro2,
   traceFig1, traceFig2)
@@ -436,6 +436,25 @@ genDefnEq5 = (sy mass) * (sy QT.heat_cap_spec) * deriv (sy QT.temp)
   * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
 --TODO: Implement physical properties of a substance
+
+iModDesc1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
+  UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
+  UncertQ -> ConceptChunk -> UnitalChunk -> UncertQ -> ConceptChunk ->
+  ConceptChunk -> Contents -> UnitalChunk -> Contents -> [Sentence]
+iModDesc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin _ vhg _ =
+  [S "To find the", phrase roc `sOf` ch temw `sC`
+  S "we look at the", phrase en, S "balance on" +:+.
+  phrase wa, S "The", phrase vo, S "being considered" `isThe`
+  phrase wv, ch wv `sC` S "which has", phrase ma +:+.
+  (ch wm `sAnd` (phrase hcw `sC` ch hcw)),
+  at_start ht, S "occurs in the water from the coil as", (ch hfc
+  `sC` S "over area") +:+. ch csa, S "No",
+  phrase ht, S "occurs to", (S "outside" `ofThe`
+  phrase ta) `sC` S "since it has been assumed to be",
+  phrase purin +:+. sParen (makeRef newA11), S "Assuming no",
+  phrase vhg +:+. (sParen (makeRef newA12) `sC`
+  E (sy vhg $= 0)), S "Therefore, the", phrase M.equation, S "for",
+  acroGD 2, S "can be written as"]
 
 iModDesc2 :: QDefinition -> [Sentence]
 iModDesc2 d1hf = [S "Using", (makeRef d1hf) `sC` S "this can be written as"]

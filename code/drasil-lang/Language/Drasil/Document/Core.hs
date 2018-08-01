@@ -7,13 +7,9 @@ import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName,
-  shortname')
-import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd),
-  MayHaveLabel(getMaybeLabel), HasLabel(getLabel))
 
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.Label (Label, mkLabelRA)
+import Language.Drasil.Label (Label)
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Spec (Sentence(..))
 

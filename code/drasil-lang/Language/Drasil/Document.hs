@@ -165,9 +165,3 @@ fig l f = Figure l f 100
 -- | Figure smart constructor for customized max widths.
 figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
 figWithWidth = Figure
-
-reldefn :: RelationConcept -> LabelledContent
-reldefn = (\x -> reldefn' (getMaybeLabel x) x)
-  where
-  	reldefn' (Just x) y = llcc x ((Definition . Theory) y)
-  	reldefn' Nothing _  = error "cannot make reference to a Nothing label"

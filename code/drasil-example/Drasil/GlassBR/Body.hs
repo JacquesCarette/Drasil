@@ -533,8 +533,8 @@ req4Desc = foldlSent [titleize output_, S "the", plural inQty,
   S "from", acroR 2]
 
 req5Desc cmd = foldlSent_ [S "If", (ch is_safePb), S "∧", (ch is_safeLR),
-  sParen (S "from" +:+ (makeRef (reldefn pbSafetyReq))
-  `sAnd` (makeRef (reldefn lrSafetyReq))), S "are true" `sC`
+  sParen (S "from" +:+ (makeRef pbIsSafe)
+  `sAnd` (makeRef lrIsSafe)), S "are true" `sC`
   phrase cmd, S "the", phrase message, Quote (safeMessage ^. defn),
   S "If the", phrase condition, S "is false, then", phrase cmd,
   S "the", phrase message, Quote (notSafe ^. defn)]

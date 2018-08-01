@@ -70,8 +70,8 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
   RefSec(RefProg), RefTab(TAandA, TUnits), 
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty, 
-  inDataConstTbl, intro, mkDoc, mkRequirement, mkUnLklyChnk, 
-  outDataConstTbl, physSystDesc, reqF, termDefnF, traceMGF, 
+  funcReqDom, inDataConstTbl, intro, mkDoc, mkEnumCC, mkRequirement,
+  mkUnLklyChnk, outDataConstTbl, physSystDesc, reqF, termDefnF, traceMGF,
   tsymb, valsOfAuxConstantsF)
  
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
@@ -179,7 +179,7 @@ nopcm_si = SI {
 }
 
 nopcmRefDB :: ReferenceDB
-nopcmRefDB = rdb [] [] assumps_Nopcm_list_new [] [] referencesRefList []-- FIXME: Convert the rest to new chunk types
+nopcmRefDB = rdb [] [] assumps_Nopcm_list_new [] [] referencesRefList newReqs-- FIXME: Convert the rest to new chunk types
 
 nopcm_code :: CodeSpec
 nopcm_code = codeSpec nopcm_si [inputMod]
@@ -538,24 +538,39 @@ reqS = reqF [funcReqs, nonFuncReqs]
 
 funcReqs = SRS.funcReq funcReqsList [] --TODO: Placeholder values until content can be added
 
+-- FIXME: Remove requirements generated from mkRequirements once SWHS does not depend on them
+
 funcReqsList :: [Contents]
-funcReqsList = weave [map LlC funcReqsListWordsNum, funcReqsListItems]
+funcReqsList = funcReqsListWordsNum
 
-funcReqsListItems :: [Contents]
-funcReqsListItems = map LlC [
-  llcc (mkLabelRA'' "fr1list") $ 
-  Table [titleize symbol_, titleize M.unit_, titleize description]
-  (mkTable [ch,
-  unitToSentence,
-  phrase] inputVar)
-  (titleize input_ +:+ titleize variable +:+ titleize requirement) False "fr1list",
+-- s5_1_list_words = map (\x -> Enumeration $ Simple [x])
+  -- $ mkEnumAbbrevList 1 (short requirement) $ map foldlSent_ [
 
-  eqUnR' mkEmptyLabel $ ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
-  (((sy diam) / 2) * (sy tank_length) * (sy w_density)))
-  ]
+  -- [titleize input_, S "the following", plural quantity `sC`
+  -- S "which define the", phrase tank, S "parameters, material",
+  -- plural property, S "and initial" +: plural condition],
 
-funcReqsListWordsNum :: [LabelledContent]
-funcReqsListWordsNum = [req1, req2, req3, req4, req5, req6] 
+  -- [S "Use the", plural input_, S "in", acroR 1, S "to find the",
+  -- phrase mass, S "needed for", acroIM 1, S "to", acroIM 4 `sC`
+  -- S "as follows, where", ch w_vol `isThe` phrase w_vol,
+  -- S "and" +: (ch tank_vol `isThe` phrase tank_vol)],
+
+  -- [S "Verify that the", plural input_, S "satisfy the required",
+  -- phrase physicalConstraint, S "shown in" +:+. makeRef data_constraint_table1],
+
+  -- [titleize' output_, S "and", plural input_, plural quantity, S "and derived",
+  -- plural quantity, S "in the following list: the", plural quantity, S "from",
+  -- (acroR 1) `sC` S "the", phrase mass, S "from", acroR 2, S "and", ch tau_W +:+.
+  -- sParen(S "from" +:+ acroIM 1)],
+
+  -- [S "Calculate and output the", phrase temp, S "of the", phrase water,
+  -- sParen (ch temp_W :+: sParen (ch time)), S "over the", phrase simulation +:+.
+  -- phrase time],
+
+  -- [S "Calculate and", phrase output_, S "the", phrase w_E,
+  -- sParen (ch w_E :+: sParen (ch time)), S "over the",
+  -- phrase simulation, phrase time +:+. sParen (S "from" +:+ acroIM 3)]
+  -- ]
 
 req1, req2, req3, req4, req5, req6 :: LabelledContent
 
@@ -587,6 +602,51 @@ req6 = mkRequirement "req6" (
   S "Calculate and" +:+ phrase output_ +:+ S "the" +:+ phrase w_E
   +:+ sParen (ch w_E :+: sParen (ch time)) +:+ S "over the" +:+
   phrase sim_time +:+. sParen (S "from" +:+ acroIM 3) ) "Calculate-Change-Heat_Energy-Water-Time"
+
+nr2Expr :: Expr
+nr2Expr = ((sy w_mass) $= (sy w_vol) * (sy w_density) $= (((sy diam) / 2) *
+  (sy tank_length) * (sy w_density)))
+
+nr1, nr2, nr3, nr4, nr5, nr6 :: ConceptInstance
+nr1 = cic "nr1" (titleize input_ +:+ S "the" +:+ plural quantity +:+
+    S "described in" +:+ makeRef nrTable `sC` S "which define the" +:+
+    plural tank_para `sC` S "material" +:+ plural property +:+
+    S "and initial" +:+. plural condition) "Input-Inital-Values" funcReqDom
+nr2 = cic "nr2" (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef nr1 +:+
+    S "to find the" +:+ phrase mass +:+ S "needed for" +:+ acroIM 1 +:+
+    S "to" +:+ acroIM 2 `sC` S "as follows, where" +:+ ch w_vol `isThe`
+    phrase w_vol +:+ S "and" +:+ (ch tank_vol `isThe` phrase tank_vol) :+:
+    S ":" +:+ E nr2Expr) "Find-Mass" funcReqDom  -- FIXME: Equation shouldn't be inline.
+nr3 = cic "nr3" (S "Verify that the" +:+ plural input_ +:+
+    S "satisfy the required" +:+ phrase physicalConstraint +:+
+    S "shown in" +:+. makeRef dataConstTable1)
+    "Check-Inputs-Satisfy-Physical-Constraints" funcReqDom
+nr4 = cic "nr4" (titleize' output_ `sAnd` plural input_ +:+ plural quantity +:+
+    S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
+    plural quantity +:+ S "from" +:+ (makeRef nr1) `sC` S "the" +:+
+    phrase mass +:+ S "from" +:+ makeRef nr2 `sAnd` ch tau_W +:+.
+    sParen (S "from" +:+ acroIM 1)) "Output-Input-Derivied-Quantities" funcReqDom
+nr5 = cic "nr5" (S "Calculate and output the" +:+ phrase temp_W +:+
+    sParen (ch temp_W :+: sParen (ch time)) +:+ S "over the" +:+
+    phrase sim_time) "Calculate-Temperature-Water-Over-Time" funcReqDom
+nr6 = cic "nr6" (S "Calculate and" +:+ phrase output_ +:+ S "the" +:+
+    phrase w_E +:+ sParen (ch w_E :+: sParen (ch time)) +:+ S "over the" +:+
+    phrase sim_time +:+. sParen (S "from" +:+ acroIM 3))
+    "Calculate-Change-Heat_Energy-Water-Time" funcReqDom
+
+nrTable :: LabelledContent
+nrTable = llcc (mkLabelRA'' "Input-Variable-Requirements") $ 
+  Table [titleize symbol_, titleize M.unit_, titleize description]
+  (mkTable [ch, unitToSentence, phrase] inputVar)
+  (titleize input_ +:+ titleize variable +:+ titleize' requirement) True
+  "Input-Variable-Requirements"
+
+newReqs :: [ConceptInstance]
+newReqs = [nr1, nr2, nr3, nr4, nr5, nr6]
+
+funcReqsListWordsNum :: [Contents]
+funcReqsListWordsNum =
+  (mkEnumCC (\x -> (getShortName x, Flat $ x ^. defn, Just $ refAdd x)) newReqs) ++ [LlC nrTable]
 
 -------------------------------------------
 --Section 5.2 : NON-FUNCTIONAL REQUIREMENTS
@@ -688,7 +748,7 @@ traceInstaModelRef = map (refFromType Theory) [eBalanceOnWtr,
   heatEInWtr]
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-traceFuncReqRef = map makeRef funcReqsListWordsNum--makeListRef s7_funcReq s5_1
+traceFuncReqRef = map makeRef newReqs
 
 traceData = ["Data Constraints"]
 traceDataRef = [makeRef dataConstTable1] --FIXME: Reference section?

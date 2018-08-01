@@ -249,12 +249,12 @@ instance Referable ConceptInstance where
   refAdd i = i ^. uid
   rType _ = Def
 
---FIXME: Label should not be an instance of Referable.
+--FIXME: assumes reference to a direct Label is for a section
 --Should refer to an object WITH a variable.
 --Can be removed once sections have labels.
 instance Referable Label where
   refAdd lb = "Sec:" ++ (getAdd (lb ^. getRefAdd))
-  rType _   = Lbl --FIXME?
+  rType _   = Lbl
 
 instance Referable LabelledContent where
   refAdd (LblC lb c) = temp' (getAdd (lb ^. getRefAdd)) c 

@@ -62,7 +62,7 @@ import Drasil.GlassBR.DataDefs (aspRat, dataDefns, gbQDefns, hFromt, strDisFac, 
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
-import Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe, tModels, lrSafetyReq, pbSafetyReq)
+import Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe, lrSafetyReq, pbSafetyReq)
 import Drasil.GlassBR.IMods (probOfBreak, 
   calofCapacity, calofDemand, gbrIMods)
 
@@ -176,7 +176,8 @@ glassSystInfo = SI {
   _quants      = this_symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _definitions = (map (relToQD gbSymbMap) gbrIMods) ++ 
-                 --(map (relToQD gbSymbMap) tModels{-gbrTMods-}) ++ --FIXME: #891
+                 (concatMap (^. defined_quant) gbrTMods) ++
+                 (concatMap (^. defined_fun) gbrTMods) ++
                   [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears
                                              -- in the description of the Calculation of Demand instance model;
                                              -- should this be included as a Data Definition?
@@ -533,8 +534,8 @@ req4Desc = foldlSent [titleize output_, S "the", plural inQty,
   S "from", acroR 2]
 
 req5Desc cmd = foldlSent_ [S "If", (ch is_safePb), S "∧", (ch is_safeLR),
-  sParen (S "from" +:+ (makeRef (reldefn pbSafetyReq))
-  `sAnd` (makeRef (reldefn lrSafetyReq))), S "are true" `sC`
+  sParen (S "from" +:+ (makeRef pbIsSafe)
+  `sAnd` (makeRef lrIsSafe)), S "are true" `sC`
   phrase cmd, S "the", phrase message, Quote (safeMessage ^. defn),
   S "If the", phrase condition, S "is false, then", phrase cmd,
   S "the", phrase message, Quote (notSafe ^. defn)]

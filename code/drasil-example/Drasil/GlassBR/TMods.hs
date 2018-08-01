@@ -1,4 +1,4 @@
-module Drasil.GlassBR.TMods (gbrTMods, tModels, pbSafetyReq, lrSafetyReq, pbIsSafe, lrIsSafe) where
+module Drasil.GlassBR.TMods (gbrTMods, pbSafetyReq, lrSafetyReq, pbIsSafe, lrIsSafe) where
 
 import Drasil.GlassBR.Unitals (demand, demandq, is_safePb, is_safeLR, lRe,
   pb_tol, prob_br)
@@ -11,10 +11,6 @@ import Control.Lens ((^.))
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
 
 {--}
-
---FIXME: should be removed with closure of #891
-tModels :: [RelationConcept]
-tModels = [pbSafetyReq, lrSafetyReq]
 
 gbrTMods :: [TheoryModel]
 gbrTMods = [pbIsSafe, lrIsSafe]
@@ -38,7 +34,7 @@ lrSafetyReq = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
 lrSafeDescr :: Sentence
 lrSafeDescr = tDescr (is_safeLR) s ending
   where 
-    s = ((ch is_safePb) +:+ sParen (S "from" +:+ (ref pbSafetyReq)) `sAnd` (ch is_safeLR))
+    s = ((ch is_safePb) +:+ sParen (S "from" +:+ (makeRef pbIsSafe)) `sAnd` (ch is_safeLR))
     ending = (short lResistance) `isThe` (phrase lResistance) +:+ 
       sParen (S "also called capacity") `sC` S "as defined in" +:+. 
       (makeRef calofCapacity) +:+ (ch demand) +:+ sParen (S "also referred as the" +:+ 
@@ -60,13 +56,10 @@ pbSafeDescr :: Sentence
 pbSafeDescr = tDescr (is_safePb) s ending
   where 
     s = (ch is_safePb) `sAnd` (ch is_safeLR) +:+ sParen (S "from" +:+
-      (ref lrSafetyReq))
+      (makeRef lrIsSafe))
     ending = ((ch prob_br) `isThe` (phrase prob_br)) `sC` S "as calculated in" +:+.
       (makeRef probOfBreak) +:+ (ch pb_tol) `isThe` (phrase pb_tol) +:+ S "entered by the user"
 
 tDescr :: VarChunk -> Sentence -> Sentence -> Sentence
 tDescr main s ending = foldlSent [S "If", ch main `sC` S "the glass is" +:+.
   S "considered safe", s +:+. S "are either both True or both False", ending]
-
-ref :: RelationConcept -> Sentence
-ref = makeRef . reldefn

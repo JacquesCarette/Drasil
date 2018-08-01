@@ -282,7 +282,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Constant-Water-Temp-Across-Tank}:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank {[}GD2, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Density-Water-Constant-over-Volume}:]The density of water has no spatial variation; that is, it is constant over their entire volume {[}GD2, LC\ref{LC:likeChg2}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Density-Water-Constant-over-Volume}:]The density of water has no spatial variation; that is, it is constant over their entire volume {[}GD2, LC\ref{Temperature-Coil-Variable-Over-Day}{]}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Specific-Heat-Energy-Constant-over-Volume}:]The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume {[}GD2{]}.
@@ -297,7 +297,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Length}:]The temperature of the heating coil does not vary along its length {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Charging-Tank-No-Temp-Discharge}:]The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil {[}IM1, LC\ref{LC:likeChg3}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Charging-Tank-No-Temp-Discharge}:]The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil {[}IM1, LC\ref{LC:Discharging-Tank}{]}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Water-Always-Liquid}:]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature {[}IM1, IM3{]}.
@@ -642,7 +642,7 @@ ${t_{final}}$ & s & final time
 \label{Table:fr1list}
 \end{longtabu}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Use-Above-Find-Mass-IM1-IM2}:]Use the inputs in R\ref{FR:req1} to find the mass needed for IM1 to IM2, as follows, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank:
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Find-Mass}:]Use the inputs in R\ref{FR:Input-Inital-Values} to find the mass needed for IM1 to IM2, as follows, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank:
 \end{description}
 \begin{dmath}
 {m_{W}}={V_{W}} {ρ_{W}}=\frac{D}{2} L {ρ_{W}}
@@ -651,7 +651,7 @@ ${t_{final}}$ & s & final time
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:Check-Inputs-Satisfy-Physical-Constraints}:]Verify that the inputs satisfy the required physical constraint shown in Table~\ref{Table:InDataConstraints}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req4}:]Outputs and inputs quantities and derived quantities in the following list: the quantities from R\ref{FR:req1}, the mass from R\ref{FR:req2} and ${τ_{W}}$ (from IM1).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Output-Input-Derivied-Quantities}:]Outputs and inputs quantities and derived quantities in the following list: the quantities from R\ref{FR:Input-Inital-Values}, the mass from R\ref{FR:Find-Mass} and ${τ_{W}}$ (from IM1).
 \end{description}
 \begin{description}
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:Calculate-Temperature-Water-Over-Time}:]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time
@@ -689,20 +689,20 @@ This problem is small in size and relatively simple, so performance is not a pri
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. Table~\ref{Table:TraceyRI} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:TraceyRIs} shows the dependencies of instance models, requirements, and data constraints on each other. Table~\ref{Table:TraceyAI} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
 \begin{longtable}{l l l l l l l}
 \toprule
- & T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) & GD1 (\hyperref[T:nwtnCooling]{Definition~T:nwtnCooling}) & GD2 (\hyperref[T:rocTempSimp]{Definition~T:rocTempSimp}) & DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) & IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) & IM2 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr})
+& T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) & GD1 (\hyperref[GD:nwtnCooling]{Definition~GD:nwtnCooling}) & GD2 (\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}) & DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) & IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) & IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr})
 \\
 \midrule
 T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) &  &  &  &  &  & 
 \\
-GD1 (\hyperref[T:nwtnCooling]{Definition~T:nwtnCooling}) &  &  &  &  &  & 
+GD1 (\hyperref[GD:nwtnCooling]{Definition~GD:nwtnCooling}) &  &  &  &  &  & 
 \\
-GD2 (\hyperref[T:rocTempSimp]{Definition~T:rocTempSimp}) & X &  &  &  &  & 
+GD2 (\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}) & X &  &  &  &  &  
 \\
 DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) &  & X &  &  &  & 
 \\
-IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) &  &  & X & X &  & 
+IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) &  &  & X & X &  &  
 \\
-IM2 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) &  &  &  &  &  & 
+IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}
@@ -710,24 +710,24 @@ IM2 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) &  &  &  &  &  &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l}
 \toprule
- & IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) & IM2 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) & Data Constraints (Table~\ref{Table:InDataConstraints}) & R1 (R\ref{FR:req1}) & R2 (R\ref{FR:req2}) & R3 (R\ref{FR:req3}) & R4 (R\ref{FR:req4}) & R5 (R\ref{FR:req5}) & R6 (R\ref{FR:req6})
+& IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) & IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) & Data Constraints (Table~\ref{Table:InDataConstraints}) & R1 (R\ref{FR:Input-Inital-Values}) & R2 (R\ref{FR:Find-Mass}) & R3 (R\ref{FR:Check-Inputs-Satisfy-Physical-Constraints}) & R4 (R\ref{FR:Output-Input-Derivied-Quantities}) & R5 (R\ref{FR:Calculate-Temperature-Water-Over-Time}) & R6 (R\ref{FR:Calculate-Change-Heat_Energy-Water-Time})
 \\
 \midrule
-IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) &  &  &  &  &  &  &  &  & 
+IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) &  &  &  &  &  &  &  &  & 
 \\
-IM2 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) &  &  &  &  &  &  &  &  & 
+IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) &  &  &  &  &  &  &  &  & 
 \\
-R1 (R\ref{FR:req1}) &  &  &  &  &  &  &  &  & 
+R1 (R\ref{FR:Input-Inital-Values}) &  &  &  &  &  &  &  &  & 
 \\
-R2 (R\ref{FR:req2}) &  &  &  & X &  &  &  &  & 
+R2 (R\ref{FR:Find-Mass}) &  &  &  & X &  &  &  &  & 
 \\
-R3 (R\ref{FR:req3}) &  &  & X &  &  &  &  &  & 
+R3 (R\ref{FR:Check-Inputs-Satisfy-Physical-Constraints}) &  &  & X &  &  &  &  &  & 
 \\
-R4 (R\ref{FR:req4}) &  &  &  & X & X &  &  &  & 
+R4 (R\ref{FR:Output-Input-Derivied-Quantities}) &  &  &  & X & X &  &  &  & 
 \\
-R5 (R\ref{FR:req5}) & X &  &  &  &  &  &  &  & 
+R5 (R\ref{FR:Calculate-Temperature-Water-Over-Time}) & X &  &  &  &  &  &  &  & 
 \\
-R6 (R\ref{FR:req6}) &  & X &  &  &  &  &  &  & 
+R6 (R\ref{FR:Calculate-Change-Heat_Energy-Water-Time}) &  & X &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}
@@ -735,28 +735,28 @@ R6 (R\ref{FR:req6}) &  & X &  &  &  &  &  &  &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l}
 \toprule
- & A1 (A\ref{A:assump1}) & A2 (A\ref{A:assump2}) & A3 (A\ref{A:assump3}) & A4 (A\ref{A:assump4}) & A5 (A\ref{A:assump5}) & A6 (A\ref{A:assump7}) & A7 (A\ref{A:assump8}) & A8 (A\ref{A:assump9}) & A9 (A\ref{A:assump9.npcm}) & A10 (A\ref{A:assump14}) & A11 (A\ref{A:assump15}) & A12 (A\ref{A:assump12}) & A13 (A\ref{A:assump13}) & A14 (A\ref{A:assump20})
+ & A1 (A\ref{A:Thermal-Energy-Only}) & A2 (A\ref{A:Heat-Transfer-Coeffs-Constant}) & A3 (A\ref{A:Constant-Water-Temp-Across-Tank}) & A4 (A\ref{A:Density-Water-Constant-over-Volume}) & A5 (A\ref{A:Specific-Heat-Energy-Constant-over-Volume}) & A6 (A\ref{A:Law-Convective-Cooling-Coil-Water}) & A7 (A\ref{A:Temp-Heating-Coil-Constant-over-Time}) & A8 (A\ref{A:Temp-Heating-Coil-Constant-over-Length}) & A9 (A\ref{A:Charging-Tank-No-Temp-Discharge}) & A10 (A\ref{A:Water-Always-Liquid}) & A11 (A\ref{A:Perfect-Insulation-Tank}) & A12 (A\ref{A:No-Internal-Heat-Generation-By-Water}) & A13 (A\ref{A:Atmospheric-Pressure-Tank}) & A14 (A\ref{A:Volume-Coil-Negligible})
 \\
 \midrule
 T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD1 (\hyperref[T:nwtnCooling]{Definition~T:nwtnCooling}) &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+GD1 (\hyperref[GD:nwtnCooling]{Definition~GD:nwtnCooling}) &  & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD2 (\hyperref[T:rocTempSimp]{Definition~T:rocTempSimp}) &  &  & X & X & X &  &  &  &  &  &  &  &  & 
+GD2 (\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}) &  &  & X & X & X &  &  &  &  &  &  &  &  & 
 \\
 DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) &  &  &  &  &  & X & X & X &  &  &  &  &  & 
 \\
-IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) &  &  &  &  &  &  &  &  & X & X &  &  &  & 
+IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) &  &  &  &  &  &  &  &  & X & X &  &  &  & 
 \\
-IM2 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) &  &  &  &  &  &  &  &  &  & X &  &  &  & 
+IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) &  &  &  &  &  &  &  &  &  & X &  &  &  & 
 \\
-LC1 (LC\ref{LC:likeChg2}) &  &  &  &  &  &  & X &  &  &  &  &  &  & 
+LC1 (LC\ref{Temperature-Coil-Variable-Over-Day}) &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
-LC2 (LC\ref{LC:likeChg3}) &  &  &  &  &  &  &  & X &  &  &  &  &  & 
+LC2 (LC\ref{LC:Temperature-Coil-Variable-Over-Length}) &  &  &  &  &  &  &  & X &  &  &  &  &  & 
 \\
-LC3 (LC\ref{LC:likeChg3}) &  &  &  &  &  &  &  &  & X &  &  &  &  & 
+LC3 (LC\ref{LC:Discharging-Tank}) &  &  &  &  &  &  &  &  & X &  &  &  &  & 
 \\
-LC4 (LC\ref{LC:likeChg6}) &  &  &  &  &  &  &  &  &  &  & X &  &  & 
+LC4 (LC\ref{LC:Tank-Lose-Heat}) &  &  &  &  &  &  &  &  &  &  & X &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}

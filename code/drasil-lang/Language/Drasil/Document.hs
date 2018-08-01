@@ -9,7 +9,7 @@ import Language.Drasil.Chunk.Citation (BibRef)
 import Language.Drasil.Chunk.Change (Change(..), ChngType(..))
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.Relation (RelationConcept)
-import Language.Drasil.Chunk.ReqChunk (ReqChunk)
+import Language.Drasil.Chunk.ReqChunk (ReqChunk(..), ReqType(..))
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), getStringSN)
 import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd),
   MayHaveLabel(getMaybeLabel), HasLabel(getLabel))
@@ -104,13 +104,16 @@ mkRawLC x@(Table _ _ _ _)  lb = llcc (mkLabelRA' ("Table:" ++ (getAdd (lb ^. get
 mkRawLC x@(Paragraph _)      lb = llcc (mkLabelRA' ("Paragraph:" ++ (getAdd (lb ^. getRefAdd)))  
   (getStringSN (lb ^. shortname))) x
 mkRawLC x@(Definition d)     lb = llcc 
-  (mkLabelRA' ((getDefName d) ++ getAdd (lb ^. getRefAdd)) (getStringSN (lb ^. shortname))) x
+  (mkLabelRA' ((getDefName d) ++ concatMap repUnd (getAdd (lb ^. getRefAdd))) 
+  (getStringSN (lb ^. shortname))) x
 mkRawLC x@(Enumeration _)    lb = llcc (mkLabelRA' ("List:" ++ (getAdd (lb ^. getRefAdd)))
   (getStringSN (lb ^. shortname))) x
 mkRawLC x@(Figure _ _ _)   lb = llcc (mkLabelRA' ("Figure:" ++ (getAdd (lb ^. getRefAdd)))
   (getStringSN (lb ^. shortname))) x
-mkRawLC x@(Requirement rq)   lb  = llcc (mkLabelRA' ("R:" ++ (getAdd (lb ^. getRefAdd)))
-  (getStringSN (rq ^. shortname))) x
+mkRawLC x@(Requirement (RC _ FR _ _)) lb  = llcc (mkLabelRA' ("FR:" ++ (getAdd (lb ^. getRefAdd)))
+  (getStringSN (lb ^. shortname))) x
+mkRawLC x@(Requirement (RC _ NFR _ _)) lb  = llcc (mkLabelRA' ("NFR:" ++ (getAdd (lb ^. getRefAdd)))
+  (getStringSN (lb ^. shortname))) x
 mkRawLC x@(Assumption ac)    lb  = llcc (mkLabelRA' ("A:" ++ (getAdd (lb ^. getRefAdd)))
   (getStringSN (ac ^. shortname))) x
 mkRawLC x@(Change (ChC _ Likely _ lb))   _  = llcc (mkLabelRA' 
@@ -120,7 +123,8 @@ mkRawLC x@(Change (ChC _ Unlikely _ lb)) _  = llcc (mkLabelRA'
 mkRawLC x@(Graph _ _ _ _)   lb = llcc (mkLabelRA' ("Graph:" ++ (getAdd (lb ^. getRefAdd)))
   (getStringSN (lb ^. shortname))) x
 mkRawLC x@(Defnt d _)       lb = llcc 
-  (mkLabelRA' ((getDefName d) ++ getAdd (lb ^. getRefAdd)) (getStringSN (lb ^. shortname))) x
+  (mkLabelRA' ((getDefName d) ++ concatMap repUnd (getAdd (lb ^. getRefAdd))) 
+  (getStringSN (lb ^. shortname))) x
 
 -- | Automatically create the label for a definition
 getDefName :: DType -> String

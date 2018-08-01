@@ -288,7 +288,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Specific-Heat-Energy-Constant-over-Volume}:]The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume {[}GD2{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Law-Convective-Cooling-Coil-Water}:]Newton's law of convective cooling applies between the heating coil and the water {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Newton-Law-Convective-Cooling-Coil-Water}:]Newton's law of convective cooling applies between the heating coil and the water {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Time}:]The temperature of the heating coil is constant over time {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
@@ -613,7 +613,7 @@ This section provides the functional requirements, the business tasks that the s
 \subsection{Functional Requirements}
 \label{Sec:FRs}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req1}:]Input the following quantities, which define the tank parameters, material properties and initial conditions:
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Input-Inital-Values}:]Input the following quantities, which define the tank parameters, material properties and initial conditions:
 \end{description}
 \begin{longtabu}{l l X[l]}
 \toprule
@@ -642,22 +642,22 @@ ${t_{final}}$ & s & final time
 \label{Table:fr1list}
 \end{longtabu}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req2}:]Use the inputs in R\ref{FR:req1} to find the mass needed for IM1 to IM2, as follows, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank:
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Use-Above-Find-Mass-IM1-IM2}:]Use the inputs in R\ref{FR:req1} to find the mass needed for IM1 to IM2, as follows, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank:
 \end{description}
 \begin{dmath}
 {m_{W}}={V_{W}} {ρ_{W}}=\frac{D}{2} L {ρ_{W}}
 \end{dmath}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req3}:]Verify that the inputs satisfy the required physical constraint shown in Table~\ref{Table:InDataConstraints}.
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Check-Inputs-Satisfy-Physical-Constraints}:]Verify that the inputs satisfy the required physical constraint shown in Table~\ref{Table:InDataConstraints}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:req4}:]Outputs and inputs quantities and derived quantities in the following list: the quantities from R\ref{FR:req1}, the mass from R\ref{FR:req2} and ${τ_{W}}$ (from IM1).
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req5}:]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Calculate-Temperature-Water-Over-Time}:]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req6}:]Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from IM3).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Calculate-Change-Heat\_Energy-Water-Time}:]Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from IM3).
 \end{description}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
@@ -665,24 +665,24 @@ This problem is small in size and relatively simple, so performance is not a pri
 \section{Likely Changes}
 \label{Sec:LCs}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg2}:]A\ref{A:assump8} - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{Temperature-Coil-Variable-Over-Day}:]A\ref{A:Temp-Heating-Coil-Constant-over-Time} - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg3}:]A\ref{A:assump9} - The temperature of the heating coil will actually change along its length as the water within it cools.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Temperature-Coil-Variable-Over-Length}:]A\ref{A:Temp-Heating-Coil-Constant-over-Length} - The temperature of the heating coil will actually change along its length as the water within it cools.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg3}:]A\ref{A:assump9.npcm}- The model currently only accounts for charging of the tank. That is, increasing the temperature of the water to match the temperature of the coil. A more complete model would also account for discharging of the tank.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Discharging-Tank}:]A\ref{A:Charging-Tank-No-Temp-Discharge}- The model currently only accounts for charging of the tank. That is, increasing the temperature of the water to match the temperature of the coil. A more complete model would also account for discharging of the tank.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg6}:]A\ref{A:assump15} - Any real tank cannot be perfectly insulated and will lose heat.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Tank-Lose-Heat}:]A\ref{A:Perfect-Insulation-Tank} - Any real tank cannot be perfectly insulated and will lose heat.
 \end{description}
 \section{Unlikely Changes}
 \label{Sec:UCs}
 \begin{description}
-\item[\refstepcounter{ucnum}\uctheucnum\label{UC:unlikeChg1}:]A\ref{A:assump14} - It is unlikely for the change of water from liquid to a solid, or from liquid to gas to be considered.
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC:Water-Fixed-States}:]A\ref{A:Water-Always-Liquid} - It is unlikely for the change of water from liquid to a solid, or from liquid to gas to be considered.
 \end{description}
 \begin{description}
-\item[\refstepcounter{ucnum}\uctheucnum\label{UC:unlikeChg2}:]A\ref{A:assump12} - Is used for the derivations of IM1 (Hack: need Label to fix).
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC:No-Internal-Heat-Generation}:]A\ref{A:No-Internal-Heat-Generation-By-Water} - Is used for the derivations of IM1 (Hack: need Label to fix).
 \end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}

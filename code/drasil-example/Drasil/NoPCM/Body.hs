@@ -551,7 +551,7 @@ req2 = mkRequirement "req2" (
   (makeRef req1) +:+ S "to find the" +:+ phrase mass +:+
   S "needed for" +:+ acroIM 1 +:+ S "to" +:+ acroIM 2 `sC`
   S "as follows, where" +:+ ch w_vol `isThe` phrase w_vol +:+
-  S "and" +: (ch tank_vol `isThe` phrase tank_vol) ) "Use-Above-Find-Mass-IM1-IM2"
+  S "and" +: (ch tank_vol `isThe` phrase tank_vol) ) "Find-Mass"
 req3 = mkRequirement "req3" (
   S "Verify that the" +:+ plural input_ +:+ S "satisfy the required"
   +:+ phrase physicalConstraint +:+ S "shown in" +:+. makeRef dataConstTable1 ) 

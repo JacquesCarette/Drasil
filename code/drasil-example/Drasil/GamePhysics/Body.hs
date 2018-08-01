@@ -141,13 +141,13 @@ newAssumptions :: [AssumpChunk]
 newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7]
 
 newA1, newA2, newA3, newA4, newA5, newA6, newA7 :: AssumpChunk
-newA1 = assump "objectTyA" (foldlSent assumptions_assum1) (mkLabelRA'' "objectTy")
-newA2 = assump "objectDimensionA" (foldlSent assumptions_assum2) (mkLabelRA'' "objectDimension")
-newA3 = assump "coordinatesystemTyA" (foldlSent assumptions_assum3) (mkLabelRA'' "coordinatesystemTy")
-newA4 = assump "axesDefinedA" (foldlSent assumptions_assum4) (mkLabelRA'' "axesDefined")
-newA5 = assump "collisionTypeA" (foldlSent assumptions_assum5) (mkLabelRA'' "collisionType")
-newA6 = assump "dampingInvolvementA" (foldlSent assumptions_assum6) (mkLabelRA'' "dampingInvolvement")
-newA7 = assump "constraints_and_jointsInvolvementA" (foldlSent assumptions_assum7) (mkLabelRA'' "constraints_and_jointsInvolvement")
+newA1 = assump "objectTy" (foldlSent assumptions_assum1) (mkLabelRA'' "objectTy")
+newA2 = assump "objectDimension" (foldlSent assumptions_assum2) (mkLabelRA'' "objectDimension")
+newA3 = assump "coordinateSystemTy" (foldlSent assumptions_assum3) (mkLabelRA'' "coordinateSystemTy")
+newA4 = assump "axesDefined" (foldlSent assumptions_assum4) (mkLabelRA'' "axesDefined")
+newA5 = assump "collisionType" (foldlSent assumptions_assum5) (mkLabelRA'' "collisionType")
+newA6 = assump "dampingInvolvement" (foldlSent assumptions_assum6) (mkLabelRA'' "dampingInvolvement")
+newA7 = assump "constraintsAndJointsInvolvement" (foldlSent assumptions_assum7) (mkLabelRA'' "constraintsAndJointsInvolvement")
 --FIXME: All named ideas, not just acronyms.
 
 chipUnits :: [UnitDefn]

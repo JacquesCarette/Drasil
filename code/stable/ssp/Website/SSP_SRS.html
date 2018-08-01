@@ -6375,7 +6375,7 @@ FIXME: This needs to be filled in
 Data Constraints
 </h3>
 <p class="paragraph">
-<a href=#Table:InDataConstraints>Table:InDataConstraints</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+<a href=#Table:InDataConstraints>InDataConstraints</a> and <a href=#Table:OutDataConstraints>OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
 </p>
 <div id="Table:InDataConstraints">
 <table class="table">
@@ -6606,7 +6606,7 @@ Functional Requirements
 </h2>
 <div class="list">
 <p>
-R1: Read the input file, and store the data. Necessary input data summarized in <a href=#Table:inDataTable>Table:inDataTable</a>.
+R1: Read the input file, and store the data. Necessary input data summarized in <a href=#Table:inDataTable>inDataTable</a>.
 </p>
 <p>
 R2: Generate potential critical slip surface's for the input slope.
@@ -6799,7 +6799,7 @@ Likely Changes
 </h1>
 <ul class="hide-list-style">
 <li>
-<div id="LC:LC.inhomogeneous">
+<div id="LC:Calculate-Inhomogeneous-Soil-Layers">
 Calculate-Inhomogeneous-Soil-Layers: <a href=#A:Soil-Layer-Homogeneous>Soil-Layer-Homogeneous</a> - The system currently assumes the different layers of the soil are homogeneous. In the future, calculations can be added for inconsistent soil properties throughout.
 </div>
 </li>
@@ -6816,14 +6816,14 @@ If changes were to be made with regard to the following, a different algorithm w
 </p>
 <ul class="hide-list-style">
 <li>
-<div id="UC:UC.normshearlinear">
+<div id="UC:Normal-And-Shear-Linear-Only">
 Normal-And-Shear-Linear-Only: Chages related to <a href=#A:Interslice-Norm-Shear-Forces-Linear>Interslice-Norm-Shear-Forces-Linear</a> and <a href=#A:Base-Norm-Shear-Forces-Linear-on-FS>Base-Norm-Shear-Forces-Linear-on-FS</a> are not possible due to the dependency of the calculations on the linear relationship between interslice normal and shear forces.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="UC:UC.2donly">
+<div id="UC:2D-Analysis-Only">
 2D-Analysis-Only: <a href=#A:Plane-Strain-Conditions>Plane-Strain-Conditions</a> allows for 2D analysis with these models only because stress along z-direction is zero. These models do not take into account stress in the z-direction, and therefore cannot be without manipulation to attempt 3d analysis.
 </div>
 </li>

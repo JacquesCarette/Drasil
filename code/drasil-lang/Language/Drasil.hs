@@ -74,7 +74,7 @@ module Language.Drasil (
   -- Chunk.Eq
   , QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec, fromEqn''', fromEqn''''
   -- Chunk.DataDefinition
-  , DataDefinition, mkDataDef, mkDD, mkDataDef', qdFromDD
+  , DataDefinition, mkQuantDef, mkDD, mkQuantDef', qdFromDD
   -- Chunk.GenDefn
   , GenDefn, gd, gdUnit, gd', gd''
   -- Chunk.InstanceModel
@@ -162,21 +162,9 @@ module Language.Drasil (
   , mkTable, unit_symb, introduceAbb, phrase, plural, phrase's 
   , plural's, at_start, at_start'
   , unitToSentence, unitToSentenceUnitless, sortBySymbol
-  -- Generate
-  --, gen, genCode
   -- People
   , People, Person, person, HasName, name, manyNames, person', personWM
   , personWM', mononym, nameStr, rendPersLFM, rendPersLFM', rendPersLFM''
-  -- CodeSpec
-  --, CodeSpec, codeSpec, Choices(..), ImplementationType(..)
-  --, Logging(..), ConstraintBehaviour(..), Structure(..), Comments(..)
-  --, defaultChoices, getStr
-  --, Mod(..), packmod, FuncDef(..), FuncStmt(..), funcDef, ($:=), ffor, fdec -- hacks
-  --, relToQD, funcData, funcQD, Func(..), asExpr, asVC   -- hacks
-  -- Code.DataDesc
-  --, DataDesc
-  --, entry, listEntry, junk, singleton, junkLine, singleLine, multiLine
-  --, multiLine', straight, repeated, repeated', Ind(..)
   -- Chunk.Theory
   , Theory(..), tc', TheoryChunk, TheoryModel, tm, tm'
   -- Chunk.SymbolForm
@@ -304,7 +292,7 @@ import Language.Drasil.Chunk.Constrained.Core (physc, sfwrc, enumc, isPhysC, isS
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqn'', getVC,
  equat, ec, fromEqn''', fromEqn'''')
-import Language.Drasil.Chunk.DataDefinition (DataDefinition, mkDataDef, mkDD, mkDataDef',
+import Language.Drasil.Chunk.DataDefinition (DataDefinition, mkQuantDef, mkDD, mkQuantDef',
   qdFromDD)
 import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.Goal (Goal, mkGoal)
@@ -342,11 +330,9 @@ import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat,
   prime, sCurlyBrSymb, compsy, Stage(..))
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it
---import Language.Drasil.Generate -- moved in SubPackages
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
 import Language.Drasil.RefTypes(RefAdd, RefType(Cite))
 import Language.Drasil.Label (Label, mkLabelRA, mkLabelRA'', mkEmptyLabel)
 import Language.Drasil.Label.Core (getAdd)
---Should be in lang-dev package?

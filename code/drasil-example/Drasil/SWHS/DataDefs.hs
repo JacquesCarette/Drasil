@@ -28,7 +28,7 @@ dataDefns = [dd1HtFluxCDD, dd2HtFluxPDD, dd3HtFusionDD, dd4MeltFracDD]
 --    I think this will need an overhaul after we fix Data Definitions.
 
 dd1HtFluxC :: QDefinition
-dd1HtFluxC = mkDataDef ht_flux_C htFluxCEqn
+dd1HtFluxC = mkQuantDef ht_flux_C htFluxCEqn
 
 htFluxCEqn :: Expr
 htFluxCEqn = (sy coil_HTC) * ((sy temp_C) - apply1 temp_W time)
@@ -40,7 +40,7 @@ dd1HtFluxCDD = mkDD dd1HtFluxC [] [] "" Nothing
 ----
 
 dd2HtFluxP :: QDefinition
-dd2HtFluxP = mkDataDef ht_flux_P htFluxPEqn
+dd2HtFluxP = mkQuantDef ht_flux_P htFluxPEqn
 
 htFluxPEqn :: Expr
 htFluxPEqn = (sy pcm_HTC) * (apply1 temp_W time - apply1 temp_PCM time)
@@ -51,7 +51,7 @@ dd2HtFluxPDD = mkDD dd2HtFluxP [] [] "" Nothing
 ----
 
 dd3HtFusion :: QDefinition
-dd3HtFusion = mkDataDef htFusion htFusionEqn
+dd3HtFusion = mkQuantDef htFusion htFusionEqn
 
 htFusionEqn :: Expr
 htFusionEqn = (sy latent_heat) / (sy mass)

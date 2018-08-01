@@ -132,31 +132,31 @@ gBRSpecParamVals = [dim_max, dim_min, ar_max, cWeightMax, cWeightMin,
 dim_max, dim_min, ar_max, cWeightMax, cWeightMin, sd_max,
   sd_min :: QDefinition
 
-dim_max     = mkDataDef (unitary "dim_max"
+dim_max     = mkQuantDef (unitary "dim_max"
   (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
   (sub lD (Atomic "max")) metre Real) (dbl 5)
 
-dim_min     = mkDataDef (unitary "dim_min"
+dim_min     = mkQuantDef (unitary "dim_min"
   (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 
   (sub lD (Atomic "min")) metre Real) (dbl 0.1)
 
-ar_max     = mkDataDef (vc "ar_max"
+ar_max     = mkQuantDef (vc "ar_max"
   (nounPhraseSP "maximum aspect ratio")
   (sub (Atomic "AR") (Atomic "max")) Rational) (dbl 5)
 
-cWeightMax = mkDataDef (unitary "cWeightMax" 
+cWeightMax = mkQuantDef (unitary "cWeightMax" 
   (nounPhraseSP "maximum permissible input charge weight")
   (sub (eqSymb char_weight) (Atomic "max")) kilogram Rational) (dbl 910)
 
-cWeightMin = mkDataDef (unitary "cWeightMin"
+cWeightMin = mkQuantDef (unitary "cWeightMin"
   (nounPhraseSP "minimum permissible input charge weight")
   (sub (eqSymb char_weight) (Atomic "min")) kilogram Rational) (dbl 4.5)
 
-sd_max     = mkDataDef (unitary "sd_max"
+sd_max     = mkQuantDef (unitary "sd_max"
   (nounPhraseSP "maximum stand off distance permissible for input")
   (sub (eqSymb standOffDist) (Atomic "max")) metre Real) (dbl 130)
 
-sd_min     = mkDataDef (unitary "sd_min"
+sd_min     = mkQuantDef (unitary "sd_min"
   (nounPhraseSP "minimum stand off distance permissible for input") 
   (sub (eqSymb standOffDist) (Atomic "min")) metre Real) (dbl 6)
 
@@ -364,16 +364,16 @@ gbConstants = [constant_M, constant_K, constant_ModElas, constant_LoadDur, const
                 ++ gBRSpecParamVals 
 
 constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadDF, constant_LoadSF :: QDefinition
-constant_K       = mkDataDef sflawParamK  $ (dbl 2.86) * (10 $^ (negate 53))
-constant_M       = mkDataDef sflawParamM  $ 7
-constant_ModElas = mkDataDef mod_elas     $ (dbl 7.17) * (10 $^ 7)
-constant_LoadDur = mkDataDef load_dur     $ 3
-constant_LoadDF  = mkDataDef lDurFac      $ ((sy load_dur) / 60) $^ ((sy sflawParamM) / (16))
-constant_LoadSF  = mkDataDef loadSF       $ 1
+constant_K       = mkQuantDef sflawParamK  $ (dbl 2.86) * (10 $^ (negate 53))
+constant_M       = mkQuantDef sflawParamM  $ 7
+constant_ModElas = mkQuantDef mod_elas     $ (dbl 7.17) * (10 $^ 7)
+constant_LoadDur = mkQuantDef load_dur     $ 3
+constant_LoadDF  = mkQuantDef lDurFac      $ ((sy load_dur) / 60) $^ ((sy sflawParamM) / (16))
+constant_LoadSF  = mkQuantDef loadSF       $ 1
 --Equations--
 
 sdWithEqn :: QDefinition
-sdWithEqn = mkDataDef standOffDist sdCalculation
+sdWithEqn = mkQuantDef standOffDist sdCalculation
 
 sdCalculation :: Relation
 sdCalculation = euclidean (map sy sdVector)
@@ -387,7 +387,7 @@ sdVector = [sdx, sdy, sdz]
 --
 
 wtntWithEqn :: QDefinition
-wtntWithEqn = mkDataDef eqTNTWeight wtntCalculation
+wtntWithEqn = mkQuantDef eqTNTWeight wtntCalculation
 
 wtntCalculation :: Relation
 --wtntCalculation = (sy eqTNTWeight) := (sy char_weight) * (sy tNT)
@@ -395,7 +395,7 @@ wtntCalculation = (sy char_weight) * (sy tNT)
 --
 
 aspectRWithEqn :: QDefinition
-aspectRWithEqn = mkDataDef aspect_ratio aspectRCalculation
+aspectRWithEqn = mkQuantDef aspect_ratio aspectRCalculation
 
 aspectRCalculation :: Relation
 aspectRCalculation = (sy aspect_ratio) $= (sy plate_len)/(sy plate_width)

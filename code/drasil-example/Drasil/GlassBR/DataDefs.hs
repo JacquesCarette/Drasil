@@ -41,7 +41,7 @@ risk_eq = ((sy sflawParamK) /
 
 -- FIXME [4] !!!
 risk :: QDefinition
-risk = mkDataDef risk_fun risk_eq
+risk = mkQuantDef risk_fun risk_eq
 
 riskDD :: DataDefinition
 riskDD = mkDD risk 
@@ -59,7 +59,7 @@ hFromt_helper :: Double -> Double -> (Expr, Relation)
 hFromt_helper result condition = (dbl result, (sy nom_thick) $= dbl condition)
 
 hFromt :: QDefinition
-hFromt = mkDataDef min_thick hFromt_eq
+hFromt = mkQuantDef min_thick hFromt_eq
 
 hFromtDD :: DataDefinition
 hFromtDD = mkDD hFromt [{-references-}] [{-derivation-}] ""--temporary
@@ -71,7 +71,7 @@ loadDF_eq :: Expr
 loadDF_eq = (sy load_dur / 60) $^ (sy sflawParamM / 16)
 
 loadDF :: QDefinition
-loadDF = mkDataDef lDurFac loadDF_eq
+loadDF = mkQuantDef lDurFac loadDF_eq
 
 loadDFDD :: DataDefinition
 loadDFDD = mkDD loadDF [{-references-}] [{-derivation-}] ""--temporary
@@ -85,7 +85,7 @@ strDisFac_eq = apply (sy stressDistFac)
 --strDisFac_eq = FCall (asExpr interpZ) [V "SDF.txt", (sy plate_len) / (sy plate_width), sy dimlessLoad]
   
 strDisFac :: QDefinition
-strDisFac = mkDataDef stressDistFac strDisFac_eq
+strDisFac = mkQuantDef stressDistFac strDisFac_eq
 
 strDisFacDD :: DataDefinition
 strDisFacDD = mkDD strDisFac [{-references-}] [{-derivation-}] ""--temporary
@@ -98,7 +98,7 @@ nonFL_eq = ((sy tolLoad) * (sy mod_elas) * (sy min_thick) $^ 4) /
   (square (sy plate_len * sy plate_width))
 
 nonFL :: QDefinition
-nonFL = mkDataDef nonFactorL nonFL_eq
+nonFL = mkQuantDef nonFactorL nonFL_eq
 
 nonFLDD :: DataDefinition
 nonFLDD = mkDD nonFL [{-references-}] [{-derivation-}] ""--temporary
@@ -113,7 +113,7 @@ glaTyFac_helper :: Integer -> String -> (Expr, Relation)
 glaTyFac_helper result condition = (int result, (sy glass_type) $= str condition)
 
 glaTyFac :: QDefinition
-glaTyFac = mkDataDef gTF glaTyFac_eq
+glaTyFac = mkQuantDef gTF glaTyFac_eq
 
 glaTyFacDD :: DataDefinition
 glaTyFacDD = mkDD glaTyFac [{-references-}] [{-derivation-}] ""--temporary
@@ -126,7 +126,7 @@ dimLL_eq = ((sy demand) * (square (sy plate_len * sy plate_width)))
   / ((sy mod_elas) * (sy min_thick $^ 4) * (sy gTF))
 
 dimLL :: QDefinition
-dimLL = mkDataDef dimlessLoad dimLL_eq
+dimLL = mkQuantDef dimlessLoad dimLL_eq
 
 dimLLDD :: DataDefinition
 dimLLDD = mkDD dimLL [sourceref $ S "[5, Eq. 7]"] [{-derivation-}] ""--temporary
@@ -139,7 +139,7 @@ tolPre_eq = apply (sy tolLoad) [sy sdf_tol, (sy plate_len) / (sy plate_width)]
 --tolPre_eq = FCall (asExpr interpY) [V "SDF.txt", (sy plate_len) / (sy plate_width), sy sdf_tol]
 
 tolPre :: QDefinition
-tolPre = mkDataDef tolLoad tolPre_eq
+tolPre = mkQuantDef tolLoad tolPre_eq
 
 tolPreDD :: DataDefinition
 tolPreDD = mkDD tolPre [{-references-}] [{-derivation-}] ""--temporary
@@ -154,7 +154,7 @@ tolStrDisFac_eq = ln (ln (1 / (1 - (sy pb_tol)))
     (square (sy min_thick)))) $^ (sy sflawParamM) * (sy lDurFac)))))
 
 tolStrDisFac :: QDefinition
-tolStrDisFac = mkDataDef sdf_tol tolStrDisFac_eq
+tolStrDisFac = mkQuantDef sdf_tol tolStrDisFac_eq
 
 tolStrDisFacDD :: DataDefinition
 tolStrDisFacDD = mkDD tolStrDisFac [{-references-}] [{-derivation-}] ""--temporary
@@ -166,7 +166,7 @@ standOffDis_eq :: Expr
 standOffDis_eq = sqrt ((sy sdx) $^ 2 + (sy sdy) $^ 2 + (sy sdz) $^ 2)
 
 standOffDis :: QDefinition
-standOffDis = mkDataDef standOffDist standOffDis_eq
+standOffDis = mkQuantDef standOffDist standOffDis_eq
 
 standOffDisDD :: DataDefinition
 standOffDisDD = mkDD standOffDis [{-references-}] [{-derivation-}] ""--temporary
@@ -178,7 +178,7 @@ aspRat_eq :: Expr
 aspRat_eq = (sy plate_len) / (sy plate_width)
 
 aspRat :: QDefinition
-aspRat = mkDataDef aspect_ratio aspRat_eq
+aspRat = mkQuantDef aspect_ratio aspRat_eq
 
 aspRatDD :: DataDefinition
 aspRatDD = mkDD aspRat [{-references-}] [{-derivation-}] ""--temporary

@@ -316,7 +316,9 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
               kNew = k ++ cnew
               nNew = n \\ cnew
           in  if null new 
-              then error "Cannot find path from inputs to outputs"
+              then error ("Cannot find path from inputs to outputs: " ++ (show $ map (^. uid) n)
+                        ++ " given Defs as " ++ (show $ map (^. uid) defs')
+                        ++ " and Knowns as " ++ (show $ map (^. uid) k) )
               else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
   
 subsetOf :: (Eq a) => [a] -> [a] -> Bool  

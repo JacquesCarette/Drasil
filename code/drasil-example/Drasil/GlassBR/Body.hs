@@ -177,6 +177,7 @@ glassSystInfo = SI {
   _concepts    = [] :: [DefinedQuantityDict],
   _definitions = (map (relToQD gbSymbMap) gbrIMods) ++ 
                  (concatMap (^. defined_quant) gbrTMods) ++
+                 (concatMap (^. defined_fun) gbrTMods) ++
                   [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears
                                              -- in the description of the Calculation of Demand instance model;
                                              -- should this be included as a Data Definition?

@@ -23,10 +23,11 @@ iModels_new = [im1_new, im2_new, im3_new]
 im1_new :: InstanceModel
 im1_new = im' transMot [qw vel_i, qw QP.time, qw QP.gravitationalAccel, qw force_i, qw mass_i] 
   [ TCon AssumedCon $ sy vel_i $> 0, TCon AssumedCon $ sy QP.time $> 0, TCon AssumedCon $ sy QP.gravitationalAccel $> 0, 
-  TCon AssumedCon $ sy force_i $> 0, TCon AssumedCon $ sy mass_i $> 0 ] (qw acc_i) [] (mkLabelRA'' "transMotIM") [transMotDesc]
+  TCon AssumedCon $ sy force_i $> 0, TCon AssumedCon $ sy mass_i $> 0 ] (qw acc_i) [] (mkLabelRA'' "transMot")
+  [transMotDesc]
 
 transMot :: RelationConcept
-transMot = makeRC "transMot" (transMotNP) (transMotDesc +:+ transMotLeg) transMotRel Nothing--label
+transMot = makeRC "transMot" transMotNP (transMotDesc +:+ transMotLeg) transMotRel Nothing--label
 
 transMotNP :: NP
 transMotNP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
@@ -54,7 +55,8 @@ im2_new :: InstanceModel
 im2_new = im' rotMot [qw QP.angularVelocity, qw QP.time, qw torque_i, qw QP.momentOfInertia]
   [TCon AssumedCon $ sy QP.angularVelocity $> 0, TCon AssumedCon $ sy QP.time $> 0,
   TCon AssumedCon $ sy torque_i $> 0, TCon AssumedCon $ sy QP.momentOfInertia $> 0] 
-  (qw QP.angularAccel) [TCon AssumedCon $ sy QP.angularAccel $> 0] (mkLabelRA'' "rotMotIM") [rotMotDesc]
+  (qw QP.angularAccel) [TCon AssumedCon $ sy QP.angularAccel $> 0] (mkLabelRA'' "rotMot")
+  [rotMotDesc]
 
 rotMot :: RelationConcept
 rotMot = makeRC "rotMot" (rotMotNP) (rotMotDesc +:+ rotMotLeg) rotMotRel Nothing--label
@@ -81,7 +83,8 @@ rotMotLeg = foldle1 (+:+) (+:+) $ map defList rotMotLegTerms
 im3_new :: InstanceModel
 im3_new = im' col2D [qw QP.time, qw QP.impulseS, qw mass_A, qw normalVect] [TCon AssumedCon $ sy QP.time $> 0,
   TCon AssumedCon $ sy QP.impulseS $> 0, TCon AssumedCon $ sy mass_A $> 0, TCon AssumedCon $ sy normalVect $> 0]
-  (qw time_c) [TCon AssumedCon $ sy vel_A $> 0, TCon AssumedCon $ sy time_c $> 0] (mkLabelRA'' "col2DIM") [col2DDesc]
+  (qw time_c) [TCon AssumedCon $ sy vel_A $> 0, TCon AssumedCon $ sy time_c $> 0] (mkLabelRA'' "col2D")
+  [col2DDesc]
 
 col2D :: RelationConcept
 col2D = makeRC "col2D" (col2DNP) (col2DDesc +:+ col2DLeg) col2DRel Nothing--label

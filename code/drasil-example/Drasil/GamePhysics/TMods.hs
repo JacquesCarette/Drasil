@@ -30,7 +30,7 @@ t1NewtonSL_new :: TheoryModel
 t1NewtonSL_new = tm' (cw newtonSL)
   (tc' "NewtonSL" [qw QP.force, qw QPP.mass, qw QP.acceleration] ([] :: [ConceptChunk])
   [] [TCon Invariant $ (sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)] []) 
-  (mkLabelRA'' "NewtonSecLawMot") [newtonSLDesc]
+  (mkLabelRA' "newtonSL" "NewtonSecLawMot") [newtonSLDesc]
 
 newtonSL :: RelationConcept
 newtonSL = makeRC "newtonSL" (nounPhraseSP "Newton's second law of motion")
@@ -56,7 +56,7 @@ t2NewtonTL_new :: TheoryModel
 t2NewtonTL_new = tm' (cw newtonTL)
   (tc' "NewtonTL" [qw force_1, qw force_2] ([] :: [ConceptChunk])
   [] [TCon Invariant $ (sy force_1) $= (negate (sy force_2))] [] ) 
-  (mkLabelRA'' "NewtonThirdLawMot") [newtonTLDesc]
+  (mkLabelRA' "newtonTL" "NewtonThirdLawMot") [newtonTLDesc]
 
 newtonTL :: RelationConcept
 newtonTL = makeRC "newtonTL" (nounPhraseSP "Newton's third law of motion")
@@ -84,7 +84,7 @@ t3NewtonLUG_new = tm' (cw newtonLUG)
   (sy mass_2) / ((sy dispNorm) $^ (fromInteger 2))) * (sy dispUnit) $= 
   (sy QP.gravitationalConst) * ((sy mass_1) * (sy mass_2) / ((sy dispNorm) 
   $^ (fromInteger 2))) * ((sy QP.displacement) / (sy dispNorm))] [] ) 
-  (mkLabelRA'' "UniversalGravLaw") [newtonLUGDesc]
+  (mkLabelRA' "newtonLUG" "UniversalGravLaw") [newtonLUGDesc]
 
 newtonLUG :: RelationConcept
 newtonLUG = makeRC "newtonLUG" 
@@ -133,7 +133,7 @@ t4ChaslesThm_new :: TheoryModel
 t4ChaslesThm_new = tm' (cw chaslesThm)
   (tc' "ChaslesThm" [qw vel_B, qw vel_O, qw QP.angularVelocity, qw r_OB] 
   ([] :: [ConceptChunk]) [] [TCon Invariant $ (sy vel_B) $= (sy vel_O) + (cross 
-  (sy  QP.angularVelocity) (sy r_OB))] []) (mkLabelRA'' "ChaslesTheorem")
+  (sy  QP.angularVelocity) (sy r_OB))] []) (mkLabelRA' "chaslesThm" "ChaslesTheorem")
   [chaslesThmDesc]
 
 chaslesThm :: RelationConcept
@@ -165,7 +165,7 @@ t5NewtonSLR_new :: TheoryModel
 t5NewtonSLR_new = tm' (cw newtonSLR)
   (tc' "NewtonSLR" [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
   ([] :: [ConceptChunk]) [] [TCon Invariant $ (sy  QP.torque) $= (sy QP.momentOfInertia) 
-  * (sy QP.angularAccel)] []) (mkLabelRA'' "NewtonSecLawRotMot")
+  * (sy QP.angularAccel)] []) (mkLabelRA' "newtonSLR" "NewtonSecLawRotMot")
   [newtonSLRDesc]
 
 newtonSLR :: RelationConcept

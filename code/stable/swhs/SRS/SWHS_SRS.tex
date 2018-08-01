@@ -357,7 +357,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Specific-Heat-Energy-Constant-over-Volume}:]The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume {[}GD2{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Law-Convective-Cooling-Coil-Water}:]Newton's law of convective cooling applies between the heating coil and the water {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Newton-Law-Convective-Cooling-Coil-Water}:]Newton's law of convective cooling applies between the heating coil and the water {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Time}:]The temperature of the heating coil is constant over time {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
@@ -932,7 +932,7 @@ RefBy & FIXME: This needs to be filled in
 \end{minipage}\\
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-Table~\ref{Table:InDataConstraints} and Table~\ref{Table:OutDataConstraints} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.(*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (A\ref{A:assump13}). (\#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is $\frac{2}{{h_{min}}}$, where ${h_{min}}$ is the thickness of a ``sheet'' of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
+Table~\ref{Table:InDataConstraints} and Table~\ref{Table:OutDataConstraints} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.(*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (A\ref{A:PCM-Initialli-Soild}). (\#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is $\frac{2}{{h_{min}}}$, where ${h_{min}}$ is the thickness of a ``sheet'' of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
 \begin{longtable}{l l l l l}
 \toprule
 Var & Physical Constraints & Software Constraints & Typical Value & Uncert.
@@ -1003,14 +1003,14 @@ In addition, the change in heat energy in the PCM should equal the energy input 
 \begin{dmath}
 {E_{P}}=\int_{0}^{t}{{h_{P}} {A_{P}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right)}\,dt
 \end{dmath}
-Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as ``sanity''checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% R\ref{FR:req9}.
+Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as ``sanity''checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% R\ref{FR:Verify-Energy-Output-follow-Conservation-of-Energy}.
 \section{Requirements}
 \label{Sec:Requirements}
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
 \label{Sec:FRs}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req1}:]Input the following quantities, which define the tank parameters, material properties and initial conditions:
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Input-Initial-Quantities}:]Input the following quantities, which define the tank parameters, material properties and initial conditions:
 \end{description}
 \begin{longtabu}{l l X[l]}
 \toprule
@@ -1055,7 +1055,7 @@ ${t_{final}}$ & s & final time
 \label{Table:InConstraints}
 \end{longtabu}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req2}:]Use the inputs in R\ref{FR:req1} to find the mass needed for IM1 to IM4, as follows, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank:
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Use-Above-Find-Mass-IM1-IM4}:]Use the inputs in R\ref{FR:Input-Initial-Quantities} to find the mass needed for IM1 to IM4, as follows, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank:
 \end{description}
 \begin{dmath}
 {m_{W}}={V_{W}} {ρ_{W}}=\left({V_{tank}}-{V_{P}}\right) {ρ_{W}}=\left(\frac{D}{2} L-{V_{P}}\right) {ρ_{W}}
@@ -1067,13 +1067,13 @@ ${t_{final}}$ & s & final time
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:req3}:]Verify that the inputs satisfy the required physical constraints.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req4}:]Output the input quantities and derived quantities in the following list: the quantities from R1, the masses from R2, ${τ_{W}}$ (from IM1), $η$ (from IM1), ${{τ_{P}}^{S}}$ (from IM2) and ${{τ_{P}}^{L}}$ (from IM2).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Output-Input-Derived-Quantities}:]Output the input quantities and derived quantities in the following list: the quantities from R1, the masses from R2, ${τ_{W}}$ (from IM1), $η$ (from IM1), ${{τ_{P}}^{S}}$ (from IM2) and ${{τ_{P}}^{L}}$ (from IM2).
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req5}:]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time (from IM1).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Calculate-Temperature-Water-OverTime}:]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time (from IM1).
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req6}:]Calculate and output the temperature of the phase change material (${T_{P}}$($t$)) over the simulation time (from IM2).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Calculate-Temperature-PCM-Over-Time}:]Calculate and output the temperature of the phase change material (${T_{P}}$($t$)) over the simulation time (from IM2).
 \end{description}
 \begin{description}
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:req7}:]Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from IM3).
@@ -1082,13 +1082,13 @@ ${t_{final}}$ & s & final time
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:req8}:]Calculate and output the change in heat energy in the PCM (${E_{P}}$($t$)) over the simulation time (from IM4).
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req9}:]Verify that the energy outputs (${E_{W}}$($t$) and ${E_{P}}$($t$)) follow the law of conservation of energy with relative error no greater than 0.001%.
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Verify-Energy-Output-follow-Conservation-of-Energy}:]Verify that the energy outputs (${E_{W}}$($t$) and ${E_{P}}$($t$)) follow the law of conservation of energy with relative error no greater than 0.001%.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req10}:]Calculate and output the time at which the PCM begins to melt ${{t_{melt}}^{init}}$ (from IM2).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Calculate-PCM-melt-begin-time}:]Calculate and output the time at which the PCM begins to melt ${{t_{melt}}^{init}}$ (from IM2).
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req11}:]Calculate and output the time at which the PCM stops melting ${{t_{melt}}^{final}}$ (from IM2).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Calculate-PCM-melt-end-time}:]Calculate and output the time at which the PCM stops melting ${{t_{melt}}^{final}}$ (from IM2).
 \end{description}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
@@ -1096,37 +1096,37 @@ This problem is small in size and relatively simple, so performance is not a pri
 \section{Likely Changes}
 \label{Sec:LCs}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Uniform-Temperature-PCM}:]A\ref{A:assump4} - PCM is actually a poor thermal conductor, so the assumption of uniform temperature of the phase change material is not likely.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Uniform-Temperature-PCM}:]A\ref{A:Temp-PCM-Constant-Across-Volume} - PCM is actually a poor thermal conductor, so the assumption of uniform temperature of the phase change material is not likely.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg2}:]A\ref{A:assump8} - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Temperature-Coil-Variable-Over-Day}:]A\ref{A:Temp-Heating-Coil-Constant-over-Time} - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Temperature-Coil-Variable-Over-Length}:]A\ref{A:assump9} - The temperature of the heating coil will actually change along its length as the water within it cools.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Temperature-Coil-Variable-Over-Length}:]A\ref{A:Temp-Heating-Coil-Constant-over-Length} - The temperature of the heating coil will actually change along its length as the water within it cools.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Discharging-Tank}:]A\ref{A:assump11} - The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Discharging-Tank}:]A\ref{A:Charging-Tank-No-Temp-Discharge} - The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Different-Initial-Temps-PCM-Water}:]A\ref{A:assump12} - To add more flexibility to the simulation, the initial temperature of the water and the PCM could be allowed to have different values.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Different-Initial-Temps-PCM-Water}:]A\ref{A:Same-Initial-Temp-Water-PCM} - To add more flexibility to the simulation, the initial temperature of the water and the PCM could be allowed to have different values.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Tank-Lose-Heat}:]A\ref{A:assump15} - Any real tank cannot be perfectly insulated and will lose heat.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Tank-Lose-Heat}:]A\ref{A:Perfect-Insulation-Tank} - Any real tank cannot be perfectly insulated and will lose heat.
 \end{description}
 \section{Unlikely Changes}
 \label{Sec:UCs}
 \begin{description}
-\item[\refstepcounter{ucnum}\uctheucnum\label{UC:unlikeChg1}:]A\ref{A:assump14} ,  A\ref{A:assump18} - It is unlikely for the change of water from liquid to a solid or the state change of the phase change material from a liquid to a gas to be considered.
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC:Water-PCM-Fixed-States}:]A\ref{A:Water-Always-Liquid} ,  A\ref{A:No-Gaseous-State-PCM} - It is unlikely for the change of water from liquid to a solid or the state change of the phase change material from a liquid to a gas to be considered.
 \end{description}
 \begin{description}
-\item[\refstepcounter{ucnum}\uctheucnum\label{UC:unlikeChg2}:]A\ref{A:assump16} - Is used for the derivations of IM1 and IM2 (Hack: need Label to fix).
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC:No-Internal-Heat-Generation}:]A\ref{A:No-Internal-Heat-Generation-By-Water-PCM} - Is used for the derivations of IM1 and IM2 (Hack: need Label to fix).
 \end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. Table~\ref{Table:Tracey2} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:Tracey1} shows the dependencies of instance models, requirements, and data constraints on each other. Table~\ref{Table:Tracey3} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) & T2 (\hyperref[T:t2SensHtE]{Definition~T:t2SensHtE}) & T3 (\hyperref[T:t3LatHtE]{Definition~T:t3LatHtE}) & GD1 (\hyperref[T:nwtnCooling]{Definition~T:nwtnCooling}) & GD2 (\hyperref[T:rocTempSimp]{Definition~T:rocTempSimp}) & DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) & DD2 (\hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}) & DD3 (\hyperref[DD:htFusion]{Definition~DD:htFusion}) & DD4 (\hyperref[DD:melt.frac]{Definition~DD:melt.frac}) & IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) & IM2 (\hyperref[T:eBalanceOnPCM]{Definition~T:eBalanceOnPCM}) & IM3 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) & IM4 (\hyperref[T:heatEInPCM]{Definition~T:heatEInPCM})
+ & T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) & T2 (\hyperref[T:t2SensHtE]{Definition~T:t2SensHtE}) & T3 (\hyperref[T:t3LatHtE]{Definition~T:t3LatHtE}) & GD1 (\hyperref[GD:nwtnCooling]{Definition~GD:nwtnCooling}) & GD2 (\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}) & DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) & DD2 (\hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}) & DD3 (\hyperref[DD:htFusion]{Definition~DD:htFusion}) & DD4 (\hyperref[DD:melt.frac]{Definition~DD:melt.frac}) & IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) & IM2 (\hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}) & IM3 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) & IM4 (\hyperref[IM:heatEInPCM]{Definition~IM:heatEInPCM})
 \\
 \midrule
 T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1135,9 +1135,9 @@ T2 (\hyperref[T:t2SensHtE]{Definition~T:t2SensHtE}) &  &  & X &  &  &  &  &  &  
 \\
 T3 (\hyperref[T:t3LatHtE]{Definition~T:t3LatHtE}) &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD1 (\hyperref[T:nwtnCooling]{Definition~T:nwtnCooling}) &  &  &  &  &  &  &  &  &  &  &  &  & 
+GD1 (\hyperref[GD:nwtnCooling]{Definition~GD:nwtnCooling}) &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD2 (\hyperref[T:rocTempSimp]{Definition~T:rocTempSimp}) & X &  &  &  &  &  &  &  &  &  &  &  & 
+GD2 (\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}) & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
@@ -1147,13 +1147,13 @@ DD3 (\hyperref[DD:htFusion]{Definition~DD:htFusion}) &  &  &  &  &  &  &  &  &  
 \\
 DD4 (\hyperref[DD:melt.frac]{Definition~DD:melt.frac}) &  &  &  &  &  &  &  & X &  &  &  &  & 
 \\
-IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) &  &  &  &  & X & X & X &  &  &  & X &  & 
+IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) &  &  &  &  & X & X & X &  &  &  & X &  & 
 \\
-IM2 (\hyperref[T:eBalanceOnPCM]{Definition~T:eBalanceOnPCM}) &  &  &  &  & X &  & X &  & X & X &  &  & X
+IM2 (\hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}) &  &  &  &  & X &  & X &  & X & X &  &  & X
 \\
-IM3 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) &  & X &  &  &  &  &  &  &  &  &  &  & 
+IM3 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) &  & X &  &  &  &  &  &  &  &  &  &  & 
 \\
-IM4 (\hyperref[T:heatEInPCM]{Definition~T:heatEInPCM}) &  & X & X &  &  &  & X & X & X &  & X &  & 
+IM4 (\hyperref[IM:heatEInPCM]{Definition~IM:heatEInPCM}) &  & X & X &  &  &  & X & X & X &  & X &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
@@ -1161,16 +1161,16 @@ IM4 (\hyperref[T:heatEInPCM]{Definition~T:heatEInPCM}) &  & X & X &  &  &  & X &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l}
 \toprule
- & IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) & IM2 (\hyperref[T:eBalanceOnPCM]{Definition~T:eBalanceOnPCM}) & IM3 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) & IM4 (\hyperref[T:heatEInPCM]{Definition~T:heatEInPCM}) & Data Constraints (Table~\ref{Table:InDataConstraints}) & R1 (Section~\ref{Sec:FRs}) & R2 (Section~\ref{Sec:FRs}) & R3 (Section~\ref{Sec:FRs}) & R4 (Section~\ref{Sec:FRs}) & R5 (Section~\ref{Sec:FRs}) & R6 (Section~\ref{Sec:FRs}) & R7 (Section~\ref{Sec:FRs}) & R8 (Section~\ref{Sec:FRs}) & R9 (Section~\ref{Sec:FRs}) & R10 (Section~\ref{Sec:FRs}) & R11 (Section~\ref{Sec:FRs})
+ & IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) & IM2 (\hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}) & IM3 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) & IM4 (\hyperref[IM:heatEInPCM]{Definition~IM:heatEInPCM}) & Data Constraints (Table~\ref{Table:InDataConstraints}) & R1 (Section~\ref{Sec:FRs}) & R2 (Section~\ref{Sec:FRs}) & R3 (Section~\ref{Sec:FRs}) & R4 (Section~\ref{Sec:FRs}) & R5 (Section~\ref{Sec:FRs}) & R6 (Section~\ref{Sec:FRs}) & R7 (Section~\ref{Sec:FRs}) & R8 (Section~\ref{Sec:FRs}) & R9 (Section~\ref{Sec:FRs}) & R10 (Section~\ref{Sec:FRs}) & R11 (Section~\ref{Sec:FRs})
 \\
 \midrule
-IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) &  & X &  &  &  & X & X &  &  &  &  &  &  &  &  & 
+IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) &  & X &  &  &  & X & X &  &  &  &  &  &  &  &  & 
 \\
-IM2 (\hyperref[T:eBalanceOnPCM]{Definition~T:eBalanceOnPCM}) & X &  &  & X &  & X & X &  &  &  &  &  &  &  &  & 
+IM2 (\hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}) & X &  &  & X &  & X & X &  &  &  &  &  &  &  &  & 
 \\
-IM3 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  & 
+IM3 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  & 
 \\
-IM4 (\hyperref[T:heatEInPCM]{Definition~T:heatEInPCM}) &  & X &  &  &  & X & X &  &  &  &  &  &  &  &  & 
+IM4 (\hyperref[IM:heatEInPCM]{Definition~IM:heatEInPCM}) &  & X &  &  &  & X & X &  &  &  &  &  &  &  &  & 
 \\
 R1 (Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1200,7 +1200,7 @@ R11 (Section~\ref{Sec:FRs}) &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & A1 (Section~\ref{Sec:Assumps}) & A2 (Section~\ref{Sec:Assumps}) & A3 (Section~\ref{Sec:Assumps}) & A4 (Section~\ref{Sec:Assumps}) & A5 (Section~\ref{Sec:Assumps}) & A6 (Section~\ref{Sec:Assumps}) & A7 (Section~\ref{Sec:Assumps}) & A8 (Section~\ref{Sec:Assumps}) & A9 (Section~\ref{Sec:Assumps}) & A10 (Section~\ref{Sec:Assumps}) & A11 (Section~\ref{Sec:Assumps}) & A12 (Section~\ref{Sec:Assumps}) & A13 (Section~\ref{Sec:Assumps}) & A14 (Section~\ref{Sec:Assumps}) & A15 (Section~\ref{Sec:Assumps}) & A16 (Section~\ref{Sec:Assumps}) & A17 (Section~\ref{Sec:Assumps}) & A18 (Section~\ref{Sec:Assumps}) & A19 (Section~\ref{Sec:Assumps})
+ & A1 (A\ref{A:Thermal-Energy-Only}) & A2 (A\ref{A:Heat-Transfer-Coeffs-Constant}) & A3 (A\ref{A:Constant-Water-Temp-Across-Tank}) & A4 (A\ref{A:Temp-PCM-Constant-Across-Volume}) & A5 (A\ref{A:Density-Water-PCM-Constant-over-Volume}) & A6 (A\ref{A:Specific-Heat-Energy-Constant-over-Volume}) & A7 (A\ref{A:Law-Convective-Cooling-Coil-Water}) & A8 (A\ref{A:Temp-Heating-Coil-Constant-over-Time}) & A9 (A\ref{A:Temp-Heating-Coil-Constant-over-Length}) & A10 (A\ref{A:Law-Convective-Cooling-Water-PCM}) & A11 (A\ref{A:Charging-Tank-No-Temp-Discharge}) & A12 (A\ref{A:Same-Initial-Temp-Water-PCM}) & A13 (A\ref{A:PCM-Initialli-Soild}) & A14 (A\ref{A:Water-Always-Liquid}) & A15 (A\ref{A:Perfect-Insulation-Tank}) & A16 (A\ref{A:No-Internal-Heat-Generation-By-Water-PCM}) & A17 (A\ref{A:Volume-Change-Melting-PCM-Negligible}) & A18 (A\ref{A:No-Gaseous-State-PCM}) & A19 (A\ref{A:Atmospheric-Pressure-Tank})
 \\
 \midrule
 T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1209,9 +1209,9 @@ T2 (\hyperref[T:t2SensHtE]{Definition~T:t2SensHtE}) &  &  &  &  &  &  &  &  &  &
 \\
 T3 (\hyperref[T:t3LatHtE]{Definition~T:t3LatHtE}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD1 (\hyperref[T:nwtnCooling]{Definition~T:nwtnCooling}) &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+GD1 (\hyperref[GD:nwtnCooling]{Definition~GD:nwtnCooling}) &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD2 (\hyperref[T:rocTempSimp]{Definition~T:rocTempSimp}) &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+GD2 (\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}) &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) &  &  &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1221,13 +1221,13 @@ DD3 (\hyperref[DD:htFusion]{Definition~DD:htFusion}) &  &  &  &  &  &  &  &  &  
 \\
 DD4 (\hyperref[DD:melt.frac]{Definition~DD:melt.frac}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) &  &  &  &  &  &  &  &  &  &  & X & X &  & X & X & X &  &  & X
+IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) &  &  &  &  &  &  &  &  &  &  & X & X &  & X & X & X &  &  & X
 \\
-IM2 (\hyperref[T:eBalanceOnPCM]{Definition~T:eBalanceOnPCM}) &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X & X & X & 
+IM2 (\hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}) &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X & X & X & 
 \\
-IM3 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & X
+IM3 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & X
 \\
-IM4 (\hyperref[T:heatEInPCM]{Definition~T:heatEInPCM}) &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & X & 
+IM4 (\hyperref[IM:heatEInPCM]{Definition~IM:heatEInPCM}) &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & X & 
 \\
 LC1 (Section~\ref{Sec:LCs}) &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1246,7 +1246,6 @@ LC6 (Section~\ref{Sec:LCs}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  
 \label{Table:Tracey3}
 \end{longtable}
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. Figure~\ref{Figure:TraceyA} shows the dependencies of theoretical models, general definitions, data definitions, instance models, likely changes, and assumptions on each other. Figure~\ref{Figure:TraceyR} shows the dependencies of instance models, requirements, and data constraints on each other.
-NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{ATrace.png}

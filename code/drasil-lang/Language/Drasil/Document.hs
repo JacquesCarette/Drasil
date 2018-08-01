@@ -105,7 +105,7 @@ mkRawLC x@(Paragraph _)      lb = llcc (mkLabelRA' ("Paragraph:" ++ (getAdd (lb 
   (getStringSN (lb ^. shortname))) x
 mkRawLC x@(Definition d)     lb = llcc 
   (mkLabelRA' ((getDefName d) ++ concatMap repUnd (getAdd (lb ^. getRefAdd))) 
-  (getStringSN (lb ^. shortname))) x
+  (concatMap repUnd (getStringSN (lb ^. shortname)))) x
 mkRawLC x@(Enumeration _)    lb = llcc (mkLabelRA' ("List:" ++ (getAdd (lb ^. getRefAdd)))
   (getStringSN (lb ^. shortname))) x
 mkRawLC x@(Figure _ _ _)   lb = llcc (mkLabelRA' ("Figure:" ++ (getAdd (lb ^. getRefAdd)))
@@ -124,7 +124,7 @@ mkRawLC x@(Graph _ _ _ _)   lb = llcc (mkLabelRA' ("Graph:" ++ (getAdd (lb ^. ge
   (getStringSN (lb ^. shortname))) x
 mkRawLC x@(Defnt d _)       lb = llcc 
   (mkLabelRA' ((getDefName d) ++ concatMap repUnd (getAdd (lb ^. getRefAdd))) 
-  (getStringSN (lb ^. shortname))) x
+  (concatMap repUnd (getStringSN (lb ^. shortname)))) x
 
 -- | Automatically create the label for a definition
 getDefName :: DType -> String

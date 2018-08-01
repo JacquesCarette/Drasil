@@ -35,7 +35,7 @@ import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian)
 
 import Drasil.GamePhysics.Changes (likelyChanges, likelyChangesList', unlikelyChanges)
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
-import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs)
+import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns)
 import Drasil.GamePhysics.IMods (iModels, im1_new, im2_new, im3_new)
 import Drasil.GamePhysics.References (cpCitations)
 import Drasil.GamePhysics.TMods (cpTMods, t1NewtonSL_new, t2NewtonTL_new, 
@@ -92,7 +92,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
             t4ChaslesThm_new, t5NewtonSLR_new]
           , GDs [] [] HideDerivation -- No Gen Defs for Gamephysics
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [im1_new, im2_new, im3_new] ShowDerivation
-          , DDs ([Label, Symbol, Units] ++ stdFields) cpDDefs ShowDerivation
+          , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , Constraints EmptyS dataConstraintUncertainty (S "FIXME") [inDataConstTbl cpInputConstraints, outDataConstTbl cpOutputConstraints]
           ]
         )
@@ -118,7 +118,7 @@ chipmunkSysInfo = SI {
   _quants = symbT, 
   _concepts = ([] :: [DefinedQuantityDict]),
   _definitions = cpDDefs,
-  _datadefs = ([] :: [DataDefinition]),
+  _datadefs = (dataDefns),
   _inputs = inputSymbols,
   _outputs = outputSymbols, 
   _defSequence = cpQDefs,
@@ -443,7 +443,7 @@ assumSec = (sSubSec assumption [(siCon assumptions_list)])
 tModSec = (sSubSec thModel [(siTMod cpTMods)])
 genDefSec = (sSubSec genDefn [])
 iModSec = (sSubSec inModel [(siIMod iModels)])
-dataDefSec = (sSubSec dataDefn [(siSent [data_definitions_intro]), (siDDef cpDDefs)])
+dataDefSec = (sSubSec dataDefn [(siSent [data_definitions_intro]), (siDDef dataDefns)])
 dataConSec = (sSubSec dataConst [(siUQI cpInputConstraints), (siUQO cpOutputConstraints)])
 
 
@@ -697,7 +697,7 @@ traceMatTheoryModel = ["T1", "T2", "T3", "T4", "T5"]
 traceMatTheoryModelRef = map (refFromType Theory) cpTMods
 
 traceMatDataDef = ["DD1","DD2","DD3","DD4","DD5","DD6","DD7","DD8"]
-traceMatDataDefRef = map (refFromType Data) cpDDefs
+traceMatDataDefRef = map (refFromType Data') dataDefns
 
 traceMatAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
 traceMatAssumpRef = makeListRef assumptions_list_a problem_description

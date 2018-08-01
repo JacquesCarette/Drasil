@@ -40,7 +40,7 @@ data SecItem where
   Sect      :: [Section] -> SecItem
   TMods     :: [RelationConcept] -> SecItem
   IMods     :: [RelationConcept] -> SecItem
-  DataDef   :: [QDefinition] -> SecItem
+  DataDef   :: [DataDefinition] -> SecItem
   --GenDef    :: [RelationConcept] -> SecItem
   ConChunk  :: [ConceptChunk] -> SecItem
   Sent      :: [Sentence] -> SecItem
@@ -71,7 +71,7 @@ siTMod xs = TMods xs
 siIMod :: [RelationConcept] -> SecItem
 siIMod xs = IMods xs
 
-siDDef :: [QDefinition] -> SecItem
+siDDef :: [DataDefinition] -> SecItem
 siDDef xs = DataDef xs
 
 siSent :: [Sentence] -> SecItem
@@ -181,7 +181,7 @@ getUQI (Just (UnQuantI xs)) = xs
 getUQI (Just _)             = []
 getUQI Nothing              = []
 
-getDDef :: (Maybe SecItem) -> [QDefinition]
+getDDef :: (Maybe SecItem) -> [DataDefinition]
 getDDef (Just (DataDef xs)) = xs
 getDDef (Just _)            = []
 getDDef Nothing             = []
@@ -228,7 +228,7 @@ pullUQI xs = pullFunc xs getUQI hasUQI
 pullUQO :: [SecItem] -> [UncertQ]
 pullUQO xs = pullFunc xs getUQO hasUQO
 
-pullDDefs :: [SecItem] -> [QDefinition]
+pullDDefs :: [SecItem] -> [DataDefinition]
 pullDDefs xs = pullFunc xs getDDef hasDDef
 
 pullIMods :: [SecItem] -> [RelationConcept]
@@ -344,7 +344,7 @@ dataDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
 dataDefinitionSect (SectionModel _ xs) _ = SRS.dataDefn
   (dataIntro:dataDefinitions ++ (pullContents xs)) (pullSections xs)
   where dataIntro       = dataDefinitionIntro $ pullSents xs
-        symMap          = Definition . Data
+        symMap          = Definition . Data'
         dataDefinitions = map (UlC . ulcc . symMap) $ pullDDefs xs
 
 

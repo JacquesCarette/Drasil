@@ -141,13 +141,13 @@ newAssumptions :: [AssumpChunk]
 newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7]
 
 newA1, newA2, newA3, newA4, newA5, newA6, newA7 :: AssumpChunk
-newA1 = assump "objectTyA" (foldlSent assumptions_assum1) (mkLabelRA'' "objectTy")
-newA2 = assump "objectDimensionA" (foldlSent assumptions_assum2) (mkLabelRA'' "objectDimension")
-newA3 = assump "coordinatesystemTyA" (foldlSent assumptions_assum3) (mkLabelRA'' "coordinatesystemTy")
-newA4 = assump "axesDefinedA" (foldlSent assumptions_assum4) (mkLabelRA'' "axesDefined")
-newA5 = assump "collisionTypeA" (foldlSent assumptions_assum5) (mkLabelRA'' "collisionType")
-newA6 = assump "dampingInvolvementA" (foldlSent assumptions_assum6) (mkLabelRA'' "dampingInvolvement")
-newA7 = assump "constraints_and_jointsInvolvementA" (foldlSent assumptions_assum7) (mkLabelRA'' "constraints_and_jointsInvolvement")
+newA1 = assump "objectTy" (foldlSent assumptions_assum1) (mkLabelRA'' "objectTy")
+newA2 = assump "objectDimension" (foldlSent assumptions_assum2) (mkLabelRA'' "objectDimension")
+newA3 = assump "coordinateSystemTy" (foldlSent assumptions_assum3) (mkLabelRA'' "coordinateSystemTy")
+newA4 = assump "axesDefined" (foldlSent assumptions_assum4) (mkLabelRA'' "axesDefined")
+newA5 = assump "collisionType" (foldlSent assumptions_assum5) (mkLabelRA'' "collisionType")
+newA6 = assump "dampingInvolvement" (foldlSent assumptions_assum6) (mkLabelRA'' "dampingInvolvement")
+newA7 = assump "constraintsAndJointsInvolvement" (foldlSent assumptions_assum7) (mkLabelRA'' "constraintsAndJointsInvolvement")
 --FIXME: All named ideas, not just acronyms.
 
 chipUnits :: [UnitDefn]
@@ -436,20 +436,6 @@ goal_statements_list = enumSimple 1 (getAcc goalStmt) goal_statements_list'
 -- 4.2 : Solution Characteristics Specification --
 --------------------------------------------------
 
-solution_characteristics_specification :: Section
-solution_characteristics_specification = assembler chipmunk everything 
-  scsSect [assumSec, tModSec, genDefSec, iModSec, dataDefSec, dataConSec]
-
-assumSec, tModSec, genDefSec, iModSec, dataDefSec, dataConSec, scsSect :: SubSec
-scsSect = sSubSec solutionCharSpec []
-assumSec = (sSubSec assumption [(siCon assumptions_list)])
-tModSec = (sSubSec thModel [(siTMod cpTMods)])
-genDefSec = (sSubSec genDefn [])
-iModSec = (sSubSec inModel [(siIMod iModels)])
-dataDefSec = (sSubSec dataDefn [(siSent [data_definitions_intro]), (siDDef dataDefns)])
-dataConSec = (sSubSec dataConst [(siUQI cpInputConstraints), (siUQO cpOutputConstraints)])
-
-
 -------------------------
 -- 4.2.1 : Assumptions --
 -------------------------
@@ -593,7 +579,7 @@ functional_requirements_req3 = foldlSent [S "Input the", (phrase CM.surface),
 
 functional_requirements_req4 = foldlSent [S "Verify that the", plural input_,
   S "satisfy the required", plural physicalConstraint, S "from", 
-  (makeRef solution_characteristics_specification)]
+  (makeRef SRS.solCharSpecLabel)]
 
 functional_requirements_req5 = requirementS (QP.position) (QP.velocity) 
   (S "acted upon by a" +:+ (phrase QP.force))
@@ -721,13 +707,13 @@ traceMatFuncReq =  ["R1","R2","R3", "R4", "R5", "R6", "R7", "R8"]
 traceMatFuncReqRef = makeListRef functional_requirements_list' functional_requirements
 
 traceMatData = ["Data Constraints"]
-traceMatDataRef = [makeRef solution_characteristics_specification]
+traceMatDataRef = [makeRef SRS.solCharSpecLabel]
 
 traceMatGoalStmt = ["GS1", "GS2", "GS3", "GS4"]
 traceMatGoalStmtRef = makeListRef goal_statements_list' problem_description
 
 traceMatGenDef = ["GD1", "GD2", "GD3", "GD4", "GD5", "GD6", "GD7"]
-traceMatGenDefRef = makeListRef traceMatGenDef solution_characteristics_specification
+traceMatGenDefRef = [makeRef SRS.solCharSpecLabel]
 
 traceMatLikelyChg = ["LC1", "LC2", "LC3", "LC4"]
 traceMatLikelyChgRef = makeListRef likelyChangesList' likelyChanges

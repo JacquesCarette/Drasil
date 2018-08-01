@@ -97,6 +97,7 @@ mkDefinitionLC :: String -> String -> String -> RawContent -> LabelledContent
 mkDefinitionLC labelUID refAdd sn dfn = llcc (mkLabelRA labelUID refAdd sn) dfn
 
 -- FIXME: no pattern for Bib BibRef of RawContent
+-- FIXME: improve design so there's no need for wild card labels?
 mkRawLC :: RawContent -> Label -> LabelledContent
 mkRawLC x@(Table _ _ _ _)  lb = llcc (mkLabelRA' ("Table:" ++ (getAdd (lb ^. getRefAdd))) 
   (getStringSN (lb ^. shortname))) x
@@ -108,9 +109,9 @@ mkRawLC x@(Enumeration _)    lb = llcc (mkLabelRA' ("List:" ++ (getAdd (lb ^. ge
   (getStringSN (lb ^. shortname))) x
 mkRawLC x@(Figure _ _ _)   lb = llcc (mkLabelRA' ("Figure:" ++ (getAdd (lb ^. getRefAdd)))
   (getStringSN (lb ^. shortname))) x
-mkRawLC x@(Requirement rq)   _  = llcc (mkLabelRA' ("R:" ++ (getAdd ((rq ^. getLabel) ^. getRefAdd)))
+mkRawLC x@(Requirement rq)   lb  = llcc (mkLabelRA' ("R:" ++ (getAdd (lb ^. getRefAdd)))
   (getStringSN (rq ^. shortname))) x
-mkRawLC x@(Assumption ac)    _  = llcc (mkLabelRA' ("A:" ++ (getAdd ((ac ^. getLabel) ^. getRefAdd)))
+mkRawLC x@(Assumption ac)    lb  = llcc (mkLabelRA' ("A:" ++ (getAdd (lb ^. getRefAdd)))
   (getStringSN (ac ^. shortname))) x
 mkRawLC x@(Change (ChC _ Likely _ lb))   _  = llcc (mkLabelRA' 
   ("LC:" ++ (getAdd (lb ^. getRefAdd))) (getStringSN (lb ^. shortname))) x

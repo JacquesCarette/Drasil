@@ -7,7 +7,7 @@ module Drasil.DocLang.SRS
   physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
   inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
   indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel,
-  tOfSymb, srsDom) where
+  tOfSymb, srsDom, solCharSpecLabel) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
@@ -73,7 +73,7 @@ termAndDefn cs ss = section' (titleize' Doc.termAndDef)        cs ss "TermDefs"
 termogy     cs ss = section' (titleize Doc.terminology)        cs ss "Terminology"
 physSyst    cs ss = section (titleize Doc.physSyst)           cs ss physSystLabel
 goalStmt    cs ss = section' (titleize' Doc.goalStmt)          cs ss "GoalStmt"
-solCharSpec cs ss = section' (titleize Doc.solutionCharSpec)   cs ss "SolCharSpec"
+solCharSpec cs ss = section (titleize Doc.solutionCharSpec)   cs ss solCharSpecLabel
 assumpt     cs ss = section (titleize' Doc.assumption)        cs ss assumptLabel
 thModel     cs ss = section (titleize' Doc.thModel)           cs ss thModelLabel
 genDefn     cs ss = section (titleize' Doc.genDefn)           cs ss genDefnLabel
@@ -133,3 +133,4 @@ referenceLabel     = mkLabelRA'' "References"
 indPRCaseLabel     = mkLabelRA' "IndividualProdUC" "Individual Product Use Cases"
 assumptLabel       = mkLabelRA' "Assumps" "Assumptions"
 funcReqLabel       = mkLabelRA' "FRs" "Functional Requirements"
+solCharSpecLabel   = mkLabelRA' "SolCharSpec" "Solution Characteristics Specification"

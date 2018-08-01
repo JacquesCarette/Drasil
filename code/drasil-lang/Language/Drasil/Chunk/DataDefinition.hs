@@ -13,6 +13,8 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), HasAdditionalNotes(getNotes),
   HasLabel(getLabel))
+import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
+import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label)
 
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname))

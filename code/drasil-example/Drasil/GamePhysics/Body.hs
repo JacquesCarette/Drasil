@@ -35,7 +35,7 @@ import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian)
 
 import Drasil.GamePhysics.Changes (likelyChanges, likelyChangesList', unlikelyChanges)
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
-import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs)
+import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns)
 import Drasil.GamePhysics.IMods (iModels, iModels_new, im1_new, im2_new, im3_new)
 import Drasil.GamePhysics.References (cpCitations)
 import Drasil.GamePhysics.TMods (cpTMods, t1NewtonSL_new, t2NewtonTL_new, 
@@ -93,7 +93,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
           , GDs [] [] HideDerivation -- No Gen Defs for Gamephysics
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) 
               [im1_new, im2_new, im3_new] ShowDerivation
-          , DDs ([Label, Symbol, Units] ++ stdFields) cpDDefs ShowDerivation
+          , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , Constraints EmptyS dataConstraintUncertainty (S "FIXME") 
               [inDataConstTbl cpInputConstraints, outDataConstTbl cpOutputConstraints]
           ]
@@ -120,7 +120,7 @@ chipmunkSysInfo = SI {
   _quants = symbT, 
   _concepts = ([] :: [DefinedQuantityDict]),
   _definitions = cpDDefs,
-  _datadefs = ([] :: [DataDefinition]),
+  _datadefs = (dataDefns),
   _inputs = inputSymbols,
   _outputs = outputSymbols, 
   _defSequence = cpQDefs,
@@ -446,7 +446,7 @@ assumSec = (sSubSec assumption [(siCon assumptions_list)])
 tModSec = (sSubSec thModel [(siTMod cpTMods)])
 genDefSec = (sSubSec genDefn [])
 iModSec = (sSubSec inModel [(siIMod iModels)])
-dataDefSec = (sSubSec dataDefn [(siSent [data_definitions_intro]), (siDDef cpDDefs)])
+dataDefSec = (sSubSec dataDefn [(siSent [data_definitions_intro]), (siDDef dataDefns)])
 dataConSec = (sSubSec dataConst [(siUQI cpInputConstraints), (siUQO cpOutputConstraints)])
 
 

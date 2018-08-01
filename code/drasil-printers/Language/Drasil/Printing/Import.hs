@@ -268,11 +268,11 @@ layLabelled sm x@(LblC _ (Assumption a))        = T.ALUR T.Assumption
   (spec sm (assuming a))
   (P.S $ getAdd (x ^. getRefAdd))
   (spec sm $ getShortName a)
-layLabelled sm x@(LblC _ (Change lc))           = T.ALUR
-  (if (chngType lc) == Likely then T.LikelyChange else T.UnlikelyChange)
-  (spec sm (chng lc)) 
+layLabelled sm x@(LblC _ (Change lcs))           = T.ALUR
+  (if (chngType lcs) == Likely then T.LikelyChange else T.UnlikelyChange)
+  (spec sm (chng lcs)) 
   (P.S $ getAdd (x ^. getRefAdd)) 
-  (spec sm $ getShortName lc)
+  (spec sm $ getShortName lcs)
 layLabelled sm x@(LblC _ (Graph ps w h t))    = T.Graph 
   (map (\(y,z) -> (spec sm y, spec sm z)) ps) w h (spec sm t)
   (P.S $ "Figure:" ++ (getAdd (x ^. getRefAdd)))

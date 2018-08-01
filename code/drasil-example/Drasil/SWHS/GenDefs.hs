@@ -38,8 +38,8 @@ swhsGDs :: [GenDefn]
 swhsGDs = [nwtnCoolingGD, rocTempSimpGD] 
 
 nwtnCoolingGD, rocTempSimpGD :: GenDefn
-nwtnCoolingGD = gdNoUnitDef nwtnCooling [] (mkLabelRA'' "nwtnCoolingLabel")
-rocTempSimpGD = gdNoUnitDef rocTempSimp [] (mkLabelRA'' "rocTempSimpLabel")
+nwtnCoolingGD = gdNoUnitDef nwtnCooling [] (mkLabelRA'' "nwtnCooling")
+rocTempSimpGD = gdNoUnitDef rocTempSimp [] (mkLabelRA'' "rocTempSimp")
 
 generalDefinitions :: [GenDefn]
 generalDefinitions = [gd' nwtnCooling (Just thermal_flux) ([] :: Derivation) "nwtnCooling" [nwtnCooling_desc],

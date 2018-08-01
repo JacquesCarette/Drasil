@@ -119,7 +119,7 @@ swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) swhsSymb
   this_si
 
 printSetting :: PrintingInformation
-printSetting = PI swhsSymMap "scientific"
+printSetting = PI swhsSymMap "Engineering"
 
   --Note: The second swhsSymbols here is
     -- Redundant b/c the unitals are not really concepts (yet). There

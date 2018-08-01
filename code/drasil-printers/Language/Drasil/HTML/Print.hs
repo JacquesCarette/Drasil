@@ -3,7 +3,7 @@ module Language.Drasil.HTML.Print(genHTML) where
 import Prelude hiding (print)
 import Data.List (sortBy,partition,intersperse)
 import Text.PrettyPrint hiding (render, Str)
-import Numeric (showFFloat)
+import Numeric (showFFloat, showEFloat)
 import Control.Arrow (second)
 
 import qualified Language.Drasil as L (People, Person, StyleGuide(APA, MLA, Chicago), 
@@ -26,7 +26,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),
   Dot, Cross, Neg, Exp, Not, Dim, Cot, Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, 
   Real, Rational, Natural, Integer, IsIn, Point), 
   Expr(Sub, Sup, Over, Sqrt, Spc, Font, MO, Fenced, Spec, Ident, Row, Mtx, Case, Div, Str, 
-  Int, Dbl, Integ), Spec(Quote, EmptyS, Ref, HARDNL, Sp, Sy, S, E, (:+:)),
+  Int, Dbl, Integ, DblSc), Spec(Quote, EmptyS, Ref, HARDNL, Sp, Sy, S, E, (:+:)),
   Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label)
 import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author, 
   Editor, Pages, Type, Month, Organization, Institution, Chapter, HowPublished, School, Note,
@@ -36,6 +36,8 @@ import Language.Drasil.Printing.LayoutObj (Tags, Document(Document),
   LayoutObj(Graph, Bib, List, Header, Figure, Definition, Table, EqnBlock, Paragraph, 
   HDiv, ALUR))
 import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..),
+  HaveNotationSetting(..))
 
 {-
 import Language.Drasil.Development.UnitLang (L.USymb(L.US))
@@ -54,7 +56,7 @@ import Language.Drasil.Chunk.Citation (CitationKind(..))
 data OpenClose = Open | Close
 
 -- | Generate an HTML document from a Drasil 'Document'
-genHTML :: L.HasSymbolTable ctx => ctx -> F.Filename -> L.Document -> Doc
+genHTML :: (L.HasSymbolTable ctx, HaveNotationSetting ctx) => ctx -> F.Filename -> L.Document -> Doc
 genHTML sm fn doc = build fn (makeDocument sm doc)
 
 -- | Build the HTML Document, called by genHTML
@@ -155,6 +157,7 @@ uSymb (L.US ls) = formatu t b
 -- | Renders expressions in the HTML (called by multiple functions)
 p_expr :: Expr -> String
 p_expr (Dbl d)        = showFFloat Nothing d ""
+p_expr (DblSc d)      = showEFloat Nothing d ""
 p_expr (Int i)        = show i
 p_expr (Integ i)      = show i
 p_expr (Str s)        = s

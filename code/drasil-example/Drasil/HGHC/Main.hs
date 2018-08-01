@@ -5,7 +5,7 @@ import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..),
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.HGHC.HGHC (allSymbols, srsBody)
+import Drasil.HGHC.HGHC (allSymbols, srsBody, printSetting)
 
 thisChoices :: Choices
 thisChoices = Choices {
@@ -21,6 +21,6 @@ thisChoices = Choices {
   
 main :: IO ()            
 main = do
-  gen (DocSpec Website "Tiny_SRS") srsBody allSymbols
-  gen (DocSpec SRS "Tiny_SRS")     srsBody allSymbols
+  gen (DocSpec Website "Tiny_SRS") srsBody printSetting
+  gen (DocSpec SRS "Tiny_SRS")     srsBody printSetting
   --genCode thisChoices thisCode

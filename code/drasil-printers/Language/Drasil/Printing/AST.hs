@@ -14,6 +14,7 @@ data Spacing = Thin
 type Label = Spec
 
 data Expr = Dbl   Double
+          | DblSc Double
           | Integ Integer
           | Int   Int
           | Str   String

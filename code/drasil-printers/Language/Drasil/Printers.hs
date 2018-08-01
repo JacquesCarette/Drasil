@@ -15,6 +15,7 @@ module Language.Drasil.Printers (
     -- Print
   , genTeX
   , PrintingInformation(..)
+  , HaveNotationSetting(..)
   )
   where
 
@@ -25,4 +26,4 @@ import Language.Drasil.HTML.Helpers (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.Make.Print (genMake)
 import Language.Drasil.TeX.Print (genTeX)
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..), getSetting)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..), HaveNotationSetting(..))

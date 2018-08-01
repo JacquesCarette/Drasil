@@ -698,7 +698,7 @@ traceMatTheoryModel = ["T1", "T2", "T3", "T4", "T5"]
 traceMatTheoryModelRef = map makeRef cpTMods_new
 
 traceMatDataDef = ["DD1","DD2","DD3","DD4","DD5","DD6","DD7","DD8"]
-traceMatDataDefRef = map makeRef cpDDefs
+traceMatDataDefRef = map makeRef dataDefns
 
 traceMatAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
 traceMatAssumpRef = map makeRef newAssumptions
@@ -713,7 +713,7 @@ traceMatGoalStmt = ["GS1", "GS2", "GS3", "GS4"]
 traceMatGoalStmtRef = makeListRef goal_statements_list' problem_description
 
 traceMatGenDef = ["GD1", "GD2", "GD3", "GD4", "GD5", "GD6", "GD7"]
-traceMatGenDefRef = [makeRef SRS.solCharSpecLabel]
+traceMatGenDefRef = replicate (length traceMatGenDef) (makeRef SRS.solCharSpecLabel) -- FIXME: hack?
 
 traceMatLikelyChg = ["LC1", "LC2", "LC3", "LC4"]
 traceMatLikelyChgRef = makeListRef likelyChangesList' likelyChanges

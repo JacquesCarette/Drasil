@@ -17,7 +17,7 @@ import Language.Drasil.Label.Core (Label)
 
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Control.Lens(makeLenses, (^.))
-import Language.Drasil.Label (mkLabelRA')
+import Language.Drasil.Label (mkLabelRA', mkLabelRA'')
 import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Spec (Sentence(EmptyS))
@@ -55,8 +55,8 @@ instance HasLabel           DataDefinition where getLabel = qd . getLabel --FIXM
 instance HasShortName       DataDefinition where shortname = lbl . shortname
 
 -- | Smart constructor for data definitions 
-mkDD :: QDefinition -> References -> Derivation -> String{-Label-} -> Maybe [Sentence] -> DataDefinition
-mkDD a b c _ e = DD a Global b c (mkLabelRA' ((a ^. uid) ++ "Label") (a ^. uid)) e -- FIXME: should the Label be passed in or derived?
+mkDD :: QDefinition -> References -> Derivation -> String -> Maybe [Sentence] -> DataDefinition
+mkDD a b c d e = DD a Global b c (mkLabelRA'' d) e -- FIXME: should the Label be passed in or derived?
 
 qdFromDD :: DataDefinition -> QDefinition
 qdFromDD (DD a _ _ _ _ _) = a
@@ -65,9 +65,9 @@ qdFromDD (DD a _ _ _ _ _) = a
 mkDataDef :: (Quantity c) => c -> Expr -> QDefinition
 mkDataDef cncpt equation = datadef $ getUnit cncpt --should references be passed in at this point?
   where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) a equation [] (mkLabelRA' ((cncpt ^. uid) ++ "Label") (cncpt ^. uid))
+                           (eqSymb cncpt) a equation [] (mkLabelRA'' (cncpt ^. uid))
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) equation [] (mkLabelRA' ((cncpt ^. uid) ++ "Label") (cncpt ^. uid))
+                           (eqSymb cncpt) equation [] (mkLabelRA'' (cncpt ^. uid))
 
 mkDataDef' :: (Quantity c) => c -> Expr -> Derivation -> QDefinition
 mkDataDef' cncpt equation dv = datadef $ getUnit cncpt --should references be passed in at this point?

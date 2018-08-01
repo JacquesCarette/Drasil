@@ -26,7 +26,6 @@ import Language.Drasil.Document.Core (RawContent(..), LabelledContent(..))
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.Spec (Sentence((:+:), Ref, S))
 import Language.Drasil.UID (UID)
-import Language.Drasil.Label.Core (getAdd)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Label.Core (Label, getAdd)
 

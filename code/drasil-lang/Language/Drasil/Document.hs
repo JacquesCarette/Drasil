@@ -40,16 +40,6 @@ repUnd :: Char -> String
 repUnd '_' = "."
 repUnd c = c : []
 
--- | Automatically create the label for a definition
-getDefName :: DType -> String
-getDefName (Data c)   = "DD:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
-getDefName (Data' c)  = "DD:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
-getDefName (Theory c) = "T:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
-getDefName TM         = "T:"
-getDefName DD         = "DD:"
-getDefName Instance   = "IM:"
-getDefName General    = "GD:"
-
 getDefLabel :: DType -> Label
 getDefLabel (Data c)   = c ^. getLabel
 getDefLabel (Data' c)  = c ^. getLabel
@@ -112,11 +102,8 @@ mkRawLC x@(Table _ _ _ _)  lb = llcc (mkLabelRA' ("Table:" ++ (getAdd (lb ^. get
   (getStringSN (lb ^. shortname))) x
 mkRawLC x@(Paragraph _)      lb = llcc (mkLabelRA' ("Paragraph:" ++ (getAdd (lb ^. getRefAdd)))  
   (getStringSN (lb ^. shortname))) x
-mkRawLC x@(Definition d)     lb = let u = getAdd ((getDefLabel d) ^. getRefAdd) in
-  case u of "empty" -> llcc (mkLabelRA' ("Definition:" ++ (getAdd (lb ^. getRefAdd))) 
-                         (getStringSN (lb ^. shortname))) x
-            _       -> llcc (mkLabelRA' ((getDefName d) ++ u)
-                         (getStringSN ((getDefLabel d) ^. shortname))) x 
+mkRawLC x@(Definition d)     lb = llcc 
+  (mkLabelRA' ((getDefName d) ++ getAdd (lb ^. getRefAdd)) (getStringSN (lb ^. shortname))) x
 mkRawLC x@(Enumeration _)    lb = llcc (mkLabelRA' ("List:" ++ (getAdd (lb ^. getRefAdd)))
   (getStringSN (lb ^. shortname))) x
 mkRawLC x@(Figure _ _ _)   lb = llcc (mkLabelRA' ("Figure:" ++ (getAdd (lb ^. getRefAdd)))
@@ -131,11 +118,19 @@ mkRawLC x@(Change (ChC _ Unlikely _ lb)) _  = llcc (mkLabelRA'
   ("UC:" ++ (getAdd (lb ^. getRefAdd))) (getStringSN (lb ^. shortname))) x
 mkRawLC x@(Graph _ _ _ _)   lb = llcc (mkLabelRA' ("Graph:" ++ (getAdd (lb ^. getRefAdd)))
   (getStringSN (lb ^. shortname))) x
-mkRawLC x@(Defnt d _)       lb = let u = getAdd ((getDefLabel d) ^. getRefAdd) in
-  case u of "empty" -> llcc (mkLabelRA' ("Definition:" ++ (getAdd (lb ^. getRefAdd)))
-                         (getStringSN (lb ^. shortname))) x
-            _       -> llcc (mkLabelRA' ((getDefName d) ++ u)
-                         (getStringSN ((getDefLabel d) ^. shortname))) x
+mkRawLC x@(Defnt d _)       lb = llcc 
+  (mkLabelRA' ((getDefName d) ++ getAdd (lb ^. getRefAdd)) (getStringSN (lb ^. shortname))) x
+
+-- | Automatically create the label for a definition
+getDefName :: DType -> String
+getDefName (Data c)   = "DD:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
+getDefName (Data' c)  = "DD:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
+getDefName (Theory c) = "T:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
+getDefName TM         = "T:"
+getDefName DD         = "DD:"
+getDefName Instance   = "IM:"
+getDefName General    = "GD:"
+
 {-mkEqnBlock
 mkEnumeration
 mkFigure

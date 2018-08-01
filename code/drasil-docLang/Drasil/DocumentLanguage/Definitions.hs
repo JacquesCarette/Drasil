@@ -51,7 +51,7 @@ ddefn :: HasSymbolTable ctx => Fields -> ctx -> QDefinition -> LabelledContent
 ddefn fs m d = llcc (d ^. getLabel) $ Defnt DD (foldr (mkQField d m) [] fs)
 
 ddefn' :: HasSymbolTable ctx => Fields -> ctx -> DataDefinition -> LabelledContent
-ddefn' fs m d = llcc (d ^. getLabel) $ Defnt DD (foldr (mkDDField d m) [] fs)
+ddefn' fs m d = mkRawLC (Defnt DD (foldr (mkDDField d m) [] fs)) (d ^. getLabel)
 
 -- | Create a general definition using a list of fields, database of symbols,
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'

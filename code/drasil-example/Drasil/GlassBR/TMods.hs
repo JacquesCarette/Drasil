@@ -1,4 +1,4 @@
-module Drasil.GlassBR.TMods (gbrTMods, tModels, pbSafetyReq, lrSafetyReq, pbIsSafe, lrIsSafe) where
+module Drasil.GlassBR.TMods (gbrTMods, pbSafetyReq, lrSafetyReq, pbIsSafe, lrIsSafe) where
 
 import Drasil.GlassBR.Unitals (demand, demandq, is_safePb, is_safeLR, lRe,
   pb_tol, prob_br)
@@ -11,10 +11,6 @@ import Control.Lens ((^.))
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
 
 {--}
-
---FIXME: should be removed with closure of #891
-tModels :: [RelationConcept]
-tModels = [pbSafetyReq, lrSafetyReq]
 
 gbrTMods :: [TheoryModel]
 gbrTMods = [pbIsSafe, lrIsSafe]

@@ -62,7 +62,7 @@ import Drasil.GlassBR.DataDefs (aspRat, dataDefns, gbQDefns, hFromt, strDisFac, 
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
-import Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe, tModels, lrSafetyReq, pbSafetyReq)
+import Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe, lrSafetyReq, pbSafetyReq)
 import Drasil.GlassBR.IMods (probOfBreak, 
   calofCapacity, calofDemand, gbrIMods)
 
@@ -176,7 +176,7 @@ glassSystInfo = SI {
   _quants      = this_symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _definitions = (map (relToQD gbSymbMap) gbrIMods) ++ 
-                 --(map (relToQD gbSymbMap) tModels{-gbrTMods-}) ++ --FIXME: #891
+                 (concatMap (^. defined_quant) gbrTMods) ++
                   [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears
                                              -- in the description of the Calculation of Demand instance model;
                                              -- should this be included as a Data Definition?

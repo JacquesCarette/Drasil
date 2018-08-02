@@ -6,7 +6,6 @@ module Language.Drasil.Chunk.PhysSystDesc
   ( PhysSystDesc
   , pSysDes
   , psd
-  , lbl
   ) where
 
 import Language.Drasil.UID (UID)

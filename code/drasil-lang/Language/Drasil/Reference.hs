@@ -14,10 +14,10 @@ import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID), CiteField
 import Language.Drasil.Chunk.Concept (ConceptInstance)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
-import Language.Drasil.Chunk.Goal as G (Goal, lbl)
+import Language.Drasil.Chunk.Goal as G (Goal)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
-import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc, lbl)
 import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..))
+import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName, getStringSN, shortname')
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel), HasRefAddress(getRefAdd))
@@ -193,11 +193,11 @@ class Referable s where
   rType   :: s -> RefType -- The reference type (referencing namespace?)
 
 instance Referable Goal where
-  refAdd g = "GS:" ++ (getAdd ((g ^. G.lbl) ^. getRefAdd))
+  refAdd g = "GS:" ++ (getAdd ((g ^. getLabel) ^. getRefAdd))
   rType _ = Goal
 
 instance Referable PhysSystDesc where
-  refAdd p = "PS:" ++ (getAdd ((p ^. PD.lbl) ^. getRefAdd))
+  refAdd p = "PS:" ++ (getAdd ((p ^. getLabel) ^. getRefAdd))
   rType _ = PSD
 
 instance Referable AssumpChunk where

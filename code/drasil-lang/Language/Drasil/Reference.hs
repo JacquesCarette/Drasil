@@ -18,10 +18,10 @@ import Language.Drasil.Chunk.Goal as G (Goal, refAddr)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
 import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc, refAddr)
 import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..), ReqType(FR))
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName)
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName, getStringSN, shortname')
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel), HasRefAddress(getRefAdd))
-import Language.Drasil.Document (Section(Section), getDefName, repUnd)
+import Language.Drasil.Document (Section(Section), getDefName, repUnd, setSN)
 import Language.Drasil.Document.Core (RawContent(..), LabelledContent(..))
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.Spec (Sentence((:+:), Ref, S))
@@ -341,7 +341,7 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 --FIXME: completely shift to being `HasLabel` since customref checks for 
 --  `HasShortName` and `Referable`?
 makeRef :: (HasShortName l, Referable l) => l -> Sentence
-makeRef r = customRef r (r ^. shortname)
+makeRef r = customRef r (shortname' $ concatMap repUnd $ getStringSN (r ^. shortname))
 
 --FIXME: needs design (HasShortName, Referable only possible when HasLabel)
 mkRefFrmLbl :: (HasLabel l, HasShortName l, Referable l) => l -> Sentence
@@ -351,9 +351,25 @@ mkRefFrmLbl r = makeRef r
 midRef :: Label -> Sentence
 midRef r = customRef r (r ^. shortname)
 
--- | Create a reference with a custom 'ShortName'
+-- | Create a reference with a customized 'ShortName'
 customRef :: (HasShortName l, Referable l) => l -> ShortName -> Sentence
-customRef r n = Ref (rType r) (refAdd r) n
+customRef r n = Ref (rType r) (refAdd r) (shortname' $ temp (rType r) n)
+  where
+    temp :: RefType -> ShortName -> String
+    temp Tab s = setSN "" s
+    temp Fig s = setSN "" s
+    temp Sect s = setSN "" s
+    temp Def s = setSN "" s
+    temp Mod s = setSN "" s
+    temp Req s = setSN "" s
+    temp Assump s = setSN "" s
+    temp LC s = setSN "" s
+    temp UC s = setSN "" s
+    temp EqnB s = setSN "" s
+    temp Cite s = setSN "" s
+    temp Goal s = setSN "" s
+    temp PSD s = setSN "" s
+    temp Lbl s = setSN "" s
 
 -- This works for passing the correct id to the reference generator for Assumptions,
 -- Requirements and Likely Changes but I question whether we should use it.

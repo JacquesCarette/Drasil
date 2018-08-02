@@ -21,12 +21,12 @@ import Drasil.GlassBR.References (gbCitations, astm2009)
 gbRefDB :: ReferenceDB
 gbRefDB = rdb [] [] newAssumptions [] [] gbCitations []
 
+newAssumptions :: [AssumpChunk] -- For testing
+newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8]
+
 assumptionConstants :: [QDefinition]
 assumptionConstants = [constant_M, constant_K, constant_ModElas,
   constant_LoadDur, constant_LoadSF]
-
-newAssumptions :: [AssumpChunk] -- For testing
-newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8]
 
 newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8 :: AssumpChunk
 newA1 = assump "glassTyA" a1Desc (mkLabelRA'' "glassTy")

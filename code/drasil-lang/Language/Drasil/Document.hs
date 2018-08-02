@@ -10,7 +10,7 @@ import Language.Drasil.Chunk.Change (Change(..), ChngType(..))
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk(..), ReqType(..))
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname), getStringSN)
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname), getStringSN, ShortName)
 import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd),
   MayHaveLabel(getMaybeLabel), HasLabel(getLabel))
 
@@ -97,38 +97,34 @@ mkDefinitionLC labelUID refAdd sn dfn = llcc (mkLabelRA labelUID refAdd sn) dfn
 -- FIXME: no pattern for Bib BibRef of RawContent
 -- FIXME: improve design so there's no need for wild card labels?
 mkRawLC :: RawContent -> Label -> LabelledContent
-mkRawLC x@(Table _ _ _ _)  lb = llcc (mkLabelRA' ("Table:" ++ (getAdd (lb ^. getRefAdd))) 
-  (getStringSN (lb ^. shortname))) x
-mkRawLC x@(Paragraph _)      lb = llcc (mkLabelRA' ("Paragraph:" ++ (getAdd (lb ^. getRefAdd)))  
-  (getStringSN (lb ^. shortname))) x
-mkRawLC x@(Definition d)     lb = llcc 
-  (mkLabelRA' ((getDefName d) ++ concatMap repUnd (getAdd (lb ^. getRefAdd))) 
-  (concatMap repUnd (getStringSN (lb ^. shortname)))) x
-mkRawLC x@(Enumeration _)    lb = llcc (mkLabelRA' ("List:" ++ (getAdd (lb ^. getRefAdd)))
-  (getStringSN (lb ^. shortname))) x
-mkRawLC x@(Figure _ _ _)   lb = llcc (mkLabelRA' ("Figure:" ++ (getAdd (lb ^. getRefAdd)))
-  (getStringSN (lb ^. shortname))) x
-mkRawLC x@(Requirement (RC _ FR _ _)) lb  = llcc (mkLabelRA' ("FR:" ++ (getAdd (lb ^. getRefAdd)))
-  (getStringSN (lb ^. shortname))) x
-mkRawLC x@(Requirement (RC _ NFR _ _)) lb  = llcc (mkLabelRA' ("NFR:" ++ (getAdd (lb ^. getRefAdd)))
-  (getStringSN (lb ^. shortname))) x
-mkRawLC x@(Assumption ac)    lb  = llcc (mkLabelRA' ("A:" ++ (getAdd (lb ^. getRefAdd)))
-  (getStringSN (ac ^. shortname))) x
-mkRawLC x@(Change (ChC _ Likely _ lb))   _  = llcc (mkLabelRA' 
-  ("LC:" ++ (getAdd (lb ^. getRefAdd))) (getStringSN (lb ^. shortname))) x
-mkRawLC x@(Change (ChC _ Unlikely _ lb)) _  = llcc (mkLabelRA'
-  ("UC:" ++ (getAdd (lb ^. getRefAdd))) (getStringSN (lb ^. shortname))) x
-mkRawLC x@(Graph _ _ _ _)   lb = llcc (mkLabelRA' ("Graph:" ++ (getAdd (lb ^. getRefAdd)))
-  (getStringSN (lb ^. shortname))) x
-mkRawLC x@(Defnt d _)       lb = llcc 
-  (mkLabelRA' ((getDefName d) ++ concatMap repUnd (getAdd (lb ^. getRefAdd))) 
-  (concatMap repUnd (getStringSN (lb ^. shortname)))) x
+mkRawLC x@(Table _ _ _ _)  lb = llcc (setLabel "Table:" "" lb) x
+mkRawLC x@(Paragraph _)    lb = llcc (setLabel "Paragraph:" "" lb) x
+mkRawLC x@(Definition d)   lb = llcc (setLabel (getDefName d) "" lb) x
+mkRawLC x@(Enumeration _)  lb = llcc (setLabel "List:" "" lb) x
+mkRawLC x@(Figure _ _ _)   lb = llcc (setLabel "Figure:" ""lb) x
+mkRawLC x@(Requirement (RC _ FR _ _)) lb  = llcc (setLabel "FR:" "" lb) x
+mkRawLC x@(Requirement (RC _ NFR _ _)) lb = llcc (setLabel "NFR:" "" lb) x
+mkRawLC x@(Assumption ac)    lb  = llcc (setLabel "A:" "" lb) x
+mkRawLC x@(Change (ChC _ Likely _ lb))   _  = llcc (setLabel "LC:" "" lb) x
+mkRawLC x@(Change (ChC _ Unlikely _ lb)) _  = llcc (setLabel "UC:" "" lb) x
+mkRawLC x@(Graph _ _ _ _)   lb = llcc (setLabel "Graph:" "" lb) x
+mkRawLC x@(Defnt d _)       lb = llcc (setLabel (getDefName d) "" lb) x
+
+setLabel :: String -> String -> Label -> Label
+setLabel prependRA prependSN lb = mkLabelRA' (setRefAdd prependRA (lb ^. getRefAdd))
+  (setSN prependSN (lb ^. shortname))
+
+--setRefAdd :: String -> LblType -> String
+setRefAdd prependRA ra = prependRA ++ concatMap repUnd (getAdd ra)
+
+setSN :: String -> ShortName -> String
+setSN prependSN sn = prependSN ++ concatMap repUnd (getStringSN sn)
 
 -- | Automatically create the label for a definition
 getDefName :: DType -> String
-getDefName (Data c)   = "DD:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
-getDefName (Data' c)  = "DD:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
-getDefName (Theory c) = "T:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
+getDefName (Data c)   = "DD:"
+getDefName (Data' c)  = "DD:"
+getDefName (Theory c) = "T:"
 getDefName TM         = "T:"
 getDefName DD         = "DD:"
 getDefName Instance   = "IM:"

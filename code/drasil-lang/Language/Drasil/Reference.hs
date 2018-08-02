@@ -14,10 +14,10 @@ import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID), CiteField
 import Language.Drasil.Chunk.Concept (ConceptInstance)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
-import Language.Drasil.Chunk.Goal as G (Goal, lbl)
+import Language.Drasil.Chunk.Goal as G (Goal)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
-import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc, lbl)
 import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..))
+import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName, getStringSN, shortname')
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel), HasRefAddress(getRefAdd))
@@ -193,24 +193,24 @@ class Referable s where
   rType   :: s -> RefType -- The reference type (referencing namespace?)
 
 instance Referable Goal where
-  refAdd g = "GS:" ++ (getAdd ((g ^. G.lbl) ^. getRefAdd))
+  refAdd g = "GS:" ++ (getAdd ((g ^. getLabel) ^. getRefAdd))
   rType _ = Goal
 
 instance Referable PhysSystDesc where
-  refAdd p = "PS:" ++ (getAdd ((p ^. PD.lbl) ^. getRefAdd))
+  refAdd p = "PS:" ++ (getAdd ((p ^. getLabel) ^. getRefAdd))
   rType _ = PSD
 
 instance Referable AssumpChunk where
-  refAdd  x             = "A:" ++ concatMap repUnd (x ^. uid)
-  rType   _             = Assump
+  refAdd  x = "A:" ++ (getAdd ((x ^. getLabel) ^. getRefAdd))
+  rType   _ = Assump
 
 instance Referable ReqChunk where
-  refAdd  r@(RC _ rt _ _) = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
+  refAdd  r@(RC _ rt _ _) = show rt ++ ":" ++ (getAdd ((r ^. getLabel) ^. getRefAdd))
   rType   (RC _ FR _ _)   = Req FR
   rType   (RC _ NFR _ _)  = Req NFR
 
 instance Referable Change where
-  refAdd r@(ChC _ rt _ _)    = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
+  refAdd r@(ChC _ rt _ _)    = show rt ++ ":" ++ (getAdd ((r ^. getLabel) ^. getRefAdd))
   rType (ChC _ Likely _ _)   = LC
   rType (ChC _ Unlikely _ _) = UC
 
@@ -223,11 +223,11 @@ instance Referable Citation where
   rType _ = Cite
 
 instance Referable TheoryModel where
-  refAdd  t = "T:" ++ t ^. uid
+  refAdd  t = "T:" ++ (getAdd ((t ^. getLabel) ^. getRefAdd))
   rType   _ = Def TM
 
 instance Referable GenDefn where
-  refAdd  g = "GD:" ++ g ^. uid
+  refAdd  g = "GD:" ++ (getAdd ((g ^. getLabel) ^. getRefAdd))
   rType   _ = Def General
 
 instance Referable QDefinition where -- FIXME: This could lead to trouble; need
@@ -235,15 +235,15 @@ instance Referable QDefinition where -- FIXME: This could lead to trouble; need
                                      -- Refs. Double-check QDef is a DD before allowing
                                      -- FIXME: QDefinition should no longer be referable
                                      -- after its Label is removed.
-  refAdd  d = "DD:" ++ concatMap repUnd (d ^. uid)
+  refAdd  d = "DD:" ++ (getAdd ((d ^. getLabel) ^. getRefAdd))
   rType   _ = Def DD
 
 instance Referable DataDefinition where
-  refAdd  d = "DD:" ++ concatMap repUnd (d ^. uid)
+  refAdd  d = "DD:" ++ (getAdd ((d ^. getLabel) ^. getRefAdd))
   rType   _ = Def DD
 
 instance Referable InstanceModel where
-  refAdd  i = "IM:" ++ i^.uid
+  refAdd  i = "IM:" ++ (getAdd ((i ^. getLabel) ^. getRefAdd))
   rType   _ = Def Instance
 
 instance Referable ConceptInstance where
@@ -267,7 +267,7 @@ temp' r (Figure _ _ _)       = "Figure:" ++ r
 temp' r (Graph _ _ _ _)      = "Figure:" ++ r
 temp' r (EqnBlock _)         = "Equation:" ++ r
 temp' _ (Definition d)       = getDefName d --fixme: to be removed
-temp' r (Defnt _ _)         = concatMap repUnd r
+temp' r (Defnt _ _)          = concatMap repUnd r
 temp' r (Requirement rc)     = r
 temp' r (Assumption ca)      = r
 temp' r (Change lcc)         = r
@@ -354,7 +354,7 @@ midRef r = customRef r (r ^. shortname)
 
 -- | Create a reference with a customized 'ShortName'
 customRef :: (HasShortName l, Referable l) => l -> ShortName -> Sentence
-customRef r n = Ref (rType r) (refAdd r) (shortname' $ temp (rType r) n)
+customRef r n = Ref (rType r) (concatMap repUnd (refAdd r)) (shortname' $ temp (rType r) n)
   where
     temp :: RefType -> ShortName -> String
     temp (Def dtp) s = setSN (getDefName dtp) s
@@ -362,9 +362,9 @@ customRef r n = Ref (rType r) (refAdd r) (shortname' $ temp (rType r) n)
     temp Assump s    = setSN "A:" s
     temp LC s        = setSN "LC:" s
     temp UC s        = setSN "UC:" s
-    temp Goal s = setSN "GS:" s
-    temp PSD s = setSN "PS:" s
-    temp _ s = setSN "" s
+    temp Goal s      = setSN "GS:" s
+    temp PSD s       = setSN "PS:" s
+    temp _ s         = setSN "" s
 
 getReqName :: ReqType -> String
 getReqName FR  = "FR:"

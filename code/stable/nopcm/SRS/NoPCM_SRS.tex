@@ -651,7 +651,7 @@ ${t_{final}}$ & s & final time
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:Check-Inputs-Satisfy-Physical-Constraints}:]Verify that the inputs satisfy the required physical constraint shown in Table~\ref{Table:InDataConstraints}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Output-Input-Derivied-Quantities}:]Outputs and inputs quantities and derived quantities in the following list: the quantities from R\ref{FR:Input-Inital-Values}, the mass from R\ref{FR:Find-Mass} and ${τ_{W}}$ (from IM1).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Output-Input-Derived-Quantities}:]Outputs and inputs quantities and derived quantities in the following list: the quantities from R\ref{FR:Input-Inital-Values}, the mass from R\ref{FR:Find-Mass} and ${τ_{W}}$ (from IM1).
 \end{description}
 \begin{description}
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:Calculate-Temperature-Water-Over-Time}:]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time
@@ -710,7 +710,7 @@ IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) &  &  &  &  &  &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l}
 \toprule
- & IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) & IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) & Data Constraints (Table~\ref{Table:InDataConstraints}) & R1 (R\ref{FR:Input-Inital-Values}) & R2 (R\ref{FR:Find-Mass}) & R3 (R\ref{FR:Check-Inputs-Satisfy-Physical-Constraints}) & R4 (R\ref{FR:Output-Input-Derivied-Quantities}) & R5 (R\ref{FR:Calculate-Temperature-Water-Over-Time}) & R6 (R\ref{FR:Calculate-Change-Heat.Energy-Water-Time})
+ & IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) & IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) & Data Constraints (Table~\ref{Table:InDataConstraints}) & R1 (R\ref{FR:Input-Inital-Values}) & R2 (R\ref{FR:Find-Mass}) & R3 (R\ref{FR:Check-Inputs-Satisfy-Physical-Constraints}) & R4 (R\ref{FR:Output-Input-Derived-Quantities}) & R5 (R\ref{FR:Calculate-Temperature-Water-Over-Time}) & R6 (R\ref{FR:Calculate-Change-Heat.Energy-Water-Time})
 \\
 \midrule
 IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) &  &  &  &  &  &  &  &  & 
@@ -723,7 +723,7 @@ R2 (R\ref{FR:Find-Mass}) &  &  &  & X &  &  &  &  &
 \\
 R3 (R\ref{FR:Check-Inputs-Satisfy-Physical-Constraints}) &  &  & X &  &  &  &  &  & 
 \\
-R4 (R\ref{FR:Output-Input-Derivied-Quantities}) &  &  &  & X & X &  &  &  & 
+R4 (R\ref{FR:Output-Input-Derived-Quantities}) &  &  &  & X & X &  &  &  & 
 \\
 R5 (R\ref{FR:Calculate-Temperature-Water-Over-Time}) & X &  &  &  &  &  &  &  & 
 \\
@@ -735,7 +735,7 @@ R6 (R\ref{FR:Calculate-Change-Heat.Energy-Water-Time}) &  & X &  &  &  &  &  &  
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l}
 \toprule
- & A1 (A\ref{A:Thermal-Energy-Only}) & A2 (A\ref{A:Heat-Transfer-Coeffs-Constant}) & A3 (A\ref{A:Constant-Water-Temp-Across-Tank}) & A4 (A\ref{A:Density-Water-Constant-over-Volume}) & A5 (A\ref{A:Specific-Heat-Energy-Constant-over-Volume}) & A6 (A\ref{A:Law-Convective-Cooling-Coil-Water}) & A7 (A\ref{A:Temp-Heating-Coil-Constant-over-Time}) & A8 (A\ref{A:Temp-Heating-Coil-Constant-over-Length}) & A9 (A\ref{A:Charging-Tank-No-Temp-Discharge}) & A10 (A\ref{A:Water-Always-Liquid}) & A11 (A\ref{A:Perfect-Insulation-Tank}) & A12 (A\ref{A:No-Internal-Heat-Generation-By-Water}) & A13 (A\ref{A:Atmospheric-Pressure-Tank}) & A14 (A\ref{A:Volume-Coil-Negligible})
+ & A1 (A\ref{A:Thermal-Energy-Only}) & A2 (A\ref{A:Heat-Transfer-Coeffs-Constant}) & A3 (A\ref{A:Constant-Water-Temp-Across-Tank}) & A4 (A\ref{A:Density-Water-Constant-over-Volume}) & A5 (A\ref{A:Specific-Heat-Energy-Constant-over-Volume}) & A6 (A\ref{A:Newton-Law-Convective-Cooling-Coil-Water}) & A7 (A\ref{A:Temp-Heating-Coil-Constant-over-Time}) & A8 (A\ref{A:Temp-Heating-Coil-Constant-over-Length}) & A9 (A\ref{A:Charging-Tank-No-Temp-Discharge}) & A10 (A\ref{A:Water-Always-Liquid}) & A11 (A\ref{A:Perfect-Insulation-Tank}) & A12 (A\ref{A:No-Internal-Heat-Generation-By-Water}) & A13 (A\ref{A:Atmospheric-Pressure-Tank}) & A14 (A\ref{A:Volume-Coil-Negligible})
 \\
 \midrule
 T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) & X &  &  &  &  &  &  &  &  &  &  &  &  & 

@@ -5,7 +5,6 @@
 module Language.Drasil.Chunk.Goal
   ( Goal
   , mkGoal
-  , lbl
   ) where
 
 import Language.Drasil.UID (UID)

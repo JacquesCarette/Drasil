@@ -64,17 +64,17 @@ qdFromDD :: DataDefinition -> QDefinition
 qdFromDD (DD a _ _ _ _ _) = a
 
 -- Used to help make Qdefinitions when uid, term, and symbol come from the same source
-mkDataDef :: (Quantity c) => c -> Expr -> QDefinition
-mkDataDef cncpt equation = datadef $ getUnit cncpt --should references be passed in at this point?
+mkQuantDef :: (Quantity c) => c -> Expr -> QDefinition
+mkQuantDef cncpt equation = datadef $ getUnit cncpt --should references be passed in at this point?
   where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS
                            (eqSymb cncpt) a equation [] (mkLabelRA'' (cncpt ^. uid))
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
                            (eqSymb cncpt) equation [] (mkLabelRA'' (cncpt ^. uid))
 
-mkDataDef' :: (Quantity c) => c -> Expr -> Derivation -> QDefinition
-mkDataDef' cncpt equation dv = datadef $ getUnit cncpt --should references be passed in at this point?
-  where datadef (Just a) = fromEqn'''  (cncpt ^. uid) (cncpt ^. term) EmptyS
+mkQuantDef' :: (Quantity c) => c -> Expr -> Derivation -> QDefinition
+mkQuantDef' cncpt equation dv = quantdef $ getUnit cncpt --should references be passed in at this point?
+  where quantdef (Just a) = fromEqn'''  (cncpt ^. uid) (cncpt ^. term) EmptyS
                            (eqSymb cncpt) a equation [] dv (cncpt ^. uid) --shortname
-        datadef Nothing  = fromEqn'''' (cncpt ^. uid) (cncpt ^. term) EmptyS
+        quantdef Nothing  = fromEqn'''' (cncpt ^. uid) (cncpt ^. term) EmptyS
                            (eqSymb cncpt) equation [] dv (cncpt ^. uid) --shortname
 

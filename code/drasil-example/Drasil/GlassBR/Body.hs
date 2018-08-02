@@ -11,7 +11,7 @@ import qualified Drasil.DocLang.SRS as SRS (dataDefnLabel,
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), 
-  GSDSub(UsrChars, SystCons), InclUnits(IncludeUnits), IntroSec(IntroProg),
+  GSDSub(..), InclUnits(IncludeUnits), IntroSec(IntroProg),
   IntroSub(IChar, IOrgSec, IPurpose, IScope), LCsSec(..), ProblemDescription(..), 
   RefSec(RefProg), RefTab(TAandA, TUnits), ReqrmntSec(..), 
   ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SCSSub(..), 
@@ -24,16 +24,15 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
 
 import Data.Drasil.Concepts.Computation (computerApp, inParam,
   computerLiteracy, inValue, inQty)
-import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
-  characteristic, class_, code, condition, content,
-  definition, description, document, emphasis, endUser, failure,
-  figure, goal, implementation, information, interface, input_, item,
-  message, model, organization, output_, problem, purpose,
-  quantity, reference, reviewer, section_, software, standard,
-  symbol_, system, template, term_, theory, traceyMatrix, user, value,
-  physicalSystem, datumConstraint, userInput, assumption, dataDefn,
-  goalStmt, inModel, likelyChg, physSyst, requirement, srs, thModel,
-  dataConst, company)
+import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
+  assumption, characteristic, class_, code, company, condition, constraint, content, 
+  dataConst, dataDefn, datum, datumConstraint, definition, description, document, emphasis, 
+  endUser, environment, failure, figure, generalSystemDescription, goal, goalStmt, 
+  implementation, information, inModel, input_, interface, item, likelyChg, message, model, 
+  organization, output_, physicalSystem, physSyst, problem, product_, purpose, quantity, 
+  reference, requirement, reviewer, section_, software, softwareSys, srs, standard, symbol_,  
+  sysCont, system, systemConstraint, template, term_, theory, thModel, traceyMatrix, user,
+  userCharacteristic, userInput, value)
 
 import Data.Drasil.Concepts.Education (secondYear, undergradDegree,
   civilEng, structuralEng, scndYrCalculus, structuralMechanics)
@@ -48,11 +47,11 @@ import Data.Drasil.Concepts.Thermodynamics (degree_')
 import Data.Drasil.SentenceStructures (acroR, sVersus, sAnd, foldlSP,
   foldlSent, foldlSent_, figureLabel, foldlList, SepType(Comma), FoldType(List),
   showingCxnBw, foldlsC, sOf, followA, ofThe, sIn, isThe, isExpctdToHv, sOr, 
-  underConsidertn, tAndDWAcc, tAndDOnly, tAndDWSym, andThe)
+  underConsidertn, tAndDWAcc, tAndDOnly, tAndDWSym, andThe, foldlSPCol)
 import Data.Drasil.Software.Products (sciCompS)
-import Data.Drasil.Utils (makeTMatrix, itemRefToSent, noRefs,
-  enumSimple, enumBullet, prodUCTbl)
-
+import Data.Drasil.Utils (makeTMatrix, makeListRef, itemRefToSent, noRefs,
+  enumSimple, enumBullet, prodUCTbl, bulletFlat, bulletNested)
+  
 import Drasil.GlassBR.Assumptions (assumptionConstants, gbRefDB, newAssumptions)
 import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, 
@@ -126,9 +125,8 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
       [Client gLassBR (S "a" +:+ phrase company
         +:+ S "named Entuitive. It is developed by Dr." +:+ (S $ name mCampidelli)),
       Cstmr gLassBR]) :
-  GSDSec (GSDProg2 [UsrChars [userCharsBullets endUser gLassBR secondYear
-    undergradDegree civilEng structuralEng glBreakage blastRisk],
-    SystCons [] []]) :
+  GSDSec (GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList], 
+    UsrChars [user_characteristics_intro], SystCons [] [] ]) :
   ScpOfProjSec (ScpOfProjProg (short gLassBR) prodUseCaseTable (indivProdUseCase glaSlab
     capacity demandq probability)) :
   SSDSec 
@@ -327,19 +325,59 @@ orgOfDocIntroEnd = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
 
 {--GENERAL SYSTEM DESCRIPTION--}
 
+{--System Context--}
+  
+sysCtxIntro :: Contents
+sysCtxIntro = foldlSP
+  [makeRef sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
+   S "A circle represents an external entity outside the" +:+ phrase software
+   `sC` S "the", phrase user, S "in this case. A rectangle represents the",
+   phrase softwareSys, S "itself", (sParen $ short gLassBR) +:+. EmptyS,
+   S "Arrows are used to show the data flow between the" +:+ phrase system,
+   S "and its" +:+ phrase environment]
+   
+sysCtxFig1 :: LabelledContent
+sysCtxFig1 = llcc (mkLabelRA'' "sysCtxDiag") $ 
+  fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png") 
+
+sysCtxDesc :: Contents
+sysCtxDesc = foldlSPCol
+  [S "The interaction between the", phrase product_, S "and the", phrase user,
+   S "is through a user" +:+. phrase interface,
+   S "The responsibilities of the", phrase user, S "and the", phrase system,
+   S "are as follows"]
+   
+sysCtxUsrResp :: [Sentence]
+sysCtxUsrResp = [S "Provide the input data related to the glass slab and blast",
+    S "type ensuring no errors in the data entry",
+  S "Ensure that consistent units are used for input variables",
+  S "Ensure required" +:+ phrase software +:+ plural assumption +:+
+    S "(FIXME REF)" +:+ S "are appropriate for any particular" +:+
+    phrase problem +:+ S "input to the" +:+ phrase software]
+	
+sysCtxSysResp :: [Sentence]
+sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters",
+    S "input instead of a floating point number",
+  S "Determine if the inputs satisfy the required physical and software constraints",
+  S "Predict whether the glass slab is safe or not."]
+  
+sysCtxResp :: [Sentence]
+sysCtxResp = [titleize user +:+ S "Responsibilities",
+  short gLassBR +:+ S "Responsibilities"]
+
+sysCtxList :: Contents
+sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
+  map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
+   
 {--User Characteristics--}
 
-userCharsBullets :: (NamedIdea n1, NamedIdea n, NamedIdea n2, NamedIdea n3,
-  NamedIdea n4, NamedIdea n5, Idea c, NamedIdea n6) =>
-  n6 -> c -> n5 -> n4 -> n3 -> n2 -> n1 -> n -> Contents
-userCharsBullets intendedIndvdl progName yr degreeType prog1 prog2 undrstd1 undrstd2
-  = enumBullet [foldlSent [(phrase intendedIndvdl `sOf` short progName)
-  `isExpctdToHv` S "completed at least", (S "equivalent" `ofThe` (phrase yr)),
-  S "of an", phrase degreeType `sIn` phrase prog1 `sOr` phrase prog2],
-  (phrase intendedIndvdl `isExpctdToHv` S "an understanding of" +:+.
-  rdrKnldgbleIn undrstd1 undrstd2), foldlSent [phrase intendedIndvdl
-  `isExpctdToHv` S "basic", phrase computerLiteracy, S "to handle the",
-  phrase software]]
+user_characteristics_intro :: Contents
+user_characteristics_intro = enumBullet $ map foldlSent
+  [[S "The end user of GlassBR is expected to have completed at least the",
+    S "equivalent of the second year of an undergraduate degree in civil engineering or structural engineering"],
+  [S "The end user is expected to have an understanding of theory behind glass",
+    S "breakage and blast risk"],
+  [S "The end user is expected to have basic computer literacy to handle the software"]]
 
 {--System Constraints--}
 

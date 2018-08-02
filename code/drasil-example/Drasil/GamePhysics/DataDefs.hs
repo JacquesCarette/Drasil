@@ -30,7 +30,7 @@ ctrOfMassDD = mkDD ctrOfMass [{-- References --}] [{-- Derivation --}]
   "ctrOfMass" Nothing
 
 ctrOfMass :: QDefinition
-ctrOfMass = mkDataDef pos_CM ctrOfMassEqn
+ctrOfMass = mkQuantDef pos_CM ctrOfMassEqn
 
 -- FIXME (Atomic "i") is a horrible hack
 ctrOfMassEqn :: Expr
@@ -59,7 +59,7 @@ linDispDD = mkDD linDisp [{-- References --}] [{-- Derivation --}] "linDisp"
   Nothing
 
 linDisp :: QDefinition
-linDisp = mkDataDef QP.linearDisplacement dispEqn
+linDisp = mkQuantDef QP.linearDisplacement dispEqn
 
 dispEqn :: Expr
 dispEqn = deriv (apply1 QP.position QP.time) QP.time
@@ -89,7 +89,7 @@ linVelDD = mkDD linVel [{-- References --}] [{-- Derivation --}] "linVel"
   Nothing
 
 linVel :: QDefinition
-linVel = mkDataDef QP.linearVelocity velEqn
+linVel = mkQuantDef QP.linearVelocity velEqn
 
 velEqn :: Expr
 velEqn = deriv (apply1 QP.displacement QP.time) QP.time
@@ -108,7 +108,7 @@ linAccDD = mkDD linAcc [{-- References --}] [{-- Derivation --}] "linAcc"
   Nothing
 
 linAcc :: QDefinition
-linAcc = mkDataDef QP.linearAccel accelEqn
+linAcc = mkQuantDef QP.linearAccel accelEqn
 
 accelEqn :: Expr
 accelEqn = deriv (apply1 QP.velocity QP.time) QP.time
@@ -127,7 +127,7 @@ angDispDD = mkDD angDisp [{-- References --}] [{-- Derivation --}] "angDisp"
   Nothing
 
 angDisp :: QDefinition
-angDisp = mkDataDef QP.angularDisplacement angDispEqn
+angDisp = mkQuantDef QP.angularDisplacement angDispEqn
 
 angDispEqn :: Expr
 angDispEqn = deriv (apply1 QM.orientation QP.time) QP.time
@@ -146,7 +146,7 @@ angVelDD = mkDD angVel [{-- References --}] [{-- Derivation --}] "angVel"
   Nothing
 
 angVel :: QDefinition
-angVel = mkDataDef QP.angularVelocity angVelEqn
+angVel = mkQuantDef QP.angularVelocity angVelEqn
 
 angVelEqn :: Expr
 angVelEqn = deriv (apply1 QP.angularDisplacement QP.time) QP.time
@@ -165,7 +165,7 @@ angAccelDD = mkDD angAccel [{-- References --}] [{-- Derivation --}] "angAccel"
   Nothing
 
 angAccel :: QDefinition
-angAccel = mkDataDef QP.angularAccel angAccelEqn
+angAccel = mkQuantDef QP.angularAccel angAccelEqn
 
 angAccelEqn :: Expr
 angAccelEqn = deriv (apply1 QP.angularVelocity QP.time) QP.time
@@ -187,7 +187,7 @@ impulseDD = mkDD impulse [{-- References --}] [{-- Derivation --}] "impulse"
   Nothing
 
 impulse :: QDefinition
-impulse = mkDataDef QP.impulseS impulseEqn
+impulse = mkQuantDef QP.impulseS impulseEqn
 
 -- The last two terms in the denominator should be cross products.
 impulseEqn :: Expr

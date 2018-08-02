@@ -357,14 +357,12 @@ customRef r n = Ref (rType r) (refAdd r) (shortname' $ temp (rType r) n)
   where
     temp :: RefType -> ShortName -> String
     temp (Def dtp) s = setSN (getDefName dtp) s
-    temp Req s       = setSN "" s
+    temp Req s       = setSN "R:" s
     temp Assump s    = setSN "A:" s
     temp LC s        = setSN "LC:" s
     temp UC s        = setSN "UC:" s
-    temp EqnB s      = setSN "" s
     temp Goal s = setSN "GS:" s
     temp PSD s = setSN "PS:" s
-    temp Lbl s = setSN "" s
     temp _ s = setSN "" s
 
 -- This works for passing the correct id to the reference generator for Assumptions,

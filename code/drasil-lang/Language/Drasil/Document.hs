@@ -112,7 +112,7 @@ setLabel prependRA prependSN lb = mkLabelRA' (setRefAdd prependRA (lb ^. getRefA
 setRefAdd prependRA ra = prependRA ++ concatMap repUnd (getAdd ra)
 
 setSN :: String -> ShortName -> String
-setSN prependSN sn = prependSN ++ concatMap repUnd (getStringSN sn)
+setSN prependSN sn = prependSN ++ " " ++ concatMap repUnd (getStringSN sn)
 
 -- | Automatically create the label for a definition
 getDefName :: DType -> String

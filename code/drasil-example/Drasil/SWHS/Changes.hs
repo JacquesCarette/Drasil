@@ -33,10 +33,10 @@ likeChg1 = mkLklyChnk "likeChg1" ( -- FIXME: mkLklyChnk is a hack since UID isn'
   S "of uniform", phrase temp_PCM, S "is not likely"] ) "Uniform-Temperature-PCM"
 
 --
-likeChg2 = llcc (mkLabelRA'' "Temperature-Coil-Variable-Over-Day") $ Change $ lc "likeChg2"
-  (foldlSent [chgsStart newA8, S "The", phrase temp_C, S "will change over",
+likeChg2 = mkLklyChnk  "likeChg2" (
+  foldlSent [chgsStart newA8, S "The", phrase temp_C, S "will change over",
   (S "course" `ofThe` S "day, depending"), S "on the", phrase energy, 
-  S "received from the sun"] ) (mkLabelRA'' "Temperature-Coil-Variable-Over-Day")
+  S "received from the sun"] ) "Temperature-Coil-Variable-Over-Day"
 --
 likeChg3 = mkLklyChnk "likeChg3" (
   foldlSent [chgsStart newA9, S "The", phrase temp_C,

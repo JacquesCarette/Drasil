@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.PhysSystDesc
   ( PhysSystDesc
   , pSysDes
   , psd
-  , refAddr
+  , lbl
   ) where
 
 import Language.Drasil.UID (UID)
@@ -22,7 +22,6 @@ import Control.Lens (makeLenses, (^.))
 data PhysSystDesc = PSD
           { _did        :: UID
           , pSysDes     :: Sentence
-          , _refAddr    :: RefAdd
           , _lbl        :: Label
           }
 
@@ -34,5 +33,5 @@ instance HasLabel      PhysSystDesc where getLabel = lbl
 instance HasShortName  PhysSystDesc where shortname = lbl . shortname
 
 -- | PhysSystDesc smart constructor
-psd :: String -> Sentence -> RefAdd -> Label -> PhysSystDesc
+psd :: String -> Sentence -> Label -> PhysSystDesc
 psd = PSD

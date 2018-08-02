@@ -14,9 +14,9 @@ import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID), CiteField
 import Language.Drasil.Chunk.Concept (ConceptInstance)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
-import Language.Drasil.Chunk.Goal as G (Goal, refAddr)
+import Language.Drasil.Chunk.Goal as G (Goal, lbl)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
-import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc, refAddr)
+import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc, lbl)
 import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..), ReqType(FR))
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName, getStringSN, shortname')
 import Language.Drasil.Chunk.Theory (TheoryModel)
@@ -193,11 +193,11 @@ class Referable s where
   rType   :: s -> RefType -- The reference type (referencing namespace?)
 
 instance Referable Goal where
-  refAdd g = "GS:" ++ g ^. G.refAddr
+  refAdd g = "GS:" ++ (getAdd ((g ^. G.lbl) ^. getRefAdd))
   rType _ = Goal
 
 instance Referable PhysSystDesc where
-  refAdd p = "PS:" ++ p ^. PD.refAddr
+  refAdd p = "PS:" ++ (getAdd ((p ^. PD.lbl) ^. getRefAdd))
   rType _ = PSD
 
 instance Referable AssumpChunk where
@@ -206,7 +206,7 @@ instance Referable AssumpChunk where
 
 instance Referable ReqChunk where
   refAdd  r@(RC _ rt _ _) = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
-  rType   _                 = Req
+  rType   _               = Req
 
 instance Referable Change where
   refAdd r@(ChC _ rt _ _)    = show rt ++ ":" ++ concatMap repUnd (r ^. uid)

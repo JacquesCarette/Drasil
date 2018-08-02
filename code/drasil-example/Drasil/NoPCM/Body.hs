@@ -78,7 +78,7 @@ import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
   isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP, acroIM, acroGD)
 import Data.Drasil.Units.Thermodynamics (thermal_flux)
 import Language.Drasil.Printers (PrintingInformation(..),
- Notation(Scientific, Engineering))
+ Notation(Scientific, Engineering), defaultConfiguration)
 
 -- This defines the standard units used throughout the document
 this_si :: [UnitDefn]
@@ -195,7 +195,7 @@ nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) n
   this_si
 
 printSetting :: PrintingInformation
-printSetting = PI nopcm_SymbMap Engineering
+printSetting = PI nopcm_SymbMap defaultConfiguration
 
 assumps_Nopcm_list_new :: [AssumpChunk]
 assumps_Nopcm_list_new = [newA1, newA2, newA3, newA5NoPCM, newA6NoPCM, newA7, newA8, newA9, 

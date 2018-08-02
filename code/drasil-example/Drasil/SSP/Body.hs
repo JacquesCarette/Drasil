@@ -53,7 +53,7 @@ import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs,
 import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
   assumptLabel, physSyst)
 import Language.Drasil.Printers (PrintingInformation(..),
- Notation(Scientific, Engineering))
+ Notation(Scientific, Engineering), defaultConfiguration)
 
 --type declarations for sections--
 req, aux_cons :: Section
@@ -145,7 +145,7 @@ sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms) sspSymbols
   this_si
 
 printSetting :: PrintingInformation
-printSetting = PI sspSymMap Engineering
+printSetting = PI sspSymMap defaultConfiguration
 
 symbT :: [DefinedQuantityDict]
 symbT = ccss (getDoc ssp_srs) (egetDoc ssp_srs) sspSymMap

@@ -76,7 +76,7 @@ import Data.Drasil.SentenceStructures (acroIM, acroGD, acroGS, showingCxnBw,
   foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, isThe, ofThe,
   ofThe', sAnd, sOf, foldlList, SepType(Comma), FoldType(List))
 import Language.Drasil.Printers (PrintingInformation(..),
- Notation(Scientific, Engineering))
+ Notation(Scientific, Engineering), defaultConfiguration)
 -------------------------------------------------------------------------------
 
 acronyms :: [CI]
@@ -120,7 +120,7 @@ swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) swhsSymb
   this_si
 
 printSetting :: PrintingInformation
-printSetting = PI swhsSymMap Engineering
+printSetting = PI swhsSymMap defaultConfiguration
 
   --Note: The second swhsSymbols here is
     -- Redundant b/c the unitals are not really concepts (yet). There

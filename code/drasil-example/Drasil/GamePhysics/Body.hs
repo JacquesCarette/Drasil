@@ -61,7 +61,7 @@ import Data.Drasil.Software.Products (videoGame, openSource, sciCompS)
 import Data.Drasil.Utils (makeTMatrix, itemRefToSent, refFromType,
   makeListRef, bulletFlat, bulletNested, enumSimple, enumBullet)
 import Language.Drasil.Printers (PrintingInformation(..),
- Notation(Scientific, Engineering))
+ Notation(Scientific, Engineering), defaultConfiguration)
 
 authors :: People
 authors = [alex, luthfi]
@@ -158,7 +158,7 @@ everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms) gamephy
   chipUnits
 
 printSetting :: PrintingInformation
-printSetting = PI everything Engineering
+printSetting = PI everything defaultConfiguration
 
 chipCode :: CodeSpec
 chipCode = codeSpec chipmunkSysInfo []

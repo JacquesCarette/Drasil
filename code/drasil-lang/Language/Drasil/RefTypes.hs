@@ -31,14 +31,14 @@ data RefType = Tab    -- ^ Table
              | Cite   -- ^ Citation
              | Goal   -- ^ Goal Statement
              | PSD    -- ^ Physical System Description
-             | Lbl    -- ^ Label
+             | Label    -- ^ Label
 
 
 instance Show RefType where
   show Tab    = "Table"
   show Fig    = "Figure"
   show Sect   = "Section"
-  show Lbl    = "Section" --FIXME: hack until section has labels
+  show Label  = "Section" --FIXME: hack until section has labels
   show Mod    = "Module"
   show (Def _)= "Definition"
   show (Req _)= "Requirement"
@@ -49,4 +49,3 @@ instance Show RefType where
   show Goal   = "Goal Statement"
   show PSD    = "Physical System Description"
   show EqnB   = "Equation"
-  show Lbl    = "Label"

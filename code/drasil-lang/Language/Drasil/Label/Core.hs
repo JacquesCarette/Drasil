@@ -5,15 +5,17 @@ module Language.Drasil.Label.Core where
 import Control.Lens (makeLenses)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname))
+import Language.Drasil.RefTypes (RefType(..))
 
 -- import reference address from Language.Drasil.References?
 data LblType = RefAdd String | MetaLink String | URI String
 
 -- Used for referencing; has to be pure ASCII
 data Label = Lbl
-  { _uniqueID  :: UID --internal, unique
-  , _lblType    :: LblType
-  , _sn        :: ShortName
+  { _uniqueID :: UID --internal, unique
+  , _lblType  :: LblType
+  , _sn       :: ShortName
+  , linkTo    :: RefType     
   }
 makeLenses ''Label
 

@@ -5,16 +5,16 @@ import Language.Drasil
 assump1Label, assump10Label, assump14Label, assump18Label, 
   assump19Label :: Label
 
-assump1Label = mkLabelRA'' "Thermal-Energy-Only"
+assump1Label = mkLabelRAAssump (mkLabelRA'' "Thermal-Energy-Only")
 
-assump10Label = mkLabelRA'' "Law-Convective-Cooling-Water-PCM"
+assump10Label = mkLabelRAAssump (mkLabelRA'' "Law-Convective-Cooling-Water-PCM")
 
-assump14Label = mkLabelRA'' "Water-Always-Liquid"
+assump14Label = mkLabelRAAssump (mkLabelRA'' "Water-Always-Liquid")
 
-assump18Label = mkLabelRA'' "No-Gaseous-State-PCM"
+assump18Label = mkLabelRAAssump (mkLabelRA'' "No-Gaseous-State-PCM")
 
-assump19Label = mkLabelRA'' "Atmospheric-Pressure-Tank"
+assump19Label = mkLabelRAAssump (mkLabelRA'' "Atmospheric-Pressure-Tank")
 
 traceFig1LC, traceFig2LC :: Label
-traceFig1LC = mkLabelRA'' "traceFig1LabelSWHS"
-traceFig2LC = mkLabelRA'' "traceFig2LabelSWHS"
+traceFig1LC = mkLabelRAFig "traceFig1LabelSWHS"
+traceFig2LC = mkLabelRAFig "traceFig2LabelSWHS"

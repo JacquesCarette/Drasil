@@ -1,9 +1,14 @@
-module Language.Drasil.Label (Label, mkLabelRA, mkLabelRA', mkLabelRA'', mkEmptyLabel, getAdd) where
+module Language.Drasil.Label (Label, mkLabelRA, mkLabelRA',
+ mkLabelRA'', mkEmptyLabel, getAdd, mkLabelRAReady,
+ mkLabelRAAssump, mkLabelRAFig) where
 
 import Language.Drasil.Label.Core
 import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd))
 import Data.Char (isAscii)
-import Language.Drasil.Chunk.ShortName (shortname')
+import Language.Drasil.Chunk.ShortName (shortname', ShortName, getStringSN, shortname)
+import Language.Drasil.RefTypes (RefType(..))
+
+import Control.Lens((^.))
 
 instance HasUID        Label where uid       = uniqueID
 instance HasRefAddress Label where getRefAdd = lblType
@@ -11,25 +16,36 @@ instance HasRefAddress Label where getRefAdd = lblType
 -- multiple mkLabel constructors for label creation
 -- id     ==> unique ID for Drasil referencing (i.e. internal)
 -- ref    ==> pure ASCII used for referencing
--- shortn ==> the shortname - what a person/user will see (can include spaces, accents, etc. (unicode))
+-- shortn ==> the shortname - what a person/import Language.Drasil.RefTypes (RefType(..))user will see (can include spaces, accents, etc. (unicode))
+-- RefTypes are Sect by default
 mkLabelRA :: String -> String -> String -> Label
-mkLabelRA i ref shortn = Lbl i (RefAdd $ ensureASCII ref) (shortname' shortn)
+mkLabelRA i ref shortn = Lbl i (RefAdd $ ensureASCII ref) (shortname' shortn) Sect
 
 -- for when reference address and the display should be the different
 mkLabelRA' :: String -> String -> Label
 mkLabelRA' ref shortn = Lbl (ref ++ "Label") (RefAdd $ ensureASCII ref) 
-  (shortname' shortn)
+  (shortname' shortn) Sect
 
 -- for when reference address and the display should be the same
 mkLabelRA'' :: String -> Label
 mkLabelRA'' iAndRefAndshortn = Lbl (iAndRefAndshortn ++ "Label") 
-  (RefAdd $ ensureASCII iAndRefAndshortn) (shortname' iAndRefAndshortn)
+  (RefAdd $ ensureASCII iAndRefAndshortn) (shortname' iAndRefAndshortn) Sect
+
+mkLabelRAReady :: String -> ShortName -> RefType -> Label
+mkLabelRAReady r s t = Lbl (r ++ "Label") (RefAdd r) s t
+
+mkLabelRAAssump :: Label -> Label
+mkLabelRAAssump x = Lbl (x ^. uid) (x^.getRefAdd) (x ^. shortname) Assump
+
+mkLabelRAFig :: String -> Label
+mkLabelRAFig x = Lbl (x ++ "Label") 
+  (RefAdd $ ensureASCII x) (shortname' x) Fig
 
 mkLabelML :: String -> String -> String -> Label
-mkLabelML i ref shortn = Lbl i (MetaLink $ ensureASCII ref) (shortname' shortn)
+mkLabelML i ref shortn = Lbl i (MetaLink $ ensureASCII ref) (shortname' shortn) Sect
 
 mkLabelURI :: String -> String -> String -> Label
-mkLabelURI i ref shortn = Lbl i (URI $ ensureASCII ref) (shortname' shortn)
+mkLabelURI i ref shortn = Lbl i (URI $ ensureASCII ref) (shortname' shortn) Sect
 
 ensureASCII :: String -> String
 ensureASCII s = map (\y -> if isAscii y then y else error "Label needs to be pure ASCII.") s

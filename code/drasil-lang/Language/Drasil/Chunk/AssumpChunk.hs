@@ -5,12 +5,14 @@ module Language.Drasil.Chunk.AssumpChunk
   ) where
 
 import Language.Drasil.UID (UID)
-import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd))
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Control.Lens (makeLenses, (^.))
-import Language.Drasil.Label.Core (Label)
+import Language.Drasil.Label.Core (Label, getAdd)
 import Language.Drasil.Classes (HasLabel(getLabel))
+import Language.Drasil.RefTypes (RefType(Assump))
+import Language.Drasil.Label (mkLabelRAReady)
 
 -- | Assumption chunk type. Has id, what is being assumed, and a shortname.
 -- Presently assumptions are captured as sentences.
@@ -28,4 +30,4 @@ instance HasShortName  AssumpChunk where shortname = lbl . shortname
 
 -- | Smart constructor for Assumption chunks.
 assump :: String -> Sentence -> Label -> AssumpChunk
-assump i a lb = AC i a lb
+assump i a lb = AC i a (mkLabelRAReady (getAdd (lb ^. getRefAdd)) (lb ^. shortname) Assump)

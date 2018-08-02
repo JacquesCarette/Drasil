@@ -27,7 +27,7 @@ import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.Spec (Sentence((:+:), Ref, S))
 import Language.Drasil.UID (UID)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
-import Language.Drasil.Label.Core (Label, getAdd)
+import Language.Drasil.Label.Core (Label(..), getAdd)
 
 -- | Database for maintaining references.
 -- The Int is that reference's number.
@@ -254,8 +254,17 @@ instance Referable ConceptInstance where
 --Should refer to an object WITH a variable.
 --Can be removed once sections have labels.
 instance Referable Label where
-  refAdd lb = "Sec:" ++ (getAdd (lb ^. getRefAdd))
-  rType _   = Lbl
+  refAdd lb@(Lbl _ _ _ x) = getAcc x ++ (getAdd (lb ^. getRefAdd))
+    where
+      getAcc :: RefType -> String
+      getAcc Sect   = "Sec:"
+      getAcc Assump = "A:" --FIXME: do in mkLabelRAAssump?
+      getAcc LC     = "LC:"
+      getAcc UC     = "UC:"
+      getAcc Goal   = "GS:"
+      getAcc PSD   = "PS:"
+      getAcc x = show x ++ ":"
+  rType  (Lbl _ _ _ x) = x
 
 instance Referable LabelledContent where
   refAdd (LblC lb c) = temp' (getAdd (lb ^. getRefAdd)) c 

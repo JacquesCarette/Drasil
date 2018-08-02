@@ -9,7 +9,7 @@ import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
 
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.Label (Label)
+import Language.Drasil.Label.Core (Label)
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.RefTypes (DType(..))

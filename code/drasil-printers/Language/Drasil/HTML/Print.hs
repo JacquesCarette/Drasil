@@ -37,7 +37,7 @@ import Language.Drasil.Printing.LayoutObj (Tags, Document(Document),
   HDiv, ALUR))
 import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..),
-  HaveNotationSetting(..))
+  HasPrintingOptions(..))
 
 {-
 import Language.Drasil.Development.UnitLang (L.USymb(L.US))
@@ -56,7 +56,7 @@ import Language.Drasil.Chunk.Citation (CitationKind(..))
 data OpenClose = Open | Close
 
 -- | Generate an HTML document from a Drasil 'Document'
-genHTML :: (L.HasSymbolTable ctx, HaveNotationSetting ctx) => ctx -> F.Filename -> L.Document -> Doc
+genHTML :: (L.HasSymbolTable ctx, HasPrintingOptions ctx) => ctx -> F.Filename -> L.Document -> Doc
 genHTML sm fn doc = build fn (makeDocument sm doc)
 
 -- | Build the HTML Document, called by genHTML

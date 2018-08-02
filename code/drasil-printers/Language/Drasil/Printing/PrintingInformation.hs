@@ -2,7 +2,7 @@
 
 module Language.Drasil.Printing.PrintingInformation where
 
-import Control.Lens ((^.), makeLenses, view)
+import Control.Lens ((^.), makeLenses, view, Lens')
 
 import Language.Drasil (ChunkDB, HasSymbolTable(..)
   , HasTermTable(..), HasDefinitionTable(..)
@@ -10,19 +10,30 @@ import Language.Drasil (ChunkDB, HasSymbolTable(..)
   )
 
 data Notation = Scientific
-               |Engineering
+                |Engineering
 
-class HaveNotationSetting c where
-	getSetting :: c -> Notation 
+class HasPrintingOptions c where
+	getSetting :: Lens' c Notation
+
+data PrintingConfiguration = PC 
+                           { _notation :: Notation
+                           }
+makeLenses ''PrintingConfiguration
+
+instance HasPrintingOptions  PrintingConfiguration where getSetting = notation
+
 
 data PrintingInformation = PI
                          { _ckdb :: ChunkDB
-                         , _setting :: Notation
+                         , _configuration :: PrintingConfiguration
                          }
 makeLenses ''PrintingInformation
 
-instance HasSymbolTable      PrintingInformation where symbolTable = ckdb . symbolTable
-instance HasTermTable        PrintingInformation where termTable   = ckdb . termTable
-instance HasDefinitionTable  PrintingInformation where defTable    = ckdb . defTable
-instance HasUnitTable        PrintingInformation where unitTable   = ckdb . unitTable
-instance HaveNotationSetting PrintingInformation where getSetting c = c ^. setting 
+instance HasSymbolTable      PrintingInformation where symbolTable  = ckdb . symbolTable
+instance HasTermTable        PrintingInformation where termTable    = ckdb . termTable
+instance HasDefinitionTable  PrintingInformation where defTable     = ckdb . defTable
+instance HasUnitTable        PrintingInformation where unitTable    = ckdb . unitTable
+instance HasPrintingOptions  PrintingInformation where getSetting  = configuration . getSetting
+
+defaultConfiguration :: PrintingConfiguration
+defaultConfiguration = PC Engineering

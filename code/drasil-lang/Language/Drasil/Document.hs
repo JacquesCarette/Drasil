@@ -15,7 +15,7 @@ import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd),
   MayHaveLabel(getMaybeLabel), HasLabel(getLabel))
 
 import Language.Drasil.Label (Label, getAdd, mkLabelRA, mkLabelRA', mkEmptyLabel)
-import Language.Drasil.RefTypes (RefAdd)
+import Language.Drasil.RefTypes (RefAdd, DType(..))
 import Language.Drasil.Spec (Sentence(..))
 
 import Control.Lens ((^.), makeLenses, Lens', set)
@@ -39,12 +39,6 @@ class HasContents c where
 repUnd :: Char -> String
 repUnd '_' = "."
 repUnd c = c : []
-
-getDefLabel :: DType -> Label
-getDefLabel (Data c)   = c ^. getLabel
-getDefLabel (Data' c)  = c ^. getLabel
-getDefLabel (Theory c) = c ^. getLabel
-getDefLabel (_)        = mkEmptyLabel
 
 instance HasContents Contents where
   accessContents f (UlC c) = fmap (UlC . (\x -> set cntnts x c)) (f $ c ^. cntnts)
@@ -122,9 +116,6 @@ setSN prependSN sn = prependSN ++ concatMap repUnd (getStringSN sn)
 
 -- | Automatically create the label for a definition
 getDefName :: DType -> String
-getDefName (Data c)   = "DD:"
-getDefName (Data' c)  = "DD:"
-getDefName (Theory c) = "T:"
 getDefName TM         = "T:"
 getDefName DD         = "DD:"
 getDefName Instance   = "IM:"

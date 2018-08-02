@@ -1,6 +1,14 @@
 {-# LANGUAGE GADTs #-}
 -- | Contains the types associated to references
-module Language.Drasil.RefTypes(RefAdd, RefType(..)) where
+module Language.Drasil.RefTypes(RefAdd, RefType(..), DType(..)) where
+
+--import Language.Drasil.Document.Core (DType(..)) cannot be imported due to importcycles
+
+-- | Types of definitions
+data DType = General
+           | Instance
+           | TM
+           | DD
 
 type RefAdd  = String
 
@@ -8,7 +16,7 @@ type RefAdd  = String
 data RefType = Tab    -- ^ Table
              | Fig    -- ^ Figure
              | Sect   -- ^ Section
-             | Def    -- ^ Definition (includes theoretical models)
+             | Def DType  -- ^ Definition (includes theoretical models) (DType used to set shortnames)
              | Mod    -- ^ Module
              | Req    -- ^ Requirement
              | Assump -- ^ Assumption
@@ -27,7 +35,7 @@ instance Show RefType where
   show Sect   = "Section"
   show Lbl    = "Section" --FIXME: hack until section has labels
   show Mod    = "Module"
-  show Def    = "Definition"
+  show (Def _)= "Definition"
   show Req    = "Requirement"
   show Assump = "Assumption"
   show LC     = "Likely Change"

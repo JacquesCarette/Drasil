@@ -1,7 +1,7 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Reference where
 
-import Language.Drasil.RefTypes (RefType(..))
+import Language.Drasil.RefTypes (RefType(..), DType(..))
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
 import Data.List (concatMap, find, groupBy, partition, sortBy)
@@ -223,11 +223,11 @@ instance Referable Citation where
 
 instance Referable TheoryModel where
   refAdd  t = "T:" ++ t ^. uid
-  rType   _ = Def
+  rType   _ = Def TM
 
 instance Referable GenDefn where
   refAdd  g = "GD:" ++ g ^. uid
-  rType   _ = Def
+  rType   _ = Def General
 
 instance Referable QDefinition where -- FIXME: This could lead to trouble; need
                                      -- to ensure sanity checking when building
@@ -235,19 +235,19 @@ instance Referable QDefinition where -- FIXME: This could lead to trouble; need
                                      -- FIXME: QDefinition should no longer be referable
                                      -- after its Label is removed.
   refAdd  d = "DD:" ++ concatMap repUnd (d ^. uid)
-  rType   _ = Def
+  rType   _ = Def DD
 
 instance Referable DataDefinition where
   refAdd  d = "DD:" ++ concatMap repUnd (d ^. uid)
-  rType   _ = Def
+  rType   _ = Def DD
 
 instance Referable InstanceModel where
   refAdd  i = "IM:" ++ i^.uid
-  rType   _ = Def
+  rType   _ = Def Instance
 
 instance Referable ConceptInstance where
   refAdd i = i ^. uid
-  rType _ = Def
+  rType _ = Def Instance --note: not actually used
 
 --FIXME: assumes reference to a direct Label is for a section
 --Should refer to an object WITH a variable.
@@ -266,7 +266,7 @@ temp' r (Figure _ _ _)       = "Figure:" ++ r
 temp' r (Graph _ _ _ _)      = "Figure:" ++ r
 temp' r (EqnBlock _)         = "Equation:" ++ r
 temp' _ (Definition d)       = getDefName d --fixme: to be removed
-temp' r (Defnt _ _ )         = concatMap repUnd r
+temp' r (Defnt _ _)         = concatMap repUnd r
 temp' r (Requirement rc)     = r
 temp' r (Assumption ca)      = r
 temp' r (Change lcc)         = r
@@ -278,8 +278,8 @@ temp :: RawContent -> RefType
 temp (Table _ _ _ _)       = Tab
 temp (Figure _ _ _)        = Fig
 temp (Graph _ _ _ _)       = Fig
-temp (Definition _)        = Def
-temp (Defnt _ _)           = Def
+temp (Definition _)        = Def DD --fixme: to be removed completely
+temp (Defnt x _)           = Def x
 temp (Requirement r)       = rType r
 temp (Assumption a)        = rType a
 temp (Change l)            = rType l
@@ -356,20 +356,16 @@ customRef :: (HasShortName l, Referable l) => l -> ShortName -> Sentence
 customRef r n = Ref (rType r) (refAdd r) (shortname' $ temp (rType r) n)
   where
     temp :: RefType -> ShortName -> String
-    temp Tab s = setSN "" s
-    temp Fig s = setSN "" s
-    temp Sect s = setSN "" s
-    temp Def s = setSN "" s
-    temp Mod s = setSN "" s
-    temp Req s = setSN "" s
-    temp Assump s = setSN "" s
-    temp LC s = setSN "" s
-    temp UC s = setSN "" s
-    temp EqnB s = setSN "" s
-    temp Cite s = setSN "" s
-    temp Goal s = setSN "" s
-    temp PSD s = setSN "" s
+    temp (Def dtp) s = setSN (getDefName dtp) s
+    temp Req s       = setSN "" s
+    temp Assump s    = setSN "A:" s
+    temp LC s        = setSN "LC:" s
+    temp UC s        = setSN "UC:" s
+    temp EqnB s      = setSN "" s
+    temp Goal s = setSN "GS:" s
+    temp PSD s = setSN "PS:" s
     temp Lbl s = setSN "" s
+    temp _ s = setSN "" s
 
 -- This works for passing the correct id to the reference generator for Assumptions,
 -- Requirements and Likely Changes but I question whether we should use it.

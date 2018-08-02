@@ -17,7 +17,7 @@ import Language.Drasil.Chunk.Citation
 import Language.Drasil.Chunk.ReqChunk
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.References
-
+import Language.Drasil.RefTypes(DType(..))
 import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(getUnit))
 
 import Language.Drasil.Classes (NamedIdea(term),
@@ -57,8 +57,6 @@ egetCon (Defnt dt []) = [] ++ egetDtype dt
 egetCon _ = []
 
 egetDtype :: DType -> [Expr]
-egetDtype (Data q) = egetQDef q
-egetDtype (Theory t) = [t ^. relat]
 egetDtype _ = []
 
 egetQDef :: QDefinition -> [Expr]
@@ -107,8 +105,6 @@ getCon (Defnt _ []) = []
 getCon  _ = []
 
 getDtype :: DType -> [Sentence]
-getDtype (Data q) = getQDef q
-getDtype (Theory t) = getTerm t ++ getDefn t
 getDtype _ = []
 
 

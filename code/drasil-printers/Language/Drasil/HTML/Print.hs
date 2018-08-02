@@ -9,7 +9,7 @@ import Control.Arrow (second)
 import qualified Language.Drasil as L (People, Person, StyleGuide(APA, MLA, Chicago), 
   CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
   Symbol(Corners, Concat, Special, Atomic, Empty, Atop), USymb(US),
-  DType(DD, TM, Instance, General, Theory, Data), MaxWidthPercent, 
+  DType(DD, TM, Instance, General), MaxWidthPercent, 
   Decoration(Prime, Hat, Vector), Document, HasSymbolTable, nameStr, 
   rendPersLFM, rendPersLFM', rendPersLFM'', special, bibStyleH)
 
@@ -262,9 +262,7 @@ makeColumns = vcat . map (td . p_spec)
 makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
 makeDefn _ [] _  = error "L.Empty definition"
 makeDefn dt ps l = refwrap l $ wrap "table" [dtag dt] (makeDRows ps)
-  where dtag (L.Data _)   = "ddefn"
-        dtag (L.Theory _) = "tdefn"
-        dtag (L.General)  = "gdefn"
+  where dtag (L.General)  = "gdefn"
         dtag (L.Instance) = "idefn"
         dtag (L.TM)       = "tdefn"
         dtag (L.DD)       = "ddefn"

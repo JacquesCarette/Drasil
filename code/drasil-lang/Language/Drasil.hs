@@ -255,8 +255,7 @@ import Language.Drasil.Document (section, fig, figWithWidth
   , llcc, ulcc, Document(..)
   , HasContents(accessContents)
   , mkParagraph, mkFig, mkRawLC)
-import Language.Drasil.Document.Core (DType(..)
-  , Contents(..), ListType(..), ItemType(..)
+import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
   , LabelledContent(..), UnlabelledContent(..) )
 import Language.Drasil.Unicode -- all of it
@@ -351,7 +350,7 @@ import Language.Drasil.Misc -- all of it
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
-import Language.Drasil.RefTypes(RefAdd, RefType(Cite))
+import Language.Drasil.RefTypes(RefAdd, RefType(Cite), DType(..))
 import Language.Drasil.Label (mkLabelRA, mkLabelRA', mkLabelRA'', mkEmptyLabel)
 import Language.Drasil.Label.Core (getAdd)
 --Should be in lang-dev package?

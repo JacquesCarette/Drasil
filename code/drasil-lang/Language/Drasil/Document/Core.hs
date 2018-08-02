@@ -12,6 +12,7 @@ import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label (Label)
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Spec (Sentence(..))
+import Language.Drasil.RefTypes (DType(..))
 
 
 data ListType = Bullet [(ItemType,Maybe RefAdd)] -- ^ Bulleted list
@@ -39,18 +40,6 @@ type ListTuple = (Title,ItemType,Maybe RefAdd) -- ^ Title: Item
 type Filepath = String
 type Lbl      = Sentence
 
-
---FIXME: Remove Data, Data', and Theory from below.
--- | Types of definitions
-data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining
-                              -- equation used to generate the Data Definition
-           | Data' DataDefinition
-           | General
-           | Theory RelationConcept -- ^ Theoretical models use a relation as
-                                    -- their definition
-           | Instance
-           | TM
-           | DD
 
 -- | Types of layout objects we deal with explicitly
 data RawContent = Table [Sentence] [[Sentence]] Title Bool

@@ -271,15 +271,16 @@ sectionMap progName (SectionModel niname xs)
 render :: (Idea c, HasSymbolTable s) => c -> s -> SubSec -> Section
 render progName symMap item@(SectionModel niname _)
   | compareID niname (Doc.assumption ^. uid)       = assumptionSect        item
-  | compareID niname (Doc.thModel ^. uid)          = theoreticalModelSect  item symMap progName
   | compareID niname (Doc.genDefn ^. uid)          = generalDefinitionSect item symMap
-  | compareID niname (Doc.inModel ^. uid)          = instanceModelSect     item symMap
-  | compareID niname (Doc.dataDefn ^. uid)         = dataDefinitionSect    item symMap
   | compareID niname (Doc.dataConst ^. uid)        = dataConstraintSect    item 
   | compareID niname (Doc.termAndDef ^. uid)       = termDefinitionSect    item
   | compareID niname (Doc.goalStmt ^. uid)         = goalStatementSect     item
   | compareID niname (Doc.systemConstraint ^. uid) = systemConstraintSect  item
   | otherwise                                      = genericSect           item
+
+{---| compareID niname (Doc.thModel ^. uid)          = theoreticalModelSect  item symMap progName
+  --| compareID niname (Doc.inModel ^. uid)          = instanceModelSect     item symMap
+  --| compareID niname (Doc.dataDefn ^. uid)         = dataDefinitionSect    item symMap-}
 
 ------------------------------
 -- Section Render Functions --
@@ -318,20 +319,12 @@ assumptionSect (SectionModel _ xs) = SRS.assumpt
   (assumpIntro:(pullContents xs)) (pullSections xs)
 
 
-theoreticalModelSect :: (Idea a, HasSymbolTable s) => SubSec -> s -> a -> Section
+{-theoreticalModelSect :: (Idea a, HasSymbolTable s) => SubSec -> s -> a -> Section
 theoreticalModelSect (SectionModel _ xs) _ progName = SRS.thModel
  ((tModIntro progName):theoreticalModels ++ 
   (pullContents xs)) (pullSections xs)
   where theoreticalModels = map (UlC . ulcc) $ map symMap $ pullTMods xs
         symMap            = Definition . Theory
-
-
-generalDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
-generalDefinitionSect (SectionModel _ xs) _ = SRS.genDefn
-  (generalDefsIntro:contents) (pullSections xs)
-  where generalDefsIntro = generalDefinitionIntro contents
-        contents         = (pullContents xs)
-
 
 instanceModelSect :: (HasSymbolTable s) => SubSec -> s -> Section
 instanceModelSect (SectionModel _ xs) _ = SRS.inModel
@@ -345,7 +338,15 @@ dataDefinitionSect (SectionModel _ xs) _ = SRS.dataDefn
   (dataIntro:dataDefinitions ++ (pullContents xs)) (pullSections xs)
   where dataIntro       = dataDefinitionIntro $ pullSents xs
         symMap          = Definition . Data'
-        dataDefinitions = map (UlC . ulcc . symMap) $ pullDDefs xs
+        dataDefinitions = map (UlC . ulcc . symMap) $ pullDDefs xs-}
+
+generalDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
+generalDefinitionSect (SectionModel _ xs) _ = SRS.genDefn
+  (generalDefsIntro:contents) (pullSections xs)
+  where generalDefsIntro = generalDefinitionIntro contents
+        contents         = (pullContents xs)
+
+
 
 
 dataConstraintSect :: SubSec -> Section

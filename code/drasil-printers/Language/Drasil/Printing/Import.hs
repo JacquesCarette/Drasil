@@ -281,8 +281,7 @@ layLabelled sm x@(LblC _ (Defnt dtyp pairs)) = T.Definition
   (P.S $ getAdd (x ^. getRefAdd))
   where layPairs = map (\(x,y) -> (x, map (lay sm) y))
 layLabelled sm (LblC _ (Paragraph c))           = T.Paragraph (spec sm c)
-layLabelled sm (LblC _ (Definition c))          = T.Definition c (makePairs sm c)
-  (P.S "nolabel8")
+layLabelled sm (LblC _ (Definition c))          = T.Definition c [("nolabel!", [T.Paragraph $ P.EmptyS])] (P.S "nolabel8")
 layLabelled sm (LblC _ (Enumeration cs))        = T.List $ makeL sm cs
 layLabelled sm (LblC _ (Bib bib))               = T.Bib $ map (layCite sm) bib
 
@@ -293,7 +292,7 @@ layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
   ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S "nolabel0") b (spec sm t)
 layUnlabelled sm (Paragraph c)          = T.Paragraph (spec sm c)
 layUnlabelled sm (EqnBlock c)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
-layUnlabelled sm (Definition c)       = T.Definition c (makePairs sm c) (P.S "nolabel1")
+layUnlabelled sm (Definition c)       = T.Definition c [("nolabel!", [T.Paragraph $ P.EmptyS])] (P.S "nolabel1")
 layUnlabelled sm (Enumeration cs)       = T.List $ makeL sm cs
 layUnlabelled sm (Figure c f wp)    = T.Figure (P.S "nolabel2") (spec sm c) f wp
 layUnlabelled sm (Requirement r)      = T.ALUR T.Requirement
@@ -353,25 +352,6 @@ item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
 
 labref :: Maybe RefAdd -> Maybe P.Spec
 labref l = maybe Nothing (\z -> Just $ P.S z) l
-
--- | Translates definitions
--- (Data defs, General defs, Theoretical models, etc.)
-makePairs :: HasSymbolTable ctx => ctx -> DType -> [(String,[T.LayoutObj])]
-makePairs m (Data c) = [
-  ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
-  ("Units",       [T.Paragraph $ spec m (unitToSentence c)]),
-  ("Equation",    [T.HDiv ["equation"] [eqnStyle numberedDDEquations $ buildEqn m c] P.EmptyS]),
-  ("Description", [T.Paragraph $ buildDDDescription m c])
-  ]
-makePairs m (Theory c) = [
-  ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
-  ("Equation",    [T.HDiv ["equation"] [eqnStyle numberedTMEquations $ P.E (expr (c ^. relat) m)] P.EmptyS]),
-  ("Description", [T.Paragraph (spec m (c ^. defn))])
-  ]
-makePairs _ General  = error "Not yet implemented"
-makePairs _ Instance = error "Not yet implemented"
-makePairs _ TM       = error "Not yet implemented"
-makePairs _ DD       = error "Not yet implemented"
 
 -- Toggle equation style
 eqnStyle :: Bool -> T.Contents -> T.LayoutObj

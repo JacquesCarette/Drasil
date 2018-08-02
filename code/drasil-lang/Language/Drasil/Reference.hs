@@ -1,7 +1,7 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Reference where
 
-import Language.Drasil.RefTypes (RefType(..), DType(..))
+import Language.Drasil.RefTypes (RefType(..), DType(..), ReqType(..))
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
 import Data.List (concatMap, find, groupBy, partition, sortBy)
@@ -17,7 +17,7 @@ import Language.Drasil.Chunk.GenDefn (GenDefn)
 import Language.Drasil.Chunk.Goal as G (Goal, lbl)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
 import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc, lbl)
-import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..), ReqType(FR))
+import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..))
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName, getStringSN, shortname')
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel), HasRefAddress(getRefAdd))
@@ -206,7 +206,8 @@ instance Referable AssumpChunk where
 
 instance Referable ReqChunk where
   refAdd  r@(RC _ rt _ _) = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
-  rType   _               = Req
+  rType   (RC _ FR _ _)   = Req FR
+  rType   (RC _ NFR _ _)  = Req NFR
 
 instance Referable Change where
   refAdd r@(ChC _ rt _ _)    = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
@@ -357,13 +358,17 @@ customRef r n = Ref (rType r) (refAdd r) (shortname' $ temp (rType r) n)
   where
     temp :: RefType -> ShortName -> String
     temp (Def dtp) s = setSN (getDefName dtp) s
-    temp Req s       = setSN "R:" s
+    temp (Req rq) s  = setSN (getReqName rq) s
     temp Assump s    = setSN "A:" s
     temp LC s        = setSN "LC:" s
     temp UC s        = setSN "UC:" s
     temp Goal s = setSN "GS:" s
     temp PSD s = setSN "PS:" s
     temp _ s = setSN "" s
+
+getReqName :: ReqType -> String
+getReqName FR  = "FR:"
+getReqName NFR = "NFR:"
 
 -- This works for passing the correct id to the reference generator for Assumptions,
 -- Requirements and Likely Changes but I question whether we should use it.

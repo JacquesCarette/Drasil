@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs #-}
 -- | Contains the types associated to references
-module Language.Drasil.RefTypes(RefAdd, RefType(..), DType(..)) where
+module Language.Drasil.RefTypes(RefAdd, RefType(..), DType(..), ReqType(..)) where
 
 --import Language.Drasil.Document.Core (DType(..)) cannot be imported due to importcycles
 
@@ -12,13 +12,18 @@ data DType = General
 
 type RefAdd  = String
 
+-- | What type of requirement are we dealing with?
+data ReqType = FR  -- ^ Functional Requirement
+             | NFR -- ^ Non-Functional Requirement
+  deriving Eq
+
 -- | For building references. Defines the possible type of reference.
 data RefType = Tab    -- ^ Table
              | Fig    -- ^ Figure
              | Sect   -- ^ Section
              | Def DType  -- ^ Definition (includes theoretical models) (DType used to set shortnames)
              | Mod    -- ^ Module
-             | Req    -- ^ Requirement
+             | Req ReqType -- ^ Requirement
              | Assump -- ^ Assumption
              | LC     -- ^ Likely Change
              | UC     -- ^ Unlikely Change
@@ -36,7 +41,7 @@ instance Show RefType where
   show Lbl    = "Section" --FIXME: hack until section has labels
   show Mod    = "Module"
   show (Def _)= "Definition"
-  show Req    = "Requirement"
+  show (Req _)= "Requirement"
   show Assump = "Assumption"
   show LC     = "Likely Change"
   show UC     = "Unlikely Change"

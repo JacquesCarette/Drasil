@@ -10,6 +10,7 @@ import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Classes (HasLabel(getLabel))
+import Language.Drasil.RefTypes (ReqType(..))
 
 import Control.Lens ((^.), makeLenses)
 
@@ -21,11 +22,6 @@ import Control.Lens ((^.), makeLenses)
 -- are dead information, and larger structures (like Contents) are display-specific.
 -- For now, using sentences to test.
 
--- | What type of requirement are we dealing with?
-data ReqType = FR  -- ^ Functional Requirement
-             | NFR -- ^ Non-Functional Requirement
-  deriving Eq
-  
 instance Show ReqType where
   show FR  = "FR"
   show NFR = "NFR"

@@ -561,7 +561,7 @@ req4 = mkRequirement "req4" (
   +:+ S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
   plural quantity +:+ S "from" +:+ (makeRef req1) `sC`
   S "the" +:+ phrase mass +:+ S "from" +:+ (makeRef req2)
-  `sAnd` ch tau_W +:+. sParen(S "from" +:+ acroIM 1) ) "Output-Input-Derivied-Quantities"
+  `sAnd` ch tau_W +:+. sParen(S "from" +:+ acroIM 1) ) "Output-Input-Derived-Quantities"
 req5 = mkRequirement "req5" (
   S "Calculate and output the" +:+ phrase temp_W +:+
   sParen (ch temp_W :+: sParen (ch time)) +:+ S "over the" +:+

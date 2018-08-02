@@ -9,7 +9,7 @@ import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..),
-  HaveNotationSetting(..))
+  HaveNotationSetting(..), Notation(Scientific, Engineering))
 
 import Language.Drasil.NounPhrase (titleize, phrase)
 import Numeric (floatToDigits)
@@ -73,11 +73,11 @@ processExpo a
 
 -- | expr translation function from Drasil to layout AST
 expr :: (HasSymbolTable s, HaveNotationSetting s) => Expr -> s -> P.Expr
-expr (Dbl d)           sm = case floatToDigits 10 d of
-  (a, b) -> if getSetting sm == "Engineering"
-    then P.Row $ digitsProcess (map toInteger a) (fst $ processExpo b) 0
-     (toInteger $ snd $ processExpo b)
-    else P.DblSc d
+expr (Dbl d)           sm = case (getSetting sm) of
+  Engineering -> P.Row $ digitsProcess (map toInteger $ fst $ floatToDigits 10 d)
+     (fst $ processExpo $ snd $ floatToDigits 10 d) 0
+     (toInteger $ snd $ floatToDigits 10 d)
+  _           ->  P.DblSc d
 expr (Int i)            _ = P.Int i
 expr (Str s)            _ = P.Str   s
 expr (AssocB And l)    sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (precB And)) l

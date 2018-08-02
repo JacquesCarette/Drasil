@@ -80,7 +80,8 @@ import Data.Drasil.People (spencerSmith, nikitha, mCampidelli)
 import Data.Drasil.Phrase (for'')
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, newton, pascal, 
   second)
-import Language.Drasil.Printers (PrintingInformation(..))
+import Language.Drasil.Printers (PrintingInformation(..),
+ Notation(Scientific, Engineering))
 
 {--}
 
@@ -90,7 +91,7 @@ gbSymbMap =
       (map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton])
 
 printSetting :: PrintingInformation
-printSetting = PI gbSymbMap "Engineering"
+printSetting = PI gbSymbMap Engineering
 
 ccss'' :: Sentence -> [DefinedQuantityDict]
 ccss'' s = combine s gbSymbMap

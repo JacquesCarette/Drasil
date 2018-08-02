@@ -16,7 +16,8 @@ import Data.Drasil.SI_Units (si_units)
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Documentation (srs)
 import Data.Drasil.Phrase (for)
-import Language.Drasil.Printers (PrintingInformation(..))
+import Language.Drasil.Printers (PrintingInformation(..),
+ Notation(Scientific, Engineering))
 
 thisCode :: CodeSpec
 thisCode = codeSpec thisSI []
@@ -48,7 +49,7 @@ allSymbols = cdb symbols (map nw symbols) ([] :: [ConceptChunk]) -- FIXME: Fill 
   si_units
 
 printSetting :: PrintingInformation
-printSetting = PI allSymbols "Engineering"
+printSetting = PI allSymbols Engineering
   
 thisSRS :: DocDesc
 thisSRS = RefSec (RefProg intro 

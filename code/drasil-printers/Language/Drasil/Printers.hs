@@ -16,6 +16,7 @@ module Language.Drasil.Printers (
   , genTeX
   , PrintingInformation(..)
   , HaveNotationSetting(..)
+  , Notation(Scientific, Engineering)
   )
   where
 
@@ -26,4 +27,5 @@ import Language.Drasil.HTML.Helpers (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.Make.Print (genMake)
 import Language.Drasil.TeX.Print (genTeX)
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..), HaveNotationSetting(..))
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..),
+ HaveNotationSetting(..), Notation(Scientific, Engineering))

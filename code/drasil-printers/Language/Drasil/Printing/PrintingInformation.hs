@@ -8,11 +8,16 @@ import Language.Drasil (ChunkDB, HasSymbolTable(..)
   , HasTermTable(..), HasDefinitionTable(..)
   , HasUnitTable(..)
   )
+
+data Notation = Scientific
+               |Engineering
+
 class HaveNotationSetting c where
-	getSetting :: c -> String 
+	getSetting :: c -> Notation 
+
 data PrintingInformation = PI
                          { _ckdb :: ChunkDB
-                         , _setting :: String
+                         , _setting :: Notation
                          }
 makeLenses ''PrintingInformation
 

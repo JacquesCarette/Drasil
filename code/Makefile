@@ -1,12 +1,12 @@
 TINY_PREF = Tiny_
-#GLASS_PREF = GlassBR_
+GLASS_PREF = GlassBR_
 NoPCM_PREF = NoPCM_
 SWHS_PREF = SWHS_
 SSP_PREF = SSP_
 GAME_PREF = Chipmunk_
 
 TINY_DIR = Tiny
-#GLASS_DIR = GlassBR
+GLASS_DIR = GlassBR
 NoPCM_DIR = NoPCM
 SWHS_DIR = SWHS
 SSP_DIR = SSP
@@ -21,7 +21,7 @@ DOCL_DIR  = drasil-docLang
 EXAM_DIR  = drasil-example
 
 TINY_EXE = tiny
-#GLASS_EXE= glassbr
+GLASS_EXE= glassbr
 NoPCM_EXE  = nopcm
 SWHS_EXE = swhs
 SSP_EXE  = ssp
@@ -30,8 +30,8 @@ GAME_EXE = chipmunkdocs
 DIRS = $(TINY_DIR) $(NoPCM_DIR) $(SWHS_DIR) $(SSP_DIR) $(GAME_DIR) $(DATA_DIR) $(LANG_DIR) $(DOCL_DIR) $(EXAM_DIR) $(CODE_DIR) $(GEN_DIR) $(PRINT_DIR)
 DIFF = diff --strip-trailing-cr --ignore-all-space
 
-TESTS = tiny_diff nopcm_diff swhs_diff ssp_diff gamephys_diff
-PROGS = tiny_prog nopcm_prog swhs_prog ssp_prog gamephys_prog
+TESTS = tiny_diff glassbr_diff nopcm_diff swhs_diff ssp_diff gamephys_diff
+PROGS = tiny_prog glassbr_prog nopcm_prog swhs_prog ssp_prog gamephys_prog
 
 all: build build_code build_data test
 
@@ -84,9 +84,9 @@ tiny_build: build_exam
 	mkdir -p build/$(TINY_DIR)
 	cd build/$(TINY_DIR) && stack exec $(TINY_EXE)
 
-#glassbr_build: tiny_build
-#	mkdir -p build/$(GLASS_DIR)
-#	cd build/$(GLASS_DIR) && stack exec $(GLASS_EXE)
+glassbr_build: tiny_build
+	mkdir -p build/$(GLASS_DIR)
+	cd build/$(GLASS_DIR) && stack exec $(GLASS_EXE)
 
 nopcm_build: tiny_build
 	mkdir -p build/$(NoPCM_DIR)
@@ -109,10 +109,10 @@ tiny_diff: tiny_build
 	- $(DIFF) ./stable/tiny/Website/$(TINY_PREF)SRS.css ./build/$(TINY_DIR)/Website/$(TINY_PREF)SRS.css >> $(TINY_PREF)log.log 2>&1
 	- $(DIFF) ./stable/tiny/Website/$(TINY_PREF)SRS.html ./build/$(TINY_DIR)/Website/$(TINY_PREF)SRS.html >> $(TINY_PREF)log.log 2>&1
 
-#glassbr_diff: glassbr_build
-#	- $(DIFF) ./stable/glassbr/SRS/$(GLASS_PREF)SRS.tex ./build/$(GLASS_DIR)/SRS/$(GLASS_PREF)SRS.tex > $(GLASS_PREF)log.log 2>&1
-#	- $(DIFF) ./stable/glassbr/Website/$(GLASS_PREF)SRS.css ./build/$(GLASS_DIR)/Website/$(GLASS_PREF)SRS.css >> $(GLASS_PREF)log.log 2>&1
-#	- $(DIFF) ./stable/glassbr/Website/$(GLASS_PREF)SRS.html ./build/$(GLASS_DIR)/Website/$(GLASS_PREF)SRS.html >> $(GLASS_PREF)log.log 2>&1
+glassbr_diff: glassbr_build
+	- $(DIFF) ./stable/glassbr/SRS/$(GLASS_PREF)SRS.tex ./build/$(GLASS_DIR)/SRS/$(GLASS_PREF)SRS.tex > $(GLASS_PREF)log.log 2>&1
+	- $(DIFF) ./stable/glassbr/Website/$(GLASS_PREF)SRS.css ./build/$(GLASS_DIR)/Website/$(GLASS_PREF)SRS.css >> $(GLASS_PREF)log.log 2>&1
+	- $(DIFF) ./stable/glassbr/Website/$(GLASS_PREF)SRS.html ./build/$(GLASS_DIR)/Website/$(GLASS_PREF)SRS.html >> $(GLASS_PREF)log.log 2>&1
 
 nopcm_diff: nopcm_build
 	- $(DIFF) ./stable/nopcm/SRS/$(NoPCM_PREF)SRS.tex ./build/$(NoPCM_DIR)/SRS/$(NoPCM_PREF)SRS.tex > $(NoPCM_PREF)log.log 2>&1
@@ -136,11 +136,11 @@ gamephys_diff: gamephys_build
 
 tiny_prog: tiny_build
 
-#glassbr_prog: glassbr_build
-#	test -d ./build/$(GLASS_DIR)/src/python && cp ./datafiles/$(GLASS_DIR)/*.txt ./build/$(GLASS_DIR)/src/python/
-#	test -d ./build/$(GLASS_DIR)/src/java && cp ./datafiles/$(GLASS_DIR)/*.txt ./build/$(GLASS_DIR)/src/java/
-#	test -d ./build/$(GLASS_DIR)/src/csharp && cp ./datafiles/$(GLASS_DIR)/*.txt ./build/$(GLASS_DIR)/src/csharp/
-#	test -d ./build/$(GLASS_DIR)/src/cpp && cp ./datafiles/$(GLASS_DIR)/*.txt ./build/$(GLASS_DIR)/src/cpp/
+glassbr_prog: glassbr_build
+	test -d ./build/$(GLASS_DIR)/src/python && cp ./datafiles/$(GLASS_DIR)/*.txt ./build/$(GLASS_DIR)/src/python/
+	test -d ./build/$(GLASS_DIR)/src/java && cp ./datafiles/$(GLASS_DIR)/*.txt ./build/$(GLASS_DIR)/src/java/
+	test -d ./build/$(GLASS_DIR)/src/csharp && cp ./datafiles/$(GLASS_DIR)/*.txt ./build/$(GLASS_DIR)/src/csharp/
+	test -d ./build/$(GLASS_DIR)/src/cpp && cp ./datafiles/$(GLASS_DIR)/*.txt ./build/$(GLASS_DIR)/src/cpp/
 
 nopcm_prog: nopcm_build
 

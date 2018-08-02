@@ -15,8 +15,7 @@ type Label = Spec
 
 data Expr = Dbl   Double
           | DblSc Double
-          | Integ Integer
-          | Int   Int
+          | Int   Integer
           | Str   String
           | Case  [(Expr,Expr)]
           | Mtx [[Expr]]

@@ -44,7 +44,7 @@ parens = P.Fenced P.Paren P.Paren
 
 --This function takes the digits form `floatToDigits` function
 -- and decimal point position and a counter and exponent
-digitsProcess :: [Int] -> Int -> Int -> Int -> [P.Expr]
+digitsProcess :: [Integer] -> Int -> Int -> Integer -> [P.Expr]
 digitsProcess [0] pos coun ex = [P.Int 0, P.MO P.Point, P.Int 0]
 digitsProcess (hd:tl) pos coun ex = if pos == coun  
   then [P.MO P.Point, P.Int hd] ++ (digitsProcess tl pos (coun+1) ex)
@@ -75,9 +75,10 @@ processExpo a
 expr :: (HasSymbolTable s, HaveNotationSetting s) => Expr -> s -> P.Expr
 expr (Dbl d)           sm = case floatToDigits 10 d of
   (a, b) -> if getSetting sm == "Engineering"
-    then P.Row $ digitsProcess a (fst $ processExpo b) 0 (snd $ processExpo b)
+    then P.Row $ digitsProcess (map toInteger a) (fst $ processExpo b) 0
+     (toInteger $ snd $ processExpo b)
     else P.DblSc d
-expr (Int i)            _ = P.Integ i
+expr (Int i)            _ = P.Int i
 expr (Str s)            _ = P.Str   s
 expr (AssocB And l)    sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (precB And)) l
 expr (AssocB Or l)     sm = P.Row $ intersperse (P.MO P.Or ) $ map (expr' sm (precB Or)) l

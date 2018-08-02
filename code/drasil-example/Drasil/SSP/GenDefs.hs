@@ -31,6 +31,19 @@ import Data.Drasil.SentenceStructures (acroGD, acroT, foldlSent, getTandS,
 
 import Drasil.DocLang.SRS as SRS (physSystLabel)
 
+-- Labels
+l1, l2, l3, l4, l5, l6, l7, l8, l9, l10 :: Label
+l1  = mkLabelRA'' "normForcEq"
+l2  = mkLabelRA'' "bsShrFEq"
+l3  = mkLabelRA'' "resShr"
+l4  = mkLabelRA'' "mobShr"
+l5  = mkLabelRA'' "normShrR"
+l6  = mkLabelRA'' "momentEql"
+l7  = mkLabelRA'' "netForcex"
+l8  = mkLabelRA'' "netForcey"
+l9  = mkLabelRA'' "hookesLaw2d"
+l10 = mkLabelRA'' "displVect"
+
 ---------------------------
 --  General Definitions  --
 ---------------------------
@@ -49,7 +62,7 @@ generalDefinitions = [gd'' normForcEq "normForcEq" [nmFEq_desc],
 --
 normForcEq :: RelationConcept
 normForcEq = makeRC "normForcEq" (nounPhraseSP "normal force equilibrium")
-  nmFEq_desc nmFEq_rel Nothing --label 
+  nmFEq_desc nmFEq_rel l1
 
 nmFEq_rel :: Relation
 nmFEq_rel = inxi totNrmForce $= eqlExpr cos sin
@@ -73,7 +86,7 @@ nmFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
 --
 bsShrFEq :: RelationConcept
 bsShrFEq = makeRC "bsShrFEq" (nounPhraseSP "base shear force equilibrium")
-  bShFEq_desc bShFEq_rel Nothing --label 
+  bShFEq_desc bShFEq_rel l2
 
 bShFEq_rel :: Relation
 bShFEq_rel = inxi mobShrI $= eqlExpr sin cos
@@ -101,7 +114,7 @@ shrResEqn = inxi nrmFSubWat * tan (inxi fricAngle) + inxi cohesion *
 
 resShr :: RelationConcept
 resShr = makeRC "resShr" (nounPhraseSP "resistive shear force")
-  resShr_desc resShr_rel Nothing --label 
+  resShr_desc resShr_rel l3
 
 resShr_rel :: Relation
 resShr_rel = inxi shrResI $= shrResEqn
@@ -124,8 +137,7 @@ resShr_desc = foldlSent [S "The Mohr-Coulomb resistive shear strength of a",
 --
 mobShr :: RelationConcept
 mobShr = makeRC "mobShr"
-  (nounPhraseSP "mobile shear force") mobShr_desc mobShr_rel
-  Nothing --label 
+  (nounPhraseSP "mobile shear force") mobShr_desc mobShr_rel l4
 
 mobShr_rel :: Relation
 mobShr_rel = inxi mobShrI $= inxi shrResI / sy fs $= shrResEqn / sy fs
@@ -141,8 +153,7 @@ mobShr_desc = foldlSent [
 --
 normShrR :: RelationConcept
 normShrR = makeRC "normShrR"
-  (nounPhraseSP "interslice normal/shear relationship") nmShrR_desc nmShrR_rel 
-  Nothing --label
+  (nounPhraseSP "interslice normal/shear relationship") nmShrR_desc nmShrR_rel l5
 
 nmShrR_rel :: Relation
 nmShrR_rel = sy intShrForce $= sy normToShear * sy scalFunc * sy intNormForce
@@ -162,7 +173,7 @@ nmShrR_desc = foldlSent [S "The", phrase assumption,
 
 momentEql :: RelationConcept
 momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")
-  momEql_desc momEql_rel Nothing --label 
+  momEql_desc momEql_rel l6
 
 momEql_rel :: Relation
 momEql_rel = 0 $= momExpr (\ x y -> x -
@@ -183,7 +194,7 @@ momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
 --
 netForcex :: RelationConcept
 netForcex = makeRC "netForce" (nounPhraseSP "net x-component force")
-  EmptyS fNetx_rel Nothing --label 
+  EmptyS fNetx_rel l7
 
 fNetx_rel :: Relation
 fNetx_rel = inxi fx $= (negate $ inxi watrForceDif) -
@@ -194,7 +205,7 @@ fNetx_rel = inxi fx $= (negate $ inxi watrForceDif) -
 
 netForcey :: RelationConcept
 netForcey = makeRC "netForce" (nounPhraseSP "net y-component force")
-  fNet_desc fNety_rel Nothing --label
+  fNet_desc fNety_rel l8
 
 fNety_rel :: Relation
 fNety_rel = inxi fy $= (negate $ inxi slcWght) +
@@ -229,7 +240,7 @@ fNet_desc = foldlSent [S "These equations show the net sum of the",
 --
 hookesLaw2d :: RelationConcept
 hookesLaw2d = makeRC "hookesLaw2d" (nounPhraseSP "Hooke's law 2D")
-  hooke2d_desc hooke2d_rel Nothing --label 
+  hooke2d_desc hooke2d_rel l9
 
 hooke2d_rel :: Relation
 hooke2d_rel = vec2D (inxi genPressure) (inxi genPressure) $=
@@ -262,7 +273,7 @@ hooke2d_desc = foldlSent [
 --
 displVect :: RelationConcept
 displVect = makeRC "displVect" (nounPhraseSP "displacement vectors")
-  disVec_desc disVec_rel Nothing --label
+  disVec_desc disVec_rel l10
 
 disVec_rel :: Relation
 disVec_rel = inxi rotatedDispl $= vec2D (inxi shrDispl) (inxi nrmDispl) $=

@@ -81,7 +81,7 @@ im''' rcon i ic o oc der sn = IM rcon i ic o oc [] der (mkLabelRA'' sn) Nothing
 -- (Sentence is the "concept" definition for the relation concept)
 -- FIXME: get the shortname from the QDefinition?
 imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> 
-  InputConstraints -> OutputConstraints -> Label -> Maybe Label -> InstanceModel
+  InputConstraints -> OutputConstraints -> Label -> Label -> InstanceModel
 imQD ctx qd dfn incon ocon lblForIM lblForRC = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
   (sy qd $= qd ^. equat) lblForRC) (vars (qd^.equat) ctx) incon (qw qd) ocon [] [] 
   lblForIM Nothing 
@@ -90,7 +90,7 @@ imQD ctx qd dfn incon ocon lblForIM lblForRC = IM (makeRC (qd ^. uid) (qd ^. ter
 -- FIXME: get the shortname from the QDefinition?
 imQD' :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> 
   InputConstraints -> OutputConstraints -> Label -> Maybe [Sentence] -> 
-  Maybe Label -> InstanceModel
+  Label -> InstanceModel
 imQD' ctx qd dfn incon ocon lblForIM addNotes lblForRC = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
   (sy qd $= qd ^. equat) lblForRC) (vars (qd^.equat) ctx) incon (qw qd) ocon [] [] 
   lblForIM addNotes

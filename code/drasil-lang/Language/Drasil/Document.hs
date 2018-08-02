@@ -43,9 +43,7 @@ repUnd c = c : []
 getDefLabel :: DType -> Label
 getDefLabel (Data c)   = c ^. getLabel
 getDefLabel (Data' c)  = c ^. getLabel
-getDefLabel (Theory c) = let u = getMaybeLabel c in
-  case u of Just l  -> l
-            Nothing -> error "No explicit label given for relation concept"
+getDefLabel (Theory c) = c ^. getLabel
 getDefLabel (_)        = mkEmptyLabel
 
 instance HasContents Contents where

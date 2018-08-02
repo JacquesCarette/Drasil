@@ -40,7 +40,7 @@ t1ConsThermE_new = tm' t1ConsThermE
 
 t1ConsThermE :: RelationConcept
 t1ConsThermE = makeRC "t1ConsThermE"
-  (nounPhraseSP "Conservation of thermal energy") t1descr consThermERel Nothing--label
+  (nounPhraseSP "Conservation of thermal energy") t1descr consThermERel (mkLabelRA'' "ConsThermE")
 
 consThermERel :: Relation
 consThermERel = (negate (sy gradient)) $. (sy thFluxVect) + (sy vol_ht_gen) $=
@@ -79,7 +79,7 @@ t2SensHtE_new = tm' t2SensHtE
 
 t2SensHtE :: RelationConcept
 t2SensHtE = makeRC "t2SensHtE"
-  (nounPhraseSP "Sensible heat energy") t2descr sensHtEEqn Nothing--label
+  (nounPhraseSP "Sensible heat energy") t2descr sensHtEEqn (mkLabelRA'' "SensHtE")
 
 sensHtEEqn :: Relation
 sensHtEEqn = (sy sens_heat) $= case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
@@ -133,7 +133,7 @@ t3LatHtE_new = tm' t3LatHtE
 
 t3LatHtE :: RelationConcept
 t3LatHtE = makeRC "t3LatHtE"
-  (nounPhraseSP "Latent heat energy") t3descr latHtEEqn Nothing--label
+  (nounPhraseSP "Latent heat energy") t3descr latHtEEqn (mkLabelRA'' "LatHtE")
 
 latHtEEqn :: Relation
 latHtEEqn = apply1 latent_heat time $= 

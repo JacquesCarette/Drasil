@@ -15,6 +15,12 @@ import Drasil.GlassBR.Unitals (demand, demandq, eqTNTWeight, lRe, loadSF,
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
 
+-- labels
+l1, l2, l3 :: Label
+l1 = mkLabelRA'' "probOfBrIM"
+l2 = mkLabelRA'' "calOfCapLabel"
+l3 = mkLabelRA'' "calofDemand"
+
 gbrIMods :: [InstanceModel]
 gbrIMods = [probOfBreak, calofCapacity, calofDemand]
 
@@ -23,13 +29,13 @@ gbrIMods = [probOfBreak, calofCapacity, calofDemand]
 probOfBreak :: InstanceModel
 probOfBreak = im probOfBr [qw risk] 
   [TCon AssumedCon $ sy risk $> 0] (qw prob_br) [TCon AssumedCon $ sy prob_br $> 0]
-  [(sourceref (S "[1]")), (sourceref (S "[4]"))] (mkLabelRA'' "probOfBrIM")
+  [(sourceref (S "[1]")), (sourceref (S "[4]"))] l1
 
 {--}
 
 probOfBr :: RelationConcept
 probOfBr = makeRC "probOfBr" (nounPhraseSP "Probability of Glass Breakage")
-  pbdescr ( (sy prob_br) $= 1 - (exp (negate (sy risk)))) Nothing--label
+  pbdescr ( (sy prob_br) $= 1 - (exp (negate (sy risk)))) l1
 
 pbdescr :: Sentence
 pbdescr =
@@ -41,11 +47,11 @@ pbdescr =
 calofCapacity :: InstanceModel
 calofCapacity = im' calOfCap [qw nonFL, qw glaTyFac, qw loadSF] 
   [TCon AssumedCon $ sy nonFL $> 0, TCon AssumedCon $ sy glaTyFac $> 0,
-  TCon AssumedCon $ sy loadSF $> 0] (qw lRe) [] (mkLabelRA'' "calOfCapLabel") [capdescr]
+  TCon AssumedCon $ sy loadSF $> 0] (qw lRe) [] l2 [capdescr]
 
 calOfCap :: RelationConcept
 calOfCap = makeRC "calOfCap" (nounPhraseSP "Calculation of Capacity(LR)") 
-  capdescr ( (sy lRe) $= ((sy nonFL) * (sy glaTyFac) * (sy loadSF))) Nothing--label
+  capdescr ( (sy lRe) $= ((sy nonFL) * (sy glaTyFac) * (sy loadSF))) l2
 
 capdescr :: Sentence
 capdescr =
@@ -65,12 +71,12 @@ capdescr =
 calofDemand :: InstanceModel
 calofDemand = im' calOfDe [qw demand, qw eqTNTWeight, qw standOffDist]
   [TCon AssumedCon $ sy demand $> 0, TCon AssumedCon $ sy eqTNTWeight $> 0,
-   TCon AssumedCon $ sy standOffDist $> 0] (qw demand) [] (mkLabelRA'' "calOfDeLabel")
+   TCon AssumedCon $ sy standOffDist $> 0] (qw demand) [] l3
   [dedescr]
 
 calOfDe :: RelationConcept
 calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)") 
-  dedescr ( (sy demand) $= apply2 demand eqTNTWeight standOffDist) Nothing--label
+  dedescr ( (sy demand) $= apply2 demand eqTNTWeight standOffDist) l3
   --dedescr $ (C demand) $= FCall (asExpr interpY) [V "TSD.txt", sy standOffDist, sy eqTNTWeight] 
   
 dedescr :: Sentence

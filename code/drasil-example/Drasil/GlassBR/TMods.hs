@@ -1,14 +1,20 @@
 module Drasil.GlassBR.TMods (gbrTMods, pbSafetyReq, lrSafetyReq, pbIsSafe, lrIsSafe) where
 
 import Drasil.GlassBR.Unitals (demand, demandq, is_safePb, is_safeLR, lRe,
-  pb_tol, prob_br)
+  pb_tol, prob_br, glassBRsymb)
 import Drasil.GlassBR.IMods (calofCapacity, calofDemand, probOfBreak)
 import Drasil.GlassBR.Concepts (lResistance)
 
 import Language.Drasil
+import Language.Drasil.Code (relToQD) -- FIXME, this should not be needed
 import Control.Lens ((^.))
 
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
+
+-- Labels
+l1, l2 :: Label
+l1 = mkLabelRA'' "isSafeLR"
+l2 = mkLabelRA'' "isSafe"
 
 {--}
 
@@ -23,13 +29,13 @@ gbrTMods = [pbIsSafe, lrIsSafe]
 lrIsSafe :: TheoryModel
 lrIsSafe = tm' (cw lrSafetyReq)
    (tc' "isSafeLR" [qw is_safeLR, qw lRe, qw demand] ([] :: [ConceptChunk])
-   [] [TCon Invariant $ (sy is_safeLR) $= (sy lRe) $> (sy demand)] []) 
-   (mkLabelRA'' "isSafeLR") [lrSafeDescr]
+   [relToQD locSymbMap lrSafetyReq] [TCon Invariant $ (sy is_safeLR) $= (sy lRe) $> (sy demand)] []) 
+   l1 [lrSafeDescr]
+  where locSymbMap = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) glassBRsymb ([] :: [UnitDefn])
 
 lrSafetyReq :: RelationConcept
 lrSafetyReq = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
-  lrSafeDescr ( (sy is_safeLR) $= (sy lRe) $> (sy demand))
-  Nothing--label
+  lrSafeDescr ( (sy is_safeLR) $= (sy lRe) $> (sy demand)) l1
 
 lrSafeDescr :: Sentence
 lrSafeDescr = tDescr (is_safeLR) s ending
@@ -45,12 +51,11 @@ pbIsSafe :: TheoryModel
 pbIsSafe = tm' (cw pbSafetyReq) 
   (tc' "isSafe" [qw is_safePb, qw prob_br, qw pb_tol] ([] :: [ConceptChunk])
   [] [TCon Invariant $ (sy is_safePb) $= (sy prob_br) $< (sy pb_tol)] [])
-  (mkLabelRA'' "isSafe") [pbSafeDescr]
+  l2 [pbSafeDescr]
 
 pbSafetyReq :: RelationConcept
 pbSafetyReq = makeRC "safetyReqPb" (nounPhraseSP "Safety Req-Pb")
-  pbSafeDescr ((sy is_safePb) $= (sy prob_br) $< (sy pb_tol))
-  Nothing--label
+  pbSafeDescr ((sy is_safePb) $= (sy prob_br) $< (sy pb_tol)) l2
 
 pbSafeDescr :: Sentence
 pbSafeDescr = tDescr (is_safePb) s ending

@@ -10,7 +10,7 @@ import Language.Drasil.Chunk.Concept (ConceptChunk, cw, dccWDS, dccWDS')
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term),Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, ExprRelat(relat),
-  MayHaveLabel(getMaybeLabel))
+  HasLabel(getLabel))
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Spec (Sentence)
@@ -18,7 +18,7 @@ import Language.Drasil.Label.Core (Label)
 
 data RelationConcept = RC { _conc :: ConceptChunk
                           , _rel :: Relation
-                          , _lbl :: Maybe Label
+                          , _lbl :: Label
                           }
 makeLenses ''RelationConcept
 
@@ -33,13 +33,13 @@ instance Eq            RelationConcept where a == b = (a ^. uid) == (b ^. uid)
 instance HasShortName  RelationConcept where
   shortname _ = error "No explicit name given for relation concept -- build a custom Ref"
   --should this be an instance of HasShortName?
-instance MayHaveLabel RelationConcept where getMaybeLabel (RC _ _ x) = x
+instance HasLabel      RelationConcept where getLabel = lbl
 
 -- | Create a RelationConcept from a given id, term, defn, and relation.
-makeRC :: String -> NP -> Sentence -> Relation -> Maybe Label -> RelationConcept
+makeRC :: String -> NP -> Sentence -> Relation -> Label -> RelationConcept
 makeRC rID rTerm rDefn label = RC (dccWDS rID rTerm rDefn) label
 
 -- | Create a RelationConcept from a given id, term, defn, abbreviation, and relation.
-makeRC' :: String -> NP -> Sentence -> String -> Relation -> Maybe Label -> RelationConcept
+makeRC' :: String -> NP -> Sentence -> String -> Relation -> Label -> RelationConcept
 makeRC' rID rTerm rDefn rAbb label = RC (cw $ dccWDS' rID rTerm rDefn rAbb) label
 

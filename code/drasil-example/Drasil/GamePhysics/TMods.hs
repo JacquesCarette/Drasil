@@ -15,6 +15,14 @@ import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
   angularAccel, angularVelocity, displacement, force, gravitationalConst, 
   momentOfInertia, torque, velocity)
 
+-- Labels
+l1, l2, l3, l4, l5 :: Label
+l1 = mkLabelRA' "newtonSL" "NewtonSecLawMot"
+l2 = mkLabelRA' "newtonTL" "NewtonThirdLawMot"
+l3 = mkLabelRA' "newtonLUG" "UniversalGravLaw"
+l4 = mkLabelRA' "chaslesThm" "ChaslesTheorem"
+l5 = mkLabelRA' "newtonSLR" "NewtonSecLawRotMot"
+
 ----- Theoretical Models -----
 
 cpTMods :: [RelationConcept]
@@ -30,11 +38,11 @@ t1NewtonSL_new :: TheoryModel
 t1NewtonSL_new = tm' (cw newtonSL)
   (tc' "NewtonSL" [qw QP.force, qw QPP.mass, qw QP.acceleration] ([] :: [ConceptChunk])
   [] [TCon Invariant $ (sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)] []) 
-  (mkLabelRA' "newtonSL" "NewtonSecLawMot") [newtonSLDesc]
+  l1 [newtonSLDesc]
 
 newtonSL :: RelationConcept
 newtonSL = makeRC "newtonSL" (nounPhraseSP "Newton's second law of motion")
-  newtonSLDesc newtonSLRel Nothing--label
+  newtonSLDesc newtonSLRel l1
 
 newtonSLRel :: Relation
 newtonSLRel = (sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)
@@ -56,11 +64,11 @@ t2NewtonTL_new :: TheoryModel
 t2NewtonTL_new = tm' (cw newtonTL)
   (tc' "NewtonTL" [qw force_1, qw force_2] ([] :: [ConceptChunk])
   [] [TCon Invariant $ (sy force_1) $= (negate (sy force_2))] [] ) 
-  (mkLabelRA' "newtonTL" "NewtonThirdLawMot") [newtonTLDesc]
+  l2 [newtonTLDesc]
 
 newtonTL :: RelationConcept
 newtonTL = makeRC "newtonTL" (nounPhraseSP "Newton's third law of motion")
-  newtonTLDesc newtonTLRel Nothing--label
+  newtonTLDesc newtonTLRel l2
 
 newtonTLRel :: Relation
 newtonTLRel = (sy force_1) $= (negate (sy force_2))
@@ -84,12 +92,11 @@ t3NewtonLUG_new = tm' (cw newtonLUG)
   (sy mass_2) / ((sy dispNorm) $^ (fromInteger 2))) * (sy dispUnit) $= 
   (sy QP.gravitationalConst) * ((sy mass_1) * (sy mass_2) / ((sy dispNorm) 
   $^ (fromInteger 2))) * ((sy QP.displacement) / (sy dispNorm))] [] ) 
-  (mkLabelRA' "newtonLUG" "UniversalGravLaw") [newtonLUGDesc]
+  l3 [newtonLUGDesc]
 
 newtonLUG :: RelationConcept
 newtonLUG = makeRC "newtonLUG" 
-  (nounPhraseSP "Newton's law of universal gravitation") newtonLUGDesc newtonLUGRel
-  Nothing--label
+  (nounPhraseSP "Newton's law of universal gravitation") newtonLUGDesc newtonLUGRel l3
 
 newtonLUGRel :: Relation
 newtonLUGRel = (sy QP.force) $=
@@ -133,12 +140,12 @@ t4ChaslesThm_new :: TheoryModel
 t4ChaslesThm_new = tm' (cw chaslesThm)
   (tc' "ChaslesThm" [qw vel_B, qw vel_O, qw QP.angularVelocity, qw r_OB] 
   ([] :: [ConceptChunk]) [] [TCon Invariant $ (sy vel_B) $= (sy vel_O) + (cross 
-  (sy  QP.angularVelocity) (sy r_OB))] []) (mkLabelRA' "chaslesThm" "ChaslesTheorem")
+  (sy  QP.angularVelocity) (sy r_OB))] []) l4
   [chaslesThmDesc]
 
 chaslesThm :: RelationConcept
 chaslesThm = makeRC "chaslesThm" (nounPhraseSP "Chasles' theorem")
-  chaslesThmDesc chaslesThmRel Nothing--label
+  chaslesThmDesc chaslesThmRel l4
 
 -- Need the cross product symbol - third term should be a cross product.
 chaslesThmRel :: Relation
@@ -165,13 +172,12 @@ t5NewtonSLR_new :: TheoryModel
 t5NewtonSLR_new = tm' (cw newtonSLR)
   (tc' "NewtonSLR" [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
   ([] :: [ConceptChunk]) [] [TCon Invariant $ (sy  QP.torque) $= (sy QP.momentOfInertia) 
-  * (sy QP.angularAccel)] []) (mkLabelRA' "newtonSLR" "NewtonSecLawRotMot")
+  * (sy QP.angularAccel)] []) l5
   [newtonSLRDesc]
 
 newtonSLR :: RelationConcept
 newtonSLR = makeRC "newtonSLR" 
-  (nounPhraseSP "Newton's second law for rotational motion") newtonSLRDesc newtonSLRRel
-  Nothing--label
+  (nounPhraseSP "Newton's second law for rotational motion") newtonSLRDesc newtonSLRRel l5
 
 newtonSLRRel :: Relation
 newtonSLRRel = (sy  QP.torque) $= (sy QP.momentOfInertia) * (sy QP.angularAccel)

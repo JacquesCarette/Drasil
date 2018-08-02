@@ -35,6 +35,16 @@ import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (displacement, force)
 import Drasil.SSP.BasicExprs (eqlExpr, momExpr)
+
+--- Some labels
+l1, l2, l3, l4, l5, l6 :: Label
+l1 = mkLabelRA'' "fctSfty"
+l2 = mkLabelRA'' "nrmShrFor"
+l3 = mkLabelRA'' "inslideFx"
+l4 = mkLabelRA'' "forDisEqlb"
+l5 = mkLabelRA'' "rfemFoS"
+l6 = mkLabelRA'' "crtSlpId"
+
 -----------------------
 --  Instance Models  --
 -----------------------
@@ -50,7 +60,7 @@ fctSfty_new = im'' fctSfty [qw shearRNoIntsl, qw shearFNoIntsl,
   [] (qw fs) [] fctSfty_deriv_ssp "fctSfty" [fcSfty_desc]
 
 fctSfty :: RelationConcept
-fctSfty = makeRC "fctSfty" factorOfSafety fcSfty_desc fcSfty_rel Nothing --label 
+fctSfty = makeRC "fctSfty" factorOfSafety fcSfty_desc fcSfty_rel l1
 
 --FIXME: first shearRNoIntsl should have local index v, not i,
 --       last occurence should have index n
@@ -82,7 +92,7 @@ nrmShrFor_new = im'' nrmShrFor [qw baseWthX, qw scalFunc,
 
 nrmShrFor :: RelationConcept
 nrmShrFor = makeRC "nrmShrFor" (nounPhraseSP "normal/shear force ratio")
-  nrmShrF_desc nrmShrF_rel Nothing --label
+  nrmShrF_desc nrmShrF_rel l2
 
 nrmShrF_rel :: Relation
 nrmShrF_rel = (sy normFunc) $= case_ [case1,case2,case3] $=
@@ -129,7 +139,7 @@ intsliceFs_new = im'' intsliceFs [qw index, qw fs,
 
 intsliceFs :: RelationConcept
 intsliceFs = makeRC "intsliceFs" (nounPhraseSP "interslice forces")
-  sliceFs_desc sliceFs_rel Nothing --label 
+  sliceFs_desc sliceFs_rel l3
 
 sliceFs_rel :: Relation
 sliceFs_rel = inxi intNormForce $= case_ [
@@ -157,8 +167,7 @@ forDisEqlb_new = im'' forDisEqlb [qw baseAngle,
 
 forDisEqlb :: RelationConcept
 forDisEqlb = makeRC "forDisEqlb"
-  (nounPhraseSP "force displacement equilibrium") fDisEq_desc fDisEq_rel 
-  Nothing --label
+  (nounPhraseSP "force displacement equilibrium") fDisEq_desc fDisEq_rel l4
 
 fDisEq_rel :: Relation --FIXME: split into two IMOD
 fDisEq_rel = negate (inxi watrForceDif) - (sy earthqkLoadFctr)*(inxi slcWght) -
@@ -216,7 +225,7 @@ rfemFoS_new = im''' rfemFoS [qw cohesion, qw nrmStiffBase, qw nrmDispl,
 
 rfemFoS :: RelationConcept
 rfemFoS = makeRC "rfemFoS" (nounPhraseSP "RFEM factor of safety")
-  rfemFoS_desc rfemFoS_rel Nothing --label
+  rfemFoS_desc rfemFoS_rel l5
 
 rfemFoS_rel :: Relation
 rfemFoS_rel = (inxi fsloc) $= fosFracLoc $= fosFracSum
@@ -250,7 +259,7 @@ crtSlpId_new = im' crtSlpId []
 
 crtSlpId :: RelationConcept
 crtSlpId = makeRC "crtSlpId" (nounPhraseSP "critical slip identification")
-  crtSlpId_desc crtSlpId_rel Nothing --label
+  crtSlpId_desc crtSlpId_rel l6
 
 -- FIXME: horrible hack. This is short an argument... that was never defined!
 crtSlpId_rel :: Relation

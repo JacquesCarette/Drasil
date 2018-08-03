@@ -1308,8 +1308,8 @@ Same-Initial-Temp-Water-PCM: The initial temperature of the water and the PCM is
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="A:PCM-Initially-Soild">
-PCM-Initially-Soild: The simulation will start with the PCM in a solid state [IM2, IM4].
+<div id="A:PCM-Initially-Solid">
+PCM-Initially-Solid: The simulation will start with the PCM in a solid state [IM2, IM4].
 </div>
 </li>
 </ul>
@@ -1439,7 +1439,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity <em>C</em> (J/(kg&sdot;&deg;C)) and density, <em>ρ</em> (kg/m<sup>3</sup>), where <em><b>q</b></em> is the thermal flux vector (W/m<sup>2</sup>), <em>g</em> is the volumetric heat generation per unit volume (W/m<sup>3</sup>), <em>T</em> is the temperature (&deg;C), <em>t</em> is time (s), and <em>∇</em> is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href=#A:Thermal-Energy-Only> Thermal-Energy-Only</a>).
+The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity <em>C</em> (J/(kg&sdot;&deg;C)) and density, <em>ρ</em> (kg/m<sup>3</sup>), where <em><b>q</b></em> is the thermal flux vector (W/m<sup>2</sup>), <em>g</em> is the volumetric heat generation per unit volume (W/m<sup>3</sup>), <em>T</em> is the temperature (&deg;C), <em>t</em> is time (s), and <em>∇</em> is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href=#A:Thermal-Energy-Only>A: Thermal-Energy-Only</a>).
 </p>
 </td>
 </tr>
@@ -2455,7 +2455,7 @@ h<sub>P</sub>&#8239;A<sub>P</sub>
 <span class="fdn">
 h<sub>C</sub>&#8239;A<sub>C</sub>
 </span>
-</div></em> is a constant (dimensionless). The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#A:assump14>assump14</a>, <a href=#A:assump19>assump19</a>).
+</div></em> is a constant (dimensionless). The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#A:Water-Always-Liquid>A: Water-Always-Liquid</a>, <a href=#A:Atmospheric-Pressure-Tank>A: Atmospheric-Pressure-Tank</a>).
 </p>
 </td>
 </tr>
@@ -3044,7 +3044,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The above equation is derived using T2. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#A:assump14>assump14</a>, <a href=#A:assump19>assump19</a>).
+The above equation is derived using T2. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#A:Water-Always-Liquid>A: Water-Always-Liquid</a>, <a href=#A:Atmospheric-Pressure-Tank>A: Atmospheric-Pressure-Tank</a>).
 </p>
 </td>
 </tr>
@@ -3213,7 +3213,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The above equation is derived using T2 and T3. <em>E<sub>P</sub></em> is the change in thermal energy of the PCM relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) J. <em>E<sub>P</sub></em> for the solid PCM is found using T2 for sensible heat ing, with the specific heat capacity of the solid PCM, <em>C<sub>P</sub><sup>S</sup></em> (J/(kg&sdot;&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). <em>E<sub>P</sub></em> for the melted PCM (<em>T<sub>P</sub>&thinsp;&gt;&thinsp;E<sub>P</sub><sub>melt</sub><sup>init</sup></em>) is found using T2 for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> (J). The energy required to melt all of the PCM is <em>H<sub>f</sub>&#8239;m<sub>P</sub></em> (J) (<a href=#DD:htFusion>DD3</a>). the specific heat capacity of the liquid PCM is <em>C<sub>P</sub><sup>L</sup></em> (J/(kg&sdot;&deg;C)) and the change in temperature is <em>T<sub>P</sub>&minus;T<sub>melt</sub><sup>P</sup></em> (&deg;C). <em>E<sub>P</sub></em> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> plus the latent heat energy added to the PCM, <em>Q<sub>P</sub></em> (J) since the time when melting began <em>t<sub>melt</sub><sup>init</sup></em> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (<a href=#A:assump18>assump18</a>).
+The above equation is derived using T2 and T3. <em>E<sub>P</sub></em> is the change in thermal energy of the PCM relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) J. <em>E<sub>P</sub></em> for the solid PCM is found using T2 for sensible heat ing, with the specific heat capacity of the solid PCM, <em>C<sub>P</sub><sup>S</sup></em> (J/(kg&sdot;&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). <em>E<sub>P</sub></em> for the melted PCM (<em>T<sub>P</sub>&thinsp;&gt;&thinsp;E<sub>P</sub><sub>melt</sub><sup>init</sup></em>) is found using T2 for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> (J). The energy required to melt all of the PCM is <em>H<sub>f</sub>&#8239;m<sub>P</sub></em> (J) (<a href=#DD:htFusion>DD: DD3</a>). the specific heat capacity of the liquid PCM is <em>C<sub>P</sub><sup>L</sup></em> (J/(kg&sdot;&deg;C)) and the change in temperature is <em>T<sub>P</sub>&minus;T<sub>melt</sub><sup>P</sup></em> (&deg;C). <em>E<sub>P</sub></em> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> plus the latent heat energy added to the PCM, <em>Q<sub>P</sub></em> (J) since the time when melting began <em>t<sub>melt</sub><sup>init</sup></em> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (<a href=#A:No-Gaseous-State-PCM>A: No-Gaseous-State-PCM</a>).
 </p>
 </td>
 </tr>
@@ -3247,7 +3247,7 @@ FIXME: This needs to be filled in
 Data Constraints
 </h3>
 <p class="paragraph">
-<a href=#Table:InDataConstraints> InDataConstraints</a> and <a href=#Table:OutDataConstraints> OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.(*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#A:PCM-Initially-Soild>A: PCM-Initially-Soild</a>). (#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <em><div class="fraction">
+<a href=#Table:InDataConstraints> InDataConstraints</a> and <a href=#Table:OutDataConstraints> OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.(*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#A:PCM-Initially-Solid>A: PCM-Initially-Solid</a>). (#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <em><div class="fraction">
 <span class="fup">
 2
 </span>
@@ -5559,7 +5559,7 @@ A5 (<a href=#A:Density-Water-PCM-Constant-over-Volume>A: Density-Water-PCM-Const
 A6 (<a href=#A:Specific-Heat-Energy-Constant-over-Volume>A: Specific-Heat-Energy-Constant-over-Volume</a>)
 </th>
 <th>
-A7 (<a href=#A:Law-Convective-Cooling-Coil-Water>A: Newton-Law-Convective-Cooling-Coil-Water</a>)
+A7 (<a href=#A:Newton-Law-Convective-Cooling-Coil-Water>A: Newton-Law-Convective-Cooling-Coil-Water</a>)
 </th>
 <th>
 A8 (<a href=#A:Temp-Heating-Coil-Constant-over-Time>A: Temp-Heating-Coil-Constant-over-Time</a>)
@@ -5577,7 +5577,7 @@ A11 (<a href=#A:Charging-Tank-No-Temp-Discharge>A: Charging-Tank-No-Temp-Dischar
 A12 (<a href=#A:Same-Initial-Temp-Water-PCM>A: Same-Initial-Temp-Water-PCM</a>)
 </th>
 <th>
-A13 (<a href=#A:PCM-Initially-Soild>A: PCM-Initially-Soild</a>)
+A13 (<a href=#A:PCM-Initially-Solid>A: PCM-Initially-Solid</a>)
 </th>
 <th>
 A14 (<a href=#A:Water-Always-Liquid>A: Water-Always-Liquid</a>)

@@ -29,14 +29,14 @@ assumptionConstants = [constant_M, constant_K, constant_ModElas,
   constant_LoadDur, constant_LoadSF]
 
 newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8 :: AssumpChunk
-newA1 = assump "glassTyA" a1Desc (mkLabelRA'' "glassTy")
-newA2 = assump "glassConditionA" a2Desc (mkLabelRA'' "glassCondition" )
-newA3 = assump "explsnScenarioA"a3Desc (mkLabelRA'' "explainScenario") 
-newA4 = assump "standardValuesA" (a4Desc load_dur) (mkLabelRA'' "standardValues")
-newA5 = assump "glassLiteA" a5Desc (mkLabelRA'' "glassLite")
-newA6 = assump "bndryConditionsA" a6Desc (mkLabelRA'' "boundaryConditions")
-newA7 = assump "responseTyA" a7Desc (mkLabelRA'' "responseType" )
-newA8 = assump "ldfConstantA" (a8Desc constant_LoadDF) (mkLabelRA'' "ldfConstant")
+newA1 = assump "glassTyA" a1Desc (mkLabelRAAssump' "glassTy")
+newA2 = assump "glassConditionA" a2Desc (mkLabelRAAssump' "glassCondition" )
+newA3 = assump "explsnScenarioA"a3Desc (mkLabelRAAssump' "explainScenario") 
+newA4 = assump "standardValuesA" (a4Desc load_dur) (mkLabelRAAssump' "standardValues")
+newA5 = assump "glassLiteA" a5Desc (mkLabelRAAssump' "glassLite")
+newA6 = assump "bndryConditionsA" a6Desc (mkLabelRAAssump' "boundaryConditions")
+newA7 = assump "responseTyA" a7Desc (mkLabelRAAssump' "responseType" )
+newA8 = assump "ldfConstantA" (a8Desc constant_LoadDF) (mkLabelRAAssump' "ldfConstant")
 
 a1Desc :: Sentence
 a1Desc = foldlSent [S "The standard E1300-09a for",

@@ -12,7 +12,7 @@ import Control.Lens (makeLenses, (^.))
 import Language.Drasil.Label.Core (Label, getAdd)
 import Language.Drasil.Classes (HasLabel(getLabel))
 import Language.Drasil.RefTypes (RefType(Assump))
-import Language.Drasil.Label (mkLabelRAReady)
+import Language.Drasil.Label (mkLabelRAAssump')
 
 -- | Assumption chunk type. Has id, what is being assumed, and a shortname.
 -- Presently assumptions are captured as sentences.
@@ -29,5 +29,7 @@ instance HasLabel      AssumpChunk where getLabel = lbl
 instance HasShortName  AssumpChunk where shortname = lbl . shortname
 
 -- | Smart constructor for Assumption chunks.
+-- FIXME: is it safe to assume the correct label constructor will be
+--        used to build the passed in label?
 assump :: String -> Sentence -> Label -> AssumpChunk
-assump i a lb = AC i a (mkLabelRAReady (getAdd (lb ^. getRefAdd)) (lb ^. shortname) Assump)
+assump i a lb = AC i a lb

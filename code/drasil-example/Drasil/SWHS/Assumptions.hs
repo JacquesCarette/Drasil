@@ -44,25 +44,25 @@ newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10,
   newA11, newA12, newA13, newA14, newA15, newA16, newA17, newA18, newA19, newA20 :: AssumpChunk
 
 newA1 = assump "Thermal-Energy-Only" assumpS1 assump1Label
-newA2 = assump "Heat-Transfer-Coeffs-Constant" assumpS2 (mkLabelRA'' "Heat-Transfer-Coeffs-Constant"  )
-newA3 = assump "Constant-Water-Temp-Across-Tank" assumpS3 (mkLabelRA'' "Constant-Water-Temp-Across-Tank" )
-newA4 = assump "Temp-PCM-Constant-Across-Volume" assumpS4 (mkLabelRA'' "Temp-PCM-Constant-Across-Volume") 
-newA5 = assump "Density-Water-PCM-Constant-over-Volume" assumpS5 (mkLabelRA'' "Density-Water-PCM-Constant-over-Volume"  )
-newA6 = assump "Specific-Heat-Energy-Constant-over-Volume" assumpS6 (mkLabelRA'' "Specific-Heat-Energy-Constant-over-Volume" )
-newA7 = assump "Law-Convective-Cooling-Coil-Water" assumpS7 (mkLabelRA'' "Newton-Law-Convective-Cooling-Coil-Water" )
-newA8 = assump "Temp-Heating-Coil-Constant-over-Time" assumpS8 (mkLabelRA'' "Temp-Heating-Coil-Constant-over-Time" )
-newA9 = assump "Temp-Heating-Coil-Constant-over-Length" assumpS9 (mkLabelRA'' "Temp-Heating-Coil-Constant-over-Length" )
+newA2 = assump "Heat-Transfer-Coeffs-Constant" assumpS2 (mkLabelRAAssump' "Heat-Transfer-Coeffs-Constant"  )
+newA3 = assump "Constant-Water-Temp-Across-Tank" assumpS3 (mkLabelRAAssump' "Constant-Water-Temp-Across-Tank" )
+newA4 = assump "Temp-PCM-Constant-Across-Volume" assumpS4 (mkLabelRAAssump' "Temp-PCM-Constant-Across-Volume") 
+newA5 = assump "Density-Water-PCM-Constant-over-Volume" assumpS5 (mkLabelRAAssump' "Density-Water-PCM-Constant-over-Volume"  )
+newA6 = assump "Specific-Heat-Energy-Constant-over-Volume" assumpS6 (mkLabelRAAssump' "Specific-Heat-Energy-Constant-over-Volume" )
+newA7 = assump "Law-Convective-Cooling-Coil-Water" assumpS7 (mkLabelRAAssump' "Newton-Law-Convective-Cooling-Coil-Water" )
+newA8 = assump "Temp-Heating-Coil-Constant-over-Time" assumpS8 (mkLabelRAAssump' "Temp-Heating-Coil-Constant-over-Time" )
+newA9 = assump "Temp-Heating-Coil-Constant-over-Length" assumpS9 (mkLabelRAAssump' "Temp-Heating-Coil-Constant-over-Length" )
 newA10 = assump "Law-Convective-Cooling-Water-PCM" assumpS10 assump10Label
-newA11 = assump "Charging-Tank-No-Temp-Discharge" assumpS11 (mkLabelRA'' "Charging-Tank-No-Temp-Discharge" )
-newA12 = assump "Same-Initial-Temp-Water-PCM" assumpS12 (mkLabelRA'' "Same-Initial-Temp-Water-PCM" )
-newA13 = assump "PCM-Initially-Solid" assumpS13 (mkLabelRA'' "PCM-Initially-Solid") 
+newA11 = assump "Charging-Tank-No-Temp-Discharge" assumpS11 (mkLabelRAAssump' "Charging-Tank-No-Temp-Discharge" )
+newA12 = assump "Same-Initial-Temp-Water-PCM" assumpS12 (mkLabelRAAssump' "Same-Initial-Temp-Water-PCM" )
+newA13 = assump "PCM-Initially-Soild" assumpS13 (mkLabelRAAssump' "PCM-Initially-Soild") 
 newA14 = assump "Water-Always-Liquid" assumpS14 assump14Label
-newA15 = assump "Perfect-Insulation-Tank" assumpS15 (mkLabelRA'' "Perfect-Insulation-Tank" )
-newA16 = assump "No-Internal-Heat-Generation-By-Water-PCM" assumpS16 (mkLabelRA'' "No-Internal-Heat-Generation-By-Water-PCM" )
-newA17 = assump "Volume-Change-Melting-PCM-Negligible" assumpS17 (mkLabelRA'' "Volume-Change-Melting-PCM-Negligible" )
+newA15 = assump "Perfect-Insulation-Tank" assumpS15 (mkLabelRAAssump' "Perfect-Insulation-Tank" )
+newA16 = assump "No-Internal-Heat-Generation-By-Water-PCM" assumpS16 (mkLabelRAAssump' "No-Internal-Heat-Generation-By-Water-PCM" )
+newA17 = assump "Volume-Change-Melting-PCM-Negligible" assumpS17 (mkLabelRAAssump' "Volume-Change-Melting-PCM-Negligible" )
 newA18 = assump "No-Gaseous-State-PCM" assumpS18 assump18Label
 newA19 = assump "Atmospheric-Pressure-Tank" assumpS19 assump19Label
-newA20 = assump "Volume-Coil-Negligible" assumpS20 (mkLabelRA'' "Volume-Coil-Negligible" )
+newA20 = assump "Volume-Coil-Negligible" assumpS20 (mkLabelRAAssump' "Volume-Coil-Negligible" )
 
 
 swhsAssumptionsS:: [Sentence]

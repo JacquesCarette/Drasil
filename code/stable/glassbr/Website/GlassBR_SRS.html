@@ -1122,7 +1122,7 @@ This section simplifies the original problem and helps in developing the theoret
 <ul class="hide-list-style">
 <li>
 <div id="A:glassTy">
-glassTy: The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that: (1) the supported glass edge for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam; and (3) glass supported on one side acts as a cantilever.
+glassTy: The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that: (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam; and (3) glass supported on one side acts as a cantilever.
 </div>
 </li>
 </ul>
@@ -1143,7 +1143,7 @@ explainScenario: This system only considers the external explosion scenario for 
 <ul class="hide-list-style">
 <li>
 <div id="A:standardValues">
-StandardValues: The values provided in <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. [IM1, DD3, DD5, DD7, DD9]
+standardValues: The values provided in <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. [IM1, DD3, DD5, DD7, DD9]
 </div>
 </li>
 </ul>
@@ -1171,7 +1171,7 @@ responseType: The response type considered in GlassBR is flexural. [IM1]
 <ul class="hide-list-style">
 <li>
 <div id="A:ldfConstant">
-ldfConstant: With reference to <a href=#A:standardValues>A: StandardValues</a>, the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. [DD3]
+ldfConstant: With reference to <a href=#A:standardValues>A: standardValues</a>, the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. [DD3]
 </div>
 </li>
 </ul>
@@ -1307,7 +1307,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-If <em>is_safeLR</em>, the glass is considered safe. <em>is_safePb</em> (from <a href=#T:safetyReqPb>T: isSafePb</a>) and <em>is_safeLR</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#IM: calOfCap>IM: calOfCap</a>. <em>q</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#IM:calOfDe>IM: calOfDe</a>.
+If <em>is_safeLR</em>, the glass is considered safe. <em>is_safePb</em> (from <a href=#T:isSafePb>T: isSafePb</a>) and <em>is_safeLR</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#IM:calOfCap>IM: calOfCap</a>. <em>q</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#IM:calOfDemand>IM: calOfDemand</a>.
 </p>
 </td>
 </tr>
@@ -1481,7 +1481,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:min.thick">
+<div id="DD:min_thick">
 <table class="ddefn">
 <tr>
 <th>
@@ -1518,7 +1518,7 @@ m
 Equation
 </th>
 <td>
-<div id="Eqn:min_thick">
+<div id="Eqn:min.thick">
 <div class="equation">
 <em>h = <div class="fraction">
 <span class="fup">
@@ -2238,7 +2238,7 @@ Unitless
 Equation
 </th>
 <td>
-<div id="">
+<div id="Eqn:tolLoad">
 <div class="equation">
 <em>q&#770;<sub>tol</sub> = q&#770;<sub>tol</sub>(J<sub>tol</sub>,<div class="fraction">
 <span class="fup">
@@ -2345,7 +2345,7 @@ Unitless
 Equation
 </th>
 <td>
-<div id="Eqn:tolLoad">
+<div id="Eqn:sdf_tol">
 <div class="equation">
 <em>J<sub>tol</sub> = ln(ln(<div class="fraction">
 <span class="fup">
@@ -2359,7 +2359,7 @@ Equation
 (a&#8239;b)<sup>m&minus;1</sup>
 </span>
 <span class="fdn">
-k&#8239;(1000&#8239;E&#8239;h<sup>2</sup>)<sup>m</sup>&#8239;LDF
+k&#8239;(E&#8239;h<sup>2</sup>)<sup>m</sup>&#8239;LDF
 </span>
 </div>)</em>
 </div>
@@ -2941,7 +2941,7 @@ Output Constraints
 Equation
 </th>
 <td>
-<div id="Eqn:calofDemand">
+<div id="Eqn:calOfDemand">
 <div class="equation">
 <em>q = q(w<sub>TNT</sub>,SD)</em>
 </div>
@@ -3006,7 +3006,7 @@ FIXME: This needs to be filled in
 Data Constraints
 </h3>
 <p class="paragraph">
-<a href=#Table:InDataConstraints>Table:InDataConstraints</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> gives the values of the specification parameters used in <a href=#Table:InDataConstraints>Table:InDataConstraints</a>.
+<a href=#Table:InDataConstraints> InDataConstraints</a> and <a href=#Table:OutDataConstraints> OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> gives the values of the specification parameters used in <a href=#Table:InDataConstraints> InDataConstraints</a>.
 </p>
 <div id="Table:InDataConstraints">
 <table class="table">
@@ -3202,26 +3202,29 @@ Input-Glass-Props: Input the quantities from <a href=#Table:R1ReqInputs> R1ReqIn
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="FR:System-Set-Values-Following-Assumptions">System-Set-Values-Following-Assumptions: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following A4, <em>LDF</em> following A8, LSF following A5, <em>h</em> (from <a href=#DD:min.thick>DD: min_thick</a>), <em>GTF</em> (from <a href=#DD:gTF>DD: gTF</a>), and <em>SD</em> (from <a href=#DD:standOffDist>DD: standOffDist</a>).
+<div id="FR:System-Set-Values-Following-Assumptions">
+System-Set-Values-Following-Assumptions: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following A4, <em>LDF</em> following A8, LSF following A5, <em>h</em> (from <a href=#DD:min.thick>DD: min.thick</a>), <em>GTF</em> (from <a href=#DD:gTF>DD: gTF</a>), and <em>SD</em> (from <a href=#DD:standOffDist>DD: standOffDist</a>).
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="FR:Check-Input-with-Data.Constraints">Check-Input-with-Data_Constraints: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Data Constraints</a>. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
+<div id="FR:Check-Input-with-Data.Constraints">
+Check-Input-with-Data_Constraints: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Data Constraints</a>. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="FR:Output-Values-and-Known-Quantities">Output-Values-and-Known-Quantities: Output the input quantities from R1 and the known quantities from R2.
+<div id="FR:Output-Values-and-Known-Quantities">
+Output-Values-and-Known-Quantities: Output the input quantities from R1 and the known quantities from R2.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="FR:Check-Glass-Safety">
-Check-Glass-Safety: If <em>is_safePb</em> ∧ <em>is_safeLR</em> (from <a href=#T:safetyReqPb>T: isSafePb</a> and <a href=#T:safetyReqLR>T: isSafeLR</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
+Check-Glass-Safety: If <em>is_safePb</em> ∧ <em>is_safeLR</em> (from <a href=#T:isSafePb>T: isSafePb</a> and <a href=#T:isSafeLR>T: isSafeLR</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
 </div>
 </li>
 </ul>
@@ -3230,40 +3233,40 @@ Check-Glass-Safety: If <em>is_safePb</em> ∧ <em>is_safeLR</em> (from <a href=#
 R6: Output the following quantities:
     <ul class="list">
     <li>
-    Probability of breakage (<em>P<sub>b</sub></em>) (<a href=#T:probOfBr>T:probOfBr</a>)
+    Probability of breakage (<em>P<sub>b</sub></em>) (<a href=#IM:probOfBr>IM: probOfBr</a>)
     </li>
     <li>
-    Load resistance (<em>LR</em>) (<a href=#T:calOfCap>T:calOfCap</a>)
+    Load resistance (<em>LR</em>) (<a href=#IM:calOfCap>IM: calOfCap</a>)
     </li>
     <li>
-    Applied load (demand) (<em>q</em>) (<a href=#T:calOfDe>T:calOfDe</a>)
+    Applied load (demand) (<em>q</em>) (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
     </li>
     <li>
-    Risk of failure (<em>B</em>) (<a href=#DD:risk.fun>DD:risk.fun</a>)
+    Risk of failure (<em>B</em>) (<a href=#DD:risk.fun>DD: risk.fun</a>)
     </li>
     <li>
     Stress distribution factor (Function) (<em>J</em>) (<a href=#DD:stressDistFac>DD:stressDistFac</a>)
     </li>
     <li>
-    Non-factored load (<em>NFL</em>) (<a href=#DD:nFL>DD:nFL</a>)
+    Non-factored load (<em>NFL</em>) (<a href=#DD:nFL>DD: nFL</a>)
     </li>
     <li>
-    Glass type factor (<em>GTF</em>) (<a href=#DD:gTF>DD:gTF</a>)
+    Glass type factor (<em>GTF</em>) (<a href=#DD:gTF>DD: gTF</a>)
     </li>
     <li>
-    Dimensionless load (<em>q&#770;</em>) (<a href=#DD:dimlessLoad>DD:dimlessLoad</a>)
+    Dimensionless load (<em>q&#770;</em>) (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
     </li>
     <li>
-    Tolerable load (<em>q&#770;<sub>tol</sub></em>) (<a href=#DD:tolLoad>DD:tolLoad</a>)
+    Tolerable load (<em>q&#770;<sub>tol</sub></em>) (<a href=#DD:tolLoad>DD: tolLoad</a>)
     </li>
     <li>
-    Stress distribution factor (Function) based on Pbtol (<em>J<sub>tol</sub></em>) (<a href=#DD:sdf.tol>DD:sdf.tol</a>)
+    Stress distribution factor (Function) based on Pbtol (<em>J<sub>tol</sub></em>) (<a href=#DD:sdf.tol>DD: sdf.tol</a>)
     </li>
     <li>
-    Minimum thickness (<em>h</em>) (<a href=#DD:min.thick>DD:min.thick</a>)
+    Minimum thickness (<em>h</em>) (<a href=#DD:min.thick>DD: min.thick</a>)
     </li>
     <li>
-    Aspect ratio (<em>AR</em>) (<a href=#DD:aspect.ratio>DD:aspect.ratio</a>)
+    Aspect ratio (<em>AR</em>) (<a href=#DD:aspect.ratio>DD: aspect.ratio</a>)
     </li>
     </ul>
 </p>
@@ -3418,14 +3421,14 @@ Likely Changes
 <ul class="hide-list-style">
 <li>
 <div id="LC:Calculate-Internal-Blask-Risk">
-Calculate-Internal-Blask-Risk: <a href=#A:explsnScenario>A: explainScenario</a> - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.
+Calculate-Internal-Blask-Risk: <a href=#A:explainScenario>A: explainScenario</a> - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="LC:Variable-Values-of-m,k,E">
-Variable-Values-of-m,k,E: <a href=#A:standardValues>A: StandardValues</a>, <a href=#A:ldfConstant>A: ldfConstant</a> - Currently, the values for <em>m</em>, <em>k</em>, and <em>E</em> are assumed to be the same for all glass. In the future, these values can be changed to variable inputs.
+Variable-Values-of-m,k,E: <a href=#A:standardValues>A: standardValues</a>, <a href=#A:ldfConstant>A: ldfConstant</a> - Currently, the values for <em>m</em>, <em>k</em>, and <em>E</em> are assumed to be the same for all glass. In the future, these values can be changed to variable inputs.
 </div>
 </li>
 </ul>
@@ -3439,14 +3442,14 @@ Accomodate-More-than-Single-Lite: <a href=#A:glassLite>A: glassLite</a> - The so
 <ul class="hide-list-style">
 <li>
 <div id="LC:Accomodate-More-Boundary-Conditions">
-Accomodate-More-Boundary-Conditions: <a href=#A:bndryConditionsA>A: boundaryConditions</a> - The software may be changed to accommodate more boundary conditions than 4-sided support.
+Accomodate-More-Boundary-Conditions: <a href=#A:boundaryConditions>A: boundaryConditions</a> - The software may be changed to accommodate more boundary conditions than 4-sided support.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="LC:Consider-More-than-Flexure-Glass">
-Consider-More-than-Flexure-Glass: <a href=#A:responseTy>A: responseType</a> - The software may be changed to consider more than just flexure of the glass.
+Consider-More-than-Flexure-Glass: <a href=#A:responseType>A: responseType</a> - The software may be changed to consider more than just flexure of the glass.
 </div>
 </li>
 </ul>
@@ -3479,7 +3482,7 @@ Accommodate-Altered-Glass: <a href=#A:glassCondition>A: glassCondition</a> requi
 Traceability Matrices and Graphs
 </h1>
 <p class="paragraph">
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TraceyItemSecs>Table:TraceyItemSecs</a> shows the dependencies of theoretical models, instance models, and data definitions with each other. <a href=#Table:TraceyReqsItems>Table:TraceyReqsItems</a> shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. <a href=#Table:TraceyAssumpsOthers>Table:TraceyAssumpsOthers</a> shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TraceyItemSecs> TraceyItemSecs</a> shows the dependencies of theoretical models, instance models, and data definitions with each other. <a href=#Table:TraceyReqsItems> TraceyReqsItems</a> shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. <a href=#Table:TraceyAssumpsOthers> TraceyAssumpsOthers</a> shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
 </p>
 <div id="Table:TraceyItemSecs">
 <table class="table">
@@ -3488,48 +3491,48 @@ The purpose of the traceability matrices is to provide easy references on what h
 
 </th>
 <th>
-T1 (<a href=#T:safetyReqPb>T:safetyReqPb</a>)
+T1 (<a href=#T:isSafePb>T: isSafePb</a>)
 </th>
 <th>
-T2 (<a href=#T:safetyReqLR>T:safetyReqLR</a>)
+T2 (<a href=#T:isSafeLR>T: isSafeLR</a>)
 </th>
 <th>
-IM1 (<a href=#T:probOfBr>T:probOfBr</a>)
+IM1 (<a href=#IM:probOfBr>IM: probOfBr</a>)
 </th>
 <th>
-IM2 (<a href=#T:calOfCap>T:calOfCap</a>)
+IM2 (<a href=#IM:calOfCap>IM: calOfCap</a>)
 </th>
 <th>
-IM3 (<a href=#T:calOfDe>T:calOfDe</a>)
+IM3 (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
 </th>
 <th>
-DD1 (<a href=#DD:risk.fun>DD:risk.fun</a>)
+DD1 (<a href=#DD:risk.fun>DD: risk.fun</a>)
 </th>
 <th>
-DD2 (<a href=#DD:min.thick>DD:min.thick</a>)
+DD2 (<a href=#DD:min.thick>DD: min.thick</a>)
 </th>
 <th>
-DD3 (<a href=#DD:loadDurFactor>DD:loadDurFactor</a>)
+DD3 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
 </th>
 <th>
-DD4 (<a href=#DD:stressDistFac>DD:stressDistFac</a>)
+DD4 (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
 </th>
 <th>
-DD5 (<a href=#DD:nFL>DD:nFL</a>)
+DD5 (<a href=#DD:nFL>DD: nFL</a>)
 </th>
 <th>
-DD6 (<a href=#DD:gTF>DD:gTF</a>)
+DD6 (<a href=#DD:gTF>DD: gTF</a>)
 </th>
 <th>
-DD7 (<a href=#DD:dimlessLoad>DD:dimlessLoad</a>)
+DD7 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
 </th>
 <th>
-DD8 (<a href=#DD:tolLoad>DD:tolLoad</a>)
+DD8 (<a href=#DD:tolLoad>DD: tolLoad</a>)
 </th>
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:safetyReqPb>T:safetyReqPb</a>)
+T1 (<a href=#T:isSafePb>T: isSafePb</a>)
 </td>
 <td>
 
@@ -3573,7 +3576,7 @@ X
 </tr>
 <tr>
 <td>
-T2 (<a href=#T:safetyReqLR>T:safetyReqLR</a>)
+T2 (<a href=#T:isSafeLR>T: isSafeLR</a>)
 </td>
 <td>
 X
@@ -3617,7 +3620,7 @@ X
 </tr>
 <tr>
 <td>
-IM1 (<a href=#T:probOfBr>T:probOfBr</a>)
+IM1 (<a href=#IM:probOfBr>IM: probOfBr</a>)
 </td>
 <td>
 
@@ -3661,7 +3664,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#T:calOfCap>T:calOfCap</a>)
+IM2 (<a href=#IM:calOfCap>IM: calOfCap</a>)
 </td>
 <td>
 
@@ -3705,7 +3708,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#T:calOfDe>T:calOfDe</a>)
+IM3 (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
 </td>
 <td>
 
@@ -3749,7 +3752,7 @@ IM3 (<a href=#T:calOfDe>T:calOfDe</a>)
 </tr>
 <tr>
 <td>
-DD1 (<a href=#DD:risk.fun>DD:risk.fun</a>)
+DD1 (<a href=#DD:risk.fun>DD: risk.fun</a>)
 </td>
 <td>
 
@@ -3793,7 +3796,7 @@ DD1 (<a href=#DD:risk.fun>DD:risk.fun</a>)
 </tr>
 <tr>
 <td>
-DD2 (<a href=#DD:min.thick>DD:min.thick</a>)
+DD2 (<a href=#DD:min.thick>DD: min.thick</a>)
 </td>
 <td>
 
@@ -3837,7 +3840,7 @@ DD2 (<a href=#DD:min.thick>DD:min.thick</a>)
 </tr>
 <tr>
 <td>
-DD3 (<a href=#DD:loadDurFactor>DD:loadDurFactor</a>)
+DD3 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
 </td>
 <td>
 
@@ -3881,7 +3884,7 @@ X
 </tr>
 <tr>
 <td>
-DD4 (<a href=#DD:stressDistFac>DD:stressDistFac</a>)
+DD4 (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
 </td>
 <td>
 
@@ -3925,7 +3928,7 @@ X
 </tr>
 <tr>
 <td>
-DD5 (<a href=#DD:nFL>DD:nFL</a>)
+DD5 (<a href=#DD:nFL>DD: nFL</a>)
 </td>
 <td>
 
@@ -3969,7 +3972,7 @@ DD5 (<a href=#DD:nFL>DD:nFL</a>)
 </tr>
 <tr>
 <td>
-DD6 (<a href=#DD:gTF>DD:gTF</a>)
+DD6 (<a href=#DD:gTF>DD: gTF</a>)
 </td>
 <td>
 
@@ -4013,7 +4016,7 @@ X
 </tr>
 <tr>
 <td>
-DD7 (<a href=#DD:dimlessLoad>DD:dimlessLoad</a>)
+DD7 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
 </td>
 <td>
 
@@ -4057,7 +4060,7 @@ X
 </tr>
 <tr>
 <td>
-DD8 (<a href=#DD:tolLoad>DD:tolLoad</a>)
+DD8 (<a href=#DD:tolLoad>DD: tolLoad</a>)
 </td>
 <td>
 
@@ -4111,61 +4114,61 @@ Traceability Matrix Showing the Connections Between Items of Different Sections
 
 </th>
 <th>
-T1 (<a href=#T:safetyReqPb>T:safetyReqPb</a>)
+T1 (<a href=#T:isSafePb>T: isSafePb</a>)
 </th>
 <th>
-T2 (<a href=#T:safetyReqLR>T:safetyReqLR</a>)
+T2 (<a href=#T:isSafeLR>T: isSafeLR</a>)
 </th>
 <th>
-IM1 (<a href=#T:probOfBr>T:probOfBr</a>)
+IM1 (<a href=#IM:probOfBr>IM: probOfBr</a>)
 </th>
 <th>
-IM2 (<a href=#T:calOfCap>T:calOfCap</a>)
+IM2 (<a href=#IM:calOfCap>IM: calOfCap</a>)
 </th>
 <th>
-IM3 (<a href=#T:calOfDe>T:calOfDe</a>)
+IM3 (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
 </th>
 <th>
-DD1 (<a href=#DD:risk.fun>DD:risk.fun</a>)
+DD1 (<a href=#DD:risk.fun>DD: risk.fun</a>)
 </th>
 <th>
-DD2 (<a href=#DD:min.thick>DD:min.thick</a>)
+DD2 (<a href=#DD:min.thick>DD: min.thick</a>)
 </th>
 <th>
-DD3 (<a href=#DD:loadDurFactor>DD:loadDurFactor</a>)
+DD3 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
 </th>
 <th>
-DD4 (<a href=#DD:stressDistFac>DD:stressDistFac</a>)
+DD4 (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
 </th>
 <th>
-DD5 (<a href=#DD:nFL>DD:nFL</a>)
+DD5 (<a href=#DD:nFL>DD: nFL</a>)
 </th>
 <th>
-DD6 (<a href=#DD:gTF>DD:gTF</a>)
+DD6 (<a href=#DD:gTF>DD: gTF</a>)
 </th>
 <th>
-DD7 (<a href=#DD:dimlessLoad>DD:dimlessLoad</a>)
+DD7 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
 </th>
 <th>
-DD8 (<a href=#DD:tolLoad>DD:tolLoad</a>)
+DD8 (<a href=#DD:tolLoad>DD: tolLoad</a>)
 </th>
 <th>
 Data Constraints (<a href=#Sec:DataConstraints>Data Constraints</a>)
 </th>
 <th>
-R1 (<a href=#Sec:FRs>Functional Requirements</a>)
+R1 (<a href=#FR:Input-Glass-Props>FR:  Input-Glass-Props</a>)
 </th>
 <th>
-R2 (<a href=#Sec:FRs>Functional Requirements</a>)
+R2 (<a href=#FR:System-Set-Values-Following-Assumptions>FR:  System-Set-Values-Following-Assumptions</a>)
 </th>
 <th>
-R3 (<a href=#Sec:FRs>Functional Requirements</a>)
+R3 (<a href=#FR:Check-Input-with-Data.Constraints>FR:  Check-Input-with-Data.Constraints</a>)
 </th>
 <th>
-R4 (<a href=#Sec:FRs>Functional Requirements</a>)
+R4 (<a href=#FR:Output-Values-and-Known-Quantities>FR:  Output-Values-and-Known-Quantities</a>)
 </th>
 <th>
-R5 (<a href=#Sec:FRs>Functional Requirements</a>)
+R5 (<a href=#FR:Check-Glass-Safety>FR:  Check-Glass-Safety</a>)
 </th>
 <th>
 R6 (<a href=#Sec:FRs>Functional Requirements</a>)
@@ -4582,7 +4585,7 @@ A2 (<a href=#A:glassCondition>A: glassCondition</a>)
 A3 (<a href=#A:explainScenario>A: explainScenario</a>)
 </th>
 <th>
-A4 (<a href=#A:StandardValues>A: standardValues</a>)
+A4 (<a href=#A:standardValues>A: standardValues</a>)
 </th>
 <th>
 A5 (<a href=#A:glassLite>A: glassLite</a>)
@@ -4715,7 +4718,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#IM:calofDemand>IM: calofDemand</a>)
+IM3 (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
 </td>
 <td>
 
@@ -5299,10 +5302,7 @@ Traceability Matrix Showing the Connections Between Assumptions and Other Items
 </p>
 </div>
 <p class="paragraph">
-The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:TraceyItemSecs>Figure:TraceyItemSecs</a> shows the dependencies of theoretical models, instance models, and data definitions on each other. <a href=#Figure:TraceyReqsItems>Figure:TraceyReqsItems</a> shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. <a href=#Figure:TraceyAssumpsOthers>Figure:TraceyAssumpsOthers</a> shows the dependencies of theoretical models, instance models, data definitions, requirements, and likely changes on assumptions.
-</p>
-<p class="paragraph">
-NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:TraceyItemSecs> TraceyItemSecs</a> shows the dependencies of theoretical models, instance models, and data definitions on each other. <a href=#Figure:TraceyReqsItems> TraceyReqsItems</a> shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. <a href=#Figure:TraceyAssumpsOthers> TraceyAssumpsOthers</a> shows the dependencies of theoretical models, instance models, data definitions, requirements, and likely changes on assumptions.
 </p>
 <div id="Figure:TraceyItemSecs">
 <img class="figure" src="../../../datafiles/GlassBR/Trace.png" alt="Figure 2: Traceability Matrix Showing the Connections Between Items of Different Sections"></img>
@@ -5583,7 +5583,7 @@ References
 Appendix
 </h1>
 <p class="paragraph">
-This appendix holds the graphs (<a href=#Figure:demandVSsod>Figure:demandVSsod</a> and <a href=#Figure:dimlessloadVSaspect>Figure:dimlessloadVSaspect</a>) used for interpolating values needed in the models.
+This appendix holds the graphs (<a href=#Figure:demandVSsod> demandVSsod</a> and <a href=#Figure:dimlessloadVSaspect> dimlessloadVSaspect</a>) used for interpolating values needed in the models.
 </p>
 <div id="Figure:demandVSsod">
 <img class="figure" src="../../../datafiles/GlassBR/ASTM_F2248-09.png" alt="Figure 5: 3 second duration equivalent pressure (<em>q</em>) versus Stand off distance (SD) versus Charge weight (<em>w</em>)"></img>

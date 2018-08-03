@@ -1,6 +1,6 @@
 module Language.Drasil.Label (Label, mkLabelRA, mkLabelRA',
- mkLabelRA'', mkEmptyLabel, getAdd, mkLabelRAReady,
- mkLabelRAAssump', mkLabelRAFig) where
+ mkLabelRA'', mkEmptyLabel, getAdd, mkLabelRAAssump', 
+ mkLabelRAFig) where
 
 import Language.Drasil.Label.Core
 import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd))
@@ -31,12 +31,8 @@ mkLabelRA'' :: String -> Label
 mkLabelRA'' iAndRefAndshortn = Lbl (iAndRefAndshortn ++ "Label") 
   (RefAdd $ ensureASCII iAndRefAndshortn) (shortname' iAndRefAndshortn) Sect
 
-mkLabelRAReady :: String -> ShortName -> RefType -> Label
-mkLabelRAReady r s t = Lbl (r ++ "Label") (RefAdd r) s t
-
 mkLabelRAAssump :: String -> String -> Label
-mkLabelRAAssump r s = mkLabelRA (r ++ "Label") ("A:" ++ ensureASCII r) 
-  ("A: " ++s) Assump
+mkLabelRAAssump r s = mkLabelRA (r ++ "Label") ("A:" ++ ensureASCII r) s Assump
 
 mkLabelRAAssump' :: String -> Label
 mkLabelRAAssump' rs = mkLabelRAAssump rs rs

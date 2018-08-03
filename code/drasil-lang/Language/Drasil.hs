@@ -201,7 +201,7 @@ module Language.Drasil (
   -- Label
   , Label 
   , mkLabelRA, mkLabelRA', mkLabelRA'', mkEmptyLabel
-  , mkLabelRAAssump, mkLabelRAFig
+  , mkLabelRAAssump', mkLabelRAFig
   -- Document.getChunk
   , vars, combine', ccss
   -- Chunk.Sentence.EmbedSymbol
@@ -340,6 +340,6 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   rendPersLFM', rendPersLFM'')
 import Language.Drasil.RefTypes(RefAdd, RefType(Cite), DType(..))
 import Language.Drasil.Label (mkLabelRA, mkLabelRA', mkLabelRA'', 
-  mkEmptyLabel, mkLabelRAAssump, mkLabelRAFig)
+  mkEmptyLabel, mkLabelRAAssump', mkLabelRAFig)
 import Language.Drasil.Label.Core (getAdd)
 --Should be in lang-dev package?

@@ -1,6 +1,6 @@
 module Language.Drasil.Label (Label, mkLabelRA, mkLabelRA',
  mkLabelRA'', mkEmptyLabel, getAdd, mkLabelRAReady,
- mkLabelRAAssump, mkLabelRAFig) where
+ mkLabelRAAssump', mkLabelRAFig) where
 
 import Language.Drasil.Label.Core
 import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd))
@@ -18,8 +18,8 @@ instance HasRefAddress Label where getRefAdd = lblType
 -- ref    ==> pure ASCII used for referencing
 -- shortn ==> the shortname - what a person/import Language.Drasil.RefTypes (RefType(..))user will see (can include spaces, accents, etc. (unicode))
 -- RefTypes are Sect by default
-mkLabelRA :: String -> String -> String -> Label
-mkLabelRA i ref shortn = Lbl i (RefAdd $ ensureASCII ref) (shortname' shortn) Sect
+mkLabelRA :: String -> String -> String -> RefType -> Label
+mkLabelRA i ref shortn rt = Lbl i (RefAdd $ ensureASCII ref) (shortname' shortn) rt
 
 -- for when reference address and the display should be the different
 mkLabelRA' :: String -> String -> Label
@@ -34,12 +34,16 @@ mkLabelRA'' iAndRefAndshortn = Lbl (iAndRefAndshortn ++ "Label")
 mkLabelRAReady :: String -> ShortName -> RefType -> Label
 mkLabelRAReady r s t = Lbl (r ++ "Label") (RefAdd r) s t
 
-mkLabelRAAssump :: Label -> Label
-mkLabelRAAssump x = Lbl (x ^. uid) (x^.getRefAdd) (x ^. shortname) Assump
+mkLabelRAAssump :: String -> String -> Label
+mkLabelRAAssump r s = mkLabelRA (r ++ "Label") ("A:" ++ ensureASCII r) 
+  ("A: " ++s) Assump
 
+mkLabelRAAssump' :: String -> Label
+mkLabelRAAssump' rs = mkLabelRAAssump rs rs
+
+--label constructor for Graphs and Figures
 mkLabelRAFig :: String -> Label
-mkLabelRAFig x = Lbl (x ++ "Label") 
-  (RefAdd $ ensureASCII x) (shortname' x) Fig
+mkLabelRAFig x = mkLabelRA (x ++ "Label") ("Figure:" ++ ensureASCII x) x Fig
 
 mkLabelML :: String -> String -> String -> Label
 mkLabelML i ref shortn = Lbl i (MetaLink $ ensureASCII ref) (shortname' shortn) Sect

@@ -201,7 +201,7 @@ instance Referable PhysSystDesc where
   rType _ = PSD
 
 instance Referable AssumpChunk where
-  refAdd  x = "A:" ++ (getAdd ((x ^. getLabel) ^. getRefAdd))
+  refAdd  x = getAdd ((x ^. getLabel) ^. getRefAdd)
   rType   _ = Assump
 
 instance Referable ReqChunk where
@@ -258,7 +258,7 @@ instance Referable Label where
     where
       getAcc :: RefType -> String
       getAcc Sect   = "Sec:"
-      getAcc Assump = "A:" --FIXME: do in mkLabelRAAssump?
+      getAcc Assump = ""
       getAcc LC     = "LC:"
       getAcc UC     = "UC:"
       getAcc Goal   = "GS:"
@@ -368,7 +368,6 @@ customRef r n = Ref (rType r) (concatMap repUnd (refAdd r)) (shortname' $ temp (
     temp :: RefType -> ShortName -> String
     temp (Def dtp) s = setSN (getDefName dtp) s
     temp (Req rq) s  = setSN (getReqName rq) s
-    temp Assump s    = setSN "A:" s
     temp LC s        = setSN "LC:" s
     temp UC s        = setSN "UC:" s
     temp Goal s      = setSN "GS:" s

@@ -32,7 +32,7 @@ data RefType = Tab    -- ^ Table
              | Goal   -- ^ Goal Statement
              | PSD    -- ^ Physical System Description
              | Label    -- ^ Label
-
+             | Blank  -- ^ Prefix filler for ConceptInstance
 
 instance Show RefType where
   show Tab    = "Table"
@@ -49,3 +49,4 @@ instance Show RefType where
   show Goal   = "Goal Statement"
   show PSD    = "Physical System Description"
   show EqnB   = "Equation"
+  show Blank  = "Blank"

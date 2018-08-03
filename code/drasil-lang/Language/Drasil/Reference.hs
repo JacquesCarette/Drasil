@@ -248,7 +248,7 @@ instance Referable InstanceModel where
 
 instance Referable ConceptInstance where
   refAdd i = i ^. uid
-  rType _ = Def Instance --note: not actually used
+  rType _  = Blank --note: not actually used
 
 --FIXME: assumes reference to a direct Label is for a section
 --Should refer to an object WITH a variable.

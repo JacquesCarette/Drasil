@@ -64,8 +64,8 @@ userChar    cs ss = section' (titleize' Doc.userCharacteristic)  cs ss  "UserCha
 sysCon      cs ss = section' (titleize' Doc.systemConstraint)    cs ss  "SysConstraints"
 
 scpOfTheProj cs ss = section' (at_start (Doc.scpOfTheProj titleize)) cs ss "ProjScope"
-prodUCTable cs ss = section' (titleize Doc.prodUCTable)      cs ss      "UseCaseTable"
-indPRCase   cs ss = section (titleize' Doc.indPRCase)       cs ss      indPRCaseLabel
+prodUCTable cs ss  = section' (titleize Doc.prodUCTable)      cs ss      "UseCaseTable"
+indPRCase   cs ss  = section (titleize' Doc.indPRCase)       cs ss      indPRCaseLabel
 
 specSysDes  cs ss = section' (titleize Doc.specificsystemdescription) cs ss "SpecSystDesc"
 probDesc    cs ss = section' (titleize Doc.problemDescription) cs ss "ProbDesc"
@@ -90,11 +90,9 @@ funcReq     cs ss = section (titleize' Doc.functionalRequirement) cs ss funcReqL
 likeChg     cs ss = section (titleize' Doc.likelyChg)        cs ss likeChgLabel
 unlikeChg   cs ss = section (titleize' Doc.unlikelyChg)      cs ss unlikeChgLabel
 
-traceyMandG cs ss = section' (titleize' Doc.traceyMandG)      cs ss "TraceMatrices"
-
+traceyMandG cs ss   = section' (titleize' Doc.traceyMandG)      cs ss "TraceMatrices"
 valsOfAuxCons cs ss = section (titleize Doc.consVals)        cs ss valsOfAuxConsLabel
-
-appendix    cs ss = section' (titleize Doc.appendix)          cs ss "Appendix"
+appendix    cs ss   = section' (titleize Doc.appendix)          cs ss "Appendix"
 
 reference   cs ss = section (titleize' Doc.reference)        cs ss referenceLabel
 offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "ExistingSolns"
@@ -107,7 +105,7 @@ srsDom = dcc' "srsDom" (Doc.srs ^. term) "srs" ""
 
 --function that sets the shortname of each section to be the reference address
 section' :: Sentence -> [Contents] -> [Section] -> String -> Section
-section' a b c d = section a b c (mkLabelRA' d (toString a))
+section' a b c d = section a b c (mkLabelRASec d (toString a))
   where
     toString :: Sentence -> String --FIXME: same as getStr hack, import instead? 
     toString (S x) = x
@@ -119,18 +117,18 @@ section' a b c d = section a b c (mkLabelRA' d (toString a))
 physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
   inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
   indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel :: Label
-physSystLabel      = mkLabelRA' "PhysSyst" "Physical System Description"
-datConLabel        = mkLabelRA' "DataConstraints" "Data Constraints"
-genDefnLabel       = mkLabelRA' "GDs" "General Definitions"
-thModelLabel       = mkLabelRA' "TMs" "Theoretical Models"
-dataDefnLabel      = mkLabelRA' "DDs" "Data Definitions"
-inModelLabel       = mkLabelRA' "IMs" "Instance Models"
-likeChgLabel       = mkLabelRA' "LCs" "Likely Changes"
-unlikeChgLabel     = mkLabelRA' "UCs" "Unlikely Changes"
-tOfSymbLabel       = mkLabelRA' "ToS" "Table of Symbols"
-valsOfAuxConsLabel = mkLabelRA' "AuxConstants" "Values of Auxiliary Constants"
-referenceLabel     = mkLabelSame "References" 
-indPRCaseLabel     = mkLabelRA' "IndividualProdUC" "Individual Product Use Cases"
-assumptLabel       = mkLabelRA' "Assumps" "Assumptions"
-funcReqLabel       = mkLabelRA' "FRs" "Functional Requirements"
-solCharSpecLabel   = mkLabelRA' "SolCharSpec" "Solution Characteristics Specification"
+physSystLabel      = mkLabelRASec "PhysSyst" "Physical System Description"
+datConLabel        = mkLabelRASec "DataConstraints" "Data Constraints"
+genDefnLabel       = mkLabelRASec "GDs" "General Definitions"
+thModelLabel       = mkLabelRASec "TMs" "Theoretical Models"
+dataDefnLabel      = mkLabelRASec "DDs" "Data Definitions"
+inModelLabel       = mkLabelRASec "IMs" "Instance Models"
+likeChgLabel       = mkLabelRASec "LCs" "Likely Changes"
+unlikeChgLabel     = mkLabelRASec "UCs" "Unlikely Changes"
+tOfSymbLabel       = mkLabelRASec "ToS" "Table of Symbols"
+valsOfAuxConsLabel = mkLabelRASec "AuxConstants" "Values of Auxiliary Constants"
+referenceLabel     = mkLabelRASec "References" "References" 
+indPRCaseLabel     = mkLabelRASec "IndividualProdUC" "Individual Product Use Cases"
+assumptLabel       = mkLabelRASec "Assumps" "Assumptions"
+funcReqLabel       = mkLabelRASec "FRs" "Functional Requirements"
+solCharSpecLabel   = mkLabelRASec "SolCharSpec" "Solution Characteristics Specification"

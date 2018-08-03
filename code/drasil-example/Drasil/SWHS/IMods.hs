@@ -42,7 +42,8 @@ eBalanceOnWtr_new = im'' eBalanceOnWtr [qw w_mass, qw htCap_W, qw coil_HTC, qw p
 
 eBalanceOnWtr :: RelationConcept
 eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
-  "water to find the temperature of the water") balWtrDesc balWtr_Rel (mkLabelSame "eBalanceOnWtr")
+  "water to find the temperature of the water") balWtrDesc balWtr_Rel 
+  (mkLabelSame "eBalanceOnWtr" (Def Instance))
 
 balWtr_Rel :: Relation
 balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
@@ -205,7 +206,7 @@ eBalanceOnPCM :: RelationConcept
 eBalanceOnPCM = makeRC "eBalanceOnPCM" (nounPhraseSP
   "Energy Balance on PCM to Find T_p")
   --FIXME: T_p should be called from symbol
-  balPCMDesc balPCM_Rel (mkLabelSame "eBalanceOnPCM")
+  balPCMDesc balPCM_Rel (mkLabelSame "eBalanceOnPCM" (Def Instance))
 
 balPCM_Rel :: Relation
 balPCM_Rel = (deriv (sy temp_PCM) time) $= case_ [case1, case2, case3, case4]
@@ -359,7 +360,7 @@ heatEInWtr_new = im'' heatEInWtr [qw temp_init, qw w_mass, qw htCap_W, qw w_mass
 
 heatEInWtr :: RelationConcept
 heatEInWtr = makeRC "heatEInWtr" (nounPhraseSP "Heat energy in the water")
-  htWtrDesc htWtr_Rel (mkLabelSame "heatEInWtr")
+  htWtrDesc htWtr_Rel (mkLabelSame "heatEInWtr" (Def Instance))
 
 htWtr_Rel :: Relation
 htWtr_Rel = (apply1 w_E time) $= (sy htCap_W) * (sy w_mass) *
@@ -391,11 +392,12 @@ heatEInPCM_new :: InstanceModel
 heatEInPCM_new = im' heatEInPCM [qw temp_melt_P, qw time_final, qw temp_init, qw pcm_SA,
  qw pcm_HTC, qw pcm_mass, qw htCap_S_P, qw htCap_L_P, qw temp_PCM, qw htFusion, qw t_init_melt]
   [TCon AssumedCon $ sy temp_init $< sy temp_melt_P] (qw pcm_E)
-   [TCon AssumedCon $ 0 $< sy time $< sy time_final] (mkLabelSame "heatEInPCM") [htPCMDesc]
+  [TCon AssumedCon $ 0 $< sy time $< sy time_final] 
+  (mkLabelSame "heatEInPCM" (Def Instance)) [htPCMDesc]
 
 heatEInPCM :: RelationConcept
 heatEInPCM = makeRC "heatEInPCM" (nounPhraseSP "Heat energy in the PCM")
-  htPCMDesc htPCM_Rel (mkLabelSame "heatEInPCM")
+  htPCMDesc htPCM_Rel (mkLabelSame "heatEInPCM" (Def Instance))
 
 htPCM_Rel :: Relation
 htPCM_Rel = sy pcm_E $= case_ [case1, case2, case3, case4]

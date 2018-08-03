@@ -271,7 +271,7 @@ mkSections si l = map doit l
 mkRefSec :: SystemInformation -> RefSec -> Section
 mkRefSec _  (RefVerb s) = s
 mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
-  (map (mkSubRef si) l) (mkLabelSame "RefMat")
+  (map (mkSubRef si) l) (mkLabelRASec "RefMat" "Reference Material")
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
     mkSubRef SI {_sysinfodb = db}  TUnits =
@@ -575,10 +575,10 @@ siSys SI {_sys = sys} = nw sys
 --Creates Contents using an uid and description (passed in as a Sentence).
 
 mkRequirement :: String -> Sentence -> String -> LabelledContent
-mkRequirement i desc shrtn = mkRawLC (Requirement (frc i desc (mkLabelSame shrtn))) (mkLabelSame shrtn) --FIXME: label made twice?
+mkRequirement i desc shrtn = mkRawLC (Requirement (frc i desc (mkLabelSame shrtn (Req FR)))) (mkLabelSame shrtn (Req FR)) --FIXME: label made twice?
 
 mkLklyChnk :: String -> Sentence -> String -> LabelledContent
-mkLklyChnk i desc shrtn = mkRawLC (Change (lc i desc (mkLabelSame shrtn))) (mkLabelSame shrtn) --FIXME: label made twice?
+mkLklyChnk i desc shrtn = mkRawLC (Change (lc i desc (mkLabelSame shrtn LCh))) (mkLabelSame shrtn LCh) --FIXME: label made twice?
 
 mkUnLklyChnk :: String -> Sentence -> String -> LabelledContent 
-mkUnLklyChnk i desc shrtn = mkRawLC (Change (ulc i desc (mkLabelSame shrtn))) (mkLabelSame shrtn) --FIXME: label made twice?
+mkUnLklyChnk i desc shrtn = mkRawLC (Change (ulc i desc (mkLabelSame shrtn UnCh))) (mkLabelSame shrtn UnCh) --FIXME: label made twice?

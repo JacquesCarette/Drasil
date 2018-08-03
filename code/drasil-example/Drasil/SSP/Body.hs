@@ -245,7 +245,7 @@ sysCtxIntro = foldlSP
    S "and its" +:+ phrase environment]
    
 sysCtxFig1 :: LabelledContent
-sysCtxFig1 = llcc (mkLabelSame "sysCtxDiag") $ fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png")
+sysCtxFig1 = llcc (mkLabelRAFig "sysCtxDiag") $ fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png")
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol
@@ -349,13 +349,13 @@ phys_sys_desc_p2 = foldlSP [S "A", phrase fbd, S "of the",
   S "is displayed in", makeRef fig_forceacting]
 
 fig_indexconv :: LabelledContent
-fig_indexconv = llcc (mkLabelSame "IndexConvention") $ 
+fig_indexconv = llcc (mkLabelRAFig "IndexConvention") $ 
   fig (foldlSent_ [S "Index convention for numbering",
   phrase slice `sAnd` phrase intrslce,
   phrase force, plural variable]) (resourcePath ++ "IndexConvention.png")
 
 fig_forceacting :: LabelledContent
-fig_forceacting = llcc (mkLabelSame "ForceDiagram") $
+fig_forceacting = llcc (mkLabelRAFig "ForceDiagram") $
   fig (at_start' force +:+ S "acting on a" +:+
   phrase slice) (resourcePath ++ "ForceDiagram.png")
 

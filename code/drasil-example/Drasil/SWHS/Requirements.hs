@@ -140,4 +140,4 @@ newReq9 = frc "req9" ( foldlSent [
   S "as outlined in"
   --FIXME , makeRef s4_2_7 `sC` -} 
   S "with relative error no greater than 0.001%"] ) 
-  (mkLabelSame "Verify-Energy-Output-follow-Conservation-of-Energy_Label")
+  (mkLabelSame "Verify-Energy-Output-follow-Conservation-of-Energy_Label" (Req FR))

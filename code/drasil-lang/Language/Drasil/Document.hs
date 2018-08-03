@@ -36,10 +36,6 @@ instance HasContents  UnlabelledContent where accessContents = cntnts
 class HasContents c where
   accessContents :: Lens' c RawContent
 
-repUnd :: Char -> String
-repUnd '_' = "."
-repUnd c = c : []
-
 instance HasContents Contents where
   accessContents f (UlC c) = fmap (UlC . (\x -> set cntnts x c)) (f $ c ^. cntnts)
   accessContents f (LlC c) = fmap (LlC . (\x -> set ctype x c)) (f $ c ^. ctype)
@@ -81,38 +77,9 @@ mkParagraph x = UlC $ ulcc $ Paragraph x
 mkFig :: Label -> RawContent -> Contents
 mkFig x y = LlC $ llcc x y
 
--- FIXME: no pattern for Bib BibRef of RawContent
--- FIXME: improve design so there's no need for wild card labels?
+--Fixme: use mkRawLc or llcc?
 mkRawLC :: RawContent -> Label -> LabelledContent
-mkRawLC x@(Table _ _ _ _)  lb = llcc (setLabel "Table:" "" lb) x
-mkRawLC x@(Paragraph _)    lb = llcc (setLabel "Paragraph:" "" lb) x
-mkRawLC x@(Definition d)   lb = llcc (setLabel (getDefName d) "" lb) x
-mkRawLC x@(Enumeration _)  lb = llcc (setLabel "List:" "" lb) x
-mkRawLC x@(Figure _ _ _)   lb = llcc (setLabel "Figure:" ""lb) x
-mkRawLC x@(Requirement (RC _ FR _ _)) lb  = llcc (setLabel "FR:" "" lb) x
-mkRawLC x@(Requirement (RC _ NFR _ _)) lb = llcc (setLabel "NFR:" "" lb) x
-mkRawLC x@(Assumption ac)  lb = llcc (setLabel "" "A: " lb) x
-mkRawLC x@(Change (ChC _ Likely _ lb))   _  = llcc (setLabel "LC:" "" lb) x
-mkRawLC x@(Change (ChC _ Unlikely _ lb)) _  = llcc (setLabel "UC:" "" lb) x
-mkRawLC x@(Graph _ _ _ _)  lb = llcc (setLabel "Graph:" "" lb) x
-mkRawLC x@(Defnt d _)      lb = llcc (setLabel (getDefName d) "" lb) x
-
-setLabel :: String -> String -> Label -> Label
-setLabel prependRA prependSN lb = mkLabelRA' (setRefAdd prependRA (lb ^. getRefAdd))
-  (setSN prependSN (lb ^. shortname))
-
---setRefAdd :: String -> LblType -> String
-setRefAdd prependRA ra = prependRA ++ concatMap repUnd (getAdd ra)
-
-setSN :: String -> ShortName -> String
-setSN prependSN sn = prependSN ++ " " ++ concatMap repUnd (getStringSN sn)
-
--- | Automatically create the label for a definition
-getDefName :: DType -> String
-getDefName TM         = "T:"
-getDefName DD         = "DD:"
-getDefName Instance   = "IM:"
-getDefName General    = "GD:"
+mkRawLC x lb = llcc lb x
 
 {-mkEqnBlock
 mkEnumeration

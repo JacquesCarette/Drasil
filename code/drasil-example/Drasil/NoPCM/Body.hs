@@ -313,7 +313,7 @@ physSystDescription = physSystDesc (getAcc progName) fig_tank
   [physSystDescList, LlC fig_tank]
 
 fig_tank :: LabelledContent
-fig_tank = llcc (mkLabelSame "Tank") $ fig (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
+fig_tank = llcc (mkLabelRAFig "Tank") $ fig (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
   S "from" +:+ phrase coil `sOf` ch ht_flux_C)
   "TankWaterOnly.png"
 
@@ -625,7 +625,7 @@ nr6 = cic "Calculate-Change-Heat_Energy-Water-Time"
     "Calculate-Change-Heat_Energy-Water-Time" funcReqDom
 
 nrTable :: LabelledContent
-nrTable = llcc (mkLabelSame "Input-Variable-Requirements") $ 
+nrTable = llcc (mkLabelSame "Input-Variable-Requirements" Tab) $ 
   Table [titleize symbol_, titleize M.unit_, titleize description]
   (mkTable [ch, unitToSentence, phrase] inputVar)
   (titleize input_ +:+ titleize variable +:+ titleize' requirement) True
@@ -781,7 +781,7 @@ trace1IM1 = ["GD2", "DD1"]
 trace1IM2 = []
 
 traceTable1 :: LabelledContent
-traceTable1 = llcc (mkLabelSame "TraceyRI") $
+traceTable1 = llcc (mkLabelSame "TraceyRI" Tab) $
   Table (EmptyS : traceRowHeader1)
   (makeTMatrix (traceRowHeader1) (traceColumns1) (traceRow1))
   (showingCxnBw traceyMatrix
@@ -820,7 +820,7 @@ trace2R5 = ["IM1"]
 trace2R6 = ["IM2"]
 
 traceTable2 :: LabelledContent
-traceTable2 = llcc (mkLabelSame "TraceyRIs") $ Table
+traceTable2 = llcc (mkLabelSame "TraceyRIs" Tab) $ Table
   (EmptyS : traceRowHeader2)
   (makeTMatrix (traceColHeader2) (traceColumns2) (traceRow2))
   (showingCxnBw traceyMatrix
@@ -855,7 +855,7 @@ trace3LC3 = ["A9"]
 trace3LC4 = ["A11"]
 
 traceTable3 :: LabelledContent
-traceTable3 = llcc (mkLabelSame "TraceyAI") $ Table
+traceTable3 = llcc (mkLabelSame "TraceyAI" Tab) $ Table
   (EmptyS : traceRowHeader3)
   (makeTMatrix traceColHeader3 traceColumns3 traceAssump)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+

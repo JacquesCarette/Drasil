@@ -20,13 +20,13 @@ ref1 = cBookA "bueche1986" [jBueche]
   (S "Introduction to Physics for Scientists")
   (S "McGraw Hill") 1986
   [edition 4, address (S "New York City, New York")]
-  (mkLabelSame "bueche1986")
+  (mkLabelSame "bueche1986" Cite)
 
 ref2 = cBookA "incroperaEtAl2007" [fIncropera, dDewitt, tBergman, aLavine]
   (S "Fundamentals of Heat and Mass Transfer")
   (S "John Wiley and Sons") 2007
   [edition 6, address (S "Hoboken, New Jersey")]
-  (mkLabelSame "incroperaEtAl2007")
+  (mkLabelSame "incroperaEtAl2007" Cite)
 
 ref3 = koothoor2013
 
@@ -35,7 +35,7 @@ ref4 = cMisc "lightstone2012" [
   title (S "Derivation of tank/pcm model"),
   year 2012,
   note (S "From Marilyn Lightstone's Personal Notes")]
-  (mkLabelSame "lightstone2012")
+  (mkLabelSame "lightstone2012" Cite)
 
 ref5 = parnasClements1986
 

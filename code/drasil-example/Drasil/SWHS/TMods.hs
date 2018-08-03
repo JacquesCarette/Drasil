@@ -36,11 +36,13 @@ t1ConsThermE_new :: TheoryModel
 t1ConsThermE_new = tm' t1ConsThermE
   (tc' "ConsThermE_new" [qw thFluxVect, qw gradient, qw vol_ht_gen, 
     qw density, qw heat_cap_spec, qw temp, qw time] ([] :: [ConceptChunk])
-  [] [TCon Invariant consThermERel] []) (mkLabelSame "t1ConsThermE") [t1descr]
+  [] [TCon Invariant consThermERel] []) 
+  (mkLabelSame "t1ConsThermE" (Def TM)) [t1descr]
 
 t1ConsThermE :: RelationConcept
 t1ConsThermE = makeRC "t1ConsThermE"
-  (nounPhraseSP "Conservation of thermal energy") t1descr consThermERel (mkLabelSame "ConsThermE")
+  (nounPhraseSP "Conservation of thermal energy") t1descr consThermERel 
+  (mkLabelSame "ConsThermE" (Def TM))
 
 consThermERel :: Relation
 consThermERel = (negate (sy gradient)) $. (sy thFluxVect) + (sy vol_ht_gen) $=
@@ -75,11 +77,12 @@ t2SensHtE_new :: TheoryModel
 t2SensHtE_new = tm' t2SensHtE
   (tc' "SensHtE_new" [qw sens_heat, qw htCap_S, qw mass, 
     qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [ConceptChunk])
-  [] [TCon Invariant sensHtEEqn] []) (mkLabelSame "t2SensHtE") [t2descr]
+  [] [TCon Invariant sensHtEEqn] []) 
+  (mkLabelSame "t2SensHtE" (Def TM)) [t2descr]
 
 t2SensHtE :: RelationConcept
-t2SensHtE = makeRC "t2SensHtE"
-  (nounPhraseSP "Sensible heat energy") t2descr sensHtEEqn (mkLabelSame "SensHtE")
+t2SensHtE = makeRC "t2SensHtE" (nounPhraseSP "Sensible heat energy") t2descr sensHtEEqn
+  (mkLabelSame "SensHtE" (Def TM))
 
 sensHtEEqn :: Relation
 sensHtEEqn = (sy sens_heat) $= case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
@@ -129,11 +132,12 @@ t2descr = foldlSent [
 t3LatHtE_new :: TheoryModel
 t3LatHtE_new = tm' t3LatHtE
   (tc' "SensHtE_new" [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
-  [] [TCon Invariant latHtEEqn] []) (mkLabelSame "t3LatHtE") [t3descr]
+  [] [TCon Invariant latHtEEqn] []) (mkLabelSame "t3LatHtE" (Def TM)) [t3descr]
 
 t3LatHtE :: RelationConcept
 t3LatHtE = makeRC "t3LatHtE"
-  (nounPhraseSP "Latent heat energy") t3descr latHtEEqn (mkLabelSame "LatHtE")
+  (nounPhraseSP "Latent heat energy") t3descr latHtEEqn 
+  (mkLabelSame "LatHtE" (Def TM))
 
 latHtEEqn :: Relation
 latHtEEqn = apply1 latent_heat time $= 
@@ -145,11 +149,10 @@ t3descr :: Sentence
 t3descr = foldlSent [
   ch latent_heat `isThe` S "change in",
   phrase thermal_energy, sParen (Sy (joule ^. usymb)) `sC`
-  phrase latent_heat +:+. phrase energy,
+  phrase latent_heat +:+. phrase energy, 
   E latHtEEqn `isThe` phrase rOfChng, S "of",
-  ch latent_heat, S "with respect",
-  S "to", phrase time, ch tau +:+.
-  sParen (Sy (unit_symb tau)), ch time `isThe`
+  ch latent_heat, S "with respect to", phrase time,
+  ch tau +:+. sParen (Sy (unit_symb tau)), ch time `isThe`
   phrase time, sParen (Sy (unit_symb time)),
   S "elapsed, as long as the",
   phrase phase_change, S "is not complete. The status of",

@@ -23,6 +23,7 @@ import Language.Drasil.Document.GetChunk (vars)
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Label (mkLabelSame)
+import Language.Drasil.RefTypes(RefType(..), DType(..))
 
 import Control.Lens (makeLenses, (^.))
 
@@ -71,11 +72,13 @@ im' rcon i ic o oc lbe addNotes = IM rcon i ic o oc [] [] lbe (Just addNotes)
 
 im'' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> Derivation -> String -> [Sentence] -> InstanceModel
-im'' rcon i ic o oc der sn addNotes = IM rcon i ic o oc [] der (mkLabelSame sn) (Just addNotes)
+im'' rcon i ic o oc der sn addNotes = IM rcon i ic o oc [] der (mkLabelSame sn (Def Instance))
+ (Just addNotes)
 
 im''' :: RelationConcept -> Inputs -> InputConstraints -> Output ->
   OutputConstraints -> Derivation -> String -> InstanceModel
-im''' rcon i ic o oc der sn = IM rcon i ic o oc [] der (mkLabelSame sn) Nothing
+im''' rcon i ic o oc der sn = IM rcon i ic o oc [] der 
+  (mkLabelSame sn (Def Instance)) Nothing
 
 -- | Smart constructor for instance model from qdefinition
 -- (Sentence is the "concept" definition for the relation concept)

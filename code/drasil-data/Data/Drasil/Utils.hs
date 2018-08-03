@@ -105,7 +105,7 @@ makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- 
 
 -- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
 mkInputDatTb :: (Quantity a) => [a] -> LabelledContent
-mkInputDatTb inputVar = llcc (mkLabelRA'' "inDataTable") $ 
+mkInputDatTb inputVar = llcc (mkLabelSame "inDataTable") $ 
   Table [titleize symbol_, titleize unit_, 
   S "Name"]
   (mkTable [ch , fmtU EmptyS, phrase] inputVar) 
@@ -165,6 +165,6 @@ noRefsLT :: [(Sentence, ItemType)] -> [ListTuple]
 noRefsLT a = uncurry zip3 (unzip a) $ repeat Nothing
 
 prodUCTbl :: [[Sentence]] -> LabelledContent
-prodUCTbl cases = llcc (mkLabelRA'' "useCaseTable") $ --FIXME: do we want labels across examples to be unique?
+prodUCTbl cases = llcc (mkLabelSame "useCaseTable") $ --FIXME: do we want labels across examples to be unique?
   Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
   cases (titleize useCaseTable) True

@@ -17,9 +17,9 @@ import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
 
 -- labels
 l1, l2, l3 :: Label
-l1 = mkLabelRA'' "probOfBr"
-l2 = mkLabelRA'' "calOfCap"
-l3 = mkLabelRA'' "calOfDemand"
+l1 = mkLabelSame "probOfBr"
+l2 = mkLabelSame "calOfCap"
+l3 = mkLabelSame "calOfDemand"
 
 gbrIMods :: [InstanceModel]
 gbrIMods = [probOfBreak, calofCapacity, calofDemand]

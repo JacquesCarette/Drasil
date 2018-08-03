@@ -14,9 +14,9 @@ import Data.Drasil.Utils (fmtU, foldle1)
 
 -- Labels
 l1, l2, l3 :: Label
-l1 = mkLabelRA'' "transMot"
-l2 = mkLabelRA'' "rotMot"
-l3 = mkLabelRA'' "col2D"
+l1 = mkLabelSame "transMot"
+l2 = mkLabelSame "rotMot"
+l3 = mkLabelSame "col2D"
 
 iModels :: [RelationConcept]
 iModels = [transMot, rotMot, col2D]

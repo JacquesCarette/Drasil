@@ -38,12 +38,12 @@ import Drasil.SSP.BasicExprs (eqlExpr, momExpr)
 
 --- Some labels
 l1, l2, l3, l4, l5, l6 :: Label
-l1 = mkLabelRA'' "fctSfty"
-l2 = mkLabelRA'' "nrmShrFor"
-l3 = mkLabelRA'' "inslideFx"
-l4 = mkLabelRA'' "forDisEqlb"
-l5 = mkLabelRA'' "rfemFoS"
-l6 = mkLabelRA'' "crtSlpId"
+l1 = mkLabelSame "fctSfty"
+l2 = mkLabelSame "nrmShrFor"
+l3 = mkLabelSame "inslideFx"
+l4 = mkLabelSame "forDisEqlb"
+l5 = mkLabelSame "rfemFoS"
+l6 = mkLabelSame "crtSlpId"
 
 -----------------------
 --  Instance Models  --
@@ -255,7 +255,7 @@ rfemFoS_desc = foldlSent [
 --
 crtSlpId_new :: InstanceModel
 crtSlpId_new = im' crtSlpId []
-  [] (qw fs_min) [] (mkLabelRA'' "crtSlpId") [crtSlpId_desc]
+  [] (qw fs_min) [] (mkLabelSame "crtSlpId") [crtSlpId_desc]
 
 crtSlpId :: RelationConcept
 crtSlpId = makeRC "crtSlpId" (nounPhraseSP "critical slip identification")

@@ -259,7 +259,7 @@ sysCtxIntro = foldlSP
    S "and its" +:+ phrase environment]
 
 sysCtxFig1 :: LabelledContent
-sysCtxFig1 = llcc (mkLabelRA'' "sysCtxDiag") $ fig (titleize sysCont) 
+sysCtxFig1 = llcc (mkLabelSame "sysCtxDiag") $ fig (titleize sysCont) 
   (resourcePath ++ "sysctx.png")
 
 sysCtxDesc :: Contents
@@ -757,7 +757,7 @@ traceMatTabReqGoalOtherCol = [traceMatTabReqGoalOtherGS1, traceMatTabReqGoalOthe
   traceMatTabReqGoalOtherReq8]
 
 traceMatTabReqGoalOther :: LabelledContent
-traceMatTabReqGoalOther = llcc (mkLabelRA'' "TraceyReqGoalsOther") $ Table
+traceMatTabReqGoalOther = llcc (mkLabelSame "TraceyReqGoalsOther") $ Table
   (EmptyS:(traceMatTabReqGoalOtherRowHead))
   (makeTMatrix traceMatTabReqGoalOtherColHead traceMatTabReqGoalOtherCol
   traceMatTabReqGoalOtherRow)
@@ -830,7 +830,7 @@ traceMatTabAssumpColHead = zipWith itemRefToSent traceMatTabAssumpCol
   traceMatTabAssumpColRef
 
 traceMatTabAssump :: LabelledContent
-traceMatTabAssump = llcc (mkLabelRA'' "TraceyAssumpsOther") $ Table
+traceMatTabAssump = llcc (mkLabelSame "TraceyAssumpsOther") $ Table
   (EmptyS:traceMatTabAssumpRowHead)
   (makeTMatrix traceMatTabAssumpColHead traceMatTabAssumpCol' traceMatTabAssumpRow)
   (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef problem_description)
@@ -892,7 +892,7 @@ traceMatTabDefnModelColHead = zipWith itemRefToSent traceMatTabDefnModelRow
 traceMatTabDefnModelRowHead = traceMatTabDefnModelColHead
 
 traceMatTabDefnModel :: LabelledContent
-traceMatTabDefnModel = llcc (mkLabelRA'' "TraceyItemsSecs") $ Table 
+traceMatTabDefnModel = llcc (mkLabelSame "TraceyItemsSecs") $ Table 
   (EmptyS:traceMatTabDefnModelRowHead)
   (makeTMatrix traceMatTabDefnModelColHead traceMatTabDefnModelCol
   traceMatTabDefnModelRow) (showingCxnBw (traceyMatrix) (titleize' item `sAnd`

@@ -1,5 +1,5 @@
 module Language.Drasil.Label (Label, mkLabelRA, mkLabelRA',
- mkLabelRA'', mkEmptyLabel, getAdd, mkLabelRAAssump', 
+ mkLabelSame, mkEmptyLabel, getAdd, mkLabelRAAssump', 
  mkLabelRAFig) where
 
 import Language.Drasil.Label.Core
@@ -27,8 +27,8 @@ mkLabelRA' ref shortn = Lbl (ref ++ "Label") (RefAdd $ ensureASCII ref)
   (shortname' shortn) Sect
 
 -- for when reference address and the display should be the same
-mkLabelRA'' :: String -> Label
-mkLabelRA'' iAndRefAndshortn = Lbl (iAndRefAndshortn ++ "Label") 
+mkLabelSame :: String -> Label
+mkLabelSame iAndRefAndshortn = Lbl (iAndRefAndshortn ++ "Label") 
   (RefAdd $ ensureASCII iAndRefAndshortn) (shortname' iAndRefAndshortn) Sect
 
 mkLabelRAAssump :: String -> String -> Label
@@ -52,4 +52,4 @@ ensureASCII s = map (\y -> if isAscii y then y else error "Label needs to be pur
 
 --FIXME: remove upon adding labels to all the data types
 mkEmptyLabel :: Label
-mkEmptyLabel = mkLabelRA'' "empty"
+mkEmptyLabel = mkLabelSame "empty"

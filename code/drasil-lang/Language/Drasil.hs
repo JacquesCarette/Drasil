@@ -200,7 +200,7 @@ module Language.Drasil (
   , RefAdd, RefType(Cite)
   -- Label
   , Label 
-  , mkLabelRA, mkLabelRA', mkLabelRA'', mkEmptyLabel
+  , mkLabelRA, mkLabelRA', mkLabelSame, mkEmptyLabel
   , mkLabelRAAssump', mkLabelRAFig
   -- Document.getChunk
   , vars, combine', ccss
@@ -339,7 +339,7 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
 import Language.Drasil.RefTypes(RefAdd, RefType(Cite), DType(..))
-import Language.Drasil.Label (mkLabelRA, mkLabelRA', mkLabelRA'', 
+import Language.Drasil.Label (mkLabelRA, mkLabelRA', mkLabelSame, 
   mkEmptyLabel, mkLabelRAAssump', mkLabelRAFig)
 import Language.Drasil.Label.Core (getAdd)
 --Should be in lang-dev package?

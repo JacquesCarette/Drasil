@@ -44,7 +44,7 @@ htTransCladCool = fromEqn "htTransCladCool" (nounPhraseSP
   "convective heat transfer coefficient between clad and coolant")
   EmptyS
   (lH `sub` lC) heat_transfer_coef htTransCladCool_eq []
-  (mkLabelRA'' "htTransCladCool")
+  (mkLabelSame "htTransCladCool")
 
 htTransCladCool_eq =
   (2 * (sy cladCond) * (sy coolFilmCond) / (2 * (sy cladCond) + (sy cladThick) 
@@ -60,7 +60,7 @@ htTransCladFuel = fromEqn "htTransCladFuel" (nounPhraseSP
   "effective heat transfer coefficient between clad and fuel surface")
   EmptyS
   (lH `sub` lG) heat_transfer_coef htTransCladFuel_eq []
-  (mkLabelRA'' "htTransCladFuel")
+  (mkLabelSame "htTransCladFuel")
 
 htTransCladFuel_eq = (2 * (sy cladCond) * (sy gapFilmCond)) / (2 * (sy cladCond)
   + ((sy cladThick) * (sy gapFilmCond)))

@@ -15,7 +15,7 @@ import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shor
 import Language.Drasil.Development.Unit (unitWrapper, UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Label.Core (Label)
-import Language.Drasil.Label (mkLabelRA'')
+import Language.Drasil.Label (mkLabelSame)
 
 import Control.Lens (makeLenses)
 
@@ -54,9 +54,9 @@ gdNoUnitDef r derivs lbe = GD r Nothing derivs [] lbe Nothing
 
 gd' :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
   Derivation -> String -> [Sentence] -> GenDefn
-gd' r (Just u) derivs sn note = GD r (Just (unitWrapper u)) derivs [] (mkLabelRA'' sn) (Just note)
-gd' r Nothing derivs sn note = GD r Nothing derivs [] (mkLabelRA'' sn) (Just note)
+gd' r (Just u) derivs sn note = GD r (Just (unitWrapper u)) derivs [] (mkLabelSame sn) (Just note)
+gd' r Nothing derivs sn note = GD r Nothing derivs [] (mkLabelSame sn) (Just note)
 
 gd'' :: RelationConcept -> String -> [Sentence] -> GenDefn
-gd'' r sn []   = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) [] (mkLabelRA'' sn) Nothing
-gd'' r sn note = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) [] (mkLabelRA'' sn) (Just note)
+gd'' r sn []   = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) [] (mkLabelSame sn) Nothing
+gd'' r sn note = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) [] (mkLabelSame sn) (Just note)

@@ -33,16 +33,16 @@ import Drasil.DocLang.SRS as SRS (physSystLabel)
 
 -- Labels
 l1, l2, l3, l4, l5, l6, l7, l8, l9, l10 :: Label
-l1  = mkLabelRA'' "normForcEq"
-l2  = mkLabelRA'' "bsShrFEq"
-l3  = mkLabelRA'' "resShr"
-l4  = mkLabelRA'' "mobShr"
-l5  = mkLabelRA'' "normShrR"
-l6  = mkLabelRA'' "momentEql"
-l7  = mkLabelRA'' "netForcex"
-l8  = mkLabelRA'' "netForcey"
-l9  = mkLabelRA'' "hookesLaw2d"
-l10 = mkLabelRA'' "displVect"
+l1  = mkLabelSame "normForcEq"
+l2  = mkLabelSame "bsShrFEq"
+l3  = mkLabelSame "resShr"
+l4  = mkLabelSame "mobShr"
+l5  = mkLabelSame "normShrR"
+l6  = mkLabelSame "momentEql"
+l7  = mkLabelSame "netForcex"
+l8  = mkLabelSame "netForcey"
+l9  = mkLabelSame "hookesLaw2d"
+l10 = mkLabelSame "displVect"
 
 ---------------------------
 --  General Definitions  --

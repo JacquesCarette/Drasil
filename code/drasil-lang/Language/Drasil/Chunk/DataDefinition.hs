@@ -19,7 +19,7 @@ import Language.Drasil.Label.Core (Label)
 
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Control.Lens(makeLenses, (^.))
-import Language.Drasil.Label (mkLabelRA', mkLabelRA'')
+import Language.Drasil.Label (mkLabelRA', mkLabelSame)
 import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Spec (Sentence(EmptyS))
@@ -58,7 +58,7 @@ instance HasShortName       DataDefinition where shortname = lbl . shortname
 
 -- | Smart constructor for data definitions 
 mkDD :: QDefinition -> References -> Derivation -> String -> Maybe [Sentence] -> DataDefinition
-mkDD a b c d e = DD a Global b c (mkLabelRA'' d) e -- FIXME: should the Label be passed in or derived?
+mkDD a b c d e = DD a Global b c (mkLabelSame d) e -- FIXME: should the Label be passed in or derived?
 
 qdFromDD :: DataDefinition -> QDefinition
 qdFromDD (DD a _ _ _ _ _) = a
@@ -67,9 +67,9 @@ qdFromDD (DD a _ _ _ _ _) = a
 mkQuantDef :: (Quantity c) => c -> Expr -> QDefinition
 mkQuantDef cncpt equation = datadef $ getUnit cncpt --should references be passed in at this point?
   where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) a equation [] (mkLabelRA'' (cncpt ^. uid))
+                           (eqSymb cncpt) a equation [] (mkLabelSame (cncpt ^. uid))
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) equation [] (mkLabelRA'' (cncpt ^. uid))
+                           (eqSymb cncpt) equation [] (mkLabelSame (cncpt ^. uid))
 
 mkQuantDef' :: (Quantity c) => c -> Expr -> Derivation -> QDefinition
 mkQuantDef' cncpt equation dv = quantdef $ getUnit cncpt --should references be passed in at this point?

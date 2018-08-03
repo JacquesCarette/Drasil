@@ -20,7 +20,7 @@ intro :: (Idea a) => a -> Contents
 intro kWord =  foldlSP [S "This section contains the standard values that are used for calculations in" +:+ short kWord]
 
 tableOfConstants :: [QDefinition] -> LabelledContent
-tableOfConstants f = llcc (mkLabelRA'' "TAuxConsts") $ Table
+tableOfConstants f = llcc (mkLabelSame "TAuxConsts") $ Table
   [titleize symbol_, titleize description, titleize value, titleize CM.unit_]
   (mkTable [ch, phrase, (\c -> E $ c^.equat), unitToSentence] f)
   (S "Auxiliary Constants")

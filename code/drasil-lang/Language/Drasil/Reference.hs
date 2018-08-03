@@ -369,6 +369,7 @@ customRef r n = Ref (rType r) (concatMap repUnd (refAdd r)) (shortname' $ temp (
     temp (Def dtp) s = setSN (getDefName dtp) s
     temp (Req rq) s  = setSN (getReqName rq) s
     temp LC s        = setSN "LC:" s
+    temp Assump s    = setSN "A:" s
     temp UC s        = setSN "UC:" s
     temp Goal s      = setSN "GS:" s
     temp PSD s       = setSN "PS:" s

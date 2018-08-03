@@ -288,7 +288,7 @@ render progName symMap item@(SectionModel niname _)
 
 genericSect :: SubSec -> Section
 genericSect (SectionModel niname xs) = section'' (pullTitle xs niname) 
-  (pullContents xs) (pullSections xs) (mkLabelSame (niname ^. uid)) --fixme
+  (pullContents xs) (pullSections xs) (mkLabelRASec (niname ^. uid) (niname ^. uid)) --fixme
 
 ------------------------------------------------
 -- GENERAL SYSTEM DESCRIPTION SECTION BUILDER --

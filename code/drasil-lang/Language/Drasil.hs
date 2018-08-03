@@ -197,11 +197,11 @@ module Language.Drasil (
   -- PhysSystDesc
   , PhysSystDesc, pSysDes, psd
   -- RefTypes
-  , RefAdd, RefType(Cite)
+  , RefAdd, RefType(Cite, Tab, EqnB, LCh, UnCh, Req, Def)
   -- Label
   , Label 
   , mkLabelRA, mkLabelRA', mkLabelSame, mkEmptyLabel
-  , mkLabelRAAssump', mkLabelRAFig
+  , mkLabelRAAssump', mkLabelRAFig, mkLabelRASec
   -- Document.getChunk
   , vars, combine', ccss
   -- Chunk.Sentence.EmbedSymbol
@@ -338,8 +338,9 @@ import Language.Drasil.Misc -- all of it
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
-import Language.Drasil.RefTypes(RefAdd, RefType(Cite), DType(..))
+import Language.Drasil.RefTypes(RefAdd, RefType(Cite, EqnB, Tab, LCh, UnCh, Req, Def),
+  DType(..))
 import Language.Drasil.Label (mkLabelRA, mkLabelRA', mkLabelSame, 
-  mkEmptyLabel, mkLabelRAAssump', mkLabelRAFig)
+  mkEmptyLabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec)
 import Language.Drasil.Label.Core (getAdd)
 --Should be in lang-dev package?

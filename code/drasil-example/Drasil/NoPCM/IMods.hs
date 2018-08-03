@@ -31,7 +31,7 @@ eBalanceOnWtr_new = im'' eBalanceOnWtr [qw temp_C, qw temp_init, qw time_final,
 eBalanceOnWtr :: RelationConcept
 eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
   "water to find the temperature of the water") balWtrDesc balWtr_Rel
-  (mkLabelSame "eBalnaceOnWtr")
+  (mkLabelSame "eBalnaceOnWtr" (Def Instance))
 
 balWtr_Rel :: Relation
 balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *

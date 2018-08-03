@@ -18,7 +18,7 @@ campidelli = cBooklet "campidelli"
   campidelliLabel
   where
     campidelliLabel :: Label
-    campidelliLabel = mkLabelRA' "campidelliLabel" "campidelli"
+    campidelliLabel = mkLabelRA' "campidelliLabel" "campidelli" Cite
 
 koothoor2013 = 
   cMThesis "koothoor2013" [nKoothoor] 
@@ -27,7 +27,7 @@ koothoor2013 =
   koothoor2013Label
   where
     koothoor2013Label :: Label
-    koothoor2013Label = mkLabelRA' "koothoor2013Label" "koothoor2013"
+    koothoor2013Label = mkLabelRA' "koothoor2013Label" "koothoor2013" Cite
   
 parnasClements1986 = cArticle "parnasClements1986" [dParnas, pcClements] 
   (S "A rational design process: How and why to fake it")
@@ -36,7 +36,7 @@ parnasClements1986 = cArticle "parnasClements1986" [dParnas, pcClements]
   parnasClements1986Label
   where
     parnasClements1986Label :: Label
-    parnasClements1986Label = mkLabelRA' "parnasClements1986Label" "parnasClements1986"
+    parnasClements1986Label = mkLabelRA' "parnasClements1986Label" "parnasClements1986" Cite
 
 
 smithLai2005 = cInProceedings "smithLai2005" [spencerSmith, lLai]
@@ -52,7 +52,7 @@ smithLai2005 = cInProceedings "smithLai2005" [spencerSmith, lLai]
   smithLai2005Label
   where
     smithLai2005Label :: Label
-    smithLai2005Label = mkLabelRA' "smithLai2005Label" "smithLai2005"
+    smithLai2005Label = mkLabelRA' "smithLai2005Label" "smithLai2005" Cite
 
 ------------------------
 -- COMMON CITE-FIELDS --

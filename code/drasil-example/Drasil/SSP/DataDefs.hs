@@ -362,10 +362,10 @@ fixme2_new = mkDD fixme2 [{-References-}] [{-Derivation-}] "fixme2" Nothing--Not
 --FIXME: fill empty lists in
 
 fixme1 :: QDefinition
-fixme1 = ec ufixme1 (inxi intNormForce + inxiM1 intNormForce) (mkLabelSame "fixme1")
+fixme1 = ec ufixme1 (inxi intNormForce + inxiM1 intNormForce) (mkLabelSame "fixme1" (Def DD))
 
 fixme2 :: QDefinition
-fixme2 = ec ufixme2 (inxi watrForce + inxiM1 watrForce) (mkLabelSame "fixme2")
+fixme2 = ec ufixme2 (inxi watrForce + inxiM1 watrForce) (mkLabelSame "fixme2" (Def DD))
 
 --------------------------
 -- Derivation Sentences --

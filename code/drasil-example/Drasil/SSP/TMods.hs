@@ -24,11 +24,11 @@ import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe',
 
 -- Pre-defined some labels. They will be re-used for tings which are 'the same'
 l1, l2, l3, l4, l5 :: Label
-l1 = mkLabelSame "fs_rc"
-l2 = mkLabelSame "equilibrium"
-l3 = mkLabelSame "mcShrStrgth"
-l4 = mkLabelSame "effStress"
-l5 = mkLabelSame "hookesLaw"
+l1 = mkLabelSame "fs_rc" (Def TM)
+l2 = mkLabelSame "equilibrium" (Def TM)
+l3 = mkLabelSame "mcShrStrgth" (Def TM)
+l4 = mkLabelSame "effStress" (Def TM)
+l5 = mkLabelSame "hookesLaw" (Def TM)
 
 --------------------------
 --  Theoretical Models  --

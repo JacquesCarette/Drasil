@@ -19,6 +19,7 @@ import Language.Drasil.Label (mkLabelSame)
 
 import Control.Lens ((^.), makeLenses, view)
 
+import Language.Drasil.RefTypes(RefType(..), DType(..))
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(typ), QuantityDict,
   mkQuant, qw)
@@ -88,11 +89,11 @@ fromEqn''' :: (IsUnit u, ConceptDomain u) =>
   String -> NP -> Sentence -> Symbol -> u -> Expr -> References -> Derivation -> String -> QDefinition
 fromEqn''' nm desc _ symb un eqn refs dv sn = 
   EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) 
-  eqn refs dv (mkLabelSame sn) Nothing
+  eqn refs dv (mkLabelSame sn (Def DD)) Nothing
 
 fromEqn'''' :: String -> NP -> Sentence -> Symbol -> Expr -> References -> Derivation -> String -> QDefinition
 fromEqn'''' nm desc _ symb eqn refs dv sn = EC (mkQuant nm desc symb Real Nothing Nothing)
-  eqn refs dv (mkLabelSame sn) Nothing
+  eqn refs dv (mkLabelSame sn (Def DD)) Nothing
 
 -- | Smart constructor for QDefinitions. Requires a quantity and its defining 
 -- equation

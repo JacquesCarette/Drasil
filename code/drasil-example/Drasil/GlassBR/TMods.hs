@@ -13,8 +13,8 @@ import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
 
 -- Labels
 l1, l2 :: Label
-l1 = mkLabelSame "isSafeLR"
-l2 = mkLabelSame "isSafePb"
+l1 = mkLabelSame "isSafeLR" (Def TM)
+l2 = mkLabelSame "isSafePb" (Def TM)
 
 {--}
 

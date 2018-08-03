@@ -72,7 +72,7 @@ derivation g = map makeDerivationContents (getDerivation g)
 -- | Helper function for creating the layout objects
 -- (paragraphs and equation blocks) for a derivation.
 makeDerivationContents :: Sentence -> Contents
-makeDerivationContents (E e) = LlC $ llcc mkEmptyLabel (EqnBlock e) --FIXME: Derivation needs labels for it's equations
+makeDerivationContents (E e) = LlC $ llcc (mkEmptyLabel EqnB) (EqnBlock e) --FIXME: Derivation needs labels for it's equations
 makeDerivationContents s     = UlC $ ulcc $ Paragraph s
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs

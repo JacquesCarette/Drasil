@@ -25,8 +25,8 @@ data RefType = Tab    -- ^ Table
              | Mod    -- ^ Module
              | Req ReqType -- ^ Requirement
              | Assump -- ^ Assumption
-             | LC     -- ^ Likely Change
-             | UC     -- ^ Unlikely Change
+             | LCh     -- ^ Likely Change
+             | UnCh     -- ^ Unlikely Change
              | EqnB   -- ^ Equation Block
              | Cite   -- ^ Citation
              | Goal   -- ^ Goal Statement
@@ -43,8 +43,8 @@ instance Show RefType where
   show (Def _)= "Definition"
   show (Req _)= "Requirement"
   show Assump = "Assumption"
-  show LC     = "Likely Change"
-  show UC     = "Unlikely Change"
+  show LCh     = "Likely Change"
+  show UnCh     = "Unlikely Change"
   show Cite   = "Citation"
   show Goal   = "Goal Statement"
   show PSD    = "Physical System Description"

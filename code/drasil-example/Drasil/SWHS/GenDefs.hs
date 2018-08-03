@@ -38,8 +38,8 @@ swhsGDs :: [GenDefn]
 swhsGDs = [nwtnCoolingGD, rocTempSimpGD] 
 
 l1, l2 :: Label
-l1 = mkLabelSame "nwtnCooling"
-l2 = mkLabelSame "rocTempSimp"
+l1 = mkLabelSame "nwtnCooling" (Def General)
+l2 = mkLabelSame "rocTempSimp" (Def General)
 
 nwtnCoolingGD, rocTempSimpGD :: GenDefn
 nwtnCoolingGD = gdNoUnitDef nwtnCooling [] l1

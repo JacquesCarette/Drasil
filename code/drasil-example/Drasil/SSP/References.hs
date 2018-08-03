@@ -19,20 +19,20 @@ chen2005 = cArticle "chen2005" [qhQian, dyZhu, cfLee, grChen]
   (S "A concise algorithm for computing the" +:+
   phrase fs_concept +:+ S "using the" +:+ S "morgenstern price method")
   jnlCGJ 2005 [month Feb, volume 42, number 1, pages [272,278]]
-  (mkLabelSame "chen2005")
+  (mkLabelSame "chen2005" Cite)
 
 fredlund1977 = cArticle "fredlund1977" [dgFredlund, jKrahn]
   (S "Comparison of slope stability methods of" +:+ phrase analysis)
   jnlCGJ 1977 [month Apr, pages [429, 439], volume 14, number 3]
-  (mkLabelSame "fredlund1977")
+  (mkLabelSame "fredlund1977" Cite)
 
 stolle2008 = cArticle "stolle2008" [dStolle, pGuo]
   (S "Limit equilibrum" +:+ phrase ssa +:+ S "using rigid finite elements")
   jnlCGJ 2008 [month May, pages [653,662], volume 45, number 5]
-  (mkLabelSame "stolle2008")
+  (mkLabelSame "stolle2008" Cite)
 
 li2010 = cArticle "li2010" [yCLi, ymChen, tltZhan, ssLing, pjCleall]
   (S "An efficient approach for locating the" +:+ phrase crtSlpSrf +:+ 
   S "in" +:+ plural ssa +:+ S "using a real-coded genetic algorithm")
   jnlCGJ 2010 [month Jun, pages [806,820], volume 47, number 7]
-  (mkLabelSame "li2010")
+  (mkLabelSame "li2010" Cite)

@@ -16,6 +16,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
 import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label)
+import Language.Drasil.RefTypes(RefType(..), DType(..))
 
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Control.Lens(makeLenses, (^.))
@@ -31,13 +32,13 @@ data ScopeType = Local Scope {-only visible within a limited scope-} | Global {-
 
 -- A data definition is a QDefinition that may have additional notes. 
 -- It also has attributes like derivation, source, etc.
-data DataDefinition = DD { _qd :: QDefinition
-                         , _scp :: ScopeType
-                         , _ref :: References
-                         , _deri :: Derivation
-                         , _lbl :: Label
-                         , _notes :: Maybe [Sentence]
-                         }
+data DataDefinition = DatDef { _qd :: QDefinition
+                             , _scp :: ScopeType
+                             , _ref :: References
+                             , _deri :: Derivation
+                             , _lbl :: Label
+                             , _notes :: Maybe [Sentence]
+                             }
 makeLenses ''DataDefinition
 
 -- this works because UnitalChunk is a Chunk
@@ -58,18 +59,18 @@ instance HasShortName       DataDefinition where shortname = lbl . shortname
 
 -- | Smart constructor for data definitions 
 mkDD :: QDefinition -> References -> Derivation -> String -> Maybe [Sentence] -> DataDefinition
-mkDD a b c d e = DD a Global b c (mkLabelSame d) e -- FIXME: should the Label be passed in or derived?
+mkDD a b c d e = DatDef a Global b c (mkLabelSame d (Def DD)) e
 
 qdFromDD :: DataDefinition -> QDefinition
-qdFromDD (DD a _ _ _ _ _) = a
+qdFromDD (DatDef a _ _ _ _ _) = a
 
 -- Used to help make Qdefinitions when uid, term, and symbol come from the same source
 mkQuantDef :: (Quantity c) => c -> Expr -> QDefinition
 mkQuantDef cncpt equation = datadef $ getUnit cncpt --should references be passed in at this point?
   where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) a equation [] (mkLabelSame (cncpt ^. uid))
+                           (eqSymb cncpt) a equation [] (mkLabelSame (cncpt ^. uid) (Def DD))
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) equation [] (mkLabelSame (cncpt ^. uid))
+                           (eqSymb cncpt) equation [] (mkLabelSame (cncpt ^. uid) (Def DD))
 
 mkQuantDef' :: (Quantity c) => c -> Expr -> Derivation -> QDefinition
 mkQuantDef' cncpt equation dv = quantdef $ getUnit cncpt --should references be passed in at this point?

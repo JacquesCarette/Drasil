@@ -2,20 +2,23 @@
 
 module Language.Drasil.Chunk.DefinedQuantity
   ( dqd, dqd', dqdEL, DefinedQuantityDict, dqdWr
-  , dqdQd) where
+  , dqdQd, dqdVc) where
 import Control.Lens ((^.), makeLenses, view)
 
 import qualified Language.Drasil.Chunk.Quantity as Q
 
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
+import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict), DefnAndDomain(DAD))
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
   HasSpace(typ), IsUnit, HasDerivation(derivations))
 import Language.Drasil.Development.Unit (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
+import Language.Drasil.Spec (Sentence(S))
 import Language.Drasil.Space (Space)
 import Language.Drasil.Symbol (Symbol, Stage)
+import Language.Drasil.Chunk.VarChunk (VarChunk(VC))
 
 -- | DefinedQuantity = Concept + Quantity
 data DefinedQuantityDict = DQD { _con :: ConceptChunk
@@ -58,3 +61,6 @@ dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c) []
 
 dqdQd :: (Q.Quantity c, Q.HasSpace c, HasSymbol c) => c -> ConceptChunk -> DefinedQuantityDict
 dqdQd c cc = DQD cc (symbol c) (c ^. typ) (getUnit c) []
+
+dqdVc :: VarChunk -> DefinedQuantityDict
+dqdVc (VC idea sym space) = DQD (ConDict (idea) (DAD (S "") [])) (sym) (space) Nothing []

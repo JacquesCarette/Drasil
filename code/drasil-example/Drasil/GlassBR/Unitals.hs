@@ -16,7 +16,7 @@ import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
 --FIXME: Many of the current terms can be separated into terms and defns?
 glassBRsymb :: [DefinedQuantityDict]
-glassBRsymb = map dqdWr [plate_len, plate_width, char_weight, standOffDist]
+glassBRsymb = map dqdWr [plate_len, plate_width, char_weight, standOffDist] ++ map dqdVc [is_safePb]
   -- roughly speaking, we'd want to do
   -- ++ map dqdWr [is_safeLR]
   -- but that doesn't typecheck. Need the definition of is_safeLR to be

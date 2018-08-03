@@ -596,28 +596,30 @@ nr2Expr = ((sy w_mass) $= (sy w_vol) * (sy w_density) $= (((sy diam) / 2) *
   (sy tank_length) * (sy w_density)))
 
 nr1, nr2, nr3, nr4, nr5, nr6 :: ConceptInstance
-nr1 = cic "nr1" (titleize input_ +:+ S "the" +:+ plural quantity +:+
+nr1 = cic "Input-Inital-Values" (titleize input_ +:+ S "the" +:+ plural quantity +:+
     S "described in" +:+ makeRef nrTable `sC` S "which define the" +:+
     plural tank_para `sC` S "material" +:+ plural property +:+
     S "and initial" +:+. plural condition) "Input-Inital-Values" funcReqDom
-nr2 = cic "nr2" (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef nr1 +:+
+nr2 = cic "Find-Mass" (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef nr1 +:+
     S "to find the" +:+ phrase mass +:+ S "needed for" +:+ acroIM 1 +:+
     S "to" +:+ acroIM 2 `sC` S "as follows, where" +:+ ch w_vol `isThe`
     phrase w_vol +:+ S "and" +:+ (ch tank_vol `isThe` phrase tank_vol) :+:
     S ":" +:+ E nr2Expr) "Find-Mass" funcReqDom  -- FIXME: Equation shouldn't be inline.
-nr3 = cic "nr3" (S "Verify that the" +:+ plural input_ +:+
+nr3 = cic "Check-Inputs-Satisfy-Physical-Constraints" (S "Verify that the" +:+ plural input_ +:+
     S "satisfy the required" +:+ phrase physicalConstraint +:+
     S "shown in" +:+. makeRef dataConstTable1)
     "Check-Inputs-Satisfy-Physical-Constraints" funcReqDom
-nr4 = cic "nr4" (titleize' output_ `sAnd` plural input_ +:+ plural quantity +:+
+nr4 = cic "Output-Input-Derivied-Quantities" (titleize' output_ `sAnd` plural input_ 
+    +:+ plural quantity +:+
     S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
     plural quantity +:+ S "from" +:+ (makeRef nr1) `sC` S "the" +:+
     phrase mass +:+ S "from" +:+ makeRef nr2 `sAnd` ch tau_W +:+.
     sParen (S "from" +:+ acroIM 1)) "Output-Input-Derivied-Quantities" funcReqDom
-nr5 = cic "nr5" (S "Calculate and output the" +:+ phrase temp_W +:+
+nr5 = cic "Calculate-Temperature-Water-Over-Time" (S "Calculate and output the" +:+ phrase temp_W +:+
     sParen (ch temp_W :+: sParen (ch time)) +:+ S "over the" +:+
     phrase sim_time) "Calculate-Temperature-Water-Over-Time" funcReqDom
-nr6 = cic "nr6" (S "Calculate and" +:+ phrase output_ +:+ S "the" +:+
+nr6 = cic "Calculate-Change-Heat_Energy-Water-Time" 
+    (S "Calculate and" +:+ phrase output_ +:+ S "the" +:+
     phrase w_E +:+ sParen (ch w_E :+: sParen (ch time)) +:+ S "over the" +:+
     phrase sim_time +:+. sParen (S "from" +:+ acroIM 3))
     "Calculate-Change-Heat_Energy-Water-Time" funcReqDom

@@ -23,7 +23,7 @@ import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.Classes (NamedIdea(term),
   ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), Definition(defn))
-
+import Language.Drasil.Label (Label, mkLabelRASec)
 
 egetDoc :: Document -> [Expr]
 egetDoc (Document _ _ s) = concatMap egetSec s
@@ -36,10 +36,16 @@ egetDoc (Document _ _ s) = concatMap egetSec s
 -- Auxiliary Constants Section (named "AuxConstants") contains standard 
 -- values (like min, max) that are used for defined basic Chunk.
 -- These values should not appear in the basic Table of symbol.
+refLabel :: Label
+refLabel = mkLabelRASec "RefMat" "Reference Material" -- FIXME: HACKED IN HERE
+auxConsLabel :: Label
+auxConsLabel = mkLabelRASec "AuxConstants" "Values of Auxiliary Constants" -- FIXME: HACKED IN HERE
+--FIXME: Remove the above labels when we have a less fragile way of checking things.
+
 egetSec :: Section -> [Expr]
-egetSec (Section _ sc lb) = case lb ^. shortname of
-	(ShortNm "RefMat") -> []
-	_ -> concatMap egetSecCon sc
+egetSec (Section _ sc lb) 
+  | lb ^. shortname == refLabel ^. shortname = []
+	| otherwise = concatMap egetSecCon sc
 egetSec (Section _ sc _) = concatMap egetSecCon sc
 
 egetSecCon :: SecCons -> [Expr]
@@ -66,10 +72,10 @@ getDoc :: Document -> [Sentence]
 getDoc (Document t a s) = t : a : concatMap getSec s
 
 getSec :: Section -> [Sentence]
-getSec (Section t sc lb) = case lb ^. shortname of
-	(ShortNm "AuxConstants") -> []
-	(ShortNm "RefMat") -> []
-	_ -> t : concatMap getSecCon sc
+getSec (Section t sc lb) 
+  | lb ^. shortname == refLabel ^. shortname = []
+  | lb ^. shortname == auxConsLabel ^. shortname = []
+	| otherwise = t : concatMap getSecCon sc
 getSec (Section _ _ _) = []
 
 getSecCon :: SecCons -> [Sentence]

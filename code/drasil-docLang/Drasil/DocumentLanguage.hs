@@ -280,10 +280,12 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
         table_of_units (sortBy comp_unitdefn $ Map.elems $ db ^. unitTable) (tuIntro con)
     mkSubRef SI {_quants = v} (TSymb con) =
       SRS.tOfSymb 
-      [tsIntro con, LlC $ table Equational (
-                sortBy (compsy `on` eqSymb) $
-                filter (`hasStageSymbol` Equational)
-                (nub v)) at_start] []
+      [tsIntro con,
+                LlC $ table Equational (
+                sortBy (compsy `on` eqSymb) 
+                $ filter (`hasStageSymbol` Equational) 
+                (nub v))
+                at_start] []
     mkSubRef SI {_concepts = cccs} (TSymb' f con) = mkTSymb cccs f con
     mkSubRef SI {_sysinfodb = db} TAandA =
       table_of_abb_and_acronyms $ nub $ Map.elems (db ^. termTable)
@@ -295,7 +297,8 @@ mkTSymb :: (Quantity e, Concept e, Eq e) =>
 mkTSymb v f c = SRS.tOfSymb [tsIntro c,
   LlC $ table Equational
     (sortBy (compsy `on` eqSymb) $ filter (`hasStageSymbol` Equational) (nub v))
-    (lf f)] []
+    (lf f)] 
+    []
   where lf Term = at_start
         lf Defn = (^. defn)
         lf (TermExcept cs) = \x -> if (x ^. uid) `elem` map (^. uid) cs then

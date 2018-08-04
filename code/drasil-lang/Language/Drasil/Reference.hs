@@ -235,15 +235,15 @@ instance Referable QDefinition where -- FIXME: This could lead to trouble; need
                                      -- Refs. Double-check QDef is a DD before allowing
                                      -- FIXME: QDefinition should no longer be referable
                                      -- after its Label is removed.
-  refAdd  d = "DD:" ++ (getAdd ((d ^. getLabel) ^. getRefAdd))
+  refAdd  d = getAdd ((d ^. getLabel) ^. getRefAdd)
   rType   _ = Def DD
 
 instance Referable DataDefinition where
-  refAdd  d = "DD:" ++ (getAdd ((d ^. getLabel) ^. getRefAdd))
+  refAdd  d = getAdd ((d ^. getLabel) ^. getRefAdd)
   rType   _ = Def DD
 
 instance Referable InstanceModel where
-  refAdd  i = "IM:" ++ (getAdd ((i ^. getLabel) ^. getRefAdd))
+  refAdd  i = getAdd ((i ^. getLabel) ^. getRefAdd)
   rType   _ = Def Instance
 
 instance Referable ConceptInstance where

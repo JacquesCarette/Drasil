@@ -37,6 +37,9 @@ mkTable fl (c:cl) = map ($ c) fl : mkTable fl cl
 unitToSentence :: Quantity u => u -> Sentence
 unitToSentence x = maybe (S "--") (\y -> Sy (y ^. usymb)) (getUnit x)
 
+unitToEmptyS :: u -> Sentence
+unitToEmptyS _ = S ""
+
 unitToSentenceUnitless :: Quantity u => u -> Sentence
 unitToSentenceUnitless x = maybe (S "Unitless") (\y -> Sy (y ^. usymb)) (getUnit x)
 

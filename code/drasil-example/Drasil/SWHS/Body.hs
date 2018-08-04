@@ -124,7 +124,9 @@ swhsPeople = [thulasi, brooks, spencerSmith]
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro [
-    TUnits, tsymb'' tsymb_intro (TermExcept [uNormalVect]), TAandA]):
+    TUnits, 
+    tsymb'' tsymb_intro (TermExcept [uNormalVect]),
+    TAandA]):
   IntroSec (
     IntroProg (introP1 CT.ener_src energy swhs_pcm phsChgMtrl 
     progName CT.thermal_energy latent_heat unit_) (introP2 swhs_pcm program

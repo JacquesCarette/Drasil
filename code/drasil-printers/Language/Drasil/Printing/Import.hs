@@ -252,13 +252,13 @@ lay sm (UlC x) = layUnlabelled sm (x ^. accessContents)
 layLabelled :: HasSymbolTable ctx => ctx -> LabelledContent -> T.LayoutObj
 layLabelled sm x@(LblC _ (Table hdr lls t b)) = T.Table ["table"]
   ((map (spec sm) hdr) : (map (map (spec sm)) lls)) 
-  (P.S $ "Table:" ++ (getAdd (x ^. getRefAdd)))
+  (P.S $ getAdd (x ^. getRefAdd))
   b (spec sm t)
 layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"] 
   [T.EqnBlock (P.E (expr c sm))] 
-  (P.S $ "Eqn:" ++ (getAdd (x ^. getRefAdd)))
+  (P.S $ getAdd (x ^. getRefAdd))
 layLabelled sm x@(LblC _ (Figure c f wp))     = T.Figure 
-  (P.S $ "Figure:" ++ (getAdd (x ^. getRefAdd)))
+  (P.S $ getAdd (x ^. getRefAdd))
   (spec sm c) f wp
 layLabelled sm x@(LblC _ (Requirement r))       = T.ALUR T.Requirement
   (spec sm $ requires r) 
@@ -275,7 +275,7 @@ layLabelled sm x@(LblC _ (Change lcs))           = T.ALUR
   (spec sm $ getShortName lcs)
 layLabelled sm x@(LblC _ (Graph ps w h t))    = T.Graph 
   (map (\(y,z) -> (spec sm y, spec sm z)) ps) w h (spec sm t)
-  (P.S $ "Figure:" ++ (getAdd (x ^. getRefAdd)))
+  (P.S $ getAdd (x ^. getRefAdd))
 layLabelled sm x@(LblC _ (Defnt dtyp pairs)) = T.Definition 
   dtyp (layPairs pairs) 
   (P.S $ getAdd (x ^. getRefAdd))

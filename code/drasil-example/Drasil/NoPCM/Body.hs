@@ -123,8 +123,9 @@ probDescription, termAndDefn, physSystDescription, goalStates,
   
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
-  [TUnits, tsymb [TSPurpose, SymbConvention
-  [Lit (nw ht_trans), Doc' (nw progName)], SymbOrder], TAandA]) :
+  [TUnits, 
+  tsymb [TSPurpose, SymbConvention [Lit (nw ht_trans), Doc' (nw progName)], SymbOrder],
+  TAandA]) :
   IntroSec (IntroProg (introStart ener_src energy progName)
     (introEnd progName program)
   [IPurpose (purpDoc progName),

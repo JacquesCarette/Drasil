@@ -14,7 +14,7 @@ import Language.Drasil.Chunk.ShortName (HasShortName(shortname), getStringSN, Sh
 import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd),
   MayHaveLabel(getMaybeLabel), HasLabel(getLabel))
 
-import Language.Drasil.Label (Label, getAdd, mkLabelRA, mkLabelRA', mkEmptyLabel)
+import Language.Drasil.Label (Label, getAdd, mkEmptyLabel)
 import Language.Drasil.RefTypes (RefAdd, DType(..))
 import Language.Drasil.Spec (Sentence(..))
 

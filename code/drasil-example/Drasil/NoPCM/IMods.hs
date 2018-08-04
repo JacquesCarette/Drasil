@@ -48,8 +48,8 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W), S "where", E 0,
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
-  plural boil_pt, S "of", phrase water `sC` S "respectively",
-  sParen (makeRef assump10Label)]
+  plural boil_pt, S "of", phrase water `sC` S "respectively"
+  {-, sParen (makeRef assump10Label)-}]
 
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --

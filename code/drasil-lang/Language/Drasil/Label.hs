@@ -1,4 +1,4 @@
-module Language.Drasil.Label (Label, mkLabelRA, mkLabelRA',
+module Language.Drasil.Label (Label, mkLabelRA',
  mkLabelSame, mkEmptyLabel, getAdd, mkLabelRAAssump', 
  mkLabelRAFig, mkLabelRASec) where
 
@@ -13,6 +13,10 @@ import Control.Lens((^.))
 instance HasUID        Label where uid       = uniqueID
 instance HasRefAddress Label where getRefAdd = lblType
 
+-- multiple mkLabel constructors for label creation
+-- id     ==> unique ID for Drasil referencing (i.e. internal)
+-- ref    ==> pure ASCII used for referencing
+-- shortn ==> the shortname - what a person/user will see (can include spaces, accents, etc. (unicode))
 mkLabel :: String -> String -> String -> RefType -> Label
 mkLabel lblUID ra sn rtype = Lbl lblUID 
   (RefAdd $ concatMap repUnd $ getAcc rtype ++ ensureASCII ra)
@@ -50,14 +54,6 @@ getDefName General    = "GD:"
 repUnd :: Char -> String
 repUnd '_' = "."
 repUnd c = c : []
-
--- multiple mkLabel constructors for label creation
--- id     ==> unique ID for Drasil referencing (i.e. internal)
--- ref    ==> pure ASCII used for referencing
--- shortn ==> the shortname - what a person/import Language.Drasil.RefTypes (RefType(..))user will see (can include spaces, accents, etc. (unicode))
--- RefTypes are Sect by default
-mkLabelRA :: String -> String -> String -> RefType -> Label
-mkLabelRA = mkLabel
 
 -- for when reference address and the display should be the different
 mkLabelRA' :: String -> String -> RefType -> Label

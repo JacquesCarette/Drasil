@@ -7,7 +7,7 @@ import Language.Drasil.Document
 import Language.Drasil.Document.Core
 import Language.Drasil.Expr
 import Language.Drasil.Spec
-import Language.Drasil.NounPhrase 
+import Language.Drasil.NounPhrase
 import Language.Drasil.NounPhrase.Core
 
 import Language.Drasil.Chunk.AssumpChunk
@@ -21,19 +21,19 @@ import Language.Drasil.RefTypes(DType(..))
 import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(getUnit))
 
 import Language.Drasil.Classes (NamedIdea(term),
-  ExprRelat(relat), HasDerivation(derivations), 
+  ExprRelat(relat), HasDerivation(derivations),
   HasReference(getReferences), Definition(defn))
 import Language.Drasil.Label (Label, mkLabelRASec)
 
 egetDoc :: Document -> [Expr]
 egetDoc (Document _ _ s) = concatMap egetSec s
 
--- If collected sentences are used for collecting symbols, 
+-- If collected sentences are used for collecting symbols,
 -- section collection has to avoid Reference Material section (named "RefMat"),
 -- because this section includes Table of symbol which would
 -- cause loop in collecting.
 
--- Auxiliary Constants Section (named "AuxConstants") contains standard 
+-- Auxiliary Constants Section (named "AuxConstants") contains standard
 -- values (like min, max) that are used for defined basic Chunk.
 -- These values should not appear in the basic Table of symbol.
 refLabel :: Label
@@ -43,9 +43,9 @@ auxConsLabel = mkLabelRASec "AuxConstants" "Values of Auxiliary Constants" -- FI
 --FIXME: Remove the above labels when we have a less fragile way of checking things.
 
 egetSec :: Section -> [Expr]
-egetSec (Section _ sc lb) 
+egetSec (Section _ sc lb)
   | lb ^. shortname == refLabel ^. shortname = []
-	| otherwise = concatMap egetSecCon sc
+  | otherwise = concatMap egetSecCon sc
 egetSec (Section _ sc _) = concatMap egetSecCon sc
 
 egetSecCon :: SecCons -> [Expr]
@@ -57,7 +57,7 @@ egetCon' c = egetCon (c ^. accessContents)
 
 egetCon :: RawContent -> [Expr]
 egetCon (EqnBlock e) = [e]
-egetCon (Definition d) = egetDtype d 
+egetCon (Definition d) = egetDtype d
 egetCon (Defnt dt (hd:tl)) = concatMap egetCon' (snd hd) ++ egetCon (Defnt dt tl)
 egetCon (Defnt dt []) = [] ++ egetDtype dt
 egetCon _ = []
@@ -72,10 +72,10 @@ getDoc :: Document -> [Sentence]
 getDoc (Document t a s) = t : a : concatMap getSec s
 
 getSec :: Section -> [Sentence]
-getSec (Section t sc lb) 
+getSec (Section t sc lb)
   | lb ^. shortname == refLabel ^. shortname = []
   | lb ^. shortname == auxConsLabel ^. shortname = []
-	| otherwise = t : concatMap getSecCon sc
+  | otherwise = t : concatMap getSecCon sc
 getSec (Section _ _ _) = []
 
 getSecCon :: SecCons -> [Sentence]
@@ -84,7 +84,7 @@ getSecCon (Con c) = getCon' c
 
 -- This function is used in collecting sentence from table.
 -- Since only the table's first Column titled "Var" should be collected,
--- this function is used to filter out only the first Column of Sentence. 
+-- this function is used to filter out only the first Column of Sentence.
 isVar :: ([Sentence], [[Sentence]]) -> [Sentence]
 isVar (S "Var" : _, hd1 : _) = hd1
 isVar (_ : tl, _ : tl1) = isVar (tl, tl1)

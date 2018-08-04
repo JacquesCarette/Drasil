@@ -4,6 +4,7 @@ import Control.Lens (Lens')
 
 --It is a hack to think of ShortName as a String
 newtype ShortName = ShortNm String
+  deriving Eq --FIXME: HACK FOR Document/Extract to work. We don't necessarily want this.
 
 getStringSN :: ShortName -> String
 getStringSN (ShortNm s) = s

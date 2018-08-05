@@ -82,7 +82,8 @@ type ModRow = [(String, [Contents])]
 mkTMField :: HasSymbolTable ctx => TheoryModel -> ctx -> Field -> ModRow -> ModRow
 mkTMField t _ l@Label fs  = (show l, (mkParagraph $ at_start t):[]) : fs
 mkTMField t _ l@DefiningEquation fs =
-  (show l, (map (\x -> LlC $ eqUnR x (t ^. getLabel)) (map tConToExpr (t ^. invariants)))) : fs --FIXME: should this have labels?
+  (show l, (map (\x -> LlC $ eqUnR x (modifyLabelEqn (t ^. getLabel))) --FIXME: should this have labels?
+  (map tConToExpr (t ^. invariants)))) : fs 
 mkTMField t m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] (map tConToExpr (t ^. invariants))) : fs
 mkTMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
@@ -103,7 +104,8 @@ mkQField :: (HasSymbolTable ctx) => QDefinition -> ctx -> Field -> ModRow -> Mod
 mkQField d _ l@Label fs = (show l, (mkParagraph $ at_start d):[]) : fs
 mkQField d _ l@Symbol fs = (show l, (mkParagraph $ (P $ eqSymb d)):[]) : fs
 mkQField d _ l@Units fs = (show l, (mkParagraph $ (unitToSentenceUnitless d)):[]) : fs
-mkQField d _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (sy d $= d ^. equat) (d ^. getLabel)) : []) : fs --FIXME: appending symbol should be done in the printing stage
+mkQField d _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (sy d $= d ^. equat) --FIXME: appending symbol should be done in the printing stage
+  (modifyLabelEqn (d ^. getLabel))) : []) : fs 
 mkQField d m l@(Description v u) fs =
   (show l, buildDDescription v u d m) : fs
 mkQField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
@@ -117,7 +119,8 @@ mkDDField :: (HasSymbolTable ctx) => DataDefinition -> ctx -> Field -> ModRow ->
 mkDDField d _ l@Label fs = (show l, (mkParagraph $ at_start d):[]) : fs
 mkDDField d _ l@Symbol fs = (show l, (mkParagraph $ (P $ eqSymb d)):[]) : fs
 mkDDField d _ l@Units fs = (show l, (mkParagraph $ (unitToSentenceUnitless d)):[]) : fs
-mkDDField d _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (sy d $= d ^. relat) (d ^.getLabel)) :[]) : fs --FIXME: appending symbol should be done in the printing stage
+mkDDField d _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (sy d $= d ^. relat) --FIXME: appending symbol should be done in the printing stage
+  (modifyLabelEqn (d ^.getLabel))) :[]) : fs 
 mkDDField d m l@(Description v u) fs =
   (show l, buildDDescription' v u d m) : fs
 mkDDField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
@@ -157,7 +160,8 @@ mkGDField g _ l@Units fs =
   let u = gdUnit g in
     case u of Nothing   -> fs
               Just udef -> (show l, (mkParagraph $ Sy (udef ^. usymb)):[]) : fs
-mkGDField g _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (g ^. relat) (g ^. getLabel)):[]) : fs
+mkGDField g _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (g ^. relat) 
+  (modifyLabelEqn (g ^. getLabel))):[]) : fs
 mkGDField g m l@(Description v u) fs = (show l,
   (buildDescription v u (g ^. relat) m) []) : fs
 mkGDField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
@@ -169,7 +173,7 @@ mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 mkIMField :: HasSymbolTable ctx => InstanceModel -> ctx -> Field -> ModRow -> ModRow
 mkIMField i _ l@Label fs  = (show l, (mkParagraph $ at_start i):[]) : fs
 mkIMField i _ l@DefiningEquation fs =
-  (show l, (LlC $ eqUnR (i ^. relat) (i ^. getLabel)):[]) : fs
+  (show l, (LlC $ eqUnR (i ^. relat) (modifyLabelEqn (i ^. getLabel))):[]) : fs
 mkIMField i m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] [i ^. relat]) : fs
 mkIMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in

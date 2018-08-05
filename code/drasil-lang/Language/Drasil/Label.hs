@@ -1,6 +1,6 @@
 module Language.Drasil.Label (Label, mkLabelRA',
  mkLabelSame, mkEmptyLabel, getAdd, mkLabelRAAssump', 
- mkLabelRAFig, mkLabelRASec) where
+ mkLabelRAFig, mkLabelRASec, modifyLabelEqn) where
 
 import Language.Drasil.Label.Core
 import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd))
@@ -21,22 +21,24 @@ mkLabel :: String -> String -> String -> RefType -> Label
 mkLabel lblUID ra sn rtype = Lbl lblUID 
   (RefAdd $ concatMap repUnd $ getAcc rtype ++ ensureASCII ra)
   (shortname' sn)
-  where
-    getAcc :: RefType -> String
-    getAcc Tab       = "Table:"
-    getAcc Fig       = "Figure:"
-    getAcc Sect      = "Sec:"
-    getAcc (Def dtp) = getDefName dtp
-    getAcc (Req rq)  = getReqName rq
-    getAcc Mod       = "Mod:"
-    getAcc LCh       = "LC:"
-    getAcc UnCh      = "UC:"
-    getAcc Assump    = "A:"
-    getAcc EqnB      = "Eqn:"
-    getAcc Cite      = "Cite:"
-    getAcc Goal      = "GS:"
-    getAcc PSD       = "PS:"
-    getAcc Label     = "" --FIXME: is this alright?
+
+--Determines what text needs to be appended to the ref address
+--Do not export
+getAcc :: RefType -> String
+getAcc Tab       = "Table:"
+getAcc Fig       = "Figure:"
+getAcc Sect      = "Sec:"
+getAcc (Def dtp) = getDefName dtp
+getAcc (Req rq)  = getReqName rq
+getAcc Mod       = "Mod:"
+getAcc LCh       = "LC:"
+getAcc UnCh      = "UC:"
+getAcc Assump    = "A:"
+getAcc EqnB      = "Eqn:"
+getAcc Cite      = "Cite:"
+getAcc Goal      = "GS:"
+getAcc PSD       = "PS:"
+getAcc Label     = "" --FIXME: is this alright?
 
 getReqName :: ReqType -> String
 getReqName FR  = "FR:"
@@ -72,6 +74,12 @@ mkLabelRAAssump' rs = mkLabelRAAssump rs rs
 
 mkLabelRASec :: String -> String -> Label
 mkLabelRASec r s = mkLabel (r ++ "Label") r s Sect
+
+--FIXME: hack
+modifyLabelEqn :: Label -> Label
+modifyLabelEqn lb = mkLabel ((getAdd (lb ^. getRefAdd)) ++ "Eqn")
+                            (getAdd (lb ^. getRefAdd))
+                            (getAdd (lb ^. getRefAdd)) EqnB
 
 --label constructor for Graphs and Figures
 mkLabelRAFig :: String -> Label

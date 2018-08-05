@@ -28,6 +28,7 @@ import Language.Drasil.Spec (Sentence((:+:), Ref, S))
 import Language.Drasil.UID (UID)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Label.Core (Label(..), getAdd)
+import Language.Drasil.Label (getDefName, getReqName)
 
 -- | Database for maintaining references.
 -- The Int is that reference's number.
@@ -339,7 +340,17 @@ midRef r = customRef r (r ^. shortname)
 
 -- | Create a reference with a customized 'ShortName'
 customRef :: (HasShortName l, Referable l) => l -> ShortName -> Sentence
-customRef r n = Ref (rType r) (refAdd r) n
+customRef r n = Ref (rType r) (refAdd r) (getAcc' (rType r) n)
+  where 
+    getAcc' :: RefType -> ShortName -> ShortName
+    getAcc' (Def dtp) sn = shortname' $ (getDefName dtp) ++ " " ++ (getStringSN sn)
+    getAcc' (Req rq)  sn = shortname' $ (getReqName rq)  ++ " " ++ (getStringSN sn)
+    getAcc' LCh       sn = shortname' $ "LC: " ++ (getStringSN sn)
+    getAcc' UnCh      sn = shortname' $ "UC: " ++ (getStringSN sn)
+    getAcc' Assump    sn = shortname' $ "A: " ++ (getStringSN sn)
+    getAcc' Goal      sn = shortname' $ "GS:" ++ (getStringSN sn)
+    getAcc' PSD       sn = shortname' $ "PS:" ++ (getStringSN sn)
+    getAcc' _         sn = sn
 
 -- This works for passing the correct id to the reference generator for Assumptions,
 -- Requirements and Likely Changes but I question whether we should use it.

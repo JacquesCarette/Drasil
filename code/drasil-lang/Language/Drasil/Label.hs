@@ -1,6 +1,7 @@
 module Language.Drasil.Label (Label, mkLabelRA',
  mkLabelSame, mkEmptyLabel, getAdd, mkLabelRAAssump', 
- mkLabelRAFig, mkLabelRASec, modifyLabelEqn) where
+ mkLabelRAFig, mkLabelRASec, modifyLabelEqn,
+ getReqName, getDefName) where
 
 import Language.Drasil.Label.Core
 import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd))

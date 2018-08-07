@@ -505,18 +505,19 @@ outputDataConstraints = outDataConstTbl [prob_br]
 
 {--Functional Requirements--}
 
-funcReqsList = funcReqsListOfReqs ++ funcReqsR6 ++ [LlC funcReqsR1Table]
+funcReqsList = funcReqsListOfReqs ++ [LlC funcReqsR1Table]
 
-funcReqsR1, funcReqsR2, funcReqsR3, funcReqsR4, funcReqsR5 :: LabelledContent
-req1Desc, req2Desc, req3Desc, req4Desc :: Sentence
+funcReqsR1, funcReqsR3, funcReqsR4, funcReqsR5 :: LabelledContent
+req1Desc, req3Desc, req4Desc :: Sentence
 req5Desc :: NamedChunk -> Sentence
-funcReqsR6 :: [Contents] --FIXME: Issue #327
+funcReqsR2, funcReqsR6 :: [Contents] --FIXME: Issue #327
 
 funcReqsListOfReqs :: [Contents]
-funcReqsListOfReqs = map LlC $ [funcReqsR1, funcReqsR2, funcReqsR3, funcReqsR4, funcReqsR5]
+funcReqsListOfReqs = [LlC funcReqsR1] ++ funcReqsR2 ++ 
+  map LlC [funcReqsR3, funcReqsR4, funcReqsR5] ++ funcReqsR6
 
 funcReqsR1 = mkRequirement "funcReqsR1" req1Desc "Input-Glass-Props"
-funcReqsR2 = mkRequirement "funcReqsR2" req2Desc "System-Set-Values-Following-Assumptions"
+--funcReqsR2 = mkRequirement "funcReqsR2" req2Desc "System-Set-Values-Following-Assumptions"
 funcReqsR3 = mkRequirement "funcReqsR3" req3Desc "Check-Input-with-Data_Constraints"
 funcReqsR4 = mkRequirement "funcReqsR4" req4Desc "Output-Values-and-Known-Quantities"
 funcReqsR5 = mkRequirement "funcReqsR5" (req5Desc (output_)) "Check-Glass-Safety"
@@ -539,15 +540,20 @@ funcReqsR1Table = llcc (mkLabelRA'' "R1ReqInputs") $
    at_start, unitToSentence] requiredInputs)
   (S "Required Inputs following R1") True "R1ReqInputs"
 
-req2Desc = foldlSent [S "The", phrase system,
-  S "shall set the known", plural value +: S "as follows",
-  foldlList Comma List [(foldlsC (map ch (take 4 assumptionConstants)) `followA` 4),
+funcReqsR2List :: [Sentence]
+funcReqsR2List = [(foldlsC (map ch (take 4 assumptionConstants)) `followA` 4),
   ch loadDF +:+ sParen (S "from" +:+ (makeRef loadDF)), 
   (short lShareFac `followA` 5),
   (ch hFromt) +:+ sParen (S "from" +:+ (makeRef hFromt)), 
   (ch glaTyFac) +:+ sParen (S "from" +:+ (makeRef glaTyFac)),
   (ch standOffDis) +:+ sParen (S "from" +:+ (makeRef standOffDis)),
-  (ch aspRat) +:+ sParen (S "from" +:+ (makeRef aspRat))]]
+  (ch aspRat) +:+ sParen (S "from" +:+ (makeRef aspRat))]
+
+funcReqsR2 = map (UlC . ulcc) [Enumeration $ Simple $ [(acroR 2, Nested (foldlSent_ 
+  [S "The", phrase system, S "shall set the known", plural value +: S "as follows"])
+  $ Bullet $ noRefs $
+    map (Flat $) funcReqsR2List
+    , Nothing)]]
 
 --ItemType
 {-funcReqsR2 = (Nested (S "The" +:+ phrase system +:+

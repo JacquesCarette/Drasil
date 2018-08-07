@@ -52,7 +52,7 @@ digitsProcess (hd:tl) pos coun ex = if pos == coun
 digitsProcess [] pos coun ex = if pos > coun
   then [P.Int 0] ++ (digitsProcess [] pos (coun+1) ex)
   else if ex /= 0
-    then [P.MO P.Point, P.Int 0, P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
+    then [P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
     else []
 
 -- THis function takes the exponent and the [Int] of base and give out

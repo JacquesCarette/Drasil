@@ -982,9 +982,18 @@ This section provides the functional requirements, the business tasks that the s
 \begin{description}
 \item[\refstepcounter{reqnum}\rthereqnum\label{Input-Glass-Props}:]Input the quantities from Table~\ref{Table:R1ReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast. Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
 \end{description}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{System-Set-Values-Following-Assumptions}:]The system shall set the known values as follows: $m$, $k$, $E$, ${t_{d}}$ following A4, $LDF$ (from \hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}), LSF following A5, $h$ (from \hyperref[DD:min.thick]{Definition~DD:min.thick}), $GTF$ (from \hyperref[DD:gTF]{Definition~DD:gTF}), $SD$ (from \hyperref[DD:standOffDist]{Definition~DD:standOffDist}), and $AR$ (from \hyperref[DD:aspect.ratio]{Definition~DD:aspect.ratio}).
-\end{description}
+\begin{itemize}
+\item[R2:]The system shall set the known values as follows:
+          \begin{itemize}
+          \item{$m$, $k$, $E$, ${t_{d}}$ following A4}
+          \item{$LDF$ (from \hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor})}
+          \item{LSF following A5}
+          \item{$h$ (from \hyperref[DD:min.thick]{Definition~DD:min.thick})}
+          \item{$GTF$ (from \hyperref[DD:gTF]{Definition~DD:gTF})}
+          \item{$SD$ (from \hyperref[DD:standOffDist]{Definition~DD:standOffDist})}
+          \item{$AR$ (from \hyperref[DD:aspect.ratio]{Definition~DD:aspect.ratio})}
+          \end{itemize}
+\end{itemize}
 \begin{description}
 \item[\refstepcounter{reqnum}\rthereqnum\label{Check-Input-with-Data\_Constraints}:]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DataConstraints}. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.
 \end{description}

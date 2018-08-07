@@ -675,18 +675,18 @@ This problem is small in size and relatively simple, so performance is not a pri
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. Table~\ref{Table:TraceyRI} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:TraceyRIs} shows the dependencies of instance models, requirements, and data constraints on each other. Table~\ref{Table:TraceyAI} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
 \begin{longtable}{l l l l l l l}
 \toprule
-& T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) & GD1 (\hyperref[GD:nwtnCooling]{Definition~GD:nwtnCooling}) & GD2 (\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}) & DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) & IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) & IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr})
+ & T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) & GD1 (\hyperref[GD:nwtnCooling]{Definition~GD:nwtnCooling}) & GD2 (\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}) & DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) & IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) & IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr})
 \\
 \midrule
 T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) &  &  &  &  &  & 
 \\
 GD1 (\hyperref[GD:nwtnCooling]{Definition~GD:nwtnCooling}) &  &  &  &  &  & 
 \\
-GD2 (\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}) & X &  &  &  &  &  
+GD2 (\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}) & X &  &  &  &  & 
 \\
 DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) &  & X &  &  &  & 
 \\
-IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) &  &  & X & X &  &  
+IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) &  &  & X & X &  & 
 \\
 IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) &  &  &  &  &  & 
 \\
@@ -696,7 +696,7 @@ IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) &  &  &  &  &  &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l}
 \toprule
-& IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) & IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) & Data Constraints (Table~\ref{Table:InDataConstraints}) & R1 (Blank~\ref{Input-Inital-Values}) & R2 (Blank~\ref{Find-Mass}) & R3 (Blank~\ref{Check-Inputs-Satisfy-Physical-Constraints}) & R4 (Blank~\ref{Output-Input-Derivied-Quantities}) & R5 (Blank~\ref{Calculate-Temperature-Water-Over-Time}) & R6 (Blank~\ref{Calculate-Change-Heat.Energy-Water-Time})
+ & IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) & IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) & Data Constraints (Table~\ref{Table:InDataConstraints}) & R1 (Blank~\ref{Input-Inital-Values}) & R2 (Blank~\ref{Find-Mass}) & R3 (Blank~\ref{Check-Inputs-Satisfy-Physical-Constraints}) & R4 (Blank~\ref{Output-Input-Derivied-Quantities}) & R5 (Blank~\ref{Calculate-Temperature-Water-Over-Time}) & R6 (Blank~\ref{Calculate-Change-Heat_Energy-Water-Time})
 \\
 \midrule
 IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) &  &  &  &  &  &  &  &  & 
@@ -713,7 +713,7 @@ R4 (Blank~\ref{Output-Input-Derivied-Quantities}) &  &  &  & X & X &  &  &  &
 \\
 R5 (Blank~\ref{Calculate-Temperature-Water-Over-Time}) & X &  &  &  &  &  &  &  & 
 \\
-R6 (Blank~\ref{Calculate-Change-Heat.Energy-Water-Time}) &  & X &  &  &  &  &  &  & 
+R6 (Blank~\ref{Calculate-Change-Heat_Energy-Water-Time}) &  & X &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}

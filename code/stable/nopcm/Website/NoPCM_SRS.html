@@ -892,7 +892,7 @@ Heat-Transfer-Coeffs-Constant: All heat transfer coefficients are constant over 
 <ul class="hide-list-style">
 <li>
 <div id="A:Constant-Water-Temp-Across-Tank">
-Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [GD2, <a href=#DD:ht.flux.P>DD:ht.flux.P</a>].
+Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [GD2, <a href=#DD:ht.flux.P>DD: ht_flux_P</a>].
 </div>
 </li>
 </ul>
@@ -913,21 +913,21 @@ Specific-Heat-Energy-Constant-over-Volume: The specific heat capacity of water h
 <ul class="hide-list-style">
 <li>
 <div id="A:Newton-Law-Convective-Cooling-Coil-Water">
-Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling applies between the heating coil and the water [<a href=#DD:ht.flux.C>DD:ht.flux.C</a>].
+Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling applies between the heating coil and the water [<a href=#DD:ht.flux.C>DD: ht_flux_C</a>].
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Temp-Heating-Coil-Constant-over-Time">
-Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time [<a href=#DD:ht.flux.C>DD:ht.flux.C</a>].
+Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time [<a href=#DD:ht.flux.C>DD: ht_flux_C</a>].
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Temp-Heating-Coil-Constant-over-Length">
-Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length [<a href=#DD:ht.flux.C>DD:ht.flux.C</a>].
+Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length [<a href=#DD:ht.flux.C>DD: ht_flux_C</a>].
 </div>
 </li>
 </ul>
@@ -1000,7 +1000,7 @@ Conservation of thermal energy
 Equation
 </th>
 <td>
-<div id="Eqn:t1ConsThermE">
+<div id="Eqn:T:t1ConsThermE">
 <div class="equation">
 <em>&minus;∇&sdot;<b>q</b>&plus;g = ρ&#8239;C&#8239;<div class="fraction">
 <span class="fup">
@@ -1113,7 +1113,7 @@ W/m<sup>2</sup>
 Equation
 </th>
 <td>
-<div id="Eqn:nwtnCooling">
+<div id="Eqn:GD:nwtnCooling">
 <div class="equation">
 <em>q(t) = h&#8239;ΔT(t)</em>
 </div>
@@ -1190,7 +1190,7 @@ Simplified rate of change of temperature
 Equation
 </th>
 <td>
-<div id="Eqn:rocTempSimp">
+<div id="Eqn:GD:rocTempSimp">
 <div class="equation">
 <em>m&#8239;C&#8239;<div class="fraction">
 <span class="fup">
@@ -1400,7 +1400,7 @@ W/m<sup>2</sup>
 Equation
 </th>
 <td>
-<div id="Eqn:ht_flux_C">
+<div id="Eqn:DD:ht.flux.C">
 <div class="equation">
 <em>q<sub>C</sub> = h<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))</em>
 </div>
@@ -1524,7 +1524,7 @@ Output Constraints
 Equation
 </th>
 <td>
-<div id="Eqn:eBalanceOnWtr">
+<div id="Eqn:IM:eBalanceOnWtr">
 <div class="equation">
 <em><div class="fraction">
 <span class="fup">
@@ -1624,7 +1624,7 @@ d&#8239;t
 </div>
 </div>
 <p class="paragraph">
-Using <a href=#DD:ht.flux.C>DD:ht.flux.C</a> , this can be written as:
+Using <a href=#DD:ht.flux.C>DD: ht_flux_C</a> , this can be written as:
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -1738,7 +1738,7 @@ Output Constraints
 Equation
 </th>
 <td>
-<div id="Eqn:heatEInWtr">
+<div id="Eqn:IM:heatEInWtr">
 <div class="equation">
 <em>E<sub>W</sub>(t) = C<sub>W</sub>&#8239;m<sub>W</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>init</sub>)</em>
 </div>
@@ -2291,7 +2291,7 @@ GD1 (<a href=#GD:nwtnCooling>GD: nwtnCooling</a>)
 GD2 (<a href=#GD:rocTempSimp>GD: rocTempSimp</a>)
 </th>
 <th>
-DD1 (<a href=#DD:ht.flux.C>DD: ht.flux.C</a>)
+DD1 (<a href=#DD:ht.flux.C>DD: ht_flux_C</a>)
 </th>
 <th>
 IM1 (<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>)
@@ -2371,7 +2371,7 @@ X
 </tr>
 <tr>
 <td>
-DD1 (<a href=#DD:ht.flux.C>DD: ht.flux.C</a>)
+DD1 (<a href=#DD:ht.flux.C>DD: ht_flux_C</a>)
 </td>
 <td>
 
@@ -2456,7 +2456,7 @@ IM1 (<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>)
 IM2 (<a href=#IM:heatEInWtr>IM: heatEInWtr</a>)
 </th>
 <th>
-Data Constraints (<a href=#Table:InDataConstraints> InDataConstraints</a>)
+Data Constraints (<a href=#Table:InDataConstraints>InDataConstraints</a>)
 </th>
 <th>
 R1 (<a href=#Input-Inital-Values>Input-Inital-Values</a>)
@@ -2474,7 +2474,7 @@ R4 (<a href=#Output-Input-Derivied-Quantities>Output-Input-Derivied-Quantities</
 R5 (<a href=#Calculate-Temperature-Water-Over-Time>Calculate-Temperature-Water-Over-Time</a>)
 </th>
 <th>
-R6 (<a href=#Calculate-Change-Heat.Energy-Water-Time> Calculate-Change-Heat.Energy-Water-Time</a>)
+R6 (<a href=#Calculate-Change-Heat_Energy-Water-Time>Calculate-Change-Heat_Energy-Water-Time</a>)
 </th>
 </tr>
 <tr>
@@ -2703,7 +2703,7 @@ X
 </tr>
 <tr>
 <td>
-R6 (<a href=#Calculate-Change-Heat.Energy-Water-Time> Calculate-Change-Heat.Energy-Water-Time</a>)
+R6 (<a href=#Calculate-Change-Heat_Energy-Water-Time>Calculate-Change-Heat_Energy-Water-Time</a>)
 </td>
 <td>
 
@@ -2930,7 +2930,7 @@ X
 </tr>
 <tr>
 <td>
-DD1 (<a href=#DD:ht.flux.C>DD: ht.flux.C</a>)
+DD1 (<a href=#DD:ht.flux.C>DD: ht_flux_C</a>)
 </td>
 <td>
 
@@ -3118,7 +3118,7 @@ X
 </tr>
 <tr>
 <td>
-LC2 (<a href=#LC:Temperature-Coil-Variable-Over-Length>LC:  Temperature-Coil-Variable-Over-Length</a>)
+LC2 (<a href=#LC:Temperature-Coil-Variable-Over-Length>LC: Temperature-Coil-Variable-Over-Length</a>)
 </td>
 <td>
 
@@ -3165,7 +3165,7 @@ X
 </tr>
 <tr>
 <td>
-LC3 (<a href=#LC:Discharging-Tank>LC:  Discharging-Tank</a>)
+LC3 (<a href=#LC:Discharging-Tank>LC: Discharging-Tank</a>)
 </td>
 <td>
 
@@ -3212,7 +3212,7 @@ X
 </tr>
 <tr>
 <td>
-LC4 (<a href=#LC:Tank-Lose-Heat>LC:  Tank-Lose-Heat</a>)
+LC4 (<a href=#LC:Tank-Lose-Heat>LC: Tank-Lose-Heat</a>)
 </td>
 <td>
 

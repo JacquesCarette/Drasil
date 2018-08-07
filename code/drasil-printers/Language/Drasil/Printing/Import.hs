@@ -61,22 +61,22 @@ processExpo :: Int -> (Int, Int)
 processExpo a 
   | a == 0 = (3, -3)
   | a == 1 = (1, 0)
-  | a == -1 = (2, -3)
   | a == 2 = (2, 0)
+  | a == -1 = (3, -3) 
   | a == -2 = (1, -3)
   | a > 0 && mod (a-1)  3 == 0 = (1, a-1)
   | a > 0 && mod (a-1)  3 == 1 = (2, a-2)
   | a > 0 && mod (a-1)  3 == 2 = (3, a-3)
-  | a < 0 && mod (-a+1) 3 == 0 = (1, a-1)
-  | a < 0 && mod (-a+1) 3 == 1 = (1, a-1)
-  | a < 0 && mod (-a+1) 3 == 2 = (2, a-2)
+  | a < 0 && mod (-a) 3 == 0 = (3, a-3)
+  | a < 0 && mod (-a) 3 == 1 = (2, a-2)
+  | a < 0 && mod (-a) 3 == 2 = (1, a-1)
 
 -- | expr translation function from Drasil to layout AST
 expr :: (HasSymbolTable s, HasPrintingOptions s) => Expr -> s -> P.Expr
 expr (Dbl d)           sm = case sm ^. getSetting of
   Engineering -> P.Row $ digitsProcess (map toInteger $ fst $ floatToDigits 10 d)
      (fst $ processExpo $ snd $ floatToDigits 10 d) 0
-     (toInteger $ snd $ floatToDigits 10 d)
+     (toInteger $ snd $ processExpo $ snd $ floatToDigits 10 d)
   _           ->  P.DblSc d
 expr (Int i)            _ = P.Int i
 expr (Str s)            _ = P.Str   s

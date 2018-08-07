@@ -19,6 +19,7 @@ data ReqType = FR  -- ^ Functional Requirement
 
 -- | For building references. Defines the possible type of reference.
 data RefType = Tab    -- ^ Table
+             | Lst   -- ^ List
              | Fig    -- ^ Figure
              | Sect   -- ^ Section
              | Def DType  -- ^ Definition (includes theoretical models) (DType used to set shortnames)
@@ -36,6 +37,7 @@ data RefType = Tab    -- ^ Table
 
 instance Show RefType where
   show Tab    = "Table"
+  show Lst    = "List"
   show Fig    = "Figure"
   show Sect   = "Section"
   show Label  = "Section" --FIXME: hack until section has labels
@@ -43,8 +45,8 @@ instance Show RefType where
   show (Def _)= "Definition"
   show (Req _)= "Requirement"
   show Assump = "Assumption"
-  show LCh     = "Likely Change"
-  show UnCh     = "Unlikely Change"
+  show LCh    = "Likely Change"
+  show UnCh   = "Unlikely Change"
   show Cite   = "Citation"
   show Goal   = "Goal Statement"
   show PSD    = "Physical System Description"

@@ -27,6 +27,7 @@ mkLabel lblUID ra sn rtype = Lbl lblUID
 --Do not export
 getAcc :: RefType -> String
 getAcc Tab       = "Table:"
+getAcc Lst       = "List:"
 getAcc Fig       = "Figure:"
 getAcc Sect      = "Sec:"
 getAcc (Def dtp) = getDefName dtp
@@ -58,7 +59,7 @@ repUnd :: Char -> String
 repUnd '_' = "."
 repUnd c = c : []
 
--- for when reference address and the display should be the different
+-- for when reference address and the display should be different
 mkLabelRA' :: String -> String -> RefType -> Label
 mkLabelRA' ref shortn rt = mkLabel (ref ++ "Label") ref shortn rt
 

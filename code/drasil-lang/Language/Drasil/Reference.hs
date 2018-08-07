@@ -271,7 +271,7 @@ temp (Requirement r)       = rType r
 temp (Assumption a)        = rType a
 temp (Change l)            = rType l
 temp (EqnBlock _)          = EqnB
-temp (Enumeration _)       = error "Shouldn't reference lists" 
+temp (Enumeration _)       = Lst 
 temp (Paragraph _)         = error "Shouldn't reference paragraphs"
 temp (Bib _)               = error $
     "Bibliography list of references cannot be referenced. " ++
@@ -348,8 +348,8 @@ customRef r n = Ref (rType r) (refAdd r) (getAcc' (rType r) n)
     getAcc' LCh       sn = shortname' $ "LC: " ++ (getStringSN sn)
     getAcc' UnCh      sn = shortname' $ "UC: " ++ (getStringSN sn)
     getAcc' Assump    sn = shortname' $ "A: " ++ (getStringSN sn)
-    getAcc' Goal      sn = shortname' $ "GS:" ++ (getStringSN sn)
-    getAcc' PSD       sn = shortname' $ "PS:" ++ (getStringSN sn)
+    getAcc' Goal      sn = shortname' $ "GS: " ++ (getStringSN sn)
+    getAcc' PSD       sn = shortname' $ "PS: " ++ (getStringSN sn)
     getAcc' _         sn = sn
 
 -- This works for passing the correct id to the reference generator for Assumptions,

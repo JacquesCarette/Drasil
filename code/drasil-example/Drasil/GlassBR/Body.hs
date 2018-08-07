@@ -507,14 +507,14 @@ outputDataConstraints = outDataConstTbl [prob_br]
 {--Functional Requirements--}
 
 funcReqsList :: [Contents]
-funcReqsList = funcReqsListOfReqs ++ funcReqsR6 ++ [LlC funcReqsR1Table]
+funcReqsList = funcReqsListOfReqs ++ [LlC funcReqsR1Table]
 
 funcReqsR1, funcReqsR2, funcReqsR3, funcReqsR4, funcReqsR5 :: LabelledContent
 req1Desc, req2Desc, req3Desc, req4Desc :: Sentence
 req5Desc :: NamedChunk -> Sentence
 
 funcReqsListOfReqs :: [Contents]
-funcReqsListOfReqs = map LlC $ [funcReqsR1, funcReqsR2, funcReqsR3, funcReqsR4, funcReqsR5]
+funcReqsListOfReqs = map LlC $ [funcReqsR1, funcReqsR2, funcReqsR3, funcReqsR4, funcReqsR5, funcReqsR6]
 
 funcReqsR1 = mkRequirement "funcReqsR1" req1Desc "Input-Glass-Props"
 funcReqsR2 = mkRequirement "funcReqsR2" req2Desc "System-Set-Values-Following-Assumptions"
@@ -585,16 +585,22 @@ funcReqsR6_pulledList :: [QDefinition]
 funcReqsR6_pulledList = [risk, strDisFac, nonFL, glaTyFac, dimLL, 
   tolPre, tolStrDisFac, hFromt, aspRat]
 
-funcReqsR6 :: [Contents] --FIXME: Issue #327
-funcReqsR6 = map (UlC . ulcc) [Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
-  S "the following" +: plural quantity)
-  $ Bullet $ noRefs $
-    map (\(a, d) -> Flat $ at_start a +:+ sParen (ch a) +:+
-    sParen (makeRef d)) (zip testing gbrIMods)
-    ++
-    map (\d -> Flat $ at_start d +:+ sParen (ch d) +:+
-    sParen (makeRef d)) funcReqsR6_pulledList
-    , Nothing)]]
+funcReqsR6 :: LabelledContent --FIXME: Issue #327
+funcReqsR6 = llcc funcReqs6Label $
+  Enumeration $ Simple $ 
+  [(acroR 6
+   , Nested (titleize output_ +:+
+     S "the following" +: plural quantity)
+     $ Bullet $ noRefs $
+     map (\(a, d) -> Flat $ at_start a +:+ sParen (ch a) +:+
+     sParen (makeRef d)) (zip testing gbrIMods)
+     ++
+     map (\d -> Flat $ at_start d +:+ sParen (ch d) +:+
+     sParen (makeRef d)) funcReqsR6_pulledList
+   , Just $ (getAdd (funcReqs6Label ^. getRefAdd)))]
+
+funcReqs6Label :: Label
+funcReqs6Label = mkLabelSame "output_quantities" Lst
 
 {--Nonfunctional Requirements--}
 
@@ -641,8 +647,9 @@ traceMatsAndGraphsDataCons  = ["Data Constraints"]
 traceMatsAndGraphsDataConsRef = [makeRef SRS.datConLabel]
 
 traceMatsAndGraphsFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-traceMatsAndGraphsFuncReqRef = map makeRef [funcReqsR1, funcReqsR2, funcReqsR3, funcReqsR4, funcReqsR5] --fixme: should be reqchunks?
-                                                                                                        --FIXME: revisit this list
+traceMatsAndGraphsFuncReqRef = map makeRef [funcReqsR1, funcReqsR2, funcReqsR3,
+  funcReqsR4, funcReqsR5, funcReqsR6]                             --FIXME: should be reqchunks?
+                                                                  --FIXME: revisit this list
 
 traceMatsAndGraphsA = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
 traceMatsAndGraphsARef = map makeRef newAssumptions

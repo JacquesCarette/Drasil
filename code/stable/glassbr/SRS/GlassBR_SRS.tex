@@ -995,21 +995,21 @@ This section provides the functional requirements, the business tasks that the s
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:Check-Glass-Safety}:]If $is\_safePb$ ∧ $is\_safeLR$ (from \hyperref[T:isSafePb]{Definition~T:isSafePb} and \hyperref[T:isSafeLR]{Definition~T:isSafeLR}) are true, output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
 \end{description}
 \begin{itemize}
-\item[R6:]Output the following quantities:
-          \begin{itemize}
-          \item{Probability of breakage (${P_{b}}$) (\hyperref[IM:probOfBr]{Definition~IM:probOfBr})}
-          \item{Load resistance ($LR$) (\hyperref[IM:calOfCap]{Definition~IM:calOfCap})}
-          \item{Applied load (demand) ($q$) (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand})}
-          \item{Risk of failure ($B$) (\hyperref[DD:risk.fun]{Definition~DD:risk.fun})}
-          \item{Stress distribution factor (Function) ($J$) (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac})}
-          \item{Non-factored load ($NFL$) (\hyperref[DD:nFL]{Definition~DD:nFL})}
-          \item{Glass type factor ($GTF$) (\hyperref[DD:gTF]{Definition~DD:gTF})}
-          \item{Dimensionless load ($\hat{q}$) (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad})}
-          \item{Tolerable load (${\hat{q}_{tol}}$) (\hyperref[DD:tolLoad]{Definition~DD:tolLoad})}
-          \item{Stress distribution factor (Function) based on Pbtol (${J_{tol}}$) (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol})}
-          \item{Minimum thickness ($h$) (\hyperref[DD:min.thick]{Definition~DD:min.thick})}
-          \item{Aspect ratio ($AR$) (\hyperref[DD:aspect.ratio]{Definition~DD:aspect.ratio})}
-          \end{itemize}
+\item[R6:\label{List:output.quantities}]Output the following quantities:
+                                        \begin{itemize}
+                                        \item{Probability of breakage (${P_{b}}$) (\hyperref[IM:probOfBr]{Definition~IM:probOfBr})}
+                                        \item{Load resistance ($LR$) (\hyperref[IM:calOfCap]{Definition~IM:calOfCap})}
+                                        \item{Applied load (demand) ($q$) (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand})}
+                                        \item{Risk of failure ($B$) (\hyperref[DD:risk.fun]{Definition~DD:risk.fun})}
+                                        \item{Stress distribution factor (Function) ($J$) (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac})}
+                                        \item{Non-factored load ($NFL$) (\hyperref[DD:nFL]{Definition~DD:nFL})}
+                                        \item{Glass type factor ($GTF$) (\hyperref[DD:gTF]{Definition~DD:gTF})}
+                                        \item{Dimensionless load ($\hat{q}$) (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad})}
+                                        \item{Tolerable load (${\hat{q}_{tol}}$) (\hyperref[DD:tolLoad]{Definition~DD:tolLoad})}
+                                        \item{Stress distribution factor (Function) based on Pbtol (${J_{tol}}$) (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol})}
+                                        \item{Minimum thickness ($h$) (\hyperref[DD:min.thick]{Definition~DD:min.thick})}
+                                        \item{Aspect ratio ($AR$) (\hyperref[DD:aspect.ratio]{Definition~DD:aspect.ratio})}
+                                        \end{itemize}
 \end{itemize}
 \begin{longtabu}{l X[l] l}
 \toprule
@@ -1108,7 +1108,7 @@ DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) &  &  &  &  &  &  & X &  &  &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:isSafePb]{Definition~T:isSafePb}) & T2 (\hyperref[T:isSafeLR]{Definition~T:isSafeLR}) & IM1 (\hyperref[IM:probOfBr]{Definition~IM:probOfBr}) & IM2 (\hyperref[IM:calOfCap]{Definition~IM:calOfCap}) & IM3 (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) & DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) & DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & Data Constraints (Section~\ref{Sec:DataConstraints}) & R1 (R\ref{FR:Input-Glass-Props}) & R2 (R\ref{FR:System-Set-Values-Following-Assumptions}) & R3 (R\ref{FR:Check-Input-with-Data.Constraints}) & R4 (R\ref{FR:Output-Values-and-Known-Quantities}) & R5 (R\ref{FR:Check-Glass-Safety})
+ & T1 (\hyperref[T:isSafePb]{Definition~T:isSafePb}) & T2 (\hyperref[T:isSafeLR]{Definition~T:isSafeLR}) & IM1 (\hyperref[IM:probOfBr]{Definition~IM:probOfBr}) & IM2 (\hyperref[IM:calOfCap]{Definition~IM:calOfCap}) & IM3 (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) & DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) & DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & Data Constraints (Section~\ref{Sec:DataConstraints}) & R1 (R\ref{FR:Input-Glass-Props}) & R2 (R\ref{FR:System-Set-Values-Following-Assumptions}) & R3 (R\ref{FR:Check-Input-with-Data.Constraints}) & R4 (R\ref{FR:Output-Values-and-Known-Quantities}) & R5 (R\ref{FR:Check-Glass-Safety}) & R6 (List~\ref{List:output.quantities})
 \\
 \midrule
 R1 (in R\ref{FR:Input-Glass-Props}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1121,7 +1121,7 @@ R4 (in R\ref{FR:Output-Values-and-Known-Quantities}) &  &  &  &  &  &  &  &  &  
 \\
 R5 (in R\ref{FR:Check-Glass-Safety}) & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R6 (in Section~\ref{Sec:FRs}) &  &  & X & X & X &  & X & X & X & X & X & X & X &  &  &  &  &  &  & 
+R6 (in List~\ref{List:output.quantities}) &  &  & X & X & X &  & X & X & X & X & X & X & X &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements and Other Items}
@@ -1178,7 +1178,7 @@ R4 (R\ref{FR:Output-Values-and-Known-Quantities}) &  &  &  &  &  &  &  &
 \\
 R5 (R\ref{FR:Check-Glass-Safety}) &  &  &  &  &  &  &  & 
 \\
-R6 (Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  & 
+R6 (List~\ref{List:output.quantities}) &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}

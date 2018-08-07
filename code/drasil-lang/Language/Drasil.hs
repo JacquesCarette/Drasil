@@ -197,7 +197,7 @@ module Language.Drasil (
   -- PhysSystDesc
   , PhysSystDesc, pSysDes, psd
   -- RefTypes
-  , RefAdd, RefType(Cite, Tab, EqnB, LCh, UnCh, Req, Def)
+  , RefAdd, RefType(Cite, Tab, EqnB, LCh, UnCh, Req, Def, Lst)
   -- Label
   , Label 
   , mkLabelRA', mkLabelSame, mkEmptyLabel
@@ -339,7 +339,7 @@ import Language.Drasil.Misc -- all of it
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
-import Language.Drasil.RefTypes(RefAdd, RefType(Cite, EqnB, Tab, LCh, UnCh, Req, Def),
+import Language.Drasil.RefTypes(RefAdd, RefType(Cite, EqnB, Tab, LCh, UnCh, Req, Def, Lst),
   DType(..))
 import Language.Drasil.Label (mkLabelRA', mkLabelSame, 
   mkEmptyLabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec, modifyLabelEqn)

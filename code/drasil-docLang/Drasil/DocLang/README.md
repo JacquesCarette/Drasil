@@ -1,7 +1,13 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 25, 2018
+Last updated: August 7, 2018
 --------------------------------------------------
+
+GenBuilders.hs
+  - Contains functions for building a general document
+
+MIS.hs
+  - Contains functions for building a Module Interface Specification
 
 README.md
   - This file

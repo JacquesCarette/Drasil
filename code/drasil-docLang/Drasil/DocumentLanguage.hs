@@ -19,9 +19,10 @@ import qualified Data.Map as Map (elems)
 import Drasil.Sections.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
 import Drasil.Sections.TableOfSymbols (table)
 import Drasil.Sections.TableOfUnits (table_of_units)
+import Drasil.DocLang.GenBuilders (reference, tOfSymb)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn, genSysDes, 
-  inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec, stakeholder,
-  thModel, tOfSymb, userChar,dataDefn, offShelfSol, propCorSol)
+  inModel, likeChg, unlikeChg, probDesc, solCharSpec, stakeholder,
+  thModel, userChar,dataDefn, offShelfSol, propCorSol)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)
@@ -278,7 +279,7 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
     mkSubRef SI {_sysinfodb = db} (TUnits' con) =
         table_of_units (sortBy comp_unitdefn $ Map.elems $ db ^. unitTable) (tuIntro con)
     mkSubRef SI {_quants = v} (TSymb con) =
-      SRS.tOfSymb 
+      tOfSymb 
       [tsIntro con, LlC $ table Equational (
                 sortBy (compsy `on` eqSymb) $
                 filter (`hasStageSymbol` Equational)
@@ -291,7 +292,7 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
 -- | Helper for creating the table of symbols
 mkTSymb :: (Quantity e, Concept e, Eq e) =>
   [e] -> LFunc -> [TSIntro] -> Section
-mkTSymb v f c = SRS.tOfSymb [tsIntro c,
+mkTSymb v f c = tOfSymb [tsIntro c,
   LlC $ table Equational
     (sortBy (compsy `on` eqSymb) $ filter (`hasStageSymbol` Equational) (nub v))
     (lf f)] []
@@ -554,7 +555,7 @@ mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortByS
 
 -- | Helper for making the bibliography section
 mkBib :: BibRef -> Section
-mkBib bib = SRS.reference [LlC $ llcc mkEmptyLabel $ Bib bib] []
+mkBib bib = reference [LlC $ llcc mkEmptyLabel $ Bib bib] []
 
 {--}
 

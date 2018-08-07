@@ -7,7 +7,8 @@ module Drasil.Sections.Introduction
    ) where
 
 import Language.Drasil
-import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc)
+import Drasil.DocLang.GenBuilders (intro)
+import qualified Drasil.DocLang.SRS as SRS (prpsOfDoc, scpOfReq, charOfIR, orgOfDoc)
 import Data.Drasil.SentenceStructures (ofThe, ofThe',
   foldlList, SepType(Comma), FoldType(List), foldlsC, refineChain, foldlSP)
 import Data.Drasil.Concepts.Documentation as Doc (goal, organization, thModel, inModel, goalStmt,
@@ -58,7 +59,7 @@ introductionSubsections = foldlList Comma List (map (\(x,y) -> x `ofThe` y)
 -- programDefinition  - Sentence definition of the specific example
 -- subSections        - List of subsections for this section
 introductionSection :: Sentence -> Sentence -> [Section] -> Section
-introductionSection problemIntroduction programDefinition subSections = SRS.intro 
+introductionSection problemIntroduction programDefinition subSections = intro 
   [mkParagraph problemIntroduction, (overviewParagraph programDefinition)] subSections
 
 

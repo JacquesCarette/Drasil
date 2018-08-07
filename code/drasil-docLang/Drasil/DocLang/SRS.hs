@@ -1,27 +1,28 @@
 module Drasil.DocLang.SRS
- (doc, doc', intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient,
+ (doc, doc', prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient,
   genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
   probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assumpt, thModel,
   genDefn, inModel, dataDefn, datCon, require, nonfuncReq, funcReq, likeChg, unlikeChg, 
-  traceyMandG, appendix, reference, propCorSol, offShelfSol, valsOfAuxCons,
+  appendix, propCorSol, offShelfSol, valsOfAuxCons,
   physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
   inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
   indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel,
-  tOfSymb, srsDom) where
+  srsDom) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
 --May want to combine SRS-specific functions into this file as well (ie. OrganizationOfSRS) to make it more Recipe-like.
 
 import Language.Drasil
+import Drasil.DocLang.GenBuilders (section')
 import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, 
     assumption, charOfIR, client, customer, consVals, dataDefn, datumConstraint, 
     functionalRequirement, genDefn, generalSystemDescription, goalStmt, 
-    indPRCase, inModel, introduction, likelyChg, unlikelyChg, nonfunctionalRequirement,
+    indPRCase, inModel, likelyChg, unlikelyChg, nonfunctionalRequirement,
     offShelfSolution, orgOfDoc, physSyst, prodUCTable, problemDescription, 
-    propOfCorSol, prpsOfDoc, reference, requirement, scpOfReq, scpOfTheProj,
+    propOfCorSol, prpsOfDoc, requirement, scpOfReq, scpOfTheProj,
     solutionCharSpec, specificsystemdescription, srs, stakeholder, sysCont, 
-    systemConstraint, termAndDef, terminology, thModel, traceyMandG, tOfSymb, 
+    systemConstraint, termAndDef, terminology, thModel, 
     userCharacteristic)
 import Data.Drasil.Phrase (for'')
 
@@ -42,13 +43,12 @@ doc sys authors secs = Document (Doc.srs `forTT` sys) authors secs
 doc' sys authors secs = Document (Doc.srs `forTT'` sys) authors secs
 
 -- | Standard SRS section builders
-intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
+prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
   genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
   probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assumpt, thModel,
-  genDefn, inModel, dataDefn, datCon, propCorSol, require, nonfuncReq, funcReq, likeChg, traceyMandG, tOfSymb,
-  appendix, reference, offShelfSol, valsOfAuxCons, unlikeChg :: [Contents] -> [Section] -> Section
+  genDefn, inModel, dataDefn, datCon, propCorSol, require, nonfuncReq, funcReq, likeChg,
+  appendix, offShelfSol, valsOfAuxCons, unlikeChg :: [Contents] -> [Section] -> Section
 
-intro       cs ss = section' (titleize Doc.introduction) cs ss "Intro"
 prpsOfDoc   cs ss = section' (titleize Doc.prpsOfDoc) cs ss "DocPurpose"
 scpOfReq    cs ss = section' (titleize Doc.scpOfReq)  cs ss "ReqsScope"
 charOfIR    cs ss = section' (titleize' Doc.charOfIR) cs ss "ReaderChars"
@@ -90,29 +90,15 @@ funcReq     cs ss = section' (titleize' Doc.functionalRequirement) cs ss "FRs" -
 likeChg     cs ss = section' (titleize' Doc.likelyChg)        cs ss "LCs" --FIXME: label is available
 unlikeChg   cs ss = section' (titleize' Doc.unlikelyChg)      cs ss "UCs" --FIXME: label is available
 
-traceyMandG cs ss = section' (titleize' Doc.traceyMandG)      cs ss "TraceMatrices"
-
 valsOfAuxCons cs ss = section' (titleize Doc.consVals)        cs ss "AuxConstants" --FIXME: label is available
 
 appendix    cs ss = section' (titleize Doc.appendix)          cs ss "Appendix"
 
-reference   cs ss = section' (titleize' Doc.reference)        cs ss "References" --FIXME: label is available
 offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "ExistingSolns"
-
-tOfSymb cs ss = section' (titleize Doc.tOfSymb) cs ss "ToS" --FIXME: label is available
 
 --Root SRS Domain
 srsDom :: CommonConcept
 srsDom = dcc' "srsDom" (Doc.srs ^. term) "srs" ""
-
---function that sets the shortname of each section to be the reference address
-section' :: Sentence -> [Contents] -> [Section] -> RefAdd -> Section
-section' a b c d = section a b c d (shortname' $ getStr a) --FIXME: getStr hack 
-  where
-    getStr :: Sentence -> String
-    getStr (S s) = s
-    getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
-    getStr _ = error "Term is not a string"
 
 --Labels--
 physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 

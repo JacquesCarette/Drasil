@@ -8,11 +8,12 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (purpose, component, column, label, reference,
   traceyGraph, traceyMatrix, item, dependency)
 import Data.Drasil.Concepts.Math (matrix, graph)
+import Drasil.DocLang.GenBuilders (traceyMandG)
 import qualified Drasil.DocLang.SRS as SRS
 
 -- wrapper for traceMGIntro
 traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> [Section] -> Section
-traceMGF refs trailing otherContents subSec = SRS.traceyMandG ((traceMIntro refs trailing):otherContents) subSec
+traceMGF refs trailing otherContents subSec = traceyMandG ((traceMIntro refs trailing):otherContents) subSec
 
 -- generalized traceability matrix and graph introduction: variables are references to the three tables
 -- generally found in this section (in order of being mentioned)

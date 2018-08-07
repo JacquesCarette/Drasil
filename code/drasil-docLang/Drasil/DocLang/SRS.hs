@@ -116,7 +116,7 @@ section' a b c d = section a b c (mkLabelRASec d (toString a))
 --FIXME: create using section information somehow?
 physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
   inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
-  indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel :: Label
+  indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel, solCharSpecLabel :: Label
 physSystLabel      = mkLabelRASec "PhysSyst" "Physical System Description"
 datConLabel        = mkLabelRASec "DataConstraints" "Data Constraints"
 genDefnLabel       = mkLabelRASec "GDs" "General Definitions"

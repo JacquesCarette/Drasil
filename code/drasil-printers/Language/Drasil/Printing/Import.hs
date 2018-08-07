@@ -10,7 +10,7 @@ import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as T
 
-import Language.Drasil.NounPhrase (titleize, phrase)
+import Language.Drasil.NounPhrase (phrase)
 
 -- | Render a Space
 space :: Space -> P.Expr
@@ -288,9 +288,9 @@ layLabelled sm x@(LblC _ (Graph ps w h t))    = T.Graph
 layLabelled sm x@(LblC _ (Defnt dtyp pairs)) = T.Definition 
   dtyp (layPairs pairs) 
   (P.S $ getAdd (x ^. getRefAdd))
-  where layPairs = map (\(x,y) -> (x, map (lay sm) y))
+  where layPairs = map (\(x',y) -> (x', map (lay sm) y))
 layLabelled sm (LblC _ (Paragraph c))           = T.Paragraph (spec sm c)
-layLabelled sm (LblC _ (Definition c))          = T.Definition c [("nolabel!", [T.Paragraph $ P.EmptyS])] (P.S "nolabel8")
+layLabelled _  (LblC _ (Definition c))          = T.Definition c [("nolabel!", [T.Paragraph $ P.EmptyS])] (P.S "nolabel8")
 layLabelled sm (LblC _ (Enumeration cs))        = T.List $ makeL sm cs
 layLabelled sm (LblC _ (Bib bib))               = T.Bib $ map (layCite sm) bib
 
@@ -301,7 +301,7 @@ layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
   ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S "nolabel0") b (spec sm t)
 layUnlabelled sm (Paragraph c)          = T.Paragraph (spec sm c)
 layUnlabelled sm (EqnBlock c)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
-layUnlabelled sm (Definition c)       = T.Definition c [("nolabel!", [T.Paragraph $ P.EmptyS])] (P.S "nolabel1")
+layUnlabelled _  (Definition c)       = T.Definition c [("nolabel!", [T.Paragraph $ P.EmptyS])] (P.S "nolabel1")
 layUnlabelled sm (Enumeration cs)       = T.List $ makeL sm cs
 layUnlabelled sm (Figure c f wp)    = T.Figure (P.S "nolabel2") (spec sm c) f wp
 layUnlabelled sm (Requirement r)      = T.ALUR T.Requirement
@@ -362,25 +362,3 @@ item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
 labref :: Maybe RefAdd -> Maybe P.Spec
 labref l = maybe Nothing (\z -> Just $ P.S z) l
 
--- Toggle equation style
-eqnStyle :: Bool -> T.Contents -> T.LayoutObj
-eqnStyle b = if b then T.EqnBlock else T.Paragraph
-
--- | Translates the defining equation from a QDefinition to
--- Printing's version of Sentence
-buildEqn :: HasSymbolTable ctx => ctx -> QDefinition -> P.Spec
-buildEqn sm c = P.E $ mkBOp sm P.Eq (sy c) (c^.equat)
-
--- | Build descriptions in data defs based on required verbosity
-buildDDDescription :: HasSymbolTable ctx => ctx -> QDefinition -> P.Spec
-buildDDDescription m c =
-  if verboseDDDescription then descLines m $ vars (sy c $= c^.equat) m else P.EmptyS
-
--- | Helper for building each line of the description of a data def
-descLines :: (HasSymbolTable ctx, Quantity q) => ctx -> [q] -> P.Spec
-descLines m l = foldr (P.:+:) P.EmptyS $ intersperse P.HARDNL $ map descLine l
-  where
-    descLine vcs = (P.E $ symbol $ eqSymb vcs) P.:+:
-      (P.S " is the " P.:+: (spec m (phrase $ vcs ^. term)) P.:+:
-      maybe P.EmptyS (\a -> P.S " (" P.:+: P.Sy (a ^. usymb) P.:+: P.S ")") 
-            (getUnitLup vcs m))

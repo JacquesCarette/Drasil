@@ -20,8 +20,7 @@ import Drasil.Sections.TableOfSymbols (table)
 import Drasil.Sections.TableOfUnits (table_of_units)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn, genSysDes, 
   inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec, stakeholder,
-  thModel, tOfSymb, userChar, genDefnLabel, thModelLabel, dataDefnLabel, inModelLabel,
-  likeChgLabel, unlikeChgLabel, propCorSol, offShelfSol)
+  thModel, tOfSymb, userChar, genDefnLabel, propCorSol, offShelfSol)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)

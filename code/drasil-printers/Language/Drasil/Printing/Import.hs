@@ -40,6 +40,15 @@ p_space (DiscreteS a)  = "{" ++ (concat $ intersperse ", " a) ++ "}"
 parens :: P.Expr -> P.Expr
 parens = P.Fenced P.Paren P.Paren
 
+mulExpr ::  HasSymbolTable s => [Expr] -> s -> [P.Expr]
+mulExpr (hd1:hd2:tl) sm = case (hd1, hd2) of
+  (a, Int i) ->  [expr' sm (precA Mul) a , P.MO P.Dot] ++ (mulExpr (hd2:tl) sm)
+  (a, Dbl d) ->  [expr' sm (precA Mul) a , P.MO P.Dot] ++ (mulExpr (hd2:tl) sm)
+  (a, b)     ->  [expr' sm (precA Mul) a , P.MO P.Mul] ++ (mulExpr (hd2:tl) sm)
+mulExpr (hd:[])      sm = [expr' sm (precA Mul) hd]
+mulExpr []       sm     = [expr' sm (precA Mul) (Int 1)]
+
+
 -- | expr translation function from Drasil to layout AST
 expr :: HasSymbolTable s => Expr -> s -> P.Expr
 expr (Dbl d)            _ = P.Dbl   d
@@ -48,11 +57,11 @@ expr (Str s)            _ = P.Str   s
 expr (AssocB And l)    sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (precB And)) l
 expr (AssocB Or l)     sm = P.Row $ intersperse (P.MO P.Or ) $ map (expr' sm (precB Or)) l
 expr (AssocA Add l)    sm = P.Row $ intersperse (P.MO P.Add) $ map (expr' sm (precA Add)) l
-expr (AssocA Mul l)    sm = P.Row $ intersperse (P.MO P.Mul) $ map (expr' sm (precA Mul)) l
+expr (AssocA Mul l)    sm = P.Row $ mulExpr l sm
 expr (Deriv Part a b) sm =
   P.Div (P.Row [P.Spec Partial, P.Spc P.Thin, expr a sm])
         (P.Row [P.Spec Partial, P.Spc P.Thin,
-                symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
+                symbol $ eqSymb $ symbLookup b $ sm ^.symbolTable])
 expr (Deriv Total a b)sm =
   P.Div (P.Row [P.Ident "d", P.Spc P.Thin, expr a sm])
         (P.Row [P.Ident "d", P.Spc P.Thin, symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])

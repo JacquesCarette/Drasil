@@ -32,7 +32,7 @@ data RefType = Tab    -- ^ Table
              | Cite   -- ^ Citation
              | Goal   -- ^ Goal Statement
              | PSD    -- ^ Physical System Description
-             | Label    -- ^ Label
+             | Label RefType    -- ^ Label --FIXME: hack (#971)
              | Blank  -- ^ Prefix filler for ConceptInstance
 
 instance Show RefType where
@@ -40,7 +40,7 @@ instance Show RefType where
   show Lst    = "List"
   show Fig    = "Figure"
   show Sect   = "Section"
-  show Label  = "Section" --FIXME: hack until section has labels
+  show (Label x) = show x --FIXME: hack (#971)
   show Mod    = "Module"
   show (Def _)= "Definition"
   show (Req _)= "Requirement"

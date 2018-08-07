@@ -254,8 +254,8 @@ instance Referable ConceptInstance where
 --Should refer to an object WITH a variable.
 --Can be removed once sections have labels.
 instance Referable Label where
-  refAdd lb@(Lbl _ _ _) = getAdd (lb ^. getRefAdd)
-  rType  (Lbl _ _ _) = Label --FIXME: need to know the RefType somehow!
+  refAdd lb@(Lbl _ _ _ _) = getAdd (lb ^. getRefAdd)
+  rType  (Lbl _ _ _ x)    = x --FIXME: is a hack; see #971
 
 instance Referable LabelledContent where
   refAdd (LblC lb _) = getAdd (lb ^. getRefAdd)

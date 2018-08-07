@@ -22,6 +22,7 @@ mkLabel :: String -> String -> String -> RefType -> Label
 mkLabel lblUID ra sn rtype = Lbl lblUID 
   (RefAdd $ concatMap repUnd $ getAcc rtype ++ ensureASCII ra)
   (shortname' sn)
+  rtype --NOT USED
 
 --Determines what text needs to be appended to the ref address
 --Do not export
@@ -40,7 +41,7 @@ getAcc EqnB      = "Eqn:"
 getAcc Cite      = "Cite:"
 getAcc Goal      = "GS:"
 getAcc PSD       = "PS:"
-getAcc Label     = "" --FIXME: is this alright?
+getAcc (Label x) = getAcc x
 
 getReqName :: ReqType -> String
 getReqName FR  = "FR:"
@@ -87,11 +88,11 @@ modifyLabelEqn lb = mkLabel ((getAdd (lb ^. getRefAdd)) ++ "Eqn")
 mkLabelRAFig :: String -> Label
 mkLabelRAFig x = mkLabel (x ++ "Label") x x Fig
 
-mkLabelML :: String -> String -> String -> Label
-mkLabelML i ref shortn = Lbl i (MetaLink $ ensureASCII ref) (shortname' shortn)
+--mkLabelML :: String -> String -> String -> Label
+--mkLabelML i ref shortn = Lbl i (MetaLink $ ensureASCII ref) (shortname' shortn)
 
-mkLabelURI :: String -> String -> String -> Label
-mkLabelURI i ref shortn = Lbl i (URI $ ensureASCII ref) (shortname' shortn)
+--mkLabelURI :: String -> String -> String -> Label
+--mkLabelURI i ref shortn = Lbl i (URI $ ensureASCII ref) (shortname' shortn)
 
 ensureASCII :: String -> String
 ensureASCII s = map (\y -> if isAscii y then y else error "Label needs to be pure ASCII.") s

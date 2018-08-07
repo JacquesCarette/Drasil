@@ -1531,7 +1531,7 @@ Symbol & ${K_{bt}}$
 Units & $\frac{\text{Pa}}{\text{m}}$
 \\ \midrule \\
 Equation & \begin{dmath}
-           {K_{bt}}=\frac{G}{2 \left(1+ν\right)} \frac{0.1}{b}+\frac{{c'}_{i}-σ \tan\left({φ'}_{i}\right)}{|δu|+a}
+           {K_{bt}}=\frac{G}{2 \left(1+ν\right)} \frac{100\cdot{}10^{-3}}{b}+\frac{{c'}_{i}-σ \tan\left({φ'}_{i}\right)}{|δu|+a}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1568,7 +1568,7 @@ Units & $\frac{\text{Pa}}{\text{m}}$
 Equation & \begin{dmath}
            {K_{bn}}=\begin{cases}
 \frac{G \left(1-ν\right)}{\left(1+ν\right) \left(1-2 ν+b\right)}, & ν<0\\
-0.01 \frac{G \left(1-ν\right)}{\left(1+ν\right) \left(1-2 ν+b\right)}+\frac{κ}{δv+A}, & ν\geq{}0
+100\cdot{}10^{-3} \frac{G \left(1-ν\right)}{\left(1+ν\right) \left(1-2 ν+b\right)}+\frac{κ}{δv+A}, & ν\geq{}0
 \end{cases}
            \end{dmath}
 \\ \midrule \\
@@ -1940,7 +1940,7 @@ s_{i}={c'}_{i}-σ_{i} \tan\left({φ'}_{i}\right)
 \end{dmath}
 Previously the value of the shear stiffness ${K_{bt}}$ as seen in equation (28) was unsolvable because the normal stress $σ$ was unknown. With the definition of $σ$ from equation (26) and the definition of displacement shear to the base $δu$ from equation (25), the value of ${K_{bt}}$ becomes solvable:
 \begin{dmath}
-{K_{bt,i}}=\frac{G_{i}}{2 \left(1+ν_{i}\right)} \frac{0.1}{b_{i}}+\frac{{c'}_{i}-σ_{i} \tan\left({φ'}_{i}\right)}{|{δu}_{i}|+a}
+{K_{bt,i}}=\frac{G_{i}}{2 \left(1+ν_{i}\right)} \frac{100\cdot{}10^{-3}}{b_{i}}+\frac{{c'}_{i}-σ_{i} \tan\left({φ'}_{i}\right)}{|{δu}_{i}|+a}
 \end{dmath}
 With shear stiffness ${K_{bt}}$ calculated in equation (28) and shear displacement $δu$ calculated in equation (24) values now known the resistive shear stress acting on the base of a slice $τ$ can be calculated using T5, as done in equation (29). Again, stress $τ$ is used in place of force $F$ as the stiffness has not been normalized for the length of the base:
 \begin{dmath}
@@ -2000,21 +2000,21 @@ $A$ & -- & $0.0$ m & 10.0\%
 \\
 $a$ & -- & $0.0$ m & 10.0\%
 \\
-$c'$ & $c'>0$ & $10.0$ Pa & 10.0\%
+$c'$ & $c'>0$ & $10$ Pa & 10.0\%
 \\
-$E$ & $E>0$ & $15000.0$ Pa & 10.0\%
+$E$ & $E>0$ & $15\cdot{}10^{3}$ Pa & 10.0\%
 \\
-$γ$ & $γ>0$ & $20.0$ $\frac{\text{N}}{\text{m}^{3}}$ & 10.0\%
+$γ$ & $γ>0$ & $20$ $\frac{\text{N}}{\text{m}^{3}}$ & 10.0\%
 \\
-${γ_{Sat}}$ & ${γ_{Sat}}>0$ & $20.0$ $\frac{\text{N}}{\text{m}^{3}}$ & 10.0\%
+${γ_{Sat}}$ & ${γ_{Sat}}>0$ & $20$ $\frac{\text{N}}{\text{m}^{3}}$ & 10.0\%
 \\
 ${γ_{w}}$ & ${γ_{w}}>0$ & $9.8$ $\frac{\text{N}}{\text{m}^{3}}$ & 10.0\%
 \\
 $κ$ & -- & $0.0$ Pa & 10.0\%
 \\
-$ν$ & $0<ν<1$ & $0.4$ & 10.0\%
+$ν$ & $0<ν<1$ & $400\cdot{}10^{-3}$ & 10.0\%
 \\
-$φ'$ & $0<φ'<90$ & $25.0$ ${}^{\circ}$ & 10.0\%
+$φ'$ & $0<φ'<90$ & $25$ ${}^{\circ}$ & 10.0\%
 \\
 \bottomrule
 \caption{Input Data Constraints}

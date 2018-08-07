@@ -11,18 +11,18 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   SSDSub(SSDSubVerb, SSDSolChSpec), SolChSpec(SCSProg), SubSec, TConvention(..), 
   TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
   assembler, dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, outDataConstTbl,
-  reqF, sSubSec, siCon, siDDef, siIMod, siSTitl, siSent, siTMod, siUQI, siUQO,
+  reqF, sSubSec, siCon, siSTitl, siSent, 
   traceMGF, tsymb, valsOfAuxConstantsF)
 
 import Data.Drasil.Concepts.Documentation (assumption, body,
-  concept, condition, consumer, dataConst, dataDefn, datumConstraint,
+  concept, condition, consumer, dataDefn, datumConstraint,
   document, endUser, environment, game, genDefn,
   goalStmt, guide, inModel, information, input_, interface, item,
   model, nonfunctionalRequirement, object, organization, physical,
   physicalConstraint, physicalProperty, physicalSim, physics, priority,
   problem, problemDescription, product_, project, property, quantity, realtime,
   reference, requirement, section_, simulation, software, softwareSys,
-  solutionCharSpec, srs, system, systemConstraint, sysCont, task, template,
+  srs, system, systemConstraint, sysCont, task, template,
   termAndDef, thModel, traceyMatrix, user, userCharacteristic)
 import Data.Drasil.Concepts.Education (highSchoolCalculus, frstYr,
   highSchoolPhysics)
@@ -36,9 +36,9 @@ import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian)
 import Drasil.GamePhysics.Changes (likelyChanges, likelyChangesList', unlikelyChanges)
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
 import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns)
-import Drasil.GamePhysics.IMods (iModels, iModels_new, im1_new, im2_new, im3_new)
+import Drasil.GamePhysics.IMods (iModels_new, im1_new, im2_new, im3_new)
 import Drasil.GamePhysics.References (cpCitations)
-import Drasil.GamePhysics.TMods (cpTMods, t1NewtonSL_new, t2NewtonTL_new, 
+import Drasil.GamePhysics.TMods (t1NewtonSL_new, t2NewtonTL_new, 
   t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, cpTMods_new)
 import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
   inputSymbols, outputSymbols, cpInputConstraints, gamephySymbols)

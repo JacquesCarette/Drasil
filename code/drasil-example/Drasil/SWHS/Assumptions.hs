@@ -14,7 +14,7 @@ import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfect_insul,
 import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, temp_init, temp_W,
   temp_PCM, htCap_L_P, htCap_W, htCap_S_P, w_density, pcm_density, pcm_vol)
 import Drasil.SWHS.TMods (t1ConsThermE_new)
-import Drasil.SWHS.Labels (assump1Label, assump14Label, assump18Label, 
+import Drasil.SWHS.Labels (assump14Label, assump18Label, 
   assump19Label, assump10Label)
 
 import Data.Drasil.Quantities.PhysicalProperties (vol)

@@ -37,9 +37,8 @@ import Drasil.SWHS.Requirements (nonFuncReqs)
 import Drasil.SWHS.Changes (chgsStart, likeChg2, likeChg3, likeChg6)
 
 import Data.Drasil.People (thulasi)
-import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix,
-  weave, eqUnR', noRefs)
-
+import Data.Drasil.Utils (enumSimple,
+  itemRefToSent, makeTMatrix, itemRefToSent, noRefs)
 import Data.Drasil.Citations (parnasClements1986, smithLai2005)
 
 import Data.Drasil.Concepts.Documentation as Doc (inModel,

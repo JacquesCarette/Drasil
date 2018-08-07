@@ -7,7 +7,7 @@ import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
 import qualified Drasil.DocLang.SRS as SRS (dataDefnLabel, 
   valsOfAuxConsLabel, referenceLabel, indPRCaseLabel,
-  datConLabel, funcReq, assumpt, likeChg)
+  datConLabel)
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), 
@@ -23,19 +23,18 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   tsymb)
 
 import Data.Drasil.Concepts.Computation (computerApp, inParam,
-  computerLiteracy, inValue, inQty)
+  inValue, inQty)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
-  assumption, characteristic, class_, code, company, condition, constraint, content, 
-  dataConst, dataDefn, datum, datumConstraint, definition, description, document, emphasis, 
-  endUser, environment, failure, figure, generalSystemDescription, goal, goalStmt, 
+  assumption, characteristic, class_, code, company, condition, content, 
+  dataConst, dataDefn, datumConstraint, definition, description, document, emphasis, 
+  environment, failure, figure, goal, goalStmt, 
   implementation, information, inModel, input_, interface, item, likelyChg, message, model, 
   organization, output_, physicalSystem, physSyst, problem, product_, purpose, quantity, 
   reference, requirement, reviewer, section_, software, softwareSys, srs, standard, symbol_,  
-  sysCont, system, systemConstraint, template, term_, theory, thModel, traceyMatrix, user,
-  userCharacteristic, userInput, value)
+  sysCont, system, template, term_, theory, thModel, traceyMatrix, user,
+  userInput, value)
 
-import Data.Drasil.Concepts.Education (secondYear, undergradDegree,
-  civilEng, structuralEng, scndYrCalculus, structuralMechanics)
+import Data.Drasil.Concepts.Education (civilEng, scndYrCalculus, structuralMechanics)
 import Data.Drasil.Concepts.Math (graph, calculation, probability,
   parameter)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
@@ -46,10 +45,10 @@ import Data.Drasil.Concepts.Software (correctness, verifiability,
 import Data.Drasil.Concepts.Thermodynamics (degree_')
 import Data.Drasil.SentenceStructures (acroR, sVersus, sAnd, foldlSP,
   foldlSent, foldlSent_, figureLabel, foldlList, SepType(Comma), FoldType(List),
-  showingCxnBw, foldlsC, sOf, followA, ofThe, sIn, isThe, isExpctdToHv, sOr, 
+  showingCxnBw, foldlsC, sOf, followA, ofThe, sIn, isThe, sOr, 
   underConsidertn, tAndDWAcc, tAndDOnly, tAndDWSym, andThe, foldlSPCol)
 import Data.Drasil.Software.Products (sciCompS)
-import Data.Drasil.Utils (makeTMatrix, makeListRef, itemRefToSent, noRefs,
+import Data.Drasil.Utils (makeTMatrix, itemRefToSent, noRefs,
   enumSimple, enumBullet, prodUCTbl, bulletFlat, bulletNested)
   
 import Drasil.GlassBR.Assumptions (assumptionConstants, gbRefDB, newAssumptions)
@@ -61,7 +60,7 @@ import Drasil.GlassBR.DataDefs (aspRat, dataDefns, gbQDefns, hFromt, strDisFac, 
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
-import Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe, lrSafetyReq, pbSafetyReq)
+import Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe)
 import Drasil.GlassBR.IMods (probOfBreak, 
   calofCapacity, calofDemand, gbrIMods)
 
@@ -354,7 +353,7 @@ sysCtxUsrResp = [S "Provide the input data related to the glass slab and blast",
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+
     S "(FIXME REF)" +:+ S "are appropriate for any particular" +:+
     phrase problem +:+ S "input to the" +:+ phrase software]
-	
+
 sysCtxSysResp :: [Sentence]
 sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters",
     S "input instead of a floating point number",

@@ -55,7 +55,7 @@ instance HasDerivation      DataDefinition where derivations = deri
 instance HasAdditionalNotes DataDefinition where getNotes = notes
 instance MayHaveUnit        DataDefinition where getUnit = getUnit . view qd 
 instance HasLabel           DataDefinition where getLabel = qd . getLabel --FIXME: will eventually just be viewed from here
-instance HasShortName       DataDefinition where shortname = lbl . shortname
+instance HasShortName       DataDefinition where shortname = qd . shortname --FIXME: will eventually just be viewed from here
 
 -- | Smart constructor for data definitions 
 mkDD :: QDefinition -> References -> Derivation -> String -> Maybe [Sentence] -> DataDefinition

@@ -696,16 +696,19 @@ traceMatsAndGraphsRowT2 = traceMatsAndGraphsRowT1 ++ traceMatsAndGraphsDataCons 
 
 traceMatsAndGraphsRowHdrT2, traceMatsAndGraphsColHdrT2 :: [Sentence]
 traceMatsAndGraphsRowHdrT2 = traceMatsAndGraphsRowHdrT1 ++
-  (zipWith itemRefToSent (traceMatsAndGraphsDataCons ++ traceMatsAndGraphsFuncReq) (traceMatsAndGraphsDataConsRef ++ traceMatsAndGraphsFuncReqRef))
+  (zipWith itemRefToSent (traceMatsAndGraphsDataCons ++ traceMatsAndGraphsFuncReq)
+   (traceMatsAndGraphsDataConsRef ++ traceMatsAndGraphsFuncReqRef))
 
 traceMatsAndGraphsColHdrT2 = zipWith (\x y -> (S x) +:+ (sParen (S "in" +:+ y)))
   traceMatsAndGraphsFuncReq traceMatsAndGraphsFuncReqRef
 
-traceMatsAndGraphsColsT2_R1, traceMatsAndGraphsColsT2_R2, traceMatsAndGraphsColsT2_R3, traceMatsAndGraphsColsT2_R4, traceMatsAndGraphsColsT2_R5,
-  traceMatsAndGraphsColsT2_R6 :: [String]
+traceMatsAndGraphsColsT2_R1, traceMatsAndGraphsColsT2_R2, traceMatsAndGraphsColsT2_R3,
+  traceMatsAndGraphsColsT2_R4, traceMatsAndGraphsColsT2_R5, traceMatsAndGraphsColsT2_R6 :: [String]
 
 traceMatsAndGraphsColsT2 :: [[String]]
-traceMatsAndGraphsColsT2 = [traceMatsAndGraphsColsT2_R1, traceMatsAndGraphsColsT2_R2, traceMatsAndGraphsColsT2_R3, traceMatsAndGraphsColsT2_R4, traceMatsAndGraphsColsT2_R5, traceMatsAndGraphsColsT2_R6]
+traceMatsAndGraphsColsT2 = [traceMatsAndGraphsColsT2_R1, traceMatsAndGraphsColsT2_R2, 
+  traceMatsAndGraphsColsT2_R3, traceMatsAndGraphsColsT2_R4, traceMatsAndGraphsColsT2_R5,
+  traceMatsAndGraphsColsT2_R6]
 traceMatsAndGraphsColsT2_R1 = []
 traceMatsAndGraphsColsT2_R2 = []
 traceMatsAndGraphsColsT2_R3 = ["Data Constraints"]

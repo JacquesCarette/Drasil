@@ -1452,7 +1452,7 @@ Notes
 <em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in DD2.
 </p>
 <p class="paragraph">
-<em>LDF</em> is the load duration factor as defined by DD3.
+<em>LDF</em> is the load duration factor as defined in DD3.
 </p>
 <p class="paragraph">
 <em>J</em> is the stress distribution factor (Function) , as defined in DD4.
@@ -2417,7 +2417,7 @@ Notes
 <em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in DD2.
 </p>
 <p class="paragraph">
-<em>LDF</em> is the load duration factor as defined by DD3.
+<em>LDF</em> is the load duration factor as defined in DD3.
 </p>
 <p class="paragraph">
 <em>P<sub>btol</sub></em> is the tolerable probability entered by the user.
@@ -3196,21 +3196,21 @@ Functional Requirements
 <ul class="hide-list-style">
 <li>
 <div id="Input-Glass-Props">
-Input-Glass-Props: Input the quantities from <a href=#Table:R1ReqInputs>R1ReqInputs</a>, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: <em>a</em> and <em>b</em> will be input in terms of millimetres and will be converted to the equivalent value in metres.
+Input-Glass-Props: Input the quantities from <a href=#Table:R1ReqInputs>R1ReqInputs</a>, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast. Note: <em>a</em> and <em>b</em> will be input in terms of millimetres and will be converted to the equivalent value in metres.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="System-Set-Values-Following-Assumptions">
-System-Set-Values-Following-Assumptions: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following A4, <em>LDF</em> following A8, LSF following A5, <em>h</em> (from <a href=#DD:min.thick>min_thick</a>), <em>GTF</em> (from <a href=#DD:gTF>gTF</a>), and <em>SD</em> (from <a href=#DD:standOffDist>standOffDist</a>).
+System-Set-Values-Following-Assumptions: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following A4, <em>LDF</em> (from <a href=#DD:loadDurFactor>loadDurFactor</a>), LSF following A5, <em>h</em> (from <a href=#DD:min.thick>min_thick</a>), <em>GTF</em> (from <a href=#DD:gTF>gTF</a>), <em>SD</em> (from <a href=#DD:standOffDist>standOffDist</a>), and <em>AR</em> (from <a href=#DD:aspect.ratio>aspect_ratio</a>).
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="Check-Input-with-Data_Constraints">
-Check-Input-with-Data_Constraints: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>DataConstraints</a>. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
+Check-Input-with-Data_Constraints: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>DataConstraints</a>. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.
 </div>
 </li>
 </ul>

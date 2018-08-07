@@ -34,8 +34,8 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   sysCont, system, systemConstraint, template, term_, theory, thModel, traceyMatrix, user,
   userCharacteristic, userInput, value)
 
-import Data.Drasil.Concepts.Education (secondYear, undergradDegree,
-  civilEng, structuralEng, scndYrCalculus, structuralMechanics)
+import Data.Drasil.Concepts.Education (civilEng, scndYrCalculus, 
+  structuralMechanics)
 import Data.Drasil.Concepts.Math (graph, calculation, probability,
   parameter)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
@@ -46,19 +46,18 @@ import Data.Drasil.Concepts.Software (correctness, verifiability,
 import Data.Drasil.Concepts.Thermodynamics (degree_')
 import Data.Drasil.SentenceStructures (acroR, sVersus, sAnd, foldlSP,
   foldlSent, foldlSent_, figureLabel, foldlList, SepType(Comma), FoldType(List),
-  showingCxnBw, foldlsC, sOf, followA, ofThe, sIn, isThe, isExpctdToHv, sOr, 
+  showingCxnBw, foldlsC, sOf, followA, ofThe, sIn, isThe, sOr, 
   underConsidertn, tAndDWAcc, tAndDOnly, tAndDWSym, andThe, foldlSPCol)
 import Data.Drasil.Software.Products (sciCompS)
 import Data.Drasil.Utils (makeTMatrix, makeListRef, itemRefToSent, noRefs,
   refFromType, enumSimple, enumBullet, prodUCTbl, bulletFlat, bulletNested)
   
-import Drasil.GlassBR.Assumptions (assumptionConstants, assumptionDescs,
-  gbRefDB, newAssumptions)
+import Drasil.GlassBR.Assumptions (assumptionConstants, gbRefDB)
 import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, 
   glass, gLassBR, lShareFac, ptOfExplsn, stdOffDist)
-import Drasil.GlassBR.DataDefs (aspRat, dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
-  dimLL, glaTyFac, tolStrDisFac, tolPre, risk, standOffDis)
+import Drasil.GlassBR.DataDefs (aspRat, dataDefns, dimLL, gbQDefns, glaTyFac, 
+  hFromt, loadDF, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
@@ -73,7 +72,7 @@ import Drasil.GlassBR.Unitals (stressDistFac, aspect_ratio, dimlessLoad,
   blast, bomb, blastTy, glassGeo, glass_type, nom_thick, sdx, sdy, sdz, tNT, 
   gBRSpecParamVals, loadTypes, load, glassTypes, probBreak, termsWithAccDefn, 
   termsWithDefsOnly, gbConstants, gbConstrained, gbOutputs, gbInputs, glBreakage, 
-  capacity, constant_LoadDF, glassBRsymb)
+  capacity, glassBRsymb)
 
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.People (spencerSmith, nikitha, mCampidelli)
@@ -352,7 +351,7 @@ sysCtxUsrResp = [S "Provide the input data related to the glass slab and blast",
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+
     S "(FIXME REF)" +:+ S "are appropriate for any particular" +:+
     phrase problem +:+ S "input to the" +:+ phrase software]
-	
+
 sysCtxSysResp :: [Sentence]
 sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters",
     S "input instead of a floating point number",
@@ -525,8 +524,8 @@ funcReqsR5 = mkRequirement "funcReqsR5" (req5Desc (output_)) "Check-Glass-Safety
 req1Desc = foldlSent [at_start input_, S "the", plural quantity, S "from",
   makeRef funcReqsR1Table `sC` S "which define the", phrase glass,
   plural dimension `sC` (glassTy ^. defn) `sC` S "tolerable",
-  phrase probability `sOf` phrase failure, S "and",
-  (plural characteristic `ofThe` phrase blast), S "Note:",
+  phrase probability `sOf` phrase failure, S "and" +:+. 
+  (plural characteristic `ofThe` phrase blast) +: S "Note",
   ch plate_len `sAnd` ch plate_width,
   S "will be input in terms of", plural millimetre `sAnd`
   S "will be converted to the equivalent value in", plural metre]
@@ -543,10 +542,12 @@ funcReqsR1Table = llcc (mkLabelRA'' "R1ReqInputs") $
 req2Desc = foldlSent [S "The", phrase system,
   S "shall set the known", plural value +: S "as follows",
   foldlList Comma List [(foldlsC (map ch (take 4 assumptionConstants)) `followA` 4),
-  ((ch constant_LoadDF) `followA` 8), (short lShareFac `followA` 5),
+  ch loadDF +:+ sParen (S "from" +:+ (makeRef loadDF)), 
+  (short lShareFac `followA` 5),
   (ch hFromt) +:+ sParen (S "from" +:+ (makeRef hFromt)), 
   (ch glaTyFac) +:+ sParen (S "from" +:+ (makeRef glaTyFac)),
-  (ch standOffDis) +:+ sParen (S "from" +:+ (makeRef standOffDis))]]
+  (ch standOffDis) +:+ sParen (S "from" +:+ (makeRef standOffDis)),
+  (ch aspRat) +:+ sParen (S "from" +:+ (makeRef aspRat))]]
 
 --ItemType
 {-funcReqsR2 = (Nested (S "The" +:+ phrase system +:+
@@ -563,7 +564,7 @@ req3Desc = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",
   plural datumConstraint, S "mentioned in" +:+. midRef
   SRS.datConLabel, S "If any" `sOf` S "the", plural inParam,
-  S "is out" `sOf` S "bounds" `sC` S "an", phrase errMsg, S "is displayed"
+  S "are out" `sOf` S "bounds" `sC` S "an", phrase errMsg, S "is displayed"
   `andThe` plural calculation, S "stop"]
 
 req4Desc = foldlSent [titleize output_, S "the", plural inQty,

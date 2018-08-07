@@ -1,5 +1,5 @@
 module Drasil.GlassBR.DataDefs (aspRat, dataDefns, dimLL, gbQDefns, glaTyFac, 
-  hFromt, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac) where
+  hFromt, loadDF, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac) where
 
 import Language.Drasil
 import Prelude hiding (log, exp, sqrt)
@@ -210,7 +210,7 @@ hsGlass = (getAcc heatS +:+ S "is" +:+ phrase heatS +:+ S "glass")
 
 ldfRef :: Sentence
 ldfRef = (ch lDurFac +:+ S "is the" +:+ phrase lDurFac +:+. 
-  S "as defined by DD3")
+  S "as defined in DD3")
 
 pbTolUsr :: Sentence
 pbTolUsr = (ch pb_tol +:+ S "is the tolerable" +:+ phrase probability 

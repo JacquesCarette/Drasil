@@ -2,7 +2,7 @@
 
 module Language.Drasil.Chunk.DefinedQuantity
   ( dqd, dqd', dqdEL, DefinedQuantityDict, dqdWr
-  , dqdQd, dqdVc) where
+  , dqdQd) where
 import Control.Lens ((^.), makeLenses, view)
 
 import qualified Language.Drasil.Chunk.Quantity as Q
@@ -61,6 +61,3 @@ dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c) []
 
 dqdQd :: (Q.Quantity c, Q.HasSpace c, HasSymbol c) => c -> ConceptChunk -> DefinedQuantityDict
 dqdQd c cc = DQD cc (symbol c) (c ^. typ) (getUnit c) []
-
-dqdVc :: VarChunk -> DefinedQuantityDict
-dqdVc (VC idea sym space) = DQD (ConDict (idea) (DAD (S "") [])) (sym) (space) Nothing []

@@ -1,5 +1,5 @@
 module Drasil.Sections.Requirements
-  (fReqF, reqF, nonFuncReqF, funcReqDom) where
+  (fReqF, reqF, nonFuncReqF, reqDom, funcReqDom) where
 
 import Language.Drasil
 

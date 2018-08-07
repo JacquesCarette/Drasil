@@ -20,8 +20,7 @@ import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, mass, vol)
 import Data.Drasil.Concepts.Thermodynamics (boiling, heat, temp, melting,
   latent_heat, sens_heat, heat_cap_spec, thermal_energy, boil_pt, heat_trans,
   phase_change, ht_flux)
-import Drasil.SWHS.Labels (assump14Label, assump19Label, assump18Label)
-import Drasil.SWHS.Assumptions (newA12, newA15, newA16, newA17, newA18)
+import Drasil.SWHS.Assumptions (newA12, newA14, newA15, newA16, newA17, newA18, newA19)
 
 
 swhsIMods :: [RelationConcept]
@@ -65,7 +64,7 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively",
-  sParen (makeRef assump14Label `sC` makeRef assump19Label)]
+  sParen (makeRef newA14 `sC` makeRef newA19)]
 
 
   ----------------------------------------------
@@ -383,7 +382,7 @@ htWtrDesc = foldlSent [S "The above", phrase equation,
   sParen (unwrap $ getUnit temp_init), S "This", phrase equation,
   S "applies as long as", (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100)))
   :+: (unwrap $ getUnit temp_W),
-  sParen $ makeRef assump14Label `sC` makeRef assump19Label]
+  sParen $ makeRef newA14 `sC` makeRef newA19]
 
 ---------
 -- IM4 --
@@ -450,4 +449,4 @@ htPCMDesc = foldlSent [S "The above", phrase equation,
   S "for", phrase boiling, S "of the", short phsChgMtrl,
   S "is not detailed" `sC` S "since the", short phsChgMtrl,
   S "is assumed to either be in a", phrase solid, S "or", phrase liquid,
-  S "state", sParen (makeRef assump18Label)]
+  S "state", sParen (makeRef newA18)]

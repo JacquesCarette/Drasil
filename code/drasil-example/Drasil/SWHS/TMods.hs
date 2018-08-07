@@ -6,7 +6,6 @@ import Control.Lens ((^.))
 
 import Data.Drasil.Concepts.Documentation (system)
 import Data.Drasil.SI_Units (joule)
-import Drasil.SWHS.Labels (assump1Label)
 import Data.Drasil.Concepts.Thermodynamics (phase_change, thermal_energy,
   heat_trans, law_cons_energy)
 import Data.Drasil.Concepts.Physics (mech_energy)

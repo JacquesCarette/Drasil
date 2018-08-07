@@ -11,7 +11,6 @@ import Data.Drasil.SentenceStructures (foldlSent, isThe,
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Concepts.Math (equation, rOfChng)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
-import Drasil.SWHS.Labels (assump10Label)
 import Data.Drasil.Concepts.Thermodynamics (melting, boil_pt, heat_cap_spec, 
   heat_trans)
 
@@ -49,7 +48,7 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively"
-  , sParen (makeRef assump10Label)]
+  , sParen (makeRef newA10)]
 
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --

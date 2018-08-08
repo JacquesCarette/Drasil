@@ -608,18 +608,18 @@ mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortByS
 {--}
 
 -- | Helper for making the 'Off-the-Shelf Solutions' section
-mkNotationSec :: NotationSec -> Section
-mkNotationSec (NotationVerb s)  = s
-mkNotationSec (NotationProg cs) = MIS.notation (MIS.notationIntroMIS ++ MIS.notTblIntro cs) []
+mkNotationSec :: SystemInformation -> NotationSec -> Section
+mkNotationSec _ (NotationVerb s)  = s
+mkNotationSec _ (NotationProg cs) = MIS.notation ({-MIS.notationIntroMIS ++ MIS.notTblIntro ++--} cs) []
 
-notTblIntro :: Contents
-notTblIntro = mkParagraph $ S "The following table summarizes the primitive" +:+
-  S "data types used by GlassBR"
+--notTblIntro :: Contents
+--notTblIntro = mkParagraph $ S "The following table summarizes the primitive" +:+
+--  S "data types used by GlassBR"
 
 --notationTable :: LabelledContent
 --notationTable 
 
-notationIntroContd
+--notationIntroContd
 
 {--}
 

@@ -4,6 +4,8 @@ import Language.Drasil
 import qualified Data.Drasil.Concepts.Documentation as Doc (introduction, reference, 
   traceyMandG, tOfSymb)
 
+intro, reference, traceyMandG, tOfSymb :: [Contents] -> [Section] -> Section
+
 intro       cs ss = section' (titleize Doc.introduction) cs ss "Intro"
 reference   cs ss = section' (titleize' Doc.reference)   cs ss "References" --FIXME: label is available
 traceyMandG cs ss = section' (titleize' Doc.traceyMandG) cs ss "TraceMatrices"

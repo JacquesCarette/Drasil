@@ -3,9 +3,9 @@ module Main (main) where
 import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..), 
   ImplementationType(..), Lang(..), Logging(..), Structure(..))
 import Language.Drasil.Generate (gen, genCode)
-import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
+import Language.Drasil.Printers (DocType(SRS, Website, MIS), DocSpec(DocSpec))
 
-import Drasil.GlassBR.Body (gbSymbMap, glassBR_code, glassBR_srs)
+import Drasil.GlassBR.Body (gbSymbMap, glassBR_code, glassBR_srs, glassBR_mis)
 
 glassChoices :: Choices
 glassChoices = Choices {
@@ -23,4 +23,5 @@ main :: IO()
 main = do
   gen (DocSpec SRS "GlassBR_SRS")     glassBR_srs gbSymbMap
   gen (DocSpec Website "GlassBR_SRS") glassBR_srs gbSymbMap
+  gen (DocSpec MIS "GlassBR_MIS")     glassBR_mis gbSymbMap
   genCode glassChoices glassBR_code

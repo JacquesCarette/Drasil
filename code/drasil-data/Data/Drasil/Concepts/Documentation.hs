@@ -8,7 +8,7 @@ import Data.Drasil.Phrase (andRT, and_, and_', ofA, of_, of_', of__)
 import Control.Lens ((^.))
 
 assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
-  unlikelyChg, physSyst, requirement, thModel, mg, notApp, srs, typUnc :: CI
+  unlikelyChg, physSyst, requirement, thModel, mis, mg, notApp, srs, typUnc :: CI
 
 -------------------------------------------------------------------------------------------------
 -- | CI       |           |    uid      |         term                        | abbreviation | --
@@ -32,6 +32,9 @@ typUnc      = commonIdea "typUnc"      (cn' "typical uncertainty")              
 srs = commonIdea "srs" 
   (compoundPhraseP1 (softwareReq ^. term) (specification ^. term))
   "SRS"
+mis = commonIdea "mis"
+  (compoundPhraseP1 (moduleInterface ^. term) (specification ^. term))
+  "MIS"
 
 ---------------------------------------------------------------------
 
@@ -208,7 +211,8 @@ designDoc, fullForm, generalSystemDescription, indPRCase,
   nonfunctionalRequirement, safetyReq, softwareConstraint, softwareDoc,
   softwareReq, softwareSys, softwareVerif, softwareVAV, solutionCharSpec,
   solutionCharacteristic, offShelfSolution, physicalSim, productUC, 
-  useCaseTable, physicalProperty, vavPlan, uncertCol, userInput :: NamedChunk
+  useCaseTable, physicalProperty, vavPlan, uncertCol, userInput, 
+  moduleInterface :: NamedChunk
  
 datumConstraint              = compoundNC' datum constraint
 designDoc                    = compoundNC design document
@@ -216,6 +220,7 @@ fullForm                     = compoundNC full form
 functionalRequirement        = compoundNC functional requirement_
 generalSystemDescription     = compoundNC general systemdescription
 indPRCase                    = compoundNC individual productUC
+moduleInterface              = compoundNC' module_ interface
 nonfunctionalRequirement     = compoundNC nonfunctional requirement_
 offShelfSolution             = compoundNC offShelf solution
 physicalConstraint           = compoundNC physical constraint

@@ -8,10 +8,12 @@ import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
 import qualified Drasil.DocLang.SRS as SRS (dataDefnLabel, 
   valsOfAuxConsLabel, referenceLabel, indPRCaseLabel,
   datConLabel, funcReq, assumpt, likeChg)
+import qualified Drasil.DocLang.GenBuilders as GB (intro)
+import qualified Drasil.DocLang.MIS as MIS (introMIS)
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), 
-  GSDSub(..), InclUnits(IncludeUnits), IntroSec(IntroProg),
+  GSDSub(..), InclUnits(IncludeUnits), IntroSec(IntroProg, IntroVerb),
   IntroSub(IChar, IOrgSec, IPurpose, IScope), LCsSec(..), ProblemDescription(..), 
   RefSec(RefProg), RefTab(TAandA, TUnits), ReqrmntSec(..), 
   ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SCSSub(..), 
@@ -32,7 +34,7 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   organization, output_, physicalSystem, physSyst, problem, product_, purpose, quantity, 
   reference, requirement, reviewer, section_, software, softwareSys, srs, standard, symbol_,  
   sysCont, system, systemConstraint, template, term_, theory, thModel, traceyMatrix, user,
-  userCharacteristic, userInput, value)
+  userCharacteristic, userInput, value, mis)
 
 import Data.Drasil.Concepts.Education (secondYear, undergradDegree,
   civilEng, structuralEng, scndYrCalculus, structuralMechanics)
@@ -112,6 +114,9 @@ resourcePath = "../../../datafiles/GlassBR/"
 glassBR_srs :: Document
 glassBR_srs = mkDoc mkSRS (for'' titleize phrase) glassSystInfo
 
+glassBR_mis :: Document
+glassBR_mis = mkDoc mkMIS (for'' titleize phrase) glassSystInfo'
+
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   IntroSec (
@@ -162,9 +167,13 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   AuxConstntSec (AuxConsProg gLassBR auxiliaryConstants) :
   Bibliography :
   AppndxSec (AppndxProg [appdxIntro, LlC fig_5, LlC fig_6]) : []
- 
+
+mkMIS :: DocDesc
+mkMIS = IntroSec (IntroVerb (GB.intro [MIS.introMIS] [])) : []
+
 stdFields :: Fields
-stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
+stdFields = [DefiningEquation, Description Verbose IncludeUnits, 
+  Notes, Source, RefBy]
 
 glassSystInfo :: SystemInformation
 glassSystInfo = SI {
@@ -190,6 +199,31 @@ glassSystInfo = SI {
   _refdb       = gbRefDB
 }
   --FIXME: All named ideas, not just acronyms.
+
+--FIXME: modify SystemInformation to hold information for both MIS and SRS?
+glassSystInfo' :: SystemInformation
+glassSystInfo' = SI {
+  _sys         = gLassBR,
+  _kind        = mis,
+  _authors     = [spencerSmith],
+  _units       = check_si,
+  _quants      = this_symbols,
+  _concepts    = [] :: [DefinedQuantityDict],
+  _definitions = (map (relToQD gbSymbMap) iModels {-[RelationConcept]-}) ++ 
+                 (map (relToQD gbSymbMap) tModels {-[RelationConcept]-}) ++
+                  [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears
+                                             -- in the description of the Calculation of Demand instance model;
+                                             -- should this be included as a Data Definition?
+                                             -- (same for sdWithEqn)
+  _datadefs    = dataDefns,
+  _inputs      = map qw gbInputs,
+  _outputs     = map qw gbOutputs,
+  _defSequence = gbQDefns,
+  _constraints = gbConstrained,
+  _constants   = gbConstants,
+  _sysinfodb   = gbSymbMap,
+  _refdb       = gbRefDB
+}
 
 glassBR_code :: CodeSpec
 glassBR_code = codeSpec glassSystInfo allMods

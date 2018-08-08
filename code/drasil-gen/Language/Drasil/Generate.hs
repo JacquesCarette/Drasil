@@ -32,7 +32,7 @@ prntDoc :: HasSymbolTable s => DocSpec -> Document -> s -> IO ()
 prntDoc (DocSpec dt fn) body sm = prntDoc' dt fn (fmt dt) body sm
   where fmt SRS = TeX
         fmt MG  = TeX
-        fmt MIS = TeX
+        fmt MIS = HTML--TeX
         fmt Website = HTML
 
 prntDoc' :: (HasSymbolTable s, Show a) => a -> String -> Format -> Document -> s -> IO ()

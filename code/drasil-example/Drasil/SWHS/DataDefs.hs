@@ -64,7 +64,8 @@ dd3HtFusionDD = mkDD dd3HtFusion [] [] "" Nothing
 dd4MeltFrac :: QDefinition
 dd4MeltFrac = fromEqn' (melt_frac ^. uid) -- FIXME Should (^. id) be used
   (melt_frac ^. term) (S "fraction of the PCM that is liquid")
-  (eqSymb melt_frac) melt_frac_eqn [] "meltFrac"
+  (eqSymb melt_frac) melt_frac_eqn [] 
+  (mkLabelSame "melt_frac" (Def DD))
 --FIXME: "Phi is the melt fraction" is produced; 
   --"Phi is the fraction of the PCM that is liquid" is what is supposed to be
   -- produced according to CaseStudies' original
@@ -76,13 +77,6 @@ dd4MeltFracDD :: DataDefinition
 dd4MeltFracDD = mkDD dd4MeltFrac [] [] "" Nothing
 
 --Need to add units to data definition descriptions
-
---Fixme: should be removed with proper addition of labels
-swhsDD1, swhsDD2, swhsDD3, swhsDD4 :: Contents
-swhsDD1 = LlC $ datadefn dd1HtFluxC
-swhsDD2 = LlC $ datadefn dd2HtFluxP
-swhsDD3 = LlC $ datadefn dd3HtFusion
-swhsDD4 = LlC $ datadefn dd4MeltFrac
 
 --Symbol appears as "Label"
 --There is no actual label

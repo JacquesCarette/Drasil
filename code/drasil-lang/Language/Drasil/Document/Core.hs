@@ -9,9 +9,10 @@ import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
 
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.Label (Label)
+import Language.Drasil.Label.Core (Label)
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Spec (Sentence(..))
+import Language.Drasil.RefTypes (DType(..))
 
 
 data ListType = Bullet [(ItemType,Maybe RefAdd)] -- ^ Bulleted list
@@ -40,38 +41,26 @@ type Filepath = String
 type Lbl      = Sentence
 
 
---FIXME: Remove Data, Data', and Theory from below.
--- | Types of definitions
-data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining
-                              -- equation used to generate the Data Definition
-           | Data' DataDefinition
-           | General
-           | Theory RelationConcept -- ^ Theoretical models use a relation as
-                                    -- their definition
-           | Instance
-           | TM
-           | DD
-
 -- | Types of layout objects we deal with explicitly
-data RawContent = Table [Sentence] [[Sentence]] Title Bool RefAdd
+data RawContent = Table [Sentence] [[Sentence]] Title Bool
   -- ^ table has: header-row data(rows) label/caption showlabel?
                | Paragraph Sentence -- ^ Paragraphs are just sentences.
                | EqnBlock Expr
      --        CodeBlock Code   -- GOOL complicates this.  Removed for now.
                | Definition DType
                | Enumeration ListType -- ^ Lists
-               | Figure Lbl Filepath MaxWidthPercent RefAdd-- ^ Should use relative file path.
+               | Figure Lbl Filepath MaxWidthPercent -- ^ Should use relative file path.
                | Requirement ReqChunk
                | Assumption AssumpChunk
                | Change Change
                | Bib BibRef
      --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
-               | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl RefAdd
+               | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl
                -- ^ TODO: Fill this one in.
                ------NEW TMOD/DDEF/IM/GD BEGINS HERE------
                ---- FIXME: The above Definition will need to be removed ----
                --------------------------------------------
-               | Defnt DType [(Identifier, [Contents])] RefAdd
+               | Defnt DType [(Identifier, [Contents])]
 type Identifier = String
 
 data LabelledContent = LblC { _lbl :: Label

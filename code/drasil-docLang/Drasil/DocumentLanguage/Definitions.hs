@@ -43,37 +43,37 @@ data InclUnits = IncludeUnits -- In description field (for other symbols)
 -- | Create a theoretical model using a list of fields to be displayed, a database of symbols,
 -- and a RelationConcept (called automatically by 'SCSSub' program)
 tmodel :: HasSymbolTable ctx => Fields -> ctx -> TheoryModel -> LabelledContent
-tmodel fs m t = llcc mkEmptyLabel $ Defnt TM (foldr (mkTMField t m) [] fs) (refAdd t)
+tmodel fs m t = mkRawLC (Defnt TM (foldr (mkTMField t m) [] fs)) (t ^. getLabel)
 
 -- | Create a data definition using a list of fields, a database of symbols, and a
 -- QDefinition (called automatically by 'SCSSub' program)
 ddefn :: HasSymbolTable ctx => Fields -> ctx -> QDefinition -> LabelledContent
-ddefn fs m d = llcc mkEmptyLabel $ Defnt DD (foldr (mkQField d m) [] fs) (refAdd d)
+ddefn fs m d = mkRawLC (Defnt DD (foldr (mkQField d m) [] fs)) (d ^. getLabel)
 
 ddefn' :: HasSymbolTable ctx => Fields -> ctx -> DataDefinition -> LabelledContent
-ddefn' fs m d = llcc mkEmptyLabel $ Defnt DD (foldr (mkDDField d m) [] fs) (refAdd d)
+ddefn' fs m d = mkRawLC (Defnt DD (foldr (mkDDField d m) [] fs)) (d ^. getLabel)
 
 -- | Create a general definition using a list of fields, database of symbols,
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'
 -- program)
 gdefn :: HasSymbolTable ctx => Fields -> ctx -> GenDefn -> LabelledContent
-gdefn fs m g = llcc mkEmptyLabel $ Defnt General (foldr (mkGDField g m) [] fs) (refAdd g)
+gdefn fs m g = mkRawLC (Defnt General (foldr (mkGDField g m) [] fs)) (g ^. getLabel)
 
 -- | Create an instance model using a list of fields, database of symbols,
 -- and an 'InstanceModel' chunk (called automatically by 'SCSSub' program)
 instanceModel :: HasSymbolTable ctx => Fields -> ctx -> InstanceModel -> LabelledContent
-instanceModel fs m i = llcc mkEmptyLabel $ Defnt Instance (foldr (mkIMField i m) [] fs) (refAdd i)
+instanceModel fs m i = mkRawLC (Defnt Instance (foldr (mkIMField i m) [] fs)) (i ^. getLabel)
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
 -- or IM definition automatically (called automatically by 'SCSSub' program)
-derivation :: HasDerivation c => c -> [LabelledContent]
+derivation :: HasDerivation c => c -> [Contents]
 derivation g = map makeDerivationContents (getDerivation g)
 
 -- | Helper function for creating the layout objects
 -- (paragraphs and equation blocks) for a derivation.
-makeDerivationContents :: Sentence -> LabelledContent
-makeDerivationContents (E e) = llcc mkEmptyLabel (EqnBlock e) --FIXME: Derivation needs labels for it's equations
-makeDerivationContents s     = llcc mkEmptyLabel $ Paragraph s  --FIXME: should this be LabelledContent?
+makeDerivationContents :: Sentence -> Contents
+makeDerivationContents (E e) = LlC $ llcc (mkEmptyLabel EqnB) (EqnBlock e) --FIXME: Derivation needs labels for it's equations
+makeDerivationContents s     = UlC $ ulcc $ Paragraph s
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
 type ModRow = [(String, [Contents])]
@@ -82,7 +82,8 @@ type ModRow = [(String, [Contents])]
 mkTMField :: HasSymbolTable ctx => TheoryModel -> ctx -> Field -> ModRow -> ModRow
 mkTMField t _ l@Label fs  = (show l, (mkParagraph $ at_start t):[]) : fs
 mkTMField t _ l@DefiningEquation fs =
-  (show l, (map (\x -> LlC $ eqUnR x mkEmptyLabel) (map tConToExpr (t ^. invariants)))) : fs --FIXME: should this have labels?
+  (show l, (map (\x -> LlC $ eqUnR x (modifyLabelEqn (t ^. getLabel))) --FIXME: should this have labels?
+  (map tConToExpr (t ^. invariants)))) : fs 
 mkTMField t m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] (map tConToExpr (t ^. invariants))) : fs
 mkTMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
@@ -103,7 +104,8 @@ mkQField :: (HasSymbolTable ctx) => QDefinition -> ctx -> Field -> ModRow -> Mod
 mkQField d _ l@Label fs = (show l, (mkParagraph $ at_start d):[]) : fs
 mkQField d _ l@Symbol fs = (show l, (mkParagraph $ (P $ eqSymb d)):[]) : fs
 mkQField d _ l@Units fs = (show l, (mkParagraph $ (unitToSentenceUnitless d)):[]) : fs
-mkQField d _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (sy d $= d ^. equat) mkEmptyLabel) : []) : fs --FIXME: appending symbol should be done in the printing stage
+mkQField d _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (sy d $= d ^. equat) --FIXME: appending symbol should be done in the printing stage
+  (modifyLabelEqn (d ^. getLabel))) : []) : fs 
 mkQField d m l@(Description v u) fs =
   (show l, buildDDescription v u d m) : fs
 mkQField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
@@ -117,7 +119,8 @@ mkDDField :: (HasSymbolTable ctx) => DataDefinition -> ctx -> Field -> ModRow ->
 mkDDField d _ l@Label fs = (show l, (mkParagraph $ at_start d):[]) : fs
 mkDDField d _ l@Symbol fs = (show l, (mkParagraph $ (P $ eqSymb d)):[]) : fs
 mkDDField d _ l@Units fs = (show l, (mkParagraph $ (unitToSentenceUnitless d)):[]) : fs
-mkDDField d _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (sy d $= d ^. relat) mkEmptyLabel) :[]) : fs --FIXME: appending symbol should be done in the printing stage
+mkDDField d _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (sy d $= d ^. relat) --FIXME: appending symbol should be done in the printing stage
+  (modifyLabelEqn (d ^.getLabel))) :[]) : fs 
 mkDDField d m l@(Description v u) fs =
   (show l, buildDDescription' v u d m) : fs
 mkDDField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
@@ -157,7 +160,8 @@ mkGDField g _ l@Units fs =
   let u = gdUnit g in
     case u of Nothing   -> fs
               Just udef -> (show l, (mkParagraph $ Sy (udef ^. usymb)):[]) : fs
-mkGDField g _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (g ^. relat) mkEmptyLabel):[]) : fs
+mkGDField g _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (g ^. relat) 
+  (modifyLabelEqn (g ^. getLabel))):[]) : fs
 mkGDField g m l@(Description v u) fs = (show l,
   (buildDescription v u (g ^. relat) m) []) : fs
 mkGDField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
@@ -169,7 +173,7 @@ mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 mkIMField :: HasSymbolTable ctx => InstanceModel -> ctx -> Field -> ModRow -> ModRow
 mkIMField i _ l@Label fs  = (show l, (mkParagraph $ at_start i):[]) : fs
 mkIMField i _ l@DefiningEquation fs =
-  (show l, (LlC $ eqUnR (i ^. relat) mkEmptyLabel):[]) : fs
+  (show l, (LlC $ eqUnR (i ^. relat) (modifyLabelEqn (i ^. getLabel))):[]) : fs
 mkIMField i m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] [i ^. relat]) : fs
 mkIMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
@@ -227,4 +231,3 @@ instance Show Field where
 
 fixme :: [Contents]
 fixme = [UlC $ ulcc $ Paragraph $ S "FIXME: This needs to be filled in"]
-

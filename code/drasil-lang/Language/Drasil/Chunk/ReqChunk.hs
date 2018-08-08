@@ -6,10 +6,13 @@ module Language.Drasil.Chunk.ReqChunk
 
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid))
-import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname))
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Label.Core (Label)
+import Language.Drasil.Classes (HasLabel(getLabel))
+import Language.Drasil.RefTypes (ReqType(..))
 
-import Control.Lens ((^.), view, makeLenses)
+import Control.Lens ((^.), makeLenses)
 
 -- We will likely need to differentiate functional/non-functional reqs
 -- (or whatever we want to call them) for the future when we parse our 
@@ -19,11 +22,6 @@ import Control.Lens ((^.), view, makeLenses)
 -- are dead information, and larger structures (like Contents) are display-specific.
 -- For now, using sentences to test.
 
--- | What type of requirement are we dealing with?
-data ReqType = FR  -- ^ Functional Requirement
-             | NFR -- ^ Non-Functional Requirement
-  deriving Eq
-  
 instance Show ReqType where
   show FR  = "FR"
   show NFR = "NFR"
@@ -35,19 +33,20 @@ data ReqChunk = RC
   { _rid        :: UID
   , reqType    :: ReqType 
   , requires   :: Sentence
-  , _refName   :: ShortName
+  , _lbl       :: Label
   }
 makeLenses ''ReqChunk
   
 instance HasUID        ReqChunk where uid = rid
 instance Eq            ReqChunk where a == b = a ^. uid == b ^. uid
-instance HasShortName  ReqChunk where shortname = view refName
+instance HasLabel      ReqChunk where getLabel = lbl
+instance HasShortName  ReqChunk where shortname = lbl . shortname
 
 -- | Smart constructor for requirement chunks (should not be exported)
-rc :: String -> ReqType -> Sentence -> ShortName -> ReqChunk
+rc :: String -> ReqType -> Sentence -> Label -> ReqChunk
 rc = RC
 
-frc, nfrc :: String -> Sentence -> ShortName -> ReqChunk
+frc, nfrc :: String -> Sentence -> Label -> ReqChunk
 -- | Smart constructor for functional requirement chunks.
 frc i = rc i FR
 

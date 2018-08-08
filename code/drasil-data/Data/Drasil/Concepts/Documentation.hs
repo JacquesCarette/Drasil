@@ -184,7 +184,8 @@ year            = nc "year"           (cn'    "year"               )
 
 
 orgOfDoc, prpsOfDoc, refmat, scpOfReq, consVals,
-  termAndDef, tOfSymb, traceyMandG, corSol, charOfIR, propOfCorSol, vav :: NamedChunk
+  termAndDef, tOfSymb, traceyMandG, corSol, charOfIR, propOfCorSol,
+  vav :: NamedChunk
 
 corSol       = nc "corSol"       (cn' "correct solution")
 charOfIR     = nc "charOfIR"     (characteristic `of__` intReader)

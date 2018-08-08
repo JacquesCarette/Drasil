@@ -35,24 +35,24 @@ import Data.Drasil.SentenceStructures (acroIM, acroR, foldlSent, sAnd, isThe,
 req1, req2, req3, req4,
   req5, req6, req7, req8, req9, req10, req11 :: LabelledContent
 
-reqEqn1, reqEqn2 :: Contents
+reqEqn1, reqEqn2 :: Contents --Fixme: rename labels
 
-req1 = mkRequirement "req1" (foldlSentCol [
+req1 = mkRequirement "req1" ( foldlSentCol [
   titleize input_, S "the following", plural quantity `sC`
   S "which define the", phrase tank, plural parameter `sC` S "material",
   plural property, S "and initial", plural condition]) "Input-Initial-Quantities"
 
-req2 = mkRequirement "req2" (foldlSentCol [
+req2 = mkRequirement "req2" ( foldlSentCol [
   S "Use the", plural input_, S "in", makeRef req1,
   S "to find the", phrase mass, S "needed for", acroIM 1, S "to",
   acroIM 4 `sC` S "as follows, where", ch w_vol `isThe` phrase w_vol,
   S "and", ch tank_vol `isThe` phrase tank_vol] ) "Use-Above-Find-Mass-IM1-IM4"
 
-reqEqn1 = LlC $ eqUnR' mkEmptyLabel $ ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
+reqEqn1 = eqUnR' $ ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
   ((sy tank_vol) - (sy pcm_vol)) * (sy w_density) $=
   (((sy diam) / 2) * (sy tank_length) - (sy pcm_vol)) * (sy w_density)) -- FIXME: Ref Hack
 
-reqEqn2 = LlC $ eqUnR' mkEmptyLabel $ ((sy pcm_mass) $= (sy pcm_vol) * (sy pcm_density)) -- FIXME: Ref Hack
+reqEqn2 = eqUnR' $ ((sy pcm_mass) $= (sy pcm_vol) * (sy pcm_density)) -- FIXME: Ref Hack
 
 req3 = mkRequirement "req3" ( foldlSent [
   S "Verify that the", plural input_, S "satisfy the required",
@@ -130,3 +130,14 @@ nonFuncReqs = nonFuncReqF [performance] [correctness, verifiability,
 -- repeated, but it is always either stating that performance is a priority or
 -- performance is not a priority. This is probably something that can be
 -- abstracted out.
+
+-- FIXME: Related to #792 --
+newReq9 :: ReqChunk
+newReq9 = frc "req9" ( foldlSent [
+  S "Verify that the", phrase energy, plural output_,
+  sParen (ch w_E :+: sParen (ch time) `sAnd` ch pcm_E :+:
+  sParen (ch time)), S "follow the", phrase CT.law_cons_energy, {-`sC`
+  S "as outlined in"
+  --FIXME , makeRef s4_2_7 `sC` -} 
+  S "with relative error no greater than 0.001%"] ) 
+  (mkLabelSame "Verify-Energy-Output-follow-Conservation-of-Energy_Label" (Req FR))

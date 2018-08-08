@@ -40,24 +40,25 @@ mis = commonIdea "mis"
 
 -- concepts relating to the templates and their contents
 
-abbreviation, analysis, appendix, aspect, body, characteristic, class_, client, 
-  code, column, company, component, concept, condition, connection, constant,
-  constraint, consumer, content, context, coordinate, customer, datum, decision, 
-  definition, dependency, description, design, document, documentation, effect, 
-  element, emphasis, endUser, environment, failure, figure, first, form, full, 
+abbreviation, access, analysis, appendix, aspect, body, characteristic, class_, client, 
+  code, column, company, component, concept, condition, connection, consideration, 
+  constant, constraint, consumer, content, context, coordinate, customer, datum, 
+  decision, definition, dependency, description, design, document, documentation, 
+  effect, element, emphasis, endUser, environment, failure, figure, first, form, full, 
   functional, game, general, goal, guide, implementation, individual, information, 
-  interest, interface, input_, instance_, intReader, introduction, issue, item, 
+  interest, interface, input_, instance_, intReader, introduction, invariant, issue, item, 
   loss, label, library, limitation, literacy, material_, message, method_, module_,
   model, name_, nonfunctional, object, offShelf, open, organization, output_,
   physics, physical, plan, practice, priority, problem, product_, project,
   property, purpose, quantity, realtime, reference, requirement_, response, 
-  result, reviewer, safety, scope, second_, section_, scenario, source,
+  result, reviewer, routine, safety, scope, second_, section_, semantic, scenario, source,
   simulation, software, solution, specific, specification, stakeholder,
-  standard, statement, symbol_, system, table_, task, template, term_,
-  terminology, theory, traceyGraph, traceyMatrix, type_, uncertainty, user,
+  standard, state, statement, symbol_, syntax, system, table_, task, template, term_,
+  terminology, theory, traceyGraph, traceyMatrix, type_, uncertainty, use, user,
   useCase, validation, value, variable, video, verification, year :: NamedChunk
 
 abbreviation    = nc "abbreviation"   (cn'    "abbreviation"       )
+access          = nc "access"         (cn'    "access"             )
 analysis        = nc "analysis"       (cnIS   "analysis"           )
 appendix        = nc "appendix"       (cnICES "appendix"           )
 aspect          = nc "aspect"         (cn'    "aspect"             )
@@ -72,6 +73,7 @@ component       = nc "component"      (cn'    "component"          )
 concept         = nc "concept"        (cn'    "concept"            )
 condition       = nc "condition"      (cn'    "condition"          )
 connection      = nc "connection"     (cn'    "connection"         )
+consideration   = nc "consideration"  (cn'    "consideration"      )
 constant        = nc "constant"       (cn'    "constant"           )
 constraint      = nc "constraint"     (cn'    "constraint"         )
 consumer        = nc "consumer"       (cn'    "consumer"           )
@@ -92,6 +94,7 @@ element         = nc "element"        (cn'    "element"            )
 emphasis        = nc "emphasis"       (cnIS   "emphasis"           )
 endUser         = nc "end user"       (cn'    "end user"           )
 environment     = nc "environment"    (cn'    "environment"        ) -- Is this term in the right spot?
+exported        = nc "exported"       (cnIS   "exported"           ) --FIXME: Adjective
 failure         = nc "failure"        (cn'    "failure"            )
 figure          = nc "figure"         (cn'    "figure"             )
 first           = nc "first"          (cn'    "first"              ) --Does it make sense for this to be here?
@@ -112,6 +115,7 @@ input_          = nc "input"          (cn'    "input"              )
 instance_       = nc "instance"       (cn'    "instance"           )
 intReader       = nc "intReader"      (cn'    "intended reader"    )
 introduction    = nc "introduction"   (cn'    "introduction"       )
+invariant       = nc "invariant"      (cn'    "invariant"          )
 issue           = nc "issue"          (cn'    "issue"              )
 item            = nc "item"           (cn'    "item"               )
 label           = nc "label"          (cn'    "label"              )
@@ -149,10 +153,12 @@ requirement_    = nc "requirement"    (cn'    "requirement"        ) --FIXME: Ev
 response        = nc "response"       (cn'    "response"           )
 result          = nc "result"         (cn'    "result"             )
 reviewer        = nc "reviewer"       (cn'    "reviewer"           )
+routine         = nc "routine"        (cn'    "routine"            )
 safety          = nc "safety"         (cnIES  "safety"             )
 scope           = nc "scope"          (cn'    "scope"              )
 second_         = nc "second"         (cn'    "second"             ) --Does it make sense for this to be here?
 section_        = nc "section"        (cn'    "section"            )
+semantic        = nc "semantic"       (cn'    "semantic"           )
 scenario        = nc "scenario"       (cn'    "scenario"           )
 source          = nc "source"         (cn'    "source"             )
 simulation      = nc "simulation"     (cn'    "simulation"         )
@@ -162,8 +168,10 @@ specific        = nc "specific"       (cn'    "specific"           ) --FIXME: Ad
 specification   = nc "specification"  (cn'    "specification"      )
 stakeholder     = nc "stakeholder"    (cn'    "stakeholder"        )
 standard        = nc "standard"       (cn'    "standard"           )
+state           = nc "state"          (cn'    "state"              )
 statement       = nc "statement"      (cn'    "statement"          )
 symbol_         = nc "symbol"         (cn'    "symbol"             )
+syntax          = nc "syntax"         (cn'    "syntax"             )
 system          = nc "system"         (cn'    "system"             )
 table_          = nc "table"          (cn'    "table"              )
 task            = nc "task"           (cn'    "task"               )
@@ -175,6 +183,7 @@ traceyGraph     = nc "traceyGraph"    (cn'    "traceability graph" )
 traceyMatrix    = nc "traceyMatrix"   (cnICES "traceability matrix")
 type_           = nc "type"           (cn'    "type"               )
 uncertainty     = nc "uncertainty"    (cnIES  "uncertainty"        )
+use             = nc "use"            (cn'    "use"                )
 user            = nc "user"           (cn'    "user"               )
 useCase         = nc "useCase"        (cn'    "use case"           )
 validation      = nc "validation"     (cn'    "validation"         )
@@ -209,18 +218,22 @@ scpOfTheProj oper = nc "scpOfTheProj" (scope `of_` theCustom oper project) -- re
 
 -- compounds
 
-datumConstraint, designDoc, fullForm, functionalRequirement, 
-  generalSystemDescription, indPRCase, moduleHierarchy, moduleInterface, 
-  nonfunctionalRequirement, offShelfSolution, physicalConstraint, 
+accRoutSemantic, datumConstraint, designDoc, enviroVar, expConstant, expType, fullForm, 
+  functionalRequirement, generalSystemDescription, indPRCase, moduleHierarchy, 
+  moduleInterface, nonfunctionalRequirement, offShelfSolution, physicalConstraint, 
   physicalProperty, physicalSim, physicalSystem, problemDescription, 
-  prodUCTable, productUC, safetyReq, softwareConstraint, softwareDoc, 
+  prodUCTable, productUC, routineSemantic, safetyReq, softwareConstraint, softwareDoc, 
   softwareReq, softwareSys, softwareVAV, softwareVerif, solutionCharacteristic, 
-  solutionCharSpec, specificsystemdescription, sysCont, systemConstraint, 
-  systemdescription, uncertCol, useCaseTable, userCharacteristic, userInput, 
-  vavPlan :: NamedChunk
+  solutionCharSpec, specificsystemdescription, stateVar, stateInvar, sysCont, 
+  systemConstraint, systemdescription, uncertCol, useCaseTable, userCharacteristic, 
+  userInput, vavPlan :: NamedChunk
  
+accRoutSemantic              = compoundNC access routineSemantic
 datumConstraint              = compoundNC' datum constraint
 designDoc                    = compoundNC design document
+enviroVar                    = compoundNC environment variable
+expConstant                  = compoundNC exported constant
+expType                      = compoundNC exported type_
 fullForm                     = compoundNC full form
 functionalRequirement        = compoundNC functional requirement_
 generalSystemDescription     = compoundNC general systemdescription
@@ -236,6 +249,7 @@ physicalSystem               = compoundNC physical system
 problemDescription           = compoundNC problem description
 prodUCTable                  = compoundNC productUC table_
 productUC                    = compoundNC product_ useCase
+routineSemantic              = compoundNC routine semantic
 safetyReq                    = compoundNC safety requirement_
 softwareConstraint           = compoundNC software constraint
 softwareDoc                  = compoundNC software documentation
@@ -246,6 +260,8 @@ softwareVerif                = compoundNC software verification
 solutionCharSpec             = compoundNCP1 solutionCharacteristic specification
 solutionCharacteristic       = compoundNC solution characteristic
 specificsystemdescription    = compoundNC specific systemdescription
+stateVar                     = compoundNC state variable
+stateInvar                   = compoundNC state invariant
 sysCont                      = compoundNC system context
 systemConstraint             = compoundNC system constraint
 systemdescription            = compoundNC system description

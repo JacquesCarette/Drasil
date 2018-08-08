@@ -1,7 +1,7 @@
 module Data.Drasil.Concepts.Software where
 
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation (srs)
+import Data.Drasil.Concepts.Documentation (access, exported, srs)
 import Data.Drasil.SentenceStructures (foldlSent)
 import Control.Lens ((^.))
 
@@ -153,3 +153,8 @@ mod_ode_desc :: ConceptChunk
 mod_ode_desc = dccWDS "mod_ode_desc" (nounPhraseSP "ODE solver") (
   S "Provides solvers that take the governing equation, initial conditions," +:+ 
   S "and numerical parameters, and solve them.")
+
+accessProgram, expAccProgram :: NamedChunk
+
+accessProgram = compoundNC access program
+expAccProgram = compoundNC exported accessProgram

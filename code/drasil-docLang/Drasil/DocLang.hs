@@ -9,7 +9,7 @@ module Drasil.DocLang (
     StkhldrSec(StkhldrProg2),
     StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg), 
     TSIntro(..), UCsSec(..), mkDoc, mkLklyChnk, mkRequirement, 
-    mkUnLklyChnk, tsymb, tsymb'', mkConCC, mkConCC', mkEnumCC,
+    mkUnLklyChnk, srsDomains, tsymb, tsymb'', mkConCC, mkConCC', mkEnumCC,
     -- DocumentLanguage.Definitions
     Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose), ddefn',
     -- DocumentLanguage.RefHelpers 
@@ -23,7 +23,7 @@ module Drasil.DocLang (
     -- Sections.ReferenceMaterial
     intro,
     -- Sections.Requirements
-    nonFuncReqF, reqF, funcReqDom,
+    nonFuncReqF, reqF, reqDom, funcReqDom,
     -- Sections.ScopeOfTheProject
     -- Sections.SolutionCharacterSpec
     SubSec, assembler, sSubSec, siCon, siDDef, siIMod, siSTitl, siSent, siTMod, 
@@ -47,7 +47,7 @@ import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
     ScpOfProjSec(ScpOfProjProg), SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), 
     StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), TConvention(..), 
     TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..), mkDoc, 
-    mkLklyChnk, mkRequirement, mkUnLklyChnk, tsymb, tsymb'', mkConCC, mkConCC',
+    mkLklyChnk, mkRequirement, mkUnLklyChnk, srsDomains, tsymb, tsymb'', mkConCC, mkConCC',
     mkEnumCC)
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, 
     InclUnits(IncludeUnits), Verbosity(Verbose), ddefn')
@@ -58,7 +58,7 @@ import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
 --import Drasil.Sections.Introduction
 import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.Sections.Requirements (nonFuncReqF, reqF, funcReqDom)
+import Drasil.Sections.Requirements (nonFuncReqF, reqF, reqDom, funcReqDom)
 --import Drasil.Sections.ScopeOfTheProject
 import Drasil.Sections.SolutionCharacterSpec (SubSec, assembler, sSubSec, siCon, 
     siDDef, siIMod, siSTitl, siSent, siTMod, siUQI, siUQO)

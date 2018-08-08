@@ -70,8 +70,8 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   RefSec(RefProg), RefTab(TAandA, TUnits), 
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty, 
   funcReqDom, inDataConstTbl, intro, mkDoc, mkEnumCC, mkRequirement,
-  mkUnLklyChnk, mkLklyChnk, outDataConstTbl, physSystDesc, reqF, termDefnF, traceMGF,
-  tsymb, valsOfAuxConstantsF)
+  mkUnLklyChnk, mkLklyChnk, outDataConstTbl, physSystDesc, reqF, srsDomains, termDefnF, 
+  traceMGF, tsymb, valsOfAuxConstantsF)
  
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
   isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP, acroIM, acroGD)
@@ -188,7 +188,7 @@ nopcm_srs :: Document
 nopcm_srs = mkDoc mkSRS (for) nopcm_si
 
 nopcm_SymbMap :: ChunkDB
-nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) nopcm_Symbols
+nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) (map cw nopcm_Symbols ++ srsDomains)
   this_si
 
 assumps_Nopcm_list_new :: [AssumpChunk]

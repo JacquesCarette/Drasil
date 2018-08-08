@@ -48,22 +48,22 @@ misOfModule cs ss mod = section' (titleize $ Doc.misOfModule mod) cs ss $ "MISof
 -- INTRODUCTION --
 ------------------
 
-introMIS :: Contents
-introMIS = foldlSP [S "The following", phrase document, S "details the", 
+introMIS :: (Idea a) => a -> Sentence -> Contents
+introMIS progName outerLink = foldlSP [S "The following", phrase document, S "details the", 
   titleize mis, S "for the implemented", plural Doc.module_ `inThe`
-  phrase program, S "GlassBR. It is intended to ease navigation through the", -- Make 'GlassBR' more general when pulled out of MIS.hs
+  phrase program, short progName :+: S ". It is intended to ease navigation through the",
   phrase program, S "for", phrase design, S "and maintenance" +:+. plural purpose,
   S "Complementary", plural document, S "include the", titleize srs, (sParen $ getAcc srs)
   `sAnd` titleize mg +:+. sParen (getAcc mg), S "The full", phrase documentation `sAnd`
-  phrase implementation, S "can be found at",
-  S "https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass"]
+  phrase implementation, S "can be found at", outerLink]
+--FIXME: outerLink needs to work!
 
 --------------
 -- NOTATION --
 --------------
 
 notationIntroMIS :: Contents
-notationIntroMIS = foldlSP [S "The structure of the MIS for modules comes from ",
+notationIntroMIS = foldlSP [S "The structure of the", getAcc mis, S "for modules comes from",
   S "Hoffman and Strooper (1995), with the addition that template modules have been:",
   S " adapted from Ghezzi et al. (2003). The mathematical notation comes from ",
   S "Chapter 3 of Hoffman and Strooper (1995). For instance, the symbol := is used",

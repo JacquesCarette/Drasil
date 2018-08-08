@@ -314,7 +314,7 @@ mkSections si l = map doit l
     doit (TraceabilitySec t) = mkTraceabilitySec t
     doit (AppndxSec a)       = mkAppndxSec a
     doit (ExistingSolnSec o) = mkExistingSolnSec o
-    doit (NotationSec n)     = mkNotationSec n
+    doit (NotationSec n)     = mkNotationSec si n
 
 
 -- | Helper for creating the reference section and subsections
@@ -446,7 +446,7 @@ defaultTUI = [System, Derived, TUPurpose]
 
 mkIntroSec :: SystemInformation -> IntroSec -> Section
 mkIntroSec _ (IntroVerb s) = s
-mkIntroSec SI {_sys = sys} (IntroMIS link)     = GB.intro [MIS.introMIS {-pass in `sys` and `link`-}] []
+mkIntroSec SI {_sys = sys} (IntroMIS link)     = GB.intro [MIS.introMIS sys link] []
 mkIntroSec si (IntroProg probIntro progDefn l) =
   Intro.introductionSection probIntro progDefn $ map (mkSubIntro si) l
   where
@@ -610,7 +610,16 @@ mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortByS
 -- | Helper for making the 'Off-the-Shelf Solutions' section
 mkNotationSec :: NotationSec -> Section
 mkNotationSec (NotationVerb s)  = s
-mkNotationSec (NotationProg cs) = MIS.notation cs []
+mkNotationSec (NotationProg cs) = MIS.notation (MIS.notationIntroMIS ++ MIS.notTblIntro cs) []
+
+notTblIntro :: Contents
+notTblIntro = mkParagraph $ S "The following table summarizes the primitive" +:+
+  S "data types used by GlassBR"
+
+--notationTable :: LabelledContent
+--notationTable 
+
+notationIntroContd
 
 {--}
 

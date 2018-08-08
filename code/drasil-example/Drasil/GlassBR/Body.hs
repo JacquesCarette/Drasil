@@ -13,7 +13,7 @@ import qualified Drasil.DocLang.MIS as MIS (introMIS)
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), 
-  GSDSub(..), InclUnits(IncludeUnits), IntroSec(IntroProg, IntroVerb),
+  GSDSub(..), InclUnits(IncludeUnits), IntroSec(IntroProg, IntroMIS),
   IntroSub(IChar, IOrgSec, IPurpose, IScope), LCsSec(..), ProblemDescription(..), 
   RefSec(RefProg), RefTab(TAandA, TUnits), ReqrmntSec(..), 
   ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SCSSub(..), 
@@ -168,7 +168,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   AppndxSec (AppndxProg [appdxIntro, LlC fig_5, LlC fig_6]) : []
 
 mkMIS :: DocDesc
-mkMIS = IntroSec (IntroVerb (GB.intro [MIS.introMIS] [])) : 
+mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass")) : 
   Bibliography : []
 
 stdFields :: Fields
@@ -204,9 +204,9 @@ glassSystInfo = SI {
 --FIXME: modify SystemInformation to hold information for both MIS and SRS?
 glassSystInfo' :: SystemInformation
 glassSystInfo' = SI {
-  _sys         = gLassBR,
-  _kind        = mis,
-  _authors     = [spencerSmith],
+  _sys         = gLassBR, --same
+  _kind        = mis,     --different
+  _authors     = [spencerSmith], --different
   _units       = check_si,
   _quants      = this_symbols,
   _concepts    = [] :: [DefinedQuantityDict],
@@ -224,7 +224,7 @@ glassSystInfo' = SI {
   _constraints = gbConstrained,
   _constants   = gbConstants,
   _sysinfodb   = gbSymbMap,
-  _refdb       = gbRefDB'
+  _refdb       = gbRefDB' --different
 }
 
 glassBR_code :: CodeSpec

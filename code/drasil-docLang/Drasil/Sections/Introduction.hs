@@ -110,7 +110,7 @@ intReaderIntro :: (Idea a) =>
 intReaderIntro EmptyS topic2 progName stdrd sectionRef = 
   [foldlSP [S "Reviewers of this",
   (phrase documentation), S "should have an understanding of" +:+. topic2 :+:
-  stdrd, S "The", (plural user), S "of", (short progName),
+  stdrd, S "The", plural user, S "of", short progName,
   S "can have a lower level of expertise, as explained in", (makeRef sectionRef)]]
 intReaderIntro topic1 topic2 progName stdrd sectionRef = 
   [foldlSP [S "Reviewers of this",

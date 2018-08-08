@@ -1,7 +1,19 @@
 module Drasil.DocLang.MIS where
 
 import Language.Drasil
+import Drasil.DocLang.GenBuilders (section')
+
+import qualified Data.Drasil.Concepts.Documentation as Doc (misOfModule, moduleHierarchy, notation)
 import Data.Drasil.SentenceStructures (foldlSP)
+
+modHier, notation :: [Contents] -> [Section] -> Section
+
+modHier  cs ss = section' (titleize Doc.moduleHierarchy)  cs ss "ModHierarchy"
+notation cs ss = section' (titleize Doc.notation)         cs ss "Notation"
+
+misOfModule :: [Contents] -> [Section] -> String -> Section
+misOfModule cs ss mod = section' (titleize $ Doc.misOfModule mod)  cs ss $ "MISof" ++ mod ++ "Module"
+
 
 --FIXME: needs variability
 introMIS :: Contents

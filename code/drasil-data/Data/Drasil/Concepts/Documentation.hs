@@ -3,7 +3,7 @@ module Data.Drasil.Concepts.Documentation where
 import Language.Drasil hiding (organization)
 
 import Data.Drasil.Concepts.Math (graph)
-import Data.Drasil.Phrase (andRT, and_, and_', ofA, of_, of_', of__)
+import Data.Drasil.Phrase (andRT, and_, and_', ofA, of_, of_', of_'', of__)
 
 import Control.Lens ((^.))
 
@@ -102,6 +102,7 @@ game            = nc "game"           (cn'    "game"               )
 general         = nc "general"        (cn'    "general"            ) --FIXME: Adjective
 goal            = nc "goal"           (cn'    "goal"               )
 guide           = nc "guide"          (cn'    "guide"              )
+hierarchy       = nc "hierarchy"      (cn'    "hierarchy"          )
 implementation  = nc "implementation" (cn'    "implementation"     )
 individual      = nc "individual"     (cn'    "individual"         )
 information     = nc "information"    (cn     "information"        )
@@ -125,6 +126,7 @@ module_         = nc "module"         (cn'    "module"             )
 model           = nc "model"          (cn'    "model"              )
 name_           = nc "name"           (cn'    "name"               )
 nonfunctional   = nc "non-functional" (cn'    "non-functional"     ) --FIXME: Adjective
+notation        = nc "notation"       (cn'    "notation"           )
 object          = nc "object"         (cn'    "object"             )
 offShelf        = nc "Off-the-Shelf"  (cn'    "Off-the-Shelf"      )
 open            = nc "open"           (cn'    "open"               )
@@ -200,20 +202,26 @@ traceyMandG  = nc "traceyMandG"  (andRT titleize' titleize' traceyMatrix graph)
 vav          = nc "vav"          (verification `and_` validation)
 consVals     = nc "consVals"     (cn "values of auxiliary constants")
 
+module_' :: String -> NamedChunk
+module_' mod = nc (mod ++ "Module") (cn' $ mod ++ " module") -- should this use compoundNC?
+
+misOfModule :: String -> NamedChunk
+misOfModule mod = nc ("misOf" ++ mod ++ "Module") (mis `of_''` module_' mod) -- use mis :: CI ?
+
 scpOfTheProj :: (NamedChunk -> Sentence) -> NamedChunk
 scpOfTheProj oper = nc "scpOfTheProj" (scope `of_` theCustom oper project) -- reasonable hack?
 
 -- compounds
 
-designDoc, fullForm, generalSystemDescription, indPRCase,
-  physicalConstraint, physicalSystem, problemDescription, prodUCTable,
-  specificsystemdescription, systemdescription, systemConstraint, sysCont,
-  userCharacteristic, datumConstraint, functionalRequirement,
-  nonfunctionalRequirement, safetyReq, softwareConstraint, softwareDoc,
-  softwareReq, softwareSys, softwareVerif, softwareVAV, solutionCharSpec,
-  solutionCharacteristic, offShelfSolution, physicalSim, productUC, 
-  useCaseTable, physicalProperty, vavPlan, uncertCol, userInput, 
-  moduleInterface :: NamedChunk
+datumConstraint, designDoc, fullForm, functionalRequirement, 
+  generalSystemDescription, indPRCase, moduleHierarchy, moduleInterface, 
+  nonfunctionalRequirement, offShelfSolution, physicalConstraint, 
+  physicalProperty, physicalSim, physicalSystem, problemDescription, 
+  prodUCTable, productUC, safetyReq, softwareConstraint, softwareDoc, 
+  softwareReq, softwareSys, softwareVAV, softwareVerif, solutionCharacteristic, 
+  solutionCharSpec, specificsystemdescription, sysCont, systemConstraint, 
+  systemdescription, uncertCol, useCaseTable, userCharacteristic, userInput, 
+  vavPlan :: NamedChunk
  
 datumConstraint              = compoundNC' datum constraint
 designDoc                    = compoundNC design document
@@ -222,6 +230,7 @@ functionalRequirement        = compoundNC functional requirement_
 generalSystemDescription     = compoundNC general systemdescription
 indPRCase                    = compoundNC individual productUC
 moduleInterface              = compoundNC' module_ interface
+moduleHierarchy              = compoundNC' module_ hierarchy
 nonfunctionalRequirement     = compoundNC nonfunctional requirement_
 offShelfSolution             = compoundNC offShelf solution
 physicalConstraint           = compoundNC physical constraint

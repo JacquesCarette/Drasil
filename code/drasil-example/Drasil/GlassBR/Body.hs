@@ -20,6 +20,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), NotationSec(..),
+  ModHierarchSec(..), 
   cite, dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
   mkRequirement, outDataConstTbl, physSystDesc, termDefnF, traceGIntro, 
   tsymb)
@@ -170,6 +171,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
 mkMIS :: DocDesc
 mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass")) : 
   NotationSec (NotationProg []) : 
+  ModHierarchSec (ModHierarchProg $ S "section 3 of the MG (Link)") : --FIXME: hardcoded link
   Bibliography : []
 
 stdFields :: Fields

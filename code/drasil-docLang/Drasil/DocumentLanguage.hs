@@ -24,7 +24,7 @@ import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn, genSysD
   inModel, likeChg, unlikeChg, probDesc, solCharSpec, stakeholder,
   thModel, userChar, genDefnLabel, propCorSol, offShelfSol)
 import qualified Drasil.DocLang.MIS as MIS (notation, introMIS, notationIntroContd,
-  notTblIntro, notationIntroMIS)
+  notTblIntro, notationIntroMIS, modHierarchyPointer, modHier)
 
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
@@ -253,7 +253,7 @@ data NotationSec = NotationVerb Section | NotationProg [Contents]
 
 {--}
 
-data ModHierarchSec = ModHierarchVerb Section | ModHierarchProg [Contents]  
+data ModHierarchSec = ModHierarchVerb Section | ModHierarchProg Sentence
 
 {--}
 
@@ -316,7 +316,7 @@ mkSections si l = map doit l
     doit (AppndxSec a)       = mkAppndxSec a
     doit (ExistingSolnSec o) = mkExistingSolnSec o
     doit (NotationSec n)     = mkNotationSec si n
-    --doit ()
+    doit (ModHierarchSec mh) = mkModHierarchSec mh
 
 
 -- | Helper for creating the reference section and subsections
@@ -609,11 +609,18 @@ mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortByS
 
 {--}
 
--- | Helper for making the 'Off-the-Shelf Solutions' section
+-- | Helper for making the 'Notation' section
 mkNotationSec :: SystemInformation -> NotationSec -> Section
 mkNotationSec _ (NotationVerb s)  = s
 mkNotationSec SI {_sys = sys} (NotationProg cs) = MIS.notation (MIS.notationIntroMIS :
   (MIS.notTblIntro sys) : cs ++ [MIS.notationIntroContd sys]) []
+
+{--}
+
+-- | Helper for making the 'Module Hierarchy' section
+mkModHierarchSec :: ModHierarchSec -> Section
+mkModHierarchSec (ModHierarchVerb s)      = s
+mkModHierarchSec (ModHierarchProg mgLink) = MIS.modHier [MIS.modHierarchyPointer mgLink] []
 
 {--}
 

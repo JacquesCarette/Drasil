@@ -91,5 +91,6 @@ notationIntroContd progName = foldlSP [S "The specification of", short progName,
 -- MODULE HIERARCHY --
 ----------------------
 
-modHierarchyPointer :: Contents
-modHierarchyPointer = mkParagraph $ S "To view the Module Hierarchy, see section 3 of the MG (Link)."
+modHierarchyPointer :: Sentence -> Contents
+modHierarchyPointer mgLink = mkParagraph $ S "To view the Module Hierarchy, see" +:+ mgLink
+

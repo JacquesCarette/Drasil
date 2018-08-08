@@ -9,7 +9,7 @@ import qualified Drasil.DocLang.SRS as SRS (dataDefnLabel,
   valsOfAuxConsLabel, referenceLabel, indPRCaseLabel,
   datConLabel)
 import qualified Drasil.DocLang.GenBuilders as GB (intro)
-import qualified Drasil.DocLang.MIS as MIS (introMIS)
+import qualified Drasil.DocLang.MIS as MIS (introMIS,hwModIntro)
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), 
@@ -20,7 +20,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), NotationSec(..),
-  ModHierarchSec(..), 
+  ModHierarchSec(..), MISModSub(..), MISModSec(..), 
   cite, dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
   mkRequirement, outDataConstTbl, physSystDesc, termDefnF, traceGIntro, 
   tsymb)
@@ -172,7 +172,9 @@ mkMIS :: DocDesc
 mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass")) : 
   NotationSec (NotationProg []) : 
   ModHierarchSec (ModHierarchProg $ S "section 3 of the MG (Link)") : --FIXME: hardcoded link
-  Bibliography : []
+  Bibliography : 
+  MISModSec (MISModProg "Hardware" (Just MIS.hwModIntro) [MISModule, MISUses []]) :
+  []
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, 

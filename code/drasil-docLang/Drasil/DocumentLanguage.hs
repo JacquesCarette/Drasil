@@ -24,7 +24,8 @@ import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn, genSysD
   inModel, likeChg, unlikeChg, probDesc, solCharSpec, stakeholder,
   thModel, userChar, genDefnLabel, propCorSol, offShelfSol)
 import qualified Drasil.DocLang.MIS as MIS (notation, introMIS, notationIntroContd,
-  notTblIntro, notationIntroMIS, modHierarchyPointer, modHier)
+  notTblIntro, notationIntroMIS, modHierarchyPointer, modHier, syntax,
+  uses, module_, misOfModule)
 
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
@@ -257,14 +258,13 @@ data ModHierarchSec = ModHierarchVerb Section | ModHierarchProg Sentence
 
 {--}
 
-
 data MISModSec = MISModVerb Section
-               | MISModProg [MISModSub]
+               | MISModProg String (Maybe Contents) [MISModSub]
 
 data MISModSub where
   MISModSubVerb     :: Section -> MISModSub
-  MISModule         :: String -> MISModSub
-  MISUses           :: [MISModSec] -> MISModSub
+  MISModule         :: MISModSub
+  MISUses           :: [Label] -> MISModSub
   MISSyntax         :: [MISSyntaxSub] -> MISModSub
   MISSemantics      :: [MISSemanticsSub] -> [Section] -> MISModSub
   MISConsiderations :: [Contents] -> MISModSub
@@ -317,6 +317,7 @@ mkSections si l = map doit l
     doit (ExistingSolnSec o) = mkExistingSolnSec o
     doit (NotationSec n)     = mkNotationSec si n
     doit (ModHierarchSec mh) = mkModHierarchSec mh
+    doit (MISModSec ms)      = mkMISModSec ms
 
 
 -- | Helper for creating the reference section and subsections
@@ -621,6 +622,24 @@ mkNotationSec SI {_sys = sys} (NotationProg cs) = MIS.notation (MIS.notationIntr
 mkModHierarchSec :: ModHierarchSec -> Section
 mkModHierarchSec (ModHierarchVerb s)      = s
 mkModHierarchSec (ModHierarchProg mgLink) = MIS.modHier [MIS.modHierarchyPointer mgLink] []
+
+{--}
+
+mkMISModSec :: MISModSec -> Section
+mkMISModSec (MISModVerb s) = s
+mkMISModSec (MISModProg modName Nothing mms)      = MIS.misOfModule [] []{-(map subsections mms)-} modName
+mkMISModSec (MISModProg modName (Just intro) mms) = MIS.misOfModule (intro : []) 
+  (map subsections mms) modName
+  where
+    subsections :: MISModSub -> Section
+    subsections (MISModSubVerb s)  = s
+    subsections MISModule          = MIS.module_ [mkParagraph $ S modName] []
+    subsections (MISUses useMods)  = MIS.uses    (map mkParagraph $ map makeRef useMods) [] --FIXME: needs to become a proper list
+    subsections _                  = MIS.syntax [] []
+    --subsections (MISSyntax s)  = s
+    --subsections (MISSemantics s)  = s
+    --subsections (MISConsiderations s)  = s
+
 
 {--}
 

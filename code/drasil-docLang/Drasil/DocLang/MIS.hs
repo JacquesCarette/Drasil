@@ -94,3 +94,11 @@ notationIntroContd progName = foldlSP [S "The specification of", short progName,
 modHierarchyPointer :: Sentence -> Contents
 modHierarchyPointer mgLink = mkParagraph $ S "To view the Module Hierarchy, see" +:+ mgLink
 
+---------------------------
+-- HARDWARE MODULE INTRO --
+---------------------------
+
+hwModIntro :: Contents
+hwModIntro = foldlSP [S "This module hides the underlying hardware for I/O (to the",
+  S "screen, or file, or other device). In general it will be provided by the selected",
+  S "programming language and operating system"]

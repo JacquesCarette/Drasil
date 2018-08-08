@@ -365,11 +365,11 @@ gbConstants = [constant_M, constant_K, constant_ModElas, constant_LoadDur, const
 
 constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadDF, constant_LoadSF :: QDefinition
 constant_K       = mkQuantDef sflawParamK  $ dbl 2.86e-53
-constant_M       = mkQuantDef sflawParamM  $ dbl 7
+constant_M       = mkQuantDef sflawParamM  $ 7
 constant_ModElas = mkQuantDef mod_elas     $ dbl 7.17e7
-constant_LoadDur = mkQuantDef load_dur     $ dbl 3
+constant_LoadDur = mkQuantDef load_dur     $ 3
 constant_LoadDF  = mkQuantDef lDurFac      $ ((sy load_dur) / 60) $^ ((sy sflawParamM) / (16))
-constant_LoadSF  = mkQuantDef loadSF       $ dbl 1
+constant_LoadSF  = mkQuantDef loadSF       $ 1
 --Equations--
 
 sdWithEqn :: QDefinition

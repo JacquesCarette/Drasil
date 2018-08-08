@@ -1,5 +1,5 @@
-module Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp, roc_temp_simp_deriv,
-  generalDefinitions, nwtnCooling_desc, rocTempSimp_desc) where
+module Drasil.SWHS.GenDefs (swhsGDs, nwtnCooling, rocTempSimp, 
+  roc_temp_simp_deriv, generalDefinitions, nwtnCooling_desc, rocTempSimp_desc) where
 
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
@@ -21,7 +21,7 @@ import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Concepts.Documentation (assumption)
 import Data.Drasil.Units.Thermodynamics (thermal_flux)
 
-import Drasil.SWHS.TMods (t1ConsThermE)
+import Drasil.SWHS.TMods (t1ConsThermE_new)
 import Drasil.SWHS.Concepts (gauss_div)
 import Drasil.SWHS.Assumptions
 
@@ -29,17 +29,31 @@ import Drasil.SWHS.Assumptions
 --  General Definitions  --
 ---------------------------
 
-swhsGenDefs :: [RelationConcept]
-swhsGenDefs = [nwtnCooling, rocTempSimp]
+--FIXME: swhsGDs, nwtnCoolingGD, and rocTempSimpGD were added--
+--since referencing implementation for RelationConcept hasn't--
+--stabilized yet (since RelationConcept isn't an instance of --
+--the Referable class.                                       --
+swhsGDs :: [GenDefn]
+swhsGDs = [nwtnCoolingGD, rocTempSimpGD] 
+
+l1, l2 :: Label
+l1 = mkLabelSame "nwtnCooling" (Def General)
+l2 = mkLabelSame "rocTempSimp" (Def General)
+
+nwtnCoolingGD, rocTempSimpGD :: GenDefn
+nwtnCoolingGD = gdNoUnitDef nwtnCooling [] l1
+rocTempSimpGD = gdNoUnitDef rocTempSimp [] l2
 
 generalDefinitions :: [GenDefn]
 generalDefinitions = [gd' nwtnCooling (Just thermal_flux) ([] :: Derivation) "nwtnCooling" [nwtnCooling_desc],
   gd' rocTempSimp (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv "rocTempSimp" [rocTempSimp_desc]]
 
+
 --
+
 nwtnCooling :: RelationConcept
 nwtnCooling = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling") 
-  nwtnCooling_desc nwtnCooling_rel
+  nwtnCooling_desc nwtnCooling_rel l1
 
 nwtnCooling_rel :: Relation
 nwtnCooling_rel = apply1 ht_flux QP.time $= sy htTransCoeff *
@@ -64,7 +78,7 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
 --
 rocTempSimp :: RelationConcept
 rocTempSimp = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
-  "of change of temperature") rocTempSimp_desc rocTempSimp_rel 
+  "of change of temperature") rocTempSimp_desc rocTempSimp_rel l2
 
 rocTempSimp_rel :: Relation
 rocTempSimp_rel = (sy QPP.mass) * (sy QT.heat_cap_spec) *
@@ -100,7 +114,7 @@ roc_temp_simp_deriv =
 
 roc_temp_simp_deriv_sentences :: [Sentence]
 roc_temp_simp_deriv_sentences = map foldlSentCol [
-  s4_2_3_desc1 t1ConsThermE vol,
+  s4_2_3_desc1 t1ConsThermE_new vol,
   s4_2_3_desc2 gauss_div surface vol thFluxVect uNormalVect unit_,
   s4_2_3_desc3 vol vol_ht_gen,
   s4_2_3_desc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heat_cap_spec
@@ -108,10 +122,9 @@ roc_temp_simp_deriv_sentences = map foldlSentCol [
                  makeRef newA5, makeRef newA6],
   s4_2_3_desc5 density mass vol]
 
-s4_2_3_desc1 :: RelationConcept -> UnitalChunk -> [Sentence]
+s4_2_3_desc1 :: (HasShortName x, Referable x) => x -> UnitalChunk -> [Sentence]
 s4_2_3_desc1 t1c vo =
-  [S "Integrating", makeRef $ reldefn t1c,
-  S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
+  [S "Integrating", makeRef t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
 s4_2_3_desc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]

@@ -62,7 +62,7 @@ sliceWght_new = mkDD sliceWght [{-References-}] [{-Derivation-}] "sliceWght" Not
 --FIXME: fill empty lists in
 
 sliceWght :: QDefinition
-sliceWght = mkDataDef slcWght slcWgtEqn
+sliceWght = mkQuantDef slcWght slcWgtEqn
 
 slcWgtEqn :: Expr
 slcWgtEqn = (inxi baseWthX) * (case_ [case1,case2,case3])
@@ -83,7 +83,7 @@ baseWtrF_new = mkDD baseWtrF [{-References-}] [{-Derivation-}] "baseWtrF" Nothin
 --FIXME: fill empty lists in
 
 baseWtrF :: QDefinition
-baseWtrF = mkDataDef baseHydroForce bsWtrFEqn 
+baseWtrF = mkQuantDef baseHydroForce bsWtrFEqn 
 
 bsWtrFEqn :: Expr
 bsWtrFEqn = (inxi baseLngth)*(case_ [case1,case2])
@@ -99,7 +99,7 @@ surfWtrF_new = mkDD surfWtrF [{-References-}] [{-Derivation-}] "surfWtrF" Nothin
 --FIXME: fill empty lists in
 
 surfWtrF :: QDefinition
-surfWtrF = mkDataDef surfHydroForce surfWtrFEqn
+surfWtrF = mkQuantDef surfHydroForce surfWtrFEqn
 
 surfWtrFEqn :: Expr
 surfWtrFEqn = (inxi surfLngth)*(case_ [case1,case2])
@@ -115,7 +115,7 @@ intersliceWtrF_new = mkDD intersliceWtrF [{-References-}] [{-Derivation-}] "inte
 --FIXME: fill empty lists in
 
 intersliceWtrF :: QDefinition
-intersliceWtrF = mkDataDef watrForce intersliceWtrFEqn
+intersliceWtrF = mkQuantDef watrForce intersliceWtrFEqn
 
 intersliceWtrFEqn :: Expr
 intersliceWtrFEqn = case_ [case1,case2,case3]
@@ -135,7 +135,7 @@ angleA_new = mkDD angleA [{-References-}] [{-Derivation-}] "angleA" Nothing--Not
 --FIXME: fill empty lists in
 
 angleA :: QDefinition
-angleA = mkDataDef baseAngle angleAEqn
+angleA = mkQuantDef baseAngle angleAEqn
 
 angleAEqn :: Expr
 angleAEqn = (inxi slipHght - inx slipHght (-1)) /
@@ -148,7 +148,7 @@ angleB_new = mkDD angleB [{-References-}] [{-Derivation-}] "angleB" Nothing--Not
 --FIXME: fill empty lists in
 
 angleB :: QDefinition
-angleB = mkDataDef surfAngle angleBEqn
+angleB = mkQuantDef surfAngle angleBEqn
 
 angleBEqn :: Expr
 angleBEqn = (inxi slopeHght - inx slopeHght (-1)) /
@@ -161,7 +161,7 @@ lengthB_new = mkDD lengthB [{-References-}] [{-Derivation-}] "lengthB" Nothing--
 --FIXME: fill empty lists in
 
 lengthB :: QDefinition
-lengthB = mkDataDef baseWthX lengthBEqn
+lengthB = mkQuantDef baseWthX lengthBEqn
 
 lengthBEqn :: Expr
 lengthBEqn = inxi slipDist - inx slipDist (-1)
@@ -173,7 +173,7 @@ lengthLb_new = mkDD lengthLb [{-References-}] [{-Derivation-}] "lengthLb" Nothin
 --FIXME: fill empty lists in
 
 lengthLb :: QDefinition
-lengthLb = mkDataDef baseLngth lengthLbEqn
+lengthLb = mkQuantDef baseLngth lengthLbEqn
 
 lengthLbEqn :: Expr
 lengthLbEqn = (inxi baseWthX) * sec (inxi baseAngle)
@@ -185,7 +185,7 @@ lengthLs_new = mkDD lengthLs [{-References-}] [{-Derivation-}] "lengthLs" Nothin
 --FIXME: fill empty lists in
 
 lengthLs :: QDefinition
-lengthLs = mkDataDef surfLngth lengthLsEqn
+lengthLs = mkQuantDef surfLngth lengthLsEqn
 
 lengthLsEqn :: Expr
 lengthLsEqn = (inxi baseWthX) * sec (inxi surfAngle)
@@ -197,7 +197,7 @@ seismicLoadF_new = mkDD seismicLoadF [{-References-}] [{-Derivation-}] "seismicL
 --FIXME: fill empty lists in
 
 seismicLoadF :: QDefinition
-seismicLoadF = mkDataDef earthqkLoadFctr ssmcLFEqn
+seismicLoadF = mkQuantDef earthqkLoadFctr ssmcLFEqn
   --FIXME: K_E missing for unitals?
 
 ssmcLFEqn :: Expr
@@ -210,7 +210,7 @@ surfLoads_new = mkDD surfLoads [{-References-}] [{-Derivation-}] "surfLoads" Not
 --FIXME: fill empty lists in
 
 surfLoads :: QDefinition
-surfLoads = mkDataDef surfLoad surfLEqn
+surfLoads = mkQuantDef surfLoad surfLEqn
   --FIXEME: is this data definition necessary?
 
 surfLEqn :: Expr
@@ -224,7 +224,7 @@ intrsliceF_new = mkDD intrsliceF [{-References-}] [{-Derivation-}] "intrsliceF" 
 --FIXME: fill empty lists in
 
 intrsliceF :: QDefinition
-intrsliceF = mkDataDef intShrForce intrsliceFEqn
+intrsliceF = mkQuantDef intShrForce intrsliceFEqn
 
 intrsliceFEqn :: Expr
 intrsliceFEqn = (sy normToShear) * (inxi scalFunc) * (inxi intNormForce)
@@ -236,7 +236,7 @@ resShearWO_new = mkDD resShearWO [{-References-}] resShr_deriv_ssp "resShearWO" 
 --FIXME: fill empty lists in
 
 resShearWO :: QDefinition
-resShearWO = mkDataDef' shearRNoIntsl resShearWOEqn resShr_deriv_ssp
+resShearWO = mkQuantDef' shearRNoIntsl resShearWOEqn resShr_deriv_ssp
 
 resShearWOEqn :: Expr
 resShearWOEqn = (((inxi slcWght) + (inxi surfHydroForce) *
@@ -257,7 +257,7 @@ mobShearWO_new = mkDD mobShearWO [{-References-}] mobShr_deriv_ssp "mobShearWO" 
 --FIXME: fill empty lists in
 
 mobShearWO :: QDefinition
-mobShearWO = mkDataDef' shearFNoIntsl mobShearWOEqn mobShr_deriv_ssp
+mobShearWO = mkQuantDef' shearFNoIntsl mobShearWOEqn mobShr_deriv_ssp
 
 mobShearWOEqn :: Expr 
 mobShearWOEqn = ((inxi slcWght) + (inxi surfHydroForce) *
@@ -277,7 +277,7 @@ displcmntRxnF_new = mkDD displcmntRxnF [{-References-}] [{-Derivation-}] "displc
 --FIXME: fill empty lists in
 
 displcmntRxnF :: QDefinition
-displcmntRxnF = mkDataDef genPressure displcmntRxnFEqn 
+displcmntRxnF = mkQuantDef genPressure displcmntRxnFEqn 
 
 displcmntRxnFEqn :: Expr
 displcmntRxnFEqn = dgnl2x2 (inxi shrStiffIntsl) (inxi nrmStiffBase) * displMtx
@@ -289,7 +289,7 @@ displcmntBasel_new = mkDD displcmntBasel [{-References-}] stfMtrx_deriv_ssp "dis
 --FIXME: fill empty lists in
 
 displcmntBasel :: QDefinition
-displcmntBasel = mkDataDef' genPressure displcmntBaselEqn stfMtrx_deriv_ssp
+displcmntBasel = mkQuantDef' genPressure displcmntBaselEqn stfMtrx_deriv_ssp
 
 displcmntBaselEqn :: Expr
 displcmntBaselEqn = m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB)
@@ -310,7 +310,7 @@ netFDsplcmntEqbm_new = mkDD netFDsplcmntEqbm [{-References-}] [{-Derivation-}] "
 --FIXME: fill empty lists in
 
 netFDsplcmntEqbm :: QDefinition
-netFDsplcmntEqbm = mkDataDef genForce netFDsplcmntEqbmEqn 
+netFDsplcmntEqbm = mkQuantDef genForce netFDsplcmntEqbmEqn 
 
 netFDsplcmntEqbmEqn :: Expr
 netFDsplcmntEqbmEqn = negate (inx surfLngth (-1)) * (inx nrmStiffIntsl (-1)) *
@@ -326,7 +326,7 @@ shearStiffness_new = mkDD shearStiffness [{-References-}] [{-Derivation-}] "shea
 --FIXME: fill empty lists in
 
 shearStiffness :: QDefinition
-shearStiffness = mkDataDef shrStiffBase shearStiffnessEqn  
+shearStiffness = mkQuantDef shrStiffBase shearStiffnessEqn  
 
 shearStiffnessEqn :: Expr
 shearStiffnessEqn = sy intNormForce / (2 * (1 + sy poissnsRatio)) *
@@ -340,7 +340,7 @@ soilStiffness_new = mkDD soilStiffness [{-References-}] [{-Derivation-}] "soilSt
 --FIXME: fill empty lists in
 
 soilStiffness :: QDefinition
-soilStiffness = mkDataDef nrmStiffBase soilStiffnessEqn
+soilStiffness = mkQuantDef nrmStiffBase soilStiffnessEqn
 
 soilStiffnessEqn :: Expr
 soilStiffnessEqn = (case_ [case1,case2])
@@ -362,10 +362,10 @@ fixme2_new = mkDD fixme2 [{-References-}] [{-Derivation-}] "fixme2" Nothing--Not
 --FIXME: fill empty lists in
 
 fixme1 :: QDefinition
-fixme1 = ec ufixme1 (inxi intNormForce + inxiM1 intNormForce) (shortname' "ufixme1")
+fixme1 = ec ufixme1 (inxi intNormForce + inxiM1 intNormForce) (mkLabelSame "fixme1" (Def DD))
 
 fixme2 :: QDefinition
-fixme2 = ec ufixme2 (inxi watrForce + inxiM1 watrForce) (shortname' "ufixme2")
+fixme2 = ec ufixme2 (inxi watrForce + inxiM1 watrForce) (mkLabelSame "fixme2" (Def DD))
 
 --------------------------
 -- Derivation Sentences --
@@ -436,7 +436,7 @@ resShrDerivation = [
   S "of a slice from", acroGD 2 `sC` S "using the", getTandS nrmFSubWat,
   S "of", acroT 4, S "shown in", eqN 1],
   
-  LlC $ eqUnR' mkEmptyLabel $ (inxi nrmFSubWat) $= eqlExpr cos sin (\x y -> x -
+  eqUnR' $ (inxi nrmFSubWat) $= eqlExpr cos sin (\x y -> x -
   inxiM1 intShrForce + inxi intShrForce + y) - inxi baseHydroForce,
   
   foldlSP [plural value `ofThe'` S "interslice forces",
@@ -447,7 +447,7 @@ resShrDerivation = [
   S "Consider a force equilibrium without the affect of interslice forces" `sC`
   S "to obtain a solvable value as done for", ch nrmFNoIntsl, S "in", eqN 2],
 
-  LlC $ eqUnR' mkEmptyLabel $
+  eqUnR' $
   (inxi nrmFNoIntsl) $= (((inxi slcWght) + (inxi surfHydroForce) *
   (cos (inxi surfAngle)) + (inxi surfLoad) * (cos (inxi impLoadAngle))) *
   (cos (inxi baseAngle)) + (negate (sy earthqkLoadFctr) * (inxi slcWght) -
@@ -459,7 +459,7 @@ resShrDerivation = [
   shearRNoIntsl ^. defn, S "can be solved for in terms of all known",
   plural value, S "as done in", eqN 3],
   
-  LlC $ eqUnR' mkEmptyLabel $
+  eqUnR' $
   inxi shearRNoIntsl $= (inxi nrmFNoIntsl) * tan (inxi fricAngle) +
   (inxi cohesion) * (inxi baseWthX) * sec (inxi baseAngle) $=
   (((inxi slcWght) + (inxi surfHydroForce) * (cos (inxi surfAngle)) +
@@ -515,7 +515,7 @@ mobShrDerivation = [
   ch mobShrI, S "from the force equilibrium in", acroGD 2 `sC`
   S "also shown in", eqN 4],
   
-  LlC $ eqUnR' mkEmptyLabel $ inxi mobShrI $= eqlExpr sin cos
+  eqUnR' $ inxi mobShrI $= eqlExpr sin cos
     (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y),
   
   foldlSP [S "The", phrase equation, S "is unsolvable, containing the unknown",
@@ -523,7 +523,7 @@ mobShrDerivation = [
   S "Consider a force equilibrium", S wiif `sC` S "to obtain the",
   getTandS shearFNoIntsl `sC` S "as done in", eqN 5],
   
-  LlC $ eqUnR' mkEmptyLabel $
+  eqUnR' $
   inxi shearFNoIntsl $= ((inxi slcWght) + (inxi surfHydroForce) *
   (cos (inxi surfAngle)) + (inxi surfLoad) * (cos (inxi impLoadAngle))) *
   (sin (inxi baseAngle)) - (negate (sy earthqkLoadFctr) * (inxi slcWght) -
@@ -640,7 +640,7 @@ stfMtrxDerivation = [
   acroGD 8, S "to define stiffness matrix", ch shrStiffIntsl `sC`
   S "as seen in", eqN 6],
   
-  LlC $ eqUnR' mkEmptyLabel $ inxi shrStiffIntsl $=
+  eqUnR' $ inxi shrStiffIntsl $=
   dgnl2x2 (inxi shrStiffIntsl) (inxi nrmStiffBase),
   
   foldlSP [S "For interslice surfaces the stiffness constants" `sAnd`
@@ -663,7 +663,7 @@ stfMtrxDerivation = [
   S "The base stiffness counter clockwise rotation is applied in", eqN 7,
   S "to the new matrix", ch nrmFNoIntsl],
   
-  LlC $ eqUnR' mkEmptyLabel $ inxi shrStiffIntsl $=
+  eqUnR' $ inxi shrStiffIntsl $=
   m2x2 (cos(inxi baseAngle)) (negate $ sin(inxi baseAngle))
   (sin(inxi baseAngle)) (cos(inxi baseAngle)) *
   inxi shrStiffIntsl $= kiStar,
@@ -681,7 +681,7 @@ stfMtrxDerivation = [
   `sC` S "a basal force displacement relationship in the same coordinate",
   S "system as the interslice relationship can be derived as done in", eqN 8],
   
-  LlC $ eqUnR' mkEmptyLabel $ vec2D (inxi genPressure) (inxi genPressure) $=
+  eqUnR' $ vec2D (inxi genPressure) (inxi genPressure) $=
   inxi shrStiffBase * sy rotatedDispl $= --FIXME: add more symbols?
   kiStar * rotMtx * displMtx $= kiPrime * displMtx,
   
@@ -695,17 +695,16 @@ stfMtrxDerivation = [
   ch effStiffA `sAnd` ch effStiffB `sC` S "defined in", eqN 10 `sAnd`
   eqN 11, S "respectively"],
   
-  LlC $ eqUnR' mkEmptyLabel $ inxi shrStiffBase $= kiPrime
+  eqUnR' $ inxi shrStiffBase $= kiPrime
   $= m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB) (inxi effStiffA),
   
-  LlC $ eqUnR' mkEmptyLabel $
+  eqUnR' $
   (inxi effStiffA) $= (inxi shrStiffBase) * (cos (inxi baseAngle)) $^ 2 +
   (inxi nrmStiffBase) * (sin (inxi baseAngle)) $^ 2,
   
-  LlC $ eqUnR' mkEmptyLabel $
+  eqUnR' $
   (inxi effStiffB) $= ((inxi shrStiffBase)-(inxi nrmStiffBase)) *
   (sin (inxi baseAngle)) * (cos (inxi baseAngle)),
-  --FIXME: should eqUnR' produce Contents instead of LabelledContent?
   
   foldlSP [S "A force-displacement relationship for an element", ch index,
   S "can be written in terms of displacements occurring in the unrotated", 

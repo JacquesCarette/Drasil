@@ -1,7 +1,7 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Reference where
 
-import Language.Drasil.RefTypes (RefType(..))
+import Language.Drasil.RefTypes (RefType(..), DType(..), ReqType(..))
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
 import Data.List (concatMap, find, groupBy, partition, sortBy)
@@ -14,21 +14,21 @@ import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID), CiteField
 import Language.Drasil.Chunk.Concept (ConceptInstance)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
-import Language.Drasil.Chunk.Goal as G (Goal, refAddr)
+import Language.Drasil.Chunk.Goal as G (Goal)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
-import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc, refAddr)
-import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..), ReqType(FR))
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName)
+import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..))
+import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc)
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName, getStringSN, shortname')
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel), HasRefAddress(getRefAdd))
-import Language.Drasil.Document (Section(Section), getDefName, repUnd)
-import Language.Drasil.Document.Core (Contents(..), DType(Data, Theory), RawContent(..), LabelledContent(..))
+import Language.Drasil.Document (Section(Section))
+import Language.Drasil.Document.Core (RawContent(..), LabelledContent(..))
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.Spec (Sentence((:+:), Ref, S))
 import Language.Drasil.UID (UID)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
-import Language.Drasil.Label (Label)
-import Language.Drasil.Label.Core (getAdd)
+import Language.Drasil.Label.Core (Label(..), getAdd)
+import Language.Drasil.Label (getDefName, getReqName)
 
 -- | Database for maintaining references.
 -- The Int is that reference's number.
@@ -194,101 +194,89 @@ class Referable s where
   rType   :: s -> RefType -- The reference type (referencing namespace?)
 
 instance Referable Goal where
-  refAdd g = "GS:" ++ g ^. G.refAddr
+  refAdd g = getAdd ((g ^. getLabel) ^. getRefAdd)
   rType _ = Goal
 
 instance Referable PhysSystDesc where
-  refAdd p = "PS:" ++ p ^. PD.refAddr
+  refAdd p = getAdd ((p ^. getLabel) ^. getRefAdd)
   rType _ = PSD
 
 instance Referable AssumpChunk where
-  refAdd  x             = "A:" ++ concatMap repUnd (x ^. uid)
-  rType   _             = Assump
+  refAdd  x = getAdd ((x ^. getLabel) ^. getRefAdd)
+  rType   _ = Assump
 
 instance Referable ReqChunk where
-  refAdd  r@(RC _ rt _ _) = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
-  rType   _                 = Req
+  refAdd  r@(RC _ rt _ _) = getAdd ((r ^. getLabel) ^. getRefAdd)
+  rType   (RC _ FR _ _)   = Req FR
+  rType   (RC _ NFR _ _)  = Req NFR
 
 instance Referable Change where
-  refAdd r@(ChC _ rt _ _)    = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
-  rType (ChC _ Likely _ _)   = LC
-  rType (ChC _ Unlikely _ _) = UC
+  refAdd r@(ChC _ rt _ _)    = getAdd ((r ^. getLabel) ^. getRefAdd)
+  rType (ChC _ Likely _ _)   = LCh
+  rType (ChC _ Unlikely _ _) = UnCh
 
 instance Referable Section where
-  refAdd  (Section _ _ r _) = "Sec:" ++ r
+  refAdd  (Section _ _ lb) = getAdd (lb ^. getRefAdd)
   rType   _               = Sect
 
 instance Referable Citation where
-  refAdd c = concatMap repUnd $ citeID c -- citeID should be unique.
+  refAdd c = citeID c -- citeID should be unique.
   rType _ = Cite
 
 instance Referable TheoryModel where
-  refAdd  t = "T:" ++ t ^. uid
-  rType   _ = Def
+  refAdd  t = getAdd ((t ^. getLabel) ^. getRefAdd)
+  rType   _ = Def TM
 
 instance Referable GenDefn where
-  refAdd  g = "GD:" ++ g ^. uid
-  rType   _ = Def
+  refAdd  g = getAdd ((g ^. getLabel) ^. getRefAdd)
+  rType   _ = Def General
 
 instance Referable QDefinition where -- FIXME: This could lead to trouble; need
                                      -- to ensure sanity checking when building
                                      -- Refs. Double-check QDef is a DD before allowing
-  refAdd  d = "DD:" ++ concatMap repUnd (d ^. uid)
-  rType   _ = Def
+                                     -- FIXME: QDefinition should no longer be referable
+                                     -- after its Label is removed.
+  refAdd  d = getAdd ((d ^. getLabel) ^. getRefAdd)
+  rType   _ = Def DD
 
 instance Referable DataDefinition where
-  refAdd  d = "DD:" ++ concatMap repUnd (d ^. uid)
-  rType   _ = Def
+  refAdd  d = getAdd ((d ^. getLabel) ^. getRefAdd)
+  rType   _ = Def DD
 
 instance Referable InstanceModel where
-  refAdd  i = "IM:" ++ i^.uid
-  rType   _ = Def
+  refAdd  i = getAdd ((i ^. getLabel) ^. getRefAdd)
+  rType   _ = Def Instance
 
 instance Referable ConceptInstance where
   refAdd i = i ^. uid
-  rType _ = Def
+  rType _  = Blank --note: not actually used
 
---FIXME: Label should not be an instance of Referable.
 --Should refer to an object WITH a variable.
 --Can be removed once sections have labels.
 instance Referable Label where
-  refAdd lb = "Sec:" ++ (getAdd (lb ^. getRefAdd))
-  rType _   = Lbl --FIXME?
+  refAdd lb@(Lbl _ _ _ _) = getAdd (lb ^. getRefAdd)
+  rType  (Lbl _ _ _ x)    = x --FIXME: is a hack; see #971
 
 instance Referable LabelledContent where
-  refAdd (LblC lb c) = temp' (getAdd (lb ^. getRefAdd)) c 
+  refAdd (LblC lb _) = getAdd (lb ^. getRefAdd)
   rType  (LblC _ c)  = temp c
 
-temp' :: String -> RawContent -> String
-temp' r (Table _ _ _ _ _)      = "Table:" ++ r
-temp' r (Figure _ _ _ _)       = "Figure:" ++ r
-temp' r (Graph _ _ _ _ _)      = "Figure:" ++ r
-temp' r (EqnBlock _)           = "Equation:" ++ r
-temp' _ (Definition d)         = getDefName d --fixme: to be removed
-temp' r (Defnt _ _ _)          = r
-temp' _ (Requirement rc)       = refAdd rc
-temp' _ (Assumption ca)        = refAdd ca
-temp' _ (Change lcc)           = refAdd lcc
-temp' _ (Enumeration _)        = error "Shouldn't reference lists"
-temp' _ (Paragraph _)          = error "Shouldn't reference paragraphs"
-temp' r (Bib _)                = r
-
 temp :: RawContent -> RefType
-temp (Table _ _ _ _ _)       = Tab
-temp (Figure _ _ _ _)        = Fig
-temp (Graph _ _ _ _ _)       = Fig
-temp (Definition _)          = Def
-temp (Defnt _ _ _)           = Def
-temp (Requirement r)         = rType r
-temp (Assumption a)          = rType a
-temp (Change l)              = rType l
-temp (EqnBlock _)            = EqnB
-temp (Enumeration _)         = error "Shouldn't reference lists" 
-temp (Paragraph _)           = error "Shouldn't reference paragraphs"
-temp (Bib _)                 = error $
+temp (Table _ _ _ _)       = Tab
+temp (Figure _ _ _)        = Fig
+temp (Graph _ _ _ _)       = Fig
+temp (Definition _)        = Def DD --fixme: to be removed completely
+temp (Defnt x _)           = Def x
+temp (Requirement r)       = rType r
+temp (Assumption a)        = rType a
+temp (Change l)            = rType l
+temp (EqnBlock _)          = EqnB
+temp (Enumeration _)       = Lst 
+temp (Paragraph _)         = error "Shouldn't reference paragraphs"
+temp (Bib _)               = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
-temp _                       =
+temp _                     =
     error "Attempting to reference unimplemented reference type"
 
 uidSort :: HasUID c => c -> c -> Ordering
@@ -337,10 +325,10 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 -- This should not be exported to the end-user, but should be usable
 -- within the recipe (we want to force reference creation to check if the given
 -- item exists in our database of referable objects.
---FIXME: completely shift to being `HasLabel` since customeref checks for 
+--FIXME: completely shift to being `HasLabel` since customref checks for 
 --  `HasShortName` and `Referable`?
 makeRef :: (HasShortName l, Referable l) => l -> Sentence
-makeRef r = customRef r (shortname r)
+makeRef r = customRef r (r ^. shortname)
 
 --FIXME: needs design (HasShortName, Referable only possible when HasLabel)
 mkRefFrmLbl :: (HasLabel l, HasShortName l, Referable l) => l -> Sentence
@@ -348,11 +336,21 @@ mkRefFrmLbl r = makeRef r
 
 --FIXME: should be removed from Examples once sections have labels
 midRef :: Label -> Sentence
-midRef r = customRef r (shortname r)
+midRef r = customRef r (r ^. shortname)
 
--- | Create a reference with a custom 'ShortName'
+-- | Create a reference with a customized 'ShortName'
 customRef :: (HasShortName l, Referable l) => l -> ShortName -> Sentence
-customRef r n = Ref (rType r) (refAdd r) n
+customRef r n = Ref (rType r) (refAdd r) (getAcc' (rType r) n)
+  where 
+    getAcc' :: RefType -> ShortName -> ShortName
+    getAcc' (Def dtp) sn = shortname' $ (getDefName dtp) ++ " " ++ (getStringSN sn)
+    getAcc' (Req rq)  sn = shortname' $ (getReqName rq)  ++ " " ++ (getStringSN sn)
+    getAcc' LCh       sn = shortname' $ "LC: " ++ (getStringSN sn)
+    getAcc' UnCh      sn = shortname' $ "UC: " ++ (getStringSN sn)
+    getAcc' Assump    sn = shortname' $ "A: " ++ (getStringSN sn)
+    getAcc' Goal      sn = shortname' $ "GS: " ++ (getStringSN sn)
+    getAcc' PSD       sn = shortname' $ "PS: " ++ (getStringSN sn)
+    getAcc' _         sn = sn
 
 -- This works for passing the correct id to the reference generator for Assumptions,
 -- Requirements and Likely Changes but I question whether we should use it.

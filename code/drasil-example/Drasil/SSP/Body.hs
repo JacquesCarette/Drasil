@@ -44,7 +44,8 @@ import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty,
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods_new)
-import Drasil.SSP.Requirements (sspInputDataTable, sspRequirements)
+import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
+
 import Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_new
   , effStress_new)
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
@@ -60,11 +61,10 @@ req, aux_cons :: Section
 
 table_of_symbol_intro :: [TSIntro]
 
-problem_desc, termi_defi, phys_sys_desc,
-  goal_stmt, func_req, non_func_req :: Section
+problem_desc, termi_defi, phys_sys_desc, goal_stmt, func_req, non_func_req :: Section
+goals_list, termi_defi_list, phys_sys_desc_p1, phys_sys_desc_bullets,
+  phys_sys_desc_p2, func_req_list :: Contents
 
-termi_defi_list, phys_sys_desc_p1, phys_sys_desc_bullets,
-  phys_sys_desc_p2, goals_list, func_req_list :: Contents
 
 --Document Setup--
 this_si :: [UnitDefn]
@@ -128,7 +128,7 @@ mkSRS = RefSec (RefProg intro
           )
         ]
       ):
-  map Verbatim [req] ++ [LCsSec (LCsProg likelyChanges_SRS)] 
+  map Verbatim [req] ++ [LCsSec (LCsProg (map LlC likelyChanges_SRS))] 
   ++ [UCsSec (UCsProg unlikelyChanges_SRS)] ++[Verbatim aux_cons] ++ (Bibliography : [])
 
 
@@ -250,7 +250,7 @@ sysCtxIntro = foldlSP
    S "and its" +:+ phrase environment]
    
 sysCtxFig1 :: LabelledContent
-sysCtxFig1 = llcc (mkLabelRA'' "sysCtxDiag") $ fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png") "sysCtxDiag"
+sysCtxFig1 = llcc (mkLabelRAFig "sysCtxDiag") $ fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png")
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol
@@ -325,8 +325,8 @@ phys_sys_desc = SRS.physSyst
   [phys_sys_desc_p1, phys_sys_desc_bullets, phys_sys_desc_p2,
    LlC fig_indexconv, LlC fig_forceacting] []
 
-phys_sys_desc_p1 = physSystIntro slope how intrslce slice (S "slice base")
-  fig_indexconv
+phys_sys_desc_p1 = physSystIntro slope how intrslce slice 
+  (S "slice base") fig_indexconv
   where how = S "as a series of" +:+ phrase slice +:+. plural element
 
 physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, HasShortName d, Referable d) =>
@@ -349,20 +349,20 @@ phys_sys_desc_bullets = enumBullet $ map foldlSent_ [
   [at_start slice, plural property +:+ S "convention is noted by" +:+.
   (ch index)]]
 
-phys_sys_desc_p2 = foldlSP [S "A", phrase fbd, S "of the", plural force,
-  S "acting on the", phrase slice, S "is displayed in",
-  makeRef fig_forceacting]
+phys_sys_desc_p2 = foldlSP [S "A", phrase fbd, S "of the", 
+  plural force, S "acting on the", phrase slice, 
+  S "is displayed in", makeRef fig_forceacting]
 
 fig_indexconv :: LabelledContent
-fig_indexconv = llcc (mkLabelRA'' "IndexConvention") $ 
+fig_indexconv = llcc (mkLabelRAFig "IndexConvention") $ 
   fig (foldlSent_ [S "Index convention for numbering",
   phrase slice `sAnd` phrase intrslce,
-  phrase force, plural variable]) (resourcePath ++ "IndexConvention.png") "IndexConvention"
+  phrase force, plural variable]) (resourcePath ++ "IndexConvention.png")
 
 fig_forceacting :: LabelledContent
-fig_forceacting = llcc (mkLabelRA'' "ForceDiagram") $
+fig_forceacting = llcc (mkLabelRAFig "ForceDiagram") $
   fig (at_start' force +:+ S "acting on a" +:+
-  phrase slice) (resourcePath ++ "ForceDiagram.png") "ForceDiagram"
+  phrase slice) (resourcePath ++ "ForceDiagram.png")
 
 -- SECTION 4.1.3 --
 goal_stmt = goalStmtF (map (\(x, y) -> x `ofThe` y) [
@@ -386,12 +386,11 @@ goals_list = enumSimple 1 (short goalStmt) sspGoals
 
 -- SECTION 4.2.4 --
 -- Data Definitions is automatically generated
-  --FIXME: derivations should be with the appropriate DataDef
+--FIXME: derivations should be with the appropriate DDef
 
 -- SECTION 4.2.5 --
 -- Instance Models is automatically generated
-
-  --FIXME: derivations should be with the appropriate IMod
+--FIXME: derivations should be with the appropriate IMod
 
 -- SECTION 4.2.6 --
 -- Data Constraints is automatically generated

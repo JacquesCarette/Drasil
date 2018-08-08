@@ -9,9 +9,9 @@ module Drasil.DocLang (
     StkhldrSec(StkhldrProg2),
     StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg), 
     TSIntro(..), UCsSec(..), mkDoc, mkLklyChnk, mkRequirement, 
-    mkUnLklyChnk, tsymb, tsymb'',
+    mkUnLklyChnk, srsDomains, tsymb, tsymb'', mkConCC, mkConCC', mkEnumCC,
     -- DocumentLanguage.Definitions
-    Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose),
+    Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose), ddefn',
     -- DocumentLanguage.RefHelpers 
     ModelDB, cite, ddRefDB, mdb, refA, refDD,
     -- DocumentLanguage.TraceabilityMatrix
@@ -23,14 +23,14 @@ module Drasil.DocLang (
     -- Sections.ReferenceMaterial
     intro,
     -- Sections.Requirements
-    nonFuncReqF, reqF, funcReqDom,
+    nonFuncReqF, reqF, reqDom, funcReqDom,
     -- Sections.ScopeOfTheProject
     -- Sections.SolutionCharacterSpec
     SubSec, assembler, sSubSec, siCon, siDDef, siIMod, siSTitl, siSent, siTMod, 
     siUQI, siUQO,
     -- Sections.SpecificSystemDescription
     assumpF, dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, 
-    inModelF, outDataConstTbl, physSystDesc, probDescF, specSysDescr, termDefnF,
+    inModelF, outDataConstTbl, physSystDesc, probDescF, termDefnF, specSysDescr,
     -- Sections.Stakeholders
     -- Sections.TableOfAbbAndAcronyms
     -- Sections.TableOfSymbols
@@ -47,9 +47,10 @@ import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
     ScpOfProjSec(ScpOfProjProg), SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), 
     StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), TConvention(..), 
     TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..), mkDoc, 
-    mkLklyChnk, mkRequirement, mkUnLklyChnk, tsymb, tsymb'')
+    mkLklyChnk, mkRequirement, mkUnLklyChnk, srsDomains, tsymb, tsymb'', mkConCC, mkConCC',
+    mkEnumCC)
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, 
-    InclUnits(IncludeUnits), Verbosity(Verbose))
+    InclUnits(IncludeUnits), Verbosity(Verbose), ddefn')
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, cite, ddRefDB, mdb, refA, 
     refDD)
 --import Drasil.DocumentLanguage.TraceabilityMatrix
@@ -57,13 +58,13 @@ import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
 --import Drasil.Sections.Introduction
 import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.Sections.Requirements (nonFuncReqF, reqF, funcReqDom)
+import Drasil.Sections.Requirements (nonFuncReqF, reqF, reqDom, funcReqDom)
 --import Drasil.Sections.ScopeOfTheProject
 import Drasil.Sections.SolutionCharacterSpec (SubSec, assembler, sSubSec, siCon, 
     siDDef, siIMod, siSTitl, siSent, siTMod, siUQI, siUQO)
 import Drasil.Sections.SpecificSystemDescription (assumpF, 
     dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, inModelF, 
-    outDataConstTbl, physSystDesc, probDescF, specSysDescr, termDefnF)
+    outDataConstTbl, physSystDesc, probDescF, termDefnF, specSysDescr)
 --import Drasil.Sections.Stakeholders
 --import Drasil.Sections.TableOfAbbAndAcronyms
 --import Drasil.Sections.TableOfSymbols

@@ -30,6 +30,7 @@ eBalanceOnWtr_new = im'' eBalanceOnWtr [qw temp_C, qw temp_init, qw time_final,
 eBalanceOnWtr :: RelationConcept
 eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
   "water to find the temperature of the water") balWtrDesc balWtr_Rel
+  (mkLabelSame "eBalnaceOnWtr" (Def Instance))
 
 balWtr_Rel :: Relation
 balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
@@ -46,8 +47,8 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W), S "where", E 0,
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
-  plural boil_pt, S "of", phrase water `sC` S "respectively",
-  sParen (makeRef assump10)]
+  plural boil_pt, S "of", phrase water `sC` S "respectively"
+  , sParen (makeRef newA10)]
 
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --
@@ -84,7 +85,7 @@ s4_2_3_desc1_nopcm roc tw en wt vo wvo ms wms hcs hw ht hfc cs tk ass11 ass12 vh
 
 s4_2_3_desc2_nopcm :: QDefinition -> [Sentence]
 s4_2_3_desc2_nopcm dd1 =
-  [S "Using", makeRef $ datadefn dd1, S ", this can be written as"]
+  [S "Using", makeRef dd1, S ", this can be written as"]
 
 s4_2_3_desc3_nopcm :: Expr-> [Sentence]
 s4_2_3_desc3_nopcm eq11 = [S "Dividing (3) by", (E eq11) `sC` S "we obtain"]

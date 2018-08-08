@@ -8,6 +8,7 @@ import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, CommonIdea(abrv))
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName)
+import Language.Drasil.Label.Core (Label)
 
 import Control.Lens (makeLenses, (^.), view)
 
@@ -34,7 +35,8 @@ instance Idea          ConceptChunk where getA = getA . view idea
 instance Definition    ConceptChunk where defn = dad . defn'
 instance ConceptDomain ConceptChunk where cdom = dad . cdom'
 instance Concept       ConceptChunk where
- 
+
+
 data CommonConcept = ComConDict { _comm :: CI, _def :: Sentence, _dom :: [UID]}
 makeLenses ''CommonConcept
 
@@ -58,4 +60,4 @@ instance Idea          ConceptInstance where getA = getA . view (cc . idea)
 instance Definition    ConceptInstance where defn = cc . dad . defn'
 instance ConceptDomain ConceptInstance where cdom = cc . dad . cdom'
 instance Concept       ConceptInstance where
-instance HasShortName  ConceptInstance where shortname = view shnm
+instance HasShortName  ConceptInstance where shortname = shnm

@@ -42,6 +42,14 @@ p_space (DiscreteS a)  = "{" ++ (concat $ intersperse ", " a) ++ "}"
 parens :: P.Expr -> P.Expr
 parens = P.Fenced P.Paren P.Paren
 
+mulExpr ::  (HasSymbolTable s, HasPrintingOptions s) => [Expr] -> s -> [P.Expr]
+mulExpr (hd1:hd2:tl) sm = case (hd1, hd2) of
+  (a, Int _) ->  [expr' sm (precA Mul) a , P.MO P.Dot] ++ (mulExpr (hd2:tl) sm)
+  (a, Dbl _) ->  [expr' sm (precA Mul) a , P.MO P.Dot] ++ (mulExpr (hd2:tl) sm)
+  (a, _)     ->  [expr' sm (precA Mul) a , P.MO P.Mul] ++ (mulExpr (hd2:tl) sm)
+mulExpr (hd:[])      sm = [expr' sm (precA Mul) hd]
+mulExpr []       sm     = [expr' sm (precA Mul) (Int 1)]
+
 --This function takes the digits form `floatToDigits` function
 -- and decimal point position and a counter and exponent
 digitsProcess :: [Integer] -> Int -> Int -> Integer -> [P.Expr]
@@ -89,11 +97,11 @@ expr (Str s)            _ = P.Str   s
 expr (AssocB And l)    sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (precB And)) l
 expr (AssocB Or l)     sm = P.Row $ intersperse (P.MO P.Or ) $ map (expr' sm (precB Or)) l
 expr (AssocA Add l)    sm = P.Row $ intersperse (P.MO P.Add) $ map (expr' sm (precA Add)) l
-expr (AssocA Mul l)    sm = P.Row $ intersperse (P.MO P.Mul) $ map (expr' sm (precA Mul)) l
+expr (AssocA Mul l)    sm = P.Row $ mulExpr l sm
 expr (Deriv Part a b) sm =
   P.Div (P.Row [P.Spec Partial, P.Spc P.Thin, expr a sm])
         (P.Row [P.Spec Partial, P.Spc P.Thin,
-                symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
+                symbol $ eqSymb $ symbLookup b $ sm ^.symbolTable])
 expr (Deriv Total a b)sm =
   P.Div (P.Row [P.Ident "d", P.Spc P.Thin, expr a sm])
         (P.Row [P.Ident "d", P.Spc P.Thin, symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
@@ -278,7 +286,7 @@ createLayout sm = map (sec sm 0)
 
 -- | Helper function for creating sections at the appropriate depth
 sec :: (HasSymbolTable ctx, HasPrintingOptions ctx) => ctx -> Int -> Section -> T.LayoutObj
-sec sm depth x@(Section titleLb contents _ _) = --FIXME: should ShortName be used somewhere?
+sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used somewhere?
   let ref = P.S (refAdd x) in
   T.HDiv [(concat $ replicate depth "sub") ++ "section"]
   (T.Header depth (spec sm titleLb) ref :
@@ -291,53 +299,51 @@ lay sm (LlC x) = layLabelled sm x
 lay sm (UlC x) = layUnlabelled sm (x ^. accessContents) 
 
 layLabelled :: (HasSymbolTable ctx, HasPrintingOptions ctx) => ctx -> LabelledContent -> T.LayoutObj
-layLabelled sm x@(LblC _ (Table hdr lls t b _)) = T.Table ["table"]
+layLabelled sm x@(LblC _ (Table hdr lls t b)) = T.Table ["table"]
   ((map (spec sm) hdr) : (map (map (spec sm)) lls)) 
-  (P.S $ "Table:" ++ (getAdd (x ^. getRefAdd)))
+  (P.S $ getAdd (x ^. getRefAdd))
   b (spec sm t)
 layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"] 
   [T.EqnBlock (P.E (expr c sm))] 
-  (P.S $ "Eqn:" ++ (getAdd (x ^. getRefAdd)))
-layLabelled sm x@(LblC _ (Figure c f wp _))     = T.Figure 
-  (P.S $ "Figure:" ++ (getAdd (x ^. getRefAdd)))
+  (P.S $ getAdd (x ^. getRefAdd))
+layLabelled sm x@(LblC _ (Figure c f wp))     = T.Figure 
+  (P.S $ getAdd (x ^. getRefAdd))
   (spec sm c) f wp
 layLabelled sm x@(LblC _ (Requirement r))       = T.ALUR T.Requirement
   (spec sm $ requires r) 
-  (P.S $ (getAdd (x ^. getRefAdd))) 
+  (P.S $ getAdd (x ^. getRefAdd)) 
   (spec sm $ getShortName r)
 layLabelled sm x@(LblC _ (Assumption a))        = T.ALUR T.Assumption
   (spec sm (assuming a))
-  (P.S $ (getAdd (x ^. getRefAdd)))
+  (P.S $ getAdd (x ^. getRefAdd))
   (spec sm $ getShortName a)
 layLabelled sm x@(LblC _ (Change lcs))           = T.ALUR
   (if (chngType lcs) == Likely then T.LikelyChange else T.UnlikelyChange)
   (spec sm (chng lcs)) 
-  (P.S $ (getAdd (x ^. getRefAdd))) 
+  (P.S $ getAdd (x ^. getRefAdd)) 
   (spec sm $ getShortName lcs)
-layLabelled sm x@(LblC _ (Graph ps w h t _))    = T.Graph 
+layLabelled sm x@(LblC _ (Graph ps w h t))    = T.Graph 
   (map (\(y,z) -> (spec sm y, spec sm z)) ps) w h (spec sm t)
-  (P.S $ "Figure:" ++ (getAdd (x ^. getRefAdd)))
-layLabelled sm (LblC _ (Defnt dtyp pairs rn)) = T.Definition 
+  (P.S $ getAdd (x ^. getRefAdd))
+layLabelled sm x@(LblC _ (Defnt dtyp pairs)) = T.Definition 
   dtyp (layPairs pairs) 
-  (P.S rn)
-  where layPairs = map (\(x,y) -> (x, map temp y))
-        temp  y   = lay sm y
+  (P.S $ getAdd (x ^. getRefAdd))
+  where layPairs = map (\(x',y) -> (x', map (lay sm) y))
 layLabelled sm (LblC _ (Paragraph c))           = T.Paragraph (spec sm c)
-layLabelled sm (LblC _ (Definition c))          = T.Definition c (makePairs sm c)
-  (P.S "nolabel6")
+layLabelled _  (LblC _ (Definition c))          = T.Definition c [("nolabel!", [T.Paragraph $ P.EmptyS])] (P.S "nolabel8")
 layLabelled sm (LblC _ (Enumeration cs))        = T.List $ makeL sm cs
 layLabelled sm (LblC _ (Bib bib))               = T.Bib $ map (layCite sm) bib
 
 -- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.
 layUnlabelled :: (HasSymbolTable ctx, HasPrintingOptions ctx) => ctx -> RawContent -> T.LayoutObj
-layUnlabelled sm (Table hdr lls t b _) = T.Table ["table"]
+layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
   ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S "nolabel0") b (spec sm t)
 layUnlabelled sm (Paragraph c)          = T.Paragraph (spec sm c)
 layUnlabelled sm (EqnBlock c)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
-layUnlabelled sm (Definition c)       = T.Definition c (makePairs sm c) (P.S "nolabel1")
+layUnlabelled _  (Definition c)       = T.Definition c [("nolabel!", [T.Paragraph $ P.EmptyS])] (P.S "nolabel1")
 layUnlabelled sm (Enumeration cs)       = T.List $ makeL sm cs
-layUnlabelled sm (Figure c f wp _)    = T.Figure (P.S "nolabel2") (spec sm c) f wp
+layUnlabelled sm (Figure c f wp)    = T.Figure (P.S "nolabel2") (spec sm c) f wp
 layUnlabelled sm (Requirement r)      = T.ALUR T.Requirement
   (spec sm $ requires r) (P.S "nolabel3") (spec sm $ getShortName r)
 layUnlabelled sm (Assumption a)       = T.ALUR T.Assumption
@@ -345,9 +351,9 @@ layUnlabelled sm (Assumption a)       = T.ALUR T.Assumption
 layUnlabelled sm (Change lcs)          = T.ALUR
   (if (chngType lcs) == Likely then T.LikelyChange else T.UnlikelyChange)
   (spec sm (chng lcs)) (P.S "nolabel5") (spec sm $ getShortName lcs)
-layUnlabelled sm (Graph ps w h t _)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
+layUnlabelled sm (Graph ps w h t)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S "nolabel6")
-layUnlabelled sm (Defnt dtyp pairs rn)  = T.Definition dtyp (layPairs pairs) (P.S rn)
+layUnlabelled sm (Defnt dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")
   where layPairs = map (\(x,y) -> (x, map temp y ))
         temp  y   = layUnlabelled sm (y ^. accessContents)
 layUnlabelled sm (Bib bib)              = T.Bib $ map (layCite sm) bib
@@ -396,44 +402,3 @@ item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
 labref :: Maybe RefAdd -> Maybe P.Spec
 labref l = maybe Nothing (\z -> Just $ P.S z) l
 
--- | Translates definitions
--- (Data defs, General defs, Theoretical models, etc.)
-makePairs :: (HasSymbolTable ctx, HasPrintingOptions ctx) => ctx -> DType -> [(String,[T.LayoutObj])]
-makePairs m (Data c) = [
-  ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
-  ("Units",       [T.Paragraph $ spec m (unitToSentence c)]),
-  ("Equation",    [T.HDiv ["equation"] [eqnStyle numberedDDEquations $ buildEqn m c] P.EmptyS]),
-  ("Description", [T.Paragraph $ buildDDDescription m c])
-  ]
-makePairs m (Theory c) = [
-  ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
-  ("Equation",    [T.HDiv ["equation"] [eqnStyle numberedTMEquations $ P.E (expr (c ^. relat) m)] P.EmptyS]),
-  ("Description", [T.Paragraph (spec m (c ^. defn))])
-  ]
-makePairs _ General  = error "Not yet implemented"
-makePairs _ Instance = error "Not yet implemented"
-makePairs _ TM       = error "Not yet implemented"
-makePairs _ DD       = error "Not yet implemented"
-
--- Toggle equation style
-eqnStyle :: Bool -> T.Contents -> T.LayoutObj
-eqnStyle b = if b then T.EqnBlock else T.Paragraph
-
--- | Translates the defining equation from a QDefinition to
--- Printing's version of Sentence
-buildEqn :: (HasSymbolTable ctx, HasPrintingOptions ctx) => ctx -> QDefinition -> P.Spec
-buildEqn sm c = P.E $ mkBOp sm P.Eq (sy c) (c^.equat)
-
--- | Build descriptions in data defs based on required verbosity
-buildDDDescription :: (HasSymbolTable ctx, HasPrintingOptions ctx) => ctx -> QDefinition -> P.Spec
-buildDDDescription m c =
-  if verboseDDDescription then descLines m $ vars (sy c $= c^.equat) m else P.EmptyS
-
--- | Helper for building each line of the description of a data def
-descLines :: (HasSymbolTable ctx, Quantity q, HasPrintingOptions ctx) => ctx -> [q] -> P.Spec
-descLines m l = foldr (P.:+:) P.EmptyS $ intersperse P.HARDNL $ map descLine l
-  where
-    descLine vcs = (P.E $ symbol $ eqSymb vcs) P.:+:
-      (P.S " is the " P.:+: (spec m (phrase $ vcs ^. term)) P.:+:
-      maybe P.EmptyS (\a -> P.S " (" P.:+: P.Sy (a ^. usymb) P.:+: P.S ")") 
-            (getUnitLup vcs m))

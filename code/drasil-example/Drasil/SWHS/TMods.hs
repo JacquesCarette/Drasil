@@ -1,12 +1,11 @@
-module Drasil.SWHS.TMods (tModels, t1ConsThermE_new, t2SensHtE_new,
-  t3LatHtE_new, t1ConsThermE) where
+module Drasil.SWHS.TMods (swhsTMods, t1ConsThermE_new,
+  t2SensHtE_new, t3LatHtE_new) where
 
 import Language.Drasil
 import Control.Lens ((^.))
 
 import Data.Drasil.Concepts.Documentation (system)
 import Data.Drasil.SI_Units (joule)
-
 import Data.Drasil.Concepts.Thermodynamics (phase_change, thermal_energy,
   heat_trans, law_cons_energy)
 import Data.Drasil.Concepts.Physics (mech_energy)
@@ -22,9 +21,10 @@ import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCap_V, htCap_S,
   htCap_L, vol_ht_gen, thFluxVect)
 import Drasil.SWHS.Concepts (transient)
 import Drasil.SWHS.DataDefs (dd3HtFusion)
+import Drasil.SWHS.Labels (assump1Label)
 
-tModels :: [RelationConcept]
-tModels = [t1ConsThermE, t2SensHtE, t3LatHtE]
+swhsTMods :: [TheoryModel]
+swhsTMods = [t1ConsThermE_new, t2SensHtE_new, t3LatHtE_new]
 
 -------------------------
 -- Theoretical Model 1 --
@@ -35,11 +35,13 @@ t1ConsThermE_new :: TheoryModel
 t1ConsThermE_new = tm' t1ConsThermE
   (tc' "ConsThermE_new" [qw thFluxVect, qw gradient, qw vol_ht_gen, 
     qw density, qw heat_cap_spec, qw temp, qw time] ([] :: [ConceptChunk])
-  [] [TCon Invariant consThermERel] []) "t1ConsThermE" [t1descr]
+  [] [TCon Invariant consThermERel] []) 
+  (mkLabelSame "t1ConsThermE" (Def TM)) [t1descr]
 
 t1ConsThermE :: RelationConcept
 t1ConsThermE = makeRC "t1ConsThermE"
-  (nounPhraseSP "Conservation of thermal energy") t1descr consThermERel
+  (nounPhraseSP "Conservation of thermal energy") t1descr consThermERel 
+  (mkLabelSame "ConsThermE" (Def TM))
 
 consThermERel :: Relation
 consThermERel = (negate (sy gradient)) $. (sy thFluxVect) + (sy vol_ht_gen) $=
@@ -65,12 +67,7 @@ t1descr = foldlSent [
   S "is the" +:+. (gradient ^. defn), S "For this", phrase equation,
   S "to apply" `sC` S "other forms of", phrase energy `sC` S "such as",
   phrase mech_energy `sC`
-  S "are assumed to be negligible in the", phrase system, sParen (makeRef a1)]
-
---referencing within a simple list is not yet implemented
--- FIXME: this hack will be removed once labels are defined in their own file
-a1 :: LabelledContent
-a1 = llcc (mkLabelRA'' "assump1") $ Assumption $ assump "assump1" EmptyS "assump1" 
+  S "are assumed to be negligible in the", phrase system, sParen (makeRef assump1Label)]
 
 -------------------------
 -- Theoretical Model 2 --
@@ -79,11 +76,12 @@ t2SensHtE_new :: TheoryModel
 t2SensHtE_new = tm' t2SensHtE
   (tc' "SensHtE_new" [qw sens_heat, qw htCap_S, qw mass, 
     qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [ConceptChunk])
-  [] [TCon Invariant sensHtEEqn] []) "t2SensHtE" [t2descr]
+  [] [TCon Invariant sensHtEEqn] []) 
+  (mkLabelSame "t2SensHtE" (Def TM)) [t2descr]
 
 t2SensHtE :: RelationConcept
-t2SensHtE = makeRC "t2SensHtE"
-  (nounPhraseSP "Sensible heat energy") t2descr sensHtEEqn 
+t2SensHtE = makeRC "t2SensHtE" (nounPhraseSP "Sensible heat energy") t2descr sensHtEEqn
+  (mkLabelSame "SensHtE" (Def TM))
 
 sensHtEEqn :: Relation
 sensHtEEqn = (sy sens_heat) $= case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
@@ -117,10 +115,9 @@ t2descr = foldlSent [
   ch temp :+: S "=" :+: ch boil_pt,
   S "or", ch temp :+: S "=" +. ch melt_pt,
   S "If this" `isThe` S "case, refer to",
-  (makeRef $ reldefn t3LatHtE) `sC`
-  at_start latent_heat, phrase energy]
+  (makeRef t3LatHtE_new) `sC` at_start latent_heat,
+  phrase energy]
  
-
 --How to have new lines in the description?
 --Can't have relation and eqn chunks together since they are called in a list
 ----You can, you just can't map "Definition" over a list
@@ -134,11 +131,12 @@ t2descr = foldlSent [
 t3LatHtE_new :: TheoryModel
 t3LatHtE_new = tm' t3LatHtE
   (tc' "SensHtE_new" [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
-  [] [TCon Invariant latHtEEqn] []) "t3LatHtE" [t3descr]
+  [] [TCon Invariant latHtEEqn] []) (mkLabelSame "t3LatHtE" (Def TM)) [t3descr]
 
 t3LatHtE :: RelationConcept
 t3LatHtE = makeRC "t3LatHtE"
-  (nounPhraseSP "Latent heat energy") t3descr latHtEEqn
+  (nounPhraseSP "Latent heat energy") t3descr latHtEEqn 
+  (mkLabelSame "LatHtE" (Def TM))
 
 latHtEEqn :: Relation
 latHtEEqn = apply1 latent_heat time $= 
@@ -150,17 +148,16 @@ t3descr :: Sentence
 t3descr = foldlSent [
   ch latent_heat `isThe` S "change in",
   phrase thermal_energy, sParen (Sy (joule ^. usymb)) `sC`
-  phrase latent_heat +:+. phrase energy,
+  phrase latent_heat +:+. phrase energy, 
   E latHtEEqn `isThe` phrase rOfChng, S "of",
-  ch latent_heat, S "with respect",
-  S "to", phrase time, ch tau +:+.
-  sParen (Sy (unit_symb tau)), ch time `isThe`
+  ch latent_heat, S "with respect to", phrase time,
+  ch tau +:+. sParen (Sy (unit_symb tau)), ch time `isThe`
   phrase time, sParen (Sy (unit_symb time)),
   S "elapsed, as long as the",
   phrase phase_change, S "is not complete. The status of",
   S "the", phrase phase_change,
   S "depends on the", phrase melt_frac `sC`
-  (makeRef $ datadefn dd3HtFusion) :+: S ".",
+  (makeRef dd3HtFusion) :+: S ".",
   ch melt_pt, S "and", ch boil_pt, S "are the",
   phrase melt_pt, S "and", phrase boil_pt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),

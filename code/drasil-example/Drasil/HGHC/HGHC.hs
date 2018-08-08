@@ -2,14 +2,14 @@ module Drasil.HGHC.HGHC (srsBody, thisCode, allSymbols, printSetting) where
 
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Language.Drasil.Code (CodeSpec, codeSpec)
-import Drasil.DocLang (DocSection(RefSec), Literature(Lit, Manual), 
+import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual), 
     RefSec(..), RefTab(TUnits), TSIntro(SymbConvention, TSPurpose), DocDesc, 
     intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
     Field(DefiningEquation, Description, Label, Symbol, Units), SolChSpec(SCSProg), 
     SCSSub(DDs'), DerivationDisplay(HideDerivation), SSDSub(SSDSolChSpec), 
-    SSDSec(SSDProg), DocSection(SSDSec))
+    SSDSec(SSDProg))
 
-import Drasil.HGHC.HeatTransfer (fp, hghc, hghcVarsDD, hghcVars, htInputs, htOutputs, 
+import Drasil.HGHC.HeatTransfer (fp, hghc, hghcVarsDD, htInputs, htOutputs, 
     nuclearPhys, symbols)
 
 import Data.Drasil.SI_Units (si_units)
@@ -30,7 +30,7 @@ thisSI = SI {
   _units = check_si,  
   _quants = symbols,
   _concepts = ([] :: [UnitaryConceptDict]),
-  _definitions = hghcVars,
+  _definitions = ([] :: [QDefinition]),
   _datadefs = hghcVarsDD,
   _inputs = htInputs,
   _outputs = htOutputs,

@@ -279,12 +279,12 @@ spec (Sy s)      = p_unit s
 spec (Sp s)      = pure $ text $ unPL $ L.special s
 spec HARDNL      = pure $ text "\\newline"
 spec (Ref t@RT.Sect r _ _) = sref (show t) (pure $ text r)
-spec (Ref t@RT.Def r _ _)  = hyperref (show t) (pure $ text r)
+spec (Ref t@(RT.Def _) r _ _)  = hyperref (show t) (pure $ text r)
 spec (Ref RT.Mod r _ _)    = mref  (pure $ text r)
-spec (Ref RT.Req r _ _)    = rref  (pure $ text r)
+spec (Ref (RT.Req _) r _ _)= rref  (pure $ text r)
 spec (Ref RT.Assump r _ _) = aref  (pure $ text r)
-spec (Ref RT.LC r _ _)     = lcref (pure $ text r)
-spec (Ref RT.UC r _ _)     = ucref (pure $ text r)
+spec (Ref RT.LCh r _ _)     = lcref (pure $ text r)
+spec (Ref RT.UnCh r _ _)     = ucref (pure $ text r)
 spec (Ref RT.Cite r _ _)   = cite  (pure $ text r)
 spec (Ref t r _ _)         = ref (show t) (pure $ text r)
 spec EmptyS              = empty
@@ -396,22 +396,22 @@ makeList (Ordered items)     = enumerate   $ vcat $ map pl_item items
 makeList (Definitions items) = symbDescription $ vcat $ def_item items
 
 pl_item :: (ItemType,Maybe Label) -> D
-pl_item (i, l) = mlref l $ p_item i
+pl_item (i, l) = mlref l <> p_item i
 
-mlref :: Maybe Label -> D -> D
-mlref = maybe id $ (%%) . label . spec
+mlref :: Maybe Label -> D
+mlref = maybe empty $ label . spec
 
 p_item :: ItemType -> D
 p_item (Flat s) = item $ spec s
 p_item (Nested t s) = vcat [item $ spec t, makeList s]
 
 sim_item :: [(Spec,ItemType,Maybe Label)] -> [D]
-sim_item = map (\(x,y,l) -> item' (spec $ x :+: S ":") $ mlref l $ sp_item y)
+sim_item = map (\(x,y,l) -> item' (spec (x :+: S ":") <> mlref l) $ sp_item y)
   where sp_item (Flat s) = spec s
         sp_item (Nested t s) = vcat [spec t, makeList s]
 
 def_item :: [(Spec, ItemType,Maybe Label)] -> [D]
-def_item = map (\(x,y,l) -> item $ mlref l $ spec $ x :+: S " is the " :+: d_item y)
+def_item = map (\(x,y,l) -> item $ mlref l <> (spec $ x :+: S " is the " :+: d_item y))
   where d_item (Flat s) = s
         d_item (Nested _ _) = error "Cannot use sublists in definitions"
 -----------------------------------------------------------------

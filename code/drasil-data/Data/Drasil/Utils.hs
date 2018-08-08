@@ -7,7 +7,6 @@ module Data.Drasil.Utils
   , zipSentList
   , makeTMatrix
   , itemRefToSent
-  , refFromType
   , noRefs
   , noRefsLT
   , makeListRef
@@ -37,8 +36,8 @@ import Data.Drasil.Concepts.Math (unit_)
 eqUnR :: Expr -> Label -> LabelledContent
 eqUnR e lbl = llcc lbl $ EqnBlock e
 
-eqUnR' :: Label -> Expr -> LabelledContent
-eqUnR' lbl e = llcc lbl $ EqnBlock e
+eqUnR' :: Expr -> Contents
+eqUnR' e = UlC $ ulcc $ EqnBlock e
 
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -106,22 +105,17 @@ makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- 
 
 -- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
 mkInputDatTb :: (Quantity a) => [a] -> LabelledContent
-mkInputDatTb inputVar = llcc (mkLabelRA'' "inDataTable") $ 
+mkInputDatTb inputVar = llcc (mkLabelSame "inDataTable" Tab) $ 
   Table [titleize symbol_, titleize unit_, 
   S "Name"]
   (mkTable [ch , fmtU EmptyS, phrase] inputVar) 
-  (S "Required" +:+ titleize' input_) True "inDataTable"
+  (S "Required" +:+ titleize' input_) True
 
 -- | makes sentences from an item and its reference 
 -- a - String title of reference
 -- b - Sentence containing the full reference
 itemRefToSent :: String -> Sentence -> Sentence
 itemRefToSent a b = S a +:+ sParen b
-
--- | refFromType takes a function and returns a reference sentence
---FIXME: will be removed when labels are added to all data types
-refFromType :: (a -> DType) -> a -> Sentence
-refFromType f = makeRef . llcc mkEmptyLabel . Definition . f
 
 -- | makeListRef takes a list and a reference and generates references to 
 --   match the length of the list
@@ -171,7 +165,6 @@ noRefsLT :: [(Sentence, ItemType)] -> [ListTuple]
 noRefsLT a = uncurry zip3 (unzip a) $ repeat Nothing
 
 prodUCTbl :: [[Sentence]] -> LabelledContent
-prodUCTbl cases = llcc (mkLabelRA'' "useCaseTable") $ --FIXME: do we want labels across examples to be unique?
+prodUCTbl cases = llcc (mkLabelSame "useCaseTable" Tab) $ --FIXME: do we want labels across examples to be unique?
   Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
-  cases
-  (titleize useCaseTable) True "useCaseTable"
+  cases (titleize useCaseTable) True

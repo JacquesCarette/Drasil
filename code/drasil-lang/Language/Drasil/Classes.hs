@@ -106,8 +106,8 @@ class HasReasVal c where
 
 -- | For those things which "have a label"
 class HasLabel c where
-  getLabel :: Lens' c Label
-
+  getLabel      :: Lens' c Label
+ 
 class MayHaveLabel c where
   getMaybeLabel :: c -> Maybe Label
 

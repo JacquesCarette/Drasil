@@ -1,16 +1,16 @@
-TINY_PREF = Tiny_
+TINY_PREF  = Tiny_
 GLASS_PREF = GlassBR_
 NoPCM_PREF = NoPCM_
-SWHS_PREF = SWHS_
-SSP_PREF = SSP_
-GAME_PREF = Chipmunk_
+SWHS_PREF  = SWHS_
+SSP_PREF   = SSP_
+GAME_PREF  = Chipmunk_
 
-TINY_DIR = Tiny
+TINY_DIR  = Tiny
 GLASS_DIR = GlassBR
 NoPCM_DIR = NoPCM
-SWHS_DIR = SWHS
-SSP_DIR = SSP
-GAME_DIR = Chipmunk
+SWHS_DIR  = SWHS
+SSP_DIR   = SSP
+GAME_DIR  = Chipmunk
 
 LANG_DIR  = drasil-lang
 CODE_DIR  = drasil-code
@@ -20,18 +20,21 @@ DATA_DIR  = drasil-data
 DOCL_DIR  = drasil-docLang
 EXAM_DIR  = drasil-example
 
-TINY_EXE = tiny
-GLASS_EXE= glassbr
-NoPCM_EXE  = nopcm
-SWHS_EXE = swhs
-SSP_EXE  = ssp
-GAME_EXE = chipmunkdocs
+TINY_EXE  = tiny
+GLASS_EXE = glassbr
+NoPCM_EXE = nopcm
+SWHS_EXE  = swhs
+SSP_EXE   = ssp
+GAME_EXE  = chipmunkdocs
 
 DIRS = $(TINY_DIR) $(GLASS_DIR) $(NoPCM_DIR) $(SWHS_DIR) $(SSP_DIR) $(GAME_DIR) $(DATA_DIR) $(LANG_DIR) $(DOCL_DIR) $(EXAM_DIR) $(CODE_DIR) $(GEN_DIR) $(PRINT_DIR)
 DIFF = diff --strip-trailing-cr --ignore-all-space
 
 TESTS = tiny_diff glassbr_diff nopcm_diff swhs_diff ssp_diff gamephys_diff
 PROGS = tiny_prog glassbr_prog nopcm_prog swhs_prog ssp_prog gamephys_prog
+
+PROFALL = --executable-profiling --library-profiling
+PROFEXEC = +RTS -xc -P
 
 all: build build_code build_data test
 
@@ -44,6 +47,10 @@ test: $(PROGS) $(TESTS)
 prog: $(PROGS)
 
 FORCE: ;
+
+debug: stackArgs+=$(PROFALL) 
+debug: EXECARGS+=$(PROFEXEC) 
+debug: test
 
 build: FORCE
 	mkdir -p $(LANG_DIR)
@@ -82,27 +89,27 @@ build_exam: build_docl
 
 tiny_build: build_exam
 	mkdir -p build/$(TINY_DIR)
-	cd build/$(TINY_DIR) && stack exec $(TINY_EXE)
+	cd build/$(TINY_DIR) && stack exec -- $(TINY_EXE) $(EXECARGS)
 
 glassbr_build: tiny_build
 	mkdir -p build/$(GLASS_DIR)
-	cd build/$(GLASS_DIR) && stack exec $(GLASS_EXE)
+	cd build/$(GLASS_DIR) && stack exec -- $(GLASS_EXE) $(EXECARGS)
 
 nopcm_build: glassbr_build
 	mkdir -p build/$(NoPCM_DIR)
-	cd build/$(NoPCM_DIR) && stack exec $(NoPCM_EXE)
+	cd build/$(NoPCM_DIR) && stack exec -- $(NoPCM_EXE) $(EXECARGS)
 
 swhs_build: nopcm_build
 	mkdir -p build/$(SWHS_DIR)
-	cd build/$(SWHS_DIR) && stack exec $(SWHS_EXE)
+	cd build/$(SWHS_DIR) && stack exec -- $(SWHS_EXE) $(EXECARGS)
 
 ssp_build: swhs_build
 	mkdir -p build/$(SSP_DIR)
-	cd build/$(SSP_DIR) && stack exec $(SSP_EXE)
+	cd build/$(SSP_DIR) && stack exec -- $(SSP_EXE) $(EXECARGS)
 
 gamephys_build: ssp_build
 	mkdir -p build/$(GAME_DIR)
-	cd build/$(GAME_DIR) && stack exec $(GAME_EXE)
+	cd build/$(GAME_DIR) && stack exec -- $(GAME_EXE) $(EXECARGS)
 
 tiny_diff: tiny_build
 	- $(DIFF) ./stable/tiny/SRS/$(TINY_PREF)SRS.tex ./build/$(TINY_DIR)/SRS/$(TINY_PREF)SRS.tex > $(TINY_PREF)log.log 2>&1

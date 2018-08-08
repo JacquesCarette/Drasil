@@ -15,19 +15,51 @@ misOfModule :: [Contents] -> [Section] -> String -> Section
 misOfModule cs ss mod = section' (titleize $ Doc.misOfModule mod)  cs ss $ "MISof" ++ mod ++ "Module"
 
 
---FIXME: needs variability
+--FIXME: All these contents need variability to be implemented in other examples
+
+------------------
+-- INTRODUCTION --
+------------------
+
 introMIS :: Contents
 introMIS = foldlSP [S "The following document details the Module Interface Specifications", 
   S "for the implemented modules in the program GlassBR. It is intended to ease",
   S " navigation through the program for design and maintenance purposes. ",
   S "Complementary documents include the System Requirement Specifications (SRS)", 
   S " and Module Guide (MG). The full documentation and implementation can be found",
-  S " at https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass."]
+  S " at https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass"]
 
-{-notationIntroMIS :: Contents
-notationIntroMIS = The structure of the MIS for modules comes from Homan and Strooper (1995), with the
-addition that template modules have been adapted from Ghezzi et al. (2003). The mathe-
-matical notation comes from Chapter 3 of Homan and Strooper (1995). For instance, the
-symbol := is used for a multiple assignment statement and conditional rules follow the form
-(c1 ) r1jc2 ) r2j:::jcn ) rn).
-The following table summarizes the primitive data types used by GlassBR.-}
+--------------
+-- NOTATION --
+--------------
+
+notationIntroMIS :: Contents
+notationIntroMIS = foldlSP [S "The structure of the MIS for modules comes from ",
+  S "Hoffman and Strooper (1995), with the addition that template modules have been:",
+  S " adapted from Ghezzi et al. (2003). The mathematical notation comes from ",
+  S "Chapter 3 of Hoffman and Strooper (1995). For instance, the symbol := is used",
+  S " for a multiple assignment statement and conditional rules follow the form",
+  S "(c1 ) r1jc2 ) r2j:::jcn ) rn)"]
+
+notTblIntro :: Contents
+notTblIntro = mkParagraph $ S "The following table summarizes the primitive" +:+
+  S "data types used by GlassBR"
+
+--notationTable :: LabelledContent
+--notationTable 
+
+notationIntroContd :: Contents
+notationIntroContd = foldlSP [S "The specification of GlassBR uses some derived data types:",
+  S " sequences, strings, and tuples. Sequences are lists that represent a countable number",
+  S " of ordered values of the same data type, where the same value may occur more than once.",
+  S " Strings are sequences of characters. Tuples contain a list of values, potentially of ", 
+  S "different types. In addition, GlassBR uses functions, which are defined by the data types",
+  S " of their inputs and outputs. Local functions are described by giving their type signature",
+  S " followed by their specification"]
+
+----------------------
+-- MODULE HIERARCHY --
+----------------------
+
+modHierarchyPointer :: Contents
+modHierarchyPointer = mkParagraph $ S "To view the Module Hierarchy, see section 3 of the MG (Link)."

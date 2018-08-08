@@ -80,7 +80,7 @@ codeSpec (SI {_sys = sys
   let inputs' = map codevar ins
       const' = map qtov constants
       derived = map qtov $ getDerivedInputs ddefs defs' inputs' const' db
-      rels = (map qtoc (defs'++(map qdFromDD ddefs))) \\ derived
+      rels = (map qtoc ({-defs'++-}(map qdFromDD ddefs))) \\ derived
       mods' = prefixFunctions $ (packmod "Calculations" $ map FCD rels):ms 
       mem   = modExportMap mods' inputs' const'
       outs' = map codevar outs
@@ -147,11 +147,11 @@ defaultChoices = Choices {
 type Name = String
 
 -- medium hacks ---
-relToQD :: (ExprRelat c, HasShortName c, HasSymbolTable ctx) => ctx -> c -> QDefinition
-relToQD sm r = convertRel sm (r ^. relat) (shortname r)
+relToQD :: (ExprRelat c, HasLabel c, HasSymbolTable ctx) => ctx -> c -> QDefinition
+relToQD sm r = convertRel sm (r ^. relat) (r ^. getLabel)
 
-convertRel :: (HasSymbolTable ctx) => ctx -> Expr -> ShortName -> QDefinition
-convertRel sm (BinaryOp Eq (C x) r) sn = ec (symbLookup x (sm ^. symbolTable)) r sn
+convertRel :: (HasSymbolTable ctx) => ctx -> Expr -> Label -> QDefinition
+convertRel sm (BinaryOp Eq (C x) r) lbe = ec (symbLookup x (sm ^. symbolTable)) r lbe
 convertRel _ _ _ = error "Conversion failed"
 
 data Mod = Mod Name [Func]
@@ -316,7 +316,9 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
               kNew = k ++ cnew
               nNew = n \\ cnew
           in  if null new 
-              then error "Cannot find path from inputs to outputs"
+              then error ("Cannot find path from inputs to outputs: " ++ (show $ map (^. uid) n)
+                        ++ " given Defs as " ++ (show $ map (^. uid) defs')
+                        ++ " and Knowns as " ++ (show $ map (^. uid) k) )
               else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
   
 subsetOf :: (Eq a) => [a] -> [a] -> Bool  

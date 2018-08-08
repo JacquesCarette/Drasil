@@ -1,7 +1,7 @@
 module Drasil.NoPCM.GenDefs (roc_temp_simp_deriv) where
 
 import Language.Drasil
-import Drasil.SWHS.TMods (t1ConsThermE)
+import Drasil.SWHS.TMods (t1ConsThermE_new)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Concepts.Math (unit_, rOfChng)
 import Data.Drasil.Concepts.Thermodynamics (temp)
@@ -25,17 +25,16 @@ roc_temp_simp_deriv =
 
 roc_temp_simp_deriv_sentences :: [Sentence]
 roc_temp_simp_deriv_sentences = map foldlSentCol [
-  genDefDesc1 t1ConsThermE vol,
+  genDefDesc1 t1ConsThermE_new vol,
   genDefDesc2 gauss_div surface vol thFluxVect uNormalVect unit_,
   genDefDesc3 vol vol_ht_gen,
   genDefDesc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heat_cap_spec
     QT.temp vol [S "A3", S "A4", S "A5"],
   genDefDesc5 density mass vol]
 
-genDefDesc1 :: RelationConcept -> UnitalChunk -> [Sentence]
+genDefDesc1 :: (HasShortName x, Referable x) => x -> UnitalChunk -> [Sentence]
 genDefDesc1 t1c vo =
-  [S "Integrating", makeRef $ reldefn t1c,
-  S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
+  [S "Integrating", makeRef t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
 genDefDesc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]

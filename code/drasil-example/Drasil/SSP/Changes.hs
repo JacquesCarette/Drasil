@@ -10,10 +10,10 @@ import Data.Drasil.SentenceStructures (foldlSent, foldlSP)
 import Data.Drasil.Concepts.Documentation (system)
 import Data.Drasil.Concepts.Math (calculation)
 
-likelyChanges_SRS :: [Contents]
+likelyChanges_SRS :: [LabelledContent]
 likelyChanges_SRS = [likelychg1]
 
-likelychg1 :: Contents
+likelychg1 :: LabelledContent
 likelychg1 = mkLklyChnk "LC_inhomogeneous" lc1Desc "Calculate-Inhomogeneous-Soil-Layers"
 
 lc1Desc :: Sentence
@@ -23,9 +23,9 @@ lc1Desc = foldlSent [(refA sspRefDB newA3) `sDash` S "The",
   S "can be added for inconsistent soil properties throughout"]
 
 unlikelyChanges_SRS :: [Contents]
-unlikelyChanges_SRS = [ucIntro, unlikelychg1, unlikelychg2]
+unlikelyChanges_SRS = [ucIntro, LlC unlikelychg1, LlC unlikelychg2]
 
-unlikelychg1, unlikelychg2 :: Contents
+unlikelychg1, unlikelychg2 :: LabelledContent
 
 unlikelychg1 = mkUnLklyChnk "UC_normshearlinear" uc1Desc "Normal-And-Shear-Linear-Only"
 unlikelychg2 = mkUnLklyChnk "UC_2donly"          uc2Desc "2D-Analysis-Only"

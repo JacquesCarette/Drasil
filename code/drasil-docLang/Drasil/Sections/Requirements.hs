@@ -17,7 +17,7 @@ reqF :: [Section] -> Section
 reqF = SRS.require [reqIntro]
 
 fReqF :: [Contents] -> Section
-fReqF listOfReqs = SRS.funcReq (listOfReqs) []
+fReqF listOfReqs = SRS.funcReq listOfReqs []
 
 --generalized requirements introduction
 reqIntroS :: Sentence

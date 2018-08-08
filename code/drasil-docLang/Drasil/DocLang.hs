@@ -11,7 +11,7 @@ module Drasil.DocLang (
     TSIntro(..), UCsSec(..), mkDoc, mkLklyChnk, mkRequirement, 
     mkUnLklyChnk, srsDomains, tsymb, tsymb'', mkConCC, mkConCC', mkEnumCC,
     -- DocumentLanguage.Definitions
-    Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose),
+    Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose), ddefn',
     -- DocumentLanguage.RefHelpers 
     ModelDB, cite, ddRefDB, mdb, refA, refDD,
     -- DocumentLanguage.TraceabilityMatrix
@@ -30,7 +30,7 @@ module Drasil.DocLang (
     siUQI, siUQO,
     -- Sections.SpecificSystemDescription
     assumpF, dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, 
-    inModelF, outDataConstTbl, physSystDesc, probDescF, specSysDescr, termDefnF,
+    inModelF, outDataConstTbl, physSystDesc, probDescF, termDefnF, specSysDescr,
     -- Sections.Stakeholders
     -- Sections.TableOfAbbAndAcronyms
     -- Sections.TableOfSymbols
@@ -50,7 +50,7 @@ import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
     mkLklyChnk, mkRequirement, mkUnLklyChnk, srsDomains, tsymb, tsymb'', mkConCC, mkConCC',
     mkEnumCC)
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, 
-    InclUnits(IncludeUnits), Verbosity(Verbose))
+    InclUnits(IncludeUnits), Verbosity(Verbose), ddefn')
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, cite, ddRefDB, mdb, refA, 
     refDD)
 --import Drasil.DocumentLanguage.TraceabilityMatrix
@@ -64,7 +64,7 @@ import Drasil.Sections.SolutionCharacterSpec (SubSec, assembler, sSubSec, siCon,
     siDDef, siIMod, siSTitl, siSent, siTMod, siUQI, siUQO)
 import Drasil.Sections.SpecificSystemDescription (assumpF, 
     dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, inModelF, 
-    outDataConstTbl, physSystDesc, probDescF, specSysDescr, termDefnF)
+    outDataConstTbl, physSystDesc, probDescF, termDefnF, specSysDescr)
 --import Drasil.Sections.Stakeholders
 --import Drasil.Sections.TableOfAbbAndAcronyms
 --import Drasil.Sections.TableOfSymbols

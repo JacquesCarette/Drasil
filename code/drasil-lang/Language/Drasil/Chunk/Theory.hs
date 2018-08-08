@@ -7,14 +7,15 @@ module Language.Drasil.Chunk.Theory
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasReference(getReferences),
-  HasAdditionalNotes(getNotes))
+  HasAdditionalNotes(getNotes), HasLabel(getLabel))
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import Language.Drasil.Chunk.Constrained.Core (TheoryConstraint)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.Quantity (Quantity, QuantityDict, qw)
 import Language.Drasil.Chunk.References (References)
-import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Label.Core (Label)
 
 import Control.Lens (Lens', view, makeLenses)
 
@@ -56,7 +57,7 @@ instance HasReference  TheoryChunk where getReferences = ref
 -- use the id of the TheoryModel as the uid. FIXME ?
 data TheoryModel = TM { _con :: ConceptChunk
                       , _thy :: TheoryChunk
-                      , _refName :: ShortName
+                      , _lb :: Label
                       , _notes :: Maybe [Sentence]
                       }
 makeLenses ''TheoryModel
@@ -66,7 +67,6 @@ instance NamedIdea          TheoryModel where term = con . term
 instance Idea               TheoryModel where getA = getA . view con
 instance Definition         TheoryModel where defn = con . defn
 instance HasReference       TheoryModel where getReferences = thy . getReferences
-instance HasShortName       TheoryModel where shortname = view refName
 instance ConceptDomain      TheoryModel where cdom = con . cdom
 instance HasAdditionalNotes TheoryModel where getNotes = notes
 instance Concept            TheoryModel where
@@ -78,6 +78,8 @@ instance Theory             TheoryModel where
   defined_quant = thy . defined_quant
   invariants    = thy . invariants
   defined_fun   = thy . defined_fun
+instance HasLabel           TheoryModel where getLabel = lb
+instance HasShortName       TheoryModel where shortname = lb . shortname
 
 tc :: (Concept c, Quantity q) =>
     String -> [TheoryChunk] -> [SpaceDefn] -> [q] -> [c] -> 
@@ -89,9 +91,9 @@ tc' :: (Quantity q, Concept c) =>
     [TheoryConstraint] -> [QDefinition] -> TheoryChunk
 tc' cid q c = tc cid ([] :: [TheoryChunk]) [] q c
 
-tm :: Concept c => c -> TheoryChunk -> String -> TheoryModel
-tm c t sn = TM (cw c) t (shortname' sn) Nothing
+tm :: Concept c => c -> TheoryChunk -> Label -> TheoryModel
+tm c t lbe = TM (cw c) t lbe Nothing
 
 -- Same as tm, but with the additional notes argument passed in
-tm' :: Concept c => c -> TheoryChunk -> String -> [Sentence] -> TheoryModel
-tm' c t sn ns = TM (cw c) t (shortname' sn) (Just ns)
+tm' :: Concept c => c -> TheoryChunk -> Label -> [Sentence] -> TheoryModel
+tm' c t lbe notes = TM (cw c) t lbe (Just notes)

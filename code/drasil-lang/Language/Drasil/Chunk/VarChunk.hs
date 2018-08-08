@@ -1,5 +1,5 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.VarChunk(VarChunk,implVar,codeVC,vc,vcSt,vc'') where
+module Language.Drasil.Chunk.VarChunk(VarChunk(VC),implVar,codeVC,vc,vcSt,vc'') where
 
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw, nc)
 import Language.Drasil.Chunk.Quantity (Quantity)
@@ -20,14 +20,14 @@ data VarChunk = VC { _ni :: IdeaDict
                    }
 makeLenses ''VarChunk
 
-instance Eq            VarChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
-instance HasUID        VarChunk where uid = ni . uid
-instance NamedIdea     VarChunk where term = ni . term
-instance Idea          VarChunk where getA = getA . view ni
-instance HasSymbol     VarChunk where symbol = (^. vsymb)
-instance HasSpace      VarChunk where typ = vtyp
-instance Quantity      VarChunk where 
-instance MayHaveUnit   VarChunk where getUnit _  = Nothing
+instance Eq          VarChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+instance HasUID      VarChunk where uid = ni . uid
+instance NamedIdea   VarChunk where term = ni . term
+instance Idea        VarChunk where getA = getA . view ni
+instance HasSymbol   VarChunk where symbol = (^. vsymb)
+instance HasSpace    VarChunk where typ = vtyp
+instance Quantity    VarChunk where 
+instance MayHaveUnit VarChunk where getUnit _  = Nothing
 
 -- | implVar makes an variable that is implementation-only
 implVar :: String -> NP -> Symbol -> Space -> VarChunk

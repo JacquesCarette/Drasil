@@ -46,14 +46,20 @@ parens = P.Fenced P.Paren P.Paren
 -- and decimal point position and a counter and exponent
 digitsProcess :: [Integer] -> Int -> Int -> Integer -> [P.Expr]
 digitsProcess [0] pos coun ex = [P.Int 0, P.MO P.Point, P.Int 0]
-digitsProcess (hd:tl) pos coun ex = if pos == coun  
-  then [P.MO P.Point, P.Int hd] ++ (digitsProcess tl pos (coun+1) ex)
-  else [P.Int hd] ++ (digitsProcess tl pos (coun+1) ex)
+digitsProcess (hd:tl) pos coun ex = if pos /= coun
+  then [P.Int hd] ++ (digitsProcess tl pos (coun+1) ex)
+  else if ex /= 0
+    then [P.MO P.Point, P.Int hd] ++ printa tl ++ [P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
+    else [P.MO P.Point, P.Int hd] ++ printa tl
 digitsProcess [] pos coun ex = if pos > coun
   then [P.Int 0] ++ (digitsProcess [] pos (coun+1) ex)
   else if ex /= 0
-    then [P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
-    else []
+    then [P.MO P.Point, P.Int 0, P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
+    else [P.MO P.Point, P.Int 0]
+
+printa :: [Integer] -> [P.Expr]
+printa (hd:tl) = [P.Int hd] ++ printa tl
+printa [] =[] 
 
 -- THis function takes the exponent and the [Int] of base and give out
 -- the decimal point position and processed exponent

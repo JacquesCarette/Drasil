@@ -27,7 +27,8 @@ import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)
 import qualified Drasil.Sections.Introduction as Intro (charIntRdrF, 
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
-import qualified Drasil.Sections.Requirements as R (fReqF, nonFuncReqF, reqF)
+import qualified Drasil.Sections.Requirements as R (fReqF, nonFuncReqF, reqF,
+  reqDom, funcReqDom)
 import qualified Drasil.Sections.ScopeOfTheProject as SotP (scopeOfTheProjF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, inModelF, probDescF, solutionCharSpecIntro, 
@@ -236,6 +237,12 @@ data AuxConstntSec = AuxConsProg CI [QDefinition] | AuxConsVerb Section
 {--}
 
 data AppndxSec = AppndxVerb Section | AppndxProg [Contents]
+
+{--}
+
+-- | List of domains for SRS
+srsDomains :: [ConceptChunk]
+srsDomains = [R.reqDom, R.funcReqDom]
 
 {--}
 

@@ -5,12 +5,19 @@ import Data.Drasil.Concepts.Documentation (datum, input_, literacy, output_,
     quantity, type_, value, variable)
 import Data.Drasil.Concepts.Math (parameter)
 
-algorithm :: ConceptChunk
-algorithm    = dcc "algorithm" (cn' "algorithm")
-  "A series of steps to be followed in calculations and problem-solving operations"
-
 mod_calc_desc :: Sentence -> ConceptChunk
 mod_calc_desc defnFromEx = dccWDS "mod_calc_desc" (cn' "calculation") defnFromEx
+
+algorithm, string, sequence, tuple :: ConceptChunk
+algorithm    = dcc "algorithm" (cn' "algorithm")
+  "A series of steps to be followed in calculations and problem-solving operations"
+string       = dcc "string"    (cn' "string") 
+  "a sequence of characters"
+sequence     = dcc "sequence"  (cn' "sequence") 
+  ("a list that represents a countable number of ordered values of the same data type,"++
+  	" where the same value may occur more than once")
+tuple        = dcc "tuple"     (cn' "tuple")
+  "a list of values, potentially of different types"
 
 application, computer, structure :: NamedChunk
 os :: CI

@@ -67,10 +67,11 @@ beasonEtAl1998 = cMisc "beasonEtAl1998"
 
 ghezziEtAl2003 = cMisc "ghezziEtAl2003"
   [author [carloGhezzi, mJazayeri, dMandrioli],
-  title (S "Fundamentals of Software Engineering 2nd edition"),
+  title (S "Fundamentals of Software Engineering"),
   year 2003,
   publisher (S "Prentice Hall"),
-  address (S "Upper Saddle River, NJ, USA")
+  address (S "Upper Saddle River, NJ, USA"),
+  edition 2
   ]
   ghezziEtAl2003Label
   where

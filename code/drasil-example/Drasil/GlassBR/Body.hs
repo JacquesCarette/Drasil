@@ -7,7 +7,7 @@ import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
 import qualified Drasil.DocLang.SRS as SRS (dataDefnLabel, 
   valsOfAuxConsLabel, referenceLabel, indPRCaseLabel,
-  datConLabel, funcReq, assumpt, likeChg)
+  datConLabel)
 import qualified Drasil.DocLang.GenBuilders as GB (intro)
 import qualified Drasil.DocLang.MIS as MIS (introMIS)
 
@@ -33,8 +33,8 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   implementation, information, inModel, input_, interface, item, likelyChg, message, model, 
   organization, output_, physicalSystem, physSyst, problem, product_, purpose, quantity, 
   reference, requirement, reviewer, section_, software, softwareSys, srs, standard, symbol_,
-  sysCont, system, systemConstraint, template, term_, theory, thModel, traceyMatrix, user,
-  userCharacteristic, userInput, value, mis)
+  sysCont, system, template, term_, theory, thModel, traceyMatrix, user,
+  userInput, value, mis)
 
 
 import Data.Drasil.Concepts.Education (civilEng, scndYrCalculus, structuralMechanics)

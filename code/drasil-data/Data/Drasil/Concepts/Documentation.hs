@@ -184,7 +184,6 @@ verification    = nc "verification"   (cn'    "verification"       )
 video           = nc "video"          (cn'    "video"              )
 year            = nc "year"           (cn'    "year"               )
 
-
 orgOfDoc, prpsOfDoc, refmat, scpOfReq, consVals,
   termAndDef, tOfSymb, traceyMandG, corSol, charOfIR, propOfCorSol,
   vav :: NamedChunk
@@ -202,11 +201,8 @@ traceyMandG  = nc "traceyMandG"  (andRT titleize' titleize' traceyMatrix graph)
 vav          = nc "vav"          (verification `and_` validation)
 consVals     = nc "consVals"     (cn "values of auxiliary constants")
 
-module_' :: String -> NamedChunk
-module_' mod = nc (mod ++ "Module") (cn' $ mod ++ " module") -- should this use compoundNC?
-
 misOfModule :: String -> NamedChunk
-misOfModule mod = nc ("misOf" ++ mod ++ "Module") (mis `of_''` module_' mod) -- use mis :: CI ?
+misOfModule modName = nc ("misOf" ++ modName ++ "Module") (mis `of_''` module_' modName)
 
 scpOfTheProj :: (NamedChunk -> Sentence) -> NamedChunk
 scpOfTheProj oper = nc "scpOfTheProj" (scope `of_` theCustom oper project) -- reasonable hack?
@@ -258,6 +254,9 @@ useCaseTable                 = compoundNC useCase table_
 userCharacteristic           = compoundNC user characteristic
 userInput                    = compoundNC user input_
 vavPlan                      = compoundNC vav plan
+
+module_' :: String -> NamedChunk
+module_' md = compoundNC (nc md $ cn' md) module_
 
 -- FIXME: fterms is here instead of Utils because of cyclic import
 -- | Apply a binary function to the terms of two named ideas, instead of to the named

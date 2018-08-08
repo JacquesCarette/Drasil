@@ -3,13 +3,18 @@ module Drasil.GlassBR.References where
 import Language.Drasil
 
 import Data.Drasil.Citations (campidelli, koothoor2013, smithLai2005, parnasClements1986)
-import Data.Drasil.People (jRobertson, jmBracci, sRobertson, tlKohutek, wlBeason)
+import Data.Drasil.People (jRobertson, jmBracci, sRobertson, tlKohutek, wlBeason,
+  carloGhezzi, mJazayeri, dMandrioli, hoffman, strooper)
 
-rbrtsn2012, astm2009, astm2016, astm2012, beasonEtAl1998 :: Citation
+rbrtsn2012, astm2009, astm2016, astm2012, beasonEtAl1998, 
+  hoffmanAndStrooper1995, ghezziEtAl2003 :: Citation
 
-gbCitations :: BibRef
-gbCitations = [campidelli, koothoor2013, smithLai2005, rbrtsn2012, astm2009, astm2016,
+srsCitations :: BibRef
+srsCitations = [campidelli, koothoor2013, smithLai2005, rbrtsn2012, astm2009, astm2016,
   astm2012, beasonEtAl1998, parnasClements1986]
+
+misCitations :: BibRef
+misCitations = [hoffmanAndStrooper1995, ghezziEtAl2003]
 
 rbrtsn2012 = cMisc "rbrtsn2012" [author [jRobertson, sRobertson], title
   (S "Volere requirements specification template edition 16"),
@@ -59,3 +64,28 @@ beasonEtAl1998 = cMisc "beasonEtAl1998"
   beasonEtAl1998Label
   where
     beasonEtAl1998Label = mkLabelRA' "beasonEtAl1998Label" "beasonEtAl1998" Cite
+
+ghezziEtAl2003 = cMisc "ghezziEtAl2003"
+  [author [carloGhezzi, mJazayeri, dMandrioli],
+  title (S "Fundamentals of Software Engineering 2nd edition"),
+  year 2003,
+  publisher (S "Prentice Hall"),
+  address (S "Upper Saddle River, NJ, USA")
+  ]
+  ghezziEtAl2003Label
+  where
+    ghezziEtAl2003Label = mkLabelRA' "ghezziEtAl2003Label" "ghezziEtAl2003" Cite
+
+hoffmanAndStrooper1995 = cMisc "hoffmanAndStrooper1995"
+  [author [hoffman, strooper],
+  title (S 
+  "Software Design, Automated Testing, and Maintenance: A Practical Approach"),
+  publisher (S "International Thoomson Computer Press"),
+  address (S "New York, NY, USA"),
+  year 1995,
+  howPublishedU (S "http://citeseer.ist.psu.edu/428727.html")
+  ]
+  hoffmanAndStrooper1995Label
+  where 
+    hoffmanAndStrooper1995Label = mkLabelRA' "hoffmanAndStrooper1995Label" 
+      "hoffmanAndStrooper1995" Cite

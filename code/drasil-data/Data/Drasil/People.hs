@@ -9,7 +9,8 @@ spencerSmith, henryFrankis, nKoothoor, dParnas, daAruliah, gWilson,
   fIncropera, dDewitt, tBergman, aLavine, jRobertson, sRobertson, 
   wlBeason, tlKohutek, jmBracci, qhQian, dyZhu, cfLee, grChen, dgFredlund,
   jKrahn, dStolle, yCLi, ymChen, tltZhan, ssLing, pjCleall, pGuo,
-  mCampidelli,   dmWiess, sPalmer, scottSmith :: Person
+  mCampidelli,   dmWiess, sPalmer, scottSmith, carloGhezzi, mJazayeri, 
+  dMandrioli, hoffman, strooper :: Person
   
 pjAgerfalk   = person    "PJ"                        "Agerfalk"
 daAruliah    = personWM  "D"         ["A"]           "Aruliah"
@@ -68,3 +69,8 @@ pWilson      = person    "Paul"                      "Wilson" -- Best Practices 
 tltZhan      = personWM  "Tony"      ["L","T"]       "Zhan"
 dyZhu        = personWM' "D"         ["Y"]           "Zhu"
 dmWiess      = personWM  ""          []              "Wiess"
+carloGhezzi  = person    "Carlo"                     "Ghezzi"
+mJazayeri    = person    "Mehdi"                     "Jazayeri"
+dMandrioli   = person    "Dino"                      "Mandrioli"
+hoffman      = personWM  "Daniel"    ["M"]           "Hoffman"
+strooper     = personWM  "Paul"      ["A"]           "Strooper"

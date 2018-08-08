@@ -54,7 +54,7 @@ import Data.Drasil.Software.Products (sciCompS)
 import Data.Drasil.Utils (makeTMatrix, itemRefToSent, noRefs,
   enumSimple, enumBullet, prodUCTbl, bulletFlat, bulletNested)
   
-import Drasil.GlassBR.Assumptions (assumptionConstants, gbRefDB, newAssumptions)
+import Drasil.GlassBR.Assumptions (assumptionConstants, gbRefDB, newAssumptions, gbRefDB')
 import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, 
   glass, gLassBR, lShareFac, ptOfExplsn, stdOffDist)
@@ -168,7 +168,8 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   AppndxSec (AppndxProg [appdxIntro, LlC fig_5, LlC fig_6]) : []
 
 mkMIS :: DocDesc
-mkMIS = IntroSec (IntroVerb (GB.intro [MIS.introMIS] [])) : []
+mkMIS = IntroSec (IntroVerb (GB.intro [MIS.introMIS] [])) : 
+  Bibliography : []
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, 
@@ -223,7 +224,7 @@ glassSystInfo' = SI {
   _constraints = gbConstrained,
   _constants   = gbConstants,
   _sysinfodb   = gbSymbMap,
-  _refdb       = gbRefDB
+  _refdb       = gbRefDB'
 }
 
 glassBR_code :: CodeSpec

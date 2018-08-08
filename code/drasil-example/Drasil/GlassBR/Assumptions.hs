@@ -16,10 +16,15 @@ import Drasil.GlassBR.Unitals ( lite, explosion, lateral, load_dur, explosion,
   constant_LoadDur, constant_ModElas, constant_M, constant_K, constant_LoadDF, constant_LoadSF)
 import Drasil.GlassBR.Concepts (lShareFac, gLassBR,
   glaSlab, glass, responseTy, cantilever, beam, plane, edge)
-import Drasil.GlassBR.References (gbCitations, astm2009)
+import Drasil.GlassBR.References (srsCitations, astm2009, misCitations)
  
+--SRS
 gbRefDB :: ReferenceDB
-gbRefDB = rdb [] [] newAssumptions [] [] gbCitations []
+gbRefDB = rdb [] [] newAssumptions [] [] srsCitations []
+
+--MIS
+gbRefDB' :: ReferenceDB
+gbRefDB' = rdb [] [] [] [] [] misCitations []
 
 newAssumptions :: [AssumpChunk] -- For testing
 newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8]

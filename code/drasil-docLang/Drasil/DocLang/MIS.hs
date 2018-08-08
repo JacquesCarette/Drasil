@@ -3,35 +3,44 @@ module Drasil.DocLang.MIS where
 import Language.Drasil
 import Drasil.DocLang.GenBuilders (section')
 
+import qualified Data.Drasil.Concepts.Documentation as Doc (accRoutSemantic, 
+  assumption, consideration, enviroVar, expConstant, expType, misOfModule, 
+  module_, moduleHierarchy, notation, semantic, stateInvar, stateVar, syntax, use)
 import qualified Data.Drasil.Concepts.Software as Doc (expAccProgram)
-import qualified Data.Drasil.Concepts.Documentation as Doc (accRoutSemantic, assumption, consideration, enviroVar, 
-  expConstant, expType, misOfModule, module_, moduleHierarchy, notation, semantic, stateInvar, stateVar, syntax, use)
-import Data.Drasil.SentenceStructures (foldlSP)
+  -- import ^ for section making
 
-expAccPrograms, expConstants, expTypes, considerations, module_, modHier, notation, semantics, syntax, 
-  uses :: [Contents] -> [Section] -> Section
+import Data.Drasil.Concepts.Documentation (design, document, documentation, implementation, 
+  mg, mis, purpose, srs)
+import Data.Drasil.Concepts.Software (program)
+  -- import ^ for paragraphs (pull out)
 
-modHier          cs ss = section' (titleize Doc.moduleHierarchy)      cs ss "ModHierarchy"
-notation         cs ss = section' (titleize Doc.notation)             cs ss "Notation"
+import Data.Drasil.SentenceStructures (foldlSP, inThe, sAnd)
 
-module_          cs ss = section' (titleize Doc.module_)              cs ss "Module"
-uses             cs ss = section' (titleize' Doc.use)                 cs ss "Uses"
-syntax           cs ss = section' (titleize Doc.syntax)               cs ss "Syntax"
-semantics        cs ss = section' (titleize' Doc.semantic)            cs ss "Semantics"
-considerations   cs ss = section' (titleize' Doc.consideration)       cs ss "Considerations"
+accRoutSemantics, assumptions, considerations, enviroVars, expAccPrograms, 
+  expConstants, expTypes, module_, modHier, notation, semantics, stateInvars, 
+  stateVars, syntax, uses :: [Contents] -> [Section] -> Section
 
-expConstants     cs ss = section' (titleize' Doc.expConstant)         cs ss "ExpConstants"
-expTypes         cs ss = section' (titleize' Doc.expType)             cs ss "ExpTypes"
-expAccPrograms   cs ss = section' (titleize' Doc.expAccProgram)       cs ss "ExpAccPrograms"
+modHier          cs ss = section' (titleize Doc.moduleHierarchy)  cs ss "ModHierarchy"
+notation         cs ss = section' (titleize Doc.notation)         cs ss "Notation"
 
-enviroVars       cs ss = section' (titleize' Doc.enviroVar)           cs ss "EnviroVars"
-stateVars        cs ss = section' (titleize' Doc.stateVar)            cs ss "StateVars"
-stateInvars      cs ss = section' (titleize' Doc.stateInvar)          cs ss "StateInvars"
-assumptions      cs ss = section' (titleize' Doc.assumption)          cs ss "Assumptions"
-accRoutSemantics cs ss = section' (titleize' Doc.accRoutSemantic)     cs ss "AccRoutSemantics"
+module_          cs ss = section' (titleize Doc.module_)          cs ss "Module"
+uses             cs ss = section' (titleize' Doc.use)             cs ss "Uses"
+syntax           cs ss = section' (titleize Doc.syntax)           cs ss "Syntax"
+semantics        cs ss = section' (titleize' Doc.semantic)        cs ss "Semantics"
+considerations   cs ss = section' (titleize' Doc.consideration)   cs ss "Considerations"
+
+expConstants     cs ss = section' (titleize' Doc.expConstant)     cs ss "ExpConstants"
+expTypes         cs ss = section' (titleize' Doc.expType)         cs ss "ExpTypes"
+expAccPrograms   cs ss = section' (titleize' Doc.expAccProgram)   cs ss "ExpAccPrograms"
+
+enviroVars       cs ss = section' (titleize' Doc.enviroVar)       cs ss "EnviroVars"
+stateVars        cs ss = section' (titleize' Doc.stateVar)        cs ss "StateVars"
+stateInvars      cs ss = section' (titleize' Doc.stateInvar)      cs ss "StateInvars"
+assumptions      cs ss = section' (titleize' Doc.assumption)      cs ss "Assumptions"
+accRoutSemantics cs ss = section' (titleize' Doc.accRoutSemantic) cs ss "AccRoutSemantics"
 
 misOfModule :: [Contents] -> [Section] -> String -> Section
-misOfModule cs ss mod = section' (titleize $ Doc.misOfModule mod)   cs ss $ "MISof" ++ mod ++ "Module"
+misOfModule cs ss mod = section' (titleize $ Doc.misOfModule mod) cs ss $ "MISof" ++ mod ++ "Module"
 
 --FIXME: All these contents need variability to be implemented in other examples
 
@@ -40,12 +49,14 @@ misOfModule cs ss mod = section' (titleize $ Doc.misOfModule mod)   cs ss $ "MIS
 ------------------
 
 introMIS :: Contents
-introMIS = foldlSP [S "The following document details the Module Interface Specifications", 
-  S "for the implemented modules in the program GlassBR. It is intended to ease",
-  S " navigation through the program for design and maintenance purposes. ",
-  S "Complementary documents include the System Requirement Specifications (SRS)", 
-  S " and Module Guide (MG). The full documentation and implementation can be found",
-  S " at https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass"]
+introMIS = foldlSP [S "The following", phrase document, S "details the", 
+  titleize mis, S "for the implemented", plural Doc.module_ `inThe`
+  phrase program, S "GlassBR. It is intended to ease navigation through the", -- Make 'GlassBR' more general when pulled out of MIS.hs
+  phrase program, S "for", phrase design, S "and maintenance" +:+. plural purpose,
+  S "Complementary", plural document, S "include the", titleize srs, (sParen $ getAcc srs)
+  `sAnd` titleize mg +:+. sParen (getAcc mg), S "The full", phrase documentation `sAnd`
+  phrase implementation, S "can be found at",
+  S "https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass"]
 
 --------------
 -- NOTATION --

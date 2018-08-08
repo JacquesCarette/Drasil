@@ -1,7 +1,7 @@
 module Data.Drasil.SentenceStructures
   ( foldlSent, foldlSent_, foldlSentCol, foldlsC, foldlList, foldlEnumList
   , sAnd, andIts, andThe, sAre, sIn, sVersus
-  , sIs, isThe, sOf, sOr, ofThe, ofThe'
+  , sIs, isThe, inThe, sOf, sOr, ofThe, ofThe'
   , ofGiv, ofGiv'
   , toThe, tableShows, figureLabel
   , isExpctdToHv, underConsidertn, showingCxnBw, refineChain
@@ -85,45 +85,25 @@ getSep Comma   = sC
 getSep SemiCol = semiCol
 
 {--** Combinators **--}
-sAnd, andIts :: Sentence -> Sentence -> Sentence
-sAnd p1 p2 = p1 +:+ S "and" +:+ p2
+sAnd, andIts, andThe, sAre, sIn, sIs, inThe, isThe, sOf, sOr, sVersus, ofThe, 
+  ofThe', ofGiv, ofGiv', toThe :: Sentence -> Sentence -> Sentence
 
-andIts p1 p2 = p1 +:+ S "and its" +:+ p2
-
-andThe :: Sentence -> Sentence -> Sentence
-andThe p1 p2 = p1 +:+ S "and the" +:+ p2
-
-sAre :: Sentence -> Sentence -> Sentence
-sAre p1 p2 = p1 +:+ S "are" +:+ p2
-
-sIn :: Sentence -> Sentence -> Sentence
-sIn p1 p2 = p1 +:+ S "in" +:+ p2
-
-sIs :: Sentence -> Sentence -> Sentence
-sIs p1 p2 = p1 +:+ S "is" +:+ p2
-
-isThe :: Sentence -> Sentence -> Sentence
-isThe p1 p2 = p1 +:+ S "is the" +:+ p2
-
-sOf :: Sentence -> Sentence -> Sentence
-sOf p1 p2 = p1 +:+ S "of" +:+ p2
-
-sOr :: Sentence -> Sentence -> Sentence
-sOr p1 p2 = p1 +:+ S "or" +:+ p2
-
-sVersus :: Sentence -> Sentence -> Sentence
+sAnd    p1 p2 = p1 +:+ S "and" +:+ p2
+andIts  p1 p2 = p1 +:+ S "and its" +:+ p2
+andThe  p1 p2 = p1 +:+ S "and the" +:+ p2
+sAre    p1 p2 = p1 +:+ S "are" +:+ p2
+sIn     p1 p2 = p1 +:+ S "in" +:+ p2
+sIs     p1 p2 = p1 +:+ S "is" +:+ p2
+inThe   p1 p2 = p1 +:+ S "in the" +:+ p2
+isThe   p1 p2 = p1 +:+ S "is the" +:+ p2
+sOf     p1 p2 = p1 +:+ S "of" +:+ p2
+sOr     p1 p2 = p1 +:+ S "or" +:+ p2
 sVersus p1 p2 = p1 +:+ S "versus" +:+ p2
-
-ofThe, ofThe' :: Sentence -> Sentence -> Sentence
-ofThe  p1 p2 = S "the" +:+ p1 +:+ S "of the" +:+ p2
-ofThe' p1 p2 = S "The" +:+ p1 +:+ S "of the" +:+ p2
-
-ofGiv, ofGiv' :: Sentence -> Sentence -> Sentence
-ofGiv  p1 p2 = S "the" +:+ p1 +:+ S "of a given" +:+ p2
-ofGiv' p1 p2 = S "The" +:+ p1 +:+ S "of a given" +:+ p2
-
-toThe :: Sentence -> Sentence -> Sentence
-toThe p1 p2 = p1 +:+ S "to the" +:+ p2
+ofThe   p1 p2 = S "the" +:+ p1 +:+ S "of the" +:+ p2
+ofThe'  p1 p2 = S "The" +:+ p1 +:+ S "of the" +:+ p2
+ofGiv   p1 p2 = S "the" +:+ p1 +:+ S "of a given" +:+ p2
+ofGiv'  p1 p2 = S "The" +:+ p1 +:+ S "of a given" +:+ p2
+toThe   p1 p2 = p1 +:+ S "to the" +:+ p2
 
 {--Acronyms to be used throughout--}
 -- ex. S "as seen in (A1)" -> S "as seen in" +:+ sParen (acroA "1")

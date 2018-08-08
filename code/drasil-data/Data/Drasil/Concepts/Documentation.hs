@@ -33,7 +33,7 @@ srs = commonIdea "srs"
   (compoundPhraseP1 (softwareReq ^. term) (specification ^. term))
   "SRS"
 mis = commonIdea "mis"
-  (compoundPhraseP1 (moduleInterface ^. term) (specification ^. term))
+  (compoundPhrase (moduleInterface ^. term) (specification ^. term))
   "MIS"
 
 ---------------------------------------------------------------------
@@ -44,12 +44,12 @@ abbreviation, access, analysis, appendix, aspect, body, characteristic, class_, 
   code, column, company, component, concept, condition, connection, consideration, 
   constant, constraint, consumer, content, context, coordinate, customer, datum, 
   decision, definition, dependency, description, design, document, documentation, 
-  effect, element, emphasis, endUser, environment, failure, figure, first, form, full, 
-  functional, game, general, goal, guide, implementation, individual, information, 
-  interest, interface, input_, instance_, intReader, introduction, invariant, issue, item, 
-  loss, label, library, limitation, literacy, material_, message, method_, module_,
-  model, name_, nonfunctional, object, offShelf, open, organization, output_,
-  physics, physical, plan, practice, priority, problem, product_, project,
+  effect, element, emphasis, endUser, environment, exported, failure, figure, first, form, 
+  full, functional, game, general, goal, guide, hierarchy, implementation, individual, 
+  information, interest, interface, input_, instance_, intReader, introduction, invariant, 
+  issue, item, loss, label, library, limitation, literacy, material_, message, method_, 
+  module_, model, name_, nonfunctional, notation, object, offShelf, open, organization, 
+  output_, physics, physical, plan, practice, priority, problem, product_, project,
   property, purpose, quantity, realtime, reference, requirement_, response, 
   result, reviewer, routine, safety, scope, second_, section_, semantic, scenario, source,
   simulation, software, solution, specific, specification, stakeholder,

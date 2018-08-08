@@ -225,8 +225,8 @@ accRoutSemantic, datumConstraint, designDoc, enviroVar, expConstant, expType, fu
   prodUCTable, productUC, routineSemantic, safetyReq, softwareConstraint, softwareDoc, 
   softwareReq, softwareSys, softwareVAV, softwareVerif, solutionCharacteristic, 
   solutionCharSpec, specificsystemdescription, stateVar, stateInvar, sysCont, 
-  systemConstraint, systemdescription, uncertCol, useCaseTable, userCharacteristic, 
-  userInput, vavPlan :: NamedChunk
+  systemConstraint, systemdescription, templateModule, uncertCol, useCaseTable, 
+  userCharacteristic, userInput, vavPlan :: NamedChunk
  
 accRoutSemantic              = compoundNC access routineSemantic
 datumConstraint              = compoundNC' datum constraint
@@ -265,6 +265,7 @@ stateInvar                   = compoundNC state invariant
 sysCont                      = compoundNC system context
 systemConstraint             = compoundNC system constraint
 systemdescription            = compoundNC system description
+templateModule               = compoundNC template module_
 uncertCol                    = compoundNC uncertainty column
 useCaseTable                 = compoundNC useCase table_
 userCharacteristic           = compoundNC user characteristic

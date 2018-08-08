@@ -9,12 +9,12 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (accRoutSemantic,
 import qualified Data.Drasil.Concepts.Software as Doc (expAccProgram)
   -- import ^ for section making
 
-import Data.Drasil.Concepts.Documentation (design, document, documentation, implementation, 
-  mg, mis, purpose, srs)
+import Data.Drasil.Concepts.Documentation (design, document, documentation, form, 
+  implementation, mg, mis, purpose, srs, statement, symbol_, templateModule)
 import Data.Drasil.Concepts.Software (program)
   -- import ^ for paragraphs (pull out)
 
-import Data.Drasil.SentenceStructures (foldlSP, inThe, sAnd)
+import Data.Drasil.SentenceStructures (foldlSP, inThe, ofThe, sAnd)
 
 accRoutSemantics, assumptions, considerations, enviroVars, expAccPrograms, 
   expConstants, expTypes, module_, modHier, notation, semantics, stateInvars, 
@@ -63,12 +63,12 @@ introMIS progName outerLink = foldlSP [S "The following", phrase document, S "de
 --------------
 
 notationIntroMIS :: Contents
-notationIntroMIS = foldlSP [S "The structure of the", getAcc mis, S "for modules comes from",
-  S "Hoffman and Strooper (1995), with the addition that template modules have been:",
-  S " adapted from Ghezzi et al. (2003). The mathematical notation comes from ",
-  S "Chapter 3 of Hoffman and Strooper (1995). For instance, the symbol := is used",
-  S " for a multiple assignment statement and conditional rules follow the form",
-  S "(c1 ) r1jc2 ) r2j:::jcn ) rn)"]
+notationIntroMIS = foldlSP [S "The structure" `ofThe` getAcc mis, S "for", plural Doc.module_,
+  S "comes from Hoffman and Strooper (1995), with the addition that", plural templateModule, 
+  S "have been adapted from Ghezzi et al. (2003). The mathematical", phrase Doc.notation, 
+  S "comes from Chapter 3 of Hoffman and Strooper (1995). For instance, the", phrase symbol_, 
+  S ":= is used for a multiple assignment", phrase statement `sAnd` S "conditional rules",
+  S "follow the", phrase form, S "(c1 ) r1jc2 ) r2j:::jcn ) rn)"]
 
 notTblIntro :: (Idea a) => a -> Contents
 notTblIntro progName = mkParagraph $ S "The following table summarizes the primitive" +:+

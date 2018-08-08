@@ -67,6 +67,13 @@ digitsProcess [] pos coun ex = if pos > coun
 
 -- THis function takes the exponent and the [Int] of base and give out
 -- the decimal point position and processed exponent
+-- This function supports transferring scientific notation to
+-- engineering notation.
+-- References for standard of Engineering Notation:
+-- https://www.khanacademy.org/science/electrical-engineering/introduction-to-ee/
+--    intro-to-ee/a/ee-numbers-in-electrical-engineering 
+-- https://www.calculatorsoup.com/calculators/math/scientific-notation-converter.php
+-- https://en.wikipedia.org/wiki/Scientific_notation
 processExpo :: Int -> (Int, Int)
 processExpo a 
   | a == 0 = (3, -3)

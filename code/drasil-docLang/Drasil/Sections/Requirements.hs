@@ -33,10 +33,10 @@ reqIntro = mkParagraph reqIntroS
 
 -- Requirements Domains
 reqDom :: ConceptChunk
-reqDom = ccs (nc "reqDom" $ requirement ^. term) reqIntroS [SRS.srsDom]
+reqDom = ccs (mkIdea "reqDom" (requirement ^. term) $ Just "R") reqIntroS [SRS.srsDom]
 
 funcReqDom :: ConceptChunk
-funcReqDom = ccs (nc "funcReqDom" $ functionalRequirement ^. term) EmptyS [reqDom]
+funcReqDom = ccs (mkIdea "funcReqDom" (functionalRequirement ^. term) $ Just "FR") EmptyS [reqDom]
 
 -- wrapper for nonfuncReq
 nonFuncReqF :: (Concept c) => [c] -> [c] -> Sentence -> Sentence -> Section

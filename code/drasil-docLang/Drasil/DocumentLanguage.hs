@@ -23,7 +23,8 @@ import qualified Drasil.DocLang.GenBuilders as GB (reference, tOfSymb, intro)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn, genSysDes, 
   inModel, likeChg, unlikeChg, probDesc, solCharSpec, stakeholder,
   thModel, userChar, genDefnLabel, propCorSol, offShelfSol)
-import qualified Drasil.DocLang.MIS as MIS (notation, introMIS)
+import qualified Drasil.DocLang.MIS as MIS (notation, introMIS, notationIntroContd,
+  notTblIntro, notationIntroMIS)
 
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
@@ -315,6 +316,7 @@ mkSections si l = map doit l
     doit (AppndxSec a)       = mkAppndxSec a
     doit (ExistingSolnSec o) = mkExistingSolnSec o
     doit (NotationSec n)     = mkNotationSec si n
+    --doit ()
 
 
 -- | Helper for creating the reference section and subsections
@@ -610,16 +612,8 @@ mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortByS
 -- | Helper for making the 'Off-the-Shelf Solutions' section
 mkNotationSec :: SystemInformation -> NotationSec -> Section
 mkNotationSec _ (NotationVerb s)  = s
-mkNotationSec _ (NotationProg cs) = MIS.notation ({-MIS.notationIntroMIS ++ MIS.notTblIntro ++--} cs) []
-
---notTblIntro :: Contents
---notTblIntro = mkParagraph $ S "The following table summarizes the primitive" +:+
---  S "data types used by GlassBR"
-
---notationTable :: LabelledContent
---notationTable 
-
---notationIntroContd
+mkNotationSec SI {_sys = sys} (NotationProg cs) = MIS.notation (MIS.notationIntroMIS :
+  (MIS.notTblIntro sys) : cs ++ [MIS.notationIntroContd sys]) []
 
 {--}
 

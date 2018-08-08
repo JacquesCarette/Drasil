@@ -70,19 +70,20 @@ notationIntroMIS = foldlSP [S "The structure of the", getAcc mis, S "for modules
   S " for a multiple assignment statement and conditional rules follow the form",
   S "(c1 ) r1jc2 ) r2j:::jcn ) rn)"]
 
-notTblIntro :: Contents
-notTblIntro = mkParagraph $ S "The following table summarizes the primitive" +:+
-  S "data types used by GlassBR"
+notTblIntro :: (Idea a) => a -> Contents
+notTblIntro progName = mkParagraph $ S "The following table summarizes the primitive" +:+
+  S "data types used by" +:+ (short progName)
 
 --notationTable :: LabelledContent
 --notationTable 
 
-notationIntroContd :: Contents
-notationIntroContd = foldlSP [S "The specification of GlassBR uses some derived data types:",
-  S " sequences, strings, and tuples. Sequences are lists that represent a countable number",
+notationIntroContd :: (Idea a) => a -> Contents
+notationIntroContd progName = foldlSP [S "The specification of", short progName, 
+  S "uses some derived data types: sequences, strings, and tuples.", 
+  S " Sequences are lists that represent a countable number",
   S " of ordered values of the same data type, where the same value may occur more than once.",
   S " Strings are sequences of characters. Tuples contain a list of values, potentially of ", 
-  S "different types. In addition, GlassBR uses functions, which are defined by the data types",
+  S "different types. In addition, ", short progName, S "uses functions, which are defined by the data types",
   S " of their inputs and outputs. Local functions are described by giving their type signature",
   S " followed by their specification"]
 

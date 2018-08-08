@@ -8,7 +8,10 @@ module Drasil.DocLang (
     SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), ExistingSolnSec(..),
     StkhldrSec(StkhldrProg2),
     StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg), 
-    TSIntro(..), UCsSec(..), mkDoc, mkLklyChnk, mkRequirement, 
+    TSIntro(..), UCsSec(..), 
+    NotationSec(..), ModHierarchSec(..), 
+    MISModSec(..), MISModSub(..), MISSyntaxSub(..), MISSemanticsSub(..),
+    mkDoc, mkLklyChnk, mkRequirement, 
     mkUnLklyChnk, srsDomains, tsymb, tsymb'', mkConCC, mkConCC', mkEnumCC,
     -- DocumentLanguage.Definitions
     Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose), ddefn',
@@ -48,7 +51,8 @@ import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
     StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), TConvention(..), 
     TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..), mkDoc, 
     mkLklyChnk, mkRequirement, mkUnLklyChnk, srsDomains, tsymb, tsymb'', mkConCC, mkConCC',
-    mkEnumCC)
+    mkEnumCC, NotationSec(..), ModHierarchSec(..), 
+    MISModSec(..), MISModSub(..), MISSyntaxSub(..), MISSemanticsSub(..))
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, 
     InclUnits(IncludeUnits), Verbosity(Verbose), ddefn')
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, cite, ddRefDB, mdb, refA, 

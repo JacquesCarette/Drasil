@@ -18,10 +18,13 @@ import qualified Data.Map as Map (elems)
 import Drasil.Sections.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
 import Drasil.Sections.TableOfSymbols (table)
 import Drasil.Sections.TableOfUnits (table_of_units)
-import Drasil.DocLang.GenBuilders (reference, tOfSymb)
+
+import qualified Drasil.DocLang.GenBuilders as GB (reference, tOfSymb, intro)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn, genSysDes, 
   inModel, likeChg, unlikeChg, probDesc, solCharSpec, stakeholder,
   thModel, userChar, genDefnLabel, propCorSol, offShelfSol)
+import qualified Drasil.DocLang.MIS as MIS (notation, introMIS)
+
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)
@@ -66,6 +69,9 @@ data DocSection = Verbatim Section
                 | Bibliography
                 | AppndxSec AppndxSec
                 | ExistingSolnSec ExistingSolnSec
+                | NotationSec NotationSec
+                | ModHierarchSec ModHierarchSec
+                | MISModSec MISModSec
 
 --FIXME: anything with 'Verb' in it should eventually go
 
@@ -131,6 +137,7 @@ data LFunc where
 data IntroSec = IntroProg Sentence Sentence [IntroSub]
   -- ^ Temporary, will be modified once we've figured out more about the section.
               | IntroVerb Section
+              | IntroMIS Sentence --link for documentation and implementation
 
 -- | Introduction subsections
 data IntroSub where
@@ -241,6 +248,41 @@ data AppndxSec = AppndxVerb Section | AppndxProg [Contents]
 
 {--}
 
+data NotationSec = NotationVerb Section | NotationProg [Contents]
+
+{--}
+
+data ModHierarchSec = ModHierarchVerb Section | ModHierarchProg [Contents]  
+
+{--}
+
+
+data MISModSec = MISModVerb Section
+               | MISModProg [MISModSub]
+
+data MISModSub where
+  MISModSubVerb     :: Section -> MISModSub
+  MISModule         :: String -> MISModSub
+  MISUses           :: [MISModSec] -> MISModSub
+  MISSyntax         :: [MISSyntaxSub] -> MISModSub
+  MISSemantics      :: [MISSemanticsSub] -> [Section] -> MISModSub
+  MISConsiderations :: [Contents] -> MISModSub
+
+data MISSyntaxSub where
+  MISSyntaxSubVerb :: Section -> MISSyntaxSub
+  MISExportedCs    :: [Contents] -> MISSyntaxSub
+  MISExportedAPs   :: Contents -> MISSyntaxSub
+
+data MISSemanticsSub where
+  MISSemanticsSubVerb :: Section -> MISSemanticsSub
+  MISStateVars        :: Contents -> MISSemanticsSub
+  MISAccessRoutines   :: Contents -> MISSemanticsSub
+  MISEnvVars          :: Contents -> MISSemanticsSub
+  MISAssumptions      :: Contents -> MISSemanticsSub
+  MISStateInvariant   :: Contents -> MISSemanticsSub
+ 
+{--}
+
 -- | List of domains for SRS
 srsDomains :: [ConceptChunk]
 srsDomains = [R.reqDom, R.funcReqDom]
@@ -272,6 +314,7 @@ mkSections si l = map doit l
     doit (TraceabilitySec t) = mkTraceabilitySec t
     doit (AppndxSec a)       = mkAppndxSec a
     doit (ExistingSolnSec o) = mkExistingSolnSec o
+    doit (NotationSec n)     = mkNotationSec n
 
 
 -- | Helper for creating the reference section and subsections
@@ -286,7 +329,7 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
     mkSubRef SI {_sysinfodb = db} (TUnits' con) =
         table_of_units (sortBy comp_unitdefn $ Map.elems $ db ^. unitTable) (tuIntro con)
     mkSubRef SI {_quants = v} (TSymb con) =
-      tOfSymb 
+      GB.tOfSymb 
       [tsIntro con,
                 LlC $ table Equational (
                 sortBy (compsy `on` eqSymb) 
@@ -301,7 +344,7 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
 -- | Helper for creating the table of symbols
 mkTSymb :: (Quantity e, Concept e, Eq e) =>
   [e] -> LFunc -> [TSIntro] -> Section
-mkTSymb v f c = tOfSymb [tsIntro c,
+mkTSymb v f c = GB.tOfSymb [tsIntro c,
   LlC $ table Equational
     (sortBy (compsy `on` eqSymb) $ filter (`hasStageSymbol` Equational) (nub v))
     (lf f)] 
@@ -403,18 +446,18 @@ defaultTUI = [System, Derived, TUPurpose]
 
 mkIntroSec :: SystemInformation -> IntroSec -> Section
 mkIntroSec _ (IntroVerb s) = s
+mkIntroSec SI {_sys = sys} (IntroMIS link)     = GB.intro [MIS.introMIS {-pass in `sys` and `link`-}] []
 mkIntroSec si (IntroProg probIntro progDefn l) =
   Intro.introductionSection probIntro progDefn $ map (mkSubIntro si) l
   where
     mkSubIntro :: SystemInformation -> IntroSub -> Section
-    mkSubIntro _ (IVerb s) = s
-    mkSubIntro si' (IPurpose intro) = Intro.purposeOfDoc (getRefDB si') intro
-    mkSubIntro SI {_sys = sys} (IScope main intendedPurp) =
+    mkSubIntro _               (IVerb s) = s
+    mkSubIntro si'             (IPurpose intro) = Intro.purposeOfDoc (getRefDB si') intro
+    mkSubIntro SI {_sys = sys} (IScope main intendedPurp) = 
       Intro.scopeOfRequirements main sys intendedPurp
     mkSubIntro SI {_sys = sys} (IChar know understand appStandd) =
       Intro.charIntRdrF know understand sys appStandd (SRS.userChar [] [])
-    mkSubIntro _ (IOrgSec i b s t)  = Intro.orgSec i b s t
-    -- FIXME: s should be "looked up" using "b" once we have all sections being generated
+    mkSubIntro _               (IOrgSec i b s t)  = Intro.orgSec i b s t -- FIXME: s should be "looked up" using "b" once we have all sections being generated
 
 -- | Helper for making the 'Stakeholders' section
 mkStkhldrSec :: StkhldrSec -> Section
@@ -564,9 +607,16 @@ mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortByS
 
 {--}
 
+-- | Helper for making the 'Off-the-Shelf Solutions' section
+mkNotationSec :: NotationSec -> Section
+mkNotationSec (NotationVerb s)  = s
+mkNotationSec (NotationProg cs) = MIS.notation cs []
+
+{--}
+
 -- | Helper for making the bibliography section
 mkBib :: BibRef -> Section
-mkBib bib = reference [UlC $ ulcc (Bib bib)] []
+mkBib bib = GB.reference [UlC $ ulcc (Bib bib)] []
 
 {--}
 

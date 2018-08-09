@@ -25,7 +25,9 @@ import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn, genSysD
   thModel, userChar, genDefnLabel, propCorSol, offShelfSol)
 import qualified Drasil.DocLang.MIS as MIS (notation, introMIS, notationIntroContd,
   notTblIntro, notationIntroMIS, modHierarchyPointer, modHier, syntax,
-  uses, module_, misOfModule)
+  uses, module_, misOfModule, accRoutSemantics, assumptions, considerations, 
+  enviroVars, expAccPrograms, expConstants, expTypes, module_, modHier, notation, 
+  semantics, stateInvars, stateVars, syntax, uses)
 
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
@@ -266,21 +268,22 @@ data MISModSub where
   MISModule         :: MISModSub
   MISUses           :: [Label] -> MISModSub
   MISSyntax         :: [MISSyntaxSub] -> MISModSub
-  MISSemantics      :: [MISSemanticsSub] -> [Section] -> MISModSub
+  MISSemantics      :: [MISSemanticsSub] -> MISModSub
   MISConsiderations :: [Contents] -> MISModSub
 
 data MISSyntaxSub where
   MISSyntaxSubVerb :: Section -> MISSyntaxSub
   MISExportedCs    :: [Contents] -> MISSyntaxSub
-  MISExportedAPs   :: Contents -> MISSyntaxSub
+  MISExportedAPs   :: [Contents] -> MISSyntaxSub
+  MISExportedTyps  :: [Contents] -> MISSyntaxSub
 
 data MISSemanticsSub where
   MISSemanticsSubVerb :: Section -> MISSemanticsSub
-  MISStateVars        :: Contents -> MISSemanticsSub
-  MISAccessRoutines   :: Contents -> MISSemanticsSub
-  MISEnvVars          :: Contents -> MISSemanticsSub
-  MISAssumptions      :: Contents -> MISSemanticsSub
-  MISStateInvariant   :: Contents -> MISSemanticsSub
+  MISStateVars        :: [Contents] -> MISSemanticsSub
+  MISAccessRoutines   :: [Contents] -> MISSemanticsSub
+  MISEnvVars          :: [Contents] -> MISSemanticsSub
+  MISAssumptions      :: [Contents] -> MISSemanticsSub
+  MISStateInvariant   :: [Contents] -> MISSemanticsSub
  
 {--}
 
@@ -627,21 +630,45 @@ mkModHierarchSec (ModHierarchProg mgLink) = MIS.modHier [MIS.modHierarchyPointer
 
 mkMISModSec :: MISModSec -> Section
 mkMISModSec (MISModVerb s)             = s
-mkMISModSec (MISModProg modName x mms) = MIS.misOfModule (getContents x) (map subsections mms) modName
+mkMISModSec (MISModProg modName x mms) = MIS.misOfModule (getIntroMaybe x) (map subsections mms) modName
   where
-    getContents :: Maybe Contents -> [Contents]
-    getContents Nothing      = []
-    getContents (Just intro) = intro : []
+    getIntroMaybe :: Maybe Contents -> [Contents]
+    getIntroMaybe Nothing      = []
+    getIntroMaybe (Just intro) = intro : []
     subsections :: MISModSub -> Section
     subsections (MISModSubVerb s)  = s
     subsections MISModule          = MIS.module_ [mkParagraph $ S modName] []
-    subsections (MISUses [])       = MIS.uses    [mkParagraph $ S "None"]  []
+    subsections (MISUses [])       = MIS.uses    none  []
     subsections (MISUses useMods)  = MIS.uses    (map mkParagraph $ map makeRef useMods) [] --FIXME: needs to become a proper list
-    subsections _                  = MIS.syntax [] []
-    --subsections (MISSyntax s)  = s
-    --subsections (MISSemantics s)  = s
-    --subsections (MISConsiderations s)  = s
+    subsections (MISSyntax subs)   = MIS.syntax [] (map syntaxSubs subs)
+    subsections (MISSemantics subs)= MIS.semantics [] (map semanticSubs subs)
+    subsections (MISConsiderations s) = MIS.considerations [] [] --FIXME: needs to be filled out
 
+syntaxSubs :: MISSyntaxSub -> Section
+syntaxSubs (MISSyntaxSubVerb s) = s
+syntaxSubs (MISExportedCs [])   = MIS.expConstants   none []
+syntaxSubs (MISExportedAPs [])  = MIS.expAccPrograms none []
+syntaxSubs (MISExportedTyps []) = MIS.expTypes       none []
+syntaxSubs (MISExportedTyps cs) = MIS.expTypes       cs []
+syntaxSubs (MISExportedAPs cs)  = MIS.expAccPrograms cs []
+syntaxSubs (MISExportedCs cs)   = MIS.expConstants   cs []
+
+semanticSubs :: MISSemanticsSub -> Section
+semanticSubs (MISSemanticsSubVerb s) = s
+semanticSubs (MISStateVars [])       = MIS.stateVars        none []
+semanticSubs (MISAccessRoutines [])  = MIS.accRoutSemantics none []
+semanticSubs (MISEnvVars [])         = MIS.enviroVars       none []
+semanticSubs (MISAssumptions [])     = MIS.assumptions      none []
+semanticSubs (MISStateInvariant [])  = MIS.stateInvars      none []
+semanticSubs (MISStateVars cs)       = MIS.stateVars        cs []
+semanticSubs (MISAccessRoutines cs)  = MIS.accRoutSemantics cs []
+semanticSubs (MISEnvVars cs)         = MIS.enviroVars       cs []
+semanticSubs (MISAssumptions cs)     = MIS.assumptions      cs []
+semanticSubs (MISStateInvariant cs)  = MIS.stateInvars      cs []
+
+
+none :: [Contents]
+none = [mkParagraph $ S "None"]
 
 {--}
 

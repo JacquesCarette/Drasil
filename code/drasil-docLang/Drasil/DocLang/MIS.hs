@@ -36,7 +36,7 @@ expAccPrograms   cs ss = section' (titleize' Doc.expAccProgram)   cs ss "ExpAccP
 enviroVars       cs ss = section' (titleize' Doc.enviroVar)       cs ss "EnviroVars"
 stateVars        cs ss = section' (titleize' Doc.stateVar)        cs ss "StateVars"
 stateInvars      cs ss = section' (titleize' Doc.stateInvar)      cs ss "StateInvars"
-assumptions      cs ss = section' (titleize' Doc.assumption)      cs ss "Assumptions"
+assumptions      cs ss = section' (titleize' Doc.assumption)      cs ss "Assumptions" --FIXME: Assumptions already defined for SRS?
 accRoutSemantics cs ss = section' (titleize' Doc.accRoutSemantic) cs ss "AccRoutSemantics"
 
 misOfModule :: [Contents] -> [Section] -> String -> Section

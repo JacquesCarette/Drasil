@@ -20,7 +20,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), NotationSec(..),
-  ModHierarchSec(..), MISModSub(..), MISModSec(..), 
+  ModHierarchSec(..), MISModSub(..), MISModSec(..), MISSyntaxSub(..), MISSemanticsSub(..),
   cite, dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
   mkRequirement, outDataConstTbl, physSystDesc, termDefnF, traceGIntro, 
   tsymb)
@@ -174,6 +174,9 @@ mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master
   ModHierarchSec (ModHierarchProg $ S "section 3 of the MG (Link)") : --FIXME: hardcoded link
   Bibliography : 
   MISModSec (MISModProg "Hardware" (Just MIS.hwModIntro) [MISModule, MISUses []]) :
+  MISModSec (MISModProg "Constants" Nothing [MISModule, MISUses [], 
+    MISSyntax [MISExportedCs [], MISExportedTyps [], MISExportedAPs []],
+    MISSemantics [MISStateVars [], MISStateInvariant []]]) :
   []
 
 stdFields :: Fields

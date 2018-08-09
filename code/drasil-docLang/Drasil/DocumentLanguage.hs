@@ -140,10 +140,9 @@ data LFunc where
 {--}
 
 -- | Introduction section. Contents are top level followed by a list of
--- subsections. IntroVerb is used for including verbatim subsections.
+-- subsections.
 data IntroSec = IntroProg Sentence Sentence [IntroSub]
   -- ^ Temporary, will be modified once we've figured out more about the section.
-              | IntroVerb Section
               | IntroMIS Sentence --link for documentation and implementation
 
 -- | Introduction subsections

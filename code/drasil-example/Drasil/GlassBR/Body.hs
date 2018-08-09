@@ -175,7 +175,7 @@ mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master
   Bibliography : 
   MISModSec (MISModProg "Hardware" (Just MIS.hwModIntro) [MISModule, MISUses []]) :
   MISModSec (MISModProg "Constants" Nothing [MISModule, MISUses [], 
-    MISSyntax [MISExportedCs [], MISExportedTyps [], MISExportedAPs []],
+    MISSyntax [MISExportedCs auxiliaryConstants, MISExportedTyps [], MISExportedAPs []],
     MISSemantics [MISStateVars [], MISStateInvariant []]]) :
   []
 

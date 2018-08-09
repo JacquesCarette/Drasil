@@ -27,7 +27,10 @@ import qualified Drasil.DocLang.MIS as MIS (notation, introMIS, notationIntroCon
   notTblIntro, notationIntroMIS, modHierarchyPointer, modHier, syntax,
   uses, module_, misOfModule, accRoutSemantics, assumptions, considerations, 
   enviroVars, expAccPrograms, expConstants, expTypes, module_, modHier, notation, 
-  semantics, stateInvars, stateVars, syntax, uses)
+  semantics, stateInvars, stateVars, syntax, uses, assignSttmts)
+
+import Data.Drasil.SentenceStructures (foldlSP)
+import Data.Drasil.Utils (bulletFlat)
 
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
@@ -273,7 +276,7 @@ data MISModSub where
 
 data MISSyntaxSub where
   MISSyntaxSubVerb :: Section -> MISSyntaxSub
-  MISExportedCs    :: [Contents] -> MISSyntaxSub
+  MISExportedCs    :: [QDefinition] -> MISSyntaxSub
   MISExportedAPs   :: [Contents] -> MISSyntaxSub
   MISExportedTyps  :: [Contents] -> MISSyntaxSub
 
@@ -651,7 +654,8 @@ syntaxSubs (MISExportedAPs [])  = MIS.expAccPrograms none []
 syntaxSubs (MISExportedTyps []) = MIS.expTypes       none []
 syntaxSubs (MISExportedTyps cs) = MIS.expTypes       cs []
 syntaxSubs (MISExportedAPs cs)  = MIS.expAccPrograms cs []
-syntaxSubs (MISExportedCs cs)   = MIS.expConstants   cs []
+syntaxSubs (MISExportedCs cnstnts) = MIS.expConstants 
+  [(UlC . ulcc . Enumeration . bulletFlat) (map MIS.assignSttmts cnstnts)] []
 
 semanticSubs :: MISSemanticsSub -> Section
 semanticSubs (MISSemanticsSubVerb s) = s

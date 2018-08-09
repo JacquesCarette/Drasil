@@ -16,6 +16,8 @@ import Data.Drasil.Concepts.Software (program)
 
 import Data.Drasil.SentenceStructures (foldlSP, inThe, ofThe, sAnd)
 
+import Control.Lens ((^.))
+
 accRoutSemantics, assumptions, considerations, enviroVars, expAccPrograms, 
   expConstants, expTypes, module_, modHier, notation, semantics, stateInvars, 
   stateVars, syntax, uses :: [Contents] -> [Section] -> Section
@@ -102,3 +104,10 @@ hwModIntro :: Contents
 hwModIntro = foldlSP [S "This module hides the underlying hardware for I/O (to the",
   S "screen, or file, or other device). In general it will be provided by the selected",
   S "programming language and operating system"]
+
+-----------------------
+-- HELPFUL FUNCTIONS --
+-----------------------
+
+assignSttmts :: (HasUID c, HasSymbol c, ExprRelat c) => c -> Sentence
+assignSttmts f = (ch f) :+: S ":=" :+: (E $ f^.relat) --FIXME: replace ":=" with actual symbol ":="

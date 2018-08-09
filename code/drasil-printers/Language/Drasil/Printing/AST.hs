@@ -14,7 +14,6 @@ data Spacing = Thin
 type Label = Spec
 
 data Expr = Dbl   Double
-          | DblSc Double
           | Int   Integer
           | Str   String
           | Case  [(Expr,Expr)]

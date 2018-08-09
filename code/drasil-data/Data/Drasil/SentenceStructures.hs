@@ -14,7 +14,7 @@ module Data.Drasil.SentenceStructures
   , displayConstrntsAsSet
   , fmtPhys, fmtSfwr, typUncr
   , mkTableFromColumns
-  , acroGS, acroIM, acroLC, acroPS, acroR, acroT
+  , acroIM, acroLC, acroPS, acroR, acroT
   , EnumType(..), WrapType(..), SepType(..), FoldType(..)
   ) where
 
@@ -127,9 +127,8 @@ toThe p1 p2 = p1 +:+ S "to the" +:+ p2
 
 {--Acronyms to be used throughout--}
 -- ex. S "as seen in (A1)" -> S "as seen in" +:+ sParen (acroA "1")
-acroGS, acroIM, acroLC, acroPS, acroR, acroT :: Int -> Sentence
+acroIM, acroLC, acroPS, acroR, acroT :: Int -> Sentence
 
-acroGS numVar = short goalStmt    :+: S (show numVar)
 acroIM numVar = short inModel     :+: S (show numVar)
 acroLC numVar = short likelyChg   :+: S (show numVar)
 acroPS numVar = short physSyst    :+: S (show numVar)

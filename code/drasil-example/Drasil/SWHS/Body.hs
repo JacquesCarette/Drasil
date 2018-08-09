@@ -42,32 +42,32 @@ import Data.Drasil.Quantities.Thermodynamics (temp, heat_cap_spec,
   latent_heat)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
 
+import Drasil.SWHS.Assumptions (swhsRefDB, newA13, newAssumptions)
+import Drasil.SWHS.Changes (likeChg1, likeChg2, likeChg3, likeChg4,
+  likeChg5, likeChg6, unlikelyChgs)
+import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
+  coil, tank, transient, swhs_pcm, phase_change_material, tank_pcm)
+import Drasil.SWHS.DataDefs (swhsDataDefs, dd1HtFluxC, dd2HtFluxP, dataDefns)
+import Drasil.SWHS.DataDesc (swhsInputMod)
+import Drasil.SWHS.GenDefs (swhsGDs, generalDefinitions)
+import Drasil.SWHS.IMods (heatEInWtr_new, eBalanceOnWtr_new,
+  heatEInPCM_new, eBalanceOnPCM_new, swhsIMods')
+import Drasil.SWHS.Requirements (req1, req2, reqEqn1, reqEqn2,
+  req3, req4, req5, req6, req7, req8, req9, req10, req11, nonFuncReqs)
+import Drasil.SWHS.TMods (t1ConsThermE_new, t2SensHtE_new, 
+  t3LatHtE_new, swhsTMods)
 import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
   temp_C, coil_SA, w_E, coil_HTC, sim_time, tau_S_P, htCap_S_P, pcm_mass,
   ht_flux_P, eta, tau_W, htCap_W, w_mass, ht_flux_C, vol_ht_gen, thickness,
   out_SA, ht_flux_out, ht_flux_in, in_SA, thFluxVect, time_final,
   specParamValList, w_density, temp_init, htCap_L_P, htFusion, pcm_density,
-  temp_melt_P, pcm_vol, diam, tank_length,
-  swhsConstrained, swhsOutputs, swhsInputs, swhsSymbols, swhsSymbolsAll)
-import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
-  coil, tank, transient, swhs_pcm, phase_change_material, tank_pcm)
-import Drasil.SWHS.Assumptions (swhsRefDB, newA13, newAssumptions)
-import Drasil.SWHS.TMods (t1ConsThermE_new, t2SensHtE_new, 
-  t3LatHtE_new, swhsTMods)
-import Drasil.SWHS.IMods (heatEInWtr_new, eBalanceOnWtr_new,
-  heatEInPCM_new, eBalanceOnPCM_new, swhsIMods')
-import Drasil.SWHS.DataDefs (swhsDataDefs, dd1HtFluxC, dd2HtFluxP, dataDefns)
-import Drasil.SWHS.GenDefs (swhsGDs, generalDefinitions)
-import Drasil.SWHS.Requirements (req1, req2, reqEqn1, reqEqn2,
-  req3, req4, req5, req6, req7, req8, req9, req10, req11, nonFuncReqs)
-import Drasil.SWHS.Changes (likeChg1, likeChg2, likeChg3, likeChg4,
-  likeChg5, likeChg6, unlikelyChgs)
-import Drasil.SWHS.DataDesc (swhsInputMod)
+  temp_melt_P, pcm_vol, diam, tank_length, swhsConstrained, swhsOutputs, 
+  swhsInputs, swhsSymbols, swhsSymbolsAll)
 
 import Data.Drasil.Utils (enumSimple, itemRefToSent, makeListRef,
   makeTMatrix, eqUnR', noRefs)
 
-import Data.Drasil.SentenceStructures (acroIM, acroGS, showingCxnBw,
+import Data.Drasil.SentenceStructures (acroIM, showingCxnBw,
   foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, ofThe,
   ofThe', sAnd, sOf, foldlList, SepType(Comma), FoldType(List))
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
@@ -1021,12 +1021,12 @@ dataDefIntroEnd = foldlSent [S "The dimension of each",
 
 iModSubpar :: NamedChunk -> UncertQ -> UncertQ -> UncertQ -> ConceptChunk
   -> [Contents]
-iModSubpar sol temw tempcm epcm pc = [foldlSP [S "The goals", acroGS 1,
-  S "to", acroGS 4, S "are solved by", acroIM 1, S "to" +:+. acroIM 4,
-  S "The", plural sol, S "for", acroIM 1 `sAnd` acroIM 2, 
-  S "are coupled since the", phrase sol, S "for", ch temw `sAnd` ch tempcm
-  +:+. S "depend on one another", acroIM 3, S "can be solved once", acroIM 1, 
-  S "has been solved. The", phrase sol `sOf` acroIM 2 `sAnd` acroIM 4, 
+iModSubpar sol temw tempcm epcm pc = [foldlSP [S "The goals", foldlList Comma List $ map S
+  ["GS1", "GS2", "GS3", "GS4"], S "are solved by" +:+. foldlList Comma List -- hardcoded GSs because GSs are not referable
+  [acroIM 1, acroIM 2, acroIM 3, acroIM 4], S "The", plural sol, S "for", 
+  acroIM 1 `sAnd` acroIM 2, S "are coupled since the", phrase sol, S "for", 
+  ch temw `sAnd` ch tempcm +:+. S "depend on one another", acroIM 3, S "can be solved once", 
+  acroIM 1, S "has been solved. The", phrase sol `sOf` acroIM 2 `sAnd` acroIM 4, 
   S "are also coupled, since the", phrase tempcm `sAnd` phrase epcm, 
   S "depend on the", phrase pc]]
 

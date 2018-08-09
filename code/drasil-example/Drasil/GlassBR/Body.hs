@@ -173,6 +173,35 @@ mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master
   NotationSec (NotationProg []) : 
   ModHierarchSec (ModHierarchProg $ S "section 3 of the MG (Link)") : --FIXME: hardcoded link
   Bibliography : 
+  MISModSec (MISModProg "Control" Nothing [MISModule, MISUses [{-FILL IN-}],
+    MISSyntax [MISExportedCs [{-FILL IN-}], MISExportedAPs [{-FILL IN-}]],
+    MISSemantics [MISStateVars [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]) :
+  MISModSec (MISModProg "Input" (Just fillIN) [MISModule, MISUses [{-FILL IN-}],
+    MISSyntax [{-MISSyntaxSubVerb [{-FILL IN-}]-}],
+    MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [{-FILL IN-}], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]],
+    MISConsiderations [{-FILL IN-}]]) :
+  MISModSec (MISModProg "LoadASTM" Nothing [MISModule, MISUses [{-FILL IN-}],
+    MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]],
+    MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [], MISStateInvariant [], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]) :
+  MISModSec (MISModProg "Calc" Nothing [MISModule, MISUses [{-FILL IN-}],
+    MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]],
+    MISSemantics [MISStateVars [], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]) :
+  MISModSec (MISModProg "GlassTypeADT" (Just fillIN) [MISTempModule, MISUses [],
+    MISSyntax [MISExportedCs [], MISExportedTyps [{-FILL IN-}], MISExportedAPs [{-FILL IN-}]],
+    MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]) :
+  MISModSec (MISModProg "ThicknessADT" (Just fillIN) [MISTempModule, MISUses [],
+    MISSyntax [MISExportedCs [], MISExportedTyps [{-FILL IN-}], MISExportedAPs [{-FILL IN-}]],
+    MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]) :
+  MISModSec (MISModProg "FunctADT" Nothing [MISTempModule, MISUses [{-FILL IN-}],
+    MISSyntax [MISExportedCs [{-FILL IN-}], MISExportedTyps [{-FILL IN-}], MISExportedAPs [{-FILL IN-}]],
+    MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]],
+    MISConsiderations [{-FILL IN-}]]) :
+  MISModSec (MISModProg "ContoursADT" Nothing [MISTempModule, MISUses [{-FILL IN-}],
+    MISSyntax [MISExportedCs [{-FILL IN-}], MISExportedTyps [{-FILL IN-}], MISExportedAPs [{-FILL IN-}]],
+    MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]) :
+  MISModSec (MISModProg "SeqServices" Nothing [MISModule, MISUses [],
+    MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]],
+    MISSemantics [MISStateVars [], MISStateInvariant [], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]) :
   MISModSec (MISModProg "Output" Nothing [MISModule, MISUses [{-FILL IN-}], 
     MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]], 
     MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]) :
@@ -181,6 +210,9 @@ mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master
     MISSemantics [MISStateVars [], MISStateInvariant []]]) :
   MISModSec (MISModProg "Hardware" (Just MIS.hwModIntro) [MISModule, MISUses []]) :
   []
+
+fillIN :: Contents
+fillIN = mkParagraph $ S "FILL IN"
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, 

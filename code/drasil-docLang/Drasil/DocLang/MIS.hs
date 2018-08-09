@@ -5,7 +5,8 @@ import Drasil.DocLang.GenBuilders (section')
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (accRoutSemantic, 
   assumption, consideration, enviroVar, expConstant, expType, misOfModule, 
-  module_, moduleHierarchy, notation, semantic, stateInvar, stateVar, syntax, use)
+  module_, moduleHierarchy, notation, semantic, stateInvar, stateVar, syntax, use,
+  templateModule)
 import qualified Data.Drasil.Concepts.Software as Doc (expAccProgram)
   -- import ^ for section making
 
@@ -19,13 +20,14 @@ import Data.Drasil.SentenceStructures (foldlSP, inThe, ofThe, sAnd)
 import Control.Lens ((^.))
 
 accRoutSemantics, assumptions, considerations, enviroVars, expAccPrograms, 
-  expConstants, expTypes, module_, modHier, notation, semantics, stateInvars, 
+  expConstants, expTypes, module_, tempMod_, modHier, notation, semantics, stateInvars, 
   stateVars, syntax, uses :: [Contents] -> [Section] -> Section
 
 modHier          cs ss = section' (titleize Doc.moduleHierarchy)  cs ss "ModHierarchy"
 notation         cs ss = section' (titleize Doc.notation)         cs ss "Notation"
 
 module_          cs ss = section' (titleize Doc.module_)          cs ss "Module"
+tempMod_         cs ss = section' (titleize Doc.templateModule)   cs ss "TemplateModule"
 uses             cs ss = section' (titleize' Doc.use)             cs ss "Uses"
 syntax           cs ss = section' (titleize Doc.syntax)           cs ss "Syntax"
 semantics        cs ss = section' (titleize' Doc.semantic)        cs ss "Semantics"

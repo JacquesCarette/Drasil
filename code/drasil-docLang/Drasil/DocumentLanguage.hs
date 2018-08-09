@@ -25,7 +25,7 @@ import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn, genSysD
   thModel, userChar, genDefnLabel, propCorSol, offShelfSol)
 import qualified Drasil.DocLang.MIS as MIS (notation, introMIS, notationIntroContd,
   notTblIntro, notationIntroMIS, modHierarchyPointer, modHier, syntax,
-  uses, module_, misOfModule, accRoutSemantics, assumptions, considerations, 
+  uses, tempMod_, misOfModule, accRoutSemantics, assumptions, considerations, 
   enviroVars, expAccPrograms, expConstants, expTypes, module_, modHier, notation, 
   semantics, stateInvars, stateVars, syntax, uses, assignSttmts)
 
@@ -269,6 +269,7 @@ data MISModSec = MISModVerb Section
 data MISModSub where
   MISModSubVerb     :: Section -> MISModSub
   MISModule         :: MISModSub
+  MISTempModule     :: MISModSub
   MISUses           :: [Label] -> MISModSub
   MISSyntax         :: [MISSyntaxSub] -> MISModSub
   MISSemantics      :: [MISSemanticsSub] -> MISModSub
@@ -278,7 +279,7 @@ data MISSyntaxSub where
   MISSyntaxSubVerb :: Section -> MISSyntaxSub
   MISExportedCs    :: [QDefinition] -> MISSyntaxSub
   MISExportedAPs   :: [Contents] -> MISSyntaxSub
-  MISExportedTyps  :: [Contents] -> MISSyntaxSub
+  MISExportedTyps  :: [Contents] -> MISSyntaxSub --FIXME: automate to be generated with Template Module?
 
 data MISSemanticsSub where
   MISSemanticsSubVerb :: Section -> MISSemanticsSub
@@ -641,6 +642,7 @@ mkMISModSec (MISModProg modName x mms) = MIS.misOfModule (getIntroMaybe x) (map 
     subsections :: MISModSub -> Section
     subsections (MISModSubVerb s)  = s
     subsections MISModule          = MIS.module_ [mkParagraph $ S modName] []
+    subsections MISTempModule      = MIS.tempMod_ [mkParagraph $ S modName] []
     subsections (MISUses [])       = MIS.uses    none  []
     subsections (MISUses useMods)  = MIS.uses    (map mkParagraph $ map makeRef useMods) [] --FIXME: needs to become a proper list
     subsections (MISSyntax subs)   = MIS.syntax [] (map syntaxSubs subs)

@@ -5,7 +5,7 @@ import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..),
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.HGHC.HGHC (allSymbols, srsBody, printSetting)
+import Drasil.HGHC.HGHC (srsBody, printSetting)
 
 thisChoices :: Choices
 thisChoices = Choices {

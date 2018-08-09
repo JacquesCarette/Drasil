@@ -78,8 +78,7 @@ import Data.Drasil.People (spencerSmith, nikitha, mCampidelli)
 import Data.Drasil.Phrase (for'')
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, newton, pascal, 
   second)
-import Language.Drasil.Printers (PrintingInformation(..),
- Notation(Scientific, Engineering), defaultConfiguration)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 
 {--}
 

@@ -3,10 +3,9 @@ module Main where
 import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..), 
   ImplementationType(..), Lang(..), Logging(..), Structure(..))
 import Language.Drasil.Generate (gen)
-import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec),
-  PrintingInformation(..), HasPrintingOptions(..))
+import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.GamePhysics.Body (chipmunkSRS', everything, printSetting)
+import Drasil.GamePhysics.Body (chipmunkSRS', printSetting)
 
 chipChoices :: Choices
 chipChoices = Choices {

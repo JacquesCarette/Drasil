@@ -76,8 +76,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
   isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP, acroIM, acroGD)
 import Data.Drasil.Units.Thermodynamics (thermal_flux)
-import Language.Drasil.Printers (PrintingInformation(..),
- Notation(Scientific, Engineering), defaultConfiguration)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 
 -- This defines the standard units used throughout the document
 this_si :: [UnitDefn]

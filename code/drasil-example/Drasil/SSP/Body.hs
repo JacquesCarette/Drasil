@@ -53,8 +53,7 @@ import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs,
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
   assumptLabel, physSyst)
-import Language.Drasil.Printers (PrintingInformation(..),
- Notation(Scientific, Engineering), defaultConfiguration)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 
 --type declarations for sections--
 req, aux_cons :: Section

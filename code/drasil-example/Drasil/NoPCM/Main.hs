@@ -5,7 +5,7 @@ import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..),
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.NoPCM.Body (nopcm_srs, nopcm_code, nopcm_SymbMap, printSetting)
+import Drasil.NoPCM.Body (nopcm_srs, nopcm_code, printSetting)
 
 nopcm_Choices :: Choices
 nopcm_Choices = Choices {

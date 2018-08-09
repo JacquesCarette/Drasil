@@ -5,7 +5,7 @@ import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..),
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.SWHS.Body (swhs_srs', swhsSymMap, printSetting)
+import Drasil.SWHS.Body (swhs_srs', printSetting)
 
 swhsChoices :: Choices
 swhsChoices = Choices {

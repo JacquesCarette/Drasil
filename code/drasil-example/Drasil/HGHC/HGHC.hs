@@ -16,8 +16,7 @@ import Data.Drasil.SI_Units (si_units)
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Documentation (srs)
 import Data.Drasil.Phrase (for)
-import Language.Drasil.Printers (PrintingInformation(..),
- Notation(Scientific, Engineering), defaultConfiguration)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 
 thisCode :: CodeSpec
 thisCode = codeSpec thisSI []

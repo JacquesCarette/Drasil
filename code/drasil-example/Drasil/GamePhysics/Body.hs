@@ -60,8 +60,7 @@ import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlList,
 import Data.Drasil.Software.Products (videoGame, openSource, sciCompS)
 import Data.Drasil.Utils (makeTMatrix, itemRefToSent,
   makeListRef, bulletFlat, bulletNested, enumSimple, enumBullet)
-import Language.Drasil.Printers (PrintingInformation(..),
- Notation(Scientific, Engineering), defaultConfiguration)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 
 authors :: People
 authors = [alex, luthfi]

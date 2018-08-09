@@ -70,8 +70,7 @@ import Data.Drasil.Utils (enumSimple, itemRefToSent, makeListRef,
 import Data.Drasil.SentenceStructures (acroIM, acroGS, showingCxnBw,
   foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, ofThe,
   ofThe', sAnd, sOf, foldlList, SepType(Comma), FoldType(List))
-import Language.Drasil.Printers (PrintingInformation(..),
- Notation(Scientific, Engineering), defaultConfiguration)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 -------------------------------------------------------------------------------
 
 acronyms :: [CI]

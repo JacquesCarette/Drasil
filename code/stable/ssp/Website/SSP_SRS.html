@@ -6604,41 +6604,83 @@ This section provides the functional requirements, the business tasks that the s
 <h2>
 Functional Requirements
 </h2>
-<div class="list">
-<p>
-R1: Read the input file, and store the data. Necessary input data summarized in <a href=#Table:inDataTable>inDataTable</a>.
-</p>
-<p>
-R2: Generate potential critical slip surface's for the input slope.
-</p>
-<p>
-R3: Test the slip surfaces to determine if they are physically realizable based on a set of pass or fail criteria.
-</p>
-<p>
-R4: Prepare the slip surfaces for a method of slices or limit equilibrium analysis.
-</p>
-<p>
-R5: Calculate the factors of safety of the slip surfaces.
-</p>
-<p>
-R6: Rank and weight the slopes based on their factor of safety, such that a slip surface with a smaller factor of safety has a larger weighting.
-</p>
-<p>
-R7: Generate new potential critical slip surfaces based on previously analysed slip surfaces with low factors of safety.
-</p>
-<p>
-R8: Repeat requirements R3 to R7 until the minimum factor of safety remains approximately the same over a predetermined number of repetitions. Identify the slip surface that generates the minimum factor of safety as the critical slip surface.
-</p>
-<p>
-R9: Prepare the critical slip surface for method of slices or limit equilibrium analysis.
-</p>
-<p>
-R10: Calculate the factor of safety of the critical slip surface using the Morgenstern Price method.
-</p>
-<p>
-R11: Display the critical slip surface and the slice element displacements graphically. Give the values of the factors of safety calculated by the Morgenstern Price method.
-</p>
+<ul class="hide-list-style">
+<li>
+<div id="FR:Read-and-Store">
+Read-and-Store: Read the input file and store the data. Necessary input data summarized in <a href=#Table:inDataTable>inDataTable</a>.
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="FR:Generate-Critical-Slip-Surfaces">
+Generate-Critical-Slip-Surfaces: Generate potential critical slip surfaces for the input slope.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="FR:Test-Slip-Surfaces">
+Test-Slip-Surfaces: Test the slip surfaces to determine if they are physically realizable based on a set of pass or fail criteria.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="FR:Prepare-Slip-Surfaces">
+Prepare-Slip-Surfaces: Prepare the slip surfaces for a method of slices or limit equilibrium analysis.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="FR:Calculate-Factors-of-Safety">
+Calculate-Factors-of-Safety: Calculate the factors of safety of the slip surfaces.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="FR:Rank-and-Weight-Slopes">
+Rank-and-Weight-Slopes: Rank and weight the slopes based on their factor of safety, such that a slip surface with a smaller factor of safety has a larger weighting.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="FR:Generate-New-Critical-Slip-Surfaces">
+Generate-New-Critical-Slip-Surfaces: Generate new potential critical slip surfaces based on previously analysed slip surfaces with low factors of safety.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="FR:Repeat-Find-Factor-of-Safety">
+Repeat-Find-Factor-of-Safety: Repeat <a href=#FR:Test-Slip-Surfaces>FR: Test-Slip-Surfaces</a>, <a href=#FR:Prepare-Slip-Surfaces>FR: Prepare-Slip-Surfaces</a>, <a href=#FR:Calculate-Factors-of-Safety>FR: Calculate-Factors-of-Safety</a>, <a href=#FR:Rank-and-Weight-Slopes>FR: Rank-and-Weight-Slopes</a>, and <a href=#FR:Generate-New-Critical-Slip-Surfaces>FR: Generate-New-Critical-Slip-Surfaces</a> until the minimum factor of safety remains approximately the same over a predetermined number of repetitions. Identify the slip surface that generates the minimum factor of safety as the critical slip surface.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="FR:Prepare-Critical-Slip-Surface">
+Prepare-Critical-Slip-Surface: Prepare the critical slip surface for method of slices or limit equilibrium analysis.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="FR:Calculate-Final-Factor-of-Safety">
+Calculate-Final-Factor-of-Safety: Calculate the factor of safety of the critical slip surface using the Morgenstern Price method.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="FR:Display-Graph">
+Display-Graph: Display the critical slip surface and the slice element displacements graphically. Give the values of the factors of safety calculated by the Morgenstern Price method.
+</div>
+</li>
+</ul>
 <div id="Table:inDataTable">
 <table class="table">
 <tr>

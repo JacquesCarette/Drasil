@@ -62,7 +62,7 @@ table_of_symbol_intro :: [TSIntro]
 
 problem_desc, termi_defi, phys_sys_desc, goal_stmt, func_req, non_func_req :: Section
 goals_list, termi_defi_list, phys_sys_desc_p1, phys_sys_desc_bullets,
-  phys_sys_desc_p2, func_req_list :: Contents
+  phys_sys_desc_p2 :: Contents
 
 
 --Document Setup--
@@ -421,10 +421,7 @@ data_constraint_Table3 = outDataConstTbl sspOutputs
 req = reqF [func_req, non_func_req]
 
 -- SECTION 5.1 --
-func_req = SRS.funcReq
-  [func_req_list, LlC sspInputDataTable] []
-
-func_req_list = enumSimple 1 (short requirement) sspRequirements
+func_req = SRS.funcReq (map LlC $ sspRequirements ++ [sspInputDataTable]) []
 
 -- SECTION 5.2 --
 non_func_req = nonFuncReqF [accuracy, performanceSpd]

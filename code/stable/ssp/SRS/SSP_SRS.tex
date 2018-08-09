@@ -21,6 +21,8 @@
 \global\tabulinesep=1mm
 \newcounter{assumpnum}
 \newcommand{\atheassumpnum}{A\theassumpnum}
+\newcounter{reqnum}
+\newcommand{\rthereqnum}{R\thereqnum}
 \newcounter{lcnum}
 \newcommand{\lcthelcnum}{LC\thelcnum}
 \newcounter{ucnum}
@@ -2042,19 +2044,39 @@ $δy$ & --
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
 \label{Sec:FRs}
-\begin{itemize}
-\item[R1:]Read the input file, and store the data. Necessary input data summarized in Table~\ref{Table:inDataTable}.
-\item[R2:]Generate potential critical slip surface's for the input slope.
-\item[R3:]Test the slip surfaces to determine if they are physically realizable based on a set of pass or fail criteria.
-\item[R4:]Prepare the slip surfaces for a method of slices or limit equilibrium analysis.
-\item[R5:]Calculate the factors of safety of the slip surfaces.
-\item[R6:]Rank and weight the slopes based on their factor of safety, such that a slip surface with a smaller factor of safety has a larger weighting.
-\item[R7:]Generate new potential critical slip surfaces based on previously analysed slip surfaces with low factors of safety.
-\item[R8:]Repeat requirements R3 to R7 until the minimum factor of safety remains approximately the same over a predetermined number of repetitions. Identify the slip surface that generates the minimum factor of safety as the critical slip surface.
-\item[R9:]Prepare the critical slip surface for method of slices or limit equilibrium analysis.
-\item[R10:]Calculate the factor of safety of the critical slip surface using the Morgenstern Price method.
-\item[R11:]Display the critical slip surface and the slice element displacements graphically. Give the values of the factors of safety calculated by the Morgenstern Price method.
-\end{itemize}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Read-and-Store}:]Read the input file and store the data. Necessary input data summarized in Table~\ref{Table:inDataTable}.
+\end{description}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Generate-Critical-Slip-Surfaces}:]Generate potential critical slip surfaces for the input slope.
+\end{description}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Test-Slip-Surfaces}:]Test the slip surfaces to determine if they are physically realizable based on a set of pass or fail criteria.
+\end{description}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Prepare-Slip-Surfaces}:]Prepare the slip surfaces for a method of slices or limit equilibrium analysis.
+\end{description}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Calculate-Factors-of-Safety}:]Calculate the factors of safety of the slip surfaces.
+\end{description}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Rank-and-Weight-Slopes}:]Rank and weight the slopes based on their factor of safety, such that a slip surface with a smaller factor of safety has a larger weighting.
+\end{description}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Generate-New-Critical-Slip-Surfaces}:]Generate new potential critical slip surfaces based on previously analysed slip surfaces with low factors of safety.
+\end{description}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Repeat-Find-Factor-of-Safety}:]Repeat R\ref{FR:Test-Slip-Surfaces}, R\ref{FR:Prepare-Slip-Surfaces}, R\ref{FR:Calculate-Factors-of-Safety}, R\ref{FR:Rank-and-Weight-Slopes}, and R\ref{FR:Generate-New-Critical-Slip-Surfaces} until the minimum factor of safety remains approximately the same over a predetermined number of repetitions. Identify the slip surface that generates the minimum factor of safety as the critical slip surface.
+\end{description}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Prepare-Critical-Slip-Surface}:]Prepare the critical slip surface for method of slices or limit equilibrium analysis.
+\end{description}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Calculate-Final-Factor-of-Safety}:]Calculate the factor of safety of the critical slip surface using the Morgenstern Price method.
+\end{description}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Display-Graph}:]Display the critical slip surface and the slice element displacements graphically. Give the values of the factors of safety calculated by the Morgenstern Price method.
+\end{description}
 \begin{longtable}{l l l}
 \toprule
 Symbol & Unit & Name

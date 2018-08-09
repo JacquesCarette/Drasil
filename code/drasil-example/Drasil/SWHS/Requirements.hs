@@ -16,7 +16,7 @@ import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, performance)
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSent, foldlSentCol, isThe, sAnd, acroR)
+  foldlSent, foldlSentCol, isThe, sAnd)
 
 import Drasil.SWHS.Concepts (phsChgMtrl, tank)
 import Drasil.SWHS.IMods (eBalanceOnWtr_new, eBalanceOnPCM_new, heatEInWtr_new, 
@@ -62,8 +62,8 @@ req3 = mkRequirement "req3" ( foldlSent [
 req4 = mkRequirement "req4" ( foldlSent [
   titleize output_, S "the", phrase input_, plural quantity `sAnd`
   S "derived", plural quantity +: S "in the following list",
-  S "the", plural quantity, S "from", acroR 1 `sC` S "the",
-  plural mass, S "from", acroR 2 `sC` ch tau_W,
+  S "the", plural quantity, S "from", makeRef req1 `sC` S "the",
+  plural mass, S "from", makeRef req2 `sC` ch tau_W,
   sParen (S "from" +:+ makeRef eBalanceOnWtr_new) `sC` ch eta,
   sParen (S "from" +:+ makeRef eBalanceOnWtr_new) `sC` ch tau_S_P,
   sParen (S "from" +:+ makeRef eBalanceOnPCM_new) `sAnd` ch tau_L_P,

@@ -29,8 +29,6 @@ swhsTMods = [t1ConsThermE_new, t2SensHtE_new, t3LatHtE_new]
 -------------------------
 -- Theoretical Model 1 --
 -------------------------
---s4_2_2_T1
-------------- New Chunck -----------
 t1ConsThermE_new :: TheoryModel
 t1ConsThermE_new = tm' t1ConsThermE
   (tc' "ConsThermE_new" [qw thFluxVect, qw gradient, qw vol_ht_gen, 

@@ -3,21 +3,9 @@ module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
 
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
-import Drasil.DocLang (refA)
 
-import Drasil.SSP.Assumptions (newA5, sspRefDB)
-import Drasil.SSP.BasicExprs (displMtx, eqlExpr, momExpr, rotMtx)
-import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShearWO, sliceWght)
-import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf)
-import Drasil.SSP.Labels (genDef1Label, genDef2Label, genDef3Label, genDef4Label, 
-  genDef5Label, genDef6Label, genDef7Label, genDef8Label, genDef9Label, genDef10Label)
-import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
-  cohesion, dx_i, dy_i, earthqkLoadFctr, elmNrmDispl, elmPrllDispl, fricAngle, 
-  fs, fx, fy, genDisplace, genPressure, impLoadAngle, index, intNormForce, 
-  intShrForce, inxi, inxiM1, mobShrI, normToShear, nrmDispl, nrmFSubWat, 
-  nrmStiffBase, rotatedDispl, scalFunc, shearFNoIntsl, shrDispl, shrResI, 
-  shrResI, shrStiffIntsl, shrStress, slcWght, surfAngle, surfHydroForce, 
-  surfLoad, totNrmForce, watrForceDif, xi)
+import Drasil.DocLang (refA)
+import Drasil.DocLang.SRS as SRS (physSystLabel)
 
 import Data.Drasil.Concepts.Documentation (assumption, definition, element, 
   method_, model, property, system, value, variable)
@@ -28,10 +16,23 @@ import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Quantities.Physics (displacement, force)
 import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 
-import Data.Drasil.SentenceStructures (acroT, foldlSent, getTandS, 
-  isThe, ofThe, sAnd)
+import Data.Drasil.SentenceStructures (foldlSent, getTandS, isThe, ofThe, sAnd)
 
-import Drasil.DocLang.SRS as SRS (physSystLabel)
+import Drasil.SSP.Assumptions (newA5, sspRefDB)
+import Drasil.SSP.BasicExprs (displMtx, eqlExpr, momExpr, rotMtx)
+import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShearWO, sliceWght)
+import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf)
+import Drasil.SSP.Labels (genDef1Label, genDef2Label, genDef3Label, genDef4Label, 
+  genDef5Label, genDef6Label, genDef7Label, genDef8Label, genDef9Label, genDef10Label)
+import Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, effStress_new, 
+  hookesLaw_new)
+import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
+  cohesion, dx_i, dy_i, earthqkLoadFctr, elmNrmDispl, elmPrllDispl, fricAngle, 
+  fs, fx, fy, genDisplace, genPressure, impLoadAngle, index, intNormForce, 
+  intShrForce, inxi, inxiM1, mobShrI, normToShear, nrmDispl, nrmFSubWat, 
+  nrmStiffBase, rotatedDispl, scalFunc, shearFNoIntsl, shrDispl, shrResI, 
+  shrResI, shrStiffIntsl, shrStress, slcWght, surfAngle, surfHydroForce, 
+  surfLoad, totNrmForce, watrForceDif, xi)
 
 ---------------------------
 --  General Definitions  --
@@ -60,7 +61,7 @@ nmFEq_rel = inxi totNrmForce $= eqlExpr cos sin
 nmFEq_desc :: Sentence
 nmFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   S "in the", phrase slope, S "the", phrase force,
-  S "equilibrium to satisfy", acroT 2, S "in the direction",
+  S "equilibrium to satisfy", makeRef equilibrium_new, S "in the direction",
   phrase perp, S "to" +:+. (S "base" +:+ phrase surface `ofThe`
   phrase slice), S "Rearranged to solve for", (phrase normForce `ofThe`
   phrase surface) +:+. ch totNrmForce, at_start force, S "equilibrium is",
@@ -84,7 +85,7 @@ bShFEq_rel = inxi mobShrI $= eqlExpr sin cos
 bShFEq_desc :: Sentence
 bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   S "in the", phrase slope, S "the", phrase force,
-  S "equilibrium to satisfy", acroT 2, S "in the direction",
+  S "equilibrium to satisfy", makeRef equilibrium_new, S "in the direction",
   S "parallel to" +:+. (S "base" +:+ phrase surface `ofThe`
   phrase slice), S "Rearranged to solve for the", phrase shearForce,
   S "on the base" +:+. ch mobShrI, at_start force, S "equilibrium is",
@@ -110,7 +111,7 @@ resShr_rel = inxi shrResI $= shrResEqn
 
 resShr_desc :: Sentence
 resShr_desc = foldlSent [S "The Mohr-Coulomb resistive shear strength of a",
-  phrase slice, ch shrStress, S "from", acroT 3,
+  phrase slice, ch shrStress, S "from", makeRef mcShrStrgth_new,
   S "is multiplied by the area", E $ sy baseWthX * sec(sy baseAngle) * 1,
   S "to obtain the" +:+. getTandS shrResI, S "Note the extra", E 1,
   S "is to represent a unit of width which is multiplied by the",
@@ -119,7 +120,7 @@ resShr_desc = foldlSent [S "The Mohr-Coulomb resistive shear strength of a",
   `sAnd` ch baseWthX, S "is the x width of the base. This accounts for the",
   phrase nrmFSubWat, E $ sy nrmFSubWat $= sy totNrmForce - sy baseHydroForce,
   S "of a soil from", -- FIXME: add prime to nrmStrss
-  acroT 4, S "where the", phrase nrmStrss,
+  makeRef effStress_new, S "where the", phrase nrmStrss,
   S "is multiplied by the same area to obtain the", phrase nrmFSubWat,
   E $ sy nrmStrss * sy baseWthX * sec(sy baseAngle) * 1 $= sy nrmFSubWat]
 
@@ -133,7 +134,7 @@ mobShr_rel = inxi mobShrI $= inxi shrResI / sy fs $= shrResEqn / sy fs
 
 mobShr_desc :: Sentence
 mobShr_desc = foldlSent [
-  S "From", phrase definition `ofThe` phrase fs, S "in", acroT 1 `sC`
+  S "From", phrase definition `ofThe` phrase fs, S "in", makeRef fs_rc_new `sC`
   S "and the new", phrase definition, S "of", ch shrResI `sC` S "a new",
   S "relation for", S "net mobile" +:+ phrase shearForce `ofThe` phrase slice,
   ch shearFNoIntsl, S "is found as the resistive shear", ch shrResI,
@@ -170,7 +171,7 @@ momEql_rel = 0 $= momExpr (\ x y -> x -
 
 momEql_desc :: Sentence
 momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
-  S "in the", phrase slope, S "the moment equilibrium to satisfy", acroT 2,
+  S "in the", phrase slope, S "the moment equilibrium to satisfy", makeRef equilibrium_new,
   S "in the direction", phrase perp,
   S "to" +:+. (S "base" +:+ phrase surface `ofThe` phrase slice),
   S "Moment equilibrium is derived from the free body diagram of" +:+.
@@ -239,7 +240,7 @@ hooke2d_rel = vec2D (inxi genPressure) (inxi genPressure) $=
 hooke2d_desc :: Sentence
 hooke2d_desc = foldlSent [
   S "A 2D component implementation of Hooke's law as seen in" +:+.
-  acroT 5, ch elmPrllDispl, S "is", phrase displacement `ofThe`
+  makeRef hookesLaw_new, ch elmPrllDispl, S "is", phrase displacement `ofThe`
   phrase element, S "normal to the", phrase surface, S "and",
   ch elmNrmDispl, S "is", phrase displacement `ofThe` phrase element,
   S "parallel to the" +:+. phrase surface, S "Pn,i",
@@ -257,7 +258,6 @@ hooke2d_desc = foldlSent [
   phrase's mass, S "reactive", phrase force, S "that creates equilibrium",
   S "with the applied", plural force, S "after reaching the equilibrium",
   phrase displacement]
-
 
 --
 displVect :: RelationConcept

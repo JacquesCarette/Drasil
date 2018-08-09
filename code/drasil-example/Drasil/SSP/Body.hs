@@ -2,6 +2,7 @@ module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap, printSetting) where
 
 import Language.Drasil hiding (organization, Verb)
 import Language.Drasil.Code (CodeSpec, codeSpec)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
 
@@ -13,6 +14,9 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
   nonFuncReqF, outDataConstTbl, probDescF, reqF, termDefnF, tsymb'',
   valsOfAuxConstantsF)
+
+import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
+  assumptLabel, physSyst)
 
 import Data.Drasil.Concepts.Documentation (analysis, assumption,
   design, document, effect, element, endUser, environment, goalStmt, inModel, 
@@ -34,7 +38,8 @@ import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (foldlList, SepType(Comma), FoldType(List), 
   foldlSP, foldlSent, foldlSent_, ofThe, sAnd, sOr, foldlSPCol)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
-import Data.Drasil.Utils (enumBullet, enumSimple, noRefsLT, bulletNested, bulletFlat)
+import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, noRefsLT)
+
 import Drasil.SSP.Assumptions (sspRefDB)
 import Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.SSP.DataDefs (dataDefns)
@@ -45,15 +50,10 @@ import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods_new)
 import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
-
 import Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_new
   , effStress_new)
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
   sspOutputs, sspSymbols)
-
-import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
-  assumptLabel, physSyst)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 
 --type declarations for sections--
 req, aux_cons :: Section

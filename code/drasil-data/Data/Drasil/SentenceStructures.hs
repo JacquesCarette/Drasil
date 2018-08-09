@@ -14,7 +14,6 @@ module Data.Drasil.SentenceStructures
   , displayConstrntsAsSet
   , fmtPhys, fmtSfwr, typUncr
   , mkTableFromColumns
-  , acroT
   , EnumType(..), WrapType(..), SepType(..), FoldType(..)
   ) where
 
@@ -124,9 +123,6 @@ ofGiv' p1 p2 = S "The" +:+ p1 +:+ S "of a given" +:+ p2
 
 toThe :: Sentence -> Sentence -> Sentence
 toThe p1 p2 = p1 +:+ S "to the" +:+ p2
-
-acroT :: Int -> Sentence
-acroT numVar = short thModel :+: S (show numVar)
 
 {--** Miscellaneous **--}
 tableShows :: LabelledContent -> Sentence -> Sentence

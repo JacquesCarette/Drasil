@@ -6,18 +6,16 @@ import Drasil.DocLang (refA)
 
 import Language.Drasil
 
-import Data.Drasil.SentenceStructures (foldlSent, isThe)
 import Data.Drasil.Utils (eqUnR', weave)
 
 -- Needed for derivations
-import Data.Drasil.Concepts.Documentation (analysis,
-  solution, definition, value, assumption, physicalProperty,
-  problem, method_)
+import Data.Drasil.Concepts.Documentation (analysis, assumption, definition, 
+  method_, physicalProperty, problem, solution, value)
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (displacement, force)
-import Data.Drasil.SentenceStructures (andThe, sIs, sIn, getTDS, getTandS, 
-  ofThe, ofThe', sAnd, sOf, acroT, eqN, foldlSP, foldlSent_, foldlSentCol)
+import Data.Drasil.SentenceStructures (andThe, eqN, foldlSent, foldlSent_, 
+  foldlSentCol, foldlSP, getTandS, getTDS, isThe, ofThe, ofThe', sAnd, sIn, sIs, sOf)
 
 import Drasil.SSP.Assumptions (newA2, sspRefDB)
 import Drasil.SSP.BasicExprs (eqlExpr, momExpr)
@@ -27,6 +25,8 @@ import Drasil.SSP.DataDefs (ddRef, displcmntRxnF, fixme1, fixme2, intrsliceF, le
 import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice, slip, slope, ssa)
 import Drasil.SSP.Labels (genDef1Label, genDef2Label, genDef4Label, genDef5Label, 
   genDef6Label, genDef7Label, genDef9Label)
+import Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, effStress_new, 
+  hookesLaw_new)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, cohesion, 
   constant_a, critCoords, dx_i, dy_i, earthqkLoadFctr, effStiffA, effStiffB, fricAngle, 
   fs, fs_min, fsloc, genDisplace, genForce, impLoadAngle, index, indx1, indxn, intNormForce, 
@@ -286,11 +286,11 @@ instModIntro1 = foldlSP [S "The", titleize morPrice,
   S "breaking the assumed failure", phrase surface,
   S "into a series of vertical", plural slice, S "of" +:+. phrase mass,
   S "Static equilibrium analysis using two", phrase force,
-  S "equilibrium, and one moment", phrase equation, S "as in" +:+. acroT 2,
+  S "equilibrium, and one moment", phrase equation, S "as in" +:+. makeRef equilibrium_new,
   S "The", phrase problem, S "is statically indeterminate with only these 3",
   plural equation, S "and one constitutive", phrase equation,
   sParen $ S "the Mohr Coulomb shear strength of" +:+
-  acroT 3, S "so the", phrase assumption, S "of", makeRef genDef5Label,
+  makeRef mcShrStrgth_new, S "so the", phrase assumption, S "of", makeRef genDef5Label,
   S "is used. Solving for", phrase force, S "equilibrium allows",
   plural definition, S "of all", plural force, S "in terms of the",
   plural physicalProperty, S "of", ddRef sliceWght, S "to",
@@ -351,7 +351,7 @@ nrmShr_deriv_ssp = (weave [nrmShrDerivation_new, map E nrmShr_deriv_eqns_ssp]) +
 
 nrmShr_deriv_sentences_ssp_s1 :: [Sentence]
 nrmShr_deriv_sentences_ssp_s1 = [S "Taking the last static", phrase equation,
-  S "of", acroT 2, S "with the", S "moment equilibrium" `sOf` makeRef genDef6Label,
+  S "of", makeRef equilibrium_new, S "with the", S "moment equilibrium" `sOf` makeRef genDef6Label,
   S "about", (S "midpoint" `ofThe` S "base") `sAnd` S "the",
   phrase assumption, S "of", makeRef genDef5Label, S "results in", eqN 13]
 
@@ -402,7 +402,7 @@ intrSlc_deriv_ssp = weave [intrSlcDerivation_new, map E intrSlc_deriv_eqns_ssp] 
 
 intrSlc_deriv_sentences_ssp_s1 :: [Sentence]
 intrSlc_deriv_sentences_ssp_s1 = [S "Taking the", S "normal force equilibrium" `sOf` makeRef genDef1Label,
-  S "with the", S "effective stress", phrase definition, S "from", acroT 4,
+  S "with the", S "effective stress", phrase definition, S "from", makeRef effStress_new,
   -- NOTE: "Taking this with that and the assumption of _
   -- to get equation #" pattern
   S "that", E (inxi totNrmForce $= inxi nrmFSubWat - inxi baseHydroForce) `sC`
@@ -534,14 +534,14 @@ rigFoS_deriv_sentences_ssp_s2 = [S "With the", phrase definition, S "of normal s
   S "and the now known base displacement perpendicular to the surface",
   ch nrmDispl, S "from", eqN 25, S "the normal base stress",
   S "can be calculated from the force-displacement relationship of" +:+.
-  acroT 5, S "Stress", ch normStress `sIs` S "used in place of",
+  makeRef hookesLaw_new, S "Stress", ch normStress `sIs` S "used in place of",
   getTandS genForce, --FIXME: use getTandS
   S "as the stiffness hasn't been normalized for" +:+.
   S "the length of the base", S "Results" `sIn` eqN 26]
 
 rigFoS_deriv_sentences_ssp_s3 :: [Sentence]
 rigFoS_deriv_sentences_ssp_s3 = [S "The resistive shear to calculate the", getTandS fs,
-  S "is found from the Mohr Coulomb resistive strength of soil in", acroT 3,
+  S "is found from the Mohr Coulomb resistive strength of soil in", makeRef mcShrStrgth_new,
   S "Using the", getTandS normStress, S "from", eqN 26, S "as the stress" `sC`
   (S "resistive shear" `ofThe` S "slice"), S "can be calculated from", eqN 27]
 
@@ -558,7 +558,7 @@ rigFoS_deriv_sentences_ssp_s5 = [S "With", getTandS shrStiffBase, S "calculated 
   S "and shear displacement", ch shrDispl, S "calculated in", eqN 24,
   --FIXME: grab term too once we have a displacement modifier
   S "values now known the", phrase shrStress, shrStress ^. defn,
-  ch shrStress, S "can be calculated using", acroT 5 `sC`
+  ch shrStress, S "can be calculated using", makeRef hookesLaw_new `sC`
   S "as done in" +:+. eqN 29, S "Again, stress", ch shrStress,
   S "is used in place of force", ch genForce, --FIXME: grab term
   S "as the stiffness has not been normalized for",
@@ -567,7 +567,7 @@ rigFoS_deriv_sentences_ssp_s5 = [S "With", getTandS shrStiffBase, S "calculated 
 rigFoS_deriv_sentences_ssp_s6 :: [Sentence]
 rigFoS_deriv_sentences_ssp_s6 = [S "The", getTDS shrStress, S "acts as the mobile shear",
   S "acting on the base. Using the", phrase definition, titleize fs,
-  phrase equation, S "from", acroT 1 `sC` S "with the", 
+  phrase equation, S "from", makeRef fs_rc_new `sC` S "with the", 
   plural definition, S "of resistive shear strength of a slice",
   ch mobStress, S "from", eqN 27, S "and", getTandS shrStress,
   S "from", eqN 29, S "the", getTandS fsloc,
@@ -627,7 +627,7 @@ fctSftyDerivation = [foldlSP [S "Using", eqN 21, S "from", makeRef intsliceFs_ne
 nrmShrDerivation = [
 
   foldlSP [S "Taking the last static", phrase equation,
-  S "of", acroT 2, S "with the", S "moment equilibrium" `sOf` makeRef genDef6Label,
+  S "of", makeRef equilibrium_new, S "with the", S "moment equilibrium" `sOf` makeRef genDef6Label,
   S "about", (S "midpoint" `ofThe` S "base") `sAnd` S "the",
   phrase assumption, S "of", makeRef genDef5Label, S "results in", eqN 13],
   
@@ -668,7 +668,7 @@ nrmShrDerivation = [
 intrSlcDerivation = [
 
   foldlSP [S "Taking the", S "normal force equilibrium" `sOf` makeRef genDef1Label,
-  S "with the", S "effective stress", phrase definition, S "from", acroT 4,
+  S "with the", S "effective stress", phrase definition, S "from", makeRef effStress_new,
   -- NOTE: "Taking this with that and the assumption of _
   -- to get equation #" pattern
   S "that", E (inxi totNrmForce $= inxi nrmFSubWat - inxi baseHydroForce) `sC`
@@ -791,7 +791,7 @@ rigFoSDerivation = [
   S "and the now known base displacement perpendicular to the surface",
   ch nrmDispl, S "from", eqN 25, S "the normal base stress",
   S "can be calculated from the force-displacement relationship of" +:+.
-  acroT 5, S "Stress", ch normStress `sIs` S "used in place of",
+  makeRef hookesLaw_new, S "Stress", ch normStress `sIs` S "used in place of",
   getTandS genForce, --FIXME: use getTandS
   S "as the stiffness hasn't been normalized for" +:+.
   (S "length" `ofThe` S "base"), S "Results" `sIn` eqN 26],
@@ -801,7 +801,7 @@ rigFoSDerivation = [
   inxi normStress $= inxi nrmStiffBase * inxi nrmDispl, --FIXME: index
   
   foldlSP [S "The resistive shear to calculate the", getTandS fs,
-  S "is found from the Mohr Coulomb resistive strength of soil in", acroT 3,
+  S "is found from the Mohr Coulomb resistive strength of soil in", makeRef mcShrStrgth_new,
   S "Using the", getTandS normStress, S "from", eqN 26, S "as the stress" `sC`
   (S "resistive shear" `ofThe` S "slice"), S "can be calculated from", eqN 27],
   
@@ -826,7 +826,7 @@ rigFoSDerivation = [
   S "and shear displacement", ch shrDispl, S "calculated in", eqN 24,
   --FIXME: grab term too once we have a displacement modifier
   S "values now known the", phrase shrStress, shrStress ^. defn,
-  ch shrStress, S "can be calculated using", acroT 5 `sC`
+  ch shrStress, S "can be calculated using", makeRef hookesLaw_new `sC`
   S "as done in" +:+. eqN 29, S "Again, stress", ch shrStress,
   S "is used in place of force", ch genForce, --FIXME: grab term
   S "as the stiffness has not been normalized for",
@@ -837,7 +837,7 @@ rigFoSDerivation = [
   
   foldlSP [S "The", getTDS shrStress, S "acts as the mobile shear",
   S "acting on the base. Using the", phrase definition, titleize fs,
-  phrase equation, S "from", acroT 1 `sC` S "with the", 
+  phrase equation, S "from", makeRef fs_rc_new `sC` S "with the", 
   plural definition, S "of resistive shear strength of a slice",
   ch mobStress, S "from", eqN 27, S "and", getTandS shrStress,
   S "from", eqN 29, S "the", getTandS fsloc,

@@ -1,35 +1,35 @@
 module Drasil.SSP.DataDefs (dataDefns, soilStiffness, netFDsplcmntEqbm, 
   mobShearWO, displcmntRxnF, intrsliceF, surfLoads, seismicLoadF, 
-  resShearWO, lengthLs, lengthLb, sliceWght, ddRef, fixme1, 
-  stfMtrxDerivation, mobShrDerivation, resShrDerivation, fixme2) where 
+  resShearWO, lengthLs, lengthLb, sliceWght, ddRef, fixme1, fixme2,
+  stfMtrxDerivation, mobShrDerivation, resShrDerivation) where 
 
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
 import Drasil.DocLang (ModelDB, ddRefDB, mdb, refDD)
+import Control.Lens ((^.))
 
 import Drasil.SSP.BasicExprs (displMtx, eqlExpr, rotMtx)
 import Drasil.SSP.Defs (intrslce)
 import Drasil.SSP.Labels (genDef2Label, genDef3Label, genDef8Label, genDef9Label)
+import Drasil.SSP.TMods (effStress_new)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
   cohesion, constant_A, constant_K, constant_a, dryWeight, earthqkLoadFctr, 
   effStiffA, effStiffB, fricAngle, genDisplace, genForce, genPressure, 
   impLoadAngle, index, intNormForce, intShrForce, inx, inxi, inxiM1, mobShrI, 
   normStress, normToShear, nrmDispl, nrmFNoIntsl, nrmFSubWat, nrmStiffBase, 
-  nrmStiffIntsl, poissnsRatio, rotatedDispl, satWeight, scalFunc, 
-  shearFNoIntsl, shearRNoIntsl, shrDispl, shrResI, shrStiffBase, shrStiffIntsl, 
-  slcWght, slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce, 
-  surfLngth, surfLoad, ufixme1, ufixme2, waterHght, waterWeight, watrForce, 
-  watrForceDif, wiif)
+  nrmStiffIntsl, poissnsRatio, rotatedDispl, satWeight, scalFunc, shearFNoIntsl, 
+  shearRNoIntsl, shrDispl, shrResI, shrStiffBase, shrStiffIntsl, slcWght, 
+  slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce, surfLngth, 
+  surfLoad, ufixme1, ufixme2, waterHght, waterWeight, watrForce, watrForceDif, wiif)
 
 import Data.Drasil.Quantities.SolidMechanics as SM (poissnsR)
 import Data.Drasil.Utils (eqUnR', weave)
 
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (definition, element, value)
-import Data.Drasil.SentenceStructures (sAnd, sOf, foldlSP, eqN, isThe, acroT,
-  ofThe, getTandS, ofThe', foldlSentCol)
-import Control.Lens ((^.))
-import Data.Drasil.Concepts.Math (equation, angle)
+import Data.Drasil.SentenceStructures (eqN, foldlSentCol, foldlSP, getTandS, 
+  isThe, ofThe, ofThe', sAnd, sOf)
+import Data.Drasil.Concepts.Math (angle, equation)
 
 ------------------------
 --  Data Definitions  --
@@ -379,7 +379,7 @@ resShr_deriv_sentences_ssp_s1 = [S "The", phrase shrResI, S "of a slice is",
   phrase nrmFSubWat, S "in the", phrase equation, S "for", ch shrResI,
   S "of the soil is defined in the perpendicular force equilibrium",
   S "of a slice from", makeRef genDef2Label `sC` S "using the", getTandS nrmFSubWat,
-  S "of", acroT 4, S "shown in", eqN 1]
+  S "of", makeRef effStress_new, S "shown in", eqN 1]
 
 resShr_deriv_sentences_ssp_s2 :: [Sentence]
 resShr_deriv_sentences_ssp_s2 = [plural value `ofThe'` S "interslice forces",
@@ -434,7 +434,7 @@ resShrDerivation = [
   phrase nrmFSubWat, S "in the", phrase equation, S "for", ch shrResI,
   S "of the soil is defined in the perpendicular force equilibrium",
   S "of a slice from", makeRef genDef2Label `sC` S "using the", getTandS nrmFSubWat,
-  S "of", acroT 4, S "shown in", eqN 1],
+  S "of", makeRef effStress_new, S "shown in", eqN 1],
   
   eqUnR' $ (inxi nrmFSubWat) $= eqlExpr cos sin (\x y -> x -
   inxiM1 intShrForce + inxi intShrForce + y) - inxi baseHydroForce,

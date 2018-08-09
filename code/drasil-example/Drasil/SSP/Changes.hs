@@ -32,7 +32,7 @@ unlikelychg2 = mkUnLklyChnk "UC_2donly"          uc2Desc "2D-Analysis-Only"
 
 uc1Desc, uc2Desc :: Sentence
 
-uc1Desc = foldlSent [S "Chages related to", (refA sspRefDB newA5), S "and",
+uc1Desc = foldlSent [S "Changes related to", (refA sspRefDB newA5), S "and",
   (refA sspRefDB newA6), S "are not possible due to the dependency",
   S "of the", plural calculation, S "on the linear relationship between",
   S "interslice normal and shear forces"]

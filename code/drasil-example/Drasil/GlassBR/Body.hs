@@ -173,20 +173,20 @@ mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master
   NotationSec (NotationProg []) : 
   ModHierarchSec (ModHierarchProg $ S "section 3 of the MG (Link)") : --FIXME: hardcoded link
   Bibliography : 
-  MISModSec (MISModProg "Control" Nothing [MISModule, MISUses [{-FILL IN-}],
+  MISModSec (MISModProg "Control" Nothing [MISModule, MISUses [inputLabel, loadLabel, calcLabel, outputLabel],
     MISSyntax [MISExportedCs [{-FILL IN-}], MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
     ctrlLabel) :
-  MISModSec (MISModProg "Input" (Just fillIN) [MISModule, MISUses [{-FILL IN-}],
+  MISModSec (MISModProg "Input" (Just fillIN) [MISModule, MISUses [glTypeLabel, thicknessLabel, constantsLabel, hwLabel],
     MISSyntax [{-MISSyntaxSubVerb [{-FILL IN-}]-}],
     MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [{-FILL IN-}], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]],
     MISConsiderations [{-FILL IN-}]]
     inputLabel) :
-  MISModSec (MISModProg "LoadASTM" Nothing [MISModule, MISUses [{-FILL IN-}],
+  MISModSec (MISModProg "LoadASTM" Nothing [MISModule, MISUses [functLabel, contoursLabel],
     MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [], MISStateInvariant [], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
     loadLabel) :
-  MISModSec (MISModProg "Calc" Nothing [MISModule, MISUses [{-FILL IN-}],
+  MISModSec (MISModProg "Calc" Nothing [MISModule, MISUses [inputLabel, contoursLabel, constantsLabel],
     MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     calcLabel) :
@@ -198,12 +198,12 @@ mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master
     MISSyntax [MISExportedCs [], MISExportedTyps [{-FILL IN-}], MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     thicknessLabel) :
-  MISModSec (MISModProg "FunctADT" Nothing [MISTempModule, MISUses [{-FILL IN-}],
+  MISModSec (MISModProg "FunctADT" Nothing [MISTempModule, MISUses [seqServLabel],
     MISSyntax [MISExportedCs [{-FILL IN-}], MISExportedTyps [{-FILL IN-}], MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]],
     MISConsiderations [{-FILL IN-}]]
     functLabel) :
-  MISModSec (MISModProg "ContoursADT" Nothing [MISTempModule, MISUses [{-FILL IN-}],
+  MISModSec (MISModProg "ContoursADT" Nothing [MISTempModule, MISUses [functLabel],
     MISSyntax [MISExportedCs [{-FILL IN-}], MISExportedTyps [{-FILL IN-}], MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     contoursLabel) :
@@ -211,7 +211,7 @@ mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master
     MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [], MISStateInvariant [], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
     seqServLabel) :
-  MISModSec (MISModProg "Output" Nothing [MISModule, MISUses [{-FILL IN-}], 
+  MISModSec (MISModProg "Output" Nothing [MISModule, MISUses [inputLabel, thicknessLabel, glTypeLabel, hwLabel],
     MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]], 
     MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     outputLabel) :

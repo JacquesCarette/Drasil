@@ -29,7 +29,7 @@ import qualified Drasil.DocLang.MIS as MIS (notation, introMIS, notationIntroCon
   enviroVars, expAccPrograms, expConstants, expTypes, module_, modHier, notation, 
   semantics, stateInvars, stateVars, syntax, uses, assignSttmts)
 
-import Data.Drasil.SentenceStructures (foldlSP)
+import Data.Drasil.SentenceStructures (foldlSP, foldlList, SepType(Comma), FoldType(List))
 import Data.Drasil.Utils (bulletFlat)
 
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
@@ -644,7 +644,8 @@ mkMISModSec (MISModProg modName x mms lbl) = MIS.misOfModule (getIntroMaybe x) (
     subsections MISModule          = MIS.module_ [mkParagraph $ S modName] []
     subsections MISTempModule      = MIS.tempMod_ [mkParagraph $ S modName] []
     subsections (MISUses [])       = MIS.uses    none  []
-    subsections (MISUses useMods)  = MIS.uses    (map mkParagraph $ map makeRef useMods) [] --FIXME: needs to become a proper list
+
+    subsections (MISUses useMods)  = MIS.uses [mkParagraph $ foldlList Comma List $ map makeRef useMods] []
     subsections (MISSyntax subs)   = MIS.syntax [] (map syntaxSubs subs)
     subsections (MISSemantics subs)= MIS.semantics [] (map semanticSubs subs)
     subsections (MISConsiderations s) = MIS.considerations [] [] --FIXME: needs to be filled out

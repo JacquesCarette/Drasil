@@ -22,7 +22,7 @@ executable tiny
     drasil-lang >= 0.1.17,
     drasil-data >= 0.1.5,
     drasil-code >= 0.1.1,
-    drasil-printers >= 0.1.0,
+    drasil-printers >= 0.1.2,
     drasil-gen >= 0.1.0,
     drasil-docLang >= 0.1.5
   default-language: Haskell2010

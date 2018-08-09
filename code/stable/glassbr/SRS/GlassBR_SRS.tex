@@ -983,7 +983,7 @@ This section provides the functional requirements, the business tasks that the s
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:Input-Glass-Props}:]Input the quantities from Table~\ref{Table:R1ReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:System-Set-Values-Following-Assumptions}:]The system shall set the known values as follows: $m$, $k$, $E$, ${t_{d}}$ following A4, $LDF$ following A8, LSF following A5, $h$ (from \hyperref[DD:min.thick]{Definition~DD:min.thick}), $GTF$ (from \hyperref[DD:gTF]{Definition~DD:gTF}), and $SD$ (from \hyperref[DD:standOffDist]{Definition~DD:standOffDist}).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:System-Set-Values-Following-Assumptions}:]The system shall set the known values as follows: $m$, $k$, $E$, ${t_{d}}$ following A\ref{A:standardValues}, $LDF$ following A\ref{A:ldfConstant}, LSF following A\ref{A:glassLite}, $h$ (from \hyperref[DD:min.thick]{Definition~DD:min.thick}), $GTF$ (from \hyperref[DD:gTF]{Definition~DD:gTF}), and $SD$ (from \hyperref[DD:standOffDist]{Definition~DD:standOffDist}).
 \end{description}
 \begin{description}
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:Check-Input-with-Data.Constraints}:]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DataConstraints}. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.

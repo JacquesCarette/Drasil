@@ -347,6 +347,24 @@ goalStateList = enumSimple 1 (short goalStmt) $
 ---------------------------------
 
 -- SECTION 4.2.3 --
+{--- General Definitions is automatically generated in solChSpecF
+s4_2_3_genDefs :: [Contents]
+s4_2_3_genDefs = map reldefn swhsRC
+
+s4_2_3_deriv :: [Contents]
+s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
+  s4_2_3_deriv_2 t1ConsThermE vol,
+  s4_2_3_deriv_3,
+  s4_2_3_deriv_4 gauss_div surface vol thFluxVect uNormalVect unit_,
+  s4_2_3_deriv_5,
+  s4_2_3_deriv_6 vol vol_ht_gen,
+  s4_2_3_deriv_7,
+  s4_2_3_deriv_8 ht_flux_in ht_flux_out in_SA out_SA density heat_cap_spec
+    temp vol assumption assump3 assump4 assump5 assump6,
+  s4_2_3_deriv_9,
+  s4_2_3_deriv_10 density mass vol,
+  s4_2_3_deriv_11]-}
+
 -- General Definitions is automatically generated 
 
 ------------------------------

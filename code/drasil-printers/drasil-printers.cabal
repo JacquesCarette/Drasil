@@ -1,5 +1,5 @@
 Name:		drasil-printers
-Version:	0.1.0
+Version:	0.1.2
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -23,6 +23,7 @@ library
     , Language.Drasil.Printing.Citation
     , Language.Drasil.Printing.Import
     , Language.Drasil.Printing.LayoutObj
+    , Language.Drasil.Printing.PrintingInformation
     , Language.Drasil.TeX.Helpers
     , Language.Drasil.TeX.Print
     , Language.Drasil.TeX.Monad

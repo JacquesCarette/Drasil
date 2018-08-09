@@ -14,6 +14,10 @@ module Language.Drasil.Printers (
   -- TeX
     -- Print
   , genTeX
+  , PrintingInformation(..)
+  , HasPrintingOptions (..)
+  , Notation(Scientific, Engineering)
+  , defaultConfiguration
   )
   where
 
@@ -24,3 +28,5 @@ import Language.Drasil.HTML.Helpers (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.Make.Print (genMake)
 import Language.Drasil.TeX.Print (genTeX)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..),
+  HasPrintingOptions(..), Notation(Scientific, Engineering), defaultConfiguration)

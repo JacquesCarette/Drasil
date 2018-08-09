@@ -70,7 +70,7 @@ import Data.Drasil.Utils (enumSimple, itemRefToSent, makeListRef,
 import Data.Drasil.SentenceStructures (acroIM, acroGS, showingCxnBw,
   foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, ofThe,
   ofThe', sAnd, sOf, foldlList, SepType(Comma), FoldType(List))
-
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 -------------------------------------------------------------------------------
 
 acronyms :: [CI]
@@ -110,6 +110,9 @@ swhs_si = SI {
 swhsSymMap :: ChunkDB
 swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) swhsSymbols
   this_si
+
+printSetting :: PrintingInformation
+printSetting = PI swhsSymMap defaultConfiguration
 
   --Note: The second swhsSymbols here is
     -- Redundant b/c the unitals are not really concepts (yet). There

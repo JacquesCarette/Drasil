@@ -2,7 +2,6 @@ module Drasil.SWHS.GenDefs (swhsGDs, nwtnCooling, rocTempSimp, rocTempSimpGD,
   roc_temp_simp_deriv, generalDefinitions, nwtnCooling_desc, rocTempSimp_desc) where
 
 import Prelude hiding (sin, cos, tan)
-
 import Language.Drasil
 import Drasil.DocLang (refA)
 

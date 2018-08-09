@@ -2,7 +2,7 @@ module Drasil.NoPCM.Body where
 
 import Language.Drasil
 import Language.Drasil.Code (CodeSpec, codeSpec)
-import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Control.Lens ((^.))
 
 import Data.Drasil.People (thulasi)
@@ -29,6 +29,7 @@ import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Software.Products (compPro)
 import Data.Drasil.Units.Thermodynamics (thermal_flux)
+import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, likeChg, unlikeChg, probDesc, goalStmt,
   inModelLabel)
@@ -191,6 +192,9 @@ nopcm_srs = mkDoc mkSRS (for) nopcm_si
 nopcm_SymbMap :: ChunkDB
 nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) (map cw nopcm_Symbols ++ srsDomains)
   this_si
+
+printSetting :: PrintingInformation
+printSetting = PI nopcm_SymbMap defaultConfiguration
 
 assumps_Nopcm_list_new :: [AssumpChunk]
 assumps_Nopcm_list_new = [newA1, newA2, newA3, newA5NoPCM, newA6NoPCM,

@@ -17,6 +17,10 @@ data ReqType = FR  -- ^ Functional Requirement
              | NFR -- ^ Non-Functional Requirement
   deriving Eq
 
+instance Show ReqType where
+  show FR  = "FR"
+  show NFR = "NFR"
+
 -- | For building references. Defines the possible type of reference.
 data RefType = Tab    -- ^ Table
              | Lst   -- ^ List

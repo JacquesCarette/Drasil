@@ -206,22 +206,22 @@ instance Referable AssumpChunk where
   rType   _ = Assump
 
 instance Referable ReqChunk where
-  refAdd  r@(RC _ rt _ _) = getAdd ((r ^. getLabel) ^. getRefAdd)
+  refAdd  r               = getAdd ((r ^. getLabel) ^. getRefAdd)
   rType   (RC _ FR _ _)   = Req FR
   rType   (RC _ NFR _ _)  = Req NFR
 
 instance Referable Change where
-  refAdd r@(ChC _ rt _ _)    = getAdd ((r ^. getLabel) ^. getRefAdd)
+  refAdd r                   = getAdd ((r ^. getLabel) ^. getRefAdd)
   rType (ChC _ Likely _ _)   = LCh
   rType (ChC _ Unlikely _ _) = UnCh
 
 instance Referable Section where
   refAdd  (Section _ _ lb) = getAdd (lb ^. getRefAdd)
-  rType   _               = Sect
+  rType   _                = Sect
 
 instance Referable Citation where
   refAdd c = citeID c -- citeID should be unique.
-  rType _ = Cite
+  rType _  = Cite
 
 instance Referable TheoryModel where
   refAdd  t = getAdd ((t ^. getLabel) ^. getRefAdd)
@@ -276,8 +276,6 @@ temp (Paragraph _)         = error "Shouldn't reference paragraphs"
 temp (Bib _)               = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
-temp _                     =
-    error "Attempting to reference unimplemented reference type"
 
 uidSort :: HasUID c => c -> c -> Ordering
 uidSort = compare `on` (^. uid)

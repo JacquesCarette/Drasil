@@ -596,12 +596,10 @@ stfMtrx_deriv_sentences_ssp_s4 =
   [S "The new effective base stiffness matrix" +:+ ch shrStiffBase +:+
   --FIXME: add symbol?
   S "as derived in" +:+ eqN 7 +:+ S "is defined in" +:+. eqN 9 +:+
-  S "This is seen as matrix" +:+ ch shrStiffBase +:+ S "in" +:+.
-  S "GD12" +:+ isElemInMx shrStiffBase "shear" `sC` S "and" +:+ -- FIXME: GD12 doesn't exist
-  isElemInMx nrmStiffBase "normal" `sC` S "calculated as in" +:+. ddRef mobShearWO  +:+
-  S "The notation is simplified by the introduction of the constants" +:+
-  ch effStiffA `sAnd` ch effStiffB `sC` S "defined in" +:+ eqN 10 `sAnd`
-  eqN 11 +:+. S "respectively"]
+  isElemInMx shrStiffBase "shear" `sC` S "and" +:+ isElemInMx nrmStiffBase "normal" `sC` 
+  S "calculated as in" +:+. ddRef mobShearWO +:+ S "The notation is simplified by" +:+ 
+  S "the introduction of the constants" +:+ ch effStiffA `sAnd` ch effStiffB `sC` 
+  S "defined in" +:+ eqN 10 `sAnd` eqN 11 +:+. S "respectively"]
 
 stfMtrx_deriv_sentences_ssp_s5 :: [Sentence]
 stfMtrx_deriv_sentences_ssp_s5 = [S "A force-displacement relationship for an element" +:+ ch index +:+

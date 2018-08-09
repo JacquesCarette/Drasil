@@ -1685,11 +1685,11 @@ Source &
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
-Using equation (21) from IM3, rearranging, and applying the boundary condition that $G_{0}$ and $G_{n}$ are equal to $0$, an equation for the factor of safety is found as equation (12), also seen in IM1:
+Using equation (21) from \hyperref[IM:intsliceFs]{Definition~IM:intsliceFs}, rearranging, and applying the boundary condition that $G_{0}$ and $G_{n}$ are equal to $0$, an equation for the factor of safety is found as equation (12), also seen in \hyperref[IM:fctSfty]{Definition~IM:fctSfty}:
 \begin{dmath}
 FS=\frac{\displaystyle\sum_{v=1}^{n-1}{R_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{Ψ_{u}}{Φ_{u}}}}+R_{n}}{\displaystyle\sum_{v=1}^{n-1}{T_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{Ψ_{u}}{Φ_{u}}}}+T_{n}}
 \end{dmath}
-The constants $Ψ$ and $Φ$ described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio $λ$ (IM2) and the factor of safety $FS$ (IM1).
+The constants $Ψ$ and $Φ$ described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio $λ$ (\hyperref[IM:nrmShrFor]{Definition~IM:nrmShrFor}) and the factor of safety $FS$ (\hyperref[IM:fctSfty]{Definition~IM:fctSfty}).
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -1760,11 +1760,11 @@ The equation in terms of $λ$ leads to equation (14):
 \begin{dmath}
 λ=\frac{-G_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+G_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)-H_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+H_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(α_{i}\right)\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(β_{i}\right) h_{i}-Q_{i} \sin\left(ω_{i}\right) h_{i}}{\frac{b_{i}}{2} \left(G_{i} f_{i}+G_{i-1} f_{i-1}\right)}
 \end{dmath}
-Taking a summation of each slice, and applying the boundary condition that $G_{0}$ and $G_{n}$ are equal to $0$, a general equation for the constant $λ$ is developed in equation (15), also found in IM2:
+Taking a summation of each slice, and applying the boundary condition that $G_{0}$ and $G_{n}$ are equal to $0$, a general equation for the constant $λ$ is developed in equation (15), also found in \hyperref[IM:nrmShrFor]{Definition~IM:nrmShrFor}:
 \begin{dmath}
 λ_{i}=\frac{\displaystyle\sum_{i=1}^{n}{b_{i} \left(SpencerFixme1Please+SpencerFixme2Please\right) \tan\left(α_{i}\right)+h_{i} \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(β_{i}\right)-2 Q_{i} \sin\left(ω_{i}\right)\right)}}{\displaystyle\sum_{i=1}^{n}{b_{i} \left(G_{i} f_{i}+G_{i-1} f_{i-1}\right)}}
 \end{dmath}
-equation (15) for $λ$, is a function of the unknown interslice normal force $G$ IM3.
+equation (15) for $λ$, is a function of the unknown interslice normal force $G$ \hyperref[IM:intsliceFs]{Definition~IM:intsliceFs}.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -1820,7 +1820,7 @@ Substituting the equation for $N'$ from equation (16) into equation (17) and rea
 \begin{dmath}
 G_{i} \left(\left(λ f_{i} \cos\left(α_{i}\right)-\sin\left(α_{i}\right)\right) \tan\left({φ'}_{i}\right)-\left(λ f_{i} \sin\left(α_{i}\right)-\cos\left(α_{i}\right)\right) FS\right)=G_{i-1} \left(\left(λ f_{i-1} \cos\left(α_{i}\right)-\sin\left(α_{i}\right)\right) \tan\left({φ'}_{i}\right)-\left(λ f_{i-1} \sin\left(α_{i}\right)-\cos\left(α_{i}\right)\right) FS\right)+FS T_{i}-R_{i}
 \end{dmath}
-Where $R$ and $T$ are the resistive and mobile shear of the slice, without the influence of interslice forces $G$ and $X$, as defined in \hyperref[DD:R.i]{Definition~DD:R.i} and \hyperref[DD:T.i]{Definition~DD:T.i} Making use of the constants, and with full equations found below in equation (19) and equation (20) respectively, then equation (18) can be simplified to equation (21), also seen in IM3:
+Where $R$ and $T$ are the resistive and mobile shear of the slice, without the influence of interslice forces $G$ and $X$, as defined in \hyperref[DD:R.i]{Definition~DD:R.i} and \hyperref[DD:T.i]{Definition~DD:T.i} Making use of the constants, and with full equations found below in equation (19) and equation (20) respectively, then equation (18) can be simplified to equation (21), also seen in \hyperref[IM:intsliceFs]{Definition~IM:intsliceFs}:
 \begin{dmath}
 Φ_{i}=\left(λ f_{i} \cos\left(α_{i}\right)-\sin\left(α_{i}\right)\right) \tan\left({φ'}_{i}\right)-\left(λ f_{i} \sin\left(α_{i}\right)-\cos\left(α_{i}\right)\right) FS
 \end{dmath}
@@ -1830,7 +1830,7 @@ Where $R$ and $T$ are the resistive and mobile shear of the slice, without the i
 \begin{dmath}
 G_{i}=\frac{Ψ_{i-1} G_{i-1}+FS T_{i}-R_{i}}{Φ_{i}}
 \end{dmath}
-The constants $Ψ$ and $Φ$ described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio $λ$ (IM2) and the factor of safety $FS$ (IM1).
+The constants $Ψ$ and $Φ$ described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio $λ$ (\hyperref[IM:nrmShrFor]{Definition~IM:nrmShrFor}) and the factor of safety $FS$ (\hyperref[IM:fctSfty]{Definition~IM:fctSfty}).
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -1923,7 +1923,7 @@ Source &
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
-RFEM analysis can also be used to calculate the factor of safety for the slope. For a slice element $i$ the displacements $δx$ and $δy$, are solved from the system of equations in IM4. The definition of $ε$ as the rotation of the displacement vector $δ$ is seen in \hyperref[GD:hookesLaw2d]{Definition~GD:hookesLaw2d}. This is used to find the displacements of the slice parallel to the base of the slice $δu$ in equation (24) and normal to the base of the slice $δv$ in equation (25).
+RFEM analysis can also be used to calculate the factor of safety for the slope. For a slice element $i$ the displacements $δx$ and $δy$, are solved from the system of equations in \hyperref[IM:forDisEqlb]{Definition~IM:forDisEqlb}. The definition of $ε$ as the rotation of the displacement vector $δ$ is seen in \hyperref[GD:hookesLaw2d]{Definition~GD:hookesLaw2d}. This is used to find the displacements of the slice parallel to the base of the slice $δu$ in equation (24) and normal to the base of the slice $δv$ in equation (25).
 \begin{dmath}
 {δu}_{i}=\cos\left(α_{i}\right) {δx}_{i}+\sin\left(α_{i}\right) {δy}_{i}
 \end{dmath}
@@ -1946,11 +1946,11 @@ With shear stiffness ${K_{bt}}$ calculated in equation (28) and shear displaceme
 \begin{dmath}
 τ_{i}={K_{bt,i}} {δu}_{i}
 \end{dmath}
-The resistive shear stress acting on the base of a slice $τ$ acts as the mobile shear acting on the base. Using the definition Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice $s$ from equation (27) and resistive shear stress $τ$ from equation (29) the local factor of safety ${FS_{Loc,i}}$ can be found from as seen in equation (30) and IM5:
+The resistive shear stress acting on the base of a slice $τ$ acts as the mobile shear acting on the base. Using the definition Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice $s$ from equation (27) and resistive shear stress $τ$ from equation (29) the local factor of safety ${FS_{Loc,i}}$ can be found from as seen in equation (30) and \hyperref[IM:rfemFoS]{Definition~IM:rfemFoS}:
 \begin{dmath}
 {FS_{Loc,i}}=\frac{s_{i}}{τ_{i}}=\frac{{c'}_{i}-{K_{bn,i}} {δv}_{i} \tan\left({φ'}_{i}\right)}{{K_{bt,i}} {δu}_{i}}
 \end{dmath}
-The global Factor of Safety is then the ratio of the summation of the resistive and mobile shears for each slice, with a weighting for the length of the slice's base. Shown in equation (31) and IM5:
+The global Factor of Safety is then the ratio of the summation of the resistive and mobile shears for each slice, with a weighting for the length of the slice's base. Shown in equation (31) and \hyperref[IM:rfemFoS]{Definition~IM:rfemFoS}:
 \begin{dmath}
 FS=\frac{\displaystyle\sum_{i=1}^{n}{{ℓ_{b,i}} s_{i}}}{\displaystyle\sum_{i=1}^{n}{{ℓ_{b,i}} τ_{i}}}=\frac{\displaystyle\sum_{i=1}^{n}{{ℓ_{b,i}} \left({c'}_{i}-{K_{bn,i}} {δv}_{i} \tan\left({φ'}_{i}\right)\right)}}{\displaystyle\sum_{i=1}^{n}{{ℓ_{b,i}} {K_{bt,i}} {δu}_{i}}}
 \end{dmath}

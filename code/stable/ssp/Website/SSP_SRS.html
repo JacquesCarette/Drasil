@@ -5273,7 +5273,7 @@ FIXME: This needs to be filled in
 </table>
 </div>
 <p class="paragraph">
-Using equation (21) from IM3, rearranging, and applying the boundary condition that <em>G<sub>0</sub></em> and <em>G<sub>n</sub></em> are equal to <em>0</em>, an equation for the factor of safety is found as equation (12), also seen in IM1:
+Using equation (21) from <a href=#IM:intsliceFs>IM: intsliceFs</a>, rearranging, and applying the boundary condition that <em>G<sub>0</sub></em> and <em>G<sub>n</sub></em> are equal to <em>0</em>, an equation for the factor of safety is found as equation (12), also seen in <a href=#IM:fctSfty>IM: fctSfty</a>:
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -5302,7 +5302,7 @@ Using equation (21) from IM3, rearranging, and applying the boundary condition t
 </div>
 </div>
 <p class="paragraph">
-The constants <em>Ψ</em> and <em>Φ</em> described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio <em>λ</em> (IM2) and the factor of safety <em>FS</em> (IM1).
+The constants <em>Ψ</em> and <em>Φ</em> described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio <em>λ</em> (<a href=#IM:nrmShrFor>IM: nrmShrFor</a>) and the factor of safety <em>FS</em> (<a href=#IM:fctSfty>IM: fctSfty</a>).
 </p>
 <div id="IM:nrmShrFor">
 <table class="idefn">
@@ -5623,7 +5623,7 @@ b<sub>i</sub>
 </div>
 </div>
 <p class="paragraph">
-Taking a summation of each slice, and applying the boundary condition that <em>G<sub>0</sub></em> and <em>G<sub>n</sub></em> are equal to <em>0</em>, a general equation for the constant <em>λ</em> is developed in equation (15), also found in IM2:
+Taking a summation of each slice, and applying the boundary condition that <em>G<sub>0</sub></em> and <em>G<sub>n</sub></em> are equal to <em>0</em>, a general equation for the constant <em>λ</em> is developed in equation (15), also found in <a href=#IM:nrmShrFor>IM: nrmShrFor</a>:
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -5638,7 +5638,7 @@ Taking a summation of each slice, and applying the boundary condition that <em>G
 </div>
 </div>
 <p class="paragraph">
-equation (15) for <em>λ</em>, is a function of the unknown interslice normal force <em>G</em> IM3.
+equation (15) for <em>λ</em>, is a function of the unknown interslice normal force <em>G</em> <a href=#IM:intsliceFs>IM: intsliceFs</a>.
 </p>
 <div id="IM:intsliceFs">
 <table class="idefn">
@@ -5828,7 +5828,7 @@ Substituting the equation for <em>N&prime;</em> from equation (16) into equation
 </div>
 </div>
 <p class="paragraph">
-Where <em>R</em> and <em>T</em> are the resistive and mobile shear of the slice, without the influence of interslice forces <em>G</em> and <em>X</em>, as defined in <a href=#DD:R.i>DD: DD13</a> and <a href=#DD:T.i>DD: DD14</a> Making use of the constants, and with full equations found below in equation (19) and equation (20) respectively, then equation (18) can be simplified to equation (21), also seen in IM3:
+Where <em>R</em> and <em>T</em> are the resistive and mobile shear of the slice, without the influence of interslice forces <em>G</em> and <em>X</em>, as defined in <a href=#DD:R.i>DD: DD13</a> and <a href=#DD:T.i>DD: DD14</a> Making use of the constants, and with full equations found below in equation (19) and equation (20) respectively, then equation (18) can be simplified to equation (21), also seen in <a href=#IM:intsliceFs>IM: intsliceFs</a>:
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -5853,7 +5853,7 @@ Where <em>R</em> and <em>T</em> are the resistive and mobile shear of the slice,
 </div>
 </div>
 <p class="paragraph">
-The constants <em>Ψ</em> and <em>Φ</em> described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio <em>λ</em> (IM2) and the factor of safety <em>FS</em> (IM1).
+The constants <em>Ψ</em> and <em>Φ</em> described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio <em>λ</em> (<a href=#IM:nrmShrFor>IM: nrmShrFor</a>) and the factor of safety <em>FS</em> (<a href=#IM:fctSfty>IM: fctSfty</a>).
 </p>
 <div id="IM:forDisEqlb">
 <table class="idefn">
@@ -6150,7 +6150,7 @@ FIXME: This needs to be filled in
 </table>
 </div>
 <p class="paragraph">
-RFEM analysis can also be used to calculate the factor of safety for the slope. For a slice element <em>i</em> the displacements <em>δx</em> and <em>δy</em>, are solved from the system of equations in IM4. The definition of <em>ε</em> as the rotation of the displacement vector <em>δ</em> is seen in <a href=#GD:hookesLaw2d>GD: hookesLaw2d</a>. This is used to find the displacements of the slice parallel to the base of the slice <em>δu</em> in equation (24) and normal to the base of the slice <em>δv</em> in equation (25).
+RFEM analysis can also be used to calculate the factor of safety for the slope. For a slice element <em>i</em> the displacements <em>δx</em> and <em>δy</em>, are solved from the system of equations in <a href=#IM:forDisEqlb>IM: forDisEqlb</a>. The definition of <em>ε</em> as the rotation of the displacement vector <em>δ</em> is seen in <a href=#GD:hookesLaw2d>GD: hookesLaw2d</a>. This is used to find the displacements of the slice parallel to the base of the slice <em>δu</em> in equation (24) and normal to the base of the slice <em>δv</em> in equation (25).
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -6216,7 +6216,7 @@ With shear stiffness <em>K<sub>bt</sub></em> calculated in equation (28) and she
 </div>
 </div>
 <p class="paragraph">
-The resistive shear stress acting on the base of a slice <em>τ</em> acts as the mobile shear acting on the base. Using the definition Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice <em>s</em> from equation (27) and resistive shear stress <em>τ</em> from equation (29) the local factor of safety <em>FS<sub>Loc,i</sub></em> can be found from as seen in equation (30) and IM5:
+The resistive shear stress acting on the base of a slice <em>τ</em> acts as the mobile shear acting on the base. Using the definition Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice <em>s</em> from equation (27) and resistive shear stress <em>τ</em> from equation (29) the local factor of safety <em>FS<sub>Loc,i</sub></em> can be found from as seen in equation (30) and <a href=#IM:rfemFoS>IM: rfemFoS</a>:
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -6238,7 +6238,7 @@ K<sub>bt,i</sub>&#8239;δu<sub>i</sub>
 </div>
 </div>
 <p class="paragraph">
-The global Factor of Safety is then the ratio of the summation of the resistive and mobile shears for each slice, with a weighting for the length of the slice's base. Shown in equation (31) and IM5:
+The global Factor of Safety is then the ratio of the summation of the resistive and mobile shears for each slice, with a weighting for the length of the slice's base. Shown in equation (31) and <a href=#IM:rfemFoS>IM: rfemFoS</a>:
 </p>
 <div id="Eqn:empty">
 <div class="equation">

@@ -1,21 +1,10 @@
 module Drasil.SWHS.Assumptions where --all of this file is exported
 
-import Drasil.SWHS.Labels (assump1Label)
 import Language.Drasil
 import Control.Lens ((^.))
-import Drasil.SWHS.References (ref_swhs_citations)
 
 import Data.Drasil.Concepts.Documentation (system, simulation, model, 
   problem)
-
-import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
-import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfect_insul,
-  charging, discharging)
-import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, temp_init, temp_W,
-  temp_PCM, htCap_L_P, htCap_W, htCap_S_P, w_density, pcm_density, pcm_vol)
-import Drasil.SWHS.TMods (t1ConsThermE_new)
-import Drasil.SWHS.Labels (assump14Label, assump18Label, 
-  assump19Label, assump10Label, genDef1Label, genDef2Label)
 
 import Data.Drasil.Quantities.PhysicalProperties (vol)
 import Data.Drasil.Quantities.Physics (time, energy)
@@ -27,8 +16,17 @@ import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, gaseous)
 import Data.Drasil.Concepts.Math (change)
 import Data.Drasil.Concepts.Physics (mech_energy)
 
-import Data.Drasil.SentenceStructures (acroIM, foldlSent, ofThe,
-  ofThe', sAnd, isThe)
+import Data.Drasil.SentenceStructures (foldlSent, ofThe, ofThe', sAnd, isThe)
+
+import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfect_insul,
+  charging, discharging)
+import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
+import Drasil.SWHS.Labels (assump1Label, assump14Label, assump18Label, assump19Label, 
+  assump10Label, genDef1Label, genDef2Label, imod1Label, imod2Label, imod3Label, imod4Label)
+import Drasil.SWHS.References (ref_swhs_citations)
+import Drasil.SWHS.TMods (t1ConsThermE_new)
+import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, temp_init, temp_W,
+  temp_PCM, htCap_L_P, htCap_W, htCap_S_P, w_density, pcm_density, pcm_vol)
 
 -------------------------
 -- 4.2.1 : Assumptions --
@@ -43,27 +41,26 @@ newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9,
 newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10,
   newA11, newA12, newA13, newA14, newA15, newA16, newA17, newA18, newA19, newA20 :: AssumpChunk
 
-newA1 = assump "Thermal-Energy-Only" assumpS1 assump1Label
-newA2 = assump "Heat-Transfer-Coeffs-Constant" assumpS2 (mkLabelRAAssump' "Heat-Transfer-Coeffs-Constant"  )
-newA3 = assump "Constant-Water-Temp-Across-Tank" assumpS3 (mkLabelRAAssump' "Constant-Water-Temp-Across-Tank" )
-newA4 = assump "Temp-PCM-Constant-Across-Volume" assumpS4 (mkLabelRAAssump' "Temp-PCM-Constant-Across-Volume") 
-newA5 = assump "Density-Water-PCM-Constant-over-Volume" assumpS5 (mkLabelRAAssump' "Density-Water-PCM-Constant-over-Volume"  )
-newA6 = assump "Specific-Heat-Energy-Constant-over-Volume" assumpS6 (mkLabelRAAssump' "Specific-Heat-Energy-Constant-over-Volume" )
-newA7 = assump "Law-Convective-Cooling-Coil-Water" assumpS7 (mkLabelRAAssump' "Newton-Law-Convective-Cooling-Coil-Water" )
-newA8 = assump "Temp-Heating-Coil-Constant-over-Time" assumpS8 (mkLabelRAAssump' "Temp-Heating-Coil-Constant-over-Time" )
-newA9 = assump "Temp-Heating-Coil-Constant-over-Length" assumpS9 (mkLabelRAAssump' "Temp-Heating-Coil-Constant-over-Length" )
-newA10 = assump "Law-Convective-Cooling-Water-PCM" assumpS10 assump10Label
-newA11 = assump "Charging-Tank-No-Temp-Discharge" assumpS11 (mkLabelRAAssump' "Charging-Tank-No-Temp-Discharge" )
-newA12 = assump "Same-Initial-Temp-Water-PCM" assumpS12 (mkLabelRAAssump' "Same-Initial-Temp-Water-PCM" )
-newA13 = assump "PCM-Initially-Solid" assumpS13 (mkLabelRAAssump' "PCM-Initially-Solid") 
-newA14 = assump "Water-Always-Liquid" assumpS14 assump14Label
-newA15 = assump "Perfect-Insulation-Tank" assumpS15 (mkLabelRAAssump' "Perfect-Insulation-Tank" )
-newA16 = assump "No-Internal-Heat-Generation-By-Water-PCM" assumpS16 (mkLabelRAAssump' "No-Internal-Heat-Generation-By-Water-PCM" )
-newA17 = assump "Volume-Change-Melting-PCM-Negligible" assumpS17 (mkLabelRAAssump' "Volume-Change-Melting-PCM-Negligible" )
-newA18 = assump "No-Gaseous-State-PCM" assumpS18 assump18Label
-newA19 = assump "Atmospheric-Pressure-Tank" assumpS19 assump19Label
-newA20 = assump "Volume-Coil-Negligible" assumpS20 (mkLabelRAAssump' "Volume-Coil-Negligible" )
-
+newA1  = assump "Thermal-Energy-Only"                       assumpS1  assump1Label
+newA2  = assump "Heat-Transfer-Coeffs-Constant"             assumpS2  (mkLabelRAAssump' "Heat-Transfer-Coeffs-Constant"  )
+newA3  = assump "Constant-Water-Temp-Across-Tank"           assumpS3  (mkLabelRAAssump' "Constant-Water-Temp-Across-Tank" )
+newA4  = assump "Temp-PCM-Constant-Across-Volume"           assumpS4  (mkLabelRAAssump' "Temp-PCM-Constant-Across-Volume") 
+newA5  = assump "Density-Water-PCM-Constant-over-Volume"    assumpS5  (mkLabelRAAssump' "Density-Water-PCM-Constant-over-Volume"  )
+newA6  = assump "Specific-Heat-Energy-Constant-over-Volume" assumpS6  (mkLabelRAAssump' "Specific-Heat-Energy-Constant-over-Volume" )
+newA7  = assump "Law-Convective-Cooling-Coil-Water"         assumpS7  (mkLabelRAAssump' "Newton-Law-Convective-Cooling-Coil-Water" )
+newA8  = assump "Temp-Heating-Coil-Constant-over-Time"      assumpS8  (mkLabelRAAssump' "Temp-Heating-Coil-Constant-over-Time" )
+newA9  = assump "Temp-Heating-Coil-Constant-over-Length"    assumpS9  (mkLabelRAAssump' "Temp-Heating-Coil-Constant-over-Length" )
+newA10 = assump "Law-Convective-Cooling-Water-PCM"          assumpS10 assump10Label
+newA11 = assump "Charging-Tank-No-Temp-Discharge"           assumpS11 (mkLabelRAAssump' "Charging-Tank-No-Temp-Discharge" )
+newA12 = assump "Same-Initial-Temp-Water-PCM"               assumpS12 (mkLabelRAAssump' "Same-Initial-Temp-Water-PCM" )
+newA13 = assump "PCM-Initially-Solid"                       assumpS13 (mkLabelRAAssump' "PCM-Initially-Solid") 
+newA14 = assump "Water-Always-Liquid"                       assumpS14 assump14Label
+newA15 = assump "Perfect-Insulation-Tank"                   assumpS15 (mkLabelRAAssump' "Perfect-Insulation-Tank" )
+newA16 = assump "No-Internal-Heat-Generation-By-Water-PCM"  assumpS16 (mkLabelRAAssump' "No-Internal-Heat-Generation-By-Water-PCM" )
+newA17 = assump "Volume-Change-Melting-PCM-Negligible"      assumpS17 (mkLabelRAAssump' "Volume-Change-Melting-PCM-Negligible" )
+newA18 = assump "No-Gaseous-State-PCM"                      assumpS18 assump18Label
+newA19 = assump "Atmospheric-Pressure-Tank"                 assumpS19 assump19Label
+newA20 = assump "Volume-Coil-Negligible"                    assumpS20 (mkLabelRAAssump' "Volume-Coil-Negligible" )
 
 swhsAssumptionsS:: [Sentence]
 swhsAssumptionsS = [assumpS1, assumpS2, assumpS3, assumpS4, assumpS5,
@@ -124,46 +121,46 @@ assumpS11 = foldlSent [
   phrase temp_PCM, S "can only increase, or remain",
   S "constant; they do not decrease. This implies that the",
   phrase temp_init, sSqBr $ makeRef newA12, S "is less than (or equal)",
-  S "to the", phrase temp_C, sSqBr $ acroIM 1]
+  S "to the", phrase temp_C, sSqBr $ makeRef imod1Label]
   --FIXME `sC` makeRef likeChg4]
 assumpS12 = foldlSent [
   phrase temp_init `ofThe'` phrase water `sAnd` S "the",
   short phsChgMtrl `isThe` S "same",
-  sSqBr $ acroIM 1 `sC` acroIM 2]
+  sSqBr $ makeRef imod1Label `sC` makeRef imod2Label]
   --FIXME `sC` makeRef likeChg5]
 assumpS13 = foldlSent [
   S "The", phrase simulation, S "will start with the",
   short phsChgMtrl, S "in a", solid ^. defn,
-  sSqBr $ acroIM 2 `sC` acroIM 4]
+  sSqBr $ makeRef imod2Label `sC` makeRef imod4Label]
 assumpS14 = foldlSent [
   (S "operating" +:+ phrase temp +:+ S "range") `ofThe'` phrase system,
   S "is such that the", phrase water,
   S "is always in" +:+. (liquid ^. defn), S "That is" `sC`
   S "the", phrase temp, S "will not drop below the",
   phrase melt_pt, S "of", phrase water `sC` S "or rise above its",
-  phrase boil_pt, sSqBr $ acroIM 1 `sC` acroIM 3]
+  phrase boil_pt, sSqBr $ makeRef imod1Label `sC` makeRef imod3Label]
 assumpS15 = foldlSent [
   S "The", phrase tank, S "is", phrase perfect_insul,
   S "so that there is no", phrase CT.heat, S "loss from the",
-  phrase tank, sSqBr $ acroIM 1]
+  phrase tank, sSqBr $ makeRef imod1Label]
   --FIXME `sC` makeRef likeChg6]
 assumpS16 = foldlSent [
   S "No internal", phrase CT.heat, S "is generated by either the",
   phrase water, S "or the", short phsChgMtrl `semiCol`
   S "therefore, the", phrase vol_ht_gen, S "is zero",
-  sSqBr $ acroIM 1 `sC` acroIM 2]
+  sSqBr $ makeRef imod1Label `sC` makeRef imod2Label]
 assumpS17 = foldlSent [
   (phrase vol +:+ phrase change) `ofThe'` short phsChgMtrl,
-  S "due to", phrase CT.melting, S "is negligible", sSqBr $ acroIM 2]
+  S "due to", phrase CT.melting, S "is negligible", sSqBr $ makeRef imod2Label]
 assumpS18 = foldlSent [
   S "The", short phsChgMtrl, S "is either in a", liquid ^. defn,
   S "or a", solid ^. defn, S "but not a", gaseous ^. defn,
-  sSqBr $ acroIM 2 `sC` acroIM 4]
+  sSqBr $ makeRef imod2Label `sC` makeRef imod4Label]
 assumpS19 = foldlSent [
   S "The pressure in the", phrase tank, S "is atmospheric, so the",
   phrase melt_pt `sAnd` phrase boil_pt, S "are", S (show (0 :: Integer)) :+:
   Sy (unit_symb temp) `sAnd` S (show (100 :: Integer)) :+:
-  Sy (unit_symb temp) `sC` S "respectively", sSqBr $ acroIM 1 `sC` acroIM 3]
+  Sy (unit_symb temp) `sC` S "respectively", sSqBr $ makeRef imod1Label `sC` makeRef imod3Label]
 assumpS20 = foldlSent [
   S "When considering the", phrase w_vol, S "in the",
   phrase tank `sC` (phrase vol `ofThe` phrase coil),

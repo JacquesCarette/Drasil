@@ -2,7 +2,7 @@ module Drasil.SWHS.Body where
 
 import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec)
-import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Control.Lens ((^.))
 
 import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, 
@@ -10,37 +10,40 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
   IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
   RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
-  Fields, Field(..), SSDSub(..), SolChSpec( SCSProg ), SSDSec(..), 
-  Verbosity(..), InclUnits(..), DerivationDisplay(..), SCSSub(..),
-  dataConstraintUncertainty, genSysF, inDataConstTbl, intro, 
-  mkDoc, outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF,
-  tsymb'')
-import qualified Drasil.DocLang.SRS as SRS (likeChg,
-  funcReq, probDesc, goalStmt, sysCont, inModelLabel, referenceLabel)
+  Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
+  InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
+  dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, 
+  outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF, tsymb'')
+import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel, 
+  likeChg, probDesc, referenceLabel, sysCont)
 
-import Data.Drasil.People (thulasi, brooks, spencerSmith)
+import Data.Drasil.Concepts.Documentation (assumption, column, condition, constraint, 
+  content, corSol, dataConst, dataDefn, datum, definition, description, document, 
+  environment, genDefn, goalStmt, information, inModel, input_, item, likelyChg, 
+  model, organization, output_, physical, physics, physSyst, problem, property, 
+  purpose, quantity, reference, requirement, section_, software, softwareSys, 
+  solution, srs, symbol_, sysCont, system, thModel, traceyGraph, traceyMatrix, 
+  typUnc, unlikelyChg, user, value, variable)
+import Data.Drasil.Concepts.Math (de, equation, ode, unit_)
+import Data.Drasil.Concepts.Software (program)
+import Data.Drasil.Software.Products (sciCompS, compPro)
+import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
+import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
+import Data.Drasil.Quantities.Physics (energy, time)
+import Data.Drasil.Quantities.Thermodynamics (heat_cap_spec, latent_heat, temp)
+
+import Data.Drasil.People (brooks, spencerSmith, thulasi)
 import Data.Drasil.Phrase (for)
-import Data.Drasil.Concepts.Documentation (section_, traceyGraph, item,
-  assumption, traceyMatrix, thModel, genDefn, dataDefn, inModel, likelyChg,
-  dataConst, requirement, input_, solution, output_, corSol, constraint,
-  value, software, column, model, goalStmt, quantity, property, condition, 
-  physics, user, physical, datum, system, variable, sysCont, environment, 
-  srs, softwareSys, organization, document, problem, content, information, 
-  reference, definition, purpose, description, symbol_, physSyst, typUnc, 
-  unlikelyChg)
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
+  foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, ofThe, ofThe', sAnd, 
+  showingCxnBw, sOf)
+import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
+import Data.Drasil.Utils (enumSimple, itemRefToSent, makeListRef,
+  makeTMatrix, eqUnR', noRefs)
 
 import qualified Data.Drasil.Concepts.Thermodynamics as CT (law_cons_energy, 
   heat_trans, thermal_conduction, ht_flux, heat_cap_spec, thermal_energy,
   ht_trans_theo, thermal_analysis, ener_src)
-import Data.Drasil.Concepts.Math (ode, de, unit_, equation)
-import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Software.Products (sciCompS, compPro)
-
-import Data.Drasil.Quantities.Physics (time, energy)
-import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
-import Data.Drasil.Quantities.Thermodynamics (temp, heat_cap_spec,
-  latent_heat)
-import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
 
 import Drasil.SWHS.Assumptions (swhsRefDB, newA13, newAssumptions)
 import Drasil.SWHS.Changes (likeChg1, likeChg2, likeChg3, likeChg4,
@@ -50,8 +53,8 @@ import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
 import Drasil.SWHS.DataDefs (swhsDataDefs, dd1HtFluxC, dd2HtFluxP, dataDefns)
 import Drasil.SWHS.DataDesc (swhsInputMod)
 import Drasil.SWHS.GenDefs (swhsGDs, generalDefinitions)
-import Drasil.SWHS.IMods (heatEInWtr_new, eBalanceOnWtr_new,
-  heatEInPCM_new, eBalanceOnPCM_new, swhsIMods')
+import Drasil.SWHS.IMods (eBalanceOnWtr_new, eBalanceOnPCM_new, 
+  heatEInWtr_new, heatEInPCM_new, swhsIMods')
 import Drasil.SWHS.Requirements (req1, req2, reqEqn1, reqEqn2,
   req3, req4, req5, req6, req7, req8, req9, req10, req11, nonFuncReqs)
 import Drasil.SWHS.TMods (t1ConsThermE_new, t2SensHtE_new, 
@@ -64,13 +67,6 @@ import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
   temp_melt_P, pcm_vol, diam, tank_length, swhsConstrained, swhsOutputs, 
   swhsInputs, swhsSymbols, swhsSymbolsAll)
 
-import Data.Drasil.Utils (enumSimple, itemRefToSent, makeListRef,
-  makeTMatrix, eqUnR', noRefs)
-
-import Data.Drasil.SentenceStructures (acroIM, showingCxnBw,
-  foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, ofThe,
-  ofThe', sAnd, sOf, foldlList, SepType(Comma), FoldType(List))
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 -------------------------------------------------------------------------------
 
 acronyms :: [CI]
@@ -150,7 +146,7 @@ mkSRS = RefSec (RefProg intro [
           , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
           , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-           [eBalanceOnWtr_new, eBalanceOnPCM_new, heatEInWtr_new, heatEInPCM_new ] ShowDerivation
+           [eBalanceOnWtr_new, eBalanceOnPCM_new, heatEInWtr_new, heatEInPCM_new] ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty dataConTail
            [dataConTable1, dataConTable3]
           , CorrSolnPpties propsDeriv
@@ -769,13 +765,11 @@ orgDocIntro = foldlSent [S "The", phrase organization, S "of this",
 
 orgDocEnd :: NamedIdea ni => ni -> CI -> Sentence
 orgDocEnd sp pro = foldlSent_ [S "The", plural inModel,
-  sParen (midRef SRS.inModelLabel),
-  S "to be solved are referred to as", acroIM 1,
-  S "to" +:+. acroIM 4, S "The", plural inModel,
-  S "provide the", phrase ode, sParen (short ode :+: S "s")
-  `sAnd` S "algebraic", plural equation, S "that",
-  phrase model, S "the" +:+. phrase sp,
-  short pro, S "solves these", short ode :+: S "s"]
+  sParen (midRef SRS.inModelLabel), S "to be solved are referred to as" +:+. 
+  (foldlList Comma List $ map makeRef swhsIMods'), S "The", plural inModel,
+  S "provide the", phrase ode, sParen (short ode :+: S "s") `sAnd` 
+  S "algebraic", plural equation, S "that", phrase model, S "the" +:+. 
+  phrase sp, short pro, S "solves these", short ode :+: S "s"]
 
 -- This paragraph is mostly general (besides program name and number of IMs),
 -- but there are some differences between the examples that I'm not sure how to
@@ -1022,13 +1016,13 @@ dataDefIntroEnd = foldlSent [S "The dimension of each",
 iModSubpar :: NamedChunk -> UncertQ -> UncertQ -> UncertQ -> ConceptChunk
   -> [Contents]
 iModSubpar sol temw tempcm epcm pc = [foldlSP [S "The goals", foldlList Comma List $ map S
-  ["GS1", "GS2", "GS3", "GS4"], S "are solved by" +:+. foldlList Comma List -- hardcoded GSs because GSs are not referable
-  [acroIM 1, acroIM 2, acroIM 3, acroIM 4], S "The", plural sol, S "for", 
-  acroIM 1 `sAnd` acroIM 2, S "are coupled since the", phrase sol, S "for", 
-  ch temw `sAnd` ch tempcm +:+. S "depend on one another", acroIM 3, S "can be solved once", 
-  acroIM 1, S "has been solved. The", phrase sol `sOf` acroIM 2 `sAnd` acroIM 4, 
-  S "are also coupled, since the", phrase tempcm `sAnd` phrase epcm, 
-  S "depend on the", phrase pc]]
+  ["GS1", "GS2", "GS3", "GS4"], S "are solved by" +:+. foldlList Comma List -- hardcoded GSs because Goals are not implemented yet
+  [makeRef eBalanceOnWtr_new, makeRef eBalanceOnPCM_new, makeRef heatEInWtr_new, makeRef heatEInPCM_new], 
+  S "The", plural sol, S "for", makeRef eBalanceOnWtr_new `sAnd` makeRef eBalanceOnPCM_new, 
+  S "are coupled since the", phrase sol, S "for", ch temw `sAnd` ch tempcm +:+. S "depend on one another", 
+  makeRef heatEInWtr_new, S "can be solved once", makeRef eBalanceOnWtr_new, S "has been solved. The", 
+  phrase sol `sOf` makeRef eBalanceOnPCM_new `sAnd` makeRef heatEInPCM_new, S "are also coupled, since the", 
+  phrase tempcm `sAnd` phrase epcm, S "depend on the", phrase pc]]
 
 iMod1Para :: UnitalChunk -> ConceptChunk -> [Contents]
 iMod1Para en wa = [foldlSPCol [S "Derivation of the",
@@ -1063,7 +1057,7 @@ iMod1Sent6 = [S "Setting",
 
 iMod1Sent7 :: [Sentence]
 iMod1Sent7 = [S "Finally, factoring out", (E $ 1 / sy tau_W) `sC` 
-  S "we are left with the governing", short ode, S "for", acroIM 1]
+  S "we are left with the governing", short ode, S "for", makeRef eBalanceOnWtr_new]
 
 iMod1Eqn1, iMod1Eqn2, iMod1Eqn3, iMod1Eqn4, iMod1Eqn5,
   iMod1Eqn6, iMod1Eqn7 :: Expr

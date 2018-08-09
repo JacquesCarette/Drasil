@@ -4,7 +4,7 @@ import Language.Drasil
 import Drasil.DocLang.GenBuilders (section')
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (accRoutSemantic, 
-  assumption, consideration, enviroVar, expConstant, expType, misOfModule, 
+  consideration, enviroVar, expConstant, expType, misOfModule, 
   module_, moduleHierarchy, notation, semantic, stateInvar, stateVar, syntax, use,
   templateModule)
 import qualified Data.Drasil.Concepts.Software as Doc (expAccProgram)
@@ -19,7 +19,7 @@ import Data.Drasil.SentenceStructures (foldlSP, inThe, ofThe, sAnd)
 
 import Control.Lens ((^.))
 
-accRoutSemantics, assumptions, considerations, enviroVars, expAccPrograms, 
+accRoutSemantics, considerations, enviroVars, expAccPrograms, 
   expConstants, expTypes, module_, tempMod_, modHier, notation, semantics, stateInvars, 
   stateVars, syntax, uses :: [Contents] -> [Section] -> Section
 
@@ -40,7 +40,6 @@ expAccPrograms   cs ss = section' (titleize' Doc.expAccProgram)   cs ss "ExpAccP
 enviroVars       cs ss = section' (titleize' Doc.enviroVar)       cs ss "EnviroVars"
 stateVars        cs ss = section' (titleize' Doc.stateVar)        cs ss "StateVars"
 stateInvars      cs ss = section' (titleize' Doc.stateInvar)      cs ss "StateInvars"
-assumptions      cs ss = section' (titleize' Doc.assumption)      cs ss "Assumptions" --FIXME: Assumptions already defined for SRS?
 accRoutSemantics cs ss = section' (titleize' Doc.accRoutSemantic) cs ss "AccRoutSemantics"
 
 misOfModule :: [Contents] -> [Section] -> String -> Label -> Section
@@ -112,7 +111,7 @@ inputModIntro = foldlSP [S "The secrets of this module are the data structure fo
   S "parameters, how the values are input and how the values are verified. The load and",
   S "verify secrets are isolated to their own access programs. This module follows the",
   S "singleton pattern; that is, there is only one instance of this module"]
-  
+
 -----------------------
 -- HELPFUL FUNCTIONS --
 -----------------------

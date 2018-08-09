@@ -19,13 +19,13 @@ import Drasil.Sections.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
 import Drasil.Sections.TableOfSymbols (table)
 import Drasil.Sections.TableOfUnits (table_of_units)
 
-import qualified Drasil.DocLang.GenBuilders as GB (reference, tOfSymb, intro)
+import qualified Drasil.DocLang.GenBuilders as GB (reference, tOfSymb, intro, assumpt)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn, genSysDes, 
   inModel, likeChg, unlikeChg, probDesc, solCharSpec, stakeholder,
   thModel, userChar, genDefnLabel, propCorSol, offShelfSol)
 import qualified Drasil.DocLang.MIS as MIS (notation, introMIS, notationIntroContd,
   notTblIntro, notationIntroMIS, modHierarchyPointer, modHier, syntax,
-  uses, tempMod_, misOfModule, accRoutSemantics, assumptions, considerations, 
+  uses, tempMod_, misOfModule, accRoutSemantics, considerations, 
   enviroVars, expAccPrograms, expConstants, expTypes, module_, modHier, notation, 
   semantics, stateInvars, stateVars, syntax, uses, assignSttmts)
 
@@ -51,7 +51,7 @@ import Data.Drasil.Concepts.Documentation (refmat)
 
 import Data.Function (on)
 import Data.List (nub, sortBy)
-
+import Data.Maybe (maybeToList)
 
 type System = Sentence
 type DocKind = Sentence
@@ -597,16 +597,12 @@ mkModHierarchSec (ModHierarchProg mgLink) = MIS.modHier [MIS.modHierarchyPointer
 {--}
 
 mkMISModSec :: MISModSec -> Section
-mkMISModSec (MISModProg modName x mms lbl True)  = MIS.misOfModule (getIntroMaybe x) 
+mkMISModSec (MISModProg modName x mms lbl True)  = MIS.misOfModule (maybeToList x) 
   ((MIS.tempMod_ [mkParagraph $ S (modName ++ "ADT")] []) :
    (MIS.expTypes [mkParagraph $ S (modName ++ "T = ?")] []) :
    map subsections mms) (modName ++ "ADT") lbl
-mkMISModSec (MISModProg modName x mms lbl False) = MIS.misOfModule (getIntroMaybe x) 
+mkMISModSec (MISModProg modName x mms lbl False) = MIS.misOfModule (maybeToList x) 
   ((MIS.module_ [mkParagraph $ S modName] []) : map subsections mms) modName lbl
-
-getIntroMaybe :: Maybe Contents -> [Contents]
-getIntroMaybe Nothing      = []
-getIntroMaybe (Just intro) = intro : []
 
 subsections :: MISModSub -> Section
 subsections (MISUses [])       = MIS.uses    none  []
@@ -627,12 +623,12 @@ semanticSubs :: MISSemanticsSub -> Section
 semanticSubs (MISStateVars [])       = MIS.stateVars        none []
 semanticSubs (MISAccessRoutines [])  = MIS.accRoutSemantics none []
 semanticSubs (MISEnvVars [])         = MIS.enviroVars       none []
-semanticSubs (MISAssumptions [])     = MIS.assumptions      none []
+semanticSubs (MISAssumptions [])     = GB.assumpt           none []
 semanticSubs (MISStateInvariant [])  = MIS.stateInvars      none []
 semanticSubs (MISStateVars cs)       = MIS.stateVars        cs []
 semanticSubs (MISAccessRoutines cs)  = MIS.accRoutSemantics cs []
 semanticSubs (MISEnvVars cs)         = MIS.enviroVars       cs []
-semanticSubs (MISAssumptions cs)     = MIS.assumptions      cs []
+semanticSubs (MISAssumptions cs)     = GB.assumpt           cs []
 semanticSubs (MISStateInvariant cs)  = MIS.stateInvars      cs []
 
 

@@ -8,8 +8,7 @@ import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
 import qualified Drasil.DocLang.SRS as SRS (dataDefnLabel, 
   valsOfAuxConsLabel, referenceLabel, indPRCaseLabel,
   datConLabel)
-import qualified Drasil.DocLang.GenBuilders as GB (intro)
-import qualified Drasil.DocLang.MIS as MIS (introMIS, hwModIntro, inputModIntro)
+import qualified Drasil.DocLang.MIS as MIS (hwModIntro, inputModIntro)
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), 

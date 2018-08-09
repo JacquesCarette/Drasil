@@ -51,8 +51,8 @@ import Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
   sspOutputs, sspSymbols)
 
-import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
-  assumptLabel, physSyst)
+import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, physSyst)
+import qualified Drasil.DocLang.GenBuilders as GB (assumptLabel)
 
 --type declarations for sections--
 req, aux_cons :: Section
@@ -259,7 +259,7 @@ sysCtxUsrResp = [S "Provide the input data related to the soil layer(s) and wate
   S "table (if applicable), ensuring no errors in the data entry",
   S "Ensure that consistent units are used for input variables",
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+ sParen ( 
-  midRef SRS.assumptLabel) +:+ S "are appropriate for any particular" +:+
+  midRef GB.assumptLabel) +:+ S "are appropriate for any particular" +:+
   phrase problem +:+ S "input to the" +:+ phrase software]
   
 sysCtxSysResp :: [Sentence]

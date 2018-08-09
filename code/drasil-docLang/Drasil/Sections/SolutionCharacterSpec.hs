@@ -33,6 +33,7 @@ import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTb
   listofTablesToRefs)
 
 import qualified Drasil.DocLang.SRS as SRS
+import qualified Drasil.DocLang.GenBuilders as GB (assumpt)
 
 data SecItem where 
   Cont      :: [Contents] -> SecItem
@@ -279,7 +280,7 @@ goalStatementSect (SectionModel _ xs) = SRS.goalStmt
 -----------------------------------------------------------
 
 assumptionSect :: SubSec -> Section
-assumptionSect (SectionModel _ xs) = SRS.assumpt
+assumptionSect (SectionModel _ xs) = GB.assumpt
   (assumpIntro:(pullContents xs)) (pullSections xs)
 
 

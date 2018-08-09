@@ -1232,35 +1232,35 @@ Thermal-Energy-Only: The only form of energy that is relevant for this problem i
 <ul class="hide-list-style">
 <li>
 <div id="A:Heat-Transfer-Coeffs-Constant">
-Heat-Transfer-Coeffs-Constant: All heat transfer coefficients are constant over time [GD1].
+Heat-Transfer-Coeffs-Constant: All heat transfer coefficients are constant over time [<a href=#GD:nwtnCooling>GD: nwtnCooling</a>].
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Constant-Water-Temp-Across-Tank">
-Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [GD2, <a href=#DD:ht.flux.P>DD: ht_flux_P</a>].
+Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [<a href=#GD:rocTempSimp>GD: rocTempSimp</a>, <a href=#DD:ht.flux.P>DD: ht_flux_P</a>].
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Temp-PCM-Constant-Across-Volume">
-Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM [GD2, <a href=#DD:ht.flux.P>DD: ht_flux_P</a>].
+Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM [<a href=#GD:rocTempSimp>GD: rocTempSimp</a>, <a href=#DD:ht.flux.P>DD: ht_flux_P</a>].
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Density-Water-PCM-Constant-over-Volume">
-Density-Water-PCM-Constant-over-Volume: The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume [GD2].
+Density-Water-PCM-Constant-over-Volume: The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume [<a href=#GD:rocTempSimp>GD: rocTempSimp</a>].
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Specific-Heat-Energy-Constant-over-Volume">
-Specific-Heat-Energy-Constant-over-Volume: The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume [GD2].
+Specific-Heat-Energy-Constant-over-Volume: The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume [<a href=#GD:rocTempSimp>GD: rocTempSimp</a>].
 </div>
 </li>
 </ul>
@@ -1912,7 +1912,7 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 </div>
 </div>
 <p class="paragraph">
-Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in GD2. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by Assumptions (<a href=#A:Constant-Water-Temp-Across-Tank>A: Constant-Water-Temp-Across-Tank</a>), (<a href=#A:Temp-PCM-Constant-Across-Volume>A: Temp-PCM-Constant-Across-Volume</a>), (<a href=#A:Density-Water-PCM-Constant-over-Volume>A: Density-Water-PCM-Constant-over-Volume</a>), and (<a href=#A:Specific-Heat-Energy-Constant-over-Volume>A: Specific-Heat-Energy-Constant-over-Volume</a>), we have:
+Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by Assumptions (<a href=#A:Constant-Water-Temp-Across-Tank>A: Constant-Water-Temp-Across-Tank</a>), (<a href=#A:Temp-PCM-Constant-Across-Volume>A: Temp-PCM-Constant-Across-Volume</a>), (<a href=#A:Density-Water-PCM-Constant-over-Volume>A: Density-Water-PCM-Constant-over-Volume</a>), and (<a href=#A:Specific-Heat-Energy-Constant-over-Volume>A: Specific-Heat-Energy-Constant-over-Volume</a>), we have:
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -2485,7 +2485,7 @@ FIXME: This needs to be filled in
 Derivation of the energy balance on water:
 </p>
 <p class="paragraph">
-To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water <em>V<sub>W</sub></em>, which has mass of water <em>m<sub>W</sub></em> and specific heat capacity of water, <em>C<sub>W</sub></em>. <em>q<sub>C</sub></em> represents the heat transfer into the water from the heating coil and <em>q<sub>P</sub></em> represents the heat transfer into the PCM from water, over heating coil surface area and phase change material surface area of <em>A<sub>C</sub></em> and <em>A<sub>P</sub></em>, respectively. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#A:Perfect-Insulation-Tank>A: Perfect-Insulation-Tank</a>). Assuming no volumetric heat generation per unit volume (<a href=#A:No-Internal-Heat-Generation-By-Water-PCM>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>. Therefore, the equation for GD2 can be written as:
+To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water <em>V<sub>W</sub></em>, which has mass of water <em>m<sub>W</sub></em> and specific heat capacity of water, <em>C<sub>W</sub></em>. <em>q<sub>C</sub></em> represents the heat transfer into the water from the heating coil and <em>q<sub>P</sub></em> represents the heat transfer into the PCM from water, over heating coil surface area and phase change material surface area of <em>A<sub>C</sub></em> and <em>A<sub>P</sub></em>, respectively. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#A:Perfect-Insulation-Tank>A: Perfect-Insulation-Tank</a>). Assuming no volumetric heat generation per unit volume (<a href=#A:No-Internal-Heat-Generation-By-Water-PCM>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -2866,7 +2866,7 @@ FIXME: This needs to be filled in
 Detailed derivation of the energy balance on the PCM during  sensible heating phase:
 </p>
 <p class="paragraph">
-To find the rate of change of <em>T<sub>P</sub></em>, we look at the energy balance on the PCM. The volume being considered is the volume of PCM, <em>V<sub>P</sub></em>. The derivation that follows is initially for the solid PCM. The mass of phase change material is <em>m<sub>P</sub></em> and the specific heat capacity of PCM as a solid is <em>C<sub>P</sub><sup>S</sup></em>. The heat flux into the PCM from water is <em>q<sub>P</sub></em> over phase change material surface area <em>A<sub>P</sub></em>. There is no heat flux output. Assuming no volumetric heat generation per unit volume (<a href=#A:No-Internal-Heat-Generation-By-Water-PCM>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em> , the equation for GD2 can be written as:
+To find the rate of change of <em>T<sub>P</sub></em>, we look at the energy balance on the PCM. The volume being considered is the volume of PCM, <em>V<sub>P</sub></em>. The derivation that follows is initially for the solid PCM. The mass of phase change material is <em>m<sub>P</sub></em> and the specific heat capacity of PCM as a solid is <em>C<sub>P</sub><sup>S</sup></em>. The heat flux into the PCM from water is <em>q<sub>P</sub></em> over phase change material surface area <em>A<sub>P</sub></em>. There is no heat flux output. Assuming no volumetric heat generation per unit volume (<a href=#A:No-Internal-Heat-Generation-By-Water-PCM>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em> , the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
 </p>
 <div id="Eqn:empty">
 <div class="equation">

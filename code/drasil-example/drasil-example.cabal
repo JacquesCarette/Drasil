@@ -106,18 +106,18 @@ executable swhs
   main-is: Drasil/SWHS/Main.hs
   other-modules:
       Drasil.SWHS.Assumptions
-    , Drasil.SWHS.Labels
     , Drasil.SWHS.Body
+    , Drasil.SWHS.Changes
     , Drasil.SWHS.Concepts
     , Drasil.SWHS.DataDefs
     , Drasil.SWHS.DataDesc
     , Drasil.SWHS.GenDefs
     , Drasil.SWHS.Generate
-    , Drasil.SWHS.Changes
+    , Drasil.SWHS.IMods
+    , Drasil.SWHS.Labels
     , Drasil.SWHS.References
     , Drasil.SWHS.Requirements
     , Drasil.SWHS.TMods
-    , Drasil.SWHS.IMods
     , Drasil.SWHS.Unitals
   Build-Depends:
     base >= 4.7,
@@ -140,6 +140,7 @@ executable ssp
   main-is: Drasil/SSP/Main.hs
   other-modules:
       Drasil.SSP.Assumptions
+    , Drasil.SSP.BasicExprs
     , Drasil.SSP.Body
     , Drasil.SSP.Changes
     , Drasil.SSP.DataDefs
@@ -148,11 +149,11 @@ executable ssp
     , Drasil.SSP.GenDefs
     , Drasil.SSP.Goals
     , Drasil.SSP.IMods
+    , Drasil.SSP.Labels
     , Drasil.SSP.References
     , Drasil.SSP.Requirements
     , Drasil.SSP.TMods
     , Drasil.SSP.Unitals
-    , Drasil.SSP.BasicExprs
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,

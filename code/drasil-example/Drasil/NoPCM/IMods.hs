@@ -2,21 +2,23 @@ module Drasil.NoPCM.IMods (eBalanceOnWtr, eBalanceOnWtr_new) where
 
 import Language.Drasil
 
-import Drasil.SWHS.Concepts (water, tank)
-import Drasil.SWHS.Unitals (temp_W, temp_C, tau_W, w_mass, htCap_W, coil_HTC, coil_SA, temp_init
-  , time_final, w_vol, ht_flux_C, vol_ht_gen)
 import Data.Drasil.Utils (unwrap, weave)
-import Data.Drasil.SentenceStructures (foldlSent, isThe,
-  sAnd, ofThe, acroGD, foldlSentCol, sOf)
+import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, ofThe, 
+  foldlSentCol, sOf)
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Concepts.Math (equation, rOfChng)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
 import Data.Drasil.Concepts.Thermodynamics (melting, boil_pt, heat_cap_spec, 
   heat_trans)
-
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass)
-import Drasil.SWHS.DataDefs(dd1HtFluxC)
+
 import Drasil.SWHS.Assumptions
+import Drasil.SWHS.Concepts (water, tank)
+import Drasil.SWHS.DataDefs(dd1HtFluxC)
+import Drasil.SWHS.Labels (genDef2Label)
+import Drasil.SWHS.Unitals (temp_W, temp_C, tau_W, w_mass, htCap_W, coil_HTC, 
+  coil_SA, temp_init, time_final, w_vol, ht_flux_C, vol_ht_gen)
+
 ---------
 -- IM1 --
 ---------
@@ -81,7 +83,7 @@ s4_2_3_desc1_nopcm roc tw en wt vo wvo ms wms hcs hw ht hfc cs tk ass11 ass12 vh
     (sParen (makeRef ass11)), S ". Assuming no volumetric", 
     S "heat generation per unit", phrase vo,
     (sParen (makeRef ass12)) `sC` (E $ sy vhg $= 0), S ". Therefore, the equation for",
-     acroGD 2, S "can be written as"]
+     makeRef genDef2Label, S "can be written as"]
 
 s4_2_3_desc2_nopcm :: QDefinition -> [Sentence]
 s4_2_3_desc2_nopcm dd1 =

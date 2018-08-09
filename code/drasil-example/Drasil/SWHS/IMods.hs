@@ -4,24 +4,25 @@ module Drasil.SWHS.IMods (swhsIMods, swhsIMods',
 
 import Language.Drasil
 
+import Data.Drasil.Utils (unwrap, weave)
+import Data.Drasil.SentenceStructures (acroT, foldlSent, isThe,
+  sAnd, ofThe, foldlSent, isThe, foldlSentCol, sOf)
+import Data.Drasil.Quantities.Physics (time, energy)
+import Data.Drasil.Concepts.Math (equation, change, rOfChng, surface, area)
+import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, mass, vol)
+import Data.Drasil.Concepts.Thermodynamics (boiling, heat, temp, melting,
+  latent_heat, sens_heat, heat_cap_spec, thermal_energy, boil_pt, heat_trans,
+  phase_change, ht_flux)
+
+import Drasil.SWHS.Assumptions (newA12, newA14, newA15, newA16, newA17, newA18, newA19)
+import Drasil.SWHS.Concepts (phsChgMtrl, water, coil, tank)
+import Drasil.SWHS.DataDefs(dd1HtFluxC, dd2HtFluxP, dd3HtFusion, ddRef, dd4MeltFrac)
+import Drasil.SWHS.Labels (genDef2Label)
 import Drasil.SWHS.Unitals (t_init_melt, latentE_P, pcm_E, pcm_initMltE,
   temp_melt_P, temp_PCM, htCap_L_P, pcm_mass, htFusion, temp_init, htCap_S_P,
   melt_frac, temp_W, w_mass, w_E, htCap_W, tau_S_P, pcm_SA, tau_L_P, pcm_HTC,
   coil_SA, coil_HTC, eta, tau_W, temp_C, time_final, w_vol, ht_flux_C, ht_flux_P,
   vol_ht_gen, pcm_vol)
-import Drasil.SWHS.DataDefs(dd1HtFluxC, dd2HtFluxP, dd3HtFusion, ddRef, dd4MeltFrac)
-import Data.Drasil.Utils (unwrap, weave)
-import Data.Drasil.SentenceStructures (acroT, foldlSent, isThe,
-  sAnd, ofThe, foldlSent, isThe, acroGD, foldlSentCol, sOf)
-import Data.Drasil.Quantities.Physics (time, energy)
-import Data.Drasil.Concepts.Math (equation, change, rOfChng, surface, area)
-import Drasil.SWHS.Concepts (phsChgMtrl, water, coil, tank)
-import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, mass, vol)
-import Data.Drasil.Concepts.Thermodynamics (boiling, heat, temp, melting,
-  latent_heat, sens_heat, heat_cap_spec, thermal_energy, boil_pt, heat_trans,
-  phase_change, ht_flux)
-import Drasil.SWHS.Assumptions (newA12, newA14, newA15, newA16, newA17, newA18, newA19)
-
 
 swhsIMods :: [RelationConcept]
 swhsIMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
@@ -107,7 +108,7 @@ s4_2_3_desc1_swhs_im1 roc tw en wt vo wvo ms wms hcs hw ht cl hfc cs ps tk hfp s
     sParen (makeRef newA15) :+: S ". Assuming no volumetric", 
     S "heat generation per unit", phrase vo +:+.
     (sParen (makeRef newA16) `sC` (E $ sy vhg $= 0)), S "Therefore, the equation for",
-     acroGD 2, S "can be written as"]
+     makeRef genDef2Label, S "can be written as"]
 
 s4_2_3_desc2_swhs_im1 :: QDefinition -> QDefinition -> [Sentence]
 s4_2_3_desc2_swhs_im1 dd1 dd2 =
@@ -278,7 +279,7 @@ s4_2_3_desc1_swhs_im2 roc tempP en wt vo pcmvo pm hcs hsp hf hfp pc ps ht ass16 
    S "material surface area" +:+. (E $ sy ps), S "There is no", phrase hf +:+. S "output",
    S "Assuming no volumetric", phrase ht, S "generation per unit", phrase vo,
    (sParen (makeRef ass16)) `sC` (E $ sy vhg $= 0), S ", the equation for",
-     acroGD 2, S "can be written as"]
+   makeRef genDef2Label, S "can be written as"]
 
 s4_2_3_desc2_swhs_im2 :: QDefinition -> UnitalChunk -> [Sentence]
 s4_2_3_desc2_swhs_im2 dd2 hfp =

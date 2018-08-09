@@ -5,6 +5,29 @@ import Control.Lens ((^.))
 import Drasil.DocLang (refA)
 
 import Language.Drasil
+
+import Data.Drasil.SentenceStructures (foldlSent, isThe)
+import Data.Drasil.Utils (eqUnR', weave)
+
+-- Needed for derivations
+import Data.Drasil.Concepts.Documentation (analysis,
+  solution, definition, value, assumption, physicalProperty,
+  problem, method_)
+import Data.Drasil.SentenceStructures (andThe, sIs, sIn, getTDS, getTandS, 
+  ofThe, ofThe', sAnd, sOf, acroIM, acroT, eqN, foldlSP, foldlSent_, foldlSentCol)
+import Data.Drasil.Concepts.Math (equation, surface)
+import Data.Drasil.Concepts.PhysicalProperties (mass)
+import Data.Drasil.Concepts.Physics (displacement, force)
+
+import Drasil.SSP.Assumptions (newA2, sspRefDB)
+import Drasil.SSP.BasicExprs (eqlExpr, momExpr)
+import Drasil.SSP.DataDefs (fixme1,fixme2, ddRef, sliceWght, lengthLb, lengthLs, 
+  seismicLoadF, surfLoads, intrsliceF, resShearWO, mobShearWO, displcmntRxnF, 
+  netFDsplcmntEqbm, soilStiffness)
+import Drasil.SSP.Defs (slope, slice, slip, intrslce, ssa, morPrice, crtSlpSrf, 
+  factorOfSafety)
+import Drasil.SSP.Labels (genDef1Label, genDef2Label, genDef4Label, genDef5Label, 
+  genDef6Label, genDef7Label, genDef9Label)
 import Drasil.SSP.Unitals (inxi, shrStress, baseLngth, sum1toN, mobStress,
   fs, fs_min, fsloc, shrDispl, shrStiffBase, genForce, constant_a, fricAngle,
   normStress, baseWthX, cohesion, poissnsRatio, intNormForce, nrmStiffBase,
@@ -15,26 +38,6 @@ import Drasil.SSP.Unitals (inxi, shrStress, baseLngth, sum1toN, mobStress,
   surfHydroForce, earthqkLoadFctr, slcWght, midpntHght, watrForce, critCoords,
   indxn, minFunction, surfLngth, shrStiffIntsl, watrForceDif, effStiffB,
   effStiffA, nrmStiffIntsl, indx1, normFunc, shearFunc, varblU, varblV)
-import Drasil.SSP.Defs (slope, slice, slip,
-  intrslce, ssa, morPrice, crtSlpSrf, factorOfSafety)
-import Data.Drasil.SentenceStructures (foldlSent, isThe)
-import Data.Drasil.Utils (eqUnR', weave)
-import Drasil.SSP.DataDefs (fixme1,fixme2, ddRef, sliceWght,
- lengthLb, lengthLs, seismicLoadF, surfLoads, intrsliceF, resShearWO,
- mobShearWO, displcmntRxnF, netFDsplcmntEqbm, soilStiffness)
-import Drasil.SSP.Assumptions (newA2, sspRefDB)
-
--- Needed for derivations
-import Data.Drasil.Concepts.Documentation (analysis,
-  solution, definition, value, assumption, physicalProperty,
-  problem, method_)
-import Data.Drasil.SentenceStructures (andThe, acroGD,
-  sIs, sIn, getTDS, getTandS, ofThe, ofThe', sAnd, sOf, acroIM, acroT,
-  eqN, foldlSP, foldlSent_, foldlSentCol)
-import Data.Drasil.Concepts.Math (equation, surface)
-import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Data.Drasil.Concepts.Physics (displacement, force)
-import Drasil.SSP.BasicExprs (eqlExpr, momExpr)
 
 --- Some labels
 l1, l2, l3, l4, l5, l6 :: Label
@@ -122,7 +125,7 @@ nrmShrF_rel = (sy normFunc) $= case_ [case1,case2,case3] $=
 nrmShrF_desc :: Sentence
 nrmShrF_desc = foldlSent [ch normToShear `isThe` S "magnitude ratio",
   S "between shear and normal forces at the interslice interfaces as the", 
-  S "assumption of the Morgenstern Price method in", acroGD 5,
+  S "assumption of the Morgenstern Price method in", makeRef genDef5Label,
   S "The inclination function", ch scalFunc,
   S "determines the relative magnitude ratio between the",
   S "different interslices, while", ch normToShear, S "determines the" +:+.
@@ -289,7 +292,7 @@ instModIntro1 = foldlSP [S "The", titleize morPrice,
   S "The", phrase problem, S "is statically indeterminate with only these 3",
   plural equation, S "and one constitutive", phrase equation,
   sParen $ S "the Mohr Coulomb shear strength of" +:+
-  acroT 3, S "so the", phrase assumption, S "of", acroGD 5,
+  acroT 3, S "so the", phrase assumption, S "of", makeRef genDef5Label,
   S "is used. Solving for", phrase force, S "equilibrium allows",
   plural definition, S "of all", plural force, S "in terms of the",
   plural physicalProperty, S "of", ddRef sliceWght, S "to",
@@ -350,9 +353,9 @@ nrmShr_deriv_ssp = (weave [nrmShrDerivation_new, map E nrmShr_deriv_eqns_ssp]) +
 
 nrmShr_deriv_sentences_ssp_s1 :: [Sentence]
 nrmShr_deriv_sentences_ssp_s1 = [S "Taking the last static", phrase equation,
-  S "of", acroT 2, S "with the", S "moment equilibrium" `sOf` acroGD 6,
+  S "of", acroT 2, S "with the", S "moment equilibrium" `sOf` makeRef genDef6Label,
   S "about", (S "midpoint" `ofThe` S "base") `sAnd` S "the",
-  phrase assumption, S "of", acroGD 5, S "results in", eqN 13]
+  phrase assumption, S "of", makeRef genDef5Label, S "results in", eqN 13]
 
 nrmShr_deriv_sentences_ssp_s2 :: [Sentence]
 nrmShr_deriv_sentences_ssp_s2 = [S "The", phrase equation, S "in terms of", ch normToShear,
@@ -400,19 +403,19 @@ intrSlc_deriv_ssp :: Derivation
 intrSlc_deriv_ssp = weave [intrSlcDerivation_new, map E intrSlc_deriv_eqns_ssp] ++ fUnknowns_new
 
 intrSlc_deriv_sentences_ssp_s1 :: [Sentence]
-intrSlc_deriv_sentences_ssp_s1 = [S "Taking the", S "normal force equilibrium" `sOf` acroGD 1,
+intrSlc_deriv_sentences_ssp_s1 = [S "Taking the", S "normal force equilibrium" `sOf` makeRef genDef1Label,
   S "with the", S "effective stress", phrase definition, S "from", acroT 4,
   -- NOTE: "Taking this with that and the assumption of _
   -- to get equation #" pattern
   S "that", E (inxi totNrmForce $= inxi nrmFSubWat - inxi baseHydroForce) `sC`
-  S "and the assumption of", acroGD 5, S "the equilibrium", phrase equation, 
+  S "and the assumption of", makeRef genDef5Label, S "the equilibrium", phrase equation, 
   S "can be rewritten as", eqN 16]
 
 intrSlc_deriv_sentences_ssp_s2 :: [Sentence]
 intrSlc_deriv_sentences_ssp_s2 = [S "Taking the", S "base shear force equilibrium" `sOf`
-  acroGD 2, S "with the", phrase definition,
-  S "of", phrase mobShrI, S "from", acroGD 4 `sAnd`
-  S "the assumption of", acroGD 5 `sC`
+  makeRef genDef2Label, S "with the", phrase definition,
+  S "of", phrase mobShrI, S "from", makeRef genDef4Label `sAnd`
+  S "the assumption of", makeRef genDef5Label `sC`
   S "the equilibrium", phrase equation,
   S "can be rewritten as", eqN 17]
 
@@ -480,7 +483,7 @@ rigDis_deriv_sentences_ssp_s1 :: [Sentence]
 rigDis_deriv_sentences_ssp_s1 = [S "Using the net force-displacement equilibrium" +:+
   phrase equation +:+ S "of a slice from" +:+ ddRef netFDsplcmntEqbm +:+ S "with the" +:+ plural definition
   +:+ S "of the stiffness matrices" +:+ S "from" +:+ ddRef displcmntRxnF +:+ S "and the force" +:+
-  plural definition +:+ S "from" +:+ acroGD 7 +:+ S "a broken down force displacement" +:+
+  plural definition +:+ S "from" +:+ makeRef genDef7Label +:+ S "a broken down force displacement" +:+
   S "equilibrium" +:+ phrase equation +:+. S "can be derived" +:+ eqN 22 +:+
   S "gives the broken down" +:+ phrase equation +:+ S "in the" +:+ ch xi +:+
   S "direction" `sC` S "and" +:+ eqN 23 +:+ S "gives the broken down" +:+
@@ -521,7 +524,7 @@ rigFoS_deriv_sentences_ssp_s1 = [S "RFEM analysis can also be used to calculate 
   S "are solved from the system of" +:+ plural equation +:+ S "in" +:+.
   acroIM 4 +:+ S "The" +:+ phrase definition +:+ S "of" +:+ ch rotatedDispl +:+
   S "as the" +:+ S "rotation of the displacement vector" +:+ ch genDisplace +:+
-  S "is seen in" +:+. acroGD 9 +:+ S "This is used to find the" +:+
+  S "is seen in" +:+. makeRef genDef9Label +:+ S "This is used to find the" +:+
   plural displacement +:+ S "of the slice parallel to" +:+ S "the base of the slice" 
    +:+ ch shrDispl `sIn` eqN 24 +:+ S "and normal to" +:+ 
   S "the base of the slice" +:+ ch nrmDispl +:+ S "in" +:+. eqN 25]
@@ -626,9 +629,9 @@ fctSftyDerivation = [foldlSP [S "Using", eqN 21, S "from", acroIM 3 `sC`
 nrmShrDerivation = [
 
   foldlSP [S "Taking the last static", phrase equation,
-  S "of", acroT 2, S "with the", S "moment equilibrium" `sOf` acroGD 6,
+  S "of", acroT 2, S "with the", S "moment equilibrium" `sOf` makeRef genDef6Label,
   S "about", (S "midpoint" `ofThe` S "base") `sAnd` S "the",
-  phrase assumption, S "of", acroGD 5, S "results in", eqN 13],
+  phrase assumption, S "of", makeRef genDef5Label, S "results in", eqN 13],
   
   eqUnR' $ 0 $=
   momExpr (\ x y -> x - (sy normToShear * (inxi baseWthX / 2) * 
@@ -666,12 +669,12 @@ nrmShrDerivation = [
 
 intrSlcDerivation = [
 
-  foldlSP [S "Taking the", S "normal force equilibrium" `sOf` acroGD 1,
+  foldlSP [S "Taking the", S "normal force equilibrium" `sOf` makeRef genDef1Label,
   S "with the", S "effective stress", phrase definition, S "from", acroT 4,
   -- NOTE: "Taking this with that and the assumption of _
   -- to get equation #" pattern
   S "that", E (inxi totNrmForce $= inxi nrmFSubWat - inxi baseHydroForce) `sC`
-  S "and the assumption of", acroGD 5, S "the equilibrium", phrase equation, 
+  S "and the assumption of", makeRef genDef5Label, S "the equilibrium", phrase equation, 
   S "can be rewritten as", eqN 16],
   
   eqUnR' $
@@ -681,9 +684,9 @@ intrSlcDerivation = [
   - (inxi baseHydroForce),
   
   foldlSP [S "Taking the", S "base shear force equilibrium" `sOf`
-  acroGD 2, S "with the", phrase definition,
-  S "of", phrase mobShrI, S "from", acroGD 4 `sAnd`
-  S "the assumption of", acroGD 5 `sC`
+  makeRef genDef2Label, S "with the", phrase definition,
+  S "of", phrase mobShrI, S "from", makeRef genDef4Label `sAnd`
+  S "the assumption of", makeRef genDef5Label `sC`
   S "the equilibrium", phrase equation,
   S "can be rewritten as", eqN 17],
   -- NOTE: "Taking this with that and the assumption of _
@@ -741,7 +744,7 @@ rigDisDerivation = [
   foldlSP [S "Using the net force-displacement equilibrium",
   phrase equation, S "of a slice from", ddRef resShearWO, S "with", plural definition
   `ofThe` S "stiffness matrices", S "from", ddRef intrsliceF, S "and the force", 
-  plural definition, S "from", acroGD 7 , S "a broken down force displacement",
+  plural definition, S "from", makeRef genDef7Label , S "a broken down force displacement",
   S "equilibrium", phrase equation +:+. S "can be derived", eqN 22,
   S "gives the broken down", phrase equation, S "in the", ch xi,
   S "direction" `sC` S "and", eqN 23, S "gives the broken down",
@@ -773,7 +776,7 @@ rigFoSDerivation = [
   S "are solved from the system of", plural equation, S "in" +:+.
   acroIM 4, S "The", phrase definition, S "of", ch rotatedDispl,
   S "as", S "rotation" `ofThe` S "displacement vector", ch genDisplace,
-  S "is seen in" +:+. acroGD 9, S "This is used to find",
+  S "is seen in" +:+. makeRef genDef9Label, S "This is used to find",
   plural displacement `ofThe` S "slice parallel to the", S "base" `ofThe`
   S "slice", ch shrDispl `sIn` eqN 24, S "and normal to the", 
   S "base" `ofThe` S "slice", ch nrmDispl, S "in", eqN 25],

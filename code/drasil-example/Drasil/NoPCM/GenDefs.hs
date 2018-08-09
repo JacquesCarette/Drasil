@@ -7,15 +7,17 @@ import Data.Drasil.Concepts.Math (unit_, rOfChng)
 import Data.Drasil.Concepts.Thermodynamics (temp)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heat_cap_spec)
-import Drasil.SWHS.Concepts (gauss_div)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
-import Drasil.SWHS.Unitals (in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, 
-                            ht_flux_out)
 import Data.Drasil.Utils (weave)
 import Data.Drasil.SentenceStructures (sAnd, foldlList, SepType(Comma), 
-  FoldType(List), ofThe, acroGD, foldlSentCol)
+  FoldType(List), ofThe, foldlSentCol)
 import Data.Drasil.Concepts.Documentation (assumption)
 import Data.Drasil.Quantities.Physics (time)
+
+import Drasil.SWHS.Concepts (gauss_div)
+import Drasil.SWHS.Labels (genDef2Label)
+import Drasil.SWHS.Unitals (in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, 
+  ht_flux_out)
 
 roc_temp_simp_deriv :: Derivation
 roc_temp_simp_deriv =
@@ -54,7 +56,7 @@ genDefDesc4 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   [Sentence] -> [Sentence]
 genDefDesc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
   ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
-  acroGD 2, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
+  makeRef genDef2Label, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
   titleize' assumption, (foldlList Comma List $ (map sParen)
   assumps) `sC` S "we have"]

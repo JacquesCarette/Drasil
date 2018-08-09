@@ -885,28 +885,28 @@ Thermal-Energy-Only: The only form of energy that is relevant for this problem i
 <ul class="hide-list-style">
 <li>
 <div id="A:Heat-Transfer-Coeffs-Constant">
-Heat-Transfer-Coeffs-Constant: All heat transfer coefficients are constant over time [GD1].
+Heat-Transfer-Coeffs-Constant: All heat transfer coefficients are constant over time [<a href=#GD:nwtnCooling>GD: nwtnCooling</a>].
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Constant-Water-Temp-Across-Tank">
-Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [GD2, <a href=#DD:ht.flux.P>DD: ht_flux_P</a>].
+Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [<a href=#GD:rocTempSimp>GD: rocTempSimp</a>, <a href=#DD:ht.flux.P>DD: ht_flux_P</a>].
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Density-Water-Constant-over-Volume">
-Density-Water-Constant-over-Volume: The density of water has no spatial variation; that is, it is constant over their entire volume [GD2, <a href=#LC:Temperature-Coil-Variable-Over-Day>LC: Temperature-Coil-Variable-Over-Day</a>].
+Density-Water-Constant-over-Volume: The density of water has no spatial variation; that is, it is constant over their entire volume [<a href=#GD:rocTempSimp>GD: rocTempSimp</a>, <a href=#LC:Temperature-Coil-Variable-Over-Day>LC: Temperature-Coil-Variable-Over-Day</a>].
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Specific-Heat-Energy-Constant-over-Volume">
-Specific-Heat-Energy-Constant-over-Volume: The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume [GD2].
+Specific-Heat-Energy-Constant-over-Volume: The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume [<a href=#GD:rocTempSimp>GD: rocTempSimp</a>].
 </div>
 </li>
 </ul>
@@ -1324,7 +1324,7 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 </div>
 </div>
 <p class="paragraph">
-Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in GD2. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by Assumptions (A3), (A4), and (A5), we have:
+Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by Assumptions (A3), (A4), and (A5), we have:
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -1609,7 +1609,7 @@ FIXME: This needs to be filled in
 Derivation of the energy balance on water:
 </p>
 <p class="paragraph">
-To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity of water, <em>C<sub>W</sub></em> . Heat transfer occurs in the water from the coil as <em>q<sub>C</sub></em>, over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#A:Charging-Tank-No-Temp-Discharge>A: Charging-Tank-No-Temp-Discharge</a>) . Assuming no volumetric heat generation per unit volume (<a href=#A:Same-Initial-Temp-Water-PCM>A: Same-Initial-Temp-Water-PCM</a>), <em>g = 0</em> . Therefore, the equation for GD2 can be written as:
+To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity of water, <em>C<sub>W</sub></em> . Heat transfer occurs in the water from the coil as <em>q<sub>C</sub></em>, over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#A:Charging-Tank-No-Temp-Discharge>A: Charging-Tank-No-Temp-Discharge</a>) . Assuming no volumetric heat generation per unit volume (<a href=#A:Same-Initial-Temp-Water-PCM>A: Same-Initial-Temp-Water-PCM</a>), <em>g = 0</em> . Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
 </p>
 <div id="Eqn:empty">
 <div class="equation">

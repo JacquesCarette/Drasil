@@ -4,37 +4,6 @@ import Language.Drasil
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 import Control.Lens ((^.))
-import Drasil.NoPCM.DataDesc (inputMod)
-import Drasil.NoPCM.Definitions (ht_trans, srs_swhs, acronyms)
-import Drasil.NoPCM.GenDefs (roc_temp_simp_deriv)
-
--- Since NoPCM is a simplified version of SWHS, the file is to be built off
--- of the SWHS libraries.  If the source for something cannot be found in
--- NoPCM, check SWHS.
-import Drasil.SWHS.Assumptions (newA1, newA2, newA3, newA7, newA8, newA9,
-  newA15, newA20, newA14, newA11, newA12)
-import Drasil.SWHS.Body (charReader1, charReader2, orgDocIntro,
-  genSystDesc, physSyst1, physSyst2, traceTrailing, dataContMid, traceIntro2,
-  traceFig1, traceFig2)
-import Drasil.SWHS.Concepts (progName, water, sWHT, tank, coil,
-  transient, tank_para)
-import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
-  w_mass, diam, coil_SA, temp_C, w_density, htCap_W, time_final,
-  in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, ht_flux_out, tau, htCap_L,
-  htTransCoeff, temp_env, diam, tank_length, ht_flux_C, coil_HTC,
-  deltaT, w_E, tank_length_min, tank_length_max,
-  w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
-  coil_HTC_max, time_final_max, sim_time, coil_SA_max, eta)
-import Drasil.SWHS.DataDefs(dd1HtFluxC, dd1HtFluxCDD)
-import Drasil.SWHS.TMods (t1ConsThermE_new)
-import Drasil.SWHS.GenDefs (nwtnCooling, rocTempSimp,
-  nwtnCooling_desc, rocTempSimp_desc, swhsGDs)
-import Drasil.SWHS.IMods (heatEInWtr_new)
-import Drasil.NoPCM.IMods (eBalanceOnWtr_new)
-import Drasil.NoPCM.Unitals (temp_init)
-import Drasil.SWHS.References (ref2, ref3, ref4)
-import Drasil.SWHS.Requirements (nonFuncReqs)
-import Drasil.SWHS.Changes (chgsStart, likeChg2, likeChg3, likeChg6)
 
 import Data.Drasil.People (thulasi)
 import Data.Drasil.Utils (enumSimple,
@@ -59,6 +28,7 @@ import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Software.Products (compPro)
+import Data.Drasil.Units.Thermodynamics (thermal_flux)
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, likeChg, unlikeChg, probDesc, goalStmt,
   inModelLabel)
@@ -74,8 +44,39 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   traceMGF, tsymb, valsOfAuxConstantsF)
  
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
-  isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP, acroIM, acroGD)
-import Data.Drasil.Units.Thermodynamics (thermal_flux)
+  isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP, acroIM)
+
+-- Since NoPCM is a simplified version of SWHS, the file is to be built off
+-- of the SWHS libraries.  If the source for something cannot be found in
+-- NoPCM, check SWHS.
+import Drasil.SWHS.Assumptions (newA1, newA2, newA3, newA7, newA8, newA9,
+  newA15, newA20, newA14, newA11, newA12)
+import Drasil.SWHS.Body (charReader1, charReader2, orgDocIntro,
+  genSystDesc, physSyst1, physSyst2, traceTrailing, dataContMid, traceIntro2,
+  traceFig1, traceFig2)
+import Drasil.SWHS.Changes (chgsStart, likeChg2, likeChg3, likeChg6)
+import Drasil.SWHS.Concepts (progName, water, sWHT, tank, coil,
+  transient, tank_para)
+import Drasil.SWHS.DataDefs(dd1HtFluxC, dd1HtFluxCDD)
+import Drasil.SWHS.IMods (heatEInWtr_new)
+import Drasil.SWHS.GenDefs (nwtnCooling, rocTempSimp, rocTempSimpGD,
+  nwtnCooling_desc, rocTempSimp_desc, swhsGDs)
+import Drasil.SWHS.References (ref2, ref3, ref4)
+import Drasil.SWHS.Requirements (nonFuncReqs)
+import Drasil.SWHS.TMods (t1ConsThermE_new)
+import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
+  w_mass, diam, coil_SA, temp_C, w_density, htCap_W, time_final,
+  in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, ht_flux_out, tau, htCap_L,
+  htTransCoeff, temp_env, diam, tank_length, ht_flux_C, coil_HTC,
+  deltaT, w_E, tank_length_min, tank_length_max,
+  w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
+  coil_HTC_max, time_final_max, sim_time, coil_SA_max, eta)
+
+import Drasil.NoPCM.DataDesc (inputMod)
+import Drasil.NoPCM.Definitions (ht_trans, srs_swhs, acronyms)
+import Drasil.NoPCM.GenDefs (roc_temp_simp_deriv)
+import Drasil.NoPCM.IMods (eBalanceOnWtr_new)
+import Drasil.NoPCM.Unitals (temp_init)
 
 -- This defines the standard units used throughout the document
 this_si :: [UnitDefn]
@@ -349,11 +350,11 @@ assumpS3, assumpS4, assumpS5, assumpS9_npcm, assumpS12, assumpS13 :: Sentence
 assumpS3 = 
   (foldlSent [S "The", phrase water, S "in the", phrase tank,
   S "is fully mixed, so the", phrase temp_W `isThe`
-  S "same throughout the entire", phrase tank, sSqBr (acroGD 2)])
+  S "same throughout the entire", phrase tank, sSqBr (makeRef rocTempSimpGD)])
 
 assumpS4 = 
   (foldlSent [S "The", phrase w_density, S "has no spatial variation; that is"
-  `sC` S "it is constant over their entire", phrase vol, sSqBr ((acroGD 2)`sC`
+  `sC` S "it is constant over their entire", phrase vol, sSqBr ((makeRef rocTempSimpGD)`sC`
   (makeRef likeChg2))])
 
 newA5NoPCM :: AssumpChunk
@@ -362,7 +363,7 @@ newA5NoPCM = assump "Density-Water-Constant-over-Volume" assumpS4
 
 assumpS5 = 
   (foldlSent [S "The", phrase htCap_W, S "has no spatial variation; that", 
-  S "is, it is constant over its entire", phrase vol, sSqBr (acroGD 2)])
+  S "is, it is constant over its entire", phrase vol, sSqBr (makeRef rocTempSimpGD)])
 
 newA6NoPCM :: AssumpChunk
 newA6NoPCM = assump "Specific-Heat-Energy-Constant-over-Volume" assumpS5 
@@ -459,7 +460,7 @@ iModDesc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin _ vhg _ =
   phrase purin +:+. sParen (makeRef newA11), S "Assuming no",
   phrase vhg +:+. (sParen (makeRef newA12) `sC`
   E (sy vhg $= 0)), S "Therefore, the", phrase M.equation, S "for",
-  acroGD 2, S "can be written as"]
+  makeRef rocTempSimpGD, S "can be written as"]
 
 iModDesc2 :: QDefinition -> [Sentence]
 iModDesc2 d1hf = [S "Using", (makeRef d1hf) `sC` S "this can be written as"]

@@ -15,7 +15,7 @@ import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, temp_init, temp_W,
   temp_PCM, htCap_L_P, htCap_W, htCap_S_P, w_density, pcm_density, pcm_vol)
 import Drasil.SWHS.TMods (t1ConsThermE_new)
 import Drasil.SWHS.Labels (assump14Label, assump18Label, 
-  assump19Label, assump10Label)
+  assump19Label, assump10Label, genDef1Label, genDef2Label)
 
 import Data.Drasil.Quantities.PhysicalProperties (vol)
 import Data.Drasil.Quantities.Physics (time, energy)
@@ -27,7 +27,7 @@ import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, gaseous)
 import Data.Drasil.Concepts.Math (change)
 import Data.Drasil.Concepts.Physics (mech_energy)
 
-import Data.Drasil.SentenceStructures (acroGD, acroIM, foldlSent, ofThe,
+import Data.Drasil.SentenceStructures (acroIM, foldlSent, ofThe,
   ofThe', sAnd, isThe)
 
 -------------------------
@@ -82,26 +82,26 @@ assumpS1 = foldlSent [
   sSqBr $ makeRef t1ConsThermE_new]
 assumpS2 = foldlSent [
   S "All", phrase CT.heat_trans, S "coefficients are constant over",
-  phrase time, sSqBr $ acroGD 1]
+  phrase time, sSqBr $ makeRef genDef1Label]
 assumpS3 = foldlSent [
   S "The", phrase water, S "in the", phrase tank,
   S "is fully mixed, so the", phrase temp_W `isThe` 
   S "same throughout the entire", phrase tank,
-  sSqBr $ acroGD 2 `sC` (makeRef dd2HtFluxP)]
+  sSqBr $ makeRef genDef2Label `sC` (makeRef dd2HtFluxP)]
 assumpS4 = foldlSent [
   S "The", phrase temp_PCM `isThe` S "same throughout the", phrase pcm_vol,
-  sSqBr $ acroGD 2 `sC` (makeRef dd2HtFluxP)]
+  sSqBr $ makeRef genDef2Label `sC` (makeRef dd2HtFluxP)]
   --FIXME `sC` makeRef likeChg1]
 assumpS5 = foldlSent [
   S "The", phrase w_density `sAnd` phrase pcm_density,
   S "have no spatial variation; that is" `sC`
   S "they are each constant over their entire", phrase vol,
-  sSqBr $ acroGD 2]
+  sSqBr $ makeRef genDef2Label]
 assumpS6 = foldlSent [
   S "The", phrase htCap_W `sC` phrase htCap_S_P `sC` S "and",
   phrase htCap_L_P, S "have no spatial variation; that",
   S "is" `sC` S "they are each constant over their entire",
-  phrase vol, sSqBr $ acroGD 2]
+  phrase vol, sSqBr $ makeRef genDef2Label]
 assumpS7 = foldlSent [
   CT.law_conv_cooling ^. defn, S "applies between the",
   phrase coil `sAnd` S "the", phrase water,

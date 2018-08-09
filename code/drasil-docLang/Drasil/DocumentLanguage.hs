@@ -86,8 +86,7 @@ data DocSection = Verbatim Section
 {--}
 
 -- | Reference section. Contents are top level followed by a list of subsections.
--- RefVerb is used for including verbatim subsections
-data RefSec = RefProg Contents [RefTab] | RefVerb Section -- continue
+data RefSec = RefProg Contents [RefTab]
 
 -- | Reference subsections
 data RefTab where
@@ -149,7 +148,6 @@ data IntroSec = IntroProg Sentence Sentence [IntroSub]
 
 -- | Introduction subsections
 data IntroSub where
-  IVerb    :: Section -> IntroSub
   IPurpose :: Sentence -> IntroSub
   IScope   :: Sentence -> Sentence -> IntroSub
   IChar    :: Sentence -> Sentence -> Sentence -> IntroSub
@@ -158,35 +156,31 @@ data IntroSub where
 {--}
 
 -- | Stakeholders section
-data StkhldrSec = StkhldrProg CI Sentence | StkhldrProg2 [StkhldrSub] | StkhldrVerb Section
+data StkhldrSec = StkhldrProg CI Sentence | StkhldrProg2 [StkhldrSub]
 
 -- | Stakeholders subsections
 data StkhldrSub where
-  StkhldrSubVerb :: Section -> StkhldrSub
   Client :: (Idea a) => a -> Sentence -> StkhldrSub
   Cstmr  :: (Idea a) => a -> StkhldrSub
 
 {--}
 
-data GSDSec = GSDVerb Section
-            | GSDProg [Section] Contents [Contents] [Section]
+data GSDSec = GSDProg [Section] Contents [Contents] [Section]
             | GSDProg2 [GSDSub]
 
 data GSDSub where
-  GSDSubVerb :: Section -> GSDSub
   SysCntxt   :: [Contents] -> GSDSub --FIXME: partially automate
   UsrChars   :: [Contents] -> GSDSub
   SystCons   :: [Contents] -> [Section] -> GSDSub
 
 {--}
 
-data ScpOfProjSec = ScpOfProjVerb Section | ScpOfProjProg Sentence Contents Contents
+data ScpOfProjSec = ScpOfProjProg Sentence Contents Contents
 
 {--}
 
 -- | Specific System Description section . Contains a list of subsections.
--- Verbatim sections handled by SSDVerb
-data SSDSec = SSDProg [SSDSub] | SSDVerb Section
+data SSDSec = SSDProg [SSDSub]
 
 -- | Specific system description subsections
 data SSDSub where
@@ -196,17 +190,14 @@ data SSDSub where
 
 -- | Problem Description section
 data ProblemDescription where
-  PDVerb :: Section -> ProblemDescription
   PDProg :: (Idea a) => Sentence -> a -> Sentence -> [Section] -> ProblemDescription
 
 -- | Solution Characteristics Specification section
 data SolChSpec where
-  SCSVerb :: Section -> SolChSpec
   SCSProg :: [SCSSub] -> SolChSpec
 
 -- | Solution Characteristics Specification subsections
 data SCSSub where
-  SCSSubVerb     :: Section -> SCSSub
   Assumptions    :: SCSSub
   TMs            :: Fields  -> [TheoryModel] -> SCSSub
   GDs            :: Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
@@ -220,25 +211,23 @@ data DerivationDisplay = ShowDerivation
                        | HideDerivation
 {--}
 
-data ReqrmntSec = ReqsVerb Section | ReqsProg [ReqsSub]
+data ReqrmntSec = ReqsProg [ReqsSub]
 
 data ReqsSub where
-  ReqsSubVerb :: Section -> ReqsSub
   FReqsSub :: [Contents] -> ReqsSub --FIXME: Should be ReqChunks?
   NonFReqsSub :: (Concept c) => [c] -> [c] -> Sentence -> Sentence -> ReqsSub
 
 {--}
 
-data LCsSec = LCsVerb Section | LCsProg [Contents] --FIXME:Should become [LikelyChanges]
+data LCsSec = LCsProg [Contents] --FIXME:Should become [LikelyChanges]
 
 {--}
 
-data UCsSec = UCsVerb Section | UCsProg [Contents]
+data UCsSec = UCsProg [Contents]
 
 {--}
 
-data TraceabilitySec = TraceabilityVerb Section
-                     | TraceabilityProg [LabelledContent] [Sentence] [Contents] [Section]
+data TraceabilitySec = TraceabilityProg [LabelledContent] [Sentence] [Contents] [Section]
 
 {--}
 
@@ -248,40 +237,36 @@ data ExistingSolnSec = ExistSolnVerb Section | ExistSolnProg [Contents]
 {--}
 
 -- | Values of Auxiliary Constants section
-data AuxConstntSec = AuxConsProg CI [QDefinition] | AuxConsVerb Section
+data AuxConstntSec = AuxConsProg CI [QDefinition]
 
 {--}
 
-data AppndxSec = AppndxVerb Section | AppndxProg [Contents]
+data AppndxSec = AppndxProg [Contents]
 
 {--}
 
-data NotationSec = NotationVerb Section | NotationProg [Contents]
+data NotationSec = NotationProg [Contents]
 
 {--}
 
-data ModHierarchSec = ModHierarchVerb Section | ModHierarchProg Sentence
+data ModHierarchSec = ModHierarchProg Sentence
 
 {--}
 
-data MISModSec = MISModVerb Section
-               | MISModProg String (Maybe Contents) [MISModSub] Label Bool{-TemplateModule==True-}
+data MISModSec = MISModProg String (Maybe Contents) [MISModSub] Label Bool{-TemplateModule==True-}
 
 data MISModSub where
-  MISModSubVerb     :: Section -> MISModSub
   MISUses           :: [Label] -> MISModSub
   MISSyntax         :: [MISSyntaxSub] -> MISModSub
   MISSemantics      :: [MISSemanticsSub] -> MISModSub
   MISConsiderations :: [Contents] -> MISModSub
 
 data MISSyntaxSub where
-  MISSyntaxSubVerb :: Section -> MISSyntaxSub
   MISExportedCs    :: [QDefinition] -> MISSyntaxSub
   MISExportedAPs   :: [Contents] -> MISSyntaxSub
   MISExportedTyps  :: [Contents] -> MISSyntaxSub --FIXME: automated to generate with Template Module; correct step?
 
 data MISSemanticsSub where
-  MISSemanticsSubVerb :: Section -> MISSemanticsSub
   MISStateVars        :: [Contents] -> MISSemanticsSub
   MISAccessRoutines   :: [Contents] -> MISSemanticsSub
   MISEnvVars          :: [Contents] -> MISSemanticsSub
@@ -328,7 +313,6 @@ mkSections si l = map doit l
 
 -- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section
-mkRefSec _  (RefVerb s) = s
 mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
   (map (mkSubRef si) l) (mkLabelRASec "RefMat" "Reference Material") --DO NOT CHANGE LABEL OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
   where
@@ -454,13 +438,11 @@ defaultTUI :: [TUIntro]
 defaultTUI = [System, Derived, TUPurpose]
 
 mkIntroSec :: SystemInformation -> IntroSec -> Section
-mkIntroSec _ (IntroVerb s) = s
 mkIntroSec SI {_sys = sys} (IntroMIS link)     = GB.intro [MIS.introMIS sys link] []
 mkIntroSec si (IntroProg probIntro progDefn l) =
   Intro.introductionSection probIntro progDefn $ map (mkSubIntro si) l
   where
     mkSubIntro :: SystemInformation -> IntroSub -> Section
-    mkSubIntro _               (IVerb s) = s
     mkSubIntro si'             (IPurpose intro) = Intro.purposeOfDoc (getRefDB si') intro
     mkSubIntro SI {_sys = sys} (IScope main intendedPurp) = 
       Intro.scopeOfRequirements main sys intendedPurp
@@ -470,36 +452,30 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
 
 -- | Helper for making the 'Stakeholders' section
 mkStkhldrSec :: StkhldrSec -> Section
-mkStkhldrSec (StkhldrVerb s) = s
 mkStkhldrSec (StkhldrProg key details) = Stk.stakehldrGeneral key details
 mkStkhldrSec (StkhldrProg2 l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkSubs l
   where
     mkSubs :: StkhldrSub -> Section
-    mkSubs (StkhldrSubVerb s)    = s
     mkSubs (Client kWrd details) = Stk.tClientF kWrd details
     mkSubs (Cstmr kWrd)          = Stk.tCustomerF kWrd
 
 -- | Helper for making the 'General System Description' section
 mkGSDSec :: GSDSec -> Section
-mkGSDSec (GSDVerb s) = s
 mkGSDSec (GSDProg cntxt uI cnstrnts systSubSec) = GSD.genSysF cntxt uI cnstrnts systSubSec
 mkGSDSec (GSDProg2 l) = SRS.genSysDes [GSD.genSysIntro] $ map mkSubs l
    where
      mkSubs :: GSDSub -> Section
-     mkSubs (GSDSubVerb s)           = s
      mkSubs (SysCntxt cs)            = GSD.sysContxt cs
      mkSubs (UsrChars intro)         = GSD.usrCharsF intro
      mkSubs (SystCons cntnts subsec) = GSD.systCon cntnts subsec
 
 -- | Helper for making the 'Scope of the Project' section
 mkScpOfProjSec :: ScpOfProjSec -> Section
-mkScpOfProjSec (ScpOfProjVerb s) = s
 mkScpOfProjSec (ScpOfProjProg kWrd uCTCntnts indCases) =
   SotP.scopeOfTheProjF kWrd uCTCntnts indCases
 
 -- | Helper for making the 'Specific System Description' section
 mkSSDSec :: SystemInformation -> SSDSec -> Section
-mkSSDSec _ (SSDVerb s) = s
 mkSSDSec si (SSDProg l) =
   SSD.specSysDescr $ map (mkSubSSD si) l
   where
@@ -509,18 +485,15 @@ mkSSDSec si (SSDProg l) =
     mkSubSSD sysi (SSDSolChSpec scs) = mkSolChSpec sysi scs
 
 mkSSDProb :: SystemInformation -> ProblemDescription -> Section
-mkSSDProb _ (PDVerb s) = s
 mkSSDProb _ (PDProg start progName end subSec) =
   SSD.probDescF start progName end subSec
 
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
-mkSolChSpec _ (SCSVerb s) = s
 mkSolChSpec si (SCSProg l) =
   SRS.solCharSpec [SSD.solutionCharSpecIntro (siSys si) inModSec] $
     map (mkSubSCS si) l
   where
     mkSubSCS :: SystemInformation -> SCSSub -> Section
-    mkSubSCS _ (SCSSubVerb s)  = s
     mkSubSCS _ (TMs _ [])   = error "There are no Theoretical Models"
     mkSubSCS _ (GDs _ [] _) = SSD.genDefnF []
     mkSubSCS _ (DDs _ [] _) = error "There are no Data Definitions" 
@@ -570,11 +543,9 @@ pdStub = SRS.probDesc  [] []
 
 -- | Helper for making the 'Requirements' section
 mkReqrmntSec :: ReqrmntSec -> Section
-mkReqrmntSec (ReqsVerb s) = s
 mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
   where
     mkSubs :: ReqsSub -> Section
-    mkSubs (ReqsSubVerb s) = s
     mkSubs (FReqsSub reqs) = R.fReqF reqs
     mkSubs (NonFReqsSub noPrrty prrty rsn explain) = R.nonFuncReqF noPrrty prrty rsn explain
 
@@ -582,21 +553,18 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 
 -- | Helper for making the 'LikelyChanges' section
 mkLCsSec :: LCsSec -> Section
-mkLCsSec (LCsVerb s) = s
 mkLCsSec (LCsProg c) = SRS.likeChg c []
 
 {--}
 
 -- | Helper for making the 'UnikelyChanges' section
 mkUCsSec :: UCsSec -> Section
-mkUCsSec (UCsVerb s) = s
 mkUCsSec (UCsProg c) = SRS.unlikeChg c []
 
 {--}
 
 -- | Helper for making the 'Traceability Matrices and Graphs' section
 mkTraceabilitySec :: TraceabilitySec -> Section
-mkTraceabilitySec (TraceabilityVerb s) = s
 mkTraceabilitySec (TraceabilityProg refs trailing otherContents subSec) =
   TMG.traceMGF refs trailing otherContents subSec
 
@@ -611,14 +579,13 @@ mkExistingSolnSec (ExistSolnProg cs) = SRS.offShelfSol cs []
 
 -- | Helper for making the 'Values of Auxiliary Constants' section
 mkAuxConsSec :: AuxConstntSec -> Section
-mkAuxConsSec (AuxConsVerb s) = s
+
 mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortBySymbol listOfCons
 
 {--}
 
 -- | Helper for making the 'Notation' section
 mkNotationSec :: SystemInformation -> NotationSec -> Section
-mkNotationSec _ (NotationVerb s)  = s
 mkNotationSec SI {_sys = sys} (NotationProg cs) = MIS.notation (MIS.notationIntroMIS :
   (MIS.notTblIntro sys) : cs ++ [MIS.notationIntroContd sys]) []
 
@@ -626,13 +593,11 @@ mkNotationSec SI {_sys = sys} (NotationProg cs) = MIS.notation (MIS.notationIntr
 
 -- | Helper for making the 'Module Hierarchy' section
 mkModHierarchSec :: ModHierarchSec -> Section
-mkModHierarchSec (ModHierarchVerb s)      = s
 mkModHierarchSec (ModHierarchProg mgLink) = MIS.modHier [MIS.modHierarchyPointer mgLink] []
 
 {--}
 
 mkMISModSec :: MISModSec -> Section
-mkMISModSec (MISModVerb s)             = s
 mkMISModSec (MISModProg modName x mms lbl True)  = MIS.misOfModule (getIntroMaybe x) 
   ((MIS.tempMod_ [mkParagraph $ S (modName ++ "ADT")] []) :
    (MIS.expTypes [mkParagraph $ S (modName ++ "T = ?")] []) :
@@ -645,7 +610,6 @@ getIntroMaybe Nothing      = []
 getIntroMaybe (Just intro) = intro : []
 
 subsections :: MISModSub -> Section
-subsections (MISModSubVerb s)  = s
 subsections (MISUses [])       = MIS.uses    none  []
 subsections (MISUses useMods)  = MIS.uses [mkParagraph $ foldlList Comma List $ map makeRef useMods] []
 subsections (MISSyntax subs)   = MIS.syntax [] (map syntaxSubs subs)
@@ -653,7 +617,6 @@ subsections (MISSemantics subs)= MIS.semantics [] (map semanticSubs subs)
 subsections (MISConsiderations s) = MIS.considerations [] [] --FIXME: needs to be filled out
 
 syntaxSubs :: MISSyntaxSub -> Section
-syntaxSubs (MISSyntaxSubVerb s) = s
 syntaxSubs (MISExportedCs [])   = MIS.expConstants   none []
 syntaxSubs (MISExportedAPs [])  = MIS.expAccPrograms none []
 syntaxSubs (MISExportedTyps []) = MIS.expTypes none []
@@ -662,7 +625,6 @@ syntaxSubs (MISExportedCs cnstnts) = MIS.expConstants
   [(UlC . ulcc . Enumeration . bulletFlat) (map MIS.assignSttmts cnstnts)] []
 
 semanticSubs :: MISSemanticsSub -> Section
-semanticSubs (MISSemanticsSubVerb s) = s
 semanticSubs (MISStateVars [])       = MIS.stateVars        none []
 semanticSubs (MISAccessRoutines [])  = MIS.accRoutSemantics none []
 semanticSubs (MISEnvVars [])         = MIS.enviroVars       none []
@@ -688,7 +650,6 @@ mkBib bib = GB.reference [UlC $ ulcc (Bib bib)] []
 
 -- | Helper for making the 'Appendix' section
 mkAppndxSec :: AppndxSec -> Section
-mkAppndxSec (AppndxVerb s)  = s
 mkAppndxSec (AppndxProg cs) = SRS.appendix cs []
 
 {--}

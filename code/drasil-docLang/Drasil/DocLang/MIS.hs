@@ -113,3 +113,17 @@ hwModIntro = foldlSP [S "This module hides the underlying hardware for I/O (to t
 
 assignSttmts :: (HasUID c, HasSymbol c, ExprRelat c) => c -> Sentence
 assignSttmts f = (ch f) :+: S ":=" :+: (E $ f^.relat) --FIXME: replace ":=" with actual symbol ":="
+
+{-WIP : laying out the access routine semantics
+layAccRoutSemantics :: (HasUID c, HasSymbol c, ExprRelat c) => String -> [c] ->
+  [Sentence] -> Maybe Sentence -> [Contents]
+layAccRoutSemantics fxnName inputs transitionContents exception = (UlC $ ulcc $
+  Enumeration $ Simple $ 
+  [ S fxnName +:+ sParen(map makeRef inputs)
+  , Nested (S "transition") $ Bullet $ noRefs $
+    (map Flat transitionContents)
+  , Nothing]) ++ (mkParagraph $ getExceptionSttmt exception)
+  where
+    getExceptionSttmt :: Maybe Sentence -> Sentence
+    getExceptionSttmt Nothing  = S "exception: None" 
+    getExceptionSttmt (Just x) = S "exception: " +:+ x-}

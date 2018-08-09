@@ -3,7 +3,7 @@ module Language.Drasil.Document.Extract (getDoc, egetDoc) where
 import Control.Lens ((^.))
 import Data.List(transpose)
 
-import Language.Drasil.Document (Document(Document),Section(Section), SecCons(..), accessContents)
+import Language.Drasil.Document (Document(Document),Section(Section), SecCons(..))
 import Language.Drasil.Document.Core
 import Language.Drasil.Expr
 import Language.Drasil.Spec

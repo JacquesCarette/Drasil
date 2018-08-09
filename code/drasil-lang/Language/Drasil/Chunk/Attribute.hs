@@ -4,10 +4,10 @@ module Language.Drasil.Chunk.Attribute
   ) where
 
 import Control.Lens ((^.))
-import Language.Drasil.Spec (Sentence(EmptyS, S), (+:+))
+import Language.Drasil.Spec (Sentence(EmptyS, S, (:+:)), (+:+))
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.References (Reference(SourceRef), References)
-import Language.Drasil.Chunk.ShortName (ShortName(ShortNm), HasShortName(shortname), shortname')
+import Language.Drasil.Chunk.ShortName (ShortName(ShortNm, Concat), HasShortName(shortname), shortname')
 import Language.Drasil.Classes (HasDerivation(derivations), HasReference(getReferences))
 
 --------------------------------------------------------------------------------
@@ -31,6 +31,8 @@ getShortName c = snToSentence $ c ^. shortname
 
 snToSentence :: ShortName -> Sentence
 snToSentence (ShortNm s) = S s
+snToSentence (Concat a b) = snToSentence a :+: snToSentence b
+snToSentence _ = error "Expected deferred lookup to have occurred before snToSentence."
 
 sourceref :: Sentence -> Reference
 sourceref = SourceRef

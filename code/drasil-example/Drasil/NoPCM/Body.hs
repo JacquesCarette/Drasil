@@ -539,7 +539,7 @@ funcReqsList = funcReqsListWordsNum
   -- S "which define the", phrase tank, S "parameters, material",
   -- plural property, S "and initial" +: plural condition],
 
-  -- [S "Use the", plural input_, S "in", acroR 1, S "to find the",
+  -- [S "Use the", plural input_, S "in", makeRef req1, S "to find the",
   -- phrase mass, S "needed for", makeRef eBalanceOnWtr_new, S "to", makeRef heatEInPCM_new `sC`
   -- S "as follows, where", ch w_vol `isThe` phrase w_vol,
   -- S "and" +: (ch tank_vol `isThe` phrase tank_vol)],
@@ -549,7 +549,7 @@ funcReqsList = funcReqsListWordsNum
 
   -- [titleize' output_, S "and", plural input_, plural quantity, S "and derived",
   -- plural quantity, S "in the following list: the", plural quantity, S "from",
-  -- (acroR 1) `sC` S "the", phrase mass, S "from", acroR 2, S "and", ch tau_W +:+.
+  -- makeRef req1 `sC` S "the", phrase mass, S "from", makeRef req2, S "and", ch tau_W +:+.
   -- sParen(S "from" +:+ makeRef eBalanceOnWtr_new)],
 
   -- [S "Calculate and output the", phrase temp, S "of the", phrase water,

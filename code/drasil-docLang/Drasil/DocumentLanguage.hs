@@ -626,14 +626,16 @@ mkModHierarchSec (ModHierarchProg mgLink) = MIS.modHier [MIS.modHierarchyPointer
 {--}
 
 mkMISModSec :: MISModSec -> Section
-mkMISModSec (MISModVerb s) = s
-mkMISModSec (MISModProg modName Nothing mms)      = MIS.misOfModule [] []{-(map subsections mms)-} modName
-mkMISModSec (MISModProg modName (Just intro) mms) = MIS.misOfModule (intro : []) 
-  (map subsections mms) modName
+mkMISModSec (MISModVerb s)             = s
+mkMISModSec (MISModProg modName x mms) = MIS.misOfModule (getContents x) (map subsections mms) modName
   where
+    getContents :: Maybe Contents -> [Contents]
+    getContents Nothing      = []
+    getContents (Just intro) = intro : []
     subsections :: MISModSub -> Section
     subsections (MISModSubVerb s)  = s
     subsections MISModule          = MIS.module_ [mkParagraph $ S modName] []
+    subsections (MISUses [])       = MIS.uses    [mkParagraph $ S "None"]  []
     subsections (MISUses useMods)  = MIS.uses    (map mkParagraph $ map makeRef useMods) [] --FIXME: needs to become a proper list
     subsections _                  = MIS.syntax [] []
     --subsections (MISSyntax s)  = s

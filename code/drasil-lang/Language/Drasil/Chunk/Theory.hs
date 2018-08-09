@@ -96,4 +96,4 @@ tm c t lbe = TM (cw c) t lbe Nothing
 
 -- Same as tm, but with the additional notes argument passed in
 tm' :: Concept c => c -> TheoryChunk -> Label -> [Sentence] -> TheoryModel
-tm' c t lbe notes = TM (cw c) t lbe (Just notes)
+tm' c t lbe nts = TM (cw c) t lbe (Just nts)

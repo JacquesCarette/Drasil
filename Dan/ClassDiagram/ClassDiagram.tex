@@ -1,0 +1,369 @@
+\documentclass{minimal}
+
+\usepackage{verbatim}
+
+\usepackage[a3paper,margin=1cm,landscape]{geometry}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes,shadows,arrows}
+
+\begin{document}
+
+\tikzstyle{class}=[rectangle, draw=black, rounded corners, fill=white!40, drop shadow,
+        text centered, anchor=north, text=black, text width=3cm]
+\tikzstyle{comment}=[rectangle, draw=black, rounded corners, fill=green, drop shadow,
+        text centered, anchor=north, text=white, text width=3cm]
+\tikzstyle{myarrow}=[->, >=triangle 90, thick]
+\tikzstyle{line}=[-, thick]
+\tikzstyle{mayHave}=[rectangle, fill=green, text=black, text width=0.65cm];
+\tikzstyle{greenArrow}=[->, >=triangle 90, thick]
+
+\begin{center}
+\begin{tikzpicture}[node distance=2cm]
+\node (HasUID) [class]
+		{
+			\textbf{HasUID}
+			
+			uid : String
+		};
+
+\node (HasLabel) [class, text width=4cm, below=of HasUID]
+		{
+			\textbf{HasLabel}
+			
+			getLabel : Label
+		};
+
+\node (IsLabel) [class, text width=2cm, below right=of HasLabel]
+		{
+			\textbf{IsLabel}
+		
+		};
+
+\node (AuxNode01) [text width=4cm, below=of HasUID] {};
+
+\node (NamedIdea) [class, left=of AuxNode01, text width=4cm]
+        {
+            \textbf{NamedIdea}
+            
+			term : Sentence
+        };
+
+\node (HasUnitSymbol) [class, text width=4cm, left=3cm of NamedIdea]
+		{ 
+			\textbf{HasUnitSymbol}
+			
+			usymb : USymb
+		};
+
+\node (Idea) [class, below left=2cm and 0.5cm of NamedIdea]
+		{
+			\textbf{Idea}
+			
+			getA : Maybe String
+		};
+
+\node (CommonIdea) [class, below right=2cm and 0.5cm of NamedIdea]
+		{
+			\textbf{CommonIdea}
+			
+			abrv : String
+		};
+		
+\node (AuxNode02) [text width=1cm, below=of Idea] {};
+
+\node (Definition) [class, left=of AuxNode02] 
+		{
+			\textbf{Definition}
+			
+			defn : Sentence
+		};
+
+\node (IsUnit) [class, text width=2cm, below left=1cm and 0cm of Definition]
+		{ 
+			\textbf{IsUnit}
+			
+		};
+
+\node (ConceptDomain) [class, text width=6cm, right=of AuxNode02]
+		{
+			\textbf{ConceptDomain}
+			
+			cdom : [UID]
+		};
+
+\node (Concept) [class, text width=4cm, below=5cm of Idea]
+		{
+			\textbf{Concept}
+			
+		};
+		
+		
+\node (Quantity) [class, text width=4cm, below=9cm of IsLabel]
+		{
+			\textbf{Quantity}
+			
+			getUnit : Maybe UnitDefn
+		};
+		
+\node (UncertainQuantity) [class, text width=4cm, below left=2cm and 0.5cm of Quantity]
+		{
+			\textbf{UncertainQuantity}
+			
+			uncert : Maybe Double
+		};
+		
+\node (Unitary) [class, text width=4cm, below=of Quantity]		
+		{
+			\textbf{Unitary}
+			
+			unit : UnitDefn
+		};
+		
+\node (Theory) [class, text width=6cm, below left=0cm and 10cm of NamedIdea]
+		{
+			\textbf{Theory}
+			
+			validContext : [TheoryChunk]
+
+			spaces : [SpaceDefn]
+
+			quantities : [QuantityDicy]
+
+			operations    : [ConceptChunk] 
+
+  			definedQuant : [QDefinition]
+
+  			invariants    : [TheoryConstraint]
+  			
+  			definedFun   : [QDefinition]
+		};
+		
+\node (NounPhrase) [class, text width=5cm, below=5cm of Theory]
+		{
+			\textbf{NounPhrase}
+			
+			phrase : Sentence
+
+			plural : PluralForm
+	
+			sentenceCase : Capitalization 
+			
+			titleCase : Capitalization (Sentence)
+		};
+
+\node (Referable) [class, text width=4cm, left=of NounPhrase]
+		{
+			\textbf{Referable}
+			
+			refAdd : String
+			
+			rType : RefType
+		};
+		
+\node (HasAssumpRefs) [class, text width=5cm, above=of Referable]
+		{
+			\textbf{HasAssumpRefs}
+			
+			assumpRefTable : AssumpMap
+		};
+
+\node (HasReqRefs) [class, text width=5cm, above=1cm of Referable]
+		{
+			\textbf{HasReqRefs}
+			
+			reqRefTable : ReqMap
+		};
+
+\node (HasChangeRefs) [class, text width=5cm, above=0.01cm of Referable]
+		{
+			\textbf{HasChangeRefs}
+			
+			changeRefTable : ChangeMap
+		};
+
+\node (HasCitationRefs) [class, text width=5cm, above=of HasAssumpRefs]
+		{
+			\textbf{HasCitationRefs}
+			
+			citationRefTable : BibMap
+		};
+
+\node (HasGoalRefs) [class, text width=5cm, above=1cmof HasAssumpRefs]
+		{
+			\textbf{HasGoalRefs}
+			
+			goalRefTable : GoalMap
+		};
+
+\node (HasPSDRRefs) [class, text width=6cm, above=0.01cmof HasAssumpRefs]
+		{
+			\textbf{HasPSDRRefs}
+			
+			psdRefTable : PhysSystDescMap
+		};
+		
+\node (HasConceptRefs) [class, text width=5cm, above=1cmof HasGoalRefs]
+		{
+			\textbf{HasConceptRefs}
+			
+			conceptRefTable : ConceptMap
+		};
+		
+\node (HasSymbolTable) [class, text width=5cm, below=of Referable]
+		{
+			\textbf{HasSymbolTable}
+			
+			symbolTable : SymbolMap
+		};			
+
+\node (HasTermTable) [class, text width=4cm, below=of HasSymbolTable]
+		{
+			\textbf{HasTermTable}
+			
+			termTable : TermMap
+		};			
+		
+\node (HasDefinitionTable) [class, text width=4cm, below=1cmof HasSymbolTable]
+		{
+			\textbf{HasDefinitionTable}
+			
+			defTable : ConceptMap
+		};			
+
+\node (HasUnitTable) [class, text width=4cm, below=0.01cm of HasSymbolTable]
+		{
+			\textbf{HasUnitTable}
+			
+			unitTable : UnitMap
+		};			
+
+\node (HasName) [class, text width=4cm, below=of HasTermTable]
+		{
+			\textbf{HasName}
+			
+			nameStr : String
+		};
+	
+\node (RenderSpecial) [class, text width=4cm, below=of HasName]
+		{
+			\textbf{RenderSpecial}
+			
+			special : Special -> r (Should this be kept)
+		};
+
+\node (HasAdditionalNotes) [class, text width=5cm, below=2cm of UncertainQuantity]
+		{
+			\textbf{HasAdditionalNotes}
+			
+			getNotes : Maybe [Sentence]
+		};
+
+\node (HasSymbol) [class, text width=4cm, right=of Concept]
+		{
+			\textbf{HasSymbol}
+			
+			symbol : Symbol
+		};
+
+\node (HasSpace) [class, text width=4cm, right=0.01of HasSymbol]
+		{
+			\textbf{HasSpace}
+			
+			typ : Space
+		};
+
+\node (HasReference) [class, text width=4cm, below=2cm of Unitary]
+		{
+			\textbf{HasReference}
+			
+			getReferences : References
+		};
+
+\node (HasDerivation) [class, text width=4cm, below=3.3cm of Unitary]
+		{
+			\textbf{HasDerivation}
+			
+			derivations : Derivation
+		};
+
+\node (Constrained) [class, text width=4cm, below=4.2cm of Unitary]
+		{
+			\textbf{Constrained}
+			
+			constraints : [Constraint]
+		};
+
+\node (HasReasVal) [class, text width=4cm, left=0.01of HasAdditionalNotes]
+		{
+			\textbf{HasReasVal}
+			
+			reasVal : Maybe Expr
+		};
+
+\node (HasRefAddress) [class, text width=4cm, below=0.01of HasReasVal]
+		{
+			\textbf{HasRefAddress}
+			
+			getRefAdd : LblType
+		};
+
+\node (UnitEq) [class, text width=4cm, below=0.01cm of HasRefAddress]
+		{
+			\textbf{UnitEq}
+			
+			uniteq : UDefn
+		};
+		
+\node (ExprRelat) [class, text width=4cm, below=0.01cm of UnitEq]
+		{
+			\textbf{ExprRelat}
+			
+			relat : Expr
+		};
+
+//is-a relations
+
+\draw[myarrow] (NamedIdea.north) -- ++(0,0.8) -| (HasUID.south);
+
+\draw[myarrow] (Idea.north) -- ++(0,0.8) -| (NamedIdea.south);
+
+\draw[myarrow] (CommonIdea.north) -- ++(0,0.8) -| (NamedIdea.south);
+
+\draw[myarrow] (UncertainQuantity.north) -- ++ (0,0.5) -| (Quantity.south);
+\draw[myarrow] (Unitary) -- ++ (0,0.5) -| (Quantity.south);
+
+\draw[line] (Theory.north) -- ++ (0,1.71) -| (NamedIdea.north);
+
+\draw[line] (IsLabel.north) -- ++ (0,3.52) -| (HasUID.south);
+
+\draw[myarrow] (IsLabel.north) -- ++ (0,1.5) -- (HasLabel.east);
+
+\draw[myarrow] (IsUnit.north) -- ++ (0,4) -| (HasUnitSymbol.south);
+
+\draw[myarrow] (IsUnit.north) -- ++ (0,3) -| (Idea.south);
+
+\draw[myarrow] (IsUnit.east) -- ++ (0,0) -| (Definition.south);
+
+\draw[myarrow] (Quantity.north) -- ++ (0,1) -| (HasSymbol);
+
+\draw[myarrow] (Quantity.north) -- ++ (0,1) -| (HasSpace);
+
+\draw[myarrow] (Quantity.north) -- ++ (0,7.3) -| (Idea);
+
+//may-have relations
+
+\begin{comment}
+\node (qtyMayHaveUnit) [mayHave, below=of Concept] {may have};
+\end{comment}
+
+\draw[myarrow] (Concept.north) -- ++ (0, 1.8) -- (Definition.east);
+
+\draw[myarrow](Concept.north) -- ++ (0, 1.8) -- (ConceptDomain.west);
+
+\draw[myarrow](Concept.north) -- ++ (0, 1.8) -- (Idea.south);
+
+\end{tikzpicture}
+\end{center}
+
+\end{document}

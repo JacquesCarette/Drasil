@@ -52,6 +52,7 @@ import Data.Drasil.Concepts.Documentation (refmat)
 import Data.Function (on)
 import Data.List (nub, sortBy)
 
+
 type System = Sentence
 type DocKind = Sentence
 
@@ -264,12 +265,10 @@ data ModHierarchSec = ModHierarchVerb Section | ModHierarchProg Sentence
 {--}
 
 data MISModSec = MISModVerb Section
-               | MISModProg String (Maybe Contents) [MISModSub] Label
+               | MISModProg String (Maybe Contents) [MISModSub] Label Bool{-TemplateModule==True-}
 
 data MISModSub where
   MISModSubVerb     :: Section -> MISModSub
-  MISModule         :: MISModSub
-  MISTempModule     :: MISModSub
   MISUses           :: [Label] -> MISModSub
   MISSyntax         :: [MISSyntaxSub] -> MISModSub
   MISSemantics      :: [MISSemanticsSub] -> MISModSub
@@ -279,7 +278,7 @@ data MISSyntaxSub where
   MISSyntaxSubVerb :: Section -> MISSyntaxSub
   MISExportedCs    :: [QDefinition] -> MISSyntaxSub
   MISExportedAPs   :: [Contents] -> MISSyntaxSub
-  MISExportedTyps  :: [Contents] -> MISSyntaxSub --FIXME: automate to be generated with Template Module?
+  MISExportedTyps  :: [Contents] -> MISSyntaxSub --FIXME: automated to generate with Template Module; correct step?
 
 data MISSemanticsSub where
   MISSemanticsSubVerb :: Section -> MISSemanticsSub
@@ -634,28 +633,30 @@ mkModHierarchSec (ModHierarchProg mgLink) = MIS.modHier [MIS.modHierarchyPointer
 
 mkMISModSec :: MISModSec -> Section
 mkMISModSec (MISModVerb s)             = s
-mkMISModSec (MISModProg modName x mms lbl) = MIS.misOfModule (getIntroMaybe x) (map subsections mms) modName lbl
-  where
-    getIntroMaybe :: Maybe Contents -> [Contents]
-    getIntroMaybe Nothing      = []
-    getIntroMaybe (Just intro) = intro : []
-    subsections :: MISModSub -> Section
-    subsections (MISModSubVerb s)  = s
-    subsections MISModule          = MIS.module_ [mkParagraph $ S modName] []
-    subsections MISTempModule      = MIS.tempMod_ [mkParagraph $ S modName] []
-    subsections (MISUses [])       = MIS.uses    none  []
+mkMISModSec (MISModProg modName x mms lbl True)  = MIS.misOfModule (getIntroMaybe x) 
+  ((MIS.tempMod_ [mkParagraph $ S (modName ++ "ADT")] []) :
+   (MIS.expTypes [mkParagraph $ S (modName ++ "T = ?")] []) :
+   map subsections mms) (modName ++ "ADT") lbl
+mkMISModSec (MISModProg modName x mms lbl False) = MIS.misOfModule (getIntroMaybe x) 
+  ((MIS.module_ [mkParagraph $ S modName] []) : map subsections mms) modName lbl
 
-    subsections (MISUses useMods)  = MIS.uses [mkParagraph $ foldlList Comma List $ map makeRef useMods] []
-    subsections (MISSyntax subs)   = MIS.syntax [] (map syntaxSubs subs)
-    subsections (MISSemantics subs)= MIS.semantics [] (map semanticSubs subs)
-    subsections (MISConsiderations s) = MIS.considerations [] [] --FIXME: needs to be filled out
+getIntroMaybe :: Maybe Contents -> [Contents]
+getIntroMaybe Nothing      = []
+getIntroMaybe (Just intro) = intro : []
+
+subsections :: MISModSub -> Section
+subsections (MISModSubVerb s)  = s
+subsections (MISUses [])       = MIS.uses    none  []
+subsections (MISUses useMods)  = MIS.uses [mkParagraph $ foldlList Comma List $ map makeRef useMods] []
+subsections (MISSyntax subs)   = MIS.syntax [] (map syntaxSubs subs)
+subsections (MISSemantics subs)= MIS.semantics [] (map semanticSubs subs)
+subsections (MISConsiderations s) = MIS.considerations [] [] --FIXME: needs to be filled out
 
 syntaxSubs :: MISSyntaxSub -> Section
 syntaxSubs (MISSyntaxSubVerb s) = s
 syntaxSubs (MISExportedCs [])   = MIS.expConstants   none []
 syntaxSubs (MISExportedAPs [])  = MIS.expAccPrograms none []
-syntaxSubs (MISExportedTyps []) = MIS.expTypes       none []
-syntaxSubs (MISExportedTyps cs) = MIS.expTypes       cs []
+syntaxSubs (MISExportedTyps []) = MIS.expTypes none []
 syntaxSubs (MISExportedAPs cs)  = MIS.expAccPrograms cs []
 syntaxSubs (MISExportedCs cnstnts) = MIS.expConstants 
   [(UlC . ulcc . Enumeration . bulletFlat) (map MIS.assignSttmts cnstnts)] []

@@ -173,54 +173,54 @@ mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master
   NotationSec (NotationProg []) : 
   ModHierarchSec (ModHierarchProg $ S "section 3 of the MG (Link)") : --FIXME: hardcoded link
   Bibliography : 
-  MISModSec (MISModProg "Control" Nothing [MISModule, MISUses [inputLabel, loadLabel, calcLabel, outputLabel],
+  MISModSec (MISModProg "Control" Nothing [MISUses [inputLabel, loadLabel, calcLabel, outputLabel],
     MISSyntax [MISExportedCs [{-FILL IN-}], MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
-    ctrlLabel) :
-  MISModSec (MISModProg "Input" (Just fillIN) [MISModule, MISUses [glTypeLabel, thicknessLabel, constantsLabel, hwLabel],
+    ctrlLabel False) :
+  MISModSec (MISModProg "Input" (Just fillIN) [MISUses [glTypeLabel, thicknessLabel, constantsLabel, hwLabel],
     MISSyntax [{-MISSyntaxSubVerb [{-FILL IN-}]-}],
     MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [{-FILL IN-}], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]],
     MISConsiderations [{-FILL IN-}]]
-    inputLabel) :
-  MISModSec (MISModProg "LoadASTM" Nothing [MISModule, MISUses [functLabel, contoursLabel],
+    inputLabel False) :
+  MISModSec (MISModProg "LoadASTM" Nothing [MISUses [functLabel, contoursLabel],
     MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [], MISStateInvariant [], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
-    loadLabel) :
-  MISModSec (MISModProg "Calc" Nothing [MISModule, MISUses [inputLabel, contoursLabel, constantsLabel],
+    loadLabel False) :
+  MISModSec (MISModProg "Calc" Nothing [MISUses [inputLabel, contoursLabel, constantsLabel],
     MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
-    calcLabel) :
-  MISModSec (MISModProg "GlassTypeADT" (Just fillIN) [MISTempModule, MISUses [],
-    MISSyntax [MISExportedCs [], MISExportedTyps [{-FILL IN-}], MISExportedAPs [{-FILL IN-}]],
+    calcLabel False) :
+  MISModSec (MISModProg "GlassType" (Just fillIN) [MISUses [],
+    MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
-    glTypeLabel) :
-  MISModSec (MISModProg "ThicknessADT" (Just fillIN) [MISTempModule, MISUses [],
-    MISSyntax [MISExportedCs [], MISExportedTyps [{-FILL IN-}], MISExportedAPs [{-FILL IN-}]],
+    glTypeLabel True) :
+  MISModSec (MISModProg "Thickness" (Just fillIN) [MISUses [],
+    MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
-    thicknessLabel) :
-  MISModSec (MISModProg "FunctADT" Nothing [MISTempModule, MISUses [seqServLabel],
-    MISSyntax [MISExportedCs [{-FILL IN-}], MISExportedTyps [{-FILL IN-}], MISExportedAPs [{-FILL IN-}]],
+    thicknessLabel True) :
+  MISModSec (MISModProg "Funct" Nothing [MISUses [seqServLabel],
+    MISSyntax [MISExportedCs [{-FILL IN-}], MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]],
     MISConsiderations [{-FILL IN-}]]
-    functLabel) :
-  MISModSec (MISModProg "ContoursADT" Nothing [MISTempModule, MISUses [functLabel],
-    MISSyntax [MISExportedCs [{-FILL IN-}], MISExportedTyps [{-FILL IN-}], MISExportedAPs [{-FILL IN-}]],
+    functLabel True) :
+  MISModSec (MISModProg "Contours" Nothing [MISUses [functLabel],
+    MISSyntax [MISExportedCs [{-FILL IN-}], MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
-    contoursLabel) :
-  MISModSec (MISModProg "SeqServices" Nothing [MISModule, MISUses [],
+    contoursLabel True) :
+  MISModSec (MISModProg "SeqServices" Nothing [MISUses [],
     MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [], MISStateInvariant [], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
-    seqServLabel) :
-  MISModSec (MISModProg "Output" Nothing [MISModule, MISUses [inputLabel, thicknessLabel, glTypeLabel, hwLabel],
+    seqServLabel False) :
+  MISModSec (MISModProg "Output" Nothing [MISUses [inputLabel, thicknessLabel, glTypeLabel, hwLabel],
     MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]], 
     MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
-    outputLabel) :
-  MISModSec (MISModProg "Constants" Nothing [MISModule, MISUses [], 
+    outputLabel False) :
+  MISModSec (MISModProg "Constants" Nothing [MISUses [], 
     MISSyntax [MISExportedCs auxiliaryConstants, MISExportedTyps [], MISExportedAPs []],
     MISSemantics [MISStateVars [], MISStateInvariant []]]
-    constantsLabel) :
-  MISModSec (MISModProg "Hardware" (Just MIS.hwModIntro) [MISModule, MISUses []] 
-    hwLabel) :
+    constantsLabel False) :
+  MISModSec (MISModProg "Hardware" (Just MIS.hwModIntro) [MISUses []] 
+    hwLabel False) :
   []
 
 --FIXME: move below defined labels to a separate Labels.hs file?

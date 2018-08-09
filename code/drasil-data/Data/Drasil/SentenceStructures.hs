@@ -14,7 +14,7 @@ module Data.Drasil.SentenceStructures
   , displayConstrntsAsSet
   , fmtPhys, fmtSfwr, typUncr
   , mkTableFromColumns
-  , acroA, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, acroT
+  , acroGD, acroGS, acroIM, acroLC, acroPS, acroR, acroT
   , EnumType(..), WrapType(..), SepType(..), FoldType(..)
   ) where
 
@@ -126,11 +126,10 @@ toThe :: Sentence -> Sentence -> Sentence
 toThe p1 p2 = p1 +:+ S "to the" +:+ p2
 
 {--Acronyms to be used throughout--}
--- ex. S "as seen in (A1)" -> S "as seen in" +:+ sParen (acroA "1")
-acroA, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, 
+-- ex. S "as seen in (T1)" -> S "as seen in" +:+ sParen (acroT "1")
+acroGD, acroGS, acroIM, acroLC, acroPS, acroR, 
   acroT :: Int -> Sentence
 
-acroA  numVar = short assumption  :+: S (show numVar)
 acroGD numVar = short genDefn     :+: S (show numVar)
 acroGS numVar = short goalStmt    :+: S (show numVar)
 acroIM numVar = short inModel     :+: S (show numVar)
@@ -138,7 +137,6 @@ acroLC numVar = short likelyChg   :+: S (show numVar)
 acroPS numVar = short physSyst    :+: S (show numVar)
 acroR  numVar = short requirement :+: S (show numVar)
 acroT  numVar = short thModel     :+: S (show numVar)
-
 
 {--** Miscellaneous **--}
 tableShows :: LabelledContent -> Sentence -> Sentence
@@ -197,8 +195,8 @@ tAndDWSym tD sym = Flat $ ((at_start tD) :+:
 tAndDOnly :: Concept s => s -> ItemType
 tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
 
-followA :: Sentence -> Int -> Sentence
-preceding `followA` num = preceding +:+ S "following" +:+ acroA num
+followA :: Sentence -> AssumpChunk -> Sentence
+preceding `followA` assump = preceding +:+ S "following" +:+ makeRef assump
 
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
 getTandS :: (Quantity a, NamedIdea a) => a -> Sentence

@@ -43,8 +43,8 @@ stateInvars      cs ss = section' (titleize' Doc.stateInvar)      cs ss "StateIn
 assumptions      cs ss = section' (titleize' Doc.assumption)      cs ss "Assumptions" --FIXME: Assumptions already defined for SRS?
 accRoutSemantics cs ss = section' (titleize' Doc.accRoutSemantic) cs ss "AccRoutSemantics"
 
-misOfModule :: [Contents] -> [Section] -> String -> Section
-misOfModule cs ss mod = section' (titleize $ Doc.misOfModule mod) cs ss $ "MISof" ++ mod ++ "Module"
+misOfModule :: [Contents] -> [Section] -> String -> Label -> Section
+misOfModule cs ss mod lbl = section (titleize $ Doc.misOfModule mod) cs ss lbl
 
 --FIXME: All these contents need variability to be implemented in other examples
 

@@ -264,7 +264,7 @@ data ModHierarchSec = ModHierarchVerb Section | ModHierarchProg Sentence
 {--}
 
 data MISModSec = MISModVerb Section
-               | MISModProg String (Maybe Contents) [MISModSub]
+               | MISModProg String (Maybe Contents) [MISModSub] Label
 
 data MISModSub where
   MISModSubVerb     :: Section -> MISModSub
@@ -634,7 +634,7 @@ mkModHierarchSec (ModHierarchProg mgLink) = MIS.modHier [MIS.modHierarchyPointer
 
 mkMISModSec :: MISModSec -> Section
 mkMISModSec (MISModVerb s)             = s
-mkMISModSec (MISModProg modName x mms) = MIS.misOfModule (getIntroMaybe x) (map subsections mms) modName
+mkMISModSec (MISModProg modName x mms lbl) = MIS.misOfModule (getIntroMaybe x) (map subsections mms) modName lbl
   where
     getIntroMaybe :: Maybe Contents -> [Contents]
     getIntroMaybe Nothing      = []

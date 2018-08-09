@@ -4,15 +4,13 @@ module Language.Drasil.Chunk.AssumpChunk
   , assump
   ) where
 
-import Language.Drasil.UID (UID)
-import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd))
-import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
+import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd), HasLabel(getLabel))
+import Language.Drasil.Label.Core (Label)
+import Language.Drasil.Spec (Sentence)
+import Language.Drasil.UID (UID)
+
 import Control.Lens (makeLenses, (^.))
-import Language.Drasil.Label.Core (Label, getAdd)
-import Language.Drasil.Classes (HasLabel(getLabel))
-import Language.Drasil.RefTypes (RefType(Assump))
-import Language.Drasil.Label (mkLabelRAAssump')
 
 -- | Assumption chunk type. Has id, what is being assumed, and a shortname.
 -- Presently assumptions are captured as sentences.
@@ -32,4 +30,4 @@ instance HasShortName  AssumpChunk where shortname = lbl . shortname
 -- FIXME: is it safe to assume the correct label constructor will be
 --        used to build the passed in label?
 assump :: String -> Sentence -> Label -> AssumpChunk
-assump i a lb = AC i a lb
+assump = AC

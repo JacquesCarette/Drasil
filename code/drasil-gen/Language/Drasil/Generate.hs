@@ -13,11 +13,13 @@ import Language.Drasil.Printers (Format(TeX, HTML), DocSpec(DocSpec),
 import Language.Drasil.Code (generator, generateCode, Choices, CodeSpec)
 
 -- | Generate a number of artifacts based on a list of recipes.
-gen :: (HasSymbolTable s, HasPrintingOptions s) => DocSpec -> Document -> s -> IO ()
+gen :: (HasSymbolTable s, HasDefinitionTable s, HasPrintingOptions s) =>
+  DocSpec -> Document -> s -> IO ()
 gen ds fn sm = prnt sm ds fn
 
 -- | Generate the output artifacts (TeX+Makefile or HTML)
-prnt :: (HasSymbolTable s, HasPrintingOptions s) => s -> DocSpec -> Document -> IO ()
+prnt :: (HasSymbolTable s, HasDefinitionTable s, HasPrintingOptions s) =>
+  s -> DocSpec -> Document -> IO ()
 prnt sm dt@(DocSpec Website fn) body =
   do prntDoc dt body sm
      outh2 <- openFile ("Website/" ++ fn ++ ".css") WriteMode
@@ -28,15 +30,16 @@ prnt sm dt@(DocSpec _ _) body =
      prntMake dt
 
 -- | Helper for writing the documents (TeX / HTML) to file
-prntDoc :: (HasSymbolTable s, HasPrintingOptions s) => DocSpec -> Document -> s -> IO ()
+prntDoc :: (HasSymbolTable s, HasDefinitionTable s, HasPrintingOptions s) =>
+  DocSpec -> Document -> s -> IO ()
 prntDoc (DocSpec dt fn) body sm = prntDoc' dt fn (fmt dt) body sm
   where fmt SRS = TeX
         fmt MG  = TeX
         fmt MIS = TeX
         fmt Website = HTML
 
-prntDoc' :: (HasSymbolTable s, Show a, HasPrintingOptions s) => a
- -> String -> Format -> Document -> s -> IO ()
+prntDoc' :: (HasSymbolTable s, HasDefinitionTable s, Show a, HasPrintingOptions s) =>
+  a -> String -> Format -> Document -> s -> IO ()
 prntDoc' dt' fn format body' sm = do
   createDirectoryIfMissing False $ show dt'
   outh <- openFile (show dt' ++ "/" ++ fn ++ getExt format) WriteMode
@@ -54,7 +57,8 @@ prntMake ds@(DocSpec dt _) =
      hClose outh
 
 -- | Renders the documents
-writeDoc :: (HasSymbolTable s, HasPrintingOptions s) => s -> Format -> Filename -> Document -> Doc
+writeDoc :: (HasSymbolTable s, HasDefinitionTable s, HasPrintingOptions s) =>
+  s -> Format -> Filename -> Document -> Doc
 writeDoc s TeX  _  doc = genTeX doc s
 writeDoc s HTML fn doc = genHTML s fn doc
 writeDoc _    _  _   _ = error "we can only write TeX/HTML (for now)"

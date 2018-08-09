@@ -9,7 +9,7 @@ import qualified Drasil.DocLang.SRS as SRS (dataDefnLabel,
   valsOfAuxConsLabel, referenceLabel, indPRCaseLabel,
   datConLabel)
 import qualified Drasil.DocLang.GenBuilders as GB (intro)
-import qualified Drasil.DocLang.MIS as MIS (introMIS,hwModIntro)
+import qualified Drasil.DocLang.MIS as MIS (introMIS, hwModIntro, inputModIntro)
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), 
@@ -60,7 +60,7 @@ import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, 
   glass, gLassBR, lShareFac, ptOfExplsn, stdOffDist)
 import Drasil.GlassBR.DataDefs (aspRat, dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
-  dimLL, glaTyFac, tolStrDisFac, tolPre, risk, standOffDis)
+  dimLL, glaTyFac, tolStrDisFac, tolPre, risk, standOffDis, hFromtDD, glaTyFacDD)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
@@ -177,7 +177,7 @@ mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master
     MISSyntax [MISExportedCs [{-FILL IN-}], MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
     ctrlLabel False) :
-  MISModSec (MISModProg "Input" (Just fillIN) [MISUses [glTypeLabel, thicknessLabel, constantsLabel, hwLabel],
+  MISModSec (MISModProg "Input" (Just MIS.inputModIntro) [MISUses [glTypeLabel, thicknessLabel, constantsLabel, hwLabel],
     MISSyntax [{-MISSyntaxSubVerb [{-FILL IN-}]-}],
     MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [{-FILL IN-}], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]],
     MISConsiderations [{-FILL IN-}]]
@@ -190,11 +190,13 @@ mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master
     MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     calcLabel False) :
-  MISModSec (MISModProg "GlassType" (Just fillIN) [MISUses [],
+  MISModSec (MISModProg "GlassType" (Just (mkParagraph (S "from" +:+ makeRef glaTyFacDD))) --FIXME: link is broken
+    [MISUses [],
     MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     glTypeLabel True) :
-  MISModSec (MISModProg "Thickness" (Just fillIN) [MISUses [],
+  MISModSec (MISModProg "Thickness" (Just (mkParagraph (S "following" +:+ makeRef hFromtDD))) --FIXME: link is broken
+    [MISUses [],
     MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     thicknessLabel True) :
@@ -241,9 +243,6 @@ loadLabel      = mkLabelRASec "LoadASTM_MIS" "LoadASTM"
 inputLabel     = mkLabelRASec "Input_MIS" "Input"
 ctrlLabel      = mkLabelRASec "Control_MIS" "Control"
 
-
-fillIN :: Contents
-fillIN = mkParagraph $ S "FILL IN"
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, 

@@ -1,5 +1,6 @@
 module Drasil.GlassBR.DataDefs (aspRat, dataDefns, dimLL, gbQDefns, glaTyFac, 
-  hFromt, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac) where
+  hFromt, hFromtDD, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac,
+  glaTyFacDD) where
 
 import Language.Drasil
 import Prelude hiding (log, exp, sqrt)

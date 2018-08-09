@@ -98,15 +98,21 @@ notationIntroContd progName = foldlSP [S "The specification of", short progName,
 modHierarchyPointer :: Sentence -> Contents
 modHierarchyPointer mgLink = mkParagraph $ S "To view the Module Hierarchy, see" +:+ mgLink
 
----------------------------
--- HARDWARE MODULE INTRO --
----------------------------
+-------------------
+-- MODULE INTROS --
+-------------------
 
 hwModIntro :: Contents
 hwModIntro = foldlSP [S "This module hides the underlying hardware for I/O (to the",
   S "screen, or file, or other device). In general it will be provided by the selected",
   S "programming language and operating system"]
 
+inputModIntro :: Contents
+inputModIntro = foldlSP [S "The secrets of this module are the data structure for input",
+  S "parameters, how the values are input and how the values are verified. The load and",
+  S "verify secrets are isolated to their own access programs. This module follows the",
+  S "singleton pattern; that is, there is only one instance of this module"]
+  
 -----------------------
 -- HELPFUL FUNCTIONS --
 -----------------------

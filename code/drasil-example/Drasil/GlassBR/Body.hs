@@ -173,10 +173,13 @@ mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master
   NotationSec (NotationProg []) : 
   ModHierarchSec (ModHierarchProg $ S "section 3 of the MG (Link)") : --FIXME: hardcoded link
   Bibliography : 
-  MISModSec (MISModProg "Hardware" (Just MIS.hwModIntro) [MISModule, MISUses []]) :
+  MISModSec (MISModProg "Output" Nothing [MISModule, MISUses [{-FILL IN-}], 
+    MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]], 
+    MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]) :
   MISModSec (MISModProg "Constants" Nothing [MISModule, MISUses [], 
     MISSyntax [MISExportedCs auxiliaryConstants, MISExportedTyps [], MISExportedAPs []],
     MISSemantics [MISStateVars [], MISStateInvariant []]]) :
+  MISModSec (MISModProg "Hardware" (Just MIS.hwModIntro) [MISModule, MISUses []]) :
   []
 
 stdFields :: Fields

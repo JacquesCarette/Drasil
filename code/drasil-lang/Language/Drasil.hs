@@ -99,7 +99,7 @@ module Language.Drasil (
   , ucw, UnitaryConceptDict
   -- Chunk.Attributes --FIXME: Changed a lot
   , getSource
-  , Derivation, getDerivation, getShortName, shortname
+  , Derivation, getDerivation, getShortName
   , sourceref
   , References
   -- Chunk.ShortName

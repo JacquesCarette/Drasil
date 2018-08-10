@@ -17,7 +17,7 @@ import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList
 import Data.Drasil.Utils (weave)
 
 import Drasil.SWHS.Concepts (gauss_div)
-import Drasil.SWHS.Labels (genDef2Label)
+import Drasil.SWHS.Labels (rocTempSimpL)
 import Drasil.SWHS.TMods (t1ConsThermE)
 import Drasil.SWHS.Unitals (in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, 
   ht_flux_out)
@@ -59,7 +59,7 @@ genDefDesc4 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   [Sentence] -> [Sentence]
 genDefDesc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
   ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
-  makeRef genDef2Label, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
+  makeRef rocTempSimpL, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
   titleize' assumption, (foldlList Comma List $ (map sParen)
   assumps) `sC` S "we have"]

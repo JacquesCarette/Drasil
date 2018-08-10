@@ -13,7 +13,7 @@ import Data.Drasil.Concepts.Thermodynamics (boil_pt, boiling, heat, heat_cap_spe
 import Drasil.SWHS.Assumptions (newA12, newA14, newA15, newA16, newA17, newA18, newA19)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, tank, water)
 import Drasil.SWHS.DataDefs(dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac, ddRef)
-import Drasil.SWHS.Labels (genDef2Label, imod1Label, imod2Label, imod3Label, imod4Label)
+import Drasil.SWHS.Labels (rocTempSimpL, eBalanceOnWtrL, eBalanceOnPCML, heatEInWtrL, heatEInPCML)
 import Drasil.SWHS.TMods (t2SensHtE, t3LatHtE)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, ht_flux_C, ht_flux_P, htCap_L_P, 
   htCap_S_P, htCap_W, htFusion, latentE_P, melt_frac, pcm_E, pcm_HTC, pcm_initMltE, 
@@ -36,7 +36,7 @@ eBalanceOnWtr = im'' eBalanceOnWtr_rc [qw w_mass, qw htCap_W, qw coil_HTC, qw pc
 eBalanceOnWtr_rc :: RelationConcept
 eBalanceOnWtr_rc = makeRC "eBalanceOnWtr_rc" (nounPhraseSP $ "Energy balance on " ++
   "water to find the temperature of the water") balWtrDesc balWtr_Rel 
-  imod1Label
+  eBalanceOnWtrL
 
 balWtr_Rel :: Relation
 balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
@@ -100,7 +100,7 @@ eBalanceOnWtrDerivDesc1 roc tw en wt vo wvo ms wms hcs hw ht cl hfc cs ps tk hfp
     sParen (makeRef newA15) :+: S ". Assuming no volumetric", 
     S "heat generation per unit", phrase vo +:+.
     (sParen (makeRef newA16) `sC` (E $ sy vhg $= 0)), S "Therefore, the equation for",
-     makeRef genDef2Label, S "can be written as"]
+     makeRef rocTempSimpL, S "can be written as"]
 
 eBalanceOnWtrDerivDesc2 :: QDefinition -> QDefinition -> [Sentence]
 eBalanceOnWtrDerivDesc2 dd1 dd2 =
@@ -196,7 +196,7 @@ eBalanceOnPCM_rc :: RelationConcept
 eBalanceOnPCM_rc = makeRC "eBalanceOnPCM_rc" (nounPhraseSP
   "Energy Balance on PCM to Find T_p")
   --FIXME: T_p should be called from symbol
-  balPCMDesc balPCM_Rel imod2Label
+  balPCMDesc balPCM_Rel eBalanceOnPCML
 
 balPCM_Rel :: Relation
 balPCM_Rel = (deriv (sy temp_PCM) time) $= case_ [case1, case2, case3, case4]
@@ -267,7 +267,7 @@ eBalanceOnPCMDerivDesc1 roc tempP en wt vo pcmvo pm hcs hsp hf hfp pc ps ht ass1
    S "material surface area" +:+. (E $ sy ps), S "There is no", phrase hf +:+. S "output",
    S "Assuming no volumetric", phrase ht, S "generation per unit", phrase vo,
    (sParen (makeRef ass16)) `sC` (E $ sy vhg $= 0), S ", the equation for",
-   makeRef genDef2Label, S "can be written as"]
+   makeRef rocTempSimpL, S "can be written as"]
 
 eBalanceOnPCMDerivDesc2 :: QDefinition -> UnitalChunk -> [Sentence]
 eBalanceOnPCMDerivDesc2 dd2 hfp =
@@ -346,7 +346,7 @@ heatEInWtr = im'' heatEInWtr_rc [qw temp_init, qw w_mass, qw htCap_W, qw w_mass]
 
 heatEInWtr_rc :: RelationConcept
 heatEInWtr_rc = makeRC "heatEInWtr_rc" (nounPhraseSP "Heat energy in the water")
-  htWtrDesc htWtr_Rel imod3Label
+  htWtrDesc htWtr_Rel heatEInWtrL
 
 htWtr_Rel :: Relation
 htWtr_Rel = (apply1 w_E time) $= (sy htCap_W) * (sy w_mass) *
@@ -376,11 +376,11 @@ heatEInPCM = im' heatEInPCM_rc [qw temp_melt_P, qw time_final, qw temp_init, qw 
  qw pcm_HTC, qw pcm_mass, qw htCap_S_P, qw htCap_L_P, qw temp_PCM, qw htFusion, qw t_init_melt]
   [TCon AssumedCon $ sy temp_init $< sy temp_melt_P] (qw pcm_E)
   [TCon AssumedCon $ 0 $< sy time $< sy time_final] 
-  imod4Label [htPCMDesc]
+  heatEInPCML [htPCMDesc]
 
 heatEInPCM_rc :: RelationConcept
 heatEInPCM_rc = makeRC "heatEInPCM_rc" (nounPhraseSP "Heat energy in the PCM")
-  htPCMDesc htPCM_Rel imod4Label
+  htPCMDesc htPCM_Rel heatEInPCML
 
 htPCM_Rel :: Relation
 htPCM_Rel = sy pcm_E $= case_ [case1, case2, case3, case4]

@@ -2,25 +2,23 @@ module Drasil.SWHS.Labels where
 
 import Language.Drasil
 
-assump1Label, assump10Label, assump14Label, assump18Label, 
-  assump19Label :: Label
+-- Assumptions
+thermalEnergyOnlyL, lawConvectiveCoolingWtrPCML, waterAlwaysLiquidL, 
+    noGaseousStatePCML, atmosphericPressureTankL :: Label
+thermalEnergyOnlyL          = mkLabelRAAssump' "Thermal-Energy-Only"
+lawConvectiveCoolingWtrPCML = mkLabelRAAssump' "Law-Convective-Cooling-Water-PCM"
+waterAlwaysLiquidL          = mkLabelRAAssump' "Water-Always-Liquid"
+noGaseousStatePCML          = mkLabelRAAssump' "No-Gaseous-State-PCM"
+atmosphericPressureTankL    = mkLabelRAAssump' "Atmospheric-Pressure-Tank"
 
-assump1Label  = mkLabelRAAssump' "Thermal-Energy-Only"
-assump10Label = mkLabelRAAssump' "Law-Convective-Cooling-Water-PCM"
-assump14Label = mkLabelRAAssump' "Water-Always-Liquid"
-assump18Label = mkLabelRAAssump' "No-Gaseous-State-PCM"
-assump19Label = mkLabelRAAssump' "Atmospheric-Pressure-Tank"
+-- General Definitions
+nwtnCoolingL, rocTempSimpL :: Label
+nwtnCoolingL = mkLabelSame "nwtnCooling" (Def General)
+rocTempSimpL = mkLabelSame "rocTempSimp" (Def General)
 
-genDef1Label, genDef2Label :: Label
-genDef1Label = mkLabelSame "nwtnCooling" (Def General)
-genDef2Label = mkLabelSame "rocTempSimp" (Def General)
-
-imod1Label, imod2Label, imod3Label, imod4Label :: Label
-imod1Label = mkLabelSame "eBalanceOnWtr" (Def Instance)
-imod2Label = mkLabelSame "eBalanceOnPCM" (Def Instance)
-imod3Label = mkLabelSame "heatEInWtr"    (Def Instance)
-imod4Label = mkLabelSame "heatEInPCM"    (Def Instance)
-
-traceFig1LC, traceFig2LC :: Label
-traceFig1LC = mkLabelRAFig "traceFig1LabelSWHS"
-traceFig2LC = mkLabelRAFig "traceFig2LabelSWHS"
+-- Instance Models
+eBalanceOnWtrL, eBalanceOnPCML, heatEInWtrL, heatEInPCML :: Label
+eBalanceOnWtrL = mkLabelSame "eBalanceOnWtr" (Def Instance)
+eBalanceOnPCML = mkLabelSame "eBalanceOnPCM" (Def Instance)
+heatEInWtrL    = mkLabelSame "heatEInWtr"    (Def Instance)
+heatEInPCML    = mkLabelSame "heatEInPCM"    (Def Instance)

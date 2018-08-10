@@ -22,7 +22,7 @@ import Data.Drasil.Utils (unwrap, weave)
 
 import Drasil.SWHS.Assumptions
 import Drasil.SWHS.Concepts (gauss_div)
-import Drasil.SWHS.Labels (genDef1Label, genDef2Label)
+import Drasil.SWHS.Labels (nwtnCoolingL, rocTempSimpL)
 import Drasil.SWHS.TMods (t1ConsThermE)
 import Drasil.SWHS.Unitals (vol_ht_gen, deltaT, temp_env, pcm_SA,
   out_SA, in_SA, ht_flux_in, ht_flux_out, htTransCoeff, thFluxVect)
@@ -39,8 +39,8 @@ swhsGDs :: [GenDefn]
 swhsGDs = [nwtnCoolingGD, rocTempSimpGD] 
 
 nwtnCoolingGD, rocTempSimpGD :: GenDefn
-nwtnCoolingGD = gdNoUnitDef nwtnCooling [] genDef1Label
-rocTempSimpGD = gdNoUnitDef rocTempSimp [] genDef2Label
+nwtnCoolingGD = gdNoUnitDef nwtnCooling [] nwtnCoolingL
+rocTempSimpGD = gdNoUnitDef rocTempSimp [] rocTempSimpL
 
 generalDefinitions :: [GenDefn]
 generalDefinitions = [gd' nwtnCooling (Just thermal_flux) ([] :: Derivation) "nwtnCooling" [nwtnCooling_desc],
@@ -50,7 +50,7 @@ generalDefinitions = [gd' nwtnCooling (Just thermal_flux) ([] :: Derivation) "nw
 
 nwtnCooling :: RelationConcept
 nwtnCooling = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling") 
-  nwtnCooling_desc nwtnCooling_rel genDef1Label
+  nwtnCooling_desc nwtnCooling_rel nwtnCoolingL
 
 nwtnCooling_rel :: Relation
 nwtnCooling_rel = apply1 ht_flux QP.time $= sy htTransCoeff *
@@ -75,7 +75,7 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
 --
 rocTempSimp :: RelationConcept
 rocTempSimp = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
-  "of change of temperature") rocTempSimp_desc rocTempSimp_rel genDef2Label
+  "of change of temperature") rocTempSimp_desc rocTempSimp_rel rocTempSimpL
 
 rocTempSimp_rel :: Relation
 rocTempSimp_rel = (sy QPP.mass) * (sy QT.heat_cap_spec) *
@@ -141,7 +141,7 @@ s4_2_3_desc4 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   [Sentence] -> [Sentence]
 s4_2_3_desc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
   ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
-  makeRef genDef2Label, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
+  makeRef rocTempSimpL, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
   titleize' assumption, (foldlList Comma List $ (map (\d -> sParen (d)))
   assumps) `sC` S "we have"]

@@ -20,7 +20,7 @@ import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCap_V, htCap_S,
   htCap_L, vol_ht_gen, thFluxVect)
 import Drasil.SWHS.Concepts (transient)
 import Drasil.SWHS.DataDefs (dd3HtFusion)
-import Drasil.SWHS.Labels (assump1Label)
+import Drasil.SWHS.Labels (thermalEnergyOnlyL)
 
 swhsTMods :: [TheoryModel]
 swhsTMods = [t1ConsThermE, t2SensHtE, t3LatHtE]
@@ -64,7 +64,7 @@ t1descr = foldlSent [
   S "is the" +:+. (gradient ^. defn), S "For this", phrase equation,
   S "to apply" `sC` S "other forms of", phrase energy `sC` S "such as",
   phrase mech_energy `sC`
-  S "are assumed to be negligible in the", phrase system, sParen (makeRef assump1Label)]
+  S "are assumed to be negligible in the", phrase system, sParen (makeRef thermalEnergyOnlyL)]
 
 -------------------------
 -- Theoretical Model 2 --

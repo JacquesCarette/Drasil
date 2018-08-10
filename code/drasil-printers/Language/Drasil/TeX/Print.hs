@@ -36,7 +36,7 @@ import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, item', description,
   includegraphics, center, figure, item, symbDescription, enumerate, itemize, toEqn, empty,
   newline, superscript, parens, fraction, quote, ref, ucref, lcref, aref, mref, sref, rref,
-  hyperref, cite, sec, newpage, maketoc, maketitle, document, author, title)
+  hyperref, snref, cite, sec, newpage, maketoc, maketitle, document, author, title)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (<>), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
 import Language.Drasil.TeX.Preamble (genPreamble)
@@ -270,6 +270,7 @@ spec (Ref RT.Assump r _ _) = aref  (pure $ text r)
 spec (Ref RT.LCh r _ _)     = lcref (pure $ text r)
 spec (Ref RT.UnCh r _ _)     = ucref (pure $ text r)
 spec (Ref RT.Cite r _ _)   = cite  (pure $ text r)
+spec (Ref RT.Blank r sn _) = snref r $ spec sn
 spec (Ref t r _ _)         = ref (show t) (pure $ text r)
 spec EmptyS              = empty
 spec (Quote q)           = quote $ spec q
@@ -383,7 +384,7 @@ pl_item :: (ItemType,Maybe Label) -> D
 pl_item (i, l) = mlref l <> p_item i
 
 mlref :: Maybe Label -> D
-mlref = maybe empty $ label . spec
+mlref = maybe empty $ ((<>) $ pure $ text "\\phantomsection") . label . spec
 
 p_item :: ItemType -> D
 p_item (Flat s) = item $ spec s

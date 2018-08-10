@@ -1003,7 +1003,7 @@ In addition, the change in heat energy in the PCM should equal the energy input 
 \begin{dmath}
 {E_{P}}=\int_{0}^{t}{{h_{P}} {A_{P}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right)}\,dt
 \end{dmath}
-Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as ``sanity''checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% R\ref{FR:Verify-Energy-Output-follow-Conservation-of-Energy}.
+Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as ``sanity'' checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% R\ref{FR:Verify-Energy-Output-follow-Conservation-of-Energy}.
 \section{Requirements}
 \label{Sec:Requirements}
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
@@ -1070,7 +1070,7 @@ ${t_{final}}$ & s & final time
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:Output-Input-Derived-Quantities}:]Output the input quantities and derived quantities in the following list: the quantities from R\ref{FR:Input-Initial-Quantities}, the masses from R\ref{FR:Use-Above-Find-Mass-IM1-IM4}, ${τ_{W}}$ (from \hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}), $η$ (from \hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}), ${{τ_{P}}^{S}}$ (from \hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}) and ${{τ_{P}}^{L}}$ (from \hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}).
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Calculate-Temperature-Water-OverTime}:]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Calculate-Temperature-Water-Over-Time}:]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}).
 \end{description}
 \begin{description}
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:Calculate-Temperature-PCM-Over-Time}:]Calculate and output the temperature of the phase change material (${T_{P}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}).

@@ -55,8 +55,12 @@ import Drasil.SWHS.DataDesc (swhsInputMod)
 import Drasil.SWHS.GenDefs (swhsGDs, generalDefinitions)
 import Drasil.SWHS.IMods (eBalanceOnWtr_new, eBalanceOnPCM_new, 
   heatEInWtr_new, heatEInPCM_new, swhsIMods')
-import Drasil.SWHS.Requirements (req1, req2, reqEqn1, reqEqn2,
-  req3, req4, req5, req6, req7, req8, req9, req10, req11, nonFuncReqs)
+import Drasil.SWHS.Requirements (inputInitQuants, useAboveFindMass, 
+  checkWithPhysConsts, outputInputDerivQuants, calcTempWtrOverTime, 
+  calcTempPCMOverTime, calcChgHeatEnergyWtrOverTime, 
+  calcChgHeatEnergyPCMOverTime, verifyEnergyOutput, 
+  calcPCMMeltBegin, calcPCMMeltEnd, inputInitQuantsEqn, 
+  useAboveFindMassEqn, nonFuncReqs) -- sorted by order of appearance; reqs, eqns, list
 import Drasil.SWHS.TMods (t1ConsThermE_new, t2SensHtE_new, 
   t3LatHtE_new, swhsTMods)
 import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
@@ -432,8 +436,8 @@ funcReqs :: Section
 funcReqs = SRS.funcReq funcReqsList []
 
 funcReqsList :: [Contents]
-funcReqsList = [LlC req1] ++ [funcReqsTable] ++ [LlC req2] ++
-  [reqEqn1, reqEqn2] ++ reqs
+funcReqsList = [LlC inputInitQuants] ++ [funcReqsTable] ++ [LlC useAboveFindMass] ++
+  [inputInitQuantsEqn, useAboveFindMassEqn] ++ reqs
 
 funcReqsTable :: Contents
 funcReqsTable = LlC $ llcc (mkLabelSame "InConstraints" Tab) $ (Table 
@@ -444,7 +448,9 @@ funcReqsTable = LlC $ llcc (mkLabelSame "InConstraints" Tab) $ (Table
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False)
 
 reqs :: [Contents]
-reqs = map LlC [req3, req4, req5, req6, req7, req8, req9, req10, req11]
+reqs = map LlC [checkWithPhysConsts, outputInputDerivQuants, calcTempWtrOverTime,
+  calcTempPCMOverTime, calcChgHeatEnergyWtrOverTime, calcChgHeatEnergyPCMOverTime,
+  verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd]
 
 ---------------------------------------
 -- 5.2 : Non-functional Requirements --
@@ -1224,12 +1230,12 @@ propCorSolDeriv4 = eqUnR' $
 
 propCorSolDeriv5 :: ConceptChunk -> CI -> CI -> Contents
 propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)" 
-  `sAnd` S "(FIXME: Equation 8) can be used as", Quote (S "sanity") :+:
+  `sAnd` S "(FIXME: Equation 8) can be used as", Quote (S "sanity") +:+
   S "checks to gain confidence in any", phrase solution,
   S "computed by" +:+. short pro, S "The relative",
   S "error between the results computed by", short pro `sAnd`
   S "the results calculated from the", short rs, S "of these",
-  plural eq, S "should be less than 0.001%", makeRef req9]
+  plural eq, S "should be less than 0.001%", makeRef verifyEnergyOutput]
 
 -- Above section only occurs in this example (although maybe it SHOULD be in
 -- the others).

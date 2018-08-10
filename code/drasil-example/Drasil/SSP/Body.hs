@@ -21,8 +21,8 @@ import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel,
 import Data.Drasil.Concepts.Documentation (analysis, assumption,
   design, document, effect, element, endUser, environment, goalStmt, inModel, 
   input_, interest, interest, interface, issue, loss, method_, organization, 
-  physics, problem, product_, property, requirement, software, softwareSys, 
-  srs, sysCont, system, table_, template, user, value, variable)
+  physics, problem, product_, property, software, softwareSys, srs, sysCont, 
+  system, table_, template, user, value, variable)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)

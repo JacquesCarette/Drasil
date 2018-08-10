@@ -53,8 +53,8 @@ import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
 import Drasil.SWHS.DataDefs (swhsDataDefs, dd1HtFluxC, dd2HtFluxP, dataDefns)
 import Drasil.SWHS.DataDesc (swhsInputMod)
 import Drasil.SWHS.GenDefs (swhsGDs, generalDefinitions)
-import Drasil.SWHS.IMods (eBalanceOnWtr_new, eBalanceOnPCM_new, 
-  heatEInWtr_new, heatEInPCM_new, swhsIMods')
+import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, 
+  heatEInWtr, heatEInPCM, swhsIMods)
 import Drasil.SWHS.Requirements (inputInitQuants, useAboveFindMass, 
   checkWithPhysConsts, outputInputDerivQuants, calcTempWtrOverTime, 
   calcTempPCMOverTime, calcChgHeatEnergyWtrOverTime, 
@@ -150,7 +150,7 @@ mkSRS = RefSec (RefProg intro [
           , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
           , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-           [eBalanceOnWtr_new, eBalanceOnPCM_new, heatEInWtr_new, heatEInPCM_new] ShowDerivation
+           [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM] ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty dataConTail
            [dataConTable1, dataConTable3]
           , CorrSolnPpties propsDeriv
@@ -492,7 +492,7 @@ traceDataRef, traceFuncReqRef, traceInstaModelRef, traceAssumpRef, traceTheories
   traceDataDefRef, traceLikelyChgRef, traceGenDefRef :: [Sentence]
 
 traceInstaModel = ["IM1", "IM2", "IM3", "IM4"]
-traceInstaModelRef = map makeRef swhsIMods' --FIXME: swhsIMods' is a hack?
+traceInstaModelRef = map makeRef swhsIMods --FIXME: swhsIMods is a hack?
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
   "R11"]
@@ -772,7 +772,7 @@ orgDocIntro = foldlSent [S "The", phrase organization, S "of this",
 orgDocEnd :: NamedIdea ni => ni -> CI -> Sentence
 orgDocEnd sp pro = foldlSent_ [S "The", plural inModel,
   sParen (midRef SRS.inModelLabel), S "to be solved are referred to as" +:+. 
-  (foldlList Comma List $ map makeRef swhsIMods'), S "The", plural inModel,
+  (foldlList Comma List $ map makeRef swhsIMods), S "The", plural inModel,
   S "provide the", phrase ode, sParen (short ode :+: S "s") `sAnd` 
   S "algebraic", plural equation, S "that", phrase model, S "the" +:+. 
   phrase sp, short pro, S "solves these", short ode :+: S "s"]
@@ -1023,11 +1023,11 @@ iModSubpar :: NamedChunk -> UncertQ -> UncertQ -> UncertQ -> ConceptChunk
   -> [Contents]
 iModSubpar sol temw tempcm epcm pc = [foldlSP [S "The goals", foldlList Comma List $ map S
   ["GS1", "GS2", "GS3", "GS4"], S "are solved by" +:+. foldlList Comma List -- hardcoded GSs because Goals are not implemented yet
-  [makeRef eBalanceOnWtr_new, makeRef eBalanceOnPCM_new, makeRef heatEInWtr_new, makeRef heatEInPCM_new], 
-  S "The", plural sol, S "for", makeRef eBalanceOnWtr_new `sAnd` makeRef eBalanceOnPCM_new, 
+  [makeRef eBalanceOnWtr, makeRef eBalanceOnPCM, makeRef heatEInWtr, makeRef heatEInPCM], 
+  S "The", plural sol, S "for", makeRef eBalanceOnWtr `sAnd` makeRef eBalanceOnPCM, 
   S "are coupled since the", phrase sol, S "for", ch temw `sAnd` ch tempcm +:+. S "depend on one another", 
-  makeRef heatEInWtr_new, S "can be solved once", makeRef eBalanceOnWtr_new, S "has been solved. The", 
-  phrase sol `sOf` makeRef eBalanceOnPCM_new `sAnd` makeRef heatEInPCM_new, S "are also coupled, since the", 
+  makeRef heatEInWtr, S "can be solved once", makeRef eBalanceOnWtr, S "has been solved. The", 
+  phrase sol `sOf` makeRef eBalanceOnPCM `sAnd` makeRef heatEInPCM, S "are also coupled, since the", 
   phrase tempcm `sAnd` phrase epcm, S "depend on the", phrase pc]]
 
 iMod1Para :: UnitalChunk -> ConceptChunk -> [Contents]
@@ -1063,7 +1063,7 @@ iMod1Sent6 = [S "Setting",
 
 iMod1Sent7 :: [Sentence]
 iMod1Sent7 = [S "Finally, factoring out", (E $ 1 / sy tau_W) `sC` 
-  S "we are left with the governing", short ode, S "for", makeRef eBalanceOnWtr_new]
+  S "we are left with the governing", short ode, S "for", makeRef eBalanceOnWtr]
 
 iMod1Eqn1, iMod1Eqn2, iMod1Eqn3, iMod1Eqn4, iMod1Eqn5,
   iMod1Eqn6, iMod1Eqn7 :: Expr

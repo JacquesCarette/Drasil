@@ -57,7 +57,7 @@ import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc,
 import Drasil.SWHS.Changes (chgsStart, likeChg2, likeChg3, likeChg6)
 import Drasil.SWHS.Concepts (coil, progName, sWHT, tank, tank_para, transient, water)
 import Drasil.SWHS.DataDefs(dd1HtFluxC, dd1HtFluxCDD)
-import Drasil.SWHS.IMods (eBalanceOnPCM_new, heatEInWtr_new)
+import Drasil.SWHS.IMods (eBalanceOnPCM, heatEInWtr)
 import Drasil.SWHS.GenDefs (nwtnCooling, rocTempSimp, rocTempSimpGD,
   nwtnCooling_desc, rocTempSimp_desc, swhsGDs)
 import Drasil.SWHS.References (ref2, ref3, ref4)
@@ -141,7 +141,7 @@ mkSRS = RefSec (RefProg intro
           , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
           , DDs' ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxCDD] ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-            [eBalanceOnWtr_new, heatEInWtr_new] ShowDerivation
+            [eBalanceOnWtr_new, heatEInWtr] ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty dataContMid
             [dataConstTable1, dataConstTable2]
           ]
@@ -395,7 +395,7 @@ assumpS13 =
   phrase melt_pt `sAnd` phrase boil_pt +:+ S "of water are" +:+ S (show (0 :: Integer))
   :+: Sy (unit_symb QT.temp) `sAnd` S (show (100 :: Integer)) :+:
   Sy (unit_symb QT.temp) `sC` S "respectively" +:+.
-  sSqBr ((makeRef eBalanceOnWtr_new) `sC` (makeRef eBalanceOnPCM_new)))
+  sSqBr ((makeRef eBalanceOnWtr_new) `sC` (makeRef eBalanceOnPCM)))
 
 newA19 :: AssumpChunk
 newA19 = assump "Atmospheric-Pressure-Tank" assumpS13 
@@ -558,7 +558,7 @@ funcReqsList = funcReqsListWordsNum
 
   -- [S "Calculate and", phrase output_, S "the", phrase w_E,
   -- sParen (ch w_E :+: sParen (ch time)), S "over the",
-  -- phrase simulation, phrase time +:+. sParen (S "from" +:+ makeRef heatEInWtr_new)]
+  -- phrase simulation, phrase time +:+. sParen (S "from" +:+ makeRef heatEInWtr)]
   -- ]
 
 req1, req2, req3, req4, req5, req6 :: LabelledContent
@@ -571,7 +571,7 @@ req1 = mkRequirement "req1" (
 req2 = mkRequirement "req2" (
   S "Use the" +:+ plural input_ +:+ S "in" +:+
   (makeRef req1) +:+ S "to find the" +:+ phrase mass +:+
-  S "needed for" +:+ makeRef eBalanceOnWtr_new +:+ S "to" +:+ makeRef eBalanceOnPCM_new `sC`
+  S "needed for" +:+ makeRef eBalanceOnWtr_new +:+ S "to" +:+ makeRef eBalanceOnPCM `sC`
   S "as follows, where" +:+ ch w_vol `isThe` phrase w_vol +:+
   S "and" +: (ch tank_vol `isThe` phrase tank_vol) ) "Find-Mass"
 req3 = mkRequirement "req3" (
@@ -591,7 +591,7 @@ req5 = mkRequirement "req5" (
 req6 = mkRequirement "req6" (
   S "Calculate and" +:+ phrase output_ +:+ S "the" +:+ phrase w_E
   +:+ sParen (ch w_E :+: sParen (ch time)) +:+ S "over the" +:+
-  phrase sim_time +:+. sParen (S "from" +:+ makeRef heatEInWtr_new) ) "Calculate-Change-Heat_Energy-Water-Time"
+  phrase sim_time +:+. sParen (S "from" +:+ makeRef heatEInWtr) ) "Calculate-Change-Heat_Energy-Water-Time"
 
 nr2Expr :: Expr
 nr2Expr = ((sy w_mass) $= (sy w_vol) * (sy w_density) $= (((sy diam) / 2) *
@@ -604,7 +604,7 @@ nr1 = cic "Input-Inital-Values" (titleize input_ +:+ S "the" +:+ plural quantity
     S "and initial" +:+. plural condition) "Input-Inital-Values" funcReqDom
 nr2 = cic "Find-Mass" (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef nr1 +:+
     S "to find the" +:+ phrase mass +:+ S "needed for" +:+ makeRef eBalanceOnWtr_new +:+
-    S "to" +:+ makeRef eBalanceOnPCM_new `sC` S "as follows, where" +:+ ch w_vol `isThe`
+    S "to" +:+ makeRef eBalanceOnPCM `sC` S "as follows, where" +:+ ch w_vol `isThe`
     phrase w_vol +:+ S "and" +:+ (ch tank_vol `isThe` phrase tank_vol) :+:
     S ":" +:+ E nr2Expr) "Find-Mass" funcReqDom  -- FIXME: Equation shouldn't be inline.
 nr3 = cic "Check-Inputs-Satisfy-Physical-Constraints" (S "Verify that the" +:+ plural input_ +:+
@@ -623,7 +623,7 @@ nr5 = cic "Calculate-Temperature-Water-Over-Time" (S "Calculate and output the" 
 nr6 = cic "Calculate-Change-Heat_Energy-Water-Time" 
     (S "Calculate and" +:+ phrase output_ +:+ S "the" +:+
     phrase w_E +:+ sParen (ch w_E :+: sParen (ch time)) +:+ S "over the" +:+
-    phrase sim_time +:+. sParen (S "from" +:+ makeRef heatEInWtr_new))
+    phrase sim_time +:+. sParen (S "from" +:+ makeRef heatEInWtr))
     "Calculate-Change-Heat_Energy-Water-Time" funcReqDom
 
 nrTable :: LabelledContent
@@ -735,7 +735,7 @@ traceDataRef, traceFuncReqRef, traceInstaModelRef, traceAssumpRef, traceTheories
   traceDataDefRef, traceLikelyChgRef, traceGenDefRef :: [Sentence]
 
 traceInstaModel = ["IM1", "IM2"]
-traceInstaModelRef = map makeRef [eBalanceOnWtr_new, heatEInWtr_new]
+traceInstaModelRef = map makeRef [eBalanceOnWtr_new, heatEInWtr]
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
 traceFuncReqRef = map makeRef newReqs

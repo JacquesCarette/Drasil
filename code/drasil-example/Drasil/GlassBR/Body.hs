@@ -178,7 +178,7 @@ mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master
   ModHierarchSec (ModHierarchProg $ S "section 3 of the MG (Link)") : --FIXME: hardcoded link
   Bibliography : 
   MISModSec (MISModProg "Control" Nothing [MISUses [inputLabel, loadLabel, calcLabel, outputLabel],
-    MISSyntax [MISExportedCs [{-FILL IN-}], MISExportedAPs [{-FILL IN-}]],
+    MISSyntax [MISExportedCs ([{-FILL IN-}] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
     ctrlLabel False) :
   MISModSec (MISModProg "Input" (Just MIS.inputModIntro) [MISUses [glTypeLabel, thicknessLabel, constantsLabel, hwLabel],
@@ -187,38 +187,38 @@ mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master
     MISConsiderations [{-FILL IN-}]]
     inputLabel False) :
   MISModSec (MISModProg "LoadASTM" Nothing [MISUses [functLabel, contoursLabel],
-    MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]],
+    MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [], MISStateInvariant [], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
     loadLabel False) :
   MISModSec (MISModProg "Calc" Nothing [MISUses [inputLabel, contoursLabel, constantsLabel],
-    MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]],
+    MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     calcLabel False) :
   MISModSec (MISModProg "GlassType" (Just (mkParagraph (S "from" +:+ makeRef glaTyFacDD))) --FIXME: link is broken
     [MISUses [],
-    MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]],
+    MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     glTypeLabel True) :
   MISModSec (MISModProg "Thickness" (Just (mkParagraph (S "following" +:+ makeRef hFromtDD))) --FIXME: link is broken
     [MISUses [],
-    MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]],
+    MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     thicknessLabel True) :
   MISModSec (MISModProg "Funct" Nothing [MISUses [seqServLabel],
-    MISSyntax [MISExportedCs [{-FILL IN-}], MISExportedAPs [{-FILL IN-}]],
+    MISSyntax [MISExportedCs ([{-FILL IN-}] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]],
     MISConsiderations [{-FILL IN-}]]
     functLabel True) :
   MISModSec (MISModProg "Contours" Nothing [MISUses [functLabel],
-    MISSyntax [MISExportedCs [{-FILL IN-}], MISExportedAPs [{-FILL IN-}]],
+    MISSyntax [MISExportedCs ([{-FILL IN-}] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     contoursLabel True) :
   MISModSec (MISModProg "SeqServices" Nothing [MISUses [],
-    MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]],
+    MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [], MISStateInvariant [], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
     seqServLabel False) :
   MISModSec (MISModProg "Output" Nothing [MISUses [inputLabel, thicknessLabel, glTypeLabel, hwLabel],
-    MISSyntax [MISExportedCs [], MISExportedAPs [{-FILL IN-}]], 
+    MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]], 
     MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     outputLabel False) :
   MISModSec (MISModProg "Constants" Nothing [MISUses [], 

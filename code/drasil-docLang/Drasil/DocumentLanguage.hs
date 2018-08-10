@@ -261,7 +261,7 @@ data MISModSub where
   MISConsiderations :: [Contents] -> MISModSub
 
 data MISSyntaxSub where
-  MISExportedCs    :: [QDefinition] -> MISSyntaxSub
+  MISExportedCs    :: (HasUID c, HasSymbol c, ExprRelat c) => [c] -> MISSyntaxSub
   MISExportedAPs   :: [Contents] -> MISSyntaxSub
   MISExportedTyps  :: [Contents] -> MISSyntaxSub --FIXME: automated to generate with Template Module; correct step?
 

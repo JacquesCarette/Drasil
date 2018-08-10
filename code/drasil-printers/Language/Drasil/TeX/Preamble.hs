@@ -2,9 +2,6 @@ module Language.Drasil.TeX.Preamble(genPreamble) where
 
 import Data.List (nub)
 
-import Language.Drasil hiding (EqnBlock, Paragraph, URL, Bib, Graph, 
-  Assumption, Requirement, Figure, Table, Definition)
-
 import Language.Drasil.Printing.LayoutObj (LayoutObj(Paragraph, Header, Bib, Graph, 
   List, EqnBlock, Figure, ALUR, Table, Definition, HDiv), 
   ALUR(LikelyChange, UnlikelyChange, Assumption, Requirement))
@@ -12,7 +9,7 @@ import Language.Drasil.TeX.Monad (D, vcat, (%%))
 import Language.Drasil.TeX.Helpers (docclass, command, command0, command1o, command3, 
   comm, count, usepackage)
 
---import Language.Drasil.Config (hyperSettings, fontSize,bibFname)
+import Language.Drasil.Config (hyperSettings, fontSize, bibFname)
 
 -- FIXME: this really shouldn't be in code, it should be data!
 data Package = AMSMath

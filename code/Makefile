@@ -71,7 +71,7 @@ build_docl: build_data
 	stack install -j2 $(stackArgs) drasil-docLang
 
 build_exam: build_docl
-	stack install -j2 $(stackArgs) drasil-example --force-dirty
+	stack install -j2 $(stackArgs) drasil-example
 
 tiny_build: build_exam
 	mkdir -p build/$(TINY_DIR)

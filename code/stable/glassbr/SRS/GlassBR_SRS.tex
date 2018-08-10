@@ -951,7 +951,7 @@ $AR$ & $AR\geq{}1$ & $AR\leq{}{AR_{max}}$ & $1.5$ & 10.0\%
 \\
 $b$ & $0<b\leq{}a$ & ${d_{min}}\leq{}b\leq{}{d_{max}}$ & $1.2$ m & 10.0\%
 \\
-${P_{btol}}$ & $0<{P_{btol}}<1$ & -- & $0.008$ & 0.1\%
+${P_{btol}}$ & $0<{P_{btol}}<1$ & -- & $8.0\cdot{}10^{-3}$ & 0.1\%
 \\
 $SD$ & $SD>0$ & ${SD_{min}}\leq{}SD\leq{}{SD_{max}}$ & $45.0$ m & 10.0\%
 \\
@@ -983,7 +983,7 @@ This section provides the functional requirements, the business tasks that the s
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:Input-Glass-Props}:]Input the quantities from Table~\ref{Table:R1ReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:System-Set-Values-Following-Assumptions}:]The system shall set the known values as follows: $m$, $k$, $E$, ${t_{d}}$ following A4, $LDF$ following A8, LSF following A5, $h$ (from \hyperref[DD:min.thick]{Definition~DD:min.thick}), $GTF$ (from \hyperref[DD:gTF]{Definition~DD:gTF}), and $SD$ (from \hyperref[DD:standOffDist]{Definition~DD:standOffDist}).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:System-Set-Values-Following-Assumptions}:]The system shall set the known values as follows: $m$, $k$, $E$, ${t_{d}}$ following A\ref{A:standardValues}, $LDF$ following A\ref{A:ldfConstant}, LSF following A\ref{A:glassLite}, $h$ (from \hyperref[DD:min.thick]{Definition~DD:min.thick}), $GTF$ (from \hyperref[DD:gTF]{Definition~DD:gTF}), and $SD$ (from \hyperref[DD:standOffDist]{Definition~DD:standOffDist}).
 \end{description}
 \begin{description}
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:Check-Input-with-Data.Constraints}:]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DataConstraints}. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
@@ -1218,11 +1218,11 @@ ${AR_{max}}$ & maximum aspect ratio & $5.0$ & --
 \\
 ${d_{max}}$ & maximum value for one of the dimensions of the glass plate & $5.0$ & m
 \\
-${d_{min}}$ & minimum value for one of the dimensions of the glass plate & $0.1$ & m
+${d_{min}}$ & minimum value for one of the dimensions of the glass plate & $100.0\cdot{}10^{-3}$ & m
 \\
-$E$ & modulus of elasticity of glass & $7.17 10^{7}$ & Pa
+$E$ & modulus of elasticity of glass & $71.7\cdot{}10^{9}$ & Pa
 \\
-$k$ & surface flaw parameter & $2.86 10^{-53}$ & $\frac{\text{m}^{12}}{\text{N}^{7}}$
+$k$ & surface flaw parameter & $28.6\cdot{}10^{-54}$ & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
 $LSF$ & load share factor & $1$ & --
 \\

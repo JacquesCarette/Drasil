@@ -58,8 +58,9 @@ import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlList,
   SepType(Comma), FoldType(List), sOf,sAnd, sOr, foldlSentCol, foldlSP, 
   foldlSPCol, showingCxnBw)
 import Data.Drasil.Software.Products (videoGame, openSource, sciCompS)
-import Data.Drasil.Utils (makeTMatrix, itemRefToSent, makeListRef, bulletFlat,
-  bulletNested, enumSimple, enumBullet)
+import Data.Drasil.Utils (makeTMatrix, itemRefToSent,
+  makeListRef, bulletFlat, bulletNested, enumSimple, enumBullet)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 
 authors :: People
 authors = [alex, luthfi]
@@ -156,6 +157,9 @@ chipUnits = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [newton
 everything :: ChunkDB
 everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms) gamephySymbols -- FIXME: Fill in Concepts
   chipUnits
+
+printSetting :: PrintingInformation
+printSetting = PI everything defaultConfiguration
 
 chipCode :: CodeSpec
 chipCode = codeSpec chipmunkSysInfo []

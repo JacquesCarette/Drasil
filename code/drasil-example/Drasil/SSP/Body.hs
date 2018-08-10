@@ -1,4 +1,4 @@
-module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap) where
+module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap, printSetting) where
 
 import Language.Drasil hiding (organization, Verb)
 import Language.Drasil.Code (CodeSpec, codeSpec)
@@ -53,6 +53,7 @@ import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs,
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, physSyst)
 import qualified Drasil.DocLang.GenBuilders as GB (assumptLabel)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 
 --type declarations for sections--
 req, aux_cons :: Section
@@ -141,6 +142,9 @@ ssp_code = codeSpec ssp_si [sspInputMod]
 sspSymMap :: ChunkDB
 sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms) sspSymbols
   this_si
+
+printSetting :: PrintingInformation
+printSetting = PI sspSymMap defaultConfiguration
 
 symbT :: [DefinedQuantityDict]
 symbT = ccss (getDoc ssp_srs) (egetDoc ssp_srs) sspSymMap

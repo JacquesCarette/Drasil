@@ -99,7 +99,7 @@ module Language.Drasil (
   , ucw, UnitaryConceptDict
   -- Chunk.Attributes --FIXME: Changed a lot
   , getSource
-  , Derivation, getDerivation, getShortName
+  , Derivation, getDerivation, getShortName, shortname
   , sourceref
   , References
   -- Chunk.ShortName
@@ -243,21 +243,20 @@ import Language.Drasil.Document (section, fig, figWithWidth
   , section''
   , Section(..), SecCons(..) 
   , llcc, ulcc, Document(..)
-  , HasContents(accessContents)
   , mkParagraph, mkFig, mkRawLC)
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
+  , HasContents(accessContents)
   , LabelledContent(..), UnlabelledContent(..) )
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Development.UnitLang -- all of it
 import Language.Drasil.Development.Unit -- all of it
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),HasSpace(typ),  
-  HasUnitSymbol(usymb), IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes),
-  Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations),
-  HasReference(getReferences), HasLabel(getLabel), MayHaveLabel(getMaybeLabel),
-  HasRefAddress(getRefAdd))
+  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
+  IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
+  HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), HasReference(getReferences), 
+  HasLabel(getLabel), MayHaveLabel(getMaybeLabel), HasRefAddress(getRefAdd))
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Document.GetChunk(vars, combine', vars', combine, ccss)
 import Language.Drasil.Config (StyleGuide(..), verboseDDDescription, numberedTMEquations,

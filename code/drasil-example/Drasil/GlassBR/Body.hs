@@ -54,7 +54,8 @@ import Data.Drasil.Software.Products (sciCompS)
 import Data.Drasil.Utils (makeTMatrix, itemRefToSent, noRefs,
   enumSimple, enumBullet, prodUCTbl, bulletFlat, bulletNested)
   
-import Drasil.GlassBR.Assumptions (assumptionConstants, gbRefDB, newAssumptions, gbRefDB')
+import Drasil.GlassBR.Assumptions (assumptionConstants, gbRefDB, newAssumptions, gbRefDB',
+  newA4, newA5, newA8)
 import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, 
   glass, gLassBR, lShareFac, ptOfExplsn, stdOffDist)
@@ -81,6 +82,7 @@ import Data.Drasil.People (spencerSmith, nikitha, mCampidelli)
 import Data.Drasil.Phrase (for'')
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, newton, pascal, 
   second)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 
 {--}
 
@@ -88,6 +90,9 @@ gbSymbMap :: ChunkDB
 gbSymbMap =
   cdb this_symbols (map nw acronyms ++ map nw this_symbols) glassBRsymb
       (map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton])
+
+printSetting :: PrintingInformation
+printSetting = PI gbSymbMap defaultConfiguration
 
 ccss'' :: Sentence -> [DefinedQuantityDict]
 ccss'' s = combine s gbSymbMap
@@ -651,8 +656,8 @@ funcReqsR1Table = llcc (mkLabelSame "R1ReqInputs" Tab) $
 
 req2Desc = foldlSent [S "The", phrase system,
   S "shall set the known", plural value +: S "as follows",
-  foldlList Comma List [(foldlsC (map ch (take 4 assumptionConstants)) `followA` 4),
-  ((ch constant_LoadDF) `followA` 8), (short lShareFac `followA` 5),
+  foldlList Comma List [(foldlsC (map ch (take 4 assumptionConstants)) `followA` newA4),
+  ((ch constant_LoadDF) `followA` newA8), (short lShareFac `followA` newA5),
   (ch hFromt) +:+ sParen (S "from" +:+ (makeRef hFromt)), 
   (ch glaTyFac) +:+ sParen (S "from" +:+ (makeRef glaTyFac)),
   (ch standOffDis) +:+ sParen (S "from" +:+ (makeRef standOffDis))]]
@@ -661,9 +666,9 @@ req2Desc = foldlSent [S "The", phrase system,
 {-funcReqsR2 = (Nested (S "The" +:+ phrase system +:+
    S "shall set the known" +:+ plural value +: S "as follows")
     (Bullet $ map Flat
-     [foldlsC (map getS (take 4 assumptionConstants)) `followA` 4,
-     (getS loadDF) `followA` 8,
-     short lShareFac `followA` 5]))
+     [foldlsC (map getS (take 4 assumptionConstants)) `followA` newA4,
+     (getS loadDF) `followA` newA8,
+     short lShareFac `followA` newA5]))
 -}
 --FIXME:should constants, LDF, and LSF have some sort of field that holds
 -- the assumption(s) that're being followed? (Issue #349)

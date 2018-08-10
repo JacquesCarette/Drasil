@@ -441,7 +441,7 @@ probEnding = foldl (+:+) EmptyS [S "interpret the", plural input_,
 {--Terminology and Definitions--}
 
 termsAndDesc = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
-  S "are extracted from" +:+ (sSqBrNum 1 {-astm2009-}) `sIn`
+  S "are extracted from" +:+ makeRef astm2009 `sIn`
   (midRef SRS.referenceLabel))) [termsAndDescBullets]
 
 {--Physical System Description--}

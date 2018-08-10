@@ -3,19 +3,19 @@ module Drasil.GlassBR.Assumptions where
 import Language.Drasil hiding (organization)
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxConsLabel)
 
-import Data.Drasil.Concepts.Documentation as Doc (condition, constant, practice, reference, scenario, 
-  system, value)
+import Data.Drasil.Concepts.Documentation as Doc (condition, constant, practice, 
+  reference, scenario, system, value)
 import Data.Drasil.Concepts.Math (calculation, surface, shape)
-import Data.Drasil.SentenceStructures (EnumType(Numb), WrapType(Parens), SepType(..), 
-  FoldType(..), foldlSent, foldlSent_, foldlList, foldlEnumList, sAnd, sIn, sOf)
+import Data.Drasil.SentenceStructures (EnumType(Numb), FoldType(..), SepType(..),
+  WrapType(Parens), foldlEnumList, foldlList, foldlSent, foldlSent_, sAnd, sIn, sOf)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 
-import Drasil.GlassBR.Unitals ( lite, explosion, lateral, load_dur, explosion,
-  constant_LoadDur, constant_ModElas, constant_M, constant_K, constant_LoadDF, constant_LoadSF)
-import Drasil.GlassBR.Concepts (lShareFac, gLassBR,
-  glaSlab, glass, responseTy, cantilever, beam, plane, edge)
-import Drasil.GlassBR.References (gbCitations, astm2009)
- 
+import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass, gLassBR, 
+  lShareFac, plane, responseTy)
+import Drasil.GlassBR.References (astm2009, gbCitations)
+import Drasil.GlassBR.Unitals (constant_K, constant_LoadDF, constant_LoadDur, 
+  constant_LoadSF, constant_M, constant_ModElas, explosion, lateral, lite, load_dur)
+
 gbRefDB :: ReferenceDB
 gbRefDB = rdb [] [] newAssumptions [] [] gbCitations []
 

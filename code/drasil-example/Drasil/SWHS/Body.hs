@@ -15,7 +15,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, 
   outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF, tsymb'')
 import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel, 
-  likeChg, probDesc, referenceLabel, sysCont)
+  likeChg, probDesc, sysCont)
 
 import Data.Drasil.Concepts.Documentation (assumption, column, condition, constraint, 
   content, corSol, dataConst, dataDefn, datum, definition, description, document, 
@@ -55,6 +55,7 @@ import Drasil.SWHS.DataDesc (swhsInputMod)
 import Drasil.SWHS.GenDefs (swhsGDs, generalDefinitions)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, 
   heatEInWtr, heatEInPCM, swhsIMods)
+import Drasil.SWHS.References (parnas1972, parnasClements1984)
 import Drasil.SWHS.Requirements (inputInitQuants, useAboveFindMass, 
   checkWithPhysConsts, outputInputDerivQuants, calcTempWtrOverTime, 
   calcTempPCMOverTime, calcChgHeatEnergyWtrOverTime, 
@@ -765,8 +766,8 @@ charReader2 diffeq = foldlSent_ [(plural diffeq) `sC`
 orgDocIntro :: Sentence
 orgDocIntro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the template for an", short srs,
-  S "for", phrase sciCompS, S "proposed by", (sSqBrNum 3) `sAnd`
-  (sSqBrNum 6), sParen (midRef SRS.referenceLabel)]
+  S "for", phrase sciCompS, S "proposed by", makeRef parnas1972 `sAnd` 
+  makeRef parnasClements1984]
 
 orgDocEnd :: NamedIdea ni => ni -> CI -> Sentence
 orgDocEnd sp pro = foldlSent_ [S "The", plural inModel,

@@ -19,7 +19,7 @@ import Data.Drasil.SentenceStructures (foldlSent, getTandS, isThe, ofThe, sAnd)
 
 import Drasil.SSP.Assumptions (newA5)
 import Drasil.SSP.BasicExprs (displMtx, eqlExpr, momExpr, rotMtx)
-import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShearWO, sliceWght)
+import Drasil.SSP.DataDefs (lengthLb, lengthLs, mobShearWO, sliceWght)
 import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf)
 import Drasil.SSP.Labels (genDef1Label, genDef2Label, genDef3Label, genDef4Label, 
   genDef5Label, genDef6Label, genDef7Label, genDef8Label, genDef9Label, genDef10Label)
@@ -69,8 +69,8 @@ nmFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   S "refers to", (plural value `ofThe` plural property), S "for",
   phrase slice :+: S "/" :+: plural intrslce, S "following convention in" +:+.
   midRef SRS.physSystLabel, at_start force, phrase variable,
-  plural definition, S "can be found in", ddRef sliceWght, S "to",
-  ddRef lengthLs]
+  plural definition, S "can be found in", makeRef sliceWght, S "to",
+  makeRef lengthLs]
 
 --
 bsShrFEq :: RelationConcept
@@ -93,8 +93,8 @@ bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   S "refers to", (plural value `ofThe` plural property), S "for",
   phrase slice :+: S "/" :+: plural intrslce, S "following convention in" +:+.
   midRef SRS.physSystLabel, at_start force, phrase variable,
-  plural definition, S "can be found in", ddRef sliceWght, S "to",
-  ddRef lengthLs]
+  plural definition, S "can be found in", makeRef sliceWght, S "to",
+  makeRef lengthLs]
 
 --
 shrResEqn :: Expr
@@ -178,7 +178,7 @@ momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   plural value `ofThe` plural property, S "for", phrase slice :+: S "/" :+:
   plural intrslce, S "following convention in" +:+.
   midRef SRS.physSystLabel, at_start variable, plural definition,
-  S "can be found in", ddRef sliceWght, S "to", ddRef lengthLs]
+  S "can be found in", makeRef sliceWght, S "to", makeRef lengthLs]
 
 --
 netForcex :: RelationConcept
@@ -224,7 +224,7 @@ fNet_desc = foldlSent [S "These equations show the net sum of the",
   phrase slice :+: S "/" :+: plural intrslce, S "following", 
   S "convention in" +:+. midRef SRS.physSystLabel,
   at_start force, phrase variable, plural definition, S "can be found in",
-  ddRef sliceWght, S "to", ddRef lengthLb]
+  makeRef sliceWght, S "to", makeRef lengthLb]
 
 --
 hookesLaw2d :: RelationConcept
@@ -250,7 +250,7 @@ hooke2d_desc = foldlSent [
   phrase len, S "The stiffness", plural value, S "Kn,i" `sAnd` S "Kt,i",
   -- FIXME: Pn,i ~ Pt,i ~ Kn,i ~ Kt,i need symbols 
   S "are then the resistance to", phrase displacement,
-  S "in the respective directions defined as in" +:+. ddRef mobShearWO,
+  S "in the respective directions defined as in" +:+. makeRef mobShearWO,
   S "The pressure", plural force, S "would be the result of applied",
   S "loads on the", phrase mass `sC` S "the product of the stiffness",
   plural element, S "with the", phrase displacement, S "would be the",

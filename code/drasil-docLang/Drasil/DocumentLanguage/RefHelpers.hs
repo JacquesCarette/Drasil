@@ -3,8 +3,8 @@ module Drasil.DocumentLanguage.RefHelpers
   ( refR, refChng, cite
   , refRByNum, refChngByNum, citeByNum
   , ModelDB, tmRefDB, gdRefDB, ddRefDB, imRefDB
-  , mdb, modelsFromDB, refTM, refDD, refGD, refIM
-  )where
+  , mdb, modelsFromDB
+  ) where
 
 import Language.Drasil
 
@@ -30,22 +30,6 @@ data ModelDB = MDB
 mdb :: [TheoryModel] -> [GenDefn] -> [QDefinition] -> [InstanceModel] -> ModelDB
 mdb tms gds dds ims = MDB
   (simpleMap tms) (simpleMap gds) (simpleMap dds) (simpleMap ims)
-
--- | Automatically reference TMs by number.
-refTM :: RefMap TheoryModel -> TheoryModel -> Sentence
-refTM db c = customRef c (shortname' $ "T" ++ (show $ snd $ modelLookup c db))
-
--- | Automatically reference GDs by number.
-refGD :: RefMap GenDefn -> GenDefn -> Sentence
-refGD db c = customRef c (shortname' $ "GD" ++ (show $ snd $ modelLookup c db))
-
--- | Automatically reference DDs by number.
-refDD :: RefMap QDefinition -> QDefinition -> Sentence
-refDD db c = customRef c (shortname' $ "DD" ++ (show $ snd $ modelLookup c db))
-
--- | Automatically reference IMs by number.
-refIM :: RefMap InstanceModel -> InstanceModel -> Sentence
-refIM db c = customRef c (shortname' $ "IM" ++ (show $ snd $ modelLookup c db))
 
 modelLookup :: HasUID a => a -> RefMap a -> (a, Int)
 modelLookup c db = getS $ Map.lookup (c ^. uid) db

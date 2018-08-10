@@ -118,9 +118,6 @@ resourcePath = "../../../datafiles/GlassBR/"
 glassBR_srs :: Document
 glassBR_srs = mkDoc mkSRS (for'' titleize phrase) glassSystInfo
 
-glassBR_mis :: Document
-glassBR_mis = mkDoc mkMIS (for'' titleize phrase) glassSystInfo'
-
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   IntroSec (
@@ -172,6 +169,11 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   Bibliography :
   AppndxSec (AppndxProg [appdxIntro, LlC fig_5, LlC fig_6]) : []
 
+{------}
+
+glassBR_mis :: Document
+glassBR_mis = mkDoc mkMIS (for'' titleize phrase) glassSystInfo'
+
 mkMIS :: DocDesc
 mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass")) : 
   NotationSec (NotationProg []) : 
@@ -184,7 +186,7 @@ mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master
   MISModSec (MISModProg "Input" (Just MIS.inputModIntro) [MISUses [glTypeLabel, thicknessLabel, constantsLabel, hwLabel],
     MISSyntax [{-MISSyntaxSubVerb [{-FILL IN-}]-}],
     MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [{-FILL IN-}], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]],
-    MISConsiderations [{-FILL IN-}]]
+    MISConsiderations [inputCons]]
     inputLabel False) :
   MISModSec (MISModProg "LoadASTM" Nothing [MISUses [functLabel, contoursLabel],
     MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
@@ -207,7 +209,7 @@ mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master
   MISModSec (MISModProg "Funct" Nothing [MISUses [seqServLabel],
     MISSyntax [MISExportedCs ([{-FILL IN-}] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]],
-    MISConsiderations [{-FILL IN-}]]
+    MISConsiderations [fxnCons]]
     functLabel True) :
   MISModSec (MISModProg "Contours" Nothing [MISUses [functLabel],
     MISSyntax [MISExportedCs ([{-FILL IN-}] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
@@ -247,6 +249,19 @@ loadLabel      = mkLabelRASec "LoadASTM_MIS" "LoadASTM"
 inputLabel     = mkLabelRASec "Input_MIS" "Input"
 ctrlLabel      = mkLabelRASec "Control_MIS" "Control"
 
+fxnCons :: Contents
+fxnCons = mkParagraph $ S "For simplicity the function evaluation is" +:+
+  S "not defined within one step of the boundaries. By considering" +:+ 
+  S "the special cases it would be possible to get right to the edge."
+
+inputCons :: Contents
+inputCons = mkParagraph $ S "The value of each state variable can be accessed" +:+ 
+  S "through its name (getter). An access program is available for each state" +:+
+  S "variable. There are no setters for the state variables, since the values" +:+
+  S "will be set and checked by load params and will not be changed for the" +:+ 
+  S "life of the program."
+
+{-----}
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, 

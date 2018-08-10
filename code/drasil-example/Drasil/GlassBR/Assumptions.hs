@@ -3,7 +3,7 @@ module Drasil.GlassBR.Assumptions where
 import Language.Drasil hiding (organization)
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxConsLabel)
 
-import Drasil.DocLang (cite, refA)
+import Drasil.DocLang (cite)
 
 import Data.Drasil.Concepts.Documentation as Doc (condition, constant, practice, reference, scenario, 
   system, value)
@@ -87,6 +87,6 @@ a7Desc = foldlSent [S "The", phrase responseTy, S "considered in",
 
 a8Desc :: QDefinition -> Sentence
 a8Desc mainConcept = foldlSent [S "With", phrase reference, S "to",
-  (refA gbRefDB newA4) `sC` S "the", phrase value `sOf`
+  makeRef newA4 `sC` S "the", phrase value `sOf`
   phrase mainConcept, sParen (ch mainConcept), S "is a", phrase constant,
   S "in", short gLassBR] +:+ S "[DD3]"

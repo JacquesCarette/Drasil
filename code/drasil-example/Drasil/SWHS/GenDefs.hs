@@ -3,7 +3,6 @@ module Drasil.SWHS.GenDefs (swhsGDs, nwtnCooling, rocTempSimp, rocTempSimpGD,
 
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
-import Drasil.DocLang (refA)
 
 import Data.Drasil.Concepts.Documentation (assumption)
 import Data.Drasil.Concepts.Math (equation, rate, rOfChng, unit_)
@@ -65,11 +64,10 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
   S "and its surroundings", E (apply1 thFluxVect QP.time) `isThe`
   S "thermal flux" +:+. sParen (Sy $ unit_symb thFluxVect),
   ch htTransCoeff `isThe` S "heat transfer coefficient" `sC`
-  S "assumed independant of", ch QT.temp, sParen (refA swhsRefDB newA2) +:+.
-  sParen (Sy $ unit_symb htTransCoeff),
-  E (apply1 deltaT QP.time $= apply1 temp QP.time -
-  apply1 temp_env QP.time) `isThe` S "time-dependant thermal gradient",
-  S "between the environment and the object",
+  S "assumed independant of", ch QT.temp, sParen (makeRef newA2) +:+.
+  sParen (Sy $ unit_symb htTransCoeff), E (apply1 deltaT QP.time $= 
+  apply1 temp QP.time - apply1 temp_env QP.time) `isThe` 
+  S "time-dependant thermal gradient between the environment and the object",
   sParen (Sy $ unit_symb deltaT)]
 
 --

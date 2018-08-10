@@ -4,7 +4,6 @@ module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
 
-import Drasil.DocLang (refA)
 import Drasil.DocLang.SRS as SRS (physSystLabel)
 
 import Data.Drasil.Concepts.Documentation (assumption, definition, element, 
@@ -18,7 +17,7 @@ import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 
 import Data.Drasil.SentenceStructures (foldlSent, getTandS, isThe, ofThe, sAnd)
 
-import Drasil.SSP.Assumptions (newA5, sspRefDB)
+import Drasil.SSP.Assumptions (newA5)
 import Drasil.SSP.BasicExprs (displMtx, eqlExpr, momExpr, rotMtx)
 import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShearWO, sliceWght)
 import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf)
@@ -150,7 +149,7 @@ nmShrR_rel = sy intShrForce $= sy normToShear * sy scalFunc * sy intNormForce
 
 nmShrR_desc :: Sentence
 nmShrR_desc = foldlSent [S "The", phrase assumption,
-  S "for the Morgenstern Price", phrase method_, sParen (refA sspRefDB newA5),
+  S "for the Morgenstern Price", phrase method_, sParen (makeRef newA5),
   S "that the", phrase intrslce, phrase shearForce, ch xi,
   S "is proportional to the", phrase intrslce, 
   phrase normForce, ch intNormForce, S "by a proportionality constant",

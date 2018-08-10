@@ -2,7 +2,6 @@ module Drasil.SSP.IMods where
 
 import Prelude hiding (tan, product, sin, cos)
 import Control.Lens ((^.))
-import Drasil.DocLang (refA)
 
 import Language.Drasil
 
@@ -17,7 +16,7 @@ import Data.Drasil.Concepts.Physics (displacement, force)
 import Data.Drasil.SentenceStructures (andThe, eqN, foldlSent, foldlSent_, 
   foldlSentCol, foldlSP, getTandS, getTDS, isThe, ofThe, ofThe', sAnd, sIn, sIs, sOf)
 
-import Drasil.SSP.Assumptions (newA2, sspRefDB)
+import Drasil.SSP.Assumptions (newA2)
 import Drasil.SSP.BasicExprs (eqlExpr, momExpr)
 import Drasil.SSP.DataDefs (ddRef, displcmntRxnF, fixme1, fixme2, intrsliceF, lengthLb, 
   lengthLs, mobShearWO, netFDsplcmntEqbm, resShearWO, seismicLoadF, sliceWght, soilStiffness, 
@@ -488,7 +487,7 @@ rigDis_deriv_sentences_ssp_s1 = [S "Using the net force-displacement equilibrium
   phrase equation +:+ S "in the" +:+ ch yi +:+ S "direction"]
 
 rigDis_deriv_sentences_ssp_s2 :: [Sentence]
-rigDis_deriv_sentences_ssp_s2 = [S "Using the known input assumption of" +:+ (refA sspRefDB newA2) `sC`
+rigDis_deriv_sentences_ssp_s2 = [S "Using the known input assumption of" +:+ makeRef newA2 `sC`
   S "the force variable" +:+ plural definition +:+ S "of" +:+ ddRef sliceWght +:+ S "to" +:+
   ddRef surfLoads +:+ S "on the" +:+ S "left side of the" +:+ plural equation +:+
   S "can be solved for. The only unknown in the variables to solve" +:+
@@ -750,7 +749,7 @@ rigDisDerivation = [
 
   eqUnR' fDisEq_rel,
   
-  foldlSP [S "Using the known input assumption of", (refA sspRefDB newA2) `sC`
+  foldlSP [S "Using the known input assumption of", (makeRef newA2) `sC`
   S "the force variable", plural definition, S "of", ddRef sliceWght, S "to",
   ddRef lengthLb, S "on", S "left side" `ofThe` plural equation,
   S "can be solved for. The only unknown in the variables to solve",

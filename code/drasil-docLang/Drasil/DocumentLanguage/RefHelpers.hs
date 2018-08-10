@@ -1,7 +1,7 @@
 {-# Language Rank2Types #-}
 module Drasil.DocumentLanguage.RefHelpers
-  ( refA, refR, refChng, cite
-  , refAByNum, refRByNum, refChngByNum, citeByNum
+  ( refR, refChng, cite
+  , refRByNum, refChngByNum, citeByNum
   , ModelDB, tmRefDB, gdRefDB, ddRefDB, imRefDB
   , mdb, modelsFromDB, refTM, refDD, refGD, refIM
   )where
@@ -47,13 +47,6 @@ refDD db c = customRef c (shortname' $ "DD" ++ (show $ snd $ modelLookup c db))
 refIM :: RefMap InstanceModel -> InstanceModel -> Sentence
 refIM db c = customRef c (shortname' $ "IM" ++ (show $ snd $ modelLookup c db))
 
--- | Reference Assumptions by Name or by Number where applicable
-refACustom :: ReferenceDB -> RefBy -> AssumpChunk -> Sentence
-refACustom rfdb ByNum  a = customRef a (shortname' $ "A" ++
-  numLookup rfdb assumpRefTable assumpLookup a)
-refACustom rfdb ByName a =
-  makeRef (chunkLookup rfdb assumpRefTable assumpLookup a)
-
 modelLookup :: HasUID a => a -> RefMap a -> (a, Int)
 modelLookup c db = getS $ Map.lookup (c ^. uid) db
   where getS (Just x) = x
@@ -78,12 +71,6 @@ chunkLookup :: HasUID c => ReferenceDB -> Simple Lens ReferenceDB t ->
   (c -> t -> (ct, Int)) -> c -> ct
 chunkLookup db tableLens lookupFun chunk =
   fst $ lookupFun chunk (db ^. tableLens)
-
--- | Smart constructors for assumption referencing by name or by number.
-refA, refAByNum :: ReferenceDB -> AssumpChunk -> Sentence
-refA rfdb = refACustom rfdb ByName
-refAByNum rfdb = refACustom rfdb ByNum
-
 
 -- | Smart constructors for requirement referencing by name or by number.
 refR, refRByNum :: ReferenceDB -> ReqChunk -> Sentence

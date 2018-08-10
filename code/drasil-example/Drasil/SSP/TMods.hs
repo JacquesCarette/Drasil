@@ -3,7 +3,6 @@ module Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, effStress_
 
 import Prelude hiding (tan)
 import Language.Drasil
-import Drasil.DocLang (refA)
 
 import Data.Drasil.Quantities.Physics (displacement, distance, force)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
@@ -17,18 +16,18 @@ import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe',
   sAnd, sOf)
 
-import Drasil.SSP.Assumptions (newA8, newA9, sspRefDB)
+import Drasil.SSP.Assumptions (newA8, newA9)
 import Drasil.SSP.Defs (factor, factorOfSafety, slope, soil)
 import Drasil.SSP.Unitals (cohesion, fricAngle, fs, fx, fy, genDisplace,
   genForce, momntOfBdy, normStress, porePressure, shrStress, surfHydroForce)
 
 -- Pre-defined some labels. They will be re-used for tings which are 'the same'
 l1, l2, l3, l4, l5 :: Label
-l1 = mkLabelSame "fs_rc" (Def TM)
+l1 = mkLabelSame "fs_rc"       (Def TM)
 l2 = mkLabelSame "equilibrium" (Def TM)
 l3 = mkLabelSame "mcShrStrgth" (Def TM)
-l4 = mkLabelSame "effStress" (Def TM)
-l5 = mkLabelSame "hookesLaw" (Def TM)
+l4 = mkLabelSame "effStress"   (Def TM)
+l5 = mkLabelSame "hookesLaw"   (Def TM)
 
 --------------------------
 --  Theoretical Models  --
@@ -74,7 +73,7 @@ eq_rel = foldr ($=) 0 (map summ [fx, fy, momntOfBdy])
 eq_desc :: Sentence
 eq_desc = foldlSent [S "For a body in static equilibrium, the net",
   plural force +:+. S "and net moments acting on the body will cancel out",
-  S "Assuming a 2D problem", sParen (refA sspRefDB newA8), S "the", getTandS fx `sAnd`
+  S "Assuming a 2D problem", sParen (makeRef newA8), S "the", getTandS fx `sAnd`
   getTandS fy, S "will be equal to" +:+. E 0, S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation",
   S "will create a net moment equal to" +:+ E 0]
@@ -111,7 +110,7 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
   S "relationship is not truly",
   phrase linear `sC` S "but assuming the effective", phrase normForce, 
   S "is strong enough, it can be approximated with a", phrase linear,
-  S "fit", sParen (refA sspRefDB newA9), S "where the cohesion", ch cohesion,
+  S "fit", sParen (makeRef newA9), S "where the cohesion", ch cohesion,
   S "represents the", ch shrStress, S "intercept of the fitted line"]
 
 --

@@ -4,7 +4,6 @@ import Prelude hiding (print)
 import Data.List (intersperse, transpose, partition)
 import Text.PrettyPrint (text, (<+>))
 import qualified Text.PrettyPrint as TP
-import Text.Printf
 import Numeric (showEFloat)
 import Control.Applicative (pure)
 import Control.Arrow (second)
@@ -41,22 +40,7 @@ import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (<>), vcat, 
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
 import Language.Drasil.TeX.Preamble (genPreamble)
 import qualified Language.Drasil.RefTypes as RT
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..),
-  HasPrintingOptions(..))
-
-{-
-import qualified Language.Drasil.Spec as LS
-import qualified Language.Drasil.RefTypes as RT
-import Language.Drasil.Development.UnitLang (USymb(US))
-import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT,bibFname)
-import           Language.Drasil.Symbol (Symbol(..))
-import qualified Language.Drasil.Symbol as S
-import qualified Language.Drasil.Document as L
-import Language.Drasil.Unicode (RenderSpecial(..))
-import Language.Drasil.People (People,rendPersLFM)
-import Language.Drasil.ChunkDB (HasSymbolTable)
-import Language.Drasil.Chunk.Citation (CitationKind(..), Month(..))
--}
+import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..))
 
 genTeX :: (L.HasSymbolTable ctx, HasPrintingOptions ctx) => L.Document -> ctx -> TP.Doc
 genTeX doc sm = runPrint (buildStd sm $ I.makeDocument sm doc) Text

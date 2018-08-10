@@ -1,21 +1,24 @@
 module Drasil.NoPCM.GenDefs (roc_temp_simp_deriv) where
 
 import Language.Drasil
-import Drasil.SWHS.TMods (t1ConsThermE_new)
-import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
-import Data.Drasil.Concepts.Math (unit_, rOfChng)
+
+import Data.Drasil.Concepts.Documentation (assumption)
+import Data.Drasil.Concepts.Math (rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (temp)
+
+import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
+import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
+import Data.Drasil.Quantities.Physics (time)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heat_cap_spec)
-import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
+
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
+  foldlSentCol, ofThe, sAnd)
 import Data.Drasil.Utils (weave)
-import Data.Drasil.SentenceStructures (sAnd, foldlList, SepType(Comma), 
-  FoldType(List), ofThe, foldlSentCol)
-import Data.Drasil.Concepts.Documentation (assumption)
-import Data.Drasil.Quantities.Physics (time)
 
 import Drasil.SWHS.Concepts (gauss_div)
 import Drasil.SWHS.Labels (genDef2Label)
+import Drasil.SWHS.TMods (t1ConsThermE)
 import Drasil.SWHS.Unitals (in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, 
   ht_flux_out)
 
@@ -27,7 +30,7 @@ roc_temp_simp_deriv =
 
 roc_temp_simp_deriv_sentences :: [Sentence]
 roc_temp_simp_deriv_sentences = map foldlSentCol [
-  genDefDesc1 t1ConsThermE_new vol,
+  genDefDesc1 t1ConsThermE vol,
   genDefDesc2 gauss_div surface vol thFluxVect uNormalVect unit_,
   genDefDesc3 vol vol_ht_gen,
   genDefDesc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heat_cap_spec

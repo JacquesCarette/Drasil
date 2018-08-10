@@ -7,8 +7,8 @@ import Data.Drasil.Concepts.Documentation (system, simulation, model,
   problem)
 
 import Data.Drasil.Quantities.PhysicalProperties (vol)
-import Data.Drasil.Quantities.Physics (time, energy)
-import Data.Drasil.Quantities.Thermodynamics (temp, boil_pt, melt_pt)
+import Data.Drasil.Quantities.Physics (energy, time)
+import Data.Drasil.Quantities.Thermodynamics (boil_pt, melt_pt, temp)
 
 import Data.Drasil.Concepts.Thermodynamics as CT (heat, melting,
   law_conv_cooling, heat_trans, thermal_energy)
@@ -24,7 +24,7 @@ import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
 import Drasil.SWHS.Labels (assump1Label, assump14Label, assump18Label, assump19Label, 
   assump10Label, genDef1Label, genDef2Label, imod1Label, imod2Label, imod3Label, imod4Label)
 import Drasil.SWHS.References (ref_swhs_citations)
-import Drasil.SWHS.TMods (t1ConsThermE_new)
+import Drasil.SWHS.TMods (t1ConsThermE)
 import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, temp_init, temp_W,
   temp_PCM, htCap_L_P, htCap_W, htCap_S_P, w_density, pcm_density, pcm_vol)
 
@@ -76,7 +76,7 @@ assumpS1 = foldlSent [
   S "relevant for this", phrase problem, S "is" +:+. 
   phrase CT.thermal_energy, S "All other forms of", phrase energy `sC`
   S "such as", phrase mech_energy `sC` S "are assumed to be negligible",
-  sSqBr $ makeRef t1ConsThermE_new]
+  sSqBr $ makeRef t1ConsThermE]
 assumpS2 = foldlSent [
   S "All", phrase CT.heat_trans, S "coefficients are constant over",
   phrase time, sSqBr $ makeRef genDef1Label]

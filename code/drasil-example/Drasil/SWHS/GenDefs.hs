@@ -5,24 +5,25 @@ import Prelude hiding (sin, cos, tan)
 import Language.Drasil
 import Drasil.DocLang (refA)
 
-import Data.Drasil.SentenceStructures (foldlSent)
+import Data.Drasil.Concepts.Documentation (assumption)
+import Data.Drasil.Concepts.Math (equation, rate, rOfChng, unit_)
+import Data.Drasil.Concepts.Thermodynamics (law_conv_cooling)
+
+import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (vol, mass, density)
+import Data.Drasil.Quantities.Physics as QP (time)
 import Data.Drasil.Quantities.Thermodynamics as QT (ht_flux, heat_cap_spec,
   temp)
-import Data.Drasil.Quantities.Physics as QP (time)
-import Data.Drasil.SentenceStructures (isThe, sAnd, ofThe, foldlSentCol,
-  foldlList, SepType(Comma), FoldType(List))
-import Data.Drasil.Utils (unwrap, weave)
-import Data.Drasil.Concepts.Math (equation, rOfChng, rate, unit_)
-import Data.Drasil.Concepts.Thermodynamics (law_conv_cooling)
-import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
-import Data.Drasil.Concepts.Documentation (assumption)
+
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
+  foldlList, foldlSent, foldlSentCol, isThe, ofThe, sAnd)
 import Data.Drasil.Units.Thermodynamics (thermal_flux)
+import Data.Drasil.Utils (unwrap, weave)
 
 import Drasil.SWHS.Assumptions
 import Drasil.SWHS.Concepts (gauss_div)
 import Drasil.SWHS.Labels (genDef1Label, genDef2Label)
-import Drasil.SWHS.TMods (t1ConsThermE_new)
+import Drasil.SWHS.TMods (t1ConsThermE)
 import Drasil.SWHS.Unitals (vol_ht_gen, deltaT, temp_env, pcm_SA,
   out_SA, in_SA, ht_flux_in, ht_flux_out, htTransCoeff, thFluxVect)
 
@@ -110,7 +111,7 @@ roc_temp_simp_deriv =
 
 roc_temp_simp_deriv_sentences :: [Sentence]
 roc_temp_simp_deriv_sentences = map foldlSentCol [
-  s4_2_3_desc1 t1ConsThermE_new vol,
+  s4_2_3_desc1 t1ConsThermE vol,
   s4_2_3_desc2 gauss_div surface vol thFluxVect uNormalVect unit_,
   s4_2_3_desc3 vol vol_ht_gen,
   s4_2_3_desc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heat_cap_spec

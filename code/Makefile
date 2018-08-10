@@ -53,39 +53,25 @@ debug: EXECARGS+=$(PROFEXEC)
 debug: test
 
 build: FORCE
-	mkdir -p $(LANG_DIR)
-	cd $(LANG_DIR) && stack build -j2 $(stackArgs) drasil-lang
-	stack install $(stackArgs) drasil-lang
+	stack install -j2 $(stackArgs) drasil-lang
 
 build_code: build
-	mkdir -p $(CODE_DIR)
-	cd $(CODE_DIR) && stack build -j2 $(stackArgs) drasil-code
-	stack install $(stackArgs) drasil-code
+	stack install -j2 $(stackArgs) drasil-code
 
 build_print: build_code
-	mkdir -p $(PRINT_DIR)
-	cd $(PRINT_DIR) && stack build -j2 $(stackArgs) drasil-printers
-	stack install $(stackArgs) drasil-printers
+	stack install -j2 $(stackArgs) drasil-printers
 
 build_gen: build_print
-	mkdir -p $(GEN_DIR)
-	cd $(GEN_DIR) && stack build -j2 $(stackArgs) drasil-gen
-	stack install $(stackArgs) drasil-gen
+	stack install -j2 $(stackArgs) drasil-gen
 
 build_data: build_gen
-	mkdir -p $(DATA_DIR)
-	cd $(DATA_DIR) && stack build -j2 $(stackArgs) drasil-data
-	stack install $(stackArgs) drasil-data
+	stack install -j2 $(stackArgs) drasil-data
 
 build_docl: build_data
-	mkdir -p $(DOCL_DIR)
-	cd $(DOCL_DIR) && stack build -j2 $(stackArgs) drasil-docLang
-	stack install $(stackArgs) drasil-docLang
+	stack install -j2 $(stackArgs) drasil-docLang
 
 build_exam: build_docl
-	mkdir -p $(EXAM_DIR)
-	cd $(EXAM_DIR) && stack build -j2 $(stackArgs) drasil-example
-	stack install $(stackArgs) drasil-example --force-dirty
+	stack install -j2 $(stackArgs) drasil-example --force-dirty
 
 tiny_build: build_exam
 	mkdir -p build/$(TINY_DIR)
@@ -182,13 +168,6 @@ docLang-docs:
 
 clean: clean_build
 	- stack clean
-	- cd $(LANG_DIR)  && stack clean
-	- cd $(CODE_DIR)  && stack clean
-	- cd $(PRINT_DIR) && stack clean
-	- cd $(GEN_DIR)   && stack clean
-	- cd $(DATA_DIR)  && stack clean
-	- cd $(DOCL_DIR)  && stack clean
-	- cd $(EXAM_DIR)  && stack clean
 
 clean_build: clean_logs
 	- rm -r ./build

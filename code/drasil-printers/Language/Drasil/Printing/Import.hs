@@ -8,10 +8,9 @@ import Control.Lens ((^.))
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as T
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..),
-  HasPrintingOptions(..), Notation(Scientific, Engineering))
+import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),
+  Notation(Scientific, Engineering))
 
-import Language.Drasil.NounPhrase (titleize, phrase)
 import Numeric (floatToDigits)
 import Data.Tuple(fst, snd)
 -- | Render a Space
@@ -53,7 +52,7 @@ mulExpr []       sm     = [expr' sm (precA Mul) (Int 1)]
 --This function takes the digits form `floatToDigits` function
 -- and decimal point position and a counter and exponent
 digitsProcess :: [Integer] -> Int -> Int -> Integer -> [P.Expr]
-digitsProcess [0] pos coun ex = [P.Int 0, P.MO P.Point, P.Int 0]
+digitsProcess [0] _ _ _ = [P.Int 0, P.MO P.Point, P.Int 0]
 digitsProcess (hd:tl) pos coun ex = if pos /= coun
   then [P.Int hd] ++ (digitsProcess tl pos (coun+1) ex)
   else if ex /= 0
@@ -87,6 +86,7 @@ processExpo a
   | a < 0 && mod (-a) 3 == 0 = (3, a-3)
   | a < 0 && mod (-a) 3 == 1 = (2, a-2)
   | a < 0 && mod (-a) 3 == 2 = (1, a-1)
+  | otherwise = error "The cases of processExpo should be exhaustive!"
 
 -- | expr translation function from Drasil to layout AST
 expr :: (HasSymbolTable s, HasPrintingOptions s) => Expr -> s -> P.Expr

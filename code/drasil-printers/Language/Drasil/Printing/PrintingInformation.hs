@@ -1,8 +1,8 @@
-{-# LANGUAGE GADTs, TemplateHaskell, TypeFamilies #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module Language.Drasil.Printing.PrintingInformation where
 
-import Control.Lens ((^.), makeLenses, view, Lens')
+import Control.Lens (makeLenses, Lens')
 
 import Language.Drasil (ChunkDB, HasSymbolTable(..)
   , HasTermTable(..), HasDefinitionTable(..)
@@ -10,14 +10,12 @@ import Language.Drasil (ChunkDB, HasSymbolTable(..)
   )
 
 data Notation = Scientific
-                |Engineering
+              | Engineering
 
 class HasPrintingOptions c where
-	getSetting :: Lens' c Notation
+    getSetting :: Lens' c Notation
 
-data PrintingConfiguration = PC 
-                           { _notation :: Notation
-                           }
+data PrintingConfiguration = PC { _notation :: Notation }
 makeLenses ''PrintingConfiguration
 
 instance HasPrintingOptions  PrintingConfiguration where getSetting = notation

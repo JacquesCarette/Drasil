@@ -1,7 +1,7 @@
 {-# Language Rank2Types #-}
 module Drasil.DocumentLanguage.RefHelpers
-  ( refR, refChng, cite
-  , refRByNum, refChngByNum, citeByNum
+  ( refChng, cite
+  , refChngByNum, citeByNum
   , ModelDB, tmRefDB, gdRefDB, ddRefDB, imRefDB
   , mdb, modelsFromDB
   ) where
@@ -55,17 +55,6 @@ chunkLookup :: HasUID c => ReferenceDB -> Simple Lens ReferenceDB t ->
   (c -> t -> (ct, Int)) -> c -> ct
 chunkLookup db tableLens lookupFun chunk =
   fst $ lookupFun chunk (db ^. tableLens)
-
--- | Smart constructors for requirement referencing by name or by number.
-refR, refRByNum :: ReferenceDB -> ReqChunk -> Sentence
-refR rfdb = refRCustom rfdb ByName
-refRByNum rfdb = refRCustom rfdb ByNum
-
--- | Reference Requirements by Name or by Number where applicable
-refRCustom :: ReferenceDB -> RefBy -> ReqChunk -> Sentence
-refRCustom rfdb ByNum  r = customRef r (shortname' $ show (reqType r) ++
-  numLookup rfdb reqRefTable reqLookup r)
-refRCustom rfdb ByName r = makeRef (chunkLookup rfdb reqRefTable reqLookup r)
 
 -- | Smart constructors for likely/unlikely change referencing by name or by number.
 refChng, refChngByNum :: ReferenceDB -> Change -> Sentence

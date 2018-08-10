@@ -13,7 +13,7 @@ module Drasil.DocLang (
     -- DocumentLanguage.Definitions
     Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose), ddefn',
     -- DocumentLanguage.RefHelpers 
-    ModelDB, cite, ddRefDB, mdb,
+    ModelDB, ddRefDB, mdb,
     -- DocumentLanguage.TraceabilityMatrix
     -- Sections.AuxiliaryConstants
     valsOfAuxConstantsF,
@@ -51,7 +51,7 @@ import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
     mkEnumCC)
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, 
     InclUnits(IncludeUnits), Verbosity(Verbose), ddefn')
-import Drasil.DocumentLanguage.RefHelpers (ModelDB, cite, ddRefDB, mdb)
+import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)
 --import Drasil.DocumentLanguage.TraceabilityMatrix
 import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Drasil.Sections.GeneralSystDesc (genSysF)

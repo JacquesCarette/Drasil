@@ -3,8 +3,6 @@ module Drasil.GlassBR.Assumptions where
 import Language.Drasil hiding (organization)
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxConsLabel)
 
-import Drasil.DocLang (cite)
-
 import Data.Drasil.Concepts.Documentation as Doc (condition, constant, practice, reference, scenario, 
   system, value)
 import Data.Drasil.Concepts.Math (calculation, surface, shape)
@@ -51,7 +49,7 @@ a1Desc = foldlSent [S "The standard E1300-09a for",
   [S "glass supported on one side acts as a", phrase cantilever]])]
 
 a2Desc :: Sentence
-a2Desc = foldlSent [S "Following", cite gbRefDB astm2009 +:+ sParen
+a2Desc = foldlSent [S "Following", makeRef astm2009 +:+ sParen
   (S "pg. 1") `sC` S "this", phrase practice,
   S "does not apply to any form of", foldlList Comma Options $ map S ["wired",
   "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"],

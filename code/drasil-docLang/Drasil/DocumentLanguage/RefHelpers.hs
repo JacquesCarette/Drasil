@@ -1,8 +1,6 @@
 {-# Language Rank2Types #-}
 module Drasil.DocumentLanguage.RefHelpers
-  ( refChng, cite
-  , refChngByNum, citeByNum
-  , ModelDB, tmRefDB, gdRefDB, ddRefDB, imRefDB
+  ( ModelDB, tmRefDB, gdRefDB, ddRefDB, imRefDB
   , mdb, modelsFromDB
   ) where
 
@@ -55,27 +53,3 @@ chunkLookup :: HasUID c => ReferenceDB -> Simple Lens ReferenceDB t ->
   (c -> t -> (ct, Int)) -> c -> ct
 chunkLookup db tableLens lookupFun chunk =
   fst $ lookupFun chunk (db ^. tableLens)
-
--- | Smart constructors for likely/unlikely change referencing by name or by number.
-refChng, refChngByNum :: ReferenceDB -> Change -> Sentence
-refChng rfdb = refChngCustom rfdb ByName
-refChngByNum rfdb = refChngCustom rfdb ByNum
-
--- | Reference Changes by Name or by Number where applicable
-refChngCustom :: ReferenceDB -> RefBy -> Change -> Sentence
-refChngCustom chdb ByNum  c = customRef c (shortname' $ show (chngType c) ++
-  numLookup chdb changeRefTable changeLookup c)
-refChngCustom chdb ByName c =
-  makeRef (chunkLookup chdb changeRefTable changeLookup c)
-
--- | Smart constructors for citation referencing by name or by number.
-cite, citeByNum :: ReferenceDB -> Citation -> Sentence
-cite rfdb = citeCustom rfdb ByName
-citeByNum rfdb = citeCustom rfdb ByNum
-
--- | Reference Changes by Name or by Number where applicable
-citeCustom :: ReferenceDB -> RefBy -> Citation -> Sentence
-citeCustom rfdb ByNum  c = customRef c
-  (shortname' $ "[" ++ numLookup rfdb citationRefTable citeLookup c ++ "]")
-citeCustom rfdb ByName c =
-  makeRef (chunkLookup rfdb citationRefTable citeLookup c)

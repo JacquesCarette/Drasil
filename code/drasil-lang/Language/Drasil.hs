@@ -100,8 +100,7 @@ module Language.Drasil (
   -- Chunk.Attributes --FIXME: Changed a lot
   , getSource
   , Derivation, getDerivation, getShortName
-  , sourceref
-  , References
+  , Reference
   -- Chunk.ShortName
   , ShortName, shortname', HasShortName(shortname)
   --Citations
@@ -259,7 +258,7 @@ import Language.Drasil.Document.GetChunk(vars, combine', vars', combine, ccss)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Derivation (Derivation)
-import Language.Drasil.Chunk.References (References)
+import Language.Drasil.Chunk.References (Reference)
 import Language.Drasil.Chunk.ShortName (ShortName, shortname', HasShortName(shortname))
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation (

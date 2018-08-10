@@ -7,7 +7,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), ConceptDomain, HasLabel(getLabel),
   HasAdditionalNotes(getNotes))
-import Language.Drasil.Chunk.References (References)
+import Language.Drasil.Chunk.References (Reference)
 import Language.Drasil.Chunk.Quantity (HasSpace(typ), QuantityDict,
   mkQuant, qw)
 import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
@@ -31,7 +31,7 @@ import Language.Drasil.Spec (Sentence)
 data QDefinition = EC
           { _qua :: QuantityDict
           , _equat :: Expr
-          , _ref :: References -- FIXME: to be removed
+          , _ref :: [Reference] -- FIXME: to be removed
           , _deri :: Derivation -- FIXME: to be removed
           , _lb :: Label -- FIXME: to be removed
           , _notes :: Maybe [Sentence] -- FIXME: to be removed
@@ -39,20 +39,20 @@ data QDefinition = EC
 makeLenses ''QDefinition
 
 -- this works because UnitalChunk is a Chunk
-instance HasUID        QDefinition where uid = qua . uid
-instance NamedIdea     QDefinition where term = qua . term
-instance Idea          QDefinition where getA c = getA $ c ^. qua
-instance HasSpace      QDefinition where typ = qua . typ
-instance HasSymbol     QDefinition where symbol e st = symbol (e^.qua) st
-instance Quantity      QDefinition where 
-instance ExprRelat     QDefinition where relat = equat
-instance HasReference  QDefinition where getReferences = ref
-instance Eq            QDefinition where a == b = (a ^. uid) == (b ^. uid)
-instance HasDerivation QDefinition where derivations = deri
-instance HasLabel      QDefinition where getLabel = lb
+instance HasUID             QDefinition where uid = qua . uid
+instance NamedIdea          QDefinition where term = qua . term
+instance Idea               QDefinition where getA c = getA $ c ^. qua
+instance HasSpace           QDefinition where typ = qua . typ
+instance HasSymbol          QDefinition where symbol e st = symbol (e^.qua) st
+instance Quantity           QDefinition where 
+instance ExprRelat          QDefinition where relat = equat
+instance HasReference       QDefinition where getReferences = ref
+instance Eq                 QDefinition where a == b = (a ^. uid) == (b ^. uid)
+instance HasDerivation      QDefinition where derivations = deri
+instance HasLabel           QDefinition where getLabel = lb
 instance HasAdditionalNotes QDefinition where getNotes = notes
-instance MayHaveUnit   QDefinition where getUnit = getUnit . view qua
-instance HasShortName  QDefinition where -- FIXME: This could lead to trouble; need
+instance MayHaveUnit        QDefinition where getUnit = getUnit . view qua
+instance HasShortName       QDefinition where -- FIXME: This could lead to trouble; need
                                          -- to ensure sanity checking when building
                                          -- Refs. Double-check QDef is a DD before allowing
   shortname = lb . shortname
@@ -62,31 +62,31 @@ instance HasShortName  QDefinition where -- FIXME: This could lead to trouble; n
 -- unit, and defining equation.  And it ignores the definition...
 --FIXME: Space hack
 fromEqn :: (IsUnit u, ConceptDomain u) => 
-  String -> NP -> Sentence -> Symbol -> u -> Expr -> References -> Label -> QDefinition
+  String -> NP -> Sentence -> Symbol -> u -> Expr -> [Reference] -> Label -> QDefinition
 fromEqn nm desc _ symb un eqn refs lbe = 
   EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) eqn refs [] lbe Nothing
 
 -- | Same as fromEqn, but has no units.
 --FIXME: Space hack
-fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> References -> Label -> QDefinition
+fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> [Reference] -> Label -> QDefinition
 fromEqn' nm desc _ symb eqn refs lbe = EC (mkQuant nm desc symb Real Nothing Nothing) eqn refs [] lbe Nothing
 
 -- | Create a 'QDefinition' with an uid, noun phrase (term), symbol,
 -- abbreviation, unit, and defining equation.
 fromEqn'' :: (IsUnit u, ConceptDomain u) => String -> NP -> Sentence ->
- Symbol -> String -> Maybe u -> Expr -> References -> Label -> QDefinition
+ Symbol -> String -> Maybe u -> Expr -> [Reference] -> Label -> QDefinition
 fromEqn'' nm desc _ symb abbr u eqn refs lbe = 
   EC (mkQuant nm desc symb Real (fmap unitWrapper u) (Just abbr)) 
   eqn refs [] lbe Nothing
 
 
 fromEqn''' :: (IsUnit u, ConceptDomain u) => 
-  String -> NP -> Sentence -> Symbol -> u -> Expr -> References -> Derivation -> String -> QDefinition
+  String -> NP -> Sentence -> Symbol -> u -> Expr -> [Reference] -> Derivation -> String -> QDefinition
 fromEqn''' nm desc _ symb un eqn refs dv sn = 
   EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) 
   eqn refs dv (mkLabelSame sn (Def DD)) Nothing
 
-fromEqn'''' :: String -> NP -> Sentence -> Symbol -> Expr -> References -> Derivation -> String -> QDefinition
+fromEqn'''' :: String -> NP -> Sentence -> Symbol -> Expr -> [Reference] -> Derivation -> String -> QDefinition
 fromEqn'''' nm desc _ symb eqn refs dv sn = EC (mkQuant nm desc symb Real Nothing Nothing)
   eqn refs dv (mkLabelSame sn (Def DD)) Nothing
 

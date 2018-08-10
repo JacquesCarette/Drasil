@@ -4,17 +4,20 @@ module Drasil.GlassBR.DataDefs (aspRat, dataDefns, dimLL, gbQDefns, glaTyFac,
 import Language.Drasil
 import Prelude hiding (log, exp, sqrt)
 
+import Drasil.GlassBR.Assumptions (newA5)
 import Drasil.GlassBR.Concepts (annealed, fullyT, heatS)
+import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, 
   demand, dimlessLoad, gTF, glassTypeAbbrsStr, glassTypeFactors, glass_type, 
   lDurFac, load_dur, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pb_tol, 
   plate_len, plate_width, risk_fun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
   sflawParamM, stressDistFac, tolLoad, min_thick)
-import Drasil.GlassBR.Assumptions (newA5)
 
 import Data.Drasil.Concepts.Documentation (datum, user)
 import Data.Drasil.Concepts.Math (probability, parameter, calculation)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
+
+import Data.Drasil.Citations (campidelli)
 import Data.Drasil.SentenceStructures (sAnd)
 
 ----------------------
@@ -44,7 +47,8 @@ risk = mkQuantDef risk_fun risk_eq
 
 riskDD :: DataDefinition
 riskDD = mkDD risk 
-  [(sourceref (S "[1]")), (sourceref (S "[4, Eq. 4-5]")), (sourceref (S "[5, Eq. 14]"))] 
+  [makeRef astm2009, makeRef beasonEtAl1998 +:+ sParen (S "Eq. 4-5"), 
+  makeRef campidelli +:+ sParen (S "Eq. 14")] 
   [{-derivation-}] ""{-temporary-} 
   (Just $ aGrtrThanB : hRef : ldfRef : jRef : [])
 
@@ -128,7 +132,7 @@ dimLL :: QDefinition
 dimLL = mkQuantDef dimlessLoad dimLL_eq
 
 dimLLDD :: DataDefinition
-dimLLDD = mkDD dimLL [sourceref $ S "[5, Eq. 7]"] [{-derivation-}] ""--temporary
+dimLLDD = mkDD dimLL [makeRef campidelli +:+ sParen (S "Eq. 7")] [{-derivation-}] ""--temporary
   (Just $ qRef : aGrtrThanB : hRef : gtfRef : a5Ref : [])
 
 --DD8--

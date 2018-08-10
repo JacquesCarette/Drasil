@@ -8,6 +8,7 @@ import Language.Drasil
 import Drasil.GlassBR.Assumptions (newA1, newA2)
 import Drasil.GlassBR.Concepts (glassTypeFac, lResistance, lShareFac)
 import Drasil.GlassBR.DataDefs (glaTyFac, nonFL, risk)
+import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (demand, demandq, eqTNTWeight, lRe, loadSF, 
   prob_br, risk_fun, standOffDist, wtntWithEqn)
 
@@ -28,7 +29,7 @@ gbrIMods = [probOfBreak, calofCapacity, calofDemand]
 probOfBreak :: InstanceModel
 probOfBreak = im probOfBr [qw risk] 
   [TCon AssumedCon $ sy risk $> 0] (qw prob_br) [TCon AssumedCon $ sy prob_br $> 0]
-  [(sourceref (S "[1]")), (sourceref (S "[4]"))] l1
+  (map makeRef [astm2009, beasonEtAl1998]) l1
 
 {--}
 
@@ -62,8 +63,8 @@ capdescr =
   (S "In the development of this procedure, it was assumed that" +:+
   S "all four edges of the glass are simply supported and free to slip" +:+
   S "in the plane of the glass. This boundary condition has been shown" +:+
-  S "to be typical of many glass installations")) +:+ S "from [1 (pg. 53)]"
-  {-astm2009-}]
+  S "to be typical of many glass installations")) +:+ S "from" +:+ 
+  makeRef astm2009, S "(pg. 53)"]
 
 {--}
 

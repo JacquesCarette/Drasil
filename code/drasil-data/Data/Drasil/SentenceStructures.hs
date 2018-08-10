@@ -196,7 +196,7 @@ tAndDOnly :: Concept s => s -> ItemType
 tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
 
 followA :: Sentence -> AssumpChunk -> Sentence
-preceding `followA` assump = preceding +:+ S "following" +:+ makeRef assump
+preceding `followA` assumpt = preceding +:+ S "following" +:+ makeRef assumpt
 
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
 getTandS :: (Quantity a, NamedIdea a) => a -> Sentence

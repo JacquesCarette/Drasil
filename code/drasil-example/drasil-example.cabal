@@ -1,5 +1,5 @@
 Name:		drasil-example
-Version:	0.1.7
+Version:	0.1.8
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -32,18 +32,19 @@ executable glassbr
   hs-source-dirs: .
   main-is: Drasil/GlassBR/Main.hs
   other-modules:
-      Drasil.GlassBR.Body
+      Drasil.GlassBR.Assumptions
+    , Drasil.GlassBR.Body
     , Drasil.GlassBR.Changes
     , Drasil.GlassBR.Concepts
-    , Drasil.GlassBR.Unitals
-    , Drasil.GlassBR.TMods
-    , Drasil.GlassBR.IMods
     , Drasil.GlassBR.DataDefs
-    , Drasil.GlassBR.References
-    , Drasil.GlassBR.Units
     , Drasil.GlassBR.ModuleDefs
+    , Drasil.GlassBR.IMods
+    , Drasil.GlassBR.Labels
+    , Drasil.GlassBR.References
     , Drasil.GlassBR.Symbols
-    , Drasil.GlassBR.Assumptions
+    , Drasil.GlassBR.TMods
+    , Drasil.GlassBR.Unitals
+    , Drasil.GlassBR.Units
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,

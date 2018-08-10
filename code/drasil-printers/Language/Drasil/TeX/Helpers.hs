@@ -93,10 +93,11 @@ genSec d
       TP.<> (if (not numberedSections) then text "*" else TP.empty) 
 
 -- For references
-ref, sref, hyperref :: String -> D -> D
+ref, sref, hyperref, snref :: String -> D -> D
 sref         = if numberedSections then ref else hyperref
 ref      t x = custRef (t ++ "~\\ref") x
 hyperref t x = command0 "hyperref" <> sq x <> br ((pure $ text (t ++ "~")) <> x)
+snref    r t = command0 "hyperref" <> sq (pure $ text r) <> br t
 
 custRef :: String -> D -> D
 custRef t x = (pure $ text t) <> br x

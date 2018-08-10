@@ -8,11 +8,12 @@ import Numeric (showEFloat)
 import Control.Applicative (pure)
 import Control.Arrow (second)
 
-import qualified Language.Drasil as L (USymb(US), colAwidth, colBwidth, bibStyleT, 
-  bibFname, RenderSpecial(..), People, rendPersLFM, HasSymbolTable,
+import qualified Language.Drasil as L (USymb(US), 
+  RenderSpecial(..), People, rendPersLFM, HasSymbolTable,
   CitationKind(..), Month(..), Symbol(..), Sentence(S), (+:+), MaxWidthPercent,
   Decoration(Prime, Hat, Vector), Document, special)
 
+import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
   ListType(Ordered, Unordered, Desc, Definitions, Simple), 
   Spec(Quote, EmptyS, Ref, S, Sy, Sp, HARDNL, E, (:+:)), 
@@ -340,7 +341,7 @@ makeDefTable :: (L.HasSymbolTable s, HasPrintingOptions s) => s -> [(String,[Lay
 makeDefTable _ [] _ = error "Trying to make empty Data Defn"
 makeDefTable sm ps l = vcat [
   pure $ text 
-  $ "\\begin{tabular}{p{"++show L.colAwidth++"\\textwidth} p{"++show L.colBwidth++"\\textwidth}}",
+  $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
   (pure $ text "\\toprule \\textbf{Refname} & \\textbf{") <> l <> (pure $ text "}"), --shortname instead of refname?
   (pure $ text "\\phantomsection "), label l,
   makeDRows sm ps,
@@ -481,7 +482,7 @@ makeGraph ps w h c l =
 -- **THE MAIN FUNCTION** --
 makeBib :: (L.HasSymbolTable s, HasPrintingOptions s) => s -> BibRef -> D
 makeBib sm bib = spec $
-  S ("\\begin{filecontents*}{"++L.bibFname++".bib}\n") :+: --bibFname is in Config.hs
+  S ("\\begin{filecontents*}{"++bibFname++".bib}\n") :+:
   mkBibRef sm bib :+:
   S "\n\\end{filecontents*}\n" :+:
   S bibLines
@@ -489,7 +490,7 @@ makeBib sm bib = spec $
 bibLines :: String
 bibLines =
   "\\nocite{*}\n" ++
-  "\\bibstyle{" ++ L.bibStyleT ++ "}\n" ++ --bibStyle is in Config.hs
+  "\\bibstyle{" ++ bibStyleT ++ "}\n" ++
   "\\printbibliography[heading=none]"
 
 mkBibRef :: (L.HasSymbolTable s, HasPrintingOptions s) => s -> BibRef -> Spec

@@ -213,10 +213,7 @@ module Language.Drasil (
   , names
   -- Document.Extract
   , egetDoc, getDoc
-  -- Config
-  , StyleGuide(..), verboseDDDescription, numberedTMEquations, numberedDDEquations
-  , bibStyleH, numberedSections, hyperSettings, fontSize, bibFname, bibStyleT, colBwidth
-  , colAwidth
+  -- Label.Core
   , getAdd
 ) where
 
@@ -259,9 +256,6 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasLabel(getLabel), MayHaveLabel(getMaybeLabel), HasRefAddress(getRefAdd))
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Document.GetChunk(vars, combine', vars', combine, ccss)
-import Language.Drasil.Config (StyleGuide(..), verboseDDDescription, numberedTMEquations,
-  numberedDDEquations, bibStyleH, numberedSections, hyperSettings, bibFname, fontSize,
-  colAwidth, colBwidth, bibStyleT)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Derivation (Derivation)

@@ -61,7 +61,7 @@ import Drasil.GlassBR.DataDefs (aspRat, dataDefns, gbQDefns, hFromt, strDisFac, 
   dimLL, glaTyFac, tolStrDisFac, tolPre, risk, standOffDis)
 import Drasil.GlassBR.IMods (probOfBreak, calofCapacity, calofDemand, gbrIMods)
 import Drasil.GlassBR.ModuleDefs (allMods)
-import Drasil.GlassBR.References (rbrtsn2012)
+import Drasil.GlassBR.References (astm2009, astm2012, astm2016, rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
 import Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe)
 import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, capacity, char_weight, 
@@ -272,8 +272,8 @@ undIR = foldlList Comma List [phrase scndYrCalculus, phrase structuralMechanics,
   plural computerApp `sIn` phrase civilEng]
 appStanddIR = foldlSent [S " In addition" `sC` plural reviewer, -- FIXME: space before "In" is a hack to get proper spacing
   S "should be familiar with the applicable", plural standard,
-  S "for constructions using glass from",
-  sSqBr (S "1-3" {-astm2009, astm2012, astm2016-}) `sIn`
+  S "for constructions using glass from", (foldlList Comma List
+  $ map makeRef [astm2009, astm2012, astm2016]) `sIn`
   (midRef SRS.referenceLabel)]
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
   S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,

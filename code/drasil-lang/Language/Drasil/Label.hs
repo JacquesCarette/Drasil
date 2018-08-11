@@ -45,6 +45,7 @@ getAcc Goal      = "GS:"
 getAcc PSD       = "PS:"
 getAcc (Label x) = getAcc x
 getAcc Blank     = error "Why are we getting the acronym of a Blank?"
+getAcc (DeferredCC _) = error "DeferredCC RefType should not be directly used."
 
 getReqName :: ReqType -> String
 getReqName FR  = "FR:"

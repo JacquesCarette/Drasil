@@ -103,7 +103,7 @@ module Language.Drasil (
   , sourceref
   , References
   -- Chunk.ShortName
-  , ShortName, shortname', HasShortName(shortname)
+  , DeferredCtx(..), resolveSN, ShortName, shortname', HasShortName(shortname)
   --Citations
   , Citation(..), EntryID, BibRef, CiteField(..), Month(..), HP(..)
   , HasFields(..)
@@ -175,7 +175,7 @@ module Language.Drasil (
   , ChunkDB, cdb
   , HasSymbolTable, symbolMap, symbLookup, symbolTable, getUnitLup
   , HasTermTable, termLookup, termTable
-  , HasDefinitionTable, conceptMap, defTable
+  , HasDefinitionTable, conceptMap, defTable, defLookup
   , HasUnitTable, unitMap, unitTable, collectUnits
   -- AssumpChunk
   , AssumpChunk, assuming, assump
@@ -260,7 +260,8 @@ import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.References (References)
-import Language.Drasil.Chunk.ShortName (ShortName, shortname', HasShortName(shortname))
+import Language.Drasil.Chunk.ShortName (DeferredCtx(..), resolveSN, ShortName
+  , shortname', HasShortName(shortname))
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation (
   -- Types

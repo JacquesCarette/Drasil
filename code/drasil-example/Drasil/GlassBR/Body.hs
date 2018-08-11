@@ -5,80 +5,72 @@ import Data.List (nub)
 
 import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
-import qualified Drasil.DocLang.SRS as SRS (dataDefnLabel, 
-  valsOfAuxConsLabel, referenceLabel, indPRCaseLabel,
-  datConLabel)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
-  DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), 
-  GSDSub(..), InclUnits(IncludeUnits), IntroSec(IntroProg),
-  IntroSub(IChar, IOrgSec, IPurpose, IScope), LCsSec(..), ProblemDescription(..), 
-  RefSec(RefProg), RefTab(TAandA, TUnits), ReqrmntSec(..), 
-  ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SCSSub(..), 
+  DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 
+  InclUnits(IncludeUnits), IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), 
+  LCsSec(..), ProblemDescription(..), RefSec(RefProg), RefTab(TAandA, TUnits), 
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SCSSub(..), 
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), 
   cite, dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
-  mkRequirement, outDataConstTbl, physSystDesc, termDefnF, traceGIntro, 
-  tsymb)
+  mkRequirement, outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb)
 
-import Data.Drasil.Concepts.Computation (computerApp, inParam,
-  inValue, inQty)
+import qualified Drasil.DocLang.SRS as SRS (datConLabel, dataDefnLabel, indPRCaseLabel, 
+  referenceLabel, valsOfAuxConsLabel)
+
+import Data.Drasil.Concepts.Computation (computerApp, inParam, inQty, inValue)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
-  assumption, characteristic, class_, code, company, condition, content, 
-  dataConst, dataDefn, datumConstraint, definition, description, document, emphasis, 
-  environment, failure, figure, goal, goalStmt, 
-  implementation, information, inModel, input_, interface, item, likelyChg, message, model, 
-  organization, output_, physicalSystem, physSyst, problem, product_, purpose, quantity, 
-  reference, requirement, reviewer, section_, software, softwareSys, srs, standard, symbol_,  
-  sysCont, system, template, term_, theory, thModel, traceyMatrix, user,
-  userInput, value)
-
+  assumption, characteristic, class_, code, company, condition, content, dataConst, 
+  dataDefn, datumConstraint, definition, description, document, emphasis, environment, 
+  failure, figure, goal, goalStmt, implementation, information, inModel, input_, 
+  interface, item, likelyChg, message, model, organization, output_, physicalSystem, 
+  physSyst, problem, product_, purpose, quantity, reference, requirement, reviewer, 
+  section_, software, softwareSys, srs, standard, symbol_, sysCont, system, template, 
+  term_, theory, thModel, traceyMatrix, user, userInput, value)
 import Data.Drasil.Concepts.Education (civilEng, scndYrCalculus, structuralMechanics)
-import Data.Drasil.Concepts.Math (graph, calculation, probability,
-  parameter)
+import Data.Drasil.Concepts.Math (calculation, graph, parameter, probability)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability,
   performance, errMsg)
 import Data.Drasil.Concepts.Thermodynamics (degree_')
-import Data.Drasil.SentenceStructures (acroR, sVersus, sAnd, foldlSP,
-  foldlSent, foldlSent_, figureLabel, foldlList, SepType(Comma), FoldType(List),
-  showingCxnBw, foldlsC, sOf, followA, ofThe, sIn, isThe, sOr, 
-  underConsidertn, tAndDWAcc, tAndDOnly, tAndDWSym, andThe, foldlSPCol)
+
 import Data.Drasil.Software.Products (sciCompS)
-import Data.Drasil.Utils (makeTMatrix, itemRefToSent, noRefs,
-  enumSimple, enumBullet, prodUCTbl, bulletFlat, bulletNested)
+
+import Data.Drasil.Citations (koothoor2013, smithLai2005)
+import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
+import Data.Drasil.Phrase (for'')
+import Data.Drasil.SI_Units (kilogram, metre, millimetre, newton, pascal, second)
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), andThe, 
+  figureLabel, foldlList, foldlsC, foldlSent, foldlSent_, foldlSP, foldlSPCol, followA, 
+  isThe, ofThe, sAnd, showingCxnBw, sIn, sOf, sOr, sVersus, tAndDOnly, tAndDWAcc, tAndDWSym, 
+  underConsidertn)
+import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, itemRefToSent, 
+  makeTMatrix, noRefs, prodUCTbl)
   
-import Drasil.GlassBR.Assumptions (assumptionConstants, gbRefDB, newAssumptions, newA4, newA5, newA8)
+import Drasil.GlassBR.Assumptions (assumptionConstants, gbRefDB, newAssumptions, newA4, 
+  newA5, newA8)
 import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
-import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, 
-  glass, gLassBR, lShareFac, ptOfExplsn, stdOffDist)
+import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, glass, gLassBR, 
+  lShareFac, ptOfExplsn, stdOffDist)
 import Drasil.GlassBR.DataDefs (aspRat, dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
   dimLL, glaTyFac, tolStrDisFac, tolPre, risk, standOffDis)
+import Drasil.GlassBR.IMods (probOfBreak, calofCapacity, calofDemand, gbrIMods)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
 import Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe)
-import Drasil.GlassBR.IMods (probOfBreak, 
-  calofCapacity, calofDemand, gbrIMods)
-
-import Drasil.GlassBR.Unitals (stressDistFac, aspect_ratio, dimlessLoad, 
-  lateralLoad, char_weight, sD, demand, demandq, lRe, wtntWithEqn, 
-  sdWithEqn, prob_br, notSafe, safeMessage, is_safePb, is_safeLR, plate_width, 
-  plate_len, blast, glassTy, gbInputDataConstraints, explosion, pb_tol, 
-  blast, bomb, blastTy, glassGeo, glass_type, nom_thick, sdx, sdy, sdz, tNT, 
-  gBRSpecParamVals, loadTypes, load, glassTypes, probBreak, termsWithAccDefn, 
-  termsWithDefsOnly, gbConstants, gbConstrained, gbOutputs, gbInputs, glBreakage, 
-  capacity, constant_LoadDF, glassBRsymb)
-
-import Data.Drasil.Citations (koothoor2013, smithLai2005)
-import Data.Drasil.People (spencerSmith, nikitha, mCampidelli)
-import Data.Drasil.Phrase (for'')
-import Data.Drasil.SI_Units (kilogram, metre, millimetre, newton, pascal, 
-  second)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, capacity, char_weight, 
+  constant_LoadDF, demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained, 
+  gbInputDataConstraints, gbInputs, gbOutputs, gBRSpecParamVals, glass_type, glassBRsymb, 
+  glassGeo, glassTy, glassTypes, glBreakage, is_safeLR, is_safePb, lateralLoad, load, 
+  loadTypes, lRe, nom_thick, notSafe, pb_tol, plate_len, plate_width, prob_br, probBreak, 
+  safeMessage, sD, sdWithEqn, sdx, sdy, sdz, stressDistFac, termsWithAccDefn, 
+  termsWithDefsOnly, tNT, wtntWithEqn)
 
 {--}
 
@@ -571,8 +563,8 @@ req3Desc = foldlSent [S "The", phrase system, S "shall check the entered",
   `andThe` plural calculation, S "stop"]
 
 req4Desc = foldlSent [titleize output_, S "the", plural inQty,
-  S "from", acroR 1 `andThe` S "known", plural quantity,
-  S "from", acroR 2]
+  S "from", makeRef funcReqsR1 `andThe` S "known", plural quantity,
+  S "from", makeRef funcReqsR2]
 
 req5Desc cmd = foldlSent_ [S "If", (ch is_safePb), S "∧", (ch is_safeLR),
   sParen (S "from" +:+ (makeRef pbIsSafe)
@@ -592,7 +584,7 @@ funcReqsR6_pulledList = [risk, strDisFac, nonFL, glaTyFac, dimLL,
 funcReqsR6 :: LabelledContent --FIXME: Issue #327
 funcReqsR6 = llcc funcReqs6Label $
   Enumeration $ Simple $ 
-  [(acroR 6
+  [(S "R6"
    , Nested (titleize output_ +:+
      S "the following" +: plural quantity)
      $ Bullet $ noRefs $

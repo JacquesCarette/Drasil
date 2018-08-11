@@ -989,7 +989,7 @@ This section provides the functional requirements, the business tasks that the s
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:Check-Input-with-Data.Constraints}:]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DataConstraints}. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Output-Values-and-Known-Quantities}:]Output the input quantities from R1 and the known quantities from R2.
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Output-Values-and-Known-Quantities}:]Output the input quantities from R\ref{FR:Input-Glass-Props} and the known quantities from R\ref{FR:System-Set-Values-Following-Assumptions}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:Check-Glass-Safety}:]If $is\_safePb$ ∧ $is\_safeLR$ (from \hyperref[T:isSafePb]{Definition~T:isSafePb} and \hyperref[T:isSafeLR]{Definition~T:isSafeLR}) are true, output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''

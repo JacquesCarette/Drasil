@@ -1,29 +1,31 @@
-module Drasil.SWHS.GenDefs (swhsGDs, nwtnCooling, rocTempSimp, 
+module Drasil.SWHS.GenDefs (swhsGDs, nwtnCooling, rocTempSimp, rocTempSimpGD,
   roc_temp_simp_deriv, generalDefinitions, nwtnCooling_desc, rocTempSimp_desc) where
 
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
 import Drasil.DocLang (refA)
 
-import Data.Drasil.SentenceStructures (foldlSent)
+import Data.Drasil.Concepts.Documentation (assumption)
+import Data.Drasil.Concepts.Math (equation, rate, rOfChng, unit_)
+import Data.Drasil.Concepts.Thermodynamics (law_conv_cooling)
+
+import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (vol, mass, density)
+import Data.Drasil.Quantities.Physics as QP (time)
 import Data.Drasil.Quantities.Thermodynamics as QT (ht_flux, heat_cap_spec,
   temp)
-import Data.Drasil.Quantities.Physics as QP (time)
+
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
+  foldlList, foldlSent, foldlSentCol, isThe, ofThe, sAnd)
+import Data.Drasil.Units.Thermodynamics (thermal_flux)
+import Data.Drasil.Utils (unwrap, weave)
+
+import Drasil.SWHS.Assumptions
+import Drasil.SWHS.Concepts (gauss_div)
+import Drasil.SWHS.Labels (nwtnCoolingL, rocTempSimpL)
+import Drasil.SWHS.TMods (t1ConsThermE)
 import Drasil.SWHS.Unitals (vol_ht_gen, deltaT, temp_env, pcm_SA,
   out_SA, in_SA, ht_flux_in, ht_flux_out, htTransCoeff, thFluxVect)
-import Data.Drasil.SentenceStructures (isThe, sAnd, ofThe, acroGD, foldlSentCol,
-  foldlList, SepType(Comma), FoldType(List))
-import Data.Drasil.Utils (unwrap, weave)
-import Data.Drasil.Concepts.Math (equation, rOfChng, rate, unit_)
-import Data.Drasil.Concepts.Thermodynamics (law_conv_cooling)
-import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
-import Data.Drasil.Concepts.Documentation (assumption)
-import Data.Drasil.Units.Thermodynamics (thermal_flux)
-
-import Drasil.SWHS.TMods (t1ConsThermE_new)
-import Drasil.SWHS.Concepts (gauss_div)
-import Drasil.SWHS.Assumptions
 
 ---------------------------
 --  General Definitions  --
@@ -36,24 +38,19 @@ import Drasil.SWHS.Assumptions
 swhsGDs :: [GenDefn]
 swhsGDs = [nwtnCoolingGD, rocTempSimpGD] 
 
-l1, l2 :: Label
-l1 = mkLabelSame "nwtnCooling" (Def General)
-l2 = mkLabelSame "rocTempSimp" (Def General)
-
 nwtnCoolingGD, rocTempSimpGD :: GenDefn
-nwtnCoolingGD = gdNoUnitDef nwtnCooling [] l1
-rocTempSimpGD = gdNoUnitDef rocTempSimp [] l2
+nwtnCoolingGD = gdNoUnitDef nwtnCooling [] nwtnCoolingL
+rocTempSimpGD = gdNoUnitDef rocTempSimp [] rocTempSimpL
 
 generalDefinitions :: [GenDefn]
 generalDefinitions = [gd' nwtnCooling (Just thermal_flux) ([] :: Derivation) "nwtnCooling" [nwtnCooling_desc],
   gd' rocTempSimp (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv "rocTempSimp" [rocTempSimp_desc]]
 
-
 --
 
 nwtnCooling :: RelationConcept
 nwtnCooling = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling") 
-  nwtnCooling_desc nwtnCooling_rel l1
+  nwtnCooling_desc nwtnCooling_rel nwtnCoolingL
 
 nwtnCooling_rel :: Relation
 nwtnCooling_rel = apply1 ht_flux QP.time $= sy htTransCoeff *
@@ -78,7 +75,7 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
 --
 rocTempSimp :: RelationConcept
 rocTempSimp = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
-  "of change of temperature") rocTempSimp_desc rocTempSimp_rel l2
+  "of change of temperature") rocTempSimp_desc rocTempSimp_rel rocTempSimpL
 
 rocTempSimp_rel :: Relation
 rocTempSimp_rel = (sy QPP.mass) * (sy QT.heat_cap_spec) *
@@ -114,7 +111,7 @@ roc_temp_simp_deriv =
 
 roc_temp_simp_deriv_sentences :: [Sentence]
 roc_temp_simp_deriv_sentences = map foldlSentCol [
-  s4_2_3_desc1 t1ConsThermE_new vol,
+  s4_2_3_desc1 t1ConsThermE vol,
   s4_2_3_desc2 gauss_div surface vol thFluxVect uNormalVect unit_,
   s4_2_3_desc3 vol vol_ht_gen,
   s4_2_3_desc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heat_cap_spec
@@ -144,7 +141,7 @@ s4_2_3_desc4 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   [Sentence] -> [Sentence]
 s4_2_3_desc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
   ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
-  acroGD 2, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
+  makeRef rocTempSimpL, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
   titleize' assumption, (foldlList Comma List $ (map (\d -> sParen (d)))
   assumps) `sC` S "we have"]

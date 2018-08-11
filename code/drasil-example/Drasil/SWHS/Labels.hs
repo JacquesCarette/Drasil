@@ -2,19 +2,23 @@ module Drasil.SWHS.Labels where
 
 import Language.Drasil
 
-assump1Label, assump10Label, assump14Label, assump18Label, 
-  assump19Label :: Label
+-- Assumptions
+thermalEnergyOnlyL, lawConvectiveCoolingWtrPCML, waterAlwaysLiquidL, 
+    noGaseousStatePCML, atmosphericPressureTankL :: Label
+thermalEnergyOnlyL          = mkLabelRAAssump' "Thermal-Energy-Only"
+lawConvectiveCoolingWtrPCML = mkLabelRAAssump' "Law-Convective-Cooling-Water-PCM"
+waterAlwaysLiquidL          = mkLabelRAAssump' "Water-Always-Liquid"
+noGaseousStatePCML          = mkLabelRAAssump' "No-Gaseous-State-PCM"
+atmosphericPressureTankL    = mkLabelRAAssump' "Atmospheric-Pressure-Tank"
 
-assump1Label  = mkLabelRAAssump' "Thermal-Energy-Only"
+-- General Definitions
+nwtnCoolingL, rocTempSimpL :: Label
+nwtnCoolingL = mkLabelSame "nwtnCooling" (Def General)
+rocTempSimpL = mkLabelSame "rocTempSimp" (Def General)
 
-assump10Label = mkLabelRAAssump' "Law-Convective-Cooling-Water-PCM"
-
-assump14Label = mkLabelRAAssump' "Water-Always-Liquid"
-
-assump18Label = mkLabelRAAssump' "No-Gaseous-State-PCM"
-
-assump19Label = mkLabelRAAssump' "Atmospheric-Pressure-Tank"
-
-traceFig1LC, traceFig2LC :: Label
-traceFig1LC = mkLabelRAFig "traceFig1LabelSWHS"
-traceFig2LC = mkLabelRAFig "traceFig2LabelSWHS"
+-- Instance Models
+eBalanceOnWtrL, eBalanceOnPCML, heatEInWtrL, heatEInPCML :: Label
+eBalanceOnWtrL = mkLabelSame "eBalanceOnWtr" (Def Instance)
+eBalanceOnPCML = mkLabelSame "eBalanceOnPCM" (Def Instance)
+heatEInWtrL    = mkLabelSame "heatEInWtr"    (Def Instance)
+heatEInPCML    = mkLabelSame "heatEInPCM"    (Def Instance)

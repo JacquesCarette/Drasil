@@ -130,7 +130,7 @@ orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
           (foldlsC $ map (plural) [Doc.goal, theory, definition]) `sC` S "and assumptions.",
           S "For readers that would like a more bottom up approach" `sC`
           S "they can start reading the", plural bottom,
-          S "in", midRef bottomSec +:+
+          S "in", makeRef bottomSec +:+
           S "and trace back to find any additional information they require"],
           mkParagraph $ lastS trailingSentence]
           where lastS EmptyS = refineChain [goalStmt, thModel, inModel]

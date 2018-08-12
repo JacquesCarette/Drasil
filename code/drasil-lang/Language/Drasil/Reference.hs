@@ -335,9 +335,6 @@ mkRefFrmLbl :: (HasLabel l, HasShortName l, Referable l) => l -> Sentence
 mkRefFrmLbl r = makeRef r
 
 --FIXME: should be removed from Examples once sections have labels
-midRef :: Label -> Sentence
-midRef r = customRef r (r ^. shortname)
-
 -- | Create a reference with a customized 'ShortName'
 customRef :: (HasShortName l, Referable l) => l -> ShortName -> Sentence
 customRef r n = Ref (fixupRType $ rType r) (refAdd r) (getAcc' (rType r) n)

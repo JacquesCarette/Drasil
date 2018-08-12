@@ -135,7 +135,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand] HideDerivation
           , Constraints EmptyS dataConstraintUncertainty
-                        (foldlSent [midRef SRS.valsOfAuxConsLabel, S "gives", (plural value `ofThe` S "specification"), 
+                        (foldlSent [makeRef SRS.valsOfAuxConsLabel, S "gives", (plural value `ofThe` S "specification"), 
                         plural parameter, S "used in", (makeRef inputDataConstraints)])
                         [inputDataConstraints, outputDataConstraints]
           ]
@@ -274,7 +274,7 @@ appStanddIR = foldlSent [S " In addition" `sC` plural reviewer, -- FIXME: space 
   S "should be familiar with the applicable", plural standard,
   S "for constructions using glass from",
   sSqBr (S "1-3" {-astm2009, astm2012, astm2016-}) `sIn`
-  (midRef SRS.referenceLabel)]
+  (makeRef SRS.referenceLabel)]
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
   S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
   S "related to", phrase blastTy]
@@ -386,7 +386,7 @@ prodUseCaseTableUC1, prodUseCaseTableUC2 :: [Sentence]
 
 prodUseCaseTableUC1 = [titleize user, titleize' characteristic +:+ S "of the"
   +:+ phrase glaSlab `sAnd` S "of the" +:+. phrase blast +:+ S "Details in"
-  +:+ midRef SRS.indPRCaseLabel]
+  +:+ makeRef SRS.indPRCaseLabel]
 
 prodUseCaseTableUC2 = [short gLassBR, S "Whether" `sOr` S "not the" +:+
   phrase glaSlab +:+ S "is safe for the" +:+ S "calculated" +:+ phrase load
@@ -442,7 +442,7 @@ probEnding = foldl (+:+) EmptyS [S "interpret the", plural input_,
 
 termsAndDesc = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
   S "are extracted from" +:+ (sSqBrNum 1 {-astm2009-}) `sIn`
-  (midRef SRS.referenceLabel))) [termsAndDescBullets]
+  (makeRef SRS.referenceLabel))) [termsAndDescBullets]
 
 {--Physical System Description--}
 
@@ -557,7 +557,7 @@ req2Desc = foldlSent [S "The", phrase system,
 
 req3Desc = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",
-  plural datumConstraint, S "mentioned in" +:+. midRef
+  plural datumConstraint, S "mentioned in" +:+. makeRef
   SRS.datConLabel, S "If any" `sOf` S "the", plural inParam,
   S "is out" `sOf` S "bounds" `sC` S "an", phrase errMsg, S "is displayed"
   `andThe` plural calculation, S "stop"]

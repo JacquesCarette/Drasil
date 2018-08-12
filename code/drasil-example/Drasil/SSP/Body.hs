@@ -263,7 +263,7 @@ sysCtxUsrResp = [S "Provide the input data related to the soil layer(s) and wate
   S "table (if applicable), ensuring no errors in the data entry",
   S "Ensure that consistent units are used for input variables",
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+ sParen ( 
-  midRef SRS.assumptLabel) +:+ S "are appropriate for any particular" +:+
+  makeRef SRS.assumptLabel) +:+ S "are appropriate for any particular" +:+
   phrase problem +:+ S "input to the" +:+ phrase software]
   
 sysCtxSysResp :: [Sentence]

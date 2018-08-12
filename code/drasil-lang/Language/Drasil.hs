@@ -148,7 +148,7 @@ module Language.Drasil (
   , RawContent(..)
   , mkFig
   -- Reference
-  , makeRef, mkRefFrmLbl, midRef
+  , makeRef, mkRefFrmLbl
   -- Space
   , Space(..)
   -- Symbol
@@ -318,7 +318,7 @@ import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (Sentence(..),
   sParen, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
   semiCol, sParenDash, sDash)
-import Language.Drasil.Reference (makeRef, midRef, mkRefFrmLbl, ReferenceDB, assumpDB, reqDB
+import Language.Drasil.Reference (makeRef, mkRefFrmLbl, ReferenceDB, assumpDB, reqDB
                                  , AssumpMap, assumpLookup, HasAssumpRefs
                                  , assumpRefTable, assumptionsFromDB
                                  , rdb, reqRefTable, reqLookup, RefBy(..)

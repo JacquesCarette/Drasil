@@ -64,14 +64,14 @@ qdFromDD (DatDef a _ _ _ _ _) = a
 mkQuantDef :: (Quantity c) => c -> Expr -> QDefinition
 mkQuantDef cncpt equation = datadef $ getUnit cncpt --should references be passed in at this point?
   where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) a equation [] (mkLabelSame (cncpt ^. uid) (Def DD))
+                           (eqSymb cncpt) a equation (mkLabelSame (cncpt ^. uid) (Def DD))
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) equation [] (mkLabelSame (cncpt ^. uid) (Def DD))
+                           (eqSymb cncpt) equation (mkLabelSame (cncpt ^. uid) (Def DD))
 
 mkQuantDef' :: (Quantity c) => c -> Expr -> QDefinition
 mkQuantDef' cncpt equation = quantdef $ getUnit cncpt --should references be passed in at this point?
   where quantdef (Just a) = fromEqn'''  (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) a equation [] (cncpt ^. uid) --shortname
+                           (eqSymb cncpt) a equation (cncpt ^. uid) --shortname
         quantdef Nothing  = fromEqn'''' (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) equation [] (cncpt ^. uid) --shortname
+                           (eqSymb cncpt) equation (cncpt ^. uid) --shortname
 

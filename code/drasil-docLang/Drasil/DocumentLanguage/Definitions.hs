@@ -109,8 +109,8 @@ mkQField d _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (sy d $= d ^. equat) 
 mkQField d m l@(Description v u) fs =
   (show l, buildDDescription v u d m) : fs
 mkQField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
-mkQField d _ l@(Source) fs = (show l, [mkParagraph $ getSource d]) : fs
-mkQField d _ l@(Notes) fs = error "Trying to get Notes from a QDefinition"
+mkQField _ _ l@(Source) _ = error "Trying to get a Reference from a QDefinition"
+mkQField _ _ l@(Notes) _ = error "Trying to get Notes from a QDefinition"
 mkQField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for data definitions"
 

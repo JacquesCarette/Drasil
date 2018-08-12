@@ -32,7 +32,6 @@ data QDefinition = EC
           , _equat :: Expr
           , _ref :: References -- FIXME: to be removed
           , _lb :: Label -- FIXME: to be removed
-          , _notes :: Maybe [Sentence] -- FIXME: to be removed
           }
 makeLenses ''QDefinition
 
@@ -47,7 +46,6 @@ instance ExprRelat     QDefinition where relat = equat
 instance HasReference  QDefinition where getReferences = ref
 instance Eq            QDefinition where a == b = (a ^. uid) == (b ^. uid)
 instance HasLabel      QDefinition where getLabel = lb
-instance HasAdditionalNotes QDefinition where getNotes = notes
 instance MayHaveUnit   QDefinition where getUnit = getUnit . view qua
 instance HasShortName  QDefinition where -- FIXME: This could lead to trouble; need
                                          -- to ensure sanity checking when building
@@ -61,12 +59,12 @@ instance HasShortName  QDefinition where -- FIXME: This could lead to trouble; n
 fromEqn :: (IsUnit u, ConceptDomain u) => 
   String -> NP -> Sentence -> Symbol -> u -> Expr -> References -> Label -> QDefinition
 fromEqn nm desc _ symb un eqn refs lbe = 
-  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) eqn refs lbe Nothing
+  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) eqn refs lbe
 
 -- | Same as fromEqn, but has no units.
 --FIXME: Space hack
 fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> References -> Label -> QDefinition
-fromEqn' nm desc _ symb eqn refs lbe = EC (mkQuant nm desc symb Real Nothing Nothing) eqn refs lbe Nothing
+fromEqn' nm desc _ symb eqn refs lbe = EC (mkQuant nm desc symb Real Nothing Nothing) eqn refs lbe
 
 -- | Create a 'QDefinition' with an uid, noun phrase (term), symbol,
 -- abbreviation, unit, and defining equation.
@@ -74,23 +72,23 @@ fromEqn'' :: (IsUnit u, ConceptDomain u) => String -> NP -> Sentence ->
  Symbol -> String -> Maybe u -> Expr -> References -> Label -> QDefinition
 fromEqn'' nm desc _ symb abbr u eqn refs lbe = 
   EC (mkQuant nm desc symb Real (fmap unitWrapper u) (Just abbr)) 
-  eqn refs lbe Nothing
+  eqn refs lbe
 
 
 fromEqn''' :: (IsUnit u, ConceptDomain u) => 
   String -> NP -> Sentence -> Symbol -> u -> Expr -> References -> String -> QDefinition
 fromEqn''' nm desc _ symb un eqn refs sn = 
   EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) 
-  eqn refs (mkLabelSame sn (Def DD)) Nothing
+  eqn refs (mkLabelSame sn (Def DD))
 
 fromEqn'''' :: String -> NP -> Sentence -> Symbol -> Expr -> References -> String -> QDefinition
 fromEqn'''' nm desc _ symb eqn refs sn = EC (mkQuant nm desc symb Real Nothing Nothing)
-  eqn refs (mkLabelSame sn (Def DD)) Nothing
+  eqn refs (mkLabelSame sn (Def DD))
 
 -- | Smart constructor for QDefinitions. Requires a quantity and its defining 
 -- equation
 ec :: (Quantity c) => c -> Expr -> Label -> QDefinition
-ec c eqn lbe = EC (qw c) eqn [] lbe Nothing --hack?
+ec c eqn lbe = EC (qw c) eqn [] lbe --hack?
 
 -- | Returns a 'VarChunk' from a 'QDefinition'.
 -- Currently only used in example /Modules/ which are being reworked.

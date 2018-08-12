@@ -110,7 +110,7 @@ mkQField d m l@(Description v u) fs =
   (show l, buildDDescription v u d m) : fs
 mkQField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkQField d _ l@(Source) fs = (show l, [mkParagraph $ getSource d]) : fs
-mkQField d _ l@(Notes) fs = maybe fs (\ss -> (show l, map mkParagraph ss) : fs) (d ^. getNotes)
+mkQField d _ l@(Notes) fs = error "Trying to get Notes from a QDefinition"
 mkQField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for data definitions"
 

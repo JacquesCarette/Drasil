@@ -80,7 +80,6 @@ data RefTab where
   TSymb :: [TSIntro] -> RefTab
   TSymb' :: LFunc -> [TSIntro] -> RefTab
   TAandA :: RefTab
-  TVerb :: Section -> RefTab
   -- add more here
 
 -- | For creating the table of symbols intro
@@ -125,10 +124,9 @@ data LFunc where
 {--}
 
 -- | Introduction section. Contents are top level followed by a list of
--- subsections. IntroVerb is used for including verbatim subsections.
+-- subsections.
 data IntroSec = IntroProg Sentence Sentence [IntroSub]
   -- ^ Temporary, will be modified once we've figured out more about the section.
-              | IntroVerb Section
 
 -- | Introduction subsections
 data IntroSub where
@@ -293,7 +291,6 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
     mkSubRef SI {_concepts = cccs} (TSymb' f con) = mkTSymb cccs f con
     mkSubRef SI {_sysinfodb = db} TAandA =
       table_of_abb_and_acronyms $ nub $ Map.elems (db ^. termTable)
-    mkSubRef _              (TVerb s) = s
 
 -- | Helper for creating the table of symbols
 mkTSymb :: (Quantity e, Concept e, Eq e) =>
@@ -399,7 +396,6 @@ defaultTUI :: [TUIntro]
 defaultTUI = [System, Derived, TUPurpose]
 
 mkIntroSec :: SystemInformation -> IntroSec -> Section
-mkIntroSec _ (IntroVerb s) = s
 mkIntroSec si (IntroProg probIntro progDefn l) =
   Intro.introductionSection probIntro progDefn $ map (mkSubIntro si) l
   where

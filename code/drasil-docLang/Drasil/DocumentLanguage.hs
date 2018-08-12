@@ -71,8 +71,7 @@ data DocSection = Verbatim Section
 {--}
 
 -- | Reference section. Contents are top level followed by a list of subsections.
--- RefVerb is used for including verbatim subsections
-data RefSec = RefProg Contents [RefTab] | RefVerb Section -- continue
+data RefSec = RefProg Contents [RefTab]
 
 -- | Reference subsections
 data RefTab where
@@ -275,7 +274,6 @@ mkSections si l = map doit l
 
 -- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section
-mkRefSec _  (RefVerb s) = s
 mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
   (map (mkSubRef si) l) (mkLabelRASec "RefMat" "Reference Material") --DO NOT CHANGE LABEL OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
   where

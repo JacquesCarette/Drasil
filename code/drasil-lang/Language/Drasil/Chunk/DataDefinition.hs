@@ -68,10 +68,10 @@ mkQuantDef cncpt equation = datadef $ getUnit cncpt --should references be passe
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
                            (eqSymb cncpt) equation [] (mkLabelSame (cncpt ^. uid) (Def DD))
 
-mkQuantDef' :: (Quantity c) => c -> Expr -> Derivation -> QDefinition
-mkQuantDef' cncpt equation dv = quantdef $ getUnit cncpt --should references be passed in at this point?
+mkQuantDef' :: (Quantity c) => c -> Expr -> QDefinition
+mkQuantDef' cncpt equation = quantdef $ getUnit cncpt --should references be passed in at this point?
   where quantdef (Just a) = fromEqn'''  (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) a equation [] dv (cncpt ^. uid) --shortname
+                           (eqSymb cncpt) a equation [] (cncpt ^. uid) --shortname
         quantdef Nothing  = fromEqn'''' (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) equation [] dv (cncpt ^. uid) --shortname
+                           (eqSymb cncpt) equation [] (cncpt ^. uid) --shortname
 

@@ -183,7 +183,6 @@ data SCSSub where
   Assumptions    :: SCSSub
   TMs            :: Fields  -> [TheoryModel] -> SCSSub
   GDs            :: Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
-  DDs            :: Fields  -> [QDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
   DDs'           :: Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro -- should eventually replace and be renamed to DDs
   IMs            :: Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
   Constraints    :: Sentence -> Sentence -> Sentence -> [LabelledContent] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
@@ -444,15 +443,10 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS :: SystemInformation -> SCSSub -> Section
     mkSubSCS _ (TMs _ [])   = error "There are no Theoretical Models"
     mkSubSCS _ (GDs _ [] _) = SSD.genDefnF []
-    mkSubSCS _ (DDs _ [] _) = error "There are no Data Definitions" 
     mkSubSCS _ (DDs' _ [] _) = error "There are no Data Definitions" --FIXME: temporary duplicate 
     mkSubSCS _ (IMs _ [] _)  = error "There are no Instance Models"
     mkSubSCS si' (TMs fields ts) =
       SSD.thModF (siSys si') (map LlC (map (tmodel fields (_sysinfodb si')) ts))
-    mkSubSCS si' (DDs fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS (concatMap (\x -> LlC (ddefn fields (_sysinfodb si') x) : derivation x) dds)
-    mkSubSCS si' (DDs fields dds _) =
-      SSD.dataDefnF EmptyS (map LlC (map (ddefn fields (_sysinfodb si')) dds))
     mkSubSCS si' (DDs' fields dds ShowDerivation) = --FIXME: need to keep track of DD intro. --FIXME: temporary duplicate
       SSD.dataDefnF EmptyS (concatMap (\x -> (LlC $ ddefn' fields (_sysinfodb si') x) : derivation x) dds)
     mkSubSCS si' (DDs' fields dds _) = --FIXME: temporary duplicate

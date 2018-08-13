@@ -15,8 +15,8 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   nonFuncReqF, outDataConstTbl, probDescF, reqF, termDefnF, tsymb'',
   valsOfAuxConstantsF)
 
-import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
-  assumptLabel, physSyst)
+import qualified Drasil.DocLang.GenBuilders as GB (assumptLabel)
+import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, physSyst)
 
 import Data.Drasil.Concepts.Documentation (analysis, assumption,
   design, document, effect, element, endUser, environment, goalStmt, inModel, 
@@ -263,7 +263,7 @@ sysCtxUsrResp = [S "Provide the input data related to the soil layer(s) and wate
   S "table (if applicable), ensuring no errors in the data entry",
   S "Ensure that consistent units are used for input variables",
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+ sParen ( 
-  makeRef SRS.assumptLabel) +:+ S "are appropriate for any particular" +:+
+  makeRef GB.assumptLabel) +:+ S "are appropriate for any particular" +:+
   phrase problem +:+ S "input to the" +:+ phrase software]
   
 sysCtxSysResp :: [Sentence]

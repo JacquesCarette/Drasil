@@ -1,0 +1,1226 @@
+\documentclass[12pt, titlepage]{article}
+
+\usepackage{amsmath, mathtools}
+
+\usepackage[round]{natbib}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{colortbl}
+\usepackage{xr}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{xfrac}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{siunitx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage[section]{placeins}
+\usepackage{caption}
+\usepackage{fullpage}
+
+\hypersetup{
+bookmarks=true,     % show bookmarks bar?
+colorlinks=true,       % false: boxed links; true: colored links
+linkcolor=red,          % color of internal links (change box color with linkbordercolor)
+citecolor=blue,        % color of links to bibliography
+filecolor=magenta,  % color of file links
+urlcolor=cyan          % color of external links
+}
+
+\usepackage{array}
+
+%% Comments
+\newif\ifcomments\commentstrue
+
+\ifcomments
+\newcommand{\authornote}[3]{\textcolor{#1}{[#3 ---#2]}}
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\else
+\newcommand{\authornote}[3]{}
+\newcommand{\todo}[1]{}
+\fi
+
+\newcommand{\wss}[1]{\authornote{blue}{SS}{#1}}
+
+\newcommand{\progname}{GlassBR}
+
+\externaldocument[SRS-]{../../SRS/glassbr_srs}
+\externaldocument[MG-]{../MG/glassbr_mg}
+
+\begin{document}
+
+\title{Module Interface Specification for \progname} 
+\author{Spencer Smith}
+\date{\today}
+
+\maketitle
+
+\tableofcontents
+
+\newpage
+
+\section{Introduction}
+
+The following document details the Module Interface Specifications for the
+implemented modules in the program \progname{}. It is intended to ease navigation
+through the program for design and maintenance purposes.  Complementary
+documents include the \href{../SRS/glassbr_srs.pdf}{System Requirement
+  Specifications} (SRS) and \href{../MG/glassbr_mg.pdf}{Module Guide} (MG).  The
+full documentation and implementation can be found at
+\url{https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass}.
+
+\section{Notation}
+
+The structure of the MIS for modules comes from \citet{HoffmanAndStrooper1995},
+with the addition that template modules have been adapted from
+\cite{GhezziEtAl2003}.  The mathematical notation comes from Chapter 3 of
+\citet{HoffmanAndStrooper1995}.  For instance, the symbol := is used for a
+multiple assignment statement and conditional rules follow the form $(c_1
+\Rightarrow r_1 | c_2 \Rightarrow r_2 | ... | c_n \Rightarrow r_n )$.
+
+The following table summarizes the primitive data types used by \progname. 
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\noindent 
+\begin{tabular}{l l p{7.5cm}} 
+\toprule 
+\textbf{Data Type} & \textbf{Notation} & \textbf{Description}\\ 
+\midrule
+character & char & a single symbol or digit\\
+integer & $\mathbb{Z}$ & a number without a fractional component in (-$\infty$, $\infty$) \\
+natural number & $\mathbb{N}$ & a number without a fractional component in [1, $\infty$) \\
+real & $\mathbb{R}$ & any number in (-$\infty$, $\infty$)\\
+string & $\mathbb{S}$ & all finite sequences of symbols from the ASCII character set\\
+\bottomrule
+\end{tabular} 
+\end{center}
+
+\noindent
+The specification of \progname{} uses some derived data types: sequences, strings, and
+tuples. Sequences are lists that represent a countable number of ordered values of the same data type, where 
+the same value may occur more than once. Strings are sequences of characters. 
+Tuples contain a list of values, potentially of different types. 
+In addition, \progname{} uses functions, which
+are defined by the data types of their inputs and outputs. Local functions are
+described by giving their type signature followed by their specification.
+
+\section{Module Hierarchy} 
+
+To view the Module Hierarchy, see section 3 of the \href{../MG/glassbr_mg.pdf}{MG}.
+
+\bibliographystyle {plainnat}
+\bibliography {../../../refs/References}
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{MIS of Control Module} \label{Main}
+
+\subsection{Module}
+
+Control
+
+\subsection{Uses}
+
+Input (Section~\ref{Input}), LoadASTM (Section~\ref{LoadASTM}), Calc
+(Section~\ref{Calc}), Output (Section~\ref{Output})
+
+\subsection{Syntax}
+
+\subsubsection {Exported Constants}
+
+sTSD = \textit{\# String for path and filename for TSD file}\\
+sSDF = \textit{\# String for path and filename for SDF file}\\
+sIn = \textit{\# String for path and filename for Input file}\\
+sOut = \textit{\# String for path and filename for Output file}
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{2cm} p{4cm} p{4cm} p{2cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+main & - & - & - \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+
+cTSD: ContoursT\\
+cSDF: ContoursT\\
+$q: \mathbb{R}$\\
+$\hat{q}: \mathbb{R}$\\
+$J_\text{tol}: \mathbb{R}$\\
+$J: \mathbb{R}$\\
+$\hat{q}_\text{tol}: \mathbb{R}$\\
+$B: \mathbb{R}$\\
+$P_b: \mathbb{R}$\\
+$\text{NFL}: \mathbb{R}$\\
+$\text{LR}: \mathbb{R}$\\
+$\text{is\_safePb}: \mathbb{B}$\\
+$\text{is\_safeLR}: \mathbb{B}$
+
+\subsubsection{Access Routine Semantics}
+
+\noindent main():
+\begin{itemize}
+\item transition: Using the steps below, modify the state variables of this
+  module, the state of the Input module, and the environment variable for the
+  Output module.
+\begin{itemize}
+\item cTSD = LoadASTM.LoadTSD(sTSD)
+\item cSDF = LoadASTM.LoadSDF(sSDF)
+\item Input.load\_params(sIn)
+\item $q$ = cTSD.eval(Input.SD, Input.$w$ * Input.TNT) \textit{\# From SRS IM3}
+\item $\hat{q}$ = Calc.calc\_q\_hat($q$)
+\item $J_\text{tol}$ = Calc.calc\_J\_tol()
+\item $J$ = cSDF.evaly(Input.AR, $\hat{q}$) \textit{\# From SRS DD4}
+\item $\hat{q}_\text{tol}$ = cSDF.eval(Input.AR, $J_\text{tol}$) \textit{\# From SRS DD8}
+\item $B$ = Calc.calc\_B($J$)
+\item $P_b$ = Calc.calc\_Pb($B$)
+\item NFL = Calc.calc\_NFL($\hat{q}_\text{tol}$)
+\item LR = Calc.calc\_LR(NFL)
+\item is\_safePb = Calc.calc\_is\_safePb($P_b$)
+\item is\_safeLR = Calc.calc\_is\_safeLR(LR, $q$)
+\item Output.output(sOut, $\mbox{is\_safePb}$, $\mbox{is\_safeLR}$, $P_b$, $B$, LR, $q$, $J$, NFL, $\hat{q}$,
+         $\hat{q}_{\text{tol}}$, $J_{\text{tol}}$)
+\item print(``Main has been executed and the results have been written to '' + sOut)
+\end{itemize}
+\end{itemize}
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{MIS of Input Module} \label{Input}
+
+The secrets of this module are the data structure for input parameters, how the
+values are input and how the values are verified.  The load and verify secrets
+are isolated to their own access programs.  This module follows the singleton
+pattern; that is, there is only one instance of this module.
+
+\subsection{Module}
+
+Input
+
+\subsection{Uses}
+
+GlassTypeADT (Section~\ref{GlassTypeADT}), ThicknessADT
+(Section~\ref{ThicknessADT}), Constants (Section~\ref{Constants}), Hardware
+(Section~\ref{Hardware})
+
+\subsection{Syntax}
+
+\begin{tabular}{p{3cm} p{1cm} p{3cm} >{\raggedright\arraybackslash}p{7cm}}
+\toprule
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\midrule
+load\_params & string & - &  FileError \\
+verify\_params & - & - & ValueError \\
+% From R1
+$a$ & - & $\mathbb{R}$\\
+$b$ & - & $\mathbb{R}$\\
+$g$ & - & GlassTypeT\\
+$P_{b_\text{tol}}$ & - & $\mathbb{R}$\\
+$\text{SD}_x$ & - & $\mathbb{R}$\\
+$\text{SD}_y$ & - & $\mathbb{R}$\\
+$\text{SD}_z$ & - & $\mathbb{R}$\\
+$t$ & - & ThicknessT\\
+TNT & - & $\mathbb{R}$\\
+$w$ & - & $\mathbb{R}$\\
+% From R2
+$m$ & - & $\mathbb{R}$\\
+$k$ & - & $\mathbb{R}$\\
+$E$ & - & $\mathbb{R}$\\
+$t_d$ & - & $\mathbb{R}$\\
+LDF & - & $\mathbb{R}$\\
+LSF & - & $\mathbb{R}$\\
+% From DD2
+$h$ & - & $\mathbb{R}$\\
+% From DD6
+GTF & - & $\mathbb{R}$\\
+% From DD10
+SD & - & $\mathbb{R}$\\
+AR & - & $\mathbb{R}$\\
+\bottomrule
+\end{tabular}
+
+\subsection{Semantics}
+
+\subsubsection{Environment Variables}
+
+inputFile: sequence of string \#\textit{f[i] is the ith string in the text file f}
+
+\subsubsection{State Variables}
+
+\renewcommand{\arraystretch}{1.2}
+\begin{longtable*}[l]{l} 
+\# From SRS R1\\
+$a$: $\mathbb{R}$ \\
+$b$: $\mathbb{R}$ \\
+$g$: GlassTypeT \\
+$P_{b_\text{tol}}$: $\mathbb{R}$ \\
+$\text{SD}_x$ : $\mathbb{R}$ \\
+$\text{SD}_y$ : $\mathbb{R}$ \\
+$\text{SD}_z$ : $\mathbb{R}$ \\
+$t$: ThicknessT \\
+TNT: $\mathbb{R}$ \\
+$w$: $\mathbb{R}$ \\
+~\\
+\# From SRS R2\\
+$m$: $\mathbb{R}$ \\
+$k$: $\mathbb{R}$ \\
+$E$: $\mathbb{R}$ \\
+$t_d$: $\mathbb{R}$ \\
+LDF: $\mathbb{R}$ \\
+LSF: $\mathbb{R}$ \\
+$h$: $\mathbb{R}$ \\
+GTF: $\mathbb{R}$\\
+SD: $\mathbb{R}$\\
+AR: $\mathbb{R}$\\
+\end{longtable*}
+
+\subsubsection{Assumptions}
+
+\begin{itemize}
+
+\item load\_params will be called before the values of any state variables will be accessed.
+
+\item The file contains the string equivalents of the numeric values for
+each input parameter in order, each on a new line. The order is the same as in
+the table in R1 of the SRS. Any comments in the input file should be denoted
+with a '\#' symbol.
+
+\end{itemize}
+
+\subsubsection{Access Routine Semantics}
+
+\noindent $a$:
+\begin{itemize}
+\item output: \textit{out} := $a$
+\item exception: none
+\end{itemize}
+
+\noindent $b$:
+\begin{itemize}
+\item output: \textit{out} := $b$
+\item exception: none
+\end{itemize}
+
+...
+~\newline
+
+\noindent GTF:
+\begin{itemize}
+\item output: \textit{out} := GTF
+\item exception: none
+\end{itemize}
+
+\noindent load\_params($s$):
+\begin{itemize}
+\item transition: The filename $s$ is first associated with the file f.  {inputFile} is used to
+  modify the state variables using the following procedural specification:
+\begin{enumerate}
+\item Read data sequentially from inputFile to populate the state variables from
+  SRS R1.
+\item Calculate the derived quantities (all other state variables, from SRS R2) as follows:
+\begin{itemize}
+\item $m, k, E, t_d, \mbox{LSF}$ as defined in Constants
+  (Section~\ref{Constants})
+\item $\text{LDF}=(\frac{t_d}{60})^{m/16}$ \textit{\# From SRS DD3}
+%\item $w_\text{TNT} = w \mbox{TNT}$
+\item $h = t.\mbox{toMinThick()}$ (Section~\ref{ThicknessADT})
+\item $\mbox{GTF} = g.\mbox{GTF}()$ (Section~\ref{GlassTypeADT})
+\item $\mbox{SD} = \sqrt{{\text{SD}_x}^2 + {\text{SD}_y}^2 + {\text{SD}_z}^2}$ \textit{\# From SRS DD10}
+\item $\mbox{AR} = a/b$ \textit{\# From SRS DD11}
+\end{itemize}
+\item verify\_params()
+\end{enumerate}
+
+\item exception: exc := a file name $s$ cannot be found OR the format of
+  inputFile is incorrect $\Rightarrow$  FileError
+\end{itemize}
+
+\noindent verify\_params():
+\begin{itemize}
+\item out: \textit{out} := none
+\item exception: exc := \textit{\# From the SRS Table 2, R3}
+\end{itemize}
+\noindent \begin{longtable*}[l]{l l}
+  $\neg (a > 0)$ & $\Rightarrow$ ValueError(``$a$ must be positive'')\\
+  $\neg (\text{AR} \geq 1.0)$ & $\Rightarrow$ ValueError(``$a$ must be greater than or equal to $b$'')\\
+  $\neg (d_{\text{min}} \leq a \leq d_{\text{max}})$ & $\Rightarrow$
+  ValueError(``$a$ too
+  large or small'')\\
+  $\neg(\text{AR} \leq \text{AR}_{\text{max}})$ & $\Rightarrow$ ValueError(``allowable
+  aspect
+  ratio exceeded'')\\
+  $\neg (b > 0)$ & $\Rightarrow$ ValueError(``$b$ must be positive'')\\
+  $\neg(d_{\text{min}} \leq b \leq d_{\text{max}})$ & $\Rightarrow$
+  ValueError(``$b$ too
+  large or small'')\\
+  $\neg(0 < P_{b_{\text{tol}}} < 1)$ & $\Rightarrow$
+  ValueError(``$P_{b_{\text{tol}}}$
+  must be between 0 and 1'')\\
+  $\neg (w > 0)$ & $\Rightarrow$ ValueError(``charge weight ($w$) must be
+  greater than zero'')\\
+  $\neg (w_{\text{min}} \leq w \leq w_{\text{max}})$ & $\Rightarrow$ ValueError(``charge
+  weight ($w$) is too small or too large'')\\
+  $\neg (\mbox{TNT} > 0)$ & $\Rightarrow$ ValueError(``TNT must be positive'')\\
+  $\neg (\mbox{SD} > 0)$ & $\Rightarrow$ ValueError(``stand off distance (SD)
+  must be positive'')\\
+  $\neg (\text{SD}_{\text{min}} \leq \text{SD} \leq \text{SD}_{\text{max}})$ &
+  $\Rightarrow$ ValueError(``stand off distance (SD) is too small or too large'')\\
+
+\end{longtable*}
+
+\subsection{Considerations}
+
+The value of each state variable can be accessed through its name (getter).  An
+access program is available for each state variable.  There are no setters for
+the state variables, since the values will be set and checked by load params and
+will not be changed for the life of the program.
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{MIS of LoadASTM Module} \label{LoadASTM}
+
+\subsection {Module}
+
+LoadASTM
+
+\subsection {Uses}
+
+FunctADT (Section~\ref{FunctADT}), ContoursADT (Section~\ref{ContoursADT})
+
+\subsection {Syntax}
+
+\subsubsection {Exported Constants}
+
+None
+
+\subsubsection {Exported Access Programs}
+
+\begin{tabular}{| l | l | l | l |}
+\hline
+\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+\hline
+LoadTSD & $s: \mbox{string}$ & ContoursT & FileError\\
+\hline
+LoadSDF & $s: \mbox{string}$ & ContoursT & FileError\\
+\hline
+\end{tabular}
+
+\subsection {Semantics}
+
+\subsubsection {Environment Variables}
+
+infile: two dimensional sequence of text characters
+
+\subsubsection {State Variables}
+
+None
+
+\subsubsection {State Invariant}
+
+None
+
+\subsubsection {Assumptions}
+
+The input file will match the given specification.
+
+\subsubsection {Access Routine Semantics}
+
+\noindent LoadTSD($s$)
+\begin{itemize}
+\item output: Create $out$ following the following steps.  Read data from the
+  file infile associated with the string $s$.  Use this data to create a ContoursT
+  object.  For each value of $w$, create an object of FunctT and add it to the
+  ContoursT object.  Each of the FunctT objects will consist of $q$ versus SD
+  data.  The first row of the TSD file contains the values of $w$.  The
+  subsequent columns are grouped in pairs.  Each pair corresponds to a column of
+  SD data and a column of $q$ data.  There is a pair of columns in this pattern
+  for each value of $w$.\\
+
+\item exception: exc := a file name $s$ cannot be found OR the format of
+  inputFile is incorrect $\Rightarrow$  FileError
+\end{itemize}
+
+\noindent LoadSDF($s$)
+\begin{itemize}
+\item output: Create $out$ following the following steps.  Read data from the
+  file infile associated with the string $s$.  Use this data to create a ContoursT
+  object.  For each value of $J$, create an object of Funct T and add it to the
+  ContoursT object.  Each of the FunctT objects will consist of $q^*$ versus AR
+  data.  The first row of the SDF file contains the values of $J$.  The
+  subsequent columns are grouped in pairs.  Each pair corresponds to a column of
+  AR data and a column of $q^*$ data.  There
+  is a pair of columns in this pattern for each value of $J$.\\
+\item exception: exc := a file name $s$ cannot be found OR the format of
+  inputFile is incorrect $\Rightarrow$  FileError
+\end{itemize}
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{MIS of Calc Module} \label{Calc}
+
+\subsection {Module}
+
+Calc
+
+\subsection {Uses}
+
+Input (Section~\ref{Input}), ContoursADT (Section~\ref{ContoursADT}), Constants
+(Section~\ref{Constants})
+
+\subsection {Syntax}
+
+\subsubsection {Exported Constants}
+
+None
+
+\subsubsection {Exported Access Programs}
+
+\begin{tabular}{| l | p{7cm} | l | l |}
+\hline
+\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+\hline
+calc\_q\_hat & $q: \mathbb{R}$ & $\mathbb{R}$ & -\\
+\hline
+calc\_J\_tol &  & $\mathbb{R}$ & -\\
+\hline
+calc\_Pb & $B: \mathbb{R}$ & $\mathbb{R}$ & InvalidOutput\\
+\hline
+calc\_B & $J: \mathbb{R}$ & $\mathbb{R}$ & -\\
+\hline
+calc\_NFL & $\hat{q}_\text{tol}: \mathbb{R}$ & $\mathbb{R}$ & -\\
+\hline
+calc\_LR & $\text{NFL}: \mathbb{R}$ & $\mathbb{R}$ & -\\
+\hline
+calc\_is\_safePb & $\mathit{P_b}: \mathbb{R}$ & $\mathbb{B}$ & -\\
+\hline
+calc\_is\_safeLR & $\text{LR}: \mathbb{R}, q : \mathbb{R}$ & $\mathbb{B}$ & -\\
+\hline
+\end{tabular}
+
+\subsection {Semantics}
+
+\subsubsection {State Variables}
+
+None
+
+\subsubsection {State Invariant}
+
+None
+
+\subsubsection {Assumptions}
+
+None
+
+\subsubsection {Access Routine Semantics}
+
+\noindent calc\_q\_hat($q$) \textit{\# From SRS DD7 Dimensionless Load ($\hat{q}$)}
+\begin{itemize}
+\item output:  \textit{out} := $\frac{q(ab)^2}{Eh^4\text{GTF}}$
+\item exception: None
+\end{itemize}
+
+\noindent calc\_J\_tol() \textit{\# From SRS DD9 Tolerable Stress Distribution Factor ($J_\text{tol}$)}
+\begin{itemize}
+\item output:  \textit{out} := $\ln[\ln( \frac{1}{1-P_{b_{\text{tol}}}} )
+				\frac{(a \times b)^{m-1}}
+					{k(E h^2)^m \text{LDF} }]$
+\item exception: None
+\end{itemize}
+
+\noindent calc\_Pb($B$) \textit{\# From SRS IM1 Probability of Glass Breakage}
+\begin{itemize}
+\item output:  \textit{out} := $1-e^{-B}$
+\item exception: $\neg(0 < (1-e^{-B}) < 1) \Rightarrow
+  \mbox{InvalidOutput}$ \textit{\# From SRS Table 3, Output Variables}
+\end{itemize}
+
+\noindent calc\_B($J$) \textit{\# From SRS DD1 Risk of Failure (B)}
+\begin{itemize}
+\item output:  \textit{out} := $\frac{k}{(a \times b)^{m-1}}(E h^2)^m 
+					\times \text{LDF} \times e^J$
+\item exception: None
+\end{itemize}
+
+\noindent calc\_NFL($\hat{q}_\text{tol}$) \textit{\# From SRS DD5 Non-Factored Load}
+\begin{itemize}
+\item output:  \textit{out} := $\frac{\hat{q}_{\text{tol}}Eh^4}{(ab)^2}$
+\item exception: None
+\end{itemize}
+
+\noindent calc\_LR($\text{NFL}$) \textit{\# From SRS IM2 Calculation of Capacity (LR)}
+\begin{itemize}
+\item output:  \textit{out} := $\text{NFL} \times \text{GTF} \times \text{LSF}$
+\item exception: None
+\end{itemize}
+
+\noindent calc\_is\_safePb($P_b$) \textit{\# From SRS T1 Safety Req-Pb)}
+\begin{itemize}
+\item output:  \textit{out} := $P_b < P_{b_{\text{tol}}}$
+\item exception: None
+\end{itemize}
+
+\noindent calc\_is\_safeLR($\text{LR}, q$) \textit{\# From SRS T2 Safety Req-LR)}
+\begin{itemize}
+\item output:  \textit{out} := $\text{LR} > q$
+\item exception: None
+\end{itemize}
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section {MIS of GlassType ADT Module} \label{GlassTypeADT}
+
+From DD6 (Glass Type Factor (GTF)) %if keep this, should automate
+                                %cross-reference
+
+\subsection{Template Module}
+
+GlassTypeADT
+
+\subsection {Uses}
+
+None
+
+\subsection {Syntax}
+
+\subsubsection {Exported Constants}
+
+None
+
+\subsubsection {Exported Types}
+
+GlassTypeT = ?
+
+\subsubsection {Exported Access Programs}
+
+\begin{tabular}{| l | l | l | p{5cm} |}
+\hline
+\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+\hline
+new GlassTypeT & $\mathbb{S}$ & GlassTypeT & ValueError\\
+\hline
+GTF & ~ & $\mathbb{R}$ & ~\\
+\hline
+toString & ~ & $\mathbb{S}$ & ~\\
+\hline
+\end{tabular}
+
+\subsection {Semantics}
+
+\subsubsection {State Variables}
+
+$g$: \{AN, FT, HS\}
+
+\subsubsection {State Invariant}
+
+None
+
+\subsubsection {Assumptions}
+
+None
+
+\subsubsection {Access Routine Semantics}
+
+\noindent new GlassTypeT($s$):
+\begin{itemize}
+\item transition: $g := (s = \mbox{``AN''} \Rightarrow \mbox{AN} | s =
+  \mbox{``FT''} \Rightarrow \mbox{FT} | s = \mbox{``HS''} \Rightarrow \mbox{HS})$
+\item output: $out := \mbox{self}$
+\item exception: $(\neg (s \in \{ \mbox{``AN''}, \mbox{``FT''}, \mbox{``HS''} \}) \Rightarrow \mbox{ValueError})$
+\end{itemize}
+
+\noindent GTF():
+\begin{itemize}
+\item output: $out := ( g = \mbox{AN} \Rightarrow 1.0 | g =
+  \mbox{FT} \Rightarrow 4.0 | g = \mbox{HS} \Rightarrow 2.0)$
+\item exception: None
+\end{itemize}
+
+\noindent toString():
+\begin{itemize}
+\item output: $out := (g = \mbox{AN} \Rightarrow \mbox{``AN''} | g =
+  \mbox{FT} \Rightarrow \mbox{``FT''} | g = \mbox{HS} \Rightarrow \mbox{``HS''})$
+\item exception: None
+\end{itemize}
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section {MIS of Thickness ADT Module} \label{ThicknessADT}
+
+From DD2 (Minimum Thickness from Nominal Thickness) %if keep this, should automate
+                                %cross-reference
+
+\subsection{Template Module}
+
+ThicknessADT
+
+\subsection {Uses}
+
+None
+
+\subsection {Syntax}
+
+\subsubsection {Exported Constants}
+
+None
+
+\subsubsection {Exported Types}
+
+ThicknessT = ?
+
+\subsubsection {Exported Access Programs}
+
+\begin{tabular}{| l | l | l | p{5cm} |}
+\hline
+\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+\hline
+new ThicknessT & $\mathbb{R}$ & ThicknessT & ValueError\\
+\hline
+toMinThick & ~ & $\mathbb{R}$ & ~\\
+\hline
+toFloat & ~ & $\mathbb{R}$ & ~\\
+\hline
+\end{tabular}
+
+\subsection {Semantics}
+
+\subsubsection {State Variables}
+
+$t: T$ where $T = \{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0 \}$
+
+\subsubsection {State Invariant}
+
+None
+
+\subsubsection {Assumptions}
+
+None
+
+\subsubsection {Access Routine Semantics}
+
+\noindent new ThicknessT($x$):
+\begin{itemize}
+\item transition: $t := x$
+\item output: $out := \mbox{self}$
+\item exception: $(\neg (x \in T) \Rightarrow \mbox{ValueError})$
+\end{itemize}
+
+\noindent toMinThick():
+\begin{itemize}
+\item output: $\begin{array}{rcrc}
+out := \frac{1}{1000}
+\begin{cases}
+t = 2.5 \Rightarrow 2.16 &\\ 
+t = 2.7 \Rightarrow 2.59 &\\
+t = 3.0 \Rightarrow 2.92 &\\
+t = 4.0 \Rightarrow 3.78 &\\
+t = 5.0 \Rightarrow 4.57 &\\
+t = 6.0 \Rightarrow 5.56 &\\
+t = 8.0 \Rightarrow 7.42 &\\ 
+t = 10.0 \Rightarrow 9.02 &\\
+t = 12.0 \Rightarrow 11.91 &\\ 
+t = 16.0 \Rightarrow 15.09 &\\
+t = 19.0 \Rightarrow 18.26 &\\ 
+t = 22.0 \Rightarrow 21.44 &\\
+\end{cases}
+    \end{array}$
+\item exception: None
+\end{itemize}
+
+\noindent toFloat():
+\begin{itemize}
+\item output: $out := t$
+\item exception: None
+\end{itemize}
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{MIS of FunctADT Module} \label{FunctADT}
+
+\subsection{Template Module}
+
+FunctADT
+
+\subsection {Uses}
+
+SeqServices (Section~\ref{SeqServices})
+
+\subsection {Syntax}
+
+\subsubsection {Exported Constants}
+
+MAX\_ORDER = 2
+
+\subsubsection {Exported Types}
+
+FunctT = ?
+
+\subsubsection {Exported Access Programs}
+
+\begin{tabular}{| l | l | l | p{5cm} |}
+\hline
+\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+\hline
+new FunctT & $X_\text{in}: \mathbb{R}^n$, $Y_\text{in}: \mathbb{R}^n$, $i: \mathbb{N}$ &
+                                                                           FunctT
+                                                   &
+                                                     IndepVarNotAscending,\newline
+                                                     SeqSizeMismatch, \newline
+                                                     InvalidInterpOrder,
+                                                     \newline TooFewDataPts\\
+\hline
+minD & ~ & $\mathbb{R}$ & ~\\
+\hline
+maxD & ~ & $\mathbb{R}$ & ~\\
+\hline
+order & ~ & $\mathbb{N}$ & ~\\
+\hline
+eval & $x: \mathbb{R}$ & $\mathbb{R}$ & OutOfDomain\\
+\hline
+
+\end{tabular}
+
+\subsection {Semantics}
+
+\subsubsection {State Variables}
+
+X: $\mathbb{R}^n$\\
+Y: $\mathbb{R}^n$\\
+minX: $\mathbb{R}$\\
+maxX: $\mathbb{R}$\\
+o: $\mathbb{N}$
+
+\subsubsection {State Invariant}
+
+None
+
+\subsubsection {Assumptions}
+
+None
+
+\subsubsection {Access Routine Semantics}
+
+\noindent new FunctT($X_\text{in}, Y_\text{in}, i$):
+\begin{itemize}
+\item transition: $X, Y, \mbox{minX}, \mbox{maxX}, o := X_\text{in}, Y_\text{in}, X_\text{in}[0], X_\text{in}[|X|-1], i$
+
+\item output: $out := \mbox{self}$
+\item exception: $(\neg \mbox{isAscending}(X_\text{in}) \Rightarrow
+  \mbox{IndepVarNotAscending} | |X_\text{in}| \neq |Y_\text{in}| \Rightarrow \mbox{SeqSizeMismatch}
+  | i \notin [1..\mbox{MAX\_ORDER}] \Rightarrow \mbox{InvalidInterpOrder} |
+  |X_\text{in}| < 3 \Rightarrow \mbox{TooFewDataPts})$
+\end{itemize}
+
+\noindent minD():
+\begin{itemize}
+\item output: $out := \mbox{minX}$
+\item exception: None
+\end{itemize}
+
+\noindent maxD():
+\begin{itemize}
+\item output: $out := \mbox{maxX}$
+\item exception: None
+\end{itemize}
+
+\noindent order():
+\begin{itemize}
+\item output: $out := \mbox{o}$
+\item exception: None
+\end{itemize}
+
+\noindent eval($x$):
+\begin{itemize}
+\item output: $out :=$ $$(o=1 \Rightarrow \mbox{interpLin}(X_i, Y_i,
+X_{i+1}, Y_{i+1}, x) | o = 2 \Rightarrow \mbox{interpQuad}(X_{i-1}, Y_{i-1}, X_i, Y_i, X_{i+1},
+Y_{i+1}, x) )$$  where $i = \mbox{index}(X, x)$
+\item exception: $(\neg(\mbox{minX} \leq x \leq \mbox{maxX}) \Rightarrow
+  \mbox{OutOfDomain}) | \neg(1 \leq \mbox{index}(X, x) \leq |X| - 2) \Rightarrow
+  \mbox{OutOfDomain})$ \textit{\# first check if within domain, then make sure
+    not too close to edge, so quadratic interpolation is defined}
+\end{itemize}
+
+\subsection{Considerations}
+
+For simplicity the function evaluation is not defined within one step of the
+boundaries.  By considering the special cases it would be possible to get right 
+to the edge.
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{MIS of ContoursADT Module} \label{ContoursADT}
+
+\subsection {Template Module}
+
+ContoursADT
+
+\subsection {Uses}
+
+FunctADT (Section~\ref{FunctADT}) for FunctT
+
+\subsection {Syntax}
+
+\subsubsection {Exported Constants}
+
+MAX\_ORDER = 2
+
+\subsubsection {Exported Types}
+
+ContoursT = ?
+
+\subsubsection {Exported Access Programs}
+
+\begin{tabular}{| l | l | l | l |}
+\hline
+\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+\hline
+new ContoursT & $i: \mathbb{R}$ & ~ & InvalidInterpOrder\\
+\hline
+add & s: FunctT, $z: \mathbb{R}$ & ~ & IndepVarNotAscending\\
+\hline
+getC & $i: \mathbb{N}$ & ~ & InvalidIndex\\
+\hline
+eval & $x: \mathbb{R}, z: \mathbb{R}$ & ~ & OutOfDomain\\
+\hline
+evaly & $x: \mathbb{R}, y: \mathbb{R}$ & ~ & OutOfDomain\\
+\hline
+slice & $x: \mathbb{R}, \text{flip}: \mathbb{B}$ & FunctT & ~\\
+\hline
+
+\end{tabular}
+
+\subsection {Semantics}
+
+\subsubsection {State Variables}
+
+$S$: sequence of FunctT\\
+$Z$: sequence of $\mathbb{R}$\\
+o: $\mathbb{N}$
+
+\subsubsection {State Invariant}
+
+None
+
+\subsubsection {Assumptions}
+
+None
+
+\subsubsection {Access Routine Semantics}
+
+new ContoursT(i):
+\begin{itemize}
+\item transition: $S, Z, o := < >, <>, i$
+\item exception: $(i \notin [1..\mbox{MAX\_ORDER}] \Rightarrow \mbox{InvalidInterpOrder})$
+
+\end{itemize}
+
+\noindent add($s, z$):
+\begin{itemize}
+\item transition: $S, Z := S || <s>, Z || <z>$
+\item exception: $exc := (|Z| > 0 \wedge z
+  < Z_{|Z|-1} \Rightarrow \mbox{IndepVarNotAscending})$
+\end{itemize}
+
+\noindent getC($i$):
+\begin{itemize}
+\item output: $out := S[i]$
+\item exception: $exc := (\neg(0 \leq i < |S|) \Rightarrow \mbox{InvalidIndex})$
+\end{itemize}
+
+\noindent eval($x, z$):
+\begin{itemize}
+\item output: $out := \mbox{self.slice}(x, \text{False}).\mbox{eval}(z)$
+\item exception: none \textit{\# appropriate exceptions are generated by slice
+    and eval}
+\end{itemize}
+
+\noindent evaly($x, y$):
+\begin{itemize}
+\item output: $out := \mbox{self.slice}(x, \text{True}).\mbox{eval}(y)$
+\item exception: none \textit{\# appropriate exceptions are generated by slice
+    and eval}
+\end{itemize}
+
+\noindent slice($x, \text{flip}$):
+\begin{itemize}
+\item output and exception:
+\begin{verbatim}
+Zdef = []
+F = []
+for i in [0 .. |S|-1]:
+   try y = S[i].eval(x):
+     Zdef.append(Z[i])
+     F.append(y)
+   except OutOfDomain:
+     pass
+if |Zdef| > 0:
+   if flip:
+     return FunctT(F, Zdef, o)
+   else:
+     return FunctT(Zdef, F, o)
+else:
+   raise OutOfDomain
+\end{verbatim}
+%\item exception: None
+\end{itemize}
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{MIS of SeqServices Module} \label{SeqServices}
+
+\subsection {Module}
+
+SeqServices
+
+\subsection {Uses}
+
+None
+
+\subsection {Syntax}
+
+\subsubsection {Exported Constants}
+
+None
+
+\subsubsection {Exported Access Programs}
+
+\begin{tabular}{| l | l | l | l |}
+\hline
+\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+\hline
+isAscending & $X: \mathbb{R}^n$ & $\mathbb{B}$ & ~\\
+\hline
+isInBounds & $X: \mathbb{R}^n, x: \mathbb{R}$ & $\mathbb{B}$ & ~\\
+\hline
+interpLin & $x_1: \mathbb{R}, y_1: \mathbb{R}, x_2: \mathbb{R}, y_2: \mathbb{R},
+           x: \mathbb{R}$ & $\mathbb{R}$ & ~\\
+\hline
+interpQuad & $ x_0: \mathbb{R}, y_0: \mathbb{R},
+           x_1: \mathbb{R}, y_1: \mathbb{R}, x_2: \mathbb{R}, y_2: \mathbb{R},
+           x: \mathbb{R}$ & $\mathbb{R}$ & ~\\
+\hline
+index & $X: \mathbb{R}^n, x: \mathbb{R}$ & $\mathbb{N}$ & ~\\
+
+\hline
+
+\end{tabular}
+
+\subsection {Semantics}
+
+\subsubsection {State Variables}
+
+None
+
+\subsubsection {State Invariant}
+
+None
+
+\subsubsection {Assumptions}
+
+None, unless noted with a particular access program
+
+\subsubsection {Access Routine Semantics}
+
+\noindent isAscending($X$)
+\begin{itemize}
+\item output: $out := \neg \exists(i | i \in [0..|X|-2] : X_{i+1} < X_i)$
+\item exception: none
+\end{itemize}
+
+\noindent isInBounds($X, x$) \textit{\# assuming isAscending is True}
+\begin{itemize}
+\item output: $out := X_0 \leq x \leq X_{|X|-1}$
+\item exception: none
+\end{itemize}
+
+\noindent interpLin($x_1, y_1, x_2, y_2, x$) \textit{\# assuming isAscending is True}
+\begin{itemize}
+\item output: $out := \frac{(y_2 - y_1)}{(x_2-x_1)} (x - x_1) + y_1$
+\item exception: none
+\end{itemize}
+
+\noindent interpQuad($x_0, y_0, x_1, y_1, x_2, y_2, x$) \textit{\# assuming isAscending is True}
+\begin{itemize}
+\item output: $out := y_1 + \frac{y_2 - y_0}{x_2-x_0} (x - x_1) + \frac{y_2 - 2 y_1 + y_0}{2
+  (x_2-x_1)^2} (x - x_1)^2$
+\item exception: none
+\end{itemize}
+
+\noindent index($X, x$) \textit{\# assuming isAscending is True and isInBounds is True}
+\begin{itemize}
+\item output: $out := i \mbox{ such that } X_i \leq x < X_{i+1}$
+\item exception: none
+\end{itemize}
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{MIS of Output Module} \label{Output}
+
+\subsection {Module}
+
+Output
+
+\subsection {Uses}
+
+Input (Section~\ref{Input}), ThicknessADT (Section~\ref{ThicknessADT}),
+GlassTypeADT (Section~\ref{GlassTypeADT}), Hardware (Section~\ref{Hardware})
+
+\subsection {Syntax}
+
+\subsubsection {Exported Constants}
+
+None
+
+\subsubsection {Exported Access Programs}
+
+\begin{tabular}{| l | p{10cm} | l | l |}
+\hline
+\textbf{Routine name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions}\\
+\hline
+output & $s: \mathbb{S}$, $\mbox{is\_safePb}: \mathbb{B}$,
+         $\mbox{is\_safeLR}: \mathbb{B}$, $P_b: \mathbb{R}$, $B: \mathbb{R}$, LR$: \mathbb{R}$, $q:
+         \mathbb{R}$,  $J: \mathbb{R}$, NFL: $\mathbb{R}$, $\hat{q}: \mathbb{R}$,
+         $\hat{q}_{\text{tol}}: \mathbb{R}$, $J_{\text{tol}}: \mathbb{R}$ & - & -\\
+\hline
+\end{tabular}
+
+\subsection {Semantics}
+
+\subsubsection {Environment Variables}
+
+outfile: two dimensional sequence of text characters
+
+\subsubsection {State Variables}
+
+None
+
+\subsubsection {State Invariant}
+
+None
+
+\subsubsection {Assumptions}
+
+None
+
+\subsubsection {Access Routine Semantics}
+
+\noindent output($s$, $\mbox{is\_safePb}$, $\mbox{is\_safeLR}$, $P_b$, $B$, 
+LR, $q$, $J$, NFL, $\hat{q}$, $\hat{q}_{\text{tol}}$, $J_{\text{tol}}$)
+
+\begin{itemize}
+\item transition: write data to the file outfile associated with the string s.
+  The data to output follows:
+\begin{itemize}
+\item From SRS R4: values from SRS R1 ($a$, $b$, $g$, $P_{b_\text{tol}}$, $\mbox{SD}_x$,
+  $\mbox{SD}_y$, $\mbox{SD}_z$, $t$, TNT, $w$), values from SRS R2 ($m$, $k$, $E$,
+  $t_d$, LDF, LSF, $h$, GTF, SD, AR)
+\item From SRS R5: ($\mbox{is\_safePB} \wedge \mbox{is\_safeLR}
+  \Rightarrow$ ``For the given input parameters, the glass is considered safe''
+ $ |$ True $\Rightarrow$ ``For the given input parameters, the glass is NOT
+ considered safe'') 
+\item From SRS R6 ($P_b$, $B$, LR, $q$, $J$, NFL, $\hat{q}$, $\hat{q}_{\text{tol}}$, $J_{\text{tol}}$)
+\end{itemize}
+\item exception: None
+\end{itemize}
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{MIS of Constants Module} \label{Constants}
+
+\subsection{Module}
+
+Constants
+
+\subsection {Uses}
+
+N/A
+
+\subsection {Syntax}
+
+\subsubsection {Exported Constants}
+
+\renewcommand{\arraystretch}{1.2}
+\begin{longtable*}[l]{l} 
+\# From Table 8 in SRS\\
+$m$ := 7\\
+$k$ := $2.86\times 10^{-53}$\\
+$E$ := $7.17\times 10^{10}$\\
+${t_{d}}$ := $3$\\
+LSF := $1$\\
+${d_{\text{max}}}$ := $5.0$\\
+${d_{\text{min}}}$ := $0.1$\\
+${\text{AR}_{\text{max}}}$ := $5.0$\\
+${w_{\text{max}}}$ := $910.0$\\
+${w_{\text{min}}}$ := $4.5$\\
+${\text{SD}_{\text{min}}}$ := $6.0$\\
+${\text{SD}_{\text{max}}}$ := $130.0$\\
+\end{longtable*}
+
+\subsubsection {Exported Types}
+
+None
+
+\subsubsection {Exported Access Programs}
+
+None
+
+\subsection {Semantics}
+
+\subsubsection {State Variables}
+
+None
+
+\subsubsection {State Invariant}
+
+None
+
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{MIS of Hardware Module} \label{Hardware}
+
+This module hides the underlying hardware for I/O (to the screen, or file, or
+other device).  In general it will be provided by the selected programming
+language and operating system.
+
+\subsection{Module}
+
+Hardware
+
+\subsection {Uses}
+
+None
+
+\end{document}

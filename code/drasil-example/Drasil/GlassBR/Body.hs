@@ -7,7 +7,7 @@ import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 
-import qualified Drasil.DocLang.MIS as MIS (hwModIntro)
+import qualified Drasil.DocLang.MIS as MIS (hwModIntro, inputModIntro)
 import qualified Drasil.DocLang.SRS as SRS (datConLabel, dataDefnLabel, indPRCaseLabel, 
   referenceLabel, valsOfAuxConsLabel)
 
@@ -20,7 +20,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), NotationSec(..),
-  ModHierarchSec(..), MISModSub(..), MISModSec(..), 
+  ModHierarchSec(..), MISModSub(..), MISModSec(..), MISSyntaxSub(..), MISSemanticsSub(..),
   cite, dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
   mkRequirement, outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb)
 
@@ -61,7 +61,7 @@ import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, glass, gLassBR, 
   lShareFac, ptOfExplsn, stdOffDist)
 import Drasil.GlassBR.DataDefs (aspRat, dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
-  dimLL, glaTyFac, tolStrDisFac, tolPre, risk, standOffDis)
+  dimLL, glaTyFac, tolStrDisFac, tolPre, risk, standOffDis, hFromtDD, glaTyFacDD)
 import Drasil.GlassBR.IMods (probOfBreak, calofCapacity, calofDemand, gbrIMods)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (rbrtsn2012)
@@ -108,9 +108,6 @@ resourcePath = "../../../datafiles/GlassBR/"
 
 glassBR_srs :: Document
 glassBR_srs = mkDoc mkSRS (for'' titleize phrase) glassSystInfo
-
-glassBR_mis :: Document
-glassBR_mis = mkDoc mkMIS (for'' titleize phrase) glassSystInfo'
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
@@ -163,13 +160,99 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   Bibliography :
   AppndxSec (AppndxProg [appdxIntro, LlC fig_5, LlC fig_6]) : []
 
+{------}
+
+glassBR_mis :: Document
+glassBR_mis = mkDoc mkMIS (for'' titleize phrase) glassSystInfo'
+
 mkMIS :: DocDesc
 mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master/CaseStudies/glass")) : 
   NotationSec (NotationProg []) : 
   ModHierarchSec (ModHierarchProg $ S "section 3 of the MG (Link)") : --FIXME: hardcoded link
   Bibliography : 
-  MISModSec (MISModProg "Hardware" (Just MIS.hwModIntro) [MISModule, MISUses []]) :
+  MISModSec (MISModProg "Control" Nothing [MISUses [inputLabel, loadLabel, calcLabel, outputLabel],
+    MISSyntax [MISExportedCs ([{-FILL IN-}] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
+    MISSemantics [MISStateVars [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
+    ctrlLabel False) :
+  MISModSec (MISModProg "Input" (Just MIS.inputModIntro) [MISUses [glTypeLabel, thicknessLabel, constantsLabel, hwLabel],
+    MISSyntax [{-MISSyntaxSubVerb [{-FILL IN-}]-}],
+    MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [{-FILL IN-}], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]],
+    MISConsiderations [inputCons]]
+    inputLabel False) :
+  MISModSec (MISModProg "LoadASTM" Nothing [MISUses [functLabel, contoursLabel],
+    MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
+    MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [], MISStateInvariant [], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
+    loadLabel False) :
+  MISModSec (MISModProg "Calc" Nothing [MISUses [inputLabel, contoursLabel, constantsLabel],
+    MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
+    MISSemantics [MISStateVars [], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
+    calcLabel False) :
+  MISModSec (MISModProg "GlassType" (Just (mkParagraph (S "from" +:+ makeRef glaTyFacDD))) --FIXME: link is broken
+    [MISUses [],
+    MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
+    MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
+    glTypeLabel True) :
+  MISModSec (MISModProg "Thickness" (Just (mkParagraph (S "following" +:+ makeRef hFromtDD))) --FIXME: link is broken
+    [MISUses [],
+    MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
+    MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
+    thicknessLabel True) :
+  MISModSec (MISModProg "Funct" Nothing [MISUses [seqServLabel],
+    MISSyntax [MISExportedCs ([{-FILL IN-}] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
+    MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]],
+    MISConsiderations [fxnCons]]
+    functLabel True) :
+  MISModSec (MISModProg "Contours" Nothing [MISUses [functLabel],
+    MISSyntax [MISExportedCs ([{-FILL IN-}] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
+    MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
+    contoursLabel True) :
+  MISModSec (MISModProg "SeqServices" Nothing [MISUses [],
+    MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
+    MISSemantics [MISStateVars [], MISStateInvariant [], MISAssumptions [{-FILL IN-}], MISAccessRoutines [{-FILL IN-}]]]
+    seqServLabel False) :
+  MISModSec (MISModProg "Output" Nothing [MISUses [inputLabel, thicknessLabel, glTypeLabel, hwLabel],
+    MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]], 
+    MISSemantics [MISEnvVars [{-FILL IN-}], MISStateVars [], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
+    outputLabel False) :
+  MISModSec (MISModProg "Constants" Nothing [MISUses [], 
+    MISSyntax [MISExportedCs auxiliaryConstants, MISExportedTyps [], MISExportedAPs []],
+    MISSemantics [MISStateVars [], MISStateInvariant []]]
+    constantsLabel False) :
+  MISModSec (MISModProg "Hardware" (Just MIS.hwModIntro) [MISUses []] 
+    hwLabel False) :
   []
+
+--FIXME: move below defined labels to a separate Labels.hs file?
+hwLabel, constantsLabel, outputLabel, seqServLabel, contoursLabel, 
+  functLabel, thicknessLabel, glTypeLabel, calcLabel, loadLabel, 
+  inputLabel, ctrlLabel :: Label
+
+hwLabel        = mkLabelRASec "HW_MIS" "Hardware"
+constantsLabel = mkLabelRASec "Constants_MIS" "Constants"
+outputLabel    = mkLabelRASec "Output_MIS" "Output"
+seqServLabel   = mkLabelRASec "SeqServices_MIS" "SeqServices"
+contoursLabel  = mkLabelRASec "ContoursADT_MIS" "ContoursADT"
+functLabel     = mkLabelRASec "FunctADT_MIS" "FunctADT"
+thicknessLabel = mkLabelRASec "ThicknessADT_MIS" "ThicknessADT"
+glTypeLabel    = mkLabelRASec "GlassTypeADT_MIS" "GlassTypeADT"
+calcLabel      = mkLabelRASec "Calc_MIS" "Calc"
+loadLabel      = mkLabelRASec "LoadASTM_MIS" "LoadASTM"
+inputLabel     = mkLabelRASec "Input_MIS" "Input"
+ctrlLabel      = mkLabelRASec "Control_MIS" "Control"
+
+fxnCons :: Contents
+fxnCons = mkParagraph $ S "For simplicity the function evaluation is" +:+
+  S "not defined within one step of the boundaries. By considering" +:+ 
+  S "the special cases it would be possible to get right to the edge."
+
+inputCons :: Contents
+inputCons = mkParagraph $ S "The value of each state variable can be accessed" +:+ 
+  S "through its name (getter). An access program is available for each state" +:+
+  S "variable. There are no setters for the state variables, since the values" +:+
+  S "will be set and checked by load params and will not be changed for the" +:+ 
+  S "life of the program."
+
+{-----}
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, 

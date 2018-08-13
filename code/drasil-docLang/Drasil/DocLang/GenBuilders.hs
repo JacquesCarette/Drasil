@@ -2,14 +2,18 @@ module Drasil.DocLang.GenBuilders where
 
 import Language.Drasil
 import qualified Data.Drasil.Concepts.Documentation as Doc (introduction, reference, 
-  traceyMandG, tOfSymb)
+  traceyMandG, tOfSymb, assumption)
 
-intro, reference, traceyMandG, tOfSymb :: [Contents] -> [Section] -> Section
+intro, reference, traceyMandG, tOfSymb, assumpt :: [Contents] -> [Section] -> Section
 
 intro       cs ss = section' (titleize Doc.introduction) cs ss "Intro"
 reference   cs ss = section' (titleize' Doc.reference)   cs ss "References" --FIXME: label is available
 traceyMandG cs ss = section' (titleize' Doc.traceyMandG) cs ss "TraceMatrices"
 tOfSymb     cs ss = section' (titleize Doc.tOfSymb)      cs ss "ToS" --FIXME: label is available
+assumpt     cs ss = section (titleize' Doc.assumption)        cs ss assumptLabel
+
+assumptLabel :: Label
+assumptLabel = mkLabelRASec "Assumps" "Assumptions"
 
 --function that sets the label of each section to be the reference address
 section' :: Sentence -> [Contents] -> [Section] -> String -> Section

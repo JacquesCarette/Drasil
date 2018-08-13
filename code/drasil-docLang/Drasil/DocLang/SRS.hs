@@ -1,13 +1,12 @@
 module Drasil.DocLang.SRS
  (doc, doc', prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient,
   genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
-  probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assumpt, thModel,
+  probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, thModel,
   genDefn, inModel, dataDefn, datCon, require, nonfuncReq, funcReq, likeChg, unlikeChg, 
   appendix, propCorSol, offShelfSol, valsOfAuxCons,
   physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
   inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
-  indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel,
-  srsDom, solCharSpecLabel) where
+  indPRCaseLabel, unlikeChgLabel, funcReqLabel, srsDom, solCharSpecLabel) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
@@ -16,7 +15,7 @@ module Drasil.DocLang.SRS
 import Language.Drasil
 import Drasil.DocLang.GenBuilders (section')
 import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, 
-    assumption, charOfIR, client, customer, consVals, dataDefn, datumConstraint, 
+    charOfIR, client, customer, consVals, dataDefn, datumConstraint, 
     functionalRequirement, genDefn, generalSystemDescription, goalStmt, 
     indPRCase, inModel, likelyChg, unlikelyChg, nonfunctionalRequirement,
     offShelfSolution, orgOfDoc, physSyst, prodUCTable, problemDescription, 
@@ -45,7 +44,7 @@ doc' sys authors secs = Document (Doc.srs `forTT'` sys) authors secs
 -- | Standard SRS section builders
 prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
   genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
-  probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assumpt, thModel,
+  probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, thModel,
   genDefn, inModel, dataDefn, datCon, propCorSol, require, nonfuncReq, funcReq, likeChg,
   appendix, offShelfSol, valsOfAuxCons, unlikeChg :: [Contents] -> [Section] -> Section
 
@@ -74,7 +73,6 @@ termogy      cs ss = section' (titleize Doc.terminology)        cs ss "Terminolo
 physSyst     cs ss = section (titleize Doc.physSyst)           cs ss physSystLabel
 goalStmt     cs ss = section' (titleize' Doc.goalStmt)          cs ss "GoalStmt"
 solCharSpec  cs ss = section (titleize Doc.solutionCharSpec)   cs ss solCharSpecLabel
-assumpt      cs ss = section (titleize' Doc.assumption)        cs ss assumptLabel
 thModel      cs ss = section (titleize' Doc.thModel)           cs ss thModelLabel
 genDefn      cs ss = section (titleize' Doc.genDefn)           cs ss genDefnLabel
 inModel      cs ss = section (titleize' Doc.inModel)           cs ss inModelLabel
@@ -103,7 +101,7 @@ srsDom = dcc' "srsDom" (Doc.srs ^. term) "srs" ""
 --FIXME: create using section information somehow?
 physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
   inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
-  indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel, solCharSpecLabel :: Label
+  indPRCaseLabel, unlikeChgLabel, funcReqLabel, solCharSpecLabel :: Label
 physSystLabel      = mkLabelRASec "PhysSyst" "Physical System Description"
 datConLabel        = mkLabelRASec "DataConstraints" "Data Constraints"
 genDefnLabel       = mkLabelRASec "GDs" "General Definitions"
@@ -116,6 +114,5 @@ tOfSymbLabel       = mkLabelRASec "ToS" "Table of Symbols"
 valsOfAuxConsLabel = mkLabelRASec "AuxConstants" "Values of Auxiliary Constants" --DO NOT CHANGE OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
 referenceLabel     = mkLabelRASec "References" "References" 
 indPRCaseLabel     = mkLabelRASec "IndividualProdUC" "Individual Product Use Cases"
-assumptLabel       = mkLabelRASec "Assumps" "Assumptions"
 funcReqLabel       = mkLabelRASec "FRs" "Functional Requirements"
 solCharSpecLabel   = mkLabelRASec "SolCharSpec" "Solution Characteristics Specification"

@@ -29,6 +29,7 @@ import Data.Drasil.SentenceStructures (fmtPhys, fmtSfwr, mkTableFromColumns, fol
   foldlSP, typUncr, ofThe, foldlList, SepType(Comma), FoldType(List))
 
 import qualified Drasil.DocLang.SRS as SRS
+import qualified Drasil.DocLang.GenBuilders as GB (assumpt)
 
 
 -- | Specific System description section builder. Takes the system and subsections.
@@ -87,7 +88,7 @@ solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inMod
 -- wrappers for assumpIntro. Use assumpF' if genDefs is not needed
 assumpF :: Section -> Section -> Section -> Section -> Section -> Section -> [Contents] -> Section
 assumpF theMod genDef dataDef inMod likeChg unlikeChg otherContents = 
-      SRS.assumpt ((assumpIntro theMod genDef dataDef inMod likeChg unlikeChg):otherContents) []
+      GB.assumpt ((assumpIntro theMod genDef dataDef inMod likeChg unlikeChg):otherContents) []
 
 
 -- takes a bunch of references to things discribed in the wrapper

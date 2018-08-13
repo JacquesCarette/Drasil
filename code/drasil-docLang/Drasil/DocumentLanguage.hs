@@ -19,13 +19,18 @@ import Drasil.Sections.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
 import Drasil.Sections.TableOfSymbols (table)
 import Drasil.Sections.TableOfUnits (table_of_units)
 
-import qualified Drasil.DocLang.GenBuilders as GB (reference, tOfSymb, intro)
+import qualified Drasil.DocLang.GenBuilders as GB (reference, tOfSymb, intro, assumpt)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn, genSysDes, 
   inModel, likeChg, unlikeChg, probDesc, solCharSpec, stakeholder,
   thModel, userChar, genDefnLabel, propCorSol, offShelfSol)
 import qualified Drasil.DocLang.MIS as MIS (notation, introMIS, notationIntroContd,
   notTblIntro, notationIntroMIS, modHierarchyPointer, modHier, syntax,
-  uses, module_, misOfModule)
+  uses, tempMod_, misOfModule, accRoutSemantics, considerations, 
+  enviroVars, expAccPrograms, expConstants, expTypes, module_, modHier, notation, 
+  semantics, stateInvars, stateVars, syntax, uses, assignSttmts)
+
+import Data.Drasil.SentenceStructures (foldlSP, foldlList, SepType(Comma), FoldType(List))
+import Data.Drasil.Utils (bulletFlat)
 
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
@@ -46,6 +51,7 @@ import Data.Drasil.Concepts.Documentation (refmat)
 
 import Data.Function (on)
 import Data.List (nub, sortBy)
+import Data.Maybe (maybeToList)
 
 type System = Sentence
 type DocKind = Sentence
@@ -136,7 +142,6 @@ data LFunc where
 -- subsections.
 data IntroSec = IntroProg Sentence Sentence [IntroSub]
   -- ^ Temporary, will be modified once we've figured out more about the section.
-              | IntroVerb Section
               | IntroMIS Sentence --link for documentation and implementation
 
 -- | Introduction subsections
@@ -237,37 +242,33 @@ data AppndxSec = AppndxProg [Contents]
 
 {--}
 
-data NotationSec = NotationVerb Section | NotationProg [Contents]
+data NotationSec = NotationProg [Contents]
 
 {--}
 
-data ModHierarchSec = ModHierarchVerb Section | ModHierarchProg Sentence
+data ModHierarchSec = ModHierarchProg Sentence
 
 {--}
 
-data MISModSec = MISModVerb Section
-               | MISModProg String (Maybe Contents) [MISModSub]
+data MISModSec = MISModProg String (Maybe Contents) [MISModSub] Label Bool{-TemplateModule==True-}
 
 data MISModSub where
-  MISModSubVerb     :: Section -> MISModSub
-  MISModule         :: MISModSub
   MISUses           :: [Label] -> MISModSub
   MISSyntax         :: [MISSyntaxSub] -> MISModSub
-  MISSemantics      :: [MISSemanticsSub] -> [Section] -> MISModSub
+  MISSemantics      :: [MISSemanticsSub] -> MISModSub
   MISConsiderations :: [Contents] -> MISModSub
 
 data MISSyntaxSub where
-  MISSyntaxSubVerb :: Section -> MISSyntaxSub
-  MISExportedCs    :: [Contents] -> MISSyntaxSub
-  MISExportedAPs   :: Contents -> MISSyntaxSub
+  MISExportedCs    :: (HasUID c, HasSymbol c, ExprRelat c) => [c] -> MISSyntaxSub
+  MISExportedAPs   :: [Contents] -> MISSyntaxSub
+  MISExportedTyps  :: [Contents] -> MISSyntaxSub --FIXME: automated to generate with Template Module; correct step?
 
 data MISSemanticsSub where
-  MISSemanticsSubVerb :: Section -> MISSemanticsSub
-  MISStateVars        :: Contents -> MISSemanticsSub
-  MISAccessRoutines   :: Contents -> MISSemanticsSub
-  MISEnvVars          :: Contents -> MISSemanticsSub
-  MISAssumptions      :: Contents -> MISSemanticsSub
-  MISStateInvariant   :: Contents -> MISSemanticsSub
+  MISStateVars        :: [Contents] -> MISSemanticsSub
+  MISAccessRoutines   :: [Contents] -> MISSemanticsSub
+  MISEnvVars          :: [Contents] -> MISSemanticsSub
+  MISAssumptions      :: [Contents] -> MISSemanticsSub
+  MISStateInvariant   :: [Contents] -> MISSemanticsSub
  
 {--}
 
@@ -575,7 +576,6 @@ mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortByS
 
 -- | Helper for making the 'Notation' section
 mkNotationSec :: SystemInformation -> NotationSec -> Section
-mkNotationSec _ (NotationVerb s)  = s
 mkNotationSec SI {_sys = sys} (NotationProg cs) = MIS.notation (MIS.notationIntroMIS :
   (MIS.notTblIntro sys) : cs ++ [MIS.notationIntroContd sys]) []
 
@@ -583,26 +583,48 @@ mkNotationSec SI {_sys = sys} (NotationProg cs) = MIS.notation (MIS.notationIntr
 
 -- | Helper for making the 'Module Hierarchy' section
 mkModHierarchSec :: ModHierarchSec -> Section
-mkModHierarchSec (ModHierarchVerb s)      = s
 mkModHierarchSec (ModHierarchProg mgLink) = MIS.modHier [MIS.modHierarchyPointer mgLink] []
 
 {--}
 
 mkMISModSec :: MISModSec -> Section
-mkMISModSec (MISModVerb s) = s
-mkMISModSec (MISModProg modName Nothing mms)      = MIS.misOfModule [] []{-(map subsections mms)-} modName
-mkMISModSec (MISModProg modName (Just intro) mms) = MIS.misOfModule (intro : []) 
-  (map subsections mms) modName
-  where
-    subsections :: MISModSub -> Section
-    subsections (MISModSubVerb s)  = s
-    subsections MISModule          = MIS.module_ [mkParagraph $ S modName] []
-    subsections (MISUses useMods)  = MIS.uses    (map mkParagraph $ map makeRef useMods) [] --FIXME: needs to become a proper list
-    subsections _                  = MIS.syntax [] []
-    --subsections (MISSyntax s)  = s
-    --subsections (MISSemantics s)  = s
-    --subsections (MISConsiderations s)  = s
+mkMISModSec (MISModProg modName x mms lbl True)  = MIS.misOfModule (maybeToList x) 
+  ((MIS.tempMod_ [mkParagraph $ S (modName ++ "ADT")] []) :
+   (MIS.expTypes [mkParagraph $ S (modName ++ "T = ?")] []) :
+   map subsections mms) (modName ++ "ADT") lbl
+mkMISModSec (MISModProg modName x mms lbl False) = MIS.misOfModule (maybeToList x) 
+  ((MIS.module_ [mkParagraph $ S modName] []) : map subsections mms) modName lbl
 
+subsections :: MISModSub -> Section
+subsections (MISUses [])       = MIS.uses    none  []
+subsections (MISUses useMods)  = MIS.uses [mkParagraph $ foldlList Comma List $ map makeRef useMods] []
+subsections (MISSyntax subs)   = MIS.syntax [] (map syntaxSubs subs)
+subsections (MISSemantics subs)= MIS.semantics [] (map semanticSubs subs)
+subsections (MISConsiderations s) = MIS.considerations [] [] --FIXME: needs to be filled out
+
+syntaxSubs :: MISSyntaxSub -> Section
+syntaxSubs (MISExportedCs [])   = MIS.expConstants   none []
+syntaxSubs (MISExportedAPs [])  = MIS.expAccPrograms none []
+syntaxSubs (MISExportedTyps []) = MIS.expTypes none []
+syntaxSubs (MISExportedAPs cs)  = MIS.expAccPrograms cs []
+syntaxSubs (MISExportedCs cnstnts) = MIS.expConstants 
+  [(UlC . ulcc . Enumeration . bulletFlat) (map MIS.assignSttmts cnstnts)] []
+
+semanticSubs :: MISSemanticsSub -> Section
+semanticSubs (MISStateVars [])       = MIS.stateVars        none []
+semanticSubs (MISAccessRoutines [])  = MIS.accRoutSemantics none []
+semanticSubs (MISEnvVars [])         = MIS.enviroVars       none []
+semanticSubs (MISAssumptions [])     = GB.assumpt           none []
+semanticSubs (MISStateInvariant [])  = MIS.stateInvars      none []
+semanticSubs (MISStateVars cs)       = MIS.stateVars        cs []
+semanticSubs (MISAccessRoutines cs)  = MIS.accRoutSemantics cs []
+semanticSubs (MISEnvVars cs)         = MIS.enviroVars       cs []
+semanticSubs (MISAssumptions cs)     = GB.assumpt           cs []
+semanticSubs (MISStateInvariant cs)  = MIS.stateInvars      cs []
+
+
+none :: [Contents]
+none = [mkParagraph $ S "None"]
 
 {--}
 

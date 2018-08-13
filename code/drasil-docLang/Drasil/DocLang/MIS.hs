@@ -4,8 +4,9 @@ import Language.Drasil
 import Drasil.DocLang.GenBuilders (section')
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (accRoutSemantic, 
-  assumption, consideration, enviroVar, expConstant, expType, misOfModule, 
-  module_, moduleHierarchy, notation, semantic, stateInvar, stateVar, syntax, use)
+  consideration, enviroVar, expConstant, expType, misOfModule, 
+  module_, moduleHierarchy, notation, semantic, stateInvar, stateVar, syntax, use,
+  templateModule)
 import qualified Data.Drasil.Concepts.Software as Doc (expAccProgram)
   -- import ^ for section making
 
@@ -16,14 +17,17 @@ import Data.Drasil.Concepts.Software (program)
 
 import Data.Drasil.SentenceStructures (foldlSP, inThe, ofThe, sAnd)
 
-accRoutSemantics, assumptions, considerations, enviroVars, expAccPrograms, 
-  expConstants, expTypes, module_, modHier, notation, semantics, stateInvars, 
+import Control.Lens ((^.))
+
+accRoutSemantics, considerations, enviroVars, expAccPrograms, 
+  expConstants, expTypes, module_, tempMod_, modHier, notation, semantics, stateInvars, 
   stateVars, syntax, uses :: [Contents] -> [Section] -> Section
 
 modHier          cs ss = section' (titleize Doc.moduleHierarchy)  cs ss "ModHierarchy"
 notation         cs ss = section' (titleize Doc.notation)         cs ss "Notation"
 
 module_          cs ss = section' (titleize Doc.module_)          cs ss "Module"
+tempMod_         cs ss = section' (titleize Doc.templateModule)   cs ss "TemplateModule"
 uses             cs ss = section' (titleize' Doc.use)             cs ss "Uses"
 syntax           cs ss = section' (titleize Doc.syntax)           cs ss "Syntax"
 semantics        cs ss = section' (titleize' Doc.semantic)        cs ss "Semantics"
@@ -36,11 +40,10 @@ expAccPrograms   cs ss = section' (titleize' Doc.expAccProgram)   cs ss "ExpAccP
 enviroVars       cs ss = section' (titleize' Doc.enviroVar)       cs ss "EnviroVars"
 stateVars        cs ss = section' (titleize' Doc.stateVar)        cs ss "StateVars"
 stateInvars      cs ss = section' (titleize' Doc.stateInvar)      cs ss "StateInvars"
-assumptions      cs ss = section' (titleize' Doc.assumption)      cs ss "Assumptions"
 accRoutSemantics cs ss = section' (titleize' Doc.accRoutSemantic) cs ss "AccRoutSemantics"
 
-misOfModule :: [Contents] -> [Section] -> String -> Section
-misOfModule cs ss mod = section' (titleize $ Doc.misOfModule mod) cs ss $ "MISof" ++ mod ++ "Module"
+misOfModule :: [Contents] -> [Section] -> String -> Label -> Section
+misOfModule cs ss mod lbl = section (titleize $ Doc.misOfModule mod) cs ss lbl
 
 --FIXME: All these contents need variability to be implemented in other examples
 
@@ -94,11 +97,38 @@ notationIntroContd progName = foldlSP [S "The specification of", short progName,
 modHierarchyPointer :: Sentence -> Contents
 modHierarchyPointer mgLink = mkParagraph $ S "To view the Module Hierarchy, see" +:+ mgLink
 
----------------------------
--- HARDWARE MODULE INTRO --
----------------------------
+-------------------
+-- MODULE INTROS --
+-------------------
 
 hwModIntro :: Contents
 hwModIntro = foldlSP [S "This module hides the underlying hardware for I/O (to the",
   S "screen, or file, or other device). In general it will be provided by the selected",
   S "programming language and operating system"]
+
+inputModIntro :: Contents
+inputModIntro = foldlSP [S "The secrets of this module are the data structure for input",
+  S "parameters, how the values are input and how the values are verified. The load and",
+  S "verify secrets are isolated to their own access programs. This module follows the",
+  S "singleton pattern; that is, there is only one instance of this module"]
+
+-----------------------
+-- HELPFUL FUNCTIONS --
+-----------------------
+
+assignSttmts :: (HasUID c, HasSymbol c, ExprRelat c) => c -> Sentence
+assignSttmts f = (ch f) :+: S ":=" :+: (E $ f^.relat) --FIXME: replace ":=" with actual symbol ":="
+
+{-WIP : laying out the access routine semantics
+layAccRoutSemantics :: (HasUID c, HasSymbol c, ExprRelat c) => String -> [c] ->
+  [Sentence] -> Maybe Sentence -> [Contents]
+layAccRoutSemantics fxnName inputs transitionContents exception = (UlC $ ulcc $
+  Enumeration $ Simple $ 
+  [ S fxnName +:+ sParen(map makeRef inputs)
+  , Nested (S "transition") $ Bullet $ noRefs $
+    (map Flat transitionContents)
+  , Nothing]) ++ (mkParagraph $ getExceptionSttmt exception)
+  where
+    getExceptionSttmt :: Maybe Sentence -> Sentence
+    getExceptionSttmt Nothing  = S "exception: None" 
+    getExceptionSttmt (Just x) = S "exception: " +:+ x-}

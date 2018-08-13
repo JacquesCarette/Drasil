@@ -42,7 +42,8 @@ pbdescr =
 calofCapacity :: InstanceModel
 calofCapacity = im' calOfCap [qw nonFL, qw glaTyFac, qw loadSF] 
   [TCon AssumedCon $ sy nonFL $> 0, TCon AssumedCon $ sy glaTyFac $> 0,
-  TCon AssumedCon $ sy loadSF $> 0] (qw lRe) [] calOfCapL [capdescr]
+  TCon AssumedCon $ sy loadSF $> 0] (qw lRe) [] [makeRef astm2009]
+  calOfCapL [capdescr]
 
 calOfCap :: RelationConcept
 calOfCap = makeRC "calOfCap" (nounPhraseSP "Calculation of Capacity(LR)") 
@@ -66,8 +67,8 @@ capdescr =
 calofDemand :: InstanceModel
 calofDemand = im' calOfDe [qw demand, qw eqTNTWeight, qw standOffDist]
   [TCon AssumedCon $ sy demand $> 0, TCon AssumedCon $ sy eqTNTWeight $> 0,
-   TCon AssumedCon $ sy standOffDist $> 0] (qw demand) [] calOfDemandL
-  [dedescr]
+  TCon AssumedCon $ sy standOffDist $> 0] (qw demand) [] [makeRef astm2009]
+  calOfDemandL [dedescr]
 
 calOfDe :: RelationConcept
 calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)") 

@@ -67,17 +67,17 @@ im rcon i ic o oc src sn = IM rcon i ic o oc src [] sn Nothing
 
 -- | Same as `im`, with an additional field for notes to be passed in
 im' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> Label -> [Sentence] -> InstanceModel
-im' rcon i ic o oc lbe addNotes = IM rcon i ic o oc [] [] lbe (Just addNotes)
+  OutputConstraints -> [Reference] -> Label -> [Sentence] -> InstanceModel
+im' rcon i ic o oc src lbe addNotes = IM rcon i ic o oc src [] lbe (Just addNotes)
 
 im'' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> Derivation -> String -> [Sentence] -> InstanceModel
-im'' rcon i ic o oc der sn addNotes = IM rcon i ic o oc [] der (mkLabelSame sn (Def Instance))
+  OutputConstraints -> [Reference] -> Derivation -> String -> [Sentence] -> InstanceModel
+im'' rcon i ic o oc src der sn addNotes = IM rcon i ic o oc src der (mkLabelSame sn (Def Instance))
  (Just addNotes)
 
 im''' :: RelationConcept -> Inputs -> InputConstraints -> Output ->
-  OutputConstraints -> Derivation -> String -> InstanceModel
-im''' rcon i ic o oc der sn = IM rcon i ic o oc [] der 
+  OutputConstraints -> [Reference] -> Derivation -> String -> InstanceModel
+im''' rcon i ic o oc src der sn = IM rcon i ic o oc src der 
   (mkLabelSame sn (Def Instance)) Nothing
 
 -- | Smart constructor for instance model from qdefinition

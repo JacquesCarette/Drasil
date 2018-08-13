@@ -358,19 +358,19 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:explainScenario}:]This system only considers the external explosion scenario for its calculations.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:standardValues}:]The values provided in Section~\ref{Sec:AuxConstants} are assumed for the duration of load (${t_{d}}$), and the material properties of $m$, $k$, and $E$. [IM1, DD3, DD5, DD7, DD9]
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:standardValues}:]The values provided in Section~\ref{Sec:AuxConstants} are assumed for the duration of load (${t_{d}}$), and the material properties of $m$, $k$, and $E$. \hyperref[IM:probOfBr]{Definition~IM:probOfBr}, \hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}, \hyperref[DD:nFL]{Definition~DD:nFL}, \hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}, and \hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:glassLite}:]Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. [IM2, DD7]
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:glassLite}:]Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. \hyperref[IM:calOfCap]{Definition~IM:calOfCap} and \hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:boundaryConditions}:]Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. [IM1]
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:boundaryConditions}:]Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. \hyperref[IM:probOfBr]{Definition~IM:probOfBr}
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:responseType}:]The response type considered in GlassBR is flexural. [IM1]
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:responseType}:]The response type considered in GlassBR is flexural. \hyperref[IM:probOfBr]{Definition~IM:probOfBr}
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:ldfConstant}:]With reference to A\ref{A:standardValues}, the value of load duration factor ($LDF$) is a constant in GlassBR. [DD3]
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:ldfConstant}:]With reference to A\ref{A:standardValues}, the value of load duration factor ($LDF$) is a constant in GlassBR. \hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}

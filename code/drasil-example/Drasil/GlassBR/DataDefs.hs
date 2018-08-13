@@ -1,5 +1,7 @@
 module Drasil.GlassBR.DataDefs (aspRat, dataDefns, dimLL, gbQDefns, glaTyFac, 
-  hFromt, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac) where
+  hFromt, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac, 
+  -- DataDefinitions for Assumptions
+  loadDFDD, nonFLDD, dimLLDD, tolStrDisFacDD) where
 
 import Language.Drasil
 import Prelude hiding (log, exp, sqrt)
@@ -11,9 +13,8 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Citations (campidelli)
 import Data.Drasil.SentenceStructures (sAnd)
 
-import Drasil.GlassBR.Assumptions (glassLite)
 import Drasil.GlassBR.Concepts (annealed, fullyT, heatS)
-import Drasil.GlassBR.Labels (calOfDemandL)
+import Drasil.GlassBR.Labels (calOfDemandL, glassLiteL)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, 
   demand, dimlessLoad, gTF, glassTypeAbbrsStr, glassTypeFactors, glass_type, 
@@ -254,4 +255,4 @@ jtolRelToPbtol :: Sentence
 jtolRelToPbtol = (ch sdf_tol +:+ S " is calculated with reference to " +:+. ch pb_tol)
 
 glassLiteRef :: Sentence 
-glassLiteRef = (ch dimlessLoad +:+ S "is calculated with reference to" +:+. makeRef glassLite)
+glassLiteRef = (ch dimlessLoad +:+ S "is calculated with reference to" +:+. makeRef glassLiteL)

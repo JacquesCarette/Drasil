@@ -14,6 +14,8 @@ import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 
 import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass, gLassBR, 
   lShareFac, plane, responseTy)
+import Drasil.GlassBR.DataDefs (loadDFDD, nonFLDD, dimLLDD, tolStrDisFacDD)
+import Drasil.GlassBR.Labels (probOfBrL, calOfCapL, glassLiteL)
 import Drasil.GlassBR.References (astm2009, gbCitations)
 import Drasil.GlassBR.Unitals (constant_K, constant_LoadDF, constant_LoadDur, 
   constant_LoadSF, constant_M, constant_ModElas, explosion, lateral, lite, load_dur)
@@ -35,7 +37,7 @@ glassType          = assump "glassTypeA"          glassTypeDesc                 
 glassCondition     = assump "glassConditionA"     glassConditionDesc               (mkLabelRAAssump' "glassCondition"    )
 explainScenario    = assump "explainScenarioA"    explainScenarioDesc              (mkLabelRAAssump' "explainScenario"   ) 
 standardValues     = assump "standardValuesA"    (standardValuesDesc load_dur)     (mkLabelRAAssump' "standardValues"    )
-glassLite          = assump "glassLiteA"          glassLiteDesc                    (mkLabelRAAssump' "glassLite"         )
+glassLite          = assump "glassLiteA"          glassLiteDesc                    glassLiteL
 boundaryConditions = assump "boundaryConditionsA" boundaryConditionsDesc           (mkLabelRAAssump' "boundaryConditions")
 responseType       = assump "responseTypeA"       responseTypeDesc                 (mkLabelRAAssump' "responseType"      )
 ldfConstant        = assump "ldfConstantA"       (ldfConstantDesc constant_LoadDF) (mkLabelRAAssump' "ldfConstant"       )
@@ -64,28 +66,29 @@ explainScenarioDesc = foldlSent [S "This", phrase system, S "only considers the 
 
 standardValuesDesc :: UnitaryChunk -> Sentence
 standardValuesDesc mainIdea = foldlSent [S "The", plural value, S "provided in",
-  makeRef SRS.valsOfAuxConsLabel, S "are assumed for the",
-  phrase mainIdea, sParen (ch mainIdea) `sC` S "and the",
-  plural materialProprty `sOf` foldlList Comma List (map ch
-  (take 3 assumptionConstants))] +:+ S "[IM1, DD3, DD5, DD7, DD9]"
+  makeRef SRS.valsOfAuxConsLabel, S "are assumed for the", phrase mainIdea, 
+  sParen (ch mainIdea) `sC` S "and the", plural materialProprty `sOf` 
+  foldlList Comma List (map ch (take 3 assumptionConstants))] +:+ 
+  (foldlList Comma List $ [makeRef probOfBrL] ++ map makeRef [loadDFDD, 
+  nonFLDD, dimLLDD, tolStrDisFacDD])
 
 glassLiteDesc :: Sentence
-glassLiteDesc = foldlSent [at_start glass, S "under consideration",
-  S "is assumed to be a single", phrase lite `semiCol` S "hence, the",
-  phrase value `sOf` short lShareFac, S "is equal to 1 for all",
-  plural calculation `sIn` short gLassBR] +:+ S "[IM2, DD7]"
+glassLiteDesc = foldlSent [at_start glass, S "under consideration is assumed to be a single", 
+  phrase lite `semiCol` S "hence, the", phrase value `sOf` short lShareFac, S "is equal to 1 for all",
+  plural calculation `sIn` short gLassBR] +:+
+  (foldlList Comma List $ [makeRef calOfCapL] ++ [makeRef dimLLDD])
 
 boundaryConditionsDesc :: Sentence
 boundaryConditionsDesc = foldlSent [S "Boundary", plural condition, S "for the",
   phrase glaSlab, S "are assumed to be 4-sided support for",
-  plural calculation] +:+ S "[IM1]"
+  plural calculation] +:+ makeRef probOfBrL
 
 responseTypeDesc :: Sentence
 responseTypeDesc = foldlSent [S "The", phrase responseTy, S "considered in",
-  short gLassBR, S "is flexural"] +:+ S "[IM1]"
+  short gLassBR, S "is flexural"] +:+ makeRef probOfBrL
 
 ldfConstantDesc :: QDefinition -> Sentence
 ldfConstantDesc mainConcept = foldlSent [S "With", phrase reference, S "to",
   makeRef standardValues `sC` S "the", phrase value `sOf`
   phrase mainConcept, sParen (ch mainConcept), S "is a", phrase constant,
-  S "in", short gLassBR] +:+ S "[DD3]"
+  S "in", short gLassBR] +:+ makeRef loadDFDD

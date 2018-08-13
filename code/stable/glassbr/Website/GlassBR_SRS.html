@@ -1143,35 +1143,35 @@ explainScenario: This system only considers the external explosion scenario for 
 <ul class="hide-list-style">
 <li>
 <div id="A:standardValues">
-standardValues: The values provided in <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. [IM1, DD3, DD5, DD7, DD9]
+standardValues: The values provided in <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. <a href=#IM:probOfBr>IM: probOfBr</a>, <a href=#DD:loadDurFactor>DD: loadDurFactor</a>, <a href=#DD:nFL>DD: nFL</a>, <a href=#DD:dimlessLoad>DD: dimlessLoad</a>, and <a href=#DD:sdf.tol>DD: sdf_tol</a>
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:glassLite">
-glassLite: Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. [IM2, DD7]
+glassLite: Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. <a href=#IM:calOfCap>IM: calOfCap</a> and <a href=#DD:dimlessLoad>DD: dimlessLoad</a>
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:boundaryConditions">
-boundaryConditions: Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. [IM1]
+boundaryConditions: Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. <a href=#IM:probOfBr>IM: probOfBr</a>
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:responseType">
-responseType: The response type considered in GlassBR is flexural. [IM1]
+responseType: The response type considered in GlassBR is flexural. <a href=#IM:probOfBr>IM: probOfBr</a>
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:ldfConstant">
-ldfConstant: With reference to <a href=#A:standardValues>A: standardValues</a>, the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. [DD3]
+ldfConstant: With reference to <a href=#A:standardValues>A: standardValues</a>, the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. <a href=#DD:loadDurFactor>DD: loadDurFactor</a>
 </div>
 </li>
 </ul>

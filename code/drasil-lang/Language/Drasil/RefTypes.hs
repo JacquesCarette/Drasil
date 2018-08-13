@@ -2,6 +2,8 @@
 -- | Contains the types associated to references
 module Language.Drasil.RefTypes(RefAdd, RefType(..), DType(..), ReqType(..)) where
 
+import Language.Drasil.UID (UID)
+
 --import Language.Drasil.Document.Core (DType(..)) cannot be imported due to importcycles
 
 -- | Types of definitions
@@ -38,6 +40,7 @@ data RefType = Tab    -- ^ Table
              | PSD    -- ^ Physical System Description
              | Label RefType    -- ^ Label --FIXME: hack (#971)
              | Blank  -- ^ Prefix filler for ConceptInstance
+             | DeferredCC UID  -- ^ For ConceptInstances --FIXME: Used by References to create a Deferred ShortName (#562)
 
 instance Show RefType where
   show Tab    = "Table"
@@ -56,3 +59,4 @@ instance Show RefType where
   show PSD    = "Physical System Description"
   show EqnB   = "Equation"
   show Blank  = "Blank"
+  show (DeferredCC _) = error "Cannot directly display deferred reference types." -- FIXME

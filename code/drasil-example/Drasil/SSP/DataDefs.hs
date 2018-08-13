@@ -221,7 +221,7 @@ resShearWO = mkDD resShearWOQD [{-References-}] resShr_deriv_ssp "resShearWO" No
 --FIXME: fill empty lists in
 
 resShearWOQD :: QDefinition
-resShearWOQD = mkQuantDef' shearRNoIntsl resShearWOEqn resShr_deriv_ssp
+resShearWOQD = mkQuantDef' shearRNoIntsl resShearWOEqn
 
 resShearWOEqn :: Expr
 resShearWOEqn = (((inxi slcWght) + (inxi surfHydroForce) *
@@ -242,7 +242,7 @@ mobShearWO = mkDD mobShearWOQD [{-References-}] mobShr_deriv_ssp "mobShearWO" No
 --FIXME: fill empty lists in
 
 mobShearWOQD :: QDefinition
-mobShearWOQD = mkQuantDef' shearFNoIntsl mobShearWOEqn mobShr_deriv_ssp
+mobShearWOQD = mkQuantDef' shearFNoIntsl mobShearWOEqn
 
 mobShearWOEqn :: Expr 
 mobShearWOEqn = ((inxi slcWght) + (inxi surfHydroForce) *
@@ -274,7 +274,7 @@ displcmntBasel = mkDD displcmntBaselQD [{-References-}] stfMtrx_deriv_ssp "displ
 --FIXME: fill empty lists in
 
 displcmntBaselQD :: QDefinition
-displcmntBaselQD = mkQuantDef' genPressure displcmntBaselEqn stfMtrx_deriv_ssp
+displcmntBaselQD = mkQuantDef' genPressure displcmntBaselEqn
 
 displcmntBaselEqn :: Expr
 displcmntBaselEqn = m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB)

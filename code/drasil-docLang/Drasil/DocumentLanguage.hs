@@ -389,7 +389,7 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
   Intro.introductionSection probIntro progDefn $ map (mkSubIntro si) l
   where
     mkSubIntro :: SystemInformation -> IntroSub -> Section
-    mkSubIntro si' (IPurpose intro) = Intro.purposeOfDoc (getRefDB si') intro
+    mkSubIntro si' (IPurpose intro) = Intro.purposeOfDoc intro
     mkSubIntro SI {_sys = sys} (IScope main intendedPurp) =
       Intro.scopeOfRequirements main sys intendedPurp
     mkSubIntro SI {_sys = sys} (IChar know understand appStandd) =

@@ -18,7 +18,8 @@ import Language.Drasil.Chunk.Goal as G (Goal)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
 import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..))
 import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc)
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName, getStringSN, shortname')
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname),
+  ShortName(Concat, Deferred), DeferredCtx(FromCC), getStringSN, shortname')
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel), HasRefAddress(getRefAdd))
 import Language.Drasil.Document (Section(Section))
@@ -108,11 +109,7 @@ bibMap cs = Map.fromList $ zip (map (^. uid) scs) (zip scs [1..])
 conGrp :: ConceptInstance -> ConceptInstance -> Bool
 conGrp a b = cdl a == cdl b where
   cdl :: ConceptInstance -> UID
-  cdl x = sDom $ x ^. cdom where
-    sDom [d] = d
-    sDom d = error $ "Expected ConceptDomain for: " ++ (x ^. uid) ++
-                     " to have a single domain, found " ++ show (length d) ++
-                     " instead."
+  cdl x = sDom $ x ^. cdom
 
 conceptMap :: [ConceptInstance] -> ConceptMap
 conceptMap cs = Map.fromList $ zip (map (^. uid) (concat grp)) $ concatMap
@@ -249,7 +246,7 @@ instance Referable InstanceModel where
 
 instance Referable ConceptInstance where
   refAdd i = i ^. uid
-  rType _  = Blank --note: not actually used
+  rType i  = DeferredCC $ sDom $ i ^. cdom
 
 --Should refer to an object WITH a variable.
 --Can be removed once sections have labels.
@@ -279,6 +276,11 @@ temp (Bib _)               = error $
 
 uidSort :: HasUID c => c -> c -> Ordering
 uidSort = compare `on` (^. uid)
+
+sDom :: [UID] -> UID
+sDom [d] = d
+sDom d = error $ "Expected ConceptDomain to have a single domain, found " ++
+  show (length d) ++ " instead."
 
 compareAuthYearTitle :: (HasFields c) => c -> c -> Ordering
 compareAuthYearTitle c1 c2
@@ -333,12 +335,9 @@ mkRefFrmLbl :: (HasLabel l, HasShortName l, Referable l) => l -> Sentence
 mkRefFrmLbl r = makeRef r
 
 --FIXME: should be removed from Examples once sections have labels
-midRef :: Label -> Sentence
-midRef r = customRef r (r ^. shortname)
-
 -- | Create a reference with a customized 'ShortName'
 customRef :: (HasShortName l, Referable l) => l -> ShortName -> Sentence
-customRef r n = Ref (rType r) (refAdd r) (getAcc' (rType r) n)
+customRef r n = Ref (fixupRType $ rType r) (refAdd r) (getAcc' (rType r) n)
   where 
     getAcc' :: RefType -> ShortName -> ShortName
     getAcc' (Def dtp) sn = shortname' $ (getDefName dtp) ++ " " ++ (getStringSN sn)
@@ -348,7 +347,10 @@ customRef r n = Ref (rType r) (refAdd r) (getAcc' (rType r) n)
     getAcc' Assump    sn = shortname' $ "A: " ++ (getStringSN sn)
     getAcc' Goal      sn = shortname' $ "GS: " ++ (getStringSN sn)
     getAcc' PSD       sn = shortname' $ "PS: " ++ (getStringSN sn)
+    getAcc' (DeferredCC u) s = Concat (Deferred $ FromCC u) s
     getAcc' _         sn = sn
+    fixupRType (DeferredCC _) = Blank  -- FIXME: This is a hack
+    fixupRType a = a
 
 -- This works for passing the correct id to the reference generator for Assumptions,
 -- Requirements and Likely Changes but I question whether we should use it.

@@ -15,7 +15,7 @@ import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass, gLassBR, 
   lShareFac, plane, responseTy)
 import Drasil.GlassBR.DataDefs (loadDFDD, nonFLDD, dimLLDD, tolStrDisFacDD)
-import Drasil.GlassBR.Labels (probOfBrL, calOfCapL, glassLiteL)
+import Drasil.GlassBR.Labels (probOfBrL, calOfCapL, glassTypeL, glassConditionL, glassLiteL)
 import Drasil.GlassBR.References (astm2009, gbCitations)
 import Drasil.GlassBR.Unitals (constant_K, constant_LoadDF, constant_LoadDur, 
   constant_LoadSF, constant_M, constant_ModElas, explosion, lateral, lite, load_dur)
@@ -33,8 +33,8 @@ assumptionConstants = [constant_M, constant_K, constant_ModElas,
 
 glassType, glassCondition, explainScenario, standardValues, glassLite, boundaryConditions, 
   responseType, ldfConstant :: AssumpChunk
-glassType          = assump "glassTypeA"          glassTypeDesc                    (mkLabelRAAssump' "glassType"         )
-glassCondition     = assump "glassConditionA"     glassConditionDesc               (mkLabelRAAssump' "glassCondition"    )
+glassType          = assump "glassTypeA"          glassTypeDesc                    glassTypeL
+glassCondition     = assump "glassConditionA"     glassConditionDesc               glassConditionL
 explainScenario    = assump "explainScenarioA"    explainScenarioDesc              (mkLabelRAAssump' "explainScenario"   ) 
 standardValues     = assump "standardValuesA"    (standardValuesDesc load_dur)     (mkLabelRAAssump' "standardValues"    )
 glassLite          = assump "glassLiteA"          glassLiteDesc                    glassLiteL

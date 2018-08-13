@@ -5,13 +5,14 @@ import Control.Lens ((^.))
 import Prelude hiding (log, sqrt)
 
 import Data.Drasil.Constraints
-import Data.Drasil.SentenceStructures (FoldType(Options), SepType(Comma),
+import Data.Drasil.SentenceStructures (FoldType(..), SepType(Comma),
   displayConstrntsAsSet, foldlList, foldlSent, foldlsC)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
 import Drasil.GlassBR.Concepts (aR, annealed, fullyT, glaPlane, 
   glassTypeFac, heatS, iGlass, lGlass, lResistance, lShareFac, 
   loadDurFactor, nFL, responseTy, stdOffDist)
+import Drasil.GlassBR.Labels (glassTypeL, glassConditionL)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016)
 import Drasil.GlassBR.Units (sFlawPU)
 
@@ -317,7 +318,8 @@ load          = dcc "load"        (nounPhraseSP "load")
 loadResis     = cc' lResistance
   (foldlSent [S "The uniform lateral load that a glass construction can sustain",
   S "based upon a given probability of breakage and load duration as defined in",
-  makeRef astm2009, S "(pg. 1, 53), following A2 and A1 respectively."])
+  makeRef astm2009, S "(pg. 1, 53), following", foldlList Comma List $ map makeRef 
+  [glassConditionL, glassTypeL], S "respectively"])
 loadShareFac  = cc' lShareFac
   (foldlSent [S "A multiplying factor derived from the load sharing between the",
   S "double glazing, of equal or different thicknesses and types (including the",

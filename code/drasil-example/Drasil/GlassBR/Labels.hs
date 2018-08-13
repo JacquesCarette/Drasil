@@ -2,12 +2,16 @@ module Drasil.GlassBR.Labels where
 
 import Language.Drasil
 
-probOfBrL, calOfCapL, calOfDemandL, glassLiteL :: Label
-
 -- Instance Models
+probOfBrL, calOfCapL, calOfDemandL :: Label
+
 probOfBrL    = mkLabelSame "probOfBr"    (Def Instance)
 calOfCapL    = mkLabelSame "calOfCap"    (Def Instance)
 calOfDemandL = mkLabelSame "calOfDemand" (Def Instance)
 
--- Assumption
-glassLiteL = mkLabelRAAssump' "glassLite"
+-- Assumptions
+glassTypeL, glassConditionL, glassLiteL :: Label
+
+glassTypeL      = mkLabelRAAssump' "glassType"
+glassConditionL = mkLabelRAAssump' "glassCondition"
+glassLiteL      = mkLabelRAAssump' "glassLite"

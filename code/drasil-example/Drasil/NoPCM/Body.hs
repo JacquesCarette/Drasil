@@ -154,8 +154,8 @@ stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 generalDefinitions :: [GenDefn]
-generalDefinitions = [gd' nwtnCooling (Just thermal_flux) ([] :: Derivation) "nwtnCooling" [nwtnCooling_desc],
-  gd' rocTempSimp (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv "rocTempSimp" [rocTempSimp_desc]]
+generalDefinitions = [gd' nwtnCooling (Just thermal_flux) ([] :: Derivation) [] "nwtnCooling" [nwtnCooling_desc],
+  gd' rocTempSimp (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv [] "rocTempSimp" [rocTempSimp_desc]]
 
 nopcm_si :: SystemInformation
 nopcm_si = SI {

@@ -23,6 +23,7 @@ import Drasil.SSP.DataDefs (lengthLb, lengthLs, mobShearWO, sliceWght)
 import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf)
 import Drasil.SSP.Labels (genDef1Label, genDef2Label, genDef3Label, genDef4Label, 
   genDef5Label, genDef6Label, genDef7Label, genDef8Label, genDef9Label, genDef10Label)
+import Drasil.SSP.References (chen2005, stolle2008)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress, 
   hookesLaw)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
@@ -37,16 +38,18 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 --  General Definitions  --
 ---------------------------
 generalDefinitions :: [GenDefn]
-generalDefinitions = [gd'' normForcEq "normForcEq" [nmFEq_desc],
-  gd'' bsShrFEq "bsShrFEq" [bShFEq_desc],
-  gd'' resShr "resShr" [resShr_desc],
-  gd'' mobShr "mobShr" [mobShr_desc],
-  gd'' normShrR "normShrR" [nmShrR_desc],
-  gd'' momentEql "momentEql" [momEql_desc],
-  gd'' netForcex "netForcex" [],
-  gd'' netForcey "netForcey" [fNet_desc],
-  gd'' hookesLaw2d "hookesLaw2d" [hooke2d_desc],
-  gd'' displVect "displVect" [disVec_desc]]
+generalDefinitions = [
+  gd'' normForcEq  [makeRef chen2005]   "normForcEq"  [nmFEq_desc],
+  gd'' bsShrFEq    [makeRef chen2005]   "bsShrFEq"    [bShFEq_desc],
+  gd'' resShr      [makeRef chen2005]   "resShr"      [resShr_desc],
+  gd'' mobShr      [makeRef chen2005]   "mobShr"      [mobShr_desc],
+  gd'' normShrR    [makeRef chen2005]   "normShrR"    [nmShrR_desc],
+  gd'' momentEql   [makeRef chen2005]   "momentEql"   [momEql_desc],
+  gd'' netForcex   []                   "netForcex"   [], -- FIXME: Source and Description Fields are empty
+  gd'' netForcey   [makeRef chen2005]   "netForcey"   [fNet_desc],
+  gd'' hookesLaw2d [makeRef stolle2008] "hookesLaw2d" [hooke2d_desc],
+  gd'' displVect   [makeRef stolle2008] "displVect"   [disVec_desc]
+  ]
 
 --
 normForcEq :: RelationConcept

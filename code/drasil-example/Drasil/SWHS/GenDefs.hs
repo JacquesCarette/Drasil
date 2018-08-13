@@ -38,12 +38,12 @@ swhsGDs :: [GenDefn]
 swhsGDs = [nwtnCoolingGD, rocTempSimpGD] 
 
 nwtnCoolingGD, rocTempSimpGD :: GenDefn
-nwtnCoolingGD = gdNoUnitDef nwtnCooling [] nwtnCoolingL
-rocTempSimpGD = gdNoUnitDef rocTempSimp [] rocTempSimpL
+nwtnCoolingGD = gdNoUnitDef nwtnCooling [] [] nwtnCoolingL
+rocTempSimpGD = gdNoUnitDef rocTempSimp [] [] rocTempSimpL
 
 generalDefinitions :: [GenDefn]
-generalDefinitions = [gd' nwtnCooling (Just thermal_flux) ([] :: Derivation) "nwtnCooling" [nwtnCooling_desc],
-  gd' rocTempSimp (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv "rocTempSimp" [rocTempSimp_desc]]
+generalDefinitions = [gd' nwtnCooling (Just thermal_flux) ([] :: Derivation) [] "nwtnCooling" [nwtnCooling_desc],
+  gd' rocTempSimp (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv [] "rocTempSimp" [rocTempSimp_desc]]
 
 --
 

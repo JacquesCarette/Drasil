@@ -24,6 +24,7 @@ import Drasil.SSP.DataDefs (displcmntRxnF, fixme1, fixme2, intrsliceF, lengthLb,
 import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice, slip, slope, ssa)
 import Drasil.SSP.Labels (genDef1Label, genDef2Label, genDef4Label, genDef5Label, 
   genDef6Label, genDef7Label, genDef9Label)
+import Drasil.SSP.References (chen2005, stolle2008, li2010)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress, hookesLaw)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, cohesion, 
   constant_a, critCoords, dx_i, dy_i, earthqkLoadFctr, effStiffA, effStiffB, fricAngle, 
@@ -56,7 +57,7 @@ sspIMods = [fctSfty, nrmShrFor, intsliceFs, forDisEqlb,
 fctSfty :: InstanceModel
 fctSfty = im'' fctSfty_rc [qw shearRNoIntsl, qw shearFNoIntsl,
  qw mobShrC, qw shrResC, qw varblV]
-  [] (qw fs) [] [] fctSftyDeriv "fctSfty" [fcSfty_desc]
+  [] (qw fs) [] [makeRef chen2005] fctSftyDeriv "fctSfty" [fcSfty_desc]
 
 fctSfty_rc :: RelationConcept
 fctSfty_rc = makeRC "fctSfty_rc" factorOfSafety fcSfty_desc fcSfty_rel l1
@@ -87,7 +88,7 @@ nrmShrFor = im'' nrmShrFor_rc [qw baseWthX, qw scalFunc,
  qw watrForce, qw baseAngle, qw midpntHght, 
  qw earthqkLoadFctr, qw slcWght, qw surfHydroForce]
   [TCon AssumedCon $ sy fixme1 $< sy fixme1] (qw shearFunc)
-   [TCon AssumedCon $ 0 $< sy fixme1 $< sy fixme1] [] nrmShrDeriv "nrmShrFor" [nrmShrF_desc]
+   [TCon AssumedCon $ 0 $< sy fixme1 $< sy fixme1] [makeRef chen2005] nrmShrDeriv "nrmShrFor" [nrmShrF_desc]
 
 nrmShrFor_rc :: RelationConcept
 nrmShrFor_rc = makeRC "nrmShrFor_rc" (nounPhraseSP "normal/shear force ratio")
@@ -134,7 +135,7 @@ intsliceFs :: InstanceModel
 intsliceFs = im'' intsliceFs_rc [qw index, qw fs,
   qw shearRNoIntsl, qw shearFNoIntsl,
  qw mobShrC, qw shrResC]
-  [] (qw intNormForce) [] [] intrSlcDeriv "intsliceFs" [sliceFs_desc]
+  [] (qw intNormForce) [] [makeRef chen2005] intrSlcDeriv "intsliceFs" [sliceFs_desc]
 
 intsliceFs_rc :: RelationConcept
 intsliceFs_rc = makeRC "intsliceFs_rc" (nounPhraseSP "interslice forces")
@@ -162,7 +163,7 @@ forDisEqlb :: InstanceModel
 forDisEqlb = im'' forDisEqlb_rc [qw baseAngle,
  qw baseHydroForce, qw surfHydroForce, qw surfAngle, qw surfLoad, qw impLoadAngle,
  qw surfLngth, qw nrmStiffIntsl, qw dx_i, qw effStiffA, qw dy_i, qw baseLngth, qw effStiffB]
-  [] (qw earthqkLoadFctr) [] [] rigDisDeriv "forDisEqlb" [fDisEq_desc']
+  [] (qw earthqkLoadFctr) [] [makeRef stolle2008] rigDisDeriv "forDisEqlb" [fDisEq_desc']
 
 forDisEqlb_rc :: RelationConcept
 forDisEqlb_rc = makeRC "forDisEqlb_rc"
@@ -219,7 +220,7 @@ fDisEq_desc = foldlSent [
 rfemFoS :: InstanceModel
 rfemFoS = im''' rfemFoS_rc [qw cohesion, qw nrmStiffBase, qw nrmDispl,
  qw fricAngle, qw shrStiffBase, qw shrDispl, qw baseLngth]
-  [] (qw fsloc) [] [] rigFosDeriv "rfemFoS"
+  [] (qw fsloc) [] [makeRef stolle2008] rigFosDeriv "rfemFoS"
 
 
 rfemFoS_rc :: RelationConcept
@@ -253,7 +254,7 @@ rfemFoS_desc = foldlSent [
 
 --
 crtSlpId :: InstanceModel
-crtSlpId = im' crtSlpId_rc [] [] (qw fs_min) [] []
+crtSlpId = im' crtSlpId_rc [] [] (qw fs_min) [] [makeRef li2010]
   (mkLabelSame "crtSlpId" (Def Instance)) [crtSlpId_desc]
 
 crtSlpId_rc :: RelationConcept

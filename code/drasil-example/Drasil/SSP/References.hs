@@ -1,4 +1,4 @@
-module Drasil.SSP.References (sspCitations) where
+module Drasil.SSP.References where
 
 import Language.Drasil
 

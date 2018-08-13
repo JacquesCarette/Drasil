@@ -3089,7 +3089,7 @@ Uncert.
 --
 </td>
 <td>
-<em>0.008</em>
+<em>8.0&sdot;10<sup>-3</sup></em>
 </td>
 <td>
 0.1%
@@ -3203,7 +3203,7 @@ Input-Glass-Props: Input the quantities from <a href=#Table:R1ReqInputs>R1ReqInp
 <ul class="hide-list-style">
 <li>
 <div id="FR:System-Set-Values-Following-Assumptions">
-System-Set-Values-Following-Assumptions: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following A4, <em>LDF</em> following A8, LSF following A5, <em>h</em> (from <a href=#DD:min.thick>DD: min_thick</a>), <em>GTF</em> (from <a href=#DD:gTF>DD: gTF</a>), and <em>SD</em> (from <a href=#DD:standOffDist>DD: standOffDist</a>).
+System-Set-Values-Following-Assumptions: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following <a href=#A:standardValues>A: standardValues</a>, <em>LDF</em> following <a href=#A:ldfConstant>A: ldfConstant</a>, LSF following <a href=#A:glassLite>A: glassLite</a>, <em>h</em> (from <a href=#DD:min.thick>DD: min_thick</a>), <em>GTF</em> (from <a href=#DD:gTF>DD: gTF</a>), and <em>SD</em> (from <a href=#DD:standOffDist>DD: standOffDist</a>).
 </div>
 </li>
 </ul>
@@ -3217,7 +3217,7 @@ Check-Input-with-Data_Constraints: The system shall check the entered input valu
 <ul class="hide-list-style">
 <li>
 <div id="FR:Output-Values-and-Known-Quantities">
-Output-Values-and-Known-Quantities: Output the input quantities from R1 and the known quantities from R2.
+Output-Values-and-Known-Quantities: Output the input quantities from <a href=#FR:Input-Glass-Props>FR: Input-Glass-Props</a> and the known quantities from <a href=#FR:System-Set-Values-Following-Assumptions>FR: System-Set-Values-Following-Assumptions</a>.
 </div>
 </li>
 </ul>
@@ -5386,7 +5386,7 @@ m
 minimum value for one of the dimensions of the glass plate
 </td>
 <td>
-<em>0.1</em>
+<em>100.0&sdot;10<sup>-3</sup></em>
 </td>
 <td>
 m
@@ -5400,7 +5400,7 @@ m
 modulus of elasticity of glass
 </td>
 <td>
-<em>7.17&#8239;10<sup>7</sup></em>
+<em>71.7&sdot;10<sup>9</sup></em>
 </td>
 <td>
 Pa
@@ -5414,7 +5414,7 @@ Pa
 surface flaw parameter
 </td>
 <td>
-<em>2.86&#8239;10<sup>&minus;53</sup></em>
+<em>28.6&sdot;10<sup>-54</sup></em>
 </td>
 <td>
 m<sup>12</sup>/N<sup>7</sup>

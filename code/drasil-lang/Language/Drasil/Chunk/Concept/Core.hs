@@ -8,7 +8,6 @@ import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, CommonIdea(abrv))
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName)
-import Language.Drasil.Label.Core (Label)
 
 import Control.Lens (makeLenses, (^.), view)
 

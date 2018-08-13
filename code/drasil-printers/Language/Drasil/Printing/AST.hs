@@ -5,7 +5,7 @@ import Language.Drasil hiding (ItemType, ListType, Expr, Label)
 data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime | Log 
   | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Not | Dim | Exp | Neg | Cross
   | Dot | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Subt | And | Or
-  | Add | Mul | Summ | Inte | Prod
+  | Add | Mul | Summ | Inte | Prod | Point
 
 data Fence = Paren | Curly | Norm | Abs
 data OverSymb = Hat

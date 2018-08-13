@@ -6,11 +6,13 @@ module Language.Drasil.Label (Label, mkLabelRA',
 import Language.Drasil.Label.Core
 import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd))
 import Data.Char (isAscii)
-import Language.Drasil.Chunk.ShortName (shortname', ShortName, getStringSN, shortname)
+import Language.Drasil.Chunk.ShortName (shortname')
 import Language.Drasil.RefTypes (RefType(..), ReqType(..), DType(..))
 
 import Control.Lens((^.))
 
+-- These are orphan instance, unfortunately. But to fix them causes
+-- import loops. FIXME
 instance HasUID        Label where uid       = uniqueID
 instance HasRefAddress Label where getRefAdd = lblType
 
@@ -19,9 +21,9 @@ instance HasRefAddress Label where getRefAdd = lblType
 -- ref    ==> pure ASCII used for referencing
 -- shortn ==> the shortname - what a person/user will see (can include spaces, accents, etc. (unicode))
 mkLabel :: String -> String -> String -> RefType -> Label
-mkLabel lblUID ra sn rtype = Lbl lblUID 
+mkLabel lblUID ra sn' rtype = Lbl lblUID 
   (RefAdd $ concatMap repUnd $ getAcc rtype ++ ensureASCII ra)
-  (shortname' sn)
+  (shortname' sn')
   rtype --NOT USED
 
 --Determines what text needs to be appended to the ref address
@@ -42,6 +44,8 @@ getAcc Cite      = "Cite:"
 getAcc Goal      = "GS:"
 getAcc PSD       = "PS:"
 getAcc (Label x) = getAcc x
+getAcc Blank     = error "Why are we getting the acronym of a Blank?"
+getAcc (DeferredCC _) = error "DeferredCC RefType should not be directly used."
 
 getReqName :: ReqType -> String
 getReqName FR  = "FR:"

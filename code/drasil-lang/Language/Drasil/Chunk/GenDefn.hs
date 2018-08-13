@@ -11,7 +11,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.References (References)
 import Language.Drasil.Chunk.Relation (RelationConcept)
-import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.Development.Unit (unitWrapper, UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Label.Core (Label)

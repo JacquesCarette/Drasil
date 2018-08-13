@@ -1,7 +1,8 @@
-module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap) where
+module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap, printSetting) where
 
 import Language.Drasil hiding (organization, Verb)
 import Language.Drasil.Code (CodeSpec, codeSpec)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
 
@@ -14,11 +15,14 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   nonFuncReqF, outDataConstTbl, probDescF, reqF, termDefnF, tsymb'',
   valsOfAuxConstantsF)
 
+import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
+  assumptLabel, physSyst)
+
 import Data.Drasil.Concepts.Documentation (analysis, assumption,
   design, document, effect, element, endUser, environment, goalStmt, inModel, 
   input_, interest, interest, interface, issue, loss, method_, organization, 
-  physics, problem, product_, property, requirement, software, softwareSys, 
-  srs, sysCont, system, table_, template, user, value, variable)
+  physics, problem, product_, property, software, softwareSys, srs, sysCont, 
+  system, table_, template, user, value, variable)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
@@ -34,7 +38,8 @@ import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (foldlList, SepType(Comma), FoldType(List), 
   foldlSP, foldlSent, foldlSent_, ofThe, sAnd, sOr, foldlSPCol)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
-import Data.Drasil.Utils (enumBullet, enumSimple, noRefsLT, bulletNested, bulletFlat)
+import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, noRefsLT)
+
 import Drasil.SSP.Assumptions (sspRefDB)
 import Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.SSP.DataDefs (dataDefns)
@@ -45,14 +50,10 @@ import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods_new)
 import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
-
 import Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_new
   , effStress_new)
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
   sspOutputs, sspSymbols)
-
-import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
-  assumptLabel, physSyst)
 
 --type declarations for sections--
 req, aux_cons :: Section
@@ -61,7 +62,7 @@ table_of_symbol_intro :: [TSIntro]
 
 problem_desc, termi_defi, phys_sys_desc, goal_stmt, func_req, non_func_req :: Section
 goals_list, termi_defi_list, phys_sys_desc_p1, phys_sys_desc_bullets,
-  phys_sys_desc_p2, func_req_list :: Contents
+  phys_sys_desc_p2 :: Contents
 
 
 --Document Setup--
@@ -141,6 +142,9 @@ ssp_code = codeSpec ssp_si [sspInputMod]
 sspSymMap :: ChunkDB
 sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms) sspSymbols
   this_si
+
+printSetting :: PrintingInformation
+printSetting = PI sspSymMap defaultConfiguration
 
 symbT :: [DefinedQuantityDict]
 symbT = ccss (getDoc ssp_srs) (egetDoc ssp_srs) sspSymMap
@@ -259,7 +263,7 @@ sysCtxUsrResp = [S "Provide the input data related to the soil layer(s) and wate
   S "table (if applicable), ensuring no errors in the data entry",
   S "Ensure that consistent units are used for input variables",
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+ sParen ( 
-  midRef SRS.assumptLabel) +:+ S "are appropriate for any particular" +:+
+  makeRef SRS.assumptLabel) +:+ S "are appropriate for any particular" +:+
   phrase problem +:+ S "input to the" +:+ phrase software]
   
 sysCtxSysResp :: [Sentence]
@@ -417,10 +421,7 @@ data_constraint_Table3 = outDataConstTbl sspOutputs
 req = reqF [func_req, non_func_req]
 
 -- SECTION 5.1 --
-func_req = SRS.funcReq
-  [func_req_list, LlC sspInputDataTable] []
-
-func_req_list = enumSimple 1 (short requirement) sspRequirements
+func_req = SRS.funcReq (map LlC $ sspRequirements ++ [sspInputDataTable]) []
 
 -- SECTION 5.2 --
 non_func_req = nonFuncReqF [accuracy, performanceSpd]

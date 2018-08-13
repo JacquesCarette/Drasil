@@ -22,10 +22,6 @@ import Control.Lens ((^.), makeLenses)
 -- are dead information, and larger structures (like Contents) are display-specific.
 -- For now, using sentences to test.
 
-instance Show ReqType where
-  show FR  = "FR"
-  show NFR = "NFR"
-
 -- | Requirement chunk type. Has an id, the type of requirement
 -- (Functional/Non-Functional) from 'ReqType', a sentence describing what is
 -- required (TODO: Change this), and a short name.

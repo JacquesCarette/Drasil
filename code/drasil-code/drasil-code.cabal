@@ -9,7 +9,8 @@ library
   exposed-modules:
       Language.Drasil.Code
   other-modules:
-      Language.Drasil.Code.Code
+      Language.Drasil.Chunk.Code
+    , Language.Drasil.Code.Code
     , Language.Drasil.Code.DataDesc
     , Language.Drasil.Code.Imperative.AST
     , Language.Drasil.Code.Imperative.Helpers
@@ -24,7 +25,6 @@ library
     , Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer
     , Language.Drasil.Code.CodeGeneration
     , Language.Drasil.Code.Imperative.Parsers.ConfigParser
-    , Language.Drasil.Chunk.Code
     , Language.Drasil.CodeSpec
 
   Build-Depends:

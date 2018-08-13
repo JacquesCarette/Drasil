@@ -693,7 +693,7 @@ Organization of Document
 The organization of this document follows the template for an SRS for scientific computing software proposed by [3] and [6] (<a href=#Sec:References>References</a>). The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>Instance Models</a> and trace back to find any additional information they require.
 </p>
 <p class="paragraph">
-The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance model (<a href=#Sec:IMs>Instance Models</a>) to be solved is referred to as IM1. The instance model provides the Ordinary Differential Equation (ODE) that model the solar water heating system. SWHS solves this ODE.
+The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance model (<a href=#Sec:IMs>Instance Models</a>) to be solved is referred to as <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>. The instance model provides the Ordinary Differential Equation (ODE) that model the solar water heating system. SWHS solves this ODE.
 </p>
 </div>
 </div>
@@ -885,28 +885,28 @@ Thermal-Energy-Only: The only form of energy that is relevant for this problem i
 <ul class="hide-list-style">
 <li>
 <div id="A:Heat-Transfer-Coeffs-Constant">
-Heat-Transfer-Coeffs-Constant: All heat transfer coefficients are constant over time [GD1].
+Heat-Transfer-Coeffs-Constant: All heat transfer coefficients are constant over time [<a href=#GD:nwtnCooling>GD: nwtnCooling</a>].
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Constant-Water-Temp-Across-Tank">
-Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [GD2, <a href=#DD:ht.flux.P>DD: ht_flux_P</a>].
+Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [<a href=#GD:rocTempSimp>GD: rocTempSimp</a>, <a href=#DD:ht.flux.P>DD: ht_flux_P</a>].
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Density-Water-Constant-over-Volume">
-Density-Water-Constant-over-Volume: The density of water has no spatial variation; that is, it is constant over their entire volume [GD2, <a href=#LC:Temperature-Coil-Variable-Over-Day>LC: Temperature-Coil-Variable-Over-Day</a>].
+Density-Water-Constant-over-Volume: The density of water has no spatial variation; that is, it is constant over their entire volume [<a href=#GD:rocTempSimp>GD: rocTempSimp</a>, <a href=#LC:Temperature-Coil-Variable-Over-Day>LC: Temperature-Coil-Variable-Over-Day</a>].
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Specific-Heat-Energy-Constant-over-Volume">
-Specific-Heat-Energy-Constant-over-Volume: The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume [GD2].
+Specific-Heat-Energy-Constant-over-Volume: The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume [<a href=#GD:rocTempSimp>GD: rocTempSimp</a>].
 </div>
 </li>
 </ul>
@@ -934,35 +934,35 @@ Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does
 <ul class="hide-list-style">
 <li>
 <div id="A:Charging-Tank-No-Temp-Discharge">
-Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil [IM1, <a href=#LC:Discharging-Tank>LC: Discharging-Tank</a>].
+Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil [<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#LC:Discharging-Tank>LC: Discharging-Tank</a>].
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Water-Always-Liquid">
-Water-Always-Liquid: The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature [IM1, IM3].
+Water-Always-Liquid: The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature [<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#IM:heatEInWtr>IM: heatEInWtr</a>].
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Perfect-Insulation-Tank">
-Perfect-Insulation-Tank: The tank is perfectly insulated so that there is no heat loss from the tank [IM1].
+Perfect-Insulation-Tank: The tank is perfectly insulated so that there is no heat loss from the tank [<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>].
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:No-Internal-Heat-Generation-By-Water">
-No-Internal-Heat-Generation-By-Water: No internal heat is generated by the water; therefore, the volumetric heat generation per unit volume is zero [IM1].
+No-Internal-Heat-Generation-By-Water: No internal heat is generated by the water; therefore, the volumetric heat generation per unit volume is zero [<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>].
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Atmospheric-Pressure-Tank">
-Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature of water are 0&deg;C and 100&deg;C, respectively [IM1, IM2].
+Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature of water are 0&deg;C and 100&deg;C, respectively [<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>].
 </div>
 </li>
 </ul>
@@ -1324,7 +1324,7 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 </div>
 </div>
 <p class="paragraph">
-Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in GD2. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by Assumptions (A3), (A4), and (A5), we have:
+Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by Assumptions (A3), (A4), and (A5), we have:
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -1609,7 +1609,7 @@ FIXME: This needs to be filled in
 Derivation of the energy balance on water:
 </p>
 <p class="paragraph">
-To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity of water, <em>C<sub>W</sub></em> . Heat transfer occurs in the water from the coil as <em>q<sub>C</sub></em>, over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#A:Charging-Tank-No-Temp-Discharge>A: Charging-Tank-No-Temp-Discharge</a>) . Assuming no volumetric heat generation per unit volume (<a href=#A:Same-Initial-Temp-Water-PCM>A: Same-Initial-Temp-Water-PCM</a>), <em>g = 0</em> . Therefore, the equation for GD2 can be written as:
+To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity of water, <em>C<sub>W</sub></em> . Heat transfer occurs in the water from the coil as <em>q<sub>C</sub></em>, over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#A:Charging-Tank-No-Temp-Discharge>A: Charging-Tank-No-Temp-Discharge</a>) . Assuming no volumetric heat generation per unit volume (<a href=#A:Same-Initial-Temp-Water-PCM>A: Same-Initial-Temp-Water-PCM</a>), <em>g = 0</em> . Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -1778,7 +1778,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The above equation is derived using T2. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#A:Water-Always-Liquid>A: Water-Always-Liquid</a>, <a href=#A:Atmospheric-Pressure-Tank>A: Atmospheric-Pressure-Tank</a>).
+The above equation is derived using <a href=#T:t2SensHtE>T: t2SensHtE</a>. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#A:Water-Always-Liquid>A: Water-Always-Liquid</a>, <a href=#A:Atmospheric-Pressure-Tank>A: Atmospheric-Pressure-Tank</a>).
 </p>
 </td>
 </tr>
@@ -1844,7 +1844,7 @@ Uncert.
 <em>A<sub>C</sub>&thinsp;&le;&thinsp;A<sub>C</sub><sup>max</sup></em>
 </td>
 <td>
-<em>0.12</em> m<sup>2</sup>
+<em>120.0&sdot;10<sup>-3</sup></em> m<sup>2</sup>
 </td>
 <td>
 10.0%
@@ -1861,7 +1861,7 @@ Uncert.
 <em>C<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;C<sub>W</sub>&thinsp;&lt;&thinsp;C<sub>W</sub><sup>max</sup></em>
 </td>
 <td>
-<em>4186.0</em> J/(kg&sdot;&deg;C)
+<em>4.186&sdot;10<sup>3</sup></em> J/(kg&sdot;&deg;C)
 </td>
 <td>
 10.0%
@@ -1878,7 +1878,7 @@ Uncert.
 --
 </td>
 <td>
-<em>0.412</em> m
+<em>412.0&sdot;10<sup>-3</sup></em> m
 </td>
 <td>
 10.0%
@@ -1895,7 +1895,7 @@ Uncert.
 <em>h<sub>C</sub><sup>min</sup>&thinsp;&le;&thinsp;h<sub>C</sub>&thinsp;&le;&thinsp;h<sub>C</sub><sup>max</sup></em>
 </td>
 <td>
-<em>1000.0</em> W/(m<sup>2</sup>&sdot;&deg;C)
+<em>1.0&sdot;10<sup>3</sup></em> W/(m<sup>2</sup>&sdot;&deg;C)
 </td>
 <td>
 10.0%
@@ -1946,7 +1946,7 @@ Uncert.
 <em>t<sub>final</sub>&thinsp;&lt;&thinsp;t<sub>final</sub><sup>max</sup></em>
 </td>
 <td>
-<em>50000.0</em> s
+<em>50.0&sdot;10<sup>3</sup></em> s
 </td>
 <td>
 10.0%
@@ -1980,7 +1980,7 @@ Uncert.
 <em>ρ<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;ρ<sub>W</sub>&thinsp;&le;&thinsp;ρ<sub>W</sub><sup>max</sup></em>
 </td>
 <td>
-<em>1000.0</em> kg/m<sup>3</sup>
+<em>1.0&sdot;10<sup>3</sup></em> kg/m<sup>3</sup>
 </td>
 <td>
 10.0%
@@ -2049,7 +2049,7 @@ Input-Inital-Values: Input the quantities described in <a href=#Table:Input-Vari
 </p>
 <p>
 <div id="Find-Mass">
-Find-Mass: Use the inputs in <a href=#Input-Inital-Values>Input-Inital-Values</a> to find the mass needed for IM1 to IM2, as follows, where <em>V<sub>W</sub></em> is the volume of water and <em>V<sub>tank</sub></em> is the volume of the cylindrical tank: <em>m<sub>W</sub> = V<sub>W</sub>&#8239;ρ<sub>W</sub> = <div class="fraction">
+Find-Mass: Use the inputs in <a href=#Input-Inital-Values>FR: Input-Inital-Values</a> to find the mass needed for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> to <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>, as follows, where <em>V<sub>W</sub></em> is the volume of water and <em>V<sub>tank</sub></em> is the volume of the cylindrical tank: <em>m<sub>W</sub> = V<sub>W</sub>&#8239;ρ<sub>W</sub> = <div class="fraction">
 <span class="fup">
 D
 </span>
@@ -2066,7 +2066,7 @@ Check-Inputs-Satisfy-Physical-Constraints: Verify that the inputs satisfy the re
 </p>
 <p>
 <div id="Output-Input-Derivied-Quantities">
-Output-Input-Derivied-Quantities: Outputs and inputs quantities and derived quantities in the following list: the quantities from <a href=#Input-Inital-Values>Input-Inital-Values</a>, the mass from <a href=#Find-Mass>Find-Mass</a> and <em>τ<sub>W</sub></em> (from IM1).
+Output-Input-Derivied-Quantities: Outputs and inputs quantities and derived quantities in the following list: the quantities from <a href=#Input-Inital-Values>FR: Input-Inital-Values</a>, the mass from <a href=#Find-Mass>FR: Find-Mass</a> and <em>τ<sub>W</sub></em> (from <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>).
 </div>
 </p>
 <p>
@@ -2076,7 +2076,7 @@ Calculate-Temperature-Water-Over-Time: Calculate and output the temperature of t
 </p>
 <p>
 <div id="Calculate-Change-Heat_Energy-Water-Time">
-Calculate-Change-Heat_Energy-Water-Time: Calculate and output the change in heat energy in the water (<em>E<sub>W</sub></em>(<em>t</em>)) over the simulation time (from IM3).
+Calculate-Change-Heat_Energy-Water-Time: Calculate and output the change in heat energy in the water (<em>E<sub>W</sub></em>(<em>t</em>)) over the simulation time (from <a href=#IM:heatEInWtr>IM: heatEInWtr</a>).
 </div>
 </p>
 </div>
@@ -2459,22 +2459,22 @@ IM2 (<a href=#IM:heatEInWtr>IM: heatEInWtr</a>)
 Data Constraints (<a href=#Table:InDataConstraints>InDataConstraints</a>)
 </th>
 <th>
-R1 (<a href=#Input-Inital-Values>Input-Inital-Values</a>)
+R1 (<a href=#Input-Inital-Values>FR: Input-Inital-Values</a>)
 </th>
 <th>
-R2 (<a href=#Find-Mass>Find-Mass</a>)
+R2 (<a href=#Find-Mass>FR: Find-Mass</a>)
 </th>
 <th>
-R3 (<a href=#Check-Inputs-Satisfy-Physical-Constraints>Check-Inputs-Satisfy-Physical-Constraints</a>)
+R3 (<a href=#Check-Inputs-Satisfy-Physical-Constraints>FR: Check-Inputs-Satisfy-Physical-Constraints</a>)
 </th>
 <th>
-R4 (<a href=#Output-Input-Derivied-Quantities>Output-Input-Derivied-Quantities</a>)
+R4 (<a href=#Output-Input-Derivied-Quantities>FR: Output-Input-Derivied-Quantities</a>)
 </th>
 <th>
-R5 (<a href=#Calculate-Temperature-Water-Over-Time>Calculate-Temperature-Water-Over-Time</a>)
+R5 (<a href=#Calculate-Temperature-Water-Over-Time>FR: Calculate-Temperature-Water-Over-Time</a>)
 </th>
 <th>
-R6 (<a href=#Calculate-Change-Heat_Energy-Water-Time>Calculate-Change-Heat_Energy-Water-Time</a>)
+R6 (<a href=#Calculate-Change-Heat_Energy-Water-Time>FR: Calculate-Change-Heat_Energy-Water-Time</a>)
 </th>
 </tr>
 <tr>
@@ -2543,7 +2543,7 @@ IM2 (<a href=#IM:heatEInWtr>IM: heatEInWtr</a>)
 </tr>
 <tr>
 <td>
-R1 (<a href=#Input-Inital-Values>Input-Inital-Values</a>)
+R1 (<a href=#Input-Inital-Values>FR: Input-Inital-Values</a>)
 </td>
 <td>
 
@@ -2575,7 +2575,7 @@ R1 (<a href=#Input-Inital-Values>Input-Inital-Values</a>)
 </tr>
 <tr>
 <td>
-R2 (<a href=#Find-Mass>Find-Mass</a>)
+R2 (<a href=#Find-Mass>FR: Find-Mass</a>)
 </td>
 <td>
 
@@ -2607,7 +2607,7 @@ X
 </tr>
 <tr>
 <td>
-R3 (<a href=#Check-Inputs-Satisfy-Physical-Constraints>Check-Inputs-Satisfy-Physical-Constraints</a>)
+R3 (<a href=#Check-Inputs-Satisfy-Physical-Constraints>FR: Check-Inputs-Satisfy-Physical-Constraints</a>)
 </td>
 <td>
 
@@ -2639,7 +2639,7 @@ X
 </tr>
 <tr>
 <td>
-R4 (<a href=#Output-Input-Derivied-Quantities>Output-Input-Derivied-Quantities</a>)
+R4 (<a href=#Output-Input-Derivied-Quantities>FR: Output-Input-Derivied-Quantities</a>)
 </td>
 <td>
 
@@ -2671,7 +2671,7 @@ X
 </tr>
 <tr>
 <td>
-R5 (<a href=#Calculate-Temperature-Water-Over-Time>Calculate-Temperature-Water-Over-Time</a>)
+R5 (<a href=#Calculate-Temperature-Water-Over-Time>FR: Calculate-Temperature-Water-Over-Time</a>)
 </td>
 <td>
 X
@@ -2703,7 +2703,7 @@ X
 </tr>
 <tr>
 <td>
-R6 (<a href=#Calculate-Change-Heat_Energy-Water-Time>Calculate-Change-Heat_Energy-Water-Time</a>)
+R6 (<a href=#Calculate-Change-Heat_Energy-Water-Time>FR: Calculate-Change-Heat_Energy-Water-Time</a>)
 </td>
 <td>
 
@@ -3311,7 +3311,7 @@ Unit
 minimum length of tank
 </td>
 <td>
-<em>0.1</em>
+<em>100.0&sdot;10<sup>-3</sup></em>
 </td>
 <td>
 m

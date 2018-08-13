@@ -1,5 +1,4 @@
-module Drasil.SWHS.TMods (swhsTMods, t1ConsThermE_new,
-  t2SensHtE_new, t3LatHtE_new) where
+module Drasil.SWHS.TMods (swhsTMods, t1ConsThermE, t2SensHtE, t3LatHtE) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -21,25 +20,23 @@ import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCap_V, htCap_S,
   htCap_L, vol_ht_gen, thFluxVect)
 import Drasil.SWHS.Concepts (transient)
 import Drasil.SWHS.DataDefs (dd3HtFusion)
-import Drasil.SWHS.Labels (assump1Label)
+import Drasil.SWHS.Labels (thermalEnergyOnlyL)
 
 swhsTMods :: [TheoryModel]
-swhsTMods = [t1ConsThermE_new, t2SensHtE_new, t3LatHtE_new]
+swhsTMods = [t1ConsThermE, t2SensHtE, t3LatHtE]
 
 -------------------------
 -- Theoretical Model 1 --
 -------------------------
---s4_2_2_T1
-------------- New Chunck -----------
-t1ConsThermE_new :: TheoryModel
-t1ConsThermE_new = tm' t1ConsThermE
-  (tc' "ConsThermE_new" [qw thFluxVect, qw gradient, qw vol_ht_gen, 
+t1ConsThermE :: TheoryModel
+t1ConsThermE = tm' t1ConsThermE_rc
+  (tc' "ConsThermE" [qw thFluxVect, qw gradient, qw vol_ht_gen, 
     qw density, qw heat_cap_spec, qw temp, qw time] ([] :: [ConceptChunk])
   [] [TCon Invariant consThermERel] []) 
   (mkLabelSame "t1ConsThermE" (Def TM)) [t1descr]
 
-t1ConsThermE :: RelationConcept
-t1ConsThermE = makeRC "t1ConsThermE"
+t1ConsThermE_rc :: RelationConcept
+t1ConsThermE_rc = makeRC "t1ConsThermE_rc"
   (nounPhraseSP "Conservation of thermal energy") t1descr consThermERel 
   (mkLabelSame "ConsThermE" (Def TM))
 
@@ -67,20 +64,20 @@ t1descr = foldlSent [
   S "is the" +:+. (gradient ^. defn), S "For this", phrase equation,
   S "to apply" `sC` S "other forms of", phrase energy `sC` S "such as",
   phrase mech_energy `sC`
-  S "are assumed to be negligible in the", phrase system, sParen (makeRef assump1Label)]
+  S "are assumed to be negligible in the", phrase system, sParen (makeRef thermalEnergyOnlyL)]
 
 -------------------------
 -- Theoretical Model 2 --
 -------------------------
-t2SensHtE_new :: TheoryModel
-t2SensHtE_new = tm' t2SensHtE
-  (tc' "SensHtE_new" [qw sens_heat, qw htCap_S, qw mass, 
+t2SensHtE :: TheoryModel
+t2SensHtE = tm' t2SensHtE_rc
+  (tc' "SensHtE" [qw sens_heat, qw htCap_S, qw mass, 
     qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [ConceptChunk])
   [] [TCon Invariant sensHtEEqn] []) 
   (mkLabelSame "t2SensHtE" (Def TM)) [t2descr]
 
-t2SensHtE :: RelationConcept
-t2SensHtE = makeRC "t2SensHtE" (nounPhraseSP "Sensible heat energy") t2descr sensHtEEqn
+t2SensHtE_rc :: RelationConcept
+t2SensHtE_rc = makeRC "t2SensHtE_rc" (nounPhraseSP "Sensible heat energy") t2descr sensHtEEqn
   (mkLabelSame "SensHtE" (Def TM))
 
 sensHtEEqn :: Relation
@@ -115,7 +112,7 @@ t2descr = foldlSent [
   ch temp :+: S "=" :+: ch boil_pt,
   S "or", ch temp :+: S "=" +. ch melt_pt,
   S "If this" `isThe` S "case, refer to",
-  (makeRef t3LatHtE_new) `sC` at_start latent_heat,
+  (makeRef t3LatHtE) `sC` at_start latent_heat,
   phrase energy]
  
 --How to have new lines in the description?
@@ -128,13 +125,13 @@ t2descr = foldlSent [
 -------------------------
 -- Theoretical Model 3 --
 -------------------------
-t3LatHtE_new :: TheoryModel
-t3LatHtE_new = tm' t3LatHtE
-  (tc' "SensHtE_new" [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
+t3LatHtE :: TheoryModel
+t3LatHtE = tm' t3LatHtE_rc
+  (tc' "SensHtE" [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
   [] [TCon Invariant latHtEEqn] []) (mkLabelSame "t3LatHtE" (Def TM)) [t3descr]
 
-t3LatHtE :: RelationConcept
-t3LatHtE = makeRC "t3LatHtE"
+t3LatHtE_rc :: RelationConcept
+t3LatHtE_rc = makeRC "t3LatHtE_rc"
   (nounPhraseSP "Latent heat energy") t3descr latHtEEqn 
   (mkLabelSame "LatHtE" (Def TM))
 

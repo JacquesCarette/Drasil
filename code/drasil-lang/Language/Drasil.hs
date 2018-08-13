@@ -103,7 +103,7 @@ module Language.Drasil (
   , sourceref
   , References
   -- Chunk.ShortName
-  , ShortName, shortname', HasShortName(shortname)
+  , DeferredCtx(..), resolveSN, ShortName, shortname', HasShortName(shortname)
   --Citations
   , Citation(..), EntryID, BibRef, CiteField(..), Month(..), HP(..)
   , HasFields(..)
@@ -148,7 +148,7 @@ module Language.Drasil (
   , RawContent(..)
   , mkFig
   -- Reference
-  , makeRef, mkRefFrmLbl, midRef
+  , makeRef, mkRefFrmLbl
   -- Space
   , Space(..)
   -- Symbol
@@ -175,7 +175,7 @@ module Language.Drasil (
   , ChunkDB, cdb
   , HasSymbolTable, symbolMap, symbLookup, symbolTable, getUnitLup
   , HasTermTable, termLookup, termTable
-  , HasDefinitionTable, conceptMap, defTable
+  , HasDefinitionTable, conceptMap, defTable, defLookup
   , HasUnitTable, unitMap, unitTable, collectUnits
   -- AssumpChunk
   , AssumpChunk, assuming, assump
@@ -213,10 +213,7 @@ module Language.Drasil (
   , names
   -- Document.Extract
   , egetDoc, getDoc
-  -- Config
-  , StyleGuide(..), verboseDDDescription, numberedTMEquations, numberedDDEquations
-  , bibStyleH, numberedSections, hyperSettings, fontSize, bibFname, bibStyleT, colBwidth
-  , colAwidth
+  -- Label.Core
   , getAdd
 ) where
 
@@ -243,31 +240,28 @@ import Language.Drasil.Document (section, fig, figWithWidth
   , section''
   , Section(..), SecCons(..) 
   , llcc, ulcc, Document(..)
-  , HasContents(accessContents)
   , mkParagraph, mkFig, mkRawLC)
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
+  , HasContents(accessContents)
   , LabelledContent(..), UnlabelledContent(..) )
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Development.UnitLang -- all of it
 import Language.Drasil.Development.Unit -- all of it
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),HasSpace(typ),  
-  HasUnitSymbol(usymb), IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes),
-  Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations),
-  HasReference(getReferences), HasLabel(getLabel), MayHaveLabel(getMaybeLabel),
-  HasRefAddress(getRefAdd))
+  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
+  IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
+  HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), HasReference(getReferences), 
+  HasLabel(getLabel), MayHaveLabel(getMaybeLabel), HasRefAddress(getRefAdd))
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Document.GetChunk(vars, combine', vars', combine, ccss)
-import Language.Drasil.Config (StyleGuide(..), verboseDDDescription, numberedTMEquations,
-  numberedDDEquations, bibStyleH, numberedSections, hyperSettings, bibFname, fontSize,
-  colAwidth, colBwidth, bibStyleT)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.References (References)
-import Language.Drasil.Chunk.ShortName (ShortName, shortname', HasShortName(shortname))
+import Language.Drasil.Chunk.ShortName (DeferredCtx(..), resolveSN, ShortName
+  , shortname', HasShortName(shortname))
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation (
   -- Types
@@ -324,7 +318,7 @@ import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (Sentence(..),
   sParen, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
   semiCol, sParenDash, sDash)
-import Language.Drasil.Reference (makeRef, midRef, mkRefFrmLbl, ReferenceDB, assumpDB, reqDB
+import Language.Drasil.Reference (makeRef, mkRefFrmLbl, ReferenceDB, assumpDB, reqDB
                                  , AssumpMap, assumpLookup, HasAssumpRefs
                                  , assumpRefTable, assumptionsFromDB
                                  , rdb, reqRefTable, reqLookup, RefBy(..)

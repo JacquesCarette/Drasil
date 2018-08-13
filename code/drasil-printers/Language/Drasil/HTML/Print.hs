@@ -3,15 +3,15 @@ module Language.Drasil.HTML.Print(genHTML) where
 import Prelude hiding (print)
 import Data.List (sortBy,partition,intersperse)
 import Text.PrettyPrint hiding (render, Str)
-import Numeric (showFFloat)
+import Numeric (showEFloat)
 import Control.Arrow (second)
 
-import qualified Language.Drasil as L (People, Person, StyleGuide(APA, MLA, Chicago), 
+import qualified Language.Drasil as L (People, Person, 
   CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
   Symbol(Corners, Concat, Special, Atomic, Empty, Atop), USymb(US),
   DType(DD, TM, Instance, General), MaxWidthPercent, 
-  Decoration(Prime, Hat, Vector), Document, HasSymbolTable, nameStr, 
-  rendPersLFM, rendPersLFM', rendPersLFM'', special, bibStyleH)
+  Decoration(Prime, Hat, Vector), Document, HasDefinitionTable, HasSymbolTable,
+  nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special)
 
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (em, wrap, refwrap, caption, image, div_tag,
@@ -19,12 +19,13 @@ import Language.Drasil.HTML.Helpers (em, wrap, refwrap, caption, image, div_tag,
   author, article_title, title, linkCSS, head_tag)
 import qualified Language.Drasil.Output.Formats as F
 
+import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
 import Language.Drasil.Printing.Import (makeDocument)
 import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),  
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, Fence(Curly, Paren, Abs, Norm),
   Ops(Prod, Inte, Mul, Summ, Or, Add, And, Subt, Iff, Impl, GEq, LEq, Lt, Gt, NEq, Eq,
   Dot, Cross, Neg, Exp, Not, Dim, Cot, Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, 
-  Real, Rational, Natural, Integer, IsIn), 
+  Real, Rational, Natural, Integer, IsIn, Point), 
   Expr(Sub, Sup, Over, Sqrt, Spc, Font, MO, Fenced, Spec, Ident, Row, Mtx, Case, Div, Str, 
   Int, Dbl), Spec(Quote, EmptyS, Ref, HARDNL, Sp, Sy, S, E, (:+:)),
   Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label)
@@ -36,25 +37,13 @@ import Language.Drasil.Printing.LayoutObj (Tags, Document(Document),
   LayoutObj(Graph, Bib, List, Header, Figure, Definition, Table, EqnBlock, Paragraph, 
   HDiv, ALUR))
 import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac)
-
-{-
-import Language.Drasil.Development.UnitLang (L.USymb(L.US))
-import Language.Drasil.Unicode (special)
-import           Language.Drasil.L.Symbol (L.Symbol(..))
-import qualified Language.Drasil.L.Symbol as S
-import qualified Language.Drasil.Document as L
-import Language.Drasil.L.People (L.People, L.Person(..), rendPersLFM', rendPersLFM'',
-  nameStr, rendPersLFM)
-import Language.Drasil.Config (L.StyleGuide(..), bibStyleH)
-import Language.Drasil.ChunkDB(HasSymbolTable)
-
-import Language.Drasil.Chunk.Citation (CitationKind(..))
--}
+import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..))
 
 data OpenClose = Open | Close
 
 -- | Generate an HTML document from a Drasil 'Document'
-genHTML :: L.HasSymbolTable ctx => ctx -> F.Filename -> L.Document -> Doc
+genHTML :: (L.HasSymbolTable ctx, L.HasDefinitionTable ctx, HasPrintingOptions ctx) =>
+  ctx -> F.Filename -> L.Document -> Doc
 genHTML sm fn doc = build fn (makeDocument sm doc)
 
 -- | Build the HTML Document, called by genHTML
@@ -154,7 +143,7 @@ uSymb (L.US ls) = formatu t b
 -----------------------------------------------------------------
 -- | Renders expressions in the HTML (called by multiple functions)
 p_expr :: Expr -> String
-p_expr (Dbl d)        = showFFloat Nothing d ""
+p_expr (Dbl d)        = showEFloat Nothing d ""
 p_expr (Int i)        = show i
 p_expr (Str s)        = s
 p_expr (Div a b)      = fraction (p_expr a) (p_expr b)
@@ -213,6 +202,7 @@ p_ops Mul      = "&#8239;"
 p_ops Summ     = "&sum;"
 p_ops Inte     = "&int;"
 p_ops Prod     = "&prod;"
+p_ops Point    = "."
 
 fence :: OpenClose -> Fence -> String
 fence Open  Paren = "("
@@ -332,8 +322,8 @@ renderCite (Cite e L.PhDThesis cfs) = (text e, renderF cfs useStyleBk <> text " 
 renderCite (Cite e L.Misc cfs) = (text e, renderF cfs useStyleBk)
 renderCite (Cite e _ cfs) = (text e, renderF cfs useStyleArtcl) --FIXME: Properly render these later.
 
-renderF :: [CiteField] -> (L.StyleGuide -> (CiteField -> Doc)) -> Doc
-renderF fields styl = hsep $ map (styl L.bibStyleH) (sortBy compCiteField fields)
+renderF :: [CiteField] -> (StyleGuide -> (CiteField -> Doc)) -> Doc
+renderF fields styl = hsep $ map (styl bibStyleH) (sortBy compCiteField fields)
 
 compCiteField :: CiteField -> CiteField -> Ordering
 compCiteField (Institution _) _ = LT
@@ -381,15 +371,15 @@ compCiteField _ (Note       _) = GT
 compCiteField (Type       _) _ = LT
 
 -- Config helpers --
-useStyleBk :: L.StyleGuide -> (CiteField -> Doc)
-useStyleBk L.MLA     = bookMLA
-useStyleBk L.APA     = bookAPA
-useStyleBk L.Chicago = bookChicago
+useStyleBk :: StyleGuide -> (CiteField -> Doc)
+useStyleBk MLA     = bookMLA
+useStyleBk APA     = bookAPA
+useStyleBk Chicago = bookChicago
 
-useStyleArtcl :: L.StyleGuide -> (CiteField -> Doc)
-useStyleArtcl L.MLA     = artclMLA
-useStyleArtcl L.APA     = artclAPA
-useStyleArtcl L.Chicago = artclChicago
+useStyleArtcl :: StyleGuide -> (CiteField -> Doc)
+useStyleArtcl MLA     = artclMLA
+useStyleArtcl APA     = artclAPA
+useStyleArtcl Chicago = artclChicago
 
 -- FIXME: move these show functions and use tags, combinators
 bookMLA :: CiteField -> Doc

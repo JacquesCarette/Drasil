@@ -1,14 +1,9 @@
-module Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_new
-  , effStress_new) where
+module Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, effStress_new, 
+  hookesLaw_new) where
 
 import Prelude hiding (tan)
 import Language.Drasil
 import Drasil.DocLang (refA)
-
-import Drasil.SSP.Assumptions (newA8, newA9, sspRefDB)
-import Drasil.SSP.Defs (factor, factorOfSafety, slope, soil)
-import Drasil.SSP.Unitals (cohesion, fricAngle, fs, fx, fy, genDisplace,
-  genForce, momntOfBdy, normStress, porePressure, shrStress, surfHydroForce)
 
 import Data.Drasil.Quantities.Physics (displacement, distance, force)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
@@ -21,6 +16,11 @@ import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 
 import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe',
   sAnd, sOf)
+
+import Drasil.SSP.Assumptions (newA8, newA9, sspRefDB)
+import Drasil.SSP.Defs (factor, factorOfSafety, slope, soil)
+import Drasil.SSP.Unitals (cohesion, fricAngle, fs, fx, fy, genDisplace,
+  genForce, momntOfBdy, normStress, porePressure, shrStress, surfHydroForce)
 
 -- Pre-defined some labels. They will be re-used for tings which are 'the same'
 l1, l2, l3, l4, l5 :: Label

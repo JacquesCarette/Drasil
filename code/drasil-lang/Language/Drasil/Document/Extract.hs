@@ -3,26 +3,18 @@ module Language.Drasil.Document.Extract (getDoc, egetDoc) where
 import Control.Lens ((^.))
 import Data.List(transpose)
 
-import Language.Drasil.Document
+import Language.Drasil.Document (Document(Document),Section(Section), SecCons(..))
 import Language.Drasil.Document.Core
 import Language.Drasil.Expr
 import Language.Drasil.Spec
-import Language.Drasil.NounPhrase
-import Language.Drasil.NounPhrase.Core
 
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.ShortName
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation
 import Language.Drasil.Chunk.ReqChunk
-import Language.Drasil.Chunk.Eq (QDefinition)
-import Language.Drasil.Chunk.References
 import Language.Drasil.RefTypes(DType(..))
-import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(getUnit))
 
-import Language.Drasil.Classes (NamedIdea(term),
-  ExprRelat(relat), HasDerivation(derivations),
-  HasReference(getReferences), Definition(defn))
 import Language.Drasil.Label (Label, mkLabelRASec)
 
 egetDoc :: Document -> [Expr]
@@ -46,7 +38,6 @@ egetSec :: Section -> [Expr]
 egetSec (Section _ sc lb)
   | lb ^. shortname == refLabel ^. shortname = []
   | otherwise = concatMap egetSecCon sc
-egetSec (Section _ sc _) = concatMap egetSecCon sc
 
 egetSecCon :: SecCons -> [Expr]
 egetSecCon (Sub s) = egetSec s
@@ -65,8 +56,8 @@ egetCon _ = []
 egetDtype :: DType -> [Expr]
 egetDtype _ = []
 
-egetQDef :: QDefinition -> [Expr]
-egetQDef a = [a ^. relat]
+-- egetQDef :: QDefinition -> [Expr]
+-- egetQDef a = [a ^. relat]
 
 getDoc :: Document -> [Sentence]
 getDoc (Document t a s) = t : a : concatMap getSec s
@@ -76,7 +67,6 @@ getSec (Section t sc lb)
   | lb ^. shortname == refLabel ^. shortname = []
   | lb ^. shortname == auxConsLabel ^. shortname = []
   | otherwise = t : concatMap getSecCon sc
-getSec (Section _ _ _) = []
 
 getSecCon :: SecCons -> [Sentence]
 getSecCon (Sub s) = getSec s
@@ -113,7 +103,7 @@ getCon  _ = []
 getDtype :: DType -> [Sentence]
 getDtype _ = []
 
-
+{-
 getQDef :: QDefinition -> [Sentence]
 getQDef a = concatMap getRef (a ^. getReferences) ++ (a ^. derivations) ++ getTerm a ++ getUnitD (getUnit a)
 
@@ -138,6 +128,7 @@ getTerm a  = getNP (a ^. term)
 
 getDefn :: (Definition a) => a -> [Sentence]
 getDefn a = [a ^. defn]
+-}
 
 getReq :: ReqChunk -> [Sentence]
 getReq a = [requires a]

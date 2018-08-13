@@ -8,6 +8,7 @@ import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn',
 import Language.Drasil.Chunk.References (References)
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(typ))
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.Chunk.SymbolForm (eqSymb)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), ExprRelat(relat), HasDerivation(derivations), 
@@ -16,13 +17,8 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
 import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label)
+import Language.Drasil.Label (mkLabelSame)
 import Language.Drasil.RefTypes(RefType(..), DType(..))
-
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
-import Control.Lens(makeLenses, (^.))
-import Language.Drasil.Label (mkLabelRA', mkLabelSame)
-import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
-import Language.Drasil.Expr (Expr)
 import Language.Drasil.Spec (Sentence(EmptyS))
 
 data Scope = Scp { _spec :: Label {-indirect reference-}}
@@ -68,14 +64,14 @@ qdFromDD (DatDef a _ _ _ _ _) = a
 mkQuantDef :: (Quantity c) => c -> Expr -> QDefinition
 mkQuantDef cncpt equation = datadef $ getUnit cncpt --should references be passed in at this point?
   where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) a equation [] (mkLabelSame (cncpt ^. uid) (Def DD))
+                           (eqSymb cncpt) a equation (mkLabelSame (cncpt ^. uid) (Def DD))
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) equation [] (mkLabelSame (cncpt ^. uid) (Def DD))
+                           (eqSymb cncpt) equation (mkLabelSame (cncpt ^. uid) (Def DD))
 
-mkQuantDef' :: (Quantity c) => c -> Expr -> Derivation -> QDefinition
-mkQuantDef' cncpt equation dv = quantdef $ getUnit cncpt --should references be passed in at this point?
+mkQuantDef' :: (Quantity c) => c -> Expr -> QDefinition
+mkQuantDef' cncpt equation = quantdef $ getUnit cncpt --should references be passed in at this point?
   where quantdef (Just a) = fromEqn'''  (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) a equation [] dv (cncpt ^. uid) --shortname
+                           (eqSymb cncpt) a equation (cncpt ^. uid) --shortname
         quantdef Nothing  = fromEqn'''' (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) equation [] dv (cncpt ^. uid) --shortname
+                           (eqSymb cncpt) equation (cncpt ^. uid) --shortname
 

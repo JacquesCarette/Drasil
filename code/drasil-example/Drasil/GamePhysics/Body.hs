@@ -2,8 +2,8 @@ module Drasil.GamePhysics.Body where
 
 import Language.Drasil hiding (Vector, organization)
 import Language.Drasil.Code (CodeSpec, codeSpec)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Control.Lens ((^.))
-import qualified Drasil.DocLang.SRS as SRS
 
 import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..), 
   Emphasis(..), Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), 
@@ -11,27 +11,43 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   SSDSub(SSDSubVerb, SSDSolChSpec), SolChSpec(SCSProg), SubSec, TConvention(..), 
   TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
   assembler, dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, outDataConstTbl,
-  reqF, sSubSec, siCon, siSTitl, siSent, 
-  traceMGF, tsymb, valsOfAuxConstantsF)
+  reqF, sSubSec, siCon, siSTitl, siSent, traceMGF, tsymb, valsOfAuxConstantsF)
 
-import Data.Drasil.Concepts.Documentation (assumption, body,
-  concept, condition, consumer, dataDefn, datumConstraint,
-  document, endUser, environment, game, genDefn,
-  goalStmt, guide, inModel, information, input_, interface, item,
-  model, nonfunctionalRequirement, object, organization, physical,
-  physicalConstraint, physicalProperty, physicalSim, physics, priority,
-  problem, problemDescription, product_, project, property, quantity, realtime,
-  reference, requirement, section_, simulation, software, softwareSys,
-  srs, system, systemConstraint, sysCont, task, template,
-  termAndDef, thModel, traceyMatrix, user, userCharacteristic)
-import Data.Drasil.Concepts.Education (highSchoolCalculus, frstYr,
+import qualified Drasil.DocLang.SRS as SRS
+
+import Data.Drasil.Concepts.Documentation (assumption, body, concept, condition,
+  consumer, dataDefn, datumConstraint, document, endUser, environment, game, genDefn,
+  goalStmt, guide, inModel, information, input_, interface, item, model,
+  nonfunctionalRequirement, object, organization, physical, physicalConstraint,
+  physicalProperty, physicalSim, physics, priority, problem, problemDescription,
+  product_, project, property, quantity, realtime, reference, requirement, section_,
+  simulation, software, softwareSys, srs, system, systemConstraint, sysCont, task, 
+  template, termAndDef, thModel, traceyMatrix, user, userCharacteristic)
+import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics)
 import Data.Drasil.Concepts.Software (physLib, understandability, portability,
   reliability, maintainability, performance, correctness)
 
+import Data.Drasil.Software.Products (openSource, sciCompS, videoGame)
+
 import Data.Drasil.People (alex, luthfi)
 import Data.Drasil.Phrase (for')
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
+  foldlSent, foldlSent_, foldlSentCol, foldlSP, foldlSPCol, sAnd, showingCxnBw, 
+  sOf, sOr)
 import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian)
+import Data.Drasil.Utils (makeTMatrix, itemRefToSent,
+  makeListRef, bulletFlat, bulletNested, enumSimple, enumBullet)
+
+import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
+import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
+  cartesian, friction, rightHand, collision, space, joint, damping)
+import qualified Data.Drasil.Concepts.Math as CM (equation, surface, constraint, law)
+
+import qualified Data.Drasil.Quantities.Math as QM (orientation)
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
+import qualified Data.Drasil.Quantities.Physics as QP (angularVelocity, force, 
+  linearVelocity, position, time, velocity)
 
 import Drasil.GamePhysics.Changes (likelyChanges, likelyChangesList', unlikelyChanges)
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
@@ -42,24 +58,6 @@ import Drasil.GamePhysics.TMods (t1NewtonSL_new, t2NewtonTL_new,
   t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, cpTMods_new)
 import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
   inputSymbols, outputSymbols, cpInputConstraints, gamephySymbols)
-
-import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, 
-  dimension)
-import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
-  cartesian, friction, rightHand, collision, space, joint, damping)
-import qualified Data.Drasil.Concepts.Math as CM (equation, surface,
-  constraint, law)
-
-import qualified Data.Drasil.Quantities.Math as QM (orientation)
-import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
-import qualified Data.Drasil.Quantities.Physics as QP (time, 
-  position, force, velocity, angularVelocity, linearVelocity)
-import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlList, 
-  SepType(Comma), FoldType(List), sOf,sAnd, sOr, foldlSentCol, foldlSP, 
-  foldlSPCol, showingCxnBw)
-import Data.Drasil.Software.Products (videoGame, openSource, sciCompS)
-import Data.Drasil.Utils (makeTMatrix, itemRefToSent, makeListRef, bulletFlat,
-  bulletNested, enumSimple, enumBullet)
 
 authors :: People
 authors = [alex, luthfi]
@@ -130,7 +128,6 @@ chipmunkSysInfo = SI {
   _refdb = cpRefDB
 }
 
-
 symbT :: [DefinedQuantityDict]
 symbT = ccss (getDoc chipmunkSRS') (egetDoc chipmunkSRS') everything
 
@@ -157,12 +154,14 @@ everything :: ChunkDB
 everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms) gamephySymbols -- FIXME: Fill in Concepts
   chipUnits
 
+printSetting :: PrintingInformation
+printSetting = PI everything defaultConfiguration
+
 chipCode :: CodeSpec
 chipCode = codeSpec chipmunkSysInfo []
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GamePhysics/"
-
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
 -- the sections below are now redundant. I have not removed them yet, because
@@ -173,7 +172,6 @@ resourcePath = "../../../datafiles/GamePhysics/"
 -- =================================== --
 -- SOFTWARE REQUIREMENTS SPECIFICATION --
 -- =================================== --
-
 
 ------------------------------
 -- Section : INTRODUCTION --
@@ -357,7 +355,6 @@ problem_description_intro_param lib app = foldlSent
   S "development will be more accessible to the masses" `sAnd` S "higher quality",
   (plural product_), S "will be produced"]
 
-
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --
 -----------------------------------------
@@ -373,7 +370,6 @@ terminology_and_definitions_terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass,
 
 terminology_and_definitions_bullets = enumBullet 
   (map (\x -> (at_start x) +: EmptyS +:+ (x ^. defn)) terminology_and_definitions_terms)
-
 
 -----------------------------
 -- 4.1.2 : Goal Statements --
@@ -475,7 +471,6 @@ assumptions_list_a :: [[Sentence]]
 assumptions_list_a = [assumptions_assum1, assumptions_assum2, assumptions_assum3, assumptions_assum4,
   assumptions_assum5, assumptions_assum6, assumptions_assum7]
 
-
 --------------------------------
 -- 4.2.2 : Theoretical Models --
 --------------------------------
@@ -525,7 +520,6 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
 
 {--fig_1 = Figure (titleize figure +:+ S "1:" +:+ S "Collision between two rigid bodies")
 "CollisionDiagram.png" --}
-
 
 ------------------------------
 -- SECTION 5 : REQUIREMENTS --

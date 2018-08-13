@@ -2,39 +2,8 @@ module Drasil.NoPCM.Body where
 
 import Language.Drasil
 import Language.Drasil.Code (CodeSpec, codeSpec)
-import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Control.Lens ((^.))
-import Drasil.NoPCM.DataDesc (inputMod)
-import Drasil.NoPCM.Definitions (ht_trans, srs_swhs, acronyms)
-import Drasil.NoPCM.GenDefs (roc_temp_simp_deriv)
-
--- Since NoPCM is a simplified version of SWHS, the file is to be built off
--- of the SWHS libraries.  If the source for something cannot be found in
--- NoPCM, check SWHS.
-import Drasil.SWHS.Assumptions (newA1, newA2, newA3, newA7, newA8, newA9,
-  newA15, newA20, newA14, newA11, newA12)
-import Drasil.SWHS.Body (charReader1, charReader2, orgDocIntro,
-  genSystDesc, physSyst1, physSyst2, traceTrailing, dataContMid, traceIntro2,
-  traceFig1, traceFig2)
-import Drasil.SWHS.Concepts (progName, water, sWHT, tank, coil,
-  transient, tank_para)
-import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
-  w_mass, diam, coil_SA, temp_C, w_density, htCap_W, time_final,
-  in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, ht_flux_out, tau, htCap_L,
-  htTransCoeff, temp_env, diam, tank_length, ht_flux_C, coil_HTC,
-  deltaT, w_E, tank_length_min, tank_length_max,
-  w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
-  coil_HTC_max, time_final_max, sim_time, coil_SA_max, eta)
-import Drasil.SWHS.DataDefs(dd1HtFluxC, dd1HtFluxCDD)
-import Drasil.SWHS.TMods (t1ConsThermE_new)
-import Drasil.SWHS.GenDefs (nwtnCooling, rocTempSimp,
-  nwtnCooling_desc, rocTempSimp_desc, swhsGDs)
-import Drasil.SWHS.IMods (heatEInWtr_new)
-import Drasil.NoPCM.IMods (eBalanceOnWtr_new)
-import Drasil.NoPCM.Unitals (temp_init)
-import Drasil.SWHS.References (ref2, ref3, ref4)
-import Drasil.SWHS.Requirements (nonFuncReqs)
-import Drasil.SWHS.Changes (chgsStart, likeChg2, likeChg3, likeChg6)
 
 import Data.Drasil.People (thulasi)
 import Data.Drasil.Utils (enumSimple,
@@ -59,6 +28,8 @@ import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Software.Products (compPro)
+import Data.Drasil.Units.Thermodynamics (thermal_flux)
+import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, likeChg, unlikeChg, probDesc, goalStmt,
   inModelLabel)
@@ -74,8 +45,36 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   traceMGF, tsymb, valsOfAuxConstantsF)
  
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
-  isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP, acroIM, acroGD)
-import Data.Drasil.Units.Thermodynamics (thermal_flux)
+  isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP)
+
+-- Since NoPCM is a simplified version of SWHS, the file is to be built off
+-- of the SWHS libraries.  If the source for something cannot be found in
+-- NoPCM, check SWHS.
+import Drasil.SWHS.Assumptions (newA1, newA2, newA3, newA7, newA8, newA9,
+  newA11, newA12, newA14, newA15, newA20)
+import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
+  orgDocIntro, physSyst1, physSyst2, traceFig1, traceFig2, traceIntro2, traceTrailing)
+import Drasil.SWHS.Changes (chgsStart, likeChg2, likeChg3, likeChg6)
+import Drasil.SWHS.Concepts (coil, progName, sWHT, tank, tank_para, transient, water)
+import Drasil.SWHS.DataDefs(dd1HtFluxC, dd1HtFluxCDD)
+import Drasil.SWHS.IMods (eBalanceOnPCM, heatEInWtr)
+import Drasil.SWHS.GenDefs (nwtnCooling, rocTempSimp, rocTempSimpGD,
+  nwtnCooling_desc, rocTempSimp_desc, swhsGDs)
+import Drasil.SWHS.References (ref2, ref3, ref4)
+import Drasil.SWHS.Requirements (nonFuncReqs)
+import Drasil.SWHS.TMods (t1ConsThermE)
+import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
+  coil_SA_max, deltaT, diam, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCap_L, 
+  htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, sim_time, 
+  tank_length, tank_length_max, tank_length_min, tank_vol, tau, tau_W, temp_C, 
+  temp_env, temp_W, thFluxVect, time_final, time_final_max, vol_ht_gen, w_density, 
+  w_density_max, w_density_min, w_E, w_mass, w_vol)
+
+import Drasil.NoPCM.DataDesc (inputMod)
+import Drasil.NoPCM.Definitions (acronyms, ht_trans, srs_swhs)
+import Drasil.NoPCM.GenDefs (roc_temp_simp_deriv)
+import Drasil.NoPCM.IMods (eBalanceOnWtr)
+import Drasil.NoPCM.Unitals (temp_init)
 
 -- This defines the standard units used throughout the document
 this_si :: [UnitDefn]
@@ -138,11 +137,11 @@ mkSRS = RefSec (RefProg intro
       , SSDSolChSpec 
         (SCSProg 
           [ Assumptions 
-          , TMs ([Label] ++ stdFields) [t1ConsThermE_new] -- only have the same T1 with SWHS
+          , TMs ([Label] ++ stdFields) [t1ConsThermE] -- only have the same T1 with SWHS
           , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
           , DDs' ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxCDD] ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-            [eBalanceOnWtr_new, heatEInWtr_new] ShowDerivation
+            [eBalanceOnWtr, heatEInWtr] ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty dataContMid
             [dataConstTable1, dataConstTable2]
           ]
@@ -190,6 +189,9 @@ nopcm_srs = mkDoc mkSRS (for) nopcm_si
 nopcm_SymbMap :: ChunkDB
 nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) (map cw nopcm_Symbols ++ srsDomains)
   this_si
+
+printSetting :: PrintingInformation
+printSetting = PI nopcm_SymbMap defaultConfiguration
 
 assumps_Nopcm_list_new :: [AssumpChunk]
 assumps_Nopcm_list_new = [newA1, newA2, newA3, newA5NoPCM, newA6NoPCM,
@@ -254,7 +256,7 @@ scopeReqEnd tem te wa = foldlSent_ [S "predicts the",
 orgDocEnd :: CI -> CI -> CI -> Sentence
 orgDocEnd im_ od pro = foldlSent_ [S "The", phrase im_,
   sParen (makeRef SRS.inModelLabel),
-  S "to be solved is referred to as" +:+. acroIM 1,
+  S "to be solved is referred to as" +:+. makeRef eBalanceOnWtr,
   S "The", phrase im_, S "provides the",
   titleize od, sParen (short od), S "that model the"
   +:+. phrase pro, short pro, S "solves this", short od]
@@ -349,11 +351,11 @@ assumpS3, assumpS4, assumpS5, assumpS9_npcm, assumpS12, assumpS13 :: Sentence
 assumpS3 = 
   (foldlSent [S "The", phrase water, S "in the", phrase tank,
   S "is fully mixed, so the", phrase temp_W `isThe`
-  S "same throughout the entire", phrase tank, sSqBr (acroGD 2)])
+  S "same throughout the entire", phrase tank, sSqBr (makeRef rocTempSimpGD)])
 
 assumpS4 = 
   (foldlSent [S "The", phrase w_density, S "has no spatial variation; that is"
-  `sC` S "it is constant over their entire", phrase vol, sSqBr ((acroGD 2)`sC`
+  `sC` S "it is constant over their entire", phrase vol, sSqBr ((makeRef rocTempSimpGD)`sC`
   (makeRef likeChg2))])
 
 newA5NoPCM :: AssumpChunk
@@ -362,7 +364,7 @@ newA5NoPCM = assump "Density-Water-Constant-over-Volume" assumpS4
 
 assumpS5 = 
   (foldlSent [S "The", phrase htCap_W, S "has no spatial variation; that", 
-  S "is, it is constant over its entire", phrase vol, sSqBr (acroGD 2)])
+  S "is, it is constant over its entire", phrase vol, sSqBr (makeRef rocTempSimpGD)])
 
 newA6NoPCM :: AssumpChunk
 newA6NoPCM = assump "Specific-Heat-Energy-Constant-over-Volume" assumpS5 
@@ -373,7 +375,7 @@ assumpS9_npcm =
   S "of the tank" `sC` S "not discharging. The", phrase temp_W, S "can only",
   S "increase, or remain constant; it cannot decrease. This implies that the",
   phrase temp_init, S "is less than (or equal to) the", phrase temp_C,
-  sSqBr ((acroIM 1) `sC` (makeRef likeChg3_npcm))])
+  sSqBr ((makeRef eBalanceOnWtr) `sC` (makeRef likeChg3_npcm))])
 
 newA9NoPCM :: AssumpChunk
 newA9NoPCM = assump "Charging-Tank-No-Temp-Discharge" assumpS9_npcm 
@@ -382,7 +384,7 @@ newA9NoPCM = assump "Charging-Tank-No-Temp-Discharge" assumpS9_npcm
 assumpS12 = 
   (S "No internal" +:+ phrase heat +:+ S "is generated by the" +:+ phrase water
   `semiCol` S "therefore, the" +:+ phrase vol_ht_gen +:+ S "is zero" +:+.
-  sSqBr (acroIM 1))
+  sSqBr (makeRef eBalanceOnWtr))
 
 newA16 :: AssumpChunk
 newA16 = assump "No-Internal-Heat-Generation-By-Water" assumpS12 
@@ -393,7 +395,7 @@ assumpS13 =
   phrase melt_pt `sAnd` phrase boil_pt +:+ S "of water are" +:+ S (show (0 :: Integer))
   :+: Sy (unit_symb QT.temp) `sAnd` S (show (100 :: Integer)) :+:
   Sy (unit_symb QT.temp) `sC` S "respectively" +:+.
-  sSqBr ((acroIM 1) `sC` (acroIM 2)))
+  sSqBr ((makeRef eBalanceOnWtr) `sC` (makeRef eBalanceOnPCM)))
 
 newA19 :: AssumpChunk
 newA19 = assump "Atmospheric-Pressure-Tank" assumpS13 
@@ -459,7 +461,7 @@ iModDesc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin _ vhg _ =
   phrase purin +:+. sParen (makeRef newA11), S "Assuming no",
   phrase vhg +:+. (sParen (makeRef newA12) `sC`
   E (sy vhg $= 0)), S "Therefore, the", phrase M.equation, S "for",
-  acroGD 2, S "can be written as"]
+  makeRef rocTempSimpGD, S "can be written as"]
 
 iModDesc2 :: QDefinition -> [Sentence]
 iModDesc2 d1hf = [S "Using", (makeRef d1hf) `sC` S "this can be written as"]
@@ -537,8 +539,8 @@ funcReqsList = funcReqsListWordsNum
   -- S "which define the", phrase tank, S "parameters, material",
   -- plural property, S "and initial" +: plural condition],
 
-  -- [S "Use the", plural input_, S "in", acroR 1, S "to find the",
-  -- phrase mass, S "needed for", acroIM 1, S "to", acroIM 4 `sC`
+  -- [S "Use the", plural input_, S "in", makeRef req1, S "to find the",
+  -- phrase mass, S "needed for", makeRef eBalanceOnWtr, S "to", makeRef heatEInPCM_new `sC`
   -- S "as follows, where", ch w_vol `isThe` phrase w_vol,
   -- S "and" +: (ch tank_vol `isThe` phrase tank_vol)],
 
@@ -547,8 +549,8 @@ funcReqsList = funcReqsListWordsNum
 
   -- [titleize' output_, S "and", plural input_, plural quantity, S "and derived",
   -- plural quantity, S "in the following list: the", plural quantity, S "from",
-  -- (acroR 1) `sC` S "the", phrase mass, S "from", acroR 2, S "and", ch tau_W +:+.
-  -- sParen(S "from" +:+ acroIM 1)],
+  -- makeRef req1 `sC` S "the", phrase mass, S "from", makeRef req2, S "and", ch tau_W +:+.
+  -- sParen(S "from" +:+ makeRef eBalanceOnWtr)],
 
   -- [S "Calculate and output the", phrase temp, S "of the", phrase water,
   -- sParen (ch temp_W :+: sParen (ch time)), S "over the", phrase simulation +:+.
@@ -556,7 +558,7 @@ funcReqsList = funcReqsListWordsNum
 
   -- [S "Calculate and", phrase output_, S "the", phrase w_E,
   -- sParen (ch w_E :+: sParen (ch time)), S "over the",
-  -- phrase simulation, phrase time +:+. sParen (S "from" +:+ acroIM 3)]
+  -- phrase simulation, phrase time +:+. sParen (S "from" +:+ makeRef heatEInWtr)]
   -- ]
 
 req1, req2, req3, req4, req5, req6 :: LabelledContent
@@ -569,7 +571,7 @@ req1 = mkRequirement "req1" (
 req2 = mkRequirement "req2" (
   S "Use the" +:+ plural input_ +:+ S "in" +:+
   (makeRef req1) +:+ S "to find the" +:+ phrase mass +:+
-  S "needed for" +:+ acroIM 1 +:+ S "to" +:+ acroIM 2 `sC`
+  S "needed for" +:+ makeRef eBalanceOnWtr +:+ S "to" +:+ makeRef eBalanceOnPCM `sC`
   S "as follows, where" +:+ ch w_vol `isThe` phrase w_vol +:+
   S "and" +: (ch tank_vol `isThe` phrase tank_vol) ) "Find-Mass"
 req3 = mkRequirement "req3" (
@@ -581,7 +583,7 @@ req4 = mkRequirement "req4" (
   +:+ S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
   plural quantity +:+ S "from" +:+ (makeRef req1) `sC`
   S "the" +:+ phrase mass +:+ S "from" +:+ (makeRef req2)
-  `sAnd` ch tau_W +:+. sParen(S "from" +:+ acroIM 1) ) "Output-Input-Derived-Quantities"
+  `sAnd` ch tau_W +:+. sParen(S "from" +:+ makeRef eBalanceOnWtr) ) "Output-Input-Derived-Quantities"
 req5 = mkRequirement "req5" (
   S "Calculate and output the" +:+ phrase temp_W +:+
   sParen (ch temp_W :+: sParen (ch time)) +:+ S "over the" +:+
@@ -589,7 +591,7 @@ req5 = mkRequirement "req5" (
 req6 = mkRequirement "req6" (
   S "Calculate and" +:+ phrase output_ +:+ S "the" +:+ phrase w_E
   +:+ sParen (ch w_E :+: sParen (ch time)) +:+ S "over the" +:+
-  phrase sim_time +:+. sParen (S "from" +:+ acroIM 3) ) "Calculate-Change-Heat_Energy-Water-Time"
+  phrase sim_time +:+. sParen (S "from" +:+ makeRef heatEInWtr) ) "Calculate-Change-Heat_Energy-Water-Time"
 
 nr2Expr :: Expr
 nr2Expr = ((sy w_mass) $= (sy w_vol) * (sy w_density) $= (((sy diam) / 2) *
@@ -601,8 +603,8 @@ nr1 = cic "Input-Inital-Values" (titleize input_ +:+ S "the" +:+ plural quantity
     plural tank_para `sC` S "material" +:+ plural property +:+
     S "and initial" +:+. plural condition) "Input-Inital-Values" funcReqDom
 nr2 = cic "Find-Mass" (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef nr1 +:+
-    S "to find the" +:+ phrase mass +:+ S "needed for" +:+ acroIM 1 +:+
-    S "to" +:+ acroIM 2 `sC` S "as follows, where" +:+ ch w_vol `isThe`
+    S "to find the" +:+ phrase mass +:+ S "needed for" +:+ makeRef eBalanceOnWtr +:+
+    S "to" +:+ makeRef eBalanceOnPCM `sC` S "as follows, where" +:+ ch w_vol `isThe`
     phrase w_vol +:+ S "and" +:+ (ch tank_vol `isThe` phrase tank_vol) :+:
     S ":" +:+ E nr2Expr) "Find-Mass" funcReqDom  -- FIXME: Equation shouldn't be inline.
 nr3 = cic "Check-Inputs-Satisfy-Physical-Constraints" (S "Verify that the" +:+ plural input_ +:+
@@ -614,14 +616,14 @@ nr4 = cic "Output-Input-Derivied-Quantities" (titleize' output_ `sAnd` plural in
     S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
     plural quantity +:+ S "from" +:+ (makeRef nr1) `sC` S "the" +:+
     phrase mass +:+ S "from" +:+ makeRef nr2 `sAnd` ch tau_W +:+.
-    sParen (S "from" +:+ acroIM 1)) "Output-Input-Derivied-Quantities" funcReqDom
+    sParen (S "from" +:+ makeRef eBalanceOnWtr)) "Output-Input-Derivied-Quantities" funcReqDom
 nr5 = cic "Calculate-Temperature-Water-Over-Time" (S "Calculate and output the" +:+ phrase temp_W +:+
     sParen (ch temp_W :+: sParen (ch time)) +:+ S "over the" +:+
     phrase sim_time) "Calculate-Temperature-Water-Over-Time" funcReqDom
 nr6 = cic "Calculate-Change-Heat_Energy-Water-Time" 
     (S "Calculate and" +:+ phrase output_ +:+ S "the" +:+
     phrase w_E +:+ sParen (ch w_E :+: sParen (ch time)) +:+ S "over the" +:+
-    phrase sim_time +:+. sParen (S "from" +:+ acroIM 3))
+    phrase sim_time +:+. sParen (S "from" +:+ makeRef heatEInWtr))
     "Calculate-Change-Heat_Energy-Water-Time" funcReqDom
 
 nrTable :: LabelledContent
@@ -733,7 +735,7 @@ traceDataRef, traceFuncReqRef, traceInstaModelRef, traceAssumpRef, traceTheories
   traceDataDefRef, traceLikelyChgRef, traceGenDefRef :: [Sentence]
 
 traceInstaModel = ["IM1", "IM2"]
-traceInstaModelRef = map makeRef [eBalanceOnWtr_new, heatEInWtr_new]
+traceInstaModelRef = map makeRef [eBalanceOnWtr, heatEInWtr]
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
 traceFuncReqRef = map makeRef newReqs
@@ -746,7 +748,7 @@ traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
 traceAssumpRef = map makeRef assumps_Nopcm_list_new
 
 traceTheories = ["T1"]
-traceTheoriesRef = map makeRef [t1ConsThermE_new]
+traceTheoriesRef = map makeRef [t1ConsThermE]
 
 traceGenDefs = ["GD1", "GD2"]
 traceGenDefRef = map makeRef swhsGDs

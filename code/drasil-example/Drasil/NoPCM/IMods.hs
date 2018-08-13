@@ -1,34 +1,38 @@
-module Drasil.NoPCM.IMods (eBalanceOnWtr, eBalanceOnWtr_new) where
+module Drasil.NoPCM.IMods (eBalanceOnWtr) where
 
 import Language.Drasil
 
-import Drasil.SWHS.Concepts (water, tank)
-import Drasil.SWHS.Unitals (temp_W, temp_C, tau_W, w_mass, htCap_W, coil_HTC, coil_SA, temp_init
-  , time_final, w_vol, ht_flux_C, vol_ht_gen)
-import Data.Drasil.Utils (unwrap, weave)
-import Data.Drasil.SentenceStructures (foldlSent, isThe,
-  sAnd, ofThe, acroGD, foldlSentCol, sOf)
-import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Concepts.Math (equation, rOfChng)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
 import Data.Drasil.Concepts.Thermodynamics (melting, boil_pt, heat_cap_spec, 
   heat_trans)
 
-import Data.Drasil.Quantities.PhysicalProperties (vol, mass)
-import Drasil.SWHS.DataDefs(dd1HtFluxC)
+import Data.Drasil.Quantities.PhysicalProperties (mass, vol)
+import Data.Drasil.Quantities.Physics (energy, time)
+
+import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol, isThe, ofThe, 
+  sAnd, sOf)
+import Data.Drasil.Utils (unwrap, weave)
+
 import Drasil.SWHS.Assumptions
+import Drasil.SWHS.Concepts (water, tank)
+import Drasil.SWHS.DataDefs(dd1HtFluxC)
+import Drasil.SWHS.Labels (rocTempSimpL)
+import Drasil.SWHS.Unitals (temp_W, temp_C, tau_W, w_mass, htCap_W, coil_HTC, 
+  coil_SA, temp_init, time_final, w_vol, ht_flux_C, vol_ht_gen)
+
 ---------
 -- IM1 --
 ---------
-eBalanceOnWtr_new :: InstanceModel
-eBalanceOnWtr_new = im'' eBalanceOnWtr [qw temp_C, qw temp_init, qw time_final, 
+eBalanceOnWtr :: InstanceModel
+eBalanceOnWtr = im'' eBalanceOnWtr_rc [qw temp_C, qw temp_init, qw time_final, 
   qw coil_SA, qw coil_HTC, qw htCap_W, qw w_mass] 
   [TCon AssumedCon $sy temp_init $<= sy temp_C] (qw temp_W) 
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
-  [TCon AssumedCon $ 0 $< sy time $< sy time_final] eBalanceOnWtr_deriv_nopcm "eBalanceOnWtr" [balWtrDesc]
+  [TCon AssumedCon $ 0 $< sy time $< sy time_final] eBalanceOnWtrDeriv "eBalanceOnWtr" [balWtrDesc]
 
-eBalanceOnWtr :: RelationConcept
-eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
+eBalanceOnWtr_rc :: RelationConcept
+eBalanceOnWtr_rc = makeRC "eBalanceOnWtr_rc" (nounPhraseSP $ "Energy balance on " ++
   "water to find the temperature of the water") balWtrDesc balWtr_Rel
   (mkLabelSame "eBalnaceOnWtr" (Def Instance))
 
@@ -53,23 +57,23 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --
 ----------------------------------------------
-eBalanceOnWtr_deriv_nopcm :: Derivation
-eBalanceOnWtr_deriv_nopcm =
+eBalanceOnWtrDeriv :: Derivation
+eBalanceOnWtrDeriv =
   [S "Derivation of the" +:+ phrase energy +:+ S "balance on water:"] ++
-  (weave [eBalanceOnWtr_deriv_sentences_nopcm, map E eBalanceOnWtr_deriv_eqns_nopcm])
+  (weave [eBalanceOnWtrDerivSentences, map E eBalanceOnWtrDerivEqns])
 
-eBalanceOnWtr_deriv_sentences_nopcm :: [Sentence]
-eBalanceOnWtr_deriv_sentences_nopcm = map foldlSentCol [
-  s4_2_3_desc1_nopcm rOfChng temp_W energy water vol w_vol mass w_mass heat_cap_spec
+eBalanceOnWtrDerivSentences :: [Sentence]
+eBalanceOnWtrDerivSentences = map foldlSentCol [
+  eBalanceOnWtrDerivDesc1 rOfChng temp_W energy water vol w_vol mass w_mass heat_cap_spec
     htCap_W heat_trans ht_flux_C coil_SA tank newA11 newA12 vol_ht_gen, 
-  s4_2_3_desc2_nopcm dd1HtFluxC,
-  s4_2_3_desc3_nopcm eq1,
-  s4_2_3_desc4_nopcm eq2]
+  eBalanceOnWtrDerivDesc2 dd1HtFluxC,
+  eBalanceOnWtrDerivDesc3 eq1,
+  eBalanceOnWtrDerivDesc4 eq2]
 
-s4_2_3_desc1_nopcm :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk -> UnitalChunk -> 
+eBalanceOnWtrDerivDesc1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk -> UnitalChunk -> 
   UnitalChunk -> UnitalChunk -> UnitalChunk -> ConceptChunk -> UncertQ -> ConceptChunk -> 
   UnitalChunk -> UncertQ -> ConceptChunk -> AssumpChunk -> AssumpChunk -> UnitalChunk -> [Sentence]
-s4_2_3_desc1_nopcm roc tw en wt vo wvo ms wms hcs hw ht hfc cs tk ass11 ass12 vhg =
+eBalanceOnWtrDerivDesc1 roc tw en wt vo wvo ms wms hcs hw ht hfc cs tk ass11 ass12 vhg =
   [S "To find the", phrase roc `sOf` (E $ sy tw) `sC` S "we look at the",
    phrase en, S "balance on" +:+. phrase wt, S "The", phrase vo, S "being considered" 
    `isThe` (phrase vo `sOf` phrase wt), (E $ sy wvo) `sC` S "which has", phrase ms,
@@ -81,17 +85,17 @@ s4_2_3_desc1_nopcm roc tw en wt vo wvo ms wms hcs hw ht hfc cs tk ass11 ass12 vh
     (sParen (makeRef ass11)), S ". Assuming no volumetric", 
     S "heat generation per unit", phrase vo,
     (sParen (makeRef ass12)) `sC` (E $ sy vhg $= 0), S ". Therefore, the equation for",
-     acroGD 2, S "can be written as"]
+     makeRef rocTempSimpL, S "can be written as"]
 
-s4_2_3_desc2_nopcm :: QDefinition -> [Sentence]
-s4_2_3_desc2_nopcm dd1 =
+eBalanceOnWtrDerivDesc2 :: QDefinition -> [Sentence]
+eBalanceOnWtrDerivDesc2 dd1 =
   [S "Using", makeRef dd1, S ", this can be written as"]
 
-s4_2_3_desc3_nopcm :: Expr-> [Sentence]
-s4_2_3_desc3_nopcm eq11 = [S "Dividing (3) by", (E eq11) `sC` S "we obtain"]
+eBalanceOnWtrDerivDesc3 :: Expr-> [Sentence]
+eBalanceOnWtrDerivDesc3 eq11 = [S "Dividing (3) by", (E eq11) `sC` S "we obtain"]
 
-s4_2_3_desc4_nopcm :: [Sentence]-> [Sentence]
-s4_2_3_desc4_nopcm eq22 = 
+eBalanceOnWtrDerivDesc4 :: [Sentence]-> [Sentence]
+eBalanceOnWtrDerivDesc4 eq22 = 
   [S "Setting"] ++ eq22 ++ [S ", Equation (4) can be written in its final form as"]
 
 eq1:: Expr
@@ -100,21 +104,20 @@ eq1 = (sy w_mass) * (sy htCap_W)
 eq2:: [Sentence]
 eq2 = [ch tau_W, S "=", ch w_mass, ch htCap_W, S "/", ch coil_HTC, ch coil_SA]
 
-s4_2_3_eq1_nopcm, s4_2_3_eq2_nopcm, s4_2_3_eq3_nopcm, s4_2_3_eq4_nopcm :: Expr
+eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4 :: Expr
 
-s4_2_3_eq1_nopcm = (sy w_mass) * (sy htCap_W) * (deriv (sy temp_W) time) $= 
+eBalanceOnWtrDerivEqn1 = (sy w_mass) * (sy htCap_W) * (deriv (sy temp_W) time) $= 
   (sy ht_flux_C) * (sy coil_SA)
 
-s4_2_3_eq2_nopcm = (sy w_mass) * (sy htCap_W) * (deriv (sy temp_W) time) $= 
+eBalanceOnWtrDerivEqn2 = (sy w_mass) * (sy htCap_W) * (deriv (sy temp_W) time) $= 
   (sy coil_HTC) * (sy coil_SA) *  ((sy temp_C) - (sy temp_W))
 
-s4_2_3_eq3_nopcm = (deriv (sy temp_W) time) $= 
+eBalanceOnWtrDerivEqn3 = (deriv (sy temp_W) time) $= 
   ((sy coil_HTC) * (sy coil_SA) / 
   ((sy w_mass) * (sy htCap_W))) *  ((sy temp_C) - (sy temp_W))
 
-s4_2_3_eq4_nopcm =  
+eBalanceOnWtrDerivEqn4 =  
   (deriv (sy temp_W) time) $= 1 / (sy tau_W) * ((sy temp_C) - (sy temp_W))
 
-
-eBalanceOnWtr_deriv_eqns_nopcm :: [Expr]
-eBalanceOnWtr_deriv_eqns_nopcm = [s4_2_3_eq1_nopcm, s4_2_3_eq2_nopcm, s4_2_3_eq3_nopcm, s4_2_3_eq4_nopcm]
+eBalanceOnWtrDerivEqns :: [Expr]
+eBalanceOnWtrDerivEqns = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4]

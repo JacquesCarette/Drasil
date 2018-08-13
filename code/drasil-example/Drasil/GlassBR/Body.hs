@@ -52,8 +52,8 @@ import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), andThe,
 import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, itemRefToSent, 
   makeTMatrix, noRefs, prodUCTbl)
   
-import Drasil.GlassBR.Assumptions (assumptionConstants, gbRefDB, newAssumptions, newA4, 
-  newA5, newA8)
+import Drasil.GlassBR.Assumptions (assumptionConstants, gbRefDB, assumptions, standardValues,
+  glassLite, ldfConstant)
 import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, glass, gLassBR, 
   lShareFac, ptOfExplsn, stdOffDist)
@@ -538,8 +538,8 @@ funcReqsR1Table = llcc (mkLabelSame "R1ReqInputs" Tab) $
 
 req2Desc = foldlSent [S "The", phrase system,
   S "shall set the known", plural value +: S "as follows",
-  foldlList Comma List [(foldlsC (map ch (take 4 assumptionConstants)) `followA` newA4),
-  ((ch constant_LoadDF) `followA` newA8), (short lShareFac `followA` newA5),
+  foldlList Comma List [(foldlsC (map ch (take 4 assumptionConstants)) `followA` standardValues),
+  ((ch constant_LoadDF) `followA` ldfConstant), (short lShareFac `followA` glassLite),
   (ch hFromt) +:+ sParen (S "from" +:+ (makeRef hFromt)), 
   (ch glaTyFac) +:+ sParen (S "from" +:+ (makeRef glaTyFac)),
   (ch standOffDis) +:+ sParen (S "from" +:+ (makeRef standOffDis))]]
@@ -548,9 +548,9 @@ req2Desc = foldlSent [S "The", phrase system,
 {-funcReqsR2 = (Nested (S "The" +:+ phrase system +:+
    S "shall set the known" +:+ plural value +: S "as follows")
     (Bullet $ map Flat
-     [foldlsC (map getS (take 4 assumptionConstants)) `followA` newA4,
-     (getS loadDF) `followA` newA8,
-     short lShareFac `followA` newA5]))
+     [foldlsC (map getS (take 4 assumptionConstants)) `followA` standardValues,
+     (getS loadDF) `followA` ldfConstant,
+     short lShareFac `followA` glassLite]))
 -}
 --FIXME:should constants, LDF, and LSF have some sort of field that holds
 -- the assumption(s) that're being followed? (Issue #349)
@@ -648,7 +648,7 @@ traceMatsAndGraphsFuncReqRef = map makeRef [funcReqsR1, funcReqsR2, funcReqsR3,
                                                                   --FIXME: revisit this list
 
 traceMatsAndGraphsA = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
-traceMatsAndGraphsARef = map makeRef newAssumptions
+traceMatsAndGraphsARef = map makeRef assumptions
 
 traceMatsAndGraphsLC = ["LC1", "LC2", "LC3", "LC4", "LC5"]
 traceMatsAndGraphsLCRef = map makeRef likelyChanges_SRS

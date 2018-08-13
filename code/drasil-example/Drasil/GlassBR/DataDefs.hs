@@ -11,7 +11,7 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Citations (campidelli)
 import Data.Drasil.SentenceStructures (sAnd)
 
-import Drasil.GlassBR.Assumptions (newA5)
+import Drasil.GlassBR.Assumptions (glassLite)
 import Drasil.GlassBR.Concepts (annealed, fullyT, heatS)
 import Drasil.GlassBR.Labels (calOfDemandL)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
@@ -134,7 +134,7 @@ dimLL = mkQuantDef dimlessLoad dimLL_eq
 
 dimLLDD :: DataDefinition
 dimLLDD = mkDD dimLL [makeRef campidelli +:+ sParen (S "Eq. 7")] [{-derivation-}] ""--temporary
-  (Just $ qRef : aGrtrThanB : hRef : gtfRef : a5Ref : [])
+  (Just $ qRef : aGrtrThanB : hRef : gtfRef : glassLiteRef : [])
 
 --DD8--
 
@@ -253,5 +253,5 @@ jRef2 = (ch stressDistFac +:+ S "is the" +:+ phrase stressDistFac `sC`
 jtolRelToPbtol :: Sentence
 jtolRelToPbtol = (ch sdf_tol +:+ S " is calculated with reference to " +:+. ch pb_tol)
 
-a5Ref :: Sentence 
-a5Ref = (ch dimlessLoad +:+ S "is calculated with reference to" +:+. makeRef newA5)
+glassLiteRef :: Sentence 
+glassLiteRef = (ch dimlessLoad +:+ S "is calculated with reference to" +:+. makeRef glassLite)

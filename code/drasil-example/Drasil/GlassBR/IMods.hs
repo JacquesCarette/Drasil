@@ -5,7 +5,7 @@ import Prelude hiding (exp)
 import Control.Lens ((^.))
 import Language.Drasil
 
-import Drasil.GlassBR.Assumptions (newA1, newA2)
+import Drasil.GlassBR.Assumptions (glassType, glassCondition)
 import Drasil.GlassBR.Concepts (glassTypeFac, lResistance, lShareFac)
 import Drasil.GlassBR.DataDefs (glaTyFac, nonFL, risk, standOffDis)
 import Drasil.GlassBR.Labels (probOfBrL, calOfCapL, calOfDemandL)
@@ -15,9 +15,6 @@ import Drasil.GlassBR.Unitals (demand, demandq, eqTNTWeight, lRe, loadSF,
 
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
-
--- labels
-
 
 gbrIMods :: [InstanceModel]
 gbrIMods = [probOfBreak, calofCapacity, calofDemand]
@@ -57,12 +54,12 @@ capdescr =
   S "which" +:+. S "is also called capacity" +:+. ((ch nonFL) `isThe`
   (phrase nonFL)) +:+. ((ch glaTyFac) `isThe` (phrase glassTypeFac))
   +:+. ((ch loadSF) `isThe` (phrase lShareFac)), S "Follows",
-  (makeRef newA2) `sAnd` (makeRef newA1), sParen (Quote 
+  (makeRef glassCondition) `sAnd` (makeRef glassType), sParen (Quote 
   (S "In the development of this procedure, it was assumed that" +:+
   S "all four edges of the glass are simply supported and free to slip" +:+
   S "in the plane of the glass. This boundary condition has been shown" +:+
   S "to be typical of many glass installations")) +:+ S "from" +:+ 
-  makeRef astm2009, S "(pg. 53)"]
+  makeRef astm2009, sParen (S "pg. 53")]
 
 {--}
 

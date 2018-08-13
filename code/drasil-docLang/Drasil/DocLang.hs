@@ -1,4 +1,6 @@
 module Drasil.DocLang (
+    -- DocLang.SRS
+    assumpDom, likeChgDom, unlikeChgDom,
     -- DocumentLanguage
     AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), DocDesc, 
     DocSection(..), Emphasis(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons, SysCntxt), 
@@ -39,6 +41,7 @@ module Drasil.DocLang (
     traceGIntro, traceMGF
     ) where 
 
+import Drasil.DocLang.SRS (assumpDom, likeChgDom, unlikeChgDom)
 import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..), 
     DerivationDisplay(..), DocDesc, DocSection(..), Emphasis(..), ExistingSolnSec(..), 
     GSDSec(GSDProg2), GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), 

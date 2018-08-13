@@ -7,7 +7,8 @@ module Drasil.DocLang.SRS
   physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
   inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
   indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel,
-  tOfSymb, srsDom, solCharSpecLabel) where
+  tOfSymb, srsDom, chgProbDom, unlikeChgDom, likeChgDom, assumpDom,
+  solCharSpecLabel) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
@@ -102,6 +103,18 @@ tOfSymb cs ss = section (titleize Doc.tOfSymb) cs ss tOfSymbLabel
 --Root SRS Domain
 srsDom :: CommonConcept
 srsDom = dcc' "srsDom" (Doc.srs ^. term) "srs" ""
+
+chgProbDom :: ConceptChunk
+chgProbDom = ccs (nc "chgProbDom" $ cn' "change") EmptyS [srsDom]
+
+likeChgDom :: ConceptChunk
+likeChgDom = ccs (mkIdea "likeChgDom" (Doc.likelyChg ^. term) $ Just "LC") EmptyS [chgProbDom]
+
+unlikeChgDom :: ConceptChunk
+unlikeChgDom = ccs (mkIdea "unlikeChgDom" (Doc.unlikelyChg ^. term) $ Just "UC") EmptyS [chgProbDom]
+
+assumpDom :: ConceptChunk
+assumpDom = ccs (mkIdea "assumpDom" (Doc.assumption ^. term) $ Just "A") EmptyS [srsDom]
 
 --function that sets the shortname of each section to be the reference address
 section' :: Sentence -> [Contents] -> [Section] -> String -> Section

@@ -15,7 +15,7 @@ import Data.Drasil.Concepts.Documentation (design, document, documentation, form
 import Data.Drasil.Concepts.Software (program)
   -- import ^ for paragraphs (pull out)
 
-import Data.Drasil.SentenceStructures (foldlSP, inThe, ofThe, sAnd)
+import Data.Drasil.SentenceStructures (foldlSP, inThe, ofThe', sAnd)
 
 import Control.Lens ((^.))
 
@@ -23,13 +23,13 @@ accRoutSemantics, considerations, enviroVars, expAccPrograms,
   expConstants, expTypes, module_, tempMod_, modHier, notation, semantics, stateInvars, 
   stateVars, syntax, uses :: [Contents] -> [Section] -> Section
 
-modHier          cs ss = section' (titleize Doc.moduleHierarchy)  cs ss "ModHierarchy"
-notation         cs ss = section' (titleize Doc.notation)         cs ss "Notation"
+modHier          cs ss = section' (titleize  Doc.moduleHierarchy)  cs ss "ModHierarchy"
+notation         cs ss = section' (titleize  Doc.notation)         cs ss "Notation"
 
-module_          cs ss = section' (titleize Doc.module_)          cs ss "Module"
-tempMod_         cs ss = section' (titleize Doc.templateModule)   cs ss "TemplateModule"
+module_          cs ss = section' (titleize  Doc.module_)          cs ss "Module"
+tempMod_         cs ss = section' (titleize  Doc.templateModule)   cs ss "TemplateModule"
 uses             cs ss = section' (titleize' Doc.use)             cs ss "Uses"
-syntax           cs ss = section' (titleize Doc.syntax)           cs ss "Syntax"
+syntax           cs ss = section' (titleize  Doc.syntax)           cs ss "Syntax"
 semantics        cs ss = section' (titleize' Doc.semantic)        cs ss "Semantics"
 considerations   cs ss = section' (titleize' Doc.consideration)   cs ss "Considerations"
 
@@ -53,7 +53,7 @@ misOfModule cs ss mod lbl = section (titleize $ Doc.misOfModule mod) cs ss lbl
 
 introMIS :: (Idea a) => a -> Sentence -> Contents
 introMIS progName outerLink = foldlSP [S "The following", phrase document, S "details the", 
-  titleize mis, S "for the implemented", plural Doc.module_ `inThe`
+  titleize mis, sParen (getAcc mis), S "for the implemented", plural Doc.module_ `inThe`
   phrase program, short progName :+: S ". It is intended to ease navigation through the",
   phrase program, S "for", phrase design, S "and maintenance" +:+. plural purpose,
   S "Complementary", plural document, S "include the", titleize srs, (sParen $ getAcc srs)
@@ -66,7 +66,7 @@ introMIS progName outerLink = foldlSP [S "The following", phrase document, S "de
 --------------
 
 notationIntroMIS :: Contents
-notationIntroMIS = foldlSP [S "The structure" `ofThe` getAcc mis, S "for", plural Doc.module_,
+notationIntroMIS = foldlSP [S "structure" `ofThe'` getAcc mis, S "for", plural Doc.module_,
   S "comes from Hoffman and Strooper (1995), with the addition that", plural templateModule, 
   S "have been adapted from Ghezzi et al. (2003). The mathematical", phrase Doc.notation, 
   S "comes from Chapter 3 of Hoffman and Strooper (1995). For instance, the", phrase symbol_, 

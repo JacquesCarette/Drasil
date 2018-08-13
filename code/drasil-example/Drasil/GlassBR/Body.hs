@@ -29,7 +29,7 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   assumption, characteristic, class_, code, company, condition, content, dataConst, 
   dataDefn, datumConstraint, definition, description, document, emphasis, environment, 
   failure, figure, goal, goalStmt, implementation, information, inModel, input_, 
-  interface, item, likelyChg, message, model, organization, output_, physicalSystem, 
+  interface, item, likelyChg, message, mis, model, organization, output_, physicalSystem, 
   physSyst, problem, product_, purpose, quantity, reference, requirement, reviewer, 
   section_, software, softwareSys, srs, standard, symbol_, sysCont, system, template, 
   term_, theory, thModel, traceyMatrix, user, userInput, value)

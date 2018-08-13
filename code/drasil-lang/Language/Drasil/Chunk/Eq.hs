@@ -10,7 +10,6 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
 
 import Language.Drasil.Chunk.Quantity (HasSpace(typ), Quantity, 
   QuantityDict, mkQuant, qw)
-import Language.Drasil.Chunk.References (Reference)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
 

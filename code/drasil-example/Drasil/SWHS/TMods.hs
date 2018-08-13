@@ -32,7 +32,7 @@ t1ConsThermE :: TheoryModel
 t1ConsThermE = tm' t1ConsThermE_rc
   (tc' "ConsThermE" [qw thFluxVect, qw gradient, qw vol_ht_gen, 
     qw density, qw heat_cap_spec, qw temp, qw time] ([] :: [ConceptChunk])
-  [] [TCon Invariant consThermERel] []) 
+  [] [TCon Invariant consThermERel] [] []) 
   (mkLabelSame "t1ConsThermE" (Def TM)) [t1descr]
 
 t1ConsThermE_rc :: RelationConcept
@@ -73,7 +73,7 @@ t2SensHtE :: TheoryModel
 t2SensHtE = tm' t2SensHtE_rc
   (tc' "SensHtE" [qw sens_heat, qw htCap_S, qw mass, 
     qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [ConceptChunk])
-  [] [TCon Invariant sensHtEEqn] []) 
+  [] [TCon Invariant sensHtEEqn] [] []) 
   (mkLabelSame "t2SensHtE" (Def TM)) [t2descr]
 
 t2SensHtE_rc :: RelationConcept
@@ -128,7 +128,7 @@ t2descr = foldlSent [
 t3LatHtE :: TheoryModel
 t3LatHtE = tm' t3LatHtE_rc
   (tc' "SensHtE" [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
-  [] [TCon Invariant latHtEEqn] []) (mkLabelSame "t3LatHtE" (Def TM)) [t3descr]
+  [] [TCon Invariant latHtEEqn] [] []) (mkLabelSame "t3LatHtE" (Def TM)) [t3descr]
 
 t3LatHtE_rc :: RelationConcept
 t3LatHtE_rc = makeRC "t3LatHtE_rc"

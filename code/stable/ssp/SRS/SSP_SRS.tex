@@ -415,9 +415,9 @@ This section focuses on the general equations and laws that SSA is based on.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:fs.rc}
+\toprule \textbf{Refname} & \textbf{T:factOfSafety}
 \phantomsection 
-\label{T:fs.rc}
+\label{T:factOfSafety}
 \\ \midrule \\
 Label & Factor of safety
 \\ \midrule \\
@@ -670,7 +670,7 @@ Description & \begin{symbDescription}
               \item{$α$ is the angle (${}^{\circ}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & From the definition of the factor of safety in \hyperref[T:fs.rc]{Definition~T:fs.rc}, and the new definition of $P$, a new relation for the net mobile shear force of the slice $T$ is found as the resistive shear $P$ (\hyperref[GD:resShr]{Definition~GD:resShr}) divided by the factor of safety $FS$.
+Notes & From the definition of the factor of safety in \hyperref[T:factOfSafety]{Definition~T:factOfSafety}, and the new definition of $P$, a new relation for the net mobile shear force of the slice $T$ is found as the resistive shear $P$ (\hyperref[GD:resShr]{Definition~GD:resShr}) divided by the factor of safety $FS$.
 \\ \midrule \\
 Source & FIXME: This needs to be filled in
 \\ \midrule \\
@@ -1948,7 +1948,7 @@ With shear stiffness ${K_{bt}}$ calculated in equation (28) and shear displaceme
 \begin{dmath}
 τ_{i}={K_{bt,i}} {δu}_{i}
 \end{dmath}
-The resistive shear stress acting on the base of a slice $τ$ acts as the mobile shear acting on the base. Using the definition Factor of Safety equation from \hyperref[T:fs.rc]{Definition~T:fs.rc}, with the definitions of resistive shear strength of a slice $s$ from equation (27) and resistive shear stress $τ$ from equation (29) the local factor of safety ${FS_{Loc,i}}$ can be found from as seen in equation (30) and \hyperref[IM:rfemFoS]{Definition~IM:rfemFoS}:
+The resistive shear stress acting on the base of a slice $τ$ acts as the mobile shear acting on the base. Using the definition Factor of Safety equation from \hyperref[T:factOfSafety]{Definition~T:factOfSafety}, with the definitions of resistive shear strength of a slice $s$ from equation (27) and resistive shear stress $τ$ from equation (29) the local factor of safety ${FS_{Loc,i}}$ can be found from as seen in equation (30) and \hyperref[IM:rfemFoS]{Definition~IM:rfemFoS}:
 \begin{dmath}
 {FS_{Loc,i}}=\frac{s_{i}}{τ_{i}}=\frac{{c'}_{i}-{K_{bn,i}} {δv}_{i} \tan\left({φ'}_{i}\right)}{{K_{bt,i}} {δu}_{i}}
 \end{dmath}

@@ -257,7 +257,7 @@ The scope of the requirements includes thermal analysis of a single solar water 
 Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of SWHS can have a lower level of expertise, as explained in Section~\ref{Sec:UserChars}.
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
-The organization of this document follows the template for an SRS for scientific computing software proposed by {[}3{]} and {[}6{]} (Section~\ref{Sec:References}). The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:IMs} and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{dParnas1972} and \cite{dParnasPcClements1984}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:IMs} and trace back to find any additional information they require.
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance models (Section~\ref{Sec:IMs}) to be solved are referred to as \hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}, and \hyperref[IM:heatEInPCM]{Definition~IM:heatEInPCM}. The instance models provide the Ordinary Differential Equation (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM. SWHS solves these ODEs.
 \section{General System Description}
 \label{Sec:GenSysDesc}
@@ -1340,6 +1340,13 @@ title={Derivation of tank/pcm model},
 year={2012},
 note={From Marilyn Lightstone's Personal Notes}}
 
+@article{dParnas1972,
+author={Parnas, David L.},
+title={On the Criteria To Be Used in Decomposing Systems into Modules},
+journal={Communications of the ACM},
+year={1972},
+pages={"1053-1058"}}
+
 @article{parnasClements1986,
 author={Parnas, David L. and Clements, P. C.},
 title={A rational design process: How and why to fake it},
@@ -1350,6 +1357,13 @@ volume={12},
 number={2},
 pages={"251-257"},
 address={Washington, USA}}
+
+@inproceedings{dParnasPcClements1984,
+author={Parnas, David L. and Clements, P. C. and Wiess, },
+title={The Modular Structure of Complex Systems},
+booktitle={ICSE '84: Proceedings of the 7th international conference on Software engineering},
+year={1984},
+pages={"408-417"}}
 
 @inproceedings{smithLai2005,
 author={Smith, W. Spencer and Lai, Lei},

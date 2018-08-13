@@ -3,25 +3,26 @@ module Language.Drasil.Chunk.Eq
   (QDefinition, fromEqn, fromEqn', fromEqn'', equat, getVC
   , ec, qua, fromEqn''', fromEqn'''') where
 
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  HasSymbol(symbol), IsUnit, ExprRelat(relat),
-  ConceptDomain, HasLabel(getLabel))
-import Language.Drasil.Chunk.Quantity (HasSpace(typ), QuantityDict,
-  mkQuant, qw)
-import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
-import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.Space (Space(Real))
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
-import Language.Drasil.Label.Core (Label)
-import Language.Drasil.Label (mkLabelSame)
-
 import Control.Lens ((^.), makeLenses, view)
 
-import Language.Drasil.RefTypes(RefType(..), DType(..))
-import Language.Drasil.Chunk.Quantity (Quantity)
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
+  HasSymbol(symbol), IsUnit, ExprRelat(relat), ConceptDomain, HasLabel(getLabel))
+
+import Language.Drasil.Chunk.Quantity (HasSpace(typ), Quantity, 
+  QuantityDict, mkQuant, qw)
+import Language.Drasil.Chunk.References (Reference)
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
+import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
+
 import Language.Drasil.Development.Unit(unitWrapper, MayHaveUnit(getUnit))
+
+import Language.Drasil.Label (mkLabelSame)
+import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase (NP)
+import Language.Drasil.RefTypes(RefType(..), DType(..))
+import Language.Drasil.Symbol (Symbol)
+import Language.Drasil.Space (Space(Real))
 import Language.Drasil.Spec (Sentence)
 
 -- | A QDefinition is a 'Quantity' with a defining equation.
@@ -47,7 +48,6 @@ instance HasShortName  QDefinition where -- FIXME: This could lead to trouble; n
                                          -- to ensure sanity checking when building
                                          -- Refs. Double-check QDef is a DD before allowing
   shortname = lb . shortname
- 
 
 -- | Create a 'QDefinition' with a uid, noun phrase (term), definition, symbol,
 -- unit, and defining equation.  And it ignores the definition...

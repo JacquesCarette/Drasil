@@ -16,7 +16,7 @@ import Data.Drasil.Utils (unwrap, weave)
 
 import Drasil.SWHS.Assumptions
 import Drasil.SWHS.Concepts (water, tank)
-import Drasil.SWHS.DataDefs(dd1HtFluxC)
+import Drasil.SWHS.DataDefs (dd1HtFluxC)
 import Drasil.SWHS.Labels (rocTempSimpL)
 import Drasil.SWHS.Unitals (temp_W, temp_C, tau_W, w_mass, htCap_W, coil_HTC, 
   coil_SA, temp_init, time_final, w_vol, ht_flux_C, vol_ht_gen)
@@ -87,7 +87,7 @@ eBalanceOnWtrDerivDesc1 roc tw en wt vo wvo ms wms hcs hw ht hfc cs tk ass11 ass
     (sParen (makeRef ass12)) `sC` (E $ sy vhg $= 0), S ". Therefore, the equation for",
      makeRef rocTempSimpL, S "can be written as"]
 
-eBalanceOnWtrDerivDesc2 :: QDefinition -> [Sentence]
+eBalanceOnWtrDerivDesc2 :: DataDefinition -> [Sentence]
 eBalanceOnWtrDerivDesc2 dd1 =
   [S "Using", makeRef dd1, S ", this can be written as"]
 

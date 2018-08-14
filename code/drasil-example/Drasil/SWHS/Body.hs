@@ -50,7 +50,7 @@ import Drasil.SWHS.Changes (likeChg1, likeChg2, likeChg3, likeChg4,
   likeChg5, likeChg6, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, rightSide, phsChgMtrl,
   coil, tank, transient, swhs_pcm, phase_change_material, tank_pcm)
-import Drasil.SWHS.DataDefs (swhsDataDefs, dd1HtFluxC, dd2HtFluxP, dataDefns)
+import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, swhsDDefs, swhsQDefs)
 import Drasil.SWHS.DataDesc (swhsInputMod)
 import Drasil.SWHS.GenDefs (swhsGDs, generalDefinitions)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, 
@@ -92,8 +92,8 @@ swhs_si = SI {
   _units = check_si,
   _quants = swhsSymbols,
   _concepts = symbT,
-  _definitions = swhsDataDefs,
-  _datadefs = dataDefns,
+  _definitions = swhsQDefs,
+  _datadefs = swhsDDefs,
   _inputs = map qw swhsInputs,
   _outputs = map qw swhsOutputs,
   _defSequence = ([] :: [Block QDefinition]),
@@ -144,7 +144,7 @@ mkSRS = RefSec (RefProg intro [
           [ Assumptions
           , TMs ([Label] ++ stdFields) [t1ConsThermE, t2SensHtE, t3LatHtE]
           , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
-          , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+          , DDs' ([Label, Symbol, Units] ++ stdFields) swhsDDefs ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
            [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM] ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty dataConTail
@@ -508,7 +508,7 @@ traceGenDefs = ["GD1", "GD2"]
 traceGenDefRef = map makeRef swhsGDs --FIXME: swhsGDs is a hack?
 
 traceDataDefs = ["DD1", "DD2", "DD3", "DD4"]
-traceDataDefRef = map makeRef swhsDataDefs
+traceDataDefRef = map makeRef swhsDDefs
 
 traceLikelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
 traceLikelyChgRef = makeListRef traceLikelyChg likelyChgs
@@ -1030,7 +1030,7 @@ iMod1Para :: UnitalChunk -> ConceptChunk -> [Contents]
 iMod1Para en wa = [foldlSPCol [S "Derivation of the",
   phrase en, S "balance on", phrase wa]]
 
-iMod1Sent2 :: QDefinition -> QDefinition -> UnitalChunk ->
+iMod1Sent2 :: DataDefinition -> DataDefinition -> UnitalChunk ->
   UnitalChunk -> [Sentence]
 iMod1Sent2 d1hf d2hf hfc hfp = [S "Using", (makeRef d1hf) `sAnd`
   (makeRef d2hf), S "for", ch hfc `sAnd`
@@ -1101,7 +1101,7 @@ iMod1Eqn7 = (deriv (sy temp_W) time $= (1 / (sy tau_W)) *
 -- Replace derivs with regular derivative when available
 -- Fractions in paragraph?
 
-iMod2Sent1 :: QDefinition -> UnitalChunk -> [Sentence]
+iMod2Sent1 :: DataDefinition -> UnitalChunk -> [Sentence]
 iMod2Sent1 d2hfp hfp = [S "Using", makeRef d2hfp, S "for", 
   ch hfp `sC` S "this", phrase equation, S "can be written as"]
 
@@ -1191,7 +1191,7 @@ dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
 ----------------------------------------------
 
 propCorSolDeriv1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
-  CI -> QDefinition -> QDefinition -> DefinedQuantityDict -> ConceptChunk -> Contents
+  CI -> DataDefinition -> DataDefinition -> DefinedQuantityDict -> ConceptChunk -> Contents
 propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
   foldlSPCol [S "A", phrase corSol, S "must exhibit the" +:+.
   phrase lce, S "This means that the", phrase ewat,

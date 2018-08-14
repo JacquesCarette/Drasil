@@ -54,7 +54,7 @@ import Drasil.SWHS.Assumptions (newA1, newA2, newA3, newA7, newA8, newA9,
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
   orgDocIntro, physSyst1, physSyst2, traceFig1, traceFig2, traceIntro2, traceTrailing)
 import Drasil.SWHS.Changes (chgsStart, likeChg2, likeChg3, likeChg6)
-import Drasil.SWHS.Concepts (coil, progName, sWHT, tank, tank_para, transient, water)
+import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, tank_para, transient, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.IMods (eBalanceOnPCM, heatEInWtr)
 import Drasil.SWHS.GenDefs (nwtnCooling, rocTempSimp, rocTempSimpGD, nwtnCooling_desc, 

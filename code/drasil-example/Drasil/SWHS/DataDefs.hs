@@ -62,7 +62,6 @@ dd4MeltFracQD :: QDefinition
 dd4MeltFracQD = fromEqn' (melt_frac ^. uid) -- FIXME Should (^. id) be used
   (melt_frac ^. term) (S "fraction of the PCM that is liquid")
   (eqSymb melt_frac) melt_frac_eqn 
-  (mkLabelSame "melt_frac" (Def DD))
 --FIXME: "Phi is the melt fraction" is produced; 
   --"Phi is the fraction of the PCM that is liquid" is what is supposed to be
   -- produced according to CaseStudies' original

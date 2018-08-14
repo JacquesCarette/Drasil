@@ -23,7 +23,7 @@ import Data.Drasil.Concepts.Documentation (assumption, column, condition, constr
   model, organization, output_, physical, physics, physSyst, problem, property, 
   purpose, quantity, reference, requirement, section_, software, softwareSys, 
   solution, srs, symbol_, sysCont, system, thModel, traceyGraph, traceyMatrix, 
-  typUnc, unlikelyChg, user, value, variable)
+  user, value, variable)
 import Data.Drasil.Concepts.Math (de, equation, ode, unit_)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Software.Products (sciCompS, compPro)
@@ -48,7 +48,7 @@ import qualified Data.Drasil.Concepts.Thermodynamics as CT (law_cons_energy,
 import Drasil.SWHS.Assumptions (swhsRefDB, newA13, newAssumptions)
 import Drasil.SWHS.Changes (likeChg1, likeChg2, likeChg3, likeChg4,
   likeChg5, likeChg6, unlikelyChgs)
-import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
+import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, rightSide, phsChgMtrl,
   coil, tank, transient, swhs_pcm, phase_change_material, tank_pcm)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, swhsDDefs, swhsQDefs)
 import Drasil.SWHS.DataDesc (swhsInputMod)
@@ -72,10 +72,6 @@ import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
   swhsInputs, swhsSymbols, swhsSymbolsAll)
 
 -------------------------------------------------------------------------------
-
-acronyms :: [CI]
-acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
-  phsChgMtrl, physSyst, requirement, rightSide, srs, progName, thModel, typUnc, unlikelyChg]
 
 this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, kilogram, second] ++ 
@@ -108,7 +104,7 @@ swhs_si = SI {
 }
 
 swhsSymMap :: ChunkDB
-swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) swhsSymbols
+swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull) swhsSymbols
   this_si
 
 printSetting :: PrintingInformation

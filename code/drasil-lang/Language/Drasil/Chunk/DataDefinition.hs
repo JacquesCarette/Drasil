@@ -50,8 +50,8 @@ instance Eq                 DataDefinition where a == b = (a ^. uid) == (b ^. ui
 instance HasDerivation      DataDefinition where derivations = deri
 instance HasAdditionalNotes DataDefinition where getNotes = notes
 instance MayHaveUnit        DataDefinition where getUnit = getUnit . view qd 
-instance HasLabel           DataDefinition where getLabel = qd . getLabel --FIXME: will eventually just be viewed from here
-instance HasShortName       DataDefinition where shortname = qd . shortname --FIXME: will eventually just be viewed from here
+instance HasLabel           DataDefinition where getLabel = lbl
+instance HasShortName       DataDefinition where shortname = lbl . shortname
 
 -- | Smart constructor for data definitions 
 mkDD :: QDefinition -> References -> Derivation -> String -> Maybe [Sentence] -> DataDefinition
@@ -64,14 +64,14 @@ qdFromDD (DatDef a _ _ _ _ _) = a
 mkQuantDef :: (Quantity c) => c -> Expr -> QDefinition
 mkQuantDef cncpt equation = datadef $ getUnit cncpt --should references be passed in at this point?
   where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) a equation (mkLabelSame (cncpt ^. uid) (Def DD))
+                           (eqSymb cncpt) a equation
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) equation (mkLabelSame (cncpt ^. uid) (Def DD))
+                           (eqSymb cncpt) equation
 
 mkQuantDef' :: (Quantity c) => c -> Expr -> QDefinition
 mkQuantDef' cncpt equation = quantdef $ getUnit cncpt --should references be passed in at this point?
   where quantdef (Just a) = fromEqn'''  (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) a equation (cncpt ^. uid) --shortname
+                           (eqSymb cncpt) a equation
         quantdef Nothing  = fromEqn'''' (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) equation (cncpt ^. uid) --shortname
+                           (eqSymb cncpt) equation
 

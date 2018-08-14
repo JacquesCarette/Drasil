@@ -23,11 +23,11 @@ modelsFromDB db = dropNums $ sortBy (compare `on` snd) elemPairs
 data ModelDB = MDB
              { tmRefDB :: RefMap TheoryModel
              , gdRefDB :: RefMap GenDefn
-             , ddRefDB :: RefMap QDefinition
+             , ddRefDB :: RefMap DataDefinition
              , imRefDB :: RefMap InstanceModel
              }
 
-mdb :: [TheoryModel] -> [GenDefn] -> [QDefinition] -> [InstanceModel] -> ModelDB
+mdb :: [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> ModelDB
 mdb tms gds dds ims = MDB
   (simpleMap tms) (simpleMap gds) (simpleMap dds) (simpleMap ims)
 
@@ -40,7 +40,7 @@ refGD :: RefMap GenDefn -> GenDefn -> Sentence
 refGD db c = customRef c (shortname' $ "GD" ++ (show $ snd $ modelLookup c db))
 
 -- | Automatically reference DDs by number.
-refDD :: RefMap QDefinition -> QDefinition -> Sentence
+refDD :: RefMap DataDefinition -> DataDefinition -> Sentence
 refDD db c = customRef c (shortname' $ "DD" ++ (show $ snd $ modelLookup c db))
 
 -- | Automatically reference IMs by number.

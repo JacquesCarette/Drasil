@@ -100,8 +100,7 @@ module Language.Drasil (
   -- Chunk.Attributes --FIXME: Changed a lot
   , getSource
   , Derivation, getDerivation, getShortName
-  , sourceref
-  , References
+  , Reference
   -- Chunk.ShortName
   , DeferredCtx(..), resolveSN, ShortName, shortname', HasShortName(shortname)
   --Citations
@@ -126,7 +125,7 @@ module Language.Drasil (
   , cProceedings, cTechReport, cUnpublished
   , CitationKind(..)
   -- Spec
-  , USymb(..), Sentence(..), sParen, sSqBr, sSqBrNum
+  , USymb(..), Sentence(..), sParen, sSqBr
   , (+:+), (+:+.), (+.), sC, (+:), semiCol, sParenDash
   , sDash
   -- NounPhrase
@@ -259,7 +258,7 @@ import Language.Drasil.Document.GetChunk(vars, combine', vars', combine, ccss)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Derivation (Derivation)
-import Language.Drasil.Chunk.References (References)
+import Language.Drasil.Chunk.References (Reference)
 import Language.Drasil.Chunk.ShortName (DeferredCtx(..), resolveSN, ShortName
   , shortname', HasShortName(shortname))
 import Language.Drasil.Chunk.Change
@@ -316,7 +315,7 @@ import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
                                           , titleize', phrase, plural)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (Sentence(..),
-  sParen, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
+  sParen, sSqBr, sC, (+:+), (+:+.), (+.), (+:),
   semiCol, sParenDash, sDash)
 import Language.Drasil.Reference (makeRef, mkRefFrmLbl, ReferenceDB, assumpDB, reqDB
                                  , AssumpMap, assumpLookup, HasAssumpRefs

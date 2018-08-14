@@ -1,9 +1,8 @@
-module Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, effStress_new, 
-  hookesLaw_new) where
+module Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress, 
+  hookesLaw) where
 
 import Prelude hiding (tan)
 import Language.Drasil
-import Drasil.DocLang (refA)
 
 import Data.Drasil.Quantities.Physics (displacement, distance, force)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
@@ -17,38 +16,38 @@ import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe',
   sAnd, sOf)
 
-import Drasil.SSP.Assumptions (newA8, newA9, sspRefDB)
+import Drasil.SSP.Assumptions (newA8, newA9)
 import Drasil.SSP.Defs (factor, factorOfSafety, slope, soil)
 import Drasil.SSP.Unitals (cohesion, fricAngle, fs, fx, fy, genDisplace,
   genForce, momntOfBdy, normStress, porePressure, shrStress, surfHydroForce)
 
 -- Pre-defined some labels. They will be re-used for tings which are 'the same'
 l1, l2, l3, l4, l5 :: Label
-l1 = mkLabelSame "fs_rc" (Def TM)
-l2 = mkLabelSame "equilibrium" (Def TM)
-l3 = mkLabelSame "mcShrStrgth" (Def TM)
-l4 = mkLabelSame "effStress" (Def TM)
-l5 = mkLabelSame "hookesLaw" (Def TM)
+l1 = mkLabelSame "factOfSafety" (Def TM)
+l2 = mkLabelSame "equilibrium"  (Def TM)
+l3 = mkLabelSame "mcShrStrgth"  (Def TM)
+l4 = mkLabelSame "effStress"    (Def TM)
+l5 = mkLabelSame "hookesLaw"    (Def TM)
 
 --------------------------
 --  Theoretical Models  --
 --------------------------
 
 ------------- New Chunk -----------
-fs_rc_new :: TheoryModel
-fs_rc_new = tm' (cw fs_rc)
-  (tc' "fs_rc_new" [qw fs, qw shearRes, qw mobShear] ([] :: [ConceptChunk])
-  [] [TCon Invariant fs_rel] []) l1 [fs_desc]
+factOfSafety :: TheoryModel
+factOfSafety = tm' (cw factOfSafety_rc)
+  (tc' "factOfSafety" [qw fs, qw shearRes, qw mobShear] ([] :: [ConceptChunk])
+  [] [TCon Invariant factOfSafety_rel] []) l1 [factOfSafety_desc]
 
 ------------------------------------
-fs_rc :: RelationConcept
-fs_rc = makeRC "fs_rc" factorOfSafety fs_desc fs_rel l1
+factOfSafety_rc :: RelationConcept
+factOfSafety_rc = makeRC "factOfSafety_rc" factorOfSafety factOfSafety_desc factOfSafety_rel l1
 
-fs_rel :: Relation
-fs_rel = (sy fs) $= (sy shearRes) / (sy mobShear)
+factOfSafety_rel :: Relation
+factOfSafety_rel = (sy fs) $= (sy shearRes) / (sy mobShear)
 
-fs_desc :: Sentence
-fs_desc = foldlSent [
+factOfSafety_desc :: Sentence
+factOfSafety_desc = foldlSent [
   S "The stability metric of the", phrase slope `sC` S "known as the",
   phrase factor `sOf` phrase safety, sParen (ch fs) `sC`
   S "is determined by", S "ratio" `ofThe` phrase shearForce,
@@ -57,14 +56,14 @@ fs_desc = foldlSent [
 
 --
 ------------- New Chunk -----------
-equilibrium_new :: TheoryModel
-equilibrium_new = tm' (cw equilibrium)
-  (tc' "equilibrium_new" [qw fx] ([] :: [ConceptChunk])
+equilibrium :: TheoryModel
+equilibrium = tm' (cw equilibrium_rc)
+  (tc' "equilibrium" [qw fx] ([] :: [ConceptChunk])
   [] [TCon Invariant eq_rel] []) l2 [eq_desc]
 
 ------------------------------------  
-equilibrium :: RelationConcept
-equilibrium = makeRC "equilibrium" (nounPhraseSP "equilibrium") eq_desc eq_rel l2
+equilibrium_rc :: RelationConcept
+equilibrium_rc = makeRC "equilibrium_rc" (nounPhraseSP "equilibrium") eq_desc eq_rel l2
 
 -- FIXME: Atomic "i" is a hack.  But we need to sum over something!
 eq_rel :: Relation
@@ -74,22 +73,22 @@ eq_rel = foldr ($=) 0 (map summ [fx, fy, momntOfBdy])
 eq_desc :: Sentence
 eq_desc = foldlSent [S "For a body in static equilibrium, the net",
   plural force +:+. S "and net moments acting on the body will cancel out",
-  S "Assuming a 2D problem", sParen (refA sspRefDB newA8), S "the", getTandS fx `sAnd`
+  S "Assuming a 2D problem", sParen (makeRef newA8), S "the", getTandS fx `sAnd`
   getTandS fy, S "will be equal to" +:+. E 0, S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation",
   S "will create a net moment equal to" +:+ E 0]
 
 --
 ------------- New Chunk -----------
-mcShrStrgth_new :: TheoryModel
-mcShrStrgth_new = tm' (cw mcShrStrgth)
-  (tc' "mcShrStrgth_new" [qw shrStress, qw normStress, qw fricAngle, qw cohesion] 
+mcShrStrgth :: TheoryModel
+mcShrStrgth = tm' (cw mcShrStrgth_rc)
+  (tc' "mcShrStrgth" [qw shrStress, qw normStress, qw fricAngle, qw cohesion] 
   ([] :: [ConceptChunk])
   [] [TCon Invariant mcSS_rel] []) l3 [mcSS_desc]
 
 ------------------------------------
-mcShrStrgth :: RelationConcept
-mcShrStrgth = makeRC "mcShrStrgth" (nounPhraseSP "Mohr-Coulumb shear strength")
+mcShrStrgth_rc :: RelationConcept
+mcShrStrgth_rc = makeRC "mcShrStrgth_rc" (nounPhraseSP "Mohr-Coulumb shear strength")
   mcSS_desc mcSS_rel l3
 
 mcSS_rel :: Relation
@@ -111,20 +110,20 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
   S "relationship is not truly",
   phrase linear `sC` S "but assuming the effective", phrase normForce, 
   S "is strong enough, it can be approximated with a", phrase linear,
-  S "fit", sParen (refA sspRefDB newA9), S "where the cohesion", ch cohesion,
+  S "fit", sParen (makeRef newA9), S "where the cohesion", ch cohesion,
   S "represents the", ch shrStress, S "intercept of the fitted line"]
 
 --
 ------------- New Chunk -----------
-effStress_new :: TheoryModel
-effStress_new = tm' (cw effStress)
-  (tc' "effStress_new" [qw normStress, qw porePressure] 
+effStress :: TheoryModel
+effStress = tm' (cw effStress_rc)
+  (tc' "effStress" [qw normStress, qw porePressure] 
   ([] :: [ConceptChunk])
   [] [TCon Invariant effS_rel] []) l4 [effS_desc]
 
 ------------------------------------
-effStress :: RelationConcept
-effStress = makeRC "effStress"
+effStress_rc :: RelationConcept
+effStress_rc = makeRC "effStress_rc"
   (nounPhraseSP "effective stress") effS_desc effS_rel l4
 
 effS_rel :: Relation
@@ -146,15 +145,15 @@ effS_desc = foldlSent [ch normStress, S "is the total", phrase stress,
 
 --
 ------------- New Chunk -----------
-hookesLaw_new :: TheoryModel
-hookesLaw_new = tm' (cw hookesLaw)
-  (tc' "effStress_new" [qw genForce, qw stffness, qw genDisplace] 
+hookesLaw :: TheoryModel
+hookesLaw = tm' (cw hookesLaw_rc)
+  (tc' "effStress" [qw genForce, qw stffness, qw genDisplace] 
   ([] :: [ConceptChunk])
   [] [TCon Invariant hksLw_rel] []) l5 [hksLw_desc]
 
 ------------------------------------
-hookesLaw :: RelationConcept
-hookesLaw = makeRC "hookesLaw"
+hookesLaw_rc :: RelationConcept
+hookesLaw_rc = makeRC "hookesLaw_rc"
   (nounPhraseSP "Hooke's law") hksLw_desc hksLw_rel l5
 
 hksLw_rel :: Relation

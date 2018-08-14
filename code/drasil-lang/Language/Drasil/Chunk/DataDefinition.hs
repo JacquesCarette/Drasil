@@ -5,7 +5,7 @@ import Control.Lens(makeLenses, (^.), view)
 
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn',
   fromEqn''', fromEqn'''')
-import Language.Drasil.Chunk.References (References)
+import Language.Drasil.Chunk.References (Reference)
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(typ))
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
@@ -30,7 +30,7 @@ data ScopeType = Local Scope {-only visible within a limited scope-} | Global {-
 -- It also has attributes like derivation, source, etc.
 data DataDefinition = DatDef { _qd :: QDefinition
                              , _scp :: ScopeType
-                             , _ref :: References
+                             , _ref :: [Reference]
                              , _deri :: Derivation
                              , _lbl :: Label
                              , _notes :: Maybe [Sentence]
@@ -50,11 +50,11 @@ instance Eq                 DataDefinition where a == b = (a ^. uid) == (b ^. ui
 instance HasDerivation      DataDefinition where derivations = deri
 instance HasAdditionalNotes DataDefinition where getNotes = notes
 instance MayHaveUnit        DataDefinition where getUnit = getUnit . view qd 
-instance HasLabel           DataDefinition where getLabel = qd . getLabel --FIXME: will eventually just be viewed from here
-instance HasShortName       DataDefinition where shortname = qd . shortname --FIXME: will eventually just be viewed from here
+instance HasLabel           DataDefinition where getLabel = lbl
+instance HasShortName       DataDefinition where shortname = lbl . shortname
 
 -- | Smart constructor for data definitions 
-mkDD :: QDefinition -> References -> Derivation -> String -> Maybe [Sentence] -> DataDefinition
+mkDD :: QDefinition -> [Reference] -> Derivation -> String -> Maybe [Sentence] -> DataDefinition
 mkDD a b c d e = DatDef a Global b c (mkLabelSame d (Def DD)) e
 
 qdFromDD :: DataDefinition -> QDefinition
@@ -62,16 +62,16 @@ qdFromDD (DatDef a _ _ _ _ _) = a
 
 -- Used to help make Qdefinitions when uid, term, and symbol come from the same source
 mkQuantDef :: (Quantity c) => c -> Expr -> QDefinition
-mkQuantDef cncpt equation = datadef $ getUnit cncpt --should references be passed in at this point?
+mkQuantDef cncpt equation = datadef $ getUnit cncpt --should [Reference] be passed in at this point?
   where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) a equation (mkLabelSame (cncpt ^. uid) (Def DD))
+                           (eqSymb cncpt) a equation
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) equation (mkLabelSame (cncpt ^. uid) (Def DD))
+                           (eqSymb cncpt) equation
 
 mkQuantDef' :: (Quantity c) => c -> Expr -> QDefinition
 mkQuantDef' cncpt equation = quantdef $ getUnit cncpt --should references be passed in at this point?
   where quantdef (Just a) = fromEqn'''  (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) a equation (cncpt ^. uid) --shortname
+                           (eqSymb cncpt) a equation
         quantdef Nothing  = fromEqn'''' (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) equation (cncpt ^. uid) --shortname
+                           (eqSymb cncpt) equation
 

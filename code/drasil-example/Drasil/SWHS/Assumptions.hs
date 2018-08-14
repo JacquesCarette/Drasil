@@ -25,7 +25,7 @@ import Drasil.SWHS.Labels (thermalEnergyOnlyL, lawConvectiveCoolingWtrPCML,
   waterAlwaysLiquidL, noGaseousStatePCML, atmosphericPressureTankL, 
   nwtnCoolingL, rocTempSimpL, eBalanceOnWtrL, eBalanceOnPCML, heatEInWtrL, 
   heatEInPCML)
-import Drasil.SWHS.References (ref_swhs_citations)
+import Drasil.SWHS.References (swhsCitations)
 import Drasil.SWHS.TMods (t1ConsThermE)
 import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, temp_init, temp_W,
   temp_PCM, htCap_L_P, htCap_W, htCap_S_P, w_density, pcm_density, pcm_vol)
@@ -34,7 +34,7 @@ import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, temp_init, temp_W,
 -- 4.2.1 : Assumptions --
 -------------------------
 swhsRefDB :: ReferenceDB
-swhsRefDB = rdb [] [] newAssumptions [] [] ref_swhs_citations []
+swhsRefDB = rdb [] [] newAssumptions [] [] swhsCitations []
 
 newAssumptions :: [AssumpChunk]
 newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10,

@@ -53,7 +53,7 @@ import Drasil.GamePhysics.Changes (likelyChanges, likelyChangesList', unlikelyCh
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
 import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns)
 import Drasil.GamePhysics.IMods (iModels_new, im1_new, im2_new, im3_new)
-import Drasil.GamePhysics.References (cpCitations)
+import Drasil.GamePhysics.References (cpCitations, parnas1972, parnasClements1984)
 import Drasil.GamePhysics.TMods (t1NewtonSL_new, t2NewtonTL_new, 
   t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, cpTMods_new)
 import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
@@ -237,8 +237,8 @@ organization_of_documents_intro :: Sentence
 organization_of_documents_intro = foldlSent 
   [S "The", (phrase organization), S "of this", (phrase document), 
   S "follows the", phrase template, S "for an", (getAcc srs), S "for", 
-  (phrase sciCompS), S "proposed by", (sSqBrNum 3) {-dParnas1972-} `sAnd` 
-  (sSqBrNum 6) {-dParnasPcClements1984-}]
+  (phrase sciCompS), S "proposed by", makeRef parnas1972 `sAnd` 
+  makeRef parnasClements1984]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --

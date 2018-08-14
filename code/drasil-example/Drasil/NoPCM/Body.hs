@@ -8,7 +8,6 @@ import Control.Lens ((^.))
 import Data.Drasil.People (thulasi)
 import Data.Drasil.Utils (enumSimple,
   itemRefToSent, makeTMatrix, itemRefToSent, noRefs)
-import Data.Drasil.Citations (parnasClements1986, smithLai2005)
 
 import Data.Drasil.Concepts.Documentation as Doc (inModel,
   requirement, item, assumption, thModel, traceyMatrix, model, output_, quantity, input_, 
@@ -58,9 +57,10 @@ import Drasil.SWHS.Changes (chgsStart, likeChg2, likeChg3, likeChg6)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, tank_para, transient, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCDD)
 import Drasil.SWHS.IMods (eBalanceOnPCM, heatEInWtr)
-import Drasil.SWHS.GenDefs (nwtnCooling, rocTempSimp, rocTempSimpGD,
-  nwtnCooling_desc, rocTempSimp_desc, swhsGDs)
-import Drasil.SWHS.References (ref2, ref3, ref4)
+import Drasil.SWHS.GenDefs (nwtnCooling, rocTempSimp, rocTempSimpGD, nwtnCooling_desc, 
+  rocTempSimp_desc, swhsGDs)
+import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, parnasClements1986, 
+  smithLai2005)
 import Drasil.SWHS.Requirements (nonFuncReqs)
 import Drasil.SWHS.TMods (t1ConsThermE)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
@@ -888,4 +888,4 @@ specParamVal = valsOfAuxConstantsF progName specParamValList
 ------------
 
 referencesRefList :: BibRef
-referencesRefList = [ref2, ref3, ref4, parnasClements1986, smithLai2005]
+referencesRefList = [incroperaEtAl2007, koothoor2013, lightstone2012, parnasClements1986, smithLai2005]

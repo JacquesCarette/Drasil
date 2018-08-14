@@ -3,21 +3,30 @@ module Language.Drasil.Chunk.Eq
   (QDefinition, fromEqn, fromEqn', fromEqn'', equat, getVC
   , ec, qua, fromEqn''', fromEqn'''') where
 
+import Control.Lens ((^.), makeLenses, view)
+
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, ExprRelat(relat),
   ConceptDomain)
 import Language.Drasil.Chunk.Quantity (HasSpace(typ), QuantityDict,
-  mkQuant, qw)
+  mkQuant, qw, Quantity)
 import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space(Real))
 
-import Control.Lens ((^.), makeLenses, view)
+import Language.Drasil.Chunk.Quantity (HasSpace(typ), Quantity, 
+  QuantityDict, mkQuant, qw)
+import Language.Drasil.Chunk.References (Reference)
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
+import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
 
-import Language.Drasil.Chunk.Quantity (Quantity)
 import Language.Drasil.Development.Unit(unitWrapper, MayHaveUnit(getUnit))
+
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase (NP)
+import Language.Drasil.RefTypes(RefType(..), DType(..))
+import Language.Drasil.Symbol (Symbol)
+import Language.Drasil.Space (Space(Real))
 import Language.Drasil.Spec (Sentence)
 
 -- | A QDefinition is a 'Quantity' with a defining equation.
@@ -37,7 +46,6 @@ instance Quantity      QDefinition where
 instance ExprRelat     QDefinition where relat = equat
 instance Eq            QDefinition where a == b = (a ^. uid) == (b ^. uid)
 instance MayHaveUnit   QDefinition where getUnit = getUnit . view qua
- 
 
 -- | Create a 'QDefinition' with a uid, noun phrase (term), definition, symbol,
 -- unit, and defining equation.  And it ignores the definition...

@@ -5,7 +5,8 @@ module Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS) where
 import Language.Drasil
 import Drasil.DocLang (mkLklyChnk, mkUnLklyChnk)
 
-import Drasil.GlassBR.Assumptions (assumptionConstants, newA2, newA3, newA4, newA5, newA6, newA7, newA8)
+import Drasil.GlassBR.Assumptions (glassCondition, explainScenario, standardValues, glassLite, 
+  boundaryConditions, responseType, ldfConstant, assumptionConstants)
 import Drasil.GlassBR.Concepts (blastRisk, glaSlab, glass)
 import Drasil.GlassBR.Unitals (explosion, lite)
 
@@ -32,26 +33,26 @@ likelychg5 = mkLklyChnk "likelychg5" (lc5Desc) "Consider-More-than-Flexure-Glass
 lc1Desc :: NamedChunk -> Sentence
 lc2Desc, lc3Desc, lc4Desc, lc5Desc :: Sentence
 
-lc1Desc mainConcept = foldlSent [(makeRef newA3) `sDash` S "The",
+lc1Desc mainConcept = foldlSent [(makeRef explainScenario) `sDash` S "The",
   phrase system, S "currently only calculates for external" +:+.
   phrase mainConcept, S "In the future,", plural calculation,
   S "can be added for the internal", phrase mainConcept]
 
-lc2Desc = foldlSent [(makeRef newA4) `sC` ((makeRef newA8) `sDash`
+lc2Desc = foldlSent [(makeRef standardValues) `sC` ((makeRef ldfConstant) `sDash`
   S "Currently, the"), plural value, S "for",
   foldlList Comma List (map ch (take 3 assumptionConstants)),
   S "are assumed to be the same for all" +:+. phrase glass,
   S "In the future, these", plural value, S "can be changed to",
   phrase variable, plural input_]
 
-lc3Desc = foldlSent [(makeRef newA5) `sDash` S "The", phrase software,
+lc3Desc = foldlSent [(makeRef glassLite) `sDash` S "The", phrase software,
   S "may be changed to accommodate more than a single", phrase lite]
 
-lc4Desc = foldlSent [(makeRef newA6) `sDash` S "The", phrase software,
+lc4Desc = foldlSent [(makeRef boundaryConditions) `sDash` S "The", phrase software,
   S "may be changed to accommodate more boundary", plural condition,
   S "than 4-sided support"]
 
-lc5Desc = foldlSent [(makeRef newA7) `sDash` S "The", phrase software,
+lc5Desc = foldlSent [(makeRef responseType) `sDash` S "The", phrase software,
   S "may be changed to consider more than just", phrase flexure,
   S "of the glass"]
 
@@ -71,6 +72,6 @@ uc1Desc = foldlSent [S "The", phrase goal, S "of the", phrase system,
   S "is to predict whether the", phrase glaSlab, S "under consideration can",
   S "withstand an", phrase explosion, S "of a certain degree"]
 
-uc2Desc = foldlSent [makeRef newA2, S "requires that the", phrase glass +:+.
+uc2Desc = foldlSent [makeRef glassCondition, S "requires that the", phrase glass +:+.
   S "is not altered in any way", S "Therefore, this cannot be used on altered",
   phrase glass]

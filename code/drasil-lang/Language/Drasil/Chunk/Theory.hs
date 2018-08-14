@@ -12,7 +12,7 @@ import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import Language.Drasil.Chunk.Constrained.Core (TheoryConstraint)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.Quantity (Quantity, QuantityDict, qw)
-import Language.Drasil.Chunk.References (References)
+import Language.Drasil.Chunk.References (Reference)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Label.Core (Label)
@@ -38,7 +38,7 @@ data TheoryChunk = TC { _tid :: UID
                       , _defq :: [QDefinition]
                       , _invs :: [TheoryConstraint]
                       , _dfun :: [QDefinition]
-                      , _ref :: References
+                      , _ref :: [Reference]
                       }
 makeLenses ''TheoryChunk
 

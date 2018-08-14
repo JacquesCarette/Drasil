@@ -1,7 +1,5 @@
 module Drasil.GlassBR.DataDefs (aspRat, dataDefns, dimLL, gbQDefns, glaTyFac, 
-  hFromt, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac, 
-  -- DataDefinitions for Assumptions
-  loadDFDD, nonFLDD, dimLLDD, tolStrDisFacDD) where
+  hFromt, loadDF, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac) where
 
 import Language.Drasil
 import Prelude hiding (log, exp, sqrt)
@@ -27,13 +25,13 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio,
 ----------------------
 
 dataDefns :: [DataDefinition] 
-dataDefns = [riskDD, hFromtDD, loadDFDD, strDisFacDD, nonFLDD, glaTyFacDD, 
-  dimLLDD, tolPreDD, tolStrDisFacDD, standOffDisDD, aspRatDD]
+dataDefns = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, 
+  dimLL, tolPre, tolStrDisFac, standOffDis, aspRat]
 
 gbQDefns :: [Block QDefinition]
-gbQDefns = [Parallel hFromt {-DD2-} [glaTyFac {-DD6-}]] ++ --can be calculated on their own
-  map (\x -> Parallel x []) [dimLL {-DD7-}, strDisFac {-DD4-}, risk {-DD1-},
-  tolStrDisFac {-DD9-}, tolPre {-DD8-}, nonFL {-DD5-}] 
+gbQDefns = [Parallel hFromtQD {-DD2-} [glaTyFacQD {-DD6-}]] ++ --can be calculated on their own
+  map (\x -> Parallel x []) [dimLLQD {-DD7-}, strDisFacQD {-DD4-}, riskQD {-DD1-},
+  tolStrDisFacQD {-DD9-}, tolPreQD {-DD8-}, nonFLQD {-DD5-}] 
 
 --DD1--
 
@@ -44,11 +42,11 @@ risk_eq = ((sy sflawParamK) /
   * (sy lDurFac) * (exp (sy stressDistFac)))
 
 -- FIXME [4] !!!
-risk :: QDefinition
-risk = mkQuantDef risk_fun risk_eq
+riskQD :: QDefinition
+riskQD = mkQuantDef risk_fun risk_eq
 
-riskDD :: DataDefinition
-riskDD = mkDD risk 
+risk :: DataDefinition
+risk = mkDD riskQD 
   [makeRef astm2009, makeRef beasonEtAl1998 +:+ sParen (S "Eq. 4-5"), 
   makeRef campidelli +:+ sParen (S "Eq. 14")] 
   [{-derivation-}] ""{-temporary-} 
@@ -63,11 +61,11 @@ hFromt_eq = (1/1000) * (case_ (zipWith hFromt_helper
 hFromt_helper :: Double -> Double -> (Expr, Relation)
 hFromt_helper result condition = (dbl result, (sy nom_thick) $= dbl condition)
 
-hFromt :: QDefinition
-hFromt = mkQuantDef min_thick hFromt_eq
+hFromtQD :: QDefinition
+hFromtQD = mkQuantDef min_thick hFromt_eq
 
-hFromtDD :: DataDefinition
-hFromtDD = mkDD hFromt [{-references-}] [{-derivation-}] ""--temporary
+hFromt :: DataDefinition
+hFromt = mkDD hFromtQD [{-references-}] [{-derivation-}] ""--temporary
   (Just $ [hMin])
 
 --DD3-- (#749)
@@ -75,11 +73,11 @@ hFromtDD = mkDD hFromt [{-references-}] [{-derivation-}] ""--temporary
 loadDF_eq :: Expr 
 loadDF_eq = (sy load_dur / 60) $^ (sy sflawParamM / 16)
 
-loadDF :: QDefinition
-loadDF = mkQuantDef lDurFac loadDF_eq
+loadDFQD :: QDefinition
+loadDFQD = mkQuantDef lDurFac loadDF_eq
 
-loadDFDD :: DataDefinition
-loadDFDD = mkDD loadDF [{-references-}] [{-derivation-}] ""--temporary
+loadDF :: DataDefinition
+loadDF = mkDD loadDFQD [{-references-}] [{-derivation-}] ""--temporary
   Nothing
 
 --DD4--
@@ -89,11 +87,11 @@ strDisFac_eq = apply (sy stressDistFac)
   [sy dimlessLoad, sy aspect_ratio]
 --strDisFac_eq = FCall (asExpr interpZ) [V "SDF.txt", (sy plate_len) / (sy plate_width), sy dimlessLoad]
   
-strDisFac :: QDefinition
-strDisFac = mkQuantDef stressDistFac strDisFac_eq
+strDisFacQD :: QDefinition
+strDisFacQD = mkQuantDef stressDistFac strDisFac_eq
 
-strDisFacDD :: DataDefinition
-strDisFacDD = mkDD strDisFac [{-references-}] [{-derivation-}] ""--temporary
+strDisFac :: DataDefinition
+strDisFac = mkDD strDisFacQD [{-references-}] [{-derivation-}] ""--temporary
   (Just $ jRef2 : qHtRef : arRef : [])
 
 --DD5--
@@ -102,11 +100,11 @@ nonFL_eq :: Expr
 nonFL_eq = ((sy tolLoad) * (sy mod_elas) * (sy min_thick) $^ 4) /
   (square (sy plate_len * sy plate_width))
 
-nonFL :: QDefinition
-nonFL = mkQuantDef nonFactorL nonFL_eq
+nonFLQD :: QDefinition
+nonFLQD = mkQuantDef nonFactorL nonFL_eq
 
-nonFLDD :: DataDefinition
-nonFLDD = mkDD nonFL [{-references-}] [{-derivation-}] ""--temporary
+nonFL :: DataDefinition
+nonFL = mkDD nonFLQD [{-references-}] [{-derivation-}] ""--temporary
   (Just $ aGrtrThanB : hRef : qHtTlTolRef : [])
 
 --DD6--
@@ -117,11 +115,11 @@ glaTyFac_eq = (case_ (zipWith glaTyFac_helper glassTypeFactors glassTypeAbbrsStr
 glaTyFac_helper :: Integer -> String -> (Expr, Relation)
 glaTyFac_helper result condition = (int result, (sy glass_type) $= str condition)
 
-glaTyFac :: QDefinition
-glaTyFac = mkQuantDef gTF glaTyFac_eq
+glaTyFacQD :: QDefinition
+glaTyFacQD = mkQuantDef gTF glaTyFac_eq
 
-glaTyFacDD :: DataDefinition
-glaTyFacDD = mkDD glaTyFac [{-references-}] [{-derivation-}] ""--temporary
+glaTyFac :: DataDefinition
+glaTyFac = mkDD glaTyFacQD [{-references-}] [{-derivation-}] ""--temporary
   (Just $ anGlass : ftGlass : hsGlass : [])
 
 --DD7--
@@ -130,11 +128,11 @@ dimLL_eq :: Expr
 dimLL_eq = ((sy demand) * (square (sy plate_len * sy plate_width)))
   / ((sy mod_elas) * (sy min_thick $^ 4) * (sy gTF))
 
-dimLL :: QDefinition
-dimLL = mkQuantDef dimlessLoad dimLL_eq
+dimLLQD :: QDefinition
+dimLLQD = mkQuantDef dimlessLoad dimLL_eq
 
-dimLLDD :: DataDefinition
-dimLLDD = mkDD dimLL [makeRef campidelli +:+ sParen (S "Eq. 7")] [{-derivation-}] ""--temporary
+dimLL :: DataDefinition
+dimLL = mkDD dimLLQD [makeRef campidelli +:+ sParen (S "Eq. 7")] [{-derivation-}] ""--temporary
   (Just $ qRef : aGrtrThanB : hRef : gtfRef : glassLiteRef : [])
 
 --DD8--
@@ -143,11 +141,11 @@ tolPre_eq :: Expr
 tolPre_eq = apply (sy tolLoad) [sy sdf_tol, (sy plate_len) / (sy plate_width)]
 --tolPre_eq = FCall (asExpr interpY) [V "SDF.txt", (sy plate_len) / (sy plate_width), sy sdf_tol]
 
-tolPre :: QDefinition
-tolPre = mkQuantDef tolLoad tolPre_eq
+tolPreQD :: QDefinition
+tolPreQD = mkQuantDef tolLoad tolPre_eq
 
-tolPreDD :: DataDefinition
-tolPreDD = mkDD tolPre [{-references-}] [{-derivation-}] ""--temporary
+tolPre :: DataDefinition
+tolPre = mkDD tolPreQD [{-references-}] [{-derivation-}] ""--temporary
   (Just $ qHtTlExtra : [])
 
 --DD9--
@@ -158,11 +156,11 @@ tolStrDisFac_eq = ln (ln (1 / (1 - (sy pb_tol)))
     ((sy sflawParamK) * ((sy mod_elas *
     (square (sy min_thick)))) $^ (sy sflawParamM) * (sy lDurFac)))))
 
-tolStrDisFac :: QDefinition
-tolStrDisFac = mkQuantDef sdf_tol tolStrDisFac_eq
+tolStrDisFacQD :: QDefinition
+tolStrDisFacQD = mkQuantDef sdf_tol tolStrDisFac_eq
 
-tolStrDisFacDD :: DataDefinition
-tolStrDisFacDD = mkDD tolStrDisFac [{-references-}] [{-derivation-}] ""--temporary
+tolStrDisFac :: DataDefinition
+tolStrDisFac = mkDD tolStrDisFacQD [{-references-}] [{-derivation-}] ""--temporary
   (Just $ jtolRelToPbtol : aGrtrThanB : hRef : ldfRef : pbTolUsr : [])
 
 --DD10--
@@ -170,11 +168,11 @@ tolStrDisFacDD = mkDD tolStrDisFac [{-references-}] [{-derivation-}] ""--tempora
 standOffDis_eq :: Expr
 standOffDis_eq = sqrt ((sy sdx) $^ 2 + (sy sdy) $^ 2 + (sy sdz) $^ 2)
 
-standOffDis :: QDefinition
-standOffDis = mkQuantDef standOffDist standOffDis_eq
+standOffDisQD :: QDefinition
+standOffDisQD = mkQuantDef standOffDist standOffDis_eq
 
-standOffDisDD :: DataDefinition
-standOffDisDD = mkDD standOffDis [{-references-}] [{-derivation-}] ""--temporary
+standOffDis :: DataDefinition
+standOffDis = mkDD standOffDisQD [{-references-}] [{-derivation-}] ""--temporary
   Nothing
 
 --DD11--
@@ -182,11 +180,11 @@ standOffDisDD = mkDD standOffDis [{-references-}] [{-derivation-}] ""--temporary
 aspRat_eq :: Expr
 aspRat_eq = (sy plate_len) / (sy plate_width)
 
-aspRat :: QDefinition
-aspRat = mkQuantDef aspect_ratio aspRat_eq
+aspRatQD :: QDefinition
+aspRatQD = mkQuantDef aspect_ratio aspRat_eq
 
-aspRatDD :: DataDefinition
-aspRatDD = mkDD aspRat [{-references-}] [{-derivation-}] ""--temporary
+aspRat :: DataDefinition
+aspRat = mkDD aspRatQD [{-references-}] [{-derivation-}] ""--temporary
   (Just $ aGrtrThanB : [])
 
 --Additional Notes--
@@ -201,20 +199,20 @@ anGlass = (getAcc annealed +:+ S "is" +:+ phrase annealed +:+ S "glass")
 
 arRef :: Sentence
 arRef = (ch aspect_ratio +:+ S "is the" +:+ phrase aspect_ratio +:+.
-  S "defined in" +:+ makeRef aspRatDD)
+  S "defined in" +:+ makeRef aspRat)
 
 ftGlass :: Sentence
 ftGlass = (getAcc fullyT +:+ S "is" +:+ phrase fullyT +:+ S "glass")
 
 hRef :: Sentence
 hRef = (ch min_thick +:+ S "is the minimum thickness" `sC` 
-  S "which is based on the nominal thicknesses as shown in" +:+. makeRef hFromtDD)
+  S "which is based on the nominal thicknesses as shown in" +:+. makeRef hFromt)
 
 hsGlass :: Sentence
 hsGlass = (getAcc heatS +:+ S "is" +:+ phrase heatS +:+ S "glass")
 
 ldfRef :: Sentence
-ldfRef = (ch lDurFac +:+ S "is the" +:+ phrase lDurFac +:+ S "as defined by" +:+. makeRef loadDFDD)
+ldfRef = (ch lDurFac +:+ S "is the" +:+ phrase lDurFac +:+ S "as defined by" +:+. makeRef loadDF)
 
 pbTolUsr :: Sentence
 pbTolUsr = (ch pb_tol +:+ S "is the tolerable" +:+ phrase probability +:+ S "entered by the" +:+. 
@@ -222,7 +220,7 @@ pbTolUsr = (ch pb_tol +:+ S "is the tolerable" +:+ phrase probability +:+ S "ent
 
 jRef :: Sentence
 jRef = (ch stressDistFac +:+ S "is the" +:+ phrase stressDistFac `sC` S "as defined in" +:+. 
-  makeRef strDisFacDD)
+  makeRef strDisFac)
 
 hMin :: Sentence
 hMin = (ch nom_thick +:+ S "is a function that maps from the nominal thickness"
@@ -232,19 +230,19 @@ qHtTlExtra :: Sentence
 qHtTlExtra = (ch tolLoad +:+ S "is the tolerable load which is obtained from Figure 7 using" 
   +:+ ch sdf_tol `sAnd` phrase aspect_ratio +:+ S "as" +:+ plural parameter +:+. S "using interpolation" 
   +:+ titleize' calculation +:+ S "of" +:+ ch sdf_tol `sAnd` ch aspect_ratio +:+ 
-  S "are defined in" +:+. makeRef tolStrDisFacDD `sAnd` makeRef aspRatDD `sC` S "respectively")
+  S "are defined in" +:+. makeRef tolStrDisFac `sAnd` makeRef aspRat `sC` S "respectively")
 
 qHtTlTolRef :: Sentence
-qHtTlTolRef = (ch tolLoad +:+ S "is the tolerable load defined in" +:+. makeRef tolPreDD)
+qHtTlTolRef = (ch tolLoad +:+ S "is the tolerable load defined in" +:+. makeRef tolPre)
 
 qRef :: Sentence
 qRef = (ch demand +:+ S "is the 3 second equivalent pressure, as given in" +:+. makeRef calOfDemandL)
 
 gtfRef :: Sentence
-gtfRef = (ch gTF +:+ S "is the" +:+. (phrase gTF `sC` S "as given by" +:+ makeRef glaTyFacDD))
+gtfRef = (ch gTF +:+ S "is the" +:+. (phrase gTF `sC` S "as given by" +:+ makeRef glaTyFac))
 
 qHtRef :: Sentence
-qHtRef = (ch dimlessLoad +:+ S "is the" +:+ phrase dimlessLoad +:+ S "defined in" +:+. makeRef dimLLDD)
+qHtRef = (ch dimlessLoad +:+ S "is the" +:+ phrase dimlessLoad +:+ S "defined in" +:+. makeRef dimLL)
 
 jRef2 :: Sentence
 jRef2 = (ch stressDistFac +:+ S "is the" +:+ phrase stressDistFac `sC` 

@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.Thermodynamics (boil_pt, boiling, heat, heat_cap_spe
 
 import Drasil.SWHS.Assumptions (newA12, newA14, newA15, newA16, newA17, newA18, newA19)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, tank, water)
-import Drasil.SWHS.DataDefs(dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac)
+import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac)
 import Drasil.SWHS.Labels (rocTempSimpL, eBalanceOnWtrL, eBalanceOnPCML, heatEInWtrL, heatEInPCML)
 import Drasil.SWHS.TMods (t2SensHtE, t3LatHtE)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, ht_flux_C, ht_flux_P, htCap_L_P, 
@@ -102,7 +102,7 @@ eBalanceOnWtrDerivDesc1 roc tw en wt vo wvo ms wms hcs hw ht cl hfc cs ps tk hfp
     (sParen (makeRef newA16) `sC` (E $ sy vhg $= 0)), S "Therefore, the equation for",
      makeRef rocTempSimpL, S "can be written as"]
 
-eBalanceOnWtrDerivDesc2 :: QDefinition -> QDefinition -> [Sentence]
+eBalanceOnWtrDerivDesc2 :: DataDefinition -> DataDefinition -> [Sentence]
 eBalanceOnWtrDerivDesc2 dd1 dd2 =
   [S "Using", makeRef dd1, S "and", makeRef dd2, S "for", 
   (E $ sy dd1) `sAnd` (E $ sy dd2),
@@ -269,7 +269,7 @@ eBalanceOnPCMDerivDesc1 roc tempP en wt vo pcmvo pm hcs hsp hf hfp pc ps ht ass1
    (sParen (makeRef ass16)) `sC` (E $ sy vhg $= 0), S ", the equation for",
    makeRef rocTempSimpL, S "can be written as"]
 
-eBalanceOnPCMDerivDesc2 :: QDefinition -> UnitalChunk -> [Sentence]
+eBalanceOnPCMDerivDesc2 :: DataDefinition -> UnitalChunk -> [Sentence]
 eBalanceOnPCMDerivDesc2 dd2 hfp =
   [S "Using", makeRef dd2, S "for", (E $ sy hfp) `sC` 
   S "this equation can be written as"]

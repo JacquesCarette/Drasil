@@ -55,7 +55,7 @@ import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc,
   orgDocIntro, physSyst1, physSyst2, traceFig1, traceFig2, traceIntro2, traceTrailing)
 import Drasil.SWHS.Changes (chgsStart, likeChg2, likeChg3, likeChg6)
 import Drasil.SWHS.Concepts (coil, progName, sWHT, tank, tank_para, transient, water)
-import Drasil.SWHS.DataDefs(dd1HtFluxC, dd1HtFluxCDD)
+import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.IMods (eBalanceOnPCM, heatEInWtr)
 import Drasil.SWHS.GenDefs (nwtnCooling, rocTempSimp, rocTempSimpGD, nwtnCooling_desc, 
   rocTempSimp_desc, swhsGDs)
@@ -139,7 +139,7 @@ mkSRS = RefSec (RefProg intro
           [ Assumptions 
           , TMs ([Label] ++ stdFields) [t1ConsThermE] -- only have the same T1 with SWHS
           , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
-          , DDs' ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxCDD] ShowDerivation
+          , DDs' ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
             [eBalanceOnWtr, heatEInWtr] ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty dataContMid
@@ -165,11 +165,11 @@ nopcm_si = SI {
   _units = check_si,
   _quants = symbT,
   _concepts = nopcm_Symbols,
-  _definitions = [dd1HtFluxC],          --dataDefs
-  _datadefs = [dd1HtFluxCDD],
+  _definitions = [dd1HtFluxCQD],          --dataDefs
+  _datadefs = [dd1HtFluxC],
   _inputs = (map qw nopcm_Constraints), --inputs
   _outputs = (map qw [temp_W, w_E]),     --outputs
-  _defSequence = [Parallel dd1HtFluxC []],
+  _defSequence = [Parallel dd1HtFluxCQD []],
   _constraints = (nopcm_Constraints),        --constrained
   _constants = [],
   _sysinfodb = nopcm_SymbMap,
@@ -463,7 +463,7 @@ iModDesc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin _ vhg _ =
   E (sy vhg $= 0)), S "Therefore, the", phrase M.equation, S "for",
   makeRef rocTempSimpGD, S "can be written as"]
 
-iModDesc2 :: QDefinition -> [Sentence]
+iModDesc2 :: DataDefinition -> [Sentence]
 iModDesc2 d1hf = [S "Using", (makeRef d1hf) `sC` S "this can be written as"]
 
 iModDesc3 :: UnitalChunk -> UncertQ -> [Sentence]

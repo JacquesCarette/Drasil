@@ -1957,7 +1957,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-For a slice of mass in the slope the force equilibrium to satisfy <a href=#T:equilibrium>T: equilibrium</a> in the direction perpendicular to the base surface of the slice. Rearranged to solve for the normal force of the surface <em>N</em>. Force equilibrium is derived from the free body diagram of <a href=#Sec:PhysSyst>Physical System Description</a> Index i refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSyst>Physical System Description</a>. Force variable definitions can be found in <a href=#DD:W.i>DD: W_i</a> to <a href=#DD:l.s,i>DD: l_s,i</a>.
+For a slice of mass in the slope the force equilibrium to satisfy <a href=#T:equilibrium>T: equilibrium</a> in the direction perpendicular to the base surface of the slice. Rearranged to solve for the normal force of the surface <em>N</em>. Force equilibrium is derived from the free body diagram of <a href=#Sec:PhysSyst>Physical System Description</a> Index i refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSyst>Physical System Description</a>. Force variable definitions can be found in <a href=#DD:sliceWght>DD: sliceWght</a> to <a href=#DD:lengthLs>DD: lengthLs</a>.
 </p>
 </td>
 </tr>
@@ -2058,7 +2058,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-For a slice of mass in the slope the force equilibrium to satisfy <a href=#T:equilibrium>T: equilibrium</a> in the direction parallel to the base surface of the slice. Rearranged to solve for the shear force on the base <em>S</em>. Force equilibrium is derived from the free body diagram of <a href=#Sec:PhysSyst>Physical System Description</a> Index <em>i</em> refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSyst>Physical System Description</a>. Force variable definitions can be found in <a href=#DD:W.i>DD: W_i</a> to <a href=#DD:l.s,i>DD: l_s,i</a>.
+For a slice of mass in the slope the force equilibrium to satisfy <a href=#T:equilibrium>T: equilibrium</a> in the direction parallel to the base surface of the slice. Rearranged to solve for the shear force on the base <em>S</em>. Force equilibrium is derived from the free body diagram of <a href=#Sec:PhysSyst>Physical System Description</a> Index <em>i</em> refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSyst>Physical System Description</a>. Force variable definitions can be found in <a href=#DD:sliceWght>DD: sliceWght</a> to <a href=#DD:lengthLs>DD: lengthLs</a>.
 </p>
 </td>
 </tr>
@@ -2476,7 +2476,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-For a slice of mass in the slope the moment equilibrium to satisfy <a href=#T:equilibrium>T: equilibrium</a> in the direction perpendicular to the base surface of the slice. Moment equilibrium is derived from the free body diagram of <a href=#Sec:PhysSyst>Physical System Description</a>. Index i refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSyst>Physical System Description</a>. Variable definitions can be found in <a href=#DD:W.i>DD: W_i</a> to <a href=#DD:l.s,i>DD: l_s,i</a>.
+For a slice of mass in the slope the moment equilibrium to satisfy <a href=#T:equilibrium>T: equilibrium</a> in the direction perpendicular to the base surface of the slice. Moment equilibrium is derived from the free body diagram of <a href=#Sec:PhysSyst>Physical System Description</a>. Index i refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSyst>Physical System Description</a>. Variable definitions can be found in <a href=#DD:sliceWght>DD: sliceWght</a> to <a href=#DD:lengthLs>DD: lengthLs</a>.
 </p>
 </td>
 </tr>
@@ -2656,7 +2656,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-These equations show the net sum of the forces acting on a slice for the RFEM model and the forces that create an applied load on the slice. <em>F<sub>x</sub></em> refers to the load in the direction perpendicular to the direction of the force of gravity for slice <em>i</em>, while <em>F<sub>y</sub></em> refers to the load in the direction parallel to the force of gravity for slice <em>i</em>. Forces are found in the free body diagram of <a href=#Sec:PhysSyst>Physical System Description</a>. In this model the elements are not exerting forces on each other, so the interslice forces <em>G</em> and <em>X</em> are not a part of the model. Index <em>i</em> refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSyst>Physical System Description</a>. Force variable definitions can be found in <a href=#DD:W.i>DD: W_i</a> to <a href=#DD:l.b,i>DD: l_b,i</a>.
+These equations show the net sum of the forces acting on a slice for the RFEM model and the forces that create an applied load on the slice. <em>F<sub>x</sub></em> refers to the load in the direction perpendicular to the direction of the force of gravity for slice <em>i</em>, while <em>F<sub>y</sub></em> refers to the load in the direction parallel to the force of gravity for slice <em>i</em>. Forces are found in the free body diagram of <a href=#Sec:PhysSyst>Physical System Description</a>. In this model the elements are not exerting forces on each other, so the interslice forces <em>G</em> and <em>X</em> are not a part of the model. Index <em>i</em> refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSyst>Physical System Description</a>. Force variable definitions can be found in <a href=#DD:sliceWght>DD: sliceWght</a> to <a href=#DD:lengthLb>DD: lengthLb</a>.
 </p>
 </td>
 </tr>
@@ -2748,7 +2748,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-A 2D component implementation of Hooke's law as seen in <a href=#T:hookesLaw>T: hookesLaw</a>. <em>δn</em> is the displacement of the element normal to the surface and <em>δt</em> is the displacement of the element parallel to the surface. Pn,i is the net pressure acting normal to the surface, and Pt,i is the net pressure acting parallel to the surface. Pressure is used in place of force as the surface has not been normalized for it's length. The stiffness values Kn,i and Kt,i are then the resistance to displacement in the respective directions defined as in <a href=#DD:T.i>DD: T_i</a>. The pressure forces would be the result of applied loads on the mass, the product of the stiffness elements with the displacement would be the mass's reactive force that creates equilibrium with the applied forces after reaching the equilibrium displacement.
+A 2D component implementation of Hooke's law as seen in <a href=#T:hookesLaw>T: hookesLaw</a>. <em>δn</em> is the displacement of the element normal to the surface and <em>δt</em> is the displacement of the element parallel to the surface. Pn,i is the net pressure acting normal to the surface, and Pt,i is the net pressure acting parallel to the surface. Pressure is used in place of force as the surface has not been normalized for it's length. The stiffness values Kn,i and Kt,i are then the resistance to displacement in the respective directions defined as in <a href=#DD:mobShearWO>DD: mobShearWO</a>. The pressure forces would be the result of applied loads on the mass, the product of the stiffness elements with the displacement would be the mass's reactive force that creates equilibrium with the applied forces after reaching the equilibrium displacement.
 </p>
 </td>
 </tr>
@@ -2885,7 +2885,7 @@ Data Definitions
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models.
 </p>
-<div id="DD:W.i">
+<div id="DD:sliceWght">
 <table class="ddefn">
 <tr>
 <th>
@@ -2922,7 +2922,7 @@ N
 Equation
 </th>
 <td>
-<div id="Eqn:DD:W.i">
+<div id="Eqn:DD:sliceWght">
 <div class="equation">
 <em>W = b<sub>i</sub>&#8239;<span class="casebr">
 {
@@ -3003,7 +3003,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:U.b,i">
+<div id="DD:baseWtrF">
 <table class="ddefn">
 <tr>
 <th>
@@ -3040,7 +3040,7 @@ N
 Equation
 </th>
 <td>
-<div id="Eqn:DD:U.b,i">
+<div id="Eqn:DD:baseWtrF">
 <div class="equation">
 <em>U<sub>b</sub> = ℓ<sub>b,i</sub>&#8239;<span class="casebr">
 {
@@ -3110,7 +3110,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:U.t,i">
+<div id="DD:surfWtrF">
 <table class="ddefn">
 <tr>
 <th>
@@ -3147,7 +3147,7 @@ N
 Equation
 </th>
 <td>
-<div id="Eqn:DD:U.t,i">
+<div id="Eqn:DD:surfWtrF">
 <div class="equation">
 <em>U<sub>t</sub> = ℓ<sub>s,i</sub>&#8239;<span class="casebr">
 {
@@ -3217,7 +3217,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:H.i">
+<div id="DD:intersliceWtrF">
 <table class="ddefn">
 <tr>
 <th>
@@ -3254,7 +3254,7 @@ N
 Equation
 </th>
 <td>
-<div id="Eqn:DD:H.i">
+<div id="Eqn:DD:intersliceWtrF">
 <div class="equation">
 <em>H = <span class="casebr">
 {
@@ -3343,7 +3343,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:alpha.i">
+<div id="DD:angleA">
 <table class="ddefn">
 <tr>
 <th>
@@ -3380,7 +3380,7 @@ Units
 Equation
 </th>
 <td>
-<div id="Eqn:DD:alpha.i">
+<div id="Eqn:DD:angleA">
 <div class="equation">
 <em>α = <div class="fraction">
 <span class="fup">
@@ -3437,7 +3437,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:beta.i">
+<div id="DD:angleB">
 <table class="ddefn">
 <tr>
 <th>
@@ -3474,7 +3474,7 @@ Units
 Equation
 </th>
 <td>
-<div id="Eqn:DD:beta.i">
+<div id="Eqn:DD:angleB">
 <div class="equation">
 <em>β = <div class="fraction">
 <span class="fup">
@@ -3531,7 +3531,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:b.i">
+<div id="DD:lengthB">
 <table class="ddefn">
 <tr>
 <th>
@@ -3568,7 +3568,7 @@ m
 Equation
 </th>
 <td>
-<div id="Eqn:DD:b.i">
+<div id="Eqn:DD:lengthB">
 <div class="equation">
 <em>b = x<sub>slip,i</sub>&minus;x<sub>slip,i&minus;1</sub></em>
 </div>
@@ -3615,7 +3615,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:l.b,i">
+<div id="DD:lengthLb">
 <table class="ddefn">
 <tr>
 <th>
@@ -3652,7 +3652,7 @@ m
 Equation
 </th>
 <td>
-<div id="Eqn:DD:l.b,i">
+<div id="Eqn:DD:lengthLb">
 <div class="equation">
 <em>ℓ<sub>b</sub> = b<sub>i</sub>&#8239;sec(α<sub>i</sub>)</em>
 </div>
@@ -3702,7 +3702,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:l.s,i">
+<div id="DD:lengthLs">
 <table class="ddefn">
 <tr>
 <th>
@@ -3739,7 +3739,7 @@ m
 Equation
 </th>
 <td>
-<div id="Eqn:DD:l.s,i">
+<div id="Eqn:DD:lengthLs">
 <div class="equation">
 <em>ℓ<sub>s</sub> = b<sub>i</sub>&#8239;sec(β<sub>i</sub>)</em>
 </div>
@@ -3789,7 +3789,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:K.c">
+<div id="DD:seismicLoadF">
 <table class="ddefn">
 <tr>
 <th>
@@ -3826,7 +3826,7 @@ Unitless
 Equation
 </th>
 <td>
-<div id="Eqn:DD:K.c">
+<div id="Eqn:DD:seismicLoadF">
 <div class="equation">
 <em>K<sub>c</sub> = K<sub>c</sub>&#8239;W<sub>i</sub></em>
 </div>
@@ -3876,7 +3876,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:Q.i">
+<div id="DD:surfLoads">
 <table class="ddefn">
 <tr>
 <th>
@@ -3913,7 +3913,7 @@ N
 Equation
 </th>
 <td>
-<div id="Eqn:DD:Q.i">
+<div id="Eqn:DD:surfLoads">
 <div class="equation">
 <em>Q = Q<sub>i</sub>&#8239;ω<sub>i</sub></em>
 </div>
@@ -3963,7 +3963,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:X.i">
+<div id="DD:intrsliceF">
 <table class="ddefn">
 <tr>
 <th>
@@ -4000,7 +4000,7 @@ N
 Equation
 </th>
 <td>
-<div id="Eqn:DD:X.i">
+<div id="Eqn:DD:intrsliceF">
 <div class="equation">
 <em>X = λ&#8239;f<sub>i</sub>&#8239;G<sub>i</sub></em>
 </div>
@@ -4053,7 +4053,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:R.i">
+<div id="DD:resShearWO">
 <table class="ddefn">
 <tr>
 <th>
@@ -4090,7 +4090,7 @@ N
 Equation
 </th>
 <td>
-<div id="Eqn:DD:R.i">
+<div id="Eqn:DD:resShearWO">
 <div class="equation">
 <em>R = ((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;ΔH<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(α<sub>i</sub>)</em>
 </div>
@@ -4179,7 +4179,7 @@ The resistive shear force of a slice is defined as <em>P</em> in <a href=#GD:res
 </div>
 </div>
 <p class="paragraph">
-The values of the interslice forces <em>G</em> and <em>X</em> in the equation are unknown, while the other values are found from the physical force definitions of <a href=#DD:W.i>DD: W_i</a> to <a href=#DD:l.s,i>DD: l_s,i</a>. Consider a force equilibrium without the affect of interslice forces, to obtain a solvable value as done for <em>N*</em> in equation (2):
+The values of the interslice forces <em>G</em> and <em>X</em> in the equation are unknown, while the other values are found from the physical force definitions of <a href=#DD:sliceWght>DD: sliceWght</a> to <a href=#DD:lengthLs>DD: lengthLs</a>. Consider a force equilibrium without the affect of interslice forces, to obtain a solvable value as done for <em>N*</em> in equation (2):
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -4194,7 +4194,7 @@ Using <em>N*</em>, a resistive shear force without the influence of interslice f
 <em>R<sub>i</sub> = N*<sub>i</sub>&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(α<sub>i</sub>) = ((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;ΔH<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(α<sub>i</sub>)</em>
 </div>
 </div>
-<div id="DD:T.i">
+<div id="DD:mobShearWO">
 <table class="ddefn">
 <tr>
 <th>
@@ -4231,7 +4231,7 @@ N
 Equation
 </th>
 <td>
-<div id="Eqn:DD:T.i">
+<div id="Eqn:DD:mobShearWO">
 <div class="equation">
 <em>T = (W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;ΔH<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)</em>
 </div>
@@ -4316,9 +4316,9 @@ The equation is unsolvable, containing the unknown interslice normal force <em>G
 </div>
 </div>
 <p class="paragraph">
-The values of <em>R</em> and <em>T</em> are now defined completely in terms of the known force property values of <a href=#DD:W.i>DD: W_i</a> to <a href=#DD:l.s,i>DD: l_s,i</a>.
+The values of <em>R</em> and <em>T</em> are now defined completely in terms of the known force property values of <a href=#DD:sliceWght>DD: sliceWght</a> to <a href=#DD:lengthLs>DD: lengthLs</a>.
 </p>
-<div id="DD:pressure">
+<div id="DD:displcmntRxnF">
 <table class="ddefn">
 <tr>
 <th>
@@ -4355,7 +4355,7 @@ Pa
 Equation
 </th>
 <td>
-<div id="Eqn:DD:pressure">
+<div id="Eqn:DD:displcmntRxnF">
 <div class="equation">
 <em>p = <table class="matrix">
 <tr><td>K<sub>st,i</sub></td><td>0</td></tr>
@@ -4417,7 +4417,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:pressure">
+<div id="DD:displcmntBasel">
 <table class="ddefn">
 <tr>
 <th>
@@ -4454,7 +4454,7 @@ Pa
 Equation
 </th>
 <td>
-<div id="Eqn:DD:pressure">
+<div id="Eqn:DD:displcmntBasel">
 <div class="equation">
 <em>p = <table class="matrix">
 <tr><td>K<sub>bA,i</sub></td><td>K<sub>bB,i</sub></td></tr>
@@ -4528,10 +4528,10 @@ Using the force-displacement relationship of <a href=#GD:netForcey>GD: netForcey
 </div>
 </div>
 <p class="paragraph">
-For interslice surfaces the stiffness constants and displacements refer to an unrotated coordinate system, <em>δ</em> of <a href=#DD:l.s,i>DD: l_s,i</a>. The interslice elements are left in their standard coordinate system, and therefore are described by the same equation from <a href=#GD:netForcey>GD: netForcey</a>. Seen as <em>K<sub>st</sub></em> in <a href=#DD:X.i>DD: X_i</a>. <em>K<sub>st</sub></em> is the shear element in the matrix, and <em>K<sub>sn</sub></em> is the normal element in the matrix, calculated as in <a href=#DD:T.i>DD: T_i</a>.
+For interslice surfaces the stiffness constants and displacements refer to an unrotated coordinate system, <em>δ</em> of <a href=#DD:lengthLs>DD: lengthLs</a>. The interslice elements are left in their standard coordinate system, and therefore are described by the same equation from <a href=#GD:netForcey>GD: netForcey</a>. Seen as <em>K<sub>st</sub></em> in <a href=#DD:intrsliceF>DD: intrsliceF</a>. <em>K<sub>st</sub></em> is the shear element in the matrix, and <em>K<sub>sn</sub></em> is the normal element in the matrix, calculated as in <a href=#DD:mobShearWO>DD: mobShearWO</a>.
 </p>
 <p class="paragraph">
-For basal surfaces the stiffness constants and displacements refer to a system rotated for the base angle alpha (<a href=#DD:alpha.i>DD: alpha_i</a>). To analyze the effect of force-displacement relationships occurring on both basal and interslice surfaces of an element <em>i</em> they must reference the same coordinate system. The basal stiffness matrix must be rotated counter clockwise to align with the angle of the basal surface. The base stiffness counter clockwise rotation is applied in equation (7) to the new matrix <em>N*</em>.
+For basal surfaces the stiffness constants and displacements refer to a system rotated for the base angle alpha (<a href=#DD:angleA>DD: angleA</a>). To analyze the effect of force-displacement relationships occurring on both basal and interslice surfaces of an element <em>i</em> they must reference the same coordinate system. The basal stiffness matrix must be rotated counter clockwise to align with the angle of the basal surface. The base stiffness counter clockwise rotation is applied in equation (7) to the new matrix <em>N*</em>.
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -4571,7 +4571,7 @@ The Hooke's law force displacement relationship of <a href=#GD:netForcey>GD: net
 </div>
 </div>
 <p class="paragraph">
-The new effective base stiffness matrix <em>K<sub>bt</sub></em> as derived in equation (7) is defined in equation (9). <em>K<sub>bt</sub></em> is the shear element in the matrix, and <em>K<sub>bn</sub></em> is the normal element in the matrix, calculated as in <a href=#DD:T.i>DD: T_i</a>. The notation is simplified by the introduction of the constants <em>K<sub>bA</sub></em> and <em>K<sub>bB</sub></em>, defined in equation (10) and equation (11) respectively.
+The new effective base stiffness matrix <em>K<sub>bt</sub></em> as derived in equation (7) is defined in equation (9). <em>K<sub>bt</sub></em> is the shear element in the matrix, and <em>K<sub>bn</sub></em> is the normal element in the matrix, calculated as in <a href=#DD:mobShearWO>DD: mobShearWO</a>. The notation is simplified by the introduction of the constants <em>K<sub>bA</sub></em> and <em>K<sub>bB</sub></em>, defined in equation (10) and equation (11) respectively.
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -4595,9 +4595,9 @@ The new effective base stiffness matrix <em>K<sub>bt</sub></em> as derived in eq
 </div>
 </div>
 <p class="paragraph">
-A force-displacement relationship for an element <em>i</em> can be written in terms of displacements occurring in the unrotated coordinate system <em>δ</em> of <a href=#GD:hookesLaw2d>GD: hookesLaw2d</a> using the matrix <em>K<sub>bt</sub></em>, and <em>K<sub>bt</sub></em> as seen in <a href=#DD:X.i>DD: X_i</a>.
+A force-displacement relationship for an element <em>i</em> can be written in terms of displacements occurring in the unrotated coordinate system <em>δ</em> of <a href=#GD:hookesLaw2d>GD: hookesLaw2d</a> using the matrix <em>K<sub>bt</sub></em>, and <em>K<sub>bt</sub></em> as seen in <a href=#DD:intrsliceF>DD: intrsliceF</a>.
 </p>
-<div id="DD:force">
+<div id="DD:displcmntBasel">
 <table class="ddefn">
 <tr>
 <th>
@@ -4634,7 +4634,7 @@ N
 Equation
 </th>
 <td>
-<div id="Eqn:DD:force">
+<div id="Eqn:DD:displcmntBasel">
 <div class="equation">
 <em>F = &minus;ℓ<sub>s,i&minus;1</sub>&#8239;K<sub>sn,i&minus;1</sub>&#8239;δ<sub>i&minus;1</sub>&plus;(ℓ<sub>s,i&minus;1</sub>&#8239;K<sub>sn,i&minus;1</sub>&plus;ℓ<sub>b,i</sub>&#8239;K<sub>bn,i</sub>&plus;ℓ<sub>s,i</sub>&#8239;K<sub>sn,i</sub>)&#8239;δ<sub>i</sub>&minus;ℓ<sub>s,i</sub>&#8239;K<sub>sn,i</sub>&#8239;δ<sub>i&plus;1</sub></em>
 </div>
@@ -4693,7 +4693,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:K.bt,i">
+<div id="DD:shearStiffness">
 <table class="ddefn">
 <tr>
 <th>
@@ -4730,7 +4730,7 @@ Pa/m
 Equation
 </th>
 <td>
-<div id="Eqn:DD:K.bt,i">
+<div id="Eqn:DD:shearStiffness">
 <div class="equation">
 <em>K<sub>bt</sub> = <div class="fraction">
 <span class="fup">
@@ -4819,7 +4819,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:K.bn,i">
+<div id="DD:soilStiffness">
 <table class="ddefn">
 <tr>
 <th>
@@ -4856,7 +4856,7 @@ Pa/m
 Equation
 </th>
 <td>
-<div id="Eqn:DD:K.bn,i">
+<div id="Eqn:DD:soilStiffness">
 <div class="equation">
 <em>K<sub>bn</sub> = <span class="casebr">
 {
@@ -5828,7 +5828,7 @@ Substituting the equation for <em>N&prime;</em> from equation (16) into equation
 </div>
 </div>
 <p class="paragraph">
-Where <em>R</em> and <em>T</em> are the resistive and mobile shear of the slice, without the influence of interslice forces <em>G</em> and <em>X</em>, as defined in <a href=#DD:R.i>DD: R_i</a> and <a href=#DD:T.i>DD: T_i</a> Making use of the constants, and with full equations found below in equation (19) and equation (20) respectively, then equation (18) can be simplified to equation (21), also seen in <a href=#IM:intsliceFs>IM: intsliceFs</a>:
+Where <em>R</em> and <em>T</em> are the resistive and mobile shear of the slice, without the influence of interslice forces <em>G</em> and <em>X</em>, as defined in <a href=#DD:resShearWO>DD: resShearWO</a> and <a href=#DD:mobShearWO>DD: mobShearWO</a> Making use of the constants, and with full equations found below in equation (19) and equation (20) respectively, then equation (18) can be simplified to equation (21), also seen in <a href=#IM:intsliceFs>IM: intsliceFs</a>:
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -6009,7 +6009,7 @@ FIXME: This needs to be filled in
 </table>
 </div>
 <p class="paragraph">
-Using the net force-displacement equilibrium equation of a slice from <a href=#DD:force>DD: force</a> with the definitions of the stiffness matrices from <a href=#DD:pressure>DD: pressure</a> and the force definitions from <a href=#GD:netForcex>GD: netForcex</a> a broken down force displacement equilibrium equation can be derived. equation (22) gives the broken down equation in the <em>x</em> direction, and equation (23) gives the broken down equation in the <em>y</em> direction:
+Using the net force-displacement equilibrium equation of a slice from <a href=#DD:displcmntBasel>DD: displcmntBasel</a> with the definitions of the stiffness matrices from <a href=#DD:displcmntRxnF>DD: displcmntRxnF</a> and the force definitions from <a href=#GD:netForcex>GD: netForcex</a> a broken down force displacement equilibrium equation can be derived. equation (22) gives the broken down equation in the <em>x</em> direction, and equation (23) gives the broken down equation in the <em>y</em> direction:
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -6017,7 +6017,7 @@ Using the net force-displacement equilibrium equation of a slice from <a href=#D
 </div>
 </div>
 <p class="paragraph">
-Using the known input assumption of <a href=#A:Geo-Slope-Mat-Props-of-Soil-Inputs>A: Geo-Slope-Mat-Props-of-Soil-Inputs</a>, the force variable definitions of <a href=#DD:W.i>DD: W_i</a> to <a href=#DD:Q.i>DD: Q_i</a> on the left side of the equations can be solved for. The only unknown in the variables to solve for the stiffness values from <a href=#DD:K.bn,i>DD: K_bn,i</a> is the displacements. Therefore taking the equation from each slice a set of <em>2&#8239;n</em> equations, with <em>2&#8239;n</em> unknown displacements in the <em>x</em> and <em>y</em> directions of each slice can be derived. Solutions for the displacements of each slice can then be found. The use of displacement in the definition of the stiffness values makes the equation implicit, which means an iterative solution method, with an initial guess for the displacements in the stiffness values is required.
+Using the known input assumption of <a href=#A:Geo-Slope-Mat-Props-of-Soil-Inputs>A: Geo-Slope-Mat-Props-of-Soil-Inputs</a>, the force variable definitions of <a href=#DD:sliceWght>DD: sliceWght</a> to <a href=#DD:surfLoads>DD: surfLoads</a> on the left side of the equations can be solved for. The only unknown in the variables to solve for the stiffness values from <a href=#DD:soilStiffness>DD: soilStiffness</a> is the displacements. Therefore taking the equation from each slice a set of <em>2&#8239;n</em> equations, with <em>2&#8239;n</em> unknown displacements in the <em>x</em> and <em>y</em> directions of each slice can be derived. Solutions for the displacements of each slice can then be found. The use of displacement in the definition of the stiffness values makes the equation implicit, which means an iterative solution method, with an initial guess for the displacements in the stiffness values is required.
 </p>
 <div id="IM:rfemFoS">
 <table class="idefn">
@@ -6163,7 +6163,7 @@ RFEM analysis can also be used to calculate the factor of safety for the slope. 
 </div>
 </div>
 <p class="paragraph">
-With the definition of normal stiffness from <a href=#DD:K.bn,i>DD: K_bn,i</a> to find the normal stiffness of the base <em>K<sub>bn</sub></em> and the now known base displacement perpendicular to the surface <em>δv</em> from equation (25) the normal base stress can be calculated from the force-displacement relationship of <a href=#T:hookesLaw>T: hookesLaw</a>. Stress <em>σ</em> is used in place of force <em>F</em> as the stiffness hasn't been normalized for the length of the base. Results in equation (26):
+With the definition of normal stiffness from <a href=#DD:soilStiffness>DD: soilStiffness</a> to find the normal stiffness of the base <em>K<sub>bn</sub></em> and the now known base displacement perpendicular to the surface <em>δv</em> from equation (25) the normal base stress can be calculated from the force-displacement relationship of <a href=#T:hookesLaw>T: hookesLaw</a>. Stress <em>σ</em> is used in place of force <em>F</em> as the stiffness hasn't been normalized for the length of the base. Results in equation (26):
 </p>
 <div id="Eqn:empty">
 <div class="equation">

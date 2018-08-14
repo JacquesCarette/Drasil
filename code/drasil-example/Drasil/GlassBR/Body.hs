@@ -577,7 +577,7 @@ testing :: [QuantityDict]
 testing = qw prob_br : qw lRe : qw demand : [] -- all different types!
 --FIXME: rename or find better implementation?
 
-funcReqsR6_pulledList :: [QDefinition]
+funcReqsR6_pulledList :: [DataDefinition]
 funcReqsR6_pulledList = [risk, strDisFac, nonFL, glaTyFac, dimLL, 
   tolPre, tolStrDisFac, hFromt, aspRat]
 

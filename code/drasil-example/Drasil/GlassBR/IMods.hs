@@ -1,4 +1,4 @@
-module Drasil.GlassBR.IMods (gbrIMods, probOfBreak,
+module Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, probOfBreak,
   calofCapacity, calofDemand) where
 
 import Prelude hiding (exp)
@@ -10,14 +10,17 @@ import Drasil.GlassBR.Concepts (glassTypeFac, lResistance, lShareFac)
 import Drasil.GlassBR.DataDefs (glaTyFac, nonFL, risk, standOffDis)
 import Drasil.GlassBR.Labels (probOfBrL, calOfCapL, calOfDemandL)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
-import Drasil.GlassBR.Unitals (demand, demandq, eqTNTWeight, lRe, loadSF, 
-  prob_br, risk_fun, standOffDist, wtntWithEqn)
+import Drasil.GlassBR.Unitals (char_weight, demand, demandq, eqTNTWeight, lRe, 
+  loadSF, plate_len, plate_width, prob_br, risk_fun, standOffDist, wtntWithEqn)
 
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
 
 gbrIMods :: [InstanceModel]
 gbrIMods = [probOfBreak, calofCapacity, calofDemand]
+
+glassBRsymb :: [DefinedQuantityDict]
+glassBRsymb = map dqdWr [plate_len, plate_width, char_weight, standOffDist] ++ map dqdWr [probOfBreak]
 
 {--}
 

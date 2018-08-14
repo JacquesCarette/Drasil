@@ -59,16 +59,16 @@ import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, glas
   lShareFac, ptOfExplsn, stdOffDist)
 import Drasil.GlassBR.DataDefs (aspRat, dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
   dimLL, glaTyFac, tolStrDisFac, tolPre, risk, standOffDis)
-import Drasil.GlassBR.IMods (probOfBreak, calofCapacity, calofDemand, gbrIMods)
+import Drasil.GlassBR.IMods (glassBRsymb, probOfBreak, calofCapacity, calofDemand, gbrIMods)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
 import Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe)
 import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, capacity, char_weight, 
   constant_LoadDF, demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained, 
-  gbInputDataConstraints, gbInputs, gbOutputs, gBRSpecParamVals, glass_type, glassBRsymb, 
+  gbInputDataConstraints, gbInputs, gbOutputs, gBRSpecParamVals, glass_type, 
   glassGeo, glassTy, glassTypes, glBreakage, is_safeLR, is_safePb, lateralLoad, load, 
-  loadTypes, lRe, nom_thick, notSafe, pb_tol, plate_len, plate_width, prob_br, probBreak, 
+  loadTypes, nom_thick, notSafe, pb_tol, plate_len, plate_width, prob_br, probBreak, 
   safeMessage, sD, sdWithEqn, sdx, sdy, sdz, stressDistFac, termsWithAccDefn, 
   termsWithDefsOnly, tNT, wtntWithEqn)
 
@@ -573,12 +573,8 @@ req5Desc cmd = foldlSent_ [S "If", (ch is_safePb), S "∧", (ch is_safeLR),
   S "If the", phrase condition, S "is false, then", phrase cmd,
   S "the", phrase message, Quote (notSafe ^. defn)]
 
-testing :: [QuantityDict]
-testing = qw prob_br : qw lRe : qw demand : [] -- all different types!
---FIXME: rename or find better implementation?
-
-funcReqsR6_pulledList :: [DataDefinition]
-funcReqsR6_pulledList = [risk, strDisFac, nonFL, glaTyFac, dimLL, 
+funcReqsR6DDList :: [DataDefinition]
+funcReqsR6DDList = [risk, strDisFac, nonFL, glaTyFac, dimLL, 
   tolPre, tolStrDisFac, hFromt, aspRat]
 
 funcReqsR6 :: LabelledContent --FIXME: Issue #327
@@ -588,12 +584,13 @@ funcReqsR6 = llcc funcReqs6Label $
    , Nested (titleize output_ +:+
      S "the following" +: plural quantity)
      $ Bullet $ noRefs $
-     map (\(a, d) -> Flat $ at_start a +:+ sParen (ch a) +:+
-     sParen (makeRef d)) (zip testing gbrIMods)
+     map (Flat . chunkToReqItem) gbrIMods
      ++
-     map (\d -> Flat $ at_start d +:+ sParen (ch d) +:+
-     sParen (makeRef d)) funcReqsR6_pulledList
+     map (Flat . chunkToReqItem) funcReqsR6DDList
    , Just $ (getAdd (funcReqs6Label ^. getRefAdd)))]
+
+chunkToReqItem :: (NamedIdea c, HasSymbol c, HasShortName c, HasUID c, Referable c) => c -> Sentence
+chunkToReqItem mod = at_start mod +:+ sParen (ch mod) +:+ sParen (makeRef mod)
 
 funcReqs6Label :: Label
 funcReqs6Label = mkLabelSame "output_quantities" Lst

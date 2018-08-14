@@ -2,7 +2,7 @@ module Drasil.SWHS.DataDefs where --exports all of it
 
 import Language.Drasil
 import Control.Lens ((^.))
-import Drasil.DocLang (ModelDB, mdb, refDD, ddRefDB)
+import Drasil.DocLang (ModelDB, mdb)
 
 import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcm_mass,
   temp_W, temp_PCM, ht_flux_P, pcm_HTC, coil_HTC, temp_C, ht_flux_C)
@@ -10,9 +10,6 @@ import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcm_mass,
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latent_heat)
-
-ddRef :: QDefinition -> Sentence
-ddRef = refDD (ddRefDB swhsRefMDB)
 
 swhsRefMDB :: ModelDB
 swhsRefMDB = mdb [] [] swhsDataDefs []
@@ -64,7 +61,7 @@ dd3HtFusionDD = mkDD dd3HtFusion [] [] "" Nothing
 dd4MeltFrac :: QDefinition
 dd4MeltFrac = fromEqn' (melt_frac ^. uid) -- FIXME Should (^. id) be used
   (melt_frac ^. term) (S "fraction of the PCM that is liquid")
-  (eqSymb melt_frac) melt_frac_eqn [] 
+  (eqSymb melt_frac) melt_frac_eqn 
   (mkLabelSame "melt_frac" (Def DD))
 --FIXME: "Phi is the melt fraction" is produced; 
   --"Phi is the fraction of the PCM that is liquid" is what is supposed to be

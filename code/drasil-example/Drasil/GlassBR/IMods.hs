@@ -4,9 +4,8 @@ module Drasil.GlassBR.IMods (gbrIMods, probOfBreak,
 import Prelude hiding (exp)
 import Control.Lens ((^.))
 import Language.Drasil
-import Drasil.DocLang (refA)
 
-import Drasil.GlassBR.Assumptions (gbRefDB, newA1, newA2)
+import Drasil.GlassBR.Assumptions (newA1, newA2)
 import Drasil.GlassBR.Concepts (glassTypeFac, lResistance, lShareFac)
 import Drasil.GlassBR.DataDefs (glaTyFac, nonFL, risk)
 import Drasil.GlassBR.Unitals (demand, demandq, eqTNTWeight, lRe, loadSF, 
@@ -59,7 +58,7 @@ capdescr =
   S "which" +:+. S "is also called capacity" +:+. ((ch nonFL) `isThe`
   (phrase nonFL)) +:+. ((ch glaTyFac) `isThe` (phrase glassTypeFac))
   +:+. ((ch loadSF) `isThe` (phrase lShareFac)), S "Follows",
-  (refA gbRefDB newA2) `sAnd` (refA gbRefDB newA1), sParen (Quote 
+  (makeRef newA2) `sAnd` (makeRef newA1), sParen (Quote 
   (S "In the development of this procedure, it was assumed that" +:+
   S "all four edges of the glass are simply supported and free to slip" +:+
   S "in the plane of the glass. This boundary condition has been shown" +:+

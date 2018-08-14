@@ -3,7 +3,6 @@ module Drasil.GlassBR.DataDefs (aspRat, dataDefns, dimLL, gbQDefns, glaTyFac,
 
 import Language.Drasil
 import Prelude hiding (log, exp, sqrt)
-import Drasil.DocLang (refA)
 
 import Drasil.GlassBR.Concepts (annealed, fullyT, heatS)
 import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, 
@@ -11,7 +10,7 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio,
   lDurFac, load_dur, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pb_tol, 
   plate_len, plate_width, risk_fun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
   sflawParamM, stressDistFac, tolLoad, min_thick)
-import Drasil.GlassBR.Assumptions (gbRefDB, newA5)
+import Drasil.GlassBR.Assumptions (newA5)
 
 import Data.Drasil.Concepts.Documentation (datum, user)
 import Data.Drasil.Concepts.Math (probability, parameter, calculation)
@@ -252,4 +251,4 @@ jtolRelToPbtol :: Sentence
 jtolRelToPbtol = (ch sdf_tol +:+ S " is calculated with reference to " +:+. ch pb_tol)
 
 a5Ref :: Sentence 
-a5Ref = (ch dimlessLoad +:+ S "is calculated with reference to" +:+. (refA gbRefDB newA5))
+a5Ref = (ch dimlessLoad +:+ S "is calculated with reference to" +:+. makeRef newA5)

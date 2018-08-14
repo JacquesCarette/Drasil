@@ -1,15 +1,15 @@
 module Drasil.GlassBR.TMods (gbrTMods, pbSafetyReq, lrSafetyReq, pbIsSafe, lrIsSafe) where
 
-import Drasil.GlassBR.Unitals (demand, demandq, is_safePb, is_safeLR, lRe,
-  pb_tol, prob_br, glassBRsymb)
-import Drasil.GlassBR.IMods (calofCapacity, calofDemand, probOfBreak)
-import Drasil.GlassBR.Concepts (lResistance)
-
 import Language.Drasil
 import Language.Drasil.Code (relToQD) -- FIXME, this should not be needed
 import Control.Lens ((^.))
 
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
+
+import Drasil.GlassBR.Concepts (lResistance)
+import Drasil.GlassBR.IMods (calofCapacity, calofDemand, probOfBreak)
+import Drasil.GlassBR.Unitals (demand, demandq, is_safePb, is_safeLR, lRe,
+  pb_tol, prob_br, glassBRsymb)
 
 -- Labels
 l1, l2 :: Label

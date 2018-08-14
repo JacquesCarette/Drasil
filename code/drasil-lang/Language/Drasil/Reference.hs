@@ -12,7 +12,6 @@ import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
 import Language.Drasil.Chunk.Change as Ch (Change(..), ChngType(..))
 import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID), CiteField(Author, Title, Year), HasFields(getFields))
 import Language.Drasil.Chunk.Concept (ConceptInstance)
-import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
 import Language.Drasil.Chunk.Goal as G (Goal)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
@@ -227,14 +226,6 @@ instance Referable TheoryModel where
 instance Referable GenDefn where
   refAdd  g = getAdd ((g ^. getLabel) ^. getRefAdd)
   rType   _ = Def General
-
-instance Referable QDefinition where -- FIXME: This could lead to trouble; need
-                                     -- to ensure sanity checking when building
-                                     -- Refs. Double-check QDef is a DD before allowing
-                                     -- FIXME: QDefinition should no longer be referable
-                                     -- after its Label is removed.
-  refAdd  d = getAdd ((d ^. getLabel) ^. getRefAdd)
-  rType   _ = Def DD
 
 instance Referable DataDefinition where
   refAdd  d = getAdd ((d ^. getLabel) ^. getRefAdd)

@@ -21,10 +21,10 @@ modelsFromDB db = dropNums $ sortBy (compare `on` snd) elemPairs
 data ModelDB = MDB
              { tmRefDB :: RefMap TheoryModel
              , gdRefDB :: RefMap GenDefn
-             , ddRefDB :: RefMap QDefinition
+             , ddRefDB :: RefMap DataDefinition
              , imRefDB :: RefMap InstanceModel
              }
 
-mdb :: [TheoryModel] -> [GenDefn] -> [QDefinition] -> [InstanceModel] -> ModelDB
+mdb :: [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> ModelDB
 mdb tms gds dds ims = MDB
   (simpleMap tms) (simpleMap gds) (simpleMap dds) (simpleMap ims)

@@ -274,6 +274,57 @@ money in the long run.
 
 \wss{The bottom up justification should also be part of the introduction.}
 
+\ds{bottom up justification can go here?}
+
+We \ds{and others -- citation ?} have observed a number of issues arise 
+throughout a standard software development and maintenance life-cycle.
+Information duplication is a major concern as several problems occur therein. 
+The first, most trivial, and incredibly tedious is that of the necessity to 
+duplicate information across software artifacts. A piece of knowledge that 
+appears in the Software Requirements Specification (SRS) will undoubtedly 
+appear in the design and implementation artifacts (documents/source code). This 
+knowledge \emph{may} be transformed, but in many cases is an exact copy 
+(Ctrl-C \& Ctrl-V anyone?) and a 
+massive waste of time for a human to replicate throughout multiple 
+artifacts.
+
+Duplication also becomes a time-sink for maintenance, particularly as the 
+duplicated information tends to fall out of sync across artifacts over the 
+course of a piece of software's lifetime. For example, a common problem is that 
+of updating the source code, but not updating any of the design documents to 
+reflect the change. These inconsistencies are at best a minor headache and at 
+worst, in the case of software certification, an expensive lesson. If the 
+artifacts are inconsistent when submitted for (re-)certification, the software 
+will not be (re-)certified and an extra cost will be incurred (both in labour, 
+and from the certifying body) to attempt certification again.
+
+\ds{Fill in this part about consistency, variabilities, and commonalities}
+
+\begin{table}
+	\caption{Problems and Proposed Solutions}
+	\label{Tab:ProbSol}
+	\begin{tabular}[width=0.5\textwidth]{l | l}		
+		Problem 		& Technical Solution 					\\
+		\hline
+		Duplication		& Databases (global \& system-specific) \\
+						& single-source \& generation *			\\
+		\hline
+		Consistency 	& 	Sanity checkers						\\
+		(incl. Source/	& 										\\
+		generated content)	&  									\\
+		\hline
+		Variability \&	& Software families \& 					\\
+		Commonality		& Generation							\\
+	\end{tabular}
+
+\textit{* Also provides free \& easy reuse}
+\end{table}
+
+Table~\ref{Tab:ProbSol} gives a brief rundown of our proposed solutions to the 
+problems mentioned above. We are leveraging our experience with generative 
+programming to provide a solution that is applicable to a wide range of 
+problems.
+
 %DS Maybe throw in a figure here to show off a bunch of common artifacts.
 
 %DS Should everything after this point go into Background? Maybe not
@@ -288,9 +339,9 @@ money in the long run.
 When we talk about software certification, we are specifically discussing the 
 goal of determining ``based on the principles of science, engineering and 
 measurement theory, whether an artifact satisfies accepted, well defined and 
-measurable criteria''~\cite{HatcliffEtAl2009}. Essentially, we are ensuring that 
-software, or some piece of it, performs a given task to within an acceptable 
-standard and can potentially be reused in other systems.
+measurable criteria''~\cite{HatcliffEtAl2009}. Essentially, we are ensuring 
+that software, or some piece of it, performs a given task to within an 
+acceptable standard and can potentially be reused in other systems.
 
 Software certification is necessary by law in certain fields. This is 
 particularly evident in safety-critical applications such as control systems 
@@ -323,7 +374,8 @@ costs associated with it. There is a massive time investment, fees, and costs
 associated with contracting out a third-party verifier. Overall it is a 
 very expensive process.
 
-Re-certification of software following any change, no matter how minor, %DS keep?
+Re-certification of software following any change, no matter how minor, %DS 
+%keep?
 incurs a similar level of costs; all the artifacts must be updated to 
 reflect the new change, and everything must be re-checked and verified to 
 ensure no new errors have been introduced. We have an implicit burden of 
@@ -346,10 +398,19 @@ inconsistent documentation~\cite{Kotula2000,Thimbleby1986}.
 %clarifies the problem.
 \label{S:Scope}
 
-- Scientific Computing Software
-- Why? Many highly specialized SCS require certification. Ex. Control sfwr 
-in nuclear power, x-ray machines, and other safety-critical contexts.
-- Well understood domain -> theories underpinning the work being done.
+We limit our scope to Scientific Computing Software (SCS) for our proof of 
+concept. The SCS domain is first and foremost a very well understood domain, by 
+which we mean there are many theories underpinning the work being done. This is 
+a necessity if we wish to be able to explain the science to a machine for the 
+purposes of generating our software artifacts. It also gives us a foundation 
+from which to build our knowledge-base.
+
+SCS is also a domain rich in specialized software requiring certification. For 
+example, control software in nuclear power plants, x-ray machines, and other 
+safety critical applications require software to be approved by a certifying 
+body.
+
+\ds{More to come}
 
 \wss{We definitely want a scope section.  What do we do is important, but what
   we don't do is also important information to convey.  We discussed this
@@ -539,24 +600,11 @@ chunks, specifying interfaces and communication between boxes, and decomposing
 boxes at any level. LSD remains primarily code-focused with little support for 
 other software artifacts.
 
-Previous attempts at automating / reducing the artifact burden.
-
-- Previous attempts at automatically generating documentation
-  - LP, tools like javadoc, Haddock, etc.
-  - Too code-centric!
-  - Comments and code still need to be updated in parallel, albeit to a lesser
-    extent in some cases
-  - In general, fairly rigidly structured output (you don't have much say on
-    how it looks, only what information should be included and, sometimes, where
-  - Finish with a focus on the good stuff:
+\ds{Things to try and work in RE:LP}
     - Identified the need for good documentation
-    - Keeps docs and code in the same place
-        - Easier to manually maintain consistency and apply updates
 - One other problem we've identified:
   - common underlying knowledge between projects is duplicated as there is no
    real cross-project reuse mechanism in place with these tools.
-
-
 
 \ds{Really need an intro to the basics of grounded theory here, for section 
 3.1 (S:IntroCases) and subsequently 4.2 (S:KReUse) if we keep the references to 
@@ -580,54 +628,24 @@ Knowledge ``presents understanding of a subject area. It includes concepts and
 facts ... as well as relations ... and mechanisms for how to combine them to 
 solve problems in that area''~\cite{Durkin1994}.
 
-\ds{Red here is used elsewhere}
-\textcolor{red}{
-For our purposes, we extend and tighten this definition to include the 
-additional constraint that a piece of knowledge has a structured encoding, as 
-opposed to natural language encoding, which then allows it to be automatically 
-reused. For example, the first law of thermodynamics is a piece of knowledge 
-that can be simply expressed as ``total energy within a closed system must be 
-conserved'', but this is not a structured encoding. One such encoding would 
-allow us to view the knowledge in those relatively simple terms, or just as 
-easily, we could view it as:
-\begin{equation*}
-\Delta{}U = Q - W
-\end{equation*}
-where we define a \emph{closed system} as one which cannot exchange matter with 
-its surroundings, but energy can be transferred. $\Delta{}U$ is then the change 
-in internal energy of a closed system, $Q$ is the amount of energy supplied to 
-the system, and $W$ is the amount of energy lost to the system's surroundings 
-as a result of work.}
+\ds{Need to write about how KBSE uses formal methods, particularly for defining 
+the semantics and whatnot for software synthesis. Good stuff in 
+\cite{Lowry1989} and \cite{DevanbuEtAl1990}.}
 
-\textcolor{red}{
-Regardless of our view, we have not changed the underlying structured knowledge 
-encoding -- we merely project out what is relevant to our current audience.}
-
-\textcolor{red}{
-For our KBSE approach to succeed, there are two major requirements. First off, 
-we must capture the underlying knowledge in a meaningful way that can be reused 
-across artifacts. We want a single source for our knowledge, regardless where 
-it ends up or how it is viewed. This allows us, using the right 
-transformations, to automatically generate our software artifacts from the 
-underlying knowledge-base.}
-
-\textcolor{red}{
-The second requirement is that we restrict our scope to well-understood domains 
-as we need a solid theoretical underpinning. Both mathematics and the physical 
-sciences are good examples of well-understood domains as the knowledge has 
-already been formalized and, to an extent, structured. These are also good 
-candidate domains since we need to explain the underlying knowledge to 
-computers in a nontrivial way, which from our experience, is harder than it 
-sounds.}
-
-With that in mind, we have decided to restrict our focus to KBSE for Scientific 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ds{This probably will have to move} With that in mind, we have decided to 
+restrict our focus to KBSE for Scientific 
 Computing Software (SCS) as it is a field rich in knowledge we can use.
 
 \wss{Should MDL show up here?}
 
 \section{A rational analysis of software artifacts}
 
-- This section exists to show how we get from problem to solution.
+To generate all software artifacts, we must first take stock of how they are 
+composed. We have chosen to focus on the Smith Et Al. templates 
+\cite{Smith????} \ds{grab proper citation later}. We made this choice because 
+we have access to a number of case studies which were implemented using the 
+given templates and thus give us a reasonable starting point for our analyses.
 
 \subsection{Introducing our case studies}
 \label{S:IntroCases}
@@ -639,20 +657,75 @@ framework.
 %DS Use a style similar to the Materials paper for introducing case studies 
 %here.
 
-- We introduce our case studies in a bit more depth here
-	- GlassBR - what it's for, if it'll
-	- SWHS and NoPCM - Software family members with a twist.
-	- The rest (tiny, Gamephysics, and SSP) for additional examples and to give 
-	us a bit more credibility in our analysis.
-- Looking for commonalities between types of artifacts and what they are really 
-saying.
-- An obvious commonality across many projects in SCS -- SI and derived Units.
+%DS This doesn't really need to be said.
+%Our case studies are broken into two main categories: those developed by 
+%scientists for a specific application (related to SC), and those developed not 
+%necessarily by scientists using a variety of scientific knowledge. 
+
+The first case study we will explore is \emph{GlassBR} -- software created for 
+checking whether a given pane of glass will be able to withstand the force of a 
+particular explosion. It has a number of glass and explosion-related parameters 
+which are used to compute the probability of glass breakage. This will be our 
+running example throughout this paper, with minor asides to demonstrate 
+particular features used by or curiosities found in the other case studies.
+
+\ds{Figure of the GlassBR system for context?}
+
+The next two case studies -- \emph{SWHS} and \emph{NoPCM} -- are members of the 
+same software 
+family. They both model a solar water heating system with one non-trivial 
+difference. SWHS incorporates Phase Change Material (PCM) which allows the 
+system to store more thermal energy than a system without PCM like that 
+modelled in NoPCM.
+
+Our fourth case study, \emph{SSP}, is for modelling a slope stability problem 
+intended 
+to analyze whether a given slope (natural or excavated) can be considered safe. 
+The software identifies the surface most likely to experience slip and gives 
+its factor of safety -- an index of its relative stability.
+
+Finally we have \emph{Gamephysics} which is a pared-down version of the 
+Chipmunk2D 
+game physics engine. We chose this project specifically for its rich use of 
+physics knowledge, but as it is a very large physics library, we narrowed the 
+scope in the interests of time for our proof of concept.
+
+There is also a toy-example case study, nicknamed \emph{tiny}, which is taken 
+from an example of a fuel-pin in a nuclear reactor. This toy example helped 
+push the early development of Drasil, but has recently been primarily of use 
+for testing our generated output.
+
+With our case studies in hand, we must look for the commonalities between them, 
+particularly between the software artifacts in each project and what they are 
+truly saying. With that in mind we can extrapolate these commonalities to other 
+pieces of SCS. One obvious commonality across many projects in SCS is that of 
+the use of Système International (SI) and derived units.
 
 \subsection{Common software artifacts}
 
-- Compare and contrast different software artifacts.
-	- SRS vs. detailed design vs. code
-	- same knowledge, different 'views'
+As our case studies appear to follow a rational design process, the same 
+software artifacts can be found for each. Each project includes a:
+
+\begin{itemize}
+	\item Software Requirements Specification (SRS)
+	\item Detailed design documents such as: 
+		\begin{itemize}
+			\item Module Guide (MG) 
+			\item Module Interface Specification (MIS)
+		\end{itemize}
+	\item Source code
+	\item Test cases
+	\item User Guide
+	\item Verification and Validation (V\&V) Plan
+	\item V\&V Report
+\end{itemize}
+
+Let us first look at the similarities and differences found in the SRS, the 
+detailed design documents, and the source code. The specific system knowledge 
+found in the SRS is duplicated throughout the design and source code, though 
+not always verbatim. The knowledge may be transformed to produce different 
+views relevant to the current document.
+
 	- only some of that knowledge is necessarily relevant in those views
 	- \fgr: SRS \& DD showing the same piece of knowledge \label{Fig:SRSDDComp}
 	in diff contexts. Use a few different \fgr here.

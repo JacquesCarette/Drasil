@@ -52,8 +52,9 @@ data RawContent = Table [Sentence] [[Sentence]] Title Bool
                | Paragraph Sentence -- ^ Paragraphs are just sentences.
                | EqnBlock Expr
      --        CodeBlock Code   -- GOOL complicates this.  Removed for now.
-               | Definition DType
+               -- | Definition DType
                | Enumeration ListType -- ^ Lists
+               | Definition DType [(Identifier, [Contents])]
                | Figure Lbl Filepath MaxWidthPercent -- ^ Should use relative file path.
                | Requirement ReqChunk
                | Assumption AssumpChunk
@@ -63,9 +64,6 @@ data RawContent = Table [Sentence] [[Sentence]] Title Bool
                | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl
                -- ^ TODO: Fill this one in.
                ------NEW TMOD/DDEF/IM/GD BEGINS HERE------
-               ---- FIXME: The above Definition will need to be removed ----
-               --------------------------------------------
-               | Defnt DType [(Identifier, [Contents])]
 type Identifier = String
 
 data LabelledContent = LblC { _lbl :: Label

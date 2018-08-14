@@ -253,8 +253,7 @@ temp :: RawContent -> RefType
 temp (Table _ _ _ _)       = Tab
 temp (Figure _ _ _)        = Fig
 temp (Graph _ _ _ _)       = Fig
-temp (Definition _)        = Def DD --fixme: to be removed completely
-temp (Defnt x _)           = Def x
+temp (Definition x _)      = Def x
 temp (Requirement r)       = rType r
 temp (Assumption a)        = rType a
 temp (Change l)            = rType l

@@ -14,19 +14,10 @@ import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space(Real))
 
-import Language.Drasil.Chunk.Quantity (HasSpace(typ), Quantity, 
-  QuantityDict, mkQuant, qw)
-import Language.Drasil.Chunk.References (Reference)
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
-import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
-
 import Language.Drasil.Development.Unit(unitWrapper, MayHaveUnit(getUnit))
 
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase (NP)
-import Language.Drasil.RefTypes(RefType(..), DType(..))
-import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.Space (Space(Real))
 import Language.Drasil.Spec (Sentence)
 
 -- | A QDefinition is a 'Quantity' with a defining equation.

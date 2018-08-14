@@ -144,7 +144,7 @@ mkSRS = RefSec (RefProg intro [
           [ Assumptions
           , TMs ([Label] ++ stdFields) [t1ConsThermE, t2SensHtE, t3LatHtE]
           , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
-          , DDs' ([Label, Symbol, Units] ++ stdFields) swhsDDefs ShowDerivation
+          , DDs ([Label, Symbol, Units] ++ stdFields) swhsDDefs ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
            [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM] ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty dataConTail

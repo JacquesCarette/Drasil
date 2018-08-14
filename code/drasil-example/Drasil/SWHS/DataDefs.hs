@@ -31,7 +31,7 @@ htFluxCEqn :: Expr
 htFluxCEqn = (sy coil_HTC) * ((sy temp_C) - apply1 temp_W time)
 
 dd1HtFluxC :: DataDefinition
-dd1HtFluxC = mkDD dd1HtFluxCQD [] [] "" Nothing
+dd1HtFluxC = mkDD dd1HtFluxCQD [] [] "ht_flux_C" Nothing
 
 --Can't include info in description beyond definition of variables?
 ----
@@ -43,7 +43,7 @@ htFluxPEqn :: Expr
 htFluxPEqn = (sy pcm_HTC) * (apply1 temp_W time - apply1 temp_PCM time)
 
 dd2HtFluxP :: DataDefinition
-dd2HtFluxP = mkDD dd2HtFluxPQD [] [] "" Nothing
+dd2HtFluxP = mkDD dd2HtFluxPQD [] [] "ht_flux_P" Nothing
 
 ----
 
@@ -54,7 +54,7 @@ htFusionEqn :: Expr
 htFusionEqn = (sy latent_heat) / (sy mass)
 
 dd3HtFusion :: DataDefinition
-dd3HtFusion = mkDD dd3HtFusionQD [] [] "" Nothing
+dd3HtFusion = mkDD dd3HtFusionQD [] [] "htFusion" Nothing
 
 ----
 
@@ -70,7 +70,7 @@ melt_frac_eqn :: Expr
 melt_frac_eqn = (sy latentE_P) / ((sy htFusion) * (sy pcm_mass))
 
 dd4MeltFrac :: DataDefinition
-dd4MeltFrac = mkDD dd4MeltFracQD [] [] "" Nothing
+dd4MeltFrac = mkDD dd4MeltFracQD [] [] "melt_frac" Nothing
 
 --Need to add units to data definition descriptions
 

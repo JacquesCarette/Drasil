@@ -5,7 +5,7 @@ module Drasil.DocumentLanguage.Definitions
   , Field(..)
   , Verbosity(..)
   , tmodel
-  , ddefn' -- , ddefn
+  , ddefn
   , gdefn, derivation
   , instanceModel
   , InclUnits(..)
@@ -47,11 +47,9 @@ tmodel fs m t = mkRawLC (Defnt TM (foldr (mkTMField t m) [] fs)) (t ^. getLabel)
 
 -- | Create a data definition using a list of fields, a database of symbols, and a
 -- QDefinition (called automatically by 'SCSSub' program)
--- ddefn :: HasSymbolTable ctx => Fields -> ctx -> QDefinition -> LabelledContent
--- ddefn fs m d = mkRawLC (Defnt DD (foldr (mkQField d m) [] fs)) (d ^. getLabel)
 
-ddefn' :: HasSymbolTable ctx => Fields -> ctx -> DataDefinition -> LabelledContent
-ddefn' fs m d = mkRawLC (Defnt DD (foldr (mkDDField d m) [] fs)) (d ^. getLabel)
+ddefn :: HasSymbolTable ctx => Fields -> ctx -> DataDefinition -> LabelledContent
+ddefn fs m d = mkRawLC (Defnt DD (foldr (mkDDField d m) [] fs)) (d ^. getLabel)
 
 -- | Create a general definition using a list of fields, database of symbols,
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'
@@ -99,23 +97,6 @@ tConToExpr (TCon AssumedCon x) = x
 
 -- TODO: buildDescription gets list of constraints to expr and ignores 't'.
 
-{-
--- | Create the fields for a definition from a QDefinition (used by ddefn)
-mkQField :: (HasSymbolTable ctx) => QDefinition -> ctx -> Field -> ModRow -> ModRow
-mkQField d _ l@Label fs = (show l, (mkParagraph $ at_start d):[]) : fs
-mkQField d _ l@Symbol fs = (show l, (mkParagraph $ (P $ eqSymb d)):[]) : fs
-mkQField d _ l@Units fs = (show l, (mkParagraph $ (unitToSentenceUnitless d)):[]) : fs
-mkQField d _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (sy d $= d ^. equat) --FIXME: appending symbol should be done in the printing stage
-  (modifyLabelEqn (d ^. getLabel))) : []) : fs 
-mkQField d m l@(Description v u) fs =
-  (show l, buildDDescription v u d m) : fs
-mkQField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
-mkQField _ _ l@(Source) _ = error "Trying to get a Reference from a QDefinition"
-mkQField _ _ l@(Notes) _ = error "Trying to get Notes from a QDefinition"
-mkQField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
-  "for data definitions"
--}
-
 -- | Create the fields for a definition from a QDefinition (used by ddefn)
 mkDDField :: (HasSymbolTable ctx) => DataDefinition -> ctx -> Field -> ModRow -> ModRow
 mkDDField d _ l@Label fs = (show l, (mkParagraph $ at_start d):[]) : fs
@@ -138,16 +119,6 @@ buildDescription :: HasSymbolTable ctx => Verbosity -> InclUnits -> Expr -> ctx 
 buildDescription Succinct _ _ _ _ = []
 buildDescription Verbose u e m cs = (UlC $ ulcc $
   Enumeration (Definitions (descPairs u (vars e m)))) : cs
-
-{-
--- | Create the description field (if necessary) using the given verbosity and
--- including or ignoring units for a data definition
-buildDDescription :: HasSymbolTable ctx => Verbosity -> InclUnits -> QDefinition -> ctx ->
-  [Contents]
-buildDDescription Succinct u d _ = map (UlC . ulcc) [Enumeration (Definitions $ (firstPair u d):[])]
-buildDDescription Verbose u d m = map (UlC . ulcc) [Enumeration (Definitions
-  (firstPair u d : descPairs u (vars (d^.equat) m)))]
--}
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a data definition
@@ -197,15 +168,6 @@ mkIMField i _ l@(Notes) fs =
   maybe fs (\ss -> (show l, map mkParagraph ss) : fs) (i ^. getNotes)
 mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for instance models"
-
-{-
--- | Used for definitions. The first pair is the symbol of the quantity we are
--- defining.
-firstPair :: InclUnits -> QDefinition -> ListTuple
-firstPair (IgnoreUnits) d  = (P $ eqSymb d, Flat $ phrase d, Nothing)
-firstPair (IncludeUnits) d = (P $ eqSymb d, Flat $ phrase d +:+ (sParen $
-  unitToSentenceUnitless d), Nothing)
--}
 
 -- | Used for definitions. The first pair is the symbol of the quantity we are
 -- defining.

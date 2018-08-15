@@ -32,7 +32,7 @@ t1ConsThermE :: TheoryModel
 t1ConsThermE = tm' t1ConsThermE_rc
   (tc' "ConsThermE" [qw thFluxVect, qw gradient, qw vol_ht_gen, 
     qw density, qw heat_cap_spec, qw temp, qw time] ([] :: [ConceptChunk])
-  [] [TCon Invariant consThermERel] [] []) 
+  [] [TCon Invariant consThermERel] [] [makeRef consThemESrc]) 
   (mkLabelSame "t1ConsThermE" (Def TM)) [t1descr]
 
 t1ConsThermE_rc :: RelationConcept
@@ -43,6 +43,9 @@ t1ConsThermE_rc = makeRC "t1ConsThermE_rc"
 consThermERel :: Relation
 consThermERel = (negate (sy gradient)) $. (sy thFluxVect) + (sy vol_ht_gen) $=
   (sy density) * (sy heat_cap_spec) * (pderiv (sy temp) time)
+
+consThemESrc :: Label
+consThemESrc = mkURILabel "consThemESrc" "http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm" "efunda.com"
 
 t1descr :: Sentence
 t1descr = foldlSent [
@@ -73,12 +76,15 @@ t2SensHtE :: TheoryModel
 t2SensHtE = tm' t2SensHtE_rc
   (tc' "SensHtE" [qw sens_heat, qw htCap_S, qw mass, 
     qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [ConceptChunk])
-  [] [TCon Invariant sensHtEEqn] [] []) 
+  [] [TCon Invariant sensHtEEqn] [] [makeRef sensHtESrc]) 
   (mkLabelSame "t2SensHtE" (Def TM)) [t2descr]
 
 t2SensHtE_rc :: RelationConcept
 t2SensHtE_rc = makeRC "t2SensHtE_rc" (nounPhraseSP "Sensible heat energy") t2descr sensHtEEqn
   (mkLabelSame "SensHtE" (Def TM))
+
+sensHtESrc :: Label
+sensHtESrc = mkURILabel "consThemESrc" "http://en.wikipedia.org/wiki/Sensible_heat" "wikipedia.org"
 
 sensHtEEqn :: Relation
 sensHtEEqn = (sy sens_heat) $= case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
@@ -128,7 +134,7 @@ t2descr = foldlSent [
 t3LatHtE :: TheoryModel
 t3LatHtE = tm' t3LatHtE_rc
   (tc' "SensHtE" [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
-  [] [TCon Invariant latHtEEqn] [] []) (mkLabelSame "t3LatHtE" (Def TM)) [t3descr]
+  [] [TCon Invariant latHtEEqn] [] [makeRef latHtESrc]) (mkLabelSame "t3LatHtE" (Def TM)) [t3descr]
 
 t3LatHtE_rc :: RelationConcept
 t3LatHtE_rc = makeRC "t3LatHtE_rc"
@@ -140,6 +146,9 @@ latHtEEqn = apply1 latent_heat time $=
   defint (eqSymb tau) 0 (sy time) (deriv (apply1 latent_heat tau) tau)
 
 -- Integrals need dTau at end
+
+latHtESrc :: Label
+latHtESrc = mkURILabel "consThemESrc" "http://en.wikipedia.org/wiki/Latent_heat" "wikipedia.org"
 
 t3descr :: Sentence
 t3descr = foldlSent [

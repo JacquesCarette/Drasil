@@ -12,7 +12,7 @@ data DType = General
            | TM
            | DD
 
-type RefAdd  = String
+type RefAdd = String
 
 -- | What type of requirement are we dealing with?
 data ReqType = FR  -- ^ Functional Requirement
@@ -41,6 +41,7 @@ data RefType = Tab    -- ^ Table
              | Label RefType    -- ^ Label --FIXME: hack (#971)
              | Blank  -- ^ Prefix filler for ConceptInstance
              | DeferredCC UID  -- ^ For ConceptInstances --FIXME: Used by References to create a Deferred ShortName (#562)
+             | Link -- ^ URI
 
 instance Show RefType where
   show Tab    = "Table"
@@ -60,3 +61,4 @@ instance Show RefType where
   show EqnB   = "Equation"
   show Blank  = "Blank"
   show (DeferredCC _) = error "Cannot directly display deferred reference types." -- FIXME
+  show Link   = "Link"

@@ -27,7 +27,6 @@ import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Software.Products (compPro)
-import Data.Drasil.Units.Thermodynamics (thermal_flux)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, likeChg, unlikeChg, probDesc, goalStmt,

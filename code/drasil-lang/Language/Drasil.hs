@@ -102,7 +102,7 @@ module Language.Drasil (
   , Derivation, getDerivation, getShortName
   , Reference
   -- Chunk.ShortName
-  , DeferredCtx(..), resolveSN, ShortName, shortname', HasShortName(shortname)
+  , DeferredCtx(..), resolveSN, ShortName, shortname', HasShortName(shortname), getStringSN
   --Citations
   , Citation(..), EntryID, BibRef, CiteField(..), Month(..), HP(..)
   , HasFields(..)
@@ -196,10 +196,10 @@ module Language.Drasil (
   -- PhysSystDesc
   , PhysSystDesc, pSysDes, psd
   -- RefTypes
-  , RefAdd, RefType(Cite, Tab, EqnB, LCh, UnCh, Req, Def, Lst)
+  , RefAdd, RefType(Cite, Tab, EqnB, LCh, UnCh, Req, Def, Lst, Link)
   -- Label
   , Label 
-  , mkLabelRA', mkLabelSame, mkEmptyLabel
+  , mkLabelRA', mkLabelSame, mkEmptyLabel, mkURILabel
   , mkLabelRAAssump', mkLabelRAFig, mkLabelRASec
   , modifyLabelEqn
   -- Document.getChunk
@@ -260,7 +260,7 @@ import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.References (Reference)
 import Language.Drasil.Chunk.ShortName (DeferredCtx(..), resolveSN, ShortName
-  , shortname', HasShortName(shortname))
+  , shortname', HasShortName(shortname), getStringSN)
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation (
   -- Types
@@ -332,9 +332,9 @@ import Language.Drasil.Misc -- all of it
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
-import Language.Drasil.RefTypes(RefAdd, RefType(Cite, EqnB, Tab, LCh, UnCh, Req, Def, Lst),
+import Language.Drasil.RefTypes(RefAdd, RefType(Cite, EqnB, Tab, LCh, UnCh, Req, Def, Lst, Link),
   DType(..))
 import Language.Drasil.Label (mkLabelRA', mkLabelSame, 
-  mkEmptyLabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec, modifyLabelEqn)
+  mkEmptyLabel, mkURILabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec, modifyLabelEqn)
 import Language.Drasil.Label.Core (getAdd)
 --Should be in lang-dev package?

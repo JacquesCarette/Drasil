@@ -340,12 +340,11 @@ layLabelled sm x@(LblC _ (Change lcs))           = T.ALUR
 layLabelled sm x@(LblC _ (Graph ps w h t))    = T.Graph 
   (map (\(y,z) -> (spec sm y, spec sm z)) ps) w h (spec sm t)
   (P.S $ getAdd (x ^. getRefAdd))
-layLabelled sm x@(LblC _ (Defnt dtyp pairs)) = T.Definition 
+layLabelled sm x@(LblC _ (Definition dtyp pairs)) = T.Definition 
   dtyp (layPairs pairs) 
   (P.S $ getAdd (x ^. getRefAdd))
   where layPairs = map (\(x',y) -> (x', map (lay sm) y))
 layLabelled sm (LblC _ (Paragraph c))           = T.Paragraph (spec sm c)
-layLabelled _  (LblC _ (Definition c))          = T.Definition c [("nolabel!", [T.Paragraph $ P.EmptyS])] (P.S "nolabel8")
 layLabelled sm (LblC _ (Enumeration cs))        = T.List $ makeL sm cs
 layLabelled sm (LblC _ (Bib bib))               = T.Bib $ map (layCite sm) bib
 
@@ -357,7 +356,6 @@ layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
   ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S "nolabel0") b (spec sm t)
 layUnlabelled sm (Paragraph c)          = T.Paragraph (spec sm c)
 layUnlabelled sm (EqnBlock c)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
-layUnlabelled _  (Definition c)       = T.Definition c [("nolabel!", [T.Paragraph $ P.EmptyS])] (P.S "nolabel1")
 layUnlabelled sm (Enumeration cs)       = T.List $ makeL sm cs
 layUnlabelled sm (Figure c f wp)    = T.Figure (P.S "nolabel2") (spec sm c) f wp
 layUnlabelled sm (Requirement r)      = T.ALUR T.Requirement
@@ -369,7 +367,7 @@ layUnlabelled sm (Change lcs)          = T.ALUR
   (spec sm (chng lcs)) (P.S "nolabel5") (spec sm $ getShortName lcs)
 layUnlabelled sm (Graph ps w h t)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S "nolabel6")
-layUnlabelled sm (Defnt dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")
+layUnlabelled sm (Definition dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")
   where layPairs = map (\(x,y) -> (x, map temp y ))
         temp  y   = layUnlabelled sm (y ^. accessContents)
 layUnlabelled sm (Bib bib)              = T.Bib $ map (layCite sm) bib

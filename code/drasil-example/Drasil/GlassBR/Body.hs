@@ -132,7 +132,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           [ Assumptions
           , TMs ([Label] ++ stdFields) [pbIsSafe, lrIsSafe]
           , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
-          , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+          , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand] HideDerivation
           , Constraints EmptyS dataConstraintUncertainty
                         (foldlSent [makeRef SRS.valsOfAuxConsLabel, S "gives", (plural value `ofThe` S "specification"), 
@@ -577,7 +577,7 @@ testing :: [QuantityDict]
 testing = qw prob_br : qw lRe : qw demand : [] -- all different types!
 --FIXME: rename or find better implementation?
 
-funcReqsR6_pulledList :: [QDefinition]
+funcReqsR6_pulledList :: [DataDefinition]
 funcReqsR6_pulledList = [risk, strDisFac, nonFL, glaTyFac, dimLL, 
   tolPre, tolStrDisFac, hFromt, aspRat]
 

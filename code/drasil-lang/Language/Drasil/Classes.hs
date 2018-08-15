@@ -20,6 +20,7 @@ module Language.Drasil.Classes (
   , Constrained(constraints)
   , HasReasVal(reasVal)
   , ExprRelat(relat)
+  , DefiningExpr(defnExpr)
   , HasDerivation(derivations)
   , HasAdditionalNotes(getNotes)
   , HasRefAddress(getRefAdd)
@@ -137,3 +138,7 @@ class UnitEq u where
 -- TODO : there is a design bug here not at all apparent from its definition; have to come back to it (Pull Request #532)
 class ExprRelat c where
   relat :: Lens' c Expr
+
+-- This is the 'correct' version of ExprRelat.
+class DefiningExpr c where
+  defnExpr :: Lens' c Expr

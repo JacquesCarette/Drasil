@@ -7,7 +7,7 @@
 -- instead.
 module Drasil.DocumentLanguage where
 
-import Drasil.DocumentLanguage.Definitions (Fields, ddefn, ddefn', derivation, instanceModel, gdefn, tmodel)
+import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation, instanceModel, gdefn, tmodel)
 
 import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                -- Vector - Name conflict (defined in file)
@@ -183,7 +183,7 @@ data SCSSub where
   Assumptions    :: SCSSub
   TMs            :: Fields  -> [TheoryModel] -> SCSSub
   GDs            :: Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
-  DDs'           :: Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro -- should eventually replace and be renamed to DDs
+  DDs            :: Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
   IMs            :: Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
   Constraints    :: Sentence -> Sentence -> Sentence -> [LabelledContent] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
 --FIXME: Work in Progress ^
@@ -389,7 +389,7 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
   Intro.introductionSection probIntro progDefn $ map (mkSubIntro si) l
   where
     mkSubIntro :: SystemInformation -> IntroSub -> Section
-    mkSubIntro si' (IPurpose intro) = Intro.purposeOfDoc intro
+    mkSubIntro _ (IPurpose intro) = Intro.purposeOfDoc intro
     mkSubIntro SI {_sys = sys} (IScope main intendedPurp) =
       Intro.scopeOfRequirements main sys intendedPurp
     mkSubIntro SI {_sys = sys} (IChar know understand appStandd) =
@@ -443,14 +443,14 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS :: SystemInformation -> SCSSub -> Section
     mkSubSCS _ (TMs _ [])   = error "There are no Theoretical Models"
     mkSubSCS _ (GDs _ [] _) = SSD.genDefnF []
-    mkSubSCS _ (DDs' _ [] _) = error "There are no Data Definitions" --FIXME: temporary duplicate 
+    mkSubSCS _ (DDs _ [] _) = error "There are no Data Definitions"
     mkSubSCS _ (IMs _ [] _)  = error "There are no Instance Models"
     mkSubSCS si' (TMs fields ts) =
       SSD.thModF (siSys si') (map LlC (map (tmodel fields (_sysinfodb si')) ts))
-    mkSubSCS si' (DDs' fields dds ShowDerivation) = --FIXME: need to keep track of DD intro. --FIXME: temporary duplicate
-      SSD.dataDefnF EmptyS (concatMap (\x -> (LlC $ ddefn' fields (_sysinfodb si') x) : derivation x) dds)
-    mkSubSCS si' (DDs' fields dds _) = --FIXME: temporary duplicate
-      SSD.dataDefnF EmptyS (map LlC (map (ddefn' fields (_sysinfodb si')) dds))
+    mkSubSCS si' (DDs fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
+      SSD.dataDefnF EmptyS (concatMap (\x -> (LlC $ ddefn fields (_sysinfodb si') x) : derivation x) dds)
+    mkSubSCS si' (DDs fields dds _) =
+      SSD.dataDefnF EmptyS (map LlC (map (ddefn fields (_sysinfodb si')) dds))
     mkSubSCS si' (GDs fields gs' ShowDerivation) =
       SSD.genDefnF (concatMap (\x -> (LlC $ gdefn fields (_sysinfodb si') x) : derivation x) gs')
     mkSubSCS si' (GDs fields gs' _) =

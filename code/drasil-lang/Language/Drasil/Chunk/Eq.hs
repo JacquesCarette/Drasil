@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.Eq
 import Control.Lens ((^.), makeLenses, view)
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  HasSymbol(symbol), IsUnit, ExprRelat(relat),
+  HasSymbol(symbol), IsUnit, DefiningExpr(defnExpr), -- ExprRelat(relat),
   ConceptDomain)
 import Language.Drasil.Chunk.Quantity (HasSpace(typ), QuantityDict,
   mkQuant, qw, Quantity)
@@ -20,7 +20,7 @@ import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Spec (Sentence)
 
--- | A QDefinition is a 'Quantity' with a defining equation.
+-- | A QDefinition is a 'Quantity' with a defining expression.
 data QDefinition = EC
           { _qua :: QuantityDict
           , _equat :: Expr
@@ -34,7 +34,7 @@ instance Idea          QDefinition where getA c = getA $ c ^. qua
 instance HasSpace      QDefinition where typ = qua . typ
 instance HasSymbol     QDefinition where symbol e st = symbol (e^.qua) st
 instance Quantity      QDefinition where 
-instance ExprRelat     QDefinition where relat = equat
+instance DefiningExpr  QDefinition where defnExpr = equat
 instance Eq            QDefinition where a == b = (a ^. uid) == (b ^. uid)
 instance MayHaveUnit   QDefinition where getUnit = getUnit . view qua
 

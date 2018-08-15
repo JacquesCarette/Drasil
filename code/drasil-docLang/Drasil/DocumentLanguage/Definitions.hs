@@ -102,7 +102,7 @@ mkDDField :: (HasSymbolTable ctx) => DataDefinition -> ctx -> Field -> ModRow ->
 mkDDField d _ l@Label fs = (show l, (mkParagraph $ at_start d):[]) : fs
 mkDDField d _ l@Symbol fs = (show l, (mkParagraph $ (P $ eqSymb d)):[]) : fs
 mkDDField d _ l@Units fs = (show l, (mkParagraph $ (unitToSentenceUnitless d)):[]) : fs
-mkDDField d _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (sy d $= d ^. relat) --FIXME: appending symbol should be done in the printing stage
+mkDDField d _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (sy d $= d ^. defnExpr) --FIXME: appending symbol should be done in the printing stage
   (modifyLabelEqn (d ^.getLabel))) :[]) : fs 
 mkDDField d m l@(Description v u) fs =
   (show l, buildDDescription' v u d m) : fs
@@ -126,7 +126,7 @@ buildDDescription' :: HasSymbolTable ctx => Verbosity -> InclUnits -> DataDefini
   [Contents]
 buildDDescription' Succinct u d _ = map (UlC . ulcc) [Enumeration (Definitions $ (firstPair' u d):[])]
 buildDDescription' Verbose u d m = map (UlC . ulcc) [Enumeration (Definitions
-  (firstPair' u d : descPairs u (vars (d^.relat) m)))]
+  (firstPair' u d : descPairs u (vars (d^.defnExpr) m)))]
 
 -- | Create the fields for a general definition from a 'GenDefn' chunk.
 mkGDField :: HasSymbolTable ctx => GenDefn -> ctx -> Field -> ModRow -> ModRow

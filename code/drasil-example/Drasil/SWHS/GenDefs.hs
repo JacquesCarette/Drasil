@@ -1,10 +1,9 @@
-module Drasil.SWHS.GenDefs (swhsGDs, nwtnCooling, rocTempSimp, rocTempSimpGD,
-  roc_temp_simp_deriv, generalDefinitions, nwtnCooling_desc, rocTempSimp_desc) where
+module Drasil.SWHS.GenDefs (swhsGDs, nwtnCooling, rocTempSimp,
+  roc_temp_simp_deriv, nwtnCooling_desc, rocTempSimpRC, rocTempSimp_desc) where
 
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
 
-import Data.Drasil.Concepts.Documentation (assumption)
 import Data.Drasil.Concepts.Math (equation, rate, rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (law_conv_cooling)
 
@@ -19,9 +18,10 @@ import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma),
 import Data.Drasil.Units.Thermodynamics (thermal_flux)
 import Data.Drasil.Utils (unwrap, weave)
 
-import Drasil.SWHS.Assumptions
+import Drasil.SWHS.Assumptions (newA2, newA3, newA4, newA5, newA6)
 import Drasil.SWHS.Concepts (gauss_div)
 import Drasil.SWHS.Labels (nwtnCoolingL, rocTempSimpL)
+import Drasil.SWHS.References (incroperaEtAl2007)
 import Drasil.SWHS.TMods (t1ConsThermE)
 import Drasil.SWHS.Unitals (vol_ht_gen, deltaT, temp_env, pcm_SA,
   out_SA, in_SA, ht_flux_in, ht_flux_out, htTransCoeff, thFluxVect)
@@ -35,20 +35,16 @@ import Drasil.SWHS.Unitals (vol_ht_gen, deltaT, temp_env, pcm_SA,
 --stabilized yet (since RelationConcept isn't an instance of --
 --the Referable class.                                       --
 swhsGDs :: [GenDefn]
-swhsGDs = [nwtnCoolingGD, rocTempSimpGD] 
+swhsGDs = [nwtnCooling, rocTempSimp] 
 
-nwtnCoolingGD, rocTempSimpGD :: GenDefn
-nwtnCoolingGD = gdNoUnitDef nwtnCooling [] [] nwtnCoolingL
-rocTempSimpGD = gdNoUnitDef rocTempSimp [] [] rocTempSimpL
-
-generalDefinitions :: [GenDefn]
-generalDefinitions = [gd' nwtnCooling (Just thermal_flux) ([] :: Derivation) [] "nwtnCooling" [nwtnCooling_desc],
-  gd' rocTempSimp (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv [] "rocTempSimp" [rocTempSimp_desc]]
+nwtnCooling, rocTempSimp :: GenDefn
+nwtnCooling = gd' nwtnCoolingRC (Just thermal_flux) ([] :: Derivation) [makeRef incroperaEtAl2007 +:+ sParen (S "pg. 8")] "nwtnCooling" [nwtnCooling_desc]
+rocTempSimp = gd' rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv [S "FIXME: no sources"]                   "rocTempSimp" [rocTempSimp_desc]
 
 --
 
-nwtnCooling :: RelationConcept
-nwtnCooling = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling") 
+nwtnCoolingRC :: RelationConcept
+nwtnCoolingRC = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling") 
   nwtnCooling_desc nwtnCooling_rel nwtnCoolingL
 
 nwtnCooling_rel :: Relation
@@ -71,8 +67,8 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
   sParen (Sy $ unit_symb deltaT)]
 
 --
-rocTempSimp :: RelationConcept
-rocTempSimp = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
+rocTempSimpRC :: RelationConcept
+rocTempSimpRC = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
   "of change of temperature") rocTempSimp_desc rocTempSimp_rel rocTempSimpL
 
 rocTempSimp_rel :: Relation
@@ -141,8 +137,7 @@ s4_2_3_desc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
   ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
   makeRef rocTempSimpL, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
-  titleize' assumption, (foldlList Comma List $ (map (\d -> sParen (d)))
-  assumps) `sC` S "we have"]
+  (foldlList Comma List assumps) `sC` S "we have"]
 
 s4_2_3_desc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]
 s4_2_3_desc5 den ma vo = [S "Using the fact that", ch den :+: S "=" :+:

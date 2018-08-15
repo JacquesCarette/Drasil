@@ -52,7 +52,7 @@ import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
   coil, tank, transient, swhs_pcm, phase_change_material, tank_pcm)
 import Drasil.SWHS.DataDefs (swhsDataDefs, dd1HtFluxC, dd2HtFluxP, dataDefns)
 import Drasil.SWHS.DataDesc (swhsInputMod)
-import Drasil.SWHS.GenDefs (swhsGDs, generalDefinitions)
+import Drasil.SWHS.GenDefs (swhsGDs)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, 
   heatEInWtr, heatEInPCM, swhsIMods)
 import Drasil.SWHS.References (parnas1972, parnasClements1984)
@@ -147,7 +147,7 @@ mkSRS = RefSec (RefProg intro [
         (SCSProg 
           [ Assumptions
           , TMs ([Label] ++ stdFields) [t1ConsThermE, t2SensHtE, t3LatHtE]
-          , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
+          , GDs ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
           , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
            [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM] ShowDerivation

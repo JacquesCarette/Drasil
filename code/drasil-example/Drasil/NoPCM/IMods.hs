@@ -17,6 +17,7 @@ import Data.Drasil.Utils (unwrap, weave)
 import Drasil.SWHS.Assumptions
 import Drasil.SWHS.Concepts (water, tank)
 import Drasil.SWHS.DataDefs(dd1HtFluxC)
+import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.Labels (rocTempSimpL)
 import Drasil.SWHS.Unitals (temp_W, temp_C, tau_W, w_mass, htCap_W, coil_HTC, 
   coil_SA, temp_init, time_final, w_vol, ht_flux_C, vol_ht_gen)
@@ -29,7 +30,8 @@ eBalanceOnWtr = im'' eBalanceOnWtr_rc [qw temp_C, qw temp_init, qw time_final,
   qw coil_SA, qw coil_HTC, qw htCap_W, qw w_mass] 
   [TCon AssumedCon $sy temp_init $<= sy temp_C] (qw temp_W) 
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
-  [TCon AssumedCon $ 0 $< sy time $< sy time_final] [] eBalanceOnWtrDeriv "eBalanceOnWtr" [balWtrDesc]
+  [TCon AssumedCon $ 0 $< sy time $< sy time_final] [makeRef koothoor2013 +:+ sParen (S "with PCM removed")] 
+  eBalanceOnWtrDeriv "eBalanceOnWtr" [balWtrDesc]
 
 eBalanceOnWtr_rc :: RelationConcept
 eBalanceOnWtr_rc = makeRC "eBalanceOnWtr_rc" (nounPhraseSP $ "Energy balance on " ++

@@ -14,6 +14,7 @@ import Drasil.SWHS.Assumptions (newA12, newA14, newA15, newA16, newA17, newA18, 
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, tank, water)
 import Drasil.SWHS.DataDefs(dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac)
 import Drasil.SWHS.Labels (rocTempSimpL, eBalanceOnWtrL, eBalanceOnPCML, heatEInWtrL, heatEInPCML)
+import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (t2SensHtE, t3LatHtE)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, ht_flux_C, ht_flux_P, htCap_L_P, 
   htCap_S_P, htCap_W, htFusion, latentE_P, melt_frac, pcm_E, pcm_HTC, pcm_initMltE, 
@@ -30,7 +31,7 @@ eBalanceOnWtr :: InstanceModel
 eBalanceOnWtr = im'' eBalanceOnWtr_rc [qw w_mass, qw htCap_W, qw coil_HTC, qw pcm_SA,
  qw pcm_HTC, qw coil_SA, qw temp_PCM, qw time_final, qw temp_C, qw temp_init]
   [TCon AssumedCon $ sy temp_init $< sy temp_C] (qw temp_W)
-   [TCon AssumedCon $ 0 $< sy time $< sy time_final] [] eBalanceOnWtrDeriv
+   [TCon AssumedCon $ 0 $< sy time $< sy time_final] [makeRef koothoor2013] eBalanceOnWtrDeriv
    "eBalanceOnWtr" [balWtrDesc]
 
 eBalanceOnWtr_rc :: RelationConcept
@@ -189,7 +190,7 @@ eBalanceOnPCM :: InstanceModel
 eBalanceOnPCM = im'' eBalanceOnPCM_rc [qw temp_melt_P, qw time_final, qw temp_init, qw pcm_SA,
  qw pcm_HTC, qw pcm_mass, qw htCap_S_P, qw htCap_L_P]
   [TCon AssumedCon $ sy temp_init $< sy temp_melt_P] (qw temp_PCM)
-   [TCon AssumedCon $ 0 $< sy time $< sy time_final] [] eBalanceOnPCMDeriv 
+   [TCon AssumedCon $ 0 $< sy time $< sy time_final] [makeRef koothoor2013] eBalanceOnPCMDeriv 
    "eBalanceOnPCM" [balPCMDesc_note]
 
 eBalanceOnPCM_rc :: RelationConcept
@@ -341,7 +342,7 @@ eBalanceOnPCM_deriv_eqns__im2 = [eBalanceOnPCM_Eqn1, eBalanceOnPCM_Eqn2,
 ---------
 heatEInWtr :: InstanceModel
 heatEInWtr = im'' heatEInWtr_rc [qw temp_init, qw w_mass, qw htCap_W, qw w_mass] 
-  [] (qw w_E) [TCon AssumedCon $ 0 $< sy time $< sy time_final] [] [] "heatEInWtr"
+  [] (qw w_E) [TCon AssumedCon $ 0 $< sy time $< sy time_final] [makeRef koothoor2013] [] "heatEInWtr"
   [htWtrDesc]
 
 heatEInWtr_rc :: RelationConcept
@@ -375,7 +376,7 @@ heatEInPCM :: InstanceModel
 heatEInPCM = im' heatEInPCM_rc [qw temp_melt_P, qw time_final, qw temp_init, qw pcm_SA,
  qw pcm_HTC, qw pcm_mass, qw htCap_S_P, qw htCap_L_P, qw temp_PCM, qw htFusion, qw t_init_melt]
   [TCon AssumedCon $ sy temp_init $< sy temp_melt_P] (qw pcm_E)
-  [TCon AssumedCon $ 0 $< sy time $< sy time_final] []
+  [TCon AssumedCon $ 0 $< sy time $< sy time_final] [makeRef koothoor2013]
   heatEInPCML [htPCMDesc]
 
 heatEInPCM_rc :: RelationConcept

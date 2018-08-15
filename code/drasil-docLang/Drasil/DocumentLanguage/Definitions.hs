@@ -165,8 +165,8 @@ mkGDField g _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (g ^. relat)
 mkGDField g m l@(Description v u) fs = (show l,
   (buildDescription v u (g ^. relat) m) []) : fs
 mkGDField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
-mkGDField _ _ l@(Source) fs = (show l, fixme) : fs
-mkGDField d _ l@(Notes) fs = maybe fs (\ss -> (show l, map mkParagraph ss) : fs) (d ^. getNotes)
+mkGDField g _ l@(Source) fs = (show l, [mkParagraph $ getSource g]) : fs
+mkGDField g _ l@(Notes) fs = maybe fs (\ss -> (show l, map mkParagraph ss) : fs) (g ^. getNotes)
 mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 
 -- | Create the fields for an instance model from an 'InstanceModel' chunk

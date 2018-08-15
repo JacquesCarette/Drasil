@@ -575,7 +575,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & For a slice of mass in the slope the force equilibrium to satisfy \hyperref[T:equilibrium]{Definition~T:equilibrium} in the direction perpendicular to the base surface of the slice. Rearranged to solve for the normal force of the surface $N$. Force equilibrium is derived from the free body diagram of Section~\ref{Sec:PhysSyst} Index i refers to the values of the properties for slice/interslices following convention in Section~\ref{Sec:PhysSyst}. Force variable definitions can be found in \hyperref[DD:W.i]{Definition~DD:W.i} to \hyperref[DD:l.s,i]{Definition~DD:l.s,i}.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & \cite{chen2005}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -610,7 +610,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & For a slice of mass in the slope the force equilibrium to satisfy \hyperref[T:equilibrium]{Definition~T:equilibrium} in the direction parallel to the base surface of the slice. Rearranged to solve for the shear force on the base $S$. Force equilibrium is derived from the free body diagram of Section~\ref{Sec:PhysSyst} Index $i$ refers to the values of the properties for slice/interslices following convention in Section~\ref{Sec:PhysSyst}. Force variable definitions can be found in \hyperref[DD:W.i]{Definition~DD:W.i} to \hyperref[DD:l.s,i]{Definition~DD:l.s,i}.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & \cite{chen2005}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -640,7 +640,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & The Mohr-Coulomb resistive shear strength of a slice $τ$ from \hyperref[T:mcShrStrgth]{Definition~T:mcShrStrgth} is multiplied by the area $b \sec\left(α\right)\cdot{}1$ to obtain the resistive shear force $P$. Note the extra $1$ is to represent a unit of width which is multiplied by the total base length of a slice ${ℓ_{b}}$ of the plane where the normal occurs, where ${ℓ_{b}}=b \sec\left(α\right)$ and $b$ is the x width of the base. This accounts for the effective normal force $N'=N-{U_{b}}$ of a soil from \hyperref[T:effStress]{Definition~T:effStress} where the normal stress is multiplied by the same area to obtain the effective normal force $σ b \sec\left(α\right)\cdot{}1=N'$.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & \cite{chen2005}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -672,7 +672,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & From the definition of the factor of safety in \hyperref[T:factOfSafety]{Definition~T:factOfSafety}, and the new definition of $P$, a new relation for the net mobile shear force of the slice $T$ is found as the resistive shear $P$ (\hyperref[GD:resShr]{Definition~GD:resShr}) divided by the factor of safety $FS$.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & \cite{chen2005}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -699,7 +699,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & The assumption for the Morgenstern Price method (A\ref{A:Interslice-Norm-Shear-Forces-Linear}) that the interslice shear force $x$ is proportional to the interslice normal force $G$ by a proportionality constant $λ$ and a predetermined scaling function $f$, that changes the proportionality as a function of the x-ordinate position of the interslice. $f$ is typically either a half-sine along the slip surface, or a constant.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & \cite{chen2005}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -736,7 +736,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & For a slice of mass in the slope the moment equilibrium to satisfy \hyperref[T:equilibrium]{Definition~T:equilibrium} in the direction perpendicular to the base surface of the slice. Moment equilibrium is derived from the free body diagram of Section~\ref{Sec:PhysSyst}. Index i refers to the values of the properties for slice/interslices following convention in Section~\ref{Sec:PhysSyst}. Variable definitions can be found in \hyperref[DD:W.i]{Definition~DD:W.i} to \hyperref[DD:l.s,i]{Definition~DD:l.s,i}.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & \cite{chen2005}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -768,7 +768,9 @@ Description & \begin{symbDescription}
               \item{$ω$ is the angle (${}^{\circ}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Notes & This equation and the equation in \hyperref[GD:netForcey]{Definition~GD:netForcey} show the net sum of the forces acting on a slice for the RFEM model and the forces that create an applied load on the slice. ${F_{x}}$ refers to the load in the direction perpendicular to the direction of the force of gravity for slice $i$, while ${F_{y}}$ refers to the load in the direction parallel to the force of gravity for slice $i$. Forces are found in the free body diagram of Section~\ref{Sec:PhysSyst}. In this model the elements are not exerting forces on each other, so the interslice forces $G$ and $X$ are not a part of the model. Index $i$ refers to the values of the properties for slice/interslices following convention in Section~\ref{Sec:PhysSyst}. Force variable definitions can be found in \hyperref[DD:W.i]{Definition~DD:W.i} to \hyperref[DD:l.b,i]{Definition~DD:l.b,i}.
+\\ \midrule \\
+Source & \cite{chen2005}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -798,9 +800,9 @@ Description & \begin{symbDescription}
               \item{$ω$ is the angle (${}^{\circ}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & These equations show the net sum of the forces acting on a slice for the RFEM model and the forces that create an applied load on the slice. ${F_{x}}$ refers to the load in the direction perpendicular to the direction of the force of gravity for slice $i$, while ${F_{y}}$ refers to the load in the direction parallel to the force of gravity for slice $i$. Forces are found in the free body diagram of Section~\ref{Sec:PhysSyst}. In this model the elements are not exerting forces on each other, so the interslice forces $G$ and $X$ are not a part of the model. Index $i$ refers to the values of the properties for slice/interslices following convention in Section~\ref{Sec:PhysSyst}. Force variable definitions can be found in \hyperref[DD:W.i]{Definition~DD:W.i} to \hyperref[DD:l.b,i]{Definition~DD:l.b,i}.
+Notes & This equation and the equation in \hyperref[GD:netForcex]{Definition~GD:netForcex} show the net sum of the forces acting on a slice for the RFEM model and the forces that create an applied load on the slice. ${F_{x}}$ refers to the load in the direction perpendicular to the direction of the force of gravity for slice $i$, while ${F_{y}}$ refers to the load in the direction parallel to the force of gravity for slice $i$. Forces are found in the free body diagram of Section~\ref{Sec:PhysSyst}. In this model the elements are not exerting forces on each other, so the interslice forces $G$ and $X$ are not a part of the model. Index $i$ refers to the values of the properties for slice/interslices following convention in Section~\ref{Sec:PhysSyst}. Force variable definitions can be found in \hyperref[DD:W.i]{Definition~DD:W.i} to \hyperref[DD:l.b,i]{Definition~DD:l.b,i}.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & \cite{chen2005}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -838,7 +840,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & A 2D component implementation of Hooke's law as seen in \hyperref[T:hookesLaw]{Definition~T:hookesLaw}. $δn$ is the displacement of the element normal to the surface and $δt$ is the displacement of the element parallel to the surface. Pn,i is the net pressure acting normal to the surface, and Pt,i is the net pressure acting parallel to the surface. Pressure is used in place of force as the surface has not been normalized for it's length. The stiffness values Kn,i and Kt,i are then the resistance to displacement in the respective directions defined as in \hyperref[DD:T.i]{Definition~DD:T.i}. The pressure forces would be the result of applied loads on the mass, the product of the stiffness elements with the displacement would be the mass's reactive force that creates equilibrium with the applied forces after reaching the equilibrium displacement.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & \cite{stolle2008}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -881,7 +883,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & Vectors describing the displacement of slice $i$. $δ$ is the displacement in the unrotated coordinate system, where $δx$ is the displacement of the slice perpendicular to the direction of gravity, and $δy$ is the displacement of the slice parallel to the force of gravity. $ε$ is the displacement in the rotated coordinate system, where $δu$ is the displacement of the slice parallel to the slice base, and $δy$ is the displacement of the slice perpendicular to the slice base. $ε$ can also be found by rotating $δ$ clockwise by the base angle, $α$ through a rotation matrix as shown.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & \cite{stolle2008}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}

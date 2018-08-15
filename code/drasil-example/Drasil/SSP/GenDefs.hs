@@ -8,14 +8,14 @@ import Drasil.DocLang.SRS as SRS (physSystLabel)
 
 import Data.Drasil.Concepts.Documentation (assumption, definition, element, 
   method_, model, property, system, value, variable)
-import Data.Drasil.Concepts.Math (angle, matrix, normal, perp, surface, vector)
+import Data.Drasil.Concepts.Math (angle, equation, matrix, normal, perp, surface, vector)
 import Data.Drasil.Concepts.PhysicalProperties (len, mass)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 
 import Data.Drasil.Quantities.Physics (displacement, force)
 import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 
-import Data.Drasil.SentenceStructures (foldlSent, getTandS, isThe, ofThe, sAnd)
+import Data.Drasil.SentenceStructures (andThe, foldlSent, getTandS, isThe, ofThe, sAnd)
 
 import Drasil.SSP.Assumptions (newA5)
 import Drasil.SSP.BasicExprs (displMtx, eqlExpr, momExpr, rotMtx)
@@ -45,8 +45,8 @@ generalDefinitions = [
   gd'' mobShr      [makeRef chen2005]   "mobShr"      [mobShr_desc],
   gd'' normShrR    [makeRef chen2005]   "normShrR"    [nmShrR_desc],
   gd'' momentEql   [makeRef chen2005]   "momentEql"   [momEql_desc],
-  gd'' netForcex   []                   "netForcex"   [], -- FIXME: Source and Description Fields are empty
-  gd'' netForcey   [makeRef chen2005]   "netForcey"   [fNet_desc],
+  gd'' netForcex   [makeRef chen2005]   "netForcex"   [fNet_desc genDef8Label],
+  gd'' netForcey   [makeRef chen2005]   "netForcey"   [fNet_desc genDef7Label],
   gd'' hookesLaw2d [makeRef stolle2008] "hookesLaw2d" [hooke2d_desc],
   gd'' displVect   [makeRef stolle2008] "displVect"   [disVec_desc]
   ]
@@ -186,7 +186,7 @@ momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
 --
 netForcex :: RelationConcept
 netForcex = makeRC "netForce" (nounPhraseSP "net x-component force")
-  EmptyS fNetx_rel genDef7Label
+  (fNet_desc genDef8Label) fNetx_rel genDef7Label
 
 fNetx_rel :: Relation
 fNetx_rel = inxi fx $= (negate $ inxi watrForceDif) -
@@ -197,7 +197,7 @@ fNetx_rel = inxi fx $= (negate $ inxi watrForceDif) -
 
 netForcey :: RelationConcept
 netForcey = makeRC "netForce" (nounPhraseSP "net y-component force")
-  fNet_desc fNety_rel genDef8Label
+  (fNet_desc genDef7Label) fNety_rel genDef8Label
 
 fNety_rel :: Relation
 fNety_rel = inxi fy $= (negate $ inxi slcWght) +
@@ -205,9 +205,9 @@ fNety_rel = inxi fy $= (negate $ inxi slcWght) +
   - (inxi surfHydroForce) * cos (inxi surfAngle) -
   (inxi surfLoad) * cos (inxi impLoadAngle)
 
-
-fNet_desc :: Sentence
-fNet_desc = foldlSent [S "These equations show the net sum of the",
+fNet_desc :: (HasShortName l, Referable l) => l -> Sentence
+fNet_desc gd = foldlSent [S "This", phrase equation `andThe` phrase equation, 
+  S "in", makeRef gd, S "show the net sum of the",
   plural force, S "acting on a", phrase slice, 
   S "for the RFEM", phrase model, S "and the", plural force,
   S "that create an applied load on the" +:+. phrase slice, ch fx,

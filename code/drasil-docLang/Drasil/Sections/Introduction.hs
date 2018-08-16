@@ -1,30 +1,25 @@
-module Drasil.Sections.Introduction 
-  (orgSec,
-   introductionSection,
-   purposeOfDoc,
-   scopeOfRequirements,
-   charIntRdrF
-   ) where
+module Drasil.Sections.Introduction (orgSec, introductionSection, purposeOfDoc, scopeOfRequirements, 
+  charIntRdrF) where
 
 import Language.Drasil
 import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc)
-import Data.Drasil.SentenceStructures (ofThe, ofThe',
-  foldlList, SepType(Comma), FoldType(List), foldlsC, refineChain, foldlSP)
+
+import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (goal, organization, thModel, inModel, goalStmt,
   documentation, user, theory, definition, scope, requirement, section_, document, purpose,
   system, model, design, intReader, srs, characteristic, designDoc, decision, environment,
   vavPlan, softwareDoc, implementation, softwareVAV, desSpec)
-import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Citations (parnasClements1986)
-import Drasil.DocumentLanguage.RefHelpers (cite)
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, foldlsC, foldlSP,
+  ofThe, ofThe', refineChain)
 
 -----------------------
 --     Constants     --
 -----------------------
 
 -- | Contents explaining the development process of this program
-developmentProcessParagraph :: ReferenceDB -> Contents
-developmentProcessParagraph refdb = foldlSP [S "This", phrase document, 
+developmentProcessParagraph :: Contents
+developmentProcessParagraph = foldlSP [S "This", phrase document, 
   S "will be used as a starting point for subsequent development", 
   S "phases, including writing the", phrase desSpec, S "and the", 
   phrase softwareVAV, S "plan. The", phrase designDoc, S "will show how the", 
@@ -37,7 +32,7 @@ developmentProcessParagraph refdb = foldlSP [S "This", phrase document,
   S "that follow the so-called waterfall", phrase model `sC` 
   S "the actual development process is not constrained", 
   S "in any way. Even when the waterfall model is not followed, as",
-  S "Parnas and Clements point out",  cite refdb parnasClements1986 `sC`
+  S "Parnas and Clements point out", makeRef parnasClements1986 `sC`
   S "the most logical way to present the", phrase documentation,
   S "is still to", Quote (S "fake"), S "a rational", phrase design,
   S "process"]
@@ -73,9 +68,9 @@ overviewParagraph programDefinition = foldlSP [S "The following", phrase section
 -- | constructor for purpose of document subsection
 -- purposeOfProgramParagraph - a sentence explaining the purpose of the specific 
 -- example
-purposeOfDoc :: ReferenceDB -> Sentence -> Section
-purposeOfDoc refdb purposeOfProgramParagraph = SRS.prpsOfDoc 
-  [mkParagraph purposeOfProgramParagraph, developmentProcessParagraph refdb] []
+purposeOfDoc :: Sentence -> Section
+purposeOfDoc purposeOfProgramParagraph = SRS.prpsOfDoc 
+  [mkParagraph purposeOfProgramParagraph, developmentProcessParagraph] []
 
 
 -- | constructor for scope of requirements subsection
@@ -119,18 +114,18 @@ intReaderIntro topic1 topic2 progName stdrd sectionRef =
   S "can have a lower level of expertise, as explained in", (makeRef sectionRef)]]
 
 -- | Doc.organization of the document section constructor.  => Sentence -> c -> Section -> Sentence -> Section
-orgSec :: (NamedIdea c) => Sentence -> c -> Label -> Sentence -> Section
+orgSec :: NamedIdea c => Sentence -> c -> Label -> Sentence -> Section
 orgSec i b s t = SRS.orgOfDoc (orgIntro i b s t) []
 
 -- Intro -> Bottom (for bottom up approach) -> Section that contains bottom ->
 --    trailing sentences -> [Contents]
-orgIntro :: (NamedIdea c) => Sentence -> c -> Label -> Sentence -> [Contents]
+orgIntro :: NamedIdea c => Sentence -> c -> Label -> Sentence -> [Contents]
 orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
           intro, S "The presentation follows the standard pattern of presenting",
           (foldlsC $ map (plural) [Doc.goal, theory, definition]) `sC` S "and assumptions.",
           S "For readers that would like a more bottom up approach" `sC`
-          S "they can start reading the", plural bottom, 
-          S "in", midRef bottomSec +:+
+          S "they can start reading the", plural bottom,
+          S "in", makeRef bottomSec +:+
           S "and trace back to find any additional information they require"],
           mkParagraph $ lastS trailingSentence]
           where lastS EmptyS = refineChain [goalStmt, thModel, inModel]

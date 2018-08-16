@@ -219,7 +219,7 @@ The scope of the requirements includes the physical simulation of 2D rigid bodie
 Reviewers of this documentation should have a strong knowledge in rigid body dynamics. The reviewers should also have an understanding of high school calculus. The users of Chipmunk2D can have a lower level of expertise, as explained in Section~\ref{Sec:UserChars}.
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
-The organization of this document follows the template for an SRS for scientific computing software proposed by {[}3{]} and {[}6{]}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:IMs} and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{dParnas1972} and \cite{dParnasPcClements1984}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:IMs} and trace back to find any additional information they require.
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models.
 \section{General System Description}
 \label{Sec:GenSysDesc}
@@ -287,25 +287,25 @@ The instance models that govern Chipmunk2D are presented in Section~\ref{Sec:IMs
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TMs}{]}, General Definitions {[}Section~\ref{Sec:GDs}{]}, Data Definitions {[}Section~\ref{Sec:DDs}{]}, Instance Models {[}Section~\ref{Sec:IMs}{]}, Likely Changes {[}Section~\ref{Sec:LCs}{]}, or Unlikely Changes {[}Section~\ref{Sec:UCs}{]}, in which the respective assumption is used.
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]All objects are rigid bodies.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:objectTy}:]All objects are rigid bodies.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]All objects are 2D.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:objectDimension}:]All objects are 2D.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The library uses a Cartesian coordinate system.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:coordinateSystemTy}:]The library uses a Cartesian coordinate system.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]The axes are defined using right-handed coordinate system.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:axesDefined}:]The axes are defined using right-handed coordinate system.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]All rigid bodies collisions are vertex-to-edge collisions.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:collisionType}:]All rigid bodies collisions are vertex-to-edge collisions.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]There is no damping involved throughout the simulation.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:dampingInvolvement}:]There is no damping involved throughout the simulation.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{empty}:]There are no constraints and joints involved throughout the simulation.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:constraintsAndJointsInvolvement}:]There are no constraints and joints involved throughout the simulation.
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -609,9 +609,9 @@ This section collects and defines all the data needed to build the instance mode
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:p.CM}
+\toprule \textbf{Refname} & \textbf{DD:ctrOfMass}
 \phantomsection 
-\label{DD:p.CM}
+\label{DD:ctrOfMass}
 \\ \midrule \\
 Label & Mass-weighted average position of a rigid body's particles
 \\ \midrule \\
@@ -638,9 +638,9 @@ RefBy & FIXME: This needs to be filled in
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:linearDisplacement}
+\toprule \textbf{Refname} & \textbf{DD:linDisp}
 \phantomsection 
-\label{DD:linearDisplacement}
+\label{DD:linDisp}
 \\ \midrule \\
 Label & Linear Displacement
 \\ \midrule \\
@@ -666,9 +666,9 @@ RefBy & FIXME: This needs to be filled in
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:linearVelocity}
+\toprule \textbf{Refname} & \textbf{DD:linVel}
 \phantomsection 
-\label{DD:linearVelocity}
+\label{DD:linVel}
 \\ \midrule \\
 Label & Linear Velocity
 \\ \midrule \\
@@ -694,9 +694,9 @@ RefBy & FIXME: This needs to be filled in
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:linearAcceleration}
+\toprule \textbf{Refname} & \textbf{DD:linAcc}
 \phantomsection 
-\label{DD:linearAcceleration}
+\label{DD:linAcc}
 \\ \midrule \\
 Label & Linear Acceleration
 \\ \midrule \\
@@ -722,9 +722,9 @@ RefBy & FIXME: This needs to be filled in
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:angularDisplacement}
+\toprule \textbf{Refname} & \textbf{DD:angDisp}
 \phantomsection 
-\label{DD:angularDisplacement}
+\label{DD:angDisp}
 \\ \midrule \\
 Label & Angular Displacement
 \\ \midrule \\
@@ -750,9 +750,9 @@ RefBy & FIXME: This needs to be filled in
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:angularVelocity}
+\toprule \textbf{Refname} & \textbf{DD:angVel}
 \phantomsection 
-\label{DD:angularVelocity}
+\label{DD:angVel}
 \\ \midrule \\
 Label & Angular Velocity
 \\ \midrule \\
@@ -778,9 +778,9 @@ RefBy & FIXME: This needs to be filled in
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:angularAcceleration}
+\toprule \textbf{Refname} & \textbf{DD:angAccel}
 \phantomsection 
-\label{DD:angularAcceleration}
+\label{DD:angAccel}
 \\ \midrule \\
 Label & Angular Acceleration
 \\ \midrule \\
@@ -806,9 +806,9 @@ RefBy & FIXME: This needs to be filled in
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:impulseS}
+\toprule \textbf{Refname} & \textbf{DD:impulse}
 \phantomsection 
-\label{DD:impulseS}
+\label{DD:impulse}
 \\ \midrule \\
 Label & Impulse (scalar)
 \\ \midrule \\
@@ -847,7 +847,7 @@ Table~\ref{Table:InDataConstraints} and Table~\ref{Table:OutDataConstraints} sho
 Var & Physical Constraints & Typical Value & Uncert.
 \\
 \midrule
-${C_{R}}$ & $0\leq{}{C_{R}}\leq{}1$ & $0.8$ & 10.0\%
+${C_{R}}$ & $0\leq{}{C_{R}}\leq{}1$ & $800.0\cdot{}10^{-3}$ & 10.0\%
 \\
 $\mathbf{F}$ & -- & $98.1$ N & 10.0\%
 \\
@@ -859,7 +859,7 @@ $L$ & $L\geq{}0$ & $44.2$ m & 10.0\%
 \\
 $m$ & $m\geq{}0$ & $56.2$ kg & 10.0\%
 \\
-$\mathbf{p}$ & -- & $0.412$ m & 10.0\%
+$\mathbf{p}$ & -- & $412.0\cdot{}10^{-3}$ m & 10.0\%
 \\
 $\mathbf{v}$ & -- & $2.51$ $\frac{\text{m}}{\text{s}}$ & 10.0\%
 \\
@@ -944,7 +944,7 @@ Free open source 3D game physics libraries include:
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. Table~\ref{Table:TraceyReqGoalsOther} shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. Table~\ref{Table:TraceyAssumpsOther} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. Table~\ref{Table:TraceyItemsSecs} shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
 \begin{longtable}{l l l l l l l l}
 \toprule
- & IM1 (\hyperref[T:transMot]{Definition~T:transMot}) & IM2 (\hyperref[T:rotMot]{Definition~T:rotMot}) & IM3 (\hyperref[T:col2D]{Definition~T:col2D}) & R1 (Section~\ref{Sec:FRs}) & R4 (Section~\ref{Sec:FRs}) & R7 (Section~\ref{Sec:FRs}) & Data Constraints (Section~\ref{Sec:SolCharSpec})
+ & IM1 (\hyperref[IM:transMot]{Definition~IM:transMot}) & IM2 (\hyperref[IM:rotMot]{Definition~IM:rotMot}) & IM3 (\hyperref[IM:col2D]{Definition~IM:col2D}) & R1 (Section~\ref{Sec:FRs}) & R4 (Section~\ref{Sec:FRs}) & R7 (Section~\ref{Sec:FRs}) & Data Constraints (Section~\ref{Sec:SolCharSpec})
 \\
 \midrule
 GS1 (Section~\ref{Sec:ProbDesc}) & X &  &  &  &  &  & 
@@ -977,7 +977,7 @@ R8 (Section~\ref{Sec:FRs}) &  &  & X &  &  & X &
 \end{longtable}
 \begin{longtable}{l l l l l l l l}
 \toprule
- & A1 (Section~\ref{Sec:ProbDesc}) & A2 (Section~\ref{Sec:ProbDesc}) & A3 (Section~\ref{Sec:ProbDesc}) & A4 (Section~\ref{Sec:ProbDesc}) & A5 (Section~\ref{Sec:ProbDesc}) & A6 (Section~\ref{Sec:ProbDesc}) & A7 (Section~\ref{Sec:ProbDesc})
+ & A1 (A\ref{A:objectTy}) & A2 (A\ref{A:objectDimension}) & A3 (A\ref{A:coordinateSystemTy}) & A4 (A\ref{A:axesDefined}) & A5 (A\ref{A:collisionType}) & A6 (A\ref{A:dampingInvolvement}) & A7 (A\ref{A:constraintsAndJointsInvolvement})
 \\
 \midrule
 T1 (\hyperref[T:newtonSL]{Definition~T:newtonSL}) &  &  &  &  &  &  & 
@@ -1004,27 +1004,27 @@ GD6 (Section~\ref{Sec:SolCharSpec}) &  &  &  &  &  &  &
 \\
 GD7 (Section~\ref{Sec:SolCharSpec}) &  &  &  &  &  &  & 
 \\
-DD1 (\hyperref[DD:p.CM]{Definition~DD:p.CM}) & X & X &  &  &  &  & 
+DD1 (\hyperref[DD:ctrOfMass]{Definition~DD:ctrOfMass}) & X & X &  &  &  &  & 
 \\
-DD2 (\hyperref[DD:linearDisplacement]{Definition~DD:linearDisplacement}) & X & X &  &  &  & X & 
+DD2 (\hyperref[DD:linDisp]{Definition~DD:linDisp}) & X & X &  &  &  & X & 
 \\
-DD3 (\hyperref[DD:linearVelocity]{Definition~DD:linearVelocity}) & X & X &  &  &  & X & 
+DD3 (\hyperref[DD:linVel]{Definition~DD:linVel}) & X & X &  &  &  & X & 
 \\
-DD4 (\hyperref[DD:linearAcceleration]{Definition~DD:linearAcceleration}) & X & X &  &  &  & X & 
+DD4 (\hyperref[DD:linAcc]{Definition~DD:linAcc}) & X & X &  &  &  & X & 
 \\
-DD5 (\hyperref[DD:angularDisplacement]{Definition~DD:angularDisplacement}) & X & X &  &  &  & X & 
+DD5 (\hyperref[DD:angDisp]{Definition~DD:angDisp}) & X & X &  &  &  & X & 
 \\
-DD6 (\hyperref[DD:angularVelocity]{Definition~DD:angularVelocity}) & X & X &  &  &  & X & 
+DD6 (\hyperref[DD:angVel]{Definition~DD:angVel}) & X & X &  &  &  & X & 
 \\
-DD7 (\hyperref[DD:angularAcceleration]{Definition~DD:angularAcceleration}) & X & X &  &  &  & X & 
+DD7 (\hyperref[DD:angAccel]{Definition~DD:angAccel}) & X & X &  &  &  & X & 
 \\
-DD8 (\hyperref[DD:impulseS]{Definition~DD:impulseS}) & X & X &  & X & X &  & 
+DD8 (\hyperref[DD:impulse]{Definition~DD:impulse}) & X & X &  & X & X &  & 
 \\
-IM1 (\hyperref[T:transMot]{Definition~T:transMot}) & X & X &  &  &  & X & X
+IM1 (\hyperref[IM:transMot]{Definition~IM:transMot}) & X & X &  &  &  & X & X
 \\
-IM2 (\hyperref[T:rotMot]{Definition~T:rotMot}) & X & X &  & X &  & X & X
+IM2 (\hyperref[IM:rotMot]{Definition~IM:rotMot}) & X & X &  & X &  & X & X
 \\
-IM3 (\hyperref[T:col2D]{Definition~T:col2D}) & X & X &  &  & X & X & X
+IM3 (\hyperref[IM:col2D]{Definition~IM:col2D}) & X & X &  &  & X & X & X
 \\
 LC1 (Section~\ref{Sec:LCs}) &  &  &  &  &  &  & 
 \\
@@ -1040,7 +1040,7 @@ LC4 (Section~\ref{Sec:LCs}) &  &  &  &  &  &  & X
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:newtonSL]{Definition~T:newtonSL}) & T2 (\hyperref[T:newtonTL]{Definition~T:newtonTL}) & T3 (\hyperref[T:newtonLUG]{Definition~T:newtonLUG}) & T4 (\hyperref[T:chaslesThm]{Definition~T:chaslesThm}) & T5 (\hyperref[T:newtonSLR]{Definition~T:newtonSLR}) & GD1 (Section~\ref{Sec:SolCharSpec}) & GD2 (Section~\ref{Sec:SolCharSpec}) & GD3 (Section~\ref{Sec:SolCharSpec}) & GD4 (Section~\ref{Sec:SolCharSpec}) & GD5 (Section~\ref{Sec:SolCharSpec}) & GD6 (Section~\ref{Sec:SolCharSpec}) & GD7 (Section~\ref{Sec:SolCharSpec}) & DD1 (\hyperref[DD:p.CM]{Definition~DD:p.CM}) & DD2 (\hyperref[DD:linearDisplacement]{Definition~DD:linearDisplacement}) & DD3 (\hyperref[DD:linearVelocity]{Definition~DD:linearVelocity}) & DD4 (\hyperref[DD:linearAcceleration]{Definition~DD:linearAcceleration}) & DD5 (\hyperref[DD:angularDisplacement]{Definition~DD:angularDisplacement}) & DD6 (\hyperref[DD:angularVelocity]{Definition~DD:angularVelocity}) & DD7 (\hyperref[DD:angularAcceleration]{Definition~DD:angularAcceleration}) & DD8 (\hyperref[DD:impulseS]{Definition~DD:impulseS}) & IM1 (\hyperref[T:transMot]{Definition~T:transMot}) & IM2 (\hyperref[T:rotMot]{Definition~T:rotMot}) & IM3 (\hyperref[T:col2D]{Definition~T:col2D})
+ & T1 (\hyperref[T:newtonSL]{Definition~T:newtonSL}) & T2 (\hyperref[T:newtonTL]{Definition~T:newtonTL}) & T3 (\hyperref[T:newtonLUG]{Definition~T:newtonLUG}) & T4 (\hyperref[T:chaslesThm]{Definition~T:chaslesThm}) & T5 (\hyperref[T:newtonSLR]{Definition~T:newtonSLR}) & GD1 (Section~\ref{Sec:SolCharSpec}) & GD2 (Section~\ref{Sec:SolCharSpec}) & GD3 (Section~\ref{Sec:SolCharSpec}) & GD4 (Section~\ref{Sec:SolCharSpec}) & GD5 (Section~\ref{Sec:SolCharSpec}) & GD6 (Section~\ref{Sec:SolCharSpec}) & GD7 (Section~\ref{Sec:SolCharSpec}) & DD1 (\hyperref[DD:ctrOfMass]{Definition~DD:ctrOfMass}) & DD2 (\hyperref[DD:linDisp]{Definition~DD:linDisp}) & DD3 (\hyperref[DD:linVel]{Definition~DD:linVel}) & DD4 (\hyperref[DD:linAcc]{Definition~DD:linAcc}) & DD5 (\hyperref[DD:angDisp]{Definition~DD:angDisp}) & DD6 (\hyperref[DD:angVel]{Definition~DD:angVel}) & DD7 (\hyperref[DD:angAccel]{Definition~DD:angAccel}) & DD8 (\hyperref[DD:impulse]{Definition~DD:impulse}) & IM1 (\hyperref[IM:transMot]{Definition~IM:transMot}) & IM2 (\hyperref[IM:rotMot]{Definition~IM:rotMot}) & IM3 (\hyperref[IM:col2D]{Definition~IM:col2D})
 \\
 \midrule
 T1 (\hyperref[T:newtonSL]{Definition~T:newtonSL}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1067,27 +1067,27 @@ GD6 (Section~\ref{Sec:SolCharSpec}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 GD7 (Section~\ref{Sec:SolCharSpec}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD1 (\hyperref[DD:p.CM]{Definition~DD:p.CM}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD1 (\hyperref[DD:ctrOfMass]{Definition~DD:ctrOfMass}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD2 (\hyperref[DD:linearDisplacement]{Definition~DD:linearDisplacement}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD2 (\hyperref[DD:linDisp]{Definition~DD:linDisp}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD3 (\hyperref[DD:linearVelocity]{Definition~DD:linearVelocity}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD3 (\hyperref[DD:linVel]{Definition~DD:linVel}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD4 (\hyperref[DD:linearAcceleration]{Definition~DD:linearAcceleration}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD4 (\hyperref[DD:linAcc]{Definition~DD:linAcc}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD5 (\hyperref[DD:angularDisplacement]{Definition~DD:angularDisplacement}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD5 (\hyperref[DD:angDisp]{Definition~DD:angDisp}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD6 (\hyperref[DD:angularVelocity]{Definition~DD:angularVelocity}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD6 (\hyperref[DD:angVel]{Definition~DD:angVel}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD7 (\hyperref[DD:angularAcceleration]{Definition~DD:angularAcceleration}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD7 (\hyperref[DD:angAccel]{Definition~DD:angAccel}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD8 (\hyperref[DD:impulseS]{Definition~DD:impulseS}) &  &  &  & X &  & X &  &  & X & X &  & X &  &  &  &  &  &  &  &  &  &  & X
+DD8 (\hyperref[DD:impulse]{Definition~DD:impulse}) &  &  &  & X &  & X &  &  & X & X &  & X &  &  &  &  &  &  &  &  &  &  & X
 \\
-IM1 (\hyperref[T:transMot]{Definition~T:transMot}) & X &  &  &  &  &  &  & X &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
+IM1 (\hyperref[IM:transMot]{Definition~IM:transMot}) & X &  &  &  &  &  &  & X &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
 \\
-IM2 (\hyperref[T:rotMot]{Definition~T:rotMot}) &  &  &  &  & X &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
+IM2 (\hyperref[IM:rotMot]{Definition~IM:rotMot}) &  &  &  &  & X &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
 \\
-IM3 (\hyperref[T:col2D]{Definition~T:col2D}) &  &  &  &  &  & X & X &  &  &  & X & X & X &  &  &  &  &  &  & X &  &  & 
+IM3 (\hyperref[IM:col2D]{Definition~IM:col2D}) &  &  &  &  &  & X & X &  &  &  & X & X & X &  &  &  &  &  &  & X &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items and Other Sections}

@@ -5,7 +5,7 @@ import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..),
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.SSP.Body (ssp_srs, sspSymMap)
+import Drasil.SSP.Body (ssp_srs, printSetting)
 
 sspChoices :: Choices
 sspChoices = Choices {
@@ -21,6 +21,6 @@ sspChoices = Choices {
        
 main :: IO ()            
 main = do
-  gen (DocSpec Website "SSP_SRS") ssp_srs sspSymMap
-  gen (DocSpec SRS "SSP_SRS")     ssp_srs sspSymMap
+  gen (DocSpec Website "SSP_SRS") ssp_srs printSetting
+  gen (DocSpec SRS "SSP_SRS")     ssp_srs printSetting
   --genCode ssp_code

@@ -1,18 +1,22 @@
+{-# Language TemplateHaskell #-}
 module Language.Drasil.Document.Core where
 
 import Language.Drasil.Chunk.AssumpChunk (AssumpChunk)
 import Language.Drasil.Chunk.Change (Change)
 import Language.Drasil.Chunk.Citation (BibRef)
-import Language.Drasil.Chunk.Eq (QDefinition)
-import Language.Drasil.Chunk.DataDefinition (DataDefinition)
-import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 
+import Language.Drasil.Classes (HasRefAddress(getRefAdd),
+  MayHaveLabel(getMaybeLabel), HasLabel(getLabel))
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.Label (Label)
+import Language.Drasil.Label.Core (Label)
+import Language.Drasil.Label () -- for instances
 import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.Spec (Sentence(..))
+import Language.Drasil.RefTypes (DType(..))
 
+import Control.Lens ((^.), makeLenses, Lens', set)
 
 data ListType = Bullet [(ItemType,Maybe RefAdd)] -- ^ Bulleted list
               | Numeric [(ItemType,Maybe RefAdd)] -- ^ Enumerated List
@@ -40,38 +44,28 @@ type Filepath = String
 type Lbl      = Sentence
 
 
---FIXME: Remove Data, Data', and Theory from below.
--- | Types of definitions
-data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining
-                              -- equation used to generate the Data Definition
-           | Data' DataDefinition
-           | General
-           | Theory RelationConcept -- ^ Theoretical models use a relation as
-                                    -- their definition
-           | Instance
-           | TM
-           | DD
-
+data Contents = UlC UnlabelledContent
+              | LlC LabelledContent
 -- | Types of layout objects we deal with explicitly
-data RawContent = Table [Sentence] [[Sentence]] Title Bool RefAdd
+data RawContent = Table [Sentence] [[Sentence]] Title Bool
   -- ^ table has: header-row data(rows) label/caption showlabel?
                | Paragraph Sentence -- ^ Paragraphs are just sentences.
                | EqnBlock Expr
      --        CodeBlock Code   -- GOOL complicates this.  Removed for now.
                | Definition DType
                | Enumeration ListType -- ^ Lists
-               | Figure Lbl Filepath MaxWidthPercent RefAdd-- ^ Should use relative file path.
+               | Figure Lbl Filepath MaxWidthPercent -- ^ Should use relative file path.
                | Requirement ReqChunk
                | Assumption AssumpChunk
                | Change Change
                | Bib BibRef
      --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
-               | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl RefAdd
+               | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl
                -- ^ TODO: Fill this one in.
                ------NEW TMOD/DDEF/IM/GD BEGINS HERE------
                ---- FIXME: The above Definition will need to be removed ----
                --------------------------------------------
-               | Defnt DType [(Identifier, [Contents])] RefAdd
+               | Defnt DType [(Identifier, [Contents])]
 type Identifier = String
 
 data LabelledContent = LblC { _lbl :: Label
@@ -80,5 +74,23 @@ data LabelledContent = LblC { _lbl :: Label
 
 data UnlabelledContent = UnlblC { _cntnts :: RawContent }
 
-data Contents = UlC UnlabelledContent
-              | LlC LabelledContent
+makeLenses ''LabelledContent
+makeLenses ''UnlabelledContent
+
+-- FIXME: this is here temporarily due to import cycles
+class HasContents c where
+  accessContents :: Lens' c RawContent
+
+instance HasRefAddress LabelledContent where getRefAdd = lbl . getRefAdd
+instance HasLabel      LabelledContent where getLabel = lbl
+instance MayHaveLabel  LabelledContent where getMaybeLabel x = Just (x ^. getLabel)
+instance HasContents   LabelledContent where accessContents = ctype
+instance HasShortName  LabelledContent where shortname = lbl . shortname
+
+instance MayHaveLabel UnlabelledContent where getMaybeLabel _ = Nothing
+instance HasContents  UnlabelledContent where accessContents = cntnts
+
+instance HasContents Contents where
+  accessContents f (UlC c) = fmap (UlC . (\x -> set cntnts x c)) (f $ c ^. cntnts)
+  accessContents f (LlC c) = fmap (LlC . (\x -> set ctype x c)) (f $ c ^. ctype)
+

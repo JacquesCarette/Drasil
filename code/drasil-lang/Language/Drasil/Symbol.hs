@@ -51,19 +51,19 @@ complsy (x : xs) (y : ys) = compsy x y `mappend` complsy xs ys
 -- Once for making sure they are the same letter, once for case sensitive.
 compsy :: Symbol -> Symbol -> Ordering
 compsy (Concat (x:[]))       (Concat (y:[]))       = compsy x y
-compsy (Concat (Atomic "Δ":(Atomic x):xs)) (Atomic y)      = 
+compsy (Concat (Atomic "Δ":(Atomic x):_)) (Atomic y)      = 
   case compare (map toLower x) (map toLower y) of
     EQ -> GT
     other -> other
-compsy (Concat (Atomic "Δ":x:xs))           y      = 
+compsy (Concat (Atomic "Δ":x:_))           y      = 
   case compsy x y of
     EQ -> GT
     other -> other
-compsy (Atomic x)  (Concat (Atomic "Δ":(Atomic y):ys))      = 
+compsy (Atomic x)  (Concat (Atomic "Δ":(Atomic y):_))      = 
   case compare (map toLower x) (map toLower y) of
     EQ -> LT
     other -> other
-compsy a           (Concat (Atomic "Δ":y:ys))      = 
+compsy a           (Concat (Atomic "Δ":y:_))      = 
   case compsy a y of
     EQ -> LT
     other -> other
@@ -86,13 +86,13 @@ compsy (Corners _ _ u l b) (Corners _ _ u' l' b')  =
 compsy (Atomic a)              (Corners _ _ _ _ (Atomic b)) = 
   case compare a b of
     EQ -> LT
-    other -> case compare (map toLower a) (map toLower b) of
+    _  -> case compare (map toLower a) (map toLower b) of
       EQ -> LT
       other -> other
 compsy (Corners _ _ _ _ (Atomic b))     (Atomic a)          = 
   case compare b a of
     EQ -> GT
-    other -> case compare (map toLower b) (map toLower a) of
+    _  -> case compare (map toLower b) (map toLower a) of
       EQ -> GT
       other -> other
 compsy (Corners _ _ _ _ b)     a                   = compsy b a
@@ -104,13 +104,13 @@ compsy (Atop d1 a)             (Atop d2 a')        =
 compsy (Atomic a)              (Atop _ (Atomic b))          = 
   case compare a b of
     EQ -> LT
-    other -> case compare (map toLower a) (map toLower b) of
+    _  -> case compare (map toLower a) (map toLower b) of
       EQ -> LT
       other -> other
 compsy (Atop _ (Atomic b))              (Atomic a)          = 
  case compare b a of
     EQ -> GT
-    other -> case compare (map toLower b) (map toLower a) of
+    _  -> case compare (map toLower b) (map toLower a) of
       EQ -> GT
       other -> other
 compsy (Atop _ a)              b                   = compsy a b  

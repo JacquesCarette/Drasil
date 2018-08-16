@@ -140,11 +140,12 @@ dataDefinitionIntro closingSent = mkParagraph $ (foldlSent [S "This", phrase sec
     S "needed to build the", plural inModel] +:+ closingSent)
 
 -- wrappers for inModelIntro. Use inModelF' if genDef are not needed
-inModelF :: Section -> Section -> Section -> Section -> [LabelledContent] -> Section
-inModelF probDes datDef theMod genDef otherContents = SRS.inModel ((inModelIntro probDes datDef theMod genDef):(map LlC otherContents)) []
+inModelF :: Section -> Section -> Section -> Label -> [Contents] -> Section
+inModelF probDes datDef theMod genDef otherContents = SRS.inModel 
+  ((inModelIntro probDes datDef theMod genDef):(otherContents)) []
 
 -- just need to provide the four references in order to this function. Nothing can be input into r4 if only three tables are present
-inModelIntro :: Section -> Section -> Section -> Section -> Contents
+inModelIntro :: Section -> Section -> Section -> Label -> Contents
 inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_, 
   S "transforms the", phrase problem, S "defined in", (makeRef r1), 
   S "into one which is expressed in mathematical terms. It uses concrete", 
@@ -199,8 +200,8 @@ dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase colum
 
 -- Creates the input Data Constraints Table
 inDataConstTbl :: (UncertainQuantity c, Constrained c, HasReasVal c) => [c] -> LabelledContent
-inDataConstTbl qlst = llcc (mkLabelRA'' "InDataConstraints") $ Table 
-  titl cts (S "Input Data Constraints") True "InDataConstraints"
+inDataConstTbl qlst = llcc (mkLabelSame "InDataConstraints" Tab) $ Table 
+  titl cts (S "Input Data Constraints") True
   where
    columns = [(S "Var", map ch $ sortBySymbol qlst),
             (titleize' physicalConstraint, map fmtPhys $ sortBySymbol qlst),
@@ -213,8 +214,8 @@ inDataConstTbl qlst = llcc (mkLabelRA'' "InDataConstraints") $ Table
 
 -- Creates the output Data Constraints Table
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent
-outDataConstTbl qlst = llcc (mkLabelRA'' "OutDataConstraints") $ Table 
-  titl cts (S "Output Data Constraints") True "OutDataConstraints"
+outDataConstTbl qlst = llcc (mkLabelSame "OutDataConstraints" Tab) $ Table 
+  titl cts (S "Output Data Constraints") True
   where
    columns = [(S "Var", map ch qlst),
             (titleize' physicalConstraint, map fmtPhys qlst),

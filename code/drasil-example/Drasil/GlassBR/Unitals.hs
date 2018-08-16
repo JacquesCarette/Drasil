@@ -4,19 +4,20 @@ import Language.Drasil
 import Control.Lens ((^.))
 import Prelude hiding (log, sqrt)
 
+import Data.Drasil.Constraints
+import Data.Drasil.SentenceStructures (FoldType(..), SepType(Comma),
+  displayConstrntsAsSet, foldlList, foldlSent, foldlsC)
+import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
+
 import Drasil.GlassBR.Concepts (aR, annealed, fullyT, glaPlane, 
   glassTypeFac, heatS, iGlass, lGlass, lResistance, lShareFac, 
   loadDurFactor, nFL, responseTy, stdOffDist)
+import Drasil.GlassBR.Labels (glassTypeL, glassConditionL)
+import Drasil.GlassBR.References (astm2009, astm2012, astm2016)
 import Drasil.GlassBR.Units (sFlawPU)
 
-import Data.Drasil.Constraints
-import Data.Drasil.SentenceStructures (displayConstrntsAsSet, foldlSent,
-  foldlsC, foldlList, SepType(Comma), FoldType(Options))
-import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
-
 --FIXME: Many of the current terms can be separated into terms and defns?
-glassBRsymb :: [DefinedQuantityDict]
-glassBRsymb = map dqdWr [plate_len, plate_width, char_weight, standOffDist]
+
 {--}
 
 glassBRSymbolsWithDefns :: [UnitalChunk]
@@ -44,7 +45,7 @@ defaultUncrt = 0.1
 
 gbInputs :: [QuantityDict]
 gbInputs = (map qw gbInputsWUnitsUncrtn) ++ (map qw gbInputsWUncrtn) ++ 
-  (map qw gbInputsNoUncrtn) ++ map qw sdVector
+  (map qw gbInputsNoUncrtn) ++ (map qw sdVector) ++ (map qw [is_safeLR, is_safePb]) ++ [qw prob_br]
 
 --inputs with units and uncertainties
 gbInputsWUnitsUncrtn :: [UncertQ]
@@ -253,9 +254,9 @@ aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
   sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage, notSafe, bomb,
   explosion :: ConceptChunk
 
-annealedGl    = cc annealed
-  ("A flat, monolithic, glass lite which has uniform thickness where the " ++
-    "residual surface stresses are almost zero, as defined in [3]." {-astm2016-})
+annealedGl    = cc' annealed
+  (foldlSent [S "A flat, monolithic, glass lite which has uniform thickness where",
+  S "the residual surface stresses are almost zero, as defined in", makeRef astm2016])
 aspectRatio   = cc aR
   ("The ratio of the long dimension of the glass to the short dimension of " ++
     "the glass. For glass supported on four sides, the aspect ratio is " ++
@@ -282,11 +283,11 @@ eqTNTChar     = dcc "eqTNTChar"   (nounPhraseSP "equivalent TNT charge mass")
     "design explosive threat.")
 explosion     = dcc "explosion"   (nounPhraseSP "explosion") 
   "a destructive shattering of something"
-fTemperedGl   = cc fullyT
-  ("A flat, monolithic, glass lite of uniform thickness that has been " ++
-    "subjected to a special heat treatment process where the residual " ++
-    "surface compression is not less than 69 MPa (10 000 psi) or the edge " ++
-    "compression not less than 67 MPa (9700 psi), as defined in [2]." {-astm2012-})
+fTemperedGl   = cc' fullyT
+  (foldlSent [S "A flat, monolithic, glass lite of uniform thickness that has",
+  S "been subjected to a special heat treatment process where the residual",
+  S "surface compression is not less than 69 MPa (10 000 psi) or the edge",
+  S "compression not less than 67 MPa (9700 psi), as defined in", makeRef astm2012])
 glassGeo      = dccWDS "glassGeo"    (nounPhraseSP "glass geometry")
   (S "The glass geometry based inputs include the dimensions of the" +:+ 
     phrase glaPlane `sC` phrase glassTy `sC` S "and" +:+.  phrase responseTy)
@@ -301,11 +302,11 @@ glTyFac       = cc' glassTypeFac
   S "of different glass type, that is,", foldlList Comma Options glassTypeAbbrs
   `sC` S "in monolithic glass" `sC` (getAcc lGlass), sParen (titleize lGlass) `sC`
    S "or", (getAcc iGlass), sParen (titleize iGlass), S "constructions"])
-hStrengthGl   = cc heatS
-  ("A flat, monolithic, glass lite of uniform thickness that has been " ++
-    "subjected to a special heat treatment process where the residual " ++
-    "surface compression is not less than 24 MPa (3500psi) or greater " ++
-    "than 52 MPa (7500 psi), as defined in [2]." {-astm2012-})
+hStrengthGl   = cc' heatS
+  (foldlSent [S "A flat, monolithic, glass lite of uniform thickness that has",
+  S "been subjected to a special heat treatment process where the residual",
+  S "surface compression is not less than 24 MPa (3500psi) or greater than",
+  S "52 MPa (7500 psi), as defined in", makeRef astm2012])
 lateral       = dcc "lateral"     (nounPhraseSP "lateral") 
   "Perpendicular to the glass surface."
 lite          = dcc "lite"        (cn' "lite")
@@ -313,10 +314,11 @@ lite          = dcc "lite"        (cn' "lite")
     "or door.")
 load          = dcc "load"        (nounPhraseSP "load") 
   "A uniformly distributed lateral pressure."
-loadResis     = cc lResistance
-  ("The uniform lateral load that a glass construction can sustain based " ++
-    "upon a given probability of breakage and load duration as defined in " ++
-    "[1 (pg. 1, 53)], following A2 and A1 respectively." {-astm2009-})
+loadResis     = cc' lResistance
+  (foldlSent [S "The uniform lateral load that a glass construction can sustain",
+  S "based upon a given probability of breakage and load duration as defined in",
+  makeRef astm2009, S "(pg. 1, 53), following", foldlList Comma List $ map makeRef 
+  [glassConditionL, glassTypeL], S "respectively"])
 loadShareFac  = cc' lShareFac
   (foldlSent [S "A multiplying factor derived from the load sharing between the",
   S "double glazing, of equal or different thicknesses and types (including the",
@@ -326,14 +328,14 @@ longDurLoad   = dcc "longDurLoad"        (nounPhraseSP "long duration load")
   ("Any load lasting approximately 30 days.")
 nonFactoredL  = cc' nFL
   (foldlSent [S "Three second duration uniform load associated with a", 
-    S "probability of breakage less than or equal to 8", (plural lite),
-    S "per 1000 for monolithic", (getAcc annealed), S "glass"])
+  S "probability of breakage less than or equal to 8", (plural lite),
+  S "per 1000 for monolithic", (getAcc annealed), S "glass"])
 notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
   ("For the given input parameters, the glass is NOT considered safe.")
-probBreak     = cc prob_br
-  ("The fraction of glass lites or plies that would break at the first " ++
-    "occurrence of a specified load and duration, typically expressed " ++
-    "in lites per 1000 [3]." {-astm2016-})
+probBreak     = cc' prob_br
+  (foldlSent [S "The fraction of glass lites or plies that would break at the",
+  S "first occurrence of a specified load and duration, typically expressed",
+  S "in lites per 1000", sParen $ makeRef astm2016])
 safeMessage   = dcc "safeMessage" (nounPhraseSP "safe")
   ("For the given input parameters, the glass is considered safe.")
 sD            = cc' stdOffDist
@@ -364,9 +366,9 @@ gbConstants = [constant_M, constant_K, constant_ModElas, constant_LoadDur, const
                 ++ gBRSpecParamVals 
 
 constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadDF, constant_LoadSF :: QDefinition
-constant_K       = mkQuantDef sflawParamK  $ (dbl 2.86) * (10 $^ (negate 53))
+constant_K       = mkQuantDef sflawParamK  $ dbl 2.86e-53
 constant_M       = mkQuantDef sflawParamM  $ 7
-constant_ModElas = mkQuantDef mod_elas     $ (dbl 7.17) * (10 $^ 7)
+constant_ModElas = mkQuantDef mod_elas     $ dbl 7.17e10
 constant_LoadDur = mkQuantDef load_dur     $ 3
 constant_LoadDF  = mkQuantDef lDurFac      $ ((sy load_dur) / 60) $^ ((sy sflawParamM) / (16))
 constant_LoadSF  = mkQuantDef loadSF       $ 1

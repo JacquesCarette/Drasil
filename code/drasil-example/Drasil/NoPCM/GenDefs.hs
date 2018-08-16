@@ -1,21 +1,26 @@
 module Drasil.NoPCM.GenDefs (roc_temp_simp_deriv) where
 
 import Language.Drasil
-import Drasil.SWHS.TMods (t1ConsThermE)
-import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
-import Data.Drasil.Concepts.Math (unit_, rOfChng)
+
+import Data.Drasil.Concepts.Documentation (assumption)
+import Data.Drasil.Concepts.Math (rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (temp)
+
+import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
+import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
+import Data.Drasil.Quantities.Physics (time)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heat_cap_spec)
-import Drasil.SWHS.Concepts (gauss_div)
-import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
-import Drasil.SWHS.Unitals (in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, 
-                            ht_flux_out)
+
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
+  foldlSentCol, ofThe, sAnd)
 import Data.Drasil.Utils (weave)
-import Data.Drasil.SentenceStructures (sAnd, foldlList, SepType(Comma), 
-  FoldType(List), ofThe, acroGD, foldlSentCol)
-import Data.Drasil.Concepts.Documentation (assumption)
-import Data.Drasil.Quantities.Physics (time)
+
+import Drasil.SWHS.Concepts (gauss_div)
+import Drasil.SWHS.Labels (rocTempSimpL)
+import Drasil.SWHS.TMods (t1ConsThermE)
+import Drasil.SWHS.Unitals (in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, 
+  ht_flux_out)
 
 roc_temp_simp_deriv :: Derivation
 roc_temp_simp_deriv =
@@ -32,10 +37,9 @@ roc_temp_simp_deriv_sentences = map foldlSentCol [
     QT.temp vol [S "A3", S "A4", S "A5"],
   genDefDesc5 density mass vol]
 
-genDefDesc1 :: RelationConcept -> UnitalChunk -> [Sentence]
+genDefDesc1 :: (HasShortName x, Referable x) => x -> UnitalChunk -> [Sentence]
 genDefDesc1 t1c vo =
-  [S "Integrating", makeRef $ reldefn t1c,
-  S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
+  [S "Integrating", makeRef t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
 genDefDesc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]
@@ -55,7 +59,7 @@ genDefDesc4 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   [Sentence] -> [Sentence]
 genDefDesc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
   ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
-  acroGD 2, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
+  makeRef rocTempSimpL, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
   titleize' assumption, (foldlList Comma List $ (map sParen)
   assumps) `sC` S "we have"]

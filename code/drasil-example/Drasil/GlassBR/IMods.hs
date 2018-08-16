@@ -1,34 +1,39 @@
-module Drasil.GlassBR.IMods (iModels, probOfBr, calOfCap, calOfDe, probOfBreak, calofCapacity, calofDemand) where
+module Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, probOfBreak,
+  calofCapacity, calofDemand) where
 
 import Prelude hiding (exp)
 import Control.Lens ((^.))
 import Language.Drasil
-import Drasil.DocLang (refA)
 
-import Drasil.GlassBR.Assumptions (gbRefDB, newA1, newA2)
+import Drasil.GlassBR.Assumptions (glassType, glassCondition)
 import Drasil.GlassBR.Concepts (glassTypeFac, lResistance, lShareFac)
-import Drasil.GlassBR.DataDefs (glaTyFac, nonFL, risk)
-import Drasil.GlassBR.Unitals (demand, demandq, eqTNTWeight, lRe, loadSF, 
-  prob_br, risk_fun, standOffDist, wtntWithEqn)
+import Drasil.GlassBR.DataDefs (glaTyFac, nonFL, risk, standOffDis)
+import Drasil.GlassBR.Labels (probOfBrL, calOfCapL, calOfDemandL)
+import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
+import Drasil.GlassBR.Unitals (char_weight, demand, demandq, eqTNTWeight, lRe, 
+  loadSF, plate_len, plate_width, prob_br, risk_fun, standOffDist, wtntWithEqn)
 
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
 
-iModels :: [RelationConcept]
-iModels = [probOfBr, calOfCap, calOfDe]
+gbrIMods :: [InstanceModel]
+gbrIMods = [probOfBreak, calofCapacity, calofDemand]
+
+glassBRsymb :: [DefinedQuantityDict]
+glassBRsymb = map dqdWr [plate_len, plate_width, char_weight, standOffDist] ++ map dqdWr [probOfBreak]
 
 {--}
 
 probOfBreak :: InstanceModel
 probOfBreak = im probOfBr [qw risk] 
   [TCon AssumedCon $ sy risk $> 0] (qw prob_br) [TCon AssumedCon $ sy prob_br $> 0]
-  [(sourceref (S "[1]")), (sourceref (S "[4]"))] "probOfBrIM"
+  (map makeRef [astm2009, beasonEtAl1998]) probOfBrL
 
 {--}
 
 probOfBr :: RelationConcept
 probOfBr = makeRC "probOfBr" (nounPhraseSP "Probability of Glass Breakage")
-  pbdescr ( (sy prob_br) $= 1 - (exp (negate (sy risk)))) 
+  pbdescr ( (sy prob_br) $= 1 - (exp (negate (sy risk)))) probOfBrL
 
 pbdescr :: Sentence
 pbdescr =
@@ -38,14 +43,13 @@ pbdescr =
 {--}
 
 calofCapacity :: InstanceModel
-calofCapacity = im' calOfCap [qw nonFL, qw glaTyFac, qw loadSF] [TCon AssumedCon $ sy nonFL $> 0,
-  TCon AssumedCon $ sy glaTyFac $> 0, TCon AssumedCon $ sy loadSF $> 0] (qw lRe) [] [] [capdescr]
-
-{--}
+calofCapacity = im' calOfCap [qw nonFL, qw glaTyFac, qw loadSF] 
+  [TCon AssumedCon $ sy nonFL $> 0, TCon AssumedCon $ sy glaTyFac $> 0,
+  TCon AssumedCon $ sy loadSF $> 0] (qw lRe) [] calOfCapL [capdescr]
 
 calOfCap :: RelationConcept
 calOfCap = makeRC "calOfCap" (nounPhraseSP "Calculation of Capacity(LR)") 
-  capdescr ( (sy lRe) $= ((sy nonFL) * (sy glaTyFac) * (sy loadSF)))
+  capdescr ( (sy lRe) $= ((sy nonFL) * (sy glaTyFac) * (sy loadSF))) calOfCapL
 
 capdescr :: Sentence
 capdescr =
@@ -53,24 +57,24 @@ capdescr =
   S "which" +:+. S "is also called capacity" +:+. ((ch nonFL) `isThe`
   (phrase nonFL)) +:+. ((ch glaTyFac) `isThe` (phrase glassTypeFac))
   +:+. ((ch loadSF) `isThe` (phrase lShareFac)), S "Follows",
-  (refA gbRefDB newA2) `sAnd` (refA gbRefDB newA1), sParen (Quote 
+  (makeRef glassCondition) `sAnd` (makeRef glassType), sParen (Quote 
   (S "In the development of this procedure, it was assumed that" +:+
   S "all four edges of the glass are simply supported and free to slip" +:+
   S "in the plane of the glass. This boundary condition has been shown" +:+
-  S "to be typical of many glass installations")) +:+ S "from [1 (pg. 53)]"
-  {-astm2009-}]
+  S "to be typical of many glass installations")) +:+ S "from" +:+ 
+  makeRef astm2009, sParen (S "pg. 53")]
 
 {--}
 
 calofDemand :: InstanceModel
-calofDemand = im' calOfDe [qw demand, qw eqTNTWeight, qw standOffDist] [TCon AssumedCon $ sy demand $> 0,
-  TCon AssumedCon $ sy eqTNTWeight $> 0, TCon AssumedCon $ sy standOffDist $> 0] (qw demand) [] [] [dedescr]
-
-{--}
+calofDemand = im' calOfDe [qw demand, qw eqTNTWeight, qw standOffDist]
+  [TCon AssumedCon $ sy demand $> 0, TCon AssumedCon $ sy eqTNTWeight $> 0,
+   TCon AssumedCon $ sy standOffDist $> 0] (qw demand) [] calOfDemandL
+  [dedescr]
 
 calOfDe :: RelationConcept
 calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)") 
-  dedescr ( (sy demand) $= apply2 demand eqTNTWeight standOffDist)
+  dedescr ( (sy demand) $= apply2 demand eqTNTWeight standOffDist) calOfDemandL
   --dedescr $ (C demand) $= FCall (asExpr interpY) [V "TSD.txt", sy standOffDist, sy eqTNTWeight] 
   
 dedescr :: Sentence
@@ -82,4 +86,4 @@ dedescr =
   (ch eqTNTWeight), S "as" +:+. plural parameter, 
   (ch eqTNTWeight), S "is defined as" +:+.
   E (wtntWithEqn^.equat), (ch standOffDist) `isThe`
-  (phrase standOffDist), S "as defined in DD10" {-standOffDisDD-}]
+  (phrase standOffDist), S "as defined in", makeRef standOffDis]

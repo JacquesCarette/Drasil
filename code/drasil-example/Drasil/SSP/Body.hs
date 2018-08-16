@@ -1,7 +1,8 @@
-module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap) where
+module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap, printSetting) where
 
 import Language.Drasil hiding (organization, Verb)
 import Language.Drasil.Code (CodeSpec, codeSpec)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
 
@@ -14,11 +15,14 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   nonFuncReqF, outDataConstTbl, probDescF, reqF, termDefnF, tsymb'',
   valsOfAuxConstantsF)
 
+import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
+  assumptLabel, physSyst)
+
 import Data.Drasil.Concepts.Documentation (analysis, assumption,
   design, document, effect, element, endUser, environment, goalStmt, inModel, 
   input_, interest, interest, interface, issue, loss, method_, organization, 
-  physics, problem, product_, property, requirement, software, softwareSys, 
-  srs, sysCont, system, table_, template, user, value, variable)
+  physics, problem, product_, property, software, softwareSys, srs, sysCont, 
+  system, table_, template, user, value, variable)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
@@ -34,7 +38,8 @@ import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (foldlList, SepType(Comma), FoldType(List), 
   foldlSP, foldlSent, foldlSent_, ofThe, sAnd, sOr, foldlSPCol)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
-import Data.Drasil.Utils (enumBullet, enumSimple, noRefsLT, bulletNested, bulletFlat)
+import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, noRefsLT)
+
 import Drasil.SSP.Assumptions (sspRefDB)
 import Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.SSP.DataDefs (dataDefns)
@@ -43,26 +48,21 @@ import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty,
   morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil, soilLyr, ssa, ssp)
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
-import Drasil.SSP.IMods (sspIMods_new)
-import Drasil.SSP.Requirements (sspInputDataTable, sspRequirements)
-import Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_new
-  , effStress_new)
+import Drasil.SSP.IMods (sspIMods)
+import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
+import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, hookesLaw, effStress)
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
   sspOutputs, sspSymbols)
-
-import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
-  assumptLabel, physSyst)
 
 --type declarations for sections--
 req, aux_cons :: Section
 
 table_of_symbol_intro :: [TSIntro]
 
-problem_desc, termi_defi, phys_sys_desc,
-  goal_stmt, func_req, non_func_req :: Section
+problem_desc, termi_defi, phys_sys_desc, goal_stmt, func_req, non_func_req :: Section
+goals_list, termi_defi_list, phys_sys_desc_p1, phys_sys_desc_bullets,
+  phys_sys_desc_p2 :: Contents
 
-termi_defi_list, phys_sys_desc_p1, phys_sys_desc_bullets,
-  phys_sys_desc_p2, goals_list, func_req_list :: Contents
 
 --Document Setup--
 this_si :: [UnitDefn]
@@ -114,19 +114,19 @@ mkSRS = RefSec (RefProg intro
         , SSDSolChSpec 
           (SCSProg 
             [Assumptions 
-            ,TMs ([Label] ++ stdFields) [fs_rc_new, equilibrium_new, mcShrStrgth_new,
-             effStress_new, hookesLaw_new]
+            ,TMs ([Label] ++ stdFields) [factOfSafety, equilibrium, mcShrStrgth,
+             effStress, hookesLaw]
             , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
             , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
             , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-             sspIMods_new ShowDerivation
+             sspIMods ShowDerivation
             , Constraints  EmptyS dataConstraintUncertainty EmptyS
               [data_constraint_Table2, data_constraint_Table3]
             ]
           )
         ]
       ):
-  map Verbatim [req] ++ [LCsSec (LCsProg likelyChanges_SRS)] 
+  map Verbatim [req] ++ [LCsSec (LCsProg (map LlC likelyChanges_SRS))] 
   ++ [UCsSec (UCsProg unlikelyChanges_SRS)] ++[Verbatim aux_cons] ++ (Bibliography : [])
 
 
@@ -141,6 +141,9 @@ ssp_code = codeSpec ssp_si [sspInputMod]
 sspSymMap :: ChunkDB
 sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms) sspSymbols
   this_si
+
+printSetting :: PrintingInformation
+printSetting = PI sspSymMap defaultConfiguration
 
 symbT :: [DefinedQuantityDict]
 symbT = ccss (getDoc ssp_srs) (egetDoc ssp_srs) sspSymMap
@@ -245,7 +248,7 @@ sysCtxIntro = foldlSP
    S "and its" +:+ phrase environment]
    
 sysCtxFig1 :: LabelledContent
-sysCtxFig1 = llcc (mkLabelRA'' "sysCtxDiag") $ fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png") "sysCtxDiag"
+sysCtxFig1 = llcc (mkLabelRAFig "sysCtxDiag") $ fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png")
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol
@@ -259,7 +262,7 @@ sysCtxUsrResp = [S "Provide the input data related to the soil layer(s) and wate
   S "table (if applicable), ensuring no errors in the data entry",
   S "Ensure that consistent units are used for input variables",
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+ sParen ( 
-  midRef SRS.assumptLabel) +:+ S "are appropriate for any particular" +:+
+  makeRef SRS.assumptLabel) +:+ S "are appropriate for any particular" +:+
   phrase problem +:+ S "input to the" +:+ phrase software]
   
 sysCtxSysResp :: [Sentence]
@@ -320,8 +323,8 @@ phys_sys_desc = SRS.physSyst
   [phys_sys_desc_p1, phys_sys_desc_bullets, phys_sys_desc_p2,
    LlC fig_indexconv, LlC fig_forceacting] []
 
-phys_sys_desc_p1 = physSystIntro slope how intrslce slice (S "slice base")
-  fig_indexconv
+phys_sys_desc_p1 = physSystIntro slope how intrslce slice 
+  (S "slice base") fig_indexconv
   where how = S "as a series of" +:+ phrase slice +:+. plural element
 
 physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, HasShortName d, Referable d) =>
@@ -344,20 +347,20 @@ phys_sys_desc_bullets = enumBullet $ map foldlSent_ [
   [at_start slice, plural property +:+ S "convention is noted by" +:+.
   (ch index)]]
 
-phys_sys_desc_p2 = foldlSP [S "A", phrase fbd, S "of the", plural force,
-  S "acting on the", phrase slice, S "is displayed in",
-  makeRef fig_forceacting]
+phys_sys_desc_p2 = foldlSP [S "A", phrase fbd, S "of the", 
+  plural force, S "acting on the", phrase slice, 
+  S "is displayed in", makeRef fig_forceacting]
 
 fig_indexconv :: LabelledContent
-fig_indexconv = llcc (mkLabelRA'' "IndexConvention") $ 
+fig_indexconv = llcc (mkLabelRAFig "IndexConvention") $ 
   fig (foldlSent_ [S "Index convention for numbering",
   phrase slice `sAnd` phrase intrslce,
-  phrase force, plural variable]) (resourcePath ++ "IndexConvention.png") "IndexConvention"
+  phrase force, plural variable]) (resourcePath ++ "IndexConvention.png")
 
 fig_forceacting :: LabelledContent
-fig_forceacting = llcc (mkLabelRA'' "ForceDiagram") $
+fig_forceacting = llcc (mkLabelRAFig "ForceDiagram") $
   fig (at_start' force +:+ S "acting on a" +:+
-  phrase slice) (resourcePath ++ "ForceDiagram.png") "ForceDiagram"
+  phrase slice) (resourcePath ++ "ForceDiagram.png")
 
 -- SECTION 4.1.3 --
 goal_stmt = goalStmtF (map (\(x, y) -> x `ofThe` y) [
@@ -381,12 +384,11 @@ goals_list = enumSimple 1 (short goalStmt) sspGoals
 
 -- SECTION 4.2.4 --
 -- Data Definitions is automatically generated
-  --FIXME: derivations should be with the appropriate DataDef
+--FIXME: derivations should be with the appropriate DDef
 
 -- SECTION 4.2.5 --
 -- Instance Models is automatically generated
-
-  --FIXME: derivations should be with the appropriate IMod
+--FIXME: derivations should be with the appropriate IMod
 
 -- SECTION 4.2.6 --
 -- Data Constraints is automatically generated
@@ -418,10 +420,7 @@ data_constraint_Table3 = outDataConstTbl sspOutputs
 req = reqF [func_req, non_func_req]
 
 -- SECTION 5.1 --
-func_req = SRS.funcReq
-  [func_req_list, LlC sspInputDataTable] []
-
-func_req_list = enumSimple 1 (short requirement) sspRequirements
+func_req = SRS.funcReq (map LlC $ sspRequirements ++ [sspInputDataTable]) []
 
 -- SECTION 5.2 --
 non_func_req = nonFuncReqF [accuracy, performanceSpd]

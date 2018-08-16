@@ -1,36 +1,38 @@
-{-# LANGUAGE TemplateHaskell, TypeFamilies #-}
+{-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Eq 
   (QDefinition, fromEqn, fromEqn', fromEqn'', equat, getVC
   , ec, qua, fromEqn''', fromEqn'''') where
 
 import Control.Lens ((^.), makeLenses, view)
 
-import Language.Drasil.Chunk.Derivation (Derivation)
-import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(typ), QuantityDict,
-  mkQuant, qw)
-import Language.Drasil.Chunk.References (References)
-import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname')
-import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  HasSymbol(symbol), IsUnit, ExprRelat(relat), HasDerivation(derivations), 
-  HasReference(getReferences), ConceptDomain, HasAdditionalNotes(getNotes))
+  HasSymbol(symbol), IsUnit, ExprRelat(relat),
+  ConceptDomain)
+import Language.Drasil.Chunk.Quantity (HasSpace(typ), QuantityDict,
+  mkQuant, qw, Quantity)
+import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
+import Language.Drasil.Symbol (Symbol)
+import Language.Drasil.Space (Space(Real))
+
+import Language.Drasil.Chunk.Quantity (HasSpace(typ), Quantity, 
+  QuantityDict, mkQuant, qw)
+import Language.Drasil.Chunk.References (Reference)
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
+import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
+
 import Language.Drasil.Development.Unit(unitWrapper, MayHaveUnit(getUnit))
+
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase (NP)
+import Language.Drasil.RefTypes(RefType(..), DType(..))
+import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space(Real))
 import Language.Drasil.Spec (Sentence)
-import Language.Drasil.Symbol (Symbol)
-
-
 
 -- | A QDefinition is a 'Quantity' with a defining equation.
 data QDefinition = EC
           { _qua :: QuantityDict
           , _equat :: Expr
-          , _ref :: References -- FIXME: to be removed
-          , _deri :: Derivation -- FIXME: to be removed
-          , _refName :: ShortName -- FIXME: to be removed
-          , _notes :: Maybe [Sentence] -- FIXME: to be removed
           }
 makeLenses ''QDefinition
 
@@ -42,50 +44,41 @@ instance HasSpace      QDefinition where typ = qua . typ
 instance HasSymbol     QDefinition where symbol e st = symbol (e^.qua) st
 instance Quantity      QDefinition where 
 instance ExprRelat     QDefinition where relat = equat
-instance HasReference  QDefinition where getReferences = ref
 instance Eq            QDefinition where a == b = (a ^. uid) == (b ^. uid)
-instance HasDerivation QDefinition where derivations = deri
-instance HasAdditionalNotes QDefinition where getNotes = notes
-instance HasShortName  QDefinition where -- FIXME: This could lead to trouble; need
-                                         -- to ensure sanity checking when building
-                                         -- Refs. Double-check QDef is a DD before allowing
-  shortname = view refName
 instance MayHaveUnit   QDefinition where getUnit = getUnit . view qua
 
- 
 -- | Create a 'QDefinition' with a uid, noun phrase (term), definition, symbol,
 -- unit, and defining equation.  And it ignores the definition...
 --FIXME: Space hack
 fromEqn :: (IsUnit u, ConceptDomain u) => 
-  String -> NP -> Sentence -> Symbol -> u -> Expr -> References -> String -> QDefinition
-fromEqn nm desc _ symb un eqn refs sn = 
-  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) eqn refs [] (shortname' sn) Nothing
+  String -> NP -> Sentence -> Symbol -> u -> Expr -> QDefinition
+fromEqn nm desc _ symb un eqn = 
+  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) eqn
 
 -- | Same as fromEqn, but has no units.
 --FIXME: Space hack
-fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> References -> String -> QDefinition
-fromEqn' nm desc _ symb eqn refs sn = EC (mkQuant nm desc symb Real Nothing Nothing) eqn refs [] (shortname' sn) Nothing
+fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> QDefinition
+fromEqn' nm desc _ symb eqn = EC (mkQuant nm desc symb Real Nothing Nothing) eqn
 
 -- | Create a 'QDefinition' with an uid, noun phrase (term), symbol,
 -- abbreviation, unit, and defining equation.
 fromEqn'' :: (IsUnit u, ConceptDomain u) => String -> NP -> Sentence ->
- Symbol -> String -> Maybe u -> Expr -> References -> String -> QDefinition
-fromEqn'' nm desc _ symb abbr u eqn refs sn = 
-  EC (mkQuant nm desc symb Real (fmap unitWrapper u) (Just abbr)) eqn refs [] (shortname' sn) Nothing
-
+ Symbol -> String -> Maybe u -> Expr -> QDefinition
+fromEqn'' nm desc _ symb abbr u eqn = 
+  EC (mkQuant nm desc symb Real (fmap unitWrapper u) (Just abbr)) eqn
 
 fromEqn''' :: (IsUnit u, ConceptDomain u) => 
-  String -> NP -> Sentence -> Symbol -> u -> Expr -> References -> Derivation -> String -> QDefinition
-fromEqn''' nm desc _ symb un eqn refs dv sn = 
-  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) eqn refs dv (shortname' sn) Nothing
+  String -> NP -> Sentence -> Symbol -> u -> Expr -> QDefinition
+fromEqn''' nm desc _ symb un eqn = 
+  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) eqn
 
-fromEqn'''' :: String -> NP -> Sentence -> Symbol -> Expr -> References -> Derivation -> String -> QDefinition
-fromEqn'''' nm desc _ symb eqn refs dv sn = EC (mkQuant nm desc symb Real Nothing Nothing) eqn refs dv (shortname' sn) Nothing
+fromEqn'''' :: String -> NP -> Sentence -> Symbol -> Expr -> QDefinition
+fromEqn'''' nm desc _ symb eqn = EC (mkQuant nm desc symb Real Nothing Nothing) eqn
 
 -- | Smart constructor for QDefinitions. Requires a quantity and its defining 
 -- equation
-ec :: (Quantity c) => c -> Expr -> ShortName -> QDefinition
-ec c eqn sn = EC (qw c) eqn [] [] sn {-hack?-} Nothing
+ec :: (Quantity c) => c -> Expr -> QDefinition
+ec c eqn = EC (qw c) eqn
 
 -- | Returns a 'VarChunk' from a 'QDefinition'.
 -- Currently only used in example /Modules/ which are being reworked.

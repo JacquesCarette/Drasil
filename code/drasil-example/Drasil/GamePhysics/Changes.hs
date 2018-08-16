@@ -12,18 +12,18 @@ import Data.Drasil.Concepts.Computation (algorithm)
 import qualified Data.Drasil.Concepts.Physics as CP (collision, damping, joint)
 import Data.Drasil.Utils (enumSimple)
 
---------------------------------
+---------------------
 --  LIKELY CHANGES --
---------------------------------
+---------------------
 
 likelyChanges :: Section
 likelyChangesIntro, likelyChangesList :: Contents
 
 likelyChanges = SRS.likeChg [likelyChangesIntro, likelyChangesList] []
 
-likelyChangesIntro = foldlSP [S "This", (phrase section_), S "lists the",
-  (plural likelyChg), S "to be made to the", (phrase game), (phrase physics), 
-  (phrase library)]
+likelyChangesIntro = foldlSP [S "This", phrase section_, 
+  S "lists the", plural likelyChg, S "to be made to the",
+  phrase game, phrase physics, phrase library]
 
 likelyChangesStmt1, likelyChangesStmt2, likelyChangesStmt3,
   likelyChangesStmt4 :: Sentence
@@ -34,7 +34,8 @@ likelyChangesStmt1 = (S "internal" +:+ (getAcc CM.ode) :+:
   (phrase library)) `maybeChanged` (S "in the future")
 
 likelyChangesStmt2 = (phrase library) `maybeExpanded`
-  (S "to deal with edge-to-edge and vertex-to-vertex" +:+ (plural CP.collision))
+  (S "to deal with edge-to-edge and vertex-to-vertex" +:+
+  plural CP.collision)
 
 likelyChangesStmt3 = (phrase library) `maybeExpanded` (
   S "to include motion with" +:+ (phrase CP.damping))
@@ -43,8 +44,8 @@ likelyChangesStmt4 = (phrase library) `maybeExpanded` (S "to include" +:+
   (plural CP.joint) `sAnd` (plural CM.constraint))
 
 likelyChangesList' :: [Sentence]
-likelyChangesList' = [likelyChangesStmt1, likelyChangesStmt2, likelyChangesStmt3,
-  likelyChangesStmt4]
+likelyChangesList' = [likelyChangesStmt1, likelyChangesStmt2, 
+  likelyChangesStmt3, likelyChangesStmt4]
 
 likelyChangesList = enumSimple 1 (getAcc likelyChg) likelyChangesList'
 
@@ -57,9 +58,9 @@ unlikelyChangesIntro, unlikelyChangesList :: Contents
 
 unlikelyChanges = SRS.unlikeChg [unlikelyChangesIntro, unlikelyChangesList] []
 
-unlikelyChangesIntro = foldlSP [S "This", (phrase section_), S "lists the",
-  (plural unlikelyChg), S "to be made to the", (phrase game), (phrase physics), 
-  (phrase library)]
+unlikelyChangesIntro = foldlSP [S "This", phrase section_, S "lists the",
+  plural unlikelyChg, S "to be made to the", phrase game, phrase physics,
+  phrase library]
 
 unlikelyChangesStmt1, unlikelyChangesStmt2,
   unlikelyChangesStmt3, unlikelyChangesStmt4 :: Sentence

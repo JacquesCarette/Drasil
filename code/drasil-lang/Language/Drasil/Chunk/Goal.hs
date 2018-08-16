@@ -5,15 +5,15 @@
 module Language.Drasil.Chunk.Goal
   ( Goal
   , mkGoal
-  , refAddr
   ) where
 
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Spec (Sentence)
-import Language.Drasil.RefTypes (RefAdd)
 
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname), shortname')
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
+import Language.Drasil.Label.Core (Label)
+import Language.Drasil.Classes (HasLabel(getLabel))
 
 
 import Control.Lens (makeLenses, (^.))
@@ -21,15 +21,16 @@ import Control.Lens (makeLenses, (^.))
 data Goal = GS
           { _gid :: UID
           , __ :: Sentence -- The goal
-          , _refAddr :: RefAdd
+          , _lbl :: Label
           }
 
 makeLenses ''Goal
 
 instance HasUID        Goal where uid = gid
 instance Eq            Goal where a == b = a ^. uid == b ^. uid
-instance HasShortName  Goal where shortname g = shortname' $ g ^. refAddr
+instance HasLabel      Goal where getLabel = lbl
+instance HasShortName  Goal where shortname = lbl . shortname
 
 -- | Goal smart constructor
-mkGoal :: String -> Sentence -> RefAdd -> Goal
+mkGoal :: String -> Sentence -> Label -> Goal
 mkGoal = GS

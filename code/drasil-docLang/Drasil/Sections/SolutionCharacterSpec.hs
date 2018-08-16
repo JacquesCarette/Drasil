@@ -127,18 +127,6 @@ hasUQO :: SecItem -> Bool
 hasUQO (UnQuantO _) = True
 hasUQO _            = False
 
-hasDDef :: SecItem -> Bool
-hasDDef (DataDef _) = True
-hasDDef _           = False
-
-hasIMods :: SecItem -> Bool
-hasIMods (IMods _) = True
-hasIMods _         = False
-
-hasTMods :: SecItem -> Bool
-hasTMods (TMods _) = True
-hasTMods _         = False
-
 -----------------
 -- GET SECITEM --
 -----------------
@@ -181,21 +169,6 @@ getUQI (Just (UnQuantI xs)) = xs
 getUQI (Just _)             = []
 getUQI Nothing              = []
 
-getDDef :: (Maybe SecItem) -> [DataDefinition]
-getDDef (Just (DataDef xs)) = xs
-getDDef (Just _)            = []
-getDDef Nothing             = []
-
-getIMods :: (Maybe SecItem) -> [RelationConcept]
-getIMods (Just (IMods xs))   = xs
-getIMods (Just _)            = []
-getIMods Nothing             = []
-
-getTMods :: (Maybe SecItem) -> [RelationConcept]
-getTMods (Just (TMods xs))   = xs
-getTMods (Just _)            = []
-getTMods Nothing             = []
-
 ----------------------------
 -- PULL SECITEM FROM LIST --
 ----------------------------
@@ -227,15 +200,6 @@ pullUQI xs = pullFunc xs getUQI hasUQI
 
 pullUQO :: [SecItem] -> [UncertQ]
 pullUQO xs = pullFunc xs getUQO hasUQO
-
-pullDDefs :: [SecItem] -> [DataDefinition]
-pullDDefs xs = pullFunc xs getDDef hasDDef
-
-pullIMods :: [SecItem] -> [RelationConcept]
-pullIMods xs = pullFunc xs getIMods hasIMods
-
-pullTMods :: [SecItem] -> [RelationConcept]
-pullTMods xs = pullFunc xs getTMods hasTMods
 
 --getID :: SubSec -> String
 --getID (SectionModel niname _) = niname ^. uid
@@ -269,17 +233,18 @@ sectionMap progName (SectionModel niname xs)
 --------------------
 
 render :: (Idea c, HasSymbolTable s) => c -> s -> SubSec -> Section
-render progName symMap item@(SectionModel niname _)
+render _ symMap item@(SectionModel niname _)
   | compareID niname (Doc.assumption ^. uid)       = assumptionSect        item
-  | compareID niname (Doc.thModel ^. uid)          = theoreticalModelSect  item symMap progName
   | compareID niname (Doc.genDefn ^. uid)          = generalDefinitionSect item symMap
-  | compareID niname (Doc.inModel ^. uid)          = instanceModelSect     item symMap
-  | compareID niname (Doc.dataDefn ^. uid)         = dataDefinitionSect    item symMap
   | compareID niname (Doc.dataConst ^. uid)        = dataConstraintSect    item 
   | compareID niname (Doc.termAndDef ^. uid)       = termDefinitionSect    item
   | compareID niname (Doc.goalStmt ^. uid)         = goalStatementSect     item
   | compareID niname (Doc.systemConstraint ^. uid) = systemConstraintSect  item
   | otherwise                                      = genericSect           item
+
+{---| compareID niname (Doc.thModel ^. uid)          = theoreticalModelSect  item symMap progName
+  --| compareID niname (Doc.inModel ^. uid)          = instanceModelSect     item symMap
+  --| compareID niname (Doc.dataDefn ^. uid)         = dataDefinitionSect    item symMap-}
 
 ------------------------------
 -- Section Render Functions --
@@ -287,7 +252,7 @@ render progName symMap item@(SectionModel niname _)
 
 genericSect :: SubSec -> Section
 genericSect (SectionModel niname xs) = section'' (pullTitle xs niname) 
-  (pullContents xs) (pullSections xs) (niname ^. uid)
+  (pullContents xs) (pullSections xs) (mkLabelRASec (niname ^. uid) (niname ^. uid)) --fixme
 
 ------------------------------------------------
 -- GENERAL SYSTEM DESCRIPTION SECTION BUILDER --
@@ -318,20 +283,12 @@ assumptionSect (SectionModel _ xs) = SRS.assumpt
   (assumpIntro:(pullContents xs)) (pullSections xs)
 
 
-theoreticalModelSect :: (Idea a, HasSymbolTable s) => SubSec -> s -> a -> Section
+{-theoreticalModelSect :: (Idea a, HasSymbolTable s) => SubSec -> s -> a -> Section
 theoreticalModelSect (SectionModel _ xs) _ progName = SRS.thModel
  ((tModIntro progName):theoreticalModels ++ 
   (pullContents xs)) (pullSections xs)
   where theoreticalModels = map (UlC . ulcc) $ map symMap $ pullTMods xs
         symMap            = Definition . Theory
-
-
-generalDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
-generalDefinitionSect (SectionModel _ xs) _ = SRS.genDefn
-  (generalDefsIntro:contents) (pullSections xs)
-  where generalDefsIntro = generalDefinitionIntro contents
-        contents         = (pullContents xs)
-
 
 instanceModelSect :: (HasSymbolTable s) => SubSec -> s -> Section
 instanceModelSect (SectionModel _ xs) _ = SRS.inModel
@@ -345,7 +302,15 @@ dataDefinitionSect (SectionModel _ xs) _ = SRS.dataDefn
   (dataIntro:dataDefinitions ++ (pullContents xs)) (pullSections xs)
   where dataIntro       = dataDefinitionIntro $ pullSents xs
         symMap          = Definition . Data'
-        dataDefinitions = map (UlC . ulcc . symMap) $ pullDDefs xs
+        dataDefinitions = map (UlC . ulcc . symMap) $ pullDDefs xs-}
+
+generalDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
+generalDefinitionSect (SectionModel _ xs) _ = SRS.genDefn
+  (generalDefsIntro:contents) (pullSections xs)
+  where generalDefsIntro = generalDefinitionIntro contents
+        contents         = (pullContents xs)
+
+
 
 
 dataConstraintSect :: SubSec -> Section
@@ -457,11 +422,6 @@ assumpIntro = mkParagraph $ foldlSent
 -- THEORETICAL MODELS --
 ------------------------
 
-tModIntro :: (Idea a) => a -> Contents
-tModIntro progName = foldlSP [S "This", phrase Doc.section_, S "focuses on",
-  S "the", phrase Doc.general, (plural equation) `sAnd` (plural law), S "that",
-  short progName, S "is based on"]
-
 -------------------------
 -- GENERAL DEFINITIONS --
 -------------------------
@@ -478,24 +438,9 @@ generalDefinitionIntro _ = foldlSP [S "This", phrase Doc.section_,
 -- DATA DEFINITIONS --
 ----------------------
 
-dataDefinitionIntro :: [Sentence] -> Contents
-dataDefinitionIntro xs = mkParagraph $ (foldlSent [S "This", phrase Doc.section_, 
-    S "collects and defines all the", plural Doc.datum, 
-    S "needed to build the", plural Doc.inModel] +:+ foldl (+:+) EmptyS xs)
-
-
 ---------------------
 -- INSTANCE MODELS --
 ---------------------
-
--- just need to provide the four references in order to this function. Nothing can be input into r4 if only three tables are present
-iModIntro :: Contents
-iModIntro = foldlSP [S "This", phrase Doc.section_, 
-  S "transforms the", phrase Doc.problem, S "defined in", S "FIXME REF", 
-  S "into one which is expressed in mathematical terms. It uses concrete", 
-  plural Doc.symbol_, S "defined in", S "FIXME REF", 
-  S "to replace the abstract", plural Doc.symbol_, S "in the", 
-  plural Doc.model, S "identified in", S "FIXME REF" :+: S " and" +:+ S "FIXME REF"]
   
 ---------------------
 -- DATA CONSTRAINTS --

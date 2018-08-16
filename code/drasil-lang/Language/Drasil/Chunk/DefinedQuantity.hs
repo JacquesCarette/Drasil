@@ -5,13 +5,13 @@ module Language.Drasil.Chunk.DefinedQuantity
   , dqdQd) where
 import Control.Lens ((^.), makeLenses, view)
 
-import qualified Language.Drasil.Chunk.Quantity as Q
-
-import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
-import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
   HasSpace(typ), IsUnit, HasDerivation(derivations))
+import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
+import qualified Language.Drasil.Chunk.Quantity as Q
+
+import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Development.Unit (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
 import Language.Drasil.Space (Space)

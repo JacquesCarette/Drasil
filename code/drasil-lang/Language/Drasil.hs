@@ -28,6 +28,7 @@ module Language.Drasil (
   , unitCon, fund, comp_unitdefn, makeDerU
   , (^:), (/:), (*:), (*$), (/$), (^$), new_unit, getCu
   , MayHaveUnit(getUnit)
+  , derCUC, derCUC', derCUC''
    -- UID
   , UID
   -- Classes
@@ -62,7 +63,7 @@ module Language.Drasil (
   , NamedChunk, short, nc, IdeaDict
   , nw -- bad name (historical)
   , compoundNC, compoundNC', compoundNC'', compoundNC''', compoundNCP1, compoundNCPlPh, compoundNCPlPl
-  , the, theCustom
+  , the, theCustom, mkIdea
   -- Chunk.Constrained.Core
   , physc, sfwrc, enumc , isPhysC, isSfwrC
   , Constraint(..), ConstraintReason(..)
@@ -76,7 +77,7 @@ module Language.Drasil (
   -- Chunk.DataDefinition
   , DataDefinition, mkQuantDef, mkDD, mkQuantDef', qdFromDD
   -- Chunk.GenDefn
-  , GenDefn, gd, gdUnit, gd', gd''
+  , GenDefn, gd, gdUnit, gdNoUnitDef, gd', gd''
   -- Chunk.InstanceModel
   , InstanceModel
   , inCons, outCons, imOutput, imInputs, im, imQD, im', imQD', im'', im'''
@@ -98,11 +99,10 @@ module Language.Drasil (
   , ucw, UnitaryConceptDict
   -- Chunk.Attributes --FIXME: Changed a lot
   , getSource
-  , Derivation, getDerivation, getShortName, shortname'
-  , sourceref
-  , References
+  , Derivation, getDerivation, getShortName
+  , Reference
   -- Chunk.ShortName
-  , ShortName, shortname', HasShortName(shortname)
+  , DeferredCtx(..), resolveSN, ShortName, shortname', HasShortName(shortname)
   --Citations
   , Citation(..), EntryID, BibRef, CiteField(..), Month(..), HP(..)
   , HasFields(..)
@@ -125,7 +125,7 @@ module Language.Drasil (
   , cProceedings, cTechReport, cUnpublished
   , CitationKind(..)
   -- Spec
-  , USymb(..), Sentence(..), sParen, sSqBr, sSqBrNum
+  , USymb(..), Sentence(..), sParen, sSqBr
   , (+:+), (+:+.), (+.), sC, (+:), semiCol, sParenDash
   , sDash
   -- NounPhrase
@@ -138,15 +138,16 @@ module Language.Drasil (
   -- Document
   , Referable(..), Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListTuple
-  , section, fig, figWithWidth, section'' 
-  , datadefn, reldefn, MaxWidthPercent  
-  , RawContent(..)
-  , HasContents(accessContents)
   , LabelledContent(..), UnlabelledContent(..)
+  , mkParagraph, mkRawLC
   , llcc, ulcc
-  , mkParagraph, mkFig
+  , section, fig, figWithWidth, section''
+  , MaxWidthPercent
+  , HasContents(accessContents)
+  , RawContent(..)
+  , mkFig
   -- Reference
-  , makeRef, mkRefFrmLbl, midRef
+  , makeRef, mkRefFrmLbl
   -- Space
   , Space(..)
   -- Symbol
@@ -173,7 +174,7 @@ module Language.Drasil (
   , ChunkDB, cdb
   , HasSymbolTable, symbolMap, symbLookup, symbolTable, getUnitLup
   , HasTermTable, termLookup, termTable
-  , HasDefinitionTable, conceptMap, defTable
+  , HasDefinitionTable, conceptMap, defTable, defLookup
   , HasUnitTable, unitMap, unitTable, collectUnits
   -- AssumpChunk
   , AssumpChunk, assuming, assump
@@ -195,7 +196,12 @@ module Language.Drasil (
   -- PhysSystDesc
   , PhysSystDesc, pSysDes, psd
   -- RefTypes
-  , RefAdd, RefType(Cite)
+  , RefAdd, RefType(Cite, Tab, EqnB, LCh, UnCh, Req, Def, Lst)
+  -- Label
+  , Label 
+  , mkLabelRA', mkLabelSame, mkEmptyLabel
+  , mkLabelRAAssump', mkLabelRAFig, mkLabelRASec
+  , modifyLabelEqn
   -- Document.getChunk
   , vars, combine', ccss
   -- Chunk.Sentence.EmbedSymbol
@@ -206,12 +212,7 @@ module Language.Drasil (
   , names
   -- Document.Extract
   , egetDoc, getDoc
-  -- Config
-  , StyleGuide(..), verboseDDDescription, numberedTMEquations, numberedDDEquations
-  , bibStyleH, numberedSections, hyperSettings, fontSize, bibFname, bibStyleT, colBwidth
-  , colAwidth
-  --Label
-  , Label, mkLabelRA, mkLabelRA'', mkEmptyLabel
+  -- Label.Core
   , getAdd
 ) where
 
@@ -234,34 +235,32 @@ import Language.Drasil.Expr.Extract (dep, names', names)
 import Language.Drasil.Expr.Precedence (precA, precB, eprec)
 import Language.Drasil.Sentence.EmbedSymbol(ch)
 import Language.Drasil.Sentence.Extract(sdep,  snames)
-import Language.Drasil.Document (section, fig, figWithWidth, section''
-  , datadefn, reldefn, Section(..), SecCons(..) 
+import Language.Drasil.Document (section, fig, figWithWidth
+  , section''
+  , Section(..), SecCons(..) 
   , llcc, ulcc, Document(..)
-  , HasContents(accessContents)
-  , mkParagraph, mkFig)
-import Language.Drasil.Document.Core (DType(..)
-  , Contents(..), ListType(..), ItemType(..)
+  , mkParagraph, mkFig, mkRawLC)
+import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
+  , HasContents(accessContents)
   , LabelledContent(..), UnlabelledContent(..) )
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Development.UnitLang -- all of it
 import Language.Drasil.Development.Unit -- all of it
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),HasSpace(typ),  HasUnitSymbol(usymb),
-  IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes),
-  Constrained(constraints), HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations),
-  HasReference(getReferences), HasLabel(getLabel), MayHaveLabel(getMaybeLabel),
-  HasRefAddress(getRefAdd))
+  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
+  IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
+  HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), HasReference(getReferences), 
+  HasLabel(getLabel), MayHaveLabel(getMaybeLabel), HasRefAddress(getRefAdd))
+import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Document.GetChunk(vars, combine', vars', combine, ccss)
-import Language.Drasil.Config (StyleGuide(..), verboseDDDescription, numberedTMEquations,
-  numberedDDEquations, bibStyleH, numberedSections, hyperSettings, bibFname, fontSize,
-  colAwidth, colBwidth, bibStyleT)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Derivation (Derivation)
-import Language.Drasil.Chunk.References (References)
-import Language.Drasil.Chunk.ShortName (ShortName, shortname', HasShortName(shortname))
+import Language.Drasil.Chunk.References (Reference)
+import Language.Drasil.Chunk.ShortName (DeferredCtx(..), resolveSN, ShortName
+  , shortname', HasShortName(shortname))
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation (
   -- Types
@@ -316,9 +315,9 @@ import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
                                           , titleize', phrase, plural)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (Sentence(..),
-  sParen, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
+  sParen, sSqBr, sC, (+:+), (+:+.), (+.), (+:),
   semiCol, sParenDash, sDash)
-import Language.Drasil.Reference (makeRef, midRef, mkRefFrmLbl, ReferenceDB, assumpDB, reqDB
+import Language.Drasil.Reference (makeRef, mkRefFrmLbl, ReferenceDB, assumpDB, reqDB
                                  , AssumpMap, assumpLookup, HasAssumpRefs
                                  , assumpRefTable, assumptionsFromDB
                                  , rdb, reqRefTable, reqLookup, RefBy(..)
@@ -333,6 +332,9 @@ import Language.Drasil.Misc -- all of it
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
-import Language.Drasil.RefTypes(RefAdd, RefType(Cite))
-import Language.Drasil.Label (Label, mkLabelRA, mkLabelRA'', mkEmptyLabel)
+import Language.Drasil.RefTypes(RefAdd, RefType(Cite, EqnB, Tab, LCh, UnCh, Req, Def, Lst),
+  DType(..))
+import Language.Drasil.Label (mkLabelRA', mkLabelSame, 
+  mkEmptyLabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec, modifyLabelEqn)
 import Language.Drasil.Label.Core (getAdd)
+--Should be in lang-dev package?

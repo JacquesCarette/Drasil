@@ -20,5 +20,4 @@ import Language.Drasil.Development.Unit (UnitDefn(..)
   , derUC, derUC', derUC''
   , fund, comp_unitdefn, derCUC, derCUC', derCUC''
   , makeDerU, unitWrapper, getCu, MayHaveUnit(getUnit))
-import Language.Drasil.Development.UnitLang (UDefn(..), USymb(US), comp_usymb,
-  from_udefn)
+import Language.Drasil.Development.UnitLang (UDefn(..), USymb(US), comp_usymb)

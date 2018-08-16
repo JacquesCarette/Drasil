@@ -447,7 +447,7 @@ tank_length_max = mkQuantDef (unitary "tank_length_max"
   (nounPhraseSP "maximum length of tank")
   (sub (eqSymb tank_length) (Atomic "max")) metre Rational) 50
 
-frac_min_aux    = mkQuantDef frac_min $ (dbl 1.0) * (10 $^ (negate 6))
+frac_min_aux    = mkQuantDef frac_min $ dbl 1.0e-6
 
 -- Used in Constraint 5
 pcm_density_min = mkQuantDef (unitary "pcm_density_min"

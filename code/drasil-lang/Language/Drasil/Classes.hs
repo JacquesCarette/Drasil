@@ -27,7 +27,7 @@ module Language.Drasil.Classes (
 
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Chunk.Derivation (Derivation)
-import Language.Drasil.Chunk.References (References)
+import Language.Drasil.Chunk.References (Reference)
 import Language.Drasil.Development.UnitLang(UDefn, USymb)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label, LblType)
@@ -84,7 +84,7 @@ class HasSpace c where
   typ      :: Lens' c Space
 
 class HasReference c where
-  getReferences :: Lens' c References
+  getReferences :: Lens' c [Reference]
 
 class HasDerivation c where
   derivations :: Lens' c Derivation
@@ -106,8 +106,8 @@ class HasReasVal c where
 
 -- | For those things which "have a label"
 class HasLabel c where
-  getLabel :: Lens' c Label
-
+  getLabel      :: Lens' c Label
+ 
 class MayHaveLabel c where
   getMaybeLabel :: c -> Maybe Label
 

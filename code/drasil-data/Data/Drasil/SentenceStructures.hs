@@ -14,7 +14,6 @@ module Data.Drasil.SentenceStructures
   , displayConstrntsAsSet
   , fmtPhys, fmtSfwr, typUncr
   , mkTableFromColumns
-  , acroA, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, acroT
   , EnumType(..), WrapType(..), SepType(..), FoldType(..)
   ) where
 
@@ -125,21 +124,6 @@ ofGiv' p1 p2 = S "The" +:+ p1 +:+ S "of a given" +:+ p2
 toThe :: Sentence -> Sentence -> Sentence
 toThe p1 p2 = p1 +:+ S "to the" +:+ p2
 
-{--Acronyms to be used throughout--}
--- ex. S "as seen in (A1)" -> S "as seen in" +:+ sParen (acroA "1")
-acroA, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, 
-  acroT :: Int -> Sentence
-
-acroA  numVar = short assumption  :+: S (show numVar)
-acroGD numVar = short genDefn     :+: S (show numVar)
-acroGS numVar = short goalStmt    :+: S (show numVar)
-acroIM numVar = short inModel     :+: S (show numVar)
-acroLC numVar = short likelyChg   :+: S (show numVar)
-acroPS numVar = short physSyst    :+: S (show numVar)
-acroR  numVar = short requirement :+: S (show numVar)
-acroT  numVar = short thModel     :+: S (show numVar)
-
-
 {--** Miscellaneous **--}
 tableShows :: LabelledContent -> Sentence -> Sentence
 tableShows ref trailing = (mkRefFrmLbl ref) +:+ S "shows the" +:+ 
@@ -147,10 +131,10 @@ tableShows ref trailing = (mkRefFrmLbl ref) +:+ S "shows the" +:+
 
 -- | Function that creates (a label for) a figure
 --FIXME: Is `figureLabel` defined in the correct file?
-figureLabel :: NamedIdea c => Int -> c -> Sentence -> [Char]-> String -> LabelledContent
-figureLabel num traceyMG contents filePath rn = llcc (mkLabelRA'' rn) $
+figureLabel :: NamedIdea c => Int -> c -> Sentence -> [Char] -> String -> LabelledContent
+figureLabel num traceyMG contents filePath rn = llcc (mkLabelRAFig rn) $
   Figure (titleize figure +: 
-  (S (show num)) +:+ (showingCxnBw traceyMG contents)) filePath 100 rn
+  (S (show num)) +:+ (showingCxnBw traceyMG contents)) filePath 100
 
 showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
 showingCxnBw traceyVar contents = titleize traceyVar +:+ S "Showing the" +:+
@@ -197,8 +181,8 @@ tAndDWSym tD sym = Flat $ ((at_start tD) :+:
 tAndDOnly :: Concept s => s -> ItemType
 tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
 
-followA :: Sentence -> Int -> Sentence
-preceding `followA` num = preceding +:+ S "following" +:+ acroA num
+followA :: Sentence -> AssumpChunk -> Sentence
+preceding `followA` assumpt = preceding +:+ S "following" +:+ makeRef assumpt
 
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
 getTandS :: (Quantity a, NamedIdea a) => a -> Sentence

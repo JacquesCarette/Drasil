@@ -2,16 +2,17 @@ module Language.Drasil.Printing.Import(space,expr,symbol,spec,makeDocument) wher
 
 import Data.List (intersperse)
 
-import Language.Drasil hiding (sec, symbol, phrase, titleize)
+import Language.Drasil hiding (sec, symbol)
 
 import Control.Lens ((^.))
-
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as T
+import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),
+  Notation(Scientific, Engineering))
 
-import Language.Drasil.NounPhrase (titleize, phrase)
-
+import Numeric (floatToDigits)
+import Data.Tuple(fst, snd)
 -- | Render a Space
 space :: Space -> P.Expr
 space Integer = P.MO P.Integer
@@ -40,19 +41,61 @@ p_space (DiscreteS a)  = "{" ++ (concat $ intersperse ", " a) ++ "}"
 parens :: P.Expr -> P.Expr
 parens = P.Fenced P.Paren P.Paren
 
-mulExpr ::  HasSymbolTable s => [Expr] -> s -> [P.Expr]
+mulExpr ::  (HasSymbolTable s, HasPrintingOptions s) => [Expr] -> s -> [P.Expr]
 mulExpr (hd1:hd2:tl) sm = case (hd1, hd2) of
-  (a, Int i) ->  [expr' sm (precA Mul) a , P.MO P.Dot] ++ (mulExpr (hd2:tl) sm)
-  (a, Dbl d) ->  [expr' sm (precA Mul) a , P.MO P.Dot] ++ (mulExpr (hd2:tl) sm)
-  (a, b)     ->  [expr' sm (precA Mul) a , P.MO P.Mul] ++ (mulExpr (hd2:tl) sm)
+  (a, Int _) ->  [expr' sm (precA Mul) a , P.MO P.Dot] ++ (mulExpr (hd2:tl) sm)
+  (a, Dbl _) ->  [expr' sm (precA Mul) a , P.MO P.Dot] ++ (mulExpr (hd2:tl) sm)
+  (a, _)     ->  [expr' sm (precA Mul) a , P.MO P.Mul] ++ (mulExpr (hd2:tl) sm)
 mulExpr (hd:[])      sm = [expr' sm (precA Mul) hd]
 mulExpr []       sm     = [expr' sm (precA Mul) (Int 1)]
 
+--This function takes the digits form `floatToDigits` function
+-- and decimal point position and a counter and exponent
+digitsProcess :: [Integer] -> Int -> Int -> Integer -> [P.Expr]
+digitsProcess [0] _ _ _ = [P.Int 0, P.MO P.Point, P.Int 0]
+digitsProcess (hd:tl) pos coun ex = if pos /= coun
+  then [P.Int hd] ++ (digitsProcess tl pos (coun+1) ex)
+  else if ex /= 0
+    then [P.MO P.Point, P.Int hd] ++ (map P.Int tl) ++ [P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
+    else [P.MO P.Point, P.Int hd] ++ (map P.Int tl)
+digitsProcess [] pos coun ex = if pos > coun
+  then [P.Int 0] ++ (digitsProcess [] pos (coun+1) ex)
+  else if ex /= 0
+    then [P.MO P.Point, P.Int 0, P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
+    else [P.MO P.Point, P.Int 0]
+
+-- THis function takes the exponent and the [Int] of base and give out
+-- the decimal point position and processed exponent
+-- This function supports transferring scientific notation to
+-- engineering notation.
+-- References for standard of Engineering Notation:
+-- https://www.khanacademy.org/science/electrical-engineering/introduction-to-ee/
+--    intro-to-ee/a/ee-numbers-in-electrical-engineering 
+-- https://www.calculatorsoup.com/calculators/math/scientific-notation-converter.php
+-- https://en.wikipedia.org/wiki/Scientific_notation
+processExpo :: Int -> (Int, Int)
+processExpo a 
+  | a == 0 = (3, -3)
+  | a == 1 = (1, 0)
+  | a == 2 = (2, 0)
+  | a == -1 = (3, -3) 
+  | a == -2 = (1, -3)
+  | a > 0 && mod (a-1)  3 == 0 = (1, a-1)
+  | a > 0 && mod (a-1)  3 == 1 = (2, a-2)
+  | a > 0 && mod (a-1)  3 == 2 = (3, a-3)
+  | a < 0 && mod (-a) 3 == 0 = (3, a-3)
+  | a < 0 && mod (-a) 3 == 1 = (2, a-2)
+  | a < 0 && mod (-a) 3 == 2 = (1, a-1)
+  | otherwise = error "The cases of processExpo should be exhaustive!"
 
 -- | expr translation function from Drasil to layout AST
-expr :: HasSymbolTable s => Expr -> s -> P.Expr
-expr (Dbl d)            _ = P.Dbl   d
-expr (Int i)            _ = P.Int   i
+expr :: (HasSymbolTable s, HasPrintingOptions s) => Expr -> s -> P.Expr
+expr (Dbl d)           sm = case sm ^. getSetting of
+  Engineering -> P.Row $ digitsProcess (map toInteger $ fst $ floatToDigits 10 d)
+     (fst $ processExpo $ snd $ floatToDigits 10 d) 0
+     (toInteger $ snd $ processExpo $ snd $ floatToDigits 10 d)
+  Scientific           ->  P.Dbl d
+expr (Int i)            _ = P.Int i
 expr (Str s)            _ = P.Str   s
 expr (AssocB And l)    sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (precB And)) l
 expr (AssocB Or l)     sm = P.Row $ intersperse (P.MO P.Or ) $ map (expr' sm (precB Or)) l
@@ -109,13 +152,13 @@ expr (RealI c ri)         sm = renderRealInt sm (lookupC sm c) ri
 lookupC :: HasSymbolTable s => s -> UID -> Symbol
 lookupC sm c = eqSymb $ symbLookup c $ sm^.symbolTable
 
-mkCall :: HasSymbolTable ctx => ctx -> P.Ops -> Expr -> P.Expr
+mkCall :: (HasSymbolTable ctx, HasPrintingOptions ctx) => ctx -> P.Ops -> Expr -> P.Expr
 mkCall s o e = P.Row [P.MO o, parens $ expr e s]
 
-mkBOp :: HasSymbolTable ctx => ctx -> P.Ops -> Expr -> Expr -> P.Expr
+mkBOp :: (HasSymbolTable ctx, HasPrintingOptions ctx) => ctx -> P.Ops -> Expr -> Expr -> P.Expr
 mkBOp sm o a b = P.Row [expr a sm, P.MO o, expr b sm]
 
-expr' :: HasSymbolTable ctx => ctx -> Int -> Expr -> P.Expr
+expr' :: (HasSymbolTable ctx, HasPrintingOptions ctx) => ctx -> Int -> Expr -> P.Expr
 expr' s p e = fence $ expr e s
   where
   fence = if eprec e < p then parens else id
@@ -132,11 +175,11 @@ neg' (C _)                = True
 neg' _                    = False
 
 -- | Render negated expressions
-neg :: HasSymbolTable s => s -> Expr -> P.Expr
+neg :: (HasSymbolTable s, HasPrintingOptions s) => s -> Expr -> P.Expr
 neg sm a = P.Row [P.MO P.Neg, (if neg' a then id else parens) $ expr a sm]
 
 -- | For printing indexes
-indx :: HasSymbolTable ctx => ctx -> Expr -> Expr -> P.Expr
+indx :: (HasSymbolTable ctx, HasPrintingOptions ctx) => ctx -> Expr -> Expr -> P.Expr
 indx sm (C c) i = f s
   where
     i' = expr i sm
@@ -151,7 +194,7 @@ indx sm (C c) i = f s
 indx sm a i = P.Row [P.Row [expr a sm], P.Sub $ expr i sm]
 
 -- | Helper function for translating 'EOperator's
-eop :: HasSymbolTable s => s -> ArithOper -> DomainDesc Expr Expr -> Expr -> P.Expr
+eop :: (HasSymbolTable s, HasPrintingOptions s) => s -> ArithOper -> DomainDesc Expr Expr -> Expr -> P.Expr
 eop sm Mul (BoundedDD v Discrete l h) e =
   P.Row [P.MO P.Prod, P.Sub (P.Row [symbol v, P.MO P.Eq, expr l sm]), P.Sup (expr h sm),
          P.Row [expr e sm]]
@@ -190,7 +233,7 @@ sFormat Vector s = P.Font P.Bold $ symbol s
 sFormat Prime  s = P.Row [symbol s, P.MO P.Prime]
 
 -- | Helper for properly rendering exponents
-pow :: HasSymbolTable ctx => ctx -> Expr -> Expr -> P.Expr
+pow :: (HasSymbolTable ctx, HasPrintingOptions ctx) => ctx -> Expr -> Expr -> P.Expr
 pow sm a@(AssocA Add _)  b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
 pow sm a@(BinaryOp Subt _ _) b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
 pow sm a@(BinaryOp Frac _ _) b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
@@ -199,7 +242,7 @@ pow sm a@(BinaryOp Pow _ _)  b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
 pow sm a                b = P.Row [expr a sm, P.Sup (expr b sm)]
 
 -- | Print a RealInterval
-renderRealInt :: HasSymbolTable st => st -> Symbol -> RealInterval Expr Expr -> P.Expr
+renderRealInt :: (HasSymbolTable st, HasPrintingOptions st) => st -> Symbol -> RealInterval Expr Expr -> P.Expr
 renderRealInt st s (Bounded (Inc,a) (Inc,b)) = 
   P.Row [ expr a st, P.MO P.LEq, symbol s, P.MO P.LEq, expr b st]
 renderRealInt st s (Bounded (Inc,a) (Exc,b)) =
@@ -215,7 +258,8 @@ renderRealInt st s (UpFrom (Exc,a))  = P.Row [ symbol s, P.MO P.Gt, expr a st]
 
 
 -- | Translates Sentence to the Printing representation of Sentence ('Spec')
-spec :: HasSymbolTable s => s -> Sentence -> P.Spec
+spec :: (HasSymbolTable s, HasDefinitionTable s, HasPrintingOptions s) =>
+  s -> Sentence -> P.Spec
   -- make sure these optimizations are clear
 spec sm (EmptyS :+: b) = spec sm b
 spec sm (a :+: EmptyS) = spec sm a
@@ -225,28 +269,37 @@ spec _ (Sy s)          = P.Sy s
 spec _ (Sp s)          = P.Sp s
 spec _ (P s)           = P.E $ symbol s
 spec sm (Ch s)         = P.E $ symbol $ lookupC sm s 
-spec sm (Ref t r sn)   = P.Ref t r (spec sm (snToSentence sn)) sn --FIXME: sn passed in twice?
+spec sm (Ref t r sn)   = P.Ref t r (spec sm (snToSentence $ resolveSN sn $
+  lookupDeferredSN sm)) sn --FIXME: sn passed in twice?
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
 
+lookupDeferredSN :: (HasDefinitionTable ctx) => ctx -> DeferredCtx -> String
+lookupDeferredSN ctx (FromCC u) = maybe "" (\x -> x ++ ": ") $
+  getA $ defLookup u $ ctx ^. defTable
+
 -- | Translates from Document to the Printing representation of Document
-makeDocument :: HasSymbolTable ctx => ctx -> Document -> T.Document
+makeDocument :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
+  ctx -> Document -> T.Document
 makeDocument sm (Document titleLb authorName sections) =
   T.Document (spec sm titleLb) (spec sm authorName) (createLayout sm sections)
 
 -- | Translates from LayoutObj to the Printing representation of LayoutObj
-layout :: HasSymbolTable ctx => ctx -> Int -> SecCons -> T.LayoutObj
+layout :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
+  ctx -> Int -> SecCons -> T.LayoutObj
 layout sm currDepth (Sub s) = sec sm (currDepth+1) s
 layout sm _         (Con c) = lay sm c
 
 -- | Helper function for creating sections as layout objects
-createLayout :: HasSymbolTable ctx => ctx -> [Section] -> [T.LayoutObj]
+createLayout :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
+  ctx -> [Section] -> [T.LayoutObj]
 createLayout sm = map (sec sm 0)
 
 -- | Helper function for creating sections at the appropriate depth
-sec :: HasSymbolTable ctx => ctx -> Int -> Section -> T.LayoutObj
-sec sm depth x@(Section titleLb contents _ _) = --FIXME: should ShortName be used somewhere?
+sec :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
+  ctx -> Int -> Section -> T.LayoutObj
+sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used somewhere?
   let ref = P.S (refAdd x) in
   T.HDiv [(concat $ replicate depth "sub") ++ "section"]
   (T.Header depth (spec sm titleLb) ref :
@@ -254,58 +307,59 @@ sec sm depth x@(Section titleLb contents _ _) = --FIXME: should ShortName be use
 
 -- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.
-lay :: HasSymbolTable ctx => ctx -> Contents -> T.LayoutObj
+lay :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
+  ctx -> Contents -> T.LayoutObj
 lay sm (LlC x) = layLabelled sm x
 lay sm (UlC x) = layUnlabelled sm (x ^. accessContents) 
 
-layLabelled :: HasSymbolTable ctx => ctx -> LabelledContent -> T.LayoutObj
-layLabelled sm x@(LblC _ (Table hdr lls t b _)) = T.Table ["table"]
+layLabelled :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
+  ctx -> LabelledContent -> T.LayoutObj
+layLabelled sm x@(LblC _ (Table hdr lls t b)) = T.Table ["table"]
   ((map (spec sm) hdr) : (map (map (spec sm)) lls)) 
-  (P.S $ "Table:" ++ (getAdd (x ^. getRefAdd)))
+  (P.S $ getAdd (x ^. getRefAdd))
   b (spec sm t)
 layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"] 
   [T.EqnBlock (P.E (expr c sm))] 
-  (P.S $ "Eqn:" ++ (getAdd (x ^. getRefAdd)))
-layLabelled sm x@(LblC _ (Figure c f wp _))     = T.Figure 
-  (P.S $ "Figure:" ++ (getAdd (x ^. getRefAdd)))
+  (P.S $ getAdd (x ^. getRefAdd))
+layLabelled sm x@(LblC _ (Figure c f wp))     = T.Figure 
+  (P.S $ getAdd (x ^. getRefAdd))
   (spec sm c) f wp
 layLabelled sm x@(LblC _ (Requirement r))       = T.ALUR T.Requirement
   (spec sm $ requires r) 
-  (P.S $ (getAdd (x ^. getRefAdd))) 
+  (P.S $ getAdd (x ^. getRefAdd)) 
   (spec sm $ getShortName r)
 layLabelled sm x@(LblC _ (Assumption a))        = T.ALUR T.Assumption
   (spec sm (assuming a))
-  (P.S $ (getAdd (x ^. getRefAdd)))
+  (P.S $ getAdd (x ^. getRefAdd))
   (spec sm $ getShortName a)
 layLabelled sm x@(LblC _ (Change lcs))           = T.ALUR
   (if (chngType lcs) == Likely then T.LikelyChange else T.UnlikelyChange)
   (spec sm (chng lcs)) 
-  (P.S $ (getAdd (x ^. getRefAdd))) 
+  (P.S $ getAdd (x ^. getRefAdd)) 
   (spec sm $ getShortName lcs)
-layLabelled sm x@(LblC _ (Graph ps w h t _))    = T.Graph 
+layLabelled sm x@(LblC _ (Graph ps w h t))    = T.Graph 
   (map (\(y,z) -> (spec sm y, spec sm z)) ps) w h (spec sm t)
-  (P.S $ "Figure:" ++ (getAdd (x ^. getRefAdd)))
-layLabelled sm (LblC _ (Defnt dtyp pairs rn)) = T.Definition 
+  (P.S $ getAdd (x ^. getRefAdd))
+layLabelled sm x@(LblC _ (Defnt dtyp pairs)) = T.Definition 
   dtyp (layPairs pairs) 
-  (P.S rn)
-  where layPairs = map (\(x,y) -> (x, map temp y))
-        temp  y   = lay sm y
+  (P.S $ getAdd (x ^. getRefAdd))
+  where layPairs = map (\(x',y) -> (x', map (lay sm) y))
 layLabelled sm (LblC _ (Paragraph c))           = T.Paragraph (spec sm c)
-layLabelled sm (LblC _ (Definition c))          = T.Definition c (makePairs sm c)
-  (P.S "nolabel6")
+layLabelled _  (LblC _ (Definition c))          = T.Definition c [("nolabel!", [T.Paragraph $ P.EmptyS])] (P.S "nolabel8")
 layLabelled sm (LblC _ (Enumeration cs))        = T.List $ makeL sm cs
 layLabelled sm (LblC _ (Bib bib))               = T.Bib $ map (layCite sm) bib
 
 -- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.
-layUnlabelled :: HasSymbolTable ctx => ctx -> RawContent -> T.LayoutObj
-layUnlabelled sm (Table hdr lls t b _) = T.Table ["table"]
+layUnlabelled :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
+  ctx -> RawContent -> T.LayoutObj
+layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
   ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S "nolabel0") b (spec sm t)
 layUnlabelled sm (Paragraph c)          = T.Paragraph (spec sm c)
 layUnlabelled sm (EqnBlock c)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
-layUnlabelled sm (Definition c)       = T.Definition c (makePairs sm c) (P.S "nolabel1")
+layUnlabelled _  (Definition c)       = T.Definition c [("nolabel!", [T.Paragraph $ P.EmptyS])] (P.S "nolabel1")
 layUnlabelled sm (Enumeration cs)       = T.List $ makeL sm cs
-layUnlabelled sm (Figure c f wp _)    = T.Figure (P.S "nolabel2") (spec sm c) f wp
+layUnlabelled sm (Figure c f wp)    = T.Figure (P.S "nolabel2") (spec sm c) f wp
 layUnlabelled sm (Requirement r)      = T.ALUR T.Requirement
   (spec sm $ requires r) (P.S "nolabel3") (spec sm $ getShortName r)
 layUnlabelled sm (Assumption a)       = T.ALUR T.Assumption
@@ -313,18 +367,20 @@ layUnlabelled sm (Assumption a)       = T.ALUR T.Assumption
 layUnlabelled sm (Change lcs)          = T.ALUR
   (if (chngType lcs) == Likely then T.LikelyChange else T.UnlikelyChange)
   (spec sm (chng lcs)) (P.S "nolabel5") (spec sm $ getShortName lcs)
-layUnlabelled sm (Graph ps w h t _)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
+layUnlabelled sm (Graph ps w h t)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S "nolabel6")
-layUnlabelled sm (Defnt dtyp pairs rn)  = T.Definition dtyp (layPairs pairs) (P.S rn)
+layUnlabelled sm (Defnt dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")
   where layPairs = map (\(x,y) -> (x, map temp y ))
         temp  y   = layUnlabelled sm (y ^. accessContents)
 layUnlabelled sm (Bib bib)              = T.Bib $ map (layCite sm) bib
 
 -- | For importing bibliography
-layCite :: HasSymbolTable ctx => ctx -> Citation -> P.Citation
+layCite ::(HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
+  ctx -> Citation -> P.Citation
 layCite sm c = P.Cite (citeID c) (externRefT c) (map (layField sm) (c ^. getFields))
 
-layField :: HasSymbolTable ctx => ctx -> CiteField -> P.CiteField
+layField :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
+  ctx -> CiteField -> P.CiteField
 layField sm (Address      s) = P.Address      $ spec sm s
 layField  _ (Author       p) = P.Author       p
 layField sm (BookTitle    b) = P.BookTitle    $ spec sm b
@@ -349,7 +405,8 @@ layField sm (HowPublished (URL  u)) = P.HowPublished (P.URL  $ spec sm u)
 layField sm (HowPublished (Verb v)) = P.HowPublished (P.Verb $ spec sm v)
 
 -- | Translates lists
-makeL :: HasSymbolTable ctx => ctx -> ListType -> P.ListType
+makeL :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
+  ctx -> ListType -> P.ListType
 makeL sm (Bullet bs)      = P.Unordered   $ map (\(x,y) -> (item sm x, labref y)) bs
 makeL sm (Numeric ns)     = P.Ordered     $ map (\(x,y) -> (item sm x, labref y)) ns
 makeL sm (Simple ps)      = P.Simple      $ map (\(x,y,z) -> (spec sm x, item sm y, labref z)) ps
@@ -357,51 +414,11 @@ makeL sm (Desc ps)        = P.Desc        $ map (\(x,y,z) -> (spec sm x, item sm
 makeL sm (Definitions ps) = P.Definitions $ map (\(x,y,z) -> (spec sm x, item sm y, labref z)) ps
 
 -- | Helper for translating list items
-item :: HasSymbolTable ctx => ctx -> ItemType -> P.ItemType
+item :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
+  ctx -> ItemType -> P.ItemType
 item sm (Flat i)     = P.Flat $ spec sm i
 item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
 
 labref :: Maybe RefAdd -> Maybe P.Spec
 labref l = maybe Nothing (\z -> Just $ P.S z) l
 
--- | Translates definitions
--- (Data defs, General defs, Theoretical models, etc.)
-makePairs :: HasSymbolTable ctx => ctx -> DType -> [(String,[T.LayoutObj])]
-makePairs m (Data c) = [
-  ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
-  ("Units",       [T.Paragraph $ spec m (unitToSentence c)]),
-  ("Equation",    [T.HDiv ["equation"] [eqnStyle numberedDDEquations $ buildEqn m c] P.EmptyS]),
-  ("Description", [T.Paragraph $ buildDDDescription m c])
-  ]
-makePairs m (Theory c) = [
-  ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
-  ("Equation",    [T.HDiv ["equation"] [eqnStyle numberedTMEquations $ P.E (expr (c ^. relat) m)] P.EmptyS]),
-  ("Description", [T.Paragraph (spec m (c ^. defn))])
-  ]
-makePairs _ General  = error "Not yet implemented"
-makePairs _ Instance = error "Not yet implemented"
-makePairs _ TM       = error "Not yet implemented"
-makePairs _ DD       = error "Not yet implemented"
-
--- Toggle equation style
-eqnStyle :: Bool -> T.Contents -> T.LayoutObj
-eqnStyle b = if b then T.EqnBlock else T.Paragraph
-
--- | Translates the defining equation from a QDefinition to
--- Printing's version of Sentence
-buildEqn :: HasSymbolTable ctx => ctx -> QDefinition -> P.Spec
-buildEqn sm c = P.E $ mkBOp sm P.Eq (sy c) (c^.equat)
-
--- | Build descriptions in data defs based on required verbosity
-buildDDDescription :: HasSymbolTable ctx => ctx -> QDefinition -> P.Spec
-buildDDDescription m c =
-  if verboseDDDescription then descLines m $ vars (sy c $= c^.equat) m else P.EmptyS
-
--- | Helper for building each line of the description of a data def
-descLines :: (HasSymbolTable ctx, Quantity q) => ctx -> [q] -> P.Spec
-descLines m l = foldr (P.:+:) P.EmptyS $ intersperse P.HARDNL $ map descLine l
-  where
-    descLine vcs = (P.E $ symbol $ eqSymb vcs) P.:+:
-      (P.S " is the " P.:+: (spec m (phrase $ vcs ^. term)) P.:+:
-      maybe P.EmptyS (\a -> P.S " (" P.:+: P.Sy (a ^. usymb) P.:+: P.S ")") 
-            (getUnitLup vcs m))

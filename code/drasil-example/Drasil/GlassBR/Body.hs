@@ -52,7 +52,7 @@ import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, item
   makeTMatrix, noRefs, prodUCTbl)
   
 import Drasil.GlassBR.Assumptions (assumptionConstants, gbRefDB, assumptions, standardValues,
-  glassLite, ldfConstant)
+  glassLite, {-ldfConstant-})
 import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, glass, gLassBR, 
   lShareFac, ptOfExplsn, stdOffDist)
@@ -64,12 +64,11 @@ import Drasil.GlassBR.References (astm2009, astm2012, astm2016, rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
 import Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe)
 import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, capacity, char_weight, 
-  constant_LoadDF, demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained, 
-  gbInputDataConstraints, gbInputs, gbOutputs, gBRSpecParamVals, glass_type, 
-  glassGeo, glassTy, glassTypes, glBreakage, is_safeLR, is_safePb, lateralLoad, load, 
-  loadTypes, nom_thick, notSafe, pb_tol, plate_len, plate_width, prob_br, probBreak, 
-  safeMessage, sD, sdWithEqn, sdx, sdy, sdz, stressDistFac, termsWithAccDefn, 
-  termsWithDefsOnly, tNT, wtntWithEqn)
+  demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained, gbInputDataConstraints,
+  gbInputs, gbOutputs, gBRSpecParamVals, glass_type, glassGeo, glassTy, glassTypes, glBreakage,
+  is_safeLR, is_safePb, lateralLoad, load, loadTypes, nom_thick, notSafe, pb_tol, plate_len,
+  plate_width, prob_br, probBreak, safeMessage, sD, sdWithEqn, sdx, sdy, sdz, stressDistFac,
+  termsWithAccDefn, termsWithDefsOnly, tNT, wtntWithEqn)
 
 {--}
 
@@ -502,19 +501,17 @@ outputDataConstraints = outDataConstTbl [prob_br]
 {--Functional Requirements--}
 
 funcReqsList :: [Contents]
-funcReqsList = funcReqsListOfReqs ++ [LlC funcReqsR1Table]
+funcReqsList = funcReqsListOfReqsCon ++ [LlC funcReqsR1Table]
 
-funcReqsR1, funcReqsR3, funcReqsR4, funcReqsR5 :: LabelledContent
+funcReqsR1, funcReqsR2, funcReqsR3, funcReqsR4, funcReqsR5, funcReqsR6 :: LabelledContent
 req1Desc, req3Desc, req4Desc :: Sentence
 req5Desc :: NamedChunk -> Sentence
-funcReqsR2, funcReqsR6 :: [Contents] --FIXME: Issue #327
 
-funcReqsListOfReqs :: [Contents]
-funcReqsListOfReqs = [LlC funcReqsR1] ++ funcReqsR2 ++ 
-  map LlC [funcReqsR3, funcReqsR4, funcReqsR5] ++ funcReqsR6
+funcReqsListOfReqs :: [LabelledContent]
+funcReqsListOfReqs = [funcReqsR1, funcReqsR2, funcReqsR3, funcReqsR4, funcReqsR5, funcReqsR6]
 
-{-funcReqsListOfReqs :: [Contents]
-funcReqsListOfReqs = map LlC $ [funcReqsR1, funcReqsR2, funcReqsR3, funcReqsR4, funcReqsR5, funcReqsR6]-}
+funcReqsListOfReqsCon :: [Contents]
+funcReqsListOfReqsCon = map LlC $ [funcReqsR1, funcReqsR2, funcReqsR3, funcReqsR4, funcReqsR5, funcReqsR6]
 
 funcReqsR1 = mkRequirement "funcReqsR1" req1Desc "Input-Glass-Props"
 --funcReqsR2 = mkRequirement "funcReqsR2" req2Desc "System-Set-Values-Following-Assumptions"
@@ -549,22 +546,14 @@ funcReqsR2List = [(foldlList Comma List (map ch (take 4 assumptionConstants)) `f
   (ch standOffDis) +:+ sParen (S "from" +:+ (makeRef standOffDis)),
   (ch aspRat) +:+ sParen (S "from" +:+ (makeRef aspRat))]
 
-funcReqsR2 = map (UlC . ulcc) [Enumeration $ Simple $ [(acroR 2, Nested ()
-  $ Bullet $ noRefs $
-    map (Flat $) funcReqsR2List
-    , Nothing)]]
-
-funcReqsR2 :: LabelledContent --FIXME: Issue #327
-funcReqsR2 = llcc funcReqs6Label $
+funcReqsR2 = llcc funcReqs2Label $
   Enumeration $ Simple $ 
   [(S "R2"
    , Nested (foldlSent_ [S "The", phrase system, S "shall set the known", 
     plural value +: S "as follows"])
      $ Bullet $ noRefs $
-     map (Flat . chunkToReqItem) gbrIMods
-     ++
-     map (Flat . chunkToReqItem) funcReqsR6DDList
-   , Just $ (getAdd (funcReqs6Label ^. getRefAdd)))]
+     map (Flat $) funcReqsR2List
+   , Just $ (getAdd (funcReqs2Label ^. getRefAdd)))]
 
 --ItemType
 {-funcReqsR2 = (Nested (S "The" +:+ phrase system +:+
@@ -599,7 +588,6 @@ funcReqsR6DDList :: [DataDefinition]
 funcReqsR6DDList = [risk, strDisFac, nonFL, glaTyFac, dimLL, 
   tolPre, tolStrDisFac, hFromt, aspRat]
 
-funcReqsR6 :: LabelledContent --FIXME: Issue #327
 funcReqsR6 = llcc funcReqs6Label $
   Enumeration $ Simple $ 
   [(S "R6"
@@ -612,10 +600,11 @@ funcReqsR6 = llcc funcReqs6Label $
    , Just $ (getAdd (funcReqs6Label ^. getRefAdd)))]
 
 chunkToReqItem :: (NamedIdea c, HasSymbol c, HasShortName c, HasUID c, Referable c) => c -> Sentence
-chunkToReqItem mod = at_start mod +:+ sParen (ch mod) +:+ sParen (makeRef mod)
+chunkToReqItem m = at_start m +:+ sParen (ch m) +:+ sParen (makeRef m)
 
-funcReqs6Label :: Label
-funcReqs6Label = mkLabelSame "output_quantities" Lst
+funcReqs2Label, funcReqs6Label :: Label
+funcReqs2Label = mkLabelSame "System-Set-Values-Following-Assumptions" Lst
+funcReqs6Label = mkLabelSame "Output-Quantities"                       Lst
 
 {--Nonfunctional Requirements--}
 
@@ -662,9 +651,8 @@ traceMatsAndGraphsDataCons  = ["Data Constraints"]
 traceMatsAndGraphsDataConsRef = [makeRef SRS.datConLabel]
 
 traceMatsAndGraphsFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-traceMatsAndGraphsFuncReqRef = map makeRef [funcReqsR1, funcReqsR2, funcReqsR3,
-  funcReqsR4, funcReqsR5, funcReqsR6]                             --FIXME: should be reqchunks?
-                                                                  --FIXME: revisit this list
+traceMatsAndGraphsFuncReqRef = map makeRef funcReqsListOfReqs --FIXME: should be reqchunks?
+                                                              --FIXME: revisit this list
 
 traceMatsAndGraphsA = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
 traceMatsAndGraphsARef = map makeRef assumptions

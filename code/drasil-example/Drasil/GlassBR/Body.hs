@@ -514,7 +514,6 @@ funcReqsListOfReqsCon :: [Contents]
 funcReqsListOfReqsCon = map LlC $ [funcReqsR1, funcReqsR2, funcReqsR3, funcReqsR4, funcReqsR5, funcReqsR6]
 
 funcReqsR1 = mkRequirement "funcReqsR1" req1Desc "Input-Glass-Props"
---funcReqsR2 = mkRequirement "funcReqsR2" req2Desc "System-Set-Values-Following-Assumptions"
 funcReqsR3 = mkRequirement "funcReqsR3" req3Desc "Check-Input-with-Data_Constraints"
 funcReqsR4 = mkRequirement "funcReqsR4" req4Desc "Output-Values-and-Known-Quantities"
 funcReqsR5 = mkRequirement "funcReqsR5" (req5Desc (output_)) "Check-Glass-Safety"
@@ -538,21 +537,21 @@ funcReqsR1Table = llcc (mkLabelSame "R1ReqInputs" Tab) $
   (S "Required Inputs following R1") True
 
 funcReqsR2List :: [Sentence]
-funcReqsR2List = [(foldlList Comma List (map ch (take 4 assumptionConstants)) `followA` standardValues),
-  ch loadDF +:+ sParen (S "from" +:+ (makeRef loadDF)), 
-  (short lShareFac `followA` glassLite),
-  (ch hFromt) +:+ sParen (S "from" +:+ (makeRef hFromt)), 
-  (ch glaTyFac) +:+ sParen (S "from" +:+ (makeRef glaTyFac)),
-  (ch standOffDis) +:+ sParen (S "from" +:+ (makeRef standOffDis)),
-  (ch aspRat) +:+ sParen (S "from" +:+ (makeRef aspRat))]
+funcReqsR2List = [foldlList Comma List (map ch (take 4 assumptionConstants)) `followA` standardValues,
+  ch loadDF +:+ S "from" +:+ makeRef loadDF, 
+  short lShareFac `followA` glassLite,
+  ch hFromt +:+ S "from" +:+ makeRef hFromt,
+  ch glaTyFac +:+ S "from" +:+ makeRef glaTyFac,
+  ch standOffDis +:+ S "from" +:+ makeRef standOffDis,
+  ch aspRat +:+ S "from" +:+ makeRef aspRat]
 
 funcReqsR2 = llcc funcReqs2Label $
   Enumeration $ Simple $ 
-  [(S "R2"
+  [(S "System-Set-Values-Following-Assumptions"
    , Nested (foldlSent_ [S "The", phrase system, S "shall set the known", 
     plural value +: S "as follows"])
      $ Bullet $ noRefs $
-     map (Flat $) funcReqsR2List
+     map (Flat $) (funcReqsR2List)
    , Just $ (getAdd (funcReqs2Label ^. getRefAdd)))]
 
 --ItemType
@@ -590,21 +589,21 @@ funcReqsR6DDList = [risk, strDisFac, nonFL, glaTyFac, dimLL,
 
 funcReqsR6 = llcc funcReqs6Label $
   Enumeration $ Simple $ 
-  [(S "R6"
+  [(S "Output-Quantities"
    , Nested (titleize output_ +:+
      S "the following" +: plural quantity)
-     $ Bullet $ noRefs $
-     map (Flat . chunkToReqItem) gbrIMods
+     $ Bullet $ noRefs $ 
+     chunksToItemTypes gbrIMods
      ++
-     map (Flat . chunkToReqItem) funcReqsR6DDList
+     chunksToItemTypes funcReqsR6DDList
    , Just $ (getAdd (funcReqs6Label ^. getRefAdd)))]
 
-chunkToReqItem :: (NamedIdea c, HasSymbol c, HasShortName c, HasUID c, Referable c) => c -> Sentence
-chunkToReqItem m = at_start m +:+ sParen (ch m) +:+ sParen (makeRef m)
+chunksToItemTypes :: (NamedIdea c, HasSymbol c, HasShortName c, HasUID c, Referable c) => [c] -> [ItemType]
+chunksToItemTypes m = map (\x -> Flat $ at_start x +:+ sParen (ch x) +:+ sParen (makeRef x)) (sortBySymbol m)
 
 funcReqs2Label, funcReqs6Label :: Label
-funcReqs2Label = mkLabelSame "System-Set-Values-Following-Assumptions" Lst
-funcReqs6Label = mkLabelSame "Output-Quantities"                       Lst
+funcReqs2Label = mkLabelSame "System-Set-Values-Following-Assumptions" (Req FR)
+funcReqs6Label = mkLabelSame "Output-Quantities"                       (Req FR)
 
 {--Nonfunctional Requirements--}
 

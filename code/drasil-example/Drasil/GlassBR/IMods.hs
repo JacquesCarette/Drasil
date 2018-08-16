@@ -49,7 +49,7 @@ calofCapacity = im' calOfCap [qw nonFL, qw glaTyFac, qw loadSF]
   TCon AssumedCon $ sy loadSF $> 0] (qw lRe) [] calOfCapL [capdescr]
 
 calOfCap :: RelationConcept
-calOfCap = makeRC "calOfCap" (nounPhraseSP "Calculation of Capacity (LR)") 
+calOfCap = makeRC "calOfCap" (nounPhraseSP "Calculation of Capacity") 
   capdescr ( (sy lRe) $= ((sy nonFL) * (sy glaTyFac) * (sy loadSF))) calOfCapL
 
 capdescr :: Sentence
@@ -74,7 +74,7 @@ calofDemand = im' calOfDe [qw demand, qw eqTNTWeight, qw standOffDist]
   [dedescr]
 
 calOfDe :: RelationConcept
-calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand (q)") 
+calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand") 
   dedescr ( (sy demand) $= apply2 demand eqTNTWeight standOffDist) calOfDemandL
   --dedescr $ (C demand) $= FCall (asExpr interpY) [V "TSD.txt", sy standOffDist, sy eqTNTWeight] 
   

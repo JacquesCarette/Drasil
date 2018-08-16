@@ -302,6 +302,17 @@ Load duration factor
 <em>LR</em>
 </td>
 <td>
+Calculation of Capacity
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
+<em>LR</em>
+</td>
+<td>
 Load resistance
 </td>
 <td>
@@ -346,6 +357,17 @@ Non-factored load
 <em>P<sub>b</sub></em>
 </td>
 <td>
+Probability of Glass Breakage
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
+<em>P<sub>b</sub></em>
+</td>
+<td>
 Probability of breakage
 </td>
 <td>
@@ -361,6 +383,17 @@ Tolerable probability of breakage
 </td>
 <td>
 --
+</td>
+</tr>
+<tr>
+<td>
+<em>q</em>
+</td>
+<td>
+Calculation of Demand
+</td>
+<td>
+Pa
 </td>
 </tr>
 <tr>
@@ -1452,7 +1485,7 @@ Notes
 <em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in <a href=#DD:min.thick>DD: min_thick</a>.
 </p>
 <p class="paragraph">
-<em>LDF</em> is the load duration factor as defined in <a href=#DD:loadDurFactor>DD: loadDurFactor</a>.
+<em>LDF</em> is the load duration factor as defined by <a href=#DD:loadDurFactor>DD: loadDurFactor</a>.
 </p>
 <p class="paragraph">
 <em>J</em> is the stress distribution factor (Function), as defined in <a href=#DD:stressDistFac>DD: stressDistFac</a>.
@@ -2417,7 +2450,7 @@ Notes
 <em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in <a href=#DD:min.thick>DD: min_thick</a>.
 </p>
 <p class="paragraph">
-<em>LDF</em> is the load duration factor as defined in <a href=#DD:loadDurFactor>DD: loadDurFactor</a>.
+<em>LDF</em> is the load duration factor as defined by <a href=#DD:loadDurFactor>DD: loadDurFactor</a>.
 </p>
 <p class="paragraph">
 <em>P<sub>btol</sub></em> is the tolerable probability entered by the user.
@@ -2757,7 +2790,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Calculation of Capacity(LR)
+Calculation of Capacity
 </p>
 </td>
 </tr>
@@ -2883,7 +2916,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Calculation of Demand(q)
+Calculation of Demand
 </p>
 </td>
 </tr>
@@ -3200,45 +3233,47 @@ Input-Glass-Props: Input the quantities from <a href=#Table:R1ReqInputs>R1ReqInp
 </div>
 </li>
 </ul>
-<div class="list" id="FR:System-Set-Values-Following-Assumptions">
-<p>
+<ul class="hide-list-style">
+<li>
+<div id="FR:System-Set-Values-Following-Assumptions">
 System-Set-Values-Following-Assumptions: The system shall set the known values as follows:
-    <ul class="list">
-    <li>
-    <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following <a href=#A:standardValues>A: standardValues</a>
-    </li>
-    <li>
-    <em>LDF</em> (from <a href=#DD:loadDurFactor>loadDurFactor</a>)
-    </li>
-    <li>
-    LSF following <a href=#A:glassLite>A: glassLite</a>
-    </li>
-    <li>
-    <em>h</em> (from <a href=#DD:min.thick>min_thick</a>)
-    </li>
-    <li>
-    <em>GTF</em> (from <a href=#DD:gTF>gTF</a>)
-    </li>
-    <li>
-    <em>SD</em> (from <a href=#DD:standOffDist>standOffDist</a>)
-    </li>
-    <li>
-    <em>AR</em> (from <a href=#DD:aspect.ratio>aspect_ratio</a>)
-    </li>
-    </ul>
-</p>
+                                         <ul class="list">
+                                         <li>
+                                         <em>m</em>, <em>k</em>, <em>E</em>, and <em>t<sub>d</sub></em> following <a href=#A:standardValues>A: standardValues</a>
+                                         </li>
+                                         <li>
+                                         <em>LDF</em> from <a href=#DD:loadDurFactor>DD: loadDurFactor</a>
+                                         </li>
+                                         <li>
+                                         LSF following <a href=#A:glassLite>A: glassLite</a>
+                                         </li>
+                                         <li>
+                                         <em>h</em> from <a href=#DD:min.thick>DD: min_thick</a>
+                                         </li>
+                                         <li>
+                                         <em>GTF</em> from <a href=#DD:gTF>DD: gTF</a>
+                                         </li>
+                                         <li>
+                                         <em>SD</em> from <a href=#DD:standOffDist>DD: standOffDist</a>
+                                         </li>
+                                         <li>
+                                         <em>AR</em> from <a href=#DD:aspect.ratio>DD: aspect_ratio</a>
+                                         </li>
+                                         </ul>
 </div>
+</li>
+</ul>
 <ul class="hide-list-style">
 <li>
 <div id="FR:Check-Input-with-Data.Constraints">
-Check-Input-with-Data_Constraints: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>DataConstraints</a>. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
+Check-Input-with-Data_Constraints: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Data Constraints</a>. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="FR:Output-Values-and-Known-Quantities">
-Output-Values-and-Known-Quantities: Output the input quantities from <a href=#FR:Input-Glass-Props>FR: Input-Glass-Props</a> and the known quantities from <a href=#FR:System-Set-Values-Following-Assumptions>FR: System-Set-Values-Following-Assumptions</a>.
+Output-Values-and-Known-Quantities: Output the input quantities from <a href=#FR:Input-Glass-Props>FR: Input-Glass-Props</a> and the known quantities from <a href=#FR:System-Set-Values-Following-Assumptions>System-Set-Values-Following-Assumptions</a>.
 </div>
 </li>
 </ul>
@@ -3249,51 +3284,51 @@ Check-Glass-Safety: If <em>is_safePb</em> ∧ <em>is_safeLR</em> (from <a href=#
 </div>
 </li>
 </ul>
-<div class="list">
-<p>
-<div id="List:output.quantities">
-R6: Output the following quantities:
-    <ul class="list">
-    <li>
-    Probability of breakage (<em>P<sub>b</sub></em>) (<a href=#IM:probOfBr>IM: probOfBr</a>)
-    </li>
-    <li>
-    Load resistance (<em>LR</em>) (<a href=#IM:calOfCap>IM: calOfCap</a>)
-    </li>
-    <li>
-    Applied load (demand) (<em>q</em>) (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
-    </li>
-    <li>
-    Risk of failure (<em>B</em>) (<a href=#DD:risk.fun>DD: risk_fun</a>)
-    </li>
-    <li>
-    Stress distribution factor (Function) (<em>J</em>) (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
-    </li>
-    <li>
-    Non-factored load (<em>NFL</em>) (<a href=#DD:nFL>DD: nFL</a>)
-    </li>
-    <li>
-    Glass type factor (<em>GTF</em>) (<a href=#DD:gTF>DD: gTF</a>)
-    </li>
-    <li>
-    Dimensionless load (<em>q&#770;</em>) (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
-    </li>
-    <li>
-    Tolerable load (<em>q&#770;<sub>tol</sub></em>) (<a href=#DD:tolLoad>DD: tolLoad</a>)
-    </li>
-    <li>
-    Stress distribution factor (Function) based on Pbtol (<em>J<sub>tol</sub></em>) (<a href=#DD:sdf.tol>DD: sdf_tol</a>)
-    </li>
-    <li>
-    Minimum thickness (<em>h</em>) (<a href=#DD:min.thick>DD: min_thick</a>)
-    </li>
-    <li>
-    Aspect ratio (<em>AR</em>) (<a href=#DD:aspect.ratio>DD: aspect_ratio</a>)
-    </li>
-    </ul>
+<ul class="hide-list-style">
+<li>
+<div id="FR:Output-Quantities">
+Output-Quantities: Output the following quantities:
+                   <ul class="list">
+                   <li>
+                   Calculation of Capacity (<em>LR</em>) (<a href=#IM:calOfCap>IM: calOfCap</a>)
+                   </li>
+                   <li>
+                   Probability of Glass Breakage (<em>P<sub>b</sub></em>) (<a href=#IM:probOfBr>IM: probOfBr</a>)
+                   </li>
+                   <li>
+                   Calculation of Demand (<em>q</em>) (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
+                   </li>
+                   <li>
+                   Aspect ratio (<em>AR</em>) (<a href=#DD:aspect.ratio>DD: aspect_ratio</a>)
+                   </li>
+                   <li>
+                   Risk of failure (<em>B</em>) (<a href=#DD:risk.fun>DD: risk_fun</a>)
+                   </li>
+                   <li>
+                   Glass type factor (<em>GTF</em>) (<a href=#DD:gTF>DD: gTF</a>)
+                   </li>
+                   <li>
+                   Minimum thickness (<em>h</em>) (<a href=#DD:min.thick>DD: min_thick</a>)
+                   </li>
+                   <li>
+                   Stress distribution factor (Function) (<em>J</em>) (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
+                   </li>
+                   <li>
+                   Stress distribution factor (Function) based on Pbtol (<em>J<sub>tol</sub></em>) (<a href=#DD:sdf.tol>DD: sdf_tol</a>)
+                   </li>
+                   <li>
+                   Non-factored load (<em>NFL</em>) (<a href=#DD:nFL>DD: nFL</a>)
+                   </li>
+                   <li>
+                   Dimensionless load (<em>q&#770;</em>) (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
+                   </li>
+                   <li>
+                   Tolerable load (<em>q&#770;<sub>tol</sub></em>) (<a href=#DD:tolLoad>DD: tolLoad</a>)
+                   </li>
+                   </ul>
 </div>
-</p>
-</div>
+</li>
+</ul>
 <div id="Table:R1ReqInputs">
 <table class="table">
 <tr>
@@ -4182,7 +4217,7 @@ Data Constraints (<a href=#Sec:DataConstraints>Data Constraints</a>)
 R1 (<a href=#FR:Input-Glass-Props>FR: Input-Glass-Props</a>)
 </th>
 <th>
-R2 (<a href=#FR:System-Set-Values-Following-Assumptions>FR: System-Set-Values-Following-Assumptions</a>)
+R2 (<a href=#FR:System-Set-Values-Following-Assumptions>System-Set-Values-Following-Assumptions</a>)
 </th>
 <th>
 R3 (<a href=#FR:Check-Input-with-Data.Constraints>FR: Check-Input-with-Data_Constraints</a>)
@@ -4194,7 +4229,7 @@ R4 (<a href=#FR:Output-Values-and-Known-Quantities>FR: Output-Values-and-Known-Q
 R5 (<a href=#FR:Check-Glass-Safety>FR: Check-Glass-Safety</a>)
 </th>
 <th>
-R6 (<a href=#List:output.quantities>output_quantities</a>)
+R6 (<a href=#FR:Output-Quantities>Output-Quantities</a>)
 </th>
 </tr>
 <tr>
@@ -4264,7 +4299,7 @@ R1 (in <a href=#FR:Input-Glass-Props>FR: Input-Glass-Props</a>)
 </tr>
 <tr>
 <td>
-R2 (in <a href=#FR:System-Set-Values-Following-Assumptions>FR: System-Set-Values-Following-Assumptions</a>)
+R2 (in <a href=#FR:System-Set-Values-Following-Assumptions>System-Set-Values-Following-Assumptions</a>)
 </td>
 <td>
 
@@ -4524,7 +4559,7 @@ X
 </tr>
 <tr>
 <td>
-R6 (in <a href=#List:output.quantities>output_quantities</a>)
+R6 (in <a href=#FR:Output-Quantities>Output-Quantities</a>)
 </td>
 <td>
 
@@ -5176,7 +5211,7 @@ R1 (<a href=#FR:Input-Glass-Props>FR: Input-Glass-Props</a>)
 </tr>
 <tr>
 <td>
-R2 (<a href=#FR:System-Set-Values-Following-Assumptions>FR: System-Set-Values-Following-Assumptions</a>)
+R2 (<a href=#FR:System-Set-Values-Following-Assumptions>System-Set-Values-Following-Assumptions</a>)
 </td>
 <td>
 
@@ -5292,7 +5327,7 @@ R5 (<a href=#FR:Check-Glass-Safety>FR: Check-Glass-Safety</a>)
 </tr>
 <tr>
 <td>
-R6 (<a href=#List:output.quantities>output_quantities</a>)
+R6 (<a href=#FR:Output-Quantities>Output-Quantities</a>)
 </td>
 <td>
 

@@ -131,7 +131,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           [ Assumptions
           , TMs ([Label] ++ stdFields) [pbIsSafe, lrIsSafe]
           , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
-          , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+          , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand] HideDerivation
           , Constraints EmptyS dataConstraintUncertainty
                         (foldlSent [makeRef SRS.valsOfAuxConsLabel, S "gives", (plural value `ofThe` S "specification"), 

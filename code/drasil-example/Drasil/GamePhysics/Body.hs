@@ -91,7 +91,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
           , GDs [] [] HideDerivation -- No Gen Defs for Gamephysics
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) 
               [im1_new, im2_new, im3_new] ShowDerivation
-          , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+          , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , Constraints EmptyS dataConstraintUncertainty (S "FIXME") 
               [inDataConstTbl cpInputConstraints, outDataConstTbl cpOutputConstraints]
           ]

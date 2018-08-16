@@ -49,6 +49,7 @@ module Language.Drasil (
   , Constrained(constraints)
   , HasReasVal(reasVal)
   , ExprRelat(relat)
+  , DefiningExpr(defnExpr)
   , HasDerivation(derivations)
   , HasRefAddress(getRefAdd)
   -- Chunk.VarChunk
@@ -252,7 +253,8 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
   IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), HasReference(getReferences), 
-  HasLabel(getLabel), MayHaveLabel(getMaybeLabel), HasRefAddress(getRefAdd))
+  HasLabel(getLabel), MayHaveLabel(getMaybeLabel), HasRefAddress(getRefAdd),
+  DefiningExpr(defnExpr))
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Document.GetChunk(vars, combine', vars', combine, ccss)
 import Language.Drasil.Chunk.AssumpChunk

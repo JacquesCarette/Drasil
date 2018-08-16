@@ -6,7 +6,7 @@ import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual),
     RefSec(..), RefTab(TUnits), TSIntro(SymbConvention, TSPurpose), DocDesc, 
     intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
     Field(DefiningEquation, Description, Label, Symbol, Units), SolChSpec(SCSProg), 
-    SCSSub(DDs'), DerivationDisplay(HideDerivation), SSDSub(SSDSolChSpec), 
+    SCSSub(DDs), DerivationDisplay(HideDerivation), SSDSub(SSDSolChSpec), 
     SSDSec(SSDProg))
 
 import Drasil.HGHC.HeatTransfer (fp, hghc, hghcVarsDD, htInputs, htOutputs, 
@@ -55,7 +55,7 @@ thisSRS = RefSec (RefProg intro
   [TUnits, 
   tsymb [TSPurpose, SymbConvention [Lit (nw nuclearPhys), Manual (nw fp)]]]) : 
   [SSDSec ( SSDProg [SSDSolChSpec 
-  (SCSProg [DDs' [Label, Symbol, Units, DefiningEquation,
+  (SCSProg [DDs [Label, Symbol, Units, DefiningEquation,
   Description Verbose IncludeUnits] hghcVarsDD HideDerivation]) ] ) ]
   
 srsBody :: Document

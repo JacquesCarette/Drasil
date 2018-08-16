@@ -11,8 +11,8 @@ import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(typ))
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.Chunk.SymbolForm (eqSymb)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  HasSymbol(symbol), ExprRelat(relat), HasDerivation(derivations), 
-  HasReference(getReferences), HasAdditionalNotes(getNotes),
+  HasSymbol(symbol), DefiningExpr(defnExpr), -- ExprRelat(relat), 
+  HasDerivation(derivations), HasReference(getReferences), HasAdditionalNotes(getNotes),
   HasLabel(getLabel))
 import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
@@ -44,7 +44,7 @@ instance Idea               DataDefinition where getA c = getA $ c ^. qd
 instance HasSpace           DataDefinition where typ = qd . typ
 instance HasSymbol          DataDefinition where symbol e st = symbol (e^.qd) st
 instance Quantity           DataDefinition where 
-instance ExprRelat          DataDefinition where relat = qd . relat
+instance DefiningExpr       DataDefinition where defnExpr = qd . defnExpr
 instance HasReference       DataDefinition where getReferences = ref
 instance Eq                 DataDefinition where a == b = (a ^. uid) == (b ^. uid)
 instance HasDerivation      DataDefinition where derivations = deri

@@ -179,11 +179,11 @@ instance CodeIdea      CodeDefinition where codeName = (^. ci)
 instance Eq            CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit   CodeDefinition where getUnit = getUnit . view quant
 
-qtoc :: (Quantity q, ExprRelat q, HasSymbol q) => q -> CodeDefinition
-qtoc q = CD (qw q) (funcPrefix ++ symbToCodeName (codeSymb q)) (q ^. relat)
+qtoc :: (Quantity q, DefiningExpr q, HasSymbol q) => q -> CodeDefinition
+qtoc q = CD (qw q) (funcPrefix ++ symbToCodeName (codeSymb q)) (q ^. defnExpr)
 
 qtov :: QDefinition -> CodeDefinition
-qtov q = CD (qw q) (symbToCodeName (codeSymb q)) (q ^. relat)
+qtov q = CD (qw q) (symbToCodeName (codeSymb q)) (q ^. defnExpr)
 
 codeEquat :: CodeDefinition -> Expr
 codeEquat cd = cd ^. def

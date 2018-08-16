@@ -54,7 +54,7 @@ import Drasil.SWHS.Assumptions (newA1, newA2, newA3, newA7, newA8, newA9,
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
   orgDocIntro, physSyst1, physSyst2, traceFig1, traceFig2, traceIntro2, traceTrailing)
 import Drasil.SWHS.Changes (chgsStart, likeChg2, likeChg3, likeChg6)
-import Drasil.SWHS.Concepts (coil, progName, sWHT, tank, tank_para, transient, water)
+import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, tank_para, transient, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.IMods (eBalanceOnPCM, heatEInWtr)
 import Drasil.SWHS.GenDefs (nwtnCooling, rocTempSimp, rocTempSimpGD, nwtnCooling_desc, 
@@ -71,7 +71,7 @@ import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA,
   w_density_max, w_density_min, w_E, w_mass, w_vol)
 
 import Drasil.NoPCM.DataDesc (inputMod)
-import Drasil.NoPCM.Definitions (acronyms, ht_trans, srs_swhs)
+import Drasil.NoPCM.Definitions (ht_trans, srs_swhs)
 import Drasil.NoPCM.GenDefs (roc_temp_simp_deriv)
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
 import Drasil.NoPCM.Unitals (temp_init)
@@ -139,7 +139,7 @@ mkSRS = RefSec (RefProg intro
           [ Assumptions 
           , TMs ([Label] ++ stdFields) [t1ConsThermE] -- only have the same T1 with SWHS
           , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
-          , DDs' ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
+          , DDs ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
             [eBalanceOnWtr, heatEInWtr] ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty dataContMid

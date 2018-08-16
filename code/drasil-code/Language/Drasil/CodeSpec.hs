@@ -302,7 +302,7 @@ getDerivedInputs :: HasSymbolTable ctx => [DataDefinition] -> [QDefinition] -> [
 getDerivedInputs ddefs defs' ins consts sm  =
   let refSet = ins ++ map codevar consts
   in  if (ddefs == []) then filter ((`subsetOf` refSet) . flip (codevars) sm . (^.equat)) defs'
-      else filter ((`subsetOf` refSet) . flip codevars sm . (^.relat)) (map qdFromDD ddefs)
+      else filter ((`subsetOf` refSet) . flip codevars sm . (^.defnExpr)) (map qdFromDD ddefs)
 
 type Known = CodeChunk
 type Need  = CodeChunk

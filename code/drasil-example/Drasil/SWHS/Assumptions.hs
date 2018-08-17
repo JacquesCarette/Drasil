@@ -18,6 +18,8 @@ import Data.Drasil.Concepts.Physics (mech_energy)
 
 import Data.Drasil.SentenceStructures (foldlSent, ofThe, ofThe', sAnd, isThe)
 
+import Drasil.DocLang.SRS as SRS (assumpDom)
+
 import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfect_insul,
   charging, discharging)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
@@ -25,7 +27,6 @@ import Drasil.SWHS.Labels (thermalEnergyOnlyL, lawConvectiveCoolingWtrPCML,
   waterAlwaysLiquidL, noGaseousStatePCML, atmosphericPressureTankL, 
   nwtnCoolingL, rocTempSimpL, eBalanceOnWtrL, eBalanceOnPCML, heatEInWtrL, 
   heatEInPCML)
-import Drasil.SWHS.References (swhsCitations)
 import Drasil.SWHS.TMods (consThermE)
 import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, temp_init, temp_W,
   temp_PCM, htCap_L_P, htCap_W, htCap_S_P, w_density, pcm_density, pcm_vol)
@@ -33,8 +34,6 @@ import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, temp_init, temp_W,
 -------------------------
 -- 4.2.1 : Assumptions --
 -------------------------
-swhsRefDB :: ReferenceDB
-swhsRefDB = rdb [] [] newAssumptions [] [] swhsCitations []
 
 newAssumptions :: [AssumpChunk]
 newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10,
@@ -43,26 +42,54 @@ newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9,
 newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10,
   newA11, newA12, newA13, newA14, newA15, newA16, newA17, newA18, newA19, newA20 :: AssumpChunk
 
+assumpTEO, assumpHTCC, assumpCWTAT, assumpTPCAV, assumpDWPCoV, assumpSHECoV,
+  assumpLCCCW, assumpTHCCoT, assumpTHCCoL, assumpLCCWP, assumpCTNOD, assumpSITWP,
+  assumpPIS, assumpWAL, assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP,
+  assumpAPT, assumpVCN :: ConceptInstance
+
+-- FIXME: Remove the newA AssumpChunk's once ConceptInstance and SCSProg's
+-- Assumptions has been migrated to using assumpDom
+
 newA1  = assump "Thermal-Energy-Only"                       assumpS1  thermalEnergyOnlyL
+assumpTEO = cic "assumpTEO"           assumpS1 "Thermal-Energy-Only"                        SRS.assumpDom
 newA2  = assump "Heat-Transfer-Coeffs-Constant"             assumpS2  (mkLabelRAAssump' "Heat-Transfer-Coeffs-Constant"  )
+assumpHTCC = cic "assumpHTCC"         assumpS2 "Heat-Transfer-Coeffs-Constant"              SRS.assumpDom
 newA3  = assump "Constant-Water-Temp-Across-Tank"           assumpS3  (mkLabelRAAssump' "Constant-Water-Temp-Across-Tank" )
-newA4  = assump "Temp-PCM-Constant-Across-Volume"           assumpS4  (mkLabelRAAssump' "Temp-PCM-Constant-Across-Volume") 
+assumpCWTAT = cic "assumpCWTAT"       assumpS3 "Constant-Water-Temp-Across-Tank"            SRS.assumpDom
+newA4  = assump "Temp-PCM-Constant-Across-Volume"           assumpS4  (mkLabelRAAssump' "Temp-PCM-Constant-Across-Volume")
+assumpTPCAV = cic "assumpTPCAV"       assumpS4 "Temp-PCM-Constant-Across-Volume"            SRS.assumpDom
 newA5  = assump "Density-Water-PCM-Constant-over-Volume"    assumpS5  (mkLabelRAAssump' "Density-Water-PCM-Constant-over-Volume"  )
+assumpDWPCoV = cic "assumpDWPCoV"     assumpS5 "Density-Water-PCM-Constant-over-Volume"     SRS.assumpDom
 newA6  = assump "Specific-Heat-Energy-Constant-over-Volume" assumpS6  (mkLabelRAAssump' "Specific-Heat-Energy-Constant-over-Volume" )
+assumpSHECoV = cic "assumpSHECov"     assumpS6 "Specific-Heat-Energy-Constant-over-Volume"  SRS.assumpDom
 newA7  = assump "Law-Convective-Cooling-Coil-Water"         assumpS7  (mkLabelRAAssump' "Newton-Law-Convective-Cooling-Coil-Water" )
+assumpLCCCW = cic "assumpLCCCW"       assumpS7 "Newton-Law-Convective-Cooling-Coil-Water"   SRS.assumpDom
 newA8  = assump "Temp-Heating-Coil-Constant-over-Time"      assumpS8  (mkLabelRAAssump' "Temp-Heating-Coil-Constant-over-Time" )
+assumpTHCCoT = cic "assumpTHCCoT"     assumpS8 "Temp-Heating-Coil-Constant-over-Time"       SRS.assumpDom
 newA9  = assump "Temp-Heating-Coil-Constant-over-Length"    assumpS9  (mkLabelRAAssump' "Temp-Heating-Coil-Constant-over-Length" )
+assumpTHCCoL = cic "assumpTHCCoL"     assumpS9 "Temp-Heating-Coil-Constant-over-Length"     SRS.assumpDom
 newA10 = assump "Law-Convective-Cooling-Water-PCM"          assumpS10 lawConvectiveCoolingWtrPCML
+assumpLCCWP = cic "assumpLCCWP"       assumpS10 "Law-Convective-Cooling-Water-PCM"          SRS.assumpDom -- FIXME: Use label once ConceptInstance migrates to them
 newA11 = assump "Charging-Tank-No-Temp-Discharge"           assumpS11 (mkLabelRAAssump' "Charging-Tank-No-Temp-Discharge" )
+assumpCTNOD = cic "assumpCTNOD"       assumpS11 "Charging-Tank-No-Temp-Discharge"           SRS.assumpDom
 newA12 = assump "Same-Initial-Temp-Water-PCM"               assumpS12 (mkLabelRAAssump' "Same-Initial-Temp-Water-PCM" )
-newA13 = assump "PCM-Initially-Solid"                       assumpS13 (mkLabelRAAssump' "PCM-Initially-Solid") 
+assumpSITWP = cic "assumpSITWP"       assumpS12 "Same-Initial-Temp-Water-PCM"               SRS.assumpDom
+newA13 = assump "PCM-Initially-Solid"                       assumpS13 (mkLabelRAAssump' "PCM-Initially-Solid")
+assumpPIS = cic "assumpPIS"           assumpS13 "PCM-Initially-Solid"                       SRS.assumpDom
 newA14 = assump "Water-Always-Liquid"                       assumpS14 waterAlwaysLiquidL
+assumpWAL = cic "assumpWAL"           assumpS14 "Water-Always-Liquid"                       SRS.assumpDom -- FIXME: Use label once ConceptInstance migrates to them
 newA15 = assump "Perfect-Insulation-Tank"                   assumpS15 (mkLabelRAAssump' "Perfect-Insulation-Tank" )
+assumpPIT = cic "assumpPIT"           assumpS15 "Perfect-Insulation-Tank"                   SRS.assumpDom
 newA16 = assump "No-Internal-Heat-Generation-By-Water-PCM"  assumpS16 (mkLabelRAAssump' "No-Internal-Heat-Generation-By-Water-PCM" )
+assumpNIHGBWP = cic "assumpNIHGBWP"   assumpS16 "No-Internal-Heat-Generation-By-Water-PCM"  SRS.assumpDom
 newA17 = assump "Volume-Change-Melting-PCM-Negligible"      assumpS17 (mkLabelRAAssump' "Volume-Change-Melting-PCM-Negligible" )
+assumpVCMPN = cic "assumpVCMPN"       assumpS17 "Volume-Change-Melting-PCM-Negligible"      SRS.assumpDom
 newA18 = assump "No-Gaseous-State-PCM"                      assumpS18 noGaseousStatePCML
+assumpNGSP = cic "assumpNGSP"         assumpS18 "No-Gaseous-State-PCM"                      SRS.assumpDom -- FIXME: Use label once ConceptInstance migrates to them
 newA19 = assump "Atmospheric-Pressure-Tank"                 assumpS19 atmosphericPressureTankL
+assumpAPT = cic "assumpAPT"           assumpS19 "Atmospheric-Pressure-Tank"                 SRS.assumpDom -- FIXME: Use label once ConceptInstance migrates to them
 newA20 = assump "Volume-Coil-Negligible"                    assumpS20 (mkLabelRAAssump' "Volume-Coil-Negligible" )
+assumpVCN = cic "assumpVCN"           assumpS20 "Volume-Coil-Negligible"                    SRS.assumpDom
 
 swhsAssumptionsS:: [Sentence]
 swhsAssumptionsS = [assumpS1, assumpS2, assumpS3, assumpS4, assumpS5,

@@ -1,0 +1,426 @@
+\documentclass{minimal}
+
+\usepackage{verbatim}
+
+\usepackage[a1paper,margin=1cm,landscape]{geometry}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes,shadows,arrows}
+
+\begin{document}
+
+\tikzstyle{class}=[rectangle, draw=black, rounded corners, fill=black!40, drop shadow,
+        text centered, anchor=north, text=white, text width=3cm]
+\tikzstyle{data}=[rectangle, draw=black, rounded corners, fill=white!40, drop shadow,
+        text centered, anchor=north, text=black, text width=3cm] 
+\tikzstyle{comment}=[rectangle, draw=black, rounded corners, fill=green, drop shadow,
+        text centered, anchor=north, text=white, text width=3cm]
+\tikzstyle{myarrow}=[->, >=triangle 90, thick]
+\tikzstyle{line}=[-, thick]
+\tikzstyle{hasA}=[rectangle, fill=green, text=black, text width=0.65cm];
+\tikzstyle{greenArrow}=[->, >=triangle 90, thick]
+
+\begin{center}
+\begin{tikzpicture}[node distance=2cm]
+\node (Anchor1) []
+		{
+		};
+
+\node (Concept) [class, below left=0cm and 10cm of Anchor1]
+		{
+			\textbf{Concept}			
+		};
+		
+\node (Quantity) [class, below right= 2cm and 5cm of Concept]
+		{
+			\textbf{Quantity}
+		};
+
+\node (Idea) [class, below=of Concept, text width=4cm]
+		{
+			\textbf{Idea};
+		};
+
+\node (CI) [data, below=1cm of Idea] 
+		{
+			\textbf{CI};
+			
+			cid : UID
+			
+			ni : NP
+			
+			ab : String
+		};
+
+\node (ConceptChunk) [data, left=of CI, text width=5cm]
+		{
+			\textbf{ConceptChunk};
+			
+			idea : IdeaDict
+			
+			dad : DefnAndDomain
+		};
+		
+\node (CommonConcept) [data, below=3cm of CI, text width=4cm]
+		{ 
+			\textbf{CommonConcept};
+			
+			comm : CI
+			
+			def : Sentence
+			
+			dom : [UID]
+		};
+
+\node (HasDerivation) [class,  below=of CommonConcept]
+		{
+			\textbf{HasDerivation}
+		};
+
+\node (ConceptInstance) [data, below=of ConceptChunk, text width=4cm]
+		{
+			\textbf{ConceptInstance};
+			
+			cc : ConceptChunk
+			
+			shnm : ShortName
+		};
+			
+\node (DefnAndDomain) [data, above=3cm of ConceptChunk, text width=4cm]
+		{ 
+			\textbf{DefnAndDomain};
+			
+			defn' : Sentence
+			
+			cdom' : [UID]
+		};	
+			
+\node (HasShortName) [class, left=of DefnAndDomain]
+		{
+			\textbf{HasShortName}
+		};
+
+\node (HasUID) [class, left=of HasShortName]
+		{
+			\textbf{HasUID}
+		};
+
+\node (AssumpChunk) [data, below=of HasUID, text width=4cm]
+		{
+			\textbf{AssumpChunk};
+			
+			aid : UID
+			
+			assuming : Sentence
+			
+			refName : ShortName
+		};
+
+\node (Citation) [data, left=of AssumpChunk, text width=5cm]
+		{
+			\textbf{Citation};
+			
+			id : UID
+			
+			citeID : EntryID
+			
+			externRefT : CitationKind
+			
+			fields : [CiteField]
+		};
+
+\node (Reason) [data, left=3cm of Citation]
+		{
+			\textbf{Reason};
+		};
+		
+\node (TheoryConstraint) [data, below=0cm of Reason, text width=4cm]
+		{
+			\textbf{TheoryConstraint};
+		};
+
+\node (Constraint) [data, below=1.14cm of Reason]
+		{ 
+			\textbf{Constraint};
+		};
+		
+\node (ConstraintReason) [data, below=0cm of Constraint, text width=4cm]
+		{
+			\textbf{ConstraintReason};
+		};
+
+\node (Scope) [data, below=0cm of TheoryConstraint]
+		{
+			\textbf{Scope};
+		};
+		
+\node (ScopeType) [data, below=0cm of ConstraintReason]
+		{
+			\textbf{ScopeType}:
+		};
+
+\node (Change) [data, right=1cm of AssumpChunk, text width=4cm]
+		{ 
+			\textbf{Change};
+			
+			id : UID
+			
+			chngType : ChngType
+			
+			chng : Sentence
+			
+			refName : ShortName
+		};
+		
+\node (QDefinition) [data, below left= 0cm and -9cm of CI, text width=4cm]
+		{ 
+			\textbf{QDefinition};
+			
+			qua : QuantityDict
+			
+			equat : Expr
+			
+			ref : References
+			
+			deriv : Derivation
+			
+			refName : ShortName
+			
+			notes : Maybe [Sentece]
+		};
+
+\node (DataDefinition) [data, below right=2cm and 0cm of CommonConcept, text width=5cm]
+		{
+			\textbf{DataDefinition};
+			
+			qd : QDefinition
+			
+			scp : ScopeType
+			
+			ref : References
+			
+			deri : Derivation
+			
+			lbl : ShortName
+			
+			notes : Maybe [Sentence]
+		};
+		
+\node (InstanceModel) [data, left=5.7cm of DataDefinition, text width=5cm]
+		{
+			\textbf{InstanceModel};
+			
+			rc : RelationConcept
+			
+			imInputs : Inputs
+			
+			inCons : InputConstraints
+			
+			imOutput : Output
+			
+			outCons : OutputConstraints
+			
+			ref : References
+			
+			deri : Derivation
+			
+			refName : ShortName
+			
+			notes : Maybe [Sentence]
+		};		
+		
+\node (DefinedQuantityDict) [data, below=of DataDefinition, text width=5cm]
+		{
+			\textbf{DefinedQuantityDict};
+			
+			con : ConceptChunk
+			
+			symb : Stage $\rightarrow$ Symbol
+			
+			spa : Space
+			
+			unit' : Maybe UnitDefn
+			
+			deri : Derivation
+		};		
+		
+\node (UnitaryConceptDict) [data, below=of DefinedQuantityDict, text width=5cm]
+		{
+			\textbf{UnitaryConceptDict};
+			
+			unitary : UnitaryChunk		
+			
+			dad : DefnAndDomain
+		};
+		
+\node (VarChunk) [data, right=of DefinedQuantityDict, text width=4cm]
+		{ 
+			\textbf{VarChunk};
+			
+			ni : IdeadDict
+			
+			vsymb : Stage $\rightarrow$ Symbol
+				
+			vtyp : Space
+		};	
+		
+\node (QuantityDict) [data, right=of QDefinition, text width=5cm]
+		{
+			\textbf{QuantityDict};
+
+			id' : IdeaDict
+			
+			typ' : Space
+			
+			symb' : Stage $\rightarrow$ Symbol
+			
+			unit' : Maybe UnitDefn
+		};
+
+\node (ConstrConcept) [data, right=of QuantityDict, text width=5cm]
+		{
+			\textbf{ConstrConcept};
+			
+			defq : DefinedQuantityDict
+			
+			constr' : [Constraint]
+			
+			reasV : Maybe Expr
+		};
+
+\node (ConstrainedChunk) [data, right=of DataDefinition, text width=5cm]
+		{
+			\textbf{ConstrainedChunk};
+			
+			qd : QuantityDict
+			
+			constr : [Constraint]
+			
+			reasV : Maybe Expr
+		};
+
+\node (Unitary) [class, right=of ConstrainedChunk]
+		{
+			\textbf{Unitary};
+		};
+	
+\node (UnitalChunk) [data, below=of Unitary, text width=5cm]
+		{
+			\textbf{UnitalChunk};
+			
+			defq' : DefinedQuantityDict
+			
+			uni : UnitDefn
+		};	
+
+\node (UncertainQuantity) [class, below=3cm of UnitalChunk, text width=5cm]
+		{
+			\textbf{UncertainQuantity};
+		};
+		
+
+\node (UncertainChunk) [data, below left= 1cm and 0cm of	UncertainQuantity, text width=5cm]
+		{
+			\textbf{UncertainChunk};
+			
+			conc : ConstrainedChunk	
+			
+			unc' : Maybe Double
+		};
+
+\node (UncertQ) [data, below=1cm of UncertainQuantity, text width=5cm]
+		{
+			\textbf{UncertQ};
+			
+			conc : ConstrConcept	
+			
+			unc' : Maybe Double
+		};
+
+\node (UnitaryChunk) [data, right=0.5cm of UnitalChunk, text width=4cm]
+		{
+			\textbf{UnitaryChunk};
+			
+			quant : QuantityDict
+			
+			un : UnitDefn
+		};
+			
+//is-a relations
+
+\draw[myarrow] (AssumpChunk.north) -- ++ (0,0) -| (HasUID.south);
+\draw[myarrow] (AssumpChunk.north) -- ++ (0,1) -| (HasShortName.south);
+
+\draw[myarrow] (Citation.north) -- ++ (0,0.75) -| (HasUID.south);
+
+\draw[myarrow] (Change.north) -- ++ (0,0.8) -|
+(HasUID.south);
+
+\draw[myarrow] (QDefinition.east) -- ++ (0.5,0) -|(Quantity.south);
+
+\draw[myarrow] (QuantityDict.west) -- ++ (-0.5,0) -| (Quantity.south);
+
+\draw[myarrow] (DataDefinition.east) -- ++ (0.5,0) -| (Quantity.south);
+
+\draw[myarrow] (DataDefinition.west) -- ++ (-0.5,0) -| (HasDerivation.south);
+
+\draw[myarrow] (ConstrainedChunk.west) -- ++ (-0.5,0) -| (Quantity.south);
+
+\draw[myarrow] (DefinedQuantityDict.east) -- ++ (0.5,0) -| (Quantity.south);
+
+\draw[myarrow] (ConstrConcept.north) -- ++ (0,1.2) -| (Quantity.south);
+
+\draw[myarrow] (ConstrConcept.north) -- ++ (0,5.52) -| (Concept.south);
+
+\draw[myarrow] (UnitaryConceptDict.east) -- ++ (0.5,0) -| (Quantity.south);
+
+\draw[myarrow] (VarChunk.west) -- ++ (-0.5,0) -| (Quantity.south);
+
+\draw[myarrow] (UnitalChunk.north) -- ++ (0,0) -| (Unitary.south);
+
+\draw[myarrow] (UnitaryChunk.north) -- ++ (0,0.5) -| (Unitary.south);
+
+\draw[myarrow] (UncertainChunk.north) -- ++ (0,0.4) -| (UncertainQuantity.south);
+
+\draw[myarrow] (UncertQ.north) -- ++ (0,0) -| (UncertainQuantity.south);
+
+\draw[myarrow] (CI.north) -- ++ (0,0.25) -| (Idea.south);
+
+\draw[myarrow] (ConceptChunk.east) -- ++ (1,0) -- ++ (0,4) -| (Concept.south);
+
+\draw[myarrow] (CommonConcept.west) -- ++ (-0.515,0) -- ++ (0,8.8) -| (Concept.south);
+
+\draw[myarrow] (ConceptInstance.east) -- ++ (1.5,0) -- ++ (0,7.35) -| (Concept.south);
+
+\draw[myarrow] (InstanceModel.east) -- ++ (0,0) -| (HasDerivation.south);
+
+\draw[myarrow] (InstanceModel.north) -- ++ (0,0.5) -- ++ (3.55,0) -- ++ (0,10.6) -| (Concept.south);
+
+//has-a relations
+
+\node (hasA1) [hasA, above=1cm of DataDefinition] {has a}; 
+
+\node (hasA2) [hasA, above=1.45cm of Unitary] {has a};
+
+\node (hasA3) [hasA, below=10cm of ConstrainedChunk] {has a};
+
+\node (hasA4) [hasA, below right=1.5cm and -1cm of CI] {has a};
+
+\node (hasA5) [hasA, above right=1.2cm and -2.2cm of ConceptChunk] {has a};
+
+\draw[myarrow,dashed] (DataDefinition.north)-- ++ (0,1) -- ++ (-2,0) -- (QDefinition.west);
+
+\draw[myarrow,dashed] (ConstrainedChunk.north)-- ++ (0,1) -- ++ (5,0) -- (QuantityDict.east);
+ 
+\draw[myarrow, dashed] (UnitaryChunk.north) -- ++ (0,2) -- (QuantityDict.east); 
+ 
+\draw[myarrow,dashed] (UnitaryConceptDict.south) -- ++ (0,-1) -| (UnitaryChunk.south);
+ 
+\draw[myarrow,dashed] (ConceptChunk.north) -- ++ (0,0) -- (DefnAndDomain.south); 
+ 
+\draw[myarrow,dashed] (CommonConcept.north) -- ++ (0,0) -- ++ (0,0) -- (CI.south);
+ 
+\end{tikzpicture}
+\end{center}
+
+\end{document}

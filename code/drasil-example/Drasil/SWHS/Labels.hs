@@ -26,6 +26,12 @@ noGaseousStatePCML          = mkLabelRAAssump' "No-Gaseous-State-PCM"
 atmosphericPressureTankL    = mkLabelRAAssump' "Atmospheric-Pressure-Tank"
 volumeCoilL                  = mkLabelRAAssump' "Volume-Coil-Negligible"
 
+-- Data Definition
+dd1HtFluxCL = mkLabelSame "ht_flux_C" (Def DD)
+dd2HtFluxPL = mkLabelSame "ht_flux_P" (Def DD)
+dd3HtFusionL = mkLabelSame "htFusion" (Def DD)
+dd4MeltFracL = mkLabelSame "melt_frac" (Def DD)
+
 -- General Definitions
 nwtnCoolingL, rocTempSimpL :: Label
 nwtnCoolingL = mkLabelSame "nwtnCooling" (Def General)

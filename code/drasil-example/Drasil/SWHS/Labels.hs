@@ -6,10 +6,25 @@ import Language.Drasil
 thermalEnergyOnlyL, lawConvectiveCoolingWtrPCML, waterAlwaysLiquidL, 
     noGaseousStatePCML, atmosphericPressureTankL :: Label
 thermalEnergyOnlyL          = mkLabelRAAssump' "Thermal-Energy-Only"
+heatTransferCoeffL          = mkLabelRAAssump' "Heat-Transfer-Coeffs-Constant"
+contantWaterTempL           = mkLabelRAAssump' "Constant-Water-Temp-Across-Tank"
+tempPcmConsL                = mkLabelRAAssump' "Temp-PCM-Constant-Across-Volume"
+densityWaterL               = mkLabelRAAssump' "Density-Water-PCM-Constant-over-Volume"
+specificHeatL               = mkLabelRAAssump' "Specific-Heat-Energy-Constant-over-Volume"
+newtoLawConvecL             = mkLabelRAAssump' "Newton-Law-Convective-Cooling-Coil-Water"
+tempOverTimeL               = mkLabelRAAssump' "Temp-Heating-Coil-Constant-over-Time"
+tempOverLengthL             = mkLabelRAAssump' "Temp-Heating-Coil-Constant-over-Length"
 lawConvectiveCoolingWtrPCML = mkLabelRAAssump' "Law-Convective-Cooling-Water-PCM"
+chargeTankL                 = mkLabelRAAssump' "Charging-Tank-No-Temp-Discharge"
+sameInitialL                = mkLabelRAAssump' "Same-Initial-Temp-Water-PCM"
+pcmInitialSolidL            = mkLabelRAAssump' "PCM-Initially-Solid"
 waterAlwaysLiquidL          = mkLabelRAAssump' "Water-Always-Liquid"
+perfectInsulationL          = mkLabelRAAssump' "Perfect-Insulation-Tank"
+noInternalHeatL             = mkLabelRAAssump' "No-Internal-Heat-Generation-By-Water-PCM"
+volumeChangeMeltL           = mkLabelRAAssump' "Volume-Change-Melting-PCM-Negligible"
 noGaseousStatePCML          = mkLabelRAAssump' "No-Gaseous-State-PCM"
 atmosphericPressureTankL    = mkLabelRAAssump' "Atmospheric-Pressure-Tank"
+volumeCoilL                  = mkLabelRAAssump' "Volume-Coil-Negligible"
 
 -- General Definitions
 nwtnCoolingL, rocTempSimpL :: Label

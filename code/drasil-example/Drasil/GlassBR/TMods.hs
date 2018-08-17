@@ -8,6 +8,7 @@ import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
 
 import Drasil.GlassBR.Concepts (lResistance)
 import Drasil.GlassBR.IMods (glassBRsymb, calofCapacity, calofDemand, probOfBreak)
+import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (demand, demandq, is_safePb, is_safeLR, lRe,
   pb_tol, prob_br)
 
@@ -29,7 +30,7 @@ gbrTMods = [pbIsSafe, lrIsSafe]
 lrIsSafe :: TheoryModel
 lrIsSafe = tm' (cw lrSafetyReq)
    (tc' "isSafeLR" [qw is_safeLR, qw lRe, qw demand] ([] :: [ConceptChunk])
-   [relToQD locSymbMap lrSafetyReq] [TCon Invariant $ (sy is_safeLR) $= (sy lRe) $> (sy demand)] []) 
+   [relToQD locSymbMap lrSafetyReq] [TCon Invariant $ (sy is_safeLR) $= (sy lRe) $> (sy demand)] [] [makeRef astm2009]) 
    l1 [lrSafeDescr]
   where locSymbMap = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) glassBRsymb ([] :: [UnitDefn])
 
@@ -50,7 +51,7 @@ lrSafeDescr = tDescr (is_safeLR) s ending
 pbIsSafe :: TheoryModel
 pbIsSafe = tm' (cw pbSafetyReq) 
   (tc' "isSafe" [qw is_safePb, qw prob_br, qw pb_tol] ([] :: [ConceptChunk])
-  [] [TCon Invariant $ (sy is_safePb) $= (sy prob_br) $< (sy pb_tol)] [])
+  [] [TCon Invariant $ (sy is_safePb) $= (sy prob_br) $< (sy pb_tol)] [] [makeRef astm2009])
   l2 [pbSafeDescr]
 
 pbSafetyReq :: RelationConcept

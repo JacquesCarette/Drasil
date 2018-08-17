@@ -878,7 +878,7 @@ This section simplifies the original problem and helps in developing the theoret
 <ul class="hide-list-style">
 <li>
 <div id="A:Thermal-Energy-Only">
-Thermal-Energy-Only: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible [<a href=#T:t1ConsThermE>T: t1ConsThermE</a>].
+Thermal-Energy-Only: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible [<a href=#T:consThermE>T: consThermE</a>].
 </div>
 </li>
 </ul>
@@ -983,7 +983,7 @@ Theoretical Models
 <p class="paragraph">
 This section focuses on the general equations and laws that SWHS is based on.
 </p>
-<div id="T:t1ConsThermE">
+<div id="T:consThermE">
 <table class="tdefn">
 <tr>
 <th>
@@ -1000,7 +1000,7 @@ Conservation of thermal energy
 Equation
 </th>
 <td>
-<div id="Eqn:T:t1ConsThermE">
+<div id="Eqn:T:consThermE">
 <div class="equation">
 <em>&minus;∇&sdot;<b>q</b>&plus;g = ρ&#8239;C&#8239;<div class="fraction">
 <span class="fup">
@@ -1060,7 +1060,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href="http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm">Fourier Law of Heat Conduction and Heat Equation</a>
 </p>
 </td>
 </tr>
@@ -1157,7 +1157,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#incroperaEtAl2007>incroperaEtAl2007</a> (pg. 8)
 </p>
 </td>
 </tr>
@@ -1259,7 +1259,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+FIXME: no sources
 </p>
 </td>
 </tr>
@@ -1279,7 +1279,7 @@ FIXME: This needs to be filled in
 Detailed derivation of simplified rate of change of temperature.
 </p>
 <p class="paragraph">
-Integrating <a href=#T:t1ConsThermE>T: t1ConsThermE</a> over a volume (<em>V</em>), we have:
+Integrating <a href=#T:consThermE>T: consThermE</a> over a volume (<em>V</em>), we have:
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -1324,7 +1324,7 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 </div>
 </div>
 <p class="paragraph">
-Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by Assumptions (A3), (A4), and (A5), we have:
+Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by <a href=#A:Constant-Water-Temp-Across-Tank>A: Constant-Water-Temp-Across-Tank</a>, <a href=#A:Temp-PCM-Constant-Across-Volume>A: Temp-PCM-Constant-Across-Volume</a>, and <a href=#A:Density-Water-PCM-Constant-over-Volume>A: Density-Water-PCM-Constant-over-Volume</a>, we have:
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -1437,7 +1437,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#koothoor2013>koothoor2013</a>
 </p>
 </td>
 </tr>
@@ -1589,7 +1589,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#koothoor2013>koothoor2013</a> (with PCM removed)
 </p>
 </td>
 </tr>
@@ -1778,7 +1778,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The above equation is derived using <a href=#T:t2SensHtE>T: t2SensHtE</a>. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#A:Water-Always-Liquid>A: Water-Always-Liquid</a>, <a href=#A:Atmospheric-Pressure-Tank>A: Atmospheric-Pressure-Tank</a>).
+The above equation is derived using <a href=#T:sensHtE>T: sensHtE</a>. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#A:Water-Always-Liquid>A: Water-Always-Liquid</a>, <a href=#A:Atmospheric-Pressure-Tank>A: Atmospheric-Pressure-Tank</a>).
 </p>
 </td>
 </tr>
@@ -1788,7 +1788,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#koothoor2013>koothoor2013</a>
 </p>
 </td>
 </tr>
@@ -2282,7 +2282,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 
 </th>
 <th>
-T1 (<a href=#T:t1ConsThermE>T: t1ConsThermE</a>)
+T1 (<a href=#T:consThermE>T: consThermE</a>)
 </th>
 <th>
 GD1 (<a href=#GD:nwtnCooling>GD: nwtnCooling</a>)
@@ -2302,7 +2302,7 @@ IM2 (<a href=#IM:heatEInWtr>IM: heatEInWtr</a>)
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:t1ConsThermE>T: t1ConsThermE</a>)
+T1 (<a href=#T:consThermE>T: consThermE</a>)
 </td>
 <td>
 
@@ -2789,7 +2789,7 @@ A14 (<a href=#A:Volume-Coil-Negligible>A: Volume-Coil-Negligible</a>)
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:t1ConsThermE>T: t1ConsThermE</a>)
+T1 (<a href=#T:consThermE>T: consThermE</a>)
 </td>
 <td>
 X

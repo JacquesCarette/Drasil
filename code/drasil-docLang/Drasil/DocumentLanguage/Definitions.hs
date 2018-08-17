@@ -70,7 +70,7 @@ derivation g = map makeDerivationContents (getDerivation g)
 -- | Helper function for creating the layout objects
 -- (paragraphs and equation blocks) for a derivation.
 makeDerivationContents :: Sentence -> Contents
-makeDerivationContents (E e) = LlC $ llcc (mkEmptyLabel EqnB) (EqnBlock e) --FIXME: Derivation needs labels for it's equations
+makeDerivationContents (E e) = LlC $ llcc (mkEmptyLabel EqnB) (EqnBlock e) --FIXME: Derivation needs labels for it's equation
 makeDerivationContents s     = UlC $ ulcc $ Paragraph s
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
@@ -85,7 +85,7 @@ mkTMField t _ l@DefiningEquation fs =
 mkTMField t m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] (map tConToExpr (t ^. invariants))) : fs
 mkTMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
-mkTMField _ _ l@(Source) fs = (show l, fixme) : fs --FIXME: fill this in
+mkTMField t _ l@(Source) fs = (show l, map mkParagraph $ t ^. getReferences) : fs
 mkTMField t _ l@(Notes) fs = 
   maybe fs (\ss -> (show l, map mkParagraph ss) : fs) (t ^. getNotes)
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
@@ -140,8 +140,8 @@ mkGDField g _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (g ^. relat)
 mkGDField g m l@(Description v u) fs = (show l,
   (buildDescription v u (g ^. relat) m) []) : fs
 mkGDField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
-mkGDField _ _ l@(Source) fs = (show l, fixme) : fs
-mkGDField d _ l@(Notes) fs = maybe fs (\ss -> (show l, map mkParagraph ss) : fs) (d ^. getNotes)
+mkGDField g _ l@(Source) fs = (show l, [mkParagraph $ getSource g]) : fs
+mkGDField g _ l@(Notes) fs = maybe fs (\ss -> (show l, map mkParagraph ss) : fs) (g ^. getNotes)
 mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 
 -- | Create the fields for an instance model from an 'InstanceModel' chunk

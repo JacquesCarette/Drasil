@@ -9,13 +9,13 @@ import Control.Arrow (second)
 import qualified Language.Drasil as L (People, Person, 
   CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
   Symbol(Corners, Concat, Special, Atomic, Empty, Atop), USymb(US),
-  DType(DD, TM, Instance, General), MaxWidthPercent, 
+  DType(DD, TM, Instance, General), MaxWidthPercent, RefType(Link),
   Decoration(Prime, Hat, Vector), Document, HasDefinitionTable, HasSymbolTable,
   nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special)
 
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (em, wrap, refwrap, caption, image, div_tag,
-  td, th, tr, bold, sub, sup, cases, fraction, reflink, paragraph, h, html, body,
+  td, th, tr, bold, sub, sup, cases, fraction, reflink, reflinkURI, paragraph, h, html, body,
   author, article_title, title, linkCSS, head_tag)
 import qualified Language.Drasil.Output.Formats as F
 
@@ -98,12 +98,12 @@ p_spec (S s)             = text s
 p_spec (Sy s)            = text $ uSymb s
 p_spec (Sp s)            = text $ unPH $ L.special s
 p_spec HARDNL            = text "<br />"
-p_spec (Ref _ r a _)    = reflink r $ p_spec a
+p_spec (Ref L.Link r a _)  = reflinkURI r $ p_spec a
+p_spec (Ref _      r a _)  = reflink    r $ p_spec a
 p_spec EmptyS            = text "" -- Expected in the output
 p_spec (Quote q)         = text "&quot;" <> p_spec q <> text "&quot;"
 -- p_spec (Acc Grave c)     = text $ '&' : c : "grave;" --Only works on vowels.
 -- p_spec (Acc Acute c)     = text $ '&' : c : "acute;" --Only works on vowels.
-
 
 -- | Renders symbols for HTML document
 symbol :: L.Symbol -> String

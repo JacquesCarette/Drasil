@@ -45,18 +45,18 @@ instance HasAdditionalNotes GenDefn where getNotes = notes
 instance MayHaveUnit        GenDefn where getUnit u = gdUnit u
 
 gd :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
-  Derivation -> Label -> GenDefn
-gd r (Just u) derivs lbe = GD r (Just (unitWrapper u)) derivs [] lbe Nothing
-gd r Nothing derivs lbe = GD r Nothing derivs [] lbe Nothing
+  Derivation -> [Reference] -> Label -> GenDefn
+gd r (Just u) derivs ref lbe = GD r (Just (unitWrapper u)) derivs ref lbe Nothing
+gd r Nothing  derivs ref lbe = GD r Nothing                derivs ref lbe Nothing
 
-gdNoUnitDef :: RelationConcept -> Derivation -> Label -> GenDefn
-gdNoUnitDef r derivs lbe = GD r Nothing derivs [] lbe Nothing
+gdNoUnitDef :: RelationConcept -> Derivation -> [Reference] -> Label -> GenDefn
+gdNoUnitDef r derivs ref lbe = GD r Nothing derivs ref lbe Nothing
 
 gd' :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
-  Derivation -> String -> [Sentence] -> GenDefn
-gd' r (Just u) derivs sn note = GD r (Just (unitWrapper u)) derivs [] (mkLabelSame sn (Def General)) (Just note)
-gd' r Nothing derivs sn note = GD r Nothing derivs [] (mkLabelSame sn (Def General)) (Just note)
+  Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
+gd' r (Just u) derivs ref sn note = GD r (Just (unitWrapper u)) derivs ref (mkLabelSame sn (Def General)) (Just note)
+gd' r Nothing  derivs ref sn note = GD r Nothing                derivs ref (mkLabelSame sn (Def General)) (Just note)
 
-gd'' :: RelationConcept -> String -> [Sentence] -> GenDefn
-gd'' r sn []   = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) [] (mkLabelSame sn (Def General)) Nothing
-gd'' r sn note = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) [] (mkLabelSame sn (Def General)) (Just note)
+gd'' :: RelationConcept -> [Reference] -> String -> [Sentence] -> GenDefn
+gd'' r ref sn []   = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) ref (mkLabelSame sn (Def General)) Nothing
+gd'' r ref sn note = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) ref (mkLabelSame sn (Def General)) (Just note)

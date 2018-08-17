@@ -11,7 +11,7 @@ import Control.Arrow (second)
 import qualified Language.Drasil as L (USymb(US), 
   RenderSpecial(..), People, rendPersLFM, HasDefinitionTable, HasSymbolTable,
   CitationKind(..), Month(..), Symbol(..), Sentence(S), (+:+), MaxWidthPercent,
-  Decoration(Prime, Hat, Vector), Document, special)
+  Decoration(Prime, Hat, Vector), Document, special, getStringSN)
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
@@ -36,7 +36,7 @@ import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, item', description,
   includegraphics, center, figure, item, symbDescription, enumerate, itemize, toEqn, empty,
   newline, superscript, parens, fraction, quote, ref, ucref, lcref, aref, mref, sref, rref,
-  hyperref, snref, cite, sec, newpage, maketoc, maketitle, document, author, title)
+  hyperref, snref, cite, href, sec, newpage, maketoc, maketitle, document, author, title)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (<>), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
 import Language.Drasil.TeX.Preamble (genPreamble)
@@ -260,23 +260,24 @@ spec a@(s :+: t) = s' <> t'
     ctx = const $ needs a
     s' = switch ctx $ spec s
     t' = switch ctx $ spec t
-spec (E ex)      = toMath $ pure $ text $ p_expr ex
-spec (S s)       = pure $ text (concatMap escapeChars s)
-spec (Sy s)      = p_unit s
-spec (Sp s)      = pure $ text $ unPL $ L.special s
-spec HARDNL      = pure $ text "\\newline"
-spec (Ref t@RT.Sect r _ _) = sref (show t) (pure $ text r)
-spec (Ref t@(RT.Def _) r _ _)  = hyperref (show t) (pure $ text r)
-spec (Ref RT.Mod r _ _)    = mref  (pure $ text r)
-spec (Ref (RT.Req _) r _ _)= rref  (pure $ text r)
-spec (Ref RT.Assump r _ _) = aref  (pure $ text r)
-spec (Ref RT.LCh r _ _)     = lcref (pure $ text r)
-spec (Ref RT.UnCh r _ _)     = ucref (pure $ text r)
-spec (Ref RT.Cite r _ _)   = cite  (pure $ text r)
-spec (Ref RT.Blank r sn _) = snref r $ spec sn
-spec (Ref t r _ _)         = ref (show t) (pure $ text r)
-spec EmptyS              = empty
-spec (Quote q)           = quote $ spec q
+spec (E ex) = toMath $ pure $ text $ p_expr ex
+spec (S s)  = pure $ text (concatMap escapeChars s)
+spec (Sy s) = p_unit s
+spec (Sp s) = pure $ text $ unPL $ L.special s
+spec HARDNL = pure $ text "\\newline"
+spec (Ref t@RT.Sect r _ _)    = sref (show t) (pure $ text r)
+spec (Ref t@(RT.Def _) r _ _) = hyperref (show t) (pure $ text r)
+spec (Ref RT.Mod r _ _)       = mref  (pure $ text r)
+spec (Ref (RT.Req _) r _ _)   = rref  (pure $ text r)
+spec (Ref RT.Assump r _ _)    = aref  (pure $ text r)
+spec (Ref RT.LCh r _ _)       = lcref (pure $ text r)
+spec (Ref RT.UnCh r _ _)      = ucref (pure $ text r)
+spec (Ref RT.Cite r _ _)      = cite  (pure $ text r)
+spec (Ref RT.Blank r sn _)    = snref r $ spec sn
+spec (Ref RT.Link r _ sn)     = href  r $ L.getStringSN sn
+spec (Ref t r _ _)            = ref (show t) (pure $ text r)
+spec EmptyS                   = empty
+spec (Quote q)                = quote $ spec q
 
 escapeChars :: Char -> String
 escapeChars '_' = "\\_"

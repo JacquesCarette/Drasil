@@ -41,6 +41,7 @@ executable glassbr
     , Drasil.GlassBR.IMods
     , Drasil.GlassBR.Labels
     , Drasil.GlassBR.References
+    , Drasil.GlassBR.Requirements
     , Drasil.GlassBR.Symbols
     , Drasil.GlassBR.TMods
     , Drasil.GlassBR.Unitals

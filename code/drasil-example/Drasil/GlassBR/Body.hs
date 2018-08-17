@@ -1,8 +1,7 @@
 module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
-import Data.Function (on)
-import Data.List (nub, sortBy)
+import Data.List (nub)
 
 import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
@@ -17,59 +16,57 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), 
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
-  mkRequirement, outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb)
+  outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb)
 
 import qualified Drasil.DocLang.SRS as SRS (datConLabel, dataDefnLabel, indPRCaseLabel, 
   referenceLabel, valsOfAuxConsLabel)
 
-import Data.Drasil.Concepts.Computation (computerApp, inParam, inQty, inValue)
+import Data.Drasil.Concepts.Computation (computerApp, inParam)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
-  assumption, characteristic, class_, code, company, condition, content, dataConst, 
-  dataDefn, datumConstraint, definition, description, document, emphasis, environment, 
-  failure, figure, goal, goalStmt, implementation, information, inModel, input_, 
-  interface, item, likelyChg, message, model, organization, output_, physicalSystem, 
-  physSyst, problem, product_, purpose, quantity, reference, requirement, reviewer, 
-  section_, software, softwareSys, srs, standard, symbol_, sysCont, system, template, 
-  term_, theory, thModel, traceyMatrix, user, userInput, value)
+  assumption, characteristic, class_, code, company, condition, content, 
+  dataConst, dataDefn, definition, document, emphasis, environment, figure, 
+  goal, goalStmt, implementation, information, inModel, input_, interface, item, 
+  likelyChg, model, organization, output_, physicalSystem, physSyst, problem, 
+  product_, purpose, reference, requirement, reviewer, section_, software, 
+  softwareSys, srs, standard, sysCont, system, template, term_, theory, thModel, 
+  traceyMatrix, user, userInput, value)
 import Data.Drasil.Concepts.Education (civilEng, scndYrCalculus, structuralMechanics)
-import Data.Drasil.Concepts.Math (calculation, graph, parameter, probability)
+import Data.Drasil.Concepts.Math (graph, parameter, probability)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability,
-  performance, errMsg)
+  performance)
 import Data.Drasil.Concepts.Thermodynamics (degree_')
 import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 import Data.Drasil.Phrase (for'')
-import Data.Drasil.SI_Units (kilogram, metre, millimetre, newton, pascal, second)
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), andThe, 
-  figureLabel, foldlList, foldlsC, foldlSent, foldlSent_, foldlSP, foldlSPCol, followA, 
+import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second)
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
+  figureLabel, foldlList, foldlsC, foldlSent, foldlSP, foldlSPCol, 
   isThe, ofThe, sAnd, showingCxnBw, sIn, sOf, sOr, sVersus, tAndDOnly, tAndDWAcc, tAndDWSym, 
   underConsidertn)
 import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, itemRefToSent, 
   makeTMatrix, noRefs, prodUCTbl)
   
-import Drasil.GlassBR.Assumptions (assumptionConstants, gbRefDB, assumptions, standardValues,
-  glassLite, {-ldfConstant-})
-import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
-import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, glass, gLassBR, 
-  lShareFac, ptOfExplsn, stdOffDist)
-import Drasil.GlassBR.DataDefs (aspRat, dataDefns, dimLL, gbQDefns, glaTyFac, 
-  hFromt, loadDF, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac)
+import Drasil.GlassBR.Assumptions (assumptionConstants, gbRefDB, assumptions)
+import Drasil.GlassBR.Changes (likelyChgsList, unlikelyChgsList)
+import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, gLassBR, 
+  ptOfExplsn, stdOffDist)
+import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns)
 import Drasil.GlassBR.IMods (glassBRsymb, probOfBreak, calofCapacity, calofDemand, gbrIMods)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, rbrtsn2012)
+import Drasil.GlassBR.Requirements (funcReqsList, funcReqsListOfReqs)
 import Drasil.GlassBR.Symbols (symbolsForTable, this_symbols)
-import Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe)
+import Drasil.GlassBR.TMods (gbrTMods)
 import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, capacity, char_weight, 
   demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained, gbInputDataConstraints,
-  gbInputs, gbOutputs, gBRSpecParamVals, glass_type, glassGeo, glassTy, glassTypes, glBreakage,
-  is_safeLR, is_safePb, lateralLoad, load, loadTypes, nom_thick, notSafe, pb_tol, plate_len,
-  plate_width, prob_br, probBreak, safeMessage, sD, sdWithEqn, sdx, sdy, sdz, stressDistFac,
-  termsWithAccDefn, termsWithDefsOnly, tNT, wtntWithEqn)
+  gbInputs, gbOutputs, gBRSpecParamVals, glassGeo, glassTy, glassTypes, glBreakage,
+  lateralLoad, load, loadTypes, pb_tol, prob_br, probBreak, sD, sdWithEqn, stressDistFac,
+  termsWithAccDefn, termsWithDefsOnly, wtntWithEqn)
 
 {--}
 
@@ -129,7 +126,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
       , SSDSolChSpec 
         (SCSProg
           [ Assumptions
-          , TMs ([Label] ++ stdFields) [pbIsSafe, lrIsSafe]
+          , TMs ([Label] ++ stdFields) gbrTMods
           , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
           , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand] HideDerivation
@@ -147,8 +144,8 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     (S "This problem is small in size and relatively simple")
     (S "Any reasonable" +:+ phrase implementation +:+.
     (S "will be very quick" `sAnd` S "use minimal storage"))]) :
-  LCsSec (LCsProg (map LlC likelyChanges_SRS)) :
-  UCsSec (UCsProg (map LlC unlikelyChanges_SRS)) :
+  LCsSec (LCsProg (map LlC likelyChgsList)) :
+  UCsSec (UCsProg (map LlC unlikelyChgsList)) :
   TraceabilitySec
     (TraceabilityProg traceyMatrices [traceMatsAndGraphsTable1Desc, traceMatsAndGraphsTable2Desc, traceMatsAndGraphsTable3Desc]
     ((map LlC traceyMatrices) ++ traceMatsAndGraphsIntro2 ++ (map LlC traceyGraphs)) []) :
@@ -238,12 +235,6 @@ solChSpecSubsections = [thModel, inModel, dataDefn, dataConst]
 --Used in "Values of Auxiliary Constants" Section--
 auxiliaryConstants :: [QDefinition]
 auxiliaryConstants = assumptionConstants ++ gBRSpecParamVals
-
---Used in "Functional Requirements" Section--
-requiredInputs :: [QuantityDict]
-requiredInputs = (map qw [plate_len, plate_width, char_weight])
-  ++ (map qw [pb_tol, tNT]) ++ (map qw [sdx, sdy, sdz])
-  ++ (map qw [glass_type, nom_thick])
 
 --Used in "Non-Functional Requirements" Section--
 gBRpriorityNFReqs :: [ConceptChunk]
@@ -501,123 +492,11 @@ outputDataConstraints = outDataConstTbl [prob_br]
 
 {--Functional Requirements--}
 
-funcReqsList :: [Contents]
-funcReqsList = funcReqsListOfReqsCon ++ [LlC funcReqsR1Table]
-
-funcReqsR1, funcReqsR2, funcReqsR3, funcReqsR4, funcReqsR5, funcReqsR6 :: LabelledContent
-req1Desc, req3Desc, req4Desc :: Sentence
-req5Desc :: NamedChunk -> Sentence
-
-funcReqsListOfReqs :: [LabelledContent]
-funcReqsListOfReqs = [funcReqsR1, funcReqsR2, funcReqsR3, funcReqsR4, funcReqsR5, funcReqsR6]
-
-funcReqsListOfReqsCon :: [Contents]
-funcReqsListOfReqsCon = map LlC $ [funcReqsR1, funcReqsR2, funcReqsR3, funcReqsR4, funcReqsR5, funcReqsR6]
-
-funcReqsR1 = mkRequirement "funcReqsR1" req1Desc "Input-Glass-Props"
-funcReqsR3 = mkRequirement "funcReqsR3" req3Desc "Check-Input-with-Data_Constraints"
-funcReqsR4 = mkRequirement "funcReqsR4" req4Desc "Output-Values-and-Known-Quantities"
-funcReqsR5 = mkRequirement "funcReqsR5" (req5Desc (output_)) "Check-Glass-Safety"
-
-req1Desc = foldlSent [at_start input_, S "the", plural quantity, S "from",
-  makeRef funcReqsR1Table `sC` S "which define the", phrase glass,
-  plural dimension `sC` (glassTy ^. defn) `sC` S "tolerable",
-  phrase probability `sOf` phrase failure, S "and" +:+. 
-  (plural characteristic `ofThe` phrase blast) +: S "Note",
-  ch plate_len `sAnd` ch plate_width,
-  S "will be input in terms of", plural millimetre `sAnd`
-  S "will be converted to the equivalent value in", plural metre]
-
-funcReqsR1Table :: LabelledContent
-funcReqsR1Table = llcc (mkLabelSame "R1ReqInputs" Tab) $ 
-  Table
-  [at_start symbol_, at_start description, S "Units"]
-  (mkTable
-  [ch,
-   at_start, unitToSentence] requiredInputs)
-  (S "Required Inputs following R1") True
-
-funcReqsR2List :: [Sentence]
-funcReqsR2List = [foldlList Comma List (map ch (take 4 assumptionConstants)) `followA` standardValues,
-  ch loadDF +:+ S "from" +:+ makeRef loadDF, 
-  short lShareFac `followA` glassLite,
-  ch hFromt +:+ S "from" +:+ makeRef hFromt,
-  ch glaTyFac +:+ S "from" +:+ makeRef glaTyFac,
-  ch standOffDis +:+ S "from" +:+ makeRef standOffDis,
-  ch aspRat +:+ S "from" +:+ makeRef aspRat]
-
-funcReqsR2 = llcc funcReqs2Label $
-  Enumeration $ Simple $ 
-  [(S "System-Set-Values-Following-Assumptions"
-   , Nested (foldlSent_ [S "The", phrase system, S "shall set the known", 
-    plural value +: S "as follows"])
-     $ Bullet $ noRefs $
-     map (Flat $) (funcReqsR2List)
-   , Just $ (getAdd (funcReqs2Label ^. getRefAdd)))]
-
---ItemType
-{-funcReqsR2 = (Nested (S "The" +:+ phrase system +:+
-   S "shall set the known" +:+ plural value +: S "as follows")
-    (Bullet $ map Flat
-     [foldlsC (map getS (take 4 assumptionConstants)) `followA` standardValues,
-     (getS loadDF) `followA` ldfConstant,
-     short lShareFac `followA` glassLite]))
--}
---FIXME:should constants, LDF, and LSF have some sort of field that holds
--- the assumption(s) that're being followed? (Issue #349)
-
-req3Desc = foldlSent [S "The", phrase system, S "shall check the entered",
-  plural inValue, S "to ensure that they do not exceed the",
-  plural datumConstraint, S "mentioned in" +:+. makeRef
-  SRS.datConLabel, S "If any" `sOf` S "the", plural inParam,
-  S "are out" `sOf` S "bounds" `sC` S "an", phrase errMsg, S "is displayed"
-  `andThe` plural calculation, S "stop"]
-
-req4Desc = foldlSent [titleize output_, S "the", plural inQty,
-  S "from", makeRef funcReqsR1 `andThe` S "known", plural quantity,
-  S "from", makeRef funcReqsR2]
-
-req5Desc cmd = foldlSent_ [S "If", (ch is_safePb), S "∧", (ch is_safeLR),
-  sParen (S "from" +:+ (makeRef pbIsSafe)
-  `sAnd` (makeRef lrIsSafe)), S "are true" `sC`
-  phrase cmd, S "the", phrase message, Quote (safeMessage ^. defn),
-  S "If the", phrase condition, S "is false, then", phrase cmd,
-  S "the", phrase message, Quote (notSafe ^. defn)]
-
-funcReqsR6 = llcc funcReqs6Label $
-  Enumeration $ Simple $ 
-  [(S "Output-Quantities"
-   , Nested (titleize output_ +:+ S "the following" +: plural quantity)
-     $ Bullet $ noRefs $ chunksToItemTypes funcReqsR6List
-   , Just $ (getAdd (funcReqs6Label ^. getRefAdd)))]
-
-chunksToItemTypes :: [(Sentence, Symbol, Sentence)] -> [ItemType]
-chunksToItemTypes = map (\(a, b, c) -> Flat $ a +:+ sParen (P b) +:+ c)
-
-funcReqsR6List :: [(Sentence, Symbol, Sentence)]
-funcReqsR6List = sortBy (compsy `on` get2) $ (mkReqList gbrIMods) ++ (mkReqList r6DDs)
-  where
-    r6DDs :: [DataDefinition]
-    r6DDs = [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, hFromt, aspRat]
-    get2 (_, b, _) = b
-
-mkReqList :: (NamedIdea c, HasSymbol c, HasShortName c, HasUID c, Referable c) => [c] -> [(Sentence, Symbol, Sentence)]
-mkReqList = map (\c -> (at_start c, symbol c Implementation, sParen (makeRef c)))
-
-funcReqs2Label, funcReqs6Label :: Label
-funcReqs2Label = mkLabelSame "System-Set-Values-Following-Assumptions" (Req FR)
-funcReqs6Label = mkLabelSame "Output-Quantities"                       (Req FR)
-
 {--Nonfunctional Requirements--}
 
 {--LIKELY CHANGES--}
 
-likelyChgsList :: [LabelledContent]
-likelyChgsList = likelyChanges_SRS 
-
 {--UNLIKELY CHANGES--}
-unlikelyChgsList :: [LabelledContent]
-unlikelyChgsList = unlikelyChanges_SRS
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
 
@@ -660,7 +539,7 @@ traceMatsAndGraphsA = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
 traceMatsAndGraphsARef = map makeRef assumptions
 
 traceMatsAndGraphsLC = ["LC1", "LC2", "LC3", "LC4", "LC5"]
-traceMatsAndGraphsLCRef = map makeRef likelyChanges_SRS
+traceMatsAndGraphsLCRef = map makeRef likelyChgsList
 
 traceMatsAndGraphsRowT1 :: [String]
 traceMatsAndGraphsRowT1 = traceMatsAndGraphsT ++ traceMatsAndGraphsIM ++ traceMatsAndGraphsDD

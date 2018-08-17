@@ -5,7 +5,11 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (output_, simulation, quantity, 
   input_, physical, constraint, condition, property)
 import Data.Drasil.Utils (eqUnR')
-import Drasil.DocLang (mkRequirement, nonFuncReqF)
+import Drasil.DocLang (mkRequirement, mkRequirementL, nonFuncReqF)
+import Drasil.SWHS.Labels (inputInitQuantsL, useAboveFindMassL, checkWithPhysConstsL, 
+  outputInputDerivQuantsL, calcTempWtrOverTimeL, calcTempPCMOverTimeL,
+  calcChgHeatEnergyWtrOverTimeL, calcChgHeatEnergyPCMOverTimeL,
+  verifyEnergyOutputL, calcPCMMeltBeginL, calcPCMMeltEndL)
 
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics (time, energy)
@@ -38,30 +42,30 @@ inputInitQuants, useAboveFindMass, checkWithPhysConsts, outputInputDerivQuants, 
 
 inputInitQuantsEqn, useAboveFindMassEqn :: Contents --Fixme: rename labels
 
-inputInitQuants = mkRequirement "inputInitQuants" ( foldlSentCol [
+inputInitQuants = mkRequirementL "inputInitQuants" ( foldlSentCol [
   titleize input_, S "the following", plural quantity `sC`
   S "which define the", phrase tank, plural parameter `sC` S "material",
-  plural property, S "and initial", plural condition]) "Input-Initial-Quantities"
+  plural property, S "and initial", plural condition]) inputInitQuantsL
 
 inputInitQuantsEqn = eqUnR' $ ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
   ((sy tank_vol) - (sy pcm_vol)) * (sy w_density) $=
   (((sy diam) / 2) * (sy tank_length) - (sy pcm_vol)) * (sy w_density)) -- FIXME: Ref Hack
 
-useAboveFindMass = mkRequirement "useAboveFindMass" ( foldlSentCol [
+useAboveFindMass = mkRequirementL "useAboveFindMass" ( foldlSentCol [
   S "Use the", plural input_, S "in", makeRef inputInitQuants,
   S "to find the", phrase mass, S "needed for", (foldlList Comma List $ map makeRef swhsIMods) `sC` 
   S "as follows, where", ch w_vol `isThe` phrase w_vol,
-  S "and", ch tank_vol `isThe` phrase tank_vol] ) "Use-Above-Find-Mass-IM1-IM4"
+  S "and", ch tank_vol `isThe` phrase tank_vol] ) useAboveFindMassL
 
 useAboveFindMassEqn = eqUnR' $ ((sy pcm_mass) $= (sy pcm_vol) * (sy pcm_density)) -- FIXME: Ref Hack
 
-checkWithPhysConsts = mkRequirement "checkWithPhysConsts" ( foldlSent [
+checkWithPhysConsts = mkRequirementL "checkWithPhysConsts" ( foldlSent [
   S "Verify that the", plural input_, S "satisfy the required",
   phrase physical, plural constraint {-, S "shown in"
   --FIXME , makeRef s7_table1-}] ) 
-  "Check-Input-with-Physical_Constraints"
+  checkWithPhysConstsL
 --
-outputInputDerivQuants = mkRequirement "outputInputDerivQuants" ( foldlSent [
+outputInputDerivQuants = mkRequirementL "outputInputDerivQuants" ( foldlSent [
   titleize output_, S "the", phrase input_, plural quantity `sAnd`
   S "derived", plural quantity +: S "in the following list",
   S "the", plural quantity, S "from", makeRef inputInitQuants `sC` S "the",
@@ -70,45 +74,45 @@ outputInputDerivQuants = mkRequirement "outputInputDerivQuants" ( foldlSent [
   sParen (S "from" +:+ makeRef eBalanceOnWtr) `sC` ch tau_S_P,
   sParen (S "from" +:+ makeRef eBalanceOnPCM) `sAnd` ch tau_L_P,
   sParen (S "from" +:+ makeRef eBalanceOnPCM)] ) 
-  "Output-Input-Derived-Quantities"
+  outputInputDerivQuantsL
 --
-calcTempWtrOverTime = mkRequirement "calcTempWtrOverTime" ( foldlSent [
+calcTempWtrOverTime = mkRequirementL "calcTempWtrOverTime" ( foldlSent [
   S "Calculate and", phrase output_, S "the", phrase temp_W,
   sParen(ch temp_W :+: sParen (ch time)), S "over the",
-  phrase simulation, phrase time, sParen (S "from" +:+ makeRef eBalanceOnWtr)] ) "Calculate-Temperature-Water-Over-Time"
+  phrase simulation, phrase time, sParen (S "from" +:+ makeRef eBalanceOnWtr)] ) calcTempWtrOverTimeL
 --
-calcTempPCMOverTime = mkRequirement "calcTempPCMOverTime" ( foldlSent [
+calcTempPCMOverTime = mkRequirementL "calcTempPCMOverTime" ( foldlSent [
   S "Calculate and", phrase output_, S "the", phrase temp_PCM,
   sParen (ch temp_PCM :+: sParen (ch time)), S "over the",
-  phrase simulation, phrase time, sParen (S "from" +:+ makeRef eBalanceOnPCM)] ) "Calculate-Temperature-PCM-Over-Time"
+  phrase simulation, phrase time, sParen (S "from" +:+ makeRef eBalanceOnPCM)] ) calcTempPCMOverTimeL
 --
-calcChgHeatEnergyWtrOverTime = mkRequirement "calcChgHeatEnergyWtrOverTime" ( foldlSent [
+calcChgHeatEnergyWtrOverTime = mkRequirementL "calcChgHeatEnergyWtrOverTime" ( foldlSent [
   S "Calculate and", phrase output_, S "the", phrase w_E,
   sParen (ch w_E :+: sParen (ch time)), S "over the",
-  phrase simulation, phrase time, sParen (S "from" +:+ makeRef heatEInWtr)] ) "Calculate-Change-Heat_Energy-Water-Over-Time"
+  phrase simulation, phrase time, sParen (S "from" +:+ makeRef heatEInWtr)] ) calcChgHeatEnergyWtrOverTimeL
 --
-calcChgHeatEnergyPCMOverTime = mkRequirement "calcChgHeatEnergyPCMOverTime" ( foldlSent [
+calcChgHeatEnergyPCMOverTime = mkRequirementL "calcChgHeatEnergyPCMOverTime" ( foldlSent [
   S "Calculate and", phrase output_, S "the", phrase pcm_E,
   sParen (ch pcm_E :+: sParen (ch time)), S "over the",
-  phrase simulation, phrase time, sParen (S "from" +:+ makeRef heatEInPCM)] ) "Calculate-Change-Heat_Energy-PCM-Over-Time"
+  phrase simulation, phrase time, sParen (S "from" +:+ makeRef heatEInPCM)] ) calcChgHeatEnergyPCMOverTimeL
 --
-verifyEnergyOutput = mkRequirement "verifyEnergyOutput" ( foldlSent [
+verifyEnergyOutput = mkRequirementL "verifyEnergyOutput" ( foldlSent [
   S "Verify that the", phrase energy, plural output_,
   sParen (ch w_E :+: sParen (ch time) `sAnd` ch pcm_E :+:
   sParen (ch time)), S "follow the", phrase CT.law_cons_energy, {-`sC`
   S "as outlined in"
   --FIXME , makeRef s4_2_7 `sC` -} 
-  S "with relative error no greater than 0.001%"] ) "Verify-Energy-Output-follow-Conservation-of-Energy"
+  S "with relative error no greater than 0.001%"] ) verifyEnergyOutputL
 --
-calcPCMMeltBegin = mkRequirement "calcPCMMeltBegin" ( foldlSent [
+calcPCMMeltBegin = mkRequirementL "calcPCMMeltBegin" ( foldlSent [
   S "Calculate and", phrase output_, S "the", phrase time,
   S "at which the", short phsChgMtrl, S "begins to melt",
-  ch t_init_melt, sParen (S "from" +:+ makeRef eBalanceOnPCM)] ) "Calculate-PCM-melt-begin-time"
+  ch t_init_melt, sParen (S "from" +:+ makeRef eBalanceOnPCM)] ) calcPCMMeltBeginL
 --
-calcPCMMeltEnd = mkRequirement "calcPCMMeltEnd" ( foldlSent [
+calcPCMMeltEnd = mkRequirementL "calcPCMMeltEnd" ( foldlSent [
   S "Calculate and", phrase output_, S "the", phrase time,
   S "at which the", short phsChgMtrl, S "stops", phrase CT.melting,
-  ch t_final_melt, sParen (S "from" +:+ makeRef eBalanceOnPCM)] ) "Calculate-PCM-melt-end-time"
+  ch t_final_melt, sParen (S "from" +:+ makeRef eBalanceOnPCM)] ) calcPCMMeltEndL
 
 -- List structure same between all examples
 

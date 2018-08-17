@@ -22,3 +22,35 @@ eBalanceOnWtrL = mkLabelSame "eBalanceOnWtr" (Def Instance)
 eBalanceOnPCML = mkLabelSame "eBalanceOnPCM" (Def Instance)
 heatEInWtrL    = mkLabelSame "heatEInWtr"    (Def Instance)
 heatEInPCML    = mkLabelSame "heatEInPCM"    (Def Instance)
+
+-- Likely Changes and Unlikely Changes
+likeChg1L, likeChg2L, likeChg3L, likeChg4L, likeChg5L,likeChg6L
+  , unlikeChg1L, unlikeChg2L :: Label
+likeChg1L = mkLabelSame "Uniform-Temperature-PCM"  LCh
+likeChg2L = mkLabelSame "Temperature-Coil-Variable-Over-Day"  LCh
+likeChg3L = mkLabelSame "Temperature-Coil-Variable-Over-Length"  LCh
+likeChg4L = mkLabelSame "Discharging-Tank"  LCh
+likeChg5L = mkLabelSame "Different-Initial-Temps-PCM-Water"  LCh
+likeChg6L = mkLabelSame "Tank-Lose-Heat"  LCh
+
+unlikeChg1L = mkLabelSame "Water-PCM-Fixed-States" UnCh
+unlikeChg2L = mkLabelSame "No-Internal-Heat-Generation" UnCh
+
+-- Requirements
+inputInitQuantsL, useAboveFindMassL, checkWithPhysConstsL, 
+  outputInputDerivQuantsL, calcTempWtrOverTimeL, calcTempPCMOverTimeL,
+  calcChgHeatEnergyWtrOverTimeL, calcChgHeatEnergyPCMOverTimeL,
+  verifyEnergyOutputL, calcPCMMeltBeginL, calcPCMMeltEndL :: Label
+
+inputInitQuantsL = mkLabelSame "Input-Initial-Quantities" (Req FR)
+useAboveFindMassL = mkLabelSame "Use-Above-Find-Mass-IM1-IM4" (Req FR)
+checkWithPhysConstsL = mkLabelSame "Check-Input-with-Physical_Constraints" (Req FR)
+outputInputDerivQuantsL = mkLabelSame "Output-Input-Derived-Quantities" (Req FR)
+calcTempWtrOverTimeL = mkLabelSame "Calculate-Temperature-Water-Over-Time" (Req FR)
+calcTempPCMOverTimeL = mkLabelSame "Calculate-Temperature-PCM-Over-Time" (Req FR)
+calcChgHeatEnergyWtrOverTimeL = mkLabelSame "Calculate-Change-Heat_Energy-Water-Over-Time" (Req FR)
+calcChgHeatEnergyPCMOverTimeL = mkLabelSame "Calculate-Change-Heat_Energy-PCM-Over-Time" (Req FR)
+verifyEnergyOutputL = mkLabelSame "Verify-Energy-Output-follow-Conservation-of-Energy" (Req FR)
+calcPCMMeltBeginL = mkLabelSame "Calculate-PCM-melt-begin-time" (Req FR)
+calcPCMMeltEndL = mkLabelSame "Calculate-PCM-melt-end-time" (Req FR)
+

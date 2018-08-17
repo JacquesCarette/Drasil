@@ -8,8 +8,8 @@ module Drasil.DocLang (
     SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), ExistingSolnSec(..),
     StkhldrSec(StkhldrProg2),
     StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg), 
-    TSIntro(..), UCsSec(..), mkDoc, mkLklyChnk, mkRequirement, 
-    mkUnLklyChnk, srsDomains, tsymb, tsymb'', mkConCC, mkConCC', mkEnumCC,
+    TSIntro(..), UCsSec(..), mkDoc, mkLklyChnk, mkLklyChnkL, mkRequirement, mkRequirementL,
+    mkUnLklyChnk, mkUnLklyChnkL, srsDomains, tsymb, tsymb'', mkConCC, mkConCC', mkEnumCC,
     -- DocumentLanguage.Definitions
     Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose), ddefn,
     -- DocumentLanguage.RefHelpers 
@@ -47,7 +47,8 @@ import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
     ScpOfProjSec(ScpOfProjProg), SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), 
     StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), TConvention(..), 
     TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..), mkDoc, 
-    mkLklyChnk, mkRequirement, mkUnLklyChnk, srsDomains, tsymb, tsymb'', mkConCC, mkConCC',
+    mkLklyChnk, mkLklyChnkL, mkRequirement, mkRequirementL, mkUnLklyChnk, mkUnLklyChnkL,
+    srsDomains, tsymb, tsymb'', mkConCC, mkConCC',
     mkEnumCC)
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, 
     InclUnits(IncludeUnits), Verbosity(Verbose), ddefn)

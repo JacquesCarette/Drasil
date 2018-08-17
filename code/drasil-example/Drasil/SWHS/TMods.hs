@@ -45,7 +45,7 @@ consThermERel = (negate (sy gradient)) $. (sy thFluxVect) + (sy vol_ht_gen) $=
   (sy density) * (sy heat_cap_spec) * (pderiv (sy temp) time)
 
 consThemESrc :: Label
-consThemESrc = mkURILabel "consThemESrc" "http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm" "efunda.com"
+consThemESrc = mkURILabel "consThemESrc" "http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm" "heatConduction"
 
 t1descr :: Sentence
 t1descr = foldlSent [
@@ -84,7 +84,7 @@ t2SensHtE_rc = makeRC "t2SensHtE_rc" (nounPhraseSP "Sensible heat energy") t2des
   (mkLabelSame "SensHtE" (Def TM))
 
 sensHtESrc :: Label
-sensHtESrc = mkURILabel "consThemESrc" "http://en.wikipedia.org/wiki/Sensible_heat" "wikipedia.org"
+sensHtESrc = mkURILabel "consThemESrc" "http://en.wikipedia.org/wiki/Sensible_heat" "sensibleHeat"
 
 sensHtEEqn :: Relation
 sensHtEEqn = (sy sens_heat) $= case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
@@ -148,7 +148,7 @@ latHtEEqn = apply1 latent_heat time $=
 -- Integrals need dTau at end
 
 latHtESrc :: Label
-latHtESrc = mkURILabel "consThemESrc" "http://en.wikipedia.org/wiki/Latent_heat" "wikipedia.org"
+latHtESrc = mkURILabel "consThemESrc" "http://en.wikipedia.org/wiki/Latent_heat" "latentHeat"
 
 t3descr :: Sentence
 t3descr = foldlSent [

@@ -1,7 +1,8 @@
 module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
-import Data.List (nub)
+import Data.Function (on)
+import Data.List (nub, sortBy)
 
 import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
@@ -583,23 +584,27 @@ req5Desc cmd = foldlSent_ [S "If", (ch is_safePb), S "∧", (ch is_safeLR),
   S "If the", phrase condition, S "is false, then", phrase cmd,
   S "the", phrase message, Quote (notSafe ^. defn)]
 
-funcReqsR6DDList :: [DataDefinition]
-funcReqsR6DDList = [risk, strDisFac, nonFL, glaTyFac, dimLL, 
-  tolPre, tolStrDisFac, hFromt, aspRat]
+funcReqsR6List :: [(Sentence, Symbol, Sentence)]
+funcReqsR6List = (mkReqList gbrIMods) ++ (mkReqList [risk, strDisFac, nonFL, 
+  glaTyFac, dimLL, tolPre, tolStrDisFac, hFromt, aspRat])
+
+funcReqsR6ListSort :: [(Sentence, Symbol, Sentence)]
+funcReqsR6ListSort = sortBy (compsy `on` get2) funcReqsR6List
+  where
+    get2 (_, b, _) = b
+
+mkReqList :: (NamedIdea c, HasSymbol c, HasShortName c, HasUID c, Referable c) => [c] -> [(Sentence, Symbol, Sentence)]
+mkReqList = map (\c -> (at_start c, symbol c Implementation, sParen (makeRef c)))
 
 funcReqsR6 = llcc funcReqs6Label $
   Enumeration $ Simple $ 
   [(S "Output-Quantities"
-   , Nested (titleize output_ +:+
-     S "the following" +: plural quantity)
-     $ Bullet $ noRefs $ 
-     chunksToItemTypes gbrIMods
-     ++
-     chunksToItemTypes funcReqsR6DDList
+   , Nested (titleize output_ +:+ S "the following" +: plural quantity)
+     $ Bullet $ noRefs $ map chunksToItemType funcReqsR6ListSort
    , Just $ (getAdd (funcReqs6Label ^. getRefAdd)))]
 
-chunksToItemTypes :: (NamedIdea c, HasSymbol c, HasShortName c, HasUID c, Referable c) => [c] -> [ItemType]
-chunksToItemTypes m = map (\x -> Flat $ at_start x +:+ sParen (ch x) +:+ sParen (makeRef x)) (sortBySymbol m)
+chunksToItemType :: (Sentence, Symbol, Sentence) -> ItemType
+chunksToItemType (a, b, c) = Flat $ a +:+ sParen (P b) +:+ c
 
 funcReqs2Label, funcReqs6Label :: Label
 funcReqs2Label = mkLabelSame "System-Set-Values-Following-Assumptions" (Req FR)

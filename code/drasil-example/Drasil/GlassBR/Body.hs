@@ -584,27 +584,25 @@ req5Desc cmd = foldlSent_ [S "If", (ch is_safePb), S "∧", (ch is_safeLR),
   S "If the", phrase condition, S "is false, then", phrase cmd,
   S "the", phrase message, Quote (notSafe ^. defn)]
 
-funcReqsR6List :: [(Sentence, Symbol, Sentence)]
-funcReqsR6List = (mkReqList gbrIMods) ++ (mkReqList [risk, strDisFac, nonFL, 
-  glaTyFac, dimLL, tolPre, tolStrDisFac, hFromt, aspRat])
-
-funcReqsR6ListSort :: [(Sentence, Symbol, Sentence)]
-funcReqsR6ListSort = sortBy (compsy `on` get2) funcReqsR6List
-  where
-    get2 (_, b, _) = b
-
-mkReqList :: (NamedIdea c, HasSymbol c, HasShortName c, HasUID c, Referable c) => [c] -> [(Sentence, Symbol, Sentence)]
-mkReqList = map (\c -> (at_start c, symbol c Implementation, sParen (makeRef c)))
-
 funcReqsR6 = llcc funcReqs6Label $
   Enumeration $ Simple $ 
   [(S "Output-Quantities"
    , Nested (titleize output_ +:+ S "the following" +: plural quantity)
-     $ Bullet $ noRefs $ map chunksToItemType funcReqsR6ListSort
+     $ Bullet $ noRefs $ chunksToItemTypes funcReqsR6List
    , Just $ (getAdd (funcReqs6Label ^. getRefAdd)))]
 
-chunksToItemType :: (Sentence, Symbol, Sentence) -> ItemType
-chunksToItemType (a, b, c) = Flat $ a +:+ sParen (P b) +:+ c
+chunksToItemTypes :: [(Sentence, Symbol, Sentence)] -> [ItemType]
+chunksToItemTypes = map (\(a, b, c) -> Flat $ a +:+ sParen (P b) +:+ c)
+
+funcReqsR6List :: [(Sentence, Symbol, Sentence)]
+funcReqsR6List = sortBy (compsy `on` get2) $ (mkReqList gbrIMods) ++ (mkReqList r6DDs)
+  where
+    r6DDs :: [DataDefinition]
+    r6DDs = [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, hFromt, aspRat]
+    get2 (_, b, _) = b
+
+mkReqList :: (NamedIdea c, HasSymbol c, HasShortName c, HasUID c, Referable c) => [c] -> [(Sentence, Symbol, Sentence)]
+mkReqList = map (\c -> (at_start c, symbol c Implementation, sParen (makeRef c)))
 
 funcReqs2Label, funcReqs6Label :: Label
 funcReqs2Label = mkLabelSame "System-Set-Values-Following-Assumptions" (Req FR)

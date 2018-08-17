@@ -75,7 +75,9 @@ import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, capacity, cha
   loadTypes, lRe, nom_thick, notSafe, pb_tol, plate_len, plate_width, prob_br, probBreak, 
   safeMessage, sD, sdWithEqn, sdx, sdy, sdz, stressDistFac, termsWithAccDefn, 
   termsWithDefsOnly, tNT, wtntWithEqn)
-
+import Drasil.GlassBR.Labels (hwLabel, constantsLabel, outputLabel, seqServLabel, contoursLabel,
+  functLabel, thicknessLabel, glTypeLabel, calcLabel, loadLabel,
+  inputLabel, ctrlLabel)
 {--}
 
 gbSymbMap :: ChunkDB
@@ -222,24 +224,6 @@ mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master
   MISModSec (MISModProg "Hardware" (Just MIS.hwModIntro) [MISUses []] 
     hwLabel False) :
   []
-
---FIXME: move below defined labels to a separate Labels.hs file?
-hwLabel, constantsLabel, outputLabel, seqServLabel, contoursLabel, 
-  functLabel, thicknessLabel, glTypeLabel, calcLabel, loadLabel, 
-  inputLabel, ctrlLabel :: Label
-
-hwLabel        = mkLabelRASec "HW_MIS" "Hardware"
-constantsLabel = mkLabelRASec "Constants_MIS" "Constants"
-outputLabel    = mkLabelRASec "Output_MIS" "Output"
-seqServLabel   = mkLabelRASec "SeqServices_MIS" "SeqServices"
-contoursLabel  = mkLabelRASec "ContoursADT_MIS" "ContoursADT"
-functLabel     = mkLabelRASec "FunctADT_MIS" "FunctADT"
-thicknessLabel = mkLabelRASec "ThicknessADT_MIS" "ThicknessADT"
-glTypeLabel    = mkLabelRASec "GlassTypeADT_MIS" "GlassTypeADT"
-calcLabel      = mkLabelRASec "Calc_MIS" "Calc"
-loadLabel      = mkLabelRASec "LoadASTM_MIS" "LoadASTM"
-inputLabel     = mkLabelRASec "Input_MIS" "Input"
-ctrlLabel      = mkLabelRASec "Control_MIS" "Control"
 
 fxnCons :: Contents
 fxnCons = mkParagraph $ S "For simplicity the function evaluation is" +:+

@@ -23,6 +23,9 @@ implVars = [v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
 
 --from TSD.txt:
 
+readTableMod :: Mod
+readTableMod = packmod "ReadTable" [read_table]
+
 read_table :: Func
 read_table = funcData "read_table" $
   [ singleLine (repeated [junk, listEntry [WithPattern] z_vector]) ',',
@@ -30,12 +33,12 @@ read_table = funcData "read_table" $
                          listEntry [WithLine, WithPattern] y_matrix]) ','
   ]
 
-readTableMod :: Mod
-readTableMod = packmod "ReadTable" [read_table]
-
 -----
 
 --from defaultInput.txt:
+
+inputMod :: Mod
+inputMod = packmod "InputFormat" [glassInputData]
 
 glassInputData :: Func
 glassInputData = funcData "get_input" $
@@ -52,9 +55,6 @@ glassInputData = funcData "get_input" $
     junkLine,
     singleton pb_tol
   ]
-
-inputMod :: Mod
-inputMod = packmod "InputFormat" [glassInputData]
 
 -----
 

@@ -6,6 +6,9 @@ import Drasil.SSP.Defs (slpSrf, slopeSrf, slope,
   mtrlPrpty, soil, soilLyr, soilPrpty, intrslce, slice)
 import Drasil.SSP.Unitals (coords, normToShear, scalFunc, fs)
 import Drasil.SSP.References (sspCitations)
+import Drasil.SSP.Labels (slipSurfaceL, geoSlopeMatL, soilLayerHomoL,
+  soilLayerIsoL, intersliceNormL, baseNormShearForL, stressStrainCurveL,
+  planeStrainL, effectiveNormL, surfaceBaseSliceL)
 import Data.Drasil.SentenceStructures (ofThe, ofThe', getTandS, foldlSent)
 
 import Data.Drasil.Concepts.Documentation (condition)
@@ -21,17 +24,17 @@ newAssumptions :: [AssumpChunk]
 newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10]
 
 newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10 :: AssumpChunk
-newA1 = assump "Slip-Surface-Concave" monotonicF (mkLabelRAAssump' "Slip-Surface-Concave")
-newA2 = assump "Geo-Slope-Mat-Props-of-Soil-Inputs" slopeG (mkLabelRAAssump' "Geo-Slope-Mat-Props-of-Soil-Inputs")
-newA3 = assump "Soil-Layer-Homogeneous" homogeneousL (mkLabelRAAssump' "Soil-Layer-Homogeneous")
-newA4 = assump "Soil-Layers-Isotropic" isotropicP (mkLabelRAAssump' "Soil-Layers-Isotropic")
-newA5 = assump "Interslice-Norm-Shear-Forces-Linear" linearS (mkLabelRAAssump' "Interslice-Norm-Shear-Forces-Linear")
-newA6 = assump "Base-Norm-Shear-Forces-Linear-on-FS" linearF (mkLabelRAAssump' "Base-Norm-Shear-Forces-Linear-on-FS")
-newA7 = assump "Stress-Strain-Curve-interslice-Linear" stressC (mkLabelRAAssump' "Stress-Strain-Curve-interslice-Linear")
-newA8 = assump "Plane-Strain-Conditions" planeS (mkLabelRAAssump' "Plane-Strain-Conditions")
-newA9 = assump "Effective-Norm-Stress-Large" largeN (mkLabelRAAssump' "Effective-Norm-Stress-Large")
+newA1 = assump "Slip-Surface-Concave" monotonicF slipSurfaceL
+newA2 = assump "Geo-Slope-Mat-Props-of-Soil-Inputs" slopeG geoSlopeMatL
+newA3 = assump "Soil-Layer-Homogeneous" homogeneousL soilLayerHomoL
+newA4 = assump "Soil-Layers-Isotropic" isotropicP soilLayerIsoL
+newA5 = assump "Interslice-Norm-Shear-Forces-Linear" linearS intersliceNormL
+newA6 = assump "Base-Norm-Shear-Forces-Linear-on-FS" linearF baseNormShearForL
+newA7 = assump "Stress-Strain-Curve-interslice-Linear" stressC stressStrainCurveL
+newA8 = assump "Plane-Strain-Conditions" planeS planeStrainL
+newA9 = assump "Effective-Norm-Stress-Large" largeN effectiveNormL
 newA10 = assump "Surface-Base-Slice-between-Interslice-Straight-Lines" straightS 
-           (mkLabelRAAssump' "Surface-Base-Slice-between-Interslice-Straight-Lines")
+           surfaceBaseSliceL
 
 monotonicF, slopeG, homogeneousL, isotropicP, linearS,
   linearF, stressC, planeS, largeN, straightS :: Sentence

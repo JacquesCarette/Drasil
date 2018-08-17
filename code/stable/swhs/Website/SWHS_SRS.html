@@ -1225,7 +1225,7 @@ This section simplifies the original problem and helps in developing the theoret
 <ul class="hide-list-style">
 <li>
 <div id="A:Thermal-Energy-Only">
-Thermal-Energy-Only: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible [<a href=#T:t1ConsThermE>T: t1ConsThermE</a>].
+Thermal-Energy-Only: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible [<a href=#T:consThermE>T: consThermE</a>].
 </div>
 </li>
 </ul>
@@ -1372,7 +1372,7 @@ Theoretical Models
 <p class="paragraph">
 This section focuses on the general equations and laws that SWHS is based on.
 </p>
-<div id="T:t1ConsThermE">
+<div id="T:consThermE">
 <table class="tdefn">
 <tr>
 <th>
@@ -1389,7 +1389,7 @@ Conservation of thermal energy
 Equation
 </th>
 <td>
-<div id="Eqn:T:t1ConsThermE">
+<div id="Eqn:T:consThermE">
 <div class="equation">
 <em>&minus;∇&sdot;<b>q</b>&plus;g = ρ&#8239;C&#8239;<div class="fraction">
 <span class="fup">
@@ -1449,7 +1449,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-<a href=http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm>heatConduction</a>
+<a href="http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm">Fourier Law of Heat Conduction and Heat Equation</a>
 </p>
 </td>
 </tr>
@@ -1465,7 +1465,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="T:t2SensHtE">
+<div id="T:sensHtE">
 <table class="tdefn">
 <tr>
 <th>
@@ -1482,7 +1482,7 @@ Sensible heat energy
 Equation
 </th>
 <td>
-<div id="Eqn:T:t2SensHtE">
+<div id="Eqn:T:sensHtE">
 <div class="equation">
 <em>E = <span class="casebr">
 {
@@ -1550,7 +1550,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>E</em> is the change in sensible heat energy (J). <em>C<sup>S</sup></em>, <em>C<sup>L</sup></em>, <em>C<sup>V</sup></em> are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively (J/(kg&sdot;&deg;C)). <em>m</em> is the mass (kg). <em>T</em> is the temperature (&deg;C), and <em>ΔT</em> is the change in temperature (&deg;C). <em>T<sub>melt</sub></em> and <em>T<sub>boil</sub></em> are the melting point temperature and boiling point temperature, respectively (&deg;C). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if <em>T</em>=<em>T<sub>boil</sub></em> or <em>T</em>=<em>T<sub>melt</sub></em>. If this is the case, refer to <a href=#T:t3LatHtE>T: t3LatHtE</a>, Latent heat energy.
+<em>E</em> is the change in sensible heat energy (J). <em>C<sup>S</sup></em>, <em>C<sup>L</sup></em>, <em>C<sup>V</sup></em> are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively (J/(kg&sdot;&deg;C)). <em>m</em> is the mass (kg). <em>T</em> is the temperature (&deg;C), and <em>ΔT</em> is the change in temperature (&deg;C). <em>T<sub>melt</sub></em> and <em>T<sub>boil</sub></em> are the melting point temperature and boiling point temperature, respectively (&deg;C). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if <em>T</em>=<em>T<sub>boil</sub></em> or <em>T</em>=<em>T<sub>melt</sub></em>. If this is the case, refer to <a href=#T:latentHtE>T: latentHtE</a>, Latent heat energy.
 </p>
 </td>
 </tr>
@@ -1560,7 +1560,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-<a href=http://en.wikipedia.org/wiki/Sensible_heat>sensibleHeat</a>
+<a href="http://en.wikipedia.org/wiki/Sensible_heat">Definition of Sensible Heat</a>
 </p>
 </td>
 </tr>
@@ -1576,7 +1576,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="T:t3LatHtE">
+<div id="T:latentHtE">
 <table class="tdefn">
 <tr>
 <th>
@@ -1593,7 +1593,7 @@ Latent heat energy
 Equation
 </th>
 <td>
-<div id="Eqn:T:t3LatHtE">
+<div id="Eqn:T:latentHtE">
 <div class="equation">
 <em>Q(t) = &int;<sub>0</sub><sup>t</sup><div class="fraction">
 <span class="fup">
@@ -1648,7 +1648,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-<a href=http://en.wikipedia.org/wiki/Latent_heat>latentHeat</a>
+<a href="http://en.wikipedia.org/wiki/Latent_heat">Definition of Latent Heat</a>
 </p>
 </td>
 </tr>
@@ -1867,7 +1867,7 @@ FIXME: This needs to be filled in
 Detailed derivation of simplified rate of change of temperature :
 </p>
 <p class="paragraph">
-Integrating <a href=#T:t1ConsThermE>T: t1ConsThermE</a> over a volume (<em>V</em>), we have:
+Integrating <a href=#T:consThermE>T: consThermE</a> over a volume (<em>V</em>), we have:
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -3044,7 +3044,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The above equation is derived using <a href=#T:t2SensHtE>T: t2SensHtE</a>. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#A:Water-Always-Liquid>A: Water-Always-Liquid</a>, <a href=#A:Atmospheric-Pressure-Tank>A: Atmospheric-Pressure-Tank</a>).
+The above equation is derived using <a href=#T:sensHtE>T: sensHtE</a>. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#A:Water-Always-Liquid>A: Water-Always-Liquid</a>, <a href=#A:Atmospheric-Pressure-Tank>A: Atmospheric-Pressure-Tank</a>).
 </p>
 </td>
 </tr>
@@ -3213,7 +3213,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The above equation is derived using <a href=#T:t2SensHtE>T: t2SensHtE</a> and <a href=#T:t3LatHtE>T: t3LatHtE</a>. <em>E<sub>P</sub></em> is the change in thermal energy of the PCM relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) J. <em>E<sub>P</sub></em> for the solid PCM is found using <a href=#T:t2SensHtE>T: t2SensHtE</a> for sensible heat ing, with the specific heat capacity of the solid PCM, <em>C<sub>P</sub><sup>S</sup></em> (J/(kg&sdot;&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). <em>E<sub>P</sub></em> for the melted PCM (<em>T<sub>P</sub>&thinsp;&gt;&thinsp;E<sub>P</sub><sub>melt</sub><sup>init</sup></em>) is found using <a href=#T:t2SensHtE>T: t2SensHtE</a> for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> (J). The energy required to melt all of the PCM is <em>H<sub>f</sub>&#8239;m<sub>P</sub></em> (J) (<a href=#DD:htFusion>DD: htFusion</a>). the specific heat capacity of the liquid PCM is <em>C<sub>P</sub><sup>L</sup></em> (J/(kg&sdot;&deg;C)) and the change in temperature is <em>T<sub>P</sub>&minus;T<sub>melt</sub><sup>P</sup></em> (&deg;C). <em>E<sub>P</sub></em> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> plus the latent heat energy added to the PCM, <em>Q<sub>P</sub></em> (J) since the time when melting began <em>t<sub>melt</sub><sup>init</sup></em> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (<a href=#A:No-Gaseous-State-PCM>A: No-Gaseous-State-PCM</a>).
+The above equation is derived using <a href=#T:sensHtE>T: sensHtE</a> and <a href=#T:latentHtE>T: latentHtE</a>. <em>E<sub>P</sub></em> is the change in thermal energy of the PCM relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) J. <em>E<sub>P</sub></em> for the solid PCM is found using <a href=#T:sensHtE>T: sensHtE</a> for sensible heat ing, with the specific heat capacity of the solid PCM, <em>C<sub>P</sub><sup>S</sup></em> (J/(kg&sdot;&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). <em>E<sub>P</sub></em> for the melted PCM (<em>T<sub>P</sub>&thinsp;&gt;&thinsp;E<sub>P</sub><sub>melt</sub><sup>init</sup></em>) is found using <a href=#T:sensHtE>T: sensHtE</a> for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> (J). The energy required to melt all of the PCM is <em>H<sub>f</sub>&#8239;m<sub>P</sub></em> (J) (<a href=#DD:htFusion>DD: htFusion</a>). the specific heat capacity of the liquid PCM is <em>C<sub>P</sub><sup>L</sup></em> (J/(kg&sdot;&deg;C)) and the change in temperature is <em>T<sub>P</sub>&minus;T<sub>melt</sub><sup>P</sup></em> (&deg;C). <em>E<sub>P</sub></em> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> plus the latent heat energy added to the PCM, <em>Q<sub>P</sub></em> (J) since the time when melting began <em>t<sub>melt</sub><sup>init</sup></em> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (<a href=#A:No-Gaseous-State-PCM>A: No-Gaseous-State-PCM</a>).
 </p>
 </td>
 </tr>
@@ -4063,13 +4063,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 
 </th>
 <th>
-T1 (<a href=#T:t1ConsThermE>T: t1ConsThermE</a>)
+T1 (<a href=#T:consThermE>T: consThermE</a>)
 </th>
 <th>
-T2 (<a href=#T:t2SensHtE>T: t2SensHtE</a>)
+T2 (<a href=#T:sensHtE>T: sensHtE</a>)
 </th>
 <th>
-T3 (<a href=#T:t3LatHtE>T: t3LatHtE</a>)
+T3 (<a href=#T:latentHtE>T: latentHtE</a>)
 </th>
 <th>
 GD1 (<a href=#GD:nwtnCooling>GD: nwtnCooling</a>)
@@ -4104,7 +4104,7 @@ IM4 (<a href=#IM:heatEInPCM>IM: heatEInPCM</a>)
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:t1ConsThermE>T: t1ConsThermE</a>)
+T1 (<a href=#T:consThermE>T: consThermE</a>)
 </td>
 <td>
 
@@ -4148,7 +4148,7 @@ T1 (<a href=#T:t1ConsThermE>T: t1ConsThermE</a>)
 </tr>
 <tr>
 <td>
-T2 (<a href=#T:t2SensHtE>T: t2SensHtE</a>)
+T2 (<a href=#T:sensHtE>T: sensHtE</a>)
 </td>
 <td>
 
@@ -4192,7 +4192,7 @@ X
 </tr>
 <tr>
 <td>
-T3 (<a href=#T:t3LatHtE>T: t3LatHtE</a>)
+T3 (<a href=#T:latentHtE>T: latentHtE</a>)
 </td>
 <td>
 
@@ -5600,7 +5600,7 @@ A19 (<a href=#A:Atmospheric-Pressure-Tank>A: Atmospheric-Pressure-Tank</a>)
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:t1ConsThermE>T: t1ConsThermE</a>)
+T1 (<a href=#T:consThermE>T: consThermE</a>)
 </td>
 <td>
 X
@@ -5662,7 +5662,7 @@ X
 </tr>
 <tr>
 <td>
-T2 (<a href=#T:t2SensHtE>T: t2SensHtE</a>)
+T2 (<a href=#T:sensHtE>T: sensHtE</a>)
 </td>
 <td>
 
@@ -5724,7 +5724,7 @@ T2 (<a href=#T:t2SensHtE>T: t2SensHtE</a>)
 </tr>
 <tr>
 <td>
-T3 (<a href=#T:t3LatHtE>T: t3LatHtE</a>)
+T3 (<a href=#T:latentHtE>T: latentHtE</a>)
 </td>
 <td>
 

@@ -59,7 +59,7 @@ import Drasil.SWHS.IMods (eBalanceOnPCM, heatEInWtr)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
 import Drasil.SWHS.Requirements (nonFuncReqs)
-import Drasil.SWHS.TMods (t1ConsThermE)
+import Drasil.SWHS.TMods (consThermE)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
   coil_SA_max, deltaT, diam, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCap_L, 
   htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, sim_time, 
@@ -134,7 +134,7 @@ mkSRS = RefSec (RefProg intro
       , SSDSolChSpec 
         (SCSProg 
           [ Assumptions 
-          , TMs ([Label] ++ stdFields) [t1ConsThermE] -- only have the same T1 with SWHS
+          , TMs ([Label] ++ stdFields) [consThermE] -- only have the same T1 with SWHS
           , GDs ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
           , DDs ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
@@ -741,7 +741,7 @@ traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
 traceAssumpRef = map makeRef assumps_Nopcm_list_new
 
 traceTheories = ["T1"]
-traceTheoriesRef = map makeRef [t1ConsThermE]
+traceTheoriesRef = map makeRef [consThermE]
 
 traceGenDefs = ["GD1", "GD2"]
 traceGenDefRef = map makeRef swhsGDs

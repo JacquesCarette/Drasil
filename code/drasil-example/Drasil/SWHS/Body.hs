@@ -62,7 +62,7 @@ import Drasil.SWHS.Requirements (inputInitQuants, useAboveFindMass,
   calcChgHeatEnergyPCMOverTime, verifyEnergyOutput, 
   calcPCMMeltBegin, calcPCMMeltEnd, inputInitQuantsEqn, 
   useAboveFindMassEqn, nonFuncReqs) -- sorted by order of appearance; reqs, eqns, list
-import Drasil.SWHS.TMods (t1ConsThermE, t2SensHtE, t3LatHtE, swhsTMods)
+import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, swhsTMods)
 import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
   temp_C, coil_SA, w_E, coil_HTC, sim_time, tau_S_P, htCap_S_P, pcm_mass,
   ht_flux_P, eta, tau_W, htCap_W, w_mass, ht_flux_C, vol_ht_gen, thickness,
@@ -142,7 +142,7 @@ mkSRS = RefSec (RefProg intro [
       , SSDSolChSpec 
         (SCSProg 
           [ Assumptions
-          , TMs ([Label] ++ stdFields) [t1ConsThermE, t2SensHtE, t3LatHtE]
+          , TMs ([Label] ++ stdFields) [consThermE, sensHtE, latentHtE]
           , GDs ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
           , DDs ([Label, Symbol, Units] ++ stdFields) swhsDDefs ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
@@ -349,7 +349,7 @@ s4_2_3_genDefs = map reldefn swhsRC
 
 s4_2_3_deriv :: [Contents]
 s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
-  s4_2_3_deriv_2 t1ConsThermE vol,
+  s4_2_3_deriv_2 consThermE vol,
   s4_2_3_deriv_3,
   s4_2_3_deriv_4 gauss_div surface vol thFluxVect uNormalVect unit_,
   s4_2_3_deriv_5,

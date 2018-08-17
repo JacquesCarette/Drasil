@@ -59,7 +59,7 @@ reflink ref txt = text ("<a href=#" ++ ref ++ ">") <> txt <> text "</a>"
 
 -- | Helper for setting up links to external URIs
 reflinkURI :: String -> Doc -> Doc
-reflinkURI ref txt = text ("<a href=" ++ ref ++ ">") <> txt <> text "</a>"
+reflinkURI ref txt = text ("<a href=\"" ++ ref ++ "\">") <> txt <> text "</a>"
 
 -- | Helper for setting up figures
 image :: Doc -> Doc -> MaxWidthPercent -> Doc

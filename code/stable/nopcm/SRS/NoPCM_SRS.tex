@@ -272,7 +272,7 @@ The instance models that govern SWHS are presented in Section~\ref{Sec:IMs}. The
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TMs}{]}, General Definitions {[}Section~\ref{Sec:GDs}{]}, Data Definitions {[}Section~\ref{Sec:DDs}{]}, Instance Models {[}Section~\ref{Sec:IMs}{]}, Likely Changes {[}Section~\ref{Sec:LCs}{]}, or Unlikely Changes {[}Section~\ref{Sec:UCs}{]}, in which the respective assumption is used.
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Thermal-Energy-Only}:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible {[}\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Thermal-Energy-Only}:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible {[}\hyperref[T:consThermE]{Definition~T:consThermE}{]}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Heat-Transfer-Coeffs-Constant}:]All heat transfer coefficients are constant over time {[}\hyperref[GD:nwtnCooling]{Definition~GD:nwtnCooling}{]}.
@@ -319,9 +319,9 @@ This section focuses on the general equations and laws that SWHS is based on.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:t1ConsThermE}
+\toprule \textbf{Refname} & \textbf{T:consThermE}
 \phantomsection 
-\label{T:t1ConsThermE}
+\label{T:consThermE}
 \\ \midrule \\
 Label & Conservation of thermal energy
 \\ \midrule \\
@@ -341,7 +341,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity $C$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and density, $ρ$ ($\frac{\text{kg}}{\text{m}^{3}}$), where $\mathbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$), $g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$), $T$ is the temperature (${}^{\circ}$C), $t$ is time (s), and $∇$ is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (A\ref{A:Thermal-Energy-Only}).
 \\ \midrule \\
-Source & \href{http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm}{heatConduction}
+Source & \href{http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm}{Fourier Law of Heat Conduction and Heat Equation}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -412,7 +412,7 @@ RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Detailed derivation of simplified rate of change of temperature.
-Integrating \hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE} over a volume ($V$), we have:
+Integrating \hyperref[T:consThermE]{Definition~T:consThermE} over a volume ($V$), we have:
 \begin{dmath}
 -\int_{V}{∇\cdot{}\mathbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
 \end{dmath}
@@ -556,7 +556,7 @@ Description & \begin{symbDescription}
               \item{${T_{init}}$ is the initial temperature (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The above equation is derived using \hyperref[T:t2SensHtE]{Definition~T:t2SensHtE}. ${E_{W}}$ is the change in thermal energy of the liquid water relative to the energy at the initial temperature (${T_{init}}$) (J). ${C_{W}}$ is the specific heat capacity of liquid water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and ${m_{W}}$ is the mass of the water (kg). The change in temperature is the difference between the temperature at time $t$ (s), ${T_{W}}$ and the initial temperature, ${T_{init}}$ (${}^{\circ}$C). This equation applies as long as $0<{T_{W}}<100$${}^{\circ}$C (A\ref{A:Water-Always-Liquid}, A\ref{A:Atmospheric-Pressure-Tank}).
+Notes & The above equation is derived using \hyperref[T:sensHtE]{Definition~T:sensHtE}. ${E_{W}}$ is the change in thermal energy of the liquid water relative to the energy at the initial temperature (${T_{init}}$) (J). ${C_{W}}$ is the specific heat capacity of liquid water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and ${m_{W}}$ is the mass of the water (kg). The change in temperature is the difference between the temperature at time $t$ (s), ${T_{W}}$ and the initial temperature, ${T_{init}}$ (${}^{\circ}$C). This equation applies as long as $0<{T_{W}}<100$${}^{\circ}$C (A\ref{A:Water-Always-Liquid}, A\ref{A:Atmospheric-Pressure-Tank}).
 \\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\
@@ -676,10 +676,10 @@ This problem is small in size and relatively simple, so performance is not a pri
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. Table~\ref{Table:TraceyRI} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:TraceyRIs} shows the dependencies of instance models, requirements, and data constraints on each other. Table~\ref{Table:TraceyAI} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
 \begin{longtable}{l l l l l l l}
 \toprule
- & T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) & GD1 (\hyperref[GD:nwtnCooling]{Definition~GD:nwtnCooling}) & GD2 (\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}) & DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) & IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) & IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr})
+ & T1 (\hyperref[T:consThermE]{Definition~T:consThermE}) & GD1 (\hyperref[GD:nwtnCooling]{Definition~GD:nwtnCooling}) & GD2 (\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}) & DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) & IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) & IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr})
 \\
 \midrule
-T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) &  &  &  &  &  & 
+T1 (\hyperref[T:consThermE]{Definition~T:consThermE}) &  &  &  &  &  & 
 \\
 GD1 (\hyperref[GD:nwtnCooling]{Definition~GD:nwtnCooling}) &  &  &  &  &  & 
 \\
@@ -725,7 +725,7 @@ R6 (\hyperref[Calculate-Change-Heat_Energy-Water-Time]{FR: Calculate-Change-Heat
  & A1 (A\ref{A:Thermal-Energy-Only}) & A2 (A\ref{A:Heat-Transfer-Coeffs-Constant}) & A3 (A\ref{A:Constant-Water-Temp-Across-Tank}) & A4 (A\ref{A:Density-Water-Constant-over-Volume}) & A5 (A\ref{A:Specific-Heat-Energy-Constant-over-Volume}) & A6 (A\ref{A:Newton-Law-Convective-Cooling-Coil-Water}) & A7 (A\ref{A:Temp-Heating-Coil-Constant-over-Time}) & A8 (A\ref{A:Temp-Heating-Coil-Constant-over-Length}) & A9 (A\ref{A:Charging-Tank-No-Temp-Discharge}) & A10 (A\ref{A:Water-Always-Liquid}) & A11 (A\ref{A:Perfect-Insulation-Tank}) & A12 (A\ref{A:No-Internal-Heat-Generation-By-Water}) & A13 (A\ref{A:Atmospheric-Pressure-Tank}) & A14 (A\ref{A:Volume-Coil-Negligible})
 \\
 \midrule
-T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+T1 (\hyperref[T:consThermE]{Definition~T:consThermE}) & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 GD1 (\hyperref[GD:nwtnCooling]{Definition~GD:nwtnCooling}) &  & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\

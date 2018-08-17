@@ -272,8 +272,7 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
     mkSubRef SI {_quants = v} (TSymb con) =
       SRS.tOfSymb 
       [tsIntro con,
-                LlC $ table Equational (
-                sortBy (compsy `on` eqSymb) 
+                LlC $ table Equational (sortBySymbol
                 $ filter (`hasStageSymbol` Equational) 
                 (nub v))
                 at_start] []

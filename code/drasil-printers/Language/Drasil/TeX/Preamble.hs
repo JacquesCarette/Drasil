@@ -1,4 +1,4 @@
-module Language.Drasil.TeX.Preamble(genPreamble) where
+module Language.Drasil.TeX.Preamble (genPreamble) where
 
 import Data.List (nub)
 
@@ -32,6 +32,7 @@ data Package = AMSMath
              | URL
              | FontSpec -- for utf-8 encoding in lualatex
              | Unicode -- for unicode-math in lualatex
+             | EnumItem
              deriving Eq
 
 addPackage :: Package -> D
@@ -57,6 +58,7 @@ addPackage Mathtools = usepackage "mathtools"
 addPackage URL       = usepackage "url"
 addPackage FontSpec  = usepackage "fontspec"
 addPackage Unicode   = usepackage "unicode-math"
+addPackage EnumItem  = usepackage "enumitem"
 
 data Def = AssumpCounter
          | LCCounter
@@ -117,5 +119,5 @@ parseDoc los' =
     parseDoc' (Bib _) = ([FileContents,BibLaTeX,URL],[Bibliography])
     parseDoc' (Header _ _ _) = ([], [])
     parseDoc' (Paragraph _)  = ([], [])
-    parseDoc' (List _)       = ([], [])
+    parseDoc' (List _)       = ([EnumItem], [])
     parseDoc' (EqnBlock _)   = ([], [])

@@ -4,7 +4,6 @@ module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
 
-import Drasil.DocLang (refA)
 import Drasil.DocLang.SRS as SRS (physSystLabel)
 
 import Data.Drasil.Concepts.Documentation (assumption, definition, element, 
@@ -18,14 +17,14 @@ import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 
 import Data.Drasil.SentenceStructures (foldlSent, getTandS, isThe, ofThe, sAnd)
 
-import Drasil.SSP.Assumptions (newA5, sspRefDB)
+import Drasil.SSP.Assumptions (newA5)
 import Drasil.SSP.BasicExprs (displMtx, eqlExpr, momExpr, rotMtx)
-import Drasil.SSP.DataDefs (ddRef, lengthLb, lengthLs, mobShearWO, sliceWght)
+import Drasil.SSP.DataDefs (lengthLb, lengthLs, mobShearWO, sliceWght)
 import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf)
 import Drasil.SSP.Labels (genDef1Label, genDef2Label, genDef3Label, genDef4Label, 
   genDef5Label, genDef6Label, genDef7Label, genDef8Label, genDef9Label, genDef10Label)
-import Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, effStress_new, 
-  hookesLaw_new)
+import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress, 
+  hookesLaw)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
   cohesion, dx_i, dy_i, earthqkLoadFctr, elmNrmDispl, elmPrllDispl, fricAngle, 
   fs, fx, fy, genDisplace, genPressure, impLoadAngle, index, intNormForce, 
@@ -61,7 +60,7 @@ nmFEq_rel = inxi totNrmForce $= eqlExpr cos sin
 nmFEq_desc :: Sentence
 nmFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   S "in the", phrase slope, S "the", phrase force,
-  S "equilibrium to satisfy", makeRef equilibrium_new, S "in the direction",
+  S "equilibrium to satisfy", makeRef equilibrium, S "in the direction",
   phrase perp, S "to" +:+. (S "base" +:+ phrase surface `ofThe`
   phrase slice), S "Rearranged to solve for", (phrase normForce `ofThe`
   phrase surface) +:+. ch totNrmForce, at_start force, S "equilibrium is",
@@ -70,8 +69,8 @@ nmFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   S "refers to", (plural value `ofThe` plural property), S "for",
   phrase slice :+: S "/" :+: plural intrslce, S "following convention in" +:+.
   makeRef SRS.physSystLabel, at_start force, phrase variable,
-  plural definition, S "can be found in", ddRef sliceWght, S "to",
-  ddRef lengthLs]
+  plural definition, S "can be found in", makeRef sliceWght, S "to",
+  makeRef lengthLs]
 
 --
 bsShrFEq :: RelationConcept
@@ -85,7 +84,7 @@ bShFEq_rel = inxi mobShrI $= eqlExpr sin cos
 bShFEq_desc :: Sentence
 bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   S "in the", phrase slope, S "the", phrase force,
-  S "equilibrium to satisfy", makeRef equilibrium_new, S "in the direction",
+  S "equilibrium to satisfy", makeRef equilibrium, S "in the direction",
   S "parallel to" +:+. (S "base" +:+ phrase surface `ofThe`
   phrase slice), S "Rearranged to solve for the", phrase shearForce,
   S "on the base" +:+. ch mobShrI, at_start force, S "equilibrium is",
@@ -94,8 +93,8 @@ bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   S "refers to", (plural value `ofThe` plural property), S "for",
   phrase slice :+: S "/" :+: plural intrslce, S "following convention in" +:+.
   makeRef SRS.physSystLabel, at_start force, phrase variable,
-  plural definition, S "can be found in", ddRef sliceWght, S "to",
-  ddRef lengthLs]
+  plural definition, S "can be found in", makeRef sliceWght, S "to",
+  makeRef lengthLs]
 
 --
 shrResEqn :: Expr
@@ -111,7 +110,7 @@ resShr_rel = inxi shrResI $= shrResEqn
 
 resShr_desc :: Sentence
 resShr_desc = foldlSent [S "The Mohr-Coulomb resistive shear strength of a",
-  phrase slice, ch shrStress, S "from", makeRef mcShrStrgth_new,
+  phrase slice, ch shrStress, S "from", makeRef mcShrStrgth,
   S "is multiplied by the area", E $ sy baseWthX * sec(sy baseAngle) * 1,
   S "to obtain the" +:+. getTandS shrResI, S "Note the extra", E 1,
   S "is to represent a unit of width which is multiplied by the",
@@ -120,7 +119,7 @@ resShr_desc = foldlSent [S "The Mohr-Coulomb resistive shear strength of a",
   `sAnd` ch baseWthX, S "is the x width of the base. This accounts for the",
   phrase nrmFSubWat, E $ sy nrmFSubWat $= sy totNrmForce - sy baseHydroForce,
   S "of a soil from", -- FIXME: add prime to nrmStrss
-  makeRef effStress_new, S "where the", phrase nrmStrss,
+  makeRef effStress, S "where the", phrase nrmStrss,
   S "is multiplied by the same area to obtain the", phrase nrmFSubWat,
   E $ sy nrmStrss * sy baseWthX * sec(sy baseAngle) * 1 $= sy nrmFSubWat]
 
@@ -134,7 +133,7 @@ mobShr_rel = inxi mobShrI $= inxi shrResI / sy fs $= shrResEqn / sy fs
 
 mobShr_desc :: Sentence
 mobShr_desc = foldlSent [
-  S "From", phrase definition `ofThe` phrase fs, S "in", makeRef fs_rc_new `sC`
+  S "From", phrase definition `ofThe` phrase fs, S "in", makeRef factOfSafety `sC`
   S "and the new", phrase definition, S "of", ch shrResI `sC` S "a new",
   S "relation for", S "net mobile" +:+ phrase shearForce `ofThe` phrase slice,
   ch shearFNoIntsl, S "is found as the resistive shear", ch shrResI,
@@ -150,7 +149,7 @@ nmShrR_rel = sy intShrForce $= sy normToShear * sy scalFunc * sy intNormForce
 
 nmShrR_desc :: Sentence
 nmShrR_desc = foldlSent [S "The", phrase assumption,
-  S "for the Morgenstern Price", phrase method_, sParen (refA sspRefDB newA5),
+  S "for the Morgenstern Price", phrase method_, sParen (makeRef newA5),
   S "that the", phrase intrslce, phrase shearForce, ch xi,
   S "is proportional to the", phrase intrslce, 
   phrase normForce, ch intNormForce, S "by a proportionality constant",
@@ -171,7 +170,7 @@ momEql_rel = 0 $= momExpr (\ x y -> x -
 
 momEql_desc :: Sentence
 momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
-  S "in the", phrase slope, S "the moment equilibrium to satisfy", makeRef equilibrium_new,
+  S "in the", phrase slope, S "the moment equilibrium to satisfy", makeRef equilibrium,
   S "in the direction", phrase perp,
   S "to" +:+. (S "base" +:+ phrase surface `ofThe` phrase slice),
   S "Moment equilibrium is derived from the free body diagram of" +:+.
@@ -179,7 +178,7 @@ momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   plural value `ofThe` plural property, S "for", phrase slice :+: S "/" :+:
   plural intrslce, S "following convention in" +:+.
   makeRef SRS.physSystLabel, at_start variable, plural definition,
-  S "can be found in", ddRef sliceWght, S "to", ddRef lengthLs]
+  S "can be found in", makeRef sliceWght, S "to", makeRef lengthLs]
 
 --
 netForcex :: RelationConcept
@@ -225,7 +224,7 @@ fNet_desc = foldlSent [S "These equations show the net sum of the",
   phrase slice :+: S "/" :+: plural intrslce, S "following", 
   S "convention in" +:+. makeRef SRS.physSystLabel,
   at_start force, phrase variable, plural definition, S "can be found in",
-  ddRef sliceWght, S "to", ddRef lengthLb]
+  makeRef sliceWght, S "to", makeRef lengthLb]
 
 --
 hookesLaw2d :: RelationConcept
@@ -240,7 +239,7 @@ hooke2d_rel = vec2D (inxi genPressure) (inxi genPressure) $=
 hooke2d_desc :: Sentence
 hooke2d_desc = foldlSent [
   S "A 2D component implementation of Hooke's law as seen in" +:+.
-  makeRef hookesLaw_new, ch elmPrllDispl, S "is", phrase displacement `ofThe`
+  makeRef hookesLaw, ch elmPrllDispl, S "is", phrase displacement `ofThe`
   phrase element, S "normal to the", phrase surface, S "and",
   ch elmNrmDispl, S "is", phrase displacement `ofThe` phrase element,
   S "parallel to the" +:+. phrase surface, S "Pn,i",
@@ -251,7 +250,7 @@ hooke2d_desc = foldlSent [
   phrase len, S "The stiffness", plural value, S "Kn,i" `sAnd` S "Kt,i",
   -- FIXME: Pn,i ~ Pt,i ~ Kn,i ~ Kt,i need symbols 
   S "are then the resistance to", phrase displacement,
-  S "in the respective directions defined as in" +:+. ddRef mobShearWO,
+  S "in the respective directions defined as in" +:+. makeRef mobShearWO,
   S "The pressure", plural force, S "would be the result of applied",
   S "loads on the", phrase mass `sC` S "the product of the stiffness",
   plural element, S "with the", phrase displacement, S "would be the",

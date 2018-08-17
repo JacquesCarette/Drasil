@@ -19,10 +19,11 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SCSSub(..), 
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
-  TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), NotationSec(..),
-  ModHierarchSec(..), MISModSub(..), MISModSec(..), MISSyntaxSub(..), MISSemanticsSub(..),
-  cite, dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
-  mkRequirement, outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb)
+  TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), 
+  dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
+  mkRequirement, outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb,
+  MISModSub(..), MISModSec(..), MISSemanticsSub(..), MISSyntaxSub(..), 
+  ModHierarchSec(ModHierarchProg), NotationSec(NotationProg))
 
 import Data.Drasil.Concepts.Computation (computerApp, inParam, inQty, inValue)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
@@ -55,16 +56,16 @@ import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), andThe,
 import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, itemRefToSent, 
   makeTMatrix, noRefs, prodUCTbl)
   
-import Drasil.GlassBR.Assumptions (assumptionConstants, gbRefDB, gbRefDB', newAssumptions, newA4, 
-  newA5, newA8)
+import Drasil.GlassBR.Assumptions (assumptionConstants, gbRefDB, gbRefDB', assumptions, standardValues,
+  glassLite, ldfConstant)
 import Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
 import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, glass, gLassBR, 
   lShareFac, ptOfExplsn, stdOffDist)
 import Drasil.GlassBR.DataDefs (aspRat, dataDefns, gbQDefns, hFromt, strDisFac, nonFL, 
-  dimLL, glaTyFac, tolStrDisFac, tolPre, risk, standOffDis, hFromtDD, glaTyFacDD)
+  dimLL, glaTyFac, tolStrDisFac, tolPre, risk, standOffDis)
 import Drasil.GlassBR.IMods (probOfBreak, calofCapacity, calofDemand, gbrIMods)
 import Drasil.GlassBR.ModuleDefs (allMods)
-import Drasil.GlassBR.References (rbrtsn2012)
+import Drasil.GlassBR.References (astm2009, astm2012, astm2016, rbrtsn2012)
 import Drasil.GlassBR.Symbols (this_symbols)
 import Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe)
 import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, capacity, char_weight, 
@@ -135,7 +136,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           [ Assumptions
           , TMs ([Label] ++ stdFields) [pbIsSafe, lrIsSafe]
           , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
-          , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+          , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand] HideDerivation
           , Constraints EmptyS dataConstraintUncertainty
                         (foldlSent [makeRef SRS.valsOfAuxConsLabel, S "gives", (plural value `ofThe` S "specification"), 
@@ -187,12 +188,12 @@ mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master
     MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     calcLabel False) :
-  MISModSec (MISModProg "GlassType" (Just (mkParagraph (S "from" +:+ makeRef glaTyFacDD))) --FIXME: link is broken
+  MISModSec (MISModProg "GlassType" (Just (mkParagraph (S "from" +:+ makeRef glaTyFac))) --FIXME: link is broken
     [MISUses [],
     MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     glTypeLabel True) :
-  MISModSec (MISModProg "Thickness" (Just (mkParagraph (S "following" +:+ makeRef hFromtDD))) --FIXME: link is broken
+  MISModSec (MISModProg "Thickness" (Just (mkParagraph (S "following" +:+ makeRef hFromt))) --FIXME: link is broken
     [MISUses [],
     MISSyntax [MISExportedCs ([] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
@@ -396,8 +397,8 @@ undIR = foldlList Comma List [phrase scndYrCalculus, phrase structuralMechanics,
   plural computerApp `sIn` phrase civilEng]
 appStanddIR = foldlSent [S " In addition" `sC` plural reviewer, -- FIXME: space before "In" is a hack to get proper spacing
   S "should be familiar with the applicable", plural standard,
-  S "for constructions using glass from",
-  sSqBr (S "1-3" {-astm2009, astm2012, astm2016-}) `sIn`
+  S "for constructions using glass from", (foldlList Comma List
+  $ map makeRef [astm2009, astm2012, astm2016]) `sIn`
   (makeRef SRS.referenceLabel)]
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
   S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
@@ -428,10 +429,10 @@ purpOfDocIntro typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
 orgOfDocIntro, orgOfDocIntroEnd :: Sentence
 orgOfDocIntro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an", short srs,
-  S "for", phrase sciCompS, S "proposed by" +:+ cite gbRefDB koothoor2013
-  `sAnd` cite gbRefDB smithLai2005 `sC` S "with some", 
+  S "for", phrase sciCompS, S "proposed by" +:+ makeRef koothoor2013
+  `sAnd` makeRef smithLai2005 `sC` S "with some", 
   plural aspect, S "taken from Volere", phrase template,
-  S "16", cite gbRefDB rbrtsn2012]
+  S "16", makeRef rbrtsn2012]
 
 orgOfDocIntroEnd = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
   S "are used to support", (plural definition `ofThe` S "different"),
@@ -565,7 +566,7 @@ probEnding = foldl (+:+) EmptyS [S "interpret the", plural input_,
 {--Terminology and Definitions--}
 
 termsAndDesc = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
-  S "are extracted from" +:+ (sSqBrNum 1 {-astm2009-}) `sIn`
+  S "are extracted from" +:+ makeRef astm2009 `sIn`
   (makeRef SRS.referenceLabel))) [termsAndDescBullets]
 
 {--Physical System Description--}
@@ -662,8 +663,8 @@ funcReqsR1Table = llcc (mkLabelSame "R1ReqInputs" Tab) $
 
 req2Desc = foldlSent [S "The", phrase system,
   S "shall set the known", plural value +: S "as follows",
-  foldlList Comma List [(foldlsC (map ch (take 4 assumptionConstants)) `followA` newA4),
-  ((ch constant_LoadDF) `followA` newA8), (short lShareFac `followA` newA5),
+  foldlList Comma List [(foldlsC (map ch (take 4 assumptionConstants)) `followA` standardValues),
+  ((ch constant_LoadDF) `followA` ldfConstant), (short lShareFac `followA` glassLite),
   (ch hFromt) +:+ sParen (S "from" +:+ (makeRef hFromt)), 
   (ch glaTyFac) +:+ sParen (S "from" +:+ (makeRef glaTyFac)),
   (ch standOffDis) +:+ sParen (S "from" +:+ (makeRef standOffDis))]]
@@ -672,9 +673,9 @@ req2Desc = foldlSent [S "The", phrase system,
 {-funcReqsR2 = (Nested (S "The" +:+ phrase system +:+
    S "shall set the known" +:+ plural value +: S "as follows")
     (Bullet $ map Flat
-     [foldlsC (map getS (take 4 assumptionConstants)) `followA` newA4,
-     (getS loadDF) `followA` newA8,
-     short lShareFac `followA` newA5]))
+     [foldlsC (map getS (take 4 assumptionConstants)) `followA` standardValues,
+     (getS loadDF) `followA` ldfConstant,
+     short lShareFac `followA` glassLite]))
 -}
 --FIXME:should constants, LDF, and LSF have some sort of field that holds
 -- the assumption(s) that're being followed? (Issue #349)
@@ -701,7 +702,7 @@ testing :: [QuantityDict]
 testing = qw prob_br : qw lRe : qw demand : [] -- all different types!
 --FIXME: rename or find better implementation?
 
-funcReqsR6_pulledList :: [QDefinition]
+funcReqsR6_pulledList :: [DataDefinition]
 funcReqsR6_pulledList = [risk, strDisFac, nonFL, glaTyFac, dimLL, 
   tolPre, tolStrDisFac, hFromt, aspRat]
 
@@ -772,7 +773,7 @@ traceMatsAndGraphsFuncReqRef = map makeRef [funcReqsR1, funcReqsR2, funcReqsR3,
                                                                   --FIXME: revisit this list
 
 traceMatsAndGraphsA = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
-traceMatsAndGraphsARef = map makeRef newAssumptions
+traceMatsAndGraphsARef = map makeRef assumptions
 
 traceMatsAndGraphsLC = ["LC1", "LC2", "LC3", "LC4", "LC5"]
 traceMatsAndGraphsLCRef = map makeRef likelyChanges_SRS

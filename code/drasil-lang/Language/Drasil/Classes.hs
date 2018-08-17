@@ -20,6 +20,7 @@ module Language.Drasil.Classes (
   , Constrained(constraints)
   , HasReasVal(reasVal)
   , ExprRelat(relat)
+  , DefiningExpr(defnExpr)
   , HasDerivation(derivations)
   , HasAdditionalNotes(getNotes)
   , HasRefAddress(getRefAdd)
@@ -27,7 +28,7 @@ module Language.Drasil.Classes (
 
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Chunk.Derivation (Derivation)
-import Language.Drasil.Chunk.References (References)
+import Language.Drasil.Chunk.References (Reference)
 import Language.Drasil.Development.UnitLang(UDefn, USymb)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label, LblType)
@@ -84,7 +85,7 @@ class HasSpace c where
   typ      :: Lens' c Space
 
 class HasReference c where
-  getReferences :: Lens' c References
+  getReferences :: Lens' c [Reference]
 
 class HasDerivation c where
   derivations :: Lens' c Derivation
@@ -137,3 +138,7 @@ class UnitEq u where
 -- TODO : there is a design bug here not at all apparent from its definition; have to come back to it (Pull Request #532)
 class ExprRelat c where
   relat :: Lens' c Expr
+
+-- This is the 'correct' version of ExprRelat.
+class DefiningExpr c where
+  defnExpr :: Lens' c Expr

@@ -855,7 +855,7 @@ Reviewers of this documentation should have a strong knowledge in rigid body dyn
 Organization of Document
 </h2>
 <p class="paragraph">
-The organization of this document follows the template for an SRS for scientific computing software proposed by [3] and [6]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>Instance Models</a> and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#dParnas1972>parnas1972</a> and <a href=#dParnasPcClements1984>parnasClements1984</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>Instance Models</a> and trace back to find any additional information they require.
 </p>
 <p class="paragraph">
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models.
@@ -1983,7 +1983,7 @@ Data Definitions
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models.
 </p>
-<div id="DD:p.CM">
+<div id="DD:ctrOfMass">
 <table class="ddefn">
 <tr>
 <th>
@@ -2020,7 +2020,7 @@ m
 Equation
 </th>
 <td>
-<div id="Eqn:DD:p.CM">
+<div id="Eqn:DD:ctrOfMass">
 <div class="equation">
 <em><b>p</b><sub>CM</sub> = <div class="fraction">
 <span class="fup">
@@ -2077,7 +2077,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:linearDisplacement">
+<div id="DD:linDisp">
 <table class="ddefn">
 <tr>
 <th>
@@ -2114,7 +2114,7 @@ m
 Equation
 </th>
 <td>
-<div id="Eqn:DD:linearDisplacement">
+<div id="Eqn:DD:linDisp">
 <div class="equation">
 <em><b>r</b>(t) = <div class="fraction">
 <span class="fup">
@@ -2168,7 +2168,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:linearVelocity">
+<div id="DD:linVel">
 <table class="ddefn">
 <tr>
 <th>
@@ -2205,7 +2205,7 @@ m/s
 Equation
 </th>
 <td>
-<div id="Eqn:DD:linearVelocity">
+<div id="Eqn:DD:linVel">
 <div class="equation">
 <em><b>v</b>(t) = <div class="fraction">
 <span class="fup">
@@ -2259,7 +2259,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:linearAcceleration">
+<div id="DD:linAcc">
 <table class="ddefn">
 <tr>
 <th>
@@ -2296,7 +2296,7 @@ m/s<sup>2</sup>
 Equation
 </th>
 <td>
-<div id="Eqn:DD:linearAcceleration">
+<div id="Eqn:DD:linAcc">
 <div class="equation">
 <em><b>a</b>(t) = <div class="fraction">
 <span class="fup">
@@ -2350,7 +2350,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:angularDisplacement">
+<div id="DD:angDisp">
 <table class="ddefn">
 <tr>
 <th>
@@ -2387,7 +2387,7 @@ rad
 Equation
 </th>
 <td>
-<div id="Eqn:DD:angularDisplacement">
+<div id="Eqn:DD:angDisp">
 <div class="equation">
 <em>θ = <div class="fraction">
 <span class="fup">
@@ -2441,7 +2441,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:angularVelocity">
+<div id="DD:angVel">
 <table class="ddefn">
 <tr>
 <th>
@@ -2478,7 +2478,7 @@ rad/s
 Equation
 </th>
 <td>
-<div id="Eqn:DD:angularVelocity">
+<div id="Eqn:DD:angVel">
 <div class="equation">
 <em>ω = <div class="fraction">
 <span class="fup">
@@ -2532,7 +2532,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:angularAcceleration">
+<div id="DD:angAccel">
 <table class="ddefn">
 <tr>
 <th>
@@ -2569,7 +2569,7 @@ rad/s<sup>2</sup>
 Equation
 </th>
 <td>
-<div id="Eqn:DD:angularAcceleration">
+<div id="Eqn:DD:angAccel">
 <div class="equation">
 <em>α = <div class="fraction">
 <span class="fup">
@@ -2623,7 +2623,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="DD:impulseS">
+<div id="DD:impulse">
 <table class="ddefn">
 <tr>
 <th>
@@ -2660,7 +2660,7 @@ N&sdot;s
 Equation
 </th>
 <td>
-<div id="Eqn:DD:impulseS">
+<div id="Eqn:DD:impulse">
 <div class="equation">
 <em>j = <div class="fraction">
 <span class="fup">
@@ -3824,7 +3824,7 @@ GD7 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
 </tr>
 <tr>
 <td>
-DD1 (<a href=#DD:p.CM>DD: p_CM</a>)
+DD1 (<a href=#DD:ctrOfMass>DD: ctrOfMass</a>)
 </td>
 <td>
 X
@@ -3850,7 +3850,7 @@ X
 </tr>
 <tr>
 <td>
-DD2 (<a href=#DD:linearDisplacement>DD: linearDisplacement</a>)
+DD2 (<a href=#DD:linDisp>DD: linDisp</a>)
 </td>
 <td>
 X
@@ -3876,7 +3876,7 @@ X
 </tr>
 <tr>
 <td>
-DD3 (<a href=#DD:linearVelocity>DD: linearVelocity</a>)
+DD3 (<a href=#DD:linVel>DD: linVel</a>)
 </td>
 <td>
 X
@@ -3902,7 +3902,7 @@ X
 </tr>
 <tr>
 <td>
-DD4 (<a href=#DD:linearAcceleration>DD: linearAcceleration</a>)
+DD4 (<a href=#DD:linAcc>DD: linAcc</a>)
 </td>
 <td>
 X
@@ -3928,7 +3928,7 @@ X
 </tr>
 <tr>
 <td>
-DD5 (<a href=#DD:angularDisplacement>DD: angularDisplacement</a>)
+DD5 (<a href=#DD:angDisp>DD: angDisp</a>)
 </td>
 <td>
 X
@@ -3954,7 +3954,7 @@ X
 </tr>
 <tr>
 <td>
-DD6 (<a href=#DD:angularVelocity>DD: angularVelocity</a>)
+DD6 (<a href=#DD:angVel>DD: angVel</a>)
 </td>
 <td>
 X
@@ -3980,7 +3980,7 @@ X
 </tr>
 <tr>
 <td>
-DD7 (<a href=#DD:angularAcceleration>DD: angularAcceleration</a>)
+DD7 (<a href=#DD:angAccel>DD: angAccel</a>)
 </td>
 <td>
 X
@@ -4006,7 +4006,7 @@ X
 </tr>
 <tr>
 <td>
-DD8 (<a href=#DD:impulseS>DD: impulseS</a>)
+DD8 (<a href=#DD:impulse>DD: impulse</a>)
 </td>
 <td>
 X
@@ -4260,28 +4260,28 @@ GD6 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
 GD7 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
 </th>
 <th>
-DD1 (<a href=#DD:p.CM>DD: p_CM</a>)
+DD1 (<a href=#DD:ctrOfMass>DD: ctrOfMass</a>)
 </th>
 <th>
-DD2 (<a href=#DD:linearDisplacement>DD: linearDisplacement</a>)
+DD2 (<a href=#DD:linDisp>DD: linDisp</a>)
 </th>
 <th>
-DD3 (<a href=#DD:linearVelocity>DD: linearVelocity</a>)
+DD3 (<a href=#DD:linVel>DD: linVel</a>)
 </th>
 <th>
-DD4 (<a href=#DD:linearAcceleration>DD: linearAcceleration</a>)
+DD4 (<a href=#DD:linAcc>DD: linAcc</a>)
 </th>
 <th>
-DD5 (<a href=#DD:angularDisplacement>DD: angularDisplacement</a>)
+DD5 (<a href=#DD:angDisp>DD: angDisp</a>)
 </th>
 <th>
-DD6 (<a href=#DD:angularVelocity>DD: angularVelocity</a>)
+DD6 (<a href=#DD:angVel>DD: angVel</a>)
 </th>
 <th>
-DD7 (<a href=#DD:angularAcceleration>DD: angularAcceleration</a>)
+DD7 (<a href=#DD:angAccel>DD: angAccel</a>)
 </th>
 <th>
-DD8 (<a href=#DD:impulseS>DD: impulseS</a>)
+DD8 (<a href=#DD:impulse>DD: impulse</a>)
 </th>
 <th>
 IM1 (<a href=#IM:transMot>IM: transMot</a>)
@@ -5183,7 +5183,7 @@ GD7 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
 </tr>
 <tr>
 <td>
-DD1 (<a href=#DD:p.CM>DD: p_CM</a>)
+DD1 (<a href=#DD:ctrOfMass>DD: ctrOfMass</a>)
 </td>
 <td>
 
@@ -5257,7 +5257,7 @@ DD1 (<a href=#DD:p.CM>DD: p_CM</a>)
 </tr>
 <tr>
 <td>
-DD2 (<a href=#DD:linearDisplacement>DD: linearDisplacement</a>)
+DD2 (<a href=#DD:linDisp>DD: linDisp</a>)
 </td>
 <td>
 
@@ -5331,7 +5331,7 @@ DD2 (<a href=#DD:linearDisplacement>DD: linearDisplacement</a>)
 </tr>
 <tr>
 <td>
-DD3 (<a href=#DD:linearVelocity>DD: linearVelocity</a>)
+DD3 (<a href=#DD:linVel>DD: linVel</a>)
 </td>
 <td>
 
@@ -5405,7 +5405,7 @@ DD3 (<a href=#DD:linearVelocity>DD: linearVelocity</a>)
 </tr>
 <tr>
 <td>
-DD4 (<a href=#DD:linearAcceleration>DD: linearAcceleration</a>)
+DD4 (<a href=#DD:linAcc>DD: linAcc</a>)
 </td>
 <td>
 
@@ -5479,7 +5479,7 @@ DD4 (<a href=#DD:linearAcceleration>DD: linearAcceleration</a>)
 </tr>
 <tr>
 <td>
-DD5 (<a href=#DD:angularDisplacement>DD: angularDisplacement</a>)
+DD5 (<a href=#DD:angDisp>DD: angDisp</a>)
 </td>
 <td>
 
@@ -5553,7 +5553,7 @@ DD5 (<a href=#DD:angularDisplacement>DD: angularDisplacement</a>)
 </tr>
 <tr>
 <td>
-DD6 (<a href=#DD:angularVelocity>DD: angularVelocity</a>)
+DD6 (<a href=#DD:angVel>DD: angVel</a>)
 </td>
 <td>
 
@@ -5627,7 +5627,7 @@ DD6 (<a href=#DD:angularVelocity>DD: angularVelocity</a>)
 </tr>
 <tr>
 <td>
-DD7 (<a href=#DD:angularAcceleration>DD: angularAcceleration</a>)
+DD7 (<a href=#DD:angAccel>DD: angAccel</a>)
 </td>
 <td>
 
@@ -5701,7 +5701,7 @@ DD7 (<a href=#DD:angularAcceleration>DD: angularAcceleration</a>)
 </tr>
 <tr>
 <td>
-DD8 (<a href=#DD:impulseS>DD: impulseS</a>)
+DD8 (<a href=#DD:impulse>DD: impulse</a>)
 </td>
 <td>
 

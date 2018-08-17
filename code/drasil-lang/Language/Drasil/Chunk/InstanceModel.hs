@@ -9,7 +9,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn),ConceptDomain(cdom), Concept, ExprRelat(relat),
   HasDerivation(derivations), HasReference(getReferences), HasAdditionalNotes(getNotes),
   HasLabel(getLabel))
-import Language.Drasil.Chunk.References (References)
+import Language.Drasil.Chunk.References (Reference)
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.Chunk.Constrained.Core (TheoryConstraint)
@@ -40,7 +40,7 @@ data InstanceModel = IM { _rc :: RelationConcept
                         , _inCons :: InputConstraints
                         , _imOutput :: Output
                         , _outCons :: OutputConstraints
-                        , _ref :: References
+                        , _ref :: [Reference]
                         , _deri :: Derivation
                         , _lb :: Label
                         , _notes :: Maybe [Sentence]
@@ -62,7 +62,7 @@ instance HasAdditionalNotes InstanceModel where getNotes = notes
 
 -- | Smart constructor for instance models
 im :: RelationConcept -> Inputs -> InputConstraints -> Output ->
-  OutputConstraints -> References -> Label -> InstanceModel
+  OutputConstraints -> [Reference] -> Label -> InstanceModel
 im rcon i ic o oc src sn = IM rcon i ic o oc src [] sn Nothing
 
 -- | Same as `im`, with an additional field for notes to be passed in

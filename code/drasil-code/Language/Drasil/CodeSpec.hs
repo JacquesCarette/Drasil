@@ -147,12 +147,12 @@ defaultChoices = Choices {
 type Name = String
 
 -- medium hacks ---
-relToQD :: (ExprRelat c, HasLabel c, HasSymbolTable ctx) => ctx -> c -> QDefinition
-relToQD sm r = convertRel sm (r ^. relat) (r ^. getLabel)
+relToQD :: (ExprRelat c, HasSymbolTable ctx) => ctx -> c -> QDefinition
+relToQD sm r = convertRel sm (r ^. relat)
 
-convertRel :: (HasSymbolTable ctx) => ctx -> Expr -> Label -> QDefinition
-convertRel sm (BinaryOp Eq (C x) r) lbe = ec (symbLookup x (sm ^. symbolTable)) r lbe
-convertRel _ _ _ = error "Conversion failed"
+convertRel :: (HasSymbolTable ctx) => ctx -> Expr -> QDefinition
+convertRel sm (BinaryOp Eq (C x) r) = ec (symbLookup x (sm ^. symbolTable)) r
+convertRel _ _ = error "Conversion failed"
 
 data Mod = Mod Name [Func]
 
@@ -302,7 +302,7 @@ getDerivedInputs :: HasSymbolTable ctx => [DataDefinition] -> [QDefinition] -> [
 getDerivedInputs ddefs defs' ins consts sm  =
   let refSet = ins ++ map codevar consts
   in  if (ddefs == []) then filter ((`subsetOf` refSet) . flip (codevars) sm . (^.equat)) defs'
-      else filter ((`subsetOf` refSet) . flip codevars sm . (^.relat)) (map qdFromDD ddefs)
+      else filter ((`subsetOf` refSet) . flip codevars sm . (^.defnExpr)) (map qdFromDD ddefs)
 
 type Known = CodeChunk
 type Need  = CodeChunk

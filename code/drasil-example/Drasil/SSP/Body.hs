@@ -48,10 +48,9 @@ import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty,
   morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil, soilLyr, ssa, ssp)
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
-import Drasil.SSP.IMods (sspIMods_new)
+import Drasil.SSP.IMods (sspIMods)
 import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
-import Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_new
-  , effStress_new)
+import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, hookesLaw, effStress)
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
   sspOutputs, sspSymbols)
 
@@ -115,12 +114,12 @@ mkSRS = RefSec (RefProg intro
         , SSDSolChSpec 
           (SCSProg 
             [Assumptions 
-            ,TMs ([Label] ++ stdFields) [fs_rc_new, equilibrium_new, mcShrStrgth_new,
-             effStress_new, hookesLaw_new]
+            ,TMs ([Label] ++ stdFields) [factOfSafety, equilibrium, mcShrStrgth,
+             effStress, hookesLaw]
             , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
-            , DDs' ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+            , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
             , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-             sspIMods_new ShowDerivation
+             sspIMods ShowDerivation
             , Constraints  EmptyS dataConstraintUncertainty EmptyS
               [data_constraint_Table2, data_constraint_Table3]
             ]

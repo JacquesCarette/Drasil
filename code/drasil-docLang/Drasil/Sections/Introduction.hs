@@ -1,31 +1,28 @@
-module Drasil.Sections.Introduction 
-  (orgSec,
-   introductionSection,
-   purposeOfDoc,
-   scopeOfRequirements,
-   charIntRdrF
-   ) where
+module Drasil.Sections.Introduction (orgSec, introductionSection, purposeOfDoc, scopeOfRequirements, 
+  charIntRdrF) where
 
 import Language.Drasil
 import Drasil.DocLang.GenBuilders (intro)
 import qualified Drasil.DocLang.SRS as SRS (prpsOfDoc, scpOfReq, charOfIR, orgOfDoc)
 import Data.Drasil.SentenceStructures (ofThe, ofThe',
   foldlList, SepType(Comma), FoldType(List), foldlsC, refineChain, foldlSP)
+
+import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (goal, organization, thModel, inModel, goalStmt,
   documentation, user, theory, definition, scope, requirement, section_, document, purpose,
   system, model, design, intReader, srs, characteristic, designDoc, decision, environment,
   vavPlan, softwareDoc, implementation, softwareVAV, desSpec)
-import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Citations (parnasClements1986)
-import Drasil.DocumentLanguage.RefHelpers (cite)
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, foldlsC, foldlSP,
+  ofThe, ofThe', refineChain)
 
 -----------------------
 --     Constants     --
 -----------------------
 
 -- | Contents explaining the development process of this program
-developmentProcessParagraph :: ReferenceDB -> Contents
-developmentProcessParagraph refdb = foldlSP [S "This", phrase document, 
+developmentProcessParagraph :: Contents
+developmentProcessParagraph = foldlSP [S "This", phrase document, 
   S "will be used as a starting point for subsequent development", 
   S "phases, including writing the", phrase desSpec, S "and the", 
   phrase softwareVAV, S "plan. The", phrase designDoc, S "will show how the", 
@@ -38,7 +35,7 @@ developmentProcessParagraph refdb = foldlSP [S "This", phrase document,
   S "that follow the so-called waterfall", phrase model `sC` 
   S "the actual development process is not constrained", 
   S "in any way. Even when the waterfall model is not followed, as",
-  S "Parnas and Clements point out",  cite refdb parnasClements1986 `sC`
+  S "Parnas and Clements point out", makeRef parnasClements1986 `sC`
   S "the most logical way to present the", phrase documentation,
   S "is still to", Quote (S "fake"), S "a rational", phrase design,
   S "process"]
@@ -74,9 +71,9 @@ overviewParagraph programDefinition = foldlSP [S "The following", phrase section
 -- | constructor for purpose of document subsection
 -- purposeOfProgramParagraph - a sentence explaining the purpose of the specific 
 -- example
-purposeOfDoc :: ReferenceDB -> Sentence -> Section
-purposeOfDoc refdb purposeOfProgramParagraph = SRS.prpsOfDoc 
-  [mkParagraph purposeOfProgramParagraph, developmentProcessParagraph refdb] []
+purposeOfDoc :: Sentence -> Section
+purposeOfDoc purposeOfProgramParagraph = SRS.prpsOfDoc 
+  [mkParagraph purposeOfProgramParagraph, developmentProcessParagraph] []
 
 
 -- | constructor for scope of requirements subsection

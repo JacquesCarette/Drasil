@@ -3,11 +3,21 @@ module Drasil.SWHS.Concepts where --all of this file is exported
 import Language.Drasil
 import Control.Lens ((^.))
 
-import Data.Drasil.Concepts.Math (parameter)
+import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn, 
+  goalStmt, inModel, likelyChg, physSyst, requirement, srs, thModel, 
+  typUnc, unlikelyChg)
+import Data.Drasil.Concepts.Math (ode, parameter)
 import Data.Drasil.Phrase (with)
 
 ---Acronyms---
-phsChgMtrl,rightSide,progName :: CI
+acronyms :: [CI]
+acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode, 
+            progName, physSyst, requirement, srs, thModel, typUnc, unlikelyChg]
+
+acronymsFull :: [CI]
+acronymsFull = acronyms ++ [phsChgMtrl, rightSide]
+
+phsChgMtrl, rightSide, progName :: CI
 
 phsChgMtrl  = commonIdea "phsChgMtrl" (nounPhrase "phase change material"
   "phase change materials") "PCM"
@@ -29,9 +39,6 @@ charging, coil, discharging, gauss_div,
   perfect_insul, phase_change_material, tank,
   tank_pcm, transient, water, sWHT, tank_para :: ConceptChunk
 
-swhs_pcm :: CommonConcept
-
- 
 charging = dcc "charging" (nounPhraseSP "charging") "charging of the tank"
 
 coil = dcc "coil" (cn' "heating coil")
@@ -59,15 +66,6 @@ tank_para = dcc "tank_para" (compoundPhrase' (tank ^. term)
   (parameter ^. term))
   "Values associated with the tank"
 
--- Nounphrase'' hack to get nounPhraseSP words to accept
--- nounPhrases instead of strings
-swhs_pcm = dcc' "swhs_pcm" (nounPhrase''
-  (plural progName +:+ S "incorporating" +:+ short phsChgMtrl)
-  (plural progName +:+ S "incorporating" +:+ short phsChgMtrl)
-  CapFirst CapWords)
-  "Solar water heating systems incorporating phase change material"
-  "SWHS"
-
 tank = dcc "tank" (cn' "tank") "Enclosure containing some kind of substance"
 sWHT = dcc "sWHT" (cn' "solar water heating tank") "Solar water heating tank"
 water = dcc "water" (cn' "water") "The liquid with which the tank is filled"
@@ -77,3 +75,13 @@ tank_pcm = dcc "tank_pcm" (nounPhrase''
   (phrase sWHT +:+ S "incorporating" +:+ short phsChgMtrl)
   CapFirst CapWords)
   "Solar water heating tank incorporating phase change material"
+
+swhs_pcm :: CommonConcept
+-- Nounphrase'' hack to get nounPhraseSP words to accept
+-- nounPhrases instead of strings
+swhs_pcm = dcc' "swhs_pcm" (nounPhrase''
+  (plural progName +:+ S "incorporating" +:+ short phsChgMtrl)
+  (plural progName +:+ S "incorporating" +:+ short phsChgMtrl)
+  CapFirst CapWords)
+  "Solar water heating systems incorporating phase change material"
+  "SWHS"

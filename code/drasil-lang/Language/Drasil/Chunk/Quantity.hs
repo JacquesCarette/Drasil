@@ -15,8 +15,6 @@ import Language.Drasil.Symbol (Symbol, Stage)
 -- | A Quantity is an 'Idea' with a 'Space' and a symbol and 
 -- may have units
 class (Idea c, HasSpace c, HasSymbol c, MayHaveUnit c) => Quantity c where
-  -- | Provides the units a quantity is measured in, if any, otherwise returns
-  -- 'Nothing'
 
 data QuantityDict = QD { _id' :: IdeaDict
                        , _typ' :: Space

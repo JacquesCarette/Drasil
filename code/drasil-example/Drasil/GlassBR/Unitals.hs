@@ -17,8 +17,7 @@ import Drasil.GlassBR.References (astm2009, astm2012, astm2016)
 import Drasil.GlassBR.Units (sFlawPU)
 
 --FIXME: Many of the current terms can be separated into terms and defns?
-glassBRsymb :: [DefinedQuantityDict]
-glassBRsymb = map dqdWr [plate_len, plate_width, char_weight, standOffDist]
+
 {--}
 
 glassBRSymbolsWithDefns :: [UnitalChunk]

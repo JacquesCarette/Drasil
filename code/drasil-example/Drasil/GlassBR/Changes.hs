@@ -1,24 +1,24 @@
-module Drasil.GlassBR.Changes (likelyChanges_SRS, unlikelyChanges_SRS) where
+module Drasil.GlassBR.Changes (likelyChgsList, unlikelyChgsList) where
 
 --A list of likely and unlikely changes for GlassBR
 
 import Language.Drasil
 import Drasil.DocLang (mkLklyChnk, mkUnLklyChnk)
 
-import Drasil.GlassBR.Assumptions (glassCondition, explainScenario, standardValues, glassLite, 
-  boundaryConditions, responseType, ldfConstant, assumptionConstants)
-import Drasil.GlassBR.Concepts (blastRisk, glaSlab, glass)
-import Drasil.GlassBR.Unitals (explosion, lite)
-
 import Data.Drasil.Concepts.Documentation (condition, goal, input_, software, system, value, variable)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.PhysicalProperties (flexure)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, foldlSent)
 
+import Drasil.GlassBR.Assumptions (glassCondition, explainScenario, standardValues, glassLite, 
+  boundaryConditions, responseType, ldfConstant, assumptionConstants)
+import Drasil.GlassBR.Concepts (blastRisk, glaSlab, glass)
+import Drasil.GlassBR.Unitals (explosion, lite)
+
 {--LIKELY CHANGES--}
 
-likelyChanges_SRS :: [LabelledContent]
-likelyChanges_SRS = [likelychg1, likelychg2, likelychg3,
+likelyChgsList :: [LabelledContent]
+likelyChgsList = [likelychg1, likelychg2, likelychg3,
   likelychg4, likelychg5]
 
 likelychg1, likelychg2, likelychg3, likelychg4,
@@ -58,8 +58,8 @@ lc5Desc = foldlSent [(makeRef responseType) `sDash` S "The", phrase software,
 
 {--UNLIKELY CHANGES--}
 
-unlikelyChanges_SRS :: [LabelledContent]
-unlikelyChanges_SRS = [unlikelychg1, unlikelychg2]
+unlikelyChgsList :: [LabelledContent]
+unlikelyChgsList = [unlikelychg1, unlikelychg2]
 
 unlikelychg1, unlikelychg2 :: LabelledContent
 

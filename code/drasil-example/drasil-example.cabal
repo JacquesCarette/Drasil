@@ -1,5 +1,5 @@
 Name:		drasil-example
-Version:	0.1.10
+Version:	0.1.11
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -41,6 +41,7 @@ executable glassbr
     , Drasil.GlassBR.IMods
     , Drasil.GlassBR.Labels
     , Drasil.GlassBR.References
+    , Drasil.GlassBR.Requirements
     , Drasil.GlassBR.Symbols
     , Drasil.GlassBR.TMods
     , Drasil.GlassBR.Unitals

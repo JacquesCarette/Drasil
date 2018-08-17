@@ -95,7 +95,7 @@ module Language.Drasil (
   -- Chunk.Relation
   , RelationConcept, makeRC, makeRC'
   --Chunk.DefinedQuantity
-  , dqd, dqd', dqdEL, DefinedQuantityDict, dqdWr
+  , dqd, dqd', dqdEL, DefinedQuantityDict, dqdWr, dqdQd
   -- Chunk.UnitaryConcept
   , ucw, UnitaryConceptDict
   -- Chunk.Attributes --FIXME: Changed a lot

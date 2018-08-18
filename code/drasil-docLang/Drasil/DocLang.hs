@@ -12,6 +12,7 @@ module Drasil.DocLang (
     StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg), 
     TSIntro(..), UCsSec(..), mkDoc, mkLklyChnk, mkRequirement, 
     mkUnLklyChnk, srsDomains, tsymb, tsymb'', mkConCC, mkConCC', mkEnumCC,
+    mkEnumSimpleCC,
     -- DocumentLanguage.Definitions
     Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose), ddefn,
     -- DocumentLanguage.RefHelpers 
@@ -51,7 +52,7 @@ import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
     StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), TConvention(..), 
     TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..), mkDoc, 
     mkLklyChnk, mkRequirement, mkUnLklyChnk, srsDomains, tsymb, tsymb'', mkConCC, mkConCC',
-    mkEnumCC)
+    mkEnumCC, mkEnumSimpleCC)
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, 
     InclUnits(IncludeUnits), Verbosity(Verbose), ddefn)
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)

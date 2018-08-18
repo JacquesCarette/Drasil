@@ -99,7 +99,7 @@ executable nopcm
     drasil-code >= 0.1.4,
     drasil-printers >= 0.1.5,
     drasil-gen >= 0.1.2,
-    drasil-docLang >= 0.1.9
+    drasil-docLang >= 0.1.10
   default-language: Haskell2010
   ghc-options:      -Wall -O2
 
@@ -133,7 +133,7 @@ executable swhs
     drasil-code >= 0.1.4,
     drasil-printers >= 0.1.5,
     drasil-gen >= 0.1.2,
-    drasil-docLang >= 0.1.9
+    drasil-docLang >= 0.1.10
   default-language: Haskell2010
   ghc-options:      -Wall
 

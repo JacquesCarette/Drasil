@@ -38,7 +38,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
   RefSec(RefProg), RefTab(TAandA, TUnits), 
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
-  funcReqDom, inDataConstTbl, intro, likeChgDom, mkDoc, mkEnumCC,
+  funcReqDom, inDataConstTbl, intro, likeChgDom, mkDoc, mkEnumSimpleCC,
   outDataConstTbl, physSystDesc, reqF, srsDomains, termDefnF, traceMGF, tsymb,
   unlikeChgDom, valsOfAuxConstantsF)
  
@@ -588,7 +588,7 @@ reqs = [reqIIV, reqFM, reqCISPC, reqOIDQ, reqCTWOT, reqCCHEWT]
 
 funcReqsListWordsNum :: [Contents]
 funcReqsListWordsNum =
-  (mkEnumCC (\x -> (getShortName x, Flat $ x ^. defn, Just $ refAdd x)) reqs) ++ [LlC reqIVRTable]
+  (mkEnumSimpleCC reqs) ++ [LlC reqIVRTable]
 
 -------------------------------------------
 --Section 5.2 : NON-FUNCTIONAL REQUIREMENTS
@@ -603,8 +603,7 @@ funcReqsListWordsNum =
 likelyChgsSect = SRS.likeChg likelyChgsList []
 
 likelyChgsList :: [Contents]
-likelyChgsList = mkEnumCC (\x -> (getShortName x, Flat $ x ^. defn, Just $ refAdd x))
-  likelyChgs
+likelyChgsList = mkEnumSimpleCC likelyChgs
 
 likelyChgs :: [ConceptInstance]
 likelyChgs = [likeChgTCVOD, likeChgTCVOL, likeChgDT, likeChgTLH]
@@ -663,7 +662,7 @@ unlikelyChgs :: [ConceptInstance]
 unlikelyChgs = [unlikeChgWFS, unlikeChgNIHG]
 
 unlikelyChgsList :: [Contents]
-unlikelyChgsList = mkEnumCC (\x -> (getShortName x, Flat $ x ^. defn, Just $ refAdd x))  unlikelyChgs
+unlikelyChgsList = mkEnumSimpleCC unlikelyChgs
 
 unlikeChgWFS :: ConceptInstance
 unlikeChgWFS = cic "unlikeChgWFS" (

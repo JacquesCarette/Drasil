@@ -12,7 +12,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
   Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
-  dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumCC,
+  dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleCC,
   outDataConstTbl, physSystDesc, reqF, srsDomains, termDefnF, traceGIntro,
   traceMGF, tsymb'')
 import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel,
@@ -441,7 +441,7 @@ inputInitQuantsTbl = LlC $ llcc inputInitQuantsLbl $ (Table
   (titleize input_ +:+ titleize variable +:+ titleize' requirement) True)
 
 reqs :: [Contents]
-reqs = mkEnumCC (\x -> (getShortName x, Flat $ x ^. defn, Just $ refAdd x)) funcReqs
+reqs = mkEnumSimpleCC funcReqs
 
 ---------------------------------------
 -- 5.2 : Non-functional Requirements --
@@ -454,8 +454,7 @@ likelyChgsSect :: Section
 likelyChgsSect = SRS.likeChg likelyChgsList []
 
 likelyChgsList :: [Contents]
-likelyChgsList = mkEnumCC (\x -> (getShortName x, Flat $ x ^. defn, Just $ refAdd x))
-  likelyChgs
+likelyChgsList = mkEnumSimpleCC likelyChgs
 
 --------------------------------
 -- Section 6b : UNLIKELY CHANGES --
@@ -465,8 +464,7 @@ unlikelyChgsSect :: Section
 unlikelyChgsSect = SRS.unlikeChg unlikelyChgsList []
 
 unlikelyChgsList :: [Contents]
-unlikelyChgsList = mkEnumCC (\x -> (getShortName x, Flat $ x ^. defn, Just $ refAdd x))
-  unlikelyChgs
+unlikelyChgsList = mkEnumSimpleCC unlikelyChgs
 
 --------------------------------------------------
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --

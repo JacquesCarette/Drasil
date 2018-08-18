@@ -372,6 +372,11 @@ mkConCC' f = mkConCC f id
 mkEnumCC :: (ConceptInstance -> ListTuple) -> [ConceptInstance] -> [Contents]
 mkEnumCC f = mkConCC f (replicate 1 . UlC . ulcc . Enumeration . Simple)
 
+-- | mkEnumSimpleCC is a convenience function for mkEnumCC providing a generic
+-- style of enumeration
+mkEnumSimpleCC :: [ConceptInstance] -> [Contents]
+mkEnumSimpleCC = mkEnumCC (\x -> (getShortName x, Flat $ x ^. defn, Just $ refAdd x))
+
 -- | table of units intro writer. Translates a TUIntro to a Sentence.
 tuI :: TUIntro -> Sentence
 tuI System  = 

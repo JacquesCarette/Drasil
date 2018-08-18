@@ -26,7 +26,7 @@ import Drasil.SWHS.Labels (thermalEnergyOnlyL, lawConvectiveCoolingWtrPCML,
   nwtnCoolingL, rocTempSimpL, eBalanceOnWtrL, eBalanceOnPCML, heatEInWtrL, 
   heatEInPCML)
 import Drasil.SWHS.References (swhsCitations)
-import Drasil.SWHS.TMods (t1ConsThermE)
+import Drasil.SWHS.TMods (consThermE)
 import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, temp_init, temp_W,
   temp_PCM, htCap_L_P, htCap_W, htCap_S_P, w_density, pcm_density, pcm_vol)
 
@@ -78,7 +78,7 @@ assumpS1 = foldlSent [
   S "relevant for this", phrase problem, S "is" +:+. 
   phrase CT.thermal_energy, S "All other forms of", phrase energy `sC`
   S "such as", phrase mech_energy `sC` S "are assumed to be negligible",
-  sSqBr $ makeRef t1ConsThermE]
+  sSqBr $ makeRef consThermE]
 assumpS2 = foldlSent [
   S "All", phrase CT.heat_trans, S "coefficients are constant over",
   phrase time, sSqBr $ makeRef nwtnCoolingL]

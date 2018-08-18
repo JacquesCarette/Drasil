@@ -47,7 +47,7 @@ probOfBreakDesc =
 calofCapacity :: InstanceModel
 calofCapacity = im' calofCapacity_RC [qw nonFL, qw glaTyFac, qw loadSF] 
   [TCon AssumedCon $ sy nonFL $> 0, TCon AssumedCon $ sy glaTyFac $> 0,
-  TCon AssumedCon $ sy loadSF $> 0] (qw lRe) [] calOfCapacityL [calofCapacityDesc]
+  TCon AssumedCon $ sy loadSF $> 0] (qw lRe) [] [makeRef astm2009] calOfCapacityL [calofCapacityDesc]
 
 calofCapacity_RC :: RelationConcept
 calofCapacity_RC = makeRC "calofCapacity_RC" (nounPhraseSP "Calculation of Capacity") 
@@ -71,7 +71,7 @@ calofCapacityDesc =
 calofDemand :: InstanceModel
 calofDemand = im' calofDemand_RC [qw demand, qw eqTNTWeight, qw standOffDist]
   [TCon AssumedCon $ sy demand $> 0, TCon AssumedCon $ sy eqTNTWeight $> 0,
-   TCon AssumedCon $ sy standOffDist $> 0] (qw demand) [] calOfDemandL
+   TCon AssumedCon $ sy standOffDist $> 0] (qw demand) [] [makeRef astm2009] calOfDemandL
   [calofDemandDesc]
 
 calofDemand_RC :: RelationConcept

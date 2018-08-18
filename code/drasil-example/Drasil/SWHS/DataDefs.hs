@@ -4,6 +4,7 @@ import Language.Drasil
 import Control.Lens ((^.))
 import Drasil.DocLang (ModelDB, mdb)
 
+import Drasil.SWHS.References (bueche1986, koothoor2013)
 import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcm_mass,
   temp_W, temp_PCM, ht_flux_P, pcm_HTC, coil_HTC, temp_C, ht_flux_C)
 
@@ -31,7 +32,7 @@ htFluxCEqn :: Expr
 htFluxCEqn = (sy coil_HTC) * ((sy temp_C) - apply1 temp_W time)
 
 dd1HtFluxC :: DataDefinition
-dd1HtFluxC = mkDD dd1HtFluxCQD [] [] "ht_flux_C" Nothing
+dd1HtFluxC = mkDD dd1HtFluxCQD [makeRef koothoor2013] [] "ht_flux_C" Nothing
 
 --Can't include info in description beyond definition of variables?
 ----
@@ -43,7 +44,7 @@ htFluxPEqn :: Expr
 htFluxPEqn = (sy pcm_HTC) * (apply1 temp_W time - apply1 temp_PCM time)
 
 dd2HtFluxP :: DataDefinition
-dd2HtFluxP = mkDD dd2HtFluxPQD [] [] "ht_flux_P" Nothing
+dd2HtFluxP = mkDD dd2HtFluxPQD [makeRef koothoor2013] [] "ht_flux_P" Nothing
 
 ----
 
@@ -54,7 +55,7 @@ htFusionEqn :: Expr
 htFusionEqn = (sy latent_heat) / (sy mass)
 
 dd3HtFusion :: DataDefinition
-dd3HtFusion = mkDD dd3HtFusionQD [] [] "htFusion" Nothing
+dd3HtFusion = mkDD dd3HtFusionQD [makeRef bueche1986 +:+ sParen (S "pg. 282")] [] "htFusion" Nothing
 
 ----
 
@@ -62,6 +63,7 @@ dd4MeltFracQD :: QDefinition
 dd4MeltFracQD = fromEqn' (melt_frac ^. uid) -- FIXME Should (^. id) be used
   (melt_frac ^. term) (S "fraction of the PCM that is liquid")
   (eqSymb melt_frac) melt_frac_eqn 
+
 --FIXME: "Phi is the melt fraction" is produced; 
   --"Phi is the fraction of the PCM that is liquid" is what is supposed to be
   -- produced according to CaseStudies' original
@@ -70,7 +72,7 @@ melt_frac_eqn :: Expr
 melt_frac_eqn = (sy latentE_P) / ((sy htFusion) * (sy pcm_mass))
 
 dd4MeltFrac :: DataDefinition
-dd4MeltFrac = mkDD dd4MeltFracQD [] [] "melt_frac" Nothing
+dd4MeltFrac = mkDD dd4MeltFracQD [makeRef koothoor2013] [] "melt_frac" Nothing
 
 --Need to add units to data definition descriptions
 

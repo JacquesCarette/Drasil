@@ -1,4 +1,4 @@
-module Drasil.SWHS.References (swhsCitations, incroperaEtAl2007, koothoor2013, lightstone2012, 
+module Drasil.SWHS.References (swhsCitations, bueche1986, incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, parnas1972, parnasClements1984, smithLai2005) where
 
 import Language.Drasil

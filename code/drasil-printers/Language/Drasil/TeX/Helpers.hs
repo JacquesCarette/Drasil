@@ -99,6 +99,9 @@ ref      t x = custRef (t ++ "~\\ref") x
 hyperref t x = command0 "hyperref" <> sq x <> br ((pure $ text (t ++ "~")) <> x)
 snref    r t = command0 "hyperref" <> sq (pure $ text r) <> br t
 
+href :: String -> String -> D
+href a0 a1 = command2 "href" a0 a1
+
 custRef :: String -> D -> D
 custRef t x = (pure $ text t) <> br x
 
@@ -136,9 +139,9 @@ item' bull s = command1oD "item" (Just bull) s
 
 maketitle, maketoc, newline, newpage, centering :: D
 maketitle = command0 "maketitle"
-maketoc = command0 "tableofcontents"
-newline = command0 "newline"
-newpage = command0 "newpage"
+maketoc   = command0 "tableofcontents"
+newline   = command0 "newline"
+newpage   = command0 "newpage"
 centering = command0 "centering"
 
 code, itemize, enumerate, description, figure, center, document, 
@@ -176,12 +179,12 @@ srsComms, lpmComms, bullet, counter, ddefnum, ddref, colAw, colBw, arrayS
 srsComms = bullet %% counter %% ddefnum %% ddref %% colAw %% colBw %% arrayS
 lpmComms = pure $ text ""
 
-counter = count "datadefnum"
-modcounter = count "modnum"
-reqcounter = count "reqnum"
+counter       = count "datadefnum"
+modcounter    = count "modnum"
+reqcounter    = count "reqnum"
 assumpcounter = count "assumpnum"
-lccounter = count "lcnum"
-uccounter = count "ucnum"
+lccounter     = count "lcnum"
+uccounter     = count "ucnum"
 
 bullet  = comm "blt"             "- "                Nothing
 ddefnum = comm "ddthedatadefnum" "MG\\thedatadefnum" Nothing

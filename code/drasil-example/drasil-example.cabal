@@ -21,9 +21,9 @@ executable tiny
     split >= 0.2.3.1,
     drasil-lang >= 0.1.23,
     drasil-data >= 0.1.6,
-    drasil-code >= 0.1.1,
-    drasil-printers >= 0.1.2,
-    drasil-gen >= 0.1.0,
+    drasil-code >= 0.1.4,
+    drasil-printers >= 0.1.5,
+    drasil-gen >= 0.1.2,
     drasil-docLang >= 0.1.8
   default-language: Haskell2010
   ghc-options:      -Wall -O2
@@ -56,9 +56,9 @@ executable glassbr
     split >= 0.2.3.1,
     drasil-lang >= 0.1.23,
     drasil-data >= 0.1.6,
-    drasil-code >= 0.1.1,
-    drasil-printers >= 0.1.0,
-    drasil-gen >= 0.1.0,
+    drasil-code >= 0.1.4,
+    drasil-printers >= 0.1.5,
+    drasil-gen >= 0.1.2,
     drasil-docLang >= 0.1.8
   default-language: Haskell2010
   ghc-options:      -Wall
@@ -96,8 +96,8 @@ executable nopcm
     split >= 0.2.3.1,
     drasil-lang >= 0.1.23,
     drasil-data >= 0.1.6,
-    drasil-code >= 0.1.1,
-    drasil-printers >= 0.1.1,
+    drasil-code >= 0.1.4,
+    drasil-printers >= 0.1.5,
     drasil-gen >= 0.1.2,
     drasil-docLang >= 0.1.8
   default-language: Haskell2010
@@ -130,9 +130,9 @@ executable swhs
     directory >= 1.2.6.2,
     drasil-lang >= 0.1.23,
     drasil-data >= 0.1.6,
-    drasil-code >= 0.1.1,
-    drasil-printers >= 0.1.0,
-    drasil-gen >= 0.1.0,
+    drasil-code >= 0.1.4,
+    drasil-printers >= 0.1.5,
+    drasil-gen >= 0.1.2,
     drasil-docLang >= 0.1.8
   default-language: Haskell2010
   ghc-options:      -Wall
@@ -166,9 +166,9 @@ executable ssp
     split >= 0.2.3.1,
     drasil-lang >= 0.1.23,
     drasil-data >= 0.1.6,
-    drasil-code >= 0.1.1,
-    drasil-printers >= 0.1.0,
-    drasil-gen >= 0.1.0,
+    drasil-code >= 0.1.4,
+    drasil-printers >= 0.1.5,
+    drasil-gen >= 0.1.2,
     drasil-docLang >= 0.1.8
   default-language: Haskell2010
   ghc-options:      -Wall
@@ -195,9 +195,9 @@ executable chipmunkdocs
     split >= 0.2.3.1,
     drasil-lang >= 0.1.23,
     drasil-data >= 0.1.6,
-    drasil-code >= 0.1.1,
-    drasil-printers >= 0.1.0,
-    drasil-gen >= 0.1.0,
+    drasil-code >= 0.1.4,
+    drasil-printers >= 0.1.5,
+    drasil-gen >= 0.1.2,
     drasil-docLang >= 0.1.8
   default-language: Haskell2010
   ghc-options:      -Wall

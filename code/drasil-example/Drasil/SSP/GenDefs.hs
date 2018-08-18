@@ -8,14 +8,14 @@ import Drasil.DocLang.SRS as SRS (physSystLabel)
 
 import Data.Drasil.Concepts.Documentation (assumption, definition, element, 
   method_, model, property, system, value, variable)
-import Data.Drasil.Concepts.Math (angle, matrix, normal, perp, surface, vector)
+import Data.Drasil.Concepts.Math (angle, equation, matrix, normal, perp, surface, vector)
 import Data.Drasil.Concepts.PhysicalProperties (len, mass)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 
 import Data.Drasil.Quantities.Physics (displacement, force)
 import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 
-import Data.Drasil.SentenceStructures (foldlSent, getTandS, isThe, ofThe, sAnd)
+import Data.Drasil.SentenceStructures (andThe, foldlSent, getTandS, isThe, ofThe, sAnd)
 
 import Drasil.SSP.Assumptions (newA5)
 import Drasil.SSP.BasicExprs (displMtx, eqlExpr, momExpr, rotMtx)
@@ -23,6 +23,7 @@ import Drasil.SSP.DataDefs (lengthLb, lengthLs, mobShearWO, sliceWght)
 import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf)
 import Drasil.SSP.Labels (genDef1Label, genDef2Label, genDef3Label, genDef4Label, 
   genDef5Label, genDef6Label, genDef7Label, genDef8Label, genDef9Label, genDef10Label)
+import Drasil.SSP.References (chen2005, stolle2008)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress, 
   hookesLaw)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
@@ -37,16 +38,18 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 --  General Definitions  --
 ---------------------------
 generalDefinitions :: [GenDefn]
-generalDefinitions = [gd'' normForcEq "normForcEq" [nmFEq_desc],
-  gd'' bsShrFEq "bsShrFEq" [bShFEq_desc],
-  gd'' resShr "resShr" [resShr_desc],
-  gd'' mobShr "mobShr" [mobShr_desc],
-  gd'' normShrR "normShrR" [nmShrR_desc],
-  gd'' momentEql "momentEql" [momEql_desc],
-  gd'' netForcex "netForcex" [],
-  gd'' netForcey "netForcey" [fNet_desc],
-  gd'' hookesLaw2d "hookesLaw2d" [hooke2d_desc],
-  gd'' displVect "displVect" [disVec_desc]]
+generalDefinitions = [
+  gd'' normForcEq  [makeRef chen2005]   "normForcEq"  [nmFEq_desc],
+  gd'' bsShrFEq    [makeRef chen2005]   "bsShrFEq"    [bShFEq_desc],
+  gd'' resShr      [makeRef chen2005]   "resShr"      [resShr_desc],
+  gd'' mobShr      [makeRef chen2005]   "mobShr"      [mobShr_desc],
+  gd'' normShrR    [makeRef chen2005]   "normShrR"    [nmShrR_desc],
+  gd'' momentEql   [makeRef chen2005]   "momentEql"   [momEql_desc],
+  gd'' netForcex   [makeRef chen2005]   "netForcex"   [fNet_desc genDef8Label],
+  gd'' netForcey   [makeRef chen2005]   "netForcey"   [fNet_desc genDef7Label],
+  gd'' hookesLaw2d [makeRef stolle2008] "hookesLaw2d" [hooke2d_desc],
+  gd'' displVect   [makeRef stolle2008] "displVect"   [disVec_desc]
+  ]
 
 --
 normForcEq :: RelationConcept
@@ -183,7 +186,7 @@ momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
 --
 netForcex :: RelationConcept
 netForcex = makeRC "netForce" (nounPhraseSP "net x-component force")
-  EmptyS fNetx_rel genDef7Label
+  (fNet_desc genDef8Label) fNetx_rel genDef7Label
 
 fNetx_rel :: Relation
 fNetx_rel = inxi fx $= (negate $ inxi watrForceDif) -
@@ -194,7 +197,7 @@ fNetx_rel = inxi fx $= (negate $ inxi watrForceDif) -
 
 netForcey :: RelationConcept
 netForcey = makeRC "netForce" (nounPhraseSP "net y-component force")
-  fNet_desc fNety_rel genDef8Label
+  (fNet_desc genDef7Label) fNety_rel genDef8Label
 
 fNety_rel :: Relation
 fNety_rel = inxi fy $= (negate $ inxi slcWght) +
@@ -202,9 +205,9 @@ fNety_rel = inxi fy $= (negate $ inxi slcWght) +
   - (inxi surfHydroForce) * cos (inxi surfAngle) -
   (inxi surfLoad) * cos (inxi impLoadAngle)
 
-
-fNet_desc :: Sentence
-fNet_desc = foldlSent [S "These equations show the net sum of the",
+fNet_desc :: (HasShortName l, Referable l) => l -> Sentence
+fNet_desc gd = foldlSent [S "This", phrase equation `andThe` phrase equation, 
+  S "in", makeRef gd, S "show the net sum of the",
   plural force, S "acting on a", phrase slice, 
   S "for the RFEM", phrase model, S "and the", plural force,
   S "that create an applied load on the" +:+. phrase slice, ch fx,

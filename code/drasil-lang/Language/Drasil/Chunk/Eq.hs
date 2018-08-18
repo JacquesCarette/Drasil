@@ -4,21 +4,22 @@ module Language.Drasil.Chunk.Eq
   , ec, qua, fromEqn''', fromEqn'''') where
 
 import Control.Lens ((^.), makeLenses, view)
+import Language.Drasil.Development.Unit (unitWrapper, MayHaveUnit(getUnit))
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, DefiningExpr(defnExpr), -- ExprRelat(relat),
   ConceptDomain)
-import Language.Drasil.Chunk.Quantity (HasSpace(typ), QuantityDict,
-  mkQuant, qw, Quantity)
+import Language.Drasil.Chunk.Quantity (HasSpace(typ), Quantity, QuantityDict, 
+  mkQuant, qw)
+import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
-import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.Space (Space(Real))
-
-import Language.Drasil.Development.Unit(unitWrapper, MayHaveUnit(getUnit))
 
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase (NP)
+import Language.Drasil.Space (Space(Real))
 import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Symbol (Symbol)
+
 
 -- | A QDefinition is a 'Quantity' with a defining expression.
 data QDefinition = EC

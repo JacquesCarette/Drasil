@@ -27,7 +27,6 @@ import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Software.Products (compPro)
-import Data.Drasil.Units.Thermodynamics (thermal_flux)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, likeChg, unlikeChg, probDesc, goalStmt,
@@ -57,12 +56,10 @@ import Drasil.SWHS.Changes (chgsStart, likeChg2, likeChg3, likeChg6)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, tank_para, transient, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.IMods (eBalanceOnPCM, heatEInWtr)
-import Drasil.SWHS.GenDefs (nwtnCooling, rocTempSimp, rocTempSimpGD, nwtnCooling_desc, 
-  rocTempSimp_desc, swhsGDs)
-import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, parnasClements1986, 
-  smithLai2005)
+import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
+  parnasClements1986, smithLai2005)
 import Drasil.SWHS.Requirements (nonFuncReqs)
-import Drasil.SWHS.TMods (t1ConsThermE)
+import Drasil.SWHS.TMods (consThermE)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
   coil_SA_max, deltaT, diam, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCap_L, 
   htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, sim_time, 
@@ -72,7 +69,7 @@ import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA,
 
 import Drasil.NoPCM.DataDesc (inputMod)
 import Drasil.NoPCM.Definitions (ht_trans, srs_swhs)
-import Drasil.NoPCM.GenDefs (roc_temp_simp_deriv)
+import Drasil.NoPCM.GenDefs (rocTempSimp, swhsGDs)
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
 import Drasil.NoPCM.Unitals (temp_init)
 
@@ -137,8 +134,8 @@ mkSRS = RefSec (RefProg intro
       , SSDSolChSpec 
         (SCSProg 
           [ Assumptions 
-          , TMs ([Label] ++ stdFields) [t1ConsThermE] -- only have the same T1 with SWHS
-          , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
+          , TMs ([Label] ++ stdFields) [consThermE] -- only have the same T1 with SWHS
+          , GDs ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
           , DDs ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
             [eBalanceOnWtr, heatEInWtr] ShowDerivation
@@ -152,10 +149,6 @@ mkSRS = RefSec (RefProg intro
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
-
-generalDefinitions :: [GenDefn]
-generalDefinitions = [gd' nwtnCooling (Just thermal_flux) ([] :: Derivation) "nwtnCooling" [nwtnCooling_desc],
-  gd' rocTempSimp (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv "rocTempSimp" [rocTempSimp_desc]]
 
 nopcm_si :: SystemInformation
 nopcm_si = SI {
@@ -351,11 +344,11 @@ assumpS3, assumpS4, assumpS5, assumpS9_npcm, assumpS12, assumpS13 :: Sentence
 assumpS3 = 
   (foldlSent [S "The", phrase water, S "in the", phrase tank,
   S "is fully mixed, so the", phrase temp_W `isThe`
-  S "same throughout the entire", phrase tank, sSqBr (makeRef rocTempSimpGD)])
+  S "same throughout the entire", phrase tank, sSqBr (makeRef rocTempSimp)])
 
 assumpS4 = 
   (foldlSent [S "The", phrase w_density, S "has no spatial variation; that is"
-  `sC` S "it is constant over their entire", phrase vol, sSqBr ((makeRef rocTempSimpGD)`sC`
+  `sC` S "it is constant over their entire", phrase vol, sSqBr ((makeRef rocTempSimp)`sC`
   (makeRef likeChg2))])
 
 newA5NoPCM :: AssumpChunk
@@ -364,7 +357,7 @@ newA5NoPCM = assump "Density-Water-Constant-over-Volume" assumpS4
 
 assumpS5 = 
   (foldlSent [S "The", phrase htCap_W, S "has no spatial variation; that", 
-  S "is, it is constant over its entire", phrase vol, sSqBr (makeRef rocTempSimpGD)])
+  S "is, it is constant over its entire", phrase vol, sSqBr (makeRef rocTempSimp)])
 
 newA6NoPCM :: AssumpChunk
 newA6NoPCM = assump "Specific-Heat-Energy-Constant-over-Volume" assumpS5 
@@ -461,7 +454,7 @@ iModDesc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin _ vhg _ =
   phrase purin +:+. sParen (makeRef newA11), S "Assuming no",
   phrase vhg +:+. (sParen (makeRef newA12) `sC`
   E (sy vhg $= 0)), S "Therefore, the", phrase M.equation, S "for",
-  makeRef rocTempSimpGD, S "can be written as"]
+  makeRef rocTempSimp, S "can be written as"]
 
 iModDesc2 :: DataDefinition -> [Sentence]
 iModDesc2 d1hf = [S "Using", (makeRef d1hf) `sC` S "this can be written as"]
@@ -748,7 +741,7 @@ traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
 traceAssumpRef = map makeRef assumps_Nopcm_list_new
 
 traceTheories = ["T1"]
-traceTheoriesRef = map makeRef [t1ConsThermE]
+traceTheoriesRef = map makeRef [consThermE]
 
 traceGenDefs = ["GD1", "GD2"]
 traceGenDefRef = map makeRef swhsGDs

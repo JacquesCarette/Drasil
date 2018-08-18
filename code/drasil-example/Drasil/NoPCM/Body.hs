@@ -29,18 +29,18 @@ import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Software.Products (compPro)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
 
-import qualified Drasil.DocLang.SRS as SRS (funcReq, likeChg, unlikeChg, probDesc, goalStmt,
-  inModelLabel)
+import qualified Drasil.DocLang.SRS as SRS (assumpDom, funcReq, likeChg, unlikeChg,
+  probDesc, goalStmt, inModelLabel)
 import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose), 
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
   SolChSpec(..), SSDSec(..),
   DocSection(SSDSec, Verbatim, Bibliography, IntroSec, RefSec), IntroSec(IntroProg),
   IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
   RefSec(RefProg), RefTab(TAandA, TUnits), 
-  TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty, 
-  funcReqDom, inDataConstTbl, intro, mkDoc, mkEnumCC, mkRequirement,
-  mkUnLklyChnk, mkLklyChnk, outDataConstTbl, physSystDesc, reqF, srsDomains, termDefnF, 
-  traceMGF, tsymb, valsOfAuxConstantsF)
+  TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
+  funcReqDom, inDataConstTbl, intro, likeChgDom, mkDoc, mkEnumSimpleCC,
+  outDataConstTbl, physSystDesc, reqF, srsDomains, termDefnF, traceMGF, tsymb,
+  unlikeChgDom, valsOfAuxConstantsF)
  
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
   isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP)
@@ -52,7 +52,7 @@ import Drasil.SWHS.Assumptions (newA1, newA2, newA3, newA7, newA8, newA9,
   newA11, newA12, newA14, newA15, newA20)
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
   orgDocIntro, physSyst1, physSyst2, traceFig1, traceFig2, traceIntro2, traceTrailing)
-import Drasil.SWHS.Changes (chgsStart, likeChg2, likeChg3, likeChg6)
+import Drasil.SWHS.Changes (chgsStart, likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, tank_para, transient, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.IMods (eBalanceOnPCM, heatEInWtr)
@@ -105,7 +105,7 @@ nopcm_Constraints =  [coil_SA, w_E, htCap_W, coil_HTC, temp_init,
   time_final, tank_length, temp_C, w_density, diam, temp_W]
 
 probDescription, termAndDefn, physSystDescription, goalStates,
-  reqS, funcReqs, likelyChgs, unlikelyChgs, traceMAndG, specParamVal :: Section
+  reqS, funcReqs, likelyChgsSect, unlikelyChgsSect, traceMAndG, specParamVal :: Section
 
 
 -------------------
@@ -145,7 +145,7 @@ mkSRS = RefSec (RefProg intro
         )
       ]
     ):
-  map Verbatim [reqS, likelyChgs, unlikelyChgs, traceMAndG, specParamVal] ++ (Bibliography : [])
+  map Verbatim [reqS, likelyChgsSect, unlikelyChgsSect, traceMAndG, specParamVal] ++ (Bibliography : [])
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -170,7 +170,8 @@ nopcm_si = SI {
 }
 
 nopcmRefDB :: ReferenceDB
-nopcmRefDB = rdb [] [] assumps_Nopcm_list_new [] [] referencesRefList newReqs-- FIXME: Convert the rest to new chunk types
+nopcmRefDB = rdb [] [] assumps_Nopcm_list_new [] [] referencesRefList (reqs ++
+  likelyChgs ++ unlikelyChgs) -- FIXME: Convert the rest to new chunk types
 
 nopcm_code :: CodeSpec
 nopcm_code = codeSpec nopcm_si [inputMod]
@@ -338,8 +339,13 @@ goalStatesList temw we = enumSimple 1 (short goalStmt) [
     plural quantity, S "can be measured. This", phrase information,
     S "would be part of the input if one were performing an",
     phrase uncertainty, S "quantification exercise"]-}
+
+-- FIXME: Remove the newA*NoPCM AssumpChunk's once SWHS has migrated to
+-- ConceptInstance and SCSProg's Assumptions has been migrated to using
+-- assumpDom
   
 assumpS3, assumpS4, assumpS5, assumpS9_npcm, assumpS12, assumpS13 :: Sentence
+assumpDWCoW, assumpSHECoW, assumpCTNTD, assumpNIHGBW, assumpAPT :: ConceptInstance
 
 assumpS3 = 
   (foldlSent [S "The", phrase water, S "in the", phrase tank,
@@ -349,11 +355,14 @@ assumpS3 =
 assumpS4 = 
   (foldlSent [S "The", phrase w_density, S "has no spatial variation; that is"
   `sC` S "it is constant over their entire", phrase vol, sSqBr ((makeRef rocTempSimp)`sC`
-  (makeRef likeChg2))])
+  (makeRef likeChgTCVOD))])
 
 newA5NoPCM :: AssumpChunk
 newA5NoPCM = assump "Density-Water-Constant-over-Volume" assumpS4 
-  (mkLabelRAAssump' "Density-Water-Constant-over-Volume")  
+  (mkLabelRAAssump' "Density-Water-Constant-over-Volume")
+
+assumpDWCoW = cic "assumpDWCoW" assumpS4
+  "Density-Water-Constant-over-Volume" SRS.assumpDom
 
 assumpS5 = 
   (foldlSent [S "The", phrase htCap_W, S "has no spatial variation; that", 
@@ -363,16 +372,22 @@ newA6NoPCM :: AssumpChunk
 newA6NoPCM = assump "Specific-Heat-Energy-Constant-over-Volume" assumpS5 
   (mkLabelRAAssump' "Specific-Heat-Energy-Constant-over-Volume") 
 
+assumpSHECoW = cic "assumpSHECoW" assumpS5
+  "Specific-Heat-Energy-Constant-over-Volume" SRS.assumpDom
+
 assumpS9_npcm = 
   (foldlSent [S "The", phrase model, S "only accounts for charging",
   S "of the tank" `sC` S "not discharging. The", phrase temp_W, S "can only",
   S "increase, or remain constant; it cannot decrease. This implies that the",
   phrase temp_init, S "is less than (or equal to) the", phrase temp_C,
-  sSqBr ((makeRef eBalanceOnWtr) `sC` (makeRef likeChg3_npcm))])
+  sSqBr ((makeRef eBalanceOnWtr) `sC` (makeRef likeChgDT))])
 
 newA9NoPCM :: AssumpChunk
 newA9NoPCM = assump "Charging-Tank-No-Temp-Discharge" assumpS9_npcm 
   (mkLabelRAAssump' "Charging-Tank-No-Temp-Discharge")
+
+assumpCTNTD = cic "assumpCTNTD" assumpS9_npcm
+  "Charging-Tank-No-Temp-Discharge" SRS.assumpDom
 
 assumpS12 = 
   (S "No internal" +:+ phrase heat +:+ S "is generated by the" +:+ phrase water
@@ -382,6 +397,9 @@ assumpS12 =
 newA16 :: AssumpChunk
 newA16 = assump "No-Internal-Heat-Generation-By-Water" assumpS12 
   (mkLabelRAAssump' "No-Internal-Heat-Generation-By-Water")
+
+assumpNIHGBW = cic "assumpNIHGBW" assumpS12
+  "No-Internal-Heat-Generation-By-Water" SRS.assumpDom
 
 assumpS13 = 
   (S "The pressure in the" +:+ phrase tank +:+ S "is atmospheric, so the" +:+
@@ -393,6 +411,9 @@ assumpS13 =
 newA19 :: AssumpChunk
 newA19 = assump "Atmospheric-Pressure-Tank" assumpS13 
   (mkLabelRAAssump' "Atmospheric-Pressure-Tank")
+
+assumpAPT = cic "assumpAPT" assumpS13
+  "Atmospheric-Pressure-Tank" SRS.assumpDom
 
 genDefnDesc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]
@@ -520,117 +541,54 @@ reqS = reqF [funcReqs, nonFuncReqs]
 
 funcReqs = SRS.funcReq funcReqsList [] --TODO: Placeholder values until content can be added
 
--- FIXME: Remove requirements generated from mkRequirements once SWHS does not depend on them
-
 funcReqsList :: [Contents]
 funcReqsList = funcReqsListWordsNum
 
--- s5_1_list_words = map (\x -> Enumeration $ Simple [x])
-  -- $ mkEnumAbbrevList 1 (short requirement) $ map foldlSent_ [
-
-  -- [titleize input_, S "the following", plural quantity `sC`
-  -- S "which define the", phrase tank, S "parameters, material",
-  -- plural property, S "and initial" +: plural condition],
-
-  -- [S "Use the", plural input_, S "in", makeRef req1, S "to find the",
-  -- phrase mass, S "needed for", makeRef eBalanceOnWtr, S "to", makeRef heatEInPCM_new `sC`
-  -- S "as follows, where", ch w_vol `isThe` phrase w_vol,
-  -- S "and" +: (ch tank_vol `isThe` phrase tank_vol)],
-
-  -- [S "Verify that the", plural input_, S "satisfy the required",
-  -- phrase physicalConstraint, S "shown in" +:+. makeRef data_constraint_table1],
-
-  -- [titleize' output_, S "and", plural input_, plural quantity, S "and derived",
-  -- plural quantity, S "in the following list: the", plural quantity, S "from",
-  -- makeRef req1 `sC` S "the", phrase mass, S "from", makeRef req2, S "and", ch tau_W +:+.
-  -- sParen(S "from" +:+ makeRef eBalanceOnWtr)],
-
-  -- [S "Calculate and output the", phrase temp, S "of the", phrase water,
-  -- sParen (ch temp_W :+: sParen (ch time)), S "over the", phrase simulation +:+.
-  -- phrase time],
-
-  -- [S "Calculate and", phrase output_, S "the", phrase w_E,
-  -- sParen (ch w_E :+: sParen (ch time)), S "over the",
-  -- phrase simulation, phrase time +:+. sParen (S "from" +:+ makeRef heatEInWtr)]
-  -- ]
-
-req1, req2, req3, req4, req5, req6 :: LabelledContent
-
---Empty list is supposed to take a ModuleChunk. Not sure what to put there.
-req1 = mkRequirement "req1" (
-  titleize input_ +:+ S "the following" +:+ plural quantity `sC`
-  S "which define the" +:+ plural tank_para `sC` S "material" +:+
-  plural property +:+ S "and initial" +: plural condition) "Input-Inital-Values"
-req2 = mkRequirement "req2" (
-  S "Use the" +:+ plural input_ +:+ S "in" +:+
-  (makeRef req1) +:+ S "to find the" +:+ phrase mass +:+
-  S "needed for" +:+ makeRef eBalanceOnWtr +:+ S "to" +:+ makeRef eBalanceOnPCM `sC`
-  S "as follows, where" +:+ ch w_vol `isThe` phrase w_vol +:+
-  S "and" +: (ch tank_vol `isThe` phrase tank_vol) ) "Find-Mass"
-req3 = mkRequirement "req3" (
-  S "Verify that the" +:+ plural input_ +:+ S "satisfy the required"
-  +:+ phrase physicalConstraint +:+ S "shown in" +:+. makeRef dataConstTable1 ) 
-  "Check-Inputs-Satisfy-Physical-Constraints"
-req4 = mkRequirement "req4" (
-  titleize' output_ `sAnd` plural input_ +:+ plural quantity
-  +:+ S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
-  plural quantity +:+ S "from" +:+ (makeRef req1) `sC`
-  S "the" +:+ phrase mass +:+ S "from" +:+ (makeRef req2)
-  `sAnd` ch tau_W +:+. sParen(S "from" +:+ makeRef eBalanceOnWtr) ) "Output-Input-Derived-Quantities"
-req5 = mkRequirement "req5" (
-  S "Calculate and output the" +:+ phrase temp_W +:+
-  sParen (ch temp_W :+: sParen (ch time)) +:+ S "over the" +:+
-  phrase sim_time ) "Calculate-Temperature-Water-Over-Time"
-req6 = mkRequirement "req6" (
-  S "Calculate and" +:+ phrase output_ +:+ S "the" +:+ phrase w_E
-  +:+ sParen (ch w_E :+: sParen (ch time)) +:+ S "over the" +:+
-  phrase sim_time +:+. sParen (S "from" +:+ makeRef heatEInWtr) ) "Calculate-Change-Heat_Energy-Water-Time"
-
-nr2Expr :: Expr
-nr2Expr = ((sy w_mass) $= (sy w_vol) * (sy w_density) $= (((sy diam) / 2) *
+reqFMExpr :: Expr
+reqFMExpr = ((sy w_mass) $= (sy w_vol) * (sy w_density) $= (((sy diam) / 2) *
   (sy tank_length) * (sy w_density)))
 
-nr1, nr2, nr3, nr4, nr5, nr6 :: ConceptInstance
-nr1 = cic "Input-Inital-Values" (titleize input_ +:+ S "the" +:+ plural quantity +:+
-    S "described in" +:+ makeRef nrTable `sC` S "which define the" +:+
+reqIIV, reqFM, reqCISPC, reqOIDQ, reqCTWOT, reqCCHEWT :: ConceptInstance
+reqIIV = cic "reqIIV" (titleize input_ +:+ S "the" +:+ plural quantity +:+
+    S "described in" +:+ makeRef reqIVRTable `sC` S "which define the" +:+
     plural tank_para `sC` S "material" +:+ plural property +:+
     S "and initial" +:+. plural condition) "Input-Inital-Values" funcReqDom
-nr2 = cic "Find-Mass" (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef nr1 +:+
+reqFM = cic "reqFM" (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef reqIIV +:+
     S "to find the" +:+ phrase mass +:+ S "needed for" +:+ makeRef eBalanceOnWtr +:+
     S "to" +:+ makeRef eBalanceOnPCM `sC` S "as follows, where" +:+ ch w_vol `isThe`
     phrase w_vol +:+ S "and" +:+ (ch tank_vol `isThe` phrase tank_vol) :+:
-    S ":" +:+ E nr2Expr) "Find-Mass" funcReqDom  -- FIXME: Equation shouldn't be inline.
-nr3 = cic "Check-Inputs-Satisfy-Physical-Constraints" (S "Verify that the" +:+ plural input_ +:+
+    S ":" +:+ E reqFMExpr) "Find-Mass" funcReqDom  -- FIXME: Equation shouldn't be inline.
+reqCISPC = cic "reqCISPC" (S "Verify that the" +:+ plural input_ +:+
     S "satisfy the required" +:+ phrase physicalConstraint +:+
     S "shown in" +:+. makeRef dataConstTable1)
     "Check-Inputs-Satisfy-Physical-Constraints" funcReqDom
-nr4 = cic "Output-Input-Derivied-Quantities" (titleize' output_ `sAnd` plural input_ 
+reqOIDQ = cic "reqOIDQ" (titleize' output_ `sAnd` plural input_ 
     +:+ plural quantity +:+
     S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
-    plural quantity +:+ S "from" +:+ (makeRef nr1) `sC` S "the" +:+
-    phrase mass +:+ S "from" +:+ makeRef nr2 `sAnd` ch tau_W +:+.
+    plural quantity +:+ S "from" +:+ (makeRef reqIIV) `sC` S "the" +:+
+    phrase mass +:+ S "from" +:+ makeRef reqFM `sAnd` ch tau_W +:+.
     sParen (S "from" +:+ makeRef eBalanceOnWtr)) "Output-Input-Derivied-Quantities" funcReqDom
-nr5 = cic "Calculate-Temperature-Water-Over-Time" (S "Calculate and output the" +:+ phrase temp_W +:+
+reqCTWOT = cic "reqCTWOT" (S "Calculate and output the" +:+ phrase temp_W +:+
     sParen (ch temp_W :+: sParen (ch time)) +:+ S "over the" +:+
     phrase sim_time) "Calculate-Temperature-Water-Over-Time" funcReqDom
-nr6 = cic "Calculate-Change-Heat_Energy-Water-Time" 
+reqCCHEWT = cic "reqCCHEWT" 
     (S "Calculate and" +:+ phrase output_ +:+ S "the" +:+
     phrase w_E +:+ sParen (ch w_E :+: sParen (ch time)) +:+ S "over the" +:+
     phrase sim_time +:+. sParen (S "from" +:+ makeRef heatEInWtr))
     "Calculate-Change-Heat_Energy-Water-Time" funcReqDom
 
-nrTable :: LabelledContent
-nrTable = llcc (mkLabelSame "Input-Variable-Requirements" Tab) $ 
+reqIVRTable :: LabelledContent
+reqIVRTable = llcc (mkLabelSame "Input-Variable-Requirements" Tab) $ 
   Table [titleize symbol_, titleize M.unit_, titleize description]
   (mkTable [ch, unitToSentence, phrase] inputVar)
   (titleize input_ +:+ titleize variable +:+ titleize' requirement) True
 
-newReqs :: [ConceptInstance]
-newReqs = [nr1, nr2, nr3, nr4, nr5, nr6]
+reqs :: [ConceptInstance]
+reqs = [reqIIV, reqFM, reqCISPC, reqOIDQ, reqCTWOT, reqCCHEWT]
 
 funcReqsListWordsNum :: [Contents]
 funcReqsListWordsNum =
-  (mkEnumCC (\x -> (getShortName x, Flat $ x ^. defn, Just $ refAdd x)) newReqs) ++ [LlC nrTable]
+  (mkEnumSimpleCC reqs) ++ [LlC reqIVRTable]
 
 -------------------------------------------
 --Section 5.2 : NON-FUNCTIONAL REQUIREMENTS
@@ -642,18 +600,21 @@ funcReqsListWordsNum =
 --Section 6 : LIKELY CHANGES
 ----------------------------
 
-likelyChgs = SRS.likeChg (map LlC likelyChgsList) []
+likelyChgsSect = SRS.likeChg likelyChgsList []
 
-likelyChgsList :: [LabelledContent] --FIXME: this can be removed by implementin NoPCM's LCs as the correct chunk
-likelyChgsList = [likeChg2, likeChg3, likeChg3_npcm, likeChg6]
+likelyChgsList :: [Contents]
+likelyChgsList = mkEnumSimpleCC likelyChgs
 
-likeChg3_npcm :: LabelledContent
-likeChg3_npcm = mkLklyChnk "likeChg3" (
+likelyChgs :: [ConceptInstance]
+likelyChgs = [likeChgTCVOD, likeChgTCVOL, likeChgDT, likeChgTLH]
+
+likeChgDT :: ConceptInstance
+likeChgDT = cic "likeChgDT" (
   (makeRef newA9NoPCM) :+: S "- The" +:+ phrase model +:+
   S "currently only accounts for charging of the tank. That is, increasing the" +:+ phrase temp +:+
   S "of the water to match the" +:+ phrase temp +:+ S "of the coil. A more complete"  
   +:+ phrase model +:+. S "would also account for discharging of the tank") 
-  "Discharging-Tank"
+  "Discharging-Tank" likeChgDom
 -- likeChg4 = LikelyChange (LCChunk (nw $ npnc "likeChg4" $
   -- nounPhraseSent (makeRef assump11 :+: S "- Any real" +:+ phrase tank +:+
   -- S "cannot be perfectly insulated and will lose" +:+. phrase heat))
@@ -695,21 +656,24 @@ likeChg3_npcm = mkLklyChnk "likeChg3" (
 --Section 6b : UNLIKELY CHANGES
 -------------------------------
 
-unlikelyChgs = SRS.unlikeChg unlikelyChgsList []
+unlikelyChgsSect = SRS.unlikeChg unlikelyChgsList []
+
+unlikelyChgs :: [ConceptInstance]
+unlikelyChgs = [unlikeChgWFS, unlikeChgNIHG]
 
 unlikelyChgsList :: [Contents]
-unlikelyChgsList = map LlC [unlikeChg1, unlikeChg2]
+unlikelyChgsList = mkEnumSimpleCC unlikelyChgs
 
-unlikeChg1 :: LabelledContent 
-unlikeChg1 = mkUnLklyChnk "unlikeChg1" (
+unlikeChgWFS :: ConceptInstance
+unlikeChgWFS = cic "unlikeChgWFS" (
   foldlSent [chgsStart newA14, S "It is unlikely for the change of",
-  phrase water, S "from liquid to a solid, or from liquid to gas to be considered"]) 
-  "Water-Fixed-States" 
+  phrase water, S "from liquid to a solid, or from liquid to gas to be considered"])
+  "Water-Fixed-States" unlikeChgDom
 
-unlikeChg2 :: LabelledContent
-unlikeChg2 = mkUnLklyChnk "unlikeChg2" (
-  foldlSent [chgsStart newA16, S "Is used for the derivations of IM1",
-  S "(Hack: need Label to fix)"] ) "No-Internal-Heat-Generation"
+unlikeChgNIHG :: ConceptInstance
+unlikeChgNIHG = cic "unlikeChgNIHG" (
+  foldlSent [chgsStart newA16, S "Is used for the derivations of",
+  makeRef eBalanceOnWtr] ) "No-Internal-Heat-Generation" unlikeChgDom
 
 ----------------------------------------------
 --Section 7:  TRACEABILITY MATRICES AND GRAPHS
@@ -731,7 +695,7 @@ traceInstaModel = ["IM1", "IM2"]
 traceInstaModelRef = map makeRef [eBalanceOnWtr, heatEInWtr]
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-traceFuncReqRef = map makeRef newReqs
+traceFuncReqRef = map makeRef reqs
 
 traceData = ["Data Constraints"]
 traceDataRef = [makeRef dataConstTable1] --FIXME: Reference section?
@@ -750,7 +714,7 @@ traceDataDefs = ["DD1"]
 traceDataDefRef = map makeRef [dd1HtFluxC]
 
 traceLikelyChg = ["LC1", "LC2", "LC3", "LC4"]
-traceLikelyChgRef = map makeRef likelyChgsList
+traceLikelyChgRef = map makeRef likelyChgs
 
 {-Traceability Matrix 1-}
 

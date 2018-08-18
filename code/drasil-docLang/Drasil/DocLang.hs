@@ -1,4 +1,6 @@
 module Drasil.DocLang (
+    -- DocLang.SRS
+    assumpDom, likeChgDom, unlikeChgDom,
     -- DocumentLanguage
     AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), DocDesc, 
     DocSection(..), Emphasis(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons, SysCntxt), 
@@ -10,6 +12,7 @@ module Drasil.DocLang (
     StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg), 
     TSIntro(..), UCsSec(..), mkDoc, mkLklyChnk, mkRequirement, 
     mkUnLklyChnk, srsDomains, tsymb, tsymb'', mkConCC, mkConCC', mkEnumCC,
+    mkEnumSimpleCC,
     -- DocumentLanguage.Definitions
     Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose), ddefn,
     -- DocumentLanguage.RefHelpers 
@@ -39,6 +42,7 @@ module Drasil.DocLang (
     traceGIntro, traceMGF
     ) where 
 
+import Drasil.DocLang.SRS (assumpDom, likeChgDom, unlikeChgDom)
 import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..), 
     DerivationDisplay(..), DocDesc, DocSection(..), Emphasis(..), ExistingSolnSec(..), 
     GSDSec(GSDProg2), GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), 
@@ -48,7 +52,7 @@ import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
     StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), TConvention(..), 
     TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..), mkDoc, 
     mkLklyChnk, mkRequirement, mkUnLklyChnk, srsDomains, tsymb, tsymb'', mkConCC, mkConCC',
-    mkEnumCC)
+    mkEnumCC, mkEnumSimpleCC)
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, 
     InclUnits(IncludeUnits), Verbosity(Verbose), ddefn)
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)

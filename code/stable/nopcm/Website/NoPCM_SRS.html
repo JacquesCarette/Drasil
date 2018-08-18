@@ -899,7 +899,7 @@ Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the te
 <ul class="hide-list-style">
 <li>
 <div id="A:Density-Water-Constant-over-Volume">
-Density-Water-Constant-over-Volume: The density of water has no spatial variation; that is, it is constant over their entire volume [<a href=#GD:rocTempSimp>GD: rocTempSimp</a>, <a href=#LC:Temperature-Coil-Variable-Over-Day>LC: Temperature-Coil-Variable-Over-Day</a>].
+Density-Water-Constant-over-Volume: The density of water has no spatial variation; that is, it is constant over their entire volume [<a href=#GD:rocTempSimp>GD: rocTempSimp</a>, <a href=#likeChgTCVOD>LC: Temperature-Coil-Variable-Over-Day</a>].
 </div>
 </li>
 </ul>
@@ -934,7 +934,7 @@ Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does
 <ul class="hide-list-style">
 <li>
 <div id="A:Charging-Tank-No-Temp-Discharge">
-Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil [<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#LC:Discharging-Tank>LC: Discharging-Tank</a>].
+Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil [<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#likeChgDT>LC: Discharging-Tank</a>].
 </div>
 </li>
 </ul>
@@ -2216,34 +2216,28 @@ This problem is small in size and relatively simple, so performance is not a pri
 <h1>
 Likely Changes
 </h1>
-<ul class="hide-list-style">
-<li>
-<div id="LC:Temperature-Coil-Variable-Over-Day">
+<div class="list">
+<p>
+<div id="likeChgTCVOD">
 Temperature-Coil-Variable-Over-Day: <a href=#A:Temp-Heating-Coil-Constant-over-Time>A: Temp-Heating-Coil-Constant-over-Time</a> - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="LC:Temperature-Coil-Variable-Over-Length">
+</p>
+<p>
+<div id="likeChgTCVOL">
 Temperature-Coil-Variable-Over-Length: <a href=#A:Temp-Heating-Coil-Constant-over-Length>A: Temp-Heating-Coil-Constant-over-Length</a> - The temperature of the heating coil will actually change along its length as the water within it cools.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="LC:Discharging-Tank">
+</p>
+<p>
+<div id="likeChgDT">
 Discharging-Tank: <a href=#A:Charging-Tank-No-Temp-Discharge>A: Charging-Tank-No-Temp-Discharge</a>- The model currently only accounts for charging of the tank. That is, increasing the temperature of the water to match the temperature of the coil. A more complete model would also account for discharging of the tank.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="LC:Tank-Lose-Heat">
+</p>
+<p>
+<div id="likeChgTLH">
 Tank-Lose-Heat: <a href=#A:Perfect-Insulation-Tank>A: Perfect-Insulation-Tank</a> - Any real tank cannot be perfectly insulated and will lose heat.
 </div>
-</li>
-</ul>
+</p>
+</div>
 </div>
 </div>
 <div id="Sec:UCs">
@@ -3069,7 +3063,7 @@ X
 </tr>
 <tr>
 <td>
-LC1 (<a href=#LC:Temperature-Coil-Variable-Over-Day>LC: Temperature-Coil-Variable-Over-Day</a>)
+LC1 (<a href=#likeChgTCVOD>LC: Temperature-Coil-Variable-Over-Day</a>)
 </td>
 <td>
 
@@ -3116,7 +3110,7 @@ X
 </tr>
 <tr>
 <td>
-LC2 (<a href=#LC:Temperature-Coil-Variable-Over-Length>LC: Temperature-Coil-Variable-Over-Length</a>)
+LC2 (<a href=#likeChgTCVOL>LC: Temperature-Coil-Variable-Over-Length</a>)
 </td>
 <td>
 
@@ -3163,7 +3157,7 @@ X
 </tr>
 <tr>
 <td>
-LC3 (<a href=#LC:Discharging-Tank>LC: Discharging-Tank</a>)
+LC3 (<a href=#likeChgDT>LC: Discharging-Tank</a>)
 </td>
 <td>
 
@@ -3210,7 +3204,7 @@ X
 </tr>
 <tr>
 <td>
-LC4 (<a href=#LC:Tank-Lose-Heat>LC: Tank-Lose-Heat</a>)
+LC4 (<a href=#likeChgTLH>LC: Tank-Lose-Heat</a>)
 </td>
 <td>
 

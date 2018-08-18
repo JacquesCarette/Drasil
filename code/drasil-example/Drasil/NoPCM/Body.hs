@@ -38,7 +38,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
   RefSec(RefProg), RefTab(TAandA, TUnits), 
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
-  funcReqDom, inDataConstTbl, intro, likeChgDom, mkDoc, mkEnumCC, mkLklyChnk,
+  funcReqDom, inDataConstTbl, intro, likeChgDom, mkDoc, mkEnumCC,
   outDataConstTbl, physSystDesc, reqF, srsDomains, termDefnF, traceMGF, tsymb,
   unlikeChgDom, valsOfAuxConstantsF)
  
@@ -52,7 +52,7 @@ import Drasil.SWHS.Assumptions (newA1, newA2, newA3, newA7, newA8, newA9,
   newA11, newA12, newA14, newA15, newA20)
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
   orgDocIntro, physSyst1, physSyst2, traceFig1, traceFig2, traceIntro2, traceTrailing)
-import Drasil.SWHS.Changes (chgsStart, likeChg2, likeChg3, likeChg6)
+import Drasil.SWHS.Changes (chgsStart, likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, tank_para, transient, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.IMods (eBalanceOnPCM, heatEInWtr)
@@ -105,7 +105,7 @@ nopcm_Constraints =  [coil_SA, w_E, htCap_W, coil_HTC, temp_init,
   time_final, tank_length, temp_C, w_density, diam, temp_W]
 
 probDescription, termAndDefn, physSystDescription, goalStates,
-  reqS, funcReqs, likelyChgs, unlikelyChgsSect, traceMAndG, specParamVal :: Section
+  reqS, funcReqs, likelyChgsSect, unlikelyChgsSect, traceMAndG, specParamVal :: Section
 
 
 -------------------
@@ -145,7 +145,7 @@ mkSRS = RefSec (RefProg intro
         )
       ]
     ):
-  map Verbatim [reqS, likelyChgs, unlikelyChgsSect, traceMAndG, specParamVal] ++ (Bibliography : [])
+  map Verbatim [reqS, likelyChgsSect, unlikelyChgsSect, traceMAndG, specParamVal] ++ (Bibliography : [])
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -170,7 +170,8 @@ nopcm_si = SI {
 }
 
 nopcmRefDB :: ReferenceDB
-nopcmRefDB = rdb [] [] assumps_Nopcm_list_new [] [] referencesRefList (reqs ++ unlikelyChgs) -- FIXME: Convert the rest to new chunk types
+nopcmRefDB = rdb [] [] assumps_Nopcm_list_new [] [] referencesRefList (reqs ++
+  likelyChgs ++ unlikelyChgs) -- FIXME: Convert the rest to new chunk types
 
 nopcm_code :: CodeSpec
 nopcm_code = codeSpec nopcm_si [inputMod]
@@ -354,7 +355,7 @@ assumpS3 =
 assumpS4 = 
   (foldlSent [S "The", phrase w_density, S "has no spatial variation; that is"
   `sC` S "it is constant over their entire", phrase vol, sSqBr ((makeRef rocTempSimp)`sC`
-  (makeRef likeChg2))])
+  (makeRef likeChgTCVOD))])
 
 newA5NoPCM :: AssumpChunk
 newA5NoPCM = assump "Density-Water-Constant-over-Volume" assumpS4 
@@ -379,7 +380,7 @@ assumpS9_npcm =
   S "of the tank" `sC` S "not discharging. The", phrase temp_W, S "can only",
   S "increase, or remain constant; it cannot decrease. This implies that the",
   phrase temp_init, S "is less than (or equal to) the", phrase temp_C,
-  sSqBr ((makeRef eBalanceOnWtr) `sC` (makeRef likeChg3_npcm))])
+  sSqBr ((makeRef eBalanceOnWtr) `sC` (makeRef likeChgDT))])
 
 newA9NoPCM :: AssumpChunk
 newA9NoPCM = assump "Charging-Tank-No-Temp-Discharge" assumpS9_npcm 
@@ -599,21 +600,14 @@ funcReqsListWordsNum =
 --Section 6 : LIKELY CHANGES
 ----------------------------
 
-likelyChgs = SRS.likeChg (map LlC likelyChgsList) []
+likelyChgsSect = SRS.likeChg likelyChgsList []
 
--- FIXME: Remove likeChg3_npcm and switch likelyChgsList to Contents when SWHS
--- likely changes has been switched to ConceptInstance.
+likelyChgsList :: [Contents]
+likelyChgsList = mkEnumCC (\x -> (getShortName x, Flat $ x ^. defn, Just $ refAdd x))
+  likelyChgs
 
-likelyChgsList :: [LabelledContent] --FIXME: this can be removed by implementin NoPCM's LCs as the correct chunk
-likelyChgsList = [likeChg2, likeChg3, likeChg3_npcm, likeChg6]
-
-likeChg3_npcm :: LabelledContent
-likeChg3_npcm = mkLklyChnk "likeChg3" (
-  (makeRef newA9NoPCM) :+: S "- The" +:+ phrase model +:+
-  S "currently only accounts for charging of the tank. That is, increasing the" +:+ phrase temp +:+
-  S "of the water to match the" +:+ phrase temp +:+ S "of the coil. A more complete"  
-  +:+ phrase model +:+. S "would also account for discharging of the tank") 
-  "Discharging-Tank"
+likelyChgs :: [ConceptInstance]
+likelyChgs = [likeChgTCVOD, likeChgTCVOL, likeChgDT, likeChgTLH]
 
 likeChgDT :: ConceptInstance
 likeChgDT = cic "likeChgDT" (
@@ -721,7 +715,7 @@ traceDataDefs = ["DD1"]
 traceDataDefRef = map makeRef [dd1HtFluxC]
 
 traceLikelyChg = ["LC1", "LC2", "LC3", "LC4"]
-traceLikelyChgRef = map makeRef likelyChgsList
+traceLikelyChgRef = map makeRef likelyChgs
 
 {-Traceability Matrix 1-}
 

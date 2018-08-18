@@ -22,8 +22,6 @@
 \global\tabulinesep=1mm
 \newcounter{assumpnum}
 \newcommand{\atheassumpnum}{A\theassumpnum}
-\newcounter{lcnum}
-\newcommand{\lcthelcnum}{LC\thelcnum}
 \bibliography{bibfile}
 \title{Software Requirements Specification for Solar Water Heating Systems}
 \author{Thulasi Jegatheesan}
@@ -279,7 +277,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Constant-Water-Temp-Across-Tank}:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank {[}\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Density-Water-Constant-over-Volume}:]The density of water has no spatial variation; that is, it is constant over their entire volume {[}\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}, LC\ref{LC:Temperature-Coil-Variable-Over-Day}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Density-Water-Constant-over-Volume}:]The density of water has no spatial variation; that is, it is constant over their entire volume {[}\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}, \hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day}{]}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Specific-Heat-Energy-Constant-over-Volume}:]The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume {[}\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}{]}.
@@ -294,7 +292,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Length}:]The temperature of the heating coil does not vary along its length {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Charging-Tank-No-Temp-Discharge}:]The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, LC\ref{LC:Discharging-Tank}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Charging-Tank-No-Temp-Discharge}:]The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, \hyperref[likeChgDT]{LC: Discharging-Tank}{]}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Water-Always-Liquid}:]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, \hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}{]}.
@@ -649,18 +647,12 @@ ${t_{final}}$ & s & final time
 This problem is small in size and relatively simple, so performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the non-functional requirement priorities are correctness, verifiability, understandability, reusability, and maintainability.
 \section{Likely Changes}
 \label{Sec:LCs}
-\begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Temperature-Coil-Variable-Over-Day}:]A\ref{A:Temp-Heating-Coil-Constant-over-Time} - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
-\end{description}
-\begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Temperature-Coil-Variable-Over-Length}:]A\ref{A:Temp-Heating-Coil-Constant-over-Length} - The temperature of the heating coil will actually change along its length as the water within it cools.
-\end{description}
-\begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Discharging-Tank}:]A\ref{A:Charging-Tank-No-Temp-Discharge}- The model currently only accounts for charging of the tank. That is, increasing the temperature of the water to match the temperature of the coil. A more complete model would also account for discharging of the tank.
-\end{description}
-\begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Tank-Lose-Heat}:]A\ref{A:Perfect-Insulation-Tank} - Any real tank cannot be perfectly insulated and will lose heat.
-\end{description}
+\begin{itemize}
+\item[Temperature-Coil-Variable-Over-Day:\phantomsection\label{likeChgTCVOD}]A\ref{A:Temp-Heating-Coil-Constant-over-Time} - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
+\item[Temperature-Coil-Variable-Over-Length:\phantomsection\label{likeChgTCVOL}]A\ref{A:Temp-Heating-Coil-Constant-over-Length} - The temperature of the heating coil will actually change along its length as the water within it cools.
+\item[Discharging-Tank:\phantomsection\label{likeChgDT}]A\ref{A:Charging-Tank-No-Temp-Discharge}- The model currently only accounts for charging of the tank. That is, increasing the temperature of the water to match the temperature of the coil. A more complete model would also account for discharging of the tank.
+\item[Tank-Lose-Heat:\phantomsection\label{likeChgTLH}]A\ref{A:Perfect-Insulation-Tank} - Any real tank cannot be perfectly insulated and will lose heat.
+\end{itemize}
 \section{Unlikely Changes}
 \label{Sec:UCs}
 \begin{itemize}
@@ -733,13 +725,13 @@ IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) &  &  &  &  &  & 
 \\
 IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) &  &  &  &  &  &  &  &  &  & X &  &  &  & 
 \\
-LC1 (LC\ref{LC:Temperature-Coil-Variable-Over-Day}) &  &  &  &  &  &  & X &  &  &  &  &  &  & 
+LC1 (\hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day}) &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
-LC2 (LC\ref{LC:Temperature-Coil-Variable-Over-Length}) &  &  &  &  &  &  &  & X &  &  &  &  &  & 
+LC2 (\hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length}) &  &  &  &  &  &  &  & X &  &  &  &  &  & 
 \\
-LC3 (LC\ref{LC:Discharging-Tank}) &  &  &  &  &  &  &  &  & X &  &  &  &  & 
+LC3 (\hyperref[likeChgDT]{LC: Discharging-Tank}) &  &  &  &  &  &  &  &  & X &  &  &  &  & 
 \\
-LC4 (LC\ref{LC:Tank-Lose-Heat}) &  &  &  &  &  &  &  &  &  &  & X &  &  & 
+LC4 (\hyperref[likeChgTLH]{LC: Tank-Lose-Heat}) &  &  &  &  &  &  &  &  &  &  & X &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}

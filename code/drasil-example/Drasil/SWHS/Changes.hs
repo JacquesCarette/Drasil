@@ -1,7 +1,6 @@
 module Drasil.SWHS.Changes where
 
 import Language.Drasil
-import Drasil.DocLang (mkLklyChnk)
 import qualified Drasil.DocLang.SRS as SRS (likeChgDom, unlikeChgDom)
 
 import Data.Drasil.Concepts.Documentation (assumption, value, simulation,
@@ -29,7 +28,6 @@ chgsStart a = makeRef a +:+ S "-"
 likelyChgs :: [ConceptInstance]
 likelyChgs = [likeChgUTP, likeChgTCVOD, likeChgTCVOL, likeChgDT, likeChgDITPW, likeChgTLH]
 
-likeChg2, likeChg3, likeChg6 :: LabelledContent
 likeChgUTP, likeChgTCVOD, likeChgTCVOL, likeChgDT, likeChgDITPW, likeChgTLH :: ConceptInstance
 
 likeChgUTP = cic "likeChgUTP" (
@@ -38,21 +36,11 @@ likeChgUTP = cic "likeChgUTP" (
   S "of uniform", phrase temp_PCM, S "is not likely"] ) "Uniform-Temperature-PCM"
   SRS.likeChgDom
 --
-likeChg2 = mkLklyChnk  "likeChg2" (
-  foldlSent [chgsStart newA8, S "The", phrase temp_C, S "will change over",
-  (S "course" `ofThe` S "day, depending"), S "on the", phrase energy, 
-  S "received from the sun"] ) "Temperature-Coil-Variable-Over-Day"
-
 likeChgTCVOD = cic "likeChgTCVOD" (
   foldlSent [chgsStart newA8, S "The", phrase temp_C, S "will change over",
   (S "course" `ofThe` S "day, depending"), S "on the", phrase energy,
   S "received from the sun"] ) "Temperature-Coil-Variable-Over-Day" SRS.likeChgDom
 --
-likeChg3 = mkLklyChnk "likeChg3" (
-  foldlSent [chgsStart newA9, S "The", phrase temp_C,
-  S "will actually change along its length as the", phrase water,
-  S "within it cools"] ) "Temperature-Coil-Variable-Over-Length"
-
 likeChgTCVOL = cic "likeChgTCVOL" (
   foldlSent [chgsStart newA9, S "The", phrase temp_C,
   S "will actually change along its length as the", phrase water,
@@ -69,10 +57,6 @@ likeChgDITPW = cic "likeChgDITPW" (
   S "the", short phsChgMtrl, S "could be allowed to have different",
   plural value] ) "Different-Initial-Temps-PCM-Water" SRS.likeChgDom
 --
-likeChg6 = mkLklyChnk "likeChg6" (
-  foldlSent [chgsStart newA15, S "Any real", phrase tank, S "cannot", 
-  S "be perfectly insulated and will lose", phrase CT.heat] ) "Tank-Lose-Heat"
-
 likeChgTLH = cic "likeChgTLH" (
   foldlSent [chgsStart newA15, S "Any real", phrase tank, S "cannot",
   S "be perfectly insulated and will lose", phrase CT.heat] ) "Tank-Lose-Heat"

@@ -202,10 +202,10 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 
 glassBRUnitless :: [VarChunk]
 glassBRUnitless = [risk_fun, is_safePb, is_safeLR, stressDistFac, sdf_tol,
-  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL]
+  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL, maxOrder]
 
 risk_fun, is_safePb, is_safeLR, stressDistFac, sdf_tol,
-  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL :: VarChunk
+  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL, maxOrder :: VarChunk
 
 dimlessLoad   = vc "dimlessLoad" (nounPhraseSP "dimensionless load")
   (hat lQ) Real
@@ -240,6 +240,8 @@ stressDistFac = vc "stressDistFac" (nounPhraseSP $ "stress distribution"
 tolLoad       = vc "tolLoad"       (nounPhraseSP "tolerable load")
   (sub (eqSymb dimlessLoad) (Atomic "tol")) Real
 
+maxOrder      = vc "maxOrder"      (nounPhraseSP "maximum order") 
+  (Atomic "MAX_ORDER") Natural
 
 terms :: [ConceptChunk]
 terms = [aspectRatio, glBreakage, lite, glassTy,
@@ -361,16 +363,19 @@ specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
 --Constants--
 
 gbConstants :: [QDefinition]
-gbConstants = [constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadDF, constant_LoadSF]
-                ++ gBRSpecParamVals 
+gbConstants = [constant_M, constant_K, constant_ModElas, constant_LoadDur, 
+  constant_LoadDF, constant_LoadSF] ++ gBRSpecParamVals 
 
-constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadDF, constant_LoadSF :: QDefinition
-constant_K       = mkQuantDef sflawParamK  $ dbl 2.86e-53
-constant_M       = mkQuantDef sflawParamM  $ 7
-constant_ModElas = mkQuantDef mod_elas     $ dbl 7.17e10
-constant_LoadDur = mkQuantDef load_dur     $ 3
-constant_LoadDF  = mkQuantDef lDurFac      $ ((sy load_dur) / 60) $^ ((sy sflawParamM) / (16))
-constant_LoadSF  = mkQuantDef loadSF       $ 1
+constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadDF, constant_LoadSF,
+  constant_MaxOrder :: QDefinition
+
+constant_K        = mkQuantDef sflawParamK  $ dbl 2.86e-53
+constant_M        = mkQuantDef sflawParamM  $ 7
+constant_ModElas  = mkQuantDef mod_elas     $ dbl 7.17e10
+constant_LoadDur  = mkQuantDef load_dur     $ 3
+constant_LoadDF   = mkQuantDef lDurFac      $ ((sy load_dur) / 60) $^ ((sy sflawParamM) / (16))
+constant_LoadSF   = mkQuantDef loadSF       $ 1
+constant_MaxOrder = mkQuantDef maxOrder     $ 2
 --Equations--
 
 sdWithEqn :: QDefinition

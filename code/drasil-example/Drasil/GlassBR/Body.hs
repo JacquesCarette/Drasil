@@ -70,7 +70,7 @@ import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, capacity, cha
   demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained, gbInputDataConstraints,
   gbInputs, gbOutputs, gBRSpecParamVals, glassGeo, glassTy, glassTypes, glBreakage,
   lateralLoad, load, loadTypes, pb_tol, prob_br, probBreak, sD, sdWithEqn, stressDistFac,
-  termsWithAccDefn, termsWithDefsOnly, wtntWithEqn)
+  termsWithAccDefn, termsWithDefsOnly, wtntWithEqn, constant_MaxOrder)
 import Drasil.GlassBR.Labels (hwLabel, constantsLabel, outputLabel, seqServLabel, contoursLabel,
   functLabel, thicknessLabel, glTypeLabel, calcLabel, loadLabel,
   inputLabel, ctrlLabel)
@@ -198,12 +198,12 @@ mkMIS = IntroSec (IntroMIS (S "https://github.com/smiths/caseStudies/tree/master
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     thicknessLabel True) :
   MISModSec (MISModProg "Funct" Nothing [MISUses [seqServLabel],
-    MISSyntax [MISExportedCs ([{-FILL IN-}] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
+    MISSyntax [MISExportedCs maxOrderConst, MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]],
     MISConsiderations [fxnCons]]
     functLabel True) :
   MISModSec (MISModProg "Contours" Nothing [MISUses [functLabel],
-    MISSyntax [MISExportedCs ([{-FILL IN-}] :: [QDefinition]), MISExportedAPs [{-FILL IN-}]],
+    MISSyntax [MISExportedCs maxOrderConst, MISExportedAPs [{-FILL IN-}]],
     MISSemantics [MISStateVars [{-FILL IN-}], MISStateInvariant [], MISAssumptions [], MISAccessRoutines [{-FILL IN-}]]]
     contoursLabel True) :
   MISModSec (MISModProg "SeqServices" Nothing [MISUses [],
@@ -341,6 +341,10 @@ traceyGraphs = [fig_2, fig_3, fig_4]
 
 solChSpecSubsections :: [CI]
 solChSpecSubsections = [thModel, inModel, dataDefn, dataConst]
+
+--Used in "Uses" Section--
+maxOrderConst :: [QDefinition]
+maxOrderConst = [constant_MaxOrder]
 
 --Used in "Values of Auxiliary Constants" Section--
 auxiliaryConstants :: [QDefinition]

@@ -13,8 +13,6 @@ import Data.Drasil.Concepts.Documentation as Doc (goal, organization, thModel, i
   system, model, design, intReader, srs, characteristic, designDoc, decision, environment,
   vavPlan, softwareDoc, implementation, softwareVAV, desSpec)
 import Data.Drasil.Citations (parnasClements1986)
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, foldlsC, foldlSP,
-  ofThe, ofThe', refineChain)
 
 -----------------------
 --     Constants     --
@@ -81,8 +79,8 @@ purposeOfDoc purposeOfProgramParagraph = SRS.prpsOfDoc
 -- programName      - the name of the program
 -- intendedPurpose  - the intended purpose of the program
 scopeOfRequirements :: (Idea a, CommonIdea a) => Sentence -> a -> Sentence -> Section
-scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq [intro] []
-  where intro = foldlSP [(phrase scope) `ofThe'` (plural requirement),
+scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq [introP] []
+  where introP = foldlSP [(phrase scope) `ofThe'` (plural requirement),
                 S "includes" +:+. mainRequirement, S "Given the appropriate inputs,",
                 short programName +:+ intendedPurpose]
 
@@ -123,8 +121,8 @@ orgSec i b s t = SRS.orgOfDoc (orgIntro i b s t) []
 -- Intro -> Bottom (for bottom up approach) -> Section that contains bottom ->
 --    trailing sentences -> [Contents]
 orgIntro :: NamedIdea c => Sentence -> c -> Label -> Sentence -> [Contents]
-orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
-          intro, S "The presentation follows the standard pattern of presenting",
+orgIntro introS bottom bottomSec trailingSentence = [foldlSP [
+          introS, S "The presentation follows the standard pattern of presenting",
           (foldlsC $ map (plural) [Doc.goal, theory, definition]) `sC` S "and assumptions.",
           S "For readers that would like a more bottom up approach" `sC`
           S "they can start reading the", plural bottom,

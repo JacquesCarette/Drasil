@@ -15,7 +15,7 @@ string       = dcc "string"    (cn' "string")
   "a sequence of characters"
 sequence     = dcc "sequence"  (cn' "sequence") 
   ("a list that represents a countable number of ordered values of the same data type,"++
-  	" where the same value may occur more than once")
+  " where the same value may occur more than once")
 tuple        = dcc "tuple"     (cn' "tuple")
   "a list of values, potentially of different types"
 

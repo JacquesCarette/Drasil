@@ -46,17 +46,21 @@ instance MayHaveUnit        GenDefn where getUnit u = gdUnit u
 
 gd :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
   Derivation -> [Reference] -> Label -> GenDefn
-gd r (Just u) derivs ref lbe = GD r (Just (unitWrapper u)) derivs ref lbe Nothing
-gd r Nothing  derivs ref lbe = GD r Nothing                derivs ref lbe Nothing
+gd r (Just u) derivs refs lbe = GD r (Just (unitWrapper u)) derivs refs lbe Nothing
+gd r Nothing  derivs refs lbe = GD r Nothing                derivs refs lbe Nothing
 
 gdNoUnitDef :: RelationConcept -> Derivation -> [Reference] -> Label -> GenDefn
-gdNoUnitDef r derivs ref lbe = GD r Nothing derivs ref lbe Nothing
+gdNoUnitDef r derivs refs lbe = GD r Nothing derivs refs lbe Nothing
 
 gd' :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
   Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
-gd' r (Just u) derivs ref sn note = GD r (Just (unitWrapper u)) derivs ref (mkLabelSame sn (Def General)) (Just note)
-gd' r Nothing  derivs ref sn note = GD r Nothing                derivs ref (mkLabelSame sn (Def General)) (Just note)
+gd' r (Just u) derivs refs sn note = GD r (Just (unitWrapper u)) derivs refs 
+  (mkLabelSame sn (Def General)) (Just note)
+gd' r Nothing  derivs refs sn note = GD r Nothing                derivs refs 
+  (mkLabelSame sn (Def General)) (Just note)
 
 gd'' :: RelationConcept -> [Reference] -> String -> [Sentence] -> GenDefn
-gd'' r ref sn []   = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) ref (mkLabelSame sn (Def General)) Nothing
-gd'' r ref sn note = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) ref (mkLabelSame sn (Def General)) (Just note)
+gd'' r refs sn []   = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) refs 
+  (mkLabelSame sn (Def General)) Nothing
+gd'' r refs sn note = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) refs 
+  (mkLabelSame sn (Def General)) (Just note)

@@ -25,9 +25,6 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   MISModSub(..), MISModSec(..), MISSemanticsSub(..), MISSyntaxSub(..), 
   ModHierarchSec(ModHierarchProg), NotationSec(NotationProg))
 
-import qualified Drasil.DocLang.SRS as SRS (datConLabel, dataDefnLabel, indPRCaseLabel, 
-  referenceLabel, valsOfAuxConsLabel)
-
 import Data.Drasil.Concepts.Computation (computerApp, inParam)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
   assumption, characteristic, class_, code, company, condition, content, 

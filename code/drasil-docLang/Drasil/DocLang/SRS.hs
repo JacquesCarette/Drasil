@@ -18,11 +18,11 @@ import Language.Drasil
 import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, 
     assumption, charOfIR, client, customer, consVals, dataDefn, datumConstraint, 
     functionalRequirement, genDefn, generalSystemDescription, goalStmt, 
-    indPRCase, inModel, introduction, likelyChg, unlikelyChg, nonfunctionalRequirement,
+    indPRCase, inModel, likelyChg, unlikelyChg, nonfunctionalRequirement,
     offShelfSolution, orgOfDoc, physSyst, prodUCTable, problemDescription, 
-    propOfCorSol, prpsOfDoc, reference, requirement, scpOfReq, scpOfTheProj,
+    propOfCorSol, prpsOfDoc, requirement, scpOfReq, scpOfTheProj,
     solutionCharSpec, specificsystemdescription, srs, stakeholder, sysCont, 
-    systemConstraint, termAndDef, terminology, thModel, traceyMandG, tOfSymb, 
+    systemConstraint, termAndDef, terminology, thModel,  
     userCharacteristic)
 import Data.Drasil.Phrase (for'')
 

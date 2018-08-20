@@ -43,7 +43,7 @@ stateInvars      cs ss = section' (titleize' Doc.stateInvar)      cs ss "StateIn
 accRoutSemantics cs ss = section' (titleize' Doc.accRoutSemantic) cs ss "AccRoutSemantics"
 
 misOfModule :: [Contents] -> [Section] -> String -> Label -> Section
-misOfModule cs ss mod lbl = section (titleize $ Doc.misOfModule mod) cs ss lbl
+misOfModule cs ss modstr lbl = section (titleize $ Doc.misOfModule modstr) cs ss lbl
 
 --FIXME: All these contents need variability to be implemented in other examples
 

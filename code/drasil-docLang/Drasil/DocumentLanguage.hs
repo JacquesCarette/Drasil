@@ -30,7 +30,7 @@ import qualified Drasil.DocLang.MIS as MIS (notation, introMIS, notationIntroCon
   enviroVars, expAccPrograms, expConstants, expTypes, module_, modHier, notation, 
   semantics, stateInvars, stateVars, syntax, uses, assignSttmts)
 
-import Data.Drasil.SentenceStructures (foldlSP, foldlList, SepType(Comma), FoldType(List))
+import Data.Drasil.SentenceStructures (foldlList, SepType(Comma), FoldType(List))
 import Data.Drasil.Utils (bulletFlat)
 
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
@@ -606,15 +606,16 @@ subsections (MISUses [])       = MIS.uses    none  []
 subsections (MISUses useMods)  = MIS.uses [mkParagraph $ foldlList Comma List $ map makeRef useMods] []
 subsections (MISSyntax subs)   = MIS.syntax [] (map syntaxSubs subs)
 subsections (MISSemantics subs)= MIS.semantics [] (map semanticSubs subs)
-subsections (MISConsiderations s) = MIS.considerations [] [] --FIXME: needs to be filled out
+subsections (MISConsiderations _) = MIS.considerations [] [] --FIXME: needs to be filled out
 
 syntaxSubs :: MISSyntaxSub -> Section
-syntaxSubs (MISExportedCs [])   = MIS.expConstants   none []
-syntaxSubs (MISExportedAPs [])  = MIS.expAccPrograms none []
-syntaxSubs (MISExportedTyps []) = MIS.expTypes none []
-syntaxSubs (MISExportedAPs cs)  = MIS.expAccPrograms cs []
+syntaxSubs (MISExportedCs [])      = MIS.expConstants   none []
+syntaxSubs (MISExportedAPs [])     = MIS.expAccPrograms none []
+syntaxSubs (MISExportedTyps [])    = MIS.expTypes none []
+syntaxSubs (MISExportedAPs cs)     = MIS.expAccPrograms cs []
 syntaxSubs (MISExportedCs cnstnts) = MIS.expConstants 
   [(UlC . ulcc . Enumeration . bulletFlat) (map MIS.assignSttmts cnstnts)] []
+syntaxSubs (MISExportedTyps tps)   = MIS.expTypes tps []
 
 semanticSubs :: MISSemanticsSub -> Section
 semanticSubs (MISStateVars [])       = MIS.stateVars        none []

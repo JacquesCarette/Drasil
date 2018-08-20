@@ -8,22 +8,23 @@ module Language.Drasil.Chunk.InstanceModel
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn),ConceptDomain(cdom), Concept, ExprRelat(relat),
   HasDerivation(derivations), HasReference(getReferences), HasAdditionalNotes(getNotes),
-  HasLabel(getLabel))
+  HasLabel(getLabel), HasSymbol(symbol), HasSpace(typ))
 import Language.Drasil.Chunk.References (Reference)
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.Chunk.Constrained.Core (TheoryConstraint)
 import Language.Drasil.Chunk.Eq (QDefinition, equat)
 import Language.Drasil.Chunk.Relation (RelationConcept, makeRC)
-import Language.Drasil.Chunk.Quantity (QuantityDict, qw)
+import Language.Drasil.Chunk.Quantity (Quantity, QuantityDict, qw)
 import Language.Drasil.ChunkDB (HasSymbolTable)
+import Language.Drasil.Development.Unit (MayHaveUnit(getUnit))
 import Language.Drasil.Expr (($=))
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Document.GetChunk (vars)
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Label (mkLabelSame)
-import Language.Drasil.RefTypes(RefType(..), DType(..))
+import Language.Drasil.RefTypes (RefType(..), DType(..))
 
 import Control.Lens (makeLenses, (^.))
 
@@ -59,6 +60,10 @@ instance HasReference       InstanceModel where getReferences = ref
 instance HasLabel           InstanceModel where getLabel = lb
 instance HasShortName       InstanceModel where shortname = lb . shortname
 instance HasAdditionalNotes InstanceModel where getNotes = notes
+instance HasSymbol          InstanceModel where symbol (IM _ _ _ a _ _ _ _ _) = symbol a
+instance HasSpace           InstanceModel where typ = imOutput . typ
+instance Quantity           InstanceModel where
+instance MayHaveUnit        InstanceModel where getUnit (IM _ _ _ a _ _ _ _ _) = getUnit a
 
 -- | Smart constructor for instance models
 im :: RelationConcept -> Inputs -> InputConstraints -> Output ->
@@ -67,17 +72,17 @@ im rcon i ic o oc src sn = IM rcon i ic o oc src [] sn Nothing
 
 -- | Same as `im`, with an additional field for notes to be passed in
 im' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> Label -> [Sentence] -> InstanceModel
-im' rcon i ic o oc lbe addNotes = IM rcon i ic o oc [] [] lbe (Just addNotes)
+  OutputConstraints -> [Reference] -> Label -> [Sentence] -> InstanceModel
+im' rcon i ic o oc src lbe addNotes = IM rcon i ic o oc src [] lbe (Just addNotes)
 
 im'' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> Derivation -> String -> [Sentence] -> InstanceModel
-im'' rcon i ic o oc der sn addNotes = IM rcon i ic o oc [] der (mkLabelSame sn (Def Instance))
+  OutputConstraints -> [Reference] -> Derivation -> String -> [Sentence] -> InstanceModel
+im'' rcon i ic o oc src der sn addNotes = IM rcon i ic o oc src der (mkLabelSame sn (Def Instance))
  (Just addNotes)
 
 im''' :: RelationConcept -> Inputs -> InputConstraints -> Output ->
-  OutputConstraints -> Derivation -> String -> InstanceModel
-im''' rcon i ic o oc der sn = IM rcon i ic o oc [] der 
+  OutputConstraints -> [Reference] -> Derivation -> String -> InstanceModel
+im''' rcon i ic o oc src der sn = IM rcon i ic o oc src der 
   (mkLabelSame sn (Def Instance)) Nothing
 
 -- | Smart constructor for instance model from qdefinition

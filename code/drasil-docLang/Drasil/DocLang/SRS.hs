@@ -6,22 +6,23 @@ module Drasil.DocLang.SRS
   appendix, propCorSol, offShelfSol, valsOfAuxCons,
   physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
   inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
-  indPRCaseLabel, unlikeChgLabel, funcReqLabel, srsDom, solCharSpecLabel) where
+  indPRCaseLabel, unlikeChgLabel, funcReqLabel,
+  srsDom, chgProbDom, unlikeChgDom, likeChgDom, assumpDom,
+  solCharSpecLabel) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
 --May want to combine SRS-specific functions into this file as well (ie. OrganizationOfSRS) to make it more Recipe-like.
 
 import Language.Drasil
-import Drasil.DocLang.GenBuilders (section')
 import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, 
-    charOfIR, client, customer, consVals, dataDefn, datumConstraint, 
+    assumption, charOfIR, client, customer, consVals, dataDefn, datumConstraint, 
     functionalRequirement, genDefn, generalSystemDescription, goalStmt, 
-    indPRCase, inModel, likelyChg, unlikelyChg, nonfunctionalRequirement,
+    indPRCase, inModel, introduction, likelyChg, unlikelyChg, nonfunctionalRequirement,
     offShelfSolution, orgOfDoc, physSyst, prodUCTable, problemDescription, 
-    propOfCorSol, prpsOfDoc, requirement, scpOfReq, scpOfTheProj,
+    propOfCorSol, prpsOfDoc, reference, requirement, scpOfReq, scpOfTheProj,
     solutionCharSpec, specificsystemdescription, srs, stakeholder, sysCont, 
-    systemConstraint, termAndDef, terminology, thModel, 
+    systemConstraint, termAndDef, terminology, thModel, traceyMandG, tOfSymb, 
     userCharacteristic)
 import Data.Drasil.Phrase (for'')
 
@@ -96,6 +97,27 @@ offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "ExistingSol
 --Root SRS Domain
 srsDom :: CommonConcept
 srsDom = dcc' "srsDom" (Doc.srs ^. term) "srs" ""
+
+chgProbDom :: ConceptChunk
+chgProbDom = ccs (nc "chgProbDom" $ cn' "change") EmptyS [srsDom]
+
+likeChgDom :: ConceptChunk
+likeChgDom = ccs (mkIdea "likeChgDom" (Doc.likelyChg ^. term) $ Just "LC") EmptyS [chgProbDom]
+
+unlikeChgDom :: ConceptChunk
+unlikeChgDom = ccs (mkIdea "unlikeChgDom" (Doc.unlikelyChg ^. term) $ Just "UC") EmptyS [chgProbDom]
+
+assumpDom :: ConceptChunk
+assumpDom = ccs (mkIdea "assumpDom" (Doc.assumption ^. term) $ Just "A") EmptyS [srsDom]
+
+--function that sets the shortname of each section to be the reference address
+section' :: Sentence -> [Contents] -> [Section] -> String -> Section
+section' a b c d = section a b c (mkLabelRASec d (toString a))
+  where
+    toString :: Sentence -> String --FIXME: same as getStr hack, import instead? 
+    toString (S x) = x
+    toString ((:+:) s1 s2) = toString s1 ++ toString s2
+    toString _ = error "Term is not a string"
 
 --Labels--
 --FIXME: create using section information somehow?

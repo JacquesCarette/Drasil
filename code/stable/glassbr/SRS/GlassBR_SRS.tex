@@ -359,16 +359,16 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:explainScenario}:]This system only considers the external explosion scenario for its calculations.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:standardValues}:]The values provided in Section~\ref{Sec:AuxConstants} are assumed for the duration of load (${t_{d}}$), and the material properties of $m$, $k$, and $E$. \hyperref[IM:probOfBr]{Definition~IM:probOfBr}, \hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}, \hyperref[DD:nFL]{Definition~DD:nFL}, \hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}, and \hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:standardValues}:]The values provided in Section~\ref{Sec:AuxConstants} are assumed for the duration of load (${t_{d}}$), and the material properties of $m$, $k$, and $E$. \hyperref[IM:probOfBreak]{Definition~IM:probOfBreak}, \hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}, \hyperref[DD:nFL]{Definition~DD:nFL}, \hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}, and \hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:glassLite}:]Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. \hyperref[IM:calOfCap]{Definition~IM:calOfCap} and \hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:glassLite}:]Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. \hyperref[IM:calofCapacity]{Definition~IM:calofCapacity} and \hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:boundaryConditions}:]Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. \hyperref[IM:probOfBr]{Definition~IM:probOfBr}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:boundaryConditions}:]Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. \hyperref[IM:probOfBreak]{Definition~IM:probOfBreak}
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:responseType}:]The response type considered in GlassBR is flexural. \hyperref[IM:probOfBr]{Definition~IM:probOfBr}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:responseType}:]The response type considered in GlassBR is flexural. \hyperref[IM:probOfBreak]{Definition~IM:probOfBreak}
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:ldfConstant}:]With reference to A\ref{A:standardValues}, the value of load duration factor ($LDF$) is a constant in GlassBR. \hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}
@@ -395,9 +395,9 @@ Description & \begin{symbDescription}
               \item{${P_{btol}}$ is the tolerable probability of breakage (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is\_safePb$, the glass is considered safe. $is\_safePb$ and $is\_safeLR$ (from \hyperref[T:isSafeLR]{Definition~T:isSafeLR}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[IM:probOfBr]{Definition~IM:probOfBr}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
+Notes & If $is\_safePb$, the glass is considered safe. $is\_safePb$ and $is\_safeLR$ (from \hyperref[T:isSafeLR]{Definition~T:isSafeLR}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[IM:probOfBreak]{Definition~IM:probOfBreak}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -421,9 +421,9 @@ Description & \begin{symbDescription}
               \item{$q$ is the applied load (demand) (Pa)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is\_safeLR$, the glass is considered safe. $is\_safePb$ (from \hyperref[T:isSafePb]{Definition~T:isSafePb}) and $is\_safeLR$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[IM:calOfCap]{Definition~IM:calOfCap}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[IM:calOfDemand]{Definition~IM:calOfDemand}.
+Notes & If $is\_safeLR$, the glass is considered safe. $is\_safePb$ (from \hyperref[T:isSafePb]{Definition~T:isSafePb}) and $is\_safeLR$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[IM:calofCapacity]{Definition~IM:calofCapacity}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[IM:calOfDemand]{Definition~IM:calOfDemand}.
 \\ \midrule \\
-Source & FIXME: This needs to be filled in
+Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -510,7 +510,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & $t$ is a function that maps from the nominal thickness ($h$) to the minimum thickness.
 \\ \midrule \\
-Source & 
+Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -538,7 +538,7 @@ Description & \begin{symbDescription}
               \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & 
+Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -571,7 +571,7 @@ Notes & $J$ is the stress distribution factor (Function), which is obtained by i
         $\hat{q}$ is the dimensionless load defined in \hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}.
         $AR$ is the aspect ratio defined in. \hyperref[DD:aspect.ratio]{Definition~DD:aspect.ratio}
 \\ \midrule \\
-Source & 
+Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -606,7 +606,7 @@ Notes & $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:min.thick]{Definition~DD:min.thick}.
         ${\hat{q}_{tol}}$ is the tolerable load defined in \hyperref[DD:tolLoad]{Definition~DD:tolLoad}.
 \\ \midrule \\
-Source & 
+Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -641,7 +641,7 @@ Notes & AN is annealed glass
         FT is fully tempered glass
         HS is heat strengthened glass
 \\ \midrule \\
-Source & 
+Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -679,7 +679,7 @@ Notes & $q$ is the 3 second equivalent pressure, as given in \hyperref[IM:calOfD
         $GTF$ is the glass type factor, as given by \hyperref[DD:gTF]{Definition~DD:gTF}.
         $\hat{q}$ is calculated with reference to A\ref{A:glassLite}.
 \\ \midrule \\
-Source & \cite{campidelli} (Eq. 7)
+Source & \cite{astm2009} and \cite{campidelli} (Eq. 7)
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -711,7 +711,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & ${\hat{q}_{tol}}$ is the tolerable load which is obtained from Figure 7 using ${J_{tol}}$ and aspect ratio as parameters using interpolation. Calculations of ${J_{tol}}$ and $AR$ are defined in \hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}. and \hyperref[DD:aspect.ratio]{Definition~DD:aspect.ratio}, respectively
 \\ \midrule \\
-Source & 
+Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -751,7 +751,7 @@ Notes & ${J_{tol}}$  is calculated with reference to  ${P_{btol}}$.
         $LDF$ is the load duration factor as defined by \hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}.
         ${P_{btol}}$ is the tolerable probability entered by the user.
 \\ \midrule \\
-Source & 
+Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -780,7 +780,7 @@ Description & \begin{symbDescription}
               \item{${SD_{z}}$ is the stand off distance (z-component) (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & 
+Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -810,7 +810,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
 \\ \midrule \\
-Source & 
+Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -821,9 +821,9 @@ This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into o
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{IM:probOfBr}
+\toprule \textbf{Refname} & \textbf{IM:probOfBreak}
 \phantomsection 
-\label{IM:probOfBr}
+\label{IM:probOfBreak}
 \\ \midrule \\
 Label & Probability of Glass Breakage
 \\ \midrule \\
@@ -856,11 +856,11 @@ RefBy & FIXME: This needs to be filled in
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{IM:calOfCap}
+\toprule \textbf{Refname} & \textbf{IM:calofCapacity}
 \phantomsection 
-\label{IM:calOfCap}
+\label{IM:calofCapacity}
 \\ \midrule \\
-Label & Calculation of Capacity(LR)
+Label & Calculation of Capacity
 \\ \midrule \\
 Input & $NFL$, $GTF$, $LSF$
 \\ \midrule \\
@@ -891,7 +891,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows A\ref{A:glassCondition} and A\ref{A:glassType} (``In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations'') from \cite{astm2009} (pg. 53).
 \\ \midrule \\
-Source & 
+Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -903,7 +903,7 @@ RefBy & FIXME: This needs to be filled in
 \phantomsection 
 \label{IM:calOfDemand}
 \\ \midrule \\
-Label & Calculation of Demand(q)
+Label & Calculation of Demand
 \\ \midrule \\
 Input & $q$, ${w_{TNT}}$, $SD$
 \\ \midrule \\
@@ -933,7 +933,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined as $w TNT$. $SD$ is the stand off distance as defined in \hyperref[DD:standOffDist]{Definition~DD:standOffDist}.
 \\ \midrule \\
-Source & 
+Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -981,36 +981,45 @@ This section provides the functional requirements, the business tasks that the s
 \subsection{Functional Requirements}
 \label{Sec:FRs}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Input-Glass-Props}:]Input the quantities from Table~\ref{Table:R1ReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Input-Glass-Props}:]Input the quantities from Table~\ref{Table:InputGlassPropsReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast. Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
+\end{description}
+\begin{itemize}
+\item[System-Set-Values-Following-Assumptions:\phantomsection\label{FR:System-Set-Values-Following-Assumptions}]The system shall set the known values as follows:
+                                                                                                                \begin{itemize}
+                                                                                                                \item{$m$, $k$, $E$, and ${t_{d}}$ following A\ref{A:standardValues}}
+                                                                                                                \item{$LDF$ from \hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}}
+                                                                                                                \item{LSF following A\ref{A:glassLite}}
+                                                                                                                \item{$h$ from \hyperref[DD:min.thick]{Definition~DD:min.thick}}
+                                                                                                                \item{$GTF$ from \hyperref[DD:gTF]{Definition~DD:gTF}}
+                                                                                                                \item{$SD$ from \hyperref[DD:standOffDist]{Definition~DD:standOffDist}}
+                                                                                                                \item{$AR$ from \hyperref[DD:aspect.ratio]{Definition~DD:aspect.ratio}}
+                                                                                                                \end{itemize}
+\end{itemize}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Check-Input-with-Data.Constraints}:]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DataConstraints}. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:System-Set-Values-Following-Assumptions}:]The system shall set the known values as follows: $m$, $k$, $E$, ${t_{d}}$ following A\ref{A:standardValues}, $LDF$ following A\ref{A:ldfConstant}, LSF following A\ref{A:glassLite}, $h$ (from \hyperref[DD:min.thick]{Definition~DD:min.thick}), $GTF$ (from \hyperref[DD:gTF]{Definition~DD:gTF}), and $SD$ (from \hyperref[DD:standOffDist]{Definition~DD:standOffDist}).
-\end{description}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Check-Input-with-Data.Constraints}:]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DataConstraints}. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
-\end{description}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Output-Values-and-Known-Quantities}:]Output the input quantities from R\ref{FR:Input-Glass-Props} and the known quantities from R\ref{FR:System-Set-Values-Following-Assumptions}.
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Output-Values-and-Known-Quantities}:]Output the input quantities from R\ref{FR:Input-Glass-Props} and the known quantities from List~\ref{FR:System-Set-Values-Following-Assumptions}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{reqnum}\rthereqnum\label{FR:Check-Glass-Safety}:]If $is\_safePb$ ∧ $is\_safeLR$ (from \hyperref[T:isSafePb]{Definition~T:isSafePb} and \hyperref[T:isSafeLR]{Definition~T:isSafeLR}) are true, output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
 \end{description}
 \begin{itemize}
-\item[R6:\phantomsection\label{List:output.quantities}]Output the following quantities:
-                                                       \begin{itemize}
-                                                       \item{Probability of breakage (${P_{b}}$) (\hyperref[IM:probOfBr]{Definition~IM:probOfBr})}
-                                                       \item{Load resistance ($LR$) (\hyperref[IM:calOfCap]{Definition~IM:calOfCap})}
-                                                       \item{Applied load (demand) ($q$) (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand})}
-                                                       \item{Risk of failure ($B$) (\hyperref[DD:risk.fun]{Definition~DD:risk.fun})}
-                                                       \item{Stress distribution factor (Function) ($J$) (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac})}
-                                                       \item{Non-factored load ($NFL$) (\hyperref[DD:nFL]{Definition~DD:nFL})}
-                                                       \item{Glass type factor ($GTF$) (\hyperref[DD:gTF]{Definition~DD:gTF})}
-                                                       \item{Dimensionless load ($\hat{q}$) (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad})}
-                                                       \item{Tolerable load (${\hat{q}_{tol}}$) (\hyperref[DD:tolLoad]{Definition~DD:tolLoad})}
-                                                       \item{Stress distribution factor (Function) based on Pbtol (${J_{tol}}$) (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol})}
-                                                       \item{Minimum thickness ($h$) (\hyperref[DD:min.thick]{Definition~DD:min.thick})}
-                                                       \item{Aspect ratio ($AR$) (\hyperref[DD:aspect.ratio]{Definition~DD:aspect.ratio})}
-                                                       \end{itemize}
+\item[Output-Quantities:\phantomsection\label{FR:Output-Quantities}]Output the following quantities:
+                                                                    \begin{itemize}
+                                                                    \item{Aspect ratio ($AR$) (\hyperref[DD:aspect.ratio]{Definition~DD:aspect.ratio})}
+                                                                    \item{Risk of failure ($B$) (\hyperref[DD:risk.fun]{Definition~DD:risk.fun})}
+                                                                    \item{Glass type factor ($GTF$) (\hyperref[DD:gTF]{Definition~DD:gTF})}
+                                                                    \item{Minimum thickness ($h$) (\hyperref[DD:min.thick]{Definition~DD:min.thick})}
+                                                                    \item{Stress distribution factor (Function) ($J$) (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac})}
+                                                                    \item{Stress distribution factor (Function) based on Pbtol (${J_{tol}}$) (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol})}
+                                                                    \item{Calculation of Capacity ($LR$) (\hyperref[IM:calofCapacity]{Definition~IM:calofCapacity})}
+                                                                    \item{Non-factored load ($NFL$) (\hyperref[DD:nFL]{Definition~DD:nFL})}
+                                                                    \item{Probability of Glass Breakage (${P_{b}}$) (\hyperref[IM:probOfBreak]{Definition~IM:probOfBreak})}
+                                                                    \item{Calculation of Demand ($q$) (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand})}
+                                                                    \item{Dimensionless load ($\hat{q}$) (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad})}
+                                                                    \item{Tolerable load (${\hat{q}_{tol}}$) (\hyperref[DD:tolLoad]{Definition~DD:tolLoad})}
+                                                                    \end{itemize}
 \end{itemize}
 \begin{longtabu}{l X[l] l}
 \toprule
@@ -1038,8 +1047,8 @@ $g$ & Glass type $g\in{}\{AN,FT,HS\}$ & --
 $t$ & Nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ & mm
 \\
 \bottomrule
-\caption{Required Inputs following R1}
-\label{Table:R1ReqInputs}
+\caption{Required Inputs following R\ref{FR:Input-Glass-Props}}
+\label{Table:InputGlassPropsReqInputs}
 \end{longtabu}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
@@ -1074,16 +1083,16 @@ This problem is small in size and relatively simple, so performance is not a pri
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. Table~\ref{Table:TraceyItemSecs} shows the dependencies of theoretical models, instance models, and data definitions with each other. Table~\ref{Table:TraceyReqsItems} shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. Table~\ref{Table:TraceyAssumpsOthers} shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:isSafePb]{Definition~T:isSafePb}) & T2 (\hyperref[T:isSafeLR]{Definition~T:isSafeLR}) & IM1 (\hyperref[IM:probOfBr]{Definition~IM:probOfBr}) & IM2 (\hyperref[IM:calOfCap]{Definition~IM:calOfCap}) & IM3 (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) & DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) & DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad})
+ & T1 (\hyperref[T:isSafePb]{Definition~T:isSafePb}) & T2 (\hyperref[T:isSafeLR]{Definition~T:isSafeLR}) & IM1 (\hyperref[IM:probOfBreak]{Definition~IM:probOfBreak}) & IM2 (\hyperref[IM:calofCapacity]{Definition~IM:calofCapacity}) & IM3 (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) & DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) & DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad})
 \\
 \midrule
 T1 (\hyperref[T:isSafePb]{Definition~T:isSafePb}) &  & X & X &  &  &  &  &  &  &  &  &  & 
 \\
 T2 (\hyperref[T:isSafeLR]{Definition~T:isSafeLR}) & X &  &  & X & X &  &  &  &  &  &  &  & 
 \\
-IM1 (\hyperref[IM:probOfBr]{Definition~IM:probOfBr}) &  &  &  &  &  & X & X & X &  &  &  &  & 
+IM1 (\hyperref[IM:probOfBreak]{Definition~IM:probOfBreak}) &  &  &  &  &  & X & X & X &  &  &  &  & 
 \\
-IM2 (\hyperref[IM:calOfCap]{Definition~IM:calOfCap}) &  &  &  &  &  &  &  &  & X & X &  &  & 
+IM2 (\hyperref[IM:calofCapacity]{Definition~IM:calofCapacity}) &  &  &  &  &  &  &  &  & X & X &  &  & 
 \\
 IM3 (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand}) &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1109,12 +1118,12 @@ DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) &  &  &  &  &  &  & X &  &  &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:isSafePb]{Definition~T:isSafePb}) & T2 (\hyperref[T:isSafeLR]{Definition~T:isSafeLR}) & IM1 (\hyperref[IM:probOfBr]{Definition~IM:probOfBr}) & IM2 (\hyperref[IM:calOfCap]{Definition~IM:calOfCap}) & IM3 (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) & DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) & DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & Data Constraints (Section~\ref{Sec:DataConstraints}) & R1 (R\ref{FR:Input-Glass-Props}) & R2 (R\ref{FR:System-Set-Values-Following-Assumptions}) & R3 (R\ref{FR:Check-Input-with-Data.Constraints}) & R4 (R\ref{FR:Output-Values-and-Known-Quantities}) & R5 (R\ref{FR:Check-Glass-Safety}) & R6 (List~\ref{List:output.quantities})
+ & T1 (\hyperref[T:isSafePb]{Definition~T:isSafePb}) & T2 (\hyperref[T:isSafeLR]{Definition~T:isSafeLR}) & IM1 (\hyperref[IM:probOfBreak]{Definition~IM:probOfBreak}) & IM2 (\hyperref[IM:calofCapacity]{Definition~IM:calofCapacity}) & IM3 (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) & DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) & DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & Data Constraints (Section~\ref{Sec:DataConstraints}) & R1 (R\ref{FR:Input-Glass-Props}) & R2 (List~\ref{FR:System-Set-Values-Following-Assumptions}) & R3 (R\ref{FR:Check-Input-with-Data.Constraints}) & R4 (R\ref{FR:Output-Values-and-Known-Quantities}) & R5 (R\ref{FR:Check-Glass-Safety}) & R6 (List~\ref{FR:Output-Quantities})
 \\
 \midrule
 R1 (in R\ref{FR:Input-Glass-Props}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R2 (in R\ref{FR:System-Set-Values-Following-Assumptions}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+R2 (in List~\ref{FR:System-Set-Values-Following-Assumptions}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 R3 (in R\ref{FR:Check-Input-with-Data.Constraints}) &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
 \\
@@ -1122,7 +1131,7 @@ R4 (in R\ref{FR:Output-Values-and-Known-Quantities}) &  &  &  &  &  &  &  &  &  
 \\
 R5 (in R\ref{FR:Check-Glass-Safety}) & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R6 (in List~\ref{List:output.quantities}) &  &  & X & X & X &  & X & X & X & X & X & X & X &  &  &  &  &  &  & 
+R6 (in List~\ref{FR:Output-Quantities}) &  &  & X & X & X &  & X & X & X & X & X & X & X &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements and Other Items}
@@ -1137,9 +1146,9 @@ T1 (\hyperref[T:isSafePb]{Definition~T:isSafePb}) &  &  &  &  &  &  &  &
 \\
 T2 (\hyperref[T:isSafeLR]{Definition~T:isSafeLR}) &  &  &  &  &  &  &  & 
 \\
-IM1 (\hyperref[IM:probOfBr]{Definition~IM:probOfBr}) &  &  &  & X &  & X & X & 
+IM1 (\hyperref[IM:probOfBreak]{Definition~IM:probOfBreak}) &  &  &  & X &  & X & X & 
 \\
-IM2 (\hyperref[IM:calOfCap]{Definition~IM:calOfCap}) & X & X &  &  & X &  &  & 
+IM2 (\hyperref[IM:calofCapacity]{Definition~IM:calofCapacity}) & X & X &  &  & X &  &  & 
 \\
 IM3 (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand}) &  &  &  &  &  &  &  & 
 \\
@@ -1171,7 +1180,7 @@ LC5 (LC\ref{LC:Consider-More-than-Flexure-Glass}) &  &  &  &  &  &  & X &
 \\
 R1 (R\ref{FR:Input-Glass-Props}) &  &  &  &  &  &  &  & 
 \\
-R2 (R\ref{FR:System-Set-Values-Following-Assumptions}) &  &  &  & X & X &  &  & X
+R2 (List~\ref{FR:System-Set-Values-Following-Assumptions}) &  &  &  & X & X &  &  & X
 \\
 R3 (R\ref{FR:Check-Input-with-Data.Constraints}) &  &  &  &  &  &  &  & 
 \\
@@ -1179,7 +1188,7 @@ R4 (R\ref{FR:Output-Values-and-Known-Quantities}) &  &  &  &  &  &  &  &
 \\
 R5 (R\ref{FR:Check-Glass-Safety}) &  &  &  &  &  &  &  & 
 \\
-R6 (List~\ref{List:output.quantities}) &  &  &  &  &  &  &  & 
+R6 (List~\ref{FR:Output-Quantities}) &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}

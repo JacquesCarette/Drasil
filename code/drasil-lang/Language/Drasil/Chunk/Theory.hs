@@ -83,13 +83,13 @@ instance HasShortName       TheoryModel where shortname = lb . shortname
 
 tc :: (Concept c, Quantity q) =>
     String -> [TheoryChunk] -> [SpaceDefn] -> [q] -> [c] -> 
-    [QDefinition] -> [TheoryConstraint] -> [QDefinition] -> TheoryChunk
-tc cid t s q c = \dq inv dfn -> TC cid t s (map qw q) (map cw c) dq inv dfn []
+    [QDefinition] -> [TheoryConstraint] -> [QDefinition] -> [Reference] -> TheoryChunk
+tc cid t s q c dq inv dfn r = TC cid t s (map qw q) (map cw c) dq inv dfn r
 
 tc' :: (Quantity q, Concept c) =>
     String -> [q] -> [c] -> [QDefinition] -> 
-    [TheoryConstraint] -> [QDefinition] -> TheoryChunk
-tc' cid q c = tc cid ([] :: [TheoryChunk]) [] q c
+    [TheoryConstraint] -> [QDefinition] -> [Reference] -> TheoryChunk
+tc' cid q c r = tc cid ([] :: [TheoryChunk]) [] q c r
 
 tm :: Concept c => c -> TheoryChunk -> Label -> TheoryModel
 tm c t lbe = TM (cw c) t lbe Nothing

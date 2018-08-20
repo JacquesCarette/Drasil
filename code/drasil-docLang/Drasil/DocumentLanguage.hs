@@ -20,9 +20,10 @@ import Drasil.Sections.TableOfSymbols (table)
 import Drasil.Sections.TableOfUnits (table_of_units)
 
 import qualified Drasil.DocLang.GenBuilders as GB (reference, tOfSymb, intro, assumpt)
-import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn, genSysDes, 
-  inModel, likeChg, unlikeChg, probDesc, solCharSpec, stakeholder,
-  thModel, userChar, genDefnLabel, propCorSol, offShelfSol)
+import qualified Drasil.DocLang.SRS as SRS (appendix, assumpDom,dataDefn, genDefn,
+  genSysDes, inModel, likeChg, unlikeChg, probDesc, solCharSpec,
+  stakeholder, thModel, userChar, genDefnLabel, propCorSol, offShelfSol,
+  likeChgDom, unlikeChgDom)
 import qualified Drasil.DocLang.MIS as MIS (notation, introMIS, notationIntroContd,
   notTblIntro, notationIntroMIS, modHierarchyPointer, modHier, syntax,
   uses, tempMod_, misOfModule, accRoutSemantics, considerations, 
@@ -274,7 +275,8 @@ data MISSemanticsSub where
 
 -- | List of domains for SRS
 srsDomains :: [ConceptChunk]
-srsDomains = [R.reqDom, R.funcReqDom]
+srsDomains = [R.reqDom, R.funcReqDom, SRS.assumpDom, SRS.likeChgDom,
+  SRS.unlikeChgDom]
 
 {--}
 
@@ -321,8 +323,7 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
     mkSubRef SI {_quants = v} (TSymb con) =
       GB.tOfSymb 
       [tsIntro con,
-                LlC $ table Equational (
-                sortBy (compsy `on` eqSymb) 
+                LlC $ table Equational (sortBySymbol
                 $ filter (`hasStageSymbol` Equational) 
                 (nub v))
                 at_start] []
@@ -419,6 +420,11 @@ mkConCC' f = mkConCC f id
 -- enumeration.
 mkEnumCC :: (ConceptInstance -> ListTuple) -> [ConceptInstance] -> [Contents]
 mkEnumCC f = mkConCC f (replicate 1 . UlC . ulcc . Enumeration . Simple)
+
+-- | mkEnumSimpleCC is a convenience function for mkEnumCC providing a generic
+-- style of enumeration
+mkEnumSimpleCC :: [ConceptInstance] -> [Contents]
+mkEnumSimpleCC = mkEnumCC (\x -> (getShortName x, Flat $ x ^. defn, Just $ refAdd x))
 
 -- | table of units intro writer. Translates a TUIntro to a Sentence.
 tuI :: TUIntro -> Sentence

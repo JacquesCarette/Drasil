@@ -15,6 +15,27 @@ planeStrainL                = mkLabelRAAssump' "Plane-Strain-Conditions"
 effectiveNormL              = mkLabelRAAssump' "Effective-Norm-Stress-Large"
 surfaceBaseSliceL           = mkLabelRAAssump' "Surface-Base-Slice-between-Interslice-Straight-Lines"
 
+-- Data Definition
+sliceWghtL        = mkLabelSame "ht_flux_C" (Def DD)
+baseWtrFL         = mkLabelSame "ht_flux_P" (Def DD)
+surfWtrFL         = mkLabelSame "htFusion" (Def DD)
+intersliceWtrFL   = mkLabelSame "melt_frac" (Def DD)
+angleAL           = mkLabelSame "ht_flux_C" (Def DD)
+angleBL           = mkLabelSame "ht_flux_P" (Def DD)
+lengthBL          = mkLabelSame "htFusion" (Def DD)
+lengthLbL         = mkLabelSame "melt_frac" (Def DD)
+lengthLsL         = mkLabelSame "ht_flux_C" (Def DD)
+seismicLoadFL     = mkLabelSame "ht_flux_P" (Def DD)
+surfLoadsL        = mkLabelSame "surfLoads" (Def DD)
+intrsliceFL       = mkLabelSame "htFusion" (Def DD)
+resShearWOL       = mkLabelSame "resShearWO" (Def DD)
+mobShearWOL       = mkLabelSame "mobShearWO" (Def DD)
+displcmntRxnFL    = mkLabelSame "displcmntRxnF" (Def DD)
+displcmntBaselL   = mkLabelSame "displcmntBasel" (Def DD)
+netFDsplcmntEqbmL = mkLabelSame "netFDsplcmntEqbm" (Def DD)
+shearStiffnessL   = mkLabelSame "shearStiffness" (Def DD)
+soilStiffnessL    = mkLabelSame "soilStiffness" (Def DD)
+
 
 -- General Definations
 genDef1Label, genDef2Label, genDef3Label, genDef4Label, genDef5Label, genDef6Label, 

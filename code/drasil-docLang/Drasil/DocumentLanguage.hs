@@ -18,17 +18,15 @@ import qualified Data.Map as Map (elems)
 import Drasil.Sections.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
 import Drasil.Sections.TableOfSymbols (table)
 import Drasil.Sections.TableOfUnits (table_of_units)
-import qualified Drasil.DocLang.SRS as SRS (appendix, assumpDom,dataDefn, genDefn,
+import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
   genSysDes, inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec,
-  stakeholder, thModel, tOfSymb, userChar, genDefnLabel, propCorSol, offShelfSol,
-  likeChgDom, unlikeChgDom)
+  stakeholder, thModel, tOfSymb, userChar, genDefnLabel, propCorSol, offShelfSol)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)
 import qualified Drasil.Sections.Introduction as Intro (charIntRdrF, 
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
-import qualified Drasil.Sections.Requirements as R (fReqF, nonFuncReqF, reqF,
-  reqDom, funcReqDom)
+import qualified Drasil.Sections.Requirements as R (fReqF, nonFuncReqF, reqF)
 import qualified Drasil.Sections.ScopeOfTheProject as SotP (scopeOfTheProjF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, inModelF, probDescF, solutionCharSpecIntro, 
@@ -227,13 +225,6 @@ data AppndxSec = AppndxProg [Contents]
 
 {--}
 
--- | List of domains for SRS
-srsDomains :: [ConceptChunk]
-srsDomains = [R.reqDom, R.funcReqDom, SRS.assumpDom, SRS.likeChgDom,
-  SRS.unlikeChgDom]
-
-{--}
-
 -- | Creates a document from a document description and system information
 mkDoc :: DocDesc -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 mkDoc l comb si@SI {_sys = sys, _kind = kind, _authors = authors} = Document
@@ -357,25 +348,16 @@ symbConvention scs = S "The choice of symbols was made to be consistent with the
 tuIntro :: [TUIntro] -> Contents
 tuIntro x = mkParagraph $ foldr ((+:+) . tuI) EmptyS x
 
--- | mkConCC converts a list of ConceptInstances to Contents using a generic
--- two-step process for flexibility.
-mkConCC :: (ConceptInstance -> a) -> ([a] -> [Contents]) -> [ConceptInstance] -> [Contents]
-mkConCC f t = t . map f
+-- | mkEnumSimple is a convenience function for converting lists into
+-- Simple-type Enumerations.
+mkEnumSimple :: (a -> ListTuple) -> [a] -> [Contents]
+mkEnumSimple f = replicate 1 . UlC . ulcc . Enumeration . Simple . map f
 
--- | mkConCC' is a convenient version of mkConCC for when the conversion can be
--- done in a single, direct step.
-mkConCC' :: (ConceptInstance -> Contents) -> [ConceptInstance] -> [Contents]
-mkConCC' f = mkConCC f id
-
--- | mkEnumCC is a convenience function for converting ConceptInstances to an
--- enumeration.
-mkEnumCC :: (ConceptInstance -> ListTuple) -> [ConceptInstance] -> [Contents]
-mkEnumCC f = mkConCC f (replicate 1 . UlC . ulcc . Enumeration . Simple)
-
--- | mkEnumSimpleCC is a convenience function for mkEnumCC providing a generic
--- style of enumeration
-mkEnumSimpleCC :: [ConceptInstance] -> [Contents]
-mkEnumSimpleCC = mkEnumCC (\x -> (getShortName x, Flat $ x ^. defn, Just $ refAdd x))
+-- | mkEnumSimpleD is a convenience function for transforming types which are
+-- instances of the constraints Referable, HasShortName, and Definition, into
+-- Simple-type Enumerations.
+mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
+mkEnumSimpleD = mkEnumSimple (\x -> (getShortName x, Flat $ x ^. defn, Just $ refAdd x))
 
 -- | table of units intro writer. Translates a TUIntro to a Sentence.
 tuI :: TUIntro -> Sentence

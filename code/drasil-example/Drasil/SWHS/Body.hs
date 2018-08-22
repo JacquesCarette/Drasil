@@ -12,9 +12,8 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
   Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
-  dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleCC,
-  outDataConstTbl, physSystDesc, reqF, srsDomains, termDefnF, traceGIntro,
-  traceMGF, tsymb'')
+  dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
+  outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF, tsymb'')
 import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel,
   likeChg, probDesc, sysCont, unlikeChg)
 
@@ -23,8 +22,8 @@ import Data.Drasil.Concepts.Documentation (assumption, column, condition, constr
   environment, genDefn, goalStmt, information, inModel, input_, item, likelyChg, 
   model, organization, output_, physical, physics, physSyst, problem, property, 
   purpose, quantity, reference, requirement, section_, software, softwareSys, 
-  solution, srs, symbol_, sysCont, system, thModel, traceyGraph, traceyMatrix, 
-  user, value, variable)
+  solution, srs, srsDomains, symbol_, sysCont, system, thModel, traceyGraph,
+  traceyMatrix, user, value, variable)
 import Data.Drasil.Concepts.Math (de, equation, ode, unit_)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Software.Products (sciCompS, compPro)
@@ -441,7 +440,7 @@ inputInitQuantsTbl = LlC $ llcc inputInitQuantsLbl $ (Table
   (titleize input_ +:+ titleize variable +:+ titleize' requirement) True)
 
 reqs :: [Contents]
-reqs = mkEnumSimpleCC funcReqs
+reqs = mkEnumSimpleD funcReqs
 
 ---------------------------------------
 -- 5.2 : Non-functional Requirements --
@@ -454,7 +453,7 @@ likelyChgsSect :: Section
 likelyChgsSect = SRS.likeChg likelyChgsList []
 
 likelyChgsList :: [Contents]
-likelyChgsList = mkEnumSimpleCC likelyChgs
+likelyChgsList = mkEnumSimpleD likelyChgs
 
 --------------------------------
 -- Section 6b : UNLIKELY CHANGES --
@@ -464,7 +463,7 @@ unlikelyChgsSect :: Section
 unlikelyChgsSect = SRS.unlikeChg unlikelyChgsList []
 
 unlikelyChgsList :: [Contents]
-unlikelyChgsList = mkEnumSimpleCC unlikelyChgs
+unlikelyChgsList = mkEnumSimpleD unlikelyChgs
 
 --------------------------------------------------
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --

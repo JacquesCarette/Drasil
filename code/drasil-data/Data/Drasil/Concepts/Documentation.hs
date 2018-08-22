@@ -245,6 +245,33 @@ userCharacteristic           = compoundNC user characteristic
 userInput                    = compoundNC user input_
 vavPlan                      = compoundNC vav plan
 
+-- Domains
+
+--Root SRS Domain
+srsDom :: CommonConcept
+srsDom = dcc' "srsDom" (srs ^. term) "srs" ""
+
+assumpDom :: ConceptChunk
+assumpDom = ccs (mkIdea "assumpDom" (assumption ^. term) $ Just "A") EmptyS [srsDom]
+
+reqDom :: ConceptChunk
+reqDom = ccs (mkIdea "reqDom" (requirement ^. term) $ Just "R") EmptyS [srsDom]
+
+funcReqDom :: ConceptChunk
+funcReqDom = ccs (mkIdea "funcReqDom" (functionalRequirement ^. term) $ Just "FR") EmptyS [reqDom]
+
+chgProbDom :: ConceptChunk
+chgProbDom = ccs (nc "chgProbDom" $ cn' "change") EmptyS [srsDom]
+
+likeChgDom :: ConceptChunk
+likeChgDom = ccs (mkIdea "likeChgDom" (likelyChg ^. term) $ Just "LC") EmptyS [chgProbDom]
+
+unlikeChgDom :: ConceptChunk
+unlikeChgDom = ccs (mkIdea "unlikeChgDom" (unlikelyChg ^. term) $ Just "UC") EmptyS [chgProbDom]
+-- | List of domains for SRS
+srsDomains :: [ConceptChunk]
+srsDomains = [reqDom, funcReqDom, assumpDom, likeChgDom, unlikeChgDom]
+
 -- FIXME: fterms is here instead of Utils because of cyclic import
 -- | Apply a binary function to the terms of two named ideas, instead of to the named
 -- ideas themselves. Ex. @fterms compoundPhrase t1 t2@ instead of

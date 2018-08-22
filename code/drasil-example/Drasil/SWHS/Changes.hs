@@ -1,10 +1,9 @@
 module Drasil.SWHS.Changes where
 
 import Language.Drasil
-import qualified Drasil.DocLang.SRS as SRS (likeChgDom, unlikeChgDom)
 
 import Data.Drasil.Concepts.Documentation (assumption, value, simulation,
-  model)
+  model, likeChgDom, unlikeChgDom)
 
 import Drasil.SWHS.Concepts (tank, phsChgMtrl, water)
 import Drasil.SWHS.Unitals (temp_init, temp_C, temp_PCM)
@@ -34,33 +33,33 @@ likeChgUTP = cic "likeChgUTP" (
   foldlSent [chgsStart newA4, short phsChgMtrl, S "is actually a poor",
   phrase CT.thermal_conductor `sC` S "so the", phrase assumption,
   S "of uniform", phrase temp_PCM, S "is not likely"] ) "Uniform-Temperature-PCM"
-  SRS.likeChgDom
+  likeChgDom
 --
 likeChgTCVOD = cic "likeChgTCVOD" (
   foldlSent [chgsStart newA8, S "The", phrase temp_C, S "will change over",
   (S "course" `ofThe` S "day, depending"), S "on the", phrase energy,
-  S "received from the sun"] ) "Temperature-Coil-Variable-Over-Day" SRS.likeChgDom
+  S "received from the sun"] ) "Temperature-Coil-Variable-Over-Day" likeChgDom
 --
 likeChgTCVOL = cic "likeChgTCVOL" (
   foldlSent [chgsStart newA9, S "The", phrase temp_C,
   S "will actually change along its length as the", phrase water,
-  S "within it cools"] ) "Temperature-Coil-Variable-Over-Length" SRS.likeChgDom
+  S "within it cools"] ) "Temperature-Coil-Variable-Over-Length" likeChgDom
 --
 likeChgDT = cic "likeChgDT" (
   foldlSent [chgsStart newA11, S "The", phrase model, S "currently only",
   S "accounts for charging of the tank. A more complete", phrase model,
-  S "would also account for discharging of the tank"] ) "Discharging-Tank" SRS.likeChgDom
+  S "would also account for discharging of the tank"] ) "Discharging-Tank" likeChgDom
 --
 likeChgDITPW = cic "likeChgDITPW" (
   foldlSent [chgsStart newA12, S "To add more flexibility to the",
   phrase simulation `sC` (phrase temp_init `ofThe` phrase water) `sAnd`
   S "the", short phsChgMtrl, S "could be allowed to have different",
-  plural value] ) "Different-Initial-Temps-PCM-Water" SRS.likeChgDom
+  plural value] ) "Different-Initial-Temps-PCM-Water" likeChgDom
 --
 likeChgTLH = cic "likeChgTLH" (
   foldlSent [chgsStart newA15, S "Any real", phrase tank, S "cannot",
   S "be perfectly insulated and will lose", phrase CT.heat] ) "Tank-Lose-Heat"
-  SRS.likeChgDom
+  likeChgDom
 
 -- List structure same in all examples.
 
@@ -71,15 +70,15 @@ unlikeChgWPFS, unlikeChgNIHG, unlikeChgNGS :: ConceptInstance
 unlikeChgWPFS = cic "unlikeChgWPFS" (
   foldlSent [makeRef newA14, S ", ", chgsStart newA18, S "It is unlikely for the change of",
   phrase water, S "from liquid to a solid or the state change of the", phrase phsChgMtrl,
-  S "from a liquid to a gas to be considered"] ) "Water-PCM-Fixed-States" SRS.unlikeChgDom
+  S "from a liquid to a gas to be considered"] ) "Water-PCM-Fixed-States" unlikeChgDom
 
 
 unlikeChgNIHG = cic "unlikeChgNIHG" (
   foldlSent [chgsStart newA16, S "Is used for the derivations of",
   makeRef eBalanceOnWtr, S "and", makeRef eBalanceOnPCM] )
-  "No-Internal-Heat-Generation" SRS.unlikeChgDom
+  "No-Internal-Heat-Generation" unlikeChgDom
 
 unlikeChgNGS = cic "unlikeChgNGS" (
   foldlSent [chgsStart newA18, S "Is used for the derivation of", makeRef eBalanceOnPCM,
   S "and for the equation given by", makeRef heatEInPCM, S "to be valid"] )
-  "No-Gaseous-State" SRS.unlikeChgDom
+  "No-Gaseous-State" unlikeChgDom

@@ -357,25 +357,16 @@ symbConvention scs = S "The choice of symbols was made to be consistent with the
 tuIntro :: [TUIntro] -> Contents
 tuIntro x = mkParagraph $ foldr ((+:+) . tuI) EmptyS x
 
--- | mkConCC converts a list of ConceptInstances to Contents using a generic
--- two-step process for flexibility.
-mkConCC :: (ConceptInstance -> a) -> ([a] -> [Contents]) -> [ConceptInstance] -> [Contents]
-mkConCC f t = t . map f
+-- | mkEnumSimple is a convenience function for converting lists into
+-- Simple-type Enumerations.
+mkEnumSimple :: (a -> ListTuple) -> [a] -> [Contents]
+mkEnumSimple f = replicate 1 . UlC . ulcc . Enumeration . Simple . map f
 
--- | mkConCC' is a convenient version of mkConCC for when the conversion can be
--- done in a single, direct step.
-mkConCC' :: (ConceptInstance -> Contents) -> [ConceptInstance] -> [Contents]
-mkConCC' f = mkConCC f id
-
--- | mkEnumCC is a convenience function for converting ConceptInstances to an
--- enumeration.
-mkEnumCC :: (ConceptInstance -> ListTuple) -> [ConceptInstance] -> [Contents]
-mkEnumCC f = mkConCC f (replicate 1 . UlC . ulcc . Enumeration . Simple)
-
--- | mkEnumSimpleCC is a convenience function for mkEnumCC providing a generic
--- style of enumeration
-mkEnumSimpleCC :: [ConceptInstance] -> [Contents]
-mkEnumSimpleCC = mkEnumCC (\x -> (getShortName x, Flat $ x ^. defn, Just $ refAdd x))
+-- | mkEnumSimpleD is a convenience function for transforming types which are
+-- instances of the constraints Referable, HasShortName, and Definition, into
+-- Simple-type Enumerations.
+mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
+mkEnumSimpleD = mkEnumSimple (\x -> (getShortName x, Flat $ x ^. defn, Just $ refAdd x))
 
 -- | table of units intro writer. Translates a TUIntro to a Sentence.
 tuI :: TUIntro -> Sentence

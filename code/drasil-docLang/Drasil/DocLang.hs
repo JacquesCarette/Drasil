@@ -1,6 +1,4 @@
 module Drasil.DocLang (
-    -- DocLang.SRS
-    assumpDom, likeChgDom, unlikeChgDom,
     -- DocumentLanguage
     AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), DocDesc, 
     DocSection(..), Emphasis(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons, SysCntxt), 
@@ -11,7 +9,7 @@ module Drasil.DocLang (
     StkhldrSec(StkhldrProg2),
     StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg), 
     TSIntro(..), UCsSec(..), mkDoc, mkLklyChnk, mkRequirement, 
-    mkUnLklyChnk, srsDomains, tsymb, tsymb'', mkEnumSimple, mkEnumSimpleD,
+    mkUnLklyChnk, tsymb, tsymb'', mkEnumSimple, mkEnumSimpleD,
     -- DocumentLanguage.Definitions
     Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose), ddefn,
     -- DocumentLanguage.RefHelpers 
@@ -25,7 +23,7 @@ module Drasil.DocLang (
     -- Sections.ReferenceMaterial
     intro,
     -- Sections.Requirements
-    nonFuncReqF, reqF, reqDom, funcReqDom,
+    nonFuncReqF, reqF,
     -- Sections.ScopeOfTheProject
     -- Sections.SolutionCharacterSpec
     SubSec, assembler, sSubSec, siCon, siDDef, siIMod, siSTitl, siSent, siTMod, 
@@ -41,7 +39,6 @@ module Drasil.DocLang (
     traceGIntro, traceMGF
     ) where 
 
-import Drasil.DocLang.SRS (assumpDom, likeChgDom, unlikeChgDom)
 import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..), 
     DerivationDisplay(..), DocDesc, DocSection(..), Emphasis(..), ExistingSolnSec(..), 
     GSDSec(GSDProg2), GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), 
@@ -50,7 +47,7 @@ import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
     ScpOfProjSec(ScpOfProjProg), SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), 
     StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), TConvention(..), 
     TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..), mkDoc, 
-    mkLklyChnk, mkRequirement, mkUnLklyChnk, srsDomains, tsymb, tsymb'',
+    mkLklyChnk, mkRequirement, mkUnLklyChnk, tsymb, tsymb'',
     mkEnumSimple, mkEnumSimpleD)
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, 
     InclUnits(IncludeUnits), Verbosity(Verbose), ddefn)
@@ -60,7 +57,7 @@ import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
 --import Drasil.Sections.Introduction
 import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.Sections.Requirements (nonFuncReqF, reqF, reqDom, funcReqDom)
+import Drasil.Sections.Requirements (nonFuncReqF, reqF)
 --import Drasil.Sections.ScopeOfTheProject
 import Drasil.Sections.SolutionCharacterSpec (SubSec, assembler, sSubSec, siCon, 
     siDDef, siIMod, siSTitl, siSent, siTMod, siUQI, siUQO)

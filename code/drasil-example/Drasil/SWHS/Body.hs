@@ -13,8 +13,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
-  outDataConstTbl, physSystDesc, reqF, srsDomains, termDefnF, traceGIntro,
-  traceMGF, tsymb'')
+  outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF, tsymb'')
 import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel,
   likeChg, probDesc, sysCont, unlikeChg)
 
@@ -23,8 +22,8 @@ import Data.Drasil.Concepts.Documentation (assumption, column, condition, constr
   environment, genDefn, goalStmt, information, inModel, input_, item, likelyChg, 
   model, organization, output_, physical, physics, physSyst, problem, property, 
   purpose, quantity, reference, requirement, section_, software, softwareSys, 
-  solution, srs, symbol_, sysCont, system, thModel, traceyGraph, traceyMatrix, 
-  user, value, variable)
+  solution, srs, srsDomains, symbol_, sysCont, system, thModel, traceyGraph,
+  traceyMatrix, user, value, variable)
 import Data.Drasil.Concepts.Math (de, equation, ode, unit_)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Software.Products (sciCompS, compPro)

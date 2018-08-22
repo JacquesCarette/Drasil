@@ -3,7 +3,7 @@ module Drasil.SWHS.Requirements where --all of this file is exported
 import Language.Drasil
 
 import Data.Drasil.Concepts.Documentation (output_, simulation, quantity, 
-  input_, physical, constraint, condition, property)
+  input_, physical, constraint, condition, property, funcReqDom)
 import Drasil.DocLang (nonFuncReqF)
 
 import Data.Drasil.Quantities.PhysicalProperties (mass)
@@ -16,8 +16,6 @@ import Data.Drasil.Concepts.Software (correctness, verifiability,
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
   foldlSent, isThe, sAnd)
-
-import Drasil.DocLang (funcReqDom)
 
 import Drasil.SWHS.Concepts (phsChgMtrl, tank)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, 

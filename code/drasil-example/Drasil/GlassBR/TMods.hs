@@ -1,4 +1,4 @@
-module Drasil.GlassBR.TMods (gbrTMods, pbSafetyReq, lrSafetyReq, pbIsSafe, lrIsSafe) where
+module Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe) where
 
 import Language.Drasil
 import Language.Drasil.Code (relToQD) -- FIXME, this should not be needed
@@ -7,9 +7,9 @@ import Control.Lens ((^.))
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
 
 import Drasil.GlassBR.Concepts (lResistance)
-import Drasil.GlassBR.IMods (calofCapacity, calofDemand, probOfBreak)
-import Drasil.GlassBR.Unitals (demand, demandq, is_safePb, is_safeLR, lRe,
-  pb_tol, prob_br, glassBRsymb)
+import Drasil.GlassBR.IMods (glassBRsymb, calofCapacity, calofDemand, probOfBreak)
+import Drasil.GlassBR.References (astm2009)
+import Drasil.GlassBR.Unitals (demand, demandq, is_safePb, is_safeLR, lRe, pb_tol, prob_br)
 
 -- Labels
 l1, l2 :: Label
@@ -23,22 +23,22 @@ gbrTMods = [pbIsSafe, lrIsSafe]
 
 -- FIXME: This is a hack to see if TheoryModel printing will work. This chunk
 -- needs to be updated properly.
--- this is the new function but it still uses the lrSafetyReq,
+-- this is the new function but it still uses the lrIsSafe_RC,
 -- so basically we have to combine the old function with the new function
 
 lrIsSafe :: TheoryModel
-lrIsSafe = tm' (cw lrSafetyReq)
+lrIsSafe = tm' (cw lrIsSafe_RC)
    (tc' "isSafeLR" [qw is_safeLR, qw lRe, qw demand] ([] :: [ConceptChunk])
-   [relToQD locSymbMap lrSafetyReq] [TCon Invariant $ (sy is_safeLR) $= (sy lRe) $> (sy demand)] []) 
-   l1 [lrSafeDescr]
+   [relToQD locSymbMap lrIsSafe_RC] [TCon Invariant $ (sy is_safeLR) $= (sy lRe) $> (sy demand)] [] [makeRef astm2009]) 
+   l1 [lrIsSafeDesc]
   where locSymbMap = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) glassBRsymb ([] :: [UnitDefn])
 
-lrSafetyReq :: RelationConcept
-lrSafetyReq = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
-  lrSafeDescr ( (sy is_safeLR) $= (sy lRe) $> (sy demand)) l1
+lrIsSafe_RC :: RelationConcept
+lrIsSafe_RC = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
+  lrIsSafeDesc ( (sy is_safeLR) $= (sy lRe) $> (sy demand)) l1
 
-lrSafeDescr :: Sentence
-lrSafeDescr = tDescr (is_safeLR) s ending
+lrIsSafeDesc :: Sentence
+lrIsSafeDesc = tModDesc (is_safeLR) s ending
   where 
     s = ((ch is_safePb) +:+ sParen (S "from" +:+ (makeRef pbIsSafe)) `sAnd` (ch is_safeLR))
     ending = (short lResistance) `isThe` (phrase lResistance) +:+ 
@@ -48,23 +48,23 @@ lrSafeDescr = tDescr (is_safeLR) s ending
       makeRef calofDemand
 
 pbIsSafe :: TheoryModel
-pbIsSafe = tm' (cw pbSafetyReq) 
+pbIsSafe = tm' (cw pbIsSafe_RC) 
   (tc' "isSafe" [qw is_safePb, qw prob_br, qw pb_tol] ([] :: [ConceptChunk])
-  [] [TCon Invariant $ (sy is_safePb) $= (sy prob_br) $< (sy pb_tol)] [])
-  l2 [pbSafeDescr]
+  [] [TCon Invariant $ (sy is_safePb) $= (sy prob_br) $< (sy pb_tol)] [] [makeRef astm2009])
+  l2 [pbIsSafeDesc]
 
-pbSafetyReq :: RelationConcept
-pbSafetyReq = makeRC "safetyReqPb" (nounPhraseSP "Safety Req-Pb")
-  pbSafeDescr ((sy is_safePb) $= (sy prob_br) $< (sy pb_tol)) l2
+pbIsSafe_RC :: RelationConcept
+pbIsSafe_RC = makeRC "safetyReqPb" (nounPhraseSP "Safety Req-Pb")
+  pbIsSafeDesc ((sy is_safePb) $= (sy prob_br) $< (sy pb_tol)) l2
 
-pbSafeDescr :: Sentence
-pbSafeDescr = tDescr (is_safePb) s ending
+pbIsSafeDesc :: Sentence
+pbIsSafeDesc = tModDesc (is_safePb) s ending
   where 
     s = (ch is_safePb) `sAnd` (ch is_safeLR) +:+ sParen (S "from" +:+
       (makeRef lrIsSafe))
     ending = ((ch prob_br) `isThe` (phrase prob_br)) `sC` S "as calculated in" +:+.
       (makeRef probOfBreak) +:+ (ch pb_tol) `isThe` (phrase pb_tol) +:+ S "entered by the user"
 
-tDescr :: VarChunk -> Sentence -> Sentence -> Sentence
-tDescr main s ending = foldlSent [S "If", ch main `sC` S "the glass is" +:+.
+tModDesc :: VarChunk -> Sentence -> Sentence -> Sentence
+tModDesc main s ending = foldlSent [S "If", ch main `sC` S "the glass is" +:+.
   S "considered safe", s +:+. S "are either both True or both False", ending]

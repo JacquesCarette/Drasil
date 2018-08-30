@@ -8,8 +8,8 @@ module Drasil.DocLang (
     SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), ExistingSolnSec(..),
     StkhldrSec(StkhldrProg2),
     StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg), 
-    TSIntro(..), UCsSec(..), mkDoc, mkLklyChnk, mkLklyChnkL, mkRequirement, mkRequirementL,
-    mkUnLklyChnk, mkUnLklyChnkL, srsDomains, tsymb, tsymb'', mkConCC, mkConCC', mkEnumCC,
+    TSIntro(..), UCsSec(..), mkDoc, mkLklyChnk, mkRequirement, mkRequirementL, 
+    mkUnLklyChnk, tsymb, tsymb'', mkEnumSimple, mkEnumSimpleD,
     -- DocumentLanguage.Definitions
     Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose), ddefn,
     -- DocumentLanguage.RefHelpers 
@@ -23,7 +23,7 @@ module Drasil.DocLang (
     -- Sections.ReferenceMaterial
     intro,
     -- Sections.Requirements
-    nonFuncReqF, reqF, reqDom, funcReqDom,
+    nonFuncReqF, reqF,
     -- Sections.ScopeOfTheProject
     -- Sections.SolutionCharacterSpec
     SubSec, assembler, sSubSec, siCon, siDDef, siIMod, siSTitl, siSent, siTMod, 
@@ -47,9 +47,8 @@ import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
     ScpOfProjSec(ScpOfProjProg), SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), 
     StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), TConvention(..), 
     TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..), mkDoc, 
-    mkLklyChnk, mkLklyChnkL, mkRequirement, mkRequirementL, mkUnLklyChnk, mkUnLklyChnkL,
-    srsDomains, tsymb, tsymb'', mkConCC, mkConCC',
-    mkEnumCC)
+    mkLklyChnk, mkRequirement, mkUnLklyChnk, tsymb, tsymb'',
+    mkEnumSimple, mkEnumSimpleD, mkRequirementL)
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, 
     InclUnits(IncludeUnits), Verbosity(Verbose), ddefn)
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)
@@ -58,7 +57,7 @@ import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
 --import Drasil.Sections.Introduction
 import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.Sections.Requirements (nonFuncReqF, reqF, reqDom, funcReqDom)
+import Drasil.Sections.Requirements (nonFuncReqF, reqF)
 --import Drasil.Sections.ScopeOfTheProject
 import Drasil.Sections.SolutionCharacterSpec (SubSec, assembler, sSubSec, siCon, 
     siDDef, siIMod, siSTitl, siSent, siTMod, siUQI, siUQO)

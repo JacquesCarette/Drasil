@@ -3,7 +3,7 @@ module Main (main) where
 import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..), 
   ImplementationType(..), Lang(..), Logging(..), Structure(..))
 import Language.Drasil.Generate (gen, genCode)
-import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
+import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
 
 import Drasil.GlassBR.Body (glassBR_code, glassBR_srs, printSetting)
 

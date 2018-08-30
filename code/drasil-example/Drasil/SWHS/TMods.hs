@@ -1,84 +1,85 @@
-module Drasil.SWHS.TMods (swhsTMods, t1ConsThermE, t2SensHtE, t3LatHtE) where
+module Drasil.SWHS.TMods (swhsTMods, consThermE, sensHtE, latentHtE) where
 
 import Language.Drasil
 import Control.Lens ((^.))
 
 import Data.Drasil.Concepts.Documentation (system)
-import Data.Drasil.SI_Units (joule)
+import Data.Drasil.Concepts.Math (equation, rOfChng)
+import Data.Drasil.Concepts.Physics (mech_energy)
 import Data.Drasil.Concepts.Thermodynamics (phase_change, thermal_energy,
   heat_trans, law_cons_energy)
-import Data.Drasil.Concepts.Physics (mech_energy)
-import Data.Drasil.Concepts.Math (equation, rOfChng)
+
 import Data.Drasil.Quantities.Math (gradient)
-import Data.Drasil.Quantities.Thermodynamics (temp, heat_cap_spec,
-  latent_heat, melt_pt, boil_pt, sens_heat, heat_cap_spec)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density)
 import Data.Drasil.Quantities.Physics (energy, time)
-import Data.Drasil.SentenceStructures (foldlSent, isThe)
+import Data.Drasil.Quantities.Thermodynamics (temp, heat_cap_spec,
+  latent_heat, melt_pt, boil_pt, sens_heat, heat_cap_spec)
 
-import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCap_V, htCap_S,
-  htCap_L, vol_ht_gen, thFluxVect)
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma),
+    foldlList, foldlSent, isThe, sAnd)
+import Data.Drasil.SI_Units (joule)
+
 import Drasil.SWHS.Concepts (transient)
 import Drasil.SWHS.DataDefs (dd3HtFusion)
 import Drasil.SWHS.Labels (thermalEnergyOnlyL)
+import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCap_V, htCap_S,
+  htCap_L, vol_ht_gen, thFluxVect)
 
 swhsTMods :: [TheoryModel]
-swhsTMods = [t1ConsThermE, t2SensHtE, t3LatHtE]
+swhsTMods = [consThermE, sensHtE, latentHtE]
 
 -------------------------
 -- Theoretical Model 1 --
 -------------------------
-t1ConsThermE :: TheoryModel
-t1ConsThermE = tm' t1ConsThermE_rc
+consThermE :: TheoryModel
+consThermE = tm' consThermE_rc
   (tc' "ConsThermE" [qw thFluxVect, qw gradient, qw vol_ht_gen, 
     qw density, qw heat_cap_spec, qw temp, qw time] ([] :: [ConceptChunk])
-  [] [TCon Invariant consThermERel] []) 
-  (mkLabelSame "t1ConsThermE" (Def TM)) [t1descr]
+  [] [TCon Invariant consThermERel] [] [makeRef consThemESrc]) 
+  (mkLabelSame "consThermE" (Def TM)) [consThermEdesc]
 
-t1ConsThermE_rc :: RelationConcept
-t1ConsThermE_rc = makeRC "t1ConsThermE_rc"
-  (nounPhraseSP "Conservation of thermal energy") t1descr consThermERel 
+consThermE_rc :: RelationConcept
+consThermE_rc = makeRC "consThermE_rc"
+  (nounPhraseSP "Conservation of thermal energy") consThermEdesc consThermERel 
   (mkLabelSame "ConsThermE" (Def TM))
 
 consThermERel :: Relation
 consThermERel = (negate (sy gradient)) $. (sy thFluxVect) + (sy vol_ht_gen) $=
   (sy density) * (sy heat_cap_spec) * (pderiv (sy temp) time)
 
-t1descr :: Sentence
-t1descr = foldlSent [
-  S "The above", phrase equation, S "gives the",
-  phrase law_cons_energy, S "for",
-  phrase transient, phrase heat_trans,
-  S "in a material of", phrase heat_cap_spec,
-  ch heat_cap_spec, sParen (Sy (unit_symb heat_cap_spec)),
-  S "and", phrase density `sC`
-  ch density, sParen (Sy (unit_symb density)) `sC`
-  S "where", ch thFluxVect `isThe`
-  phrase thFluxVect, sParen (Sy (unit_symb thFluxVect)) `sC`
-  ch vol_ht_gen `isThe`
-  phrase vol_ht_gen, sParen (Sy (unit_symb vol_ht_gen)) `sC`
-  ch temp `isThe`
-  phrase temp, sParen (Sy (unit_symb temp)) `sC`
-  ch time, S "is", phrase time,
-  sParen (Sy (unit_symb time)) `sC` S "and", ch gradient,
-  S "is the" +:+. (gradient ^. defn), S "For this", phrase equation,
-  S "to apply" `sC` S "other forms of", phrase energy `sC` S "such as",
-  phrase mech_energy `sC`
+consThemESrc :: Label
+consThemESrc = mkURILabel "consThemESrc" "http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm" "Fourier Law of Heat Conduction and Heat Equation"
+
+consThermEdesc :: Sentence
+consThermEdesc = foldlSent [
+  S "The above", phrase equation, S "gives the", phrase law_cons_energy, S "for",
+  phrase transient, phrase heat_trans, S "in a material of", phrase heat_cap_spec,
+  ch heat_cap_spec, sParen (Sy (unit_symb heat_cap_spec)) `sAnd` phrase density `sC`
+  ch density, sParen (Sy (unit_symb density)) `sC` S "where" +:+. 
+  foldlList Comma List [ch thFluxVect `isThe` phrase thFluxVect +:+ sParen (Sy (unit_symb thFluxVect)),
+  ch vol_ht_gen `isThe` phrase vol_ht_gen +:+ sParen (Sy (unit_symb vol_ht_gen)),
+  ch temp `isThe` phrase temp +:+ sParen (Sy (unit_symb temp)),
+  ch time +:+ S "is" +:+ phrase time +:+ sParen (Sy (unit_symb time)), ch gradient +:+
+  S "is the" +:+ (gradient ^. defn)], S "For this", phrase equation, S "to apply" `sC`
+  S "other forms of", phrase energy `sC` S "such as", phrase mech_energy `sC`
   S "are assumed to be negligible in the", phrase system, sParen (makeRef thermalEnergyOnlyL)]
 
 -------------------------
 -- Theoretical Model 2 --
 -------------------------
-t2SensHtE :: TheoryModel
-t2SensHtE = tm' t2SensHtE_rc
+sensHtE :: TheoryModel
+sensHtE = tm' sensHtE_rc
   (tc' "SensHtE" [qw sens_heat, qw htCap_S, qw mass, 
     qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [ConceptChunk])
-  [] [TCon Invariant sensHtEEqn] []) 
-  (mkLabelSame "t2SensHtE" (Def TM)) [t2descr]
+  [] [TCon Invariant sensHtEEqn] [] [makeRef sensHtESrc]) 
+  (mkLabelSame "sensHtE" (Def TM)) [sensHtEdesc]
 
-t2SensHtE_rc :: RelationConcept
-t2SensHtE_rc = makeRC "t2SensHtE_rc" (nounPhraseSP "Sensible heat energy") t2descr sensHtEEqn
+sensHtE_rc :: RelationConcept
+sensHtE_rc = makeRC "sensHtE_rc" (nounPhraseSP "Sensible heat energy") sensHtEdesc sensHtEEqn
   (mkLabelSame "SensHtE" (Def TM))
+
+sensHtESrc :: Label
+sensHtESrc = mkURILabel "consThemESrc" "http://en.wikipedia.org/wiki/Sensible_heat" "Definition of Sensible Heat"
 
 sensHtEEqn :: Relation
 sensHtEEqn = (sy sens_heat) $= case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
@@ -91,8 +92,8 @@ sensHtEEqn = (sy sens_heat) $= case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
 
 --Figured out why so many were defn and others were term. The unitals
 -- were implemented incorrectly.
-t2descr :: Sentence
-t2descr = foldlSent [
+sensHtEdesc :: Sentence
+sensHtEdesc = foldlSent [
   ch sens_heat `isThe` S "change in",
   phrase sens_heat, phrase energy +:+. sParen (Sy (joule ^. usymb)),
   ch htCap_S `sC` ch htCap_L `sC` ch htCap_V, S "are the",
@@ -102,8 +103,8 @@ t2descr = foldlSent [
   ch temp `isThe` phrase temp,
   sParen (Sy (unit_symb temp)) `sC` S "and", ch deltaT `isThe`
   phrase deltaT +:+. sParen (Sy (unit_symb deltaT)),
-  ch melt_pt, S "and", ch boil_pt,
-  S "are the", phrase melt_pt, S "and", phrase boil_pt `sC`
+  ch melt_pt `sAnd` ch boil_pt,
+  S "are the", phrase melt_pt `sAnd` phrase boil_pt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),
   at_start sens_heat :+: S "ing occurs as long as the material does",
   S "not reach a", phrase temp, S "where a" +:+
@@ -112,7 +113,7 @@ t2descr = foldlSent [
   ch temp :+: S "=" :+: ch boil_pt,
   S "or", ch temp :+: S "=" +. ch melt_pt,
   S "If this" `isThe` S "case, refer to",
-  (makeRef t3LatHtE) `sC` at_start latent_heat,
+  (makeRef latentHtE) `sC` at_start latent_heat,
   phrase energy]
  
 --How to have new lines in the description?
@@ -125,14 +126,14 @@ t2descr = foldlSent [
 -------------------------
 -- Theoretical Model 3 --
 -------------------------
-t3LatHtE :: TheoryModel
-t3LatHtE = tm' t3LatHtE_rc
+latentHtE :: TheoryModel
+latentHtE = tm' latentHtE_rc
   (tc' "SensHtE" [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
-  [] [TCon Invariant latHtEEqn] []) (mkLabelSame "t3LatHtE" (Def TM)) [t3descr]
+  [] [TCon Invariant latHtEEqn] [] [makeRef latHtESrc]) (mkLabelSame "latentHtE" (Def TM)) [latentHtEdesc]
 
-t3LatHtE_rc :: RelationConcept
-t3LatHtE_rc = makeRC "t3LatHtE_rc"
-  (nounPhraseSP "Latent heat energy") t3descr latHtEEqn 
+latentHtE_rc :: RelationConcept
+latentHtE_rc = makeRC "latentHtE_rc"
+  (nounPhraseSP "Latent heat energy") latentHtEdesc latHtEEqn 
   (mkLabelSame "LatHtE" (Def TM))
 
 latHtEEqn :: Relation
@@ -141,8 +142,11 @@ latHtEEqn = apply1 latent_heat time $=
 
 -- Integrals need dTau at end
 
-t3descr :: Sentence
-t3descr = foldlSent [
+latHtESrc :: Label
+latHtESrc = mkURILabel "consThemESrc" "http://en.wikipedia.org/wiki/Latent_heat" "Definition of Latent Heat"
+
+latentHtEdesc :: Sentence
+latentHtEdesc = foldlSent [
   ch latent_heat `isThe` S "change in",
   phrase thermal_energy, sParen (Sy (joule ^. usymb)) `sC`
   phrase latent_heat +:+. phrase energy, 
@@ -155,8 +159,8 @@ t3descr = foldlSent [
   S "the", phrase phase_change,
   S "depends on the", phrase melt_frac `sC`
   (makeRef dd3HtFusion) :+: S ".",
-  ch melt_pt, S "and", ch boil_pt, S "are the",
-  phrase melt_pt, S "and", phrase boil_pt `sC`
+  ch melt_pt `sAnd` ch boil_pt, S "are the",
+  phrase melt_pt `sAnd` phrase boil_pt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),
   at_start latent_heat :+: S "ing stops when all material has",
   S "changed to the new phase"]

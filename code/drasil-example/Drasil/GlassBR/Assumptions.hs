@@ -15,7 +15,7 @@ import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass, gLassBR, 
   lShareFac, plane, responseTy)
 import Drasil.GlassBR.DataDefs (dimLL, loadDF, nonFL, tolStrDisFac)
-import Drasil.GlassBR.Labels (probOfBrL, calOfCapL, glassTypeL, glassConditionL, glassLiteL)
+import Drasil.GlassBR.Labels (probOfBreakL, calOfCapacityL, glassTypeL, glassConditionL, glassLiteL)
 import Drasil.GlassBR.References (astm2009, gbCitations)
 import Drasil.GlassBR.Unitals (constant_K, constant_LoadDF, constant_LoadDur, 
   constant_LoadSF, constant_M, constant_ModElas, explosion, lateral, lite, load_dur)
@@ -69,23 +69,23 @@ standardValuesDesc mainIdea = foldlSent [S "The", plural value, S "provided in",
   makeRef SRS.valsOfAuxConsLabel, S "are assumed for the", phrase mainIdea, 
   sParen (ch mainIdea) `sC` S "and the", plural materialProprty `sOf` 
   foldlList Comma List (map ch (take 3 assumptionConstants))] +:+ 
-  (foldlList Comma List $ [makeRef probOfBrL] ++ map makeRef [loadDF, 
+  (foldlList Comma List $ [makeRef probOfBreakL] ++ map makeRef [loadDF, 
   nonFL, dimLL, tolStrDisFac])
 
 glassLiteDesc :: Sentence
 glassLiteDesc = foldlSent [at_start glass, S "under consideration is assumed to be a single", 
   phrase lite `semiCol` S "hence, the", phrase value `sOf` short lShareFac, S "is equal to 1 for all",
   plural calculation `sIn` short gLassBR] +:+
-  (foldlList Comma List $ [makeRef calOfCapL] ++ [makeRef dimLL])
+  (foldlList Comma List $ [makeRef calOfCapacityL] ++ [makeRef dimLL])
 
 boundaryConditionsDesc :: Sentence
 boundaryConditionsDesc = foldlSent [S "Boundary", plural condition, S "for the",
   phrase glaSlab, S "are assumed to be 4-sided support for",
-  plural calculation] +:+ makeRef probOfBrL
+  plural calculation] +:+ makeRef probOfBreakL
 
 responseTypeDesc :: Sentence
 responseTypeDesc = foldlSent [S "The", phrase responseTy, S "considered in",
-  short gLassBR, S "is flexural"] +:+ makeRef probOfBrL
+  short gLassBR, S "is flexural"] +:+ makeRef probOfBreakL
 
 ldfConstantDesc :: QDefinition -> Sentence
 ldfConstantDesc mainConcept = foldlSent [S "With", phrase reference, S "to",

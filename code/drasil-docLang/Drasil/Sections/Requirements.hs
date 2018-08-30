@@ -1,16 +1,14 @@
 module Drasil.Sections.Requirements
-  (fReqF, reqF, nonFuncReqF, reqDom, funcReqDom) where
+  (fReqF, reqF, nonFuncReqF) where
 
 import Language.Drasil
 
-import Data.Drasil.Concepts.Documentation (priority, software, requirement, nonfunctionalRequirement,
+import Data.Drasil.Concepts.Documentation (priority, software, nonfunctionalRequirement,
   functionalRequirement, section_)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.SentenceStructures (foldlList, foldlSent, SepType(Comma), FoldType(List))
 
 import qualified Drasil.DocLang.SRS as SRS
-
-import Control.Lens ((^.))
 
 -- wrapper for reqIntro
 reqF :: [Section] -> Section
@@ -30,13 +28,6 @@ reqIntroS = foldlSent
 
 reqIntro :: Contents
 reqIntro = mkParagraph reqIntroS
-
--- Requirements Domains
-reqDom :: ConceptChunk
-reqDom = ccs (mkIdea "reqDom" (requirement ^. term) $ Just "R") reqIntroS [SRS.srsDom]
-
-funcReqDom :: ConceptChunk
-funcReqDom = ccs (mkIdea "funcReqDom" (functionalRequirement ^. term) $ Just "FR") EmptyS [reqDom]
 
 -- wrapper for nonfuncReq
 nonFuncReqF :: (Concept c) => [c] -> [c] -> Sentence -> Sentence -> Section

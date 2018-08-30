@@ -1,5 +1,5 @@
 module Language.Drasil.Label (Label, mkLabelRA',
- mkLabelSame, mkEmptyLabel, getAdd, mkLabelRAAssump', 
+ mkLabelSame, mkEmptyLabel, mkURILabel, getAdd, mkLabelRAAssump', 
  mkLabelRAFig, mkLabelRASec, modifyLabelEqn,
  getReqName, getDefName) where
 
@@ -26,6 +26,12 @@ mkLabel lblUID ra sn' rtype = Lbl lblUID
   (shortname' sn')
   rtype --NOT USED
 
+mkURILabel :: String -> String -> String -> Label
+mkURILabel lblUID ra sn' = Lbl lblUID 
+  (URI $ ensureASCII ra)
+  (shortname' sn')
+  Link
+
 --Determines what text needs to be appended to the ref address
 --Do not export
 getAcc :: RefType -> String
@@ -46,6 +52,7 @@ getAcc PSD       = "PS:"
 getAcc (Label x) = getAcc x
 getAcc Blank     = error "Why are we getting the acronym of a Blank?"
 getAcc (DeferredCC _) = error "DeferredCC RefType should not be directly used."
+getAcc Link      = "Link:"
 
 getReqName :: ReqType -> String
 getReqName FR  = "FR:"

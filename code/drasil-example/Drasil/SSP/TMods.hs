@@ -18,6 +18,7 @@ import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe',
 
 import Drasil.SSP.Assumptions (newA8, newA9)
 import Drasil.SSP.Defs (factor, factorOfSafety, slope, soil)
+import Drasil.SSP.References (fredlund1977, stolle2008)
 import Drasil.SSP.Unitals (cohesion, fricAngle, fs, fx, fy, genDisplace,
   genForce, momntOfBdy, normStress, porePressure, shrStress, surfHydroForce)
 
@@ -37,7 +38,7 @@ l5 = mkLabelSame "hookesLaw"    (Def TM)
 factOfSafety :: TheoryModel
 factOfSafety = tm' (cw factOfSafety_rc)
   (tc' "factOfSafety" [qw fs, qw shearRes, qw mobShear] ([] :: [ConceptChunk])
-  [] [TCon Invariant factOfSafety_rel] []) l1 [factOfSafety_desc]
+  [] [TCon Invariant factOfSafety_rel] [] [makeRef fredlund1977]) l1 [factOfSafety_desc]
 
 ------------------------------------
 factOfSafety_rc :: RelationConcept
@@ -59,7 +60,7 @@ factOfSafety_desc = foldlSent [
 equilibrium :: TheoryModel
 equilibrium = tm' (cw equilibrium_rc)
   (tc' "equilibrium" [qw fx] ([] :: [ConceptChunk])
-  [] [TCon Invariant eq_rel] []) l2 [eq_desc]
+  [] [TCon Invariant eq_rel] [] [makeRef fredlund1977]) l2 [eq_desc]
 
 ------------------------------------  
 equilibrium_rc :: RelationConcept
@@ -84,7 +85,7 @@ mcShrStrgth :: TheoryModel
 mcShrStrgth = tm' (cw mcShrStrgth_rc)
   (tc' "mcShrStrgth" [qw shrStress, qw normStress, qw fricAngle, qw cohesion] 
   ([] :: [ConceptChunk])
-  [] [TCon Invariant mcSS_rel] []) l3 [mcSS_desc]
+  [] [TCon Invariant mcSS_rel] [] [makeRef fredlund1977]) l3 [mcSS_desc]
 
 ------------------------------------
 mcShrStrgth_rc :: RelationConcept
@@ -119,7 +120,7 @@ effStress :: TheoryModel
 effStress = tm' (cw effStress_rc)
   (tc' "effStress" [qw normStress, qw porePressure] 
   ([] :: [ConceptChunk])
-  [] [TCon Invariant effS_rel] []) l4 [effS_desc]
+  [] [TCon Invariant effS_rel] [] [makeRef fredlund1977]) l4 [effS_desc]
 
 ------------------------------------
 effStress_rc :: RelationConcept
@@ -149,7 +150,7 @@ hookesLaw :: TheoryModel
 hookesLaw = tm' (cw hookesLaw_rc)
   (tc' "effStress" [qw genForce, qw stffness, qw genDisplace] 
   ([] :: [ConceptChunk])
-  [] [TCon Invariant hksLw_rel] []) l5 [hksLw_desc]
+  [] [TCon Invariant hksLw_rel] [] [makeRef stolle2008]) l5 [hksLw_desc]
 
 ------------------------------------
 hookesLaw_rc :: RelationConcept

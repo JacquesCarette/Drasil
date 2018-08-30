@@ -2,30 +2,29 @@ module Drasil.GlassBR.Unitals where --whole file is used
 
 import Language.Drasil
 import Control.Lens ((^.))
-import Prelude hiding (log, sqrt)
+import Prelude hiding (log)
 
-import Data.Drasil.Constraints
+import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SentenceStructures (FoldType(..), SepType(Comma),
   displayConstrntsAsSet, foldlList, foldlSent, foldlsC)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
-import Drasil.GlassBR.Concepts (aR, annealed, fullyT, glaPlane, 
-  glassTypeFac, heatS, iGlass, lGlass, lResistance, lShareFac, 
-  loadDurFactor, nFL, responseTy, stdOffDist)
+import Drasil.GlassBR.Concepts (aR, annealed, fullyT, glaPlane, glassTypeFac, 
+  heatS, iGlass, lGlass, lResistance, lShareFac, loadDurFactor, nFL, responseTy, 
+  stdOffDist)
 import Drasil.GlassBR.Labels (glassTypeL, glassConditionL)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016)
 import Drasil.GlassBR.Units (sFlawPU)
 
 --FIXME: Many of the current terms can be separated into terms and defns?
-glassBRsymb :: [DefinedQuantityDict]
-glassBRsymb = map dqdWr [plate_len, plate_width, char_weight, standOffDist]
+
 {--}
 
 glassBRSymbolsWithDefns :: [UnitalChunk]
 glassBRSymbolsWithDefns = [mod_elas]
 
 mod_elas :: UnitalChunk
-mod_elas    = uc' "mod_elas"     (nounPhraseSP "modulus of elasticity of glass")
+mod_elas = uc' "mod_elas" (nounPhraseSP "modulus of elasticity of glass")
   "The ratio of tensile stress to tensile strain of glass." cE pascal
 
 {--}
@@ -63,7 +62,6 @@ gbInputsNoUncrtn = [glass_type, nom_thick]
 gbInputDataConstraints :: [UncertainChunk]
 gbInputDataConstraints = (map uncrtnw gbInputsWUnitsUncrtn) ++ 
   (map uncrtnw gbInputsWUncrtn)
-  
 
 plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA metre Real 
@@ -73,7 +71,7 @@ plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
 
 plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
   lB metre Real
-  [ physc $ Bounded (Exc,0) (Inc, sy plate_len),
+  [ physc $ Bounded (Exc, 0) (Inc, sy plate_len),
     sfwrc $ Bounded (Inc, sy dim_min) (Inc, sy dim_max)] (dbl 1.2) defaultUncrt
 
 aspect_ratio = uvc "aspect_ratio" (aR ^. term)
@@ -83,7 +81,7 @@ aspect_ratio = uvc "aspect_ratio" (aR ^. term)
 
 pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Real
-  [ physc $ Bounded (Exc,0) (Exc,1)] (dbl 0.008) (0.001)
+  [ physc $ Bounded (Exc, 0) (Exc, 1)] (dbl 0.008) (0.001)
 
 char_weight = uqcND "char_weight" (nounPhraseSP "charge weight") 
   lW kilogram Real

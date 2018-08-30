@@ -12,18 +12,18 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
   Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
-  dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, 
+  dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
   outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF, tsymb'')
-import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel, 
-  likeChg, probDesc, sysCont)
+import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel,
+  likeChg, probDesc, sysCont, unlikeChg)
 
 import Data.Drasil.Concepts.Documentation (assumption, column, condition, constraint, 
   content, corSol, dataConst, dataDefn, datum, definition, description, document, 
   environment, genDefn, goalStmt, information, inModel, input_, item, likelyChg, 
   model, organization, output_, physical, physics, physSyst, problem, property, 
   purpose, quantity, reference, requirement, section_, software, softwareSys, 
-  solution, srs, symbol_, sysCont, system, thModel, traceyGraph, traceyMatrix, 
-  user, value, variable)
+  solution, srs, srsDomains, symbol_, sysCont, system, thModel, traceyGraph,
+  traceyMatrix, user, value, variable)
 import Data.Drasil.Concepts.Math (de, equation, ode, unit_)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Software.Products (sciCompS, compPro)
@@ -38,31 +38,24 @@ import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList
   foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, ofThe, ofThe', sAnd, 
   showingCxnBw, sOf)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
-import Data.Drasil.Utils (enumSimple, itemRefToSent, makeListRef,
-  makeTMatrix, eqUnR', noRefs)
+import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, eqUnR', noRefs)
 
 import qualified Data.Drasil.Concepts.Thermodynamics as CT (law_cons_energy, 
   heat_trans, thermal_conduction, ht_flux, heat_cap_spec, thermal_energy,
   ht_trans_theo, thermal_analysis, ener_src)
 
-import Drasil.SWHS.Assumptions (swhsRefDB, newA13, newAssumptions)
-import Drasil.SWHS.Changes (likeChg1, likeChg2, likeChg3, likeChg4,
-  likeChg5, likeChg6, unlikelyChgs)
+import Drasil.SWHS.Assumptions (newA13, newAssumptions)
+import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, rightSide, phsChgMtrl,
   coil, tank, transient, swhs_pcm, phase_change_material, tank_pcm)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, swhsDDefs, swhsQDefs)
 import Drasil.SWHS.DataDesc (swhsInputMod)
-import Drasil.SWHS.GenDefs (swhsGDs, generalDefinitions)
+import Drasil.SWHS.GenDefs (swhsGDs)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, 
   heatEInWtr, heatEInPCM, swhsIMods)
-import Drasil.SWHS.References (parnas1972, parnasClements1984)
-import Drasil.SWHS.Requirements (inputInitQuants, useAboveFindMass, 
-  checkWithPhysConsts, outputInputDerivQuants, calcTempWtrOverTime, 
-  calcTempPCMOverTime, calcChgHeatEnergyWtrOverTime, 
-  calcChgHeatEnergyPCMOverTime, verifyEnergyOutput, 
-  calcPCMMeltBegin, calcPCMMeltEnd, inputInitQuantsEqn, 
-  useAboveFindMassEqn, nonFuncReqs) -- sorted by order of appearance; reqs, eqns, list
-import Drasil.SWHS.TMods (t1ConsThermE, t2SensHtE, t3LatHtE, swhsTMods)
+import Drasil.SWHS.References (parnas1972, parnasClements1984, swhsCitations)
+import Drasil.SWHS.Requirements (funcReqs, inputInitQuantsLbl, nonFuncReqs, verifyEnergyOutput)
+import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, swhsTMods)
 import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
   temp_C, coil_SA, w_E, coil_HTC, sim_time, tau_S_P, htCap_S_P, pcm_mass,
   ht_flux_P, eta, tau_W, htCap_W, w_mass, ht_flux_C, vol_ht_gen, thickness,
@@ -104,8 +97,12 @@ swhs_si = SI {
 }
 
 swhsSymMap :: ChunkDB
-swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull) swhsSymbols
-  this_si
+swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull)
+  (map cw swhsSymbols ++ srsDomains) this_si
+
+swhsRefDB :: ReferenceDB
+swhsRefDB = rdb [] [] newAssumptions [] [] swhsCitations (funcReqs ++
+  likelyChgs ++ unlikelyChgs)
 
 printSetting :: PrintingInformation
 printSetting = PI swhsSymMap defaultConfiguration
@@ -142,8 +139,8 @@ mkSRS = RefSec (RefProg intro [
       , SSDSolChSpec 
         (SCSProg 
           [ Assumptions
-          , TMs ([Label] ++ stdFields) [t1ConsThermE, t2SensHtE, t3LatHtE]
-          , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
+          , TMs ([Label] ++ stdFields) [consThermE, sensHtE, latentHtE]
+          , GDs ([Label, Units] ++ stdFields) swhsGDs ShowDerivation
           , DDs ([Label, Symbol, Units] ++ stdFields) swhsDDefs ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
            [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM] ShowDerivation
@@ -154,7 +151,7 @@ mkSRS = RefSec (RefProg intro [
         )
       ]
     ):  
-  (map Verbatim [reqS, likelyChgs, unlikelyChgs, traceMAndG]) ++
+  (map Verbatim [reqS, likelyChgsSect, unlikelyChgsSect, traceMAndG]) ++
     AuxConstntSec (AuxConsProg progName specParamValList) :
     Bibliography : []
 
@@ -349,7 +346,7 @@ s4_2_3_genDefs = map reldefn swhsRC
 
 s4_2_3_deriv :: [Contents]
 s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
-  s4_2_3_deriv_2 t1ConsThermE vol,
+  s4_2_3_deriv_2 consThermE vol,
   s4_2_3_deriv_3,
   s4_2_3_deriv_4 gauss_div surface vol thFluxVect uNormalVect unit_,
   s4_2_3_deriv_5,
@@ -422,31 +419,28 @@ propsDeriv =
 ------------------------------
 
 reqS :: Section
-reqS = reqF [funcReqs, nonFuncReqs]
+reqS = reqF [funcReqsSect, nonFuncReqs]
 
 -----------------------------------
 -- 5.1 : Functional Requirements --
 -----------------------------------
 
-funcReqs :: Section
-funcReqs = SRS.funcReq funcReqsList []
+funcReqsSect :: Section
+funcReqsSect = SRS.funcReq funcReqsList []
 
 funcReqsList :: [Contents]
-funcReqsList = [LlC inputInitQuants] ++ [funcReqsTable] ++ [LlC useAboveFindMass] ++
-  [inputInitQuantsEqn, useAboveFindMassEqn] ++ reqs
+funcReqsList = reqs ++ [inputInitQuantsTbl]
 
-funcReqsTable :: Contents
-funcReqsTable = LlC $ llcc (mkLabelSame "InConstraints" Tab) $ (Table 
+inputInitQuantsTbl :: Contents
+inputInitQuantsTbl = LlC $ llcc inputInitQuantsLbl $ (Table
   [titleize symbol_, titleize unit_, titleize description]
   (mkTable
   [ch, --(\ch -> Sy (unit_symb ch)),
   unitToSentence, phrase] (map qw inputConstraints))
-  (titleize input_ +:+ titleize variable +:+ titleize requirement) False)
+  (titleize input_ +:+ titleize variable +:+ titleize' requirement) True)
 
 reqs :: [Contents]
-reqs = map LlC [checkWithPhysConsts, outputInputDerivQuants, calcTempWtrOverTime,
-  calcTempPCMOverTime, calcChgHeatEnergyWtrOverTime, calcChgHeatEnergyPCMOverTime,
-  verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd]
+reqs = mkEnumSimpleD funcReqs
 
 ---------------------------------------
 -- 5.2 : Non-functional Requirements --
@@ -455,15 +449,21 @@ reqs = map LlC [checkWithPhysConsts, outputInputDerivQuants, calcTempWtrOverTime
 -- Section 6 : LIKELY CHANGES --
 --------------------------------
 
-likelyChgs :: Section
-likelyChgs = SRS.likeChg likelyChgsList []
+likelyChgsSect :: Section
+likelyChgsSect = SRS.likeChg likelyChgsList []
 
 likelyChgsList :: [Contents]
-likelyChgsList = map LlC [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
+likelyChgsList = mkEnumSimpleD likelyChgs
 
 --------------------------------
 -- Section 6b : UNLIKELY CHANGES --
 --------------------------------
+
+unlikelyChgsSect :: Section
+unlikelyChgsSect = SRS.unlikeChg unlikelyChgsList []
+
+unlikelyChgsList :: [Contents]
+unlikelyChgsList = mkEnumSimpleD unlikelyChgs
 
 --------------------------------------------------
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
@@ -492,7 +492,7 @@ traceInstaModelRef = map makeRef swhsIMods --FIXME: swhsIMods is a hack?
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
   "R11"]
-traceFuncReqRef = makeListRef traceFuncReq funcReqs
+traceFuncReqRef = map makeRef funcReqs
 
 traceData = ["Data Constraints"]
 traceDataRef = [makeRef dataConTable1] --FIXME: Reference section?
@@ -511,7 +511,7 @@ traceDataDefs = ["DD1", "DD2", "DD3", "DD4"]
 traceDataDefRef = map makeRef swhsDDefs
 
 traceLikelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
-traceLikelyChgRef = makeListRef traceLikelyChg likelyChgs
+traceLikelyChgRef = map makeRef likelyChgs
 
 {-Traceability Matrix 1-}
 

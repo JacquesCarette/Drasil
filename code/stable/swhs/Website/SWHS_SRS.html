@@ -1225,7 +1225,7 @@ This section simplifies the original problem and helps in developing the theoret
 <ul class="hide-list-style">
 <li>
 <div id="A:Thermal-Energy-Only">
-Thermal-Energy-Only: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible [<a href=#T:t1ConsThermE>T: t1ConsThermE</a>].
+Thermal-Energy-Only: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible [<a href=#T:consThermE>T: consThermE</a>].
 </div>
 </li>
 </ul>
@@ -1372,7 +1372,7 @@ Theoretical Models
 <p class="paragraph">
 This section focuses on the general equations and laws that SWHS is based on.
 </p>
-<div id="T:t1ConsThermE">
+<div id="T:consThermE">
 <table class="tdefn">
 <tr>
 <th>
@@ -1389,7 +1389,7 @@ Conservation of thermal energy
 Equation
 </th>
 <td>
-<div id="Eqn:T:t1ConsThermE">
+<div id="Eqn:T:consThermE">
 <div class="equation">
 <em>&minus;∇&sdot;<b>q</b>&plus;g = ρ&#8239;C&#8239;<div class="fraction">
 <span class="fup">
@@ -1449,7 +1449,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href="http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm">Fourier Law of Heat Conduction and Heat Equation</a>
 </p>
 </td>
 </tr>
@@ -1465,7 +1465,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="T:t2SensHtE">
+<div id="T:sensHtE">
 <table class="tdefn">
 <tr>
 <th>
@@ -1482,7 +1482,7 @@ Sensible heat energy
 Equation
 </th>
 <td>
-<div id="Eqn:T:t2SensHtE">
+<div id="Eqn:T:sensHtE">
 <div class="equation">
 <em>E = <span class="casebr">
 {
@@ -1550,7 +1550,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>E</em> is the change in sensible heat energy (J). <em>C<sup>S</sup></em>, <em>C<sup>L</sup></em>, <em>C<sup>V</sup></em> are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively (J/(kg&sdot;&deg;C)). <em>m</em> is the mass (kg). <em>T</em> is the temperature (&deg;C), and <em>ΔT</em> is the change in temperature (&deg;C). <em>T<sub>melt</sub></em> and <em>T<sub>boil</sub></em> are the melting point temperature and boiling point temperature, respectively (&deg;C). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if <em>T</em>=<em>T<sub>boil</sub></em> or <em>T</em>=<em>T<sub>melt</sub></em>. If this is the case, refer to <a href=#T:t3LatHtE>T: t3LatHtE</a>, Latent heat energy.
+<em>E</em> is the change in sensible heat energy (J). <em>C<sup>S</sup></em>, <em>C<sup>L</sup></em>, <em>C<sup>V</sup></em> are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively (J/(kg&sdot;&deg;C)). <em>m</em> is the mass (kg). <em>T</em> is the temperature (&deg;C), and <em>ΔT</em> is the change in temperature (&deg;C). <em>T<sub>melt</sub></em> and <em>T<sub>boil</sub></em> are the melting point temperature and boiling point temperature, respectively (&deg;C). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if <em>T</em>=<em>T<sub>boil</sub></em> or <em>T</em>=<em>T<sub>melt</sub></em>. If this is the case, refer to <a href=#T:latentHtE>T: latentHtE</a>, Latent heat energy.
 </p>
 </td>
 </tr>
@@ -1560,7 +1560,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href="http://en.wikipedia.org/wiki/Sensible_heat">Definition of Sensible Heat</a>
 </p>
 </td>
 </tr>
@@ -1576,7 +1576,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-<div id="T:t3LatHtE">
+<div id="T:latentHtE">
 <table class="tdefn">
 <tr>
 <th>
@@ -1593,7 +1593,7 @@ Latent heat energy
 Equation
 </th>
 <td>
-<div id="Eqn:T:t3LatHtE">
+<div id="Eqn:T:latentHtE">
 <div class="equation">
 <em>Q(t) = &int;<sub>0</sub><sup>t</sup><div class="fraction">
 <span class="fup">
@@ -1648,7 +1648,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href="http://en.wikipedia.org/wiki/Latent_heat">Definition of Latent Heat</a>
 </p>
 </td>
 </tr>
@@ -1745,7 +1745,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+<a href=#incroperaEtAl2007>incroperaEtAl2007</a> (pg. 8)
 </p>
 </td>
 </tr>
@@ -1847,7 +1847,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
+FIXME: no sources
 </p>
 </td>
 </tr>
@@ -1867,7 +1867,7 @@ FIXME: This needs to be filled in
 Detailed derivation of simplified rate of change of temperature :
 </p>
 <p class="paragraph">
-Integrating <a href=#T:t1ConsThermE>T: t1ConsThermE</a> over a volume (<em>V</em>), we have:
+Integrating <a href=#T:consThermE>T: consThermE</a> over a volume (<em>V</em>), we have:
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -1912,7 +1912,7 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 </div>
 </div>
 <p class="paragraph">
-Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by Assumptions (<a href=#A:Constant-Water-Temp-Across-Tank>A: Constant-Water-Temp-Across-Tank</a>), (<a href=#A:Temp-PCM-Constant-Across-Volume>A: Temp-PCM-Constant-Across-Volume</a>), (<a href=#A:Density-Water-PCM-Constant-over-Volume>A: Density-Water-PCM-Constant-over-Volume</a>), and (<a href=#A:Specific-Heat-Energy-Constant-over-Volume>A: Specific-Heat-Energy-Constant-over-Volume</a>), we have:
+Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by <a href=#A:Constant-Water-Temp-Across-Tank>A: Constant-Water-Temp-Across-Tank</a>, <a href=#A:Temp-PCM-Constant-Across-Volume>A: Temp-PCM-Constant-Across-Volume</a>, <a href=#A:Density-Water-PCM-Constant-over-Volume>A: Density-Water-PCM-Constant-over-Volume</a>, and <a href=#A:Specific-Heat-Energy-Constant-over-Volume>A: Specific-Heat-Energy-Constant-over-Volume</a>, we have:
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -2025,7 +2025,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#koothoor2013>koothoor2013</a>
 </p>
 </td>
 </tr>
@@ -2115,7 +2115,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#koothoor2013>koothoor2013</a>
 </p>
 </td>
 </tr>
@@ -2206,7 +2206,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#bueche1986>bueche1986</a> (pg. 282)
 </p>
 </td>
 </tr>
@@ -2300,7 +2300,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#koothoor2013>koothoor2013</a>
 </p>
 </td>
 </tr>
@@ -2465,7 +2465,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#koothoor2013>koothoor2013</a>
 </p>
 </td>
 </tr>
@@ -2846,7 +2846,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#koothoor2013>koothoor2013</a>
 </p>
 </td>
 </tr>
@@ -3044,7 +3044,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The above equation is derived using <a href=#T:t2SensHtE>T: t2SensHtE</a>. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#A:Water-Always-Liquid>A: Water-Always-Liquid</a>, <a href=#A:Atmospheric-Pressure-Tank>A: Atmospheric-Pressure-Tank</a>).
+The above equation is derived using <a href=#T:sensHtE>T: sensHtE</a>. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#A:Water-Always-Liquid>A: Water-Always-Liquid</a>, <a href=#A:Atmospheric-Pressure-Tank>A: Atmospheric-Pressure-Tank</a>).
 </p>
 </td>
 </tr>
@@ -3054,7 +3054,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#koothoor2013>koothoor2013</a>
 </p>
 </td>
 </tr>
@@ -3213,7 +3213,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The above equation is derived using <a href=#T:t2SensHtE>T: t2SensHtE</a> and <a href=#T:t3LatHtE>T: t3LatHtE</a>. <em>E<sub>P</sub></em> is the change in thermal energy of the PCM relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) J. <em>E<sub>P</sub></em> for the solid PCM is found using <a href=#T:t2SensHtE>T: t2SensHtE</a> for sensible heat ing, with the specific heat capacity of the solid PCM, <em>C<sub>P</sub><sup>S</sup></em> (J/(kg&sdot;&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). <em>E<sub>P</sub></em> for the melted PCM (<em>T<sub>P</sub>&thinsp;&gt;&thinsp;E<sub>P</sub><sub>melt</sub><sup>init</sup></em>) is found using <a href=#T:t2SensHtE>T: t2SensHtE</a> for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> (J). The energy required to melt all of the PCM is <em>H<sub>f</sub>&#8239;m<sub>P</sub></em> (J) (<a href=#DD:htFusion>DD: htFusion</a>). the specific heat capacity of the liquid PCM is <em>C<sub>P</sub><sup>L</sup></em> (J/(kg&sdot;&deg;C)) and the change in temperature is <em>T<sub>P</sub>&minus;T<sub>melt</sub><sup>P</sup></em> (&deg;C). <em>E<sub>P</sub></em> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> plus the latent heat energy added to the PCM, <em>Q<sub>P</sub></em> (J) since the time when melting began <em>t<sub>melt</sub><sup>init</sup></em> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (<a href=#A:No-Gaseous-State-PCM>A: No-Gaseous-State-PCM</a>).
+The above equation is derived using <a href=#T:sensHtE>T: sensHtE</a> and <a href=#T:latentHtE>T: latentHtE</a>. <em>E<sub>P</sub></em> is the change in thermal energy of the PCM relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) J. <em>E<sub>P</sub></em> for the solid PCM is found using <a href=#T:sensHtE>T: sensHtE</a> for sensible heat ing, with the specific heat capacity of the solid PCM, <em>C<sub>P</sub><sup>S</sup></em> (J/(kg&sdot;&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). <em>E<sub>P</sub></em> for the melted PCM (<em>T<sub>P</sub>&thinsp;&gt;&thinsp;E<sub>P</sub><sub>melt</sub><sup>init</sup></em>) is found using <a href=#T:sensHtE>T: sensHtE</a> for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> (J). The energy required to melt all of the PCM is <em>H<sub>f</sub>&#8239;m<sub>P</sub></em> (J) (<a href=#DD:htFusion>DD: htFusion</a>). the specific heat capacity of the liquid PCM is <em>C<sub>P</sub><sup>L</sup></em> (J/(kg&sdot;&deg;C)) and the change in temperature is <em>T<sub>P</sub>&minus;T<sub>melt</sub><sup>P</sup></em> (&deg;C). <em>E<sub>P</sub></em> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> plus the latent heat energy added to the PCM, <em>Q<sub>P</sub></em> (J) since the time when melting began <em>t<sub>melt</sub><sup>init</sup></em> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (<a href=#A:No-Gaseous-State-PCM>A: No-Gaseous-State-PCM</a>).
 </p>
 </td>
 </tr>
@@ -3223,7 +3223,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-
+<a href=#koothoor2013>koothoor2013</a>
 </p>
 </td>
 </tr>
@@ -3647,7 +3647,7 @@ In addition, the change in heat energy in the PCM should equal the energy input 
 </div>
 </div>
 <p class="paragraph">
-Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as &quot;sanity&quot; checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% <a href=#FR:Verify-Energy-Output-follow-Conservation-of-Energy>FR: Verify-Energy-Output-follow-Conservation-of-Energy</a>.
+Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as &quot;sanity&quot; checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% <a href=#verifyEnergyOutput>FR: Verify-Energy-Output-Follow-Conservation-of-Energy</a>.
 </p>
 </div>
 </div>
@@ -3668,14 +3668,71 @@ This section provides the functional requirements, the business tasks that the s
 <h2>
 Functional Requirements
 </h2>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Input-Initial-Quantities">
-Input-Initial-Quantities: Input the following quantities, which define the tank parameters, material properties and initial conditions:
+<div class="list">
+<p>
+<div id="inputInitQuants">
+Input-Initial-Quantities: Input the following quantities described in <a href=#Table:Input-Variable-Requirements>Input-Variable-Requirements</a>, which define the tank parameters, material properties and initial conditions.
 </div>
-</li>
-</ul>
-<div id="Table:InConstraints">
+</p>
+<p>
+<div id="findMass">
+Find-Mass: Use the inputs in <a href=#inputInitQuants>FR: Input-Initial-Quantities</a> to find the mass needed for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>, <a href=#IM:heatEInWtr>IM: heatEInWtr</a>, and <a href=#IM:heatEInPCM>IM: heatEInPCM</a>, using <em>m<sub>W</sub> = V<sub>W</sub>&#8239;ρ<sub>W</sub> = (V<sub>tank</sub>&minus;V<sub>P</sub>)&#8239;ρ<sub>W</sub> = (<div class="fraction">
+<span class="fup">
+D
+</span>
+<span class="fdn">
+2
+</span>
+</div>&#8239;L&minus;V<sub>P</sub>)&#8239;ρ<sub>W</sub></em> and <em>m<sub>P</sub> = V<sub>P</sub>&#8239;ρ<sub>P</sub></em>, where <em>V<sub>W</sub></em> is the volume of water and <em>V<sub>tank</sub></em> is the volume of the cylindrical tank.
+</div>
+</p>
+<p>
+<div id="checkWithPhysConsts">
+Check-Input-with-Physical_Constraints: Verify that the inputs satisfy the required physical constraints.
+</div>
+</p>
+<p>
+<div id="outputInputDerivQuants">
+Output-Input-Derived-Quantities: Output the input quantities and derived quantities in the following list: the quantities from <a href=#inputInitQuants>FR: Input-Initial-Quantities</a>, the masses from <a href=#findMass>FR: Find-Mass</a>, <em>τ<sub>W</sub></em> (from <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>), <em>η</em> (from <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>), <em>τ<sub>P</sub><sup>S</sup></em> (from <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>) and <em>τ<sub>P</sub><sup>L</sup></em> (from <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>).
+</div>
+</p>
+<p>
+<div id="calcTempWtrOverTime">
+Calculate-Temperature-Water-Over-Time: Calculate and output the temperature of the water (<em>T<sub>W</sub></em>(<em>t</em>)) over the simulation time (from <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>).
+</div>
+</p>
+<p>
+<div id="calcTempPCMOverTime">
+Calculate-Temperature-PCM-Over-Time: Calculate and output the temperature of the phase change material (<em>T<sub>P</sub></em>(<em>t</em>)) over the simulation time (from <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>).
+</div>
+</p>
+<p>
+<div id="calcChgHeatEnergyWtrOverTime">
+Calculate-Change-Heat_Energy-Water-Over-Time: Calculate and output the change in heat energy in the water (<em>E<sub>W</sub></em>(<em>t</em>)) over the simulation time (from <a href=#IM:heatEInWtr>IM: heatEInWtr</a>).
+</div>
+</p>
+<p>
+<div id="calcChgHeatEnergyPCMOverTime">
+Calculate-Change-Heat_Energy-PCM-Over-Time: Calculate and output the change in heat energy in the PCM (<em>E<sub>P</sub></em>(<em>t</em>)) over the simulation time (from <a href=#IM:heatEInPCM>IM: heatEInPCM</a>).
+</div>
+</p>
+<p>
+<div id="verifyEnergyOutput">
+Verify-Energy-Output-Follow-Conservation-of-Energy: Verify that the energy outputs (<em>E<sub>W</sub></em>(<em>t</em>) and <em>E<sub>P</sub></em>(<em>t</em>)) follow the law of conservation of energy with relative error no greater than 0.001%.
+</div>
+</p>
+<p>
+<div id="calcPCMMeltBegin">
+Calculate-PCM-Melt-Begin-Time: Calculate and output the time at which the PCM begins to melt <em>t<sub>melt</sub><sup>init</sup></em> (from <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>).
+</div>
+</p>
+<p>
+<div id="calcPCMMeltEnd">
+Calculate-PCM-Melt-End-Time: Calculate and output the time at which the PCM stops melting <em>t<sub>melt</sub><sup>final</sup></em> (from <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>).
+</div>
+</p>
+</div>
+<div id="Table:Input-Variable-Requirements">
 <table class="table">
 <tr>
 <th>
@@ -3876,94 +3933,10 @@ final time
 </td>
 </tr>
 </table>
+<p class="caption">
+Input Variable Requirements
+</p>
 </div>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Use-Above-Find-Mass-IM1-IM4">
-Use-Above-Find-Mass-IM1-IM4: Use the inputs in <a href=#FR:Input-Initial-Quantities>FR: Input-Initial-Quantities</a> to find the mass needed for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>, <a href=#IM:heatEInWtr>IM: heatEInWtr</a>, and <a href=#IM:heatEInPCM>IM: heatEInPCM</a>, as follows, where <em>V<sub>W</sub></em> is the volume of water and <em>V<sub>tank</sub></em> is the volume of the cylindrical tank:
-</div>
-</li>
-</ul>
-<div id="">
-<div class="equation">
-<em>m<sub>W</sub> = V<sub>W</sub>&#8239;ρ<sub>W</sub> = (V<sub>tank</sub>&minus;V<sub>P</sub>)&#8239;ρ<sub>W</sub> = (<div class="fraction">
-<span class="fup">
-D
-</span>
-<span class="fdn">
-2
-</span>
-</div>&#8239;L&minus;V<sub>P</sub>)&#8239;ρ<sub>W</sub></em>
-</div>
-</div>
-<div id="">
-<div class="equation">
-<em>m<sub>P</sub> = V<sub>P</sub>&#8239;ρ<sub>P</sub></em>
-</div>
-</div>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Check-Input-with-Physical.Constraints">
-Check-Input-with-Physical_Constraints: Verify that the inputs satisfy the required physical constraints.
-</div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Output-Input-Derived-Quantities">
-Output-Input-Derived-Quantities: Output the input quantities and derived quantities in the following list: the quantities from <a href=#FR:Input-Initial-Quantities>FR: Input-Initial-Quantities</a>, the masses from <a href=#FR:Use-Above-Find-Mass-IM1-IM4>FR: Use-Above-Find-Mass-IM1-IM4</a>, <em>τ<sub>W</sub></em> (from <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>), <em>η</em> (from <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>), <em>τ<sub>P</sub><sup>S</sup></em> (from <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>) and <em>τ<sub>P</sub><sup>L</sup></em> (from <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>).
-</div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Calculate-Temperature-Water-Over-Time">
-Calculate-Temperature-Water-Over-Time: Calculate and output the temperature of the water (<em>T<sub>W</sub></em>(<em>t</em>)) over the simulation time (from <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>).
-</div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Calculate-Temperature-PCM-Over-Time">
-Calculate-Temperature-PCM-Over-Time: Calculate and output the temperature of the phase change material (<em>T<sub>P</sub></em>(<em>t</em>)) over the simulation time (from <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>).
-</div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Calculate-Change-Heat.Energy-Water-Over-Time">
-Calculate-Change-Heat_Energy-Water-Over-Time: Calculate and output the change in heat energy in the water (<em>E<sub>W</sub></em>(<em>t</em>)) over the simulation time (from <a href=#IM:heatEInWtr>IM: heatEInWtr</a>).
-</div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Calculate-Change-Heat.Energy-PCM-Over-Time">
-Calculate-Change-Heat_Energy-PCM-Over-Time: Calculate and output the change in heat energy in the PCM (<em>E<sub>P</sub></em>(<em>t</em>)) over the simulation time (from <a href=#IM:heatEInPCM>IM: heatEInPCM</a>).
-</div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Verify-Energy-Output-follow-Conservation-of-Energy">
-Verify-Energy-Output-follow-Conservation-of-Energy: Verify that the energy outputs (<em>E<sub>W</sub></em>(<em>t</em>) and <em>E<sub>P</sub></em>(<em>t</em>)) follow the law of conservation of energy with relative error no greater than 0.001%.
-</div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Calculate-PCM-melt-begin-time">
-Calculate-PCM-melt-begin-time: Calculate and output the time at which the PCM begins to melt <em>t<sub>melt</sub><sup>init</sup></em> (from <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>).
-</div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Calculate-PCM-melt-end-time">
-Calculate-PCM-melt-end-time: Calculate and output the time at which the PCM stops melting <em>t<sub>melt</sub><sup>final</sup></em> (from <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>).
-</div>
-</li>
-</ul>
 </div>
 </div>
 <div id="Sec:NFRs">
@@ -3983,48 +3956,38 @@ This problem is small in size and relatively simple, so performance is not a pri
 <h1>
 Likely Changes
 </h1>
-<ul class="hide-list-style">
-<li>
-<div id="LC:Uniform-Temperature-PCM">
+<div class="list">
+<p>
+<div id="likeChgUTP">
 Uniform-Temperature-PCM: <a href=#A:Temp-PCM-Constant-Across-Volume>A: Temp-PCM-Constant-Across-Volume</a> - PCM is actually a poor thermal conductor, so the assumption of uniform temperature of the phase change material is not likely.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="LC:Temperature-Coil-Variable-Over-Day">
+</p>
+<p>
+<div id="likeChgTCVOD">
 Temperature-Coil-Variable-Over-Day: <a href=#A:Temp-Heating-Coil-Constant-over-Time>A: Temp-Heating-Coil-Constant-over-Time</a> - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="LC:Temperature-Coil-Variable-Over-Length">
+</p>
+<p>
+<div id="likeChgTCVOL">
 Temperature-Coil-Variable-Over-Length: <a href=#A:Temp-Heating-Coil-Constant-over-Length>A: Temp-Heating-Coil-Constant-over-Length</a> - The temperature of the heating coil will actually change along its length as the water within it cools.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="LC:Discharging-Tank">
+</p>
+<p>
+<div id="likeChgDT">
 Discharging-Tank: <a href=#A:Charging-Tank-No-Temp-Discharge>A: Charging-Tank-No-Temp-Discharge</a> - The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="LC:Different-Initial-Temps-PCM-Water">
+</p>
+<p>
+<div id="likeChgDITPW">
 Different-Initial-Temps-PCM-Water: <a href=#A:Same-Initial-Temp-Water-PCM>A: Same-Initial-Temp-Water-PCM</a> - To add more flexibility to the simulation, the initial temperature of the water and the PCM could be allowed to have different values.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="LC:Tank-Lose-Heat">
+</p>
+<p>
+<div id="likeChgTLH">
 Tank-Lose-Heat: <a href=#A:Perfect-Insulation-Tank>A: Perfect-Insulation-Tank</a> - Any real tank cannot be perfectly insulated and will lose heat.
 </div>
-</li>
-</ul>
+</p>
+</div>
 </div>
 </div>
 <div id="Sec:UCs">
@@ -4032,20 +3995,23 @@ Tank-Lose-Heat: <a href=#A:Perfect-Insulation-Tank>A: Perfect-Insulation-Tank</a
 <h1>
 Unlikely Changes
 </h1>
-<ul class="hide-list-style">
-<li>
-<div id="UC:Water-PCM-Fixed-States">
-Water-PCM-Fixed-States: <a href=#A:Water-Always-Liquid>A: Water-Always-Liquid</a> ,  <a href=#A:No-Gaseous-State-PCM>A: No-Gaseous-State-PCM</a> - It is unlikely for the changeof water from liquid to a solid or the state change of the phase change material from a liquid to a gas to be considered.
+<div class="list">
+<p>
+<div id="unlikeChgWPFS">
+Water-PCM-Fixed-States: <a href=#A:Water-Always-Liquid>A: Water-Always-Liquid</a> ,  <a href=#A:No-Gaseous-State-PCM>A: No-Gaseous-State-PCM</a> - It is unlikely for the change of water from liquid to a solid or the state change of the phase change material from a liquid to a gas to be considered.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="UC:No-Internal-Heat-Generation">
-No-Internal-Heat-Generation: <a href=#A:No-Internal-Heat-Generation-By-Water-PCM>A: No-Internal-Heat-Generation-By-Water-PCM</a> - Is used for the derivations of IM1 and IM2 (Hack: need Label to fix).
+</p>
+<p>
+<div id="unlikeChgNIHG">
+No-Internal-Heat-Generation: <a href=#A:No-Internal-Heat-Generation-By-Water-PCM>A: No-Internal-Heat-Generation-By-Water-PCM</a> - Is used for the derivations of <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> and <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>.
 </div>
-</li>
-</ul>
+</p>
+<p>
+<div id="unlikeChgNGS">
+No-Gaseous-State: <a href=#A:No-Gaseous-State-PCM>A: No-Gaseous-State-PCM</a> - Is used for the derivation of <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a> and for the equation given by <a href=#IM:heatEInPCM>IM: heatEInPCM</a> to be valid.
+</div>
+</p>
+</div>
 </div>
 </div>
 <div id="Sec:TraceMatrices">
@@ -4063,13 +4029,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 
 </th>
 <th>
-T1 (<a href=#T:t1ConsThermE>T: t1ConsThermE</a>)
+T1 (<a href=#T:consThermE>T: consThermE</a>)
 </th>
 <th>
-T2 (<a href=#T:t2SensHtE>T: t2SensHtE</a>)
+T2 (<a href=#T:sensHtE>T: sensHtE</a>)
 </th>
 <th>
-T3 (<a href=#T:t3LatHtE>T: t3LatHtE</a>)
+T3 (<a href=#T:latentHtE>T: latentHtE</a>)
 </th>
 <th>
 GD1 (<a href=#GD:nwtnCooling>GD: nwtnCooling</a>)
@@ -4104,7 +4070,7 @@ IM4 (<a href=#IM:heatEInPCM>IM: heatEInPCM</a>)
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:t1ConsThermE>T: t1ConsThermE</a>)
+T1 (<a href=#T:consThermE>T: consThermE</a>)
 </td>
 <td>
 
@@ -4148,7 +4114,7 @@ T1 (<a href=#T:t1ConsThermE>T: t1ConsThermE</a>)
 </tr>
 <tr>
 <td>
-T2 (<a href=#T:t2SensHtE>T: t2SensHtE</a>)
+T2 (<a href=#T:sensHtE>T: sensHtE</a>)
 </td>
 <td>
 
@@ -4192,7 +4158,7 @@ X
 </tr>
 <tr>
 <td>
-T3 (<a href=#T:t3LatHtE>T: t3LatHtE</a>)
+T3 (<a href=#T:latentHtE>T: latentHtE</a>)
 </td>
 <td>
 
@@ -4701,37 +4667,37 @@ IM4 (<a href=#IM:heatEInPCM>IM: heatEInPCM</a>)
 Data Constraints (<a href=#Table:InDataConstraints>InDataConstraints</a>)
 </th>
 <th>
-R1 (<a href=#Sec:FRs>Functional Requirements</a>)
+R1 (<a href=#inputInitQuants>FR: Input-Initial-Quantities</a>)
 </th>
 <th>
-R2 (<a href=#Sec:FRs>Functional Requirements</a>)
+R2 (<a href=#findMass>FR: Find-Mass</a>)
 </th>
 <th>
-R3 (<a href=#Sec:FRs>Functional Requirements</a>)
+R3 (<a href=#checkWithPhysConsts>FR: Check-Input-with-Physical_Constraints</a>)
 </th>
 <th>
-R4 (<a href=#Sec:FRs>Functional Requirements</a>)
+R4 (<a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a>)
 </th>
 <th>
-R5 (<a href=#Sec:FRs>Functional Requirements</a>)
+R5 (<a href=#calcTempWtrOverTime>FR: Calculate-Temperature-Water-Over-Time</a>)
 </th>
 <th>
-R6 (<a href=#Sec:FRs>Functional Requirements</a>)
+R6 (<a href=#calcTempPCMOverTime>FR: Calculate-Temperature-PCM-Over-Time</a>)
 </th>
 <th>
-R7 (<a href=#Sec:FRs>Functional Requirements</a>)
+R7 (<a href=#calcChgHeatEnergyWtrOverTime>FR: Calculate-Change-Heat_Energy-Water-Over-Time</a>)
 </th>
 <th>
-R8 (<a href=#Sec:FRs>Functional Requirements</a>)
+R8 (<a href=#calcChgHeatEnergyPCMOverTime>FR: Calculate-Change-Heat_Energy-PCM-Over-Time</a>)
 </th>
 <th>
-R9 (<a href=#Sec:FRs>Functional Requirements</a>)
+R9 (<a href=#verifyEnergyOutput>FR: Verify-Energy-Output-Follow-Conservation-of-Energy</a>)
 </th>
 <th>
-R10 (<a href=#Sec:FRs>Functional Requirements</a>)
+R10 (<a href=#calcPCMMeltBegin>FR: Calculate-PCM-Melt-Begin-Time</a>)
 </th>
 <th>
-R11 (<a href=#Sec:FRs>Functional Requirements</a>)
+R11 (<a href=#calcPCMMeltEnd>FR: Calculate-PCM-Melt-End-Time</a>)
 </th>
 </tr>
 <tr>
@@ -4948,7 +4914,7 @@ X
 </tr>
 <tr>
 <td>
-R1 (<a href=#Sec:FRs>Functional Requirements</a>)
+R1 (<a href=#inputInitQuants>FR: Input-Initial-Quantities</a>)
 </td>
 <td>
 
@@ -5001,7 +4967,7 @@ R1 (<a href=#Sec:FRs>Functional Requirements</a>)
 </tr>
 <tr>
 <td>
-R2 (<a href=#Sec:FRs>Functional Requirements</a>)
+R2 (<a href=#findMass>FR: Find-Mass</a>)
 </td>
 <td>
 
@@ -5054,7 +5020,7 @@ X
 </tr>
 <tr>
 <td>
-R3 (<a href=#Sec:FRs>Functional Requirements</a>)
+R3 (<a href=#checkWithPhysConsts>FR: Check-Input-with-Physical_Constraints</a>)
 </td>
 <td>
 
@@ -5107,7 +5073,7 @@ X
 </tr>
 <tr>
 <td>
-R4 (<a href=#Sec:FRs>Functional Requirements</a>)
+R4 (<a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a>)
 </td>
 <td>
 X
@@ -5160,7 +5126,7 @@ X
 </tr>
 <tr>
 <td>
-R5 (<a href=#Sec:FRs>Functional Requirements</a>)
+R5 (<a href=#calcTempWtrOverTime>FR: Calculate-Temperature-Water-Over-Time</a>)
 </td>
 <td>
 X
@@ -5213,7 +5179,7 @@ X
 </tr>
 <tr>
 <td>
-R6 (<a href=#Sec:FRs>Functional Requirements</a>)
+R6 (<a href=#calcTempPCMOverTime>FR: Calculate-Temperature-PCM-Over-Time</a>)
 </td>
 <td>
 
@@ -5266,7 +5232,7 @@ X
 </tr>
 <tr>
 <td>
-R7 (<a href=#Sec:FRs>Functional Requirements</a>)
+R7 (<a href=#calcChgHeatEnergyWtrOverTime>FR: Calculate-Change-Heat_Energy-Water-Over-Time</a>)
 </td>
 <td>
 
@@ -5319,7 +5285,7 @@ X
 </tr>
 <tr>
 <td>
-R8 (<a href=#Sec:FRs>Functional Requirements</a>)
+R8 (<a href=#calcChgHeatEnergyPCMOverTime>FR: Calculate-Change-Heat_Energy-PCM-Over-Time</a>)
 </td>
 <td>
 
@@ -5372,7 +5338,7 @@ X
 </tr>
 <tr>
 <td>
-R9 (<a href=#Sec:FRs>Functional Requirements</a>)
+R9 (<a href=#verifyEnergyOutput>FR: Verify-Energy-Output-Follow-Conservation-of-Energy</a>)
 </td>
 <td>
 
@@ -5425,7 +5391,7 @@ X
 </tr>
 <tr>
 <td>
-R10 (<a href=#Sec:FRs>Functional Requirements</a>)
+R10 (<a href=#calcPCMMeltBegin>FR: Calculate-PCM-Melt-Begin-Time</a>)
 </td>
 <td>
 
@@ -5478,7 +5444,7 @@ X
 </tr>
 <tr>
 <td>
-R11 (<a href=#Sec:FRs>Functional Requirements</a>)
+R11 (<a href=#calcPCMMeltEnd>FR: Calculate-PCM-Melt-End-Time</a>)
 </td>
 <td>
 
@@ -5600,7 +5566,7 @@ A19 (<a href=#A:Atmospheric-Pressure-Tank>A: Atmospheric-Pressure-Tank</a>)
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:t1ConsThermE>T: t1ConsThermE</a>)
+T1 (<a href=#T:consThermE>T: consThermE</a>)
 </td>
 <td>
 X
@@ -5662,7 +5628,7 @@ X
 </tr>
 <tr>
 <td>
-T2 (<a href=#T:t2SensHtE>T: t2SensHtE</a>)
+T2 (<a href=#T:sensHtE>T: sensHtE</a>)
 </td>
 <td>
 
@@ -5724,7 +5690,7 @@ T2 (<a href=#T:t2SensHtE>T: t2SensHtE</a>)
 </tr>
 <tr>
 <td>
-T3 (<a href=#T:t3LatHtE>T: t3LatHtE</a>)
+T3 (<a href=#T:latentHtE>T: latentHtE</a>)
 </td>
 <td>
 
@@ -6406,7 +6372,7 @@ X
 </tr>
 <tr>
 <td>
-LC1 (<a href=#Sec:LCs>Likely Changes</a>)
+LC1 (<a href=#likeChgUTP>LC: Uniform-Temperature-PCM</a>)
 </td>
 <td>
 
@@ -6468,7 +6434,7 @@ X
 </tr>
 <tr>
 <td>
-LC2 (<a href=#Sec:LCs>Likely Changes</a>)
+LC2 (<a href=#likeChgTCVOD>LC: Temperature-Coil-Variable-Over-Day</a>)
 </td>
 <td>
 
@@ -6530,7 +6496,7 @@ X
 </tr>
 <tr>
 <td>
-LC3 (<a href=#Sec:LCs>Likely Changes</a>)
+LC3 (<a href=#likeChgTCVOL>LC: Temperature-Coil-Variable-Over-Length</a>)
 </td>
 <td>
 
@@ -6592,7 +6558,7 @@ X
 </tr>
 <tr>
 <td>
-LC4 (<a href=#Sec:LCs>Likely Changes</a>)
+LC4 (<a href=#likeChgDT>LC: Discharging-Tank</a>)
 </td>
 <td>
 
@@ -6654,7 +6620,7 @@ X
 </tr>
 <tr>
 <td>
-LC5 (<a href=#Sec:LCs>Likely Changes</a>)
+LC5 (<a href=#likeChgDITPW>LC: Different-Initial-Temps-PCM-Water</a>)
 </td>
 <td>
 
@@ -6716,7 +6682,7 @@ X
 </tr>
 <tr>
 <td>
-LC6 (<a href=#Sec:LCs>Likely Changes</a>)
+LC6 (<a href=#likeChgTLH>LC: Tank-Lose-Heat</a>)
 </td>
 <td>
 

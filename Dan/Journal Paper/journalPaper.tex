@@ -1,0 +1,1384 @@
+\documentclass[format=acmsmall, review=false, screen=true]{acmart}
+
+\renewcommand{\texttt}[1]{%
+  \begingroup
+  \ttfamily
+  \begingroup\lccode`~=`/\lowercase{\endgroup\def~}{/\discretionary{}{}{}}%
+  \begingroup\lccode`~=`[\lowercase{\endgroup\def~}{[\discretionary{}{}{}}%
+  \begingroup\lccode`~=`.\lowercase{\endgroup\def~}{.\discretionary{}{}{}}%
+  \catcode`/=\active\catcode`[=\active\catcode`.=\active
+  \scantokens{#1\noexpand}%
+  \endgroup
+}
+
+\usepackage{booktabs} % For formal tables
+\usepackage{tikz}
+\usetikzlibrary{positioning,fit,calc,shapes,shadows,arrows}
+\usepackage{forest}
+\usetikzlibrary{arrows.meta}
+\usepackage[ruled]{algorithm2e} % For algorithms
+\renewcommand{\algorithmcfname}{ALGORITHM}
+\SetAlFnt{\small}
+\SetAlCapFnt{\small}
+\SetAlCapNameFnt{\small}
+\SetAlCapHSkip{0pt}
+\IncMargin{-\parindent}
+\usepackage{hyperref}
+\usepackage[normalem]{ulem}
+
+% Metadata Information
+\acmJournal{TOSEM}
+%\acmVolume{}
+%\acmNumber{}
+%\acmArticle{}
+%\acmYear{}
+%\acmMonth{}
+\copyrightyear{2018}
+%\acmArticleSeq{9}
+
+% Copyright
+%\setcopyright{acmcopyright}
+\setcopyright{acmlicensed}
+%\setcopyright{rightsretained}
+%\setcopyright{usgov}
+%\setcopyright{usgovmixed}
+%\setcopyright{cagov}
+%\setcopyright{cagovmixed}
+
+% DOI
+\acmDOI{0000001.0000001}
+
+% Paper history
+%\received{February 2007}
+%\received[revised]{March 2009}
+%\received[accepted]{June 2009}
+
+\newcommand{\dl}{drasil-lang}
+\newcommand{\dc}{drasil-code}
+\newcommand{\dd}{drasil-data}
+\newcommand{\de}{drasil-example}
+\newcommand{\dg}{drasil-gen}
+\newcommand{\drp}{drasil-printers}
+
+\newcommand{\edl}{\emph{\dl}}
+\newcommand{\edc}{\emph{\dc}}
+\newcommand{\edd}{\emph{\dd}}
+\newcommand{\ede}{\emph{\de}}
+\newcommand{\edg}{\emph{\dg}}
+\newcommand{\edp}{\emph{\drp}}
+
+%% Comments
+\newif\ifcomments\commentstrue
+
+\ifcomments
+\newcommand{\authornotes}[3]{\textcolor{#1}{[#3 ---#2]}}
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\else
+\newcommand{\authornotes}[3]{}
+\newcommand{\todo}[1]{}
+\fi
+
+\newcommand{\wss}[1]{\authornotes{blue}{SS}{#1}}
+\newcommand{\jc}[1]{\authornotes{red}{JC}{#1}}
+\newcommand{\ds}[1]{\authornotes{olive}{DS}{#1}}
+
+% Document starts
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%
+% Tikz Styles
+\tikzstyle{class}=[rectangle, draw=black, rounded corners, fill=white!40, drop 
+shadow,
+text centered, anchor=north, text=black, text width=3cm]
+\tikzstyle{myarrow}=[->, >=triangle 90, thick]
+%%%%%%%%%%%%%%%%%%%%%
+
+% Title portion. Note the short title for running heads
+\title[headertitle]{TITLE}
+
+\author{Dan Szymczak}
+%\orcid{1234-5678-9012-3456}
+\affiliation{%
+  \institution{McMaster University}
+  \streetaddress{1280 Main St. W.}
+  \city{Hamilton}
+  \state{ON}
+  \postcode{L8S 4K1}
+  \country{Canada}}
+\email{szymczdm@mcmaster.ca}
+\author{Jacques Carette}
+%\affiliation{%
+%  \institution{Inria Paris-Rocquencourt}
+%  \city{Rocquencourt}
+%  \country{France}
+%}
+%\email{beranger@inria.fr}
+\author{Spencer Smith}
+%\affiliation{%
+% \institution{Rajiv Gandhi University}
+% \streetaddress{Rono-Hills}
+% \city{Doimukh}
+% \state{Arunachal Pradesh}
+% \country{India}}
+%\email{aprna_patel@rguhs.ac.in}
+%\author{Huifen Chan}
+%\affiliation{%
+%  \institution{Tsinghua University}
+%  \streetaddress{30 Shuangqing Rd}
+%  \city{Haidian Qu}
+%  \state{Beijing Shi}
+%  \country{China}
+%}
+%\email{chan0345@tsinghua.edu.cn}
+%\author{Ting Yan}
+%\affiliation{%
+%  \institution{Eaton Innovation Center}
+%  \city{Prague}
+%  \country{Czech Republic}}
+%\email{yanting02@gmail.com}
+%\author{Tian He}
+%\affiliation{%
+%  \institution{University of Virginia}
+%  \department{School of Engineering}
+%  \city{Charlottesville}
+%  \state{VA}
+%  \postcode{22903}
+%  \country{USA}
+%}
+%\affiliation{%
+%  \institution{University of Minnesota}
+%  \country{USA}}
+%\email{tinghe@uva.edu}
+%\author{Chengdu Huang}
+%\author{John A. Stankovic}
+%\author{Tarek F. Abdelzaher}
+%\affiliation{%
+%  \institution{University of Virginia}
+%  \department{School of Engineering}
+%  \city{Charlottesville}
+%  \state{VA}
+%  \postcode{22903}
+%  \country{USA}
+%}
+
+
+\begin{abstract}
+
+CONTEXT: Software (re-)certification requires the creation and maintenance of
+many different software artifacts. Manually creating and maintaining \wss{and
+reusing?} them is tedious and costly. \wss{and error prone}
+
+OBJECTIVE: Improve software (re-)certification efforts by automating as much of
+the artifact creation process as possible, while maintaining full traceability
+within -- and between -- artifacts.  %DS Secondary objective -> Knowledge reuse 
+%-- Don't know if I want
+% to focus here as it muddies the waters.
+
+METHOD: %Use grounded theory in the creation of a tool for software artifact
+%generation. 
+Start by analyzing the artifacts themselves from several case 
+studies to understand what (semantically) is being said in each.
+Capture the underlying knowledge and apply transformations to create each of 
+the requisite artifacts through a generative approach.  
+
+RESULTS: Case studies -- GlassBR to show capture and transformation. SWHS and
+NoPCM for reuse (Something about Kolmogorov complexity / MDL here?).
+% Moved from Method:
+Captured knowledge can 
+be re-used across projects as it represents the ``science''. Maintenance
+involves updating the captured knowledge or transformations as necessary.
+%Moved from Objective:
+Creation of our tool -- Drasil -- facilitates this automation process using a 
+knowledge-based approach to Software Engineering.  \wss{Maybe add something
+  about the infrastructure now being in place to reuse/grow the scientific and
+  computing knowledge base to cover new case studies?  It would be nice if we
+  could make the connection between Drasil's knowledge and existing scientific
+  knowledge ontologies, but maybe it is too early for that connection?}
+
+CONCLUSIONS: With good tool support and a front-loaded time investment, we can 
+automate the generation of software artifacts required for certification. 
+(fill in later)?????
+
+\wss{The abstract doesn't have anything from Jacques ``bottom up'' viewpoint.
+  Can you work in something about consistency by construction?}
+
+\end{abstract}
+
+
+%
+% The code below should be generated by the tool at
+% http://dl.acm.org/ccs.cfm
+% Please copy and paste the code instead of the example below.
+%
+%\begin{CCSXML}
+%<ccs2012>
+% <concept>
+%  <concept_id>10010520.10010553.10010562</concept_id>
+%  <concept_desc>Computer systems organization~Embedded systems</concept_desc>
+%  <concept_significance>500</concept_significance>
+% </concept>
+% <concept>
+%  <concept_id>10010520.10010575.10010755</concept_id>
+%  <concept_desc>Computer systems organization~Redundancy</concept_desc>
+%  <concept_significance>300</concept_significance>
+% </concept>
+% <concept>
+%  <concept_id>10010520.10010553.10010554</concept_id>
+%  <concept_desc>Computer systems organization~Robotics</concept_desc>
+%  <concept_significance>100</concept_significance>
+% </concept>
+% <concept>
+%  <concept_id>10003033.10003083.10003095</concept_id>
+%  <concept_desc>Networks~Network reliability</concept_desc>
+%  <concept_significance>100</concept_significance>
+% </concept>
+%</ccs2012>
+%\end{CCSXML}
+
+%\ccsdesc[500]{Computer systems organization~Embedded systems}
+%\ccsdesc[300]{Computer systems organization~Redundancy}
+%\ccsdesc{Computer systems organization~Robotics}
+%\ccsdesc[100]{Networks~Network reliability}
+
+%
+% End generated code
+%
+
+
+\keywords{??}
+
+
+\maketitle
+
+% The default list of authors is too long for headers.
+\renewcommand{\shortauthors}{D.\ Szymczak et al.}
+\newcommand{\fgr}{\textcolor{red}{!FIGURE!}}
+\section{Introduction}\label{S:Intro}
+
+Writing non-executable software artifacts (requirements and design documents,
+verification \& validation plans, etc.) can be tedious work, but is 
+ultimately necessary when attempting to certify software. 
+Similarly, maintenance of these artifacts, as necessary for re-certification as 
+improvements are made, typically requires a large time investment.
+
+Why, in a world of software tools, do we continue to undertake these
+efforts manually? Literate programming had the right idea, but was too heavily 
+focused on code.
+
+We want to aid software (re-)certification efforts by automating as much of the 
+artifact creation process as possible. By generating our software artifacts -- 
+including code -- in the right way, we can implement changes much more quickly 
+and easily for a modest up-front time investment. By front-loading the costs of 
+maintenance and rolling them into the development cycle, we can save time and 
+money in the long run.
+
+\wss{The bottom up justification should also be part of the introduction.}
+
+\ds{bottom up justification can go here?}
+
+We \ds{and others -- citation ?} have observed a number of issues arise 
+throughout a standard software development and maintenance life-cycle.
+Information duplication is a major concern as several problems occur therein. 
+The first, most trivial, and incredibly tedious is that of the necessity to 
+duplicate information across software artifacts. A piece of knowledge that 
+appears in the Software Requirements Specification (SRS) will undoubtedly 
+appear in the design and implementation artifacts (documents/source code). This 
+knowledge \emph{may} be transformed, but in many cases is an exact copy 
+(Ctrl-C \& Ctrl-V anyone?) and a 
+massive waste of time for a human to replicate throughout multiple 
+artifacts.
+
+Duplication also becomes a time-sink for maintenance, particularly as the 
+duplicated information tends to fall out of sync across artifacts over the 
+course of a piece of software's lifetime. For example, a common problem is that 
+of updating the source code, but not updating any of the design documents to 
+reflect the change. These inconsistencies are at best a minor headache and at 
+worst, in the case of software certification, an expensive lesson. If the 
+artifacts are inconsistent when submitted for (re-)certification, the software 
+will not be (re-)certified and an extra cost will be incurred (both in labour, 
+and from the certifying body) to attempt certification again.
+
+\ds{Fill in this part about consistency, variabilities, and commonalities}
+
+\begin{table}
+	\caption{Problems and Proposed Solutions}
+	\label{Tab:ProbSol}
+	\begin{tabular}[width=0.5\textwidth]{l | l}		
+		Problem 		& Technical Solution 					\\
+		\hline
+		Duplication		& Databases (global \& system-specific) \\
+						& single-source \& generation *			\\
+		\hline
+		Consistency 	& 	Sanity checkers						\\
+		(incl. Source/	& 										\\
+		generated content)	&  									\\
+		\hline
+		Variability \&	& Software families \& 					\\
+		Commonality		& Generation							\\
+	\end{tabular}
+
+\textit{* Also provides free \& easy reuse}
+\end{table}
+
+Table~\ref{Tab:ProbSol} gives a brief rundown of our proposed solutions to the 
+problems mentioned above. We are leveraging our experience with generative 
+programming to provide a solution that is applicable to a wide range of 
+problems.
+
+%DS Maybe throw in a figure here to show off a bunch of common artifacts.
+
+%DS Should everything after this point go into Background? Maybe not
+
+\wss{We can certainly wait to do it, but I like a ``roadmap'' paragraph at the
+  end of the introduction.  The roadmap explains how the paper is organized.
+  More importantly, it provides an opportunity to present your ``story,''
+  assuming that the organization of the paper follows the story.}
+
+\subsection{Software (Re-)certification}
+
+When we talk about software certification, we are specifically discussing the 
+goal of determining ``based on the principles of science, engineering and 
+measurement theory, whether an artifact satisfies accepted, well defined and 
+measurable criteria''~\cite{HatcliffEtAl2009}. Essentially, we are ensuring 
+that software, or some piece of it, performs a given task to within an 
+acceptable standard and can potentially be reused in other systems.
+
+Software certification is necessary by law in certain fields. This is 
+particularly evident in safety-critical applications such as control systems 
+for nuclear power plants or X-ray machines. 
+
+Different certifying bodies exist across domains and each has their own list of 
+requirements to satisfy for certifying software. Looking at some 
+examples \cite{CSA1999,CSA2009,CDRH2002,FDA2014} there are many pieces
+of requisite documentation including, but not limited to:
+
+\begin{itemize}
+\item Problem definition
+\item Theory manual
+\item Requirements specification
+\item Design description
+\item Verification and Validation (V\&V) report
+\end{itemize}
+
+We should keep in mind that we require full traceability -- inter- and 
+intra-artifact -- of the knowledge contained within these artifacts. That is, 
+we should be able to find an explicit link between our problem definition and 
+theory manual, down to our requirements, design, and other development planning 
+artifacts. From there, we should be able to continue through our proposed 
+verification and validation plans, and should eventually end up in the V\&V 
+report.
+
+\ds{rework the following paragraph}
+Ensuring this traceability and, in fact, getting anything certified has many 
+costs associated with it. There is a massive time investment, fees, and costs 
+associated with contracting out a third-party verifier. Overall it is a 
+very expensive process.
+
+Re-certification of software following any change, no matter how minor, %DS 
+%keep?
+incurs a similar level of costs; all the artifacts must be updated to 
+reflect the new change, and everything must be re-checked and verified to 
+ensure no new errors have been introduced. We have an implicit burden of 
+ensuring the consistency of related information across our artifacts.
+
+We intend to alleviate some of this cost-burden through a strategic, generative 
+approach to Software Engineering (SE). With the automated generation of 
+artifacts we can ensure they are \emph{consistent by construction}, implement 
+changes 
+quickly, and automatically update relevant and/or dependent artifacts.  \wss{I
+  was looking for consistent by construction here, and I found it.  :-)}
+
+\ds{Work the following paragraph in somewhere related to consistency.}
+Consistent documentation has its own advantages while developing or maintaining 
+software~\cite{Hyman1990, Kotula2000}. Similarly, there are many downsides to
+inconsistent documentation~\cite{Kotula2000,Thimbleby1986}.
+
+
+\subsection{Scope} %DS Should this be here? Maybe, as long as the above 
+%clarifies the problem.
+\label{S:Scope}
+
+We limit our scope to Scientific Computing Software (SCS) for our proof of 
+concept. The SCS domain is first and foremost a very well understood domain, by 
+which we mean there are many theories underpinning the work being done. This is 
+a necessity if we wish to be able to explain the science to a machine for the 
+purposes of generating our software artifacts. It also gives us a foundation 
+from which to build our knowledge-base.
+
+SCS is also a domain rich in specialized software requiring certification. For 
+example, control software in nuclear power plants, x-ray machines, and other 
+safety critical applications require software to be approved by a certifying 
+body.
+
+\ds{More to come}
+
+\wss{We definitely want a scope section.  What do we do is important, but what
+  we don't do is also important information to convey.  We discussed this
+  recently.  Many people want us to jump to the more interesting/more
+  challenging problems, but we recognize that there is much to be gained by
+  first tackling the more mundane problems.  We allow for many classes of
+  practical changes to be made quickly and easily.  This has real value.  We can
+  discuss in the future work section the more interesting ideas.}
+
+\wss{My suggestion is to stop writing Section 1 for now and focus on Sections 5
+	and 6.  Section 1 is a good start, but it feels like we need more current
+	information on MDL.  We might also want more information on scientific
+	knowledge ontologies.}
+
+
+\section{Background}
+\label{S:BG}
+
+Reducing the costs of (re-)certification efforts and automating the generation
+of software artifacts has been attempted in differing scopes by many others. We
+look to them for insight and in an attempt to combine the fruits of their
+labours into something more versatile.
+
+In this section we will first look at the state of SC software 
+development, as we have limited our scope to that domain, and identify 
+practices we can learn from or potentially improve. We 
+then explore previous efforts in automating software artifact
+generation, as well as look at the current state of Model Driven
+Engineering, scientific knowledge ontologies, and other areas that may be of 
+interest.
+
+\subsection{SC Software Development}
+
+In many instances of SC software development, the developers are scientists and 
+tend to emphasize their science without necessarily following 
+software development best practices~\cite{Kelly2007}. These developers tend to 
+prefer an agile~\cite{AckroydEtAl2008, CarverEtAl2007, 
+EasterbrookAndJohns2009, Segal2005} or knowledge-acquisition driven 
+process~\cite{Kelly2015} instead. They consider process-heavy approaches 
+too rigid and disagreeable~\cite{CarverEtAl2007}.
+
+Tool use and adoption is also a problem in the SC software development 
+community, especially the use of version control software~\cite{Wilson2006}. 
+There is also a limited use of automated testing~\cite{PatrickEtAl2015} and 
+lack of understanding of what good software testing entails~\cite{Merali2010} 
+with quality assurance having ``a bad name among creative scientists and
+engineers''~\cite[p.~352]{Roache1998}. 
+
+With good science relying on replication and reuse, we see a lack of 
+reuse on the software side. A survey~\cite{Owen1998} showed that of 81 
+different mesh generator packages, 52 generated triangular meshes. Of those 52, 
+37 used the same Delaunay triangulation algorithm. There is no 
+reason for the exact same algorithm to be implemented 37 separate times when it 
+could simply be reused.
+
+Some SC software developers have used advanced techniques, like code 
+generation, quite successfully. Examples that come to mind are 
+FEniCS~\cite{LoggEtAl2012}, FFT~\cite{KiselyovEtAl2004}, Gaussian 
+Elimination~\cite{Carette2006}, and Spiral\cite{PuschelEtAl2005}. The focus of 
+generation techniques, thus far, have been solely on a single software 
+artifact: the source code.
+
+\subsection{Software Artifact Reuse and Generation} %DS Is this subsect 
+%necessary?
+
+Previous attempts at generating software artifacts were primarily focused on
+reusability. One aim of these approaches was to remove the burden of
+replicating some artifacts as, in many cases, replication can become impossible 
+without the help of the original author. Typically this is due to undocumented 
+assumptions, modifications to the finished product, or errors in the original 
+work~\cite{IonescuAndJansson2013}.
+
+\subsubsection{Reproducible Research}
+\label{S:RR}
+
+The term \emph{reproducible research} means embedding executable 
+code in research papers to allow readers to reproduce the results 
+described~\cite{SchulteEtAl2012}. However, combining research reports with 
+relevant code and data is not easy, particularly when dealing with publication 
+versions of an author's work, thus the idea of \emph{compendia} were 
+introduced~\cite{GentlemanAndLang2012}.
+
+Compendia provide a means of encapsulating the full scope of a work. They 
+allow readers to see computational details and re-run computations performed by 
+the original author. While Gentleman and Lang intended compendia to be used for 
+peer review in scientific journals, we can also see their use in the realm of 
+software certification. Any requisite artifacts for getting software certified 
+could together be considered a type of compendium.
+
+Alongside compendia, several other tools have been created for reproducible 
+research. Examples include Sweave~\cite{Leisch2002},
+SASweave~\cite{LenthEtAl2007}, Statweave~\cite{Lenth2009},
+Scribble~\cite{FlattEtAl2009}, and Org-mode~\cite{SchulteEtAl2012}. These tools
+maintain a focus on specific computational details and code in general. Sweave 
+(the most popular of the aforementioned examples~\cite{SchulteEtAl2012}) allows 
+for embedding code into a document to be run during typesetting so up-to-date 
+results are always included. The majority of these tools aim to create a 
+singular, linear document like a research report.
+
+\subsubsection{Literate Programming}
+\label{S:LP}
+
+Introduced by Knuth, Literate Programming (LP) changes the focus from writing 
+programs as a list of instructions to explaining (\emph{to humans}) what we 
+want the computer to do~\cite{Knuth1984}.
+
+Developing literate programs involves breaking algorithms down into
+\emph{chunks}~\cite{JohnsonAndJohnson1997} or \emph{sections}~\cite{Knuth1984}
+which are small and easily understandable. These chunks are organized into a 
+``psychological order''~\cite{PieterseKourieAndBoake2004} to promote 
+understanding. One key aspect of LP is that chunks do not have to be written in 
+the order necessary for computation, as that may not be the most understandable.
+
+It should also be noted that in a literate program, the code and
+documentation are kept together in one source. Extracting working source code 
+is done through the \emph{tangle} process. Similarly, \emph{weave}
+is used to extract and typeset the documentation.
+
+Beyond understandability, LP has some key advantages over traditional 
+development. The intent of LP is to update documentation surrounding a piece of 
+source code as a program is developed and updated. There is also some reduction 
+in knowledge duplication through chunking. Adopting proper usage of LP ends up
+with more consistent documentation and code~\cite{ShumAndCook1993}. Keeping in 
+mind the benefits of artifact consistency we can see that more effective and 
+maintainable code can be produced when using 
+LP~\cite{PieterseKourieAndBoake2004}. 
+
+LP has not been very popular due to a couple of main issues: language/text 
+processor dependency and the lack of flexibility on output 
+presentation/suppression~\cite{ShumAndCook1993}. Still, there are
+several successful examples of literate programs in SC. Two such examples are
+VNODE-LP~\cite{Nedialkov2006} and ``Physically Based Rendering: From Theory to
+Implementation''~\cite{PharrAndHumphreys2004}. The latter being a textbook that 
+can be run as a literate program. 
+
+Many attempts to address the issues with LP's popularity have focused on
+changing or removing the output language or text processor dependency. Several
+new tools were developed such as: CWeb (for the C language), DOC++ (for C++),
+noweb (programming language independent), and more. While these tools did not 
+bring LP into the mainstream~\cite{Ramsey1994}, they did help drive the 
+understanding behind what exactly LP tools must do. We can now see LP becoming 
+more standardized in certain domains (for example: Agda, Haskell, and R support 
+LP to some extent). R has good tool support, with the most popular being
+Sweave~\cite{Leisch2002}, however it is mainly used for dynamically generating 
+reports as mentioned in Section~\ref{S:RR}.
+
+New tools led to the introduction of many new features including, but not 
+limited to, a ``What You See Is What You Get'' (WYSIWYG) 
+editor~\cite{FritzsonGunnarssonAndJirstrand2002}, phantom 
+abstracting~\cite{ShumAndCook1993}, and even movement away from the ``one 
+source'' idea~\cite{Simonis2003}.
+
+Tools such as Haddock (for Haskell), javadoc (for Java), and Doxygen (for 
+multiple languages) were also influenced by LP, but differ in that they are 
+merely document extraction tools. They do not contain the chunking features 
+which allow for re-ordering algorithms.
+
+As a final note, LP does not overly simplify the software development process 
+as documentation and code must be written as usual (barring chunk reuse), but 
+with the additional effort of re-ordering chunks.
+
+\subsubsection{Literate Software}
+
+A combination of LP and Box Structure~\cite{Mills1986} was proposed as a new
+method called ``Literate Software Development''
+(LSD)~\cite{AlMatiiAndBoujarwah2002}.
+
+Box structure can be summarized as using 
+different abstractions (views) that communicate the same
+information in differing levels of detail, for distinctive purposes. Box
+structures consist of black box, state machine, and clear boxes. The
+black box gives an external (user) view of the system and consists of stimuli
+and responses; the state machine makes the state data of the system visible -- 
+it defines the data stored between stimuli; and the clear box gives an internal
+(designer's) view describing how data are processed~\cite{Mills1986}. These 
+three structures are nested as necessary to describe a system.
+
+LSD was developed with the intent to overcome the disadvantages of both LP and
+box structure. It was intended to overcome LP's inability to specify interfaces
+between modules; the inability to decompose boxes and implement designs
+created by box structures; and overcome the lack of tool support for box
+structure~\cite{Deck1996}.
+
+``WebBox'' is a framework for LSD which expands LP and box structures in a
+variety of ways. It includes new chunk types and functionality for refining 
+chunks, specifying interfaces and communication between boxes, and decomposing 
+boxes at any level. LSD remains primarily code-focused with little support for 
+other software artifacts.
+
+\ds{Things to try and work in RE:LP}
+    - Identified the need for good documentation
+- One other problem we've identified:
+  - common underlying knowledge between projects is duplicated as there is no
+   real cross-project reuse mechanism in place with these tools.
+
+\ds{Really need an intro to the basics of grounded theory here, for section 
+3.1 (S:IntroCases) and subsequently 4.2 (S:KReUse) if we keep the references to 
+grounded theory}
+
+\subsection{Knowledge-Based Software Engineering (KBSE)}
+\label{S:KBSE}
+
+\ds{Pull apart this section and move the pieces around as necessary. Some of 
+this is intro, some is our approach, etc.}
+
+Knowledge-Based Software Engineering (KBSE) was originally defined as an
+``engineering discipline that includes the integration of knowledge into 
+software systems in order to solve complex problems, which would normally 
+require rather high level of human 
+expertise''~\cite{FeigenbaumAndMcCorduck1983}.
+This is a solid definition, provided we understand what ``knowledge'' is. So 
+then, what exactly is knowledge?
+
+Knowledge ``presents understanding of a subject area. It includes concepts and 
+facts ... as well as relations ... and mechanisms for how to combine them to 
+solve problems in that area''~\cite{Durkin1994}.
+
+\ds{Need to write about how KBSE uses formal methods, particularly for defining 
+the semantics and whatnot for software synthesis. Good stuff in 
+\cite{Lowry1989} and \cite{DevanbuEtAl1990}.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ds{This probably will have to move} With that in mind, we have decided to 
+restrict our focus to KBSE for Scientific 
+Computing Software (SCS) as it is a field rich in knowledge we can use.
+
+\wss{Should MDL show up here?}
+
+\section{A rational analysis of software artifacts}
+
+To generate all software artifacts, we must first take stock of how they are 
+composed. We have chosen to focus on the Smith Et Al. templates 
+\cite{Smith????} \ds{grab proper citation later}. We made this choice because 
+we have access to a number of case studies which were implemented using the 
+given templates and thus give us a reasonable starting point for our analyses.
+
+\subsection{Introducing our case studies}
+\label{S:IntroCases}
+
+To understand exactly what we are looking at in our software artifacts, we will 
+now introduce the case studies that have driven the development of the Drasil 
+framework.
+
+%DS Use a style similar to the Materials paper for introducing case studies 
+%here.
+
+%DS This doesn't really need to be said.
+%Our case studies are broken into two main categories: those developed by 
+%scientists for a specific application (related to SC), and those developed not 
+%necessarily by scientists using a variety of scientific knowledge. 
+
+The first case study we will explore is \emph{GlassBR} -- software created for 
+checking whether a given pane of glass will be able to withstand the force of a 
+particular explosion. It has a number of glass and explosion-related parameters 
+which are used to compute the probability of glass breakage. This will be our 
+running example throughout this paper, with minor asides to demonstrate 
+particular features used by or curiosities found in the other case studies.
+
+\ds{Figure of the GlassBR system for context?}
+
+The next two case studies -- \emph{SWHS} and \emph{NoPCM} -- are members of the 
+same software 
+family. They both model a solar water heating system with one non-trivial 
+difference. SWHS incorporates Phase Change Material (PCM) which allows the 
+system to store more thermal energy than a system without PCM like that 
+modelled in NoPCM.
+
+Our fourth case study, \emph{SSP}, is for modelling a slope stability problem 
+intended 
+to analyze whether a given slope (natural or excavated) can be considered safe. 
+The software identifies the surface most likely to experience slip and gives 
+its factor of safety -- an index of its relative stability.
+
+Finally we have \emph{Gamephysics} which is a pared-down version of the 
+Chipmunk2D 
+game physics engine. We chose this project specifically for its rich use of 
+physics knowledge, but as it is a very large physics library, we narrowed the 
+scope in the interests of time for our proof of concept.
+
+There is also a toy-example case study, nicknamed \emph{tiny}, which is taken 
+from an example of a fuel-pin in a nuclear reactor. This toy example helped 
+push the early development of Drasil, but has recently been primarily of use 
+for testing our generated output.
+
+With our case studies in hand, we must look for the commonalities between them, 
+particularly between the software artifacts in each project and what they are 
+truly saying. With that in mind we can extrapolate these commonalities to other 
+pieces of SCS. One obvious commonality across many projects in SCS is that of 
+the use of Système International (SI) and derived units.
+
+\subsection{Common software artifacts}
+
+As our case studies appear to follow a rational design process, the same 
+software artifacts can be found for each. Each project includes a:
+
+\begin{itemize}
+	\item Software Requirements Specification (SRS)
+	\item Detailed design documents such as: 
+		\begin{itemize}
+			\item Module Guide (MG) 
+			\item Module Interface Specification (MIS)
+		\end{itemize}
+	\item Source code
+	\item Test cases
+	\item User Guide
+	\item Verification and Validation (V\&V) Plan
+	\item V\&V Report
+\end{itemize}
+
+Let us first look at the similarities and differences found in the SRS, the 
+detailed design documents, and the source code. The specific system knowledge 
+found in the SRS is duplicated throughout the design and source code, though 
+not always verbatim. The knowledge may be transformed to produce different 
+views relevant to the current document.
+
+	- only some of that knowledge is necessarily relevant in those views
+	- \fgr: SRS \& DD showing the same piece of knowledge \label{Fig:SRSDDComp}
+	in diff contexts. Use a few different \fgr here.
+	- \fgr: Attempt to show generalized overlap via Venn diagram?
+
+\subsection{Emerging structures} 
+\sout{\ds{want to fit this into the analysis but it would make more sense 
+--after-- the intro to KBSE}}
+
+\ds{Makes more sense now that intro to KBSE has been moved.}
+\label{S:KnowStruct}
+
+- As shown above, 
+
+In the common software artifacts we see different ways of representing what 
+are, semantically, the same things (for example, see 
+Figure~\ref{Fig:SRSDDComp}). We are really seeing the pieces of underlying 
+knowledge that have been composed from a variety of components. Each component 
+tells us something about one aspect of that piece of knowledge. Particularly, 
+they give examples of how we can transform, or view, the same semantic 
+knowledge in different contexts.
+
+\begin{figure}
+%GLASSBR DD here with code example, possible it might be useful earlier.
+\caption{Data Definition for !FIXME! from GlassBR SRS}
+\label{Fig:GlassBRDDSRS}
+\end{figure}
+
+\begin{figure}
+%Fig goes here. Or lsting
+\caption{Data Definition code from GlassBR implementation}
+\label{Fig:GlassBRDDCode}
+\end{figure}
+
+If we take a look at one particular example across artifacts from GlassBR 
+(Figures~\ref{Fig:GlassBRDDSRS},\ref{Fig:GlassBRDDCode}), we can see that it is 
+an aggregation of the following components:
+
+\begin{itemize}
+\item Unique Identifier (label)
+\item Symbolic (theory) representation
+\item Symbolic (implementation) representation
+\item Concise natural language description (a term)
+\item Verbose natural language description (a definition)
+\item Equation 
+\item Constraints %(Really relevant. Again show \fgr as math and code)
+\item Units? %DS If applicable in the example?
+\end{itemize}
+
+The unique identifier is fairly straightforward (!FIXME id!), it is just a 
+label that we associate with this particular piece of knowledge and nothing 
+else. The symbolic representations are just the symbols we use when referring 
+to this particular quantity in an equation (theory) or code (implementation) 
+context. Our natural language descriptions are terms and their corresponding 
+definitions (!FIXME! and !FIXME! respectively for this example). 
+
+We also have a defining equation, which incorporates the symbolic 
+representation for various other pieces of knowledge and relates them to
+!FIXME name!. Similarly, we have constraints which are just relationships which 
+must be maintained between !NAME! and some other quantities. Lastly, we have 
+the units which our quantity is measured in, which are derived from the 
+fundamental !SI UNITS!. %!FILL IN?!
+
+	%DS (not sure which yet, probably something big -- like a quantity or 
+	%bigger; maybe a DD or TM?).
+	% Working from TM or DD as an example
+
+Similar examples of knowledge crop up over all the artifacts. Some have the 
+same depth of information, whereas others do not. Regardless, all of our 
+knowledge shares some components in common. We will always have a label, and 
+usually a term and definition. Depending on what we are looking at, there may 
+not be a symbolic representation, or perhaps we have a quantity that is 
+unit-less. These special cases help us see the underlying root structure from 
+which our knowledge buds. %DS Tree metaphor! Wooo!
+
+\wss{Going through the GlassBR example like this seems like a good motivating
+  example to me.  I'm assuming that you will also be able to reuse it later when
+  you discuss the advantages of our approach for consistency and maintainability
+  (with respect to change).}
+
+-Discuss the breakdown of knowledge into classes. Refer to 
+Table~\ref{Tab:KnowledgeClasses} for more.  \wss{This table looks like a good
+  way to summarize this information to me.}
+
+\begin{table}
+\caption{Knowledge Classes}
+\label{Tab:KnowledgeClasses}
+\begin{tabular}[]{ l | l | l | l | l | l | l | l | l}
+Knowledge Class & ID & Term & Abbreviation & Definition & Symbol & 
+Equation & Constraints & Units \\
+
+			\hline{} & & & & & & & & \\
+Labeled & X & & & & & & &\\
+			\hline{} & & & & & & & &  \\
+Named Idea & X & X & O & & & & &\\
+		  	\hline{} & & & & & & & & \\
+Common Idea & X & X & X & & & & &\\
+			\hline{} & & & & & & & &\\
+Concept & X & X & X & X & & & &\\
+%TODO: Finish filling in
+\end{tabular}
+
+Legend: X - Mandatory; O - Optional
+
+\end{table}
+
+\section{Our solution -- A combined approach}
+\label{S:solution}
+
+With inspiration from similar problem domains, as mentioned in 
+Section~\ref{S:BG}, we combine a number of ideas to tackle the problems of 
+duplication, inter-/intra-artifact inconsistency, design for change, lack of 
+reusability, and difficulty with (re-)certifiability.
+
+For our purposes, we extend and tighten the definition of knowledge introduced 
+in Section~\ref{S:KBSE} to include the additional constraint that a piece of 
+knowledge has a structured encoding, as opposed to natural language encoding, 
+which then allows it to be automatically reused. For example, the first law of 
+thermodynamics is a piece of knowledge that can be simply expressed as ``total 
+energy within a closed system must be conserved'', but this is not a structured 
+encoding. One such encoding would allow us to view the knowledge in those 
+relatively simple terms, or just as easily, we could view it as:
+\begin{equation*}
+\Delta{}U = Q - W
+\end{equation*}
+where we define a \emph{closed system} as one which cannot exchange matter with 
+its surroundings, but energy can be transferred. $\Delta{}U$ is then the change 
+in internal energy of a closed system, $Q$ is the amount of energy supplied to 
+the system, and $W$ is the amount of energy lost to the system's surroundings 
+as a result of work.
+
+Regardless of our view, we have not changed the underlying structured knowledge 
+encoding -- we merely project out what is relevant to our current audience.
+
+Our approaches involves using this underlying idea in the creation and 
+maintenance of a singular knowledge-base that we can pull from to implement our 
+software. With knowledge coming from a single source, we have guaranteed 
+consistency. We are able to mix and match knowledge as needed, which allows for 
+greater reuse across projects, and we use generators to produce the software 
+artifacts we need.
+
+For our approach to succeed we must satisfy two major requirements. First off, 
+we must capture the underlying knowledge in a meaningful and reusable 
+(artifact-independent) way. We want a single source for our knowledge, 
+regardless where it ends up or how it is viewed. Thus, using the right 
+transformations %DS Conversions?
+and projections, we can automatically generate our software artifacts from the 
+knowledge-base.
+
+The second requirement is that we restrict our scope to well-understood domains 
+as we need a solid theoretical underpinning. Both mathematics and the physical 
+sciences are good examples of well-understood domains as the knowledge has 
+already been formalized and, to an extent, structured. These are also good 
+candidate domains since we need to explain the underlying knowledge to 
+computers in a nontrivial way, which from our experience is harder than it 
+sounds. Hence the reduction in scope we mentioned in Section~\ref{S:Scope}
+
+\subsection{Capturing Knowledge}
+\label{S:KnowCapt}
+
+From our work in Section~\ref{S:KnowStruct} we can create a knowledge-capture 
+mechanism for encoding the requisite underlying science into a machine-usable 
+form. By laying out the structure, we can see which information must be 
+captured for each piece of knowledge.
+
+Different types of information are required for encoding each of the various 
+pieces of knowledge we intend to use. Some types of knowledge lack specific 
+information bindings, for example a \emph{named idea} does not necessarily have 
+a symbol associated with it, however, a \emph{quantity} \emph{must} have a 
+symbol alongside its \emph{term} -- the fundamental information in a named
+idea.  \wss{Should this information go closer to the GlassBR example above?}
+
+We borrow, and expand, the idea of \emph{Chunks} from Literate Programming 
+(LP)~\cite{Knuth1984} to facilitate our knowledge-capture. A chunk in its most 
+rudimentary sense is simply a labeled piece of information. Given our 
+understanding of how the knowledge should be structured, we have created a 
+hierarchy of classes built up from the simplest of chunks, to fulfill our 
+knowledge-capture requirements. This hierarchy as implemented in Drasil can be 
+seen in Figure~\ref{Fig:ChunkHierarchy}. It mimics the structure mentioned in 
+Section~\ref{S:KnowStruct}. We will delve deeper into the specifics of our 
+hierarchy in Section~\ref{S:Drasil}.
+
+\begin{figure}
+\begin{tikzpicture}
+[every text node part/.style={align=center}]
+\begin{scope}[every node/.style={rectangle,draw}]
+
+\node(Chunk) at (0,0) 
+{\textbf{Chunk} \\ \small{uid :: String}};
+
+    \node(NamedIdea) at (-3,-1.5) 
+    {\textbf{NamedIdea} \\ \small{term :: NounPhrase}};
+
+        \node(Idea) at (-1.5, -3)
+		{\textbf{Idea} \\ \small{getA :: Maybe String}};
+
+			\node(Concept) at (0, -4.5)
+			{\textbf{Concept} \\ \small{FIXME}};
+
+        \node(CommonIdea) at (-4.5, -3)
+        {\textbf{CommonIdea} \\ \small{abrv :: String}};
+
+	\node(ExprRelat) at (0, -1.5)
+	{\textbf{ExprRelat} \\ \small{FIXME}};
+
+	\node(Theory) at (2, -1.5)
+	{\textbf{Theory} \\ \small{FIXME}};
+
+\node(Definition) at (2.5, 0)
+{\textbf{Definition} \\ \small{FIXME}};
+
+\node(ConceptDomain) at (5,0)
+{\textbf{ConceptDomain} \\ \small{FIXME}};
+
+%TODO: Finish and make this look nice
+
+\end{scope}
+
+\draw [->] (Chunk.south west) -- (NamedIdea.north east);
+\draw [->] (Chunk.south) -- (ExprRelat.north);
+\draw [->] (Chunk.south east) -- (Theory.north west);
+\draw (NamedIdea) [->] to (CommonIdea);
+\draw (NamedIdea) [->] to (Idea);
+\draw (Definition) [->, out=330, in=0] to (Concept);
+\draw (ConceptDomain) [->, out=270, in=0] to (Concept);
+\draw (Idea) [->] to (Concept);
+
+\end{tikzpicture}
+
+%\begin{forest}
+%  for tree={
+%    align=center,
+%    parent anchor=south,
+%    child anchor=north,
+%    font=\sffamily,
+%    edge={thick, -{Stealth[]}},
+%    l sep+=10pt,
+%    edge path={
+%      \noexpand\path [draw, \forestoption{edge}] (!u.parent anchor) -- 
+%      +(0,-10pt) -| (.child anchor)\forestoption{edge label};
+%    }
+%  }
+%  [\textbf{Chunk} \\ \small{uid :: String}
+%    [\textbf{NamedIdea} \\ \small{term :: NounPhrase}
+%      [\textbf{Idea} \\ \small{getA :: Maybe String}]
+%      [\textbf{CommonIdea} \\ \small{abrv :: String}]
+%    ]
+%    [\textbf{Theory} \\ \small{FIXME}]
+%    [\textbf{ExprRelat} \\ \small{FIXME}]
+%  ]
+%  [\textbf{Definition} \\ \small{uid :: String}
+%  ]
+%\end{forest}
+\caption{Chunk hierarchy in Drasil Today}
+\label{Fig:ChunkHierarchy}
+\end{figure}
+
+When we capture knowledge, we try to encode all of the information surrounding 
+that piece of knowledge in an artifact-agnostic manner. We are not concerned 
+with which views will be used by our artifacts, only what the underlying 
+knowledge is and how it should be captured.  \wss{Great point.}
+
+Once we have properly captured the relevant knowledge, we should not have to 
+capture it again to reuse it in a different project. Any given piece of 
+knowledge should only be added to the knowledge-base once!
+
+\subsection{(Re-)Using Knowledge}
+\label{S:KReUse}
+
+Capturing knowledge in itself helps us improve our understanding of the 
+underlying theory by laying things out in a structured way. That is a benefit 
+in itself, however, when we can actually use the captured knowledge we see many 
+advantages to this approach.
+
+The most obvious perk is that we no longer need to manually copy knowledge 
+across artifacts, we can simply pull what we need from our knowledge-base. 
+While this seems trivial, the ramifications are huge -- we have guaranteed 
+consistency by construction. 
+
+At this point you may be wondering, ``what if I want to do more than just copy 
+information around?" Recall the example from the beginning of 
+Section~\ref{S:KBSE}, the view of our knowledge can change without affecting 
+our encoding. To project these views, we use transformations.
+
+Transformations represent the different 'views' of the knowledge we want based 
+on how abstract we need it to be, what audience we are targeting, and a host of 
+other factors. We use transformations to translate knowledge into its requisite 
+forms, whether they be equations, descriptions, code, or something else 
+entirely.  \wss{Can we call what we are doing transformation?  I've always
+  thought of what we are doing as model transformation, but in a conversation
+  Wolfram Kahl implied that it isn't.  I didn't quite catch his point, but I
+  think there was a concern that we do not do bidirectional transformation?}
+
+We can also use transformations to expose variabilities. These are what define 
+project families -- projects which solve the same general problem, but with 
+differences in the specific goals and/or implementations of those solutions. 
+
+For example, our case studies (introduced in Section~\ref{S:IntroCases}) for 
+SWHS and NoPCM are members of the same \emph{software family} as they solve the 
+same general problem with a variation on whether phase-change material is 
+present in the system. A correct solution for each problem will look different, 
+but there is a non-trivial amount of fundamental knowledge being shared by both 
+solutions.
+
+%      - Example: SWHS vs NoPCM
+      \fgr{} Show portion of each SRS, one similarity, one difference?
+
+Manually transforming knowledge in this way is tedious and would likely not end 
+up cutting costs or saving time. If, on the other hand, we had a framework or 
+tool to support the automation of these transformations for our software 
+artifacts, those particular disadvantages disappear.
+
+\section{Drasil}
+\label{S:Drasil}
+- To use KBSE to its potential we need a strong support framework
+- Intro to Drasil
+    \fgr{} Knowledge tree
+  - What it is and does
+    - Domain Specific Language(s)
+    - Generate all the things!
+  - Dev to date.
+  - How is Knowledge Capture handled in Drasil? - chunks!
+  - What do transformations look like? Recipes!
+    \fgr{} SmithEtAl template for SRS = Drasil.DocumentLanguage
+  - Key components of the generator / renderer
+
+- Haddock % Drasil is documented -- available on the repo if you make docs.
+
+\subsection{Developing Drasil - A grounded theory} %DS Should this be here or 
+													%in bg?
+- Following grounded theory (ish). Using data from case studies to guide 
+development and implement new features.
+- \fgr{}: Before and after System Information.
+- \fgr{}: Before and after mini-DBs
+- Majority of features developed after analyzing commonalities in the case 
+studies and abstracting them out.
+- Allows for rapid progress -> constant iteration based on what we find in the 
+data.
+
+\subsection{Packaging Drasil}
+
+The current version (0.1.1 as of this writing) of Drasil is built as a 
+group of Haskell packages (see Figure~\ref{Fig:Packages}). The core components, 
+including those for document concepts, are stored in a package named 
+\edl{} and code-related components are in 
+\edc{}. The main generator code is in \edg{}, with the HTML/LaTeX printers in 
+\edp{}. We maintain our current knowledge-base in 
+\edd{} and our case study examples in \ede{}.
+
+\begin{figure}
+\begin{tikzpicture}
+
+%TODO: Fix this
+
+\node (drasil-lang) [class] {\dl};
+\node (drasil-code) [class, below left=1 and 0.2cm of drasil-lang] {\dc};
+\node (drasil-data) [class, below right=1 and 4cm of drasil-code] {\dd};
+\node (drasil-example) [class, below left=1 and 0.54cm of drasil-data] {\de};
+\node (drasil-printers) [class, below right=1 and 1cm of drasil-lang] {\drp};
+\node (drasil-gen) [class, below left=of drasil-printers] {\dg};
+
+%lang coords
+\coordinate [above=2.785cm of drasil-data] (rightl);
+\coordinate [above=1.28cm of drasil-code] (leftl);
+%code coords
+\coordinate [below=1.25 of drasil-code] (underc);
+\coordinate [below left=1.53 and 0.5 of underc] (underleftc);
+\coordinate [left=0.5 of drasil-code.south] (leftc);
+%data coords
+\coordinate [below=1.285 of drasil-data] (underd);
+
+%code
+\draw [myarrow] (drasil-code.north) -- (leftl) -- (drasil-lang.west);
+
+%data
+\draw [myarrow] (drasil-data.north) -- (rightl) -- (drasil-lang.east);
+\draw [myarrow] (drasil-data.west)  -- (underc) -- (drasil-code.south);
+
+%example
+\draw [myarrow] (drasil-example.north) -- (drasil-lang);
+\draw [myarrow] (drasil-example.west) -- (underleftc) -- (leftc) node[midway, 
+left]{depends};
+\draw [myarrow] (drasil-example.east) -- (underd) -- (drasil-data.south);
+
+\end{tikzpicture}
+\caption{Drasil package dependencies}
+\label{Fig:Packages}
+\end{figure}
+
+\subsubsection{\dl}
+
+The core language used within the Drasil framework, including all of the 
+building blocks for our knowledge-base are stored within \edl{} under the 
+exported module \texttt{Language.Drasil}. This package also exports a second 
+module with functionality targeted to developers of Drasil known as 
+\texttt{Language.Drasil.Development}.
+
+\texttt{Language.Drasil} presently contains the expression DSL, document layout 
+DSL, and knowledge capture classes \& data types. Every other \emph{drasil-*} 
+package relies on, and builds off, this core.
+
+With \texttt{Language.Drasil} alone we can capture knowledge for generating
+artifacts nearly identical to those shown in Section~\ref{S:IntroCases}. 
+However this is a much lower-level approach than we would like to use and could 
+be seen as being akin to programming in a language like C, or even assembly. 
+
+\subsubsection{\drp}
+
+The printing DSL for HTML and LaTeX are stored here under the namespace 
+\texttt{Language.Drasil.Printers}. These are the DSLs which translate Drasil 
+specifications to the target language(s). Please note that the 
+printers for source-code are kept in a separate location.
+
+\subsubsection{\dc}
+
+The code generation DSL used within the Drasil framework is stored here under 
+the namespace \texttt{Language.Drasil.Code}. The code generation framework 
+incorporates \emph{GOOL}, a Generic Object-Oriented 
+Language~\cite{Costabile2012}, to give us the 
+ability to target multiple languages -- C++, C\#, Objective C, Java, Lua, and 
+Python.
+
+\subsubsection{\dg}
+
+The main generator functions used by Drasil are stored here under the 
+\texttt{Language.Drasil.Generate} namespace. These functions are used to take a 
+Drasil specification and use the appropriate printers to generate the final 
+output file(s). Both code and document generation are handled through 
+function-calls found here.
+
+The actual body of \edg{} is very small, consisting of only approximately 60 
+lines of Haskell code.
+
+\subsubsection{\dd}
+
+The knowledge-base common to all Drasil programs is curated and maintained 
+within this package under the \texttt{Data.Drasil} name. Currently we have 
+captured 
+knowledge in a range of domains including, but not limited to, Computation, 
+Education, Math, Physics, and Software. We have also captured meta-knowledge 
+related to documentation, physical properties, and more.
+
+A more detailed breakdown of \texttt{Data.Drasil} will be given in 
+Section~\ref{S:Data}.
+
+\subsubsection{\de}
+
+All of the code required to generate artifacts for our case study examples is 
+maintained in this one package. Each case study has a unique namespace 
+containing everything, other than common knowledge from \edd{}, required to 
+generate that particular case study's artifacts. These namespaces can be seen 
+in Table~\ref{Tab:Namespaces}. 
+
+\begin{table}
+\caption{Case study namespaces in \ede{}}
+\label{Tab:Namespaces}
+\begin{tabular}[]{ l | l}
+		Case Study 		& 				Namespace 						\\
+\hline{}
+		GlassBR 		& 	\texttt{	Drasil.GlassBR			} 		\\
+\hline{}
+		GamePhysics 	& 	\texttt{	Drasil.GamePhysics		}	 	\\
+\hline{}
+		SSP 			& 	\texttt{	Drasil.SSP				}		\\
+\hline{}
+		SWHS 			& 	\texttt{	Drasil.SWHS				}		\\
+\hline{}
+		NoPCM 			& 	\texttt{	Drasil.NoPCM			} 		\\
+\hline{}
+		Tiny 			& 	\texttt{	Drasil.HGHC				} 		\\
+\end{tabular}
+\end{table}
+
+The \ede{} package also contains an example recipe, found in 
+\texttt{Drasil.DocumentLanguage} targeted at recreating the 
+SmithEtAl SRS template\cite{SmithEtAl????}. %DS Gotta add the year.
+Keeping the recipe with the examples is less than ideal, hence why it will soon 
+be moved out of \ede{} and into its own package soon, along with other recipes 
+as they are created.
+We will discuss the recipe and document language specifics in 
+Section~\ref{S:DrasilToday}.
+
+\wss{I like the explanation of the packages}
+
+\subsection{Drasil Today}
+\label{S:DrasilToday}
+
+- Sentence and Document
+- Explain the chunk hierarchy (refer to Section~\ref{S:KnowCapt} figure)
+- Data.Drasil
+  \fgr{} Knowledge areas we have started to capture (See: SE-CSE paper)
+- Recipe Language(s) -- Refer to:
+  \fgr{} Drasil.DocumentLanguage
+- The generator
+  - HTML and TeX rendering
+  - GOOL for code
+- System Information -> Get into it
+
+\section{Case studies - in more depth}
+
+- Re-introduce case studies
+  - Our methods for reimplementing
+  - CI for testing
+- Start showing off re-use and automated generation.
+  - Start with common knowledge (generalized \fgr{}?)
+  - Then onto GlassBR example to show off the doc lang recipe (\fgr{}?)
+  - Then let's see SRS vs. NoPCM for reuse (particularly NoPCM) (\fgr{}?)
+
+\wss{I like how specific this section is.  You are highlighting specific
+  lessons/findings from actual examples.  When you get stuck with writing other
+  sections, this would be a good place to focus your energy.  You should be able
+  to write this material almost independently of the other sections, at least to
+  get started.}
+
+\subsection{Data.Drasil}
+\label{S:Data}
+
+- Common knowledge
+  \fgr{} SI\_Units
+  \fgr{} Thermodynamics (ConsThermE?)
+
+\subsection{GlassBR}
+
+- Brief intro to problem GlassBR is solving - how it works
+- Show off the doc language here
+  \fgr{} GlassBR SRS in (truncated) DocLang format 
+  - "Reads like a table of contents, with a few quirks"
+- Show off some code generation
+  \fgr{} Side-by-side of Chunk Eqn vs. Doc Eqn vs. Code 
+  - "Easy to see that the code matches the equations"
+- Talk about potential variabilities and how to make this a family
+- Why is this interesting?
+	- Fairly straightforward example of something a scientist would create/use 
+	in their research
+
+\subsection{NoPCM \& SWHS}
+
+- Re-introduce the problems
+- See how they're a family?
+- Really drill in the similarities
+  \fgr{} Figure showing NoPCM import(s)
+- Lots of knowledge-reuse
+- Very few 'new' chunks (count them?)
+- Show example of variability in action
+  \fgr{} Equation with/without PCM (rendered?)
+- Why this example is interesting:
+  - ODE solver -> We don't gen, just link to existing good one(s)
+
+\subsection{Others}
+
+- Mention SSP, Tiny, GamePhysics, but don't go too in-depth.
+  - Useful examples as they give us a wider range of problems for analysis
+- Testing
+  - Physics is physics -> when we make updates, the underlying knowledge isn't
+    changing, so neither should our output
+  - Refer to CI
+
+\subsection{Freebies - Compliments of System Information}
+
+- Thanks to the recipe language and the way we structure out system information
+  we can get
+- Table of Symbols
+- Table of Units
+- Table of Abbreviations and Acronyms
+- Bibliography
+
+- All tedious to do by hand, but are free to automatically generate
+- Generator includes sanity-checking -> Can't use something that isn't defined!
+- Sanity-checks are 'free' -> we can check for errors with our symbols,
+  ensure units are consistent, guard against constraints, and ensure we only
+  reference those things which are defined in our system. 
+- Sanity-checks are run every time artifacts are generated.
+
+\section{Results}
+
+- Here we discuss the results we've seen so far.
+- Had some of these case studies attempted to be certified, they would (should) 
+have failed.
+	- A number of common problems.
+
+\subsection{Common issues across case studies}
+
+- A number of undefined symbols even after multiple passes by humans. 
+(Auto-generating the symbol table and including sanity-checking revealed them)
+\wss{You are giving specific examples below, right?}
+
+\subsection{NoPCM and SWHS}
+
+- Along with the common errors, there was some sharing of PCM-related knowledge
+  - Found because PCM symbols were not in the ToS and the sanity-check caught 
+  it.
+  - No way to specifically exclude knowledge that shouldn't 'exist' in a project
+- Work in Kolmogorov complexity / MDL for NoPCM + SWHS?
+- Kolmogorov/MDL implies less writing for the same artifacts -> less to sift 
+through = maybe better?
+
+\subsection{SSP}
+
+- Symbols for given quantities changed throughout the documentation
+  - Went unnoticed by a human for years! Found almost instantly by Drasil
+    - the new symbols were undefined.
+
+\subsection{Pervasive Bugs}
+
+One of the utmost benefits of the knowledge-based approach using Drasil is the 
+introduction of ``pervasive bugs". These are typically mistakes made in the 
+captured knowledge which propagate across all generated artifacts wherein that 
+knowledge is used. Calling this a benefit may seem counter-intuitive, but when 
+an error appears in a multitude of locations it is far more likely to be caught 
+then if it were hiding in the corner of one artifact.
+
+Not only is it more likely that we will find an error, it is also far easier to 
+track down the source of said error -- we need only go to the knowledge base 
+and find the requisite chunk. We can also tune error messages to point us at 
+the exact chunk causing the problem if we so desire.
+
+Correcting an error in a chunk of knowledge is also trivial. It only needs to 
+be fixed once to be fixed across all of our software artifacts. No need to 
+\texttt{grep}, find-and-replace, or the like.
+
+
+\section{Future Work}
+
+[*SS* - Once we are capable of true variability in the documentation, we can
+really start asking the question about what is the "best" documentation for a
+given context.  In the future experiments could be done with presenting the same
+information in different ways to find which approach is the most effective.]
+
+[*SS* - Related to the previous point, the act of formalizing the knowledge that
+goes into the requirements documentation forces us to deeply understand the
+distinctions between difference concepts, like scope, goal, theory, assumption,
+simplification, etc.  With this knowledge we can improve the focus and
+effectiveness of existing templates, and existing requirements solicitation and
+analysis efforts.  Teaching it to a computer.]
+
+- Run an experiment to determine how easy it is to create new software with 
+Drasil.
+
+- Run an experiment to see how easy it is to find and remove errors with Drasil
+
+- Experiment to see time saved in maintenance while using Drasil vs. not
+
+- Create drasil-gen package
+
+- Design language
+
+- Open issues (as of writing there are \#\#\# %DS 147
+issues currently open on the Drasil repository).
+
+\section{Conclusion}
+
+- Easier to find errors (anecdotally) - future work will tell us if this holds.
+
+\bibliography{drasil}
+\bibliographystyle{acm}
+\end{document}

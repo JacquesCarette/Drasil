@@ -27,14 +27,14 @@ are available in [a separate case studies repo](https://github.com/smiths/caseSt
 For more information on Drasil, please read 
 [our position paper](https://github.com/JacquesCarette/Drasil/blob/master/Dan/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf)
 or take a look at 
-our [poster](https://github.com/JacquesCarette/Drasil/blob/master/Dan/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf).
+[our poster](https://github.com/JacquesCarette/Drasil/blob/master/Dan/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf).
 
 ## Quick Start
 
 1. Ensure you have [Stack](https://www.haskell.org/downloads#stack) installed (if you have the Haskell Platform, you should already have Stack).
 2. Run `stack setup` while in **./code/**
 3. Use the `make` command to build the current version of Drasil. This will build and run all of the examples as well.
-4. You can find the generated output in the SRS, MIS, MG, C++, and Website folders that appear.
+4. You can find the generated output in the build folder that appears. Each example will have its own subdirectory.
 
 ## Building specific examples
 
@@ -51,7 +51,23 @@ nopcm_diff | minimal SWHS example, with PCM removed
 
 ## Running the example(s)
 
-After building, you can find the executables for the examples in the relevant subdirectories of .stack-work/dist/ca59d0ab/build/
+Please note that if `make` has been used, docs are already generated automatically and can be found in build.
+Automated testing can be done on these examples.
+
+After building, you can run the examples by using `stack exec NAME` where NAME is detailed below:
+
+NAME | Example
+------|-------
+chipmunkdocs | Chipmunk2D
+swhs | Solar Water Heating System with PCM (SWHS)
+glassbr | Glass-BR
+tiny | HGHC toy example
+ssp | Slope Stability Analysis (SSP)
+nopcm | SWHS without PCM (NoPCM)
+
+This runs the examples manually from the .stack-work folder after building, and the generated docs will
+appear in this folder (i.e. in the SRS and Website folders). Due to this placement, these generated
+versions will not be subject to automated tests.
 
 ## Finding / Building the Haddock documentation
 
@@ -67,29 +83,36 @@ in ./code/ for more information.
 **Dan**
   - Subdirectory for Dan Szymczak's work. Mostly papers and presentations
   
-**FamilyOfGamePhysicsEngines**
-  - Subdirectory containing papers on Families of Physics Engines / Material Models
+**GOOLCodeGen**
+  - An isolated compilation space for creating GOOL code for the examples.
   
 **Presentations**
   - Presentations on LSS/Drasil
   
 **RelatedCode**
   - Contains the *Generic Object Oriented Language* (GOOL) code.
-  
-**SRS_LPM_Example**
-  - SRS for a fuel pin (more comprehensive than HGHC)
-  
+
 **Steve**
   - Steven Palmer's work
   
+**WindowsFix**
+  - Contains registry files for adding and removing the autorun of the command 
+  `chcp 65001`. This is to fix an issue with unicode characters. **ONLY** affects Windows machines.
+  
 **code**
   - The main folder for Drasil source code and example implementations
+  
+**notes**
+  - Assorted general/administrative notes
 
 .gitattributes
   - Used by git
   
 .gitignore
   - Used by git (specifies which file(type)s to ignore when committing)
+  
+.travis.yml
+  - Used for continuous integration with Travis CI
   
 LICENSE
   - License information

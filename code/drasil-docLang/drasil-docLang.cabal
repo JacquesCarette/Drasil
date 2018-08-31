@@ -1,0 +1,50 @@
+Name:		drasil-docLang
+Version:	0.1.12
+Cabal-Version:  >= 1.18
+Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
+build-type:     Simple
+Synopsis:	A framework for code and document generation for scientific software - Document Language SubPackage
+
+library
+  exposed-modules:
+      Drasil.DocLang
+    , Drasil.DocLang.SRS
+  other-modules:
+      Drasil.DocumentLanguage
+    , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers
+    , Drasil.DocumentLanguage.TraceabilityMatrix
+    , Drasil.Sections.AuxiliaryConstants
+    , Drasil.Sections.GeneralSystDesc
+    , Drasil.Sections.Introduction
+    , Drasil.Sections.ReferenceMaterial
+    , Drasil.Sections.Requirements
+    , Drasil.Sections.ScopeOfTheProject
+    , Drasil.Sections.SolutionCharacterSpec
+    , Drasil.Sections.SpecificSystemDescription
+    , Drasil.Sections.Stakeholders
+    , Drasil.Sections.TableOfAbbAndAcronyms
+    , Drasil.Sections.TableOfSymbols
+    , Drasil.Sections.TableOfUnits
+    , Drasil.Sections.TraceabilityMandGs
+
+  Build-Depends:
+    base >= 4.7,
+    lens >= 4.12,
+    containers >= 0.5.5.1,
+    pretty >= 1.1.1.1,
+    mtl >= 2.2.1,
+    directory >= 1.2.6.2,
+    split >= 0.2.3.1,
+    MissingH >= 1.4.0.1,
+    parsec >= 3.1.9,
+    data-fix (>= 0.0.4 && <= 1.0),
+    drasil-lang >= 0.1.23,
+    drasil-data >= 0.1.6
+  default-language: Haskell2010
+  ghc-options:      -Wall
+
+source-repository head
+  type:     git
+  location: git://github.com/JacquesCarette/Drasil.git
+  subdir: code

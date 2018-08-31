@@ -2,6 +2,7 @@ If you are looking for **build instructions**, find them in the README file [her
 
 --------------------------------------------------
 ### Drasil Coding Style Guide
+Last updated: July 26, 2018
 --------------------------------------------------
 
 1. Use spaces instead of tabs. Preferably 2 spaces per indent level. Ex:
@@ -19,17 +20,15 @@ top level
 
 5. One blank line between top-level definitions. No blank lines between type signatures and function definitions.
 
-6. Surround binary operators with a single space on either side. Ex:
-
-`x ^. term`
+6. Surround binary operators with a single space on either side. Ex: `x ^. term`
 
 7. Do not break operations across lines, unless they are sentence combinators (`:+:`, `+:+`, `(sC)`, etc.). Ex: 
 
 ```Haskell
-S "The" +:+ (phrase $ heat_trans ^. term) +:+ 
-S "is the"
+  S "The" +:+ (phrase $ heat_trans ^. term) +:+ 
+  S "is the"
+  ...
 ```
-...
 
 -------------------------------------------------
 ### Quick Start Legend
@@ -59,6 +58,15 @@ S "is the"
 More to come as questions arise.
 
 -------------------------------------------------
+### Data types and class instances
+-------------------------------------------------
+
+See the 
+[cheat sheet on Data Types](https://github.com/JacquesCarette/Drasil/blob/master/Dan/DataTypes.xlsx) 
+(located in ../Dan/DataTypes.xlsx) for more information on which chunk types are instances
+of which classes.
+
+-------------------------------------------------
 ### Building Up-to-Date Documentation
 -------------------------------------------------
 
@@ -86,14 +94,29 @@ Updating Haddock index for local packages in
 ### Summary of Folder Structure and File Contents
 --------------------------------------------------
 
-**Data**
+**data-files**
+  - Contains additional "helper" files for each of the examples
+
+**drasil-code**
+  - Contains the code for code generation in Drasil
+
+**drasil-data**
   - Contains the current common-knowledge base for Drasil
+
+**drasil-docLang**
+  - Contains the document language for Drasil
   
-**Example**
+**drasil-example**
   - Contains the currently implemented examples
+
+**drasil-gen**
+  - Contains the generation file(s) for actually generating code
   
-**Language**
+**drasil-lang**
   - Contains the base for the Drasil language
+
+**drasil-printers**
+  - Containts the printers for the Drasil language
   
 **stable**
   - Contains the (currently) expected output for each of the examples
@@ -104,11 +127,13 @@ Makefile
 README.md
   - This file
   
-drasil.cabal
-  - Cabal file, used by stack to build Drasil
+countCommand.txt
+  - A text file containing instructions on how to count all unique words 
+  within a file using bash commands
   
 log_check.sh
-  - A shell script for comparing the generated output to the expected output for each example. Outputs whether the examples match their stable versions or not
+  - A shell script for comparing the generated output to the expected output for
+  each example. Outputs whether the examples match their stable versions or not
   
 stack.yaml
   - Used by Stack

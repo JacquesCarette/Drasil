@@ -1,0 +1,102 @@
+POTENTIAL TASKS (Proto-issues)
+
+- Learn you a Haskell
+
+- de-embed text when the combinators aren't really capturing any knowledge
+	- is the knowledge reusable?
+	- is the knowledge derivable from existing knowledge?
+	- if the answers to these questions are unclear, make it text (for now)
+
+- literature survey
+	- model driven development
+	- grounded theory
+	- knowledge modelling
+	- existing scientific knowledge ontologies
+
+- review existing "manual" examples looking for errors/inconsistencies - create at least 5 issues? - units match
+
+- apply inspection and review techniques to improve existing "manual" examples
+
+- create a rigorous model for the types of knowledge captured in the SRS:
+	- what distinguishes a data definition from a theoretical model?
+	- what is the required relationships between the parts?
+	
+- support Dan's work by, for instance:
+	- creating figures
+	- proof reading
+	- doing anything Dan can assign as an issue
+
+- documentation of using Drasil, Drasil design, steps to create a new document
+
+- documentation example using existing OPG template
+
+- improve design documentation for existing case studies
+	- document design like an SRS through refinement
+
+- add additional test cases to the existing examples
+
+- redo the game physics documentation and implementation to no longer use Chipmunk
+
+- physics library - what is in the applets, equations, stick it in Drasil, build it up
+
+- add doxygen (or similar) comments to "manual" code, or better yet, generate documentation comments
+
+- move to using pandoc
+
+- move to using MathJax
+
+- issue #475 Setting up Drasil documentation/test infrastructure, (https://github.com/JacquesCarette/Drasil/issues/475)
+
+- Code issues:
+  - remove Greek from Unicode and use the actual characters
+  - understand if sClrlyBrSymb in Symbol makes sense
+  - investigate StringLike and/or OverloadedStrings.  See SymbolAlphabet.
+  - Space needs to be rethought
+  - RefTypes is way too specific. `RefType` should not exist...
+  - Printing/Helpers is possibly full of stuff already in some
+    pretty-printing package.  Needs a cleanup.
+  - TeX.Monad: adjust should use `lub` (functionality duplication)
+  - Printing.AST: move Spec closer to Pandoc
+  - People: better names for render* routines.
+  - remove all warnings from all files.
+  - rethink everything in this file. Seems wrong.
+  - Make.Helpers: should have 'resource files' where such text can be
+    stored.  It's silly to embed it like this.
+  - Make.AST: rethink the rule `Type`. Maybe these should be more semantic.
+  - Make.Import: too specific.
+  - Make.Print: `build` seems hackish. `printRule` too specific?
+  - Format: deprecate?
+  - Config: perhaps re-org to be clearer about where each configuration
+     parameter belongs.  This file might well disappear.
+  - Code.Imperative.Lang: would be nice to re-enable them all
+  - Code.Imperative.Helpers: some of these are in common with Printing.Helpers
+  - " : pure String manipulation might move elsewhere?
+  - Code.Imperative.AST: needs a full redesign...
+  - Code.Code: why are these things defined here?
+  - (skipping all the LanguageRenderer since the AST needs redesigned)
+  - Expr: make Expr into a type constructor
+  - Chunk:
+    - SymbolForm: better names. Show not a good idea.
+    - ExprRelat: this is a hack. Fix and remove.
+    - Attribute.Derivation: should be more structured?
+    - Attribute: longer term, need to rethink the implementation
+    - AssumpChunk: Hack. re-implement.
+    - Change: Hack. re-implement.
+    - Citation: should investigate 3rd party implementations
+  - Spec: a lot of the Sentence constructors should be deleted...
+  - Remove multiple occurrences of definition of DD as Data Definition
+
+- Structural:
+  - make sure the generated code compiles and runs correctly and html is clean, tex 
+    compiles (at least on travis?)
+  - investigate
+    https://hackage.haskell.org/package/bibdb
+    http://pandoc.org/MANUAL.html#citations
+
+- Consistency checks
+	- bunch of them
+
+- Document choice points
+	- verbosity
+	
+

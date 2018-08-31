@@ -1,18 +1,4 @@
-{-# LANGUAGE TypeFamilies, TypeOperators, Rank2Types, FlexibleInstances #-}
-{-# LANGUAGE TemplateHaskell, FlexibleContexts #-}
-{-# OPTIONS_GHC -W #-}
-
 module New where
-
---import qualified Data.Function as F
---import Language.Haskell.TH
-
--- base types
---data BooleanT
---data IntegerT
---data FloatT 
---data CharacterT 
---data StringT
 
 data Block
 data Statement
@@ -23,9 +9,9 @@ data IOType
 
 type Label = String
 
-class Symantics repr where
-    block   :: (StatementSym reprS) => [reprS Statement] -> repr Block
-    
+-- Right now the Block is the top-level structure
+class StatementSym repr => Symantics repr where
+    block   :: [repr Statement] -> repr Block
 
 class StateTypeSym repr where
     bool   :: repr StateType
@@ -33,80 +19,65 @@ class StateTypeSym repr where
     float  :: repr StateType
     char   :: repr StateType
     string :: repr StateType
-    
 
-class StatementSym repr where
-    (&=)   :: (ValueSym reprV) => reprV Value -> reprV Value -> repr Statement
-    (&.=)  :: (ValueSym reprV) => Label -> reprV Value -> repr Statement
-    (&=.)  :: (ValueSym reprV) => reprV Value -> Label -> repr Statement
-    (&-=)  :: (ValueSym reprV) => reprV Value -> reprV Value -> repr Statement
-    (&.-=) :: (ValueSym reprV) => Label -> reprV Value -> repr Statement
-    (&+=)  :: (ValueSym reprV) => reprV Value -> reprV Value -> repr Statement
-    (&.+=) :: (ValueSym reprV) => Label -> reprV Value -> repr Statement
-    (&++)  :: (ValueSym reprV) => reprV Value -> repr Statement
+class (StateTypeSym repr, ValueSym repr, IOSym repr) => StatementSym repr where
+    (&=)   :: repr Value -> repr Value -> repr Statement
+    (&.=)  :: Label -> repr Value -> repr Statement
+    (&=.)  :: repr Value -> Label -> repr Statement
+    (&-=)  :: repr Value -> repr Value -> repr Statement
+    (&.-=) :: Label -> repr Value -> repr Statement
+    (&+=)  :: repr Value -> repr Value -> repr Statement
+    (&.+=) :: Label -> repr Value -> repr Statement
+    (&++)  :: repr Value -> repr Statement
     (&.++) :: Label -> repr Statement
-    (&~-)  :: (ValueSym reprV) => reprV Value -> repr Statement
+    (&~-)  :: repr Value -> repr Statement
     (&.~-) :: Label -> repr Statement
-    
-    assign  :: (ValueSym reprV) => reprV Value -> reprV Value -> repr Statement
-    varDec  :: (StateTypeSym reprST) => Label -> reprST StateType -> repr Statement
 
-    print      :: (StateTypeSym reprST, ValueSym reprV) => 
-                    reprST StateType -> reprV Value -> repr Statement
-    printLn    :: (StateTypeSym reprST, ValueSym reprV) =>
-                    reprST StateType -> reprV Value -> repr Statement
+    assign  :: repr Value -> repr Value -> repr Statement
+    varDec  :: Label -> repr StateType -> repr Statement
+
+    print      :: repr StateType -> repr Value -> repr Statement
+    printLn    :: repr StateType -> repr Value -> repr Statement
     printStr   :: String -> repr Statement
     printStrLn :: String -> repr Statement
-    
-    print'      :: (IOSym reprI, StateTypeSym reprST, ValueSym reprV) => 
-                     reprI IOType -> reprST StateType -> reprV Value -> repr Statement
-    printLn'    :: (IOSym reprI, StateTypeSym reprST, ValueSym reprV) => 
-                     reprI IOType -> reprST StateType -> reprV Value -> repr Statement
-    printStr'   :: (IOSym reprI) => reprI IOType -> String -> repr Statement
-    printStrLn' :: (IOSym reprI) => reprI IOType -> String -> repr Statement
-    
-    printFile      :: (StateTypeSym reprST, ValueSym reprV) =>
-                        reprV Value -> reprST StateType -> reprV Value -> repr Statement
-    printFileLn    :: (StateTypeSym reprST, ValueSym reprV) =>
-                        reprV Value -> reprST StateType -> reprV Value -> repr Statement
-    printFileStr   :: (ValueSym reprV) => reprV Value -> String -> repr Statement
-    printFileStrLn :: (ValueSym reprV) => reprV Value -> String -> repr Statement
 
-    getInput         :: (StateTypeSym reprST, ValueSym reprV) =>
-                          reprST StateType -> reprV Value -> repr Statement
-    getFileInput     :: (StateTypeSym reprST, ValueSym reprV) =>
-                          reprV Value -> reprST StateType -> reprV Value -> repr Statement
-    discardFileInput :: (ValueSym reprV) => reprV Value -> repr Statement
-    getFileInputLine :: (ValueSym reprV) => 
-                          reprV Value -> reprV Value -> repr Statement
-    discardFileLine  :: (ValueSym reprV) => reprV Value -> repr Statement
-    getFileInputAll  :: (ValueSym reprV) => 
-                          reprV Value -> reprV Value -> repr Statement
+    print'      :: repr IOType -> repr StateType -> repr Value -> repr Statement
+    printLn'    :: repr IOType -> repr StateType -> repr Value -> repr Statement
+    printStr'   :: repr IOType -> String -> repr Statement
+    printStrLn' :: repr IOType -> String -> repr Statement
 
-    openFileR :: (ValueSym reprV) => 
-                   reprV Value -> reprV Value -> repr Statement
-    openFileW :: (ValueSym reprV) => 
-                   reprV Value -> reprV Value -> repr Statement
-    closeFile :: (ValueSym reprV) => reprV Value -> repr Statement
+    printFile      :: repr Value -> repr StateType -> repr Value -> repr Statement
+    printFileLn    :: repr Value -> repr StateType -> repr Value -> repr Statement
+    printFileStr   :: repr Value -> String -> repr Statement
+    printFileStrLn :: repr Value -> String -> repr Statement
 
-    return    :: (ValueSym reprV) => reprV Value -> repr Statement
+    getInput         :: repr StateType -> repr Value -> repr Statement
+    getFileInput     :: repr Value -> repr StateType -> repr Value -> repr Statement
+    discardFileInput :: repr Value -> repr Statement
+    getFileInputLine :: repr Value -> repr Value -> repr Statement
+    discardFileLine  :: repr Value -> repr Statement
+    getFileInputAll  :: repr Value -> repr Value -> repr Statement
+
+    openFileR :: repr Value -> repr Value -> repr Statement
+    openFileW :: repr Value -> repr Value -> repr Statement
+    closeFile :: repr Value -> repr Statement
+
+    return    :: repr Value -> repr Statement
     returnVar :: Label -> repr Statement
 
-    
-class IOSym repr where
+class ValueSym repr => IOSym repr where
     console :: repr IOType
-    file    :: (ValueSym reprV) => reprV Value -> repr IOType
-    
-    
-class ValueSym repr where    
+    file    :: repr Value -> repr IOType
+
+class ValueSym repr where
     litBool   :: Bool -> repr Value
     litChar   :: Char -> repr Value
     litFloat  :: Double -> repr Value
     litInt    :: Integer -> repr Value
     litString :: String -> repr Value
-    
+
     defaultValue :: repr StateType -> repr Value
-    
+
     (?!)  :: repr Value -> repr Value
     (?<)  :: repr Value -> repr Value -> repr Value
     (?<=) :: repr Value -> repr Value -> repr Value
@@ -120,20 +91,18 @@ class ValueSym repr where
     --arithmetic operators (#)
     (#~)  :: repr Value -> repr Value
     (#/^) :: repr Value -> repr Value
-    (#|)  :: repr Value -> repr Value 
+    (#|)  :: repr Value -> repr Value
     (#+)  :: repr Value -> repr Value -> repr Value
     (#-)  :: repr Value -> repr Value -> repr Value
     (#*)  :: repr Value -> repr Value -> repr Value
     (#/)  :: repr Value -> repr Value -> repr Value
     (#%)  :: repr Value -> repr Value -> repr Value
-    (#^)  :: repr Value -> repr Value -> repr Value 
+    (#^)  :: repr Value -> repr Value -> repr Value
 
      --other operators ($)
     ($->) :: repr Value -> repr Value -> repr Value
-    ($.)  :: (FunctionSym reprF) => repr Value -> reprF Function -> repr Value
     ($:)  :: Label -> Label -> repr Value
-    
-    
+
     log :: repr Value -> repr Value
     exp :: repr Value -> repr Value
     sin :: repr Value -> repr Value
@@ -142,12 +111,14 @@ class ValueSym repr where
     csc :: repr Value -> repr Value
     sec :: repr Value -> repr Value
     cot :: repr Value -> repr Value
-    
-    
-class FunctionSym repr where
-    func :: (ValueSym reprV) => Label -> [reprV Value] -> repr Function
-    
+
+class (FunctionSym repr, ValueSym repr) => Selector repr where
+    ($.)  :: repr Value -> repr Function -> repr Value
+
+class (ValueSym repr, StateTypeSym repr) => FunctionSym repr where
+    func :: Label -> [repr Value] -> repr Function
+
     listSize   :: repr Function
-    listAccess :: (ValueSym reprV) => reprV Value -> repr Function
-    listAppend :: (ValueSym reprV) => reprV Value -> repr Function
-    listExtend :: (StateTypeSym reprST) => reprST StateType -> repr Function
+    listAccess :: repr Value -> repr Function
+    listAppend :: repr Value -> repr Function
+    listExtend :: repr StateType -> repr Function

@@ -22,12 +22,6 @@
 \global\tabulinesep=1mm
 \newcounter{assumpnum}
 \newcommand{\atheassumpnum}{A\theassumpnum}
-\newcounter{reqnum}
-\newcommand{\rthereqnum}{R\thereqnum}
-\newcounter{lcnum}
-\newcommand{\lcthelcnum}{LC\thelcnum}
-\newcounter{ucnum}
-\newcommand{\uctheucnum}{UC\theucnum}
 \bibliography{bibfile}
 \title{Software Requirements Specification for GlassBR}
 \author{Nikitha Krithnan and W. Spencer Smith}
@@ -980,46 +974,36 @@ ${P_{b}}$ & $0<{P_{b}}<1$
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
 \label{Sec:FRs}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Input-Glass-Props}:]Input the quantities from Table~\ref{Table:InputGlassPropsReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast. Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
-\end{description}
 \begin{itemize}
-\item[System-Set-Values-Following-Assumptions:\phantomsection\label{FR:System-Set-Values-Following-Assumptions}]The system shall set the known values as follows:
-                                                                                                                \begin{itemize}
-                                                                                                                \item{$m$, $k$, $E$, and ${t_{d}}$ following A\ref{A:standardValues}}
-                                                                                                                \item{$LDF$ from \hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}}
-                                                                                                                \item{LSF following A\ref{A:glassLite}}
-                                                                                                                \item{$h$ from \hyperref[DD:min.thick]{Definition~DD:min.thick}}
-                                                                                                                \item{$GTF$ from \hyperref[DD:gTF]{Definition~DD:gTF}}
-                                                                                                                \item{$SD$ from \hyperref[DD:standOffDist]{Definition~DD:standOffDist}}
-                                                                                                                \item{$AR$ from \hyperref[DD:aspect.ratio]{Definition~DD:aspect.ratio}}
-                                                                                                                \end{itemize}
-\end{itemize}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Check-Input-with-Data.Constraints}:]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DataConstraints}. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.
-\end{description}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Output-Values-and-Known-Quantities}:]Output the input quantities from R\ref{FR:Input-Glass-Props} and the known quantities from List~\ref{FR:System-Set-Values-Following-Assumptions}.
-\end{description}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Check-Glass-Safety}:]If $is\_safePb$ ∧ $is\_safeLR$ (from \hyperref[T:isSafePb]{Definition~T:isSafePb} and \hyperref[T:isSafeLR]{Definition~T:isSafeLR}) are true, output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
-\end{description}
-\begin{itemize}
-\item[Output-Quantities:\phantomsection\label{FR:Output-Quantities}]Output the following quantities:
-                                                                    \begin{itemize}
-                                                                    \item{Aspect ratio ($AR$) (\hyperref[DD:aspect.ratio]{Definition~DD:aspect.ratio})}
-                                                                    \item{Risk of failure ($B$) (\hyperref[DD:risk.fun]{Definition~DD:risk.fun})}
-                                                                    \item{Glass type factor ($GTF$) (\hyperref[DD:gTF]{Definition~DD:gTF})}
-                                                                    \item{Minimum thickness ($h$) (\hyperref[DD:min.thick]{Definition~DD:min.thick})}
-                                                                    \item{Stress distribution factor (Function) ($J$) (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac})}
-                                                                    \item{Stress distribution factor (Function) based on Pbtol (${J_{tol}}$) (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol})}
-                                                                    \item{Calculation of Capacity ($LR$) (\hyperref[IM:calofCapacity]{Definition~IM:calofCapacity})}
-                                                                    \item{Non-factored load ($NFL$) (\hyperref[DD:nFL]{Definition~DD:nFL})}
-                                                                    \item{Probability of Glass Breakage (${P_{b}}$) (\hyperref[IM:probOfBreak]{Definition~IM:probOfBreak})}
-                                                                    \item{Calculation of Demand ($q$) (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand})}
-                                                                    \item{Dimensionless load ($\hat{q}$) (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad})}
-                                                                    \item{Tolerable load (${\hat{q}_{tol}}$) (\hyperref[DD:tolLoad]{Definition~DD:tolLoad})}
-                                                                    \end{itemize}
+\item[Input-Glass-Props:\phantomsection\label{inputGlassProps}]Input the quantities from Table~\ref{Table:InputGlassPropsReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast. Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
+\item[System-Set-Values-Following-Assumptions:\phantomsection\label{sysSetValsFollowingAssumps}]The system shall set the known values as follows:
+                                                                                                \begin{itemize}
+                                                                                                \item{$m$, $k$, $E$, and ${t_{d}}$ following A\ref{A:standardValues}}
+                                                                                                \item{$LDF$ from \hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}}
+                                                                                                \item{LSF following A\ref{A:glassLite}}
+                                                                                                \item{$h$ from \hyperref[DD:min.thick]{Definition~DD:min.thick}}
+                                                                                                \item{$GTF$ from \hyperref[DD:gTF]{Definition~DD:gTF}}
+                                                                                                \item{$SD$ from \hyperref[DD:standOffDist]{Definition~DD:standOffDist}}
+                                                                                                \item{$AR$ from \hyperref[DD:aspect.ratio]{Definition~DD:aspect.ratio}}
+                                                                                                \end{itemize}
+\item[Check-Input-with-Data\_Constraints:\phantomsection\label{checkInputWithDataCons}]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DataConstraints}. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.
+\item[Output-Values-and-Known-Quantities:\phantomsection\label{outputValsAndKnownQuants}]Output the input quantities from \hyperref[inputGlassProps]{FR: Input-Glass-Props} and the known quantities from \hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions}.
+\item[Check-Glass-Safety:\phantomsection\label{checkGlassSafety}]If $is\_safePb$ ∧ $is\_safeLR$ (from \hyperref[T:isSafePb]{Definition~T:isSafePb} and \hyperref[T:isSafeLR]{Definition~T:isSafeLR}) are true, output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
+\item[Output-Quantities:\phantomsection\label{outputQuants}]Output the following quantities:
+                                                            \begin{itemize}
+                                                            \item{Aspect ratio ($AR$) (\hyperref[DD:aspect.ratio]{Definition~DD:aspect.ratio})}
+                                                            \item{Risk of failure ($B$) (\hyperref[DD:risk.fun]{Definition~DD:risk.fun})}
+                                                            \item{Glass type factor ($GTF$) (\hyperref[DD:gTF]{Definition~DD:gTF})}
+                                                            \item{Minimum thickness ($h$) (\hyperref[DD:min.thick]{Definition~DD:min.thick})}
+                                                            \item{Stress distribution factor (Function) ($J$) (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac})}
+                                                            \item{Stress distribution factor (Function) based on Pbtol (${J_{tol}}$) (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol})}
+                                                            \item{Calculation of Capacity ($LR$) (\hyperref[IM:calofCapacity]{Definition~IM:calofCapacity})}
+                                                            \item{Non-factored load ($NFL$) (\hyperref[DD:nFL]{Definition~DD:nFL})}
+                                                            \item{Probability of Glass Breakage (${P_{b}}$) (\hyperref[IM:probOfBreak]{Definition~IM:probOfBreak})}
+                                                            \item{Calculation of Demand ($q$) (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand})}
+                                                            \item{Dimensionless load ($\hat{q}$) (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad})}
+                                                            \item{Tolerable load (${\hat{q}_{tol}}$) (\hyperref[DD:tolLoad]{Definition~DD:tolLoad})}
+                                                            \end{itemize}
 \end{itemize}
 \begin{longtabu}{l X[l] l}
 \toprule
@@ -1047,7 +1031,7 @@ $g$ & Glass type $g\in{}\{AN,FT,HS\}$ & --
 $t$ & Nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ & mm
 \\
 \bottomrule
-\caption{Required Inputs following R\ref{FR:Input-Glass-Props}}
+\caption{Required Inputs following \hyperref[inputGlassProps]{FR: Input-Glass-Props}}
 \label{Table:InputGlassPropsReqInputs}
 \end{longtabu}
 \subsection{Non-Functional Requirements}
@@ -1055,29 +1039,19 @@ $t$ & Nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0
 This problem is small in size and relatively simple, so performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the non-functional requirement priorities are correctness, verifiability, understandability, reusability, maintainability, and portability.
 \section{Likely Changes}
 \label{Sec:LCs}
-\begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Calculate-Internal-Blask-Risk}:]A\ref{A:explainScenario} - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.
-\end{description}
-\begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Variable-Values-of-m,k,E}:]A\ref{A:standardValues}, A\ref{A:ldfConstant} - Currently, the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future, these values can be changed to variable inputs.
-\end{description}
-\begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Accomodate-More-than-Single-Lite}:]A\ref{A:glassLite} - The software may be changed to accommodate more than a single lite.
-\end{description}
-\begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Accomodate-More-Boundary-Conditions}:]A\ref{A:boundaryConditions} - The software may be changed to accommodate more boundary conditions than 4-sided support.
-\end{description}
-\begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Consider-More-than-Flexure-Glass}:]A\ref{A:responseType} - The software may be changed to consider more than just flexure of the glass.
-\end{description}
+\begin{itemize}
+\item[Calculate-Internal-Blask-Risk:\phantomsection\label{calcInternalBlastRisk}]A\ref{A:explainScenario} - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.
+\item[Variable-Values-of-m,k,E:\phantomsection\label{varValsOfmkE}]A\ref{A:standardValues}, A\ref{A:ldfConstant} - Currently, the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future, these values can be changed to variable inputs.
+\item[Accomodate-More-than-Single-Lite:\phantomsection\label{accMoreThanSingleLite}]A\ref{A:glassLite} - The software may be changed to accommodate more than a single lite.
+\item[Accomodate-More-Boundary-Conditions:\phantomsection\label{accMoreBoundaryConditions}]A\ref{A:boundaryConditions} - The software may be changed to accommodate more boundary conditions than 4-sided support.
+\item[Consider-More-than-Flexure-Glass:\phantomsection\label{considerMoreThanFlexGlass}]A\ref{A:responseType} - The software may be changed to consider more than just flexure of the glass.
+\end{itemize}
 \section{Unlikely Changes}
 \label{Sec:UCs}
-\begin{description}
-\item[\refstepcounter{ucnum}\uctheucnum\label{UC:Predict-Withstanding-of-Certain-Degree}:]The goal of the system is to predict whether the glass slab under consideration can withstand an explosion of a certain degree.
-\end{description}
-\begin{description}
-\item[\refstepcounter{ucnum}\uctheucnum\label{UC:Accommodate-Altered-Glass}:]A\ref{A:glassCondition} requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.
-\end{description}
+\begin{itemize}
+\item[Predict-Withstanding-of-Certain-Degree:\phantomsection\label{predictWithstandOfCertDeg}]The goal of the system is to predict whether the glass slab under consideration can withstand an explosion of a certain degree.
+\item[Accommodate-Altered-Glass:\phantomsection\label{accAlteredGlass}]A\ref{A:glassCondition} requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.
+\end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. Table~\ref{Table:TraceyItemSecs} shows the dependencies of theoretical models, instance models, and data definitions with each other. Table~\ref{Table:TraceyReqsItems} shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. Table~\ref{Table:TraceyAssumpsOthers} shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
@@ -1118,20 +1092,20 @@ DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) &  &  &  &  &  &  & X &  &  &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:isSafePb]{Definition~T:isSafePb}) & T2 (\hyperref[T:isSafeLR]{Definition~T:isSafeLR}) & IM1 (\hyperref[IM:probOfBreak]{Definition~IM:probOfBreak}) & IM2 (\hyperref[IM:calofCapacity]{Definition~IM:calofCapacity}) & IM3 (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) & DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) & DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & Data Constraints (Section~\ref{Sec:DataConstraints}) & R1 (R\ref{FR:Input-Glass-Props}) & R2 (List~\ref{FR:System-Set-Values-Following-Assumptions}) & R3 (R\ref{FR:Check-Input-with-Data.Constraints}) & R4 (R\ref{FR:Output-Values-and-Known-Quantities}) & R5 (R\ref{FR:Check-Glass-Safety}) & R6 (List~\ref{FR:Output-Quantities})
+ & T1 (\hyperref[T:isSafePb]{Definition~T:isSafePb}) & T2 (\hyperref[T:isSafeLR]{Definition~T:isSafeLR}) & IM1 (\hyperref[IM:probOfBreak]{Definition~IM:probOfBreak}) & IM2 (\hyperref[IM:calofCapacity]{Definition~IM:calofCapacity}) & IM3 (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) & DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) & DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & Data Constraints (Section~\ref{Sec:DataConstraints}) & R1 (\hyperref[inputGlassProps]{FR: Input-Glass-Props}) & R2 (\hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions}) & R3 (\hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints}) & R4 (\hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities}) & R5 (\hyperref[checkGlassSafety]{FR: Check-Glass-Safety}) & R6 (\hyperref[outputQuants]{FR: Output-Quantities})
 \\
 \midrule
-R1 (in R\ref{FR:Input-Glass-Props}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+R1 (in \hyperref[inputGlassProps]{FR: Input-Glass-Props}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R2 (in List~\ref{FR:System-Set-Values-Following-Assumptions}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+R2 (in \hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R3 (in R\ref{FR:Check-Input-with-Data.Constraints}) &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
+R3 (in \hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints}) &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
 \\
-R4 (in R\ref{FR:Output-Values-and-Known-Quantities}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  & 
+R4 (in \hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  & 
 \\
-R5 (in R\ref{FR:Check-Glass-Safety}) & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+R5 (in \hyperref[checkGlassSafety]{FR: Check-Glass-Safety}) & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R6 (in List~\ref{FR:Output-Quantities}) &  &  & X & X & X &  & X & X & X & X & X & X & X &  &  &  &  &  &  & 
+R6 (in \hyperref[outputQuants]{FR: Output-Quantities}) &  &  & X & X & X &  & X & X & X & X & X & X & X &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements and Other Items}
@@ -1168,27 +1142,27 @@ DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) &  &  &  &  &  &  &  
 \\
 DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) &  &  &  & X &  &  &  & 
 \\
-LC1 (LC\ref{LC:Calculate-Internal-Blask-Risk}) &  &  & X &  &  &  &  & 
+LC1 (\hyperref[calcInternalBlastRisk]{LC: Calculate-Internal-Blask-Risk}) &  &  & X &  &  &  &  & 
 \\
-LC2 (LC\ref{LC:Variable-Values-of-m,k,E}) &  &  &  & X &  &  &  & X
+LC2 (\hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E}) &  &  &  & X &  &  &  & X
 \\
-LC3 (LC\ref{LC:Accomodate-More-than-Single-Lite}) &  &  &  &  & X &  &  & 
+LC3 (\hyperref[accMoreThanSingleLite]{LC: Accomodate-More-than-Single-Lite}) &  &  &  &  & X &  &  & 
 \\
-LC4 (LC\ref{LC:Accomodate-More-Boundary-Conditions}) &  &  &  &  &  & X &  & 
+LC4 (\hyperref[accMoreBoundaryConditions]{LC: Accomodate-More-Boundary-Conditions}) &  &  &  &  &  & X &  & 
 \\
-LC5 (LC\ref{LC:Consider-More-than-Flexure-Glass}) &  &  &  &  &  &  & X & 
+LC5 (\hyperref[considerMoreThanFlexGlass]{LC: Consider-More-than-Flexure-Glass}) &  &  &  &  &  &  & X & 
 \\
-R1 (R\ref{FR:Input-Glass-Props}) &  &  &  &  &  &  &  & 
+R1 (\hyperref[inputGlassProps]{FR: Input-Glass-Props}) &  &  &  &  &  &  &  & 
 \\
-R2 (List~\ref{FR:System-Set-Values-Following-Assumptions}) &  &  &  & X & X &  &  & X
+R2 (\hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions}) &  &  &  & X & X &  &  & X
 \\
-R3 (R\ref{FR:Check-Input-with-Data.Constraints}) &  &  &  &  &  &  &  & 
+R3 (\hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints}) &  &  &  &  &  &  &  & 
 \\
-R4 (R\ref{FR:Output-Values-and-Known-Quantities}) &  &  &  &  &  &  &  & 
+R4 (\hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities}) &  &  &  &  &  &  &  & 
 \\
-R5 (R\ref{FR:Check-Glass-Safety}) &  &  &  &  &  &  &  & 
+R5 (\hyperref[checkGlassSafety]{FR: Check-Glass-Safety}) &  &  &  &  &  &  &  & 
 \\
-R6 (List~\ref{FR:Output-Quantities}) &  &  &  &  &  &  &  & 
+R6 (\hyperref[outputQuants]{FR: Output-Quantities}) &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}

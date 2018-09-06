@@ -5,33 +5,43 @@ import Language.Drasil
 import Drasil.SSP.Defs (slpSrf, slopeSrf, slope,
   mtrlPrpty, soil, soilLyr, soilPrpty, intrslce, slice)
 import Drasil.SSP.Unitals (coords, normToShear, scalFunc, fs)
-import Drasil.SSP.References (sspCitations)
 import Data.Drasil.SentenceStructures (ofThe, ofThe', getTandS, foldlSent)
 
-import Data.Drasil.Concepts.Documentation (condition)
+import Data.Drasil.Concepts.Documentation (assumpDom, condition)
 import Data.Drasil.Concepts.Physics (force, stress, strain)
 import Data.Drasil.Concepts.Math (surface, unit_)
 import Data.Drasil.Concepts.SolidMechanics (shearForce)
 
-sspRefDB :: ReferenceDB
-sspRefDB = rdb [] [] newAssumptions [] [] sspCitations []
--- FIXME: Convert the rest to new chunk types (similar to issues #446 and #447)
-
 newAssumptions :: [AssumpChunk]
 newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10]
 
+-- FIXME: Remove the newA AssumpChunk's once ConceptInstance and SCSProg's
+-- Assumptions has been migrated to using assumpDom
+
 newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10 :: AssumpChunk
+assumpSSC, assumpGSMPSL, assumpSLH, assumpSLI, assumpINSFL, assumpBNSFLFS,
+  assumpSSCIL, assumpPSC, assumpENSL, assumpSBSBISL :: ConceptInstance
 newA1 = assump "Slip-Surface-Concave" monotonicF (mkLabelRAAssump' "Slip-Surface-Concave")
+assumpSSC = cic "assumpSSC" monotonicF "Slip-Surface-Concave" assumpDom
 newA2 = assump "Geo-Slope-Mat-Props-of-Soil-Inputs" slopeG (mkLabelRAAssump' "Geo-Slope-Mat-Props-of-Soil-Inputs")
+assumpGSMPSL = cic "assumpGSMPSL" slopeG "Geo-Slope-Mat-Props-of-Soil-Inputs" assumpDom
 newA3 = assump "Soil-Layer-Homogeneous" homogeneousL (mkLabelRAAssump' "Soil-Layer-Homogeneous")
+assumpSLH = cic "assumpSLH" homogeneousL "Soil-Layer-Homogeneous" assumpDom
 newA4 = assump "Soil-Layers-Isotropic" isotropicP (mkLabelRAAssump' "Soil-Layers-Isotropic")
+assumpSLI = cic "assumpSLI" isotropicP "Soil-Layers-Isotropic" assumpDom
 newA5 = assump "Interslice-Norm-Shear-Forces-Linear" linearS (mkLabelRAAssump' "Interslice-Norm-Shear-Forces-Linear")
+assumpINSFL = cic "assumpINSFL" linearS "Interslice-Norm-Shear-Forces-Linear" assumpDom
 newA6 = assump "Base-Norm-Shear-Forces-Linear-on-FS" linearF (mkLabelRAAssump' "Base-Norm-Shear-Forces-Linear-on-FS")
+assumpBNSFLFS = cic "assumpBNSFLFS" linearF "Base-Norm-Shear-Forces-Linear-on-FS" assumpDom
 newA7 = assump "Stress-Strain-Curve-interslice-Linear" stressC (mkLabelRAAssump' "Stress-Strain-Curve-interslice-Linear")
+assumpSSCIL = cic "assumpSSCIL" stressC "Stress-Strain-Curve-interslice-Linear" assumpDom
 newA8 = assump "Plane-Strain-Conditions" planeS (mkLabelRAAssump' "Plane-Strain-Conditions")
+assumpPSC = cic "assumpPSC" planeS "Plane-Strain-Conditions" assumpDom
 newA9 = assump "Effective-Norm-Stress-Large" largeN (mkLabelRAAssump' "Effective-Norm-Stress-Large")
+assumpENSL = cic "assumpENSL" largeN "Effective-Norm-Stress-Large" assumpDom
 newA10 = assump "Surface-Base-Slice-between-Interslice-Straight-Lines" straightS 
            (mkLabelRAAssump' "Surface-Base-Slice-between-Interslice-Straight-Lines")
+assumpSBSBISL = cic "assumpSBSBISL" straightS "Surface-Base-Slice-between-Interslice-Straight-Lines" assumpDom
 
 monotonicF, slopeG, homogeneousL, isotropicP, linearS,
   linearF, stressC, planeS, largeN, straightS :: Sentence

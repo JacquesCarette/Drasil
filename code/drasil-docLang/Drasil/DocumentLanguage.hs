@@ -357,7 +357,12 @@ mkEnumSimple f = replicate 1 . UlC . ulcc . Enumeration . Simple . map f
 -- instances of the constraints Referable, HasShortName, and Definition, into
 -- Simple-type Enumerations.
 mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
-mkEnumSimpleD = mkEnumSimple (\x -> (getShortName x, Flat $ x ^. defn, Just $ refAdd x))
+mkEnumSimpleD = mkEnumSimple $ mkListTuple (\x -> Flat $ x ^. defn)
+
+-- | Creates a list tuple filling in the title with a ShortName and filling
+-- reference information.
+mkListTuple :: (Referable c, HasShortName c, Definition c) => (c -> ItemType) -> c -> ListTuple
+mkListTuple f x = (getShortName x, f x, Just $ refAdd x)
 
 -- | table of units intro writer. Translates a TUIntro to a Sentence.
 tuI :: TUIntro -> Sentence

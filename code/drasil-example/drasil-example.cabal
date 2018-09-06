@@ -1,5 +1,5 @@
 Name:		drasil-example
-Version:	0.1.13
+Version:	0.1.14
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -55,11 +55,11 @@ executable glassbr
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
     drasil-lang >= 0.1.23,
-    drasil-data >= 0.1.6,
+    drasil-data >= 0.1.7,
     drasil-code >= 0.1.4,
     drasil-printers >= 0.1.5,
     drasil-gen >= 0.1.2,
-    drasil-docLang >= 0.1.8
+    drasil-docLang >= 0.1.13
   default-language: Haskell2010
   ghc-options:      -Wall
 

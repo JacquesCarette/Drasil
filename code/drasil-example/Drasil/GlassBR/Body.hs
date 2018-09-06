@@ -28,8 +28,8 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   goal, goalStmt, implementation, information, inModel, input_, interface, item, 
   likelyChg, model, organization, output_, physicalSystem, physSyst, problem, 
   product_, purpose, reference, requirement, reviewer, section_, software, 
-  softwareSys, srs, standard, sysCont, system, template, term_, theory, thModel, 
-  traceyMatrix, user, userInput, value)
+  softwareSys, srs, srsDomains, standard, sysCont, system, template, term_,
+  theory, thModel, traceyMatrix, user, userInput, value)
 import Data.Drasil.Concepts.Education (civilEng, scndYrCalculus, structuralMechanics)
 import Data.Drasil.Concepts.Math (graph, parameter, probability)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
@@ -51,15 +51,16 @@ import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma),
 import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, itemRefToSent, 
   makeTMatrix, noRefs, prodUCTbl)
   
-import Drasil.GlassBR.Assumptions (assumptionConstants, gbRefDB, assumptions)
-import Drasil.GlassBR.Changes (likelyChgsList, unlikelyChgsList)
+import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
+import Drasil.GlassBR.Changes (likelyChgs, likelyChgsList, unlikelyChgs,
+  unlikelyChgsList)
 import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, gLassBR, 
   ptOfExplsn, stdOffDist)
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns)
 import Drasil.GlassBR.IMods (glassBRsymb, probOfBreak, calofCapacity, calofDemand, gbrIMods)
 import Drasil.GlassBR.ModuleDefs (allMods)
-import Drasil.GlassBR.References (astm2009, astm2012, astm2016, rbrtsn2012)
-import Drasil.GlassBR.Requirements (funcReqsList, funcReqsListOfReqs)
+import Drasil.GlassBR.References (astm2009, astm2012, astm2016, gbCitations, rbrtsn2012)
+import Drasil.GlassBR.Requirements (funcReqsList, funcReqs)
 import Drasil.GlassBR.Symbols (symbolsForTable, this_symbols)
 import Drasil.GlassBR.TMods (gbrTMods)
 import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, capacity, char_weight, 
@@ -71,9 +72,13 @@ import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, capacity, cha
 {--}
 
 gbSymbMap :: ChunkDB
-gbSymbMap =
-  cdb this_symbols (map nw acronyms ++ map nw this_symbols) glassBRsymb
-      (map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton])
+gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols)
+  (map cw glassBRsymb ++ Doc.srsDomains) $ map unitWrapper [metre, second, kilogram]
+  ++ map unitWrapper [pascal, newton]
+
+gbRefDB :: ReferenceDB
+gbRefDB = rdb [] [] assumptions [] [] gbCitations $ funcReqs ++ likelyChgs ++
+  unlikelyChgs
 
 printSetting :: PrintingInformation
 printSetting = PI gbSymbMap defaultConfiguration
@@ -144,8 +149,8 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     (S "This problem is small in size and relatively simple")
     (S "Any reasonable" +:+ phrase implementation +:+.
     (S "will be very quick" `sAnd` S "use minimal storage"))]) :
-  LCsSec (LCsProg (map LlC likelyChgsList)) :
-  UCsSec (UCsProg (map LlC unlikelyChgsList)) :
+  LCsSec (LCsProg likelyChgsList) :
+  UCsSec (UCsProg unlikelyChgsList) :
   TraceabilitySec
     (TraceabilityProg traceyMatrices [traceMatsAndGraphsTable1Desc, traceMatsAndGraphsTable2Desc, traceMatsAndGraphsTable3Desc]
     ((map LlC traceyMatrices) ++ traceMatsAndGraphsIntro2 ++ (map LlC traceyGraphs)) []) :
@@ -532,14 +537,13 @@ traceMatsAndGraphsDataCons  = ["Data Constraints"]
 traceMatsAndGraphsDataConsRef = [makeRef SRS.datConLabel]
 
 traceMatsAndGraphsFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-traceMatsAndGraphsFuncReqRef = map makeRef funcReqsListOfReqs --FIXME: should be reqchunks?
-                                                              --FIXME: revisit this list
+traceMatsAndGraphsFuncReqRef = map makeRef funcReqs
 
 traceMatsAndGraphsA = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
 traceMatsAndGraphsARef = map makeRef assumptions
 
 traceMatsAndGraphsLC = ["LC1", "LC2", "LC3", "LC4", "LC5"]
-traceMatsAndGraphsLCRef = map makeRef likelyChgsList
+traceMatsAndGraphsLCRef = map makeRef likelyChgs
 
 traceMatsAndGraphsRowT1 :: [String]
 traceMatsAndGraphsRowT1 = traceMatsAndGraphsT ++ traceMatsAndGraphsIM ++ traceMatsAndGraphsDD

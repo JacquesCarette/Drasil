@@ -1,11 +1,14 @@
-module Drasil.GlassBR.Changes (likelyChgsList, unlikelyChgsList) where
+module Drasil.GlassBR.Changes (likelyChgs, likelyChgsList, unlikelyChgs,
+  unlikelyChgsList) where
 
 --A list of likely and unlikely changes for GlassBR
 
 import Language.Drasil
-import Drasil.DocLang (mkLklyChnk, mkUnLklyChnk)
 
-import Data.Drasil.Concepts.Documentation (condition, goal, input_, software, system, value, variable)
+import Drasil.DocLang (mkEnumSimpleD)
+
+import Data.Drasil.Concepts.Documentation (condition, goal, input_, likeChgDom,
+  software, system, unlikeChgDom, value, variable)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.PhysicalProperties (flexure)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, foldlSent, ofThe')
@@ -17,18 +20,21 @@ import Drasil.GlassBR.Unitals (explosion, lite)
 
 {--LIKELY CHANGES--}
 
-likelyChgsList :: [LabelledContent]
-likelyChgsList = [calcInternalBlastRisk, varValsOfmkE, accMoreThanSingleLite,
+likelyChgsList :: [Contents]
+likelyChgsList = mkEnumSimpleD likelyChgs
+
+likelyChgs :: [ConceptInstance]
+likelyChgs = [calcInternalBlastRisk, varValsOfmkE, accMoreThanSingleLite,
   accMoreBoundaryConditions, considerMoreThanFlexGlass]
 
 calcInternalBlastRisk, varValsOfmkE, accMoreThanSingleLite, accMoreBoundaryConditions,
-  considerMoreThanFlexGlass :: LabelledContent
+  considerMoreThanFlexGlass :: ConceptInstance
 
-calcInternalBlastRisk     = mkLklyChnk "calcInternalBlastRisk"     (calcInternalBlastRiskDesc (blastRisk)) "Calculate-Internal-Blask-Risk"
-varValsOfmkE              = mkLklyChnk "varValsOfmkE"              (varValsOfmkEDesc)                      "Variable-Values-of-m,k,E"
-accMoreThanSingleLite     = mkLklyChnk "accMoreThanSingleLite"     (accMoreThanSingleLiteDesc)             "Accomodate-More-than-Single-Lite"
-accMoreBoundaryConditions = mkLklyChnk "accMoreBoundaryConditions" (accMoreBoundaryConditionsDesc)         "Accomodate-More-Boundary-Conditions"
-considerMoreThanFlexGlass = mkLklyChnk "considerMoreThanFlexGlass" (considerMoreThanFlexGlassDesc)         "Consider-More-than-Flexure-Glass"
+calcInternalBlastRisk     = cic "calcInternalBlastRisk"     (calcInternalBlastRiskDesc blastRisk) "Calculate-Internal-Blask-Risk"       likeChgDom
+varValsOfmkE              = cic "varValsOfmkE"              varValsOfmkEDesc                      "Variable-Values-of-m,k,E"            likeChgDom
+accMoreThanSingleLite     = cic "accMoreThanSingleLite"     accMoreThanSingleLiteDesc             "Accomodate-More-than-Single-Lite"    likeChgDom
+accMoreBoundaryConditions = cic "accMoreBoundaryConditions" accMoreBoundaryConditionsDesc         "Accomodate-More-Boundary-Conditions" likeChgDom
+considerMoreThanFlexGlass = cic "considerMoreThanFlexGlass" considerMoreThanFlexGlassDesc         "Consider-More-than-Flexure-Glass"    likeChgDom
 
 calcInternalBlastRiskDesc :: NamedChunk -> Sentence
 varValsOfmkEDesc, accMoreThanSingleLiteDesc, accMoreBoundaryConditionsDesc, considerMoreThanFlexGlassDesc :: Sentence
@@ -58,13 +64,16 @@ considerMoreThanFlexGlassDesc = foldlSent [(makeRef responseType) `sDash` S "The
 
 {--UNLIKELY CHANGES--}
 
-unlikelyChgsList :: [LabelledContent]
-unlikelyChgsList = [predictWithstandOfCertDeg, accAlteredGlass]
+unlikelyChgsList :: [Contents]
+unlikelyChgsList = mkEnumSimpleD unlikelyChgs
 
-predictWithstandOfCertDeg, accAlteredGlass :: LabelledContent
+unlikelyChgs :: [ConceptInstance]
+unlikelyChgs = [predictWithstandOfCertDeg, accAlteredGlass]
 
-predictWithstandOfCertDeg = mkUnLklyChnk "predictWithstandOfCertDeg" predictWithstandOfCertDegDesc "Predict-Withstanding-of-Certain-Degree"
-accAlteredGlass           = mkUnLklyChnk "accAlteredGlass"           accAlteredGlassDesc           "Accommodate-Altered-Glass"
+predictWithstandOfCertDeg, accAlteredGlass :: ConceptInstance
+
+predictWithstandOfCertDeg = cic "predictWithstandOfCertDeg" predictWithstandOfCertDegDesc "Predict-Withstanding-of-Certain-Degree"  unlikeChgDom
+accAlteredGlass           = cic "accAlteredGlass"           accAlteredGlassDesc           "Accommodate-Altered-Glass"               unlikeChgDom
 
 predictWithstandOfCertDegDesc, accAlteredGlassDesc :: Sentence
 

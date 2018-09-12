@@ -13,7 +13,8 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   SCSSub(..), GSDSec(..), GSDSub(..),
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
   nonFuncReqF, outDataConstTbl, probDescF, reqF, termDefnF, tsymb'',
-  valsOfAuxConstantsF)
+  valsOfAuxConstantsF, filterSectionForSentence,
+  filterSectionForExpr)
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
   assumptLabel, physSyst)
@@ -146,7 +147,8 @@ printSetting :: PrintingInformation
 printSetting = PI sspSymMap defaultConfiguration
 
 symbT :: [DefinedQuantityDict]
-symbT = ccss (getDoc ssp_srs) (egetDoc ssp_srs) sspSymMap
+symbT = ccss (getDoc $ mkDoc (filterSectionForSentence mkSRS) for ssp_si)
+ (egetDoc $ mkDoc (filterSectionForExpr mkSRS) for ssp_si) sspSymMap
 
 -- SECTION 1 --
 --automatically generated in mkSRS -

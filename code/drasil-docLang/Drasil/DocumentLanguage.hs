@@ -545,3 +545,20 @@ mkLklyChnk i desc shrtn = mkRawLC (Change (lc i desc (mkLabelSame shrtn LCh))) (
 
 mkUnLklyChnk :: String -> Sentence -> String -> LabelledContent 
 mkUnLklyChnk i desc shrtn = mkRawLC (Change (ulc i desc (mkLabelSame shrtn UnCh))) (mkLabelSame shrtn UnCh) --FIXME: label made twice?
+
+
+filterSectionForSentence :: [DocSection] -> [DocSection]
+filterSectionForSentence (hd:tl) = case hd of
+  (RefSec _) -> [] ++ filterSectionForSentence tl
+  (AppndxSec _) -> [] ++ filterSectionForSentence tl
+  a -> [a] ++ filterSectionForSentence tl
+filterSectionForSentence [] = []
+
+filterSectionForExpr :: [DocSection] -> [DocSection]
+filterSectionForExpr (hd:tl) = case hd of
+  (RefSec _) -> [] ++ filterSectionForSentence tl
+  a -> [a] ++ filterSectionForSentence tl
+filterSectionForExpr [] = []
+
+
+

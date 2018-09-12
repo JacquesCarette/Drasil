@@ -35,9 +35,9 @@ auxConsLabel = mkLabelRASec "AuxConstants" "Values of Auxiliary Constants" -- FI
 --FIXME: Remove the above labels when we have a less fragile way of checking things.
 
 egetSec :: Section -> [Expr]
-egetSec (Section _ sc lb)
-  | lb ^. shortname == refLabel ^. shortname = []
-  | otherwise = concatMap egetSecCon sc
+egetSec (Section _ sc lb) = concatMap egetSecCon sc
+  {--| lb ^. shortname == refLabel ^. shortname = []
+  | otherwise = concatMap egetSecCon sc --}
 
 egetSecCon :: SecCons -> [Expr]
 egetSecCon (Sub s) = egetSec s
@@ -62,10 +62,10 @@ getDoc :: Document -> [Sentence]
 getDoc (Document t a s) = t : a : concatMap getSec s
 
 getSec :: Section -> [Sentence]
-getSec (Section t sc lb)
-  | lb ^. shortname == refLabel ^. shortname = []
+getSec (Section t sc lb) = t : concatMap getSecCon sc
+ {--| lb ^. shortname == refLabel ^. shortname = []
   | lb ^. shortname == auxConsLabel ^. shortname = []
-  | otherwise = t : concatMap getSecCon sc
+  | otherwise = t : concatMap getSecCon sc--}
 
 getSecCon :: SecCons -> [Sentence]
 getSecCon (Sub s) = getSec s

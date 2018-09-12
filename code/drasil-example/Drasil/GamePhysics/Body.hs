@@ -11,7 +11,8 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   SSDSub(SSDSubVerb, SSDSolChSpec), SolChSpec(SCSProg), SubSec, TConvention(..), 
   TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
   assembler, dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, outDataConstTbl,
-  reqF, sSubSec, siCon, siSTitl, siSent, traceMGF, tsymb, valsOfAuxConstantsF)
+  reqF, sSubSec, siCon, siSTitl, siSent, traceMGF, tsymb, valsOfAuxConstantsF,
+  filterSectionForSentence, filterSectionForExpr)
 
 import qualified Drasil.DocLang.SRS as SRS
 
@@ -129,7 +130,8 @@ chipmunkSysInfo = SI {
 }
 
 symbT :: [DefinedQuantityDict]
-symbT = ccss (getDoc chipmunkSRS') (egetDoc chipmunkSRS') everything
+symbT = ccss (getDoc $ mkDoc (filterSectionForSentence mkSRS) for' chipmunkSysInfo)
+ (egetDoc $ mkDoc (filterSectionForExpr mkSRS) for' chipmunkSysInfo) everything
 
 cpRefDB :: ReferenceDB
 cpRefDB = rdb [] [] newAssumptions [] [] cpCitations [] -- FIXME: Convert the rest to new chunk types

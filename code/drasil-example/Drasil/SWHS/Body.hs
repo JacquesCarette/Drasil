@@ -13,7 +13,8 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
-  outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF, tsymb'')
+  outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF, tsymb'',
+  filterSectionForSentence, filterSectionForExpr)
 import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel,
   likeChg, probDesc, sysCont, unlikeChg)
 
@@ -113,7 +114,8 @@ printSetting = PI swhsSymMap defaultConfiguration
   --FIXME: Should be all Named, not just acronyms at the end.
 
 symbT :: [DefinedQuantityDict]
-symbT =  ccss (getDoc swhs_srs') (egetDoc swhs_srs') swhsSymMap
+symbT =  ccss (getDoc $ mkDoc (filterSectionForSentence mkSRS) for swhs_si)
+ (egetDoc $ mkDoc (filterSectionForExpr mkSRS) for swhs_si) swhsSymMap
 
 swhsPeople :: [Person]
 swhsPeople = [thulasi, brooks, spencerSmith]

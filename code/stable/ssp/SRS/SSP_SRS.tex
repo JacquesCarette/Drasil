@@ -22,12 +22,6 @@
 \global\tabulinesep=1mm
 \newcounter{assumpnum}
 \newcommand{\atheassumpnum}{A\theassumpnum}
-\newcounter{reqnum}
-\newcommand{\rthereqnum}{R\thereqnum}
-\newcounter{lcnum}
-\newcommand{\lcthelcnum}{LC\thelcnum}
-\newcounter{ucnum}
-\newcommand{\uctheucnum}{UC\theucnum}
 \bibliography{bibfile}
 \title{Software Requirements Specification for Slope Stability Analysis}
 \author{Henry Frankis}
@@ -2047,39 +2041,19 @@ $δy$ & --
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
 \label{Sec:FRs}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Read-and-Store}:]Read the input file and store the data. Necessary input data summarized in Table~\ref{Table:inDataTable}.
-\end{description}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Generate-Critical-Slip-Surfaces}:]Generate potential critical slip surfaces for the input slope.
-\end{description}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Test-Slip-Surfaces}:]Test the slip surfaces to determine if they are physically realizable based on a set of pass or fail criteria.
-\end{description}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Prepare-Slip-Surfaces}:]Prepare the slip surfaces for a method of slices or limit equilibrium analysis.
-\end{description}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Calculate-Factors-of-Safety}:]Calculate the factors of safety of the slip surfaces.
-\end{description}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Rank-and-Weight-Slopes}:]Rank and weight the slopes based on their factor of safety, such that a slip surface with a smaller factor of safety has a larger weighting.
-\end{description}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Generate-New-Critical-Slip-Surfaces}:]Generate new potential critical slip surfaces based on previously analysed slip surfaces with low factors of safety.
-\end{description}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Repeat-Find-Factor-of-Safety}:]Repeat R\ref{FR:Test-Slip-Surfaces}, R\ref{FR:Prepare-Slip-Surfaces}, R\ref{FR:Calculate-Factors-of-Safety}, R\ref{FR:Rank-and-Weight-Slopes}, and R\ref{FR:Generate-New-Critical-Slip-Surfaces} until the minimum factor of safety remains approximately the same over a predetermined number of repetitions. Identify the slip surface that generates the minimum factor of safety as the critical slip surface.
-\end{description}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Prepare-Critical-Slip-Surface}:]Prepare the critical slip surface for method of slices or limit equilibrium analysis.
-\end{description}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Calculate-Final-Factor-of-Safety}:]Calculate the factor of safety of the critical slip surface using the Morgenstern Price method.
-\end{description}
-\begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{FR:Display-Graph}:]Display the critical slip surface and the slice element displacements graphically. Give the values of the factors of safety calculated by the Morgenstern Price method.
-\end{description}
+\begin{itemize}
+\item[Read-and-Store:\phantomsection\label{readAndStore}]Read the input file and store the data. Necessary input data summarized in Table~\ref{Table:inDataTable}.
+\item[Generate-Critical-Slip-Surfaces:\phantomsection\label{generateCSS}]Generate potential critical slip surfaces for the input slope.
+\item[Test-Slip-Surfaces:\phantomsection\label{testSlipSrf}]Test the slip surfaces to determine if they are physically realizable based on a set of pass or fail criteria.
+\item[Prepare-Slip-Surfaces:\phantomsection\label{prepareSlipS}]Prepare the slip surfaces for a method of slices or limit equilibrium analysis.
+\item[Calculate-Factors-of-Safety:\phantomsection\label{calculateFS}]Calculate the factors of safety of the slip surfaces.
+\item[Rank-and-Weight-Slopes:\phantomsection\label{rankSlope}]Rank and weight the slopes based on their factor of safety, such that a slip surface with a smaller factor of safety has a larger weighting.
+\item[Generate-New-Critical-Slip-Surfaces:\phantomsection\label{generateCSS'}]Generate new potential critical slip surfaces based on previously analysed slip surfaces with low factors of safety.
+\item[Repeat-Find-Factor-of-Safety:\phantomsection\label{repeatFindFS}]Repeat \hyperref[testSlipSrf]{FR: Test-Slip-Surfaces}, \hyperref[prepareSlipS]{FR: Prepare-Slip-Surfaces}, \hyperref[calculateFS]{FR: Calculate-Factors-of-Safety}, \hyperref[rankSlope]{FR: Rank-and-Weight-Slopes}, and \hyperref[generateCSS']{FR: Generate-New-Critical-Slip-Surfaces} until the minimum factor of safety remains approximately the same over a predetermined number of repetitions. Identify the slip surface that generates the minimum factor of safety as the critical slip surface.
+\item[Prepare-Critical-Slip-Surface:\phantomsection\label{prepareCSS}]Prepare the critical slip surface for method of slices or limit equilibrium analysis.
+\item[Calculate-Final-Factor-of-Safety:\phantomsection\label{calculateFS'}]Calculate the factor of safety of the critical slip surface using the Morgenstern Price method.
+\item[Display-Graph:\phantomsection\label{displayGraph}]Display the critical slip surface and the slice element displacements graphically. Give the values of the factors of safety calculated by the Morgenstern Price method.
+\end{itemize}
 \begin{longtable}{l l l}
 \toprule
 Symbol & Unit & Name
@@ -2116,18 +2090,16 @@ $κ$ & Pa & constant
 SSA is intended to be an educational tool, so accuracy and performance are not priorities. Rather, the non-functional requirement priorities are correctness, understandability, reusability, and maintainability.
 \section{Likely Changes}
 \label{Sec:LCs}
-\begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:Calculate-Inhomogeneous-Soil-Layers}:]A\ref{A:Soil-Layer-Homogeneous} - The system currently assumes the different layers of the soil are homogeneous. In the future, calculations can be added for inconsistent soil properties throughout.
-\end{description}
+\begin{itemize}
+\item[Calculate-Inhomogeneous-Soil-Layers:\phantomsection\label{LC\_inhomogeneous}]A\ref{A:Soil-Layer-Homogeneous} - The system currently assumes the different layers of the soil are homogeneous. In the future, calculations can be added for inconsistent soil properties throughout.
+\end{itemize}
 \section{Unlikely Changes}
 \label{Sec:UCs}
 If changes were to be made with regard to the following, a different algorithm would be needed.
-\begin{description}
-\item[\refstepcounter{ucnum}\uctheucnum\label{UC:Normal-And-Shear-Linear-Only}:]Changes related to A\ref{A:Interslice-Norm-Shear-Forces-Linear} and A\ref{A:Base-Norm-Shear-Forces-Linear-on-FS} are not possible due to the dependency of the calculations on the linear relationship between interslice normal and shear forces.
-\end{description}
-\begin{description}
-\item[\refstepcounter{ucnum}\uctheucnum\label{UC:2D-Analysis-Only}:]A\ref{A:Plane-Strain-Conditions} allows for 2D analysis with these models only because stress along z-direction is zero. These models do not take into account stress in the z-direction, and therefore cannot be without manipulation to attempt 3d analysis.
-\end{description}
+\begin{itemize}
+\item[Normal-And-Shear-Linear-Only:\phantomsection\label{UC\_normshearlinear}]Changes related to A\ref{A:Interslice-Norm-Shear-Forces-Linear} and A\ref{A:Base-Norm-Shear-Forces-Linear-on-FS} are not possible due to the dependency of the calculations on the linear relationship between interslice normal and shear forces.
+\item[2D-Analysis-Only:\phantomsection\label{UC\_2donly}]A\ref{A:Plane-Strain-Conditions} allows for 2D analysis with these models only because stress along z-direction is zero. These models do not take into account stress in the z-direction, and therefore cannot be without manipulation to attempt 3d analysis.
+\end{itemize}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}
 There are no auxiliary constants.

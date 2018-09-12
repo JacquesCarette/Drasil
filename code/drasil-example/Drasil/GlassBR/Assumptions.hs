@@ -1,12 +1,12 @@
 module Drasil.GlassBR.Assumptions (glassType, glassCondition, explainScenario, standardValues, 
-  glassLite, boundaryConditions, responseType, ldfConstant, assumptionConstants, assumptions, 
-  gbRefDB) where
+  glassLite, boundaryConditions, responseType, ldfConstant, assumptionConstants,
+  assumptions) where
 
 import Language.Drasil hiding (organization)
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxConsLabel)
 
-import Data.Drasil.Concepts.Documentation as Doc (condition, constant, practice, 
-  reference, scenario, system, value)
+import Data.Drasil.Concepts.Documentation as Doc (assumpDom, condition, constant,
+  practice, reference, scenario, system, value)
 import Data.Drasil.Concepts.Math (calculation, surface, shape)
 import Data.Drasil.SentenceStructures (EnumType(Numb), FoldType(..), SepType(..),
   WrapType(Parens), foldlEnumList, foldlList, foldlSent, foldlSent_, sAnd, sIn, sOf)
@@ -16,12 +16,9 @@ import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass, gLassBR,
   lShareFac, plane, responseTy)
 import Drasil.GlassBR.DataDefs (dimLL, loadDF, nonFL, tolStrDisFac)
 import Drasil.GlassBR.Labels (probOfBreakL, calOfCapacityL, glassTypeL, glassConditionL, glassLiteL)
-import Drasil.GlassBR.References (astm2009, gbCitations)
+import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (constant_K, constant_LoadDF, constant_LoadDur, 
   constant_LoadSF, constant_M, constant_ModElas, explosion, lateral, lite, load_dur)
-
-gbRefDB :: ReferenceDB
-gbRefDB = rdb [] [] assumptions [] [] gbCitations []
 
 assumptions :: [AssumpChunk] -- For testing
 assumptions = [glassType, glassCondition, explainScenario, standardValues, glassLite, boundaryConditions, 
@@ -33,14 +30,28 @@ assumptionConstants = [constant_M, constant_K, constant_ModElas,
 
 glassType, glassCondition, explainScenario, standardValues, glassLite, boundaryConditions, 
   responseType, ldfConstant :: AssumpChunk
+
+-- FIXME: Remove the AssumpChunks once ConceptInstance and SCSProg's
+-- Assumptions has been migrated to using assumpDom
+
+assumpGT, assumpGC, assumpES, assumpSV, assumpGL, assumpBC, assumpRT,
+  assumpLDFC :: ConceptInstance
 glassType          = assump "glassTypeA"          glassTypeDesc                    glassTypeL
+assumpGT           = cic "assumpGT"   glassTypeDesc                     "glassType"           Doc.assumpDom  -- FIXME: Use label once ConceptInstance migrates to them
 glassCondition     = assump "glassConditionA"     glassConditionDesc               glassConditionL
-explainScenario    = assump "explainScenarioA"    explainScenarioDesc              (mkLabelRAAssump' "explainScenario"   ) 
+assumpGC           = cic "assumpGC"   glassConditionDesc                "glassCondition"      Doc.assumpDom  -- FIXME: Use label once ConceptInstance migrates to them
+explainScenario    = assump "explainScenarioA"    explainScenarioDesc              (mkLabelRAAssump' "explainScenario"   )
+assumpES           = cic "assumpES"   explainScenarioDesc               "explainScenario"     Doc.assumpDom
 standardValues     = assump "standardValuesA"    (standardValuesDesc load_dur)     (mkLabelRAAssump' "standardValues"    )
+assumpSV           = cic "assumpSV"   (standardValuesDesc load_dur)     "standardValues"      Doc.assumpDom
 glassLite          = assump "glassLiteA"          glassLiteDesc                    glassLiteL
+assumpGL           = cic "assumpGL"   glassLiteDesc                     "glassLite"           Doc.assumpDom  -- FIXME: Use label once ConceptInstance migrates to them
 boundaryConditions = assump "boundaryConditionsA" boundaryConditionsDesc           (mkLabelRAAssump' "boundaryConditions")
+assumpBC           = cic "assumpBC"   boundaryConditionsDesc            "boundaryConditions"  Doc.assumpDom
 responseType       = assump "responseTypeA"       responseTypeDesc                 (mkLabelRAAssump' "responseType"      )
+assumpRT           = cic "assumpRT"   responseTypeDesc                  "responseType"        Doc.assumpDom
 ldfConstant        = assump "ldfConstantA"       (ldfConstantDesc constant_LoadDF) (mkLabelRAAssump' "ldfConstant"       )
+assumpLDFC         = cic "assumpLDFC" (ldfConstantDesc constant_LoadDF) "ldfConstant"         Doc.assumpDom
 
 glassTypeDesc :: Sentence
 glassTypeDesc = foldlSent [S "The standard E1300-09a for",

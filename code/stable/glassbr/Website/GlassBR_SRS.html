@@ -3193,16 +3193,14 @@ This section provides the functional requirements, the business tasks that the s
 <h2>
 Functional Requirements
 </h2>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Input-Glass-Props">
-Input-Glass-Props: Input the quantities from <a href=#Table:InputGlassPropsReqInputs>InputGlassPropsReqInputs</a>, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast. Note: <em>a</em> and <em>b</em> will be input in terms of millimetres and will be converted to the equivalent value in metres.
-</div>
-</li>
-</ul>
 <div class="list">
 <p>
-<div id="FR:System-Set-Values-Following-Assumptions">
+<div id="inputGlassProps">
+Input-Glass-Props: Input the quantities from <a href=#Table:InputGlassPropsReqInputs>InputGlassPropsReqInputs</a>, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast. Note: <em>a</em> and <em>b</em> will be input in terms of millimetres and will be converted to the equivalent value in metres.
+</div>
+</p>
+<p>
+<div id="sysSetValsFollowingAssumps">
 System-Set-Values-Following-Assumptions: The system shall set the known values as follows:
                                          <ul class="list">
                                          <li>
@@ -3229,31 +3227,23 @@ System-Set-Values-Following-Assumptions: The system shall set the known values a
                                          </ul>
 </div>
 </p>
-</div>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Check-Input-with-Data.Constraints">
+<p>
+<div id="checkInputWithDataCons">
 Check-Input-with-Data_Constraints: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Data Constraints</a>. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Output-Values-and-Known-Quantities">
-Output-Values-and-Known-Quantities: Output the input quantities from <a href=#FR:Input-Glass-Props>FR: Input-Glass-Props</a> and the known quantities from <a href=#FR:System-Set-Values-Following-Assumptions>System-Set-Values-Following-Assumptions</a>.
+</p>
+<p>
+<div id="outputValsAndKnownQuants">
+Output-Values-and-Known-Quantities: Output the input quantities from <a href=#inputGlassProps>FR: Input-Glass-Props</a> and the known quantities from <a href=#sysSetValsFollowingAssumps>FR: System-Set-Values-Following-Assumptions</a>.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Check-Glass-Safety">
+</p>
+<p>
+<div id="checkGlassSafety">
 Check-Glass-Safety: If <em>is_safePb</em> ∧ <em>is_safeLR</em> (from <a href=#T:isSafePb>T: isSafePb</a> and <a href=#T:isSafeLR>T: isSafeLR</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
 </div>
-</li>
-</ul>
-<div class="list">
+</p>
 <p>
-<div id="FR:Output-Quantities">
+<div id="outputQuants">
 Output-Quantities: Output the following quantities:
                    <ul class="list">
                    <li>
@@ -3421,7 +3411,7 @@ mm
 </tr>
 </table>
 <p class="caption">
-Required Inputs following <a href=#FR:Input-Glass-Props>FR: Input-Glass-Props</a>
+Required Inputs following <a href=#inputGlassProps>FR: Input-Glass-Props</a>
 </p>
 </div>
 </div>
@@ -3443,41 +3433,33 @@ This problem is small in size and relatively simple, so performance is not a pri
 <h1>
 Likely Changes
 </h1>
-<ul class="hide-list-style">
-<li>
-<div id="LC:Calculate-Internal-Blask-Risk">
+<div class="list">
+<p>
+<div id="calcInternalBlastRisk">
 Calculate-Internal-Blask-Risk: <a href=#A:explainScenario>A: explainScenario</a> - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="LC:Variable-Values-of-m,k,E">
+</p>
+<p>
+<div id="varValsOfmkE">
 Variable-Values-of-m,k,E: <a href=#A:standardValues>A: standardValues</a>, <a href=#A:ldfConstant>A: ldfConstant</a> - Currently, the values for <em>m</em>, <em>k</em>, and <em>E</em> are assumed to be the same for all glass. In the future, these values can be changed to variable inputs.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="LC:Accomodate-More-than-Single-Lite">
+</p>
+<p>
+<div id="accMoreThanSingleLite">
 Accomodate-More-than-Single-Lite: <a href=#A:glassLite>A: glassLite</a> - The software may be changed to accommodate more than a single lite.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="LC:Accomodate-More-Boundary-Conditions">
+</p>
+<p>
+<div id="accMoreBoundaryConditions">
 Accomodate-More-Boundary-Conditions: <a href=#A:boundaryConditions>A: boundaryConditions</a> - The software may be changed to accommodate more boundary conditions than 4-sided support.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="LC:Consider-More-than-Flexure-Glass">
+</p>
+<p>
+<div id="considerMoreThanFlexGlass">
 Consider-More-than-Flexure-Glass: <a href=#A:responseType>A: responseType</a> - The software may be changed to consider more than just flexure of the glass.
 </div>
-</li>
-</ul>
+</p>
+</div>
 </div>
 </div>
 <div id="Sec:UCs">
@@ -3485,20 +3467,18 @@ Consider-More-than-Flexure-Glass: <a href=#A:responseType>A: responseType</a> - 
 <h1>
 Unlikely Changes
 </h1>
-<ul class="hide-list-style">
-<li>
-<div id="UC:Predict-Withstanding-of-Certain-Degree">
+<div class="list">
+<p>
+<div id="predictWithstandOfCertDeg">
 Predict-Withstanding-of-Certain-Degree: The goal of the system is to predict whether the glass slab under consideration can withstand an explosion of a certain degree.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="UC:Accommodate-Altered-Glass">
+</p>
+<p>
+<div id="accAlteredGlass">
 Accommodate-Altered-Glass: <a href=#A:glassCondition>A: glassCondition</a> requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.
 </div>
-</li>
-</ul>
+</p>
+</div>
 </div>
 </div>
 <div id="Sec:TraceMatrices">
@@ -4181,92 +4161,27 @@ DD8 (<a href=#DD:tolLoad>DD: tolLoad</a>)
 Data Constraints (<a href=#Sec:DataConstraints>Data Constraints</a>)
 </th>
 <th>
-R1 (<a href=#FR:Input-Glass-Props>FR: Input-Glass-Props</a>)
+R1 (<a href=#inputGlassProps>FR: Input-Glass-Props</a>)
 </th>
 <th>
-R2 (<a href=#FR:System-Set-Values-Following-Assumptions>System-Set-Values-Following-Assumptions</a>)
+R2 (<a href=#sysSetValsFollowingAssumps>FR: System-Set-Values-Following-Assumptions</a>)
 </th>
 <th>
-R3 (<a href=#FR:Check-Input-with-Data.Constraints>FR: Check-Input-with-Data_Constraints</a>)
+R3 (<a href=#checkInputWithDataCons>FR: Check-Input-with-Data_Constraints</a>)
 </th>
 <th>
-R4 (<a href=#FR:Output-Values-and-Known-Quantities>FR: Output-Values-and-Known-Quantities</a>)
+R4 (<a href=#outputValsAndKnownQuants>FR: Output-Values-and-Known-Quantities</a>)
 </th>
 <th>
-R5 (<a href=#FR:Check-Glass-Safety>FR: Check-Glass-Safety</a>)
+R5 (<a href=#checkGlassSafety>FR: Check-Glass-Safety</a>)
 </th>
 <th>
-R6 (<a href=#FR:Output-Quantities>Output-Quantities</a>)
+R6 (<a href=#outputQuants>FR: Output-Quantities</a>)
 </th>
 </tr>
 <tr>
 <td>
-R1 (in <a href=#FR:Input-Glass-Props>FR: Input-Glass-Props</a>)
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-R2 (in <a href=#FR:System-Set-Values-Following-Assumptions>System-Set-Values-Following-Assumptions</a>)
+R1 (in <a href=#inputGlassProps>FR: Input-Glass-Props</a>)
 </td>
 <td>
 
@@ -4331,7 +4246,72 @@ R2 (in <a href=#FR:System-Set-Values-Following-Assumptions>System-Set-Values-Fol
 </tr>
 <tr>
 <td>
-R3 (in <a href=#FR:Check-Input-with-Data.Constraints>FR: Check-Input-with-Data_Constraints</a>)
+R2 (in <a href=#sysSetValsFollowingAssumps>FR: System-Set-Values-Following-Assumptions</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R3 (in <a href=#checkInputWithDataCons>FR: Check-Input-with-Data_Constraints</a>)
 </td>
 <td>
 
@@ -4396,7 +4376,7 @@ X
 </tr>
 <tr>
 <td>
-R4 (in <a href=#FR:Output-Values-and-Known-Quantities>FR: Output-Values-and-Known-Quantities</a>)
+R4 (in <a href=#outputValsAndKnownQuants>FR: Output-Values-and-Known-Quantities</a>)
 </td>
 <td>
 
@@ -4461,7 +4441,7 @@ X
 </tr>
 <tr>
 <td>
-R5 (in <a href=#FR:Check-Glass-Safety>FR: Check-Glass-Safety</a>)
+R5 (in <a href=#checkGlassSafety>FR: Check-Glass-Safety</a>)
 </td>
 <td>
 X
@@ -4526,7 +4506,7 @@ X
 </tr>
 <tr>
 <td>
-R6 (in <a href=#FR:Output-Quantities>Output-Quantities</a>)
+R6 (in <a href=#outputQuants>FR: Output-Quantities</a>)
 </td>
 <td>
 
@@ -5004,7 +4984,7 @@ X
 </tr>
 <tr>
 <td>
-LC1 (<a href=#LC:Calculate-Internal-Blask-Risk>LC: Calculate-Internal-Blask-Risk</a>)
+LC1 (<a href=#calcInternalBlastRisk>LC: Calculate-Internal-Blask-Risk</a>)
 </td>
 <td>
 
@@ -5033,7 +5013,7 @@ X
 </tr>
 <tr>
 <td>
-LC2 (<a href=#LC:Variable-Values-of-m,k,E>LC: Variable-Values-of-m,k,E</a>)
+LC2 (<a href=#varValsOfmkE>LC: Variable-Values-of-m,k,E</a>)
 </td>
 <td>
 
@@ -5062,7 +5042,7 @@ X
 </tr>
 <tr>
 <td>
-LC3 (<a href=#LC:Accomodate-More-than-Single-Lite>LC: Accomodate-More-than-Single-Lite</a>)
+LC3 (<a href=#accMoreThanSingleLite>LC: Accomodate-More-than-Single-Lite</a>)
 </td>
 <td>
 
@@ -5091,7 +5071,7 @@ X
 </tr>
 <tr>
 <td>
-LC4 (<a href=#LC:Accomodate-More-Boundary-Conditions>LC: Accomodate-More-Boundary-Conditions</a>)
+LC4 (<a href=#accMoreBoundaryConditions>LC: Accomodate-More-Boundary-Conditions</a>)
 </td>
 <td>
 
@@ -5120,7 +5100,7 @@ X
 </tr>
 <tr>
 <td>
-LC5 (<a href=#LC:Consider-More-than-Flexure-Glass>LC: Consider-More-than-Flexure-Glass</a>)
+LC5 (<a href=#considerMoreThanFlexGlass>LC: Consider-More-than-Flexure-Glass</a>)
 </td>
 <td>
 
@@ -5149,7 +5129,7 @@ X
 </tr>
 <tr>
 <td>
-R1 (<a href=#FR:Input-Glass-Props>FR: Input-Glass-Props</a>)
+R1 (<a href=#inputGlassProps>FR: Input-Glass-Props</a>)
 </td>
 <td>
 
@@ -5178,7 +5158,7 @@ R1 (<a href=#FR:Input-Glass-Props>FR: Input-Glass-Props</a>)
 </tr>
 <tr>
 <td>
-R2 (<a href=#FR:System-Set-Values-Following-Assumptions>System-Set-Values-Following-Assumptions</a>)
+R2 (<a href=#sysSetValsFollowingAssumps>FR: System-Set-Values-Following-Assumptions</a>)
 </td>
 <td>
 
@@ -5207,7 +5187,7 @@ X
 </tr>
 <tr>
 <td>
-R3 (<a href=#FR:Check-Input-with-Data.Constraints>FR: Check-Input-with-Data_Constraints</a>)
+R3 (<a href=#checkInputWithDataCons>FR: Check-Input-with-Data_Constraints</a>)
 </td>
 <td>
 
@@ -5236,7 +5216,7 @@ R3 (<a href=#FR:Check-Input-with-Data.Constraints>FR: Check-Input-with-Data_Cons
 </tr>
 <tr>
 <td>
-R4 (<a href=#FR:Output-Values-and-Known-Quantities>FR: Output-Values-and-Known-Quantities</a>)
+R4 (<a href=#outputValsAndKnownQuants>FR: Output-Values-and-Known-Quantities</a>)
 </td>
 <td>
 
@@ -5265,7 +5245,7 @@ R4 (<a href=#FR:Output-Values-and-Known-Quantities>FR: Output-Values-and-Known-Q
 </tr>
 <tr>
 <td>
-R5 (<a href=#FR:Check-Glass-Safety>FR: Check-Glass-Safety</a>)
+R5 (<a href=#checkGlassSafety>FR: Check-Glass-Safety</a>)
 </td>
 <td>
 
@@ -5294,7 +5274,7 @@ R5 (<a href=#FR:Check-Glass-Safety>FR: Check-Glass-Safety</a>)
 </tr>
 <tr>
 <td>
-R6 (<a href=#FR:Output-Quantities>Output-Quantities</a>)
+R6 (<a href=#outputQuants>FR: Output-Quantities</a>)
 </td>
 <td>
 

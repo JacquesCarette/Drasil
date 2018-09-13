@@ -4,6 +4,9 @@ import Language.Drasil
 
 
 -- Assumptions
+slipSurfaceL, geoSlopeMatL, soilLayerHomoL, soilLayerIsoL,
+    intersliceNormL, baseNormShearForL, stressStrainCurveL, planeStrainL,
+    effectiveNormL, surfaceBaseSliceL :: Label
 slipSurfaceL                = mkLabelRAAssump' "Slip-Surface-Concave"
 geoSlopeMatL                = mkLabelRAAssump' "Geo-Slope-Mat-Props-of-Soil-Inputs"
 soilLayerHomoL              = mkLabelRAAssump' "Soil-Layer-Homogeneous"
@@ -16,6 +19,10 @@ effectiveNormL              = mkLabelRAAssump' "Effective-Norm-Stress-Large"
 surfaceBaseSliceL           = mkLabelRAAssump' "Surface-Base-Slice-between-Interslice-Straight-Lines"
 
 -- Data Definition
+sliceWghtL, baseWtrFL, surfWtrFL, intersliceWtrFL, angleAL, angleBL, lengthBL,
+    lengthLbL, lengthLsL, seismicLoadFL, surfLoadsL, intrsliceFL, resShearWOL,
+    mobShearWOL, displcmntRxnFL, displcmntBaselL, netFDsplcmntEqbmL,
+    shearStiffnessL, soilStiffnessL :: Label
 sliceWghtL        = mkLabelSame "ht_flux_C" (Def DD)
 baseWtrFL         = mkLabelSame "ht_flux_P" (Def DD)
 surfWtrFL         = mkLabelSame "htFusion" (Def DD)
@@ -51,3 +58,13 @@ genDef7Label  = mkLabelSame "netForcex"   (Def General)
 genDef8Label  = mkLabelSame "netForcey"   (Def General)
 genDef9Label  = mkLabelSame "hookesLaw2d" (Def General)
 genDef10Label = mkLabelSame "displVect"   (Def General)
+
+-- Instance Models
+fctSftyL, nrmShrForL, inslideFxL, forDisEqlbL, rfemFoSL, crtSlpIdL :: Label
+fctSftyL = mkLabelSame "fctSfty"    (Def Instance)
+nrmShrForL = mkLabelSame "nrmShrFor"  (Def Instance)
+inslideFxL = mkLabelSame "inslideFx"  (Def Instance)
+forDisEqlbL = mkLabelSame "forDisEqlb" (Def Instance)
+rfemFoSL = mkLabelSame "rfemFoS"    (Def Instance)
+crtSlpIdL = mkLabelSame "crtSlpId"   (Def Instance)
+

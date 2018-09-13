@@ -27,6 +27,7 @@ atmosphericPressureTankL    = mkLabelRAAssump' "Atmospheric-Pressure-Tank"
 volumeCoilL                  = mkLabelRAAssump' "Volume-Coil-Negligible"
 
 -- Data Definition
+dd1HtFluxCL, dd2HtFluxPL, dd3HtFusionL, dd4MeltFracL :: Label
 dd1HtFluxCL = mkLabelSame "ht_flux_C" (Def DD)
 dd2HtFluxPL = mkLabelSame "ht_flux_P" (Def DD)
 dd3HtFusionL = mkLabelSame "htFusion" (Def DD)

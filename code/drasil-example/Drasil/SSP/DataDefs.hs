@@ -587,6 +587,7 @@ stfMtrx_deriv_sentences_ssp_s4 =
   [S "The new effective base stiffness matrix" +:+ ch shrStiffBase +:+
   --FIXME: add symbol?
   S "as derived in" +:+ eqN 7 +:+ S "is defined in" +:+. eqN 9 +:+
+  S "This is seen as matrix" +:+ ch shrStiffBase +:+ S "in" +:+ makeRef displcmntBaselL +:+
   isElemInMx shrStiffBase "shear" `sC` S "and" +:+ isElemInMx nrmStiffBase "normal" `sC` 
   S "calculated as in" +:+. makeRef mobShearWO +:+ S "The notation is simplified by" +:+ 
   S "the introduction of the constants" +:+ ch effStiffA `sAnd` ch effStiffB `sC` 

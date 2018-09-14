@@ -11,9 +11,9 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   TSIntro(..), UCsSec(..), Fields, Field(..), SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..),
-  dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
-  nonFuncReqF, outDataConstTbl, probDescF, reqF, termDefnF, tsymb'',
-  valsOfAuxConstantsF)
+  dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc,
+  mkEnumSimpleD, nonFuncReqF, outDataConstTbl, probDescF, reqF, termDefnF,
+  tsymb'', valsOfAuxConstantsF)
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
   assumptLabel, physSyst)
@@ -21,8 +21,8 @@ import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel,
 import Data.Drasil.Concepts.Documentation (analysis, assumption,
   design, document, effect, element, endUser, environment, goalStmt, inModel, 
   input_, interest, interest, interface, issue, loss, method_, organization, 
-  physics, problem, product_, property, software, softwareSys, srs, sysCont, 
-  system, table_, template, user, value, variable)
+  physics, problem, product_, property, software, softwareSys, srs, srsDomains,
+  sysCont, system, table_, template, user, value, variable)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
@@ -40,8 +40,9 @@ import Data.Drasil.SentenceStructures (foldlList, SepType(Comma), FoldType(List)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
 import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, noRefsLT)
 
-import Drasil.SSP.Assumptions (sspRefDB)
-import Drasil.SSP.Changes (likelyChanges_SRS, unlikelyChanges_SRS)
+import Drasil.SSP.Assumptions (newAssumptions)
+import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
+  unlikelyChanges_SRS)
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty, 
@@ -49,6 +50,7 @@ import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty,
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods)
+import Drasil.SSP.References (sspCitations)
 import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, hookesLaw, effStress)
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
@@ -126,8 +128,8 @@ mkSRS = RefSec (RefProg intro
           )
         ]
       ):
-  map Verbatim [req] ++ [LCsSec (LCsProg (map LlC likelyChanges_SRS))] 
-  ++ [UCsSec (UCsProg unlikelyChanges_SRS)] ++[Verbatim aux_cons] ++ (Bibliography : [])
+  map Verbatim [req] ++ [LCsSec $ LCsProg likelyChanges_SRS]
+  ++ [UCsSec $ UCsProg unlikelyChanges_SRS] ++ [Verbatim aux_cons] ++ (Bibliography : [])
 
 
 stdFields :: Fields
@@ -139,8 +141,12 @@ ssp_code = codeSpec ssp_si [sspInputMod]
 
 -- SYMBOL MAP HELPERS --
 sspSymMap :: ChunkDB
-sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms) sspSymbols
-  this_si
+sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms)
+  (map cw sspSymbols ++ srsDomains) this_si
+
+sspRefDB :: ReferenceDB
+sspRefDB = rdb [] [] newAssumptions [] [] sspCitations (sspRequirements ++
+  likelyChgs ++ unlikelyChgs)
 
 printSetting :: PrintingInformation
 printSetting = PI sspSymMap defaultConfiguration
@@ -420,7 +426,8 @@ data_constraint_Table3 = outDataConstTbl sspOutputs
 req = reqF [func_req, non_func_req]
 
 -- SECTION 5.1 --
-func_req = SRS.funcReq (map LlC $ sspRequirements ++ [sspInputDataTable]) []
+func_req = SRS.funcReq ((mkEnumSimpleD sspRequirements) ++
+  [LlC sspInputDataTable]) []
 
 -- SECTION 5.2 --
 non_func_req = nonFuncReqF [accuracy, performanceSpd]

@@ -1,10 +1,10 @@
 module Drasil.SSP.Requirements (sspRequirements, sspInputDataTable) where
 
 import Language.Drasil
-import Drasil.DocLang (mkRequirement)
 
 import Data.Drasil.Concepts.Computation (inDatum)
-import Data.Drasil.Concepts.Documentation (datum, element, input_, method_, value)
+import Data.Drasil.Concepts.Documentation (datum, element, funcReqDom, input_,
+  method_, value)
 
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), andThe, 
   foldlList, foldlSent, ofThe, sOf)
@@ -13,67 +13,71 @@ import Data.Drasil.Utils (mkInputDatTb)
 import Drasil.SSP.Defs (crtSlpSrf, morPrice, slice, slope, slpSrf)
 import Drasil.SSP.Unitals (coords, fs, fs_min, sspInputs)
 
-sspRequirements :: [LabelledContent]
+sspRequirements :: [ConceptInstance]
 sspRequirements = [readAndStore, generateCSS, testSlipSrf, prepareSlipS, 
     calculateFS, rankSlope, generateCSS', repeatFindFS, prepareCSS, 
     calculateFS', displayGraph]
 
 readAndStore, generateCSS, testSlipSrf, prepareSlipS, calculateFS, rankSlope, 
     generateCSS', repeatFindFS, prepareCSS, calculateFS', 
-    displayGraph :: LabelledContent
+    displayGraph :: ConceptInstance
 
-readAndStore = mkRequirement "readAndStore" ( foldlSent [
+readAndStore = cic "readAndStore" ( foldlSent [
   S "Read the", phrase input_, S "file and store the" +:+. 
   plural datum, S "Necessary", plural inDatum, S "summarized in", 
-  makeRef sspInputDataTable]) "Read-and-Store"
+  makeRef sspInputDataTable]) "Read-and-Store" funcReqDom
 
-generateCSS = mkRequirement "generateCSS" ( foldlSent [
+generateCSS = cic "generateCSS" ( foldlSent [
   S "Generate potential", plural crtSlpSrf,S "for the", 
-  phrase input_, phrase slope]) "Generate-Critical-Slip-Surfaces"
+  phrase input_, phrase slope]) "Generate-Critical-Slip-Surfaces" funcReqDom
 
-testSlipSrf = mkRequirement "testSlipSrf" ( foldlSent [
+testSlipSrf = cic "testSlipSrf" ( foldlSent [
   S "Test the", plural slpSrf, S "to determine if they are physically",
   S "realizable based on a set of pass or fail criteria"]) "Test-Slip-Surfaces"
+  funcReqDom
 
-prepareSlipS = mkRequirement "prepareSlipS" ( foldlSent [
+prepareSlipS = cic "prepareSlipS" ( foldlSent [
   S "Prepare the", plural slpSrf, S "for a", phrase method_ `sOf`
   plural slice, S "or limit equilibrium analysis"]) "Prepare-Slip-Surfaces"
+  funcReqDom
 
-calculateFS = mkRequirement "calculateFS" ( foldlSent [
+calculateFS = cic "calculateFS" ( foldlSent [
   S "Calculate", plural fs `ofThe` plural slpSrf]) "Calculate-Factors-of-Safety"
+  funcReqDom
 
-rankSlope = mkRequirement "rankSlope" ( foldlSent [
+rankSlope = cic "rankSlope" ( foldlSent [
   S "Rank and weight the", plural slope, S "based on their", 
   phrase fs `sC` S "such that a", phrase slpSrf, S "with a smaller", 
-  phrase fs, S "has a larger weighting"]) "Rank-and-Weight-Slopes"
+  phrase fs, S "has a larger weighting"]) "Rank-and-Weight-Slopes" funcReqDom
 
-generateCSS' = mkRequirement "generateCSS'" ( foldlSent [
+generateCSS' = cic "generateCSS'" ( foldlSent [
   S "Generate new potential", plural crtSlpSrf, 
   S "based on previously analysed", plural slpSrf, S "with low", 
-  plural fs]) "Generate-New-Critical-Slip-Surfaces"
+  plural fs]) "Generate-New-Critical-Slip-Surfaces" funcReqDom
 
-repeatFindFS = mkRequirement "repeatFindFS" ( foldlSent [
-  S "Repeat", (foldlList Comma List $ map makeRef [testSlipSrf, prepareSlipS, calculateFS, rankSlope, generateCSS']), 
-  S "until the", phrase fs_min, S "remains approximately the same over a",
+repeatFindFS = cic "repeatFindFS" ( foldlSent [
+  S "Repeat", (foldlList Comma List $ map makeRef [testSlipSrf, prepareSlipS,
+  calculateFS, rankSlope, generateCSS']), S "until the", phrase fs_min,
+  S "remains approximately the same over a",
   S "predetermined number of repetitions. Identify the", phrase slpSrf, 
   S "that generates the", phrase fs_min, S "as the", phrase crtSlpSrf])
-  "Repeat-Find-Factor-of-Safety"
+  "Repeat-Find-Factor-of-Safety" funcReqDom
 
-prepareCSS = mkRequirement "prepareCSS" ( foldlSent [
+prepareCSS = cic "prepareCSS" ( foldlSent [
   S "Prepare the", phrase crtSlpSrf, S "for", phrase method_ `sOf` 
   plural slice, S "or limit equilibrium analysis"])
-  "Prepare-Critical-Slip-Surface"
+  "Prepare-Critical-Slip-Surface" funcReqDom
 
-calculateFS' = mkRequirement "calculateFS'" ( foldlSent [
+calculateFS' = cic "calculateFS'" ( foldlSent [
   S "Calculate", phrase fs `ofThe` phrase crtSlpSrf, 
   S "using the", titleize morPrice, phrase method_])
-  "Calculate-Final-Factor-of-Safety"
+  "Calculate-Final-Factor-of-Safety" funcReqDom
 
-displayGraph = mkRequirement "displayGraph" ( foldlSent [
+displayGraph = cic "displayGraph" ( foldlSent [
   S "Display the", phrase crtSlpSrf `andThe` phrase slice, 
   phrase element, S "displacements graphically. Give", plural value `ofThe` 
   plural fs, S "calculated by the", titleize morPrice, phrase method_]) 
-  "Display-Graph"
+  "Display-Graph" funcReqDom
 
 ------------------
 sspInputDataTable :: LabelledContent

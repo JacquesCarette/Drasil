@@ -8,7 +8,7 @@ module Drasil.DocLang (
     SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), ExistingSolnSec(..),
     StkhldrSec(StkhldrProg2),
     StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg), 
-    TSIntro(..), UCsSec(..), mkDoc, mkLklyChnk, mkRequirement,
+    TSIntro(..), UCsSec(..), mkDoc, mkLklyChnk, mkRequirement, 
     mkUnLklyChnk, tsymb, tsymb'', mkEnumSimple, mkEnumSimpleD, mkListTuple,
     -- DocumentLanguage.Definitions
     Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose), ddefn,

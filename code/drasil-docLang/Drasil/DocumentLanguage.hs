@@ -537,17 +537,8 @@ siSys SI {_sys = sys} = nw sys
 --BELOW IS IN THIS FILE TEMPORARILY--
 --Creates Contents using an uid and description (passed in as a Sentence).
 
-mkRequirementL :: String -> Sentence -> Label -> LabelledContent
-mkRequirementL i desc label = mkRawLC (Requirement (frc i desc label)) label
-
 mkRequirement :: String -> Sentence -> String -> LabelledContent
 mkRequirement i desc shrtn = mkRawLC (Requirement (frc i desc (mkLabelSame shrtn (Req FR)))) (mkLabelSame shrtn (Req FR)) --FIXME: label made twice?
-
-mkLklyChnkL :: String -> Sentence -> Label -> LabelledContent
-mkLklyChnkL i desc label = mkRawLC (Change (lc i desc label)) label
-
-mkUnLklyChnkL :: String -> Sentence -> Label -> LabelledContent 
-mkUnLklyChnkL i desc label = mkRawLC (Change (ulc i desc label)) label
 
 mkLklyChnk :: String -> Sentence -> String -> LabelledContent
 mkLklyChnk i desc shrtn = mkRawLC (Change (lc i desc (mkLabelSame shrtn LCh))) (mkLabelSame shrtn LCh) --FIXME: label made twice?

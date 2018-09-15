@@ -57,6 +57,9 @@ instance HasShortName       DataDefinition where shortname = lbl . shortname
 mkDD :: QDefinition -> [Reference] -> Derivation -> String -> Maybe [Sentence] -> DataDefinition
 mkDD a b c d e = DatDef a Global b c (mkLabelSame d (Def DD)) e
 
+mkDDL :: QDefinition -> [Reference] -> Derivation -> Label -> Maybe [Sentence] -> DataDefinition
+mkDDL a b c label e = DatDef a Global b c label e
+
 qdFromDD :: DataDefinition -> QDefinition
 qdFromDD (DatDef a _ _ _ _ _) = a
 

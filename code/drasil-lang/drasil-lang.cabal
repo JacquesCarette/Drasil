@@ -1,5 +1,5 @@
 Name:		drasil-lang
-Version:	0.1.23
+Version:	0.1.24
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple

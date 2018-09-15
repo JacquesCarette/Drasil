@@ -1246,7 +1246,7 @@ Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the te
 <ul class="hide-list-style">
 <li>
 <div id="A:Temp-PCM-Constant-Across-Volume">
-Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM [<a href=#GD:rocTempSimp>GD: rocTempSimp</a>, <a href=#DD:ht.flux.P>DD: ht_flux_P</a>].
+Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM [<a href=#GD:rocTempSimp>GD: rocTempSimp</a>, <a href=#DD:ht.flux.P>DD: ht_flux_P</a>, <a href=#LC:Uniform-Temperature-PCM>LC: Uniform-Temperature-PCM</a>].
 </div>
 </li>
 </ul>
@@ -1274,14 +1274,14 @@ Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling app
 <ul class="hide-list-style">
 <li>
 <div id="A:Temp-Heating-Coil-Constant-over-Time">
-Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time [<a href=#DD:ht.flux.C>DD: ht_flux_C</a>].
+Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time [<a href=#DD:ht.flux.C>DD: ht_flux_C</a>, <a href=#LC:Temperature-Coil-Variable-Over-Day>LC: Temperature-Coil-Variable-Over-Day</a>].
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Temp-Heating-Coil-Constant-over-Length">
-Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length [<a href=#DD:ht.flux.C>DD: ht_flux_C</a>].
+Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length [<a href=#DD:ht.flux.C>DD: ht_flux_C</a>, <a href=#LC:Temperature-Coil-Variable-Over-Length>LC: Temperature-Coil-Variable-Over-Length</a>].
 </div>
 </li>
 </ul>
@@ -1295,14 +1295,14 @@ Law-Convective-Cooling-Water-PCM: Newton's law of convective cooling applies bet
 <ul class="hide-list-style">
 <li>
 <div id="A:Charging-Tank-No-Temp-Discharge">
-Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature [<a href=#A:Same-Initial-Temp-Water-PCM>A: Same-Initial-Temp-Water-PCM</a>] is less than (or equal) to the temperature of the heating coil [<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>].
+Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature [<a href=#A:Same-Initial-Temp-Water-PCM>A: Same-Initial-Temp-Water-PCM</a>] is less than (or equal) to the temperature of the heating coil [<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#LC:Discharging-Tank>LC: Discharging-Tank</a>].
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Same-Initial-Temp-Water-PCM">
-Same-Initial-Temp-Water-PCM: The initial temperature of the water and the PCM is the same [<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>].
+Same-Initial-Temp-Water-PCM: The initial temperature of the water and the PCM is the same [<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>, <a href=#LC:Different-Initial-Temps-PCM-Water>LC: Different-Initial-Temps-PCM-Water</a>].
 </div>
 </li>
 </ul>
@@ -1323,7 +1323,7 @@ Water-Always-Liquid: The operating temperature range of the system is such that 
 <ul class="hide-list-style">
 <li>
 <div id="A:Perfect-Insulation-Tank">
-Perfect-Insulation-Tank: The tank is perfectly insulated so that there is no heat loss from the tank [<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>].
+Perfect-Insulation-Tank: The tank is perfectly insulated so that there is no heat loss from the tank [<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#LC:Tank-Lose-Heat>LC: Tank-Lose-Heat</a>].
 </div>
 </li>
 </ul>
@@ -1358,7 +1358,7 @@ Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melti
 <ul class="hide-list-style">
 <li>
 <div id="A:Volume-Coil-Negligible">
-Volume-Coil-Negligible: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible.
+Volume-Coil-Negligible: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible [<a href=#FR:Input-Initial-Quantities>FR: Input-Initial-Quantities</a>].
 </div>
 </li>
 </ul>
@@ -2441,14 +2441,14 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>τ<sub>W</sub> = <div class="fraction">
+<em>τ<sub>W</sub></em>, <em>t<sub>final</sub></em>, <em>T<sub>C</sub></em>, <em>T<sub>P</sub></em> from (<a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>). The input is constrained so that <em>T<sub>init</sub>&thinsp;&le;&thinsp;T<sub>C</sub></em>. (<a href=#A:Charging-Tank-No-Temp-Discharge>A: Charging-Tank-No-Temp-Discharge</a>) <em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>τ<sub>W</sub> = <div class="fraction">
 <span class="fup">
 m<sub>W</sub>&#8239;C<sub>W</sub>
 </span>
 <span class="fdn">
 h<sub>C</sub>&#8239;A<sub>C</sub>
 </span>
-</div></em> is a constant (s). <em>η = <div class="fraction">
+</div></em> is a constant (<a href=#DD:htFusion>DD: htFusion</a>) (s). <em>η = <div class="fraction">
 <span class="fup">
 h<sub>P</sub>&#8239;A<sub>P</sub>
 </span>
@@ -2623,14 +2623,14 @@ m<sub>W</sub>&#8239;C<sub>W</sub>
 <span class="fdn">
 h<sub>C</sub>&#8239;A<sub>C</sub>
 </span>
-</div></em> and <em>η = <div class="fraction">
+</div></em> (<a href=#DD:htFusion>DD: htFusion</a>) and <em>η = <div class="fraction">
 <span class="fup">
 h<sub>P</sub>&#8239;A<sub>P</sub>
 </span>
 <span class="fdn">
 h<sub>C</sub>&#8239;A<sub>C</sub>
 </span>
-</div></em>, Equation (5) can be written as:
+</div></em> (<a href=#DD:melt.frac>DD: melt_frac</a>), Equation (5) can be written as:
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -2666,7 +2666,7 @@ Finally, factoring out <em><div class="fraction">
 <span class="fdn">
 τ<sub>W</sub>
 </span>
-</div></em> , we are left with the governing ODE for IM1:
+</div></em> , we are left with the governing ODE for (<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>):
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -2836,7 +2836,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>T<sub>P</sub></em>, <em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>, with initial conditions, <em>T<sub>W</sub> = T<sub>P</sub> = T<sub>init</sub></em>, FIXME t_w(0) = t_p(0), <a href=#A:Same-Initial-Temp-Water-PCM>A: Same-Initial-Temp-Water-PCM</a>, and <em>T<sub>W</sub></em> from IM1, such that the following governing ODE is satisfied. The temperature remains constant at <em>T<sub>melt</sub><sup>P</sup></em>, even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as <em>0&thinsp;&lt;&thinsp;ϕ&thinsp;&lt;&thinsp;1</em> (from <a href=#DD:melt.frac>DD: melt_frac</a> ) is determined as part of the heat energy in the PCM, as given in IM4.
+<em>T<sub>melt</sub><sup>P</sup></em>, <em>t<sub>final</sub></em>, <em>T<sub>init</sub></em>, <em>h<sub>P</sub></em>, <em>m<sub>P</sub></em>, <em>C<sub>P</sub><sup>S</sup></em>, <em>C<sub>P</sub><sup>S</sup></em> form (<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>). The input is constrained so that <em>T<sub>init</sub>&thinsp;&lt;&thinsp;T<sub>melt</sub><sup>P</sup></em> (<a href=#A:PCM-Initially-Solid>A: PCM-Initially-Solid</a>) <em>T<sub>P</sub></em>, <em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>, with initial conditions, <em>T<sub>W</sub> = T<sub>P</sub> = T<sub>init</sub></em>, FIXME t_w(0) = t_p(0), <a href=#A:Same-Initial-Temp-Water-PCM>A: Same-Initial-Temp-Water-PCM</a>, and <em>T<sub>W</sub></em> from IM1, such that the following governing ODE is satisfied. The temperature remains constant at <em>T<sub>melt</sub><sup>P</sup></em>, even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as <em>0&thinsp;&lt;&thinsp;ϕ&thinsp;&lt;&thinsp;1</em> (from <a href=#DD:melt.frac>DD: melt_frac</a> ) is determined as part of the heat energy in the PCM, as given in (<a href=#IM:heatEInPCM>IM: heatEInPCM</a>).
 </p>
 </td>
 </tr>

@@ -343,7 +343,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Constant-Water-Temp-Across-Tank}:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank {[}\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-PCM-Constant-Across-Volume}:]The temperature of the phase change material is the same throughout the volume of PCM {[}\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-PCM-Constant-Across-Volume}:]The temperature of the phase change material is the same throughout the volume of PCM {[}\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}, LC\ref{LC:Uniform-Temperature-PCM}{]}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Density-Water-PCM-Constant-over-Volume}:]The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume {[}\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}{]}.
@@ -355,19 +355,19 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Newton-Law-Convective-Cooling-Coil-Water}:]Newton's law of convective cooling applies between the heating coil and the water {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Time}:]The temperature of the heating coil is constant over time {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Time}:]The temperature of the heating coil is constant over time {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}, LC\ref{LC:Temperature-Coil-Variable-Over-Day}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Length}:]The temperature of the heating coil does not vary along its length {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Length}:]The temperature of the heating coil does not vary along its length {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}, LC\ref{LC:Temperature-Coil-Variable-Over-Length}{]}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Law-Convective-Cooling-Water-PCM}:]Newton's law of convective cooling applies between the water and the PCM {[}\hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Charging-Tank-No-Temp-Discharge}:]The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature {[}A\ref{A:Same-Initial-Temp-Water-PCM}{]} is less than (or equal) to the temperature of the heating coil {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Charging-Tank-No-Temp-Discharge}:]The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature {[}A\ref{A:Same-Initial-Temp-Water-PCM}{]} is less than (or equal) to the temperature of the heating coil {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, LC\ref{LC:Discharging-Tank}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Same-Initial-Temp-Water-PCM}:]The initial temperature of the water and the PCM is the same {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Same-Initial-Temp-Water-PCM}:]The initial temperature of the water and the PCM is the same {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}, LC\ref{LC:Different-Initial-Temps-PCM-Water}{]}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:PCM-Initially-Solid}:]The simulation will start with the PCM in a solid state {[}\hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}, \hyperref[IM:heatEInPCM]{Definition~IM:heatEInPCM}{]}.
@@ -376,7 +376,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Water-Always-Liquid}:]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, \hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Perfect-Insulation-Tank}:]The tank is perfectly insulated so that there is no heat loss from the tank {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Perfect-Insulation-Tank}:]The tank is perfectly insulated so that there is no heat loss from the tank {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, LC\ref{LC:Tank-Lose-Heat}{]}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:No-Internal-Heat-Generation-By-Water-PCM}:]No internal heat is generated by either the water or the PCM; therefore, the volumetric heat generation per unit volume is zero {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}{]}.
@@ -391,7 +391,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Atmospheric-Pressure-Tank}:]The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0${}^{\circ}$C and 100${}^{\circ}$C, respectively {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, \hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Volume-Coil-Negligible}:]When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Volume-Coil-Negligible}:]When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible {[}R\ref{FR:Input-Initial-Quantities}{]}.
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -731,7 +731,7 @@ Description & \begin{symbDescription}
               \item{${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C). ${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C). ${τ_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ is a constant (s). $η=\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}}$ is a constant (dimensionless). The above equation applies as long as the water is in liquid form, $0<{T_{W}}<100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (A\ref{A:Water-Always-Liquid}, A\ref{A:Atmospheric-Pressure-Tank}).
+Notes & ${τ_{W}}$, ${t_{final}}$, ${T_{C}}$, ${T_{P}}$ from (\hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}). The input is constrained so that ${T_{init}}\leq{}{T_{C}}$. (A\ref{A:Charging-Tank-No-Temp-Discharge}) ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C). ${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C). ${τ_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ is a constant (\hyperref[DD:htFusion]{Definition~DD:htFusion}) (s). $η=\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}}$ is a constant (dimensionless). The above equation applies as long as the water is in liquid form, $0<{T_{W}}<100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (A\ref{A:Water-Always-Liquid}, A\ref{A:Atmospheric-Pressure-Tank}).
 \\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\
@@ -759,11 +759,11 @@ Which simplifies to:
 \begin{dmath}
 \frac{d\,{T_{W}}}{d\,t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}} \frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{P}}-{T_{W}}\right)
 \end{dmath}
-Setting ${τ_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ and $η=\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}}$, Equation (5) can be written as:
+Setting ${τ_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ (\hyperref[DD:htFusion]{Definition~DD:htFusion}) and $η=\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}}$ (\hyperref[DD:melt.frac]{Definition~DD:melt.frac}), Equation (5) can be written as:
 \begin{dmath}
 \frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{η}{{τ_{W}}} \left({T_{P}}-{T_{W}}\right)
 \end{dmath}
-Finally, factoring out $\frac{1}{{τ_{W}}}$ , we are left with the governing ODE for IM1:
+Finally, factoring out $\frac{1}{{τ_{W}}}$ , we are left with the governing ODE for (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}):
 \begin{dmath}
 \frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}+η \left({T_{P}}-{T_{W}}\right)\right)
 \end{dmath}
@@ -807,7 +807,7 @@ Description & \begin{symbDescription}
               \item{$ϕ$ is the melt fraction (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${T_{P}}$, $0<t<{t_{final}}$, with initial conditions, ${T_{W}}={T_{P}}={T_{init}}$, FIXME t\_w(0) = t\_p(0), A\ref{A:Same-Initial-Temp-Water-PCM}, and ${T_{W}}$ from IM1, such that the following governing ODE is satisfied. The temperature remains constant at ${{T_{melt}}^{P}}$, even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as $0<ϕ<1$ (from \hyperref[DD:melt.frac]{Definition~DD:melt.frac} ) is determined as part of the heat energy in the PCM, as given in IM4.
+Notes & ${{T_{melt}}^{P}}$, ${t_{final}}$, ${T_{init}}$, ${h_{P}}$, ${m_{P}}$, ${{C_{P}}^{S}}$, ${{C_{P}}^{S}}$ form (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}). The input is constrained so that ${T_{init}}<{{T_{melt}}^{P}}$ (A\ref{A:PCM-Initially-Solid}) ${T_{P}}$, $0<t<{t_{final}}$, with initial conditions, ${T_{W}}={T_{P}}={T_{init}}$, FIXME t\_w(0) = t\_p(0), A\ref{A:Same-Initial-Temp-Water-PCM}, and ${T_{W}}$ from IM1, such that the following governing ODE is satisfied. The temperature remains constant at ${{T_{melt}}^{P}}$, even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as $0<ϕ<1$ (from \hyperref[DD:melt.frac]{Definition~DD:melt.frac} ) is determined as part of the heat energy in the PCM, as given in (\hyperref[IM:heatEInPCM]{Definition~IM:heatEInPCM}).
 \\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\

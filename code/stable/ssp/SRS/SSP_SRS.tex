@@ -378,7 +378,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Slip-Surface-Concave}:]The slip surface is concave with respect to the slope surface. The $(x,y)$ coordinates of the failure surface follow a monotonic function.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Geo-Slope-Mat-Props-of-Soil-Inputs}:]The geometry of the slope, and the material properties of the soil layers are given as inputs.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Geo-Slope-Mat-Props-of-Soil-Inputs}:]The geometry of the slope, and the material properties of the soil layers are given as inputs {[}\hyperref[IM:forDisEqlb]{Definition~IM:forDisEqlb}{]}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Soil-Layer-Homogeneous}:]The different layers of the soil are homogeneous, with consistent soil properties throughout, and independent of dry or saturated conditions, with the exception of unit weight.
@@ -1467,7 +1467,7 @@ p_{i}
 {δy}_{i}
 \end{bmatrix}
 \end{dmath}
-The new effective base stiffness matrix ${K_{bt}}$ as derived in equation (7) is defined in equation (9). ${K_{bt}}$ is the shear element in the matrix, and ${K_{bn}}$ is the normal element in the matrix, calculated as in \hyperref[DD:mobShearWO]{Definition~DD:mobShearWO}. The notation is simplified by the introduction of the constants ${K_{bA}}$ and ${K_{bB}}$, defined in equation (10) and equation (11) respectively.
+The new effective base stiffness matrix ${K_{bt}}$ as derived in equation (7) is defined in equation (9). This is seen as matrix ${K_{bt}}$ in \hyperref[DD:displcmntBasel]{Definition~DD:displcmntBasel} ${K_{bt}}$ is the shear element in the matrix, and ${K_{bn}}$ is the normal element in the matrix, calculated as in \hyperref[DD:mobShearWO]{Definition~DD:mobShearWO}. The notation is simplified by the introduction of the constants ${K_{bA}}$ and ${K_{bB}}$, defined in equation (10) and equation (11) respectively.
 \begin{dmath}
 {K_{bt,i}}=\begin{bmatrix}
 {K_{bt,i}} \cos\left(α_{i}\right)^{2}+{K_{sn,i}} \sin\left(α_{i}\right)^{2} & \left({K_{bt,i}}-{K_{bn,i}}\right) \sin\left(α_{i}\right) \cos\left(α_{i}\right)\\
@@ -1487,9 +1487,9 @@ A force-displacement relationship for an element $i$ can be written in terms of 
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:displcmntBasel}
+\toprule \textbf{Refname} & \textbf{DD:netFDsplcmntEqbm}
 \phantomsection 
-\label{DD:displcmntBasel}
+\label{DD:netFDsplcmntEqbm}
 \\ \midrule \\
 Label & Force
 \\ \midrule \\
@@ -1879,7 +1879,7 @@ Source & \cite{stolle2008}
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
-Using the net force-displacement equilibrium equation of a slice from \hyperref[DD:displcmntBasel]{Definition~DD:displcmntBasel} with the definitions of the stiffness matrices from \hyperref[DD:displcmntRxnF]{Definition~DD:displcmntRxnF} and the force definitions from \hyperref[GD:netForcex]{Definition~GD:netForcex} a broken down force displacement equilibrium equation can be derived. equation (22) gives the broken down equation in the $x$ direction, and equation (23) gives the broken down equation in the $y$ direction:
+Using the net force-displacement equilibrium equation of a slice from \hyperref[DD:netFDsplcmntEqbm]{Definition~DD:netFDsplcmntEqbm} with the definitions of the stiffness matrices from \hyperref[DD:displcmntRxnF]{Definition~DD:displcmntRxnF} and the force definitions from \hyperref[GD:netForcex]{Definition~GD:netForcex} a broken down force displacement equilibrium equation can be derived. equation (22) gives the broken down equation in the $x$ direction, and equation (23) gives the broken down equation in the $y$ direction:
 \begin{dmath}
 -{ΔH}_{i}-{K_{c}} W_{i}-{U_{b,i}} \sin\left(α_{i}\right)+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)={δx}_{i-1} -{ℓ_{s,i-1}} {K_{sn,i-1}}+{δx}_{i} \left(-{ℓ_{s,i-1}} {K_{sn,i-1}}+{ℓ_{s,i}} {K_{sn,i}}+{ℓ_{b,i}} {K_{bA,i}}\right)+{δx}_{i+1} -{ℓ_{s,i}} {K_{sn,i}}+{δy}_{i} -{ℓ_{b,i}} {K_{bB,i}}=-W_{i}-{U_{b,i}} \cos\left(α_{i}\right)+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)={δy}_{i-1} -{ℓ_{s,i-1}} {K_{st,i-1}}+{δy}_{i} \left(-{ℓ_{s,i-1}} {K_{st,i-1}}+{ℓ_{s,i}} {K_{sn,i}}+{ℓ_{b,i}} {K_{bA,i}}\right)+{δy}_{i+1} -{ℓ_{s,i}} {K_{st,i}}+{δx}_{i} -{ℓ_{b,i}} {K_{bB,i}}
 \end{dmath}

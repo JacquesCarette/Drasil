@@ -1425,7 +1425,7 @@ Slip-Surface-Concave: The slip surface is concave with respect to the slope surf
 <ul class="hide-list-style">
 <li>
 <div id="A:Geo-Slope-Mat-Props-of-Soil-Inputs">
-Geo-Slope-Mat-Props-of-Soil-Inputs: The geometry of the slope, and the material properties of the soil layers are given as inputs.
+Geo-Slope-Mat-Props-of-Soil-Inputs: The geometry of the slope, and the material properties of the soil layers are given as inputs [<a href=#IM:forDisEqlb>IM: forDisEqlb</a>].
 </div>
 </li>
 </ul>
@@ -4581,7 +4581,7 @@ The Hooke's law force displacement relationship of <a href=#GD:netForcey>GD: net
 </div>
 </div>
 <p class="paragraph">
-The new effective base stiffness matrix <em>K<sub>bt</sub></em> as derived in equation (7) is defined in equation (9). <em>K<sub>bt</sub></em> is the shear element in the matrix, and <em>K<sub>bn</sub></em> is the normal element in the matrix, calculated as in <a href=#DD:mobShearWO>DD: mobShearWO</a>. The notation is simplified by the introduction of the constants <em>K<sub>bA</sub></em> and <em>K<sub>bB</sub></em>, defined in equation (10) and equation (11) respectively.
+The new effective base stiffness matrix <em>K<sub>bt</sub></em> as derived in equation (7) is defined in equation (9). This is seen as matrix <em>K<sub>bt</sub></em> in <a href=#DD:displcmntBasel>DD: displcmntBasel</a> <em>K<sub>bt</sub></em> is the shear element in the matrix, and <em>K<sub>bn</sub></em> is the normal element in the matrix, calculated as in <a href=#DD:mobShearWO>DD: mobShearWO</a>. The notation is simplified by the introduction of the constants <em>K<sub>bA</sub></em> and <em>K<sub>bB</sub></em>, defined in equation (10) and equation (11) respectively.
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -4607,7 +4607,7 @@ The new effective base stiffness matrix <em>K<sub>bt</sub></em> as derived in eq
 <p class="paragraph">
 A force-displacement relationship for an element <em>i</em> can be written in terms of displacements occurring in the unrotated coordinate system <em>δ</em> of <a href=#GD:hookesLaw2d>GD: hookesLaw2d</a> using the matrix <em>K<sub>bt</sub></em>, and <em>K<sub>bt</sub></em> as seen in <a href=#DD:intrsliceF>DD: intrsliceF</a>.
 </p>
-<div id="DD:displcmntBasel">
+<div id="DD:netFDsplcmntEqbm">
 <table class="ddefn">
 <tr>
 <th>
@@ -4644,7 +4644,7 @@ N
 Equation
 </th>
 <td>
-<div id="Eqn:DD:displcmntBasel">
+<div id="Eqn:DD:netFDsplcmntEqbm">
 <div class="equation">
 <em>F = &minus;ℓ<sub>s,i&minus;1</sub>&#8239;K<sub>sn,i&minus;1</sub>&#8239;δ<sub>i&minus;1</sub>&plus;(ℓ<sub>s,i&minus;1</sub>&#8239;K<sub>sn,i&minus;1</sub>&plus;ℓ<sub>b,i</sub>&#8239;K<sub>bn,i</sub>&plus;ℓ<sub>s,i</sub>&#8239;K<sub>sn,i</sub>)&#8239;δ<sub>i</sub>&minus;ℓ<sub>s,i</sub>&#8239;K<sub>sn,i</sub>&#8239;δ<sub>i&plus;1</sub></em>
 </div>
@@ -6019,7 +6019,7 @@ FIXME: This needs to be filled in
 </table>
 </div>
 <p class="paragraph">
-Using the net force-displacement equilibrium equation of a slice from <a href=#DD:displcmntBasel>DD: displcmntBasel</a> with the definitions of the stiffness matrices from <a href=#DD:displcmntRxnF>DD: displcmntRxnF</a> and the force definitions from <a href=#GD:netForcex>GD: netForcex</a> a broken down force displacement equilibrium equation can be derived. equation (22) gives the broken down equation in the <em>x</em> direction, and equation (23) gives the broken down equation in the <em>y</em> direction:
+Using the net force-displacement equilibrium equation of a slice from <a href=#DD:netFDsplcmntEqbm>DD: netFDsplcmntEqbm</a> with the definitions of the stiffness matrices from <a href=#DD:displcmntRxnF>DD: displcmntRxnF</a> and the force definitions from <a href=#GD:netForcex>GD: netForcex</a> a broken down force displacement equilibrium equation can be derived. equation (22) gives the broken down equation in the <em>x</em> direction, and equation (23) gives the broken down equation in the <em>y</em> direction:
 </p>
 <div id="Eqn:empty">
 <div class="equation">

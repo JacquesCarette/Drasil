@@ -275,9 +275,27 @@ and easily for a modest up-front time investment. By front-loading the costs of
 maintenance and rolling them into the development cycle, we can save time and 
 money in the long run.
 
+\wss{The above is true, but only after the investment in building the generator
+  infrastructure and incorporating the required knowledge.  Based on a
+  discussion with JC, and some of his original text, I recently wrote a little
+  blurb about this effort.  You could probably modify this to work in your paper
+  somewhere.  ``The proposed work can improve the quality of SCS and reduce the cost of its
+development, but this will require a transformative change in development
+practices.  Using Drasil for an SCS project will require a willingness to encode
+all of the knowledge, both declarative and procedural, about the relevant topics
+inside Drasil.  Although encoding this information is a significant undertaking,
+the payoff is potentially enormous -- We get to generate fully-documented
+families of programs at an incrementally tiny cost.  The large up-front
+investment has a large long-term payoff.  Current software development, has a
+small up-front cost, and ever-increasing maintenance costs to continue.  Drasil
+will completely change this effort curve.''}
+
 \wss{The bottom up justification should also be part of the introduction.}
 
-\ds{bottom up justification can go here?}
+\ds{bottom up justification can go here?} \wss{You mention a table below
+  (Problems and Proposed Solutions).  That would be the spot to discuss the
+  bottom up justification.  To make sure we are communicating about the same
+  thing, when I say bottom up justification, I'm talking about consistency.}
 
 We \ds{and others -- citation ?} have observed a number of issues arise 
 throughout a standard software development and maintenance life-cycle.
@@ -326,7 +344,7 @@ and from the certifying body) to attempt certification again.
 Table~\ref{Tab:ProbSol} gives a brief rundown of our proposed solutions to the 
 problems mentioned above. We are leveraging our experience with generative 
 programming to provide a solution that is applicable to a wide range of 
-problems.
+problems. \wss{This blurb about the table isn't enough to explain its content.}
 
 %DS Maybe throw in a figure here to show off a bunch of common artifacts.
 
@@ -369,9 +387,11 @@ we should be able to find an explicit link between our problem definition and
 theory manual, down to our requirements, design, and other development planning 
 artifacts. From there, we should be able to continue through our proposed 
 verification and validation plans, and should eventually end up in the V\&V 
-report.
+report. \wss{Why do we require full traceability.  I agree, but you should tell
+  the reader why this documentation quality is so important.}
 
-\ds{rework the following paragraph}
+\ds{rework the following paragraph} \wss{I agree - you say it is expensive two
+  different ways.  You only need to say it once.  :-)}
 Ensuring this traceability and, in fact, getting anything certified has many 
 costs associated with it. There is a massive time investment, fees, and costs 
 associated with contracting out a third-party verifier. Overall it is a 
@@ -394,8 +414,10 @@ quickly, and automatically update relevant and/or dependent artifacts.  \wss{I
 \ds{Work the following paragraph in somewhere related to consistency.}
 Consistent documentation has its own advantages while developing or maintaining 
 software~\cite{Hyman1990, Kotula2000}. Similarly, there are many downsides to
-inconsistent documentation~\cite{Kotula2000,Thimbleby1986}.
-
+inconsistent documentation~\cite{Kotula2000,Thimbleby1986}.  \wss{I haven't
+  looked at the papers you cite, but that is great to have scholarly support for
+  the importance of consistency.  Rather than just cite, you could explicitly
+  point out the advantages of consistency.}
 
 \subsection{Scope} %DS Should this be here? Maybe, as long as the above 
 %clarifies the problem.
@@ -411,7 +433,8 @@ from which to build our knowledge-base.
 SCS is also a domain rich in specialized software requiring certification. For 
 example, control software in nuclear power plants, x-ray machines, and other 
 safety critical applications require software to be approved by a certifying 
-body.
+body. \wss{control software isn't really SCS software - for the nuclear domain
+  we are more focused on nuclear safety analysis software.}
 
 \ds{More to come}
 
@@ -428,6 +451,14 @@ body.
 	information on MDL.  We might also want more information on scientific
 	knowledge ontologies.}
 
+\wss{In the scope section we should clarify that our generator will focus on the
+  SRS and some code.  We can hopefully find words to express that we are aiming
+  for a big picture, and will discuss the big picture, but the proof of concept
+  implementation has focused on the SRS.  This has come up before.  We are in
+  the difficult situation of having to express the value of Drasil for
+  generating all things, but also not implying that we are further along than we
+  are.  I'm not sure of the right words, but being up front in the scope section
+  should help.}
 
 \section{Background}
 \label{S:BG}
@@ -678,7 +709,25 @@ given templates and thus give us a reasonable starting point for our analyses.
 
 To understand exactly what we are looking at in our software artifacts, we will 
 now introduce the case studies that have driven the development of the Drasil 
-framework.
+framework.  \wss{Should we include links to the appropriate repos?}
+
+\wss{I think it would be helpful to give some of the history of the case
+  studies.  They come from SmithJegatheesanAndKelly2016.  We redeveloped
+  existing software using a modern software engineering process and
+  documentation.  The case studies are manually written; Drasil translates them
+  so that the documentation and code can be generated.  By the way,
+  SmithJegatheesanAndKelly2016 can be used to motivate Drasil.  I wrote the
+  following in a recent grant proposal: ``A recent study by the applicant
+  further highlighted the value of documentation.  Five existing SCS projects
+  were redeveloped, with an emphasis on documentation and software engineering
+  best practices \citep{SmithJegatheesanAndKelly2016}.  Interviews with the code
+  owners showed agreement that a systematic development process can be
+  beneficial, and they had a positive or neutral response to the software
+  artifacts produced during redevelopment.  However, mirroring the comments in
+  other studies \citep{CarverEtAl2007, SegalAndMorris2008}, the code owners felt
+  that documentation requires too great a time commitment and too much up front
+  effort.  To reduce the effort required for documentation, work has begun on a
+  prototype tool called Drasil~\citep{SzymczakEtAl2016}.''}
 
 The first case study we will explore is \emph{GlassBR} -- software created for 
 checking whether a given pane of glass will be able to withstand the force of a 
@@ -703,7 +752,8 @@ its factor of safety -- an index of its relative stability.
 
 Finally we have \emph{Gamephysics} which is a pared-down version of the 
 Chipmunk2D 
-game physics engine. We chose this project specifically for its rich use of 
+game physics engine. \wss{If we mention Chipmunk2D, we should give a reference,
+  or a link, to it}  We chose this project specifically for its rich use of 
 physics knowledge, but as it is a very large physics library, we narrowed the 
 scope in the interests of time for our proof of concept.
 
@@ -767,6 +817,12 @@ before the SRS is complete) that we will -- whatever implementation detail is
 in the figure --, but that is not relevant until we begin to plan and discuss 
 the design.}
 
+\wss{Here you are talking about reuse of knowledge between artifacts in the same
+  problem domain.  Is there a place where you talk about reuse between the same
+  artifact, across the case studies?  You alluded to this with the discussion of
+  the SI section.  The reference section was parameterized so that it would fit
+  with all of the examples.  This might be a good example to include in this paper?}
+
 \subsection{Emerging structures} 
 \label{S:KnowStruct}
 
@@ -808,6 +864,9 @@ code)}
 \item Units  -- \ds{id (If applicable in the example, otherwise unitless)}
 \end{itemize}
 
+\wss{I like where you are going with this, but it is hard to review without the
+  ``blanks'' being filled in.}
+
 As shown above, the unique identifier is fairly straightforward (!FIXME id!), 
 it is just a label that we associate with this particular piece of knowledge 
 and nothing else. The symbolic representations are just the symbols we use when 
@@ -837,7 +896,7 @@ which our knowledge buds. %DS Tree metaphor! Wooo!
   (with respect to change).}
 
 After comparing knowledge across case studies and analyzing patterns that 
-emerged, we have created a number of ``knowledge classes" to categorize and 
+emerged, we have created a number of ``knowledge classes'' to categorize and 
 differentiate our various kinds of knowledge. If you refer to 
 Table~\ref{Tab:KnowledgeClasses} you can see the breakdown of each class. Items 
 marked with an \emph{X} are necessary for a piece of knowledge to be considered 
@@ -909,7 +968,10 @@ mandatory symbol.
 
 With inspiration from similar problem domains, as mentioned in 
 Section~\ref{S:BG}, we combine a number of ideas to tackle the problems of 
-duplication, inter-/intra-artifact inconsistency, design for change, lack of 
+duplication, inter-/intra-artifact inconsistency, design for change \wss{this is
+  the first time you have mentioned design for change - I think this is an
+  important advantage of our approach.  We should highlight it sooner.  It is
+  also related to why you want traceability}, lack of 
 reusability, and difficulty with (re-)certifiability.
 
 For our purposes, we extend and tighten the definition of knowledge introduced 
@@ -1046,7 +1108,9 @@ our intuition that different representations of knowledge are not expressing
 different ideas, only saying them in different ways. Recall the first law of 
 thermodynamics example from earlier, once captured we do not need to re-capture 
 that law regardless of how we wish to view it, we only need apply the 
-appropriate transformation.
+appropriate transformation.  \wss{It would be great if we could show an example
+  for this, maybe from SWHS and NoPCM?  It looks like you are planning on doing
+  this below.}
 
 \subsection{(Re-)Using Knowledge}
 \label{S:KReUse}
@@ -1062,7 +1126,7 @@ While this seems trivial, the ramifications are huge -- we have guaranteed
 \emph{consistency by construction}.
 
 At this point you may be wondering, ``what if I want to do more than just copy 
-information around?" Recall the example from the beginning of 
+information around?'' Recall the example from the beginning of 
 Section~\ref{S:KBSE}, the view of our knowledge can change without affecting 
 our encoding. To project these views, we use transformations.
 
@@ -1144,7 +1208,7 @@ to reach its current state. We use our case studies as a guide, treating them
 like data, to search for commonalities. Once a commonality is found, we 
 abstract it out and repeat the process. This approach allows for rapid progress 
 due to constant iteration, while also helping us to determine what is 
-``meaningful" knowledge in the case studies as opposed to boilerplate 
+``meaningful'' knowledge in the case studies as opposed to boilerplate 
 information. This process of analysis and abstraction is what led us to our 
 first real recipe for generating documents using the SmithEtAl template: 
 \texttt{Drasil.DocumentLanguage}. Again, we will discuss that in more detail in 
@@ -1154,6 +1218,9 @@ One last thing to note regarding Drasil is our liberal use of Haddock. The vast
 majority of Drasil is documented within the comments of the source code and 
 this documentation can be extracted by running \texttt{make docs} on the Drasil 
 repository at \url{https://github.com/JacquesCarette/Drasil}.
+
+\wss{I like the above description of Drasil.  It felt more focused than some of
+  the other sections.}
 
 \subsection{Knowledge Capture \& Transformations in Drasil}
 \label{S:DrasilKC}
@@ -1405,6 +1472,9 @@ themselves.
 - Had some of these case studies attempted to be certified, they would (should) 
 have failed.
 	- A number of common problems.
+
+\wss{I like this Results section - examples like these are something people can
+  understand and hopefully be convinced by.}
 
 \subsection{Common issues across case studies}
 

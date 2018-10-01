@@ -25,6 +25,8 @@
 \IncMargin{-\parindent}
 \usepackage{hyperref}
 \usepackage[normalem]{ulem}
+\usepackage{listings}
+\usepackage{color}
 
 % Metadata Information
 \acmJournal{TOSEM}
@@ -93,6 +95,25 @@
 shadow,
 text centered, anchor=north, text=black, text width=3cm]
 \tikzstyle{myarrow}=[->, >=triangle 90, thick]
+%%%%%%%%%%%%%%%%%%%%%
+
+%Listings Style
+\lstset{
+	language=Haskell,
+	basicstyle=\small,
+	breaklines=true,
+	commentstyle=\color{green},
+	frame=single,
+	keywordstyle=\color{blue},
+	numbers=left,
+	numbersep=5pt,
+	numberstyle=\color{gray},
+	stepnumber=5,
+	stringstyle=\color{pink},
+	tabsize=2,
+	title=\lstname,
+	escapeinside={-*}{*-}
+}
 %%%%%%%%%%%%%%%%%%%%%
 
 % Title portion. Note the short title for running heads
@@ -297,6 +318,9 @@ will completely change this effort curve.''}
   bottom up justification.  To make sure we are communicating about the same
   thing, when I say bottom up justification, I'm talking about consistency.}
 
+\ds{Also note: Should point out maintainability/traceability/design for change 
+somewhere in here, since it is relevant later on.}
+
 We \ds{and others -- citation ?} have observed a number of issues arise 
 throughout a standard software development and maintenance life-cycle.
 Information duplication is a major concern as several problems occur therein. 
@@ -459,6 +483,8 @@ body. \wss{control software isn't really SCS software - for the nuclear domain
   generating all things, but also not implying that we are further along than we
   are.  I'm not sure of the right words, but being up front in the scope section
   should help.}
+\ds{I'll start that (removing assumptions and trying not to imply things) 
+discussion with something along the lines of "For the sake of transparency..."}
 
 \section{Background}
 \label{S:BG}
@@ -639,10 +665,6 @@ for specifying interfaces and communication between boxes; and the ability to
 decompose boxes at any level. LSD remains primarily code-focused with little 
 support for other software artifacts.
 
-\ds{Really need an intro to the basics of grounded theory here, for section 
-3.1 (S:IntroCases) and subsequently 4.2 (S:KReUse) if we keep the references to 
-grounded theory}
-
 \subsection{Generative Software Development (GSD)}
 
 See~\cite{Czarnecki2005} for a detailed overview.
@@ -685,16 +707,15 @@ Drasil.
 we have not gone into extensive depth, but there is a lot of good inspiration 
 there that also overlaps with GSD
 
-\subsubsection{Scientific Knowledge Ontologies}
-\ds{Should we keep this? We haven't found a useful example. Maybe just mention 
-ontologies and such?}
-
 \subsubsection{Grounded Theory}
-\ds{intro}
+\ds{Really need an intro to the basics of grounded theory here, for section 
+3.1 (S:IntroCases) and subsequently 4.2 (S:KReUse) if we keep the references to 
+grounded theory}
 
 Had we come across Grounded Theory earlier in our, we would have liked to take 
 a formal grounded theory approach to Drasil's development. As it stands, we can 
 only use it as inspiration to help us analyze and improve upon our work.
+
 
 \section{A rational analysis of software artifacts}
 
@@ -752,10 +773,10 @@ its factor of safety -- an index of its relative stability.
 
 Finally we have \emph{Gamephysics} which is a pared-down version of the 
 Chipmunk2D 
-game physics engine. \wss{If we mention Chipmunk2D, we should give a reference,
-  or a link, to it}  We chose this project specifically for its rich use of 
+game physics engine (\url{https://chipmunk-physics.net/}). We chose this 
+project specifically for its rich use of 
 physics knowledge, but as it is a very large physics library, we narrowed the 
-scope in the interests of time for our proof of concept.
+scope for our proof of concept in the interest of time.
 
 There is also a trivial case study, affectionately nicknamed \emph{tiny}, which 
 is taken from an example of a fuel-pin inside a nuclear reactor. This toy 
@@ -1110,7 +1131,9 @@ thermodynamics example from earlier, once captured we do not need to re-capture
 that law regardless of how we wish to view it, we only need apply the 
 appropriate transformation.  \wss{It would be great if we could show an example
   for this, maybe from SWHS and NoPCM?  It looks like you are planning on doing
-  this below.}
+  this below.} \ds{Something like that, yes. I'd like to show off (particularly 
+  when dealing with Kolmogorov complexity) that NoPCM is using a lot of things 
+  from SWHS}
 
 \subsection{(Re-)Using Knowledge}
 \label{S:KReUse}
@@ -1225,12 +1248,68 @@ repository at \url{https://github.com/JacquesCarette/Drasil}.
 \subsection{Knowledge Capture \& Transformations in Drasil}
 \label{S:DrasilKC}
 
-  - How is Knowledge Capture handled in Drasil? - chunks!
- - Refer to chunk hierarchy Figure~\ref{Fig:ChunkHierarchy}
- - Talk about some of the implementation details -- lenses!
+Before we get into the specifics of transforming knowledge in Drasil, we should 
+first explain how knowledge is captured. We originally borrowed the idea of 
+\emph{Chunks} from Literate Programming, but have since expanded our knowledge 
+capture mechanism to more closely resemble the classification scheme mentioned 
+in Section~\ref{S:KnowCapt}, specifically following the property-based 
+knowledge classes seen in Figure~\ref{Fig:ChunkHierarchy}.
 
-We have already started to capture knowledge in several areas ... 
-  \fgr{} Knowledge areas we have started to capture (See: SE-CSE paper)
+Knowledge is captured in a number of various data structures representing the 
+common combinations of properties we have observed. For instance, a 
+\emph{QuantityDict} (Quantity dictionary), is shown in 
+Figure~\ref{Fig:QuantityDict}.
+
+\begin{figure}
+\begin{lstlisting}[numbers=none]
+data QuantityDict = QD { _id' :: IdeaDict
+                       , _typ' :: Space
+                       , _symb' :: Stage -> Symbol
+                       , _unit' :: Maybe UnitDefn
+                       }
+-* \dots{} *-
+instance HasUID        QuantityDict where uid = id' . uid
+instance NamedIdea     QuantityDict where term = id' . term
+instance Idea          QuantityDict where getA  qd = getA (qd ^. id')
+instance HasSpace      QuantityDict where typ = typ'
+instance HasSymbol     QuantityDict where symbol = view symb'
+instance Quantity      QuantityDict where 
+instance Eq            QuantityDict where a == b = (a ^. uid) == (b ^. uid)
+instance MayHaveUnit   QuantityDict where getUnit = view unit'
+
+\end{lstlisting}
+\caption{The \emph{QuantityDict} data structure definition and class instances}
+\label{Fig:QuantityDict}
+\end{figure}
+
+To understand exactly what is being captured, we need to first look at the 
+definition of an \emph{IdeaDict}, which is itself composed of a 
+\emph{NamedChunk} and may have an abbreviation. A \emph{NamedChunk} has a 
+Unique IDentifier (UID) and a term -- it is the minimal complete definition for 
+the \emph{NamedIdea} class of properties. The \emph{IdeaDict} then is the 
+minimal complete definition for the \emph{Idea} class. Finally, the 
+\emph{QuantityDict} also has a space (domain/type), symbol, and may have units. 
+Thus it is the minimal complete definition of the \emph{Quantity} class.
+
+Since Haskell is strictly-typed, having a number of different data structures 
+and expecting them to behave with each other can be difficult. As such, we have 
+implemented each class property using lenses. Now our knowledge can be captured 
+in a variety of data structures, but we are able to project out only what is 
+relevant in a given context, or related to a specific property. 
+
+We have already started to capture knowledge from several areas into our 
+knowledge base. A brief, high-level overview can be seen in 
+Figure~\ref{Fig:CaptKnowAreas}. While we have started capturing knowledge, we 
+have not strayed far from the specifics of our case studies. Our knowledge-base 
+should by no means be considered an ontology or even somewhat comprehensive 
+collection of knowledge at this time. It is quite interesting even, to see how 
+little we have captured, yet how much we can achieve.
+
+\begin{figure}
+\caption{Knowledge areas we have started to capture (See: SE-CSE paper) \ds{I 
+can't find this in the old papers, hmm, oh well, I know what to draw}}
+\label{Fig:CaptKnowAreas}
+\end{figure}
 
 What about transformations? In high-level terms, they are our recipes.
 More specifically, recipes combine atomic knowledge 
@@ -1243,6 +1322,8 @@ projecting out each of its symbols' definitions and combining them into a
 sentence or description block. An example can be seen 
 Figure~\ref{Fig:GlassBRDDSRS}.
 
+We discuss the recipe language in more depth in Section~\ref{S:RecipeLang}.
+
 \subsection{The Generator}
 
   - Key components of the generator / renderer
@@ -1252,6 +1333,7 @@ Figure~\ref{Fig:GlassBRDDSRS}.
 - Sentence and Document
 
 \subsection{The Recipe Language}
+\label{S:RecipeLang}
 
 - Recipe Language(s) -- Example in action Refer to:
   \fgr{} Drasil.DocumentLanguage
@@ -1419,6 +1501,9 @@ in Table~\ref{Tab:Namespaces}.
   to write this material almost independently of the other sections, at least to
   get started.}
 
+\ds{Somewhere in here (probably in GlassBR) I need to really emphasize the 
+separation of System Information from the DocLang. It comes up later.}
+
 \subsection{Data.Drasil}
 \label{S:Data}
 
@@ -1468,15 +1553,76 @@ themselves.
 
 \section{Results}
 
-- Here we discuss the results we've seen so far.
-- Had some of these case studies attempted to be certified, they would (should) 
-have failed.
-	- A number of common problems.
+We will now discuss the results of what we have observed thus far. In general, 
+had the manually written versions of these case studies attempted to be 
+certified, they would (and should) have failed.
+
+Overall there were a number of common problems, alongside some case-study 
+specific issues, many of which had gone unnoticed for years. It was not until 
+the case studies were re-developed in Drasil that they were finally resolved.
+
+We will also discuss other observations and enhancements provided by Drasil 
+that we hope will lead to long-term quality improvements for the generated 
+software.
 
 \wss{I like this Results section - examples like these are something people can
   understand and hopefully be convinced by.}
 
+\subsection{Freebies - Compliments of System Information} \ds{Change the title}
+
+We have reduced the burden of knowledge capture for a project by separating the 
+system information from the layout specification and template boilerplate for 
+our artifacts. While this in itself is a good start, it also gives us a number 
+of convenient, and free, perks.
+
+First off, thanks to the recipe language we can generate a number of sections 
+manually. One of the most tedious sections to write and maintain is that of 
+reference material. Manually maintaining the tables of symbols, units, and 
+abbreviations and acronyms is necessary, but ultimately uninteresting. 
+By separating out the system information we have a smaller, more maintainable 
+data structure from which we can generate all of the previously mentioned 
+tables (as well as many other sections and subsections).
+
+Let us first look at the \emph{tiny} case study. As our first toy-example, it 
+lacked the rigour of the other case studies. Particularly, there was no 
+reference information section, only a table of units. However, since Drasil 
+takes the monotony out of creating a reference information section, one is 
+currently being generated in our software artifacts. See 
+Figure~\ref{Fig:tinyRef} for a comparison of the original version of tiny to 
+the freebie-inclusive one.
+
+\begin{figure}
+\caption{Tiny before (left) and after (right) use of Document Language and 
+System Information}
+\label{Fig:tinyRef}
+\ds{This might need to be an appendix since I'm not sure how to fit it in here}
+\end{figure}
+
+Not only does the generator populate the reference material from our system 
+information, it also provides a number of sanity-checks. First and foremost, if 
+a symbol is not defined, it cannot be used anywhere else within the document. 
+This actually extends to cross-referencing as well, only pieces of knowledge 
+that have been properly captured and added to the system context can be 
+referenced. 
+
+There are other sanity-checks being implemented, such as guarding against 
+captured constraints and ensuring unit consistency in equations, but those 
+features are as yet incomplete. We can already see instances of where they 
+would be very useful, and an example related to unit consistency will be given 
+in Section~\ref{S:SSPResults}.
+
+With that in mind, we can still see the benefits of running even the most 
+trivial sanity-checks every time we generate our artifacts. We no longer need 
+to worry if the reference material will remain consistent with the rest of the 
+artifact, as if a system is modified, we can ensure that no requisite 
+definitions were accidentally removed.
+
+\ds{Move - Bibliography - to section explaining System Information as a 
+concept?}
+
+
 \subsection{Common issues across case studies}
+\label{S:CommIssues}
 
 Across all of our case studies we were able to find a number of undefined 
 symbols using Drasil. This was after multiple passes by humans attempting to 
@@ -1492,28 +1638,121 @@ The symbols that lacked definitions were typically those with an ``understood"
 meaning in the context of their domain, but not once did that definition appear 
 concretely in any of the software artifacts.
 
-\wss{You are giving specific examples below, right?}
-
-\ds{Yes.}
+Otherwise, the most common issue to crop up across the case studies was that of 
+implicit information. There is tacit knowledge (for domain experts) and 
+undocumented assumptions in a number of the manually-written case studies. 
+Identifying and capturing that knowledge is necessary when attempting to use 
+Drasil, otherwise, there is no way to properly define the system relative to 
+its domain.
 
 \subsection{NoPCM and SWHS}
 
-- Along with the common errors, there was some sharing of PCM-related knowledge
-  - Found because PCM symbols were not in the ToS and the sanity-check caught 
-  it.
-  - No way to specifically exclude knowledge that shouldn't 'exist' in a project
-- Work in Kolmogorov complexity / MDL for NoPCM + SWHS?
-- Kolmogorov/MDL implies less writing for the same artifacts -> less to sift 
-through = maybe better? Need to run experiments to know for sure.
+As previously mentioned, NoPCM and SWHS are members of the same software 
+family. They share a lot of the same core knowledge. It should be noted that  
+NoPCM was manually created after SWHS.
+
+When implementing NoPCM in Drasil, we found PCM-related knowledge that should 
+not have existed in the case study. It is likely that in the manual version, 
+some information was copied directly from the SWHS case study and pasted into 
+the NoPCM documentation. 
+
+This information was trivial to remove in the Drasil 
+version, as a number of the PCM-related symbols were not defined and ended up 
+causing errors during the sanity-checking portion of artifact generation. The 
+PCM-related concepts were not defined in the context of NoPCM, and as such were 
+not in the table of symbols or other reference material. However, prior to 
+implementing our sanity-checking, the PCM-related concepts did actually occur 
+in Drasil, namely due to the lack of a means to specifically exclude knowledge 
+that \emph{should not} exist in a given project. That may be something worth 
+looking into for specific software family-related knowledge, however, on the 
+whole it is not feasible to force developers to specify excluded knowledge for 
+every project.
+
+Another interesting result was the reduction in Kolmogorov complexity across 
+these two case studies. As of this writing the total number of 80-character 
+lines of code written in Drasil, including import blocks and some deprecated 
+code, needed to generate both SWHS and NoPCM is 4460 (ignoring whitespace and 
+comments). This value ignores all back-end packages that define the 
+languages used to write the case study examples in Drasil, as they are not part 
+of the case study knowledge or recipe itself. However, to ensure we are getting 
+an upper bound on the number of lines of code required, this number also 
+includes the entirety of our knowledge base (\emph{Data.Drasil}).
+
+The generated artifacts for SWHS and NoPCM contain a total of 13695 lines of 
+code (again, ignoring whitespace and comments). This is again, an upper limit, 
+as there are many lines of boilerplate, particularly in the HTML, that could be 
+condensed. However, we also do not limit the length of lines in the 
+generated output, many of which far exceed 80 characters. Overall, we need only 
+write less than one third of the lines of code to produce the same output!
+
+If we consider each of NoPCM or SWHS independent of the other, the results are 
+still interesting, but less so. For SWHS the amount of Drasil code written 
+(again, including \emph{Data.Drasil}) is 3678 and the number of generated lines 
+for that example is 8550. While this is still a reduction of over 50\%, we can 
+see there is a substantial benefit when producing multiple software family 
+members.
+
+Finally, the code generator is still in the process of being updated, so we are 
+not generating any source code for SWHS. Thus the 13695 
+figure \emph{will} increase, while the 4460 (or 3678) figure should remain near 
+constant. We can support this claim as our NoPCM example is currently 
+generating source code and it requires less than 100 dedicated lines of code in 
+Drasil to do so (included in the above figure of 4460).
+
+We hope these results will lead to an overall reduction in the time required to 
+create and maintain software artifacts while using Drasil, particularly for 
+software families, since there will be less code to manage. However, we make no 
+claim to that effect without experimental evidence to support it. We 
+will discuss plans for experiments in Section~\ref{S:Future}.
+
+%LoC Count excluding whitespace and comments, but including imports for source
+%NoPCM: 782 lines (incl. imports)
+%SWHS: 2284 ""
+%Data: 1394 ""
+%Total: 4460
+
+%LoC Count excluding whitespace and comments, but including imports for gen'd
+%NoPCM TeX, HTML, CSS, src, and makefiles: 829 + 3466 + 89 + 740 + 21 = 5145
+%SWHS TeX, HTML, CSS, src, and makefiles: 1340+7100+89+0+21 = 8550
+%Total: 13695
 
 \subsection{SSP}
+\label{S:SSPResults}
+A major inconsistency was found in the SSP case study regarding three symbols: 
+$S_i$, $P_i$, and $\tau{}_i$. In the table of symbols, $S_i$ and $P_i$ were 
+defined as shown in Figure~\ref{Fig:SiPi} and there was no instance of a 
+definition for $\tau{}_i$.
 
-- Symbols for given quantities changed throughout the documentation
-  - Went unnoticed by a human for years! Found almost instantly by Drasil
-    - the new symbols were undefined.
+\begin{figure}
+\fbox{\includegraphics[width=\textwidth]{sipi.png}}
+\caption{Definitions of $P_i$ and $S_i$ from the SSP case study}
+\end{figure}
 
-Immediately improved the quality of the documentation, particularly in terms of 
-consistency!
+The lack of definition was a simple enough problem to find, as mentioned in 
+Section~\ref{S:CommIssues}. However, there was a second, more insidious problem 
+to be solved: $\tau{}_i$ actually represented $S_i$ and at some point $S_i$ and 
+$P_i$ had their definitions swapped! If you are interested in the full details 
+of the problem and solution, they can be found at 
+\url{https://github.com/JacquesCarette/Drasil/issues/348}.
+
+This seemingly minor error in consistency was only caught after Drasil alerted 
+us that $\tau{}_i$ had not been defined. We then traced through the equations 
+using $\tau{}_i$ to determine its meaning. It took several passes through the 
+manually-written documentation to determine all of the requisite changes. 
+First, the definition of $\tau{}_i$ was added, then the equations were 
+double-checked for correctness, and any place where $S_i$ and $P_i$ were 
+swapped had to be identified.
+
+Another issue arose while fixing the symbol-mixup situation: there was an 
+implicit assumption in one of the equations which caused inconsistencies in the 
+units of the output. Namely, there is an assumption that a particular force per 
+meter is being applied over one unit of width ``into the page", thus changing 
+the expected units from $\frac{N}{m}$ to $N$.
+
+Overall, the changes required in the Drasil source were minimal. A definition 
+and assumption were added and a few symbols were shuffled. Yet there was an 
+immediate improvement in the quality of the documentation, particularly with 
+regards to consistency!
 
 \subsection{Pervasive Bugs}
 
@@ -1522,7 +1761,7 @@ introduction of ``pervasive bugs". These are typically mistakes made in the
 captured knowledge which propagate across all generated artifacts wherein that 
 knowledge is used. Calling this a benefit may seem counter-intuitive, but when 
 an error appears in a multitude of locations it is far more likely to be caught 
-then if it were hiding in the corner of one artifact.
+then were it hiding in some corner of one artifact.
 
 Not only is it more likely that we will find an error, it is also far easier to 
 track down the source of said error -- we need only go to the knowledge base 
@@ -1532,27 +1771,6 @@ the offending chunk if we so desire.
 Correcting an error in a chunk of knowledge is also trivial. It only needs to 
 be fixed once to be fixed across all of our software artifacts. No need to 
 \texttt{grep}, find-and-replace, or the like.
-
-\subsection{Freebies - Compliments of System Information}
-
-- Thanks to the recipe language and the way we structure out system information
-  we can get
-- Table of Symbols
-- Table of Units
-- Table of Abbreviations and Acronyms
-- Bibliography
-
-\begin{figure}
-\caption{Tiny before (left) and after (right) use of Document Language and 
-System Information}
-\end{figure}
-
-- All tedious to do by hand, but are free to automatically generate
-- Generator includes sanity-checking -> Can't use something that isn't defined!
-- Sanity-checks are 'free' -> we can check for errors with our symbols,
-  ensure units are consistent, guard against constraints, and ensure we only
-  reference those things which are defined in our system. 
-- Sanity-checks are run every time artifacts are generated.
 
 \subsection{Improved Understanding of Software Artifacts}
 
@@ -1572,11 +1790,15 @@ effectiveness of existing templates, and existing requirements solicitation and
 analysis efforts.  Teaching it to a computer.]
 
 \section{Future Work}
+\label{S:Future}
 
 [*SS* - Once we are capable of true variability in the documentation, we can
 really start asking the question about what is the "best" documentation for a
 given context.  In the future experiments could be done with presenting the same
 information in different ways to find which approach is the most effective.]
+
+%Definitely need to keep experiments in mind here! See SWHS/NoPCM section for 
+%details.
 
 - Run an experiment to determine how easy it is to create new software with 
 Drasil.
@@ -1591,6 +1813,8 @@ Drasil.
 issues currently open on the Drasil repository).
 
 - User friendliness
+
+- More sanity checks
 
 \section{Conclusion}
 

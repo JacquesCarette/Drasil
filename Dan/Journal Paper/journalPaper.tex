@@ -1224,7 +1224,7 @@ knowledge-base. To that end we have leveraged our experience with generative
 programming to create a number of Domain-Specific Languages (DSLs) to help 
 achieve our goals. In the simplest terms, we use a DSL for knowledge-capture, 
 document layout, printing, code-generation, and more. These will be discussed 
-in more depth in Section~\ref{S:DrasilKC}.
+in more depth in Section~\ref{S:DrasilBackEnd}.
 
 Drasil's development has followed a cyclic approach of analysis and abstraction 
 to reach its current state. We use our case studies as a guide, treating them 
@@ -1244,6 +1244,61 @@ repository at \url{https://github.com/JacquesCarette/Drasil}.
 
 \wss{I like the above description of Drasil.  It felt more focused than some of
   the other sections.}
+
+\subsection{The Generator \& Back-end DSLs}
+\label{S:DrasilBackEnd}
+
+Drasil is composed of a number of DSLs working together to generate software 
+artifacts. While there are other DSLs within Drasil, namely the recipe language 
+(See Section~\ref{S:RecipeLang}), they are not exactly necessary for generating 
+documentation and source code -- they provide useful high-level abstractions. 
+The required DSLs for generating documentation and source code using Drasil are 
+the:
+
+\begin{itemize}
+\item Expression language
+\item Specification language
+\item Knowledge-capture language
+\item Document layout language
+\item (Modified) Generic Object Oriented Language (GOOL) framework
+\item Printing translation language
+\item LaTeX and HTML printers
+\end{itemize}
+
+The expression language
+
+The specification language
+
+The knowledge-capture language is the collection of data structures, smart 
+constructors, lenses, transformations, and other functions related specifically 
+to capturing and operationalizing knowledge. The knowledge capture language 
+uses the expression and specification languages as building blocks for 
+capturing different properties. For example, a defining equation like that seen 
+in Figure~\ref{Fig:GlassBRDDSRS} will be captured within a chunk using the 
+expression language, whereas the English-language term referring to a chunk 
+will be captured using the specification language. See Section~\ref{S:DrasilKC} 
+for more of the implementation details.
+
+The document layout language
+- Give an example here of how it can be used (like the following) to show what 
+NOT to do.
+\begin{listing}
+myDocument :: Document
+myDocument = Document myTitle authors sections
+
+myTitle :: Sentence
+myTitle = S "Sample document title"
+
+
+
+\end{listing}
+
+GOOL~\cite{Costabile2012} is ... We use a modified version to facilitate 
+our code generation. -Has its own printing DSLs and ASTs for a number of langs.
+
+The printing translation language and printers are very closely related. They 
+are
+
 
 \subsection{Knowledge Capture \& Transformations in Drasil}
 \label{S:DrasilKC}
@@ -1293,9 +1348,13 @@ Thus it is the minimal complete definition of the \emph{Quantity} class.
 
 Since Haskell is strictly-typed, having a number of different data structures 
 and expecting them to behave with each other can be difficult. As such, we have 
-implemented each class property using lenses. Now our knowledge can be captured 
-in a variety of data structures, but we are able to project out only what is 
-relevant in a given context, or related to a specific property. 
+implemented each class property using lenses. For those unaware, lenses are 
+composable functional references -- they allow us to read and write data 
+deep within our data structures. Combining lenses with Haskell's type classes 
+allows us to capture our knowledge in a variety of data structures, then use 
+the lenses to project out only that which is relevant in a given context, or 
+related to a specific property. Classes and lenses work in tandem to give us 
+data-structure-agnostic setters and getters.
 
 We have already started to capture knowledge from several areas into our 
 knowledge base. A brief, high-level overview can be seen in 
@@ -1319,21 +1378,16 @@ typically involves using a lens to extract the relevant portion of knowledge,
 while a translation can take knowledge in one form and convert it to another. 
 For example, we can translate an equation into an English description by 
 projecting out each of its symbols' definitions and combining them into a 
-sentence or description block. An example can be seen 
+sentence or description block. An example of the generated output can be seen in
 Figure~\ref{Fig:GlassBRDDSRS}.
-
-We discuss the recipe language in more depth in Section~\ref{S:RecipeLang}.
-
-\subsection{The Generator}
-
-  - Key components of the generator / renderer
-- The generator
-  - HTML and TeX rendering
-  - GOOL for code
-- Sentence and Document
 
 \subsection{The Recipe Language}
 \label{S:RecipeLang}
+
+The recipe language in Drasil is known under the name 
+\texttt{Drasil.DocumentLanguage}. While it is not exactly mandatory for 
+generating documents, it provides a number of higher-level tools to simplify 
+the process dramatically. 
 
 - Recipe Language(s) -- Example in action Refer to:
   \fgr{} Drasil.DocumentLanguage
@@ -1447,7 +1501,7 @@ related to documentation, physical properties, and more.
 A more detailed breakdown of \texttt{Data.Drasil} is given in 
 Section~\ref{S:Data}.
 
-\subsection{\ddl}
+\subsubsection{\ddl}
 
 The \eddl{} package contains an example recipe, found in 
 \texttt{Drasil.DocumentLanguage}, targeted at recreating the 

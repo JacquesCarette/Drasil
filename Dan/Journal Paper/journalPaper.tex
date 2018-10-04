@@ -105,14 +105,16 @@ text centered, anchor=north, text=black, text width=3cm]
 	commentstyle=\color{green},
 	frame=single,
 	keywordstyle=\color{blue},
-	numbers=left,
-	numbersep=5pt,
-	numberstyle=\color{gray},
-	stepnumber=5,
-	stringstyle=\color{pink},
+%	numbers=left,
+%	numbersep=5pt,
+%	numberstyle=\color{gray},
+%	stepnumber=5,
+	stringstyle=\color{red},
 	tabsize=2,
-	title=\lstname,
-	escapeinside={-*}{*-}
+%	title=\lstname,
+	escapeinside={-*}{*-},
+	showspaces=false,
+	showstringspaces=false
 }
 %%%%%%%%%%%%%%%%%%%%%
 
@@ -1254,51 +1256,135 @@ artifacts. While there are other DSLs within Drasil, namely the recipe language
 documentation and source code -- they provide useful high-level abstractions. 
 The required DSLs for generating documentation and source code using Drasil are 
 the:
-
 \begin{itemize}
 \item Expression language
-\item Specification language
+\item Sentence specification language
 \item Knowledge-capture language
 \item Document layout language
 \item (Modified) Generic Object Oriented Language (GOOL) framework
 \item Printing translation language
 \item LaTeX and HTML printers
 \end{itemize}
+%What follows is a fairly dry overview of each of these DSLs.
 
-The expression language
+The expression language is used for capturing mathematic expressions, such as 
+defining equations. With it we can capture equations, relations, and more. We 
+have included a host of standard unary, binary, and $n$-ary arithmetic, 
+trigonometric, boolean, and matrix operations. For example, the equation 
+captured in Drasil for linear displacement (from the game physics example) 
+$\mathbf{r}(t)=\frac{d\,\mathbf{p}\left(t\right)}{d\,t}$ can be seen in 
+Figure~\ref{Fig:ExprEq}. The equation is simply defined as a derivative of the 
+position function with respect to time. At this point in time, the expression 
+language is untyped, however, we recognize the advantages of using a typed 
+expression language and intend to implement expression typing in the future.
 
-The specification language
+\begin{figure}
+\lstinputlisting[firstline=64, 
+lastline=65]{../../code/drasil-example/Drasil/GamePhysics/DataDefs.hs}
+\caption{Linear displacement equation 
+$\mathbf{r}(t)=\frac{d\,\mathbf{p}\left(t\right)}{d\,t}$ in Drasil}
+\label{Fig:ExprEq}
+\end{figure}
+
+The sentence specification language is used for capturing knowledge at the 
+``sentence" level. These are typically English-language sentences which combine 
+captured knowledge in different ways. We can build mixtures of strings 
+with knowledge-level or document-layout-level references, expressions, symbols 
+and special characters, units, and any other captured information. An example 
+sentence (shortened for the sake of brevity) can be seen in 
+Figure~\ref{Fig:Sentence}. Note the use of references to existing pieces of 
+knowledge (\verb|plate_len|, \verb|plate_width|, \verb|millimetre|, and 
+\verb|metre|) allowing us to look up the relevant symbols ($a$ and $b$ for 
+\verb|plate_len| and \verb|plate_width| respectively) and other information on 
+generation to maintain consistency. The binary infix constructor \verb|:+:| is 
+used for sentence concatenation.
+
+\begin{figure}
+\begin{lstlisting}
+inputGlassPropsDesc :: Sentence
+inputGlassPropsDesc = -* \dots{} *- :+:
+  S "Note" :+: ch plate_len `sAnd` ch plate_width :+: 
+  S "will be input in terms of" :+: plural millimetre `sAnd` :+: 
+  S "will be converted to the equivalent value in" :+: plural metre
+\end{lstlisting}
+\caption{A sentence captured in Drasil}
+\label{Fig:Sentence}
+\end{figure}
 
 The knowledge-capture language is the collection of data structures, smart 
 constructors, lenses, transformations, and other functions related specifically 
 to capturing and operationalizing knowledge. The knowledge capture language 
-uses the expression and specification languages as building blocks for 
+uses the expression and sentence specification languages as building blocks for 
 capturing different properties. For example, a defining equation like that seen 
-in Figure~\ref{Fig:GlassBRDDSRS} will be captured within a chunk using the 
-expression language, whereas the English-language term referring to a chunk 
-will be captured using the specification language. See Section~\ref{S:DrasilKC} 
-for more of the implementation details.
+in Figure~\ref{Fig:ExprEq} will be captured as one property of a chunk using 
+the expression language, whereas the English-language term referring to the 
+same chunk will be captured using the sentence specification language. See 
+Section~\ref{S:DrasilKC} for more of the implementation details.
 
-The document layout language
-- Give an example here of how it can be used (like the following) to show what 
-NOT to do.
-\begin{listing}
+The document layout language is where things really start to come together. 
+This is the lowest-level specification for how a document artifact should be 
+pieced together. A \emph{Document} is simply defined as a data structure which 
+includes a title, author(s), and a list of (one or more) sections. The sections 
+are then composed of (sub-)sections and contents (tables, figures, paragraphs, 
+lists, equations, etc.) which are in turn composed of sentences and 
+expressions. 
+
+The document layout language is \emph{not} meant to be used to 
+generate artifacts directly -- it is far too naive and very tedious to 
+use. We show evidence of this in Figure~\ref{Fig:DumbDoc} which shows the 
+effort required to create a document given a simple title, authors, and an 
+introduction section composed of an introductory paragraph and an empty 
+``Scope" subsection.
+
+It seems clear that this approach is not much better than using tools 
+like LaTeX macros, other than our ability to print in both
+LaTeX and HTML. The only real benefits of assembling documents at this level 
+are the highly-specific control of the layout and the 
+consistent-by-construction output when (re-)using captured knowledge. Alone, 
+that is not enough, hence why we need higher level abstractions (see 
+Section~\ref{S:RecipeLang}).
+
+\begin{figure}
+\begin{lstlisting}
 myDocument :: Document
 myDocument = Document myTitle authors sections
 
 myTitle :: Sentence
 myTitle = S "Sample document title"
 
+author :: Sentence
+authors = S "Szymczak, Carette, and Smith"
 
+sections :: [Section]
+sections = [introduction, filler, conclusion]
 
-\end{listing}
+introduction, filler, conclusion :: Section
+introduction = Section (S "Introduction") 
+	[Con $ ULC $ Paragraph $ 
+		S "This is the introduction paragraph for our tedious document."
+		Sub Section (S "Scope") 
+			[{- Scope section contents go here -}]
+	]
+-* \dots{} \emph{omitted for brevity} *-
+\end{lstlisting}
+\caption{Assembling a document using only the low-level document language is 
+tedious}
+\label{Fig:DumbDoc}
+\end{figure}
 
-GOOL~\cite{Costabile2012} is ... We use a modified version to facilitate 
-our code generation. -Has its own printing DSLs and ASTs for a number of langs.
+The printing translation language and printers are very closely related.  
+The translation language is a mid-level representation between the 
+higher-level semantic constructs in the document, sentence, and expression 
+languages and the lower-level printable HTML and LaTeX syntax.
+The printers themselves deal with printing the actual HTML and LaTeX found in 
+the generated artifacts, based solely on the translation-level constructs.
 
-The printing translation language and printers are very closely related. They 
-are
-
+Finally, GOOL~\cite{Costabile2012} is a generic object-oriented language used 
+to generate source code for a number of different programming languages 
+(Python, Java, Objective C, C++, C\#, and Lua) from a more abstract 
+specification. As we like to practice what we preach, we have chosen to 
+incorporate a modified version of GOOL into Drasil to facilitate code 
+generation without reinventing the wheel.
 
 \subsection{Knowledge Capture \& Transformations in Drasil}
 \label{S:DrasilKC}
@@ -1363,6 +1449,8 @@ have not strayed far from the specifics of our case studies. Our knowledge-base
 should by no means be considered an ontology or even somewhat comprehensive 
 collection of knowledge at this time. It is quite interesting even, to see how 
 little we have captured, yet how much we can achieve.
+
+%TODO: Work in "People.hs" somewhere in here
 
 \begin{figure}
 \caption{Knowledge areas we have started to capture (See: SE-CSE paper) \ds{I 
@@ -1869,6 +1957,10 @@ issues currently open on the Drasil repository).
 - User friendliness
 
 - More sanity checks
+
+- Expression language -> Make it typed
+
+- Expression language -> Make it easier to extend
 
 \section{Conclusion}
 

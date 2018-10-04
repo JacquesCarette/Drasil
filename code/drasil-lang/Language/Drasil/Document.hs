@@ -15,6 +15,15 @@ import Control.Lens (makeLenses)
 -- are standard layout objects (see 'Contents')
 data SecCons = Sub   Section
              | Con   Contents
+             
+-- It seems odd that we only include sections. What about Chapters or Parts?
+-- I guess they haven't come up yet. Should probably add something like:
+-- data Partition = Section ...
+--                | Part ...
+--                | Chapter ... -- Intro paragraph(s) then Sections within
+--                | ...
+-- and modify Document to use [Partition] instead of [Section]
+-- Should we be using Data.List.NonEmpty?
 
 -- | Sections have a title ('Sentence') and a list of contents ('SecCons')
 -- and its shortname

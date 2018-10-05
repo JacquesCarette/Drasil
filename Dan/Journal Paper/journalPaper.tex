@@ -1473,19 +1473,65 @@ Figure~\ref{Fig:GlassBRDDSRS}.
 \label{S:RecipeLang}
 
 The recipe language in Drasil is known under the name 
-\texttt{Drasil.DocumentLanguage}. While it is not exactly mandatory for 
-generating documents, it provides a number of higher-level tools to simplify 
-the process dramatically. 
+\texttt{Drasil.DocumentLanguage}. While it is not necessary to generate
+documentation artifacts, it provides a number of higher-level semantic 
+constructors for combining document-specific layout information alongside 
+document meta-knowledge (captured in \texttt{Data.Drasil}).
 
-- Recipe Language(s) -- Example in action Refer to:
-  \fgr{} Drasil.DocumentLanguage
-- System Information -> Get into it
+The recipe language essentially defines new custom data-types specific to the 
+documentation artifact we wish to generate. We are creating representations 
+which combine (document) layout information with system information (captured 
+knowledge) in a meaningful way. Alongside the recipe language, the system 
+information is used to define exactly what knowledge is relevant to a 
+particular software family member.
 
+Within our \emph{SystemInformation} data structure we maintain a database of 15 
+different chunk classes (all the quantities, concepts, inputs, outputs, 
+constraints, constants, etc.) required to generate (all) our artifacts for the 
+given piece of software. Without a recipe, however, these chunks are 
+essentially useless -- Drasil can not do anything with them without a recipe. 
+We need at least one recipe for each of the artifact types we wish to create. 
+Let us consider the SRS as our running example for the rest of this section.
+
+\texttt{Drasil.DocumentLanguage} currently contains one recipe for 
+generating the SmithEtAl SRS template. We have created custom, meaningful 
+constructors for the different document sections relevant to the current 
+context of the SRS, see Figure~\ref{Fig:DocSection} for the top-level 
+constructors. Each of these top-level sections, with the exception of Verbatim, 
+can be decomposed in a meaningful way, thus allowing us to specify the 
+subsections we would like to include as well. 
+
+\begin{figure}
+\lstinputlisting[firstline=52, 
+lastline=66]{../../code/drasil-docLang/Drasil/DocumentLanguage.hs}
+\caption{Our top-level SRS recipe section constructors}
+\label{Fig:DocSection}
+\end{figure}
+
+With our recipe, we enforce certain conventions, for example subsections can 
+only belong to the appropriate parent sections as outlined in the original 
+template. We have attempted to enforce the bare minimum necessary to maintain a 
+cohesive document, allowing for a greater level of customization for the user. 
+Options we give to our users include such trivial things as customizing the 
+order sections should appear (for example, should the reference information be 
+up-front, somewhere in the middle, or at the end?). We also include less 
+trivial decisions such as the verbosity of description fields (should all 
+relevant symbols be defined in the context of a defining equation, 
+or only the symbol(s) defined by that equation?), or whether to include model 
+derivations.
+
+An example of the SRS recipe in use can be seen in 
+Figure~\ref{Fig:GlassBRSRSDL} and is explained further in 
+Section~\ref{S:GlassBR}.
 
 \subsection{Packaging Drasil}
 
-The current version (0.1.23 as of this writing) of Drasil is built as a group 
-of Haskell packages (see Figure~\ref{Fig:Packages}). The core components, 
+Since Drasil has a lot of moving parts, it may be difficult to see where to 
+start or how things fit together. We have attempted to simplify this by 
+splitting the current version (0.1.23 as of this writing) of Drasil into a 
+group of Haskell packages (see Figure~\ref{Fig:Packages}).
+
+The core components, 
 including those for document concepts, are stored in a package named \edl{} and 
 code-related components are in \edc{}. The main generator code is in \edg{}, 
 with the HTML and LaTeX printers in \edp{}. We maintain our current 
@@ -1658,6 +1704,7 @@ knowledge, yet the results with out limited knowledge-capture already speak for
 themselves.
 
 \subsection{GlassBR}
+\label{S:GlassBR}
 
 - Brief intro to problem GlassBR is solving - how it works
 - Show off the doc language here
@@ -1923,21 +1970,20 @@ understanding of software artifacts that follows. To write a recipe, one needs
 to truly understand what is being said and how each piece of knowledge relates 
 to each other. 
 
-[*SS* - Related to the previous \ds{now next} point, the act of formalizing the 
-knowledge that
-goes into the requirements documentation forces us to deeply understand the
-distinctions between difference concepts, like scope, goal, theory, assumption,
-simplification, etc.  With this knowledge we can improve the focus and
-effectiveness of existing templates, and existing requirements solicitation and
-analysis efforts.  Teaching it to a computer.]
+\wss{Related to the previous \ds{now next} point, the act of formalizing 
+the knowledge that goes into the requirements documentation forces us to deeply 
+understand the distinctions between difference concepts, like scope, goal, 
+theory, assumption, simplification, etc.  With this knowledge we can improve 
+the focus and effectiveness of existing templates, and existing requirements 
+solicitation and analysis efforts.  Teaching it to a computer.}
 
-\section{Future Work}
+\section{Future Work} \ds{This might end up being really long}
 \label{S:Future}
 
-[*SS* - Once we are capable of true variability in the documentation, we can
+\wss{Once we are capable of true variability in the documentation, we can
 really start asking the question about what is the "best" documentation for a
 given context.  In the future experiments could be done with presenting the same
-information in different ways to find which approach is the most effective.]
+information in different ways to find which approach is the most effective.}
 
 %Definitely need to keep experiments in mind here! See SWHS/NoPCM section for 
 %details.
@@ -1961,6 +2007,9 @@ issues currently open on the Drasil repository).
 - Expression language -> Make it typed
 
 - Expression language -> Make it easier to extend
+
+- More recipes for current artifacts (ie. not just SmithEtAl template), and for 
+new types of artifacts!
 
 \section{Conclusion}
 

@@ -3,8 +3,6 @@ module Language.Drasil.RefTypes(RefAdd, RefType(..), DType(..), ReqType(..)) whe
 
 import Language.Drasil.UID (UID)
 
---import Language.Drasil.Document.Core (DType(..)) cannot be imported due to importcycles
-
 -- | Types of definitions
 data DType = General
            | Instance

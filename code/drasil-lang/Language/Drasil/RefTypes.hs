@@ -1,4 +1,3 @@
-{-# LANGUAGE GADTs #-}
 -- | Contains the types associated to references
 module Language.Drasil.RefTypes(RefAdd, RefType(..), DType(..), ReqType(..)) where
 
@@ -17,7 +16,6 @@ type RefAdd = String
 -- | What type of requirement are we dealing with?
 data ReqType = FR  -- ^ Functional Requirement
              | NFR -- ^ Non-Functional Requirement
-  deriving Eq
 
 instance Show ReqType where
   show FR  = "FR"

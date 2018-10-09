@@ -1,5 +1,5 @@
 module Language.Drasil.People 
-  ( People, Person(..)
+  ( People, Person
   , person, person', personWM, personWM', mononym
   , HasName
   , name, manyNames, nameStr

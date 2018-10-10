@@ -126,7 +126,83 @@ egetSCSSub (_)    = [] --concatMap egetTM tm
 egetSCSSub (Constraints _ _ _ lc) = concatMap egetLblCon lc
 egetSCSSub (CorrSolnPpties c) = concatMap egetCon' c
 
+getDocDesc :: DocDesc -> [Sentence]
+getDocDesc d = getDocSec d
 
+getDocSec :: DocSection -> [Sentence]
+getDocSec (Verbatim a)         = getSec a
+getDocSec (RefSec r)           = getRefSec r
+getDocSec (IntroSec i)         = getIntrosec i
+getDocSec (StkhldrSec s)       = getStk s
+getDocSec (GSDSec g)           = getGSD g -------Stop here
+getDocSec (ScpOfProjSec s)     = getScp s
+getDocSec (SSDSec s)           = getSSD s
+getDocSec (ReqrmntSec r)       = getReq r
+getDocSec (LCsSec l)           = getLcs l
+getDocSec (UCsSec u)           = getUcs u
+getDocSec (TraceabilitySec t)  = getTrace t
+getDocSec (AuxConstntSec a)    = getAux a
+getDocSec (Bibliography)       = []
+getDocSec (AppndxSec a)        = getApp a
+getDocSec (ExistingSolnSec e)  = getExist e
 
+getRefSec :: RefSec -> [Sentence]
+getRefSec (RefProg c r) = getCon' c ++ concatMap getReftab r
 
+getReftab :: RefTab -> [Sentence]
+getReftab (TUnits) = []
+getReftab (TUnits' tu) = concatMap getTuIntro tu
+getReftab (TSymb ts) = concatMap getTsIntro ts
+getReftab (TSymb' lf ts) = getLFunc lf ++ concatMap getTsIntro ts
+getReftab (TAandA) = []
 
+getTuIntro :: TUIntro -> [Sentence]
+getTuIntro (System) = [System]
+getTuIntro (_) = []
+
+getTsIntro :: TSIntro -> [Sentence]
+getTsIntro (TypogConvention tc) = concatMap getTConv tc
+getTsIntro (_) = []
+
+{--data LFunc where
+  Term :: LFunc
+  Defn :: LFunc
+  TermExcept :: Concept c => [c] -> LFunc
+  DefnExcept :: Concept c => [c] -> LFunc
+  TAD :: LFunc
+  Fixme!!--}
+getLFunc :: LFunc -> [Sentence]
+getLFunc (_) = []
+
+getTConv :: TConvention -> [Sentence]
+getTConv (Vector _) = []
+getTConv (Verb s) = [s]
+
+getIntrosec :: IntroSec -> [Sentence]
+getIntosec (IntroProg s1 s2 is) = [s1] ++ [s2] ++ concatMap getIntroSub is
+
+getIntroSub :: IntroSub -> [Sentence]
+getIntroSub (IPurpose s) = [s]
+getIntroSub (IScope s1 s2) = [s1] ++ [s2]
+getIntroSub (IChar s1 s2 s3) = [s1] ++ [s2] ++ [s3]
+getIntroSub (IOrgSec s1 _ _ s2) = [s1] ++ [s2]
+
+getStk :: StkhldrSec -> [Sentence]
+getStk (StkhldrProg _ s) = [s]
+getStk (StkhldrProg2 t) = concatMap getStkSub t
+
+{--data StkhldrSub where
+  Client :: (Idea a) => a -> Sentence -> StkhldrSub
+  Cstmr  :: (Idea a) => a -> StkhldrSub--}
+getStkSub :: StkhldrSub -> [Sentence]
+getStkSub (_) = []
+
+getGSD :: GSDSec -> [Sentence]
+getGSD (GSDProg sc c cl sc1) = concatMap getSec sc ++ getCon' c
+  ++ concatMap getCon' cl ++ concatMap getSec sc1
+getGSD (GSDProg2 gs) = getGSDSub gs
+
+getGSDSub :: GSDSub -> [Sentence]
+getGSDSub (SysCntxt c) = concatMap getCon' c
+getGSDSub (UsrChars c) = concatMap getCon' c
+getGSDSub (SystCons c s) = concatMap getCon' c ++ concatMap getSec s

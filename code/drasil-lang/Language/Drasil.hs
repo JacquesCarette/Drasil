@@ -213,6 +213,7 @@ module Language.Drasil (
   , names
   -- Document.Extract
   , egetDoc, getDoc, egetSec, egetCon', egetLblCon, egetQDef
+  , getSec, getCon', getSec, getCon'
   -- Label.Core
   , getAdd
 ) where
@@ -232,7 +233,7 @@ import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, csc
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
 import Language.Drasil.Document.Extract(egetDoc, getDoc, egetSec, egetCon', egetLblCon,
- egetQDef)
+ egetQDef, getSec, getCon', getSec, getCon')
 import Language.Drasil.Expr.Extract (dep, names', names)
 import Language.Drasil.Expr.Precedence (precA, precB, eprec)
 import Language.Drasil.Sentence.EmbedSymbol(ch)

@@ -1,4 +1,5 @@
-module Language.Drasil.Document.Extract (getDoc, egetDoc, egetSec, egetCon', egetLblCon, egetQDef) where
+module Language.Drasil.Document.Extract (getDoc, egetDoc, egetSec, egetCon', egetLblCon, egetQDef,
+	getSec, getCon', getSec, getCon' ) where
 
 import Control.Lens ((^.))
 import Data.List(transpose)

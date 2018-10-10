@@ -1,8 +1,9 @@
-module Language.Drasil.Document.Extract (getDoc, egetDoc) where
+module Language.Drasil.Document.Extract (getDoc, egetDoc, egetSec, egetCon', egetLblCon, egetQDef) where
 
 import Control.Lens ((^.))
 import Data.List(transpose)
 
+import Language.Drasil.Classes (DefiningExpr(defnExpr))
 import Language.Drasil.Document (Document(Document),Section(Section), SecCons(..))
 import Language.Drasil.Document.Core
 import Language.Drasil.Expr
@@ -13,9 +14,13 @@ import Language.Drasil.Chunk.ShortName
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation
 import Language.Drasil.Chunk.ReqChunk
+import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.RefTypes(DType(..))
 
 import Language.Drasil.Label (Label, mkLabelRASec)
+
+egetLblCon :: LabelledContent -> [Expr]
+egetLblCon a = egetCon (a ^. accessContents)
 
 egetDoc :: Document -> [Expr]
 egetDoc (Document _ _ s) = concatMap egetSec s
@@ -55,8 +60,8 @@ egetCon _ = []
 egetDtype :: DType -> [Expr]
 egetDtype _ = []
 
--- egetQDef :: QDefinition -> [Expr]
--- egetQDef a = [a ^. relat]
+egetQDef :: QDefinition -> [Expr]
+egetQDef q = [q ^. defnExpr]
 
 getDoc :: Document -> [Sentence]
 getDoc (Document t a s) = t : a : concatMap getSec s

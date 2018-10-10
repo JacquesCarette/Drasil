@@ -1,5 +1,5 @@
 Name:		drasil-docLang
-Version:	0.1.15
+Version:	0.1.16
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -11,6 +11,7 @@ library
     , Drasil.DocLang.SRS
   other-modules:
       Drasil.DocumentLanguage
+    , Drasil.ExtractDocDesc
     , Drasil.DocumentLanguage.Definitions
     , Drasil.DocumentLanguage.RefHelpers
     , Drasil.DocumentLanguage.TraceabilityMatrix

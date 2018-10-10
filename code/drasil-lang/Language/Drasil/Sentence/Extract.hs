@@ -19,3 +19,4 @@ snames (EmptyS)     = []
 -- And now implement the exported traversals all in terms of the above
 sdep :: Sentence -> [String]
 sdep = nub . snames
+

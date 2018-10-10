@@ -1,10 +1,7 @@
-{-# LANGUAGE GADTs #-}
 -- | Contains the types associated to references
 module Language.Drasil.RefTypes(RefAdd, RefType(..), DType(..), ReqType(..)) where
 
 import Language.Drasil.UID (UID)
-
---import Language.Drasil.Document.Core (DType(..)) cannot be imported due to importcycles
 
 -- | Types of definitions
 data DType = General
@@ -17,11 +14,6 @@ type RefAdd = String
 -- | What type of requirement are we dealing with?
 data ReqType = FR  -- ^ Functional Requirement
              | NFR -- ^ Non-Functional Requirement
-  deriving Eq
-
-instance Show ReqType where
-  show FR  = "FR"
-  show NFR = "NFR"
 
 -- | For building references. Defines the possible type of reference.
 data RefType = Tab    -- ^ Table

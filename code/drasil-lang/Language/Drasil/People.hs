@@ -1,5 +1,5 @@
 module Language.Drasil.People 
-  ( People, Person(..)
+  ( People, Person
   , person, person', personWM, personWM', mononym
   , HasName
   , name, manyNames, nameStr
@@ -16,27 +16,27 @@ data Person = Person { _given :: String
                      , _middle :: [String]
                      , _convention :: Conv
                      } deriving (Eq)
--- ^ Western style conventions are given name followed
--- by middle names, followed by surname.
--- Eastern style conventions are surname followed by middle names, 
--- followed by given name.
--- Mononyms are for those people who have only one name (ex. Madonna)
-
-comparePeople :: [Person] -> [Person] -> Maybe Ordering
-comparePeople [] [] = Nothing
-comparePeople _  [] = Just GT -- this makes sure that if the authors are the same 
-comparePeople []  _ = Just LT -- up to a point, the citation with more goes last
-comparePeople (Person f1 l1 _ _:xs) (Person f2 l2 _ _:ys)
-  | l1 /= l2  = Just $ l1 `compare` l2
-  | f1 /= f2  = Just $ f1 `compare` f2
-  | otherwise = comparePeople xs ys
-
 type People = [Person]
 
 -- | Naming conventions.
 data Conv = Western
           | Eastern
           | Mono deriving (Eq)
+
+-- ^ Western style conventions are given name followed
+-- by middle names, followed by surname.
+-- Eastern style conventions are surname followed by middle names, 
+-- followed by given name.
+-- Mononyms are for those people who have only one name (ex. Madonna)
+
+comparePeople :: [Person] -> [Person] -> Ordering
+comparePeople [] [] = EQ
+comparePeople _  [] = GT -- this makes sure that if the authors are the same 
+comparePeople []  _ = LT -- up to a point, the citation with more goes last
+comparePeople (Person f1 l1 _ _:xs) (Person f2 l2 _ _:ys)
+  | l1 /= l2  = l1 `compare` l2
+  | f1 /= f2  = f1 `compare` f2
+  | otherwise = comparePeople xs ys
 
 -- | Constructor for a person using Western naming conventions. 
 -- Used for a person with only a given name and surname.

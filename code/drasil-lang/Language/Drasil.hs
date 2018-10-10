@@ -76,7 +76,7 @@ module Language.Drasil (
   -- Chunk.Eq
   , QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec, fromEqn''', fromEqn''''
   -- Chunk.DataDefinition
-  , DataDefinition, mkQuantDef, mkDD, mkQuantDef', qdFromDD
+  , DataDefinition, mkQuantDef, mkDD, mkQuantDef', qdFromDD, mkDDL
   -- Chunk.GenDefn
   , GenDefn, gd, gdUnit, gdNoUnitDef, gd', gd''
   -- Chunk.InstanceModel
@@ -294,7 +294,7 @@ import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqn'', getVC,
  equat, ec, fromEqn''', fromEqn'''')
 import Language.Drasil.Chunk.DataDefinition (DataDefinition, mkQuantDef, mkDD, mkQuantDef',
-  qdFromDD)
+  qdFromDD, mkDDL)
 import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.Goal (Goal, mkGoal)
 import Language.Drasil.Chunk.InstanceModel

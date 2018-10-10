@@ -5,7 +5,6 @@ import Language.Drasil.RefTypes (RefType(..), DType(..), ReqType(..))
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
 import Data.List (concatMap, find, groupBy, partition, sortBy)
-import Data.Maybe (fromJust)
 import qualified Data.Map as Map
 
 import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
@@ -273,11 +272,17 @@ sDom d = error $ "Expected ConceptDomain to have a single domain, found " ++
   show (length d) ++ " instead."
 
 compareAuthYearTitle :: (HasFields c) => c -> c -> Ordering
-compareAuthYearTitle c1 c2
-  | comparePeople (getAuthor c1) (getAuthor c2) /= Nothing = fromJust $ comparePeople (getAuthor c1) (getAuthor c2)
-  | getYear c1  /= getYear c2  = getYear c1  `compare` getYear c2
-  | getTitle c1 /= getTitle c2 = getTitle c1 `compare` getTitle c2
-  | otherwise                      = error "Couldn't sort authors"
+compareAuthYearTitle c1 c2 =
+  if cp /= EQ then cp
+  else if y1 /= y2 then y1 `compare` y2
+  else if t1 /= t2 then t1 `compare` t2
+  else error "Couldn't sort authors"
+  where
+    cp = comparePeople (getAuthor c1) (getAuthor c2)
+    y1 = getYear c1
+    y2 = getYear c2
+    t1 = getTitle c1
+    t2 = getTitle c2
 
 getAuthor :: (HasFields c) => c -> People
 getAuthor c = maybe (error "No author found") (\(Author x) -> x) (find isAuthor (c ^. getFields))

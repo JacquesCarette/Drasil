@@ -24,7 +24,14 @@ import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
 import Drasil.SWHS.Labels (thermalEnergyOnlyL, lawConvectiveCoolingWtrPCML, 
   waterAlwaysLiquidL, noGaseousStatePCML, atmosphericPressureTankL, 
   nwtnCoolingL, rocTempSimpL, eBalanceOnWtrL, eBalanceOnPCML, heatEInWtrL, 
-  heatEInPCML)
+  heatEInPCML, likeChg1L, likeChg2L, likeChg3L, likeChg4L, likeChg5L,
+  likeChg6L,inputInitQuantsL, thermalEnergyOnlyL, heatTransferCoeffL,
+  contantWaterTempL, tempPcmConsL, densityWaterL, specificHeatL,
+  newtoLawConvecL, tempOverTimeL, tempOverLengthL, lawConvectiveCoolingWtrPCML,
+  chargeTankL, sameInitialL, pcmInitialSolidL, waterAlwaysLiquidL,
+  perfectInsulationL, noInternalHeatL, volumeChangeMeltL, noGaseousStatePCML,
+  atmosphericPressureTankL, volumeCoilL)
+import Drasil.SWHS.References (swhsCitations)
 import Drasil.SWHS.TMods (consThermE)
 import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, temp_init, temp_W,
   temp_PCM, htCap_L_P, htCap_W, htCap_S_P, w_density, pcm_density, pcm_vol)
@@ -50,43 +57,43 @@ assumpTEO, assumpHTCC, assumpCWTAT, assumpTPCAV, assumpDWPCoV, assumpSHECoV,
 
 newA1  = assump "Thermal-Energy-Only"                       assumpS1  thermalEnergyOnlyL
 assumpTEO = cic "assumpTEO"           assumpS1 "Thermal-Energy-Only"                        assumpDom
-newA2  = assump "Heat-Transfer-Coeffs-Constant"             assumpS2  (mkLabelRAAssump' "Heat-Transfer-Coeffs-Constant"  )
+newA2  = assump "Heat-Transfer-Coeffs-Constant"             assumpS2  heatTransferCoeffL
 assumpHTCC = cic "assumpHTCC"         assumpS2 "Heat-Transfer-Coeffs-Constant"              assumpDom
-newA3  = assump "Constant-Water-Temp-Across-Tank"           assumpS3  (mkLabelRAAssump' "Constant-Water-Temp-Across-Tank" )
+newA3  = assump "Constant-Water-Temp-Across-Tank"           assumpS3  contantWaterTempL
 assumpCWTAT = cic "assumpCWTAT"       assumpS3 "Constant-Water-Temp-Across-Tank"            assumpDom
-newA4  = assump "Temp-PCM-Constant-Across-Volume"           assumpS4  (mkLabelRAAssump' "Temp-PCM-Constant-Across-Volume")
+newA4  = assump "Temp-PCM-Constant-Across-Volume"           assumpS4  tempPcmConsL
 assumpTPCAV = cic "assumpTPCAV"       assumpS4 "Temp-PCM-Constant-Across-Volume"            assumpDom
-newA5  = assump "Density-Water-PCM-Constant-over-Volume"    assumpS5  (mkLabelRAAssump' "Density-Water-PCM-Constant-over-Volume"  )
+newA5  = assump "Density-Water-PCM-Constant-over-Volume"    assumpS5  densityWaterL
 assumpDWPCoV = cic "assumpDWPCoV"     assumpS5 "Density-Water-PCM-Constant-over-Volume"     assumpDom
-newA6  = assump "Specific-Heat-Energy-Constant-over-Volume" assumpS6  (mkLabelRAAssump' "Specific-Heat-Energy-Constant-over-Volume" )
+newA6  = assump "Specific-Heat-Energy-Constant-over-Volume" assumpS6  specificHeatL
 assumpSHECoV = cic "assumpSHECov"     assumpS6 "Specific-Heat-Energy-Constant-over-Volume"  assumpDom
-newA7  = assump "Law-Convective-Cooling-Coil-Water"         assumpS7  (mkLabelRAAssump' "Newton-Law-Convective-Cooling-Coil-Water" )
+newA7  = assump "Law-Convective-Cooling-Coil-Water"         assumpS7  newtoLawConvecL
 assumpLCCCW = cic "assumpLCCCW"       assumpS7 "Newton-Law-Convective-Cooling-Coil-Water"   assumpDom
-newA8  = assump "Temp-Heating-Coil-Constant-over-Time"      assumpS8  (mkLabelRAAssump' "Temp-Heating-Coil-Constant-over-Time" )
+newA8  = assump "Temp-Heating-Coil-Constant-over-Time"      assumpS8  tempOverTimeL
 assumpTHCCoT = cic "assumpTHCCoT"     assumpS8 "Temp-Heating-Coil-Constant-over-Time"       assumpDom
-newA9  = assump "Temp-Heating-Coil-Constant-over-Length"    assumpS9  (mkLabelRAAssump' "Temp-Heating-Coil-Constant-over-Length" )
+newA9  = assump "Temp-Heating-Coil-Constant-over-Length"    assumpS9  tempOverLengthL
 assumpTHCCoL = cic "assumpTHCCoL"     assumpS9 "Temp-Heating-Coil-Constant-over-Length"     assumpDom
 newA10 = assump "Law-Convective-Cooling-Water-PCM"          assumpS10 lawConvectiveCoolingWtrPCML
 assumpLCCWP = cic "assumpLCCWP"       assumpS10 "Law-Convective-Cooling-Water-PCM"          assumpDom -- FIXME: Use label once ConceptInstance migrates to them
-newA11 = assump "Charging-Tank-No-Temp-Discharge"           assumpS11 (mkLabelRAAssump' "Charging-Tank-No-Temp-Discharge" )
+newA11 = assump "Charging-Tank-No-Temp-Discharge"           assumpS11 chargeTankL
 assumpCTNOD = cic "assumpCTNOD"       assumpS11 "Charging-Tank-No-Temp-Discharge"           assumpDom
-newA12 = assump "Same-Initial-Temp-Water-PCM"               assumpS12 (mkLabelRAAssump' "Same-Initial-Temp-Water-PCM" )
+newA12 = assump "Same-Initial-Temp-Water-PCM"               assumpS12 sameInitialL
 assumpSITWP = cic "assumpSITWP"       assumpS12 "Same-Initial-Temp-Water-PCM"               assumpDom
-newA13 = assump "PCM-Initially-Solid"                       assumpS13 (mkLabelRAAssump' "PCM-Initially-Solid")
+newA13 = assump "PCM-Initially-Solid"                       assumpS13 pcmInitialSolidL
 assumpPIS = cic "assumpPIS"           assumpS13 "PCM-Initially-Solid"                       assumpDom
 newA14 = assump "Water-Always-Liquid"                       assumpS14 waterAlwaysLiquidL
 assumpWAL = cic "assumpWAL"           assumpS14 "Water-Always-Liquid"                       assumpDom -- FIXME: Use label once ConceptInstance migrates to them
-newA15 = assump "Perfect-Insulation-Tank"                   assumpS15 (mkLabelRAAssump' "Perfect-Insulation-Tank" )
+newA15 = assump "Perfect-Insulation-Tank"                   assumpS15 perfectInsulationL
 assumpPIT = cic "assumpPIT"           assumpS15 "Perfect-Insulation-Tank"                   assumpDom
-newA16 = assump "No-Internal-Heat-Generation-By-Water-PCM"  assumpS16 (mkLabelRAAssump' "No-Internal-Heat-Generation-By-Water-PCM" )
+newA16 = assump "No-Internal-Heat-Generation-By-Water-PCM"  assumpS16 noInternalHeatL
 assumpNIHGBWP = cic "assumpNIHGBWP"   assumpS16 "No-Internal-Heat-Generation-By-Water-PCM"  assumpDom
-newA17 = assump "Volume-Change-Melting-PCM-Negligible"      assumpS17 (mkLabelRAAssump' "Volume-Change-Melting-PCM-Negligible" )
+newA17 = assump "Volume-Change-Melting-PCM-Negligible"      assumpS17 volumeChangeMeltL
 assumpVCMPN = cic "assumpVCMPN"       assumpS17 "Volume-Change-Melting-PCM-Negligible"      assumpDom
 newA18 = assump "No-Gaseous-State-PCM"                      assumpS18 noGaseousStatePCML
 assumpNGSP = cic "assumpNGSP"         assumpS18 "No-Gaseous-State-PCM"                      assumpDom -- FIXME: Use label once ConceptInstance migrates to them
 newA19 = assump "Atmospheric-Pressure-Tank"                 assumpS19 atmosphericPressureTankL
 assumpAPT = cic "assumpAPT"           assumpS19 "Atmospheric-Pressure-Tank"                 assumpDom -- FIXME: Use label once ConceptInstance migrates to them
-newA20 = assump "Volume-Coil-Negligible"                    assumpS20 (mkLabelRAAssump' "Volume-Coil-Negligible" )
+newA20 = assump "Volume-Coil-Negligible"                    assumpS20 volumeCoilL
 assumpVCN = cic "assumpVCN"           assumpS20 "Volume-Coil-Negligible"                    assumpDom
 
 swhsAssumptionsS:: [Sentence]
@@ -111,10 +118,10 @@ assumpS3 = foldlSent [
   S "The", phrase water, S "in the", phrase tank,
   S "is fully mixed, so the", phrase temp_W `isThe` 
   S "same throughout the entire", phrase tank,
-  sSqBr $ makeRef rocTempSimpL `sC` (makeRef dd2HtFluxP)]
+  sSqBr $ makeRef rocTempSimpL `sC` makeRef dd2HtFluxP]
 assumpS4 = foldlSent [
   S "The", phrase temp_PCM `isThe` S "same throughout the", phrase pcm_vol,
-  sSqBr $ makeRef rocTempSimpL `sC` (makeRef dd2HtFluxP)]
+  sSqBr $ makeRef rocTempSimpL `sC` makeRef dd2HtFluxP `sC` makeRef likeChg1L]
   --FIXME `sC` makeRef likeChg1]
 assumpS5 = foldlSent [
   S "The", phrase w_density `sAnd` phrase pcm_density,
@@ -132,12 +139,10 @@ assumpS7 = foldlSent [
   sSqBr $ makeRef dd1HtFluxC]
 assumpS8 = foldlSent [
   S "The", phrase temp_C, S "is constant over", phrase time,
-  sSqBr $ makeRef dd1HtFluxC]
-  --FIXME `sC` makeRef likeChg2]
+  sSqBr $ makeRef dd1HtFluxC `sC` makeRef likeChg2L]
 assumpS9 = foldlSent [
   S "The", phrase temp_C, S "does not vary along its length",
-  sSqBr $ makeRef dd1HtFluxC]
-  --FIXME `sC` makeRef likeChg3]
+  sSqBr $ makeRef dd1HtFluxC `sC` makeRef likeChg3L]
 assumpS10 = foldlSent [
   CT.law_conv_cooling ^. defn, S "applies between the",
   phrase water `sAnd` S "the", short phsChgMtrl,
@@ -148,13 +153,13 @@ assumpS11 = foldlSent [
   phrase temp_PCM, S "can only increase, or remain",
   S "constant; they do not decrease. This implies that the",
   phrase temp_init, sSqBr $ makeRef newA12, S "is less than (or equal)",
-  S "to the", phrase temp_C, sSqBr $ makeRef eBalanceOnWtrL]
-  --FIXME `sC` makeRef likeChg4]
+  S "to the", phrase temp_C, sSqBr $ makeRef eBalanceOnWtrL
+   `sC` makeRef likeChg4L]
 assumpS12 = foldlSent [
   phrase temp_init `ofThe'` phrase water `sAnd` S "the",
   short phsChgMtrl `isThe` S "same",
-  sSqBr $ makeRef eBalanceOnWtrL `sC` makeRef eBalanceOnPCML]
-  --FIXME `sC` makeRef likeChg5]
+  sSqBr $ makeRef eBalanceOnWtrL `sC` makeRef eBalanceOnPCML
+  `sC` makeRef likeChg5L]
 assumpS13 = foldlSent [
   S "The", phrase simulation, S "will start with the",
   short phsChgMtrl, S "in a", solid ^. defn,
@@ -169,8 +174,8 @@ assumpS14 = foldlSent [
 assumpS15 = foldlSent [
   S "The", phrase tank, S "is", phrase perfect_insul,
   S "so that there is no", phrase CT.heat, S "loss from the",
-  phrase tank, sSqBr $ makeRef eBalanceOnWtrL]
-  --FIXME `sC` makeRef likeChg6]
+  phrase tank, sSqBr $ makeRef eBalanceOnWtrL
+  `sC` makeRef likeChg6L]
 assumpS16 = foldlSent [
   S "No internal", phrase CT.heat, S "is generated by either the",
   phrase water, S "or the", short phsChgMtrl `semiCol`
@@ -191,7 +196,7 @@ assumpS19 = foldlSent [
 assumpS20 = foldlSent [
   S "When considering the", phrase w_vol, S "in the",
   phrase tank `sC` (phrase vol `ofThe` phrase coil),
-  S "is assumed to be negligible"]
+  S "is assumed to be negligible", sSqBr $ makeRef inputInitQuantsL]
   --FIXME , sSqBr $ makeRef req2]
 
 --- Again, list structure is same between all examples.

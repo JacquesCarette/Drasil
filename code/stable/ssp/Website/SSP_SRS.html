@@ -1425,7 +1425,7 @@ Slip-Surface-Concave: The slip surface is concave with respect to the slope surf
 <ul class="hide-list-style">
 <li>
 <div id="A:Geo-Slope-Mat-Props-of-Soil-Inputs">
-Geo-Slope-Mat-Props-of-Soil-Inputs: The geometry of the slope, and the material properties of the soil layers are given as inputs.
+Geo-Slope-Mat-Props-of-Soil-Inputs: The geometry of the slope, and the material properties of the soil layers are given as inputs [<a href=#IM:forDisEqlb>IM: forDisEqlb</a>].
 </div>
 </li>
 </ul>
@@ -4581,7 +4581,7 @@ The Hooke's law force displacement relationship of <a href=#GD:netForcey>GD: net
 </div>
 </div>
 <p class="paragraph">
-The new effective base stiffness matrix <em>K<sub>bt</sub></em> as derived in equation (7) is defined in equation (9). <em>K<sub>bt</sub></em> is the shear element in the matrix, and <em>K<sub>bn</sub></em> is the normal element in the matrix, calculated as in <a href=#DD:mobShearWO>DD: mobShearWO</a>. The notation is simplified by the introduction of the constants <em>K<sub>bA</sub></em> and <em>K<sub>bB</sub></em>, defined in equation (10) and equation (11) respectively.
+The new effective base stiffness matrix <em>K<sub>bt</sub></em> as derived in equation (7) is defined in equation (9). This is seen as matrix <em>K<sub>bt</sub></em> in <a href=#DD:displcmntBasel>DD: displcmntBasel</a> <em>K<sub>bt</sub></em> is the shear element in the matrix, and <em>K<sub>bn</sub></em> is the normal element in the matrix, calculated as in <a href=#DD:mobShearWO>DD: mobShearWO</a>. The notation is simplified by the introduction of the constants <em>K<sub>bA</sub></em> and <em>K<sub>bB</sub></em>, defined in equation (10) and equation (11) respectively.
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -4607,7 +4607,7 @@ The new effective base stiffness matrix <em>K<sub>bt</sub></em> as derived in eq
 <p class="paragraph">
 A force-displacement relationship for an element <em>i</em> can be written in terms of displacements occurring in the unrotated coordinate system <em>δ</em> of <a href=#GD:hookesLaw2d>GD: hookesLaw2d</a> using the matrix <em>K<sub>bt</sub></em>, and <em>K<sub>bt</sub></em> as seen in <a href=#DD:intrsliceF>DD: intrsliceF</a>.
 </p>
-<div id="DD:displcmntBasel">
+<div id="DD:netFDsplcmntEqbm">
 <table class="ddefn">
 <tr>
 <th>
@@ -4644,7 +4644,7 @@ N
 Equation
 </th>
 <td>
-<div id="Eqn:DD:displcmntBasel">
+<div id="Eqn:DD:netFDsplcmntEqbm">
 <div class="equation">
 <em>F = &minus;ℓ<sub>s,i&minus;1</sub>&#8239;K<sub>sn,i&minus;1</sub>&#8239;δ<sub>i&minus;1</sub>&plus;(ℓ<sub>s,i&minus;1</sub>&#8239;K<sub>sn,i&minus;1</sub>&plus;ℓ<sub>b,i</sub>&#8239;K<sub>bn,i</sub>&plus;ℓ<sub>s,i</sub>&#8239;K<sub>sn,i</sub>)&#8239;δ<sub>i</sub>&minus;ℓ<sub>s,i</sub>&#8239;K<sub>sn,i</sub>&#8239;δ<sub>i&plus;1</sub></em>
 </div>
@@ -6019,7 +6019,7 @@ FIXME: This needs to be filled in
 </table>
 </div>
 <p class="paragraph">
-Using the net force-displacement equilibrium equation of a slice from <a href=#DD:displcmntBasel>DD: displcmntBasel</a> with the definitions of the stiffness matrices from <a href=#DD:displcmntRxnF>DD: displcmntRxnF</a> and the force definitions from <a href=#GD:netForcex>GD: netForcex</a> a broken down force displacement equilibrium equation can be derived. equation (22) gives the broken down equation in the <em>x</em> direction, and equation (23) gives the broken down equation in the <em>y</em> direction:
+Using the net force-displacement equilibrium equation of a slice from <a href=#DD:netFDsplcmntEqbm>DD: netFDsplcmntEqbm</a> with the definitions of the stiffness matrices from <a href=#DD:displcmntRxnF>DD: displcmntRxnF</a> and the force definitions from <a href=#GD:netForcex>GD: netForcex</a> a broken down force displacement equilibrium equation can be derived. equation (22) gives the broken down equation in the <em>x</em> direction, and equation (23) gives the broken down equation in the <em>y</em> direction:
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -6614,83 +6614,63 @@ This section provides the functional requirements, the business tasks that the s
 <h2>
 Functional Requirements
 </h2>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Read-and-Store">
+<div class="list">
+<p>
+<div id="readAndStore">
 Read-and-Store: Read the input file and store the data. Necessary input data summarized in <a href=#Table:inDataTable>inDataTable</a>.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Generate-Critical-Slip-Surfaces">
+</p>
+<p>
+<div id="generateCSS">
 Generate-Critical-Slip-Surfaces: Generate potential critical slip surfaces for the input slope.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Test-Slip-Surfaces">
+</p>
+<p>
+<div id="testSlipSrf">
 Test-Slip-Surfaces: Test the slip surfaces to determine if they are physically realizable based on a set of pass or fail criteria.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Prepare-Slip-Surfaces">
+</p>
+<p>
+<div id="prepareSlipS">
 Prepare-Slip-Surfaces: Prepare the slip surfaces for a method of slices or limit equilibrium analysis.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Calculate-Factors-of-Safety">
+</p>
+<p>
+<div id="calculateFS">
 Calculate-Factors-of-Safety: Calculate the factors of safety of the slip surfaces.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Rank-and-Weight-Slopes">
+</p>
+<p>
+<div id="rankSlope">
 Rank-and-Weight-Slopes: Rank and weight the slopes based on their factor of safety, such that a slip surface with a smaller factor of safety has a larger weighting.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Generate-New-Critical-Slip-Surfaces">
+</p>
+<p>
+<div id="generateCSS'">
 Generate-New-Critical-Slip-Surfaces: Generate new potential critical slip surfaces based on previously analysed slip surfaces with low factors of safety.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Repeat-Find-Factor-of-Safety">
-Repeat-Find-Factor-of-Safety: Repeat <a href=#FR:Test-Slip-Surfaces>FR: Test-Slip-Surfaces</a>, <a href=#FR:Prepare-Slip-Surfaces>FR: Prepare-Slip-Surfaces</a>, <a href=#FR:Calculate-Factors-of-Safety>FR: Calculate-Factors-of-Safety</a>, <a href=#FR:Rank-and-Weight-Slopes>FR: Rank-and-Weight-Slopes</a>, and <a href=#FR:Generate-New-Critical-Slip-Surfaces>FR: Generate-New-Critical-Slip-Surfaces</a> until the minimum factor of safety remains approximately the same over a predetermined number of repetitions. Identify the slip surface that generates the minimum factor of safety as the critical slip surface.
+</p>
+<p>
+<div id="repeatFindFS">
+Repeat-Find-Factor-of-Safety: Repeat <a href=#testSlipSrf>FR: Test-Slip-Surfaces</a>, <a href=#prepareSlipS>FR: Prepare-Slip-Surfaces</a>, <a href=#calculateFS>FR: Calculate-Factors-of-Safety</a>, <a href=#rankSlope>FR: Rank-and-Weight-Slopes</a>, and <a href=#generateCSS'>FR: Generate-New-Critical-Slip-Surfaces</a> until the minimum factor of safety remains approximately the same over a predetermined number of repetitions. Identify the slip surface that generates the minimum factor of safety as the critical slip surface.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Prepare-Critical-Slip-Surface">
+</p>
+<p>
+<div id="prepareCSS">
 Prepare-Critical-Slip-Surface: Prepare the critical slip surface for method of slices or limit equilibrium analysis.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Calculate-Final-Factor-of-Safety">
+</p>
+<p>
+<div id="calculateFS'">
 Calculate-Final-Factor-of-Safety: Calculate the factor of safety of the critical slip surface using the Morgenstern Price method.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="FR:Display-Graph">
+</p>
+<p>
+<div id="displayGraph">
 Display-Graph: Display the critical slip surface and the slice element displacements graphically. Give the values of the factors of safety calculated by the Morgenstern Price method.
 </div>
-</li>
-</ul>
+</p>
+</div>
 <div id="Table:inDataTable">
 <table class="table">
 <tr>
@@ -6849,13 +6829,13 @@ SSA is intended to be an educational tool, so accuracy and performance are not p
 <h1>
 Likely Changes
 </h1>
-<ul class="hide-list-style">
-<li>
-<div id="LC:Calculate-Inhomogeneous-Soil-Layers">
+<div class="list">
+<p>
+<div id="LC_inhomogeneous">
 Calculate-Inhomogeneous-Soil-Layers: <a href=#A:Soil-Layer-Homogeneous>A: Soil-Layer-Homogeneous</a> - The system currently assumes the different layers of the soil are homogeneous. In the future, calculations can be added for inconsistent soil properties throughout.
 </div>
-</li>
-</ul>
+</p>
+</div>
 </div>
 </div>
 <div id="Sec:UCs">
@@ -6866,20 +6846,18 @@ Unlikely Changes
 <p class="paragraph">
 If changes were to be made with regard to the following, a different algorithm would be needed.
 </p>
-<ul class="hide-list-style">
-<li>
-<div id="UC:Normal-And-Shear-Linear-Only">
+<div class="list">
+<p>
+<div id="UC_normshearlinear">
 Normal-And-Shear-Linear-Only: Changes related to <a href=#A:Interslice-Norm-Shear-Forces-Linear>A: Interslice-Norm-Shear-Forces-Linear</a> and <a href=#A:Base-Norm-Shear-Forces-Linear-on-FS>A: Base-Norm-Shear-Forces-Linear-on-FS</a> are not possible due to the dependency of the calculations on the linear relationship between interslice normal and shear forces.
 </div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="UC:2D-Analysis-Only">
+</p>
+<p>
+<div id="UC_2donly">
 2D-Analysis-Only: <a href=#A:Plane-Strain-Conditions>A: Plane-Strain-Conditions</a> allows for 2D analysis with these models only because stress along z-direction is zero. These models do not take into account stress in the z-direction, and therefore cannot be without manipulation to attempt 3d analysis.
 </div>
-</li>
-</ul>
+</p>
+</div>
 </div>
 </div>
 <div id="Sec:AuxConstants">

@@ -23,7 +23,8 @@ import Drasil.SSP.DataDefs (displcmntRxnF, fixme1, fixme2, intrsliceF, lengthLb,
   surfLoads)
 import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice, slip, slope, ssa)
 import Drasil.SSP.Labels (genDef1Label, genDef2Label, genDef4Label, genDef5Label, 
-  genDef6Label, genDef7Label, genDef9Label)
+  genDef6Label, genDef7Label, genDef9Label, fctSftyL, nrmShrForL, inslideFxL, forDisEqlbL,
+  rfemFoSL, crtSlpIdL)
 import Drasil.SSP.References (chen2005, stolle2008, li2010)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress, hookesLaw)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, cohesion, 
@@ -35,15 +36,6 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, cohes
   shrDispl, shrResC, shrStiffBase, shrStiffIntsl, shrStress, slcWght, sum1toN, surfAngle, 
   surfHydroForce, surfLngth, surfLoad, totNrmForce, varblU, varblV, watrForce, watrForceDif, 
   wiif, xi, yi)
-
---- Some labels
-l1, l2, l3, l4, l5, l6 :: Label
-l1 = mkLabelSame "fctSfty"    (Def Instance)
-l2 = mkLabelSame "nrmShrFor"  (Def Instance)
-l3 = mkLabelSame "inslideFx"  (Def Instance)
-l4 = mkLabelSame "forDisEqlb" (Def Instance)
-l5 = mkLabelSame "rfemFoS"    (Def Instance)
-l6 = mkLabelSame "crtSlpId"   (Def Instance)
 
 -----------------------
 --  Instance Models  --
@@ -60,7 +52,7 @@ fctSfty = im'' fctSfty_rc [qw shearRNoIntsl, qw shearFNoIntsl,
   [] (qw fs) [] [makeRef chen2005] fctSftyDeriv "fctSfty" [fcSfty_desc]
 
 fctSfty_rc :: RelationConcept
-fctSfty_rc = makeRC "fctSfty_rc" factorOfSafety fcSfty_desc fcSfty_rel l1
+fctSfty_rc = makeRC "fctSfty_rc" factorOfSafety fcSfty_desc fcSfty_rel fctSftyL
 
 --FIXME: first shearRNoIntsl should have local index v, not i,
 --       last occurence should have index n
@@ -92,7 +84,7 @@ nrmShrFor = im'' nrmShrFor_rc [qw baseWthX, qw scalFunc,
 
 nrmShrFor_rc :: RelationConcept
 nrmShrFor_rc = makeRC "nrmShrFor_rc" (nounPhraseSP "normal/shear force ratio")
-  nrmShrF_desc nrmShrF_rel l2
+  nrmShrF_desc nrmShrF_rel nrmShrForL
 
 nrmShrF_rel :: Relation
 nrmShrF_rel = (sy normFunc) $= case_ [case1,case2,case3] $=
@@ -139,7 +131,7 @@ intsliceFs = im'' intsliceFs_rc [qw index, qw fs,
 
 intsliceFs_rc :: RelationConcept
 intsliceFs_rc = makeRC "intsliceFs_rc" (nounPhraseSP "interslice forces")
-  sliceFs_desc sliceFs_rel l3
+  sliceFs_desc sliceFs_rel inslideFxL
 
 sliceFs_rel :: Relation
 sliceFs_rel = inxi intNormForce $= case_ [
@@ -167,7 +159,7 @@ forDisEqlb = im'' forDisEqlb_rc [qw baseAngle,
 
 forDisEqlb_rc :: RelationConcept
 forDisEqlb_rc = makeRC "forDisEqlb_rc"
-  (nounPhraseSP "force displacement equilibrium") fDisEq_desc fDisEq_rel l4
+  (nounPhraseSP "force displacement equilibrium") fDisEq_desc fDisEq_rel forDisEqlbL
 
 fDisEq_rel :: Relation --FIXME: split into two IMOD
 fDisEq_rel = negate (inxi watrForceDif) - (sy earthqkLoadFctr)*(inxi slcWght) -
@@ -225,7 +217,7 @@ rfemFoS = im''' rfemFoS_rc [qw cohesion, qw nrmStiffBase, qw nrmDispl,
 
 rfemFoS_rc :: RelationConcept
 rfemFoS_rc = makeRC "rfemFoS_rc" (nounPhraseSP "RFEM factor of safety")
-  rfemFoS_desc rfemFoS_rel l5
+  rfemFoS_desc rfemFoS_rel rfemFoSL
 
 rfemFoS_rel :: Relation
 rfemFoS_rel = (inxi fsloc) $= fosFracLoc $= fosFracSum
@@ -259,7 +251,7 @@ crtSlpId = im' crtSlpId_rc [] [] (qw fs_min) [] [makeRef li2010]
 
 crtSlpId_rc :: RelationConcept
 crtSlpId_rc = makeRC "crtSlpId_rc" (nounPhraseSP "critical slip identification")
-  crtSlpId_desc crtSlpId_rel l6
+  crtSlpId_desc crtSlpId_rel crtSlpIdL
 
 -- FIXME: horrible hack. This is short an argument... that was never defined!
 crtSlpId_rel :: Relation
@@ -622,7 +614,7 @@ fctSftyDerivation = [foldlSP [S "Using", eqN 21, S "from", makeRef intsliceFs `s
 
 nrmShrDerivation = [
 
-  foldlSP [S "Taking the last static", phrase equation,
+  foldlSP [S "The last static", phrase equation,
   S "of", makeRef equilibrium, S "with the", S "moment equilibrium" `sOf` makeRef genDef6Label,
   S "about", (S "midpoint" `ofThe` S "base") `sAnd` S "the",
   phrase assumption, S "of", makeRef genDef5Label, S "results in", eqN 13],

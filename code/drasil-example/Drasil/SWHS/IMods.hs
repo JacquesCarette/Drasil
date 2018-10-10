@@ -13,7 +13,8 @@ import Data.Drasil.Concepts.Thermodynamics (boil_pt, boiling, heat, heat_cap_spe
 import Drasil.SWHS.Assumptions (newA12, newA14, newA15, newA16, newA17, newA18, newA19)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, tank, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac)
-import Drasil.SWHS.Labels (rocTempSimpL, eBalanceOnWtrL, eBalanceOnPCML, heatEInWtrL, heatEInPCML)
+import Drasil.SWHS.Labels (rocTempSimpL, eBalanceOnWtrL, eBalanceOnPCML, heatEInWtrL, heatEInPCML,
+  chargeTankL, dd3HtFusionL, dd4MeltFracL, pcmInitialSolidL)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, ht_flux_C, ht_flux_P, htCap_L_P, 
@@ -45,12 +46,16 @@ balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
   (sy eta) * ((apply1 temp_PCM time) - (apply1 temp_W time)))
 
 balWtrDesc :: Sentence
-balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
+balWtrDesc = foldlSent [(E $ sy tau_W) `sC` (E $ sy time_final)
+  `sC` (E $ sy temp_C) `sC` (E $ sy temp_PCM), S "from" +:+.
+  sParen (makeRef eBalanceOnPCML), S "The input is constrained so that" +:+.
+  (E $ sy temp_init $<= (sy temp_C)), sParen (makeRef chargeTankL),
+  (E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W), (E $ sy temp_PCM) `isThe`
   phrase temp_PCM +:+. sParen (unwrap $ getUnit temp_PCM),
   (E $ sy temp_C) `isThe` phrase temp_C +:+. sParen (unwrap $ getUnit temp_C),
   (E $ sy tau_W $= (sy w_mass * sy htCap_W) / (sy coil_HTC * sy coil_SA)),
-  S "is a constant" +:+. sParen (unwrap $ getUnit tau_W),
+  S "is a constant", sParen (makeRef dd3HtFusionL) +:+. sParen (unwrap $ getUnit tau_W),
   (E $ sy eta $= (sy pcm_HTC * sy pcm_SA) / (sy coil_HTC * sy coil_SA)),
   S "is a constant" +:+. sParen (S "dimensionless"),
   S "The above", phrase equation, S "applies as long as the", phrase water,
@@ -122,11 +127,13 @@ eBalanceOnWtrDerivDesc5 = [S "Which simplifies to"]
 
 eBalanceOnWtrDerivDesc6 :: Expr -> Expr -> [Sentence]
 eBalanceOnWtrDerivDesc6 eq33 eq44 = 
-  [S "Setting", ((E eq33) `sAnd` (E eq44)) `sC` S "Equation (5) can be written as"]
+  [S "Setting", (E eq33), ((sParen (makeRef dd3HtFusionL)) `sAnd` (E eq44)),
+  (sParen (makeRef dd4MeltFracL)) `sC` S "Equation (5) can be written as"]
 
 eBalanceOnWtrDerivDesc7 :: Expr -> [Sentence]
 eBalanceOnWtrDerivDesc7 eq55 = 
-  [S "Finally, factoring out", (E eq55), S ", we are left with the governing ODE for IM1"]
+  [S "Finally, factoring out", (E eq55), S ", we are left with the governing ODE for",
+  sParen (makeRef eBalanceOnWtrL)]
 
 eq2 :: [Sentence]
 eq2 = [ch coil_HTC, ch coil_SA, S "/", ch coil_HTC, ch coil_SA]
@@ -222,7 +229,13 @@ balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   S "is a constant", sParen (unwrap $ getUnit tau_S_P)]
 
 balPCMDesc_note :: Sentence
-balPCMDesc_note = foldlSent [(E $ (sy temp_PCM)) `sC` (E $ (0 $< sy time $< sy time_final)) `sC`
+balPCMDesc_note = foldlSent [
+  (E $ (sy temp_melt_P)) `sC` (E $ (sy time_final)) `sC` (E $ (sy temp_init)) `sC`
+  (E $ (sy pcm_HTC)) `sC` (E $ (sy pcm_mass)) `sC` (E $ (sy htCap_S_P)) `sC`
+  (E $ (sy htCap_S_P)), S "form" +:+. sParen (makeRef eBalanceOnWtrL),
+  S "The input is constrained so that", (E $ (sy temp_init $< sy temp_melt_P)),
+  sParen (makeRef pcmInitialSolidL),
+  (E $ (sy temp_PCM)) `sC` (E $ (0 $< sy time $< sy time_final)) `sC`
   (S "with initial conditions")
   `sC` (E $ (sy temp_W $= sy temp_PCM $= sy temp_init)) `sC` (S "FIXME t_w(0) = t_p(0)") `sC` 
   makeRef newA12 `sC` (S "and"), (E $ (sy temp_W)), 
@@ -231,7 +244,8 @@ balPCMDesc_note = foldlSent [(E $ (sy temp_PCM)) `sC` (E $ (0 $< sy time $< sy t
   (E $ (sy temp_melt_P)) `sC` 
   (S "even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as"),
   (E $ (0 $< sy melt_frac $< 1)), S "(from", makeRef dd4MeltFrac,
-  S ") is determined as part of the heat energy in the PCM, as given in IM4"]
+  S ") is determined as part of the heat energy in the PCM, as given in",
+   sParen (makeRef heatEInPCML)]
 
  ----------------------------------------------
 --    Derivation of eBalanceOnPCM          --

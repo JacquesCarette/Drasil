@@ -10,20 +10,22 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   IntroSub(..), RefSec(..), RefTab(..), SCSSub(..), SSDSec(SSDProg), 
   SSDSub(SSDSubVerb, SSDSolChSpec), SolChSpec(SCSProg), SubSec, TConvention(..), 
   TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
-  assembler, dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, outDataConstTbl,
-  reqF, sSubSec, siCon, siSTitl, siSent, traceMGF, tsymb, valsOfAuxConstantsF,
-  filterSectionForSentence, filterSectionForExpr)
+  assembler, dataConstraintUncertainty, inDataConstTbl, intro, mkDoc,
+  mkEnumSimpleD, outDataConstTbl, reqF, sSubSec, siCon, siSTitl, siSent,
+  traceMGF, tsymb, valsOfAuxConstantsF,filterSectionForSentence, filterSectionForExpr)
 
 import qualified Drasil.DocLang.SRS as SRS
 
-import Data.Drasil.Concepts.Documentation (assumption, body, concept, condition,
-  consumer, dataDefn, datumConstraint, document, endUser, environment, game, genDefn,
-  goalStmt, guide, inModel, information, input_, interface, item, model,
-  nonfunctionalRequirement, object, organization, physical, physicalConstraint,
-  physicalProperty, physicalSim, physics, priority, problem, problemDescription,
-  product_, project, property, quantity, realtime, reference, requirement, section_,
-  simulation, software, softwareSys, srs, system, systemConstraint, sysCont, task, 
-  template, termAndDef, thModel, traceyMatrix, user, userCharacteristic)
+import Data.Drasil.Concepts.Documentation (assumpDom, assumption, body,
+  concept, condition, consumer, dataDefn, datumConstraint, document, endUser,
+  environment, funcReqDom, game, genDefn, goalStmt, guide, inModel,
+  information, input_, interface, item, model, nonfunctionalRequirement,
+  object, organization, physical, physicalConstraint, physicalProperty,
+  physicalSim, physics, priority, problem, problemDescription, product_,
+  project, property, quantity, realtime, reference, requirement, section_,
+  simulation, software, softwareSys, srs, srsDomains, system, systemConstraint,
+  sysCont, task, template, termAndDef, thModel, traceyMatrix, user,
+  userCharacteristic)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics)
 import Data.Drasil.Concepts.Software (physLib, understandability, portability,
@@ -50,7 +52,8 @@ import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Quantities.Physics as QP (angularVelocity, force, 
   linearVelocity, position, time, velocity)
 
-import Drasil.GamePhysics.Changes (likelyChanges, likelyChangesList', unlikelyChanges)
+import Drasil.GamePhysics.Changes (likelyChanges, likelyChangesList',
+  unlikelyChanges, unlikelyChangesList')
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
 import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns)
 import Drasil.GamePhysics.IMods (iModels_new, im1_new, im2_new, im3_new)
@@ -134,27 +137,41 @@ symbT = ccss (getDoc $ mkDoc (filterSectionForSentence mkSRS) for' chipmunkSysIn
  (egetDoc $ mkDoc (filterSectionForExpr mkSRS) for' chipmunkSysInfo) everything
 
 cpRefDB :: ReferenceDB
-cpRefDB = rdb [] [] newAssumptions [] [] cpCitations [] -- FIXME: Convert the rest to new chunk types
+cpRefDB = rdb [] [] newAssumptions [] [] cpCitations
+  (functional_requirements_list' ++ likelyChangesList' ++ unlikelyChangesList') -- FIXME: Convert the rest to new chunk types
 
 newAssumptions :: [AssumpChunk]
 newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7]
 
+assumptions :: [ConceptInstance]
+assumptions = [assumpOT, assumpOD, assumpCST, assumpAD, assumpCT, assumpDI,
+  assumpCAJI]
+
 newA1, newA2, newA3, newA4, newA5, newA6, newA7 :: AssumpChunk
+assumpOT, assumpOD, assumpCST, assumpAD, assumpCT, assumpDI,
+  assumpCAJI :: ConceptInstance
 newA1 = assump "objectTy" (foldlSent assumptions_assum1) (mkLabelRAAssump' "objectTy")
+assumpOT = cic "assumpOT" (foldlSent assumptions_assum1) "objectTy" assumpDom
 newA2 = assump "objectDimension" (foldlSent assumptions_assum2) (mkLabelRAAssump' "objectDimension")
+assumpOD = cic "assumpOD" (foldlSent assumptions_assum2) "objectDimension" assumpDom
 newA3 = assump "coordinateSystemTy" (foldlSent assumptions_assum3) (mkLabelRAAssump' "coordinateSystemTy")
+assumpCST = cic "assumpCST" (foldlSent assumptions_assum3) "coordinateSystemTy" assumpDom
 newA4 = assump "axesDefined" (foldlSent assumptions_assum4) (mkLabelRAAssump' "axesDefined")
+assumpAD = cic "assumpAD" (foldlSent assumptions_assum4) "axesDefined" assumpDom
 newA5 = assump "collisionType" (foldlSent assumptions_assum5) (mkLabelRAAssump' "collisionType")
+assumpCT = cic "assumpCT" (foldlSent assumptions_assum5) "collisionType" assumpDom
 newA6 = assump "dampingInvolvement" (foldlSent assumptions_assum6) (mkLabelRAAssump' "dampingInvolvement")
+assumpDI = cic "assumpDI" (foldlSent assumptions_assum6) "dampingInvolvement" assumpDom
 newA7 = assump "constraintsAndJointsInvolvement" (foldlSent assumptions_assum7) (mkLabelRAAssump' "constraintsAndJointsInvolvement")
+assumpCAJI = cic "assumpCAJI" (foldlSent assumptions_assum7) "constraintsAndJointsInvolvement" assumpDom
 --FIXME: All named ideas, not just acronyms.
 
 chipUnits :: [UnitDefn]
 chipUnits = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [newton, radian]
 
 everything :: ChunkDB
-everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms) gamephySymbols -- FIXME: Fill in Concepts
-  chipUnits
+everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms)
+  (map cw gamephySymbols ++ srsDomains) chipUnits
 
 printSetting :: PrintingInformation
 printSetting = PI everything defaultConfiguration
@@ -535,9 +552,9 @@ requirements = reqF [functional_requirements, nonfunctional_requirements]
 -----------------------------------
 
 functional_requirements :: Section
-functional_requirements_list :: Contents
+functional_requirements_list :: [Contents]
 
-functional_requirements = SRS.funcReq [functional_requirements_list] []
+functional_requirements = SRS.funcReq functional_requirements_list []
 
 functional_requirements_req1, functional_requirements_req2, 
   functional_requirements_req3, functional_requirements_req4,
@@ -589,16 +606,24 @@ functional_requirements_req7 = foldlSent [S "Determine if any of the",
 functional_requirements_req8 = requirementS (QP.position) (QP.velocity) 
   (S "that have undergone a" +:+ (phrase CP.collision))
 
+reqSS, reqIIC, reqISP, reqVPC, reqCTOT, reqCROT, reqDC, reqDCROT :: ConceptInstance
+
+reqSS = cic "reqSS" functional_requirements_req1 "Simulation-Space" funcReqDom
+reqIIC = cic "reqIIC" functional_requirements_req2 "Input-Initial-Conditions" funcReqDom
+reqISP = cic "reqISP" functional_requirements_req3 "Input-Surface-Properties" funcReqDom
+reqVPC = cic "reqVPC" functional_requirements_req4 "Verify-Physical_Constraints" funcReqDom
+reqCTOT = cic "reqCTOT" functional_requirements_req5 "Calculate-Translation-Over-Time" funcReqDom
+reqCROT = cic "reqCROT" functional_requirements_req6 "Calculate-Rotation-Over-Time" funcReqDom
+reqDC = cic "reqDC" functional_requirements_req7 "Determine-Collisions" funcReqDom
+reqDCROT = cic "reqDCROT" functional_requirements_req8 "Determine-Collision-Response-Over-Time" funcReqDom
+
 -- Currently need separate chunks for plurals like rigid bodies,
 -- velocities, etc.
-functional_requirements_list' :: [Sentence]
-functional_requirements_list' = [functional_requirements_req1, 
-  functional_requirements_req2, functional_requirements_req3, 
-  functional_requirements_req4, functional_requirements_req5, 
-  functional_requirements_req6, functional_requirements_req7, 
-  functional_requirements_req8]
+functional_requirements_list' :: [ConceptInstance]
+functional_requirements_list' = [reqSS, reqIIC, reqISP, reqVPC, reqCTOT,
+  reqCROT, reqDC, reqDCROT]
 
-functional_requirements_list = enumSimple 1 (getAcc requirement)
+functional_requirements_list = mkEnumSimpleD
   functional_requirements_list'
 
 --------------------------------------
@@ -700,7 +725,7 @@ traceMatAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
 traceMatAssumpRef = map makeRef newAssumptions
 
 traceMatFuncReq =  ["R1","R2","R3", "R4", "R5", "R6", "R7", "R8"]
-traceMatFuncReqRef = makeListRef functional_requirements_list' functional_requirements
+traceMatFuncReqRef = map makeRef functional_requirements_list'
 
 traceMatData = ["Data Constraints"]
 traceMatDataRef = [makeRef SRS.solCharSpecLabel]
@@ -712,7 +737,7 @@ traceMatGenDef = ["GD1", "GD2", "GD3", "GD4", "GD5", "GD6", "GD7"]
 traceMatGenDefRef = replicate (length traceMatGenDef) (makeRef SRS.solCharSpecLabel) -- FIXME: hack?
 
 traceMatLikelyChg = ["LC1", "LC2", "LC3", "LC4"]
-traceMatLikelyChgRef = makeListRef likelyChangesList' likelyChanges
+traceMatLikelyChgRef = map makeRef likelyChangesList'
 
 
 {-- Matrices generation below --}

@@ -1673,15 +1673,70 @@ in Table~\ref{Tab:Namespaces}.
 
 \wss{I like the explanation of the packages}
 
-\section{Case studies - in more depth}
+\section{Case studies reimplemented in Drasil}
 
-- Re-introduce case studies
-  - Our methods for reimplementing
-  - CI for testing
-- Start showing off re-use and automated generation.
-  - Start with common knowledge (generalized \fgr{}?)
-  - Then onto GlassBR example to show off the doc lang recipe (\fgr{}?)
-  - Then let's see SRS vs. NoPCM for reuse (particularly NoPCM) (\fgr{}?)
+Drasil's development has relied heavily on the case studies, as mentioned in 
+Section~\ref{S:Drasil}. Our current selection of case studies 
+(Section~\ref{S:IntroCases}) were determined by a number of factors including 
+their sizes, domains, availability (both of source code and of documentation 
+artifacts), and selection variety. At the very least, we needed various, small 
+case studies which included at least two members of the same software family.
+
+Our case studies give us a finish line. If we cannot generate our examples with 
+at least the same level of quality as the original manually-created versions, 
+then Drasil is not useful. \ds{Reword previous.} Reimplementing 
+these case studies is our guide through development, and it is not as simple as 
+it seems.
+
+The first task in reimplementing the case studies is understanding exactly what 
+is system-specific information versus common knowledge. Our litmus test for 
+common knowledge was ``is this knowledge a fundamental concept of [domain]" or 
+``does this piece of knowledge occur in at least two 
+[non-family member] examples?" The distinction of ``non-family member" was 
+necessary to ensure we didn't encode \emph{all} knowledge relating to a given 
+example as being ``common knowledge", since it may only be specific to the 
+given software family and not truly common across the domain.
+
+Our distinction between common knowledge and specific knowledge in the case 
+studies is not ideal given our small sample size, but it is a start. We may 
+eventually classify more of the system-specific knowledge as 
+common knowledge if it crops up in a number of future examples.
+
+Next, we need to differentiate artifact-template boilerplate text from 
+meaningful text. This is a simple, but not easy task involving a cycle of 
+abstracting out the meaning of a given sentence, paragraph, section, etc. and 
+determining what, if any, specific knowledge is being used therein. 
+
+The abstraction process is what led us to the Drasil.DocumentLanguage recipe 
+for our SRS (Section~\ref{S:RecipeLang}). At times it was as simple as pulling 
+out a sentence as ``boilerplate text", or a slightly more complex ``choice 
+between boilerplate text options". Options include trivial things 
+such as how to represent vectors (are they shown in bold, italics, or something 
+else?), what type of source is being referenced in a given section (existing 
+literature, documentation, or manuals), or which combination of boilerplate 
+text to use. Other cases are more complex, where a sentence includes specific 
+information related to the system. By abstracting out the meaning of the 
+sentence, we see the specific information is only required for a singular 
+purpose. For example, the section ``characteristics of the intended 
+reader" from the SmithEtAl SRS template has a fairly self-explanatory meaning, 
+but the specifics will vary greatly depending on the system being implemented.
+
+Finally, the only way to know that our reimplementation is truly on the right 
+track is to have something to test it against. To that end, we created a very 
+simple test suite using continuous integration tools to ensure after each 
+update to the Drasil framework or our reimplemented examples, we could ensure 
+the generated output remains as expected. Overall, the tests were a simple 
+series of \texttt{diff}s between the manually-produced case studies and the 
+generated output. Any difference was considered a test failure, even though 
+that was often not the case. We often found improvements in the 
+Drasil-generated output, which in turn led us to incorporate these improvements 
+into our test-suite.
+
+Now let us look at some of the specifics of the reimplementation process. First 
+we will introduce the common knowledge database (\texttt{Data.Drasil}) and some 
+of its components, then we will take a look at the \emph{GlassBR} example 
+reimplemented in Drasil. Following that we will discuss reimplementing the 
+other case studies, particularly SWHS and NoPCM.
 
 \wss{I like how specific this section is.  You are highlighting specific
   lessons/findings from actual examples.  When you get stuck with writing other
@@ -1699,8 +1754,8 @@ separation of System Information from the DocLang. It comes up later.}
   \fgr{} SI\_Units
   \fgr{} Thermodynamics (ConsThermE?)
 
-Important to not we have not captured even a minute fraction of all the domain 
-knowledge, yet the results with out limited knowledge-capture already speak for 
+Important to note we have not captured even a minute fraction of all the domain 
+knowledge, yet the results with our limited knowledge-capture already speak for 
 themselves.
 
 \subsection{GlassBR}

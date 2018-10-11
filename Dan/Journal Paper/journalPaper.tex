@@ -817,6 +817,9 @@ detailed design documents, and the source code. The specific system knowledge
 found in the SRS is duplicated throughout the design and source code, though
 not always verbatim. The knowledge may be transformed to produce different
 views relevant to the current document.
+\jc{This is the 'wrong' way to tell this part of the story: of course the same knowledge
+is present, it would be crazy otherwise. It is what knowledge is duplicated,
+its level of granularity, and its transformations which are interesting}
 
 Though the knowledge is duplicated, it may only be in part as only certain
 aspects of a piece of knowledge are necessarily relevant in each of the
@@ -825,10 +828,10 @@ see the same knowledge from \Gl's SRS and MG. \ds{or is it MIS?
 Double-check.}
 
 The SRS displays more knowledge related to the abstract theory, while the
-\ds{MG} provides a view meant to transition from the abstract to something far
+\ds{MG} provides a view meant to transition from the abstract to something
 more concrete. Both of these \emph{mean} the same thing in the context of our
 case study, but they are meant to display what is most relevant to the audience
-of that particular artifact.
+of that particular document.
 
 \begin{figure}
 \caption{SRS \& MG showing the same piece of knowledge \ds{name it} (from
@@ -847,13 +850,18 @@ the design.}
   the SI section.  The reference section was parameterized so that it would fit
   with all of the examples.  This might be a good example to include in this paper?}
 
+\jc{this subsection feels too shallow to me. The list of artifacts is fine,
+but the 'investigation' into the commonalities is not. What point are we
+really trying to make here -- and are we making it? To really show this,
+I think we need 3, preferably 4, quite distinct examples (all in \Gl) of
+knowledge duplication.}
 \subsection{Emerging structures}
 \label{S:KnowStruct}
 
 As shown in the common software artifacts, we see different ways of
 representing what are, semantically, the same things (for example, see
 Figure~\ref{Fig:SRSDDComp}). We are really seeing the pieces of underlying
-knowledge that have been composed from a variety of components. Each component
+knowledge that have been composed from a variety of parts. Each part
 tells us something about one aspect of that piece of knowledge. Particularly,
 they give examples of how we can transform, or view, the same semantic
 knowledge in different contexts.
@@ -890,14 +898,20 @@ code)}
 
 \wss{I like where you are going with this, but it is hard to review without the
   ``blanks'' being filled in.}
+\jc{I agree. We need the examples to see if that list is what we came up post
+facto, or could be recognized as valid by a reader}
 
 As shown above, the unique identifier is fairly straightforward (!FIXME id!),
 it is just a label that we associate with this particular piece of knowledge
-and nothing else. The symbolic representations are just the symbols we use when
+and nothing else. \jc{id actually worries me a lot: it feels like a design
+decision (which can, and should be, justified)}
+The symbolic representations are just the symbols we use when
 referring to this particular quantity in an equation (theory) or code
 (implementation) context. Our natural language descriptions are terms and their
 corresponding definitions \ds{remove this if it's above, or leave it in for
 readability? -- (!FIXME! and !FIXME! respectively for this example). }
+\jc{And these are also rational reconstructions. So we have to guide the 
+reader into seeing them. For example, the 2 symbols.}
 
 We also have a defining equation, which incorporates the symbolic
 representation for various other pieces of knowledge and relates them to
@@ -919,6 +933,12 @@ which our knowledge buds. %DS Tree metaphor! Wooo!
   you discuss the advantages of our approach for consistency and maintainability
   (with respect to change).}
 
+\jc{Right. But please be systematic. ``similar examples of knowledge'' and
+so on doesn't say much to the reader. Plus we need to show the commonalities,
+by showing different kinds of explicit knowledge, so that when we say that
+``they all have X'', the reader will believe us.  Not everything from the
+table should be shown, of course, but more.}
+
 After comparing knowledge across case studies and analyzing patterns that
 emerged, we have created a number of ``knowledge classes'' to categorize and
 differentiate our various kinds of knowledge. If you refer to
@@ -934,6 +954,9 @@ knowledge must have an abbreviation, in which case our
 
 \wss{This table looks like a good
   way to summarize this information to me.}
+
+\jc{Table is good. Lack of definition for each of the things in the
+header row and header column, bad.}
 
 \begin{table} \ds{Figure out how to landscape this table if necessary, it's
 probably going to be big}
@@ -967,6 +990,7 @@ X $\rightarrow{}$ Mandatory; O $\rightarrow{}$ Commonly observed; all others
 optional
 
 \ds{Why aren't Unital/Unitary or constrained classes in Drasil?}
+\jc{Is the table up to date wrt current Drasil?}
 \end{table}
 
 Certain things stand out in this table. How can a \emph{Named Idea}
@@ -978,6 +1002,10 @@ also a lot of overlap between classes, some only add one new mandatory piece of
 information. However, by analyzing where and how these types of knowledge are
 used, we see they do, in fact, \emph{mean} something different than the
 existing classes.
+\jc{Also not a good way to tell the story. We invented all of these. So
+we need to reason out why we did. You're doing it backwards, as if these
+were all obvious and natural (or were grabbed from somewhere else) and
+justifying their use and adequacy post facto}
 
 It should also be noted that knowledge in those classes with additional
 mandatory fields are less restrictive in their use. We see \emph{Quantities}
@@ -986,10 +1014,19 @@ study artifacts, but they also appear in \emph{Quantity}-specific areas. For
 example, a table of symbols can only display knowledge that falls into the
 \emph{Quantity} class, as that is the minimal complete class with a
 mandatory symbol.
+\jc{This will make no sense to any reader. If you want to make this point,
+show it via an explicit example}
 
 \section{Our solution -- A combined approach}
 \label{S:solution}
 
+\jc{And this section does not ``logically follow'' from the previous,
+as the previous section is not solely an analysis of the problem, but
+contains many pieces of solution (and design decisions). If you want
+to arrange things in this way, you need to make sure that the previous
+section is 100\% in the problem space, and presents domain analysis
+that could have been done purely on the original case studies (by hand)
+without writing a single line of Haskell.}
 With inspiration from similar problem domains, as mentioned in
 Section~\ref{S:BG}, we combine a number of ideas to tackle the problems of
 duplication, inter-/intra-artifact inconsistency, design for change \wss{this is

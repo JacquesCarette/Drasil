@@ -101,22 +101,22 @@
 
 %Listings Style
 \lstset{
-	language=Haskell,
-	basicstyle=\small,
-	breaklines=true,
-	commentstyle=\color{green},
-	frame=single,
-	keywordstyle=\color{blue},
-%	numbers=left,
-%	numbersep=5pt,
-%	numberstyle=\color{gray},
-%	stepnumber=5,
-	stringstyle=\color{red},
-	tabsize=2,
-%	title=\lstname,
-	escapeinside={-*}{*-},
-	showspaces=false,
-	showstringspaces=false
+  language=Haskell,
+  basicstyle=\small,
+  breaklines=true,
+  commentstyle=\color{green},
+  frame=single,
+  keywordstyle=\color{blue},
+%  numbers=left,
+%  numbersep=5pt,
+%  numberstyle=\color{gray},
+%  stepnumber=5,
+  stringstyle=\color{red},
+  tabsize=2,
+%  title=\lstname,
+  escapeinside={-*}{*-},
+  showspaces=false,
+  showstringspaces=false
 }
 %%%%%%%%%%%%%%%%%%%%%
 
@@ -348,21 +348,21 @@ and from the certifying body) to attempt certification again.
 \ds{Fill in this part about consistency, variabilities, and commonalities}
 
 \begin{table}
-	\caption{Problems and Proposed Solutions}
-	\label{Tab:ProbSol}
-	\begin{tabular}[width=0.5\textwidth]{l | l}		
-		Problem 		& Technical Solution 					\\
-		\hline
-		Duplication		& Databases (global \& system-specific) \\
-						& single-source \& generation *			\\
-		\hline
-		Consistency 	& 	Sanity checkers						\\
-		(incl. Source/	& 										\\
-		generated content)	&  									\\
-		\hline
-		Variability \&	& Software families \& 					\\
-		Commonality		& Generation							\\
-	\end{tabular}
+  \caption{Problems and Proposed Solutions}
+  \label{Tab:ProbSol}
+  \begin{tabular}[width=0.5\textwidth]{l | l}    
+    Problem     & Technical Solution           \\
+    \hline
+    Duplication    & Databases (global \& system-specific) \\
+            & single-source \& generation *      \\
+    \hline
+    Consistency   &   Sanity checkers            \\
+    (incl. Source/  &                     \\
+    generated content)  &                    \\
+    \hline
+    Variability \&  & Software families \&           \\
+    Commonality    & Generation              \\
+  \end{tabular}
 
 \textit{* Also provides free \& easy reuse}
 \end{table}
@@ -473,9 +473,9 @@ body. \wss{control software isn't really SCS software - for the nuclear domain
   discuss in the future work section the more interesting ideas.}
 
 \wss{My suggestion is to stop writing Section 1 for now and focus on Sections 5
-	and 6.  Section 1 is a good start, but it feels like we need more current
-	information on MDL.  We might also want more information on scientific
-	knowledge ontologies.}
+  and 6.  Section 1 is a good start, but it feels like we need more current
+  information on MDL.  We might also want more information on scientific
+  knowledge ontologies.}
 
 \wss{In the scope section we should clarify that our generator will focus on the
   SRS and some code.  We can hopefully find words to express that we are aiming
@@ -780,7 +780,7 @@ Chipmunk2D
 game physics engine (\url{https://chipmunk-physics.net/}). We chose this
 project specifically for its rich use of
 physics knowledge, but as it is a very large physics library, we narrowed the
-scope for case study.
+scope for this case study.
 
 There is also a trivial example, affectionately nicknamed \emph{tiny}, which
 is taken from modelling a fuel-pin inside a nuclear reactor. This toy
@@ -799,17 +799,17 @@ software artifacts can be found within each. That is to say, each project
 includes:
 
 \begin{itemize}
-	\item Software Requirements Specification (SRS)
-	\item Detailed design documents such as:
-		\begin{itemize}
-			\item Module Guide (MG)
-			\item Module Interface Specification (MIS)
-		\end{itemize}
-	\item Source code
-	\item Test cases
-	\item User Guide
-	\item Verification and Validation (V\&V) Plan
-	\item V\&V Report
+  \item Software Requirements Specification (SRS)
+  \item Detailed design documents such as:
+    \begin{itemize}
+      \item Module Guide (MG)
+      \item Module Interface Specification (MIS)
+    \end{itemize}
+  \item Source code
+  \item Test cases
+  \item User Guide
+  \item Verification and Validation (V\&V) Plan
+  \item V\&V Report
 \end{itemize}
 
 Let us first look at the similarities and differences found in the SRS, the
@@ -943,22 +943,22 @@ probably going to be big}
 Class & ID & Term & Abbrev. & Defined & Domain & Symbol & Units &
 Equation & Constraints \\
 
-											\hline{} & & & & & & & & & \\
+                      \hline{} & & & & & & & & & \\
 Labeled & X & & & & & & & &\\
-											\hline{} & & & & & & & & & \\
+                      \hline{} & & & & & & & & & \\
 Named Idea & X & X & O & & & & & &\\
-											\hline{} & & & & & & & & & \\
+                      \hline{} & & & & & & & & & \\
 Common &&&&&&&&&\\ ~~Idea & X & X & X & & & & & &\\
-											\hline{} & & & & & & & & & \\
+                      \hline{} & & & & & & & & & \\
 Concept & X & X & O & X & X & & & &\\
-											\hline{} & & & & & & & & & \\
+                      \hline{} & & & & & & & & & \\
 Quantity & X & X & O & O & X & X & & &\\
-											\hline{} & & & & & & & & & \\
+                      \hline{} & & & & & & & & & \\
 Unitary & X & X & O & O & X & X & X & & \\
-											\hline{} & & & & & & & & & \\
+                      \hline{} & & & & & & & & & \\
 Defined by &&&&&&&&&\\
 Expression & X & X & O & O & X & X & O & X & O\\
-											\hline{} & & & & & & & & & \\
+                      \hline{} & & & & & & & & & \\
 Constrained & X & X & O & O & X & X & O & O & X\\
 & & & & & & & & & \\
 \end{tabular}
@@ -1081,19 +1081,19 @@ hierarchy in Section~\ref{S:Drasil}.
     {\textbf{NamedIdea} \\ \small{term :: NounPhrase}};
 
         \node(Idea) at (-1.5, -3)
-		{\textbf{Idea} \\ \small{getA :: Maybe String}};
+    {\textbf{Idea} \\ \small{getA :: Maybe String}};
 
-			\node(Concept) at (0, -4.5)
-			{\textbf{Concept} \\ \small{FIXME}};
+      \node(Concept) at (0, -4.5)
+      {\textbf{Concept} \\ \small{FIXME}};
 
         \node(CommonIdea) at (-4.5, -3)
         {\textbf{CommonIdea} \\ \small{abrv :: String}};
 
-	\node(ExprRelat) at (0, -1.5)
-	{\textbf{ExprRelat} \\ \small{FIXME}};
+  \node(ExprRelat) at (0, -1.5)
+  {\textbf{ExprRelat} \\ \small{FIXME}};
 
-	\node(Theory) at (2, -1.5)
-	{\textbf{Theory} \\ \small{FIXME}};
+  \node(Theory) at (2, -1.5)
+  {\textbf{Theory} \\ \small{FIXME}};
 
 \node(Definition) at (2.5, 0)
 {\textbf{Definition} \\ \small{FIXME}};
@@ -1362,11 +1362,11 @@ sections = [introduction, filler, conclusion]
 
 introduction, filler, conclusion :: Section
 introduction = Section (S "Introduction")
-	[Con $ ULC $ Paragraph $
-		S "This is the introduction paragraph for our tedious document."
-		Sub Section (S "Scope")
-			[{- Scope section contents go here -}]
-	]
+  [Con $ ULC $ Paragraph $
+    S "This is the introduction paragraph for our tedious document."
+    Sub Section (S "Scope")
+      [{- Scope section contents go here -}]
+  ]
 -* \dots \emph{omitted for brevity} *-
 \end{lstlisting}
 \caption{Assembling a document using only the low-level document language is tedious}
@@ -1655,19 +1655,19 @@ in Table~\ref{Tab:Namespaces}.
 \caption{Case study namespaces in \ede{}}
 \label{Tab:Namespaces}
 \begin{tabular}[]{ l | l}
-		Case Study 		& 				Namespace 						\\
+    Case Study     &         Namespace             \\
 \hline{}
-		\Gl 		& 	\texttt{	Drasil.GlassBR			} 		\\
+    \Gl     &   \texttt{  Drasil.GlassBR      }     \\
 \hline{}
-		GamePhysics 	& 	\texttt{	Drasil.GamePhysics		}	 	\\
+    GamePhysics   &   \texttt{  Drasil.GamePhysics    }     \\
 \hline{}
-		SSP 			& 	\texttt{	Drasil.SSP				}		\\
+    SSP       &   \texttt{  Drasil.SSP        }    \\
 \hline{}
-		SWHS 			& 	\texttt{	Drasil.SWHS				}		\\
+    SWHS       &   \texttt{  Drasil.SWHS        }    \\
 \hline{}
-		NoPCM 			& 	\texttt{	Drasil.NoPCM			} 		\\
+    NoPCM       &   \texttt{  Drasil.NoPCM      }     \\
 \hline{}
-		Tiny 			& 	\texttt{	Drasil.HGHC				} 		\\
+    Tiny       &   \texttt{  Drasil.HGHC        }     \\
 \end{tabular}
 \end{table}
 
@@ -1770,8 +1770,8 @@ themselves.
   - "Easy to see that the code matches the equations"
 - Talk about potential variabilities and how to make this a family
 - Why is this interesting?
-	- Fairly straightforward example of something a scientist would create/use
-	in their research
+  - Fairly straightforward example of something a scientist would create/use
+  in their research
 
 \subsection{NoPCM \& SWHS}
 

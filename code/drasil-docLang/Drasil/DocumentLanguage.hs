@@ -116,8 +116,8 @@ data TUIntro = System -- ^ System of units (defaults to SI)
 data LFunc where
   Term :: LFunc
   Defn :: LFunc
-  TermExcept :: Concept c => [c] -> LFunc
-  DefnExcept :: Concept c => [c] -> LFunc
+  TermExcept :: [DefinedQuantityDict] -> LFunc
+  DefnExcept :: [DefinedQuantityDict] -> LFunc
   TAD :: LFunc --Term and Definition
 
 {--}
@@ -141,8 +141,8 @@ data StkhldrSec = StkhldrProg CI Sentence | StkhldrProg2 [StkhldrSub]
 
 -- | Stakeholders subsections
 data StkhldrSub where
-  Client :: (Idea a) => a -> Sentence -> StkhldrSub
-  Cstmr  :: (Idea a) => a -> StkhldrSub
+  Client :: CI -> Sentence -> StkhldrSub
+  Cstmr  :: CI -> StkhldrSub
 
 {--}
 
@@ -171,7 +171,7 @@ data SSDSub where
 
 -- | Problem Description section
 data ProblemDescription where
-  PDProg :: (Idea a) => Sentence -> a -> Sentence -> [Section] -> ProblemDescription
+  PDProg :: Sentence -> CI -> Sentence -> [Section] -> ProblemDescription
 
 -- | Solution Characteristics Specification section
 data SolChSpec where
@@ -195,7 +195,7 @@ data ReqrmntSec = ReqsProg [ReqsSub]
 
 data ReqsSub where
   FReqsSub :: [Contents] -> ReqsSub --FIXME: Should be ReqChunks?
-  NonFReqsSub :: (Concept c) => [c] -> [c] -> Sentence -> Sentence -> ReqsSub
+  NonFReqsSub :: [ConceptChunk] -> [ConceptChunk] -> Sentence -> Sentence -> ReqsSub
 
 {--}
 

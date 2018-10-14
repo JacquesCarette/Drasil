@@ -23,13 +23,11 @@ mkLabel :: String -> String -> String -> RefType -> Label
 mkLabel lblUID ra sn' rtype = Lbl lblUID 
   (RefAdd $ concatMap repUnd $ getAcc rtype ++ ensureASCII ra)
   (shortname' sn')
-  rtype --NOT USED
 
 mkURILabel :: String -> String -> String -> Label
 mkURILabel lblUID ra sn' = Lbl lblUID 
   (URI $ ensureASCII ra)
   (shortname' sn')
-  Link
 
 --Determines what text needs to be appended to the ref address
 --Do not export

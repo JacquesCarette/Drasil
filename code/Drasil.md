@@ -37,3 +37,10 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 
 - **ShortName**: Abstract type for a 'short name', i.e. the string to be displayed
   for a link, visible to users.
+
+- **Label.Core**: Type of labels. Is a reference address, link or URI. Also has a shortname.
+  (probably should be abstract, but isn't yet)
+
+- **Unicode**: Misnamed. Really is a few special characters which need special code to be
+  displayed properly. Unclear how much this should be used in examples, so maybe this should
+  no longer be exported?

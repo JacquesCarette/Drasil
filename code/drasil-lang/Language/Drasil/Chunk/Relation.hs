@@ -7,10 +7,9 @@ module Language.Drasil.Chunk.Relation
 import Control.Lens (makeLenses, (^.))
 
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw, dccWDS, dccWDS')
-import Language.Drasil.ShortName (HasShortName(shortname))
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term),Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, ExprRelat(relat),
-  HasLabel(getLabel))
+  HasLabel(getLabel), HasShortName(shortname))
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Spec (Sentence)

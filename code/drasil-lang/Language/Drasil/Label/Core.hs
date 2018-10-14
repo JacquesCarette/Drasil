@@ -1,10 +1,10 @@
 {-# Language TemplateHaskell #-}
-{-# Language FlexibleInstances #-}
 module Language.Drasil.Label.Core where
 
 import Control.Lens (makeLenses)
 import Language.Drasil.UID (UID)
-import Language.Drasil.ShortName (ShortName, HasShortName(shortname))
+import Language.Drasil.ShortName (ShortName)
+import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
 import Language.Drasil.RefTypes (RefType)
 
 -- import reference address from Language.Drasil.References?
@@ -19,6 +19,7 @@ data Label = Lbl
   }
 makeLenses ''Label
 
+instance HasUID       Label where uid       = uniqueID
 instance HasShortName Label where shortname = sn
 
 getAdd :: LblType -> String

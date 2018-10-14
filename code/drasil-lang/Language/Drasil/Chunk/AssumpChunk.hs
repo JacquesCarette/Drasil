@@ -4,8 +4,8 @@ module Language.Drasil.Chunk.AssumpChunk
   , assump
   ) where
 
-import Language.Drasil.ShortName (HasShortName(shortname))
-import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel))
+import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
+import Language.Drasil.Classes (HasLabel(getLabel))
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.UID (UID)

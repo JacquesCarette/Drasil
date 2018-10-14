@@ -9,9 +9,8 @@ module Language.Drasil.Chunk.PhysSystDesc
   ) where
 
 import Language.Drasil.UID (UID)
-import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
 import Language.Drasil.Spec (Sentence)
-import Language.Drasil.ShortName (HasShortName(shortname))
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Classes (HasLabel(getLabel))
 

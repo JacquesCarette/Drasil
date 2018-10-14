@@ -52,6 +52,7 @@ module Language.Drasil (
   , DefiningExpr(defnExpr)
   , HasDerivation(derivations)
   , HasRefAddress(getRefAdd)
+  , HasShortName(shortname)
   -- Chunk.VarChunk
   , VarChunk, codeVC
   , vc, implVar
@@ -103,7 +104,7 @@ module Language.Drasil (
   , Derivation, getDerivation, getShortName
   , Reference
   -- ShortName
-  , resolveSN, ShortName, shortname', HasShortName(shortname), getStringSN
+  , resolveSN, ShortName, shortname', getStringSN
   --Citations
   , Citation(..), EntryID, BibRef, CiteField(..), Month(..), HP(..)
   , HasFields(..)
@@ -254,7 +255,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), HasReference(getReferences), 
   HasLabel(getLabel), MayHaveLabel(getMaybeLabel), HasRefAddress(getRefAdd),
-  DefiningExpr(defnExpr))
+  DefiningExpr(defnExpr), HasShortName(shortname))
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Document.GetChunk(vars, combine', vars', combine, ccss)
 import Language.Drasil.Chunk.AssumpChunk
@@ -314,7 +315,7 @@ import Language.Drasil.ChunkDB
 import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
                                           , titleize', phrase, plural)
 import Language.Drasil.ShortName (resolveSN, ShortName
-  , shortname', HasShortName(shortname), getStringSN)
+  , shortname', getStringSN)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (Sentence(..),
   sParen, sSqBr, sC, (+:+), (+:+.), (+.), (+:),

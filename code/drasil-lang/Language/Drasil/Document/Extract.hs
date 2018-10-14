@@ -7,9 +7,10 @@ import Language.Drasil.Document (Document(Document),Section(Section), SecCons(..
 import Language.Drasil.Document.Core
 import Language.Drasil.Expr
 import Language.Drasil.Spec
+import Language.Drasil.Classes.Core (HasShortName(shortname))
 
 import Language.Drasil.Chunk.AssumpChunk
-import Language.Drasil.ShortName
+-- import Language.Drasil.ShortName
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation
 import Language.Drasil.Chunk.ReqChunk

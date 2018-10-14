@@ -7,6 +7,7 @@ module Language.Drasil.Classes (
   , Definition(defn)
   , ConceptDomain(cdom)
   , Concept
+  , HasShortName(shortname)
   , HasSymbol(symbol)
   , HasSpace(typ)
   , HasUnitSymbol(usymb)
@@ -26,6 +27,10 @@ module Language.Drasil.Classes (
   , HasRefAddress(getRefAdd)
   ) where
 
+-- some classes are so 'core' that they are defined elswhere
+-- also helps with cycles...
+import Language.Drasil.Classes.Core
+
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.References (Reference)
@@ -39,11 +44,6 @@ import Language.Drasil.Symbol (Stage, Symbol)
 import Language.Drasil.UID (UID)
 
 import Control.Lens (Lens')
-
--- | The most basic item: having a unique key, here a UID
-class HasUID c where
-  -- | Provides a /unique/ id for internal Drasil use
-  uid :: Lens' c UID
 
 -- | A NamedIdea is a 'term' that we've identified (has an 'id') as 
 -- being worthy of naming.

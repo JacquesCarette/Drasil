@@ -8,10 +8,9 @@ module Language.Drasil.Chunk.InstanceModel
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn),ConceptDomain(cdom), Concept, ExprRelat(relat),
   HasDerivation(derivations), HasReference(getReferences), HasAdditionalNotes(getNotes),
-  HasLabel(getLabel), HasSymbol(symbol), HasSpace(typ))
+  HasLabel(getLabel), HasSymbol(symbol), HasSpace(typ), HasShortName(shortname))
 import Language.Drasil.Chunk.References (Reference)
 import Language.Drasil.Chunk.Derivation (Derivation)
-import Language.Drasil.ShortName (HasShortName(shortname))
 import Language.Drasil.Chunk.Constrained.Core (TheoryConstraint)
 import Language.Drasil.Chunk.Eq (QDefinition, equat)
 import Language.Drasil.Chunk.Relation (RelationConcept, makeRC)

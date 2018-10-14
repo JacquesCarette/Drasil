@@ -6,8 +6,8 @@ import Language.Drasil.Chunk.NamedIdea (IdeaDict)
 import Language.Drasil.Chunk.CommonIdea (CI)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, CommonIdea(abrv))
-import Language.Drasil.ShortName (HasShortName(shortname), ShortName)
+  Definition(defn), ConceptDomain(cdom), Concept, CommonIdea(abrv), HasShortName(shortname))
+import Language.Drasil.ShortName (ShortName)
 
 import Control.Lens (makeLenses, (^.), view)
 

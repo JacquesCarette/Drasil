@@ -5,10 +5,9 @@ import Language.Drasil.Chunk.AssumpChunk (AssumpChunk)
 import Language.Drasil.Chunk.Change (Change)
 import Language.Drasil.Chunk.Citation (BibRef)
 import Language.Drasil.Chunk.ReqChunk (ReqChunk)
-import Language.Drasil.ShortName (HasShortName(shortname))
 
 import Language.Drasil.Classes (HasRefAddress(getRefAdd),
-  MayHaveLabel(getMaybeLabel), HasLabel(getLabel))
+  MayHaveLabel(getMaybeLabel), HasLabel(getLabel), HasShortName(shortname))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Label () -- for instances

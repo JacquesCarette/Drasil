@@ -44,3 +44,16 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 - **Unicode**: Misnamed. Really is a few special characters which need special code to be
   displayed properly. Unclear how much this should be used in examples, so maybe this should
   no longer be exported?
+
+- **Symbol**: Abstract definition of symbol layout primitives. Enough information for
+  renderers to display them.
+
+- **Stage**: (perhaps misnamed?). An indication of which 'stage' of the processing an
+  entity belongs to. Mostly used to configure the display of 'variables', i.e. which
+  symbol to choose.
+
+- **SymbolAlphabet**: The long names of many symbols, and even some short ones (because of the
+  tag) is inconvenient; provides some short-hand way of referring to them.
+
+- **Expr**: ``mathematical'' expressions. And also domain descriptions and real intervals.
+  (the latter two should probably be split off on their own)

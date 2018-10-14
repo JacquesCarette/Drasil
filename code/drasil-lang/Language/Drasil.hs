@@ -170,8 +170,10 @@ module Language.Drasil (
   , personWM', mononym, nameStr, rendPersLFM, rendPersLFM', rendPersLFM''
   -- Chunk.Theory
   , Theory(..), tc', TheoryChunk, TheoryModel, tm, tm'
-  -- Chunk.SymbolForm
-  , Stage(Equational,Implementation), HasSymbol(symbol), eqSymb, codeSymb, hasStageSymbol
+  -- Stages
+  , Stage(Equational,Implementation)
+  -- SymbolForm
+  , HasSymbol(symbol), eqSymb, codeSymb, hasStageSymbol
   -- ChunkDB
   , ChunkDB, cdb
   , HasSymbolTable, symbolMap, symbLookup, symbolTable, getUnitLup
@@ -329,7 +331,8 @@ import Language.Drasil.Reference (makeRef, mkRefFrmLbl, ReferenceDB, assumpDB, r
                                  , citationRefTable, citeLookup, RefMap
                                  , simpleMap)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 
-  prime, sCurlyBrSymb, compsy, Stage(..))
+  prime, sCurlyBrSymb, compsy)
+import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames

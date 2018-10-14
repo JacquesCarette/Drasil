@@ -10,7 +10,8 @@ import Language.Drasil.Chunk.Unitary (Unitary, unit)
 import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
 import Language.Drasil.Development.UnitLang (USymb)
 import Language.Drasil.Spec ((+:+), Sentence((:+:), S, Sy), sParen)
-import Language.Drasil.Symbol (Stage(Implementation), compsy)
+import Language.Drasil.Symbol (compsy)
+import Language.Drasil.Stages (Stage(Implementation))
 import qualified Language.Drasil.NounPhrase as NP
 
 {- |

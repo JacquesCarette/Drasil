@@ -10,7 +10,8 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
 import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space)
-import Language.Drasil.Symbol (Symbol, Stage)
+import Language.Drasil.Stages (Stage)
+import Language.Drasil.Symbol (Symbol)
 
 -- | A Quantity is an 'Idea' with a 'Space' and a symbol and 
 -- may have units

@@ -34,6 +34,7 @@ library
     , Language.Drasil.ShortName
     , Language.Drasil.Space
     , Language.Drasil.Spec
+    , Language.Drasil.Stages
     , Language.Drasil.Symbol
     , Language.Drasil.SymbolAlphabet
     , Language.Drasil.UID

@@ -7,7 +7,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.References (Reference)
-import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname), shortname', getStringSN)
+import Language.Drasil.ShortName (ShortName, HasShortName(shortname), shortname', getStringSN)
 
 import Language.Drasil.Classes (HasDerivation(derivations), HasReference(getReferences))
 import Language.Drasil.Spec (Sentence(EmptyS, S), (+:+), sC)

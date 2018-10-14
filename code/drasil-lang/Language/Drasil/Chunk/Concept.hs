@@ -13,8 +13,7 @@ import Language.Drasil.Spec (Sentence(S))
 import Language.Drasil.NounPhrase (NP, pn)
 import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict),
   ConceptInstance(ConInst), CommonConcept(ComConDict), DefnAndDomain(DAD))
-import Language.Drasil.Chunk.ShortName (shortname')
-
+import Language.Drasil.ShortName (shortname')
 
 import Control.Lens ((^.))
 

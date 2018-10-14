@@ -7,7 +7,7 @@ import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.RefTypes (RefAdd, RefType)
 import Language.Drasil.Development.UnitLang (USymb)
-import Language.Drasil.Chunk.ShortName (ShortName)
+import Language.Drasil.ShortName (ShortName)
 import Language.Drasil.UID (UID)
 
 -- | For writing "sentences" via combining smaller elements

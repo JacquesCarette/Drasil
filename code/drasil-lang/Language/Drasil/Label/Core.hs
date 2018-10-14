@@ -4,7 +4,7 @@ module Language.Drasil.Label.Core where
 
 import Control.Lens (makeLenses)
 import Language.Drasil.UID (UID)
-import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname))
+import Language.Drasil.ShortName (ShortName, HasShortName(shortname))
 import Language.Drasil.RefTypes (RefType)
 
 -- import reference address from Language.Drasil.References?

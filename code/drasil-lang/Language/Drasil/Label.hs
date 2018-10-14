@@ -6,7 +6,7 @@ module Language.Drasil.Label (Label, mkLabelRA',
 import Language.Drasil.Label.Core
 import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd))
 import Data.Char (isAscii)
-import Language.Drasil.Chunk.ShortName (shortname')
+import Language.Drasil.ShortName (shortname')
 import Language.Drasil.RefTypes (RefType(..), ReqType(..), DType(..))
 
 import Control.Lens((^.))

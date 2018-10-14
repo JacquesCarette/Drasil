@@ -9,7 +9,7 @@ import Language.Drasil.Expr
 import Language.Drasil.Spec
 
 import Language.Drasil.Chunk.AssumpChunk
-import Language.Drasil.Chunk.ShortName
+import Language.Drasil.ShortName
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation
 import Language.Drasil.Chunk.ReqChunk

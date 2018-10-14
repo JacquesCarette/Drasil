@@ -3,7 +3,7 @@
 module Language.Drasil.Document where
 
 import Language.Drasil.Document.Core
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
+import Language.Drasil.ShortName (HasShortName(shortname))
 import Language.Drasil.Classes (HasLabel(getLabel))
 
 import Language.Drasil.Label (Label)

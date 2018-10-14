@@ -31,7 +31,7 @@ import Language.Drasil.UID (UID)
 
 import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel))
 import Language.Drasil.Misc (noSpaces)
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
+import Language.Drasil.ShortName (HasShortName(shortname))
 import Language.Drasil.Label.Core (Label)
 
 import Control.Lens (Lens', makeLenses)

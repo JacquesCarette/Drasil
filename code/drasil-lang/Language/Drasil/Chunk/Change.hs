@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.Change
   ) where
 
 import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel))
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
+import Language.Drasil.ShortName (HasShortName(shortname))
 import Language.Drasil.UID (UID)
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Label.Core (Label)

@@ -1,4 +1,4 @@
-module Language.Drasil.Chunk.ShortName(
+module Language.Drasil.ShortName(
   ShortName, getStringSN, resolveSN, HasShortName(shortname), shortname', concatSN, defer) where
 
 import Language.Drasil.UID (UID)

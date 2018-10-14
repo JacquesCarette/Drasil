@@ -30,6 +30,7 @@ library
     , Language.Drasil.Reference
     , Language.Drasil.Sentence.Extract
     , Language.Drasil.Sentence.EmbedSymbol
+    , Language.Drasil.ShortName
     , Language.Drasil.Space
     , Language.Drasil.Spec
     , Language.Drasil.Symbol
@@ -58,7 +59,6 @@ library
     , Language.Drasil.Chunk.References
     , Language.Drasil.Chunk.Relation
     , Language.Drasil.Chunk.ReqChunk
-    , Language.Drasil.Chunk.ShortName
     , Language.Drasil.Chunk.SymbolForm
     , Language.Drasil.Chunk.Theory
     , Language.Drasil.Chunk.UncertainQuantity

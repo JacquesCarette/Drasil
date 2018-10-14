@@ -16,7 +16,7 @@ import Language.Drasil.Chunk.Goal as G (Goal)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
 import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..))
 import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc)
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname),
+import Language.Drasil.ShortName (HasShortName(shortname),
   ShortName, getStringSN, shortname', concatSN, defer)
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel), HasRefAddress(getRefAdd))

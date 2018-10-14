@@ -103,7 +103,7 @@ module Language.Drasil (
   , Derivation, getDerivation, getShortName
   , Reference
   -- Chunk.ShortName
-  , DeferredCtx(..), resolveSN, ShortName, shortname', HasShortName(shortname), getStringSN
+  , resolveSN, ShortName, shortname', HasShortName(shortname), getStringSN
   --Citations
   , Citation(..), EntryID, BibRef, CiteField(..), Month(..), HP(..)
   , HasFields(..)
@@ -261,7 +261,7 @@ import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.References (Reference)
-import Language.Drasil.Chunk.ShortName (DeferredCtx(..), resolveSN, ShortName
+import Language.Drasil.Chunk.ShortName (resolveSN, ShortName
   , shortname', HasShortName(shortname), getStringSN)
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation (

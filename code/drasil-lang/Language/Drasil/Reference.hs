@@ -17,7 +17,7 @@ import Language.Drasil.Chunk.InstanceModel (InstanceModel)
 import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..))
 import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc)
 import Language.Drasil.Chunk.ShortName (HasShortName(shortname),
-  ShortName(Concat, Deferred), DeferredCtx(FromCC), getStringSN, shortname')
+  ShortName, getStringSN, shortname', concatSN, defer)
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel), HasRefAddress(getRefAdd))
 import Language.Drasil.Document (Section(Section))
@@ -342,7 +342,7 @@ customRef r n = Ref (fixupRType $ rType r) (refAdd r) (getAcc' (rType r) n)
     getAcc' Assump    sn = shortname' $ "A: " ++ (getStringSN sn)
     getAcc' Goal      sn = shortname' $ "GS: " ++ (getStringSN sn)
     getAcc' PSD       sn = shortname' $ "PS: " ++ (getStringSN sn)
-    getAcc' (DeferredCC u) s = Concat (Deferred $ FromCC u) s
+    getAcc' (DeferredCC u) s = concatSN (defer u) s
     getAcc' _         sn = sn
     fixupRType (DeferredCC _) = Blank  -- FIXME: This is a hack
     fixupRType a = a

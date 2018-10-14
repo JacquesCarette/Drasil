@@ -275,8 +275,8 @@ spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
 
-lookupDeferredSN :: (HasDefinitionTable ctx) => ctx -> DeferredCtx -> String
-lookupDeferredSN ctx (FromCC u) = maybe "" (\x -> x ++ ": ") $
+lookupDeferredSN :: (HasDefinitionTable ctx) => ctx -> UID -> String
+lookupDeferredSN ctx u = maybe "" (\x -> x ++ ": ") $
   getA $ defLookup u $ ctx ^. defTable
 
 -- | Translates from Document to the Printing representation of Document

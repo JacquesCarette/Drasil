@@ -1,16 +1,13 @@
-module Language.Drasil.Chunk.ShortName where
+module Language.Drasil.Chunk.ShortName(
+  ShortName, getStringSN, resolveSN, HasShortName(shortname), shortname', concatSN, defer) where
 
 import Language.Drasil.UID (UID)
 import Control.Lens (Lens')
 
-data DeferredCtx =
-  FromCC UID
-  deriving Eq  --FIXME: HACK FOR Document/Extract to work. We don't necessarily want this. (By extension of ShortName)
-
 data ShortName =
     ShortNm String
   | Concat ShortName ShortName
-  | Deferred DeferredCtx
+  | Deferred UID
     deriving Eq  --FIXME: HACK FOR Document/Extract to work. We don't necessarily want this.
 
 instance Monoid ShortName where
@@ -31,7 +28,13 @@ class HasShortName  s where
 shortname' :: String -> ShortName
 shortname' = ShortNm
 
-resolveSN :: ShortName -> (DeferredCtx -> String) -> ShortName
+concatSN :: ShortName -> ShortName -> ShortName
+concatSN = Concat
+
+defer :: UID -> ShortName
+defer = Deferred
+
+resolveSN :: ShortName -> (UID -> String) -> ShortName
 resolveSN (Deferred u) f = shortname' $ f u
 resolveSN (Concat a b) f = Concat (resolveSN a f) $ resolveSN b f
 resolveSN s _ = s

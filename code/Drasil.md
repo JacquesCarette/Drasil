@@ -34,3 +34,6 @@ under the namespace *Language.Drasil*, which will thus be omitted.
   references. The 'kinds of reference' belongs here, but it shouldn't have a Show instance.
   And lots of the kinds of references are either layout-specific or document-specific, so
   should not be defined globally in either case.
+
+- **Chunk/ShortName**: Abstract type for a 'short name', i.e. the string to be displayed
+  for a link, visible to users. 

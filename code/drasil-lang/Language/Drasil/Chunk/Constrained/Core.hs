@@ -2,15 +2,9 @@
 module Language.Drasil.Chunk.Constrained.Core (
     Constraint(..), ConstraintReason(..)
   , physc, sfwrc, enumc, isPhysC, isSfwrC
-  , Reason(..), TheoryConstraint(..)
   ) where
 
-import Language.Drasil.Expr (Expr(..), RealInterval(..), Relation)
-
--- AssumedCon are constraints that come from assumptions as opposed to theory invariants.
--- This might be an artificial distinction as they may be "the same"
-data Reason = Invariant | AssumedCon
-data TheoryConstraint = TCon Reason Relation 
+import Language.Drasil.Expr (Expr(..), RealInterval(..))
 
 data ConstraintReason = Physical | Software
 data Constraint where

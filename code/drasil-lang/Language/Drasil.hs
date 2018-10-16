@@ -69,7 +69,6 @@ module Language.Drasil (
   -- Chunk.Constrained.Core
   , physc, sfwrc, enumc , isPhysC, isSfwrC
   , Constraint(..), ConstraintReason(..)
-  , Reason(..), TheoryConstraint(..)
   -- Chunk.Constrained
   , ConstrainedChunk(..), ConstrConcept(..)
   , constrained, cuc, cvc, cvc', constrained', cuc', constrainedNRV'
@@ -291,7 +290,7 @@ import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Constrained.Core (physc, sfwrc, enumc, isPhysC, isSfwrC,
-  Constraint(..), ConstraintReason(..), Reason(..), TheoryConstraint(..))
+  Constraint(..), ConstraintReason(..))
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqn'', getVC,
  equat, ec, fromEqn''', fromEqn'''')

@@ -81,18 +81,15 @@ mkTMField :: HasSymbolTable ctx => TheoryModel -> ctx -> Field -> ModRow -> ModR
 mkTMField t _ l@Label fs  = (show l, (mkParagraph $ at_start t):[]) : fs
 mkTMField t _ l@DefiningEquation fs =
   (show l, (map (\x -> LlC $ eqUnR x (modifyLabelEqn (t ^. getLabel))) --FIXME: should this have labels?
-  (map tConToExpr (t ^. invariants)))) : fs 
+  (t ^. invariants))) : fs 
 mkTMField t m l@(Description v u) fs = (show l,
-  foldr (\x -> buildDescription v u x m) [] (map tConToExpr (t ^. invariants))) : fs
+  foldr (\x -> buildDescription v u x m) [] (t ^. invariants)) : fs
 mkTMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkTMField t _ l@(Source) fs = (show l, map mkParagraph $ t ^. getReferences) : fs
 mkTMField t _ l@(Notes) fs = 
   maybe fs (\ss -> (show l, map mkParagraph ss) : fs) (t ^. getNotes)
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
-
-tConToExpr :: TheoryConstraint -> Expr
-tConToExpr (TCon _ x) = x
 
 -- TODO: buildDescription gets list of constraints to expr and ignores 't'.
 

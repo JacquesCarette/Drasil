@@ -41,6 +41,8 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 - **Label.Core**: Type of labels. Is a reference address, link or URI. Also has a shortname.
   (probably should be abstract, but isn't yet)
 
+- **Classes.Core**: The 'core' classes which abstract over HasUID and HasShortName.
+
 - **Unicode**: Misnamed. Really is a few special characters which need special code to be
   displayed properly. Unclear how much this should be used in examples, so maybe this should
   no longer be exported?

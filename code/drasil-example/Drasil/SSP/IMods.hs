@@ -79,8 +79,8 @@ nrmShrFor :: InstanceModel
 nrmShrFor = im'' nrmShrFor_rc [qw baseWthX, qw scalFunc,
  qw watrForce, qw baseAngle, qw midpntHght, 
  qw earthqkLoadFctr, qw slcWght, qw surfHydroForce]
-  [TCon AssumedCon $ sy fixme1 $< sy fixme1] (qw shearFunc)
-   [TCon AssumedCon $ 0 $< sy fixme1 $< sy fixme1] [makeRef chen2005] nrmShrDeriv "nrmShrFor" [nrmShrF_desc]
+  [sy fixme1 $< sy fixme1] (qw shearFunc)
+   [0 $< sy fixme1 $< sy fixme1] [makeRef chen2005] nrmShrDeriv "nrmShrFor" [nrmShrF_desc]
 
 nrmShrFor_rc :: RelationConcept
 nrmShrFor_rc = makeRC "nrmShrFor_rc" (nounPhraseSP "normal/shear force ratio")
@@ -124,8 +124,7 @@ nrmShrF_desc = foldlSent [ch normToShear `isThe` S "magnitude ratio",
 --
 
 intsliceFs :: InstanceModel
-intsliceFs = im'' intsliceFs_rc [qw index, qw fs,
-  qw shearRNoIntsl, qw shearFNoIntsl,
+intsliceFs = im'' intsliceFs_rc [qw index, qw fs, qw shearRNoIntsl, qw shearFNoIntsl,
  qw mobShrC, qw shrResC]
   [] (qw intNormForce) [] [makeRef chen2005] intrSlcDeriv "intsliceFs" [sliceFs_desc]
 

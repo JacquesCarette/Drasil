@@ -28,9 +28,9 @@ import Drasil.SWHS.Unitals (temp_W, temp_C, tau_W, w_mass, htCap_W, coil_HTC,
 eBalanceOnWtr :: InstanceModel
 eBalanceOnWtr = im'' eBalanceOnWtr_rc [qw temp_C, qw temp_init, qw time_final, 
   qw coil_SA, qw coil_HTC, qw htCap_W, qw w_mass] 
-  [TCon AssumedCon $sy temp_init $<= sy temp_C] (qw temp_W) 
+  [sy temp_init $<= sy temp_C] (qw temp_W) 
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
-  [TCon AssumedCon $ 0 $< sy time $< sy time_final] [makeRef koothoor2013 +:+ sParen (S "with PCM removed")] 
+  [0 $< sy time $< sy time_final] [makeRef koothoor2013 +:+ sParen (S "with PCM removed")] 
   eBalanceOnWtrDeriv "eBalanceOnWtr" [balWtrDesc]
 
 eBalanceOnWtr_rc :: RelationConcept

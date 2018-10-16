@@ -28,7 +28,7 @@ glassBRsymb = map dqdWr [plate_len, plate_width, char_weight, standOffDist] ++
 
 probOfBreak :: InstanceModel
 probOfBreak = im probOfBreak_RC [qw risk] 
-  [TCon AssumedCon $ sy risk $> 0] (qw prob_br) [TCon AssumedCon $ sy prob_br $> 0]
+  [sy risk $> 0] (qw prob_br) [sy prob_br $> 0]
   (map makeRef [astm2009, beasonEtAl1998]) probOfBreakL
 
 {--}
@@ -46,8 +46,8 @@ probOfBreakDesc =
 
 calofCapacity :: InstanceModel
 calofCapacity = im' calofCapacity_RC [qw nonFL, qw glaTyFac, qw loadSF] 
-  [TCon AssumedCon $ sy nonFL $> 0, TCon AssumedCon $ sy glaTyFac $> 0,
-  TCon AssumedCon $ sy loadSF $> 0] (qw lRe) [] [makeRef astm2009] calOfCapacityL [calofCapacityDesc]
+  [sy nonFL $> 0, sy glaTyFac $> 0, sy loadSF $> 0] (qw lRe) [] [makeRef astm2009]
+  calOfCapacityL [calofCapacityDesc]
 
 calofCapacity_RC :: RelationConcept
 calofCapacity_RC = makeRC "calofCapacity_RC" (nounPhraseSP "Calculation of Capacity") 
@@ -70,8 +70,8 @@ calofCapacityDesc =
 
 calofDemand :: InstanceModel
 calofDemand = im' calofDemand_RC [qw demand, qw eqTNTWeight, qw standOffDist]
-  [TCon AssumedCon $ sy demand $> 0, TCon AssumedCon $ sy eqTNTWeight $> 0,
-   TCon AssumedCon $ sy standOffDist $> 0] (qw demand) [] [makeRef astm2009] calOfDemandL
+  [sy demand $> 0, sy eqTNTWeight $> 0, sy standOffDist $> 0] (qw demand) []
+  [makeRef astm2009] calOfDemandL
   [calofDemandDesc]
 
 calofDemand_RC :: RelationConcept

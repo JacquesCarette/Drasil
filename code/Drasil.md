@@ -55,5 +55,15 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 - **SymbolAlphabet**: The long names of many symbols, and even some short ones (because of the
   tag) is inconvenient; provides some short-hand way of referring to them.
 
-- **Expr**: ``mathematical'' expressions. And also domain descriptions and real intervals.
+- **Expr**: mathematical expressions. And also domain descriptions and real intervals.
   (the latter two should probably be split off on their own)
+
+- **Expr/Precendence**: definition of precedence of various mathematical operators.
+  Used for both parsing and pretty-printing
+
+- **Expr/Extract**:function to extract names, and thence dependencies, from Expr.
+
+- **Chunk/Constrained/Core**: Definition of a constraint, and the reason why this constraint
+  exists. There are, in fact, two kinds of constraints defined here, one on theories
+  (which can be either an invariant or an assumption), or on variables (which can be to enclose
+  it in an interval, or an enumeration).

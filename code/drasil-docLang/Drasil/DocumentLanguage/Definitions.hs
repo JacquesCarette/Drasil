@@ -92,8 +92,7 @@ mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
 
 tConToExpr :: TheoryConstraint -> Expr
-tConToExpr (TCon Invariant x) = x
-tConToExpr (TCon AssumedCon x) = x
+tConToExpr (TCon _ x) = x
 
 -- TODO: buildDescription gets list of constraints to expr and ignores 't'.
 
@@ -160,10 +159,10 @@ mkIMField i _ l@(Input) fs =
   [] -> (show l, [mkParagraph EmptyS]) : fs -- FIXME? Should an empty input list be allowed?
   (_:_) -> (show l, [mkParagraph $ foldl (sC) x xs]) : fs
   where (x:xs) = map (P . eqSymb) (i ^. imInputs)
-mkIMField i _ l@(InConstraints) fs  = (show l,
-  foldr ((:) . UlC . ulcc . EqnBlock) [] (map tConToExpr (i ^. inCons))) : fs
-mkIMField i _ l@(OutConstraints) fs = (show l,
-  foldr ((:) . UlC . ulcc . EqnBlock) [] (map tConToExpr (i ^. outCons))) : fs
+mkIMField i _ l@(InConstraints) fs  = 
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] (i ^. inCons)) : fs
+mkIMField i _ l@(OutConstraints) fs = 
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] (i ^. outCons)) : fs
 mkIMField i _ l@(Notes) fs = 
   maybe fs (\ss -> (show l, map mkParagraph ss) : fs) (i ^. getNotes)
 mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++

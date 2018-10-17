@@ -9,8 +9,7 @@ module Language.Drasil.Development (
   , fund, comp_unitdefn, derCUC, derCUC', derCUC''
   , unitWrapper, getCu, MayHaveUnit(getUnit)
   -- UnitLang
-  , USymb(US), UDefn(..)
-  , comp_usymb
+  , USymb(US)
   ) where
 
 import Language.Drasil.Development.Unit (UnitDefn(..)
@@ -20,4 +19,4 @@ import Language.Drasil.Development.Unit (UnitDefn(..)
   , derUC, derUC', derUC''
   , fund, comp_unitdefn, derCUC, derCUC', derCUC''
   , makeDerU, unitWrapper, getCu, MayHaveUnit(getUnit))
-import Language.Drasil.Development.UnitLang (UDefn(..), USymb(US), comp_usymb)
+import Language.Drasil.Development.UnitLang (USymb(US))

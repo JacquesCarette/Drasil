@@ -65,7 +65,14 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 
 - **Expr/Extract**:function to extract names, and thence dependencies, from Expr.
 
-- **Chunk/Constrained/Core**: Definition of a constraint, and the reason why this constraint
-  exists. There are, in fact, two kinds of constraints defined here, one on theories
-  (which can be either an invariant or an assumption), or on variables (which can be to enclose
-  it in an interval, or an enumeration).
+- **Chunk/Constrained/Core**: Definition of a constraint on variables, and the reason 
+  why this constraint exists. These constraints are either an interval enclosure or an
+  enumeration.
+
+- **Development/UnitLang**: First, the 'Development' sub-hierarchy indicates that this 
+  should not be exported from Drasil.hs at all, just from Drasil.Development.
+  This defines the 'language of units', in two layers. First, as a 'laurent monomial'
+  over basic symbols; and then as an extended type which takes into account synonyms
+  scaling and shifting. This is the internal representation, which of course is only
+  useful for printing. The combinators, one level up, for creating them, is more
+  semantic.

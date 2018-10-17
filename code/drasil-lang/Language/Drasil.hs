@@ -21,8 +21,6 @@ module Language.Drasil (
   , precA, precB, eprec
   -- all the stuff from Unicode
   , Special(..), RenderSpecial(..)
-  -- UnitLang
-  , UDefn(..), from_udefn
   -- Unit
   , UnitDefn(..), unitWrapper
   , unitCon, fund, comp_unitdefn, makeDerU
@@ -127,7 +125,7 @@ module Language.Drasil (
   , cProceedings, cTechReport, cUnpublished
   , CitationKind(..)
   -- Spec
-  , USymb(..), Sentence(..), sParen, sSqBr
+  , Sentence(..), sParen, sSqBr
   , (+:+), (+:+.), (+.), sC, (+:), semiCol, sParenDash
   , sDash
   -- NounPhrase
@@ -249,7 +247,6 @@ import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..)
   , HasContents(accessContents)
   , LabelledContent(..), UnlabelledContent(..) )
 import Language.Drasil.Unicode -- all of it
-import Language.Drasil.Development.UnitLang -- all of it
 import Language.Drasil.Development.Unit -- all of it
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),

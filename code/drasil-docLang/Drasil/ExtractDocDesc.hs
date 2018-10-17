@@ -111,13 +111,16 @@ egetSCSSub (Assumptions) = []
 egetSCSSub (TMs _ tm)    = concatMap egetTM tm
 egetSCSSub (GDs _ gd _)  = []
 egetSCSSub (DDs _ dd _)  = concatMap egetDD dd
-egetSCSSub (IMs _ im _)  = []
+egetSCSSub (IMs _ im _)  = concatMap egetIM im
 egetSCSSub (Constraints _ _ _ lc) = concatMap egetLblCon lc
 egetSCSSub (CorrSolnPpties c) = concatMap egetCon' c
 
 egetTM :: TheoryModel -> [Expr]
 egetTM tm = concatMap egetQDef (tm ^. defined_quant ++ tm ^. defined_fun)
   ++ concatMap egetTheoryChunk (tm ^. valid_context)
+
+egetIM :: InstanceModel ->[Expr]
+egetIM im = [im ^. relat]
 
 egetTheoryChunk :: TheoryChunk -> [Expr]
 egetTheoryChunk tm = concatMap egetTheoryChunk (tm ^. valid_context) ++

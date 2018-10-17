@@ -138,7 +138,7 @@ symbT = ccss (getDoc $ mkDoc (filterSectionForSentence mkSRS) for' chipmunkSysIn
  (egetDoc $ mkDoc (filterSectionForExpr mkSRS) for' chipmunkSysInfo) everything
 
 symbTT :: [DefinedQuantityDict]
-symbTT = ccss (getDocDesc mkSRS) [] everything--(egetDocDesc mkSRS) everything
+symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) everything
 
 cpRefDB :: ReferenceDB
 cpRefDB = rdb [] [] newAssumptions [] [] cpCitations

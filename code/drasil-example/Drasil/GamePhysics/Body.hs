@@ -12,7 +12,8 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
   assembler, dataConstraintUncertainty, inDataConstTbl, intro, mkDoc,
   mkEnumSimpleD, outDataConstTbl, reqF, sSubSec, siCon, siSTitl, siSent,
-  traceMGF, tsymb, valsOfAuxConstantsF,filterSectionForSentence, filterSectionForExpr)
+  traceMGF, tsymb, valsOfAuxConstantsF,filterSectionForSentence, filterSectionForExpr
+  , getDocDesc, egetDocDesc)
 
 import qualified Drasil.DocLang.SRS as SRS
 
@@ -119,7 +120,7 @@ chipmunkSysInfo = SI {
   _kind = srs,
   _authors = authors,
   _units = chipUnits,
-  _quants = symbT, 
+  _quants = symbTT, 
   _concepts = ([] :: [DefinedQuantityDict]),
   _definitions = cpDDefs,
   _datadefs = dataDefns,
@@ -135,6 +136,9 @@ chipmunkSysInfo = SI {
 symbT :: [DefinedQuantityDict]
 symbT = ccss (getDoc $ mkDoc (filterSectionForSentence mkSRS) for' chipmunkSysInfo)
  (egetDoc $ mkDoc (filterSectionForExpr mkSRS) for' chipmunkSysInfo) everything
+
+symbTT :: [DefinedQuantityDict]
+symbTT = ccss (getDocDesc mkSRS) [] everything--(egetDocDesc mkSRS) everything
 
 cpRefDB :: ReferenceDB
 cpRefDB = rdb [] [] newAssumptions [] [] cpCitations

@@ -1,4 +1,4 @@
-module Drasil.ExtractDocDesc (getDoc, egetDoc) where
+module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc ) where
 
 import Control.Lens(makeLenses, (^.), view)
 import Drasil.DocumentLanguage

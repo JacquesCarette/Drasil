@@ -14,7 +14,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
   outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF, tsymb'',
-  filterSectionForSentence, filterSectionForExpr)
+  filterSectionForSentence, filterSectionForExpr, getDocDesc, egetDocDesc)
 import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel,
   likeChg, probDesc, sysCont, unlikeChg)
 
@@ -85,7 +85,7 @@ swhs_si = SI {
   _authors = swhsPeople,
   _units = check_si,
   _quants = swhsSymbols,
-  _concepts = symbT,
+  _concepts = symbTT,
   _definitions = swhsQDefs,
   _datadefs = swhsDDefs,
   _inputs = map qw swhsInputs,
@@ -116,6 +116,9 @@ printSetting = PI swhsSymMap defaultConfiguration
 symbT :: [DefinedQuantityDict]
 symbT =  ccss (getDoc $ mkDoc (filterSectionForSentence mkSRS) for swhs_si)
  (egetDoc $ mkDoc (filterSectionForExpr mkSRS) for swhs_si) swhsSymMap
+
+symbTT :: [DefinedQuantityDict]
+symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) swhsSymMap
 
 swhsPeople :: [Person]
 swhsPeople = [thulasi, brooks, spencerSmith]

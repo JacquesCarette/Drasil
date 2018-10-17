@@ -40,7 +40,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
   reqF, termDefnF, traceMGF, tsymb, valsOfAuxConstantsF, filterSectionForSentence,
-  filterSectionForExpr)
+  filterSectionForExpr, getDocDesc, egetDocDesc)
  
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
   isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP)
@@ -194,6 +194,9 @@ assumps_Nopcm_list_new = [newA1, newA2, newA3, newA5NoPCM, newA6NoPCM,
 symbT :: [DefinedQuantityDict]
 symbT = ccss (getDoc $ mkDoc (filterSectionForSentence mkSRS) for nopcm_si)
  (egetDoc $ mkDoc (filterSectionForExpr mkSRS) for nopcm_si) nopcm_SymbMap
+
+symbTT :: [DefinedQuantityDict]
+symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) nopcm_SymbMap
 
 --------------------------
 --Section 2 : INTRODUCTION

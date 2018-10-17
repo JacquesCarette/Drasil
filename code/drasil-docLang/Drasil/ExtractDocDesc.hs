@@ -133,13 +133,13 @@ getDocSec (Verbatim a)         = getSec a
 getDocSec (RefSec r)           = getRefSec r
 getDocSec (IntroSec i)         = getIntrosec i
 getDocSec (StkhldrSec s)       = getStk s
-getDocSec (GSDSec g)           = getGSD g -------Stop here
+getDocSec (GSDSec g)           = getGSD g
 getDocSec (ScpOfProjSec s)     = getScp s
 getDocSec (SSDSec s)           = getSSD s
 getDocSec (ReqrmntSec r)       = getReq r
 getDocSec (LCsSec l)           = getLcs l
 getDocSec (UCsSec u)           = getUcs u
-getDocSec (TraceabilitySec t)  = getTrace t
+getDocSec (TraceabilitySec t)  = getTrace t  -- Stops here
 getDocSec (AuxConstntSec a)    = getAux a
 getDocSec (Bibliography)       = []
 getDocSec (AppndxSec a)        = getApp a
@@ -190,11 +190,9 @@ getStk :: StkhldrSec -> [Sentence]
 getStk (StkhldrProg _ s) = [s]
 getStk (StkhldrProg2 t) = concatMap getStkSub t
 
-{--data StkhldrSub where
-  Client :: (Idea a) => a -> Sentence -> StkhldrSub
-  Cstmr  :: (Idea a) => a -> StkhldrSub--}
 getStkSub :: StkhldrSub -> [Sentence]
-getStkSub (_) = []
+getStkSub (Client _ s) = [s]
+getStkSub (Cstmr _)    = []
 
 getGSD :: GSDSec -> [Sentence]
 getGSD (GSDProg sc c cl sc1) = concatMap getSec sc ++ getCon' c
@@ -205,3 +203,70 @@ getGSDSub :: GSDSub -> [Sentence]
 getGSDSub (SysCntxt c) = concatMap getCon' c
 getGSDSub (UsrChars c) = concatMap getCon' c
 getGSDSub (SystCons c s) = concatMap getCon' c ++ concatMap getSec s
+
+getScp :: ScpOfProjSec -> [Sentence]
+getScp (ScpOfProjProg s c1 c2) = s:(getCon' c1):(getCon' c2)
+
+getSSD :: SSDSec -> [Sentence]
+getSSD (SSDProg ssd) = concatMap getSSDSub ssd
+
+getSSDSub :: SSDSub -> [Sentence]
+getSSDSub (SSDSubVerb s)     = getSec s
+getSSDSub (SSDProblem pd)    = getProblem pd
+getSSDSub (SSDSolChSpec sss) = getSol sss
+
+getProblem :: ProblemDescription -> [Sentence]
+getProblem (PDProg s1 _ s2 sec) = s1:[s2]:(concatMap getsec sec)
+
+getSol :: SolChSpec -> [Sentence]
+getSol (SCSProg sub) = concatMap getSCSSub sub
+
+getSCSSub :: SCSSub -> [Sentence]
+getSCSSub (Assumptions) = []
+getSCSSub (TMs _ tm)    = concatMap getTM tm
+getSCSSub (GDs _ gd _)  = concatMap getGD gd
+getSCSSub (DDs _ dd _)  = concatMap getDD dd
+getSCSSub (IMs _ im _)  = concatMap getIM im
+getSCSSub (Constraints s1 s2 s3 lb) = s1:[s2]:[s3]:(concatMap getCon (concatMap (^. accessContents) lb))
+getSCSSub (CorrSolnPpties c) = concatMap getCon' c
+
+getIM :: InstanceModel -> [Sentence]
+getIM im = (im ^. getReferences) ++ (im ^. derivations) ++ (im ^. getNotes) ++
+  [im ^. relat] ++ [im ^. defn]
+
+getGD :: GenDefn -> [Sentence]
+getGD gd = [im ^. relat] ++ [im ^. defn] ++ (im ^. derivations) ++ (im ^. getReferences)
+  ++ (im ^. getNotes)
+
+getDD :: DataDefinition -> [Sentence]
+getDD dd = (dd ^. derivations) ++ (dd ^. getReferences) ++ (dd ^. getNotes)
+
+getTM :: TheoryModel -> [Sentence]
+getTM tm = (dd ^. getReferences) ++ (dd ^. getNotes) ++ [im ^. defn]
+
+getReq :: ReqrmntSec -> [Sentence]
+getReq (ReqsProg rs) = concatMap getReqSub rs
+
+getReqSub :: ReqsSub -> [Sentence]
+getReqSub (FReqsSub c) = concatMap getCon' c
+getReqSub (NonFReqsSub cc1 cc2 s1 s2) = (concatMap (^. defn) cc1) ++ (concatMap (^. defn) cc2)
+  ++ [s1] ++ [s2]
+
+getLcs :: LCsSec -> [Sentence]
+getLcs (LCsProg c) = concatMap getCon' c
+
+getUcs :: UCsSec -> [Sentence]
+getUcs (UCsProg c) = concatMap getCon' c
+
+
+
+
+
+
+
+
+
+
+
+
+

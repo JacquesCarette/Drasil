@@ -85,7 +85,7 @@ standardValuesDesc mainIdea = foldlSent [S "The", plural value, S "provided in",
 
 glassLiteDesc :: Sentence
 glassLiteDesc = foldlSent [at_start glass, S "under consideration is assumed to be a single", 
-  phrase lite `semiCol` S "hence, the", phrase value `sOf` short lShareFac, S "is equal to 1 for all",
+  S "lite; hence, the", phrase value `sOf` short lShareFac, S "is equal to 1 for all",
   plural calculation `sIn` short gLassBR] +:+
   (foldlList Comma List $ [makeRef calOfCapacityL] ++ [makeRef dimLL])
 

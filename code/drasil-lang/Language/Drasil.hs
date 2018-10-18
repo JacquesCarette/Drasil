@@ -126,7 +126,7 @@ module Language.Drasil (
   , CitationKind(..)
   -- Spec
   , Sentence(..), sParen, sSqBr
-  , (+:+), (+:+.), sC, (+:), semiCol, sParenDash
+  , (+:+), (+:+.), sC, (+:), sParenDash
   , sDash
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
@@ -318,7 +318,7 @@ import Language.Drasil.ShortName (resolveSN, ShortName
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (Sentence(..),
   sParen, sSqBr, sC, (+:+), (+:+.), (+:),
-  semiCol, sParenDash, sDash)
+  sParenDash, sDash)
 import Language.Drasil.Reference (makeRef, mkRefFrmLbl, ReferenceDB, assumpDB, reqDB
                                  , AssumpMap, assumpLookup, HasAssumpRefs
                                  , assumpRefTable, assumptionsFromDB

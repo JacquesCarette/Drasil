@@ -65,10 +65,6 @@ a +:+. b = a +:+ b :+: S "."
 (+:) :: Sentence -> Sentence -> Sentence
 a +: b = a +:+ b :+: S ":"
 
--- | Helper for concatenating two sentences with a semi-colon and space between them.
-semiCol :: Sentence -> Sentence -> Sentence
-a `semiCol` b = a :+: S ";" +:+ b
-
 sParenDash :: Sentence -> Sentence
 sParenDash x = S " (" :+: x :+: S ") - "
 

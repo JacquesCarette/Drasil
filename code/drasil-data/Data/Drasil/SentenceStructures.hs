@@ -81,7 +81,7 @@ foldlList s Options lst    = foldle1 (getSep s) (\a b -> (getSep s) a (S "or" +:
 --Helper function to foldlList - not exported
 getSep :: SepType -> (Sentence -> Sentence -> Sentence)
 getSep Comma   = sC
-getSep SemiCol = semiCol
+getSep SemiCol = (\a b -> a :+: S ";" +:+ b)
 
 {--** Combinators **--}
 sAnd, andIts :: Sentence -> Sentence -> Sentence

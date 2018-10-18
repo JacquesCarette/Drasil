@@ -76,3 +76,6 @@ under the namespace *Language.Drasil*, which will thus be omitted.
   scaling and shifting. This is the internal representation, which of course is only
   useful for printing. The combinators, one level up, for creating them, is more
   semantic.
+
+- **Spec**: Should really be called 'Sentence'. A 'language of sentences', mostly to
+  accomodate symbols, concatenation, units, etc. And some helper functions as well.

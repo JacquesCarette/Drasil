@@ -111,7 +111,7 @@ sensHtEdesc = foldlSent [
   phrase phase_change, S "occurs. A",
   phrase phase_change, S "occurs if",
   ch temp :+: S "=" :+: ch boil_pt,
-  S "or", ch temp :+: S "=" +. ch melt_pt,
+  S "or", ch temp :+: S "=" +:+. ch melt_pt,
   S "If this" `isThe` S "case, refer to",
   (makeRef latentHtE) `sC` at_start latent_heat,
   phrase energy]

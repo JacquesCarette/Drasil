@@ -22,7 +22,7 @@ likelyChgCISL :: ConceptInstance
 likelyChgCISL = cic "LC_inhomogeneous" lcCISLDesc "Calculate-Inhomogeneous-Soil-Layers" likeChgDom
 
 lcCISLDesc :: Sentence
-lcCISLDesc = foldlSent [(makeRef newA3) `sDash` S "The",
+lcCISLDesc = foldlSent [(makeRef newA3) +:+ S "- The",
   phrase system +:+. S "currently assumes the different layers of the soil are homogeneous",
   S "In the future,", plural calculation,
   S "can be added for inconsistent soil properties throughout"]

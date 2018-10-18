@@ -169,6 +169,9 @@ maybeWOVerb a b = likelyFrame a EmptyS b
 maybeChanged a b = likelyFrame a (S "changed") b
 maybeExpanded a b = likelyFrame a (S "expanded") b
 
+sParenDash :: Sentence -> Sentence
+sParenDash x = S " (" :+: x :+: S ") - "
+
 -- | helpful combinators for making Sentences for Terminologies with Definitions
 -- term (acc) - definition
 tAndDWAcc :: Concept s => s -> ItemType

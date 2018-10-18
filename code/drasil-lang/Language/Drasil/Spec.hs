@@ -65,8 +65,5 @@ a +:+. b = a +:+ b :+: S "."
 (+:) :: Sentence -> Sentence -> Sentence
 a +: b = a +:+ b :+: S ":"
 
-sParenDash :: Sentence -> Sentence
-sParenDash x = S " (" :+: x :+: S ") - "
-
 sDash :: Sentence -> Sentence -> Sentence
 y `sDash` z = y +:+ S "-" +:+ z

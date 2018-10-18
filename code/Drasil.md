@@ -79,3 +79,6 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 
 - **Spec**: Should really be called 'Sentence'. A 'language of sentences', mostly to
   accomodate symbols, concatenation, units, etc. And some helper functions as well.
+
+- **Sentence/Extract**: Utility to extract the (unique) dependencies of Sentences on
+  chunks, i.e. things that have UIDs.

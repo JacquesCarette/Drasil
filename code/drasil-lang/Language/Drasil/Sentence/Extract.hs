@@ -1,22 +1,24 @@
-module Language.Drasil.Sentence.Extract(sdep, snames) where
+module Language.Drasil.Sentence.Extract(sdep) where
 
 import Data.List (nub)
+import Language.Drasil.UID (UID)
 import Language.Drasil.Spec(Sentence(..))
 import Language.Drasil.Expr.Extract(names)
--- | Generic traverse of all positions that could lead to names from sentences
-snames   :: Sentence -> [String]
-snames (Ch a)       = [a]
-snames (Sy _)       = []
-snames (S _)        = []
-snames (Sp _)       = []
-snames (P _)        = []
-snames (Ref _ _ _)  = []
-snames ((:+:) a b)  = (snames a) ++ (snames b)
-snames (Quote a)    = snames a
-snames (E a)        = names a
-snames (EmptyS)     = []
+
+-- | Generic traverse of all positions that could lead to UIDs from sentences
+getUIDs   :: Sentence -> [UID]
+getUIDs (Ch a)       = [a]
+getUIDs (Sy _)       = []
+getUIDs (S _)        = []
+getUIDs (Sp _)       = []
+getUIDs (P _)        = []
+getUIDs (Ref _ _ _)  = []
+getUIDs ((:+:) a b)  = (getUIDs a) ++ (getUIDs b)
+getUIDs (Quote a)    = getUIDs a
+getUIDs (E a)        = names a
+getUIDs (EmptyS)     = []
+
 -----------------------------------------------------------------------------
 -- And now implement the exported traversals all in terms of the above
-sdep :: Sentence -> [String]
-sdep = nub . snames
-
+sdep :: Sentence -> [UID]
+sdep = nub . getUIDs

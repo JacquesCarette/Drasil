@@ -203,12 +203,12 @@ module Language.Drasil (
   , mkLabelRAAssump', mkLabelRAFig, mkLabelRASec
   , modifyLabelEqn
   -- Document.getChunk
-  , vars, combine', ccss
+  , vars, vars', combine, combine', ccss
   -- Chunk.Sentence.EmbedSymbol
   , ch
-  -- Chunk.Sentence.Extract
-  , sdep, vars',snames, combine
-  -- Chunk.Expr.Extract
+  -- Sentence.Extract
+  , sdep
+  -- Expr.Extract
   , names
   -- Document.Extract
   , egetDoc, getDoc
@@ -234,7 +234,7 @@ import Language.Drasil.Document.Extract(egetDoc, getDoc)
 import Language.Drasil.Expr.Extract (dep, names', names)
 import Language.Drasil.Expr.Precedence (precA, precB, eprec)
 import Language.Drasil.Sentence.EmbedSymbol(ch)
-import Language.Drasil.Sentence.Extract(sdep,  snames)
+import Language.Drasil.Sentence.Extract(sdep)
 import Language.Drasil.Document (section, fig, figWithWidth
   , section''
   , Section(..), SecCons(..) 

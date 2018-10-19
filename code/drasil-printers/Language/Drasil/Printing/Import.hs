@@ -324,10 +324,12 @@ layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"]
 layLabelled sm x@(LblC _ (Figure c f wp))     = T.Figure 
   (P.S $ getAdd (x ^. getRefAdd))
   (spec sm c) f wp
+{-
 layLabelled sm x@(LblC _ (Requirement r))       = T.ALUR T.Requirement
   (spec sm $ requires r) 
   (P.S $ getAdd (x ^. getRefAdd)) 
   (spec sm $ getShortName r)
+-}
 layLabelled sm x@(LblC _ (Assumption a))        = T.ALUR T.Assumption
   (spec sm (assuming a))
   (P.S $ getAdd (x ^. getRefAdd))
@@ -358,8 +360,8 @@ layUnlabelled sm (Paragraph c)          = T.Paragraph (spec sm c)
 layUnlabelled sm (EqnBlock c)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
 layUnlabelled sm (Enumeration cs)       = T.List $ makeL sm cs
 layUnlabelled sm (Figure c f wp)    = T.Figure (P.S "nolabel2") (spec sm c) f wp
-layUnlabelled sm (Requirement r)      = T.ALUR T.Requirement
-  (spec sm $ requires r) (P.S "nolabel3") (spec sm $ getShortName r)
+-- layUnlabelled sm (Requirement r)      = T.ALUR T.Requirement
+--   (spec sm $ requires r) (P.S "nolabel3") (spec sm $ getShortName r)
 layUnlabelled sm (Assumption a)       = T.ALUR T.Assumption
   (spec sm (assuming a)) (P.S "nolabel4") (spec sm $ getShortName a)
 layUnlabelled sm (Change lcs)          = T.ALUR

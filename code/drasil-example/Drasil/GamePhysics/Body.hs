@@ -136,7 +136,7 @@ symbT :: [DefinedQuantityDict]
 symbT = ccss (getDoc chipmunkSRS') (egetDoc chipmunkSRS') everything
 
 cpRefDB :: ReferenceDB
-cpRefDB = rdb [] [] newAssumptions [] [] cpCitations
+cpRefDB = rdb [] [] newAssumptions [] cpCitations
   (functional_requirements_list' ++ likelyChangesList' ++ unlikelyChangesList') -- FIXME: Convert the rest to new chunk types
 
 newAssumptions :: [AssumpChunk]

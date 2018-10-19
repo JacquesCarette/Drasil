@@ -14,7 +14,6 @@ import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
 import Language.Drasil.Chunk.Goal as G (Goal)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
-import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..))
 import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc)
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel),
@@ -25,7 +24,7 @@ import Language.Drasil.Label.Core (Label(..))
 import Language.Drasil.Label.Type (getAdd)
 import Language.Drasil.Label (getDefName, getReqName)
 import Language.Drasil.People (People, comparePeople)
-import Language.Drasil.RefTypes (RefType(..), DType(..), ReqType(..), Reference(Reference))
+import Language.Drasil.RefTypes (RefType(..), DType(..), Reference(Reference))
 import Language.Drasil.ShortName ( ShortName, getStringSN, shortname', concatSN, defer)
 import Language.Drasil.Spec (Sentence((:+:), S, Ref))
 import Language.Drasil.UID (UID)
@@ -44,7 +43,7 @@ type GoalMap = RefMap Goal
 -- | Assumption Database
 type AssumpMap = RefMap AssumpChunk
 -- | Requirement (functional/non-functional) Database
-type ReqMap = RefMap ReqChunk
+-- type ReqMap = RefMap ReqChunk
 -- | Change (likely/unlikely) Database
 type ChangeMap = RefMap Change
 -- | Citation Database (bibliography information)
@@ -58,7 +57,7 @@ data ReferenceDB = RDB -- organized in order of appearance in SmithEtAl template
   { _physSystDescDB :: PhysSystDescMap
   , _goalDB :: GoalMap
   , _assumpDB :: AssumpMap
-  , _reqDB :: ReqMap
+  -- , _reqDB :: ReqMap
   , _changeDB :: ChangeMap
   , _citationDB :: BibMap
   , _conceptDB :: ConceptMap
@@ -69,13 +68,12 @@ makeLenses ''ReferenceDB
 data RefBy = ByName
            | ByNum -- If applicable
 
-rdb :: [PhysSystDesc] -> [Goal] -> [AssumpChunk] -> [ReqChunk] -> [Change] ->
+rdb :: [PhysSystDesc] -> [Goal] -> [AssumpChunk] -> [Change] ->
   BibRef -> [ConceptInstance] -> ReferenceDB
-rdb psds goals assumps reqs changes citations con = RDB
+rdb psds goals assumps changes citations con = RDB
   (simpleMap psds)
   (simpleMap goals)
   (simpleMap assumps)
-  (reqMap reqs)
   (changeMap changes)
   (bibMap citations)
   (conceptMap con)
@@ -83,12 +81,14 @@ rdb psds goals assumps reqs changes citations con = RDB
 simpleMap :: HasUID a => [a] -> RefMap a
 simpleMap xs = Map.fromList $ zip (map (^. uid) xs) (zip xs [1..])
 
+{-
 reqMap :: [ReqChunk] -> ReqMap
 reqMap rs = Map.fromList $ zip (map (^. uid) (frs ++ nfrs)) (zip frs [1..] ++
   zip nfrs [1..])
   where (frs, nfrs)  = partition (isFuncRec . reqType) rs
         isFuncRec FR = True
         isFuncRec _  = False
+-}
 
 changeMap :: [Change] -> ChangeMap
 changeMap cs = Map.fromList $ zip (map (^. uid) (lcs ++ ulcs))
@@ -134,11 +134,13 @@ assumpLookup a m = getS $ Map.lookup (a ^. uid) m
         getS Nothing = error $ "Assumption: " ++ (a ^. uid) ++
           " referencing information not found in Assumption Map"
 
+{-
 reqLookup :: HasUID c => c -> ReqMap -> (ReqChunk, Int)
 reqLookup r m = getS $ Map.lookup (r ^. uid) m
   where getS (Just x) = x
         getS Nothing = error $ "Requirement: " ++ (r ^. uid) ++
           " referencing information not found in Requirement Map"
+-}
 
 changeLookup :: HasUID c => c -> ChangeMap -> (Change, Int)
 changeLookup c m = getS $ Map.lookup (c ^. uid) m
@@ -160,8 +162,8 @@ conceptLookup c = maybe (error $ "ConceptInstance: " ++ (c ^. uid) ++
 -- Classes and instances --
 class HasAssumpRefs s where
   assumpRefTable :: Simple Lens s AssumpMap
-class HasReqRefs s where
-  reqRefTable :: Simple Lens s ReqMap
+-- class HasReqRefs s where
+--   reqRefTable :: Simple Lens s ReqMap
 class HasChangeRefs s where
   changeRefTable :: Simple Lens s ChangeMap
 class HasCitationRefs s where
@@ -176,7 +178,7 @@ class HasConceptRefs s where
 instance HasGoalRefs ReferenceDB where goalRefTable = goalDB
 instance HasPSDRefs      ReferenceDB where psdRefTable = physSystDescDB
 instance HasAssumpRefs   ReferenceDB where assumpRefTable = assumpDB
-instance HasReqRefs      ReferenceDB where reqRefTable = reqDB
+-- instance HasReqRefs      ReferenceDB where reqRefTable = reqDB
 instance HasChangeRefs   ReferenceDB where changeRefTable = changeDB
 instance HasCitationRefs ReferenceDB where citationRefTable = citationDB
 instance HasConceptRefs  ReferenceDB where conceptRefTable = conceptDB
@@ -201,10 +203,12 @@ instance Referable AssumpChunk where
   refAdd  x = getAdd ((x ^. getLabel) ^. getRefAdd)
   rType   _ = Assump
 
+{-
 instance Referable ReqChunk where
   refAdd  r               = getAdd ((r ^. getLabel) ^. getRefAdd)
   rType   (RC _ FR _ _)   = Req FR
   rType   (RC _ NFR _ _)  = Req NFR
+-}
 
 instance Referable Change where
   refAdd r                   = getAdd ((r ^. getLabel) ^. getRefAdd)
@@ -254,7 +258,7 @@ temp (Table _ _ _ _)       = Tab
 temp (Figure _ _ _)        = Fig
 temp (Graph _ _ _ _)       = Fig
 temp (Definition x _)      = Def x
-temp (Requirement r)       = rType r
+-- temp (Requirement r)       = rType r
 temp (Assumption a)        = rType a
 temp (Change l)            = rType l
 temp (EqnBlock _)          = EqnB

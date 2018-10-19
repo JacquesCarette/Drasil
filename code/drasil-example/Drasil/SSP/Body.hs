@@ -145,7 +145,7 @@ sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms)
   (map cw sspSymbols ++ srsDomains) this_si
 
 sspRefDB :: ReferenceDB
-sspRefDB = rdb [] [] newAssumptions [] [] sspCitations (sspRequirements ++
+sspRefDB = rdb [] [] newAssumptions [] sspCitations (sspRequirements ++
   likelyChgs ++ unlikelyChgs)
 
 printSetting :: PrintingInformation

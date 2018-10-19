@@ -181,12 +181,9 @@ module Language.Drasil (
   , snToSentence
   -- Referencing
   , ReferenceDB, AssumpMap, assumpLookup, assumptionsFromDB
-  , rdb, assumpRefTable, customRef
-  , HasAssumpRefs, HasReqRefs, reqRefTable, reqLookup
+  , rdb, assumpRefTable, customRef, HasAssumpRefs
   , HasChangeRefs, changeRefTable, changeLookup, RefBy(..)
-  , reqDB, assumpDB, RefMap, simpleMap
-  -- ReqChunk
-  , ReqChunk, ReqType(..), reqType, requires, frc, nfrc
+  , assumpDB, RefMap, simpleMap
   -- Change
   , Change, ChngType(..), chngType, chng, lc, ulc
   , citationRefTable, citeLookup
@@ -197,6 +194,7 @@ module Language.Drasil (
   -- RefTypes
   , RefAdd, RefType(Cite, Tab, EqnB, LCh, UnCh, Req, Def, Lst, Link)
   , Reference(Reference)
+  , ReqType(FR, NFR)
   -- Label
   , Label 
   , mkLabelRA', mkLabelSame, mkEmptyLabel, mkURILabel
@@ -297,8 +295,6 @@ import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.PhysSystDesc (PhysSystDesc, pSysDes, psd)
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, makeRC')
-import Language.Drasil.Chunk.ReqChunk(ReqChunk, ReqType(..), reqType, requires
-                                     , frc, nfrc)
 import Language.Drasil.Chunk.Theory
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS,
@@ -313,11 +309,11 @@ import Language.Drasil.ShortName (resolveSN, ShortName
   , shortname', getStringSN)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (Sentence(..), sParen, sSqBr, sC, (+:+), (+:+.), (+:))
-import Language.Drasil.Reference (makeRef, makeRefS, mkRefFrmLbl, ReferenceDB, assumpDB, reqDB
+import Language.Drasil.Reference (makeRef, makeRefS, mkRefFrmLbl, ReferenceDB, assumpDB
                                  , AssumpMap, assumpLookup, HasAssumpRefs
                                  , assumpRefTable, assumptionsFromDB
-                                 , rdb, reqRefTable, reqLookup, RefBy(..)
-                                 , HasReqRefs, Referable(..), customRef
+                                 , rdb, RefBy(..)
+                                 , Referable(..), customRef
                                  , HasChangeRefs, changeRefTable, changeLookup
                                  , citationRefTable, citeLookup, RefMap
                                  , simpleMap)
@@ -331,7 +327,7 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
 import Language.Drasil.RefTypes(RefAdd, RefType(Cite, EqnB, Tab, LCh, UnCh, Req, Def, Lst, Link),
-  DType(..), Reference(Reference))
+  DType(..), Reference(Reference), ReqType(FR, NFR))
 import Language.Drasil.Label (mkLabelRA', mkLabelSame, 
   mkEmptyLabel, mkURILabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec, modifyLabelEqn)
 import Language.Drasil.Label.Type (getAdd)

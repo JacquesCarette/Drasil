@@ -169,7 +169,7 @@ nopcm_si = SI {
 }
 
 nopcmRefDB :: ReferenceDB
-nopcmRefDB = rdb [] [] assumps_Nopcm_list_new [] [] referencesRefList (reqs ++
+nopcmRefDB = rdb [] [] assumps_Nopcm_list_new [] referencesRefList (reqs ++
   likelyChgs ++ unlikelyChgs) -- FIXME: Convert the rest to new chunk types
 
 nopcm_code :: CodeSpec

@@ -13,7 +13,6 @@ import Language.Drasil.Chunk.AssumpChunk
 -- import Language.Drasil.ShortName
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation
-import Language.Drasil.Chunk.ReqChunk
 import Language.Drasil.RefTypes(DType(..))
 
 import Language.Drasil.Label (Label, mkLabelRASec)
@@ -90,7 +89,7 @@ getCon (Paragraph s)       = [s]
 getCon (EqnBlock _)      = []
 getCon (Enumeration lst)   = getLT lst
 getCon (Figure l _ _)    = [l]
-getCon (Requirement reqc)  = getReq reqc
+-- getCon (Requirement reqc)  = getReq reqc
 getCon (Assumption assc)   = getAss assc
 getCon (Change chg)        = getChg chg
 getCon (Bib bref)          = getBib bref
@@ -124,10 +123,10 @@ getTerm a  = getNP (a ^. term)
 
 getDefn :: (Definition a) => a -> [Sentence]
 getDefn a = [a ^. defn]
--}
 
 getReq :: ReqChunk -> [Sentence]
 getReq a = [requires a]
+-}
 
 getAss :: AssumpChunk -> [Sentence]
 getAss a = [assuming a]

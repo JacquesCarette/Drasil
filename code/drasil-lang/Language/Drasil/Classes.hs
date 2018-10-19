@@ -40,8 +40,6 @@ import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.RefTypes (Reference)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Spec (Sentence)
-import Language.Drasil.Stages (Stage)
-import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UID (UID)
 
 import Control.Lens (Lens')
@@ -76,11 +74,6 @@ class ConceptDomain c where
 -- | Concepts are 'Idea's with definitions and domains
 class (Idea c, Definition c, ConceptDomain c) => Concept c where
 
--- | A HasSymbol is anything which has a Symbol
-class HasSymbol c where
-  -- | Provides the Symbol --  for a particular stage of generation
-  symbol  :: c -> Stage -> Symbol
-  
 -- | HasSpace is anything which has a Space...
 class HasSpace c where
   typ      :: Lens' c Space

@@ -44,18 +44,19 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 - **Label.Core**: Label structure. Has a type, shortname and a reference type (hack?).
   (probably should be abstract, but isn't yet)
 
-- **Classes.Core**: The 'core' classes which abstract over HasUID and HasShortName.
+- **Symbol**: Abstract definition of symbol layout primitives. Enough information for
+  renderers to display them.
+
+- **Stages**: (perhaps misnamed?). An indication of which 'stage' of the processing an
+  entity belongs to. Mostly used to configure the display of 'variables', i.e. which
+  symbol to choose.
+
+- **Classes.Core**: The 'core' classes which abstract over HasUID, HasShortName,
+  HasRefAddress, HasSymbol.
 
 - **Unicode**: Misnamed. Really is a few special characters which need special code to be
   displayed properly. Unclear how much this should be used in examples, so maybe this should
   no longer be exported?
-
-- **Symbol**: Abstract definition of symbol layout primitives. Enough information for
-  renderers to display them.
-
-- **Stage**: (perhaps misnamed?). An indication of which 'stage' of the processing an
-  entity belongs to. Mostly used to configure the display of 'variables', i.e. which
-  symbol to choose.
 
 - **SymbolAlphabet**: The long names of many symbols, and even some short ones (because of the
   tag) is inconvenient; provides some short-hand way of referring to them.
@@ -108,4 +109,8 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 - **Sentence/EmbedSymbol**: defines 'ch' to embed a chunk with a symbol into a
   sentence.  Defined here because HasSymbol is in Classes rather than Classes/Core.
 
-- **Label**:
+- **Label**: routines for making labels.
+
+- **Expr/Math**: constructors of Expr. 
+
+- **Chunk/SymbolForm**:

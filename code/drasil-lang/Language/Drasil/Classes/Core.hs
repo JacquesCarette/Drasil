@@ -4,10 +4,13 @@ module Language.Drasil.Classes.Core (
     HasUID(uid), UID
   , HasShortName(shortname)
   , HasRefAddress(getRefAdd)
+  , HasSymbol(symbol)
   ) where
 
 import Language.Drasil.Label.Type (LblType)
 import Language.Drasil.ShortName (ShortName)
+import Language.Drasil.Stages (Stage)
+import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UID (UID)
 
 import Control.Lens (Lens')
@@ -23,6 +26,11 @@ class HasShortName  s where
                             -- include symbols and whatnot if required.
                             -- Visible in the typeset documents (pdf)
 
+-- | A HasSymbol is anything which has a Symbol
+class HasSymbol c where
+  -- | Provides the Symbol --  for a particular stage of generation
+  symbol  :: c -> Stage -> Symbol
+  
 class HasRefAddress b where
   getRefAdd :: Lens' b LblType 
 

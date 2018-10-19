@@ -14,7 +14,6 @@ import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
 import Language.Drasil.Chunk.Goal as G (Goal)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
-import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc)
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel),
   HasRefAddress(getRefAdd), HasShortName(shortname))
@@ -36,8 +35,6 @@ import Language.Drasil.UID (UID)
 -- if no shortname exists)
 type RefMap a = Map.Map UID (a, Int)
 
--- | Physical System Description Database
-type PhysSystDescMap = RefMap PhysSystDesc
 -- | Goal Statement Database
 type GoalMap = RefMap Goal
 -- | Assumption Database
@@ -54,8 +51,7 @@ type ConceptMap = RefMap ConceptInstance
 
 -- | Database for internal references.
 data ReferenceDB = RDB -- organized in order of appearance in SmithEtAl template
-  { _physSystDescDB :: PhysSystDescMap
-  , _goalDB :: GoalMap
+  { _goalDB :: GoalMap
   , _assumpDB :: AssumpMap
   -- , _reqDB :: ReqMap
   , _changeDB :: ChangeMap
@@ -68,10 +64,9 @@ makeLenses ''ReferenceDB
 data RefBy = ByName
            | ByNum -- If applicable
 
-rdb :: [PhysSystDesc] -> [Goal] -> [AssumpChunk] -> [Change] ->
+rdb :: [Goal] -> [AssumpChunk] -> [Change] ->
   BibRef -> [ConceptInstance] -> ReferenceDB
-rdb psds goals assumps changes citations con = RDB
-  (simpleMap psds)
+rdb goals assumps changes citations con = RDB
   (simpleMap goals)
   (simpleMap assumps)
   (changeMap changes)
@@ -116,12 +111,6 @@ conceptMap cs = Map.fromList $ zip (map (^. uid) (concat grp)) $ concatMap
   where grp :: [[ConceptInstance]]
         grp = groupBy conGrp $ sortBy uidSort cs
 
-psdLookup :: HasUID c => c -> PhysSystDescMap -> (PhysSystDesc, Int)
-psdLookup p m = getS $ Map.lookup (p ^. uid) m
-  where getS (Just x) = x
-        getS Nothing = error $ "No referencing information found for: " ++
-          (p ^. uid) ++ " in PhysSystDesc Map"
-
 goalLookup :: HasUID c => c -> GoalMap -> (Goal, Int)
 goalLookup g m = getS $ Map.lookup (g ^. uid) m
   where getS (Just x) = x
@@ -133,14 +122,6 @@ assumpLookup a m = getS $ Map.lookup (a ^. uid) m
   where getS (Just x) = x
         getS Nothing = error $ "Assumption: " ++ (a ^. uid) ++
           " referencing information not found in Assumption Map"
-
-{-
-reqLookup :: HasUID c => c -> ReqMap -> (ReqChunk, Int)
-reqLookup r m = getS $ Map.lookup (r ^. uid) m
-  where getS (Just x) = x
-        getS Nothing = error $ "Requirement: " ++ (r ^. uid) ++
-          " referencing information not found in Requirement Map"
--}
 
 changeLookup :: HasUID c => c -> ChangeMap -> (Change, Int)
 changeLookup c m = getS $ Map.lookup (c ^. uid) m
@@ -170,13 +151,10 @@ class HasCitationRefs s where
   citationRefTable :: Simple Lens s BibMap
 class HasGoalRefs s where
   goalRefTable :: Simple Lens s GoalMap
-class HasPSDRefs s where
-  psdRefTable :: Simple Lens s PhysSystDescMap
 class HasConceptRefs s where
   conceptRefTable :: Simple Lens s ConceptMap
 
 instance HasGoalRefs ReferenceDB where goalRefTable = goalDB
-instance HasPSDRefs      ReferenceDB where psdRefTable = physSystDescDB
 instance HasAssumpRefs   ReferenceDB where assumpRefTable = assumpDB
 -- instance HasReqRefs      ReferenceDB where reqRefTable = reqDB
 instance HasChangeRefs   ReferenceDB where changeRefTable = changeDB
@@ -194,10 +172,6 @@ class Referable s where
 instance Referable Goal where
   refAdd g = getAdd ((g ^. getLabel) ^. getRefAdd)
   rType _ = Goal
-
-instance Referable PhysSystDesc where
-  refAdd p = getAdd ((p ^. getLabel) ^. getRefAdd)
-  rType _ = PSD
 
 instance Referable AssumpChunk where
   refAdd  x = getAdd ((x ^. getLabel) ^. getRefAdd)
@@ -349,7 +323,6 @@ customRef r n = Reference (fixupRType $ rType r) (refAdd r) (getAcc' (rType r) n
     getAcc' UnCh      sn = shortname' $ "UC: " ++ (getStringSN sn)
     getAcc' Assump    sn = shortname' $ "A: " ++ (getStringSN sn)
     getAcc' Goal      sn = shortname' $ "GS: " ++ (getStringSN sn)
-    getAcc' PSD       sn = shortname' $ "PS: " ++ (getStringSN sn)
     getAcc' (DeferredCC u) s = concatSN (defer u) s
     getAcc' _         sn = sn
     fixupRType (DeferredCC _) = Blank  -- FIXME: This is a hack

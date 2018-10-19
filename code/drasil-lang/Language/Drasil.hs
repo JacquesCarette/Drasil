@@ -189,8 +189,6 @@ module Language.Drasil (
   , citationRefTable, citeLookup
   -- Goal
   , Goal, mkGoal
-  -- PhysSystDesc
-  , PhysSystDesc, pSysDes, psd
   -- RefTypes
   , RefAdd, RefType(Cite, Tab, EqnB, LCh, UnCh, Req, Def, Lst, Link)
   , Reference(Reference)
@@ -292,7 +290,6 @@ import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.Goal (Goal, mkGoal)
 import Language.Drasil.Chunk.InstanceModel
 import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.PhysSystDesc (PhysSystDesc, pSysDes, psd)
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, makeRC')
 import Language.Drasil.Chunk.Theory

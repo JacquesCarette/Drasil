@@ -31,7 +31,6 @@ data RefType = Tab    -- ^ Table
              | EqnB   -- ^ Equation Block
              | Cite   -- ^ Citation
              | Goal   -- ^ Goal Statement
-             | PSD    -- ^ Physical System Description
              | Label RefType    -- ^ Label --FIXME: hack (#971)
              | Blank  -- ^ Prefix filler for ConceptInstance
              | DeferredCC UID  -- ^ For ConceptInstances --FIXME: Used by References to create a Deferred ShortName (#562)
@@ -53,7 +52,6 @@ instance Show RefType where
   show UnCh   = "Unlikely Change"
   show Cite   = "Citation"
   show Goal   = "Goal Statement"
-  show PSD    = "Physical System Description"
   show EqnB   = "Equation"
   show Blank  = "Blank"
   show (DeferredCC _) = error "Cannot directly display deferred reference types." -- FIXME

@@ -29,14 +29,15 @@ under the namespace *Language.Drasil*, which will thus be omitted.
   uniquely, so that we can insert things into various internal databases. Basically a global
   primary key for all knowledge.
 
+- **ShortName**: Abstract type for a 'short name', i.e. the string to be displayed
+  for a link, visible to users.
+
 - **RefTypes**: (Should eventually disappear?). Currently defines different kinds of
   definitions (knowledge which belongs to documents), requirements and kinds of
   references. The 'kinds of reference' belongs here, but it shouldn't have a Show instance.
   And lots of the kinds of references are either layout-specific or document-specific, so
-  should not be defined globally in either case.
-
-- **ShortName**: Abstract type for a 'short name', i.e. the string to be displayed
-  for a link, visible to users.
+  should not be defined globally in either case. Also defines Reference, which pulls these
+  together.
 
 - **Label.Core**: Type of labels. Is a reference address, link or URI. Also has a shortname.
   (probably should be abstract, but isn't yet)
@@ -82,3 +83,14 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 
 - **Sentence/Extract**: Utility to extract the (unique) dependencies of Sentences on
   chunks, i.e. things that have UIDs.
+
+- **NounPhrase/Core**: Noun phrases, pluralisation rules and capitalization rules. 
+  Used to deal with terms and other things which are defined as 'noun phrases'
+  that are used in contexts where they then need a plural or capitalization. Easier
+  to go via rules than to define all variants upon creation.
+
+- **NounPhrase**: Constructors for noun phrases, and actual computations of plurals
+  and capitalization. And a Class for NounPhrase, which gives the main methods on
+  them. Right now, there is a single instance though.
+
+- **References**:

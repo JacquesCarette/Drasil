@@ -59,12 +59,12 @@ calofCapacityDesc =
   S "which" +:+. S "is also called capacity" +:+. ((ch nonFL) `isThe`
   (phrase nonFL)) +:+. ((ch glaTyFac) `isThe` (phrase glassTypeFac))
   +:+. ((ch loadSF) `isThe` (phrase lShareFac)), S "Follows",
-  (makeRef glassCondition) `sAnd` (makeRef glassType), sParen (Quote 
+  (makeRefS glassCondition) `sAnd` (makeRefS glassType), sParen (Quote 
   (S "In the development of this procedure, it was assumed that" +:+
   S "all four edges of the glass are simply supported and free to slip" +:+
   S "in the plane of the glass. This boundary condition has been shown" +:+
   S "to be typical of many glass installations")) +:+ S "from" +:+ 
-  makeRef astm2009, sParen (S "pg. 53")]
+  makeRefS astm2009, sParen (S "pg. 53")]
 
 {--}
 
@@ -88,4 +88,4 @@ calofDemandDesc =
   (ch eqTNTWeight), S "as" +:+. plural parameter, 
   (ch eqTNTWeight), S "is defined as" +:+.
   E (wtntWithEqn^.equat), (ch standOffDist) `isThe`
-  (phrase standOffDist), S "as defined in", makeRef standOffDis]
+  (phrase standOffDist), S "as defined in", makeRefS standOffDis]

@@ -62,7 +62,7 @@ consThermEdesc = foldlSent [
   ch time +:+ S "is" +:+ phrase time +:+ sParen (Sy (unit_symb time)), ch gradient +:+
   S "is the" +:+ (gradient ^. defn)], S "For this", phrase equation, S "to apply" `sC`
   S "other forms of", phrase energy `sC` S "such as", phrase mech_energy `sC`
-  S "are assumed to be negligible in the", phrase system, sParen (makeRef thermalEnergyOnlyL)]
+  S "are assumed to be negligible in the", phrase system, sParen (makeRefS thermalEnergyOnlyL)]
 
 -------------------------
 -- Theoretical Model 2 --
@@ -113,7 +113,7 @@ sensHtEdesc = foldlSent [
   ch temp :+: S "=" :+: ch boil_pt,
   S "or", ch temp :+: S "=" +:+. ch melt_pt,
   S "If this" `isThe` S "case, refer to",
-  (makeRef latentHtE) `sC` at_start latent_heat,
+  (makeRefS latentHtE) `sC` at_start latent_heat,
   phrase energy]
  
 --How to have new lines in the description?
@@ -158,7 +158,7 @@ latentHtEdesc = foldlSent [
   phrase phase_change, S "is not complete. The status of",
   S "the", phrase phase_change,
   S "depends on the", phrase melt_frac `sC`
-  (makeRef dd3HtFusion) :+: S ".",
+  (makeRefS dd3HtFusion) :+: S ".",
   ch melt_pt `sAnd` ch boil_pt, S "are the",
   phrase melt_pt `sAnd` phrase boil_pt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),

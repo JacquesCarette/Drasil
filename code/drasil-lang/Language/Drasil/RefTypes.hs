@@ -1,6 +1,8 @@
 -- | Contains the types associated to references
-module Language.Drasil.RefTypes(RefAdd, RefType(..), DType(..), ReqType(..)) where
+module Language.Drasil.RefTypes(
+  RefAdd, RefType(..), DType(..), ReqType(..), Reference(Reference)) where
 
+import Language.Drasil.ShortName (ShortName)
 import Language.Drasil.UID (UID)
 
 -- | Types of definitions
@@ -34,6 +36,8 @@ data RefType = Tab    -- ^ Table
              | Blank  -- ^ Prefix filler for ConceptInstance
              | DeferredCC UID  -- ^ For ConceptInstances --FIXME: Used by References to create a Deferred ShortName (#562)
              | Link -- ^ URI
+
+data Reference = Reference RefType RefAdd ShortName
 
 instance Show RefType where
   show Tab    = "Table"

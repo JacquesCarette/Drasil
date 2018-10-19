@@ -57,7 +57,7 @@ monotonicF = foldlSent [S "The", phrase slpSrf,
 
 slopeG = foldlSent [S "geometry" `ofThe'` phrase slope `sC` S "and",
   plural mtrlPrpty `ofThe` plural soilLyr, S "are given as inputs",
-  sSqBr $ makeRef forDisEqlbL]
+  sSqBr $ makeRefS forDisEqlbL]
 
 homogeneousL = foldlSent [S "different layers" `ofThe'` phrase soil,
   S "are homogeneous" `sC` S "with consistent", plural soilPrpty,

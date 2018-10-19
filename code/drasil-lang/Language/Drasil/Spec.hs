@@ -5,9 +5,8 @@ module Language.Drasil.Spec where
 import Language.Drasil.Unicode (Special(SqBrClose, SqBrOpen))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.RefTypes (RefAdd, RefType)
+import Language.Drasil.RefTypes (Reference)
 import Language.Drasil.Development.UnitLang (USymb)
-import Language.Drasil.ShortName (ShortName)
 import Language.Drasil.UID (UID)
 
 -- | For writing "sentences" via combining smaller elements
@@ -24,7 +23,7 @@ data Sentence where
   S     :: String -> Sentence       -- Strings, used for Descriptions in Chunks
   Sp    :: Special -> Sentence
   P     :: Symbol -> Sentence
-  Ref   :: RefType -> RefAdd -> ShortName -> Sentence  -- Needs helper func to create Ref
+  Ref   :: Reference -> Sentence  -- Needs helper func to create Ref
                                                        -- See Reference.hs
   Quote :: Sentence -> Sentence     -- Adds quotation marks around a sentence
                                     

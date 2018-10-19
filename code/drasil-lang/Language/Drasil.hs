@@ -100,7 +100,6 @@ module Language.Drasil (
   -- Chunk.Attributes --FIXME: Changed a lot
   , getSource
   , Derivation, getDerivation, getShortName
-  , Reference
   -- ShortName
   , resolveSN, ShortName, shortname', getStringSN
   --Citations
@@ -145,7 +144,7 @@ module Language.Drasil (
   , RawContent(..)
   , mkFig
   -- Reference
-  , makeRef, mkRefFrmLbl
+  , makeRef, makeRefS, mkRefFrmLbl
   -- Space
   , Space(..)
   -- Symbol
@@ -197,6 +196,7 @@ module Language.Drasil (
   , PhysSystDesc, pSysDes, psd
   -- RefTypes
   , RefAdd, RefType(Cite, Tab, EqnB, LCh, UnCh, Req, Def, Lst, Link)
+  , Reference(Reference)
   -- Label
   , Label 
   , mkLabelRA', mkLabelSame, mkEmptyLabel, mkURILabel
@@ -258,7 +258,6 @@ import Language.Drasil.Document.GetChunk(vars, combine', vars', combine, ccss)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Derivation (Derivation)
-import Language.Drasil.Chunk.References (Reference)
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation (
   -- Types
@@ -315,7 +314,7 @@ import Language.Drasil.ShortName (resolveSN, ShortName
   , shortname', getStringSN)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (Sentence(..), sParen, sSqBr, sC, (+:+), (+:+.), (+:))
-import Language.Drasil.Reference (makeRef, mkRefFrmLbl, ReferenceDB, assumpDB, reqDB
+import Language.Drasil.Reference (makeRef, makeRefS, mkRefFrmLbl, ReferenceDB, assumpDB, reqDB
                                  , AssumpMap, assumpLookup, HasAssumpRefs
                                  , assumpRefTable, assumptionsFromDB
                                  , rdb, reqRefTable, reqLookup, RefBy(..)
@@ -332,7 +331,7 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
 import Language.Drasil.RefTypes(RefAdd, RefType(Cite, EqnB, Tab, LCh, UnCh, Req, Def, Lst, Link),
-  DType(..))
+  DType(..), Reference(Reference))
 import Language.Drasil.Label (mkLabelRA', mkLabelSame, 
   mkEmptyLabel, mkURILabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec, modifyLabelEqn)
 import Language.Drasil.Label.Core (getAdd)

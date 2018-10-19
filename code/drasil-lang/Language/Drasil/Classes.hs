@@ -33,11 +33,11 @@ import Language.Drasil.Classes.Core
 
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Chunk.Derivation (Derivation)
-import Language.Drasil.Chunk.References (Reference)
 import Language.Drasil.Development.UnitLang(UDefn, USymb)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label, LblType)
 import Language.Drasil.NounPhrase.Core (NP)
+import Language.Drasil.RefTypes (Reference)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Stages (Stage)

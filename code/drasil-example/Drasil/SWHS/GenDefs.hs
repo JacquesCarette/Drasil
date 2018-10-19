@@ -37,9 +37,12 @@ import Drasil.SWHS.Unitals (vol_ht_gen, deltaT, temp_env, pcm_SA,
 swhsGDs :: [GenDefn]
 swhsGDs = [nwtnCooling, rocTempSimp] 
 
+-- FIXME: page reference
 nwtnCooling, rocTempSimp :: GenDefn
-nwtnCooling = gd' nwtnCoolingRC (Just thermal_flux) ([] :: Derivation) [makeRef incroperaEtAl2007 +:+ sParen (S "pg. 8")] "nwtnCooling" [nwtnCooling_desc]
-rocTempSimp = gd' rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv [S "FIXME: no sources"]                   "rocTempSimp" [rocTempSimp_desc]
+nwtnCooling = gd' nwtnCoolingRC (Just thermal_flux) ([] :: Derivation) 
+  [makeRef incroperaEtAl2007 {- +:+ sParen (S "pg. 8") -}] "nwtnCooling" [nwtnCooling_desc]
+rocTempSimp = gd' rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv [] -- FIXME: no sources
+                 "rocTempSimp" [rocTempSimp_desc]
 
 --
 
@@ -60,7 +63,7 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
   S "and its surroundings", E (apply1 thFluxVect QP.time) `isThe`
   S "thermal flux" +:+. sParen (Sy $ unit_symb thFluxVect),
   ch htTransCoeff `isThe` S "heat transfer coefficient" `sC`
-  S "assumed independant of", ch QT.temp, sParen (makeRef newA2) +:+.
+  S "assumed independant of", ch QT.temp, sParen (makeRefS newA2) +:+.
   sParen (Sy $ unit_symb htTransCoeff), E (apply1 deltaT QP.time $= 
   apply1 temp QP.time - apply1 temp_env QP.time) `isThe` 
   S "time-dependant thermal gradient between the environment and the object",
@@ -109,13 +112,13 @@ roc_temp_simp_deriv_sentences = map foldlSentCol [
   s4_2_3_desc2 gauss_div surface vol thFluxVect uNormalVect unit_,
   s4_2_3_desc3 vol vol_ht_gen,
   s4_2_3_desc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heat_cap_spec
-    QT.temp vol [makeRef newA3, makeRef newA4, 
-                 makeRef newA5, makeRef newA6],
+    QT.temp vol [makeRefS newA3, makeRefS newA4, 
+                 makeRefS newA5, makeRefS newA6],
   s4_2_3_desc5 density mass vol]
 
 s4_2_3_desc1 :: (HasShortName x, Referable x) => x -> UnitalChunk -> [Sentence]
 s4_2_3_desc1 t1c vo =
-  [S "Integrating", makeRef t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
+  [S "Integrating", makeRefS t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
 s4_2_3_desc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]
@@ -135,7 +138,7 @@ s4_2_3_desc4 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   [Sentence] -> [Sentence]
 s4_2_3_desc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
   ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
-  makeRef rocTempSimpL, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
+  makeRefS rocTempSimpL, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
   (foldlList Comma List assumps) `sC` S "we have"]
 

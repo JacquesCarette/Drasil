@@ -1,7 +1,6 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Reference where
 
-import Language.Drasil.RefTypes (RefType(..), DType(..), ReqType(..))
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
 import Data.List (concatMap, find, groupBy, partition, sortBy)
@@ -11,23 +10,24 @@ import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
 import Language.Drasil.Chunk.Change as Ch (Change(..), ChngType(..))
 import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID), CiteField(Author, Title, Year), HasFields(getFields))
 import Language.Drasil.Chunk.Concept (ConceptInstance)
+import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
 import Language.Drasil.Chunk.Goal as G (Goal)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
 import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..))
 import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc)
-import Language.Drasil.ShortName ( ShortName, getStringSN, shortname', concatSN, defer)
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel),
   HasRefAddress(getRefAdd), HasShortName(shortname))
 import Language.Drasil.Document (Section(Section))
 import Language.Drasil.Document.Core (RawContent(..), LabelledContent(..))
-import Language.Drasil.People (People, comparePeople)
-import Language.Drasil.Spec (Sentence((:+:), Ref, S))
-import Language.Drasil.UID (UID)
-import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Label.Core (Label(..), getAdd)
 import Language.Drasil.Label (getDefName, getReqName)
+import Language.Drasil.People (People, comparePeople)
+import Language.Drasil.RefTypes (RefType(..), DType(..), ReqType(..), Reference(Reference))
+import Language.Drasil.ShortName ( ShortName, getStringSN, shortname', concatSN, defer)
+import Language.Drasil.Spec (Sentence((:+:), S, Ref))
+import Language.Drasil.UID (UID)
 
 -- | Database for maintaining references.
 -- The Int is that reference's number.
@@ -322,17 +322,20 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 -- item exists in our database of referable objects.
 --FIXME: completely shift to being `HasLabel` since customref checks for 
 --  `HasShortName` and `Referable`?
-makeRef :: (HasShortName l, Referable l) => l -> Sentence
+makeRef :: (HasShortName l, Referable l) => l -> Reference
 makeRef r = customRef r (r ^. shortname)
 
+makeRefS :: (HasShortName l, Referable l) => l -> Sentence
+makeRefS = Ref . makeRef
+
 --FIXME: needs design (HasShortName, Referable only possible when HasLabel)
-mkRefFrmLbl :: (HasLabel l, HasShortName l, Referable l) => l -> Sentence
-mkRefFrmLbl r = makeRef r
+mkRefFrmLbl :: (HasLabel l, HasShortName l, Referable l) => l -> Reference
+mkRefFrmLbl = makeRef
 
 --FIXME: should be removed from Examples once sections have labels
 -- | Create a reference with a customized 'ShortName'
-customRef :: (HasShortName l, Referable l) => l -> ShortName -> Sentence
-customRef r n = Ref (fixupRType $ rType r) (refAdd r) (getAcc' (rType r) n)
+customRef :: (HasShortName l, Referable l) => l -> ShortName -> Reference
+customRef r n = Reference (fixupRType $ rType r) (refAdd r) (getAcc' (rType r) n)
   where 
     getAcc' :: RefType -> ShortName -> ShortName
     getAcc' (Def dtp) sn = shortname' $ (getDefName dtp) ++ " " ++ (getStringSN sn)

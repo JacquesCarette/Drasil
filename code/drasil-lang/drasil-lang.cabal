@@ -1,5 +1,5 @@
 Name:		drasil-lang
-Version:	0.1.29
+Version:	0.1.30
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -58,7 +58,6 @@ library
     , Language.Drasil.Chunk.NamedIdea
     , Language.Drasil.Chunk.PhysSystDesc
     , Language.Drasil.Chunk.Quantity
-    , Language.Drasil.Chunk.References
     , Language.Drasil.Chunk.Relation
     , Language.Drasil.Chunk.ReqChunk
     , Language.Drasil.Chunk.SymbolForm

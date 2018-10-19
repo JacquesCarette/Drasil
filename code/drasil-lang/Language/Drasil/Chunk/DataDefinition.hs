@@ -7,7 +7,7 @@ import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn',
   fromEqn''', fromEqn'''')
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(typ))
-import Language.Drasil.Chunk.SymbolForm (eqSymb)
+import Language.Drasil.Symbol.Helpers (eqSymb)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), DefiningExpr(defnExpr), -- ExprRelat(relat), 
   HasDerivation(derivations), HasReference(getReferences), HasAdditionalNotes(getNotes),

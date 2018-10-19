@@ -167,7 +167,7 @@ module Language.Drasil (
   , Theory(..), tc', TheoryChunk, TheoryModel, tm, tm'
   -- Stages
   , Stage(Equational,Implementation)
-  -- SymbolForm
+  -- Symbol.Helpers
   , HasSymbol(symbol), eqSymb, codeSymb, hasStageSymbol
   -- ChunkDB
   , ChunkDB, cdb
@@ -299,7 +299,6 @@ import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, makeRC')
 import Language.Drasil.Chunk.ReqChunk(ReqChunk, ReqType(..), reqType, requires
                                      , frc, nfrc)
-import Language.Drasil.Chunk.SymbolForm (eqSymb, codeSymb, hasStageSymbol)
 import Language.Drasil.Chunk.Theory
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS,
@@ -324,6 +323,7 @@ import Language.Drasil.Reference (makeRef, makeRefS, mkRefFrmLbl, ReferenceDB, a
                                  , simpleMap)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 
   prime, sCurlyBrSymb, compsy)
+import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol)
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it

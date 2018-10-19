@@ -1,5 +1,4 @@
-module Language.Drasil.Chunk.SymbolForm
-  (eqSymb, codeSymb, hasStageSymbol) where
+module Language.Drasil.Symbol.Helpers(eqSymb, codeSymb, hasStageSymbol) where
 
 import Language.Drasil.Classes (HasSymbol(symbol))
 import Language.Drasil.Symbol (Symbol(Empty))

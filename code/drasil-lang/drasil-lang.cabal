@@ -37,6 +37,7 @@ library
     , Language.Drasil.Spec
     , Language.Drasil.Stages
     , Language.Drasil.Symbol
+    , Language.Drasil.Symbol.Helpers
     , Language.Drasil.SymbolAlphabet
     , Language.Drasil.UID
     , Language.Drasil.Unicode
@@ -61,7 +62,6 @@ library
     , Language.Drasil.Chunk.Quantity
     , Language.Drasil.Chunk.Relation
     , Language.Drasil.Chunk.ReqChunk
-    , Language.Drasil.Chunk.SymbolForm
     , Language.Drasil.Chunk.Theory
     , Language.Drasil.Chunk.UncertainQuantity
     , Language.Drasil.Chunk.Unital

@@ -113,4 +113,5 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 
 - **Expr/Math**: constructors of Expr. 
 
-- **Chunk/SymbolForm**:
+- **Symbol/Helpers**: helper routines to check if symbol exists, and to extract the 
+  Implementation or Equational stage symbol.

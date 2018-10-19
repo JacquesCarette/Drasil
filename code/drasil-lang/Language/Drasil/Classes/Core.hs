@@ -3,8 +3,10 @@
 module Language.Drasil.Classes.Core (
     HasUID(uid), UID
   , HasShortName(shortname)
+  , HasRefAddress(getRefAdd)
   ) where
 
+import Language.Drasil.Label.Type (LblType)
 import Language.Drasil.ShortName (ShortName)
 import Language.Drasil.UID (UID)
 
@@ -20,3 +22,7 @@ class HasShortName  s where
                             -- A short name used for referencing within a document that can 
                             -- include symbols and whatnot if required.
                             -- Visible in the typeset documents (pdf)
+
+class HasRefAddress b where
+  getRefAdd :: Lens' b LblType 
+

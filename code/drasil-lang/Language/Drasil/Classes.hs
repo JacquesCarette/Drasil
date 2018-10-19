@@ -35,7 +35,7 @@ import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Development.UnitLang(UDefn, USymb)
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.Label.Core (Label, LblType)
+import Language.Drasil.Label.Core (Label)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.RefTypes (Reference)
 import Language.Drasil.Space (Space)
@@ -112,11 +112,6 @@ class HasLabel c where
  
 class MayHaveLabel c where
   getMaybeLabel :: c -> Maybe Label
-
--- HasRefAddress is associated with the HasLabel class due to
--- the current definition of a Label
-class HasRefAddress b where
-  getRefAdd :: Lens' b LblType 
 
 -- IsLabel is associated with String rendering
 class (HasLabel u, HasUID u) => IsLabel u where

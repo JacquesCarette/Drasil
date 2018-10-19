@@ -212,7 +212,7 @@ module Language.Drasil (
   , names
   -- Document.Extract
   , egetDoc, getDoc
-  -- Label.Core
+  -- Label.Type
   , getAdd
 ) where
 
@@ -334,5 +334,5 @@ import Language.Drasil.RefTypes(RefAdd, RefType(Cite, EqnB, Tab, LCh, UnCh, Req,
   DType(..), Reference(Reference))
 import Language.Drasil.Label (mkLabelRA', mkLabelSame, 
   mkEmptyLabel, mkURILabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec, modifyLabelEqn)
-import Language.Drasil.Label.Core (getAdd)
+import Language.Drasil.Label.Type (getAdd)
 --Should be in lang-dev package?

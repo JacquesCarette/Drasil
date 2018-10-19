@@ -39,7 +39,9 @@ under the namespace *Language.Drasil*, which will thus be omitted.
   should not be defined globally in either case. Also defines Reference, which pulls these
   together.
 
-- **Label.Core**: Type of labels. Is a reference address, link or URI. Also has a shortname.
+- **Label.Type**: Label type. Is a reference address, link or URI.
+
+- **Label.Core**: Label structure. Has a type, shortname and a reference type (hack?).
   (probably should be abstract, but isn't yet)
 
 - **Classes.Core**: The 'core' classes which abstract over HasUID and HasShortName.
@@ -93,4 +95,17 @@ under the namespace *Language.Drasil*, which will thus be omitted.
   and capitalization. And a Class for NounPhrase, which gives the main methods on
   them. Right now, there is a single instance though.
 
-- **References**:
+- **Chunk/Derivation**: Misnomer (not a chunk), just a list of Sentences. In theory,
+  this really ought to be a real data-structure, that alternates between narrative and
+  equations. Could even be equational reasoning, etc.
+
+- **Classes**: Defined a bunch of 'classy lenses'.  These can be understood as 
+  our meta-model. NamedIdea, Idea, Definition, ConceptDomain, Concept, HasSymbol, etc.
+  Really deserves a full write up.
+  Sits 'on top' of all the important data-structures, and 'below' most of the
+  actual chunks.
+
+- **Sentence/EmbedSymbol**: defines 'ch' to embed a chunk with a symbol into a
+  sentence.  Defined here because HasSymbol is in Classes rather than Classes/Core.
+
+- **Label**:

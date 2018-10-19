@@ -3,17 +3,14 @@ module Language.Drasil.Label (Label, mkLabelRA',
  mkLabelRAFig, mkLabelRASec, modifyLabelEqn,
  getReqName, getDefName) where
 
-import Language.Drasil.Label.Core
-import Language.Drasil.Classes (HasRefAddress(getRefAdd))
 import Data.Char (isAscii)
-import Language.Drasil.ShortName (shortname')
-import Language.Drasil.RefTypes (RefType(..), ReqType(..), DType(..))
-
 import Control.Lens((^.))
 
--- These are orphan instance, unfortunately. But to fix them causes
--- import loops. FIXME
-instance HasRefAddress Label where getRefAdd = lblType
+import Language.Drasil.Label.Core
+import Language.Drasil.Label.Type (LblType(..), getAdd)
+import Language.Drasil.Classes (HasRefAddress(getRefAdd))
+import Language.Drasil.ShortName (shortname')
+import Language.Drasil.RefTypes (RefType(..), ReqType(..), DType(..))
 
 -- multiple mkLabel constructors for label creation
 -- id     ==> unique ID for Drasil referencing (i.e. internal)

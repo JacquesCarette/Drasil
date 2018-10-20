@@ -1,4 +1,4 @@
-{-# Language TemplateHaskell, TypeFamilies #-}
+{-# Language TemplateHaskell #-}
 module Language.Drasil.Development.Unit (
     UnitDefn(..)
   , from_udefn, unitCon, makeDerU

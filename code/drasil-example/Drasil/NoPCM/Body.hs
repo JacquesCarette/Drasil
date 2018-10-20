@@ -3,6 +3,8 @@ module Drasil.NoPCM.Body where
 import Language.Drasil
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Language.Drasil.Development (UnitDefn, unitWrapper) -- FIXME?
+
 import Control.Lens ((^.))
 
 import Data.Drasil.People (thulasi)

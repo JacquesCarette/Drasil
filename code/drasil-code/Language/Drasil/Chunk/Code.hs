@@ -10,6 +10,8 @@ module Language.Drasil.Chunk.Code (
 import Control.Lens ((^.),makeLenses,view)
 
 import Language.Drasil-- hiding (CodeType(..))
+import Language.Drasil.Development (MayHaveUnit(getUnit))
+
 import qualified Language.Drasil.Code.Code as G
 
 import Data.String.Utils (replace)

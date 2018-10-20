@@ -26,9 +26,11 @@ module Data.Drasil.Utils
   ) where
 
 import Language.Drasil
-import Control.Lens ((^.))
+import Language.Drasil.Development (UnitDefn, getUnit)
 
+import Control.Lens ((^.))
 import Data.List (transpose)
+
 import Data.Drasil.Concepts.Documentation (fterms, input_, output_, symbol_, 
   useCaseTable)
 import Data.Drasil.Concepts.Math (unit_)

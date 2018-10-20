@@ -1,4 +1,4 @@
-{-# Language TemplateHaskell, FlexibleInstances, TypeFamilies #-}
+{-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.Concept.Core where
 
 import Language.Drasil.Spec (Sentence)

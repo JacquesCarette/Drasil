@@ -3,6 +3,8 @@ module Drasil.GamePhysics.Body where
 import Language.Drasil hiding (Vector, organization)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Language.Drasil.Development (UnitDefn, unitWrapper)
+
 import Control.Lens ((^.))
 
 import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..), 
@@ -72,7 +74,7 @@ auths = S $ manyNames authors
 chipmunkSRS' :: Document
 chipmunkSRS' = mkDoc mkSRS for' chipmunkSysInfo
 
-check_si :: [UnitDefn]
+check_si :: [UnitDefn] -- FIXME
 check_si = collectUnits everything symbT 
 
 mkSRS :: DocDesc 
@@ -165,7 +167,7 @@ newA7 = assump "constraintsAndJointsInvolvement" (foldlSent assumptions_assum7) 
 assumpCAJI = cic "assumpCAJI" (foldlSent assumptions_assum7) "constraintsAndJointsInvolvement" assumpDom
 --FIXME: All named ideas, not just acronyms.
 
-chipUnits :: [UnitDefn]
+chipUnits :: [UnitDefn] -- FIXME
 chipUnits = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [newton, radian]
 
 everything :: ChunkDB

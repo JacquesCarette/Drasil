@@ -2,7 +2,9 @@ module Drasil.SWHS.GenDefs (swhsGDs, nwtnCooling, rocTempSimp,
   roc_temp_simp_deriv, nwtnCooling_desc, rocTempSimpRC, rocTempSimp_desc) where
 
 import Prelude hiding (sin, cos, tan)
+
 import Language.Drasil
+import Language.Drasil.Development (UnitDefn, getUnit) -- FIXME?
 
 import Data.Drasil.Concepts.Math (equation, rate, rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (law_conv_cooling)

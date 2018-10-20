@@ -1,6 +1,7 @@
 module Drasil.SWHS.IMods (swhsIMods, eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM) where
 
 import Language.Drasil
+import Language.Drasil.Development (getUnit) -- FIXME? Points to an oddity
 
 import Data.Drasil.Utils (unwrap, weave)
 import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol, isThe, ofThe, sAnd, sOf)

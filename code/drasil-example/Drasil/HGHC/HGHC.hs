@@ -2,6 +2,7 @@ module Drasil.HGHC.HGHC (srsBody, thisCode, allSymbols, printSetting) where
 
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Language.Drasil.Code (CodeSpec, codeSpec)
+import Language.Drasil.Development (UnitDefn)
 import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual), 
     RefSec(..), RefTab(TUnits), TSIntro(SymbConvention, TSPurpose), DocDesc, 
     intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
@@ -40,7 +41,7 @@ thisSI = SI {
   _refdb = rdb [] [] [] [] -- FIXME?
 }
 
-check_si :: [UnitDefn]
+check_si :: [UnitDefn] -- FIXME? Probably shouldn't be done here
 check_si = collectUnits allSymbols symbols 
 
 allSymbols :: ChunkDB

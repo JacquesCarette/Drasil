@@ -21,12 +21,6 @@ module Language.Drasil (
   , precA, precB, eprec
   -- all the stuff from Unicode
   , Special(..), RenderSpecial(..)
-  -- Unit
-  , UnitDefn(..), unitWrapper
-  , unitCon, fund, comp_unitdefn, makeDerU
-  , (^:), (/:), (*:), (*$), (/$), (^$), new_unit, getCu
-  , MayHaveUnit(getUnit)
-  , derCUC, derCUC', derCUC''
    -- UID
   , UID
   -- Classes
@@ -237,7 +231,6 @@ import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..)
   , HasContents(accessContents)
   , LabelledContent(..), UnlabelledContent(..) )
 import Language.Drasil.Unicode -- all of it
-import Language.Drasil.Development.Unit -- all of it
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),

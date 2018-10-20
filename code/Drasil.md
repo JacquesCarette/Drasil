@@ -105,6 +105,7 @@ under the namespace *Language.Drasil*, which will thus be omitted.
   Really deserves a full write up.
   Sits 'on top' of all the important data-structures, and 'below' most of the
   actual chunks.
+  (TODO: actually define the meaning of each of them)
 
 - **Sentence/EmbedSymbol**: defines 'ch' to embed a chunk with a symbol into a
   sentence.  Defined here because HasSymbol is in Classes rather than Classes/Core.
@@ -118,3 +119,14 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 
 - **Chunk/NamedIdea**: defines data-structures that hold NamedIdea and Idea, their
   constructors and instances.
+
+- **Chunk/CommonIdea**: Data-structure for an Idea which also has an abbreviation.
+
+- **Chunk/Concept/Core**: Defines 3 data-structures.
+  - ConceptChunk, which is an idea, definition and (concept) domain
+  - CommonConcept, which is a common idea, definition and (concept) domain
+  - ConceptInstance, which is a ConceptChunk that also has a shortname
+
+- **Chunk/Concept**: (smart) constructors for all of the above.
+
+- **Development/Unit**:

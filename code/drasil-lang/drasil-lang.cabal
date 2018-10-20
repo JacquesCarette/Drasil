@@ -55,7 +55,6 @@ library
     , Language.Drasil.Chunk.Derivation
     , Language.Drasil.Chunk.Eq
     , Language.Drasil.Chunk.GenDefn
-    , Language.Drasil.Chunk.Goal
     , Language.Drasil.Chunk.InstanceModel
     , Language.Drasil.Chunk.NamedIdea
     , Language.Drasil.Chunk.Quantity

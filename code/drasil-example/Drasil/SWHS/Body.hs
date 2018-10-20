@@ -101,7 +101,7 @@ swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull)
   (map cw swhsSymbols ++ srsDomains) this_si
 
 swhsRefDB :: ReferenceDB
-swhsRefDB = rdb [] [] newAssumptions [] swhsCitations (funcReqs ++
+swhsRefDB = rdb newAssumptions [] swhsCitations (funcReqs ++
   likelyChgs ++ unlikelyChgs)
 
 printSetting :: PrintingInformation

@@ -115,3 +115,6 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 
 - **Symbol/Helpers**: helper routines to check if symbol exists, and to extract the 
   Implementation or Equational stage symbol.
+
+- **Chunk/NamedIdea**: defines data-structures that hold NamedIdea and Idea, their
+  constructors and instances.

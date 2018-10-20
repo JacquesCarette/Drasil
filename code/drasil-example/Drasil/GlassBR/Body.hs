@@ -42,7 +42,7 @@ import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
-import Data.Drasil.Phrase (for'')
+import Data.Drasil.Phrase (for'', the)
 import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
   figureLabel, foldlList, foldlsC, foldlSent, foldlSP, foldlSPCol, 
@@ -77,7 +77,7 @@ gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols)
   ++ map unitWrapper [pascal, newton]
 
 gbRefDB :: ReferenceDB
-gbRefDB = rdb [] [] assumptions [] gbCitations $ funcReqs ++ likelyChgs ++
+gbRefDB = rdb assumptions [] gbCitations $ funcReqs ++ likelyChgs ++
   unlikelyChgs
 
 printSetting :: PrintingInformation

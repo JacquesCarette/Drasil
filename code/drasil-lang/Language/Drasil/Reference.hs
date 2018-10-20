@@ -12,7 +12,6 @@ import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID), CiteField
 import Language.Drasil.Chunk.Concept (ConceptInstance)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
-import Language.Drasil.Chunk.Goal as G (Goal)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel),
@@ -35,8 +34,6 @@ import Language.Drasil.UID (UID)
 -- if no shortname exists)
 type RefMap a = Map.Map UID (a, Int)
 
--- | Goal Statement Database
-type GoalMap = RefMap Goal
 -- | Assumption Database
 type AssumpMap = RefMap AssumpChunk
 -- | Requirement (functional/non-functional) Database
@@ -51,9 +48,7 @@ type ConceptMap = RefMap ConceptInstance
 
 -- | Database for internal references.
 data ReferenceDB = RDB -- organized in order of appearance in SmithEtAl template
-  { _goalDB :: GoalMap
-  , _assumpDB :: AssumpMap
-  -- , _reqDB :: ReqMap
+  { _assumpDB :: AssumpMap
   , _changeDB :: ChangeMap
   , _citationDB :: BibMap
   , _conceptDB :: ConceptMap
@@ -64,10 +59,9 @@ makeLenses ''ReferenceDB
 data RefBy = ByName
            | ByNum -- If applicable
 
-rdb :: [Goal] -> [AssumpChunk] -> [Change] ->
+rdb :: [AssumpChunk] -> [Change] ->
   BibRef -> [ConceptInstance] -> ReferenceDB
-rdb goals assumps changes citations con = RDB
-  (simpleMap goals)
+rdb assumps changes citations con = RDB
   (simpleMap assumps)
   (changeMap changes)
   (bibMap citations)
@@ -111,12 +105,6 @@ conceptMap cs = Map.fromList $ zip (map (^. uid) (concat grp)) $ concatMap
   where grp :: [[ConceptInstance]]
         grp = groupBy conGrp $ sortBy uidSort cs
 
-goalLookup :: HasUID c => c -> GoalMap -> (Goal, Int)
-goalLookup g m = getS $ Map.lookup (g ^. uid) m
-  where getS (Just x) = x
-        getS Nothing = error $ "No referencing information found for: " ++
-          (g ^. uid) ++ " in Goal Map"
-
 assumpLookup :: HasUID c => c -> AssumpMap -> (AssumpChunk, Int)
 assumpLookup a m = getS $ Map.lookup (a ^. uid) m
   where getS (Just x) = x
@@ -143,20 +131,14 @@ conceptLookup c = maybe (error $ "ConceptInstance: " ++ (c ^. uid) ++
 -- Classes and instances --
 class HasAssumpRefs s where
   assumpRefTable :: Simple Lens s AssumpMap
--- class HasReqRefs s where
---   reqRefTable :: Simple Lens s ReqMap
 class HasChangeRefs s where
   changeRefTable :: Simple Lens s ChangeMap
 class HasCitationRefs s where
   citationRefTable :: Simple Lens s BibMap
-class HasGoalRefs s where
-  goalRefTable :: Simple Lens s GoalMap
 class HasConceptRefs s where
   conceptRefTable :: Simple Lens s ConceptMap
 
-instance HasGoalRefs ReferenceDB where goalRefTable = goalDB
 instance HasAssumpRefs   ReferenceDB where assumpRefTable = assumpDB
--- instance HasReqRefs      ReferenceDB where reqRefTable = reqDB
 instance HasChangeRefs   ReferenceDB where changeRefTable = changeDB
 instance HasCitationRefs ReferenceDB where citationRefTable = citationDB
 instance HasConceptRefs  ReferenceDB where conceptRefTable = conceptDB
@@ -168,10 +150,6 @@ class Referable s where
                           -- Should be string with no spaces/special chars.
                           -- Only visible in the source (tex/html).
   rType   :: s -> RefType -- The reference type (referencing namespace?)
-
-instance Referable Goal where
-  refAdd g = getAdd ((g ^. getLabel) ^. getRefAdd)
-  rType _ = Goal
 
 instance Referable AssumpChunk where
   refAdd  x = getAdd ((x ^. getLabel) ^. getRefAdd)
@@ -322,7 +300,6 @@ customRef r n = Reference (fixupRType $ rType r) (refAdd r) (getAcc' (rType r) n
     getAcc' LCh       sn = shortname' $ "LC: " ++ (getStringSN sn)
     getAcc' UnCh      sn = shortname' $ "UC: " ++ (getStringSN sn)
     getAcc' Assump    sn = shortname' $ "A: " ++ (getStringSN sn)
-    getAcc' Goal      sn = shortname' $ "GS: " ++ (getStringSN sn)
     getAcc' (DeferredCC u) s = concatSN (defer u) s
     getAcc' _         sn = sn
     fixupRType (DeferredCC _) = Blank  -- FIXME: This is a hack

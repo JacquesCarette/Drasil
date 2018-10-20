@@ -185,8 +185,6 @@ module Language.Drasil (
   -- Change
   , Change, ChngType(..), chngType, chng, lc, ulc
   , citationRefTable, citeLookup
-  -- Goal
-  , Goal, mkGoal
   -- RefTypes
   , RefAdd, RefType(Cite, Tab, EqnB, LCh, UnCh, Req, Def, Lst, Link)
   , Reference(Reference)
@@ -285,7 +283,6 @@ import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqn'', getV
 import Language.Drasil.Chunk.DataDefinition (DataDefinition, mkQuantDef, mkDD, mkQuantDef',
   qdFromDD, mkDDL)
 import Language.Drasil.Chunk.GenDefn
-import Language.Drasil.Chunk.Goal (Goal, mkGoal)
 import Language.Drasil.Chunk.InstanceModel
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity

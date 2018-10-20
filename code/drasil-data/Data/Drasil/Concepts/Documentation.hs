@@ -3,7 +3,7 @@ module Data.Drasil.Concepts.Documentation where
 import Language.Drasil hiding (organization)
 
 import Data.Drasil.Concepts.Math (graph)
-import Data.Drasil.Phrase (andRT, and_, and_', ofA, of_, of_', of__)
+import Data.Drasil.Phrase (andRT, and_, and_', ofA, of_, of_', of__, theCustom)
 
 import Control.Lens ((^.))
 

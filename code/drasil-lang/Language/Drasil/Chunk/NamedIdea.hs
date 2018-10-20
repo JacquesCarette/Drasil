@@ -2,16 +2,15 @@
 module Language.Drasil.Chunk.NamedIdea (
   NamedChunk, nc, IdeaDict, short, nw, mkIdea,
   compoundNC, compoundNC', compoundNC'', compoundNC''', 
-  compoundNCP1, compoundNCPlPh, compoundNCPlPl,
-  the, theCustom) where
+  compoundNCP1, compoundNCPlPh, compoundNCPlPl) where
 
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
 import Control.Lens ((^.), makeLenses, view)
 
-import Language.Drasil.Spec (Sentence(S), (+:+))
-import Language.Drasil.NounPhrase (NP, CapitalizationRule(CapFirst, CapWords), phrase,
-  plural, compoundPhrase, compoundPhrase'', compoundPhrase''', nounPhrase'')
+import Language.Drasil.Spec (Sentence(S))
+import Language.Drasil.NounPhrase (NP, phrase,
+  plural, compoundPhrase, compoundPhrase'', compoundPhrase''')
 
 -- | Get short form (if it exists), else get term.
 short :: Idea c => c -> Sentence
@@ -83,12 +82,4 @@ compoundNC''' f1 t1 t2 = nc
 
 compoundNCP1 :: NamedChunk -> NamedChunk -> NamedChunk
 compoundNCP1 = compoundNC''' plural
-  
-the :: (NamedIdea c) => c -> NamedChunk
-the t = nc ("the" ++ t ^. uid) (nounPhrase''
-  (S "the" +:+ phrase (t ^. term)) (S "the" +:+ plural (t ^. term))
-  CapFirst CapWords)
 
-theCustom :: (NamedIdea c) => (c -> Sentence) -> c -> NamedChunk
-theCustom f t = nc ("the" ++ t ^. uid) (nounPhrase''(S "the" +:+ f t)
-  (S "the" +:+ f t) CapFirst CapWords)

@@ -1,5 +1,6 @@
 module Data.Drasil.Phrase where
 import Language.Drasil
+import Control.Lens ((^.))
 
 -- | Creates an NP by combining two 'NamedIdea's with the word "and" between
 -- their terms. Plural is defaulted to @(phrase t1) "of" (plural t2)@
@@ -100,3 +101,11 @@ for' t1 t2 = (titleize t1) +:+ S "for" +:+ (short t2)
 -- before inserting for. For example one could use @for'' phrase plural t1 t2@
 for'' :: (NamedIdea c, NamedIdea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> Sentence
 for'' f1 f2 t1 t2 = (f1 t1) +:+ S "for" +:+ (f2 t2)
+
+the :: (NamedIdea t) => t -> NamedChunk
+the t = nc ("the" ++ t ^. uid)
+  (nounPhrase'' (S "the" +:+ phrase t) (S "the" +:+ plural t) CapFirst CapWords)
+
+theCustom :: (NamedIdea t) => (t -> Sentence) -> t -> NamedChunk
+theCustom f t = nc ("the" ++ t ^. uid) (nounPhrase''(S "the" +:+ f t)
+  (S "the" +:+ f t) CapFirst CapWords)

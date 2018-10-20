@@ -23,7 +23,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (appendix,
     solutionCharSpec, specificsystemdescription, srs, stakeholder, sysCont, 
     systemConstraint, termAndDef, terminology, thModel, traceyMandG, tOfSymb, 
     userCharacteristic)
-import Data.Drasil.Phrase (for'')
+import Data.Drasil.Phrase (for'', the)
 
 -- Local function to keep things looking clean, not exported.
 forTT :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence

@@ -60,10 +60,8 @@ module Language.Drasil (
   -- Chunk.CommonIdea
   , commonIdea, CI, getAcc
   -- Chunk.NamedIdea
-  , NamedChunk, short, nc, IdeaDict
+  , NamedChunk, short, nc, IdeaDict , mkIdea
   , nw -- bad name (historical)
-  , compoundNC, compoundNC', compoundNC'', compoundNC''', compoundNCP1, compoundNCPlPh, compoundNCPlPl
-  , mkIdea
   -- Chunk.Constrained.Core
   , physc, sfwrc, enumc , isPhysC, isSfwrC
   , Constraint(..), ConstraintReason(..)

@@ -1,5 +1,6 @@
 module Data.Drasil.Phrase where
 import Language.Drasil
+import qualified Language.Drasil.Development as D
 import Control.Lens ((^.))
 
 -- | Creates an NP by combining two 'NamedIdea's with the word "and" between
@@ -109,3 +110,34 @@ the t = nc ("the" ++ t ^. uid)
 theCustom :: (NamedIdea t) => (t -> Sentence) -> t -> NamedChunk
 theCustom f t = nc ("the" ++ t ^. uid) (nounPhrase''(S "the" +:+ f t)
   (S "the" +:+ f t) CapFirst CapWords)
+
+-- | Combinator for combining two 'NamedChunk's into one.
+-- /Does not preserve abbreviations/
+compoundNC :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
+compoundNC t1 t2 = nc
+  (t1^.uid ++ t2^.uid) (compoundPhrase (t1 ^. term) (t2 ^. term))
+  
+compoundNC' :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
+compoundNC' t1 t2 = nc
+  (t1^.uid ++ t2^.uid) (compoundPhrase'' D.plural D.plural (t1 ^. term) (t2 ^. term))
+  
+compoundNC'' :: (NamedIdea a, NamedIdea b) => 
+  (NP -> Sentence) -> (NP -> Sentence) -> a -> b -> NamedChunk
+compoundNC'' f1 f2 t1 t2 = nc
+  (t1 ^. uid ++ t2 ^. uid) (compoundPhrase'' f1 f2 (t1 ^. term) (t2 ^. term))
+
+compoundNCPlPh :: NamedChunk -> NamedChunk -> NamedChunk
+compoundNCPlPh = compoundNC'' D.plural D.phrase
+
+compoundNCPlPl :: NamedChunk -> NamedChunk -> NamedChunk
+compoundNCPlPl = compoundNC'' D.plural D.plural
+
+-- hack for Solution Characteristics Specification, calling upon plural will pluralize
+-- Characteristics as it is the end of the first term (solutionCharacteristic)
+compoundNC''' :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> a -> b -> NamedChunk
+compoundNC''' f1 t1 t2 = nc
+  (t1^.uid ++ t2^.uid) (compoundPhrase''' f1 (t1 ^. term) (t2 ^. term))
+
+compoundNCP1 :: NamedChunk -> NamedChunk -> NamedChunk
+compoundNCP1 = compoundNC''' D.plural
+

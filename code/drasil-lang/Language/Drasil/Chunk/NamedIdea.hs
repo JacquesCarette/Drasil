@@ -1,16 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.NamedIdea (
-  NamedChunk, nc, IdeaDict, short, nw, mkIdea,
-  compoundNC, compoundNC', compoundNC'', compoundNC''', 
-  compoundNCP1, compoundNCPlPh, compoundNCPlPl) where
+module Language.Drasil.Chunk.NamedIdea (NamedChunk, nc, IdeaDict, short, nw, mkIdea) where
 
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
 import Control.Lens ((^.), makeLenses, view)
 
 import Language.Drasil.Spec (Sentence(S))
-import Language.Drasil.NounPhrase (NP, phrase,
-  plural, compoundPhrase, compoundPhrase'', compoundPhrase''')
+import Language.Drasil.NounPhrase (NP, phrase)
 
 -- | Get short form (if it exists), else get term.
 short :: Idea c => c -> Sentence
@@ -49,37 +45,3 @@ mkIdea s np' ms = IdeaDict (nc s np') ms
 -- no more wrappers, instead we have explicit dictionaries.
 nw :: Idea c => c -> IdeaDict
 nw c = IdeaDict (NC (c^.uid) (c^.term)) (getA c)
-
-----------------------
--- various combinators
-
--- | Combinator for combining two 'NamedChunk's into one.
--- /Does not preserve abbreviations/
-compoundNC :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
-compoundNC t1 t2 = nc
-  (t1^.uid ++ t2^.uid) (compoundPhrase (t1 ^. term) (t2 ^. term))
-  
-compoundNC' :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
-compoundNC' t1 t2 = nc
-  (t1^.uid ++ t2^.uid) (compoundPhrase'' plural plural (t1 ^. term) (t2 ^. term))
-  
-compoundNC'' :: (NamedIdea a, NamedIdea b) => 
-  (NP -> Sentence) -> (NP -> Sentence) -> a -> b -> NamedChunk
-compoundNC'' f1 f2 t1 t2 = nc
-  (t1 ^. uid ++ t2 ^. uid) (compoundPhrase'' f1 f2 (t1 ^. term) (t2 ^. term))
-
-compoundNCPlPh :: NamedChunk -> NamedChunk -> NamedChunk
-compoundNCPlPh = compoundNC'' plural phrase
-
-compoundNCPlPl :: NamedChunk -> NamedChunk -> NamedChunk
-compoundNCPlPl = compoundNC'' plural plural
-
--- hack for Solution Characteristics Specification, calling upon plural will pluralize
--- Characteristics as it is the end of the first term (solutionCharacteristic)
-compoundNC''' :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> a -> b -> NamedChunk
-compoundNC''' f1 t1 t2 = nc
-  (t1^.uid ++ t2^.uid) (compoundPhrase''' f1 (t1 ^. term) (t2 ^. term))
-
-compoundNCP1 :: NamedChunk -> NamedChunk -> NamedChunk
-compoundNCP1 = compoundNC''' plural
-

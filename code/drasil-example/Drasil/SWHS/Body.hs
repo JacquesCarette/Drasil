@@ -19,6 +19,8 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
 import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel,
   likeChg, probDesc, sysCont, unlikeChg)
 
+import qualified Drasil.DocumentLanguage.Units as U (toSentence)
+
 import Data.Drasil.Concepts.Documentation (assumption, column, condition, constraint, 
   content, corSol, dataConst, dataDefn, datum, definition, description, document, 
   environment, genDefn, goalStmt, information, inModel, input_, item, likelyChg, 
@@ -438,7 +440,7 @@ inputInitQuantsTbl = LlC $ llcc inputInitQuantsLbl $ (Table
   [titleize symbol_, titleize unit_, titleize description]
   (mkTable
   [ch, --(\ch -> Sy (unit_symb ch)),
-  unitToSentence, phrase] (map qw inputConstraints))
+  U.toSentence, phrase] (map qw inputConstraints))
   (titleize input_ +:+ titleize variable +:+ titleize' requirement) True)
 
 reqs :: [Contents]

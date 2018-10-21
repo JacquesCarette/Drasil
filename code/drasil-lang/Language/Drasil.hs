@@ -148,7 +148,7 @@ module Language.Drasil (
   -- Misc
   , mkTable, unit_symb, introduceAbb, phrase, plural, phrase's 
   , plural's, at_start, at_start'
-  , unitToSentence, unitToSentenceUnitless, sortBySymbol
+  , sortBySymbol
   -- People
   , People, Person, person, HasName, name, manyNames, person', personWM
   , personWM', mononym, nameStr, rendPersLFM, rendPersLFM', rendPersLFM''

@@ -1,4 +1,4 @@
-{-# LANGUAGE TemplateHaskell, TypeFamilies #-}
+{-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Unitary
   ( UnitaryChunk
   , unitary, mkUnitary

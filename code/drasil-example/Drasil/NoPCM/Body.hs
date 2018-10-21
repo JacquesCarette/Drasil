@@ -42,6 +42,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
   reqF, termDefnF, traceMGF, tsymb, valsOfAuxConstantsF)
+import qualified Drasil.DocumentLanguage.Units as U (toSentence)
  
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
   isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP)
@@ -581,7 +582,7 @@ reqCCHEWT = cic "reqCCHEWT"
 reqIVRTable :: LabelledContent
 reqIVRTable = llcc (mkLabelSame "Input-Variable-Requirements" Tab) $ 
   Table [titleize symbol_, titleize M.unit_, titleize description]
-  (mkTable [ch, unitToSentence, phrase] inputVar)
+  (mkTable [ch, U.toSentence, phrase] inputVar)
   (titleize input_ +:+ titleize variable +:+ titleize' requirement) True
 
 reqs :: [ConceptInstance]

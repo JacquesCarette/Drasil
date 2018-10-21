@@ -14,6 +14,8 @@ module Drasil.DocumentLanguage.Definitions
 import Language.Drasil
 import Data.Drasil.Utils (eqUnR)
 
+import Drasil.DocumentLanguage.Units (toSentenceUnitless)
+
 import Control.Lens ((^.))
 
 -- | Synonym for a list of 'Field'
@@ -97,7 +99,7 @@ mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
 mkDDField :: (HasSymbolTable ctx) => DataDefinition -> ctx -> Field -> ModRow -> ModRow
 mkDDField d _ l@Label fs = (show l, (mkParagraph $ at_start d):[]) : fs
 mkDDField d _ l@Symbol fs = (show l, (mkParagraph $ (P $ eqSymb d)):[]) : fs
-mkDDField d _ l@Units fs = (show l, (mkParagraph $ (unitToSentenceUnitless d)):[]) : fs
+mkDDField d _ l@Units fs = (show l, (mkParagraph $ (toSentenceUnitless d)):[]) : fs
 mkDDField d _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (sy d $= d ^. defnExpr) --FIXME: appending symbol should be done in the printing stage
   (modifyLabelEqn (d ^.getLabel))) :[]) : fs 
 mkDDField d m l@(Description v u) fs =
@@ -170,13 +172,13 @@ mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
 firstPair' :: InclUnits -> DataDefinition -> ListTuple
 firstPair' (IgnoreUnits) d  = (P $ eqSymb d, Flat $ phrase d, Nothing)
 firstPair' (IncludeUnits) d = (P $ eqSymb d, Flat $ phrase d +:+ (sParen $
-  unitToSentenceUnitless d), Nothing)
+  toSentenceUnitless d), Nothing)
 
 -- | Create the descriptions for each symbol in the relation/equation
 descPairs :: (Quantity q) => InclUnits -> [q] -> [ListTuple]
 descPairs IgnoreUnits = map (\x -> (P $ eqSymb x, Flat $ phrase x, Nothing))
 descPairs IncludeUnits =
-  map (\x -> (P $ eqSymb x, Flat $ phrase x +:+ (sParen $ unitToSentenceUnitless x), Nothing))
+  map (\x -> (P $ eqSymb x, Flat $ phrase x +:+ (sParen $ toSentenceUnitless x), Nothing))
   -- FIXME: Need a Units map for looking up units from variables
 
 instance Show Field where

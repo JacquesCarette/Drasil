@@ -137,3 +137,7 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 
 - **Chunk/Quantity**: A 'Quantity' is an idea which has a Space, a Symbol and
   perhaps a unit (definition). It is meant to represent a value.
+
+- **Chunk/Unitary**: A Unitary is a Quantity that must have a unit.
+
+- **Misc**:

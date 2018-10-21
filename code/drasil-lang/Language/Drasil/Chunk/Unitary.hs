@@ -1,13 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Unitary
-  ( UnitaryChunk
-  , unitary, mkUnitary
-  , Unitary(..)) where
+  ( UnitaryChunk, unitary, mkUnitary, Unitary(..), unit_symb) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  ConceptDomain, HasSymbol(symbol), IsUnit)
+  ConceptDomain, HasSymbol(symbol), IsUnit, usymb)
 import Language.Drasil.Chunk.Quantity (Quantity, QuantityDict, mkQuant, qw, 
   HasSpace(typ))
+import Language.Drasil.Development.UnitLang (USymb)
 import Language.Drasil.Development.Unit (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
 import Language.Drasil.Symbol (Symbol)
@@ -44,3 +43,9 @@ unitary i t s u space = UC (mkQuant i t s space (Just uu) Nothing) uu -- Unit do
 
 mkUnitary :: (Unitary u) => u -> UnitaryChunk
 mkUnitary u = UC (qw u) (unit u)
+
+-- | Helper for getting the unit's symbol from a chunk, 
+-- as opposed to the symbols of the chunk itself.
+unit_symb :: (Unitary c) => c -> USymb
+unit_symb c = unit c ^. usymb
+

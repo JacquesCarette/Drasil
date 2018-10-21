@@ -79,7 +79,7 @@ module Language.Drasil (
   , UnitalChunk(..), makeUCWDS
   , uc, uc', ucs, ucs', ucsWS, ucFromDQD
   -- Chunk.Unitary
-  , Unitary(..), UnitaryChunk, unitary
+  , Unitary(..), UnitaryChunk, unitary, unit_symb
   -- Chunk.Relation
   , RelationConcept, makeRC, makeRC'
   --Chunk.DefinedQuantity
@@ -146,7 +146,7 @@ module Language.Drasil (
   , lOmicron, cOmicron, lPi, cPi, lRho, cRho, lSigma, cSigma, lTau, cTau, lUpsilon, cUpsilon, lPhi, vPhi, cPhi
   , lChi, cChi, lPsi, cPsi, lOmega, cOmega, lNabla, lEll
   -- Misc
-  , mkTable, unit_symb, introduceAbb, phrase, plural, phrase's 
+  , mkTable, introduceAbb, phrase, plural, phrase's 
   , plural's, at_start, at_start'
   , sortBySymbol
   -- People

@@ -2,11 +2,8 @@ module Language.Drasil.Misc where
 
 import Control.Lens ((^.))
 import Data.List (sortBy)
-import Language.Drasil.Classes (HasSymbol(symbol), HasUnitSymbol(usymb), 
-  NamedIdea(term), Idea)
+import Language.Drasil.Classes (HasSymbol(symbol), NamedIdea(term), Idea)
 import Language.Drasil.Chunk.NamedIdea (short)
-import Language.Drasil.Chunk.Unitary (Unitary, unit)
-import Language.Drasil.Development.UnitLang (USymb)
 import Language.Drasil.Spec ((+:+), Sentence((:+:), S), sParen)
 import Language.Drasil.Symbol (compsy)
 import Language.Drasil.Stages (Stage(Implementation))
@@ -30,11 +27,6 @@ mkTable :: [a -> b] -> [a] -> [[b]]
 mkTable _     []  = []
 mkTable []     _  = error "Attempting to make table without data"
 mkTable fl (c:cl) = map ($ c) fl : mkTable fl cl
-
--- | Helper for getting the unit's symbol from a chunk, 
--- as opposed to the symbols of the chunk itself.
-unit_symb :: (Unitary c) => c -> USymb
-unit_symb c = unit c ^. usymb
 
 -- | Helper for common pattern of introducing the title-case version of a 
 -- noun phrase (from a NamedIdea)

@@ -45,8 +45,6 @@ module Language.Drasil (
   , HasDerivation(derivations)
   , HasRefAddress(getRefAdd)
   , HasShortName(shortname)
-  -- Chunk.VarChunk
-  , VarChunk
   -- Chunk.Concept
   , cw , ConceptChunk , CommonConcept, ConceptInstance
   -- Chunk.CommonIdea
@@ -285,7 +283,6 @@ import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS,
                                    uc, uc', ucs, ucs', ucsWS, ucFromDQD)
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.UnitaryConcept
-import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.ChunkDB
 import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
                                           , titleize', phrase, plural)

@@ -10,8 +10,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, DefiningExpr(defnExpr), -- ExprRelat(relat),
   ConceptDomain)
 import Language.Drasil.Chunk.Quantity (HasSpace(typ), Quantity, QuantityDict, 
-  mkQuant, qw)
-import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
+  mkQuant, qw, vcSt)
 
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase (NP)
@@ -71,7 +70,7 @@ fromEqn'''' nm desc _ symb eqn = EC (mkQuant nm desc symb Real Nothing Nothing) 
 ec :: (Quantity c) => c -> Expr -> QDefinition
 ec c eqn = EC (qw c) eqn
 
--- | Returns a 'VarChunk' from a 'QDefinition'.
+-- | Returns a 'QuantityDict' from a 'QDefinition'.
 -- Currently only used in example /Modules/ which are being reworked.
-getVC :: QDefinition -> VarChunk
+getVC :: QDefinition -> QuantityDict
 getVC qd = vcSt (qd ^. uid) (qd ^. term) (symbol qd) (qd ^. typ)

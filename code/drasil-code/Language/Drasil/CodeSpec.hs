@@ -203,7 +203,7 @@ ffor v e fs  = FFor (codevar  v) e fs
 fdec :: (Quantity c) => c -> FuncStmt
 fdec v  = FDec (codevar  v) (spaceToCodeType $ v ^. typ)
 
-asVC :: Func -> VarChunk
+asVC :: Func -> QuantityDict
 asVC (FDef (FuncDef n _ _ _)) = implVar n (nounPhraseSP n) (Atomic n) Real
 asVC (FData (FuncData n _)) = implVar n (nounPhraseSP n) (Atomic n) Real
 asVC (FCD cd) = codeVC cd (codeSymb cd) (cd ^. typ)

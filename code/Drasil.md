@@ -135,4 +135,5 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 - **Development**: Export features that are primarily meant for extending the
   system rather than for developing examples.
 
-- **Chunk/Quantity**:
+- **Chunk/Quantity**: A 'Quantity' is an idea which has a Space, a Symbol and
+  perhaps a unit (definition). It is meant to represent a value.

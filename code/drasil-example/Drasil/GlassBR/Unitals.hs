@@ -201,12 +201,12 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 
 {-Quantities-}
 
-glassBRUnitless :: [VarChunk]
+glassBRUnitless :: [QuantityDict]
 glassBRUnitless = [risk_fun, is_safePb, is_safeLR, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL]
 
 risk_fun, is_safePb, is_safeLR, stressDistFac, sdf_tol,
-  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL :: VarChunk
+  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL :: QuantityDict
 
 dimlessLoad   = vc "dimlessLoad" (nounPhraseSP "dimensionless load")
   (hat lQ) Real

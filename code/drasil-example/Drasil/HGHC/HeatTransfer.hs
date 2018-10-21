@@ -15,14 +15,14 @@ hghcVarsDD = [htTransCladFuelDD, htTransCladCoolDD]
 hghcVars :: [QDefinition]
 hghcVars = [htTransCladFuel, htTransCladCool]
 
-htVars :: [VarChunk]
+htVars :: [QuantityDict]
 htVars = [cladThick, coolFilmCond, gapFilmCond, cladCond]
 
 htInputs, htOutputs :: [QuantityDict]
 htInputs = map qw htVars
 htOutputs = map qw hghcVars
 
-cladThick, coolFilmCond, gapFilmCond, cladCond :: VarChunk
+cladThick, coolFilmCond, gapFilmCond, cladCond :: QuantityDict
 cladThick    = vc "cladThick"    (cn''' "clad thickness")
   (lTau `sub` lC) Real
 coolFilmCond = vc "coolFilmCond" (cn' "initial coolant film conductance")

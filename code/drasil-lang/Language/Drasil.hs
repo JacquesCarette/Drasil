@@ -46,9 +46,7 @@ module Language.Drasil (
   , HasRefAddress(getRefAdd)
   , HasShortName(shortname)
   -- Chunk.VarChunk
-  , VarChunk, codeVC
-  , vc, implVar
-  , dcc, dcc', dccWDS, dccWDS', vc'', ccs, cc, cc', cic
+  , VarChunk
   -- Chunk.Concept
   , cw , ConceptChunk , CommonConcept, ConceptInstance
   -- Chunk.CommonIdea
@@ -75,6 +73,7 @@ module Language.Drasil (
   , Constraints
   -- Chunk.Quantity
   , Quantity, QuantityDict, qw, mkQuant
+  , codeVC, vc, implVar , dcc, dcc', dccWDS, dccWDS', vc'', ccs, cc, cc', cic
   -- Chunk.UncertainQuantity
   , UncertainQuantity(..), UncertainChunk(..), UncertQ, uq, uqNU, uqc, uqcNU, uqcND, uncrtnChunk, uvc
   , uncrtnw

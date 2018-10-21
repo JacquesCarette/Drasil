@@ -129,4 +129,10 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 
 - **Chunk/Concept**: (smart) constructors for all of the above.
 
-- **Development/Unit**:
+- **Development/Unit**: UnitDefn, the data-structure for the definition of
+  new units, and lots of constructors.
+
+- **Development**: Export features that are primarily meant for extending the
+  system rather than for developing examples.
+
+- **Chunk/Quantity**:

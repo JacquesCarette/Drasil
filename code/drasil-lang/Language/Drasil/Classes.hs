@@ -131,3 +131,4 @@ class ExprRelat c where
 -- This is the 'correct' version of ExprRelat.
 class DefiningExpr c where
   defnExpr :: Lens' c Expr
+

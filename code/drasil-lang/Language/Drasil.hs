@@ -176,9 +176,8 @@ module Language.Drasil (
   , Change, ChngType(..), chngType, chng, lc, ulc
   , citationRefTable, citeLookup
   -- RefTypes
-  , RefAdd, RefType(Cite, Tab, EqnB, LCh, UnCh, Req, Def, Lst, Link)
+  , RefAdd, RefType(Cite, Tab, EqnB, LCh, UnCh, Def, Lst, Link)
   , Reference(Reference)
-  , ReqType(FR, NFR)
   -- Label
   , Label 
   , mkLabelRA', mkLabelSame, mkEmptyLabel, mkURILabel
@@ -307,8 +306,8 @@ import Language.Drasil.Misc -- all of it
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
-import Language.Drasil.RefTypes(RefAdd, RefType(Cite, EqnB, Tab, LCh, UnCh, Req, Def, Lst, Link),
-  DType(..), Reference(Reference), ReqType(FR, NFR))
+import Language.Drasil.RefTypes(RefAdd, RefType(Cite, EqnB, Tab, LCh, UnCh, Def, Lst, Link),
+  DType(..), Reference(Reference))
 import Language.Drasil.Label (mkLabelRA', mkLabelSame, 
   mkEmptyLabel, mkURILabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec, modifyLabelEqn)
 import Language.Drasil.Label.Type (getAdd)

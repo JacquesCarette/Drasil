@@ -20,7 +20,7 @@ import Language.Drasil.Document (Section(Section))
 import Language.Drasil.Document.Core (RawContent(..), LabelledContent(..))
 import Language.Drasil.Label.Core (Label(..))
 import Language.Drasil.Label.Type (getAdd)
-import Language.Drasil.Label (getDefName, getReqName)
+import Language.Drasil.Label (getDefName)
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.RefTypes (RefType(..), DType(..), Reference(Reference))
 import Language.Drasil.ShortName ( ShortName, getStringSN, shortname', concatSN, defer)
@@ -154,13 +154,6 @@ class Referable s where
 instance Referable AssumpChunk where
   refAdd  x = getAdd ((x ^. getLabel) ^. getRefAdd)
   rType   _ = Assump
-
-{-
-instance Referable ReqChunk where
-  refAdd  r               = getAdd ((r ^. getLabel) ^. getRefAdd)
-  rType   (RC _ FR _ _)   = Req FR
-  rType   (RC _ NFR _ _)  = Req NFR
--}
 
 instance Referable Change where
   refAdd r                   = getAdd ((r ^. getLabel) ^. getRefAdd)
@@ -296,7 +289,6 @@ customRef r n = Reference (fixupRType $ rType r) (refAdd r) (getAcc' (rType r) n
   where 
     getAcc' :: RefType -> ShortName -> ShortName
     getAcc' (Def dtp) sn = shortname' $ (getDefName dtp) ++ " " ++ (getStringSN sn)
-    getAcc' (Req rq)  sn = shortname' $ (getReqName rq)  ++ " " ++ (getStringSN sn)
     getAcc' LCh       sn = shortname' $ "LC: " ++ (getStringSN sn)
     getAcc' UnCh      sn = shortname' $ "UC: " ++ (getStringSN sn)
     getAcc' Assump    sn = shortname' $ "A: " ++ (getStringSN sn)

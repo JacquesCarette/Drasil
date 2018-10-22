@@ -1,7 +1,7 @@
 module Language.Drasil.Label (Label, mkLabelRA',
  mkLabelSame, mkEmptyLabel, mkURILabel, getAdd, mkLabelRAAssump', 
  mkLabelRAFig, mkLabelRASec, modifyLabelEqn,
- getReqName, getDefName) where
+ getDefName) where
 
 import Data.Char (isAscii)
 import Control.Lens((^.))
@@ -10,7 +10,7 @@ import Language.Drasil.Label.Core
 import Language.Drasil.Label.Type (LblType(..), getAdd)
 import Language.Drasil.Classes (HasRefAddress(getRefAdd))
 import Language.Drasil.ShortName (shortname')
-import Language.Drasil.RefTypes (RefType(..), ReqType(..), DType(..))
+import Language.Drasil.RefTypes (RefType(..), DType(..))
 
 -- multiple mkLabel constructors for label creation
 -- id     ==> unique ID for Drasil referencing (i.e. internal)
@@ -36,7 +36,6 @@ getAcc Lst       = "List:"
 getAcc Fig       = "Figure:"
 getAcc Sect      = "Sec:"
 getAcc (Def dtp) = getDefName dtp
-getAcc (Req rq)  = getReqName rq
 getAcc Mod       = "Mod:"
 getAcc LCh       = "LC:"
 getAcc UnCh      = "UC:"
@@ -48,10 +47,6 @@ getAcc (Label x) = getAcc x
 getAcc Blank     = error "Why are we getting the acronym of a Blank?"
 getAcc (DeferredCC _) = error "DeferredCC RefType should not be directly used."
 getAcc Link      = "Link:"
-
-getReqName :: ReqType -> String
-getReqName FR  = "FR:"
-getReqName NFR = "NFR:"
 
 -- | Automatically create the label for a definition
 -- FIXME: Duplicated from Document.hs!

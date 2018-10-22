@@ -1,13 +1,9 @@
 module Language.Drasil.Misc where
 
-import Control.Lens ((^.))
 import Data.List (sortBy)
-import Language.Drasil.Classes (HasSymbol(symbol), NamedIdea(term), Idea)
-import Language.Drasil.Chunk.NamedIdea (short)
-import Language.Drasil.Spec ((+:+), Sentence((:+:), S), sParen)
+import Language.Drasil.Classes (HasSymbol(symbol))
 import Language.Drasil.Symbol (compsy)
 import Language.Drasil.Stages (Stage(Implementation))
-import qualified Language.Drasil.NounPhrase as NP
 
 {- |
   Create a table body (not including header row) by applying the given
@@ -27,42 +23,6 @@ mkTable :: [a -> b] -> [a] -> [[b]]
 mkTable _     []  = []
 mkTable []     _  = error "Attempting to make table without data"
 mkTable fl (c:cl) = map ($ c) fl : mkTable fl cl
-
--- | Helper for common pattern of introducing the title-case version of a 
--- noun phrase (from a NamedIdea)
--- followed by its abbreviation in parentheses.
-introduceAbb :: Idea n => n -> Sentence
-introduceAbb n = NP.titleize (n ^. term) +:+ sParen (short n)
-
--- | Helper function for getting the sentence case of a noun phrase from a 
--- NamedIdea.
-at_start, at_start' :: NamedIdea n => n -> Sentence
--- | Singular sentence case.
-at_start  n = NP.at_start (n ^. term)
--- | Plural sentence case.
-at_start' n = NP.at_start' (n ^. term)
-
--- | Helper function for getting the title case of a noun phrase from a 
--- NamedIdea.
-titleize, titleize' :: NamedIdea n => n -> Sentence
--- | Singular title case.
-titleize  n = NP.titleize (n ^. term)
--- | Plural title case.
-titleize' n = NP.titleize' (n ^. term)
-
--- | Helper for getting the phrase from a NamedIdea.
-phrase :: NamedIdea n => n -> Sentence
-phrase n = NP.phrase (n ^. term)
-
--- | Helper for getting the plural of a phrase from a NamedIdea
-plural :: NamedIdea n => n -> Sentence
-plural n = NP.plural (n ^. term)
-
-phrase's, plural's :: NamedIdea n => n -> Sentence
--- | Singular possesive function
-phrase's a = phrase a :+: S "'s"
--- | Plural possesive function
-plural's a = plural a :+: S "'"
 
 -- Returns the string if it doesn't contain spaces and throws an error if it does
 noSpaces :: String -> String

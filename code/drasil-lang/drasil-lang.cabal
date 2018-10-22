@@ -67,6 +67,7 @@ library
     , Language.Drasil.ChunkDB
     , Language.Drasil.Development.Unit
     , Language.Drasil.Development.UnitLang
+    , Language.Drasil.Development.Sentence
 
   Build-Depends:
     base >= 4.7,

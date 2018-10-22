@@ -146,8 +146,7 @@ module Language.Drasil (
   , lOmicron, cOmicron, lPi, cPi, lRho, cRho, lSigma, cSigma, lTau, cTau, lUpsilon, cUpsilon, lPhi, vPhi, cPhi
   , lChi, cChi, lPsi, cPsi, lOmega, cOmega, lNabla, lEll
   -- Misc
-  , mkTable, introduceAbb, phrase, plural, phrase's 
-  , plural's, at_start, at_start'
+  , mkTable
   , sortBySymbol
   -- People
   , People, Person, person, HasName, name, manyNames, person', personWM
@@ -197,8 +196,9 @@ module Language.Drasil (
   , egetDoc, getDoc
   -- Label.Type
   , getAdd
+  -- Development.Sentence
+  , introduceAbb, phrase, plural, phrase's, plural's, at_start, at_start'
 ) where
-
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.SystemInformation
@@ -313,3 +313,5 @@ import Language.Drasil.Label (mkLabelRA', mkLabelSame,
   mkEmptyLabel, mkURILabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec, modifyLabelEqn)
 import Language.Drasil.Label.Type (getAdd)
 --Should be in lang-dev package?
+
+import Language.Drasil.Development.Sentence -- are these really development?

@@ -534,12 +534,3 @@ mkAppndxSec (AppndxProg cs) = SRS.appendix cs []
 -- Helper
 siSys :: SystemInformation -> IdeaDict
 siSys SI {_sys = sys} = nw sys
-
---BELOW IS IN THIS FILE TEMPORARILY--
---Creates Contents using an uid and description (passed in as a Sentence).
-
-mkLklyChnk :: String -> Sentence -> String -> LabelledContent
-mkLklyChnk i desc shrtn = mkRawLC (Change (lc i desc (mkLabelSame shrtn LCh))) (mkLabelSame shrtn LCh) --FIXME: label made twice?
-
-mkUnLklyChnk :: String -> Sentence -> String -> LabelledContent 
-mkUnLklyChnk i desc shrtn = mkRawLC (Change (ulc i desc (mkLabelSame shrtn UnCh))) (mkLabelSame shrtn UnCh) --FIXME: label made twice?

@@ -37,7 +37,7 @@ import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, item', description,
   includegraphics, center, figure, item, symbDescription, enumerate, itemize, toEqn, empty,
   newline, superscript, parens, fraction, quote, ref, ucref, lcref, aref, mref, sref,
-  hyperref, snref, cite, href, sec, newpage, maketoc, maketitle, document, author, title)
+  hyperref, snref, cite, href, sec, newpage, maketoc, maketitle, document, author, title, rref)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (<>), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
 import Language.Drasil.TeX.Preamble (genPreamble)
@@ -270,6 +270,7 @@ spec (Ref t@RT.Sect r _ _)    = sref (show t) (pure $ text r)
 spec (Ref t@(RT.Def _) r _ _) = hyperref (show t) (pure $ text r)
 spec (Ref RT.Mod r _ _)       = mref  (pure $ text r)
 spec (Ref RT.Assump r _ _)    = aref  (pure $ text r)
+spec (Ref (RT.Req _) r _ _)   = rref  (pure $ text r)
 spec (Ref RT.LCh r _ _)       = lcref (pure $ text r)
 spec (Ref RT.UnCh r _ _)      = ucref (pure $ text r)
 spec (Ref RT.Cite r _ _)      = cite  (pure $ text r)

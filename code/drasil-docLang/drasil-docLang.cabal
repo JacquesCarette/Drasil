@@ -40,7 +40,7 @@ library
     MissingH >= 1.4.0.1,
     parsec >= 3.1.9,
     data-fix (>= 0.0.4 && <= 1.0),
-    drasil-lang >= 0.1.34,
+    drasil-lang >= 0.1.35,
     drasil-data >= 0.1.9
   default-language: Haskell2010
   ghc-options:      -Wall

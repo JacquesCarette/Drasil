@@ -170,13 +170,12 @@ module Language.Drasil (
   -- Referencing
   , ReferenceDB, AssumpMap, assumpLookup, assumptionsFromDB
   , rdb, assumpRefTable, customRef, HasAssumpRefs
-  , HasChangeRefs, changeRefTable, changeLookup, RefBy(..)
+  , RefBy(..)
   , assumpDB, RefMap, simpleMap
-  -- Change
-  , Change, ChngType(..), chngType, chng, lc, ulc
-  , citationRefTable, citeLookup
+  , citationRefTable
   -- RefTypes
-  , RefAdd, RefType(Cite, Tab, EqnB, LCh, UnCh, Def, Lst, Link)
+  , RefAdd, RefType(Cite, Tab, EqnB, Req, LCh, UnCh, Def, Lst, Link)
+  , ReqType(FR, NFR)
   , Reference(Reference)
   -- Label
   , Label 
@@ -239,7 +238,6 @@ import Language.Drasil.Document.GetChunk(vars, combine', vars', combine, ccss)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Derivation (Derivation)
-import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation (
   -- Types
     Citation(..), EntryID, BibRef, CiteField(..), Month(..), HP(..), CitationKind(..)
@@ -294,8 +292,7 @@ import Language.Drasil.Reference (makeRef, makeRefS, mkRefFrmLbl, ReferenceDB, a
                                  , assumpRefTable, assumptionsFromDB
                                  , rdb, RefBy(..)
                                  , Referable(..), customRef
-                                 , HasChangeRefs, changeRefTable, changeLookup
-                                 , citationRefTable, citeLookup, RefMap
+                                 , citationRefTable, RefMap
                                  , simpleMap)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 
   prime, sCurlyBrSymb, compsy)
@@ -306,8 +303,8 @@ import Language.Drasil.Misc -- all of it
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
-import Language.Drasil.RefTypes(RefAdd, RefType(Cite, EqnB, Tab, LCh, UnCh, Def, Lst, Link),
-  DType(..), Reference(Reference))
+import Language.Drasil.RefTypes(RefAdd, RefType(Cite, EqnB, Tab, Req, LCh, UnCh, Def, Lst, Link),
+  DType(..), Reference(Reference), ReqType(FR, NFR))
 import Language.Drasil.Label (mkLabelRA', mkLabelSame, 
   mkEmptyLabel, mkURILabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec, modifyLabelEqn)
 import Language.Drasil.Label.Type (getAdd)

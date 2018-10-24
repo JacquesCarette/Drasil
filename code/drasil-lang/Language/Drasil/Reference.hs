@@ -3,11 +3,10 @@ module Language.Drasil.Reference where
 
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
-import Data.List (concatMap, find, groupBy, partition, sortBy)
+import Data.List (concatMap, find, groupBy, sortBy)
 import qualified Data.Map as Map
 
 import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
-import Language.Drasil.Chunk.Change as Ch (Change(..), ChngType(..))
 import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID), CiteField(Author, Title, Year), HasFields(getFields))
 import Language.Drasil.Chunk.Concept (ConceptInstance)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
@@ -20,7 +19,7 @@ import Language.Drasil.Document (Section(Section))
 import Language.Drasil.Document.Core (RawContent(..), LabelledContent(..))
 import Language.Drasil.Label.Core (Label(..))
 import Language.Drasil.Label.Type (getAdd)
-import Language.Drasil.Label (getDefName)
+import Language.Drasil.Label (getDefName, getReqName)
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.RefTypes (RefType(..), DType(..), Reference(Reference))
 import Language.Drasil.ShortName ( ShortName, getStringSN, shortname', concatSN, defer)
@@ -36,10 +35,6 @@ type RefMap a = Map.Map UID (a, Int)
 
 -- | Assumption Database
 type AssumpMap = RefMap AssumpChunk
--- | Requirement (functional/non-functional) Database
--- type ReqMap = RefMap ReqChunk
--- | Change (likely/unlikely) Database
-type ChangeMap = RefMap Change
 -- | Citation Database (bibliography information)
 type BibMap = RefMap Citation
 -- | ConceptInstance Database
@@ -49,7 +44,6 @@ type ConceptMap = RefMap ConceptInstance
 -- | Database for internal references.
 data ReferenceDB = RDB -- organized in order of appearance in SmithEtAl template
   { _assumpDB :: AssumpMap
-  , _changeDB :: ChangeMap
   , _citationDB :: BibMap
   , _conceptDB :: ConceptMap
   }
@@ -59,32 +53,14 @@ makeLenses ''ReferenceDB
 data RefBy = ByName
            | ByNum -- If applicable
 
-rdb :: [AssumpChunk] -> [Change] ->
-  BibRef -> [ConceptInstance] -> ReferenceDB
-rdb assumps changes citations con = RDB
+rdb :: [AssumpChunk] -> BibRef -> [ConceptInstance] -> ReferenceDB
+rdb assumps citations con = RDB
   (simpleMap assumps)
-  (changeMap changes)
   (bibMap citations)
   (conceptMap con)
 
 simpleMap :: HasUID a => [a] -> RefMap a
 simpleMap xs = Map.fromList $ zip (map (^. uid) xs) (zip xs [1..])
-
-{-
-reqMap :: [ReqChunk] -> ReqMap
-reqMap rs = Map.fromList $ zip (map (^. uid) (frs ++ nfrs)) (zip frs [1..] ++
-  zip nfrs [1..])
-  where (frs, nfrs)  = partition (isFuncRec . reqType) rs
-        isFuncRec FR = True
-        isFuncRec _  = False
--}
-
-changeMap :: [Change] -> ChangeMap
-changeMap cs = Map.fromList $ zip (map (^. uid) (lcs ++ ulcs))
-  (zip lcs [1..] ++ zip ulcs [1..])
-  where (lcs, ulcs) = partition (isLikely . chngType) cs
-        isLikely Likely = True
-        isLikely _ = False
 
 bibMap :: [Citation] -> BibMap
 bibMap cs = Map.fromList $ zip (map (^. uid) scs) (zip scs [1..])
@@ -111,18 +87,6 @@ assumpLookup a m = getS $ Map.lookup (a ^. uid) m
         getS Nothing = error $ "Assumption: " ++ (a ^. uid) ++
           " referencing information not found in Assumption Map"
 
-changeLookup :: HasUID c => c -> ChangeMap -> (Change, Int)
-changeLookup c m = getS $ Map.lookup (c ^. uid) m
-  where getS (Just x) = x
-        getS Nothing = error $ "Change: " ++ (c ^. uid) ++
-          " referencing information not found in Change Map"
-
-citeLookup :: HasUID c => c -> BibMap -> (Citation, Int)
-citeLookup c m = getS $ Map.lookup (c ^. uid) m
-  where getS (Just x) = x
-        getS Nothing = error $ "Change: " ++ (c ^. uid) ++
-          " referencing information not found in Change Map"
-
 conceptLookup :: HasUID c => c -> ConceptMap -> (ConceptInstance, Int)
 conceptLookup c = maybe (error $ "ConceptInstance: " ++ (c ^. uid) ++
           " referencing information not found in Concept Map") id .
@@ -131,15 +95,12 @@ conceptLookup c = maybe (error $ "ConceptInstance: " ++ (c ^. uid) ++
 -- Classes and instances --
 class HasAssumpRefs s where
   assumpRefTable :: Simple Lens s AssumpMap
-class HasChangeRefs s where
-  changeRefTable :: Simple Lens s ChangeMap
 class HasCitationRefs s where
   citationRefTable :: Simple Lens s BibMap
 class HasConceptRefs s where
   conceptRefTable :: Simple Lens s ConceptMap
 
 instance HasAssumpRefs   ReferenceDB where assumpRefTable = assumpDB
-instance HasChangeRefs   ReferenceDB where changeRefTable = changeDB
 instance HasCitationRefs ReferenceDB where citationRefTable = citationDB
 instance HasConceptRefs  ReferenceDB where conceptRefTable = conceptDB
 
@@ -154,11 +115,6 @@ class Referable s where
 instance Referable AssumpChunk where
   refAdd  x = getAdd ((x ^. getLabel) ^. getRefAdd)
   rType   _ = Assump
-
-instance Referable Change where
-  refAdd r                   = getAdd ((r ^. getLabel) ^. getRefAdd)
-  rType (ChC _ Likely _ _)   = LCh
-  rType (ChC _ Unlikely _ _) = UnCh
 
 instance Referable Section where
   refAdd  (Section _ _ lb) = getAdd (lb ^. getRefAdd)
@@ -203,9 +159,7 @@ temp (Table _ _ _ _)       = Tab
 temp (Figure _ _ _)        = Fig
 temp (Graph _ _ _ _)       = Fig
 temp (Definition x _)      = Def x
--- temp (Requirement r)       = rType r
 temp (Assumption a)        = rType a
-temp (Change l)            = rType l
 temp (EqnBlock _)          = EqnB
 temp (Enumeration _)       = Lst 
 temp (Paragraph _)         = error "Shouldn't reference paragraphs"
@@ -292,6 +246,7 @@ customRef r n = Reference (fixupRType $ rType r) (refAdd r) (getAcc' (rType r) n
     getAcc' LCh       sn = shortname' $ "LC: " ++ (getStringSN sn)
     getAcc' UnCh      sn = shortname' $ "UC: " ++ (getStringSN sn)
     getAcc' Assump    sn = shortname' $ "A: " ++ (getStringSN sn)
+    getAcc' (Req rq)  sn = shortname' $ (getReqName rq)  ++ " " ++ (getStringSN sn)
     getAcc' (DeferredCC u) s = concatSN (defer u) s
     getAcc' _         sn = sn
     fixupRType (DeferredCC _) = Blank  -- FIXME: This is a hack

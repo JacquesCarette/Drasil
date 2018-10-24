@@ -10,8 +10,6 @@ import Language.Drasil.Spec
 import Language.Drasil.Classes.Core (HasShortName(shortname))
 
 import Language.Drasil.Chunk.AssumpChunk
--- import Language.Drasil.ShortName
-import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation
 import Language.Drasil.RefTypes(DType(..))
 
@@ -89,9 +87,7 @@ getCon (Paragraph s)       = [s]
 getCon (EqnBlock _)      = []
 getCon (Enumeration lst)   = getLT lst
 getCon (Figure l _ _)    = [l]
--- getCon (Requirement reqc)  = getReq reqc
 getCon (Assumption assc)   = getAss assc
-getCon (Change chg)        = getChg chg
 getCon (Bib bref)          = getBib bref
 getCon (Graph [(s1, s2)] _ _ l) = s1 : s2 : [l]
 getCon (Definition dt (hd:fs)) = concatMap getCon' (snd hd) ++ getCon (Definition dt fs)
@@ -130,9 +126,6 @@ getReq a = [requires a]
 
 getAss :: AssumpChunk -> [Sentence]
 getAss a = [assuming a]
-
-getChg :: Change -> [Sentence]
-getChg a = [chng a]
 
 getLT :: ListType -> [Sentence]
 getLT (Bullet it) = concatMap getIL $ map fst it

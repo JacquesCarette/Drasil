@@ -334,11 +334,6 @@ layLabelled sm x@(LblC _ (Assumption a))        = T.ALUR T.Assumption
   (spec sm (assuming a))
   (P.S $ getAdd (x ^. getRefAdd))
   (spec sm $ getShortName a)
-layLabelled sm x@(LblC _ (Change lcs))           = T.ALUR
-  (if (chngType lcs) == Likely then T.LikelyChange else T.UnlikelyChange)
-  (spec sm (chng lcs)) 
-  (P.S $ getAdd (x ^. getRefAdd)) 
-  (spec sm $ getShortName lcs)
 layLabelled sm x@(LblC _ (Graph ps w h t))    = T.Graph 
   (map (\(y,z) -> (spec sm y, spec sm z)) ps) w h (spec sm t)
   (P.S $ getAdd (x ^. getRefAdd))
@@ -364,9 +359,6 @@ layUnlabelled sm (Figure c f wp)    = T.Figure (P.S "nolabel2") (spec sm c) f wp
 --   (spec sm $ requires r) (P.S "nolabel3") (spec sm $ getShortName r)
 layUnlabelled sm (Assumption a)       = T.ALUR T.Assumption
   (spec sm (assuming a)) (P.S "nolabel4") (spec sm $ getShortName a)
-layUnlabelled sm (Change lcs)          = T.ALUR
-  (if (chngType lcs) == Likely then T.LikelyChange else T.UnlikelyChange)
-  (spec sm (chng lcs)) (P.S "nolabel5") (spec sm $ getShortName lcs)
 layUnlabelled sm (Graph ps w h t)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S "nolabel6")
 layUnlabelled sm (Definition dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")

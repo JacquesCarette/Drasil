@@ -78,7 +78,7 @@ gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols)
   ++ map unitWrapper [pascal, newton]
 
 gbRefDB :: ReferenceDB
-gbRefDB = rdb assumptions [] gbCitations $ funcReqs ++ likelyChgs ++
+gbRefDB = rdb assumptions gbCitations $ funcReqs ++ likelyChgs ++
   unlikelyChgs
 
 printSetting :: PrintingInformation

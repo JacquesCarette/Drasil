@@ -32,7 +32,7 @@ module Language.Drasil.Classes (
 import Language.Drasil.Classes.Core
 
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
-import Language.Drasil.Chunk.Derivation (Derivation)
+import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Development.UnitLang(UDefn, USymb)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label)

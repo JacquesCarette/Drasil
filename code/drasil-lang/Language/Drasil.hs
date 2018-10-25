@@ -60,7 +60,7 @@ module Language.Drasil (
   , constrained, cuc, cvc, cvc', constrained', cuc', constrainedNRV'
   , cnstrw
   -- Chunk.Eq
-  , QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec, fromEqn''', fromEqn''''
+  , QDefinition, fromEqn, fromEqn', equat, ec
   -- Chunk.DataDefinition
   , DataDefinition, mkQuantDef, mkDD, mkQuantDef', qdFromDD, mkDDL
   -- Chunk.GenDefn
@@ -88,7 +88,10 @@ module Language.Drasil (
   , ucw, UnitaryConceptDict
   -- Chunk.Attributes --FIXME: Changed a lot
   , getSource
-  , Derivation, getDerivation, getShortName
+  -- Derivation
+  , Derivation
+  -- ???
+  , getDerivation, getShortName
   -- ShortName
   , resolveSN, ShortName, shortname', getStringSN
   --Citations
@@ -234,10 +237,10 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasLabel(getLabel), MayHaveLabel(getMaybeLabel), HasRefAddress(getRefAdd),
   DefiningExpr(defnExpr), HasShortName(shortname))
 import Language.Drasil.Label.Core (Label)
+import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Document.GetChunk(vars, combine', vars', combine, ccss)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
-import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.Citation (
   -- Types
     Citation(..), EntryID, BibRef, CiteField(..), Month(..), HP(..), CitationKind(..)
@@ -265,8 +268,7 @@ import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Constrained.Core (physc, sfwrc, enumc, isPhysC, isSfwrC,
   Constraint(..), ConstraintReason(..))
 import Language.Drasil.Chunk.DefinedQuantity
-import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqn'', getVC,
- equat, ec, fromEqn''', fromEqn'''')
+import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', equat, ec)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition, mkQuantDef, mkDD, mkQuantDef',
   qdFromDD, mkDDL)
 import Language.Drasil.Chunk.GenDefn

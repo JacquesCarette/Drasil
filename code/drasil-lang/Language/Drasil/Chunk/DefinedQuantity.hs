@@ -11,7 +11,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import qualified Language.Drasil.Chunk.Quantity as Q
 
-import Language.Drasil.Chunk.Derivation (Derivation)
+import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Development.Unit (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
 import Language.Drasil.Space (Space)

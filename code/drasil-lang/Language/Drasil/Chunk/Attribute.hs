@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.Attribute
 
 import Control.Lens ((^.))
 
-import Language.Drasil.Chunk.Derivation (Derivation)
+import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.ShortName (ShortName, shortname', getStringSN)
 
 import Language.Drasil.Classes (HasDerivation(derivations), HasReference(getReferences),

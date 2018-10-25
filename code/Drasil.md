@@ -96,7 +96,7 @@ under the namespace *Language.Drasil*, which will thus be omitted.
   and capitalization. And a Class for NounPhrase, which gives the main methods on
   them. Right now, there is a single instance though.
 
-- **Chunk/Derivation**: Misnomer (not a chunk), just a list of Sentences. In theory,
+- **Derivation**: A list of Sentences. In theory,
   this really ought to be a real data-structure, that alternates between narrative and
   equations. Could even be equational reasoning, etc.
 

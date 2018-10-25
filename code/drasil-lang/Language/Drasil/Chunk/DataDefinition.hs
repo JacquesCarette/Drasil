@@ -5,9 +5,8 @@ import Control.Lens(makeLenses, (^.), view)
 
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn',
   fromEqn''', fromEqn'''')
-import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(typ))
-import Language.Drasil.Symbol.Helpers (eqSymb)
+import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), DefiningExpr(defnExpr), -- ExprRelat(relat), 
   HasDerivation(derivations), HasReference(getReferences), HasAdditionalNotes(getNotes),
@@ -18,6 +17,7 @@ import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Label (mkLabelSame)
 import Language.Drasil.RefTypes(RefType(..), DType(..), Reference)
 import Language.Drasil.Spec (Sentence(EmptyS))
+import Language.Drasil.Symbol.Helpers (eqSymb)
 
 data Scope = Scp { _spec :: Label {-indirect reference-}}
 

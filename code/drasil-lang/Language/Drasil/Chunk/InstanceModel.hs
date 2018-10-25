@@ -6,7 +6,6 @@ module Language.Drasil.Chunk.InstanceModel
   , Constraints
   ) where
 
-import Language.Drasil.Chunk.Derivation (Derivation)
 import Language.Drasil.Chunk.Eq (QDefinition, equat)
 import Language.Drasil.Chunk.Relation (RelationConcept, makeRC)
 import Language.Drasil.Chunk.Quantity (Quantity, QuantityDict, qw)
@@ -15,6 +14,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn),ConceptDomain(cdom), Concept, ExprRelat(relat),
   HasDerivation(derivations), HasReference(getReferences), HasAdditionalNotes(getNotes),
   HasLabel(getLabel), HasSymbol(symbol), HasSpace(typ), HasShortName(shortname))
+import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Development.Unit (MayHaveUnit(getUnit))
 import Language.Drasil.Document.GetChunk (vars)
 import Language.Drasil.Expr (($=),Relation)

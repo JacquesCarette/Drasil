@@ -3,12 +3,11 @@ module Language.Drasil.Chunk.DataDefinition where
 
 import Control.Lens(makeLenses, (^.), view)
 
-import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn',
-  fromEqn''', fromEqn'''')
+import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn')
 import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(typ))
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  HasSymbol(symbol), DefiningExpr(defnExpr), -- ExprRelat(relat), 
+  HasSymbol(symbol), DefiningExpr(defnExpr),
   HasDerivation(derivations), HasReference(getReferences), HasAdditionalNotes(getNotes),
   HasShortName(shortname), HasLabel(getLabel))
 import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
@@ -23,7 +22,6 @@ data Scope = Scp { _spec :: Label {-indirect reference-}}
 
 data ScopeType = Local Scope {-only visible within a limited scope-} | Global {-visible everywhere-}
 
-
 -- A data definition is a QDefinition that may have additional notes. 
 -- It also has attributes like derivation, source, etc.
 data DataDefinition = DatDef { _qd :: QDefinition
@@ -35,7 +33,6 @@ data DataDefinition = DatDef { _qd :: QDefinition
                              }
 makeLenses ''DataDefinition
 
--- this works because UnitalChunk is a Chunk
 instance HasUID             DataDefinition where uid = qd . uid
 instance NamedIdea          DataDefinition where term = qd . term
 instance Idea               DataDefinition where getA c = getA $ c ^. qd
@@ -59,20 +56,10 @@ mkDDL :: QDefinition -> [Reference] -> Derivation -> Label -> Maybe [Sentence] -
 mkDDL a b c label e = DatDef a Global b c label e
 
 qdFromDD :: DataDefinition -> QDefinition
-qdFromDD (DatDef a _ _ _ _ _) = a
+qdFromDD dd = dd ^. qd
 
 -- Used to help make Qdefinitions when uid, term, and symbol come from the same source
 mkQuantDef :: (Quantity c) => c -> Expr -> QDefinition
 mkQuantDef cncpt equation = datadef $ getUnit cncpt --should [Reference] be passed in at this point?
-  where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) a equation
-        datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) equation
-
-mkQuantDef' :: (Quantity c) => c -> Expr -> QDefinition
-mkQuantDef' cncpt equation = quantdef $ getUnit cncpt --should references be passed in at this point?
-  where quantdef (Just a) = fromEqn'''  (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) a equation
-        quantdef Nothing  = fromEqn'''' (cncpt ^. uid) (cncpt ^. term) EmptyS
-                           (eqSymb cncpt) equation
-
+  where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS (eqSymb cncpt) a equation
+        datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS (eqSymb cncpt) equation

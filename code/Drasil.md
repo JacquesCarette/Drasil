@@ -144,3 +144,8 @@ under the namespace *Language.Drasil*, which will thus be omitted.
   a String has not spaces (hard error otherwise) and a routine to sort by 
   (Implementation!) symbol. [The latter function could be moved to docLang, but
   it is still odd]
+
+- **Chunk/Eq**: Short for 'Equation' which means a Quantity which has a definition,
+  both in words and through an equation.
+
+- **Chunk/DataDefinition**:

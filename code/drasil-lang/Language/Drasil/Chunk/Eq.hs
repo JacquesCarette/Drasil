@@ -1,7 +1,5 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.Eq 
-  (QDefinition, fromEqn, fromEqn', equat
-  , ec, qua, fromEqn''', fromEqn'''') where
+module Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', equat, ec) where
 
 import Control.Lens ((^.), makeLenses, view)
 import Language.Drasil.Development.Unit (unitWrapper, MayHaveUnit(getUnit))
@@ -46,15 +44,6 @@ fromEqn nm desc def symb un eqn =
 --FIXME: Space hack
 fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> QDefinition
 fromEqn' nm desc def symb eqn = EC (mkQuant nm desc symb Real Nothing Nothing) def eqn
-
--- The next two variants are only used in Chunk.DataDefinitions.
-fromEqn''' :: (IsUnit u, ConceptDomain u) => 
-  String -> NP -> Sentence -> Symbol -> u -> Expr -> QDefinition
-fromEqn''' nm desc def symb un eqn = 
-  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) def eqn
-
-fromEqn'''' :: String -> NP -> Sentence -> Symbol -> Expr -> QDefinition
-fromEqn'''' nm desc def symb eqn = EC (mkQuant nm desc symb Real Nothing Nothing) def eqn
 
 -- | Smart constructor for QDefinitions. Requires a quantity and its defining 
 -- equation. HACK - makes the definition EmptyS !!! FIXME

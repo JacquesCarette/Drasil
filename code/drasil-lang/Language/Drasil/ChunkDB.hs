@@ -1,7 +1,7 @@
-{-# LANGUAGE TemplateHaskell, TypeFamilies #-}
+{-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.ChunkDB 
   ( ChunkDB, cdb
-  , HasSymbolTable(..), symbolMap, symbLookup, getUnitLup
+  , HasSymbolTable(..), symbolMap, symbLookup
   , HasTermTable(..), termLookup
   , HasDefinitionTable(..), conceptMap, defLookup
   , HasUnitTable(..), unitMap, collectUnits
@@ -77,8 +77,8 @@ class HasUnitTable s where
   unitTable :: Lens' s UnitMap
 
 -- | Gets a unit if it exists, or Nothing.        
-getUnitLup :: HasSymbolTable s => (HasUID c, MayHaveUnit c) => c -> s -> Maybe UnitDefn
-getUnitLup c m = getUnit $ symbLookup (c ^. uid) (m ^. symbolTable)
+getUnitLup :: HasSymbolTable s => (HasUID c, MayHaveUnit c) => s -> c -> Maybe UnitDefn
+getUnitLup m c = getUnit $ symbLookup (c ^. uid) (m ^. symbolTable)
 
 -- | Looks up an uid in the term table. If nothing is found, an error is thrown
 termLookup :: (HasUID c) => c -> TermMap -> IdeaDict
@@ -112,4 +112,4 @@ instance HasDefinitionTable ChunkDB where defTable    = cdefs
 instance HasUnitTable       ChunkDB where unitTable   = cunitDB
 
 collectUnits :: HasSymbolTable s => (HasUID c, Quantity c) => s -> [c] -> [UnitDefn]
-collectUnits m symb = map unitWrapper $ concatMap maybeToList $ map (\x -> getUnitLup x m) symb
+collectUnits m symb = map unitWrapper $ concatMap maybeToList $ map (getUnitLup m) symb

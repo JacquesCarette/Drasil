@@ -146,6 +146,10 @@ under the namespace *Language.Drasil*, which will thus be omitted.
   it is still odd]
 
 - **Chunk/Eq**: Short for 'Equation' which means a Quantity which has a definition,
-  both in words and through an equation.
+  both in words and through an equation. Called QDefinition.
+  (Should not be exported, DataDefinition should be used instead)
 
-- **Chunk/DataDefinition**:
+- **Chunk/DataDefinition**: A DataDefinition is a QDefinition which is decorated
+  with a variety of information. Should be the main structure used.
+
+- **ChunkDB**:

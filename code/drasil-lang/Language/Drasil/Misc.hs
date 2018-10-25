@@ -71,7 +71,7 @@ analyze a True (num, den) = findUnit a (num, den)
 analyze a False (num, den) = findUnit a (den, num)
 
 convert :: HasSymbolTable ctx => ctx -> ([SF], [SF]) -> ([Maybe UnitDefn], [Maybe UnitDefn])
-convert (num, den) = combine ((reorder (map (\x -> getUnitLup x symbtab) num)) ([], []), reorder (map (\x -> getUnitLup x symbtab) den) ([], []))
+convert (num, den) = combine ((reorder (map (getUnitLup symbtab) num)) ([], []), reorder (map (\x -> getUnitLup x symbtab) den) ([], []))
 where reorder [] lst = lst
       reorder (frst:rst) lst = reorder rst (divide frst lst)
       divide (UPow a int) x@(val1, val2) = error "Exponential not yet implemented"

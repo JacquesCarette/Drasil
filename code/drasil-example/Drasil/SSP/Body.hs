@@ -278,8 +278,7 @@ sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +
   S " input instead of a floating point number",
   S "Determine if the inputs satisfy the required physical and software constraints",
   S "Identify the most likely failure surface within the possible input range",
-  S "Find the factor of safety for the slope",
-  S "Find the displacement of soil that will occur on the slope"]
+  S "Find the factor of safety for the slope"]
   
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",

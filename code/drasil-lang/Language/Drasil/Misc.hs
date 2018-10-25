@@ -1,7 +1,7 @@
-module Language.Drasil.Misc where
+module Language.Drasil.Misc(mkTable, noSpaces, sortBySymbol) where
 
 import Data.List (sortBy)
-import Language.Drasil.Classes (HasSymbol(symbol))
+import Language.Drasil.Classes.Core (HasSymbol(symbol))
 import Language.Drasil.Symbol (compsy)
 import Language.Drasil.Stages (Stage(Implementation))
 

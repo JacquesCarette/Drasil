@@ -140,4 +140,7 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 
 - **Chunk/Unitary**: A Unitary is a Quantity that must have a unit.
 
-- **Misc**:
+- **Misc**: Some, well, miscellaneous routines. To make a table, to check that
+  a String has not spaces (hard error otherwise) and a routine to sort by 
+  (Implementation!) symbol. [The latter function could be moved to docLang, but
+  it is still odd]

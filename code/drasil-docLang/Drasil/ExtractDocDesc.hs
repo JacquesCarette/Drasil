@@ -1,4 +1,4 @@
-module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc ) where
+module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc) where
 
 import Control.Lens(makeLenses, (^.), view)
 import Drasil.DocumentLanguage
@@ -236,16 +236,16 @@ getSCSSub (CorrSolnPpties c) = concatMap getCon' c
 -- The definition of IM should not be collected because even the definition is at type
 -- sentence, but the definition is not shown in Document.
 getIM :: InstanceModel -> [Sentence]
-getIM im = (im ^. derivations) ++ (fromMaybe [] (im ^. getNotes))
+getIM im = (im ^. derivations) ++ (im ^. getNotes)
 
 getGD :: GenDefn -> [Sentence]
-getGD gd = [gd ^. defn] ++ (gd ^. derivations) ++ (fromMaybe [] (gd ^. getNotes))
+getGD gd = [gd ^. defn] ++ (gd ^. derivations) ++ (gd ^. getNotes)
 
 getDD :: DataDefinition -> [Sentence]
-getDD dd = (dd ^. derivations) ++ (fromMaybe [] (dd ^. getNotes))
+getDD dd = (dd ^. derivations) ++ (dd ^. getNotes)
 
 getTM :: TheoryModel -> [Sentence]
-getTM tm = (fromMaybe [] (tm ^. getNotes)) ++ concatMap getTC (tm ^. valid_context) ++
+getTM tm = (tm ^. getNotes) ++ concatMap getTC (tm ^. valid_context) ++
  map (^. defn) (tm ^. operations) ++ map (^. defn) (tm ^. defined_quant)
   ++ map (^. defn) (tm ^. defined_fun)
 

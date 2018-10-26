@@ -1,6 +1,8 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.Theory 
-  ( tc', TheoryModel, tm, tm', Theory(invariants, defined_quant, defined_fun))where
+  ( tc', TheoryModel, tm, tm', TheoryChunk,
+   Theory(invariants, defined_quant, defined_fun, valid_context,
+    operations))where
 
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import Language.Drasil.Chunk.Eq (QDefinition)

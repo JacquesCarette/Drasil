@@ -8,12 +8,12 @@ import Language.Drasil.Development (UnitDefn, unitWrapper) -- FIXME?
 import Control.Lens ((^.))
 
 import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, 
-  DocSection (SSDSec, AuxConstntSec, Bibliography, IntroSec, RefSec, Verbatim), 
-  LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
+  DocSection (..), LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
   IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
   RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
   Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
+  TraceabilitySec(TraceabilityProg),
   dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
   outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF, tsymb'')
 import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel,
@@ -155,7 +155,11 @@ mkSRS = RefSec (RefProg intro [
         )
       ]
     ):  
-  (map Verbatim [reqS, likelyChgsSect, unlikelyChgsSect, traceMAndG]) ++
+  (map Verbatim [reqS, likelyChgsSect, unlikelyChgsSect]) ++
+  TraceabilitySec
+    (TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
+  (map UlC traceIntro2) ++ 
+  [LlC traceFig1, LlC traceFig2]) []) :
     AuxConstntSec (AuxConsProg progName specParamValList) :
     Bibliography : []
 
@@ -472,12 +476,6 @@ unlikelyChgsList = mkEnumSimpleD unlikelyChgs
 --------------------------------------------------
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
 --------------------------------------------------
-
-traceMAndG :: Section
-traceMAndG = traceMGF traceRefList traceTrailing
-  (map LlC traceRefList ++
-  (map UlC traceIntro2) ++ 
-  [LlC traceFig1, LlC traceFig2]) []
 
 traceRefList :: [LabelledContent]
 traceRefList = [traceTable1, traceTable2, traceTable3]

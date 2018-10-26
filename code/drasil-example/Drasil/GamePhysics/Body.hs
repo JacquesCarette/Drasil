@@ -12,7 +12,8 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   IntroSub(..), RefSec(..), RefTab(..), SCSSub(..), SSDSec(SSDProg), 
   SSDSub(SSDSubVerb, SSDSolChSpec), SolChSpec(SCSProg), SubSec, TConvention(..), 
   TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
-  assembler, dataConstraintUncertainty, inDataConstTbl, intro, mkDoc,
+  TraceabilitySec(TraceabilityProg), assembler, dataConstraintUncertainty,
+  inDataConstTbl, intro, mkDoc, outDataConstTbl,
   mkEnumSimpleD, outDataConstTbl, reqF, sSubSec, siCon, siSTitl, siSent,
   traceMGF, tsymb, valsOfAuxConstantsF)
 
@@ -106,7 +107,10 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
     ):
   (map Verbatim [requirements, likelyChanges, unlikelyChanges]) ++
   [ExistingSolnSec (ExistSolnVerb  off_the_shelf_solutions)] ++
-  (map Verbatim [traceability_matrices_and_graph, values_of_auxiliary_constatnts]) ++
+  TraceabilitySec
+    (TraceabilityProg [traceMatTabReqGoalOther, traceMatTabAssump,
+  traceMatTabDefnModel] traceability_matrices_and_graph_traces (map LlC [traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) []) :
+  ([Verbatim values_of_auxiliary_constatnts]) ++
   (Bibliography : [])
     where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 

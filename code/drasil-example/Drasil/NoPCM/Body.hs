@@ -41,8 +41,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   RefSec(RefProg), RefTab(TAandA, TUnits), 
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
-  reqF, termDefnF, traceMGF, tsymb, valsOfAuxConstantsF, filterSectionForSentence,
-  filterSectionForExpr, getDocDesc, egetDocDesc)
+  reqF, termDefnF, traceMGF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc)
 import qualified Drasil.DocumentLanguage.Units as U (toSentence) 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
   isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP)
@@ -80,7 +79,7 @@ this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
 
 check_si :: [UnitDefn]
-check_si = collectUnits nopcm_SymbMap symbT 
+check_si = collectUnits nopcm_SymbMap symbTT 
 
 -- This contains the list of symbols used throughout the document
 nopcm_Symbols :: [DefinedQuantityDict]
@@ -158,7 +157,7 @@ nopcm_si = SI {
   _kind = srs,
   _authors = [thulasi],
   _units = check_si,
-  _quants = symbT,
+  _quants = symbTT,
   _concepts = nopcm_Symbols,
   _definitions = [dd1HtFluxCQD],          --dataDefs
   _datadefs = [dd1HtFluxC],
@@ -192,10 +191,6 @@ printSetting = PI nopcm_SymbMap defaultConfiguration
 assumps_Nopcm_list_new :: [AssumpChunk]
 assumps_Nopcm_list_new = [newA1, newA2, newA3, newA5NoPCM, newA6NoPCM,
   newA7, newA8, newA9, newA9NoPCM, newA14, newA15, newA16, newA19, newA20]
-
-symbT :: [DefinedQuantityDict]
-symbT = ccss (getDoc $ mkDoc (filterSectionForSentence mkSRS) for nopcm_si)
- (egetDoc $ mkDoc (filterSectionForExpr mkSRS) for nopcm_si) nopcm_SymbMap
 
 symbTT :: [DefinedQuantityDict]
 symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) nopcm_SymbMap

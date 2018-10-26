@@ -534,16 +534,3 @@ mkAppndxSec (AppndxProg cs) = SRS.appendix cs []
 -- Helper
 siSys :: SystemInformation -> IdeaDict
 siSys SI {_sys = sys} = nw sys
-
-filterSectionForSentence :: [DocSection] -> [DocSection]
-filterSectionForSentence (hd:tl) = case hd of
-  (RefSec _) -> [] ++ filterSectionForSentence tl
-  (AppndxSec _) -> [] ++ filterSectionForSentence tl
-  a -> [a] ++ filterSectionForSentence tl
-filterSectionForSentence [] = []
-
-filterSectionForExpr :: [DocSection] -> [DocSection]
-filterSectionForExpr (hd:tl) = case hd of
-  (RefSec _) -> [] ++ filterSectionForSentence tl
-  a -> [a] ++ filterSectionForSentence tl
-filterSectionForExpr [] = []

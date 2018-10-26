@@ -14,8 +14,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
   assembler, dataConstraintUncertainty, inDataConstTbl, intro, mkDoc,
   mkEnumSimpleD, outDataConstTbl, reqF, sSubSec, siCon, siSTitl, siSent,
-  traceMGF, tsymb, valsOfAuxConstantsF,filterSectionForSentence, filterSectionForExpr
-  , getDocDesc, egetDocDesc)
+  traceMGF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc)
 
 import qualified Drasil.DocLang.SRS as SRS
 
@@ -76,7 +75,7 @@ chipmunkSRS' :: Document
 chipmunkSRS' = mkDoc mkSRS for' chipmunkSysInfo
 
 check_si :: [UnitDefn] -- FIXME
-check_si = collectUnits everything symbT 
+check_si = collectUnits everything symbTT 
 
 mkSRS :: DocDesc 
 mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
@@ -134,10 +133,6 @@ chipmunkSysInfo = SI {
   _sysinfodb = everything,
   _refdb = cpRefDB
 }
-
-symbT :: [DefinedQuantityDict]
-symbT = ccss (getDoc $ mkDoc (filterSectionForSentence mkSRS) for' chipmunkSysInfo)
- (egetDoc $ mkDoc (filterSectionForExpr mkSRS) for' chipmunkSysInfo) everything
 
 symbTT :: [DefinedQuantityDict]
 symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) everything

@@ -16,7 +16,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
   outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF, tsymb'',
-  filterSectionForSentence, filterSectionForExpr, getDocDesc, egetDocDesc)
+  getDocDesc, egetDocDesc)
 import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel,
   likeChg, probDesc, sysCont, unlikeChg)
 
@@ -77,7 +77,7 @@ this_si = map unitWrapper [metre, kilogram, second] ++
 --Will there be a table of contents?
 
 check_si :: [UnitDefn]
-check_si = collectUnits swhsSymMap symbT 
+check_si = collectUnits swhsSymMap symbTT
 
 swhsAuthors :: Sentence
 swhsAuthors = S $ manyNames swhsPeople
@@ -116,10 +116,6 @@ printSetting = PI swhsSymMap defaultConfiguration
     -- Redundant b/c the unitals are not really concepts (yet). There
     -- Will still likely be a better way to do this.
   --FIXME: Should be all Named, not just acronyms at the end.
-
-symbT :: [DefinedQuantityDict]
-symbT =  ccss (getDoc $ mkDoc (filterSectionForSentence mkSRS) for swhs_si)
- (egetDoc $ mkDoc (filterSectionForExpr mkSRS) for swhs_si) swhsSymMap
 
 symbTT :: [DefinedQuantityDict]
 symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) swhsSymMap

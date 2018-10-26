@@ -6,7 +6,7 @@ import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn,
   thModel, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (surface)
 
-import Data.Drasil.Phrase(of_'')
+import Data.Drasil.Phrase(of_'', compoundNC)
 
 ----Acronyms-----
 acronyms :: [CI]

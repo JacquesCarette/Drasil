@@ -11,6 +11,7 @@ import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation, instanceM
 
 import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                -- Vector - Name conflict (defined in file)
+import Language.Drasil.Development (comp_unitdefn)
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map (elems)
@@ -534,22 +535,6 @@ mkAppndxSec (AppndxProg cs) = SRS.appendix cs []
 siSys :: SystemInformation -> IdeaDict
 siSys SI {_sys = sys} = nw sys
 
---BELOW IS IN THIS FILE TEMPORARILY--
---Creates Contents using an uid and description (passed in as a Sentence).
-
-mkRequirementL :: String -> Sentence -> Label -> LabelledContent
-mkRequirementL i desc label = mkRawLC (Requirement (frc i desc label)) label
-
-mkRequirement :: String -> Sentence -> String -> LabelledContent
-mkRequirement i desc shrtn = mkRawLC (Requirement (frc i desc (mkLabelSame shrtn (Req FR)))) (mkLabelSame shrtn (Req FR)) --FIXME: label made twice?
-
-mkLklyChnk :: String -> Sentence -> String -> LabelledContent
-mkLklyChnk i desc shrtn = mkRawLC (Change (lc i desc (mkLabelSame shrtn LCh))) (mkLabelSame shrtn LCh) --FIXME: label made twice?
-
-mkUnLklyChnk :: String -> Sentence -> String -> LabelledContent 
-mkUnLklyChnk i desc shrtn = mkRawLC (Change (ulc i desc (mkLabelSame shrtn UnCh))) (mkLabelSame shrtn UnCh) --FIXME: label made twice?
-
-
 filterSectionForSentence :: [DocSection] -> [DocSection]
 filterSectionForSentence (hd:tl) = case hd of
   (RefSec _) -> [] ++ filterSectionForSentence tl
@@ -562,6 +547,3 @@ filterSectionForExpr (hd:tl) = case hd of
   (RefSec _) -> [] ++ filterSectionForSentence tl
   a -> [a] ++ filterSectionForSentence tl
 filterSectionForExpr [] = []
-
-
-

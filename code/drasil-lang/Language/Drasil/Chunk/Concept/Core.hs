@@ -1,38 +1,33 @@
-{-# Language TemplateHaskell, FlexibleInstances, TypeFamilies #-}
-module Language.Drasil.Chunk.Concept.Core where
+{-# Language TemplateHaskell #-}
+module Language.Drasil.Chunk.Concept.Core(ConceptChunk(ConDict), CommonConcept(ComConDict)
+  , ConceptInstance(ConInst)) where
 
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Chunk.NamedIdea (IdeaDict)
 import Language.Drasil.Chunk.CommonIdea (CI)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, CommonIdea(abrv))
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname), ShortName)
+  Definition(defn), ConceptDomain(cdom), Concept, CommonIdea(abrv), HasShortName(shortname))
+import Language.Drasil.ShortName (ShortName)
 
 import Control.Lens (makeLenses, (^.), view)
 
 -- === DATA TYPES === --
 --- ConceptChunk ---  
 
-data DefnAndDomain = DAD { _defn' :: Sentence, _cdom' :: [UID]}
-makeLenses ''DefnAndDomain
-
 -- | The ConceptChunk datatype is a Concept
--- ConDict is not exported, nor are _idea, and _dad.
 data ConceptChunk = ConDict { _idea :: IdeaDict
-                            , _dad :: DefnAndDomain
+                            , _defn' :: Sentence
+                            , _cdom' :: [UID]
                             }
 makeLenses ''ConceptChunk
-
-instance Definition    DefnAndDomain where defn = defn'
-instance ConceptDomain DefnAndDomain where cdom = cdom'
 
 instance Eq            ConceptChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance HasUID        ConceptChunk where uid = idea . uid
 instance NamedIdea     ConceptChunk where term = idea . term
 instance Idea          ConceptChunk where getA = getA . view idea
-instance Definition    ConceptChunk where defn = dad . defn'
-instance ConceptDomain ConceptChunk where cdom = dad . cdom'
+instance Definition    ConceptChunk where defn = defn'
+instance ConceptDomain ConceptChunk where cdom = cdom'
 instance Concept       ConceptChunk where
 
 
@@ -56,7 +51,7 @@ instance Eq            ConceptInstance where c1 == c2 = (c1 ^. uid) == (c2 ^. ui
 instance HasUID        ConceptInstance where uid = cc . idea . uid
 instance NamedIdea     ConceptInstance where term = cc . idea . term
 instance Idea          ConceptInstance where getA = getA . view (cc . idea)
-instance Definition    ConceptInstance where defn = cc . dad . defn'
-instance ConceptDomain ConceptInstance where cdom = cc . dad . cdom'
+instance Definition    ConceptInstance where defn = cc . defn'
+instance ConceptDomain ConceptInstance where cdom = cc . cdom'
 instance Concept       ConceptInstance where
 instance HasShortName  ConceptInstance where shortname = shnm

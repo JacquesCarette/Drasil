@@ -1,6 +1,8 @@
 -- | Contains the types associated to references
-module Language.Drasil.RefTypes(RefAdd, RefType(..), DType(..), ReqType(..)) where
+module Language.Drasil.RefTypes(
+  RefAdd, RefType(..), DType(..), Reference(Reference), ReqType(..)) where
 
+import Language.Drasil.ShortName (ShortName)
 import Language.Drasil.UID (UID)
 
 -- | Types of definitions
@@ -11,10 +13,7 @@ data DType = General
 
 type RefAdd = String
 
--- | What type of requirement are we dealing with?
-data ReqType = FR  -- ^ Functional Requirement
-             | NFR -- ^ Non-Functional Requirement
-
+data ReqType = FR | NFR
 -- | For building references. Defines the possible type of reference.
 data RefType = Tab    -- ^ Table
              | Lst   -- ^ List
@@ -22,18 +21,19 @@ data RefType = Tab    -- ^ Table
              | Sect   -- ^ Section
              | Def DType  -- ^ Definition (includes theoretical models) (DType used to set shortnames)
              | Mod    -- ^ Module
-             | Req ReqType -- ^ Requirement
              | Assump -- ^ Assumption
              | LCh     -- ^ Likely Change
              | UnCh     -- ^ Unlikely Change
+             | Req ReqType
              | EqnB   -- ^ Equation Block
              | Cite   -- ^ Citation
              | Goal   -- ^ Goal Statement
-             | PSD    -- ^ Physical System Description
              | Label RefType    -- ^ Label --FIXME: hack (#971)
              | Blank  -- ^ Prefix filler for ConceptInstance
              | DeferredCC UID  -- ^ For ConceptInstances --FIXME: Used by References to create a Deferred ShortName (#562)
              | Link -- ^ URI
+
+data Reference = Reference RefType RefAdd ShortName
 
 instance Show RefType where
   show Tab    = "Table"
@@ -49,7 +49,6 @@ instance Show RefType where
   show UnCh   = "Unlikely Change"
   show Cite   = "Citation"
   show Goal   = "Goal Statement"
-  show PSD    = "Physical System Description"
   show EqnB   = "Equation"
   show Blank  = "Blank"
   show (DeferredCC _) = error "Cannot directly display deferred reference types." -- FIXME

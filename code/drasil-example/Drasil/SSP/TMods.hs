@@ -38,7 +38,7 @@ l5 = mkLabelSame "hookesLaw"    (Def TM)
 factOfSafety :: TheoryModel
 factOfSafety = tm' (cw factOfSafety_rc)
   (tc' "factOfSafety" [qw fs, qw shearRes, qw mobShear] ([] :: [ConceptChunk])
-  [] [TCon Invariant factOfSafety_rel] [] [makeRef fredlund1977]) l1 [factOfSafety_desc]
+  [] [factOfSafety_rel] [] [makeRef fredlund1977]) l1 [factOfSafety_desc]
 
 ------------------------------------
 factOfSafety_rc :: RelationConcept
@@ -60,7 +60,7 @@ factOfSafety_desc = foldlSent [
 equilibrium :: TheoryModel
 equilibrium = tm' (cw equilibrium_rc)
   (tc' "equilibrium" [qw fx] ([] :: [ConceptChunk])
-  [] [TCon Invariant eq_rel] [] [makeRef fredlund1977]) l2 [eq_desc]
+  [] [eq_rel] [] [makeRef fredlund1977]) l2 [eq_desc]
 
 ------------------------------------  
 equilibrium_rc :: RelationConcept
@@ -74,7 +74,7 @@ eq_rel = foldr ($=) 0 (map summ [fx, fy, momntOfBdy])
 eq_desc :: Sentence
 eq_desc = foldlSent [S "For a body in static equilibrium, the net",
   plural force +:+. S "and net moments acting on the body will cancel out",
-  S "Assuming a 2D problem", sParen (makeRef newA8), S "the", getTandS fx `sAnd`
+  S "Assuming a 2D problem", sParen (makeRefS newA8), S "the", getTandS fx `sAnd`
   getTandS fy, S "will be equal to" +:+. E 0, S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation",
   S "will create a net moment equal to" +:+ E 0]
@@ -85,7 +85,7 @@ mcShrStrgth :: TheoryModel
 mcShrStrgth = tm' (cw mcShrStrgth_rc)
   (tc' "mcShrStrgth" [qw shrStress, qw normStress, qw fricAngle, qw cohesion] 
   ([] :: [ConceptChunk])
-  [] [TCon Invariant mcSS_rel] [] [makeRef fredlund1977]) l3 [mcSS_desc]
+  [] [mcSS_rel] [] [makeRef fredlund1977]) l3 [mcSS_desc]
 
 ------------------------------------
 mcShrStrgth_rc :: RelationConcept
@@ -111,7 +111,7 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
   S "relationship is not truly",
   phrase linear `sC` S "but assuming the effective", phrase normForce, 
   S "is strong enough, it can be approximated with a", phrase linear,
-  S "fit", sParen (makeRef newA9), S "where the cohesion", ch cohesion,
+  S "fit", sParen (makeRefS newA9), S "where the cohesion", ch cohesion,
   S "represents the", ch shrStress, S "intercept of the fitted line"]
 
 --
@@ -120,7 +120,7 @@ effStress :: TheoryModel
 effStress = tm' (cw effStress_rc)
   (tc' "effStress" [qw normStress, qw porePressure] 
   ([] :: [ConceptChunk])
-  [] [TCon Invariant effS_rel] [] [makeRef fredlund1977]) l4 [effS_desc]
+  [] [effS_rel] [] [makeRef fredlund1977]) l4 [effS_desc]
 
 ------------------------------------
 effStress_rc :: RelationConcept
@@ -150,7 +150,7 @@ hookesLaw :: TheoryModel
 hookesLaw = tm' (cw hookesLaw_rc)
   (tc' "effStress" [qw genForce, qw stffness, qw genDisplace] 
   ([] :: [ConceptChunk])
-  [] [TCon Invariant hksLw_rel] [] [makeRef stolle2008]) l5 [hksLw_desc]
+  [] [hksLw_rel] [] [makeRef stolle2008]) l5 [hksLw_desc]
 
 ------------------------------------
 hookesLaw_rc :: RelationConcept

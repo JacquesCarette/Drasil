@@ -4,18 +4,17 @@ module Language.Drasil.Chunk.Theory
    Theory(..), TheoryChunk, TheoryModel, tm, tm'
   )where
 
-import Language.Drasil.UID (UID)
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, HasReference(getReferences),
-  HasAdditionalNotes(getNotes), HasLabel(getLabel))
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
-import Language.Drasil.Chunk.Constrained.Core (TheoryConstraint)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.Quantity (Quantity, QuantityDict, qw)
-import Language.Drasil.Chunk.References (Reference)
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
-import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
+  Definition(defn), ConceptDomain(cdom), Concept, HasReference(getReferences),
+  HasAdditionalNotes(getNotes), HasLabel(getLabel), HasShortName(shortname))
+import Language.Drasil.Expr (Relation)
 import Language.Drasil.Label.Core (Label)
+import Language.Drasil.RefTypes (Reference)
+import Language.Drasil.Spec (Sentence)
+import Language.Drasil.UID (UID)
 
 import Control.Lens (Lens', view, makeLenses)
 
@@ -25,7 +24,7 @@ class HasUID t => Theory t where
   quantities    :: Lens' t [QuantityDict]
   operations    :: Lens' t [ConceptChunk] -- FIXME: Should not be Concept
   defined_quant :: Lens' t [QDefinition]
-  invariants    :: Lens' t [TheoryConstraint]
+  invariants    :: Lens' t [Relation]
   defined_fun   :: Lens' t [QDefinition]
 
 data SpaceDefn -- FIXME: This should be defined.
@@ -36,9 +35,9 @@ data TheoryChunk = TC { _tid :: UID
                       , _quan :: [QuantityDict]
                       , _ops  :: [ConceptChunk]
                       , _defq :: [QDefinition]
-                      , _invs :: [TheoryConstraint]
+                      , _invs :: [Relation]
                       , _dfun :: [QDefinition]
-                      , _ref :: [Reference]
+                      , _ref  :: [Reference]
                       }
 makeLenses ''TheoryChunk
 
@@ -83,12 +82,12 @@ instance HasShortName       TheoryModel where shortname = lb . shortname
 
 tc :: (Concept c, Quantity q) =>
     String -> [TheoryChunk] -> [SpaceDefn] -> [q] -> [c] -> 
-    [QDefinition] -> [TheoryConstraint] -> [QDefinition] -> [Reference] -> TheoryChunk
+    [QDefinition] -> [Relation] -> [QDefinition] -> [Reference] -> TheoryChunk
 tc cid t s q c dq inv dfn r = TC cid t s (map qw q) (map cw c) dq inv dfn r
 
 tc' :: (Quantity q, Concept c) =>
     String -> [q] -> [c] -> [QDefinition] -> 
-    [TheoryConstraint] -> [QDefinition] -> [Reference] -> TheoryChunk
+    [Relation] -> [QDefinition] -> [Reference] -> TheoryChunk
 tc' cid q c r = tc cid ([] :: [TheoryChunk]) [] q c r
 
 tm :: Concept c => c -> TheoryChunk -> Label -> TheoryModel

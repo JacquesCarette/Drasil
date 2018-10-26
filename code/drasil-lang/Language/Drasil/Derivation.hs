@@ -1,4 +1,4 @@
-module Language.Drasil.Chunk.Derivation where
+module Language.Drasil.Derivation where
 
 import Language.Drasil.Spec (Sentence)
 

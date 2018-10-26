@@ -6,6 +6,7 @@ import Data.List (nub)
 import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Language.Drasil.Development (UnitDefn, unitWrapper) -- FIXME
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 
@@ -42,7 +43,7 @@ import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
-import Data.Drasil.Phrase (for'')
+import Data.Drasil.Phrase (for'', the)
 import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
   figureLabel, foldlList, foldlsC, foldlSent, foldlSP, foldlSPCol, 
@@ -77,7 +78,7 @@ gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols)
   ++ map unitWrapper [pascal, newton]
 
 gbRefDB :: ReferenceDB
-gbRefDB = rdb [] [] assumptions [] [] gbCitations $ funcReqs ++ likelyChgs ++
+gbRefDB = rdb assumptions gbCitations $ funcReqs ++ likelyChgs ++
   unlikelyChgs
 
 printSetting :: PrintingInformation
@@ -93,7 +94,7 @@ ccs' :: [DefinedQuantityDict]
 ccs' = nub ((concatMap ccss'' $ getDoc glassBR_srs) ++ (concatMap ccss' $ egetDoc glassBR_srs))
 
 outputuid :: [String]
-outputuid = nub ((concatMap snames $ getDoc glassBR_srs) ++ (concatMap names $ egetDoc glassBR_srs))
+outputuid = nub ((concatMap sdep $ getDoc glassBR_srs) ++ (concatMap names $ egetDoc glassBR_srs))
 
 this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton]
@@ -136,8 +137,8 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand] HideDerivation
           , Constraints EmptyS dataConstraintUncertainty
-                        (foldlSent [makeRef SRS.valsOfAuxConsLabel, S "gives", (plural value `ofThe` S "specification"), 
-                        plural parameter, S "used in", (makeRef inputDataConstraints)])
+                        (foldlSent [makeRefS SRS.valsOfAuxConsLabel, S "gives", (plural value `ofThe` S "specification"), 
+                        plural parameter, S "used in", (makeRefS inputDataConstraints)])
                         [inputDataConstraints, outputDataConstraints]
           ]
         )
@@ -268,8 +269,8 @@ undIR = foldlList Comma List [phrase scndYrCalculus, phrase structuralMechanics,
 appStanddIR = foldlSent [S " In addition" `sC` plural reviewer, -- FIXME: space before "In" is a hack to get proper spacing
   S "should be familiar with the applicable", plural standard,
   S "for constructions using glass from", (foldlList Comma List
-  $ map makeRef [astm2009, astm2012, astm2016]) `sIn`
-  (makeRef SRS.referenceLabel)]
+  $ map makeRefS [astm2009, astm2012, astm2016]) `sIn`
+  (makeRefS SRS.referenceLabel)]
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
   S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
   S "related to", phrase blastTy]
@@ -299,10 +300,10 @@ purpOfDocIntro typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
 orgOfDocIntro, orgOfDocIntroEnd :: Sentence
 orgOfDocIntro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an", short srs,
-  S "for", phrase sciCompS, S "proposed by" +:+ makeRef koothoor2013
-  `sAnd` makeRef smithLai2005 `sC` S "with some", 
+  S "for", phrase sciCompS, S "proposed by" +:+ makeRefS koothoor2013
+  `sAnd` makeRefS smithLai2005 `sC` S "with some", 
   plural aspect, S "taken from Volere", phrase template,
-  S "16", makeRef rbrtsn2012]
+  S "16", makeRefS rbrtsn2012]
 
 orgOfDocIntroEnd = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
   S "are used to support", (plural definition `ofThe` S "different"),
@@ -319,7 +320,7 @@ orgOfDocIntroEnd = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
   
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
-  [makeRef sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
+  [makeRefS sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
    `sC` S "the", phrase user, S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself", (sParen $ short gLassBR) +:+. EmptyS,
@@ -342,7 +343,7 @@ sysCtxUsrResp = [S "Provide the input data related to the glass slab and blast",
     S "type ensuring no errors in the data entry",
   S "Ensure that consistent units are used for input variables",
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+
-    (sParen $ makeRef SRS.assumptLabel) +:+ S "are appropriate for any particular" +:+
+    (sParen $ makeRefS SRS.assumptLabel) +:+ S "are appropriate for any particular" +:+
     phrase problem +:+ S "input to the" +:+ phrase software]
 
 sysCtxSysResp :: [Sentence]
@@ -381,7 +382,7 @@ prodUseCaseTableUC1, prodUseCaseTableUC2 :: [Sentence]
 
 prodUseCaseTableUC1 = [titleize user, titleize' characteristic +:+ S "of the"
   +:+ phrase glaSlab `sAnd` S "of the" +:+. phrase blast +:+ S "Details in"
-  +:+ makeRef SRS.indPRCaseLabel]
+  +:+ makeRefS SRS.indPRCaseLabel]
 
 prodUseCaseTableUC2 = [short gLassBR, S "Whether" `sOr` S "not the" +:+
   phrase glaSlab +:+ S "is safe for the" +:+ S "calculated" +:+ phrase load
@@ -436,8 +437,8 @@ probEnding = foldl (+:+) EmptyS [S "interpret the", plural input_,
 {--Terminology and Definitions--}
 
 termsAndDesc = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
-  S "are extracted from" +:+ makeRef astm2009 `sIn`
-  (makeRef SRS.referenceLabel))) [termsAndDescBullets]
+  S "are extracted from" +:+ makeRefS astm2009 `sIn`
+  (makeRefS SRS.referenceLabel))) [termsAndDescBullets]
 
 {--Physical System Description--}
 
@@ -525,25 +526,25 @@ traceMatsAndGraphsTRef, traceMatsAndGraphsIMRef, traceMatsAndGraphsDDRef, traceM
   traceMatsAndGraphsARef, traceMatsAndGraphsLCRef :: [Sentence]
 
 traceMatsAndGraphsT = ["T1", "T2"]
-traceMatsAndGraphsTRef = map makeRef gbrTMods
+traceMatsAndGraphsTRef = map makeRefS gbrTMods
 
 traceMatsAndGraphsIM = ["IM1", "IM2", "IM3"]
-traceMatsAndGraphsIMRef = map makeRef gbrIMods
+traceMatsAndGraphsIMRef = map makeRefS gbrIMods
 
 traceMatsAndGraphsDD =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
-traceMatsAndGraphsDDRef = map makeRef dataDefns
+traceMatsAndGraphsDDRef = map makeRefS dataDefns
 
 traceMatsAndGraphsDataCons  = ["Data Constraints"]
-traceMatsAndGraphsDataConsRef = [makeRef SRS.datConLabel]
+traceMatsAndGraphsDataConsRef = [makeRefS SRS.datConLabel]
 
 traceMatsAndGraphsFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-traceMatsAndGraphsFuncReqRef = map makeRef funcReqs
+traceMatsAndGraphsFuncReqRef = map makeRefS funcReqs
 
 traceMatsAndGraphsA = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
-traceMatsAndGraphsARef = map makeRef assumptions
+traceMatsAndGraphsARef = map makeRefS assumptions
 
 traceMatsAndGraphsLC = ["LC1", "LC2", "LC3", "LC4", "LC5"]
-traceMatsAndGraphsLCRef = map makeRef likelyChgs
+traceMatsAndGraphsLCRef = map makeRefS likelyChgs
 
 traceMatsAndGraphsRowT1 :: [String]
 traceMatsAndGraphsRowT1 = traceMatsAndGraphsT ++ traceMatsAndGraphsIM ++ traceMatsAndGraphsDD
@@ -699,7 +700,7 @@ fig_4 = figureLabel 4 traceyMatrix
 
 appdxIntro = foldlSP [
   S "This", phrase appendix, S "holds the", plural graph,
-  sParen ((makeRef fig_5) `sAnd` (makeRef fig_6)),
+  sParen ((makeRefS fig_5) `sAnd` (makeRefS fig_6)),
   S "used for interpolating", plural value, S "needed in the", plural model]
 
 fig_5 = llcc (mkLabelRAFig "demandVSsod") $ fig (titleize figure +: S "5" +:+ (demandq ^. defn) +:+

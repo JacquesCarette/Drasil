@@ -10,6 +10,7 @@ import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.SentenceStructures (foldlSP)
 import Data.Drasil.Concepts.Documentation (section_, stakeholder, interest, product_, client,
   customer, endUser)
+import Data.Drasil.Phrase (the)
 
 stakehldrGeneral :: (Idea a) => a -> Sentence -> Section
 stakehldrGeneral kWord clientDetails = (SRS.stakeholder) [stakeholderIntro] subs

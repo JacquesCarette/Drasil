@@ -2,6 +2,8 @@ module Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe) where
 
 import Language.Drasil
 import Language.Drasil.Code (relToQD) -- FIXME, this should not be needed
+import Language.Drasil.Development (UnitDefn) -- FIXME
+
 import Control.Lens ((^.))
 
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
@@ -29,7 +31,7 @@ gbrTMods = [pbIsSafe, lrIsSafe]
 lrIsSafe :: TheoryModel
 lrIsSafe = tm' (cw lrIsSafe_RC)
    (tc' "isSafeLR" [qw is_safeLR, qw lRe, qw demand] ([] :: [ConceptChunk])
-   [relToQD locSymbMap lrIsSafe_RC] [TCon Invariant $ (sy is_safeLR) $= (sy lRe) $> (sy demand)] [] [makeRef astm2009]) 
+   [relToQD locSymbMap lrIsSafe_RC] [(sy is_safeLR) $= (sy lRe) $> (sy demand)] [] [makeRef astm2009]) 
    l1 [lrIsSafeDesc]
   where locSymbMap = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) glassBRsymb ([] :: [UnitDefn])
 
@@ -40,17 +42,17 @@ lrIsSafe_RC = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
 lrIsSafeDesc :: Sentence
 lrIsSafeDesc = tModDesc (is_safeLR) s ending
   where 
-    s = ((ch is_safePb) +:+ sParen (S "from" +:+ (makeRef pbIsSafe)) `sAnd` (ch is_safeLR))
+    s = ((ch is_safePb) +:+ sParen (S "from" +:+ (makeRefS pbIsSafe)) `sAnd` (ch is_safeLR))
     ending = (short lResistance) `isThe` (phrase lResistance) +:+ 
       sParen (S "also called capacity") `sC` S "as defined in" +:+. 
-      (makeRef calofCapacity) +:+ (ch demand) +:+ sParen (S "also referred as the" +:+ 
+      (makeRefS calofCapacity) +:+ (ch demand) +:+ sParen (S "also referred as the" +:+ 
       (titleize demandq)) `isThe` (demandq ^. defn) `sC` S "as defined in" +:+ 
-      makeRef calofDemand
+      makeRefS calofDemand
 
 pbIsSafe :: TheoryModel
 pbIsSafe = tm' (cw pbIsSafe_RC) 
   (tc' "isSafe" [qw is_safePb, qw prob_br, qw pb_tol] ([] :: [ConceptChunk])
-  [] [TCon Invariant $ (sy is_safePb) $= (sy prob_br) $< (sy pb_tol)] [] [makeRef astm2009])
+  [] [(sy is_safePb) $= (sy prob_br) $< (sy pb_tol)] [] [makeRef astm2009])
   l2 [pbIsSafeDesc]
 
 pbIsSafe_RC :: RelationConcept
@@ -61,10 +63,10 @@ pbIsSafeDesc :: Sentence
 pbIsSafeDesc = tModDesc (is_safePb) s ending
   where 
     s = (ch is_safePb) `sAnd` (ch is_safeLR) +:+ sParen (S "from" +:+
-      (makeRef lrIsSafe))
+      (makeRefS lrIsSafe))
     ending = ((ch prob_br) `isThe` (phrase prob_br)) `sC` S "as calculated in" +:+.
-      (makeRef probOfBreak) +:+ (ch pb_tol) `isThe` (phrase pb_tol) +:+ S "entered by the user"
+      (makeRefS probOfBreak) +:+ (ch pb_tol) `isThe` (phrase pb_tol) +:+ S "entered by the user"
 
-tModDesc :: VarChunk -> Sentence -> Sentence -> Sentence
+tModDesc :: QuantityDict -> Sentence -> Sentence -> Sentence
 tModDesc main s ending = foldlSent [S "If", ch main `sC` S "the glass is" +:+.
   S "considered safe", s +:+. S "are either both True or both False", ending]

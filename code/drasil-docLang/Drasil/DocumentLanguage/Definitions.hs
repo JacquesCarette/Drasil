@@ -14,6 +14,8 @@ module Drasil.DocumentLanguage.Definitions
 import Language.Drasil
 import Data.Drasil.Utils (eqUnR)
 
+import Drasil.DocumentLanguage.Units (toSentenceUnitless)
+
 import Control.Lens ((^.))
 
 -- | Synonym for a list of 'Field'
@@ -81,19 +83,15 @@ mkTMField :: HasSymbolTable ctx => TheoryModel -> ctx -> Field -> ModRow -> ModR
 mkTMField t _ l@Label fs  = (show l, (mkParagraph $ at_start t):[]) : fs
 mkTMField t _ l@DefiningEquation fs =
   (show l, (map (\x -> LlC $ eqUnR x (modifyLabelEqn (t ^. getLabel))) --FIXME: should this have labels?
-  (map tConToExpr (t ^. invariants)))) : fs 
+  (t ^. invariants))) : fs 
 mkTMField t m l@(Description v u) fs = (show l,
-  foldr (\x -> buildDescription v u x m) [] (map tConToExpr (t ^. invariants))) : fs
+  foldr (\x -> buildDescription v u x m) [] (t ^. invariants)) : fs
 mkTMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
-mkTMField t _ l@(Source) fs = (show l, map mkParagraph $ t ^. getReferences) : fs
+mkTMField t _ l@(Source) fs = (show l, map (mkParagraph . Ref) $ t ^. getReferences) : fs
 mkTMField t _ l@(Notes) fs = 
   maybe fs (\ss -> (show l, map mkParagraph ss) : fs) (t ^. getNotes)
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
-
-tConToExpr :: TheoryConstraint -> Expr
-tConToExpr (TCon Invariant x) = x
-tConToExpr (TCon AssumedCon x) = x
 
 -- TODO: buildDescription gets list of constraints to expr and ignores 't'.
 
@@ -101,7 +99,7 @@ tConToExpr (TCon AssumedCon x) = x
 mkDDField :: (HasSymbolTable ctx) => DataDefinition -> ctx -> Field -> ModRow -> ModRow
 mkDDField d _ l@Label fs = (show l, (mkParagraph $ at_start d):[]) : fs
 mkDDField d _ l@Symbol fs = (show l, (mkParagraph $ (P $ eqSymb d)):[]) : fs
-mkDDField d _ l@Units fs = (show l, (mkParagraph $ (unitToSentenceUnitless d)):[]) : fs
+mkDDField d _ l@Units fs = (show l, (mkParagraph $ (toSentenceUnitless d)):[]) : fs
 mkDDField d _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (sy d $= d ^. defnExpr) --FIXME: appending symbol should be done in the printing stage
   (modifyLabelEqn (d ^.getLabel))) :[]) : fs 
 mkDDField d m l@(Description v u) fs =
@@ -160,10 +158,10 @@ mkIMField i _ l@(Input) fs =
   [] -> (show l, [mkParagraph EmptyS]) : fs -- FIXME? Should an empty input list be allowed?
   (_:_) -> (show l, [mkParagraph $ foldl (sC) x xs]) : fs
   where (x:xs) = map (P . eqSymb) (i ^. imInputs)
-mkIMField i _ l@(InConstraints) fs  = (show l,
-  foldr ((:) . UlC . ulcc . EqnBlock) [] (map tConToExpr (i ^. inCons))) : fs
-mkIMField i _ l@(OutConstraints) fs = (show l,
-  foldr ((:) . UlC . ulcc . EqnBlock) [] (map tConToExpr (i ^. outCons))) : fs
+mkIMField i _ l@(InConstraints) fs  = 
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] (i ^. inCons)) : fs
+mkIMField i _ l@(OutConstraints) fs = 
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] (i ^. outCons)) : fs
 mkIMField i _ l@(Notes) fs = 
   maybe fs (\ss -> (show l, map mkParagraph ss) : fs) (i ^. getNotes)
 mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
@@ -174,13 +172,13 @@ mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
 firstPair' :: InclUnits -> DataDefinition -> ListTuple
 firstPair' (IgnoreUnits) d  = (P $ eqSymb d, Flat $ phrase d, Nothing)
 firstPair' (IncludeUnits) d = (P $ eqSymb d, Flat $ phrase d +:+ (sParen $
-  unitToSentenceUnitless d), Nothing)
+  toSentenceUnitless d), Nothing)
 
 -- | Create the descriptions for each symbol in the relation/equation
 descPairs :: (Quantity q) => InclUnits -> [q] -> [ListTuple]
 descPairs IgnoreUnits = map (\x -> (P $ eqSymb x, Flat $ phrase x, Nothing))
 descPairs IncludeUnits =
-  map (\x -> (P $ eqSymb x, Flat $ phrase x +:+ (sParen $ unitToSentenceUnitless x), Nothing))
+  map (\x -> (P $ eqSymb x, Flat $ phrase x +:+ (sParen $ toSentenceUnitless x), Nothing))
   -- FIXME: Need a Units map for looking up units from variables
 
 instance Show Field where

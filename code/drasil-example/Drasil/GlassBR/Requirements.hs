@@ -7,6 +7,7 @@ import Data.List (sortBy)
 import Language.Drasil
 import Drasil.DocLang (mkEnumSimple, mkListTuple)
 import Drasil.DocLang.SRS (datConLabel)
+import qualified Drasil.DocumentLanguage.Units as U (toSentence)
 
 import Data.Drasil.Concepts.Computation (inParam, inQty, inValue)
 import Data.Drasil.Concepts.Documentation (characteristic, condition,
@@ -63,7 +64,7 @@ inputGlassPropsDesc, checkInputWithDataConsDesc, outputValsAndKnownQuantsDesc ::
 checkGlassSafetyDesc :: NamedChunk -> Sentence
 
 inputGlassPropsDesc = foldlSent [at_start input_, S "the", plural quantity, S "from",
-  makeRef inputGlassPropsTable `sC` S "which define the" +:+. foldlList Comma List
+  makeRefS inputGlassPropsTable `sC` S "which define the" +:+. foldlList Comma List
   [phrase glass +:+ plural dimension, (glassTy ^. defn), S "tolerable" +:+
   phrase probability `sOf` phrase failure, (plural characteristic `ofThe` 
   phrase blast)] +: S "Note", ch plate_len `sAnd` ch plate_width,
@@ -76,8 +77,8 @@ inputGlassPropsTable = llcc (mkLabelSame "InputGlassPropsReqInputs" Tab) $
   [at_start symbol_, at_start description, S "Units"]
   (mkTable
   [ch,
-   at_start, unitToSentence] requiredInputs)
-  (S "Required Inputs following" +:+ makeRef inputGlassProps) True
+   at_start, U.toSentence] requiredInputs)
+  (S "Required Inputs following" +:+ makeRefS inputGlassProps) True
   where
     requiredInputs :: [QuantityDict]
     requiredInputs = (map qw [plate_len, plate_width, char_weight])
@@ -90,29 +91,29 @@ sysSetValsFollowingAssumpsDesc = foldlSent_ [S "The", phrase system, S "shall se
 
 sysSetValsFollowingAssumpsList :: [Sentence]
 sysSetValsFollowingAssumpsList = [foldlList Comma List (map ch (take 4 assumptionConstants)) `followA` standardValues,
-  ch loadDF +:+ S "from" +:+ makeRef loadDF, 
+  ch loadDF +:+ S "from" +:+ makeRefS loadDF, 
   short lShareFac `followA` glassLite,
-  ch hFromt +:+ S "from" +:+ makeRef hFromt,
-  ch glaTyFac +:+ S "from" +:+ makeRef glaTyFac,
-  ch standOffDis +:+ S "from" +:+ makeRef standOffDis,
-  ch aspRat +:+ S "from" +:+ makeRef aspRat]
+  ch hFromt +:+ S "from" +:+ makeRefS hFromt,
+  ch glaTyFac +:+ S "from" +:+ makeRefS glaTyFac,
+  ch standOffDis +:+ S "from" +:+ makeRefS standOffDis,
+  ch aspRat +:+ S "from" +:+ makeRefS aspRat]
 
 --FIXME:should constants, LDF, and LSF have some sort of field that holds
 -- the assumption(s) that're being followed? (Issue #349)
 
 checkInputWithDataConsDesc = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",
-  plural datumConstraint, S "mentioned in" +:+. makeRef datConLabel, 
+  plural datumConstraint, S "mentioned in" +:+. makeRefS datConLabel, 
   S "If any" `sOf` S "the", plural inParam, S "are out" `sOf` S "bounds" `sC`
   S "an", phrase errMsg, S "is displayed" `andThe` plural calculation, S "stop"]
 
 outputValsAndKnownQuantsDesc = foldlSent [titleize output_, S "the", plural inQty,
-  S "from", makeRef inputGlassProps `andThe` S "known", plural quantity,
-  S "from", makeRef sysSetValsFollowingAssumps]
+  S "from", makeRefS inputGlassProps `andThe` S "known", plural quantity,
+  S "from", makeRefS sysSetValsFollowingAssumps]
 
 checkGlassSafetyDesc cmd = foldlSent_ [S "If", (ch is_safePb), S "∧", (ch is_safeLR),
-  sParen (S "from" +:+ (makeRef pbIsSafe)
-  `sAnd` (makeRef lrIsSafe)), S "are true" `sC`
+  sParen (S "from" +:+ (makeRefS pbIsSafe)
+  `sAnd` (makeRefS lrIsSafe)), S "are true" `sC`
   phrase cmd, S "the", phrase message, Quote (safeMessage ^. defn),
   S "If the", phrase condition, S "is false, then", phrase cmd,
   S "the", phrase message, Quote (notSafe ^. defn)]
@@ -132,4 +133,4 @@ outputQuantsList = sortBy (compsy `on` get2) $ (mkReqList gbrIMods) ++ (mkReqLis
     get2 (_, b, _) = b
 
 mkReqList :: (NamedIdea c, HasSymbol c, HasShortName c, HasUID c, Referable c) => [c] -> [(Sentence, Symbol, Sentence)]
-mkReqList = map (\c -> (at_start c, symbol c Implementation, sParen (makeRef c)))
+mkReqList = map (\c -> (at_start c, symbol c Implementation, sParen (makeRefS c)))

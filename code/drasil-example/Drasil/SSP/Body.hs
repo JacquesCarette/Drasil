@@ -3,6 +3,8 @@ module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap, printSetting) where
 import Language.Drasil hiding (organization, Verb)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Language.Drasil.Development (UnitDefn, unitWrapper) -- FIXME
+
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
 
@@ -147,7 +149,7 @@ sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms)
   (map cw sspSymbols ++ srsDomains) this_si
 
 sspRefDB :: ReferenceDB
-sspRefDB = rdb [] [] newAssumptions [] [] sspCitations (sspRequirements ++
+sspRefDB = rdb newAssumptions sspCitations (sspRequirements ++
   likelyChgs ++ unlikelyChgs)
 
 printSetting :: PrintingInformation
@@ -252,7 +254,7 @@ orgSecEnd   = S "The" +:+ plural inModel +:+ S "provide the set of" +:+
 -- System Context automatically generated
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
-  [makeRef sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
+  [makeRefS sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
    `sC` S "the", phrase user, S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself" +:+. (sParen $ short ssp),
@@ -274,7 +276,7 @@ sysCtxUsrResp = [S "Provide the input data related to the soil layer(s) and wate
   S "table (if applicable), ensuring no errors in the data entry",
   S "Ensure that consistent units are used for input variables",
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+ sParen ( 
-  makeRef SRS.assumptLabel) +:+ S "are appropriate for any particular" +:+
+  makeRefS SRS.assumptLabel) +:+ S "are appropriate for any particular" +:+
   phrase problem +:+ S "input to the" +:+ phrase software]
   
 sysCtxSysResp :: [Sentence]
@@ -346,7 +348,7 @@ physSystIntro what how p1 p2 p3 indexref = foldlSP [
   plural property, S "of the", phrase what, how, S "Some", plural property,
   S "are", phrase p1, plural property `sC` S "and some are", phrase p2 `sOr`
   p3 +:+. plural property, S "The index convention for referencing which",
-  phrase p1 `sOr` phrase p2, S "is being used is shown in", makeRef indexref]
+  phrase p1 `sOr` phrase p2, S "is being used is shown in", makeRefS indexref]
 
 phys_sys_desc_bullets = enumBullet $ map foldlSent_ [
 
@@ -361,7 +363,7 @@ phys_sys_desc_bullets = enumBullet $ map foldlSent_ [
 
 phys_sys_desc_p2 = foldlSP [S "A", phrase fbd, S "of the", 
   plural force, S "acting on the", phrase slice, 
-  S "is displayed in", makeRef fig_forceacting]
+  S "is displayed in", makeRefS fig_forceacting]
 
 fig_indexconv :: LabelledContent
 fig_indexconv = llcc (mkLabelRAFig "IndexConvention") $ 

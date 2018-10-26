@@ -274,10 +274,10 @@ mass_B      = ucFromDQD (rigidParam "B" cB)
 -- CHUNKS WITHOUT UNITS --
 --------------------------
 
-cpUnitless :: [VarChunk]
+cpUnitless :: [QuantityDict]
 cpUnitless = [numParticles]
 
-numParticles :: VarChunk
+numParticles :: QuantityDict
 numParticles = vc "n" (nounPhraseSP "number of particles in a rigid body") lN Integer
 
 -----------------------

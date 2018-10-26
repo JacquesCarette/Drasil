@@ -6,7 +6,7 @@ import Data.List(nub)
 import Language.Drasil.Expr
 import Language.Drasil.Spec
 import Language.Drasil.Expr.Extract(dep)
-import Language.Drasil.Sentence.Extract(sdep)
+import Language.Drasil.Sentence.Extract (sdep)
 
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.ChunkDB (HasSymbolTable, symbLookup, symbolTable, HasDefinitionTable,

@@ -5,9 +5,8 @@ module Language.Drasil.Spec where
 import Language.Drasil.Unicode (Special(SqBrClose, SqBrOpen))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.RefTypes (RefAdd, RefType)
+import Language.Drasil.RefTypes (Reference)
 import Language.Drasil.Development.UnitLang (USymb)
-import Language.Drasil.Chunk.ShortName (ShortName)
 import Language.Drasil.UID (UID)
 
 -- | For writing "sentences" via combining smaller elements
@@ -24,7 +23,7 @@ data Sentence where
   S     :: String -> Sentence       -- Strings, used for Descriptions in Chunks
   Sp    :: Special -> Sentence
   P     :: Symbol -> Sentence
-  Ref   :: RefType -> RefAdd -> ShortName -> Sentence  -- Needs helper func to create Ref
+  Ref   :: Reference -> Sentence  -- Needs helper func to create Ref
                                                        -- See Reference.hs
   Quote :: Sentence -> Sentence     -- Adds quotation marks around a sentence
                                     
@@ -60,22 +59,7 @@ a `sC` b = a :+: S "," +:+ b
 (+:+.) :: Sentence -> Sentence -> Sentence
 a +:+. b = a +:+ b :+: S "."
 
--- | Helper which concatenates two sentences using ':+:' then adds a period to
--- the end.
-(+.) :: Sentence -> Sentence -> Sentence
-a +. b = a :+: b :+: S "."
-
 -- | Helper which concatenates two sentences using '+:+' then adds a colon to
 -- the end.
 (+:) :: Sentence -> Sentence -> Sentence
 a +: b = a +:+ b :+: S ":"
-
--- | Helper for concatenating two sentences with a semi-colon and space between them.
-semiCol :: Sentence -> Sentence -> Sentence
-a `semiCol` b = a :+: S ";" +:+ b
-
-sParenDash :: Sentence -> Sentence
-sParenDash x = S " (" :+: x :+: S ") - "
-
-sDash :: Sentence -> Sentence -> Sentence
-y `sDash` z = y +:+ S "-" +:+ z

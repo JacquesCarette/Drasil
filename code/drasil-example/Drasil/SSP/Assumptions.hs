@@ -57,7 +57,7 @@ monotonicF = foldlSent [S "The", phrase slpSrf,
 
 slopeG = foldlSent [S "geometry" `ofThe'` phrase slope `sC` S "and",
   plural mtrlPrpty `ofThe` plural soilLyr, S "are given as inputs",
-  sSqBr $ makeRef forDisEqlbL]
+  sSqBr $ makeRefS forDisEqlbL]
 
 homogeneousL = foldlSent [S "different layers" `ofThe'` phrase soil,
   S "are homogeneous" `sC` S "with consistent", plural soilPrpty,
@@ -76,8 +76,8 @@ linearF = foldlSent [at_start slice, S "to base normal and",
   plural shearForce, S "have", S "a linear relationship, dependent on the",
   getTandS fs `sC` S "and the Coulomb sliding law"]
 
-stressC = foldlSent [S "The", phrase stress `sDash` phrase strain,
-  S "curve for", phrase intrslce, S "relationships is",
+stressC = foldlSent [S "The stress - strain curve for",
+  phrase intrslce, S "relationships is",
   S "linear with a constant", phrase slope]
 
 planeS = foldlSent [S "The", phrase slope, S "and", phrase slpSrf +:+.

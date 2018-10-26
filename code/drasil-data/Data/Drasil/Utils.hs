@@ -26,9 +26,11 @@ module Data.Drasil.Utils
   ) where
 
 import Language.Drasil
-import Control.Lens ((^.))
+import Language.Drasil.Development (UnitDefn, getUnit)
 
+import Control.Lens ((^.))
 import Data.List (transpose)
+
 import Data.Drasil.Concepts.Documentation (fterms, input_, output_, symbol_, 
   useCaseTable)
 import Data.Drasil.Concepts.Math (unit_)
@@ -122,7 +124,7 @@ itemRefToSent a b = S a +:+ sParen b
 -- l - list whos length is to be matched
 -- r - reference to be repeated
 makeListRef :: [a] -> Section -> [Sentence]
-makeListRef l r = take (length l) $ repeat $ makeRef r
+makeListRef l r = take (length l) $ repeat $ Ref $ makeRef r
 
 -- | bulletFlat applies Bullet and Flat to a list.
 bulletFlat :: [Sentence] -> ListType

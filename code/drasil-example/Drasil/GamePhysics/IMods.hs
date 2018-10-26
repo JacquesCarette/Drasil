@@ -27,8 +27,8 @@ iModels_new = [im1_new, im2_new, im3_new]
 {-- Force on the translational motion  --}
 im1_new :: InstanceModel
 im1_new = im' transMot [qw vel_i, qw QP.time, qw QP.gravitationalAccel, qw force_i, qw mass_i] 
-  [ TCon AssumedCon $ sy vel_i $> 0, TCon AssumedCon $ sy QP.time $> 0, TCon AssumedCon $ sy QP.gravitationalAccel $> 0, 
-  TCon AssumedCon $ sy force_i $> 0, TCon AssumedCon $ sy mass_i $> 0 ] (qw acc_i) [] [] l1
+  [sy vel_i $> 0, sy QP.time $> 0, sy QP.gravitationalAccel $> 0, 
+            sy force_i $> 0, sy mass_i $> 0 ] (qw acc_i) [] [] l1
   [transMotDesc]
 
 transMot :: RelationConcept
@@ -58,9 +58,8 @@ transMotLeg = foldle1 (+:+) (+:+) $ map defList transMotLegTerms
 
 im2_new :: InstanceModel
 im2_new = im' rotMot [qw QP.angularVelocity, qw QP.time, qw torque_i, qw QP.momentOfInertia]
-  [TCon AssumedCon $ sy QP.angularVelocity $> 0, TCon AssumedCon $ sy QP.time $> 0,
-  TCon AssumedCon $ sy torque_i $> 0, TCon AssumedCon $ sy QP.momentOfInertia $> 0] 
-  (qw QP.angularAccel) [TCon AssumedCon $ sy QP.angularAccel $> 0] [] l2
+  [sy QP.angularVelocity $> 0, sy QP.time $> 0, sy torque_i $> 0, sy QP.momentOfInertia $> 0] 
+    (qw QP.angularAccel) [sy QP.angularAccel $> 0] [] l2
   [rotMotDesc]
 
 rotMot :: RelationConcept
@@ -86,9 +85,9 @@ rotMotLeg = foldle1 (+:+) (+:+) $ map defList rotMotLegTerms
 {-- 2D Collision --}
 
 im3_new :: InstanceModel
-im3_new = im' col2D [qw QP.time, qw QP.impulseS, qw mass_A, qw normalVect] [TCon AssumedCon $ sy QP.time $> 0,
-  TCon AssumedCon $ sy QP.impulseS $> 0, TCon AssumedCon $ sy mass_A $> 0, TCon AssumedCon $ sy normalVect $> 0]
-  (qw time_c) [TCon AssumedCon $ sy vel_A $> 0, TCon AssumedCon $ sy time_c $> 0] [] l3
+im3_new = im' col2D [qw QP.time, qw QP.impulseS, qw mass_A, qw normalVect] 
+  [sy QP.time $> 0, sy QP.impulseS $> 0, sy mass_A $> 0, sy normalVect $> 0]
+  (qw time_c) [sy vel_A $> 0, sy time_c $> 0] [] l3
   [col2DDesc]
 
 col2D :: RelationConcept

@@ -22,7 +22,7 @@ import Data.Drasil.SentenceStructures (foldlSent, sAnd, ofThe)
 --------------------------------
 
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence
-chgsStart a = makeRef a +:+ S "-"
+chgsStart a = makeRefS a +:+ S "-"
 
 likelyChgs :: [ConceptInstance]
 likelyChgs = [likeChgUTP, likeChgTCVOD, likeChgTCVOL, likeChgDT, likeChgDITPW, likeChgTLH]
@@ -68,17 +68,17 @@ unlikelyChgs = [unlikeChgWPFS, unlikeChgNIHG, unlikeChgNGS]
 
 unlikeChgWPFS, unlikeChgNIHG, unlikeChgNGS :: ConceptInstance
 unlikeChgWPFS = cic "unlikeChgWPFS" (
-  foldlSent [makeRef newA14, S ", ", chgsStart newA18, S "It is unlikely for the change of",
+  foldlSent [makeRefS newA14, S ", ", chgsStart newA18, S "It is unlikely for the change of",
   phrase water, S "from liquid to a solid or the state change of the", phrase phsChgMtrl,
   S "from a liquid to a gas to be considered"] ) "Water-PCM-Fixed-States" unlikeChgDom
 
 
 unlikeChgNIHG = cic "unlikeChgNIHG" (
   foldlSent [chgsStart newA16, S "Is used for the derivations of",
-  makeRef eBalanceOnWtr, S "and", makeRef eBalanceOnPCM] )
+  makeRefS eBalanceOnWtr, S "and", makeRefS eBalanceOnPCM] )
   "No-Internal-Heat-Generation" unlikeChgDom
 
 unlikeChgNGS = cic "unlikeChgNGS" (
-  foldlSent [chgsStart newA18, S "Is used for the derivation of", makeRef eBalanceOnPCM,
-  S "and for the equation given by", makeRef heatEInPCM, S "to be valid"] )
+  foldlSent [chgsStart newA18, S "Is used for the derivation of", makeRefS eBalanceOnPCM,
+  S "and for the equation given by", makeRefS heatEInPCM, S "to be valid"] )
   "No-Gaseous-State" unlikeChgDom

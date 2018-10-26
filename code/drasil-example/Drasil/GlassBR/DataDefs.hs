@@ -47,8 +47,8 @@ riskQD = mkQuantDef risk_fun risk_eq
 
 risk :: DataDefinition
 risk = mkDD riskQD 
-  [makeRef astm2009, makeRef beasonEtAl1998 +:+ sParen (S "Eq. 4-5"), 
-  makeRef campidelli +:+ sParen (S "Eq. 14")] 
+  [makeRef astm2009, makeRef beasonEtAl1998 {- FIXME +:+ sParen (S "Eq. 4-5") -},
+  makeRef campidelli {- FIXME +:+ sParen (S "Eq. 14") -}] 
   [{-derivation-}] "risk_fun"
   (Just $ aGrtrThanB : hRef : ldfRef : jRef : [])
 
@@ -132,7 +132,7 @@ dimLLQD :: QDefinition
 dimLLQD = mkQuantDef dimlessLoad dimLL_eq
 
 dimLL :: DataDefinition
-dimLL = mkDD dimLLQD [makeRef astm2009, makeRef campidelli +:+ sParen (S "Eq. 7")] [{-derivation-}] "dimlessLoad"
+dimLL = mkDD dimLLQD [makeRef astm2009, makeRef campidelli {- +:+ sParen (S "Eq. 7") -}] [{-derivation-}] "dimlessLoad"
   (Just $ qRef : aGrtrThanB : hRef : gtfRef : glassLiteRef : [])
 
 --DD8--
@@ -199,20 +199,20 @@ anGlass = (getAcc annealed +:+ S "is" +:+ phrase annealed +:+ S "glass")
 
 arRef :: Sentence
 arRef = (ch aspect_ratio +:+ S "is the" +:+ phrase aspect_ratio +:+.
-  S "defined in" +:+ makeRef aspRat)
+  S "defined in" +:+ makeRefS aspRat)
 
 ftGlass :: Sentence
 ftGlass = (getAcc fullyT +:+ S "is" +:+ phrase fullyT +:+ S "glass")
 
 hRef :: Sentence
 hRef = (ch min_thick +:+ S "is the" +:+ phrase min_thick `sC` 
-  S "which is based on the nominal thicknesses as shown in" +:+. makeRef hFromt)
+  S "which is based on the nominal thicknesses as shown in" +:+. makeRefS hFromt)
 
 hsGlass :: Sentence
 hsGlass = (getAcc heatS +:+ S "is" +:+ phrase heatS +:+ S "glass")
 
 ldfRef :: Sentence
-ldfRef = (ch lDurFac +:+ S "is the" +:+ phrase lDurFac +:+ S "as defined by" +:+. makeRef loadDF)
+ldfRef = (ch lDurFac +:+ S "is the" +:+ phrase lDurFac +:+ S "as defined by" +:+. makeRefS loadDF)
 
 pbTolUsr :: Sentence
 pbTolUsr = (ch pb_tol +:+ S "is the tolerable" +:+ phrase probability +:+ S "entered by the" +:+. 
@@ -220,7 +220,7 @@ pbTolUsr = (ch pb_tol +:+ S "is the tolerable" +:+ phrase probability +:+ S "ent
 
 jRef :: Sentence
 jRef = (ch stressDistFac +:+ S "is the" +:+ phrase stressDistFac `sC` S "as defined in" +:+. 
-  makeRef strDisFac)
+  makeRefS strDisFac)
 
 hMin :: Sentence
 hMin = (ch nom_thick +:+ S "is a function that maps from the nominal thickness"
@@ -230,19 +230,19 @@ qHtTlExtra :: Sentence
 qHtTlExtra = (ch tolLoad +:+ S "is the tolerable load which is obtained from Figure 7 using" 
   +:+ ch sdf_tol `sAnd` phrase aspect_ratio +:+ S "as" +:+ plural parameter +:+. S "using interpolation" 
   +:+ titleize' calculation `sOf` ch sdf_tol `sAnd` ch aspect_ratio +:+ 
-  S "are defined in" +:+. makeRef tolStrDisFac `sAnd` makeRef aspRat `sC` S "respectively")
+  S "are defined in" +:+. makeRefS tolStrDisFac `sAnd` makeRefS aspRat `sC` S "respectively")
 
 qHtTlTolRef :: Sentence
-qHtTlTolRef = (ch tolLoad +:+ S "is the tolerable load defined in" +:+. makeRef tolPre)
+qHtTlTolRef = (ch tolLoad +:+ S "is the tolerable load defined in" +:+. makeRefS tolPre)
 
 qRef :: Sentence
-qRef = (ch demand +:+ S "is the 3 second equivalent pressure, as given in" +:+. makeRef calOfDemandL)
+qRef = (ch demand +:+ S "is the 3 second equivalent pressure, as given in" +:+. makeRefS calOfDemandL)
 
 gtfRef :: Sentence
-gtfRef = (ch gTF +:+ S "is the" +:+. (phrase gTF `sC` S "as given by" +:+ makeRef glaTyFac))
+gtfRef = (ch gTF +:+ S "is the" +:+. (phrase gTF `sC` S "as given by" +:+ makeRefS glaTyFac))
 
 qHtRef :: Sentence
-qHtRef = (ch dimlessLoad +:+ S "is the" +:+ phrase dimlessLoad +:+ S "defined in" +:+. makeRef dimLL)
+qHtRef = (ch dimlessLoad +:+ S "is the" +:+ phrase dimlessLoad +:+ S "defined in" +:+. makeRefS dimLL)
 
 jRef2 :: Sentence
 jRef2 = (ch stressDistFac +:+ S "is the" +:+ phrase stressDistFac `sC` 
@@ -253,4 +253,4 @@ jtolRelToPbtol :: Sentence
 jtolRelToPbtol = (ch sdf_tol +:+ S " is calculated with reference to " +:+. ch pb_tol)
 
 glassLiteRef :: Sentence 
-glassLiteRef = (ch dimlessLoad +:+ S "is calculated with reference to" +:+. makeRef glassLiteL)
+glassLiteRef = (ch dimlessLoad +:+ S "is calculated with reference to" +:+. makeRefS glassLiteL)

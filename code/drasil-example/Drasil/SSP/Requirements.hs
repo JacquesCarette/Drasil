@@ -25,7 +25,7 @@ readAndStore, generateCSS, testSlipSrf, prepareSlipS, calculateFS, rankSlope,
 readAndStore = cic "readAndStore" ( foldlSent [
   S "Read the", phrase input_, S "file and store the" +:+. 
   plural datum, S "Necessary", plural inDatum, S "summarized in", 
-  makeRef sspInputDataTable]) "Read-and-Store" funcReqDom
+  makeRefS sspInputDataTable]) "Read-and-Store" funcReqDom
 
 generateCSS = cic "generateCSS" ( foldlSent [
   S "Generate potential", plural crtSlpSrf,S "for the", 
@@ -56,7 +56,7 @@ generateCSS' = cic "generateCSS'" ( foldlSent [
   plural fs]) "Generate-New-Critical-Slip-Surfaces" funcReqDom
 
 repeatFindFS = cic "repeatFindFS" ( foldlSent [
-  S "Repeat", (foldlList Comma List $ map makeRef [testSlipSrf, prepareSlipS,
+  S "Repeat", (foldlList Comma List $ map makeRefS [testSlipSrf, prepareSlipS,
   calculateFS, rankSlope, generateCSS']), S "until the", phrase fs_min,
   S "remains approximately the same over a",
   S "predetermined number of repetitions. Identify the", phrase slpSrf, 

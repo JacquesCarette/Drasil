@@ -2,13 +2,10 @@
 module Language.Drasil.Document.Core where
 
 import Language.Drasil.Chunk.AssumpChunk (AssumpChunk)
-import Language.Drasil.Chunk.Change (Change)
 import Language.Drasil.Chunk.Citation (BibRef)
-import Language.Drasil.Chunk.ReqChunk (ReqChunk)
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 
 import Language.Drasil.Classes (HasRefAddress(getRefAdd),
-  MayHaveLabel(getMaybeLabel), HasLabel(getLabel))
+  MayHaveLabel(getMaybeLabel), HasLabel(getLabel), HasShortName(shortname))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Label () -- for instances
@@ -56,9 +53,7 @@ data RawContent = Table [Sentence] [[Sentence]] Title Bool
                | Enumeration ListType -- ^ Lists
                | Definition DType [(Identifier, [Contents])]
                | Figure Lbl Filepath MaxWidthPercent -- ^ Should use relative file path.
-               | Requirement ReqChunk
                | Assumption AssumpChunk
-               | Change Change
                | Bib BibRef
      --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
                | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl

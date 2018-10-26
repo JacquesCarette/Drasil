@@ -7,6 +7,7 @@ module Language.Drasil.Classes (
   , Definition(defn)
   , ConceptDomain(cdom)
   , Concept
+  , HasShortName(shortname)
   , HasSymbol(symbol)
   , HasSpace(typ)
   , HasUnitSymbol(usymb)
@@ -26,24 +27,22 @@ module Language.Drasil.Classes (
   , HasRefAddress(getRefAdd)
   ) where
 
+-- some classes are so 'core' that they are defined elswhere
+-- also helps with cycles...
+import Language.Drasil.Classes.Core
+
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
-import Language.Drasil.Chunk.Derivation (Derivation)
-import Language.Drasil.Chunk.References (Reference)
+import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Development.UnitLang(UDefn, USymb)
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.Label.Core (Label, LblType)
+import Language.Drasil.Label.Core (Label)
 import Language.Drasil.NounPhrase.Core (NP)
+import Language.Drasil.RefTypes (Reference)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Spec (Sentence)
-import Language.Drasil.Symbol (Stage, Symbol)
 import Language.Drasil.UID (UID)
 
 import Control.Lens (Lens')
-
--- | The most basic item: having a unique key, here a UID
-class HasUID c where
-  -- | Provides a /unique/ id for internal Drasil use
-  uid :: Lens' c UID
 
 -- | A NamedIdea is a 'term' that we've identified (has an 'id') as 
 -- being worthy of naming.
@@ -75,11 +74,6 @@ class ConceptDomain c where
 -- | Concepts are 'Idea's with definitions and domains
 class (Idea c, Definition c, ConceptDomain c) => Concept c where
 
--- | A HasSymbol is anything which has a Symbol
-class HasSymbol c where
-  -- | Provides the Symbol --  for a particular stage of generation
-  symbol  :: c -> Stage -> Symbol
-  
 -- | HasSpace is anything which has a Space...
 class HasSpace c where
   typ      :: Lens' c Space
@@ -112,11 +106,6 @@ class HasLabel c where
 class MayHaveLabel c where
   getMaybeLabel :: c -> Maybe Label
 
--- HasRefAddress is associated with the HasLabel class due to
--- the current definition of a Label
-class HasRefAddress b where
-  getRefAdd :: Lens' b LblType 
-
 -- IsLabel is associated with String rendering
 class (HasLabel u, HasUID u) => IsLabel u where
 
@@ -142,3 +131,4 @@ class ExprRelat c where
 -- This is the 'correct' version of ExprRelat.
 class DefiningExpr c where
   defnExpr :: Lens' c Expr
+

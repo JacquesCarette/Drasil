@@ -66,7 +66,7 @@ glassTypeDesc = foldlSent [S "The standard E1300-09a for",
   [S "glass supported on one side acts as a", phrase cantilever]])]
 
 glassConditionDesc :: Sentence
-glassConditionDesc = foldlSent [S "Following", makeRef astm2009, sParen (S "pg. 1") `sC` 
+glassConditionDesc = foldlSent [S "Following", makeRefS astm2009, sParen (S "pg. 1") `sC` 
   S "this", phrase practice, S "does not apply to any form of", foldlList Comma Options $ map S ["wired",
   "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"], S "with", 
   phrase surface `sAnd` S "edge treatments that alter the glass strength"]
@@ -77,29 +77,29 @@ explainScenarioDesc = foldlSent [S "This", phrase system, S "only considers the 
 
 standardValuesDesc :: UnitaryChunk -> Sentence
 standardValuesDesc mainIdea = foldlSent [S "The", plural value, S "provided in",
-  makeRef SRS.valsOfAuxConsLabel, S "are assumed for the", phrase mainIdea, 
+  makeRefS SRS.valsOfAuxConsLabel, S "are assumed for the", phrase mainIdea, 
   sParen (ch mainIdea) `sC` S "and the", plural materialProprty `sOf` 
   foldlList Comma List (map ch (take 3 assumptionConstants))] +:+ 
-  (foldlList Comma List $ [makeRef probOfBreakL] ++ map makeRef [loadDF, 
+  (foldlList Comma List $ [makeRefS probOfBreakL] ++ map makeRefS [loadDF, 
   nonFL, dimLL, tolStrDisFac])
 
 glassLiteDesc :: Sentence
 glassLiteDesc = foldlSent [at_start glass, S "under consideration is assumed to be a single", 
-  phrase lite `semiCol` S "hence, the", phrase value `sOf` short lShareFac, S "is equal to 1 for all",
+  S "lite; hence, the", phrase value `sOf` short lShareFac, S "is equal to 1 for all",
   plural calculation `sIn` short gLassBR] +:+
-  (foldlList Comma List $ [makeRef calOfCapacityL] ++ [makeRef dimLL])
+  (foldlList Comma List $ [makeRefS calOfCapacityL] ++ [makeRefS dimLL])
 
 boundaryConditionsDesc :: Sentence
 boundaryConditionsDesc = foldlSent [S "Boundary", plural condition, S "for the",
   phrase glaSlab, S "are assumed to be 4-sided support for",
-  plural calculation] +:+ makeRef probOfBreakL
+  plural calculation] +:+ makeRefS probOfBreakL
 
 responseTypeDesc :: Sentence
 responseTypeDesc = foldlSent [S "The", phrase responseTy, S "considered in",
-  short gLassBR, S "is flexural"] +:+ makeRef probOfBreakL
+  short gLassBR, S "is flexural"] +:+ makeRefS probOfBreakL
 
 ldfConstantDesc :: QDefinition -> Sentence
 ldfConstantDesc mainConcept = foldlSent [S "With", phrase reference, S "to",
-  makeRef standardValues `sC` S "the", phrase value `sOf`
+  makeRefS standardValues `sC` S "the", phrase value `sOf`
   phrase mainConcept, sParen (ch mainConcept), S "is a", phrase constant,
-  S "in", short gLassBR] +:+ makeRef loadDF
+  S "in", short gLassBR] +:+ makeRefS loadDF

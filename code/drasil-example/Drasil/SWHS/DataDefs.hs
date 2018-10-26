@@ -55,8 +55,10 @@ dd3HtFusionQD = mkQuantDef htFusion htFusionEqn
 htFusionEqn :: Expr
 htFusionEqn = (sy latent_heat) / (sy mass)
 
+-- FIXME: need to allow page references in references.
 dd3HtFusion :: DataDefinition
-dd3HtFusion = mkDDL dd3HtFusionQD [makeRef bueche1986 +:+ sParen (S "pg. 282")] [] dd3HtFusionL Nothing
+dd3HtFusion = mkDDL dd3HtFusionQD [makeRef bueche1986 {- +:+ sParen (S "pg. 282") -} ] 
+  [] dd3HtFusionL Nothing
 
 ----
 

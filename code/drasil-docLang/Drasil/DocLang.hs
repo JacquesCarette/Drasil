@@ -8,8 +8,8 @@ module Drasil.DocLang (
     SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), ExistingSolnSec(..),
     StkhldrSec(StkhldrProg2),
     StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg), 
-    TSIntro(..), UCsSec(..), mkDoc, mkLklyChnk, mkRequirement, mkRequirementL,
-    mkUnLklyChnk, tsymb, tsymb'', mkEnumSimple, mkEnumSimpleD, mkListTuple,
+    TSIntro(..), UCsSec(..), mkDoc,
+    tsymb, tsymb'', mkEnumSimple, mkEnumSimpleD, mkListTuple,
     filterSectionForSentence,
     filterSectionForExpr,
     -- DocumentLanguage.Definitions
@@ -50,10 +50,9 @@ import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
     RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), 
     ScpOfProjSec(ScpOfProjProg), SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), 
     StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), TConvention(..), 
-    TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..), mkDoc, 
-    mkLklyChnk, mkRequirement, mkUnLklyChnk, tsymb, tsymb'',
+    TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..), mkDoc, tsymb, tsymb'',
     mkEnumSimple, mkEnumSimpleD, mkListTuple, filterSectionForSentence,
-    filterSectionForExpr, mkRequirementL)
+    filterSectionForExpr)
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, 
     InclUnits(IncludeUnits), Verbosity(Verbose), ddefn)
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)

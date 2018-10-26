@@ -5,12 +5,13 @@ module Language.Drasil.Chunk.Attribute
 
 import Control.Lens ((^.))
 
-import Language.Drasil.Chunk.Derivation (Derivation)
-import Language.Drasil.Chunk.References (Reference)
-import Language.Drasil.Chunk.ShortName (ShortName(ShortNm, Concat), HasShortName(shortname), shortname')
+import Language.Drasil.Derivation (Derivation)
+import Language.Drasil.ShortName (ShortName, shortname', getStringSN)
 
-import Language.Drasil.Classes (HasDerivation(derivations), HasReference(getReferences))
-import Language.Drasil.Spec (Sentence(EmptyS, S, (:+:)), (+:+), sC)
+import Language.Drasil.Classes (HasDerivation(derivations), HasReference(getReferences),
+  HasShortName(shortname))
+import Language.Drasil.RefTypes (Reference)
+import Language.Drasil.Spec (Sentence(EmptyS, S, Ref), (+:+), sC)
 
 --------------------------------------------------------------------------------
 
@@ -23,9 +24,9 @@ getSource c = foldList $ c ^. getReferences
   where
     foldList :: [Reference] -> Sentence
     foldList []       = EmptyS
-    foldList [x]      = x 
-    foldList [x, y]   = x +:+ S "and" +:+ y 
-    foldList (x:y:xs) = x `sC` (foldList (y:xs))
+    foldList [x]      = Ref x 
+    foldList [x, y]   = Ref x +:+ S "and" +:+ Ref y 
+    foldList (x:y:xs) = Ref x `sC` (foldList (y:xs))
 
 getDerivation :: HasDerivation c => c -> Derivation
 getDerivation c =  c ^. derivations
@@ -34,6 +35,4 @@ getShortName :: HasShortName c => c -> Sentence
 getShortName c = snToSentence $ c ^. shortname
 
 snToSentence :: ShortName -> Sentence
-snToSentence (ShortNm s) = S s
-snToSentence (Concat a b) = snToSentence a :+: snToSentence b
-snToSentence _ = error "Expected deferred lookup to have occurred before snToSentence."
+snToSentence = S . getStringSN

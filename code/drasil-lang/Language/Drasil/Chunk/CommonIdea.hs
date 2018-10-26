@@ -1,5 +1,5 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.CommonIdea ( CI, commonIdea , getAcc) where
+module Language.Drasil.Chunk.CommonIdea (CI, commonIdea , getAcc) where
 
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA), CommonIdea(abrv))
@@ -9,7 +9,7 @@ import Language.Drasil.NounPhrase (NP)
 import Control.Lens (makeLenses, view)
 
 -- | The common idea (with nounPhrase) data type. It must have a 
--- 'NounPhrase' for its 'term'.
+-- 'NounPhrase' for its 'term', and must have an abbreviation.
 data CI = CI { _cid :: UID, _ni :: NP, _ab :: String}
 makeLenses ''CI
 

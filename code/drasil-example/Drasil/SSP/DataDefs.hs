@@ -227,7 +227,7 @@ resShearWO = mkDDL resShearWOQD [makeRef chen2005] resShr_deriv_ssp resShearWOL 
 --FIXME: fill empty lists in
 
 resShearWOQD :: QDefinition
-resShearWOQD = mkQuantDef' shearRNoIntsl resShearWOEqn
+resShearWOQD = mkQuantDef shearRNoIntsl resShearWOEqn
 
 resShearWOEqn :: Expr
 resShearWOEqn = (((inxi slcWght) + (inxi surfHydroForce) *
@@ -248,7 +248,7 @@ mobShearWO = mkDDL mobShearWOQD [makeRef chen2005] mobShr_deriv_ssp mobShearWOL 
 --FIXME: fill empty lists in
 
 mobShearWOQD :: QDefinition
-mobShearWOQD = mkQuantDef' shearFNoIntsl mobShearWOEqn
+mobShearWOQD = mkQuantDef shearFNoIntsl mobShearWOEqn
 
 mobShearWOEqn :: Expr 
 mobShearWOEqn = ((inxi slcWght) + (inxi surfHydroForce) *
@@ -280,7 +280,7 @@ displcmntBasel = mkDDL displcmntBaselQD [makeRef stolle2008] stfMtrx_deriv_ssp d
 --FIXME: fill empty lists in
 
 displcmntBaselQD :: QDefinition
-displcmntBaselQD = mkQuantDef' genPressure displcmntBaselEqn
+displcmntBaselQD = mkQuantDef genPressure displcmntBaselEqn
 
 displcmntBaselEqn :: Expr
 displcmntBaselEqn = m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB)
@@ -288,7 +288,7 @@ displcmntBaselEqn = m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB)
 
 stfMtrx_deriv_ssp :: Derivation
 stfMtrx_deriv_ssp = [S "Using the force-displacement relationship of" +:+ 
-  (makeRef genDef8Label) +:+  S "to define stiffness matrix" +:+ ch shrStiffIntsl `sC`
+  (makeRefS genDef8Label) +:+  S "to define stiffness matrix" +:+ ch shrStiffIntsl `sC`
   S "as seen in" +:+. eqN 6] ++ [(E eq6)] ++ stfMtrx_deriv_sentences_ssp_s1 ++
   stfMtrx_deriv_sentences_ssp_s2 ++ [(E eq7)] ++ stfMtrx_deriv_sentences_ssp_s3
   ++ [(E eq8)] ++ stfMtrx_deriv_sentences_ssp_s4 ++ [(E eq9)] ++ [(E eq10)] ++ [(E eq11)]
@@ -366,18 +366,18 @@ fixme2QD = ec ufixme2 (inxi watrForce + inxiM1 watrForce)
 
 resShr_deriv_sentences_ssp_s1 :: [Sentence]
 resShr_deriv_sentences_ssp_s1 = [S "The", phrase shrResI, S "of a slice is", 
-  S "defined as", ch shrResI, S "in" +:+. makeRef genDef3Label, S "The",
+  S "defined as", ch shrResI, S "in" +:+. makeRefS genDef3Label, S "The",
   phrase nrmFSubWat, S "in the", phrase equation, S "for", ch shrResI,
   S "of the soil is defined in the perpendicular force equilibrium",
-  S "of a slice from", makeRef genDef2Label `sC` S "using the", getTandS nrmFSubWat,
-  S "of", makeRef effStress, S "shown in", eqN 1]
+  S "of a slice from", makeRefS genDef2Label `sC` S "using the", getTandS nrmFSubWat,
+  S "of", makeRefS effStress, S "shown in", eqN 1]
 
 resShr_deriv_sentences_ssp_s2 :: [Sentence]
 resShr_deriv_sentences_ssp_s2 = [plural value `ofThe'` S "interslice forces",
   ch intNormForce `sAnd` ch intShrForce, S "in the", phrase equation,
   S "are unknown, while the other", plural value,
   S "are found from the physical force", plural definition, S "of",
-  makeRef sliceWght, S "to" +:+. makeRef lengthLs,
+  makeRefS sliceWght, S "to" +:+. makeRefS lengthLs,
   S "Consider a force equilibrium without the affect of interslice forces" `sC`
   S "to obtain a solvable value as done for", ch nrmFNoIntsl, S "in", eqN 2]
 
@@ -421,11 +421,11 @@ resShrDerivation :: [Contents]
 resShrDerivation = [
 
   foldlSP [S "The", phrase shrResI, S "of a slice is", 
-  S "defined as", ch shrResI, S "in" +:+. makeRef genDef3Label, S "The",
+  S "defined as", ch shrResI, S "in" +:+. makeRefS genDef3Label, S "The",
   phrase nrmFSubWat, S "in the", phrase equation, S "for", ch shrResI,
   S "of the soil is defined in the perpendicular force equilibrium",
-  S "of a slice from", makeRef genDef2Label `sC` S "using the", getTandS nrmFSubWat,
-  S "of", makeRef effStress, S "shown in", eqN 1],
+  S "of a slice from", makeRefS genDef2Label `sC` S "using the", getTandS nrmFSubWat,
+  S "of", makeRefS effStress, S "shown in", eqN 1],
   
   eqUnR' $ (inxi nrmFSubWat) $= eqlExpr cos sin (\x y -> x -
   inxiM1 intShrForce + inxi intShrForce + y) - inxi baseHydroForce,
@@ -434,7 +434,7 @@ resShrDerivation = [
   ch intNormForce `sAnd` ch intShrForce, S "in the", phrase equation,
   S "are unknown, while the other", plural value,
   S "are found from the physical force", plural definition, S "of",
-  makeRef sliceWght, S "to" +:+. makeRef lengthLs,
+  makeRefS sliceWght, S "to" +:+. makeRefS lengthLs,
   S "Consider a force equilibrium without the affect of interslice forces" `sC`
   S "to obtain a solvable value as done for", ch nrmFNoIntsl, S "in", eqN 2],
 
@@ -467,7 +467,7 @@ resShrDerivation = [
 
 mobShr_deriv_sentences_ssp_s1 :: [Sentence]
 mobShr_deriv_sentences_ssp_s1 = [S "The", phrase mobShrI, S "acting on a slice is defined as",
-  ch mobShrI, S "from the force equilibrium in", makeRef genDef2Label `sC`
+  ch mobShrI, S "from the force equilibrium in", makeRefS genDef2Label `sC`
   S "also shown in", eqN 4]
 
 mobShr_deriv_sentences_ssp_s2 :: [Sentence]
@@ -479,7 +479,7 @@ mobShr_deriv_sentences_ssp_s2 = [S "The", phrase equation, S "is unsolvable, con
 mobShr_deriv_sentences_ssp_s3 :: [Sentence]
 mobShr_deriv_sentences_ssp_s3 = [S "The" +:+ plural value +:+ S "of" +:+ ch shearRNoIntsl `sAnd`
   ch shearFNoIntsl +:+ S "are now defined completely in terms of the" +:+
-  S "known force property" +:+ plural value +:+ S "of" +:+ makeRef sliceWght +:+ S "to" +:+. makeRef lengthLs]
+  S "known force property" +:+ plural value +:+ S "of" +:+ makeRefS sliceWght +:+ S "to" +:+. makeRefS lengthLs]
 
 
 mobShrDerivation_sentence :: [Sentence]
@@ -503,7 +503,7 @@ mobShrDerivation :: [Contents]
 mobShrDerivation = [
 
   foldlSP [S "The", phrase mobShrI, S "acting on a slice is defined as",
-  ch mobShrI, S "from the force equilibrium in", makeRef genDef2Label `sC`
+  ch mobShrI, S "from the force equilibrium in", makeRefS genDef2Label `sC`
   S "also shown in", eqN 4],
   
   eqUnR' $ inxi mobShrI $= eqlExpr sin cos
@@ -523,8 +523,8 @@ mobShrDerivation = [
   
   foldlSP [S "The", plural value, S "of", ch shearRNoIntsl `sAnd`
   ch shearFNoIntsl, S "are now defined completely in terms of the",
-  S "known force property", plural value, S "of", makeRef sliceWght, S "to", 
-  makeRef lengthLs]
+  S "known force property", plural value, S "of", makeRefS sliceWght, S "to", 
+  makeRefS lengthLs]
 
   ]
 
@@ -548,18 +548,18 @@ kiPrime = m2x2
 stfMtrx_deriv_sentences_ssp_s1 :: [Sentence]
 stfMtrx_deriv_sentences_ssp_s1 = [S "For interslice surfaces the stiffness constants" `sAnd`
   S "displacements refer to an unrotated coordinate system" `sC`
-  ch genDisplace +:+ S "of" +:+. makeRef lengthLs +:+ S "The interslice elements" +:+
+  ch genDisplace +:+ S "of" +:+. makeRefS lengthLs +:+ S "The interslice elements" +:+
   S "are left in their standard coordinate system" `sC`
   S "and therefore are described by the same" +:+ phrase equation +:+
-  S "from" +:+. makeRef genDef8Label +:+ S "Seen as" +:+ ch shrStiffIntsl +:+ S "in" +:+.
-  makeRef intrsliceF +:+ isElemInMx shrStiffIntsl "shear" `sC` --FIXEME: add matrix symbols?
-  S "and" +:+ (isElemInMx nrmStiffIntsl "normal" `sC` S "calculated as in") +:+. makeRef mobShearWO]
+  S "from" +:+. makeRefS genDef8Label +:+ S "Seen as" +:+ ch shrStiffIntsl +:+ S "in" +:+.
+  makeRefS intrsliceF +:+ isElemInMx shrStiffIntsl "shear" `sC` --FIXEME: add matrix symbols?
+  S "and" +:+ (isElemInMx nrmStiffIntsl "normal" `sC` S "calculated as in") +:+. makeRefS mobShearWO]
   
 stfMtrx_deriv_sentences_ssp_s2 :: [Sentence]
 stfMtrx_deriv_sentences_ssp_s2 =
  [S "For basal surfaces the stiffness constants" `sAnd`
   S "displacements refer to a system rotated for the base angle alpha" +:+.
-  sParen (makeRef angleA) +:+ S "To analyze the effect of force-displacement" +:+
+  sParen (makeRefS angleA) +:+ S "To analyze the effect of force-displacement" +:+
   S "relationships occurring on both basal" `sAnd`
   S "interslice surfaces of an" +:+ phrase element +:+ ch index +:+
   S "they must reference the same coordinate" +:+
@@ -569,15 +569,15 @@ stfMtrx_deriv_sentences_ssp_s2 =
   S "to the new matrix" +:+. ch nrmFNoIntsl]
 
 stfMtrx_deriv_sentences_ssp_s3 :: [Sentence]
-stfMtrx_deriv_sentences_ssp_s3 = [S "The Hooke's law force displacement relationship of" +:+ (makeRef genDef8Label) +:+
+stfMtrx_deriv_sentences_ssp_s3 = [S "The Hooke's law force displacement relationship of" +:+ (makeRefS genDef8Label) +:+
   S "applied to the base also references a displacement vector" +:+
-  ch rotatedDispl +:+ S "of" +:+ makeRef genDef9Label +:+ S "rotated for the base angle of the slice" +:+ 
+  ch rotatedDispl +:+ S "of" +:+ makeRefS genDef9Label +:+ S "rotated for the base angle of the slice" +:+ 
   ch baseAngle +:+. S "The basal displacement vector" +:+
   ch genDisplace +:+  S "is rotated clockwise to align with the" +:+
   phrase intrslce +:+ S "displacement vector" +:+
   ch genDisplace `sC` S "applying the" +:+ phrase definition +:+ S "of" +:+ 
   ch rotatedDispl +:+ S "in terms of" +:+ ch genDisplace +:+ S "as seen in" +:+.
-  makeRef genDef9Label +:+ S "Using this with base stiffness matrix" +:+
+  makeRefS genDef9Label +:+ S "Using this with base stiffness matrix" +:+
   ch shrStiffBase --FIXME: should be K*i"
   `sC` S "a basal force displacement relationship in the same coordinate" +:+
   S "system as the interslice relationship can be derived as done in" +:+. eqN 8]
@@ -587,18 +587,18 @@ stfMtrx_deriv_sentences_ssp_s4 =
   [S "The new effective base stiffness matrix" +:+ ch shrStiffBase +:+
   --FIXME: add symbol?
   S "as derived in" +:+ eqN 7 +:+ S "is defined in" +:+. eqN 9 +:+
-  S "This is seen as matrix" +:+ ch shrStiffBase +:+ S "in" +:+ makeRef displcmntBaselL +:+
+  S "This is seen as matrix" +:+ ch shrStiffBase +:+ S "in" +:+ makeRefS displcmntBaselL +:+
   isElemInMx shrStiffBase "shear" `sC` S "and" +:+ isElemInMx nrmStiffBase "normal" `sC` 
-  S "calculated as in" +:+. makeRef mobShearWO +:+ S "The notation is simplified by" +:+ 
+  S "calculated as in" +:+. makeRefS mobShearWO +:+ S "The notation is simplified by" +:+ 
   S "the introduction of the constants" +:+ ch effStiffA `sAnd` ch effStiffB `sC` 
   S "defined in" +:+ eqN 10 `sAnd` eqN 11 +:+. S "respectively"]
 
 stfMtrx_deriv_sentences_ssp_s5 :: [Sentence]
 stfMtrx_deriv_sentences_ssp_s5 = [S "A force-displacement relationship for an element" +:+ ch index +:+
   S "can be written in terms of displacements occurring in the unrotated" +:+
-  S "coordinate system" +:+ ch genDisplace `sOf` makeRef genDef9Label +:+ S "using the matrix" +:+
+  S "coordinate system" +:+ ch genDisplace `sOf` makeRefS genDef9Label +:+ S "using the matrix" +:+
   ch shrStiffBase `sC` --FIXME: index 
-  S "and" +:+ ch shrStiffBase +:+ S "as seen in" +:+. makeRef intrsliceF]
+  S "and" +:+ ch shrStiffBase +:+ S "as seen in" +:+. makeRefS intrsliceF]
 
 
 eq6, eq7, eq8, eq9, eq10, eq11:: Expr
@@ -627,7 +627,7 @@ stfMtrxDerivation :: [Contents]
 stfMtrxDerivation = [
 
   foldlSP [S "Using the force-displacement relationship of", 
-  makeRef genDef8Label, S "to define stiffness matrix", ch shrStiffIntsl `sC`
+  makeRefS genDef8Label, S "to define stiffness matrix", ch shrStiffIntsl `sC`
   S "as seen in", eqN 6],
   
   eqUnR' $ inxi shrStiffIntsl $=
@@ -635,16 +635,16 @@ stfMtrxDerivation = [
   
   foldlSP [S "For interslice surfaces the stiffness constants" `sAnd`
   S "displacements refer to an unrotated coordinate system" `sC`
-  ch genDisplace, S "of" +:+. makeRef lengthLs, S "The interslice elements",
+  ch genDisplace, S "of" +:+. makeRefS lengthLs, S "The interslice elements",
   S "are left in their standard coordinate system" `sC`
   S "and therefore are described by the same", phrase equation,
-  S "from" +:+. makeRef genDef8Label, S "Seen as", ch shrStiffIntsl, S "in" +:+.
-  makeRef intrsliceF, isElemInMx shrStiffIntsl "shear" `sC` --FIXEME: add matrix symbols?
-  S "and", isElemInMx nrmStiffIntsl "normal" `sC` S "calculated as in", makeRef mobShearWO],
+  S "from" +:+. makeRefS genDef8Label, S "Seen as", ch shrStiffIntsl, S "in" +:+.
+  makeRefS intrsliceF, isElemInMx shrStiffIntsl "shear" `sC` --FIXEME: add matrix symbols?
+  S "and", isElemInMx nrmStiffIntsl "normal" `sC` S "calculated as in", makeRefS mobShearWO],
   
   foldlSP [S "For basal surfaces the stiffness constants" `sAnd`
   S "displacements refer to a system rotated for the base angle alpha" +:+.
-  sParen (makeRef angleA), S "To analyze the effect of force-displacement",
+  sParen (makeRefS angleA), S "To analyze the effect of force-displacement",
   S "relationships occurring on both basal" `sAnd`
   S "interslice surfaces of an", phrase element, ch index,
   S "they must reference the same coordinate",
@@ -658,15 +658,15 @@ stfMtrxDerivation = [
   (sin(inxi baseAngle)) (cos(inxi baseAngle)) *
   inxi shrStiffIntsl $= kiStar,
   
-  foldlSP [S "The Hooke's law force displacement relationship of", makeRef genDef8Label,
+  foldlSP [S "The Hooke's law force displacement relationship of", makeRefS genDef8Label,
   S "applied to the base also references a displacement vector",
-  ch rotatedDispl, S "of", makeRef genDef9Label, S "rotated for", S "base angle" `ofThe`
+  ch rotatedDispl, S "of", makeRefS genDef9Label, S "rotated for", S "base angle" `ofThe`
   S "slice", ch baseAngle +:+. S "The basal displacement vector",
   ch genDisplace,  S "is rotated clockwise to align with the",
   phrase intrslce, S "displacement vector",
   ch genDisplace `sC` S "applying the", phrase definition, S "of", 
   ch rotatedDispl, S "in terms of", ch genDisplace, S "as seen in" +:+.
-  makeRef genDef9Label, S "Using this with base stiffness matrix",
+  makeRefS genDef9Label, S "Using this with base stiffness matrix",
   ch shrStiffBase --FIXME: should be K*i"
   `sC` S "a basal force displacement relationship in the same coordinate",
   S "system as the interslice relationship can be derived as done in", eqN 8],
@@ -680,7 +680,7 @@ stfMtrxDerivation = [
   S "as derived in", eqN 7, S "is defined in" +:+. eqN 9,
   S "This is seen as matrix", ch shrStiffBase, S "in" +:+.
   S "GD12", isElemInMx shrStiffBase "shear" `sC` S "and", -- FIXME: GD12 doesn't exist
-  isElemInMx nrmStiffBase "normal" `sC` S "calculated as in" +:+. makeRef mobShearWO,
+  isElemInMx nrmStiffBase "normal" `sC` S "calculated as in" +:+. makeRefS mobShearWO,
   S "The notation is simplified by", S "introduction" `ofThe` S "constants",
   ch effStiffA `sAnd` ch effStiffB `sC` S "defined in", eqN 10 `sAnd`
   eqN 11, S "respectively"],
@@ -698,9 +698,9 @@ stfMtrxDerivation = [
   
   foldlSP [S "A force-displacement relationship for an element", ch index,
   S "can be written in terms of displacements occurring in the unrotated", 
-  S "coordinate system", ch genDisplace `sOf` makeRef genDef9Label, S "using the matrix",
+  S "coordinate system", ch genDisplace `sOf` makeRefS genDef9Label, S "using the matrix",
   ch shrStiffBase `sC` --FIXME: index 
-  S "and", ch shrStiffBase, S "as seen in", makeRef intrsliceF]
+  S "and", ch shrStiffBase, S "as seen in", makeRefS intrsliceF]
   
   ]
 

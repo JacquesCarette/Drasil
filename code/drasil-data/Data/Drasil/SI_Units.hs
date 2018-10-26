@@ -1,7 +1,6 @@
 module Data.Drasil.SI_Units where
 import Language.Drasil
-import Language.Drasil.Development(derUC, derUC', scale, shift
-  , derCUC, derCUC', derCUC'')
+import Language.Drasil.Development
 
 fundamentals :: [UnitDefn]
 fundamentals = [metre, kilogram, second, kelvin, mole, ampere, candela]

@@ -3,36 +3,37 @@ module Language.Drasil.Chunk.InstanceModel
   ( InstanceModel
   , inCons, outCons, imOutput, imInputs
   , im, imQD, im', imQD', im'', im'''
-  )where
+  , Constraints
+  ) where
 
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn),ConceptDomain(cdom), Concept, ExprRelat(relat),
-  HasDerivation(derivations), HasReference(getReferences), HasAdditionalNotes(getNotes),
-  HasLabel(getLabel), HasSymbol(symbol), HasSpace(typ))
-import Language.Drasil.Chunk.References (Reference)
-import Language.Drasil.Chunk.Derivation (Derivation)
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
-import Language.Drasil.Chunk.Constrained.Core (TheoryConstraint)
 import Language.Drasil.Chunk.Eq (QDefinition, equat)
 import Language.Drasil.Chunk.Relation (RelationConcept, makeRC)
 import Language.Drasil.Chunk.Quantity (Quantity, QuantityDict, qw)
 import Language.Drasil.ChunkDB (HasSymbolTable)
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
+  Definition(defn),ConceptDomain(cdom), Concept, ExprRelat(relat),
+  HasDerivation(derivations), HasReference(getReferences), HasAdditionalNotes(getNotes),
+  HasLabel(getLabel), HasSymbol(symbol), HasSpace(typ), HasShortName(shortname))
+import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Development.Unit (MayHaveUnit(getUnit))
-import Language.Drasil.Expr (($=))
-import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Document.GetChunk (vars)
-import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Expr (($=),Relation)
+import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Label (mkLabelSame)
-import Language.Drasil.RefTypes (RefType(..), DType(..))
+import Language.Drasil.RefTypes (RefType(..), DType(..), Reference)
+import Language.Drasil.Spec (Sentence)
 
 import Control.Lens (makeLenses, (^.))
 
 type Inputs = [QuantityDict]
 type Output = QuantityDict
 
-type InputConstraints  = [TheoryConstraint]
-type OutputConstraints = [TheoryConstraint]
+-- All constraints in an InstanceModel are always 'Assumed' !
+type Constraints = [Relation]
+
+type OutputConstraints = Constraints
+type InputConstraints  = Constraints
 
 -- | An Instance Model is a RelationConcept that may have specific input/output
 -- constraints. It also has attributes like derivation, source, etc.

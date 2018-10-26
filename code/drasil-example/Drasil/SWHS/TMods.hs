@@ -35,7 +35,7 @@ consThermE :: TheoryModel
 consThermE = tm' consThermE_rc
   (tc' "ConsThermE" [qw thFluxVect, qw gradient, qw vol_ht_gen, 
     qw density, qw heat_cap_spec, qw temp, qw time] ([] :: [ConceptChunk])
-  [] [TCon Invariant consThermERel] [] [makeRef consThemESrc]) 
+  [] [consThermERel] [] [makeRef consThemESrc]) 
   (mkLabelSame "consThermE" (Def TM)) [consThermEdesc]
 
 consThermE_rc :: RelationConcept
@@ -62,7 +62,7 @@ consThermEdesc = foldlSent [
   ch time +:+ S "is" +:+ phrase time +:+ sParen (Sy (unit_symb time)), ch gradient +:+
   S "is the" +:+ (gradient ^. defn)], S "For this", phrase equation, S "to apply" `sC`
   S "other forms of", phrase energy `sC` S "such as", phrase mech_energy `sC`
-  S "are assumed to be negligible in the", phrase system, sParen (makeRef thermalEnergyOnlyL)]
+  S "are assumed to be negligible in the", phrase system, sParen (makeRefS thermalEnergyOnlyL)]
 
 -------------------------
 -- Theoretical Model 2 --
@@ -71,7 +71,7 @@ sensHtE :: TheoryModel
 sensHtE = tm' sensHtE_rc
   (tc' "SensHtE" [qw sens_heat, qw htCap_S, qw mass, 
     qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [ConceptChunk])
-  [] [TCon Invariant sensHtEEqn] [] [makeRef sensHtESrc]) 
+  [] [sensHtEEqn] [] [makeRef sensHtESrc]) 
   (mkLabelSame "sensHtE" (Def TM)) [sensHtEdesc]
 
 sensHtE_rc :: RelationConcept
@@ -111,9 +111,9 @@ sensHtEdesc = foldlSent [
   phrase phase_change, S "occurs. A",
   phrase phase_change, S "occurs if",
   ch temp :+: S "=" :+: ch boil_pt,
-  S "or", ch temp :+: S "=" +. ch melt_pt,
+  S "or", ch temp :+: S "=" +:+. ch melt_pt,
   S "If this" `isThe` S "case, refer to",
-  (makeRef latentHtE) `sC` at_start latent_heat,
+  (makeRefS latentHtE) `sC` at_start latent_heat,
   phrase energy]
  
 --How to have new lines in the description?
@@ -129,7 +129,7 @@ sensHtEdesc = foldlSent [
 latentHtE :: TheoryModel
 latentHtE = tm' latentHtE_rc
   (tc' "SensHtE" [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
-  [] [TCon Invariant latHtEEqn] [] [makeRef latHtESrc]) (mkLabelSame "latentHtE" (Def TM)) [latentHtEdesc]
+  [] [latHtEEqn] [] [makeRef latHtESrc]) (mkLabelSame "latentHtE" (Def TM)) [latentHtEdesc]
 
 latentHtE_rc :: RelationConcept
 latentHtE_rc = makeRC "latentHtE_rc"
@@ -158,7 +158,7 @@ latentHtEdesc = foldlSent [
   phrase phase_change, S "is not complete. The status of",
   S "the", phrase phase_change,
   S "depends on the", phrase melt_frac `sC`
-  (makeRef dd3HtFusion) :+: S ".",
+  (makeRefS dd3HtFusion) :+: S ".",
   ch melt_pt `sAnd` ch boil_pt, S "are the",
   phrase melt_pt `sAnd` phrase boil_pt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),

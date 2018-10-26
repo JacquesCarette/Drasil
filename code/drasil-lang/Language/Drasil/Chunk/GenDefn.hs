@@ -6,17 +6,15 @@ module Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, IsUnit,
   ExprRelat(relat), HasDerivation(derivations), HasReference(getReferences),
-  HasLabel(getLabel), HasAdditionalNotes(getNotes))
+  HasLabel(getLabel), HasAdditionalNotes(getNotes), HasShortName(shortname))
 
-import Language.Drasil.Chunk.Derivation (Derivation)
-import Language.Drasil.Chunk.References (Reference)
 import Language.Drasil.Chunk.Relation (RelationConcept)
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
+import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Development.Unit (unitWrapper, UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Label (mkLabelSame)
-import Language.Drasil.RefTypes(RefType(..), DType(..))
+import Language.Drasil.RefTypes(RefType(..), DType(..), Reference)
 import Control.Lens (makeLenses)
 
 
@@ -46,17 +44,17 @@ instance MayHaveUnit        GenDefn where getUnit u = gdUnit u
 
 gd :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
   Derivation -> [Reference] -> Label -> GenDefn
-gd r (Just u) derivs ref lbe = GD r (Just (unitWrapper u)) derivs ref lbe Nothing
-gd r Nothing  derivs ref lbe = GD r Nothing                derivs ref lbe Nothing
+gd r (Just u) derivs ref_ lbe = GD r (Just (unitWrapper u)) derivs ref_ lbe Nothing
+gd r Nothing  derivs ref_ lbe = GD r Nothing                derivs ref_ lbe Nothing
 
 gdNoUnitDef :: RelationConcept -> Derivation -> [Reference] -> Label -> GenDefn
-gdNoUnitDef r derivs ref lbe = GD r Nothing derivs ref lbe Nothing
+gdNoUnitDef r derivs ref_ lbe = GD r Nothing derivs ref_ lbe Nothing
 
 gd' :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
   Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
-gd' r (Just u) derivs ref sn note = GD r (Just (unitWrapper u)) derivs ref (mkLabelSame sn (Def General)) (Just note)
-gd' r Nothing  derivs ref sn note = GD r Nothing                derivs ref (mkLabelSame sn (Def General)) (Just note)
+gd' r (Just u) derivs ref_ sn note = GD r (Just (unitWrapper u)) derivs ref_ (mkLabelSame sn (Def General)) (Just note)
+gd' r Nothing  derivs ref_ sn note = GD r Nothing                derivs ref_ (mkLabelSame sn (Def General)) (Just note)
 
 gd'' :: RelationConcept -> [Reference] -> String -> [Sentence] -> GenDefn
-gd'' r ref sn []   = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) ref (mkLabelSame sn (Def General)) Nothing
-gd'' r ref sn note = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) ref (mkLabelSame sn (Def General)) (Just note)
+gd'' r ref_ sn []   = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) ref_ (mkLabelSame sn (Def General)) Nothing
+gd'' r ref_ sn note = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) ref_ (mkLabelSame sn (Def General)) (Just note)

@@ -63,17 +63,17 @@ nmFEq_rel = inxi totNrmForce $= eqlExpr cos sin
 nmFEq_desc :: Sentence
 nmFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   S "in the", phrase slope, S "the", phrase force,
-  S "equilibrium to satisfy", makeRef equilibrium, S "in the direction",
+  S "equilibrium to satisfy", makeRefS equilibrium, S "in the direction",
   phrase perp, S "to" +:+. (S "base" +:+ phrase surface `ofThe`
   phrase slice), S "Rearranged to solve for", (phrase normForce `ofThe`
   phrase surface) +:+. ch totNrmForce, at_start force, S "equilibrium is",
   S "derived from the free body diagram of",
-  makeRef SRS.physSystLabel, S "Index i",
+  makeRefS SRS.physSystLabel, S "Index i",
   S "refers to", (plural value `ofThe` plural property), S "for",
   phrase slice :+: S "/" :+: plural intrslce, S "following convention in" +:+.
-  makeRef SRS.physSystLabel, at_start force, phrase variable,
-  plural definition, S "can be found in", makeRef sliceWght, S "to",
-  makeRef lengthLs]
+  makeRefS SRS.physSystLabel, at_start force, phrase variable,
+  plural definition, S "can be found in", makeRefS sliceWght, S "to",
+  makeRefS lengthLs]
 
 --
 bsShrFEq :: RelationConcept
@@ -87,17 +87,17 @@ bShFEq_rel = inxi mobShrI $= eqlExpr sin cos
 bShFEq_desc :: Sentence
 bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   S "in the", phrase slope, S "the", phrase force,
-  S "equilibrium to satisfy", makeRef equilibrium, S "in the direction",
+  S "equilibrium to satisfy", makeRefS equilibrium, S "in the direction",
   S "parallel to" +:+. (S "base" +:+ phrase surface `ofThe`
   phrase slice), S "Rearranged to solve for the", phrase shearForce,
   S "on the base" +:+. ch mobShrI, at_start force, S "equilibrium is",
   S "derived from the free body diagram of",
-  makeRef SRS.physSystLabel, S "Index", ch index,
+  makeRefS SRS.physSystLabel, S "Index", ch index,
   S "refers to", (plural value `ofThe` plural property), S "for",
   phrase slice :+: S "/" :+: plural intrslce, S "following convention in" +:+.
-  makeRef SRS.physSystLabel, at_start force, phrase variable,
-  plural definition, S "can be found in", makeRef sliceWght, S "to",
-  makeRef lengthLs]
+  makeRefS SRS.physSystLabel, at_start force, phrase variable,
+  plural definition, S "can be found in", makeRefS sliceWght, S "to",
+  makeRefS lengthLs]
 
 --
 shrResEqn :: Expr
@@ -113,7 +113,7 @@ resShr_rel = inxi shrResI $= shrResEqn
 
 resShr_desc :: Sentence
 resShr_desc = foldlSent [S "The Mohr-Coulomb resistive shear strength of a",
-  phrase slice, ch shrStress, S "from", makeRef mcShrStrgth,
+  phrase slice, ch shrStress, S "from", makeRefS mcShrStrgth,
   S "is multiplied by the area", E $ sy baseWthX * sec(sy baseAngle) * 1,
   S "to obtain the" +:+. getTandS shrResI, S "Note the extra", E 1,
   S "is to represent a unit of width which is multiplied by the",
@@ -122,7 +122,7 @@ resShr_desc = foldlSent [S "The Mohr-Coulomb resistive shear strength of a",
   `sAnd` ch baseWthX, S "is the x width of the base. This accounts for the",
   phrase nrmFSubWat, E $ sy nrmFSubWat $= sy totNrmForce - sy baseHydroForce,
   S "of a soil from", -- FIXME: add prime to nrmStrss
-  makeRef effStress, S "where the", phrase nrmStrss,
+  makeRefS effStress, S "where the", phrase nrmStrss,
   S "is multiplied by the same area to obtain the", phrase nrmFSubWat,
   E $ sy nrmStrss * sy baseWthX * sec(sy baseAngle) * 1 $= sy nrmFSubWat]
 
@@ -136,11 +136,11 @@ mobShr_rel = inxi mobShrI $= inxi shrResI / sy fs $= shrResEqn / sy fs
 
 mobShr_desc :: Sentence
 mobShr_desc = foldlSent [
-  S "From", phrase definition `ofThe` phrase fs, S "in", makeRef factOfSafety `sC`
+  S "From", phrase definition `ofThe` phrase fs, S "in", makeRefS factOfSafety `sC`
   S "and the new", phrase definition, S "of", ch shrResI `sC` S "a new",
   S "relation for", S "net mobile" +:+ phrase shearForce `ofThe` phrase slice,
   ch shearFNoIntsl, S "is found as the resistive shear", ch shrResI,
-  sParen (makeRef genDef3Label), S "divided by the factor of safety", ch fs]
+  sParen (makeRefS genDef3Label), S "divided by the factor of safety", ch fs]
 
 --
 normShrR :: RelationConcept
@@ -152,7 +152,7 @@ nmShrR_rel = sy intShrForce $= sy normToShear * sy scalFunc * sy intNormForce
 
 nmShrR_desc :: Sentence
 nmShrR_desc = foldlSent [S "The", phrase assumption,
-  S "for the Morgenstern Price", phrase method_, sParen (makeRef newA5),
+  S "for the Morgenstern Price", phrase method_, sParen (makeRefS newA5),
   S "that the", phrase intrslce, phrase shearForce, ch xi,
   S "is proportional to the", phrase intrslce, 
   phrase normForce, ch intNormForce, S "by a proportionality constant",
@@ -173,15 +173,15 @@ momEql_rel = 0 $= momExpr (\ x y -> x -
 
 momEql_desc :: Sentence
 momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
-  S "in the", phrase slope, S "the moment equilibrium to satisfy", makeRef equilibrium,
+  S "in the", phrase slope, S "the moment equilibrium to satisfy", makeRefS equilibrium,
   S "in the direction", phrase perp,
   S "to" +:+. (S "base" +:+ phrase surface `ofThe` phrase slice),
   S "Moment equilibrium is derived from the free body diagram of" +:+.
-  makeRef SRS.physSystLabel, S "Index i refers to",
+  makeRefS SRS.physSystLabel, S "Index i refers to",
   plural value `ofThe` plural property, S "for", phrase slice :+: S "/" :+:
   plural intrslce, S "following convention in" +:+.
-  makeRef SRS.physSystLabel, at_start variable, plural definition,
-  S "can be found in", makeRef sliceWght, S "to", makeRef lengthLs]
+  makeRefS SRS.physSystLabel, at_start variable, plural definition,
+  S "can be found in", makeRefS sliceWght, S "to", makeRefS lengthLs]
 
 --
 netForcex :: RelationConcept
@@ -207,7 +207,7 @@ fNety_rel = inxi fy $= (negate $ inxi slcWght) +
 
 fNet_desc :: (HasShortName l, Referable l) => l -> Sentence
 fNet_desc gd = foldlSent [S "This", phrase equation `andThe` phrase equation, 
-  S "in", makeRef gd, S "show the net sum of the",
+  S "in", makeRefS gd, S "show the net sum of the",
   plural force, S "acting on a", phrase slice, 
   S "for the RFEM", phrase model, S "and the", plural force,
   S "that create an applied load on the" +:+. phrase slice, ch fx,
@@ -217,7 +217,7 @@ fNet_desc gd = foldlSent [S "This", phrase equation `andThe` phrase equation,
   S "direction parallel to the", phrase force, S "of gravity for", 
   phrase slice +:+. ch index, at_start' force, 
   S "are found in the free body diagram of" +:+.
-  makeRef SRS.physSystLabel, S "In this", phrase model,
+  makeRefS SRS.physSystLabel, S "In this", phrase model,
   --FIXME: hacked link
   S "the", plural element, S "are not exerting", plural force,
   S "on each other" `sC` S "so the", phrase intrslce, plural force,
@@ -225,9 +225,9 @@ fNet_desc gd = foldlSent [S "This", phrase equation `andThe` phrase equation,
   +:+. phrase model, S "Index", ch index, 
   S "refers to", (plural value `ofThe` plural property), S "for",
   phrase slice :+: S "/" :+: plural intrslce, S "following", 
-  S "convention in" +:+. makeRef SRS.physSystLabel,
+  S "convention in" +:+. makeRefS SRS.physSystLabel,
   at_start force, phrase variable, plural definition, S "can be found in",
-  makeRef sliceWght, S "to", makeRef lengthLb]
+  makeRefS sliceWght, S "to", makeRefS lengthLb]
 
 --
 hookesLaw2d :: RelationConcept
@@ -242,7 +242,7 @@ hooke2d_rel = vec2D (inxi genPressure) (inxi genPressure) $=
 hooke2d_desc :: Sentence
 hooke2d_desc = foldlSent [
   S "A 2D component implementation of Hooke's law as seen in" +:+.
-  makeRef hookesLaw, ch elmPrllDispl, S "is", phrase displacement `ofThe`
+  makeRefS hookesLaw, ch elmPrllDispl, S "is", phrase displacement `ofThe`
   phrase element, S "normal to the", phrase surface, S "and",
   ch elmNrmDispl, S "is", phrase displacement `ofThe` phrase element,
   S "parallel to the" +:+. phrase surface, S "Pn,i",
@@ -253,7 +253,7 @@ hooke2d_desc = foldlSent [
   phrase len, S "The stiffness", plural value, S "Kn,i" `sAnd` S "Kt,i",
   -- FIXME: Pn,i ~ Pt,i ~ Kn,i ~ Kt,i need symbols 
   S "are then the resistance to", phrase displacement,
-  S "in the respective directions defined as in" +:+. makeRef mobShearWO,
+  S "in the respective directions defined as in" +:+. makeRefS mobShearWO,
   S "The pressure", plural force, S "would be the result of applied",
   S "loads on the", phrase mass `sC` S "the product of the stiffness",
   plural element, S "with the", phrase displacement, S "would be the",

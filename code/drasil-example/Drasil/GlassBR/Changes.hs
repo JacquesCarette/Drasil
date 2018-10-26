@@ -39,26 +39,26 @@ considerMoreThanFlexGlass = cic "considerMoreThanFlexGlass" considerMoreThanFlex
 calcInternalBlastRiskDesc :: NamedChunk -> Sentence
 varValsOfmkEDesc, accMoreThanSingleLiteDesc, accMoreBoundaryConditionsDesc, considerMoreThanFlexGlassDesc :: Sentence
 
-calcInternalBlastRiskDesc mainConcept = foldlSent [(makeRef explainScenario) `sDash` S "The",
+calcInternalBlastRiskDesc mainConcept = foldlSent [(makeRefS explainScenario) +:+ S "- The",
   phrase system, S "currently only calculates for external" +:+.
   phrase mainConcept, S "In the future,", plural calculation,
   S "can be added for the internal", phrase mainConcept]
 
-varValsOfmkEDesc = foldlSent [(makeRef standardValues) `sC` ((makeRef ldfConstant) `sDash`
-  S "Currently, the"), plural value, S "for",
+varValsOfmkEDesc = foldlSent [(makeRefS standardValues) `sC` ((makeRefS ldfConstant) +:+
+  S "- Currently, the"), plural value, S "for",
   foldlList Comma List (map ch (take 3 assumptionConstants)),
   S "are assumed to be the same for all" +:+. phrase glass,
   S "In the future, these", plural value, S "can be changed to",
   phrase variable, plural input_]
 
-accMoreThanSingleLiteDesc = foldlSent [(makeRef glassLite) `sDash` S "The", phrase software,
+accMoreThanSingleLiteDesc = foldlSent [(makeRefS glassLite) +:+ S "- The", phrase software,
   S "may be changed to accommodate more than a single", phrase lite]
 
-accMoreBoundaryConditionsDesc = foldlSent [(makeRef boundaryConditions) `sDash` S "The", phrase software,
+accMoreBoundaryConditionsDesc = foldlSent [(makeRefS boundaryConditions) :+: S "- The", phrase software,
   S "may be changed to accommodate more boundary", plural condition,
   S "than 4-sided support"]
 
-considerMoreThanFlexGlassDesc = foldlSent [(makeRef responseType) `sDash` S "The", phrase software,
+considerMoreThanFlexGlassDesc = foldlSent [(makeRefS responseType) +:+ S "- The", phrase software,
   S "may be changed to consider more than just", phrase flexure,
   S "of the glass"]
 
@@ -81,6 +81,6 @@ predictWithstandOfCertDegDesc = foldlSent [phrase goal `ofThe'` phrase system,
   S "is to predict whether the", phrase glaSlab, S "under consideration can",
   S "withstand an", phrase explosion, S "of a certain degree"]
 
-accAlteredGlassDesc = foldlSent [makeRef glassCondition, S "requires that the", phrase glass +:+.
+accAlteredGlassDesc = foldlSent [makeRefS glassCondition, S "requires that the", phrase glass +:+.
   S "is not altered in any way", S "Therefore, this cannot be used on altered",
   phrase glass]

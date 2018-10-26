@@ -231,18 +231,17 @@ getSCSSub (Constraints s1 s2 s3 lb) = [s1]++[s2]++[s3]++(concatMap getCon (map (
 getSCSSub (CorrSolnPpties c) = concatMap getCon' c
 
 getIM :: InstanceModel -> [Sentence]
-getIM im = (im ^. getReferences) ++ (im ^. derivations) ++ (fromMaybe [] (im ^. getNotes))
+getIM im = (im ^. derivations) ++ (fromMaybe [] (im ^. getNotes))
   ++ [im ^. defn]
 
 getGD :: GenDefn -> [Sentence]
-getGD gd = [gd ^. defn] ++ (gd ^. derivations) ++ (gd ^. getReferences)
-  ++ (fromMaybe [] (gd ^. getNotes))
+getGD gd = [gd ^. defn] ++ (gd ^. derivations) ++ (fromMaybe [] (gd ^. getNotes))
 
 getDD :: DataDefinition -> [Sentence]
-getDD dd = (dd ^. derivations) ++ (dd ^. getReferences) ++ (fromMaybe [] (dd ^. getNotes))
+getDD dd = (dd ^. derivations) ++ (fromMaybe [] (dd ^. getNotes))
 
 getTM :: TheoryModel -> [Sentence]
-getTM tm = (tm ^. getReferences) ++ (fromMaybe [] (tm ^. getNotes)) ++ [tm ^. defn]
+getTM tm = (fromMaybe [] (tm ^. getNotes)) ++ [tm ^. defn]
 
 getReq :: ReqrmntSec -> [Sentence]
 getReq (ReqsProg rs) = concatMap getReqSub rs

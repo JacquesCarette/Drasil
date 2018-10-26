@@ -4,6 +4,7 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (datum, input_, literacy, output_, 
     quantity, type_, value, variable)
 import Data.Drasil.Concepts.Math (parameter)
+import Data.Drasil.Phrase (compoundNC, compoundNCPlPh, compoundNCPlPl)
 
 algorithm :: ConceptChunk
 algorithm    = dcc "algorithm" (cn' "algorithm")

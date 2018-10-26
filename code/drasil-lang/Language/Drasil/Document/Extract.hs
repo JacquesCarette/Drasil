@@ -9,12 +9,10 @@ import Language.Drasil.Document (Document(Document),Section(Section), SecCons(..
 import Language.Drasil.Document.Core
 import Language.Drasil.Expr
 import Language.Drasil.Spec
+import Language.Drasil.Classes.Core (HasShortName(shortname))
 
 import Language.Drasil.Chunk.AssumpChunk
-import Language.Drasil.Chunk.ShortName
-import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation
-import Language.Drasil.Chunk.ReqChunk
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.RefTypes(DType(..))
 
@@ -95,9 +93,7 @@ getCon (Paragraph s)       = [s]
 getCon (EqnBlock _)      = []
 getCon (Enumeration lst)   = getLT lst
 getCon (Figure l _ _)    = [l]
-getCon (Requirement reqc)  = getReq reqc
 getCon (Assumption assc)   = getAss assc
-getCon (Change chg)        = getChg chg
 getCon (Bib bref)          = getBib bref
 getCon (Graph [(s1, s2)] _ _ l) = s1 : s2 : [l]
 getCon (Definition dt (hd:fs)) = concatMap getCon' (snd hd) ++ getCon (Definition dt fs)
@@ -129,16 +125,13 @@ getTerm a  = getNP (a ^. term)
 
 getDefn :: (Definition a) => a -> [Sentence]
 getDefn a = [a ^. defn]
--}
 
 getReq :: ReqChunk -> [Sentence]
 getReq a = [requires a]
+-}
 
 getAss :: AssumpChunk -> [Sentence]
 getAss a = [assuming a]
-
-getChg :: Change -> [Sentence]
-getChg a = [chng a]
 
 getLT :: ListType -> [Sentence]
 getLT (Bullet it) = concatMap getIL $ map fst it

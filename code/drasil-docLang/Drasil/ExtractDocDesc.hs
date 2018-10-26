@@ -127,7 +127,7 @@ egetTheoryChunk tm = concatMap egetTheoryChunk (tm ^. valid_context) ++
   concatMap egetQDef (tm ^. defined_quant ++ tm ^. defined_fun)
 
 egetDD :: DataDefinition -> [Expr]
-egetDD dd = [dd ^. defnExpr]
+egetDD dd = [dd ^. defnExpr] ++ [sy dd]
 
 getDocDesc :: DocDesc -> [Sentence]
 getDocDesc d = concatMap getDocSec d

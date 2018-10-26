@@ -152,4 +152,5 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 - **Chunk/DataDefinition**: A DataDefinition is a QDefinition which is decorated
   with a variety of information. Should be the main structure used.
 
-- **ChunkDB**:
+- **ChunkDB**: Contains a 'chunk database', for quantities, concepts, units and
+  ideas.

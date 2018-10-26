@@ -154,3 +154,9 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 
 - **ChunkDB**: Contains a 'chunk database', for quantities, concepts, units and
   ideas.
+
+- **Chunk/UnitaryConcept**: A join between a concept and a unitary, which is
+  another way to say quantity+unit+definition+concept-domain.
+
+- **Chunk/Theory**: A Theory is a collection of types, defined quantities,
+  definitions and relations.

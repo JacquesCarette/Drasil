@@ -29,7 +29,7 @@ data DataDefinition = DatDef { _qd :: QDefinition
                              , _ref :: [Reference]
                              , _deri :: Derivation
                              , _lbl :: Label
-                             , _notes :: Maybe [Sentence]
+                             , _notes :: [Sentence]
                              }
 makeLenses ''DataDefinition
 
@@ -49,10 +49,10 @@ instance HasLabel           DataDefinition where getLabel = lbl
 instance HasShortName       DataDefinition where shortname = lbl . shortname
 
 -- | Smart constructor for data definitions 
-mkDD :: QDefinition -> [Reference] -> Derivation -> String -> Maybe [Sentence] -> DataDefinition
+mkDD :: QDefinition -> [Reference] -> Derivation -> String -> [Sentence] -> DataDefinition
 mkDD a b c d e = DatDef a Global b c (mkLabelSame d (Def DD)) e
 
-mkDDL :: QDefinition -> [Reference] -> Derivation -> Label -> Maybe [Sentence] -> DataDefinition
+mkDDL :: QDefinition -> [Reference] -> Derivation -> Label -> [Sentence] -> DataDefinition
 mkDDL a b c label e = DatDef a Global b c label e
 
 qdFromDD :: DataDefinition -> QDefinition

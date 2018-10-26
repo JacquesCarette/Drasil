@@ -230,9 +230,10 @@ getSCSSub (IMs _ im _)  = concatMap getIM im
 getSCSSub (Constraints s1 s2 s3 lb) = [s1]++[s2]++[s3]++(concatMap getCon (map (^. accessContents) lb))
 getSCSSub (CorrSolnPpties c) = concatMap getCon' c
 
+-- The definition of IM should not be collected because even the definition is at type
+-- sentence, but the definition is not shown in Document.
 getIM :: InstanceModel -> [Sentence]
 getIM im = (im ^. derivations) ++ (fromMaybe [] (im ^. getNotes))
-  ++ [im ^. defn]
 
 getGD :: GenDefn -> [Sentence]
 getGD gd = [gd ^. defn] ++ (gd ^. derivations) ++ (fromMaybe [] (gd ^. getNotes))

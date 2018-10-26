@@ -3,7 +3,6 @@ module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc) where
 import Control.Lens(makeLenses, (^.), view)
 import Drasil.DocumentLanguage
 import Language.Drasil hiding (Manual, Vector, Verb)
-import Data.Maybe (fromMaybe)
 
 
 egetDocDesc :: DocDesc -> [Expr]
@@ -130,7 +129,7 @@ egetTheoryChunk tm = concatMap egetTheoryChunk (tm ^. valid_context) ++
   concatMap egetQDef (tm ^. defined_quant ++ tm ^. defined_fun) ++ tm ^. invariants
 
 egetDD :: DataDefinition -> [Expr]
-egetDD dd = [dd ^. defnExpr] ++ [sy dd]
+egetDD dd = [dd ^. defnExpr, sy dd]
 
 getDocDesc :: DocDesc -> [Sentence]
 getDocDesc d = concatMap getDocSec d

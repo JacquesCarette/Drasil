@@ -109,7 +109,7 @@ egetSol (SCSProg s) = concatMap egetSCSSub s
 egetSCSSub :: SCSSub -> [Expr]
 egetSCSSub (Assumptions) = []
 egetSCSSub (TMs _ tm)    = concatMap egetTM tm
-egetSCSSub (GDs _ gd _)  = []
+egetSCSSub (GDs _ gd _)  = concatMap egetGD gd
 egetSCSSub (DDs _ dd _)  = concatMap egetDD dd
 egetSCSSub (IMs _ im _)  = concatMap egetIM im
 egetSCSSub (Constraints _ _ _ lc) = concatMap egetLblCon lc
@@ -121,6 +121,9 @@ egetTM tm = concatMap egetQDef (tm ^. defined_quant ++ tm ^. defined_fun)
 
 egetIM :: InstanceModel ->[Expr]
 egetIM im = [im ^. relat]
+
+egetGD :: GenDefn ->[Expr]
+egetGD gd = [gd ^. relat]
 
 egetTheoryChunk :: TheoryChunk -> [Expr]
 egetTheoryChunk tm = concatMap egetTheoryChunk (tm ^. valid_context) ++
@@ -242,7 +245,7 @@ getDD :: DataDefinition -> [Sentence]
 getDD dd = (dd ^. derivations) ++ (fromMaybe [] (dd ^. getNotes))
 
 getTM :: TheoryModel -> [Sentence]
-getTM tm = (fromMaybe [] (tm ^. getNotes)) ++ [tm ^. defn]
+getTM tm = (fromMaybe [] (tm ^. getNotes)) ++ [tm ^. defn] ++ map (^.defn) (tm ^. operations)
 
 getReq :: ReqrmntSec -> [Sentence]
 getReq (ReqsProg rs) = concatMap getReqSub rs

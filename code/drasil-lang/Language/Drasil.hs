@@ -155,7 +155,7 @@ module Language.Drasil (
   , People, Person, person, HasName, name, manyNames, person', personWM
   , personWM', mononym, nameStr, rendPersLFM, rendPersLFM', rendPersLFM''
   -- Chunk.Theory
-  , Theory(..), tc', TheoryChunk, TheoryModel, tm, tm'
+  , tc', TheoryModel, tm, tm', Theory(invariants, defined_quant, defined_fun)
   -- Stages
   , Stage(Equational,Implementation)
   -- Symbol.Helpers

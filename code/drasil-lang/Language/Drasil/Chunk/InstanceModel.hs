@@ -45,7 +45,7 @@ data InstanceModel = IM { _rc :: RelationConcept
                         , _ref :: [Reference]
                         , _deri :: Derivation
                         , _lb :: Label
-                        , _notes :: Maybe [Sentence]
+                        , _notes :: [Sentence]
                         }
 makeLenses ''InstanceModel
 
@@ -69,22 +69,22 @@ instance MayHaveUnit        InstanceModel where getUnit (IM _ _ _ a _ _ _ _ _) =
 -- | Smart constructor for instance models
 im :: RelationConcept -> Inputs -> InputConstraints -> Output ->
   OutputConstraints -> [Reference] -> Label -> InstanceModel
-im rcon i ic o oc src sn = IM rcon i ic o oc src [] sn Nothing
+im rcon i ic o oc src sn = IM rcon i ic o oc src [] sn []
 
 -- | Same as `im`, with an additional field for notes to be passed in
 im' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> [Reference] -> Label -> [Sentence] -> InstanceModel
-im' rcon i ic o oc src lbe addNotes = IM rcon i ic o oc src [] lbe (Just addNotes)
+im' rcon i ic o oc src lbe addNotes = IM rcon i ic o oc src [] lbe addNotes
 
 im'' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> [Reference] -> Derivation -> String -> [Sentence] -> InstanceModel
 im'' rcon i ic o oc src der sn addNotes = IM rcon i ic o oc src der (mkLabelSame sn (Def Instance))
- (Just addNotes)
+ addNotes
 
 im''' :: RelationConcept -> Inputs -> InputConstraints -> Output ->
   OutputConstraints -> [Reference] -> Derivation -> String -> InstanceModel
 im''' rcon i ic o oc src der sn = IM rcon i ic o oc src der 
-  (mkLabelSame sn (Def Instance)) Nothing
+  (mkLabelSame sn (Def Instance)) []
 
 -- | Smart constructor for instance model from qdefinition
 -- (Sentence is the "concept" definition for the relation concept)
@@ -93,12 +93,12 @@ imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence ->
   InputConstraints -> OutputConstraints -> Label -> Label -> InstanceModel
 imQD ctx qd dfn incon ocon lblForIM lblForRC = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
   (sy qd $= qd ^. equat) lblForRC) (vars (qd^.equat) ctx) incon (qw qd) ocon [] [] 
-  lblForIM Nothing 
+  lblForIM [] 
 
 -- Same as `imQD`, with an additional field for notes to be passed in
 -- FIXME: get the shortname from the QDefinition?
 imQD' :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> 
-  InputConstraints -> OutputConstraints -> Label -> Maybe [Sentence] -> 
+  InputConstraints -> OutputConstraints -> Label -> [Sentence] -> 
   Label -> InstanceModel
 imQD' ctx qd dfn incon ocon lblForIM addNotes lblForRC = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
   (sy qd $= qd ^. equat) lblForRC) (vars (qd^.equat) ctx) incon (qw qd) ocon [] [] 

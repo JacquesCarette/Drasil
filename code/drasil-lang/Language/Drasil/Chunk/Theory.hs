@@ -1,8 +1,6 @@
-{-# Language TemplateHaskell, TypeFamilies #-}
+{-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.Theory 
-  ( tc',
-   Theory(..), TheoryChunk, TheoryModel, tm, tm'
-  )where
+  ( tc', TheoryModel, tm, tm', Theory(invariants, defined_quant, defined_fun))where
 
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import Language.Drasil.Chunk.Eq (QDefinition)
@@ -57,7 +55,7 @@ instance HasReference  TheoryChunk where getReferences = ref
 data TheoryModel = TM { _con :: ConceptChunk
                       , _thy :: TheoryChunk
                       , _lb :: Label
-                      , _notes :: Maybe [Sentence]
+                      , _notes :: [Sentence]
                       }
 makeLenses ''TheoryModel
 
@@ -91,8 +89,8 @@ tc' :: (Quantity q, Concept c) =>
 tc' cid q c r = tc cid ([] :: [TheoryChunk]) [] q c r
 
 tm :: Concept c => c -> TheoryChunk -> Label -> TheoryModel
-tm c t lbe = TM (cw c) t lbe Nothing
+tm c t lbe = TM (cw c) t lbe []
 
 -- Same as tm, but with the additional notes argument passed in
 tm' :: Concept c => c -> TheoryChunk -> Label -> [Sentence] -> TheoryModel
-tm' c t lbe nts = TM (cw c) t lbe (Just nts)
+tm' c t lbe nts = TM (cw c) t lbe nts

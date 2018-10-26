@@ -24,7 +24,7 @@ data GenDefn = GD { _relC :: RelationConcept
                   , _deri :: Derivation
                   , _ref :: [Reference]
                   , _lb :: Label
-                  , _notes :: Maybe [Sentence]
+                  , _notes :: [Sentence]
                   }
 makeLenses ''GenDefn
 
@@ -44,17 +44,16 @@ instance MayHaveUnit        GenDefn where getUnit u = gdUnit u
 
 gd :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
   Derivation -> [Reference] -> Label -> GenDefn
-gd r (Just u) derivs ref_ lbe = GD r (Just (unitWrapper u)) derivs ref_ lbe Nothing
-gd r Nothing  derivs ref_ lbe = GD r Nothing                derivs ref_ lbe Nothing
+gd r (Just u) derivs ref_ lbe = GD r (Just (unitWrapper u)) derivs ref_ lbe []
+gd r Nothing  derivs ref_ lbe = GD r Nothing                derivs ref_ lbe []
 
 gdNoUnitDef :: RelationConcept -> Derivation -> [Reference] -> Label -> GenDefn
-gdNoUnitDef r derivs ref_ lbe = GD r Nothing derivs ref_ lbe Nothing
+gdNoUnitDef r derivs ref_ lbe = GD r Nothing derivs ref_ lbe []
 
 gd' :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
   Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
-gd' r (Just u) derivs ref_ sn note = GD r (Just (unitWrapper u)) derivs ref_ (mkLabelSame sn (Def General)) (Just note)
-gd' r Nothing  derivs ref_ sn note = GD r Nothing                derivs ref_ (mkLabelSame sn (Def General)) (Just note)
+gd' r (Just u) derivs ref_ sn note = GD r (Just (unitWrapper u)) derivs ref_ (mkLabelSame sn (Def General)) note
+gd' r Nothing  derivs ref_ sn note = GD r Nothing                derivs ref_ (mkLabelSame sn (Def General)) note
 
 gd'' :: RelationConcept -> [Reference] -> String -> [Sentence] -> GenDefn
-gd'' r ref_ sn []   = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) ref_ (mkLabelSame sn (Def General)) Nothing
-gd'' r ref_ sn note = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) ref_ (mkLabelSame sn (Def General)) (Just note)
+gd'' r ref_ sn note = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) ref_ (mkLabelSame sn (Def General)) note

@@ -29,9 +29,9 @@ gbrTMods = [pbIsSafe, lrIsSafe]
 -- so basically we have to combine the old function with the new function
 
 lrIsSafe :: TheoryModel
-lrIsSafe = tm' (cw lrIsSafe_RC)
-   (tc' [qw is_safeLR, qw lRe, qw demand] ([] :: [ConceptChunk])
-   [relToQD locSymbMap lrIsSafe_RC] [(sy is_safeLR) $= (sy lRe) $> (sy demand)] [] [makeRef astm2009]) 
+lrIsSafe = tm (cw lrIsSafe_RC)
+   [qw is_safeLR, qw lRe, qw demand] ([] :: [ConceptChunk])
+   [relToQD locSymbMap lrIsSafe_RC] [(sy is_safeLR) $= (sy lRe) $> (sy demand)] [] [makeRef astm2009] 
    l1 [lrIsSafeDesc]
   where locSymbMap = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) glassBRsymb ([] :: [UnitDefn])
 
@@ -50,9 +50,9 @@ lrIsSafeDesc = tModDesc (is_safeLR) s ending
       makeRefS calofDemand
 
 pbIsSafe :: TheoryModel
-pbIsSafe = tm' (cw pbIsSafe_RC) 
-  (tc' [qw is_safePb, qw prob_br, qw pb_tol] ([] :: [ConceptChunk])
-  [] [(sy is_safePb) $= (sy prob_br) $< (sy pb_tol)] [] [makeRef astm2009])
+pbIsSafe = tm (cw pbIsSafe_RC) 
+  [qw is_safePb, qw prob_br, qw pb_tol] ([] :: [ConceptChunk])
+  [] [(sy is_safePb) $= (sy prob_br) $< (sy pb_tol)] [] [makeRef astm2009]
   l2 [pbIsSafeDesc]
 
 pbIsSafe_RC :: RelationConcept

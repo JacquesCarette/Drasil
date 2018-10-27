@@ -35,9 +35,9 @@ cpTMods_new = [t1NewtonSL_new, t2NewtonTL_new, t3NewtonLUG_new,
 -- T1 : Newton's second law of motion --
 
 t1NewtonSL_new :: TheoryModel
-t1NewtonSL_new = tm' (cw newtonSL)
-  (tc' [qw QP.force, qw QPP.mass, qw QP.acceleration] ([] :: [ConceptChunk])
-  [] [(sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)] [] []) 
+t1NewtonSL_new = tm (cw newtonSL)
+  [qw QP.force, qw QPP.mass, qw QP.acceleration] ([] :: [ConceptChunk])
+  [] [(sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)] [] [] 
   l1 [newtonSLDesc]
 
 newtonSL :: RelationConcept
@@ -61,9 +61,9 @@ newtonSLDesc = foldlSent [S "The net", (phrase QP.force), (ch QP.force),
 -- T2 : Newton's third law of motion --
 
 t2NewtonTL_new :: TheoryModel
-t2NewtonTL_new = tm' (cw newtonTL)
-  (tc' [qw force_1, qw force_2] ([] :: [ConceptChunk])
-  [] [(sy force_1) $= (negate (sy force_2))] [] []) 
+t2NewtonTL_new = tm (cw newtonTL)
+  [qw force_1, qw force_2] ([] :: [ConceptChunk])
+  [] [(sy force_1) $= (negate (sy force_2))] [] [] 
   l2 [newtonTLDesc]
 
 newtonTL :: RelationConcept
@@ -85,13 +85,13 @@ newtonTLDesc = foldlSent [S "Every action has an equal and opposite reaction. In
 -- T3 : Newton's law of universal gravitation --
 
 t3NewtonLUG_new :: TheoryModel
-t3NewtonLUG_new = tm' (cw newtonLUG)
-  (tc' [qw QP.force, qw QP.gravitationalConst, qw mass_1, qw mass_2,
+t3NewtonLUG_new = tm (cw newtonLUG)
+  [qw QP.force, qw QP.gravitationalConst, qw mass_1, qw mass_2,
   qw dispNorm, qw dispUnit, qw QP.displacement] ([] :: [ConceptChunk])
   [] [(sy QP.force) $= (sy QP.gravitationalConst) * ((sy mass_1) * 
   (sy mass_2) / ((sy dispNorm) $^ (fromInteger 2))) * (sy dispUnit) $= 
   (sy QP.gravitationalConst) * ((sy mass_1) * (sy mass_2) / ((sy dispNorm) 
-  $^ (fromInteger 2))) * ((sy QP.displacement) / (sy dispNorm))] [] []) 
+  $^ (fromInteger 2))) * ((sy QP.displacement) / (sy dispNorm))] [] [] 
   l3 [newtonLUGDesc]
 
 newtonLUG :: RelationConcept
@@ -137,10 +137,10 @@ newtonLUGDesc = foldlSent [S "Two", (plural CP.rigidBody), S "in the universe",
 -- T4 : Chasles' theorem --
 
 t4ChaslesThm_new :: TheoryModel
-t4ChaslesThm_new = tm' (cw chaslesThm)
-  (tc' [qw vel_B, qw vel_O, qw QP.angularVelocity, qw r_OB] 
+t4ChaslesThm_new = tm (cw chaslesThm)
+  [qw vel_B, qw vel_O, qw QP.angularVelocity, qw r_OB] 
   ([] :: [ConceptChunk]) [] [(sy vel_B) $= (sy vel_O) + (cross 
-  (sy  QP.angularVelocity) (sy r_OB))] [] []) l4
+  (sy  QP.angularVelocity) (sy r_OB))] [] [] l4
   [chaslesThmDesc]
 
 chaslesThm :: RelationConcept
@@ -169,10 +169,10 @@ chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
 -- T5 : Newton's second law for rotational motion --
 
 t5NewtonSLR_new :: TheoryModel
-t5NewtonSLR_new = tm' (cw newtonSLR)
-  (tc' [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
+t5NewtonSLR_new = tm (cw newtonSLR)
+  [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
   ([] :: [ConceptChunk]) [] [(sy  QP.torque) $= (sy QP.momentOfInertia) 
-  * (sy QP.angularAccel)] [] []) l5
+  * (sy QP.angularAccel)] [] [] l5
   [newtonSLRDesc]
 
 newtonSLR :: RelationConcept

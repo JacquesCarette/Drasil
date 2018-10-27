@@ -32,10 +32,10 @@ swhsTMods = [consThermE, sensHtE, latentHtE]
 -- Theoretical Model 1 --
 -------------------------
 consThermE :: TheoryModel
-consThermE = tm' consThermE_rc
-  (tc' [qw thFluxVect, qw gradient, qw vol_ht_gen, 
+consThermE = tm consThermE_rc
+  [qw thFluxVect, qw gradient, qw vol_ht_gen, 
     qw density, qw heat_cap_spec, qw temp, qw time] ([] :: [ConceptChunk])
-  [] [consThermERel] [] [makeRef consThemESrc]) 
+  [] [consThermERel] [] [makeRef consThemESrc] 
   (mkLabelSame "consThermE" (Def TM)) [consThermEdesc]
 
 consThermE_rc :: RelationConcept
@@ -68,10 +68,10 @@ consThermEdesc = foldlSent [
 -- Theoretical Model 2 --
 -------------------------
 sensHtE :: TheoryModel
-sensHtE = tm' sensHtE_rc
-  (tc' [qw sens_heat, qw htCap_S, qw mass, 
+sensHtE = tm sensHtE_rc
+  [qw sens_heat, qw htCap_S, qw mass, 
     qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [ConceptChunk])
-  [] [sensHtEEqn] [] [makeRef sensHtESrc]) 
+  [] [sensHtEEqn] [] [makeRef sensHtESrc] 
   (mkLabelSame "sensHtE" (Def TM)) [sensHtEdesc]
 
 sensHtE_rc :: RelationConcept
@@ -127,9 +127,9 @@ sensHtEdesc = foldlSent [
 -- Theoretical Model 3 --
 -------------------------
 latentHtE :: TheoryModel
-latentHtE = tm' latentHtE_rc
-  (tc' [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
-  [] [latHtEEqn] [] [makeRef latHtESrc]) (mkLabelSame "latentHtE" (Def TM)) [latentHtEdesc]
+latentHtE = tm latentHtE_rc
+  [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
+  [] [latHtEEqn] [] [makeRef latHtESrc] (mkLabelSame "latentHtE" (Def TM)) [latentHtEdesc]
 
 latentHtE_rc :: RelationConcept
 latentHtE_rc = makeRC "latentHtE_rc"

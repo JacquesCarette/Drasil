@@ -1,6 +1,5 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.Theory
-  ( tc', TheoryModel, tm', Theory(..))where
+module Language.Drasil.Chunk.Theory (TheoryModel, tm, Theory(..))where
 
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import Language.Drasil.Chunk.Eq (QDefinition)
@@ -16,7 +15,7 @@ import Language.Drasil.Spec (Sentence)
 import Control.Lens (Lens', view, makeLenses)
 
 class Theory t where
-  valid_context :: Lens' t [TheoryChunk]
+  valid_context :: Lens' t [TheoryModel]
   spaces        :: Lens' t [SpaceDefn]
   quantities    :: Lens' t [QuantityDict]
   operations    :: Lens' t [ConceptChunk] -- FIXME: Should not be Concept
@@ -27,13 +26,17 @@ class Theory t where
 data SpaceDefn -- FIXME: This should be defined.
 
 {-
-A Theory is a collection of type definitions (spc),
+A TheoryModel is a collection of type definitions (spc),
 quantities (quan), operations (ops), definitions (defq),
-invariants (invs), defined functions (dfun) and
-accompanying reference (ref).
+invariants (invs), defined functions (dfun),
+accompanying reference (ref), label and notes.
+
+Right now, neither the definition context (vctx) nor the
+spaces (spc) are ever defined.
 -}
-data TheoryChunk = TC
-  { _vctx :: [TheoryChunk]
+data TheoryModel = TM 
+  { _con :: ConceptChunk
+  , _vctx :: [TheoryModel]
   , _spc  :: [SpaceDefn]
   , _quan :: [QuantityDict]
   , _ops  :: [ConceptChunk]
@@ -41,10 +44,20 @@ data TheoryChunk = TC
   , _invs :: [Relation]
   , _dfun :: [QDefinition]
   , _ref  :: [Reference]
+  , _lb :: Label
+  , _notes :: [Sentence]
   }
-makeLenses ''TheoryChunk
+makeLenses ''TheoryModel
 
-instance Theory        TheoryChunk where
+instance HasUID             TheoryModel where uid = con . uid
+instance NamedIdea          TheoryModel where term = con . term
+instance Idea               TheoryModel where getA = getA . view con
+instance Definition         TheoryModel where defn = con . defn
+instance HasReference       TheoryModel where getReferences = ref
+instance ConceptDomain      TheoryModel where cdom = con . cdom
+instance HasAdditionalNotes TheoryModel where getNotes = notes
+instance Concept            TheoryModel where
+instance Theory             TheoryModel where
   valid_context = vctx
   spaces        = spc
   quantities    = quan
@@ -52,38 +65,18 @@ instance Theory        TheoryChunk where
   defined_quant = defq
   invariants    = invs
   defined_fun   = dfun
-instance HasReference  TheoryChunk where getReferences = ref
-
-data TheoryModel = TM { _con :: ConceptChunk
-                      , _thy :: TheoryChunk
-                      , _lb :: Label
-                      , _notes :: [Sentence]
-                      }
-makeLenses ''TheoryModel
-
-instance HasUID             TheoryModel where uid = con . uid
-instance NamedIdea          TheoryModel where term = con . term
-instance Idea               TheoryModel where getA = getA . view con
-instance Definition         TheoryModel where defn = con . defn
-instance HasReference       TheoryModel where getReferences = thy . getReferences
-instance ConceptDomain      TheoryModel where cdom = con . cdom
-instance HasAdditionalNotes TheoryModel where getNotes = notes
-instance Concept            TheoryModel where
-instance Theory             TheoryModel where
-  valid_context = thy . valid_context
-  spaces        = thy . spaces
-  quantities    = thy . quantities
-  operations    = thy . operations
-  defined_quant = thy . defined_quant
-  invariants    = thy . invariants
-  defined_fun   = thy . defined_fun
 instance HasLabel           TheoryModel where getLabel = lb
 instance HasShortName       TheoryModel where shortname = lb . shortname
 
+{-
 tc' :: (Quantity q, Concept c) =>
     [q] -> [c] -> [QDefinition] ->
     [Relation] -> [QDefinition] -> [Reference] -> TheoryChunk
 tc' q c dq inv dfn r = TC [] [] (map qw q) (map cw c) dq inv dfn r
+-}
 
-tm' :: Concept c => c -> TheoryChunk -> Label -> [Sentence] -> TheoryModel
-tm' c t lbe nts = TM (cw c) t lbe nts
+tm :: (Concept c0, Quantity q, Concept c1) => c0 ->
+    [q] -> [c1] -> [QDefinition] ->
+    [Relation] -> [QDefinition] -> [Reference] ->
+    Label -> [Sentence] -> TheoryModel
+tm c0 q c1 dq inv dfn r lbe nts = TM (cw c0) [] [] (map qw q) (map cw c1) dq inv dfn r lbe nts

@@ -36,9 +36,9 @@ l5 = mkLabelSame "hookesLaw"    (Def TM)
 
 ------------- New Chunk -----------
 factOfSafety :: TheoryModel
-factOfSafety = tm' (cw factOfSafety_rc)
-  (tc' [qw fs, qw shearRes, qw mobShear] ([] :: [ConceptChunk])
-  [] [factOfSafety_rel] [] [makeRef fredlund1977]) l1 [factOfSafety_desc]
+factOfSafety = tm (cw factOfSafety_rc)
+  [qw fs, qw shearRes, qw mobShear] ([] :: [ConceptChunk])
+  [] [factOfSafety_rel] [] [makeRef fredlund1977] l1 [factOfSafety_desc]
 
 ------------------------------------
 factOfSafety_rc :: RelationConcept
@@ -58,9 +58,9 @@ factOfSafety_desc = foldlSent [
 --
 ------------- New Chunk -----------
 equilibrium :: TheoryModel
-equilibrium = tm' (cw equilibrium_rc)
-  (tc' [qw fx] ([] :: [ConceptChunk])
-  [] [eq_rel] [] [makeRef fredlund1977]) l2 [eq_desc]
+equilibrium = tm (cw equilibrium_rc)
+  [qw fx] ([] :: [ConceptChunk])
+  [] [eq_rel] [] [makeRef fredlund1977] l2 [eq_desc]
 
 ------------------------------------  
 equilibrium_rc :: RelationConcept
@@ -82,10 +82,10 @@ eq_desc = foldlSent [S "For a body in static equilibrium, the net",
 --
 ------------- New Chunk -----------
 mcShrStrgth :: TheoryModel
-mcShrStrgth = tm' (cw mcShrStrgth_rc)
-  (tc' [qw shrStress, qw normStress, qw fricAngle, qw cohesion] 
+mcShrStrgth = tm (cw mcShrStrgth_rc)
+  [qw shrStress, qw normStress, qw fricAngle, qw cohesion] 
   ([] :: [ConceptChunk])
-  [] [mcSS_rel] [] [makeRef fredlund1977]) l3 [mcSS_desc]
+  [] [mcSS_rel] [] [makeRef fredlund1977] l3 [mcSS_desc]
 
 ------------------------------------
 mcShrStrgth_rc :: RelationConcept
@@ -117,10 +117,10 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
 --
 ------------- New Chunk -----------
 effStress :: TheoryModel
-effStress = tm' (cw effStress_rc)
-  (tc' [qw normStress, qw porePressure] 
+effStress = tm (cw effStress_rc)
+  [qw normStress, qw porePressure] 
   ([] :: [ConceptChunk])
-  [] [effS_rel] [] [makeRef fredlund1977]) l4 [effS_desc]
+  [] [effS_rel] [] [makeRef fredlund1977] l4 [effS_desc]
 
 ------------------------------------
 effStress_rc :: RelationConcept
@@ -147,10 +147,10 @@ effS_desc = foldlSent [ch normStress, S "is the total", phrase stress,
 --
 ------------- New Chunk -----------
 hookesLaw :: TheoryModel
-hookesLaw = tm' (cw hookesLaw_rc)
-  (tc' [qw genForce, qw stffness, qw genDisplace] 
+hookesLaw = tm (cw hookesLaw_rc)
+  [qw genForce, qw stffness, qw genDisplace] 
   ([] :: [ConceptChunk])
-  [] [hksLw_rel] [] [makeRef stolle2008]) l5 [hksLw_desc]
+  [] [hksLw_rel] [] [makeRef stolle2008] l5 [hksLw_desc]
 
 ------------------------------------
 hookesLaw_rc :: RelationConcept

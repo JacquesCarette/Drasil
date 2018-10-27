@@ -50,7 +50,7 @@ risk = mkDD riskQD
   [makeRef astm2009, makeRef beasonEtAl1998 {- FIXME +:+ sParen (S "Eq. 4-5") -},
   makeRef campidelli {- FIXME +:+ sParen (S "Eq. 14") -}] 
   [{-derivation-}] "risk_fun"
-  (Just $ aGrtrThanB : hRef : ldfRef : jRef : [])
+  (aGrtrThanB : hRef : ldfRef : jRef : [])
 
 --DD2--
 
@@ -65,8 +65,7 @@ hFromtQD :: QDefinition
 hFromtQD = mkQuantDef min_thick hFromt_eq
 
 hFromt :: DataDefinition
-hFromt = mkDD hFromtQD [makeRef astm2009] [{-derivation-}] "min_thick"
-  (Just $ [hMin])
+hFromt = mkDD hFromtQD [makeRef astm2009] [{-derivation-}] "min_thick" [hMin]
 
 --DD3-- (#749)
 
@@ -77,8 +76,7 @@ loadDFQD :: QDefinition
 loadDFQD = mkQuantDef lDurFac loadDF_eq
 
 loadDF :: DataDefinition
-loadDF = mkDD loadDFQD [makeRef astm2009] [{-derivation-}] "loadDurFactor"
-  Nothing
+loadDF = mkDD loadDFQD [makeRef astm2009] [{-derivation-}] "loadDurFactor" []
 
 --DD4--
 
@@ -92,7 +90,7 @@ strDisFacQD = mkQuantDef stressDistFac strDisFac_eq
 
 strDisFac :: DataDefinition
 strDisFac = mkDD strDisFacQD [makeRef astm2009] [{-derivation-}] "stressDistFac"
-  (Just $ jRef2 : qHtRef : arRef : [])
+  (jRef2 : qHtRef : arRef : [])
 
 --DD5--
 
@@ -105,7 +103,7 @@ nonFLQD = mkQuantDef nonFactorL nonFL_eq
 
 nonFL :: DataDefinition
 nonFL = mkDD nonFLQD [makeRef astm2009] [{-derivation-}] "nFL"
-  (Just $ aGrtrThanB : hRef : qHtTlTolRef : [])
+  (aGrtrThanB : hRef : qHtTlTolRef : [])
 
 --DD6--
 
@@ -120,7 +118,7 @@ glaTyFacQD = mkQuantDef gTF glaTyFac_eq
 
 glaTyFac :: DataDefinition
 glaTyFac = mkDD glaTyFacQD [makeRef astm2009] [{-derivation-}] "gTF"
-  (Just $ anGlass : ftGlass : hsGlass : [])
+  (anGlass : ftGlass : hsGlass : [])
 
 --DD7--
 
@@ -133,7 +131,7 @@ dimLLQD = mkQuantDef dimlessLoad dimLL_eq
 
 dimLL :: DataDefinition
 dimLL = mkDD dimLLQD [makeRef astm2009, makeRef campidelli {- +:+ sParen (S "Eq. 7") -}] [{-derivation-}] "dimlessLoad"
-  (Just $ qRef : aGrtrThanB : hRef : gtfRef : glassLiteRef : [])
+  (qRef : aGrtrThanB : hRef : gtfRef : glassLiteRef : [])
 
 --DD8--
 
@@ -146,7 +144,7 @@ tolPreQD = mkQuantDef tolLoad tolPre_eq
 
 tolPre :: DataDefinition
 tolPre = mkDD tolPreQD [makeRef astm2009] [{-derivation-}] "tolLoad"
-  (Just $ qHtTlExtra : [])
+  (qHtTlExtra : [])
 
 --DD9--
 
@@ -161,7 +159,7 @@ tolStrDisFacQD = mkQuantDef sdf_tol tolStrDisFac_eq
 
 tolStrDisFac :: DataDefinition
 tolStrDisFac = mkDD tolStrDisFacQD [makeRef astm2009] [{-derivation-}] "sdf_tol"
-  (Just $ jtolRelToPbtol : aGrtrThanB : hRef : ldfRef : pbTolUsr : [])
+  (jtolRelToPbtol : aGrtrThanB : hRef : ldfRef : pbTolUsr : [])
 
 --DD10--
 
@@ -172,8 +170,7 @@ standOffDisQD :: QDefinition
 standOffDisQD = mkQuantDef standOffDist standOffDis_eq
 
 standOffDis :: DataDefinition
-standOffDis = mkDD standOffDisQD [makeRef astm2009] [{-derivation-}] "standOffDist"
-  Nothing
+standOffDis = mkDD standOffDisQD [makeRef astm2009] [{-derivation-}] "standOffDist" []
 
 --DD11--
 
@@ -184,8 +181,7 @@ aspRatQD :: QDefinition
 aspRatQD = mkQuantDef aspect_ratio aspRat_eq
 
 aspRat :: DataDefinition
-aspRat = mkDD aspRatQD [makeRef astm2009] [{-derivation-}] "aspect_ratio"
-  (Just $ aGrtrThanB : [])
+aspRat = mkDD aspRatQD [makeRef astm2009] [{-derivation-}] "aspect_ratio" (aGrtrThanB : [])
 
 --Additional Notes--
 

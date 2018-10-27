@@ -1,6 +1,6 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.Theory 
-  ( tc', TheoryModel, tm, tm', Theory(invariants, defined_quant, defined_fun))where
+module Language.Drasil.Chunk.Theory
+  ( tc', TheoryModel, tm', Theory(..))where
 
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import Language.Drasil.Chunk.Eq (QDefinition)
@@ -16,9 +16,9 @@ import Language.Drasil.UID (UID)
 
 import Control.Lens (Lens', view, makeLenses)
 
-class HasUID t => Theory t where
+class Theory t where
   valid_context :: Lens' t [TheoryChunk]
-  spaces        :: Lens' t [SpaceDefn] 
+  spaces        :: Lens' t [SpaceDefn]
   quantities    :: Lens' t [QuantityDict]
   operations    :: Lens' t [ConceptChunk] -- FIXME: Should not be Concept
   defined_quant :: Lens' t [QDefinition]
@@ -27,16 +27,22 @@ class HasUID t => Theory t where
 
 data SpaceDefn -- FIXME: This should be defined.
 
-data TheoryChunk = TC { _tid :: UID
-                      , _vctx :: [TheoryChunk]
-                      , _spc  :: [SpaceDefn]
-                      , _quan :: [QuantityDict]
-                      , _ops  :: [ConceptChunk]
-                      , _defq :: [QDefinition]
-                      , _invs :: [Relation]
-                      , _dfun :: [QDefinition]
-                      , _ref  :: [Reference]
-                      }
+{-
+A Theory is a collection of type definitions (spc),
+quantities (quan), operations (ops), definitions (defq),
+invariants (invs), defined functions (dfun) and
+accompanying reference (ref).
+-}
+data TheoryChunk = TC
+  { _vctx :: [TheoryChunk]
+  , _spc  :: [SpaceDefn]
+  , _quan :: [QuantityDict]
+  , _ops  :: [ConceptChunk]
+  , _defq :: [QDefinition]
+  , _invs :: [Relation]
+  , _dfun :: [QDefinition]
+  , _ref  :: [Reference]
+  }
 makeLenses ''TheoryChunk
 
 instance Theory        TheoryChunk where
@@ -47,11 +53,8 @@ instance Theory        TheoryChunk where
   defined_quant = defq
   invariants    = invs
   defined_fun   = dfun
-instance HasUID        TheoryChunk where uid = tid
 instance HasReference  TheoryChunk where getReferences = ref
 
-
--- use the id of the TheoryModel as the uid. FIXME ?
 data TheoryModel = TM { _con :: ConceptChunk
                       , _thy :: TheoryChunk
                       , _lb :: Label
@@ -79,14 +82,14 @@ instance HasLabel           TheoryModel where getLabel = lb
 instance HasShortName       TheoryModel where shortname = lb . shortname
 
 tc :: (Concept c, Quantity q) =>
-    String -> [TheoryChunk] -> [SpaceDefn] -> [q] -> [c] -> 
+    [TheoryChunk] -> [SpaceDefn] -> [q] -> [c] ->
     [QDefinition] -> [Relation] -> [QDefinition] -> [Reference] -> TheoryChunk
-tc cid t s q c dq inv dfn r = TC cid t s (map qw q) (map cw c) dq inv dfn r
+tc t s q c dq inv dfn r = TC t s (map qw q) (map cw c) dq inv dfn r
 
 tc' :: (Quantity q, Concept c) =>
-    String -> [q] -> [c] -> [QDefinition] -> 
+    [q] -> [c] -> [QDefinition] ->
     [Relation] -> [QDefinition] -> [Reference] -> TheoryChunk
-tc' cid q c r = tc cid ([] :: [TheoryChunk]) [] q c r
+tc' q c r = tc ([] :: [TheoryChunk]) [] q c r
 
 tm :: Concept c => c -> TheoryChunk -> Label -> TheoryModel
 tm c t lbe = TM (cw c) t lbe []

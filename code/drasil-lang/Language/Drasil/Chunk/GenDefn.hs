@@ -1,7 +1,5 @@
-{-# Language TemplateHaskell, TypeFamilies #-}
-module Language.Drasil.Chunk.GenDefn
-  ( GenDefn, gd, gdUnit, gd', gd'', gdNoUnitDef
-  ) where
+{-# Language TemplateHaskell #-}
+module Language.Drasil.Chunk.GenDefn ( GenDefn, gd, gdUnit, gd', gd'', gdNoUnitDef) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, IsUnit,
@@ -22,7 +20,7 @@ import Control.Lens (makeLenses)
 data GenDefn = GD { _relC :: RelationConcept
                   , gdUnit :: Maybe UnitDefn                  
                   , _deri :: Derivation
-                  , _ref :: [Reference]
+                  , _refs :: [Reference]
                   , _lb :: Label
                   , _notes :: [Sentence]
                   }
@@ -36,7 +34,7 @@ instance Definition         GenDefn where defn = relC . defn
 instance ConceptDomain      GenDefn where cdom = relC . cdom
 instance ExprRelat          GenDefn where relat = relC . relat
 instance HasDerivation      GenDefn where derivations = deri
-instance HasReference       GenDefn where getReferences = ref
+instance HasReference       GenDefn where getReferences = refs
 instance HasLabel           GenDefn where getLabel = lb
 instance HasShortName       GenDefn where shortname = lb . shortname
 instance HasAdditionalNotes GenDefn where getNotes = notes
@@ -44,16 +42,16 @@ instance MayHaveUnit        GenDefn where getUnit u = gdUnit u
 
 gd :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
   Derivation -> [Reference] -> Label -> GenDefn
-gd r (Just u) derivs ref_ lbe = GD r (Just (unitWrapper u)) derivs ref_ lbe []
-gd r Nothing  derivs ref_ lbe = GD r Nothing                derivs ref_ lbe []
+gd r (Just u) derivs ref lbe = GD r (Just (unitWrapper u)) derivs ref lbe []
+gd r Nothing  derivs ref lbe = GD r Nothing                derivs ref lbe []
 
 gdNoUnitDef :: RelationConcept -> Derivation -> [Reference] -> Label -> GenDefn
-gdNoUnitDef r derivs ref_ lbe = GD r Nothing derivs ref_ lbe []
+gdNoUnitDef r derivs ref lbe = GD r Nothing derivs ref lbe []
 
 gd' :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
   Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
-gd' r (Just u) derivs ref_ sn note = GD r (Just (unitWrapper u)) derivs ref_ (mkLabelSame sn (Def General)) note
-gd' r Nothing  derivs ref_ sn note = GD r Nothing                derivs ref_ (mkLabelSame sn (Def General)) note
+gd' r (Just u) derivs ref sn note = GD r (Just (unitWrapper u)) derivs ref (mkLabelSame sn (Def General)) note
+gd' r Nothing  derivs ref sn note = GD r Nothing                derivs ref (mkLabelSame sn (Def General)) note
 
 gd'' :: RelationConcept -> [Reference] -> String -> [Sentence] -> GenDefn
-gd'' r ref_ sn note = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) ref_ (mkLabelSame sn (Def General)) note
+gd'' r ref sn note = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) ref (mkLabelSame sn (Def General)) note

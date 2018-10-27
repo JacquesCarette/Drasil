@@ -12,7 +12,6 @@ import Language.Drasil.Expr (Relation)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.RefTypes (Reference)
 import Language.Drasil.Spec (Sentence)
-import Language.Drasil.UID (UID)
 
 import Control.Lens (Lens', view, makeLenses)
 
@@ -81,19 +80,10 @@ instance Theory             TheoryModel where
 instance HasLabel           TheoryModel where getLabel = lb
 instance HasShortName       TheoryModel where shortname = lb . shortname
 
-tc :: (Concept c, Quantity q) =>
-    [TheoryChunk] -> [SpaceDefn] -> [q] -> [c] ->
-    [QDefinition] -> [Relation] -> [QDefinition] -> [Reference] -> TheoryChunk
-tc t s q c dq inv dfn r = TC t s (map qw q) (map cw c) dq inv dfn r
-
 tc' :: (Quantity q, Concept c) =>
     [q] -> [c] -> [QDefinition] ->
     [Relation] -> [QDefinition] -> [Reference] -> TheoryChunk
-tc' q c r = tc ([] :: [TheoryChunk]) [] q c r
+tc' q c dq inv dfn r = TC [] [] (map qw q) (map cw c) dq inv dfn r
 
-tm :: Concept c => c -> TheoryChunk -> Label -> TheoryModel
-tm c t lbe = TM (cw c) t lbe []
-
--- Same as tm, but with the additional notes argument passed in
 tm' :: Concept c => c -> TheoryChunk -> Label -> [Sentence] -> TheoryModel
 tm' c t lbe nts = TM (cw c) t lbe nts

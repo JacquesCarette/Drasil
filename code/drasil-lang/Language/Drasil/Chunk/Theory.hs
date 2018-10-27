@@ -68,13 +68,9 @@ instance Theory             TheoryModel where
 instance HasLabel           TheoryModel where getLabel = lb
 instance HasShortName       TheoryModel where shortname = lb . shortname
 
-{-
-tc' :: (Quantity q, Concept c) =>
-    [q] -> [c] -> [QDefinition] ->
-    [Relation] -> [QDefinition] -> [Reference] -> TheoryChunk
-tc' q c dq inv dfn r = TC [] [] (map qw q) (map cw c) dq inv dfn r
--}
-
+-- This "smart" constructor is really quite awful, it takes way too many arguments.
+-- This should likely be re-arranged somehow. Especially since since of the arguments
+-- have the same type!
 tm :: (Concept c0, Quantity q, Concept c1) => c0 ->
     [q] -> [c1] -> [QDefinition] ->
     [Relation] -> [QDefinition] -> [Reference] ->

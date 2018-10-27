@@ -159,4 +159,6 @@ under the namespace *Language.Drasil*, which will thus be omitted.
   another way to say quantity+unit+definition+concept-domain.
 
 - **Chunk/Theory**: A Theory is a collection of types, defined quantities,
-  definitions and relations.
+  definitions and relations (and more - see the comments in the file).
+
+- **Chunk/Relation**:

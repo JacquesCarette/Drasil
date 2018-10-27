@@ -32,7 +32,7 @@ im1_new = im' transMot [qw vel_i, qw QP.time, qw QP.gravitationalAccel, qw force
   [transMotDesc]
 
 transMot :: RelationConcept
-transMot = makeRC "transMot" transMotNP (transMotDesc +:+ transMotLeg) transMotRel l1
+transMot = makeRC "transMot" transMotNP (transMotDesc +:+ transMotLeg) transMotRel -- l1
 
 transMotNP :: NP
 transMotNP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
@@ -63,7 +63,7 @@ im2_new = im' rotMot [qw QP.angularVelocity, qw QP.time, qw torque_i, qw QP.mome
   [rotMotDesc]
 
 rotMot :: RelationConcept
-rotMot = makeRC "rotMot" (rotMotNP) (rotMotDesc +:+ rotMotLeg) rotMotRel l2
+rotMot = makeRC "rotMot" (rotMotNP) (rotMotDesc +:+ rotMotLeg) rotMotRel -- l2
 
 rotMotNP :: NP
 rotMotNP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid body"
@@ -91,7 +91,7 @@ im3_new = im' col2D [qw QP.time, qw QP.impulseS, qw mass_A, qw normalVect]
   [col2DDesc]
 
 col2D :: RelationConcept
-col2D = makeRC "col2D" (col2DNP) (col2DDesc +:+ col2DLeg) col2DRel l3
+col2D = makeRC "col2D" (col2DNP) (col2DDesc +:+ col2DLeg) col2DRel -- l3
 
 col2DNP :: NP
 col2DNP =  nounPhraseSP "Collisions on 2D rigid bodies"

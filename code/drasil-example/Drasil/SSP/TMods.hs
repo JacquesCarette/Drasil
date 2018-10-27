@@ -42,7 +42,7 @@ factOfSafety = tm (cw factOfSafety_rc)
 
 ------------------------------------
 factOfSafety_rc :: RelationConcept
-factOfSafety_rc = makeRC "factOfSafety_rc" factorOfSafety factOfSafety_desc factOfSafety_rel l1
+factOfSafety_rc = makeRC "factOfSafety_rc" factorOfSafety factOfSafety_desc factOfSafety_rel -- l1
 
 factOfSafety_rel :: Relation
 factOfSafety_rel = (sy fs) $= (sy shearRes) / (sy mobShear)
@@ -64,7 +64,7 @@ equilibrium = tm (cw equilibrium_rc)
 
 ------------------------------------  
 equilibrium_rc :: RelationConcept
-equilibrium_rc = makeRC "equilibrium_rc" (nounPhraseSP "equilibrium") eq_desc eq_rel l2
+equilibrium_rc = makeRC "equilibrium_rc" (nounPhraseSP "equilibrium") eq_desc eq_rel -- l2
 
 -- FIXME: Atomic "i" is a hack.  But we need to sum over something!
 eq_rel :: Relation
@@ -90,7 +90,7 @@ mcShrStrgth = tm (cw mcShrStrgth_rc)
 ------------------------------------
 mcShrStrgth_rc :: RelationConcept
 mcShrStrgth_rc = makeRC "mcShrStrgth_rc" (nounPhraseSP "Mohr-Coulumb shear strength")
-  mcSS_desc mcSS_rel l3
+  mcSS_desc mcSS_rel -- l3
 
 mcSS_rel :: Relation
 mcSS_rel = (sy shrStress) $= ((sy normStress) * (tan (sy fricAngle)) + (sy cohesion))
@@ -125,7 +125,7 @@ effStress = tm (cw effStress_rc)
 ------------------------------------
 effStress_rc :: RelationConcept
 effStress_rc = makeRC "effStress_rc"
-  (nounPhraseSP "effective stress") effS_desc effS_rel l4
+  (nounPhraseSP "effective stress") effS_desc effS_rel -- l4
 
 effS_rel :: Relation
 effS_rel = (sy normStress) $= (sy normStress) - (sy porePressure)
@@ -155,7 +155,7 @@ hookesLaw = tm (cw hookesLaw_rc)
 ------------------------------------
 hookesLaw_rc :: RelationConcept
 hookesLaw_rc = makeRC "hookesLaw_rc"
-  (nounPhraseSP "Hooke's law") hksLw_desc hksLw_rel l5
+  (nounPhraseSP "Hooke's law") hksLw_desc hksLw_rel -- l5
 
 hksLw_rel :: Relation
 hksLw_rel = (sy genForce) $= (sy stffness) * (sy genDisplace)

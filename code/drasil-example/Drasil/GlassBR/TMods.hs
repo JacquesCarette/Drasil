@@ -37,7 +37,7 @@ lrIsSafe = tm (cw lrIsSafe_RC)
 
 lrIsSafe_RC :: RelationConcept
 lrIsSafe_RC = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
-  lrIsSafeDesc ( (sy is_safeLR) $= (sy lRe) $> (sy demand)) l1
+  lrIsSafeDesc ( (sy is_safeLR) $= (sy lRe) $> (sy demand)) -- l1
 
 lrIsSafeDesc :: Sentence
 lrIsSafeDesc = tModDesc (is_safeLR) s ending
@@ -57,7 +57,7 @@ pbIsSafe = tm (cw pbIsSafe_RC)
 
 pbIsSafe_RC :: RelationConcept
 pbIsSafe_RC = makeRC "safetyReqPb" (nounPhraseSP "Safety Req-Pb")
-  pbIsSafeDesc ((sy is_safePb) $= (sy prob_br) $< (sy pb_tol)) l2
+  pbIsSafeDesc ((sy is_safePb) $= (sy prob_br) $< (sy pb_tol)) -- l2
 
 pbIsSafeDesc :: Sentence
 pbIsSafeDesc = tModDesc (is_safePb) s ending

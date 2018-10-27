@@ -22,7 +22,7 @@ import Data.Drasil.Utils (unwrap, weave)
 
 import Drasil.SWHS.Assumptions (newA2, newA3, newA4, newA5, newA6)
 import Drasil.SWHS.Concepts (gauss_div)
-import Drasil.SWHS.Labels (nwtnCoolingL, rocTempSimpL)
+import Drasil.SWHS.Labels (rocTempSimpL)
 import Drasil.SWHS.References (incroperaEtAl2007)
 import Drasil.SWHS.TMods (consThermE)
 import Drasil.SWHS.Unitals (vol_ht_gen, deltaT, temp_env, pcm_SA,
@@ -50,7 +50,7 @@ rocTempSimp = gd' rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv 
 
 nwtnCoolingRC :: RelationConcept
 nwtnCoolingRC = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling") 
-  nwtnCooling_desc nwtnCooling_rel nwtnCoolingL
+  nwtnCooling_desc nwtnCooling_rel -- nwtnCoolingL
 
 nwtnCooling_rel :: Relation
 nwtnCooling_rel = apply1 ht_flux QP.time $= sy htTransCoeff *
@@ -74,7 +74,7 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
 --
 rocTempSimpRC :: RelationConcept
 rocTempSimpRC = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
-  "of change of temperature") rocTempSimp_desc rocTempSimp_rel rocTempSimpL
+  "of change of temperature") rocTempSimp_desc rocTempSimp_rel -- rocTempSimpL
 
 rocTempSimp_rel :: Relation
 rocTempSimp_rel = (sy QPP.mass) * (sy QT.heat_cap_spec) *

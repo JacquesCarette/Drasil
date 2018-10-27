@@ -42,7 +42,7 @@ t1NewtonSL_new = tm (cw newtonSL)
 
 newtonSL :: RelationConcept
 newtonSL = makeRC "newtonSL" (nounPhraseSP "Newton's second law of motion")
-  newtonSLDesc newtonSLRel l1
+  newtonSLDesc newtonSLRel -- l1
 
 newtonSLRel :: Relation
 newtonSLRel = (sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)
@@ -68,7 +68,7 @@ t2NewtonTL_new = tm (cw newtonTL)
 
 newtonTL :: RelationConcept
 newtonTL = makeRC "newtonTL" (nounPhraseSP "Newton's third law of motion")
-  newtonTLDesc newtonTLRel l2
+  newtonTLDesc newtonTLRel -- l2
 
 newtonTLRel :: Relation
 newtonTLRel = (sy force_1) $= (negate (sy force_2))
@@ -96,7 +96,7 @@ t3NewtonLUG_new = tm (cw newtonLUG)
 
 newtonLUG :: RelationConcept
 newtonLUG = makeRC "newtonLUG" 
-  (nounPhraseSP "Newton's law of universal gravitation") newtonLUGDesc newtonLUGRel l3
+  (nounPhraseSP "Newton's law of universal gravitation") newtonLUGDesc newtonLUGRel -- l3
 
 newtonLUGRel :: Relation
 newtonLUGRel = (sy QP.force) $=
@@ -145,7 +145,7 @@ t4ChaslesThm_new = tm (cw chaslesThm)
 
 chaslesThm :: RelationConcept
 chaslesThm = makeRC "chaslesThm" (nounPhraseSP "Chasles' theorem")
-  chaslesThmDesc chaslesThmRel l4
+  chaslesThmDesc chaslesThmRel -- l4
 
 -- Need the cross product symbol - third term should be a cross product.
 chaslesThmRel :: Relation
@@ -177,7 +177,7 @@ t5NewtonSLR_new = tm (cw newtonSLR)
 
 newtonSLR :: RelationConcept
 newtonSLR = makeRC "newtonSLR" 
-  (nounPhraseSP "Newton's second law for rotational motion") newtonSLRDesc newtonSLRRel l5
+  (nounPhraseSP "Newton's second law for rotational motion") newtonSLRDesc newtonSLRRel -- l5
 
 newtonSLRRel :: Relation
 newtonSLRRel = (sy  QP.torque) $= (sy QP.momentOfInertia) * (sy QP.angularAccel)

@@ -1,5 +1,5 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.GenDefn ( GenDefn, gd, gdUnit, gd', gd'', gdNoUnitDef) where
+module Language.Drasil.Chunk.GenDefn ( GenDefn, gd', gd'') where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, IsUnit,
@@ -38,20 +38,15 @@ instance HasReference       GenDefn where getReferences = refs
 instance HasLabel           GenDefn where getLabel = lb
 instance HasShortName       GenDefn where shortname = lb . shortname
 instance HasAdditionalNotes GenDefn where getNotes = notes
-instance MayHaveUnit        GenDefn where getUnit u = gdUnit u
-
-gd :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
-  Derivation -> [Reference] -> Label -> GenDefn
-gd r (Just u) derivs ref lbe = GD r (Just (unitWrapper u)) derivs ref lbe []
-gd r Nothing  derivs ref lbe = GD r Nothing                derivs ref lbe []
-
-gdNoUnitDef :: RelationConcept -> Derivation -> [Reference] -> Label -> GenDefn
-gdNoUnitDef r derivs ref lbe = GD r Nothing derivs ref lbe []
+instance MayHaveUnit        GenDefn where getUnit = gdUnit
 
 gd' :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
   Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
+gd' r u derivs ref sn note = GD r (fmap unitWrapper u) derivs ref (mkLabelSame sn (Def General)) note
+{-
 gd' r (Just u) derivs ref sn note = GD r (Just (unitWrapper u)) derivs ref (mkLabelSame sn (Def General)) note
 gd' r Nothing  derivs ref sn note = GD r Nothing                derivs ref (mkLabelSame sn (Def General)) note
+-}
 
 gd'' :: RelationConcept -> [Reference] -> String -> [Sentence] -> GenDefn
-gd'' r ref sn note = GD r (Nothing :: Maybe UnitDefn) ([] :: Derivation) ref (mkLabelSame sn (Def General)) note
+gd'' r ref sn note = GD r Nothing  [] ref (mkLabelSame sn (Def General)) note

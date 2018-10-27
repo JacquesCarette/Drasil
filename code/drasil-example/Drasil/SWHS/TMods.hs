@@ -41,7 +41,7 @@ consThermE = tm consThermE_rc
 consThermE_rc :: RelationConcept
 consThermE_rc = makeRC "consThermE_rc"
   (nounPhraseSP "Conservation of thermal energy") consThermEdesc consThermERel 
-  (mkLabelSame "ConsThermE" (Def TM))
+  -- (mkLabelSame "ConsThermE" (Def TM))
 
 consThermERel :: Relation
 consThermERel = (negate (sy gradient)) $. (sy thFluxVect) + (sy vol_ht_gen) $=
@@ -76,7 +76,7 @@ sensHtE = tm sensHtE_rc
 
 sensHtE_rc :: RelationConcept
 sensHtE_rc = makeRC "sensHtE_rc" (nounPhraseSP "Sensible heat energy") sensHtEdesc sensHtEEqn
-  (mkLabelSame "SensHtE" (Def TM))
+  -- (mkLabelSame "SensHtE" (Def TM))
 
 sensHtESrc :: Label
 sensHtESrc = mkURILabel "consThemESrc" "http://en.wikipedia.org/wiki/Sensible_heat" "Definition of Sensible Heat"
@@ -134,7 +134,7 @@ latentHtE = tm latentHtE_rc
 latentHtE_rc :: RelationConcept
 latentHtE_rc = makeRC "latentHtE_rc"
   (nounPhraseSP "Latent heat energy") latentHtEdesc latHtEEqn 
-  (mkLabelSame "LatHtE" (Def TM))
+  -- (mkLabelSame "LatHtE" (Def TM))
 
 latHtEEqn :: Relation
 latHtEEqn = apply1 latent_heat time $= 

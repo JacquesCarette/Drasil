@@ -35,7 +35,7 @@ probOfBreak = im probOfBreak_RC [qw risk]
 
 probOfBreak_RC :: RelationConcept
 probOfBreak_RC = makeRC "probOfBreak_RC" (nounPhraseSP "Probability of Glass Breakage")
-  probOfBreakDesc ( (sy prob_br) $= 1 - (exp (negate (sy risk)))) probOfBreakL
+  probOfBreakDesc ( (sy prob_br) $= 1 - (exp (negate (sy risk)))) -- probOfBreakL
 
 probOfBreakDesc :: Sentence
 probOfBreakDesc =
@@ -51,7 +51,7 @@ calofCapacity = im' calofCapacity_RC [qw nonFL, qw glaTyFac, qw loadSF]
 
 calofCapacity_RC :: RelationConcept
 calofCapacity_RC = makeRC "calofCapacity_RC" (nounPhraseSP "Calculation of Capacity") 
-  calofCapacityDesc ( (sy lRe) $= ((sy nonFL) * (sy glaTyFac) * (sy loadSF))) calOfCapacityL
+  calofCapacityDesc ( (sy lRe) $= ((sy nonFL) * (sy glaTyFac) * (sy loadSF))) -- calOfCapacityL
 
 calofCapacityDesc :: Sentence
 calofCapacityDesc =
@@ -76,7 +76,7 @@ calofDemand = im' calofDemand_RC [qw demand, qw eqTNTWeight, qw standOffDist]
 
 calofDemand_RC :: RelationConcept
 calofDemand_RC = makeRC "calofDemand_RC" (nounPhraseSP "Calculation of Demand") 
-  calofDemandDesc ( (sy demand) $= apply2 demand eqTNTWeight standOffDist) calOfDemandL
+  calofDemandDesc ( (sy demand) $= apply2 demand eqTNTWeight standOffDist) -- calOfDemandL
   --calofDemandDesc $ (C demand) $= FCall (asExpr interpY) [V "TSD.txt", sy standOffDist, sy eqTNTWeight] 
   
 calofDemandDesc :: Sentence

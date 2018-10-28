@@ -1,14 +1,6 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.Unital 
-  ( UnitalChunk(..)
-  , makeUCWDS
-  , ucFromDQD
-  , uc
-  , uc'
-  , ucs
-  , ucs'
-  , ucsWS
-  ) where
+  ( UnitalChunk(..) , makeUCWDS , ucFromDQD , uc , uc' , ucs , ucs' , ucsWS) where
 
 import Control.Lens (makeLenses, view, (^.))
 import Language.Drasil.Chunk.Concept (dcc, dccWDS,cw)
@@ -25,7 +17,7 @@ import Language.Drasil.Spec (Sentence)
 
 import Language.Drasil.NounPhrase (NP)
 
--- | UnitalChunks are Unitary
+-- | UnitalChunks are Unitary DefinedQuantityDict
 data UnitalChunk = UC { _defq' :: DefinedQuantityDict
                       , _uni :: UnitDefn
                       }
@@ -49,11 +41,11 @@ instance MayHaveUnit   UnitalChunk where getUnit = Just . view uni
 -- Assumes the 'Space' is Real
 uc :: (Concept c, IsUnit u, ConceptDomain u) =>
   c -> Symbol -> u -> UnitalChunk
-uc a b c = ucs' a b c Real
+uc a b c = ucs' a b Real c
 
 ucs' :: (Concept c, IsUnit u, ConceptDomain u) =>
-  c -> Symbol -> u -> Space -> UnitalChunk
-ucs' a sym c space = UC (dqd (cw a) sym space un) un
+  c -> Symbol -> Space -> u -> UnitalChunk
+ucs' a sym space c = UC (dqd (cw a) sym space un) un
  where un = unitWrapper c
 
 -- | Same as 'uc', except it builds the Concept portion of the UnitalChunk

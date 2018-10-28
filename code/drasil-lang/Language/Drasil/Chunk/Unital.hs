@@ -39,12 +39,10 @@ instance MayHaveUnit   UnitalChunk where getUnit = Just . view uni
 
 -- | Used to create a UnitalChunk from a 'Concept', 'Symbol', and 'Unit'.
 -- Assumes the 'Space' is Real
-uc :: (Concept c, IsUnit u, ConceptDomain u) =>
-  c -> Symbol -> u -> UnitalChunk
+uc :: (Concept c, IsUnit u, ConceptDomain u) => c -> Symbol -> u -> UnitalChunk
 uc a b c = ucs' a b Real c
 
-ucs' :: (Concept c, IsUnit u, ConceptDomain u) =>
-  c -> Symbol -> Space -> u -> UnitalChunk
+ucs' :: (Concept c, IsUnit u, ConceptDomain u) => c -> Symbol -> Space -> u -> UnitalChunk
 ucs' a sym space c = UC (dqd (cw a) sym space un) un
  where un = unitWrapper c
 
@@ -57,14 +55,14 @@ uc' i t d s u = UC (dqd (dcc i t d) s Real un) un
 
 -- | Same as 'uc'', but does not assume the 'Space'
 ucs :: (IsUnit u, ConceptDomain u) => String -> NP ->
-  String -> Symbol -> u -> Space -> UnitalChunk
-ucs nam trm desc sym un space = UC (dqd (dcc nam trm desc) sym space uu) uu
+  String -> Symbol -> Space -> u -> UnitalChunk
+ucs nam trm desc sym space un = UC (dqd (dcc nam trm desc) sym space uu) uu
   where uu = unitWrapper un
 
 -- ucs With a Sentence for desc
 ucsWS :: (IsUnit u, ConceptDomain u) => String -> NP ->
-  Sentence -> Symbol -> u -> Space -> UnitalChunk
-ucsWS nam trm desc sym un space = UC (dqd (dccWDS nam trm desc) sym space uu) uu
+  Sentence -> Symbol -> Space -> u -> UnitalChunk
+ucsWS nam trm desc sym space un = UC (dqd (dccWDS nam trm desc) sym space uu) uu
   where uu = unitWrapper un
 
 --Better names will come later.

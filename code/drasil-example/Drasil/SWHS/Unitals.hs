@@ -189,8 +189,9 @@ thickness = uc'  "thickness" (nounPhraseSP "Minimum thickness of a sheet of PCM"
 -- Unitless symbols --
 ----------------------
 
+-- FIXME: this list should not be hand-constructed
 swhsUnitless :: [DefinedQuantityDict]
-swhsUnitless = [uNormalVect, surface, eta, melt_frac, gradient, frac_min]
+swhsUnitless = [uNormalVect, dqdWr surface, eta, melt_frac, gradient, frac_min]
 
 eta, melt_frac, frac_min:: DefinedQuantityDict
 

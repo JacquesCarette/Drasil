@@ -85,7 +85,7 @@ check_si = collectUnits nopcm_SymbMap symbT
 -- This contains the list of symbols used throughout the document
 nopcm_Symbols :: [DefinedQuantityDict]
 nopcm_Symbols = (map dqdWr nopcm_Units) ++ (map dqdWr nopcm_Constraints)
- ++ [gradient, surface, uNormalVect]
+ ++ [gradient, uNormalVect] ++ map dqdWr [surface]
   
 nopcm_SymbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcm_HTC and pcm_SA
@@ -93,7 +93,7 @@ nopcm_SymbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
 nopcm_SymbolsAll = (map qw nopcm_Units) ++ (map qw nopcm_Constraints) ++
   (map qw specParamValList) ++ 
   (map qw [coil_SA_max]) ++ (map qw [tau_W]) ++ 
-  (map qw [surface, uNormalVect, gradient, eta])
+  (map qw [surface]) ++ (map qw [uNormalVect, gradient, eta])
 
 nopcm_Units :: [UnitaryConceptDict]
 nopcm_Units = map ucw [density, tau, in_SA, out_SA,

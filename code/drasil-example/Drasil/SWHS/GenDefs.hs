@@ -122,7 +122,7 @@ s4_2_3_desc1 :: (HasShortName x, Referable x) => x -> UnitalChunk -> [Sentence]
 s4_2_3_desc1 t1c vo =
   [S "Integrating", makeRefS t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
-s4_2_3_desc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
+s4_2_3_desc2 :: (NamedIdea b, HasSymbol b) => ConceptChunk -> b -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]
 s4_2_3_desc2 cchn su vo tfv unv un =
   [S "Applying", titleize cchn, S "to the first term over",

@@ -95,5 +95,5 @@ constrainedNRV' q cs = ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit
 cuc' :: (IsUnit u, ConceptDomain u) => String -> NP -> String -> Symbol -> u
             -> Space -> [Constraint] -> Expr -> ConstrConcept
 cuc' nam trm desc sym un space cs rv =
-  ConstrConcept (dqd (cw (ucs nam trm desc sym un space)) sym space uu) cs (Just rv)
+  ConstrConcept (dqd (cw (ucs nam trm desc sym space un)) sym space uu) cs (Just rv)
   where uu = unitWrapper un

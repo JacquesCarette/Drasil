@@ -50,8 +50,8 @@ genDefDesc1 :: (HasShortName x, Referable x) => x -> UnitalChunk -> [Sentence]
 genDefDesc1 t1c vo =
   [S "Integrating", makeRefS t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
-genDefDesc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
-  DefinedQuantityDict -> ConceptChunk -> [Sentence]
+genDefDesc2 :: (Quantity b, Quantity e) => ConceptChunk -> b -> UnitalChunk ->
+  UnitalChunk -> e -> ConceptChunk -> [Sentence]
 genDefDesc2 gad su vo tfv unv un =
   [S "Applying", titleize gad, S "to the first term over",
   (phrase su +:+ ch su `ofThe` phrase vo) `sC` S "with",

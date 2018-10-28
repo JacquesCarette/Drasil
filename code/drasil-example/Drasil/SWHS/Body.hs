@@ -1194,8 +1194,8 @@ dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
 -- 4.2.7 : Properties of A Correct Solution --
 ----------------------------------------------
 
-propCorSolDeriv1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
-  CI -> DataDefinition -> DataDefinition -> DefinedQuantityDict -> ConceptChunk -> Contents
+propCorSolDeriv1 :: NamedIdea h => ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
+  CI -> DataDefinition -> DataDefinition -> h -> ConceptChunk -> Contents
 propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
   foldlSPCol [S "A", phrase corSol, S "must exhibit the" +:+.
   phrase lce, S "This means that the", phrase ewat,

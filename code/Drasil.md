@@ -169,3 +169,9 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 
 - **Chunk/DefinedQuantity**: Very weirdly named, since the 'definition' here is that
   from Concept, i.e. just a Sentence. Basically join(Concept,Quantity).
+
+- **Chunk/InstanceModel**: A 'relation concept' that has some stuff identified
+  as inputs and outputs (and constraints on those). Like with GenDefn, should probably
+  use a finer distinction that relation. See issue #1030.
+
+

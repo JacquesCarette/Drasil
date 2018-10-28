@@ -1,9 +1,9 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.Relation ( RelationConcept(..) , makeRC, conc) where
+module Language.Drasil.Chunk.Relation (RelationConcept, makeRC) where
 
 import Control.Lens (makeLenses, (^.), view)
 
-import Language.Drasil.Chunk.Concept (ConceptChunk, cw, dccWDS, dccWDS')
+import Language.Drasil.Chunk.Concept (ConceptChunk, dccWDS)
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term),Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, ExprRelat(relat))
 import Language.Drasil.Expr (Relation)

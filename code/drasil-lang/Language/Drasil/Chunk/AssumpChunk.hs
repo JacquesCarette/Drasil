@@ -1,8 +1,5 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.AssumpChunk 
-  ( AssumpChunk(..)
-  , assump
-  ) where
+module Language.Drasil.Chunk.AssumpChunk ( AssumpChunk(..) , assump) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
 import Language.Drasil.Classes (HasLabel(getLabel))

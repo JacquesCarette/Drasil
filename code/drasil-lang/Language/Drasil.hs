@@ -83,7 +83,7 @@ module Language.Drasil (
   -- Chunk.Relation
   , RelationConcept, makeRC
   --Chunk.DefinedQuantity
-  , dqd, dqd', dqdEL, DefinedQuantityDict, dqdWr, dqdQd
+  , dqd, dqd', DefinedQuantityDict, dqdWr, dqdQd
   -- Chunk.UnitaryConcept
   , ucw, UnitaryConceptDict
   -- Chunk.Attributes --FIXME: Changed a lot

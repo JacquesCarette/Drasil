@@ -53,26 +53,26 @@ uc a b c = ucs' a b c Real
 
 ucs' :: (Concept c, IsUnit u, ConceptDomain u) =>
   c -> Symbol -> u -> Space -> UnitalChunk
-ucs' a sym c space = UC (dqd (cw a) sym space (Just un)) un
+ucs' a sym c space = UC (dqd (cw a) sym space un) un
  where un = unitWrapper c
 
 -- | Same as 'uc', except it builds the Concept portion of the UnitalChunk
 -- from a given uid, term, and defn. Those are the first three arguments
 uc' :: (IsUnit u, ConceptDomain u) => String -> NP -> String -> Symbol ->
   u -> UnitalChunk
-uc' i t d s u = UC (dqd (dcc i t d) s Real (Just un)) un
+uc' i t d s u = UC (dqd (dcc i t d) s Real un) un
  where un = unitWrapper u
 
 -- | Same as 'uc'', but does not assume the 'Space'
 ucs :: (IsUnit u, ConceptDomain u) => String -> NP ->
   String -> Symbol -> u -> Space -> UnitalChunk
-ucs nam trm desc sym un space = UC (dqd (dcc nam trm desc) sym space (Just uu)) uu
+ucs nam trm desc sym un space = UC (dqd (dcc nam trm desc) sym space uu) uu
   where uu = unitWrapper un
 
 -- ucs With a Sentence for desc
 ucsWS :: (IsUnit u, ConceptDomain u) => String -> NP ->
   Sentence -> Symbol -> u -> Space -> UnitalChunk
-ucsWS nam trm desc sym un space = UC (dqd (dccWDS nam trm desc) sym space (Just uu)) uu
+ucsWS nam trm desc sym un space = UC (dqd (dccWDS nam trm desc) sym space uu) uu
   where uu = unitWrapper un
 
 --Better names will come later.
@@ -80,7 +80,7 @@ ucsWS nam trm desc sym un space = UC (dqd (dccWDS nam trm desc) sym space (Just 
 -- the definition instead of a String
 makeUCWDS :: (IsUnit u, ConceptDomain u) => String -> NP -> Sentence -> Symbol ->
   u -> UnitalChunk
-makeUCWDS nam trm desc sym un = UC (dqd (dccWDS nam trm desc) sym Real (Just uu)) uu
+makeUCWDS nam trm desc sym un = UC (dqd (dccWDS nam trm desc) sym Real uu) uu
   where uu = unitWrapper un
 
 -- | Create a UnitalChunk from a 'DefinedQuantityDict' which has a unit already.

@@ -69,21 +69,21 @@ cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
 --FIXME: parametrized hack
 --FIXME: "A" is not being capitalized when it should be.
 forceParam, massParam, momtParam, contParam :: String -> String -> DefinedQuantityDict
-forceParam n w = dqdEL
+forceParam n w = dqd
  (dccWDS ("force" ++ n) (cn $ "force exerted by the " ++ w ++ 
   " body (on another body)") (phrase QP.force)) 
   (sub (eqSymb QP.force) (Atomic n)) Real newton
 
-massParam n w = dqdEL
+massParam n w = dqd
  (dccWDS ("mass" ++ n) (cn $ "mass of the " ++ w ++ " body") 
   (phrase QPP.mass)) (sub (eqSymb QPP.mass) (Atomic n)) Real kilogram
 
-momtParam n w = dqdEL
+momtParam n w = dqd
  (dccWDS ("momentOfInertia" ++ n) (compoundPhrase'
   (QP.momentOfInertia ^. term) (cn $ "of rigid body " ++ n))
   (phrase QP.momentOfInertia)) (sub (eqSymb QP.momentOfInertia) (Atomic w)) Real momtInertU
 
-contParam n w = dqdEL
+contParam n w = dqd
  (dccWDS ("r_" ++ n ++ "P") (contdispN n) 
   (phrase QP.displacement)) (sub (eqSymb QP.displacement)
   (Concat $ [Atomic w, cP])) Real metre
@@ -95,23 +95,23 @@ contdispN n = cn $ "displacement vector between the centre of mass of rigid body
 perpParam, rigidParam, velParam, 
   angParam :: String -> Symbol -> DefinedQuantityDict
 
-velParam n w = dqdEL
+velParam n w = dqd
  (dccWDS ("velocity" ++ n) (compoundPhrase' (QP.velocity ^. term)
   (cn $ "at point " ++ n)) (phrase QP.velocity)) (sub (eqSymb QP.velocity) w) Real velU
 
-angParam n w = dqdEL
+angParam n w = dqd
  (dccWDS ("angular velocity" ++ n) (compoundPhrase'
   (cn $ n ++ " body's") (QP.angularVelocity ^. term))
   (phrase QP.angularVelocity)) (sub (eqSymb QP.angularVelocity) w) Real angVelU
 
-perpParam n w = dqdEL
+perpParam n w = dqd
  (dccWDS ("|| r_A" ++ n ++ " x n ||") 
   (compoundPhrase' (compoundPhrase (cn' "length of the") (QM.perpVect ^. term))
   (cn $ "to the contact displacement vector of rigid body " ++ n)) 
   (phrase QM.perpVect)) (Concat [Atomic "||", w, Atomic "*", --should be x for cross
   (eqSymb QM.perpVect), Atomic "||"]) Real metre
 
-rigidParam n w = dqdEL
+rigidParam n w = dqd
  (dccWDS ("rig_mass" ++ n) (compoundPhrase' (QPP.mass ^. term)
   (cn $ "of rigid body " ++ n)) (phrase QPP.mass)) (sub (eqSymb QPP.mass) w) Real kilogram
 
@@ -128,31 +128,31 @@ iVect, jVect, normalVect, force_1, force_2, force_i, mass_1, mass_2, dispUnit,
 
 -- FIXME: parametrized hack
 iVect = ucFromDQD ivec
-  where ivec = dqdEL (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
+  where ivec = dqd (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) 
                (eqSymb QM.unitVect) Real metre
 -- FIXME: parametrized hack
 jVect       = ucFromDQD ivec
-  where ivec = dqdEL (dccWDS "unitVectJ" (compoundPhrase' (cn "vertical")
+  where ivec = dqd (dccWDS "unitVectJ" (compoundPhrase' (cn "vertical")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) (vec $ hat lJ) Real metre
 -- FIXME: parametrized hack
 normalVect  = ucFromDQD normVect
-  where normVect = dqdEL (dccWDS "normalVect" (compoundPhrase' (cn "collision")
+  where normVect = dqd (dccWDS "normalVect" (compoundPhrase' (cn "collision")
                    (QM.normalVect ^. term)) (phrase QM.normalVect)) 
                    (eqSymb QM.normalVect) Real metre
 
 dispUnit = ucFromDQD dispVect
-  where dispVect = dqdEL (dccWDS "dispUnit" (cn "displacement unit vector") 
+  where dispVect = dqd (dccWDS "dispUnit" (cn "displacement unit vector") 
                    (S "displacement" +:+ (phrase QM.unitVect))) (vec (hat lR)) Real metre
 
 -- FIXME: parametrized hack
 dispNorm = ucFromDQD norm
-  where norm = dqdEL (dccWDS "euclideanNormDisp" (cn "Euclidean norm of the displacement")
+  where norm = dqd (dccWDS "euclideanNormDisp" (cn "Euclidean norm of the displacement")
                (phrase QM.euclidNorm) ) (eqSymb QM.euclidNorm) Real metre
 
 -- FIXME: parametrized hack
 sqrDist = ucFromDQD norm
-  where norm = dqdEL (dccWDS "euclideanNorm" (cn' "squared distance")
+  where norm = dqd (dccWDS "euclideanNorm" (cn' "squared distance")
                (phrase QM.euclidNorm) ) (sup (eqSymb QM.euclidNorm) 
                (Atomic "2")) Real m_2
 
@@ -169,85 +169,85 @@ pos_CM = ucs "p_CM" (nounPhraseSP $
 
 --FIXME: parametrized hack
 mass_i = ucFromDQD massi
-  where massi = dqdEL (dccWDS "m_j" (compoundPhrase' (QPP.mass ^. term)
+  where massi = dqd (dccWDS "m_j" (compoundPhrase' (QPP.mass ^. term)
                 (cn "of the j-th particle")) (phrase QPP.mass)) 
                 (sub (eqSymb QPP.mass) lJ) Real kilogram
 
 pos_i = ucFromDQD posi
-  where posi = dqdEL (dccWDS "p_j" (compoundPhrase' (QP.position ^. term) 
+  where posi = dqd (dccWDS "p_j" (compoundPhrase' (QP.position ^. term) 
                (cn "vector of the j-th particle")) (phrase QP.position))
                (sub (eqSymb QP.position) lJ) Real metre
 
 acc_i = ucFromDQD accI
-  where accI = dqdEL (dccWDS "acc_i" (compoundPhrase' (cn "the i-th body's")
+  where accI = dqd (dccWDS "acc_i" (compoundPhrase' (cn "the i-th body's")
                (QP.acceleration ^. term)) (phrase QP.acceleration))
                (sub (eqSymb QP.acceleration) lI) Real accelU
 
 vel_i = ucFromDQD accI
-  where accI = dqdEL (dccWDS "vel_i" (compoundPhrase' (QP.velocity ^. term) 
+  where accI = dqd (dccWDS "vel_i" (compoundPhrase' (QP.velocity ^. term) 
                (cn "of the i-th body's velocity")) (phrase QP.velocity))
                (sub (eqSymb QP.velocity) lI) Real velU
 
 torque_i = ucFromDQD torI
-  where torI = dqdEL (dccWDS "torque_i" 
+  where torI = dqd (dccWDS "torque_i" 
                (cn "torque applied to the i-th body")
                (phrase QP.torque)) (sub (eqSymb QP.torque) lI) Real torqueU
 
 mTot = ucFromDQD mtotal
-  where mtotal = dqdEL (dccWDS "M" (compoundPhrase' (cn "total mass of the") 
+  where mtotal = dqd (dccWDS "M" (compoundPhrase' (cn "total mass of the") 
                  (CP.rigidBody ^. term)) (phrase QPP.mass)) cM Real kilogram
 
 time_c = ucFromDQD timec
-  where timec = dqdEL (dccWDS "time_c" (cn "denotes the time at collision") 
+  where timec = dqd (dccWDS "time_c" (cn "denotes the time at collision") 
                 (phrase QP.time)) (sub (eqSymb QP.time) lC) Real second
 
 --FIXME: parametrized hack
 initRelVel = ucFromDQD relVel
-  where relVel = dqdEL (dccWDS "v_i^AB" (compoundPhrase'
+  where relVel = dqd (dccWDS "v_i^AB" (compoundPhrase'
                  (compoundPhrase' (cn "relative") (QP.velocity ^. term))
                  (cn "between rigid bodies of A and B")) (phrase QP.velocity))
                  (sup (sub (eqSymb QP.velocity) lI) (Concat [cA, cB])) Real velU
 
 --FIXME: parametrized hack
 massIRigidBody = ucFromDQD massI
-  where massI = dqdEL (dccWDS "massI" (compoundPhrase' (QPP.mass ^. term) 
+  where massI = dqd (dccWDS "massI" (compoundPhrase' (QPP.mass ^. term) 
                 (cn "of the i-th rigid body")) (phrase QPP.mass)) 
                 (sub (eqSymb QPP.mass) lI) Real kilogram
 --FIXME: parametrized hack
 normalLen = ucFromDQD normLen
-  where normLen = dqdEL (dccWDS "length of the normal vector" (compoundPhrase'
+  where normLen = dqd (dccWDS "length of the normal vector" (compoundPhrase'
                   (cn "length of the") (QM.normalVect ^. term)) 
                   (phrase QM.normalVect))
                   (Concat [Atomic "||",(eqSymb QM.normalVect), Atomic "||"]) Real metre
 
 timeT = ucFromDQD timet
-  where timet = dqdEL (dccWDS "t" (cn "point in time") (phrase QP.time))
+  where timet = dqd (dccWDS "t" (cn "point in time") (phrase QP.time))
                 (eqSymb QP.time) Real second
 
 initTime = ucFromDQD timeN
-  where timeN = dqdEL (dccWDS "t_0" (cn "denotes the initial time") 
+  where timeN = dqd (dccWDS "t_0" (cn "denotes the initial time") 
                 (phrase QP.time)) (sub (eqSymb QP.time) (Atomic "0")) Real second
 
 momtInert_k = ucFromDQD momtK
- where momtK = dqdEL (dccWDS "momentOfInertiaK" (compoundPhrase'
+ where momtK = dqd (dccWDS "momentOfInertiaK" (compoundPhrase'
                (QP.momentOfInertia ^. term) 
                (cn $ "of the k-th rigid body"))
                (phrase QP.momentOfInertia)) 
                (sub (eqSymb QP.momentOfInertia) lK) Real momtInertU
 
 pointOfCollision = ucFromDQD pointC
-  where pointC = dqdEL (dccWDS "point_c" (cn "point of collision") 
+  where pointC = dqd (dccWDS "point_c" (cn "point of collision") 
                  (S "point")) cP Real metre
 
 collisionImpulse = ucFromDQD impul
-  where impul = dqdEL (dccWDS "collisionImp" (compoundPhrase' 
+  where impul = dqd (dccWDS "collisionImp" (compoundPhrase' 
                 (cn $ "collision") (QP.impulseS ^. term)) (phrase QP.impulseS)) 
                 (eqSymb QP.impulseS) Real impulseU
 
 
 force_i = ucFromDQD theforce
   where 
-    theforce = dqdEL (dccWDS "force_i" (compoundPhrase' 
+    theforce = dqd (dccWDS "force_i" (compoundPhrase' 
       (QP.force ^. term) (cn "applied to the i-th body at time t")) 
       (phrase QP.force)) (sub (eqSymb QP.force) lI) Real newton
 

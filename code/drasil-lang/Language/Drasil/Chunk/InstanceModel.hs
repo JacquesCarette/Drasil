@@ -16,7 +16,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasLabel(getLabel), HasSymbol(symbol), HasSpace(typ), HasShortName(shortname))
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Development.Unit (MayHaveUnit(getUnit))
-import Language.Drasil.Document.GetChunk (vars)
+import Language.Drasil.ChunkDB.GetChunk (vars)
 import Language.Drasil.Expr (($=),Relation)
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Label.Core (Label)

@@ -238,7 +238,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   DefiningExpr(defnExpr), HasShortName(shortname))
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Derivation (Derivation)
-import Language.Drasil.Document.GetChunk(vars, combine', vars', combine, ccss)
+import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Citation (

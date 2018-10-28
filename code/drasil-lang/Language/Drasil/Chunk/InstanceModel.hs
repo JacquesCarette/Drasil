@@ -1,8 +1,8 @@
-{-# LANGUAGE TemplateHaskell, TypeFamilies #-}
+{-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.InstanceModel
   ( InstanceModel
-  , inCons, outCons, imOutput, imInputs
   , im, imQD, im', imQD', im'', im'''
+  , inCons, outCons, imOutput, imInputs -- FIXME, these should be done via lenses
   , Constraints
   ) where
 
@@ -24,7 +24,7 @@ import Language.Drasil.Label (mkLabelSame)
 import Language.Drasil.RefTypes (RefType(..), DType(..), Reference)
 import Language.Drasil.Spec (Sentence)
 
-import Control.Lens (makeLenses, (^.))
+import Control.Lens (makeLenses, (^.), view)
 
 type Inputs = [QuantityDict]
 type Output = QuantityDict
@@ -51,7 +51,7 @@ makeLenses ''InstanceModel
 
 instance HasUID             InstanceModel where uid = rc . uid
 instance NamedIdea          InstanceModel where term = rc . term
-instance Idea               InstanceModel where getA (IM a _ _ _ _ _ _ _ _) = getA a
+instance Idea               InstanceModel where getA = getA . view rc
 instance Concept            InstanceModel where
 instance Definition         InstanceModel where defn = rc . defn
 instance ConceptDomain      InstanceModel where cdom = rc . cdom
@@ -61,26 +61,28 @@ instance HasReference       InstanceModel where getReferences = ref
 instance HasLabel           InstanceModel where getLabel = lb
 instance HasShortName       InstanceModel where shortname = lb . shortname
 instance HasAdditionalNotes InstanceModel where getNotes = notes
-instance HasSymbol          InstanceModel where symbol (IM _ _ _ a _ _ _ _ _) = symbol a
+instance HasSymbol          InstanceModel where symbol = symbol . view imOutput -- ???
 instance HasSpace           InstanceModel where typ = imOutput . typ
 instance Quantity           InstanceModel where
-instance MayHaveUnit        InstanceModel where getUnit (IM _ _ _ a _ _ _ _ _) = getUnit a
+instance MayHaveUnit        InstanceModel where getUnit = getUnit . view imOutput
 
--- | Smart constructor for instance models
+-- | Smart constructor for instance models; no derivations or notes
 im :: RelationConcept -> Inputs -> InputConstraints -> Output ->
   OutputConstraints -> [Reference] -> Label -> InstanceModel
 im rcon i ic o oc src sn = IM rcon i ic o oc src [] sn []
 
--- | Same as `im`, with an additional field for notes to be passed in
+-- | Same as `im`, with an additional field for notes to be passed in; no derivation
 im' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> [Reference] -> Label -> [Sentence] -> InstanceModel
 im' rcon i ic o oc src lbe addNotes = IM rcon i ic o oc src [] lbe addNotes
 
+-- | im but with everything defined
 im'' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> [Reference] -> Derivation -> String -> [Sentence] -> InstanceModel
 im'' rcon i ic o oc src der sn addNotes = IM rcon i ic o oc src der (mkLabelSame sn (Def Instance))
  addNotes
 
+-- | im with no notes
 im''' :: RelationConcept -> Inputs -> InputConstraints -> Output ->
   OutputConstraints -> [Reference] -> Derivation -> String -> InstanceModel
 im''' rcon i ic o oc src der sn = IM rcon i ic o oc src der 
@@ -89,6 +91,7 @@ im''' rcon i ic o oc src der sn = IM rcon i ic o oc src der
 -- | Smart constructor for instance model from qdefinition
 -- (Sentence is the "concept" definition for the relation concept)
 -- FIXME: get the shortname from the QDefinition?
+-- no references, derivation or notes
 imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> 
   InputConstraints -> OutputConstraints -> Label -> InstanceModel
 imQD ctx qd dfn incon ocon lblForIM = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
@@ -97,6 +100,7 @@ imQD ctx qd dfn incon ocon lblForIM = IM (makeRC (qd ^. uid) (qd ^. term) dfn
 
 -- Same as `imQD`, with an additional field for notes to be passed in
 -- FIXME: get the shortname from the QDefinition?
+-- no references, or derivation
 imQD' :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> 
   InputConstraints -> OutputConstraints -> Label -> [Sentence] -> InstanceModel
 imQD' ctx qd dfn incon ocon lblForIM addNotes = IM (makeRC (qd ^. uid) (qd ^. term) dfn 

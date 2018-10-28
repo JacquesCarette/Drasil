@@ -14,7 +14,6 @@ import Language.Drasil.ChunkDB (HasSymbolTable, symbLookup, symbolTable, HasDefi
 import Language.Drasil.Chunk.Concept(ConceptChunk)
 import Language.Drasil.Chunk.DefinedQuantity(DefinedQuantityDict, dqdQd)
 
-
 -- | Get a list of quantities (QuantityDict) from an equation in order to print
 vars :: (HasSymbolTable s) => Expr -> s -> [QuantityDict]
 vars e m = map resolve $ dep e

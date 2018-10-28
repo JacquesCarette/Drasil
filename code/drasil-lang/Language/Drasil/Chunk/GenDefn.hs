@@ -13,8 +13,7 @@ import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Label (mkLabelSame)
 import Language.Drasil.RefTypes(RefType(..), DType(..), Reference)
-import Control.Lens (makeLenses)
-
+import Control.Lens (makeLenses, view)
 
 -- | A GenDefn is a RelationConcept that may have units
 data GenDefn = GD { _relC :: RelationConcept
@@ -28,7 +27,7 @@ makeLenses ''GenDefn
 
 instance HasUID             GenDefn where uid = relC . uid
 instance NamedIdea          GenDefn where term = relC . term
-instance Idea               GenDefn where getA (GD a _ _ _ _ _) = getA a
+instance Idea               GenDefn where getA = getA . view relC
 instance Concept            GenDefn where
 instance Definition         GenDefn where defn = relC . defn
 instance ConceptDomain      GenDefn where cdom = relC . cdom
@@ -43,10 +42,6 @@ instance MayHaveUnit        GenDefn where getUnit = gdUnit
 gd' :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
   Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
 gd' r u derivs ref sn note = GD r (fmap unitWrapper u) derivs ref (mkLabelSame sn (Def General)) note
-{-
-gd' r (Just u) derivs ref sn note = GD r (Just (unitWrapper u)) derivs ref (mkLabelSame sn (Def General)) note
-gd' r Nothing  derivs ref sn note = GD r Nothing                derivs ref (mkLabelSame sn (Def General)) note
--}
 
 gd'' :: RelationConcept -> [Reference] -> String -> [Sentence] -> GenDefn
 gd'' r ref sn note = GD r Nothing  [] ref (mkLabelSame sn (Def General)) note

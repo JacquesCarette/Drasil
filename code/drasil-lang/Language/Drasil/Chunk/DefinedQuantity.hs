@@ -1,5 +1,4 @@
 {-# LANGUAGE TemplateHaskell #-}
-
 module Language.Drasil.Chunk.DefinedQuantity
   ( dqd, dqd', DefinedQuantityDict, dqdWr
   , dqdQd) where
@@ -23,7 +22,6 @@ data DefinedQuantityDict = DQD { _con :: ConceptChunk
                                , _symb :: Stage -> Symbol
                                , _spa :: Space
                                , _unit' :: Maybe UnitDefn
-                               , _deri :: Derivation
                                }
   
 makeLenses ''DefinedQuantityDict
@@ -38,22 +36,21 @@ instance Concept       DefinedQuantityDict where
 instance Q.HasSpace    DefinedQuantityDict where typ = spa
 instance HasSymbol     DefinedQuantityDict where symbol = view symb
 instance Q.Quantity    DefinedQuantityDict where 
-instance HasDerivation DefinedQuantityDict where derivations = deri
 instance MayHaveUnit   DefinedQuantityDict where getUnit = view unit'
 
 -- For when the symbol is constant through stages
 dqd :: (IsUnit u) => ConceptChunk -> Symbol -> Space -> u -> DefinedQuantityDict
-dqd c s sp un = DQD c (\_ -> s) sp uu []
+dqd c s sp un = DQD c (\_ -> s) sp uu
   where uu = Just $ unitWrapper un
 
 -- For when the symbol changes depending on the stage
 dqd' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> DefinedQuantityDict
-dqd' c s sp un = DQD c s sp un []
+dqd' c s sp un = DQD c s sp un
 
 -- When the input already has all the necessary information. A 'projection' operator
 dqdWr :: (Q.Quantity c, Concept c) => c -> DefinedQuantityDict
-dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c) []
+dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c)
 
 -- When we want to merge a quantity and a concept. This is suspicious.
 dqdQd :: (Q.Quantity c) => c -> ConceptChunk -> DefinedQuantityDict
-dqdQd c cc = DQD cc (symbol c) (c ^. typ) (getUnit c) []
+dqdQd c cc = DQD cc (symbol c) (c ^. typ) (getUnit c)

@@ -162,3 +162,10 @@ under the namespace *Language.Drasil*, which will thus be omitted.
   definitions and relations (and more - see the comments in the file).
 
 - **Chunk/Relation**: A concept and a relation. Used (currently) by general definition.
+
+- **Chunk/GenDefn**: General Definition. See wiki for current thoughts on that.
+  A relation concept that may have units, but also a derivation, references, a label
+  and notes.
+
+- **Chunk/DefinedQuantity**: Very weirdly named, since the 'definition' here is that
+  from Concept, i.e. just a Sentence. Basically join(Concept,Quantity).

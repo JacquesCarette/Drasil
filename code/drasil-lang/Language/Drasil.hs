@@ -67,7 +67,7 @@ module Language.Drasil (
   , GenDefn, gd', gd''
   -- Chunk.InstanceModel
   , InstanceModel
-  , inCons, outCons, imOutput, imInputs, im, imQD, im', imQD', im'', im'''
+  , inCons, outCons, imOutput, imInputs, im, im', im'', im'''
   , Constraints
   -- Chunk.Quantity
   , Quantity, QuantityDict, qw, mkQuant
@@ -77,7 +77,7 @@ module Language.Drasil (
   , uncrtnw
   -- Chunk.Unital
   , UnitalChunk(..), makeUCWDS
-  , uc, uc', ucs, ucs', ucsWS, ucFromDQD
+  , uc, uc', ucs, ucs', ucsWS
   -- Chunk.Unitary
   , Unitary(..), UnitaryChunk, unitary, unit_symb
   -- Chunk.Relation
@@ -277,8 +277,7 @@ import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC)
 import Language.Drasil.Chunk.Theory
 import Language.Drasil.Chunk.UncertainQuantity
-import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS,
-                                   uc, uc', ucs, ucs', ucsWS, ucFromDQD)
+import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc', ucs, ucs', ucsWS)
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.UnitaryConcept
 import Language.Drasil.ChunkDB

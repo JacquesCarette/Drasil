@@ -1,30 +1,26 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.InstanceModel
   ( InstanceModel
-  , im, imQD, im', imQD', im'', im'''
+  , im, im', im'', im'''
   , inCons, outCons, imOutput, imInputs -- FIXME, these should be done via lenses
   , Constraints
   ) where
 
-import Language.Drasil.Chunk.Eq (QDefinition, equat)
-import Language.Drasil.Chunk.Relation (RelationConcept, makeRC)
-import Language.Drasil.Chunk.Quantity (Quantity, QuantityDict, qw)
-import Language.Drasil.ChunkDB (HasSymbolTable)
+import Language.Drasil.Chunk.Relation (RelationConcept)
+import Language.Drasil.Chunk.Quantity (Quantity, QuantityDict)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn),ConceptDomain(cdom), Concept, ExprRelat(relat),
   HasDerivation(derivations), HasReference(getReferences), HasAdditionalNotes(getNotes),
   HasLabel(getLabel), HasSymbol(symbol), HasSpace(typ), HasShortName(shortname))
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Development.Unit (MayHaveUnit(getUnit))
-import Language.Drasil.ChunkDB.GetChunk (vars)
-import Language.Drasil.Expr (($=),Relation)
-import Language.Drasil.Expr.Math (sy)
+import Language.Drasil.Expr (Relation)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Label (mkLabelSame)
 import Language.Drasil.RefTypes (RefType(..), DType(..), Reference)
 import Language.Drasil.Spec (Sentence)
 
-import Control.Lens (makeLenses, (^.), view)
+import Control.Lens (makeLenses, view)
 
 type Inputs = [QuantityDict]
 type Output = QuantityDict
@@ -87,22 +83,3 @@ im''' :: RelationConcept -> Inputs -> InputConstraints -> Output ->
   OutputConstraints -> [Reference] -> Derivation -> String -> InstanceModel
 im''' rcon i ic o oc src der sn = IM rcon i ic o oc src der 
   (mkLabelSame sn (Def Instance)) []
-
--- | Smart constructor for instance model from qdefinition
--- (Sentence is the "concept" definition for the relation concept)
--- FIXME: get the shortname from the QDefinition?
--- no references, derivation or notes
-imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> 
-  InputConstraints -> OutputConstraints -> Label -> InstanceModel
-imQD ctx qd dfn incon ocon lblForIM = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
-  (sy qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon (qw qd) ocon [] [] 
-  lblForIM [] 
-
--- Same as `imQD`, with an additional field for notes to be passed in
--- FIXME: get the shortname from the QDefinition?
--- no references, or derivation
-imQD' :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> 
-  InputConstraints -> OutputConstraints -> Label -> [Sentence] -> InstanceModel
-imQD' ctx qd dfn incon ocon lblForIM addNotes = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
-  (sy qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon (qw qd) ocon [] [] 
-  lblForIM addNotes

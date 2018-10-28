@@ -174,4 +174,6 @@ under the namespace *Language.Drasil*, which will thus be omitted.
   as inputs and outputs (and constraints on those). Like with GenDefn, should probably
   use a finer distinction that relation. See issue #1030.
 
+- **Chunk/Unital**: DefinedQuantity guaranteed to have a unit.
 
+- **Chunk/Constrained**:

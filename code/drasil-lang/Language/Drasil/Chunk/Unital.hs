@@ -1,6 +1,6 @@
-{-# LANGUAGE TemplateHaskell, TypeFamilies #-}
+{-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Unital 
-  ( UnitalChunk(..) , makeUCWDS , ucFromDQD , uc , uc' , ucs , ucs' , ucsWS) where
+  ( UnitalChunk(..) , makeUCWDS , uc , uc' , ucs , ucs' , ucsWS) where
 
 import Control.Lens (makeLenses, view, (^.))
 import Language.Drasil.Chunk.Concept (dcc, dccWDS,cw)
@@ -72,9 +72,3 @@ makeUCWDS :: (IsUnit u, ConceptDomain u) => String -> NP -> Sentence -> Symbol -
   u -> UnitalChunk
 makeUCWDS nam trm desc sym un = UC (dqd (dccWDS nam trm desc) sym Real uu) uu
   where uu = unitWrapper un
-
--- | Create a UnitalChunk from a 'DefinedQuantityDict' which has a unit already.
--- fail otherwise
-ucFromDQD :: DefinedQuantityDict -> UnitalChunk
-ucFromDQD defq = UC defq (unitWrapper uu) 
-  where uu = maybe (error "ucFromDQD must be called on a DQD with a unit") id (getUnit defq)

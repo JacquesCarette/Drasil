@@ -18,7 +18,7 @@ import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe',
 
 import Drasil.SSP.Assumptions (newA8, newA9)
 import Drasil.SSP.Defs (factor, factorOfSafety, slope, soil)
-import Drasil.SSP.References (fredlund1977, stolle2008)
+import Drasil.SSP.References (fredlund1977)
 import Drasil.SSP.Unitals (cohesion, fricAngle, fs, fx, fy,
   momntOfBdy, normStress, porePressure, shrStress, surfHydroForce)
 

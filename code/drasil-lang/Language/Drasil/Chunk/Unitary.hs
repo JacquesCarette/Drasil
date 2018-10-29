@@ -3,9 +3,8 @@ module Language.Drasil.Chunk.Unitary
   ( UnitaryChunk, unitary, mkUnitary, Unitary(..), unit_symb) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  ConceptDomain, HasSymbol(symbol), IsUnit, usymb)
-import Language.Drasil.Chunk.Quantity (Quantity, QuantityDict, mkQuant, qw, 
-  HasSpace(typ))
+  ConceptDomain, HasSymbol(symbol), IsUnit, usymb, Quantity, HasSpace(typ))
+import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, qw)
 import Language.Drasil.Development.UnitLang (USymb)
 import Language.Drasil.Development.Unit (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
@@ -41,7 +40,7 @@ unitary :: (IsUnit u, ConceptDomain u) =>
 unitary i t s u space = UC (mkQuant i t s space (Just uu) Nothing) uu -- Unit doesn't have a unitDefn, so [] is passed in
   where uu = unitWrapper u
 
-mkUnitary :: (Unitary u) => u -> UnitaryChunk
+mkUnitary :: (Unitary u, MayHaveUnit u) => u -> UnitaryChunk
 mkUnitary u = UC (qw u) (unit u)
 
 -- | Helper for getting the unit's symbol from a chunk, 

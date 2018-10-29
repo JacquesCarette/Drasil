@@ -11,7 +11,7 @@ import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation, instanceM
 
 import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                -- Vector - Name conflict (defined in file)
-import Language.Drasil.Development (comp_unitdefn)
+import Language.Drasil.Development (comp_unitdefn, MayHaveUnit)
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map (elems)
@@ -275,7 +275,7 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
       table_of_abb_and_acronyms $ nub $ Map.elems (db ^. termTable)
 
 -- | Helper for creating the table of symbols
-mkTSymb :: (Quantity e, Concept e, Eq e) =>
+mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
   [e] -> LFunc -> [TSIntro] -> Section
 mkTSymb v f c = SRS.tOfSymb [tsIntro c,
   LlC $ table Equational

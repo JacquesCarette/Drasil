@@ -12,7 +12,7 @@ module Drasil.DocumentLanguage.Definitions
   )where
 
 import Language.Drasil
-import Language.Drasil.Development (getUnit)
+import Language.Drasil.Development (MayHaveUnit(getUnit))
 import Data.Drasil.Utils (eqUnR)
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
@@ -179,7 +179,7 @@ firstPair' (IncludeUnits) d = (P $ eqSymb d, Flat $ phrase d +:+ (sParen $
   toSentenceUnitless d), Nothing)
 
 -- | Create the descriptions for each symbol in the relation/equation
-descPairs :: (Quantity q) => InclUnits -> [q] -> [ListTuple]
+descPairs :: (Quantity q, MayHaveUnit q) => InclUnits -> [q] -> [ListTuple]
 descPairs IgnoreUnits = map (\x -> (P $ eqSymb x, Flat $ phrase x, Nothing))
 descPairs IncludeUnits =
   map (\x -> (P $ eqSymb x, Flat $ phrase x +:+ (sParen $ toSentenceUnitless x), Nothing))

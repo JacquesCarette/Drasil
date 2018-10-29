@@ -45,6 +45,8 @@ module Language.Drasil (
   , HasDerivation(derivations)
   , HasRefAddress(getRefAdd)
   , HasShortName(shortname)
+  , UncertainQuantity(uncert)
+  , Quantity
   -- Chunk.Concept
   , cw , ConceptChunk , CommonConcept, ConceptInstance
   -- Chunk.CommonIdea
@@ -70,10 +72,10 @@ module Language.Drasil (
   , inCons, outCons, imOutput, imInputs, im, im', im'', im'''
   , Constraints
   -- Chunk.Quantity
-  , Quantity, QuantityDict, qw, mkQuant
+  , QuantityDict, qw, mkQuant
   , codeVC, vc, implVar , dcc, dcc', dccWDS, dccWDS', vc'', ccs, cc, cc', cic
   -- Chunk.UncertainQuantity
-  , UncertainQuantity(..), UncertainChunk(..), UncertQ, uq, uqNU, uqc, uqcNU, uqcND, uncrtnChunk, uvc
+  , UncertainChunk(..), UncertQ, uq, uqNU, uqc, uqcNU, uqcND, uncrtnChunk, uvc
   , uncrtnw
   -- Chunk.Unital
   , UnitalChunk(..), makeUCWDS
@@ -234,8 +236,8 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
   IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), HasReference(getReferences), 
-  HasLabel(getLabel), MayHaveLabel(getMaybeLabel), HasRefAddress(getRefAdd),
-  DefiningExpr(defnExpr), HasShortName(shortname))
+  HasLabel(getLabel), MayHaveLabel(getMaybeLabel), HasRefAddress(getRefAdd), HasSpace(typ),
+  DefiningExpr(defnExpr), HasShortName(shortname), Quantity, UncertainQuantity(uncert))
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss)

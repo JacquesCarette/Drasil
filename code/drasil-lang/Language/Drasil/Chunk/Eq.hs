@@ -6,9 +6,8 @@ import Language.Drasil.Development.Unit (unitWrapper, MayHaveUnit(getUnit))
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), IsUnit, DefiningExpr(defnExpr), Definition(defn),
-  ConceptDomain)
-import Language.Drasil.Chunk.Quantity (HasSpace(typ), Quantity, QuantityDict, 
-  mkQuant, qw)
+  ConceptDomain, Quantity, HasSpace(typ))
+import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, qw)
 
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase (NP)
@@ -47,5 +46,5 @@ fromEqn' nm desc def symb eqn = EC (mkQuant nm desc symb Real Nothing Nothing) d
 
 -- | Smart constructor for QDefinitions. Requires a quantity and its defining 
 -- equation. HACK - makes the definition EmptyS !!! FIXME
-ec :: (Quantity c) => c -> Expr -> QDefinition
+ec :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
 ec c eqn = EC (qw c) EmptyS eqn

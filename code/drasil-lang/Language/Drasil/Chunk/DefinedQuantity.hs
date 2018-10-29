@@ -6,9 +6,8 @@ import Control.Lens ((^.), makeLenses, view)
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
-  HasSpace(typ), IsUnit)
+  HasSpace(typ), IsUnit, Quantity)
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
-import qualified Language.Drasil.Chunk.Quantity as Q
 
 import Language.Drasil.Development.Unit (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
@@ -32,9 +31,9 @@ instance Idea          DefinedQuantityDict where getA = getA . view con
 instance Definition    DefinedQuantityDict where defn = con . defn
 instance ConceptDomain DefinedQuantityDict where cdom = con . cdom
 instance Concept       DefinedQuantityDict where
-instance Q.HasSpace    DefinedQuantityDict where typ = spa
+instance HasSpace      DefinedQuantityDict where typ = spa
 instance HasSymbol     DefinedQuantityDict where symbol = view symb
-instance Q.Quantity    DefinedQuantityDict where 
+instance Quantity      DefinedQuantityDict where 
 instance MayHaveUnit   DefinedQuantityDict where getUnit = view unit'
 
 -- For when the symbol is constant through stages
@@ -47,9 +46,9 @@ dqd' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> DefinedQ
 dqd' c s sp un = DQD c s sp un
 
 -- When the input already has all the necessary information. A 'projection' operator
-dqdWr :: (Q.Quantity c, Concept c) => c -> DefinedQuantityDict
+dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
 dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c)
 
 -- When we want to merge a quantity and a concept. This is suspicious.
-dqdQd :: (Q.Quantity c) => c -> ConceptChunk -> DefinedQuantityDict
+dqdQd :: (Quantity c, MayHaveUnit c) => c -> ConceptChunk -> DefinedQuantityDict
 dqdQd c cc = DQD cc (symbol c) (c ^. typ) (getUnit c)

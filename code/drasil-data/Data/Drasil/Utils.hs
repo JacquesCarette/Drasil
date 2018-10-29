@@ -26,7 +26,7 @@ module Data.Drasil.Utils
   ) where
 
 import Language.Drasil
-import Language.Drasil.Development (UnitDefn, getUnit)
+import Language.Drasil.Development (UnitDefn, MayHaveUnit(getUnit))
 
 import Control.Lens ((^.))
 import Data.List (transpose)
@@ -72,7 +72,7 @@ mkEnumAbbrevList s t l = zip (enumWithAbbrev s t) $ map Flat l
 -- | takes a amount and adds a unit to it
 -- n - sentenc representing an amount
 -- u - unit we want to attach to amount
-fmtU :: (Quantity a) => Sentence -> a -> Sentence
+fmtU :: (Quantity a, MayHaveUnit a) => Sentence -> a -> Sentence
 fmtU n u  = n +:+ (unwrap $ getUnit u)
 
 -- | gets a reasonable or typical value from a Constrained chunk
@@ -106,7 +106,7 @@ makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
 makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- col] 
 
 -- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
-mkInputDatTb :: (Quantity a) => [a] -> LabelledContent
+mkInputDatTb :: (Quantity a, MayHaveUnit a) => [a] -> LabelledContent
 mkInputDatTb inputVar = llcc (mkLabelSame "inDataTable" Tab) $ 
   Table [titleize symbol_, titleize unit_, 
   S "Name"]

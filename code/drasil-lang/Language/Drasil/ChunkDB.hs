@@ -10,9 +10,9 @@ module Language.Drasil.ChunkDB
 import Control.Lens ((^.), Lens', makeLenses)
 import Data.Maybe (maybeToList)
 import Language.Drasil.UID (UID)
-import Language.Drasil.Classes (Concept, ConceptDomain, HasUID(uid), Idea, IsUnit)
+import Language.Drasil.Classes (Concept, ConceptDomain, HasUID(uid), Idea, IsUnit, Quantity)
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw)
-import Language.Drasil.Chunk.Quantity (Quantity, QuantityDict, qw)
+import Language.Drasil.Chunk.Quantity (QuantityDict, qw)
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(getUnit), unitWrapper)
 import qualified Data.Map as Map
@@ -39,7 +39,7 @@ type UnitMap = Map.Map UID UnitDefn
 type TermMap = Map.Map UID IdeaDict
 
 -- | Smart constructor for a 'SymbolMap'
-symbolMap :: (Quantity c) => [c] -> SymbolMap
+symbolMap :: (Quantity c, MayHaveUnit c) => [c] -> SymbolMap
 symbolMap = Map.fromList . map (\x -> (x ^. uid, qw x))
 
 -- | Smart constructor for a 'TermMap'
@@ -100,7 +100,7 @@ makeLenses ''ChunkDB
 -- | Smart constructor for chunk databases. Takes a list of Quantities 
 -- (for SymbolTable), NamedIdeas (for TermTable), Concepts (for DefinitionTable),
 -- and Units (for UnitTable)
-cdb :: (Quantity q, Idea t, Concept c, IsUnit u,
+cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u,
         ConceptDomain u) => [q] -> [t] -> [c] -> [u] -> ChunkDB
 cdb s t c u = CDB (symbolMap s) (termMap t) (conceptMap c) (unitMap u)
 
@@ -110,5 +110,5 @@ instance HasTermTable       ChunkDB where termTable   = cterms
 instance HasDefinitionTable ChunkDB where defTable    = cdefs
 instance HasUnitTable       ChunkDB where unitTable   = cunitDB
 
-collectUnits :: HasSymbolTable s => (HasUID c, Quantity c) => s -> [c] -> [UnitDefn]
+collectUnits :: HasSymbolTable s => (Quantity c, MayHaveUnit c) => s -> [c] -> [UnitDefn]
 collectUnits m symb = map unitWrapper $ concatMap maybeToList $ map (getUnitLup m) symb

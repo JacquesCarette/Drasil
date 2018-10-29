@@ -4,9 +4,8 @@ module Language.Drasil.Chunk.UnitaryConcept (ucw, UnitaryConceptDict) where
 import Control.Lens ((^.), makeLenses)
 
 import Language.Drasil.Chunk.Unitary (UnitaryChunk, mkUnitary, Unitary(unit))
-import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(typ))
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),Quantity,
+  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasSpace(typ))
 import Language.Drasil.Development.Unit (MayHaveUnit(getUnit))
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.UID (UID)
@@ -30,5 +29,5 @@ instance Eq            UnitaryConceptDict where a == b = (a ^. uid) == (b ^. uid
 instance MayHaveUnit   UnitaryConceptDict where getUnit u = getUnit $ u ^. unitary
 instance Unitary       UnitaryConceptDict where unit x = unit (x ^. unitary)
 
-ucw :: (Unitary c, Concept c) => c -> UnitaryConceptDict
+ucw :: (Unitary c, Concept c, MayHaveUnit c) => c -> UnitaryConceptDict
 ucw c = UCC (mkUnitary c) (c ^. defn) (c ^. cdom)

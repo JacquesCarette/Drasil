@@ -3,10 +3,11 @@ module Language.Drasil.Chunk.Theory (TheoryModel, tm, Theory(..))where
 
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import Language.Drasil.Chunk.Eq (QDefinition)
-import Language.Drasil.Chunk.Quantity (Quantity, QuantityDict, qw)
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
+import Language.Drasil.Chunk.Quantity (QuantityDict, qw)
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA), Quantity,
   Definition(defn), ConceptDomain(cdom), Concept, HasReference(getReferences),
   HasAdditionalNotes(getNotes), HasLabel(getLabel), HasShortName(shortname))
+import Language.Drasil.Development.Unit (MayHaveUnit)
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.RefTypes (Reference)
@@ -71,7 +72,7 @@ instance HasShortName       TheoryModel where shortname = lb . shortname
 -- This "smart" constructor is really quite awful, it takes way too many arguments.
 -- This should likely be re-arranged somehow. Especially since since of the arguments
 -- have the same type!
-tm :: (Concept c0, Quantity q, Concept c1) => c0 ->
+tm :: (Concept c0, Quantity q, MayHaveUnit q, Concept c1) => c0 ->
     [q] -> [c1] -> [QDefinition] ->
     [Relation] -> [QDefinition] -> [Reference] ->
     Label -> [Sentence] -> TheoryModel

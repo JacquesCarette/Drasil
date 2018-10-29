@@ -5,11 +5,10 @@ module Language.Drasil.Chunk.Unital
 import Control.Lens (makeLenses, view, (^.))
 import Language.Drasil.Chunk.Concept (dcc, dccWDS,cw)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd)
-import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(typ))
 import Language.Drasil.Chunk.Unitary (Unitary(..))
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol),
-  IsUnit)
+  IsUnit, Quantity, HasSpace(typ))
 import Language.Drasil.Development.Unit (MayHaveUnit(getUnit), UnitDefn, unitWrapper)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space(..))

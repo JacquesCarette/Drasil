@@ -4,10 +4,9 @@ module Language.Drasil.Chunk.DataDefinition where
 import Control.Lens(makeLenses, (^.), view)
 
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn')
-import Language.Drasil.Chunk.Quantity (Quantity, HasSpace(typ))
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  HasSymbol(symbol), DefiningExpr(defnExpr),
+  HasSymbol(symbol), DefiningExpr(defnExpr), Quantity, HasSpace(typ),
   HasDerivation(derivations), HasReference(getReferences), HasAdditionalNotes(getNotes),
   HasShortName(shortname), HasLabel(getLabel))
 import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
@@ -59,7 +58,7 @@ qdFromDD :: DataDefinition -> QDefinition
 qdFromDD dd = dd ^. qd
 
 -- Used to help make Qdefinitions when uid, term, and symbol come from the same source
-mkQuantDef :: (Quantity c) => c -> Expr -> QDefinition
+mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
 mkQuantDef cncpt equation = datadef $ getUnit cncpt --should [Reference] be passed in at this point?
   where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS (eqSymb cncpt) a equation
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS (eqSymb cncpt) equation

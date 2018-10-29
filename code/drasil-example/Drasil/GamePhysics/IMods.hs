@@ -1,6 +1,7 @@
 module Drasil.GamePhysics.IMods (iModels, iModels_new, im1_new, im2_new, im3_new) where
 
 import Language.Drasil
+import Language.Drasil.Development (MayHaveUnit)
 
 import Drasil.GamePhysics.Unitals(acc_i, force_i, transMotLegTerms, rotMotLegTerms,
   col2DLegTerms, mass_A, mass_i, normalVect, time_c, torque_i, vel_A, vel_i)
@@ -124,7 +125,7 @@ col2DDesc = foldlSent [S "This instance model is based on our assumptions",
   S "P is the point of collision (m)"
 --}
 
-defList :: (Quantity a) => a -> Sentence
+defList :: (Quantity a, MayHaveUnit a) => a -> Sentence
 defList thing = foldlSent [(ch thing), S "is the", (phrase thing), sParen (fmtU EmptyS thing)]
 
 col2DLeg = foldle1 (+:+) (+:+) $ map defList col2DLegTerms

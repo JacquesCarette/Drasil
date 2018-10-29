@@ -25,6 +25,8 @@ module Language.Drasil.Classes (
   , HasDerivation(derivations)
   , HasAdditionalNotes(getNotes)
   , HasRefAddress(getRefAdd)
+  , Quantity
+  , UncertainQuantity(uncert)
   ) where
 
 -- some classes are so 'core' that they are defined elswhere
@@ -108,6 +110,16 @@ class MayHaveLabel c where
 
 -- IsLabel is associated with String rendering
 class (HasLabel u, HasUID u) => IsLabel u where
+
+-- | A Quantity is an 'Idea' with a 'Space' and a symbol.
+-- In theory, it should also have MayHaveUnit, but that causes
+-- all sorts of import cycles (or lost of orphans)
+class (Idea c, HasSpace c, HasSymbol c) => Quantity c where
+
+-- | An UncertainQuantity is just a Quantity with some uncertainty associated to it.
+-- This uncertainty is represented as a decimal value between 0 and 1 (percentage).
+class Quantity c => UncertainQuantity c where
+  uncert :: Lens' c (Maybe Double)
 
 -----------------------------------------------------
 -- Below are for units only

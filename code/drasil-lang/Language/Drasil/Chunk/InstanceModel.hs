@@ -7,8 +7,8 @@ module Language.Drasil.Chunk.InstanceModel
   ) where
 
 import Language.Drasil.Chunk.Relation (RelationConcept)
-import Language.Drasil.Chunk.Quantity (Quantity, QuantityDict)
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
+import Language.Drasil.Chunk.Quantity (QuantityDict)
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA), Quantity,
   Definition(defn),ConceptDomain(cdom), Concept, ExprRelat(relat),
   HasDerivation(derivations), HasReference(getReferences), HasAdditionalNotes(getNotes),
   HasLabel(getLabel), HasSymbol(symbol), HasSpace(typ), HasShortName(shortname))

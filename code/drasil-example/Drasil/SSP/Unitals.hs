@@ -47,11 +47,10 @@ sspConstrained :: [ConstrainedChunk]
 sspConstrained = map cnstrw sspInputs ++ map cnstrw sspOutputs
 
 sspInputs :: [UncertQ]
-sspInputs = [elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight,
-              satWeight, waterWeight, constant_a, constant_A, constant_K]
+sspInputs = [cohesion, fricAngle, dryWeight, satWeight, waterWeight]
 
 sspOutputs :: [ConstrConcept]
-sspOutputs = [fs, coords, dx_i, dy_i]
+sspOutputs = [fs, coords]
 
 {-
 monotonicIn :: [Constraint]  --FIXME: Move this?
@@ -62,23 +61,17 @@ monotonicIn = [physc $ \_ -> -- FIXME: Hack with "index" !
 defultUncrt :: Double
 defultUncrt = 0.1
 
-elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight,
-  waterWeight, constant_a, constant_A, constant_K :: UncertQ
+cohesion, fricAngle, dryWeight, satWeight,
+  waterWeight :: UncertQ
   
-fs, coords, dx_i, dy_i :: ConstrConcept
+fs, coords :: ConstrConcept
 
 {-Intput Variables-}
 --FIXME: add (x,y) when we can index or make related unitals
 
-elasticMod = uq (constrained' SM.elastMod [gtZeroConstr]
-  (dbl 15000)) defultUncrt
-
 cohesion = uqc "c'" (cn $ "effective cohesion")
   "internal pressure that sticks particles of soil together"
   (prime $ Atomic "c") pascal Real [gtZeroConstr] (dbl 10) defultUncrt
-
-poissnsRatio = uq (constrained' SM.poissnsR
-  [physc $ Bounded (Exc,0) (Exc,1)] (dbl 0.4)) defultUncrt
 
 fricAngle = uqc "varphi'" (cn $ "effective angle of friction")
   ("The angle of inclination with respect to the horizontal axis of " ++
@@ -101,15 +94,6 @@ waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   "The weight of one cubic meter of water."
   (sub lGamma lW) specific_weight Real [gtZeroConstr]
   (dbl 9.8) defultUncrt
-  
-constant_a = uqc "a" (cn "constant") fixme
-  lA metre Real [] (dbl 0) defultUncrt
-  
-constant_A = uqc "A" (cn "constant") fixme
-  cA metre Real [] (dbl 0) defultUncrt
-  
-constant_K = uqc "kappa" (cn "constant") fixme
-  lKappa pascal Real [] (dbl 0) defultUncrt
 
 {-Output Variables-} --FIXME: See if there should be typical values
 fs = constrained' (dqd' fs_concept (const $ Atomic "FS") Real Nothing)
@@ -127,12 +111,6 @@ coords = cuc' "(x,y)"
   ("y is considered parallel to the direction of the force of " ++
   "gravity and x is considered perpendicular to y")
   (Atomic "(x,y)") metre Real [] (dbl 1)
-
-dx_i = cuc' "dx_i" (cn $ "displacement") ("in the x-ordinate direction " ++
-  fsi) (Concat [lDelta, Atomic "x"]) metre Real [] (dbl 1)
-
-dy_i = cuc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " ++
-  fsi) (Concat [lDelta, Atomic "y"]) metre Real [] (dbl 1)
 
 ---------------------------
 -- START OF UNITALCHUNKS --

@@ -1,8 +1,10 @@
-module Language.Drasil.Document.Extract (getDoc, egetDoc) where
+module Language.Drasil.Document.Extract (getDoc, egetDoc, egetSec, egetCon', egetLblCon, egetQDef,
+	getSec, getCon', getSec, getCon ) where
 
 import Control.Lens ((^.))
 import Data.List(transpose)
 
+import Language.Drasil.Classes (DefiningExpr(defnExpr))
 import Language.Drasil.Document (Document(Document),Section(Section), SecCons(..))
 import Language.Drasil.Document.Core
 import Language.Drasil.Expr
@@ -11,9 +13,13 @@ import Language.Drasil.Classes.Core (HasShortName(shortname))
 
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Citation
+import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.RefTypes(DType(..))
 
 import Language.Drasil.Label (Label, mkLabelRASec)
+
+egetLblCon :: LabelledContent -> [Expr]
+egetLblCon a = egetCon (a ^. accessContents)
 
 egetDoc :: Document -> [Expr]
 egetDoc (Document _ _ s) = concatMap egetSec s
@@ -33,9 +39,9 @@ auxConsLabel = mkLabelRASec "AuxConstants" "Values of Auxiliary Constants" -- FI
 --FIXME: Remove the above labels when we have a less fragile way of checking things.
 
 egetSec :: Section -> [Expr]
-egetSec (Section _ sc lb)
-  | lb ^. shortname == refLabel ^. shortname = []
-  | otherwise = concatMap egetSecCon sc
+egetSec (Section _ sc lb) = concatMap egetSecCon sc
+  {--| lb ^. shortname == refLabel ^. shortname = []
+  | otherwise = concatMap egetSecCon sc --}
 
 egetSecCon :: SecCons -> [Expr]
 egetSecCon (Sub s) = egetSec s
@@ -53,17 +59,17 @@ egetCon _ = []
 egetDtype :: DType -> [Expr]
 egetDtype _ = []
 
--- egetQDef :: QDefinition -> [Expr]
--- egetQDef a = [a ^. relat]
+egetQDef :: QDefinition -> [Expr]
+egetQDef q = [q ^. defnExpr]
 
 getDoc :: Document -> [Sentence]
 getDoc (Document t a s) = t : a : concatMap getSec s
 
 getSec :: Section -> [Sentence]
-getSec (Section t sc lb)
-  | lb ^. shortname == refLabel ^. shortname = []
+getSec (Section t sc lb) = t : concatMap getSecCon sc
+ {--| lb ^. shortname == refLabel ^. shortname = []
   | lb ^. shortname == auxConsLabel ^. shortname = []
-  | otherwise = t : concatMap getSecCon sc
+  | otherwise = t : concatMap getSecCon sc--}
 
 getSecCon :: SecCons -> [Sentence]
 getSecCon (Sub s) = getSec s

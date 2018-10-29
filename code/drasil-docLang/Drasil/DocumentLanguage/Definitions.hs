@@ -12,6 +12,7 @@ module Drasil.DocumentLanguage.Definitions
   )where
 
 import Language.Drasil
+import Language.Drasil.Development (MayHaveUnit(getUnit))
 import Data.Drasil.Utils (eqUnR)
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
@@ -78,6 +79,11 @@ makeDerivationContents s     = UlC $ ulcc $ Paragraph s
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
 type ModRow = [(String, [Contents])]
 
+-- | nonEmpty is like |maybe| but for lists
+nonEmpty :: b -> ([a] -> b) -> [a] -> b
+nonEmpty def _ [] = def
+nonEmpty _   f xs = f xs
+
 -- | Create the fields for a model from a relation concept (used by tmodel)
 mkTMField :: HasSymbolTable ctx => TheoryModel -> ctx -> Field -> ModRow -> ModRow
 mkTMField t _ l@Label fs  = (show l, (mkParagraph $ at_start t):[]) : fs
@@ -89,7 +95,7 @@ mkTMField t m l@(Description v u) fs = (show l,
 mkTMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkTMField t _ l@(Source) fs = (show l, map (mkParagraph . Ref) $ t ^. getReferences) : fs
 mkTMField t _ l@(Notes) fs = 
-  maybe fs (\ss -> (show l, map mkParagraph ss) : fs) (t ^. getNotes)
+  nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (t ^. getNotes)
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
 
@@ -106,7 +112,7 @@ mkDDField d m l@(Description v u) fs =
   (show l, buildDDescription' v u d m) : fs
 mkDDField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkDDField d _ l@(Source) fs = (show l, [mkParagraph $ getSource d]) : fs
-mkDDField d _ l@(Notes) fs = maybe fs (\ss -> (show l, map mkParagraph ss) : fs) (d ^. getNotes)
+mkDDField d _ l@(Notes) fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (d ^. getNotes)
 mkDDField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for data definitions"
 
@@ -129,17 +135,15 @@ buildDDescription' Verbose u d m = map (UlC . ulcc) [Enumeration (Definitions
 -- | Create the fields for a general definition from a 'GenDefn' chunk.
 mkGDField :: HasSymbolTable ctx => GenDefn -> ctx -> Field -> ModRow -> ModRow
 mkGDField g _ l@Label fs = (show l, (mkParagraph $ at_start g):[]) : fs
-mkGDField g _ l@Units fs =
-  let u = gdUnit g in
-    case u of Nothing   -> fs
-              Just udef -> (show l, (mkParagraph $ Sy (udef ^. usymb)):[]) : fs
+mkGDField g _ l@Units fs = 
+  maybe fs (\udef -> (show l, (mkParagraph $ Sy (udef ^. usymb)):[]) : fs) (getUnit g)
 mkGDField g _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (g ^. relat) 
   (modifyLabelEqn (g ^. getLabel))):[]) : fs
 mkGDField g m l@(Description v u) fs = (show l,
   (buildDescription v u (g ^. relat) m) []) : fs
 mkGDField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkGDField g _ l@(Source) fs = (show l, [mkParagraph $ getSource g]) : fs
-mkGDField g _ l@(Notes) fs = maybe fs (\ss -> (show l, map mkParagraph ss) : fs) (g ^. getNotes)
+mkGDField g _ l@(Notes) fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (g ^. getNotes)
 mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 
 -- | Create the fields for an instance model from an 'InstanceModel' chunk
@@ -163,7 +167,7 @@ mkIMField i _ l@(InConstraints) fs  =
 mkIMField i _ l@(OutConstraints) fs = 
   (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] (i ^. outCons)) : fs
 mkIMField i _ l@(Notes) fs = 
-  maybe fs (\ss -> (show l, map mkParagraph ss) : fs) (i ^. getNotes)
+  nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (i ^. getNotes)
 mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for instance models"
 
@@ -175,7 +179,7 @@ firstPair' (IncludeUnits) d = (P $ eqSymb d, Flat $ phrase d +:+ (sParen $
   toSentenceUnitless d), Nothing)
 
 -- | Create the descriptions for each symbol in the relation/equation
-descPairs :: (Quantity q) => InclUnits -> [q] -> [ListTuple]
+descPairs :: (Quantity q, MayHaveUnit q) => InclUnits -> [q] -> [ListTuple]
 descPairs IgnoreUnits = map (\x -> (P $ eqSymb x, Flat $ phrase x, Nothing))
 descPairs IncludeUnits =
   map (\x -> (P $ eqSymb x, Flat $ phrase x +:+ (sParen $ toSentenceUnitless x), Nothing))

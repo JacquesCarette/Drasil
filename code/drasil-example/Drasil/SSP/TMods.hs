@@ -35,13 +35,13 @@ l4 = mkLabelSame "effStress"    (Def TM)
 
 ------------- New Chunk -----------
 factOfSafety :: TheoryModel
-factOfSafety = tm' (cw factOfSafety_rc)
-  (tc' "factOfSafety" [qw fs, qw shearRes, qw mobShear] ([] :: [ConceptChunk])
-  [] [factOfSafety_rel] [] [makeRef fredlund1977]) l1 [factOfSafety_desc]
+factOfSafety = tm (cw factOfSafety_rc)
+  [qw fs, qw shearRes, qw mobShear] ([] :: [ConceptChunk])
+  [] [factOfSafety_rel] [] [makeRef fredlund1977] l1 [factOfSafety_desc]
 
 ------------------------------------
 factOfSafety_rc :: RelationConcept
-factOfSafety_rc = makeRC "factOfSafety_rc" factorOfSafety factOfSafety_desc factOfSafety_rel l1
+factOfSafety_rc = makeRC "factOfSafety_rc" factorOfSafety factOfSafety_desc factOfSafety_rel -- l1
 
 factOfSafety_rel :: Relation
 factOfSafety_rel = (sy fs) $= (sy shearRes) / (sy mobShear)
@@ -57,13 +57,13 @@ factOfSafety_desc = foldlSent [
 --
 ------------- New Chunk -----------
 equilibrium :: TheoryModel
-equilibrium = tm' (cw equilibrium_rc)
-  (tc' "equilibrium" [qw fx] ([] :: [ConceptChunk])
-  [] [eq_rel] [] [makeRef fredlund1977]) l2 [eq_desc]
+equilibrium = tm (cw equilibrium_rc)
+  [qw fx] ([] :: [ConceptChunk])
+  [] [eq_rel] [] [makeRef fredlund1977] l2 [eq_desc]
 
 ------------------------------------  
 equilibrium_rc :: RelationConcept
-equilibrium_rc = makeRC "equilibrium_rc" (nounPhraseSP "equilibrium") eq_desc eq_rel l2
+equilibrium_rc = makeRC "equilibrium_rc" (nounPhraseSP "equilibrium") eq_desc eq_rel -- l2
 
 -- FIXME: Atomic "i" is a hack.  But we need to sum over something!
 eq_rel :: Relation
@@ -81,15 +81,15 @@ eq_desc = foldlSent [S "For a body in static equilibrium, the net",
 --
 ------------- New Chunk -----------
 mcShrStrgth :: TheoryModel
-mcShrStrgth = tm' (cw mcShrStrgth_rc)
-  (tc' "mcShrStrgth" [qw shrStress, qw normStress, qw fricAngle, qw cohesion] 
+mcShrStrgth = tm (cw mcShrStrgth_rc)
+  [qw shrStress, qw normStress, qw fricAngle, qw cohesion] 
   ([] :: [ConceptChunk])
-  [] [mcSS_rel] [] [makeRef fredlund1977]) l3 [mcSS_desc]
+  [] [mcSS_rel] [] [makeRef fredlund1977] l3 [mcSS_desc]
 
 ------------------------------------
 mcShrStrgth_rc :: RelationConcept
 mcShrStrgth_rc = makeRC "mcShrStrgth_rc" (nounPhraseSP "Mohr-Coulumb shear strength")
-  mcSS_desc mcSS_rel l3
+  mcSS_desc mcSS_rel -- l3
 
 mcSS_rel :: Relation
 mcSS_rel = (sy shrStress) $= ((sy normStress) * (tan (sy fricAngle)) + (sy cohesion))
@@ -116,15 +116,15 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
 --
 ------------- New Chunk -----------
 effStress :: TheoryModel
-effStress = tm' (cw effStress_rc)
-  (tc' "effStress" [qw normStress, qw porePressure] 
+effStress = tm (cw effStress_rc)
+  [qw normStress, qw porePressure] 
   ([] :: [ConceptChunk])
-  [] [effS_rel] [] [makeRef fredlund1977]) l4 [effS_desc]
+  [] [effS_rel] [] [makeRef fredlund1977] l4 [effS_desc]
 
 ------------------------------------
 effStress_rc :: RelationConcept
 effStress_rc = makeRC "effStress_rc"
-  (nounPhraseSP "effective stress") effS_desc effS_rel l4
+  (nounPhraseSP "effective stress") effS_desc effS_rel -- l4
 
 effS_rel :: Relation
 effS_rel = (sy normStress) $= (sy normStress) - (sy porePressure)

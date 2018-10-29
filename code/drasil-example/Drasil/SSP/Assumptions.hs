@@ -5,10 +5,7 @@ import Language.Drasil
 import Drasil.SSP.Defs (slpSrf, slopeSrf, slope,
   mtrlPrpty, soil, soilLyr, soilPrpty, intrslce, slice)
 import Drasil.SSP.Unitals (coords, normToShear, scalFunc, fs)
-import Drasil.SSP.References (sspCitations)
-import Drasil.SSP.Labels (slipSurfaceL, geoSlopeMatL, soilLayerHomoL,
-  soilLayerIsoL, intersliceNormL, baseNormShearForL, stressStrainCurveL,
-  planeStrainL, effectiveNormL, surfaceBaseSliceL)
+
 import Data.Drasil.SentenceStructures (ofThe, ofThe', getTandS, foldlSent)
 
 import Data.Drasil.Concepts.Documentation (assumpDom, condition)

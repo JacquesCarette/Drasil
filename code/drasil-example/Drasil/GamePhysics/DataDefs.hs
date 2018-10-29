@@ -26,8 +26,7 @@ cpQDefs = map (\x -> Parallel x []) cpDDefs
 -- DD1 : Centre of mass --
 
 ctrOfMassDD :: DataDefinition
-ctrOfMassDD = mkDD ctrOfMass [{-- References --}] [{-- Derivation --}]
-  "ctrOfMass" Nothing
+ctrOfMassDD = mkDD ctrOfMass [{-- References --}] [{-- Derivation --}] "ctrOfMass" []
 
 ctrOfMass :: QDefinition
 ctrOfMass = mkQuantDef pos_CM ctrOfMassEqn
@@ -55,8 +54,7 @@ linDispQDef = foldl (+:+) (EmptyS) def
 -}
 
 linDispDD :: DataDefinition
-linDispDD = mkDD linDisp [{-- References --}] [{-- Derivation --}] "linDisp"
-  Nothing
+linDispDD = mkDD linDisp [{-- References --}] [{-- Derivation --}] "linDisp" []
 
 linDisp :: QDefinition
 linDisp = mkQuantDef QP.linearDisplacement dispEqn
@@ -85,8 +83,7 @@ linVelQDef = foldl (+:+) (EmptyS) def
 -}
 
 linVelDD :: DataDefinition
-linVelDD = mkDD linVel [{-- References --}] [{-- Derivation --}] "linVel"
-  Nothing
+linVelDD = mkDD linVel [{-- References --}] [{-- Derivation --}] "linVel" []
 
 linVel :: QDefinition
 linVel = mkQuantDef QP.linearVelocity velEqn
@@ -104,8 +101,7 @@ dd3descr = S "linear" +:+ (QP.velocity ^. term) +:+ S "of a" +:+
 -- DD4 : Linear acceleration --
 
 linAccDD :: DataDefinition
-linAccDD = mkDD linAcc [{-- References --}] [{-- Derivation --}] "linAcc"
-  Nothing
+linAccDD = mkDD linAcc [{-- References --}] [{-- Derivation --}] "linAcc" []
 
 linAcc :: QDefinition
 linAcc = mkQuantDef QP.linearAccel accelEqn
@@ -123,8 +119,7 @@ dd4descr = S "linear" +:+ (accel ^. term) +:+ S "of a" +:+
 -- DD5 : Angular displacement --
 
 angDispDD :: DataDefinition
-angDispDD = mkDD angDisp [{-- References --}] [{-- Derivation --}] "angDisp"
-  Nothing
+angDispDD = mkDD angDisp [{-- References --}] [{-- Derivation --}] "angDisp" []
 
 angDisp :: QDefinition
 angDisp = mkQuantDef QP.angularDisplacement angDispEqn
@@ -142,8 +137,7 @@ dd5descr = (QP.angularDisplacement ^. term) +:+ S "of a" +:+
 -- DD6 : Angular velocity --
 
 angVelDD :: DataDefinition
-angVelDD = mkDD angVel [{-- References --}] [{-- Derivation --}] "angVel"
-  Nothing
+angVelDD = mkDD angVel [{-- References --}] [{-- Derivation --}] "angVel" []
 
 angVel :: QDefinition
 angVel = mkQuantDef QP.angularVelocity angVelEqn
@@ -161,8 +155,7 @@ dd6descr = ((QP.angularVelocity ^. term)) +:+ S "of a" +:+
 -- DD7 : Angular acceleration --
 
 angAccelDD :: DataDefinition
-angAccelDD = mkDD angAccel [{-- References --}] [{-- Derivation --}] "angAccel"
-  Nothing
+angAccelDD = mkDD angAccel [{-- References --}] [{-- Derivation --}] "angAccel" []
 
 angAccel :: QDefinition
 angAccel = mkQuantDef QP.angularAccel angAccelEqn
@@ -183,8 +176,7 @@ dd7descr = (QP.angularAccel ^. term) +:+ S "of a" +:+
 -- need norms and cross products
 
 impulseDD :: DataDefinition
-impulseDD = mkDD impulse [{-- References --}] [{-- Derivation --}] "impulse"
-  Nothing
+impulseDD = mkDD impulse [{-- References --}] [{-- Derivation --}] "impulse" []
 
 impulse :: QDefinition
 impulse = mkQuantDef QP.impulseS impulseEqn

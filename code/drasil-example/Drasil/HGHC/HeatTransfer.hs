@@ -38,7 +38,7 @@ htTransCladCool, htTransCladFuel :: QDefinition
 
 htTransCladCoolDD :: DataDefinition
 htTransCladCoolDD = mkDD htTransCladCool [{-References-}] [{-Derivation-}] "htTransCladCool"--Label
-  Nothing--no additional notes
+  []--no additional notes
 
 htTransCladCool = fromEqn "htTransCladCool" (nounPhraseSP
   "convective heat transfer coefficient between clad and coolant")
@@ -53,7 +53,7 @@ htTransCladCool_eq =
 
 htTransCladFuelDD :: DataDefinition
 htTransCladFuelDD = mkDD htTransCladFuel [{-References-}] [{-Derivation-}] "htTransCladFuel"--Label
-  Nothing--no additional notes
+  []--no additional notes
 
 htTransCladFuel = fromEqn "htTransCladFuel" (nounPhraseSP
   "effective heat transfer coefficient between clad and fuel surface")

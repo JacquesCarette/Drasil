@@ -21,8 +21,7 @@ import Drasil.SSP.Assumptions (newA5)
 import Drasil.SSP.BasicExprs (eqlExpr, momExpr)
 import Drasil.SSP.DataDefs (lengthLs, sliceWght)
 import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf)
-import Drasil.SSP.Labels (genDef1Label, genDef2Label, genDef3Label, genDef4Label, 
-  genDef5Label, genDef6Label)
+import Drasil.SSP.Labels (genDef3Label)
 import Drasil.SSP.References (chen2005)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
@@ -46,7 +45,7 @@ generalDefinitions = [
 --
 normForcEq :: RelationConcept
 normForcEq = makeRC "normForcEq" (nounPhraseSP "normal force equilibrium")
-  nmFEq_desc nmFEq_rel genDef1Label
+  nmFEq_desc nmFEq_rel -- genDef1Label
 
 nmFEq_rel :: Relation
 nmFEq_rel = inxi totNrmForce $= eqlExpr cos sin
@@ -70,7 +69,7 @@ nmFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
 --
 bsShrFEq :: RelationConcept
 bsShrFEq = makeRC "bsShrFEq" (nounPhraseSP "base shear force equilibrium")
-  bShFEq_desc bShFEq_rel genDef2Label
+  bShFEq_desc bShFEq_rel -- genDef2Label
 
 bShFEq_rel :: Relation
 bShFEq_rel = inxi mobShrI $= eqlExpr sin cos
@@ -98,7 +97,7 @@ shrResEqn = inxi nrmFSubWat * tan (inxi fricAngle) + inxi cohesion *
 
 resShr :: RelationConcept
 resShr = makeRC "resShr" (nounPhraseSP "resistive shear force")
-  resShr_desc resShr_rel genDef3Label
+  resShr_desc resShr_rel -- genDef3Label
 
 resShr_rel :: Relation
 resShr_rel = inxi shrResI $= shrResEqn
@@ -121,7 +120,7 @@ resShr_desc = foldlSent [S "The Mohr-Coulomb resistive shear strength of a",
 --
 mobShr :: RelationConcept
 mobShr = makeRC "mobShr"
-  (nounPhraseSP "mobile shear force") mobShr_desc mobShr_rel genDef4Label
+  (nounPhraseSP "mobile shear force") mobShr_desc mobShr_rel -- genDef4Label
 
 mobShr_rel :: Relation
 mobShr_rel = inxi mobShrI $= inxi shrResI / sy fs $= shrResEqn / sy fs
@@ -137,7 +136,7 @@ mobShr_desc = foldlSent [
 --
 normShrR :: RelationConcept
 normShrR = makeRC "normShrR"
-  (nounPhraseSP "interslice normal/shear relationship") nmShrR_desc nmShrR_rel genDef5Label
+  (nounPhraseSP "interslice normal/shear relationship") nmShrR_desc nmShrR_rel -- genDef5Label
 
 nmShrR_rel :: Relation
 nmShrR_rel = sy intShrForce $= sy normToShear * sy scalFunc * sy intNormForce
@@ -157,7 +156,7 @@ nmShrR_desc = foldlSent [S "The", phrase assumption,
 
 momentEql :: RelationConcept
 momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")
-  momEql_desc momEql_rel genDef6Label
+  momEql_desc momEql_rel -- genDef6Label
 
 momEql_rel :: Relation
 momEql_rel = 0 $= momExpr (\ x y -> x -

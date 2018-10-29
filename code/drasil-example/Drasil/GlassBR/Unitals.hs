@@ -108,10 +108,10 @@ nom_thick = cuc "nom_thick"
   [enumc nominalThicknesses] 8
 
 -- FIXME glassTypeAbbrsStr should really not exist...
-glass_type  = cvc' "glass_type" (nounPhraseSent $ phrase glassTy +:+ 
+glass_type  = cvc "glass_type" (nounPhraseSent $ phrase glassTy +:+ 
     displayConstrntsAsSet glass_type glassTypeAbbrsStr)
   lG ({-DiscreteS glassTypeAbbrsStr-} String)
-  [EnumeratedStr Software glassTypeAbbrsStr]
+  [EnumeratedStr Software glassTypeAbbrsStr] Nothing
 
 {--}
 
@@ -121,7 +121,7 @@ gbOutputs = map qw [is_safePb, is_safeLR] ++ map qw [prob_br]
 prob_br :: ConstrainedChunk
 prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational
-  [ physc $ Bounded (Exc,0) (Exc,1)] (dbl 0.4)
+  [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
   --FIXME: no typical value!
 
 {--}

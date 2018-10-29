@@ -15,7 +15,7 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   SCSSub(..), GSDSec(..), GSDSub(..),
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc,
   mkEnumSimpleD, nonFuncReqF, outDataConstTbl, probDescF, reqF, termDefnF,
-  tsymb'', valsOfAuxConstantsF)
+  tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc)
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
   assumptLabel, physSyst)
@@ -73,7 +73,7 @@ this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, degree] ++ map unitWrapper [newton, pascal]
 
 check_si :: [UnitDefn]
-check_si = collectUnits sspSymMap symbT 
+check_si = collectUnits sspSymMap symbTT
 
 ssp_si :: SystemInformation
 ssp_si = SI {
@@ -82,7 +82,7 @@ ssp_si = SI {
   _authors = [henryFrankis],
   _units = check_si,
   _quants = sspSymbols,
-  _concepts = symbT,
+  _concepts = symbTT,
   _definitions = ([] :: [QDefinition]),
   _datadefs = dataDefns,
   _inputs = map qw sspInputs,
@@ -153,8 +153,8 @@ sspRefDB = rdb newAssumptions sspCitations (sspRequirements ++
 printSetting :: PrintingInformation
 printSetting = PI sspSymMap defaultConfiguration
 
-symbT :: [DefinedQuantityDict]
-symbT = ccss (getDoc ssp_srs) (egetDoc ssp_srs) sspSymMap
+symbTT :: [DefinedQuantityDict]
+symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) sspSymMap
 
 -- SECTION 1 --
 --automatically generated in mkSRS -

@@ -1,22 +1,17 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Quantity 
-  (Quantity, QuantityDict, qw, mkQuant, mkQuant', HasSpace(typ),
-   implVar,codeVC,vc,vcSt,vc'') where
+  (QuantityDict, qw, mkQuant, mkQuant', implVar,codeVC,vc,vcSt,vc'') where
 
 import Control.Lens ((^.),makeLenses,view)
 
 import Language.Drasil.Chunk.NamedIdea (IdeaDict,nw,mkIdea,nc)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  HasSymbol(symbol), HasSpace(typ))
+  HasSymbol(symbol), HasSpace(typ), Quantity)
 import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.Symbol (Symbol(Empty))
-
--- | A Quantity is an 'Idea' with a 'Space' and a symbol and 
--- may have units
-class (Idea c, HasSpace c, HasSymbol c, MayHaveUnit c) => Quantity c where
 
 data QuantityDict = QD { _id' :: IdeaDict
                        , _typ' :: Space
@@ -34,7 +29,7 @@ instance Quantity      QuantityDict where
 instance Eq            QuantityDict where a == b = (a ^. uid) == (b ^. uid)
 instance MayHaveUnit   QuantityDict where getUnit = view unit'
 
-qw :: (Quantity q) => q -> QuantityDict
+qw :: (Quantity q, MayHaveUnit q) => q -> QuantityDict
 qw q = QD (nw q) (q^.typ) (symbol q) (getUnit q)
 
 -- For when the symbol is constant through stages

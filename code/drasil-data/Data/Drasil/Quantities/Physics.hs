@@ -10,7 +10,7 @@ import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU,
     impulseU, momtInertU, torqueU, velU)
 
 restitutionCoef :: DefinedQuantityDict
-restitutionCoef = dqd CP.restitutionCoef (sub cC cR) Real Nothing
+restitutionCoef = dqd' CP.restitutionCoef (const $ sub cC cR) Real Nothing
 
 angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
   distance, energy, force, gravitationalAccel, gravitationalConst, impulseS,

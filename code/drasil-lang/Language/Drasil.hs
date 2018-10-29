@@ -45,6 +45,8 @@ module Language.Drasil (
   , HasDerivation(derivations)
   , HasRefAddress(getRefAdd)
   , HasShortName(shortname)
+  , UncertainQuantity(uncert)
+  , Quantity
   -- Chunk.Concept
   , cw , ConceptChunk , CommonConcept, ConceptInstance
   -- Chunk.CommonIdea
@@ -57,33 +59,33 @@ module Language.Drasil (
   , Constraint(..), ConstraintReason(..)
   -- Chunk.Constrained
   , ConstrainedChunk(..), ConstrConcept(..)
-  , constrained, cuc, cvc, cvc', constrained', cuc', constrainedNRV'
-  , cnstrw
+  , cuc, cvc, constrained', cuc', constrainedNRV'
+  , cnstrw, cnstrw'
   -- Chunk.Eq
   , QDefinition, fromEqn, fromEqn', equat, ec
   -- Chunk.DataDefinition
   , DataDefinition, mkQuantDef, mkDD, qdFromDD, mkDDL
   -- Chunk.GenDefn
-  , GenDefn, gd, gdUnit, gdNoUnitDef, gd', gd''
+  , GenDefn, gd', gd''
   -- Chunk.InstanceModel
   , InstanceModel
-  , inCons, outCons, imOutput, imInputs, im, imQD, im', imQD', im'', im'''
+  , inCons, outCons, imOutput, imInputs, im, im', im'', im'''
   , Constraints
   -- Chunk.Quantity
-  , Quantity, QuantityDict, qw, mkQuant
+  , QuantityDict, qw, mkQuant
   , codeVC, vc, implVar , dcc, dcc', dccWDS, dccWDS', vc'', ccs, cc, cc', cic
   -- Chunk.UncertainQuantity
-  , UncertainQuantity(..), UncertainChunk(..), UncertQ, uq, uqNU, uqc, uqcNU, uqcND, uncrtnChunk, uvc
+  , UncertainChunk(..), UncertQ, uq, uqc, uqcND, uncrtnChunk, uvc
   , uncrtnw
   -- Chunk.Unital
   , UnitalChunk(..), makeUCWDS
-  , uc, uc', ucs, ucs', ucsWS, ucFromDQD
+  , uc, uc', ucs, ucs', ucsWS
   -- Chunk.Unitary
   , Unitary(..), UnitaryChunk, unitary, unit_symb
   -- Chunk.Relation
-  , RelationConcept, makeRC, makeRC'
+  , RelationConcept, makeRC
   --Chunk.DefinedQuantity
-  , dqd, dqd', dqdEL, DefinedQuantityDict, dqdWr, dqdQd
+  , dqd, dqd', DefinedQuantityDict, dqdWr, dqdQd
   -- Chunk.UnitaryConcept
   , ucw, UnitaryConceptDict
   -- Chunk.Attributes --FIXME: Changed a lot
@@ -155,7 +157,7 @@ module Language.Drasil (
   , People, Person, person, HasName, name, manyNames, person', personWM
   , personWM', mononym, nameStr, rendPersLFM, rendPersLFM', rendPersLFM''
   -- Chunk.Theory
-  , Theory(..), tc', TheoryChunk, TheoryModel, tm, tm'
+  , TheoryModel, tm, Theory(..)
   -- Stages
   , Stage(Equational,Implementation)
   -- Symbol.Helpers
@@ -194,8 +196,9 @@ module Language.Drasil (
   -- Expr.Extract
   , names
   -- Document.Extract
-  , egetDoc, getDoc
-  -- Label.Type
+  , egetDoc, getDoc, egetSec, egetCon', egetLblCon, egetQDef
+  , getSec, getCon', getSec, getCon
+  -- Label.Core
   , getAdd
   -- Development.Sentence
   , introduceAbb, phrase, plural, phrase's, plural's, at_start, at_start'
@@ -214,7 +217,8 @@ import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, csc
           apply, apply1, apply2,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
-import Language.Drasil.Document.Extract(egetDoc, getDoc)
+import Language.Drasil.Document.Extract(egetDoc, getDoc, egetSec, egetCon', egetLblCon,
+ egetQDef, getSec, getCon', getSec, getCon)
 import Language.Drasil.Expr.Extract (dep, names', names)
 import Language.Drasil.Expr.Precedence (precA, precB, eprec)
 import Language.Drasil.Sentence.EmbedSymbol(ch)
@@ -234,11 +238,11 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
   IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), HasReference(getReferences), 
-  HasLabel(getLabel), MayHaveLabel(getMaybeLabel), HasRefAddress(getRefAdd),
-  DefiningExpr(defnExpr), HasShortName(shortname))
+  HasLabel(getLabel), MayHaveLabel(getMaybeLabel), HasRefAddress(getRefAdd), HasSpace(typ),
+  DefiningExpr(defnExpr), HasShortName(shortname), Quantity, UncertainQuantity(uncert))
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Derivation (Derivation)
-import Language.Drasil.Document.GetChunk(vars, combine', vars', combine, ccss)
+import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Citation (
@@ -274,11 +278,10 @@ import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.InstanceModel
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, makeRC')
+import Language.Drasil.Chunk.Relation(RelationConcept, makeRC)
 import Language.Drasil.Chunk.Theory
 import Language.Drasil.Chunk.UncertainQuantity
-import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS,
-                                   uc, uc', ucs, ucs', ucsWS, ucFromDQD)
+import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc', ucs, ucs', ucsWS)
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.UnitaryConcept
 import Language.Drasil.ChunkDB

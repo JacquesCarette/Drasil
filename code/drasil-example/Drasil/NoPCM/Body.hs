@@ -35,15 +35,13 @@ import qualified Drasil.DocLang.SRS as SRS (probDesc, goalStmt, inModelLabel,
   funcReq, likeChg, unlikeChg)
 import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose), 
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
-  SolChSpec(..), SSDSec(..),
-  DocSection(SSDSec, Verbatim, Bibliography, IntroSec, RefSec), IntroSec(IntroProg),
-  IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
-  RefSec(RefProg), RefTab(TAandA, TUnits), 
+  SolChSpec(..), SSDSec(..), DocSection(..),
+  IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
+  RefSec(RefProg), RefTab(TAandA, TUnits), TraceabilitySec(TraceabilityProg),
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
-  reqF, termDefnF, traceMGF, tsymb, valsOfAuxConstantsF)
-import qualified Drasil.DocumentLanguage.Units as U (toSentence)
- 
+  reqF, termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc)
+import qualified Drasil.DocumentLanguage.Units as U (toSentence) 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
   isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP)
 
@@ -80,20 +78,22 @@ this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
 
 check_si :: [UnitDefn]
-check_si = collectUnits nopcm_SymbMap symbT 
+check_si = collectUnits nopcm_SymbMap symbTT 
 
 -- This contains the list of symbols used throughout the document
 nopcm_Symbols :: [DefinedQuantityDict]
 nopcm_Symbols = (map dqdWr nopcm_Units) ++ (map dqdWr nopcm_Constraints)
- ++ [gradient, surface, uNormalVect]
+ ++ map dqdWr [temp_W, w_E]
+ ++ [gradient, uNormalVect] ++ map dqdWr [surface]
   
 nopcm_SymbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcm_HTC and pcm_SA
                                --FOUND LOC OF ERROR: Instance Models
 nopcm_SymbolsAll = (map qw nopcm_Units) ++ (map qw nopcm_Constraints) ++
+  (map qw [temp_W, w_E]) ++
   (map qw specParamValList) ++ 
   (map qw [coil_SA_max]) ++ (map qw [tau_W]) ++ 
-  (map qw [surface, uNormalVect, gradient, eta])
+  (map qw [surface]) ++ (map qw [uNormalVect, gradient, eta])
 
 nopcm_Units :: [UnitaryConceptDict]
 nopcm_Units = map ucw [density, tau, in_SA, out_SA,
@@ -103,11 +103,12 @@ nopcm_Units = map ucw [density, tau, in_SA, out_SA,
   vol, w_mass, w_vol, tau_W]
 
 nopcm_Constraints :: [UncertQ]
-nopcm_Constraints =  [coil_SA, w_E, htCap_W, coil_HTC, temp_init,
-  time_final, tank_length, temp_C, w_density, diam, temp_W]
+nopcm_Constraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
+  time_final, tank_length, temp_C, w_density, diam]
+  -- w_E, temp_W
 
 probDescription, termAndDefn, physSystDescription, goalStates,
-  reqS, funcReqs, likelyChgsSect, unlikelyChgsSect, traceMAndG, specParamVal :: Section
+  reqS, funcReqs, likelyChgsSect, unlikelyChgsSect, specParamVal :: Section
 
 
 -------------------
@@ -147,7 +148,11 @@ mkSRS = RefSec (RefProg intro
         )
       ]
     ):
-  map Verbatim [reqS, likelyChgsSect, unlikelyChgsSect, traceMAndG, specParamVal] ++ (Bibliography : [])
+  map Verbatim [reqS, likelyChgsSect, unlikelyChgsSect] ++
+  TraceabilitySec
+    (TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
+  (map UlC traceIntro2) ++ [LlC traceFig1, LlC traceFig2]) []) :
+  map Verbatim [specParamVal] ++ (Bibliography : [])
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -158,14 +163,14 @@ nopcm_si = SI {
   _kind = srs,
   _authors = [thulasi],
   _units = check_si,
-  _quants = symbT,
+  _quants = symbTT,
   _concepts = nopcm_Symbols,
   _definitions = [dd1HtFluxCQD],          --dataDefs
   _datadefs = [dd1HtFluxC],
-  _inputs = (map qw nopcm_Constraints), --inputs
+  _inputs = (map qw nopcm_Constraints ++ map qw [temp_W, w_E]), --inputs ++ outputs?
   _outputs = (map qw [temp_W, w_E]),     --outputs
   _defSequence = [Parallel dd1HtFluxCQD []],
-  _constraints = (nopcm_Constraints),        --constrained
+  _constraints = (map cnstrw nopcm_Constraints ++ map cnstrw [temp_W, w_E]),        --constrained
   _constants = [],
   _sysinfodb = nopcm_SymbMap,
   _refdb = nopcmRefDB
@@ -193,8 +198,8 @@ assumps_Nopcm_list_new :: [AssumpChunk]
 assumps_Nopcm_list_new = [newA1, newA2, newA3, newA5NoPCM, newA6NoPCM,
   newA7, newA8, newA9, newA9NoPCM, newA14, newA15, newA16, newA19, newA20]
 
-symbT :: [DefinedQuantityDict]
-symbT = ccss (getDoc nopcm_srs) (egetDoc nopcm_srs) nopcm_SymbMap
+symbTT :: [DefinedQuantityDict]
+symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) nopcm_SymbMap
 
 --------------------------
 --Section 2 : INTRODUCTION
@@ -322,12 +327,12 @@ physSystDescList = enumSimple 1 (short physSyst) $ map foldlSent_
 goalStates = SRS.goalStmt [goalStatesIntro temp coil temp_W, goalStatesList temp_W w_E]
   []
 
-goalStatesIntro :: ConceptChunk -> ConceptChunk -> UncertQ -> Contents
+goalStatesIntro :: NamedIdea c => ConceptChunk -> ConceptChunk -> c -> Contents
 goalStatesIntro te co temw = foldlSPCol [S "Given", phrase te `ofThe`
   phrase co `sC` S "initial", phrase temw  `sC` S "and material",
   plural property `sC` S "the", phrase goalStmt, S "are"]
 
-goalStatesList :: UncertQ -> UncertQ -> Contents
+goalStatesList :: (NamedIdea a, NamedIdea b) => a -> b -> Contents
 goalStatesList temw we = enumSimple 1 (short goalStmt) [
   (S "predict the" +:+ phrase temw +:+ S "over time"),
   (S "predict the" +:+ phrase we +:+ S "over time")]
@@ -524,7 +529,7 @@ dataConstTable2 = outDataConstTbl dataConstListOut
   -- (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_conListOut)
   -- (titleize output_ +:+ titleize' variable) True
 
-dataConstListOut :: [UncertQ]
+dataConstListOut :: [ConstrConcept]
 dataConstListOut = [temp_W, w_E]
 
 inputVar :: [QuantityDict]
@@ -680,10 +685,6 @@ unlikeChgNIHG = cic "unlikeChgNIHG" (
 ----------------------------------------------
 --Section 7:  TRACEABILITY MATRICES AND GRAPHS
 ----------------------------------------------
- 
-traceMAndG = traceMGF traceRefList traceTrailing
-  (map LlC traceRefList ++
-  (map UlC traceIntro2) ++ [LlC traceFig1, LlC traceFig2]) []
 
 traceRefList :: [LabelledContent]
 traceRefList = [traceTable1, traceTable2, traceTable3]

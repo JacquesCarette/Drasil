@@ -36,7 +36,9 @@ module Drasil.DocLang (
     -- Sections.TableOfSymbols
     -- Sections.TableOfUnits
     -- Sections.TraceabilityMandGs
-    traceGIntro, traceMGF
+    traceGIntro, traceMGF,
+    -- ExtractDocDesc
+    getDocDesc, egetDocDesc
     ) where 
 
 import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..), 
@@ -46,8 +48,7 @@ import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
     RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), 
     ScpOfProjSec(ScpOfProjProg), SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), 
     StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), TConvention(..), 
-    TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..), mkDoc, 
-    tsymb, tsymb'',
+    TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..), mkDoc, tsymb, tsymb'',
     mkEnumSimple, mkEnumSimpleD, mkListTuple)
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, 
     InclUnits(IncludeUnits), Verbosity(Verbose), ddefn)
@@ -69,5 +70,5 @@ import Drasil.Sections.SpecificSystemDescription (assumpF,
 --import Drasil.Sections.TableOfSymbols
 --import Drasil.Sections.TableOfUnits
 import Drasil.Sections.TraceabilityMandGs (traceGIntro, traceMGF)
-
+import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 -- Commented out modules aren't used - uncomment if this changes

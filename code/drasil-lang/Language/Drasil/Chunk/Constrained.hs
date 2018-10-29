@@ -1,16 +1,16 @@
-{-# Language TemplateHaskell, TypeFamilies #-}
+{-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.Constrained (
     ConstrainedChunk(..)
   , ConstrConcept(..)
   , cuc, cvc, constrained', cuc', constrainedNRV'
-  , cnstrw
+  , cnstrw, cnstrw'
   ) where
 
 import Control.Lens ((^.), makeLenses, view)
 
 import Language.Drasil.Chunk.Concept (cw)
 import Language.Drasil.Chunk.Constrained.Core (Constraint(..))
-import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', dqdWr)
 import Language.Drasil.Chunk.Quantity (QuantityDict, qw, vc)
 import Language.Drasil.Chunk.Unital (ucs)
 import Language.Drasil.Chunk.Unitary (unitary)
@@ -89,3 +89,7 @@ cuc' :: (IsUnit u, ConceptDomain u) => String -> NP -> String -> Symbol -> u
 cuc' nam trm desc sym un space cs rv =
   ConstrConcept (dqd (cw (ucs nam trm desc sym space un)) sym space uu) cs (Just rv)
   where uu = unitWrapper un
+
+cnstrw' :: (Quantity c, Concept c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrConcept
+cnstrw' c = ConstrConcept (dqdWr c) (c ^. constraints) (c ^. reasVal)
+

@@ -1,8 +1,8 @@
 {-# Language TemplateHaskell #-}
 
 module Language.Drasil.Chunk.UncertainQuantity 
-  ( UncertQ, UncertainChunk(..) , uq, uqNU , uqc
-  , uqcNU, uqcND, uncrtnChunk, uvc, uncrtnw) where
+  ( UncertQ, UncertainChunk(..) , uq, uqc
+  , uqcND, uncrtnChunk, uvc, uncrtnw) where
  
 import Language.Drasil.Chunk.DefinedQuantity (dqd')
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
@@ -51,6 +51,7 @@ uncrtnChunk q u = UCh (cnstrw q) (Just $ bw0And1 u)
 uvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> Double -> UncertainChunk
 uvc nam trm sym space cs val uncrt = uncrtnChunk (cvc nam trm sym space cs (Just val)) uncrt
 
+-- | projection
 uncrtnw :: (UncertainQuantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> UncertainChunk
 uncrtnw c = UCh (cnstrw c) (c ^. uncert)
 
@@ -81,19 +82,10 @@ uq :: (Quantity c, Constrained c, Concept c, HasReasVal c, MayHaveUnit c) =>
   c -> Double -> UncertQ
 uq q u = UQ (ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit q)) (q ^. constraints) (q ^. reasVal)) (Just $ bw0And1 u)
 
-uqNU :: (Quantity c, Constrained c, Concept c, HasReasVal c, MayHaveUnit c) =>
-  c -> UncertQ
-uqNU q = UQ (ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit q)) (q ^. constraints) (q ^. reasVal)) Nothing 
-
 --FIXME: this is kind of crazy and probably shouldn't be used!
 uqc :: (IsUnit u, ConceptDomain u) => String -> NP -> String -> Symbol -> u -> Space
                 -> [Constraint] -> Expr -> Double -> UncertQ
 uqc nam trm desc sym un space cs val uncrt = uq (cuc' nam trm desc sym un space cs val) uncrt
-
---uncertainty quantity constraint no uncertainty
-uqcNU :: (IsUnit u, ConceptDomain u) => String -> NP -> String -> Symbol -> u
-                  -> Space -> [Constraint] -> Expr -> UncertQ
-uqcNU nam trm desc sym un space cs val = uqNU (cuc' nam trm desc sym un space cs val)
 
 --uncertainty quantity constraint no description
 uqcND :: (IsUnit u, ConceptDomain u) => String -> NP -> Symbol -> u -> Space -> [Constraint]

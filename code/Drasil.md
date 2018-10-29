@@ -178,3 +178,6 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 
 - **Chunk/Constrained**: Either a Quantity or a DefinedQuantity (two types defined)
   that have constraints and maybe a default value.
+
+- **Chunk/UncertainQuantity**: Either a Quantity or a DefinedQuantity that has
+  some uncertainty.

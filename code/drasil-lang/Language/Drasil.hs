@@ -60,7 +60,7 @@ module Language.Drasil (
   -- Chunk.Constrained
   , ConstrainedChunk(..), ConstrConcept(..)
   , cuc, cvc, constrained', cuc', constrainedNRV'
-  , cnstrw
+  , cnstrw, cnstrw'
   -- Chunk.Eq
   , QDefinition, fromEqn, fromEqn', equat, ec
   -- Chunk.DataDefinition
@@ -75,7 +75,7 @@ module Language.Drasil (
   , QuantityDict, qw, mkQuant
   , codeVC, vc, implVar , dcc, dcc', dccWDS, dccWDS', vc'', ccs, cc, cc', cic
   -- Chunk.UncertainQuantity
-  , UncertainChunk(..), UncertQ, uq, uqNU, uqc, uqcNU, uqcND, uncrtnChunk, uvc
+  , UncertainChunk(..), UncertQ, uq, uqc, uqcND, uncrtnChunk, uvc
   , uncrtnw
   -- Chunk.Unital
   , UnitalChunk(..), makeUCWDS

@@ -87,7 +87,7 @@ eBalanceOnWtrDerivSentences = map foldlSentCol [
   eBalanceOnWtrDerivDesc6 eq3 eq4,
   eBalanceOnWtrDerivDesc7 eq5]
 
-eBalanceOnWtrDerivDesc1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk -> 
+eBalanceOnWtrDerivDesc1 :: ConceptChunk -> ConstrConcept -> UnitalChunk -> ConceptChunk -> 
   ConceptChunk -> UnitalChunk -> ConceptChunk -> UnitalChunk -> ConceptChunk -> UncertQ -> 
   ConceptChunk -> ConceptChunk -> UnitalChunk -> UncertQ -> UncertQ -> ConceptChunk ->
   UnitalChunk -> ConceptChunk -> UnitalChunk -> [Sentence]
@@ -269,7 +269,7 @@ eBalanceOnPCMDerivSentences = map foldlSentCol [
   eBalanceOnPCMDerivDesc4 eq7
    ]
 
-eBalanceOnPCMDerivDesc1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk -> 
+eBalanceOnPCMDerivDesc1 :: ConceptChunk -> ConstrConcept -> UnitalChunk -> ConceptChunk -> 
   ConceptChunk-> UncertQ -> UnitalChunk -> ConceptChunk -> UncertQ -> 
   ConceptChunk -> UnitalChunk -> ConceptChunk -> UncertQ ->  ConceptChunk ->
   AssumpChunk -> UnitalChunk -> [Sentence]
@@ -308,7 +308,7 @@ eBalanceOnPCMDerivDesc5 hsp hlp tsp tlp sur ar melt vo ass17=
    S "since the" +:+ phrase vo +:+ S "change of the PCM with" +:+ phrase melting +:+ S "is assumed to be negligible" +:+.
    (sParen (makeRefS ass17))]
 
-eBalanceOnPCMDerivDesc6 :: UncertQ -> [Sentence]
+eBalanceOnPCMDerivDesc6 :: NamedIdea a => a -> [Sentence]
 eBalanceOnPCMDerivDesc6 tp =
     [S "In the case where" +:+ (E eq6_1) +:+ S "and not all of the PCM is melted" `sC`
    S "the" +:+ phrase tp +:+. S "does not change" +:+ S "Therefore" `sC` 

@@ -226,8 +226,7 @@ scpIncl = S "stability analysis of a 2 dimensional" +:+ phrase slope `sC`
 scpEnd  = S "identifies the most likely failure" +:+
   phrase surface +:+ S "within the possible" +:+ phrase input_ +:+ 
   S "range" `sC` S "and finds the" +:+ phrase fs +:+ S "for the" +:+
-  phrase slope +:+ S "as well as displacement of" +:+ phrase soil +:+
-  S "that will occur on the" +:+ phrase slope
+  phrase slope
 
 -- SECTION 2.3 --
 -- Characteristics of the Intended Reader generated in IChar
@@ -319,8 +318,7 @@ termi_defi = termDefnF Nothing [termi_defi_list]
 
 termi_defi_list = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
   map (\x -> (titleize $ x, Flat $ x ^. defn))
-  [fs_concept, crtSlpSrf, stress, strain, normForce,
-  shearForce, tension, compression, plnStrn]
+  [fs_concept, crtSlpSrf, stress, strain, normForce, shearForce, plnStrn]
   -- most of these are in concepts (physics or solidMechanics)
   -- except for crtSlpSrf & plnStrn which is in defs.hs
   -- and fs which is in Unitals.hs

@@ -311,8 +311,8 @@ userChar pname understandings familiarities = foldlSP [
 -- SECTION 4.1 --
 problem_desc = probDescF EmptyS ssa ending [termi_defi, phys_sys_desc, goal_stmt]
   where ending = foldlSent_ [S "evaluate the", phrase fs, S "of a",
-          phrase's slope, phrase slpSrf, S "and to calculate the",
-          S "displacement that the", phrase slope, S "will experience"]
+          phrase's slope, phrase slpSrf, S "and identify the",
+          phrase crtSlpSrf, S "of the", phrase slope]
 
 -- SECTION 4.1.1 --
 termi_defi = termDefnF Nothing [termi_defi_list]

@@ -54,7 +54,7 @@ import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods)
 import Drasil.SSP.References (sspCitations)
 import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
-import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, hookesLaw, effStress)
+import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
   sspOutputs, sspSymbols)
 
@@ -119,7 +119,7 @@ mkSRS = RefSec (RefProg intro
           (SCSProg 
             [Assumptions 
             ,TMs ([Label] ++ stdFields) [factOfSafety, equilibrium, mcShrStrgth,
-             effStress, hookesLaw]
+             effStress]
             , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
             , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
             , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)

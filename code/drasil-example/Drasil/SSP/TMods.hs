@@ -1,12 +1,12 @@
-module Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress, 
-  hookesLaw) where
+module Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress) 
+  where
 
 import Prelude hiding (tan)
 import Language.Drasil
 
-import Data.Drasil.Quantities.Physics (displacement, distance, force)
+import Data.Drasil.Quantities.Physics (distance, force)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Data.Drasil.Quantities.SolidMechanics (mobShear, shearRes, stffness)
+import Data.Drasil.Quantities.SolidMechanics (mobShear, shearRes)
 
 import Data.Drasil.Concepts.Documentation (model, safety, source)
 import Data.Drasil.Concepts.Math (surface)
@@ -19,16 +19,15 @@ import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, ofThe',
 import Drasil.SSP.Assumptions (newA8, newA9)
 import Drasil.SSP.Defs (factor, factorOfSafety, slope, soil)
 import Drasil.SSP.References (fredlund1977, stolle2008)
-import Drasil.SSP.Unitals (cohesion, fricAngle, fs, fx, fy, genDisplace,
-  genForce, momntOfBdy, normStress, porePressure, shrStress, surfHydroForce)
+import Drasil.SSP.Unitals (cohesion, fricAngle, fs, fx, fy,
+  momntOfBdy, normStress, porePressure, shrStress, surfHydroForce)
 
 -- Pre-defined some labels. They will be re-used for tings which are 'the same'
-l1, l2, l3, l4, l5 :: Label
+l1, l2, l3, l4 :: Label
 l1 = mkLabelSame "factOfSafety" (Def TM)
 l2 = mkLabelSame "equilibrium"  (Def TM)
 l3 = mkLabelSame "mcShrStrgth"  (Def TM)
 l4 = mkLabelSame "effStress"    (Def TM)
-l5 = mkLabelSame "hookesLaw"    (Def TM)
 
 --------------------------
 --  Theoretical Models  --
@@ -143,26 +142,3 @@ effS_desc = foldlSent [ch normStress, S "is the total", phrase stress,
   phrase stress, ch normStress, S "and is the difference between the",
   S "total", phrase stress, ch normStress, S "and the pore",
   phrase stress, ch porePressure]
-
---
-------------- New Chunk -----------
-hookesLaw :: TheoryModel
-hookesLaw = tm' (cw hookesLaw_rc)
-  (tc' "effStress" [qw genForce, qw stffness, qw genDisplace] 
-  ([] :: [ConceptChunk])
-  [] [hksLw_rel] [] [makeRef stolle2008]) l5 [hksLw_desc]
-
-------------------------------------
-hookesLaw_rc :: RelationConcept
-hookesLaw_rc = makeRC "hookesLaw_rc"
-  (nounPhraseSP "Hooke's law") hksLw_desc hksLw_rel l5
-
-hksLw_rel :: Relation
-hksLw_rel = (sy genForce) $= (sy stffness) * (sy genDisplace)
-
-hksLw_desc :: Sentence
-hksLw_desc = foldlSent [S "Stiffness", ch stffness, S "is the",
-  S "resistance of a body to deformation by", phrase displacement,
-  ch genDisplace, S "when subject to a", phrase force, ch genForce `sC`
-  S "along the same direction. A body with high stiffness will experience",
-  S "little deformation when subject to a", phrase force]

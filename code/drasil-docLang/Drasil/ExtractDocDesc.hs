@@ -1,6 +1,6 @@
 module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc) where
 
-import Control.Lens(makeLenses, (^.), view)
+import Control.Lens(makeLenses, (^.))
 import Drasil.DocumentLanguage
 import Language.Drasil hiding (Manual, Vector, Verb)
 
@@ -12,7 +12,7 @@ egetDocDesc d = concatMap egetDocSec d
 egetDocSec :: DocSection -> [Expr]
 egetDocSec (Verbatim a)         = egetSec a
 egetDocSec (RefSec r)           = egetRefSec r
-egetDocSec (IntroSec i)         = []
+egetDocSec (IntroSec _)         = []
 egetDocSec (StkhldrSec s)       = egetStk s
 egetDocSec (GSDSec g)           = egetGSD g
 egetDocSec (ScpOfProjSec s)     = egetScp s
@@ -55,7 +55,7 @@ egetTrace (TraceabilityProg lc _ c s) = concatMap egetLblCon lc ++ concatMap ege
   ++ concatMap egetSec s
 
 egetAux :: AuxConstntSec -> [Expr]
-egetAux (AuxConsProg c qd) = concatMap egetQDef qd
+egetAux (AuxConsProg _ qd) = concatMap egetQDef qd
 
 egetApp :: AppndxSec -> [Expr]
 egetApp (AppndxProg c) = concatMap egetCon' c
@@ -67,8 +67,8 @@ egetExist (ExistSolnProg c) = concatMap egetCon' c
 egetRefProg :: RefTab -> [Expr]
 egetRefProg (TUnits) = []
 egetRefProg (TUnits' _) = []
-egetRefProg (TSymb t)   = []
-egetRefProg (TSymb' l t) = egetFunc l
+egetRefProg (TSymb _)   = []
+egetRefProg (TSymb' l _) = egetFunc l
 egetRefProg (TAandA) = []
 
 egetStk :: StkhldrSec -> [Expr]
@@ -95,8 +95,8 @@ egetReqSub (_) = []
 egetFunc :: LFunc -> [Expr]
 egetFunc (Term) = []
 egetFunc (Defn) = []
-egetFunc (TermExcept dqd) = []
-egetFunc (DefnExcept dqd) = []
+egetFunc (TermExcept _) = []
+egetFunc (DefnExcept _) = []
 egetFunc (TAD) = []
 
 egetProblem :: ProblemDescription -> [Expr]

@@ -40,7 +40,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   RefSec(RefProg), RefTab(TAandA, TUnits), TraceabilitySec(TraceabilityProg),
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
-  reqF, termDefnF, traceMGF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc)
+  reqF, termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc)
 import qualified Drasil.DocumentLanguage.Units as U (toSentence) 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
   isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP)

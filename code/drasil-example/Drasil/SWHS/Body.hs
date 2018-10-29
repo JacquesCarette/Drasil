@@ -15,7 +15,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg),
   dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
-  outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF, tsymb'',
+  outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, tsymb'',
   getDocDesc, egetDocDesc)
 import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel,
   likeChg, probDesc, sysCont, unlikeChg)

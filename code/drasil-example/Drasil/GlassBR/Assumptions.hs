@@ -5,7 +5,7 @@ module Drasil.GlassBR.Assumptions (glassType, glassCondition, explainScenario, s
 import Language.Drasil hiding (organization)
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxConsLabel)
 
-import Data.Drasil.Concepts.Documentation as Doc (assumpDom, condition, constant,
+import Data.Drasil.Concepts.Documentation as Doc (condition, constant,
   practice, reference, scenario, system, value)
 import Data.Drasil.Concepts.Math (calculation, surface, shape)
 import Data.Drasil.SentenceStructures (EnumType(Numb), FoldType(..), SepType(..),

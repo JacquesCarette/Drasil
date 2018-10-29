@@ -15,7 +15,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   TraceabilitySec(TraceabilityProg), assembler, dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, outDataConstTbl,
   mkEnumSimpleD, outDataConstTbl, reqF, sSubSec, siCon, siSTitl, siSent,
-  traceMGF, tsymb, valsOfAuxConstantsF)
+  traceMGF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc)
 
 import qualified Drasil.DocLang.SRS as SRS
 
@@ -76,7 +76,7 @@ chipmunkSRS' :: Document
 chipmunkSRS' = mkDoc mkSRS for' chipmunkSysInfo
 
 check_si :: [UnitDefn] -- FIXME
-check_si = collectUnits everything symbT 
+check_si = collectUnits everything symbTT 
 
 mkSRS :: DocDesc 
 mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
@@ -125,7 +125,7 @@ chipmunkSysInfo = SI {
   _kind = srs,
   _authors = authors,
   _units = chipUnits,
-  _quants = symbT, 
+  _quants = symbTT, 
   _concepts = ([] :: [DefinedQuantityDict]),
   _definitions = cpDDefs,
   _datadefs = dataDefns,
@@ -138,8 +138,8 @@ chipmunkSysInfo = SI {
   _refdb = cpRefDB
 }
 
-symbT :: [DefinedQuantityDict]
-symbT = ccss (getDoc chipmunkSRS') (egetDoc chipmunkSRS') everything
+symbTT :: [DefinedQuantityDict]
+symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) everything
 
 cpRefDB :: ReferenceDB
 cpRefDB = rdb newAssumptions cpCitations

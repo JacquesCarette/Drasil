@@ -15,7 +15,8 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg),
   dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
-  outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF, tsymb'')
+  outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, tsymb'',
+  getDocDesc, egetDocDesc)
 import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel,
   likeChg, probDesc, sysCont, unlikeChg)
 
@@ -76,7 +77,7 @@ this_si = map unitWrapper [metre, kilogram, second] ++
 --Will there be a table of contents?
 
 check_si :: [UnitDefn]
-check_si = collectUnits swhsSymMap symbT 
+check_si = collectUnits swhsSymMap symbTT
 
 swhsAuthors :: Sentence
 swhsAuthors = S $ manyNames swhsPeople
@@ -88,7 +89,7 @@ swhs_si = SI {
   _authors = swhsPeople,
   _units = check_si,
   _quants = swhsSymbols,
-  _concepts = symbT,
+  _concepts = symbTT,
   _definitions = swhsQDefs,
   _datadefs = swhsDDefs,
   _inputs = map qw swhsInputs,
@@ -116,8 +117,8 @@ printSetting = PI swhsSymMap defaultConfiguration
     -- Will still likely be a better way to do this.
   --FIXME: Should be all Named, not just acronyms at the end.
 
-symbT :: [DefinedQuantityDict]
-symbT =  ccss (getDoc swhs_srs') (egetDoc swhs_srs') swhsSymMap
+symbTT :: [DefinedQuantityDict]
+symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) swhsSymMap
 
 swhsPeople :: [Person]
 swhsPeople = [thulasi, brooks, spencerSmith]

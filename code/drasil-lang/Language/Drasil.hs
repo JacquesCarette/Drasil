@@ -57,7 +57,7 @@ module Language.Drasil (
   , Constraint(..), ConstraintReason(..)
   -- Chunk.Constrained
   , ConstrainedChunk(..), ConstrConcept(..)
-  , constrained, cuc, cvc, cvc', constrained', cuc', constrainedNRV'
+  , cuc, cvc, constrained', cuc', constrainedNRV'
   , cnstrw
   -- Chunk.Eq
   , QDefinition, fromEqn, fromEqn', equat, ec

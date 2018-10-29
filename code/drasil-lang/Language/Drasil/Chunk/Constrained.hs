@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.Constrained (
     ConstrainedChunk(..)
   , ConstrConcept(..)
-  , constrained, cuc, cvc, cvc', constrained', cuc', constrainedNRV'
+  , cuc, cvc, constrained', cuc', constrainedNRV'
   , cnstrw
   ) where
 
@@ -42,22 +42,14 @@ instance HasReasVal    ConstrainedChunk where reasVal     = reasV
 instance Eq            ConstrainedChunk where c1 == c2 = (c1 ^. qd . uid) == (c2 ^. qd . uid)
 instance MayHaveUnit   ConstrainedChunk where getUnit = getUnit . view qd
 
--- | Creates a constrained chunk from a symbolic quantity
-constrained :: (Quantity c) => c -> [Constraint] -> Expr -> ConstrainedChunk
-constrained q cs ex = ConstrainedChunk (qw q) cs (Just ex)
-
 -- | Creates a constrained unitary
 cuc :: (IsUnit u, ConceptDomain u) => String -> NP -> Symbol -> u
-                -> Space -> [Constraint] -> Expr  -> ConstrainedChunk
-cuc i t s u space cs rv =
-  ConstrainedChunk (qw (unitary i t s u space)) cs (Just rv)
+  -> Space -> [Constraint] -> Expr -> ConstrainedChunk
+cuc i t s u space cs rv = ConstrainedChunk (qw (unitary i t s u space)) cs (Just rv)
 
--- | Creates a constrained varchunk
-cvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> ConstrainedChunk
-cvc i des sym space cs rv = ConstrainedChunk (qw (vc i des sym space)) cs (Just rv)
-
-cvc' :: String -> NP -> Symbol -> Space -> [Constraint] -> ConstrainedChunk
-cvc' i des sym space cs = ConstrainedChunk (qw (vc i des sym space)) cs Nothing
+-- | Creates a constrained
+cvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Maybe Expr -> ConstrainedChunk
+cvc i des sym space cs rv = ConstrainedChunk (qw (vc i des sym space)) cs rv
 
 cnstrw :: (Quantity c, Constrained c, HasReasVal c) => c -> ConstrainedChunk
 cnstrw c = ConstrainedChunk (qw c) (c ^. constraints) (c ^. reasVal)

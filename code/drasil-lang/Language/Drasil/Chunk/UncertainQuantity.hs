@@ -67,7 +67,7 @@ uncrtnChunk q u = UCh (cnstrw q) (bw0And1 u)
 
 -- | Creates an uncertain varchunk
 uvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> Double -> UncertainChunk
-uvc nam trm sym space cs val uncrt = uncrtnChunk (cvc nam trm sym space cs val) uncrt
+uvc nam trm sym space cs val uncrt = uncrtnChunk (cvc nam trm sym space cs (Just val)) uncrt
 
 uncrtnw :: (UncertainQuantity c, Constrained c, HasReasVal c) => c -> UncertainChunk
 uncrtnw c = UCh (cnstrw c) (c ^. uncert)

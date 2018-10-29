@@ -17,6 +17,7 @@ module Drasil.Sections.SpecificSystemDescription
   ) where
 
 import Language.Drasil
+import Language.Drasil.Development (MayHaveUnit)
 import Data.Drasil.Concepts.Documentation (physical, column, input_, uncertainty, physicalConstraint,
   softwareConstraint, typUnc, user, model, value, quantity, information, constraint, variable,
   output_, symbol_, limitation, problem, inModel, datum, datumConstraint, section_, dataDefn,
@@ -199,7 +200,8 @@ dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase colum
   phrase uncertainty, S "quantification exercise"]
 
 -- Creates the input Data Constraints Table
-inDataConstTbl :: (UncertainQuantity c, Constrained c, HasReasVal c) => [c] -> LabelledContent
+inDataConstTbl :: (UncertainQuantity c, Constrained c, HasReasVal c, MayHaveUnit c) => 
+  [c] -> LabelledContent
 inDataConstTbl qlst = llcc (mkLabelSame "InDataConstraints" Tab) $ Table 
   titl cts (S "Input Data Constraints") True
   where

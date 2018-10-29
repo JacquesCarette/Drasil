@@ -21,8 +21,7 @@ import Drasil.SSP.Assumptions (newA5)
 import Drasil.SSP.BasicExprs (displMtx, eqlExpr, momExpr, rotMtx)
 import Drasil.SSP.DataDefs (lengthLb, lengthLs, mobShearWO, sliceWght)
 import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf)
-import Drasil.SSP.Labels (genDef1Label, genDef2Label, genDef3Label, genDef4Label, 
-  genDef5Label, genDef6Label, genDef7Label, genDef8Label, genDef9Label, genDef10Label)
+import Drasil.SSP.Labels (genDef3Label, genDef7Label, genDef8Label)
 import Drasil.SSP.References (chen2005, stolle2008)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress, 
   hookesLaw)
@@ -54,7 +53,7 @@ generalDefinitions = [
 --
 normForcEq :: RelationConcept
 normForcEq = makeRC "normForcEq" (nounPhraseSP "normal force equilibrium")
-  nmFEq_desc nmFEq_rel genDef1Label
+  nmFEq_desc nmFEq_rel -- genDef1Label
 
 nmFEq_rel :: Relation
 nmFEq_rel = inxi totNrmForce $= eqlExpr cos sin
@@ -78,7 +77,7 @@ nmFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
 --
 bsShrFEq :: RelationConcept
 bsShrFEq = makeRC "bsShrFEq" (nounPhraseSP "base shear force equilibrium")
-  bShFEq_desc bShFEq_rel genDef2Label
+  bShFEq_desc bShFEq_rel -- genDef2Label
 
 bShFEq_rel :: Relation
 bShFEq_rel = inxi mobShrI $= eqlExpr sin cos
@@ -106,7 +105,7 @@ shrResEqn = inxi nrmFSubWat * tan (inxi fricAngle) + inxi cohesion *
 
 resShr :: RelationConcept
 resShr = makeRC "resShr" (nounPhraseSP "resistive shear force")
-  resShr_desc resShr_rel genDef3Label
+  resShr_desc resShr_rel -- genDef3Label
 
 resShr_rel :: Relation
 resShr_rel = inxi shrResI $= shrResEqn
@@ -129,7 +128,7 @@ resShr_desc = foldlSent [S "The Mohr-Coulomb resistive shear strength of a",
 --
 mobShr :: RelationConcept
 mobShr = makeRC "mobShr"
-  (nounPhraseSP "mobile shear force") mobShr_desc mobShr_rel genDef4Label
+  (nounPhraseSP "mobile shear force") mobShr_desc mobShr_rel -- genDef4Label
 
 mobShr_rel :: Relation
 mobShr_rel = inxi mobShrI $= inxi shrResI / sy fs $= shrResEqn / sy fs
@@ -145,7 +144,7 @@ mobShr_desc = foldlSent [
 --
 normShrR :: RelationConcept
 normShrR = makeRC "normShrR"
-  (nounPhraseSP "interslice normal/shear relationship") nmShrR_desc nmShrR_rel genDef5Label
+  (nounPhraseSP "interslice normal/shear relationship") nmShrR_desc nmShrR_rel -- genDef5Label
 
 nmShrR_rel :: Relation
 nmShrR_rel = sy intShrForce $= sy normToShear * sy scalFunc * sy intNormForce
@@ -165,7 +164,7 @@ nmShrR_desc = foldlSent [S "The", phrase assumption,
 
 momentEql :: RelationConcept
 momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")
-  momEql_desc momEql_rel genDef6Label
+  momEql_desc momEql_rel -- genDef6Label
 
 momEql_rel :: Relation
 momEql_rel = 0 $= momExpr (\ x y -> x -
@@ -186,7 +185,7 @@ momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
 --
 netForcex :: RelationConcept
 netForcex = makeRC "netForce" (nounPhraseSP "net x-component force")
-  (fNet_desc genDef8Label) fNetx_rel genDef7Label
+  (fNet_desc genDef8Label) fNetx_rel -- genDef7Label
 
 fNetx_rel :: Relation
 fNetx_rel = inxi fx $= (negate $ inxi watrForceDif) -
@@ -197,7 +196,7 @@ fNetx_rel = inxi fx $= (negate $ inxi watrForceDif) -
 
 netForcey :: RelationConcept
 netForcey = makeRC "netForce" (nounPhraseSP "net y-component force")
-  (fNet_desc genDef7Label) fNety_rel genDef8Label
+  (fNet_desc genDef7Label) fNety_rel -- genDef8Label
 
 fNety_rel :: Relation
 fNety_rel = inxi fy $= (negate $ inxi slcWght) +
@@ -232,7 +231,7 @@ fNet_desc gd = foldlSent [S "This", phrase equation `andThe` phrase equation,
 --
 hookesLaw2d :: RelationConcept
 hookesLaw2d = makeRC "hookesLaw2d" (nounPhraseSP "Hooke's law 2D")
-  hooke2d_desc hooke2d_rel genDef9Label
+  hooke2d_desc hooke2d_rel -- genDef9Label
 
 hooke2d_rel :: Relation
 hooke2d_rel = vec2D (inxi genPressure) (inxi genPressure) $=
@@ -264,7 +263,7 @@ hooke2d_desc = foldlSent [
 --
 displVect :: RelationConcept
 displVect = makeRC "displVect" (nounPhraseSP "displacement vectors")
-  disVec_desc disVec_rel genDef10Label
+  disVec_desc disVec_rel -- genDef10Label
 
 disVec_rel :: Relation
 disVec_rel = inxi rotatedDispl $= vec2D (inxi shrDispl) (inxi nrmDispl) $=

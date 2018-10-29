@@ -159,10 +159,10 @@ spaceToCodeType (DiscreteS _) = G.List (spaceToCodeType String)
 codeType :: HasSpace c => c -> G.CodeType
 codeType c = spaceToCodeType $ c ^. typ
 
-codevar :: (Quantity c) => c -> CodeChunk
+codevar :: (Quantity c, MayHaveUnit c) => c -> CodeChunk
 codevar c = CodeC (qw c) Var
 
-codefunc :: (Quantity c) => c -> CodeChunk
+codefunc :: (Quantity c, MayHaveUnit c) => c -> CodeChunk
 codefunc c = CodeC (qw c) Func
 
 data CodeDefinition = CD { _quant :: QuantityDict
@@ -181,7 +181,7 @@ instance CodeIdea      CodeDefinition where codeName = (^. ci)
 instance Eq            CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit   CodeDefinition where getUnit = getUnit . view quant
 
-qtoc :: (Quantity q, DefiningExpr q, HasSymbol q) => q -> CodeDefinition
+qtoc :: (Quantity q, DefiningExpr q, MayHaveUnit q) => q -> CodeDefinition
 qtoc q = CD (qw q) (funcPrefix ++ symbToCodeName (codeSymb q)) (q ^. defnExpr)
 
 qtov :: QDefinition -> CodeDefinition
@@ -195,12 +195,12 @@ type ConstraintMap = Map.Map UID [Constraint]
 constraintMap :: (HasUID c, Constrained c) => [c] -> ConstraintMap
 constraintMap = Map.fromList . map (\x -> (x ^. uid, x ^. constraints))
 
-physLookup :: (Quantity q) => ConstraintMap -> q -> (q,[Constraint])
+physLookup :: (Quantity q, MayHaveUnit q) => ConstraintMap -> q -> (q,[Constraint])
 physLookup m q = constraintLookup' q m (filter isPhysC)
 
-sfwrLookup :: (Quantity q) => ConstraintMap -> q -> (q,[Constraint])
+sfwrLookup :: (Quantity q, MayHaveUnit q) => ConstraintMap -> q -> (q,[Constraint])
 sfwrLookup m q = constraintLookup' q m (filter isPhysC)
 
-constraintLookup' :: (Quantity q) => q -> ConstraintMap
+constraintLookup' :: (Quantity q, MayHaveUnit q) => q -> ConstraintMap
                       -> ([Constraint] -> [Constraint]) -> (q , [Constraint])
 constraintLookup' q m filt = (q, maybe [] filt (Map.lookup (q^.uid) m))

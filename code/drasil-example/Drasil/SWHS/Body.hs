@@ -8,12 +8,12 @@ import Language.Drasil.Development (UnitDefn, unitWrapper) -- FIXME?
 import Control.Lens ((^.))
 
 import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, 
-  DocSection (SSDSec, AuxConstntSec, Bibliography, IntroSec, RefSec, Verbatim), 
-  LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
+  DocSection (..), LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
   IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
   RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
   Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
+  TraceabilitySec(TraceabilityProg),
   dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
   outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF, tsymb'',
   getDocDesc, egetDocDesc)
@@ -156,7 +156,11 @@ mkSRS = RefSec (RefProg intro [
         )
       ]
     ):  
-  (map Verbatim [reqS, likelyChgsSect, unlikelyChgsSect, traceMAndG]) ++
+  (map Verbatim [reqS, likelyChgsSect, unlikelyChgsSect]) ++
+  TraceabilitySec
+    (TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
+  (map UlC traceIntro2) ++ 
+  [LlC traceFig1, LlC traceFig2]) []) :
     AuxConstntSec (AuxConsProg progName specParamValList) :
     Bibliography : []
 
@@ -398,7 +402,7 @@ dataConTable3 :: LabelledContent
 dataConTable3 = outDataConstTbl outputConstraints
 --FIXME: add "(by A11)" in Physical Constraints of `temp_W` and `temp_PCM`?
 
-outputConstraints :: [UncertQ]
+outputConstraints :: [ConstrConcept]
 outputConstraints = [temp_W, temp_PCM, w_E, pcm_E]
 
 -- Other Notes:
@@ -473,12 +477,6 @@ unlikelyChgsList = mkEnumSimpleD unlikelyChgs
 --------------------------------------------------
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
 --------------------------------------------------
-
-traceMAndG :: Section
-traceMAndG = traceMGF traceRefList traceTrailing
-  (map LlC traceRefList ++
-  (map UlC traceIntro2) ++ 
-  [LlC traceFig1, LlC traceFig2]) []
 
 traceRefList :: [LabelledContent]
 traceRefList = [traceTable1, traceTable2, traceTable3]
@@ -919,7 +917,7 @@ fig_tank = llcc (mkLabelRAFig "Tank") $ fig (
 -- 4.1.3 : Goal Statements --
 -----------------------------
 
-goalStateIntro :: UncertQ -> UncertQ -> UncertQ -> Contents
+goalStateIntro :: (NamedIdea a, NamedIdea b, NamedIdea c) => a -> b -> c -> Contents
 goalStateIntro temc temw tempcm = foldlSPCol [S "Given the", phrase temc `sC`
   S "initial", plural condition, S "for the", phrase temw
   `sAnd` S "the", phrase tempcm `sC` S "and material",
@@ -1195,8 +1193,8 @@ dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
 -- 4.2.7 : Properties of A Correct Solution --
 ----------------------------------------------
 
-propCorSolDeriv1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
-  CI -> DataDefinition -> DataDefinition -> DefinedQuantityDict -> ConceptChunk -> Contents
+propCorSolDeriv1 :: (NamedIdea b, NamedIdea h) => ConceptChunk -> b -> UnitalChunk -> ConceptChunk ->
+  CI -> DataDefinition -> DataDefinition -> h -> ConceptChunk -> Contents
 propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
   foldlSPCol [S "A", phrase corSol, S "must exhibit the" +:+.
   phrase lce, S "This means that the", phrase ewat,
@@ -1217,7 +1215,7 @@ propCorSolDeriv2 = eqUnR' $
   ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) -
   (apply1 temp_PCM time)))))
 
-propCorSolDeriv3 :: UncertQ -> UnitalChunk -> CI -> ConceptChunk -> Contents
+propCorSolDeriv3 :: NamedIdea a => a -> UnitalChunk -> CI -> ConceptChunk -> Contents
 propCorSolDeriv3 epcm en pcmat wa =
   foldlSP_ [S "In addition, the", phrase epcm, S "should equal the",
   phrase en, phrase input_, S "to the", short pcmat,

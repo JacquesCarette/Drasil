@@ -65,8 +65,7 @@ hFromtQD :: QDefinition
 hFromtQD = mkQuantDef min_thick hFromt_eq
 
 hFromt :: DataDefinition
-hFromt = mkDD hFromtQD [makeRef astm2009] [{-derivation-}] "min_thick"
-  [hMin]
+hFromt = mkDD hFromtQD [makeRef astm2009] [{-derivation-}] "min_thick" [hMin]
 
 --DD3-- (#749)
 
@@ -182,8 +181,7 @@ aspRatQD :: QDefinition
 aspRatQD = mkQuantDef aspect_ratio aspRat_eq
 
 aspRat :: DataDefinition
-aspRat = mkDD aspRatQD [makeRef astm2009] [{-derivation-}] "aspect_ratio"
-  (aGrtrThanB : [])
+aspRat = mkDD aspRatQD [makeRef astm2009] [{-derivation-}] "aspect_ratio" (aGrtrThanB : [])
 
 --Additional Notes--
 

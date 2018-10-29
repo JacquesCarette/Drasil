@@ -2,6 +2,7 @@
 module Language.Drasil.CodeSpec where
 
 import Language.Drasil
+import Language.Drasil.Development (MayHaveUnit)
 import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, CodeIdea, ConstraintMap,
   codevar, codeEquat, funcPrefix, codeName, spaceToCodeType, toCodeName, constraintMap,
   qtov, qtoc, symbToCodeName, codeType)
@@ -171,7 +172,7 @@ funcQD qd = FCD $ qtoc qd
 funcData :: Name -> DataDesc -> Func
 funcData n dd = FData $ FuncData (toCodeName n) dd 
 
-funcDef :: (Quantity c) => Name -> [c] -> Space -> [FuncStmt] -> Func  
+funcDef :: (Quantity c, MayHaveUnit c) => Name -> [c] -> Space -> [FuncStmt] -> Func  
 funcDef s i t fs  = FDef $ FuncDef (toCodeName s) (map (codevar ) i) (spaceToCodeType t) fs 
      
 data FuncData where
@@ -194,13 +195,13 @@ data FuncStmt where
   -- slight hack, for now
   FAppend :: Expr -> Expr -> FuncStmt
   
-($:=) :: (Quantity c) => c -> Expr -> FuncStmt
+($:=) :: (Quantity c, MayHaveUnit c) => c -> Expr -> FuncStmt
 v $:= e = FAsg (codevar v) e
 
-ffor :: (Quantity c) => c -> Expr -> [FuncStmt] -> FuncStmt
+ffor :: (Quantity c, MayHaveUnit c) => c -> Expr -> [FuncStmt] -> FuncStmt
 ffor v e fs  = FFor (codevar  v) e fs
 
-fdec :: (Quantity c) => c -> FuncStmt
+fdec :: (Quantity c, MayHaveUnit c) => c -> FuncStmt
 fdec v  = FDec (codevar  v) (spaceToCodeType $ v ^. typ)
 
 asVC :: Func -> QuantityDict

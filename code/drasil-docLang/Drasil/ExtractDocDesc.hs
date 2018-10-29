@@ -115,18 +115,15 @@ egetSCSSub (Constraints _ _ _ lc) = concatMap egetLblCon lc
 egetSCSSub (CorrSolnPpties c) = concatMap egetCon' c
 
 egetTM :: TheoryModel -> [Expr]
-egetTM tm = concatMap egetQDef (tm ^. defined_quant ++ tm ^. defined_fun)
-  ++ concatMap egetTheoryChunk (tm ^. valid_context) ++ tm ^. invariants
+egetTM tm = concatMap egetTM (tm ^. valid_context) ++ 
+  concatMap egetQDef (tm ^. defined_quant ++ tm ^. defined_fun)
+  ++ (tm ^. invariants)
 
 egetIM :: InstanceModel ->[Expr]
 egetIM im = [im ^. relat]
 
 egetGD :: GenDefn ->[Expr]
 egetGD gd = [gd ^. relat]
-
-egetTheoryChunk :: TheoryChunk -> [Expr]
-egetTheoryChunk tm = concatMap egetTheoryChunk (tm ^. valid_context) ++
-  concatMap egetQDef (tm ^. defined_quant ++ tm ^. defined_fun) ++ tm ^. invariants
 
 egetDD :: DataDefinition -> [Expr]
 egetDD dd = [dd ^. defnExpr, sy dd]
@@ -244,13 +241,8 @@ getDD :: DataDefinition -> [Sentence]
 getDD dd = (dd ^. derivations) ++ (dd ^. getNotes)
 
 getTM :: TheoryModel -> [Sentence]
-getTM tm = (tm ^. getNotes) ++ concatMap getTC (tm ^. valid_context) ++
- map (^. defn) (tm ^. operations) ++ map (^. defn) (tm ^. defined_quant)
-  ++ map (^. defn) (tm ^. defined_fun)
-
-getTC :: TheoryChunk -> [Sentence]
-getTC tc = concatMap getTC (tc ^. valid_context) ++ map (^. defn) (tc ^. operations) ++
-  map (^. defn) (tc ^. defined_quant) ++ map (^. defn) (tc ^. defined_fun)
+getTM tm = map (^. defn) (tm ^. operations) ++ map (^. defn) (tm ^. defined_quant)
+  ++ concatMap getTM (tm ^. valid_context) ++ (tm ^. getNotes)
 
 getReq :: ReqrmntSec -> [Sentence]
 getReq (ReqsProg rs) = concatMap getReqSub rs

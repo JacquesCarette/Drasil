@@ -32,16 +32,16 @@ swhsTMods = [consThermE, sensHtE, latentHtE]
 -- Theoretical Model 1 --
 -------------------------
 consThermE :: TheoryModel
-consThermE = tm' consThermE_rc
-  (tc' "ConsThermE" [qw thFluxVect, qw gradient, qw vol_ht_gen, 
+consThermE = tm consThermE_rc
+  [qw thFluxVect, qw gradient, qw vol_ht_gen, 
     qw density, qw heat_cap_spec, qw temp, qw time] ([] :: [ConceptChunk])
-  [] [consThermERel] [] [makeRef consThemESrc]) 
+  [] [consThermERel] [] [makeRef consThemESrc] 
   (mkLabelSame "consThermE" (Def TM)) [consThermEdesc]
 
 consThermE_rc :: RelationConcept
 consThermE_rc = makeRC "consThermE_rc"
   (nounPhraseSP "Conservation of thermal energy") consThermEdesc consThermERel 
-  (mkLabelSame "ConsThermE" (Def TM))
+  -- (mkLabelSame "ConsThermE" (Def TM))
 
 consThermERel :: Relation
 consThermERel = (negate (sy gradient)) $. (sy thFluxVect) + (sy vol_ht_gen) $=
@@ -68,15 +68,15 @@ consThermEdesc = foldlSent [
 -- Theoretical Model 2 --
 -------------------------
 sensHtE :: TheoryModel
-sensHtE = tm' sensHtE_rc
-  (tc' "SensHtE" [qw sens_heat, qw htCap_S, qw mass, 
+sensHtE = tm sensHtE_rc
+  [qw sens_heat, qw htCap_S, qw mass, 
     qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [ConceptChunk])
-  [] [sensHtEEqn] [] [makeRef sensHtESrc]) 
+  [] [sensHtEEqn] [] [makeRef sensHtESrc] 
   (mkLabelSame "sensHtE" (Def TM)) [sensHtEdesc]
 
 sensHtE_rc :: RelationConcept
 sensHtE_rc = makeRC "sensHtE_rc" (nounPhraseSP "Sensible heat energy") sensHtEdesc sensHtEEqn
-  (mkLabelSame "SensHtE" (Def TM))
+  -- (mkLabelSame "SensHtE" (Def TM))
 
 sensHtESrc :: Label
 sensHtESrc = mkURILabel "consThemESrc" "http://en.wikipedia.org/wiki/Sensible_heat" "Definition of Sensible Heat"
@@ -127,14 +127,14 @@ sensHtEdesc = foldlSent [
 -- Theoretical Model 3 --
 -------------------------
 latentHtE :: TheoryModel
-latentHtE = tm' latentHtE_rc
-  (tc' "SensHtE" [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
-  [] [latHtEEqn] [] [makeRef latHtESrc]) (mkLabelSame "latentHtE" (Def TM)) [latentHtEdesc]
+latentHtE = tm latentHtE_rc
+  [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
+  [] [latHtEEqn] [] [makeRef latHtESrc] (mkLabelSame "latentHtE" (Def TM)) [latentHtEdesc]
 
 latentHtE_rc :: RelationConcept
 latentHtE_rc = makeRC "latentHtE_rc"
   (nounPhraseSP "Latent heat energy") latentHtEdesc latHtEEqn 
-  (mkLabelSame "LatHtE" (Def TM))
+  -- (mkLabelSame "LatHtE" (Def TM))
 
 latHtEEqn :: Relation
 latHtEEqn = apply1 latent_heat time $= 

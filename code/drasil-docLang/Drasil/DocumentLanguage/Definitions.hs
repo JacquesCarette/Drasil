@@ -12,6 +12,7 @@ module Drasil.DocumentLanguage.Definitions
   )where
 
 import Language.Drasil
+import Language.Drasil.Development (MayHaveUnit(getUnit))
 import Data.Drasil.Utils (eqUnR)
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
@@ -134,10 +135,8 @@ buildDDescription' Verbose u d m = map (UlC . ulcc) [Enumeration (Definitions
 -- | Create the fields for a general definition from a 'GenDefn' chunk.
 mkGDField :: HasSymbolTable ctx => GenDefn -> ctx -> Field -> ModRow -> ModRow
 mkGDField g _ l@Label fs = (show l, (mkParagraph $ at_start g):[]) : fs
-mkGDField g _ l@Units fs =
-  let u = gdUnit g in
-    case u of Nothing   -> fs
-              Just udef -> (show l, (mkParagraph $ Sy (udef ^. usymb)):[]) : fs
+mkGDField g _ l@Units fs = 
+  maybe fs (\udef -> (show l, (mkParagraph $ Sy (udef ^. usymb)):[]) : fs) (getUnit g)
 mkGDField g _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (g ^. relat) 
   (modifyLabelEqn (g ^. getLabel))):[]) : fs
 mkGDField g m l@(Description v u) fs = (show l,
@@ -180,7 +179,7 @@ firstPair' (IncludeUnits) d = (P $ eqSymb d, Flat $ phrase d +:+ (sParen $
   toSentenceUnitless d), Nothing)
 
 -- | Create the descriptions for each symbol in the relation/equation
-descPairs :: (Quantity q) => InclUnits -> [q] -> [ListTuple]
+descPairs :: (Quantity q, MayHaveUnit q) => InclUnits -> [q] -> [ListTuple]
 descPairs IgnoreUnits = map (\x -> (P $ eqSymb x, Flat $ phrase x, Nothing))
 descPairs IncludeUnits =
   map (\x -> (P $ eqSymb x, Flat $ phrase x +:+ (sParen $ toSentenceUnitless x), Nothing))

@@ -23,7 +23,7 @@ import Language.Drasil.Label (getDefName, getReqName)
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.RefTypes (RefType(..), DType(..), Reference(Reference))
 import Language.Drasil.ShortName ( ShortName, getStringSN, shortname', concatSN, defer)
-import Language.Drasil.Spec (Sentence((:+:), S, Ref))
+import Language.Drasil.Sentence (Sentence((:+:), S, Ref))
 import Language.Drasil.UID (UID)
 
 -- | Database for maintaining references.

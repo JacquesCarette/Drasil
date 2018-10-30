@@ -1,5 +1,5 @@
 Name:		drasil-lang
-Version:	0.1.39
+Version:	0.1.40
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -13,34 +13,10 @@ library
   other-modules:
       Language.Drasil.NounPhrase
     , Language.Drasil.RefTypes
-    , Language.Drasil.SystemInformation
     , Language.Drasil.Expr
     , Language.Drasil.Expr.Extract
     , Language.Drasil.Expr.Math
     , Language.Drasil.Expr.Precedence
-    , Language.Drasil.Classes
-    , Language.Drasil.Classes.Core
-    , Language.Drasil.Document
-    , Language.Drasil.Document.Core
-    , Language.Drasil.Document.Extract
-    , Language.Drasil.Label.Core
-    , Language.Drasil.Label.Type
-    , Language.Drasil.Label
-    , Language.Drasil.Misc
-    , Language.Drasil.NounPhrase.Core
-    , Language.Drasil.People
-    , Language.Drasil.Reference
-    , Language.Drasil.Sentence.Extract
-    , Language.Drasil.Sentence.EmbedSymbol
-    , Language.Drasil.ShortName
-    , Language.Drasil.Space
-    , Language.Drasil.Spec
-    , Language.Drasil.Stages
-    , Language.Drasil.Symbol
-    , Language.Drasil.Symbol.Helpers
-    , Language.Drasil.SymbolAlphabet
-    , Language.Drasil.UID
-    , Language.Drasil.Unicode
     , Language.Drasil.Chunk.AssumpChunk
     , Language.Drasil.Chunk.Attribute
     , Language.Drasil.Chunk.Citation
@@ -64,9 +40,33 @@ library
     , Language.Drasil.Chunk.UnitaryConcept
     , Language.Drasil.ChunkDB
     , Language.Drasil.ChunkDB.GetChunk
+    , Language.Drasil.Classes
+    , Language.Drasil.Classes.Core
+    , Language.Drasil.Document
+    , Language.Drasil.Document.Core
+    , Language.Drasil.Document.Extract
+    , Language.Drasil.Label.Core
+    , Language.Drasil.Label.Type
+    , Language.Drasil.Label
+    , Language.Drasil.Misc
+    , Language.Drasil.NounPhrase.Core
+    , Language.Drasil.People
+    , Language.Drasil.Reference
+    , Language.Drasil.Sentence.Extract
+    , Language.Drasil.Sentence.EmbedSymbol
+    , Language.Drasil.ShortName
+    , Language.Drasil.Space
+    , Language.Drasil.Sentence
+    , Language.Drasil.Stages
+    , Language.Drasil.Symbol
+    , Language.Drasil.Symbol.Helpers
+    , Language.Drasil.SymbolAlphabet
+    , Language.Drasil.SystemInformation
+    , Language.Drasil.UID
+    , Language.Drasil.Unicode
+    , Language.Drasil.UnitLang
     , Language.Drasil.Derivation
     , Language.Drasil.Development.Unit
-    , Language.Drasil.Development.UnitLang
     , Language.Drasil.Development.Sentence
 
   Build-Depends:

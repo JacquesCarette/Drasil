@@ -9,7 +9,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Development.Unit (unitWrapper, UnitDefn, MayHaveUnit(getUnit))
-import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Label (mkLabelSame)
 import Language.Drasil.RefTypes(RefType(..), DType(..), Reference)

@@ -14,7 +14,7 @@ import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Label (mkLabelSame)
 import Language.Drasil.RefTypes(RefType(..), DType(..), Reference)
-import Language.Drasil.Spec (Sentence(EmptyS))
+import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Symbol.Helpers (eqSymb)
 
 data Scope = Scp { _spec :: Label {-indirect reference-}}

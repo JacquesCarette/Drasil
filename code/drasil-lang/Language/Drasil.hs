@@ -201,6 +201,8 @@ module Language.Drasil (
   , getAdd
   -- Development.Sentence
   , introduceAbb, phrase, plural, phrase's, plural's, at_start, at_start'
+  -- UnitLang
+  , USymb(US)
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -289,7 +291,7 @@ import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
 import Language.Drasil.ShortName (resolveSN, ShortName
   , shortname', getStringSN)
 import Language.Drasil.Space (Space(..))
-import Language.Drasil.Spec (Sentence(..), sParen, sSqBr, sC, (+:+), (+:+.), (+:))
+import Language.Drasil.Sentence (Sentence(..), sParen, sSqBr, sC, (+:+), (+:+.), (+:))
 import Language.Drasil.Reference (makeRef, makeRefS, mkRefFrmLbl, ReferenceDB, assumpDB
                                  , AssumpMap, assumpLookup, HasAssumpRefs
                                  , assumpRefTable, assumptionsFromDB
@@ -312,5 +314,7 @@ import Language.Drasil.Label (mkLabelRA', mkLabelSame,
   mkEmptyLabel, mkURILabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec, modifyLabelEqn)
 import Language.Drasil.Label.Type (getAdd)
 --Should be in lang-dev package?
+
+import Language.Drasil.UnitLang (USymb(US))
 
 import Language.Drasil.Development.Sentence -- are these really development?

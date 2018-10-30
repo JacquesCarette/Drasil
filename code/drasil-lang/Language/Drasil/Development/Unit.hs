@@ -16,8 +16,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), HasUnitSymbol(usymb), IsUnit(udefn, getUnits))
 import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cc')
 import Language.Drasil.Symbol (Symbol(Atomic))
-import Language.Drasil.Development.UnitLang (USymb(US),
- UDefn(UScale, USynonym, UShift), comp_usymb, from_udefn)
+import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift), comp_usymb, from_udefn)
 import Language.Drasil.UID
 import Language.Drasil.NounPhrase (cn,cn',NP)
 

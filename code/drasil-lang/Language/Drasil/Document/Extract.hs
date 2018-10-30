@@ -8,14 +8,12 @@ import Language.Drasil.Classes (DefiningExpr(defnExpr))
 import Language.Drasil.Document (Document(Document),Section(Section), SecCons(..))
 import Language.Drasil.Document.Core
 import Language.Drasil.Expr
-import Language.Drasil.Spec
+import Language.Drasil.Sentence (Sentence(S))
 
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Citation
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.RefTypes(DType(..))
-
-import Language.Drasil.Label (Label, mkLabelRASec)
 
 egetLblCon :: LabelledContent -> [Expr]
 egetLblCon a = egetCon (a ^. accessContents)

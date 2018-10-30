@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.Concept.Core(ConceptChunk(ConDict), CommonConcept(ComConDict)
   , ConceptInstance(ConInst)) where
 
-import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Chunk.NamedIdea (IdeaDict)
 import Language.Drasil.Chunk.CommonIdea (CI)
 import Language.Drasil.UID (UID)

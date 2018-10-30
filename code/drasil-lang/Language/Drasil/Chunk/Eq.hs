@@ -12,7 +12,7 @@ import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, qw)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space(Real))
-import Language.Drasil.Spec (Sentence(EmptyS))
+import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Symbol (Symbol)
 
 -- | A QDefinition is a 'Quantity' with a defining expression, and a definition

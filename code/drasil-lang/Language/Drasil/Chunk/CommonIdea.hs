@@ -3,7 +3,7 @@ module Language.Drasil.Chunk.CommonIdea (CI, commonIdea , getAcc) where
 
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA), CommonIdea(abrv))
-import Language.Drasil.Spec (Sentence(S))
+import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.NounPhrase (NP)
 
 import Control.Lens (makeLenses, view)

@@ -35,13 +35,13 @@ import Language.Drasil.Classes.Core
 
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
 import Language.Drasil.Derivation (Derivation)
-import Language.Drasil.Development.UnitLang(UDefn, USymb)
+import Language.Drasil.UnitLang(UDefn, USymb)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.RefTypes (Reference)
 import Language.Drasil.Space (Space)
-import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
 
 import Control.Lens (Lens')

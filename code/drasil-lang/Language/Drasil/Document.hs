@@ -6,7 +6,7 @@ import Language.Drasil.Document.Core
 import Language.Drasil.Classes (HasLabel(getLabel), HasShortName(shortname))
 
 import Language.Drasil.Label (Label)
-import Language.Drasil.Spec (Sentence(..))
+import Language.Drasil.Sentence (Sentence(..))
 
 import Control.Lens (makeLenses)
 

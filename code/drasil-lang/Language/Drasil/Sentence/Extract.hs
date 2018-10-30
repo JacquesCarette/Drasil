@@ -2,7 +2,7 @@ module Language.Drasil.Sentence.Extract(sdep) where
 
 import Data.List (nub)
 import Language.Drasil.UID (UID)
-import Language.Drasil.Spec(Sentence(..))
+import Language.Drasil.Sentence(Sentence(..))
 import Language.Drasil.Expr.Extract(names)
 
 -- | Generic traverse of all positions that could lead to UIDs from sentences

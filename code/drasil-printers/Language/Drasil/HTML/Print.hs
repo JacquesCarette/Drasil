@@ -11,8 +11,7 @@ import qualified Language.Drasil as L (People, Person,
   Symbol(Corners, Concat, Special, Atomic, Empty, Atop),
   DType(DD, TM, Instance, General), MaxWidthPercent, RefType(Link),
   Decoration(Prime, Hat, Vector), Document, HasDefinitionTable, HasSymbolTable,
-  nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special)
-import qualified Language.Drasil.Development as D (USymb(US))
+  nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
 
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (em, wrap, refwrap, caption, image, div_tag,
@@ -123,8 +122,8 @@ symbol (L.Atop L.Hat s)           = symbol s ++ "&#770;"
 symbol (L.Atop L.Prime s)         = symbol s ++ "&prime;"
 symbol L.Empty                    = ""
 
-uSymb :: D.USymb -> String
-uSymb (D.US ls) = formatu t b
+uSymb :: L.USymb -> String
+uSymb (L.US ls) = formatu t b
   where
     (t,b) = partition ((> 0) . snd) ls
     formatu :: [(L.Symbol,Integer)] -> [(L.Symbol,Integer)] -> String

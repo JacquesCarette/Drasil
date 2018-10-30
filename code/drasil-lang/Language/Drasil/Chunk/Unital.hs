@@ -12,7 +12,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
 import Language.Drasil.Development.Unit (MayHaveUnit(getUnit), UnitDefn, unitWrapper)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space(..))
-import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Sentence (Sentence)
 
 import Language.Drasil.NounPhrase (NP)
 

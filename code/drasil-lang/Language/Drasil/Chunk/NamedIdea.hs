@@ -5,7 +5,7 @@ import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
 import Control.Lens ((^.), makeLenses, view)
 
-import Language.Drasil.Spec (Sentence(S))
+import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.NounPhrase (NP, phrase)
 
 -- | Get short form (if it exists), else get term.

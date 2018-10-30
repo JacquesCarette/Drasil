@@ -6,7 +6,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil.Classes (NamedIdea(term), Idea)
 import Language.Drasil.Chunk.NamedIdea (short)
-import Language.Drasil.Spec ((+:+), Sentence((:+:), S), sParen)
+import Language.Drasil.Sentence ((+:+), Sentence((:+:), S), sParen)
 import qualified Language.Drasil.NounPhrase as NP
 
 -- | Helper for common pattern of introducing the title-case version of a 

@@ -7,7 +7,7 @@ import Language.Drasil.Chunk.Unitary (UnitaryChunk, mkUnitary, Unitary(unit))
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),Quantity,
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasSpace(typ))
 import Language.Drasil.Development.Unit (MayHaveUnit(getUnit))
-import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
 
 data UnitaryConceptDict = UCC { _unitary :: UnitaryChunk

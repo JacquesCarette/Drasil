@@ -11,8 +11,7 @@ import Control.Arrow (second)
 import qualified Language.Drasil as L (
   RenderSpecial(..), People, rendPersLFM, HasDefinitionTable, HasSymbolTable,
   CitationKind(..), Month(..), Symbol(..), Sentence(S), (+:+), MaxWidthPercent,
-  Decoration(Prime, Hat, Vector), Document, special, getStringSN, RefType(..))
-import qualified Language.Drasil.Development as D (USymb(US))
+  Decoration(Prime, Hat, Vector), Document, special, getStringSN, RefType(..), USymb(US))
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
@@ -293,8 +292,8 @@ symbol_needs (L.Corners _ _ _ _ _) = Math
 symbol_needs (L.Atop _ _)          = Math
 symbol_needs L.Empty               = Curr
 
-p_unit :: D.USymb -> D
-p_unit (D.US ls) = formatu t b
+p_unit :: L.USymb -> D
+p_unit (L.US ls) = formatu t b
   where
     (t,b) = partition ((> 0) . snd) ls
     formatu :: [(L.Symbol,Integer)] -> [(L.Symbol,Integer)] -> D
@@ -313,7 +312,7 @@ p_unit (D.US ls) = formatu t b
     p_symb n = let cn = symbol_needs n in switch (const cn) (pure $ text $ symbol n)
 
 {-
-p_unit :: D.USymb -> D
+p_unit :: L.USymb -> D
 p_unit (UName (Concat s)) = foldl (<>) empty $ map (p_unit . UName) s
 p_unit (UName n) =
   let cn = symbol_needs n in

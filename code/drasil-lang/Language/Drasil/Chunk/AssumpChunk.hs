@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.AssumpChunk ( AssumpChunk(..) , assump) where
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
 import Language.Drasil.Classes (HasLabel(getLabel))
 import Language.Drasil.Label.Core (Label)
-import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
 
 import Control.Lens (makeLenses, (^.))

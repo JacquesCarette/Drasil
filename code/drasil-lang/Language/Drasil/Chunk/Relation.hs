@@ -8,7 +8,7 @@ import Language.Drasil.Classes (HasUID(uid),NamedIdea(term),Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, ExprRelat(relat))
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.NounPhrase (NP)
-import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Sentence (Sentence)
 
 data RelationConcept = RC { _conc :: ConceptChunk
                           , _rel :: Relation

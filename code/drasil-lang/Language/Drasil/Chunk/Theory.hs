@@ -11,7 +11,7 @@ import Language.Drasil.Development.Unit (MayHaveUnit)
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.RefTypes (Reference)
-import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Sentence (Sentence)
 
 import Control.Lens (Lens', view, makeLenses)
 

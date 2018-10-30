@@ -10,7 +10,7 @@ import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Label () -- for instances
 import Language.Drasil.RefTypes (RefAdd)
-import Language.Drasil.Spec (Sentence(..))
+import Language.Drasil.Sentence (Sentence(..))
 import Language.Drasil.RefTypes (DType(..))
 
 import Control.Lens ((^.), makeLenses, Lens', set)

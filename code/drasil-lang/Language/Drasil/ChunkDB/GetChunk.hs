@@ -5,8 +5,8 @@ module Language.Drasil.ChunkDB.GetChunk (vars, combine', vars', combine, ccss) w
 import Control.Lens ((^.))
 import Data.List(nub)
 
-import Language.Drasil.Expr
-import Language.Drasil.Spec
+import Language.Drasil.Expr (Expr)
+import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Expr.Extract(dep)
 import Language.Drasil.Sentence.Extract (sdep)
 

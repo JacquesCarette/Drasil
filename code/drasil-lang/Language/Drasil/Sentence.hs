@@ -1,12 +1,12 @@
 {-# LANGUAGE GADTs #-}
 -- | Contains Sentences and helpers
-module Language.Drasil.Spec where
+module Language.Drasil.Sentence where
 
 import Language.Drasil.Unicode (Special(SqBrClose, SqBrOpen))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.RefTypes (Reference)
-import Language.Drasil.Development.UnitLang (USymb)
+import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.UID (UID)
 
 -- | For writing "sentences" via combining smaller elements

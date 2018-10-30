@@ -18,7 +18,7 @@ import Language.Drasil.Expr (Relation)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Label (mkLabelSame)
 import Language.Drasil.RefTypes (RefType(..), DType(..), Reference)
-import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Sentence (Sentence)
 
 import Control.Lens (makeLenses, view)
 

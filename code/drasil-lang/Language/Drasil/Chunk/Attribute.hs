@@ -11,7 +11,7 @@ import Language.Drasil.ShortName (ShortName, shortname', getStringSN)
 import Language.Drasil.Classes (HasDerivation(derivations), HasReference(getReferences),
   HasShortName(shortname))
 import Language.Drasil.RefTypes (Reference)
-import Language.Drasil.Spec (Sentence(EmptyS, S, Ref), (+:+), sC)
+import Language.Drasil.Sentence (Sentence(EmptyS, S, Ref), (+:+), sC)
 
 --------------------------------------------------------------------------------
 

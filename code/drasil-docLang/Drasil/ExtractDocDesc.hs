@@ -1,6 +1,6 @@
 module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc) where
 
-import Control.Lens(makeLenses, (^.))
+import Control.Lens((^.))
 import Drasil.DocumentLanguage
 import Language.Drasil hiding (Manual, Vector, Verb)
 
@@ -107,20 +107,20 @@ egetSol (SCSProg s) = concatMap egetSCSSub s
 
 egetSCSSub :: SCSSub -> [Expr]
 egetSCSSub (Assumptions) = []
-egetSCSSub (TMs _ tm)    = concatMap egetTM tm
-egetSCSSub (GDs _ gd _)  = concatMap egetGD gd
-egetSCSSub (DDs _ dd _)  = concatMap egetDD dd
-egetSCSSub (IMs _ im _)  = concatMap egetIM im
+egetSCSSub (TMs _ x)    = concatMap egetTM x
+egetSCSSub (GDs _ x _)  = concatMap egetGD x
+egetSCSSub (DDs _ x _)  = concatMap egetDD x
+egetSCSSub (IMs _ x _)  = concatMap egetIM x
 egetSCSSub (Constraints _ _ _ lc) = concatMap egetLblCon lc
 egetSCSSub (CorrSolnPpties c) = concatMap egetCon' c
 
 egetTM :: TheoryModel -> [Expr]
-egetTM tm = concatMap egetTM (tm ^. valid_context) ++ 
-  concatMap egetQDef (tm ^. defined_quant ++ tm ^. defined_fun)
-  ++ (tm ^. invariants)
+egetTM x = concatMap egetTM (x ^. valid_context) ++ 
+  concatMap egetQDef (x ^. defined_quant ++ x ^. defined_fun)
+  ++ (x ^. invariants)
 
 egetIM :: InstanceModel ->[Expr]
-egetIM im = [im ^. relat]
+egetIM x = [x ^. relat]
 
 egetGD :: GenDefn ->[Expr]
 egetGD gd = [gd ^. relat]
@@ -168,8 +168,8 @@ getTsIntro (_) = []
 getLFunc :: LFunc -> [Sentence]
 getLFunc (Term) = []
 getLFunc (Defn) = []
-getLFunc (TermExcept dqd) = map (^. defn) dqd
-getLFunc (DefnExcept dqd) = map (^. defn) dqd
+getLFunc (TermExcept x) = map (^. defn) x
+getLFunc (DefnExcept x) = map (^. defn) x
 getLFunc (TAD)  = []
 
 getTConv :: TConvention -> [Sentence]
@@ -215,24 +215,24 @@ getSSDSub (SSDProblem pd)    = getProblem pd
 getSSDSub (SSDSolChSpec sss) = getSol sss
 
 getProblem :: ProblemDescription -> [Sentence]
-getProblem (PDProg s1 _ s2 sec) = [s1]++[s2]++(concatMap getSec sec)
+getProblem (PDProg s1 _ s2 x) = [s1]++[s2]++(concatMap getSec x)
 
 getSol :: SolChSpec -> [Sentence]
-getSol (SCSProg sub) = concatMap getSCSSub sub
+getSol (SCSProg x) = concatMap getSCSSub x
 
 getSCSSub :: SCSSub -> [Sentence]
 getSCSSub (Assumptions) = []
-getSCSSub (TMs _ tm)    = concatMap getTM tm
-getSCSSub (GDs _ gd _)  = concatMap getGD gd
-getSCSSub (DDs _ dd _)  = concatMap getDD dd
-getSCSSub (IMs _ im _)  = concatMap getIM im
+getSCSSub (TMs _ x)    = concatMap getTM x
+getSCSSub (GDs _ x _)  = concatMap getGD x
+getSCSSub (DDs _ x _)  = concatMap getDD x
+getSCSSub (IMs _ x _)  = concatMap getIM x
 getSCSSub (Constraints s1 s2 s3 lb) = [s1]++[s2]++[s3]++(concatMap getCon (map (^. accessContents) lb))
 getSCSSub (CorrSolnPpties c) = concatMap getCon' c
 
 -- The definition of IM should not be collected because even the definition is at type
 -- sentence, but the definition is not shown in Document.
 getIM :: InstanceModel -> [Sentence]
-getIM im = (im ^. derivations) ++ (im ^. getNotes)
+getIM x = (x ^. derivations) ++ (x ^. getNotes)
 
 getGD :: GenDefn -> [Sentence]
 getGD gd = [gd ^. defn] ++ (gd ^. derivations) ++ (gd ^. getNotes)
@@ -241,8 +241,8 @@ getDD :: DataDefinition -> [Sentence]
 getDD dd = (dd ^. derivations) ++ (dd ^. getNotes)
 
 getTM :: TheoryModel -> [Sentence]
-getTM tm = map (^. defn) (tm ^. operations) ++ map (^. defn) (tm ^. defined_quant)
-  ++ concatMap getTM (tm ^. valid_context) ++ (tm ^. getNotes)
+getTM x = map (^. defn) (x ^. operations) ++ map (^. defn) (x ^. defined_quant)
+  ++ concatMap getTM (x ^. valid_context) ++ (x ^. getNotes)
 
 getReq :: ReqrmntSec -> [Sentence]
 getReq (ReqsProg rs) = concatMap getReqSub rs
@@ -259,8 +259,8 @@ getUcs :: UCsSec -> [Sentence]
 getUcs (UCsProg c) = concatMap getCon' c
 
 getTrace :: TraceabilitySec -> [Sentence]
-getTrace (TraceabilityProg lc s c sec) = (concatMap getCon (map (^. accessContents) lc))
-  ++ s ++ concatMap getCon' c ++ concatMap getSec sec
+getTrace (TraceabilityProg lc s c x) = (concatMap getCon (map (^. accessContents) lc))
+  ++ s ++ concatMap getCon' c ++ concatMap getSec x
 
 getAux :: AuxConstntSec -> [Sentence]
 getAux (AuxConsProg _ _) = []
@@ -271,5 +271,3 @@ getApp (AppndxProg c) = concatMap getCon' c
 getExist :: ExistingSolnSec -> [Sentence]
 getExist (ExistSolnVerb s) = getSec s
 getExist (ExistSolnProg c) = concatMap getCon' c
-
-

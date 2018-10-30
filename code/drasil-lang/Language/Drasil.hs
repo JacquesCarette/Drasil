@@ -93,7 +93,7 @@ module Language.Drasil (
   -- Derivation
   , Derivation
   -- ???
-  , getDerivation, getShortName
+  , getShortName
   -- ShortName
   , resolveSN, ShortName, shortname', getStringSN
   --Citations

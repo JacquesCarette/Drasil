@@ -1,14 +1,13 @@
 module Language.Drasil.Chunk.Attribute 
-  ( getSource, getDerivation, getShortName
+  ( getSource, getShortName
   , shortname', snToSentence
   ) where
 
 import Control.Lens ((^.))
 
-import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.ShortName (ShortName, shortname', getStringSN)
 
-import Language.Drasil.Classes (HasDerivation(derivations), HasReference(getReferences),
+import Language.Drasil.Classes (HasReference(getReferences),
   HasShortName(shortname))
 import Language.Drasil.RefTypes (Reference)
 import Language.Drasil.Sentence (Sentence(EmptyS, S, Ref), (+:+), sC)
@@ -27,9 +26,6 @@ getSource c = foldList $ c ^. getReferences
     foldList [x]      = Ref x 
     foldList [x, y]   = Ref x +:+ S "and" +:+ Ref y 
     foldList (x:y:xs) = Ref x `sC` (foldList (y:xs))
-
-getDerivation :: HasDerivation c => c -> Derivation
-getDerivation c =  c ^. derivations
 
 getShortName :: HasShortName c => c -> Sentence
 getShortName c = snToSentence $ c ^. shortname

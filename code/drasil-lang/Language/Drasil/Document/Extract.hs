@@ -1,5 +1,5 @@
 module Language.Drasil.Document.Extract (getDoc, egetDoc, egetSec, egetCon', egetLblCon, egetQDef,
-	getSec, getCon', getSec, getCon ) where
+  getCon', getSec, getCon ) where
 
 import Control.Lens ((^.))
 import Data.List(transpose)
@@ -9,7 +9,6 @@ import Language.Drasil.Document (Document(Document),Section(Section), SecCons(..
 import Language.Drasil.Document.Core
 import Language.Drasil.Expr
 import Language.Drasil.Spec
-import Language.Drasil.Classes.Core (HasShortName(shortname))
 
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Citation
@@ -29,17 +28,8 @@ egetDoc (Document _ _ s) = concatMap egetSec s
 -- because this section includes Table of symbol which would
 -- cause loop in collecting.
 
--- Auxiliary Constants Section (named "AuxConstants") contains standard
--- values (like min, max) that are used for defined basic Chunk.
--- These values should not appear in the basic Table of symbol.
-refLabel :: Label
-refLabel = mkLabelRASec "RefMat" "Reference Material" -- FIXME: HACKED IN HERE
-auxConsLabel :: Label
-auxConsLabel = mkLabelRASec "AuxConstants" "Values of Auxiliary Constants" -- FIXME: HACKED IN HERE
---FIXME: Remove the above labels when we have a less fragile way of checking things.
-
 egetSec :: Section -> [Expr]
-egetSec (Section _ sc lb) = concatMap egetSecCon sc
+egetSec (Section _ sc _) = concatMap egetSecCon sc
   {--| lb ^. shortname == refLabel ^. shortname = []
   | otherwise = concatMap egetSecCon sc --}
 
@@ -66,7 +56,7 @@ getDoc :: Document -> [Sentence]
 getDoc (Document t a s) = t : a : concatMap getSec s
 
 getSec :: Section -> [Sentence]
-getSec (Section t sc lb) = t : concatMap getSecCon sc
+getSec (Section t sc _) = t : concatMap getSecCon sc
  {--| lb ^. shortname == refLabel ^. shortname = []
   | lb ^. shortname == auxConsLabel ^. shortname = []
   | otherwise = t : concatMap getSecCon sc--}

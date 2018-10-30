@@ -1,4 +1,4 @@
-{-# Language TemplateHaskell, TypeFamilies #-}
+{-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.Citation
   ( -- Types
     Citation, BibRef, CiteField(..), Month(..), HP(..), CitationKind(..), EntryID

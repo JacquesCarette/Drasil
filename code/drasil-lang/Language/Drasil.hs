@@ -197,7 +197,7 @@ module Language.Drasil (
   , names
   -- Document.Extract
   , egetDoc, getDoc, egetSec, egetCon', egetLblCon, egetQDef
-  , getSec, getCon', getSec, getCon
+  , getCon', getSec, getCon
   -- Label.Core
   , getAdd
   -- Development.Sentence

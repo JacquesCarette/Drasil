@@ -16,8 +16,10 @@ module Drasil.Sections.SpecificSystemDescription
   , listofTablesToRefs
   ) where
 
-import Language.Drasil
+import Language.Drasil hiding (Sect)
 import Language.Drasil.Development (MayHaveUnit)
+import Language.Drasil.Utils (sortBySymbol)
+
 import Data.Drasil.Concepts.Documentation (physical, column, input_, uncertainty, physicalConstraint,
   softwareConstraint, typUnc, user, model, value, quantity, information, constraint, variable,
   output_, symbol_, limitation, problem, inModel, datum, datumConstraint, section_, dataDefn,

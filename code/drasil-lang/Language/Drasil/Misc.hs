@@ -1,9 +1,4 @@
-module Language.Drasil.Misc(mkTable, noSpaces, sortBySymbol) where
-
-import Data.List (sortBy)
-import Language.Drasil.Classes.Core (HasSymbol(symbol))
-import Language.Drasil.Symbol (compsy)
-import Language.Drasil.Stages (Stage(Implementation))
+module Language.Drasil.Misc(mkTable, noSpaces) where
 
 {- |
   Create a table body (not including header row) by applying the given
@@ -29,13 +24,6 @@ noSpaces :: String -> String
 noSpaces s
   | not (' ' `elem` s) = s
   | otherwise          = error "String has at least one space in it."
-
--- Sorts a list of HasSymbols by Symbol
-sortBySymbol :: (HasSymbol a) => [a] -> [a]
-sortBySymbol = sortBy compareBySymbol
-  where
-    compareBySymbol :: (HasSymbol a) => a -> a -> Ordering
-    compareBySymbol a b = compsy (symbol a Implementation) (symbol b Implementation)
 
 {-
 --------------------- WIP ---------------------

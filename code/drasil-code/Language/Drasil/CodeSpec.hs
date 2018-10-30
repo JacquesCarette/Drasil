@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs #-}
 module Language.Drasil.CodeSpec where
 
-import Language.Drasil
+import Language.Drasil hiding (Mod)
 import Language.Drasil.Development (MayHaveUnit)
 import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, CodeIdea, ConstraintMap,
   codevar, codeEquat, funcPrefix, codeName, spaceToCodeType, toCodeName, constraintMap,

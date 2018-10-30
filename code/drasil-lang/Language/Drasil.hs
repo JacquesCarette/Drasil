@@ -152,7 +152,6 @@ module Language.Drasil (
   , lChi, cChi, lPsi, cPsi, lOmega, cOmega, lNabla, lEll
   -- Misc
   , mkTable
-  , sortBySymbol
   -- People
   , People, Person, person, HasName, name, manyNames, person', personWM
   , personWM', mononym, nameStr, rendPersLFM, rendPersLFM', rendPersLFM''
@@ -179,7 +178,7 @@ module Language.Drasil (
   , assumpDB, RefMap, simpleMap
   , citationRefTable
   -- RefTypes
-  , RefAdd, RefType(Cite, Tab, EqnB, Req, LCh, UnCh, Def, Lst, Link)
+  , RefAdd, RefType(Cite, Tab, EqnB, Req, LCh, UnCh, Def, Lst, Link, Sect, Mod, Blank, Assump)
   , ReqType(FR, NFR)
   , Reference(Reference)
   -- Label
@@ -307,7 +306,7 @@ import Language.Drasil.Misc -- all of it
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
-import Language.Drasil.RefTypes(RefAdd, RefType(Cite, EqnB, Tab, Req, LCh, UnCh, Def, Lst, Link),
+import Language.Drasil.RefTypes(RefAdd, RefType(..),
   DType(..), Reference(Reference), ReqType(FR, NFR))
 import Language.Drasil.Label (mkLabelRA', mkLabelSame, 
   mkEmptyLabel, mkURILabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec, modifyLabelEqn)

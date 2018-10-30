@@ -11,7 +11,7 @@ import Control.Arrow (second)
 import qualified Language.Drasil as L (
   RenderSpecial(..), People, rendPersLFM, HasDefinitionTable, HasSymbolTable,
   CitationKind(..), Month(..), Symbol(..), Sentence(S), (+:+), MaxWidthPercent,
-  Decoration(Prime, Hat, Vector), Document, special, getStringSN)
+  Decoration(Prime, Hat, Vector), Document, special, getStringSN, RefType(..))
 import qualified Language.Drasil.Development as D (USymb(US))
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
@@ -41,7 +41,6 @@ import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, item', des
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (<>), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
 import Language.Drasil.TeX.Preamble (genPreamble)
-import qualified Language.Drasil.RefTypes as RT
 import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..))
 
 genTeX :: (L.HasSymbolTable ctx, L.HasDefinitionTable ctx, HasPrintingOptions ctx) =>
@@ -266,16 +265,16 @@ spec (S s)  = pure $ text (concatMap escapeChars s)
 spec (Sy s) = p_unit s
 spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = pure $ text "\\newline"
-spec (Ref t@RT.Sect r _ _)    = sref (show t) (pure $ text r)
-spec (Ref t@(RT.Def _) r _ _) = hyperref (show t) (pure $ text r)
-spec (Ref RT.Mod r _ _)       = mref  (pure $ text r)
-spec (Ref RT.Assump r _ _)    = aref  (pure $ text r)
-spec (Ref (RT.Req _) r _ _)   = rref  (pure $ text r)
-spec (Ref RT.LCh r _ _)       = lcref (pure $ text r)
-spec (Ref RT.UnCh r _ _)      = ucref (pure $ text r)
-spec (Ref RT.Cite r _ _)      = cite  (pure $ text r)
-spec (Ref RT.Blank r sn _)    = snref r $ spec sn
-spec (Ref RT.Link r _ sn)     = href  r $ L.getStringSN sn
+spec (Ref t@L.Sect r _ _)    = sref (show t) (pure $ text r)
+spec (Ref t@(L.Def _) r _ _) = hyperref (show t) (pure $ text r)
+spec (Ref L.Mod r _ _)       = mref  (pure $ text r)
+spec (Ref L.Assump r _ _)    = aref  (pure $ text r)
+spec (Ref (L.Req _) r _ _)   = rref  (pure $ text r)
+spec (Ref L.LCh r _ _)       = lcref (pure $ text r)
+spec (Ref L.UnCh r _ _)      = ucref (pure $ text r)
+spec (Ref L.Cite r _ _)      = cite  (pure $ text r)
+spec (Ref L.Blank r sn _)    = snref r $ spec sn
+spec (Ref L.Link r _ sn)     = href  r $ L.getStringSN sn
 spec (Ref t r _ _)            = ref (show t) (pure $ text r)
 spec EmptyS                   = empty
 spec (Quote q)                = quote $ spec q

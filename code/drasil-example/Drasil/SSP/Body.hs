@@ -54,7 +54,7 @@ import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods)
 import Drasil.SSP.References (sspCitations)
 import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
-import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, hookesLaw, effStress)
+import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
   sspOutputs, sspSymbols)
 
@@ -119,7 +119,7 @@ mkSRS = RefSec (RefProg intro
           (SCSProg 
             [Assumptions 
             ,TMs ([Label] ++ stdFields) [factOfSafety, equilibrium, mcShrStrgth,
-             effStress, hookesLaw]
+             effStress]
             , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
             , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
             , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
@@ -226,8 +226,7 @@ scpIncl = S "stability analysis of a 2 dimensional" +:+ phrase slope `sC`
 scpEnd  = S "identifies the most likely failure" +:+
   phrase surface +:+ S "within the possible" +:+ phrase input_ +:+ 
   S "range" `sC` S "and finds the" +:+ phrase fs +:+ S "for the" +:+
-  phrase slope +:+ S "as well as displacement of" +:+ phrase soil +:+
-  S "that will occur on the" +:+ phrase slope
+  phrase slope
 
 -- SECTION 2.3 --
 -- Characteristics of the Intended Reader generated in IChar
@@ -278,8 +277,7 @@ sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +
   S " input instead of a floating point number",
   S "Determine if the inputs satisfy the required physical and software constraints",
   S "Identify the most likely failure surface within the possible input range",
-  S "Find the factor of safety for the slope",
-  S "Find the displacement of soil that will occur on the slope"]
+  S "Find the factor of safety for the slope"]
   
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
@@ -312,16 +310,15 @@ userChar pname understandings familiarities = foldlSP [
 -- SECTION 4.1 --
 problem_desc = probDescF EmptyS ssa ending [termi_defi, phys_sys_desc, goal_stmt]
   where ending = foldlSent_ [S "evaluate the", phrase fs, S "of a",
-          phrase's slope, phrase slpSrf, S "and to calculate the",
-          S "displacement that the", phrase slope, S "will experience"]
+          phrase's slope, phrase slpSrf, S "and identify the",
+          phrase crtSlpSrf, S "of the", phrase slope]
 
 -- SECTION 4.1.1 --
 termi_defi = termDefnF Nothing [termi_defi_list]
 
 termi_defi_list = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
   map (\x -> (titleize $ x, Flat $ x ^. defn))
-  [fs_concept, crtSlpSrf, stress, strain, normForce,
-  shearForce, tension, compression, plnStrn]
+  [fs_concept, crtSlpSrf, stress, strain, normForce, shearForce, plnStrn]
   -- most of these are in concepts (physics or solidMechanics)
   -- except for crtSlpSrf & plnStrn which is in defs.hs
   -- and fs which is in Unitals.hs

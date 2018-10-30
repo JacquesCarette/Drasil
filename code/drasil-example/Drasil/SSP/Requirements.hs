@@ -3,7 +3,7 @@ module Drasil.SSP.Requirements (sspRequirements, sspInputDataTable) where
 import Language.Drasil
 
 import Data.Drasil.Concepts.Computation (inDatum)
-import Data.Drasil.Concepts.Documentation (datum, element, funcReqDom, input_,
+import Data.Drasil.Concepts.Documentation (datum, funcReqDom, input_,
   method_, value)
 
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), andThe, 
@@ -74,10 +74,9 @@ calculateFS' = cic "calculateFS'" ( foldlSent [
   "Calculate-Final-Factor-of-Safety" funcReqDom
 
 displayGraph = cic "displayGraph" ( foldlSent [
-  S "Display the", phrase crtSlpSrf `andThe` phrase slice, 
-  phrase element, S "displacements graphically. Give", plural value `ofThe` 
-  plural fs, S "calculated by the", titleize morPrice, phrase method_]) 
-  "Display-Graph" funcReqDom
+  S "Display the", phrase crtSlpSrf, S "graphically. Display the", phrase value 
+  `ofThe` phrase fs]) 
+ "Display-Graph" funcReqDom
 
 ------------------
 sspInputDataTable :: LabelledContent

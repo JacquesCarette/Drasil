@@ -6,14 +6,14 @@ import Drasil.SSP.Defs (crtSlpSrf, fs_concept, ssa)
 
 import Data.Drasil.Citations (jnlCGJ, koothoor2013, parnasClements1986, smithLai2005)
 import Data.Drasil.Concepts.Documentation (analysis)
-import Data.Drasil.People (cfLee, dgFredlund, dStolle, dyZhu, grChen, jKrahn, 
-  pGuo, pjCleall, qhQian, ssLing, tltZhan, yCLi, ymChen)
+import Data.Drasil.People (cfLee, dgFredlund, dyZhu, grChen, jKrahn, 
+  pjCleall, qhQian, ssLing, tltZhan, yCLi, ymChen)
 
 sspCitations :: BibRef
 sspCitations = [chen2005, parnasClements1986, koothoor2013,
-  fredlund1977, smithLai2005, stolle2008, li2010]
+  fredlund1977, smithLai2005, li2010]
 
-chen2005, fredlund1977, stolle2008, li2010 :: Citation
+chen2005, fredlund1977, li2010 :: Citation
 --See Language.Drasil.People for all person constructors
 chen2005 = cArticle "chen2005" [qhQian, dyZhu, cfLee, grChen]
   (S "A concise algorithm for computing the" +:+
@@ -25,11 +25,6 @@ fredlund1977 = cArticle "fredlund1977" [dgFredlund, jKrahn]
   (S "Comparison of slope stability methods of" +:+ phrase analysis)
   jnlCGJ 1977 [month Apr, pages [429, 439], volume 14, number 3]
   (mkLabelSame "fredlund1977" Cite)
-
-stolle2008 = cArticle "stolle2008" [dStolle, pGuo]
-  (S "Limit equilibrum" +:+ phrase ssa +:+ S "using rigid finite elements")
-  jnlCGJ 2008 [month May, pages [653,662], volume 45, number 5]
-  (mkLabelSame "stolle2008" Cite)
 
 li2010 = cArticle "li2010" [yCLi, ymChen, tltZhan, ssLing, pjCleall]
   (S "An efficient approach for locating the" +:+ phrase crtSlpSrf +:+ 

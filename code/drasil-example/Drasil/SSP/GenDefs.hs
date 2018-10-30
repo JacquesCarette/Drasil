@@ -1,37 +1,33 @@
 module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
-  normShrR, momentEql, netForcex, netForcey, hookesLaw2d, displVect, generalDefinitions) where
+  normShrR, momentEql, generalDefinitions) where
 
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
 
 import Drasil.DocLang.SRS as SRS (physSystLabel)
 
-import Data.Drasil.Concepts.Documentation (assumption, definition, element, 
-  method_, model, property, system, value, variable)
-import Data.Drasil.Concepts.Math (angle, equation, matrix, normal, perp, surface, vector)
-import Data.Drasil.Concepts.PhysicalProperties (len, mass)
+import Data.Drasil.Concepts.Documentation (assumption, definition, 
+  method_, property, system, value, variable)
+import Data.Drasil.Concepts.Math (normal, perp, surface)
+import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 
 import Data.Drasil.Quantities.Physics (displacement, force)
 import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 
-import Data.Drasil.SentenceStructures (andThe, foldlSent, getTandS, isThe, ofThe, sAnd)
+import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, sAnd)
 
 import Drasil.SSP.Assumptions (newA5)
-import Drasil.SSP.BasicExprs (displMtx, eqlExpr, momExpr, rotMtx)
-import Drasil.SSP.DataDefs (lengthLb, lengthLs, mobShearWO, sliceWght)
+import Drasil.SSP.BasicExprs (eqlExpr, momExpr)
+import Drasil.SSP.DataDefs (lengthLs, sliceWght)
 import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf)
-import Drasil.SSP.Labels (genDef3Label, genDef7Label, genDef8Label)
-import Drasil.SSP.References (chen2005, stolle2008)
-import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress, 
-  hookesLaw)
+import Drasil.SSP.Labels (genDef3Label)
+import Drasil.SSP.References (chen2005)
+import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
-  cohesion, dx_i, dy_i, earthqkLoadFctr, elmNrmDispl, elmPrllDispl, fricAngle, 
-  fs, fx, fy, genDisplace, genPressure, impLoadAngle, index, intNormForce, 
-  intShrForce, inxi, inxiM1, mobShrI, normToShear, nrmDispl, nrmFSubWat, 
-  nrmStiffBase, rotatedDispl, scalFunc, shearFNoIntsl, shrDispl, shrResI, 
-  shrResI, shrStiffIntsl, shrStress, slcWght, surfAngle, surfHydroForce, 
-  surfLoad, totNrmForce, watrForceDif, xi)
+  cohesion, fricAngle, fs, index, intNormForce, intShrForce, inxi, inxiM1, 
+  mobShrI, normToShear, nrmFSubWat, scalFunc, shearFNoIntsl, shrResI, 
+  shrResI, shrStress, totNrmForce, xi)
 
 ---------------------------
 --  General Definitions  --
@@ -43,11 +39,7 @@ generalDefinitions = [
   gd'' resShr      [makeRef chen2005]   "resShr"      [resShr_desc],
   gd'' mobShr      [makeRef chen2005]   "mobShr"      [mobShr_desc],
   gd'' normShrR    [makeRef chen2005]   "normShrR"    [nmShrR_desc],
-  gd'' momentEql   [makeRef chen2005]   "momentEql"   [momEql_desc],
-  gd'' netForcex   [makeRef chen2005]   "netForcex"   [fNet_desc genDef8Label],
-  gd'' netForcey   [makeRef chen2005]   "netForcey"   [fNet_desc genDef7Label],
-  gd'' hookesLaw2d [makeRef stolle2008] "hookesLaw2d" [hooke2d_desc],
-  gd'' displVect   [makeRef stolle2008] "displVect"   [disVec_desc]
+  gd'' momentEql   [makeRef chen2005]   "momentEql"   [momEql_desc]
   ]
 
 --
@@ -181,109 +173,3 @@ momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   plural intrslce, S "following convention in" +:+.
   makeRefS SRS.physSystLabel, at_start variable, plural definition,
   S "can be found in", makeRefS sliceWght, S "to", makeRefS lengthLs]
-
---
-netForcex :: RelationConcept
-netForcex = makeRC "netForce" (nounPhraseSP "net x-component force")
-  (fNet_desc genDef8Label) fNetx_rel -- genDef7Label
-
-fNetx_rel :: Relation
-fNetx_rel = inxi fx $= (negate $ inxi watrForceDif) -
-  (sy earthqkLoadFctr)*(inxi slcWght)
-  - (inxi baseHydroForce) * sin (inxi baseAngle) +
-  (inxi surfHydroForce) * sin (inxi surfAngle)
-  + (inxi surfLoad) * sin (inxi impLoadAngle)
-
-netForcey :: RelationConcept
-netForcey = makeRC "netForce" (nounPhraseSP "net y-component force")
-  (fNet_desc genDef7Label) fNety_rel -- genDef8Label
-
-fNety_rel :: Relation
-fNety_rel = inxi fy $= (negate $ inxi slcWght) +
-  (inxi baseHydroForce) * cos (inxi baseAngle)
-  - (inxi surfHydroForce) * cos (inxi surfAngle) -
-  (inxi surfLoad) * cos (inxi impLoadAngle)
-
-fNet_desc :: (HasShortName l, Referable l) => l -> Sentence
-fNet_desc gd = foldlSent [S "This", phrase equation `andThe` phrase equation, 
-  S "in", makeRefS gd, S "show the net sum of the",
-  plural force, S "acting on a", phrase slice, 
-  S "for the RFEM", phrase model, S "and the", plural force,
-  S "that create an applied load on the" +:+. phrase slice, ch fx,
-  S "refers to the load in the direction", phrase perp, S "to the",
-  S "direction of the", phrase force, S "of gravity for", phrase slice,
-  ch index `sC` S "while", ch fy, S "refers to the load in the",
-  S "direction parallel to the", phrase force, S "of gravity for", 
-  phrase slice +:+. ch index, at_start' force, 
-  S "are found in the free body diagram of" +:+.
-  makeRefS SRS.physSystLabel, S "In this", phrase model,
-  --FIXME: hacked link
-  S "the", plural element, S "are not exerting", plural force,
-  S "on each other" `sC` S "so the", phrase intrslce, plural force,
-  ch intNormForce, S "and", ch intShrForce, S "are not a part of the"
-  +:+. phrase model, S "Index", ch index, 
-  S "refers to", (plural value `ofThe` plural property), S "for",
-  phrase slice :+: S "/" :+: plural intrslce, S "following", 
-  S "convention in" +:+. makeRefS SRS.physSystLabel,
-  at_start force, phrase variable, plural definition, S "can be found in",
-  makeRefS sliceWght, S "to", makeRefS lengthLb]
-
---
-hookesLaw2d :: RelationConcept
-hookesLaw2d = makeRC "hookesLaw2d" (nounPhraseSP "Hooke's law 2D")
-  hooke2d_desc hooke2d_rel -- genDef9Label
-
-hooke2d_rel :: Relation
-hooke2d_rel = vec2D (inxi genPressure) (inxi genPressure) $=
-  dgnl2x2 (inxi shrStiffIntsl) (inxi nrmStiffBase) *
-  vec2D (inxi dx_i) (inxi dy_i)
-
-hooke2d_desc :: Sentence
-hooke2d_desc = foldlSent [
-  S "A 2D component implementation of Hooke's law as seen in" +:+.
-  makeRefS hookesLaw, ch elmPrllDispl, S "is", phrase displacement `ofThe`
-  phrase element, S "normal to the", phrase surface, S "and",
-  ch elmNrmDispl, S "is", phrase displacement `ofThe` phrase element,
-  S "parallel to the" +:+. phrase surface, S "Pn,i",
-  S "is the net pressure acting normal to the", phrase surface `sC`
-  S "and", S "Pt,i", S "is the net pressure acting parallel to the" +:+.
-  phrase surface, S "Pressure is used in place of", phrase force,
-  S "as the", phrase surface, S "has not been normalized for it's" +:+.
-  phrase len, S "The stiffness", plural value, S "Kn,i" `sAnd` S "Kt,i",
-  -- FIXME: Pn,i ~ Pt,i ~ Kn,i ~ Kt,i need symbols 
-  S "are then the resistance to", phrase displacement,
-  S "in the respective directions defined as in" +:+. makeRefS mobShearWO,
-  S "The pressure", plural force, S "would be the result of applied",
-  S "loads on the", phrase mass `sC` S "the product of the stiffness",
-  plural element, S "with the", phrase displacement, S "would be the",
-  phrase's mass, S "reactive", phrase force, S "that creates equilibrium",
-  S "with the applied", plural force, S "after reaching the equilibrium",
-  phrase displacement]
-
---
-displVect :: RelationConcept
-displVect = makeRC "displVect" (nounPhraseSP "displacement vectors")
-  disVec_desc disVec_rel -- genDef10Label
-
-disVec_rel :: Relation
-disVec_rel = inxi rotatedDispl $= vec2D (inxi shrDispl) (inxi nrmDispl) $=
-  rotMtx * (inxi genDisplace) $= rotMtx * displMtx
-
-disVec_desc :: Sentence
-disVec_desc = foldlSent [at_start' vector, S "describing the",
-  phrase displacement, S "of", phrase slice +:+. ch index,
-  ch genDisplace `isThe` phrase displacement,
-  S "in the unrotated coordinate system" `sC` S "where",
-  ch dx_i `isThe` phrase displacement, S "of the", phrase slice,
-  phrase perp, S "to the direction of gravity, and", ch dy_i `isThe`
-  phrase displacement, S "of the", phrase slice, S "parallel to the", 
-  phrase force +:+. S "of gravity", ch rotatedDispl `isThe`
-  phrase displacement, S "in the rotated coordinate", phrase system `sC`
-  S "where", ch shrDispl `isThe` phrase displacement, S "of the",
-  phrase slice, S "parallel to the", phrase slice, S "base, and", 
-  ch dy_i `isThe` phrase displacement, S "of the", phrase slice,
-  phrase perp, S "to the", phrase slice +:+. S "base", ch rotatedDispl,
-  S "can also be found by rotating", ch genDisplace,
-  S "clockwise by the base", phrase angle `sC` ch baseAngle,
-  S "through a rotation", phrase matrix, S "as shown"]
-  --FIXME: some symbols need to be vectors

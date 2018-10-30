@@ -5,7 +5,7 @@ import Language.Drasil
 import Drasil.SSP.Defs (slpSrf, slopeSrf, slope,
   mtrlPrpty, soil, soilLyr, soilPrpty, intrslce, slice)
 import Drasil.SSP.Unitals (coords, normToShear, scalFunc, fs)
-import Drasil.SSP.Labels (forDisEqlbL)
+
 import Data.Drasil.SentenceStructures (ofThe, ofThe', getTandS, foldlSent)
 
 import Data.Drasil.Concepts.Documentation (assumpDom, condition)
@@ -53,8 +53,7 @@ monotonicF = foldlSent [S "The", phrase slpSrf,
   phrase surface, S "follow a monotonic function"]
 
 slopeG = foldlSent [S "geometry" `ofThe'` phrase slope `sC` S "and",
-  plural mtrlPrpty `ofThe` plural soilLyr, S "are given as inputs",
-  sSqBr $ makeRefS forDisEqlbL]
+  plural mtrlPrpty `ofThe` plural soilLyr, S "are given as inputs"]
 
 homogeneousL = foldlSent [S "different layers" `ofThe'` phrase soil,
   S "are homogeneous" `sC` S "with consistent", plural soilPrpty,

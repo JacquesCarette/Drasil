@@ -10,17 +10,14 @@ import Data.Drasil.SentenceStructures (ofThe)
 -----------
 
 sspGoals :: [Sentence]
-sspGoals = [locAndGlFS, lowestFS, displSlope]
+sspGoals = [evaluateFS, lowestFS]
 
-locAndGlFS, lowestFS, displSlope :: Sentence
+evaluateFS, lowestFS :: Sentence
 
 -- 1
-locAndGlFS = S "Evaluate local and global" +:+ plural fs_concept +:+
+evaluateFS = S "Evaluate the" +:+ phrase fs_concept +:+
   S "along a given" +:+. phrase slpSrf
   
 -- 2
 lowestFS   = S "Identify the" +:+ phrase crtSlpSrf +:+ S "for the" +:+
   phrase slope `sC` S "with the lowest" +:+. phrase fs_concept
-  
--- 3
-displSlope = S "Determine" +:+. (S "displacement" `ofThe` phrase slope)

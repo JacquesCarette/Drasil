@@ -443,4 +443,4 @@ htPCMDesc = foldlSent [S "The above", phrase equation,S "is derived using" +:+.
   S "The", phrase heat, phrase energy, S "for", phrase boiling, S "of the", short phsChgMtrl,
   S "is not detailed" `sC` S "since the", short phsChgMtrl, S "is assumed to either be in a", 
   phrase solid, S "or", phrase liquid, S "state", sParen (makeRefS newA18),
-  sParen (makeRefS newA13), sParen (makeRefS newA12)]
+  sParen (makeRefS newA13)]

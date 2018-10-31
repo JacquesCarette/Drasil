@@ -15,14 +15,13 @@ import Data.Drasil.Concepts.Documentation as Doc (inModel,
   requirement, item, assumption, thModel, traceyMatrix, model, output_, quantity, input_, 
   physicalConstraint, condition, property, variable, description, symbol_,
   information, goalStmt, physSyst, problem, definition, srs, content, reference,
-  document, goal, purpose, assumpDom, funcReqDom, likeChgDom, unlikeChgDom, srsDomains)
+  document, goal, purpose, funcReqDom, likeChgDom, unlikeChgDom, srsDomains)
 
 import qualified Data.Drasil.Concepts.Math as M (ode, de, unit_, equation)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
-  thermal_energy, ht_trans_theo, heat, melt_pt, boil_pt, ht_flux,
-  heat_cap_spec, thermal_conduction)
+  thermal_energy, ht_trans_theo, ht_flux, heat_cap_spec, thermal_conduction)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heat_cap_spec, ht_flux)
 import Data.Drasil.Quantities.Physics (time, energy)
@@ -48,8 +47,7 @@ import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
-import Drasil.SWHS.Assumptions (newA1, newA2, newA3, newA7, newA8, newA9,
-  newA11, newA12, newA14, newA15, newA20)
+import Drasil.SWHS.Assumptions (newA11, newA12, newA14)
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
   orgDocIntro, physSyst1, physSyst2, traceFig1, traceFig2, traceIntro2, traceTrailing)
 import Drasil.SWHS.Changes (chgsStart, likeChgTCVOD, likeChgTCVOL, likeChgTLH)

@@ -20,7 +20,6 @@ import Data.Drasil.SentenceStructures (foldlSent, ofThe, ofThe', sAnd, isThe)
 
 import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfect_insul,
   charging, discharging)
-import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
 import Drasil.SWHS.Labels (thermalEnergyOnlyL, lawConvectiveCoolingWtrPCML, 
   waterAlwaysLiquidL, noGaseousStatePCML, atmosphericPressureTankL, 
   nwtnCoolingL, rocTempSimpL, eBalanceOnWtrL, eBalanceOnPCML, heatEInWtrL, 
@@ -32,7 +31,6 @@ import Drasil.SWHS.Labels (thermalEnergyOnlyL, lawConvectiveCoolingWtrPCML,
   perfectInsulationL, noInternalHeatL, volumeChangeMeltL, noGaseousStatePCML,
   atmosphericPressureTankL, volumeCoilL)
 -- import Drasil.SWHS.References (swhsCitations)
-import Drasil.SWHS.TMods (consThermE)
 import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, temp_init, temp_W,
   temp_PCM, htCap_L_P, htCap_W, htCap_S_P, w_density, pcm_density, pcm_vol)
 
@@ -109,90 +107,78 @@ assumpS1 = foldlSent [
   S "The only form of", phrase energy, S "that is",
   S "relevant for this", phrase problem, S "is" +:+. 
   phrase CT.thermal_energy, S "All other forms of", phrase energy `sC`
-  S "such as", phrase mech_energy `sC` S "are assumed to be negligible",
-  sSqBr $ makeRefS consThermE]
+  S "such as", phrase mech_energy `sC` S "are assumed to be negligible"]
 assumpS2 = foldlSent [
-  S "All", phrase CT.heat_trans, S "coefficients are constant over",
-  phrase time, sSqBr $ makeRefS nwtnCoolingL]
+  S "All", phrase CT.heat_trans, S "coefficients are constant over", phrase time]
 assumpS3 = foldlSent [
   S "The", phrase water, S "in the", phrase tank,
   S "is fully mixed, so the", phrase temp_W `isThe` 
-  S "same throughout the entire", phrase tank,
-  sSqBr $ makeRefS rocTempSimpL `sC` makeRefS dd2HtFluxP]
+  S "same throughout the entire", phrase tank]
 assumpS4 = foldlSent [
   S "The", phrase temp_PCM `isThe` S "same throughout the", phrase pcm_vol,
-  sSqBr $ makeRefS rocTempSimpL `sC` makeRefS dd2HtFluxP `sC` makeRefS likeChg1L]
+  sSqBr $ makeRefS likeChg1L]
   --FIXME `sC` makeRefS likeChg1]
 assumpS5 = foldlSent [
   S "The", phrase w_density `sAnd` phrase pcm_density,
   S "have no spatial variation; that is" `sC`
-  S "they are each constant over their entire", phrase vol,
-  sSqBr $ makeRefS rocTempSimpL]
+  S "they are each constant over their entire", phrase vol]
 assumpS6 = foldlSent [
   S "The", phrase htCap_W `sC` phrase htCap_S_P `sC` S "and",
   phrase htCap_L_P, S "have no spatial variation; that",
   S "is" `sC` S "they are each constant over their entire",
-  phrase vol, sSqBr $ makeRefS rocTempSimpL]
+  phrase vol]
 assumpS7 = foldlSent [
   CT.law_conv_cooling ^. defn, S "applies between the",
-  phrase coil `sAnd` S "the", phrase water,
-  sSqBr $ makeRefS dd1HtFluxC]
+  phrase coil `sAnd` S "the", phrase water]
 assumpS8 = foldlSent [
   S "The", phrase temp_C, S "is constant over", phrase time,
-  sSqBr $ makeRefS dd1HtFluxC `sC` makeRefS likeChg2L]
+  sSqBr $ makeRefS likeChg2L]
 assumpS9 = foldlSent [
   S "The", phrase temp_C, S "does not vary along its length",
-  sSqBr $ makeRefS dd1HtFluxC `sC` makeRefS likeChg3L]
+  sSqBr $  makeRefS likeChg3L]
 assumpS10 = foldlSent [
   CT.law_conv_cooling ^. defn, S "applies between the",
-  phrase water `sAnd` S "the", short phsChgMtrl,
-  sSqBr $ makeRefS dd2HtFluxP]
+  phrase water `sAnd` S "the", short phsChgMtrl]
 assumpS11 = foldlSent [
   S "The", phrase model, S "only accounts for", (charging ^. defn) `sC`
   S "not" +:+. phrase discharging, S "The", phrase temp_W `sAnd`
   phrase temp_PCM, S "can only increase, or remain",
   S "constant; they do not decrease. This implies that the",
   phrase temp_init, sSqBr $ makeRefS newA12, S "is less than (or equal)",
-  S "to the", phrase temp_C, sSqBr $ makeRefS eBalanceOnWtrL
-   `sC` makeRefS likeChg4L]
+  S "to the", phrase temp_C, sSqBr $ makeRefS likeChg4L]
 assumpS12 = foldlSent [
   phrase temp_init `ofThe'` phrase water `sAnd` S "the",
   short phsChgMtrl `isThe` S "same",
-  sSqBr $ makeRefS eBalanceOnWtrL `sC` makeRefS eBalanceOnPCML
-  `sC` makeRefS likeChg5L]
+  sSqBr $ makeRefS likeChg5L]
 assumpS13 = foldlSent [
   S "The", phrase simulation, S "will start with the",
-  short phsChgMtrl, S "in a", solid ^. defn,
-  sSqBr $ makeRefS eBalanceOnPCML `sC` makeRefS heatEInPCML]
+  short phsChgMtrl, S "in a", solid ^. defn]
 assumpS14 = foldlSent [
   (S "operating" +:+ phrase temp +:+ S "range") `ofThe'` phrase system,
   S "is such that the", phrase water,
   S "is always in" +:+. (liquid ^. defn), S "That is" `sC`
   S "the", phrase temp, S "will not drop below the",
   phrase melt_pt, S "of", phrase water `sC` S "or rise above its",
-  phrase boil_pt, sSqBr $ makeRefS eBalanceOnWtrL `sC` makeRefS heatEInWtrL]
+  phrase boil_pt]
 assumpS15 = foldlSent [
   S "The", phrase tank, S "is", phrase perfect_insul,
   S "so that there is no", phrase CT.heat, S "loss from the",
-  phrase tank, sSqBr $ makeRefS eBalanceOnWtrL
-  `sC` makeRefS likeChg6L]
+  phrase tank, sSqBr $  makeRefS likeChg6L]
 assumpS16 = foldlSent [
   S "No internal", phrase CT.heat, S "is generated by either the",
   phrase water, S "or the", short phsChgMtrl +:+
-  S "; therefore, the", phrase vol_ht_gen, S "is zero",
-  sSqBr $ makeRefS eBalanceOnWtrL `sC` makeRefS eBalanceOnPCML]
+  S "; therefore, the", phrase vol_ht_gen, S "is zero"]
 assumpS17 = foldlSent [
   (phrase vol +:+ phrase change) `ofThe'` short phsChgMtrl,
-  S "due to", phrase CT.melting, S "is negligible", sSqBr $ makeRefS eBalanceOnPCML]
+  S "due to", phrase CT.melting, S "is negligible"]
 assumpS18 = foldlSent [
   S "The", short phsChgMtrl, S "is either in a", liquid ^. defn,
-  S "or a", solid ^. defn, S "but not a", gaseous ^. defn,
-  sSqBr $ makeRefS eBalanceOnPCML `sC` makeRefS heatEInPCML]
+  S "or a", solid ^. defn, S "but not a", gaseous ^. defn]
 assumpS19 = foldlSent [
   S "The pressure in the", phrase tank, S "is atmospheric, so the",
   phrase melt_pt `sAnd` phrase boil_pt, S "are", S (show (0 :: Integer)) :+:
   Sy (unit_symb temp) `sAnd` S (show (100 :: Integer)) :+:
-  Sy (unit_symb temp) `sC` S "respectively", sSqBr $ makeRefS eBalanceOnWtrL `sC` makeRefS heatEInWtrL]
+  Sy (unit_symb temp) `sC` S "respectively"]
 assumpS20 = foldlSent [
   S "When considering the", phrase w_vol, S "in the",
   phrase tank `sC` (phrase vol `ofThe` phrase coil),

@@ -11,7 +11,7 @@ import Data.Drasil.Concepts.PhysicalProperties (liquid, mass, solid, vol)
 import Data.Drasil.Concepts.Thermodynamics (boil_pt, boiling, heat, heat_cap_spec, 
   heat_trans, ht_flux, latent_heat, melting, phase_change, sens_heat, temp, thermal_energy)
 
-import Drasil.SWHS.Assumptions (newA12, newA14, newA15, newA16, newA17, newA18, newA19)
+import Drasil.SWHS.Assumptions (newA12, newA13, newA14, newA15, newA16, newA17, newA18, newA19)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, tank, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac)
 import Drasil.SWHS.Labels (rocTempSimpL, eBalanceOnWtrL, eBalanceOnPCML, heatEInPCML,
@@ -442,4 +442,5 @@ htPCMDesc = foldlSent [S "The above", phrase equation,S "is derived using" +:+.
   phrase melting, S "began", ch t_init_melt +:+. sParen (unwrap $ getUnit t_init_melt),
   S "The", phrase heat, phrase energy, S "for", phrase boiling, S "of the", short phsChgMtrl,
   S "is not detailed" `sC` S "since the", short phsChgMtrl, S "is assumed to either be in a", 
-  phrase solid, S "or", phrase liquid, S "state", sParen (makeRefS newA18)]
+  phrase solid, S "or", phrase liquid, S "state", sParen (makeRefS newA18),
+  sParen (makeRefS newA13), sParen (makeRefS newA12)]

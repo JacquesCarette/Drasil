@@ -20,11 +20,11 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
 import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
   assumptLabel, physSyst)
 
-import Data.Drasil.Concepts.Documentation (analysis, assumption,
+import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   design, document, effect, element, endUser, environment, goalStmt, inModel, 
   input_, interest, interest, interface, issue, loss, method_, organization, 
   physics, problem, product_, property, software, softwareSys, srs, srsDomains,
-  sysCont, system, table_, template, user, value, variable)
+  sysCont, system, table_, template, user, value, variable, physSyst)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
@@ -341,16 +341,20 @@ physSystIntro what how p1 p2 p3 indexref = foldlSP [
   p3 +:+. plural property, S "The index convention for referencing which",
   phrase p1 `sOr` phrase p2, S "is being used is shown in", makeRefS indexref]
 
-phys_sys_desc_bullets = enumBullet $ map foldlSent_ [
+phys_sys_desc_bullets = enumSimple 1 (short Doc.physSyst) physSystDescriptionListPhysys
+physSystDescriptionListPhysys :: [Sentence]
+physSystDescriptionListPhysys1 :: Sentence
+physSystDescriptionListPhysys2 :: Sentence
 
-  [at_start' itslPrpty, S "convention is noted by j. The end",
+physSystDescriptionListPhysys = [physSystDescriptionListPhysys1, physSystDescriptionListPhysys2]
+
+physSystDescriptionListPhysys1 = foldlSent_ [at_start' itslPrpty, S "convention is noted by j. The end",
   plural itslPrpty, S "are usually not of", phrase interest `sC`
   S "therefore use the", plural itslPrpty, S "from" +:+.
-  (E $ real_interval index $ Bounded (Inc,1) (Inc,sy numbSlices -1))],
-  -- (E $ 1 $<= sy index $<= (sy numbSlices) - 1)],
+  (E $ real_interval index $ Bounded (Inc,1) (Inc,sy numbSlices -1))]
 
-  [at_start slice, plural property +:+ S "convention is noted by" +:+.
-  (ch index)]]
+physSystDescriptionListPhysys2 = foldlSent_ [at_start slice, plural property +:+ S "convention is noted by" +:+.
+  (ch index)]
 
 phys_sys_desc_p2 = foldlSP [S "A", phrase fbd, S "of the", 
   plural force, S "acting on the", phrase slice, 

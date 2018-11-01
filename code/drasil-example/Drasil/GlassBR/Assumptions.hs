@@ -14,7 +14,6 @@ import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 
 import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass, gLassBR, 
   lShareFac, plane, responseTy)
-import Drasil.GlassBR.DataDefs (dimLL, loadDF, nonFL, tolStrDisFac)
 import Drasil.GlassBR.Labels (probOfBreakL, calOfCapacityL, glassTypeL, glassConditionL, glassLiteL)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (constant_K, constant_LoadDF, constant_LoadDur, 
@@ -77,27 +76,24 @@ standardValuesDesc :: UnitaryChunk -> Sentence
 standardValuesDesc mainIdea = foldlSent [S "The", plural value, S "provided in",
   makeRefS SRS.valsOfAuxConsLabel, S "are assumed for the", phrase mainIdea, 
   sParen (ch mainIdea) `sC` S "and the", plural materialProprty `sOf` 
-  foldlList Comma List (map ch (take 3 assumptionConstants))] +:+ 
-  (foldlList Comma List $ [makeRefS probOfBreakL] ++ map makeRefS [loadDF, 
-  nonFL, dimLL, tolStrDisFac])
+  foldlList Comma List (map ch (take 3 assumptionConstants))]
 
 glassLiteDesc :: Sentence
 glassLiteDesc = foldlSent [at_start glass, S "under consideration is assumed to be a single", 
   S "lite; hence, the", phrase value `sOf` short lShareFac, S "is equal to 1 for all",
-  plural calculation `sIn` short gLassBR] +:+
-  (foldlList Comma List $ [makeRefS calOfCapacityL] ++ [makeRefS dimLL])
+  plural calculation `sIn` short gLassBR]
 
 boundaryConditionsDesc :: Sentence
 boundaryConditionsDesc = foldlSent [S "Boundary", plural condition, S "for the",
   phrase glaSlab, S "are assumed to be 4-sided support for",
-  plural calculation] +:+ makeRefS probOfBreakL
+  plural calculation]
 
 responseTypeDesc :: Sentence
 responseTypeDesc = foldlSent [S "The", phrase responseTy, S "considered in",
-  short gLassBR, S "is flexural"] +:+ makeRefS probOfBreakL
+  short gLassBR, S "is flexural"]
 
 ldfConstantDesc :: QDefinition -> Sentence
 ldfConstantDesc mainConcept = foldlSent [S "With", phrase reference, S "to",
   makeRefS standardValues `sC` S "the", phrase value `sOf`
   phrase mainConcept, sParen (ch mainConcept), S "is a", phrase constant,
-  S "in", short gLassBR] +:+ makeRefS loadDF
+  S "in", short gLassBR]

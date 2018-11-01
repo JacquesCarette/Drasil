@@ -353,19 +353,19 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:explainScenario}:]This system only considers the external explosion scenario for its calculations.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:standardValues}:]The values provided in Section~\ref{Sec:AuxConstants} are assumed for the duration of load (${t_{d}}$), and the material properties of $m$, $k$, and $E$. \hyperref[IM:probOfBreak]{Definition~IM:probOfBreak}, \hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}, \hyperref[DD:nFL]{Definition~DD:nFL}, \hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}, and \hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:standardValues}:]The values provided in Section~\ref{Sec:AuxConstants} are assumed for the duration of load (${t_{d}}$), and the material properties of $m$, $k$, and $E$.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:glassLite}:]Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. \hyperref[IM:calofCapacity]{Definition~IM:calofCapacity} and \hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:glassLite}:]Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:boundaryConditions}:]Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. \hyperref[IM:probOfBreak]{Definition~IM:probOfBreak}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:boundaryConditions}:]Boundary conditions for the glass slab are assumed to be 4-sided support for calculations.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:responseType}:]The response type considered in GlassBR is flexural. \hyperref[IM:probOfBreak]{Definition~IM:probOfBreak}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:responseType}:]The response type considered in GlassBR is flexural.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:ldfConstant}:]With reference to A\ref{A:standardValues}, the value of load duration factor ($LDF$) is a constant in GlassBR. \hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:ldfConstant}:]With reference to A\ref{A:standardValues}, the value of load duration factor ($LDF$) is a constant in GlassBR.
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -532,6 +532,9 @@ Description & \begin{symbDescription}
               \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
               \end{symbDescription}
 \\ \midrule \\
+Notes & A\ref{A:standardValues}
+        A\ref{A:ldfConstant}
+\\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
@@ -599,6 +602,7 @@ Description & \begin{symbDescription}
 Notes & $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:min.thick]{Definition~DD:min.thick}.
         ${\hat{q}_{tol}}$ is the tolerable load defined in \hyperref[DD:tolLoad]{Definition~DD:tolLoad}.
+        A\ref{A:standardValues}
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -672,6 +676,7 @@ Notes & $q$ is the 3 second equivalent pressure, as given in \hyperref[IM:calOfD
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:min.thick]{Definition~DD:min.thick}.
         $GTF$ is the glass type factor, as given by \hyperref[DD:gTF]{Definition~DD:gTF}.
         $\hat{q}$ is calculated with reference to A\ref{A:glassLite}.
+        A\ref{A:standardValues}
 \\ \midrule \\
 Source & \cite{astm2009} and \cite{campidelli}
 \\ \midrule \\
@@ -744,6 +749,7 @@ Notes & ${J_{tol}}$  is calculated with reference to  ${P_{btol}}$.
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:min.thick]{Definition~DD:min.thick}.
         $LDF$ is the load duration factor as defined by \hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}.
         ${P_{btol}}$ is the tolerable probability entered by the user.
+        A\ref{A:standardValues}
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -842,6 +848,10 @@ Description & \begin{symbDescription}
               \item{$B$ is the risk of failure (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
+Notes & A\ref{A:standardValues}
+        A\ref{A:boundaryConditions}
+        A\ref{A:responseType}
+\\ \midrule \\
 Source & \cite{astm2009} and \cite{beasonEtAl1998}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
@@ -883,7 +893,7 @@ Description & \begin{symbDescription}
               \item{$LSF$ is the load share factor (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows A\ref{A:glassCondition} and A\ref{A:glassType} (``In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations'') from \cite{astm2009} (pg. 53).
+Notes & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows A\ref{A:glassCondition} and A\ref{A:glassType} (``In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations'') from \cite{astm2009} (pg. 53) (A\ref{A:glassLite}).
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\

@@ -4,6 +4,7 @@ import Language.Drasil
 import Control.Lens ((^.))
 import Drasil.DocLang (ModelDB, mdb)
 
+import Drasil.SWHS.Assumptions
 import Drasil.SWHS.References (bueche1986, koothoor2013)
 import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcm_mass,
   temp_W, temp_PCM, ht_flux_P, pcm_HTC, coil_HTC, temp_C, ht_flux_C)
@@ -33,7 +34,7 @@ htFluxCEqn :: Expr
 htFluxCEqn = (sy coil_HTC) * ((sy temp_C) - apply1 temp_W time)
 
 dd1HtFluxC :: DataDefinition
-dd1HtFluxC = mkDDL dd1HtFluxCQD [makeRef koothoor2013] [] dd1HtFluxCL []
+dd1HtFluxC = mkDDL dd1HtFluxCQD [makeRef koothoor2013] [] dd1HtFluxCL [makeRefS newA7, makeRefS newA8, makeRefS newA9]
 
 --Can't include info in description beyond definition of variables?
 ----
@@ -45,7 +46,7 @@ htFluxPEqn :: Expr
 htFluxPEqn = (sy pcm_HTC) * (apply1 temp_W time - apply1 temp_PCM time)
 
 dd2HtFluxP :: DataDefinition
-dd2HtFluxP = mkDDL dd2HtFluxPQD [makeRef koothoor2013] [] dd2HtFluxPL []
+dd2HtFluxP = mkDDL dd2HtFluxPQD [makeRef koothoor2013] [] dd2HtFluxPL [makeRefS newA3, makeRefS newA4, makeRefS newA10]
 
 ----
 

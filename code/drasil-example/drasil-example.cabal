@@ -67,7 +67,8 @@ executable nopcm
   hs-source-dirs: .
   main-is: Drasil/NoPCM/Main.hs
   other-modules:
-      Drasil.NoPCM.Body
+      Drasil.NoPCM.Assumptions
+    , Drasil.NoPCM.Body
     , Drasil.NoPCM.Unitals
     , Drasil.NoPCM.Definitions
     , Drasil.NoPCM.DataDesc

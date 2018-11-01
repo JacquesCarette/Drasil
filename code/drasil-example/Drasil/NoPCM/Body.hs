@@ -15,14 +15,13 @@ import Data.Drasil.Concepts.Documentation as Doc (inModel,
   requirement, item, assumption, thModel, traceyMatrix, model, output_, quantity, input_, 
   physicalConstraint, condition, property, variable, description, symbol_,
   information, goalStmt, physSyst, problem, definition, srs, content, reference,
-  document, goal, purpose, assumpDom, funcReqDom, likeChgDom, unlikeChgDom, srsDomains)
+  document, goal, purpose, funcReqDom, likeChgDom, unlikeChgDom, srsDomains)
 
 import qualified Data.Drasil.Concepts.Math as M (ode, de, unit_, equation)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
-  thermal_energy, ht_trans_theo, heat, melt_pt, boil_pt, ht_flux,
-  heat_cap_spec, thermal_conduction)
+  thermal_energy, ht_trans_theo, ht_flux, heat_cap_spec, thermal_conduction)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heat_cap_spec, ht_flux)
 import Data.Drasil.Quantities.Physics (time, energy)
@@ -48,8 +47,7 @@ import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
-import Drasil.SWHS.Assumptions (newA1, newA2, newA3, newA7, newA8, newA9,
-  newA11, newA12, newA14, newA15, newA20)
+import Drasil.SWHS.Assumptions (newA11, newA12, newA14)
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
   orgDocIntro, physSyst1, physSyst2, traceFig1, traceFig2, traceIntro2, traceTrailing)
 import Drasil.SWHS.Changes (chgsStart, likeChgTCVOD, likeChgTCVOL, likeChgTLH)
@@ -67,6 +65,7 @@ import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA,
   temp_env, temp_W, thFluxVect, time_final, time_final_max, vol_ht_gen, w_density, 
   w_density_max, w_density_min, w_E, w_mass, w_vol)
 
+import Drasil.NoPCM.Assumptions
 import Drasil.NoPCM.DataDesc (inputMod)
 import Drasil.NoPCM.Definitions (ht_trans, srs_swhs)
 import Drasil.NoPCM.GenDefs (rocTempSimp, swhsGDs)
@@ -193,10 +192,6 @@ nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) (
 
 printSetting :: PrintingInformation
 printSetting = PI nopcm_SymbMap defaultConfiguration
-
-assumps_Nopcm_list_new :: [AssumpChunk]
-assumps_Nopcm_list_new = [newA1, newA2, newA3, newA5NoPCM, newA6NoPCM,
-  newA7, newA8, newA9, newA9NoPCM, newA14, newA15, newA16, newA19, newA20]
 
 symbTT :: [DefinedQuantityDict]
 symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) nopcm_SymbMap
@@ -346,81 +341,6 @@ goalStatesList temw we = enumSimple 1 (short goalStmt) [
     plural quantity, S "can be measured. This", phrase information,
     S "would be part of the input if one were performing an",
     phrase uncertainty, S "quantification exercise"]-}
-
--- FIXME: Remove the newA*NoPCM AssumpChunk's once SWHS has migrated to
--- ConceptInstance and SCSProg's Assumptions has been migrated to using
--- assumpDom
-  
-assumpS3, assumpS4, assumpS5, assumpS9_npcm, assumpS12, assumpS13 :: Sentence
-assumpDWCoW, assumpSHECoW, assumpCTNTD, assumpNIHGBW, assumpAPT :: ConceptInstance
-
-assumpS3 = 
-  (foldlSent [S "The", phrase water, S "in the", phrase tank,
-  S "is fully mixed, so the", phrase temp_W `isThe`
-  S "same throughout the entire", phrase tank, sSqBr (makeRefS rocTempSimp)])
-
-assumpS4 = 
-  (foldlSent [S "The", phrase w_density, S "has no spatial variation; that is"
-  `sC` S "it is constant over their entire", phrase vol, sSqBr ((makeRefS rocTempSimp)`sC`
-  (makeRefS likeChgTCVOD))])
-
-newA5NoPCM :: AssumpChunk
-newA5NoPCM = assump "Density-Water-Constant-over-Volume" assumpS4 
-  (mkLabelRAAssump' "Density-Water-Constant-over-Volume")
-
-assumpDWCoW = cic "assumpDWCoW" assumpS4
-  "Density-Water-Constant-over-Volume" assumpDom
-
-assumpS5 = 
-  (foldlSent [S "The", phrase htCap_W, S "has no spatial variation; that", 
-  S "is, it is constant over its entire", phrase vol, sSqBr (makeRefS rocTempSimp)])
-
-newA6NoPCM :: AssumpChunk
-newA6NoPCM = assump "Specific-Heat-Energy-Constant-over-Volume" assumpS5 
-  (mkLabelRAAssump' "Specific-Heat-Energy-Constant-over-Volume") 
-
-assumpSHECoW = cic "assumpSHECoW" assumpS5
-  "Specific-Heat-Energy-Constant-over-Volume" assumpDom
-
-assumpS9_npcm = 
-  (foldlSent [S "The", phrase model, S "only accounts for charging",
-  S "of the tank" `sC` S "not discharging. The", phrase temp_W, S "can only",
-  S "increase, or remain constant; it cannot decrease. This implies that the",
-  phrase temp_init, S "is less than (or equal to) the", phrase temp_C,
-  sSqBr ((makeRefS eBalanceOnWtr) `sC` (makeRefS likeChgDT))])
-
-newA9NoPCM :: AssumpChunk
-newA9NoPCM = assump "Charging-Tank-No-Temp-Discharge" assumpS9_npcm 
-  (mkLabelRAAssump' "Charging-Tank-No-Temp-Discharge")
-
-assumpCTNTD = cic "assumpCTNTD" assumpS9_npcm
-  "Charging-Tank-No-Temp-Discharge" assumpDom
-
-assumpS12 = 
-  (S "No internal" +:+ phrase heat +:+ S "is generated by the water; therefore, the"
-  +:+ phrase vol_ht_gen +:+ S "is zero" +:+.
-  sSqBr (makeRefS eBalanceOnWtr))
-
-newA16 :: AssumpChunk
-newA16 = assump "No-Internal-Heat-Generation-By-Water" assumpS12 
-  (mkLabelRAAssump' "No-Internal-Heat-Generation-By-Water")
-
-assumpNIHGBW = cic "assumpNIHGBW" assumpS12
-  "No-Internal-Heat-Generation-By-Water" assumpDom
-
-assumpS13 = 
-  (S "The pressure in the" +:+ phrase tank +:+ S "is atmospheric, so the" +:+
-  phrase melt_pt `sAnd` phrase boil_pt +:+ S "of water are" +:+ S (show (0 :: Integer))
-  :+: Sy (unit_symb QT.temp) `sAnd` S (show (100 :: Integer)) :+:
-  Sy (unit_symb QT.temp) `sC` S "respectively" +:+.
-  sSqBr ((makeRefS eBalanceOnWtr) `sC` (makeRefS eBalanceOnPCM)))
-
-newA19 :: AssumpChunk
-newA19 = assump "Atmospheric-Pressure-Tank" assumpS13 
-  (mkLabelRAAssump' "Atmospheric-Pressure-Tank")
-
-assumpAPT = cic "assumpAPT" assumpS13
-  "Atmospheric-Pressure-Tank" assumpDom
 
 genDefnDesc2 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]

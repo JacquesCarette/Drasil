@@ -18,7 +18,6 @@ library
     , Language.Drasil.Expr.Math
     , Language.Drasil.Expr.Precedence
     , Language.Drasil.Chunk.AssumpChunk
-    , Language.Drasil.Chunk.Attribute
     , Language.Drasil.Chunk.Citation
     , Language.Drasil.Chunk.CommonIdea
     , Language.Drasil.Chunk.Concept

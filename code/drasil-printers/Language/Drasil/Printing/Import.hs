@@ -414,3 +414,6 @@ item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
 labref :: Maybe RefAdd -> Maybe P.Spec
 labref l = maybe Nothing (\z -> Just $ P.S z) l
 
+-- | Helper for getting a short name
+getShortName :: HasShortName c => c -> Sentence
+getShortName c = S . getStringSN $ c ^. shortname

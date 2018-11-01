@@ -1,5 +1,6 @@
 module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
-  normShrR, momentEql, generalDefinitions) where
+  normShrR, momentEql, generalDefinitions,
+  normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, normShrRGD, momentEqlGD) where
 
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
@@ -17,7 +18,7 @@ import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 
 import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, sAnd)
 
-import Drasil.SSP.Assumptions (newA5)
+import Drasil.SSP.Assumptions (newA6)
 import Drasil.SSP.BasicExprs (eqlExpr, momExpr)
 import Drasil.SSP.DataDefs (lengthLs, sliceWght)
 import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf)
@@ -33,14 +34,15 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 --  General Definitions  --
 ---------------------------
 generalDefinitions :: [GenDefn]
-generalDefinitions = [
-  gd'' normForcEq  [makeRef chen2005]   "normForcEq"  [nmFEq_desc],
-  gd'' bsShrFEq    [makeRef chen2005]   "bsShrFEq"    [bShFEq_desc],
-  gd'' resShr      [makeRef chen2005]   "resShr"      [resShr_desc],
-  gd'' mobShr      [makeRef chen2005]   "mobShr"      [mobShr_desc],
-  gd'' normShrR    [makeRef chen2005]   "normShrR"    [nmShrR_desc],
-  gd'' momentEql   [makeRef chen2005]   "momentEql"   [momEql_desc]
-  ]
+generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, normShrRGD, momentEqlGD]
+
+normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, normShrRGD, momentEqlGD :: GenDefn
+normForcEqGD = gd'' normForcEq  [makeRef chen2005]   "normForcEq"  [nmFEq_desc]
+bsShrFEqGD   = gd'' bsShrFEq    [makeRef chen2005]   "bsShrFEq"    [bShFEq_desc]
+resShrGD     = gd'' resShr      [makeRef chen2005]   "resShr"      [resShr_desc]
+mobShrGD     = gd'' mobShr      [makeRef chen2005]   "mobShr"      [mobShr_desc]
+normShrRGD   = gd'' normShrR    [makeRef chen2005]   "normShrR"    [nmShrR_desc]
+momentEqlGD  = gd'' momentEql   [makeRef chen2005]   "momentEql"   [momEql_desc]
 
 --
 normForcEq :: RelationConcept
@@ -143,7 +145,7 @@ nmShrR_rel = sy intShrForce $= sy normToShear * sy scalFunc * sy intNormForce
 
 nmShrR_desc :: Sentence
 nmShrR_desc = foldlSent [S "The", phrase assumption,
-  S "for the Morgenstern Price", phrase method_, sParen (makeRefS newA5),
+  S "for the Morgenstern Price", phrase method_, sParen (makeRefS newA6),
   S "that the", phrase intrslce, phrase shearForce, ch xi,
   S "is proportional to the", phrase intrslce, 
   phrase normForce, ch intNormForce, S "by a proportionality constant",

@@ -14,7 +14,7 @@ import Data.Drasil.SentenceStructures (eqN, foldlSentCol, foldlSP, getTandS,
   isThe, ofThe', sAnd)
 import Data.Drasil.Concepts.Math (equation)
 
-
+import Drasil.SSP.Assumptions (newA10, newA11)
 import Drasil.SSP.BasicExprs (eqlExpr)
 import Drasil.SSP.Labels (genDef2Label, genDef3Label, sliceWghtL, baseWtrFL, 
   surfWtrFL, intersliceWtrFL, angleAL, angleBL, lengthLbL , sliceWghtL, 
@@ -250,8 +250,7 @@ mobShearWOEqn = ((inxi slcWght) + (inxi surfHydroForce) *
   (inxi surfLoad) * (sin (inxi impLoadAngle))) * (cos (inxi baseAngle))
 
 mobShr_deriv_ssp :: Derivation
-mobShr_deriv_ssp = (weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ssp]) ++
-  mobShr_deriv_sentences_ssp_s3
+mobShr_deriv_ssp = (weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ssp])
 
 -----------------
 -- Hacks --------
@@ -296,15 +295,20 @@ resShr_deriv_sentences_ssp_s3 = [S "Using", ch nrmFNoIntsl `sC` S "a", phrase sh
   shearRNoIntsl ^. defn, S "can be solved for in terms of all known",
   plural value, S "as done in", eqN 3]
 
+resShr_deriv_sentences_ssp_s4 :: [Sentence]
+resShr_deriv_sentences_ssp_s4 = [S "This can be further simplified by considering assumptions",
+  makeRefS newA10, S "and", makeRefS newA11 `sC`
+  S "which state that the seismic coefficient and the external force" `sC` S "respectively"
+  `sC` S "are0", S "Removing seismic and external forces yields ", eqN 4]
 
 resShrDerivation_sentence :: [Sentence]
 resShrDerivation_sentence = map foldlSentCol [resShr_deriv_sentences_ssp_s1, resShr_deriv_sentences_ssp_s2,
-  resShr_deriv_sentences_ssp_s3]
+  resShr_deriv_sentences_ssp_s3, resShr_deriv_sentences_ssp_s4]
 
 resShr_deriv_eqns_ssp :: [Expr]
-resShr_deriv_eqns_ssp = [eq1, eq2, eq3]
+resShr_deriv_eqns_ssp = [eq1, eq2, eq3, eq8]
 
-eq1, eq2, eq3 :: Expr
+eq1, eq2, eq3, eq8 :: Expr
 eq1 = (inxi nrmFSubWat) $= eqlExpr cos sin (\x y -> x -
   inxiM1 intShrForce + inxi intShrForce + y) - inxi baseHydroForce
 
@@ -325,6 +329,14 @@ eq3 = inxi shearRNoIntsl $= (inxi nrmFNoIntsl) * tan (inxi fricAngle) +
   (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi cohesion) *
   (inxi baseWthX) * sec (inxi baseAngle)
 
+eq8 = inxi shearRNoIntsl $=
+  (((inxi slcWght) + (inxi surfHydroForce) * (cos (inxi surfAngle))) * (cos (inxi baseAngle)) +
+  (- (inxi watrForceDif) +
+  (inxi surfHydroForce) * sin (inxi surfAngle) + (inxi surfLoad) *
+  (sin (inxi impLoadAngle))) * (sin (inxi baseAngle)) -
+  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi cohesion) *
+  (inxi baseWthX) * sec (inxi baseAngle)
+
 -------old chunk---------
 
 resShrDerivation :: [Contents]
@@ -335,7 +347,7 @@ resShrDerivation = [
   phrase nrmFSubWat, S "in the", phrase equation, S "for", ch shrResI,
   S "of the soil is defined in the perpendicular force equilibrium",
   S "of a slice from", makeRefS genDef2Label `sC` S "using the", getTandS nrmFSubWat,
-  S "of", makeRefS effStress, S "shown in", eqN 1],
+  S "of", makeRefS effStress, S "shown in", eqN 5],
   
   eqUnR' $ (inxi nrmFSubWat) $= eqlExpr cos sin (\x y -> x -
   inxiM1 intShrForce + inxi intShrForce + y) - inxi baseHydroForce,
@@ -378,27 +390,31 @@ resShrDerivation = [
 mobShr_deriv_sentences_ssp_s1 :: [Sentence]
 mobShr_deriv_sentences_ssp_s1 = [S "The", phrase mobShrI, S "acting on a slice is defined as",
   ch mobShrI, S "from the force equilibrium in", makeRefS genDef2Label `sC`
-  S "also shown in", eqN 4]
+  S "also shown in", eqN 5]
 
 mobShr_deriv_sentences_ssp_s2 :: [Sentence]
 mobShr_deriv_sentences_ssp_s2 = [S "The", phrase equation, S "is unsolvable, containing the unknown",
   getTandS intNormForce, S "and" +:+. getTandS intShrForce,
   S "Consider a force equilibrium", S wiif `sC` S "to obtain the",
-  getTandS shearFNoIntsl `sC` S "as done in", eqN 5]
+  getTandS shearFNoIntsl `sC` S "as done in", eqN 6]
 
 mobShr_deriv_sentences_ssp_s3 :: [Sentence]
-mobShr_deriv_sentences_ssp_s3 = [S "The" +:+ plural value +:+ S "of" +:+ ch shearRNoIntsl `sAnd`
-  ch shearFNoIntsl +:+ S "are now defined completely in terms of the" +:+
-  S "known force property" +:+ plural value +:+ S "of" +:+ makeRefS sliceWght +:+ S "to" +:+. makeRefS lengthLs]
+mobShr_deriv_sentences_ssp_s3 = [S "The" +:+ plural value +:+ S "of" +:+ 
+  ch shearFNoIntsl +:+ S "is now defined completely in terms of the" +:+
+  S "known" +:+. plural value +:+ S "This can be further simplified by considering assumptions" +:+
+  makeRefS newA10 +:+ S "and" +:+ makeRefS newA11 `sC`
+  S "which state that the seismic coefficient and the external force" `sC` S "respectively"
+  `sC` S "are0" +:+ S "Removing seismic and external forces yields " +:+ eqN 7]
 
 
 mobShrDerivation_sentence :: [Sentence]
-mobShrDerivation_sentence = map foldlSentCol [mobShr_deriv_sentences_ssp_s1, mobShr_deriv_sentences_ssp_s2]
+mobShrDerivation_sentence = map foldlSentCol [mobShr_deriv_sentences_ssp_s1, mobShr_deriv_sentences_ssp_s2,
+  mobShr_deriv_sentences_ssp_s3]
 
 mobShr_deriv_eqns_ssp :: [Expr]
-mobShr_deriv_eqns_ssp = [eq4, eq5]
+mobShr_deriv_eqns_ssp = [eq4, eq5, eq6]
 
-eq4, eq5:: Expr
+eq4, eq5, eq6:: Expr
 eq4 = inxi mobShrI $= eqlExpr sin cos
     (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
 
@@ -407,6 +423,11 @@ eq5 = inxi shearFNoIntsl $= ((inxi slcWght) + (inxi surfHydroForce) *
   (sin (inxi baseAngle)) - (negate (sy earthqkLoadFctr) * (inxi slcWght) -
   (inxi watrForceDif) + (inxi surfHydroForce) * sin (inxi surfAngle) +
   (inxi surfLoad) * (sin (inxi impLoadAngle))) * (cos (inxi baseAngle))
+
+eq6 = inxi shearFNoIntsl $= ((inxi slcWght) + (inxi surfHydroForce) *
+  (cos (inxi surfAngle))) *
+  (sin (inxi baseAngle)) -
+  ((inxi watrForceDif) + (inxi surfHydroForce) * sin (inxi surfAngle)) * (cos (inxi baseAngle))
 
   ------old chunk-----
 mobShrDerivation :: [Contents]

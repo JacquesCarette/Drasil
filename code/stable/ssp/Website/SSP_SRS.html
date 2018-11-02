@@ -1137,15 +1137,22 @@ Slip-Surface-Concave: The slip surface is concave with respect to the slope surf
 </ul>
 <ul class="hide-list-style">
 <li>
-<div id="A:Geo-Slope-Mat-Props-of-Soil-Inputs">
-Geo-Slope-Mat-Props-of-Soil-Inputs: The geometry of the slope, and the material properties of the soil layers are given as inputs.
+<div id="A:Factor-of-Safety">
+Factor-of-Safety: The factor of safety is assumed to be constant across a whole slip surface.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Soil-Layer-Homogeneous">
-Soil-Layer-Homogeneous: The different layers of the soil are homogeneous, with consistent soil properties throughout, and independent of dry or saturated conditions, with the exception of unit weight.
+Soil-Layer-Homogeneous: The different layers of the soil are homogeneous, with consistent soil properties throughout.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="A:Soil-Properties">
+Soil-Properties: The soil properties are independent of dry or saturated conditions, with the exception of unit weight.
 </div>
 </li>
 </ul>
@@ -1160,20 +1167,6 @@ Soil-Layers-Isotropic: Soil layers are treated as if they have isotropic propert
 <li>
 <div id="A:Interslice-Norm-Shear-Forces-Linear">
 Interslice-Norm-Shear-Forces-Linear: Interslice normal and shear forces have a linear relationship, proportional to a constant (<em>λ</em>) and an interslice force function (<em>f</em>) depending on x position.
-</div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:Base-Norm-Shear-Forces-Linear-on-FS">
-Base-Norm-Shear-Forces-Linear-on-FS: Slice to base normal and shear forces have a linear relationship, dependent on the factor of safety <em>FS</em>, and the Coulomb sliding law.
-</div>
-</li>
-</ul>
-<ul class="hide-list-style">
-<li>
-<div id="A:Stress-Strain-Curve-interslice-Linear">
-Stress-Strain-Curve-interslice-Linear: The stress - strain curve for interslice relationships is linear with a constant slope.
 </div>
 </li>
 </ul>
@@ -1195,6 +1188,20 @@ Effective-Norm-Stress-Large: The effective normal stress is large enough that th
 <li>
 <div id="A:Surface-Base-Slice-between-Interslice-Straight-Lines">
 Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice between interslice nodes are approximated as straight lines.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="A:Seismic-Force">
+Seismic-Force: There is no seismic force acting on the slope.
+</div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
+<div id="A:Surface-Load">
+Surface-Load: There is no imposed surface, load and therefore no external force, acting on the slope.
 </div>
 </li>
 </ul>
@@ -1337,7 +1344,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-For a body in static equilibrium, the net forces and net moments acting on the body will cancel out. Assuming a 2D problem (<a href=#A:Plane-Strain-Conditions>A: Plane-Strain-Conditions</a>) the x-component of the net force <em>F<sub>x</sub></em> and y-component of the net force <em>F<sub>y</sub></em> will be equal to <em>0</em>. All forces and their distance from the chosen point of rotation will create a net moment equal to <em>0</em>.
+For a body in static equilibrium, the net forces and net moments acting on the body will cancel out. Assuming a 2D problem (<a href=#A:Effective-Norm-Stress-Large>A: Effective-Norm-Stress-Large</a>) the x-component of the net force <em>F<sub>x</sub></em> and y-component of the net force <em>F<sub>y</sub></em> will be equal to <em>0</em>. All forces and their distance from the chosen point of rotation will create a net moment equal to <em>0</em>.
 </p>
 </td>
 </tr>
@@ -1414,7 +1421,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the resistive shear stress <em>τ</em> is proportional to the product of the normal stress on the plane <em>σ</em> with it's static friction in the angular form <em>tan(φ&prime;) = U<sub>t</sub></em>. The <em>τ</em> versus <em>σ</em> relationship is not truly linear, but assuming the effective normal force is strong enough, it can be approximated with a linear fit (<a href=#A:Effective-Norm-Stress-Large>A: Effective-Norm-Stress-Large</a>) where the cohesion <em>c&prime;</em> represents the <em>τ</em> intercept of the fitted line.
+For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the resistive shear stress <em>τ</em> is proportional to the product of the normal stress on the plane <em>σ</em> with it's static friction in the angular form <em>tan(φ&prime;) = U<sub>t</sub></em>. The <em>τ</em> versus <em>σ</em> relationship is not truly linear, but assuming the effective normal force is strong enough, it can be approximated with a linear fit (<a href=#A:Surface-Base-Slice-between-Interslice-Straight-Lines>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>) where the cohesion <em>c&prime;</em> represents the <em>τ</em> intercept of the fitted line.
 </p>
 </td>
 </tr>
@@ -3460,6 +3467,14 @@ Using <em>N*</em>, a resistive shear force without the influence of interslice f
 <em>R<sub>i</sub> = N*<sub>i</sub>&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(α<sub>i</sub>) = ((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;ΔH<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(α<sub>i</sub>)</em>
 </div>
 </div>
+<p class="paragraph">
+This can be further simplified by considering assumptions <a href=#A:Seismic-Force>A: Seismic-Force</a> and <a href=#A:Surface-Load>A: Surface-Load</a>, which state that the seismic coefficient and the external force, respectively, are0 Removing seismic and external forces yields  equation (4):
+</p>
+<div id="Eqn:empty">
+<div class="equation">
+<em>R<sub>i</sub> = ((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;ΔH<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(α<sub>i</sub>)</em>
+</div>
+</div>
 <div id="DD:mobShearWO">
 <table class="ddefn">
 <tr>
@@ -3566,7 +3581,7 @@ FIXME: This needs to be filled in
 </table>
 </div>
 <p class="paragraph">
-The mobilized shear force acting on a slice is defined as <em>S</em> from the force equilibrium in <a href=#GD:bsShrFEq>GD: bsShrFEq</a>, also shown in equation (4):
+The mobilized shear force acting on a slice is defined as <em>S</em> from the force equilibrium in <a href=#GD:bsShrFEq>GD: bsShrFEq</a>, also shown in equation (5):
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -3574,7 +3589,7 @@ The mobilized shear force acting on a slice is defined as <em>S</em> from the fo
 </div>
 </div>
 <p class="paragraph">
-The equation is unsolvable, containing the unknown interslice normal force <em>G</em> and interslice shear force <em>X</em>. Consider a force equilibrium without the influence of interslice forces, to obtain the mobilized shear force <em>T</em>, as done in equation (5):
+The equation is unsolvable, containing the unknown interslice normal force <em>G</em> and interslice shear force <em>X</em>. Consider a force equilibrium without the influence of interslice forces, to obtain the mobilized shear force <em>T</em>, as done in equation (6):
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -3582,8 +3597,13 @@ The equation is unsolvable, containing the unknown interslice normal force <em>G
 </div>
 </div>
 <p class="paragraph">
-The values of <em>R</em> and <em>T</em> are now defined completely in terms of the known force property values of <a href=#DD:sliceWght>DD: sliceWght</a> to <a href=#DD:lengthLs>DD: lengthLs</a>.
+The values of <em>T</em> is now defined completely in terms of the known values. This can be further simplified by considering assumptions <a href=#A:Seismic-Force>A: Seismic-Force</a> and <a href=#A:Surface-Load>A: Surface-Load</a>, which state that the seismic coefficient and the external force, respectively, are0 Removing seismic and external forces yields  equation (7):
 </p>
+<div id="Eqn:empty">
+<div class="equation">
+<em>T<sub>i</sub> = (W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(ΔH<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>))&#8239;cos(α<sub>i</sub>)</em>
+</div>
+</div>
 <div id="DD:fixme1">
 <table class="ddefn">
 <tr>
@@ -4150,7 +4170,7 @@ FIXME: This needs to be filled in
 </table>
 </div>
 <p class="paragraph">
-Taking the last static equation of <a href=#T:equilibrium>T: equilibrium</a> with the moment equilibrium of <a href=#GD:momentEql>GD: momentEql</a> about the midpoint of the base and the assumption of <a href=#GD:normShrR>GD: normShrR</a> results in equation (13):
+From the moment equilibrium of <a href=#GD:momentEql>GD: momentEql</a> with the primary assumption for the Morgenstern-Price method of <a href=#A:Interslice-Norm-Shear-Forces-Linear>A: Interslice-Norm-Shear-Forces-Linear</a> and associated definition <a href=#GD:normShrR>GD: normShrR</a> equation equation (9) can be derived:
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -4200,7 +4220,7 @@ K<sub>c</sub>&#8239;W<sub>i</sub>&#8239;h<sub>i</sub>
 </div>
 </div>
 <p class="paragraph">
-The equation in terms of <em>λ</em> leads to equation (14):
+Rearranging the equation in terms of <em>λ</em> leads to equation (10):
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -4257,7 +4277,7 @@ b<sub>i</sub>
 </div>
 </div>
 <p class="paragraph">
-Taking a summation of each slice, and applying the boundary condition that <em>G<sub>0</sub></em> and <em>G<sub>n</sub></em> are equal to <em>0</em>, a general equation for the constant <em>λ</em> is developed in equation (15), also found in <a href=#IM:nrmShrFor>IM: nrmShrFor</a>:
+Taking a summation of each slice, and applying the boundary condition that <em>G<sub>0</sub></em> and <em>G<sub>n</sub></em> are equal to <em>0</em>, and removing the seismic and external forces due to <a href=#A:Seismic-Force>A: Seismic-Force</a> and <a href=#A:Surface-Load>A: Surface-Load</a>, a general equation for the constant <em>λ</em> is developed in equation (11), also found in <a href=#IM:nrmShrFor>IM: nrmShrFor</a>:
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -4272,7 +4292,7 @@ Taking a summation of each slice, and applying the boundary condition that <em>G
 </div>
 </div>
 <p class="paragraph">
-equation (15) for <em>λ</em>, is a function of the unknown interslice normal force <em>G</em> <a href=#IM:intsliceFs>IM: intsliceFs</a>.
+equation (11) for <em>λ</em>, is a function of the unknown interslice normal force <em>G</em> <a href=#IM:intsliceFs>IM: intsliceFs</a>.
 </p>
 <div id="IM:intsliceFs">
 <table class="idefn">
@@ -4431,7 +4451,7 @@ FIXME: This needs to be filled in
 </table>
 </div>
 <p class="paragraph">
-Taking the normal force equilibrium of <a href=#GD:normForcEq>GD: normForcEq</a> with the effective stress definition from <a href=#T:effStress>T: effStress</a> that <em>N<sub>i</sub> = N&prime;<sub>i</sub>&minus;U<sub>b,i</sub></em>, and the assumption of <a href=#GD:normShrR>GD: normShrR</a> the equilibrium equation can be rewritten as equation (16):
+Substituting the normal force equilibrium of <a href=#GD:normForcEq>GD: normForcEq</a> and the assumption <a href=#A:Interslice-Norm-Shear-Forces-Linear>A: Interslice-Norm-Shear-Forces-Linear</a> represented by <a href=#GD:momentEql>GD: momentEql</a> into the effective normal force definition from <a href=#GD:normShrR>GD: normShrR</a> yields equation equation (12):
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -4928,12 +4948,12 @@ If changes were to be made with regard to the following, a different algorithm w
 <div class="list">
 <p>
 <div id="UC_normshearlinear">
-Normal-And-Shear-Linear-Only: Changes related to <a href=#A:Interslice-Norm-Shear-Forces-Linear>A: Interslice-Norm-Shear-Forces-Linear</a> and <a href=#A:Base-Norm-Shear-Forces-Linear-on-FS>A: Base-Norm-Shear-Forces-Linear-on-FS</a> are not possible due to the dependency of the calculations on the linear relationship between interslice normal and shear forces.
+Normal-And-Shear-Linear-Only: Changes related to <a href=#A:Soil-Layers-Isotropic>A: Soil-Layers-Isotropic</a> and <a href=#A:Interslice-Norm-Shear-Forces-Linear>A: Interslice-Norm-Shear-Forces-Linear</a> are not possible due to the dependency of the calculations on the linear relationship between interslice normal and shear forces.
 </div>
 </p>
 <p>
 <div id="UC_2donly">
-2D-Analysis-Only: <a href=#A:Plane-Strain-Conditions>A: Plane-Strain-Conditions</a> allows for 2D analysis with these models only because stress along z-direction is zero. These models do not take into account stress in the z-direction, and therefore cannot be without manipulation to attempt 3d analysis.
+2D-Analysis-Only: <a href=#A:Effective-Norm-Stress-Large>A: Effective-Norm-Stress-Large</a> allows for 2D analysis with these models only because stress along z-direction is zero. These models do not take into account stress in the z-direction, and therefore cannot be without manipulation to attempt 3d analysis.
 </div>
 </p>
 </div>

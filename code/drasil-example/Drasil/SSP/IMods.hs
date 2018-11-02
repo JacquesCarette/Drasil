@@ -16,10 +16,12 @@ import Data.Drasil.Concepts.Physics (force)
 import Data.Drasil.SentenceStructures (andThe, eqN, foldlSent, foldlSent_, 
   foldlSentCol, foldlSP, getTandS, getTDS, isThe, ofThe, ofThe', sAnd, sIs, sOf)
 
+import Drasil.SSP.Assumptions (newA10, newA11,newA6)
 import Drasil.SSP.BasicExprs (eqlExpr, momExpr)
 import Drasil.SSP.DataDefs (fixme1, fixme2,
   lengthLs, mobShearWO, resShearWO, seismicLoadF, sliceWght, 
   surfLoads)
+import Drasil.SSP.GenDefs (normShrRGD, momentEqlGD, normForcEqGD)
 import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice, slip, slope, ssa)
 import Drasil.SSP.Labels (genDef1Label, genDef2Label, genDef4Label, genDef5Label, 
   genDef6Label)
@@ -42,8 +44,7 @@ sspIMods = [fctSfty, nrmShrFor, intsliceFs, crtSlpId]
 
 --
 fctSfty :: InstanceModel
-fctSfty = im'' fctSfty_rc [qw shearRNoIntsl, qw shearFNoIntsl,
- qw mobShrC, qw shrResC, qw varblV]
+fctSfty = im'' fctSfty_rc [qw shearRNoIntsl, qw shearFNoIntsl, qw mobShrC, qw shrResC, qw varblV]
   [] (qw fs) [] [makeRef chen2005] fctSftyDeriv "fctSfty" [fcSfty_desc]
 
 fctSfty_rc :: RelationConcept
@@ -238,22 +239,22 @@ nrmShrDeriv :: Derivation
 nrmShrDeriv = (weave [nrmShrDerivationSentences, map E nrmShrDerivEqns]) ++ nrmShrDerivSentence4
 
 nrmShrDerivSentence1 :: [Sentence]
-nrmShrDerivSentence1 = [S "Taking the last static", phrase equation,
-  S "of", makeRefS equilibrium, S "with the", S "moment equilibrium" `sOf` makeRefS genDef6Label,
-  S "about", (S "midpoint" `ofThe` S "base") `sAnd` S "the",
-  phrase assumption, S "of", makeRefS genDef5Label, S "results in", eqN 13]
+nrmShrDerivSentence1 = [S "From the moment equilibrium of", makeRefS momentEqlGD,
+  S "with the primary assumption for the Morgenstern-Price method of", makeRefS newA6 `sAnd`
+  S "associated definition", makeRefS normShrRGD, S "equation", eqN 9, S "can be derived"]
 
 nrmShrDerivSentence2 :: [Sentence]
-nrmShrDerivSentence2 = [S "The", phrase equation, S "in terms of", ch normToShear,
-  S "leads to", eqN 14]
+nrmShrDerivSentence2 = [S "Rearranging the", phrase equation, S "in terms of", ch normToShear,
+  S "leads to", eqN 10]
 
 nrmShrDerivSentence3 :: [Sentence]
 nrmShrDerivSentence3 = [S "Taking a summation of each slice, and", boundaryCon `sC`
-  S "a general", phrase equation, S "for the constant", ch normToShear,
-  S "is developed in", eqN 15 `sC` S "also found in", makeRefS nrmShrFor]
+  S "and removing the seismic and external forces due to", makeRefS newA10 `sAnd` makeRefS newA11
+  `sC` S "a general", phrase equation, S "for the constant", ch normToShear,
+  S "is developed in", eqN 11 `sC` S "also found in", makeRefS nrmShrFor]
 
 nrmShrDerivSentence4 :: [Sentence]
-nrmShrDerivSentence4 = [eqN 15 +:+ S "for" +:+ ch normToShear `sC`
+nrmShrDerivSentence4 = [eqN 11 +:+ S "for" +:+ ch normToShear `sC`
   S "is a function of the unknown" +:+ getTandS intNormForce +:+. makeRefS intsliceFs]
 
 
@@ -289,13 +290,11 @@ intrSlcDeriv :: Derivation
 intrSlcDeriv = weave [intrSlcDerivationSentences, map E intrSlcDerivEqns] ++ fUnknowns
 
 intrSlcDerivSentence1 :: [Sentence]
-intrSlcDerivSentence1 = [S "Taking the", S "normal force equilibrium" `sOf` makeRefS genDef1Label,
-  S "with the", S "effective stress", phrase definition, S "from", makeRefS effStress,
-  -- NOTE: "Taking this with that and the assumption of _
-  -- to get equation #" pattern
-  S "that", E (inxi totNrmForce $= inxi nrmFSubWat - inxi baseHydroForce) `sC`
-  S "and the assumption of", makeRefS genDef5Label, S "the equilibrium", phrase equation, 
-  S "can be rewritten as", eqN 16]
+intrSlcDerivSentence1 = [S "Substituting the", S "normal force equilibrium" `sOf`
+  (makeRefS normForcEqGD) `sAnd` S "the assumption", makeRefS newA6,
+  S "represented by", makeRefS momentEqlGD, 
+  S "into the effective normal force definition from", makeRefS normShrRGD,
+  S "yields equation", eqN 12] 
 
 intrSlcDerivSentence2 :: [Sentence]
 intrSlcDerivSentence2 = [S "Taking the", S "base shear force equilibrium" `sOf`

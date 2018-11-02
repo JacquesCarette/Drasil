@@ -1,5 +1,6 @@
 module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
-  normShrR, momentEql, generalDefinitions) where
+  normShrR, momentEql, generalDefinitions,
+  normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, normShrRGD, momentEqlGD) where
 
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
@@ -17,11 +18,11 @@ import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 
 import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, sAnd)
 
-import Drasil.SSP.Assumptions (newA5)
-import Drasil.SSP.BasicExprs (eqlExpr, momExpr)
+import Drasil.SSP.Assumptions (newA6)
+import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
 import Drasil.SSP.DataDefs (lengthLs, sliceWght)
 import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf)
-import Drasil.SSP.Labels (genDef3Label)
+import Drasil.SSP.Labels (genDef3Label, forceDiagramL)
 import Drasil.SSP.References (chen2005)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
@@ -33,14 +34,15 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 --  General Definitions  --
 ---------------------------
 generalDefinitions :: [GenDefn]
-generalDefinitions = [
-  gd'' normForcEq  [makeRef chen2005]   "normForcEq"  [nmFEq_desc],
-  gd'' bsShrFEq    [makeRef chen2005]   "bsShrFEq"    [bShFEq_desc],
-  gd'' resShr      [makeRef chen2005]   "resShr"      [resShr_desc],
-  gd'' mobShr      [makeRef chen2005]   "mobShr"      [mobShr_desc],
-  gd'' normShrR    [makeRef chen2005]   "normShrR"    [nmShrR_desc],
-  gd'' momentEql   [makeRef chen2005]   "momentEql"   [momEql_desc]
-  ]
+generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, normShrRGD, momentEqlGD]
+
+normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, normShrRGD, momentEqlGD :: GenDefn
+normForcEqGD = gd'' normForcEq  [makeRef chen2005]   "normForcEq"  [nmFEq_desc]
+bsShrFEqGD   = gd'' bsShrFEq    [makeRef chen2005]   "bsShrFEq"    [bShFEq_desc]
+resShrGD     = gd'' resShr      [makeRef chen2005]   "resShr"      [resShr_desc]
+mobShrGD     = gd'' mobShr      [makeRef chen2005]   "mobShr"      [mobShr_desc]
+normShrRGD   = gd'' normShrR    [makeRef chen2005]   "normShrR"    [nmShrR_desc]
+momentEqlGD  = gd'' momentEql   [makeRef chen2005]   "momentEql"   [momEql_desc]
 
 --
 normForcEq :: RelationConcept
@@ -52,19 +54,10 @@ nmFEq_rel = inxi totNrmForce $= eqlExpr cos sin
   (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
 
 nmFEq_desc :: Sentence
-nmFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
-  S "in the", phrase slope, S "the", phrase force,
-  S "equilibrium to satisfy", makeRefS equilibrium, S "in the direction",
-  phrase perp, S "to" +:+. (S "base" +:+ phrase surface `ofThe`
-  phrase slice), S "Rearranged to solve for", (phrase normForce `ofThe`
-  phrase surface) +:+. ch totNrmForce, at_start force, S "equilibrium is",
-  S "derived from the free body diagram of",
-  makeRefS SRS.physSystLabel, S "Index i",
-  S "refers to", (plural value `ofThe` plural property), S "for",
-  phrase slice :+: S "/" :+: plural intrslce, S "following convention in" +:+.
-  makeRefS SRS.physSystLabel, at_start force, phrase variable,
-  plural definition, S "can be found in", makeRefS sliceWght, S "to",
-  makeRefS lengthLs]
+nmFEq_desc = foldlSent [S "This equation satisfies", makeRefS equilibrium +:+.
+  S "in the shear direction", at_start force, S "equilibrium is",
+  S "derived from the free body diagram of", makeRefS forceDiagramL,
+  S "in", makeRefS SRS.physSystLabel]
 
 --
 bsShrFEq :: RelationConcept
@@ -72,23 +65,14 @@ bsShrFEq = makeRC "bsShrFEq" (nounPhraseSP "base shear force equilibrium")
   bShFEq_desc bShFEq_rel -- genDef2Label
 
 bShFEq_rel :: Relation
-bShFEq_rel = inxi mobShrI $= eqlExpr sin cos
+bShFEq_rel = inxi mobShrI $= eqlExprN sin cos
   (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
 
 bShFEq_desc :: Sentence
-bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
-  S "in the", phrase slope, S "the", phrase force,
-  S "equilibrium to satisfy", makeRefS equilibrium, S "in the direction",
-  S "parallel to" +:+. (S "base" +:+ phrase surface `ofThe`
-  phrase slice), S "Rearranged to solve for the", phrase shearForce,
-  S "on the base" +:+. ch mobShrI, at_start force, S "equilibrium is",
-  S "derived from the free body diagram of",
-  makeRefS SRS.physSystLabel, S "Index", ch index,
-  S "refers to", (plural value `ofThe` plural property), S "for",
-  phrase slice :+: S "/" :+: plural intrslce, S "following convention in" +:+.
-  makeRefS SRS.physSystLabel, at_start force, phrase variable,
-  plural definition, S "can be found in", makeRefS sliceWght, S "to",
-  makeRefS lengthLs]
+bShFEq_desc = foldlSent [S "This equation satisfies", makeRefS equilibrium +:+.
+  S "in the shear direction", at_start force, S "equilibrium is",
+  S "derived from the free body diagram of", makeRefS forceDiagramL,
+  S "in", makeRefS SRS.physSystLabel]
 
 --
 shrResEqn :: Expr
@@ -143,7 +127,7 @@ nmShrR_rel = sy intShrForce $= sy normToShear * sy scalFunc * sy intNormForce
 
 nmShrR_desc :: Sentence
 nmShrR_desc = foldlSent [S "The", phrase assumption,
-  S "for the Morgenstern Price", phrase method_, sParen (makeRefS newA5),
+  S "for the Morgenstern Price", phrase method_, sParen (makeRefS newA6),
   S "that the", phrase intrslce, phrase shearForce, ch xi,
   S "is proportional to the", phrase intrslce, 
   phrase normForce, ch intNormForce, S "by a proportionality constant",

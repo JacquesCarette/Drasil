@@ -491,7 +491,7 @@ Description & \begin{symbDescription}
               \item{$H$ is the interslice water force (N)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & For a slice of mass in the slope the force equilibrium to satisfy \hyperref[T:equilibrium]{Definition~T:equilibrium} in the direction perpendicular to the base surface of the slice. Rearranged to solve for the normal force of the surface $N$. Force equilibrium is derived from the free body diagram of Section~\ref{Sec:PhysSyst} Index i refers to the values of the properties for slice/interslices following convention in Section~\ref{Sec:PhysSyst}. Force variable definitions can be found in \hyperref[DD:sliceWght]{Definition~DD:sliceWght} to \hyperref[DD:lengthLs]{Definition~DD:lengthLs}.
+Notes & This equation satisfies \hyperref[T:equilibrium]{Definition~T:equilibrium} in the shear direction. Force equilibrium is derived from the free body diagram of Figure~\ref{Figure:ForceDiagram} in Section~\ref{Sec:PhysSyst}.
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
@@ -508,7 +508,7 @@ RefBy & FIXME: This needs to be filled in
 Label & Base shear force equilibrium
 \\ \midrule \\
 Equation & \begin{dmath}
-           S_{i}=\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)+\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)
+           S_{i}=\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -526,7 +526,7 @@ Description & \begin{symbDescription}
               \item{$H$ is the interslice water force (N)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & For a slice of mass in the slope the force equilibrium to satisfy \hyperref[T:equilibrium]{Definition~T:equilibrium} in the direction parallel to the base surface of the slice. Rearranged to solve for the shear force on the base $S$. Force equilibrium is derived from the free body diagram of Section~\ref{Sec:PhysSyst} Index $i$ refers to the values of the properties for slice/interslices following convention in Section~\ref{Sec:PhysSyst}. Force variable definitions can be found in \hyperref[DD:sliceWght]{Definition~DD:sliceWght} to \hyperref[DD:lengthLs]{Definition~DD:lengthLs}.
+Notes & This equation satisfies \hyperref[T:equilibrium]{Definition~T:equilibrium} in the shear direction. Force equilibrium is derived from the free body diagram of Figure~\ref{Figure:ForceDiagram} in Section~\ref{Sec:PhysSyst}.
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\

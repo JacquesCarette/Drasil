@@ -18,6 +18,15 @@ eqlExpr f1_ f2_ _e_ = (inxi slcWght `_e_`
   (inxi surfHydroForce) * sin (inxi surfAngle) +
   (inxi surfLoad) * (sin (inxi impLoadAngle))) * (f2_ (inxi baseAngle))
 
+eqlExprN :: (Expr -> Expr) -> (Expr -> Expr) -> (Expr -> Expr -> Expr) -> Expr
+eqlExprN f1_ f2_ _e_ = (inxi slcWght `_e_`
+  (inxi surfHydroForce * cos (inxi surfAngle)) +
+  (inxi surfLoad) * (cos (inxi impLoadAngle))) * (f1_ (inxi baseAngle)) -
+  (negate (sy earthqkLoadFctr) * (inxi slcWght) - (inxi intNormForce) +
+  (inxiM1 intNormForce) - (inxi watrForce) + (inxiM1 watrForce) +
+  (inxi surfHydroForce) * sin (inxi surfAngle) +
+  (inxi surfLoad) * (sin (inxi impLoadAngle))) * (f2_ (inxi baseAngle))
+
 momExpr :: (Expr -> Expr -> Expr) -> Expr
 momExpr _e_ = (negate (inxi intNormForce) * (inxi sliceHght -
   inxi baseWthX / 2 *  tan (inxi baseAngle)) + inxiM1 intNormForce *

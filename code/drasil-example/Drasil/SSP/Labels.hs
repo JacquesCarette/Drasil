@@ -55,3 +55,7 @@ fctSftyL = mkLabelSame "fctSfty"    (Def Instance)
 nrmShrForL = mkLabelSame "nrmShrFor"  (Def Instance)
 inslideFxL = mkLabelSame "inslideFx"  (Def Instance)
 crtSlpIdL = mkLabelSame "crtSlpId"   (Def Instance)
+
+-- Fig
+forceDiagramL :: Label
+forceDiagramL = (mkLabelRAFig "ForceDiagram")

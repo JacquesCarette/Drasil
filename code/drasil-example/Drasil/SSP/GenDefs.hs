@@ -19,10 +19,10 @@ import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, sAnd)
 
 import Drasil.SSP.Assumptions (newA6)
-import Drasil.SSP.BasicExprs (eqlExpr, momExpr)
+import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
 import Drasil.SSP.DataDefs (lengthLs, sliceWght)
 import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf)
-import Drasil.SSP.Labels (genDef3Label)
+import Drasil.SSP.Labels (genDef3Label, forceDiagramL)
 import Drasil.SSP.References (chen2005)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
@@ -54,19 +54,10 @@ nmFEq_rel = inxi totNrmForce $= eqlExpr cos sin
   (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
 
 nmFEq_desc :: Sentence
-nmFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
-  S "in the", phrase slope, S "the", phrase force,
-  S "equilibrium to satisfy", makeRefS equilibrium, S "in the direction",
-  phrase perp, S "to" +:+. (S "base" +:+ phrase surface `ofThe`
-  phrase slice), S "Rearranged to solve for", (phrase normForce `ofThe`
-  phrase surface) +:+. ch totNrmForce, at_start force, S "equilibrium is",
-  S "derived from the free body diagram of",
-  makeRefS SRS.physSystLabel, S "Index i",
-  S "refers to", (plural value `ofThe` plural property), S "for",
-  phrase slice :+: S "/" :+: plural intrslce, S "following convention in" +:+.
-  makeRefS SRS.physSystLabel, at_start force, phrase variable,
-  plural definition, S "can be found in", makeRefS sliceWght, S "to",
-  makeRefS lengthLs]
+nmFEq_desc = foldlSent [S "This equation satisfies", makeRefS equilibrium +:+.
+  S "in the shear direction", at_start force, S "equilibrium is",
+  S "derived from the free body diagram of", makeRefS forceDiagramL,
+  S "in", makeRefS SRS.physSystLabel]
 
 --
 bsShrFEq :: RelationConcept
@@ -74,23 +65,14 @@ bsShrFEq = makeRC "bsShrFEq" (nounPhraseSP "base shear force equilibrium")
   bShFEq_desc bShFEq_rel -- genDef2Label
 
 bShFEq_rel :: Relation
-bShFEq_rel = inxi mobShrI $= eqlExpr sin cos
+bShFEq_rel = inxi mobShrI $= eqlExprN sin cos
   (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
 
 bShFEq_desc :: Sentence
-bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
-  S "in the", phrase slope, S "the", phrase force,
-  S "equilibrium to satisfy", makeRefS equilibrium, S "in the direction",
-  S "parallel to" +:+. (S "base" +:+ phrase surface `ofThe`
-  phrase slice), S "Rearranged to solve for the", phrase shearForce,
-  S "on the base" +:+. ch mobShrI, at_start force, S "equilibrium is",
-  S "derived from the free body diagram of",
-  makeRefS SRS.physSystLabel, S "Index", ch index,
-  S "refers to", (plural value `ofThe` plural property), S "for",
-  phrase slice :+: S "/" :+: plural intrslce, S "following convention in" +:+.
-  makeRefS SRS.physSystLabel, at_start force, phrase variable,
-  plural definition, S "can be found in", makeRefS sliceWght, S "to",
-  makeRefS lengthLs]
+bShFEq_desc = foldlSent [S "This equation satisfies", makeRefS equilibrium +:+.
+  S "in the shear direction", at_start force, S "equilibrium is",
+  S "derived from the free body diagram of", makeRefS forceDiagramL,
+  S "in", makeRefS SRS.physSystLabel]
 
 --
 shrResEqn :: Expr

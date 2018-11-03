@@ -72,12 +72,12 @@ image f c wp =
 image :: Doc -> Doc -> MaxWidthPercent -> Doc
 image f c 100 = 
   text "<figure>" <>
-  text "<img class=\"figure\" src=\"" <> f <> text "\" alt=\"" <> c <> text "\"></img>" <>
+  text "<p><img class=\"figure\" src=\"" <> f <> text "\" alt=\"" <> c <> text "\"></img>" <>
   text "<figcaption>" <> c <> text "</figcaption>" <>
   text "</figure>"
 image f c wp =
   text "<figure>" <>
-  text "<img class=\"figure\" src=\"" <> f <> text "\" alt=\"" <> c <> 
+  text "<p><img class=\"figure\" src=\"" <> f <> text "\" alt=\"" <> c <> 
   text ("\"style=\"max-width: " ++ show (wp / 100) ++ "%;\"></img>") <>
   text "<figcaption>" <> c <> text "</figcaption>" <>
   text "</figure>"

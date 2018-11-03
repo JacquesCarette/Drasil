@@ -84,7 +84,12 @@ makeCSS _ = vcat [
     text "  white-space: -o-pre-wrap;",
     text "  background: #faf8f0;}"],
   text ".list {text-align: left;}",
-  text ".figure {max-width: 100%;}",
+  vcat [
+    text "figure {",
+    text "max-width: 100%;",
+    text "text-align: center;",
+    text "font-style: bold;",
+    text "}"],
   vcat [
     text ".matrix {",
     text "  position: relative;",

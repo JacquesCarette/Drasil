@@ -110,7 +110,7 @@ div_tag = wrap "div"
 span_tag :: [String] -> String -> Doc
 span_tag = \t -> wrap "span" t . text
 
--- | Generates the CSS selectors necessary for a document
+{-- | Generates the CSS selectors necessary for a document
 makeCSS :: Document -> Doc  
 makeCSS _ = vcat [
 -- TODO: Autogenerate necessary css selectors only, make CSS configurable
@@ -227,7 +227,7 @@ makeCSS _ = vcat [
 -- | Create the link to the necessary CSS file
 linkCSS :: String -> Doc  
 linkCSS fn = 
-  text $ "<link rel=\"stylesheet\" type=\"text/css\" href=\""++fn++".css\">"
+  text $ "<link rel=\"stylesheet\" type=\"text/css\" href=\""++fn++".css\">"--}
 
 -- | Create and markup fractions
 fraction :: String -> String -> String  

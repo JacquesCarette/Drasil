@@ -16,8 +16,9 @@ import qualified Language.Drasil as L (People, Person,
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (em, wrap, refwrap, caption, image, div_tag,
   td, th, tr, bold, sub, sup, cases, fraction, reflink, reflinkURI, paragraph, h, html, body,
-  author, article_title, title, linkCSS, head_tag)
+  author, article_title, title, head_tag)
 import qualified Language.Drasil.Output.Formats as F
+import Language.Drasil.HTML.CSS (linkCSS)
 
 import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
 import Language.Drasil.Printing.Import (makeDocument)

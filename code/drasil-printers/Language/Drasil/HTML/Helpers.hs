@@ -62,12 +62,24 @@ reflinkURI :: String -> Doc -> Doc
 reflinkURI ref txt = text ("<a href=\"" ++ ref ++ "\">") <> txt <> text "</a>"
 
 -- | Helper for setting up figures
-image :: Doc -> Doc -> MaxWidthPercent -> Doc
+{--image :: Doc -> Doc -> MaxWidthPercent -> Doc
 image f c 100 = 
   text "<img class=\"figure\" src=\"" <> f <> text "\" alt=\"" <> c <> text "\"></img>"
 image f c wp =
   text "<img class=\"figure\" src=\"" <> f <> text "\" alt=\"" <> c <> 
-  text ("\"style=\"max-width: " ++ show (wp / 100) ++ "%;\"></img>")
+  text ("\"style=\"max-width: " ++ show (wp / 100) ++ "%;\"></img>")--}
+
+image :: Doc -> Doc -> MaxWidthPercent -> Doc
+image f c 100 = 
+  text "<figure>" <>
+  text "<img class=\"figure\" src=\"" <> f <> text "\" alt=\"" <> c <> text "\"></img>" <>
+  text "<figcaption>" <> c <> text "</figcaption>"
+image f c wp =
+  text "<figure>" <>
+  text "<img class=\"figure\" src=\"" <> f <> text "\" alt=\"" <> c <> 
+  text ("\"style=\"max-width: " ++ show (wp / 100) ++ "%;\"></img>") <>
+  text "<figcaption>" <> c <> text "</figcaption>"
+
 
 em :: Doc -> Doc
 -- | Emphasis (italics) tag

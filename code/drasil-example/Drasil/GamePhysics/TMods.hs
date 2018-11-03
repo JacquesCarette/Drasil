@@ -5,7 +5,7 @@ import Language.Drasil
 import Prelude hiding (id)
 import Control.Lens ((^.))
 
-import Drasil.GamePhysics.Assumptions (newA1)
+import Drasil.GamePhysics.Assumptions (newA1, newA2)
 import Drasil.GamePhysics.Unitals (dispNorm, dispUnit, force_1, force_2,
   mass_1, mass_2, r_OB, sqrDist, vel_B, vel_O)
 
@@ -196,4 +196,5 @@ newtonSLRDesc = foldlSent [S "The net", (phrase QP.torque),
   (sParen $ Sy $ unit_symb QP.momentOfInertia),
   S "denotes the", (phrase QP.momentOfInertia), S "of the" +:+.
   (phrase CP.rigidBody), S "We also assume that all",
-  (plural CP.rigidBody), S "involved are two-dimensional (A2)"]
+  (plural CP.rigidBody), S "involved are two-dimensional",
+  makeRefS newA2]

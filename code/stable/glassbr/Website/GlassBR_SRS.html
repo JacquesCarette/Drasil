@@ -1143,35 +1143,35 @@ explainScenario: This system only considers the external explosion scenario for 
 <ul class="hide-list-style">
 <li>
 <div id="A:standardValues">
-standardValues: The values provided in <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. <a href=#IM:probOfBreak>IM: probOfBreak</a>, <a href=#DD:loadDurFactor>DD: loadDurFactor</a>, <a href=#DD:nFL>DD: nFL</a>, <a href=#DD:dimlessLoad>DD: dimlessLoad</a>, and <a href=#DD:sdf.tol>DD: sdf_tol</a>
+standardValues: The values provided in <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:glassLite">
-glassLite: Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. <a href=#IM:calofCapacity>IM: calofCapacity</a> and <a href=#DD:dimlessLoad>DD: dimlessLoad</a>
+glassLite: Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:boundaryConditions">
-boundaryConditions: Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. <a href=#IM:probOfBreak>IM: probOfBreak</a>
+boundaryConditions: Boundary conditions for the glass slab are assumed to be 4-sided support for calculations.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:responseType">
-responseType: The response type considered in GlassBR is flexural. <a href=#IM:probOfBreak>IM: probOfBreak</a>
+responseType: The response type considered in GlassBR is flexural.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:ldfConstant">
-ldfConstant: With reference to <a href=#A:standardValues>A: standardValues</a>, the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. <a href=#DD:loadDurFactor>DD: loadDurFactor</a>
+ldfConstant: With reference to <a href=#A:standardValues>A: standardValues</a>, the value of load duration factor (<em>LDF</em>) is a constant in GlassBR.
 </div>
 </li>
 </ul>
@@ -1721,6 +1721,19 @@ Description
 </tr>
 <tr>
 <th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<a href=#A:standardValues>A: standardValues</a>
+</p>
+<p class="paragraph">
+<a href=#A:ldfConstant>A: ldfConstant</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Source
 </th>
 <td>
@@ -1935,6 +1948,9 @@ Notes
 </p>
 <p class="paragraph">
 <em>q&#770;<sub>tol</sub></em> is the tolerable load defined in <a href=#DD:tolLoad>DD: tolLoad</a>.
+</p>
+<p class="paragraph">
+<a href=#A:standardValues>A: standardValues</a>
 </p>
 </td>
 </tr>
@@ -2176,6 +2192,9 @@ Notes
 </p>
 <p class="paragraph">
 <em>q&#770;</em> is calculated with reference to <a href=#A:glassLite>A: glassLite</a>.
+</p>
+<p class="paragraph">
+<a href=#A:standardValues>A: standardValues</a>
 </p>
 </td>
 </tr>
@@ -2421,6 +2440,9 @@ Notes
 </p>
 <p class="paragraph">
 <em>P<sub>btol</sub></em> is the tolerable probability entered by the user.
+</p>
+<p class="paragraph">
+<a href=#A:standardValues>A: standardValues</a>
 </p>
 </td>
 </tr>
@@ -2729,6 +2751,22 @@ Description
 </tr>
 <tr>
 <th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<a href=#A:standardValues>A: standardValues</a>
+</p>
+<p class="paragraph">
+<a href=#A:boundaryConditions>A: boundaryConditions</a>
+</p>
+<p class="paragraph">
+<a href=#A:responseType>A: responseType</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Source
 </th>
 <td>
@@ -2849,7 +2887,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>LR</em> is the load resistance, which is also called capacity. <em>NFL</em> is the non-factored load. <em>GTF</em> is the glass type factor. <em>LSF</em> is the load share factor. Follows <a href=#A:glassCondition>A: glassCondition</a> and <a href=#A:glassType>A: glassType</a> (&quot;In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations&quot;) from <a href=#astm2009>astm2009</a> (pg. 53).
+<em>LR</em> is the load resistance, which is also called capacity. <em>NFL</em> is the non-factored load. <em>GTF</em> is the glass type factor. <em>LSF</em> is the load share factor. Follows <a href=#A:glassCondition>A: glassCondition</a> and <a href=#A:glassType>A: glassType</a> (&quot;In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations&quot;) from <a href=#astm2009>astm2009</a> (pg. 53) (<a href=#A:glassLite>A: glassLite</a>).
 </p>
 </td>
 </tr>

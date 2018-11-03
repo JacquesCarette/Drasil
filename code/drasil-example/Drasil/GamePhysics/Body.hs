@@ -19,7 +19,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
 
 import qualified Drasil.DocLang.SRS as SRS
 
-import Data.Drasil.Concepts.Documentation (assumpDom, assumption, body,
+import Data.Drasil.Concepts.Documentation (assumption, body,
   concept, condition, consumer, dataDefn, datumConstraint, document, endUser,
   environment, funcReqDom, game, genDefn, goalStmt, guide, inModel,
   information, input_, interface, item, model, nonfunctionalRequirement,
@@ -47,8 +47,8 @@ import Data.Drasil.Utils (makeTMatrix, itemRefToSent,
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
-  cartesian, friction, rightHand, collision, space, joint, damping)
-import qualified Data.Drasil.Concepts.Math as CM (equation, surface, constraint, law)
+  cartesian, friction, rightHand, collision, space)
+import qualified Data.Drasil.Concepts.Math as CM (equation, surface, law)
 
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)

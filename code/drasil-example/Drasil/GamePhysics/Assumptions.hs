@@ -3,17 +3,14 @@ module Drasil.GamePhysics.Assumptions where
 import Control.Lens ((^.))
 
 import Language.Drasil hiding (organization)
-import qualified Drasil.DocLang.SRS as SRS (valsOfAuxConsLabel)
 
-import Data.Drasil.Concepts.Documentation as Doc (condition, constant,
-  practice, reference, scenario, system, value, simulation, assumpDom)
-import Data.Drasil.Concepts.Math (calculation, surface, shape)
-import Data.Drasil.SentenceStructures (EnumType(Numb), FoldType(..), SepType(..),
-  WrapType(Parens), foldlEnumList, foldlList, foldlSent, foldlSent_, sAnd, sIn, sOf)
-import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
-import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
-  cartesian, friction, rightHand, collision, space, joint, damping)
-import qualified Data.Drasil.Concepts.Math as CM (equation, surface, constraint, law)
+import Data.Drasil.Concepts.Documentation as Doc (simulation, assumpDom)
+import Data.Drasil.SentenceStructures (FoldType(..), SepType(..),
+  foldlList, foldlSent)
+import Drasil.GamePhysics.Concepts (twoD)
+import qualified Data.Drasil.Concepts.Physics as CP (rigidBody,  
+  cartesian, rightHand, collision, joint, damping)
+import qualified Data.Drasil.Concepts.Math as CM (constraint)
 
 
 newAssumptions :: [AssumpChunk]

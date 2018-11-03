@@ -11,7 +11,7 @@ import Data.Drasil.Utils (eqUnR', weave)
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (definition, value)
 import Data.Drasil.SentenceStructures (eqN, foldlSentCol, foldlSP, getTandS, 
-  isThe, ofThe', sAnd)
+  ofThe', sAnd)
 import Data.Drasil.Concepts.Math (equation)
 
 import Drasil.SSP.Assumptions (newA10, newA11)

@@ -8,12 +8,12 @@ import Language.Drasil
 import Drasil.DocLang.SRS as SRS (physSystLabel)
 
 import Data.Drasil.Concepts.Documentation (assumption, definition, 
-  method_, property, system, value, variable)
+  method_, property, value, variable)
 import Data.Drasil.Concepts.Math (normal, perp, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 
-import Data.Drasil.Quantities.Physics (displacement, force)
+import Data.Drasil.Quantities.Physics (force)
 import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 
 import Data.Drasil.SentenceStructures (foldlSent, getTandS, ofThe, sAnd)
@@ -26,7 +26,7 @@ import Drasil.SSP.Labels (genDef3Label, forceDiagramL)
 import Drasil.SSP.References (chen2005)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
-  cohesion, fricAngle, fs, index, intNormForce, intShrForce, inxi, inxiM1, 
+  cohesion, fricAngle, fs, intNormForce, intShrForce, inxi, inxiM1, 
   mobShrI, normToShear, nrmFSubWat, scalFunc, shearFNoIntsl, shrResI, 
   shrResI, shrStress, totNrmForce, xi)
 

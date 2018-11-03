@@ -3,10 +3,10 @@ module Drasil.SSP.Assumptions where
 import Language.Drasil
 
 import Drasil.SSP.Defs (slpSrf, slopeSrf, slope,
-  mtrlPrpty, soil, soilLyr, soilPrpty, intrslce, slice)
-import Drasil.SSP.Unitals (coords, normToShear, scalFunc, fs)
+  soil, soilLyr, soilPrpty, intrslce, slice)
+import Drasil.SSP.Unitals (coords, normToShear, scalFunc)
 
-import Data.Drasil.SentenceStructures (ofThe, ofThe', getTandS, foldlSent)
+import Data.Drasil.SentenceStructures (ofThe', foldlSent)
 
 import Data.Drasil.Concepts.Documentation (assumpDom, condition)
 import Data.Drasil.Concepts.Physics (force, stress, strain)
@@ -47,7 +47,7 @@ newA11 = assump "Surface-Load" stressC (mkLabelRAAssump' "Surface-Load")
 assumpSSCIL = cic "assumpSSCIL" stressC "Surface-Load" assumpDom
 
 monotonicF, slopeS, homogeneousL, isotropicP, linearS,
-  linearF, stressC, planeS, largeN, straightS :: Sentence
+  linearF, stressC, planeS, largeN, straightS, propertiesS :: Sentence
 
 monotonicF = foldlSent [S "The", phrase slpSrf,
   S "is concave with respect to", S "the" +:+. phrase slopeSrf,

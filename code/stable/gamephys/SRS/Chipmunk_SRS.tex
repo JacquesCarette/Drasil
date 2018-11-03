@@ -125,17 +125,17 @@ $t$ & Time & s
 \\
 ${t_{c}}$ & Denotes the time at collision & s
 \\
-${{\mathbf{v}_{i}}^{AB}}$ & Relative Velocity Between Rigid Bodies of a and B & $\frac{\text{m}}{\text{s}}$
+${\mathbf{v}_{A}}$ & Velocity At Point a & $\frac{\text{m}}{\text{s}}$
 \\
 ${\mathbf{v}_{B}}$ & Velocity At Point B & $\frac{\text{m}}{\text{s}}$
+\\
+${\mathbf{v}_{i}}$ & Velocity Of the I-Th Body's Velocity & $\frac{\text{m}}{\text{s}}$
 \\
 ${\mathbf{v}_{O}}$ & Velocity At Point Origin & $\frac{\text{m}}{\text{s}}$
 \\
 $\mathbf{v}$ & Velocity & $\frac{\text{m}}{\text{s}}$
 \\
-${\mathbf{v}_{A}}$ & Velocity At Point a & $\frac{\text{m}}{\text{s}}$
-\\
-${\mathbf{v}_{i}}$ & Velocity Of the I-Th Body's Velocity & $\frac{\text{m}}{\text{s}}$
+${{\mathbf{v}_{i}}^{AB}}$ & Relative Velocity Between Rigid Bodies of a and B & $\frac{\text{m}}{\text{s}}$
 \\
 $\mathbf{v}(t)$ & Linear Velocity & $\frac{\text{m}}{\text{s}}$
 \\
@@ -412,7 +412,7 @@ Description & \begin{symbDescription}
               \item{${\mathbf{r}_{OB}}$ is the displacement vector between the origin and point B (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body is the sum of the linear velocity ${\mathbf{v}_{O}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{OB}}$ (m).
+Notes & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body A\ref{A:objectTy} is the sum of the linear velocity ${\mathbf{v}_{O}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{OB}}$ (m).
 \\ \midrule \\
 Source & 
 \\ \midrule \\
@@ -438,7 +438,7 @@ Description & \begin{symbDescription}
               \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The net torque $τ$ (Nm) on a rigid body is proportional to its angular acceleration $α$ ($\frac{\text{rad}}{\text{s}^{2}}$). Here, $\mathbf{I}$ (kg$\text{m}^{2}$) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional (A2).
+Notes & The net torque $τ$ (Nm) on a rigid body is proportional to its angular acceleration $α$ ($\frac{\text{rad}}{\text{s}^{2}}$). Here, $\mathbf{I}$ (kg$\text{m}^{2}$) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional A\ref{A:objectDimension}.
 \\ \midrule \\
 Source & 
 \\ \midrule \\
@@ -448,6 +448,274 @@ RefBy & FIXME: This needs to be filled in
 \subsubsection{General Definitions}
 \label{Sec:GDs}
 There are no general definitions.
+\subsubsection{Data Definitions}
+\label{Sec:DDs}
+This section collects and defines all the data needed to build the instance models.
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:ctrOfMass}
+\phantomsection 
+\label{DD:ctrOfMass}
+\\ \midrule \\
+Label & Mass-weighted average position of a rigid body's particles
+\\ \midrule \\
+Symbol & ${\mathbf{p}_{CM}}$
+\\ \midrule \\
+Units & m
+\\ \midrule \\
+Equation & \begin{dmath}
+           {\mathbf{p}_{CM}}=\frac{\displaystyle\sum{{m_{j}} {\mathbf{p}_{j}}}}{M}
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${\mathbf{p}_{CM}}$ is the mass-weighted average position of a rigid body's particles (m)}
+              \item{${m_{j}}$ is the mass of the j-th particle (kg)}
+              \item{${\mathbf{p}_{j}}$ is the position vector of the j-th particle (m)}
+              \item{$M$ is the total mass of the rigid body (kg)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & A\ref{A:objectTy}
+        A\ref{A:objectDimension}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:linDisp}
+\phantomsection 
+\label{DD:linDisp}
+\\ \midrule \\
+Label & Linear Displacement
+\\ \midrule \\
+Symbol & $\mathbf{r}(t)$
+\\ \midrule \\
+Units & m
+\\ \midrule \\
+Equation & \begin{dmath}
+           \mathbf{r}(t)=\frac{d\,\mathbf{p}\left(t\right)}{d\,t}
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\mathbf{r}(t)$ is the linear displacement (m)}
+              \item{$t$ is the time (s)}
+              \item{$\mathbf{p}$ is the position (m)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & A\ref{A:objectTy}
+        A\ref{A:objectDimension}
+        A\ref{A:dampingInvolvement}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:linVel}
+\phantomsection 
+\label{DD:linVel}
+\\ \midrule \\
+Label & Linear Velocity
+\\ \midrule \\
+Symbol & $\mathbf{v}(t)$
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}}$
+\\ \midrule \\
+Equation & \begin{dmath}
+           \mathbf{v}(t)=\frac{d\,\mathbf{r}\left(t\right)}{d\,t}
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\mathbf{v}(t)$ is the linear velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$t$ is the time (s)}
+              \item{$\mathbf{r}$ is the displacement (m)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & A\ref{A:objectTy}
+        A\ref{A:objectDimension}
+        A\ref{A:dampingInvolvement}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:linAcc}
+\phantomsection 
+\label{DD:linAcc}
+\\ \midrule \\
+Label & Linear Acceleration
+\\ \midrule \\
+Symbol & $\mathbf{a}(t)$
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}^{2}}$
+\\ \midrule \\
+Equation & \begin{dmath}
+           \mathbf{a}(t)=\frac{d\,\mathbf{v}\left(t\right)}{d\,t}
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\mathbf{a}(t)$ is the linear acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$t$ is the time (s)}
+              \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & A\ref{A:objectTy}
+        A\ref{A:objectDimension}
+        A\ref{A:dampingInvolvement}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:angDisp}
+\phantomsection 
+\label{DD:angDisp}
+\\ \midrule \\
+Label & Angular Displacement
+\\ \midrule \\
+Symbol & $θ$
+\\ \midrule \\
+Units & rad
+\\ \midrule \\
+Equation & \begin{dmath}
+           θ=\frac{d\,ϕ\left(t\right)}{d\,t}
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$θ$ is the angular displacement (rad)}
+              \item{$t$ is the time (s)}
+              \item{$ϕ$ is the orientation (rad)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & A\ref{A:objectTy}
+        A\ref{A:objectDimension}
+        A\ref{A:dampingInvolvement}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:angVel}
+\phantomsection 
+\label{DD:angVel}
+\\ \midrule \\
+Label & Angular Velocity
+\\ \midrule \\
+Symbol & $ω$
+\\ \midrule \\
+Units & $\frac{\text{rad}}{\text{s}}$
+\\ \midrule \\
+Equation & \begin{dmath}
+           ω=\frac{d\,θ\left(t\right)}{d\,t}
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
+              \item{$t$ is the time (s)}
+              \item{$θ$ is the angular displacement (rad)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & A\ref{A:objectTy}
+        A\ref{A:objectDimension}
+        A\ref{A:dampingInvolvement}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:angAccel}
+\phantomsection 
+\label{DD:angAccel}
+\\ \midrule \\
+Label & Angular Acceleration
+\\ \midrule \\
+Symbol & $α$
+\\ \midrule \\
+Units & $\frac{\text{rad}}{\text{s}^{2}}$
+\\ \midrule \\
+Equation & \begin{dmath}
+           α=\frac{d\,ω\left(t\right)}{d\,t}
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
+              \item{$t$ is the time (s)}
+              \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & A\ref{A:objectTy}
+        A\ref{A:objectDimension}
+        A\ref{A:dampingInvolvement}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:impulse}
+\phantomsection 
+\label{DD:impulse}
+\\ \midrule \\
+Label & Impulse (scalar)
+\\ \midrule \\
+Symbol & $j$
+\\ \midrule \\
+Units & Ns
+\\ \midrule \\
+Equation & \begin{dmath}
+           j=\frac{-\left(1+{C_{R}}\right) {{\mathbf{v}_{i}}^{AB}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{A}}}+\frac{1}{{m_{B}}}\right) ||\mathbf{n}||^{2}+\frac{||{\mathbf{r}_{AP}}*\mathbf{n}||^{2}}{{\mathbf{I}_{A}}}+\frac{||{\mathbf{r}_{BP}}*\mathbf{n}||^{2}}{{\mathbf{I}_{B}}}}
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$j$ is the impulse (scalar) (Ns)}
+              \item{${C_{R}}$ is the coefficient of restitution (Unitless)}
+              \item{${{\mathbf{v}_{i}}^{AB}}$ is the relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\mathbf{n}$ is the collision normal vector (m)}
+              \item{${m_{A}}$ is the mass of rigid body A (kg)}
+              \item{${m_{B}}$ is the mass of rigid body B (kg)}
+              \item{$||\mathbf{n}||$ is the length of the normal vector (m)}
+              \item{$||{\mathbf{r}_{AP}}*\mathbf{n}||$ is the length of the perpendicular vector to the contact displacement vector of rigid body A (m)}
+              \item{${\mathbf{I}_{A}}$ is the moment of inertia of rigid body A (kg$\text{m}^{2}$)}
+              \item{$||{\mathbf{r}_{BP}}*\mathbf{n}||$ is the length of the perpendicular vector to the contact displacement vector of rigid body B (m)}
+              \item{${\mathbf{I}_{B}}$ is the moment of inertia of rigid body B (kg$\text{m}^{2}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & A\ref{A:objectTy}
+        A\ref{A:objectDimension}
+        A\ref{A:axesDefined}
+        A\ref{A:collisionType}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DDs} to replace the abstract symbols in the models identified in Section~\ref{Sec:TMs} and Section~\ref{Sec:GDs}.
@@ -495,7 +763,7 @@ Description & \begin{symbDescription}
               \item{${m_{j}}$ is the mass of the j-th particle (kg)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The above equation expresses the total acceleration of the rigid body (A1, A2) i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using DD2, DD3 and DD4. It is currently assumed that there is no damping (A6) or constraints (A7) involved.
+Notes & The above equation expresses the total acceleration of the rigid body A\ref{A:objectTy} A\ref{A:objectDimension} i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using DD2, DD3 and DD4. It is currently assumed that there is no damping A\ref{A:dampingInvolvement} or constraints A\ref{A:constraintsAndJointsInvolvement} involved.
 \\ \midrule \\
 Source & 
 \\ \midrule \\
@@ -544,7 +812,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{I}$ is the moment of inertia (kg$\text{m}^{2}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved.
+Notes & The above equation for the total angular acceleration of the rigid body A\ref{A:objectTy} A\ref{A:objectDimension} i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping A\ref{A:dampingInvolvement} or constraints A\ref{A:constraintsAndJointsInvolvement} involved. A\ref{A:axesDefined}
 \\ \midrule \\
 Source & 
 \\ \midrule \\
@@ -597,243 +865,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{n}$ is the collision normal vector (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & This instance model is based on our assumptions regarding rigid body (A1, A2) collisions (A5). Again, this does not take damping (A6) or constraints (A7) into account.
-\\ \midrule \\
-Source & 
-\\ \midrule \\
-RefBy & FIXME: This needs to be filled in
-\\ \bottomrule \end{tabular}
-\end{minipage}\\
-\subsubsection{Data Definitions}
-\label{Sec:DDs}
-This section collects and defines all the data needed to build the instance models.
-~\newline
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:ctrOfMass}
-\phantomsection 
-\label{DD:ctrOfMass}
-\\ \midrule \\
-Label & Mass-weighted average position of a rigid body's particles
-\\ \midrule \\
-Symbol & ${\mathbf{p}_{CM}}$
-\\ \midrule \\
-Units & m
-\\ \midrule \\
-Equation & \begin{dmath}
-           {\mathbf{p}_{CM}}=\frac{\displaystyle\sum{{m_{j}} {\mathbf{p}_{j}}}}{M}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{${\mathbf{p}_{CM}}$ is the mass-weighted average position of a rigid body's particles (m)}
-              \item{${m_{j}}$ is the mass of the j-th particle (kg)}
-              \item{${\mathbf{p}_{j}}$ is the position vector of the j-th particle (m)}
-              \item{$M$ is the total mass of the rigid body (kg)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & 
-\\ \midrule \\
-RefBy & FIXME: This needs to be filled in
-\\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:linDisp}
-\phantomsection 
-\label{DD:linDisp}
-\\ \midrule \\
-Label & Linear Displacement
-\\ \midrule \\
-Symbol & $\mathbf{r}(t)$
-\\ \midrule \\
-Units & m
-\\ \midrule \\
-Equation & \begin{dmath}
-           \mathbf{r}(t)=\frac{d\,\mathbf{p}\left(t\right)}{d\,t}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$\mathbf{r}(t)$ is the linear displacement (m)}
-              \item{$t$ is the time (s)}
-              \item{$\mathbf{p}$ is the position (m)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & 
-\\ \midrule \\
-RefBy & FIXME: This needs to be filled in
-\\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:linVel}
-\phantomsection 
-\label{DD:linVel}
-\\ \midrule \\
-Label & Linear Velocity
-\\ \midrule \\
-Symbol & $\mathbf{v}(t)$
-\\ \midrule \\
-Units & $\frac{\text{m}}{\text{s}}$
-\\ \midrule \\
-Equation & \begin{dmath}
-           \mathbf{v}(t)=\frac{d\,\mathbf{r}\left(t\right)}{d\,t}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$\mathbf{v}(t)$ is the linear velocity ($\frac{\text{m}}{\text{s}}$)}
-              \item{$t$ is the time (s)}
-              \item{$\mathbf{r}$ is the displacement (m)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & 
-\\ \midrule \\
-RefBy & FIXME: This needs to be filled in
-\\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:linAcc}
-\phantomsection 
-\label{DD:linAcc}
-\\ \midrule \\
-Label & Linear Acceleration
-\\ \midrule \\
-Symbol & $\mathbf{a}(t)$
-\\ \midrule \\
-Units & $\frac{\text{m}}{\text{s}^{2}}$
-\\ \midrule \\
-Equation & \begin{dmath}
-           \mathbf{a}(t)=\frac{d\,\mathbf{v}\left(t\right)}{d\,t}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$\mathbf{a}(t)$ is the linear acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-              \item{$t$ is the time (s)}
-              \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & 
-\\ \midrule \\
-RefBy & FIXME: This needs to be filled in
-\\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:angDisp}
-\phantomsection 
-\label{DD:angDisp}
-\\ \midrule \\
-Label & Angular Displacement
-\\ \midrule \\
-Symbol & $θ$
-\\ \midrule \\
-Units & rad
-\\ \midrule \\
-Equation & \begin{dmath}
-           θ=\frac{d\,ϕ\left(t\right)}{d\,t}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$θ$ is the angular displacement (rad)}
-              \item{$t$ is the time (s)}
-              \item{$ϕ$ is the orientation (rad)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & 
-\\ \midrule \\
-RefBy & FIXME: This needs to be filled in
-\\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:angVel}
-\phantomsection 
-\label{DD:angVel}
-\\ \midrule \\
-Label & Angular Velocity
-\\ \midrule \\
-Symbol & $ω$
-\\ \midrule \\
-Units & $\frac{\text{rad}}{\text{s}}$
-\\ \midrule \\
-Equation & \begin{dmath}
-           ω=\frac{d\,θ\left(t\right)}{d\,t}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-              \item{$t$ is the time (s)}
-              \item{$θ$ is the angular displacement (rad)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & 
-\\ \midrule \\
-RefBy & FIXME: This needs to be filled in
-\\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:angAccel}
-\phantomsection 
-\label{DD:angAccel}
-\\ \midrule \\
-Label & Angular Acceleration
-\\ \midrule \\
-Symbol & $α$
-\\ \midrule \\
-Units & $\frac{\text{rad}}{\text{s}^{2}}$
-\\ \midrule \\
-Equation & \begin{dmath}
-           α=\frac{d\,ω\left(t\right)}{d\,t}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
-              \item{$t$ is the time (s)}
-              \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & 
-\\ \midrule \\
-RefBy & FIXME: This needs to be filled in
-\\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:impulse}
-\phantomsection 
-\label{DD:impulse}
-\\ \midrule \\
-Label & Impulse (scalar)
-\\ \midrule \\
-Symbol & $j$
-\\ \midrule \\
-Units & Ns
-\\ \midrule \\
-Equation & \begin{dmath}
-           j=\frac{-\left(1+{C_{R}}\right) {{\mathbf{v}_{i}}^{AB}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{A}}}+\frac{1}{{m_{B}}}\right) ||\mathbf{n}||^{2}+\frac{||{\mathbf{r}_{AP}}*\mathbf{n}||^{2}}{{\mathbf{I}_{A}}}+\frac{||{\mathbf{r}_{BP}}*\mathbf{n}||^{2}}{{\mathbf{I}_{B}}}}
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$j$ is the impulse (scalar) (Ns)}
-              \item{${C_{R}}$ is the coefficient of restitution (Unitless)}
-              \item{${{\mathbf{v}_{i}}^{AB}}$ is the relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
-              \item{$\mathbf{n}$ is the collision normal vector (m)}
-              \item{${m_{A}}$ is the mass of rigid body A (kg)}
-              \item{${m_{B}}$ is the mass of rigid body B (kg)}
-              \item{$||\mathbf{n}||$ is the length of the normal vector (m)}
-              \item{$||{\mathbf{r}_{AP}}*\mathbf{n}||$ is the length of the perpendicular vector to the contact displacement vector of rigid body A (m)}
-              \item{${\mathbf{I}_{A}}$ is the moment of inertia of rigid body A (kg$\text{m}^{2}$)}
-              \item{$||{\mathbf{r}_{BP}}*\mathbf{n}||$ is the length of the perpendicular vector to the contact displacement vector of rigid body B (m)}
-              \item{${\mathbf{I}_{B}}$ is the moment of inertia of rigid body B (kg$\text{m}^{2}$)}
-              \end{symbDescription}
+Notes & This instance model is based on our assumptions regarding rigid body A\ref{A:objectTy} A\ref{A:objectDimension} collisions A\ref{A:collisionType} Again, this does not take damping A\ref{A:dampingInvolvement} or constraints A\ref{A:constraintsAndJointsInvolvement} into account. A\ref{A:axesDefined}
 \\ \midrule \\
 Source & 
 \\ \midrule \\
@@ -914,9 +946,9 @@ Games are resource intensive, so performance is a high priority. Other non-funct
 This section lists the likely changes to be made to the game physics library.
 \begin{itemize}
 \item[Variable-ODE-Solver:\phantomsection\label{lcVODES}]The internal ODE-solving algorithm used by the library may be changed in the future.
-\item[Expanded-Collisions:\phantomsection\label{lcEC}]The library may be expanded to deal with edge-to-edge and vertex-to-vertex collisions.
-\item[Include-Dampening:\phantomsection\label{lcID}]The library may be expanded to include motion with damping.
-\item[Include-Joints-Constraints:\phantomsection\label{lcIJC}]The library may be expanded to include joints and constraints.
+\item[Expanded-Collisions:\phantomsection\label{lcEC}]The library may be expanded to deal with edge-to-edge and vertex-to-vertex collisions. A\ref{A:collisionType}
+\item[Include-Dampening:\phantomsection\label{lcID}]The library may be expanded to include motion with damping. A\ref{A:dampingInvolvement}
+\item[Include-Joints-Constraints:\phantomsection\label{lcIJC}]The library may be expanded to include joints and constraints. A\ref{A:constraintsAndJointsInvolvement}
 \end{itemize}
 \section{Unlikely Changes}
 \label{Sec:UCs}

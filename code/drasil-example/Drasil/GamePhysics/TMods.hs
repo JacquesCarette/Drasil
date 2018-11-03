@@ -5,6 +5,7 @@ import Language.Drasil
 import Prelude hiding (id)
 import Control.Lens ((^.))
 
+import Drasil.GamePhysics.Assumptions (newA1)
 import Drasil.GamePhysics.Unitals (dispNorm, dispUnit, force_1, force_2,
   mass_1, mass_2, r_OB, sqrDist, vel_B, vel_O)
 
@@ -155,7 +156,7 @@ chaslesThmRel = (sy vel_B) $= (sy vel_O) + (cross (sy  QP.angularVelocity) (sy r
 chaslesThmDesc :: Sentence
 chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
   (ch vel_B), (sParen $ Sy $ unit_symb vel_B), S "of any point B in a",
-  (phrase CP.rigidBody), S "is the sum of the linear",
+  (phrase CP.rigidBody), makeRefS newA1, S "is the sum of the linear",
   (phrase QP.velocity), (ch vel_O),
   (sParen $ Sy $ unit_symb vel_O), S "of the", (phrase $ CP.rigidBody),
   S "at the origin (axis of rotation) and the",

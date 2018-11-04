@@ -464,10 +464,10 @@ s
 </tr>
 <tr>
 <td>
-<em><b>v</b><sub>i</sub><sup>AB</sup></em>
+<em><b>v</b><sub>A</sub></em>
 </td>
 <td>
-Relative Velocity Between Rigid Bodies of a and B
+Velocity At Point a
 </td>
 <td>
 m/s
@@ -479,6 +479,17 @@ m/s
 </td>
 <td>
 Velocity At Point B
+</td>
+<td>
+m/s
+</td>
+</tr>
+<tr>
+<td>
+<em><b>v</b><sub>i</sub></em>
+</td>
+<td>
+Velocity Of the I-Th Body's Velocity
 </td>
 <td>
 m/s
@@ -508,21 +519,10 @@ m/s
 </tr>
 <tr>
 <td>
-<em><b>v</b><sub>A</sub></em>
+<em><b>v</b><sub>i</sub><sup>AB</sup></em>
 </td>
 <td>
-Velocity At Point a
-</td>
-<td>
-m/s
-</td>
-</tr>
-<tr>
-<td>
-<em><b>v</b><sub>i</sub></em>
-</td>
-<td>
-Velocity Of the I-Th Body's Velocity
+Relative Velocity Between Rigid Bodies of a and B
 </td>
 <td>
 m/s
@@ -1381,7 +1381,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigid body is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> (m/s) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>ω</em> (rad/s) and the displacement vector between the origin and point B, <em><b>r</b><sub>OB</sub></em> (m).
+The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigid body <a href=#A:objectTy>A: objectTy</a> is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> (m/s) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>ω</em> (rad/s) and the displacement vector between the origin and point B, <em><b>r</b><sub>OB</sub></em> (m).
 </p>
 </td>
 </tr>
@@ -1452,7 +1452,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The net torque <em>τ</em> (N&sdot;m) on a rigid body is proportional to its angular acceleration <em>α</em> (rad/s<sup>2</sup>). Here, <em><b>I</b></em> (kg&sdot;m<sup>2</sup>) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional (A2).
+The net torque <em>τ</em> (N&sdot;m) on a rigid body is proportional to its angular acceleration <em>α</em> (rad/s<sup>2</sup>). Here, <em><b>I</b></em> (kg&sdot;m<sup>2</sup>) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional <a href=#A:objectDimension>A: objectDimension</a>.
 </p>
 </td>
 </tr>
@@ -1485,6 +1485,927 @@ General Definitions
 <p class="paragraph">
 There are no general definitions.
 </p>
+</div>
+</div>
+<div id="Sec:DDs">
+<div class="subsubsection">
+<h3>
+Data Definitions
+</h3>
+<p class="paragraph">
+This section collects and defines all the data needed to build the instance models.
+</p>
+<div id="DD:ctrOfMass">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Mass-weighted average position of a rigid body's particles
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em><b>p</b><sub>CM</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+m
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div id="Eqn:DD:ctrOfMass">
+<div class="equation">
+<em><b>p</b><sub>CM</sub> = <div class="fraction">
+<span class="fup">
+&sum;m<sub>j</sub>&#8239;<b>p</b><sub>j</sub>
+</span>
+<span class="fdn">
+M
+</span>
+</div></em>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em><b>p</b><sub>CM</sub></em> is the mass-weighted average position of a rigid body's particles (m)
+</li>
+<li>
+<em>m<sub>j</sub></em> is the mass of the j-th particle (kg)
+</li>
+<li>
+<em><b>p</b><sub>j</sub></em> is the position vector of the j-th particle (m)
+</li>
+<li>
+<em>M</em> is the total mass of the rigid body (kg)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<a href=#A:objectTy>A: objectTy</a>
+</p>
+<p class="paragraph">
+<a href=#A:objectDimension>A: objectDimension</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:linDisp">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Linear Displacement
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em><b>r</b>(t)</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+m
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div id="Eqn:DD:linDisp">
+<div class="equation">
+<em><b>r</b>(t) = <div class="fraction">
+<span class="fup">
+d&#8239;<b>p</b>(t)
+</span>
+<span class="fdn">
+d&#8239;t
+</span>
+</div></em>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em><b>r</b>(t)</em> is the linear displacement (m)
+</li>
+<li>
+<em>t</em> is the time (s)
+</li>
+<li>
+<em><b>p</b></em> is the position (m)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<a href=#A:objectTy>A: objectTy</a>
+</p>
+<p class="paragraph">
+<a href=#A:objectDimension>A: objectDimension</a>
+</p>
+<p class="paragraph">
+<a href=#A:dampingInvolvement>A: dampingInvolvement</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:linVel">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Linear Velocity
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em><b>v</b>(t)</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+m/s
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div id="Eqn:DD:linVel">
+<div class="equation">
+<em><b>v</b>(t) = <div class="fraction">
+<span class="fup">
+d&#8239;<b>r</b>(t)
+</span>
+<span class="fdn">
+d&#8239;t
+</span>
+</div></em>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em><b>v</b>(t)</em> is the linear velocity (m/s)
+</li>
+<li>
+<em>t</em> is the time (s)
+</li>
+<li>
+<em><b>r</b></em> is the displacement (m)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<a href=#A:objectTy>A: objectTy</a>
+</p>
+<p class="paragraph">
+<a href=#A:objectDimension>A: objectDimension</a>
+</p>
+<p class="paragraph">
+<a href=#A:dampingInvolvement>A: dampingInvolvement</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:linAcc">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Linear Acceleration
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em><b>a</b>(t)</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+m/s<sup>2</sup>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div id="Eqn:DD:linAcc">
+<div class="equation">
+<em><b>a</b>(t) = <div class="fraction">
+<span class="fup">
+d&#8239;<b>v</b>(t)
+</span>
+<span class="fdn">
+d&#8239;t
+</span>
+</div></em>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em><b>a</b>(t)</em> is the linear acceleration (m/s<sup>2</sup>)
+</li>
+<li>
+<em>t</em> is the time (s)
+</li>
+<li>
+<em><b>v</b></em> is the velocity (m/s)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<a href=#A:objectTy>A: objectTy</a>
+</p>
+<p class="paragraph">
+<a href=#A:objectDimension>A: objectDimension</a>
+</p>
+<p class="paragraph">
+<a href=#A:dampingInvolvement>A: dampingInvolvement</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:angDisp">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Angular Displacement
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>θ</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+rad
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div id="Eqn:DD:angDisp">
+<div class="equation">
+<em>θ = <div class="fraction">
+<span class="fup">
+d&#8239;ϕ(t)
+</span>
+<span class="fdn">
+d&#8239;t
+</span>
+</div></em>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>θ</em> is the angular displacement (rad)
+</li>
+<li>
+<em>t</em> is the time (s)
+</li>
+<li>
+<em>ϕ</em> is the orientation (rad)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<a href=#A:objectTy>A: objectTy</a>
+</p>
+<p class="paragraph">
+<a href=#A:objectDimension>A: objectDimension</a>
+</p>
+<p class="paragraph">
+<a href=#A:dampingInvolvement>A: dampingInvolvement</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:angVel">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Angular Velocity
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>ω</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+rad/s
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div id="Eqn:DD:angVel">
+<div class="equation">
+<em>ω = <div class="fraction">
+<span class="fup">
+d&#8239;θ(t)
+</span>
+<span class="fdn">
+d&#8239;t
+</span>
+</div></em>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>ω</em> is the angular velocity (rad/s)
+</li>
+<li>
+<em>t</em> is the time (s)
+</li>
+<li>
+<em>θ</em> is the angular displacement (rad)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<a href=#A:objectTy>A: objectTy</a>
+</p>
+<p class="paragraph">
+<a href=#A:objectDimension>A: objectDimension</a>
+</p>
+<p class="paragraph">
+<a href=#A:dampingInvolvement>A: dampingInvolvement</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:angAccel">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Angular Acceleration
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>α</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+rad/s<sup>2</sup>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div id="Eqn:DD:angAccel">
+<div class="equation">
+<em>α = <div class="fraction">
+<span class="fup">
+d&#8239;ω(t)
+</span>
+<span class="fdn">
+d&#8239;t
+</span>
+</div></em>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>α</em> is the angular acceleration (rad/s<sup>2</sup>)
+</li>
+<li>
+<em>t</em> is the time (s)
+</li>
+<li>
+<em>ω</em> is the angular velocity (rad/s)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<a href=#A:objectTy>A: objectTy</a>
+</p>
+<p class="paragraph">
+<a href=#A:objectDimension>A: objectDimension</a>
+</p>
+<p class="paragraph">
+<a href=#A:dampingInvolvement>A: dampingInvolvement</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+</table>
+</div>
+<div id="DD:impulse">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Impulse (scalar)
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>j</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+N&sdot;s
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div id="Eqn:DD:impulse">
+<div class="equation">
+<em>j = <div class="fraction">
+<span class="fup">
+&minus;(1&plus;C<sub>R</sub>)&#8239;<b>v</b><sub>i</sub><sup>AB</sup>&sdot;<b>n</b>
+</span>
+<span class="fdn">
+(<div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+m<sub>A</sub>
+</span>
+</div>&plus;<div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+m<sub>B</sub>
+</span>
+</div>)&#8239;||<b>n</b>||<sup>2</sup>&plus;<div class="fraction">
+<span class="fup">
+||<b>r</b><sub>AP</sub>*<b>n</b>||<sup>2</sup>
+</span>
+<span class="fdn">
+<b>I</b><sub>A</sub>
+</span>
+</div>&plus;<div class="fraction">
+<span class="fup">
+||<b>r</b><sub>BP</sub>*<b>n</b>||<sup>2</sup>
+</span>
+<span class="fdn">
+<b>I</b><sub>B</sub>
+</span>
+</div>
+</span>
+</div></em>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em>j</em> is the impulse (scalar) (N&sdot;s)
+</li>
+<li>
+<em>C<sub>R</sub></em> is the coefficient of restitution (Unitless)
+</li>
+<li>
+<em><b>v</b><sub>i</sub><sup>AB</sup></em> is the relative velocity between rigid bodies of A and B (m/s)
+</li>
+<li>
+<em><b>n</b></em> is the collision normal vector (m)
+</li>
+<li>
+<em>m<sub>A</sub></em> is the mass of rigid body A (kg)
+</li>
+<li>
+<em>m<sub>B</sub></em> is the mass of rigid body B (kg)
+</li>
+<li>
+<em>||<b>n</b>||</em> is the length of the normal vector (m)
+</li>
+<li>
+<em>||<b>r</b><sub>AP</sub>*<b>n</b>||</em> is the length of the perpendicular vector to the contact displacement vector of rigid body A (m)
+</li>
+<li>
+<em><b>I</b><sub>A</sub></em> is the moment of inertia of rigid body A (kg&sdot;m<sup>2</sup>)
+</li>
+<li>
+<em>||<b>r</b><sub>BP</sub>*<b>n</b>||</em> is the length of the perpendicular vector to the contact displacement vector of rigid body B (m)
+</li>
+<li>
+<em><b>I</b><sub>B</sub></em> is the moment of inertia of rigid body B (kg&sdot;m<sup>2</sup>)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+<a href=#A:objectTy>A: objectTy</a>
+</p>
+<p class="paragraph">
+<a href=#A:objectDimension>A: objectDimension</a>
+</p>
+<p class="paragraph">
+<a href=#A:axesDefined>A: axesDefined</a>
+</p>
+<p class="paragraph">
+<a href=#A:collisionType>A: collisionType</a>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div id="Sec:IMs">
@@ -1625,7 +2546,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The above equation expresses the total acceleration of the rigid body (A1, A2) i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using DD2, DD3 and DD4. It is currently assumed that there is no damping (A6) or constraints (A7) involved.
+The above equation expresses the total acceleration of the rigid body <a href=#A:objectTy>A: objectTy</a> <a href=#A:objectDimension>A: objectDimension</a> i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using DD2, DD3 and DD4. It is currently assumed that there is no damping <a href=#A:dampingInvolvement>A: dampingInvolvement</a> or constraints <a href=#A:constraintsAndJointsInvolvement>A: constraintsAndJointsInvolvement</a> involved.
 </p>
 </td>
 </tr>
@@ -1778,7 +2699,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved.
+The above equation for the total angular acceleration of the rigid body <a href=#A:objectTy>A: objectTy</a> <a href=#A:objectDimension>A: objectDimension</a> i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping <a href=#A:dampingInvolvement>A: dampingInvolvement</a> or constraints <a href=#A:constraintsAndJointsInvolvement>A: constraintsAndJointsInvolvement</a> involved. <a href=#A:axesDefined>A: axesDefined</a>
 </p>
 </td>
 </tr>
@@ -1932,801 +2853,8 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-This instance model is based on our assumptions regarding rigid body (A1, A2) collisions (A5). Again, this does not take damping (A6) or constraints (A7) into account.
+This instance model is based on our assumptions regarding rigid body <a href=#A:objectTy>A: objectTy</a> <a href=#A:objectDimension>A: objectDimension</a> collisions <a href=#A:collisionType>A: collisionType</a> Again, this does not take damping <a href=#A:dampingInvolvement>A: dampingInvolvement</a> or constraints <a href=#A:constraintsAndJointsInvolvement>A: constraintsAndJointsInvolvement</a> into account. <a href=#A:axesDefined>A: axesDefined</a>
 </p>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
-<p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-</table>
-</div>
-</div>
-</div>
-<div id="Sec:DDs">
-<div class="subsubsection">
-<h3>
-Data Definitions
-</h3>
-<p class="paragraph">
-This section collects and defines all the data needed to build the instance models.
-</p>
-<div id="DD:ctrOfMass">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Mass-weighted average position of a rigid body's particles
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em><b>p</b><sub>CM</sub></em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-m
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<div id="Eqn:DD:ctrOfMass">
-<div class="equation">
-<em><b>p</b><sub>CM</sub> = <div class="fraction">
-<span class="fup">
-&sum;m<sub>j</sub>&#8239;<b>p</b><sub>j</sub>
-</span>
-<span class="fdn">
-M
-</span>
-</div></em>
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em><b>p</b><sub>CM</sub></em> is the mass-weighted average position of a rigid body's particles (m)
-</li>
-<li>
-<em>m<sub>j</sub></em> is the mass of the j-th particle (kg)
-</li>
-<li>
-<em><b>p</b><sub>j</sub></em> is the position vector of the j-th particle (m)
-</li>
-<li>
-<em>M</em> is the total mass of the rigid body (kg)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
-<p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-</table>
-</div>
-<div id="DD:linDisp">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Linear Displacement
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em><b>r</b>(t)</em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-m
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<div id="Eqn:DD:linDisp">
-<div class="equation">
-<em><b>r</b>(t) = <div class="fraction">
-<span class="fup">
-d&#8239;<b>p</b>(t)
-</span>
-<span class="fdn">
-d&#8239;t
-</span>
-</div></em>
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em><b>r</b>(t)</em> is the linear displacement (m)
-</li>
-<li>
-<em>t</em> is the time (s)
-</li>
-<li>
-<em><b>p</b></em> is the position (m)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
-<p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-</table>
-</div>
-<div id="DD:linVel">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Linear Velocity
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em><b>v</b>(t)</em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-m/s
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<div id="Eqn:DD:linVel">
-<div class="equation">
-<em><b>v</b>(t) = <div class="fraction">
-<span class="fup">
-d&#8239;<b>r</b>(t)
-</span>
-<span class="fdn">
-d&#8239;t
-</span>
-</div></em>
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em><b>v</b>(t)</em> is the linear velocity (m/s)
-</li>
-<li>
-<em>t</em> is the time (s)
-</li>
-<li>
-<em><b>r</b></em> is the displacement (m)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
-<p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-</table>
-</div>
-<div id="DD:linAcc">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Linear Acceleration
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em><b>a</b>(t)</em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-m/s<sup>2</sup>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<div id="Eqn:DD:linAcc">
-<div class="equation">
-<em><b>a</b>(t) = <div class="fraction">
-<span class="fup">
-d&#8239;<b>v</b>(t)
-</span>
-<span class="fdn">
-d&#8239;t
-</span>
-</div></em>
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em><b>a</b>(t)</em> is the linear acceleration (m/s<sup>2</sup>)
-</li>
-<li>
-<em>t</em> is the time (s)
-</li>
-<li>
-<em><b>v</b></em> is the velocity (m/s)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
-<p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-</table>
-</div>
-<div id="DD:angDisp">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Angular Displacement
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>θ</em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-rad
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<div id="Eqn:DD:angDisp">
-<div class="equation">
-<em>θ = <div class="fraction">
-<span class="fup">
-d&#8239;ϕ(t)
-</span>
-<span class="fdn">
-d&#8239;t
-</span>
-</div></em>
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>θ</em> is the angular displacement (rad)
-</li>
-<li>
-<em>t</em> is the time (s)
-</li>
-<li>
-<em>ϕ</em> is the orientation (rad)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
-<p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-</table>
-</div>
-<div id="DD:angVel">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Angular Velocity
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>ω</em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-rad/s
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<div id="Eqn:DD:angVel">
-<div class="equation">
-<em>ω = <div class="fraction">
-<span class="fup">
-d&#8239;θ(t)
-</span>
-<span class="fdn">
-d&#8239;t
-</span>
-</div></em>
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>ω</em> is the angular velocity (rad/s)
-</li>
-<li>
-<em>t</em> is the time (s)
-</li>
-<li>
-<em>θ</em> is the angular displacement (rad)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
-<p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-</table>
-</div>
-<div id="DD:angAccel">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Angular Acceleration
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>α</em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-rad/s<sup>2</sup>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<div id="Eqn:DD:angAccel">
-<div class="equation">
-<em>α = <div class="fraction">
-<span class="fup">
-d&#8239;ω(t)
-</span>
-<span class="fdn">
-d&#8239;t
-</span>
-</div></em>
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>α</em> is the angular acceleration (rad/s<sup>2</sup>)
-</li>
-<li>
-<em>t</em> is the time (s)
-</li>
-<li>
-<em>ω</em> is the angular velocity (rad/s)
-</li>
-</ul>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
-<p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-</table>
-</div>
-<div id="DD:impulse">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Impulse (scalar)
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>j</em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-N&sdot;s
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<div id="Eqn:DD:impulse">
-<div class="equation">
-<em>j = <div class="fraction">
-<span class="fup">
-&minus;(1&plus;C<sub>R</sub>)&#8239;<b>v</b><sub>i</sub><sup>AB</sup>&sdot;<b>n</b>
-</span>
-<span class="fdn">
-(<div class="fraction">
-<span class="fup">
-1
-</span>
-<span class="fdn">
-m<sub>A</sub>
-</span>
-</div>&plus;<div class="fraction">
-<span class="fup">
-1
-</span>
-<span class="fdn">
-m<sub>B</sub>
-</span>
-</div>)&#8239;||<b>n</b>||<sup>2</sup>&plus;<div class="fraction">
-<span class="fup">
-||<b>r</b><sub>AP</sub>*<b>n</b>||<sup>2</sup>
-</span>
-<span class="fdn">
-<b>I</b><sub>A</sub>
-</span>
-</div>&plus;<div class="fraction">
-<span class="fup">
-||<b>r</b><sub>BP</sub>*<b>n</b>||<sup>2</sup>
-</span>
-<span class="fdn">
-<b>I</b><sub>B</sub>
-</span>
-</div>
-</span>
-</div></em>
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<ul class="hide-list-style-no-indent">
-<li>
-<em>j</em> is the impulse (scalar) (N&sdot;s)
-</li>
-<li>
-<em>C<sub>R</sub></em> is the coefficient of restitution (Unitless)
-</li>
-<li>
-<em><b>v</b><sub>i</sub><sup>AB</sup></em> is the relative velocity between rigid bodies of A and B (m/s)
-</li>
-<li>
-<em><b>n</b></em> is the collision normal vector (m)
-</li>
-<li>
-<em>m<sub>A</sub></em> is the mass of rigid body A (kg)
-</li>
-<li>
-<em>m<sub>B</sub></em> is the mass of rigid body B (kg)
-</li>
-<li>
-<em>||<b>n</b>||</em> is the length of the normal vector (m)
-</li>
-<li>
-<em>||<b>r</b><sub>AP</sub>*<b>n</b>||</em> is the length of the perpendicular vector to the contact displacement vector of rigid body A (m)
-</li>
-<li>
-<em><b>I</b><sub>A</sub></em> is the moment of inertia of rigid body A (kg&sdot;m<sup>2</sup>)
-</li>
-<li>
-<em>||<b>r</b><sub>BP</sub>*<b>n</b>||</em> is the length of the perpendicular vector to the contact displacement vector of rigid body B (m)
-</li>
-<li>
-<em><b>I</b><sub>B</sub></em> is the moment of inertia of rigid body B (kg&sdot;m<sup>2</sup>)
-</li>
-</ul>
 </td>
 </tr>
 <tr>
@@ -3066,17 +3194,17 @@ Variable-ODE-Solver: The internal ODE-solving algorithm used by the library may 
 </p>
 <p>
 <div id="lcEC">
-Expanded-Collisions: The library may be expanded to deal with edge-to-edge and vertex-to-vertex collisions.
+Expanded-Collisions: The library may be expanded to deal with edge-to-edge and vertex-to-vertex collisions. <a href=#A:collisionType>A: collisionType</a>
 </div>
 </p>
 <p>
 <div id="lcID">
-Include-Dampening: The library may be expanded to include motion with damping.
+Include-Dampening: The library may be expanded to include motion with damping. <a href=#A:dampingInvolvement>A: dampingInvolvement</a>
 </div>
 </p>
 <p>
 <div id="lcIJC">
-Include-Joints-Constraints: The library may be expanded to include joints and constraints.
+Include-Joints-Constraints: The library may be expanded to include joints and constraints. <a href=#A:constraintsAndJointsInvolvement>A: constraintsAndJointsInvolvement</a>
 </div>
 </p>
 </div>

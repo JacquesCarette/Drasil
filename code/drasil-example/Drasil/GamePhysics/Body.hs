@@ -19,7 +19,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
 
 import qualified Drasil.DocLang.SRS as SRS
 
-import Data.Drasil.Concepts.Documentation (assumpDom, assumption, body,
+import Data.Drasil.Concepts.Documentation (assumption, body,
   concept, condition, consumer, dataDefn, datumConstraint, document, endUser,
   environment, funcReqDom, game, genDefn, goalStmt, guide, inModel,
   information, input_, interface, item, model, nonfunctionalRequirement,
@@ -47,14 +47,14 @@ import Data.Drasil.Utils (makeTMatrix, itemRefToSent,
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
-  cartesian, friction, rightHand, collision, space, joint, damping)
-import qualified Data.Drasil.Concepts.Math as CM (equation, surface, constraint, law)
+  cartesian, friction, rightHand, collision, space)
+import qualified Data.Drasil.Concepts.Math as CM (equation, surface, law)
 
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Quantities.Physics as QP (angularVelocity, force, 
   linearVelocity, position, time, velocity)
-
+import Drasil.GamePhysics.Assumptions(newAssumptions)
 import Drasil.GamePhysics.Changes (likelyChanges, likelyChangesList',
   unlikelyChanges, unlikelyChangesList')
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
@@ -96,9 +96,9 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
           , TMs ([Label]++ stdFields) 
               [t1NewtonSL_new, t2NewtonTL_new, t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new]
           , GDs [] [] HideDerivation -- No Gen Defs for Gamephysics
+          , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) 
               [im1_new, im2_new, im3_new] ShowDerivation
-          , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , Constraints EmptyS dataConstraintUncertainty (S "FIXME") 
               [inDataConstTbl cpInputConstraints, outDataConstTbl cpOutputConstraints]
           ]
@@ -145,30 +145,6 @@ cpRefDB :: ReferenceDB
 cpRefDB = rdb newAssumptions cpCitations
   (functional_requirements_list' ++ likelyChangesList' ++ unlikelyChangesList') -- FIXME: Convert the rest to new chunk types
 
-newAssumptions :: [AssumpChunk]
-newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7]
-
-assumptions :: [ConceptInstance]
-assumptions = [assumpOT, assumpOD, assumpCST, assumpAD, assumpCT, assumpDI,
-  assumpCAJI]
-
-newA1, newA2, newA3, newA4, newA5, newA6, newA7 :: AssumpChunk
-assumpOT, assumpOD, assumpCST, assumpAD, assumpCT, assumpDI,
-  assumpCAJI :: ConceptInstance
-newA1 = assump "objectTy" (foldlSent assumptions_assum1) (mkLabelRAAssump' "objectTy")
-assumpOT = cic "assumpOT" (foldlSent assumptions_assum1) "objectTy" assumpDom
-newA2 = assump "objectDimension" (foldlSent assumptions_assum2) (mkLabelRAAssump' "objectDimension")
-assumpOD = cic "assumpOD" (foldlSent assumptions_assum2) "objectDimension" assumpDom
-newA3 = assump "coordinateSystemTy" (foldlSent assumptions_assum3) (mkLabelRAAssump' "coordinateSystemTy")
-assumpCST = cic "assumpCST" (foldlSent assumptions_assum3) "coordinateSystemTy" assumpDom
-newA4 = assump "axesDefined" (foldlSent assumptions_assum4) (mkLabelRAAssump' "axesDefined")
-assumpAD = cic "assumpAD" (foldlSent assumptions_assum4) "axesDefined" assumpDom
-newA5 = assump "collisionType" (foldlSent assumptions_assum5) (mkLabelRAAssump' "collisionType")
-assumpCT = cic "assumpCT" (foldlSent assumptions_assum5) "collisionType" assumpDom
-newA6 = assump "dampingInvolvement" (foldlSent assumptions_assum6) (mkLabelRAAssump' "dampingInvolvement")
-assumpDI = cic "assumpDI" (foldlSent assumptions_assum6) "dampingInvolvement" assumpDom
-newA7 = assump "constraintsAndJointsInvolvement" (foldlSent assumptions_assum7) (mkLabelRAAssump' "constraintsAndJointsInvolvement")
-assumpCAJI = cic "assumpCAJI" (foldlSent assumptions_assum7) "constraintsAndJointsInvolvement" assumpDom
 --FIXME: All named ideas, not just acronyms.
 
 chipUnits :: [UnitDefn] -- FIXME
@@ -459,41 +435,6 @@ goal_statements_list = enumSimple 1 (getAcc goalStmt) goal_statements_list'
 -------------------------
 -- 4.2.1 : Assumptions --
 -------------------------
-
-assumptions_list :: [Contents]
-assumptions_list = map (LlC . (\x -> mkRawLC (Assumption x) (x ^. getLabel))) newAssumptions
-
-assumptions_assum1, assumptions_assum2, assumptions_assum3, assumptions_assum4, assumptions_assum5, 
-  assumptions_assum6, assumptions_assum7 :: [Sentence]
-
-allObject :: Sentence -> [Sentence]
-allObject thing = [S "All objects are", thing]
-
-thereNo :: [Sentence] -> [Sentence]
-thereNo [x]      = [S "There is no", x, S "involved throughout the", 
-  (phrase simulation)]
-thereNo l        = [S "There are no", foldlList Comma List l, S "involved throughout the", 
-  (phrase simulation)]
-
-assumptions_assum1 = allObject (plural CP.rigidBody)
-assumptions_assum2 = allObject (getAcc twoD)
-assumptions_assum3 = [S "The library uses a", (phrase CP.cartesian)]
-assumptions_assum4 = [S "The axes are defined using", 
-  (phrase CP.rightHand)]
-assumptions_assum5 = [S "All", (plural CP.rigidBody), 
-  (plural CP.collision), S "are vertex-to-edge", 
-  (plural CP.collision)]
-
-assumptions_assum6 = thereNo [(phrase CP.damping)]
-assumptions_assum7 = thereNo [(plural CM.constraint), (plural CP.joint)]
-
-{-assumptions_list = enumSimple 1 (getAcc assumption) $ map (foldlSent) 
-  [assumptions_assum1, assumptions_assum2, assumptions_assum3, assumptions_assum4, assumptions_assum5, 
-  assumptions_assum6, assumptions_assum7]-}
-
-assumptions_list_a :: [[Sentence]]
-assumptions_list_a = [assumptions_assum1, assumptions_assum2, assumptions_assum3, assumptions_assum4,
-  assumptions_assum5, assumptions_assum6, assumptions_assum7]
 
 --------------------------------
 -- 4.2.2 : Theoretical Models --

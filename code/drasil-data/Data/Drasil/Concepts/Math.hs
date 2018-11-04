@@ -43,9 +43,9 @@ vector       = dcc "vector"       (cn' "vector")                  "Object with m
 orient       = dcc "orientation"  (cn' "orientation")             "The relative physical position or direction of something"
 
 --FIXME: use nounphrase instead of cn'
-de           = commonIdea "de"     (cn' "differential equation")          "DE"
-ode          = commonIdea "ode"    (cn' "Ordinary Differential Equation") "ODE"
-pde          = commonIdea "pde"    (cn' "partial differential equation")  "PDE"
+de           = commonIdea "de"     (cn' "differential equation")          "DE"   []
+ode          = commonIdea "ode"    (cn' "Ordinary Differential Equation") "ODE"  []
+pde          = commonIdea "pde"    (cn' "partial differential equation")  "PDE"  []
 
 --FIXME: COMBINATION HACK (all below)
 euclidN      = dcc "euclidNorm"     (compoundPhrase' (euclidSpace ^. term)

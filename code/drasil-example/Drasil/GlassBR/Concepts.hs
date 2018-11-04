@@ -25,19 +25,19 @@ annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass,
 
 --FIXME: Add compound nounphrases
 
-annealed      = commonIdea "annealed"      (nounPhraseSP "annealed")                "AN"
-aR            = commonIdea "aR"            (nounPhraseSP "aspect ratio")            "AR"
-fullyT        = commonIdea "fullyT"        (nounPhraseSP "fully tempered")          "FT"
-glassTypeFac  = commonIdea "glassTypeFac"  (nounPhraseSP "glass type factor")       "GTF"
-heatS         = commonIdea "heatS"         (nounPhraseSP "heat strengthened")       "HS"
-iGlass        = commonIdea "iGlass"        (nounPhraseSP "insulating glass")        "IG"
-lGlass        = commonIdea "lGlass"        (nounPhraseSP "laminated glass")         "LG"
-lResistance   = commonIdea "lResistance"   (nounPhraseSP "load resistance")         "LR"
-lShareFac     = commonIdea "lShareFac"     (nounPhraseSP "load share factor")       "LSF"
-gLassBR       = commonIdea "gLassBR"       (pn "GlassBR")                           "GlassBR"
-stdOffDist    = commonIdea "stdOffDist"    (nounPhraseSP "stand off distance")      "SD"
-loadDurFactor = commonIdea "loadDurFactor" (nounPhraseSP "load duration factor")    "LDF"
-nFL           = commonIdea "nFL"           (nounPhraseSP "non-factored load")       "NFL"
+annealed      = commonIdea "annealed"      (nounPhraseSP "annealed")                "AN"       []
+aR            = commonIdea "aR"            (nounPhraseSP "aspect ratio")            "AR"       []
+fullyT        = commonIdea "fullyT"        (nounPhraseSP "fully tempered")          "FT"       []
+glassTypeFac  = commonIdea "glassTypeFac"  (nounPhraseSP "glass type factor")       "GTF"      []
+heatS         = commonIdea "heatS"         (nounPhraseSP "heat strengthened")       "HS"       []
+iGlass        = commonIdea "iGlass"        (nounPhraseSP "insulating glass")        "IG"       []
+lGlass        = commonIdea "lGlass"        (nounPhraseSP "laminated glass")         "LG"       []
+lResistance   = commonIdea "lResistance"   (nounPhraseSP "load resistance")         "LR"       []
+lShareFac     = commonIdea "lShareFac"     (nounPhraseSP "load share factor")       "LSF"      []
+gLassBR       = commonIdea "gLassBR"       (pn "GlassBR")                           "GlassBR"  []
+stdOffDist    = commonIdea "stdOffDist"    (nounPhraseSP "stand off distance")      "SD"       []
+loadDurFactor = commonIdea "loadDurFactor" (nounPhraseSP "load duration factor")    "LDF"      []
+nFL           = commonIdea "nFL"           (nounPhraseSP "non-factored load")       "NFL"      []
 
 {-Terminology-}
 -- TODO: See if we can make some of these terms less specific and/or parameterized.

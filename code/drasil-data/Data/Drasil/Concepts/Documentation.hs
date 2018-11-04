@@ -11,28 +11,28 @@ import Control.Lens ((^.))
 assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
   unlikelyChg, physSyst, requirement, thModel, mg, notApp, srs, typUnc :: CI
 
--------------------------------------------------------------------------------------------------
--- | CI       |           |    uid      |         term                        | abbreviation | --
--------------------------------------------------------------------------------------------------
-assumption  = commonIdea "assumption"  (cn' "assumption")                                  "A"
-dataDefn    = commonIdea "dataDefn"    (cn' "data definition")                             "DD"
-desSpec     = commonIdea "desSpec"     (fterms compoundPhrase design specification)        "DS"
-genDefn     = commonIdea "genDefn"     (cn' "general definition")                          "GD"
-goalStmt    = commonIdea "goalStmt"    (fterms compoundPhrase goal statement)              "GS"
-dataConst   = commonIdea "dataConst"   (cn' "data constraint")                             "DC"
-inModel     = commonIdea "inModel"     (fterms compoundPhrase instance_ model)             "IM"
-likelyChg   = commonIdea "likelyChg"   (cn' "likely change")                               "LC"
-unlikelyChg = commonIdea "unlikelyChg" (cn' "unlikely change")                             "UC"
-physSyst    = commonIdea "physSyst"    (fterms compoundPhrase physicalSystem description)  "PS"
-requirement = commonIdea "requirement" (cn' "requirement")                                 "R"
-thModel     = commonIdea "thModel"     (cn' "theoretical model")                           "T"
-mg          = commonIdea "mg"          (fterms compoundPhrase module_ guide)               "MG"
-notApp      = commonIdea "notApp"      (nounPhraseSP "not applicable")                     "N/A"
-typUnc      = commonIdea "typUnc"      (cn' "typical uncertainty")                         "Uncert."
+-----------------------------------------------------------------------------------------------------------------
+-- | CI       |           |    uid      |         term                        | abbreviation |     ConceptDomain
+-----------------------------------------------------------------------------------------------------------------
+assumption  = commonIdea "assumption"  (cn' "assumption")                                  "A"         []
+dataDefn    = commonIdea "dataDefn"    (cn' "data definition")                             "DD"        []
+desSpec     = commonIdea "desSpec"     (fterms compoundPhrase design specification)        "DS"        []
+genDefn     = commonIdea "genDefn"     (cn' "general definition")                          "GD"        []
+goalStmt    = commonIdea "goalStmt"    (fterms compoundPhrase goal statement)              "GS"        []
+dataConst   = commonIdea "dataConst"   (cn' "data constraint")                             "DC"        []
+inModel     = commonIdea "inModel"     (fterms compoundPhrase instance_ model)             "IM"        []
+likelyChg   = commonIdea "likelyChg"   (cn' "likely change")                               "LC"        []
+unlikelyChg = commonIdea "unlikelyChg" (cn' "unlikely change")                             "UC"        []
+physSyst    = commonIdea "physSyst"    (fterms compoundPhrase physicalSystem description)  "PS"        []
+requirement = commonIdea "requirement" (cn' "requirement")                                 "R"         []
+thModel     = commonIdea "thModel"     (cn' "theoretical model")                           "T"         []
+mg          = commonIdea "mg"          (fterms compoundPhrase module_ guide)               "MG"        []
+notApp      = commonIdea "notApp"      (nounPhraseSP "not applicable")                     "N/A"       []
+typUnc      = commonIdea "typUnc"      (cn' "typical uncertainty")                         "Uncert."   []
 
 srs = commonIdea "srs" 
   (compoundPhraseP1 (softwareReq ^. term) (specification ^. term))
-  "SRS"
+  "SRS" []
 
 ---------------------------------------------------------------------
 

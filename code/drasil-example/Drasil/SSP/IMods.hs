@@ -16,7 +16,7 @@ import Data.Drasil.Concepts.Physics (force)
 import Data.Drasil.SentenceStructures (andThe, eqN, foldlSent, foldlSent_, 
   foldlSentCol, foldlSP, getTandS, getTDS, isThe, ofThe, ofThe', sAnd, sIs, sOf)
 
-import Drasil.SSP.Assumptions (newA10, newA11,newA6)
+import Drasil.SSP.Assumptions (newA2, newA4, newA10, newA11,newA6)
 import Drasil.SSP.BasicExprs (eqlExpr, momExpr)
 import Drasil.SSP.DataDefs (fixme1, fixme2,
   lengthLs, mobShearWO, resShearWO, seismicLoadF, sliceWght, 
@@ -61,14 +61,15 @@ fcSfty_rel = sy fs $= sumOp shearRNoIntsl / sumOp shearFNoIntsl
           (idx (sy sym) (sy varblV) * prodOp) + idx (sy sym) (sy numbSlices)
 
 fcSfty_desc :: Sentence
-fcSfty_desc = foldlSent [S "Equation for the", titleize fs `isThe` S "ratio",
+fcSfty_desc = foldlSent_ [S "Equation for the", titleize fs `isThe` S "ratio",
   S "between resistive and mobile shear of the slip surface.",
   S "The sum of values from each slice is taken to find the total",
   S "resistive and mobile shear for the slip surface. The constants",
   ch shrResC, S "and", ch mobShrC, S "convert the resistive and",
-  S "mobile shear without the inluence of",
+  S "mobile shear without the inluence of" +:+.
   --FIXME: have these constants defined somewhere else
-  S "interslice forces, to a calculation considering the interslice forces"]
+  S "interslice forces, to a calculation considering the interslice forces",
+  makeRefS newA2, makeRefS newA6, makeRefS newA10, makeRefS newA11]
 
 --
 nrmShrFor :: InstanceModel
@@ -139,11 +140,12 @@ sliceFs_rel = inxi intNormForce $= case_ [
   -- FIXME: Use index i as part of condition
 
 sliceFs_desc :: Sentence
-sliceFs_desc = foldlSent [S "The value of the interslice normal force",
+sliceFs_desc = foldlSent_ [S "The value of the interslice normal force",
   ch intNormForce, S "at interface", ch index +:+. S "The net force"
   `isThe` S "weight",
-  S "of the slices adjacent to interface", ch index,
-  S "exert horizontally on each other"]
+  S "of the slices adjacent to interface", ch index +:+.
+  S "exert horizontally on each other", makeRefS newA2,
+  makeRefS newA10, makeRefS newA11]
 
 --
 crtSlpId :: InstanceModel
@@ -160,11 +162,12 @@ crtSlpId_rel = (sy fs_min) $= (apply1 minFunction critCoords) -- sy inputHack])
   --FIXME: add subscript to fs
 
 crtSlpId_desc :: Sentence
-crtSlpId_desc = foldlSent [S "Given the necessary", phrase slope,
+crtSlpId_desc = foldlSent_ [S "Given the necessary", phrase slope,
   S "inputs, a minimization", S "algorithm or function", ch minFunction,
   S "will identify the", phrase crtSlpSrf, S "of the", phrase slope `sC`
   S "with the critical", phrase slip, S "coordinates", ch critCoords, 
-  S "and the", phrase fs_min, E (sy fs_min), S "that results"]
+  S "and the", phrase fs_min, E (sy fs_min) +:+. S "that results",
+  makeRefS newA4]
 
 -----------
 -- Intro --

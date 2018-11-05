@@ -1,7 +1,8 @@
 module Language.Drasil.HTML.Helpers where
 
 import Text.PrettyPrint (Doc, text, render, empty, ($$), (<>), vcat, hcat)
-import Data.List (intersperse)
+import Data.List (intersperse, length)
+import Data.String (unwords)
 
 import Language.Drasil hiding (Expr)
 
@@ -49,6 +50,16 @@ wrap s ts = \x ->
   let tb c = text $ "<" ++c++ " class=\""++(foldr1 (++) (intersperse " " ts))++"\">"
   in let te c = text $ "</" ++ c ++ ">"
   in vcat [tb s, x, te s]
+
+-- | Helper for wrapping attributes in a tag.
+-- | The first argument is tag name.
+-- | The second argument contains different attribute names.
+-- | The third argument contains the values for different attributes.
+wrapInside :: String -> [String] -> [String] -> Doc
+wrapInside t att va = if length att /= length va then
+    error ("The number of attributes doesn't match the number of values.")
+ else text $ "<" ++ t ++ (unwords $ zipWith foldStr att va) ++ ">"
+ where foldStr s1 s2 = s1 ++ "\"" ++ s2 ++ "\""
 
 -- | Helper for setting up captions  
 caption :: Doc -> Doc

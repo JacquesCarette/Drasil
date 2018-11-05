@@ -364,7 +364,7 @@ mkEnumSimpleD = mkEnumSimple $ mkListTuple (\x -> Flat $ x ^. defn)
 -- | Creates a list tuple filling in the title with a ShortName and filling
 -- reference information.
 mkListTuple :: (Referable c, HasShortName c, Definition c) => (c -> ItemType) -> c -> ListTuple
-mkListTuple f x = (getShortName x, f x, Just $ refAdd x)
+mkListTuple f x = ((S . getStringSN $ x ^. shortname), f x, Just $ refAdd x)
 
 -- | table of units intro writer. Translates a TUIntro to a Sentence.
 tuI :: TUIntro -> Sentence

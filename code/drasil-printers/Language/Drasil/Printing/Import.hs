@@ -269,7 +269,7 @@ spec _ (Sy s)          = P.Sy s
 spec _ (Sp s)          = P.Sp s
 spec _ (P s)           = P.E $ symbol s
 spec sm (Ch s)         = P.E $ symbol $ lookupC sm s 
-spec sm (Ref (Reference t r sn))   = P.Ref t r (spec sm (snToSentence $ resolveSN sn $
+spec sm (Ref (Reference t r sn))   = P.Ref t r (spec sm (S . getStringSN $ resolveSN sn $
   lookupDeferredSN sm)) sn --FIXME: sn passed in twice?
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
@@ -414,3 +414,6 @@ item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
 labref :: Maybe RefAdd -> Maybe P.Spec
 labref l = maybe Nothing (\z -> Just $ P.S z) l
 
+-- | Helper for getting a short name
+getShortName :: HasShortName c => c -> Sentence
+getShortName c = S . getStringSN $ c ^. shortname

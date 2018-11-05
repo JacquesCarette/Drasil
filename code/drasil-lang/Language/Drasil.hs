@@ -88,12 +88,8 @@ module Language.Drasil (
   , dqd, dqd', DefinedQuantityDict, dqdWr, dqdQd
   -- Chunk.UnitaryConcept
   , ucw, UnitaryConceptDict
-  -- Chunk.Attributes --FIXME: Changed a lot
-  , getSource
   -- Derivation
   , Derivation
-  -- ???
-  , getShortName
   -- ShortName
   , resolveSN, ShortName, shortname', getStringSN
   --Citations
@@ -117,7 +113,7 @@ module Language.Drasil (
   , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
   , cProceedings, cTechReport, cUnpublished
   , CitationKind(..)
-  -- Spec
+  -- Sentence
   , Sentence(..), sParen, sSqBr , (+:+), (+:+.), sC, (+:)
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
@@ -169,8 +165,6 @@ module Language.Drasil (
   , HasUnitTable, unitMap, unitTable, collectUnits
   -- AssumpChunk
   , AssumpChunk, assuming, assump
-  -- Attribute
-  , snToSentence
   -- Referencing
   , ReferenceDB, AssumpMap, assumpLookup, assumptionsFromDB
   , rdb, assumpRefTable, customRef, HasAssumpRefs
@@ -245,7 +239,6 @@ import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss)
 import Language.Drasil.Chunk.AssumpChunk
-import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Citation (
   -- Types
     Citation(..), EntryID, BibRef, CiteField(..), Month(..), HP(..), CitationKind(..)

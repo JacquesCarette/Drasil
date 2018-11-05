@@ -8,25 +8,30 @@ import Language.Drasil hiding (Expr)
 --import Language.Drasil.Document (Document, MaxWidthPercent)
 import Language.Drasil.Printing.AST (Expr)
 
-html, head_tag, body, title, paragraph, code, tr, th, td :: Doc -> Doc
+html, head_tag, body, title, paragraph, code, tr, th, td, figure,
+  figcaption :: Doc -> Doc
 -- | HTML tag wrapper
-html      = wrap "html" []
+html       = wrap "html" []
 -- | Head tag wrapper
-head_tag  = wrap "head" []
+head_tag   = wrap "head" []
 -- | Body tag wrapper
-body      = wrap "body" []
+body       = wrap "body" []
 -- | Title tag wrapper
-title     = wrap "title" []
+title      = wrap "title" []
 -- | Paragraph tag wrapper
-paragraph = wrap "p" ["paragraph"]
+paragraph  = wrap "p" ["paragraph"]
 -- | Code tag wrapper
-code      = wrap "code" ["code"]
+code       = wrap "code" ["code"]
 -- | Table row tag wrapper
-tr        = wrap "tr" []
+tr         = wrap "tr" []
 -- | Table header tag wrapper
-th        = wrap "th" []
+th         = wrap "th" []
 -- | Table cell tag wrapper
-td        = wrap "td" []
+td         = wrap "td" []
+-- | Figure tag wrapper
+figure     = wrap "figure" []
+-- | Figcaption tag wra
+figcaption = wrap "figcaption" []
 
 -- | Helper for HTML headers
 h :: Int -> Doc -> Doc
@@ -71,16 +76,15 @@ image f c wp =
 
 image :: Doc -> Doc -> MaxWidthPercent -> Doc
 image f c 100 = 
-  text "<figure>" <>
-  text "<p><img class=\"figure\" src=\"" <> f <> text "\" alt=\"" <> c <> text "\"></img>" <>
-  text "<figcaption>" <> c <> text "</figcaption>" <>
-  text "</figure>"
+  figure $ vcat[
+  text "<img class=\"figure\" src=\"" <> f <> text "\" alt=\"" <> c <> text "\">",
+  figcaption c]
 image f c wp =
-  text "<figure>" <>
-  text "<p><img class=\"figure\" src=\"" <> f <> text "\" alt=\"" <> c <> 
-  text ("\"style=\"max-width: " ++ show (wp / 100) ++ "%;\"></img>") <>
-  text "<figcaption>" <> c <> text "</figcaption>" <>
-  text "</figure>"
+  figure $ vcat[
+  text "<img class=\"figure\" src=\"" <> f <> text "\" alt=\"" <> c <>
+  text ("\"width=\" " ++ show (wp / 100) ++ "%;\">"),
+  figcaption c
+  ]
 
 
 

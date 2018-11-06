@@ -16,7 +16,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   TraceabilitySec(TraceabilityProg),
   dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
   outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, tsymb'',
-  getDocDesc, egetDocDesc)
+  getDocDesc, egetDocDesc, ciGetDocDesc)
 import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel,
   likeChg, probDesc, sysCont, unlikeChg)
 
@@ -102,7 +102,7 @@ swhs_si = SI {
 }
 
 swhsSymMap :: ChunkDB
-swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull)
+swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms)
   (map cw swhsSymbols ++ srsDomains) this_si
 
 swhsRefDB :: ReferenceDB
@@ -116,6 +116,8 @@ printSetting = PI swhsSymMap defaultConfiguration
     -- Redundant b/c the unitals are not really concepts (yet). There
     -- Will still likely be a better way to do this.
   --FIXME: Should be all Named, not just acronyms at the end.
+acronyms :: [CI]
+acronyms = ciGetDocDesc mkSRS
 
 symbTT :: [DefinedQuantityDict]
 symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) swhsSymMap

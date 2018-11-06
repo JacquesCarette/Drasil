@@ -1,7 +1,7 @@
 module Language.Drasil.HTML.Helpers where
 
 import Text.PrettyPrint (Doc, text, render, empty, ($$), (<>), vcat, hcat)
-import Data.List (intersperse, length)
+import Data.List (intersperse, foldl1)
 import Data.String (unwords)
 
 import Language.Drasil hiding (Expr)
@@ -31,8 +31,12 @@ th         = wrap "th" []
 td         = wrap "td" []
 -- | Figure tag wrapper
 figure     = wrap "figure" []
--- | Figcaption tag wra
+-- | Figcaption tag wrapper
 figcaption = wrap "figcaption" []
+
+img :: [(String, Doc)] -> Doc
+-- | Image tag wrapper
+img        = wrapInside "img"
 
 -- | Helper for HTML headers
 h :: Int -> Doc -> Doc
@@ -53,13 +57,11 @@ wrap s ts = \x ->
 
 -- | Helper for wrapping attributes in a tag.
 -- | The first argument is tag name.
--- | The second argument contains different attribute names.
--- | The third argument contains the values for different attributes.
-wrapInside :: String -> [String] -> [String] -> Doc
-wrapInside t att va = if length att /= length va then
-    error ("The number of attributes doesn't match the number of values.")
- else text $ "<" ++ t ++ (unwords $ zipWith foldStr att va) ++ ">"
- where foldStr s1 s2 = s1 ++ "\"" ++ s2 ++ "\""
+-- | The String in the pair is the attribute name,
+-- | The Doc is the value for different attributes.
+wrapInside :: String -> [(String, Doc)] -> Doc
+wrapInside t p = text ("<" ++ t ++ " ") <> foldl1 (<>) (map foldStr p) <> text ">"
+ where foldStr (attr, val) = text (attr ++ "=\"") <> val <> text "\" "
 
 -- | Helper for setting up captions  
 caption :: Doc -> Doc
@@ -81,12 +83,11 @@ reflinkURI ref txt = text ("<a href=\"" ++ ref ++ "\">") <> txt <> text "</a>"
 image :: Doc -> Doc -> MaxWidthPercent -> Doc
 image f c 100 = 
   figure $ vcat[
-  text "<img src=\"" <> f <> text "\" alt=\"" <> c <> text "\">",
+  img $ [("src", f), ("alt", c)],
   figcaption c]
 image f c wp =
   figure $ vcat[
-  text "<img src=\"" <> f <> text "\" alt=\"" <> c <>
-  text ("\" width=\" " ++ show (wp) ++ "%\">"),
+  img $ [("src", f), ("alt", c), ("width", text $ show (wp) ++ "%")],
   figcaption c
   ]
 

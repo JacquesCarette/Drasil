@@ -1,6 +1,8 @@
 {-# LANGUAGE GADTs #-}
 -- | Contains Sentences and helpers
-module Language.Drasil.Sentence where
+module Language.Drasil.Sentence
+  (Sentence(Ch, Sy, S, Sp, E, Ref, Quote, (:+:), EmptyS, P),
+   sParen, sSqBr, (+:+), sC, (+:+.), (+:)) where
 
 import Language.Drasil.Unicode (Special(SqBrClose, SqBrOpen))
 import Language.Drasil.Symbol (Symbol)
@@ -19,10 +21,11 @@ import Language.Drasil.UID (UID)
 infixr 5 :+:
 data Sentence where
   Ch    :: UID -> Sentence
-  Sy    :: USymb -> Sentence
+  Sy    :: USymb -> Sentence        -- Unit Symbol
   S     :: String -> Sentence       -- Strings, used for Descriptions in Chunks
   Sp    :: Special -> Sentence
-  P     :: Symbol -> Sentence
+  P     :: Symbol -> Sentence       -- should not be used in examples?
+  E     :: Expr -> Sentence
   Ref   :: Reference -> Sentence  -- Needs helper func to create Ref
                                                        -- See Reference.hs
   Quote :: Sentence -> Sentence     -- Adds quotation marks around a sentence
@@ -30,7 +33,6 @@ data Sentence where
   -- Direct concatenation of two Sentences (no implicit spaces!)
   (:+:) :: Sentence -> Sentence -> Sentence   
   EmptyS :: Sentence
-  E :: Expr -> Sentence
 
 instance Monoid Sentence where
   mempty = EmptyS

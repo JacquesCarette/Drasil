@@ -293,8 +293,8 @@ import Language.Drasil.Reference (makeRef, makeRefS, mkRefFrmLbl, ReferenceDB, a
                                  , citationRefTable, RefMap
                                  , simpleMap)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 
-  prime, sCurlyBrSymb, compsy)
-import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol)
+  prime, compsy)
+import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol, sCurlyBrSymb)
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it

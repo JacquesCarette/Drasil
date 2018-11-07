@@ -19,7 +19,7 @@ cent_mass :: NP --FIXME: Need to be able to cap plural.
 cent_mass = nounPhrase' "centre of mass" "centres of mass" 
   (Replace (S "centre of mass"))
 
-centreMass    = commonIdea "centreMass" cent_mass              "CM"   []
-twoD          = commonIdea "twoD"       (pn "Two-Dimensional") "2D"   []
+centreMass    = commonIdea "centreMass" cent_mass              "CM"   ["domain specific"]
+twoD          = commonIdea "twoD"       (pn "Two-Dimensional") "2D"   ["domain specific"]
 
-chipmunk = commonIdea "chipmunk"      (pn "Chipmunk2D game physics library")    "Chipmunk2D"  []
+chipmunk = commonIdea "chipmunk"      (pn "Chipmunk2D game physics library")    "Chipmunk2D"  ["domain specific"]

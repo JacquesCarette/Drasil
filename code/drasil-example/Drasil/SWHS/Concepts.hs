@@ -20,13 +20,13 @@ acronymsFull = acronyms ++ [phsChgMtrl, rightSide]
 phsChgMtrl, rightSide, progName :: CI
 
 phsChgMtrl  = commonIdea "phsChgMtrl" (nounPhrase "phase change material"
-  "phase change materials") "PCM" []
+  "phase change materials") "PCM" ["domain specific"]
 
 rightSide   = commonIdea "rightSide"  (nounPhrase "right hand side"
-  "right hand sides") "RHS" []
+  "right hand sides") "RHS" ["domain specific"]
 
 progName    = commonIdea "swhsName"   (nounPhrase "solar water heating system"
-  "solar water heating systems") "SWHS" []
+  "solar water heating systems") "SWHS" ["domain specific"]
 
 swhsFull :: NamedChunk
 swhsFull    = nc "swhsFull" (progName `with` phsChgMtrl)

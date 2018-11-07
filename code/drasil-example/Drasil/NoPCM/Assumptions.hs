@@ -1,21 +1,20 @@
 module Drasil.NoPCM.Assumptions where --all of this file is exported
 
 import Language.Drasil
-import Control.Lens ((^.))
 
 import Data.Drasil.Concepts.Documentation (model, assumpDom)
 
 import Data.Drasil.Quantities.PhysicalProperties (vol)
-import Data.Drasil.Quantities.Thermodynamics (boil_pt, melt_pt, temp)
+import Data.Drasil.Quantities.Thermodynamics (boil_pt, melt_pt)
 
-import Data.Drasil.Concepts.Thermodynamics as CT (heat, melting)
+import Data.Drasil.Concepts.Thermodynamics as CT (heat)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp)
 
 import Data.Drasil.SentenceStructures (foldlSent, sAnd, isThe)
 
 import Drasil.SWHS.Assumptions (newA1, newA2, newA3, newA7, newA8, newA9,
-  newA11, newA12, newA14, newA15, newA20)
-import Drasil.SWHS.Concepts (tank, water, perfect_insul)
+  newA14, newA15, newA20)
+import Drasil.SWHS.Concepts (tank, water)
 -- import Drasil.SWHS.References (swhsCitations)
 import Drasil.SWHS.Unitals (vol_ht_gen, temp_C, temp_init, temp_W, htCap_W, w_density)
 import Drasil.NoPCM.GenDefs (rocTempSimp)

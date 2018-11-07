@@ -1,7 +1,6 @@
 module Drasil.SSP.IMods where
 
 import Prelude hiding (tan, product, sin, cos)
-import Control.Lens ((^.))
 
 import Language.Drasil
 
@@ -14,7 +13,7 @@ import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (force)
 import Data.Drasil.SentenceStructures (andThe, eqN, foldlSent, foldlSent_, 
-  foldlSentCol, foldlSP, getTandS, getTDS, isThe, ofThe, ofThe', sAnd, sIs, sOf)
+  foldlSentCol, foldlSP, getTandS, isThe, ofThe, ofThe', sAnd, sOf)
 
 import Drasil.SSP.Assumptions (newA2, newA4, newA10, newA11,newA6)
 import Drasil.SSP.BasicExprs (eqlExpr, momExpr)

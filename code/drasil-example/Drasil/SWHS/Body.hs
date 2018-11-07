@@ -101,6 +101,9 @@ swhs_si = SI {
   _refdb = swhsRefDB
 }
 
+resourcePath :: String
+resourcePath = "../../../datafiles/SWHS/"
+
 swhsSymMap :: ChunkDB
 swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull)
   (map cw swhsSymbols ++ srsDomains) this_si
@@ -911,7 +914,7 @@ fig_tank :: LabelledContent
 fig_tank = llcc (mkLabelRAFig "Tank") $ fig (
   foldlSent_ [at_start sWHT `sC` S "with", phrase ht_flux_C, S "of",
   ch ht_flux_C `sAnd` phrase ht_flux_P, S "of", ch ht_flux_P])
-  "Tank.png"
+  (resourcePath ++"Tank.png")
 
 -----------------------------
 -- 4.1.3 : Goal Statements --

@@ -11,7 +11,7 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Citations (campidelli)
 import Data.Drasil.SentenceStructures (sAnd, sOf)
 
-import Drasil.GlassBR.Assumptions (standardValues, glassLite, ldfConstant)
+import Drasil.GlassBR.Assumptions (standardValues, ldfConstant)
 import Drasil.GlassBR.Concepts (annealed, fullyT, heatS)
 import Drasil.GlassBR.Labels (calOfDemandL, glassLiteL)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)

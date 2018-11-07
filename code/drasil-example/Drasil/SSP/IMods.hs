@@ -308,7 +308,8 @@ intrSlcDerivSentence2 = [S "Taking the", S "base shear force equilibrium" `sOf`
 
 intrSlcDerivSentence3 :: [Sentence]
 intrSlcDerivSentence3 = [S "Substituting the", phrase equation, S "for", ch nrmFSubWat,
-  S "from", eqN 16, S "into", eqN 17, S "and rearranging results in", eqN 18]
+  S "from", eqN 16, makeRefS resShearWO `sAnd` makeRefS mobShearWO,
+  S "into", eqN 17, S "and rearranging results in", eqN 18]
 
 intrSlcDerivSentence4 :: [Sentence]
 intrSlcDerivSentence4 = [S "Where", ch shearRNoIntsl `sAnd` ch shearFNoIntsl,

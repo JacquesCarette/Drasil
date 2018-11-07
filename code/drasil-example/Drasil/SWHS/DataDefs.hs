@@ -76,7 +76,8 @@ melt_frac_eqn :: Expr
 melt_frac_eqn = (sy latentE_P) / ((sy htFusion) * (sy pcm_mass))
 
 dd4MeltFrac :: DataDefinition
-dd4MeltFrac = mkDDL dd4MeltFracQD [makeRef koothoor2013] [] dd4MeltFracL []
+dd4MeltFrac = mkDDL dd4MeltFracQD [makeRef koothoor2013] [] dd4MeltFracL
+ [makeRefS dd3HtFusion]
 
 --Need to add units to data definition descriptions
 

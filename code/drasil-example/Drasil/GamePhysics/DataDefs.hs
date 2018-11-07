@@ -1,4 +1,6 @@
-module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns) where
+module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns,
+  ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
+  angVelDD, angAccelDD, impulseDD) where
 
 import Language.Drasil
 

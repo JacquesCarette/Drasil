@@ -6,7 +6,7 @@ import Data.Drasil.Concepts.Computation (inDatum)
 import Data.Drasil.Concepts.Documentation (datum, funcReqDom, input_,
   method_, value)
 
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), andThe, 
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
   foldlList, foldlSent, ofThe, sOf)
 import Data.Drasil.Utils (mkInputDatTb)
 

@@ -830,10 +830,12 @@ System Context
 <a href=#Figure:sysCtxDiag>sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (GlassBR). Arrows are used to show the data flow between the system and its environment.
 </p>
 <div id="Figure:sysCtxDiag">
-<img class="figure" src="../../../datafiles/GlassBR/SystemContextFigure.png" alt="System Context"></img>
-<p class="caption">
+<figure>
+<img src="../../../datafiles/GlassBR/SystemContextFigure.png" alt="System Context" >
+<figcaption>
 System Context
-</p>
+</figcaption>
+</figure>
 </div>
 <p class="paragraph">
 The interaction between the product and the user is through a user interface. The responsibilities of the user and the system are as follows:
@@ -1079,10 +1081,12 @@ PS2: The point of explosion. Where the bomb, or any kind of man-made explosion, 
 </p>
 </div>
 <div id="Figure:physSystImage">
-<img class="figure" src="../../../datafiles/GlassBR/physicalsystimage.png" alt="The physical system"style="max-width: 0.3%;"></img>
-<p class="caption">
+<figure>
+<img src="../../../datafiles/GlassBR/physicalsystimage.png" alt="The physical system" width="30.0%" >
+<figcaption>
 The physical system
-</p>
+</figcaption>
+</figure>
 </div>
 </div>
 </div>
@@ -1465,7 +1469,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
-<a href=#astm2009>astm2009</a>, <a href=#beasonEtAl1998>beasonEtAl1998</a> and <a href=#campidelli>campidelli</a>
+<a href=#astm2009>astm2009</a>, <a href=#beasonEtAl1998>beasonEtAl1998</a>, and <a href=#campidelli>campidelli</a>
 </p>
 </td>
 </tr>
@@ -2763,6 +2767,9 @@ Notes
 <p class="paragraph">
 <a href=#A:responseType>A: responseType</a>
 </p>
+<p class="paragraph">
+<a href=#DD:risk.fun>DD: risk_fun</a>
+</p>
 </td>
 </tr>
 <tr>
@@ -2887,7 +2894,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>LR</em> is the load resistance, which is also called capacity. <em>NFL</em> is the non-factored load. <em>GTF</em> is the glass type factor. <em>LSF</em> is the load share factor. Follows <a href=#A:glassCondition>A: glassCondition</a> and <a href=#A:glassType>A: glassType</a> (&quot;In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations&quot;) from <a href=#astm2009>astm2009</a> (pg. 53) (<a href=#A:glassLite>A: glassLite</a>).
+<a href=#A:glassLite>A: glassLite</a> <a href=#DD:gTF>DD: gTF</a> <a href=#DD:nFL>DD: nFL</a>.
 </p>
 </td>
 </tr>
@@ -5348,22 +5355,28 @@ Traceability Matrix Showing the Connections Between Assumptions and Other Items
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:TraceyItemSecs>TraceyItemSecs</a> shows the dependencies of theoretical models, instance models, and data definitions on each other. <a href=#Figure:TraceyReqsItems>TraceyReqsItems</a> shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. <a href=#Figure:TraceyAssumpsOthers>TraceyAssumpsOthers</a> shows the dependencies of theoretical models, instance models, data definitions, requirements, and likely changes on assumptions.
 </p>
 <div id="Figure:TraceyItemSecs">
-<img class="figure" src="../../../datafiles/GlassBR/Trace.png" alt="Figure 2: Traceability Matrix Showing the Connections Between Items of Different Sections"></img>
-<p class="caption">
+<figure>
+<img src="../../../datafiles/GlassBR/Trace.png" alt="Figure 2: Traceability Matrix Showing the Connections Between Items of Different Sections" >
+<figcaption>
 Figure 2: Traceability Matrix Showing the Connections Between Items of Different Sections
-</p>
+</figcaption>
+</figure>
 </div>
 <div id="Figure:TraceyReqsItems">
-<img class="figure" src="../../../datafiles/GlassBR/RTrace.png" alt="Figure 3: Traceability Matrix Showing the Connections Between Requirements and Other Items"></img>
-<p class="caption">
+<figure>
+<img src="../../../datafiles/GlassBR/RTrace.png" alt="Figure 3: Traceability Matrix Showing the Connections Between Requirements and Other Items" >
+<figcaption>
 Figure 3: Traceability Matrix Showing the Connections Between Requirements and Other Items
-</p>
+</figcaption>
+</figure>
 </div>
 <div id="Figure:TraceyAssumpsOthers">
-<img class="figure" src="../../../datafiles/GlassBR/ATrace.png" alt="Figure 4: Traceability Matrix Showing the Connections Between Assumptions and Other Items"></img>
-<p class="caption">
+<figure>
+<img src="../../../datafiles/GlassBR/ATrace.png" alt="Figure 4: Traceability Matrix Showing the Connections Between Assumptions and Other Items" >
+<figcaption>
 Figure 4: Traceability Matrix Showing the Connections Between Assumptions and Other Items
-</p>
+</figcaption>
+</figure>
 </div>
 </div>
 </div>
@@ -5629,16 +5642,20 @@ Appendix
 This appendix holds the graphs (<a href=#Figure:demandVSsod>demandVSsod</a> and <a href=#Figure:dimlessloadVSaspect>dimlessloadVSaspect</a>) used for interpolating values needed in the models.
 </p>
 <div id="Figure:demandVSsod">
-<img class="figure" src="../../../datafiles/GlassBR/ASTM_F2248-09.png" alt="Figure 5: 3 second duration equivalent pressure (<em>q</em>) versus Stand off distance (SD) versus Charge weight (<em>w</em>)"></img>
-<p class="caption">
+<figure>
+<img src="../../../datafiles/GlassBR/ASTM_F2248-09.png" alt="Figure 5: 3 second duration equivalent pressure (<em>q</em>) versus Stand off distance (SD) versus Charge weight (<em>w</em>)" >
+<figcaption>
 Figure 5: 3 second duration equivalent pressure (<em>q</em>) versus Stand off distance (SD) versus Charge weight (<em>w</em>)
-</p>
+</figcaption>
+</figure>
 </div>
 <div id="Figure:dimlessloadVSaspect">
-<img class="figure" src="../../../datafiles/GlassBR/ASTM_F2248-09_BeasonEtAl.png" alt="Figure 6: Non dimensional lateral load (<em>q&#770;</em>) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (<em>J</em>)"></img>
-<p class="caption">
+<figure>
+<img src="../../../datafiles/GlassBR/ASTM_F2248-09_BeasonEtAl.png" alt="Figure 6: Non dimensional lateral load (<em>q&#770;</em>) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (<em>J</em>)" >
+<figcaption>
 Figure 6: Non dimensional lateral load (<em>q&#770;</em>) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (<em>J</em>)
-</p>
+</figcaption>
+</figure>
 </div>
 </div>
 </div>

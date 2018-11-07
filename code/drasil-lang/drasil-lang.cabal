@@ -18,7 +18,6 @@ library
     , Language.Drasil.Expr.Math
     , Language.Drasil.Expr.Precedence
     , Language.Drasil.Chunk.AssumpChunk
-    , Language.Drasil.Chunk.Attribute
     , Language.Drasil.Chunk.Citation
     , Language.Drasil.Chunk.CommonIdea
     , Language.Drasil.Chunk.Concept
@@ -44,7 +43,6 @@ library
     , Language.Drasil.Classes.Core
     , Language.Drasil.Document
     , Language.Drasil.Document.Core
-    , Language.Drasil.Document.Extract
     , Language.Drasil.Label.Core
     , Language.Drasil.Label.Type
     , Language.Drasil.Label

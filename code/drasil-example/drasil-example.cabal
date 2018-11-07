@@ -178,7 +178,8 @@ executable chipmunkdocs
   hs-source-dirs: .
   main-is: Drasil/GamePhysics/Main.hs
   other-modules:
-      Drasil.GamePhysics.Body
+      Drasil.GamePhysics.Assumptions
+    , Drasil.GamePhysics.Body
     , Drasil.GamePhysics.Changes
     , Drasil.GamePhysics.Concepts
     , Drasil.GamePhysics.DataDefs

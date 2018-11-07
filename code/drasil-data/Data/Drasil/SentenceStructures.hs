@@ -15,6 +15,7 @@ module Data.Drasil.SentenceStructures
   , fmtPhys, fmtSfwr, typUncr
   , mkTableFromColumns
   , EnumType(..), WrapType(..), SepType(..), FoldType(..)
+  , getSource
   ) where
 
 import Language.Drasil
@@ -237,3 +238,10 @@ fmtSfwr c = foldlList Comma List $ map (E . constraintToExpr c) $ filter isSfwrC
 replaceEmptyS :: Sentence -> Sentence
 replaceEmptyS EmptyS = none
 replaceEmptyS s@_ = s
+
+-- Should this get only the first one or all potential sources?
+-- Should we change the source ref to have a list (to keep things clean in case
+--    of multiple sources)?
+-- | Get the source reference from the references (if it exists)
+getSource :: HasReference c => c -> Sentence
+getSource c = foldlList Comma List $ map Ref $ c ^. getReferences

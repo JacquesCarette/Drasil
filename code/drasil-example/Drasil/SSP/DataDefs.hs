@@ -11,10 +11,10 @@ import Data.Drasil.Utils (eqUnR', weave)
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (definition, value)
 import Data.Drasil.SentenceStructures (eqN, foldlSentCol, foldlSP, getTandS, 
-  isThe, ofThe', sAnd)
+  ofThe', sAnd)
 import Data.Drasil.Concepts.Math (equation)
 
-import Drasil.SSP.Assumptions (newA10, newA11)
+import Drasil.SSP.Assumptions (newA3, newA4, newA5, newA9, newA10, newA11)
 import Drasil.SSP.BasicExprs (eqlExpr)
 import Drasil.SSP.Labels (genDef2Label, genDef3Label, sliceWghtL, baseWtrFL, 
   surfWtrFL, intersliceWtrFL, angleAL, angleBL, lengthLbL , sliceWghtL, 
@@ -62,7 +62,8 @@ slcWgtEqn = (inxi baseWthX) * (case_ [case1,case2,case3])
 --DD2
 
 baseWtrF :: DataDefinition
-baseWtrF = mkDDL baseWtrFQD [makeRef fredlund1977] [{-Derivation-}] baseWtrFL []--Notes
+baseWtrF = mkDDL baseWtrFQD [makeRef fredlund1977] [{-Derivation-}] baseWtrFL 
+  [makeRefS newA9]--Notes
 --FIXME: fill empty lists in
 
 baseWtrFQD :: QDefinition
@@ -78,7 +79,8 @@ bsWtrFEqn = (inxi baseLngth)*(case_ [case1,case2])
 --DD3
 
 surfWtrF :: DataDefinition
-surfWtrF = mkDDL surfWtrFQD [makeRef fredlund1977] [{-Derivation-}] surfWtrFL []--Notes
+surfWtrF = mkDDL surfWtrFQD [makeRef fredlund1977] [{-Derivation-}] surfWtrFL
+  [makeRefS newA9]--Notes
 --FIXME: fill empty lists in
 
 surfWtrFQD :: QDefinition
@@ -94,7 +96,8 @@ surfWtrFEqn = (inxi surfLngth)*(case_ [case1,case2])
 --DD4
 
 intersliceWtrF :: DataDefinition
-intersliceWtrF = mkDDL intersliceWtrFQD [makeRef fredlund1977] [{-Derivation-}] intersliceWtrFL []--Notes
+intersliceWtrF = mkDDL intersliceWtrFQD [makeRef fredlund1977] [{-Derivation-}] intersliceWtrFL
+  []--Notes
 --FIXME: fill empty lists in
 
 intersliceWtrFQD :: QDefinition
@@ -114,7 +117,8 @@ intersliceWtrFEqn = case_ [case1,case2,case3]
 --DD5
 
 angleA :: DataDefinition
-angleA = mkDDL angleAQD [makeRef fredlund1977] [{-Derivation-}] angleAL []--Notes
+angleA = mkDDL angleAQD [makeRef fredlund1977] [{-Derivation-}] angleAL 
+  [makeRefS newA9]--Notes
 --FIXME: fill empty lists in
 
 angleAQD :: QDefinition
@@ -127,7 +131,8 @@ angleAEqn = (inxi slipHght - inx slipHght (-1)) /
 --DD5.5
 
 angleB :: DataDefinition
-angleB = mkDDL angleBQD [makeRef fredlund1977] [{-Derivation-}] angleBL []--Notes
+angleB = mkDDL angleBQD [makeRef fredlund1977] [{-Derivation-}] angleBL 
+  [makeRefS newA9]--Notes
 --FIXME: fill empty lists in
 
 angleBQD :: QDefinition
@@ -152,7 +157,8 @@ lengthBEqn = inxi slipDist - inx slipDist (-1)
 --DD6.3
 
 lengthLb :: DataDefinition
-lengthLb = mkDDL lengthLbQD [makeRef fredlund1977] [{-Derivation-}] lengthLbL []--Notes
+lengthLb = mkDDL lengthLbQD [makeRef fredlund1977] [{-Derivation-}] lengthLbL
+  [makeRefS newA9]--Notes
 --FIXME: fill empty lists in
 
 lengthLbQD :: QDefinition
@@ -164,7 +170,8 @@ lengthLbEqn = (inxi baseWthX) * sec (inxi baseAngle)
 --DD6.6
 
 lengthLs :: DataDefinition
-lengthLs = mkDDL lengthLsQD [makeRef fredlund1977] [{-Derivation-}] lengthLsL []--Notes
+lengthLs = mkDDL lengthLsQD [makeRef fredlund1977] [{-Derivation-}] lengthLsL
+  [makeRefS newA9]--Notes
 --FIXME: fill empty lists in
 
 lengthLsQD :: QDefinition
@@ -215,7 +222,8 @@ intrsliceFEqn = (sy normToShear) * (inxi scalFunc) * (inxi intNormForce)
 --DD10
 
 resShearWO :: DataDefinition
-resShearWO = mkDDL resShearWOQD [makeRef chen2005] resShr_deriv_ssp resShearWOL []--Notes
+resShearWO = mkDDL resShearWOQD [makeRef chen2005] resShr_deriv_ssp resShearWOL
+  [makeRefS newA3, makeRefS newA4, makeRefS newA5]--Notes
 --FIXME: fill empty lists in
 
 resShearWOQD :: QDefinition
@@ -236,7 +244,8 @@ resShr_deriv_ssp = weave [resShrDerivation_sentence, map E resShr_deriv_eqns_ssp
 --DD11
 
 mobShearWO :: DataDefinition
-mobShearWO = mkDDL mobShearWOQD [makeRef chen2005] mobShr_deriv_ssp mobShearWOL []--Notes
+mobShearWO = mkDDL mobShearWOQD [makeRef chen2005] mobShr_deriv_ssp mobShearWOL
+  [makeRefS newA3, makeRefS newA4, makeRefS newA5]--Notes
 --FIXME: fill empty lists in
 
 mobShearWOQD :: QDefinition

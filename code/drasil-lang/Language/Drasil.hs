@@ -88,12 +88,8 @@ module Language.Drasil (
   , dqd, dqd', DefinedQuantityDict, dqdWr, dqdQd
   -- Chunk.UnitaryConcept
   , ucw, UnitaryConceptDict
-  -- Chunk.Attributes --FIXME: Changed a lot
-  , getSource
   -- Derivation
   , Derivation
-  -- ???
-  , getShortName
   -- ShortName
   , resolveSN, ShortName, shortname', getStringSN
   --Citations
@@ -117,7 +113,7 @@ module Language.Drasil (
   , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
   , cProceedings, cTechReport, cUnpublished
   , CitationKind(..)
-  -- Spec
+  -- Sentence
   , Sentence(..), sParen, sSqBr , (+:+), (+:+.), sC, (+:)
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
@@ -169,8 +165,6 @@ module Language.Drasil (
   , HasUnitTable, unitMap, unitTable, collectUnits
   -- AssumpChunk
   , AssumpChunk, assuming, assump
-  -- Attribute
-  , snToSentence
   -- Referencing
   , ReferenceDB, AssumpMap, assumpLookup, assumptionsFromDB
   , rdb, assumpRefTable, customRef, HasAssumpRefs
@@ -194,9 +188,6 @@ module Language.Drasil (
   , sdep
   -- Expr.Extract
   , names
-  -- Document.Extract
-  , egetDoc, getDoc, egetSec, egetCon', egetLblCon, egetQDef
-  , getCon', getSec, getCon
   -- Label.Core
   , getAdd
   -- Development.Sentence
@@ -218,8 +209,6 @@ import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, csc
           apply, apply1, apply2,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
-import Language.Drasil.Document.Extract(egetDoc, getDoc, egetSec, egetCon', egetLblCon,
- egetQDef, getSec, getCon', getSec, getCon)
 import Language.Drasil.Expr.Extract (dep, names', names)
 import Language.Drasil.Expr.Precedence (precA, precB, eprec)
 import Language.Drasil.Sentence.EmbedSymbol(ch)
@@ -245,7 +234,6 @@ import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss)
 import Language.Drasil.Chunk.AssumpChunk
-import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Citation (
   -- Types
     Citation(..), EntryID, BibRef, CiteField(..), Month(..), HP(..), CitationKind(..)

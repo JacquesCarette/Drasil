@@ -84,18 +84,6 @@ gbRefDB = rdb assumptions gbCitations $ funcReqs ++ likelyChgs ++
 printSetting :: PrintingInformation
 printSetting = PI gbSymbMap defaultConfiguration
 
-ccss'' :: Sentence -> [DefinedQuantityDict]
-ccss'' s = combine s gbSymbMap
-
-ccss' :: Expr -> [DefinedQuantityDict]
-ccss' s = combine' s gbSymbMap
-
-ccs' :: [DefinedQuantityDict]
-ccs' = nub ((concatMap ccss'' $ getDoc glassBR_srs) ++ (concatMap ccss' $ egetDoc glassBR_srs))
-
-outputuid :: [String]
-outputuid = nub ((concatMap sdep $ getDoc glassBR_srs) ++ (concatMap names $ egetDoc glassBR_srs))
-
 this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton]
 

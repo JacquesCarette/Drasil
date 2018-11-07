@@ -43,7 +43,6 @@ library
     , Language.Drasil.Classes.Core
     , Language.Drasil.Document
     , Language.Drasil.Document.Core
-    , Language.Drasil.Document.Extract
     , Language.Drasil.Label.Core
     , Language.Drasil.Label.Type
     , Language.Drasil.Label

@@ -21,7 +21,7 @@ os :: CI
 application  = nc  "application"    (cn' "application")      
 computer     = nc  "computer"       (cn' "computer")         
 structure    = nc  "structure"      (cn' "structure")         
-os           = commonIdea "os"      (cn' "operating system")    "OS"   []
+os           = commonIdea "os"      (cn' "operating system")    "OS"   ["computer concept"]
 
 
 dataStruct, dataStruct', dataType, dataType', 

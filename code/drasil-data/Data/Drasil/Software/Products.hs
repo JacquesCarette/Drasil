@@ -6,7 +6,7 @@ import Data.Drasil.Concepts.Computation (computer)
 import Data.Drasil.Concepts.Software (program)
 
 matlab :: CI
-matlab     = commonIdea "matlab" (pn' "MATLAB programming language")       "MATLAB"  []
+matlab     = commonIdea "matlab" (pn' "MATLAB programming language")       "MATLAB"  ["programming language"]
 
 sciCompS :: NamedChunk
 sciCompS   = nc "sciCompS"       (cn' "scientific computing software")

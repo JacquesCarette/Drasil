@@ -14,21 +14,21 @@ assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
 -----------------------------------------------------------------------------------------------------------------
 -- | CI       |           |    uid      |         term                        | abbreviation |     ConceptDomain
 -----------------------------------------------------------------------------------------------------------------
-assumption  = commonIdea "assumption"  (cn' "assumption")                                  "A"         []
-dataDefn    = commonIdea "dataDefn"    (cn' "data definition")                             "DD"        []
-desSpec     = commonIdea "desSpec"     (fterms compoundPhrase design specification)        "DS"        []
-genDefn     = commonIdea "genDefn"     (cn' "general definition")                          "GD"        []
-goalStmt    = commonIdea "goalStmt"    (fterms compoundPhrase goal statement)              "GS"        []
-dataConst   = commonIdea "dataConst"   (cn' "data constraint")                             "DC"        []
-inModel     = commonIdea "inModel"     (fterms compoundPhrase instance_ model)             "IM"        []
-likelyChg   = commonIdea "likelyChg"   (cn' "likely change")                               "LC"        []
-unlikelyChg = commonIdea "unlikelyChg" (cn' "unlikely change")                             "UC"        []
-physSyst    = commonIdea "physSyst"    (fterms compoundPhrase physicalSystem description)  "PS"        []
-requirement = commonIdea "requirement" (cn' "requirement")                                 "R"         []
-thModel     = commonIdea "thModel"     (cn' "theoretical model")                           "T"         []
-mg          = commonIdea "mg"          (fterms compoundPhrase module_ guide)               "MG"        []
-notApp      = commonIdea "notApp"      (nounPhraseSP "not applicable")                     "N/A"       []
-typUnc      = commonIdea "typUnc"      (cn' "typical uncertainty")                         "Uncert."   []
+assumption  = commonIdea "assumption"  (cn' "assumption")                                  "A"         ["software engineering"]
+dataDefn    = commonIdea "dataDefn"    (cn' "data definition")                             "DD"        ["software engineering"]
+desSpec     = commonIdea "desSpec"     (fterms compoundPhrase design specification)        "DS"        ["software engineering"]
+genDefn     = commonIdea "genDefn"     (cn' "general definition")                          "GD"        ["software engineering"]
+goalStmt    = commonIdea "goalStmt"    (fterms compoundPhrase goal statement)              "GS"        ["software engineering"]
+dataConst   = commonIdea "dataConst"   (cn' "data constraint")                             "DC"        ["software engineering"]
+inModel     = commonIdea "inModel"     (fterms compoundPhrase instance_ model)             "IM"        ["software engineering"]
+likelyChg   = commonIdea "likelyChg"   (cn' "likely change")                               "LC"        ["software engineering"]
+unlikelyChg = commonIdea "unlikelyChg" (cn' "unlikely change")                             "UC"        ["software engineering"]
+physSyst    = commonIdea "physSyst"    (fterms compoundPhrase physicalSystem description)  "PS"        ["software engineering"]
+requirement = commonIdea "requirement" (cn' "requirement")                                 "R"         ["software engineering"]
+thModel     = commonIdea "thModel"     (cn' "theoretical model")                           "T"         ["software engineering"]
+mg          = commonIdea "mg"          (fterms compoundPhrase module_ guide)               "MG"        ["software engineering"]
+notApp      = commonIdea "notApp"      (nounPhraseSP "not applicable")                     "N/A"       ["others"]
+typUnc      = commonIdea "typUnc"      (cn' "typical uncertainty")                         "Uncert."   ["software engineering"]
 
 srs = commonIdea "srs" 
   (compoundPhraseP1 (softwareReq ^. term) (specification ^. term))

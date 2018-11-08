@@ -3,6 +3,7 @@ module Language.Drasil.Chunk.DataDefinition where
 
 import Control.Lens(makeLenses, (^.), view)
 
+import Data.Drasil.Concepts.Documentation (dataDefn)
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn')
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
@@ -29,7 +30,7 @@ data DataDefinition = DatDef { _qd :: QDefinition
                              , _deri :: Derivation
                              , _lbl :: Label
                              , _notes :: [Sentence]
-                             , _cdom' :: [UID]
+                             , _ci :: CI
                              }
 makeLenses ''DataDefinition
 
@@ -47,14 +48,14 @@ instance HasAdditionalNotes DataDefinition where getNotes = notes
 instance MayHaveUnit        DataDefinition where getUnit = getUnit . view qd 
 instance HasLabel           DataDefinition where getLabel = lbl
 instance HasShortName       DataDefinition where shortname = lbl . shortname
-instance ConceptDomain      DataDefinition where cdom = cdom'
+instance ConceptDomain      DataDefinition where cdom = ci ^. cdom
 
 -- | Smart constructor for data definitions 
 mkDD :: QDefinition -> [Reference] -> Derivation -> String -> [Sentence] -> DataDefinition
-mkDD a b c d e = DatDef a Global b c (mkLabelSame d (Def DD)) e
+mkDD a b c d e = DatDef a Global b c (mkLabelSame d (Def DD)) e dataDefn
 
 mkDDL :: QDefinition -> [Reference] -> Derivation -> Label -> [Sentence] -> DataDefinition
-mkDDL a b c label e = DatDef a Global b c label e
+mkDDL a b c label e = DatDef a Global b c label e dataDefn
 
 qdFromDD :: DataDefinition -> QDefinition
 qdFromDD dd = dd ^. qd

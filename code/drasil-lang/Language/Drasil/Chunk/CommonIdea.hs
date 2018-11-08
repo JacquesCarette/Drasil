@@ -1,11 +1,13 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.CommonIdea (CI, commonIdea , getAcc) where
+module Language.Drasil.Chunk.CommonIdea (CI, commonIdea, getAcc, commonIdeaWithDict) where
 
+import Control.Lens ((^.))
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
  CommonIdea(abrv), ConceptDomain(cdom))
 import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.NounPhrase (NP)
+import Language.Drasil.Chunk.NamedIdea (IdeaDict)
 
 import Control.Lens (makeLenses, view)
 
@@ -24,6 +26,9 @@ instance ConceptDomain CI where cdom = cdom'
 -- term (of type 'NP'), and abbreviation (as a string)
 commonIdea :: String -> NP -> String -> [UID] -> CI
 commonIdea = CI
+
+commonIdeaWithDict :: String -> NP -> String -> [IdeaDict] -> CI
+commonIdeaWithDict = (\x y z i -> CI x y z (map (^.uid) i))
 
 getAcc :: CI -> Sentence
 getAcc = S . abrv

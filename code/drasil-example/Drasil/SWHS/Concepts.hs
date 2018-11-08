@@ -8,6 +8,7 @@ import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn,
   typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (ode, parameter)
 import Data.Drasil.Phrase (with)
+import Data.Drasil.IdeaDicts (materialEng)
 
 ---Acronyms---
 acronyms :: [CI]
@@ -19,14 +20,14 @@ acronymsFull = acronyms ++ [phsChgMtrl, rightSide]
 
 phsChgMtrl, rightSide, progName :: CI
 
-phsChgMtrl  = commonIdea "phsChgMtrl" (nounPhrase "phase change material"
-  "phase change materials") "PCM" ["domain specific"]
+phsChgMtrl  = commonIdeaWithDict "phsChgMtrl" (nounPhrase "phase change material"
+  "phase change materials") "PCM" [materialEng]
 
-rightSide   = commonIdea "rightSide"  (nounPhrase "right hand side"
-  "right hand sides") "RHS" ["domain specific"]
+rightSide   = commonIdeaWithDict "rightSide"  (nounPhrase "right hand side"
+  "right hand sides") "RHS" [materialEng]
 
-progName    = commonIdea "swhsName"   (nounPhrase "solar water heating system"
-  "solar water heating systems") "SWHS" ["domain specific"]
+progName    = commonIdeaWithDict "swhsName"   (nounPhrase "solar water heating system"
+  "solar water heating systems") "SWHS" [materialEng]
 
 swhsFull :: NamedChunk
 swhsFull    = nc "swhsFull" (progName `with` phsChgMtrl)

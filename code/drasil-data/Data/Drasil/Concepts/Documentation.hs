@@ -5,6 +5,7 @@ import Language.Drasil hiding (organization)
 import Data.Drasil.Concepts.Math (graph)
 import Data.Drasil.Phrase (andRT, and_, and_', ofA, of_, of_', of__, theCustom,
   compoundNC, compoundNC', compoundNCP1)
+import Data.Drasil.IdeaDicts (softEng)
 
 import Control.Lens ((^.))
 
@@ -14,25 +15,25 @@ assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
 -----------------------------------------------------------------------------------------------------------------
 -- | CI       |           |    uid      |         term                        | abbreviation |     ConceptDomain
 -----------------------------------------------------------------------------------------------------------------
-assumption  = commonIdea "assumption"  (cn' "assumption")                                  "A"         ["software engineering"]
-dataDefn    = commonIdea "dataDefn"    (cn' "data definition")                             "DD"        ["software engineering"]
-desSpec     = commonIdea "desSpec"     (fterms compoundPhrase design specification)        "DS"        ["software engineering"]
-genDefn     = commonIdea "genDefn"     (cn' "general definition")                          "GD"        ["software engineering"]
-goalStmt    = commonIdea "goalStmt"    (fterms compoundPhrase goal statement)              "GS"        ["software engineering"]
-dataConst   = commonIdea "dataConst"   (cn' "data constraint")                             "DC"        ["software engineering"]
-inModel     = commonIdea "inModel"     (fterms compoundPhrase instance_ model)             "IM"        ["software engineering"]
-likelyChg   = commonIdea "likelyChg"   (cn' "likely change")                               "LC"        ["software engineering"]
-unlikelyChg = commonIdea "unlikelyChg" (cn' "unlikely change")                             "UC"        ["software engineering"]
-physSyst    = commonIdea "physSyst"    (fterms compoundPhrase physicalSystem description)  "PS"        ["software engineering"]
-requirement = commonIdea "requirement" (cn' "requirement")                                 "R"         ["software engineering"]
-thModel     = commonIdea "thModel"     (cn' "theoretical model")                           "T"         ["software engineering"]
-mg          = commonIdea "mg"          (fterms compoundPhrase module_ guide)               "MG"        ["software engineering"]
-notApp      = commonIdea "notApp"      (nounPhraseSP "not applicable")                     "N/A"       ["others"]
-typUnc      = commonIdea "typUnc"      (cn' "typical uncertainty")                         "Uncert."   ["software engineering"]
-sec         = commonIdea "section"     (cn' "section")                                     "Sec"       ["software engineering"]
-srs = commonIdea "srs" 
+assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")                                  "A"         [softEng]
+dataDefn    = commonIdeaWithDict "dataDefn"    (cn' "data definition")                             "DD"        [softEng]
+desSpec     = commonIdeaWithDict "desSpec"     (fterms compoundPhrase design specification)        "DS"        [softEng]
+genDefn     = commonIdeaWithDict "genDefn"     (cn' "general definition")                          "GD"        [softEng]
+goalStmt    = commonIdeaWithDict "goalStmt"    (fterms compoundPhrase goal statement)              "GS"        [softEng]
+dataConst   = commonIdeaWithDict "dataConst"   (cn' "data constraint")                             "DC"        [softEng]
+inModel     = commonIdeaWithDict "inModel"     (fterms compoundPhrase instance_ model)             "IM"        [softEng]
+likelyChg   = commonIdeaWithDict "likelyChg"   (cn' "likely change")                               "LC"        [softEng]
+unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")                             "UC"        [softEng]
+physSyst    = commonIdeaWithDict "physSyst"    (fterms compoundPhrase physicalSystem description)  "PS"        [softEng]
+requirement = commonIdeaWithDict "requirement" (cn' "requirement")                                 "R"         [softEng]
+thModel     = commonIdeaWithDict "thModel"     (cn' "theoretical model")                           "T"         [softEng]
+mg          = commonIdeaWithDict "mg"          (fterms compoundPhrase module_ guide)               "MG"        [softEng]
+notApp      = commonIdea         "notApp"      (nounPhraseSP "not applicable")                     "N/A"       []
+typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")                         "Uncert."   [softEng]
+sec         = commonIdeaWithDict "section"     (cn' "section")                                     "Sec"       [softEng]
+srs = commonIdeaWithDict "srs" 
   (compoundPhraseP1 (softwareReq ^. term) (specification ^. term))
-  "SRS" ["software engineering"]
+  "SRS" [softEng]
 
 ---------------------------------------------------------------------
 

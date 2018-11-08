@@ -4,6 +4,7 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn, 
     goalStmt, inModel, likelyChg, requirement, srs, thModel, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (ode)
+import Data.Drasil.IdeaDicts (physics)
 
 ----- Acronyms -----
 
@@ -19,7 +20,7 @@ cent_mass :: NP --FIXME: Need to be able to cap plural.
 cent_mass = nounPhrase' "centre of mass" "centres of mass" 
   (Replace (S "centre of mass"))
 
-centreMass    = commonIdea "centreMass" cent_mass              "CM"   ["domain specific"]
-twoD          = commonIdea "twoD"       (pn "Two-Dimensional") "2D"   ["domain specific"]
+centreMass    = commonIdeaWithDict "centreMass" cent_mass              "CM"   [physics]
+twoD          = commonIdeaWithDict "twoD"       (pn "Two-Dimensional") "2D"   [physics]
 
-chipmunk = commonIdea "chipmunk"      (pn "Chipmunk2D game physics library")    "Chipmunk2D"  ["domain specific"]
+chipmunk = commonIdeaWithDict "chipmunk"      (pn "Chipmunk2D game physics library")    "Chipmunk2D"  [physics]

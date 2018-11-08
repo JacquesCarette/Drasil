@@ -1,10 +1,12 @@
 module Data.Drasil.Concepts.Computation where
 
+import Control.Lens ((^.))
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (datum, input_, literacy, output_, 
     quantity, type_, value, variable)
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.Phrase (compoundNC, compoundNCPlPh, compoundNCPlPl)
+import Data.Drasil.IdeaDicts (compScience)
 
 algorithm :: ConceptChunk
 algorithm    = dcc "algorithm" (cn' "algorithm")
@@ -21,7 +23,7 @@ os :: CI
 application  = nc  "application"    (cn' "application")      
 computer     = nc  "computer"       (cn' "computer")         
 structure    = nc  "structure"      (cn' "structure")         
-os           = commonIdea "os"      (cn' "operating system")    "OS"   ["computer concept"]
+os           = commonIdeaWithDict "os"      (cn' "operating system")    "OS"   [compScience]
 
 
 dataStruct, dataStruct', dataType, dataType', 

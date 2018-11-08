@@ -3,7 +3,6 @@ module Language.Drasil.Chunk.DataDefinition where
 
 import Control.Lens(makeLenses, (^.), view)
 
---import Data.Drasil.Concepts.Documentation (dataDefn)
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn')
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
@@ -17,6 +16,9 @@ import Language.Drasil.Label (mkLabelSame)
 import Language.Drasil.RefTypes(RefType(..), DType(..), Reference)
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Symbol.Helpers (eqSymb)
+import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
+import Language.Drasil.Chunk.NamedIdea (IdeaDict, mkIdea)
+import Language.Drasil.NounPhrase (cn')
 
 data Scope = Scp { _spec :: Label {-indirect reference-}}
 
@@ -30,7 +32,7 @@ data DataDefinition = DatDef { _qd :: QDefinition
                              , _deri :: Derivation
                              , _lbl :: Label
                              , _notes :: [Sentence]
-                            -- , _ci :: CI
+                             , _ci :: CI
                              }
 makeLenses ''DataDefinition
 
@@ -48,14 +50,20 @@ instance HasAdditionalNotes DataDefinition where getNotes = notes
 instance MayHaveUnit        DataDefinition where getUnit = getUnit . view qd 
 instance HasLabel           DataDefinition where getLabel = lbl
 instance HasShortName       DataDefinition where shortname = lbl . shortname
---instance ConceptDomain      DataDefinition where cdom = ci ^. cdom
+instance ConceptDomain      DataDefinition where cdom = ci . cdom
+
+softEng :: IdeaDict
+softEng      = mkIdea  "softEng"        (cn' "Software Engineering")  (Just "SE")
+
+dataDefn :: CI
+dataDefn    = commonIdeaWithDict "dataDefn"    (cn' "data definition")                             "DD"        [softEng]
 
 -- | Smart constructor for data definitions 
 mkDD :: QDefinition -> [Reference] -> Derivation -> String -> [Sentence] -> DataDefinition
-mkDD a b c d e = DatDef a Global b c (mkLabelSame d (Def DD)) e
+mkDD a b c d e = DatDef a Global b c (mkLabelSame d (Def DD)) e dataDefn
 
 mkDDL :: QDefinition -> [Reference] -> Derivation -> Label -> [Sentence] -> DataDefinition
-mkDDL a b c label e = DatDef a Global b c label e
+mkDDL a b c label e = DatDef a Global b c label e dataDefn
 
 qdFromDD :: DataDefinition -> QDefinition
 qdFromDD dd = dd ^. qd

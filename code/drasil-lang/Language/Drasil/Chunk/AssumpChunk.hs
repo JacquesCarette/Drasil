@@ -34,10 +34,10 @@ instance ConceptDomain AssumpChunk where cdom = ci . cdom
 softEng :: IdeaDict
 softEng      = mkIdea  "softEng"        (cn' "Software Engineering")  (Just "SE")
 
-dataDefn :: CI
-dataDefn    = commonIdeaWithDict "dataDefn"    (cn' "data definition")                             "DD"        [softEng]
+assumption :: CI
+assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")                                  "A"         [softEng]
 -- | Smart constructor for Assumption chunks.
 -- FIXME: is it safe to assume the correct label constructor will be
 --        used to build the passed in label?
 assump :: String -> Sentence -> Label -> AssumpChunk
-assump = (\x y z -> AC x y z dataDefn)
+assump = (\x y z -> AC x y z assumption)

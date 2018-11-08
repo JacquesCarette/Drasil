@@ -8,7 +8,7 @@ import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), DefiningExpr(defnExpr), Quantity, HasSpace(typ),
   HasDerivation(derivations), HasReference(getReferences), HasAdditionalNotes(getNotes),
-  HasShortName(shortname), HasLabel(getLabel))
+  HasShortName(shortname), HasLabel(getLabel), ConceptDomain(cdom))
 import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label)
@@ -29,6 +29,7 @@ data DataDefinition = DatDef { _qd :: QDefinition
                              , _deri :: Derivation
                              , _lbl :: Label
                              , _notes :: [Sentence]
+                             , _cdom' :: [UID]
                              }
 makeLenses ''DataDefinition
 
@@ -46,6 +47,7 @@ instance HasAdditionalNotes DataDefinition where getNotes = notes
 instance MayHaveUnit        DataDefinition where getUnit = getUnit . view qd 
 instance HasLabel           DataDefinition where getLabel = lbl
 instance HasShortName       DataDefinition where shortname = lbl . shortname
+instance ConceptDomain      DataDefinition where cdom = cdom'
 
 -- | Smart constructor for data definitions 
 mkDD :: QDefinition -> [Reference] -> Derivation -> String -> [Sentence] -> DataDefinition

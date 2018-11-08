@@ -9,7 +9,7 @@ import Data.Drasil.Phrase (andRT, and_, and_', ofA, of_, of_', of__, theCustom,
 import Control.Lens ((^.))
 
 assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
-  unlikelyChg, physSyst, requirement, thModel, mg, notApp, srs, typUnc :: CI
+  unlikelyChg, physSyst, requirement, thModel, mg, notApp, srs, typUnc, sec :: CI
 
 -----------------------------------------------------------------------------------------------------------------
 -- | CI       |           |    uid      |         term                        | abbreviation |     ConceptDomain
@@ -29,10 +29,10 @@ thModel     = commonIdea "thModel"     (cn' "theoretical model")                
 mg          = commonIdea "mg"          (fterms compoundPhrase module_ guide)               "MG"        ["software engineering"]
 notApp      = commonIdea "notApp"      (nounPhraseSP "not applicable")                     "N/A"       ["others"]
 typUnc      = commonIdea "typUnc"      (cn' "typical uncertainty")                         "Uncert."   ["software engineering"]
-
+sec         = commonIdea "section"     (cn' "section")                                     "Sec"       ["software engineering"]
 srs = commonIdea "srs" 
   (compoundPhraseP1 (softwareReq ^. term) (specification ^. term))
-  "SRS" []
+  "SRS" ["software engineering"]
 
 ---------------------------------------------------------------------
 

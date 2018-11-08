@@ -2,12 +2,17 @@
 -- | Contains Sentences and helpers
 module Language.Drasil.Sentence where
 
-import Language.Drasil.Unicode (Special(SqBrClose, SqBrOpen))
-import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.RefTypes (Reference)
+import Language.Drasil.RefTypes (Reference, RefAdd)
+import Language.Drasil.ShortName (ShortName)
+import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.UID (UID)
+import Language.Drasil.Unicode (Special(SqBrClose, SqBrOpen))
+
+-- Trying different pieces of information for a reference
+data RefProg
+data Reference2 = Reference2 RefProg RefAdd ShortName
 
 -- | For writing "sentences" via combining smaller elements
 -- Sentences are made up of some known vocabulary of things:
@@ -23,6 +28,7 @@ data Sentence where
   S     :: String -> Sentence       -- Strings, used for Descriptions in Chunks
   Sp    :: Special -> Sentence
   P     :: Symbol -> Sentence
+  Ref2  :: Reference2 -> Sentence
   Ref   :: Reference -> Sentence  -- Needs helper func to create Ref
                                                        -- See Reference.hs
   Quote :: Sentence -> Sentence     -- Adds quotation marks around a sentence

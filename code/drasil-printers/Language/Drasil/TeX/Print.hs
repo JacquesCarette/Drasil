@@ -16,7 +16,7 @@ import qualified Language.Drasil as L (
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
   ListType(Ordered, Unordered, Desc, Definitions, Simple), 
-  Spec(Quote, EmptyS, Ref, S, Sy, Sp, HARDNL, E, (:+:)), 
+  Spec(Quote, EmptyS, Ref, Ref2, S, Sy, Sp, HARDNL, E, (:+:)), 
   Fence(Norm, Abs, Curly, Paren), Expr, 
   Ops(Inte, Prod, Summ, Mul, Add, Or, And, Subt, Iff, LEq, GEq, 
   NEq, Eq, Gt, Lt, Impl, Dot, Cross, Neg, Exp, Dim, Not, Cot,
@@ -243,14 +243,15 @@ makeColumns ls = hpunctuate (text " & ") $ map spec ls
 
 needs :: Spec -> MathContext
 needs (a :+: b) = needs a `lub` needs b
-needs (S _)         = Text
-needs (E _)         = Math
-needs (Sy _)        = Text
-needs (Sp _)        = Math
-needs HARDNL        = Text
-needs (Ref _ _ _ _) = Text
-needs (EmptyS)      = Text
-needs (Quote _)     = Text
+needs (S _)          = Text
+needs (E _)          = Math
+needs (Sy _)         = Text
+needs (Sp _)         = Math
+needs HARDNL         = Text
+needs (Ref _ _ _ _)  = Text
+needs (Ref2 _ _ _ _) = Text
+needs (EmptyS)       = Text
+needs (Quote _)      = Text
 
 -- print all Spec through here
 spec :: Spec -> D
@@ -275,6 +276,7 @@ spec (Ref L.Cite r _ _)      = cite  (pure $ text r)
 spec (Ref L.Blank r sn _)    = snref r $ spec sn
 spec (Ref L.Link r _ sn)     = href  r $ L.getStringSN sn
 spec (Ref t r _ _)            = ref (show t) (pure $ text r)
+spec (Ref2 _ _ _ _)           = error "Ref2 Not implemented in TeX printer."
 spec EmptyS                   = empty
 spec (Quote q)                = quote $ spec q
 
@@ -285,7 +287,6 @@ escapeChars c = c : []
 symbol_needs :: L.Symbol -> MathContext
 symbol_needs (L.Atomic _)          = Text
 symbol_needs (L.Special _)         = Math
---symbol_needs (Greek _)           = Math
 symbol_needs (L.Concat [])         = Math
 symbol_needs (L.Concat (s:_))      = symbol_needs s
 symbol_needs (L.Corners _ _ _ _ _) = Math

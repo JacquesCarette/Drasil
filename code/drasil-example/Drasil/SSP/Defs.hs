@@ -7,6 +7,7 @@ import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn,
 import Data.Drasil.Concepts.Math (surface)
 
 import Data.Drasil.Phrase(of_'', compoundNC)
+import Data.Drasil.IdeaDicts
 
 ----Acronyms-----
 acronyms :: [CI]

@@ -2,6 +2,7 @@ module Data.Drasil.Concepts.Math where
 
 import Language.Drasil
 import Control.Lens ((^.))
+import Data.Drasil.IdeaDicts
 
 import Data.Drasil.Phrase(of_)
 

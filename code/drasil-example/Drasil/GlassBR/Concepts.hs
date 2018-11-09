@@ -6,6 +6,7 @@ import Data.Drasil.Concepts.Documentation (assumption, dataDefn, goalStmt, inMod
     likelyChg, notApp, physSyst, response, requirement, srs, thModel, type_, typUnc, 
     unlikelyChg)
 import Data.Drasil.Phrase (compoundNC)
+import Data.Drasil.IdeaDicts
 
 {--}
 

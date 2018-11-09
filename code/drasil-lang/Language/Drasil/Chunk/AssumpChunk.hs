@@ -7,7 +7,7 @@ import Language.Drasil.Classes (HasLabel(getLabel), ConceptDomain(cdom))
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
-import Language.Drasil.IdeaDicts (softEng)
+import Data.Drasil.IdeaDicts (softEng)
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
 import Language.Drasil.NounPhrase (cn')
 

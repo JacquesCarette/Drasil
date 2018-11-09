@@ -31,7 +31,7 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   product_, purpose, reference, requirement, reviewer, section_, software, 
   softwareSys, srs, srsDomains, standard, sysCont, system, template, term_,
   theory, thModel, traceyMatrix, user, userInput, value)
-import Data.Drasil.Concepts.Education (civilEng, scndYrCalculus, structuralMechanics)
+import Data.Drasil.Concepts.Education as Edu(civilEng, scndYrCalculus, structuralMechanics)
 import Data.Drasil.Concepts.Math (graph, parameter, probability)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Physics (distance)
@@ -253,7 +253,7 @@ rdrKnldgbleIn undrstd1 undrstd2 = (phrase theory +:+ S "behind" +:+
 
 undIR, appStanddIR, incScoR, endScoR :: Sentence
 undIR = foldlList Comma List [phrase scndYrCalculus, phrase structuralMechanics,
-  plural computerApp `sIn` phrase civilEng]
+  plural computerApp `sIn` phrase Edu.civilEng]
 appStanddIR = foldlSent [S " In addition" `sC` plural reviewer, -- FIXME: space before "In" is a hack to get proper spacing
   S "should be familiar with the applicable", plural standard,
   S "for constructions using glass from", (foldlList Comma List

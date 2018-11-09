@@ -5,7 +5,6 @@ import Language.Drasil hiding (organization)
 import Data.Drasil.Concepts.Math (graph)
 import Data.Drasil.Phrase (andRT, and_, and_', ofA, of_, of_', of__, theCustom,
   compoundNC, compoundNC', compoundNCP1)
-import Data.Drasil.IdeaDicts (softEng, documentc)
 
 import Control.Lens ((^.))
 

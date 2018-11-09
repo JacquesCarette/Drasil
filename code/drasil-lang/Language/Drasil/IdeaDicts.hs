@@ -1,7 +1,7 @@
-module Data.Drasil.IdeaDicts where
+module Language.Drasil.IdeaDicts where
 
-import Language.Drasil
-
+import Language.Drasil.Chunk.NamedIdea (IdeaDict, mkIdea)
+import Language.Drasil.NounPhrase (cn')
 
 compScience, softEng, mathematics, progLanguage, idglass, physics, civilEng
   , materialEng, documentc :: IdeaDict

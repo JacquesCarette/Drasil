@@ -7,8 +7,8 @@ import Language.Drasil.Classes (HasLabel(getLabel), ConceptDomain(cdom))
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
+import Language.Drasil.IdeaDicts (softEng)
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
-import Language.Drasil.Chunk.NamedIdea (IdeaDict, mkIdea)
 import Language.Drasil.NounPhrase (cn')
 
 
@@ -29,10 +29,6 @@ instance Eq            AssumpChunk where a == b = a ^. uid == b ^. uid
 instance HasLabel      AssumpChunk where getLabel = lbl
 instance HasShortName  AssumpChunk where shortname = lbl . shortname
 instance ConceptDomain AssumpChunk where cdom = ci . cdom
-
-
-softEng :: IdeaDict
-softEng      = mkIdea  "softEng"        (cn' "Software Engineering")  (Just "SE")
 
 assumption :: CI
 assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")                                  "A"         [softEng]

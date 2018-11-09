@@ -194,6 +194,9 @@ module Language.Drasil (
   , introduceAbb, phrase, plural, phrase's, plural's, at_start, at_start'
   -- UnitLang
   , USymb(US)
+  -- IdeaDicts
+  , compScience, softEng, mathematics, progLanguage, idglass, physics, civilEng
+  , materialEng, documentc
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -306,3 +309,4 @@ import Language.Drasil.Label.Type (getAdd)
 import Language.Drasil.UnitLang (USymb(US))
 
 import Language.Drasil.Development.Sentence -- are these really development?
+import Language.Drasil.IdeaDicts

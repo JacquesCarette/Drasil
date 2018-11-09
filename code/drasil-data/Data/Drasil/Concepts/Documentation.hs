@@ -5,7 +5,7 @@ import Language.Drasil hiding (organization)
 import Data.Drasil.Concepts.Math (graph)
 import Data.Drasil.Phrase (andRT, and_, and_', ofA, of_, of_', of__, theCustom,
   compoundNC, compoundNC', compoundNCP1)
-import Data.Drasil.IdeaDicts (softEng)
+import Data.Drasil.IdeaDicts (softEng, documentc)
 
 import Control.Lens ((^.))
 
@@ -30,7 +30,7 @@ thModel     = commonIdeaWithDict "thModel"     (cn' "theoretical model")        
 mg          = commonIdeaWithDict "mg"          (fterms compoundPhrase module_ guide)               "MG"        [softEng]
 notApp      = commonIdea         "notApp"      (nounPhraseSP "not applicable")                     "N/A"       []
 typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")                         "Uncert."   [softEng]
-sec         = commonIdeaWithDict "section"     (cn' "section")                                     "Sec"       [softEng]
+sec         = commonIdeaWithDict "section"     (cn' "section")                                     "Sec"       [documentc]
 srs = commonIdeaWithDict "srs" 
   (compoundPhraseP1 (softwareReq ^. term) (specification ^. term))
   "SRS" [softEng]

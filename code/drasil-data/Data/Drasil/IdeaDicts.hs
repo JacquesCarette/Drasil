@@ -3,7 +3,8 @@ module Data.Drasil.IdeaDicts where
 import Language.Drasil
 
 
-compScience :: IdeaDict
+compScience, softEng, mathematics, progLanguage, idglass, physics, civilEng
+  , materialEng, documentc :: IdeaDict
 -------------------------------------------------------------------------------
 --  IdeaDict     |   |      id       |       term                    |  abbreviation
 -------------------------------------------------------------------------------
@@ -15,6 +16,7 @@ idglass      = mkIdea  "glass"          (cn' "GlassBR")               (Just "Gla
 physics      = mkIdea  "physics"        (cn' "physics")               Nothing
 civilEng     = mkIdea  "civilEng"       (cn' "civil engineering")     Nothing
 materialEng  = mkIdea  "materialEng"    (cn' "material engineering")  Nothing
+documentc    = mkIdea  "documentc"      (cn' "document")              (Just "Doc")
         
 
 

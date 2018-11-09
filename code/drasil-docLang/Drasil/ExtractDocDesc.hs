@@ -28,7 +28,7 @@ egetDocSec (AppndxSec a)        = egetApp a
 egetDocSec (ExistingSolnSec e)  = egetExist e
 
 egetSec :: Section -> [Expr]
-egetSec (Section _ sc _) = concatMap egetSecCon sc
+egetSec (Section _ sc _ _) = concatMap egetSecCon sc
 
 egetSecCon :: SecCons -> [Expr]
 egetSecCon (Sub s) = egetSec s
@@ -171,7 +171,7 @@ getDocSec (AppndxSec a)        = getApp a
 getDocSec (ExistingSolnSec e)  = getExist e
 
 getSec :: Section -> [Sentence]
-getSec (Section t sc _) = t : concatMap getSecCon sc
+getSec (Section t sc _ _) = t : concatMap getSecCon sc
 
 getSecCon :: SecCons -> [Sentence]
 getSecCon (Sub s) = getSec s

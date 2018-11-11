@@ -14,7 +14,7 @@ import Language.Drasil.Chunk.GenDefn (GenDefn)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel),
-  HasRefAddress(getRefAdd), HasShortName(shortname))
+  HasRefAddress(getRefAdd), HasShortName(shortname), CommonIdea(abrv))
 import Language.Drasil.Document (Section(Section))
 import Language.Drasil.Document.Core (RawContent(..), LabelledContent(..))
 import Language.Drasil.Label.Core (Label(..))
@@ -117,7 +117,7 @@ instance Referable AssumpChunk where
   rType   _ = Assump
 
 instance Referable Section where
-  refAdd  (Section _ _ lb) = getAdd (lb ^. getRefAdd)
+  refAdd  (Section _ _ lb _) = getAdd (lb ^. getRefAdd)
   rType   _                = Sect
 
 instance Referable Citation where

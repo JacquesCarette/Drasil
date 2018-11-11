@@ -19,6 +19,9 @@ import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Label (mkLabelSame)
 import Language.Drasil.RefTypes (RefType(..), DType(..), Reference)
 import Language.Drasil.Sentence (Sentence)
+import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
+import Language.Drasil.Chunk.NamedIdea (IdeaDict, mkIdea)
+import Language.Drasil.NounPhrase (cn')
 
 import Control.Lens (makeLenses, view)
 
@@ -42,6 +45,7 @@ data InstanceModel = IM { _rc :: RelationConcept
                         , _deri :: Derivation
                         , _lb :: Label
                         , _notes :: [Sentence]
+                        , _ci :: CI
                         }
 makeLenses ''InstanceModel
 
@@ -62,24 +66,30 @@ instance HasSpace           InstanceModel where typ = imOutput . typ
 instance Quantity           InstanceModel where
 instance MayHaveUnit        InstanceModel where getUnit = getUnit . view imOutput
 
+softEng :: IdeaDict
+softEng      = mkIdea  "softEng"        (cn' "Software Engineering")  (Just "SE")
+
+instanceMod :: CI
+instanceMod    = commonIdeaWithDict "instanceMod"    (cn' "Instance Model")                    "IM"        [softEng]
+
 -- | Smart constructor for instance models; no derivations or notes
 im :: RelationConcept -> Inputs -> InputConstraints -> Output ->
   OutputConstraints -> [Reference] -> Label -> InstanceModel
-im rcon i ic o oc src sn = IM rcon i ic o oc src [] sn []
+im rcon i ic o oc src sn = IM rcon i ic o oc src [] sn [] instanceMod
 
 -- | Same as `im`, with an additional field for notes to be passed in; no derivation
 im' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> [Reference] -> Label -> [Sentence] -> InstanceModel
-im' rcon i ic o oc src lbe addNotes = IM rcon i ic o oc src [] lbe addNotes
+im' rcon i ic o oc src lbe addNotes = IM rcon i ic o oc src [] lbe addNotes instanceMod
 
 -- | im but with everything defined
 im'' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> [Reference] -> Derivation -> String -> [Sentence] -> InstanceModel
 im'' rcon i ic o oc src der sn addNotes = IM rcon i ic o oc src der (mkLabelSame sn (Def Instance))
- addNotes
+ addNotes instanceMod
 
 -- | im with no notes
 im''' :: RelationConcept -> Inputs -> InputConstraints -> Output ->
   OutputConstraints -> [Reference] -> Derivation -> String -> InstanceModel
 im''' rcon i ic o oc src der sn = IM rcon i ic o oc src der 
-  (mkLabelSame sn (Def Instance)) []
+  (mkLabelSame sn (Def Instance)) [] instanceMod

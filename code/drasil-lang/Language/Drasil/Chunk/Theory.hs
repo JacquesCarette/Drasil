@@ -12,6 +12,9 @@ import Language.Drasil.Expr (Relation)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.RefTypes (Reference)
 import Language.Drasil.Sentence (Sentence)
+import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
+import Language.Drasil.Chunk.NamedIdea (IdeaDict, mkIdea)
+import Language.Drasil.NounPhrase (cn')
 
 import Control.Lens (Lens', view, makeLenses)
 
@@ -47,6 +50,7 @@ data TheoryModel = TM
   , _ref  :: [Reference]
   , _lb :: Label
   , _notes :: [Sentence]
+  , _ci :: CI
   }
 makeLenses ''TheoryModel
 
@@ -69,6 +73,12 @@ instance Theory             TheoryModel where
 instance HasLabel           TheoryModel where getLabel = lb
 instance HasShortName       TheoryModel where shortname = lb . shortname
 
+softEng :: IdeaDict
+softEng      = mkIdea  "softEng"        (cn' "Software Engineering")  (Just "SE")
+
+theoryMod :: CI
+theoryMod    = commonIdeaWithDict "theoryMod"    (cn' "Theory Model")                    "TM"        [softEng]
+
 -- This "smart" constructor is really quite awful, it takes way too many arguments.
 -- This should likely be re-arranged somehow. Especially since since of the arguments
 -- have the same type!
@@ -76,4 +86,4 @@ tm :: (Concept c0, Quantity q, MayHaveUnit q, Concept c1) => c0 ->
     [q] -> [c1] -> [QDefinition] ->
     [Relation] -> [QDefinition] -> [Reference] ->
     Label -> [Sentence] -> TheoryModel
-tm c0 q c1 dq inv dfn r lbe nts = TM (cw c0) [] [] (map qw q) (map cw c1) dq inv dfn r lbe nts
+tm c0 q c1 dq inv dfn r lbe nts = TM (cw c0) [] [] (map qw q) (map cw c1) dq inv dfn r lbe nts theoryMod 

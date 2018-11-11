@@ -14,6 +14,9 @@ import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Label (mkLabelSame)
 import Language.Drasil.RefTypes(RefType(..), DType(..), Reference)
 import Control.Lens (makeLenses, view)
+import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
+import Language.Drasil.Chunk.NamedIdea (IdeaDict, mkIdea)
+import Language.Drasil.NounPhrase (cn')
 
 -- | A GenDefn is a RelationConcept that may have units
 data GenDefn = GD { _relC :: RelationConcept
@@ -22,6 +25,7 @@ data GenDefn = GD { _relC :: RelationConcept
                   , _refs :: [Reference]
                   , _lb :: Label
                   , _notes :: [Sentence]
+                  , _ci :: CI
                   }
 makeLenses ''GenDefn
 
@@ -39,9 +43,15 @@ instance HasShortName       GenDefn where shortname = lb . shortname
 instance HasAdditionalNotes GenDefn where getNotes = notes
 instance MayHaveUnit        GenDefn where getUnit = gdUnit
 
+softEng :: IdeaDict
+softEng      = mkIdea  "softEng"        (cn' "Software Engineering")  (Just "SE")
+
+gendef :: CI
+gendef    = commonIdeaWithDict "gendef"    (cn' "General Definition")                    "GD"        [softEng]
+
 gd' :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
   Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
-gd' r u derivs ref sn note = GD r (fmap unitWrapper u) derivs ref (mkLabelSame sn (Def General)) note
+gd' r u derivs ref sn note = GD r (fmap unitWrapper u) derivs ref (mkLabelSame sn (Def General)) note gendef
 
 gd'' :: RelationConcept -> [Reference] -> String -> [Sentence] -> GenDefn
-gd'' r ref sn note = GD r Nothing  [] ref (mkLabelSame sn (Def General)) note
+gd'' r ref sn note = GD r Nothing  [] ref (mkLabelSame sn (Def General)) note gendef

@@ -1,5 +1,5 @@
 Name:		drasil-lang
-Version:	0.1.40
+Version:	0.1.43
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -10,6 +10,7 @@ library
       Language.Drasil
     , Language.Drasil.Development
     , Language.Drasil.Utils
+    , Data.Drasil.IdeaDicts
   other-modules:
       Language.Drasil.NounPhrase
     , Language.Drasil.RefTypes

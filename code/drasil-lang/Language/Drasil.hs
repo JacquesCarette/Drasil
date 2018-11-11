@@ -50,7 +50,7 @@ module Language.Drasil (
   -- Chunk.Concept
   , cw , ConceptChunk , CommonConcept, ConceptInstance
   -- Chunk.CommonIdea
-  , commonIdea, CI, getAcc
+  , commonIdea, CI, getAcc, commonIdeaWithDict
   -- Chunk.NamedIdea
   , NamedChunk, short, nc, IdeaDict , mkIdea
   , nw -- bad name (historical)

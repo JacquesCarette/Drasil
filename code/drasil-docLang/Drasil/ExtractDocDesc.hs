@@ -1,4 +1,4 @@
-module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc) where
+module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc) where
 
 import Control.Lens((^.))
 import Drasil.DocumentLanguage
@@ -28,7 +28,7 @@ egetDocSec (AppndxSec a)        = egetApp a
 egetDocSec (ExistingSolnSec e)  = egetExist e
 
 egetSec :: Section -> [Expr]
-egetSec (Section _ sc _) = concatMap egetSecCon sc
+egetSec (Section _ sc _ _) = concatMap egetSecCon sc
 
 egetSecCon :: SecCons -> [Expr]
 egetSecCon (Sub s) = egetSec s
@@ -171,7 +171,7 @@ getDocSec (AppndxSec a)        = getApp a
 getDocSec (ExistingSolnSec e)  = getExist e
 
 getSec :: Section -> [Sentence]
-getSec (Section t sc _) = t : concatMap getSecCon sc
+getSec (Section t sc _ _) = t : concatMap getSecCon sc
 
 getSecCon :: SecCons -> [Sentence]
 getSecCon (Sub s) = getSec s
@@ -359,3 +359,67 @@ getApp (AppndxProg c) = concatMap getCon' c
 getExist :: ExistingSolnSec -> [Sentence]
 getExist (ExistSolnVerb s) = getSec s
 getExist (ExistSolnProg c) = concatMap getCon' c
+
+ciGetDocDesc :: DocDesc -> [CI]
+ciGetDocDesc docdesc = concatMap ciGetDocSec docdesc
+
+ciGetDocSec :: DocSection -> [CI]
+ciGetDocSec (Verbatim        sec)     = []
+ciGetDocSec (RefSec          refsec)  = []
+ciGetDocSec (IntroSec        intro)   = ciGetIntro intro
+ciGetDocSec (StkhldrSec      stk)     = ciGetStk stk
+ciGetDocSec (GSDSec          gsd)     = []
+ciGetDocSec (ScpOfProjSec    scpPro)  = []
+ciGetDocSec (SSDSec          ssd)     = ciGetSSD ssd
+ciGetDocSec (ReqrmntSec      req)     = []
+ciGetDocSec (LCsSec          lc)      = []
+ciGetDocSec (UCsSec          uc)      = []
+ciGetDocSec (TraceabilitySec trace)   = []
+ciGetDocSec (AuxConstntSec   aux)     = ciGetAux aux
+ciGetDocSec (Bibliography)            = []
+ciGetDocSec (AppndxSec       app)     = []
+ciGetDocSec (ExistingSolnSec exist)   = []
+
+ciGetIntro :: IntroSec -> [CI]
+ciGetIntro (IntroProg _ _ insub) = concatMap ciGetIntroSub insub
+
+ciGetIntroSub :: IntroSub -> [CI]
+ciGetIntroSub (IPurpose _)        = []
+ciGetIntroSub (IScope   _ _)      = []
+ciGetIntroSub (IChar    _ _ _)    = []
+ciGetIntroSub (IOrgSec  _ ci _ _) = [ci]
+
+ciGetStk :: StkhldrSec -> [CI]
+ciGetStk (StkhldrProg  ci _)   = [ci]
+ciGetStk (StkhldrProg2 stksub) = concatMap ciGetStkSub stksub
+
+ciGetStkSub :: StkhldrSub -> [CI]
+ciGetStkSub (Client ci1 _) = [ci1]
+ciGetStkSub (Cstmr ci2)    = [ci2]
+
+ciGetSSD :: SSDSec -> [CI]
+ciGetSSD (SSDProg ssdsub) = concatMap ciGetSSDSub ssdsub
+
+ciGetSSDSub :: SSDSub -> [CI]
+ciGetSSDSub (SSDSubVerb _)         = []
+ciGetSSDSub (SSDProblem pd)        = ciGetProbDesc pd
+ciGetSSDSub (SSDSolChSpec solspec) = []
+
+ciGetProbDesc :: ProblemDescription -> [CI]
+ciGetProbDesc (PDProg _ ci _ _) = [ci]
+
+ciGetAux :: AuxConstntSec -> [CI]
+ciGetAux (AuxConsProg ci _) = [ci]
+
+
+
+
+
+
+
+
+
+
+
+
+

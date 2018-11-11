@@ -7,8 +7,8 @@ import Data.List (concatMap, find, groupBy, sortBy)
 import qualified Data.Map as Map
 
 import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
-import Language.Drasil.Chunk.Citation as Ci (BibRef, citeID, Citation, 
-  CiteField(Author, Title, Year), HasFields(getFields))
+import Language.Drasil.Chunk.Citation as Ci (BibRef, citeID, Citation, HasFields(getFields))
+import Language.Drasil.Data.Citation(CiteField(Author, Title, Year))
 import Language.Drasil.Chunk.Concept (ConceptInstance)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)

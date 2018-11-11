@@ -11,7 +11,8 @@ import Language.Drasil.Expr
 import Language.Drasil.Sentence (Sentence(S))
 
 import Language.Drasil.Chunk.AssumpChunk
-import Language.Drasil.Chunk.Citation
+import Language.Drasil.Chunk.Citation (HasFields(getFields))
+import Language.Drasil.Data.Citation (CiteField(..))
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.RefTypes(DType(..))
 

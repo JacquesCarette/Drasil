@@ -93,8 +93,8 @@ module Language.Drasil (
   -- ShortName
   , resolveSN, ShortName, shortname', getStringSN
   --Citations
-  , Citation, EntryID, BibRef, CiteField(..), HP(..), citeID, citeKind
-  , HasFields(..)
+  , Citation, EntryID, BibRef
+  , citeID, citeKind , HasFields(..)
     -- CiteFields smart constructors
       -- People -> CiteField
   , author, editor
@@ -112,7 +112,6 @@ module Language.Drasil (
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
   , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
   , cProceedings, cTechReport, cUnpublished
-  , CitationKind(..)
   -- Sentence
   , Sentence(..), sParen, sSqBr , (+:+), (+:+.), sC, (+:)
   -- NounPhrase
@@ -199,6 +198,8 @@ module Language.Drasil (
   , USymb(US)
   -- Data.Date
   , Month(..)
+  -- Data.Citation ; should be moved to Language.Drasil.Development
+  , CiteField(..), HP(..), CitationKind(..)
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -244,7 +245,7 @@ import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
   -- Types
-    Citation, EntryID, BibRef, CiteField(..), HP(..), CitationKind(..)
+    Citation, EntryID, BibRef
   , HasFields(..)
     -- Accessors
   , citeID, citeKind
@@ -284,6 +285,7 @@ import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc', ucs, uc
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.UnitaryConcept
 import Language.Drasil.ChunkDB
+import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..)) -- for Printing
 import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
                                           , titleize', phrase, plural)
 import Language.Drasil.ShortName (resolveSN, ShortName

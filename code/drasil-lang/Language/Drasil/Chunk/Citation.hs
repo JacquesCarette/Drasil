@@ -1,7 +1,7 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.Citation
   ( -- Types
-    Citation, BibRef, CiteField(..), HP(..), CitationKind(..), EntryID
+    Citation, BibRef, EntryID
     -- Class for Reference.hs
   , HasFields(getFields)
     -- Accessors
@@ -30,57 +30,15 @@ import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
 
 import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel), HasShortName(shortname))
+import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..))
+import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Misc (noSpaces)
 import Language.Drasil.Label.Core (Label)
-import Language.Drasil.Data.Date (Month(..))
 
 import Control.Lens (Lens', makeLenses, (^.))
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces
-
--- | Fields used in citations.
-data CiteField = Address      Sentence
-               | Author       People
-               | BookTitle    Sentence -- Used for 'InCollection' references only.
-               | Chapter      Int
-               | Edition      Int
-               | Editor       People
-               | HowPublished HP
-               | Institution  Sentence
-               | Journal      Sentence
-               | Month        Month
-               | Note         Sentence
-               | Number       Int
-               | Organization Sentence
-               | Pages        [Int] -- Range of pages (ex1. 1-32; ex2. 7,31,52-55)
-               | Publisher    Sentence
-               | School       Sentence
-               | Series       Sentence
-               | Title        Sentence
-               | Type         Sentence -- BibTeX "type" field
-               | Volume       Int
-               | Year         Int
-
--- | How Published. Necessary for URLs to work properly.
-data HP = URL Sentence
-        | Verb Sentence
-
--- | External references come in many flavours. Articles, Books, etc.
--- (we are using the types available in Bibtex)
-data CitationKind = Article
-                  | Book
-                  | Booklet
-                  | InBook
-                  | InCollection
-                  | InProceedings
-                  | Manual
-                  | MThesis
-                  | Misc
-                  | PhDThesis
-                  | Proceedings
-                  | TechReport
-                  | Unpublished
 
 -- | All citations require a unique identifier (String) used by the Drasil chunk.
 -- We will re-use that as an EntryID (String) used for creating reference links.

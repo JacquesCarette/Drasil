@@ -10,7 +10,6 @@ import Language.Drasil.Document.Core
 import Language.Drasil.Expr
 import Language.Drasil.Sentence (Sentence(S))
 
-import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Data.Citation (CiteField(..))
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.RefTypes(DType(..))
@@ -81,45 +80,12 @@ getCon (Paragraph s)       = [s]
 getCon (EqnBlock _)      = []
 getCon (Enumeration lst)   = getLT lst
 getCon (Figure l _ _)    = [l]
-getCon (Assumption assc)   = getAss assc
+getCon (Assumption _ b _)   = [b]
 getCon (Bib bref)          = getBib bref
 getCon (Graph [(s1, s2)] _ _ l) = s1 : s2 : [l]
 getCon (Definition dt (hd:fs)) = concatMap getCon' (snd hd) ++ getCon (Definition dt fs)
 getCon (Definition _ []) = []
 getCon  _ = []
-
-{-
-getQDef :: QDefinition -> [Sentence]
-getQDef a = concatMap getRef (a ^. getReferences) ++ (a ^. derivations) ++ getTerm a ++ getUnitD (getUnit a)
-
-getRef :: Reference -> [Sentence]
-getRef (SourceRef s) = [s]
-
-getNP :: NP -> [Sentence]
-getNP (ProperNoun _ _) = []
-getNP (CommonNoun _ _ c) = getCap c
-getNP (Phrase s _ c1 c2) = s : getCap c1 ++ getCap c2
-
-getCap :: CapitalizationRule -> [Sentence]
-getCap (Replace s) = [s]
-getCap  _ = []
-
-getUnitD :: Maybe UnitDefn -> [Sentence]
-getUnitD Nothing = []
-getUnitD (Just a) = getTerm a ++ getDefn a
-
-getTerm :: (NamedIdea a) => a -> [Sentence]
-getTerm a  = getNP (a ^. term)
-
-getDefn :: (Definition a) => a -> [Sentence]
-getDefn a = [a ^. defn]
-
-getReq :: ReqChunk -> [Sentence]
-getReq a = [requires a]
--}
-
-getAss :: AssumpChunk -> [Sentence]
-getAss a = [assuming a]
 
 getLT :: ListType -> [Sentence]
 getLT (Bullet it) = concatMap getIL $ map fst it

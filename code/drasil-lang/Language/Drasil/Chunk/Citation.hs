@@ -17,7 +17,8 @@ import Language.Drasil.People (People)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
 
-import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel), HasShortName(shortname))
+import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
+import Language.Drasil.Classes (HasLabel(getLabel))
 import Language.Drasil.Data.Citation (author, chapter, pages, editor, bookTitle, title, 
   year, school, journal, institution, note, publisher, CitationKind(..), CiteField)
 import Language.Drasil.Misc (noSpaces)

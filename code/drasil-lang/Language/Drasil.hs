@@ -47,6 +47,7 @@ module Language.Drasil (
   , HasShortName(shortname)
   , UncertainQuantity(uncert)
   , Quantity
+  , HasFields(getFields)
   -- Chunk.Concept
   , cw , ConceptChunk , CommonConcept, ConceptInstance
   -- Chunk.CommonIdea
@@ -94,7 +95,7 @@ module Language.Drasil (
   , resolveSN, ShortName, shortname', getStringSN
   --Citations
   , Citation, EntryID, BibRef
-  , citeID, citeKind , HasFields(..)
+  , citeID, citeKind
     -- Citation smart constructors
   , cArticle, cBookA, cBookE, cBooklet
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
@@ -237,7 +238,8 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), HasReference(getReferences), 
   HasLabel(getLabel), MayHaveLabel(getMaybeLabel), HasRefAddress(getRefAdd), HasSpace(typ),
-  DefiningExpr(defnExpr), HasShortName(shortname), Quantity, UncertainQuantity(uncert))
+  DefiningExpr(defnExpr), HasShortName(shortname), Quantity, UncertainQuantity(uncert),
+  HasFields(getFields))
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss)
@@ -246,7 +248,6 @@ import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
   -- Types
     Citation, EntryID, BibRef
-  , HasFields(..)
     -- Accessors
   , citeID, citeKind
     -- CiteFields smart constructors

@@ -2,8 +2,6 @@
 module Language.Drasil.Chunk.Citation
   ( -- Types
     Citation, BibRef, EntryID
-    -- Class for Reference.hs
-  , HasFields(getFields)
     -- Accessors
   , citeID, citeKind
     -- Citation smart constructors
@@ -18,13 +16,13 @@ import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
-import Language.Drasil.Classes (HasLabel(getLabel))
+import Language.Drasil.Classes (HasLabel(getLabel), HasFields(getFields))
 import Language.Drasil.Data.Citation (author, chapter, pages, editor, bookTitle, title, 
   year, school, journal, institution, note, publisher, CitationKind(..), CiteField)
 import Language.Drasil.Misc (noSpaces)
 import Language.Drasil.Label.Core (Label)
 
-import Control.Lens (Lens', makeLenses, (^.))
+import Control.Lens (makeLenses, (^.))
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces
@@ -40,6 +38,11 @@ data Citation = Cite
   }
 makeLenses ''Citation
 
+instance HasUID       Citation where uid       = cid
+instance HasLabel     Citation where getLabel  = lb
+instance HasShortName Citation where shortname = lb . shortname
+instance HasFields    Citation where getFields = fields
+
 -- | Smart constructor which implicitly uses EntryID as chunk i.
 cite :: EntryID -> CitationKind -> [CiteField] -> Label -> Citation
 cite i = Cite (noSpaces i)
@@ -47,15 +50,6 @@ cite i = Cite (noSpaces i)
 -- | We don't let anyone know that the EntryID is in fact the UID
 citeID :: Citation -> EntryID
 citeID c = c ^. cid
-
--- | Citations are chunks.
-class HasFields c where
-  getFields :: Lens' c [CiteField]
-
-instance HasUID       Citation where uid = cid
-instance HasLabel      Citation where getLabel = lb
-instance HasShortName  Citation where shortname = lb . shortname
-instance HasFields    Citation where getFields = fields
 
 -- | Article citation requires author(s), title, journal, year.
 -- Optional fields can be: volume, number, pages, month, and note.

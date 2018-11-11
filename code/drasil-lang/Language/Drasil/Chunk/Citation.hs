@@ -1,7 +1,7 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.Citation
   ( -- Types
-    Citation, BibRef, CiteField(..), Month(..), HP(..), CitationKind(..), EntryID
+    Citation, BibRef, CiteField(..), HP(..), CitationKind(..), EntryID
     -- Class for Reference.hs
   , HasFields(getFields)
     -- Accessors
@@ -32,6 +32,7 @@ import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel), HasShortName(shortname))
 import Language.Drasil.Misc (noSpaces)
 import Language.Drasil.Label.Core (Label)
+import Language.Drasil.Data.Date (Month(..))
 
 import Control.Lens (Lens', makeLenses, (^.))
 
@@ -64,34 +65,6 @@ data CiteField = Address      Sentence
 -- | How Published. Necessary for URLs to work properly.
 data HP = URL Sentence
         | Verb Sentence
-
--- | Month must be of this format.
-data Month = Jan
-           | Feb
-           | Mar
-           | Apr
-           | May
-           | Jun
-           | Jul
-           | Aug
-           | Sep
-           | Oct
-           | Nov
-           | Dec deriving (Eq, Ord)
-
-instance Show Month where
-  show Jan = "January"
-  show Feb = "February"
-  show Mar = "March"
-  show Apr = "April"
-  show May = "May"
-  show Jun = "June"
-  show Jul = "July"
-  show Aug = "August"
-  show Sep = "September"
-  show Oct = "October"
-  show Nov = "November"
-  show Dec = "December"
 
 -- | External references come in many flavours. Articles, Books, etc.
 -- (we are using the types available in Bibtex)

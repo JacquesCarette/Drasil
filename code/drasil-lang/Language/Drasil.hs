@@ -93,7 +93,7 @@ module Language.Drasil (
   -- ShortName
   , resolveSN, ShortName, shortname', getStringSN
   --Citations
-  , Citation, EntryID, BibRef, CiteField(..), Month(..), HP(..), citeID, citeKind
+  , Citation, EntryID, BibRef, CiteField(..), HP(..), citeID, citeKind
   , HasFields(..)
     -- CiteFields smart constructors
       -- People -> CiteField
@@ -197,6 +197,8 @@ module Language.Drasil (
   , introduceAbb, phrase, plural, phrase's, plural's, at_start, at_start'
   -- UnitLang
   , USymb(US)
+  -- Data.Date
+  , Month(..)
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -239,9 +241,10 @@ import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss)
 import Language.Drasil.Chunk.AssumpChunk
+import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
   -- Types
-    Citation, EntryID, BibRef, CiteField(..), Month(..), HP(..), CitationKind(..)
+    Citation, EntryID, BibRef, CiteField(..), HP(..), CitationKind(..)
   , HasFields(..)
     -- Accessors
   , citeID, citeKind

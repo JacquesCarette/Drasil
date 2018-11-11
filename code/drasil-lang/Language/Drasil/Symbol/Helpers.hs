@@ -1,8 +1,8 @@
-module Language.Drasil.Chunk.SymbolForm
-  (eqSymb, codeSymb, hasStageSymbol) where
+module Language.Drasil.Symbol.Helpers(eqSymb, codeSymb, hasStageSymbol) where
 
 import Language.Drasil.Classes (HasSymbol(symbol))
-import Language.Drasil.Symbol (Symbol(Empty), Stage(Equational,Implementation))
+import Language.Drasil.Symbol (Symbol(Empty))
+import Language.Drasil.Stages (Stage(Equational,Implementation))
 
 -- | Helper function for getting a symbol in the Equational Stage
 eqSymb :: HasSymbol q => q -> Symbol

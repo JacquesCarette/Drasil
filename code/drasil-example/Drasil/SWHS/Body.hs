@@ -3,21 +3,26 @@ module Drasil.SWHS.Body where
 import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Language.Drasil.Development (UnitDefn, unitWrapper) -- FIXME?
+
 import Control.Lens ((^.))
 
 import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, 
-  DocSection (SSDSec, AuxConstntSec, Bibliography, IntroSec, RefSec, Verbatim), 
-  LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
+  DocSection (..), LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
   IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
   RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
   Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
+  TraceabilitySec(TraceabilityProg),
   dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
-  outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, traceMGF, tsymb'')
+  outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, tsymb'',
+  getDocDesc, egetDocDesc, ciGetDocDesc)
 import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel,
   likeChg, probDesc, sysCont, unlikeChg)
 
-import Data.Drasil.Concepts.Documentation (assumption, column, condition, constraint, 
+import qualified Drasil.DocumentLanguage.Units as U (toSentence)
+
+import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition, constraint, 
   content, corSol, dataConst, dataDefn, datum, definition, description, document, 
   environment, genDefn, goalStmt, information, inModel, input_, item, likelyChg, 
   model, organization, output_, physical, physics, physSyst, problem, property, 
@@ -72,7 +77,7 @@ this_si = map unitWrapper [metre, kilogram, second] ++
 --Will there be a table of contents?
 
 check_si :: [UnitDefn]
-check_si = collectUnits swhsSymMap symbT 
+check_si = collectUnits swhsSymMap symbTT
 
 swhsAuthors :: Sentence
 swhsAuthors = S $ manyNames swhsPeople
@@ -84,7 +89,7 @@ swhs_si = SI {
   _authors = swhsPeople,
   _units = check_si,
   _quants = swhsSymbols,
-  _concepts = symbT,
+  _concepts = symbTT,
   _definitions = swhsQDefs,
   _datadefs = swhsDDefs,
   _inputs = map qw swhsInputs,
@@ -96,12 +101,15 @@ swhs_si = SI {
   _refdb = swhsRefDB
 }
 
+resourcePath :: String
+resourcePath = "../../../datafiles/SWHS/"
+
 swhsSymMap :: ChunkDB
 swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull)
   (map cw swhsSymbols ++ srsDomains) this_si
 
 swhsRefDB :: ReferenceDB
-swhsRefDB = rdb [] [] newAssumptions [] [] swhsCitations (funcReqs ++
+swhsRefDB = rdb newAssumptions swhsCitations (funcReqs ++
   likelyChgs ++ unlikelyChgs)
 
 printSetting :: PrintingInformation
@@ -111,9 +119,11 @@ printSetting = PI swhsSymMap defaultConfiguration
     -- Redundant b/c the unitals are not really concepts (yet). There
     -- Will still likely be a better way to do this.
   --FIXME: Should be all Named, not just acronyms at the end.
+acronyms :: [CI]
+acronyms = ciGetDocDesc mkSRS
 
-symbT :: [DefinedQuantityDict]
-symbT =  ccss (getDoc swhs_srs') (egetDoc swhs_srs') swhsSymMap
+symbTT :: [DefinedQuantityDict]
+symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) swhsSymMap
 
 swhsPeople :: [Person]
 swhsPeople = [thulasi, brooks, spencerSmith]
@@ -151,7 +161,11 @@ mkSRS = RefSec (RefProg intro [
         )
       ]
     ):  
-  (map Verbatim [reqS, likelyChgsSect, unlikelyChgsSect, traceMAndG]) ++
+  (map Verbatim [reqS, likelyChgsSect, unlikelyChgsSect]) ++
+  TraceabilitySec
+    (TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
+  (map UlC traceIntro2) ++ 
+  [LlC traceFig1, LlC traceFig2]) []) :
     AuxConstntSec (AuxConsProg progName specParamValList) :
     Bibliography : []
 
@@ -393,7 +407,7 @@ dataConTable3 :: LabelledContent
 dataConTable3 = outDataConstTbl outputConstraints
 --FIXME: add "(by A11)" in Physical Constraints of `temp_W` and `temp_PCM`?
 
-outputConstraints :: [UncertQ]
+outputConstraints :: [ConstrConcept]
 outputConstraints = [temp_W, temp_PCM, w_E, pcm_E]
 
 -- Other Notes:
@@ -436,7 +450,7 @@ inputInitQuantsTbl = LlC $ llcc inputInitQuantsLbl $ (Table
   [titleize symbol_, titleize unit_, titleize description]
   (mkTable
   [ch, --(\ch -> Sy (unit_symb ch)),
-  unitToSentence, phrase] (map qw inputConstraints))
+  U.toSentence, phrase] (map qw inputConstraints))
   (titleize input_ +:+ titleize variable +:+ titleize' requirement) True)
 
 reqs :: [Contents]
@@ -469,12 +483,6 @@ unlikelyChgsList = mkEnumSimpleD unlikelyChgs
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
 --------------------------------------------------
 
-traceMAndG :: Section
-traceMAndG = traceMGF traceRefList traceTrailing
-  (map LlC traceRefList ++
-  (map UlC traceIntro2) ++ 
-  [LlC traceFig1, LlC traceFig2]) []
-
 traceRefList :: [LabelledContent]
 traceRefList = [traceTable1, traceTable2, traceTable3]
 
@@ -488,30 +496,30 @@ traceDataRef, traceFuncReqRef, traceInstaModelRef, traceAssumpRef, traceTheories
   traceDataDefRef, traceLikelyChgRef, traceGenDefRef :: [Sentence]
 
 traceInstaModel = ["IM1", "IM2", "IM3", "IM4"]
-traceInstaModelRef = map makeRef swhsIMods --FIXME: swhsIMods is a hack?
+traceInstaModelRef = map makeRefS swhsIMods --FIXME: swhsIMods is a hack?
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
   "R11"]
-traceFuncReqRef = map makeRef funcReqs
+traceFuncReqRef = map makeRefS funcReqs
 
 traceData = ["Data Constraints"]
-traceDataRef = [makeRef dataConTable1] --FIXME: Reference section?
+traceDataRef = [makeRefS dataConTable1] --FIXME: Reference section?
 
 traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19"]
-traceAssumpRef = map makeRef newAssumptions 
+traceAssumpRef = map makeRefS newAssumptions 
 
 traceTheories = ["T1", "T2", "T3"]
-traceTheoriesRef = map makeRef swhsTMods
+traceTheoriesRef = map makeRefS swhsTMods
 
 traceGenDefs = ["GD1", "GD2"]
-traceGenDefRef = map makeRef swhsGDs --FIXME: swhsGDs is a hack?
+traceGenDefRef = map makeRefS swhsGDs --FIXME: swhsGDs is a hack?
 
 traceDataDefs = ["DD1", "DD2", "DD3", "DD4"]
-traceDataDefRef = map makeRef swhsDDefs
+traceDataDefRef = map makeRefS swhsDDefs
 
 traceLikelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
-traceLikelyChgRef = map makeRef likelyChgs
+traceLikelyChgRef = map makeRefS likelyChgs
 
 {-Traceability Matrix 1-}
 
@@ -762,13 +770,13 @@ charReader2 diffeq = foldlSent_ [(plural diffeq) `sC`
 orgDocIntro :: Sentence
 orgDocIntro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the template for an", short srs,
-  S "for", phrase sciCompS, S "proposed by", makeRef parnas1972 `sAnd` 
-  makeRef parnasClements1984]
+  S "for", phrase sciCompS, S "proposed by", makeRefS parnas1972 `sAnd` 
+  makeRefS parnasClements1984]
 
 orgDocEnd :: NamedIdea ni => ni -> CI -> Sentence
 orgDocEnd sp pro = foldlSent_ [S "The", plural inModel,
-  sParen (makeRef SRS.inModelLabel), S "to be solved are referred to as" +:+. 
-  (foldlList Comma List $ map makeRef swhsIMods), S "The", plural inModel,
+  sParen (makeRefS SRS.inModelLabel), S "to be solved are referred to as" +:+. 
+  (foldlList Comma List $ map makeRefS swhsIMods), S "The", plural inModel,
   S "provide the", phrase ode, sParen (short ode :+: S "s") `sAnd` 
   S "algebraic", plural equation, S "that", phrase model, S "the" +:+. 
   phrase sp, short pro, S "solves these", short ode :+: S "s"]
@@ -798,7 +806,7 @@ orgDocEnd sp pro = foldlSent_ [S "The", plural inModel,
 --------------------------
 
 systCContents :: CI -> Contents
-systCContents pro = foldlSP [makeRef sys_context_fig, S "shows the" +:+. phrase sysCont, 
+systCContents pro = foldlSP [makeRefS sys_context_fig, S "shows the" +:+. phrase sysCont, 
   S "A circle represents an external entity outside the",
   phrase software `sC` S "the", phrase user, S "in this case. A",
   S "rectangle represents the", phrase softwareSys, S "itself" +:+.
@@ -808,7 +816,7 @@ systCContents pro = foldlSP [makeRef sys_context_fig, S "shows the" +:+. phrase 
 
 sys_context_fig :: LabelledContent
 sys_context_fig = llcc (mkLabelRAFig "SysCon") $ fig (foldlSent_
-  [makeRef sys_context_fig +: EmptyS, titleize sysCont])
+  [makeRefS sys_context_fig +: EmptyS, titleize sysCont])
   "SystemContextFigure.png"
 
 systCIntro :: CI -> NamedChunk -> Contents
@@ -852,7 +860,7 @@ swhsResp = Nested (short progName +: S "Responsibilities")
 userCharContents :: CI -> Contents
 userCharContents pro = foldlSP [S "The end", phrase user, S "of",
   short pro, S "should have an understanding of undergraduate",
-  S "Level 1 Calculus and", titleize physics]
+  S "Level 1 Calculus and", titleize Doc.physics]
 
 -- Some of these course names are repeated between examples, could potentially
 -- be abstracted out.
@@ -908,13 +916,13 @@ fig_tank :: LabelledContent
 fig_tank = llcc (mkLabelRAFig "Tank") $ fig (
   foldlSent_ [at_start sWHT `sC` S "with", phrase ht_flux_C, S "of",
   ch ht_flux_C `sAnd` phrase ht_flux_P, S "of", ch ht_flux_P])
-  "Tank.png"
+  (resourcePath ++"Tank.png")
 
 -----------------------------
 -- 4.1.3 : Goal Statements --
 -----------------------------
 
-goalStateIntro :: UncertQ -> UncertQ -> UncertQ -> Contents
+goalStateIntro :: (NamedIdea a, NamedIdea b, NamedIdea c) => a -> b -> c -> Contents
 goalStateIntro temc temw tempcm = foldlSPCol [S "Given the", phrase temc `sC`
   S "initial", plural condition, S "for the", phrase temw
   `sAnd` S "the", phrase tempcm `sC` S "and material",
@@ -959,7 +967,7 @@ genDefDeriv1 roc tem = foldlSPCol [S "Detailed derivation of simplified",
   phrase roc, S "of", phrase tem]
 
 genDefDeriv2 :: LabelledContent -> UnitalChunk -> Contents
-genDefDeriv2 t1ct vo = foldlSPCol [S "Integrating", makeRef t1ct,
+genDefDeriv2 t1ct vo = foldlSPCol [S "Integrating", makeRefS t1ct,
   S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
 genDefDeriv3 = eqUnR' $ 
@@ -1019,11 +1027,11 @@ iModSubpar :: NamedChunk -> UncertQ -> UncertQ -> UncertQ -> ConceptChunk
   -> [Contents]
 iModSubpar sol temw tempcm epcm pc = [foldlSP [S "The goals", foldlList Comma List $ map S
   ["GS1", "GS2", "GS3", "GS4"], S "are solved by" +:+. foldlList Comma List -- hardcoded GSs because Goals are not implemented yet
-  [makeRef eBalanceOnWtr, makeRef eBalanceOnPCM, makeRef heatEInWtr, makeRef heatEInPCM], 
-  S "The", plural sol, S "for", makeRef eBalanceOnWtr `sAnd` makeRef eBalanceOnPCM, 
+  [makeRefS eBalanceOnWtr, makeRefS eBalanceOnPCM, makeRefS heatEInWtr, makeRefS heatEInPCM], 
+  S "The", plural sol, S "for", makeRefS eBalanceOnWtr `sAnd` makeRefS eBalanceOnPCM, 
   S "are coupled since the", phrase sol, S "for", ch temw `sAnd` ch tempcm +:+. S "depend on one another", 
-  makeRef heatEInWtr, S "can be solved once", makeRef eBalanceOnWtr, S "has been solved. The", 
-  phrase sol `sOf` makeRef eBalanceOnPCM `sAnd` makeRef heatEInPCM, S "are also coupled, since the", 
+  makeRefS heatEInWtr, S "can be solved once", makeRefS eBalanceOnWtr, S "has been solved. The", 
+  phrase sol `sOf` makeRefS eBalanceOnPCM `sAnd` makeRefS heatEInPCM, S "are also coupled, since the", 
   phrase tempcm `sAnd` phrase epcm, S "depend on the", phrase pc]]
 
 iMod1Para :: UnitalChunk -> ConceptChunk -> [Contents]
@@ -1032,8 +1040,8 @@ iMod1Para en wa = [foldlSPCol [S "Derivation of the",
 
 iMod1Sent2 :: DataDefinition -> DataDefinition -> UnitalChunk ->
   UnitalChunk -> [Sentence]
-iMod1Sent2 d1hf d2hf hfc hfp = [S "Using", (makeRef d1hf) `sAnd`
-  (makeRef d2hf), S "for", ch hfc `sAnd`
+iMod1Sent2 d1hf d2hf hfc hfp = [S "Using", (makeRefS d1hf) `sAnd`
+  (makeRefS d2hf), S "for", ch hfc `sAnd`
   ch hfp, S "respectively, this can be written as"]
 
 iMod1Sent3 :: UnitalChunk -> UncertQ -> [Sentence]
@@ -1059,7 +1067,7 @@ iMod1Sent6 = [S "Setting",
 
 iMod1Sent7 :: [Sentence]
 iMod1Sent7 = [S "Finally, factoring out", (E $ 1 / sy tau_W) `sC` 
-  S "we are left with the governing", short ode, S "for", makeRef eBalanceOnWtr]
+  S "we are left with the governing", short ode, S "for", makeRefS eBalanceOnWtr]
 
 iMod1Eqn1, iMod1Eqn2, iMod1Eqn3, iMod1Eqn4, iMod1Eqn5,
   iMod1Eqn6, iMod1Eqn7 :: Expr
@@ -1102,7 +1110,7 @@ iMod1Eqn7 = (deriv (sy temp_W) time $= (1 / (sy tau_W)) *
 -- Fractions in paragraph?
 
 iMod2Sent1 :: DataDefinition -> UnitalChunk -> [Sentence]
-iMod2Sent1 d2hfp hfp = [S "Using", makeRef d2hfp, S "for", 
+iMod2Sent1 d2hfp hfp = [S "Using", makeRefS d2hfp, S "for", 
   ch hfp `sC` S "this", phrase equation, S "can be written as"]
 
 iMod2Sent2 :: [Sentence]
@@ -1159,7 +1167,7 @@ dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
   S "or there will be a divide by zero in the", phrase model],
 
   [sParen (S "+"), S "These", plural qua, S "cannot be zero" `sC`
-  S "or there would be freezing", sParen (makeRef newA13)],
+  S "or there would be freezing", sParen (makeRefS newA13)],
 
   [sParen (Sp Hash), S "The", plural constraint, S "on the", phrase sa,
   S "are calculated by considering the", phrase sa, S "to", phrase vo +:+.
@@ -1190,8 +1198,8 @@ dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
 -- 4.2.7 : Properties of A Correct Solution --
 ----------------------------------------------
 
-propCorSolDeriv1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
-  CI -> DataDefinition -> DataDefinition -> DefinedQuantityDict -> ConceptChunk -> Contents
+propCorSolDeriv1 :: (NamedIdea b, NamedIdea h) => ConceptChunk -> b -> UnitalChunk -> ConceptChunk ->
+  CI -> DataDefinition -> DataDefinition -> h -> ConceptChunk -> Contents
 propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
   foldlSPCol [S "A", phrase corSol, S "must exhibit the" +:+.
   phrase lce, S "This means that the", phrase ewat,
@@ -1199,7 +1207,7 @@ propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
   phrase input_, S "from the", phrase co `sAnd` S "the",
   phrase en, phrase output_, S "to the" +:+. short pcmat,
   S "This can be shown as an", phrase equation, S "by taking",
-  (makeRef d1hfc) `sAnd` (makeRef d2hfp) `sC`
+  (makeRefS d1hfc) `sAnd` (makeRefS d2hfp) `sC`
   S "multiplying each by their respective", phrase su,
   S "area of", phrase ht `sC` S "and integrating each",
   S "over the", phrase sim_time `sC` S "as follows"]
@@ -1212,7 +1220,7 @@ propCorSolDeriv2 = eqUnR' $
   ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) -
   (apply1 temp_PCM time)))))
 
-propCorSolDeriv3 :: UncertQ -> UnitalChunk -> CI -> ConceptChunk -> Contents
+propCorSolDeriv3 :: NamedIdea a => a -> UnitalChunk -> CI -> ConceptChunk -> Contents
 propCorSolDeriv3 epcm en pcmat wa =
   foldlSP_ [S "In addition, the", phrase epcm, S "should equal the",
   phrase en, phrase input_, S "to the", short pcmat,
@@ -1231,7 +1239,7 @@ propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)"
   S "computed by" +:+. short pro, S "The relative",
   S "error between the results computed by", short pro `sAnd`
   S "the results calculated from the", short rs, S "of these",
-  plural eq, S "should be less than 0.001%", makeRef verifyEnergyOutput]
+  plural eq, S "should be less than 0.001%", makeRefS verifyEnergyOutput]
 
 -- Above section only occurs in this example (although maybe it SHOULD be in
 -- the others).

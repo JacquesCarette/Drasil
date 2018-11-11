@@ -8,16 +8,17 @@ import Control.Arrow (second)
 
 import qualified Language.Drasil as L (People, Person, 
   CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
-  Symbol(Corners, Concat, Special, Atomic, Empty, Atop), USymb(US),
+  Symbol(Corners, Concat, Special, Atomic, Empty, Atop),
   DType(DD, TM, Instance, General), MaxWidthPercent, RefType(Link),
   Decoration(Prime, Hat, Vector), Document, HasDefinitionTable, HasSymbolTable,
-  nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special)
+  nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
 
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (em, wrap, refwrap, caption, image, div_tag,
   td, th, tr, bold, sub, sup, cases, fraction, reflink, reflinkURI, paragraph, h, html, body,
-  author, article_title, title, linkCSS, head_tag)
+  author, article_title, title, head_tag)
 import qualified Language.Drasil.Output.Formats as F
+import Language.Drasil.HTML.CSS (linkCSS)
 
 import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
 import Language.Drasil.Printing.Import (makeDocument)
@@ -297,7 +298,7 @@ p_item (Nested s l) = vcat [p_spec s, makeList l]
 -----------------------------------------------------------------
 -- | Renders figures in HTML
 makeFigure :: Doc -> Doc -> Doc -> L.MaxWidthPercent -> Doc
-makeFigure r c f wp = refwrap r (image f c wp $$ caption c)
+makeFigure r c f wp = refwrap r (image f c wp)
 
 -- | Renders assumptions, requirements, likely changes
 makeRefList :: Doc -> Doc -> Doc -> Doc

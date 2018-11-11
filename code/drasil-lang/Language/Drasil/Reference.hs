@@ -1,34 +1,30 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Reference where
 
-import Language.Drasil.RefTypes (RefType(..), DType(..), ReqType(..))
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
-import Data.List (concatMap, find, groupBy, partition, sortBy)
-import Data.Maybe (fromJust)
+import Data.List (concatMap, find, groupBy, sortBy)
 import qualified Data.Map as Map
 
 import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
-import Language.Drasil.Chunk.Change as Ch (Change(..), ChngType(..))
 import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID), CiteField(Author, Title, Year), HasFields(getFields))
 import Language.Drasil.Chunk.Concept (ConceptInstance)
+import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
-import Language.Drasil.Chunk.Goal as G (Goal)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
-import Language.Drasil.Chunk.ReqChunk as R (ReqChunk(..))
-import Language.Drasil.Chunk.PhysSystDesc as PD (PhysSystDesc)
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname),
-  ShortName(Concat, Deferred), DeferredCtx(FromCC), getStringSN, shortname')
 import Language.Drasil.Chunk.Theory (TheoryModel)
-import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel), HasRefAddress(getRefAdd))
+import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel),
+  HasRefAddress(getRefAdd), HasShortName(shortname), CommonIdea(abrv))
 import Language.Drasil.Document (Section(Section))
 import Language.Drasil.Document.Core (RawContent(..), LabelledContent(..))
-import Language.Drasil.People (People, comparePeople)
-import Language.Drasil.Spec (Sentence((:+:), Ref, S))
-import Language.Drasil.UID (UID)
-import Language.Drasil.Chunk.DataDefinition (DataDefinition)
-import Language.Drasil.Label.Core (Label(..), getAdd)
+import Language.Drasil.Label.Core (Label(..))
+import Language.Drasil.Label.Type (getAdd)
 import Language.Drasil.Label (getDefName, getReqName)
+import Language.Drasil.People (People, comparePeople)
+import Language.Drasil.RefTypes (RefType(..), DType(..), Reference(Reference))
+import Language.Drasil.ShortName ( ShortName, getStringSN, shortname', concatSN, defer)
+import Language.Drasil.Sentence (Sentence((:+:), S, Ref))
+import Language.Drasil.UID (UID)
 
 -- | Database for maintaining references.
 -- The Int is that reference's number.
@@ -37,16 +33,8 @@ import Language.Drasil.Label (getDefName, getReqName)
 -- if no shortname exists)
 type RefMap a = Map.Map UID (a, Int)
 
--- | Physical System Description Database
-type PhysSystDescMap = RefMap PhysSystDesc
--- | Goal Statement Database
-type GoalMap = RefMap Goal
 -- | Assumption Database
 type AssumpMap = RefMap AssumpChunk
--- | Requirement (functional/non-functional) Database
-type ReqMap = RefMap ReqChunk
--- | Change (likely/unlikely) Database
-type ChangeMap = RefMap Change
 -- | Citation Database (bibliography information)
 type BibMap = RefMap Citation
 -- | ConceptInstance Database
@@ -55,11 +43,7 @@ type ConceptMap = RefMap ConceptInstance
 
 -- | Database for internal references.
 data ReferenceDB = RDB -- organized in order of appearance in SmithEtAl template
-  { _physSystDescDB :: PhysSystDescMap
-  , _goalDB :: GoalMap
-  , _assumpDB :: AssumpMap
-  , _reqDB :: ReqMap
-  , _changeDB :: ChangeMap
+  { _assumpDB :: AssumpMap
   , _citationDB :: BibMap
   , _conceptDB :: ConceptMap
   }
@@ -69,33 +53,14 @@ makeLenses ''ReferenceDB
 data RefBy = ByName
            | ByNum -- If applicable
 
-rdb :: [PhysSystDesc] -> [Goal] -> [AssumpChunk] -> [ReqChunk] -> [Change] ->
-  BibRef -> [ConceptInstance] -> ReferenceDB
-rdb psds goals assumps reqs changes citations con = RDB
-  (simpleMap psds)
-  (simpleMap goals)
+rdb :: [AssumpChunk] -> BibRef -> [ConceptInstance] -> ReferenceDB
+rdb assumps citations con = RDB
   (simpleMap assumps)
-  (reqMap reqs)
-  (changeMap changes)
   (bibMap citations)
   (conceptMap con)
 
 simpleMap :: HasUID a => [a] -> RefMap a
 simpleMap xs = Map.fromList $ zip (map (^. uid) xs) (zip xs [1..])
-
-reqMap :: [ReqChunk] -> ReqMap
-reqMap rs = Map.fromList $ zip (map (^. uid) (frs ++ nfrs)) (zip frs [1..] ++
-  zip nfrs [1..])
-  where (frs, nfrs)  = partition (isFuncRec . reqType) rs
-        isFuncRec FR = True
-        isFuncRec _  = False
-
-changeMap :: [Change] -> ChangeMap
-changeMap cs = Map.fromList $ zip (map (^. uid) (lcs ++ ulcs))
-  (zip lcs [1..] ++ zip ulcs [1..])
-  where (lcs, ulcs) = partition (isLikely . chngType) cs
-        isLikely Likely = True
-        isLikely _ = False
 
 bibMap :: [Citation] -> BibMap
 bibMap cs = Map.fromList $ zip (map (^. uid) scs) (zip scs [1..])
@@ -116,41 +81,11 @@ conceptMap cs = Map.fromList $ zip (map (^. uid) (concat grp)) $ concatMap
   where grp :: [[ConceptInstance]]
         grp = groupBy conGrp $ sortBy uidSort cs
 
-psdLookup :: HasUID c => c -> PhysSystDescMap -> (PhysSystDesc, Int)
-psdLookup p m = getS $ Map.lookup (p ^. uid) m
-  where getS (Just x) = x
-        getS Nothing = error $ "No referencing information found for: " ++
-          (p ^. uid) ++ " in PhysSystDesc Map"
-
-goalLookup :: HasUID c => c -> GoalMap -> (Goal, Int)
-goalLookup g m = getS $ Map.lookup (g ^. uid) m
-  where getS (Just x) = x
-        getS Nothing = error $ "No referencing information found for: " ++
-          (g ^. uid) ++ " in Goal Map"
-
 assumpLookup :: HasUID c => c -> AssumpMap -> (AssumpChunk, Int)
 assumpLookup a m = getS $ Map.lookup (a ^. uid) m
   where getS (Just x) = x
         getS Nothing = error $ "Assumption: " ++ (a ^. uid) ++
           " referencing information not found in Assumption Map"
-
-reqLookup :: HasUID c => c -> ReqMap -> (ReqChunk, Int)
-reqLookup r m = getS $ Map.lookup (r ^. uid) m
-  where getS (Just x) = x
-        getS Nothing = error $ "Requirement: " ++ (r ^. uid) ++
-          " referencing information not found in Requirement Map"
-
-changeLookup :: HasUID c => c -> ChangeMap -> (Change, Int)
-changeLookup c m = getS $ Map.lookup (c ^. uid) m
-  where getS (Just x) = x
-        getS Nothing = error $ "Change: " ++ (c ^. uid) ++
-          " referencing information not found in Change Map"
-
-citeLookup :: HasUID c => c -> BibMap -> (Citation, Int)
-citeLookup c m = getS $ Map.lookup (c ^. uid) m
-  where getS (Just x) = x
-        getS Nothing = error $ "Change: " ++ (c ^. uid) ++
-          " referencing information not found in Change Map"
 
 conceptLookup :: HasUID c => c -> ConceptMap -> (ConceptInstance, Int)
 conceptLookup c = maybe (error $ "ConceptInstance: " ++ (c ^. uid) ++
@@ -160,24 +95,12 @@ conceptLookup c = maybe (error $ "ConceptInstance: " ++ (c ^. uid) ++
 -- Classes and instances --
 class HasAssumpRefs s where
   assumpRefTable :: Simple Lens s AssumpMap
-class HasReqRefs s where
-  reqRefTable :: Simple Lens s ReqMap
-class HasChangeRefs s where
-  changeRefTable :: Simple Lens s ChangeMap
 class HasCitationRefs s where
   citationRefTable :: Simple Lens s BibMap
-class HasGoalRefs s where
-  goalRefTable :: Simple Lens s GoalMap
-class HasPSDRefs s where
-  psdRefTable :: Simple Lens s PhysSystDescMap
 class HasConceptRefs s where
   conceptRefTable :: Simple Lens s ConceptMap
 
-instance HasGoalRefs ReferenceDB where goalRefTable = goalDB
-instance HasPSDRefs      ReferenceDB where psdRefTable = physSystDescDB
 instance HasAssumpRefs   ReferenceDB where assumpRefTable = assumpDB
-instance HasReqRefs      ReferenceDB where reqRefTable = reqDB
-instance HasChangeRefs   ReferenceDB where changeRefTable = changeDB
 instance HasCitationRefs ReferenceDB where citationRefTable = citationDB
 instance HasConceptRefs  ReferenceDB where conceptRefTable = conceptDB
 
@@ -189,30 +112,12 @@ class Referable s where
                           -- Only visible in the source (tex/html).
   rType   :: s -> RefType -- The reference type (referencing namespace?)
 
-instance Referable Goal where
-  refAdd g = getAdd ((g ^. getLabel) ^. getRefAdd)
-  rType _ = Goal
-
-instance Referable PhysSystDesc where
-  refAdd p = getAdd ((p ^. getLabel) ^. getRefAdd)
-  rType _ = PSD
-
 instance Referable AssumpChunk where
   refAdd  x = getAdd ((x ^. getLabel) ^. getRefAdd)
   rType   _ = Assump
 
-instance Referable ReqChunk where
-  refAdd  r               = getAdd ((r ^. getLabel) ^. getRefAdd)
-  rType   (RC _ FR _ _)   = Req FR
-  rType   (RC _ NFR _ _)  = Req NFR
-
-instance Referable Change where
-  refAdd r                   = getAdd ((r ^. getLabel) ^. getRefAdd)
-  rType (ChC _ Likely _ _)   = LCh
-  rType (ChC _ Unlikely _ _) = UnCh
-
 instance Referable Section where
-  refAdd  (Section _ _ lb) = getAdd (lb ^. getRefAdd)
+  refAdd  (Section _ _ lb _) = getAdd (lb ^. getRefAdd)
   rType   _                = Sect
 
 instance Referable Citation where
@@ -254,9 +159,7 @@ temp (Table _ _ _ _)       = Tab
 temp (Figure _ _ _)        = Fig
 temp (Graph _ _ _ _)       = Fig
 temp (Definition x _)      = Def x
-temp (Requirement r)       = rType r
 temp (Assumption a)        = rType a
-temp (Change l)            = rType l
 temp (EqnBlock _)          = EqnB
 temp (Enumeration _)       = Lst 
 temp (Paragraph _)         = error "Shouldn't reference paragraphs"
@@ -273,11 +176,17 @@ sDom d = error $ "Expected ConceptDomain to have a single domain, found " ++
   show (length d) ++ " instead."
 
 compareAuthYearTitle :: (HasFields c) => c -> c -> Ordering
-compareAuthYearTitle c1 c2
-  | comparePeople (getAuthor c1) (getAuthor c2) /= Nothing = fromJust $ comparePeople (getAuthor c1) (getAuthor c2)
-  | getYear c1  /= getYear c2  = getYear c1  `compare` getYear c2
-  | getTitle c1 /= getTitle c2 = getTitle c1 `compare` getTitle c2
-  | otherwise                      = error "Couldn't sort authors"
+compareAuthYearTitle c1 c2 =
+  if cp /= EQ then cp
+  else if y1 /= y2 then y1 `compare` y2
+  else if t1 /= t2 then t1 `compare` t2
+  else error "Couldn't sort authors"
+  where
+    cp = comparePeople (getAuthor c1) (getAuthor c2)
+    y1 = getYear c1
+    y2 = getYear c2
+    t1 = getTitle c1
+    t2 = getTitle c2
 
 getAuthor :: (HasFields c) => c -> People
 getAuthor c = maybe (error "No author found") (\(Author x) -> x) (find isAuthor (c ^. getFields))
@@ -317,27 +226,28 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 -- item exists in our database of referable objects.
 --FIXME: completely shift to being `HasLabel` since customref checks for 
 --  `HasShortName` and `Referable`?
-makeRef :: (HasShortName l, Referable l) => l -> Sentence
+makeRef :: (HasShortName l, Referable l) => l -> Reference
 makeRef r = customRef r (r ^. shortname)
 
+makeRefS :: (HasShortName l, Referable l) => l -> Sentence
+makeRefS = Ref . makeRef
+
 --FIXME: needs design (HasShortName, Referable only possible when HasLabel)
-mkRefFrmLbl :: (HasLabel l, HasShortName l, Referable l) => l -> Sentence
-mkRefFrmLbl r = makeRef r
+mkRefFrmLbl :: (HasLabel l, HasShortName l, Referable l) => l -> Reference
+mkRefFrmLbl = makeRef
 
 --FIXME: should be removed from Examples once sections have labels
 -- | Create a reference with a customized 'ShortName'
-customRef :: (HasShortName l, Referable l) => l -> ShortName -> Sentence
-customRef r n = Ref (fixupRType $ rType r) (refAdd r) (getAcc' (rType r) n)
+customRef :: (HasShortName l, Referable l) => l -> ShortName -> Reference
+customRef r n = Reference (fixupRType $ rType r) (refAdd r) (getAcc' (rType r) n)
   where 
     getAcc' :: RefType -> ShortName -> ShortName
     getAcc' (Def dtp) sn = shortname' $ (getDefName dtp) ++ " " ++ (getStringSN sn)
-    getAcc' (Req rq)  sn = shortname' $ (getReqName rq)  ++ " " ++ (getStringSN sn)
     getAcc' LCh       sn = shortname' $ "LC: " ++ (getStringSN sn)
     getAcc' UnCh      sn = shortname' $ "UC: " ++ (getStringSN sn)
     getAcc' Assump    sn = shortname' $ "A: " ++ (getStringSN sn)
-    getAcc' Goal      sn = shortname' $ "GS: " ++ (getStringSN sn)
-    getAcc' PSD       sn = shortname' $ "PS: " ++ (getStringSN sn)
-    getAcc' (DeferredCC u) s = Concat (Deferred $ FromCC u) s
+    getAcc' (Req rq)  sn = shortname' $ (getReqName rq)  ++ " " ++ (getStringSN sn)
+    getAcc' (DeferredCC u) s = concatSN (defer u) s
     getAcc' _         sn = sn
     fixupRType (DeferredCC _) = Blank  -- FIXME: This is a hack
     fixupRType a = a

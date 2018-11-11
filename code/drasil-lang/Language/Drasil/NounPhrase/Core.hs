@@ -2,7 +2,7 @@ module Language.Drasil.NounPhrase.Core (
   NP(..), CapitalizationRule(..), PluralRule(..), PluralForm
   ) where
 
-import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Sentence (Sentence)
 
 type PluralForm     = Sentence  -- These might change.
 

@@ -3,6 +3,8 @@ module Drasil.GamePhysics.Body where
 import Language.Drasil hiding (Vector, organization)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Language.Drasil.Development (UnitDefn, unitWrapper)
+
 import Control.Lens ((^.))
 
 import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..), 
@@ -10,13 +12,14 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   IntroSub(..), RefSec(..), RefTab(..), SCSSub(..), SSDSec(SSDProg), 
   SSDSub(SSDSubVerb, SSDSolChSpec), SolChSpec(SCSProg), SubSec, TConvention(..), 
   TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
-  assembler, dataConstraintUncertainty, inDataConstTbl, intro, mkDoc,
+  TraceabilitySec(TraceabilityProg), assembler, dataConstraintUncertainty,
+  inDataConstTbl, intro, mkDoc, outDataConstTbl,
   mkEnumSimpleD, outDataConstTbl, reqF, sSubSec, siCon, siSTitl, siSent,
-  traceMGF, tsymb, valsOfAuxConstantsF)
+  traceMGF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc)
 
 import qualified Drasil.DocLang.SRS as SRS
 
-import Data.Drasil.Concepts.Documentation (assumpDom, assumption, body,
+import Data.Drasil.Concepts.Documentation as Doc(assumption, body,
   concept, condition, consumer, dataDefn, datumConstraint, document, endUser,
   environment, funcReqDom, game, genDefn, goalStmt, guide, inModel,
   information, input_, interface, item, model, nonfunctionalRequirement,
@@ -44,14 +47,14 @@ import Data.Drasil.Utils (makeTMatrix, itemRefToSent,
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
-  cartesian, friction, rightHand, collision, space, joint, damping)
-import qualified Data.Drasil.Concepts.Math as CM (equation, surface, constraint, law)
+  cartesian, friction, rightHand, collision, space)
+import qualified Data.Drasil.Concepts.Math as CM (equation, surface, law)
 
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Quantities.Physics as QP (angularVelocity, force, 
   linearVelocity, position, time, velocity)
-
+import Drasil.GamePhysics.Assumptions(newAssumptions)
 import Drasil.GamePhysics.Changes (likelyChanges, likelyChangesList',
   unlikelyChanges, unlikelyChangesList')
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
@@ -72,8 +75,8 @@ auths = S $ manyNames authors
 chipmunkSRS' :: Document
 chipmunkSRS' = mkDoc mkSRS for' chipmunkSysInfo
 
-check_si :: [UnitDefn]
-check_si = collectUnits everything symbT 
+check_si :: [UnitDefn] -- FIXME
+check_si = collectUnits everything symbTT 
 
 mkSRS :: DocDesc 
 mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
@@ -93,9 +96,9 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
           , TMs ([Label]++ stdFields) 
               [t1NewtonSL_new, t2NewtonTL_new, t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new]
           , GDs [] [] HideDerivation -- No Gen Defs for Gamephysics
+          , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) 
               [im1_new, im2_new, im3_new] ShowDerivation
-          , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , Constraints EmptyS dataConstraintUncertainty (S "FIXME") 
               [inDataConstTbl cpInputConstraints, outDataConstTbl cpOutputConstraints]
           ]
@@ -104,7 +107,10 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
     ):
   (map Verbatim [requirements, likelyChanges, unlikelyChanges]) ++
   [ExistingSolnSec (ExistSolnVerb  off_the_shelf_solutions)] ++
-  (map Verbatim [traceability_matrices_and_graph, values_of_auxiliary_constatnts]) ++
+  TraceabilitySec
+    (TraceabilityProg [traceMatTabReqGoalOther, traceMatTabAssump,
+  traceMatTabDefnModel] traceability_matrices_and_graph_traces (map LlC [traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) []) :
+  ([Verbatim values_of_auxiliary_constatnts]) ++
   (Bibliography : [])
     where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
@@ -119,7 +125,7 @@ chipmunkSysInfo = SI {
   _kind = srs,
   _authors = authors,
   _units = chipUnits,
-  _quants = symbT, 
+  _quants = symbTT, 
   _concepts = ([] :: [DefinedQuantityDict]),
   _definitions = cpDDefs,
   _datadefs = dataDefns,
@@ -132,40 +138,16 @@ chipmunkSysInfo = SI {
   _refdb = cpRefDB
 }
 
-symbT :: [DefinedQuantityDict]
-symbT = ccss (getDoc chipmunkSRS') (egetDoc chipmunkSRS') everything
+symbTT :: [DefinedQuantityDict]
+symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) everything
 
 cpRefDB :: ReferenceDB
-cpRefDB = rdb [] [] newAssumptions [] [] cpCitations
+cpRefDB = rdb newAssumptions cpCitations
   (functional_requirements_list' ++ likelyChangesList' ++ unlikelyChangesList') -- FIXME: Convert the rest to new chunk types
 
-newAssumptions :: [AssumpChunk]
-newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7]
-
-assumptions :: [ConceptInstance]
-assumptions = [assumpOT, assumpOD, assumpCST, assumpAD, assumpCT, assumpDI,
-  assumpCAJI]
-
-newA1, newA2, newA3, newA4, newA5, newA6, newA7 :: AssumpChunk
-assumpOT, assumpOD, assumpCST, assumpAD, assumpCT, assumpDI,
-  assumpCAJI :: ConceptInstance
-newA1 = assump "objectTy" (foldlSent assumptions_assum1) (mkLabelRAAssump' "objectTy")
-assumpOT = cic "assumpOT" (foldlSent assumptions_assum1) "objectTy" assumpDom
-newA2 = assump "objectDimension" (foldlSent assumptions_assum2) (mkLabelRAAssump' "objectDimension")
-assumpOD = cic "assumpOD" (foldlSent assumptions_assum2) "objectDimension" assumpDom
-newA3 = assump "coordinateSystemTy" (foldlSent assumptions_assum3) (mkLabelRAAssump' "coordinateSystemTy")
-assumpCST = cic "assumpCST" (foldlSent assumptions_assum3) "coordinateSystemTy" assumpDom
-newA4 = assump "axesDefined" (foldlSent assumptions_assum4) (mkLabelRAAssump' "axesDefined")
-assumpAD = cic "assumpAD" (foldlSent assumptions_assum4) "axesDefined" assumpDom
-newA5 = assump "collisionType" (foldlSent assumptions_assum5) (mkLabelRAAssump' "collisionType")
-assumpCT = cic "assumpCT" (foldlSent assumptions_assum5) "collisionType" assumpDom
-newA6 = assump "dampingInvolvement" (foldlSent assumptions_assum6) (mkLabelRAAssump' "dampingInvolvement")
-assumpDI = cic "assumpDI" (foldlSent assumptions_assum6) "dampingInvolvement" assumpDom
-newA7 = assump "constraintsAndJointsInvolvement" (foldlSent assumptions_assum7) (mkLabelRAAssump' "constraintsAndJointsInvolvement")
-assumpCAJI = cic "assumpCAJI" (foldlSent assumptions_assum7) "constraintsAndJointsInvolvement" assumpDom
 --FIXME: All named ideas, not just acronyms.
 
-chipUnits :: [UnitDefn]
+chipUnits :: [UnitDefn] -- FIXME
 chipUnits = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [newton, radian]
 
 everything :: ChunkDB
@@ -255,8 +237,8 @@ organization_of_documents_intro :: Sentence
 organization_of_documents_intro = foldlSent 
   [S "The", (phrase organization), S "of this", (phrase document), 
   S "follows the", phrase template, S "for an", (getAcc srs), S "for", 
-  (phrase sciCompS), S "proposed by", makeRef parnas1972 `sAnd` 
-  makeRef parnasClements1984]
+  (phrase sciCompS), S "proposed by", makeRefS parnas1972 `sAnd` 
+  makeRefS parnasClements1984]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
@@ -267,7 +249,7 @@ organization_of_documents_intro = foldlSent
 
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
-  [makeRef sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
+  [makeRefS sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
    `sC` S "the", phrase user, S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself", (sParen $ short chipmunk) +:+. EmptyS,
@@ -365,10 +347,10 @@ problem_description_intro_param lib app = foldlSent
   (phrase realtime), S "during the" +:+. (phrase app), S "Developing a", 
   (phrase lib), S "from scratch takes a long period of", (phrase QP.time) `sAnd`
   S "is very costly" `sC` S "presenting barriers of entry which make it difficult for",
-  (phrase app), S "developers to include", (phrase physics), S "in their" +:+. 
+  (phrase app), S "developers to include", (phrase Doc.physics), S "in their" +:+. 
   (plural product_), S "There are a few free" `sC` (phrase openSource) `sAnd` S "high quality",
   (plural lib), S "available to be used for", phrase consumer, plural product_ +:+. 
-  (sParen $ makeRef off_the_shelf_solutions), S "By creating a simple, lightweight, fast and portable",
+  (sParen $ makeRefS off_the_shelf_solutions), S "By creating a simple, lightweight, fast and portable",
   (getAcc twoD), (phrase CP.rigidBody), (phrase lib) `sC` (phrase app),
   S "development will be more accessible to the masses" `sAnd` S "higher quality",
   (plural product_), S "will be produced"]
@@ -453,41 +435,6 @@ goal_statements_list = enumSimple 1 (getAcc goalStmt) goal_statements_list'
 -------------------------
 -- 4.2.1 : Assumptions --
 -------------------------
-
-assumptions_list :: [Contents]
-assumptions_list = map (LlC . (\x -> mkRawLC (Assumption x) (x ^. getLabel))) newAssumptions
-
-assumptions_assum1, assumptions_assum2, assumptions_assum3, assumptions_assum4, assumptions_assum5, 
-  assumptions_assum6, assumptions_assum7 :: [Sentence]
-
-allObject :: Sentence -> [Sentence]
-allObject thing = [S "All objects are", thing]
-
-thereNo :: [Sentence] -> [Sentence]
-thereNo [x]      = [S "There is no", x, S "involved throughout the", 
-  (phrase simulation)]
-thereNo l        = [S "There are no", foldlList Comma List l, S "involved throughout the", 
-  (phrase simulation)]
-
-assumptions_assum1 = allObject (plural CP.rigidBody)
-assumptions_assum2 = allObject (getAcc twoD)
-assumptions_assum3 = [S "The library uses a", (phrase CP.cartesian)]
-assumptions_assum4 = [S "The axes are defined using", 
-  (phrase CP.rightHand)]
-assumptions_assum5 = [S "All", (plural CP.rigidBody), 
-  (plural CP.collision), S "are vertex-to-edge", 
-  (plural CP.collision)]
-
-assumptions_assum6 = thereNo [(phrase CP.damping)]
-assumptions_assum7 = thereNo [(plural CM.constraint), (plural CP.joint)]
-
-{-assumptions_list = enumSimple 1 (getAcc assumption) $ map (foldlSent) 
-  [assumptions_assum1, assumptions_assum2, assumptions_assum3, assumptions_assum4, assumptions_assum5, 
-  assumptions_assum6, assumptions_assum7]-}
-
-assumptions_list_a :: [[Sentence]]
-assumptions_list_a = [assumptions_assum1, assumptions_assum2, assumptions_assum3, assumptions_assum4,
-  assumptions_assum5, assumptions_assum6, assumptions_assum7]
 
 --------------------------------
 -- 4.2.2 : Theoretical Models --
@@ -591,7 +538,7 @@ functional_requirements_req3 = foldlSent [S "Input the", (phrase CM.surface),
 
 functional_requirements_req4 = foldlSent [S "Verify that the", plural input_,
   S "satisfy the required", plural physicalConstraint, S "from", 
-  (makeRef SRS.solCharSpecLabel)]
+  (makeRefS SRS.solCharSpecLabel)]
 
 functional_requirements_req5 = requirementS (QP.position) (QP.velocity) 
   (S "acted upon by a" +:+ (phrase QP.force))
@@ -663,7 +610,7 @@ off_the_shelf_solutions_intro = off_the_shelf_solutions_intro_param problem_desc
 
 off_the_shelf_solutions_intro_param :: NamedIdea n => Section -> n -> Contents
 off_the_shelf_solutions_intro_param problmDescSec lib = mkParagraph $ foldlSentCol 
-  [S "As mentioned in", (makeRef problmDescSec) `sC`
+  [S "As mentioned in", (makeRefS problmDescSec) `sC`
   S "there already exist free", (phrase openSource), (phrase game) +:+.
   (plural lib), S "Similar", (getAcc twoD), (plural lib), S "are"]
 
@@ -712,31 +659,31 @@ traceMatInstaModelRef, traceMatAssumpRef, traceMatFuncReqRef, traceMatGoalStmtRe
   traceMatLikelyChgRef, traceMatDataRef :: [Sentence]
 
 traceMatInstaModel = ["IM1", "IM2", "IM3"]
-traceMatInstaModelRef = map makeRef iModels_new
+traceMatInstaModelRef = map makeRefS iModels_new
 
 traceMatTheoryModel = ["T1", "T2", "T3", "T4", "T5"]
-traceMatTheoryModelRef = map makeRef cpTMods_new
+traceMatTheoryModelRef = map makeRefS cpTMods_new
 
 traceMatDataDef = ["DD1","DD2","DD3","DD4","DD5","DD6","DD7","DD8"]
-traceMatDataDefRef = map makeRef dataDefns
+traceMatDataDefRef = map makeRefS dataDefns
 
 traceMatAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
-traceMatAssumpRef = map makeRef newAssumptions
+traceMatAssumpRef = map makeRefS newAssumptions
 
 traceMatFuncReq =  ["R1","R2","R3", "R4", "R5", "R6", "R7", "R8"]
-traceMatFuncReqRef = map makeRef functional_requirements_list'
+traceMatFuncReqRef = map makeRefS functional_requirements_list'
 
 traceMatData = ["Data Constraints"]
-traceMatDataRef = [makeRef SRS.solCharSpecLabel]
+traceMatDataRef = [makeRefS SRS.solCharSpecLabel]
 
 traceMatGoalStmt = ["GS1", "GS2", "GS3", "GS4"]
 traceMatGoalStmtRef = makeListRef goal_statements_list' problem_description
 
 traceMatGenDef = ["GD1", "GD2", "GD3", "GD4", "GD5", "GD6", "GD7"]
-traceMatGenDefRef = replicate (length traceMatGenDef) (makeRef SRS.solCharSpecLabel) -- FIXME: hack?
+traceMatGenDefRef = replicate (length traceMatGenDef) (makeRefS SRS.solCharSpecLabel) -- FIXME: hack?
 
 traceMatLikelyChg = ["LC1", "LC2", "LC3", "LC4"]
-traceMatLikelyChgRef = map makeRef likelyChangesList'
+traceMatLikelyChgRef = map makeRefS likelyChangesList'
 
 
 {-- Matrices generation below --}
@@ -781,8 +728,8 @@ traceMatTabReqGoalOther = llcc (mkLabelSame "TraceyReqGoalsOther" Tab) $ Table
   (EmptyS:(traceMatTabReqGoalOtherRowHead))
   (makeTMatrix traceMatTabReqGoalOtherColHead traceMatTabReqGoalOtherCol
   traceMatTabReqGoalOtherRow)
-  (showingCxnBw (traceyMatrix) (titleize' requirement +:+ sParen (makeRef requirements)
-  `sC` (titleize' goalStmt) +:+ sParen (makeRef problem_description) `sAnd` S "Other" +:+
+  (showingCxnBw (traceyMatrix) (titleize' requirement +:+ sParen (makeRefS requirements)
+  `sC` (titleize' goalStmt) +:+ sParen (makeRefS problem_description) `sAnd` S "Other" +:+
   titleize' item)) True
 
 traceMatTabAssumpCol' :: [[String]]
@@ -853,7 +800,7 @@ traceMatTabAssump :: LabelledContent
 traceMatTabAssump = llcc (mkLabelSame "TraceyAssumpsOther" Tab) $ Table
   (EmptyS:traceMatTabAssumpRowHead)
   (makeTMatrix traceMatTabAssumpColHead traceMatTabAssumpCol' traceMatTabAssumpRow)
-  (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef problem_description)
+  (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRefS problem_description)
   `sAnd` S "Other" +:+ titleize' item)) True
 
 traceMatTabDefnModelCol :: [[String]]

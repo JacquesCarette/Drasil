@@ -20,8 +20,7 @@ import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.Phrase (of_)
 
 swhsSymbols :: [DefinedQuantityDict]
-swhsSymbols = (map dqdWr swhsUnits) ++ (map dqdWr swhsUnitless) ++
-  (map dqdWr swhsConstrained)
+swhsSymbols = (map dqdWr swhsUnits) ++ (map dqdWr swhsUnitless) ++ map dqdWr swhsConstrained
 
 swhsSymbolsAll :: [QuantityDict]
 swhsSymbolsAll = (map qw swhsUnits) ++ (map qw swhsUnitless) ++
@@ -189,8 +188,9 @@ thickness = uc'  "thickness" (nounPhraseSP "Minimum thickness of a sheet of PCM"
 -- Unitless symbols --
 ----------------------
 
+-- FIXME: this list should not be hand-constructed
 swhsUnitless :: [DefinedQuantityDict]
-swhsUnitless = [uNormalVect, surface, eta, melt_frac, gradient, frac_min]
+swhsUnitless = [uNormalVect, dqdWr surface, eta, melt_frac, gradient, frac_min]
 
 eta, melt_frac, frac_min:: DefinedQuantityDict
 
@@ -213,8 +213,8 @@ frac_min = dqd' (dcc "frac_min"
 -- Constraints --
 -----------------
 
-swhsConstrained ::[UncertQ]
-swhsConstrained = swhsInputs ++ swhsOutputs
+swhsConstrained ::[ConstrConcept]
+swhsConstrained = map cnstrw' swhsInputs ++ map cnstrw' swhsOutputs
 
 -- Input Constraints
 swhsInputs :: [UncertQ]
@@ -224,8 +224,9 @@ swhsInputs = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
 
 tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
   htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C, w_density,
-  htCap_W, coil_HTC, pcm_HTC, temp_init, time_final, temp_PCM, 
-  temp_W, w_E, pcm_E :: UncertQ
+  htCap_W, coil_HTC, pcm_HTC, temp_init, time_final :: UncertQ
+
+temp_PCM, temp_W, w_E, pcm_E :: ConstrConcept
 
 -- Constraint 1
 tank_length = uqc "tank_length" (nounPhraseSP "length of tank")
@@ -366,19 +367,19 @@ time_final = uqc "time_final" (nounPhraseSP "final time")
   
   
 -- Output Constraints
-swhsOutputs :: [UncertQ]
+swhsOutputs :: [ConstrConcept]
 --FIXME: Add typical values or use Nothing if not known
 swhsOutputs = [temp_W, temp_PCM, w_E, pcm_E]
 
 -- Constraint 18
-temp_W = uqcNU "temp_W"
+temp_W = cuc' "temp_W"
   (nounPhraseSP "temperature of the water")
   "The average kinetic energy of the particles within the water" 
   (sub (eqSymb temp) cW) centigrade Rational
   [physc $ Bounded (Inc, sy temp_init) (Inc, sy temp_C)] (dbl 0)
 
 -- Constraint 19
-temp_PCM = uqcNU "temp_PCM"
+temp_PCM = cuc' "temp_PCM"
   (nounPhraseSP "temperature of the phase change material" )
   ("The average kinetic energy of the " ++
     "particles within the phase change material")
@@ -386,13 +387,13 @@ temp_PCM = uqcNU "temp_PCM"
   [physc $ Bounded (Inc, sy temp_init) (Inc, sy temp_C)] (dbl 0)
   
 -- Constraint 20
-w_E = uqcNU "w_E" (nounPhraseSP "change in heat energy in the water")
+w_E = cuc' "w_E" (nounPhraseSP "change in heat energy in the water")
   "Change in thermal energy within the water" 
   (sub (eqSymb sens_heat) cW) joule Rational
   [physc $ UpFrom (Inc,0)] (dbl 0)
   
 -- Constraint 21
-pcm_E = uqcNU "pcm_E" (nounPhraseSP "change in heat energy in the PCM")
+pcm_E = cuc' "pcm_E" (nounPhraseSP "change in heat energy in the PCM")
   "Change in thermal energy within the phase change material" 
   (sub (eqSymb sens_heat) cP) joule Rational
   [physc $ UpFrom (Inc, 0)] (dbl 0)

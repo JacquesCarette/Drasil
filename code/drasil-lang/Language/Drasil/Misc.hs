@@ -1,17 +1,4 @@
-module Language.Drasil.Misc where
-
-import Control.Lens ((^.))
-import Data.List (sortBy)
-import Language.Drasil.Classes (HasSymbol(symbol), HasUnitSymbol(usymb), 
-  NamedIdea(term), Idea)
-import Language.Drasil.Chunk.NamedIdea (short)
-import Language.Drasil.Chunk.Quantity (Quantity)
-import Language.Drasil.Chunk.Unitary (Unitary, unit)
-import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
-import Language.Drasil.Development.UnitLang (USymb)
-import Language.Drasil.Spec ((+:+), Sentence((:+:), S, Sy), sParen)
-import Language.Drasil.Symbol (Stage(Implementation), compsy)
-import qualified Language.Drasil.NounPhrase as NP
+module Language.Drasil.Misc(mkTable, noSpaces) where
 
 {- |
   Create a table body (not including header row) by applying the given
@@ -32,67 +19,11 @@ mkTable _     []  = []
 mkTable []     _  = error "Attempting to make table without data"
 mkTable fl (c:cl) = map ($ c) fl : mkTable fl cl
 
--- where should this go?
--- | Get the units, if they exist, and wrap them as a Sentence
-unitToSentence :: Quantity u => u -> Sentence
-unitToSentence x = maybe (S "--") (\y -> Sy (y ^. usymb)) (getUnit x)
-
-unitToSentenceUnitless :: Quantity u => u -> Sentence
-unitToSentenceUnitless x = maybe (S "Unitless") (\y -> Sy (y ^. usymb)) (getUnit x)
-
--- | Helper for getting the unit's symbol from a chunk, 
--- as opposed to the symbols of the chunk itself.
-unit_symb :: (Unitary c) => c -> USymb
-unit_symb c = unit c ^. usymb
-
--- | Helper for common pattern of introducing the title-case version of a 
--- noun phrase (from a NamedIdea)
--- followed by its abbreviation in parentheses.
-introduceAbb :: Idea n => n -> Sentence
-introduceAbb n = NP.titleize (n ^. term) +:+ sParen (short n)
-
--- | Helper function for getting the sentence case of a noun phrase from a 
--- NamedIdea.
-at_start, at_start' :: NamedIdea n => n -> Sentence
--- | Singular sentence case.
-at_start  n = NP.at_start (n ^. term)
--- | Plural sentence case.
-at_start' n = NP.at_start' (n ^. term)
-
--- | Helper function for getting the title case of a noun phrase from a 
--- NamedIdea.
-titleize, titleize' :: NamedIdea n => n -> Sentence
--- | Singular title case.
-titleize  n = NP.titleize (n ^. term)
--- | Plural title case.
-titleize' n = NP.titleize' (n ^. term)
-
--- | Helper for getting the phrase from a NamedIdea.
-phrase :: NamedIdea n => n -> Sentence
-phrase n = NP.phrase (n ^. term)
-
--- | Helper for getting the plural of a phrase from a NamedIdea
-plural :: NamedIdea n => n -> Sentence
-plural n = NP.plural (n ^. term)
-
-phrase's, plural's :: NamedIdea n => n -> Sentence
--- | Singular possesive function
-phrase's a = phrase a :+: S "'s"
--- | Plural possesive function
-plural's a = plural a :+: S "'"
-
 -- Returns the string if it doesn't contain spaces and throws an error if it does
 noSpaces :: String -> String
 noSpaces s
   | not (' ' `elem` s) = s
   | otherwise          = error "String has at least one space in it."
-
--- Sorts a list of HasSymbols by Symbol
-sortBySymbol :: (HasSymbol a) => [a] -> [a]
-sortBySymbol = sortBy compareBySymbol
-  where
-    compareBySymbol :: (HasSymbol a) => a -> a -> Ordering
-    compareBySymbol a b = compsy (symbol a Implementation) (symbol b Implementation)
 
 {-
 --------------------- WIP ---------------------
@@ -128,7 +59,7 @@ analyze a True (num, den) = findUnit a (num, den)
 analyze a False (num, den) = findUnit a (den, num)
 
 convert :: HasSymbolTable ctx => ctx -> ([SF], [SF]) -> ([Maybe UnitDefn], [Maybe UnitDefn])
-convert (num, den) = combine ((reorder (map (\x -> getUnitLup x symbtab) num)) ([], []), reorder (map (\x -> getUnitLup x symbtab) den) ([], []))
+convert (num, den) = combine ((reorder (map (getUnitLup symbtab) num)) ([], []), reorder (map (\x -> getUnitLup x symbtab) den) ([], []))
 where reorder [] lst = lst
       reorder (frst:rst) lst = reorder rst (divide frst lst)
       divide (UPow a int) x@(val1, val2) = error "Exponential not yet implemented"

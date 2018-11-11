@@ -5,7 +5,7 @@ module Drasil.GlassBR.Assumptions (glassType, glassCondition, explainScenario, s
 import Language.Drasil hiding (organization)
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxConsLabel)
 
-import Data.Drasil.Concepts.Documentation as Doc (assumpDom, condition, constant,
+import Data.Drasil.Concepts.Documentation as Doc (condition, constant,
   practice, reference, scenario, system, value)
 import Data.Drasil.Concepts.Math (calculation, surface, shape)
 import Data.Drasil.SentenceStructures (EnumType(Numb), FoldType(..), SepType(..),
@@ -14,11 +14,10 @@ import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 
 import Drasil.GlassBR.Concepts (beam, cantilever, edge, glaSlab, glass, gLassBR, 
   lShareFac, plane, responseTy)
-import Drasil.GlassBR.DataDefs (dimLL, loadDF, nonFL, tolStrDisFac)
-import Drasil.GlassBR.Labels (probOfBreakL, calOfCapacityL, glassTypeL, glassConditionL, glassLiteL)
+import Drasil.GlassBR.Labels (glassTypeL, glassConditionL, glassLiteL)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (constant_K, constant_LoadDF, constant_LoadDur, 
-  constant_LoadSF, constant_M, constant_ModElas, explosion, lateral, lite, load_dur)
+  constant_LoadSF, constant_M, constant_ModElas, explosion, lateral, load_dur)
 
 assumptions :: [AssumpChunk] -- For testing
 assumptions = [glassType, glassCondition, explainScenario, standardValues, glassLite, boundaryConditions, 
@@ -34,24 +33,22 @@ glassType, glassCondition, explainScenario, standardValues, glassLite, boundaryC
 -- FIXME: Remove the AssumpChunks once ConceptInstance and SCSProg's
 -- Assumptions has been migrated to using assumpDom
 
-assumpGT, assumpGC, assumpES, assumpSV, assumpGL, assumpBC, assumpRT,
-  assumpLDFC :: ConceptInstance
 glassType          = assump "glassTypeA"          glassTypeDesc                    glassTypeL
-assumpGT           = cic "assumpGT"   glassTypeDesc                     "glassType"           Doc.assumpDom  -- FIXME: Use label once ConceptInstance migrates to them
+-- assumpGT           = cic "assumpGT"   glassTypeDesc                     "glassType"           Doc.assumpDom  -- FIXME: Use label once ConceptInstance migrates to them
 glassCondition     = assump "glassConditionA"     glassConditionDesc               glassConditionL
-assumpGC           = cic "assumpGC"   glassConditionDesc                "glassCondition"      Doc.assumpDom  -- FIXME: Use label once ConceptInstance migrates to them
+-- assumpGC           = cic "assumpGC"   glassConditionDesc                "glassCondition"      Doc.assumpDom  -- FIXME: Use label once ConceptInstance migrates to them
 explainScenario    = assump "explainScenarioA"    explainScenarioDesc              (mkLabelRAAssump' "explainScenario"   )
-assumpES           = cic "assumpES"   explainScenarioDesc               "explainScenario"     Doc.assumpDom
+-- assumpES           = cic "assumpES"   explainScenarioDesc               "explainScenario"     Doc.assumpDom
 standardValues     = assump "standardValuesA"    (standardValuesDesc load_dur)     (mkLabelRAAssump' "standardValues"    )
-assumpSV           = cic "assumpSV"   (standardValuesDesc load_dur)     "standardValues"      Doc.assumpDom
+-- assumpSV           = cic "assumpSV"   (standardValuesDesc load_dur)     "standardValues"      Doc.assumpDom
 glassLite          = assump "glassLiteA"          glassLiteDesc                    glassLiteL
-assumpGL           = cic "assumpGL"   glassLiteDesc                     "glassLite"           Doc.assumpDom  -- FIXME: Use label once ConceptInstance migrates to them
+-- assumpGL           = cic "assumpGL"   glassLiteDesc                     "glassLite"           Doc.assumpDom  -- FIXME: Use label once ConceptInstance migrates to them
 boundaryConditions = assump "boundaryConditionsA" boundaryConditionsDesc           (mkLabelRAAssump' "boundaryConditions")
-assumpBC           = cic "assumpBC"   boundaryConditionsDesc            "boundaryConditions"  Doc.assumpDom
+-- assumpBC           = cic "assumpBC"   boundaryConditionsDesc            "boundaryConditions"  Doc.assumpDom
 responseType       = assump "responseTypeA"       responseTypeDesc                 (mkLabelRAAssump' "responseType"      )
-assumpRT           = cic "assumpRT"   responseTypeDesc                  "responseType"        Doc.assumpDom
+-- assumpRT           = cic "assumpRT"   responseTypeDesc                  "responseType"        Doc.assumpDom
 ldfConstant        = assump "ldfConstantA"       (ldfConstantDesc constant_LoadDF) (mkLabelRAAssump' "ldfConstant"       )
-assumpLDFC         = cic "assumpLDFC" (ldfConstantDesc constant_LoadDF) "ldfConstant"         Doc.assumpDom
+-- assumpLDFC         = cic "assumpLDFC" (ldfConstantDesc constant_LoadDF) "ldfConstant"         Doc.assumpDom
 
 glassTypeDesc :: Sentence
 glassTypeDesc = foldlSent [S "The standard E1300-09a for",
@@ -66,7 +63,7 @@ glassTypeDesc = foldlSent [S "The standard E1300-09a for",
   [S "glass supported on one side acts as a", phrase cantilever]])]
 
 glassConditionDesc :: Sentence
-glassConditionDesc = foldlSent [S "Following", makeRef astm2009, sParen (S "pg. 1") `sC` 
+glassConditionDesc = foldlSent [S "Following", makeRefS astm2009, sParen (S "pg. 1") `sC` 
   S "this", phrase practice, S "does not apply to any form of", foldlList Comma Options $ map S ["wired",
   "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"], S "with", 
   phrase surface `sAnd` S "edge treatments that alter the glass strength"]
@@ -77,29 +74,26 @@ explainScenarioDesc = foldlSent [S "This", phrase system, S "only considers the 
 
 standardValuesDesc :: UnitaryChunk -> Sentence
 standardValuesDesc mainIdea = foldlSent [S "The", plural value, S "provided in",
-  makeRef SRS.valsOfAuxConsLabel, S "are assumed for the", phrase mainIdea, 
+  makeRefS SRS.valsOfAuxConsLabel, S "are assumed for the", phrase mainIdea, 
   sParen (ch mainIdea) `sC` S "and the", plural materialProprty `sOf` 
-  foldlList Comma List (map ch (take 3 assumptionConstants))] +:+ 
-  (foldlList Comma List $ [makeRef probOfBreakL] ++ map makeRef [loadDF, 
-  nonFL, dimLL, tolStrDisFac])
+  foldlList Comma List (map ch (take 3 assumptionConstants))]
 
 glassLiteDesc :: Sentence
 glassLiteDesc = foldlSent [at_start glass, S "under consideration is assumed to be a single", 
-  phrase lite `semiCol` S "hence, the", phrase value `sOf` short lShareFac, S "is equal to 1 for all",
-  plural calculation `sIn` short gLassBR] +:+
-  (foldlList Comma List $ [makeRef calOfCapacityL] ++ [makeRef dimLL])
+  S "lite; hence, the", phrase value `sOf` short lShareFac, S "is equal to 1 for all",
+  plural calculation `sIn` short gLassBR]
 
 boundaryConditionsDesc :: Sentence
 boundaryConditionsDesc = foldlSent [S "Boundary", plural condition, S "for the",
   phrase glaSlab, S "are assumed to be 4-sided support for",
-  plural calculation] +:+ makeRef probOfBreakL
+  plural calculation]
 
 responseTypeDesc :: Sentence
 responseTypeDesc = foldlSent [S "The", phrase responseTy, S "considered in",
-  short gLassBR, S "is flexural"] +:+ makeRef probOfBreakL
+  short gLassBR, S "is flexural"]
 
 ldfConstantDesc :: QDefinition -> Sentence
 ldfConstantDesc mainConcept = foldlSent [S "With", phrase reference, S "to",
-  makeRef standardValues `sC` S "the", phrase value `sOf`
+  makeRefS standardValues `sC` S "the", phrase value `sOf`
   phrase mainConcept, sParen (ch mainConcept), S "is a", phrase constant,
-  S "in", short gLassBR] +:+ makeRef loadDF
+  S "in", short gLassBR]

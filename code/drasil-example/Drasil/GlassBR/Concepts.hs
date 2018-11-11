@@ -5,6 +5,8 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (assumption, dataDefn, goalStmt, inModel, 
     likelyChg, notApp, physSyst, response, requirement, srs, thModel, type_, typUnc, 
     unlikelyChg)
+import Data.Drasil.Phrase (compoundNC)
+import Data.Drasil.IdeaDicts
 
 {--}
 
@@ -24,19 +26,19 @@ annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass,
 
 --FIXME: Add compound nounphrases
 
-annealed      = commonIdea "annealed"      (nounPhraseSP "annealed")                "AN"
-aR            = commonIdea "aR"            (nounPhraseSP "aspect ratio")            "AR"
-fullyT        = commonIdea "fullyT"        (nounPhraseSP "fully tempered")          "FT"
-glassTypeFac  = commonIdea "glassTypeFac"  (nounPhraseSP "glass type factor")       "GTF"
-heatS         = commonIdea "heatS"         (nounPhraseSP "heat strengthened")       "HS"
-iGlass        = commonIdea "iGlass"        (nounPhraseSP "insulating glass")        "IG"
-lGlass        = commonIdea "lGlass"        (nounPhraseSP "laminated glass")         "LG"
-lResistance   = commonIdea "lResistance"   (nounPhraseSP "load resistance")         "LR"
-lShareFac     = commonIdea "lShareFac"     (nounPhraseSP "load share factor")       "LSF"
-gLassBR       = commonIdea "gLassBR"       (pn "GlassBR")                           "GlassBR"
-stdOffDist    = commonIdea "stdOffDist"    (nounPhraseSP "stand off distance")      "SD"
-loadDurFactor = commonIdea "loadDurFactor" (nounPhraseSP "load duration factor")    "LDF"
-nFL           = commonIdea "nFL"           (nounPhraseSP "non-factored load")       "NFL"
+annealed      = commonIdeaWithDict "annealed"      (nounPhraseSP "annealed")                "AN"       [idglass]
+aR            = commonIdeaWithDict "aR"            (nounPhraseSP "aspect ratio")            "AR"       [idglass]
+fullyT        = commonIdeaWithDict "fullyT"        (nounPhraseSP "fully tempered")          "FT"       [idglass]
+glassTypeFac  = commonIdeaWithDict "glassTypeFac"  (nounPhraseSP "glass type factor")       "GTF"      [idglass]
+heatS         = commonIdeaWithDict "heatS"         (nounPhraseSP "heat strengthened")       "HS"       [idglass]
+iGlass        = commonIdeaWithDict "iGlass"        (nounPhraseSP "insulating glass")        "IG"       [idglass]
+lGlass        = commonIdeaWithDict "lGlass"        (nounPhraseSP "laminated glass")         "LG"       [idglass]
+lResistance   = commonIdeaWithDict "lResistance"   (nounPhraseSP "load resistance")         "LR"       [idglass]
+lShareFac     = commonIdeaWithDict "lShareFac"     (nounPhraseSP "load share factor")       "LSF"      [idglass]
+gLassBR       = commonIdeaWithDict "gLassBR"       (pn "GlassBR")                           "GlassBR"  [idglass]
+stdOffDist    = commonIdeaWithDict "stdOffDist"    (nounPhraseSP "stand off distance")      "SD"       [idglass]
+loadDurFactor = commonIdeaWithDict "loadDurFactor" (nounPhraseSP "load duration factor")    "LDF"      [idglass]
+nFL           = commonIdeaWithDict "nFL"           (nounPhraseSP "non-factored load")       "NFL"      [idglass]
 
 {-Terminology-}
 -- TODO: See if we can make some of these terms less specific and/or parameterized.

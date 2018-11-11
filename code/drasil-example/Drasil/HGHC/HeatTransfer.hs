@@ -15,14 +15,14 @@ hghcVarsDD = [htTransCladFuelDD, htTransCladCoolDD]
 hghcVars :: [QDefinition]
 hghcVars = [htTransCladFuel, htTransCladCool]
 
-htVars :: [VarChunk]
+htVars :: [QuantityDict]
 htVars = [cladThick, coolFilmCond, gapFilmCond, cladCond]
 
 htInputs, htOutputs :: [QuantityDict]
 htInputs = map qw htVars
 htOutputs = map qw hghcVars
 
-cladThick, coolFilmCond, gapFilmCond, cladCond :: VarChunk
+cladThick, coolFilmCond, gapFilmCond, cladCond :: QuantityDict
 cladThick    = vc "cladThick"    (cn''' "clad thickness")
   (lTau `sub` lC) Real
 coolFilmCond = vc "coolFilmCond" (cn' "initial coolant film conductance")
@@ -38,7 +38,7 @@ htTransCladCool, htTransCladFuel :: QDefinition
 
 htTransCladCoolDD :: DataDefinition
 htTransCladCoolDD = mkDD htTransCladCool [{-References-}] [{-Derivation-}] "htTransCladCool"--Label
-  Nothing--no additional notes
+  []--no additional notes
 
 htTransCladCool = fromEqn "htTransCladCool" (nounPhraseSP
   "convective heat transfer coefficient between clad and coolant")
@@ -53,7 +53,7 @@ htTransCladCool_eq =
 
 htTransCladFuelDD :: DataDefinition
 htTransCladFuelDD = mkDD htTransCladFuel [{-References-}] [{-Derivation-}] "htTransCladFuel"--Label
-  Nothing--no additional notes
+  []--no additional notes
 
 htTransCladFuel = fromEqn "htTransCladFuel" (nounPhraseSP
   "effective heat transfer coefficient between clad and fuel surface")

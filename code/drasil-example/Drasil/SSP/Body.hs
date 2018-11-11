@@ -3,6 +3,8 @@ module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap, printSetting) where
 import Language.Drasil hiding (organization, Verb)
 import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Language.Drasil.Development (UnitDefn, unitWrapper) -- FIXME
+
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
 
@@ -13,21 +15,20 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   SCSSub(..), GSDSec(..), GSDSub(..),
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc,
   mkEnumSimpleD, nonFuncReqF, outDataConstTbl, probDescF, reqF, termDefnF,
-  tsymb'', valsOfAuxConstantsF)
+  tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc)
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
   assumptLabel, physSyst)
 
-import Data.Drasil.Concepts.Documentation (analysis, assumption,
+import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   design, document, effect, element, endUser, environment, goalStmt, inModel, 
   input_, interest, interest, interface, issue, loss, method_, organization, 
   physics, problem, product_, property, software, softwareSys, srs, srsDomains,
-  sysCont, system, table_, template, user, value, variable)
+  sysCont, system, table_, template, user, value, variable, physSyst)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Data.Drasil.Concepts.Physics (compression, fbd, force, strain, stress,
-  tension)
+import Data.Drasil.Concepts.Physics (fbd, force, strain, stress)
 import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability, 
   performanceSpd, program, reusability, understandability)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
@@ -38,7 +39,7 @@ import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (foldlList, SepType(Comma), FoldType(List), 
   foldlSP, foldlSent, foldlSent_, ofThe, sAnd, sOr, foldlSPCol)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
-import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, noRefsLT)
+import Data.Drasil.Utils (bulletFlat, bulletNested, enumSimple, noRefsLT)
 
 import Drasil.SSP.Assumptions (newAssumptions)
 import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
@@ -52,7 +53,7 @@ import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods)
 import Drasil.SSP.References (sspCitations)
 import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
-import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, hookesLaw, effStress)
+import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs, 
   sspOutputs, sspSymbols)
 
@@ -71,7 +72,7 @@ this_si :: [UnitDefn]
 this_si = map unitWrapper [metre, degree] ++ map unitWrapper [newton, pascal]
 
 check_si :: [UnitDefn]
-check_si = collectUnits sspSymMap symbT 
+check_si = collectUnits sspSymMap symbTT
 
 ssp_si :: SystemInformation
 ssp_si = SI {
@@ -80,7 +81,7 @@ ssp_si = SI {
   _authors = [henryFrankis],
   _units = check_si,
   _quants = sspSymbols,
-  _concepts = symbT,
+  _concepts = symbTT,
   _definitions = ([] :: [QDefinition]),
   _datadefs = dataDefns,
   _inputs = map qw sspInputs,
@@ -105,7 +106,7 @@ mkSRS = RefSec (RefProg intro
     [IPurpose prpsOfDoc_p1
     , IScope scpIncl scpEnd
     , IChar (phrase solidMechanics)
-      (phrase undergraduate +:+ S "level 4" +:+ phrase physics)
+      (phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics)
       EmptyS
     , IOrgSec orgSecStart inModel SRS.inModelLabel orgSecEnd]) :
     --FIXME: issue #235
@@ -117,7 +118,7 @@ mkSRS = RefSec (RefProg intro
           (SCSProg 
             [Assumptions 
             ,TMs ([Label] ++ stdFields) [factOfSafety, equilibrium, mcShrStrgth,
-             effStress, hookesLaw]
+             effStress]
             , GDs ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
             , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
             , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
@@ -145,14 +146,14 @@ sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms)
   (map cw sspSymbols ++ srsDomains) this_si
 
 sspRefDB :: ReferenceDB
-sspRefDB = rdb [] [] newAssumptions [] [] sspCitations (sspRequirements ++
+sspRefDB = rdb newAssumptions sspCitations (sspRequirements ++
   likelyChgs ++ unlikelyChgs)
 
 printSetting :: PrintingInformation
 printSetting = PI sspSymMap defaultConfiguration
 
-symbT :: [DefinedQuantityDict]
-symbT = ccss (getDoc ssp_srs) (egetDoc ssp_srs) sspSymMap
+symbTT :: [DefinedQuantityDict]
+symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) sspSymMap
 
 -- SECTION 1 --
 --automatically generated in mkSRS -
@@ -224,8 +225,7 @@ scpIncl = S "stability analysis of a 2 dimensional" +:+ phrase slope `sC`
 scpEnd  = S "identifies the most likely failure" +:+
   phrase surface +:+ S "within the possible" +:+ phrase input_ +:+ 
   S "range" `sC` S "and finds the" +:+ phrase fs +:+ S "for the" +:+
-  phrase slope +:+ S "as well as displacement of" +:+ phrase soil +:+
-  S "that will occur on the" +:+ phrase slope
+  phrase slope
 
 -- SECTION 2.3 --
 -- Characteristics of the Intended Reader generated in IChar
@@ -246,7 +246,7 @@ orgSecEnd   = S "The" +:+ plural inModel +:+ S "provide the set of" +:+
 -- System Context automatically generated
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
-  [makeRef sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
+  [makeRefS sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
    `sC` S "the", phrase user, S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself" +:+. (sParen $ short ssp),
@@ -268,7 +268,7 @@ sysCtxUsrResp = [S "Provide the input data related to the soil layer(s) and wate
   S "table (if applicable), ensuring no errors in the data entry",
   S "Ensure that consistent units are used for input variables",
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+ sParen ( 
-  makeRef SRS.assumptLabel) +:+ S "are appropriate for any particular" +:+
+  makeRefS SRS.assumptLabel) +:+ S "are appropriate for any particular" +:+
   phrase problem +:+ S "input to the" +:+ phrase software]
   
 sysCtxSysResp :: [Sentence]
@@ -276,8 +276,7 @@ sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +
   S " input instead of a floating point number",
   S "Determine if the inputs satisfy the required physical and software constraints",
   S "Identify the most likely failure surface within the possible input range",
-  S "Find the factor of safety for the slope",
-  S "Find the displacement of soil that will occur on the slope"]
+  S "Find the factor of safety for the slope"]
   
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
@@ -292,7 +291,7 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 -- userContraints intro below
 
 userCharIntro :: Contents
-userCharIntro = userChar ssa [S "Calculus", titleize physics]
+userCharIntro = userChar ssa [S "Calculus", titleize Doc.physics]
   [phrase soil, plural mtrlPrpty]
 
 userChar :: (Idea a) => a -> [Sentence] -> [Sentence] -> Contents
@@ -310,16 +309,15 @@ userChar pname understandings familiarities = foldlSP [
 -- SECTION 4.1 --
 problem_desc = probDescF EmptyS ssa ending [termi_defi, phys_sys_desc, goal_stmt]
   where ending = foldlSent_ [S "evaluate the", phrase fs, S "of a",
-          phrase's slope, phrase slpSrf, S "and to calculate the",
-          S "displacement that the", phrase slope, S "will experience"]
+          phrase's slope, phrase slpSrf, S "and identify the",
+          phrase crtSlpSrf, S "of the", phrase slope]
 
 -- SECTION 4.1.1 --
 termi_defi = termDefnF Nothing [termi_defi_list]
 
 termi_defi_list = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
   map (\x -> (titleize $ x, Flat $ x ^. defn))
-  [fs_concept, crtSlpSrf, stress, strain, normForce,
-  shearForce, tension, compression, plnStrn]
+  [fs_concept, crtSlpSrf, stress, strain, normForce, shearForce, plnStrn]
   -- most of these are in concepts (physics or solidMechanics)
   -- except for crtSlpSrf & plnStrn which is in defs.hs
   -- and fs which is in Unitals.hs
@@ -340,22 +338,26 @@ physSystIntro what how p1 p2 p3 indexref = foldlSP [
   plural property, S "of the", phrase what, how, S "Some", plural property,
   S "are", phrase p1, plural property `sC` S "and some are", phrase p2 `sOr`
   p3 +:+. plural property, S "The index convention for referencing which",
-  phrase p1 `sOr` phrase p2, S "is being used is shown in", makeRef indexref]
+  phrase p1 `sOr` phrase p2, S "is being used is shown in", makeRefS indexref]
 
-phys_sys_desc_bullets = enumBullet $ map foldlSent_ [
+phys_sys_desc_bullets = enumSimple 1 (short Doc.physSyst) physSystDescriptionListPhysys
+physSystDescriptionListPhysys :: [Sentence]
+physSystDescriptionListPhysys1 :: Sentence
+physSystDescriptionListPhysys2 :: Sentence
 
-  [at_start' itslPrpty, S "convention is noted by j. The end",
+physSystDescriptionListPhysys = [physSystDescriptionListPhysys1, physSystDescriptionListPhysys2]
+
+physSystDescriptionListPhysys1 = foldlSent_ [at_start' itslPrpty, S "convention is noted by j. The end",
   plural itslPrpty, S "are usually not of", phrase interest `sC`
   S "therefore use the", plural itslPrpty, S "from" +:+.
-  (E $ real_interval index $ Bounded (Inc,1) (Inc,sy numbSlices -1))],
-  -- (E $ 1 $<= sy index $<= (sy numbSlices) - 1)],
+  (E $ real_interval index $ Bounded (Inc,1) (Inc,sy numbSlices -1))]
 
-  [at_start slice, plural property +:+ S "convention is noted by" +:+.
-  (ch index)]]
+physSystDescriptionListPhysys2 = foldlSent_ [at_start slice, plural property +:+ S "convention is noted by" +:+.
+  (ch index)]
 
 phys_sys_desc_p2 = foldlSP [S "A", phrase fbd, S "of the", 
   plural force, S "acting on the", phrase slice, 
-  S "is displayed in", makeRef fig_forceacting]
+  S "is displayed in", makeRefS fig_forceacting]
 
 fig_indexconv :: LabelledContent
 fig_indexconv = llcc (mkLabelRAFig "IndexConvention") $ 

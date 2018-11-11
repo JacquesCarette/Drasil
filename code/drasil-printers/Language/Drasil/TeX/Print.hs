@@ -8,10 +8,10 @@ import Numeric (showEFloat)
 import Control.Applicative (pure)
 import Control.Arrow (second)
 
-import qualified Language.Drasil as L (USymb(US), 
+import qualified Language.Drasil as L (
   RenderSpecial(..), People, rendPersLFM, HasDefinitionTable, HasSymbolTable,
   CitationKind(..), Month(..), Symbol(..), Sentence(S), (+:+), MaxWidthPercent,
-  Decoration(Prime, Hat, Vector), Document, special, getStringSN)
+  Decoration(Prime, Hat, Vector), Document, special, getStringSN, RefType(..), USymb(US))
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
@@ -35,12 +35,11 @@ import qualified Language.Drasil.Printing.Import as I
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, item', description,
   includegraphics, center, figure, item, symbDescription, enumerate, itemize, toEqn, empty,
-  newline, superscript, parens, fraction, quote, ref, ucref, lcref, aref, mref, sref, rref,
-  hyperref, snref, cite, href, sec, newpage, maketoc, maketitle, document, author, title)
+  newline, superscript, parens, fraction, quote, ref, ucref, lcref, aref, mref, sref,
+  hyperref, snref, cite, href, sec, newpage, maketoc, maketitle, document, author, title, rref)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (<>), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
 import Language.Drasil.TeX.Preamble (genPreamble)
-import qualified Language.Drasil.RefTypes as RT
 import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..))
 
 genTeX :: (L.HasSymbolTable ctx, L.HasDefinitionTable ctx, HasPrintingOptions ctx) =>
@@ -265,16 +264,16 @@ spec (S s)  = pure $ text (concatMap escapeChars s)
 spec (Sy s) = p_unit s
 spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = pure $ text "\\newline"
-spec (Ref t@RT.Sect r _ _)    = sref (show t) (pure $ text r)
-spec (Ref t@(RT.Def _) r _ _) = hyperref (show t) (pure $ text r)
-spec (Ref RT.Mod r _ _)       = mref  (pure $ text r)
-spec (Ref (RT.Req _) r _ _)   = rref  (pure $ text r)
-spec (Ref RT.Assump r _ _)    = aref  (pure $ text r)
-spec (Ref RT.LCh r _ _)       = lcref (pure $ text r)
-spec (Ref RT.UnCh r _ _)      = ucref (pure $ text r)
-spec (Ref RT.Cite r _ _)      = cite  (pure $ text r)
-spec (Ref RT.Blank r sn _)    = snref r $ spec sn
-spec (Ref RT.Link r _ sn)     = href  r $ L.getStringSN sn
+spec (Ref t@L.Sect r _ _)    = sref (show t) (pure $ text r)
+spec (Ref t@(L.Def _) r _ _) = hyperref (show t) (pure $ text r)
+spec (Ref L.Mod r _ _)       = mref  (pure $ text r)
+spec (Ref L.Assump r _ _)    = aref  (pure $ text r)
+spec (Ref (L.Req _) r _ _)   = rref  (pure $ text r)
+spec (Ref L.LCh r _ _)       = lcref (pure $ text r)
+spec (Ref L.UnCh r _ _)      = ucref (pure $ text r)
+spec (Ref L.Cite r _ _)      = cite  (pure $ text r)
+spec (Ref L.Blank r sn _)    = snref r $ spec sn
+spec (Ref L.Link r _ sn)     = href  r $ L.getStringSN sn
 spec (Ref t r _ _)            = ref (show t) (pure $ text r)
 spec EmptyS                   = empty
 spec (Quote q)                = quote $ spec q
@@ -313,7 +312,7 @@ p_unit (L.US ls) = formatu t b
     p_symb n = let cn = symbol_needs n in switch (const cn) (pure $ text $ symbol n)
 
 {-
-p_unit :: USymb -> D
+p_unit :: L.USymb -> D
 p_unit (UName (Concat s)) = foldl (<>) empty $ map (p_unit . UName) s
 p_unit (UName n) =
   let cn = symbol_needs n in

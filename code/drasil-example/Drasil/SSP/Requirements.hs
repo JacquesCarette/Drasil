@@ -3,10 +3,10 @@ module Drasil.SSP.Requirements (sspRequirements, sspInputDataTable) where
 import Language.Drasil
 
 import Data.Drasil.Concepts.Computation (inDatum)
-import Data.Drasil.Concepts.Documentation (datum, element, funcReqDom, input_,
+import Data.Drasil.Concepts.Documentation (datum, funcReqDom, input_,
   method_, value)
 
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), andThe, 
+import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
   foldlList, foldlSent, ofThe, sOf)
 import Data.Drasil.Utils (mkInputDatTb)
 
@@ -25,7 +25,7 @@ readAndStore, generateCSS, testSlipSrf, prepareSlipS, calculateFS, rankSlope,
 readAndStore = cic "readAndStore" ( foldlSent [
   S "Read the", phrase input_, S "file and store the" +:+. 
   plural datum, S "Necessary", plural inDatum, S "summarized in", 
-  makeRef sspInputDataTable]) "Read-and-Store" funcReqDom
+  makeRefS sspInputDataTable]) "Read-and-Store" funcReqDom
 
 generateCSS = cic "generateCSS" ( foldlSent [
   S "Generate potential", plural crtSlpSrf,S "for the", 
@@ -56,7 +56,7 @@ generateCSS' = cic "generateCSS'" ( foldlSent [
   plural fs]) "Generate-New-Critical-Slip-Surfaces" funcReqDom
 
 repeatFindFS = cic "repeatFindFS" ( foldlSent [
-  S "Repeat", (foldlList Comma List $ map makeRef [testSlipSrf, prepareSlipS,
+  S "Repeat", (foldlList Comma List $ map makeRefS [testSlipSrf, prepareSlipS,
   calculateFS, rankSlope, generateCSS']), S "until the", phrase fs_min,
   S "remains approximately the same over a",
   S "predetermined number of repetitions. Identify the", phrase slpSrf, 
@@ -74,10 +74,9 @@ calculateFS' = cic "calculateFS'" ( foldlSent [
   "Calculate-Final-Factor-of-Safety" funcReqDom
 
 displayGraph = cic "displayGraph" ( foldlSent [
-  S "Display the", phrase crtSlpSrf `andThe` phrase slice, 
-  phrase element, S "displacements graphically. Give", plural value `ofThe` 
-  plural fs, S "calculated by the", titleize morPrice, phrase method_]) 
-  "Display-Graph" funcReqDom
+  S "Display the", phrase crtSlpSrf, S "graphically. Display the", phrase value 
+  `ofThe` phrase fs]) 
+ "Display-Graph" funcReqDom
 
 ------------------
 sspInputDataTable :: LabelledContent

@@ -1,8 +1,9 @@
 module Data.Drasil.Concepts.Education where
 
 import Language.Drasil hiding (year)
-import Data.Drasil.Concepts.Documentation (first, physics, second_, year)
+import Data.Drasil.Concepts.Documentation as Doc (first, physics, second_, year)
 import Data.Drasil.Concepts.PhysicalProperties (solid)
+import Data.Drasil.Phrase (compoundNC)
 
 calculus, civil, degree_, engineering, structural, mechanics,
   undergraduate, highSchool, physical_, chemistry :: NamedChunk
@@ -25,7 +26,7 @@ undergradDegree, scndYrCalculus, solidMechanics, secondYear, structuralEng,
 civilEng                     = compoundNC civil engineering
 physChem                     = compoundNC physical_ chemistry
 highSchoolCalculus           = compoundNC highSchool calculus
-highSchoolPhysics            = compoundNC highSchool physics
+highSchoolPhysics            = compoundNC highSchool Doc.physics
 scndYrCalculus               = compoundNC secondYear calculus
 frstYr                       = compoundNC first year
 secondYear                   = compoundNC second_ year

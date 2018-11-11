@@ -19,12 +19,12 @@ executable tiny
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    drasil-lang >= 0.1.23,
-    drasil-data >= 0.1.6,
+    drasil-lang >= 0.1.38,
+    drasil-data >= 0.1.9,
     drasil-code >= 0.1.4,
-    drasil-printers >= 0.1.5,
+    drasil-printers >= 0.1.6,
     drasil-gen >= 0.1.2,
-    drasil-docLang >= 0.1.8
+    drasil-docLang >= 0.1.15
   default-language: Haskell2010
   ghc-options:      -Wall -O2
 
@@ -67,7 +67,8 @@ executable nopcm
   hs-source-dirs: .
   main-is: Drasil/NoPCM/Main.hs
   other-modules:
-      Drasil.NoPCM.Body
+      Drasil.NoPCM.Assumptions
+    , Drasil.NoPCM.Body
     , Drasil.NoPCM.Unitals
     , Drasil.NoPCM.Definitions
     , Drasil.NoPCM.DataDesc
@@ -177,7 +178,8 @@ executable chipmunkdocs
   hs-source-dirs: .
   main-is: Drasil/GamePhysics/Main.hs
   other-modules:
-      Drasil.GamePhysics.Body
+      Drasil.GamePhysics.Assumptions
+    , Drasil.GamePhysics.Body
     , Drasil.GamePhysics.Changes
     , Drasil.GamePhysics.Concepts
     , Drasil.GamePhysics.DataDefs

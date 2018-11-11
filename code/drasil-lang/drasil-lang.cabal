@@ -1,5 +1,5 @@
 Name:		drasil-lang
-Version:	0.1.24
+Version:	0.1.43
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -9,36 +9,16 @@ library
   exposed-modules:
       Language.Drasil
     , Language.Drasil.Development
-    , Language.Drasil.NounPhrase
-    , Language.Drasil.RefTypes
+    , Language.Drasil.Utils
+    , Data.Drasil.IdeaDicts
   other-modules:
-      Language.Drasil.SystemInformation
+      Language.Drasil.NounPhrase
+    , Language.Drasil.RefTypes
     , Language.Drasil.Expr
     , Language.Drasil.Expr.Extract
     , Language.Drasil.Expr.Math
     , Language.Drasil.Expr.Precedence
-    , Language.Drasil.Classes
-    , Language.Drasil.Document
-    , Language.Drasil.Document.Core
-    , Language.Drasil.Document.Extract
-    , Language.Drasil.Document.GetChunk
-    , Language.Drasil.Label.Core
-    , Language.Drasil.Label
-    , Language.Drasil.Misc
-    , Language.Drasil.NounPhrase.Core
-    , Language.Drasil.People
-    , Language.Drasil.Reference
-    , Language.Drasil.Sentence.Extract
-    , Language.Drasil.Sentence.EmbedSymbol
-    , Language.Drasil.Space
-    , Language.Drasil.Spec
-    , Language.Drasil.Symbol
-    , Language.Drasil.SymbolAlphabet
-    , Language.Drasil.UID
-    , Language.Drasil.Unicode
     , Language.Drasil.Chunk.AssumpChunk
-    , Language.Drasil.Chunk.Attribute
-    , Language.Drasil.Chunk.Change
     , Language.Drasil.Chunk.Citation
     , Language.Drasil.Chunk.CommonIdea
     , Language.Drasil.Chunk.Concept
@@ -47,28 +27,46 @@ library
     , Language.Drasil.Chunk.Constrained.Core
     , Language.Drasil.Chunk.DataDefinition
     , Language.Drasil.Chunk.DefinedQuantity
-    , Language.Drasil.Chunk.Derivation
     , Language.Drasil.Chunk.Eq
     , Language.Drasil.Chunk.GenDefn
-    , Language.Drasil.Chunk.Goal
     , Language.Drasil.Chunk.InstanceModel
     , Language.Drasil.Chunk.NamedIdea
-    , Language.Drasil.Chunk.PhysSystDesc
     , Language.Drasil.Chunk.Quantity
-    , Language.Drasil.Chunk.References
     , Language.Drasil.Chunk.Relation
-    , Language.Drasil.Chunk.ReqChunk
-    , Language.Drasil.Chunk.ShortName
-    , Language.Drasil.Chunk.SymbolForm
     , Language.Drasil.Chunk.Theory
     , Language.Drasil.Chunk.UncertainQuantity
     , Language.Drasil.Chunk.Unital
     , Language.Drasil.Chunk.Unitary
     , Language.Drasil.Chunk.UnitaryConcept
-    , Language.Drasil.Chunk.VarChunk
     , Language.Drasil.ChunkDB
+    , Language.Drasil.ChunkDB.GetChunk
+    , Language.Drasil.Classes
+    , Language.Drasil.Classes.Core
+    , Language.Drasil.Document
+    , Language.Drasil.Document.Core
+    , Language.Drasil.Label.Core
+    , Language.Drasil.Label.Type
+    , Language.Drasil.Label
+    , Language.Drasil.Misc
+    , Language.Drasil.NounPhrase.Core
+    , Language.Drasil.People
+    , Language.Drasil.Reference
+    , Language.Drasil.Sentence.Extract
+    , Language.Drasil.Sentence.EmbedSymbol
+    , Language.Drasil.ShortName
+    , Language.Drasil.Space
+    , Language.Drasil.Sentence
+    , Language.Drasil.Stages
+    , Language.Drasil.Symbol
+    , Language.Drasil.Symbol.Helpers
+    , Language.Drasil.SymbolAlphabet
+    , Language.Drasil.SystemInformation
+    , Language.Drasil.UID
+    , Language.Drasil.Unicode
+    , Language.Drasil.UnitLang
+    , Language.Drasil.Derivation
     , Language.Drasil.Development.Unit
-    , Language.Drasil.Development.UnitLang
+    , Language.Drasil.Development.Sentence
 
   Build-Depends:
     base >= 4.7,

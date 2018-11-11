@@ -269,14 +269,14 @@ spec _ (Sy s)          = P.Sy s
 spec _ (Sp s)          = P.Sp s
 spec _ (P s)           = P.E $ symbol s
 spec sm (Ch s)         = P.E $ symbol $ lookupC sm s 
-spec sm (Ref t r sn)   = P.Ref t r (spec sm (snToSentence $ resolveSN sn $
+spec sm (Ref (Reference t r sn))   = P.Ref t r (spec sm (S . getStringSN $ resolveSN sn $
   lookupDeferredSN sm)) sn --FIXME: sn passed in twice?
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
 
-lookupDeferredSN :: (HasDefinitionTable ctx) => ctx -> DeferredCtx -> String
-lookupDeferredSN ctx (FromCC u) = maybe "" (\x -> x ++ ": ") $
+lookupDeferredSN :: (HasDefinitionTable ctx) => ctx -> UID -> String
+lookupDeferredSN ctx u = maybe "" (\x -> x ++ ": ") $
   getA $ defLookup u $ ctx ^. defTable
 
 -- | Translates from Document to the Printing representation of Document
@@ -299,7 +299,7 @@ createLayout sm = map (sec sm 0)
 -- | Helper function for creating sections at the appropriate depth
 sec :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
   ctx -> Int -> Section -> T.LayoutObj
-sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used somewhere?
+sec sm depth x@(Section titleLb contents _ _) = --FIXME: should ShortName be used somewhere?
   let ref = P.S (refAdd x) in
   T.HDiv [(concat $ replicate depth "sub") ++ "section"]
   (T.Header depth (spec sm titleLb) ref :
@@ -324,19 +324,16 @@ layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"]
 layLabelled sm x@(LblC _ (Figure c f wp))     = T.Figure 
   (P.S $ getAdd (x ^. getRefAdd))
   (spec sm c) f wp
+{-
 layLabelled sm x@(LblC _ (Requirement r))       = T.ALUR T.Requirement
   (spec sm $ requires r) 
   (P.S $ getAdd (x ^. getRefAdd)) 
   (spec sm $ getShortName r)
+-}
 layLabelled sm x@(LblC _ (Assumption a))        = T.ALUR T.Assumption
   (spec sm (assuming a))
   (P.S $ getAdd (x ^. getRefAdd))
   (spec sm $ getShortName a)
-layLabelled sm x@(LblC _ (Change lcs))           = T.ALUR
-  (if (chngType lcs) == Likely then T.LikelyChange else T.UnlikelyChange)
-  (spec sm (chng lcs)) 
-  (P.S $ getAdd (x ^. getRefAdd)) 
-  (spec sm $ getShortName lcs)
 layLabelled sm x@(LblC _ (Graph ps w h t))    = T.Graph 
   (map (\(y,z) -> (spec sm y, spec sm z)) ps) w h (spec sm t)
   (P.S $ getAdd (x ^. getRefAdd))
@@ -358,13 +355,10 @@ layUnlabelled sm (Paragraph c)          = T.Paragraph (spec sm c)
 layUnlabelled sm (EqnBlock c)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
 layUnlabelled sm (Enumeration cs)       = T.List $ makeL sm cs
 layUnlabelled sm (Figure c f wp)    = T.Figure (P.S "nolabel2") (spec sm c) f wp
-layUnlabelled sm (Requirement r)      = T.ALUR T.Requirement
-  (spec sm $ requires r) (P.S "nolabel3") (spec sm $ getShortName r)
+-- layUnlabelled sm (Requirement r)      = T.ALUR T.Requirement
+--   (spec sm $ requires r) (P.S "nolabel3") (spec sm $ getShortName r)
 layUnlabelled sm (Assumption a)       = T.ALUR T.Assumption
   (spec sm (assuming a)) (P.S "nolabel4") (spec sm $ getShortName a)
-layUnlabelled sm (Change lcs)          = T.ALUR
-  (if (chngType lcs) == Likely then T.LikelyChange else T.UnlikelyChange)
-  (spec sm (chng lcs)) (P.S "nolabel5") (spec sm $ getShortName lcs)
 layUnlabelled sm (Graph ps w h t)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S "nolabel6")
 layUnlabelled sm (Definition dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")
@@ -420,3 +414,6 @@ item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
 labref :: Maybe RefAdd -> Maybe P.Spec
 labref l = maybe Nothing (\z -> Just $ P.S z) l
 
+-- | Helper for getting a short name
+getShortName :: HasShortName c => c -> Sentence
+getShortName c = S . getStringSN $ c ^. shortname

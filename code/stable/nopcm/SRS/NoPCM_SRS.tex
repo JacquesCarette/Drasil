@@ -268,43 +268,43 @@ The instance models that govern SWHS are presented in Section~\ref{Sec:IMs}. The
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TMs}{]}, General Definitions {[}Section~\ref{Sec:GDs}{]}, Data Definitions {[}Section~\ref{Sec:DDs}{]}, Instance Models {[}Section~\ref{Sec:IMs}{]}, Likely Changes {[}Section~\ref{Sec:LCs}{]}, or Unlikely Changes {[}Section~\ref{Sec:UCs}{]}, in which the respective assumption is used.
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Thermal-Energy-Only}:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible {[}\hyperref[T:consThermE]{Definition~T:consThermE}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Thermal-Energy-Only}:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Heat-Transfer-Coeffs-Constant}:]All heat transfer coefficients are constant over time {[}\hyperref[GD:nwtnCooling]{Definition~GD:nwtnCooling}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Heat-Transfer-Coeffs-Constant}:]All heat transfer coefficients are constant over time.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Constant-Water-Temp-Across-Tank}:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank {[}\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Constant-Water-Temp-Across-Tank}:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Density-Water-Constant-over-Volume}:]The density of water has no spatial variation; that is, it is constant over their entire volume {[}\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}, \hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Density-Water-Constant-over-Volume}:]The density of water has no spatial variation; that is, it is constant over their entire volume {[}\hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Specific-Heat-Energy-Constant-over-Volume}:]The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume {[}\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Specific-Heat-Energy-Constant-over-Volume}:]The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Newton-Law-Convective-Cooling-Coil-Water}:]Newton's law of convective cooling applies between the heating coil and the water {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Newton-Law-Convective-Cooling-Coil-Water}:]Newton's law of convective cooling applies between the heating coil and the water.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Time}:]The temperature of the heating coil is constant over time {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}, LC\ref{LC:Temperature-Coil-Variable-Over-Day}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Time}:]The temperature of the heating coil is constant over time {[}LC\ref{LC:Temperature-Coil-Variable-Over-Day}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Length}:]The temperature of the heating coil does not vary along its length {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}, LC\ref{LC:Temperature-Coil-Variable-Over-Length}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Length}:]The temperature of the heating coil does not vary along its length {[}LC\ref{LC:Temperature-Coil-Variable-Over-Length}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Charging-Tank-No-Temp-Discharge}:]The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, \hyperref[likeChgDT]{LC: Discharging-Tank}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Charging-Tank-No-Temp-Discharge}:]The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil {[}\hyperref[likeChgDT]{LC: Discharging-Tank}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Water-Always-Liquid}:]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, \hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Water-Always-Liquid}:]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Perfect-Insulation-Tank}:]The tank is perfectly insulated so that there is no heat loss from the tank {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, LC\ref{LC:Tank-Lose-Heat}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Perfect-Insulation-Tank}:]The tank is perfectly insulated so that there is no heat loss from the tank {[}LC\ref{LC:Tank-Lose-Heat}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:No-Internal-Heat-Generation-By-Water}:]No internal heat is generated by the water; therefore, the volumetric heat generation per unit volume is zero {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:No-Internal-Heat-Generation-By-Water}:]No internal heat is generated by the water; therefore, the volumetric heat generation per unit volume is zero.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Atmospheric-Pressure-Tank}:]The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature of water are 0${}^{\circ}$C and 100${}^{\circ}$C, respectively {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Atmospheric-Pressure-Tank}:]The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature of water are 0${}^{\circ}$C and 100${}^{\circ}$C, respectively
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Volume-Coil-Negligible}:]When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible {[}R\ref{FR:Input-Initial-Quantities}{]}.
@@ -369,7 +369,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. $\mathbf{q}\left(t\right)$ is the thermal flux ($\frac{\text{W}}{\text{m}^{2}}$). $h$ is the heat transfer coefficient, assumed independant of $T$ (A\ref{A:Heat-Transfer-Coeffs-Constant}) ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$). $ΔT\left(t\right)=T\left(t\right)-{T_{env}}\left(t\right)$ is the time-dependant thermal gradient between the environment and the object (${}^{\circ}$C).
 \\ \midrule \\
-Source & \cite{incroperaEtAl2007} (pg. 8)
+Source & \cite{incroperaEtAl2007}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -402,7 +402,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & The basic equation governing the rate of change of temperature, for a given volume $V$, with time. $m$ is the mass (kg). $C$ is the specific heat capacity ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$). $T$ is the temperature (${}^{\circ}$C) and $t$ is the time (s). ${q_{in}}$ and ${q_{out}}$ are the in and out heat transfer rates, respectively ($\frac{\text{W}}{\text{m}^{2}}$). ${A_{in}}$ and ${A_{out}}$ are the surface areas over which the heat is being transferred in and out, respectively ($\text{m}^{2}$). $g$ is the volumetric heat generated ($\frac{\text{W}}{\text{m}^{3}}$). $V$ is the volume ($\text{m}^{3}$).
 \\ \midrule \\
-Source & FIXME: no sources
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -456,6 +456,10 @@ Description & \begin{symbDescription}
               \item{$t$ is the time (s)}
               \end{symbDescription}
 \\ \midrule \\
+Notes & A\ref{A:Newton-Law-Convective-Cooling-Coil-Water}
+        A\ref{A:Temp-Heating-Coil-Constant-over-Time}
+        A\ref{A:Temp-Heating-Coil-Constant-over-Length}
+\\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
@@ -496,15 +500,15 @@ Description & \begin{symbDescription}
               \item{${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C). ${τ_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ is a constant (s). The above equation applies as long as the water is in liquid form, $0<{T_{W}}<100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (A\ref{A:Law-Convective-Cooling-Water-PCM}).
+Notes & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C). ${τ_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ is a constant (s). The above equation applies as long as the water is in liquid form, $0<{T_{W}}<100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (A\ref{A:Law-Convective-Cooling-Water-PCM}). (A\ref{A:Water-Always-Liquid}) (A\ref{A:Perfect-Insulation-Tank}) (A\ref{A:Atmospheric-Pressure-Tank}).
 \\ \midrule \\
-Source & \cite{koothoor2013} (with PCM removed)
+Source & \cite{koothoor2013}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Derivation of the energy balance on water:
-To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water ${V_{W}}$, which has mass ${m_{W}}$ and specific heat capacity of water, ${C_{W}}$ . Heat transfer occurs in the water from the coil as ${q_{C}}$, over area ${A_{C}}$. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (A\ref{A:Charging-Tank-No-Temp-Discharge}) . Assuming no volumetric heat generation per unit volume (A\ref{A:Same-Initial-Temp-Water-PCM}), $g=0$ . Therefore, the equation for \hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp} can be written as:
+To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water ${V_{W}}$, which has mass ${m_{W}}$ and specific heat capacity of water, ${C_{W}}$ . Heat transfer occurs in the water from the coil as ${q_{C}}$, over area ${A_{C}}$. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (A\ref{A:Charging-Tank-No-Temp-Discharge}) . Assuming no volumetric heat generation per unit volume (A\ref{A:No-Internal-Heat-Generation-By-Water}), $g=0$ . Therefore, the equation for \hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp} can be written as:
 \begin{dmath}
 {m_{W}} {C_{W}} \frac{d\,{T_{W}}}{d\,t}={q_{C}} {A_{C}}
 \end{dmath}

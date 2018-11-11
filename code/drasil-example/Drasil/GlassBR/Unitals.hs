@@ -5,6 +5,7 @@ import Control.Lens ((^.))
 import Prelude hiding (log)
 
 import Data.Drasil.Constraints (gtZeroConstr)
+import Data.Drasil.Phrase (compoundNC)
 import Data.Drasil.SentenceStructures (FoldType(..), SepType(Comma),
   displayConstrntsAsSet, foldlList, foldlSent, foldlsC)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
@@ -107,10 +108,10 @@ nom_thick = cuc "nom_thick"
   [enumc nominalThicknesses] 8
 
 -- FIXME glassTypeAbbrsStr should really not exist...
-glass_type  = cvc' "glass_type" (nounPhraseSent $ phrase glassTy +:+ 
+glass_type  = cvc "glass_type" (nounPhraseSent $ phrase glassTy +:+ 
     displayConstrntsAsSet glass_type glassTypeAbbrsStr)
   lG ({-DiscreteS glassTypeAbbrsStr-} String)
-  [EnumeratedStr Software glassTypeAbbrsStr]
+  [EnumeratedStr Software glassTypeAbbrsStr] Nothing
 
 {--}
 
@@ -120,7 +121,7 @@ gbOutputs = map qw [is_safePb, is_safeLR] ++ map qw [prob_br]
 prob_br :: ConstrainedChunk
 prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational
-  [ physc $ Bounded (Exc,0) (Exc,1)] (dbl 0.4)
+  [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
   --FIXME: no typical value!
 
 {--}
@@ -200,12 +201,12 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 
 {-Quantities-}
 
-glassBRUnitless :: [VarChunk]
+glassBRUnitless :: [QuantityDict]
 glassBRUnitless = [risk_fun, is_safePb, is_safeLR, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL]
 
 risk_fun, is_safePb, is_safeLR, stressDistFac, sdf_tol,
-  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL :: VarChunk
+  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL :: QuantityDict
 
 dimlessLoad   = vc "dimlessLoad" (nounPhraseSP "dimensionless load")
   (hat lQ) Real
@@ -255,7 +256,7 @@ aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
 
 annealedGl    = cc' annealed
   (foldlSent [S "A flat, monolithic, glass lite which has uniform thickness where",
-  S "the residual surface stresses are almost zero, as defined in", makeRef astm2016])
+  S "the residual surface stresses are almost zero, as defined in", makeRefS astm2016])
 aspectRatio   = cc aR
   ("The ratio of the long dimension of the glass to the short dimension of " ++
     "the glass. For glass supported on four sides, the aspect ratio is " ++
@@ -286,7 +287,7 @@ fTemperedGl   = cc' fullyT
   (foldlSent [S "A flat, monolithic, glass lite of uniform thickness that has",
   S "been subjected to a special heat treatment process where the residual",
   S "surface compression is not less than 69 MPa (10 000 psi) or the edge",
-  S "compression not less than 67 MPa (9700 psi), as defined in", makeRef astm2012])
+  S "compression not less than 67 MPa (9700 psi), as defined in", makeRefS astm2012])
 glassGeo      = dccWDS "glassGeo"    (nounPhraseSP "glass geometry")
   (S "The glass geometry based inputs include the dimensions of the" +:+ 
     phrase glaPlane `sC` phrase glassTy `sC` S "and" +:+.  phrase responseTy)
@@ -305,7 +306,7 @@ hStrengthGl   = cc' heatS
   (foldlSent [S "A flat, monolithic, glass lite of uniform thickness that has",
   S "been subjected to a special heat treatment process where the residual",
   S "surface compression is not less than 24 MPa (3500psi) or greater than",
-  S "52 MPa (7500 psi), as defined in", makeRef astm2012])
+  S "52 MPa (7500 psi), as defined in", makeRefS astm2012])
 lateral       = dcc "lateral"     (nounPhraseSP "lateral") 
   "Perpendicular to the glass surface."
 lite          = dcc "lite"        (cn' "lite")
@@ -316,7 +317,7 @@ load          = dcc "load"        (nounPhraseSP "load")
 loadResis     = cc' lResistance
   (foldlSent [S "The uniform lateral load that a glass construction can sustain",
   S "based upon a given probability of breakage and load duration as defined in",
-  makeRef astm2009, S "(pg. 1, 53), following", foldlList Comma List $ map makeRef 
+  makeRefS astm2009, S "(pg. 1, 53), following", foldlList Comma List $ map makeRefS 
   [glassConditionL, glassTypeL], S "respectively"])
 loadShareFac  = cc' lShareFac
   (foldlSent [S "A multiplying factor derived from the load sharing between the",
@@ -334,7 +335,7 @@ notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
 probBreak     = cc' prob_br
   (foldlSent [S "The fraction of glass lites or plies that would break at the",
   S "first occurrence of a specified load and duration, typically expressed",
-  S "in lites per 1000", sParen $ makeRef astm2016])
+  S "in lites per 1000", sParen $ makeRefS astm2016])
 safeMessage   = dcc "safeMessage" (nounPhraseSP "safe")
   ("For the given input parameters, the glass is considered safe.")
 sD            = cc' stdOffDist

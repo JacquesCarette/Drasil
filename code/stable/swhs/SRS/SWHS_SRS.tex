@@ -313,7 +313,7 @@ The physical system of SWHS, as shown in Figure~\ref{Figure:Tank}, includes the 
 \end{itemize}
 \begin{figure}
 \begin{center}
-\includegraphics[width=\textwidth]{Tank.png}
+\includegraphics[width=\textwidth]{../../../datafiles/SWHS/Tank.png}
 \caption{Solar water heating tank, with heat flux into the water from the coil of ${q_{C}}$ and heat flux into the PCM from water of ${q_{P}}$}
 \label{Figure:Tank}
 \end{center}
@@ -334,61 +334,61 @@ The instance models that govern SWHS are presented in Section~\ref{Sec:IMs}. The
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TMs}{]}, General Definitions {[}Section~\ref{Sec:GDs}{]}, Data Definitions {[}Section~\ref{Sec:DDs}{]}, Instance Models {[}Section~\ref{Sec:IMs}{]}, Likely Changes {[}Section~\ref{Sec:LCs}{]}, or Unlikely Changes {[}Section~\ref{Sec:UCs}{]}, in which the respective assumption is used.
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Thermal-Energy-Only}:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible {[}\hyperref[T:consThermE]{Definition~T:consThermE}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Thermal-Energy-Only}:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Heat-Transfer-Coeffs-Constant}:]All heat transfer coefficients are constant over time {[}\hyperref[GD:nwtnCooling]{Definition~GD:nwtnCooling}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Heat-Transfer-Coeffs-Constant}:]All heat transfer coefficients are constant over time.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Constant-Water-Temp-Across-Tank}:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank {[}\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Constant-Water-Temp-Across-Tank}:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-PCM-Constant-Across-Volume}:]The temperature of the phase change material is the same throughout the volume of PCM {[}\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}, LC\ref{LC:Uniform-Temperature-PCM}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-PCM-Constant-Across-Volume}:]The temperature of the phase change material is the same throughout the volume of PCM {[}LC\ref{LC:Uniform-Temperature-PCM}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Density-Water-PCM-Constant-over-Volume}:]The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume {[}\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Density-Water-PCM-Constant-over-Volume}:]The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Specific-Heat-Energy-Constant-over-Volume}:]The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume {[}\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Specific-Heat-Energy-Constant-over-Volume}:]The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Newton-Law-Convective-Cooling-Coil-Water}:]Newton's law of convective cooling applies between the heating coil and the water {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Newton-Law-Convective-Cooling-Coil-Water}:]Newton's law of convective cooling applies between the heating coil and the water.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Time}:]The temperature of the heating coil is constant over time {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}, LC\ref{LC:Temperature-Coil-Variable-Over-Day}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Time}:]The temperature of the heating coil is constant over time {[}LC\ref{LC:Temperature-Coil-Variable-Over-Day}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Length}:]The temperature of the heating coil does not vary along its length {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}, LC\ref{LC:Temperature-Coil-Variable-Over-Length}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Length}:]The temperature of the heating coil does not vary along its length {[}LC\ref{LC:Temperature-Coil-Variable-Over-Length}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Law-Convective-Cooling-Water-PCM}:]Newton's law of convective cooling applies between the water and the PCM {[}\hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Law-Convective-Cooling-Water-PCM}:]Newton's law of convective cooling applies between the water and the PCM.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Charging-Tank-No-Temp-Discharge}:]The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature {[}A\ref{A:Same-Initial-Temp-Water-PCM}{]} is less than (or equal) to the temperature of the heating coil {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, LC\ref{LC:Discharging-Tank}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Charging-Tank-No-Temp-Discharge}:]The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature {[}A\ref{A:Same-Initial-Temp-Water-PCM}{]} is less than (or equal) to the temperature of the heating coil {[}LC\ref{LC:Discharging-Tank}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Same-Initial-Temp-Water-PCM}:]The initial temperature of the water and the PCM is the same {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}, LC\ref{LC:Different-Initial-Temps-PCM-Water}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Same-Initial-Temp-Water-PCM}:]The initial temperature of the water and the PCM is the same {[}LC\ref{LC:Different-Initial-Temps-PCM-Water}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:PCM-Initially-Solid}:]The simulation will start with the PCM in a solid state {[}\hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}, \hyperref[IM:heatEInPCM]{Definition~IM:heatEInPCM}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:PCM-Initially-Solid}:]The simulation will start with the PCM in a solid state.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Water-Always-Liquid}:]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, \hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Water-Always-Liquid}:]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Perfect-Insulation-Tank}:]The tank is perfectly insulated so that there is no heat loss from the tank {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, LC\ref{LC:Tank-Lose-Heat}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Perfect-Insulation-Tank}:]The tank is perfectly insulated so that there is no heat loss from the tank {[}LC\ref{LC:Tank-Lose-Heat}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:No-Internal-Heat-Generation-By-Water-PCM}:]No internal heat is generated by either the water or the PCM; therefore, the volumetric heat generation per unit volume is zero {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:No-Internal-Heat-Generation-By-Water-PCM}:]No internal heat is generated by either the water or the PCM ; therefore, the volumetric heat generation per unit volume is zero.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Volume-Change-Melting-PCM-Negligible}:]The volume change of the PCM due to melting is negligible {[}\hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Volume-Change-Melting-PCM-Negligible}:]The volume change of the PCM due to melting is negligible.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:No-Gaseous-State-PCM}:]The PCM is either in a liquid state or a solid state but not a gaseous state {[}\hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}, \hyperref[IM:heatEInPCM]{Definition~IM:heatEInPCM}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:No-Gaseous-State-PCM}:]The PCM is either in a liquid state or a solid state but not a gaseous state.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Atmospheric-Pressure-Tank}:]The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0${}^{\circ}$C and 100${}^{\circ}$C, respectively {[}\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, \hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Atmospheric-Pressure-Tank}:]The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0${}^{\circ}$C and 100${}^{\circ}$C, respectively.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Volume-Coil-Negligible}:]When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible {[}R\ref{FR:Input-Initial-Quantities}{]}.
@@ -455,7 +455,7 @@ Description & \begin{symbDescription}
               \item{${T_{boil}}$ is the boiling point temperature (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $E$ is the change in sensible heat energy (J). ${C^{S}}$, ${C^{L}}$, ${C^{V}}$ are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$). $m$ is the mass (kg). $T$ is the temperature (${}^{\circ}$C), and $ΔT$ is the change in temperature (${}^{\circ}$C). ${T_{melt}}$ and ${T_{boil}}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}$C). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if $T$=${T_{boil}}$ or $T$=${T_{melt}}$. If this is the case, refer to \hyperref[T:latentHtE]{Definition~T:latentHtE}, Latent heat energy.
+Notes & $E$ is the change in sensible heat energy (J). ${C^{S}}$, ${C^{L}}$, ${C^{V}}$ are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$). $m$ is the mass (kg). $T$ is the temperature (${}^{\circ}$C), and $ΔT$ is the change in temperature (${}^{\circ}$C). ${T_{melt}}$ and ${T_{boil}}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}$C). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if $T$=${T_{boil}}$ or $T$= ${T_{melt}}$. If this is the case, refer to \hyperref[T:latentHtE]{Definition~T:latentHtE}, Latent heat energy.
 \\ \midrule \\
 Source & \href{http://en.wikipedia.org/wiki/Sensible_heat}{Definition of Sensible Heat}
 \\ \midrule \\
@@ -515,7 +515,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. $\mathbf{q}\left(t\right)$ is the thermal flux ($\frac{\text{W}}{\text{m}^{2}}$). $h$ is the heat transfer coefficient, assumed independant of $T$ (A\ref{A:Heat-Transfer-Coeffs-Constant}) ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$). $ΔT\left(t\right)=T\left(t\right)-{T_{env}}\left(t\right)$ is the time-dependant thermal gradient between the environment and the object (${}^{\circ}$C).
 \\ \midrule \\
-Source & \cite{incroperaEtAl2007} (pg. 8)
+Source & \cite{incroperaEtAl2007}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -548,7 +548,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & The basic equation governing the rate of change of temperature, for a given volume $V$, with time. $m$ is the mass (kg). $C$ is the specific heat capacity ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$). $T$ is the temperature (${}^{\circ}$C) and $t$ is the time (s). ${q_{in}}$ and ${q_{out}}$ are the in and out heat transfer rates, respectively ($\frac{\text{W}}{\text{m}^{2}}$). ${A_{in}}$ and ${A_{out}}$ are the surface areas over which the heat is being transferred in and out, respectively ($\text{m}^{2}$). $g$ is the volumetric heat generated ($\frac{\text{W}}{\text{m}^{3}}$). $V$ is the volume ($\text{m}^{3}$).
 \\ \midrule \\
-Source & FIXME: no sources
+Source & 
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -602,6 +602,10 @@ Description & \begin{symbDescription}
               \item{$t$ is the time (s)}
               \end{symbDescription}
 \\ \midrule \\
+Notes & A\ref{A:Newton-Law-Convective-Cooling-Coil-Water}
+        A\ref{A:Temp-Heating-Coil-Constant-over-Time}
+        A\ref{A:Temp-Heating-Coil-Constant-over-Length}
+\\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
@@ -632,6 +636,10 @@ Description & \begin{symbDescription}
               \item{${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
+Notes & A\ref{A:Constant-Water-Temp-Across-Tank}
+        A\ref{A:Temp-PCM-Constant-Across-Volume}
+        A\ref{A:Law-Convective-Cooling-Water-PCM}
+\\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
@@ -660,7 +668,7 @@ Description & \begin{symbDescription}
               \item{$m$ is the mass (kg)}
               \end{symbDescription}
 \\ \midrule \\
-Source & \cite{bueche1986} (pg. 282)
+Source & \cite{bueche1986}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -688,6 +696,8 @@ Description & \begin{symbDescription}
               \item{${H_{f}}$ is the specific latent heat of fusion ($\frac{\text{J}}{\text{kg}}$)}
               \item{${m_{P}}$ is the mass of phase change material (kg)}
               \end{symbDescription}
+\\ \midrule \\
+Notes & \hyperref[DD:htFusion]{Definition~DD:htFusion}
 \\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\
@@ -918,7 +928,7 @@ Description & \begin{symbDescription}
               \item{$ϕ$ is the melt fraction (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The above equation is derived using \hyperref[T:sensHtE]{Definition~T:sensHtE} and \hyperref[T:latentHtE]{Definition~T:latentHtE}. ${E_{P}}$ is the change in thermal energy of the PCM relative to the energy at the initial temperature (${T_{init}}$) J. ${E_{P}}$ for the solid PCM is found using \hyperref[T:sensHtE]{Definition~T:sensHtE} for sensible heat ing, with the specific heat capacity of the solid PCM, ${{C_{P}}^{S}}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and the change in the PCM temperature from the initial temperature (${}^{\circ}$C). ${E_{P}}$ for the melted PCM (${T_{P}}>{{{E_{P}}_{melt}}^{init}}$) is found using \hyperref[T:sensHtE]{Definition~T:sensHtE} for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is ${{{E_{P}}_{melt}}^{init}}$ (J). The energy required to melt all of the PCM is ${H_{f}} {m_{P}}$ (J) (\hyperref[DD:htFusion]{Definition~DD:htFusion}). the specific heat capacity of the liquid PCM is ${{C_{P}}^{L}}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and the change in temperature is ${T_{P}}-{{T_{melt}}^{P}}$ (${}^{\circ}$C). ${E_{P}}$ during melting of the PCM is found using the energy required at the instant melting of the PCM begins, ${{{E_{P}}_{melt}}^{init}}$ plus the latent heat energy added to the PCM, ${Q_{P}}$ (J) since the time when melting began ${{t_{melt}}^{init}}$ (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (A\ref{A:No-Gaseous-State-PCM}).
+Notes & The above equation is derived using \hyperref[T:sensHtE]{Definition~T:sensHtE} and \hyperref[T:latentHtE]{Definition~T:latentHtE}. ${E_{P}}$ is the change in thermal energy of the PCM relative to the energy at the initial temperature (${T_{init}}$) J. ${E_{P}}$ for the solid PCM is found using \hyperref[T:sensHtE]{Definition~T:sensHtE} for sensible heat ing, with the specific heat capacity of the solid PCM, ${{C_{P}}^{S}}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and the change in the PCM temperature from the initial temperature (${}^{\circ}$C). ${E_{P}}$ for the melted PCM (${T_{P}}>{{{E_{P}}_{melt}}^{init}}$) is found using \hyperref[T:sensHtE]{Definition~T:sensHtE} for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is ${{{E_{P}}_{melt}}^{init}}$ (J). The energy required to melt all of the PCM is ${H_{f}} {m_{P}}$ (J) (\hyperref[DD:htFusion]{Definition~DD:htFusion}). the specific heat capacity of the liquid PCM is ${{C_{P}}^{L}}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and the change in temperature is ${T_{P}}-{{T_{melt}}^{P}}$ (${}^{\circ}$C). ${E_{P}}$ during melting of the PCM is found using the energy required at the instant melting of the PCM begins, ${{{E_{P}}_{melt}}^{init}}$ plus the latent heat energy added to the PCM, ${Q_{P}}$ (J) since the time when melting began ${{t_{melt}}^{init}}$ (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (A\ref{A:No-Gaseous-State-PCM}) (A\ref{A:PCM-Initially-Solid}).
 \\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\

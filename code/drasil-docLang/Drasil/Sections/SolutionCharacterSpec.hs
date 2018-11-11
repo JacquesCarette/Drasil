@@ -17,7 +17,7 @@ module Drasil.Sections.SolutionCharacterSpec
   siUQO
   ) where
 
-import Language.Drasil
+import Language.Drasil hiding (Sect)
 import Data.Drasil.Concepts.Math (equation, law)
 import Data.Drasil.Concepts.Computation (computer)
 import Data.Drasil.Concepts.Software (program)

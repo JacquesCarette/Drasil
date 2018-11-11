@@ -8,11 +8,8 @@ import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, specific_weight)
 
 import Data.Drasil.Units.Physics (momentOfForceU)
-import Data.Drasil.Units.SolidMechanics (stiffness3D)
 
-import Data.Drasil.Quantities.Physics as QP (force, pressure)
-import Data.Drasil.Quantities.SolidMechanics as SM (elastMod, nrmStrss,
-  poissnsR, stffness)
+import Data.Drasil.Quantities.SolidMechanics as SM (nrmStrss)
 
 
 sspSymbols :: [DefinedQuantityDict]
@@ -27,10 +24,6 @@ SM.mobShear, SM.shearRes <- currently not used
 SM.poissnsR, SM.elastMod <- Used to make UncertQ
 -}
 normStress  = SM.nrmStrss
-genForce = uc QP.force cF newton --must import from Concept.Physics
-                                 --since force is a vector otherwise
-genPressure = QP.pressure
-genStffness = SM.stffness
 
 -------------
 -- HELPERS --
@@ -51,11 +44,10 @@ sspConstrained :: [ConstrainedChunk]
 sspConstrained = map cnstrw sspInputs ++ map cnstrw sspOutputs
 
 sspInputs :: [UncertQ]
-sspInputs = [elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight,
-              satWeight, waterWeight, constant_a, constant_A, constant_K]
+sspInputs = [cohesion, fricAngle, dryWeight, satWeight, waterWeight]
 
 sspOutputs :: [ConstrConcept]
-sspOutputs = [fs, coords, dx_i, dy_i]
+sspOutputs = [fs, coords]
 
 {-
 monotonicIn :: [Constraint]  --FIXME: Move this?
@@ -66,23 +58,17 @@ monotonicIn = [physc $ \_ -> -- FIXME: Hack with "index" !
 defultUncrt :: Double
 defultUncrt = 0.1
 
-elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight,
-  waterWeight, constant_a, constant_A, constant_K :: UncertQ
+cohesion, fricAngle, dryWeight, satWeight,
+  waterWeight :: UncertQ
   
-fs, coords, dx_i, dy_i :: ConstrConcept
+fs, coords :: ConstrConcept
 
 {-Intput Variables-}
 --FIXME: add (x,y) when we can index or make related unitals
 
-elasticMod = uq (constrained' SM.elastMod [gtZeroConstr]
-  (dbl 15000)) defultUncrt
-
 cohesion = uqc "c'" (cn $ "effective cohesion")
   "internal pressure that sticks particles of soil together"
   (prime $ Atomic "c") pascal Real [gtZeroConstr] (dbl 10) defultUncrt
-
-poissnsRatio = uq (constrained' SM.poissnsR
-  [physc $ Bounded (Exc,0) (Exc,1)] (dbl 0.4)) defultUncrt
 
 fricAngle = uqc "varphi'" (cn $ "effective angle of friction")
   ("The angle of inclination with respect to the horizontal axis of " ++
@@ -105,15 +91,6 @@ waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   "The weight of one cubic meter of water."
   (sub lGamma lW) specific_weight Real [gtZeroConstr]
   (dbl 9.8) defultUncrt
-  
-constant_a = uqc "a" (cn "constant") fixme
-  lA metre Real [] (dbl 0) defultUncrt
-  
-constant_A = uqc "A" (cn "constant") fixme
-  cA metre Real [] (dbl 0) defultUncrt
-  
-constant_K = uqc "kappa" (cn "constant") fixme
-  lKappa pascal Real [] (dbl 0) defultUncrt
 
 {-Output Variables-} --FIXME: See if there should be typical values
 fs = constrained' (dqd' fs_concept (const $ Atomic "FS") Real Nothing)
@@ -132,38 +109,28 @@ coords = cuc' "(x,y)"
   "gravity and x is considered perpendicular to y")
   (Atomic "(x,y)") metre Real [] (dbl 1)
 
-dx_i = cuc' "dx_i" (cn $ "displacement") ("in the x-ordinate direction " ++
-  fsi) (Concat [lDelta, Atomic "x"]) metre Real [] (dbl 1)
-
-dy_i = cuc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " ++
-  fsi) (Concat [lDelta, Atomic "y"]) metre Real [] (dbl 1)
-
 ---------------------------
 -- START OF UNITALCHUNKS --
 ---------------------------
 
 sspUnits :: [UnitaryConceptDict]
-sspUnits = map ucw [normStress, genPressure, normFunc, shearFunc,
+sspUnits = map ucw [normStress, normFunc, shearFunc,
   waterHght, slopeHght, slipHght, xi, yi, critCoords, slopeDist, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
-  watrForceDif, intShrForce, baseHydroForce, surfHydroForce, effStiffA,
-  effStiffB, totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle,
+  watrForceDif, intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle,
   surfAngle, impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght,
-  genForce, momntOfBdy, genDisplace, genStffness, shrStiffIntsl,
-  shrStiffBase, nrmStiffIntsl, nrmStiffBase, shrStiffRes, nrmStiffRes,
-  shrDispl, nrmDispl, porePressure, elmNrmDispl, elmPrllDispl, sliceHght,
-  fx, fy, mobShrC, shrResC, rotatedDispl, intNormForce, shrStress, mobStress]
+  momntOfBdy, porePressure, sliceHght,
+  fx, fy, mobShrC, shrResC, intNormForce, shrStress]
 
-normStress, genPressure, normFunc, shearFunc, slopeDist, slipDist, genStffness,
+normStress, normFunc, shearFunc, slopeDist, slipDist,
   waterHght, slopeHght, slipHght, xi, yi, critCoords, mobShrI, sliceHght,
   shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
   nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
-  effStiffA, effStiffB, baseLngth, surfLngth, midpntHght, genForce,
-  momntOfBdy, genDisplace, fx, fy, shrStiffIntsl, shrStiffBase,
-  nrmStiffIntsl, nrmStiffBase, shrStiffRes, nrmStiffRes, shrDispl, nrmDispl,
-  porePressure, elmNrmDispl, mobStress, elmPrllDispl, mobShrC, shrResC,
-  rotatedDispl, intNormForce, shrStress :: UnitalChunk
+  baseLngth, surfLngth, midpntHght,
+  momntOfBdy, fx, fy,
+  porePressure, mobShrC, shrResC,
+  intNormForce, shrStress :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
@@ -305,71 +272,12 @@ momntOfBdy = uc' "M" (cn $ "moment") ("a measure of the tendency of " ++
   "a body to rotate about a specific point or axis")
   cM momentOfForceU --FIXME: move in concepts.physics ?
 
-genDisplace = uc' "genDisplace" (cn $ "displacement")
-  "generic displacement of a body" lDelta metre
-
-shrStiffIntsl = uc' "K_st,i" (cn $ "shear stiffness")
-  ("for interslice surface, " ++ wla ++ " " ++ fisi)
-  (sub cK (Atomic "st")) stiffness3D
-
-shrStiffBase = uc' "K_bt,i" (cn $ "shear stiffness") 
-  ("for a slice base surface, " ++ wla ++ " " ++ fsi)
-  (sub cK (Atomic "bt")) stiffness3D
-
-nrmStiffIntsl = uc' "K_sn,i" (cn $ "normal stiffness")
-  ("for an interslice surface, " ++ wla ++ " " ++ fisi)
-  (sub cK (Atomic "sn")) stiffness3D
-
-nrmStiffBase = uc' "K_bn,i" (cn $ "normal stiffness") 
-  ("for a slice base surface, " ++ wla ++ " " ++ fsi)
-  (sub cK (Atomic "bn")) stiffness3D
-
-shrStiffRes = uc' "K_tr" (cn $ "shear stiffness")
-  "residual strength"
-  (sub cK (Atomic "tr")) stiffness3D
-
-nrmStiffRes = uc' "K_no" (cn $ "normal stiffness")
-  "residual strength"
-  (sub cK (Atomic "no")) stiffness3D
-
-effStiffA = uc' "K_bA" (cn $ "effective base stiffness A")
-  ("for rotated coordinates of a slice base surface, " ++ fsi)
-  (sub cK (Atomic "bA")) stiffness3D
-
-effStiffB = uc' "K_bB" (cn $ "effective base stiffness A")
-  ("for rotated coordinates of a slice base surface, " ++ fsi)
-  (sub cK (Atomic "bB")) stiffness3D
-
-shrDispl = uc' "du_i" (cn $ "displacement")
-  ("shear displacement " ++ fsi)
-  (Concat [lDelta, Atomic "u"]) metre
-
-nrmDispl = uc' "dv_i" (cn $ "displacement")
-  ("normal displacement " ++ fsi)
-  (Concat [lDelta, Atomic "v"]) metre
-  
-elmNrmDispl = uc' "dt_i" (cn $ "displacement")
-  ("for the element normal to the surface " ++ fsi)
-  (Concat [lDelta, Atomic "t"]) metre
-  
-elmPrllDispl = uc' "dn_i" (cn $ "displacement")
-  ("for the element parallel to the surface " ++ fsi)
-  (Concat [lDelta, Atomic "n"]) metre
-
 porePressure = uc' "mu" (cn "pore pressure") ("from water within the soil")
   lMu pascal
-
-rotatedDispl = uc' "varepsilon_i" (cn "displacement")
-  ("in rotated coordinate system")
-  vEpsilon metre
   
 shrStress = uc' "tau_i" (cn "resistive shear stress")
   ("acting on the base of a slice")
   lTau pascal
-  
-mobStress = uc' "s_i" (cn "mobilized shear stress")
-  ("acting on the base of a slice")
-  (lS) pascal
 
 sliceHght = uc' "z_i" (cn "center of slice height")
   ("the distance from the lowest part " ++
@@ -396,11 +304,11 @@ fy = uc' "fy" (cn "y-component of the net force") ""
 
 sspUnitless :: [DefinedQuantityDict]
 sspUnitless = [earthqkLoadFctr, normToShear,scalFunc,
-  numbSlices, minFunction, fsloc, index, varblU, varblV, fs_min,
+  numbSlices, minFunction, index, varblU, varblV, fs_min,
   ufixme1, ufixme2]
 
 earthqkLoadFctr, normToShear, scalFunc, numbSlices,
-  minFunction, fsloc, index, varblU, varblV, ufixme1, ufixme2 :: DefinedQuantityDict
+  minFunction, index, varblU, varblV, ufixme1, ufixme2 :: DefinedQuantityDict
 
 earthqkLoadFctr = dqd' (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
   ("proportionality factor of force that " ++
@@ -423,9 +331,6 @@ numbSlices = dqd' (dcc "n" (nounPhraseSP "number of slices")
 minFunction = dqd' (dcc "Upsilon" (nounPhraseSP "function")
   ("generic minimization function or algorithm"))
   (const cUpsilon) Real Nothing
-
-fsloc = dqd' (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
-  (const $ sub (Atomic "FS") (Atomic "Loc,i")) Real Nothing 
 
 ufixme1 = dqd' (dcc "fixme1" (cn "fixme") "What is this value?")
   (const $ Atomic "SpencerFixme1Please") Real Nothing 

@@ -1,4 +1,4 @@
-{-# Language TemplateHaskell, TypeFamilies #-}
+{-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.Citation
   ( -- Types
     Citation, BibRef, CiteField(..), Month(..), HP(..), CitationKind(..), EntryID
@@ -26,12 +26,11 @@ module Language.Drasil.Chunk.Citation
   ) where
 
 import Language.Drasil.People (People)
-import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
 
-import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel))
+import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel), HasShortName(shortname))
 import Language.Drasil.Misc (noSpaces)
-import Language.Drasil.Chunk.ShortName (HasShortName(shortname))
 import Language.Drasil.Label.Core (Label)
 
 import Control.Lens (Lens', makeLenses)

@@ -5,6 +5,9 @@ import Language.Drasil
 -- Assumptions
 thermalEnergyOnlyL, lawConvectiveCoolingWtrPCML, waterAlwaysLiquidL, 
     noGaseousStatePCML, atmosphericPressureTankL :: Label
+heatTransferCoeffL, contantWaterTempL, tempPcmConsL, densityWaterL, specificHeatL,
+  newtoLawConvecL, tempOverTimeL, tempOverLengthL, chargeTankL, sameInitialL,
+  pcmInitialSolidL, perfectInsulationL, noInternalHeatL, volumeChangeMeltL, volumeCoilL :: Label
 thermalEnergyOnlyL          = mkLabelRAAssump' "Thermal-Energy-Only"
 heatTransferCoeffL          = mkLabelRAAssump' "Heat-Transfer-Coeffs-Constant"
 contantWaterTempL           = mkLabelRAAssump' "Constant-Water-Temp-Across-Tank"
@@ -75,4 +78,3 @@ calcChgHeatEnergyPCMOverTimeL = mkLabelSame "Calculate-Change-Heat_Energy-PCM-Ov
 verifyEnergyOutputL = mkLabelSame "Verify-Energy-Output-follow-Conservation-of-Energy" (Req FR)
 calcPCMMeltBeginL = mkLabelSame "Calculate-PCM-melt-begin-time" (Req FR)
 calcPCMMeltEndL = mkLabelSame "Calculate-PCM-melt-end-time" (Req FR)
-

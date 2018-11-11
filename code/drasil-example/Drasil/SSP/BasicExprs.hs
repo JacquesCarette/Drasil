@@ -3,7 +3,7 @@ module Drasil.SSP.BasicExprs where
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
 
-import Drasil.SSP.Unitals (baseAngle, dy_i, dx_i, inxi,
+import Drasil.SSP.Unitals (baseAngle, inxi,
   intNormForce, impLoadAngle, surfLoad, surfHydroForce,
   slcWght, inxiM1, surfAngle, earthqkLoadFctr, midpntHght,
   baseWthX, sliceHght, watrForce)
@@ -18,13 +18,14 @@ eqlExpr f1_ f2_ _e_ = (inxi slcWght `_e_`
   (inxi surfHydroForce) * sin (inxi surfAngle) +
   (inxi surfLoad) * (sin (inxi impLoadAngle))) * (f2_ (inxi baseAngle))
 
-displMtx :: Expr
-displMtx = vec2D (inxi dx_i) (inxi dy_i)
-
-rotMtx :: Expr
-rotMtx = m2x2
-  (cos(inxi baseAngle))       (sin(inxi baseAngle))
-  (negate $ sin(inxi baseAngle)) (cos(inxi baseAngle))
+eqlExprN :: (Expr -> Expr) -> (Expr -> Expr) -> (Expr -> Expr -> Expr) -> Expr
+eqlExprN f1_ f2_ _e_ = (inxi slcWght `_e_`
+  (inxi surfHydroForce * cos (inxi surfAngle)) +
+  (inxi surfLoad) * (cos (inxi impLoadAngle))) * (f1_ (inxi baseAngle)) -
+  (negate (sy earthqkLoadFctr) * (inxi slcWght) - (inxi intNormForce) +
+  (inxiM1 intNormForce) - (inxi watrForce) + (inxiM1 watrForce) +
+  (inxi surfHydroForce) * sin (inxi surfAngle) +
+  (inxi surfLoad) * (sin (inxi impLoadAngle))) * (f2_ (inxi baseAngle))
 
 momExpr :: (Expr -> Expr -> Expr) -> Expr
 momExpr _e_ = (negate (inxi intNormForce) * (inxi sliceHght -

@@ -15,6 +15,7 @@ module Data.Drasil.SentenceStructures
   , fmtPhys, fmtSfwr, typUncr
   , mkTableFromColumns
   , EnumType(..), WrapType(..), SepType(..), FoldType(..)
+  , getSource
   ) where
 
 import Language.Drasil
@@ -81,7 +82,7 @@ foldlList s Options lst    = foldle1 (getSep s) (\a b -> (getSep s) a (S "or" +:
 --Helper function to foldlList - not exported
 getSep :: SepType -> (Sentence -> Sentence -> Sentence)
 getSep Comma   = sC
-getSep SemiCol = semiCol
+getSep SemiCol = (\a b -> a :+: S ";" +:+ b)
 
 {--** Combinators **--}
 sAnd, andIts :: Sentence -> Sentence -> Sentence
@@ -126,7 +127,7 @@ toThe p1 p2 = p1 +:+ S "to the" +:+ p2
 
 {--** Miscellaneous **--}
 tableShows :: LabelledContent -> Sentence -> Sentence
-tableShows ref trailing = (mkRefFrmLbl ref) +:+ S "shows the" +:+ 
+tableShows ref trailing = (Ref $ mkRefFrmLbl ref) +:+ S "shows the" +:+ 
   plural dependency +:+ S "of" +:+ trailing
 
 -- | Function that creates (a label for) a figure
@@ -169,6 +170,9 @@ maybeWOVerb a b = likelyFrame a EmptyS b
 maybeChanged a b = likelyFrame a (S "changed") b
 maybeExpanded a b = likelyFrame a (S "expanded") b
 
+sParenDash :: Sentence -> Sentence
+sParenDash x = S " (" :+: x :+: S ") - "
+
 -- | helpful combinators for making Sentences for Terminologies with Definitions
 -- term (acc) - definition
 tAndDWAcc :: Concept s => s -> ItemType
@@ -182,7 +186,7 @@ tAndDOnly :: Concept s => s -> ItemType
 tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
 
 followA :: Sentence -> AssumpChunk -> Sentence
-preceding `followA` assumpt = preceding +:+ S "following" +:+ makeRef assumpt
+preceding `followA` assumpt = preceding +:+ S "following" +:+ (Ref $ makeRef assumpt)
 
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
 getTandS :: (Quantity a, NamedIdea a) => a -> Sentence
@@ -234,3 +238,10 @@ fmtSfwr c = foldlList Comma List $ map (E . constraintToExpr c) $ filter isSfwrC
 replaceEmptyS :: Sentence -> Sentence
 replaceEmptyS EmptyS = none
 replaceEmptyS s@_ = s
+
+-- Should this get only the first one or all potential sources?
+-- Should we change the source ref to have a list (to keep things clean in case
+--    of multiple sources)?
+-- | Get the source reference from the references (if it exists)
+getSource :: HasReference c => c -> Sentence
+getSource c = foldlList Comma List $ map Ref $ c ^. getReferences

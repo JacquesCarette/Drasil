@@ -1,14 +1,13 @@
 {-# Language TemplateHaskell #-}
-{-# Language FlexibleInstances #-}
 module Language.Drasil.Label.Core where
 
 import Control.Lens (makeLenses)
-import Language.Drasil.UID (UID)
-import Language.Drasil.Chunk.ShortName (ShortName, HasShortName(shortname))
-import Language.Drasil.RefTypes (RefType)
 
--- import reference address from Language.Drasil.References?
-data LblType = RefAdd String | MetaLink String | URI String
+import Language.Drasil.UID (UID)
+import Language.Drasil.ShortName (ShortName)
+import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname), HasRefAddress(getRefAdd))
+import Language.Drasil.Label.Type (LblType)
+import Language.Drasil.RefTypes (RefType)
 
 -- Used for referencing; has to be pure ASCII
 data Label = Lbl
@@ -19,9 +18,6 @@ data Label = Lbl
   }
 makeLenses ''Label
 
+instance HasUID       Label where uid       = uniqueID
 instance HasShortName Label where shortname = sn
-
-getAdd :: LblType -> String
-getAdd (RefAdd s)   = s
-getAdd (MetaLink s) = s
-getAdd (URI s)      = s
+instance HasRefAddress Label where getRefAdd = lblType

@@ -3,35 +3,37 @@ module Data.Drasil.Concepts.Documentation where
 import Language.Drasil hiding (organization)
 
 import Data.Drasil.Concepts.Math (graph)
-import Data.Drasil.Phrase (andRT, and_, and_', ofA, of_, of_', of__)
+import Data.Drasil.Phrase (andRT, and_, and_', ofA, of_, of_', of__, theCustom,
+  compoundNC, compoundNC', compoundNCP1)
+import Data.Drasil.IdeaDicts
 
 import Control.Lens ((^.))
 
 assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
-  unlikelyChg, physSyst, requirement, thModel, mg, notApp, srs, typUnc :: CI
+  unlikelyChg, physSyst, requirement, thModel, mg, notApp, srs, typUnc, sec :: CI
 
--------------------------------------------------------------------------------------------------
--- | CI       |           |    uid      |         term                        | abbreviation | --
--------------------------------------------------------------------------------------------------
-assumption  = commonIdea "assumption"  (cn' "assumption")                                  "A"
-dataDefn    = commonIdea "dataDefn"    (cn' "data definition")                             "DD"
-desSpec     = commonIdea "desSpec"     (fterms compoundPhrase design specification)        "DS"
-genDefn     = commonIdea "genDefn"     (cn' "general definition")                          "GD"
-goalStmt    = commonIdea "goalStmt"    (fterms compoundPhrase goal statement)              "GS"
-dataConst   = commonIdea "dataConst"   (cn' "data constraint")                             "DC"
-inModel     = commonIdea "inModel"     (fterms compoundPhrase instance_ model)             "IM"
-likelyChg   = commonIdea "likelyChg"   (cn' "likely change")                               "LC"
-unlikelyChg = commonIdea "unlikelyChg" (cn' "unlikely change")                             "UC"
-physSyst    = commonIdea "physSyst"    (fterms compoundPhrase physicalSystem description)  "PS"
-requirement = commonIdea "requirement" (cn' "requirement")                                 "R"
-thModel     = commonIdea "thModel"     (cn' "theoretical model")                           "T"
-mg          = commonIdea "mg"          (fterms compoundPhrase module_ guide)               "MG"
-notApp      = commonIdea "notApp"      (nounPhraseSP "not applicable")                     "N/A"
-typUnc      = commonIdea "typUnc"      (cn' "typical uncertainty")                         "Uncert."
-
-srs = commonIdea "srs" 
+-----------------------------------------------------------------------------------------------------------------
+-- | CI       |           |    uid      |         term                        | abbreviation |     ConceptDomain
+-----------------------------------------------------------------------------------------------------------------
+assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")                                  "A"         [softEng]
+dataDefn    = commonIdeaWithDict "dataDefn"    (cn' "data definition")                             "DD"        [softEng]
+desSpec     = commonIdeaWithDict "desSpec"     (fterms compoundPhrase design specification)        "DS"        [softEng]
+genDefn     = commonIdeaWithDict "genDefn"     (cn' "general definition")                          "GD"        [softEng]
+goalStmt    = commonIdeaWithDict "goalStmt"    (fterms compoundPhrase goal statement)              "GS"        [softEng]
+dataConst   = commonIdeaWithDict "dataConst"   (cn' "data constraint")                             "DC"        [softEng]
+inModel     = commonIdeaWithDict "inModel"     (fterms compoundPhrase instance_ model)             "IM"        [softEng]
+likelyChg   = commonIdeaWithDict "likelyChg"   (cn' "likely change")                               "LC"        [softEng]
+unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")                             "UC"        [softEng]
+physSyst    = commonIdeaWithDict "physSyst"    (fterms compoundPhrase physicalSystem description)  "PS"        [softEng]
+requirement = commonIdeaWithDict "requirement" (cn' "requirement")                                 "R"         [softEng]
+thModel     = commonIdeaWithDict "thModel"     (cn' "theoretical model")                           "T"         [softEng]
+mg          = commonIdeaWithDict "mg"          (fterms compoundPhrase module_ guide)               "MG"        [softEng]
+notApp      = commonIdea         "notApp"      (nounPhraseSP "not applicable")                     "N/A"       []
+typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")                         "Uncert."   [softEng]
+sec         = commonIdeaWithDict "section"     (cn' "section")                                     "Sec"       [documentc]
+srs = commonIdeaWithDict "srs" 
   (compoundPhraseP1 (softwareReq ^. term) (specification ^. term))
-  "SRS"
+  "SRS" [softEng]
 
 ---------------------------------------------------------------------
 

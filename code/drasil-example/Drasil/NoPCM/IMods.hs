@@ -1,6 +1,7 @@
 module Drasil.NoPCM.IMods (eBalanceOnWtr) where
 
 import Language.Drasil
+import Language.Drasil.Development (getUnit) -- FIXME?
 
 import Data.Drasil.Concepts.Math (equation, rOfChng)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
@@ -14,29 +15,31 @@ import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol, isThe, ofThe,
   sAnd, sOf)
 import Data.Drasil.Utils (unwrap, weave)
 
-import Drasil.SWHS.Assumptions
+import Drasil.SWHS.Assumptions (newA10, newA11, newA14, newA15)
 import Drasil.SWHS.Concepts (water, tank)
 import Drasil.SWHS.DataDefs (dd1HtFluxC)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.Labels (rocTempSimpL)
 import Drasil.SWHS.Unitals (temp_W, temp_C, tau_W, w_mass, htCap_W, coil_HTC, 
   coil_SA, temp_init, time_final, w_vol, ht_flux_C, vol_ht_gen)
+import Drasil.NoPCM.Assumptions
 
 ---------
 -- IM1 --
 ---------
+-- FIXME: comment on reference?
 eBalanceOnWtr :: InstanceModel
 eBalanceOnWtr = im'' eBalanceOnWtr_rc [qw temp_C, qw temp_init, qw time_final, 
   qw coil_SA, qw coil_HTC, qw htCap_W, qw w_mass] 
-  [TCon AssumedCon $sy temp_init $<= sy temp_C] (qw temp_W) 
+  [sy temp_init $<= sy temp_C] (qw temp_W) 
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
-  [TCon AssumedCon $ 0 $< sy time $< sy time_final] [makeRef koothoor2013 +:+ sParen (S "with PCM removed")] 
+  [0 $< sy time $< sy time_final] [makeRef koothoor2013 {- +:+ sParen (S "with PCM removed")-} ] 
   eBalanceOnWtrDeriv "eBalanceOnWtr" [balWtrDesc]
 
 eBalanceOnWtr_rc :: RelationConcept
 eBalanceOnWtr_rc = makeRC "eBalanceOnWtr_rc" (nounPhraseSP $ "Energy balance on " ++
   "water to find the temperature of the water") balWtrDesc balWtr_Rel
-  (mkLabelSame "eBalnaceOnWtr" (Def Instance))
+  -- (mkLabelSame "eBalnaceOnWtr" (Def Instance))
 
 balWtr_Rel :: Relation
 balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
@@ -54,7 +57,8 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively"
-  , sParen (makeRef newA10)]
+  +:+. sParen (makeRefS newA10), sParen (makeRefS newA14),
+  sParen (makeRefS newA15), sParen (makeRefS newA19)]
 
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --
@@ -67,15 +71,15 @@ eBalanceOnWtrDeriv =
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [
   eBalanceOnWtrDerivDesc1 rOfChng temp_W energy water vol w_vol mass w_mass heat_cap_spec
-    htCap_W heat_trans ht_flux_C coil_SA tank newA11 newA12 vol_ht_gen, 
+    htCap_W heat_trans ht_flux_C coil_SA tank newA11 newA16 vol_ht_gen, 
   eBalanceOnWtrDerivDesc2 dd1HtFluxC,
   eBalanceOnWtrDerivDesc3 eq1,
   eBalanceOnWtrDerivDesc4 eq2]
 
-eBalanceOnWtrDerivDesc1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk -> UnitalChunk -> 
+eBalanceOnWtrDerivDesc1 :: ConceptChunk -> ConstrConcept -> UnitalChunk -> ConceptChunk -> UnitalChunk -> 
   UnitalChunk -> UnitalChunk -> UnitalChunk -> ConceptChunk -> UncertQ -> ConceptChunk -> 
   UnitalChunk -> UncertQ -> ConceptChunk -> AssumpChunk -> AssumpChunk -> UnitalChunk -> [Sentence]
-eBalanceOnWtrDerivDesc1 roc tw en wt vo wvo ms wms hcs hw ht hfc cs tk ass11 ass12 vhg =
+eBalanceOnWtrDerivDesc1 roc tw en wt vo wvo ms wms hcs hw ht hfc cs tk ass11 ass16 vhg =
   [S "To find the", phrase roc `sOf` (E $ sy tw) `sC` S "we look at the",
    phrase en, S "balance on" +:+. phrase wt, S "The", phrase vo, S "being considered" 
    `isThe` (phrase vo `sOf` phrase wt), (E $ sy wvo) `sC` S "which has", phrase ms,
@@ -84,14 +88,14 @@ eBalanceOnWtrDerivDesc1 roc tw en wt vo wvo ms wms hcs hw ht hfc cs tk ass11 ass
     (E $ sy hfc) `sC` S "over area" +:+. (E $ sy cs), S "No", phrase ht,
     S "occurs to", S "outside" `ofThe` phrase tk `sC` 
     S "since it has been assumed to be perfectly insulated", 
-    (sParen (makeRef ass11)), S ". Assuming no volumetric", 
+    (sParen (makeRefS ass11)), S ". Assuming no volumetric", 
     S "heat generation per unit", phrase vo,
-    (sParen (makeRef ass12)) `sC` (E $ sy vhg $= 0), S ". Therefore, the equation for",
-     makeRef rocTempSimpL, S "can be written as"]
+    (sParen (makeRefS ass16)) `sC` (E $ sy vhg $= 0), S ". Therefore, the equation for",
+     makeRefS rocTempSimpL, S "can be written as"]
 
 eBalanceOnWtrDerivDesc2 :: DataDefinition -> [Sentence]
 eBalanceOnWtrDerivDesc2 dd1 =
-  [S "Using", makeRef dd1, S ", this can be written as"]
+  [S "Using", makeRefS dd1, S ", this can be written as"]
 
 eBalanceOnWtrDerivDesc3 :: Expr-> [Sentence]
 eBalanceOnWtrDerivDesc3 eq11 = [S "Dividing (3) by", (E eq11) `sC` S "we obtain"]

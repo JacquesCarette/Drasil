@@ -1,4 +1,4 @@
-{-# Language TemplateHaskell, TypeFamilies #-}
+{-# Language TemplateHaskell #-}
 module Language.Drasil.Development.Unit (
     UnitDefn(..)
   , from_udefn, unitCon, makeDerU
@@ -16,13 +16,15 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), HasUnitSymbol(usymb), IsUnit(udefn, getUnits))
 import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cc')
 import Language.Drasil.Symbol (Symbol(Atomic))
-import Language.Drasil.Development.UnitLang (USymb(US),
- UDefn(UScale, USynonym, UShift), comp_usymb, from_udefn)
+import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift), comp_usymb, from_udefn)
 import Language.Drasil.UID
 import Language.Drasil.NounPhrase (cn,cn',NP)
 
--- | for defining fundamental units
-
+-- | for defining units
+-- It is a concept chunk (defined what kind of unit it is),
+-- has a unit symbol, maybe another (when it is a synonym),
+-- perhaps a definition, and the list of UID of the units that make up
+-- the definition.
 data UnitDefn = UD { _vc :: ConceptChunk, 
                      _fsymb :: USymb,
                      _dsymb :: Maybe USymb,
@@ -143,8 +145,10 @@ shift a b = UShift a (b ^. usymb)
 new_unit :: String -> UnitEquation -> UnitDefn
 new_unit s u = makeDerU (unitCon s) u
 
+-- | Smart constructor for a "fundamental" unit
 fund :: String -> String -> String -> UnitDefn
 fund nam desc sym = UD (dcc nam (cn' nam) desc) (US [(Atomic sym, 1)]) Nothing Nothing []
 
+-- | We don't want an Ord on units, but this still allows us to compare them
 comp_unitdefn :: UnitDefn -> UnitDefn -> Ordering
 comp_unitdefn a b = comp_usymb (a ^. usymb) (b ^. usymb)

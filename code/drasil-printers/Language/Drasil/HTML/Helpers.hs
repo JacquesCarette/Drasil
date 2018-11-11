@@ -1,32 +1,42 @@
 module Language.Drasil.HTML.Helpers where
 
 import Text.PrettyPrint (Doc, text, render, empty, ($$), (<>), vcat, hcat)
-import Data.List (intersperse)
+import Data.List (intersperse, foldl1)
+import Data.String (unwords)
 
 import Language.Drasil hiding (Expr)
 
 --import Language.Drasil.Document (Document, MaxWidthPercent)
 import Language.Drasil.Printing.AST (Expr)
 
-html, head_tag, body, title, paragraph, code, tr, th, td :: Doc -> Doc
+html, head_tag, body, title, paragraph, code, tr, th, td, figure,
+  figcaption :: Doc -> Doc
 -- | HTML tag wrapper
-html      = wrap "html" []
+html       = wrap "html" []
 -- | Head tag wrapper
-head_tag  = wrap "head" []
+head_tag   = wrap "head" []
 -- | Body tag wrapper
-body      = wrap "body" []
+body       = wrap "body" []
 -- | Title tag wrapper
-title     = wrap "title" []
+title      = wrap "title" []
 -- | Paragraph tag wrapper
-paragraph = wrap "p" ["paragraph"]
+paragraph  = wrap "p" ["paragraph"]
 -- | Code tag wrapper
-code      = wrap "code" ["code"]
+code       = wrap "code" ["code"]
 -- | Table row tag wrapper
-tr        = wrap "tr" []
+tr         = wrap "tr" []
 -- | Table header tag wrapper
-th        = wrap "th" []
+th         = wrap "th" []
 -- | Table cell tag wrapper
-td        = wrap "td" []
+td         = wrap "td" []
+-- | Figure tag wrapper
+figure     = wrap "figure" []
+-- | Figcaption tag wrapper
+figcaption = wrap "figcaption" []
+
+img :: [(String, Doc)] -> Doc
+-- | Image tag wrapper
+img        = wrapInside "img"
 
 -- | Helper for HTML headers
 h :: Int -> Doc -> Doc
@@ -44,6 +54,14 @@ wrap s ts = \x ->
   let tb c = text $ "<" ++c++ " class=\""++(foldr1 (++) (intersperse " " ts))++"\">"
   in let te c = text $ "</" ++ c ++ ">"
   in vcat [tb s, x, te s]
+
+-- | Helper for wrapping attributes in a tag.
+-- | The first argument is tag name.
+-- | The String in the pair is the attribute name,
+-- | The Doc is the value for different attributes.
+wrapInside :: String -> [(String, Doc)] -> Doc
+wrapInside t p = text ("<" ++ t ++ " ") <> foldl1 (<>) (map foldStr p) <> text ">"
+ where foldStr (attr, val) = text (attr ++ "=\"") <> val <> text "\" "
 
 -- | Helper for setting up captions  
 caption :: Doc -> Doc
@@ -64,10 +82,14 @@ reflinkURI ref txt = text ("<a href=\"" ++ ref ++ "\">") <> txt <> text "</a>"
 -- | Helper for setting up figures
 image :: Doc -> Doc -> MaxWidthPercent -> Doc
 image f c 100 = 
-  text "<img class=\"figure\" src=\"" <> f <> text "\" alt=\"" <> c <> text "\"></img>"
+  figure $ vcat[
+  img $ [("src", f), ("alt", c)],
+  figcaption c]
 image f c wp =
-  text "<img class=\"figure\" src=\"" <> f <> text "\" alt=\"" <> c <> 
-  text ("\"style=\"max-width: " ++ show (wp / 100) ++ "%;\"></img>")
+  figure $ vcat[
+  img $ [("src", f), ("alt", c), ("width", text $ show (wp) ++ "%")],
+  figcaption c
+  ]
 
 em :: Doc -> Doc
 -- | Emphasis (italics) tag
@@ -95,124 +117,6 @@ div_tag = wrap "div"
 span_tag :: [String] -> String -> Doc
 span_tag = \t -> wrap "span" t . text
 
--- | Generates the CSS selectors necessary for a document
-makeCSS :: Document -> Doc  
-makeCSS _ = vcat [
--- TODO: Autogenerate necessary css selectors only, make CSS configurable
-  text "body {min-width: 400px; max-width: 1400px;}",
-  text ".title {text-align: center;}",
-  text ".author {text-align: center;}",
-  text ".paragraph {text-align: justify;}",
-  vcat [
-    text ".cases {",
-    text "  display: inline-block;",
-    text "  vertical-align: middle;}"],
-  vcat [
-    text ".case {",
-    text "  float: right;",
-    text "  padding-left: 1em;}"],
-  vcat [
-    text ".cases > span {",
-    text "  display: block;",
-    text "  padding-top: 0.1em;",
-    text "  padding-left: 0em;}"],
-  vcat [
-    text ".casebr {",
-    text "  display: inline-block;",
-    text "  vertical-align: middle;",
-    text "  margin: 0 0.2em 0.4ex;",
-    text "  text-align: center;",
-    text "  font-size: 500%;}"],
-  vcat [
-    text ".caption {",
-    text "  text-align: center;",
-    text "  font-weight: bold;",
-    text "  padding-bottom: 1%;",
-    text "  line-height: 0;}"
-    ],
-  vcat [
-    text ".fraction {",
-    text "  display: inline-block;",
-    text "  vertical-align: middle;",
-    text "  margin: 0 0.2em 0.4ex;",
-    text "  text-align: center;}"
-    ],
-  vcat [
-    text ".fraction > span {",
-    text "  display: block;",
-    text "  padding-top: 0.15em;}"
-    ],
-  text ".fdn {border-top: thin solid black;}",
-  vcat [
-    text ".table {",
-    text "  text-align: left;",
-    text "  padding-left: 1%;",
-    text "  width: 90%;",
-    text "  margin-bottom: 2%;",
-    text "  margin-top: 2%}"],
-  vcat [
-    text "table, th, td {",
-    text "  border-collapse: collapse;",
-    text "  margin-left: auto;",
-    text "  margin-right: auto;}"],
-  text "th, td {border: 1px solid black; padding: 0.5em;}",
-  text ".tdefn, .ddefn {width: 75%; margin-top: 1%; margin-bottom: 1%;}",
-  text ".tdefn th {width: 15%;}",
-  text ".ddefn th {width: 15%;}",
-  text ".section {width: 80%; margin: 0 auto; text-align: left;}",
-  vcat [
-    text ".code {",
-    text "  display: inline-block;",
-    text "  text-align: left;",
-    text ("  font-family: Monaco, Consolas, \"Andale Mono\"," ++
-      "\"DejaVu Sans Mono\", monospace;"),
-    text "  font-size: 95%;",
-    text "  line-height: 140%;",
-    text "  white-space: pre;",
-    text "  white-space: pre-wrap;",
-    text "  white-space: -moz-pre-wrap;",
-    text "  white-space: -o-pre-wrap;",
-    text "  background: #faf8f0;}"],
-  text ".list {text-align: left;}",
-  text ".figure {max-width: 100%;}",
-  vcat [
-    text ".matrix {",
-    text "  position: relative;",
-    text "  display: inline-table;",
-    text "  margin: 10px;",
-    text "  vertical-align: middle;}",
-    text ".matrix:before, .matrix:after {",
-    text "  content: \"\";",
-    text "  position: absolute;",
-    text "  top: 0;",
-    text "  border: 1px solid #000;",
-    text "  width: 5px;",
-    text "  height: 100%;}",
-    text ".matrix:before {",
-    text "  left: -5px;",
-    text "  border-right: 0px;}",
-    text ".matrix:after {",
-    text "  right: -5px;",
-    text "  border-left: 0px;}",
-    text ".matrix td {",
-    text "  padding: 5px;",
-    text "  text-align: center;",
-    text "  border: 0px;}"],
-  vcat [
-    text "ul.hide-list-style {",
-    text "  list-style-type: none;}"
-    ],
-  vcat [
-    text "ul.hide-list-style-no-indent {",
-    text "  list-style-type: none;",
-    text "padding: 0;}"
-    ] 
-  ]
-
--- | Create the link to the necessary CSS file
-linkCSS :: String -> Doc  
-linkCSS fn = 
-  text $ "<link rel=\"stylesheet\" type=\"text/css\" href=\""++fn++".css\">"
 
 -- | Create and markup fractions
 fraction :: String -> String -> String  

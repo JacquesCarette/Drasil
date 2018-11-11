@@ -93,7 +93,7 @@ module Language.Drasil (
   -- ShortName
   , resolveSN, ShortName, shortname', getStringSN
   --Citations
-  , Citation(..), EntryID, BibRef, CiteField(..), Month(..), HP(..)
+  , Citation, EntryID, BibRef, CiteField(..), Month(..), HP(..), citeID, citeKind
   , HasFields(..)
     -- CiteFields smart constructors
       -- People -> CiteField
@@ -241,8 +241,10 @@ import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Citation (
   -- Types
-    Citation(..), EntryID, BibRef, CiteField(..), Month(..), HP(..), CitationKind(..)
+    Citation, EntryID, BibRef, CiteField(..), Month(..), HP(..), CitationKind(..)
   , HasFields(..)
+    -- Accessors
+  , citeID, citeKind
     -- CiteFields smart constructors
       -- People -> CiteField
   , author, editor

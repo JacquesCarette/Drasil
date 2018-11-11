@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.Citation
     -- Class for Reference.hs
   , HasFields(getFields)
     -- Accessors
-  , citeID, externRefT
+  , citeID, citeKind
     -- CiteFields smart constructors
       -- People -> CiteField
   , author, editor
@@ -33,7 +33,7 @@ import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel), HasShortName(sh
 import Language.Drasil.Misc (noSpaces)
 import Language.Drasil.Label.Core (Label)
 
-import Control.Lens (Lens', makeLenses)
+import Control.Lens (Lens', makeLenses, (^.))
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces
@@ -110,12 +110,11 @@ data CitationKind = Article
                   | Unpublished
 
 -- | All citations require a unique identifier (String) used by the Drasil chunk.
--- We will also have an EntryID (String) used for creating reference links.
+-- We will re-use that as an EntryID (String) used for creating reference links.
 -- Finally we will have the reference information (type and fields).
 data Citation = Cite
   { _cid :: UID
-  , citeID :: EntryID
-  , externRefT :: CitationKind
+  , _citeKind :: CitationKind
   , _fields :: [CiteField]
   , _lb :: Label
   }
@@ -123,7 +122,11 @@ makeLenses ''Citation
 
 -- | Smart constructor which implicitly uses EntryID as chunk i.
 cite :: EntryID -> CitationKind -> [CiteField] -> Label -> Citation
-cite i = Cite i (noSpaces i)
+cite i = Cite (noSpaces i)
+
+-- | We don't let anyone know that the EntryID is in fact the UID
+citeID :: Citation -> EntryID
+citeID c = c ^. cid
 
 -- | Citations are chunks.
 class HasFields c where

@@ -369,7 +369,7 @@ layUnlabelled sm (Bib bib)              = T.Bib $ map (layCite sm) bib
 -- | For importing bibliography
 layCite ::(HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
   ctx -> Citation -> P.Citation
-layCite sm c = P.Cite (citeID c) (externRefT c) (map (layField sm) (c ^. getFields))
+layCite sm c = P.Cite (citeID c) (c ^. citeKind) (map (layField sm) (c ^. getFields))
 
 layField :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
   ctx -> CiteField -> P.CiteField

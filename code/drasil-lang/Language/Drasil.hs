@@ -95,18 +95,6 @@ module Language.Drasil (
   --Citations
   , Citation, EntryID, BibRef
   , citeID, citeKind , HasFields(..)
-    -- CiteFields smart constructors
-      -- People -> CiteField
-  , author, editor
-      -- Sentence -> CiteField
-  , address, bookTitle, howPublished, howPublishedU, institution, journal, note
-  , organization, publisher, school, series, title, typeField
-      -- Int -> CiteField
-  , chapter, edition, number, volume, year
-      -- [Int] -> CiteField
-  , pages
-      -- Month -> CiteField
-  , month
     -- Citation smart constructors
   , cArticle, cBookA, cBookE, cBooklet
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
@@ -200,6 +188,18 @@ module Language.Drasil (
   , Month(..)
   -- Data.Citation ; should be moved to Language.Drasil.Development
   , CiteField(..), HP(..), CitationKind(..)
+    -- CiteFields smart constructors
+      -- People -> CiteField
+  , author, editor
+      -- Sentence -> CiteField
+  , address, bookTitle, howPublished, howPublishedU, institution, journal, note
+  , organization, publisher, school, series, title, typeField
+      -- Int -> CiteField
+  , chapter, edition, number, volume, year
+      -- [Int] -> CiteField
+  , pages
+      -- Month -> CiteField
+  , month
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -251,16 +251,6 @@ import Language.Drasil.Chunk.Citation (
   , citeID, citeKind
     -- CiteFields smart constructors
       -- People -> CiteField
-  , author, editor
-      -- Sentence -> CiteField
-  , address, bookTitle, howPublished, howPublishedU, institution, journal, note
-  , organization, publisher, school, series, title, typeField
-      -- Int -> CiteField
-  , chapter, edition, number, volume, year
-      -- [Int] -> CiteField
-  , pages
-      -- Month -> CiteField
-  , month
     -- Citation smart constructors
   , cArticle, cBookA, cBookE, cBooklet
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
@@ -285,7 +275,17 @@ import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc', ucs, uc
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.UnitaryConcept
 import Language.Drasil.ChunkDB
-import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..)) -- for Printing
+import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- for Printing
+  , author, editor
+      -- Sentence -> CiteField
+  , address, bookTitle, howPublished, howPublishedU, institution, journal, note
+  , organization, publisher, school, series, title, typeField
+      -- Int -> CiteField
+  , chapter, edition, number, volume, year
+      -- [Int] -> CiteField
+  , pages
+      -- Month -> CiteField
+  , month)
 import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
                                           , titleize', phrase, plural)
 import Language.Drasil.ShortName (resolveSN, ShortName

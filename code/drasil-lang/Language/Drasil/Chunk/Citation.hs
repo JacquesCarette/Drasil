@@ -6,18 +6,6 @@ module Language.Drasil.Chunk.Citation
   , HasFields(getFields)
     -- Accessors
   , citeID, citeKind
-    -- CiteFields smart constructors
-      -- People -> CiteField
-  , author, editor
-      -- Sentence -> CiteField
-  , address, bookTitle, howPublished, howPublishedU, institution, journal, note
-  , organization, publisher, school, series, title, typeField
-      -- Int -> CiteField
-  , chapter, edition, number, volume, year
-      -- [Int] -> CiteField
-  , pages
-      -- Month -> CiteField
-  , month
     -- Citation smart constructors
   , cArticle, cBookA, cBookE, cBooklet
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
@@ -30,8 +18,8 @@ import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
 
 import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel), HasShortName(shortname))
-import Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..))
-import Language.Drasil.Data.Date (Month(..))
+import Language.Drasil.Data.Citation (author, chapter, pages, editor, bookTitle, title, 
+  year, school, journal, institution, note, publisher, CitationKind(..), CiteField)
 import Language.Drasil.Misc (noSpaces)
 import Language.Drasil.Label.Core (Label)
 
@@ -197,44 +185,3 @@ stdFields t pub yr opt = title t : publisher pub : year yr : opt
 -- Helper function (do not export) for creating thesis reference.
 thesis :: People -> Sentence -> Sentence -> Int -> [CiteField] -> [CiteField]
 thesis auth t sch yr opt = author auth : title t : school sch : year yr : opt
-
--- | Smart field constructor
-author, editor :: People -> CiteField
-author = Author
-editor = Editor
-
--- | Smart field constructor
-address, bookTitle, howPublished, howPublishedU, institution, journal, note,
-  organization, publisher, school, series, title,
-  typeField :: Sentence -> CiteField
-
-address       = Address
-bookTitle     = BookTitle
-howPublished  = HowPublished . Verb
-howPublishedU = HowPublished . URL
-institution   = Institution
-journal       = Journal
-note          = Note
-organization  = Organization
-publisher     = Publisher
-school        = School
-series        = Series
-title         = Title
-typeField     = Type
-
--- | Smart field constructor
-chapter, edition, number, volume, year :: Int -> CiteField
-
-chapter = Chapter
-edition = Edition
-number = Number
-volume = Volume
-year = Year
-
--- | Smart field constructor
-pages :: [Int] -> CiteField
-pages = Pages
-
--- | Smart field constructor
-month :: Month -> CiteField
-month = Month

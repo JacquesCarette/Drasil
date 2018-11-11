@@ -1,4 +1,20 @@
-module Language.Drasil.Data.Citation (CiteField(..), HP(..), CitationKind(..)) where
+module Language.Drasil.Data.Citation 
+  ( -- Types
+    CiteField(..), HP(..), CitationKind(..)
+    -- "smart" constructors
+  , author, editor
+      -- Sentence -> CiteField
+  , address, bookTitle, howPublished, howPublishedU, institution, journal, note
+  , organization, publisher, school, series, title, typeField
+      -- FIXME: these should be checked for bounds
+      -- Int -> CiteField
+  , chapter, edition, number, volume, year
+      -- [Int] -> CiteField
+  , pages
+      -- Month -> CiteField
+  , month
+
+  ) where
 
 import Language.Drasil.People (People)
 import Language.Drasil.Sentence (Sentence)
@@ -46,3 +62,43 @@ data CitationKind = Article
                   | Proceedings
                   | TechReport
                   | Unpublished
+-- | Smart field constructor
+author, editor :: People -> CiteField
+author = Author
+editor = Editor
+
+-- | Smart field constructor
+address, bookTitle, howPublished, howPublishedU, institution, journal, note,
+  organization, publisher, school, series, title,
+  typeField :: Sentence -> CiteField
+
+address       = Address
+bookTitle     = BookTitle
+howPublished  = HowPublished . Verb
+howPublishedU = HowPublished . URL
+institution   = Institution
+journal       = Journal
+note          = Note
+organization  = Organization
+publisher     = Publisher
+school        = School
+series        = Series
+title         = Title
+typeField     = Type
+
+-- | Smart field constructor
+chapter, edition, number, volume, year :: Int -> CiteField
+
+chapter = Chapter
+edition = Edition
+number = Number
+volume = Volume
+year = Year
+
+-- | Smart field constructor
+pages :: [Int] -> CiteField
+pages = Pages
+
+-- | Smart field constructor
+month :: Month -> CiteField
+month = Month

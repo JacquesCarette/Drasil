@@ -16,9 +16,14 @@ import Language.Drasil.UID (UID)
 -- - special characters
 -- - accented letters
 -- - References to specific layout objects
+data SentenceStyle = ShortStyle
+                   | SymbolStyle
+                   | TermStyle
+                   | PluralTerm
+
 infixr 5 :+:
 data Sentence where
-  Ch    :: UID -> Sentence
+  Ch    :: SentenceStyle -> UID -> Sentence
   Sy    :: USymb -> Sentence
   S     :: String -> Sentence       -- Strings, used for Descriptions in Chunks
   Sp    :: Special -> Sentence

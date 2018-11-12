@@ -114,10 +114,10 @@ module Language.Drasil (
   , cProceedings, cTechReport, cUnpublished
   , CitationKind(..)
   -- Sentence
-  , Sentence(..), sParen, sSqBr , (+:+), (+:+.), sC, (+:)
+  , Sentence(..), sParen, sSqBr , (+:+), (+:+.), sC, (+:), SentenceStyle(..)
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
-  , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase'
+  , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase', phraseNP
   , CapitalizationRule(..)
   , PluralRule(..)
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
@@ -275,11 +275,12 @@ import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.UnitaryConcept
 import Language.Drasil.ChunkDB
 import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
-                                          , titleize', phrase, plural)
+                                          , titleize', plural)
 import Language.Drasil.ShortName (resolveSN, ShortName
   , shortname', getStringSN)
 import Language.Drasil.Space (Space(..))
-import Language.Drasil.Sentence (Sentence(..), sParen, sSqBr, sC, (+:+), (+:+.), (+:))
+import Language.Drasil.Sentence (Sentence(..), sParen, sSqBr, sC, (+:+), (+:+.), (+:),
+  SentenceStyle(..))
 import Language.Drasil.Reference (makeRef, makeRefS, mkRefFrmLbl, ReferenceDB, assumpDB
                                  , AssumpMap, assumpLookup, HasAssumpRefs
                                  , assumpRefTable, assumptionsFromDB

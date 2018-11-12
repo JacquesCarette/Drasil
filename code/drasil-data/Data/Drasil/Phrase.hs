@@ -127,7 +127,7 @@ compoundNC'' f1 f2 t1 t2 = nc
   (t1 ^. uid ++ t2 ^. uid) (compoundPhrase'' f1 f2 (t1 ^. term) (t2 ^. term))
 
 compoundNCPlPh :: NamedChunk -> NamedChunk -> NamedChunk
-compoundNCPlPh = compoundNC'' D.plural D.phrase
+compoundNCPlPh = compoundNC'' D.plural D.phraseNP
 
 compoundNCPlPl :: NamedChunk -> NamedChunk -> NamedChunk
 compoundNCPlPl = compoundNC'' D.plural D.plural

@@ -4,9 +4,9 @@ module Language.Drasil.Development.Sentence where
 
 import Control.Lens ((^.))
 
-import Language.Drasil.Classes (NamedIdea(term), Idea)
+import Language.Drasil.Classes (NamedIdea(term), HasUID(uid), Idea)
 import Language.Drasil.Chunk.NamedIdea (short)
-import Language.Drasil.Sentence ((+:+), Sentence((:+:), S), sParen)
+import Language.Drasil.Sentence ((+:+), Sentence((:+:), S, Ch), sParen, SentenceStyle (SymbolStyle))
 import qualified Language.Drasil.NounPhrase as NP
 
 -- | Helper for common pattern of introducing the title-case version of a 
@@ -32,8 +32,8 @@ titleize  n = NP.titleize (n ^. term)
 titleize' n = NP.titleize' (n ^. term)
 
 -- | Helper for getting the phrase from a NamedIdea.
-phrase :: NamedIdea n => n -> Sentence
-phrase n = NP.phrase (n ^. term)
+phrase :: (HasUID n, NamedIdea n) => n -> Sentence
+phrase n = Ch SymbolStyle (n ^. uid) --NP.phrase (n ^. term)
 
 -- | Helper for getting the plural of a phrase from a NamedIdea
 plural :: NamedIdea n => n -> Sentence

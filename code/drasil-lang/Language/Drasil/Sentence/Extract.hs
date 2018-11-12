@@ -7,7 +7,7 @@ import Language.Drasil.Expr.Extract(names)
 
 -- | Generic traverse of all positions that could lead to UIDs from sentences
 getUIDs   :: Sentence -> [UID]
-getUIDs (Ch a)       = [a]
+getUIDs (Ch _ a)       = [a]
 getUIDs (Sy _)       = []
 getUIDs (S _)        = []
 getUIDs (Sp _)       = []

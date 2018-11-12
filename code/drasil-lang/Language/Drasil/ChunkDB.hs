@@ -80,9 +80,9 @@ getUnitLup :: HasSymbolTable s => (HasUID c, MayHaveUnit c) => s -> c -> Maybe U
 getUnitLup m c = getUnit $ symbLookup (c ^. uid) (m ^. symbolTable)
 
 -- | Looks up an uid in the term table. If nothing is found, an error is thrown
-termLookup :: (HasUID c) => c -> TermMap -> IdeaDict
-termLookup c m = getT $ Map.lookup (c ^. uid) m
-  where getT = maybe (error $ "Term: " ++ (c ^. uid) ++ " not found in TermMap") id
+termLookup :: UID -> TermMap -> IdeaDict
+termLookup c m = getT $ Map.lookup c m
+  where getT = maybe (error $ "Term: " ++ c ++ " not found in TermMap") id
 
 -- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
 defLookup :: UID -> ConceptMap -> ConceptChunk

@@ -5,6 +5,13 @@ import Data.Drasil.Concepts.Documentation (first, physics, second_, year)
 import Data.Drasil.Concepts.PhysicalProperties (solid)
 import Data.Drasil.Phrase (compoundNC)
 
+educon :: [NamedChunk]
+educon = [calculus, civil, degree_, engineering, structural, mechanics,
+  undergraduate, highSchool, physical_, chemistry, undergradDegree,
+  scndYrCalculus, solidMechanics, secondYear, structuralEng,
+  structuralMechanics, civilEng, highSchoolCalculus, highSchoolPhysics,
+  frstYr, physChem]
+
 calculus, civil, degree_, engineering, structural, mechanics,
   undergraduate, highSchool, physical_, chemistry :: NamedChunk
 

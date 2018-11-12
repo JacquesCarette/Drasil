@@ -13,9 +13,9 @@ import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual),
 import Drasil.HGHC.HeatTransfer (fp, hghc, hghcVarsDD, htInputs, htOutputs, 
     nuclearPhys, symbols)
 
-import Data.Drasil.SI_Units (si_units)
+import Data.Drasil.SI_Units (si_units, fundamentals, derived)
 import Data.Drasil.People (spencerSmith)
-import Data.Drasil.Concepts.Documentation (srs)
+import Data.Drasil.Concepts.Documentation (srs, doccon)
 import Data.Drasil.Phrase (for)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 
@@ -45,7 +45,9 @@ check_si :: [UnitDefn] -- FIXME? Probably shouldn't be done here
 check_si = collectUnits allSymbols symbols 
 
 allSymbols :: ChunkDB
-allSymbols = cdb symbols (map nw symbols) ([] :: [ConceptChunk]) -- FIXME: Fill in concepts
+allSymbols = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
+  ++ [nw fp, nw nuclearPhys])
+ ([] :: [ConceptChunk]) -- FIXME: Fill in concepts
   si_units
 
 printSetting :: PrintingInformation

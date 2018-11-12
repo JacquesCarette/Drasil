@@ -13,6 +13,10 @@ algorithm    = dcc "algorithm" (cn' "algorithm")
 mod_calc_desc :: Sentence -> ConceptChunk
 mod_calc_desc defnFromEx = dccWDS "mod_calc_desc" (cn' "calculation") defnFromEx
 
+compcon :: [NamedChunk]
+compcon = [application, computer, structure, dataStruct, dataStruct', dataType, dataType', 
+  inDatum, outDatum, inParam, inVar, inValue, inQty, computerLiteracy, computerApp]
+
 application, computer, structure :: NamedChunk
 os :: CI
 -------------------------------------------------------------------------------

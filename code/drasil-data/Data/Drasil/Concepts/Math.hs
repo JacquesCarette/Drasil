@@ -1,9 +1,17 @@
 module Data.Drasil.Concepts.Math where
 
-import Language.Drasil
+import Language.Drasil hiding (number)
 import Control.Lens ((^.))
 
 import Data.Drasil.Phrase(of_)
+mathcon :: [ConceptChunk]
+mathcon = [angle, area, calculation, diameter, equation, euclidN, euclidSpace, gradient, 
+  graph, law, matrix, norm, normal, normalV, number, orient, parameter, perp, 
+  perpV, probability, shape, surArea, surface, unit_, unitV, vector, rate, 
+  change, rOfChng, constraint]
+
+mathcon' :: [CI]
+mathcon' = [pde, ode, de]
 
 angle, area, calculation, diameter, equation, euclidN, euclidSpace, gradient, 
   graph, law, matrix, norm, normal, normalV, number, orient, parameter, perp, 

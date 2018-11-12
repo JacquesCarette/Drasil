@@ -243,10 +243,11 @@ tolLoad       = vc "tolLoad"       (nounPhraseSP "tolerable load")
 
 
 terms :: [ConceptChunk]
-terms = [aspectRatio, glBreakage, lite, glassTy,
-  annealedGl, fTemperedGl, hStrengthGl, glTyFac, lateral, load, specDeLoad,
-  loadResis, longDurLoad, nonFactoredL, glassWL, shortDurLoad, loadShareFac,
-  probBreak, specA, blastResisGla, eqTNTChar, sD]
+terms = [aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
+  glTyFac, lateral, load, specDeLoad, loadResis, longDurLoad, nonFactoredL,
+  glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar,
+  sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage, notSafe, bomb,
+  explosion]
 
 aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
   glTyFac, lateral, load, specDeLoad, loadResis, longDurLoad, nonFactoredL,

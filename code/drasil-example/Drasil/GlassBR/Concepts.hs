@@ -8,6 +8,13 @@ import Data.Drasil.Concepts.Documentation (assumption, dataDefn, goalStmt, inMod
 import Data.Drasil.Phrase (compoundNC)
 
 {--}
+glasscon :: [CI]
+glasscon = [annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass, 
+  lResistance, lShareFac, gLassBR, stdOffDist, nFL]
+
+glasscon' :: [NamedChunk]
+glasscon' = [beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
+  glass, ptOfExplsn, responseTy]
 
 {-glassBRProg :: CommonConcept
 glassBRProg = dcc' "glassBRProg" (nounPhraseSP "GlassBR program")

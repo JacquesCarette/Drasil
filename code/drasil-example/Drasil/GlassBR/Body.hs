@@ -22,7 +22,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
 import qualified Drasil.DocLang.SRS as SRS (datConLabel, dataDefnLabel, indPRCaseLabel, 
   referenceLabel, valsOfAuxConsLabel, assumptLabel)
 
-import Data.Drasil.Concepts.Computation (computerApp, inParam)
+import Data.Drasil.Concepts.Computation (computerApp, inParam, compcon)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
   assumption, characteristic, class_, code, company, condition, content, 
   dataConst, dataDefn, definition, document, emphasis, environment, figure, 
@@ -30,9 +30,10 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   likelyChg, model, organization, output_, physicalSystem, physSyst, problem, 
   product_, purpose, reference, requirement, reviewer, section_, software, 
   softwareSys, srs, srsDomains, standard, sysCont, system, template, term_,
-  theory, thModel, traceyMatrix, user, userInput, value)
-import Data.Drasil.Concepts.Education (civilEng, scndYrCalculus, structuralMechanics)
-import Data.Drasil.Concepts.Math (graph, parameter, probability)
+  theory, thModel, traceyMatrix, user, userInput, value, doccon, doccon')
+import Data.Drasil.Concepts.Education (civilEng, scndYrCalculus, structuralMechanics,
+  educon)
+import Data.Drasil.Concepts.Math (graph, parameter, probability, mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
@@ -56,7 +57,7 @@ import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, likelyChgsList, unlikelyChgs,
   unlikelyChgsList)
 import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, gLassBR, 
-  ptOfExplsn, stdOffDist)
+  ptOfExplsn, stdOffDist, glasscon, glasscon')
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns)
 import Drasil.GlassBR.IMods (glassBRsymb, probOfBreak, calofCapacity, calofDemand, gbrIMods)
 import Drasil.GlassBR.ModuleDefs (allMods)
@@ -68,12 +69,14 @@ import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, capacity, cha
   demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained, gbInputDataConstraints,
   gbInputs, gbOutputs, gBRSpecParamVals, glassGeo, glassTy, glassTypes, glBreakage,
   lateralLoad, load, loadTypes, pb_tol, prob_br, probBreak, sD, sdWithEqn, stressDistFac,
-  termsWithAccDefn, termsWithDefsOnly, wtntWithEqn)
+  termsWithAccDefn, termsWithDefsOnly, wtntWithEqn, terms)
 
 {--}
 
 gbSymbMap :: ChunkDB
-gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols)
+gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols ++ map nw glasscon
+  ++ map nw glasscon' ++ map nw terms ++ map nw doccon ++ map nw doccon' ++ map nw educon
+  ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon')
   (map cw glassBRsymb ++ Doc.srsDomains) $ map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]
 

@@ -34,18 +34,19 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
 import Data.Drasil.Concepts.Education (civilEng, scndYrCalculus, structuralMechanics,
   educon)
 import Data.Drasil.Concepts.Math (graph, parameter, probability, mathcon, mathcon')
-import Data.Drasil.Concepts.PhysicalProperties (dimension)
+import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon)
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability,
-  performance)
+  performance, softwarecon, program)
 import Data.Drasil.Concepts.Thermodynamics (degree_')
 import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 import Data.Drasil.Phrase (for'', the)
-import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second)
+import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamentals,
+  derived)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
   figureLabel, foldlList, foldlsC, foldlSent, foldlSP, foldlSPCol, 
   isThe, ofThe, sAnd, showingCxnBw, sIn, sOf, sOr, sVersus, tAndDOnly, tAndDWAcc, tAndDWSym, 
@@ -76,7 +77,9 @@ import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, capacity, cha
 gbSymbMap :: ChunkDB
 gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols ++ map nw glasscon
   ++ map nw glasscon' ++ map nw terms ++ map nw doccon ++ map nw doccon' ++ map nw educon
-  ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon')
+  ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon'
+  ++ map nw softwarecon ++ map nw terms ++ [nw lateralLoad] ++ [nw distance] ++
+  map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw glassBRsymb ++ Doc.srsDomains) $ map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]
 

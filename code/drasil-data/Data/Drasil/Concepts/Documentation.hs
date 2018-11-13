@@ -35,7 +35,7 @@ doccon = [abbreviation, analysis, appendix, aspect, body, characteristic, class_
   softwareReq, softwareSys, softwareVerif, softwareVAV, solutionCharSpec,
   solutionCharacteristic, offShelfSolution, physicalSim, productUC, 
   useCaseTable, physicalProperty, vavPlan, uncertCol, userInput, theproduct_
-  , theproject]
+  , theproject, scpOfTheProjS]
 
 doccon' :: [CI]
 doccon' = [assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
@@ -87,7 +87,7 @@ abbreviation, analysis, appendix, aspect, body, characteristic, class_, client,
   standard, statement, symbol_, system, table_, task, template, term_,
   terminology, theory, traceyGraph, traceyMatrix, type_, uncertainty, user,
   useCase, validation, value, variable, video, verification, year,
-  theproduct_, theproject :: NamedChunk
+  theproduct_, theproject, scpOfTheProjS :: NamedChunk
 
 abbreviation    = nc "abbreviation"   (cn'    "abbreviation"       )
 analysis        = nc "analysis"       (cnIS   "analysis"           )
@@ -215,6 +215,7 @@ video           = nc "video"          (cn'    "video"              )
 year            = nc "year"           (cn'    "year"               )
 theproduct_     = nc "theproduct"     (cn'    "the product"        )
 theproject      = nc "theproject"     (cn'    "the project"        )
+scpOfTheProjS   = nc "scpOfTheProj"   (cn'    "scope of the project") -- temporary generated for test
 
 
 orgOfDoc, prpsOfDoc, refmat, scpOfReq, consVals,

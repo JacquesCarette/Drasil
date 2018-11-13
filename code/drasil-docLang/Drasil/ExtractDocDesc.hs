@@ -5,10 +5,8 @@ import Drasil.DocumentLanguage
 import Language.Drasil hiding (Manual, Vector, Verb)
 import Data.List(transpose)
 
-
 egetDocDesc :: DocDesc -> [Expr]
 egetDocDesc d = concatMap egetDocSec d
-
 
 egetDocSec :: DocSection -> [Expr]
 egetDocSec (Verbatim a)         = egetSec a
@@ -40,7 +38,7 @@ egetCon' c = egetCon (c ^. accessContents)
 egetCon :: RawContent -> [Expr]
 egetCon (EqnBlock e) = [e]
 egetCon (Definition dt (hd:tl)) = concatMap egetCon' (snd hd) ++ egetCon (Definition dt tl)
-egetCon (Definition dt []) = [] ++ []
+egetCon (Definition _ []) = []
 egetCon _ = []
 
 egetLblCon :: LabelledContent -> [Expr]
@@ -186,7 +184,7 @@ getCon (Paragraph s)       = [s]
 getCon (EqnBlock _)      = []
 getCon (Enumeration lst)   = getLT lst
 getCon (Figure l _ _)    = [l]
-getCon (Assumption assc)   = getAss assc
+getCon (Assumption _ b _) = [b]
 getCon (Bib bref)          = getBib bref
 getCon (Graph [(s1, s2)] _ _ l) = s1 : s2 : [l]
 getCon (Definition dt (hd:fs)) = concatMap getCon' (snd hd) ++ getCon (Definition dt fs)
@@ -232,9 +230,6 @@ getLP (t, it, _) = t : getIL it
 getIL :: ItemType -> [Sentence]
 getIL (Flat s) = [s]
 getIL (Nested h lt) = h : getLT lt
-
-getAss :: AssumpChunk -> [Sentence]
-getAss a = [assuming a]
 
 getRefSec :: RefSec -> [Sentence]
 getRefSec (RefProg c r) = getCon' c ++ concatMap getReftab r

@@ -7,6 +7,11 @@ import Data.Drasil.Concepts.Physics (energy)
 
 import Control.Lens((^.))
 
+thermocon :: [ConceptChunk]
+thermocon = [boiling, boil_pt, degree_', law_cons_energy, law_conv_cooling, latent_heat, melting, melt_pt, phase_change,
+  sens_heat, temp, thermal_analysis, thermal_conduction, thermal_energy,
+  thermal_conductor, heat, heat_cap_spec, ht_flux, heat_trans, ht_trans_theo, ener_src]
+
 boiling, boil_pt, degree_', law_cons_energy, law_conv_cooling, latent_heat, melting, melt_pt, phase_change,
   sens_heat, temp, thermal_analysis, thermal_conduction, thermal_energy,
   thermal_conductor, heat, heat_cap_spec, ht_flux, heat_trans, ht_trans_theo, ener_src :: ConceptChunk

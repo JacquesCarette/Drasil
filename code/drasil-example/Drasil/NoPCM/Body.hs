@@ -21,7 +21,8 @@ import qualified Data.Drasil.Concepts.Math as M (ode, de, unit_, equation)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
-  thermal_energy, ht_trans_theo, ht_flux, heat_cap_spec, thermal_conduction)
+  thermal_energy, ht_trans_theo, ht_flux, heat_cap_spec, thermal_conduction,
+  thermocon, heat_trans)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heat_cap_spec, ht_flux)
 import Data.Drasil.Quantities.Physics (time, energy)
@@ -67,7 +68,7 @@ import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA,
 
 import Drasil.NoPCM.Assumptions
 import Drasil.NoPCM.DataDesc (inputMod)
-import Drasil.NoPCM.Definitions (ht_trans, srs_swhs)
+import Drasil.NoPCM.Definitions (srs_swhs)
 import Drasil.NoPCM.GenDefs (rocTempSimp, swhsGDs)
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
 import Drasil.NoPCM.Unitals (temp_init)
@@ -121,7 +122,7 @@ probDescription, termAndDefn, physSystDescription, goalStates,
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
   [TUnits, 
-  tsymb [TSPurpose, SymbConvention [Lit (nw ht_trans), Doc' (nw progName)], SymbOrder],
+  tsymb [TSPurpose, SymbConvention [Lit (nw heat_trans), Doc' (nw progName)], SymbOrder],
   TAandA]) :
   IntroSec (IntroProg (introStart ener_src energy progName)
     (introEnd progName program)
@@ -187,7 +188,8 @@ nopcm_srs :: Document
 nopcm_srs = mkDoc mkSRS (for) nopcm_si
 
 nopcm_SymbMap :: ChunkDB
-nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) (map cw nopcm_Symbols ++ srsDomains)
+nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms ++ map nw thermocon)
+ (map cw nopcm_Symbols ++ srsDomains)
   this_si
 
 printSetting :: PrintingInformation

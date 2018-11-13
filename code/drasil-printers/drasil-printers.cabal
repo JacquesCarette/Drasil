@@ -12,6 +12,7 @@ library
       Language.Drasil.Config
     , Language.Drasil.Format
     , Language.Drasil.Output.Formats
+    , Language.Drasil.HTML.CSS
     , Language.Drasil.HTML.Helpers
     , Language.Drasil.HTML.Print
     , Language.Drasil.HTML.Monad

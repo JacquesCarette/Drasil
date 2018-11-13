@@ -8,11 +8,8 @@ import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, specific_weight)
 
 import Data.Drasil.Units.Physics (momentOfForceU)
-import Data.Drasil.Units.SolidMechanics (stiffness3D)
 
-import Data.Drasil.Quantities.Physics as QP (force, pressure)
-import Data.Drasil.Quantities.SolidMechanics as SM (elastMod, nrmStrss,
-  poissnsR, stffness)
+import Data.Drasil.Quantities.SolidMechanics as SM (nrmStrss)
 
 
 sspSymbols :: [DefinedQuantityDict]

@@ -39,7 +39,6 @@ library
     , Language.Drasil.Data.Date
     , Language.Drasil.Document
     , Language.Drasil.Document.Core
-    , Language.Drasil.Document.Extract
     , Language.Drasil.Expr
     , Language.Drasil.Expr.Extract
     , Language.Drasil.Expr.Math

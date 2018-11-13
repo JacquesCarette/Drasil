@@ -4,7 +4,6 @@ import Language.Drasil
 
 import Drasil.SSP.Defs (crtSlpSrf, fs_concept, slope, slpSrf)
 
-import Data.Drasil.SentenceStructures (ofThe)
 -----------
 -- Goals --
 -----------

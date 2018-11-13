@@ -176,9 +176,6 @@ module Language.Drasil (
   , sdep
   -- Expr.Extract
   , names
-  -- Document.Extract
-  , egetDoc, getDoc, egetSec, egetCon', egetLblCon, egetQDef
-  , getCon', getSec, getCon
   -- Label.Core
   , getAdd
   -- Development.Sentence
@@ -216,8 +213,6 @@ import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, csc
           apply, apply1, apply2,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
-import Language.Drasil.Document.Extract(egetDoc, getDoc, egetSec, egetCon', egetLblCon,
- egetQDef, getSec, getCon', getSec, getCon)
 import Language.Drasil.Expr.Extract (dep, names', names)
 import Language.Drasil.Expr.Precedence (precA, precB, eprec)
 import Language.Drasil.Sentence.EmbedSymbol(ch)

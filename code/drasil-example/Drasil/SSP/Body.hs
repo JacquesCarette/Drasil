@@ -28,8 +28,7 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Data.Drasil.Concepts.Physics (compression, fbd, force, strain, stress,
-  tension)
+import Data.Drasil.Concepts.Physics (fbd, force, strain, stress)
 import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability, 
   performanceSpd, program, reusability, understandability)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
@@ -40,7 +39,7 @@ import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (foldlList, SepType(Comma), FoldType(List), 
   foldlSP, foldlSent, foldlSent_, ofThe, sAnd, sOr, foldlSPCol)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal)
-import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, noRefsLT)
+import Data.Drasil.Utils (bulletFlat, bulletNested, enumSimple, noRefsLT)
 
 import Drasil.SSP.Assumptions (newAssumptions)
 import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,

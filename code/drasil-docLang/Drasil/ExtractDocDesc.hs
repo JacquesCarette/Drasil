@@ -3,6 +3,7 @@ module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc) where
 import Control.Lens((^.))
 import Drasil.DocumentLanguage
 import Language.Drasil hiding (Manual, Vector, Verb)
+import Data.List(transpose)
 
 
 egetDocDesc :: DocDesc -> [Expr]
@@ -26,6 +27,24 @@ egetDocSec (Bibliography)       = []
 egetDocSec (AppndxSec a)        = egetApp a
 egetDocSec (ExistingSolnSec e)  = egetExist e
 
+egetSec :: Section -> [Expr]
+egetSec (Section _ sc _) = concatMap egetSecCon sc
+
+egetSecCon :: SecCons -> [Expr]
+egetSecCon (Sub s) = egetSec s
+egetSecCon (Con c) = egetCon' c
+
+egetCon' :: Contents -> [Expr]
+egetCon' c = egetCon (c ^. accessContents)
+
+egetCon :: RawContent -> [Expr]
+egetCon (EqnBlock e) = [e]
+egetCon (Definition dt (hd:tl)) = concatMap egetCon' (snd hd) ++ egetCon (Definition dt tl)
+egetCon (Definition dt []) = [] ++ []
+egetCon _ = []
+
+egetLblCon :: LabelledContent -> [Expr]
+egetLblCon a = egetCon (a ^. accessContents)
 
 egetRefSec :: RefSec -> [Expr]
 egetRefSec (RefProg c r) = egetCon' c ++ concatMap egetRefProg r
@@ -56,6 +75,9 @@ egetTrace (TraceabilityProg lc _ c s) = concatMap egetLblCon lc ++ concatMap ege
 
 egetAux :: AuxConstntSec -> [Expr]
 egetAux (AuxConsProg _ qd) = concatMap egetQDef qd
+
+egetQDef :: QDefinition -> [Expr]
+egetQDef q = [q ^. defnExpr]
 
 egetApp :: AppndxSec -> [Expr]
 egetApp (AppndxProg c) = concatMap egetCon' c
@@ -147,6 +169,72 @@ getDocSec (AuxConstntSec a)    = getAux a
 getDocSec (Bibliography)       = []
 getDocSec (AppndxSec a)        = getApp a
 getDocSec (ExistingSolnSec e)  = getExist e
+
+getSec :: Section -> [Sentence]
+getSec (Section t sc _) = t : concatMap getSecCon sc
+
+getSecCon :: SecCons -> [Sentence]
+getSecCon (Sub s) = getSec s
+getSecCon (Con c) = getCon' c
+
+getCon' :: Contents -> [Sentence]
+getCon' c = getCon (c ^. accessContents)
+
+getCon :: RawContent -> [Sentence]
+getCon (Table s1 s2 t _) = isVar (s1, transpose s2) ++ [t]
+getCon (Paragraph s)       = [s]
+getCon (EqnBlock _)      = []
+getCon (Enumeration lst)   = getLT lst
+getCon (Figure l _ _)    = [l]
+getCon (Assumption assc)   = getAss assc
+getCon (Bib bref)          = getBib bref
+getCon (Graph [(s1, s2)] _ _ l) = s1 : s2 : [l]
+getCon (Definition dt (hd:fs)) = concatMap getCon' (snd hd) ++ getCon (Definition dt fs)
+getCon (Definition _ []) = []
+getCon  _ = []
+
+-- This function is used in collecting sentence from table.
+-- Since only the table's first Column titled "Var" should be collected,
+-- this function is used to filter out only the first Column of Sentence.
+isVar :: ([Sentence], [[Sentence]]) -> [Sentence]
+isVar (S "Var" : _, hd1 : _) = hd1
+isVar (_ : tl, _ : tl1) = isVar (tl, tl1)
+isVar ([], _) = []
+isVar (_, []) = []
+
+getBib :: (HasFields c) => [c] -> [Sentence]
+getBib a = concatMap getField $ concatMap (^. getFields) a
+
+getField :: CiteField -> [Sentence]
+getField (Address s) = [s]
+getField (BookTitle s) = [s]
+getField (Institution s) = [s]
+getField (Journal s) = [s]
+getField (Note s) = [s]
+getField (Organization s) = [s]
+getField (Publisher s) = [s]
+getField (School s) = [s]
+getField (Series s) = [s]
+getField (Title s) = [s]
+getField (Type s) = [s]
+getField _ = []
+
+getLT :: ListType -> [Sentence]
+getLT (Bullet it) = concatMap getIL $ map fst it
+getLT (Numeric it) = concatMap getIL $ map fst it
+getLT (Simple lp) = concatMap getLP lp
+getLT (Desc lp) = concatMap getLP lp
+getLT (Definitions lp) = concatMap getLP lp
+
+getLP :: ListTuple -> [Sentence]
+getLP (t, it, _) = t : getIL it
+
+getIL :: ItemType -> [Sentence]
+getIL (Flat s) = [s]
+getIL (Nested h lt) = h : getLT lt
+
+getAss :: AssumpChunk -> [Sentence]
+getAss a = [assuming a]
 
 getRefSec :: RefSec -> [Sentence]
 getRefSec (RefProg c r) = getCon' c ++ concatMap getReftab r

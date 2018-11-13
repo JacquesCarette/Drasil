@@ -35,7 +35,7 @@ import qualified Language.Drasil.Printing.Import as I
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, item', description,
   includegraphics, center, figure, item, symbDescription, enumerate, itemize, toEqn, empty,
-  newline, superscript, parens, fraction, quote, ref, ucref, lcref, aref, mref, sref,
+  newline, superscript, parens, fraction, quote, ref, ucref, lcref, aref, sref,
   hyperref, snref, cite, href, sec, newpage, maketoc, maketitle, document, author, title, rref)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (<>), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
@@ -83,7 +83,6 @@ print sm l = foldr ($+$) empty $ map (flip lo sm) l
 symbol :: L.Symbol -> String
 symbol (L.Atomic s)  = s
 symbol (L.Special s) = unPL $ L.special s
---symbol (Greek g)   = unPL $ greek g
 symbol (L.Concat sl) = foldr (++) "" $ map symbol sl
 --
 -- handle the special cases first, then general case
@@ -267,7 +266,6 @@ spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = pure $ text "\\newline"
 spec (Ref t@L.Sect r _ _)    = sref (show t) (pure $ text r)
 spec (Ref t@(L.Def _) r _ _) = hyperref (show t) (pure $ text r)
-spec (Ref L.Mod r _ _)       = mref  (pure $ text r)
 spec (Ref L.Assump r _ _)    = aref  (pure $ text r)
 spec (Ref (L.Req _) r _ _)   = rref  (pure $ text r)
 spec (Ref L.LCh r _ _)       = lcref (pure $ text r)

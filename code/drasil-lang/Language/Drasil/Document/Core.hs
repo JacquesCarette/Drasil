@@ -1,7 +1,6 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Document.Core where
 
-import Language.Drasil.Chunk.AssumpChunk (AssumpChunk)
 import Language.Drasil.Chunk.Citation (BibRef)
 
 import Language.Drasil.Classes (HasRefAddress(getRefAdd),
@@ -9,9 +8,9 @@ import Language.Drasil.Classes (HasRefAddress(getRefAdd),
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Label () -- for instances
-import Language.Drasil.RefTypes (RefAdd)
-import Language.Drasil.Sentence (Sentence(..))
-import Language.Drasil.RefTypes (DType(..))
+import Language.Drasil.Sentence (Sentence)
+import Language.Drasil.UID (UID)
+import Language.Drasil.RefTypes (RefAdd, DType(..))
 
 import Control.Lens ((^.), makeLenses, Lens', set)
 
@@ -48,17 +47,13 @@ data RawContent = Table [Sentence] [[Sentence]] Title Bool
   -- ^ table has: header-row data(rows) label/caption showlabel?
                | Paragraph Sentence -- ^ Paragraphs are just sentences.
                | EqnBlock Expr
-     --        CodeBlock Code   -- GOOL complicates this.  Removed for now.
-               -- | Definition DType
                | Enumeration ListType -- ^ Lists
                | Definition DType [(Identifier, [Contents])]
                | Figure Lbl Filepath MaxWidthPercent -- ^ Should use relative file path.
-               | Assumption AssumpChunk
+               | Assumption UID Sentence Label -- FIXME: hack, remove
                | Bib BibRef
-     --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
                | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl
                -- ^ TODO: Fill this one in.
-               ------NEW TMOD/DDEF/IM/GD BEGINS HERE------
 type Identifier = String
 
 data LabelledContent = LblC { _lbl :: Label

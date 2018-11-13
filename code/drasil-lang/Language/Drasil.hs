@@ -47,6 +47,7 @@ module Language.Drasil (
   , HasShortName(shortname)
   , UncertainQuantity(uncert)
   , Quantity
+  , HasFields(getFields)
   -- Chunk.Concept
   , cw , ConceptChunk , CommonConcept, ConceptInstance
   -- Chunk.CommonIdea
@@ -93,26 +94,13 @@ module Language.Drasil (
   -- ShortName
   , resolveSN, ShortName, shortname', getStringSN
   --Citations
-  , Citation(..), EntryID, BibRef, CiteField(..), Month(..), HP(..)
-  , HasFields(..)
-    -- CiteFields smart constructors
-      -- People -> CiteField
-  , author, editor
-      -- Sentence -> CiteField
-  , address, bookTitle, howPublished, howPublishedU, institution, journal, note
-  , organization, publisher, school, series, title, typeField
-      -- Int -> CiteField
-  , chapter, edition, number, volume, year
-      -- [Int] -> CiteField
-  , pages
-      -- Month -> CiteField
-  , month
+  , Citation, EntryID, BibRef
+  , citeID, citeKind
     -- Citation smart constructors
   , cArticle, cBookA, cBookE, cBooklet
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
   , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
   , cProceedings, cTechReport, cUnpublished
-  , CitationKind(..)
   -- Sentence
   , Sentence(..), sParen, sSqBr , (+:+), (+:+.), sC, (+:)
   , RefProg, Reference2(..)
@@ -173,7 +161,7 @@ module Language.Drasil (
   , assumpDB, RefMap, simpleMap
   , citationRefTable
   -- RefTypes
-  , RefAdd, RefType(Cite, Tab, EqnB, Req, LCh, UnCh, Def, Lst, Link, Sect, Mod, Blank, Assump)
+  , RefAdd, RefType(Cite, Tab, EqnB, Req, LCh, UnCh, Def, Lst, Link, Sect, Blank, Assump)
   , ReqType(FR, NFR)
   , Reference(Reference)
   -- Label
@@ -195,6 +183,22 @@ module Language.Drasil (
   , introduceAbb, phrase, plural, phrase's, plural's, at_start, at_start'
   -- UnitLang
   , USymb(US)
+  -- Data.Date
+  , Month(..)
+  -- Data.Citation ; should be moved to Language.Drasil.Development
+  , CiteField(..), HP(..), CitationKind(..)
+    -- CiteFields smart constructors
+      -- People -> CiteField
+  , author, editor
+      -- Sentence -> CiteField
+  , address, bookTitle, howPublished, howPublishedU, institution, journal, note
+  , organization, publisher, school, series, title, typeField
+      -- Int -> CiteField
+  , chapter, edition, number, volume, year
+      -- [Int] -> CiteField
+  , pages
+      -- Month -> CiteField
+  , month
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -230,27 +234,20 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), HasReference(getReferences), 
   HasLabel(getLabel), MayHaveLabel(getMaybeLabel), HasRefAddress(getRefAdd), HasSpace(typ),
-  DefiningExpr(defnExpr), HasShortName(shortname), Quantity, UncertainQuantity(uncert))
+  DefiningExpr(defnExpr), HasShortName(shortname), Quantity, UncertainQuantity(uncert),
+  HasFields(getFields))
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss)
 import Language.Drasil.Chunk.AssumpChunk
+import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
   -- Types
-    Citation(..), EntryID, BibRef, CiteField(..), Month(..), HP(..), CitationKind(..)
-  , HasFields(..)
+    Citation, EntryID, BibRef
+    -- Accessors
+  , citeID, citeKind
     -- CiteFields smart constructors
       -- People -> CiteField
-  , author, editor
-      -- Sentence -> CiteField
-  , address, bookTitle, howPublished, howPublishedU, institution, journal, note
-  , organization, publisher, school, series, title, typeField
-      -- Int -> CiteField
-  , chapter, edition, number, volume, year
-      -- [Int] -> CiteField
-  , pages
-      -- Month -> CiteField
-  , month
     -- Citation smart constructors
   , cArticle, cBookA, cBookE, cBooklet
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
@@ -275,6 +272,17 @@ import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc', ucs, uc
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.UnitaryConcept
 import Language.Drasil.ChunkDB
+import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- for Printing
+  , author, editor
+      -- Sentence -> CiteField
+  , address, bookTitle, howPublished, howPublishedU, institution, journal, note
+  , organization, publisher, school, series, title, typeField
+      -- Int -> CiteField
+  , chapter, edition, number, volume, year
+      -- [Int] -> CiteField
+  , pages
+      -- Month -> CiteField
+  , month)
 import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
                                           , titleize', phrase, plural)
 import Language.Drasil.ShortName (resolveSN, ShortName
@@ -290,8 +298,8 @@ import Language.Drasil.Reference (makeRef, makeRefS, mkRefFrmLbl, ReferenceDB, a
                                  , citationRefTable, RefMap
                                  , simpleMap)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 
-  prime, sCurlyBrSymb, compsy)
-import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol)
+  prime, compsy)
+import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol, sCurlyBrSymb)
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it

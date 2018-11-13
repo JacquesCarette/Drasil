@@ -181,3 +181,10 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 
 - **Chunk/UncertainQuantity**: Either a Quantity or a DefinedQuantity that has
   some uncertainty.
+
+- **Data/Date**: representation of dates. Mostly Month for now, but will extend.
+
+- **Data/Citation**: internal representation of the data in citations, and their
+  smart constructors.
+
+- **Chunk/Citation**: citations as a chunk (record, with accessors, etc)

@@ -20,14 +20,12 @@ data RefType = Tab    -- ^ Table
              | Fig    -- ^ Figure
              | Sect   -- ^ Section
              | Def DType  -- ^ Definition (includes theoretical models) (DType used to set shortnames)
-             | Mod    -- ^ Module
              | Assump -- ^ Assumption
              | LCh     -- ^ Likely Change
              | UnCh     -- ^ Unlikely Change
              | Req ReqType
              | EqnB   -- ^ Equation Block
              | Cite   -- ^ Citation
-             | Goal   -- ^ Goal Statement
              | Label RefType    -- ^ Label --FIXME: hack (#971)
              | Blank  -- ^ Prefix filler for ConceptInstance
              | DeferredCC UID  -- ^ For ConceptInstances --FIXME: Used by References to create a Deferred ShortName (#562)
@@ -41,14 +39,12 @@ instance Show RefType where
   show Fig    = "Figure"
   show Sect   = "Section"
   show (Label x) = show x --FIXME: hack (#971)
-  show Mod    = "Module"
   show (Def _)= "Definition"
   show (Req _)= "Requirement"
   show Assump = "Assumption"
   show LCh    = "Likely Change"
   show UnCh   = "Unlikely Change"
   show Cite   = "Citation"
-  show Goal   = "Goal Statement"
   show EqnB   = "Equation"
   show Blank  = "Blank"
   show (DeferredCC _) = error "Cannot directly display deferred reference types." -- FIXME

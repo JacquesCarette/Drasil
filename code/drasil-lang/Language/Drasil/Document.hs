@@ -3,8 +3,7 @@
 module Language.Drasil.Document where
 
 import Language.Drasil.Document.Core
-import Language.Drasil.Classes (HasLabel(getLabel), HasShortName(shortname),
-	ConceptDomain(cdom))
+import Language.Drasil.Classes (HasLabel(getLabel), HasShortName(shortname), ConceptDomain(cdom))
 
 import Language.Drasil.Label (Label)
 import Language.Drasil.Sentence (Sentence(..))

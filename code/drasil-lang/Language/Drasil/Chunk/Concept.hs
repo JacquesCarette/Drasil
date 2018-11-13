@@ -26,7 +26,7 @@ dcc i ter des = ConDict (mkIdea i ter Nothing) (S des) []
 
 -- | Identical to 'dcc', but adds an abbreviation (String)
 dcc' :: String -> NP -> String -> String -> CommonConcept
-dcc' i t d a = ComConDict (commonIdea i t a) (S d) []
+dcc' i t d a = ComConDict (commonIdea i t a []) (S d) []
 
 -- | Similar to 'dcc', except the definition is a 'Sentence'
 dccWDS :: String -> NP -> Sentence -> ConceptChunk
@@ -35,7 +35,7 @@ dccWDS i t d = ConDict (mkIdea i t Nothing) d []
 -- | Similar to 'dcc', except the definition is a 'Sentence' and adds
 -- an abbreviation (String)
 dccWDS' :: String -> NP -> Sentence -> String -> CommonConcept
-dccWDS' i t d a = ComConDict (commonIdea i t a) d []
+dccWDS' i t d a = ComConDict (commonIdea i t a []) d []
 
 -- | Constructor for 'ConceptChunk'. Does not allow concept domain tagging.
 cc :: Idea c => c -> String -> ConceptChunk

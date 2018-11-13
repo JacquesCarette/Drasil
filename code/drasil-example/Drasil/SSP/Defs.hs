@@ -7,6 +7,7 @@ import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn,
 import Data.Drasil.Concepts.Math (surface)
 
 import Data.Drasil.Phrase(of_'', compoundNC)
+import Data.Drasil.IdeaDicts
 
 ----Acronyms-----
 acronyms :: [CI]
@@ -14,8 +15,8 @@ acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
   physSyst, requirement, srs, ssa, thModel, typUnc, unlikelyChg]
   
 ssa, ssp :: CI
-ssa = commonIdea "ssa" (cnIS "slope stability analysis") "SSA"
-ssp = commonIdea "ssp" (cn' "slope stability problem") "SSP"
+ssa = commonIdeaWithDict "ssa" (cnIS "slope stability analysis") "SSA" [civilEng]
+ssp = commonIdeaWithDict "ssp" (cn' "slope stability problem") "SSP"   [civilEng]
 
 ----Other Common Phrases----
 soil, material, intrslce, slip, slope, slice, morPrice, rgFnElm :: NamedChunk

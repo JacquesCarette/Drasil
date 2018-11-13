@@ -16,13 +16,13 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   TraceabilitySec(TraceabilityProg),
   dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
   outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, tsymb'',
-  getDocDesc, egetDocDesc)
+  getDocDesc, egetDocDesc, ciGetDocDesc)
 import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel,
   likeChg, probDesc, sysCont, unlikeChg)
 
 import qualified Drasil.DocumentLanguage.Units as U (toSentence)
 
-import Data.Drasil.Concepts.Documentation (assumption, column, condition, constraint, 
+import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition, constraint, 
   content, corSol, dataConst, dataDefn, datum, definition, description, document, 
   environment, genDefn, goalStmt, information, inModel, input_, item, likelyChg, 
   model, organization, output_, physical, physics, physSyst, problem, property, 
@@ -119,6 +119,8 @@ printSetting = PI swhsSymMap defaultConfiguration
     -- Redundant b/c the unitals are not really concepts (yet). There
     -- Will still likely be a better way to do this.
   --FIXME: Should be all Named, not just acronyms at the end.
+acronyms :: [CI]
+acronyms = ciGetDocDesc mkSRS
 
 symbTT :: [DefinedQuantityDict]
 symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) swhsSymMap
@@ -858,7 +860,7 @@ swhsResp = Nested (short progName +: S "Responsibilities")
 userCharContents :: CI -> Contents
 userCharContents pro = foldlSP [S "The end", phrase user, S "of",
   short pro, S "should have an understanding of undergraduate",
-  S "Level 1 Calculus and", titleize physics]
+  S "Level 1 Calculus and", titleize Doc.physics]
 
 -- Some of these course names are repeated between examples, could potentially
 -- be abstracted out.

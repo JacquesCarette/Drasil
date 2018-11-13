@@ -118,7 +118,7 @@ instance Referable AssumpChunk where
   rType   _ = Assump
 
 instance Referable Section where
-  refAdd  (Section _ _ lb) = getAdd (lb ^. getRefAdd)
+  refAdd  (Section _ _ lb _) = getAdd (lb ^. getRefAdd)
   rType   _                = Sect
 
 instance Referable Citation where

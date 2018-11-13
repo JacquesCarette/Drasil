@@ -3,10 +3,13 @@
 module Language.Drasil.Document where
 
 import Language.Drasil.Document.Core
-import Language.Drasil.Classes (HasLabel(getLabel), HasShortName(shortname))
+import Language.Drasil.Classes (HasLabel(getLabel), HasShortName(shortname), ConceptDomain(cdom))
 
 import Language.Drasil.Label (Label)
 import Language.Drasil.Sentence (Sentence(..))
+import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
+import Language.Drasil.Chunk.NamedIdea (IdeaDict, mkIdea)
+import Language.Drasil.NounPhrase (cn')
 
 import Control.Lens (makeLenses)
 
@@ -21,11 +24,19 @@ data Section = Section
              { tle :: Title 
              , cons :: [SecCons]
              , _lab :: Label
+             , _ci :: CI
              }
 makeLenses ''Section
 
 instance HasLabel      Section where getLabel = lab
 instance HasShortName  Section where shortname = lab . shortname
+instance ConceptDomain Section where cdom = ci . cdom
+
+documentc :: IdeaDict
+documentc      = mkIdea  "documentc"        (cn' "document")  (Just "Doc")
+
+sectionci :: CI
+sectionci    = commonIdeaWithDict "sectionci"    (cn' "section")                   "DD"        [documentc]
 
 -- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and Sections
 -- which hold the contents of the document
@@ -59,7 +70,7 @@ mkRawLC x lb = llcc lb x
 -- | Smart constructor for creating Sections with introductory contents
 -- (ie. paragraphs, tables, etc.) and a list of subsections.
 section :: Sentence -> [Contents] -> [Section] -> Label -> Section
-section title intro secs lbe = Section title (map Con intro ++ map Sub secs) lbe
+section title intro secs lbe = Section title (map Con intro ++ map Sub secs) lbe sectionci
 
 section'' :: Sentence -> [Contents] -> [Section] -> Label -> Section
 section'' title intro secs lbe = section title intro secs lbe

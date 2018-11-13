@@ -34,7 +34,8 @@ doccon = [abbreviation, analysis, appendix, aspect, body, characteristic, class_
   nonfunctionalRequirement, safetyReq, softwareConstraint, softwareDoc,
   softwareReq, softwareSys, softwareVerif, softwareVAV, solutionCharSpec,
   solutionCharacteristic, offShelfSolution, physicalSim, productUC, 
-  useCaseTable, physicalProperty, vavPlan, uncertCol, userInput, theproduct_]
+  useCaseTable, physicalProperty, vavPlan, uncertCol, userInput, theproduct_
+  , theproject]
 
 doccon' :: [CI]
 doccon' = [assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
@@ -86,7 +87,7 @@ abbreviation, analysis, appendix, aspect, body, characteristic, class_, client,
   standard, statement, symbol_, system, table_, task, template, term_,
   terminology, theory, traceyGraph, traceyMatrix, type_, uncertainty, user,
   useCase, validation, value, variable, video, verification, year,
-  theproduct_ :: NamedChunk
+  theproduct_, theproject :: NamedChunk
 
 abbreviation    = nc "abbreviation"   (cn'    "abbreviation"       )
 analysis        = nc "analysis"       (cnIS   "analysis"           )
@@ -168,7 +169,6 @@ practice        = nc "practice"       (cn'    "practice"           )
 priority        = nc "priority"       (cnIES  "priority"           )
 problem         = nc "problem"        (cn'    "problem"            )
 product_        = nc "product"        (cn'    "product"            )
-theproduct_     = nc "theproduct"     (cn'    "theproduct"         )
 project         = nc "project"        (cn'    "project"            )
 property        = nc "property"       (cnIES  "property"           )
 purpose         = nc "purpose"        (cn'    "purpose"            )
@@ -213,6 +213,8 @@ variable        = nc "variable"       (cn'    "variable"           )
 verification    = nc "verification"   (cn'    "verification"       )
 video           = nc "video"          (cn'    "video"              )
 year            = nc "year"           (cn'    "year"               )
+theproduct_     = nc "theproduct"     (cn'    "the product"        )
+theproject      = nc "theproject"     (cn'    "the project"        )
 
 
 orgOfDoc, prpsOfDoc, refmat, scpOfReq, consVals,

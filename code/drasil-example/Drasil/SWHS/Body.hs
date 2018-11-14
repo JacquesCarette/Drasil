@@ -119,7 +119,7 @@ swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull
   (map cw swhsSymbols ++ srsDomains) this_si
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) shortTT ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
+usedDB = cdb (map qw symbTT) (shortTT ++ map nw acronyms) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
 
 swhsRefDB :: ReferenceDB
 swhsRefDB = rdb newAssumptions swhsCitations (funcReqs ++

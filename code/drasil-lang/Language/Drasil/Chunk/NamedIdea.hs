@@ -5,12 +5,13 @@ import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
 import Control.Lens ((^.), makeLenses, view)
 
-import Language.Drasil.Sentence (Sentence(S))
+import Language.Drasil.Sentence (Sentence(S, Ch), SentenceStyle (ShortStyle))
 import Language.Drasil.NounPhrase (NP, phraseNP)
 
 -- | Get short form (if it exists), else get term.
-short :: Idea c => c -> Sentence
-short c = maybe (phraseNP (c ^. term)) id (fmap S $ getA c)
+short :: (Idea c, HasUID c) => c -> Sentence
+short c = Ch ShortStyle (c ^. uid)
+--short c = maybe (phraseNP (c ^. term)) id (fmap S $ getA c)
 
 -- === DATA TYPES/INSTANCES === --
 -- | Note that a |NamedChunk| does not have an acronym/abbreviation

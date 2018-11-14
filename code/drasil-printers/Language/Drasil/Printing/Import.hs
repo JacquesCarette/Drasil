@@ -155,6 +155,10 @@ lookupC sm c = eqSymb $ symbLookup c $ sm^.symbolTable
 lookupT :: HasTermTable s => s -> UID -> Sentence
 lookupT sm c = phraseNP $ (termLookup c (sm^.termTable)) ^. term
 
+lookupS :: HasTermTable s => s -> UID -> Sentence
+lookupS sm c = maybe (phraseNP $ (termLookup c (sm^.termTable)) ^. term) id (fmap S $ getA $ termLookup c (sm^.termTable))
+-- short c = maybe (phraseNP (c ^. term)) id (fmap S $ getA c)
+
 mkCall :: (HasSymbolTable ctx, HasPrintingOptions ctx) => ctx -> P.Ops -> Expr -> P.Expr
 mkCall s o e = P.Row [P.MO o, parens $ expr e s]
 
@@ -273,6 +277,7 @@ spec _ (Sp s)          = P.Sp s
 spec _ (P s)           = P.E $ symbol s
 spec sm (Ch SymbolStyle s)       = P.E $ symbol $ lookupC sm s
 spec sm (Ch TermStyle s)         = spec sm $ lookupT sm s
+spec sm (Ch ShortStyle s)        = spec sm $ lookupS sm s
 spec sm (Ch _ s)   = spec sm $ lookupT sm s
 spec sm (Ref (Reference t r sn))   = P.Ref t r (spec sm (S . getStringSN $ resolveSN sn $
   lookupDeferredSN sm)) sn --FIXME: sn passed in twice?

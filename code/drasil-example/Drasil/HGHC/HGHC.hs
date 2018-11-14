@@ -46,7 +46,7 @@ check_si = collectUnits allSymbols symbols
 
 allSymbols :: ChunkDB
 allSymbols = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
-  ++ [nw fp, nw nuclearPhys])
+  ++ [nw fp, nw nuclearPhys, nw hghc])
  ([] :: [ConceptChunk]) -- FIXME: Fill in concepts
   si_units
 

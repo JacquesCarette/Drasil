@@ -170,7 +170,7 @@ module Language.Drasil (
   , mkLabelRAAssump', mkLabelRAFig, mkLabelRASec
   , modifyLabelEqn
   -- Document.getChunk
-  , vars, vars', combine, combine', ccss
+  , vars, vars', combine, combine', ccss, getIdeaDict
   -- Chunk.Sentence.EmbedSymbol
   , ch
   -- Sentence.Extract
@@ -238,7 +238,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasFields(getFields))
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Derivation (Derivation)
-import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss)
+import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss, getIdeaDict)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (

@@ -136,6 +136,7 @@ chipmunkSysInfo = SI {
   _constraints = cpInputConstraints,
   _constants = [],
   _sysinfodb = everything,
+  _usedinfodb = usedDB,
   _refdb = cpRefDB
 }
 

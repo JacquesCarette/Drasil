@@ -1,6 +1,7 @@
 -- | Utilities to get grab certain chunks (from Expr, Sentence, etc) by UID and
 -- dereference the chunk it refers to.
-module Language.Drasil.ChunkDB.GetChunk (vars, combine', vars', combine, ccss) where
+module Language.Drasil.ChunkDB.GetChunk (vars, combine', vars', combine, ccss,
+	getIdeaDict) where
 
 import Control.Lens ((^.))
 import Data.List(nub)

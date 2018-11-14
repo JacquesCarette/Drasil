@@ -272,7 +272,7 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
                 (nub v))
                 at_start] []
     mkSubRef SI {_concepts = cccs} (TSymb' f con) = mkTSymb cccs f con
-    mkSubRef SI {_sysinfodb = db} TAandA =
+    mkSubRef SI {_usedinfodb = db} TAandA =
       table_of_abb_and_acronyms $ nub $ Map.elems (db ^. termTable)
 
 -- | Helper for creating the table of symbols

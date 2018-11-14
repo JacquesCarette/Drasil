@@ -38,6 +38,7 @@ thisSI = SI {
   _constraints = ([] :: [ConstrainedChunk]),
   _constants = [],
   _sysinfodb = allSymbols,
+  _usedinfodb = usedDB,
   _refdb = rdb [] [] [] -- FIXME?
 }
 
@@ -49,6 +50,9 @@ allSymbols = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals
   ++ [nw fp, nw nuclearPhys, nw hghc] ++ map nw doccon')
  ([] :: [ConceptChunk]) -- FIXME: Fill in concepts
   si_units
+
+usedDB :: ChunkDB
+usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk]) ([] :: [UnitDefn])
 
 printSetting :: PrintingInformation
 printSetting = PI allSymbols defaultConfiguration

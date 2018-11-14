@@ -41,6 +41,7 @@ data SystemInformation where
   , _constraints :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
   , _constants :: [QDefinition]
   , _sysinfodb :: ChunkDB
+  , _usedinfodb :: ChunkDB
   , _refdb :: ReferenceDB
   } -> SystemInformation
   

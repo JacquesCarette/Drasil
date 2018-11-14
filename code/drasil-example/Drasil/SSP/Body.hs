@@ -93,6 +93,7 @@ ssp_si = SI {
   _constraints = sspConstrained,
   _constants = [],
   _sysinfodb = sspSymMap,
+  _usedinfodb = usedDB,
   _refdb = sspRefDB
 }
 

@@ -102,6 +102,7 @@ swhs_si = SI {
   _constraints = (swhsConstrained),
   _constants = [],
   _sysinfodb = swhsSymMap,
+  _usedinfodb = usedDB,
   _refdb = swhsRefDB
 }
 
@@ -118,7 +119,7 @@ swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull
   (map cw swhsSymbols ++ srsDomains) this_si
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) ([] :: [IdeaDict]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
+usedDB = cdb (map qw symbTT) (shortTT) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
 
 swhsRefDB :: ReferenceDB
 swhsRefDB = rdb newAssumptions swhsCitations (funcReqs ++
@@ -133,6 +134,9 @@ printSetting = PI swhsSymMap defaultConfiguration
   --FIXME: Should be all Named, not just acronyms at the end.
 acronyms :: [CI]
 acronyms = ciGetDocDesc mkSRS
+
+shortTT :: [IdeaDict]
+shortTT = concatMap (\x -> getIdeaDict x swhsSymMap) (getDocDesc mkSRS)
 
 symbTT :: [DefinedQuantityDict]
 symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) swhsSymMap

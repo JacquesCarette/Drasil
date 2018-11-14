@@ -180,6 +180,7 @@ nopcm_si = SI {
   _constraints = (map cnstrw nopcm_Constraints ++ map cnstrw [temp_W, w_E]),        --constrained
   _constants = [],
   _sysinfodb = nopcm_SymbMap,
+  _usedinfodb = usedDB,
   _refdb = nopcmRefDB
 }
 

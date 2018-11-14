@@ -84,6 +84,9 @@ gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols ++ map nw g
   (map cw glassBRsymb ++ Doc.srsDomains) $ map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]
 
+usedDB :: ChunkDB
+usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk]) ([] :: [UnitDefn])
+
 gbRefDB :: ReferenceDB
 gbRefDB = rdb assumptions gbCitations $ funcReqs ++ likelyChgs ++
   unlikelyChgs
@@ -179,6 +182,7 @@ glassSystInfo = SI {
   _constraints = gbConstrained,
   _constants   = gbConstants,
   _sysinfodb   = gbSymbMap,
+  _usedinfodb = usedDB,
   _refdb       = gbRefDB
 }
   --FIXME: All named ideas, not just acronyms.

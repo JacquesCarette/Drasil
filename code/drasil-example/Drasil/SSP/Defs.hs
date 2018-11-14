@@ -11,7 +11,7 @@ import Data.Drasil.Phrase(of_'', compoundNC)
 ----Acronyms-----
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
-  physSyst, requirement, srs, ssa, thModel, typUnc, unlikelyChg]
+  physSyst, requirement, srs, ssa, thModel, typUnc, unlikelyChg, ssp]
   
 ssa, ssp :: CI
 ssa = commonIdea "ssa" (cnIS "slope stability analysis") "SSA"

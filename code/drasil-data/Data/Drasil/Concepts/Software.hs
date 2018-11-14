@@ -8,7 +8,7 @@ import Control.Lens ((^.))
 softwarecon :: [ConceptChunk]
 softwarecon = [correctness, verifiability,
   understandability, reusability, maintainability, portability,
-  performance, program, errMsg]
+  performance, program, errMsg, accuracy, correctness, reliability]
 
 c, errMsg, physLib, program :: ConceptChunk
 

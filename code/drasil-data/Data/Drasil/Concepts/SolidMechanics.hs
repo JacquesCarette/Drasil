@@ -5,6 +5,9 @@ import Data.Drasil.Concepts.Physics (force, friction, strain, stress)
 
 --FIXME: add "shear stress" and "shear strain" when we have adjectives
 --       to make a combined "mobilized shear force" for example
+solidcon :: [ConceptChunk]
+solidcon = [elastMod, mobShear, normForce, nrmStrss, poissnsR, shearForce,
+  shearRes, stffness]
 
 elastMod, mobShear, normForce, nrmStrss, poissnsR, shearForce,
   shearRes, stffness :: ConceptChunk

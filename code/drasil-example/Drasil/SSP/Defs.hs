@@ -17,6 +17,13 @@ ssa, ssp :: CI
 ssa = commonIdea "ssa" (cnIS "slope stability analysis") "SSA"
 ssp = commonIdea "ssp" (cn' "slope stability problem") "SSP"
 
+sspdef :: [NamedChunk]
+sspdef = [factor, soil, material, intrslce, slip, slope, slice, morPrice, rgFnElm,
+  slpSrf, soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr]
+
+sspdef' :: [ConceptChunk]
+sspdef' = [crtSlpSrf, plnStrn, fs_concept]
+
 ----Other Common Phrases----
 soil, material, intrslce, slip, slope, slice, morPrice, rgFnElm :: NamedChunk
 intrslce = nc "interslice" (cn' "interslice")

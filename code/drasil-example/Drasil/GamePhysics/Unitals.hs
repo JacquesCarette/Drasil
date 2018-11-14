@@ -79,7 +79,7 @@ massParam n w = ucs'
   (phrase QPP.mass)) (sub (eqSymb QPP.mass) (Atomic n)) Real kilogram
 
 momtParam n w = ucs'
- (dccWDS ("momentOfInertiaUC" ++ n) (compoundPhrase'
+ (dccWDS ("momentOfInertia" ++ n) (compoundPhrase'
   (QP.momentOfInertiaUC ^. term) (cn $ "of rigid body " ++ n))
   (phrase QP.momentOfInertiaUC)) (sub (eqSymb QP.momentOfInertiaUC) (Atomic w)) Real momtInertU
 
@@ -96,18 +96,18 @@ perpParam, rigidParam, velParam,
   angParam :: String -> Symbol -> UnitalChunk
 
 velParam n w = ucs'
- (dccWDS ("velocityUC" ++ n) (compoundPhrase' (QP.velocityUC ^. term)
+ (dccWDS ("velocity" ++ n) (compoundPhrase' (QP.velocityUC ^. term)
   (cn $ "at point " ++ n)) (phrase QP.velocityUC)) (sub (eqSymb QP.velocityUC) w) Real velU
 
 angParam n w = ucs'
- (dccWDS ("angular velocityUC" ++ n) (compoundPhrase'
+ (dccWDS ("angular velocity" ++ n) (compoundPhrase'
   (cn $ n ++ " body's") (QP.angularVelocity ^. term))
   (phrase QP.angularVelocity)) (sub (eqSymb QP.angularVelocity) w) Real angVelU
 
 perpParam n w = ucs'
  (dccWDS ("|| r_A" ++ n ++ " x n ||") 
   (compoundPhrase' (compoundPhrase (cn' "length of the") (QM.perpVect ^. term))
-  (cn $ "to the contact displacementUC vector of rigid body " ++ n)) 
+  (cn $ "to the contact displacement vector of rigid body " ++ n)) 
   (phrase QM.perpVect)) (Concat [Atomic "||", w, Atomic "*", --should be x for cross
   (eqSymb QM.perpVect), Atomic "||"]) Real metre
 
@@ -135,23 +135,23 @@ normalVect  = ucs' (dccWDS "normalVect" (compoundPhrase' (cn "collision")
                    (QM.normalVect ^. term)) (phrase QM.normalVect)) 
                    (eqSymb QM.normalVect) Real metre
 
-dispUnit = ucs' (dccWDS "dispUnit" (cn "displacementUC unit vector") 
-                   (S "displacementUC" +:+ (phrase QM.unitVect))) (vec (hat lR)) Real metre
+dispUnit = ucs' (dccWDS "dispUnit" (cn "displacement unit vector") 
+                   (S "displacement" +:+ (phrase QM.unitVect))) (vec (hat lR)) Real metre
 
-dispNorm = ucs' (dccWDS "euclideanNormDisp" (cn "Euclidean norm of the displacementUC")
+dispNorm = ucs' (dccWDS "euclideanNormDisp" (cn "Euclidean norm of the displacement")
                (phrase QM.euclidNorm) ) (eqSymb QM.euclidNorm) Real metre
 
-sqrDist = ucs' (dccWDS "euclideanNorm" (cn' "squared distanceUC")
+sqrDist = ucs' (dccWDS "euclideanNorm" (cn' "squared distance")
                (phrase QM.euclidNorm) ) (sup (eqSymb QM.euclidNorm) 
                (Atomic "2")) Real m_2
 
 r_OB    = uc' "r_OB" 
-  (nounPhraseSP "displacementUC vector between the origin and point B")
+  (nounPhraseSP "displacement vector between the origin and point B")
   "FIXME: Define this or remove the need for definitions" 
   (sub (eqSymb QP.displacementUC) (Concat [cO, cB])) metre
 
 pos_CM = ucs "p_CM" (nounPhraseSP $ 
-  "mass-weighted average positionUC of a rigid " ++
+  "mass-weighted average position of a rigid " ++
   "body's particles") 
   "FIXME: Define this or remove the need for definitions" 
   (sub (eqSymb QP.positionUC) (Atomic "CM")) Real metre
@@ -169,7 +169,7 @@ acc_i = ucs' (dccWDS "acc_i" (compoundPhrase' (cn "the i-th body's")
                (sub (eqSymb QP.accelerationUC) lI) Real accelU
 
 vel_i = ucs' (dccWDS "vel_i" (compoundPhrase' (QP.velocityUC ^. term) 
-               (cn "of the i-th body's velocityUC")) (phrase QP.velocityUC))
+               (cn "of the i-th body's velocity")) (phrase QP.velocityUC))
                (sub (eqSymb QP.velocityUC) lI) Real velU
 
 torque_i = ucs' (dccWDS "torque_i" 
@@ -201,7 +201,7 @@ timeT = ucs' (dccWDS "t" (cn "point in time") (phrase QP.timeUC))
 inittime = ucs' (dccWDS "t_0" (cn "denotes the initial time") 
                 (phrase QP.timeUC)) (sub (eqSymb QP.timeUC) (Atomic "0")) Real second
 
-momtInert_k = ucs' (dccWDS "momentOfInertiaUCK" (compoundPhrase'
+momtInert_k = ucs' (dccWDS "momentOfInertiaK" (compoundPhrase'
                (QP.momentOfInertiaUC ^. term) 
                (cn $ "of the k-th rigid body"))
                (phrase QP.momentOfInertiaUC)) 

@@ -19,6 +19,20 @@ getUIDs (Quote a)            = getUIDs a
 getUIDs (E a)                = names a
 getUIDs (EmptyS)             = []
 
+-- | Generic traverse of all positions that could lead to UIDs from sentences
+getUIDshort   :: Sentence -> [UID]
+getUIDshort (Ch ShortStyle a)    = [a]
+getUIDshort (Ch _ a)             = []
+getUIDshort (Sy _)               = []
+getUIDshort (S _)                = []
+getUIDshort (Sp _)               = []
+getUIDshort (P _)                = []
+getUIDshort (Ref _)              = []
+getUIDshort ((:+:) a b)          = (getUIDs a) ++ (getUIDs b)
+getUIDshort (Quote a)            = getUIDs a
+getUIDshort (E a)                = names a
+getUIDshort (EmptyS)             = []
+
 -----------------------------------------------------------------------------
 -- And now implement the exported traversals all in terms of the above
 sdep :: Sentence -> [UID]

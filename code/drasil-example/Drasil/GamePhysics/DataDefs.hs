@@ -51,10 +51,10 @@ linDispQDef :: Sentence
 linDispQDef = foldl (+:+) (EmptyS) def
   where def = [phrase $ QP.linearDisplacement ^. term, S "of a",
               phrase $ CP.rigidBody ^. term, S "as a function of",
-              phrase $ QP.timeUC ^. term, P $ QP.timeUC ^. symbol,
+              phrase $ QP.timeUC ^. term, ch QP.timeUC,
               S "also equal to the derivate of its linear",
               phrase $ QP.velocity ^. term, S "with respect to",
-              phrase $ QP.timeUC ^. term, P $ QP.timeUC ^. symbol]
+              phrase $ QP.timeUC ^. term, ch QP.timeUC]
 -}
 
 linDispDD :: DataDefinition
@@ -70,9 +70,9 @@ dispEqn = deriv (apply1 QP.positionUC QP.timeUC) QP.timeUC
 dd2descr :: Sentence
 dd2descr = S "linear" +:+ (QP.displacement ^. term) +:+ S "of a" +:+
   ( CP.rigidBody ^. term) +:+ S "as a function of" +:+ (QP.timeUC ^. term) +:+ 
-  P (QP.timeUC ^. symbol) +:+ sParen (Sy (unit_symb QP.timeUC)) `sC`
+  ch QP.timeUC +:+ sParen (Sy (unit_symb QP.timeUC)) `sC`
   S "also equal to the derivative of its linear" +:+ (QP.positionUC ^. term) +:+ 
-  S "with respect to" +:+ (QP.timeUC ^. term) +:+ P (QP.timeUC ^. symbol)
+  S "with respect to" +:+ (QP.timeUC ^. term) +:+ ch QP.timeUC
 -}
 -- DD3 : Linear velocity --
 
@@ -81,10 +81,10 @@ linVelQDef :: Sentence
 linVelQDef = foldl (+:+) (EmptyS) def
   where def = [phrase $ QP.linearVelocity ^. term, S "of a",
               phrase $ CP.rigidBody ^. term, S "as a function of" ,
-              phrase $ QP.timeUC ^. term, P $ QP.timeUC ^. symbol,
+              phrase $ QP.timeUC ^. term, QP.timeUC,
               S "also equal to the derivative of its linear",
               phrase $ QP.velocity ^. term, S "with respect to",
-              phrase $ QP.timeUC ^. term, P $ QP.timeUC ^. symbol]
+              phrase $ QP.timeUC ^. term, ch QP.timeUC]
 -}
 
 linVelDD :: DataDefinition
@@ -100,9 +100,9 @@ velEqn = deriv (apply1 QP.displacementUC QP.timeUC) QP.timeUC
 dd3descr :: Sentence
 dd3descr = S "linear" +:+ (QP.velocity ^. term) +:+ S "of a" +:+
   (CP.rigidBody ^. term) +:+ S "as a function of" +:+ (QP.timeUC ^. term) +:+ 
-  P (QP.timeUC ^. symbol) +:+ sParen (Sy (unit_symb QP.timeUC)) `sC`
+  ch QP.timeUC +:+ sParen (Sy (unit_symb QP.timeUC)) `sC`
   S "also equal to the derivative of its linear" +:+ (QP.velocity ^. term) +:+
-  S "with respect to" +:+ (QP.timeUC ^. term) +:+ P (QP.timeUC ^. symbol)
+  S "with respect to" +:+ (QP.timeUC ^. term) +:+ ch QP.timeUC
 -}
 -- DD4 : Linear acceleration --
 
@@ -119,9 +119,9 @@ accelEqn = deriv (apply1 QP.velocityUC QP.timeUC) QP.timeUC
 dd4descr :: Sentence
 dd4descr = S "linear" +:+ (accel ^. term) +:+ S "of a" +:+
   (CP.rigidBody ^. term) +:+ S "as a function of" +:+ (QP.timeUC ^. term) +:+ 
-  P (QP.timeUC ^. symbol) +:+ sParen (Sy (unit_symb QP.timeUC)) `sC`
+  ch QP.timeUC +:+ sParen (Sy (unit_symb QP.timeUC)) `sC`
   S "also equal to the derivative of its linear" +:+ (accel ^. term) +:+
-  S "with respect to" +:+ (QP.timeUC ^. term) +:+ P (QP.timeUC ^. symbol)
+  S "with respect to" +:+ (QP.timeUC ^. term) +:+ ch QP.timeUC
 -}
 -- DD5 : Angular displacement --
 
@@ -138,9 +138,9 @@ angDispEqn = deriv (apply1 QM.orientation QP.timeUC) QP.timeUC
 dd5descr :: Sentence
 dd5descr = (QP.angularDisplacement ^. term) +:+ S "of a" +:+
   (CP.rigidBody ^. term) +:+ S "as a function of" +:+ (QP.timeUC ^. term) +:+ 
-  P (QP.timeUC ^. symbol) +:+ sParen (Sy (unit_symb QP.timeUC)) `sC`
+  ch QP.timeUC +:+ sParen (Sy (unit_symb QP.timeUC)) `sC`
   S "also equal to the derivative of its" +:+ (QM.orientation ^. term) +:+
-  S "with respect to" +:+ (QP.timeUC ^. term) +:+ P (QP.timeUC ^. symbol)
+  S "with respect to" +:+ (QP.timeUC ^. term) +:+ ch QP.timeUC
 -}
 -- DD6 : Angular velocity --
 
@@ -157,9 +157,9 @@ angVelEqn = deriv (apply1 QP.angularDisplacement QP.timeUC) QP.timeUC
 dd6descr :: Sentence
 dd6descr = ((QP.angularVelocity ^. term)) +:+ S "of a" +:+
   (CP.rigidBody ^. term) +:+ S "as a function of" +:+ (QP.timeUC ^. term) +:+ 
-  P (QP.timeUC ^. symbol) +:+ sParen (Sy (unit_symb QP.timeUC)) `sC`
+  ch QP.timeUC +:+ sParen (Sy (unit_symb QP.timeUC)) `sC`
   S "also equal to the derivative of its" +:+ (QP.angularDisplacement ^. term) +:+
-  S "with respect to" +:+ (QP.timeUC ^. term) +:+ P (QP.timeUC ^. symbol)
+  S "with respect to" +:+ (QP.timeUC ^. term) +:+ ch QP.timeUC
 -}
 -- DD7 : Angular acceleration --
 
@@ -176,9 +176,9 @@ angAccelEqn = deriv (apply1 QP.angularVelocity QP.timeUC) QP.timeUC
 dd7descr :: Sentence
 dd7descr = (QP.angularAccel ^. term) +:+ S "of a" +:+
   (CP.rigidBody ^. term) +:+ S "as a function of" +:+ (QP.timeUC ^. term) +:+
-  P (QP.timeUC ^. symbol) +:+ sParen (Sy (unit_symb QP.timeUC)) `sC`
+  ch QP.timeUC +:+ sParen (Sy (unit_symb QP.timeUC)) `sC`
   S "also equal to the derivative of its" +:+ ((QP.angularVelocity ^. term)) +:+
-  S "with respect to" +:+ (QP.timeUC ^. term) +:+ P (QP.timeUC ^. symbol)
+  S "with respect to" +:+ (QP.timeUC ^. term) +:+ ch QP.timeUC
 -}
 -- DD8 : Impulse for collision response --
 

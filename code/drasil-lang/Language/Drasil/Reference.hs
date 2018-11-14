@@ -7,14 +7,15 @@ import Data.List (concatMap, find, groupBy, sortBy)
 import qualified Data.Map as Map
 
 import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
-import Language.Drasil.Chunk.Citation as Ci (BibRef, Citation(citeID), CiteField(Author, Title, Year), HasFields(getFields))
+import Language.Drasil.Chunk.Citation as Ci (BibRef, citeID, Citation)
+import Language.Drasil.Data.Citation(CiteField(Author, Title, Year))
 import Language.Drasil.Chunk.Concept (ConceptInstance)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel),
-  HasRefAddress(getRefAdd), HasShortName(shortname))
+  HasRefAddress(getRefAdd), HasShortName(shortname), HasFields(getFields))
 import Language.Drasil.Document (Section(Section))
 import Language.Drasil.Document.Core (RawContent(..), LabelledContent(..))
 import Language.Drasil.Label.Core (Label(..))
@@ -117,7 +118,7 @@ instance Referable AssumpChunk where
   rType   _ = Assump
 
 instance Referable Section where
-  refAdd  (Section _ _ lb) = getAdd (lb ^. getRefAdd)
+  refAdd  (Section _ _ lb _) = getAdd (lb ^. getRefAdd)
   rType   _                = Sect
 
 instance Referable Citation where
@@ -158,8 +159,8 @@ temp :: RawContent -> RefType
 temp (Table _ _ _ _)       = Tab
 temp (Figure _ _ _)        = Fig
 temp (Graph _ _ _ _)       = Fig
-temp (Definition x _)      = Def x
-temp (Assumption a)        = rType a
+temp (Defini x _)          = Def x
+temp (Assumption _ _ _)    = Assump -- hard-code, will disappear
 temp (EqnBlock _)          = EqnB
 temp (Enumeration _)       = Lst 
 temp (Paragraph _)         = error "Shouldn't reference paragraphs"

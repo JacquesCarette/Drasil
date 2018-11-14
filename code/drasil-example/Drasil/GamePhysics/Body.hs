@@ -19,7 +19,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
-import Data.Drasil.Concepts.Documentation (assumption, body,
+import Data.Drasil.Concepts.Documentation as Doc(assumption, body,
   concept, condition, consumer, dataDefn, datumConstraint, document, endUser,
   environment, funcReqDom, game, genDefn, goalStmt, guide, inModel,
   information, input_, interface, item, model, nonfunctionalRequirement,
@@ -351,7 +351,7 @@ problem_description_intro_param lib app = foldlSent
   (phrase realtime), S "during the" +:+. (phrase app), S "Developing a", 
   (phrase lib), S "from scratch takes a long period of", (phrase QP.timeUC) `sAnd`
   S "is very costly" `sC` S "presenting barriers of entry which make it difficult for",
-  (phrase app), S "developers to include", (phrase physics), S "in their" +:+. 
+  (phrase app), S "developers to include", (phrase Doc.physics), S "in their" +:+. 
   (plural product_), S "There are a few free" `sC` (phrase openSource) `sAnd` S "high quality",
   (plural lib), S "available to be used for", phrase consumer, plural product_ +:+. 
   (sParen $ makeRefS off_the_shelf_solutions), S "By creating a simple, lightweight, fast and portable",

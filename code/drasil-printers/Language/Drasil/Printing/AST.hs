@@ -40,6 +40,7 @@ data Spec = E Expr
           | Sy USymb
           | Sp Special
           | Ref RefType RefAdd Spec ShortName
+          | Ref2 RefProg RefAdd Spec ShortName
           | EmptyS
           | Quote Spec    -- quotes are different in different languages
           | HARDNL        -- newline. Temp fix for multi-line descriptions; 

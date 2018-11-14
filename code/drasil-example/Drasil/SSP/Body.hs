@@ -109,7 +109,7 @@ mkSRS = RefSec (RefProg intro
     [IPurpose prpsOfDoc_p1
     , IScope scpIncl scpEnd
     , IChar (phrase solidMechanics)
-      (phrase undergraduate +:+ S "level 4" +:+ phrase physics)
+      (phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics)
       EmptyS
     , IOrgSec orgSecStart inModel SRS.inModelLabel orgSecEnd]) :
     --FIXME: issue #235
@@ -299,7 +299,7 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 -- userContraints intro below
 
 userCharIntro :: Contents
-userCharIntro = userChar ssa [S "Calculus", titleize physics]
+userCharIntro = userChar ssa [S "Calculus", titleize Doc.physics]
   [phrase soil, plural mtrlPrpty]
 
 userChar :: (Idea a) => a -> [Sentence] -> [Sentence] -> Contents

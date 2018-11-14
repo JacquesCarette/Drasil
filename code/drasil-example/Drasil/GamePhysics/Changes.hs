@@ -8,7 +8,7 @@ import qualified Drasil.DocLang.SRS as SRS (likeChg, unlikeChg)
 
 import Data.Drasil.SentenceStructures (foldlSent, foldlSP, maybeChanged,
   maybeExpanded, sAnd)
-import Data.Drasil.Concepts.Documentation (section_, likelyChg, unlikelyChg,
+import Data.Drasil.Concepts.Documentation as Doc (section_, likelyChg, unlikelyChg,
   physics, game, library, likeChgDom, unlikeChgDom)
 import qualified Data.Drasil.Concepts.Math as CM (ode, constraint)
 import Data.Drasil.Concepts.Computation (algorithm)
@@ -28,7 +28,7 @@ likelyChanges = SRS.likeChg ([likelyChangesIntro] ++ likelyChangesList) []
 
 likelyChangesIntro = foldlSP [S "This", phrase section_, 
   S "lists the", plural likelyChg, S "to be made to the",
-  phrase game, phrase physics, phrase library]
+  phrase game, phrase Doc.physics, phrase library]
 
 likelyChangesStmt1, likelyChangesStmt2, likelyChangesStmt3,
   likelyChangesStmt4 :: Sentence
@@ -70,7 +70,7 @@ unlikelyChangesIntro :: Contents
 unlikelyChanges = SRS.unlikeChg ([unlikelyChangesIntro] ++ unlikelyChangesList) []
 
 unlikelyChangesIntro = foldlSP [S "This", phrase section_, S "lists the",
-  plural unlikelyChg, S "to be made to the", phrase game, phrase physics,
+  plural unlikelyChg, S "to be made to the", phrase game, phrase Doc.physics,
   phrase library]
 
 unlikelyChangesStmt1, unlikelyChangesStmt2,

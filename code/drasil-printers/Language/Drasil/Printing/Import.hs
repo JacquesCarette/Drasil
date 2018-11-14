@@ -284,6 +284,8 @@ spec sm (Ch ShortStyle s)   = spec sm $ lookupS sm s
 spec sm (Ch PluralTerm s)   = spec sm $ lookupP sm s
 spec sm (Ref (Reference t r sn))   = P.Ref t r (spec sm (S . getStringSN $ resolveSN sn $
   lookupDeferredSN sm)) sn --FIXME: sn passed in twice?
+spec sm (Ref2 (Reference2 t r sn)) = P.Ref2 t r (spec sm (S . getStringSN $ resolveSN sn $
+  lookupDeferredSN sm)) sn --FIXME: sn passed in twice?
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
@@ -312,7 +314,7 @@ createLayout sm = map (sec sm 0)
 -- | Helper function for creating sections at the appropriate depth
 sec :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasTermTable ctx, 
   HasPrintingOptions ctx) => ctx -> Int -> Section -> T.LayoutObj
-sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used somewhere?
+sec sm depth x@(Section titleLb contents _ _) = --FIXME: should ShortName be used somewhere?
   let ref = P.S (refAdd x) in
   T.HDiv [(concat $ replicate depth "sub") ++ "section"]
   (T.Header depth (spec sm titleLb) ref :
@@ -343,14 +345,14 @@ layLabelled sm x@(LblC _ (Requirement r))       = T.ALUR T.Requirement
   (P.S $ getAdd (x ^. getRefAdd)) 
   (spec sm $ getShortName r)
 -}
-layLabelled sm x@(LblC _ (Assumption a))        = T.ALUR T.Assumption
-  (spec sm (assuming a))
+layLabelled sm x@(LblC _ (Assumption _ b c))        = T.ALUR T.Assumption
+  (spec sm b)
   (P.S $ getAdd (x ^. getRefAdd))
-  (spec sm $ getShortName a)
+  (spec sm $ getShortName c)
 layLabelled sm x@(LblC _ (Graph ps w h t))    = T.Graph 
   (map (\(y,z) -> (spec sm y, spec sm z)) ps) w h (spec sm t)
   (P.S $ getAdd (x ^. getRefAdd))
-layLabelled sm x@(LblC _ (Definition dtyp pairs)) = T.Definition 
+layLabelled sm x@(LblC _ (Defini dtyp pairs)) = T.Definition 
   dtyp (layPairs pairs) 
   (P.S $ getAdd (x ^. getRefAdd))
   where layPairs = map (\(x',y) -> (x', map (lay sm) y))
@@ -370,11 +372,11 @@ layUnlabelled sm (Enumeration cs)       = T.List $ makeL sm cs
 layUnlabelled sm (Figure c f wp)    = T.Figure (P.S "nolabel2") (spec sm c) f wp
 -- layUnlabelled sm (Requirement r)      = T.ALUR T.Requirement
 --   (spec sm $ requires r) (P.S "nolabel3") (spec sm $ getShortName r)
-layUnlabelled sm (Assumption a)       = T.ALUR T.Assumption
-  (spec sm (assuming a)) (P.S "nolabel4") (spec sm $ getShortName a)
+layUnlabelled sm (Assumption _ b c)       = T.ALUR T.Assumption
+  (spec sm b) (P.S "nolabel4") (spec sm $ getShortName c)
 layUnlabelled sm (Graph ps w h t)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S "nolabel6")
-layUnlabelled sm (Definition dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")
+layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")
   where layPairs = map (\(x,y) -> (x, map temp y ))
         temp  y   = layUnlabelled sm (y ^. accessContents)
 layUnlabelled sm (Bib bib)              = T.Bib $ map (layCite sm) bib
@@ -382,7 +384,7 @@ layUnlabelled sm (Bib bib)              = T.Bib $ map (layCite sm) bib
 -- | For importing bibliography
 layCite ::(HasSymbolTable ctx, HasTermTable ctx, HasDefinitionTable ctx,
  HasPrintingOptions ctx) => ctx -> Citation -> P.Citation
-layCite sm c = P.Cite (citeID c) (externRefT c) (map (layField sm) (c ^. getFields))
+layCite sm c = P.Cite (citeID c) (c ^. citeKind) (map (layField sm) (c ^. getFields))
 
 layField :: (HasSymbolTable ctx, HasTermTable ctx, HasDefinitionTable ctx,
  HasPrintingOptions ctx) => ctx -> CiteField -> P.CiteField

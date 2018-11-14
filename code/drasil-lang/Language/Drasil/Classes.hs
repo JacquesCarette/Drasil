@@ -27,6 +27,7 @@ module Language.Drasil.Classes (
   , HasRefAddress(getRefAdd)
   , Quantity
   , UncertainQuantity(uncert)
+  , HasFields(getFields)
   ) where
 
 -- some classes are so 'core' that they are defined elswhere
@@ -34,6 +35,7 @@ module Language.Drasil.Classes (
 import Language.Drasil.Classes.Core
 
 import Language.Drasil.Chunk.Constrained.Core (Constraint)
+import Language.Drasil.Data.Citation (CiteField)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.UnitLang(UDefn, USymb)
 import Language.Drasil.Expr (Expr)
@@ -120,6 +122,10 @@ class (Idea c, HasSpace c, HasSymbol c) => Quantity c where
 -- This uncertainty is represented as a decimal value between 0 and 1 (percentage).
 class Quantity c => UncertainQuantity c where
   uncert :: Lens' c (Maybe Double)
+
+-- | Citations have Fields
+class HasFields c where
+  getFields :: Lens' c [CiteField]
 
 -----------------------------------------------------
 -- Below are for units only

@@ -38,7 +38,7 @@ module Drasil.DocLang (
     -- Sections.TraceabilityMandGs
     traceGIntro, traceMGF,
     -- ExtractDocDesc
-    getDocDesc, egetDocDesc
+    getDocDesc, egetDocDesc, ciGetDocDesc
     ) where 
 
 import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..), 
@@ -70,5 +70,5 @@ import Drasil.Sections.SpecificSystemDescription (assumpF,
 --import Drasil.Sections.TableOfSymbols
 --import Drasil.Sections.TableOfUnits
 import Drasil.Sections.TraceabilityMandGs (traceGIntro, traceMGF)
-import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
+import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc)
 -- Commented out modules aren't used - uncomment if this changes

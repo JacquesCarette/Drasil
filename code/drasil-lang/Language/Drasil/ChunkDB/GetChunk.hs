@@ -8,13 +8,14 @@ import Data.List(nub)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Expr.Extract(dep)
-import Language.Drasil.Sentence.Extract (sdep)
+import Language.Drasil.Sentence.Extract (sdep, shortdep)
 
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.ChunkDB (HasSymbolTable, symbLookup, symbolTable, HasDefinitionTable,
- defLookup, defTable, ChunkDB)
+ defLookup, defTable, ChunkDB, HasTermTable, termLookup, termTable)
 import Language.Drasil.Chunk.Concept(ConceptChunk)
 import Language.Drasil.Chunk.DefinedQuantity(DefinedQuantityDict, dqdQd)
+import Language.Drasil.Chunk.NamedIdea(IdeaDict)
 
 -- | Get a list of quantities (QuantityDict) from an equation in order to print
 vars :: (HasSymbolTable s) => Expr -> s -> [QuantityDict]
@@ -41,3 +42,7 @@ concpt a m = map resolve $ sdep a
 
 combine :: (HasSymbolTable s, HasDefinitionTable s) => Sentence -> s -> [DefinedQuantityDict]
 combine a m = zipWith dqdQd (vars' a m) (concpt a m)
+
+getIdeaDict :: (HasTermTable s) => Sentence -> s -> [IdeaDict]
+getIdeaDict a m = map resolve $ shortdep a
+  where resolve x = termLookup x $ m ^. termTable

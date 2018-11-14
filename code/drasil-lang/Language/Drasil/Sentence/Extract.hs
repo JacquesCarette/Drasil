@@ -1,4 +1,4 @@
-module Language.Drasil.Sentence.Extract(sdep) where
+module Language.Drasil.Sentence.Extract(sdep, shortdep) where
 
 import Data.List (nub)
 import Language.Drasil.UID (UID)
@@ -35,5 +35,10 @@ getUIDshort (EmptyS)             = []
 
 -----------------------------------------------------------------------------
 -- And now implement the exported traversals all in terms of the above
+-- This is to collect UID who is printed out as a Symbol
 sdep :: Sentence -> [UID]
 sdep = nub . getUIDs
+
+-- This is to collect UID who is printed out as an Abbreviation
+shortdep :: Sentence -> [UID]
+shortdep = nub . getUIDshort

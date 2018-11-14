@@ -153,6 +153,9 @@ sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms ++
   ++ map nw educon ++ map nw compcon ++ [nw algorithm])
   (map cw sspSymbols ++ srsDomains) this_si
 
+usedDB :: ChunkDB
+usedDB = cdb (map qw symbTT) ([] :: [IdeaDict]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
+
 sspRefDB :: ReferenceDB
 sspRefDB = rdb newAssumptions sspCitations (sspRequirements ++
   likelyChgs ++ unlikelyChgs)

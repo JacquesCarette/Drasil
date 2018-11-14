@@ -202,6 +202,9 @@ nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms 
  (map cw nopcm_Symbols ++ srsDomains)
   this_si
 
+usedDB :: ChunkDB
+usedDB = cdb (map qw symbTT) ([] :: [IdeaDict]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
+
 printSetting :: PrintingInformation
 printSetting = PI nopcm_SymbMap defaultConfiguration
 

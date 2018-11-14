@@ -117,6 +117,9 @@ swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull
   ++ [nw swhs_pcm, nw algorithm] ++ map nw compcon)
   (map cw swhsSymbols ++ srsDomains) this_si
 
+usedDB :: ChunkDB
+usedDB = cdb (map qw symbTT) ([] :: [IdeaDict]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
+
 swhsRefDB :: ReferenceDB
 swhsRefDB = rdb newAssumptions swhsCitations (funcReqs ++
   likelyChgs ++ unlikelyChgs)

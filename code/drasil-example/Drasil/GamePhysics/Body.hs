@@ -158,6 +158,9 @@ everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms ++ map n
   ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw gamephySymbols ++ srsDomains) chipUnits
 
+usedDB :: ChunkDB
+usedDB = cdb (map qw symbTT) ([] :: [IdeaDict]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
+
 printSetting :: PrintingInformation
 printSetting = PI everything defaultConfiguration
 

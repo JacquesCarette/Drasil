@@ -28,9 +28,9 @@ getUIDshort (S _)                = []
 getUIDshort (Sp _)               = []
 getUIDshort (P _)                = []
 getUIDshort (Ref _)              = []
-getUIDshort ((:+:) a b)          = (getUIDs a) ++ (getUIDs b)
-getUIDshort (Quote a)            = getUIDs a
-getUIDshort (E a)                = names a
+getUIDshort ((:+:) a b)          = (getUIDshort a) ++ (getUIDshort b)
+getUIDshort (Quote a)            = getUIDshort a
+getUIDshort (E a)                = []
 getUIDshort (EmptyS)             = []
 
 -----------------------------------------------------------------------------

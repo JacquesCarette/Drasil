@@ -4,12 +4,21 @@ module Data.Drasil.Concepts.Physics
   , momentOfInertia, force, impulseS, impulseV, displacement
   , gravitationalAccel, gravitationalConst, position, distance
   , time, torque, fbd, angular, linear, tension, compression, stress, strain
-  , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint, damping
+  , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint, damping, physicCon
   ) where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
 import Language.Drasil
 import Control.Lens((^.)) --need for parametrization hack
+
+physicCon :: [ConceptChunk]
+physicCon = [rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space,
+  cartesian, rightHand, restitutionCoef, acceleration,
+  momentOfInertia, force, impulseS, impulseV, displacement,
+  gravitationalAccel, gravitationalConst, position, distance,
+  time, torque, fbd, linear, angular, tension, compression, stress, 
+  strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
+  joint, damping, pressure]
 
 rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space,
   cartesian, rightHand, restitutionCoef, acceleration,

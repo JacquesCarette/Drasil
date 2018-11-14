@@ -7,7 +7,7 @@ import Data.Drasil.Concepts.Documentation (system, simulation, model,
   problem, assumpDom)
 
 import Data.Drasil.Quantities.PhysicalProperties (vol)
-import Data.Drasil.Quantities.Physics (energy, time)
+import Data.Drasil.Quantities.Physics (energyUC, timeUC)
 import Data.Drasil.Quantities.Thermodynamics (boil_pt, melt_pt, temp)
 
 import Data.Drasil.Concepts.Thermodynamics as CT (heat, melting,
@@ -103,12 +103,12 @@ assumpS1, assumpS2, assumpS3, assumpS4, assumpS5, assumpS6, assumpS7,
   assumpS15, assumpS16, assumpS17, assumpS18, assumpS19, assumpS20 :: Sentence
 
 assumpS1 = foldlSent [
-  S "The only form of", phrase energy, S "that is",
+  S "The only form of", phrase energyUC, S "that is",
   S "relevant for this", phrase problem, S "is" +:+. 
-  phrase CT.thermal_energy, S "All other forms of", phrase energy `sC`
+  phrase CT.thermal_energy, S "All other forms of", phrase energyUC `sC`
   S "such as", phrase mech_energy `sC` S "are assumed to be negligible"]
 assumpS2 = foldlSent [
-  S "All", phrase CT.heat_trans, S "coefficients are constant over", phrase time]
+  S "All", phrase CT.heat_trans, S "coefficients are constant over", phrase timeUC]
 assumpS3 = foldlSent [
   S "The", phrase water, S "in the", phrase tank,
   S "is fully mixed, so the", phrase temp_W `isThe` 
@@ -130,7 +130,7 @@ assumpS7 = foldlSent [
   CT.law_conv_cooling ^. defn, S "applies between the",
   phrase coil `sAnd` S "the", phrase water]
 assumpS8 = foldlSent [
-  S "The", phrase temp_C, S "is constant over", phrase time,
+  S "The", phrase temp_C, S "is constant over", phrase timeUC,
   sSqBr $ makeRefS likeChg2L]
 assumpS9 = foldlSent [
   S "The", phrase temp_C, S "does not vary along its length",

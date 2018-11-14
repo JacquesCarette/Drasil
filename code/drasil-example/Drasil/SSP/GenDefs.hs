@@ -13,7 +13,7 @@ import Data.Drasil.Concepts.Math (normal, perp, surface)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 
-import Data.Drasil.Quantities.Physics (force)
+import Data.Drasil.Quantities.Physics (forceUC)
 import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 
 import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, getTandS, ofThe, sAnd)
@@ -55,7 +55,7 @@ nmFEq_rel = inxi totNrmForce $= eqlExpr cos sin
 
 nmFEq_desc :: Sentence
 nmFEq_desc = foldlSent [S "This equation satisfies", makeRefS equilibrium +:+.
-  S "in the shear direction", at_start force, S "equilibrium is",
+  S "in the shear direction", at_start forceUC, S "equilibrium is",
   S "derived from the free body diagram of", makeRefS forceDiagramL,
   S "in", makeRefS SRS.physSystLabel]
 
@@ -70,7 +70,7 @@ bShFEq_rel = inxi mobShrI $= eqlExprN sin cos
 
 bShFEq_desc :: Sentence
 bShFEq_desc = foldlSent [S "This equation satisfies", makeRefS equilibrium +:+.
-  S "in the shear direction", at_start force, S "equilibrium is",
+  S "in the shear direction", at_start forceUC, S "equilibrium is",
   S "derived from the free body diagram of", makeRefS forceDiagramL,
   S "in", makeRefS SRS.physSystLabel]
 

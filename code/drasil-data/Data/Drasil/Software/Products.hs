@@ -5,6 +5,9 @@ import Data.Drasil.Concepts.Documentation (game, video, open, source)
 import Data.Drasil.Concepts.Computation (computer)
 import Data.Drasil.Concepts.Software (program)
 
+prodtcon :: [NamedChunk]
+prodtcon = [sciCompS, videoGame, openSource, compPro]
+
 matlab :: CI
 matlab     = commonIdea "matlab" (pn' "MATLAB programming language")       "MATLAB" 
 

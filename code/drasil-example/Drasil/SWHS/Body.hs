@@ -34,7 +34,7 @@ import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Software.Products (sciCompS, compPro)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
-import Data.Drasil.Quantities.Physics (energy, time)
+import Data.Drasil.Quantities.Physics (energyUC, timeUC)
 import Data.Drasil.Quantities.Thermodynamics (heat_cap_spec, latent_heat, temp)
 
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
@@ -132,7 +132,7 @@ mkSRS = RefSec (RefProg intro [
     tsymb'' tsymb_intro (TermExcept [uNormalVect]),
     TAandA]):
   IntroSec (
-    IntroProg (introP1 CT.ener_src energy swhs_pcm phsChgMtrl 
+    IntroProg (introP1 CT.ener_src energyUC swhs_pcm phsChgMtrl 
     progName CT.thermal_energy latent_heat unit_) (introP2 swhs_pcm program
     progName) 
     [IPurpose (purpDoc swhs_pcm progName),
@@ -417,10 +417,10 @@ outputConstraints = [temp_W, temp_PCM, w_E, pcm_E]
 
 propsDeriv :: [Contents]
 propsDeriv =
-  [propCorSolDeriv1 CT.law_cons_energy w_E energy coil phsChgMtrl dd1HtFluxC
+  [propCorSolDeriv1 CT.law_cons_energy w_E energyUC coil phsChgMtrl dd1HtFluxC
     dd2HtFluxP surface CT.heat_trans,
   propCorSolDeriv2,
-  propCorSolDeriv3 pcm_E energy phsChgMtrl water,
+  propCorSolDeriv3 pcm_E energyUC phsChgMtrl water,
   propCorSolDeriv4,
   propCorSolDeriv5 equation progName rightSide]
 
@@ -931,7 +931,7 @@ goalStateIntro temc temw tempcm = foldlSPCol [S "Given the", phrase temc `sC`
 
 goalState :: NamedIdea varTerm => varTerm -> Sentence
 goalState varTerm = foldlSent [S "Predict the", phrase varTerm,
-  S "over", phrase time]
+  S "over", phrase timeUC]
 
 -- List structure is repeated between examples. (For all of these lists I am
 -- imagining the potential for something like what was done with the lists in
@@ -971,7 +971,7 @@ genDefDeriv2 t1ct vo = foldlSPCol [S "Integrating", makeRefS t1ct,
 genDefDeriv3 = eqUnR' $ 
   ((negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $=
-  (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
+  (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) timeUC)))
 
 genDefDeriv4 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> Contents
@@ -984,7 +984,7 @@ genDefDeriv4 gaussdiv su vo tfv unv un = foldlSPCol [S "Applying", titleize gaus
 genDefDeriv5 = eqUnR' $ 
   ((negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
+  (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) timeUC)))
 
 genDefDeriv6 :: UnitalChunk -> UnitalChunk -> Contents
 genDefDeriv6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
@@ -994,7 +994,7 @@ genDefDeriv6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
 genDefDeriv7 = eqUnR' $ 
   ((sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
+  (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) timeUC)))
 
 genDefDeriv10 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> Contents
 genDefDeriv10 den ma vo = foldlSPCol [S "Using the fact that", ch den :+:
@@ -1002,7 +1002,7 @@ genDefDeriv10 den ma vo = foldlSPCol [S "Using the fact that", ch den :+:
 
 genDefDeriv11 = eqUnR' $ 
   ((sy mass) * (sy heat_cap_spec) * deriv (sy temp)
-  time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
+  timeUC $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
   * (sy out_SA) + (sy vol_ht_gen) * (sy vol))
 
 -- Created a unitalChunk for "S"... should I add it to table of symbols?
@@ -1070,35 +1070,35 @@ iMod1Sent7 = [S "Finally, factoring out", (E $ 1 / sy tau_W) `sC`
 iMod1Eqn1, iMod1Eqn2, iMod1Eqn3, iMod1Eqn4, iMod1Eqn5,
   iMod1Eqn6, iMod1Eqn7 :: Expr
 
-iMod1Eqn1 = ((sy w_mass) * (sy htCap_W) * deriv (sy temp_W) time $=
+iMod1Eqn1 = ((sy w_mass) * (sy htCap_W) * deriv (sy temp_W) timeUC $=
   (sy ht_flux_C) * (sy coil_SA) - (sy ht_flux_P) * (sy pcm_SA))
 
-iMod1Eqn2 = ((sy w_mass) * (sy htCap_W) * deriv (sy temp_W) time $=
+iMod1Eqn2 = ((sy w_mass) * (sy htCap_W) * deriv (sy temp_W) timeUC $=
   (sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - (sy temp_W)) -
   (sy pcm_HTC) * (sy pcm_SA) * ((sy temp_W) - (sy temp_PCM)))
 
-iMod1Eqn3 = (deriv (sy temp_W) time $= ((sy coil_HTC) *
+iMod1Eqn3 = (deriv (sy temp_W) timeUC $= ((sy coil_HTC) *
   (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) -
   (sy temp_W)) - ((sy pcm_mass) * (sy pcm_SA)) / ((sy w_mass) *
   (sy htCap_W)) * ((sy temp_W) - (sy temp_PCM)))
 
-iMod1Eqn4 = (deriv (sy temp_W) time $= ((sy coil_HTC) *
+iMod1Eqn4 = (deriv (sy temp_W) timeUC $= ((sy coil_HTC) *
   (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) - (sy temp_W)) +
   (((sy coil_HTC) * (sy coil_SA)) / ((sy coil_HTC) * (sy coil_SA))) *
   (((sy pcm_HTC) * (sy pcm_SA)) / ((sy w_mass) * (sy htCap_W))) *
   ((sy temp_PCM) - (sy temp_W)))
 
-iMod1Eqn5 = (deriv (sy temp_W) time $= ((sy coil_HTC) *
+iMod1Eqn5 = (deriv (sy temp_W) timeUC $= ((sy coil_HTC) *
   (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) - (sy temp_W)) +
   (((sy pcm_HTC) * (sy pcm_SA)) / ((sy coil_HTC) * (sy coil_SA))) *
   (((sy coil_HTC) * (sy coil_SA)) / ((sy w_mass) * (sy htCap_W))) *
   ((sy temp_PCM) - (sy temp_W)))
 
-iMod1Eqn6 = (deriv (sy temp_W) time $= (1 / (sy tau_W)) *
+iMod1Eqn6 = (deriv (sy temp_W) timeUC $= (1 / (sy tau_W)) *
   ((sy temp_C) - (sy temp_W)) + ((sy eta) / (sy tau_W)) *
   ((sy temp_PCM) - (sy temp_W)))
 
-iMod1Eqn7 = (deriv (sy temp_W) time $= (1 / (sy tau_W)) *
+iMod1Eqn7 = (deriv (sy temp_W) timeUC $= (1 / (sy tau_W)) *
   (((sy temp_C) - (sy temp_W)) + (sy eta) * ((sy temp_PCM) -
   (sy temp_W))))
 
@@ -1123,15 +1123,15 @@ iMod2Sent3 = [S "Setting", ch tau_S_P :+: S "=" :+: ch pcm_mass :+:
 iMod2Eqn1, iMod2Eqn2, iMod2Eqn3, iMod2Eqn4 :: Expr
 
 iMod2Eqn1 = ((sy pcm_mass) * (sy htCap_S_P) * deriv (sy temp_PCM)
-  time $= (sy ht_flux_P) * (sy pcm_SA))
+  timeUC $= (sy ht_flux_P) * (sy pcm_SA))
 
 iMod2Eqn2 = ((sy pcm_mass) * (sy htCap_S_P) * deriv (sy temp_PCM)
-  time $= (sy pcm_HTC) * (sy pcm_SA) * ((sy temp_W) - (sy temp_PCM)))
+  timeUC $= (sy pcm_HTC) * (sy pcm_SA) * ((sy temp_W) - (sy temp_PCM)))
 
-iMod2Eqn3 = (deriv (sy temp_PCM) time $= ((sy pcm_HTC) *
+iMod2Eqn3 = (deriv (sy temp_PCM) timeUC $= ((sy pcm_HTC) *
   (sy pcm_SA)) / ((sy pcm_mass) * (sy htCap_S_P)) * ((sy temp_W) - (sy temp_PCM)))
 
-iMod2Eqn4 = (deriv (sy temp_PCM) time $= (1 / (sy tau_S_P)) *
+iMod2Eqn4 = (deriv (sy temp_PCM) timeUC $= (1 / (sy tau_S_P)) *
   ((sy temp_W) - (sy temp_PCM)))
 
 -- Add GD, A, and EqnBlock references when available
@@ -1177,7 +1177,7 @@ dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
   phrase vo, S "ratio"],
 
   [sParen (S "**"), S "The", phrase constraint, S "on the maximum", 
-  phrase time, S "at the end of the simulation is the total number of seconds",
+  phrase timeUC, S "at the end of the simulation is the total number of seconds",
   S "in one day"]
   
   ]
@@ -1212,11 +1212,11 @@ propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
 
 propCorSolDeriv2 :: Contents
 propCorSolDeriv2 = eqUnR' $ 
-  ((sy w_E) $= (defint (eqSymb time) 0 (sy time)
-  ((sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - apply1 temp_W time)))
-  - (defint (eqSymb time) 0 (sy time)
-  ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) -
-  (apply1 temp_PCM time)))))
+  ((sy w_E) $= (defint (eqSymb timeUC) 0 (sy timeUC)
+  ((sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - apply1 temp_W timeUC)))
+  - (defint (eqSymb timeUC) 0 (sy timeUC)
+  ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W timeUC) -
+  (apply1 temp_PCM timeUC)))))
 
 propCorSolDeriv3 :: NamedIdea a => a -> UnitalChunk -> CI -> ConceptChunk -> Contents
 propCorSolDeriv3 epcm en pcmat wa =
@@ -1226,9 +1226,9 @@ propCorSolDeriv3 epcm en pcmat wa =
 
 propCorSolDeriv4 :: Contents
 propCorSolDeriv4 = eqUnR' $ 
-  ((sy pcm_E) $= (defint (eqSymb time) 0 (sy time)
-  ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) - 
-  (apply1 temp_PCM time)))))
+  ((sy pcm_E) $= (defint (eqSymb timeUC) 0 (sy timeUC)
+  ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W timeUC) - 
+  (apply1 temp_PCM timeUC)))))
 
 propCorSolDeriv5 :: ConceptChunk -> CI -> CI -> Contents
 propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)" 

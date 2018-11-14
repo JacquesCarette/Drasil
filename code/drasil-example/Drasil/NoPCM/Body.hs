@@ -15,21 +15,26 @@ import Data.Drasil.Concepts.Documentation as Doc (inModel,
   requirement, item, assumption, thModel, traceyMatrix, model, output_, quantity, input_, 
   physicalConstraint, condition, property, variable, description, symbol_,
   information, goalStmt, physSyst, problem, definition, srs, content, reference,
-  document, goal, purpose, funcReqDom, likeChgDom, unlikeChgDom, srsDomains)
+  document, goal, purpose, funcReqDom, likeChgDom, unlikeChgDom, srsDomains, doccon,
+  doccon')
 
 import qualified Data.Drasil.Concepts.Math as M (ode, de, unit_, equation)
-import Data.Drasil.Concepts.Software (program)
+import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
   thermal_energy, ht_trans_theo, ht_flux, heat_cap_spec, thermal_conduction,
   thermocon, heat_trans)
+import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
+import Data.Drasil.Concepts.Physics (physicCon)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heat_cap_spec, ht_flux)
-import Data.Drasil.Quantities.Physics (time, energy)
+import Data.Drasil.Concepts.Math (mathcon, mathcon')
+import Data.Drasil.Quantities.Physics (timeUC, energyUC, physicscon)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
-import Data.Drasil.Software.Products (compPro)
-import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
+import Data.Drasil.Software.Products (compPro, prodtcon)
+import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
+  fundamentals, derived)
 
 import qualified Drasil.DocLang.SRS as SRS (probDesc, goalStmt, inModelLabel,
   funcReq, likeChg, unlikeChg)
@@ -52,7 +57,8 @@ import Drasil.SWHS.Assumptions (newA11, newA12, newA14)
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
   orgDocIntro, physSyst1, physSyst2, traceFig1, traceFig2, traceIntro2, traceTrailing)
 import Drasil.SWHS.Changes (chgsStart, likeChgTCVOD, likeChgTCVOL, likeChgTLH)
-import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, tank_para, transient, water)
+import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, tank_para, transient, water,
+  swhscon)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.IMods (eBalanceOnPCM, heatEInWtr)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
@@ -64,7 +70,7 @@ import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA,
   htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, sim_time, 
   tank_length, tank_length_max, tank_length_min, tank_vol, tau, tau_W, temp_C, 
   temp_env, temp_W, thFluxVect, time_final, time_final_max, vol_ht_gen, w_density, 
-  w_density_max, w_density_min, w_E, w_mass, w_vol)
+  w_density_max, w_density_min, w_E, w_mass, w_vol, specParamValList, swhsUC)
 
 import Drasil.NoPCM.Assumptions
 import Drasil.NoPCM.DataDesc (inputMod)
@@ -99,7 +105,7 @@ nopcm_Units :: [UnitaryConceptDict]
 nopcm_Units = map ucw [density, tau, in_SA, out_SA,
   htCap_L, QT.ht_flux, ht_flux_in, ht_flux_out, vol_ht_gen,
   htTransCoeff, mass, tank_vol, QT.temp, QT.heat_cap_spec,
-  deltaT, temp_env, thFluxVect, time, ht_flux_C,
+  deltaT, temp_env, thFluxVect, timeUC, ht_flux_C,
   vol, w_mass, w_vol, tau_W]
 
 nopcm_Constraints :: [UncertQ]
@@ -124,7 +130,7 @@ mkSRS = RefSec (RefProg intro
   [TUnits, 
   tsymb [TSPurpose, SymbConvention [Lit (nw heat_trans), Doc' (nw progName)], SymbOrder],
   TAandA]) :
-  IntroSec (IntroProg (introStart ener_src energy progName)
+  IntroSec (IntroProg (introStart ener_src energyUC progName)
     (introEnd progName program)
   [IPurpose (purpDoc progName),
   IScope (scopeReqStart thermal_analysis sWHT) (scopeReqEnd temp thermal_energy
@@ -188,7 +194,10 @@ nopcm_srs :: Document
 nopcm_srs = mkDoc mkSRS (for) nopcm_si
 
 nopcm_SymbMap :: ChunkDB
-nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms ++ map nw thermocon)
+nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms ++ map nw thermocon
+  ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
+  ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
+  ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC)
  (map cw nopcm_Symbols ++ srsDomains)
   this_si
 
@@ -366,23 +375,23 @@ genDefnEq1, genDefnEq2, genDefnEq3, genDefnEq4, genDefnEq5 :: Expr
 genDefnEq1 = (negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
   (int_all (eqSymb vol) (sy vol_ht_gen)) $=
   (int_all (eqSymb vol) ((sy density)
-  * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
+  * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) timeUC))
 
 genDefnEq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
   (int_all (eqSymb vol)
-  ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
+  ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) timeUC))
 
 genDefnEq3 = (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
+  (int_all (eqSymb vol) ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) timeUC))
 
 genDefnEq4 = (sy density) * (sy QT.heat_cap_spec) * (sy vol) * deriv
-  (sy QT.temp) time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
+  (sy QT.temp) timeUC $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
 genDefnEq5 = (sy mass) * (sy QT.heat_cap_spec) * deriv (sy QT.temp)
-  time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
+  timeUC $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
   * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
 --TODO: Implement physical properties of a substance
@@ -421,17 +430,17 @@ iModDesc4 temw wm hcw chtc csa = [S "Setting", (ch temw :+: S "=" :+:
 
 iModEq1, iModEq2, iModEq3, iModEq4 ::Expr
 
-iModEq1 = (sy w_mass) * (sy htCap_W) * deriv (sy temp_W) time $=
+iModEq1 = (sy w_mass) * (sy htCap_W) * deriv (sy temp_W) timeUC $=
   (sy ht_flux_C) * (sy coil_SA)
  
-iModEq2 = (sy w_mass) * (sy htCap_W) * deriv (sy temp_W) time $=
+iModEq2 = (sy w_mass) * (sy htCap_W) * deriv (sy temp_W) timeUC $=
   (sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - (sy temp_W))
 
-iModEq3 = deriv (sy temp_W) time $= ((sy coil_HTC) *
+iModEq3 = deriv (sy temp_W) timeUC $= ((sy coil_HTC) *
   (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) -
   (sy temp_W))
 
-iModEq4 = deriv (sy temp_W) time $= (1 / (sy tau_W)) *
+iModEq4 = deriv (sy temp_W) timeUC $= (1 / (sy tau_W)) *
   ((sy temp_C) - (sy temp_W))
 
 dataConstTable1 :: LabelledContent
@@ -498,11 +507,11 @@ reqOIDQ = cic "reqOIDQ" (titleize' output_ `sAnd` plural input_
     phrase mass +:+ S "from" +:+ makeRefS reqFM `sAnd` ch tau_W +:+.
     sParen (S "from" +:+ makeRefS eBalanceOnWtr)) "Output-Input-Derivied-Quantities" funcReqDom
 reqCTWOT = cic "reqCTWOT" (S "Calculate and output the" +:+ phrase temp_W +:+
-    sParen (ch temp_W :+: sParen (ch time)) +:+ S "over the" +:+
+    sParen (ch temp_W :+: sParen (ch timeUC)) +:+ S "over the" +:+
     phrase sim_time) "Calculate-Temperature-Water-Over-Time" funcReqDom
 reqCCHEWT = cic "reqCCHEWT" 
     (S "Calculate and" +:+ phrase output_ +:+ S "the" +:+
-    phrase w_E +:+ sParen (ch w_E :+: sParen (ch time)) +:+ S "over the" +:+
+    phrase w_E +:+ sParen (ch w_E :+: sParen (ch timeUC)) +:+ S "over the" +:+
     phrase sim_time +:+. sParen (S "from" +:+ makeRefS heatEInWtr))
     "Calculate-Change-Heat_Energy-Water-Time" funcReqDom
 
@@ -758,12 +767,12 @@ traceTable3 = llcc (mkLabelSame "TraceyAI" Tab) $ Table
 --Section 8: SPECIFICATION PARAMETER VALUE
 ------------------------------------------
 
-specParamValList :: [QDefinition]
-specParamValList = [tank_length_min, tank_length_max,
+specParamValListb :: [QDefinition]
+specParamValListb = [tank_length_min, tank_length_max,
   w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
   coil_HTC_max, time_final_max]
 
-specParamVal = valsOfAuxConstantsF progName specParamValList
+specParamVal = valsOfAuxConstantsF progName specParamValListb
 
 ------------
 --REFERENCES

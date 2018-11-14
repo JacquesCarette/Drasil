@@ -9,6 +9,11 @@ import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn,
 import Data.Drasil.Concepts.Math (ode, parameter)
 import Data.Drasil.Phrase (with)
 
+swhscon :: [ConceptChunk]
+swhscon = [charging, coil, discharging, gauss_div,
+  perfect_insul, phase_change_material, tank,
+  tank_pcm, transient, water, sWHT, tank_para]
+
 ---Acronyms---
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode, 

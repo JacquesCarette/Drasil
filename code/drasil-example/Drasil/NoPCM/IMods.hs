@@ -9,7 +9,7 @@ import Data.Drasil.Concepts.Thermodynamics (melting, boil_pt, heat_cap_spec,
   heat_trans)
 
 import Data.Drasil.Quantities.PhysicalProperties (mass, vol)
-import Data.Drasil.Quantities.Physics (energy, time)
+import Data.Drasil.Quantities.Physics (energyUC, timeUC)
 
 import Data.Drasil.SentenceStructures (foldlSent, foldlSentCol, isThe, ofThe, 
   sAnd, sOf)
@@ -33,7 +33,7 @@ eBalanceOnWtr = im'' eBalanceOnWtr_rc [qw temp_C, qw temp_init, qw time_final,
   qw coil_SA, qw coil_HTC, qw htCap_W, qw w_mass] 
   [sy temp_init $<= sy temp_C] (qw temp_W) 
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
-  [0 $< sy time $< sy time_final] [makeRef koothoor2013 {- +:+ sParen (S "with PCM removed")-} ] 
+  [0 $< sy timeUC $< sy time_final] [makeRef koothoor2013 {- +:+ sParen (S "with PCM removed")-} ] 
   eBalanceOnWtrDeriv "eBalanceOnWtr" [balWtrDesc]
 
 eBalanceOnWtr_rc :: RelationConcept
@@ -42,8 +42,8 @@ eBalanceOnWtr_rc = makeRC "eBalanceOnWtr_rc" (nounPhraseSP $ "Energy balance on 
   -- (mkLabelSame "eBalnaceOnWtr" (Def Instance))
 
 balWtr_Rel :: Relation
-balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
-  (((sy temp_C) - (apply1 temp_W time)))
+balWtr_Rel = (deriv (sy temp_W) timeUC) $= 1 / (sy tau_W) *
+  (((sy temp_C) - (apply1 temp_W timeUC)))
 
 balWtrDesc :: Sentence
 balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
@@ -65,12 +65,12 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
 ----------------------------------------------
 eBalanceOnWtrDeriv :: Derivation
 eBalanceOnWtrDeriv =
-  [S "Derivation of the" +:+ phrase energy +:+ S "balance on water:"] ++
+  [S "Derivation of the" +:+ phrase energyUC +:+ S "balance on water:"] ++
   (weave [eBalanceOnWtrDerivSentences, map E eBalanceOnWtrDerivEqns])
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [
-  eBalanceOnWtrDerivDesc1 rOfChng temp_W energy water vol w_vol mass w_mass heat_cap_spec
+  eBalanceOnWtrDerivDesc1 rOfChng temp_W energyUC water vol w_vol mass w_mass heat_cap_spec
     htCap_W heat_trans ht_flux_C coil_SA tank newA11 newA16 vol_ht_gen, 
   eBalanceOnWtrDerivDesc2 dd1HtFluxC,
   eBalanceOnWtrDerivDesc3 eq1,
@@ -112,18 +112,18 @@ eq2 = [ch tau_W, S "=", ch w_mass, ch htCap_W, S "/", ch coil_HTC, ch coil_SA]
 
 eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4 :: Expr
 
-eBalanceOnWtrDerivEqn1 = (sy w_mass) * (sy htCap_W) * (deriv (sy temp_W) time) $= 
+eBalanceOnWtrDerivEqn1 = (sy w_mass) * (sy htCap_W) * (deriv (sy temp_W) timeUC) $= 
   (sy ht_flux_C) * (sy coil_SA)
 
-eBalanceOnWtrDerivEqn2 = (sy w_mass) * (sy htCap_W) * (deriv (sy temp_W) time) $= 
+eBalanceOnWtrDerivEqn2 = (sy w_mass) * (sy htCap_W) * (deriv (sy temp_W) timeUC) $= 
   (sy coil_HTC) * (sy coil_SA) *  ((sy temp_C) - (sy temp_W))
 
-eBalanceOnWtrDerivEqn3 = (deriv (sy temp_W) time) $= 
+eBalanceOnWtrDerivEqn3 = (deriv (sy temp_W) timeUC) $= 
   ((sy coil_HTC) * (sy coil_SA) / 
   ((sy w_mass) * (sy htCap_W))) *  ((sy temp_C) - (sy temp_W))
 
 eBalanceOnWtrDerivEqn4 =  
-  (deriv (sy temp_W) time) $= 1 / (sy tau_W) * ((sy temp_C) - (sy temp_W))
+  (deriv (sy temp_W) timeUC) $= 1 / (sy tau_W) * ((sy temp_C) - (sy temp_W))
 
 eBalanceOnWtrDerivEqns :: [Expr]
 eBalanceOnWtrDerivEqns = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4]

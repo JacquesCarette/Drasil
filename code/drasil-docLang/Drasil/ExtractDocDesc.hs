@@ -37,8 +37,8 @@ egetCon' c = egetCon (c ^. accessContents)
 
 egetCon :: RawContent -> [Expr]
 egetCon (EqnBlock e) = [e]
-egetCon (Definition dt (hd:tl)) = concatMap egetCon' (snd hd) ++ egetCon (Definition dt tl)
-egetCon (Definition _ []) = []
+egetCon (Defini _ []) = []
+egetCon (Defini dt (hd:tl)) = concatMap egetCon' (snd hd) ++ egetCon (Defini dt tl)
 egetCon _ = []
 
 egetLblCon :: LabelledContent -> [Expr]
@@ -187,8 +187,8 @@ getCon (Figure l _ _)    = [l]
 getCon (Assumption _ b _) = [b]
 getCon (Bib bref)          = getBib bref
 getCon (Graph [(s1, s2)] _ _ l) = s1 : s2 : [l]
-getCon (Definition dt (hd:fs)) = concatMap getCon' (snd hd) ++ getCon (Definition dt fs)
-getCon (Definition _ []) = []
+getCon (Defini _ []) = []
+getCon (Defini dt (hd:fs)) = concatMap getCon' (snd hd) ++ getCon (Defini dt fs)
 getCon  _ = []
 
 -- This function is used in collecting sentence from table.

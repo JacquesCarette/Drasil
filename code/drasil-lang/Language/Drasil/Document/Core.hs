@@ -42,13 +42,21 @@ type Lbl      = Sentence
 
 data Contents = UlC UnlabelledContent
               | LlC LabelledContent
+
+-- For 'Defini' below.  From DocumentLanguage.Definitions
+--   tmodel, TM, mkTMField [ Para, EqnBlock, Enumeration]
+--   ddefn, DD, mkDDField [Para, EqnBlock, Enumeration]
+--   gdefn, General, mkGDField [Para, EqnBlock, Enumeration]
+--   instanceModel, Instance, mkIMField [Para, EqnBlock, Enumeration]
+
+
 -- | Types of layout objects we deal with explicitly
 data RawContent = Table [Sentence] [[Sentence]] Title Bool
   -- ^ table has: header-row data(rows) label/caption showlabel?
                | Paragraph Sentence -- ^ Paragraphs are just sentences.
                | EqnBlock Expr
                | Enumeration ListType -- ^ Lists
-               | Definition DType [(Identifier, [Contents])]
+               | Defini DType [(Identifier, [Contents])]
                | Figure Lbl Filepath MaxWidthPercent -- ^ Should use relative file path.
                | Assumption UID Sentence Label -- FIXME: hack, remove
                | Bib BibRef
@@ -81,4 +89,3 @@ instance HasContents  UnlabelledContent where accessContents = cntnts
 instance HasContents Contents where
   accessContents f (UlC c) = fmap (UlC . (\x -> set cntnts x c)) (f $ c ^. cntnts)
   accessContents f (LlC c) = fmap (LlC . (\x -> set ctype x c)) (f $ c ^. ctype)
-

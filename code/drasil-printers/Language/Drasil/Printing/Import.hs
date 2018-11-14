@@ -339,7 +339,7 @@ layLabelled sm x@(LblC _ (Assumption _ b c))        = T.ALUR T.Assumption
 layLabelled sm x@(LblC _ (Graph ps w h t))    = T.Graph 
   (map (\(y,z) -> (spec sm y, spec sm z)) ps) w h (spec sm t)
   (P.S $ getAdd (x ^. getRefAdd))
-layLabelled sm x@(LblC _ (Definition dtyp pairs)) = T.Definition 
+layLabelled sm x@(LblC _ (Defini dtyp pairs)) = T.Definition 
   dtyp (layPairs pairs) 
   (P.S $ getAdd (x ^. getRefAdd))
   where layPairs = map (\(x',y) -> (x', map (lay sm) y))
@@ -363,7 +363,7 @@ layUnlabelled sm (Assumption _ b c)       = T.ALUR T.Assumption
   (spec sm b) (P.S "nolabel4") (spec sm $ getShortName c)
 layUnlabelled sm (Graph ps w h t)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S "nolabel6")
-layUnlabelled sm (Definition dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")
+layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")
   where layPairs = map (\(x,y) -> (x, map temp y ))
         temp  y   = layUnlabelled sm (y ^. accessContents)
 layUnlabelled sm (Bib bib)              = T.Bib $ map (layCite sm) bib

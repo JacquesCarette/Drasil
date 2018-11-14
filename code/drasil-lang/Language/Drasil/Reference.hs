@@ -159,7 +159,7 @@ temp :: RawContent -> RefType
 temp (Table _ _ _ _)       = Tab
 temp (Figure _ _ _)        = Fig
 temp (Graph _ _ _ _)       = Fig
-temp (Definition x _)      = Def x
+temp (Defini x _)          = Def x
 temp (Assumption _ _ _)    = Assump -- hard-code, will disappear
 temp (EqnBlock _)          = EqnB
 temp (Enumeration _)       = Lst 

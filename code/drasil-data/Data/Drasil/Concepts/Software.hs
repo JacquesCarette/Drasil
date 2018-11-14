@@ -6,7 +6,7 @@ import Data.Drasil.SentenceStructures (foldlSent)
 import Control.Lens ((^.))
 
 softwarecon :: [ConceptChunk]
-softwarecon = [correctness, verifiability,
+softwarecon = [correctness, verifiability, physLib,
   understandability, reusability, maintainability, portability,
   performance, program, errMsg, accuracy, correctness, reliability]
 

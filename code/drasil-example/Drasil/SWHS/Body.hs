@@ -21,20 +21,22 @@ import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel,
   likeChg, probDesc, sysCont, unlikeChg)
 
 import qualified Drasil.DocumentLanguage.Units as U (toSentence)
-
+import Data.Drasil.Concepts.Thermodynamics (thermocon)
 import Data.Drasil.Concepts.Documentation (assumption, column, condition, constraint, 
   content, corSol, dataConst, dataDefn, datum, definition, description, document, 
   environment, genDefn, goalStmt, information, inModel, input_, item, likelyChg, 
   model, organization, output_, physical, physics, physSyst, problem, property, 
   purpose, quantity, reference, requirement, section_, software, softwareSys, 
   solution, srs, srsDomains, symbol_, sysCont, system, thModel, traceyGraph,
-  traceyMatrix, user, value, variable)
-import Data.Drasil.Concepts.Math (de, equation, ode, unit_)
-import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Software.Products (sciCompS, compPro)
+  traceyMatrix, user, value, variable, doccon, doccon')
+import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
+import Data.Drasil.Concepts.Software (program, softwarecon)
+import Data.Drasil.Concepts.Physics (physicCon)
+import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
+import Data.Drasil.Software.Products (sciCompS, compPro, prodtcon)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
-import Data.Drasil.Quantities.Physics (energyUC, timeUC)
+import Data.Drasil.Quantities.Physics (energyUC, timeUC, physicscon)
 import Data.Drasil.Quantities.Thermodynamics (heat_cap_spec, latent_heat, temp)
 
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
@@ -42,7 +44,8 @@ import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
   foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, ofThe, ofThe', sAnd, 
   showingCxnBw, sOf)
-import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
+import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
+  fundamentals, derived)
 import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, eqUnR', noRefs)
 
 import qualified Data.Drasil.Concepts.Thermodynamics as CT (law_cons_energy, 
@@ -52,7 +55,7 @@ import qualified Data.Drasil.Concepts.Thermodynamics as CT (law_cons_energy,
 import Drasil.SWHS.Assumptions (newA13, newAssumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, rightSide, phsChgMtrl,
-  coil, tank, transient, swhs_pcm, phase_change_material, tank_pcm)
+  coil, tank, transient, swhs_pcm, phase_change_material, tank_pcm, swhscon)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, swhsDDefs, swhsQDefs)
 import Drasil.SWHS.DataDesc (swhsInputMod)
 import Drasil.SWHS.GenDefs (swhsGDs)
@@ -67,7 +70,7 @@ import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
   out_SA, ht_flux_out, ht_flux_in, in_SA, thFluxVect, time_final,
   specParamValList, w_density, temp_init, htCap_L_P, htFusion, pcm_density,
   temp_melt_P, pcm_vol, diam, tank_length, swhsConstrained, swhsOutputs, 
-  swhsInputs, swhsSymbols, swhsSymbolsAll)
+  swhsInputs, swhsSymbols, swhsSymbolsAll, swhsUC)
 
 -------------------------------------------------------------------------------
 
@@ -105,7 +108,11 @@ resourcePath :: String
 resourcePath = "../../../datafiles/SWHS/"
 
 swhsSymMap :: ChunkDB
-swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull)
+swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull
+  ++ map nw thermocon
+  ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
+  ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
+  ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC ++ [nw swhs_pcm])
   (map cw swhsSymbols ++ srsDomains) this_si
 
 swhsRefDB :: ReferenceDB

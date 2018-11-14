@@ -33,6 +33,7 @@ import Data.Drasil.Concepts.Physics (fbd, force, strain, stress, physicCon)
 import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability, 
   performanceSpd, program, reusability, understandability, softwarecon)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce, solidcon)
+import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Software.Products (sciCompS, prodtcon)
 
 import Data.Drasil.People (henryFrankis)
@@ -149,7 +150,7 @@ sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms ++
   ++ map nw softwarecon ++ map nw physicCon ++ map nw mathcon
   ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals
-  ++ map nw educon)
+  ++ map nw educon ++ map nw compcon ++ [nw algorithm])
   (map cw sspSymbols ++ srsDomains) this_si
 
 sspRefDB :: ReferenceDB

@@ -117,7 +117,7 @@ module Language.Drasil (
   , Sentence(..), sParen, sSqBr , (+:+), (+:+.), sC, (+:), SentenceStyle(..)
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
-  , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase', phraseNP
+  , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase', phraseNP, pluralNP
   , CapitalizationRule(..)
   , PluralRule(..)
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
@@ -275,7 +275,7 @@ import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.UnitaryConcept
 import Language.Drasil.ChunkDB
 import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
-                                          , titleize', plural)
+                                          , titleize')
 import Language.Drasil.ShortName (resolveSN, ShortName
   , shortname', getStringSN)
 import Language.Drasil.Space (Space(..))

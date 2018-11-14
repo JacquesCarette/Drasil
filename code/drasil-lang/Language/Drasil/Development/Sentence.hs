@@ -6,7 +6,8 @@ import Control.Lens ((^.))
 
 import Language.Drasil.Classes (NamedIdea(term), HasUID(uid), Idea)
 import Language.Drasil.Chunk.NamedIdea (short)
-import Language.Drasil.Sentence ((+:+), Sentence((:+:), S, Ch), sParen, SentenceStyle (TermStyle))
+import Language.Drasil.Sentence ((+:+), Sentence((:+:), S, Ch), sParen,
+ SentenceStyle (TermStyle, PluralTerm))
 import qualified Language.Drasil.NounPhrase as NP
 
 -- | Helper for common pattern of introducing the title-case version of a 
@@ -36,8 +37,9 @@ phrase :: (HasUID n, NamedIdea n) => n -> Sentence
 phrase n = Ch TermStyle (n ^. uid) --NP.phrase (n ^. term)
 
 -- | Helper for getting the plural of a phrase from a NamedIdea
-plural :: NamedIdea n => n -> Sentence
-plural n = NP.plural (n ^. term)
+plural :: (HasUID n, NamedIdea n) => n -> Sentence
+plural n = Ch PluralTerm (n ^. uid)
+--plural n = NP.plural (n ^. term)
 
 phrase's, plural's :: NamedIdea n => n -> Sentence
 -- | Singular possesive function

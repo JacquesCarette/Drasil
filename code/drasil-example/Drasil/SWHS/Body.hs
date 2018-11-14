@@ -29,6 +29,7 @@ import Data.Drasil.Concepts.Documentation (assumption, column, condition, constr
   purpose, quantity, reference, requirement, section_, software, softwareSys, 
   solution, srs, srsDomains, symbol_, sysCont, system, thModel, traceyGraph,
   traceyMatrix, user, value, variable, doccon, doccon')
+import Data.Drasil.Concepts.Computation (computerApp, inParam, compcon, algorithm)
 import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
 import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.Physics (physicCon)
@@ -112,7 +113,8 @@ swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull
   ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
-  ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC ++ [nw swhs_pcm])
+  ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC
+  ++ [nw swhs_pcm, nw algorithm] ++ map nw compcon)
   (map cw swhsSymbols ++ srsDomains) this_si
 
 swhsRefDB :: ReferenceDB

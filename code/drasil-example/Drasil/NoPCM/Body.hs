@@ -26,6 +26,7 @@ import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
   thermocon, heat_trans)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon)
+import Data.Drasil.Concepts.Computation (computerApp, inParam, compcon, algorithm)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heat_cap_spec, ht_flux)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
@@ -197,7 +198,7 @@ nopcm_SymbMap :: ChunkDB
 nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
-  ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs])
+  ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm])
  (map cw nopcm_Symbols ++ srsDomains)
   this_si
 

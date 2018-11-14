@@ -22,7 +22,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
 import qualified Drasil.DocLang.SRS as SRS (datConLabel, dataDefnLabel, indPRCaseLabel, 
   referenceLabel, valsOfAuxConsLabel, assumptLabel)
 
-import Data.Drasil.Concepts.Computation (computerApp, inParam, compcon)
+import Data.Drasil.Concepts.Computation (computerApp, inParam, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
   assumption, characteristic, class_, code, company, condition, content, 
   dataConst, dataDefn, definition, document, emphasis, environment, figure, 
@@ -34,7 +34,7 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
 import Data.Drasil.Concepts.Education (civilEng, scndYrCalculus, structuralMechanics,
   educon)
 import Data.Drasil.Concepts.Math (graph, parameter, probability, mathcon, mathcon')
-import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon)
+import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon, materialProprty)
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability,
@@ -78,7 +78,8 @@ gbSymbMap :: ChunkDB
 gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols ++ map nw glasscon
   ++ map nw glasscon' ++ map nw terms ++ map nw doccon ++ map nw doccon' ++ map nw educon
   ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon'
-  ++ map nw softwarecon ++ map nw terms ++ [nw lateralLoad] ++ [nw distance] ++
+  ++ map nw softwarecon ++ map nw terms ++ [nw lateralLoad, nw materialProprty]
+   ++ [nw distance, nw algorithm] ++
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw glassBRsymb ++ Doc.srsDomains) $ map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]

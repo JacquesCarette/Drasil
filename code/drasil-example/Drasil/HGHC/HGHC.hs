@@ -15,7 +15,7 @@ import Drasil.HGHC.HeatTransfer (fp, hghc, hghcVarsDD, htInputs, htOutputs,
 
 import Data.Drasil.SI_Units (si_units, fundamentals, derived)
 import Data.Drasil.People (spencerSmith)
-import Data.Drasil.Concepts.Documentation (srs, doccon)
+import Data.Drasil.Concepts.Documentation (srs, doccon, doccon')
 import Data.Drasil.Phrase (for)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 
@@ -46,7 +46,7 @@ check_si = collectUnits allSymbols symbols
 
 allSymbols :: ChunkDB
 allSymbols = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
-  ++ [nw fp, nw nuclearPhys, nw hghc])
+  ++ [nw fp, nw nuclearPhys, nw hghc] ++ map nw doccon')
  ([] :: [ConceptChunk]) -- FIXME: Fill in concepts
   si_units
 

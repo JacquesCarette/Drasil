@@ -242,15 +242,15 @@ makeColumns ls = hpunctuate (text " & ") $ map spec ls
 
 needs :: Spec -> MathContext
 needs (a :+: b) = needs a `lub` needs b
-needs (S _)          = Text
-needs (E _)          = Math
-needs (Sy _)         = Text
-needs (Sp _)         = Math
-needs HARDNL         = Text
-needs (Ref _ _ _ _)  = Text
-needs (Ref2 _ _ _ _) = Text
-needs (EmptyS)       = Text
-needs (Quote _)      = Text
+needs (S _)            = Text
+needs (E _)            = Math
+needs (Sy _)           = Text
+needs (Sp _)           = Math
+needs HARDNL           = Text
+needs (Ref _ _ _ _)    = Text
+needs (Ref2 _ _ _ _ ) = Text
+needs (EmptyS)         = Text
+needs (Quote _)        = Text
 
 -- print all Spec through here
 spec :: Spec -> D
@@ -273,8 +273,8 @@ spec (Ref L.UnCh r _ _)      = ucref (pure $ text r)
 spec (Ref L.Cite r _ _)      = cite  (pure $ text r)
 spec (Ref L.Blank r sn _)    = snref r $ spec sn
 spec (Ref L.Link r _ sn)     = href  r $ L.getStringSN sn
-spec (Ref t r _ _)            = ref (show t) (pure $ text r)
-spec (Ref2 _ _ _ _)           = error "Ref2 Not implemented in TeX printer."
+spec (Ref t r _ _)           = ref (show t) (pure $ text r)
+spec (Ref2 _ _ _ _ )         = error "Ref2 Not implemented in TeX printer."
 spec EmptyS                   = empty
 spec (Quote q)                = quote $ spec q
 

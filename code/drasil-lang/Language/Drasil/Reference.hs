@@ -15,7 +15,7 @@ import Language.Drasil.Chunk.GenDefn (GenDefn)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel),
-  HasRefAddress(getRefAdd), HasShortName(shortname), HasFields(getFields))
+  HasRefAddress(getRefAdd), HasShortName(shortname), HasFields(getFields), CommonIdea(abrv))
 import Language.Drasil.Document (Section(Section))
 import Language.Drasil.Document.Core (RawContent(..), LabelledContent(..))
 import Language.Drasil.Label.Core (Label(..))
@@ -24,7 +24,7 @@ import Language.Drasil.Label (getDefName, getReqName)
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.RefTypes (RefType(..), DType(..), Reference(Reference))
 import Language.Drasil.ShortName ( ShortName, getStringSN, shortname', concatSN, defer)
-import Language.Drasil.Sentence (Sentence((:+:), S, Ref))
+import Language.Drasil.Sentence (Sentence((:+:), S, Ref, Ref2), Reference2(Reference2))
 import Language.Drasil.UID (UID)
 
 -- | Database for maintaining references.
@@ -220,6 +220,12 @@ assumptionsFromDB :: AssumpMap -> [AssumpChunk]
 assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
   where assumptions = Map.elems am
         dropNums = map fst
+
+--data RefProg = UID
+--data RefProg2 = String --- for abbreviation of the name, the prefix...?
+--data Reference2 = Reference2 RefProg RefProg2 RefAdd ShortName
+makeRef2 :: (HasUID l, Referable l, HasShortName l, CommonIdea l) => l -> Reference2
+makeRef2 l = Reference2 (l ^. uid) (abrv l) (refAdd l) (l ^. shortname)
 
 -- | Create References to a given 'LayoutObj'
 -- This should not be exported to the end-user, but should be usable

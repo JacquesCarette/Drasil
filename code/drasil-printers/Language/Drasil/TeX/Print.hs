@@ -16,7 +16,7 @@ import qualified Language.Drasil as L (
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
   ListType(Ordered, Unordered, Desc, Definitions, Simple), 
-  Spec(Quote, EmptyS, Ref, S, Sy, Sp, HARDNL, E, (:+:)), 
+  Spec(Quote, EmptyS, Ref, Ref2, S, Sy, Sp, HARDNL, E, (:+:)), 
   Fence(Norm, Abs, Curly, Paren), Expr, 
   Ops(Inte, Prod, Summ, Mul, Add, Or, And, Subt, Iff, LEq, GEq, 
   NEq, Eq, Gt, Lt, Impl, Dot, Cross, Neg, Exp, Dim, Not, Cot,
@@ -35,7 +35,7 @@ import qualified Language.Drasil.Printing.Import as I
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, item', description,
   includegraphics, center, figure, item, symbDescription, enumerate, itemize, toEqn, empty,
-  newline, superscript, parens, fraction, quote, ref, ucref, lcref, aref, mref, sref,
+  newline, superscript, parens, fraction, quote, ref, ucref, lcref, aref, sref,
   hyperref, snref, cite, href, sec, newpage, maketoc, maketitle, document, author, title, rref)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (<>), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
@@ -83,7 +83,6 @@ print sm l = foldr ($+$) empty $ map (flip lo sm) l
 symbol :: L.Symbol -> String
 symbol (L.Atomic s)  = s
 symbol (L.Special s) = unPL $ L.special s
---symbol (Greek g)   = unPL $ greek g
 symbol (L.Concat sl) = foldr (++) "" $ map symbol sl
 --
 -- handle the special cases first, then general case
@@ -243,14 +242,15 @@ makeColumns ls = hpunctuate (text " & ") $ map spec ls
 
 needs :: Spec -> MathContext
 needs (a :+: b) = needs a `lub` needs b
-needs (S _)         = Text
-needs (E _)         = Math
-needs (Sy _)        = Text
-needs (Sp _)        = Math
-needs HARDNL        = Text
-needs (Ref _ _ _ _) = Text
-needs (EmptyS)      = Text
-needs (Quote _)     = Text
+needs (S _)          = Text
+needs (E _)          = Math
+needs (Sy _)         = Text
+needs (Sp _)         = Math
+needs HARDNL         = Text
+needs (Ref _ _ _ _)  = Text
+needs (Ref2 _ _ _ _) = Text
+needs (EmptyS)       = Text
+needs (Quote _)      = Text
 
 -- print all Spec through here
 spec :: Spec -> D
@@ -266,7 +266,6 @@ spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = pure $ text "\\newline"
 spec (Ref t@L.Sect r _ _)    = sref (show t) (pure $ text r)
 spec (Ref t@(L.Def _) r _ _) = hyperref (show t) (pure $ text r)
-spec (Ref L.Mod r _ _)       = mref  (pure $ text r)
 spec (Ref L.Assump r _ _)    = aref  (pure $ text r)
 spec (Ref (L.Req _) r _ _)   = rref  (pure $ text r)
 spec (Ref L.LCh r _ _)       = lcref (pure $ text r)
@@ -275,6 +274,7 @@ spec (Ref L.Cite r _ _)      = cite  (pure $ text r)
 spec (Ref L.Blank r sn _)    = snref r $ spec sn
 spec (Ref L.Link r _ sn)     = href  r $ L.getStringSN sn
 spec (Ref t r _ _)            = ref (show t) (pure $ text r)
+spec (Ref2 _ _ _ _)           = error "Ref2 Not implemented in TeX printer."
 spec EmptyS                   = empty
 spec (Quote q)                = quote $ spec q
 
@@ -285,7 +285,6 @@ escapeChars c = c : []
 symbol_needs :: L.Symbol -> MathContext
 symbol_needs (L.Atomic _)          = Text
 symbol_needs (L.Special _)         = Math
---symbol_needs (Greek _)           = Math
 symbol_needs (L.Concat [])         = Math
 symbol_needs (L.Concat (s:_))      = symbol_needs s
 symbol_needs (L.Corners _ _ _ _ _) = Math

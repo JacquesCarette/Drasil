@@ -12,13 +12,7 @@ library
     , Language.Drasil.Utils
     , Data.Drasil.IdeaDicts
   other-modules:
-      Language.Drasil.NounPhrase
-    , Language.Drasil.RefTypes
-    , Language.Drasil.Expr
-    , Language.Drasil.Expr.Extract
-    , Language.Drasil.Expr.Math
-    , Language.Drasil.Expr.Precedence
-    , Language.Drasil.Chunk.AssumpChunk
+      Language.Drasil.Chunk.AssumpChunk
     , Language.Drasil.Chunk.Citation
     , Language.Drasil.Chunk.CommonIdea
     , Language.Drasil.Chunk.Concept
@@ -42,15 +36,23 @@ library
     , Language.Drasil.ChunkDB.GetChunk
     , Language.Drasil.Classes
     , Language.Drasil.Classes.Core
+    , Language.Drasil.Data.Citation
+    , Language.Drasil.Data.Date
     , Language.Drasil.Document
     , Language.Drasil.Document.Core
+    , Language.Drasil.Expr
+    , Language.Drasil.Expr.Extract
+    , Language.Drasil.Expr.Math
+    , Language.Drasil.Expr.Precedence
     , Language.Drasil.Label.Core
     , Language.Drasil.Label.Type
     , Language.Drasil.Label
     , Language.Drasil.Misc
+    , Language.Drasil.NounPhrase
     , Language.Drasil.NounPhrase.Core
     , Language.Drasil.People
     , Language.Drasil.Reference
+    , Language.Drasil.RefTypes
     , Language.Drasil.Sentence.Extract
     , Language.Drasil.Sentence.EmbedSymbol
     , Language.Drasil.ShortName

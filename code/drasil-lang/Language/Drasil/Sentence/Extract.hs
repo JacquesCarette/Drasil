@@ -13,6 +13,7 @@ getUIDs (S _)        = []
 getUIDs (Sp _)       = []
 getUIDs (P _)        = []
 getUIDs (Ref _)      = []
+getUIDs (Ref2 _)     = []
 getUIDs ((:+:) a b)  = (getUIDs a) ++ (getUIDs b)
 getUIDs (Quote a)    = getUIDs a
 getUIDs (E a)        = names a

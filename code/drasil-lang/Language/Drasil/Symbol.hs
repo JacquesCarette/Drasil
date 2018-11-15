@@ -3,9 +3,9 @@
 -- semantics at all, but just a description of how things look.
 
 module Language.Drasil.Symbol(Decoration(..), Symbol(..), compsy,
- upper_left, sub, sup, hat, vec, prime, sCurlyBrSymb) where
+ upper_left, sub, sup, hat, vec, prime) where
 
-import Language.Drasil.Unicode (Special(CurlyBrClose, CurlyBrOpen))
+import Language.Drasil.Unicode(Special)
 
 import Data.Char (toLower)
 
@@ -16,14 +16,12 @@ data Decoration = Hat | Vector | Prime deriving (Eq, Ord)
 -- | Symbols can be:
 -- - atomic (strings such as "A" or "max" that represent a single idea)
 -- - special characters (ex. unicode)
--- - Greek characters
 -- - Decorated symbols
 -- - Concatenations of symbols, including subscripts and superscripts
 -- - empty! (this is to give this a monoid-like flavour)
 data Symbol =
     Atomic  String
   | Special Special
---  | Greek   Greek
   | Atop    Decoration Symbol
   | Corners [Symbol] [Symbol] [Symbol] [Symbol] Symbol
           -- upleft   lowleft  upright  lowright base
@@ -152,7 +150,3 @@ vec = Atop Vector
 -- | Helper for creating a Vector symbol.
 prime :: Symbol -> Symbol
 prime = Atop Prime
-
--- | Helper for adding {} around a symbol (used for coordinates).
-sCurlyBrSymb :: Symbol -> Symbol
-sCurlyBrSymb x = Concat [Special CurlyBrOpen, x, Special CurlyBrClose]

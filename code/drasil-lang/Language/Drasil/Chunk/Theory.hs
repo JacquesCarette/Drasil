@@ -50,7 +50,7 @@ data TheoryModel = TM
   , _ref  :: [Reference]
   , _lb :: Label
   , _notes :: [Sentence]
-  , _ci :: CI
+  , ci :: CI
   }
 makeLenses ''TheoryModel
 

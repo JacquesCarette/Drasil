@@ -25,7 +25,7 @@ data GenDefn = GD { _relC :: RelationConcept
                   , _refs :: [Reference]
                   , _lb :: Label
                   , _notes :: [Sentence]
-                  , _ci :: CI
+                  , ci :: CI
                   }
 makeLenses ''GenDefn
 

@@ -45,7 +45,7 @@ data InstanceModel = IM { _rc :: RelationConcept
                         , _deri :: Derivation
                         , _lb :: Label
                         , _notes :: [Sentence]
-                        , _ci :: CI
+                        , ci :: CI
                         }
 makeLenses ''InstanceModel
 

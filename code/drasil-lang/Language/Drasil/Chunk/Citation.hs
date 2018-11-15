@@ -11,14 +11,17 @@ module Language.Drasil.Chunk.Citation
   , cProceedings, cTechReport, cUnpublished
   ) where
 
+import Data.Drasil.IdeaDicts (softEng)
 import Language.Drasil.People (People)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
 import Language.Drasil.Classes (HasLabel(getLabel), HasFields(getFields))
+import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
 import Language.Drasil.Data.Citation (author, chapter, pages, editor, bookTitle, title, 
   year, school, journal, institution, note, publisher, CitationKind(..), CiteField)
+import Language.Drasil.NounPhrase (cn')
 import Language.Drasil.Misc (noSpaces)
 import Language.Drasil.Label.Core (Label)
 
@@ -35,6 +38,7 @@ data Citation = Cite
   , _citeKind :: CitationKind
   , _fields :: [CiteField]
   , _lb :: Label
+  , ci :: CI
   }
 makeLenses ''Citation
 
@@ -43,9 +47,12 @@ instance HasLabel     Citation where getLabel  = lb
 instance HasShortName Citation where shortname = lb . shortname
 instance HasFields    Citation where getFields = fields
 
+citation :: CI
+citation  = commonIdeaWithDict "citation"  (cn' "citation")   "Citation"         [softEng]
+
 -- | Smart constructor which implicitly uses EntryID as chunk i.
 cite :: EntryID -> CitationKind -> [CiteField] -> Label -> Citation
-cite i = Cite (noSpaces i)
+cite i = (\x y z -> (Cite (noSpaces i) x y z citation))
 
 -- | We don't let anyone know that the EntryID is in fact the UID
 citeID :: Citation -> EntryID

@@ -2,13 +2,13 @@
 module Language.Drasil.Chunk.AssumpChunk ( AssumpChunk(..) , assump) where
 import Control.Lens ((^.))
 
+import Data.Drasil.IdeaDicts (softEng)
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
 import Language.Drasil.Classes (HasLabel(getLabel), ConceptDomain(cdom), CommonIdea(abrv)
 	, NamedIdea(term))
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
-import Data.Drasil.IdeaDicts (softEng)
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
 import Language.Drasil.NounPhrase (cn')
 import Control.Lens (makeLenses, (^.), view)

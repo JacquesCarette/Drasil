@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.DataDefinition where
 
 import Control.Lens(makeLenses, (^.), view)
-
+import Data.Drasil.IdeaDicts (softEng)
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn')
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
@@ -51,9 +51,6 @@ instance MayHaveUnit        DataDefinition where getUnit = getUnit . view qd
 instance HasLabel           DataDefinition where getLabel = lbl
 instance HasShortName       DataDefinition where shortname = lbl . shortname
 instance ConceptDomain      DataDefinition where cdom = ci . cdom
-
-softEng :: IdeaDict
-softEng      = mkIdea  "softEng"        (cn' "Software Engineering")  (Just "SE")
 
 dataDefn :: CI
 dataDefn    = commonIdeaWithDict "dataDefn"    (cn' "data definition")                             "DD"        [softEng]

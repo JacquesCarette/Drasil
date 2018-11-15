@@ -17,7 +17,8 @@ import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
-import Language.Drasil.Classes (HasLabel(getLabel), HasFields(getFields))
+import Language.Drasil.Classes (HasLabel(getLabel), HasFields(getFields),
+  ConceptDomain(cdom), CommonIdea(abrv), NamedIdea(term))
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
 import Language.Drasil.Data.Citation (author, chapter, pages, editor, bookTitle, title, 
   year, school, journal, institution, note, publisher, CitationKind(..), CiteField)
@@ -25,7 +26,7 @@ import Language.Drasil.NounPhrase (cn')
 import Language.Drasil.Misc (noSpaces)
 import Language.Drasil.Label.Core (Label)
 
-import Control.Lens (makeLenses, (^.))
+import Control.Lens (makeLenses, (^.), view)
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces
@@ -38,7 +39,7 @@ data Citation = Cite
   , _citeKind :: CitationKind
   , _fields :: [CiteField]
   , _lb :: Label
-  , ci :: CI
+  , _ci :: CI
   }
 makeLenses ''Citation
 
@@ -46,6 +47,9 @@ instance HasUID       Citation where uid       = cid
 instance HasLabel     Citation where getLabel  = lb
 instance HasShortName Citation where shortname = lb . shortname
 instance HasFields    Citation where getFields = fields
+instance NamedIdea    Citation where term = ci . term
+instance CommonIdea   Citation where abrv = abrv . view ci
+
 
 citation :: CI
 citation  = commonIdeaWithDict "citation"  (cn' "citation")   "Citation"         [softEng]

@@ -6,6 +6,7 @@ module Language.Drasil.Chunk.InstanceModel
   , Constraints
   ) where
 
+import Data.Drasil.IdeaDicts (softEng)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.Quantity (QuantityDict)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA), Quantity,
@@ -65,9 +66,6 @@ instance HasSymbol          InstanceModel where symbol = symbol . view imOutput 
 instance HasSpace           InstanceModel where typ = imOutput . typ
 instance Quantity           InstanceModel where
 instance MayHaveUnit        InstanceModel where getUnit = getUnit . view imOutput
-
-softEng :: IdeaDict
-softEng      = mkIdea  "softEng"        (cn' "Software Engineering")  (Just "SE")
 
 instanceMod :: CI
 instanceMod    = commonIdeaWithDict "instanceMod"    (cn' "Instance Model")                    "IM"        [softEng]

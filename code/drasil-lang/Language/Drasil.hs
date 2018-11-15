@@ -123,7 +123,7 @@ module Language.Drasil (
   , RawContent(..)
   , mkFig
   -- Reference
-  , makeRef, makeRefS, mkRefFrmLbl
+  , makeRef, makeRefS, mkRefFrmLbl, makeRef2, makeRef2S
   -- Space
   , Space(..)
   -- Symbol
@@ -296,7 +296,7 @@ import Language.Drasil.Reference (makeRef, makeRefS, mkRefFrmLbl, ReferenceDB, a
                                  , rdb, RefBy(..)
                                  , Referable(..), customRef
                                  , citationRefTable, RefMap
-                                 , simpleMap)
+                                 , simpleMap, makeRef2S, makeRef2)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 
   prime, compsy)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol, sCurlyBrSymb)

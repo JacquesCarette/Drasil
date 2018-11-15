@@ -46,7 +46,7 @@ htFluxPEqn :: Expr
 htFluxPEqn = (sy pcm_HTC) * (apply1 temp_W time - apply1 temp_PCM time)
 
 dd2HtFluxP :: DataDefinition
-dd2HtFluxP = mkDDL dd2HtFluxPQD [makeRef koothoor2013] [] dd2HtFluxPL [makeRefS newA3, makeRefS newA4, makeRefS newA10]
+dd2HtFluxP = mkDDL dd2HtFluxPQD [makeRef koothoor2013] [] dd2HtFluxPL [makeRef2S newA3, makeRef2S newA4, makeRef2S newA10]
 
 ----
 

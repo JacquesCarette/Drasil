@@ -227,6 +227,9 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 makeRef2 :: (HasUID l, Referable l, HasShortName l, CommonIdea l) => l -> Reference2
 makeRef2 l = Reference2 (l ^. uid) (abrv l) (refAdd l) (l ^. shortname)
 
+makeRef2S :: (HasUID l, Referable l, HasShortName l, CommonIdea l) => l -> Sentence
+makeRef2S = Ref2 . makeRef2
+
 -- | Create References to a given 'LayoutObj'
 -- This should not be exported to the end-user, but should be usable
 -- within the recipe (we want to force reference creation to check if the given

@@ -266,7 +266,7 @@ spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = pure $ text "\\newline"
 spec (Ref t@L.Sect r _ _)    = sref (show t) (pure $ text r)
 spec (Ref t@(L.Def _) r _ _) = hyperref (show t) (pure $ text r)
-spec (Ref L.Assump r _ _)    = aref  (pure $ text r)
+spec (Ref L.Assump r _ _)    = aref  (pure $ text r) -- solved
 spec (Ref (L.Req _) r _ _)   = rref  (pure $ text r)
 spec (Ref L.LCh r _ _)       = lcref (pure $ text r)
 spec (Ref L.UnCh r _ _)      = ucref (pure $ text r)
@@ -274,7 +274,9 @@ spec (Ref L.Cite r _ _)      = cite  (pure $ text r)
 spec (Ref L.Blank r sn _)    = snref r $ spec sn
 spec (Ref L.Link r _ sn)     = href  r $ L.getStringSN sn
 spec (Ref t r _ _)           = ref (show t) (pure $ text r)
-spec (Ref2 _ _ _ _ )         = error "Ref2 Not implemented in TeX printer."
+--          | Ref2 RefProg RefProg2 RefAdd Spec
+spec (Ref2 _ "A" r _)        = aref  (pure $ text r)  -- for test
+spec (Ref2 _ _ _ _ )         = empty
 spec EmptyS                   = empty
 spec (Quote q)                = quote $ spec q
 

@@ -192,7 +192,7 @@ sPlur s@(S _) SelfPlur = s
 sPlur (S sts) (IrregPlur f) = S $ f sts --Custom pluralization
 sPlur (a :+: b) pt = a :+: sPlur b pt
 sPlur a _ = S "MISSING PLURAL FOR:" +:+ a
-
+--  titleCase n@(Phrase _ _ _ r)      f = cap (f n) r
 -- | Capitalization helper function.
 cap :: Sentence -> CapitalizationRule -> Sentence
 cap _ (Replace s) = s

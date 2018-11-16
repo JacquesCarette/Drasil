@@ -5,10 +5,13 @@ import Language.Drasil.UID (UID)
 import Language.Drasil.Sentence(Sentence(..), SentenceStyle(..))
 import Language.Drasil.Expr.Extract(names)
 
+
 -- | Generic traverse of all positions that could lead to UIDs from sentences
 getUIDs   :: Sentence -> [UID]
 getUIDs (Ch SymbolStyle a)   = [a]
-getUIDs (Ch _ a)             = []
+getUIDs (Ch ShortStyle _)    = []
+getUIDs (Ch TermStyle _)     = []
+getUIDs (Ch PluralTerm _)    = []
 getUIDs (Sy _)               = []
 getUIDs (S _)                = []
 getUIDs (Sp _)               = []
@@ -22,7 +25,9 @@ getUIDs (EmptyS)             = []
 -- | Generic traverse of all positions that could lead to UIDs from sentences
 getUIDshort   :: Sentence -> [UID]
 getUIDshort (Ch ShortStyle a)    = [a]
-getUIDshort (Ch _ a)             = []
+getUIDshort (Ch SymbolStyle _)   = []
+getUIDshort (Ch TermStyle _)     = []
+getUIDshort (Ch PluralTerm _)    = []
 getUIDshort (Sy _)               = []
 getUIDshort (S _)                = []
 getUIDshort (Sp _)               = []

@@ -107,10 +107,10 @@ module Language.Drasil (
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
   , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase', phraseNP, pluralNP
-  , CapitalizationRule(..)
+  , CapitalizationRule(..), at_startNP, at_startNP'
   , PluralRule(..)
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
-  , titleize, titleize', nounPhrase'', nounPhraseSP, nounPhraseSent
+  , titleizeNP, titleizeNP', nounPhrase'', nounPhraseSP, nounPhraseSent
   -- Document
   , Referable(..), Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListTuple
@@ -181,6 +181,7 @@ module Language.Drasil (
   , getAdd
   -- Development.Sentence
   , introduceAbb, phrase, plural, phrase's, plural's, at_start, at_start'
+  , titleize, titleize'
   -- UnitLang
   , USymb(US)
   -- Data.Date
@@ -283,8 +284,7 @@ import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- 
   , pages
       -- Month -> CiteField
   , month)
-import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
-                                          , titleize')
+import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (resolveSN, ShortName
   , shortname', getStringSN)
 import Language.Drasil.Space (Space(..))

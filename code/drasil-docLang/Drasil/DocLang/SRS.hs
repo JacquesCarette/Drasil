@@ -53,8 +53,8 @@ charOfIR    cs ss = section' (titleize' Doc.charOfIR) cs ss "ReaderChars"
 orgOfDoc    cs ss = section' (titleize Doc.orgOfDoc)  cs ss "DocOrg"
 
 stakeholder cs ss = section' (titleize' Doc.stakeholder) cs ss "Stakeholder"
-theCustomer cs ss = section' (titleize $ the Doc.customer) cs ss "Customer"
-theClient   cs ss = section' (titleize $ the Doc.client) cs ss "Client"
+theCustomer cs ss = section' (titleizeNP $ the Doc.customer) cs ss "Customer"
+theClient   cs ss = section' (titleizeNP $ the Doc.client) cs ss "Client"
 
 genSysDes   cs ss = section' (titleize Doc.generalSystemDescription) cs ss "GenSysDesc"
 sysCont     cs ss = section' (titleize Doc.sysCont)              cs ss  "SysContext"

@@ -103,9 +103,12 @@ for' t1 t2 = (titleize t1) +:+ S "for" +:+ (short t2)
 for'' :: (NamedIdea c, NamedIdea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> Sentence
 for'' f1 f2 t1 t2 = (f1 t1) +:+ S "for" +:+ (f2 t2)
 
-the :: (NamedIdea t) => t -> NamedChunk
+the :: (NamedIdea t) => t -> NP
+the t = nounPhrase'' (S "the" +:+ phrase t) (S "the" +:+ plural t) CapWords CapWords
+
+{--the :: (NamedIdea t) => t -> NamedChunk
 the t = nc ("the" ++ t ^. uid)
-  (nounPhrase'' (S "the" +:+ phrase t) (S "the" +:+ plural t) CapFirst CapWords)
+  (nounPhrase'' (S "the" +:+ phrase t) (S "the" +:+ plural t) CapFirst CapWords)--}
 
 theCustom :: (NamedIdea t) => (t -> Sentence) -> t -> NamedChunk
 theCustom f t = nc ("the" ++ t ^. uid) (nounPhrase''(S "the" +:+ f t)

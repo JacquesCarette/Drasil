@@ -75,7 +75,7 @@ import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA,
 
 import Drasil.NoPCM.Assumptions
 import Drasil.NoPCM.DataDesc (inputMod)
-import Drasil.NoPCM.Definitions (srs_swhs)
+import Drasil.NoPCM.Definitions (srs_swhs, ht_trans)
 import Drasil.NoPCM.GenDefs (rocTempSimp, swhsGDs)
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
 import Drasil.NoPCM.Unitals (temp_init)
@@ -129,7 +129,7 @@ probDescription, termAndDefn, physSystDescription, goalStates,
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
   [TUnits, 
-  tsymb [TSPurpose, SymbConvention [Lit (nw heat_trans), Doc' (nw progName)], SymbOrder],
+  tsymb [TSPurpose, SymbConvention [Lit (nw ht_trans), Doc' (nw progName)], SymbOrder],
   TAandA]) :
   IntroSec (IntroProg (introStart ener_src energyUC progName)
     (introEnd progName program)
@@ -199,7 +199,8 @@ nopcm_SymbMap :: ChunkDB
 nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
-  ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm])
+  ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm,
+  nw ht_trans])
  (map cw nopcm_Symbols ++ srsDomains)
   this_si
 

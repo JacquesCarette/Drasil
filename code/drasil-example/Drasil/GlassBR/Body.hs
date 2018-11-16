@@ -304,7 +304,7 @@ orgOfDocIntro = foldlSent [S "The", phrase organization, S "of this",
   plural aspect, S "taken from Volere", phrase template,
   S "16", makeRefS rbrtsn2012]
 
-orgOfDocIntroEnd = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
+orgOfDocIntroEnd = foldl (+:+) EmptyS [(at_startNP' $ the dataDefn),
   S "are used to support", (plural definition `ofThe` S "different"),
   plural model]
 
@@ -445,7 +445,7 @@ physSystDescription = physSystDesc (short gLassBR) fig_glassbr
   [physSystDescriptionList, LlC fig_glassbr]
 
 fig_glassbr = llcc (mkLabelRAFig "physSystImage") $ figWithWidth 
-  (at_start $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
+  (at_startNP $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
 
 physSystDescriptionList = enumSimple 1 (short physSyst) physSystDescriptionListPhysys
 

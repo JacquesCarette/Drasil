@@ -248,7 +248,7 @@ needs (Sy _)           = Text
 needs (Sp _)           = Math
 needs HARDNL           = Text
 needs (Ref _ _ _ _)    = Text
-needs (Ref2 _ _ _ _ ) = Text
+needs (Ref2 _ _ _ _)     = Text
 needs (EmptyS)         = Text
 needs (Quote _)        = Text
 

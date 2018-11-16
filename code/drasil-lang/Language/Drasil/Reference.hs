@@ -24,7 +24,8 @@ import Language.Drasil.Label (getDefName, getReqName)
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.RefTypes (RefType(..), DType(..), Reference(Reference))
 import Language.Drasil.ShortName ( ShortName, getStringSN, shortname', concatSN, defer)
-import Language.Drasil.Sentence (Sentence((:+:), S, Ref, Ref2), Reference2(Reference2))
+import Language.Drasil.Sentence (Sentence((:+:), S, Ref, Ref2), Reference2(Reference2),
+  RefProg(..))
 import Language.Drasil.UID (UID)
 
 -- | Database for maintaining references.
@@ -225,7 +226,7 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 --data RefProg2 = String --- for abbreviation of the name, the prefix...?
 --data Reference2 = Reference2 RefProg RefProg2 RefAdd ShortName
 makeRef2 :: (HasUID l, Referable l, HasShortName l, CommonIdea l) => l -> Reference2
-makeRef2 l = Reference2 (l ^. uid) (abrv l) (refAdd l) (l ^. shortname)
+makeRef2 l = Reference2 (PrependDomain (l ^. uid) (abrv l)) (refAdd l) (l ^. shortname)
 
 makeRef2S :: (HasUID l, Referable l, HasShortName l, CommonIdea l) => l -> Sentence
 makeRef2S = Ref2 . makeRef2

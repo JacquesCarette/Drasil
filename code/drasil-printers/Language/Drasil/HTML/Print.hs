@@ -101,9 +101,9 @@ p_spec (Sp s)            = text $ unPH $ L.special s
 p_spec HARDNL            = text "<br />"
 p_spec (Ref L.Link r a _) = reflinkURI r $ p_spec a
 p_spec (Ref _      r a _) = reflink    r $ p_spec a
-p_spec (Ref2 _ _   r a )  = reflink    r $ p_spec a -- FIXME
-p_spec EmptyS            = text "" -- Expected in the output
-p_spec (Quote q)         = text "&quot;" <> p_spec q <> text "&quot;"
+p_spec (Ref2 _ _  r a )   = reflink    r $ p_spec a -- FIXME
+p_spec EmptyS             = text "" -- Expected in the output
+p_spec (Quote q)          = text "&quot;" <> p_spec q <> text "&quot;"
 -- p_spec (Acc Grave c)     = text $ '&' : c : "grave;" --Only works on vowels.
 -- p_spec (Acc Acute c)     = text $ '&' : c : "acute;" --Only works on vowels.
 

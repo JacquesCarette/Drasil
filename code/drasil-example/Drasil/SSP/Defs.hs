@@ -12,7 +12,7 @@ import Data.Drasil.IdeaDicts
 ----Acronyms-----
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,
-  physSyst, requirement, srs, ssa, thModel, typUnc, unlikelyChg, ssp]
+  physSyst, requirement, srs, ssa, thModel, typUnc, unlikelyChg]
   
 ssa, ssp :: CI
 ssa = commonIdeaWithDict "ssa" (cnIS "slope stability analysis") "SSA" [civilEng]

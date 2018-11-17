@@ -160,7 +160,7 @@ everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms ++ map n
   (map cw gamephySymbols ++ srsDomains) chipUnits
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) ([] :: [IdeaDict]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
+usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
 
 printSetting :: PrintingInformation
 printSetting = PI everything defaultConfiguration

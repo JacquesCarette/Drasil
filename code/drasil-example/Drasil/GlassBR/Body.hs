@@ -85,7 +85,8 @@ gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols ++ map nw g
   ++ map unitWrapper [pascal, newton]
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk]) ([] :: [UnitDefn])
+usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw this_symbols)
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn])
 
 gbRefDB :: ReferenceDB
 gbRefDB = rdb assumptions gbCitations $ funcReqs ++ likelyChgs ++

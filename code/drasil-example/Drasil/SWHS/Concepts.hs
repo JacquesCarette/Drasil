@@ -85,9 +85,10 @@ tank_pcm = dcc "tank_pcm" (nounPhrase''
 swhs_pcm :: CommonConcept
 -- Nounphrase'' hack to get nounPhraseSP words to accept
 -- nounPhrases instead of strings
+-- Another capitalization hack.
 swhs_pcm = dcc' "swhs_pcm" (nounPhrase''
-  (plural progName +:+ S "incorporating" +:+ short phsChgMtrl)
-  (plural progName +:+ S "incorporating" +:+ short phsChgMtrl)
+  (S "solar water heating systems" +:+ S "incorporating" +:+ short phsChgMtrl)
+  (S "solar water heating systems" +:+ S "incorporating" +:+ short phsChgMtrl)
   CapFirst CapWords)
   "Solar water heating systems incorporating phase change material"
   "SWHS"

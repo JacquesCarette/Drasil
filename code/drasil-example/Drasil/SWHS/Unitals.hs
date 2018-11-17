@@ -260,8 +260,10 @@ pcm_vol = uqc "pcm_vol" (nounPhraseSP "volume of PCM")
   -- needs to add (D,L)*minfract to end of last constraint
 
 -- Constraint 4
+-- Capitalization Issue here too.
 pcm_SA = uqc "pcm_SA"
-  (compoundPhrase (nounPhrase'' (phrase phsChgMtrl) (phrase phsChgMtrl)
+  (compoundPhrase (nounPhrase'' (S "phase change material")
+  (S "phase change material")
   CapFirst CapWords) (nounPhrase'' (phrase surArea) (phrase surArea)
   CapFirst CapWords))
   "Area covered by the outermost layer of the phase change material"
@@ -313,8 +315,10 @@ htFusion = uqc "htFusion" (nounPhraseSP "specific latent heat of fusion")
   sfwrc $ Bounded (Exc, sy htFusion_min) (Exc, sy htFusion_max)] (dbl 211600) 0.1
 
 -- Constraint 10
+-- The "S "heating coil" " should be replaced by "phrase coil",
+-- Since the capitalization issue, they are replaced by S so far.
 coil_SA = uqc "coil_SA"
-  (compoundPhrase (nounPhrase'' (phrase coil) (phrase coil) CapFirst CapWords)
+  (compoundPhrase (nounPhrase'' (S "heating coil") (S "heating coil") CapFirst CapWords)
   (nounPhrase'' (phrase surArea) (phrase surArea) CapFirst CapWords))
   "Area covered by the outermost layer of the coil" (sub cA cC) m_2 Rational
   [gtZeroConstr,

@@ -32,7 +32,7 @@ poissnsR   = dccWDS "poissnsR" (nounPhraseSP "Poisson's ratio")
   (S "The ratio of perpendicular" +:+ phrase strain +:+ 
   S "to parallel" +:+. phrase strain)
   
-shearRes   = dccWDS "shearRes" (cn "shear resistance") 
+shearRes   = dccWDS "shearRes" (cn "resistive shear force") 
   (S "The resulting" +:+ phrase friction +:+ 
   S "caused by a shear" +:+. phrase stress)
   

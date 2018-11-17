@@ -8,7 +8,7 @@ fundamentals = [metre, kilogram, second, kelvin, mole, ampere, candela]
 derived :: [UnitDefn]
 derived = [becquerel, calorie, centigrade, coulomb, farad, gray, henry, hertz, joule,
   katal, kilopascal, kilowatt, litre, lumen, lux,  millimetre, newton, ohm,
-  pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber, degree]
+  pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber]
 
 si_units :: [UnitDefn]
 si_units = map unitWrapper fundamentals ++ map unitWrapper derived

@@ -47,6 +47,13 @@ of_ t1 t2 = nounPhrase''
   (Replace ((at_start t1) +:+ S "of" +:+ (phrase t2)))
   (Replace ((titleize t1) +:+ S "of" +:+ (titleize t2)))
 
+ofN_ :: (NamedIdea c, NounPhrase d) => c -> d -> NP
+ofN_ t1 t2 = nounPhrase'' 
+  ((phrase t1) +:+ S "of" +:+ (phraseNP t2))
+  ((phrase t1) +:+ S "of" +:+ (pluralNP t2))
+  (Replace ((at_start t1) +:+ S "of" +:+ (phraseNP t2)))
+  (Replace ((titleize t1) +:+ S "of" +:+ (titleizeNP t2)))
+
 -- | Creates a noun phrase by combining two 'NamedIdea's with the word "of" between
 -- them. 'phrase' is defaulted to @(phrase t1) "of" (plural t2)@. Plural is the same.
 of_' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
@@ -109,13 +116,16 @@ the' t = nounPhrase'' (S "the" +:+ titleize t) (S "the" +:+ titleize' t) CapWord
 the :: (NamedIdea t) => t -> NP
 the t = nounPhrase'' (S "the" +:+ phrase t) (S "the" +:+ plural t) CapWords CapWords
 
+theCustom :: (NamedIdea t) => (t -> Sentence) -> t -> NP
+theCustom f t = nounPhrase''(S "the" +:+ f t) (S "the" +:+ f t) CapFirst CapWords
+
 {--the :: (NamedIdea t) => t -> NamedChunk
 the t = nc ("the" ++ t ^. uid)
-  (nounPhrase'' (S "the" +:+ phrase t) (S "the" +:+ plural t) CapFirst CapWords)--}
+  (nounPhrase'' (S "the" +:+ phrase t) (S "the" +:+ plural t) CapFirst CapWords)
 
 theCustom :: (NamedIdea t) => (t -> Sentence) -> t -> NamedChunk
 theCustom f t = nc ("the" ++ t ^. uid) (nounPhrase''(S "the" +:+ f t)
-  (S "the" +:+ f t) CapFirst CapWords)
+  (S "the" +:+ f t) CapFirst CapWords) --}
 
 -- | Combinator for combining two 'NamedChunk's into one.
 -- /Does not preserve abbreviations/

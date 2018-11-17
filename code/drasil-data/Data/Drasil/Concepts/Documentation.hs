@@ -4,7 +4,7 @@ import Language.Drasil hiding (organization, year)
 
 import Data.Drasil.Concepts.Math (graph)
 import Data.Drasil.Phrase (andRT, and_, and_', ofA, of_, of_', of__, theCustom,
-  compoundNC, compoundNC', compoundNCP1)
+  ofN_, compoundNC, compoundNC', compoundNCP1)
 import Data.Drasil.IdeaDicts (softEng, documentc)
 
 import Control.Lens ((^.))
@@ -35,8 +35,8 @@ doccon = [abbreviation, analysis, appendix, aspect, body, characteristic, class_
   nonfunctionalRequirement, safetyReq, softwareConstraint, softwareDoc,
   softwareReq, softwareSys, softwareVerif, softwareVAV, solutionCharSpec,
   solutionCharacteristic, offShelfSolution, physicalSim, productUC, 
-  useCaseTable, physicalProperty, vavPlan, uncertCol, userInput, theproduct_
-  , theproject, scpOfTheProjS]
+  useCaseTable, physicalProperty, vavPlan, uncertCol, userInput,
+  scpOfTheProjS]
 
 doccon' :: [CI]
 doccon' = [assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
@@ -213,8 +213,6 @@ variable        = nc "variable"       (cn'    "variable"           )
 verification    = nc "verification"   (cn'    "verification"       )
 video           = nc "video"          (cn'    "video"              )
 year            = nc "year"           (cn'    "year"               )
-theproduct_     = nc "theproduct"     (cn'    "the product"        )
-theproject      = nc "theproject"     (cn'    "the project"        )
 scpOfTheProjS   = nc "scpOfTheProj"   (cn'    "scope of the project") -- temporary generated for test
 
 
@@ -236,7 +234,7 @@ vav          = nc "vav"          (verification `and_` validation)
 consVals     = nc "consVals"     (cn "values of auxiliary constants")
 
 scpOfTheProj :: (NamedChunk -> Sentence) -> NamedChunk
-scpOfTheProj oper = nc "scpOfTheProj" (scope `of_` theCustom oper project) -- reasonable hack?
+scpOfTheProj oper = nc "scpOfTheProj" (scope `ofN_` theCustom oper project) -- reasonable hack?
 
 -- compounds
 

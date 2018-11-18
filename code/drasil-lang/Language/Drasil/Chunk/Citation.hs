@@ -18,7 +18,7 @@ import Language.Drasil.UID (UID)
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
 import Language.Drasil.Classes (HasLabel(getLabel), HasFields(getFields),
-  ConceptDomain(cdom), CommonIdea(abrv), NamedIdea(term))
+  CommonIdea(abrv), NamedIdea(term))
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
 import Language.Drasil.Data.Citation (author, chapter, pages, editor, bookTitle, title, 
   year, school, journal, institution, note, publisher, CitationKind(..), CiteField)

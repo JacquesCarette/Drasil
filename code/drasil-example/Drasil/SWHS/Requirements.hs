@@ -59,7 +59,7 @@ inputInitQuants = cic "inputInitQuants" ( foldlSent [
   plural condition]) "Input-Initial-Quantities" funcReqDom
 --
 findMass = cic "findMass" ( foldlSent [
-  S "Use the", plural input_, S "in", makeRefS inputInitQuants,
+  S "Use the", plural input_, S "in", makeRef2S inputInitQuants,
   S "to find the", phrase mass, S "needed for",
   (foldlList Comma List $ map makeRefS swhsIMods) `sC`
   S "using", E inputInitQuantsEqn, S "and", E findMassEqn `sC` S "where",
@@ -81,8 +81,8 @@ checkWithPhysConsts = cic "checkWithPhysConsts" ( foldlSent [
 outputInputDerivQuants = cic "outputInputDerivQuants" ( foldlSent [
   titleize output_, S "the", phrase input_, plural quantity `sAnd`
   S "derived", plural quantity +: S "in the following list",
-  S "the", plural quantity, S "from", makeRefS inputInitQuants `sC` S "the",
-  plural mass, S "from", makeRefS findMass `sC` ch tau_W,
+  S "the", plural quantity, S "from", makeRef2S inputInitQuants `sC` S "the",
+  plural mass, S "from", makeRef2S findMass `sC` ch tau_W,
   sParen (S "from" +:+ makeRefS eBalanceOnWtr) `sC` ch eta,
   sParen (S "from" +:+ makeRefS eBalanceOnWtr) `sC` ch tau_S_P,
   sParen (S "from" +:+ makeRefS eBalanceOnPCM) `sAnd` ch tau_L_P,

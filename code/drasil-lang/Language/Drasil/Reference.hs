@@ -154,7 +154,7 @@ instance Referable InstanceModel where
 
 instance Referable ConceptInstance where
   refAdd    i = i ^. uid
-  rType     i = DeferredCC $ sDom $ i ^. cdom
+  rType     _ = error "makeRef, makeRefS, and rType are deprecated for ConceptInstance. Use the makeRef2, makeRef2S, renderRef instead."
   renderRef l = (RP.defer $ sDom $ l ^. cdom) +::+ raw ": " +::+ name
 
 --Should refer to an object WITH a variable.

@@ -480,7 +480,7 @@ reqIIV = cic "reqIIV" (titleize input_ +:+ S "the" +:+ plural quantity +:+
     S "described in" +:+ makeRefS reqIVRTable `sC` S "which define the" +:+
     plural tank_para `sC` S "material" +:+ plural property +:+
     S "and initial" +:+. plural condition) "Input-Inital-Values" funcReqDom
-reqFM = cic "reqFM" (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRefS reqIIV +:+
+reqFM = cic "reqFM" (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef2S reqIIV +:+
     S "to find the" +:+ phrase mass +:+ S "needed for" +:+ makeRefS eBalanceOnWtr +:+
     S "to" +:+ makeRefS eBalanceOnPCM `sC` S "as follows, where" +:+ ch w_vol `isThe`
     phrase w_vol +:+ S "and" +:+ (ch tank_vol `isThe` phrase tank_vol) :+:
@@ -492,8 +492,8 @@ reqCISPC = cic "reqCISPC" (S "Verify that the" +:+ plural input_ +:+
 reqOIDQ = cic "reqOIDQ" (titleize' output_ `sAnd` plural input_ 
     +:+ plural quantity +:+
     S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
-    plural quantity +:+ S "from" +:+ (makeRefS reqIIV) `sC` S "the" +:+
-    phrase mass +:+ S "from" +:+ makeRefS reqFM `sAnd` ch tau_W +:+.
+    plural quantity +:+ S "from" +:+ (makeRef2S reqIIV) `sC` S "the" +:+
+    phrase mass +:+ S "from" +:+ makeRef2S reqFM `sAnd` ch tau_W +:+.
     sParen (S "from" +:+ makeRefS eBalanceOnWtr)) "Output-Input-Derivied-Quantities" funcReqDom
 reqCTWOT = cic "reqCTWOT" (S "Calculate and output the" +:+ phrase temp_W +:+
     sParen (ch temp_W :+: sParen (ch time)) +:+ S "over the" +:+
@@ -618,7 +618,7 @@ traceInstaModel = ["IM1", "IM2"]
 traceInstaModelRef = map makeRefS [eBalanceOnWtr, heatEInWtr]
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-traceFuncReqRef = map makeRefS reqs
+traceFuncReqRef = map makeRef2S reqs
 
 traceData = ["Data Constraints"]
 traceDataRef = [makeRefS dataConstTable1] --FIXME: Reference section?
@@ -637,7 +637,7 @@ traceDataDefs = ["DD1"]
 traceDataDefRef = map makeRefS [dd1HtFluxC]
 
 traceLikelyChg = ["LC1", "LC2", "LC3", "LC4"]
-traceLikelyChgRef = map makeRefS likelyChgs
+traceLikelyChgRef = map makeRef2S likelyChgs
 
 {-Traceability Matrix 1-}
 

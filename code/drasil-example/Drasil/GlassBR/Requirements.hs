@@ -78,7 +78,7 @@ inputGlassPropsTable = llcc (mkLabelSame "InputGlassPropsReqInputs" Tab) $
   (mkTable
   [ch,
    at_start, U.toSentence] requiredInputs)
-  (S "Required Inputs following" +:+ makeRefS inputGlassProps) True
+  (S "Required Inputs following" +:+ makeRef2S inputGlassProps) True
   where
     requiredInputs :: [QuantityDict]
     requiredInputs = (map qw [plate_len, plate_width, char_weight])
@@ -108,8 +108,8 @@ checkInputWithDataConsDesc = foldlSent [S "The", phrase system, S "shall check t
   S "an", phrase errMsg, S "is displayed" `andThe` plural calculation, S "stop"]
 
 outputValsAndKnownQuantsDesc = foldlSent [titleize output_, S "the", plural inQty,
-  S "from", makeRefS inputGlassProps `andThe` S "known", plural quantity,
-  S "from", makeRefS sysSetValsFollowingAssumps]
+  S "from", makeRef2S inputGlassProps `andThe` S "known", plural quantity,
+  S "from", makeRef2S sysSetValsFollowingAssumps]
 
 checkGlassSafetyDesc cmd = foldlSent_ [S "If", (ch is_safePb), S "∧", (ch is_safeLR),
   sParen (S "from" +:+ (makeRefS pbIsSafe)

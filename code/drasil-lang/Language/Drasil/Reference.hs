@@ -22,10 +22,11 @@ import Language.Drasil.Label.Core (Label(..))
 import Language.Drasil.Label.Type (getAdd)
 import Language.Drasil.Label (getDefName, getReqName)
 import Language.Drasil.People (People, comparePeople)
+import Language.Drasil.RefProg (Reference2(Reference2), prepend)
 import Language.Drasil.RefTypes (RefType(..), DType(..), Reference(Reference))
-import Language.Drasil.ShortName ( ShortName, getStringSN, shortname', concatSN, defer)
-import Language.Drasil.Sentence (Sentence((:+:), S, Ref, Ref2), Reference2(Reference2),
-  RefProg(..))
+import Language.Drasil.ShortName ( ShortName, getStringSN, shortname', concatSN)
+import Language.Drasil.ShortName as SN (defer)
+import Language.Drasil.Sentence (Sentence((:+:), S, Ref, Ref2))
 import Language.Drasil.UID (UID)
 
 -- | Database for maintaining references.
@@ -226,7 +227,7 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 --data RefProg2 = String --- for abbreviation of the name, the prefix...?
 --data Reference2 = Reference2 RefProg RefProg2 RefAdd ShortName
 makeRef2 :: (HasUID l, Referable l, HasShortName l, CommonIdea l) => l -> Reference2
-makeRef2 l = Reference2 (PrependDomain (l ^. uid) (abrv l)) (refAdd l) (l ^. shortname)
+makeRef2 l = Reference2 (l ^. uid) (prepend $ abrv l) (refAdd l) (l ^. shortname)
 
 makeRef2S :: (HasUID l, Referable l, HasShortName l, CommonIdea l) => l -> Sentence
 makeRef2S = Ref2 . makeRef2
@@ -258,7 +259,7 @@ customRef r n = Reference (fixupRType $ rType r) (refAdd r) (getAcc' (rType r) n
     getAcc' UnCh      sn = shortname' $ "UC: " ++ (getStringSN sn)
     getAcc' Assump    sn = shortname' $ "A: " ++ (getStringSN sn)
     getAcc' (Req rq)  sn = shortname' $ (getReqName rq)  ++ " " ++ (getStringSN sn)
-    getAcc' (DeferredCC u) s = concatSN (defer u) s
+    getAcc' (DeferredCC u) s = concatSN (SN.defer u) s
     getAcc' _         sn = sn
     fixupRType (DeferredCC _) = Blank  -- FIXME: This is a hack
     fixupRType a = a

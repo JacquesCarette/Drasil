@@ -288,8 +288,7 @@ import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
 import Language.Drasil.ShortName (resolveSN, ShortName
   , shortname', getStringSN)
 import Language.Drasil.Space (Space(..))
-import Language.Drasil.Sentence (Sentence(..), sParen, sSqBr, sC, (+:+), (+:+.), (+:),
- RefProg(..), Reference2(Reference2))
+import Language.Drasil.Sentence (Sentence(..), sParen, sSqBr, sC, (+:+), (+:+.), (+:))
 import Language.Drasil.Reference (makeRef, makeRefS, mkRefFrmLbl, ReferenceDB, assumpDB
                                  , AssumpMap, assumpLookup, HasAssumpRefs
                                  , assumpRefTable, assumptionsFromDB
@@ -308,6 +307,7 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   rendPersLFM', rendPersLFM'')
 import Language.Drasil.RefTypes(RefAdd, RefType(..),
   DType(..), Reference(Reference), ReqType(FR, NFR))
+import Language.Drasil.RefProg(RefProg(..), Reference2(Reference2))
 import Language.Drasil.Label (mkLabelRA', mkLabelSame, 
   mkEmptyLabel, mkURILabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec, modifyLabelEqn)
 import Language.Drasil.Label.Type (getAdd)

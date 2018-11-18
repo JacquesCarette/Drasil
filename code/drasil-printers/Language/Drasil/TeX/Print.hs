@@ -276,7 +276,7 @@ spec (Ref L.Link r _ sn)     = href  r $ L.getStringSN sn
 spec (Ref t r _ _)           = ref (show t) (pure $ text r)
 --          | Ref2 RefProg RefProg2 RefAdd Spec
 spec (Ref2 _ "A" r _)        = aref  (pure $ text r)  -- for test
-spec (Ref2 _ _ _ _ )         = empty
+spec (Ref2 _ _ r sn )         = snref r $ spec sn
 spec EmptyS                   = empty
 spec (Quote q)                = quote $ spec q
 

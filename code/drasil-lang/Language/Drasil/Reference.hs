@@ -113,48 +113,59 @@ class Referable s where
                           -- Should be string with no spaces/special chars.
                           -- Only visible in the source (tex/html).
   rType   :: s -> RefType -- The reference type (referencing namespace?)
+  rProg   :: s -> RefProg -- A program to render a shortname
 
 instance Referable AssumpChunk where
   refAdd  x = getAdd ((x ^. getLabel) ^. getRefAdd)
   rType   _ = Assump
+  rProg   l = PrependDomain (l ^. uid) $ abrv l
 
 instance Referable Section where
   refAdd  (Section _ _ lb ) = getAdd (lb ^. getRefAdd)
   rType   _                = Sect
+  rProg   l = RPConcat (RS "Section: ") Name
 
 instance Referable Citation where
   refAdd c = citeID c -- citeID should be unique.
   rType _  = Cite
+  rProg   l = Name -- FIXME: Need to see how to reference citationsd
 
 instance Referable TheoryModel where
   refAdd  t = getAdd ((t ^. getLabel) ^. getRefAdd)
   rType   _ = Def TM
+  rProg   l = Name -- FIXME: Implement Ref2 for TheoryModel
 
 instance Referable GenDefn where
   refAdd  g = getAdd ((g ^. getLabel) ^. getRefAdd)
   rType   _ = Def General
+  rProg   l = Name -- FIXME
 
 instance Referable DataDefinition where
   refAdd  d = getAdd ((d ^. getLabel) ^. getRefAdd)
   rType   _ = Def DD
+  rProg   l = Name -- FIXME
 
 instance Referable InstanceModel where
   refAdd  i = getAdd ((i ^. getLabel) ^. getRefAdd)
   rType   _ = Def Instance
+  rProg   l = Name -- FIXME
 
 instance Referable ConceptInstance where
   refAdd i = i ^. uid
-  rType i  = DeferredCC $ sDom $ i ^. cdom
+  rType i  = {--error ("ConceptInstance References should be done using makeRef2" ++ (i ^. uid))--} DeferredCC $ sDom $ i ^. cdom
+  rProg  l = RPConcat (Deferred $ sDom $ l ^. cdom) $ RPConcat (RS ": ") Name
 
 --Should refer to an object WITH a variable.
 --Can be removed once sections have labels.
 instance Referable Label where
   refAdd lb@(Lbl _ _ _ _) = getAdd (lb ^. getRefAdd)
   rType  (Lbl _ _ _ x)    = x --FIXME: is a hack; see #971
+  rProg   l = Name -- FIXME
 
 instance Referable LabelledContent where
   refAdd (LblC lb _) = getAdd (lb ^. getRefAdd)
   rType  (LblC _ c)  = temp c
+  rProg   l = Name -- FIXME
 
 temp :: RawContent -> RefType
 temp (Table _ _ _ _)       = Tab
@@ -225,10 +236,10 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 --data RefProg = UID
 --data RefProg2 = String --- for abbreviation of the name, the prefix...?
 --data Reference2 = Reference2 RefProg RefProg2 RefAdd ShortName
-makeRef2 :: (HasUID l, Referable l, HasShortName l, CommonIdea l) => l -> Reference2
-makeRef2 l = Reference2 (PrependDomain (l ^. uid) (abrv l)) (refAdd l) (l ^. shortname)
+makeRef2 :: (HasUID l, Referable l, HasShortName l) => l -> Reference2
+makeRef2 l = Reference2 (rProg l) (refAdd l) (l ^. shortname)
 
-makeRef2S :: (HasUID l, Referable l, HasShortName l, CommonIdea l) => l -> Sentence
+makeRef2S :: (HasUID l, Referable l, HasShortName l) => l -> Sentence
 makeRef2S = Ref2 . makeRef2
 
 -- | Create References to a given 'LayoutObj'

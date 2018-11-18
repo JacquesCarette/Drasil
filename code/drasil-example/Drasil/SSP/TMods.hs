@@ -4,7 +4,7 @@ module Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Prelude hiding (tan)
 import Language.Drasil
 
-import Data.Drasil.Quantities.Physics (distanceUC, forceUC)
+import Data.Drasil.Quantities.Physics (distance, force)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.SolidMechanics (mobShear, shearRes)
 
@@ -72,10 +72,10 @@ eq_rel = foldr ($=) 0 (map summ [fx, fy, momntOfBdy])
 
 eq_desc :: Sentence
 eq_desc = foldlSent [S "For a body in static equilibrium, the net",
-  plural forceUC +:+. S "and net moments acting on the body will cancel out",
+  plural force +:+. S "and net moments acting on the body will cancel out",
   S "Assuming a 2D problem", sParen (makeRefS newA8), S "the", getTandS fx `sAnd`
-  getTandS fy, S "will be equal to" +:+. E 0, S "All", plural forceUC,
-  S "and their", phrase distanceUC, S "from the chosen point of rotation",
+  getTandS fy, S "will be equal to" +:+. E 0, S "All", plural force,
+  S "and their", phrase distance, S "from the chosen point of rotation",
   S "will create a net moment equal to" +:+ E 0]
 
 --

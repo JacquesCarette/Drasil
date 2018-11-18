@@ -10,7 +10,7 @@ import qualified Data.Drasil.Units.Thermodynamics as UT (heat_transfer_coef,
   heat_cap_spec, thermal_flux, volHtGenU)
 import Data.Drasil.Quantities.Thermodynamics (sens_heat, temp, melt_pt,
   ht_flux, latent_heat, boil_pt, heat_cap_spec)
-import Data.Drasil.Quantities.Physics (timeUC)
+import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Math (surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
 import Drasil.SWHS.Concepts (water, coil, phsChgMtrl)
@@ -37,7 +37,7 @@ swhsUnits = map ucw [in_SA, out_SA, heat_cap_spec, htCap_L,
   temp,boil_pt, temp_env, melt_pt, t_init_melt,
   t_final_melt, vol, tank_vol, w_vol, deltaT,
   density, tau, tau_L_P, tau_S_P, tau_W, thickness] ++
-  map ucw [mass, timeUC] -- ++ [tank_length, diam, coil_SA]
+  map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]
 
 swhsUC :: [UnitalChunk]
 swhsUC = [in_SA, out_SA, htCap_L, htCap_S, htCap_V,
@@ -147,13 +147,13 @@ t_init_melt = uc' "t_init_melt"
   (nounPhraseSP "time at which melting of PCM begins")
   ("Time at which the phase change material " ++
     "begins changing from a solid to a liquid")
-  (sup (sub (eqSymb timeUC) (Atomic "melt")) (Atomic "init")) second
+  (sup (sub (eqSymb time) (Atomic "melt")) (Atomic "init")) second
 
 t_final_melt = uc' "t_final_melt"
   (nounPhraseSP "time at which melting of PCM ends")
   ("Time at which the phase change material " ++
     "finishes changes from a solid to a liquid")
-  (sup (sub (eqSymb timeUC) (Atomic "melt")) (Atomic "final")) second
+  (sup (sub (eqSymb time) (Atomic "melt")) (Atomic "final")) second
   
 tank_vol = uc' "tank_vol" (nounPhraseSP "volume of the cylindrical tank")
   "The amount of space encompassed by a tank"
@@ -187,7 +187,7 @@ tau_W = uc' "tau_W" (nounPhraseSP "ODE parameter for water")
   (sub lTau cW) second
 
 sim_time = uc' "sim_time" (compoundPhrase' (simulation ^. term)
-  (timeUC ^. term)) "Time over which the simulation runs"
+  (time ^. term)) "Time over which the simulation runs"
   lT second
 
 thickness = uc'  "thickness" (nounPhraseSP "Minimum thickness of a sheet of PCM")
@@ -373,7 +373,7 @@ temp_init = uqc "temp_init" (nounPhraseSP "initial temperature")
 -- Constraint 17
 time_final = uqc "time_final" (nounPhraseSP "final time")
   ("The amount of time elapsed from the beginning of the " ++
-  "simulation to its conclusion") (sub (eqSymb timeUC) 
+  "simulation to its conclusion") (sub (eqSymb time) 
   (Atomic "final")) second Rational
   [gtZeroConstr,
   sfwrc $ UpTo $ (Exc, sy time_final_max)] (dbl 50000) 0.1

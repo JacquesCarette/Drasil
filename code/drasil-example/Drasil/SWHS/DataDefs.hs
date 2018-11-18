@@ -10,7 +10,7 @@ import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcm_mass,
   temp_W, temp_PCM, ht_flux_P, pcm_HTC, coil_HTC, temp_C, ht_flux_C)
 import Drasil.SWHS.Labels(dd1HtFluxCL, dd2HtFluxPL, dd3HtFusionL, dd4MeltFracL)
 
-import Data.Drasil.Quantities.Physics (timeUC)
+import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latent_heat)
 
@@ -31,7 +31,7 @@ dd1HtFluxCQD :: QDefinition
 dd1HtFluxCQD = mkQuantDef ht_flux_C htFluxCEqn
 
 htFluxCEqn :: Expr
-htFluxCEqn = (sy coil_HTC) * ((sy temp_C) - apply1 temp_W timeUC)
+htFluxCEqn = (sy coil_HTC) * ((sy temp_C) - apply1 temp_W time)
 
 dd1HtFluxC :: DataDefinition
 dd1HtFluxC = mkDDL dd1HtFluxCQD [makeRef koothoor2013] [] dd1HtFluxCL [makeRefS newA7, makeRefS newA8, makeRefS newA9]
@@ -43,7 +43,7 @@ dd2HtFluxPQD :: QDefinition
 dd2HtFluxPQD = mkQuantDef ht_flux_P htFluxPEqn
 
 htFluxPEqn :: Expr
-htFluxPEqn = (sy pcm_HTC) * (apply1 temp_W timeUC - apply1 temp_PCM timeUC)
+htFluxPEqn = (sy pcm_HTC) * (apply1 temp_W time - apply1 temp_PCM time)
 
 dd2HtFluxP :: DataDefinition
 dd2HtFluxP = mkDDL dd2HtFluxPQD [makeRef koothoor2013] [] dd2HtFluxPL [makeRefS newA3, makeRefS newA4, makeRefS newA10]

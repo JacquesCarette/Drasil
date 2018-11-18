@@ -30,7 +30,7 @@ import Data.Drasil.Concepts.Computation (computerApp, inParam, compcon, algorith
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heat_cap_spec, ht_flux)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
-import Data.Drasil.Quantities.Physics (timeUC, energyUC, physicscon)
+import Data.Drasil.Quantities.Physics (time, energy, physicscon)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Software.Products (compPro, prodtcon)
@@ -106,7 +106,7 @@ nopcm_Units :: [UnitaryConceptDict]
 nopcm_Units = map ucw [density, tau, in_SA, out_SA,
   htCap_L, QT.ht_flux, ht_flux_in, ht_flux_out, vol_ht_gen,
   htTransCoeff, mass, tank_vol, QT.temp, QT.heat_cap_spec,
-  deltaT, temp_env, thFluxVect, timeUC, ht_flux_C,
+  deltaT, temp_env, thFluxVect, time, ht_flux_C,
   vol, w_mass, w_vol, tau_W]
 
 nopcm_Constraints :: [UncertQ]
@@ -131,7 +131,7 @@ mkSRS = RefSec (RefProg intro
   [TUnits, 
   tsymb [TSPurpose, SymbConvention [Lit (nw ht_trans), Doc' (nw progName)], SymbOrder],
   TAandA]) :
-  IntroSec (IntroProg (introStart ener_src energyUC progName)
+  IntroSec (IntroProg (introStart ener_src energy progName)
     (introEnd progName program)
   [IPurpose (purpDoc progName),
   IScope (scopeReqStart thermal_analysis sWHT) (scopeReqEnd temp thermal_energy
@@ -382,23 +382,23 @@ genDefnEq1, genDefnEq2, genDefnEq3, genDefnEq4, genDefnEq5 :: Expr
 genDefnEq1 = (negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
   (int_all (eqSymb vol) (sy vol_ht_gen)) $=
   (int_all (eqSymb vol) ((sy density)
-  * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) timeUC))
+  * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
 
 genDefnEq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
   (int_all (eqSymb vol)
-  ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) timeUC))
+  ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
 
 genDefnEq3 = (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) timeUC))
+  (int_all (eqSymb vol) ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
 
 genDefnEq4 = (sy density) * (sy QT.heat_cap_spec) * (sy vol) * deriv
-  (sy QT.temp) timeUC $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
+  (sy QT.temp) time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
 genDefnEq5 = (sy mass) * (sy QT.heat_cap_spec) * deriv (sy QT.temp)
-  timeUC $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
+  time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
   * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
 --TODO: Implement physical properties of a substance
@@ -437,17 +437,17 @@ iModDesc4 temw wm hcw chtc csa = [S "Setting", (ch temw :+: S "=" :+:
 
 iModEq1, iModEq2, iModEq3, iModEq4 ::Expr
 
-iModEq1 = (sy w_mass) * (sy htCap_W) * deriv (sy temp_W) timeUC $=
+iModEq1 = (sy w_mass) * (sy htCap_W) * deriv (sy temp_W) time $=
   (sy ht_flux_C) * (sy coil_SA)
  
-iModEq2 = (sy w_mass) * (sy htCap_W) * deriv (sy temp_W) timeUC $=
+iModEq2 = (sy w_mass) * (sy htCap_W) * deriv (sy temp_W) time $=
   (sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - (sy temp_W))
 
-iModEq3 = deriv (sy temp_W) timeUC $= ((sy coil_HTC) *
+iModEq3 = deriv (sy temp_W) time $= ((sy coil_HTC) *
   (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) -
   (sy temp_W))
 
-iModEq4 = deriv (sy temp_W) timeUC $= (1 / (sy tau_W)) *
+iModEq4 = deriv (sy temp_W) time $= (1 / (sy tau_W)) *
   ((sy temp_C) - (sy temp_W))
 
 dataConstTable1 :: LabelledContent
@@ -514,11 +514,11 @@ reqOIDQ = cic "reqOIDQ" (titleize' output_ `sAnd` plural input_
     phrase mass +:+ S "from" +:+ makeRefS reqFM `sAnd` ch tau_W +:+.
     sParen (S "from" +:+ makeRefS eBalanceOnWtr)) "Output-Input-Derivied-Quantities" funcReqDom
 reqCTWOT = cic "reqCTWOT" (S "Calculate and output the" +:+ phrase temp_W +:+
-    sParen (ch temp_W :+: sParen (ch timeUC)) +:+ S "over the" +:+
+    sParen (ch temp_W :+: sParen (ch time)) +:+ S "over the" +:+
     phrase sim_time) "Calculate-Temperature-Water-Over-Time" funcReqDom
 reqCCHEWT = cic "reqCCHEWT" 
     (S "Calculate and" +:+ phrase output_ +:+ S "the" +:+
-    phrase w_E +:+ sParen (ch w_E :+: sParen (ch timeUC)) +:+ S "over the" +:+
+    phrase w_E +:+ sParen (ch w_E :+: sParen (ch time)) +:+ S "over the" +:+
     phrase sim_time +:+. sParen (S "from" +:+ makeRefS heatEInWtr))
     "Calculate-Change-Heat_Energy-Water-Time" funcReqDom
 

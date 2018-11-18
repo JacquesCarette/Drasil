@@ -13,7 +13,7 @@ import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInPCM)
 
 import Data.Drasil.Concepts.Thermodynamics as CT (heat,
   thermal_conductor)
-import Data.Drasil.Quantities.Physics (energyUC)
+import Data.Drasil.Quantities.Physics (energy)
 
 import Data.Drasil.SentenceStructures (foldlSent, sAnd, ofThe)
 
@@ -37,7 +37,7 @@ likeChgUTP = cic "likeChgUTP" (
 --
 likeChgTCVOD = cic "likeChgTCVOD" (
   foldlSent [chgsStart newA8, S "The", phrase temp_C, S "will change over",
-  (S "course" `ofThe` S "day, depending"), S "on the", phrase energyUC,
+  (S "course" `ofThe` S "day, depending"), S "on the", phrase energy,
   S "received from the sun"] ) "Temperature-Coil-Variable-Over-Day" likeChgDom
 --
 likeChgTCVOL = cic "likeChgTCVOL" (

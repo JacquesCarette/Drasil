@@ -8,7 +8,7 @@ import Data.Drasil.Concepts.Thermodynamics (temp)
 
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
-import Data.Drasil.Quantities.Physics (timeUC)
+import Data.Drasil.Quantities.Physics (time)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heat_cap_spec)
 
@@ -81,23 +81,23 @@ genDefEq1, genDefEq2, genDefEq3, genDefEq4, genDefEq5 :: Expr
 genDefEq1 = (negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
   (int_all (eqSymb vol) (sy vol_ht_gen)) $=
   (int_all (eqSymb vol) ((sy density)
-  * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) timeUC))
+  * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
 
 genDefEq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
   (int_all (eqSymb vol)
-  ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) timeUC))
+  ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
 
 genDefEq3 = (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) timeUC))
+  (int_all (eqSymb vol) ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
 
 genDefEq4 = (sy density) * (sy QT.heat_cap_spec) * (sy vol) * deriv
-  (sy QT.temp) timeUC $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
+  (sy QT.temp) time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
 genDefEq5 = (sy mass) * (sy QT.heat_cap_spec) * deriv (sy QT.temp)
-  timeUC $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
+  time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
   * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
 roc_temp_simp_deriv_eqns :: [Expr]

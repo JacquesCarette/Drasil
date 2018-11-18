@@ -53,8 +53,8 @@ import qualified Data.Drasil.Concepts.Math as CM (equation, surface, law, mathco
 import Data.Drasil.Software.Products (prodtcon)
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
-import qualified Data.Drasil.Quantities.Physics as QP (angularVelocity, forceUC, 
-  linearVelocity, positionUC, timeUC, velocityUC)
+import qualified Data.Drasil.Quantities.Physics as QP (angularVelocity, force, 
+  linearVelocity, position, time, velocity)
 import Drasil.GamePhysics.Assumptions(newAssumptions)
 import Drasil.GamePhysics.Changes (likelyChanges, likelyChangesList',
   unlikelyChanges, unlikelyChangesList')
@@ -227,7 +227,7 @@ scope_of_requirements_intro_p1, scope_of_requirements_intro_p2 :: Sentence
 
 scope_of_requirements_intro_p1 = foldlSent_
   [S "the", (phrase physicalSim) `sOf` (getAcc twoD), 
-  (plural CP.rigidBody), S "acted on by", plural QP.forceUC]
+  (plural CP.rigidBody), S "acted on by", plural QP.force]
   
 scope_of_requirements_intro_p2 = foldlSent_ [S "simulates how these", 
   (plural CP.rigidBody), S "interact with one another"]
@@ -277,7 +277,7 @@ sysCtxDesc = foldlSPCol [S "The interaction between the", phrase product_,
 sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = [S "Provide initial" +:+ plural condition +:+ S "of the" +:+
     phrase physical +:+ S"state of the" +:+ phrase simulation `sC`
-    plural (CP.rigidBody) +:+ S "present, and" +:+ plural QP.forceUC +:+.
+    plural (CP.rigidBody) +:+ S "present, and" +:+ plural QP.force +:+.
     S "applied to them",
   S "Ensure application programming" +:+ phrase interface +:+
     S "use complies with the" +:+ phrase user +:+. phrase guide,
@@ -353,7 +353,7 @@ problem_description_intro_param lib app = foldlSent
   S "acting under various", (phrase physical), plural condition `sC` S "while", 
   S "simultaneously being fast and efficient enough to work in soft",
   (phrase realtime), S "during the" +:+. (phrase app), S "Developing a", 
-  (phrase lib), S "from scratch takes a long period of", (phrase QP.timeUC) `sAnd`
+  (phrase lib), S "from scratch takes a long period of", (phrase QP.time) `sAnd`
   S "is very costly" `sC` S "presenting barriers of entry which make it difficult for",
   (phrase app), S "developers to include", (phrase Doc.physics), S "in their" +:+. 
   (plural product_), S "There are a few free" `sC` (phrase openSource) `sAnd` S "high quality",
@@ -393,7 +393,7 @@ goalStatementStruct :: (NamedIdea a, NamedIdea b) => Sentence -> [a] ->
 goalStatementStruct state inputs wrt adjective outputs objct condition1 condition2 = 
   [S "Given the", initial state, (listOfInputs wrt), adjective, S "a set of", 
   (plural objct) `sC` S "determine", condition1, listOfOutputs, 
-  S "over a period of", (phrase QP.timeUC), condition2]
+  S "over a period of", (phrase QP.time), condition2]
   where initial EmptyS      = S "initial"
         initial p           = p `sC` (S "initial")
         listOfInputs EmptyS = (foldlList Comma List $ map plural inputs)
@@ -401,12 +401,12 @@ goalStatementStruct state inputs wrt adjective outputs objct condition1 conditio
         listOfOutputs       = (foldlList Comma List $ map plural outputs)
 
 goal_statements_G_linear = goalStatementStruct (plural physicalProperty) 
-  (take 2 inputSymbols) (plural QP.forceUC) (S "applied on")
+  (take 2 inputSymbols) (plural QP.force) (S "applied on")
   (take 2 outputSymbols) CP.rigidBody
   (S "their new") EmptyS
 
 goal_statements_G_angular = goalStatementStruct (plural physicalProperty) 
-  (drop 3 $ take 5 inputSymbols) (plural QP.forceUC) (S "applied on")
+  (drop 3 $ take 5 inputSymbols) (plural QP.force) (S "applied on")
   (drop 3 $ take 5 inputSymbols) CP.rigidBody
   (S "their new") EmptyS
 
@@ -416,7 +416,7 @@ goal_statements_G_detectCollision = goalStatementStruct EmptyS
   (S "if any of them will collide with one another") EmptyS
 
 goalStatement4Inputs :: [UnitalChunk]
-goalStatement4Inputs = [QP.positionUC, QM.orientation, QP.linearVelocity, 
+goalStatement4Inputs = [QP.position, QM.orientation, QP.linearVelocity, 
   QP.angularVelocity]
 
 goal_statements_G_collision = goalStatementStruct (plural physicalProperty)
@@ -518,7 +518,7 @@ functional_requirements_req1, functional_requirements_req2,
   -- | template for requirements
 requirementTemplate :: Sentence -> Sentence -> Sentence -> Sentence -> Sentence
 requirementTemplate a b x z = foldlSent [S "Determine the", a `sAnd` b, 
-  S "over a period of", (phrase QP.timeUC), S "of the", x, z]
+  S "over a period of", (phrase QP.time), S "of the", x, z]
 
   -- | with added constraint
 requirementS :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence -> Sentence
@@ -535,9 +535,9 @@ functional_requirements_req1 = foldlSent [S "Create a", (phrase CP.space), S "fo
   S "to interact in"]
 
 functional_requirements_req2 = foldlSent [S "Input the initial", 
-  (plural QPP.mass) `sC` (plural QP.velocityUC) `sC` 
+  (plural QPP.mass) `sC` (plural QP.velocity) `sC` 
   (plural QM.orientation) `sC` (plural QP.angularVelocity), 
-  S "of" `sC` S "and", (plural QP.forceUC), S "applied on", 
+  S "of" `sC` S "and", (plural QP.force), S "applied on", 
   (plural CP.rigidBody)]
 
 functional_requirements_req3 = foldlSent [S "Input the", (phrase CM.surface), 
@@ -548,8 +548,8 @@ functional_requirements_req4 = foldlSent [S "Verify that the", plural input_,
   S "satisfy the required", plural physicalConstraint, S "from", 
   (makeRefS SRS.solCharSpecLabel)]
 
-functional_requirements_req5 = requirementS (QP.positionUC) (QP.velocityUC) 
-  (S "acted upon by a" +:+ (phrase QP.forceUC))
+functional_requirements_req5 = requirementS (QP.position) (QP.velocity) 
+  (S "acted upon by a" +:+ (phrase QP.force))
 
 functional_requirements_req6 = requirementS' (QM.orientation) (QP.angularVelocity)
 
@@ -557,7 +557,7 @@ functional_requirements_req7 = foldlSent [S "Determine if any of the",
   (plural CP.rigidBody), S "in the", (phrase CP.space), 
   S "have collided"]
 
-functional_requirements_req8 = requirementS (QP.positionUC) (QP.velocityUC) 
+functional_requirements_req8 = requirementS (QP.position) (QP.velocity) 
   (S "that have undergone a" +:+ (phrase CP.collision))
 
 reqSS, reqIIC, reqISP, reqVPC, reqCTOT, reqCROT, reqDC, reqDCROT :: ConceptInstance

@@ -11,7 +11,7 @@ import Data.Drasil.Concepts.Thermodynamics (phase_change, thermal_energy,
 
 import Data.Drasil.Quantities.Math (gradient)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density)
-import Data.Drasil.Quantities.Physics (energyUC, timeUC)
+import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Quantities.Thermodynamics (temp, heat_cap_spec,
   latent_heat, melt_pt, boil_pt, sens_heat, heat_cap_spec)
 
@@ -34,7 +34,7 @@ swhsTMods = [consThermE, sensHtE, latentHtE]
 consThermE :: TheoryModel
 consThermE = tm consThermE_rc
   [qw thFluxVect, qw gradient, qw vol_ht_gen, 
-    qw density, qw heat_cap_spec, qw temp, qw timeUC] ([] :: [ConceptChunk])
+    qw density, qw heat_cap_spec, qw temp, qw time] ([] :: [ConceptChunk])
   [] [consThermERel] [] [makeRef consThemESrc] 
   (mkLabelSame "consThermE" (Def TM)) [consThermEdesc]
 
@@ -45,7 +45,7 @@ consThermE_rc = makeRC "consThermE_rc"
 
 consThermERel :: Relation
 consThermERel = (negate (sy gradient)) $. (sy thFluxVect) + (sy vol_ht_gen) $=
-  (sy density) * (sy heat_cap_spec) * (pderiv (sy temp) timeUC)
+  (sy density) * (sy heat_cap_spec) * (pderiv (sy temp) time)
 
 consThemESrc :: Label
 consThemESrc = mkURILabel "consThemESrc" "http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm" "Fourier Law of Heat Conduction and Heat Equation"
@@ -59,9 +59,9 @@ consThermEdesc = foldlSent [
   foldlList Comma List [ch thFluxVect `isThe` phrase thFluxVect +:+ sParen (Sy (unit_symb thFluxVect)),
   ch vol_ht_gen `isThe` phrase vol_ht_gen +:+ sParen (Sy (unit_symb vol_ht_gen)),
   ch temp `isThe` phrase temp +:+ sParen (Sy (unit_symb temp)),
-  ch timeUC +:+ S "is" +:+ phrase timeUC +:+ sParen (Sy (unit_symb timeUC)), ch gradient +:+
+  ch time +:+ S "is" +:+ phrase time +:+ sParen (Sy (unit_symb time)), ch gradient +:+
   S "is the" +:+ (gradient ^. defn)], S "For this", phrase equation, S "to apply" `sC`
-  S "other forms of", phrase energyUC `sC` S "such as", phrase mech_energy `sC`
+  S "other forms of", phrase energy `sC` S "such as", phrase mech_energy `sC`
   S "are assumed to be negligible in the", phrase system, sParen (makeRefS thermalEnergyOnlyL)]
 
 -------------------------
@@ -95,7 +95,7 @@ sensHtEEqn = (sy sens_heat) $= case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
 sensHtEdesc :: Sentence
 sensHtEdesc = foldlSent [
   ch sens_heat `isThe` S "change in",
-  phrase sens_heat, phrase energyUC +:+. sParen (Sy (joule ^. usymb)),
+  phrase sens_heat, phrase energy +:+. sParen (Sy (joule ^. usymb)),
   ch htCap_S `sC` ch htCap_L `sC` ch htCap_V, S "are the",
   phrase htCap_S `sC` phrase htCap_L `sC` S "and", phrase htCap_V `sC`
   S "respectively" +:+. sParen (Sy (unit_symb heat_cap_spec)),
@@ -114,7 +114,7 @@ sensHtEdesc = foldlSent [
   S "or", ch temp :+: S "=" +:+. ch melt_pt,
   S "If this" `isThe` S "case, refer to",
   (makeRefS latentHtE) `sC` at_start latent_heat,
-  phrase energyUC]
+  phrase energy]
  
 --How to have new lines in the description?
 --Can't have relation and eqn chunks together since they are called in a list
@@ -128,7 +128,7 @@ sensHtEdesc = foldlSent [
 -------------------------
 latentHtE :: TheoryModel
 latentHtE = tm latentHtE_rc
-  [qw latent_heat, qw timeUC, qw tau] ([] :: [ConceptChunk])
+  [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
   [] [latHtEEqn] [] [makeRef latHtESrc] (mkLabelSame "latentHtE" (Def TM)) [latentHtEdesc]
 
 latentHtE_rc :: RelationConcept
@@ -137,8 +137,8 @@ latentHtE_rc = makeRC "latentHtE_rc"
   -- (mkLabelSame "LatHtE" (Def TM))
 
 latHtEEqn :: Relation
-latHtEEqn = apply1 latent_heat timeUC $= 
-  defint (eqSymb tau) 0 (sy timeUC) (deriv (apply1 latent_heat tau) tau)
+latHtEEqn = apply1 latent_heat time $= 
+  defint (eqSymb tau) 0 (sy time) (deriv (apply1 latent_heat tau) tau)
 
 -- Integrals need dTau at end
 
@@ -149,11 +149,11 @@ latentHtEdesc :: Sentence
 latentHtEdesc = foldlSent [
   ch latent_heat `isThe` S "change in",
   phrase thermal_energy, sParen (Sy (joule ^. usymb)) `sC`
-  phrase latent_heat +:+. phrase energyUC, 
+  phrase latent_heat +:+. phrase energy, 
   E latHtEEqn `isThe` phrase rOfChng, S "of",
-  ch latent_heat, S "with respect to", phrase timeUC,
-  ch tau +:+. sParen (Sy (unit_symb tau)), ch timeUC `isThe`
-  phrase timeUC, sParen (Sy (unit_symb timeUC)),
+  ch latent_heat, S "with respect to", phrase time,
+  ch tau +:+. sParen (Sy (unit_symb tau)), ch time `isThe`
+  phrase time, sParen (Sy (unit_symb time)),
   S "elapsed, as long as the",
   phrase phase_change, S "is not complete. The status of",
   S "the", phrase phase_change,

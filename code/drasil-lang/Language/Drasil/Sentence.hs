@@ -14,7 +14,12 @@ import Language.Drasil.UID (UID)
 import Language.Drasil.Unicode (Special(SqBrClose, SqBrOpen))
 
 -- Trying different pieces of information for a reference
-data RefProg = PrependDomain UID String
+data RefProg =
+    PrependDomain UID String
+  | Deferred UID                -- Deferred lookup; done later
+  | RS String                   -- Lifts a String into a RefProg
+  | RPConcat RefProg RefProg    -- Concatenates with two subprograms
+  | Name                        -- The Symbol to insert the ShortName directly
 data Reference2 = Reference2 RefProg RefAdd ShortName
 
 -- | For writing "sentences" via combining smaller elements

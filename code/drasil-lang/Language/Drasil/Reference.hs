@@ -22,7 +22,8 @@ import Language.Drasil.Label.Core (Label(..))
 import Language.Drasil.Label.Type (getAdd)
 import Language.Drasil.Label (getDefName, getReqName)
 import Language.Drasil.People (People, comparePeople)
-import Language.Drasil.RefProg (Reference2(Reference2), prepend)
+import Language.Drasil.RefProg (RefProg, Reference2(Reference2), (+::+), name, prepend, raw)
+import Language.Drasil.RefProg as RP (defer)  -- FIXME: Remove prefix once SN.defer is no longer needed.
 import Language.Drasil.RefTypes (RefType(..), DType(..), Reference(Reference))
 import Language.Drasil.ShortName ( ShortName, getStringSN, shortname', concatSN)
 import Language.Drasil.ShortName as SN (defer)
@@ -110,52 +111,63 @@ instance HasConceptRefs  ReferenceDB where conceptRefTable = conceptDB
 
 --FIXME: "class (HasLabel s) => Referable s where" instead?
 class Referable s where
-  refAdd  :: s -> String  -- The plaintext referencing address (what we're linking to).
-                          -- Should be string with no spaces/special chars.
-                          -- Only visible in the source (tex/html).
-  rType   :: s -> RefType -- The reference type (referencing namespace?)
+  refAdd    :: s -> String  -- The plaintext referencing address (what we're linking to).
+                            -- Should be string with no spaces/special chars.
+                            -- Only visible in the source (tex/html).
+  rType     :: s -> RefType -- The reference type (referencing namespace?)
+  renderRef :: s -> RefProg -- A program to render a shortname
 
 instance Referable AssumpChunk where
-  refAdd  x = getAdd ((x ^. getLabel) ^. getRefAdd)
-  rType   _ = Assump
+  refAdd    x = getAdd ((x ^. getLabel) ^. getRefAdd)
+  rType     _ = Assump
+  renderRef l = prepend $ abrv l
 
 instance Referable Section where
-  refAdd  (Section _ _ lb ) = getAdd (lb ^. getRefAdd)
-  rType   _                = Sect
+  refAdd    (Section _ _ lb ) = getAdd (lb ^. getRefAdd)
+  rType     _                 = Sect
+  renderRef _                 = raw "Section: " +::+ name
 
 instance Referable Citation where
-  refAdd c = citeID c -- citeID should be unique.
-  rType _  = Cite
+  refAdd    c = citeID c -- citeID should be unique.
+  rType     _ = Cite
+  renderRef _ = name -- FIXME
 
 instance Referable TheoryModel where
-  refAdd  t = getAdd ((t ^. getLabel) ^. getRefAdd)
-  rType   _ = Def TM
+  refAdd    t = getAdd ((t ^. getLabel) ^. getRefAdd)
+  rType     _ = Def TM
+  renderRef _ = name -- FIXME
 
 instance Referable GenDefn where
-  refAdd  g = getAdd ((g ^. getLabel) ^. getRefAdd)
-  rType   _ = Def General
+  refAdd    g = getAdd ((g ^. getLabel) ^. getRefAdd)
+  rType     _ = Def General
+  renderRef _ = name -- FIXME
 
 instance Referable DataDefinition where
-  refAdd  d = getAdd ((d ^. getLabel) ^. getRefAdd)
-  rType   _ = Def DD
+  refAdd    d = getAdd ((d ^. getLabel) ^. getRefAdd)
+  rType     _ = Def DD
+  renderRef _ = name -- FIXME
 
 instance Referable InstanceModel where
-  refAdd  i = getAdd ((i ^. getLabel) ^. getRefAdd)
-  rType   _ = Def Instance
+  refAdd    i = getAdd ((i ^. getLabel) ^. getRefAdd)
+  rType     _ = Def Instance
+  renderRef _ = name -- FIXME
 
 instance Referable ConceptInstance where
-  refAdd i = i ^. uid
-  rType i  = DeferredCC $ sDom $ i ^. cdom
+  refAdd    i = i ^. uid
+  rType     i = DeferredCC $ sDom $ i ^. cdom
+  renderRef l = (RP.defer $ sDom $ l ^. cdom) +::+ raw ": " +::+ name
 
 --Should refer to an object WITH a variable.
 --Can be removed once sections have labels.
 instance Referable Label where
-  refAdd lb@(Lbl _ _ _ _) = getAdd (lb ^. getRefAdd)
-  rType  (Lbl _ _ _ x)    = x --FIXME: is a hack; see #971
+  refAdd    lb@(Lbl _ _ _ _) = getAdd (lb ^. getRefAdd)
+  rType     (Lbl _ _ _ x)    = x --FIXME: is a hack; see #971
+  renderRef _                = name -- FIXME
 
 instance Referable LabelledContent where
-  refAdd (LblC lb _) = getAdd (lb ^. getRefAdd)
-  rType  (LblC _ c)  = temp c
+  refAdd    (LblC lb _) = getAdd (lb ^. getRefAdd)
+  rType     (LblC _ c)  = temp c
+  renderRef _           = name -- FIXME
 
 temp :: RawContent -> RefType
 temp (Table _ _ _ _)       = Tab
@@ -223,13 +235,10 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
   where assumptions = Map.elems am
         dropNums = map fst
 
---data RefProg = UID
---data RefProg2 = String --- for abbreviation of the name, the prefix...?
---data Reference2 = Reference2 RefProg RefProg2 RefAdd ShortName
-makeRef2 :: (HasUID l, Referable l, HasShortName l, CommonIdea l) => l -> Reference2
-makeRef2 l = Reference2 (l ^. uid) (prepend $ abrv l) (refAdd l) (l ^. shortname)
+makeRef2 :: (HasUID l, Referable l, HasShortName l) => l -> Reference2
+makeRef2 l = Reference2 (l ^. uid) (renderRef l) (refAdd l) (l ^. shortname)
 
-makeRef2S :: (HasUID l, Referable l, HasShortName l, CommonIdea l) => l -> Sentence
+makeRef2S :: (HasUID l, Referable l, HasShortName l) => l -> Sentence
 makeRef2S = Ref2 . makeRef2
 
 -- | Create References to a given 'LayoutObj'

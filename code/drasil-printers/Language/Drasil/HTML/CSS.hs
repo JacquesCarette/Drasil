@@ -1,7 +1,6 @@
 module Language.Drasil.HTML.CSS where
 
-import Text.PrettyPrint (Doc, text, render, empty, ($$), (<>), vcat, hcat)
-import Data.List (intersperse)
+import Text.PrettyPrint (Doc, text, vcat)
 
 import Language.Drasil hiding (Expr)
 

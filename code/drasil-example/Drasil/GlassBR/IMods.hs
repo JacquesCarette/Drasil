@@ -5,9 +5,8 @@ import Prelude hiding (exp)
 import Control.Lens ((^.))
 import Language.Drasil
 
-import Drasil.GlassBR.Assumptions (glassType, glassCondition, standardValues, glassLite,
+import Drasil.GlassBR.Assumptions (standardValues, glassLite,
   boundaryConditions, responseType)
-import Drasil.GlassBR.Concepts (glassTypeFac, lResistance, lShareFac)
 import Drasil.GlassBR.DataDefs (glaTyFac, nonFL, risk, standOffDis)
 import Drasil.GlassBR.Labels (probOfBreakL, calOfCapacityL, calOfDemandL)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)

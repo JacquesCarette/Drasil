@@ -276,9 +276,6 @@ spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
 
-helpRefName :: String -> ShortName -> String
-helpRefName rf sn =  rf ++ ": " ++ getStringSN sn
-
 renderShortName :: (HasDefinitionTable ctx) => ctx -> RefProg -> ShortName -> Sentence
 renderShortName ctx (Deferred u) _ = S $ maybe (error "Domain has no abbreviation.") id $ getA $ defLookup u $ ctx ^. defTable
 renderShortName ctx (RConcat a b) sn = renderShortName ctx a sn :+: renderShortName ctx b sn

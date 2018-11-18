@@ -525,13 +525,13 @@ traceMatsAndGraphsDataCons  = ["Data Constraints"]
 traceMatsAndGraphsDataConsRef = [makeRefS SRS.datConLabel]
 
 traceMatsAndGraphsFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-traceMatsAndGraphsFuncReqRef = map makeRefS funcReqs
+traceMatsAndGraphsFuncReqRef = map makeRef2S funcReqs
 
 traceMatsAndGraphsA = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
 traceMatsAndGraphsARef = map makeRefS assumptions
 
 traceMatsAndGraphsLC = ["LC1", "LC2", "LC3", "LC4", "LC5"]
-traceMatsAndGraphsLCRef = map makeRefS likelyChgs
+traceMatsAndGraphsLCRef = map makeRef2S likelyChgs
 
 traceMatsAndGraphsRowT1 :: [String]
 traceMatsAndGraphsRowT1 = traceMatsAndGraphsT ++ traceMatsAndGraphsIM ++ traceMatsAndGraphsDD

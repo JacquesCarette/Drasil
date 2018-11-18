@@ -271,7 +271,7 @@ spec _ (P s)           = P.E $ symbol s
 spec sm (Ch s)         = P.E $ symbol $ lookupC sm s 
 spec sm (Ref (Reference t r sn))   = P.Ref t r (spec sm (S . getStringSN $ resolveSN sn $
   lookupDeferredSN sm)) sn --FIXME: sn passed in twice?
-spec sm (Ref2 (Reference2 rp ra sn)) = P.Ref2 "FIXME" "A" ra $ spec sm $ renderShortName sm rp sn
+spec sm (Ref2 (Reference2 rp ra sn)) = P.Ref2 "FIXME" "FIXME" ra $ spec sm $ renderShortName sm rp sn
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm

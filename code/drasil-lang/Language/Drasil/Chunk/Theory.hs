@@ -6,7 +6,7 @@ import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.Quantity (QuantityDict, qw)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA), Quantity,
   Definition(defn), ConceptDomain(cdom), Concept, HasReference(getReferences),
-  HasAdditionalNotes(getNotes), HasLabel(getLabel), HasShortName(shortname))
+  HasAdditionalNotes(getNotes), HasLabel(getLabel), HasShortName(shortname), CommonIdea(abrv))
 import Language.Drasil.Development.Unit (MayHaveUnit)
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.Label.Core (Label)
@@ -50,7 +50,7 @@ data TheoryModel = TM
   , _ref  :: [Reference]
   , _lb :: Label
   , _notes :: [Sentence]
-  , ci :: CI
+  , _ci :: CI
   }
 makeLenses ''TheoryModel
 
@@ -72,6 +72,7 @@ instance Theory             TheoryModel where
   defined_fun   = dfun
 instance HasLabel           TheoryModel where getLabel = lb
 instance HasShortName       TheoryModel where shortname = lb . shortname
+instance CommonIdea         TheoryModel where abrv = abrv . view ci
 
 softEng :: IdeaDict
 softEng      = mkIdea  "softEng"        (cn' "Software Engineering")  (Just "SE")

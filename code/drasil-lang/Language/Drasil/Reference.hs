@@ -133,7 +133,7 @@ instance Referable Citation where
 instance Referable TheoryModel where
   refAdd  t = getAdd ((t ^. getLabel) ^. getRefAdd)
   rType   _ = Def TM
-  rProg   l = Name -- FIXME: Implement Ref2 for TheoryModel
+  rProg   l = PrependDomain (l ^. uid) $ abrv l -- FIXME: Implement Ref2 for TheoryModel
 
 instance Referable GenDefn where
   refAdd  g = getAdd ((g ^. getLabel) ^. getRefAdd)

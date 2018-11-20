@@ -29,8 +29,8 @@ glassBRsymb = map dqdWr [plate_len, plate_width, char_weight, standOffDist] ++
 probOfBreak :: InstanceModel
 probOfBreak = im' probOfBreak_RC [qw risk] 
   [sy risk $> 0] (qw prob_br) [sy prob_br $> 0]
-  (map makeRef [astm2009, beasonEtAl1998]) probOfBreakL [makeRefS standardValues, makeRefS boundaryConditions,
-  makeRefS responseType, makeRefS risk]
+  (map makeRef [astm2009, beasonEtAl1998]) probOfBreakL [makeRef2S standardValues, makeRef2S boundaryConditions,
+  makeRef2S responseType, makeRefS risk]
 
 {--}
 
@@ -56,7 +56,7 @@ calofCapacity_RC = makeRC "calofCapacity_RC" (nounPhraseSP "Calculation of Capac
 
 calofCapacityDesc :: Sentence
 calofCapacityDesc =
-  foldlSent [makeRefS glassLite, makeRefS glaTyFac, makeRefS nonFL]
+  foldlSent [makeRef2S glassLite, makeRefS glaTyFac, makeRefS nonFL]
 
 {--}
 

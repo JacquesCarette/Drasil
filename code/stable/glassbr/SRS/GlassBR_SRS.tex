@@ -365,7 +365,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:responseType}:]The response type considered in GlassBR is flexural.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:ldfConstant}:]With reference to A\ref{A:standardValues}, the value of load duration factor ($LDF$) is a constant in GlassBR.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:ldfConstant}:]With reference to \hyperref[A:standardValues]{A: standardValues}, the value of load duration factor ($LDF$) is a constant in GlassBR.
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -532,8 +532,8 @@ Description & \begin{symbDescription}
               \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & A\ref{A:standardValues}
-        A\ref{A:ldfConstant}
+Notes & \hyperref[A:standardValues]{A: standardValues}
+        \hyperref[A:ldfConstant]{A: ldfConstant}
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -602,7 +602,7 @@ Description & \begin{symbDescription}
 Notes & $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:min.thick]{Definition~DD:min.thick}.
         ${\hat{q}_{tol}}$ is the tolerable load defined in \hyperref[DD:tolLoad]{Definition~DD:tolLoad}.
-        A\ref{A:standardValues}
+        \hyperref[A:standardValues]{A: standardValues}
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -675,8 +675,8 @@ Notes & $q$ is the 3 second equivalent pressure, as given in \hyperref[IM:calOfD
         $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:min.thick]{Definition~DD:min.thick}.
         $GTF$ is the glass type factor, as given by \hyperref[DD:gTF]{Definition~DD:gTF}.
-        $\hat{q}$ is calculated with reference to A\ref{A:glassLite}.
-        A\ref{A:standardValues}
+        $\hat{q}$ is calculated with reference to \hyperref[A:glassLite]{A: glassLite}.
+        \hyperref[A:standardValues]{A: standardValues}
 \\ \midrule \\
 Source & \cite{astm2009} and \cite{campidelli}
 \\ \midrule \\
@@ -749,7 +749,7 @@ Notes & ${J_{tol}}$  is calculated with reference to  ${P_{btol}}$.
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:min.thick]{Definition~DD:min.thick}.
         $LDF$ is the load duration factor as defined by \hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}.
         ${P_{btol}}$ is the tolerable probability entered by the user.
-        A\ref{A:standardValues}
+        \hyperref[A:standardValues]{A: standardValues}
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -848,9 +848,9 @@ Description & \begin{symbDescription}
               \item{$B$ is the risk of failure (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & A\ref{A:standardValues}
-        A\ref{A:boundaryConditions}
-        A\ref{A:responseType}
+Notes & \hyperref[A:standardValues]{A: standardValues}
+        \hyperref[A:boundaryConditions]{A: boundaryConditions}
+        \hyperref[A:responseType]{A: responseType}
         \hyperref[DD:risk.fun]{Definition~DD:risk.fun}
 \\ \midrule \\
 Source & \cite{astm2009} and \cite{beasonEtAl1998}
@@ -894,7 +894,7 @@ Description & \begin{symbDescription}
               \item{$LSF$ is the load share factor (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & A\ref{A:glassLite} \hyperref[DD:gTF]{Definition~DD:gTF} \hyperref[DD:nFL]{Definition~DD:nFL}.
+Notes & \hyperref[A:glassLite]{A: glassLite} \hyperref[DD:gTF]{Definition~DD:gTF} \hyperref[DD:nFL]{Definition~DD:nFL}.
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -989,9 +989,9 @@ This section provides the functional requirements, the business tasks that the s
 \item[Input-Glass-Props:\phantomsection\label{inputGlassProps}]Input the quantities from Table~\ref{Table:InputGlassPropsReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast. Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
 \item[System-Set-Values-Following-Assumptions:\phantomsection\label{sysSetValsFollowingAssumps}]The system shall set the known values as follows:
                                                                                                 \begin{itemize}
-                                                                                                \item{$m$, $k$, $E$, and ${t_{d}}$ following A\ref{A:standardValues}}
+                                                                                                \item{$m$, $k$, $E$, and ${t_{d}}$ following \hyperref[A:standardValues]{A: standardValues}}
                                                                                                 \item{$LDF$ from \hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}}
-                                                                                                \item{LSF following A\ref{A:glassLite}}
+                                                                                                \item{LSF following \hyperref[A:glassLite]{A: glassLite}}
                                                                                                 \item{$h$ from \hyperref[DD:min.thick]{Definition~DD:min.thick}}
                                                                                                 \item{$GTF$ from \hyperref[DD:gTF]{Definition~DD:gTF}}
                                                                                                 \item{$SD$ from \hyperref[DD:standOffDist]{Definition~DD:standOffDist}}
@@ -1051,17 +1051,17 @@ This problem is small in size and relatively simple, so performance is not a pri
 \section{Likely Changes}
 \label{Sec:LCs}
 \begin{itemize}
-\item[Calculate-Internal-Blask-Risk:\phantomsection\label{calcInternalBlastRisk}]A\ref{A:explainScenario} - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.
-\item[Variable-Values-of-m,k,E:\phantomsection\label{varValsOfmkE}]A\ref{A:standardValues}, A\ref{A:ldfConstant} - Currently, the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future, these values can be changed to variable inputs.
-\item[Accomodate-More-than-Single-Lite:\phantomsection\label{accMoreThanSingleLite}]A\ref{A:glassLite} - The software may be changed to accommodate more than a single lite.
-\item[Accomodate-More-Boundary-Conditions:\phantomsection\label{accMoreBoundaryConditions}]A\ref{A:boundaryConditions}- The software may be changed to accommodate more boundary conditions than 4-sided support.
-\item[Consider-More-than-Flexure-Glass:\phantomsection\label{considerMoreThanFlexGlass}]A\ref{A:responseType} - The software may be changed to consider more than just flexure of the glass.
+\item[Calculate-Internal-Blask-Risk:\phantomsection\label{calcInternalBlastRisk}]\hyperref[A:explainScenario]{A: explainScenario} - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.
+\item[Variable-Values-of-m,k,E:\phantomsection\label{varValsOfmkE}]\hyperref[A:standardValues]{A: standardValues}, \hyperref[A:ldfConstant]{A: ldfConstant} - Currently, the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future, these values can be changed to variable inputs.
+\item[Accomodate-More-than-Single-Lite:\phantomsection\label{accMoreThanSingleLite}]\hyperref[A:glassLite]{A: glassLite} - The software may be changed to accommodate more than a single lite.
+\item[Accomodate-More-Boundary-Conditions:\phantomsection\label{accMoreBoundaryConditions}]\hyperref[A:boundaryConditions]{A: boundaryConditions}- The software may be changed to accommodate more boundary conditions than 4-sided support.
+\item[Consider-More-than-Flexure-Glass:\phantomsection\label{considerMoreThanFlexGlass}]\hyperref[A:responseType]{A: responseType} - The software may be changed to consider more than just flexure of the glass.
 \end{itemize}
 \section{Unlikely Changes}
 \label{Sec:UCs}
 \begin{itemize}
 \item[Predict-Withstanding-of-Certain-Degree:\phantomsection\label{predictWithstandOfCertDeg}]The goal of the system is to predict whether the glass slab under consideration can withstand an explosion of a certain degree.
-\item[Accommodate-Altered-Glass:\phantomsection\label{accAlteredGlass}]A\ref{A:glassCondition} requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.
+\item[Accommodate-Altered-Glass:\phantomsection\label{accAlteredGlass}]\hyperref[A:glassCondition]{A: glassCondition} requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}

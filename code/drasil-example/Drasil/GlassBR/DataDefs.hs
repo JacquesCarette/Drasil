@@ -11,7 +11,7 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Citations (campidelli)
 import Data.Drasil.SentenceStructures (sAnd, sOf)
 
-import Drasil.GlassBR.Assumptions (standardValues, ldfConstant)
+import Drasil.GlassBR.Assumptions (standardValues, ldfConstant, glassLite)
 import Drasil.GlassBR.Concepts (annealed, fullyT, heatS)
 import Drasil.GlassBR.Labels (calOfDemandL, glassLiteL)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
@@ -77,8 +77,8 @@ loadDFQD :: QDefinition
 loadDFQD = mkQuantDef lDurFac loadDF_eq
 
 loadDF :: DataDefinition
-loadDF = mkDD loadDFQD [makeRef astm2009] [{-derivation-}] "loadDurFactor" [makeRefS standardValues,
-  makeRefS ldfConstant]
+loadDF = mkDD loadDFQD [makeRef astm2009] [{-derivation-}] "loadDurFactor" [makeRef2S standardValues,
+  makeRef2S ldfConstant]
 
 --DD4--
 
@@ -105,7 +105,7 @@ nonFLQD = mkQuantDef nonFactorL nonFL_eq
 
 nonFL :: DataDefinition
 nonFL = mkDD nonFLQD [makeRef astm2009] [{-derivation-}] "nFL"
-  (aGrtrThanB : hRef : qHtTlTolRef : [makeRefS standardValues])
+  (aGrtrThanB : hRef : qHtTlTolRef : [makeRef2S standardValues])
 
 --DD6--
 
@@ -133,7 +133,7 @@ dimLLQD = mkQuantDef dimlessLoad dimLL_eq
 
 dimLL :: DataDefinition
 dimLL = mkDD dimLLQD [makeRef astm2009, makeRef campidelli {- +:+ sParen (S "Eq. 7") -}] [{-derivation-}] "dimlessLoad"
-  (qRef : aGrtrThanB : hRef : gtfRef : glassLiteRef : [makeRefS standardValues])
+  (qRef : aGrtrThanB : hRef : gtfRef : glassLiteRef : [makeRef2S standardValues])
 
 --DD8--
 
@@ -161,7 +161,7 @@ tolStrDisFacQD = mkQuantDef sdf_tol tolStrDisFac_eq
 
 tolStrDisFac :: DataDefinition
 tolStrDisFac = mkDD tolStrDisFacQD [makeRef astm2009] [{-derivation-}] "sdf_tol"
-  (jtolRelToPbtol : aGrtrThanB : hRef : ldfRef : pbTolUsr : [makeRefS standardValues])
+  (jtolRelToPbtol : aGrtrThanB : hRef : ldfRef : pbTolUsr : [makeRef2S standardValues])
 
 --DD10--
 
@@ -251,4 +251,4 @@ jtolRelToPbtol :: Sentence
 jtolRelToPbtol = (ch sdf_tol +:+ S " is calculated with reference to " +:+. ch pb_tol)
 
 glassLiteRef :: Sentence 
-glassLiteRef = (ch dimlessLoad +:+ S "is calculated with reference to" +:+. makeRefS glassLiteL)
+glassLiteRef = (ch dimlessLoad +:+ S "is calculated with reference to" +:+. makeRef2S glassLite)

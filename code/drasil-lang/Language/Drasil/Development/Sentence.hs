@@ -6,8 +6,8 @@ import Control.Lens ((^.))
 
 import Language.Drasil.Classes (NamedIdea(term), HasUID(uid), Idea)
 import Language.Drasil.Chunk.NamedIdea (short)
-import Language.Drasil.Sentence ((+:+), Sentence((:+:), S, Ch), sParen,
- SentenceStyle (TermStyle, PluralTerm))
+import Language.Drasil.Sentence ((+:+), Sentence((:+:), S), sParen, sentenceTerm,
+	sentencePlural)
 import qualified Language.Drasil.NounPhrase as NP
 
 -- | Helper for common pattern of introducing the title-case version of a 
@@ -34,11 +34,11 @@ titleize' n = NP.titleizeNP' (n ^. term)
 
 -- | Helper for getting the phrase from a NamedIdea.
 phrase :: (HasUID n, NamedIdea n) => n -> Sentence
-phrase n = Ch TermStyle (n ^. uid) --NP.phrase (n ^. term)
+phrase n = sentenceTerm (n ^. uid) --NP.phrase (n ^. term)
 
 -- | Helper for getting the plural of a phrase from a NamedIdea
 plural :: (HasUID n, NamedIdea n) => n -> Sentence
-plural n = Ch PluralTerm (n ^. uid)
+plural n = sentencePlural (n ^. uid)
 --plural n = NP.plural (n ^. term)
 
 phrase's, plural's :: NamedIdea n => n -> Sentence

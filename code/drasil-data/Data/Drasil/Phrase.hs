@@ -119,14 +119,6 @@ the t = nounPhrase'' (S "the" +:+ phrase t) (S "the" +:+ plural t) CapWords CapW
 theCustom :: (NamedIdea t) => (t -> Sentence) -> t -> NP
 theCustom f t = nounPhrase''(S "the" +:+ f t) (S "the" +:+ f t) CapFirst CapWords
 
-{--the :: (NamedIdea t) => t -> NamedChunk
-the t = nc ("the" ++ t ^. uid)
-  (nounPhrase'' (S "the" +:+ phrase t) (S "the" +:+ plural t) CapFirst CapWords)
-
-theCustom :: (NamedIdea t) => (t -> Sentence) -> t -> NamedChunk
-theCustom f t = nc ("the" ++ t ^. uid) (nounPhrase''(S "the" +:+ f t)
-  (S "the" +:+ f t) CapFirst CapWords) --}
-
 -- | Combinator for combining two 'NamedChunk's into one.
 -- /Does not preserve abbreviations/
 compoundNC :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk

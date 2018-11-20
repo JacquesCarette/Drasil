@@ -3,7 +3,7 @@
 module Language.Drasil.Sentence
   (Sentence(Ch, Sy, S, Sp, E, Ref, Quote, (:+:), EmptyS, P, Ref2),
    sParen, sSqBr, (+:+), sC, (+:+.), (+:), Reference2(Reference2), RefProg,
-   SentenceStyle(..)) where
+   SentenceStyle(..), sentenceShort, sentenceSymb, sentenceTerm, sentencePlural) where
 
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.RefTypes (Reference, RefAdd)
@@ -50,6 +50,17 @@ instance Monoid Sentence where
   mempty = EmptyS
   mappend = (:+:)
 
+sentenceShort :: UID ->Sentence
+sentenceShort u = Ch ShortStyle u
+
+sentenceSymb :: UID ->Sentence
+sentenceSymb u = Ch SymbolStyle u
+
+sentenceTerm :: UID ->Sentence
+sentenceTerm u = Ch TermStyle u
+
+sentencePlural :: UID ->Sentence
+sentencePlural u = Ch PluralTerm u
 -- | Helper function for wrapping sentences in parentheses.
 sParen :: Sentence -> Sentence
 sParen x = S "(" :+: x :+: S ")"

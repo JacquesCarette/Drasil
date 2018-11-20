@@ -13,7 +13,7 @@ import Data.Drasil.SentenceStructures (sAnd, sOf)
 
 import Drasil.GlassBR.Assumptions (standardValues, ldfConstant, glassLite)
 import Drasil.GlassBR.Concepts (annealed, fullyT, heatS)
-import Drasil.GlassBR.Labels (calOfDemandL, glassLiteL)
+import Drasil.GlassBR.Labels (calOfDemandL)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, 
   demand, dimlessLoad, gTF, glassTypeAbbrsStr, glassTypeFactors, glass_type, 

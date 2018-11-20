@@ -133,22 +133,22 @@ instance Referable Citation where
 instance Referable TheoryModel where
   refAdd  t = getAdd ((t ^. getLabel) ^. getRefAdd)
   rType   _ = Def TM
-  rProg   l = PrependDomain (l ^. uid) $ abrv l -- FIXME: Implement Ref2 for TheoryModel
+  rProg   l = PrependDomain (l ^. uid) $ abrv l
 
 instance Referable GenDefn where
   refAdd  g = getAdd ((g ^. getLabel) ^. getRefAdd)
   rType   _ = Def General
-  rProg   l = PrependDomain (l ^. uid) $ abrv l -- FIXME
+  rProg   l = PrependDomain (l ^. uid) $ abrv l
 
 instance Referable DataDefinition where
   refAdd  d = getAdd ((d ^. getLabel) ^. getRefAdd)
   rType   _ = Def DD
-  rProg   l = PrependDomain (l ^. uid) $ abrv l -- FIXME
+  rProg   l = PrependDomain (l ^. uid) $ abrv l
 
 instance Referable InstanceModel where
   refAdd  i = getAdd ((i ^. getLabel) ^. getRefAdd)
   rType   _ = Def Instance
-  rProg   l = Name -- FIXME
+  rProg   l = PrependDomain (l ^. uid) $ abrv l
 
 instance Referable ConceptInstance where
   refAdd i = i ^. uid

@@ -12,7 +12,7 @@ import Language.Drasil.Chunk.Quantity (QuantityDict)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA), Quantity,
   Definition(defn),ConceptDomain(cdom), Concept, ExprRelat(relat),
   HasDerivation(derivations), HasReference(getReferences), HasAdditionalNotes(getNotes),
-  HasLabel(getLabel), HasSymbol(symbol), HasSpace(typ), HasShortName(shortname))
+  HasLabel(getLabel), HasSymbol(symbol), HasSpace(typ), HasShortName(shortname),CommonIdea(abrv))
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Development.Unit (MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Relation)
@@ -45,7 +45,7 @@ data InstanceModel = IM { _rc :: RelationConcept
                         , _deri :: Derivation
                         , _lb :: Label
                         , _notes :: [Sentence]
-                        , ci :: CI
+                        , _ci :: CI
                         }
 makeLenses ''InstanceModel
 
@@ -65,6 +65,7 @@ instance HasSymbol          InstanceModel where symbol = symbol . view imOutput 
 instance HasSpace           InstanceModel where typ = imOutput . typ
 instance Quantity           InstanceModel where
 instance MayHaveUnit        InstanceModel where getUnit = getUnit . view imOutput
+instance CommonIdea         InstanceModel where abrv = abrv . view ci
 
 instanceMod :: CI
 instanceMod    = commonIdeaWithDict "instanceMod"    (cn' "Instance Model")                    "IM"        [softEng]

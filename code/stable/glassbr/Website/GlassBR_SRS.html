@@ -1237,7 +1237,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-If <em>is_safePb</em>, the glass is considered safe. <em>is_safePb</em> and <em>is_safeLR</em> (from <a href=#T:isSafeLR>T: isSafeLR</a>) are either both True or both False. <em>P<sub>b</sub></em> is the probability of breakage, as calculated in <a href=#IM:probOfBreak>IM: probOfBreak</a>. <em>P<sub>btol</sub></em> is the tolerable probability of breakage entered by the user.
+If <em>is_safePb</em>, the glass is considered safe. <em>is_safePb</em> and <em>is_safeLR</em> (from <a href=#T:isSafeLR>TM: isSafeLR</a>) are either both True or both False. <em>P<sub>b</sub></em> is the probability of breakage, as calculated in <a href=#IM:probOfBreak>IM: probOfBreak</a>. <em>P<sub>btol</sub></em> is the tolerable probability of breakage entered by the user.
 </p>
 </td>
 </tr>
@@ -1311,7 +1311,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-If <em>is_safeLR</em>, the glass is considered safe. <em>is_safePb</em> (from <a href=#T:isSafePb>T: isSafePb</a>) and <em>is_safeLR</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#IM:calofCapacity>IM: calofCapacity</a>. <em>q</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#IM:calOfDemand>IM: calOfDemand</a>.
+If <em>is_safeLR</em>, the glass is considered safe. <em>is_safePb</em> (from <a href=#T:isSafePb>TM: isSafePb</a>) and <em>is_safeLR</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#IM:calofCapacity>IM: calofCapacity</a>. <em>q</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#IM:calOfDemand>IM: calOfDemand</a>.
 </p>
 </td>
 </tr>
@@ -3284,7 +3284,7 @@ Output-Values-and-Known-Quantities: Output the input quantities from <a href=#in
 </p>
 <p>
 <div id="checkGlassSafety">
-Check-Glass-Safety: If <em>is_safePb</em> ∧ <em>is_safeLR</em> (from <a href=#T:isSafePb>T: isSafePb</a> and <a href=#T:isSafeLR>T: isSafeLR</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
+Check-Glass-Safety: If <em>is_safePb</em> ∧ <em>is_safeLR</em> (from <a href=#T:isSafePb>TM: isSafePb</a> and <a href=#T:isSafeLR>TM: isSafeLR</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
 </div>
 </p>
 <p>

@@ -112,8 +112,8 @@ outputValsAndKnownQuantsDesc = foldlSent [titleize output_, S "the", plural inQt
   S "from", makeRef2S sysSetValsFollowingAssumps]
 
 checkGlassSafetyDesc cmd = foldlSent_ [S "If", (ch is_safePb), S "∧", (ch is_safeLR),
-  sParen (S "from" +:+ (makeRefS pbIsSafe)
-  `sAnd` (makeRefS lrIsSafe)), S "are true" `sC`
+  sParen (S "from" +:+ (makeRef2S pbIsSafe)
+  `sAnd` (makeRef2S lrIsSafe)), S "are true" `sC`
   phrase cmd, S "the", phrase message, Quote (safeMessage ^. defn),
   S "If the", phrase condition, S "is false, then", phrase cmd,
   S "the", phrase message, Quote (notSafe ^. defn)]

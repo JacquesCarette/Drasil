@@ -91,12 +91,12 @@ sysSetValsFollowingAssumpsDesc = foldlSent_ [S "The", phrase system, S "shall se
 
 sysSetValsFollowingAssumpsList :: [Sentence]
 sysSetValsFollowingAssumpsList = [foldlList Comma List (map ch (take 4 assumptionConstants)) `followA` standardValues,
-  ch loadDF +:+ S "from" +:+ makeRefS loadDF, 
+  ch loadDF +:+ S "from" +:+ makeRef2S loadDF, 
   short lShareFac `followA` glassLite,
-  ch hFromt +:+ S "from" +:+ makeRefS hFromt,
-  ch glaTyFac +:+ S "from" +:+ makeRefS glaTyFac,
-  ch standOffDis +:+ S "from" +:+ makeRefS standOffDis,
-  ch aspRat +:+ S "from" +:+ makeRefS aspRat]
+  ch hFromt +:+ S "from" +:+ makeRef2S hFromt,
+  ch glaTyFac +:+ S "from" +:+ makeRef2S glaTyFac,
+  ch standOffDis +:+ S "from" +:+ makeRef2S standOffDis,
+  ch aspRat +:+ S "from" +:+ makeRef2S aspRat]
 
 --FIXME:should constants, LDF, and LSF have some sort of field that holds
 -- the assumption(s) that're being followed? (Issue #349)

@@ -8,7 +8,7 @@ import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), DefiningExpr(defnExpr), Quantity, HasSpace(typ),
   HasDerivation(derivations), HasReference(getReferences), HasAdditionalNotes(getNotes),
-  HasShortName(shortname), HasLabel(getLabel), ConceptDomain(cdom))
+  HasShortName(shortname), HasLabel(getLabel), ConceptDomain(cdom), CommonIdea(abrv))
 import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label)
@@ -50,6 +50,7 @@ instance MayHaveUnit        DataDefinition where getUnit = getUnit . view qd
 instance HasLabel           DataDefinition where getLabel = lbl
 instance HasShortName       DataDefinition where shortname = lbl . shortname
 instance ConceptDomain      DataDefinition where cdom = ci . cdom
+instance CommonIdea         DataDefinition where abrv = abrv . view ci
 
 dataDefn :: CI
 dataDefn    = commonIdeaWithDict "dataDefn"    (cn' "data definition")                             "DD"        [softEng]

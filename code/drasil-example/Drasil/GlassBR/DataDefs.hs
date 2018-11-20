@@ -197,20 +197,20 @@ anGlass = (getAcc annealed +:+ S "is" +:+ phrase annealed +:+ S "glass")
 
 arRef :: Sentence
 arRef = (ch aspect_ratio +:+ S "is the" +:+ phrase aspect_ratio +:+.
-  S "defined in" +:+ makeRefS aspRat)
+  S "defined in" +:+ makeRef2S aspRat)
 
 ftGlass :: Sentence
 ftGlass = (getAcc fullyT +:+ S "is" +:+ phrase fullyT +:+ S "glass")
 
 hRef :: Sentence
 hRef = (ch min_thick +:+ S "is the" +:+ phrase min_thick `sC` 
-  S "which is based on the nominal thicknesses as shown in" +:+. makeRefS hFromt)
+  S "which is based on the nominal thicknesses as shown in" +:+. makeRef2S hFromt)
 
 hsGlass :: Sentence
 hsGlass = (getAcc heatS +:+ S "is" +:+ phrase heatS +:+ S "glass")
 
 ldfRef :: Sentence
-ldfRef = (ch lDurFac +:+ S "is the" +:+ phrase lDurFac +:+ S "as defined by" +:+. makeRefS loadDF)
+ldfRef = (ch lDurFac +:+ S "is the" +:+ phrase lDurFac +:+ S "as defined by" +:+. makeRef2S loadDF)
 
 pbTolUsr :: Sentence
 pbTolUsr = (ch pb_tol +:+ S "is the tolerable" +:+ phrase probability +:+ S "entered by the" +:+. 
@@ -218,7 +218,7 @@ pbTolUsr = (ch pb_tol +:+ S "is the tolerable" +:+ phrase probability +:+ S "ent
 
 jRef :: Sentence
 jRef = (ch stressDistFac +:+ S "is the" +:+ phrase stressDistFac `sC` S "as defined in" +:+. 
-  makeRefS strDisFac)
+  makeRef2S strDisFac)
 
 hMin :: Sentence
 hMin = (ch nom_thick +:+ S "is a function that maps from the nominal thickness"
@@ -228,19 +228,19 @@ qHtTlExtra :: Sentence
 qHtTlExtra = (ch tolLoad +:+ S "is the tolerable load which is obtained from Figure 7 using" 
   +:+ ch sdf_tol `sAnd` phrase aspect_ratio +:+ S "as" +:+ plural parameter +:+. S "using interpolation" 
   +:+ titleize' calculation `sOf` ch sdf_tol `sAnd` ch aspect_ratio +:+ 
-  S "are defined in" +:+. makeRefS tolStrDisFac `sAnd` makeRefS aspRat `sC` S "respectively")
+  S "are defined in" +:+. makeRef2S tolStrDisFac `sAnd` makeRef2S aspRat `sC` S "respectively")
 
 qHtTlTolRef :: Sentence
-qHtTlTolRef = (ch tolLoad +:+ S "is the tolerable load defined in" +:+. makeRefS tolPre)
+qHtTlTolRef = (ch tolLoad +:+ S "is the tolerable load defined in" +:+. makeRef2S tolPre)
 
 qRef :: Sentence
 qRef = (ch demand +:+ S "is the 3 second equivalent pressure, as given in" +:+. makeRefS calOfDemandL)
 
 gtfRef :: Sentence
-gtfRef = (ch gTF +:+ S "is the" +:+. (phrase gTF `sC` S "as given by" +:+ makeRefS glaTyFac))
+gtfRef = (ch gTF +:+ S "is the" +:+. (phrase gTF `sC` S "as given by" +:+ makeRef2S glaTyFac))
 
 qHtRef :: Sentence
-qHtRef = (ch dimlessLoad +:+ S "is the" +:+ phrase dimlessLoad +:+ S "defined in" +:+. makeRefS dimLL)
+qHtRef = (ch dimlessLoad +:+ S "is the" +:+ phrase dimlessLoad +:+ S "defined in" +:+. makeRef2S dimLL)
 
 jRef2 :: Sentence
 jRef2 = (ch stressDistFac +:+ S "is the" +:+ phrase stressDistFac `sC` 

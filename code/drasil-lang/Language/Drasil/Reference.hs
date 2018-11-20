@@ -138,7 +138,7 @@ instance Referable TheoryModel where
 instance Referable GenDefn where
   refAdd  g = getAdd ((g ^. getLabel) ^. getRefAdd)
   rType   _ = Def General
-  rProg   l = Name -- FIXME
+  rProg   l = PrependDomain (l ^. uid) $ abrv l -- FIXME
 
 instance Referable DataDefinition where
   refAdd  d = getAdd ((d ^. getLabel) ^. getRefAdd)

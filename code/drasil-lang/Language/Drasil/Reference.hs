@@ -165,7 +165,20 @@ instance Referable Label where
 instance Referable LabelledContent where
   refAdd (LblC lb _) = getAdd (lb ^. getRefAdd)
   rType  (LblC _ c)  = temp c
-  rProg   l = Name -- FIXME
+  rProg  (LblC _ c) = refLabelledCon c
+
+refLabelledCon :: RawContent -> RefProg
+refLabelledCon (Table _ _ _ _)       = RPConcat (RS "Tab: ") Name
+refLabelledCon (Figure _ _ _)        = RPConcat (RS "Fig: ") Name
+refLabelledCon (Graph _ _ _ _)       = RPConcat (RS "Fig: ") Name
+refLabelledCon (Defini x _)          = RPConcat (RS "Def: ") Name
+refLabelledCon (Assumption _ _ _)    = RPConcat (RS "Assump: ") Name
+refLabelledCon (EqnBlock _)          = RPConcat (RS "EqnB: ") Name
+refLabelledCon (Enumeration _)       = RPConcat (RS "Lst: ") Name 
+refLabelledCon (Paragraph _)         = error "Shouldn't reference paragraphs"
+refLabelledCon (Bib _)               = error $ 
+    "Bibliography list of references cannot be referenced. " ++
+    "You must reference the Section or an individual citation."
 
 temp :: RawContent -> RefType
 temp (Table _ _ _ _)       = Tab

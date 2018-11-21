@@ -128,7 +128,7 @@ instance Referable Section where
 instance Referable Citation where
   refAdd c = citeID c -- citeID should be unique.
   rType _  = Cite
-  rProg   l = Name -- FIXME: Need to see how to reference citationsd
+  rProg   l =  PrependDomain (l ^. uid) $ abrv l -- FIXME: Need to see how to reference citationsd
 
 instance Referable TheoryModel where
   refAdd  t = getAdd ((t ^. getLabel) ^. getRefAdd)

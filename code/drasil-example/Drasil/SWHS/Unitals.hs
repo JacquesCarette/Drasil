@@ -39,6 +39,15 @@ swhsUnits = map ucw [in_SA, out_SA, heat_cap_spec, htCap_L,
   density, tau, tau_L_P, tau_S_P, tau_W, thickness] ++
   map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]
 
+swhsUC :: [UnitalChunk]
+swhsUC = [in_SA, out_SA, htCap_L, htCap_S, htCap_V,
+  pcm_initMltE, vol_ht_gen, htTransCoeff,
+  pcm_mass, w_mass,
+  thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
+  temp_env, t_init_melt,
+  t_final_melt, tank_vol, w_vol, deltaT,
+  tau, tau_L_P, tau_S_P, tau_W, sim_time, thickness]
+
 in_SA, out_SA, htCap_L, htCap_S, htCap_V,
   pcm_initMltE, vol_ht_gen, htTransCoeff,
   pcm_mass, w_mass,
@@ -251,8 +260,10 @@ pcm_vol = uqc "pcm_vol" (nounPhraseSP "volume of PCM")
   -- needs to add (D,L)*minfract to end of last constraint
 
 -- Constraint 4
+-- Capitalization Issue here too.
 pcm_SA = uqc "pcm_SA"
-  (compoundPhrase (nounPhrase'' (phrase phsChgMtrl) (phrase phsChgMtrl)
+  (compoundPhrase (nounPhrase'' (S "phase change material")
+  (S "phase change material")
   CapFirst CapWords) (nounPhrase'' (phrase surArea) (phrase surArea)
   CapFirst CapWords))
   "Area covered by the outermost layer of the phase change material"
@@ -304,8 +315,10 @@ htFusion = uqc "htFusion" (nounPhraseSP "specific latent heat of fusion")
   sfwrc $ Bounded (Exc, sy htFusion_min) (Exc, sy htFusion_max)] (dbl 211600) 0.1
 
 -- Constraint 10
+-- The "S "heating coil" " should be replaced by "phrase coil",
+-- Since the capitalization issue, they are replaced by S so far.
 coil_SA = uqc "coil_SA"
-  (compoundPhrase (nounPhrase'' (phrase coil) (phrase coil) CapFirst CapWords)
+  (compoundPhrase (nounPhrase'' (S "heating coil") (S "heating coil") CapFirst CapWords)
   (nounPhrase'' (phrase surArea) (phrase surArea) CapFirst CapWords))
   "Area covered by the outermost layer of the coil" (sub cA cC) m_2 Rational
   [gtZeroConstr,

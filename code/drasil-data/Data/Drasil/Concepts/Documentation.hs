@@ -1,13 +1,46 @@
 module Data.Drasil.Concepts.Documentation where
 
-import Language.Drasil hiding (organization)
+import Language.Drasil hiding (organization, year)
 
 import Data.Drasil.Concepts.Math (graph)
 import Data.Drasil.Phrase (andRT, and_, and_', ofA, of_, of_', of__, theCustom,
-  compoundNC, compoundNC', compoundNCP1)
-import Data.Drasil.IdeaDicts
+  ofN_, compoundNC, compoundNC', compoundNCP1)
+import Data.Drasil.IdeaDicts (softEng, documentc)
 
 import Control.Lens ((^.))
+
+doccon :: [NamedChunk]
+doccon = [abbreviation, analysis, appendix, aspect, body, characteristic, class_, client, 
+  code, column, company, component, concept, condition, connection, constant,
+  constraint, consumer, content, context, coordinate, customer, datum, decision, 
+  definition, dependency, description, design, document, documentation, effect, 
+  element, emphasis, endUser, environment, failure, figure, first, form, full, 
+  functional, game, general, goal, guide, implementation, individual, information, 
+  interest, interface, input_, instance_, intReader, introduction, issue, item, 
+  loss, label, library, limitation, literacy, material_, message, method_, module_,
+  model, name_, nonfunctional, object, offShelf, open, organization, output_,
+  physics, physical, plan, practice, priority, problem, product_, project,
+  property, purpose, quantity, realtime, reference, requirement_, response, 
+  result, reviewer, safety, scope, second_, section_, scenario, source,
+  simulation, software, solution, specific, specification, stakeholder,
+  standard, statement, symbol_, system, table_, task, template, term_,
+  terminology, theory, traceyGraph, traceyMatrix, type_, uncertainty, user,
+  useCase, validation, value, variable, video, verification, year,
+  orgOfDoc, prpsOfDoc, refmat, scpOfReq, consVals,
+  termAndDef, tOfSymb, traceyMandG, corSol, charOfIR, propOfCorSol,
+  vav, designDoc, fullForm, generalSystemDescription, indPRCase,
+  physicalConstraint, physicalSystem, problemDescription, prodUCTable,
+  specificsystemdescription, systemdescription, systemConstraint, sysCont,
+  userCharacteristic, datumConstraint, functionalRequirement,
+  nonfunctionalRequirement, safetyReq, softwareConstraint, softwareDoc,
+  softwareReq, softwareSys, softwareVerif, softwareVAV, solutionCharSpec,
+  solutionCharacteristic, offShelfSolution, physicalSim, productUC, 
+  useCaseTable, physicalProperty, vavPlan, uncertCol, userInput,
+  scpOfTheProjS]
+
+doccon' :: [CI]
+doccon' = [assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
+  unlikelyChg, physSyst, requirement, thModel, mg, notApp, srs, typUnc]
 
 assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
   unlikelyChg, physSyst, requirement, thModel, mg, notApp, srs, typUnc, sec :: CI
@@ -180,6 +213,7 @@ variable        = nc "variable"       (cn'    "variable"           )
 verification    = nc "verification"   (cn'    "verification"       )
 video           = nc "video"          (cn'    "video"              )
 year            = nc "year"           (cn'    "year"               )
+scpOfTheProjS   = nc "scpOfTheProj"   (cn'    "scope of the project") -- temporary generated for test
 
 
 orgOfDoc, prpsOfDoc, refmat, scpOfReq, consVals,
@@ -200,7 +234,7 @@ vav          = nc "vav"          (verification `and_` validation)
 consVals     = nc "consVals"     (cn "values of auxiliary constants")
 
 scpOfTheProj :: (NamedChunk -> Sentence) -> NamedChunk
-scpOfTheProj oper = nc "scpOfTheProj" (scope `of_` theCustom oper project) -- reasonable hack?
+scpOfTheProj oper = nc "scpOfTheProj" (scope `ofN_` theCustom oper project) -- reasonable hack?
 
 -- compounds
 

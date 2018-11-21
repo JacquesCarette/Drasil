@@ -15,20 +15,27 @@ import Data.Drasil.Concepts.Documentation as Doc (inModel,
   requirement, item, assumption, thModel, traceyMatrix, model, output_, quantity, input_, 
   physicalConstraint, condition, property, variable, description, symbol_,
   information, goalStmt, physSyst, problem, definition, srs, content, reference,
-  document, goal, purpose, funcReqDom, likeChgDom, unlikeChgDom, srsDomains)
+  document, goal, purpose, funcReqDom, likeChgDom, unlikeChgDom, srsDomains, doccon,
+  doccon')
 
 import qualified Data.Drasil.Concepts.Math as M (ode, de, unit_, equation)
-import Data.Drasil.Concepts.Software (program)
+import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
-  thermal_energy, ht_trans_theo, ht_flux, heat_cap_spec, thermal_conduction)
+  thermal_energy, ht_trans_theo, ht_flux, heat_cap_spec, thermal_conduction,
+  thermocon, heat_trans)
+import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
+import Data.Drasil.Concepts.Physics (physicCon)
+import Data.Drasil.Concepts.Computation (computerApp, inParam, compcon, algorithm)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heat_cap_spec, ht_flux)
-import Data.Drasil.Quantities.Physics (time, energy)
+import Data.Drasil.Concepts.Math (mathcon, mathcon')
+import Data.Drasil.Quantities.Physics (time, energy, physicscon)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
-import Data.Drasil.Software.Products (compPro)
-import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
+import Data.Drasil.Software.Products (compPro, prodtcon)
+import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
+  fundamentals, derived)
 
 import qualified Drasil.DocLang.SRS as SRS (probDesc, goalStmt, inModelLabel,
   funcReq, likeChg, unlikeChg)
@@ -51,7 +58,8 @@ import Drasil.SWHS.Assumptions (newA11, newA12, newA14)
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
   orgDocIntro, physSyst1, physSyst2, traceFig1, traceFig2, traceIntro2, traceTrailing)
 import Drasil.SWHS.Changes (chgsStart, likeChgTCVOD, likeChgTCVOL, likeChgTLH)
-import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, tank_para, transient, water)
+import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, tank_para, transient, water,
+  swhscon)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.IMods (eBalanceOnPCM, heatEInWtr)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
@@ -63,11 +71,11 @@ import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA,
   htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, sim_time, 
   tank_length, tank_length_max, tank_length_min, tank_vol, tau, tau_W, temp_C, 
   temp_env, temp_W, thFluxVect, time_final, time_final_max, vol_ht_gen, w_density, 
-  w_density_max, w_density_min, w_E, w_mass, w_vol)
+  w_density_max, w_density_min, w_E, w_mass, w_vol, specParamValList, swhsUC)
 
 import Drasil.NoPCM.Assumptions
 import Drasil.NoPCM.DataDesc (inputMod)
-import Drasil.NoPCM.Definitions (ht_trans, srs_swhs)
+import Drasil.NoPCM.Definitions (srs_swhs, ht_trans)
 import Drasil.NoPCM.GenDefs (rocTempSimp, swhsGDs)
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
 import Drasil.NoPCM.Unitals (temp_init)
@@ -172,6 +180,7 @@ nopcm_si = SI {
   _constraints = (map cnstrw nopcm_Constraints ++ map cnstrw [temp_W, w_E]),        --constrained
   _constants = [],
   _sysinfodb = nopcm_SymbMap,
+  _usedinfodb = usedDB,
   _refdb = nopcmRefDB
 }
 
@@ -187,8 +196,17 @@ nopcm_srs :: Document
 nopcm_srs = mkDoc mkSRS (for) nopcm_si
 
 nopcm_SymbMap :: ChunkDB
-nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) (map cw nopcm_Symbols ++ srsDomains)
+nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms ++ map nw thermocon
+  ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
+  ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
+  ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm,
+  nw ht_trans])
+ (map cw nopcm_Symbols ++ srsDomains)
   this_si
+
+usedDB :: ChunkDB
+usedDB = cdb (map qw symbTT) (map nw nopcm_Symbols ++ map nw acronyms)
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
 
 printSetting :: PrintingInformation
 printSetting = PI nopcm_SymbMap defaultConfiguration
@@ -756,12 +774,12 @@ traceTable3 = llcc (mkLabelSame "TraceyAI" Tab) $ Table
 --Section 8: SPECIFICATION PARAMETER VALUE
 ------------------------------------------
 
-specParamValList :: [QDefinition]
-specParamValList = [tank_length_min, tank_length_max,
+specParamValListb :: [QDefinition]
+specParamValListb = [tank_length_min, tank_length_max,
   w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
   coil_HTC_max, time_final_max]
 
-specParamVal = valsOfAuxConstantsF progName specParamValList
+specParamVal = valsOfAuxConstantsF progName specParamValListb
 
 ------------
 --REFERENCES

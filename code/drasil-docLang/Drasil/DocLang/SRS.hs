@@ -23,7 +23,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (appendix,
     solutionCharSpec, specificsystemdescription, srs, stakeholder, sysCont, 
     systemConstraint, termAndDef, terminology, thModel, traceyMandG, tOfSymb, 
     userCharacteristic)
-import Data.Drasil.Phrase (for'', the)
+import Data.Drasil.Phrase (for'', the, the')
 
 -- Local function to keep things looking clean, not exported.
 forTT :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
@@ -53,8 +53,8 @@ charOfIR    cs ss = section' (titleize' Doc.charOfIR) cs ss "ReaderChars"
 orgOfDoc    cs ss = section' (titleize Doc.orgOfDoc)  cs ss "DocOrg"
 
 stakeholder cs ss = section' (titleize' Doc.stakeholder) cs ss "Stakeholder"
-theCustomer cs ss = section' (titleize $ the Doc.customer) cs ss "Customer"
-theClient   cs ss = section' (titleize $ the Doc.client) cs ss "Client"
+theCustomer cs ss = section' (titleizeNP $ the' Doc.customer) cs ss "Customer"
+theClient   cs ss = section' (titleizeNP $ the' Doc.client) cs ss "Client"
 
 genSysDes   cs ss = section' (titleize Doc.generalSystemDescription) cs ss "GenSysDesc"
 sysCont     cs ss = section' (titleize Doc.sysCont)              cs ss  "SysContext"

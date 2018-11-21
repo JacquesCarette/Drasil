@@ -18,7 +18,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   traceMGF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc)
 
 import qualified Drasil.DocLang.SRS as SRS
-
+import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc(assumption, body,
   concept, condition, consumer, dataDefn, datumConstraint, document, endUser,
   environment, funcReqDom, game, genDefn, goalStmt, guide, inModel,
@@ -28,11 +28,11 @@ import Data.Drasil.Concepts.Documentation as Doc(assumption, body,
   project, property, quantity, realtime, reference, requirement, section_,
   simulation, software, softwareSys, srs, srsDomains, system, systemConstraint,
   sysCont, task, template, termAndDef, thModel, traceyMatrix, user,
-  userCharacteristic)
+  userCharacteristic, doccon, doccon')
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
-  highSchoolPhysics)
+  highSchoolPhysics, educon)
 import Data.Drasil.Concepts.Software (physLib, understandability, portability,
-  reliability, maintainability, performance, correctness)
+  reliability, maintainability, performance, correctness, softwarecon)
 
 import Data.Drasil.Software.Products (openSource, sciCompS, videoGame)
 
@@ -41,15 +41,16 @@ import Data.Drasil.Phrase (for')
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
   foldlSent, foldlSent_, foldlSentCol, foldlSP, foldlSPCol, sAnd, showingCxnBw, 
   sOf, sOr)
-import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian)
+import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
+  derived, fundamentals)
 import Data.Drasil.Utils (makeTMatrix, itemRefToSent,
   makeListRef, bulletFlat, bulletNested, enumSimple, enumBullet)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
-  cartesian, friction, rightHand, collision, space)
-import qualified Data.Drasil.Concepts.Math as CM (equation, surface, law)
-
+  cartesian, friction, rightHand, collision, space, physicCon)
+import qualified Data.Drasil.Concepts.Math as CM (equation, surface, law, mathcon, mathcon')
+import Data.Drasil.Software.Products (prodtcon)
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Quantities.Physics as QP (angularVelocity, force, 
@@ -135,6 +136,7 @@ chipmunkSysInfo = SI {
   _constraints = cpInputConstraints,
   _constants = [],
   _sysinfodb = everything,
+  _usedinfodb = usedDB,
   _refdb = cpRefDB
 }
 
@@ -151,8 +153,14 @@ chipUnits :: [UnitDefn] -- FIXME
 chipUnits = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [newton, radian]
 
 everything :: ChunkDB
-everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms)
+everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms ++ map nw prodtcon
+  ++ map nw softwarecon ++ map nw doccon ++ map nw doccon' ++ map nw CP.physicCon
+  ++ map nw educon ++ [nw algorithm] ++ map nw derived ++ map nw fundamentals
+  ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw gamephySymbols ++ srsDomains) chipUnits
+
+usedDB :: ChunkDB
+usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
 
 printSetting :: PrintingInformation
 printSetting = PI everything defaultConfiguration

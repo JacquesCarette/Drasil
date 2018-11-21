@@ -7,6 +7,9 @@ import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.IdeaDicts
 
 
+prodtcon :: [NamedChunk]
+prodtcon = [sciCompS, videoGame, openSource, compPro]
+
 matlab :: CI
 matlab     = commonIdeaWithDict "matlab" (pn' "MATLAB programming language")       "MATLAB"  [progLanguage]
 

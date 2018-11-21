@@ -9,7 +9,7 @@ module Language.Drasil.Development (
   , fund, comp_unitdefn, derCUC, derCUC', derCUC''
   , unitWrapper, getCu, MayHaveUnit(getUnit)
   -- NounPhrase
-  , NounPhrase(phrase,plural)
+  , NounPhrase(phraseNP,pluralNP)
   ) where
 
 import Language.Drasil.Development.Unit (UnitDefn(..)
@@ -19,4 +19,4 @@ import Language.Drasil.Development.Unit (UnitDefn(..)
   , derUC, derUC', derUC''
   , fund, comp_unitdefn, derCUC, derCUC', derCUC''
   , makeDerU, unitWrapper, getCu, MayHaveUnit(getUnit))
-import Language.Drasil.NounPhrase (NounPhrase(phrase,plural))
+import Language.Drasil.NounPhrase (NounPhrase(phraseNP,pluralNP))

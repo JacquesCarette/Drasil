@@ -671,7 +671,7 @@ traceMatAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
 traceMatAssumpRef = map makeRefS newAssumptions
 
 traceMatFuncReq =  ["R1","R2","R3", "R4", "R5", "R6", "R7", "R8"]
-traceMatFuncReqRef = map makeRefS functional_requirements_list'
+traceMatFuncReqRef = map makeRef2S functional_requirements_list'
 
 traceMatData = ["Data Constraints"]
 traceMatDataRef = [makeRefS SRS.solCharSpecLabel]
@@ -683,7 +683,7 @@ traceMatGenDef = ["GD1", "GD2", "GD3", "GD4", "GD5", "GD6", "GD7"]
 traceMatGenDefRef = replicate (length traceMatGenDef) (makeRefS SRS.solCharSpecLabel) -- FIXME: hack?
 
 traceMatLikelyChg = ["LC1", "LC2", "LC3", "LC4"]
-traceMatLikelyChgRef = map makeRefS likelyChangesList'
+traceMatLikelyChgRef = map makeRef2S likelyChangesList'
 
 
 {-- Matrices generation below --}

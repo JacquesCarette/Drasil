@@ -17,7 +17,6 @@ import Language.Drasil.RefTypes(RefType(..), DType(..), Reference)
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Symbol.Helpers (eqSymb)
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
-import Language.Drasil.Chunk.NamedIdea (IdeaDict, mkIdea)
 import Language.Drasil.NounPhrase (cn')
 
 data Scope = Scp { _spec :: Label {-indirect reference-}}

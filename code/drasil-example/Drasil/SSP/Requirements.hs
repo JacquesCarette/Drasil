@@ -56,7 +56,7 @@ generateCSS' = cic "generateCSS'" ( foldlSent [
   plural fs]) "Generate-New-Critical-Slip-Surfaces" funcReqDom
 
 repeatFindFS = cic "repeatFindFS" ( foldlSent [
-  S "Repeat", (foldlList Comma List $ map makeRefS [testSlipSrf, prepareSlipS,
+  S "Repeat", (foldlList Comma List $ map makeRef2S [testSlipSrf, prepareSlipS,
   calculateFS, rankSlope, generateCSS']), S "until the", phrase fs_min,
   S "remains approximately the same over a",
   S "predetermined number of repetitions. Identify the", phrase slpSrf, 

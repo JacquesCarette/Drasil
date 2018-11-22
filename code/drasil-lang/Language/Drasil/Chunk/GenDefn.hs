@@ -15,7 +15,6 @@ import Language.Drasil.Label (mkLabelSame)
 import Language.Drasil.RefTypes(RefType(..), DType(..), Reference)
 import Control.Lens (makeLenses, view)
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
-import Language.Drasil.Chunk.NamedIdea (IdeaDict, mkIdea)
 import Language.Drasil.NounPhrase (cn')
 
 -- | A GenDefn is a RelationConcept that may have units

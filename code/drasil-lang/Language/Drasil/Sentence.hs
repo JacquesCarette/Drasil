@@ -2,20 +2,15 @@
 -- | Contains Sentences and helpers
 module Language.Drasil.Sentence
   (Sentence(Ch, Sy, S, Sp, E, Ref, Quote, (:+:), EmptyS, P, Ref2),
-  sParen, sSqBr, (+:+), sC, (+:+.), (+:), Reference2(Reference2),
-  RefProg(..)) where
+  sParen, sSqBr, (+:+), sC, (+:+.), (+:)) where
 
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.RefTypes (Reference, RefAdd)
-import Language.Drasil.ShortName (ShortName)
+import Language.Drasil.RefProg (Reference2)
+import Language.Drasil.RefTypes (Reference)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Unicode (Special(SqBrClose, SqBrOpen))
-
--- Trying different pieces of information for a reference
-data RefProg = PrependDomain UID String
-data Reference2 = Reference2 RefProg RefAdd ShortName
 
 -- | For writing "sentences" via combining smaller elements
 -- Sentences are made up of some known vocabulary of things:

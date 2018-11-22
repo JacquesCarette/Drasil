@@ -271,13 +271,16 @@ spec _ (P s)           = P.E $ symbol s
 spec sm (Ch s)         = P.E $ symbol $ lookupC sm s 
 spec sm (Ref (Reference t r sn))   = P.Ref t r (spec sm (S . getStringSN $ resolveSN sn $
   lookupDeferredSN sm)) sn --FIXME: sn passed in twice?
-spec sm (Ref2 (Reference2 (PrependDomain uid rp) r sn)) = P.Ref2 uid rp r (P.S $ helpRefName rp sn)
+spec sm (Ref2 (Reference2 _ rp ra sn)) = P.Ref2 ra $ spec sm $ renderShortName sm rp sn
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
 
-helpRefName :: String -> ShortName -> String
-helpRefName rf sn =  rf ++ ": " ++ getStringSN sn
+renderShortName :: (HasDefinitionTable ctx) => ctx -> RefProg -> ShortName -> Sentence
+renderShortName ctx (Deferred u) _ = S $ maybe (error "Domain has no abbreviation.") id $ getA $ defLookup u $ ctx ^. defTable
+renderShortName ctx (RConcat a b) sn = renderShortName ctx a sn :+: renderShortName ctx b sn
+renderShortName _ (RS s) _ = S s
+renderShortName _ Name sn = S $ getStringSN sn
 
 lookupDeferredSN :: (HasDefinitionTable ctx) => ctx -> UID -> String
 lookupDeferredSN ctx u = maybe "" (\x -> x ++ ": ") $

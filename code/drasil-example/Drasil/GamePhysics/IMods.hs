@@ -2,7 +2,7 @@ module Drasil.GamePhysics.IMods (iModels, iModels_new, im1_new, im2_new, im3_new
 
 import Language.Drasil
 import Language.Drasil.Development (MayHaveUnit)
-import Drasil.GamePhysics.Assumptions (newA1, newA2, newA3, newA4, newA5, newA6,
+import Drasil.GamePhysics.Assumptions (newA1, newA2, newA4, newA5, newA6,
   newA7)
 import Drasil.GamePhysics.Unitals(acc_i, force_i, transMotLegTerms, rotMotLegTerms,
   col2DLegTerms, mass_A, mass_i, normalVect, time_c, torque_i, vel_A, vel_i)

@@ -4,13 +4,11 @@ module Language.Drasil.Document where
 
 import Data.Drasil.IdeaDicts (documentc)
 import Language.Drasil.Document.Core
-import Language.Drasil.Classes (HasLabel(getLabel), HasShortName(shortname),
-	ConceptDomain(cdom))
+import Language.Drasil.Classes (HasLabel(getLabel), HasShortName(shortname))
 
 import Language.Drasil.Label (Label)
 import Language.Drasil.Sentence (Sentence(..))
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
-import Language.Drasil.Chunk.NamedIdea (IdeaDict, mkIdea)
 import Language.Drasil.NounPhrase (cn')
 
 import Control.Lens (makeLenses)

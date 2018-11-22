@@ -11,7 +11,7 @@ module Language.Drasil.Chunk.Citation
   , cProceedings, cTechReport, cUnpublished
   ) where
 
-import Data.Drasil.IdeaDicts (softEng)
+import Data.Drasil.IdeaDicts (knowledgemng)
 import Language.Drasil.People (People)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
@@ -52,7 +52,7 @@ instance CommonIdea   Citation where abrv = abrv . view ci
 
 
 citation :: CI
-citation  = commonIdeaWithDict "citation"  (cn' "citation")   "Citation"         [softEng]
+citation  = commonIdeaWithDict "citation"  (cn' "citation")   "Citation"         [knowledgemng]
 
 -- | Smart constructor which implicitly uses EntryID as chunk i.
 cite :: EntryID -> CitationKind -> [CiteField] -> Label -> Citation

@@ -17,7 +17,3 @@ physics      = mkIdea  "physics"        (cn' "Physics")               Nothing
 civilEng     = mkIdea  "civilEng"       (cn' "Civil Engineering")     Nothing
 materialEng  = mkIdea  "materialEng"    (cn' "Material Engineering")  Nothing
 documentc    = mkIdea  "documentc"      (cn' "Document")              (Just "Doc")
-        
-
-
-

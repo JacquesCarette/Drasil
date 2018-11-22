@@ -24,21 +24,23 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   design, document, effect, element, endUser, environment, goalStmt, inModel, 
   input_, interest, interest, interface, issue, loss, method_, organization, 
   physics, problem, product_, property, software, softwareSys, srs, srsDomains,
-  sysCont, system, table_, template, user, value, variable, physSyst)
-import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
-import Data.Drasil.Concepts.Math (equation, surface)
-import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Data.Drasil.Concepts.Physics (fbd, force, strain, stress)
+  sysCont, system, table_, template, user, value, variable, physSyst, doccon,
+  doccon')
+import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
+import Data.Drasil.Concepts.Math (equation, surface, mathcon, mathcon')
+import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
+import Data.Drasil.Concepts.Physics (fbd, force, strain, stress, physicCon)
 import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability, 
-  performanceSpd, program, reusability, understandability)
-import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
-import Data.Drasil.Software.Products (sciCompS)
+  performanceSpd, program, reusability, understandability, softwarecon)
+import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce, solidcon)
+import Data.Drasil.Concepts.Computation (compcon, algorithm)
+import Data.Drasil.Software.Products (sciCompS, prodtcon)
 
 import Data.Drasil.People (henryFrankis)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (foldlList, SepType(Comma), FoldType(List), 
   foldlSP, foldlSent, foldlSent_, ofThe, sAnd, sOr, foldlSPCol)
-import Data.Drasil.SI_Units (degree, metre, newton, pascal)
+import Data.Drasil.SI_Units (degree, metre, newton, pascal, derived, fundamentals)
 import Data.Drasil.Utils (bulletFlat, bulletNested, enumSimple, noRefsLT)
 
 import Drasil.SSP.Assumptions (newAssumptions)
@@ -47,7 +49,8 @@ import Drasil.SSP.Changes (likelyChgs, likelyChanges_SRS, unlikelyChgs,
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, fs_concept, intrslce, itslPrpty, 
-  morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil, soilLyr, ssa, ssp)
+  morPrice, mtrlPrpty, plnStrn, slice, slope, slpSrf, soil, soilLyr, ssa, ssp, sspdef,
+  sspdef')
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (sspIMods)
@@ -90,6 +93,7 @@ ssp_si = SI {
   _constraints = sspConstrained,
   _constants = [],
   _sysinfodb = sspSymMap,
+  _usedinfodb = usedDB,
   _refdb = sspRefDB
 }
 
@@ -142,8 +146,17 @@ ssp_code = codeSpec ssp_si [sspInputMod]
 
 -- SYMBOL MAP HELPERS --
 sspSymMap :: ChunkDB
-sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms)
+sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms ++
+  map nw doccon ++ map nw prodtcon ++ map nw sspdef ++ map nw sspdef'
+  ++ map nw softwarecon ++ map nw physicCon ++ map nw mathcon
+  ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
+  ++ map nw doccon' ++ map nw derived ++ map nw fundamentals
+  ++ map nw educon ++ map nw compcon ++ [nw algorithm, nw ssp])
   (map cw sspSymbols ++ srsDomains) this_si
+
+usedDB :: ChunkDB
+usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms)
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
 
 sspRefDB :: ReferenceDB
 sspRefDB = rdb newAssumptions sspCitations (sspRequirements ++

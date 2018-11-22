@@ -11,7 +11,7 @@ import qualified Language.Drasil as L (People, Person,
   Symbol(Corners, Concat, Special, Atomic, Empty, Atop),
   DType(DD, TM, Instance, General), MaxWidthPercent, RefType(Link),
   Decoration(Prime, Hat, Vector), Document, HasDefinitionTable, HasSymbolTable,
-  nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
+  HasTermTable, nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
 
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (em, wrap, refwrap, caption, image, div_tag,
@@ -43,8 +43,8 @@ import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..))
 data OpenClose = Open | Close
 
 -- | Generate an HTML document from a Drasil 'Document'
-genHTML :: (L.HasSymbolTable ctx, L.HasDefinitionTable ctx, HasPrintingOptions ctx) =>
-  ctx -> F.Filename -> L.Document -> Doc
+genHTML :: (L.HasSymbolTable ctx, L.HasTermTable ctx, L.HasDefinitionTable ctx,
+ HasPrintingOptions ctx) => ctx -> F.Filename -> L.Document -> Doc
 genHTML sm fn doc = build fn (makeDocument sm doc)
 
 -- | Build the HTML Document, called by genHTML

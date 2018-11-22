@@ -28,7 +28,7 @@ gamephyUnitSymbs = map ucw cpUnits ++ map ucw [iVect, jVect, normalVect,
   dispNorm, sqrDist, vel_A, vel_B, vel_O, r_OB, angVel_A, angVel_B,
   pos_CM, mass_i, pos_i, acc_i, mTot, vel_i, torque_i, time_c, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
-  perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, initTime, 
+  perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
   momtInert_k, pointOfCollision, contDisp_k, collisionImpulse]
 
 ----------------------
@@ -60,7 +60,7 @@ cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   perpLen_A, perpLen_B, force_i, torque_i, time_c, vel_A, vel_B, mass_A, mass_B,
   angVel_A, angVel_B, force_1, force_2, mass_1, mass_2, dispUnit, 
   dispNorm, sqrDist, vel_O, r_OB, massIRigidBody, contDisp_A, contDisp_B, 
-  momtInert_A, momtInert_B, timeT, initTime,  
+  momtInert_A, momtInert_B, timeT, inittime,  
   momtInert_k, pointOfCollision, contDisp_k, collisionImpulse]
 
 -----------------------
@@ -123,7 +123,7 @@ iVect, jVect, normalVect, force_1, force_2, force_i, mass_1, mass_2, dispUnit,
   dispNorm, sqrDist, vel_A, vel_B, vel_O, r_OB, angVel_A, angVel_B,
   pos_CM, mass_i, pos_i, acc_i, mTot, vel_i, torque_i, time_c, initRelVel, 
   mass_A, mass_B, massIRigidBody, normalLen, contDisp_A, contDisp_B, 
-  perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, initTime, 
+  perpLen_A, momtInert_A, perpLen_B, momtInert_B, timeT, inittime, 
   momtInert_k, pointOfCollision, contDisp_k, collisionImpulse :: UnitalChunk
 
 iVect = ucs' (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
@@ -198,7 +198,7 @@ normalLen = ucs' (dccWDS "length of the normal vector" (compoundPhrase'
 timeT = ucs' (dccWDS "t" (cn "point in time") (phrase QP.time))
                 (eqSymb QP.time) Real second
 
-initTime = ucs' (dccWDS "t_0" (cn "denotes the initial time") 
+inittime = ucs' (dccWDS "t_0" (cn "denotes the initial time") 
                 (phrase QP.time)) (sub (eqSymb QP.time) (Atomic "0")) Real second
 
 momtInert_k = ucs' (dccWDS "momentOfInertiaK" (compoundPhrase'
@@ -284,13 +284,13 @@ restCoefCons   = constrained' QP.restitutionCoef    [physc $ Bounded (Inc,0) (In
 ---------------------
 
 transMotLegTerms, rotMotLegTerms, col2DLegTerms :: [UnitalChunk]
-transMotLegTerms = [massIRigidBody, QP.gravitationalAccel, timeT, initTime, pos_CM,
+transMotLegTerms = [massIRigidBody, QP.gravitationalAccel, timeT, inittime, pos_CM,
   QP.acceleration, QP.velocity, force_i]
 
-rotMotLegTerms = [massIRigidBody, QP.gravitationalAccel, timeT, initTime,
+rotMotLegTerms = [massIRigidBody, QP.gravitationalAccel, timeT, inittime,
   QM.orientation, QP.angularVelocity, QP.angularAccel, torque_i, momtInert_k]
 
-col2DLegTerms = [massIRigidBody, momtInert_k, timeT, initTime, time_c, pos_CM,
+col2DLegTerms = [massIRigidBody, momtInert_k, timeT, inittime, time_c, pos_CM,
   QP.velocity, QM.orientation, QP.angularVelocity, normalVect, -- +:+. S "Its signed direction is determined by (A4)",
   collisionImpulse, pointOfCollision, contDisp_k]
 

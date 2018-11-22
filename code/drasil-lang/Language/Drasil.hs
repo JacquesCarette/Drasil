@@ -103,14 +103,14 @@ module Language.Drasil (
   , cProceedings, cTechReport, cUnpublished
   -- Sentence
   , Sentence(..), sParen, sSqBr , (+:+), (+:+.), sC, (+:)
-  , RefProg(..), Reference2(..)
+  , RefProg(..), Reference2(..), SentenceStyle(..)
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
-  , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase'
-  , CapitalizationRule(..)
+  , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase', phraseNP, pluralNP
+  , CapitalizationRule(..), at_startNP, at_startNP'
   , PluralRule(..)
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
-  , titleize, titleize', nounPhrase'', nounPhraseSP, nounPhraseSent
+  , titleizeNP, titleizeNP', nounPhrase'', nounPhraseSP, nounPhraseSent
   -- Document
   , Referable(..), Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListTuple
@@ -170,7 +170,7 @@ module Language.Drasil (
   , mkLabelRAAssump', mkLabelRAFig, mkLabelRASec
   , modifyLabelEqn
   -- Document.getChunk
-  , vars, vars', combine, combine', ccss
+  , vars, vars', combine, combine', ccss, getIdeaDict
   -- Chunk.Sentence.EmbedSymbol
   , ch
   -- Sentence.Extract
@@ -181,6 +181,7 @@ module Language.Drasil (
   , getAdd
   -- Development.Sentence
   , introduceAbb, phrase, plural, phrase's, plural's, at_start, at_start'
+  , titleize, titleize'
   -- UnitLang
   , USymb(US)
   -- Data.Date
@@ -238,7 +239,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasFields(getFields))
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Derivation (Derivation)
-import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss)
+import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss, getIdeaDict)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
@@ -283,12 +284,11 @@ import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- 
   , pages
       -- Month -> CiteField
   , month)
-import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
-                                          , titleize', phrase, plural)
+import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (resolveSN, ShortName
   , shortname', getStringSN)
 import Language.Drasil.Space (Space(..))
-import Language.Drasil.Sentence (Sentence(..), sParen, sSqBr, sC, (+:+), (+:+.), (+:))
+import Language.Drasil.Sentence (Sentence(..), sParen, sSqBr, sC, (+:+), (+:+.), (+:), SentenceStyle(..))
 import Language.Drasil.Reference (makeRef, makeRefS, mkRefFrmLbl, ReferenceDB, assumpDB
                                  , AssumpMap, assumpLookup, HasAssumpRefs
                                  , assumpRefTable, assumptionsFromDB

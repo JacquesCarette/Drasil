@@ -2,7 +2,8 @@
 -- | Contains Sentences and helpers
 module Language.Drasil.Sentence
   (Sentence(Ch, Sy, S, Sp, E, Ref, Quote, (:+:), EmptyS, P, Ref2),
-  sParen, sSqBr, (+:+), sC, (+:+.), (+:)) where
+   sParen, sSqBr, (+:+), sC, (+:+.), (+:),
+   SentenceStyle(..), sentenceShort, sentenceSymb, sentenceTerm, sentencePlural) where
 
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.RefProg (Reference2)
@@ -19,10 +20,15 @@ import Language.Drasil.Unicode (Special(SqBrClose, SqBrOpen))
 -- - special characters
 -- - accented letters
 -- - References to specific layout objects
+data SentenceStyle = ShortStyle
+                   | SymbolStyle
+                   | TermStyle
+                   | PluralTerm
+
 infixr 5 :+:
 data Sentence where
-  Ch    :: UID -> Sentence
-  Sy    :: USymb -> Sentence        -- Unit Symbol
+  Ch    :: SentenceStyle -> UID -> Sentence
+  Sy    :: USymb -> Sentence
   S     :: String -> Sentence       -- Strings, used for Descriptions in Chunks
   Sp    :: Special -> Sentence
   P     :: Symbol -> Sentence       -- should not be used in examples?
@@ -40,6 +46,17 @@ instance Monoid Sentence where
   mempty = EmptyS
   mappend = (:+:)
 
+sentenceShort :: UID ->Sentence
+sentenceShort u = Ch ShortStyle u
+
+sentenceSymb :: UID ->Sentence
+sentenceSymb u = Ch SymbolStyle u
+
+sentenceTerm :: UID ->Sentence
+sentenceTerm u = Ch TermStyle u
+
+sentencePlural :: UID ->Sentence
+sentencePlural u = Ch PluralTerm u
 -- | Helper function for wrapping sentences in parentheses.
 sParen :: Sentence -> Sentence
 sParen x = S "(" :+: x :+: S ")"

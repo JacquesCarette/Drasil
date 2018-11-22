@@ -21,7 +21,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
 import qualified Drasil.DocLang.SRS as SRS (datConLabel, dataDefnLabel, indPRCaseLabel, 
   referenceLabel, valsOfAuxConsLabel, assumptLabel)
 
-import Data.Drasil.Concepts.Computation (computerApp, inParam)
+import Data.Drasil.Concepts.Computation (computerApp, inParam, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
   assumption, characteristic, class_, code, company, condition, content, 
   dataConst, dataDefn, definition, document, emphasis, environment, figure, 
@@ -29,21 +29,23 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   likelyChg, model, organization, output_, physicalSystem, physSyst, problem, 
   product_, purpose, reference, requirement, reviewer, section_, software, 
   softwareSys, srs, srsDomains, standard, sysCont, system, template, term_,
-  theory, thModel, traceyMatrix, user, userInput, value)
-import Data.Drasil.Concepts.Education as Edu(civilEng, scndYrCalculus, structuralMechanics)
-import Data.Drasil.Concepts.Math (graph, parameter, probability)
-import Data.Drasil.Concepts.PhysicalProperties (dimension)
+  theory, thModel, traceyMatrix, user, userInput, value, doccon, doccon')
+import Data.Drasil.Concepts.Education as Edu(civilEng, scndYrCalculus, structuralMechanics,
+  educon)
+import Data.Drasil.Concepts.Math (graph, parameter, probability, mathcon, mathcon')
+import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon, materialProprty)
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability,
-  performance)
+  performance, softwarecon, program)
 import Data.Drasil.Concepts.Thermodynamics (degree_')
 import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 import Data.Drasil.Phrase (for'', the)
-import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second)
+import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamentals,
+  derived)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
   figureLabel, foldlList, foldlsC, foldlSent, foldlSP, foldlSPCol, 
   isThe, ofThe, sAnd, showingCxnBw, sIn, sOf, sOr, sVersus, tAndDOnly, tAndDWAcc, tAndDWSym, 
@@ -55,7 +57,7 @@ import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, likelyChgsList, unlikelyChgs,
   unlikelyChgsList)
 import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, gLassBR, 
-  ptOfExplsn, stdOffDist)
+  ptOfExplsn, stdOffDist, glasscon, glasscon')
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns)
 import Drasil.GlassBR.IMods (glassBRsymb, probOfBreak, calofCapacity, calofDemand, gbrIMods)
 import Drasil.GlassBR.ModuleDefs (allMods)
@@ -67,14 +69,23 @@ import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, capacity, cha
   demand, demandq, dimlessLoad, explosion, gbConstants, gbConstrained, gbInputDataConstraints,
   gbInputs, gbOutputs, gBRSpecParamVals, glassGeo, glassTy, glassTypes, glBreakage,
   lateralLoad, load, loadTypes, pb_tol, prob_br, probBreak, sD, sdWithEqn, stressDistFac,
-  termsWithAccDefn, termsWithDefsOnly, wtntWithEqn)
+  termsWithAccDefn, termsWithDefsOnly, wtntWithEqn, terms)
 
 {--}
 
 gbSymbMap :: ChunkDB
-gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols)
+gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols ++ map nw glasscon
+  ++ map nw glasscon' ++ map nw terms ++ map nw doccon ++ map nw doccon' ++ map nw educon
+  ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon'
+  ++ map nw softwarecon ++ map nw terms ++ [nw lateralLoad, nw materialProprty]
+   ++ [nw distance, nw algorithm] ++
+  map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw glassBRsymb ++ Doc.srsDomains) $ map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]
+
+usedDB :: ChunkDB
+usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw this_symbols)
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn])
 
 gbRefDB :: ReferenceDB
 gbRefDB = rdb assumptions gbCitations $ funcReqs ++ likelyChgs ++
@@ -171,6 +182,7 @@ glassSystInfo = SI {
   _constraints = gbConstrained,
   _constants   = gbConstants,
   _sysinfodb   = gbSymbMap,
+  _usedinfodb = usedDB,
   _refdb       = gbRefDB
 }
   --FIXME: All named ideas, not just acronyms.
@@ -292,7 +304,7 @@ orgOfDocIntro = foldlSent [S "The", phrase organization, S "of this",
   plural aspect, S "taken from Volere", phrase template,
   S "16", makeRefS rbrtsn2012]
 
-orgOfDocIntroEnd = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
+orgOfDocIntroEnd = foldl (+:+) EmptyS [(at_startNP' $ the dataDefn),
   S "are used to support", (plural definition `ofThe` S "different"),
   plural model]
 
@@ -433,7 +445,7 @@ physSystDescription = physSystDesc (short gLassBR) fig_glassbr
   [physSystDescriptionList, LlC fig_glassbr]
 
 fig_glassbr = llcc (mkLabelRAFig "physSystImage") $ figWithWidth 
-  (at_start $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
+  (at_startNP $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
 
 physSystDescriptionList = enumSimple 1 (short physSyst) physSystDescriptionListPhysys
 

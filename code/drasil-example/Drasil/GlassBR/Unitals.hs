@@ -108,7 +108,11 @@ nom_thick = cuc "nom_thick"
   [enumc nominalThicknesses] 8
 
 -- FIXME glassTypeAbbrsStr should really not exist...
-glass_type  = cvc "glass_type" (nounPhraseSent $ phrase glassTy +:+ 
+-- the S "glass type" is supposed to be using "phrase glassTy"
+-- but the problem is still the Capitalization issue with new 
+-- constructor `Ch` of generateing the sentence. So for the sentence
+-- only "S" can be capitalized 
+glass_type  = cvc "glass_type" (nounPhraseSent $ S "glass type" +:+ 
     displayConstrntsAsSet glass_type glassTypeAbbrsStr)
   lG ({-DiscreteS glassTypeAbbrsStr-} String)
   [EnumeratedStr Software glassTypeAbbrsStr] Nothing
@@ -243,10 +247,11 @@ tolLoad       = vc "tolLoad"       (nounPhraseSP "tolerable load")
 
 
 terms :: [ConceptChunk]
-terms = [aspectRatio, glBreakage, lite, glassTy,
-  annealedGl, fTemperedGl, hStrengthGl, glTyFac, lateral, load, specDeLoad,
-  loadResis, longDurLoad, nonFactoredL, glassWL, shortDurLoad, loadShareFac,
-  probBreak, specA, blastResisGla, eqTNTChar, sD]
+terms = [aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
+  glTyFac, lateral, load, specDeLoad, loadResis, longDurLoad, nonFactoredL,
+  glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar,
+  sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage, notSafe, bomb,
+  explosion]
 
 aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
   glTyFac, lateral, load, specDeLoad, loadResis, longDurLoad, nonFactoredL,
@@ -438,7 +443,7 @@ type GlassThickness = [(Double, Double)] --[(Nominal, Actual)]
 
 glassType :: GlassType
 -- What it should really be:
--- glassType = [(1, annealed), (4, fullyT), (2, heatS)]
+--glassType = [(1, annealed), (4, fullyT), (2, heatS)]
 glassType = [(1, "AN"), (4, "FT"), (2, "HS")]
 
 glassThickness :: GlassThickness

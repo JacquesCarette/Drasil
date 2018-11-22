@@ -72,7 +72,7 @@ dd2descr = S "linear" +:+ (QP.displacement ^. term) +:+ S "of a" +:+
   ( CP.rigidBody ^. term) +:+ S "as a function of" +:+ (QP.time ^. term) +:+ 
   ch QP.time +:+ sParen (Sy (unit_symb QP.time)) `sC`
   S "also equal to the derivative of its linear" +:+ (QP.position ^. term) +:+ 
-  S "with respect to" +:+ (QP.time ^. term) +:+ ch QP.time)
+  S "with respect to" +:+ (QP.time ^. term) +:+ ch QP.time
 -}
 -- DD3 : Linear velocity --
 
@@ -81,7 +81,7 @@ linVelQDef :: Sentence
 linVelQDef = foldl (+:+) (EmptyS) def
   where def = [phrase $ QP.linearVelocity ^. term, S "of a",
               phrase $ CP.rigidBody ^. term, S "as a function of" ,
-              phrase $ QP.time ^. term, ch QP.time,
+              phrase $ QP.time ^. term, QP.time,
               S "also equal to the derivative of its linear",
               phrase $ QP.velocity ^. term, S "with respect to",
               phrase $ QP.time ^. term, ch QP.time]

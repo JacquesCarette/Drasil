@@ -2,25 +2,16 @@
 -- | Contains Sentences and helpers
 module Language.Drasil.Sentence
   (Sentence(Ch, Sy, S, Sp, E, Ref, Quote, (:+:), EmptyS, P, Ref2),
-  sParen, sSqBr, (+:+), sC, (+:+.), (+:), Reference2(Reference2),
-  RefProg(..)) where
+   sParen, sSqBr, (+:+), sC, (+:+.), (+:),
+   SentenceStyle(..), sentenceShort, sentenceSymb, sentenceTerm, sentencePlural) where
 
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.RefTypes (Reference, RefAdd)
-import Language.Drasil.ShortName (ShortName)
+import Language.Drasil.RefProg (Reference2)
+import Language.Drasil.RefTypes (Reference)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Unicode (Special(SqBrClose, SqBrOpen))
-
--- Trying different pieces of information for a reference
-data RefProg =
-    PrependDomain UID String
-  | Deferred UID                -- Deferred lookup; done later
-  | RS String                   -- Lifts a String into a RefProg
-  | RPConcat RefProg RefProg    -- Concatenates with two subprograms
-  | Name                        -- The Symbol to insert the ShortName directly
-data Reference2 = Reference2 RefProg RefAdd ShortName
 
 -- | For writing "sentences" via combining smaller elements
 -- Sentences are made up of some known vocabulary of things:
@@ -29,10 +20,15 @@ data Reference2 = Reference2 RefProg RefAdd ShortName
 -- - special characters
 -- - accented letters
 -- - References to specific layout objects
+data SentenceStyle = ShortStyle
+                   | SymbolStyle
+                   | TermStyle
+                   | PluralTerm
+
 infixr 5 :+:
 data Sentence where
-  Ch    :: UID -> Sentence
-  Sy    :: USymb -> Sentence        -- Unit Symbol
+  Ch    :: SentenceStyle -> UID -> Sentence
+  Sy    :: USymb -> Sentence
   S     :: String -> Sentence       -- Strings, used for Descriptions in Chunks
   Sp    :: Special -> Sentence
   P     :: Symbol -> Sentence       -- should not be used in examples?
@@ -50,6 +46,17 @@ instance Monoid Sentence where
   mempty = EmptyS
   mappend = (:+:)
 
+sentenceShort :: UID ->Sentence
+sentenceShort u = Ch ShortStyle u
+
+sentenceSymb :: UID ->Sentence
+sentenceSymb u = Ch SymbolStyle u
+
+sentenceTerm :: UID ->Sentence
+sentenceTerm u = Ch TermStyle u
+
+sentencePlural :: UID ->Sentence
+sentencePlural u = Ch PluralTerm u
 -- | Helper function for wrapping sentences in parentheses.
 sParen :: Sentence -> Sentence
 sParen x = S "(" :+: x :+: S ")"

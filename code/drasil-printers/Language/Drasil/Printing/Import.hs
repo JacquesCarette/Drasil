@@ -152,6 +152,16 @@ expr (RealI c ri)         sm = renderRealInt sm (lookupC sm c) ri
 lookupC :: HasSymbolTable s => s -> UID -> Symbol
 lookupC sm c = eqSymb $ symbLookup c $ sm^.symbolTable
 
+lookupT :: HasTermTable s => s -> UID -> Sentence
+lookupT sm c = phraseNP $ (termLookup c (sm^.termTable)) ^. term
+
+lookupS :: HasTermTable s => s -> UID -> Sentence
+lookupS sm c = maybe (phraseNP $ (termLookup c (sm^.termTable)) ^. term) id (fmap S $ getA $ termLookup c (sm^.termTable))
+
+lookupP :: HasTermTable s => s -> UID -> Sentence
+lookupP sm c =  pluralNP $ (termLookup c (sm^.termTable)) ^. term
+-- --plural n = NP.plural (n ^. term)
+
 mkCall :: (HasSymbolTable ctx, HasPrintingOptions ctx) => ctx -> P.Ops -> Expr -> P.Expr
 mkCall s o e = P.Row [P.MO o, parens $ expr e s]
 
@@ -258,7 +268,7 @@ renderRealInt st s (UpFrom (Exc,a))  = P.Row [ symbol s, P.MO P.Gt, expr a st]
 
 
 -- | Translates Sentence to the Printing representation of Sentence ('Spec')
-spec :: (HasSymbolTable s, HasDefinitionTable s, HasPrintingOptions s) =>
+spec :: (HasSymbolTable s, HasTermTable s, HasDefinitionTable s, HasPrintingOptions s) =>
   s -> Sentence -> P.Spec
   -- make sure these optimizations are clear
 spec sm (EmptyS :+: b) = spec sm b
@@ -268,21 +278,20 @@ spec _ (S s)           = P.S s
 spec _ (Sy s)          = P.Sy s
 spec _ (Sp s)          = P.Sp s
 spec _ (P s)           = P.E $ symbol s
-spec sm (Ch s)         = P.E $ symbol $ lookupC sm s 
+spec sm (Ch SymbolStyle s)  = P.E $ symbol $ lookupC sm s
+spec sm (Ch TermStyle s)    = spec sm $ lookupT sm s
+spec sm (Ch ShortStyle s)   = spec sm $ lookupS sm s
+spec sm (Ch PluralTerm s)   = spec sm $ lookupP sm s
 spec sm (Ref (Reference t r sn))   = P.Ref t r (spec sm (S . getStringSN $ resolveSN sn $
   lookupDeferredSN sm)) sn --FIXME: sn passed in twice?
-spec sm (Ref2 (Reference2 rp ra sn)) = P.Ref2 "FIXME" "FIXME" ra $ spec sm $ renderShortName sm rp sn
+spec sm (Ref2 (Reference2 _ rp ra sn)) = P.Ref2 ra $ spec sm $ renderShortName sm rp sn
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
 
-helpRefName :: String -> ShortName -> String
-helpRefName rf sn =  rf ++ ": " ++ getStringSN sn
-
 renderShortName :: (HasDefinitionTable ctx) => ctx -> RefProg -> ShortName -> Sentence
-renderShortName _ (PrependDomain _ rp) sn = S $ helpRefName rp sn
 renderShortName ctx (Deferred u) _ = S $ maybe (error "Domain has no abbreviation.") id $ getA $ defLookup u $ ctx ^. defTable
-renderShortName ctx (RPConcat a b) sn = renderShortName ctx a sn :+: renderShortName ctx b sn
+renderShortName ctx (RConcat a b) sn = renderShortName ctx a sn :+: renderShortName ctx b sn
 renderShortName _ (RS s) _ = S s
 renderShortName _ Name sn = S $ getStringSN sn
 
@@ -291,25 +300,25 @@ lookupDeferredSN ctx u = maybe "" (\x -> x ++ ": ") $
   getA $ defLookup u $ ctx ^. defTable
 
 -- | Translates from Document to the Printing representation of Document
-makeDocument :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
-  ctx -> Document -> T.Document
+makeDocument :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasTermTable ctx,
+  HasPrintingOptions ctx) => ctx -> Document -> T.Document
 makeDocument sm (Document titleLb authorName sections) =
   T.Document (spec sm titleLb) (spec sm authorName) (createLayout sm sections)
 
 -- | Translates from LayoutObj to the Printing representation of LayoutObj
-layout :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
-  ctx -> Int -> SecCons -> T.LayoutObj
+layout :: (HasSymbolTable ctx, HasTermTable ctx, HasDefinitionTable ctx,
+ HasPrintingOptions ctx) => ctx -> Int -> SecCons -> T.LayoutObj
 layout sm currDepth (Sub s) = sec sm (currDepth+1) s
 layout sm _         (Con c) = lay sm c
 
 -- | Helper function for creating sections as layout objects
-createLayout :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
-  ctx -> [Section] -> [T.LayoutObj]
+createLayout :: (HasSymbolTable ctx, HasTermTable ctx, HasDefinitionTable ctx,
+ HasPrintingOptions ctx) => ctx -> [Section] -> [T.LayoutObj]
 createLayout sm = map (sec sm 0)
 
 -- | Helper function for creating sections at the appropriate depth
-sec :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
-  ctx -> Int -> Section -> T.LayoutObj
+sec :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasTermTable ctx, 
+  HasPrintingOptions ctx) => ctx -> Int -> Section -> T.LayoutObj
 sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used somewhere?
   let ref = P.S (refAdd x) in
   T.HDiv [(concat $ replicate depth "sub") ++ "section"]
@@ -318,13 +327,13 @@ sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used 
 
 -- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.
-lay :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
-  ctx -> Contents -> T.LayoutObj
+lay :: (HasSymbolTable ctx, HasTermTable ctx, HasDefinitionTable ctx,
+ HasPrintingOptions ctx) => ctx -> Contents -> T.LayoutObj
 lay sm (LlC x) = layLabelled sm x
 lay sm (UlC x) = layUnlabelled sm (x ^. accessContents) 
 
-layLabelled :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
-  ctx -> LabelledContent -> T.LayoutObj
+layLabelled :: (HasSymbolTable ctx, HasTermTable ctx, HasDefinitionTable ctx,
+ HasPrintingOptions ctx) => ctx -> LabelledContent -> T.LayoutObj
 layLabelled sm x@(LblC _ (Table hdr lls t b)) = T.Table ["table"]
   ((map (spec sm) hdr) : (map (map (spec sm)) lls)) 
   (P.S $ getAdd (x ^. getRefAdd))
@@ -358,8 +367,8 @@ layLabelled sm (LblC _ (Bib bib))               = T.Bib $ map (layCite sm) bib
 
 -- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.
-layUnlabelled :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
-  ctx -> RawContent -> T.LayoutObj
+layUnlabelled :: (HasSymbolTable ctx, HasTermTable ctx, HasDefinitionTable ctx,
+ HasPrintingOptions ctx) => ctx -> RawContent -> T.LayoutObj
 layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
   ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S "nolabel0") b (spec sm t)
 layUnlabelled sm (Paragraph c)          = T.Paragraph (spec sm c)
@@ -378,12 +387,12 @@ layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S 
 layUnlabelled sm (Bib bib)              = T.Bib $ map (layCite sm) bib
 
 -- | For importing bibliography
-layCite ::(HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
-  ctx -> Citation -> P.Citation
+layCite ::(HasSymbolTable ctx, HasTermTable ctx, HasDefinitionTable ctx,
+ HasPrintingOptions ctx) => ctx -> Citation -> P.Citation
 layCite sm c = P.Cite (citeID c) (c ^. citeKind) (map (layField sm) (c ^. getFields))
 
-layField :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
-  ctx -> CiteField -> P.CiteField
+layField :: (HasSymbolTable ctx, HasTermTable ctx, HasDefinitionTable ctx,
+ HasPrintingOptions ctx) => ctx -> CiteField -> P.CiteField
 layField sm (Address      s) = P.Address      $ spec sm s
 layField  _ (Author       p) = P.Author       p
 layField sm (BookTitle    b) = P.BookTitle    $ spec sm b
@@ -408,7 +417,7 @@ layField sm (HowPublished (URL  u)) = P.HowPublished (P.URL  $ spec sm u)
 layField sm (HowPublished (Verb v)) = P.HowPublished (P.Verb $ spec sm v)
 
 -- | Translates lists
-makeL :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
+makeL :: (HasSymbolTable ctx, HasTermTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
   ctx -> ListType -> P.ListType
 makeL sm (Bullet bs)      = P.Unordered   $ map (\(x,y) -> (item sm x, labref y)) bs
 makeL sm (Numeric ns)     = P.Ordered     $ map (\(x,y) -> (item sm x, labref y)) ns
@@ -417,8 +426,8 @@ makeL sm (Desc ps)        = P.Desc        $ map (\(x,y,z) -> (spec sm x, item sm
 makeL sm (Definitions ps) = P.Definitions $ map (\(x,y,z) -> (spec sm x, item sm y, labref z)) ps
 
 -- | Helper for translating list items
-item :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasPrintingOptions ctx) =>
-  ctx -> ItemType -> P.ItemType
+item :: (HasSymbolTable ctx, HasTermTable ctx,HasDefinitionTable ctx,
+ HasPrintingOptions ctx) => ctx -> ItemType -> P.ItemType
 item sm (Flat i)     = P.Flat $ spec sm i
 item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
 

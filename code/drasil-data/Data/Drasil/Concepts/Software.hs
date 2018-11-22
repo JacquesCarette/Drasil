@@ -5,6 +5,11 @@ import Data.Drasil.Concepts.Documentation (srs)
 import Data.Drasil.SentenceStructures (foldlSent)
 import Control.Lens ((^.))
 
+softwarecon :: [ConceptChunk]
+softwarecon = [correctness, verifiability, physLib,
+  understandability, reusability, maintainability, portability,
+  performance, program, errMsg, accuracy, correctness, reliability]
+
 c, errMsg, physLib, program :: ConceptChunk
 
 c       = dcc "c" (pn "C") 

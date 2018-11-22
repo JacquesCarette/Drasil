@@ -4,40 +4,42 @@ module Language.Drasil.Development.Sentence where
 
 import Control.Lens ((^.))
 
-import Language.Drasil.Classes (NamedIdea(term), Idea)
+import Language.Drasil.Classes (NamedIdea(term), HasUID(uid), Idea)
 import Language.Drasil.Chunk.NamedIdea (short)
-import Language.Drasil.Sentence ((+:+), Sentence((:+:), S), sParen)
+import Language.Drasil.Sentence ((+:+), Sentence((:+:), S), sParen, sentenceTerm,
+	sentencePlural)
 import qualified Language.Drasil.NounPhrase as NP
 
 -- | Helper for common pattern of introducing the title-case version of a 
 -- noun phrase (from an Idea)
 -- followed by its abbreviation in parentheses.
 introduceAbb :: Idea n => n -> Sentence
-introduceAbb n = NP.titleize (n ^. term) +:+ sParen (short n)
+introduceAbb n = NP.titleizeNP (n ^. term) +:+ sParen (short n)
 
 -- | Helper function for getting the sentence case of a noun phrase from a 
 -- NamedIdea.
 at_start, at_start' :: NamedIdea n => n -> Sentence
 -- | Singular sentence case.
-at_start  n = NP.at_start (n ^. term)
+at_start  n = NP.at_startNP (n ^. term)
 -- | Plural sentence case.
-at_start' n = NP.at_start' (n ^. term)
+at_start' n = NP.at_startNP' (n ^. term)
 
 -- | Helper function for getting the title case of a noun phrase from a 
 -- NamedIdea.
 titleize, titleize' :: NamedIdea n => n -> Sentence
 -- | Singular title case.
-titleize  n = NP.titleize (n ^. term)
+titleize  n = NP.titleizeNP (n ^. term)
 -- | Plural title case.
-titleize' n = NP.titleize' (n ^. term)
+titleize' n = NP.titleizeNP' (n ^. term)
 
 -- | Helper for getting the phrase from a NamedIdea.
-phrase :: NamedIdea n => n -> Sentence
-phrase n = NP.phrase (n ^. term)
+phrase :: (HasUID n, NamedIdea n) => n -> Sentence
+phrase n = sentenceTerm (n ^. uid) --NP.phrase (n ^. term)
 
 -- | Helper for getting the plural of a phrase from a NamedIdea
-plural :: NamedIdea n => n -> Sentence
-plural n = NP.plural (n ^. term)
+plural :: (HasUID n, NamedIdea n) => n -> Sentence
+plural n = sentencePlural (n ^. uid)
+--plural n = NP.plural (n ^. term)
 
 phrase's, plural's :: NamedIdea n => n -> Sentence
 -- | Singular possesive function

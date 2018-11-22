@@ -52,6 +52,7 @@ library
     , Language.Drasil.NounPhrase.Core
     , Language.Drasil.People
     , Language.Drasil.Reference
+    , Language.Drasil.RefProg
     , Language.Drasil.RefTypes
     , Language.Drasil.Sentence.Extract
     , Language.Drasil.Sentence.EmbedSymbol

@@ -9,6 +9,13 @@ import Data.Drasil.Phrase (compoundNC)
 import Data.Drasil.IdeaDicts
 
 {--}
+glasscon :: [CI]
+glasscon = [annealed, aR, fullyT, glassTypeFac, heatS, loadDurFactor, iGlass, lGlass, 
+  lResistance, lShareFac, gLassBR, stdOffDist, nFL]
+
+glasscon' :: [NamedChunk]
+glasscon' = [beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
+  glass, ptOfExplsn, responseTy]
 
 {-glassBRProg :: CommonConcept
 glassBRProg = dcc' "glassBRProg" (nounPhraseSP "GlassBR program")

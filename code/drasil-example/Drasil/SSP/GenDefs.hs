@@ -54,9 +54,9 @@ nmFEq_rel = inxi totNrmForce $= eqlExpr cos sin
   (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
 
 nmFEq_desc :: Sentence
-nmFEq_desc = foldlSent [S "This equation satisfies", makeRefS equilibrium +:+.
+nmFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   S "in the shear direction", at_start force, S "equilibrium is",
-  S "derived from the free body diagram of", makeRefS forceDiagramL,
+  S "derived from the free body diagram of", makeRef2S forceDiagramL,
   S "in", makeRefS SRS.physSystLabel]
 
 --
@@ -69,7 +69,7 @@ bShFEq_rel = inxi mobShrI $= eqlExprN sin cos
   (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
 
 bShFEq_desc :: Sentence
-bShFEq_desc = foldlSent [S "This equation satisfies", makeRefS equilibrium +:+.
+bShFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   S "in the shear direction", at_start force, S "equilibrium is",
   S "derived from the free body diagram of", makeRefS forceDiagramL,
   S "in", makeRefS SRS.physSystLabel]
@@ -88,7 +88,7 @@ resShr_rel = inxi shrResI $= shrResEqn
 
 resShr_desc :: Sentence
 resShr_desc = foldlSent_ [S "The Mohr-Coulomb resistive shear strength of a",
-  phrase slice, ch shrStress, S "from", makeRefS mcShrStrgth,
+  phrase slice, ch shrStress, S "from", makeRef2S mcShrStrgth,
   S "is multiplied by the area", E $ sy baseWthX * sec(sy baseAngle) * 1,
   S "to obtain the" +:+. getTandS shrResI, S "Note the extra", E 1,
   S "is to represent a unit of width which is multiplied by the",
@@ -97,10 +97,10 @@ resShr_desc = foldlSent_ [S "The Mohr-Coulomb resistive shear strength of a",
   `sAnd` ch baseWthX, S "is the x width of the base. This accounts for the",
   phrase nrmFSubWat, E $ sy nrmFSubWat $= sy totNrmForce - sy baseHydroForce,
   S "of a soil from", -- FIXME: add prime to nrmStrss
-  makeRefS effStress, S "where the", phrase nrmStrss,
+  makeRef2S effStress, S "where the", phrase nrmStrss,
   S "is multiplied by the same area to obtain the", phrase nrmFSubWat,
   E $ sy nrmStrss * sy baseWthX * sec(sy baseAngle) * 1 $= sy nrmFSubWat,
-  makeRefS newA3, makeRefS newA4, makeRefS newA5]
+  makeRef2S newA3, makeRef2S newA4, makeRef2S newA5]
 
 --
 mobShr :: RelationConcept
@@ -112,12 +112,12 @@ mobShr_rel = inxi mobShrI $= inxi shrResI / sy fs $= shrResEqn / sy fs
 
 mobShr_desc :: Sentence
 mobShr_desc = foldlSent_ [
-  S "From", phrase definition `ofThe` phrase fs, S "in", makeRefS factOfSafety `sC`
+  S "From", phrase definition `ofThe` phrase fs, S "in", makeRef2S factOfSafety `sC`
   S "and the new", phrase definition, S "of", ch shrResI `sC` S "a new",
   S "relation for", S "net mobile" +:+ phrase shearForce `ofThe` phrase slice,
   ch shearFNoIntsl, S "is found as the resistive shear", ch shrResI,
   sParen (makeRefS genDef3Label), S "divided by the factor of safety" +:+. ch fs,
-  makeRefS newA2, makeRefS newA3, makeRefS newA4, makeRefS newA5]
+  makeRef2S newA2, makeRef2S newA3, makeRef2S newA4, makeRef2S newA5]
 
 --
 normShrR :: RelationConcept
@@ -129,7 +129,7 @@ nmShrR_rel = sy intShrForce $= sy normToShear * sy scalFunc * sy intNormForce
 
 nmShrR_desc :: Sentence
 nmShrR_desc = foldlSent_ [S "The", phrase assumption,
-  S "for the Morgenstern Price", phrase method_, sParen (makeRefS newA6),
+  S "for the Morgenstern Price", phrase method_, sParen (makeRef2S newA6),
   S "that the", phrase intrslce, phrase shearForce, ch xi,
   S "is proportional to the", phrase intrslce, 
   phrase normForce, ch intNormForce, S "by a proportionality constant",
@@ -150,7 +150,7 @@ momEql_rel = 0 $= momExpr (\ x y -> x -
 
 momEql_desc :: Sentence
 momEql_desc = foldlSent_ [S "For a", phrase slice, S "of", phrase mass,
-  S "in the", phrase slope, S "the moment equilibrium to satisfy", makeRefS equilibrium,
+  S "in the", phrase slope, S "the moment equilibrium to satisfy", makeRef2S equilibrium,
   S "in the direction", phrase perp,
   S "to" +:+. (S "base" +:+ phrase surface `ofThe` phrase slice),
   S "Moment equilibrium is derived from the free body diagram of" +:+.
@@ -158,5 +158,5 @@ momEql_desc = foldlSent_ [S "For a", phrase slice, S "of", phrase mass,
   plural value `ofThe` plural property, S "for", phrase slice :+: S "/" :+:
   plural intrslce, S "following convention in" +:+.
   makeRefS SRS.physSystLabel, at_start variable, plural definition,
-  S "can be found in", makeRefS sliceWght, S "to" +:+. makeRefS lengthLs,
-  makeRefS newA6]
+  S "can be found in", makeRef2S sliceWght, S "to" +:+. makeRef2S lengthLs,
+  makeRef2S newA6]

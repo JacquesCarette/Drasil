@@ -68,7 +68,7 @@ fcSfty_desc = foldlSent_ [S "Equation for the", titleize fs `isThe` S "ratio",
   S "mobile shear without the inluence of" +:+.
   --FIXME: have these constants defined somewhere else
   S "interslice forces, to a calculation considering the interslice forces",
-  makeRefS newA2, makeRefS newA6, makeRefS newA10, makeRefS newA11]
+  makeRef2S newA2, makeRef2S newA6, makeRef2S newA10, makeRef2S newA11]
 
 --
 nrmShrFor :: InstanceModel
@@ -143,8 +143,8 @@ sliceFs_desc = foldlSent_ [S "The value of the interslice normal force",
   ch intNormForce, S "at interface", ch index +:+. S "The net force"
   `isThe` S "weight",
   S "of the slices adjacent to interface", ch index +:+.
-  S "exert horizontally on each other", makeRefS newA2,
-  makeRefS newA10, makeRefS newA11]
+  S "exert horizontally on each other", makeRef2S newA2,
+  makeRef2S newA10, makeRef2S newA11]
 
 --
 crtSlpId :: InstanceModel
@@ -166,7 +166,7 @@ crtSlpId_desc = foldlSent_ [S "Given the necessary", phrase slope,
   S "will identify the", phrase crtSlpSrf, S "of the", phrase slope `sC`
   S "with the critical", phrase slip, S "coordinates", ch critCoords, 
   S "and the", phrase fs_min, E (sy fs_min) +:+. S "that results",
-  makeRefS newA4]
+  makeRef2S newA4]
 
 -----------
 -- Intro --
@@ -180,24 +180,24 @@ instModIntro1 = foldlSP [S "The", titleize morPrice,
   S "breaking the assumed failure", phrase surface,
   S "into a series of vertical", plural slice, S "of" +:+. phrase mass,
   S "Static equilibrium analysis using two", phrase force,
-  S "equilibrium, and one moment", phrase equation, S "as in" +:+. makeRefS equilibrium,
+  S "equilibrium, and one moment", phrase equation, S "as in" +:+. makeRef2S equilibrium,
   S "The", phrase problem, S "is statically indeterminate with only these 3",
   plural equation, S "and one constitutive", phrase equation,
   sParen $ S "the Mohr Coulomb shear strength of" +:+
-  makeRefS mcShrStrgth, S "so the", phrase assumption, S "of", makeRefS genDef5Label,
+  makeRef2S mcShrStrgth, S "so the", phrase assumption, S "of", makeRefS genDef5Label,
   S "is used. Solving for", phrase force, S "equilibrium allows",
   plural definition, S "of all", plural force, S "in terms of the",
-  plural physicalProperty, S "of", makeRefS sliceWght, S "to",
-  makeRefS lengthLs `sC` S "as done in", makeRefS seismicLoadF `sC` makeRefS surfLoads]
+  plural physicalProperty, S "of", makeRef2S sliceWght, S "to",
+  makeRef2S lengthLs `sC` S "as done in", makeRef2S seismicLoadF `sC` makeRef2S surfLoads]
 
 instModIntro2 = foldlSP [
   plural value `ofThe'` (phrase intrslce +:+ phrase totNrmForce),
   ch intNormForce, S "the", getTandS normToShear `sC`
   S "and the", titleize fs, (sParen $ ch fs) `sC` S "are unknown.",
   at_start' equation, S "for the unknowns are written in terms of only the",
-  plural value, S "in", makeRefS sliceWght, S "to", makeRefS lengthLs `sC` S "the", plural value,
+  plural value, S "in", makeRef2S sliceWght, S "to", makeRef2S lengthLs `sC` S "the", plural value,
   S "of", ch shearRNoIntsl `sC` S "and", ch shearFNoIntsl, S "in",
-  makeRefS seismicLoadF, S "and", makeRefS surfLoads `sC` S "and each",
+  makeRef2S seismicLoadF, S "and", makeRef2S surfLoads `sC` S "and each",
   S "other. The relationships between the unknowns are non linear" `sC`
   S "and therefore explicit", plural equation, S "cannot be derived and an",
   S "iterative", plural solution, S "method is required"]
@@ -215,10 +215,10 @@ fctSftyDerivSentences :: [Sentence]
 fctSftyDerivSentences = map foldlSentCol [fctSftyDerivationSentences]
 
 fctSftyDerivationSentences :: [Sentence]
-fctSftyDerivationSentences = [S "Using", eqN 21, S "from", makeRefS intsliceFs `sC`
+fctSftyDerivationSentences = [S "Using", eqN 21, S "from", makeRef2S intsliceFs `sC`
   S "rearranging, and", boundaryCon `sC` S "an", phrase equation, 
   S "for the", phrase fs, S "is found as", eqN 12 `sC` 
-  S "also seen in", makeRefS fctSfty] -- ++ eqUnR' fcSfty_rel ++ fUnknowns
+  S "also seen in", makeRef2S fctSfty] -- ++ eqUnR' fcSfty_rel ++ fUnknowns
 
 boundaryCon :: Sentence
 boundaryCon = foldlSent_ [S "applying the boundary condition that",
@@ -230,7 +230,7 @@ fUnknowns :: [Sentence]
 fUnknowns = [S "The constants" +:+ ch mobShrC `sAnd` ch shrResC +:+ 
   S "described in" +:+ eqN 20 `sAnd` eqN 19 +:+
   S "are functions of the unknowns: the" +:+ getTandS normToShear +:+
-  sParen (makeRefS nrmShrFor) `andThe` getTandS fs +:+. sParen (makeRefS fctSfty)]
+  sParen (makeRef2S nrmShrFor) `andThe` getTandS fs +:+. sParen (makeRef2S fctSfty)]
 
 
 fUnknownsCon :: Contents
@@ -241,9 +241,9 @@ nrmShrDeriv :: Derivation
 nrmShrDeriv = (weave [nrmShrDerivationSentences, map E nrmShrDerivEqns]) ++ nrmShrDerivSentence4
 
 nrmShrDerivSentence1 :: [Sentence]
-nrmShrDerivSentence1 = [S "From the moment equilibrium of", makeRefS momentEqlGD,
-  S "with the primary assumption for the Morgenstern-Price method of", makeRefS newA6 `sAnd`
-  S "associated definition", makeRefS normShrRGD, S "equation", eqN 9, S "can be derived"]
+nrmShrDerivSentence1 = [S "From the moment equilibrium of", makeRef2S momentEqlGD,
+  S "with the primary assumption for the Morgenstern-Price method of", makeRef2S newA6 `sAnd`
+  S "associated definition", makeRef2S normShrRGD, S "equation", eqN 9, S "can be derived"]
 
 nrmShrDerivSentence2 :: [Sentence]
 nrmShrDerivSentence2 = [S "Rearranging the", phrase equation, S "in terms of", ch normToShear,
@@ -251,13 +251,13 @@ nrmShrDerivSentence2 = [S "Rearranging the", phrase equation, S "in terms of", c
 
 nrmShrDerivSentence3 :: [Sentence]
 nrmShrDerivSentence3 = [S "Taking a summation of each slice, and", boundaryCon `sC`
-  S "and removing the seismic and external forces due to", makeRefS newA10 `sAnd` makeRefS newA11
+  S "and removing the seismic and external forces due to", makeRef2S newA10 `sAnd` makeRef2S newA11
   `sC` S "a general", phrase equation, S "for the constant", ch normToShear,
-  S "is developed in", eqN 11 `sC` S "also found in", makeRefS nrmShrFor]
+  S "is developed in", eqN 11 `sC` S "also found in", makeRef2S nrmShrFor]
 
 nrmShrDerivSentence4 :: [Sentence]
 nrmShrDerivSentence4 = [eqN 11 +:+ S "for" +:+ ch normToShear `sC`
-  S "is a function of the unknown" +:+ getTandS intNormForce +:+. makeRefS intsliceFs]
+  S "is a function of the unknown" +:+ getTandS intNormForce +:+. makeRef2S intsliceFs]
 
 
 nrmShrDerivationSentences :: [Sentence]
@@ -293,9 +293,9 @@ intrSlcDeriv = weave [intrSlcDerivationSentences, map E intrSlcDerivEqns] ++ fUn
 
 intrSlcDerivSentence1 :: [Sentence]
 intrSlcDerivSentence1 = [S "Substituting the", S "normal force equilibrium" `sOf`
-  (makeRefS normForcEqGD) `sAnd` S "the assumption", makeRefS newA6,
-  S "represented by", makeRefS momentEqlGD, 
-  S "into the effective normal force definition from", makeRefS normShrRGD,
+  (makeRef2S normForcEqGD) `sAnd` S "the assumption", makeRef2S newA6,
+  S "represented by", makeRef2S momentEqlGD, 
+  S "into the effective normal force definition from", makeRef2S normShrRGD,
   S "yields equation", eqN 12] 
 
 intrSlcDerivSentence2 :: [Sentence]
@@ -308,17 +308,17 @@ intrSlcDerivSentence2 = [S "Taking the", S "base shear force equilibrium" `sOf`
 
 intrSlcDerivSentence3 :: [Sentence]
 intrSlcDerivSentence3 = [S "Substituting the", phrase equation, S "for", ch nrmFSubWat,
-  S "from", eqN 16, makeRefS resShearWO `sAnd` makeRefS mobShearWO,
+  S "from", eqN 16, makeRef2S resShearWO `sAnd` makeRef2S mobShearWO,
   S "into", eqN 17, S "and rearranging results in", eqN 18]
 
 intrSlcDerivSentence4 :: [Sentence]
 intrSlcDerivSentence4 = [S "Where", ch shearRNoIntsl `sAnd` ch shearFNoIntsl,
   S "are the resistive and mobile shear of the slice" `sC`
   S wiif, ch intNormForce `sAnd` ch intShrForce `sC`
-  S "as defined in", makeRefS resShearWO `sAnd` makeRefS mobShearWO,
+  S "as defined in", makeRef2S resShearWO `sAnd` makeRef2S mobShearWO,
   S "Making use of the constants, and with full", plural equation, 
   S "found below in", eqN 19 `sAnd` eqN 20, S "respectively, then", eqN 18, 
-  S "can be simplified to", eqN 21 `sC` S "also seen in", makeRefS intsliceFs]
+  S "can be simplified to", eqN 21 `sC` S "also seen in", makeRef2S intsliceFs]
 
 
 intrSlcDerivationSentences :: [Sentence]
@@ -366,10 +366,10 @@ eq9 = (inxi intNormForce) $= (inxiM1 mobShrC * inxiM1 intNormForce +
 
 fctSftyDerivation, nrmShrDerivation, intrSlcDerivation :: [Contents]
 
-fctSftyDerivation = [foldlSP [S "Using", eqN 21, S "from", makeRefS intsliceFs `sC`
+fctSftyDerivation = [foldlSP [S "Using", eqN 21, S "from", makeRef2S intsliceFs `sC`
   S "rearranging, and", boundaryCon `sC` S "an", phrase equation, 
   S "for the", phrase fs, S "is found as", eqN 12 `sC` 
-  S "also seen in", makeRefS fctSfty],
+  S "also seen in", makeRef2S fctSfty],
   
   eqUnR' fcSfty_rel,
   
@@ -378,7 +378,7 @@ fctSftyDerivation = [foldlSP [S "Using", eqN 21, S "from", makeRefS intsliceFs `
 nrmShrDerivation = [
 
   foldlSP [S "The last static", phrase equation,
-  S "of", makeRefS equilibrium, S "with the", S "moment equilibrium" `sOf` makeRefS genDef6Label,
+  S "of", makeRef2S equilibrium, S "with the", S "moment equilibrium" `sOf` makeRefS genDef6Label,
   S "about", (S "midpoint" `ofThe` S "base") `sAnd` S "the",
   phrase assumption, S "of", makeRefS genDef5Label, S "results in", eqN 13],
   
@@ -397,7 +397,7 @@ nrmShrDerivation = [
   
   foldlSP [S "Taking a summation of each slice, and", boundaryCon `sC`
   S "a general", phrase equation, S "for the constant", ch normToShear,
-  S "is developed in", eqN 15 `sC` S "also found in", makeRefS nrmShrFor],
+  S "is developed in", eqN 15 `sC` S "also found in", makeRef2S nrmShrFor],
   --NOTE: "Taking this with that and the assumption of _
   --to get equation #" pattern
   
@@ -412,14 +412,14 @@ nrmShrDerivation = [
   inxiM1 intNormForce * inxiM1 scalFunc)),
   
   foldlSP [eqN 15, S "for", ch normToShear `sC`
-  S "is a function of the unknown", getTandS intNormForce, makeRefS intsliceFs]
+  S "is a function of the unknown", getTandS intNormForce, makeRef2S intsliceFs]
 
   ]
 
 intrSlcDerivation = [
 
   foldlSP [S "Taking the", S "normal force equilibrium" `sOf` makeRefS genDef1Label,
-  S "with the", S "effective stress", phrase definition, S "from", makeRefS effStress,
+  S "with the", S "effective stress", phrase definition, S "from", makeRef2S effStress,
   -- NOTE: "Taking this with that and the assumption of _
   -- to get equation #" pattern
   S "that", E (inxi totNrmForce $= inxi nrmFSubWat - inxi baseHydroForce) `sC`
@@ -464,10 +464,10 @@ intrSlcDerivation = [
   foldlSP [S "Where", ch shearRNoIntsl `sAnd` ch shearFNoIntsl,
   S "are the resistive and mobile shear of the slice" `sC`
   S wiif, ch intNormForce `sAnd` ch intShrForce `sC`
-  S "as defined in", makeRefS seismicLoadF `sAnd` makeRefS surfLoads,
+  S "as defined in", makeRef2S seismicLoadF `sAnd` makeRef2S surfLoads,
   S "Making use of the constants, and with full", plural equation, 
   S "found below in", eqN 19 `sAnd` eqN 20, S "respectively, then", eqN 18, 
-  S "can be simplified to", eqN 21 `sC` S "also seen in", makeRefS intsliceFs],
+  S "can be simplified to", eqN 21 `sC` S "also seen in", makeRef2S intsliceFs],
   
   eqUnR' $
   (inxi shrResC) $= ((sy normToShear)*(inxi scalFunc) * cos (inxi baseAngle) -

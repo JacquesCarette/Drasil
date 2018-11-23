@@ -73,7 +73,7 @@ eq_rel = foldr ($=) 0 (map summ [fx, fy, momntOfBdy])
 eq_desc :: Sentence
 eq_desc = foldlSent [S "For a body in static equilibrium, the net",
   plural force +:+. S "and net moments acting on the body will cancel out",
-  S "Assuming a 2D problem", sParen (makeRefS newA8), S "the", getTandS fx `sAnd`
+  S "Assuming a 2D problem", sParen (makeRef2S newA8), S "the", getTandS fx `sAnd`
   getTandS fy, S "will be equal to" +:+. E 0, S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation",
   S "will create a net moment equal to" +:+ E 0]
@@ -110,7 +110,7 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
   S "relationship is not truly",
   phrase linear `sC` S "but assuming the effective", phrase normForce, 
   S "is strong enough, it can be approximated with a", phrase linear,
-  S "fit", sParen (makeRefS newA9), S "where the cohesion", ch cohesion,
+  S "fit", sParen (makeRef2S newA9), S "where the cohesion", ch cohesion,
   S "represents the", ch shrStress, S "intercept of the fitted line"]
 
 --

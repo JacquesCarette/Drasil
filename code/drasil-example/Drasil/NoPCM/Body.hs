@@ -270,7 +270,7 @@ scopeReqEnd tem te wa = foldlSent_ [S "predicts the",
 orgDocEnd :: CI -> CI -> CI -> Sentence
 orgDocEnd im_ od pro = foldlSent_ [S "The", phrase im_,
   sParen (makeRefS SRS.inModelLabel),
-  S "to be solved is referred to as" +:+. makeRefS eBalanceOnWtr,
+  S "to be solved is referred to as" +:+. makeRef2S eBalanceOnWtr,
   S "The", phrase im_, S "provides the",
   titleize od, sParen (short od), S "that model the"
   +:+. phrase pro, short pro, S "solves this", short od]
@@ -417,13 +417,13 @@ iModDesc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin _ vhg _ =
   `sC` S "over area") +:+. ch csa, S "No",
   phrase ht, S "occurs to", (S "outside" `ofThe`
   phrase ta) `sC` S "since it has been assumed to be",
-  phrase purin +:+. sParen (makeRefS newA11), S "Assuming no",
-  phrase vhg +:+. (sParen (makeRefS newA12) `sC`
+  phrase purin +:+. sParen (makeRef2S newA11), S "Assuming no",
+  phrase vhg +:+. (sParen (makeRef2S newA12) `sC`
   E (sy vhg $= 0)), S "Therefore, the", phrase M.equation, S "for",
-  makeRefS rocTempSimp, S "can be written as"]
+  makeRef2S rocTempSimp, S "can be written as"]
 
 iModDesc2 :: DataDefinition -> [Sentence]
-iModDesc2 d1hf = [S "Using", (makeRefS d1hf) `sC` S "this can be written as"]
+iModDesc2 d1hf = [S "Using", (makeRef2S d1hf) `sC` S "this can be written as"]
 
 iModDesc3 :: UnitalChunk -> UncertQ -> [Sentence]
 iModDesc3 wm hcw = [S "Dividing (3) by", ch wm :+: ch hcw `sC`
@@ -499,8 +499,8 @@ reqIIV = cic "reqIIV" (titleize input_ +:+ S "the" +:+ plural quantity +:+
     plural tank_para `sC` S "material" +:+ plural property +:+
     S "and initial" +:+. plural condition) "Input-Inital-Values" funcReqDom
 reqFM = cic "reqFM" (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef2S reqIIV +:+
-    S "to find the" +:+ phrase mass +:+ S "needed for" +:+ makeRefS eBalanceOnWtr +:+
-    S "to" +:+ makeRefS eBalanceOnPCM `sC` S "as follows, where" +:+ ch w_vol `isThe`
+    S "to find the" +:+ phrase mass +:+ S "needed for" +:+ makeRef2S eBalanceOnWtr +:+
+    S "to" +:+ makeRef2S eBalanceOnPCM `sC` S "as follows, where" +:+ ch w_vol `isThe`
     phrase w_vol +:+ S "and" +:+ (ch tank_vol `isThe` phrase tank_vol) :+:
     S ":" +:+ E reqFMExpr) "Find-Mass" funcReqDom  -- FIXME: Equation shouldn't be inline.
 reqCISPC = cic "reqCISPC" (S "Verify that the" +:+ plural input_ +:+
@@ -512,14 +512,14 @@ reqOIDQ = cic "reqOIDQ" (titleize' output_ `sAnd` plural input_
     S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
     plural quantity +:+ S "from" +:+ (makeRef2S reqIIV) `sC` S "the" +:+
     phrase mass +:+ S "from" +:+ makeRef2S reqFM `sAnd` ch tau_W +:+.
-    sParen (S "from" +:+ makeRefS eBalanceOnWtr)) "Output-Input-Derivied-Quantities" funcReqDom
+    sParen (S "from" +:+ makeRef2S eBalanceOnWtr)) "Output-Input-Derivied-Quantities" funcReqDom
 reqCTWOT = cic "reqCTWOT" (S "Calculate and output the" +:+ phrase temp_W +:+
     sParen (ch temp_W :+: sParen (ch time)) +:+ S "over the" +:+
     phrase sim_time) "Calculate-Temperature-Water-Over-Time" funcReqDom
 reqCCHEWT = cic "reqCCHEWT" 
     (S "Calculate and" +:+ phrase output_ +:+ S "the" +:+
     phrase w_E +:+ sParen (ch w_E :+: sParen (ch time)) +:+ S "over the" +:+
-    phrase sim_time +:+. sParen (S "from" +:+ makeRefS heatEInWtr))
+    phrase sim_time +:+. sParen (S "from" +:+ makeRef2S heatEInWtr))
     "Calculate-Change-Heat_Energy-Water-Time" funcReqDom
 
 reqIVRTable :: LabelledContent
@@ -555,7 +555,7 @@ likelyChgs = [likeChgTCVOD, likeChgTCVOL, likeChgDT, likeChgTLH]
 
 likeChgDT :: ConceptInstance
 likeChgDT = cic "likeChgDT" (
-  (makeRefS newA9NoPCM) :+: S "- The" +:+ phrase model +:+
+  (makeRef2S newA9NoPCM) :+: S "- The" +:+ phrase model +:+
   S "currently only accounts for charging of the tank. That is, increasing the" +:+ phrase temp +:+
   S "of the water to match the" +:+ phrase temp +:+ S "of the coil. A more complete"  
   +:+ phrase model +:+. S "would also account for discharging of the tank") 
@@ -633,7 +633,7 @@ traceDataRef, traceFuncReqRef, traceInstaModelRef, traceAssumpRef, traceTheories
   traceDataDefRef, traceLikelyChgRef, traceGenDefRef :: [Sentence]
 
 traceInstaModel = ["IM1", "IM2"]
-traceInstaModelRef = map makeRefS [eBalanceOnWtr, heatEInWtr]
+traceInstaModelRef = map makeRef2S [eBalanceOnWtr, heatEInWtr]
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
 traceFuncReqRef = map makeRef2S reqs
@@ -643,16 +643,16 @@ traceDataRef = [makeRefS dataConstTable1] --FIXME: Reference section?
 
 traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14"]
-traceAssumpRef = map makeRefS assumps_Nopcm_list_new
+traceAssumpRef = map makeRef2S assumps_Nopcm_list_new
 
 traceTheories = ["T1"]
-traceTheoriesRef = map makeRefS [consThermE]
+traceTheoriesRef = map makeRef2S [consThermE]
 
 traceGenDefs = ["GD1", "GD2"]
-traceGenDefRef = map makeRefS swhsGDs
+traceGenDefRef = map makeRef2S swhsGDs
 
 traceDataDefs = ["DD1"]
-traceDataDefRef = map makeRefS [dd1HtFluxC]
+traceDataDefRef = map makeRef2S [dd1HtFluxC]
 
 traceLikelyChg = ["LC1", "LC2", "LC3", "LC4"]
 traceLikelyChgRef = map makeRef2S likelyChgs

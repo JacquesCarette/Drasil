@@ -34,7 +34,7 @@ htFluxCEqn :: Expr
 htFluxCEqn = (sy coil_HTC) * ((sy temp_C) - apply1 temp_W time)
 
 dd1HtFluxC :: DataDefinition
-dd1HtFluxC = mkDDL dd1HtFluxCQD [makeRef koothoor2013] [] dd1HtFluxCL [makeRefS newA7, makeRefS newA8, makeRefS newA9]
+dd1HtFluxC = mkDDL dd1HtFluxCQD [makeRef koothoor2013] [] dd1HtFluxCL [makeRef2S newA7, makeRef2S newA8, makeRef2S newA9]
 
 --Can't include info in description beyond definition of variables?
 ----
@@ -77,7 +77,7 @@ melt_frac_eqn = (sy latentE_P) / ((sy htFusion) * (sy pcm_mass))
 
 dd4MeltFrac :: DataDefinition
 dd4MeltFrac = mkDDL dd4MeltFracQD [makeRef koothoor2013] [] dd4MeltFracL
- [makeRefS dd3HtFusion]
+ [makeRef2S dd3HtFusion]
 
 --Need to add units to data definition descriptions
 

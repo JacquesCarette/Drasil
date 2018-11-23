@@ -17,7 +17,6 @@ import Data.Drasil.Concepts.Math (change)
 import Data.Drasil.Concepts.Physics (mech_energy)
 
 import Data.Drasil.SentenceStructures (foldlSent, ofThe, ofThe', sAnd, isThe)
-
 import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfect_insul,
   charging, discharging)
 import Drasil.SWHS.Labels (thermalEnergyOnlyL, lawConvectiveCoolingWtrPCML, 
@@ -143,7 +142,7 @@ assumpS11 = foldlSent [
   S "not" +:+. phrase discharging, S "The", phrase temp_W `sAnd`
   phrase temp_PCM, S "can only increase, or remain",
   S "constant; they do not decrease. This implies that the",
-  phrase temp_init, sSqBr $ makeRefS newA12, S "is less than (or equal)",
+  phrase temp_init, sSqBr $ makeRef2S newA12, S "is less than (or equal)",
   S "to the", phrase temp_C, sSqBr $ makeRefS likeChg4L]
 assumpS12 = foldlSent [
   phrase temp_init `ofThe'` phrase water `sAnd` S "the",

@@ -191,7 +191,7 @@ Reviewers of this documentation should have a strong knowledge in heat transfer 
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
 The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{dParnas1972} and \cite{dParnasPcClements1984}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:IMs} and trace back to find any additional information they require.
-The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance model (Section~\ref{Sec:IMs}) to be solved is referred to as \hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}. The instance model provides the Ordinary Differential Equation (ODE) that model the solar water heating system. SWHS solves this ODE.
+The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance model (Section~\ref{Sec:IMs}) to be solved is referred to as \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}. The instance model provides the Ordinary Differential Equation (ODE) that model the solar water heating system. SWHS solves this ODE.
 \section{General System Description}
 \label{Sec:GenSysDesc}
 This section provides general information about the system including identifying the interfaces between the system and its environment (system context), describing the user characteristics and listing the system constraints.
@@ -367,7 +367,7 @@ Description & \begin{symbDescription}
               \item{$ΔT$ is the change in temperature (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. $\mathbf{q}\left(t\right)$ is the thermal flux ($\frac{\text{W}}{\text{m}^{2}}$). $h$ is the heat transfer coefficient, assumed independant of $T$ (A\ref{A:Heat-Transfer-Coeffs-Constant}) ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$). $ΔT\left(t\right)=T\left(t\right)-{T_{env}}\left(t\right)$ is the time-dependant thermal gradient between the environment and the object (${}^{\circ}$C).
+Notes & Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. $\mathbf{q}\left(t\right)$ is the thermal flux ($\frac{\text{W}}{\text{m}^{2}}$). $h$ is the heat transfer coefficient, assumed independant of $T$ (\hyperref[A:Heat-Transfer-Coeffs-Constant]{A: Heat-Transfer-Coeffs-Constant}) ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$). $ΔT\left(t\right)=T\left(t\right)-{T_{env}}\left(t\right)$ is the time-dependant thermal gradient between the environment and the object (${}^{\circ}$C).
 \\ \midrule \\
 Source & \cite{incroperaEtAl2007}
 \\ \midrule \\
@@ -456,9 +456,9 @@ Description & \begin{symbDescription}
               \item{$t$ is the time (s)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & A\ref{A:Newton-Law-Convective-Cooling-Coil-Water}
-        A\ref{A:Temp-Heating-Coil-Constant-over-Time}
-        A\ref{A:Temp-Heating-Coil-Constant-over-Length}
+Notes & \hyperref[A:Newton-Law-Convective-Cooling-Coil-Water]{A: Newton-Law-Convective-Cooling-Coil-Water}
+        \hyperref[A:Temp-Heating-Coil-Constant-over-Time]{A: Temp-Heating-Coil-Constant-over-Time}
+        \hyperref[A:Temp-Heating-Coil-Constant-over-Length]{A: Temp-Heating-Coil-Constant-over-Length}
 \\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\
@@ -556,7 +556,7 @@ Description & \begin{symbDescription}
               \item{${T_{init}}$ is the initial temperature (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The above equation is derived using \hyperref[T:sensHtE]{Definition~T:sensHtE}. ${E_{W}}$ is the change in thermal energy of the liquid water relative to the energy at the initial temperature (${T_{init}}$) (J). ${C_{W}}$ is the specific heat capacity of liquid water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and ${m_{W}}$ is the mass of the water (kg). The change in temperature is the difference between the temperature at time $t$ (s), ${T_{W}}$ and the initial temperature, ${T_{init}}$ (${}^{\circ}$C). This equation applies as long as $0<{T_{W}}<100$${}^{\circ}$C (A\ref{A:Water-Always-Liquid}, A\ref{A:Atmospheric-Pressure-Tank}).
+Notes & The above equation is derived using \hyperref[T:sensHtE]{TM: sensHtE}. ${E_{W}}$ is the change in thermal energy of the liquid water relative to the energy at the initial temperature (${T_{init}}$) (J). ${C_{W}}$ is the specific heat capacity of liquid water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and ${m_{W}}$ is the mass of the water (kg). The change in temperature is the difference between the temperature at time $t$ (s), ${T_{W}}$ and the initial temperature, ${T_{init}}$ (${}^{\circ}$C). This equation applies as long as $0<{T_{W}}<100$${}^{\circ}$C (\hyperref[A:Water-Always-Liquid]{A: Water-Always-Liquid}, \hyperref[A:Atmospheric-Pressure-Tank]{A: Atmospheric-Pressure-Tank}).
 \\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\
@@ -613,11 +613,11 @@ This section provides the functional requirements, the business tasks that the s
 \label{Sec:FRs}
 \begin{itemize}
 \item[Input-Inital-Values:\phantomsection\label{reqIIV}]Input the quantities described in Table~\ref{Table:Input-Variable-Requirements}, which define the tank parameters, material properties and initial conditions.
-\item[Find-Mass:\phantomsection\label{reqFM}]Use the inputs in \hyperref[reqIIV]{FR: Input-Inital-Values} to find the mass needed for \hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr} to \hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}, as follows, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank: ${m_{W}}={V_{W}} {ρ_{W}}=\frac{D}{2} L {ρ_{W}}$
+\item[Find-Mass:\phantomsection\label{reqFM}]Use the inputs in \hyperref[reqIIV]{FR: Input-Inital-Values} to find the mass needed for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} to \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}, as follows, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank: ${m_{W}}={V_{W}} {ρ_{W}}=\frac{D}{2} L {ρ_{W}}$
 \item[Check-Inputs-Satisfy-Physical-Constraints:\phantomsection\label{reqCISPC}]Verify that the inputs satisfy the required physical constraint shown in Table~\ref{Table:InDataConstraints}.
-\item[Output-Input-Derivied-Quantities:\phantomsection\label{reqOIDQ}]Outputs and inputs quantities and derived quantities in the following list: the quantities from \hyperref[reqIIV]{FR: Input-Inital-Values}, the mass from \hyperref[reqFM]{FR: Find-Mass} and ${τ_{W}}$ (from \hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}).
+\item[Output-Input-Derivied-Quantities:\phantomsection\label{reqOIDQ}]Outputs and inputs quantities and derived quantities in the following list: the quantities from \hyperref[reqIIV]{FR: Input-Inital-Values}, the mass from \hyperref[reqFM]{FR: Find-Mass} and ${τ_{W}}$ (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}).
 \item[Calculate-Temperature-Water-Over-Time:\phantomsection\label{reqCTWOT}]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time
-\item[Calculate-Change-Heat\_Energy-Water-Time:\phantomsection\label{reqCCHEWT}]Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from \hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}).
+\item[Calculate-Change-Heat\_Energy-Water-Time:\phantomsection\label{reqCCHEWT}]Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from \hyperref[IM:heatEInWtr]{IM: heatEInWtr}).
 \end{itemize}
 \begin{longtabu}{l l X[l]}
 \toprule
@@ -654,7 +654,7 @@ This problem is small in size and relatively simple, so performance is not a pri
 \begin{itemize}
 \item[Temperature-Coil-Variable-Over-Day:\phantomsection\label{likeChgTCVOD}]A\ref{A:Temp-Heating-Coil-Constant-over-Time} - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
 \item[Temperature-Coil-Variable-Over-Length:\phantomsection\label{likeChgTCVOL}]A\ref{A:Temp-Heating-Coil-Constant-over-Length} - The temperature of the heating coil will actually change along its length as the water within it cools.
-\item[Discharging-Tank:\phantomsection\label{likeChgDT}]A\ref{A:Charging-Tank-No-Temp-Discharge}- The model currently only accounts for charging of the tank. That is, increasing the temperature of the water to match the temperature of the coil. A more complete model would also account for discharging of the tank.
+\item[Discharging-Tank:\phantomsection\label{likeChgDT}]\hyperref[A:Charging-Tank-No-Temp-Discharge]{A: Charging-Tank-No-Temp-Discharge}- The model currently only accounts for charging of the tank. That is, increasing the temperature of the water to match the temperature of the coil. A more complete model would also account for discharging of the tank.
 \item[Tank-Lose-Heat:\phantomsection\label{likeChgTLH}]A\ref{A:Perfect-Insulation-Tank} - Any real tank cannot be perfectly insulated and will lose heat.
 \end{itemize}
 \section{Unlikely Changes}
@@ -668,20 +668,20 @@ This problem is small in size and relatively simple, so performance is not a pri
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. Table~\ref{Table:TraceyRI} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:TraceyRIs} shows the dependencies of instance models, requirements, and data constraints on each other. Table~\ref{Table:TraceyAI} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
 \begin{longtable}{l l l l l l l}
 \toprule
- & T1 (\hyperref[T:consThermE]{Definition~T:consThermE}) & GD1 (\hyperref[GD:nwtnCooling]{Definition~GD:nwtnCooling}) & GD2 (\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}) & DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) & IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) & IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr})
+ & T1 (\hyperref[T:consThermE]{TM: consThermE}) & GD1 (\hyperref[GD:nwtnCooling]{GD: nwtnCooling}) & GD2 (\hyperref[GD:rocTempSimp]{GD: rocTempSimp}) & DD1 (\hyperref[DD:ht.flux.C]{DD: ht\_flux\_C}) & IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) & IM2 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr})
 \\
 \midrule
-T1 (\hyperref[T:consThermE]{Definition~T:consThermE}) &  &  &  &  &  & 
+T1 (\hyperref[T:consThermE]{TM: consThermE}) &  &  &  &  &  & 
 \\
-GD1 (\hyperref[GD:nwtnCooling]{Definition~GD:nwtnCooling}) &  &  &  &  &  & 
+GD1 (\hyperref[GD:nwtnCooling]{GD: nwtnCooling}) &  &  &  &  &  & 
 \\
-GD2 (\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}) & X &  &  &  &  & 
+GD2 (\hyperref[GD:rocTempSimp]{GD: rocTempSimp}) & X &  &  &  &  & 
 \\
-DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) &  & X &  &  &  & 
+DD1 (\hyperref[DD:ht.flux.C]{DD: ht\_flux\_C}) &  & X &  &  &  & 
 \\
-IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) &  &  & X & X &  & 
+IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) &  &  & X & X &  & 
 \\
-IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) &  &  &  &  &  & 
+IM2 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}
@@ -689,12 +689,12 @@ IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) &  &  &  &  &  &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l}
 \toprule
- & IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) & IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) & Data Constraints (Table~\ref{Table:InDataConstraints}) & R1 (\hyperref[reqIIV]{FR: Input-Inital-Values}) & R2 (\hyperref[reqFM]{FR: Find-Mass}) & R3 (\hyperref[reqCISPC]{FR: Check-Inputs-Satisfy-Physical-Constraints}) & R4 (\hyperref[reqOIDQ]{FR: Output-Input-Derivied-Quantities}) & R5 (\hyperref[reqCTWOT]{FR: Calculate-Temperature-Water-Over-Time}) & R6 (\hyperref[reqCCHEWT]{FR: Calculate-Change-Heat\_Energy-Water-Time})
+ & IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) & IM2 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) & Data Constraints (Table~\ref{Table:InDataConstraints}) & R1 (\hyperref[reqIIV]{FR: Input-Inital-Values}) & R2 (\hyperref[reqFM]{FR: Find-Mass}) & R3 (\hyperref[reqCISPC]{FR: Check-Inputs-Satisfy-Physical-Constraints}) & R4 (\hyperref[reqOIDQ]{FR: Output-Input-Derivied-Quantities}) & R5 (\hyperref[reqCTWOT]{FR: Calculate-Temperature-Water-Over-Time}) & R6 (\hyperref[reqCCHEWT]{FR: Calculate-Change-Heat\_Energy-Water-Time})
 \\
 \midrule
-IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) &  &  &  &  &  &  &  &  & 
+IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) &  &  &  &  &  &  &  &  & 
 \\
-IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) &  &  &  &  &  &  &  &  & 
+IM2 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) &  &  &  &  &  &  &  &  & 
 \\
 R1 (\hyperref[reqIIV]{FR: Input-Inital-Values}) &  &  &  &  &  &  &  &  & 
 \\
@@ -714,20 +714,20 @@ R6 (\hyperref[reqCCHEWT]{FR: Calculate-Change-Heat\_Energy-Water-Time}) &  & X &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l}
 \toprule
- & A1 (A\ref{A:Thermal-Energy-Only}) & A2 (A\ref{A:Heat-Transfer-Coeffs-Constant}) & A3 (A\ref{A:Constant-Water-Temp-Across-Tank}) & A4 (A\ref{A:Density-Water-Constant-over-Volume}) & A5 (A\ref{A:Specific-Heat-Energy-Constant-over-Volume}) & A6 (A\ref{A:Newton-Law-Convective-Cooling-Coil-Water}) & A7 (A\ref{A:Temp-Heating-Coil-Constant-over-Time}) & A8 (A\ref{A:Temp-Heating-Coil-Constant-over-Length}) & A9 (A\ref{A:Charging-Tank-No-Temp-Discharge}) & A10 (A\ref{A:Water-Always-Liquid}) & A11 (A\ref{A:Perfect-Insulation-Tank}) & A12 (A\ref{A:No-Internal-Heat-Generation-By-Water}) & A13 (A\ref{A:Atmospheric-Pressure-Tank}) & A14 (A\ref{A:Volume-Coil-Negligible})
+ & A1 (\hyperref[A:Thermal-Energy-Only]{A: Thermal-Energy-Only}) & A2 (\hyperref[A:Heat-Transfer-Coeffs-Constant]{A: Heat-Transfer-Coeffs-Constant}) & A3 (\hyperref[A:Constant-Water-Temp-Across-Tank]{A: Constant-Water-Temp-Across-Tank}) & A4 (\hyperref[A:Density-Water-Constant-over-Volume]{A: Density-Water-Constant-over-Volume}) & A5 (\hyperref[A:Specific-Heat-Energy-Constant-over-Volume]{A: Specific-Heat-Energy-Constant-over-Volume}) & A6 (\hyperref[A:Newton-Law-Convective-Cooling-Coil-Water]{A: Newton-Law-Convective-Cooling-Coil-Water}) & A7 (\hyperref[A:Temp-Heating-Coil-Constant-over-Time]{A: Temp-Heating-Coil-Constant-over-Time}) & A8 (\hyperref[A:Temp-Heating-Coil-Constant-over-Length]{A: Temp-Heating-Coil-Constant-over-Length}) & A9 (\hyperref[A:Charging-Tank-No-Temp-Discharge]{A: Charging-Tank-No-Temp-Discharge}) & A10 (\hyperref[A:Water-Always-Liquid]{A: Water-Always-Liquid}) & A11 (\hyperref[A:Perfect-Insulation-Tank]{A: Perfect-Insulation-Tank}) & A12 (\hyperref[A:No-Internal-Heat-Generation-By-Water]{A: No-Internal-Heat-Generation-By-Water}) & A13 (\hyperref[A:Atmospheric-Pressure-Tank]{A: Atmospheric-Pressure-Tank}) & A14 (\hyperref[A:Volume-Coil-Negligible]{A: Volume-Coil-Negligible})
 \\
 \midrule
-T1 (\hyperref[T:consThermE]{Definition~T:consThermE}) & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+T1 (\hyperref[T:consThermE]{TM: consThermE}) & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD1 (\hyperref[GD:nwtnCooling]{Definition~GD:nwtnCooling}) &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+GD1 (\hyperref[GD:nwtnCooling]{GD: nwtnCooling}) &  & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD2 (\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}) &  &  & X & X & X &  &  &  &  &  &  &  &  & 
+GD2 (\hyperref[GD:rocTempSimp]{GD: rocTempSimp}) &  &  & X & X & X &  &  &  &  &  &  &  &  & 
 \\
-DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) &  &  &  &  &  & X & X & X &  &  &  &  &  & 
+DD1 (\hyperref[DD:ht.flux.C]{DD: ht\_flux\_C}) &  &  &  &  &  & X & X & X &  &  &  &  &  & 
 \\
-IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) &  &  &  &  &  &  &  &  & X & X &  &  &  & 
+IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) &  &  &  &  &  &  &  &  & X & X &  &  &  & 
 \\
-IM2 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) &  &  &  &  &  &  &  &  &  & X &  &  &  & 
+IM2 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) &  &  &  &  &  &  &  &  &  & X &  &  &  & 
 \\
 LC1 (\hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day}) &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\

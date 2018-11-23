@@ -46,7 +46,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   RefSec(RefProg), RefTab(TAandA, TUnits), TraceabilitySec(TraceabilityProg),
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
-  reqF, termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc)
+  reqF, termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap)
 import qualified Drasil.DocumentLanguage.Units as U (toSentence) 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
   isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP)
@@ -161,6 +161,13 @@ mkSRS = RefSec (RefProg intro
   (map UlC traceIntro2) ++ [LlC traceFig1, LlC traceFig2]) []) :
   map Verbatim [specParamVal] ++ (Bibliography : [])
 
+nopcm_label :: TraceMap
+nopcm_label = generateTraceMap mkSRS
+ 
+nopcm_refby :: RefbyMap
+nopcm_refby = generateRefbyMap nopcm_label
+
+
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
@@ -202,11 +209,11 @@ nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms 
   ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm,
   nw ht_trans])
  (map cw nopcm_Symbols ++ srsDomains)
-  this_si
+  this_si nopcm_label nopcm_refby
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw nopcm_Symbols ++ map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) nopcm_label nopcm_refby
 
 printSetting :: PrintingInformation
 printSetting = PI nopcm_SymbMap defaultConfiguration

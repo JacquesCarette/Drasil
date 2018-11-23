@@ -16,7 +16,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), 
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
-  outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb)
+  outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb, generateTraceMap)
 
 import qualified Drasil.DocLang.SRS as SRS (datConLabel, dataDefnLabel, indPRCaseLabel, 
   referenceLabel, valsOfAuxConsLabel, assumptLabel)
@@ -80,12 +80,18 @@ gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols ++ map nw g
   ++ map nw softwarecon ++ map nw terms ++ [nw lateralLoad, nw materialProprty]
    ++ [nw distance, nw algorithm] ++
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
-  (map cw glassBRsymb ++ Doc.srsDomains) $ map unitWrapper [metre, second, kilogram]
-  ++ map unitWrapper [pascal, newton]
+  (map cw glassBRsymb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
+  ++ map unitWrapper [pascal, newton]) glassBR_label glassBR_refby
+
+glassBR_label :: TraceMap
+glassBR_label = generateTraceMap mkSRS
+ 
+glassBR_refby :: RefbyMap
+glassBR_refby = generateRefbyMap glassBR_label 
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw this_symbols)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn])
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) glassBR_label glassBR_refby
 
 gbRefDB :: ReferenceDB
 gbRefDB = rdb assumptions gbCitations $ funcReqs ++ likelyChgs ++

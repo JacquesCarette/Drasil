@@ -94,6 +94,6 @@ responseTypeDesc = foldlSent [S "The", phrase responseTy, S "considered in",
 
 ldfConstantDesc :: QDefinition -> Sentence
 ldfConstantDesc mainConcept = foldlSent [S "With", phrase reference, S "to",
-  makeRefS standardValues `sC` S "the", phrase value `sOf`
+  makeRef2S standardValues `sC` S "the", phrase value `sOf`
   phrase mainConcept, sParen (ch mainConcept), S "is a", phrase constant,
   S "in", short gLassBR]

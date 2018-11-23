@@ -130,27 +130,27 @@ instance Referable Section where
 instance Referable Citation where
   refAdd    c = citeID c -- citeID should be unique.
   rType     _ = Cite
-  renderRef _ = name -- FIXME
+  renderRef l = prepend $ abrv l
 
 instance Referable TheoryModel where
   refAdd    t = getAdd ((t ^. getLabel) ^. getRefAdd)
   rType     _ = Def TM
-  renderRef _ = name -- FIXME
+  renderRef l = prepend $ abrv l
 
 instance Referable GenDefn where
   refAdd    g = getAdd ((g ^. getLabel) ^. getRefAdd)
   rType     _ = Def General
-  renderRef _ = name -- FIXME
+  renderRef l = prepend $ abrv l
 
 instance Referable DataDefinition where
   refAdd    d = getAdd ((d ^. getLabel) ^. getRefAdd)
   rType     _ = Def DD
-  renderRef _ = name -- FIXME
+  renderRef l = prepend $ abrv l
 
 instance Referable InstanceModel where
   refAdd    i = getAdd ((i ^. getLabel) ^. getRefAdd)
   rType     _ = Def Instance
-  renderRef _ = name -- FIXME
+  renderRef l = prepend $ abrv l
 
 instance Referable ConceptInstance where
   refAdd    i = i ^. uid
@@ -165,9 +165,22 @@ instance Referable Label where
   renderRef _                = name -- FIXME
 
 instance Referable LabelledContent where
-  refAdd    (LblC lb _) = getAdd (lb ^. getRefAdd)
-  rType     (LblC _ c)  = temp c
-  renderRef _           = name -- FIXME
+  refAdd     (LblC lb _) = getAdd (lb ^. getRefAdd)
+  rType      (LblC _ c)  = temp c
+  renderRef  (LblC _ c)  = refLabelledCon c
+
+refLabelledCon :: RawContent -> RefProg
+refLabelledCon (Table _ _ _ _)       = raw "Table:" +::+ name 
+refLabelledCon (Figure _ _ _)        = raw "Fig:" +::+ name
+refLabelledCon (Graph _ _ _ _)       = raw "Fig:" +::+ name
+refLabelledCon (Defini x _)          = raw "Def:" +::+ name
+refLabelledCon (Assumption _ _ _)    = raw "Assump:" +::+ name
+refLabelledCon (EqnBlock _)          = raw "EqnB:" +::+ name
+refLabelledCon (Enumeration _)       = raw "Lst:" +::+ name 
+refLabelledCon (Paragraph _)         = error "Shouldn't reference paragraphs"
+refLabelledCon (Bib _)               = error $ 
+    "Bibliography list of references cannot be referenced. " ++
+    "You must reference the Section or an individual citation."
 
 temp :: RawContent -> RefType
 temp (Table _ _ _ _)       = Tab

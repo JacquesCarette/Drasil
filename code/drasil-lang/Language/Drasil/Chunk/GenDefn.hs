@@ -4,7 +4,8 @@ module Language.Drasil.Chunk.GenDefn ( GenDefn, gd', gd'') where
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, IsUnit,
   ExprRelat(relat), HasDerivation(derivations), HasReference(getReferences),
-  HasLabel(getLabel), HasAdditionalNotes(getNotes), HasShortName(shortname))
+  HasLabel(getLabel), HasAdditionalNotes(getNotes), HasShortName(shortname),
+  CommonIdea(abrv))
 import Data.Drasil.IdeaDicts (softEng)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Derivation (Derivation)
@@ -24,7 +25,7 @@ data GenDefn = GD { _relC :: RelationConcept
                   , _refs :: [Reference]
                   , _lb :: Label
                   , _notes :: [Sentence]
-                  , ci :: CI
+                  , _ci :: CI
                   }
 makeLenses ''GenDefn
 
@@ -41,6 +42,7 @@ instance HasLabel           GenDefn where getLabel = lb
 instance HasShortName       GenDefn where shortname = lb . shortname
 instance HasAdditionalNotes GenDefn where getNotes = notes
 instance MayHaveUnit        GenDefn where getUnit = gdUnit
+instance CommonIdea         GenDefn where abrv = abrv . view ci
 
 gendef :: CI
 gendef    = commonIdeaWithDict "gendef"    (cn' "General Definition")                    "GD"        [softEng]

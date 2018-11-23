@@ -365,7 +365,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:responseType}:]The response type considered in GlassBR is flexural.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:ldfConstant}:]With reference to A\ref{A:standardValues}, the value of load duration factor ($LDF$) is a constant in GlassBR.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:ldfConstant}:]With reference to \hyperref[A:standardValues]{A: standardValues}, the value of load duration factor ($LDF$) is a constant in GlassBR.
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -389,7 +389,7 @@ Description & \begin{symbDescription}
               \item{${P_{btol}}$ is the tolerable probability of breakage (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is\_safePb$, the glass is considered safe. $is\_safePb$ and $is\_safeLR$ (from \hyperref[T:isSafeLR]{Definition~T:isSafeLR}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[IM:probOfBreak]{Definition~IM:probOfBreak}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
+Notes & If $is\_safePb$, the glass is considered safe. $is\_safePb$ and $is\_safeLR$ (from \hyperref[T:isSafeLR]{TM: isSafeLR}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[IM:probOfBreak]{IM: probOfBreak}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -415,7 +415,7 @@ Description & \begin{symbDescription}
               \item{$q$ is the applied load (demand) (Pa)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is\_safeLR$, the glass is considered safe. $is\_safePb$ (from \hyperref[T:isSafePb]{Definition~T:isSafePb}) and $is\_safeLR$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[IM:calofCapacity]{Definition~IM:calofCapacity}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[IM:calOfDemand]{Definition~IM:calOfDemand}.
+Notes & If $is\_safeLR$, the glass is considered safe. $is\_safePb$ (from \hyperref[T:isSafePb]{TM: isSafePb}) and $is\_safeLR$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[IM:calofCapacity]{IM: calofCapacity}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[IM:calOfDemand]{IM: calOfDemand}.
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -458,9 +458,9 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
-        $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:min.thick]{Definition~DD:min.thick}.
-        $LDF$ is the load duration factor as defined by \hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}.
-        $J$ is the stress distribution factor (Function), as defined in \hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}.
+        $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:min.thick]{DD: min\_thick}.
+        $LDF$ is the load duration factor as defined by \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.
+        $J$ is the stress distribution factor (Function), as defined in \hyperref[DD:stressDistFac]{DD: stressDistFac}.
 \\ \midrule \\
 Source & \cite{astm2009}, \cite{beasonEtAl1998}, and \cite{campidelli}
 \\ \midrule \\
@@ -532,8 +532,8 @@ Description & \begin{symbDescription}
               \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & A\ref{A:standardValues}
-        A\ref{A:ldfConstant}
+Notes & \hyperref[A:standardValues]{A: standardValues}
+        \hyperref[A:ldfConstant]{A: ldfConstant}
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -565,8 +565,8 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & $J$ is the stress distribution factor (Function), which is obtained by interpolating from data shown in Figure 7.
-        $\hat{q}$ is the dimensionless load defined in \hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}.
-        $AR$ is the aspect ratio defined in. \hyperref[DD:aspect.ratio]{Definition~DD:aspect.ratio}
+        $\hat{q}$ is the dimensionless load defined in \hyperref[DD:dimlessLoad]{DD: dimlessLoad}.
+        $AR$ is the aspect ratio defined in. \hyperref[DD:aspect.ratio]{DD: aspect\_ratio}
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -600,9 +600,9 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
-        $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:min.thick]{Definition~DD:min.thick}.
-        ${\hat{q}_{tol}}$ is the tolerable load defined in \hyperref[DD:tolLoad]{Definition~DD:tolLoad}.
-        A\ref{A:standardValues}
+        $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:min.thick]{DD: min\_thick}.
+        ${\hat{q}_{tol}}$ is the tolerable load defined in \hyperref[DD:tolLoad]{DD: tolLoad}.
+        \hyperref[A:standardValues]{A: standardValues}
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -673,10 +673,10 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & $q$ is the 3 second equivalent pressure, as given in \hyperref[IM:calOfDemand]{Definition~IM:calOfDemand}.
         $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
-        $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:min.thick]{Definition~DD:min.thick}.
-        $GTF$ is the glass type factor, as given by \hyperref[DD:gTF]{Definition~DD:gTF}.
-        $\hat{q}$ is calculated with reference to A\ref{A:glassLite}.
-        A\ref{A:standardValues}
+        $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:min.thick]{DD: min\_thick}.
+        $GTF$ is the glass type factor, as given by \hyperref[DD:gTF]{DD: gTF}.
+        $\hat{q}$ is calculated with reference to \hyperref[A:glassLite]{A: glassLite}.
+        \hyperref[A:standardValues]{A: standardValues}
 \\ \midrule \\
 Source & \cite{astm2009} and \cite{campidelli}
 \\ \midrule \\
@@ -708,7 +708,7 @@ Description & \begin{symbDescription}
               \item{$b$ is the plate width (short dimension) (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${\hat{q}_{tol}}$ is the tolerable load which is obtained from Figure 7 using ${J_{tol}}$ and aspect ratio as parameters using interpolation. Calculations of ${J_{tol}}$ and $AR$ are defined in \hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}. and \hyperref[DD:aspect.ratio]{Definition~DD:aspect.ratio}, respectively
+Notes & ${\hat{q}_{tol}}$ is the tolerable load which is obtained from Figure 7 using ${J_{tol}}$ and aspect ratio as parameters using interpolation. Calculations of ${J_{tol}}$ and $AR$ are defined in \hyperref[DD:sdf.tol]{DD: sdf\_tol}. and \hyperref[DD:aspect.ratio]{DD: aspect\_ratio}, respectively
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -746,10 +746,10 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & ${J_{tol}}$  is calculated with reference to  ${P_{btol}}$.
         $a$, $b$ are dimensions of the plate, where ($a\geq{}b$).
-        $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:min.thick]{Definition~DD:min.thick}.
-        $LDF$ is the load duration factor as defined by \hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}.
+        $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:min.thick]{DD: min\_thick}.
+        $LDF$ is the load duration factor as defined by \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.
         ${P_{btol}}$ is the tolerable probability entered by the user.
-        A\ref{A:standardValues}
+        \hyperref[A:standardValues]{A: standardValues}
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -848,10 +848,10 @@ Description & \begin{symbDescription}
               \item{$B$ is the risk of failure (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & A\ref{A:standardValues}
-        A\ref{A:boundaryConditions}
-        A\ref{A:responseType}
-        \hyperref[DD:risk.fun]{Definition~DD:risk.fun}
+Notes & \hyperref[A:standardValues]{A: standardValues}
+        \hyperref[A:boundaryConditions]{A: boundaryConditions}
+        \hyperref[A:responseType]{A: responseType}
+        \hyperref[DD:risk.fun]{DD: risk\_fun}
 \\ \midrule \\
 Source & \cite{astm2009} and \cite{beasonEtAl1998}
 \\ \midrule \\
@@ -894,7 +894,7 @@ Description & \begin{symbDescription}
               \item{$LSF$ is the load share factor (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & A\ref{A:glassLite} \hyperref[DD:gTF]{Definition~DD:gTF} \hyperref[DD:nFL]{Definition~DD:nFL}.
+Notes & \hyperref[A:glassLite]{A: glassLite} \hyperref[DD:gTF]{DD: gTF} \hyperref[DD:nFL]{DD: nFL}.
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -936,7 +936,7 @@ Description & \begin{symbDescription}
               \item{$SD$ is the stand off distance (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined as $w TNT$. $SD$ is the stand off distance as defined in \hyperref[DD:standOffDist]{Definition~DD:standOffDist}.
+Notes & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined as $w TNT$. $SD$ is the stand off distance as defined in \hyperref[DD:standOffDist]{DD: standOffDist}.
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -989,17 +989,17 @@ This section provides the functional requirements, the business tasks that the s
 \item[Input-Glass-Props:\phantomsection\label{inputGlassProps}]Input the quantities from Table~\ref{Table:InputGlassPropsReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast. Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
 \item[System-Set-Values-Following-Assumptions:\phantomsection\label{sysSetValsFollowingAssumps}]The system shall set the known values as follows:
                                                                                                 \begin{itemize}
-                                                                                                \item{$m$, $k$, $E$, and ${t_{d}}$ following A\ref{A:standardValues}}
-                                                                                                \item{$LDF$ from \hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}}
-                                                                                                \item{LSF following A\ref{A:glassLite}}
-                                                                                                \item{$h$ from \hyperref[DD:min.thick]{Definition~DD:min.thick}}
-                                                                                                \item{$GTF$ from \hyperref[DD:gTF]{Definition~DD:gTF}}
-                                                                                                \item{$SD$ from \hyperref[DD:standOffDist]{Definition~DD:standOffDist}}
-                                                                                                \item{$AR$ from \hyperref[DD:aspect.ratio]{Definition~DD:aspect.ratio}}
+                                                                                                \item{$m$, $k$, $E$, and ${t_{d}}$ following \hyperref[A:standardValues]{A: standardValues}}
+                                                                                                \item{$LDF$ from \hyperref[DD:loadDurFactor]{DD: loadDurFactor}}
+                                                                                                \item{LSF following \hyperref[A:glassLite]{A: glassLite}}
+                                                                                                \item{$h$ from \hyperref[DD:min.thick]{DD: min\_thick}}
+                                                                                                \item{$GTF$ from \hyperref[DD:gTF]{DD: gTF}}
+                                                                                                \item{$SD$ from \hyperref[DD:standOffDist]{DD: standOffDist}}
+                                                                                                \item{$AR$ from \hyperref[DD:aspect.ratio]{DD: aspect\_ratio}}
                                                                                                 \end{itemize}
 \item[Check-Input-with-Data\_Constraints:\phantomsection\label{checkInputWithDataCons}]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DataConstraints}. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.
 \item[Output-Values-and-Known-Quantities:\phantomsection\label{outputValsAndKnownQuants}]Output the input quantities from \hyperref[inputGlassProps]{FR: Input-Glass-Props} and the known quantities from \hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions}.
-\item[Check-Glass-Safety:\phantomsection\label{checkGlassSafety}]If $is\_safePb$ ∧ $is\_safeLR$ (from \hyperref[T:isSafePb]{Definition~T:isSafePb} and \hyperref[T:isSafeLR]{Definition~T:isSafeLR}) are true, output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
+\item[Check-Glass-Safety:\phantomsection\label{checkGlassSafety}]If $is\_safePb$ ∧ $is\_safeLR$ (from \hyperref[T:isSafePb]{TM: isSafePb} and \hyperref[T:isSafeLR]{TM: isSafeLR}) are true, output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
 \item[Output-Quantities:\phantomsection\label{outputQuants}]Output the following quantities:
                                                             \begin{itemize}
                                                             \item{Aspect ratio ($AR$) (\hyperref[DD:aspect.ratio]{Definition~DD:aspect.ratio})}
@@ -1051,17 +1051,17 @@ This problem is small in size and relatively simple, so performance is not a pri
 \section{Likely Changes}
 \label{Sec:LCs}
 \begin{itemize}
-\item[Calculate-Internal-Blask-Risk:\phantomsection\label{calcInternalBlastRisk}]A\ref{A:explainScenario} - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.
-\item[Variable-Values-of-m,k,E:\phantomsection\label{varValsOfmkE}]A\ref{A:standardValues}, A\ref{A:ldfConstant} - Currently, the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future, these values can be changed to variable inputs.
-\item[Accomodate-More-than-Single-Lite:\phantomsection\label{accMoreThanSingleLite}]A\ref{A:glassLite} - The software may be changed to accommodate more than a single lite.
-\item[Accomodate-More-Boundary-Conditions:\phantomsection\label{accMoreBoundaryConditions}]A\ref{A:boundaryConditions}- The software may be changed to accommodate more boundary conditions than 4-sided support.
-\item[Consider-More-than-Flexure-Glass:\phantomsection\label{considerMoreThanFlexGlass}]A\ref{A:responseType} - The software may be changed to consider more than just flexure of the glass.
+\item[Calculate-Internal-Blask-Risk:\phantomsection\label{calcInternalBlastRisk}]\hyperref[A:explainScenario]{A: explainScenario} - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.
+\item[Variable-Values-of-m,k,E:\phantomsection\label{varValsOfmkE}]\hyperref[A:standardValues]{A: standardValues}, \hyperref[A:ldfConstant]{A: ldfConstant} - Currently, the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future, these values can be changed to variable inputs.
+\item[Accomodate-More-than-Single-Lite:\phantomsection\label{accMoreThanSingleLite}]\hyperref[A:glassLite]{A: glassLite} - The software may be changed to accommodate more than a single lite.
+\item[Accomodate-More-Boundary-Conditions:\phantomsection\label{accMoreBoundaryConditions}]\hyperref[A:boundaryConditions]{A: boundaryConditions}- The software may be changed to accommodate more boundary conditions than 4-sided support.
+\item[Consider-More-than-Flexure-Glass:\phantomsection\label{considerMoreThanFlexGlass}]\hyperref[A:responseType]{A: responseType} - The software may be changed to consider more than just flexure of the glass.
 \end{itemize}
 \section{Unlikely Changes}
 \label{Sec:UCs}
 \begin{itemize}
 \item[Predict-Withstanding-of-Certain-Degree:\phantomsection\label{predictWithstandOfCertDeg}]The goal of the system is to predict whether the glass slab under consideration can withstand an explosion of a certain degree.
-\item[Accommodate-Altered-Glass:\phantomsection\label{accAlteredGlass}]A\ref{A:glassCondition} requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.
+\item[Accommodate-Altered-Glass:\phantomsection\label{accAlteredGlass}]\hyperref[A:glassCondition]{A: glassCondition} requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}

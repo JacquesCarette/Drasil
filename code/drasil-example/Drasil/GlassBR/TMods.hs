@@ -42,12 +42,12 @@ lrIsSafe_RC = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
 lrIsSafeDesc :: Sentence
 lrIsSafeDesc = tModDesc (is_safeLR) s ending
   where 
-    s = ((ch is_safePb) +:+ sParen (S "from" +:+ (makeRefS pbIsSafe)) `sAnd` (ch is_safeLR))
+    s = ((ch is_safePb) +:+ sParen (S "from" +:+ (makeRef2S pbIsSafe)) `sAnd` (ch is_safeLR))
     ending = (short lResistance) `isThe` (phrase lResistance) +:+ 
       sParen (S "also called capacity") `sC` S "as defined in" +:+. 
-      (makeRefS calofCapacity) +:+ (ch demand) +:+ sParen (S "also referred as the" +:+ 
+      (makeRef2S calofCapacity) +:+ (ch demand) +:+ sParen (S "also referred as the" +:+ 
       (titleize demandq)) `isThe` (demandq ^. defn) `sC` S "as defined in" +:+ 
-      makeRefS calofDemand
+      makeRef2S calofDemand
 
 pbIsSafe :: TheoryModel
 pbIsSafe = tm (cw pbIsSafe_RC) 
@@ -63,9 +63,9 @@ pbIsSafeDesc :: Sentence
 pbIsSafeDesc = tModDesc (is_safePb) s ending
   where 
     s = (ch is_safePb) `sAnd` (ch is_safeLR) +:+ sParen (S "from" +:+
-      (makeRefS lrIsSafe))
+      (makeRef2S lrIsSafe))
     ending = ((ch prob_br) `isThe` (phrase prob_br)) `sC` S "as calculated in" +:+.
-      (makeRefS probOfBreak) +:+ (ch pb_tol) `isThe` (phrase pb_tol) +:+ S "entered by the user"
+      (makeRef2S probOfBreak) +:+ (ch pb_tol) `isThe` (phrase pb_tol) +:+ S "entered by the user"
 
 tModDesc :: QuantityDict -> Sentence -> Sentence -> Sentence
 tModDesc main s ending = foldlSent [S "If", ch main `sC` S "the glass is" +:+.

@@ -50,14 +50,14 @@ transMotRel = (sy acc_i) $= (deriv (apply1 vel_i QP.time) QP.time)
 transMotDesc, transMotLeg :: Sentence
 transMotDesc = foldlSent [S "The above equation expresses the total",
   (phrase QP.acceleration), S "of the", (phrase CP.rigidBody),
-  makeRefS newA1, makeRefS newA2, S "i as the sum of",
+  makeRef2S newA1, makeRef2S newA2, S "i as the sum of",
   (phrase QP.gravitationalAccel),
   S "(GD3) and", (phrase QP.acceleration), S "due to applied",
   (phrase QP.force), S "Fi(t) (T1). The resultant outputs are",
-  S "then obtained from this equation using", makeRefS linDispDD,
-  makeRefS linVelDD +:+. makeRefS linAccDD, S" It is currently",
-  S "assumed that there is no damping", makeRefS newA6,
-  S "or constraints", makeRefS newA7 +:+. S "involved", makeRefS ctrOfMassDD]
+  S "then obtained from this equation using", makeRef2S linDispDD,
+  makeRef2S linVelDD +:+. makeRef2S linAccDD, S" It is currently",
+  S "assumed that there is no damping", makeRef2S newA6,
+  S "or constraints", makeRef2S newA7 +:+. S "involved", makeRef2S ctrOfMassDD]
 
 transMotLeg = foldle1 (+:+) (+:+) $ map defList transMotLegTerms
 
@@ -83,12 +83,12 @@ rotMotRel = (sy QP.angularAccel) $= deriv
 --fixme: need referencing
 rotMotDesc, rotMotLeg :: Sentence
 rotMotDesc = foldlSent_ [S "The above equation for the total angular acceleration",
-  S "of the rigid body", makeRefS newA1, makeRefS newA2,
+  S "of the rigid body", makeRef2S newA1, makeRef2S newA2,
   S "i is derived from T5, and the resultant outputs",
-  S "are then obtained from this equation using", makeRefS angDispDD,
-  makeRefS angVelDD +:+. makeRefS angAccelDD, S "It is",
-  S "currently assumed that there is no damping", makeRefS newA6, 
-  S "or constraints", makeRefS newA7 +:+. S "involved", makeRefS newA4]
+  S "are then obtained from this equation using", makeRef2S angDispDD,
+  makeRef2S angVelDD +:+. makeRef2S angAccelDD, S "It is",
+  S "currently assumed that there is no damping", makeRef2S newA6, 
+  S "or constraints", makeRef2S newA7 +:+. S "involved", makeRef2S newA4]
 
 rotMotLeg = foldle1 (+:+) (+:+) $ map defList rotMotLegTerms
 
@@ -124,11 +124,11 @@ col2DRel = (apply1 vel_A time_c) $= (apply1 vel_A QP.time) +
 --fixme: need referencing
 col2DDesc, col2DLeg :: Sentence
 col2DDesc = foldlSent_ [S "This instance model is based on our assumptions",
-  S "regarding rigid body", makeRefS newA1, makeRefS newA2,
-  S "collisions", makeRefS newA5, S "Again, this does not take",
-  S "damping", makeRefS newA6, S "or constraints",
-  makeRefS newA7 +:+. S "into account" +:+. makeRefS newA4,
-  makeRefS ctrOfMassDD, makeRefS impulseDD]
+  S "regarding rigid body", makeRef2S newA1, makeRef2S newA2,
+  S "collisions", makeRef2S newA5, S "Again, this does not take",
+  S "damping", makeRef2S newA6, S "or constraints",
+  makeRef2S newA7 +:+. S "into account" +:+. makeRef2S newA4,
+  makeRef2S ctrOfMassDD, makeRef2S impulseDD]
 
 
 {--S "Ik is the moment of inertia of the k-th rigid body (kg m2)",

@@ -16,7 +16,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   TraceabilitySec(TraceabilityProg),
   dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
   outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, tsymb'',
-  getDocDesc, egetDocDesc, ciGetDocDesc)
+  getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap)
 import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel,
   likeChg, probDesc, sysCont, unlikeChg)
 
@@ -116,10 +116,11 @@ swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC
   ++ [nw swhs_pcm, nw algorithm] ++ map nw compcon)
-  (map cw swhsSymbols ++ srsDomains) this_si
+  (map cw swhsSymbols ++ srsDomains) this_si swhs_label swhs_refby
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
+  swhs_label swhs_refby
 
 swhsRefDB :: ReferenceDB
 swhsRefDB = rdb newAssumptions swhsCitations (funcReqs ++
@@ -195,6 +196,12 @@ tsymb_intro = [TSPurpose, SymbConvention
 --- The document starts here
 swhs_srs' :: Document
 swhs_srs' = mkDoc mkSRS for swhs_si
+
+swhs_label :: TraceMap
+swhs_label = generateTraceMap mkSRS
+ 
+swhs_refby :: RefbyMap
+swhs_refby = generateRefbyMap swhs_label
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

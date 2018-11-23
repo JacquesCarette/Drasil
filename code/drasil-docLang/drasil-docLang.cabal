@@ -13,6 +13,7 @@ library
   other-modules:
       Drasil.DocumentLanguage
     , Drasil.ExtractDocDesc
+    , Drasil.TraceTable
     , Drasil.DocumentLanguage.Definitions
     , Drasil.DocumentLanguage.RefHelpers
     , Drasil.DocumentLanguage.TraceabilityMatrix

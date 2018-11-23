@@ -16,7 +16,7 @@ module Language.Drasil (
   , apply, apply1, apply2
   , cross, m2x2, vec2D, dgnl2x2
   -- Expr.Extract
-  , dep, names'
+  , dep, names', lnames, lnames'
   -- Expr.Precendence
   , precA, precB, eprec
   -- all the stuff from Unicode
@@ -152,6 +152,8 @@ module Language.Drasil (
   , HasTermTable, termLookup, termTable
   , HasDefinitionTable, conceptMap, defTable, defLookup
   , HasUnitTable, unitMap, unitTable, collectUnits
+  , TraceMap, traceLookup, HasTraceTable(..), generateRefbyMap, RefbyMap
+  , refbyLookup, HasRefbyTable(..)
   -- AssumpChunk
   , AssumpChunk, assuming, assump
   -- Referencing
@@ -218,7 +220,7 @@ import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, csc
 import Language.Drasil.Expr.Extract (dep, names', names)
 import Language.Drasil.Expr.Precedence (precA, precB, eprec)
 import Language.Drasil.Sentence.EmbedSymbol(ch)
-import Language.Drasil.Sentence.Extract(sdep)
+import Language.Drasil.Sentence.Extract(sdep, lnames, lnames')
 import Language.Drasil.Document (section, fig, figWithWidth
   , section''
   , Section(..), SecCons(..) 

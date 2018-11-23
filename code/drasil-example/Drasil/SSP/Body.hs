@@ -15,7 +15,7 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   SCSSub(..), GSDSec(..), GSDSub(..),
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc,
   mkEnumSimpleD, nonFuncReqF, outDataConstTbl, probDescF, reqF, termDefnF,
-  tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc)
+  tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc, generateTraceMap)
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
   assumptLabel, physSyst)
@@ -136,6 +136,11 @@ mkSRS = RefSec (RefProg intro
   map Verbatim [req] ++ [LCsSec $ LCsProg likelyChanges_SRS]
   ++ [UCsSec $ UCsProg unlikelyChanges_SRS] ++ [Verbatim aux_cons] ++ (Bibliography : [])
 
+ssp_label :: TraceMap
+ssp_label = generateTraceMap mkSRS
+ 
+ssp_refby :: RefbyMap
+ssp_refby = generateRefbyMap ssp_label
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -152,11 +157,11 @@ sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms ++
   ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals
   ++ map nw educon ++ map nw compcon ++ [nw algorithm, nw ssp])
-  (map cw sspSymbols ++ srsDomains) this_si
+  (map cw sspSymbols ++ srsDomains) this_si ssp_label ssp_refby
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) ssp_label ssp_refby
 
 sspRefDB :: ReferenceDB
 sspRefDB = rdb newAssumptions sspCitations (sspRequirements ++

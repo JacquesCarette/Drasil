@@ -284,10 +284,10 @@ fixme2QD = ec ufixme2 (inxi watrForce + inxiM1 watrForce)
 
 resShr_deriv_sentences_ssp_s1 :: [Sentence]
 resShr_deriv_sentences_ssp_s1 = [S "The", phrase shrResI, S "of a slice is", 
-  S "defined as", ch shrResI, S "in" +:+. makeRef2S genDef3Label, S "The",
+  S "defined as", ch shrResI, S "in" +:+. makeRefS genDef3Label, S "The",
   phrase nrmFSubWat, S "in the", phrase equation, S "for", ch shrResI,
   S "of the soil is defined in the perpendicular force equilibrium",
-  S "of a slice from", makeRef2S genDef2Label `sC` S "using the", getTandS nrmFSubWat,
+  S "of a slice from", makeRefS genDef2Label `sC` S "using the", getTandS nrmFSubWat,
   S "of", makeRef2S effStress, S "shown in", eqN 1]
 
 resShr_deriv_sentences_ssp_s2 :: [Sentence]
@@ -352,10 +352,10 @@ resShrDerivation :: [Contents]
 resShrDerivation = [
 
   foldlSP [S "The", phrase shrResI, S "of a slice is", 
-  S "defined as", ch shrResI, S "in" +:+. makeRef2S genDef3Label, S "The",
+  S "defined as", ch shrResI, S "in" +:+. makeRefS genDef3Label, S "The",
   phrase nrmFSubWat, S "in the", phrase equation, S "for", ch shrResI,
   S "of the soil is defined in the perpendicular force equilibrium",
-  S "of a slice from", makeRef2S genDef2Label `sC` S "using the", getTandS nrmFSubWat,
+  S "of a slice from", makeRefS genDef2Label `sC` S "using the", getTandS nrmFSubWat,
   S "of", makeRef2S effStress, S "shown in", eqN 5],
   
   eqUnR' $ (inxi nrmFSubWat) $= eqlExpr cos sin (\x y -> x -
@@ -398,7 +398,7 @@ resShrDerivation = [
 
 mobShr_deriv_sentences_ssp_s1 :: [Sentence]
 mobShr_deriv_sentences_ssp_s1 = [S "The", phrase mobShrI, S "acting on a slice is defined as",
-  ch mobShrI, S "from the force equilibrium in", makeRef2S genDef2Label `sC`
+  ch mobShrI, S "from the force equilibrium in", makeRefS genDef2Label `sC`
   S "also shown in", eqN 5]
 
 mobShr_deriv_sentences_ssp_s2 :: [Sentence]
@@ -443,7 +443,7 @@ mobShrDerivation :: [Contents]
 mobShrDerivation = [
 
   foldlSP [S "The", phrase mobShrI, S "acting on a slice is defined as",
-  ch mobShrI, S "from the force equilibrium in", makeRef2S genDef2Label `sC`
+  ch mobShrI, S "from the force equilibrium in", makeRefS genDef2Label `sC`
   S "also shown in", eqN 4],
   
   eqUnR' $ inxi mobShrI $= eqlExpr sin cos

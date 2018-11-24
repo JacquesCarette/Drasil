@@ -1,4 +1,4 @@
-module Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, calofDemand) where
+module Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, calofDemandi) where
 
 import Prelude hiding (exp)
 import Control.Lens ((^.))
@@ -6,7 +6,7 @@ import Language.Drasil
 
 import Drasil.GlassBR.Assumptions (standardValues, glassLite,
   boundaryConditions, responseType)
-import Drasil.GlassBR.DataDefs (glaTyFac, nonFL, risk, standOffDis)
+import Drasil.GlassBR.DataDefs (glaTyFac, nonFL, risk, standOffDis, calofDemand)
 import Drasil.GlassBR.Labels (calOfCapacityL, calOfDemandL)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (capacity, char_weight, demand, 
@@ -17,7 +17,7 @@ import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
 
 gbrIMods :: [InstanceModel]
-gbrIMods = [calofDemand]
+gbrIMods = [calofDemandi]
 
 glassBRsymb :: [DefinedQuantityDict]
 glassBRsymb = map dqdWr [plate_len, plate_width, char_weight, standOffDist] ++ 
@@ -26,14 +26,14 @@ glassBRsymb = map dqdWr [plate_len, plate_width, char_weight, standOffDist] ++
 
 {--}
 
-calofDemand :: InstanceModel
-calofDemand = im' calofDemand_RC [qw demand, qw eqTNTWeight, qw standOffDist]
+calofDemandi :: InstanceModel
+calofDemandi = im' calofDemand_RCi [qw demand, qw eqTNTWeight, qw standOffDist]
   [sy demand $> 0, sy eqTNTWeight $> 0, sy standOffDist $> 0] (qw demand) []
   [makeRef astm2009] calOfDemandL
   [calofDemandDesc]
 
-calofDemand_RC :: RelationConcept
-calofDemand_RC = makeRC "calofDemand_RC" (nounPhraseSP "Calculation of Demand") 
+calofDemand_RCi :: RelationConcept
+calofDemand_RCi = makeRC "calofDemand_RC" (nounPhraseSP "Calculation of Demand") 
   calofDemandDesc ( (sy demand) $= apply2 demand eqTNTWeight standOffDist) -- calOfDemandL
   --calofDemandDesc $ (C demand) $= FCall (asExpr interpY) [V "TSD.txt", sy standOffDist, sy eqTNTWeight] 
   

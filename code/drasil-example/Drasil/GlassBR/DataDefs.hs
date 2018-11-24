@@ -1,7 +1,7 @@
 module Drasil.GlassBR.DataDefs (aspRat, dataDefns, dimLL, gbQDefns, glaTyFac, 
   hFromt, loadDF, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac,
-  probOfBreak, calofCapacity) where
-
+  probOfBreak, calofCapacity, calofDemand) where
+import Control.Lens ((^.))
 import Language.Drasil
 import Prelude hiding (log, exp, sqrt)
 
@@ -10,7 +10,7 @@ import Data.Drasil.Concepts.Math (probability, parameter, calculation)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 
 import Data.Drasil.Citations (campidelli)
-import Data.Drasil.SentenceStructures (sAnd, sOf)
+import Data.Drasil.SentenceStructures (sAnd, sOf, foldlSent, isThe, sOr)
 
 import Drasil.GlassBR.Assumptions (standardValues, ldfConstant, glassLite)
 import Drasil.GlassBR.Concepts (annealed, fullyT, heatS)
@@ -20,7 +20,8 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio,
   demand, dimlessLoad, gTF, glassTypeAbbrsStr, glassTypeFactors, glass_type, 
   lDurFac, load_dur, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pb_tol, 
   plate_len, plate_width, risk_fun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
-  sflawParamM, stressDistFac, tolLoad, min_thick, prob_br, lRe, loadSF)
+  sflawParamM, stressDistFac, tolLoad, min_thick, prob_br, lRe, loadSF, demandq,
+  eqTNTWeight, wtntWithEqn)
 
 ----------------------
 -- DATA DEFINITIONS --
@@ -28,7 +29,8 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio,
 
 dataDefns :: [DataDefinition] 
 dataDefns = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, 
-  dimLL, tolPre, tolStrDisFac, standOffDis, aspRat, probOfBreak, calofCapacity]
+  dimLL, tolPre, tolStrDisFac, standOffDis, aspRat, probOfBreak,
+  calofCapacity, calofDemand]
 
 gbQDefns :: [Block QDefinition]
 gbQDefns = [Parallel hFromtQD {-DD2-} [glaTyFacQD {-DD6-}]] ++ --can be calculated on their own
@@ -206,8 +208,29 @@ calofCapacityQD = mkQuantDef lRe calofCapacity_eq
 calofCapacity :: DataDefinition
 calofCapacity = mkDD calofCapacityQD [makeRef astm2009] [{-derivation-}] "calofCapacity" capacityS
 
+--DD14--
+calofDemand_eq :: Expr
+calofDemand_eq = apply2 demand eqTNTWeight standOffDist
+
+calofDemandQD :: QDefinition
+calofDemandQD = mkQuantDef demand calofDemand_eq
+
+calofDemand :: DataDefinition
+calofDemand = mkDD calofDemandQD [makeRef astm2009] [{-derivation-}] "calofCapacity" (calofDemandDesc : [])
+
 
 --Additional Notes--
+calofDemandDesc :: Sentence
+calofDemandDesc = 
+  foldlSent [(ch demand `sOr` phrase demandq) `sC`
+  S "is the", (demandq ^. defn), 
+  S "obtained from Figure 2 by interpolation using", --use MakeRef? Issue #216
+  (phrase standOffDist), sParen (ch standOffDist) `sAnd`
+  (ch eqTNTWeight), S "as" +:+. plural parameter, 
+  (ch eqTNTWeight), S "is defined as" +:+.
+  E (wtntWithEqn^.equat), (ch standOffDist) `isThe`
+  (phrase standOffDist), S "as defined in", makeRef2S standOffDis]
+
 capacityS :: [Sentence]
 capacityS = [ch lRe +:+ S "is the" +:+ phrase lRe `sC` S "which is also called capacity" +:+.
   ch nonFL +:+ S "is the" +:+ phrase nonFL `sC` S "as defined in" +:+.

@@ -18,9 +18,9 @@ import Data.Drasil.SentenceStructures (andThe, eqN, foldlSent, foldlSent_,
 import Drasil.SSP.Assumptions (newA2, newA4, newA10, newA11,newA6)
 import Drasil.SSP.BasicExprs (eqlExpr, momExpr)
 import Drasil.SSP.DataDefs (fixme1, fixme2,
-  lengthLs, mobShearWO, resShearWO, seismicLoadF, sliceWght, 
+  lengthLs, seismicLoadF, sliceWght, 
   surfLoads)
-import Drasil.SSP.GenDefs (normShrRGD, momentEqlGD, normForcEqGD)
+import Drasil.SSP.GenDefs (normShrRGD, momentEqlGD, normForcEqGD, mobShearWOGD, resShearWOGD)
 import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice, slip, slope, ssa)
 import Drasil.SSP.Labels (genDef1Label, genDef2Label, genDef4Label, genDef5Label, 
   genDef6Label)
@@ -308,14 +308,14 @@ intrSlcDerivSentence2 = [S "Taking the", S "base shear force equilibrium" `sOf`
 
 intrSlcDerivSentence3 :: [Sentence]
 intrSlcDerivSentence3 = [S "Substituting the", phrase equation, S "for", ch nrmFSubWat,
-  S "from", eqN 16, makeRef2S resShearWO `sAnd` makeRef2S mobShearWO,
+  S "from", eqN 16, makeRef2S resShearWOGD `sAnd` makeRef2S mobShearWOGD,
   S "into", eqN 17, S "and rearranging results in", eqN 18]
 
 intrSlcDerivSentence4 :: [Sentence]
 intrSlcDerivSentence4 = [S "Where", ch shearRNoIntsl `sAnd` ch shearFNoIntsl,
   S "are the resistive and mobile shear of the slice" `sC`
   S wiif, ch intNormForce `sAnd` ch intShrForce `sC`
-  S "as defined in", makeRef2S resShearWO `sAnd` makeRef2S mobShearWO,
+  S "as defined in", makeRef2S resShearWOGD `sAnd` makeRef2S mobShearWOGD,
   S "Making use of the constants, and with full", plural equation, 
   S "found below in", eqN 19 `sAnd` eqN 20, S "respectively, then", eqN 18, 
   S "can be simplified to", eqN 21 `sC` S "also seen in", makeRef2S intsliceFs]

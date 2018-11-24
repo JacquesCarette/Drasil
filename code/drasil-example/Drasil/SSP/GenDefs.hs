@@ -1,6 +1,7 @@
 module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
   normShrR, momentEql, generalDefinitions,
-  normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, normShrRGD, momentEqlGD) where
+  normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, normShrRGD, momentEqlGD,
+  mobShearWOGD, resShearWOGD) where
 
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil

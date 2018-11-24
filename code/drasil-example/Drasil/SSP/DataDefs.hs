@@ -1,6 +1,5 @@
-module Drasil.SSP.DataDefs (dataDefns,mobShearWO, intrsliceF, surfLoads, 
-  seismicLoadF, resShearWO, lengthLs, lengthLb, sliceWght, fixme1, fixme2,
-  mobShrDerivation, resShrDerivation) where 
+module Drasil.SSP.DataDefs (dataDefns, intrsliceF, surfLoads, 
+  seismicLoadF, lengthLs, lengthLb, sliceWght, fixme1, fixme2) where 
 
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
@@ -16,7 +15,7 @@ import Data.Drasil.Concepts.Math (equation)
 
 import Drasil.SSP.Assumptions (newA3, newA4, newA5, newA9, newA10, newA11)
 import Drasil.SSP.BasicExprs (eqlExpr)
-import Drasil.SSP.Labels (genDef2Label, genDef3Label, sliceWghtL, baseWtrFL, 
+import Drasil.SSP.Labels (sliceWghtL, baseWtrFL, 
   surfWtrFL, intersliceWtrFL, angleAL, angleBL, lengthLbL , sliceWghtL, 
   lengthBL, lengthLsL, seismicLoadFL, intrsliceFL, resShearWOL, mobShearWOL,
   surfLoadsL)
@@ -35,8 +34,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 
 dataDefns :: [DataDefinition]
 dataDefns = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB, 
-  lengthB, lengthLb, lengthLs, seismicLoadF, surfLoads, intrsliceF, resShearWO,
-  mobShearWO, fixme1, fixme2]
+  lengthB, lengthLb, lengthLs, seismicLoadF, surfLoads, intrsliceF, fixme1, fixme2]
 
 --DD1
 
@@ -219,7 +217,7 @@ intrsliceFQD = mkQuantDef intShrForce intrsliceFEqn
 intrsliceFEqn :: Expr
 intrsliceFEqn = (sy normToShear) * (inxi scalFunc) * (inxi intNormForce)
 
---DD10
+{--DD10
 
 resShearWO :: DataDefinition
 resShearWO = mkDDL resShearWOQD [makeRef chen2005] resShr_deriv_ssp resShearWOL
@@ -259,7 +257,7 @@ mobShearWOEqn = ((inxi slcWght) + (inxi surfHydroForce) *
   (inxi surfLoad) * (sin (inxi impLoadAngle))) * (cos (inxi baseAngle))
 
 mobShr_deriv_ssp :: Derivation
-mobShr_deriv_ssp = (weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ssp])
+mobShr_deriv_ssp = (weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ssp])-}
 
 -----------------
 -- Hacks --------
@@ -282,7 +280,7 @@ fixme2QD = ec ufixme2 (inxi watrForce + inxiM1 watrForce)
 
 -- FIXME: move derivations with the appropriate data definition
 
-resShr_deriv_sentences_ssp_s1 :: [Sentence]
+{-resShr_deriv_sentences_ssp_s1 :: [Sentence]
 resShr_deriv_sentences_ssp_s1 = [S "The", phrase shrResI, S "of a slice is", 
   S "defined as", ch shrResI, S "in" +:+. makeRefS genDef3Label, S "The",
   phrase nrmFSubWat, S "in the", phrase equation, S "for", ch shrResI,
@@ -466,4 +464,4 @@ mobShrDerivation = [
   S "known force property", plural value, S "of", makeRef2S sliceWght, S "to", 
   makeRef2S lengthLs]
 
-  ]
+  ]-}

@@ -106,7 +106,7 @@ module Language.Drasil (
   , RefProg(..), Reference2(..), SentenceStyle(..)
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
-  , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase', phraseNP, pluralNP
+  , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase'
   , CapitalizationRule(..), at_startNP, at_startNP'
   , PluralRule(..)
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
@@ -122,8 +122,6 @@ module Language.Drasil (
   , HasContents(accessContents)
   , RawContent(..)
   , mkFig
-  -- Reference
-  , makeRef, makeRefS, mkRefFrmLbl, makeRef2, makeRef2S
   -- Space
   , Space(..)
   -- Symbol
@@ -154,9 +152,10 @@ module Language.Drasil (
   , HasUnitTable, unitMap, unitTable, collectUnits
   -- AssumpChunk
   , AssumpChunk, assuming, assump
-  -- Referencing
+  -- Reference
+  , makeRef, makeRefS, makeRef2, makeRef2S
   , ReferenceDB, AssumpMap, assumpLookup, assumptionsFromDB
-  , rdb, assumpRefTable, customRef, HasAssumpRefs
+  , rdb, assumpRefTable, HasAssumpRefs
   , RefBy(..)
   , assumpDB, RefMap, simpleMap
   , citationRefTable
@@ -289,11 +288,11 @@ import Language.Drasil.ShortName (resolveSN, ShortName
   , shortname', getStringSN)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Sentence (Sentence(..), sParen, sSqBr, sC, (+:+), (+:+.), (+:), SentenceStyle(..))
-import Language.Drasil.Reference (makeRef, makeRefS, mkRefFrmLbl, ReferenceDB, assumpDB
+import Language.Drasil.Reference (makeRef, makeRefS, ReferenceDB, assumpDB
                                  , AssumpMap, assumpLookup, HasAssumpRefs
                                  , assumpRefTable, assumptionsFromDB
                                  , rdb, RefBy(..)
-                                 , Referable(..), customRef
+                                 , Referable(..)
                                  , citationRefTable, RefMap
                                  , simpleMap, makeRef2S, makeRef2)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 

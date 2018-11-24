@@ -9,7 +9,7 @@ data RefProg =
   | RS String                    -- Lifts a String into a RefProg
   | RConcat RefProg RefProg      -- Concatenates with two subprograms
   | Name                        -- The Symbol to insert the ShortName directly
-data Reference2 = Reference2 UID RefProg RefAdd ShortName
+data Reference2 = Reference2 RefProg RefAdd ShortName
 
 name :: RefProg
 name = Name

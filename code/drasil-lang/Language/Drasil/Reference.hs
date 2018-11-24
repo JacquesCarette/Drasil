@@ -1,5 +1,8 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Reference where
+module Language.Drasil.Reference(makeRef, makeRefS, makeRef2, makeRef2S,
+  ReferenceDB, citationsFromBibMap, citationRefTable, assumpRefTable,
+  assumptionsFromDB, rdb, RefBy(..), Referable(..), RefMap, simpleMap,
+  assumpDB, AssumpMap, assumpLookup, HasAssumpRefs) where
 
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
@@ -173,7 +176,7 @@ refLabelledCon :: RawContent -> RefProg
 refLabelledCon (Table _ _ _ _)       = raw "Table:" +::+ name 
 refLabelledCon (Figure _ _ _)        = raw "Fig:" +::+ name
 refLabelledCon (Graph _ _ _ _)       = raw "Fig:" +::+ name
-refLabelledCon (Defini x _)          = raw "Def:" +::+ name
+refLabelledCon (Defini _ _)          = raw "Def:" +::+ name
 refLabelledCon (Assumption _ _ _)    = raw "Assump:" +::+ name
 refLabelledCon (EqnBlock _)          = raw "EqnB:" +::+ name
 refLabelledCon (Enumeration _)       = raw "Lst:" +::+ name 
@@ -248,10 +251,10 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
   where assumptions = Map.elems am
         dropNums = map fst
 
-makeRef2 :: (HasUID l, Referable l, HasShortName l) => l -> Reference2
-makeRef2 l = Reference2 (l ^. uid) (renderRef l) (refAdd l) (l ^. shortname)
+makeRef2 :: (Referable l, HasShortName l) => l -> Reference2
+makeRef2 l = Reference2 (renderRef l) (refAdd l) (l ^. shortname)
 
-makeRef2S :: (HasUID l, Referable l, HasShortName l) => l -> Sentence
+makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
 makeRef2S = Ref2 . makeRef2
 
 -- | Create References to a given 'LayoutObj'
@@ -265,10 +268,6 @@ makeRef r = customRef r (r ^. shortname)
 
 makeRefS :: (HasShortName l, Referable l) => l -> Sentence
 makeRefS = Ref . makeRef
-
---FIXME: needs design (HasShortName, Referable only possible when HasLabel)
-mkRefFrmLbl :: (HasLabel l, HasShortName l, Referable l) => l -> Reference
-mkRefFrmLbl = makeRef
 
 --FIXME: should be removed from Examples once sections have labels
 -- | Create a reference with a customized 'ShortName'

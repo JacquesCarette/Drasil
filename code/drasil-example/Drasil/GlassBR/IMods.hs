@@ -1,4 +1,4 @@
-module Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, probOfBreak,
+module Drasil.GlassBR.IMods (glassBRsymb, gbrIMods,
   calofCapacity, calofDemand) where
 
 import Prelude hiding (exp)
@@ -8,7 +8,7 @@ import Language.Drasil
 import Drasil.GlassBR.Assumptions (standardValues, glassLite,
   boundaryConditions, responseType)
 import Drasil.GlassBR.DataDefs (glaTyFac, nonFL, risk, standOffDis)
-import Drasil.GlassBR.Labels (probOfBreakL, calOfCapacityL, calOfDemandL)
+import Drasil.GlassBR.Labels (calOfCapacityL, calOfDemandL)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (capacity, char_weight, demand, 
   demandq, eqTNTWeight, lRe, loadSF, plate_len, plate_width, 
@@ -18,30 +18,12 @@ import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
 
 gbrIMods :: [InstanceModel]
-gbrIMods = [probOfBreak, calofCapacity, calofDemand]
+gbrIMods = [calofCapacity, calofDemand]
 
 glassBRsymb :: [DefinedQuantityDict]
 glassBRsymb = map dqdWr [plate_len, plate_width, char_weight, standOffDist] ++ 
-  [dqdQd (qw probOfBreak) probBreak, dqdQd (qw calofCapacity) capacity, dqdQd (qw calofDemand) demandq]
+  [dqdQd (qw calofCapacity) capacity, dqdQd (qw calofDemand) demandq]
 
-{--}
-
-probOfBreak :: InstanceModel
-probOfBreak = im' probOfBreak_RC [qw risk] 
-  [sy risk $> 0] (qw prob_br) [sy prob_br $> 0]
-  (map makeRef [astm2009, beasonEtAl1998]) probOfBreakL [makeRef2S standardValues, makeRef2S boundaryConditions,
-  makeRef2S responseType, makeRef2S risk]
-
-{--}
-
-probOfBreak_RC :: RelationConcept
-probOfBreak_RC = makeRC "probOfBreak_RC" (nounPhraseSP "Probability of Glass Breakage")
-  probOfBreakDesc ( (sy prob_br) $= 1 - (exp (negate (sy risk)))) -- probOfBreakL
-
-probOfBreakDesc :: Sentence
-probOfBreakDesc =
-  foldlSent [(ch prob_br) `isThe` (S "calculated" +:+. (phrase prob_br)),
-  (ch risk_fun) `isThe` (phrase risk)]
 
 {--}
 

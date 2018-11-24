@@ -58,8 +58,8 @@ import Drasil.GlassBR.Changes (likelyChgs, likelyChgsList, unlikelyChgs,
   unlikelyChgsList)
 import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, gLassBR, 
   ptOfExplsn, stdOffDist, glasscon, glasscon')
-import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns)
-import Drasil.GlassBR.IMods (glassBRsymb, probOfBreak, calofCapacity, calofDemand, gbrIMods)
+import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, probOfBreak)
+import Drasil.GlassBR.IMods (glassBRsymb, calofCapacity, calofDemand, gbrIMods)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, gbCitations, rbrtsn2012)
 import Drasil.GlassBR.Requirements (funcReqsList, funcReqs)
@@ -133,7 +133,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           , TMs ([Label] ++ stdFields) gbrTMods
           , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
           , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand] HideDerivation
+          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [calofCapacity, calofDemand] HideDerivation
           , Constraints EmptyS dataConstraintUncertainty
                         (foldlSent [makeRefS SRS.valsOfAuxConsLabel, S "gives", (plural value `ofThe` S "specification"), 
                         plural parameter, S "used in", (makeRefS inputDataConstraints)])

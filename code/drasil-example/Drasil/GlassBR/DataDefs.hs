@@ -1,5 +1,6 @@
 module Drasil.GlassBR.DataDefs (aspRat, dataDefns, dimLL, gbQDefns, glaTyFac, 
-  hFromt, loadDF, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac) where
+  hFromt, loadDF, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac,
+  probOfBreak) where
 
 import Language.Drasil
 import Prelude hiding (log, exp, sqrt)
@@ -19,7 +20,7 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio,
   demand, dimlessLoad, gTF, glassTypeAbbrsStr, glassTypeFactors, glass_type, 
   lDurFac, load_dur, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pb_tol, 
   plate_len, plate_width, risk_fun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
-  sflawParamM, stressDistFac, tolLoad, min_thick)
+  sflawParamM, stressDistFac, tolLoad, min_thick, prob_br)
 
 ----------------------
 -- DATA DEFINITIONS --
@@ -27,7 +28,7 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio,
 
 dataDefns :: [DataDefinition] 
 dataDefns = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, 
-  dimLL, tolPre, tolStrDisFac, standOffDis, aspRat]
+  dimLL, tolPre, tolStrDisFac, standOffDis, aspRat, probOfBreak]
 
 gbQDefns :: [Block QDefinition]
 gbQDefns = [Parallel hFromtQD {-DD2-} [glaTyFacQD {-DD6-}]] ++ --can be calculated on their own
@@ -185,7 +186,21 @@ aspRatQD = mkQuantDef aspect_ratio aspRat_eq
 aspRat :: DataDefinition
 aspRat = mkDD aspRatQD [makeRef astm2009] [{-derivation-}] "aspect_ratio" (aGrtrThanB : [])
 
+--DD12--
+probOfBreak_eq :: Expr
+probOfBreak_eq = 1 - (exp (negate (sy risk)))
+
+probOfBreakQD :: QDefinition
+probOfBreakQD = mkQuantDef prob_br probOfBreak_eq
+
+probOfBreak :: DataDefinition
+probOfBreak = mkDD probOfBreakQD (map makeRef [astm2009, beasonEtAl1998]) [{-derivation-}] "probOfBreak" (glassBreak : [])
+
+
 --Additional Notes--
+glassBreak :: Sentence
+glassBreak = (ch risk +:+ S "is the" +:+ phrase risk `sC` S "as defined in" +:+
+  makeRef2S risk)
 
 aGrtrThanB :: Sentence
 aGrtrThanB = (ch plate_len `sC` ch plate_width +:+ 

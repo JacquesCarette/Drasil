@@ -389,7 +389,7 @@ Description & \begin{symbDescription}
               \item{${P_{btol}}$ is the tolerable probability of breakage (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is\_safePb$, the glass is considered safe. $is\_safePb$ and $is\_safeLR$ (from \hyperref[T:isSafeLR]{TM: isSafeLR}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[IM:probOfBreak]{IM: probOfBreak}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
+Notes & If $is\_safePb$, the glass is considered safe. $is\_safePb$ and $is\_safeLR$ (from \hyperref[T:isSafeLR]{TM: isSafeLR}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[DD:probOfBreak]{DD: probOfBreak}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -815,29 +815,18 @@ Source & \cite{astm2009}
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
-\subsubsection{Instance Models}
-\label{Sec:IMs}
-This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DDs} to replace the abstract symbols in the models identified in Section~\ref{Sec:TMs} and Section~\ref{Sec:GDs}.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{IM:probOfBreak}
+\toprule \textbf{Refname} & \textbf{DD:probOfBreak}
 \phantomsection 
-\label{IM:probOfBreak}
+\label{DD:probOfBreak}
 \\ \midrule \\
-Label & Probability of Glass Breakage
+Label & Probability of breakage
 \\ \midrule \\
-Input & $B$
+Symbol & ${P_{b}}$
 \\ \midrule \\
-Output & ${P_{b}}$
-\\ \midrule \\
-Input Constraints & \begin{dmath}
-                    B>0
-                    \end{dmath}
-\\ \midrule \\
-Output Constraints & \begin{dmath}
-                     {P_{b}}>0
-                     \end{dmath}
+Units & Unitless
 \\ \midrule \\
 Equation & \begin{dmath}
            {P_{b}}=1-e^{-B}
@@ -848,16 +837,16 @@ Description & \begin{symbDescription}
               \item{$B$ is the risk of failure (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & \hyperref[A:standardValues]{A: standardValues}
-        \hyperref[A:boundaryConditions]{A: boundaryConditions}
-        \hyperref[A:responseType]{A: responseType}
-        \hyperref[DD:risk.fun]{DD: risk\_fun}
+Notes & $B$ is the risk of failure, as defined in \hyperref[DD:risk.fun]{DD: risk\_fun}
 \\ \midrule \\
 Source & \cite{astm2009} and \cite{beasonEtAl1998}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
+\subsubsection{Instance Models}
+\label{Sec:IMs}
+This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DDs} to replace the abstract symbols in the models identified in Section~\ref{Sec:TMs} and Section~\ref{Sec:GDs}.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -1010,7 +999,6 @@ This section provides the functional requirements, the business tasks that the s
                                                             \item{Stress distribution factor (Function) based on Pbtol (${J_{tol}}$) (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol})}
                                                             \item{Calculation of Capacity ($LR$) (\hyperref[IM:calofCapacity]{Definition~IM:calofCapacity})}
                                                             \item{Non-factored load ($NFL$) (\hyperref[DD:nFL]{Definition~DD:nFL})}
-                                                            \item{Probability of Glass Breakage (${P_{b}}$) (\hyperref[IM:probOfBreak]{Definition~IM:probOfBreak})}
                                                             \item{Calculation of Demand ($q$) (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand})}
                                                             \item{Dimensionless load ($\hat{q}$) (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad})}
                                                             \item{Tolerable load (${\hat{q}_{tol}}$) (\hyperref[DD:tolLoad]{Definition~DD:tolLoad})}
@@ -1068,34 +1056,34 @@ This problem is small in size and relatively simple, so performance is not a pri
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. Table~\ref{Table:TraceyItemSecs} shows the dependencies of theoretical models, instance models, and data definitions with each other. Table~\ref{Table:TraceyReqsItems} shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. Table~\ref{Table:TraceyAssumpsOthers} shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:isSafePb]{Definition~T:isSafePb}) & T2 (\hyperref[T:isSafeLR]{Definition~T:isSafeLR}) & IM1 (\hyperref[IM:probOfBreak]{Definition~IM:probOfBreak}) & IM2 (\hyperref[IM:calofCapacity]{Definition~IM:calofCapacity}) & IM3 (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) & DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) & DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad})
+ & T1 (\hyperref[T:isSafePb]{Definition~T:isSafePb}) & T2 (\hyperref[T:isSafeLR]{Definition~T:isSafeLR}) & IM1 (\hyperref[IM:calofCapacity]{Definition~IM:calofCapacity}) & IM2 (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand}) & IM3 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD1 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) & DD2 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) & DD3 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD4 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD5 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD6 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD7 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & DD8 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol})
 \\
 \midrule
 T1 (\hyperref[T:isSafePb]{Definition~T:isSafePb}) &  & X & X &  &  &  &  &  &  &  &  &  & 
 \\
 T2 (\hyperref[T:isSafeLR]{Definition~T:isSafeLR}) & X &  &  & X & X &  &  &  &  &  &  &  & 
 \\
-IM1 (\hyperref[IM:probOfBreak]{Definition~IM:probOfBreak}) &  &  &  &  &  & X & X & X &  &  &  &  & 
+IM1 (\hyperref[IM:calofCapacity]{Definition~IM:calofCapacity}) &  &  &  &  &  & X & X & X &  &  &  &  & 
 \\
-IM2 (\hyperref[IM:calofCapacity]{Definition~IM:calofCapacity}) &  &  &  &  &  &  &  &  & X & X &  &  & 
+IM2 (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand}) &  &  &  &  &  &  &  &  & X & X &  &  & 
 \\
-IM3 (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand}) &  &  &  &  &  &  &  &  &  &  &  &  & 
+IM3 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD1 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD2 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD2 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) &  &  &  &  &  &  &  &  &  &  & X &  & 
+DD3 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) &  &  &  &  &  &  &  &  &  &  & X &  & 
 \\
-DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) &  &  &  &  &  &  & X &  &  &  & X &  & 
+DD4 (\hyperref[DD:nFL]{Definition~DD:nFL}) &  &  &  &  &  &  & X &  &  &  & X &  & 
 \\
-DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD5 (\hyperref[DD:gTF]{Definition~DD:gTF}) &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) &  &  &  &  & X &  & X &  &  & X &  &  & 
+DD6 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) &  &  &  &  & X &  & X &  &  & X &  &  & 
 \\
-DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) &  &  &  &  &  &  &  &  &  &  &  &  & X
+DD7 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) &  &  &  &  &  &  &  &  &  &  &  &  & X
 \\
-DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) &  &  &  &  &  &  & X &  &  &  &  &  & 
+DD8 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}) &  &  &  &  &  &  & X &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
@@ -1103,7 +1091,7 @@ DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) &  &  &  &  &  &  & X &  &  &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:isSafePb]{Definition~T:isSafePb}) & T2 (\hyperref[T:isSafeLR]{Definition~T:isSafeLR}) & IM1 (\hyperref[IM:probOfBreak]{Definition~IM:probOfBreak}) & IM2 (\hyperref[IM:calofCapacity]{Definition~IM:calofCapacity}) & IM3 (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) & DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) & DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & Data Constraints (Section~\ref{Sec:DataConstraints}) & R1 (\hyperref[inputGlassProps]{FR: Input-Glass-Props}) & R2 (\hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions}) & R3 (\hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints}) & R4 (\hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities}) & R5 (\hyperref[checkGlassSafety]{FR: Check-Glass-Safety}) & R6 (\hyperref[outputQuants]{FR: Output-Quantities})
+ & T1 (\hyperref[T:isSafePb]{Definition~T:isSafePb}) & T2 (\hyperref[T:isSafeLR]{Definition~T:isSafeLR}) & IM1 (\hyperref[IM:calofCapacity]{Definition~IM:calofCapacity}) & IM2 (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand}) & IM3 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD1 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) & DD2 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) & DD3 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD4 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD5 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD6 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD7 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & DD8 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}) & Data Constraints (Section~\ref{Sec:DataConstraints}) & R1 (\hyperref[inputGlassProps]{FR: Input-Glass-Props}) & R2 (\hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions}) & R3 (\hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints}) & R4 (\hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities}) & R5 (\hyperref[checkGlassSafety]{FR: Check-Glass-Safety}) & R6 (\hyperref[outputQuants]{FR: Output-Quantities})
 \\
 \midrule
 R1 (in \hyperref[inputGlassProps]{FR: Input-Glass-Props}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1131,27 +1119,27 @@ T1 (\hyperref[T:isSafePb]{Definition~T:isSafePb}) &  &  &  &  &  &  &  &
 \\
 T2 (\hyperref[T:isSafeLR]{Definition~T:isSafeLR}) &  &  &  &  &  &  &  & 
 \\
-IM1 (\hyperref[IM:probOfBreak]{Definition~IM:probOfBreak}) &  &  &  & X &  & X & X & 
+IM1 (\hyperref[IM:calofCapacity]{Definition~IM:calofCapacity}) &  &  &  & X &  & X & X & 
 \\
-IM2 (\hyperref[IM:calofCapacity]{Definition~IM:calofCapacity}) & X & X &  &  & X &  &  & 
+IM2 (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand}) & X & X &  &  & X &  &  & 
 \\
-IM3 (\hyperref[IM:calOfDemand]{Definition~IM:calOfDemand}) &  &  &  &  &  &  &  & 
+IM3 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) &  &  &  &  &  &  &  & 
 \\
-DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) &  &  &  &  &  &  &  & 
+DD1 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) &  &  &  &  &  &  &  & 
 \\
-DD2 (\hyperref[DD:min.thick]{Definition~DD:min.thick}) &  &  &  &  &  &  &  & 
+DD2 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) &  &  &  &  &  &  &  & 
 \\
-DD3 (\hyperref[DD:loadDurFactor]{Definition~DD:loadDurFactor}) &  &  &  &  &  &  &  & 
+DD3 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) &  &  &  &  &  &  &  & 
 \\
-DD4 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) &  &  &  & X &  &  &  & 
+DD4 (\hyperref[DD:nFL]{Definition~DD:nFL}) &  &  &  & X &  &  &  & 
 \\
-DD5 (\hyperref[DD:nFL]{Definition~DD:nFL}) &  &  &  &  &  &  &  & 
+DD5 (\hyperref[DD:gTF]{Definition~DD:gTF}) &  &  &  &  &  &  &  & 
 \\
-DD6 (\hyperref[DD:gTF]{Definition~DD:gTF}) &  &  &  &  & X &  &  & 
+DD6 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) &  &  &  &  & X &  &  & 
 \\
-DD7 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) &  &  &  &  &  &  &  & 
+DD7 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) &  &  &  &  &  &  &  & 
 \\
-DD8 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) &  &  &  & X &  &  &  & 
+DD8 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}) &  &  &  & X &  &  &  & 
 \\
 LC1 (\hyperref[calcInternalBlastRisk]{LC: Calculate-Internal-Blask-Risk}) &  &  & X &  &  &  &  & 
 \\

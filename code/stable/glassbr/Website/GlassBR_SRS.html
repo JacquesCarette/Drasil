@@ -1237,7 +1237,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-If <em>is_safePb</em>, the glass is considered safe. <em>is_safePb</em> and <em>is_safeLR</em> (from <a href=#T:isSafeLR>TM: isSafeLR</a>) are either both True or both False. <em>P<sub>b</sub></em> is the probability of breakage, as calculated in <a href=#IM:probOfBreak>IM: probOfBreak</a>. <em>P<sub>btol</sub></em> is the tolerable probability of breakage entered by the user.
+If <em>is_safePb</em>, the glass is considered safe. <em>is_safePb</em> and <em>is_safeLR</em> (from <a href=#T:isSafeLR>TM: isSafeLR</a>) are either both True or both False. <em>P<sub>b</sub></em> is the probability of breakage, as calculated in <a href=#DD:probOfBreak>DD: probOfBreak</a>. <em>P<sub>btol</sub></em> is the tolerable probability of breakage entered by the user.
 </p>
 </td>
 </tr>
@@ -2660,41 +2660,21 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
-</div>
-</div>
-<div id="Sec:IMs">
-<div class="subsubsection">
-<h3>
-Instance Models
-</h3>
-<p class="paragraph">
-This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
-</p>
-<div id="IM:probOfBreak">
-<table class="idefn">
+<div id="DD:probOfBreak">
+<table class="ddefn">
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Probability of Glass Breakage
+Probability of breakage
 </p>
 </td>
 </tr>
 <tr>
 <th>
-Input
-</th>
-<td>
-<p class="paragraph">
-<em>B</em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Output
+Symbol
 </th>
 <td>
 <p class="paragraph">
@@ -2704,26 +2684,12 @@ Output
 </tr>
 <tr>
 <th>
-Input Constraints
+Units
 </th>
 <td>
-<div id="">
-<div class="equation">
-<em>B&thinsp;&gt;&thinsp;0</em>
-</div>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Output Constraints
-</th>
-<td>
-<div id="">
-<div class="equation">
-<em>P<sub>b</sub>&thinsp;&gt;&thinsp;0</em>
-</div>
-</div>
+<p class="paragraph">
+Unitless
+</p>
 </td>
 </tr>
 <tr>
@@ -2731,7 +2697,7 @@ Output Constraints
 Equation
 </th>
 <td>
-<div id="Eqn:IM:probOfBreak">
+<div id="Eqn:DD:probOfBreak">
 <div class="equation">
 <em>P<sub>b</sub> = 1&minus;e<sup>&minus;B</sup></em>
 </div>
@@ -2759,16 +2725,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<a href=#A:standardValues>A: standardValues</a>
-</p>
-<p class="paragraph">
-<a href=#A:boundaryConditions>A: boundaryConditions</a>
-</p>
-<p class="paragraph">
-<a href=#A:responseType>A: responseType</a>
-</p>
-<p class="paragraph">
-<a href=#DD:risk.fun>DD: risk_fun</a>
+<em>B</em> is the risk of failure, as defined in <a href=#DD:risk.fun>DD: risk_fun</a>
 </p>
 </td>
 </tr>
@@ -2794,6 +2751,16 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
+</div>
+</div>
+<div id="Sec:IMs">
+<div class="subsubsection">
+<h3>
+Instance Models
+</h3>
+<p class="paragraph">
+This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
+</p>
 <div id="IM:calofCapacity">
 <table class="idefn">
 <tr>
@@ -3316,9 +3283,6 @@ Output-Quantities: Output the following quantities:
                    Non-factored load (<em>NFL</em>) (<a href=#DD:nFL>DD: nFL</a>)
                    </li>
                    <li>
-                   Probability of Glass Breakage (<em>P<sub>b</sub></em>) (<a href=#IM:probOfBreak>IM: probOfBreak</a>)
-                   </li>
-                   <li>
                    Calculation of Demand (<em>q</em>) (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
                    </li>
                    <li>
@@ -3547,37 +3511,37 @@ T1 (<a href=#T:isSafePb>T: isSafePb</a>)
 T2 (<a href=#T:isSafeLR>T: isSafeLR</a>)
 </th>
 <th>
-IM1 (<a href=#IM:probOfBreak>IM: probOfBreak</a>)
+IM1 (<a href=#IM:calofCapacity>IM: calofCapacity</a>)
 </th>
 <th>
-IM2 (<a href=#IM:calofCapacity>IM: calofCapacity</a>)
+IM2 (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
 </th>
 <th>
-IM3 (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
+IM3 (<a href=#DD:risk.fun>DD: risk_fun</a>)
 </th>
 <th>
-DD1 (<a href=#DD:risk.fun>DD: risk_fun</a>)
+DD1 (<a href=#DD:min.thick>DD: min_thick</a>)
 </th>
 <th>
-DD2 (<a href=#DD:min.thick>DD: min_thick</a>)
+DD2 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
 </th>
 <th>
-DD3 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
+DD3 (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
 </th>
 <th>
-DD4 (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
+DD4 (<a href=#DD:nFL>DD: nFL</a>)
 </th>
 <th>
-DD5 (<a href=#DD:nFL>DD: nFL</a>)
+DD5 (<a href=#DD:gTF>DD: gTF</a>)
 </th>
 <th>
-DD6 (<a href=#DD:gTF>DD: gTF</a>)
+DD6 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
 </th>
 <th>
-DD7 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
+DD7 (<a href=#DD:tolLoad>DD: tolLoad</a>)
 </th>
 <th>
-DD8 (<a href=#DD:tolLoad>DD: tolLoad</a>)
+DD8 (<a href=#DD:sdf.tol>DD: sdf_tol</a>)
 </th>
 </tr>
 <tr>
@@ -3670,7 +3634,7 @@ X
 </tr>
 <tr>
 <td>
-IM1 (<a href=#IM:probOfBreak>IM: probOfBreak</a>)
+IM1 (<a href=#IM:calofCapacity>IM: calofCapacity</a>)
 </td>
 <td>
 
@@ -3714,7 +3678,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#IM:calofCapacity>IM: calofCapacity</a>)
+IM2 (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
 </td>
 <td>
 
@@ -3758,7 +3722,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
+IM3 (<a href=#DD:risk.fun>DD: risk_fun</a>)
 </td>
 <td>
 
@@ -3802,7 +3766,7 @@ IM3 (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
 </tr>
 <tr>
 <td>
-DD1 (<a href=#DD:risk.fun>DD: risk_fun</a>)
+DD1 (<a href=#DD:min.thick>DD: min_thick</a>)
 </td>
 <td>
 
@@ -3846,7 +3810,7 @@ DD1 (<a href=#DD:risk.fun>DD: risk_fun</a>)
 </tr>
 <tr>
 <td>
-DD2 (<a href=#DD:min.thick>DD: min_thick</a>)
+DD2 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
 </td>
 <td>
 
@@ -3890,7 +3854,7 @@ DD2 (<a href=#DD:min.thick>DD: min_thick</a>)
 </tr>
 <tr>
 <td>
-DD3 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
+DD3 (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
 </td>
 <td>
 
@@ -3934,7 +3898,7 @@ X
 </tr>
 <tr>
 <td>
-DD4 (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
+DD4 (<a href=#DD:nFL>DD: nFL</a>)
 </td>
 <td>
 
@@ -3978,7 +3942,7 @@ X
 </tr>
 <tr>
 <td>
-DD5 (<a href=#DD:nFL>DD: nFL</a>)
+DD5 (<a href=#DD:gTF>DD: gTF</a>)
 </td>
 <td>
 
@@ -4022,7 +3986,7 @@ DD5 (<a href=#DD:nFL>DD: nFL</a>)
 </tr>
 <tr>
 <td>
-DD6 (<a href=#DD:gTF>DD: gTF</a>)
+DD6 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
 </td>
 <td>
 
@@ -4066,7 +4030,7 @@ X
 </tr>
 <tr>
 <td>
-DD7 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
+DD7 (<a href=#DD:tolLoad>DD: tolLoad</a>)
 </td>
 <td>
 
@@ -4110,7 +4074,7 @@ X
 </tr>
 <tr>
 <td>
-DD8 (<a href=#DD:tolLoad>DD: tolLoad</a>)
+DD8 (<a href=#DD:sdf.tol>DD: sdf_tol</a>)
 </td>
 <td>
 
@@ -4170,37 +4134,37 @@ T1 (<a href=#T:isSafePb>T: isSafePb</a>)
 T2 (<a href=#T:isSafeLR>T: isSafeLR</a>)
 </th>
 <th>
-IM1 (<a href=#IM:probOfBreak>IM: probOfBreak</a>)
+IM1 (<a href=#IM:calofCapacity>IM: calofCapacity</a>)
 </th>
 <th>
-IM2 (<a href=#IM:calofCapacity>IM: calofCapacity</a>)
+IM2 (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
 </th>
 <th>
-IM3 (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
+IM3 (<a href=#DD:risk.fun>DD: risk_fun</a>)
 </th>
 <th>
-DD1 (<a href=#DD:risk.fun>DD: risk_fun</a>)
+DD1 (<a href=#DD:min.thick>DD: min_thick</a>)
 </th>
 <th>
-DD2 (<a href=#DD:min.thick>DD: min_thick</a>)
+DD2 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
 </th>
 <th>
-DD3 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
+DD3 (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
 </th>
 <th>
-DD4 (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
+DD4 (<a href=#DD:nFL>DD: nFL</a>)
 </th>
 <th>
-DD5 (<a href=#DD:nFL>DD: nFL</a>)
+DD5 (<a href=#DD:gTF>DD: gTF</a>)
 </th>
 <th>
-DD6 (<a href=#DD:gTF>DD: gTF</a>)
+DD6 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
 </th>
 <th>
-DD7 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
+DD7 (<a href=#DD:tolLoad>DD: tolLoad</a>)
 </th>
 <th>
-DD8 (<a href=#DD:tolLoad>DD: tolLoad</a>)
+DD8 (<a href=#DD:sdf.tol>DD: sdf_tol</a>)
 </th>
 <th>
 Data Constraints (<a href=#Sec:DataConstraints>Data Constraints</a>)
@@ -4710,7 +4674,7 @@ T2 (<a href=#T:isSafeLR>T: isSafeLR</a>)
 </tr>
 <tr>
 <td>
-IM1 (<a href=#IM:probOfBreak>IM: probOfBreak</a>)
+IM1 (<a href=#IM:calofCapacity>IM: calofCapacity</a>)
 </td>
 <td>
 
@@ -4739,7 +4703,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#IM:calofCapacity>IM: calofCapacity</a>)
+IM2 (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
 </td>
 <td>
 X
@@ -4768,7 +4732,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
+IM3 (<a href=#DD:risk.fun>DD: risk_fun</a>)
 </td>
 <td>
 
@@ -4797,7 +4761,7 @@ IM3 (<a href=#IM:calOfDemand>IM: calOfDemand</a>)
 </tr>
 <tr>
 <td>
-DD1 (<a href=#DD:risk.fun>DD: risk_fun</a>)
+DD1 (<a href=#DD:min.thick>DD: min_thick</a>)
 </td>
 <td>
 
@@ -4826,7 +4790,7 @@ DD1 (<a href=#DD:risk.fun>DD: risk_fun</a>)
 </tr>
 <tr>
 <td>
-DD2 (<a href=#DD:min.thick>DD: min_thick</a>)
+DD2 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
 </td>
 <td>
 
@@ -4855,7 +4819,7 @@ DD2 (<a href=#DD:min.thick>DD: min_thick</a>)
 </tr>
 <tr>
 <td>
-DD3 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
+DD3 (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
 </td>
 <td>
 
@@ -4884,7 +4848,7 @@ DD3 (<a href=#DD:loadDurFactor>DD: loadDurFactor</a>)
 </tr>
 <tr>
 <td>
-DD4 (<a href=#DD:stressDistFac>DD: stressDistFac</a>)
+DD4 (<a href=#DD:nFL>DD: nFL</a>)
 </td>
 <td>
 
@@ -4913,7 +4877,7 @@ X
 </tr>
 <tr>
 <td>
-DD5 (<a href=#DD:nFL>DD: nFL</a>)
+DD5 (<a href=#DD:gTF>DD: gTF</a>)
 </td>
 <td>
 
@@ -4942,7 +4906,7 @@ DD5 (<a href=#DD:nFL>DD: nFL</a>)
 </tr>
 <tr>
 <td>
-DD6 (<a href=#DD:gTF>DD: gTF</a>)
+DD6 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
 </td>
 <td>
 
@@ -4971,7 +4935,7 @@ X
 </tr>
 <tr>
 <td>
-DD7 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
+DD7 (<a href=#DD:tolLoad>DD: tolLoad</a>)
 </td>
 <td>
 
@@ -5000,7 +4964,7 @@ DD7 (<a href=#DD:dimlessLoad>DD: dimlessLoad</a>)
 </tr>
 <tr>
 <td>
-DD8 (<a href=#DD:tolLoad>DD: tolLoad</a>)
+DD8 (<a href=#DD:sdf.tol>DD: sdf_tol</a>)
 </td>
 <td>
 

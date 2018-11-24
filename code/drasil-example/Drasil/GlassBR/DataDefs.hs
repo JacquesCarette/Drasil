@@ -14,7 +14,6 @@ import Data.Drasil.SentenceStructures (sAnd, sOf, foldlSent, isThe, sOr)
 
 import Drasil.GlassBR.Assumptions (standardValues, ldfConstant, glassLite)
 import Drasil.GlassBR.Concepts (annealed, fullyT, heatS)
-import Drasil.GlassBR.Labels (calOfDemandL)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, 
   demand, dimlessLoad, gTF, glassTypeAbbrsStr, glassTypeFactors, glass_type, 
@@ -289,7 +288,7 @@ qHtTlTolRef :: Sentence
 qHtTlTolRef = (ch tolLoad +:+ S "is the tolerable load defined in" +:+. makeRef2S tolPre)
 
 qRef :: Sentence
-qRef = (ch demand +:+ S "is the 3 second equivalent pressure, as given in" +:+. makeRefS calOfDemandL)
+qRef = (ch demand +:+ S "is the 3 second equivalent pressure, as given in" +:+. makeRef2S calofDemand)
 
 gtfRef :: Sentence
 gtfRef = (ch gTF +:+ S "is the" +:+. (phrase gTF `sC` S "as given by" +:+ makeRef2S glaTyFac))

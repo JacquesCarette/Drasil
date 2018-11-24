@@ -7,7 +7,7 @@ import Language.Drasil
 import Drasil.GlassBR.Assumptions (standardValues, glassLite,
   boundaryConditions, responseType)
 import Drasil.GlassBR.DataDefs (glaTyFac, nonFL, risk, standOffDis, calofDemand)
-import Drasil.GlassBR.Labels (calOfCapacityL, calOfDemandL)
+import Drasil.GlassBR.Labels (calOfDemandL)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (capacity, char_weight, demand, 
   demandq, eqTNTWeight, lRe, loadSF, plate_len, plate_width, 

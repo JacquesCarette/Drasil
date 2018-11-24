@@ -525,13 +525,13 @@ traceMatsAndGraphsTRef, traceMatsAndGraphsIMRef, traceMatsAndGraphsDDRef, traceM
   traceMatsAndGraphsARef, traceMatsAndGraphsLCRef :: [Sentence]
 
 traceMatsAndGraphsT = ["T1", "T2"]
-traceMatsAndGraphsTRef = map makeRefS gbrTMods
+traceMatsAndGraphsTRef = map makeRef2S gbrTMods
 
 traceMatsAndGraphsIM = ["IM1", "IM2", "IM3"]
-traceMatsAndGraphsIMRef = map makeRefS gbrIMods
+traceMatsAndGraphsIMRef = map makeRef2S gbrIMods
 
 traceMatsAndGraphsDD =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
-traceMatsAndGraphsDDRef = map makeRefS dataDefns
+traceMatsAndGraphsDDRef = map makeRef2S dataDefns
 
 traceMatsAndGraphsDataCons  = ["Data Constraints"]
 traceMatsAndGraphsDataConsRef = [makeRefS SRS.datConLabel]
@@ -540,7 +540,7 @@ traceMatsAndGraphsFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
 traceMatsAndGraphsFuncReqRef = map makeRef2S funcReqs
 
 traceMatsAndGraphsA = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
-traceMatsAndGraphsARef = map makeRefS assumptions
+traceMatsAndGraphsARef = map makeRef2S assumptions
 
 traceMatsAndGraphsLC = ["LC1", "LC2", "LC3", "LC4", "LC5"]
 traceMatsAndGraphsLCRef = map makeRef2S likelyChgs

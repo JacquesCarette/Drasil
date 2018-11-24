@@ -1,5 +1,5 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Reference(makeRef, makeRefS, makeRef2, makeRef2S,
+module Language.Drasil.Reference(makeRef, makeRefS, makeRef2S,
   ReferenceDB, citationsFromBibMap, citationRefTable, assumpRefTable,
   assumptionsFromDB, rdb, RefBy(..), Referable(..), RefMap, simpleMap,
   assumpDB, AssumpMap, assumpLookup, HasAssumpRefs) where
@@ -157,7 +157,7 @@ instance Referable InstanceModel where
 
 instance Referable ConceptInstance where
   refAdd    i = i ^. uid
-  rType     _ = error "makeRef, makeRefS, and rType are deprecated for ConceptInstance. Use the makeRef2, makeRef2S, renderRef instead."
+  rType     _ = error "makeRef, makeRefS, and rType are deprecated for ConceptInstance. Use the makeRef2S, renderRef instead."
   renderRef l = (RP.defer $ sDom $ l ^. cdom) +::+ raw ": " +::+ name
 
 --Should refer to an object WITH a variable.
@@ -251,11 +251,8 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
   where assumptions = Map.elems am
         dropNums = map fst
 
-makeRef2 :: (Referable l, HasShortName l) => l -> Reference2
-makeRef2 l = Reference2 (renderRef l) (refAdd l) (l ^. shortname)
-
 makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
-makeRef2S = Ref2 . makeRef2
+makeRef2S l = Ref2 $ Reference2 (renderRef l) (refAdd l) (l ^. shortname)
 
 -- | Create References to a given 'LayoutObj'
 -- This should not be exported to the end-user, but should be usable

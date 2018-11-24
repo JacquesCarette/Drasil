@@ -127,7 +127,7 @@ toThe p1 p2 = p1 +:+ S "to the" +:+ p2
 
 {--** Miscellaneous **--}
 tableShows :: LabelledContent -> Sentence -> Sentence
-tableShows ref trailing = (Ref2 $ makeRef2 ref) +:+ S "shows the" +:+ 
+tableShows ref trailing = (makeRef2S ref) +:+ S "shows the" +:+ 
   plural dependency +:+ S "of" +:+ trailing
 
 -- | Function that creates (a label for) a figure
@@ -186,7 +186,7 @@ tAndDOnly :: Concept s => s -> ItemType
 tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
 
 followA :: Sentence -> AssumpChunk -> Sentence
-preceding `followA` assumpt = preceding +:+ S "following" +:+ (Ref2 $ makeRef2 assumpt)
+preceding `followA` assumpt = preceding +:+ S "following" +:+ (makeRef2S assumpt)
 
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
 getTandS :: (Quantity a, NamedIdea a) => a -> Sentence

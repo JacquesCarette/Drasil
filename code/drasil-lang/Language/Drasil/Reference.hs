@@ -248,10 +248,10 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
   where assumptions = Map.elems am
         dropNums = map fst
 
-makeRef2 :: (HasUID l, Referable l, HasShortName l) => l -> Reference2
-makeRef2 l = Reference2 (l ^. uid) (renderRef l) (refAdd l) (l ^. shortname)
+makeRef2 :: (Referable l, HasShortName l) => l -> Reference2
+makeRef2 l = Reference2 (renderRef l) (refAdd l) (l ^. shortname)
 
-makeRef2S :: (HasUID l, Referable l, HasShortName l) => l -> Sentence
+makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
 makeRef2S = Ref2 . makeRef2
 
 -- | Create References to a given 'LayoutObj'

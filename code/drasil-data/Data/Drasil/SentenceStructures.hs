@@ -127,7 +127,7 @@ toThe p1 p2 = p1 +:+ S "to the" +:+ p2
 
 {--** Miscellaneous **--}
 tableShows :: LabelledContent -> Sentence -> Sentence
-tableShows ref trailing = (Ref $ mkRefFrmLbl ref) +:+ S "shows the" +:+ 
+tableShows ref trailing = (Ref2 $ makeRef2 ref) +:+ S "shows the" +:+ 
   plural dependency +:+ S "of" +:+ trailing
 
 -- | Function that creates (a label for) a figure

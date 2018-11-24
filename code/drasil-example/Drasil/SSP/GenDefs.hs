@@ -23,7 +23,7 @@ import Drasil.SSP.Assumptions (newA2, newA3, newA4, newA5, newA6)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
 import Drasil.SSP.DataDefs (lengthLs, sliceWght)
 import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf)
-import Drasil.SSP.Labels (genDef3Label, forceDiagramL)
+import Drasil.SSP.Labels (forceDiagramL)
 import Drasil.SSP.References (chen2005)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
@@ -122,7 +122,7 @@ mobShr_desc = foldlSent_ [
   S "and the new", phrase definition, S "of", ch shrResI `sC` S "a new",
   S "relation for", S "net mobile" +:+ phrase shearForce `ofThe` phrase slice,
   ch shearFNoIntsl, S "is found as the resistive shear", ch shrResI,
-  sParen (makeRefS genDef3Label), S "divided by the factor of safety" +:+. ch fs,
+  sParen (makeRef2S resShrGD), S "divided by the factor of safety" +:+. ch fs,
   makeRef2S newA2, makeRef2S newA3, makeRef2S newA4, makeRef2S newA5]
 
 --

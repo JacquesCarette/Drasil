@@ -1,6 +1,6 @@
 module Drasil.GlassBR.DataDefs (aspRat, dataDefns, dimLL, gbQDefns, glaTyFac, 
   hFromt, loadDF, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac,
-  probOfBreak) where
+  probOfBreak, calofCapacity) where
 
 import Language.Drasil
 import Prelude hiding (log, exp, sqrt)
@@ -20,7 +20,7 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio,
   demand, dimlessLoad, gTF, glassTypeAbbrsStr, glassTypeFactors, glass_type, 
   lDurFac, load_dur, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pb_tol, 
   plate_len, plate_width, risk_fun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
-  sflawParamM, stressDistFac, tolLoad, min_thick, prob_br)
+  sflawParamM, stressDistFac, tolLoad, min_thick, prob_br, lRe, loadSF)
 
 ----------------------
 -- DATA DEFINITIONS --
@@ -28,7 +28,7 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio,
 
 dataDefns :: [DataDefinition] 
 dataDefns = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, 
-  dimLL, tolPre, tolStrDisFac, standOffDis, aspRat, probOfBreak]
+  dimLL, tolPre, tolStrDisFac, standOffDis, aspRat, probOfBreak, calofCapacity]
 
 gbQDefns :: [Block QDefinition]
 gbQDefns = [Parallel hFromtQD {-DD2-} [glaTyFacQD {-DD6-}]] ++ --can be calculated on their own
@@ -196,8 +196,25 @@ probOfBreakQD = mkQuantDef prob_br probOfBreak_eq
 probOfBreak :: DataDefinition
 probOfBreak = mkDD probOfBreakQD (map makeRef [astm2009, beasonEtAl1998]) [{-derivation-}] "probOfBreak" (glassBreak : [])
 
+--DD13--
+calofCapacity_eq :: Expr
+calofCapacity_eq = ((sy nonFL) * (sy glaTyFac) * (sy loadSF))
+
+calofCapacityQD :: QDefinition
+calofCapacityQD = mkQuantDef lRe calofCapacity_eq
+
+calofCapacity :: DataDefinition
+calofCapacity = mkDD calofCapacityQD [makeRef astm2009] [{-derivation-}] "calofCapacity" capacityS
+
 
 --Additional Notes--
+capacityS :: [Sentence]
+capacityS = [ch lRe +:+ S "is the" +:+ phrase lRe `sC` S "which is also called capacity" +:+.
+  ch nonFL +:+ S "is the" +:+ phrase nonFL `sC` S "as defined in" +:+.
+  makeRef2S nonFL +:+ ch glaTyFac +:+ S "is the" +:+ phrase glaTyFac `sC` S "as defined in" +:+.
+  makeRef2S glaTyFac] ++ [makeRef2S glassLite, makeRef2S glaTyFac, makeRef2S nonFL]
+
+
 glassBreak :: Sentence
 glassBreak = (ch risk +:+ S "is the" +:+ phrase risk `sC` S "as defined in" +:+
   makeRef2S risk)

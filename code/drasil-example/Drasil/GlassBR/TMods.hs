@@ -9,8 +9,8 @@ import Control.Lens ((^.))
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
 
 import Drasil.GlassBR.Concepts (lResistance)
-import Drasil.GlassBR.DataDefs (probOfBreak)
-import Drasil.GlassBR.IMods (glassBRsymb, calofCapacity, calofDemand)
+import Drasil.GlassBR.DataDefs (probOfBreak, calofCapacity)
+import Drasil.GlassBR.IMods (glassBRsymb, calofDemand)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (demand, demandq, is_safePb, is_safeLR, lRe, pb_tol, prob_br)
 

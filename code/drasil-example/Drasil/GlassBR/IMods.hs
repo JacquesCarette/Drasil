@@ -1,5 +1,4 @@
-module Drasil.GlassBR.IMods (glassBRsymb, gbrIMods,
-  calofCapacity, calofDemand) where
+module Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, calofDemand) where
 
 import Prelude hiding (exp)
 import Control.Lens ((^.))
@@ -18,27 +17,12 @@ import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
 
 gbrIMods :: [InstanceModel]
-gbrIMods = [calofCapacity, calofDemand]
+gbrIMods = [calofDemand]
 
 glassBRsymb :: [DefinedQuantityDict]
 glassBRsymb = map dqdWr [plate_len, plate_width, char_weight, standOffDist] ++ 
-  [dqdQd (qw calofCapacity) capacity, dqdQd (qw calofDemand) demandq]
+  [dqdQd (qw calofDemand) demandq]
 
-
-{--}
-
-calofCapacity :: InstanceModel
-calofCapacity = im' calofCapacity_RC [qw nonFL, qw glaTyFac, qw loadSF] 
-  [sy nonFL $> 0, sy glaTyFac $> 0, sy loadSF $> 0] (qw lRe) [] [makeRef astm2009]
-  calOfCapacityL [calofCapacityDesc]
-
-calofCapacity_RC :: RelationConcept
-calofCapacity_RC = makeRC "calofCapacity_RC" (nounPhraseSP "Calculation of Capacity") 
-  calofCapacityDesc ( (sy lRe) $= ((sy nonFL) * (sy glaTyFac) * (sy loadSF))) -- calOfCapacityL
-
-calofCapacityDesc :: Sentence
-calofCapacityDesc =
-  foldlSent [makeRef2S glassLite, makeRef2S glaTyFac, makeRef2S nonFL]
 
 {--}
 

@@ -1,6 +1,7 @@
 module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
   normShrR, momentEql, generalDefinitions,
-  normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, normShrRGD, momentEqlGD) where
+  normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, normShrRGD, momentEqlGD,
+  mobShearWOGD, resShearWOGD) where
 
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
@@ -22,25 +23,30 @@ import Drasil.SSP.Assumptions (newA2, newA3, newA4, newA5, newA6)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
 import Drasil.SSP.DataDefs (lengthLs, sliceWght)
 import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf)
-import Drasil.SSP.Labels (genDef3Label, forceDiagramL)
+import Drasil.SSP.Labels (forceDiagramL)
 import Drasil.SSP.References (chen2005)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
   cohesion, fricAngle, fs, intNormForce, intShrForce, inxi, inxiM1, 
   mobShrI, normToShear, nrmFSubWat, scalFunc, shearFNoIntsl, shrResI, 
-  shrResI, shrStress, totNrmForce, xi)
+  shrResI, shrStress, totNrmForce, xi, shearRNoIntsl, shrResI, slcWght,
+  surfHydroForce, surfLngth, surfLoad, surfAngle, impLoadAngle, earthqkLoadFctr,
+  watrForceDif)
 
 ---------------------------
 --  General Definitions  --
 ---------------------------
 generalDefinitions :: [GenDefn]
-generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, normShrRGD, momentEqlGD]
+generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, resShearWOGD, 
+  mobShearWOGD, normShrRGD, momentEqlGD]
 
-normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, normShrRGD, momentEqlGD :: GenDefn
+normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD :: GenDefn
 normForcEqGD = gd'' normForcEq  [makeRef chen2005]   "normForcEq"  [nmFEq_desc]
 bsShrFEqGD   = gd'' bsShrFEq    [makeRef chen2005]   "bsShrFEq"    [bShFEq_desc]
 resShrGD     = gd'' resShr      [makeRef chen2005]   "resShr"      [resShr_desc]
 mobShrGD     = gd'' mobShr      [makeRef chen2005]   "mobShr"      [mobShr_desc]
+resShearWOGD = gd'' resShearWO  [makeRef chen2005]   "resShearWO"  []
+mobShearWOGD = gd'' mobShearWO  [makeRef chen2005]   "mobShearWO"  []
 normShrRGD   = gd'' normShrR    [makeRef chen2005]   "normShrR"    [nmShrR_desc]
 momentEqlGD  = gd'' momentEql   [makeRef chen2005]   "momentEql"   [momEql_desc]
 
@@ -116,7 +122,7 @@ mobShr_desc = foldlSent_ [
   S "and the new", phrase definition, S "of", ch shrResI `sC` S "a new",
   S "relation for", S "net mobile" +:+ phrase shearForce `ofThe` phrase slice,
   ch shearFNoIntsl, S "is found as the resistive shear", ch shrResI,
-  sParen (makeRefS genDef3Label), S "divided by the factor of safety" +:+. ch fs,
+  sParen (makeRef2S resShrGD), S "divided by the factor of safety" +:+. ch fs,
   makeRef2S newA2, makeRef2S newA3, makeRef2S newA4, makeRef2S newA5]
 
 --
@@ -139,6 +145,61 @@ nmShrR_desc = foldlSent_ [S "The", phrase assumption,
   S "x-ordinate position of the") +:+. phrase intrslce, ch scalFunc,
   S "is typically either a half-sine along the", phrase slpSrf `sC`
   S "or a constant"]
+
+--
+resShearWO :: RelationConcept
+resShearWO = makeRC "resShearWO"
+  (nounPhraseSP "resistive shear force") resShearWO_desc resShearWO_rel
+
+resShearWO_rel :: Relation
+resShearWO_rel = sy shearRNoIntsl $= (((inxi slcWght) + (inxi surfHydroForce) *
+  (cos (inxi surfAngle)) + (inxi surfLoad) * (cos (inxi impLoadAngle))) *
+  (cos (inxi baseAngle)) + (negate (sy earthqkLoadFctr) * (inxi slcWght) -
+  (inxi watrForceDif) + (inxi surfHydroForce) * sin (inxi surfAngle) +
+  (inxi surfLoad) * (sin (inxi impLoadAngle))) * (sin (inxi baseAngle)) -
+  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi cohesion) *
+  (inxi baseWthX) * sec (inxi baseAngle)
+
+resShearWO_desc :: Sentence
+resShearWO_desc = foldlSent_ [S "The", phrase assumption,
+  S "for the Morgenstern Price", phrase method_, sParen (makeRef2S newA6),
+  S "that the", phrase intrslce, phrase shearForce, ch xi,
+  S "is proportional to the", phrase intrslce, 
+  phrase normForce, ch intNormForce, S "by a proportionality constant",
+  ch normToShear, S "and a predetermined scaling function",
+  ch scalFunc `sC` S "that changes",
+  (S "proportionality as a function" `ofThe`
+  S "x-ordinate position of the") +:+. phrase intrslce, ch scalFunc,
+  S "is typically either a half-sine along the", phrase slpSrf `sC`
+  S "or a constant"]
+
+--
+--
+mobShearWO :: RelationConcept
+mobShearWO = makeRC "mobShearWO"
+  (nounPhraseSP "mobilized shear force") mobShearWO_desc mobShearWO_rel
+
+mobShearWO_rel :: Relation
+mobShearWO_rel = sy shearFNoIntsl $= ((inxi slcWght) + (inxi surfHydroForce) *
+  (cos (inxi surfAngle)) + (inxi surfLoad) * (cos (inxi impLoadAngle))) *
+  (sin (inxi baseAngle)) - (negate (sy earthqkLoadFctr) * (inxi slcWght) -
+  (inxi watrForceDif) + (inxi surfHydroForce) * sin (inxi surfAngle) +
+  (inxi surfLoad) * (sin (inxi impLoadAngle))) * (cos (inxi baseAngle))
+
+mobShearWO_desc :: Sentence
+mobShearWO_desc = foldlSent_ [S "The", phrase assumption,
+  S "for the Morgenstern Price", phrase method_, sParen (makeRef2S newA6),
+  S "that the", phrase intrslce, phrase shearForce, ch xi,
+  S "is proportional to the", phrase intrslce, 
+  phrase normForce, ch intNormForce, S "by a proportionality constant",
+  ch normToShear, S "and a predetermined scaling function",
+  ch scalFunc `sC` S "that changes",
+  (S "proportionality as a function" `ofThe`
+  S "x-ordinate position of the") +:+. phrase intrslce, ch scalFunc,
+  S "is typically either a half-sine along the", phrase slpSrf `sC`
+  S "or a constant"]
+
+--
 
 momentEql :: RelationConcept
 momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")

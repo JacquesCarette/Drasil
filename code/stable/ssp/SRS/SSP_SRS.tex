@@ -101,8 +101,6 @@ $n$ & Number of Slices: the slip mass has been divided into & --
 \\
 $N'$ & Effective Normal Force: for a soil surface, subtracting pore water reactive force from total reactive force & N
 \\
-$N*$ & Effective Normal Force: for a soil surface, without the influence of interslice forces & N
-\\
 $P$ & Resistive Shear Force: Mohr Coulomb frictional force that describes the limit of mobilized shear force the slice i can withstand before failure & N
 \\
 $Q$ & Imposed Surface Load: a downward force acting into the surface from midpoint of slice i & N
@@ -588,7 +586,73 @@ Description & \begin{symbDescription}
               \item{$α$ is the angle (${}^{\circ}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & From the definition of the factor of safety in \hyperref[T:factOfSafety]{TM: factOfSafety}, and the new definition of $P$, a new relation for the net mobile shear force of the slice $T$ is found as the resistive shear $P$ (\hyperref[GD:resShr]{Definition~GD:resShr}) divided by the factor of safety $FS$. \hyperref[A:Factor-of-Safety]{A: Factor-of-Safety} \hyperref[A:Soil-Layer-Homogeneous]{A: Soil-Layer-Homogeneous} \hyperref[A:Soil-Properties]{A: Soil-Properties} \hyperref[A:Soil-Layers-Isotropic]{A: Soil-Layers-Isotropic}
+Notes & From the definition of the factor of safety in \hyperref[T:factOfSafety]{TM: factOfSafety}, and the new definition of $P$, a new relation for the net mobile shear force of the slice $T$ is found as the resistive shear $P$ (\hyperref[GD:resShr]{GD: resShr}) divided by the factor of safety $FS$. \hyperref[A:Factor-of-Safety]{A: Factor-of-Safety} \hyperref[A:Soil-Layer-Homogeneous]{A: Soil-Layer-Homogeneous} \hyperref[A:Soil-Properties]{A: Soil-Properties} \hyperref[A:Soil-Layers-Isotropic]{A: Soil-Layers-Isotropic}
+\\ \midrule \\
+Source & \cite{chen2005}
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:resShearWO}
+\phantomsection 
+\label{GD:resShearWO}
+\\ \midrule \\
+Label & Resistive shear force
+\\ \midrule \\
+Equation & \begin{dmath}
+           R=\left(\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{K_{c}} W_{i}-{ΔH}_{i}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}\right) \tan\left({φ'}_{i}\right)+{c'}_{i} b_{i} \sec\left(α_{i}\right)
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$R$ is the resistive shear force (N)}
+              \item{$W$ is the weight (N)}
+              \item{$i$ is the index (Unitless)}
+              \item{${U_{t}}$ is the surface hydrostatic force (N)}
+              \item{$β$ is the angle (${}^{\circ}$)}
+              \item{$Q$ is the imposed surface load (N)}
+              \item{$ω$ is the angle (${}^{\circ}$)}
+              \item{$α$ is the angle (${}^{\circ}$)}
+              \item{${K_{c}}$ is the earthquake load factor (Unitless)}
+              \item{$ΔH$ is the difference between interslice forces (N)}
+              \item{${U_{b}}$ is the base hydrostatic force (N)}
+              \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
+              \item{$c'$ is the effective cohesion (Pa)}
+              \item{$b$ is the base width of a slice (m)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & \cite{chen2005}
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:mobShearWO}
+\phantomsection 
+\label{GD:mobShearWO}
+\\ \midrule \\
+Label & Mobilized shear force
+\\ \midrule \\
+Equation & \begin{dmath}
+           T=\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-\left(-{K_{c}} W_{i}-{ΔH}_{i}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$T$ is the mobilized shear force (N)}
+              \item{$W$ is the weight (N)}
+              \item{$i$ is the index (Unitless)}
+              \item{${U_{t}}$ is the surface hydrostatic force (N)}
+              \item{$β$ is the angle (${}^{\circ}$)}
+              \item{$Q$ is the imposed surface load (N)}
+              \item{$ω$ is the angle (${}^{\circ}$)}
+              \item{$α$ is the angle (${}^{\circ}$)}
+              \item{${K_{c}}$ is the earthquake load factor (Unitless)}
+              \item{$ΔH$ is the difference between interslice forces (N)}
+              \end{symbDescription}
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
@@ -1049,116 +1113,6 @@ RefBy & FIXME: This needs to be filled in
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:resShearWO}
-\phantomsection 
-\label{DD:resShearWO}
-\\ \midrule \\
-Label & Resistive shear force
-\\ \midrule \\
-Symbol & $R$
-\\ \midrule \\
-Units & N
-\\ \midrule \\
-Equation & \begin{dmath}
-           R=\left(\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{K_{c}} W_{i}-{ΔH}_{i}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}\right) \tan\left({φ'}_{i}\right)+{c'}_{i} b_{i} \sec\left(α_{i}\right)
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$R$ is the resistive shear force (N)}
-              \item{$W$ is the weight (N)}
-              \item{$i$ is the index (Unitless)}
-              \item{${U_{t}}$ is the surface hydrostatic force (N)}
-              \item{$β$ is the angle (${}^{\circ}$)}
-              \item{$Q$ is the imposed surface load (N)}
-              \item{$ω$ is the angle (${}^{\circ}$)}
-              \item{$α$ is the angle (${}^{\circ}$)}
-              \item{${K_{c}}$ is the earthquake load factor (Unitless)}
-              \item{$ΔH$ is the difference between interslice forces (N)}
-              \item{${U_{b}}$ is the base hydrostatic force (N)}
-              \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
-              \item{$c'$ is the effective cohesion (Pa)}
-              \item{$b$ is the base width of a slice (m)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & \hyperref[A:Soil-Layer-Homogeneous]{A: Soil-Layer-Homogeneous}
-        \hyperref[A:Soil-Properties]{A: Soil-Properties}
-        \hyperref[A:Soil-Layers-Isotropic]{A: Soil-Layers-Isotropic}
-\\ \midrule \\
-Source & \cite{chen2005}
-\\ \midrule \\
-RefBy & FIXME: This needs to be filled in
-\\ \bottomrule \end{tabular}
-\end{minipage}\\
-The resistive shear force of a slice is defined as $P$ in \hyperref[GD:resShr]{Definition~GD:resShr}. The effective normal force in the equation for $P$ of the soil is defined in the perpendicular force equilibrium of a slice from \hyperref[GD:bsShrFEq]{Definition~GD:bsShrFEq}, using the effective normal force $N'$ of \hyperref[T:effStress]{TM: effStress} shown in equation (1):
-\begin{dmath}
-{N'}_{i}=\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}
-\end{dmath}
-The values of the interslice forces $G$ and $X$ in the equation are unknown, while the other values are found from the physical force definitions of \hyperref[DD:sliceWght]{DD: sliceWght} to \hyperref[DD:lengthLs]{DD: lengthLs}. Consider a force equilibrium without the affect of interslice forces, to obtain a solvable value as done for $N*$ in equation (2):
-\begin{dmath}
-N*_{i}=\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{K_{c}} W_{i}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}
-\end{dmath}
-Using $N*$, a resistive shear force without the influence of interslice forces for slice index i can be solved for in terms of all known values as done in equation (3):
-\begin{dmath}
-R_{i}=N*_{i} \tan\left({φ'}_{i}\right)+{c'}_{i} b_{i} \sec\left(α_{i}\right)=\left(\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{K_{c}} W_{i}-{ΔH}_{i}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}\right) \tan\left({φ'}_{i}\right)+{c'}_{i} b_{i} \sec\left(α_{i}\right)
-\end{dmath}
-This can be further simplified by considering assumptions \hyperref[A:Seismic-Force]{A: Seismic-Force} and \hyperref[A:Surface-Load]{A: Surface-Load}, which state that the seismic coefficient and the external force, respectively, are0 Removing seismic and external forces yields  equation (4):
-\begin{dmath}
-R_{i}=\left(\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{ΔH}_{i}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}\right) \tan\left({φ'}_{i}\right)+{c'}_{i} b_{i} \sec\left(α_{i}\right)
-\end{dmath}
-~\newline
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:mobShearWO}
-\phantomsection 
-\label{DD:mobShearWO}
-\\ \midrule \\
-Label & Mobilized shear force
-\\ \midrule \\
-Symbol & $T$
-\\ \midrule \\
-Units & N
-\\ \midrule \\
-Equation & \begin{dmath}
-           T=\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-\left(-{K_{c}} W_{i}-{ΔH}_{i}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$T$ is the mobilized shear force (N)}
-              \item{$W$ is the weight (N)}
-              \item{$i$ is the index (Unitless)}
-              \item{${U_{t}}$ is the surface hydrostatic force (N)}
-              \item{$β$ is the angle (${}^{\circ}$)}
-              \item{$Q$ is the imposed surface load (N)}
-              \item{$ω$ is the angle (${}^{\circ}$)}
-              \item{$α$ is the angle (${}^{\circ}$)}
-              \item{${K_{c}}$ is the earthquake load factor (Unitless)}
-              \item{$ΔH$ is the difference between interslice forces (N)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & \hyperref[A:Soil-Layer-Homogeneous]{A: Soil-Layer-Homogeneous}
-        \hyperref[A:Soil-Properties]{A: Soil-Properties}
-        \hyperref[A:Soil-Layers-Isotropic]{A: Soil-Layers-Isotropic}
-\\ \midrule \\
-Source & \cite{chen2005}
-\\ \midrule \\
-RefBy & FIXME: This needs to be filled in
-\\ \bottomrule \end{tabular}
-\end{minipage}\\
-The mobilized shear force acting on a slice is defined as $S$ from the force equilibrium in \hyperref[GD:bsShrFEq]{Definition~GD:bsShrFEq}, also shown in equation (5):
-\begin{dmath}
-S_{i}=\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)+\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)
-\end{dmath}
-The equation is unsolvable, containing the unknown interslice normal force $G$ and interslice shear force $X$. Consider a force equilibrium without the influence of interslice forces, to obtain the mobilized shear force $T$, as done in equation (6):
-\begin{dmath}
-T_{i}=\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-\left(-{K_{c}} W_{i}-{ΔH}_{i}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)
-\end{dmath}
-The values of $T$ is now defined completely in terms of the known values. This can be further simplified by considering assumptions \hyperref[A:Seismic-Force]{A: Seismic-Force} and \hyperref[A:Surface-Load]{A: Surface-Load}, which state that the seismic coefficient and the external force, respectively, are0 Removing seismic and external forces yields  equation (7):
-\begin{dmath}
-T_{i}=\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)\right) \sin\left(α_{i}\right)-\left({ΔH}_{i}+{U_{t,i}} \sin\left(β_{i}\right)\right) \cos\left(α_{i}\right)
-\end{dmath}
-~\newline
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:fixme1}
 \phantomsection 
 \label{DD:fixme1}
@@ -1314,7 +1268,7 @@ Description & \begin{symbDescription}
               \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $λ$ is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in \hyperref[GD:normShrR]{Definition~GD:normShrR} The inclination function $f$ determines the relative magnitude ratio between the different interslices, while $λ$ determines the magnitude. $λ$ uses the sum of interslice normal and shear forces taken from each interslice.
+Notes & $λ$ is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in \hyperref[GD:normShrR]{GD: normShrR} The inclination function $f$ determines the relative magnitude ratio between the different interslices, while $λ$ determines the magnitude. $λ$ uses the sum of interslice normal and shear forces taken from each interslice.
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
@@ -1381,15 +1335,15 @@ Substituting the normal force equilibrium of \hyperref[GD:normForcEq]{GD: normFo
 \begin{dmath}
 {N'}_{i}=\left(W_{i}-λ f_{i-1} G_{i-1}+λ f_{i} G_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}
 \end{dmath}
-Taking the base shear force equilibrium of \hyperref[GD:bsShrFEq]{Definition~GD:bsShrFEq} with the definition of mobilized shear force from \hyperref[GD:mobShr]{Definition~GD:mobShr} and the assumption of \hyperref[GD:normShrR]{Definition~GD:normShrR}, the equilibrium equation can be rewritten as equation (17):
+Taking the base shear force equilibrium of \hyperref[GD:bsShrFEq]{GD: bsShrFEq} with the definition of mobilized shear force from \hyperref[GD:mobShr]{GD: mobShr} and the assumption of \hyperref[GD:normShrR]{GD: normShrR}, the equilibrium equation can be rewritten as equation (17):
 \begin{dmath}
 \frac{N_{i} \tan\left({φ'}_{i}\right)+{c'}_{i} b_{i} \sec\left(α_{i}\right)}{FS}=\left(W_{i}-λ f_{i-1} G_{i-1}+λ f_{i} G_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)+\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)
 \end{dmath}
-Substituting the equation for $N'$ from equation (16) \hyperref[DD:resShearWO]{DD: resShearWO} and \hyperref[DD:mobShearWO]{DD: mobShearWO} into equation (17) and rearranging results in equation (18):
+Substituting the equation for $N'$ from equation (16) \hyperref[GD:resShearWO]{GD: resShearWO} and \hyperref[GD:mobShearWO]{GD: mobShearWO} into equation (17) and rearranging results in equation (18):
 \begin{dmath}
 G_{i} \left(\left(λ f_{i} \cos\left(α_{i}\right)-\sin\left(α_{i}\right)\right) \tan\left({φ'}_{i}\right)-\left(λ f_{i} \sin\left(α_{i}\right)-\cos\left(α_{i}\right)\right) FS\right)=G_{i-1} \left(\left(λ f_{i-1} \cos\left(α_{i}\right)-\sin\left(α_{i}\right)\right) \tan\left({φ'}_{i}\right)-\left(λ f_{i-1} \sin\left(α_{i}\right)-\cos\left(α_{i}\right)\right) FS\right)+FS T_{i}-R_{i}
 \end{dmath}
-Where $R$ and $T$ are the resistive and mobile shear of the slice, without the influence of interslice forces $G$ and $X$, as defined in \hyperref[DD:resShearWO]{DD: resShearWO} and \hyperref[DD:mobShearWO]{DD: mobShearWO} Making use of the constants, and with full equations found below in equation (19) and equation (20) respectively, then equation (18) can be simplified to equation (21), also seen in \hyperref[IM:intsliceFs]{IM: intsliceFs}:
+Where $R$ and $T$ are the resistive and mobile shear of the slice, without the influence of interslice forces $G$ and $X$, as defined in \hyperref[GD:resShearWO]{GD: resShearWO} and \hyperref[GD:mobShearWO]{GD: mobShearWO} Making use of the constants, and with full equations found below in equation (19) and equation (20) respectively, then equation (18) can be simplified to equation (21), also seen in \hyperref[IM:intsliceFs]{IM: intsliceFs}:
 \begin{dmath}
 Φ_{i}=\left(λ f_{i} \cos\left(α_{i}\right)-\sin\left(α_{i}\right)\right) \tan\left({φ'}_{i}\right)-\left(λ f_{i} \sin\left(α_{i}\right)-\cos\left(α_{i}\right)\right) FS
 \end{dmath}

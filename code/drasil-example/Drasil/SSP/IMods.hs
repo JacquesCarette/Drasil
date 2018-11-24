@@ -18,12 +18,11 @@ import Data.Drasil.SentenceStructures (andThe, eqN, foldlSent, foldlSent_,
 import Drasil.SSP.Assumptions (newA2, newA4, newA10, newA11,newA6)
 import Drasil.SSP.BasicExprs (eqlExpr, momExpr)
 import Drasil.SSP.DataDefs (fixme1, fixme2,
-  lengthLs, mobShearWO, resShearWO, seismicLoadF, sliceWght, 
+  lengthLs, seismicLoadF, sliceWght, 
   surfLoads)
-import Drasil.SSP.GenDefs (normShrRGD, momentEqlGD, normForcEqGD)
+import Drasil.SSP.GenDefs (normShrRGD, momentEqlGD, normForcEqGD, mobShearWOGD, resShearWOGD,
+  bsShrFEqGD, mobShrGD)
 import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, intrslce, morPrice, slice, slip, slope, ssa)
-import Drasil.SSP.Labels (genDef1Label, genDef2Label, genDef4Label, genDef5Label, 
-  genDef6Label)
 import Drasil.SSP.References (chen2005, li2010)
 import Drasil.SSP.TMods (equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseWthX, cohesion, 
@@ -110,7 +109,7 @@ nrmShrF_rel = (sy normFunc) $= case_ [case1,case2,case3] $=
 nrmShrF_desc :: Sentence
 nrmShrF_desc = foldlSent [ch normToShear `isThe` S "magnitude ratio",
   S "between shear and normal forces at the interslice interfaces as the", 
-  S "assumption of the Morgenstern Price method in", makeRefS genDef5Label,
+  S "assumption of the Morgenstern Price method in", makeRef2S normShrRGD,
   S "The inclination function", ch scalFunc,
   S "determines the relative magnitude ratio between the",
   S "different interslices, while", ch normToShear, S "determines the" +:+.
@@ -184,7 +183,7 @@ instModIntro1 = foldlSP [S "The", titleize morPrice,
   S "The", phrase problem, S "is statically indeterminate with only these 3",
   plural equation, S "and one constitutive", phrase equation,
   sParen $ S "the Mohr Coulomb shear strength of" +:+
-  makeRef2S mcShrStrgth, S "so the", phrase assumption, S "of", makeRefS genDef5Label,
+  makeRef2S mcShrStrgth, S "so the", phrase assumption, S "of", makeRef2S normShrRGD,
   S "is used. Solving for", phrase force, S "equilibrium allows",
   plural definition, S "of all", plural force, S "in terms of the",
   plural physicalProperty, S "of", makeRef2S sliceWght, S "to",
@@ -300,22 +299,22 @@ intrSlcDerivSentence1 = [S "Substituting the", S "normal force equilibrium" `sOf
 
 intrSlcDerivSentence2 :: [Sentence]
 intrSlcDerivSentence2 = [S "Taking the", S "base shear force equilibrium" `sOf`
-  makeRefS genDef2Label, S "with the", phrase definition,
-  S "of", phrase mobShrI, S "from", makeRefS genDef4Label `sAnd`
-  S "the assumption of", makeRefS genDef5Label `sC`
+  makeRef2S bsShrFEqGD, S "with the", phrase definition,
+  S "of", phrase mobShrI, S "from", makeRef2S mobShrGD `sAnd`
+  S "the assumption of", makeRef2S normShrRGD `sC`
   S "the equilibrium", phrase equation,
   S "can be rewritten as", eqN 17]
 
 intrSlcDerivSentence3 :: [Sentence]
 intrSlcDerivSentence3 = [S "Substituting the", phrase equation, S "for", ch nrmFSubWat,
-  S "from", eqN 16, makeRef2S resShearWO `sAnd` makeRef2S mobShearWO,
+  S "from", eqN 16, makeRef2S resShearWOGD `sAnd` makeRef2S mobShearWOGD,
   S "into", eqN 17, S "and rearranging results in", eqN 18]
 
 intrSlcDerivSentence4 :: [Sentence]
 intrSlcDerivSentence4 = [S "Where", ch shearRNoIntsl `sAnd` ch shearFNoIntsl,
   S "are the resistive and mobile shear of the slice" `sC`
   S wiif, ch intNormForce `sAnd` ch intShrForce `sC`
-  S "as defined in", makeRef2S resShearWO `sAnd` makeRef2S mobShearWO,
+  S "as defined in", makeRef2S resShearWOGD `sAnd` makeRef2S mobShearWOGD,
   S "Making use of the constants, and with full", plural equation, 
   S "found below in", eqN 19 `sAnd` eqN 20, S "respectively, then", eqN 18, 
   S "can be simplified to", eqN 21 `sC` S "also seen in", makeRef2S intsliceFs]
@@ -378,9 +377,9 @@ fctSftyDerivation = [foldlSP [S "Using", eqN 21, S "from", makeRef2S intsliceFs 
 nrmShrDerivation = [
 
   foldlSP [S "The last static", phrase equation,
-  S "of", makeRef2S equilibrium, S "with the", S "moment equilibrium" `sOf` makeRefS genDef6Label,
+  S "of", makeRef2S equilibrium, S "with the", S "moment equilibrium" `sOf` makeRef2S momentEqlGD,
   S "about", (S "midpoint" `ofThe` S "base") `sAnd` S "the",
-  phrase assumption, S "of", makeRefS genDef5Label, S "results in", eqN 13],
+  phrase assumption, S "of", makeRef2S normShrRGD, S "results in", eqN 13],
   
   eqUnR' $ 0 $=
   momExpr (\ x y -> x - (sy normToShear * (inxi baseWthX / 2) * 
@@ -418,12 +417,12 @@ nrmShrDerivation = [
 
 intrSlcDerivation = [
 
-  foldlSP [S "Taking the", S "normal force equilibrium" `sOf` makeRefS genDef1Label,
+  foldlSP [S "Taking the", S "normal force equilibrium" `sOf` makeRef2S normForcEqGD,
   S "with the", S "effective stress", phrase definition, S "from", makeRef2S effStress,
   -- NOTE: "Taking this with that and the assumption of _
   -- to get equation #" pattern
   S "that", E (inxi totNrmForce $= inxi nrmFSubWat - inxi baseHydroForce) `sC`
-  S "and the assumption of", makeRefS genDef5Label, S "the equilibrium", phrase equation, 
+  S "and the assumption of", makeRef2S normShrRGD, S "the equilibrium", phrase equation, 
   S "can be rewritten as", eqN 16],
   
   eqUnR' $
@@ -433,9 +432,9 @@ intrSlcDerivation = [
   - (inxi baseHydroForce),
   
   foldlSP [S "Taking the", S "base shear force equilibrium" `sOf`
-  makeRefS genDef2Label, S "with the", phrase definition,
-  S "of", phrase mobShrI, S "from", makeRefS genDef4Label `sAnd`
-  S "the assumption of", makeRefS genDef5Label `sC`
+  makeRef2S bsShrFEqGD, S "with the", phrase definition,
+  S "of", phrase mobShrI, S "from", makeRef2S mobShrGD `sAnd`
+  S "the assumption of", makeRef2S normShrRGD `sC`
   S "the equilibrium", phrase equation,
   S "can be rewritten as", eqN 17],
   -- NOTE: "Taking this with that and the assumption of _

@@ -1,5 +1,5 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Reference(makeRef, makeRefS, makeRef2S,
+module Language.Drasil.Reference(makeRef, makeRefS, makeRef2S, makeCite,
   ReferenceDB, citationsFromBibMap, citationRefTable, assumpRefTable,
   assumptionsFromDB, rdb, RefBy(..), Referable(..), RefMap, simpleMap,
   assumpDB, AssumpMap, assumpLookup, HasAssumpRefs) where

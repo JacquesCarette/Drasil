@@ -25,7 +25,8 @@ import Language.Drasil.Label.Core (Label(..))
 import Language.Drasil.Label.Type (getAdd)
 import Language.Drasil.Label (getDefName, getReqName)
 import Language.Drasil.People (People, comparePeople)
-import Language.Drasil.RefProg (RefProg, Reference2(Reference2), (+::+), name, prepend, raw)
+import Language.Drasil.RefProg (RefProg(RP, Citation), Reference2(Reference2), (+::+), name,
+  prepend, raw, IRefProg)
 import Language.Drasil.RefProg as RP (defer)  -- FIXME: Remove prefix once SN.defer is no longer needed.
 import Language.Drasil.RefTypes (RefType(..), DType(..), Reference(Reference))
 import Language.Drasil.ShortName ( ShortName, getStringSN, shortname', concatSN)
@@ -123,56 +124,56 @@ class Referable s where
 instance Referable AssumpChunk where
   refAdd    x = getAdd ((x ^. getLabel) ^. getRefAdd)
   rType     _ = Assump
-  renderRef l = prepend $ abrv l
+  renderRef l = RP $ prepend $ abrv l
 
 instance Referable Section where
   refAdd    (Section _ _ lb ) = getAdd (lb ^. getRefAdd)
   rType     _                 = Sect
-  renderRef _                 = raw "Section: " +::+ name
+  renderRef _                 = RP $ raw "Section: " +::+ name
 
 instance Referable Citation where
   refAdd    c = citeID c -- citeID should be unique.
   rType     _ = Cite
-  renderRef l = prepend $ abrv l
+  renderRef _ = Citation -- $ prepend $ abrv l
 
 instance Referable TheoryModel where
   refAdd    t = getAdd ((t ^. getLabel) ^. getRefAdd)
   rType     _ = Def TM
-  renderRef l = prepend $ abrv l
+  renderRef l = RP $ prepend $ abrv l
 
 instance Referable GenDefn where
   refAdd    g = getAdd ((g ^. getLabel) ^. getRefAdd)
   rType     _ = Def General
-  renderRef l = prepend $ abrv l
+  renderRef l = RP $ prepend $ abrv l
 
 instance Referable DataDefinition where
   refAdd    d = getAdd ((d ^. getLabel) ^. getRefAdd)
   rType     _ = Def DD
-  renderRef l = prepend $ abrv l
+  renderRef l = RP $ prepend $ abrv l
 
 instance Referable InstanceModel where
   refAdd    i = getAdd ((i ^. getLabel) ^. getRefAdd)
   rType     _ = Def Instance
-  renderRef l = prepend $ abrv l
+  renderRef l = RP $ prepend $ abrv l
 
 instance Referable ConceptInstance where
   refAdd    i = i ^. uid
   rType     _ = error "makeRef, makeRefS, and rType are deprecated for ConceptInstance. Use the makeRef2S, renderRef instead."
-  renderRef l = (RP.defer $ sDom $ l ^. cdom) +::+ raw ": " +::+ name
+  renderRef l = RP $ (RP.defer $ sDom $ l ^. cdom) +::+ raw ": " +::+ name
 
 --Should refer to an object WITH a variable.
 --Can be removed once sections have labels.
 instance Referable Label where
   refAdd    lb@(Lbl _ _ _ _) = getAdd (lb ^. getRefAdd)
   rType     (Lbl _ _ _ x)    = x --FIXME: is a hack; see #971
-  renderRef _                = name -- FIXME
+  renderRef _                = RP name -- FIXME
 
 instance Referable LabelledContent where
   refAdd     (LblC lb _) = getAdd (lb ^. getRefAdd)
   rType      (LblC _ c)  = temp c
-  renderRef  (LblC _ c)  = refLabelledCon c
+  renderRef  (LblC _ c)  = RP $ refLabelledCon c
 
-refLabelledCon :: RawContent -> RefProg
+refLabelledCon :: RawContent -> IRefProg
 refLabelledCon (Table _ _ _ _)       = raw "Table:" +::+ name 
 refLabelledCon (Figure _ _ _)        = raw "Fig:" +::+ name
 refLabelledCon (Graph _ _ _ _)       = raw "Fig:" +::+ name
@@ -253,6 +254,10 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 
 makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
 makeRef2S l = Ref2 $ Reference2 (renderRef l) (refAdd l) (l ^. shortname)
+
+-- Here we don't use the Lenses as constraints, we really do want a Citation.
+makeCite :: Citation -> Sentence
+makeCite l = Ref2 $ Reference2 Citation (refAdd l) (l ^. shortname)
 
 -- | Create References to a given 'LayoutObj'
 -- This should not be exported to the end-user, but should be usable

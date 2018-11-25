@@ -1,6 +1,6 @@
 -- | Contains the types associated to references
 module Language.Drasil.RefTypes(
-  RefAdd, RefType(..), DType(..), Reference(Reference), ReqType(..)) where
+  RefAdd, RefType(..), DType(..), Reference(Reference), ReqType(..), LinkType(..)) where
 
 import Language.Drasil.ShortName (ShortName)
 import Language.Drasil.UID (UID)
@@ -30,6 +30,13 @@ data RefType = Tab    -- ^ Table
              | Blank  -- ^ Prefix filler for ConceptInstance
              | DeferredCC UID  -- ^ For ConceptInstances --FIXME: Used by References to create a Deferred ShortName (#562)
              | Link -- ^ URI
+
+-- we do need to know a bit more about references, such as whether they are
+-- an internal (document) link or a citation (and eventually, external).
+-- basically, this amounts to a choice between
+-- \ref (or \hyperref) and \cite in LaTeX.
+-- in a sense, Cite2 is a very special kind of External reference.
+data LinkType = Internal | Cite2 -- | External
 
 data Reference = Reference RefType RefAdd ShortName
 

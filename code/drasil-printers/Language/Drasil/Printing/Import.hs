@@ -284,16 +284,22 @@ spec sm (Ch ShortStyle s)   = spec sm $ lookupS sm s
 spec sm (Ch PluralTerm s)   = spec sm $ lookupP sm s
 spec sm (Ref (Reference t r sn))   = P.Ref t r (spec sm (S . getStringSN $ resolveSN sn $
   lookupDeferredSN sm)) sn --FIXME: sn passed in twice?
-spec sm (Ref2 (Reference2 rp ra sn)) = P.Ref2 ra $ spec sm $ renderShortName sm rp sn
+spec sm (Ref2 (Reference2 (RP rp) ra sn)) = 
+  P.Ref2 Internal ra $ spec sm $ renderShortName sm rp sn
+spec sm (Ref2 (Reference2 Citation ra sn)) = 
+  P.Ref2 Cite2    ra $ spec sm $ renderCitation sm sn
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
 
-renderShortName :: (HasDefinitionTable ctx) => ctx -> RefProg -> ShortName -> Sentence
+renderShortName :: (HasDefinitionTable ctx) => ctx -> IRefProg -> ShortName -> Sentence
 renderShortName ctx (Deferred u) _ = S $ maybe (error "Domain has no abbreviation.") id $ getA $ defLookup u $ ctx ^. defTable
 renderShortName ctx (RConcat a b) sn = renderShortName ctx a sn :+: renderShortName ctx b sn
 renderShortName _ (RS s) _ = S s
 renderShortName _ Name sn = S $ getStringSN sn
+
+renderCitation :: (HasDefinitionTable ctx) => ctx -> ShortName -> Sentence
+renderCitation _ sn = S $ getStringSN sn
 
 lookupDeferredSN :: (HasDefinitionTable ctx) => ctx -> UID -> String
 lookupDeferredSN ctx u = maybe "" (\x -> x ++ ": ") $

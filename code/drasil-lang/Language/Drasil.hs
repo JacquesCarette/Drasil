@@ -103,7 +103,9 @@ module Language.Drasil (
   , cProceedings, cTechReport, cUnpublished
   -- Sentence
   , Sentence(..), sParen, sSqBr , (+:+), (+:+.), sC, (+:)
-  , RefProg(..), Reference2(..), SentenceStyle(..)
+  , Reference2(..), SentenceStyle(..)
+  -- RefProg
+  , RefProg(..), IRefProg(..)
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
   , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase'
@@ -163,6 +165,7 @@ module Language.Drasil (
   , RefAdd, RefType(Cite, Tab, EqnB, Req, LCh, UnCh, Def, Lst, Link, Sect, Blank, Assump)
   , ReqType(FR, NFR)
   , Reference(Reference)
+  , LinkType(Internal, Cite2)
   -- Label
   , Label 
   , mkLabelRA', mkLabelSame, mkEmptyLabel, mkURILabel
@@ -305,8 +308,8 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
 import Language.Drasil.RefTypes(RefAdd, RefType(..),
-  DType(..), Reference(Reference), ReqType(FR, NFR))
-import Language.Drasil.RefProg(RefProg(..), Reference2(Reference2))
+  DType(..), Reference(Reference), ReqType(FR, NFR), LinkType(Internal, Cite2))
+import Language.Drasil.RefProg(RefProg(..), IRefProg(..), Reference2(Reference2))
 import Language.Drasil.Label (mkLabelRA', mkLabelSame, 
   mkEmptyLabel, mkURILabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec, modifyLabelEqn)
 import Language.Drasil.Label.Type (getAdd)

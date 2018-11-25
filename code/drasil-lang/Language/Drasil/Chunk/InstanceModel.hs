@@ -7,11 +7,12 @@ module Language.Drasil.Chunk.InstanceModel
   ) where
 
 import Data.Drasil.IdeaDicts (softEng)
+import Language.Drasil.Chunk.Citation (Citation, HasCitation(getCitations))
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.Quantity (QuantityDict)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA), Quantity,
   Definition(defn),ConceptDomain(cdom), Concept, ExprRelat(relat),
-  HasDerivation(derivations), HasReference(getReferences), HasAdditionalNotes(getNotes),
+  HasDerivation(derivations), HasAdditionalNotes(getNotes),
   HasLabel(getLabel), HasSymbol(symbol), HasSpace(typ), HasShortName(shortname),CommonIdea(abrv))
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Development.Unit (MayHaveUnit(getUnit))
@@ -41,7 +42,7 @@ data InstanceModel = IM { _rc :: RelationConcept
                         , _inCons :: InputConstraints
                         , _imOutput :: Output
                         , _outCons :: OutputConstraints
-                        , _ref :: [Reference]
+                        , _cit :: [Citation]
                         , _deri :: Derivation
                         , _lb :: Label
                         , _notes :: [Sentence]
@@ -57,7 +58,7 @@ instance Definition         InstanceModel where defn = rc . defn
 instance ConceptDomain      InstanceModel where cdom = rc . cdom
 instance ExprRelat          InstanceModel where relat = rc . relat
 instance HasDerivation      InstanceModel where derivations = deri
-instance HasReference       InstanceModel where getReferences = ref
+instance HasCitation        InstanceModel where getCitations = cit
 instance HasLabel           InstanceModel where getLabel = lb
 instance HasShortName       InstanceModel where shortname = lb . shortname
 instance HasAdditionalNotes InstanceModel where getNotes = notes
@@ -72,11 +73,11 @@ instanceMod    = commonIdeaWithDict "instanceMod"    (cn' "Instance Model")     
 
 -- | Smart constructor for instance models; no derivations
 im' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> [Reference] -> Label -> [Sentence] -> InstanceModel
+  OutputConstraints -> [Citation] -> Label -> [Sentence] -> InstanceModel
 im' rcon i ic o oc src lbe addNotes = IM rcon i ic o oc src [] lbe addNotes instanceMod
 
 -- | im but with everything defined
 im'' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> [Reference] -> Derivation -> String -> [Sentence] -> InstanceModel
+  OutputConstraints -> [Citation] -> Derivation -> String -> [Sentence] -> InstanceModel
 im'' rcon i ic o oc src der sn addNotes = IM rcon i ic o oc src der (mkLabelSame sn (Def Instance))
  addNotes instanceMod

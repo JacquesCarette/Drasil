@@ -43,7 +43,7 @@ sspIMods = [fctSfty, nrmShrFor, intsliceFs, crtSlpId]
 --
 fctSfty :: InstanceModel
 fctSfty = im'' fctSfty_rc [qw shearRNoIntsl, qw shearFNoIntsl, qw mobShrC, qw shrResC, qw varblV]
-  [] (qw fs) [] [makeRef chen2005] fctSftyDeriv "fctSfty" [fcSfty_desc]
+  [] (qw fs) [] [chen2005] fctSftyDeriv "fctSfty" [fcSfty_desc]
 
 fctSfty_rc :: RelationConcept
 fctSfty_rc = makeRC "fctSfty_rc" factorOfSafety fcSfty_desc fcSfty_rel -- fctSftyL
@@ -75,7 +75,7 @@ nrmShrFor = im'' nrmShrFor_rc [qw baseWthX, qw scalFunc,
  qw watrForce, qw baseAngle, qw midpntHght, 
  qw earthqkLoadFctr, qw slcWght, qw surfHydroForce]
   [sy fixme1 $< sy fixme1] (qw shearFunc)
-   [0 $< sy fixme1 $< sy fixme1] [makeRef chen2005] nrmShrDeriv "nrmShrFor" [nrmShrF_desc]
+   [0 $< sy fixme1 $< sy fixme1] [chen2005] nrmShrDeriv "nrmShrFor" [nrmShrF_desc]
 
 nrmShrFor_rc :: RelationConcept
 nrmShrFor_rc = makeRC "nrmShrFor_rc" (nounPhraseSP "normal/shear force ratio")
@@ -121,7 +121,7 @@ nrmShrF_desc = foldlSent [ch normToShear `isThe` S "magnitude ratio",
 intsliceFs :: InstanceModel
 intsliceFs = im'' intsliceFs_rc [qw index, qw fs, qw shearRNoIntsl, qw shearFNoIntsl,
  qw mobShrC, qw shrResC]
-  [] (qw intNormForce) [] [makeRef chen2005] intrSlcDeriv "intsliceFs" [sliceFs_desc]
+  [] (qw intNormForce) [] [chen2005] intrSlcDeriv "intsliceFs" [sliceFs_desc]
 
 intsliceFs_rc :: RelationConcept
 intsliceFs_rc = makeRC "intsliceFs_rc" (nounPhraseSP "interslice forces")
@@ -147,7 +147,7 @@ sliceFs_desc = foldlSent_ [S "The value of the interslice normal force",
 
 --
 crtSlpId :: InstanceModel
-crtSlpId = im' crtSlpId_rc [] [] (qw fs_min) [] [makeRef li2010]
+crtSlpId = im' crtSlpId_rc [] [] (qw fs_min) [] [li2010]
   (mkLabelSame "crtSlpId" (Def Instance)) [crtSlpId_desc]
 
 crtSlpId_rc :: RelationConcept

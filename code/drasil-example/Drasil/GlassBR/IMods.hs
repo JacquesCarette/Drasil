@@ -29,7 +29,7 @@ glassBRsymb = map dqdWr [plate_len, plate_width, char_weight, standOffDist] ++
 calofDemandi :: InstanceModel
 calofDemandi = im' calofDemand_RCi [qw demand, qw eqTNTWeight, qw standOffDist]
   [sy demand $> 0, sy eqTNTWeight $> 0, sy standOffDist $> 0] (qw demand) []
-  [makeRef astm2009] calOfDemandL
+  [astm2009] calOfDemandL
   [calofDemandDesc]
 
 calofDemand_RCi :: RelationConcept

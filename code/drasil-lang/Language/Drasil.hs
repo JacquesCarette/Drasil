@@ -101,6 +101,8 @@ module Language.Drasil (
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
   , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
   , cProceedings, cTechReport, cUnpublished
+  -- Chunk.Citation
+  , HasCitation(getCitations)
   -- Sentence
   , Sentence(..), sParen, sSqBr , (+:+), (+:+.), sC, (+:)
   , Reference2(..), SentenceStyle(..)
@@ -255,7 +257,9 @@ import Language.Drasil.Chunk.Citation (
   , cArticle, cBookA, cBookE, cBooklet
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
   , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
-  , cProceedings, cTechReport, cUnpublished)
+  , cProceedings, cTechReport, cUnpublished
+  -- move?
+  , HasCitation(getCitations) )
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained

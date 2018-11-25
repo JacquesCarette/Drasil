@@ -70,7 +70,7 @@ module Language.Drasil (
   , GenDefn, gd', gd''
   -- Chunk.InstanceModel
   , InstanceModel
-  , inCons, outCons, imOutput, imInputs, im, im', im'', im'''
+  , inCons, outCons, imOutput, imInputs, im', im''
   , Constraints
   -- Chunk.Quantity
   , QuantityDict, qw, mkQuant

@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.InstanceModel
   ( InstanceModel
-  , im, im', im'', im'''
+  , im', im''
   , inCons, outCons, imOutput, imInputs -- FIXME, these should be done via lenses
   , Constraints
   ) where
@@ -70,12 +70,7 @@ instance CommonIdea         InstanceModel where abrv = abrv . view ci
 instanceMod :: CI
 instanceMod    = commonIdeaWithDict "instanceMod"    (cn' "Instance Model")                    "IM"        [softEng]
 
--- | Smart constructor for instance models; no derivations or notes
-im :: RelationConcept -> Inputs -> InputConstraints -> Output ->
-  OutputConstraints -> [Reference] -> Label -> InstanceModel
-im rcon i ic o oc src sn = IM rcon i ic o oc src [] sn [] instanceMod
-
--- | Same as `im`, with an additional field for notes to be passed in; no derivation
+-- | Smart constructor for instance models; no derivations
 im' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> [Reference] -> Label -> [Sentence] -> InstanceModel
 im' rcon i ic o oc src lbe addNotes = IM rcon i ic o oc src [] lbe addNotes instanceMod
@@ -85,9 +80,3 @@ im'' :: RelationConcept -> Inputs -> InputConstraints -> Output ->
   OutputConstraints -> [Reference] -> Derivation -> String -> [Sentence] -> InstanceModel
 im'' rcon i ic o oc src der sn addNotes = IM rcon i ic o oc src der (mkLabelSame sn (Def Instance))
  addNotes instanceMod
-
--- | im with no notes
-im''' :: RelationConcept -> Inputs -> InputConstraints -> Output ->
-  OutputConstraints -> [Reference] -> Derivation -> String -> InstanceModel
-im''' rcon i ic o oc src der sn = IM rcon i ic o oc src der 
-  (mkLabelSame sn (Def Instance)) [] instanceMod

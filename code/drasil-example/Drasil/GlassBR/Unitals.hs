@@ -261,7 +261,7 @@ aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
 
 annealedGl    = cc' annealed
   (foldlSent [S "A flat, monolithic, glass lite which has uniform thickness where",
-  S "the residual surface stresses are almost zero, as defined in", makeRef2S astm2016])
+  S "the residual surface stresses are almost zero, as defined in", makeCiteS astm2016])
 aspectRatio   = cc aR
   ("The ratio of the long dimension of the glass to the short dimension of " ++
     "the glass. For glass supported on four sides, the aspect ratio is " ++
@@ -292,7 +292,7 @@ fTemperedGl   = cc' fullyT
   (foldlSent [S "A flat, monolithic, glass lite of uniform thickness that has",
   S "been subjected to a special heat treatment process where the residual",
   S "surface compression is not less than 69 MPa (10 000 psi) or the edge",
-  S "compression not less than 67 MPa (9700 psi), as defined in", makeRef2S astm2012])
+  S "compression not less than 67 MPa (9700 psi), as defined in", makeCiteS astm2012])
 glassGeo      = dccWDS "glassGeo"    (nounPhraseSP "glass geometry")
   (S "The glass geometry based inputs include the dimensions of the" +:+ 
     phrase glaPlane `sC` phrase glassTy `sC` S "and" +:+.  phrase responseTy)
@@ -311,7 +311,7 @@ hStrengthGl   = cc' heatS
   (foldlSent [S "A flat, monolithic, glass lite of uniform thickness that has",
   S "been subjected to a special heat treatment process where the residual",
   S "surface compression is not less than 24 MPa (3500psi) or greater than",
-  S "52 MPa (7500 psi), as defined in", makeRef2S astm2012])
+  S "52 MPa (7500 psi), as defined in", makeCiteS astm2012])
 lateral       = dcc "lateral"     (nounPhraseSP "lateral") 
   "Perpendicular to the glass surface."
 lite          = dcc "lite"        (cn' "lite")
@@ -322,7 +322,7 @@ load          = dcc "load"        (nounPhraseSP "load")
 loadResis     = cc' lResistance
   (foldlSent [S "The uniform lateral load that a glass construction can sustain",
   S "based upon a given probability of breakage and load duration as defined in",
-  makeRef2S astm2009, S "(pg. 1, 53), following", foldlList Comma List $ map makeRefS 
+  makeCiteS astm2009, S "(pg. 1, 53), following", foldlList Comma List $ map makeRefS 
   [glassConditionL, glassTypeL], S "respectively"])
 loadShareFac  = cc' lShareFac
   (foldlSent [S "A multiplying factor derived from the load sharing between the",
@@ -340,7 +340,7 @@ notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
 probBreak     = cc' prob_br
   (foldlSent [S "The fraction of glass lites or plies that would break at the",
   S "first occurrence of a specified load and duration, typically expressed",
-  S "in lites per 1000", sParen $ makeRef2S astm2016])
+  S "in lites per 1000", sParen $ makeCiteS astm2016])
 safeMessage   = dcc "safeMessage" (nounPhraseSP "safe")
   ("For the given input parameters, the glass is considered safe.")
 sD            = cc' stdOffDist

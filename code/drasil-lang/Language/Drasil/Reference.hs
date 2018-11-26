@@ -1,6 +1,6 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Reference(makeRef, makeRefS, makeRef2S, makeCite,
-  ReferenceDB, citationsFromBibMap, citationRefTable, assumpRefTable,
+module Language.Drasil.Reference(makeRef, makeRefS, makeRef2, makeRef2S, makeCite,
+  makeCiteS, ReferenceDB, citationsFromBibMap, citationRefTable, assumpRefTable,
   assumptionsFromDB, rdb, RefBy(..), Referable(..), RefMap, simpleMap,
   assumpDB, AssumpMap, assumpLookup, HasAssumpRefs) where
 
@@ -252,12 +252,18 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
   where assumptions = Map.elems am
         dropNums = map fst
 
+makeRef2 :: (Referable l, HasShortName l) => l -> Reference2
+makeRef2 l = Reference2 (renderRef l) (refAdd l) (l ^. shortname)
+
 makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
 makeRef2S l = Ref2 $ Reference2 (renderRef l) (refAdd l) (l ^. shortname)
 
 -- Here we don't use the Lenses as constraints, we really do want a Citation.
-makeCite :: Citation -> Sentence
-makeCite l = Ref2 $ Reference2 Citation (refAdd l) (l ^. shortname)
+makeCite :: Citation -> Reference2
+makeCite l = Reference2 Citation (refAdd l) (l ^. shortname)
+
+makeCiteS :: Citation -> Sentence
+makeCiteS l = Ref2 $ Reference2 Citation (refAdd l) (l ^. shortname)
 
 -- | Create References to a given 'LayoutObj'
 -- This should not be exported to the end-user, but should be usable

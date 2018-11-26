@@ -157,7 +157,7 @@ module Language.Drasil (
   -- AssumpChunk
   , AssumpChunk, assuming, assump
   -- Reference
-  , makeRef, makeRefS, makeRef2S, makeCite
+  , makeRef, makeRefS, makeRef2S, makeCite, makeRef2, makeCiteS
   , ReferenceDB, AssumpMap, assumpLookup, assumptionsFromDB
   , rdb, assumpRefTable, HasAssumpRefs
   , RefBy(..)
@@ -301,7 +301,7 @@ import Language.Drasil.Reference (makeRef, makeRefS, makeCite, ReferenceDB, assu
                                  , rdb, RefBy(..)
                                  , Referable(..)
                                  , citationRefTable, RefMap
-                                 , simpleMap, makeRef2S)
+                                 , simpleMap, makeRef2S, makeRef2, makeCiteS)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 
   prime, compsy)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol, sCurlyBrSymb)

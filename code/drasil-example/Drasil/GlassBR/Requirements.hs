@@ -6,7 +6,7 @@ import Data.List (sortBy)
 
 import Language.Drasil
 import Drasil.DocLang (mkEnumSimple, mkListTuple)
-import Drasil.DocLang.SRS (datConLabel)
+import Drasil.DocLang.SRS (datCon)
 import qualified Drasil.DocumentLanguage.Units as U (toSentence)
 
 import Data.Drasil.Concepts.Computation (inParam, inQty, inValue)
@@ -64,7 +64,7 @@ inputGlassPropsDesc, checkInputWithDataConsDesc, outputValsAndKnownQuantsDesc ::
 checkGlassSafetyDesc :: NamedChunk -> Sentence
 
 inputGlassPropsDesc = foldlSent [at_start input_, S "the", plural quantity, S "from",
-  makeRefS inputGlassPropsTable `sC` S "which define the" +:+. foldlList Comma List
+  makeRef2S inputGlassPropsTable `sC` S "which define the" +:+. foldlList Comma List
   [phrase glass +:+ plural dimension, (glassTy ^. defn), S "tolerable" +:+
   phrase probability `sOf` phrase failure, (plural characteristic `ofThe` 
   phrase blast)] +: S "Note", ch plate_len `sAnd` ch plate_width,
@@ -103,7 +103,7 @@ sysSetValsFollowingAssumpsList = [foldlList Comma List (map ch (take 4 assumptio
 
 checkInputWithDataConsDesc = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",
-  plural datumConstraint, S "mentioned in" +:+. makeRefS datConLabel, 
+  plural datumConstraint, S "mentioned in" +:+. (makeRef2S $ datCon ([]::[Contents]) ([]::[Section])), 
   S "If any" `sOf` S "the", plural inParam, S "are out" `sOf` S "bounds" `sC`
   S "an", phrase errMsg, S "is displayed" `andThe` plural calculation, S "stop"]
 
@@ -133,4 +133,4 @@ outputQuantsList = sortBy (compsy `on` get2) $ (mkReqList gbrIMods) ++ (mkReqLis
     get2 (_, b, _) = b
 
 mkReqList :: (NamedIdea c, HasSymbol c, HasShortName c, HasUID c, Referable c) => [c] -> [(Sentence, Symbol, Sentence)]
-mkReqList = map (\c -> (at_start c, symbol c Implementation, sParen (makeRefS c)))
+mkReqList = map (\c -> (at_start c, symbol c Implementation, sParen (makeRef2S c)))

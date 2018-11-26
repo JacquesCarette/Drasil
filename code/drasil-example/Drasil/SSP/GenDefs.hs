@@ -6,7 +6,7 @@ module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
 
-import Drasil.DocLang.SRS as SRS (physSystLabel)
+import Drasil.DocLang.SRS as SRS (physSystLabel, physSyst)
 
 import Data.Drasil.Concepts.Documentation (assumption, definition, 
   method_, property, value, variable)
@@ -62,8 +62,8 @@ nmFEq_rel = inxi totNrmForce $= eqlExpr cos sin
 nmFEq_desc :: Sentence
 nmFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   S "in the shear direction", at_start force, S "equilibrium is",
-  S "derived from the free body diagram of", makeRef2S forceDiagramL,
-  S "in", makeRefS SRS.physSystLabel]
+  S "derived from the free body diagram of", makeRefS forceDiagramL,
+  S "in", makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section])]
 
 --
 bsShrFEq :: RelationConcept
@@ -78,7 +78,7 @@ bShFEq_desc :: Sentence
 bShFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   S "in the shear direction", at_start force, S "equilibrium is",
   S "derived from the free body diagram of", makeRefS forceDiagramL,
-  S "in", makeRefS SRS.physSystLabel]
+  S "in", makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section])]
 
 --
 shrResEqn :: Expr
@@ -215,9 +215,9 @@ momEql_desc = foldlSent_ [S "For a", phrase slice, S "of", phrase mass,
   S "in the direction", phrase perp,
   S "to" +:+. (S "base" +:+ phrase surface `ofThe` phrase slice),
   S "Moment equilibrium is derived from the free body diagram of" +:+.
-  makeRefS SRS.physSystLabel, S "Index i refers to",
+  (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section])), S "Index i refers to",
   plural value `ofThe` plural property, S "for", phrase slice :+: S "/" :+:
   plural intrslce, S "following convention in" +:+.
-  makeRefS SRS.physSystLabel, at_start variable, plural definition,
+  (makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section])), at_start variable, plural definition,
   S "can be found in", makeRef2S sliceWght, S "to" +:+. makeRef2S lengthLs,
   makeRef2S newA6]

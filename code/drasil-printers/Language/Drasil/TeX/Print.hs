@@ -12,7 +12,7 @@ import qualified Language.Drasil as L (
   RenderSpecial(..), People, rendPersLFM, HasDefinitionTable, HasSymbolTable,
   CitationKind(..), Month(..), Symbol(..), Sentence(S), (+:+), MaxWidthPercent,
   Decoration(Prime, Hat, Vector), Document, special, getStringSN, RefType(..),
-  USymb(US), HasTermTable, LinkType(Internal, Cite2))
+  USymb(US), HasTermTable, LinkType(Internal, Cite2, External))
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
@@ -278,6 +278,7 @@ spec (Ref L.Link r _ sn)     = href  r $ L.getStringSN sn
 spec (Ref t r _ _)           = ref (show t) (pure $ text r)
 spec (Ref2 L.Internal r sn)  = snref r $ spec sn
 spec (Ref2 L.Cite2 r _)      = cite $ pure $ text r
+spec (Ref2 L.External r sn)  = snref r $ spec sn
 spec EmptyS                  = empty
 spec (Quote q)               = quote $ spec q
 

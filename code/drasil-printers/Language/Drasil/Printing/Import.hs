@@ -288,6 +288,8 @@ spec sm (Ref2 (Reference2 (RP rp) ra sn)) =
   P.Ref2 Internal ra $ spec sm $ renderShortName sm rp sn
 spec sm (Ref2 (Reference2 Citation ra sn)) = 
   P.Ref2 Cite2    ra $ spec sm $ renderCitation sm sn
+spec sm (Ref2 (Reference2 URI ra sn)) = 
+  P.Ref2 External    ra $ spec sm $ renderURI sm sn
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
@@ -298,7 +300,10 @@ renderShortName ctx (RConcat a b) sn = renderShortName ctx a sn :+: renderShortN
 renderShortName _ (RS s) _ = S s
 renderShortName _ Name sn = S $ getStringSN sn
 
-renderCitation :: (HasDefinitionTable ctx) => ctx -> ShortName -> Sentence
+renderURI :: ctx -> ShortName -> Sentence
+renderURI _ sn = S $ getStringSN sn
+
+renderCitation :: ctx -> ShortName -> Sentence
 renderCitation _ sn = S $ getStringSN sn
 
 lookupDeferredSN :: (HasDefinitionTable ctx) => ctx -> UID -> String

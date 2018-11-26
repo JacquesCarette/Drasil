@@ -36,7 +36,7 @@ data RefType = Tab    -- ^ Table
 -- basically, this amounts to a choice between
 -- \ref (or \hyperref) and \cite in LaTeX.
 -- in a sense, Cite2 is a very special kind of External reference.
-data LinkType = Internal | Cite2 -- | External
+data LinkType = Internal | Cite2 | External
 
 data Reference = Reference RefType RefAdd ShortName
 

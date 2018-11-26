@@ -7,7 +7,7 @@ import Language.Drasil.ShortName (ShortName)
 import Language.Drasil.UID (UID)
 
 -- Trying different pieces of information for a reference
-data RefProg = RP IRefProg | Citation
+data RefProg = RP IRefProg | Citation | URI
 
 data IRefProg =
     Deferred UID                -- Deferred lookup; done later

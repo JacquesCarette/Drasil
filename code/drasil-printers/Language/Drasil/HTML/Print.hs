@@ -12,7 +12,7 @@ import qualified Language.Drasil as L (People, Person,
   DType(DD, TM, Instance, General), MaxWidthPercent, RefType(Link),
   Decoration(Prime, Hat, Vector), Document, HasDefinitionTable, HasSymbolTable,
   HasTermTable, nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US),
-  LinkType(Internal, Cite2))
+  LinkType(Internal, Cite2, External))
 
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (em, wrap, refwrap, caption, image, div_tag,
@@ -104,6 +104,7 @@ p_spec (Ref L.Link r a _) = reflinkURI r $ p_spec a
 p_spec (Ref _      r a _) = reflink    r $ p_spec a
 p_spec (Ref2 L.Internal r a )  = reflink  r $ p_spec a
 p_spec (Ref2 L.Cite2 r a )  = reflink  r $ p_spec a -- no difference for citations?
+p_spec (Ref2 L.External r a ) = reflinkURI  r $ p_spec a
 p_spec EmptyS             = text "" -- Expected in the output
 p_spec (Quote q)          = text "&quot;" <> p_spec q <> text "&quot;"
 -- p_spec (Acc Grave c)     = text $ '&' : c : "grave;" --Only works on vowels.

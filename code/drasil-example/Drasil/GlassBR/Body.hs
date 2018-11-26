@@ -18,8 +18,8 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
   outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb)
 
-import qualified Drasil.DocLang.SRS as SRS (datConLabel, dataDefnLabel, indPRCaseLabel, 
-  referenceLabel, valsOfAuxConsLabel, assumptLabel)
+import qualified Drasil.DocLang.SRS as SRS (datConLabel, datCon, dataDefnLabel, indPRCase, 
+  reference, assumptLabel, valsOfAuxCons, assumpt)
 
 import Data.Drasil.Concepts.Computation (computerApp, inParam, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
@@ -135,8 +135,9 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [calofDemandi] HideDerivation
           , Constraints EmptyS dataConstraintUncertainty
-                        (foldlSent [makeRefS SRS.valsOfAuxConsLabel, S "gives", (plural value `ofThe` S "specification"), 
-                        plural parameter, S "used in", (makeRefS inputDataConstraints)])
+                        (foldlSent [makeRef2S $ SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]),
+                        S "gives", (plural value `ofThe` S "specification"), 
+                        plural parameter, S "used in", (makeRef2S inputDataConstraints)])
                         [inputDataConstraints, outputDataConstraints]
           ]
         )
@@ -269,7 +270,7 @@ appStanddIR = foldlSent [S " In addition" `sC` plural reviewer, -- FIXME: space 
   S "should be familiar with the applicable", plural standard,
   S "for constructions using glass from", (foldlList Comma List
   $ map makeCiteS [astm2009, astm2012, astm2016]) `sIn`
-  (makeRefS SRS.referenceLabel)]
+  (makeRef2S $ SRS.reference ([]::[Contents]) ([]::[Section]))]
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
   S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
   S "related to", phrase blastTy]
@@ -319,7 +320,7 @@ orgOfDocIntroEnd = foldl (+:+) EmptyS [(at_startNP' $ the dataDefn),
   
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
-  [makeRefS sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
+  [makeRef2S sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
    `sC` S "the", phrase user, S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself", (sParen $ short gLassBR) +:+. EmptyS,
@@ -342,7 +343,8 @@ sysCtxUsrResp = [S "Provide the input data related to the glass slab and blast",
     S "type ensuring no errors in the data entry",
   S "Ensure that consistent units are used for input variables",
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+
-    (sParen $ makeRefS SRS.assumptLabel) +:+ S "are appropriate for any particular" +:+
+    (sParen $ makeRef2S $ SRS.assumpt ([]::[Contents]) ([]::[Section]))
+    +:+ S "are appropriate for any particular" +:+
     phrase problem +:+ S "input to the" +:+ phrase software]
 
 sysCtxSysResp :: [Sentence]
@@ -381,7 +383,7 @@ prodUseCaseTableUC1, prodUseCaseTableUC2 :: [Sentence]
 
 prodUseCaseTableUC1 = [titleize user, titleize' characteristic +:+ S "of the"
   +:+ phrase glaSlab `sAnd` S "of the" +:+. phrase blast +:+ S "Details in"
-  +:+ makeRefS SRS.indPRCaseLabel]
+  +:+ (makeRef2S $ SRS.indPRCase ([]::[Contents]) ([]::[Section]))]
 
 prodUseCaseTableUC2 = [short gLassBR, S "Whether" `sOr` S "not the" +:+
   phrase glaSlab +:+ S "is safe for the" +:+ S "calculated" +:+ phrase load
@@ -437,7 +439,7 @@ probEnding = foldl (+:+) EmptyS [S "interpret the", plural input_,
 
 termsAndDesc = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
   S "are extracted from" +:+ makeCiteS astm2009 `sIn`
-  (makeRefS SRS.referenceLabel))) [termsAndDescBullets]
+  (makeRef2S $ SRS.reference ([]::[Contents]) ([]::[Section])))) [termsAndDescBullets]
 
 {--Physical System Description--}
 
@@ -534,7 +536,7 @@ traceMatsAndGraphsDD =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
 traceMatsAndGraphsDDRef = map makeRef2S dataDefns
 
 traceMatsAndGraphsDataCons  = ["Data Constraints"]
-traceMatsAndGraphsDataConsRef = [makeRefS SRS.datConLabel]
+traceMatsAndGraphsDataConsRef = [makeRef2S $ SRS.datCon ([]::[Contents]) ([]::[Section])]
 
 traceMatsAndGraphsFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
 traceMatsAndGraphsFuncReqRef = map makeRef2S funcReqs
@@ -699,7 +701,7 @@ fig_4 = figureLabel 4 traceyMatrix
 
 appdxIntro = foldlSP [
   S "This", phrase appendix, S "holds the", plural graph,
-  sParen ((makeRefS fig_5) `sAnd` (makeRefS fig_6)),
+  sParen ((makeRef2S fig_5) `sAnd` (makeRef2S fig_6)),
   S "used for interpolating", plural value, S "needed in the", plural model]
 
 fig_5 = llcc (mkLabelRAFig "demandVSsod") $ fig (titleize figure +: S "5" +:+ (demandq ^. defn) +:+

@@ -764,7 +764,7 @@ The scope of the requirements includes getting all input parameters related to t
 Characteristics of Intended Reader
 </h2>
 <p class="paragraph">
-Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering. In addition, reviewers should be familiar with the applicable standards for constructions using glass from <a href=#astm2009>astm2009</a>, <a href=#astm2012>astm2012</a>, and <a href=#astm2016>astm2016</a> in <a href=#Sec:References>References</a>. The users of GlassBR can have a lower level of expertise, as explained in <a href=#Sec:UserChars>User Characteristics</a>.
+Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering. In addition, reviewers should be familiar with the applicable standards for constructions using glass from <a href=#astm2009>astm2009</a>, <a href=#astm2012>astm2012</a>, and <a href=#astm2016>astm2016</a> in <a href=#Sec:References>Section: References</a>. The users of GlassBR can have a lower level of expertise, as explained in <a href=#Sec:UserChars>User Characteristics</a>.
 </p>
 </div>
 </div>
@@ -827,7 +827,7 @@ This section provides general information about the system including identifying
 System Context
 </h2>
 <p class="paragraph">
-<a href=#Figure:sysCtxDiag>sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (GlassBR). Arrows are used to show the data flow between the system and its environment.
+<a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (GlassBR). Arrows are used to show the data flow between the system and its environment.
 </p>
 <div id="Figure:sysCtxDiag">
 <figure>
@@ -854,7 +854,7 @@ type ensuring no errors in the data entry
 Ensure that consistent units are used for input variables
 </li>
 <li>
-Ensure required software assumptions (<a href=#Sec:Assumps>Assumptions</a>) are appropriate for any particular problem input to the software
+Ensure required software assumptions (<a href=#Sec:Assumps>Section: Assumptions</a>) are appropriate for any particular problem input to the software
 </li>
 </ul>
 </li>
@@ -936,7 +936,7 @@ Input and Output
 User
 </td>
 <td>
-Characteristics of the glass slab and of the blast. Details in <a href=#Sec:IndividualProdUC>Individual Product Use Cases</a>
+Characteristics of the glass slab and of the blast. Details in <a href=#Sec:IndividualProdUC>Section: Individual Product Use Cases</a>
 </td>
 </tr>
 <tr>
@@ -988,7 +988,7 @@ A system is needed to efficiently and correctly predict the blast risk involved 
 Terminology and Definitions
 </h3>
 <p class="paragraph">
-This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from <a href=#astm2009>astm2009</a> in <a href=#Sec:References>References</a>.
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from <a href=#astm2009>astm2009</a> in <a href=#Sec:References>Section: References</a>.
 </p>
 <ol class="list">
 <li>
@@ -1147,7 +1147,7 @@ explainScenario: This system only considers the external explosion scenario for 
 <ul class="hide-list-style">
 <li>
 <div id="A:standardValues">
-standardValues: The values provided in <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>.
+standardValues: The values provided in <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>.
 </div>
 </li>
 </ul>
@@ -3095,7 +3095,7 @@ FIXME: This needs to be filled in
 Data Constraints
 </h3>
 <p class="paragraph">
-<a href=#Table:InDataConstraints>InDataConstraints</a> and <a href=#Table:OutDataConstraints>OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> gives the values of the specification parameters used in <a href=#Table:InDataConstraints>InDataConstraints</a>.
+<a href=#Table:InDataConstraints>InDataConstraints</a> and <a href=#Table:OutDataConstraints>OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a> gives the values of the specification parameters used in <a href=#Table:InDataConstraints>Table:InDataConstraints</a>.
 </p>
 <div id="Table:InDataConstraints">
 <table class="table">
@@ -3285,7 +3285,7 @@ Functional Requirements
 <div class="list">
 <p>
 <div id="inputGlassProps">
-Input-Glass-Props: Input the quantities from <a href=#Table:InputGlassPropsReqInputs>InputGlassPropsReqInputs</a>, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast. Note: <em>a</em> and <em>b</em> will be input in terms of millimetres and will be converted to the equivalent value in metres.
+Input-Glass-Props: Input the quantities from <a href=#Table:InputGlassPropsReqInputs>Table:InputGlassPropsReqInputs</a>, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast. Note: <em>a</em> and <em>b</em> will be input in terms of millimetres and will be converted to the equivalent value in metres.
 </div>
 </p>
 <p>
@@ -3318,7 +3318,7 @@ System-Set-Values-Following-Assumptions: The system shall set the known values a
 </p>
 <p>
 <div id="checkInputWithDataCons">
-Check-Input-with-Data_Constraints: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Data Constraints</a>. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.
+Check-Input-with-Data_Constraints: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Section: Data Constraints</a>. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.
 </div>
 </p>
 <p>
@@ -4241,7 +4241,7 @@ DD7 (<a href=#DD:sdf.tol>DD: sdf_tol</a>)
 DD8 (<a href=#DD:standOffDist>DD: standOffDist</a>)
 </th>
 <th>
-Data Constraints (<a href=#Sec:DataConstraints>Data Constraints</a>)
+Data Constraints (<a href=#Sec:DataConstraints>Section: Data Constraints</a>)
 </th>
 <th>
 R1 (<a href=#inputGlassProps>FR: Input-Glass-Props</a>)
@@ -5677,7 +5677,7 @@ References
 Appendix
 </h1>
 <p class="paragraph">
-This appendix holds the graphs (<a href=#Figure:demandVSsod>demandVSsod</a> and <a href=#Figure:dimlessloadVSaspect>dimlessloadVSaspect</a>) used for interpolating values needed in the models.
+This appendix holds the graphs (<a href=#Figure:demandVSsod>Fig:demandVSsod</a> and <a href=#Figure:dimlessloadVSaspect>Fig:dimlessloadVSaspect</a>) used for interpolating values needed in the models.
 </p>
 <div id="Figure:demandVSsod">
 <figure>

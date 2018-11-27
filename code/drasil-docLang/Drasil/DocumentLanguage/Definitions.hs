@@ -111,7 +111,8 @@ mkDDField d _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (sy d $= d ^. defnEx
 mkDDField d m l@(Description v u) fs =
   (show l, buildDDescription' v u d m) : fs
 mkDDField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
-mkDDField d _ l@(Source) fs = (show l, [mkParagraph $ getSource d]) : fs
+--mkDDField d _ l@(Source) fs = (show l, [mkParagraph $ getSource d]) : fs
+mkDDField d _ l@(Source) fs = (show l, [mkParagraph $ getSource' d]) : fs
 mkDDField d _ l@(Notes) fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (d ^. getNotes)
 mkDDField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for data definitions"

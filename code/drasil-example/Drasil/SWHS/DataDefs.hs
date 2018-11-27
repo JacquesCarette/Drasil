@@ -34,7 +34,7 @@ htFluxCEqn :: Expr
 htFluxCEqn = (sy coil_HTC) * ((sy temp_C) - apply1 temp_W time)
 
 dd1HtFluxC :: DataDefinition
-dd1HtFluxC = mkDDL dd1HtFluxCQD [makeRef koothoor2013] [] dd1HtFluxCL [makeRef2S newA7, makeRef2S newA8, makeRef2S newA9]
+dd1HtFluxC = mkDDL dd1HtFluxCQD [koothoor2013] [] dd1HtFluxCL [makeRef2S newA7, makeRef2S newA8, makeRef2S newA9]
 
 --Can't include info in description beyond definition of variables?
 ----
@@ -46,7 +46,7 @@ htFluxPEqn :: Expr
 htFluxPEqn = (sy pcm_HTC) * (apply1 temp_W time - apply1 temp_PCM time)
 
 dd2HtFluxP :: DataDefinition
-dd2HtFluxP = mkDDL dd2HtFluxPQD [makeRef koothoor2013] [] dd2HtFluxPL [makeRef2S newA3, makeRef2S newA4, makeRef2S newA10]
+dd2HtFluxP = mkDDL dd2HtFluxPQD [koothoor2013] [] dd2HtFluxPL [makeRef2S newA3, makeRef2S newA4, makeRef2S newA10]
 
 ----
 
@@ -58,7 +58,7 @@ htFusionEqn = (sy latent_heat) / (sy mass)
 
 -- FIXME: need to allow page references in references.
 dd3HtFusion :: DataDefinition
-dd3HtFusion = mkDDL dd3HtFusionQD [makeRef bueche1986 {- +:+ sParen (S "pg. 282") -} ] 
+dd3HtFusion = mkDDL dd3HtFusionQD [bueche1986 {- +:+ sParen (S "pg. 282") -} ] 
   [] dd3HtFusionL []
 
 ----
@@ -76,7 +76,7 @@ melt_frac_eqn :: Expr
 melt_frac_eqn = (sy latentE_P) / ((sy htFusion) * (sy pcm_mass))
 
 dd4MeltFrac :: DataDefinition
-dd4MeltFrac = mkDDL dd4MeltFracQD [makeRef koothoor2013] [] dd4MeltFracL
+dd4MeltFrac = mkDDL dd4MeltFracQD [koothoor2013] [] dd4MeltFracL
  [makeRef2S dd3HtFusion]
 
 --Need to add units to data definition descriptions

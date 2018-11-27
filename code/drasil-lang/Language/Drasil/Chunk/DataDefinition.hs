@@ -3,6 +3,7 @@ module Language.Drasil.Chunk.DataDefinition where
 
 import Control.Lens(makeLenses, (^.), view)
 import Data.Drasil.IdeaDicts (softEng)
+import Language.Drasil.Chunk.Citation (Citation, HasCitation(getCitations))
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn')
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
@@ -27,7 +28,7 @@ data ScopeType = Local Scope {-only visible within a limited scope-} | Global {-
 -- It also has attributes like derivation, source, etc.
 data DataDefinition = DatDef { _qd :: QDefinition
                              , _scp :: ScopeType
-                             , _ref :: [Reference]
+                             , _cit :: [Citation]
                              , _deri :: Derivation
                              , _lbl :: Label
                              , _notes :: [Sentence]
@@ -42,7 +43,7 @@ instance HasSpace           DataDefinition where typ = qd . typ
 instance HasSymbol          DataDefinition where symbol e st = symbol (e^.qd) st
 instance Quantity           DataDefinition where 
 instance DefiningExpr       DataDefinition where defnExpr = qd . defnExpr
-instance HasReference       DataDefinition where getReferences = ref
+instance HasCitation        DataDefinition where getCitations = cit
 instance Eq                 DataDefinition where a == b = (a ^. uid) == (b ^. uid)
 instance HasDerivation      DataDefinition where derivations = deri
 instance HasAdditionalNotes DataDefinition where getNotes = notes
@@ -56,10 +57,10 @@ dataDefn :: CI
 dataDefn    = commonIdeaWithDict "dataDefn"    (cn' "data definition")                             "DD"        [softEng]
 
 -- | Smart constructor for data definitions 
-mkDD :: QDefinition -> [Reference] -> Derivation -> String -> [Sentence] -> DataDefinition
+mkDD :: QDefinition -> [Citation] -> Derivation -> String -> [Sentence] -> DataDefinition
 mkDD a b c d e = DatDef a Global b c (mkLabelSame d (Def DD)) e dataDefn
 
-mkDDL :: QDefinition -> [Reference] -> Derivation -> Label -> [Sentence] -> DataDefinition
+mkDDL :: QDefinition -> [Citation] -> Derivation -> Label -> [Sentence] -> DataDefinition
 mkDDL a b c label e = DatDef a Global b c label e dataDefn
 
 qdFromDD :: DataDefinition -> QDefinition

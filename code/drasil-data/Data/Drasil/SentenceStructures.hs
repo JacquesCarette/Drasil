@@ -245,5 +245,5 @@ getSource c = foldlList Comma List $ map Ref $ c ^. getReferences
 
 -- | Get the source citations (if any)
 getSource' :: HasCitation c => c -> Sentence
-getSource' c = foldlList Comma List $ map makeCite $ c ^. getCitations
+getSource' c = foldlList Comma List $ map makeCiteS $ c ^. getCitations
 

@@ -35,7 +35,7 @@ consThermE :: TheoryModel
 consThermE = tm consThermE_rc
   [qw thFluxVect, qw gradient, qw vol_ht_gen, 
     qw density, qw heat_cap_spec, qw temp, qw time] ([] :: [ConceptChunk])
-  [] [consThermERel] [] [makeRef consThemESrc] 
+  [] [consThermERel] [] [consThemESrc] 
   (mkLabelSame "consThermE" (Def TM)) [consThermEdesc]
 
 consThermE_rc :: RelationConcept
@@ -47,8 +47,11 @@ consThermERel :: Relation
 consThermERel = (negate (sy gradient)) $. (sy thFluxVect) + (sy vol_ht_gen) $=
   (sy density) * (sy heat_cap_spec) * (pderiv (sy temp) time)
 
-consThemESrc :: Label
-consThemESrc = mkURILabel "consThemESrc" "http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm" "Fourier Law of Heat Conduction and Heat Equation"
+-- the second argument is a 'ShortName'...
+consThemESrc :: Reference2
+consThemESrc = makeURI 
+  "http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm" $
+  shortname' "Fourier Law of Heat Conduction and Heat Equation"
 
 consThermEdesc :: Sentence
 consThermEdesc = foldlSent [
@@ -71,15 +74,17 @@ sensHtE :: TheoryModel
 sensHtE = tm sensHtE_rc
   [qw sens_heat, qw htCap_S, qw mass, 
     qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [ConceptChunk])
-  [] [sensHtEEqn] [] [makeRef sensHtESrc] 
+  [] [sensHtEEqn] [] [sensHtESrc] 
   (mkLabelSame "sensHtE" (Def TM)) [sensHtEdesc]
 
 sensHtE_rc :: RelationConcept
 sensHtE_rc = makeRC "sensHtE_rc" (nounPhraseSP "Sensible heat energy") sensHtEdesc sensHtEEqn
   -- (mkLabelSame "SensHtE" (Def TM))
 
-sensHtESrc :: Label
-sensHtESrc = mkURILabel "consThemESrc" "http://en.wikipedia.org/wiki/Sensible_heat" "Definition of Sensible Heat"
+sensHtESrc :: Reference2
+sensHtESrc = makeURI 
+  "http://en.wikipedia.org/wiki/Sensible_heat" $
+  shortname' "Definition of Sensible Heat"
 
 sensHtEEqn :: Relation
 sensHtEEqn = (sy sens_heat) $= case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
@@ -129,7 +134,7 @@ sensHtEdesc = foldlSent [
 latentHtE :: TheoryModel
 latentHtE = tm latentHtE_rc
   [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
-  [] [latHtEEqn] [] [makeRef latHtESrc] (mkLabelSame "latentHtE" (Def TM)) [latentHtEdesc]
+  [] [latHtEEqn] [] [latHtESrc] (mkLabelSame "latentHtE" (Def TM)) [latentHtEdesc]
 
 latentHtE_rc :: RelationConcept
 latentHtE_rc = makeRC "latentHtE_rc"
@@ -142,8 +147,9 @@ latHtEEqn = apply1 latent_heat time $=
 
 -- Integrals need dTau at end
 
-latHtESrc :: Label
-latHtESrc = mkURILabel "consThemESrc" "http://en.wikipedia.org/wiki/Latent_heat" "Definition of Latent Heat"
+latHtESrc :: Reference2
+latHtESrc = makeURI "http://en.wikipedia.org/wiki/Latent_heat" $
+  shortname' "Definition of Latent Heat"
 
 latentHtEdesc :: Sentence
 latentHtEdesc = foldlSent [

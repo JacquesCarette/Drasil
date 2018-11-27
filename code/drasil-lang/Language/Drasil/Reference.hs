@@ -1,6 +1,6 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Reference(makeRef, makeRefS, makeRef2S, makeCite,
-  ReferenceDB, citationsFromBibMap, citationRefTable, assumpRefTable,
+module Language.Drasil.Reference(makeRef, makeRefS, makeRef2S, makeCite, makeCiteS,
+  makeURI, ReferenceDB, citationsFromBibMap, citationRefTable, assumpRefTable,
   assumptionsFromDB, rdb, RefBy(..), Referable(..), RefMap, simpleMap,
   assumpDB, AssumpMap, assumpLookup, HasAssumpRefs) where
 
@@ -25,7 +25,7 @@ import Language.Drasil.Label.Core (Label(..))
 import Language.Drasil.Label.Type (getAdd)
 import Language.Drasil.Label (getDefName, getReqName)
 import Language.Drasil.People (People, comparePeople)
-import Language.Drasil.RefProg (RefProg(RP, Citation), Reference2(Reference2), (+::+), name,
+import Language.Drasil.RefProg (RefProg(..), Reference2(Reference2), (+::+), name,
   prepend, raw, IRefProg)
 import Language.Drasil.RefProg as RP (defer)  -- FIXME: Remove prefix once SN.defer is no longer needed.
 import Language.Drasil.RefTypes (RefType(..), DType(..), Reference(Reference))
@@ -256,8 +256,15 @@ makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
 makeRef2S l = Ref2 $ Reference2 (renderRef l) (refAdd l) (l ^. shortname)
 
 -- Here we don't use the Lenses as constraints, we really do want a Citation.
-makeCite :: Citation -> Sentence
-makeCite l = Ref2 $ Reference2 Citation (refAdd l) (l ^. shortname)
+makeCite :: Citation -> Reference2
+makeCite l = Reference2 Citation (refAdd l) (l ^. shortname)
+
+makeCiteS :: Citation -> Sentence
+makeCiteS = Ref2 . makeCite
+
+-- | Create a reference for a URI
+makeURI :: String -> ShortName -> Reference2
+makeURI ra sn = Reference2 URI ra sn
 
 -- | Create References to a given 'LayoutObj'
 -- This should not be exported to the end-user, but should be usable

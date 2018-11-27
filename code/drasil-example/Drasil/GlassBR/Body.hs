@@ -268,7 +268,7 @@ undIR = foldlList Comma List [phrase scndYrCalculus, phrase structuralMechanics,
 appStanddIR = foldlSent [S " In addition" `sC` plural reviewer, -- FIXME: space before "In" is a hack to get proper spacing
   S "should be familiar with the applicable", plural standard,
   S "for constructions using glass from", (foldlList Comma List
-  $ map makeCite [astm2009, astm2012, astm2016]) `sIn`
+  $ map makeCiteS [astm2009, astm2012, astm2016]) `sIn`
   (makeRefS SRS.referenceLabel)]
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
   S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
@@ -299,10 +299,10 @@ purpOfDocIntro typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
 orgOfDocIntro, orgOfDocIntroEnd :: Sentence
 orgOfDocIntro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an", short srs,
-  S "for", phrase sciCompS, S "proposed by" +:+ makeCite koothoor2013
-  `sAnd` makeCite smithLai2005 `sC` S "with some", 
+  S "for", phrase sciCompS, S "proposed by" +:+ makeCiteS koothoor2013
+  `sAnd` makeCiteS smithLai2005 `sC` S "with some", 
   plural aspect, S "taken from Volere", phrase template,
-  S "16", makeCite rbrtsn2012]
+  S "16", makeCiteS rbrtsn2012]
 
 orgOfDocIntroEnd = foldl (+:+) EmptyS [(at_startNP' $ the dataDefn),
   S "are used to support", (plural definition `ofThe` S "different"),
@@ -436,7 +436,7 @@ probEnding = foldl (+:+) EmptyS [S "interpret the", plural input_,
 {--Terminology and Definitions--}
 
 termsAndDesc = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
-  S "are extracted from" +:+ makeCite astm2009 `sIn`
+  S "are extracted from" +:+ makeCiteS astm2009 `sIn`
   (makeRefS SRS.referenceLabel))) [termsAndDescBullets]
 
 {--Physical System Description--}

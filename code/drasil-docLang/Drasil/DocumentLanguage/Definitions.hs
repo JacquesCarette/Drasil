@@ -93,7 +93,7 @@ mkTMField t _ l@DefiningEquation fs =
 mkTMField t m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] (t ^. invariants)) : fs
 mkTMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
-mkTMField t _ l@(Source) fs = (show l, map (mkParagraph . Ref) $ t ^. getReferences) : fs
+mkTMField t _ l@(Source) fs = (show l, map (mkParagraph . Ref2) $ t ^. getReferences2) : fs
 mkTMField t _ l@(Notes) fs = 
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (t ^. getNotes)
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++

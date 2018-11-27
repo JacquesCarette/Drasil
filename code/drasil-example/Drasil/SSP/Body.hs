@@ -18,7 +18,7 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc)
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
-  assumptLabel, physSyst)
+  physSyst, assumpt)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   design, document, effect, element, endUser, environment, goalStmt, inModel, 
@@ -259,7 +259,7 @@ orgSecEnd   = S "The" +:+ plural inModel +:+ S "provide the set of" +:+
 -- System Context automatically generated
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
-  [makeRefS sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
+  [makeRef2S sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
    `sC` S "the", phrase user, S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself" +:+. (sParen $ short ssp),
@@ -281,7 +281,7 @@ sysCtxUsrResp = [S "Provide the input data related to the soil layer(s) and wate
   S "table (if applicable), ensuring no errors in the data entry",
   S "Ensure that consistent units are used for input variables",
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+ sParen ( 
-  makeRefS SRS.assumptLabel) +:+ S "are appropriate for any particular" +:+
+  makeRef2S $ SRS.assumpt ([]::[Contents]) ([]::[Section])) +:+ S "are appropriate for any particular" +:+
   phrase problem +:+ S "input to the" +:+ phrase software]
   
 sysCtxSysResp :: [Sentence]
@@ -351,7 +351,7 @@ physSystIntro what how p1 p2 p3 indexref = foldlSP [
   plural property, S "of the", phrase what, how, S "Some", plural property,
   S "are", phrase p1, plural property `sC` S "and some are", phrase p2 `sOr`
   p3 +:+. plural property, S "The index convention for referencing which",
-  phrase p1 `sOr` phrase p2, S "is being used is shown in", makeRefS indexref]
+  phrase p1 `sOr` phrase p2, S "is being used is shown in", makeRef2S indexref]
 
 phys_sys_desc_bullets = enumSimple 1 (short Doc.physSyst) physSystDescriptionListPhysys
 physSystDescriptionListPhysys :: [Sentence]
@@ -370,7 +370,7 @@ physSystDescriptionListPhysys2 = foldlSent_ [at_start slice, plural property +:+
 
 phys_sys_desc_p2 = foldlSP [S "A", phrase fbd, S "of the", 
   plural force, S "acting on the", phrase slice, 
-  S "is displayed in", makeRefS fig_forceacting]
+  S "is displayed in", makeRef2S fig_forceacting]
 
 fig_indexconv :: LabelledContent
 fig_indexconv = llcc (mkLabelRAFig "IndexConvention") $ 

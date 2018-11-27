@@ -26,7 +26,7 @@ egetDocSec (AppndxSec a)        = egetApp a
 egetDocSec (ExistingSolnSec e)  = egetExist e
 
 egetSec :: Section -> [Expr]
-egetSec (Section _ sc _ _) = concatMap egetSecCon sc
+egetSec (Section _ sc _ ) = concatMap egetSecCon sc
 
 egetSecCon :: SecCons -> [Expr]
 egetSecCon (Sub s) = egetSec s
@@ -169,7 +169,7 @@ getDocSec (AppndxSec a)        = getApp a
 getDocSec (ExistingSolnSec e)  = getExist e
 
 getSec :: Section -> [Sentence]
-getSec (Section t sc _ _) = t : concatMap getSecCon sc
+getSec (Section t sc _ ) = t : concatMap getSecCon sc
 
 getSecCon :: SecCons -> [Sentence]
 getSecCon (Sub s) = getSec s
@@ -359,21 +359,21 @@ ciGetDocDesc :: DocDesc -> [CI]
 ciGetDocDesc docdesc = concatMap ciGetDocSec docdesc
 
 ciGetDocSec :: DocSection -> [CI]
-ciGetDocSec (Verbatim        sec)     = []
-ciGetDocSec (RefSec          refsec)  = []
-ciGetDocSec (IntroSec        intro)   = ciGetIntro intro
-ciGetDocSec (StkhldrSec      stk)     = ciGetStk stk
-ciGetDocSec (GSDSec          gsd)     = []
-ciGetDocSec (ScpOfProjSec    scpPro)  = []
-ciGetDocSec (SSDSec          ssd)     = ciGetSSD ssd
-ciGetDocSec (ReqrmntSec      req)     = []
-ciGetDocSec (LCsSec          lc)      = []
-ciGetDocSec (UCsSec          uc)      = []
-ciGetDocSec (TraceabilitySec trace)   = []
-ciGetDocSec (AuxConstntSec   aux)     = ciGetAux aux
-ciGetDocSec (Bibliography)            = []
-ciGetDocSec (AppndxSec       app)     = []
-ciGetDocSec (ExistingSolnSec exist)   = []
+ciGetDocSec (Verbatim        _)     = []
+ciGetDocSec (RefSec          _)     = []
+ciGetDocSec (IntroSec        intro) = ciGetIntro intro
+ciGetDocSec (StkhldrSec      stk)   = ciGetStk stk
+ciGetDocSec (GSDSec          _)     = []
+ciGetDocSec (ScpOfProjSec    _)     = []
+ciGetDocSec (SSDSec          ssd)   = ciGetSSD ssd
+ciGetDocSec (ReqrmntSec      _)     = []
+ciGetDocSec (LCsSec          _)     = []
+ciGetDocSec (UCsSec          _)     = []
+ciGetDocSec (TraceabilitySec _)     = []
+ciGetDocSec (AuxConstntSec   aux)   = ciGetAux aux
+ciGetDocSec (Bibliography)          = []
+ciGetDocSec (AppndxSec       _)     = []
+ciGetDocSec (ExistingSolnSec _)     = []
 
 ciGetIntro :: IntroSec -> [CI]
 ciGetIntro (IntroProg _ _ insub) = concatMap ciGetIntroSub insub
@@ -396,9 +396,9 @@ ciGetSSD :: SSDSec -> [CI]
 ciGetSSD (SSDProg ssdsub) = concatMap ciGetSSDSub ssdsub
 
 ciGetSSDSub :: SSDSub -> [CI]
-ciGetSSDSub (SSDSubVerb _)         = []
-ciGetSSDSub (SSDProblem pd)        = ciGetProbDesc pd
-ciGetSSDSub (SSDSolChSpec solspec) = []
+ciGetSSDSub (SSDSubVerb _)   = []
+ciGetSSDSub (SSDProblem pd)  = ciGetProbDesc pd
+ciGetSSDSub (SSDSolChSpec _) = []
 
 ciGetProbDesc :: ProblemDescription -> [CI]
 ciGetProbDesc (PDProg _ ci _ _) = [ci]

@@ -1,5 +1,8 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Reference where
+module Language.Drasil.Reference(makeRef, makeRefS, makeRef2, makeRef2S, makeCite, makeURI,
+  makeCiteS, ReferenceDB, citationsFromBibMap, citationRefTable, assumpRefTable,
+  assumptionsFromDB, rdb, RefBy(..), Referable(..), RefMap, simpleMap,
+  assumpDB, AssumpMap, assumpLookup, HasAssumpRefs) where
 
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
@@ -15,16 +18,20 @@ import Language.Drasil.Chunk.GenDefn (GenDefn)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel),
-  HasRefAddress(getRefAdd), HasShortName(shortname), HasFields(getFields))
+  HasRefAddress(getRefAdd), HasShortName(shortname), HasFields(getFields), CommonIdea(abrv))
 import Language.Drasil.Document (Section(Section))
 import Language.Drasil.Document.Core (RawContent(..), LabelledContent(..))
 import Language.Drasil.Label.Core (Label(..))
 import Language.Drasil.Label.Type (getAdd)
 import Language.Drasil.Label (getDefName, getReqName)
 import Language.Drasil.People (People, comparePeople)
+import Language.Drasil.RefProg (RefProg(..), Reference2(Reference2), (+::+), name,
+  prepend, raw, IRefProg)
+import Language.Drasil.RefProg as RP (defer)  -- FIXME: Remove prefix once SN.defer is no longer needed.
 import Language.Drasil.RefTypes (RefType(..), DType(..), Reference(Reference))
-import Language.Drasil.ShortName ( ShortName, getStringSN, shortname', concatSN, defer)
-import Language.Drasil.Sentence (Sentence((:+:), S, Ref))
+import Language.Drasil.ShortName ( ShortName, getStringSN, shortname', concatSN)
+import Language.Drasil.ShortName as SN (defer)
+import Language.Drasil.Sentence (Sentence((:+:), S, Ref, Ref2))
 import Language.Drasil.UID (UID)
 
 -- | Database for maintaining references.
@@ -108,52 +115,76 @@ instance HasConceptRefs  ReferenceDB where conceptRefTable = conceptDB
 
 --FIXME: "class (HasLabel s) => Referable s where" instead?
 class Referable s where
-  refAdd  :: s -> String  -- The plaintext referencing address (what we're linking to).
-                          -- Should be string with no spaces/special chars.
-                          -- Only visible in the source (tex/html).
-  rType   :: s -> RefType -- The reference type (referencing namespace?)
+  refAdd    :: s -> String  -- The plaintext referencing address (what we're linking to).
+                            -- Should be string with no spaces/special chars.
+                            -- Only visible in the source (tex/html).
+  rType     :: s -> RefType -- The reference type (referencing namespace?)
+  renderRef :: s -> RefProg -- A program to render a shortname
 
 instance Referable AssumpChunk where
-  refAdd  x = getAdd ((x ^. getLabel) ^. getRefAdd)
-  rType   _ = Assump
+  refAdd    x = getAdd ((x ^. getLabel) ^. getRefAdd)
+  rType     _ = Assump
+  renderRef l = RP $ prepend $ abrv l
 
 instance Referable Section where
-  refAdd  (Section _ _ lb _) = getAdd (lb ^. getRefAdd)
-  rType   _                = Sect
+  refAdd    (Section _ _ lb ) = getAdd (lb ^. getRefAdd)
+  rType     _                 = Sect
+  renderRef _                 = RP $ raw "Section: " +::+ name
 
 instance Referable Citation where
-  refAdd c = citeID c -- citeID should be unique.
-  rType _  = Cite
+  refAdd    c = citeID c -- citeID should be unique.
+  rType     _ = Cite
+  renderRef _ = Citation
 
 instance Referable TheoryModel where
-  refAdd  t = getAdd ((t ^. getLabel) ^. getRefAdd)
-  rType   _ = Def TM
+  refAdd    t = getAdd ((t ^. getLabel) ^. getRefAdd)
+  rType     _ = Def TM
+  renderRef l = RP $ prepend $ abrv l
 
 instance Referable GenDefn where
-  refAdd  g = getAdd ((g ^. getLabel) ^. getRefAdd)
-  rType   _ = Def General
+  refAdd    g = getAdd ((g ^. getLabel) ^. getRefAdd)
+  rType     _ = Def General
+  renderRef l = RP $ prepend $ abrv l
 
 instance Referable DataDefinition where
-  refAdd  d = getAdd ((d ^. getLabel) ^. getRefAdd)
-  rType   _ = Def DD
+  refAdd    d = getAdd ((d ^. getLabel) ^. getRefAdd)
+  rType     _ = Def DD
+  renderRef l = RP $ prepend $ abrv l
 
 instance Referable InstanceModel where
-  refAdd  i = getAdd ((i ^. getLabel) ^. getRefAdd)
-  rType   _ = Def Instance
+  refAdd    i = getAdd ((i ^. getLabel) ^. getRefAdd)
+  rType     _ = Def Instance
+  renderRef l = RP $ prepend $ abrv l
 
 instance Referable ConceptInstance where
-  refAdd i = i ^. uid
-  rType i  = DeferredCC $ sDom $ i ^. cdom
+  refAdd    i = i ^. uid
+  rType     _ = error "makeRef, makeRefS, and rType are deprecated for ConceptInstance. Use the makeRef2S, renderRef instead."
+  renderRef l = RP $ (RP.defer $ sDom $ l ^. cdom) +::+ raw ": " +::+ name
 
 --Should refer to an object WITH a variable.
 --Can be removed once sections have labels.
 instance Referable Label where
-  refAdd lb@(Lbl _ _ _ _) = getAdd (lb ^. getRefAdd)
-  rType  (Lbl _ _ _ x)    = x --FIXME: is a hack; see #971
+  refAdd    lb@(Lbl _ _ _ _) = getAdd (lb ^. getRefAdd)
+  rType     (Lbl _ _ _ x)    = x --FIXME: is a hack; see #971
+  renderRef _                = RP name -- FIXME
 
 instance Referable LabelledContent where
-  refAdd (LblC lb _) = getAdd (lb ^. getRefAdd)
-  rType  (LblC _ c)  = temp c
+  refAdd     (LblC lb _) = getAdd (lb ^. getRefAdd)
+  rType      (LblC _ c)  = temp c
+  renderRef  (LblC _ c)  = RP $ refLabelledCon c
+
+refLabelledCon :: RawContent -> IRefProg
+refLabelledCon (Table _ _ _ _)       = raw "Table:" +::+ name 
+refLabelledCon (Figure _ _ _)        = raw "Fig:" +::+ name
+refLabelledCon (Graph _ _ _ _)       = raw "Fig:" +::+ name
+refLabelledCon (Defini _ _)          = raw "Def:" +::+ name
+refLabelledCon (Assumption _ _ _)    = raw "Assump:" +::+ name
+refLabelledCon (EqnBlock _)          = raw "EqnB:" +::+ name
+refLabelledCon (Enumeration _)       = raw "Lst:" +::+ name 
+refLabelledCon (Paragraph _)         = error "Shouldn't reference paragraphs"
+refLabelledCon (Bib _)               = error $ 
+    "Bibliography list of references cannot be referenced. " ++
+    "You must reference the Section or an individual citation."
 
 temp :: RawContent -> RefType
 temp (Table _ _ _ _)       = Tab
@@ -221,6 +252,23 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
   where assumptions = Map.elems am
         dropNums = map fst
 
+makeRef2 :: (Referable l, HasShortName l) => l -> Reference2
+makeRef2 l = Reference2 (renderRef l) (refAdd l) (l ^. shortname)
+
+makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
+makeRef2S l = Ref2 $ Reference2 (renderRef l) (refAdd l) (l ^. shortname)
+
+-- Here we don't use the Lenses as constraints, we really do want a Citation.
+makeCite :: Citation -> Reference2
+makeCite l = Reference2 Citation (refAdd l) (l ^. shortname)
+
+makeCiteS :: Citation -> Sentence
+makeCiteS = Ref2 . makeCite
+
+-- | Create a reference for a URI
+makeURI :: String -> ShortName -> Reference2
+makeURI ra sn = Reference2 URI ra sn
+
 -- | Create References to a given 'LayoutObj'
 -- This should not be exported to the end-user, but should be usable
 -- within the recipe (we want to force reference creation to check if the given
@@ -233,10 +281,6 @@ makeRef r = customRef r (r ^. shortname)
 makeRefS :: (HasShortName l, Referable l) => l -> Sentence
 makeRefS = Ref . makeRef
 
---FIXME: needs design (HasShortName, Referable only possible when HasLabel)
-mkRefFrmLbl :: (HasLabel l, HasShortName l, Referable l) => l -> Reference
-mkRefFrmLbl = makeRef
-
 --FIXME: should be removed from Examples once sections have labels
 -- | Create a reference with a customized 'ShortName'
 customRef :: (HasShortName l, Referable l) => l -> ShortName -> Reference
@@ -248,7 +292,7 @@ customRef r n = Reference (fixupRType $ rType r) (refAdd r) (getAcc' (rType r) n
     getAcc' UnCh      sn = shortname' $ "UC: " ++ (getStringSN sn)
     getAcc' Assump    sn = shortname' $ "A: " ++ (getStringSN sn)
     getAcc' (Req rq)  sn = shortname' $ (getReqName rq)  ++ " " ++ (getStringSN sn)
-    getAcc' (DeferredCC u) s = concatSN (defer u) s
+    getAcc' (DeferredCC u) s = concatSN (SN.defer u) s
     getAcc' _         sn = sn
     fixupRType (DeferredCC _) = Blank  -- FIXME: This is a hack
     fixupRType a = a

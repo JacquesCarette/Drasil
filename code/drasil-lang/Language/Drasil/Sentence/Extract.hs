@@ -17,6 +17,7 @@ getUIDs (S _)                = []
 getUIDs (Sp _)               = []
 getUIDs (P _)                = []
 getUIDs (Ref _)              = []
+getUIDs (Ref2 _)             = []
 getUIDs ((:+:) a b)          = (getUIDs a) ++ (getUIDs b)
 getUIDs (Quote a)            = getUIDs a
 getUIDs (E a)                = names a
@@ -33,9 +34,10 @@ getUIDshort (S _)                = []
 getUIDshort (Sp _)               = []
 getUIDshort (P _)                = []
 getUIDshort (Ref _)              = []
+getUIDshort (Ref2 _)             = []
 getUIDshort ((:+:) a b)          = (getUIDshort a) ++ (getUIDshort b)
 getUIDshort (Quote a)            = getUIDshort a
-getUIDshort (E a)                = []
+getUIDshort (E _)                = []
 getUIDshort (EmptyS)             = []
 
 -----------------------------------------------------------------------------

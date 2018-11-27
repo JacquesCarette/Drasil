@@ -87,7 +87,8 @@ abbreviation, analysis, appendix, aspect, body, characteristic, class_, client,
   simulation, software, solution, specific, specification, stakeholder,
   standard, statement, symbol_, system, table_, task, template, term_,
   terminology, theory, traceyGraph, traceyMatrix, type_, uncertainty, user,
-  useCase, validation, value, variable, video, verification, year :: NamedChunk
+  useCase, validation, value, variable, video, verification, year,
+  scpOfTheProjS :: NamedChunk
 
 abbreviation    = nc "abbreviation"   (cn'    "abbreviation"       )
 analysis        = nc "analysis"       (cnIS   "analysis"           )

@@ -12,7 +12,7 @@ import qualified Language.Drasil as L (
   RenderSpecial(..), People, rendPersLFM, HasDefinitionTable, HasSymbolTable,
   CitationKind(..), Month(..), Symbol(..), Sentence(S), (+:+), MaxWidthPercent,
   Decoration(Prime, Hat, Vector), Document, special, getStringSN, RefType(..),
-  USymb(US), HasTermTable)
+  USymb(US), HasTermTable, LinkType(Internal, Cite2, External))
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
@@ -244,15 +244,15 @@ makeColumns ls = hpunctuate (text " & ") $ map spec ls
 
 needs :: Spec -> MathContext
 needs (a :+: b) = needs a `lub` needs b
-needs (S _)          = Text
-needs (E _)          = Math
-needs (Sy _)         = Text
-needs (Sp _)         = Math
-needs HARDNL         = Text
-needs (Ref _ _ _ _)  = Text
-needs (Ref2 _ _ _ _) = Text
-needs (EmptyS)       = Text
-needs (Quote _)      = Text
+needs (S _)            = Text
+needs (E _)            = Math
+needs (Sy _)           = Text
+needs (Sp _)           = Math
+needs HARDNL           = Text
+needs (Ref _ _ _ _)    = Text
+needs (Ref2 _ _ _)     = Text
+needs (EmptyS)         = Text
+needs (Quote _)        = Text
 
 -- print all Spec through here
 spec :: Spec -> D
@@ -268,17 +268,19 @@ spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = pure $ text "\\newline"
 spec (Ref t@L.Sect r _ _)    = sref (show t) (pure $ text r)
 spec (Ref t@(L.Def _) r _ _) = hyperref (show t) (pure $ text r)
-spec (Ref L.Assump r _ _)    = aref  (pure $ text r)
+spec (Ref L.Assump r _ _)    = aref  (pure $ text r) -- solved
 spec (Ref (L.Req _) r _ _)   = rref  (pure $ text r)
 spec (Ref L.LCh r _ _)       = lcref (pure $ text r)
 spec (Ref L.UnCh r _ _)      = ucref (pure $ text r)
 spec (Ref L.Cite r _ _)      = cite  (pure $ text r)
 spec (Ref L.Blank r sn _)    = snref r $ spec sn
 spec (Ref L.Link r _ sn)     = href  r $ L.getStringSN sn
-spec (Ref t r _ _)            = ref (show t) (pure $ text r)
-spec (Ref2 _ _ _ _)           = error "Ref2 Not implemented in TeX printer."
-spec EmptyS                   = empty
-spec (Quote q)                = quote $ spec q
+spec (Ref t r _ _)           = ref (show t) (pure $ text r)
+spec (Ref2 L.Internal r sn)  = snref r $ spec sn
+spec (Ref2 L.Cite2 r _)      = cite $ pure $ text r
+spec (Ref2 L.External r sn)  = snref r $ spec sn
+spec EmptyS                  = empty
+spec (Quote q)               = quote $ spec q
 
 escapeChars :: Char -> String
 escapeChars '_' = "\\_"

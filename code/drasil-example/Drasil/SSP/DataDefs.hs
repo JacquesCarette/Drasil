@@ -1,33 +1,25 @@
-module Drasil.SSP.DataDefs (dataDefns,mobShearWO, intrsliceF, surfLoads, 
-  seismicLoadF, resShearWO, lengthLs, lengthLb, sliceWght, fixme1, fixme2,
-  mobShrDerivation, resShrDerivation) where 
+module Drasil.SSP.DataDefs (dataDefns, intrsliceF, surfLoads, 
+  seismicLoadF, lengthLs, lengthLb, sliceWght, fixme1, fixme2) where 
 
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
-import Control.Lens ((^.))
-
-import Data.Drasil.Utils (eqUnR', weave)
 
 -- Needed for derivations
-import Data.Drasil.Concepts.Documentation (definition, value)
-import Data.Drasil.SentenceStructures (eqN, foldlSentCol, foldlSP, getTandS, 
-  ofThe', sAnd)
-import Data.Drasil.Concepts.Math (equation)
+--import Data.Drasil.SentenceStructures (eqN, foldlSentCol, foldlSP, getTandS, 
+ -- ofThe', sAnd)
 
-import Drasil.SSP.Assumptions (newA3, newA4, newA5, newA9, newA10, newA11)
-import Drasil.SSP.BasicExprs (eqlExpr)
-import Drasil.SSP.Labels (genDef2Label, genDef3Label, sliceWghtL, baseWtrFL, 
+import Drasil.SSP.Assumptions (newA9)
+import Drasil.SSP.Labels (sliceWghtL, baseWtrFL, 
   surfWtrFL, intersliceWtrFL, angleAL, angleBL, lengthLbL , sliceWghtL, 
-  lengthBL, lengthLsL, seismicLoadFL, intrsliceFL, resShearWOL, mobShearWOL,
+  lengthBL, lengthLsL, seismicLoadFL, intrsliceFL,
   surfLoadsL)
-import Drasil.SSP.TMods (effStress)
 import Drasil.SSP.References (chen2005, fredlund1977)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
-  cohesion, dryWeight, earthqkLoadFctr, fricAngle, impLoadAngle, intNormForce, 
-  intShrForce, inx, inxi, inxiM1, mobShrI, normToShear, nrmFNoIntsl, nrmFSubWat,
-  satWeight, scalFunc, shearFNoIntsl,shearRNoIntsl, shrResI, slcWght, 
+  dryWeight, earthqkLoadFctr, impLoadAngle, intNormForce, 
+  intShrForce, inx, inxi, inxiM1, normToShear,
+  satWeight, scalFunc,  slcWght, 
   slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce, surfLngth, 
-  surfLoad, ufixme1, ufixme2, waterHght, waterWeight, watrForce, watrForceDif, wiif)
+  surfLoad, ufixme1, ufixme2, waterHght, waterWeight, watrForce)
 
 ------------------------
 --  Data Definitions  --
@@ -35,13 +27,12 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 
 dataDefns :: [DataDefinition]
 dataDefns = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB, 
-  lengthB, lengthLb, lengthLs, seismicLoadF, surfLoads, intrsliceF, resShearWO,
-  mobShearWO, fixme1, fixme2]
+  lengthB, lengthLb, lengthLs, seismicLoadF, surfLoads, intrsliceF, fixme1, fixme2]
 
 --DD1
 
 sliceWght :: DataDefinition
-sliceWght = mkDDL sliceWghtQD [makeRef fredlund1977] [{-Derivation-}] sliceWghtL []--Notes
+sliceWght = mkDDL sliceWghtQD [fredlund1977] [{-Derivation-}] sliceWghtL []--Notes
 --FIXME: fill empty lists in
 
 sliceWghtQD :: QDefinition
@@ -62,8 +53,8 @@ slcWgtEqn = (inxi baseWthX) * (case_ [case1,case2,case3])
 --DD2
 
 baseWtrF :: DataDefinition
-baseWtrF = mkDDL baseWtrFQD [makeRef fredlund1977] [{-Derivation-}] baseWtrFL 
-  [makeRefS newA9]--Notes
+baseWtrF = mkDDL baseWtrFQD [fredlund1977] [{-Derivation-}] baseWtrFL 
+  [makeRef2S newA9]--Notes
 --FIXME: fill empty lists in
 
 baseWtrFQD :: QDefinition
@@ -79,8 +70,8 @@ bsWtrFEqn = (inxi baseLngth)*(case_ [case1,case2])
 --DD3
 
 surfWtrF :: DataDefinition
-surfWtrF = mkDDL surfWtrFQD [makeRef fredlund1977] [{-Derivation-}] surfWtrFL
-  [makeRefS newA9]--Notes
+surfWtrF = mkDDL surfWtrFQD [fredlund1977] [{-Derivation-}] surfWtrFL
+  [makeRef2S newA9]--Notes
 --FIXME: fill empty lists in
 
 surfWtrFQD :: QDefinition
@@ -96,7 +87,7 @@ surfWtrFEqn = (inxi surfLngth)*(case_ [case1,case2])
 --DD4
 
 intersliceWtrF :: DataDefinition
-intersliceWtrF = mkDDL intersliceWtrFQD [makeRef fredlund1977] [{-Derivation-}] intersliceWtrFL
+intersliceWtrF = mkDDL intersliceWtrFQD [fredlund1977] [{-Derivation-}] intersliceWtrFL
   []--Notes
 --FIXME: fill empty lists in
 
@@ -117,8 +108,8 @@ intersliceWtrFEqn = case_ [case1,case2,case3]
 --DD5
 
 angleA :: DataDefinition
-angleA = mkDDL angleAQD [makeRef fredlund1977] [{-Derivation-}] angleAL 
-  [makeRefS newA9]--Notes
+angleA = mkDDL angleAQD [fredlund1977] [{-Derivation-}] angleAL 
+  [makeRef2S newA9]--Notes
 --FIXME: fill empty lists in
 
 angleAQD :: QDefinition
@@ -131,8 +122,8 @@ angleAEqn = (inxi slipHght - inx slipHght (-1)) /
 --DD5.5
 
 angleB :: DataDefinition
-angleB = mkDDL angleBQD [makeRef fredlund1977] [{-Derivation-}] angleBL 
-  [makeRefS newA9]--Notes
+angleB = mkDDL angleBQD [fredlund1977] [{-Derivation-}] angleBL 
+  [makeRef2S newA9]--Notes
 --FIXME: fill empty lists in
 
 angleBQD :: QDefinition
@@ -145,7 +136,7 @@ angleBEqn = (inxi slopeHght - inx slopeHght (-1)) /
 --DD6
 
 lengthB :: DataDefinition
-lengthB = mkDDL lengthBQD [makeRef fredlund1977] [{-Derivation-}] lengthBL []--Notes
+lengthB = mkDDL lengthBQD [fredlund1977] [{-Derivation-}] lengthBL []--Notes
 --FIXME: fill empty lists in
 
 lengthBQD :: QDefinition
@@ -157,8 +148,8 @@ lengthBEqn = inxi slipDist - inx slipDist (-1)
 --DD6.3
 
 lengthLb :: DataDefinition
-lengthLb = mkDDL lengthLbQD [makeRef fredlund1977] [{-Derivation-}] lengthLbL
-  [makeRefS newA9]--Notes
+lengthLb = mkDDL lengthLbQD [fredlund1977] [{-Derivation-}] lengthLbL
+  [makeRef2S newA9]--Notes
 --FIXME: fill empty lists in
 
 lengthLbQD :: QDefinition
@@ -170,8 +161,8 @@ lengthLbEqn = (inxi baseWthX) * sec (inxi baseAngle)
 --DD6.6
 
 lengthLs :: DataDefinition
-lengthLs = mkDDL lengthLsQD [makeRef fredlund1977] [{-Derivation-}] lengthLsL
-  [makeRefS newA9]--Notes
+lengthLs = mkDDL lengthLsQD [fredlund1977] [{-Derivation-}] lengthLsL
+  [makeRef2S newA9]--Notes
 --FIXME: fill empty lists in
 
 lengthLsQD :: QDefinition
@@ -183,7 +174,7 @@ lengthLsEqn = (inxi baseWthX) * sec (inxi surfAngle)
 --DD7
 
 seismicLoadF :: DataDefinition
-seismicLoadF = mkDDL seismicLoadFQD [makeRef fredlund1977] [{-Derivation-}] seismicLoadFL []--Notes
+seismicLoadF = mkDDL seismicLoadFQD [fredlund1977] [{-Derivation-}] seismicLoadFL []--Notes
 --FIXME: fill empty lists in
 
 seismicLoadFQD :: QDefinition
@@ -196,7 +187,7 @@ ssmcLFEqn = ((sy earthqkLoadFctr) * (inxi slcWght))
 --DD8
 
 surfLoads :: DataDefinition
-surfLoads = mkDDL surfLoadsQD [makeRef chen2005] [{-Derivation-}] surfLoadsL []--Notes
+surfLoads = mkDDL surfLoadsQD [chen2005] [{-Derivation-}] surfLoadsL []--Notes
 --FIXME: fill empty lists in
 
 surfLoadsQD :: QDefinition
@@ -210,7 +201,7 @@ surfLEqn = (inxi surfLoad) * (inxi impLoadAngle)
 --DD9
 
 intrsliceF :: DataDefinition
-intrsliceF = mkDDL intrsliceFQD [makeRef chen2005] [{-Derivation-}] intrsliceFL []--Notes
+intrsliceF = mkDDL intrsliceFQD [chen2005] [{-Derivation-}] intrsliceFL []--Notes
 --FIXME: fill empty lists in
 
 intrsliceFQD :: QDefinition
@@ -219,11 +210,11 @@ intrsliceFQD = mkQuantDef intShrForce intrsliceFEqn
 intrsliceFEqn :: Expr
 intrsliceFEqn = (sy normToShear) * (inxi scalFunc) * (inxi intNormForce)
 
---DD10
+{--DD10
 
 resShearWO :: DataDefinition
 resShearWO = mkDDL resShearWOQD [makeRef chen2005] resShr_deriv_ssp resShearWOL
-  [makeRefS newA3, makeRefS newA4, makeRefS newA5]--Notes
+  [makeRef2S newA3, makeRef2S newA4, makeRef2S newA5]--Notes
 --FIXME: fill empty lists in
 
 resShearWOQD :: QDefinition
@@ -245,7 +236,7 @@ resShr_deriv_ssp = weave [resShrDerivation_sentence, map E resShr_deriv_eqns_ssp
 
 mobShearWO :: DataDefinition
 mobShearWO = mkDDL mobShearWOQD [makeRef chen2005] mobShr_deriv_ssp mobShearWOL
-  [makeRefS newA3, makeRefS newA4, makeRefS newA5]--Notes
+  [makeRef2S newA3, makeRef2S newA4, makeRef2S newA5]--Notes
 --FIXME: fill empty lists in
 
 mobShearWOQD :: QDefinition
@@ -259,7 +250,7 @@ mobShearWOEqn = ((inxi slcWght) + (inxi surfHydroForce) *
   (inxi surfLoad) * (sin (inxi impLoadAngle))) * (cos (inxi baseAngle))
 
 mobShr_deriv_ssp :: Derivation
-mobShr_deriv_ssp = (weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ssp])
+mobShr_deriv_ssp = (weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ssp])-}
 
 -----------------
 -- Hacks --------
@@ -282,20 +273,20 @@ fixme2QD = ec ufixme2 (inxi watrForce + inxiM1 watrForce)
 
 -- FIXME: move derivations with the appropriate data definition
 
-resShr_deriv_sentences_ssp_s1 :: [Sentence]
+{-resShr_deriv_sentences_ssp_s1 :: [Sentence]
 resShr_deriv_sentences_ssp_s1 = [S "The", phrase shrResI, S "of a slice is", 
   S "defined as", ch shrResI, S "in" +:+. makeRefS genDef3Label, S "The",
   phrase nrmFSubWat, S "in the", phrase equation, S "for", ch shrResI,
   S "of the soil is defined in the perpendicular force equilibrium",
   S "of a slice from", makeRefS genDef2Label `sC` S "using the", getTandS nrmFSubWat,
-  S "of", makeRefS effStress, S "shown in", eqN 1]
+  S "of", makeRef2S effStress, S "shown in", eqN 1]
 
 resShr_deriv_sentences_ssp_s2 :: [Sentence]
 resShr_deriv_sentences_ssp_s2 = [plural value `ofThe'` S "interslice forces",
   ch intNormForce `sAnd` ch intShrForce, S "in the", phrase equation,
   S "are unknown, while the other", plural value,
   S "are found from the physical force", plural definition, S "of",
-  makeRefS sliceWght, S "to" +:+. makeRefS lengthLs,
+  makeRef2S sliceWght, S "to" +:+. makeRef2S lengthLs,
   S "Consider a force equilibrium without the affect of interslice forces" `sC`
   S "to obtain a solvable value as done for", ch nrmFNoIntsl, S "in", eqN 2]
 
@@ -306,7 +297,7 @@ resShr_deriv_sentences_ssp_s3 = [S "Using", ch nrmFNoIntsl `sC` S "a", phrase sh
 
 resShr_deriv_sentences_ssp_s4 :: [Sentence]
 resShr_deriv_sentences_ssp_s4 = [S "This can be further simplified by considering assumptions",
-  makeRefS newA10, S "and", makeRefS newA11 `sC`
+  makeRef2S newA10, S "and", makeRef2S newA11 `sC`
   S "which state that the seismic coefficient and the external force" `sC` S "respectively"
   `sC` S "are0", S "Removing seismic and external forces yields ", eqN 4]
 
@@ -356,7 +347,7 @@ resShrDerivation = [
   phrase nrmFSubWat, S "in the", phrase equation, S "for", ch shrResI,
   S "of the soil is defined in the perpendicular force equilibrium",
   S "of a slice from", makeRefS genDef2Label `sC` S "using the", getTandS nrmFSubWat,
-  S "of", makeRefS effStress, S "shown in", eqN 5],
+  S "of", makeRef2S effStress, S "shown in", eqN 5],
   
   eqUnR' $ (inxi nrmFSubWat) $= eqlExpr cos sin (\x y -> x -
   inxiM1 intShrForce + inxi intShrForce + y) - inxi baseHydroForce,
@@ -365,7 +356,7 @@ resShrDerivation = [
   ch intNormForce `sAnd` ch intShrForce, S "in the", phrase equation,
   S "are unknown, while the other", plural value,
   S "are found from the physical force", plural definition, S "of",
-  makeRefS sliceWght, S "to" +:+. makeRefS lengthLs,
+  makeRef2S sliceWght, S "to" +:+. makeRef2S lengthLs,
   S "Consider a force equilibrium without the affect of interslice forces" `sC`
   S "to obtain a solvable value as done for", ch nrmFNoIntsl, S "in", eqN 2],
 
@@ -411,7 +402,7 @@ mobShr_deriv_sentences_ssp_s3 :: [Sentence]
 mobShr_deriv_sentences_ssp_s3 = [S "The" +:+ plural value +:+ S "of" +:+ 
   ch shearFNoIntsl +:+ S "is now defined completely in terms of the" +:+
   S "known" +:+. plural value +:+ S "This can be further simplified by considering assumptions" +:+
-  makeRefS newA10 +:+ S "and" +:+ makeRefS newA11 `sC`
+  makeRef2S newA10 +:+ S "and" +:+ makeRef2S newA11 `sC`
   S "which state that the seismic coefficient and the external force" `sC` S "respectively"
   `sC` S "are0" +:+ S "Removing seismic and external forces yields " +:+ eqN 7]
 
@@ -463,7 +454,7 @@ mobShrDerivation = [
   
   foldlSP [S "The", plural value, S "of", ch shearRNoIntsl `sAnd`
   ch shearFNoIntsl, S "are now defined completely in terms of the",
-  S "known force property", plural value, S "of", makeRefS sliceWght, S "to", 
-  makeRefS lengthLs]
+  S "known force property", plural value, S "of", makeRef2S sliceWght, S "to", 
+  makeRef2S lengthLs]
 
-  ]
+  ]-}

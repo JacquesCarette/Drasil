@@ -37,7 +37,7 @@ l4 = mkLabelSame "effStress"    (Def TM)
 factOfSafety :: TheoryModel
 factOfSafety = tm (cw factOfSafety_rc)
   [qw fs, qw shearRes, qw mobShear] ([] :: [ConceptChunk])
-  [] [factOfSafety_rel] [] [makeRef fredlund1977] l1 [factOfSafety_desc]
+  [] [factOfSafety_rel] [] [makeCite fredlund1977] l1 [factOfSafety_desc]
 
 ------------------------------------
 factOfSafety_rc :: RelationConcept
@@ -59,7 +59,7 @@ factOfSafety_desc = foldlSent [
 equilibrium :: TheoryModel
 equilibrium = tm (cw equilibrium_rc)
   [qw fx] ([] :: [ConceptChunk])
-  [] [eq_rel] [] [makeRef fredlund1977] l2 [eq_desc]
+  [] [eq_rel] [] [makeCite fredlund1977] l2 [eq_desc]
 
 ------------------------------------  
 equilibrium_rc :: RelationConcept
@@ -73,7 +73,7 @@ eq_rel = foldr ($=) 0 (map summ [fx, fy, momntOfBdy])
 eq_desc :: Sentence
 eq_desc = foldlSent [S "For a body in static equilibrium, the net",
   plural force +:+. S "and net moments acting on the body will cancel out",
-  S "Assuming a 2D problem", sParen (makeRefS newA8), S "the", getTandS fx `sAnd`
+  S "Assuming a 2D problem", sParen (makeRef2S newA8), S "the", getTandS fx `sAnd`
   getTandS fy, S "will be equal to" +:+. E 0, S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation",
   S "will create a net moment equal to" +:+ E 0]
@@ -84,7 +84,7 @@ mcShrStrgth :: TheoryModel
 mcShrStrgth = tm (cw mcShrStrgth_rc)
   [qw shrStress, qw normStress, qw fricAngle, qw cohesion] 
   ([] :: [ConceptChunk])
-  [] [mcSS_rel] [] [makeRef fredlund1977] l3 [mcSS_desc]
+  [] [mcSS_rel] [] [makeCite fredlund1977] l3 [mcSS_desc]
 
 ------------------------------------
 mcShrStrgth_rc :: RelationConcept
@@ -110,7 +110,7 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
   S "relationship is not truly",
   phrase linear `sC` S "but assuming the effective", phrase normForce, 
   S "is strong enough, it can be approximated with a", phrase linear,
-  S "fit", sParen (makeRefS newA9), S "where the cohesion", ch cohesion,
+  S "fit", sParen (makeRef2S newA9), S "where the cohesion", ch cohesion,
   S "represents the", ch shrStress, S "intercept of the fitted line"]
 
 --
@@ -119,7 +119,7 @@ effStress :: TheoryModel
 effStress = tm (cw effStress_rc)
   [qw normStress, qw porePressure] 
   ([] :: [ConceptChunk])
-  [] [effS_rel] [] [makeRef fredlund1977] l4 [effS_desc]
+  [] [effS_rel] [] [makeCite fredlund1977] l4 [effS_desc]
 
 ------------------------------------
 effStress_rc :: RelationConcept

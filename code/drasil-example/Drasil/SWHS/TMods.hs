@@ -18,10 +18,9 @@ import Data.Drasil.Quantities.Thermodynamics (temp, heat_cap_spec,
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma),
     foldlList, foldlSent, isThe, sAnd)
 import Data.Drasil.SI_Units (joule)
-
+import Drasil.SWHS.Assumptions (newA1)
 import Drasil.SWHS.Concepts (transient)
 import Drasil.SWHS.DataDefs (dd3HtFusion)
-import Drasil.SWHS.Labels (thermalEnergyOnlyL)
 import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCap_V, htCap_S,
   htCap_L, vol_ht_gen, thFluxVect)
 
@@ -35,7 +34,7 @@ consThermE :: TheoryModel
 consThermE = tm consThermE_rc
   [qw thFluxVect, qw gradient, qw vol_ht_gen, 
     qw density, qw heat_cap_spec, qw temp, qw time] ([] :: [ConceptChunk])
-  [] [consThermERel] [] [makeRef consThemESrc] 
+  [] [consThermERel] [] [consThemESrc] 
   (mkLabelSame "consThermE" (Def TM)) [consThermEdesc]
 
 consThermE_rc :: RelationConcept
@@ -47,8 +46,11 @@ consThermERel :: Relation
 consThermERel = (negate (sy gradient)) $. (sy thFluxVect) + (sy vol_ht_gen) $=
   (sy density) * (sy heat_cap_spec) * (pderiv (sy temp) time)
 
-consThemESrc :: Label
-consThemESrc = mkURILabel "consThemESrc" "http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm" "Fourier Law of Heat Conduction and Heat Equation"
+-- the second argument is a 'ShortName'...
+consThemESrc :: Reference2
+consThemESrc = makeURI 
+  "http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm" $
+  shortname' "Fourier Law of Heat Conduction and Heat Equation"
 
 consThermEdesc :: Sentence
 consThermEdesc = foldlSent [
@@ -62,7 +64,7 @@ consThermEdesc = foldlSent [
   ch time +:+ S "is" +:+ phrase time +:+ sParen (Sy (unit_symb time)), ch gradient +:+
   S "is the" +:+ (gradient ^. defn)], S "For this", phrase equation, S "to apply" `sC`
   S "other forms of", phrase energy `sC` S "such as", phrase mech_energy `sC`
-  S "are assumed to be negligible in the", phrase system, sParen (makeRefS thermalEnergyOnlyL)]
+  S "are assumed to be negligible in the", phrase system, sParen (makeRef2S newA1)]
 
 -------------------------
 -- Theoretical Model 2 --
@@ -71,15 +73,17 @@ sensHtE :: TheoryModel
 sensHtE = tm sensHtE_rc
   [qw sens_heat, qw htCap_S, qw mass, 
     qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [ConceptChunk])
-  [] [sensHtEEqn] [] [makeRef sensHtESrc] 
+  [] [sensHtEEqn] [] [sensHtESrc] 
   (mkLabelSame "sensHtE" (Def TM)) [sensHtEdesc]
 
 sensHtE_rc :: RelationConcept
 sensHtE_rc = makeRC "sensHtE_rc" (nounPhraseSP "Sensible heat energy") sensHtEdesc sensHtEEqn
   -- (mkLabelSame "SensHtE" (Def TM))
 
-sensHtESrc :: Label
-sensHtESrc = mkURILabel "consThemESrc" "http://en.wikipedia.org/wiki/Sensible_heat" "Definition of Sensible Heat"
+sensHtESrc :: Reference2
+sensHtESrc = makeURI 
+  "http://en.wikipedia.org/wiki/Sensible_heat" $
+  shortname' "Definition of Sensible Heat"
 
 sensHtEEqn :: Relation
 sensHtEEqn = (sy sens_heat) $= case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
@@ -113,7 +117,7 @@ sensHtEdesc = foldlSent [
   ch temp :+: S "=" :+: ch boil_pt,
   S "or", ch temp :+: S "=" +:+. ch melt_pt,
   S "If this" `isThe` S "case, refer to",
-  (makeRefS latentHtE) `sC` at_start latent_heat,
+  (makeRef2S latentHtE) `sC` at_start latent_heat,
   phrase energy]
  
 --How to have new lines in the description?
@@ -129,7 +133,7 @@ sensHtEdesc = foldlSent [
 latentHtE :: TheoryModel
 latentHtE = tm latentHtE_rc
   [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
-  [] [latHtEEqn] [] [makeRef latHtESrc] (mkLabelSame "latentHtE" (Def TM)) [latentHtEdesc]
+  [] [latHtEEqn] [] [latHtESrc] (mkLabelSame "latentHtE" (Def TM)) [latentHtEdesc]
 
 latentHtE_rc :: RelationConcept
 latentHtE_rc = makeRC "latentHtE_rc"
@@ -142,8 +146,9 @@ latHtEEqn = apply1 latent_heat time $=
 
 -- Integrals need dTau at end
 
-latHtESrc :: Label
-latHtESrc = mkURILabel "consThemESrc" "http://en.wikipedia.org/wiki/Latent_heat" "Definition of Latent Heat"
+latHtESrc :: Reference2
+latHtESrc = makeURI "http://en.wikipedia.org/wiki/Latent_heat" $
+  shortname' "Definition of Latent Heat"
 
 latentHtEdesc :: Sentence
 latentHtEdesc = foldlSent [
@@ -158,7 +163,7 @@ latentHtEdesc = foldlSent [
   phrase phase_change, S "is not complete. The status of",
   S "the", phrase phase_change,
   S "depends on the", phrase melt_frac `sC`
-  (makeRefS dd3HtFusion) :+: S ".",
+  (makeRef2S dd3HtFusion) :+: S ".",
   ch melt_pt `sAnd` ch boil_pt, S "are the",
   phrase melt_pt `sAnd` phrase boil_pt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),

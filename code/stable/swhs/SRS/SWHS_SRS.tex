@@ -249,21 +249,21 @@ This document will be used as a starting point for subsequent development phases
 The scope of the requirements includes thermal analysis of a single solar water heating tank incorporating PCM. Given the appropriate inputs, SWHS predicts the temperature and thermal energy histories for the water and the PCM. This entire document is written assuming that the substances inside the solar water heating tank are water and PCM.
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
-Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of SWHS can have a lower level of expertise, as explained in Section~\ref{Sec:UserChars}.
+Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of SWHS can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Section: User Characteristics}.
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
-The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{dParnas1972} and \cite{dParnasPcClements1984}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:IMs} and trace back to find any additional information they require.
-The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance models (Section~\ref{Sec:IMs}) to be solved are referred to as \hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}, and \hyperref[IM:heatEInPCM]{Definition~IM:heatEInPCM}. The instance models provide the Ordinary Differential Equation (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM. SWHS solves these ODEs.
+The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{dParnas1972} and \cite{dParnasPcClements1984}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in \hyperref[Sec:IMs]{Instance Models} and trace back to find any additional information they require.
+The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance models (\hyperref[Sec:IMs]{Section: Instance Models}) to be solved are referred to as \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{IM: heatEInWtr}, and \hyperref[IM:heatEInPCM]{IM: heatEInPCM}. The instance models provide the Ordinary Differential Equation (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM. SWHS solves these ODEs.
 \section{General System Description}
 \label{Sec:GenSysDesc}
 This section provides general information about the system including identifying the interfaces between the system and its environment (system context), describing the user characteristics and listing the system constraints.
 \subsection{System Context}
 \label{Sec:SysContext}
-Figure~\ref{Figure:SysCon} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system and its environment.
+\hyperref[Figure:SysCon]{Fig:SysCon} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system and its environment.
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{SystemContextFigure.png}
-\caption{Figure~\ref{Figure:SysCon}: System Context}
+\caption{\hyperref[Figure:SysCon]{Fig:SysCon}: System Context}
 \label{Figure:SysCon}
 \end{center}
 \end{figure}
@@ -305,7 +305,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
-The physical system of SWHS, as shown in Figure~\ref{Figure:Tank}, includes the following elements:
+The physical system of SWHS, as shown in \hyperref[Figure:Tank]{Fig:Tank}, includes the following elements:
 \begin{itemize}
 \item[PS1:]Tank containing water.
 \item[PS2:]Heating coil at bottom of tank. (${q_{C}}$ represents the heat flux into the water from the coil.)
@@ -329,10 +329,10 @@ Given the temperature of the heating coil, initial conditions for the temperatur
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
-The instance models that govern SWHS are presented in Section~\ref{Sec:IMs}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern SWHS are presented in \hyperref[Sec:IMs]{Section: Instance Models}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TMs}{]}, General Definitions {[}Section~\ref{Sec:GDs}{]}, Data Definitions {[}Section~\ref{Sec:DDs}{]}, Instance Models {[}Section~\ref{Sec:IMs}{]}, Likely Changes {[}Section~\ref{Sec:LCs}{]}, or Unlikely Changes {[}Section~\ref{Sec:UCs}{]}, in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}\hyperref[Sec:TMs]{Section: Theoretical Models}{]}, General Definitions {[}\hyperref[Sec:GDs]{Section: General Definitions}{]}, Data Definitions {[}\hyperref[Sec:DDs]{Section: Data Definitions}{]}, Instance Models {[}\hyperref[Sec:IMs]{Section: Instance Models}{]}, Likely Changes {[}\hyperref[Sec:LCs]{Section: Likely Changes}{]}, or Unlikely Changes {[}\hyperref[Sec:UCs]{Section: Unlikely Changes}{]}, in which the respective assumption is used.
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Thermal-Energy-Only}:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible.
 \end{description}
@@ -343,7 +343,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Constant-Water-Temp-Across-Tank}:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-PCM-Constant-Across-Volume}:]The temperature of the phase change material is the same throughout the volume of PCM {[}LC\ref{LC:Uniform-Temperature-PCM}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-PCM-Constant-Across-Volume}:]The temperature of the phase change material is the same throughout the volume of PCM.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Density-Water-PCM-Constant-over-Volume}:]The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume.
@@ -355,19 +355,19 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Newton-Law-Convective-Cooling-Coil-Water}:]Newton's law of convective cooling applies between the heating coil and the water.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Time}:]The temperature of the heating coil is constant over time {[}LC\ref{LC:Temperature-Coil-Variable-Over-Day}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Time}:]The temperature of the heating coil is constant over time.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Length}:]The temperature of the heating coil does not vary along its length {[}LC\ref{LC:Temperature-Coil-Variable-Over-Length}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Length}:]The temperature of the heating coil does not vary along its length.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Law-Convective-Cooling-Water-PCM}:]Newton's law of convective cooling applies between the water and the PCM.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Charging-Tank-No-Temp-Discharge}:]The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature {[}A\ref{A:Same-Initial-Temp-Water-PCM}{]} is less than (or equal) to the temperature of the heating coil {[}LC\ref{LC:Discharging-Tank}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Charging-Tank-No-Temp-Discharge}:]The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature {[}\hyperref[A:Same-Initial-Temp-Water-PCM]{A: Same-Initial-Temp-Water-PCM}{]} is less than (or equal) to the temperature of the heating coil.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Same-Initial-Temp-Water-PCM}:]The initial temperature of the water and the PCM is the same {[}LC\ref{LC:Different-Initial-Temps-PCM-Water}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Same-Initial-Temp-Water-PCM}:]The initial temperature of the water and the PCM is the same.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:PCM-Initially-Solid}:]The simulation will start with the PCM in a solid state.
@@ -376,7 +376,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Water-Always-Liquid}:]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Perfect-Insulation-Tank}:]The tank is perfectly insulated so that there is no heat loss from the tank {[}LC\ref{LC:Tank-Lose-Heat}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Perfect-Insulation-Tank}:]The tank is perfectly insulated so that there is no heat loss from the tank.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:No-Internal-Heat-Generation-By-Water-PCM}:]No internal heat is generated by either the water or the PCM ; therefore, the volumetric heat generation per unit volume is zero.
@@ -391,7 +391,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Atmospheric-Pressure-Tank}:]The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0${}^{\circ}$C and 100${}^{\circ}$C, respectively.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Volume-Coil-Negligible}:]When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible {[}R\ref{FR:Input-Initial-Quantities}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Volume-Coil-Negligible}:]When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible.
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -419,9 +419,9 @@ Description & \begin{symbDescription}
               \item{$T$ is the temperature (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity $C$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and density, $ρ$ ($\frac{\text{kg}}{\text{m}^{3}}$), where $\mathbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$), $g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$), $T$ is the temperature (${}^{\circ}$C), $t$ is time (s), and $∇$ is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (A\ref{A:Thermal-Energy-Only}).
+Notes & The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity $C$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and density, $ρ$ ($\frac{\text{kg}}{\text{m}^{3}}$), where $\mathbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$), $g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$), $T$ is the temperature (${}^{\circ}$C), $t$ is time (s), and $∇$ is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (\hyperref[A:Thermal-Energy-Only]{A: Thermal-Energy-Only}).
 \\ \midrule \\
-Source & \href{http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm}{Fourier Law of Heat Conduction and Heat Equation}
+Source & \hyperref[http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm]{Fourier Law of Heat Conduction and Heat Equation}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -455,9 +455,9 @@ Description & \begin{symbDescription}
               \item{${T_{boil}}$ is the boiling point temperature (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $E$ is the change in sensible heat energy (J). ${C^{S}}$, ${C^{L}}$, ${C^{V}}$ are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$). $m$ is the mass (kg). $T$ is the temperature (${}^{\circ}$C), and $ΔT$ is the change in temperature (${}^{\circ}$C). ${T_{melt}}$ and ${T_{boil}}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}$C). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if $T$=${T_{boil}}$ or $T$= ${T_{melt}}$. If this is the case, refer to \hyperref[T:latentHtE]{Definition~T:latentHtE}, Latent heat energy.
+Notes & $E$ is the change in sensible heat energy (J). ${C^{S}}$, ${C^{L}}$, ${C^{V}}$ are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$). $m$ is the mass (kg). $T$ is the temperature (${}^{\circ}$C), and $ΔT$ is the change in temperature (${}^{\circ}$C). ${T_{melt}}$ and ${T_{boil}}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}$C). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if $T$=${T_{boil}}$ or $T$= ${T_{melt}}$. If this is the case, refer to \hyperref[T:latentHtE]{TM: latentHtE}, Latent heat energy.
 \\ \midrule \\
-Source & \href{http://en.wikipedia.org/wiki/Sensible_heat}{Definition of Sensible Heat}
+Source & \hyperref[http://en.wikipedia.org/wiki/Sensible_heat]{Definition of Sensible Heat}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -481,9 +481,9 @@ Description & \begin{symbDescription}
               \item{$τ$ is the dummy variable for integration over time (s)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $Q$ is the change in thermal energy (J), latent heat energy. $Q\left(t\right)=\int_{0}^{t}{\frac{d\,Q\left(τ\right)}{d\,τ}}\,dτ$ is the rate of change of $Q$ with respect to time $τ$ (s). $t$ is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, \hyperref[DD:htFusion]{Definition~DD:htFusion}. ${T_{melt}}$ and ${T_{boil}}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}$C). Latent heating stops when all material has changed to the new phase.
+Notes & $Q$ is the change in thermal energy (J), latent heat energy. $Q\left(t\right)=\int_{0}^{t}{\frac{d\,Q\left(τ\right)}{d\,τ}}\,dτ$ is the rate of change of $Q$ with respect to time $τ$ (s). $t$ is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, \hyperref[DD:htFusion]{DD: htFusion}. ${T_{melt}}$ and ${T_{boil}}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}$C). Latent heating stops when all material has changed to the new phase.
 \\ \midrule \\
-Source & \href{http://en.wikipedia.org/wiki/Latent_heat}{Definition of Latent Heat}
+Source & \hyperref[http://en.wikipedia.org/wiki/Latent_heat]{Definition of Latent Heat}
 \\ \midrule \\
 RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
@@ -513,7 +513,7 @@ Description & \begin{symbDescription}
               \item{$ΔT$ is the change in temperature (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. $\mathbf{q}\left(t\right)$ is the thermal flux ($\frac{\text{W}}{\text{m}^{2}}$). $h$ is the heat transfer coefficient, assumed independant of $T$ (A\ref{A:Heat-Transfer-Coeffs-Constant}) ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$). $ΔT\left(t\right)=T\left(t\right)-{T_{env}}\left(t\right)$ is the time-dependant thermal gradient between the environment and the object (${}^{\circ}$C).
+Notes & Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. $\mathbf{q}\left(t\right)$ is the thermal flux ($\frac{\text{W}}{\text{m}^{2}}$). $h$ is the heat transfer coefficient, assumed independant of $T$ (\hyperref[A:Heat-Transfer-Coeffs-Constant]{A: Heat-Transfer-Coeffs-Constant}) ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$). $ΔT\left(t\right)=T\left(t\right)-{T_{env}}\left(t\right)$ is the time-dependant thermal gradient between the environment and the object (${}^{\circ}$C).
 \\ \midrule \\
 Source & \cite{incroperaEtAl2007}
 \\ \midrule \\
@@ -554,7 +554,7 @@ RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Detailed derivation of simplified rate of change of temperature :
-Integrating \hyperref[T:consThermE]{Definition~T:consThermE} over a volume ($V$), we have:
+Integrating \hyperref[T:consThermE]{TM: consThermE} over a volume ($V$), we have:
 \begin{dmath}
 -\int_{V}{∇\cdot{}\mathbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
 \end{dmath}
@@ -566,7 +566,7 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 \begin{dmath}
 {q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
 \end{dmath}
-Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in \hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}. Assuming $ρ$, $C$ and $T$ are constant over the volume, which is true in our case by A\ref{A:Constant-Water-Temp-Across-Tank}, A\ref{A:Temp-PCM-Constant-Across-Volume}, A\ref{A:Density-Water-PCM-Constant-over-Volume}, and A\ref{A:Specific-Heat-Energy-Constant-over-Volume}, we have:
+Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in \hyperref[GD:rocTempSimp]{GD: rocTempSimp}. Assuming $ρ$, $C$ and $T$ are constant over the volume, which is true in our case by \hyperref[A:Constant-Water-Temp-Across-Tank]{A: Constant-Water-Temp-Across-Tank}, \hyperref[A:Temp-PCM-Constant-Across-Volume]{A: Temp-PCM-Constant-Across-Volume}, \hyperref[A:Density-Water-PCM-Constant-over-Volume]{A: Density-Water-PCM-Constant-over-Volume}, and \hyperref[A:Specific-Heat-Energy-Constant-over-Volume]{A: Specific-Heat-Energy-Constant-over-Volume}, we have:
 \begin{dmath}
 ρ C V \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \end{dmath}
@@ -602,9 +602,9 @@ Description & \begin{symbDescription}
               \item{$t$ is the time (s)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & A\ref{A:Newton-Law-Convective-Cooling-Coil-Water}
-        A\ref{A:Temp-Heating-Coil-Constant-over-Time}
-        A\ref{A:Temp-Heating-Coil-Constant-over-Length}
+Notes & \hyperref[A:Newton-Law-Convective-Cooling-Coil-Water]{A: Newton-Law-Convective-Cooling-Coil-Water}
+        \hyperref[A:Temp-Heating-Coil-Constant-over-Time]{A: Temp-Heating-Coil-Constant-over-Time}
+        \hyperref[A:Temp-Heating-Coil-Constant-over-Length]{A: Temp-Heating-Coil-Constant-over-Length}
 \\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\
@@ -636,9 +636,9 @@ Description & \begin{symbDescription}
               \item{${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & A\ref{A:Constant-Water-Temp-Across-Tank}
-        A\ref{A:Temp-PCM-Constant-Across-Volume}
-        A\ref{A:Law-Convective-Cooling-Water-PCM}
+Notes & \hyperref[A:Constant-Water-Temp-Across-Tank]{A: Constant-Water-Temp-Across-Tank}
+        \hyperref[A:Temp-PCM-Constant-Across-Volume]{A: Temp-PCM-Constant-Across-Volume}
+        \hyperref[A:Law-Convective-Cooling-Water-PCM]{A: Law-Convective-Cooling-Water-PCM}
 \\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\
@@ -697,7 +697,7 @@ Description & \begin{symbDescription}
               \item{${m_{P}}$ is the mass of phase change material (kg)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & \hyperref[DD:htFusion]{Definition~DD:htFusion}
+Notes & \hyperref[DD:htFusion]{DD: htFusion}
 \\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\
@@ -706,7 +706,7 @@ RefBy & FIXME: This needs to be filled in
 \end{minipage}\\
 \subsubsection{Instance Models}
 \label{Sec:IMs}
-This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DDs} to replace the abstract symbols in the models identified in Section~\ref{Sec:TMs} and Section~\ref{Sec:GDs}.
+This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -741,7 +741,7 @@ Description & \begin{symbDescription}
               \item{${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${τ_{W}}$, ${t_{final}}$, ${T_{C}}$, ${T_{P}}$ from (\hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}). The input is constrained so that ${T_{init}}\leq{}{T_{C}}$. (A\ref{A:Charging-Tank-No-Temp-Discharge}) ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C). ${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C). ${τ_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ is a constant (\hyperref[DD:htFusion]{Definition~DD:htFusion}) (s). $η=\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}}$ is a constant (dimensionless). The above equation applies as long as the water is in liquid form, $0<{T_{W}}<100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (A\ref{A:Water-Always-Liquid}, A\ref{A:Atmospheric-Pressure-Tank}).
+Notes & ${τ_{W}}$, ${t_{final}}$, ${T_{C}}$, ${T_{P}}$ from (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}). The input is constrained so that ${T_{init}}\leq{}{T_{C}}$. (\hyperref[A:Charging-Tank-No-Temp-Discharge]{A: Charging-Tank-No-Temp-Discharge}) ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C). ${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C). ${τ_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ is a constant (\hyperref[DD:htFusion]{DD: htFusion}) (s). $η=\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}}$ is a constant (dimensionless). The above equation applies as long as the water is in liquid form, $0<{T_{W}}<100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (\hyperref[A:Water-Always-Liquid]{A: Water-Always-Liquid}, \hyperref[A:Atmospheric-Pressure-Tank]{A: Atmospheric-Pressure-Tank}).
 \\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\
@@ -749,11 +749,11 @@ RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Derivation of the energy balance on water:
-To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water ${V_{W}}$, which has mass of water ${m_{W}}$ and specific heat capacity of water, ${C_{W}}$. ${q_{C}}$ represents the heat transfer into the water from the heating coil and ${q_{P}}$ represents the heat transfer into the PCM from water, over heating coil surface area and phase change material surface area of ${A_{C}}$ and ${A_{P}}$, respectively. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (A\ref{A:Perfect-Insulation-Tank}). Assuming no volumetric heat generation per unit volume (A\ref{A:No-Internal-Heat-Generation-By-Water-PCM}), $g=0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp} can be written as:
+To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water ${V_{W}}$, which has mass of water ${m_{W}}$ and specific heat capacity of water, ${C_{W}}$. ${q_{C}}$ represents the heat transfer into the water from the heating coil and ${q_{P}}$ represents the heat transfer into the PCM from water, over heating coil surface area and phase change material surface area of ${A_{C}}$ and ${A_{P}}$, respectively. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[A:Perfect-Insulation-Tank]{A: Perfect-Insulation-Tank}). Assuming no volumetric heat generation per unit volume (\hyperref[A:No-Internal-Heat-Generation-By-Water-PCM]{A: No-Internal-Heat-Generation-By-Water-PCM}), $g=0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
 \begin{dmath}
 {m_{W}} {C_{W}} \frac{d\,{T_{W}}}{d\,t}={q_{C}} {A_{C}}-{q_{P}} {A_{P}}
 \end{dmath}
-Using \hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C} and \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P} for ${q_{C}}$ and ${q_{P}}$ respectively, this can be written as:
+Using \hyperref[DD:ht.flux.C]{DD: ht\_flux\_C} and \hyperref[DD:ht.flux.P]{DD: ht\_flux\_P} for ${q_{C}}$ and ${q_{P}}$ respectively, this can be written as:
 \begin{dmath}
 {m_{W}} {C_{W}} \frac{d\,{T_{W}}}{d\,t}={h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\right)-{h_{P}} {A_{P}} \left({T_{W}}-{T_{P}}\right)
 \end{dmath}
@@ -769,11 +769,11 @@ Which simplifies to:
 \begin{dmath}
 \frac{d\,{T_{W}}}{d\,t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}} \frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{P}}-{T_{W}}\right)
 \end{dmath}
-Setting ${τ_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ (\hyperref[DD:htFusion]{Definition~DD:htFusion}) and $η=\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}}$ (\hyperref[DD:melt.frac]{Definition~DD:melt.frac}), Equation (5) can be written as:
+Setting ${τ_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ (\hyperref[DD:htFusion]{DD: htFusion}) and $η=\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}}$ (\hyperref[DD:melt.frac]{DD: melt\_frac}), Equation (5) can be written as:
 \begin{dmath}
 \frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{η}{{τ_{W}}} \left({T_{P}}-{T_{W}}\right)
 \end{dmath}
-Finally, factoring out $\frac{1}{{τ_{W}}}$ , we are left with the governing ODE for (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}):
+Finally, factoring out $\frac{1}{{τ_{W}}}$ , we are left with the governing ODE for (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}):
 \begin{dmath}
 \frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}+η \left({T_{P}}-{T_{W}}\right)\right)
 \end{dmath}
@@ -817,7 +817,7 @@ Description & \begin{symbDescription}
               \item{$ϕ$ is the melt fraction (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${{T_{melt}}^{P}}$, ${t_{final}}$, ${T_{init}}$, ${h_{P}}$, ${m_{P}}$, ${{C_{P}}^{S}}$, ${{C_{P}}^{S}}$ form (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}). The input is constrained so that ${T_{init}}<{{T_{melt}}^{P}}$ (A\ref{A:PCM-Initially-Solid}) ${T_{P}}$, $0<t<{t_{final}}$, with initial conditions, ${T_{W}}={T_{P}}={T_{init}}$, FIXME t\_w(0) = t\_p(0), A\ref{A:Same-Initial-Temp-Water-PCM}, and ${T_{W}}$ from IM1, such that the following governing ODE is satisfied. The temperature remains constant at ${{T_{melt}}^{P}}$, even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as $0<ϕ<1$ (from \hyperref[DD:melt.frac]{Definition~DD:melt.frac} ) is determined as part of the heat energy in the PCM, as given in (\hyperref[IM:heatEInPCM]{Definition~IM:heatEInPCM}).
+Notes & ${{T_{melt}}^{P}}$, ${t_{final}}$, ${T_{init}}$, ${h_{P}}$, ${m_{P}}$, ${{C_{P}}^{S}}$, ${{C_{P}}^{S}}$ form (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}). The input is constrained so that ${T_{init}}<{{T_{melt}}^{P}}$ (\hyperref[A:PCM-Initially-Solid]{A: PCM-Initially-Solid}) ${T_{P}}$, $0<t<{t_{final}}$, with initial conditions, ${T_{W}}={T_{P}}={T_{init}}$, FIXME t\_w(0) = t\_p(0), \hyperref[A:Same-Initial-Temp-Water-PCM]{A: Same-Initial-Temp-Water-PCM}, and ${T_{W}}$ from IM1, such that the following governing ODE is satisfied. The temperature remains constant at ${{T_{melt}}^{P}}$, even with the heating (or cool-ing), until the phase change has occurred for all of the material; that is as long as $0<ϕ<1$ (from \hyperref[DD:melt.frac]{DD: melt\_frac} ) is determined as part of the heat energy in the PCM, as given in (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}).
 \\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\
@@ -825,11 +825,11 @@ RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Detailed derivation of the energy balance on the PCM during  sensible heating phase:
-To find the rate of change of ${T_{P}}$, we look at the energy balance on the PCM. The volume being considered is the volume of PCM, ${V_{P}}$. The derivation that follows is initially for the solid PCM. The mass of phase change material is ${m_{P}}$ and the specific heat capacity of PCM as a solid is ${{C_{P}}^{S}}$. The heat flux into the PCM from water is ${q_{P}}$ over phase change material surface area ${A_{P}}$. There is no heat flux output. Assuming no volumetric heat generation per unit volume (A\ref{A:No-Internal-Heat-Generation-By-Water-PCM}), $g=0$ , the equation for \hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp} can be written as:
+To find the rate of change of ${T_{P}}$, we look at the energy balance on the PCM. The volume being considered is the volume of PCM, ${V_{P}}$. The derivation that follows is initially for the solid PCM. The mass of phase change material is ${m_{P}}$ and the specific heat capacity of PCM as a solid is ${{C_{P}}^{S}}$. The heat flux into the PCM from water is ${q_{P}}$ over phase change material surface area ${A_{P}}$. There is no heat flux output. Assuming no volumetric heat generation per unit volume (\hyperref[A:No-Internal-Heat-Generation-By-Water-PCM]{A: No-Internal-Heat-Generation-By-Water-PCM}), $g=0$ , the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
 \begin{dmath}
 {m_{P}} {{C_{P}}^{S}} \frac{d\,{T_{P}}}{d\,t}={q_{P}} {A_{P}}
 \end{dmath}
-Using \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P} for ${q_{P}}$, this equation can be written as:
+Using \hyperref[DD:ht.flux.P]{DD: ht\_flux\_P} for ${q_{P}}$, this equation can be written as:
 \begin{dmath}
 {m_{P}} {{C_{P}}^{S}} \frac{d\,{T_{P}}}{d\,t}={h_{P}} {A_{P}} \left({T_{W}}-{T_{P}}\right)
 \end{dmath}
@@ -841,9 +841,9 @@ Setting ${{τ_{P}}^{S}}$ = ${m_{P}}$ ${{C_{P}}^{S}}$ / ${h_{P}}$ ${A_{P}}$ , thi
 \begin{dmath}
 \frac{d\,{T_{P}}}{d\,t}=\frac{1}{{{τ_{P}}^{S}}} \left({T_{W}}-{T_{P}}\right)
 \end{dmath}
-Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that ${{C_{P}}^{S}}$ is replaced by ${{C_{P}}^{L}}$, and thus ${{τ_{P}}^{S}}$ is replaced by ${{τ_{P}}^{L}}$. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (A\ref{A:Volume-Change-Melting-PCM-Negligible}).
+Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that ${{C_{P}}^{S}}$ is replaced by ${{C_{P}}^{L}}$, and thus ${{τ_{P}}^{S}}$ is replaced by ${{τ_{P}}^{L}}$. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (\hyperref[A:Volume-Change-Melting-PCM-Negligible]{A: Volume-Change-Melting-PCM-Negligible}).
 In the case where ${T_{P}}={{T_{melt}}^{P}}$ and not all of the PCM is melted, the temperature of the phase change material does not change. Therefore, in this case d ${T_{P}}$ / d $t$ = 0.
-This derivation does not consider the boiling of the PCM, as the PCM is assumed to either be in a solid state or a liquid state (A\ref{A:No-Gaseous-State-PCM}).
+This derivation does not consider the boiling of the PCM, as the PCM is assumed to either be in a solid state or a liquid state (\hyperref[A:No-Gaseous-State-PCM]{A: No-Gaseous-State-PCM}).
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -876,7 +876,7 @@ Description & \begin{symbDescription}
               \item{${T_{init}}$ is the initial temperature (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The above equation is derived using \hyperref[T:sensHtE]{Definition~T:sensHtE}. ${E_{W}}$ is the change in thermal energy of the liquid water relative to the energy at the initial temperature (${T_{init}}$) (J). ${C_{W}}$ is the specific heat capacity of liquid water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and ${m_{W}}$ is the mass of the water (kg). The change in temperature is the difference between the temperature at time $t$ (s), ${T_{W}}$ and the initial temperature, ${T_{init}}$ (${}^{\circ}$C). This equation applies as long as $0<{T_{W}}<100$${}^{\circ}$C (A\ref{A:Water-Always-Liquid}, A\ref{A:Atmospheric-Pressure-Tank}).
+Notes & The above equation is derived using \hyperref[T:sensHtE]{TM: sensHtE}. ${E_{W}}$ is the change in thermal energy of the liquid water relative to the energy at the initial temperature (${T_{init}}$) (J). ${C_{W}}$ is the specific heat capacity of liquid water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and ${m_{W}}$ is the mass of the water (kg). The change in temperature is the difference between the temperature at time $t$ (s), ${T_{W}}$ and the initial temperature, ${T_{init}}$ (${}^{\circ}$C). This equation applies as long as $0<{T_{W}}<100$${}^{\circ}$C (\hyperref[A:Water-Always-Liquid]{A: Water-Always-Liquid}, \hyperref[A:Atmospheric-Pressure-Tank]{A: Atmospheric-Pressure-Tank}).
 \\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\
@@ -928,7 +928,7 @@ Description & \begin{symbDescription}
               \item{$ϕ$ is the melt fraction (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The above equation is derived using \hyperref[T:sensHtE]{Definition~T:sensHtE} and \hyperref[T:latentHtE]{Definition~T:latentHtE}. ${E_{P}}$ is the change in thermal energy of the PCM relative to the energy at the initial temperature (${T_{init}}$) J. ${E_{P}}$ for the solid PCM is found using \hyperref[T:sensHtE]{Definition~T:sensHtE} for sensible heat ing, with the specific heat capacity of the solid PCM, ${{C_{P}}^{S}}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and the change in the PCM temperature from the initial temperature (${}^{\circ}$C). ${E_{P}}$ for the melted PCM (${T_{P}}>{{{E_{P}}_{melt}}^{init}}$) is found using \hyperref[T:sensHtE]{Definition~T:sensHtE} for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is ${{{E_{P}}_{melt}}^{init}}$ (J). The energy required to melt all of the PCM is ${H_{f}} {m_{P}}$ (J) (\hyperref[DD:htFusion]{Definition~DD:htFusion}). the specific heat capacity of the liquid PCM is ${{C_{P}}^{L}}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and the change in temperature is ${T_{P}}-{{T_{melt}}^{P}}$ (${}^{\circ}$C). ${E_{P}}$ during melting of the PCM is found using the energy required at the instant melting of the PCM begins, ${{{E_{P}}_{melt}}^{init}}$ plus the latent heat energy added to the PCM, ${Q_{P}}$ (J) since the time when melting began ${{t_{melt}}^{init}}$ (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (A\ref{A:No-Gaseous-State-PCM}) (A\ref{A:PCM-Initially-Solid}).
+Notes & The above equation is derived using \hyperref[T:sensHtE]{TM: sensHtE} and \hyperref[T:latentHtE]{TM: latentHtE}. ${E_{P}}$ is the change in thermal energy of the PCM relative to the energy at the initial temperature (${T_{init}}$) J. ${E_{P}}$ for the solid PCM is found using \hyperref[T:sensHtE]{TM: sensHtE} for sensible heat ing, with the specific heat capacity of the solid PCM, ${{C_{P}}^{S}}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and the change in the PCM temperature from the initial temperature (${}^{\circ}$C). ${E_{P}}$ for the melted PCM (${T_{P}}>{{{E_{P}}_{melt}}^{init}}$) is found using \hyperref[T:sensHtE]{TM: sensHtE} for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is ${{{E_{P}}_{melt}}^{init}}$ (J). The energy required to melt all of the PCM is ${H_{f}} {m_{P}}$ (J) (\hyperref[DD:htFusion]{DD: htFusion}). the specific heat capacity of the liquid PCM is ${{C_{P}}^{L}}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and the change in temperature is ${T_{P}}-{{T_{melt}}^{P}}$ (${}^{\circ}$C). ${E_{P}}$ during melting of the PCM is found using the energy required at the instant melting of the PCM begins, ${{{E_{P}}_{melt}}^{init}}$ plus the latent heat energy added to the PCM, ${Q_{P}}$ (J) since the time when melting began ${{t_{melt}}^{init}}$ (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (\hyperref[A:No-Gaseous-State-PCM]{A: No-Gaseous-State-PCM}) (\hyperref[A:PCM-Initially-Solid]{A: PCM-Initially-Solid}).
 \\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\
@@ -937,7 +937,7 @@ RefBy & FIXME: This needs to be filled in
 \end{minipage}\\
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-Table~\ref{Table:InDataConstraints} and Table~\ref{Table:OutDataConstraints} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.(*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (A\ref{A:PCM-Initially-Solid}). (\#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is $\frac{2}{{h_{min}}}$, where ${h_{min}}$ is the thickness of a ``sheet'' of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
+\hyperref[Table:InDataConstraints]{Table:InDataConstraints} and \hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.(*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (\hyperref[A:PCM-Initially-Solid]{A: PCM-Initially-Solid}). (\#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is $\frac{2}{{h_{min}}}$, where ${h_{min}}$ is the thickness of a ``sheet'' of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
 \begin{longtable}{l l l l l}
 \toprule
 Var & Physical Constraints & Software Constraints & Typical Value & Uncert.
@@ -1000,7 +1000,7 @@ ${E_{P}}$ & ${E_{P}}\geq{}0$
 \end{longtable}
 \subsubsection{Properties of a Correct Solution}
 \label{Sec:CorSolProps}
-A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking \hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C} and \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
+A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking \hyperref[DD:ht.flux.C]{DD: ht\_flux\_C} and \hyperref[DD:ht.flux.P]{DD: ht\_flux\_P}, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
 \begin{dmath}
 {E_{W}}=\int_{0}^{t}{{h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\left(t\right)\right)}\,dt-\int_{0}^{t}{{h_{P}} {A_{P}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right)}\,dt
 \end{dmath}
@@ -1015,17 +1015,17 @@ This section provides the functional requirements, the business tasks that the s
 \subsection{Functional Requirements}
 \label{Sec:FRs}
 \begin{itemize}
-\item[Input-Initial-Quantities:\phantomsection\label{inputInitQuants}]Input the following quantities described in Table~\ref{Table:Input-Variable-Requirements}, which define the tank parameters, material properties and initial conditions.
-\item[Find-Mass:\phantomsection\label{findMass}]Use the inputs in \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} to find the mass needed for \hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}, and \hyperref[IM:heatEInPCM]{Definition~IM:heatEInPCM}, using ${m_{W}}={V_{W}} {ρ_{W}}=\left({V_{tank}}-{V_{P}}\right) {ρ_{W}}=\left(\frac{D}{2} L-{V_{P}}\right) {ρ_{W}}$ and ${m_{P}}={V_{P}} {ρ_{P}}$, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank.
+\item[Input-Initial-Quantities:\phantomsection\label{inputInitQuants}]Input the following quantities described in \hyperref[Table:Input-Variable-Requirements]{Table:Input-Variable-Requirements}, which define the tank parameters, material properties and initial conditions. \hyperref[A:Volume-Coil-Negligible]{A: Volume-Coil-Negligible}.
+\item[Find-Mass:\phantomsection\label{findMass}]Use the inputs in \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} to find the mass needed for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{IM: heatEInWtr}, and \hyperref[IM:heatEInPCM]{IM: heatEInPCM}, using ${m_{W}}={V_{W}} {ρ_{W}}=\left({V_{tank}}-{V_{P}}\right) {ρ_{W}}=\left(\frac{D}{2} L-{V_{P}}\right) {ρ_{W}}$ and ${m_{P}}={V_{P}} {ρ_{P}}$, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank.
 \item[Check-Input-with-Physical\_Constraints:\phantomsection\label{checkWithPhysConsts}]Verify that the inputs satisfy the required physical constraints.
-\item[Output-Input-Derived-Quantities:\phantomsection\label{outputInputDerivQuants}]Output the input quantities and derived quantities in the following list: the quantities from \hyperref[inputInitQuants]{FR: Input-Initial-Quantities}, the masses from \hyperref[findMass]{FR: Find-Mass}, ${τ_{W}}$ (from \hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}), $η$ (from \hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}), ${{τ_{P}}^{S}}$ (from \hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}) and ${{τ_{P}}^{L}}$ (from \hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}).
-\item[Calculate-Temperature-Water-Over-Time:\phantomsection\label{calcTempWtrOverTime}]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}).
-\item[Calculate-Temperature-PCM-Over-Time:\phantomsection\label{calcTempPCMOverTime}]Calculate and output the temperature of the phase change material (${T_{P}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}).
-\item[Calculate-Change-Heat\_Energy-Water-Over-Time:\phantomsection\label{calcChgHeatEnergyWtrOverTime}]Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from \hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}).
-\item[Calculate-Change-Heat\_Energy-PCM-Over-Time:\phantomsection\label{calcChgHeatEnergyPCMOverTime}]Calculate and output the change in heat energy in the PCM (${E_{P}}$($t$)) over the simulation time (from \hyperref[IM:heatEInPCM]{Definition~IM:heatEInPCM}).
+\item[Output-Input-Derived-Quantities:\phantomsection\label{outputInputDerivQuants}]Output the input quantities and derived quantities in the following list: the quantities from \hyperref[inputInitQuants]{FR: Input-Initial-Quantities}, the masses from \hyperref[findMass]{FR: Find-Mass}, ${τ_{W}}$ (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}), $η$ (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}), ${{τ_{P}}^{S}}$ (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}) and ${{τ_{P}}^{L}}$ (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}).
+\item[Calculate-Temperature-Water-Over-Time:\phantomsection\label{calcTempWtrOverTime}]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}).
+\item[Calculate-Temperature-PCM-Over-Time:\phantomsection\label{calcTempPCMOverTime}]Calculate and output the temperature of the phase change material (${T_{P}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}).
+\item[Calculate-Change-Heat\_Energy-Water-Over-Time:\phantomsection\label{calcChgHeatEnergyWtrOverTime}]Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from \hyperref[IM:heatEInWtr]{IM: heatEInWtr}).
+\item[Calculate-Change-Heat\_Energy-PCM-Over-Time:\phantomsection\label{calcChgHeatEnergyPCMOverTime}]Calculate and output the change in heat energy in the PCM (${E_{P}}$($t$)) over the simulation time (from \hyperref[IM:heatEInPCM]{IM: heatEInPCM}).
 \item[Verify-Energy-Output-Follow-Conservation-of-Energy:\phantomsection\label{verifyEnergyOutput}]Verify that the energy outputs (${E_{W}}$($t$) and ${E_{P}}$($t$)) follow the law of conservation of energy with relative error no greater than 0.001%.
-\item[Calculate-PCM-Melt-Begin-Time:\phantomsection\label{calcPCMMeltBegin}]Calculate and output the time at which the PCM begins to melt ${{t_{melt}}^{init}}$ (from \hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}).
-\item[Calculate-PCM-Melt-End-Time:\phantomsection\label{calcPCMMeltEnd}]Calculate and output the time at which the PCM stops melting ${{t_{melt}}^{final}}$ (from \hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}).
+\item[Calculate-PCM-Melt-Begin-Time:\phantomsection\label{calcPCMMeltBegin}]Calculate and output the time at which the PCM begins to melt ${{t_{melt}}^{init}}$ (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}).
+\item[Calculate-PCM-Melt-End-Time:\phantomsection\label{calcPCMMeltEnd}]Calculate and output the time at which the PCM stops melting ${{t_{melt}}^{final}}$ (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}).
 \end{itemize}
 \begin{longtabu}{l l X[l]}
 \toprule
@@ -1076,53 +1076,53 @@ This problem is small in size and relatively simple, so performance is not a pri
 \section{Likely Changes}
 \label{Sec:LCs}
 \begin{itemize}
-\item[Uniform-Temperature-PCM:\phantomsection\label{likeChgUTP}]A\ref{A:Temp-PCM-Constant-Across-Volume} - PCM is actually a poor thermal conductor, so the assumption of uniform temperature of the phase change material is not likely.
-\item[Temperature-Coil-Variable-Over-Day:\phantomsection\label{likeChgTCVOD}]A\ref{A:Temp-Heating-Coil-Constant-over-Time} - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
-\item[Temperature-Coil-Variable-Over-Length:\phantomsection\label{likeChgTCVOL}]A\ref{A:Temp-Heating-Coil-Constant-over-Length} - The temperature of the heating coil will actually change along its length as the water within it cools.
-\item[Discharging-Tank:\phantomsection\label{likeChgDT}]A\ref{A:Charging-Tank-No-Temp-Discharge} - The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.
-\item[Different-Initial-Temps-PCM-Water:\phantomsection\label{likeChgDITPW}]A\ref{A:Same-Initial-Temp-Water-PCM} - To add more flexibility to the simulation, the initial temperature of the water and the PCM could be allowed to have different values.
-\item[Tank-Lose-Heat:\phantomsection\label{likeChgTLH}]A\ref{A:Perfect-Insulation-Tank} - Any real tank cannot be perfectly insulated and will lose heat.
+\item[Uniform-Temperature-PCM:\phantomsection\label{likeChgUTP}]\hyperref[A:Temp-PCM-Constant-Across-Volume]{A: Temp-PCM-Constant-Across-Volume} - PCM is actually a poor thermal conductor, so the assumption of uniform temperature of the phase change material is not likely.
+\item[Temperature-Coil-Variable-Over-Day:\phantomsection\label{likeChgTCVOD}]\hyperref[A:Temp-Heating-Coil-Constant-over-Time]{A: Temp-Heating-Coil-Constant-over-Time} - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
+\item[Temperature-Coil-Variable-Over-Length:\phantomsection\label{likeChgTCVOL}]\hyperref[A:Temp-Heating-Coil-Constant-over-Length]{A: Temp-Heating-Coil-Constant-over-Length} - The temperature of the heating coil will actually change along its length as the water within it cools.
+\item[Discharging-Tank:\phantomsection\label{likeChgDT}]\hyperref[A:Charging-Tank-No-Temp-Discharge]{A: Charging-Tank-No-Temp-Discharge} - The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.
+\item[Different-Initial-Temps-PCM-Water:\phantomsection\label{likeChgDITPW}]\hyperref[A:Same-Initial-Temp-Water-PCM]{A: Same-Initial-Temp-Water-PCM} - To add more flexibility to the simulation, the initial temperature of the water and the PCM could be allowed to have different values.
+\item[Tank-Lose-Heat:\phantomsection\label{likeChgTLH}]\hyperref[A:Perfect-Insulation-Tank]{A: Perfect-Insulation-Tank} - Any real tank cannot be perfectly insulated and will lose heat.
 \end{itemize}
 \section{Unlikely Changes}
 \label{Sec:UCs}
 \begin{itemize}
-\item[Water-PCM-Fixed-States:\phantomsection\label{unlikeChgWPFS}]A\ref{A:Water-Always-Liquid} ,  A\ref{A:No-Gaseous-State-PCM} - It is unlikely for the change of water from liquid to a solid or the state change of the phase change material from a liquid to a gas to be considered.
-\item[No-Internal-Heat-Generation:\phantomsection\label{unlikeChgNIHG}]A\ref{A:No-Internal-Heat-Generation-By-Water-PCM} - Is used for the derivations of \hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr} and \hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}.
-\item[No-Gaseous-State:\phantomsection\label{unlikeChgNGS}]A\ref{A:No-Gaseous-State-PCM} - Is used for the derivation of \hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM} and for the equation given by \hyperref[IM:heatEInPCM]{Definition~IM:heatEInPCM} to be valid.
+\item[Water-PCM-Fixed-States:\phantomsection\label{unlikeChgWPFS}]\hyperref[A:Water-Always-Liquid]{A: Water-Always-Liquid} ,  \hyperref[A:No-Gaseous-State-PCM]{A: No-Gaseous-State-PCM} - It is unlikely for the change of water from liquid to a solid or the state change of the phase change material from a liquid to a gas to be considered.
+\item[No-Internal-Heat-Generation:\phantomsection\label{unlikeChgNIHG}]\hyperref[A:No-Internal-Heat-Generation-By-Water-PCM]{A: No-Internal-Heat-Generation-By-Water-PCM} - Is used for the derivations of \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.
+\item[No-Gaseous-State:\phantomsection\label{unlikeChgNGS}]\hyperref[A:No-Gaseous-State-PCM]{A: No-Gaseous-State-PCM} - Is used for the derivation of \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM} and for the equation given by \hyperref[IM:heatEInPCM]{IM: heatEInPCM} to be valid.
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. Table~\ref{Table:Tracey2} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:Tracey1} shows the dependencies of instance models, requirements, and data constraints on each other. Table~\ref{Table:Tracey3} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey2]{Table:Tracey2} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. \hyperref[Table:Tracey1]{Table:Tracey1} shows the dependencies of instance models, requirements, and data constraints on each other. \hyperref[Table:Tracey3]{Table:Tracey3} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:consThermE]{Definition~T:consThermE}) & T2 (\hyperref[T:sensHtE]{Definition~T:sensHtE}) & T3 (\hyperref[T:latentHtE]{Definition~T:latentHtE}) & GD1 (\hyperref[GD:nwtnCooling]{Definition~GD:nwtnCooling}) & GD2 (\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}) & DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) & DD2 (\hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}) & DD3 (\hyperref[DD:htFusion]{Definition~DD:htFusion}) & DD4 (\hyperref[DD:melt.frac]{Definition~DD:melt.frac}) & IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) & IM2 (\hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}) & IM3 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) & IM4 (\hyperref[IM:heatEInPCM]{Definition~IM:heatEInPCM})
+ & T1 (\hyperref[T:consThermE]{TM: consThermE}) & T2 (\hyperref[T:sensHtE]{TM: sensHtE}) & T3 (\hyperref[T:latentHtE]{TM: latentHtE}) & GD1 (\hyperref[GD:nwtnCooling]{GD: nwtnCooling}) & GD2 (\hyperref[GD:rocTempSimp]{GD: rocTempSimp}) & DD1 (\hyperref[DD:ht.flux.C]{DD: ht\_flux\_C}) & DD2 (\hyperref[DD:ht.flux.P]{DD: ht\_flux\_P}) & DD3 (\hyperref[DD:htFusion]{DD: htFusion}) & DD4 (\hyperref[DD:melt.frac]{DD: melt\_frac}) & IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) & IM2 (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}) & IM3 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) & IM4 (\hyperref[IM:heatEInPCM]{IM: heatEInPCM})
 \\
 \midrule
-T1 (\hyperref[T:consThermE]{Definition~T:consThermE}) &  &  &  &  &  &  &  &  &  &  &  &  & 
+T1 (\hyperref[T:consThermE]{TM: consThermE}) &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-T2 (\hyperref[T:sensHtE]{Definition~T:sensHtE}) &  &  & X &  &  &  &  &  &  &  &  &  & 
+T2 (\hyperref[T:sensHtE]{TM: sensHtE}) &  &  & X &  &  &  &  &  &  &  &  &  & 
 \\
-T3 (\hyperref[T:latentHtE]{Definition~T:latentHtE}) &  &  &  &  &  &  &  &  &  &  &  &  & 
+T3 (\hyperref[T:latentHtE]{TM: latentHtE}) &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD1 (\hyperref[GD:nwtnCooling]{Definition~GD:nwtnCooling}) &  &  &  &  &  &  &  &  &  &  &  &  & 
+GD1 (\hyperref[GD:nwtnCooling]{GD: nwtnCooling}) &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD2 (\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}) & X &  &  &  &  &  &  &  &  &  &  &  & 
+GD2 (\hyperref[GD:rocTempSimp]{GD: rocTempSimp}) & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) &  &  &  & X &  &  &  &  &  &  &  &  & 
+DD1 (\hyperref[DD:ht.flux.C]{DD: ht\_flux\_C}) &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-DD2 (\hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}) &  &  &  & X &  &  &  &  &  &  &  &  & 
+DD2 (\hyperref[DD:ht.flux.P]{DD: ht\_flux\_P}) &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-DD3 (\hyperref[DD:htFusion]{Definition~DD:htFusion}) &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD3 (\hyperref[DD:htFusion]{DD: htFusion}) &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD4 (\hyperref[DD:melt.frac]{Definition~DD:melt.frac}) &  &  &  &  &  &  &  & X &  &  &  &  & 
+DD4 (\hyperref[DD:melt.frac]{DD: melt\_frac}) &  &  &  &  &  &  &  & X &  &  &  &  & 
 \\
-IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) &  &  &  &  & X & X & X &  &  &  & X &  & 
+IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) &  &  &  &  & X & X & X &  &  &  & X &  & 
 \\
-IM2 (\hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}) &  &  &  &  & X &  & X &  & X & X &  &  & X
+IM2 (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}) &  &  &  &  & X &  & X &  & X & X &  &  & X
 \\
-IM3 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) &  & X &  &  &  &  &  &  &  &  &  &  & 
+IM3 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) &  & X &  &  &  &  &  &  &  &  &  &  & 
 \\
-IM4 (\hyperref[IM:heatEInPCM]{Definition~IM:heatEInPCM}) &  & X & X &  &  &  & X & X & X &  & X &  & 
+IM4 (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}) &  & X & X &  &  &  & X & X & X &  & X &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
@@ -1130,16 +1130,16 @@ IM4 (\hyperref[IM:heatEInPCM]{Definition~IM:heatEInPCM}) &  & X & X &  &  &  & X
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l}
 \toprule
- & IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) & IM2 (\hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}) & IM3 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) & IM4 (\hyperref[IM:heatEInPCM]{Definition~IM:heatEInPCM}) & Data Constraints (Table~\ref{Table:InDataConstraints}) & R1 (\hyperref[inputInitQuants]{FR: Input-Initial-Quantities}) & R2 (\hyperref[findMass]{FR: Find-Mass}) & R3 (\hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints}) & R4 (\hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities}) & R5 (\hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}) & R6 (\hyperref[calcTempPCMOverTime]{FR: Calculate-Temperature-PCM-Over-Time}) & R7 (\hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}) & R8 (\hyperref[calcChgHeatEnergyPCMOverTime]{FR: Calculate-Change-Heat\_Energy-PCM-Over-Time}) & R9 (\hyperref[verifyEnergyOutput]{FR: Verify-Energy-Output-Follow-Conservation-of-Energy}) & R10 (\hyperref[calcPCMMeltBegin]{FR: Calculate-PCM-Melt-Begin-Time}) & R11 (\hyperref[calcPCMMeltEnd]{FR: Calculate-PCM-Melt-End-Time})
+ & IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) & IM2 (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}) & IM3 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) & IM4 (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}) & Data Constraints (\hyperref[Table:InDataConstraints]{Table:InDataConstraints}) & R1 (\hyperref[inputInitQuants]{FR: Input-Initial-Quantities}) & R2 (\hyperref[findMass]{FR: Find-Mass}) & R3 (\hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints}) & R4 (\hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities}) & R5 (\hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}) & R6 (\hyperref[calcTempPCMOverTime]{FR: Calculate-Temperature-PCM-Over-Time}) & R7 (\hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}) & R8 (\hyperref[calcChgHeatEnergyPCMOverTime]{FR: Calculate-Change-Heat\_Energy-PCM-Over-Time}) & R9 (\hyperref[verifyEnergyOutput]{FR: Verify-Energy-Output-Follow-Conservation-of-Energy}) & R10 (\hyperref[calcPCMMeltBegin]{FR: Calculate-PCM-Melt-Begin-Time}) & R11 (\hyperref[calcPCMMeltEnd]{FR: Calculate-PCM-Melt-End-Time})
 \\
 \midrule
-IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) &  & X &  &  &  & X & X &  &  &  &  &  &  &  &  & 
+IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) &  & X &  &  &  & X & X &  &  &  &  &  &  &  &  & 
 \\
-IM2 (\hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}) & X &  &  & X &  & X & X &  &  &  &  &  &  &  &  & 
+IM2 (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}) & X &  &  & X &  & X & X &  &  &  &  &  &  &  &  & 
 \\
-IM3 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  & 
+IM3 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  & 
 \\
-IM4 (\hyperref[IM:heatEInPCM]{Definition~IM:heatEInPCM}) &  & X &  &  &  & X & X &  &  &  &  &  &  &  &  & 
+IM4 (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}) &  & X &  &  &  & X & X &  &  &  &  &  &  &  &  & 
 \\
 R1 (\hyperref[inputInitQuants]{FR: Input-Initial-Quantities}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1169,34 +1169,34 @@ R11 (\hyperref[calcPCMMeltEnd]{FR: Calculate-PCM-Melt-End-Time}) &  & X &  &  & 
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & A1 (A\ref{A:Thermal-Energy-Only}) & A2 (A\ref{A:Heat-Transfer-Coeffs-Constant}) & A3 (A\ref{A:Constant-Water-Temp-Across-Tank}) & A4 (A\ref{A:Temp-PCM-Constant-Across-Volume}) & A5 (A\ref{A:Density-Water-PCM-Constant-over-Volume}) & A6 (A\ref{A:Specific-Heat-Energy-Constant-over-Volume}) & A7 (A\ref{A:Newton-Law-Convective-Cooling-Coil-Water}) & A8 (A\ref{A:Temp-Heating-Coil-Constant-over-Time}) & A9 (A\ref{A:Temp-Heating-Coil-Constant-over-Length}) & A10 (A\ref{A:Law-Convective-Cooling-Water-PCM}) & A11 (A\ref{A:Charging-Tank-No-Temp-Discharge}) & A12 (A\ref{A:Same-Initial-Temp-Water-PCM}) & A13 (A\ref{A:PCM-Initially-Solid}) & A14 (A\ref{A:Water-Always-Liquid}) & A15 (A\ref{A:Perfect-Insulation-Tank}) & A16 (A\ref{A:No-Internal-Heat-Generation-By-Water-PCM}) & A17 (A\ref{A:Volume-Change-Melting-PCM-Negligible}) & A18 (A\ref{A:No-Gaseous-State-PCM}) & A19 (A\ref{A:Atmospheric-Pressure-Tank})
+ & A1 (\hyperref[A:Thermal-Energy-Only]{A: Thermal-Energy-Only}) & A2 (\hyperref[A:Heat-Transfer-Coeffs-Constant]{A: Heat-Transfer-Coeffs-Constant}) & A3 (\hyperref[A:Constant-Water-Temp-Across-Tank]{A: Constant-Water-Temp-Across-Tank}) & A4 (\hyperref[A:Temp-PCM-Constant-Across-Volume]{A: Temp-PCM-Constant-Across-Volume}) & A5 (\hyperref[A:Density-Water-PCM-Constant-over-Volume]{A: Density-Water-PCM-Constant-over-Volume}) & A6 (\hyperref[A:Specific-Heat-Energy-Constant-over-Volume]{A: Specific-Heat-Energy-Constant-over-Volume}) & A7 (\hyperref[A:Newton-Law-Convective-Cooling-Coil-Water]{A: Newton-Law-Convective-Cooling-Coil-Water}) & A8 (\hyperref[A:Temp-Heating-Coil-Constant-over-Time]{A: Temp-Heating-Coil-Constant-over-Time}) & A9 (\hyperref[A:Temp-Heating-Coil-Constant-over-Length]{A: Temp-Heating-Coil-Constant-over-Length}) & A10 (\hyperref[A:Law-Convective-Cooling-Water-PCM]{A: Law-Convective-Cooling-Water-PCM}) & A11 (\hyperref[A:Charging-Tank-No-Temp-Discharge]{A: Charging-Tank-No-Temp-Discharge}) & A12 (\hyperref[A:Same-Initial-Temp-Water-PCM]{A: Same-Initial-Temp-Water-PCM}) & A13 (\hyperref[A:PCM-Initially-Solid]{A: PCM-Initially-Solid}) & A14 (\hyperref[A:Water-Always-Liquid]{A: Water-Always-Liquid}) & A15 (\hyperref[A:Perfect-Insulation-Tank]{A: Perfect-Insulation-Tank}) & A16 (\hyperref[A:No-Internal-Heat-Generation-By-Water-PCM]{A: No-Internal-Heat-Generation-By-Water-PCM}) & A17 (\hyperref[A:Volume-Change-Melting-PCM-Negligible]{A: Volume-Change-Melting-PCM-Negligible}) & A18 (\hyperref[A:No-Gaseous-State-PCM]{A: No-Gaseous-State-PCM}) & A19 (\hyperref[A:Atmospheric-Pressure-Tank]{A: Atmospheric-Pressure-Tank})
 \\
 \midrule
-T1 (\hyperref[T:consThermE]{Definition~T:consThermE}) & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+T1 (\hyperref[T:consThermE]{TM: consThermE}) & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-T2 (\hyperref[T:sensHtE]{Definition~T:sensHtE}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+T2 (\hyperref[T:sensHtE]{TM: sensHtE}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-T3 (\hyperref[T:latentHtE]{Definition~T:latentHtE}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+T3 (\hyperref[T:latentHtE]{TM: latentHtE}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD1 (\hyperref[GD:nwtnCooling]{Definition~GD:nwtnCooling}) &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+GD1 (\hyperref[GD:nwtnCooling]{GD: nwtnCooling}) &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD2 (\hyperref[GD:rocTempSimp]{Definition~GD:rocTempSimp}) &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+GD2 (\hyperref[GD:rocTempSimp]{GD: rocTempSimp}) &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) &  &  &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  & 
+DD1 (\hyperref[DD:ht.flux.C]{DD: ht\_flux\_C}) &  &  &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  & 
 \\
-DD2 (\hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}) &  &  & X & X &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
+DD2 (\hyperref[DD:ht.flux.P]{DD: ht\_flux\_P}) &  &  & X & X &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-DD3 (\hyperref[DD:htFusion]{Definition~DD:htFusion}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD3 (\hyperref[DD:htFusion]{DD: htFusion}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD4 (\hyperref[DD:melt.frac]{Definition~DD:melt.frac}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD4 (\hyperref[DD:melt.frac]{DD: melt\_frac}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-IM1 (\hyperref[IM:eBalanceOnWtr]{Definition~IM:eBalanceOnWtr}) &  &  &  &  &  &  &  &  &  &  & X & X &  & X & X & X &  &  & X
+IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) &  &  &  &  &  &  &  &  &  &  & X & X &  & X & X & X &  &  & X
 \\
-IM2 (\hyperref[IM:eBalanceOnPCM]{Definition~IM:eBalanceOnPCM}) &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X & X & X & 
+IM2 (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}) &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X & X & X & 
 \\
-IM3 (\hyperref[IM:heatEInWtr]{Definition~IM:heatEInWtr}) &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & X
+IM3 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & X
 \\
-IM4 (\hyperref[IM:heatEInPCM]{Definition~IM:heatEInPCM}) &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & X & 
+IM4 (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}) &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & X & 
 \\
 LC1 (\hyperref[likeChgUTP]{LC: Uniform-Temperature-PCM}) &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1214,7 +1214,7 @@ LC6 (\hyperref[likeChgTLH]{LC: Tank-Lose-Heat}) &  &  &  &  &  &  &  &  &  &  & 
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
 \label{Table:Tracey3}
 \end{longtable}
-The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. Figure~\ref{Figure:TraceyA} shows the dependencies of theoretical models, general definitions, data definitions, instance models, likely changes, and assumptions on each other. Figure~\ref{Figure:TraceyR} shows the dependencies of instance models, requirements, and data constraints on each other.
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceyA]{Fig:TraceyA} shows the dependencies of theoretical models, general definitions, data definitions, instance models, likely changes, and assumptions on each other. \hyperref[Figure:TraceyR]{Fig:TraceyR} shows the dependencies of instance models, requirements, and data constraints on each other.
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{ATrace.png}

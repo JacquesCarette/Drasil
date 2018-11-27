@@ -9,6 +9,8 @@ module Language.Drasil.Chunk.Citation
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
   , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
   , cProceedings, cTechReport, cUnpublished
+  -- FIXME move out of here later
+  , HasCitation(getCitations)
   ) where
 
 import Language.Drasil.People (People)
@@ -17,12 +19,13 @@ import Language.Drasil.UID (UID)
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
 import Language.Drasil.Classes (HasLabel(getLabel), HasFields(getFields))
+-- import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
 import Language.Drasil.Data.Citation (author, chapter, pages, editor, bookTitle, title, 
   year, school, journal, institution, note, publisher, CitationKind(..), CiteField)
 import Language.Drasil.Misc (noSpaces)
 import Language.Drasil.Label.Core (Label)
 
-import Control.Lens (makeLenses, (^.))
+import Control.Lens (makeLenses, (^.), Lens')
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces
@@ -42,10 +45,15 @@ instance HasUID       Citation where uid       = cid
 instance HasLabel     Citation where getLabel  = lb
 instance HasShortName Citation where shortname = lb . shortname
 instance HasFields    Citation where getFields = fields
+-- instance NamedIdea    Citation where term = ci . term
+-- instance CommonIdea   Citation where abrv = abrv . view ci
+
+-- citation :: CI
+-- citation  = commonIdeaWithDict "citation"  (cn' "citation")   "Citation"         [knowledgemng]
 
 -- | Smart constructor which implicitly uses EntryID as chunk i.
 cite :: EntryID -> CitationKind -> [CiteField] -> Label -> Citation
-cite i = Cite (noSpaces i)
+cite i = (\x y z -> (Cite (noSpaces i) x y z))
 
 -- | We don't let anyone know that the EntryID is in fact the UID
 citeID :: Citation -> EntryID
@@ -180,3 +188,8 @@ stdFields t pub yr opt = title t : publisher pub : year yr : opt
 -- Helper function (do not export) for creating thesis reference.
 thesis :: People -> Sentence -> Sentence -> Int -> [CiteField] -> [CiteField]
 thesis auth t sch yr opt = author auth : title t : school sch : year yr : opt
+
+------------
+-- This does not belong here, should be moved later
+class HasCitation c where
+  getCitations :: Lens' c [Citation]

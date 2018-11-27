@@ -5,12 +5,12 @@ import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.Quantity (QuantityDict, qw)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA), Quantity,
-  Definition(defn), ConceptDomain(cdom), Concept, HasReference(getReferences),
-  HasAdditionalNotes(getNotes), HasLabel(getLabel), HasShortName(shortname))
+  Definition(defn), ConceptDomain(cdom), Concept, HasReference2(getReferences2),
+  HasAdditionalNotes(getNotes), HasLabel(getLabel), HasShortName(shortname), CommonIdea(abrv))
 import Language.Drasil.Development.Unit (MayHaveUnit)
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.Label.Core (Label)
-import Language.Drasil.RefTypes (Reference)
+import Language.Drasil.RefProg (Reference2)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, mkIdea)
@@ -47,10 +47,10 @@ data TheoryModel = TM
   , _defq :: [QDefinition]
   , _invs :: [Relation]
   , _dfun :: [QDefinition]
-  , _ref  :: [Reference]
+  , _ref  :: [Reference2]
   , _lb :: Label
   , _notes :: [Sentence]
-  , ci :: CI
+  , _ci :: CI
   }
 makeLenses ''TheoryModel
 
@@ -58,7 +58,7 @@ instance HasUID             TheoryModel where uid = con . uid
 instance NamedIdea          TheoryModel where term = con . term
 instance Idea               TheoryModel where getA = getA . view con
 instance Definition         TheoryModel where defn = con . defn
-instance HasReference       TheoryModel where getReferences = ref
+instance HasReference2      TheoryModel where getReferences2 = ref
 instance ConceptDomain      TheoryModel where cdom = con . cdom
 instance HasAdditionalNotes TheoryModel where getNotes = notes
 instance Concept            TheoryModel where
@@ -72,6 +72,7 @@ instance Theory             TheoryModel where
   defined_fun   = dfun
 instance HasLabel           TheoryModel where getLabel = lb
 instance HasShortName       TheoryModel where shortname = lb . shortname
+instance CommonIdea         TheoryModel where abrv = abrv . view ci
 
 softEng :: IdeaDict
 softEng      = mkIdea  "softEng"        (cn' "Software Engineering")  (Just "SE")
@@ -84,6 +85,6 @@ theoryMod    = commonIdeaWithDict "theoryMod"    (cn' "Theory Model")           
 -- have the same type!
 tm :: (Concept c0, Quantity q, MayHaveUnit q, Concept c1) => c0 ->
     [q] -> [c1] -> [QDefinition] ->
-    [Relation] -> [QDefinition] -> [Reference] ->
+    [Relation] -> [QDefinition] -> [Reference2] ->
     Label -> [Sentence] -> TheoryModel
 tm c0 q c1 dq inv dfn r lbe nts = TM (cw c0) [] [] (map qw q) (map cw c1) dq inv dfn r lbe nts theoryMod 

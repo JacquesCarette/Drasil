@@ -284,11 +284,27 @@ spec sm (Ch ShortStyle s)   = spec sm $ lookupS sm s
 spec sm (Ch PluralTerm s)   = spec sm $ lookupP sm s
 spec sm (Ref (Reference t r sn))   = P.Ref t r (spec sm (S . getStringSN $ resolveSN sn $
   lookupDeferredSN sm)) sn --FIXME: sn passed in twice?
-spec sm (Ref2 (Reference2 t r sn)) = P.Ref2 t r (spec sm (S . getStringSN $ resolveSN sn $
-  lookupDeferredSN sm)) sn --FIXME: sn passed in twice?
+spec sm (Ref2 (Reference2 (RP rp) ra sn)) = 
+  P.Ref2 Internal ra $ spec sm $ renderShortName sm rp sn
+spec sm (Ref2 (Reference2 Citation ra sn)) = 
+  P.Ref2 Cite2    ra $ spec sm $ renderCitation sm sn
+spec sm (Ref2 (Reference2 URI ra sn)) = 
+  P.Ref2 External    ra $ spec sm $ renderURI sm sn
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
+
+renderShortName :: (HasDefinitionTable ctx) => ctx -> IRefProg -> ShortName -> Sentence
+renderShortName ctx (Deferred u) _ = S $ maybe (error "Domain has no abbreviation.") id $ getA $ defLookup u $ ctx ^. defTable
+renderShortName ctx (RConcat a b) sn = renderShortName ctx a sn :+: renderShortName ctx b sn
+renderShortName _ (RS s) _ = S s
+renderShortName _ Name sn = S $ getStringSN sn
+
+renderURI :: ctx -> ShortName -> Sentence
+renderURI _ sn = S $ getStringSN sn
+
+renderCitation :: ctx -> ShortName -> Sentence
+renderCitation _ sn = S $ getStringSN sn
 
 lookupDeferredSN :: (HasDefinitionTable ctx) => ctx -> UID -> String
 lookupDeferredSN ctx u = maybe "" (\x -> x ++ ": ") $
@@ -314,7 +330,7 @@ createLayout sm = map (sec sm 0)
 -- | Helper function for creating sections at the appropriate depth
 sec :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasTermTable ctx, 
   HasPrintingOptions ctx) => ctx -> Int -> Section -> T.LayoutObj
-sec sm depth x@(Section titleLb contents _ _) = --FIXME: should ShortName be used somewhere?
+sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used somewhere?
   let ref = P.S (refAdd x) in
   T.HDiv [(concat $ replicate depth "sub") ++ "section"]
   (T.Header depth (spec sm titleLb) ref :

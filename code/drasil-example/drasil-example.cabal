@@ -84,6 +84,7 @@ executable nopcm
     , Drasil.SWHS.Changes
     , Drasil.SWHS.References
     , Drasil.SWHS.Requirements
+    , Drasil.SWHS.Tables
     , Drasil.SWHS.TMods
     , Drasil.SWHS.IMods
     , Drasil.SWHS.Unitals
@@ -120,6 +121,7 @@ executable swhs
     , Drasil.SWHS.Labels
     , Drasil.SWHS.References
     , Drasil.SWHS.Requirements
+    , Drasil.SWHS.Tables
     , Drasil.SWHS.TMods
     , Drasil.SWHS.Unitals
   Build-Depends:
@@ -149,6 +151,7 @@ executable ssp
     , Drasil.SSP.DataDefs
     , Drasil.SSP.DataDesc
     , Drasil.SSP.Defs
+    , Drasil.SSP.Figures
     , Drasil.SSP.GenDefs
     , Drasil.SSP.Goals
     , Drasil.SSP.IMods

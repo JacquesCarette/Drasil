@@ -1,6 +1,5 @@
 module Data.Drasil.Concepts.Computation where
 
-import Control.Lens ((^.))
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (datum, input_, literacy, output_, 
     quantity, type_, value, variable)

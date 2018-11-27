@@ -1015,7 +1015,7 @@ The scope of the requirements includes thermal analysis of a single solar water 
 Characteristics of Intended Reader
 </h2>
 <p class="paragraph">
-Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of SWHS can have a lower level of expertise, as explained in <a href=#Sec:UserChars>User Characteristics</a>.
+Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of SWHS can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Section: User Characteristics</a>.
 </p>
 </div>
 </div>
@@ -1028,7 +1028,7 @@ Organization of Document
 The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#dParnas1972>parnas1972</a> and <a href=#dParnasPcClements1984>parnasClements1984</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>Instance Models</a> and trace back to find any additional information they require.
 </p>
 <p class="paragraph">
-The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance models (<a href=#Sec:IMs>Instance Models</a>) to be solved are referred to as <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>, <a href=#IM:heatEInWtr>IM: heatEInWtr</a>, and <a href=#IM:heatEInPCM>IM: heatEInPCM</a>. The instance models provide the Ordinary Differential Equation (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM. SWHS solves these ODEs.
+The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance models (<a href=#Sec:IMs>Section: Instance Models</a>) to be solved are referred to as <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>, <a href=#IM:heatEInWtr>IM: heatEInWtr</a>, and <a href=#IM:heatEInPCM>IM: heatEInPCM</a>. The instance models provide the Ordinary Differential Equation (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM. SWHS solves these ODEs.
 </p>
 </div>
 </div>
@@ -1048,13 +1048,13 @@ This section provides general information about the system including identifying
 System Context
 </h2>
 <p class="paragraph">
-<a href=#Figure:SysCon>SysCon</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system and its environment.
+<a href=#Figure:SysCon>Fig:SysCon</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system and its environment.
 </p>
 <div id="Figure:SysCon">
 <figure>
-<img src="SystemContextFigure.png" alt="<a href=#Figure:SysCon>SysCon</a>: System Context" >
+<img src="SystemContextFigure.png" alt="<a href=#Figure:SysCon>Fig:SysCon</a>: System Context" >
 <figcaption>
-<a href=#Figure:SysCon>SysCon</a>: System Context
+<a href=#Figure:SysCon>Fig:SysCon</a>: System Context
 </figcaption>
 </figure>
 </div>
@@ -1161,7 +1161,7 @@ Transient: Changing with time.
 Physical System Description
 </h3>
 <p class="paragraph">
-The physical system of SWHS, as shown in <a href=#Figure:Tank>Tank</a>, includes the following elements:
+The physical system of SWHS, as shown in <a href=#Figure:Tank>Fig:Tank</a>, includes the following elements:
 </p>
 <div class="list">
 <p>
@@ -1216,7 +1216,7 @@ GS4: Predict the change in heat energy in the PCM over time.
 Solution Characteristics Specification
 </h2>
 <p class="paragraph">
-The instance models that govern SWHS are presented in <a href=#Sec:IMs>Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern SWHS are presented in <a href=#Sec:IMs>Section: Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
 <div id="Sec:Assumps">
 <div class="subsubsection">
@@ -1224,7 +1224,7 @@ The instance models that govern SWHS are presented in <a href=#Sec:IMs>Instance 
 Assumptions
 </h3>
 <p class="paragraph">
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], or Unlikely Changes [<a href=#Sec:UCs>Unlikely Changes</a>], in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Section: Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>Section: General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Section: Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Section: Instance Models</a>], Likely Changes [<a href=#Sec:LCs>Section: Likely Changes</a>], or Unlikely Changes [<a href=#Sec:UCs>Section: Unlikely Changes</a>], in which the respective assumption is used.
 </p>
 <ul class="hide-list-style">
 <li>
@@ -1250,7 +1250,7 @@ Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the te
 <ul class="hide-list-style">
 <li>
 <div id="A:Temp-PCM-Constant-Across-Volume">
-Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM [<a href=#LC:Uniform-Temperature-PCM>LC: Uniform-Temperature-PCM</a>].
+Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM.
 </div>
 </li>
 </ul>
@@ -1278,14 +1278,14 @@ Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling app
 <ul class="hide-list-style">
 <li>
 <div id="A:Temp-Heating-Coil-Constant-over-Time">
-Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time [<a href=#LC:Temperature-Coil-Variable-Over-Day>LC: Temperature-Coil-Variable-Over-Day</a>].
+Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Temp-Heating-Coil-Constant-over-Length">
-Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length [<a href=#LC:Temperature-Coil-Variable-Over-Length>LC: Temperature-Coil-Variable-Over-Length</a>].
+Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length.
 </div>
 </li>
 </ul>
@@ -1299,14 +1299,14 @@ Law-Convective-Cooling-Water-PCM: Newton's law of convective cooling applies bet
 <ul class="hide-list-style">
 <li>
 <div id="A:Charging-Tank-No-Temp-Discharge">
-Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature [<a href=#A:Same-Initial-Temp-Water-PCM>A: Same-Initial-Temp-Water-PCM</a>] is less than (or equal) to the temperature of the heating coil [<a href=#LC:Discharging-Tank>LC: Discharging-Tank</a>].
+Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature [<a href=#A:Same-Initial-Temp-Water-PCM>A: Same-Initial-Temp-Water-PCM</a>] is less than (or equal) to the temperature of the heating coil.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Same-Initial-Temp-Water-PCM">
-Same-Initial-Temp-Water-PCM: The initial temperature of the water and the PCM is the same [<a href=#LC:Different-Initial-Temps-PCM-Water>LC: Different-Initial-Temps-PCM-Water</a>].
+Same-Initial-Temp-Water-PCM: The initial temperature of the water and the PCM is the same.
 </div>
 </li>
 </ul>
@@ -1327,7 +1327,7 @@ Water-Always-Liquid: The operating temperature range of the system is such that 
 <ul class="hide-list-style">
 <li>
 <div id="A:Perfect-Insulation-Tank">
-Perfect-Insulation-Tank: The tank is perfectly insulated so that there is no heat loss from the tank [<a href=#LC:Tank-Lose-Heat>LC: Tank-Lose-Heat</a>].
+Perfect-Insulation-Tank: The tank is perfectly insulated so that there is no heat loss from the tank.
 </div>
 </li>
 </ul>
@@ -1362,7 +1362,7 @@ Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melti
 <ul class="hide-list-style">
 <li>
 <div id="A:Volume-Coil-Negligible">
-Volume-Coil-Negligible: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible [<a href=#FR:Input-Initial-Quantities>FR: Input-Initial-Quantities</a>].
+Volume-Coil-Negligible: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible.
 </div>
 </li>
 </ul>
@@ -1554,7 +1554,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-<em>E</em> is the change in sensible heat energy (J). <em>C<sup>S</sup></em>, <em>C<sup>L</sup></em>, <em>C<sup>V</sup></em> are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively (J/(kg&sdot;&deg;C)). <em>m</em> is the mass (kg). <em>T</em> is the temperature (&deg;C), and <em>ΔT</em> is the change in temperature (&deg;C). <em>T<sub>melt</sub></em> and <em>T<sub>boil</sub></em> are the melting point temperature and boiling point temperature, respectively (&deg;C). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if <em>T</em>=<em>T<sub>boil</sub></em> or <em>T</em>= <em>T<sub>melt</sub></em>. If this is the case, refer to <a href=#T:latentHtE>T: latentHtE</a>, Latent heat energy.
+<em>E</em> is the change in sensible heat energy (J). <em>C<sup>S</sup></em>, <em>C<sup>L</sup></em>, <em>C<sup>V</sup></em> are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively (J/(kg&sdot;&deg;C)). <em>m</em> is the mass (kg). <em>T</em> is the temperature (&deg;C), and <em>ΔT</em> is the change in temperature (&deg;C). <em>T<sub>melt</sub></em> and <em>T<sub>boil</sub></em> are the melting point temperature and boiling point temperature, respectively (&deg;C). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if <em>T</em>=<em>T<sub>boil</sub></em> or <em>T</em>= <em>T<sub>melt</sub></em>. If this is the case, refer to <a href=#T:latentHtE>TM: latentHtE</a>, Latent heat energy.
 </p>
 </td>
 </tr>
@@ -1871,7 +1871,7 @@ FIXME: This needs to be filled in
 Detailed derivation of simplified rate of change of temperature :
 </p>
 <p class="paragraph">
-Integrating <a href=#T:consThermE>T: consThermE</a> over a volume (<em>V</em>), we have:
+Integrating <a href=#T:consThermE>TM: consThermE</a> over a volume (<em>V</em>), we have:
 </p>
 <div id="Eqn:empty">
 <div class="equation">
@@ -2370,7 +2370,7 @@ FIXME: This needs to be filled in
 Instance Models
 </h3>
 <p class="paragraph">
-This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
+This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Section: Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Section: Theoretical Models</a> and <a href=#Sec:GDs>Section: General Definitions</a>.
 </p>
 <div id="IM:eBalanceOnWtr">
 <table class="idefn">
@@ -3090,7 +3090,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The above equation is derived using <a href=#T:sensHtE>T: sensHtE</a>. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#A:Water-Always-Liquid>A: Water-Always-Liquid</a>, <a href=#A:Atmospheric-Pressure-Tank>A: Atmospheric-Pressure-Tank</a>).
+The above equation is derived using <a href=#T:sensHtE>TM: sensHtE</a>. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#A:Water-Always-Liquid>A: Water-Always-Liquid</a>, <a href=#A:Atmospheric-Pressure-Tank>A: Atmospheric-Pressure-Tank</a>).
 </p>
 </td>
 </tr>
@@ -3259,7 +3259,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The above equation is derived using <a href=#T:sensHtE>T: sensHtE</a> and <a href=#T:latentHtE>T: latentHtE</a>. <em>E<sub>P</sub></em> is the change in thermal energy of the PCM relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) J. <em>E<sub>P</sub></em> for the solid PCM is found using <a href=#T:sensHtE>T: sensHtE</a> for sensible heat ing, with the specific heat capacity of the solid PCM, <em>C<sub>P</sub><sup>S</sup></em> (J/(kg&sdot;&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). <em>E<sub>P</sub></em> for the melted PCM (<em>T<sub>P</sub>&thinsp;&gt;&thinsp;E<sub>P</sub><sub>melt</sub><sup>init</sup></em>) is found using <a href=#T:sensHtE>T: sensHtE</a> for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> (J). The energy required to melt all of the PCM is <em>H<sub>f</sub>&#8239;m<sub>P</sub></em> (J) (<a href=#DD:htFusion>DD: htFusion</a>). the specific heat capacity of the liquid PCM is <em>C<sub>P</sub><sup>L</sup></em> (J/(kg&sdot;&deg;C)) and the change in temperature is <em>T<sub>P</sub>&minus;T<sub>melt</sub><sup>P</sup></em> (&deg;C). <em>E<sub>P</sub></em> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> plus the latent heat energy added to the PCM, <em>Q<sub>P</sub></em> (J) since the time when melting began <em>t<sub>melt</sub><sup>init</sup></em> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (<a href=#A:No-Gaseous-State-PCM>A: No-Gaseous-State-PCM</a>) (<a href=#A:PCM-Initially-Solid>A: PCM-Initially-Solid</a>).
+The above equation is derived using <a href=#T:sensHtE>TM: sensHtE</a> and <a href=#T:latentHtE>TM: latentHtE</a>. <em>E<sub>P</sub></em> is the change in thermal energy of the PCM relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) J. <em>E<sub>P</sub></em> for the solid PCM is found using <a href=#T:sensHtE>TM: sensHtE</a> for sensible heat ing, with the specific heat capacity of the solid PCM, <em>C<sub>P</sub><sup>S</sup></em> (J/(kg&sdot;&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). <em>E<sub>P</sub></em> for the melted PCM (<em>T<sub>P</sub>&thinsp;&gt;&thinsp;E<sub>P</sub><sub>melt</sub><sup>init</sup></em>) is found using <a href=#T:sensHtE>TM: sensHtE</a> for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> (J). The energy required to melt all of the PCM is <em>H<sub>f</sub>&#8239;m<sub>P</sub></em> (J) (<a href=#DD:htFusion>DD: htFusion</a>). the specific heat capacity of the liquid PCM is <em>C<sub>P</sub><sup>L</sup></em> (J/(kg&sdot;&deg;C)) and the change in temperature is <em>T<sub>P</sub>&minus;T<sub>melt</sub><sup>P</sup></em> (&deg;C). <em>E<sub>P</sub></em> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> plus the latent heat energy added to the PCM, <em>Q<sub>P</sub></em> (J) since the time when melting began <em>t<sub>melt</sub><sup>init</sup></em> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (<a href=#A:No-Gaseous-State-PCM>A: No-Gaseous-State-PCM</a>) (<a href=#A:PCM-Initially-Solid>A: PCM-Initially-Solid</a>).
 </p>
 </td>
 </tr>
@@ -3293,7 +3293,7 @@ FIXME: This needs to be filled in
 Data Constraints
 </h3>
 <p class="paragraph">
-<a href=#Table:InDataConstraints>InDataConstraints</a> and <a href=#Table:OutDataConstraints>OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.(*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#A:PCM-Initially-Solid>A: PCM-Initially-Solid</a>). (#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <em><div class="fraction">
+<a href=#Table:InDataConstraints>Table:InDataConstraints</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.(*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#A:PCM-Initially-Solid>A: PCM-Initially-Solid</a>). (#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <em><div class="fraction">
 <span class="fup">
 2
 </span>
@@ -3717,7 +3717,7 @@ Functional Requirements
 <div class="list">
 <p>
 <div id="inputInitQuants">
-Input-Initial-Quantities: Input the following quantities described in <a href=#Table:Input-Variable-Requirements>Input-Variable-Requirements</a>, which define the tank parameters, material properties and initial conditions.
+Input-Initial-Quantities: Input the following quantities described in <a href=#Table:Input-Variable-Requirements>Table:Input-Variable-Requirements</a>, which define the tank parameters, material properties and initial conditions. <a href=#A:Volume-Coil-Negligible>A: Volume-Coil-Negligible</a>.
 </div>
 </p>
 <p>
@@ -4066,7 +4066,7 @@ No-Gaseous-State: <a href=#A:No-Gaseous-State-PCM>A: No-Gaseous-State-PCM</a> - 
 Traceability Matrices and Graphs
 </h1>
 <p class="paragraph">
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:Tracey2>Tracey2</a> shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. <a href=#Table:Tracey1>Tracey1</a> shows the dependencies of instance models, requirements, and data constraints on each other. <a href=#Table:Tracey3>Tracey3</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:Tracey2>Table:Tracey2</a> shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. <a href=#Table:Tracey1>Table:Tracey1</a> shows the dependencies of instance models, requirements, and data constraints on each other. <a href=#Table:Tracey3>Table:Tracey3</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
 </p>
 <div id="Table:Tracey2">
 <table class="table">
@@ -4075,13 +4075,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 
 </th>
 <th>
-T1 (<a href=#T:consThermE>T: consThermE</a>)
+T1 (<a href=#T:consThermE>TM: consThermE</a>)
 </th>
 <th>
-T2 (<a href=#T:sensHtE>T: sensHtE</a>)
+T2 (<a href=#T:sensHtE>TM: sensHtE</a>)
 </th>
 <th>
-T3 (<a href=#T:latentHtE>T: latentHtE</a>)
+T3 (<a href=#T:latentHtE>TM: latentHtE</a>)
 </th>
 <th>
 GD1 (<a href=#GD:nwtnCooling>GD: nwtnCooling</a>)
@@ -4116,7 +4116,7 @@ IM4 (<a href=#IM:heatEInPCM>IM: heatEInPCM</a>)
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:consThermE>T: consThermE</a>)
+T1 (<a href=#T:consThermE>TM: consThermE</a>)
 </td>
 <td>
 
@@ -4160,7 +4160,7 @@ T1 (<a href=#T:consThermE>T: consThermE</a>)
 </tr>
 <tr>
 <td>
-T2 (<a href=#T:sensHtE>T: sensHtE</a>)
+T2 (<a href=#T:sensHtE>TM: sensHtE</a>)
 </td>
 <td>
 
@@ -4204,7 +4204,7 @@ X
 </tr>
 <tr>
 <td>
-T3 (<a href=#T:latentHtE>T: latentHtE</a>)
+T3 (<a href=#T:latentHtE>TM: latentHtE</a>)
 </td>
 <td>
 
@@ -4710,7 +4710,7 @@ IM3 (<a href=#IM:heatEInWtr>IM: heatEInWtr</a>)
 IM4 (<a href=#IM:heatEInPCM>IM: heatEInPCM</a>)
 </th>
 <th>
-Data Constraints (<a href=#Table:InDataConstraints>InDataConstraints</a>)
+Data Constraints (<a href=#Table:InDataConstraints>Table:InDataConstraints</a>)
 </th>
 <th>
 R1 (<a href=#inputInitQuants>FR: Input-Initial-Quantities</a>)
@@ -5612,7 +5612,7 @@ A19 (<a href=#A:Atmospheric-Pressure-Tank>A: Atmospheric-Pressure-Tank</a>)
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:consThermE>T: consThermE</a>)
+T1 (<a href=#T:consThermE>TM: consThermE</a>)
 </td>
 <td>
 X
@@ -5674,7 +5674,7 @@ X
 </tr>
 <tr>
 <td>
-T2 (<a href=#T:sensHtE>T: sensHtE</a>)
+T2 (<a href=#T:sensHtE>TM: sensHtE</a>)
 </td>
 <td>
 
@@ -5736,7 +5736,7 @@ T2 (<a href=#T:sensHtE>T: sensHtE</a>)
 </tr>
 <tr>
 <td>
-T3 (<a href=#T:latentHtE>T: latentHtE</a>)
+T3 (<a href=#T:latentHtE>TM: latentHtE</a>)
 </td>
 <td>
 
@@ -6794,7 +6794,7 @@ Traceability Matrix Showing the Connections Between Assumptions and Other Items
 </p>
 </div>
 <p class="paragraph">
-The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:TraceyA>TraceyA</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, likely changes, and assumptions on each other. <a href=#Figure:TraceyR>TraceyR</a> shows the dependencies of instance models, requirements, and data constraints on each other.
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:TraceyA>Fig:TraceyA</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, likely changes, and assumptions on each other. <a href=#Figure:TraceyR>Fig:TraceyR</a> shows the dependencies of instance models, requirements, and data constraints on each other.
 </p>
 <div id="Figure:TraceyA">
 <figure>

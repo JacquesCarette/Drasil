@@ -17,8 +17,6 @@ import Drasil.SWHS.Assumptions (newA1, newA2, newA3, newA7, newA8, newA9,
 import Drasil.SWHS.Concepts (tank, water)
 -- import Drasil.SWHS.References (swhsCitations)
 import Drasil.SWHS.Unitals (vol_ht_gen, temp_C, temp_init, temp_W, htCap_W, w_density)
-import Drasil.NoPCM.GenDefs (rocTempSimp)
-import Drasil.SWHS.Changes (likeChgTCVOD, likeChgDT)
 
 -------------------------
 -- 4.2.1 : Assumptions --
@@ -38,11 +36,11 @@ assumpDWCoW, assumpSHECoW, assumpCTNTD, assumpNIHGBW, assumpAPT :: ConceptInstan
 assumpS3 = 
   (foldlSent [S "The", phrase water, S "in the", phrase tank,
   S "is fully mixed, so the", phrase temp_W `isThe`
-  S "same throughout the entire", phrase tank, sSqBr (makeRefS rocTempSimp)])
+  S "same throughout the entire", phrase tank])
 
 assumpS4 = 
   (foldlSent [S "The", phrase w_density, S "has no spatial variation; that is"
-  `sC` S "it is constant over their entire", phrase vol, sSqBr $ makeRefS likeChgTCVOD])
+  `sC` S "it is constant over their entire", phrase vol])
 
 newA5NoPCM :: AssumpChunk
 newA5NoPCM = assump "Density-Water-Constant-over-Volume" assumpS4 
@@ -66,8 +64,7 @@ assumpS9_npcm =
   (foldlSent [S "The", phrase model, S "only accounts for charging",
   S "of the tank" `sC` S "not discharging. The", phrase temp_W, S "can only",
   S "increase, or remain constant; it cannot decrease. This implies that the",
-  phrase temp_init, S "is less than (or equal to) the", phrase temp_C,
-  sSqBr $ makeRefS likeChgDT])
+  phrase temp_init, S "is less than (or equal to) the", phrase temp_C])
 
 newA9NoPCM :: AssumpChunk
 newA9NoPCM = assump "Charging-Tank-No-Temp-Discharge" assumpS9_npcm 

@@ -52,12 +52,12 @@ inputInitQuantsEqn, findMassEqn :: Expr --Fixme: rename labels
 
 inputInitQuants = cic "inputInitQuants" ( foldlSent [
   titleize input_, S "the following", plural quantity, S "described in",
-  makeRef2S inputInitQuants `sC` S "which define the", phrase tank,
+  makeRef2S inputInitQuantsTblabled `sC` S "which define the", phrase tank,
   plural parameter `sC` S "material", plural property, S "and initial" +:+.
   plural condition, makeRef2S newA20]) "Input-Initial-Quantities" funcReqDom
 --
 findMass = cic "findMass" ( foldlSent [
-  S "Use the", plural input_, S "in", makeRef2S inputInitQuantsTblabled,
+  S "Use the", plural input_, S "in", makeRef2S inputInitQuants,
   S "to find the", phrase mass, S "needed for",
   (foldlList Comma List $ map makeRef2S swhsIMods) `sC`
   S "using", E inputInitQuantsEqn, S "and", E findMassEqn `sC` S "where",

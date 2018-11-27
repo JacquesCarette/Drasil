@@ -1015,7 +1015,7 @@ The scope of the requirements includes thermal analysis of a single solar water 
 Characteristics of Intended Reader
 </h2>
 <p class="paragraph">
-Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of SWHS can have a lower level of expertise, as explained in <a href=#Sec:UserChars>User Characteristics</a>.
+Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of SWHS can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Section: User Characteristics</a>.
 </p>
 </div>
 </div>
@@ -1161,7 +1161,7 @@ Transient: Changing with time.
 Physical System Description
 </h3>
 <p class="paragraph">
-The physical system of SWHS, as shown in <a href=#Figure:Tank>Tank</a>, includes the following elements:
+The physical system of SWHS, as shown in <a href=#Figure:Tank>Fig:Tank</a>, includes the following elements:
 </p>
 <div class="list">
 <p>
@@ -1216,7 +1216,7 @@ GS4: Predict the change in heat energy in the PCM over time.
 Solution Characteristics Specification
 </h2>
 <p class="paragraph">
-The instance models that govern SWHS are presented in <a href=#Sec:IMs>Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern SWHS are presented in <a href=#Sec:IMs>Section: Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
 <div id="Sec:Assumps">
 <div class="subsubsection">
@@ -1224,7 +1224,7 @@ The instance models that govern SWHS are presented in <a href=#Sec:IMs>Instance 
 Assumptions
 </h3>
 <p class="paragraph">
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], or Unlikely Changes [<a href=#Sec:UCs>Unlikely Changes</a>], in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Section: Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>Section: General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Section: Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Section: Instance Models</a>], Likely Changes [<a href=#Sec:LCs>Section: Likely Changes</a>], or Unlikely Changes [<a href=#Sec:UCs>Section: Unlikely Changes</a>], in which the respective assumption is used.
 </p>
 <ul class="hide-list-style">
 <li>
@@ -1250,7 +1250,7 @@ Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the te
 <ul class="hide-list-style">
 <li>
 <div id="A:Temp-PCM-Constant-Across-Volume">
-Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM [<a href=#LC:Uniform-Temperature-PCM>LC: Uniform-Temperature-PCM</a>].
+Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM.
 </div>
 </li>
 </ul>
@@ -1278,14 +1278,14 @@ Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling app
 <ul class="hide-list-style">
 <li>
 <div id="A:Temp-Heating-Coil-Constant-over-Time">
-Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time [<a href=#LC:Temperature-Coil-Variable-Over-Day>LC: Temperature-Coil-Variable-Over-Day</a>].
+Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Temp-Heating-Coil-Constant-over-Length">
-Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length [<a href=#LC:Temperature-Coil-Variable-Over-Length>LC: Temperature-Coil-Variable-Over-Length</a>].
+Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length.
 </div>
 </li>
 </ul>
@@ -1299,14 +1299,14 @@ Law-Convective-Cooling-Water-PCM: Newton's law of convective cooling applies bet
 <ul class="hide-list-style">
 <li>
 <div id="A:Charging-Tank-No-Temp-Discharge">
-Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature [<a href=#A:Same-Initial-Temp-Water-PCM>A: Same-Initial-Temp-Water-PCM</a>] is less than (or equal) to the temperature of the heating coil [<a href=#LC:Discharging-Tank>LC: Discharging-Tank</a>].
+Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature [<a href=#A:Same-Initial-Temp-Water-PCM>A: Same-Initial-Temp-Water-PCM</a>] is less than (or equal) to the temperature of the heating coil.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Same-Initial-Temp-Water-PCM">
-Same-Initial-Temp-Water-PCM: The initial temperature of the water and the PCM is the same [<a href=#LC:Different-Initial-Temps-PCM-Water>LC: Different-Initial-Temps-PCM-Water</a>].
+Same-Initial-Temp-Water-PCM: The initial temperature of the water and the PCM is the same.
 </div>
 </li>
 </ul>
@@ -1327,7 +1327,7 @@ Water-Always-Liquid: The operating temperature range of the system is such that 
 <ul class="hide-list-style">
 <li>
 <div id="A:Perfect-Insulation-Tank">
-Perfect-Insulation-Tank: The tank is perfectly insulated so that there is no heat loss from the tank [<a href=#LC:Tank-Lose-Heat>LC: Tank-Lose-Heat</a>].
+Perfect-Insulation-Tank: The tank is perfectly insulated so that there is no heat loss from the tank.
 </div>
 </li>
 </ul>
@@ -1362,7 +1362,7 @@ Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melti
 <ul class="hide-list-style">
 <li>
 <div id="A:Volume-Coil-Negligible">
-Volume-Coil-Negligible: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible [<a href=#FR:Input-Initial-Quantities>FR: Input-Initial-Quantities</a>].
+Volume-Coil-Negligible: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible.
 </div>
 </li>
 </ul>
@@ -2370,7 +2370,7 @@ FIXME: This needs to be filled in
 Instance Models
 </h3>
 <p class="paragraph">
-This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
+This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Section: Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Section: Theoretical Models</a> and <a href=#Sec:GDs>Section: General Definitions</a>.
 </p>
 <div id="IM:eBalanceOnWtr">
 <table class="idefn">
@@ -3293,7 +3293,7 @@ FIXME: This needs to be filled in
 Data Constraints
 </h3>
 <p class="paragraph">
-<a href=#Table:InDataConstraints>InDataConstraints</a> and <a href=#Table:OutDataConstraints>OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.(*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#A:PCM-Initially-Solid>A: PCM-Initially-Solid</a>). (#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <em><div class="fraction">
+<a href=#Table:InDataConstraints>Table:InDataConstraints</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.(*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#A:PCM-Initially-Solid>A: PCM-Initially-Solid</a>). (#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <em><div class="fraction">
 <span class="fup">
 2
 </span>
@@ -3717,7 +3717,7 @@ Functional Requirements
 <div class="list">
 <p>
 <div id="inputInitQuants">
-Input-Initial-Quantities: Input the following quantities described in <a href=#Table:Input-Variable-Requirements>Input-Variable-Requirements</a>, which define the tank parameters, material properties and initial conditions.
+Input-Initial-Quantities: Input the following quantities described in <a href=#Table:Input-Variable-Requirements>Table:Input-Variable-Requirements</a>, which define the tank parameters, material properties and initial conditions. <a href=#A:Volume-Coil-Negligible>A: Volume-Coil-Negligible</a>.
 </div>
 </p>
 <p>

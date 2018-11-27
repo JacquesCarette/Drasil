@@ -1,6 +1,6 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Reference(makeRef, makeRefS, makeRef2S, makeCite, makeCiteS,
-  makeURI, ReferenceDB, citationsFromBibMap, citationRefTable, assumpRefTable,
+module Language.Drasil.Reference(makeRef, makeRefS, makeRef2, makeRef2S, makeCite, makeURI,
+  makeCiteS, ReferenceDB, citationsFromBibMap, citationRefTable, assumpRefTable,
   assumptionsFromDB, rdb, RefBy(..), Referable(..), RefMap, simpleMap,
   assumpDB, AssumpMap, assumpLookup, HasAssumpRefs) where
 
@@ -251,6 +251,9 @@ assumptionsFromDB :: AssumpMap -> [AssumpChunk]
 assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
   where assumptions = Map.elems am
         dropNums = map fst
+
+makeRef2 :: (Referable l, HasShortName l) => l -> Reference2
+makeRef2 l = Reference2 (renderRef l) (refAdd l) (l ^. shortname)
 
 makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
 makeRef2S l = Ref2 $ Reference2 (renderRef l) (refAdd l) (l ^. shortname)

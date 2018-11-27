@@ -3,7 +3,7 @@ module Drasil.GlassBR.Assumptions (glassType, glassCondition, explainScenario, s
   assumptions) where
 
 import Language.Drasil hiding (organization)
-import qualified Drasil.DocLang.SRS as SRS (valsOfAuxConsLabel)
+import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
 
 import Data.Drasil.Concepts.Documentation as Doc (condition, constant,
   practice, reference, scenario, system, value)
@@ -63,7 +63,7 @@ glassTypeDesc = foldlSent [S "The standard E1300-09a for",
   [S "glass supported on one side acts as a", phrase cantilever]])]
 
 glassConditionDesc :: Sentence
-glassConditionDesc = foldlSent [S "Following", makeRefS astm2009, sParen (S "pg. 1") `sC` 
+glassConditionDesc = foldlSent [S "Following", makeCiteS astm2009, sParen (S "pg. 1") `sC` 
   S "this", phrase practice, S "does not apply to any form of", foldlList Comma Options $ map S ["wired",
   "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"], S "with", 
   phrase surface `sAnd` S "edge treatments that alter the glass strength"]
@@ -74,7 +74,7 @@ explainScenarioDesc = foldlSent [S "This", phrase system, S "only considers the 
 
 standardValuesDesc :: UnitaryChunk -> Sentence
 standardValuesDesc mainIdea = foldlSent [S "The", plural value, S "provided in",
-  makeRefS SRS.valsOfAuxConsLabel, S "are assumed for the", phrase mainIdea, 
+  makeRef2S $ SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]), S "are assumed for the", phrase mainIdea, 
   sParen (ch mainIdea) `sC` S "and the", plural materialProprty `sOf` 
   foldlList Comma List (map ch (take 3 assumptionConstants))]
 

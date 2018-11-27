@@ -39,7 +39,7 @@ dataDefns = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB,
 --DD1
 
 sliceWght :: DataDefinition
-sliceWght = mkDDL sliceWghtQD [makeRef fredlund1977] [{-Derivation-}] sliceWghtL []--Notes
+sliceWght = mkDDL sliceWghtQD [fredlund1977] [{-Derivation-}] sliceWghtL []--Notes
 --FIXME: fill empty lists in
 
 sliceWghtQD :: QDefinition
@@ -60,7 +60,7 @@ slcWgtEqn = (inxi baseWthX) * (case_ [case1,case2,case3])
 --DD2
 
 baseWtrF :: DataDefinition
-baseWtrF = mkDDL baseWtrFQD [makeRef fredlund1977] [{-Derivation-}] baseWtrFL 
+baseWtrF = mkDDL baseWtrFQD [fredlund1977] [{-Derivation-}] baseWtrFL 
   [makeRef2S newA9]--Notes
 --FIXME: fill empty lists in
 
@@ -77,7 +77,7 @@ bsWtrFEqn = (inxi baseLngth)*(case_ [case1,case2])
 --DD3
 
 surfWtrF :: DataDefinition
-surfWtrF = mkDDL surfWtrFQD [makeRef fredlund1977] [{-Derivation-}] surfWtrFL
+surfWtrF = mkDDL surfWtrFQD [fredlund1977] [{-Derivation-}] surfWtrFL
   [makeRef2S newA9]--Notes
 --FIXME: fill empty lists in
 
@@ -94,7 +94,7 @@ surfWtrFEqn = (inxi surfLngth)*(case_ [case1,case2])
 --DD4
 
 intersliceWtrF :: DataDefinition
-intersliceWtrF = mkDDL intersliceWtrFQD [makeRef fredlund1977] [{-Derivation-}] intersliceWtrFL
+intersliceWtrF = mkDDL intersliceWtrFQD [fredlund1977] [{-Derivation-}] intersliceWtrFL
   []--Notes
 --FIXME: fill empty lists in
 
@@ -115,7 +115,7 @@ intersliceWtrFEqn = case_ [case1,case2,case3]
 --DD5
 
 angleA :: DataDefinition
-angleA = mkDDL angleAQD [makeRef fredlund1977] [{-Derivation-}] angleAL 
+angleA = mkDDL angleAQD [fredlund1977] [{-Derivation-}] angleAL 
   [makeRef2S newA9]--Notes
 --FIXME: fill empty lists in
 
@@ -129,7 +129,7 @@ angleAEqn = (inxi slipHght - inx slipHght (-1)) /
 --DD5.5
 
 angleB :: DataDefinition
-angleB = mkDDL angleBQD [makeRef fredlund1977] [{-Derivation-}] angleBL 
+angleB = mkDDL angleBQD [fredlund1977] [{-Derivation-}] angleBL 
   [makeRef2S newA9]--Notes
 --FIXME: fill empty lists in
 
@@ -143,7 +143,7 @@ angleBEqn = (inxi slopeHght - inx slopeHght (-1)) /
 --DD6
 
 lengthB :: DataDefinition
-lengthB = mkDDL lengthBQD [makeRef fredlund1977] [{-Derivation-}] lengthBL []--Notes
+lengthB = mkDDL lengthBQD [fredlund1977] [{-Derivation-}] lengthBL []--Notes
 --FIXME: fill empty lists in
 
 lengthBQD :: QDefinition
@@ -155,7 +155,7 @@ lengthBEqn = inxi slipDist - inx slipDist (-1)
 --DD6.3
 
 lengthLb :: DataDefinition
-lengthLb = mkDDL lengthLbQD [makeRef fredlund1977] [{-Derivation-}] lengthLbL
+lengthLb = mkDDL lengthLbQD [fredlund1977] [{-Derivation-}] lengthLbL
   [makeRef2S newA9]--Notes
 --FIXME: fill empty lists in
 
@@ -168,7 +168,7 @@ lengthLbEqn = (inxi baseWthX) * sec (inxi baseAngle)
 --DD6.6
 
 lengthLs :: DataDefinition
-lengthLs = mkDDL lengthLsQD [makeRef fredlund1977] [{-Derivation-}] lengthLsL
+lengthLs = mkDDL lengthLsQD [fredlund1977] [{-Derivation-}] lengthLsL
   [makeRef2S newA9]--Notes
 --FIXME: fill empty lists in
 
@@ -181,7 +181,7 @@ lengthLsEqn = (inxi baseWthX) * sec (inxi surfAngle)
 --DD7
 
 seismicLoadF :: DataDefinition
-seismicLoadF = mkDDL seismicLoadFQD [makeRef fredlund1977] [{-Derivation-}] seismicLoadFL []--Notes
+seismicLoadF = mkDDL seismicLoadFQD [fredlund1977] [{-Derivation-}] seismicLoadFL []--Notes
 --FIXME: fill empty lists in
 
 seismicLoadFQD :: QDefinition
@@ -194,7 +194,7 @@ ssmcLFEqn = ((sy earthqkLoadFctr) * (inxi slcWght))
 --DD8
 
 surfLoads :: DataDefinition
-surfLoads = mkDDL surfLoadsQD [makeRef chen2005] [{-Derivation-}] surfLoadsL []--Notes
+surfLoads = mkDDL surfLoadsQD [chen2005] [{-Derivation-}] surfLoadsL []--Notes
 --FIXME: fill empty lists in
 
 surfLoadsQD :: QDefinition
@@ -208,7 +208,7 @@ surfLEqn = (inxi surfLoad) * (inxi impLoadAngle)
 --DD9
 
 intrsliceF :: DataDefinition
-intrsliceF = mkDDL intrsliceFQD [makeRef chen2005] [{-Derivation-}] intrsliceFL []--Notes
+intrsliceF = mkDDL intrsliceFQD [chen2005] [{-Derivation-}] intrsliceFL []--Notes
 --FIXME: fill empty lists in
 
 intrsliceFQD :: QDefinition

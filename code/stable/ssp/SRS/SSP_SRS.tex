@@ -235,7 +235,7 @@ The goal statements are refined to the theoretical models, and the theoretical m
 This section provides general information about the system including identifying the interfaces between the system and its environment (system context), describing the user characteristics and listing the system constraints.
 \subsection{System Context}
 \label{Sec:SysContext}
-Figure~\ref{Figure:sysCtxDiag} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SSP). Arrows are used to show the data flow between the system and its environment.
+\hyperref[Figure:sysCtxDiag]{Fig:sysCtxDiag} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SSP). Arrows are used to show the data flow between the system and its environment.
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{../../../datafiles/SSP/SystemContextFigure.png}
@@ -249,7 +249,7 @@ The interaction between the product and the user is through a user interface. Th
 \begin{itemize}
 \item{Provide the input data related to the soil layer(s) and water table (if applicable), ensuring no errors in the data entry}
 \item{Ensure that consistent units are used for input variables}
-\item{Ensure required software assumptions (Section~\ref{Sec:Assumps}) are appropriate for any particular problem input to the software}
+\item{Ensure required software assumptions (\hyperref[Sec:Assumps]{Section: Assumptions}) are appropriate for any particular problem input to the software}
 \end{itemize}
 \item{SSP Responsibilities}
 \begin{itemize}
@@ -285,12 +285,12 @@ This subsection provides a list of terms that are used in the subsequent section
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
-Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties. The index convention for referencing which interslice or slice is being used is shown in Figure~\ref{Figure:IndexConvention}.
+Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties. The index convention for referencing which interslice or slice is being used is shown in \hyperref[Figure:IndexConvention]{Fig:IndexConvention}.
 \begin{itemize}
 \item[PS1:]Interslice properties convention is noted by j. The end interslice properties are usually not of interest, therefore use the interslice properties from $1\leq{}i\leq{}n-1$.
 \item[PS2:]Slice properties convention is noted by $i$.
 \end{itemize}
-A free body diagram of the forces acting on the slice is displayed in Figure~\ref{Figure:ForceDiagram}.
+A free body diagram of the forces acting on the slice is displayed in \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram}.
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{../../../datafiles/SSP/IndexConvention.png}
@@ -489,7 +489,7 @@ Description & \begin{symbDescription}
               \item{$H$ is the interslice water force (N)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & This equation satisfies \hyperref[T:equilibrium]{TM: equilibrium} in the shear direction. Force equilibrium is derived from the free body diagram of \hyperref[Figure:ForceDiagram]{ForceDiagram} in Section~\ref{Sec:PhysSyst}.
+Notes & This equation satisfies \hyperref[T:equilibrium]{TM: equilibrium} in the shear direction. Force equilibrium is derived from the free body diagram of Figure~\ref{Figure:ForceDiagram} in \hyperref[Sec:PhysSyst]{Section: Physical System Description}.
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
@@ -524,7 +524,7 @@ Description & \begin{symbDescription}
               \item{$H$ is the interslice water force (N)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & This equation satisfies \hyperref[T:equilibrium]{TM: equilibrium} in the shear direction. Force equilibrium is derived from the free body diagram of Figure~\ref{Figure:ForceDiagram} in Section~\ref{Sec:PhysSyst}.
+Notes & This equation satisfies \hyperref[T:equilibrium]{TM: equilibrium} in the shear direction. Force equilibrium is derived from the free body diagram of Figure~\ref{Figure:ForceDiagram} in \hyperref[Sec:PhysSyst]{Section: Physical System Description}.
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
@@ -716,7 +716,7 @@ Description & \begin{symbDescription}
               \item{$ω$ is the angle (${}^{\circ}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & For a slice of mass in the slope the moment equilibrium to satisfy \hyperref[T:equilibrium]{TM: equilibrium} in the direction perpendicular to the base surface of the slice. Moment equilibrium is derived from the free body diagram of Section~\ref{Sec:PhysSyst}. Index i refers to the values of the properties for slice/interslices following convention in Section~\ref{Sec:PhysSyst}. Variable definitions can be found in \hyperref[DD:sliceWght]{DD: sliceWght} to \hyperref[DD:lengthLs]{DD: lengthLs}. \hyperref[A:Interslice-Norm-Shear-Forces-Linear]{A: Interslice-Norm-Shear-Forces-Linear}
+Notes & For a slice of mass in the slope the moment equilibrium to satisfy \hyperref[T:equilibrium]{TM: equilibrium} in the direction perpendicular to the base surface of the slice. Moment equilibrium is derived from the free body diagram of \hyperref[Sec:PhysSyst]{Section: Physical System Description}. Index i refers to the values of the properties for slice/interslices following convention in \hyperref[Sec:PhysSyst]{Section: Physical System Description}. Variable definitions can be found in \hyperref[DD:sliceWght]{DD: sliceWght} to \hyperref[DD:lengthLs]{DD: lengthLs}. \hyperref[A:Interslice-Norm-Shear-Forces-Linear]{A: Interslice-Norm-Shear-Forces-Linear}
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
@@ -1429,7 +1429,7 @@ This section provides the functional requirements, the business tasks that the s
 \subsection{Functional Requirements}
 \label{Sec:FRs}
 \begin{itemize}
-\item[Read-and-Store:\phantomsection\label{readAndStore}]Read the input file and store the data. Necessary input data summarized in Table~\ref{Table:inDataTable}.
+\item[Read-and-Store:\phantomsection\label{readAndStore}]Read the input file and store the data. Necessary input data summarized in \hyperref[Table:inDataTable]{Table:inDataTable}.
 \item[Generate-Critical-Slip-Surfaces:\phantomsection\label{generateCSS}]Generate potential critical slip surfaces for the input slope.
 \item[Test-Slip-Surfaces:\phantomsection\label{testSlipSrf}]Test the slip surfaces to determine if they are physically realizable based on a set of pass or fail criteria.
 \item[Prepare-Slip-Surfaces:\phantomsection\label{prepareSlipS}]Prepare the slip surfaces for a method of slices or limit equilibrium analysis.

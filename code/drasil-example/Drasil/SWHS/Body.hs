@@ -18,7 +18,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, tsymb'',
   getDocDesc, egetDocDesc, ciGetDocDesc)
 import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel,
-  likeChg, probDesc, sysCont, unlikeChg)
+  likeChg, probDesc, sysCont, unlikeChg, inModel)
 
 import qualified Drasil.DocumentLanguage.Units as U (toSentence)
 import Data.Drasil.Concepts.Thermodynamics (thermocon)
@@ -512,27 +512,27 @@ traceDataRef, traceFuncReqRef, traceInstaModelRef, traceAssumpRef, traceTheories
   traceDataDefRef, traceLikelyChgRef, traceGenDefRef :: [Sentence]
 
 traceInstaModel = ["IM1", "IM2", "IM3", "IM4"]
-traceInstaModelRef = map makeRefS swhsIMods --FIXME: swhsIMods is a hack?
+traceInstaModelRef = map makeRef2S swhsIMods --FIXME: swhsIMods is a hack?
 
 traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
   "R11"]
 traceFuncReqRef = map makeRef2S funcReqs
 
 traceData = ["Data Constraints"]
-traceDataRef = [makeRefS dataConTable1] --FIXME: Reference section?
+traceDataRef = [makeRef2S dataConTable1] --FIXME: Reference section?
 
 traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19"]
-traceAssumpRef = map makeRefS newAssumptions 
+traceAssumpRef = map makeRef2S newAssumptions 
 
 traceTheories = ["T1", "T2", "T3"]
-traceTheoriesRef = map makeRefS swhsTMods
+traceTheoriesRef = map makeRef2S swhsTMods
 
 traceGenDefs = ["GD1", "GD2"]
-traceGenDefRef = map makeRefS swhsGDs --FIXME: swhsGDs is a hack?
+traceGenDefRef = map makeRef2S swhsGDs --FIXME: swhsGDs is a hack?
 
 traceDataDefs = ["DD1", "DD2", "DD3", "DD4"]
-traceDataDefRef = map makeRefS swhsDDefs
+traceDataDefRef = map makeRef2S swhsDDefs
 
 traceLikelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
 traceLikelyChgRef = map makeRef2S likelyChgs
@@ -786,13 +786,13 @@ charReader2 diffeq = foldlSent_ [(plural diffeq) `sC`
 orgDocIntro :: Sentence
 orgDocIntro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the template for an", short srs,
-  S "for", phrase sciCompS, S "proposed by", makeRefS parnas1972 `sAnd` 
-  makeRefS parnasClements1984]
+  S "for", phrase sciCompS, S "proposed by", makeCiteS parnas1972 `sAnd` 
+  makeCiteS parnasClements1984]
 
 orgDocEnd :: NamedIdea ni => ni -> CI -> Sentence
 orgDocEnd sp pro = foldlSent_ [S "The", plural inModel,
-  sParen (makeRefS SRS.inModelLabel), S "to be solved are referred to as" +:+. 
-  (foldlList Comma List $ map makeRefS swhsIMods), S "The", plural inModel,
+  sParen (makeRef2S $ SRS.inModel ([]::[Contents]) ([]::[Section])), S "to be solved are referred to as" +:+. 
+  (foldlList Comma List $ map makeRef2S swhsIMods), S "The", plural inModel,
   S "provide the", phrase ode, sParen (short ode :+: S "s") `sAnd` 
   S "algebraic", plural equation, S "that", phrase model, S "the" +:+. 
   phrase sp, short pro, S "solves these", short ode :+: S "s"]
@@ -822,7 +822,7 @@ orgDocEnd sp pro = foldlSent_ [S "The", plural inModel,
 --------------------------
 
 systCContents :: CI -> Contents
-systCContents pro = foldlSP [makeRefS sys_context_fig, S "shows the" +:+. phrase sysCont, 
+systCContents pro = foldlSP [makeRef2S sys_context_fig, S "shows the" +:+. phrase sysCont, 
   S "A circle represents an external entity outside the",
   phrase software `sC` S "the", phrase user, S "in this case. A",
   S "rectangle represents the", phrase softwareSys, S "itself" +:+.
@@ -832,7 +832,7 @@ systCContents pro = foldlSP [makeRefS sys_context_fig, S "shows the" +:+. phrase
 
 sys_context_fig :: LabelledContent
 sys_context_fig = llcc (mkLabelRAFig "SysCon") $ fig (foldlSent_
-  [makeRefS sys_context_fig +: EmptyS, titleize sysCont])
+  [makeRef2S sys_context_fig +: EmptyS, titleize sysCont])
   "SystemContextFigure.png"
 
 systCIntro :: CI -> NamedChunk -> Contents
@@ -983,7 +983,7 @@ genDefDeriv1 roc tem = foldlSPCol [S "Detailed derivation of simplified",
   phrase roc, S "of", phrase tem]
 
 genDefDeriv2 :: LabelledContent -> UnitalChunk -> Contents
-genDefDeriv2 t1ct vo = foldlSPCol [S "Integrating", makeRefS t1ct,
+genDefDeriv2 t1ct vo = foldlSPCol [S "Integrating", makeRef2S t1ct,
   S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
 genDefDeriv3 = eqUnR' $ 
@@ -1043,11 +1043,11 @@ iModSubpar :: NamedChunk -> UncertQ -> UncertQ -> UncertQ -> ConceptChunk
   -> [Contents]
 iModSubpar sol temw tempcm epcm pc = [foldlSP [S "The goals", foldlList Comma List $ map S
   ["GS1", "GS2", "GS3", "GS4"], S "are solved by" +:+. foldlList Comma List -- hardcoded GSs because Goals are not implemented yet
-  [makeRefS eBalanceOnWtr, makeRefS eBalanceOnPCM, makeRefS heatEInWtr, makeRefS heatEInPCM], 
-  S "The", plural sol, S "for", makeRefS eBalanceOnWtr `sAnd` makeRefS eBalanceOnPCM, 
+  [makeRef2S eBalanceOnWtr, makeRef2S eBalanceOnPCM, makeRef2S heatEInWtr, makeRef2S heatEInPCM], 
+  S "The", plural sol, S "for", makeRef2S eBalanceOnWtr `sAnd` makeRef2S eBalanceOnPCM, 
   S "are coupled since the", phrase sol, S "for", ch temw `sAnd` ch tempcm +:+. S "depend on one another", 
-  makeRefS heatEInWtr, S "can be solved once", makeRefS eBalanceOnWtr, S "has been solved. The", 
-  phrase sol `sOf` makeRefS eBalanceOnPCM `sAnd` makeRefS heatEInPCM, S "are also coupled, since the", 
+  makeRef2S heatEInWtr, S "can be solved once", makeRef2S eBalanceOnWtr, S "has been solved. The", 
+  phrase sol `sOf` makeRef2S eBalanceOnPCM `sAnd` makeRef2S heatEInPCM, S "are also coupled, since the", 
   phrase tempcm `sAnd` phrase epcm, S "depend on the", phrase pc]]
 
 iMod1Para :: UnitalChunk -> ConceptChunk -> [Contents]
@@ -1056,8 +1056,8 @@ iMod1Para en wa = [foldlSPCol [S "Derivation of the",
 
 iMod1Sent2 :: DataDefinition -> DataDefinition -> UnitalChunk ->
   UnitalChunk -> [Sentence]
-iMod1Sent2 d1hf d2hf hfc hfp = [S "Using", (makeRefS d1hf) `sAnd`
-  (makeRefS d2hf), S "for", ch hfc `sAnd`
+iMod1Sent2 d1hf d2hf hfc hfp = [S "Using", (makeRef2S d1hf) `sAnd`
+  (makeRef2S d2hf), S "for", ch hfc `sAnd`
   ch hfp, S "respectively, this can be written as"]
 
 iMod1Sent3 :: UnitalChunk -> UncertQ -> [Sentence]
@@ -1083,7 +1083,7 @@ iMod1Sent6 = [S "Setting",
 
 iMod1Sent7 :: [Sentence]
 iMod1Sent7 = [S "Finally, factoring out", (E $ 1 / sy tau_W) `sC` 
-  S "we are left with the governing", short ode, S "for", makeRefS eBalanceOnWtr]
+  S "we are left with the governing", short ode, S "for", makeRef2S eBalanceOnWtr]
 
 iMod1Eqn1, iMod1Eqn2, iMod1Eqn3, iMod1Eqn4, iMod1Eqn5,
   iMod1Eqn6, iMod1Eqn7 :: Expr
@@ -1126,7 +1126,7 @@ iMod1Eqn7 = (deriv (sy temp_W) time $= (1 / (sy tau_W)) *
 -- Fractions in paragraph?
 
 iMod2Sent1 :: DataDefinition -> UnitalChunk -> [Sentence]
-iMod2Sent1 d2hfp hfp = [S "Using", makeRefS d2hfp, S "for", 
+iMod2Sent1 d2hfp hfp = [S "Using", makeRef2S d2hfp, S "for", 
   ch hfp `sC` S "this", phrase equation, S "can be written as"]
 
 iMod2Sent2 :: [Sentence]
@@ -1183,7 +1183,7 @@ dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
   S "or there will be a divide by zero in the", phrase model],
 
   [sParen (S "+"), S "These", plural qua, S "cannot be zero" `sC`
-  S "or there would be freezing", sParen (makeRefS newA13)],
+  S "or there would be freezing", sParen (makeRef2S newA13)],
 
   [sParen (Sp Hash), S "The", plural constraint, S "on the", phrase sa,
   S "are calculated by considering the", phrase sa, S "to", phrase vo +:+.
@@ -1223,7 +1223,7 @@ propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
   phrase input_, S "from the", phrase co `sAnd` S "the",
   phrase en, phrase output_, S "to the" +:+. short pcmat,
   S "This can be shown as an", phrase equation, S "by taking",
-  (makeRefS d1hfc) `sAnd` (makeRefS d2hfp) `sC`
+  (makeRef2S d1hfc) `sAnd` (makeRef2S d2hfp) `sC`
   S "multiplying each by their respective", phrase su,
   S "area of", phrase ht `sC` S "and integrating each",
   S "over the", phrase sim_time `sC` S "as follows"]

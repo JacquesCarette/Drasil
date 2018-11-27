@@ -18,7 +18,7 @@ import Data.Drasil.Quantities.Thermodynamics (temp, heat_cap_spec,
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma),
     foldlList, foldlSent, isThe, sAnd)
 import Data.Drasil.SI_Units (joule)
-
+import Drasil.SWHS.Assumptions (newA1)
 import Drasil.SWHS.Concepts (transient)
 import Drasil.SWHS.DataDefs (dd3HtFusion)
 import Drasil.SWHS.Labels (thermalEnergyOnlyL)
@@ -65,7 +65,7 @@ consThermEdesc = foldlSent [
   ch time +:+ S "is" +:+ phrase time +:+ sParen (Sy (unit_symb time)), ch gradient +:+
   S "is the" +:+ (gradient ^. defn)], S "For this", phrase equation, S "to apply" `sC`
   S "other forms of", phrase energy `sC` S "such as", phrase mech_energy `sC`
-  S "are assumed to be negligible in the", phrase system, sParen (makeRefS thermalEnergyOnlyL)]
+  S "are assumed to be negligible in the", phrase system, sParen (makeRef2S newA1)]
 
 -------------------------
 -- Theoretical Model 2 --

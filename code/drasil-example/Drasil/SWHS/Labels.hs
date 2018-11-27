@@ -78,3 +78,7 @@ calcChgHeatEnergyPCMOverTimeL = mkLabelSame "Calculate-Change-Heat_Energy-PCM-Ov
 verifyEnergyOutputL = mkLabelSame "Verify-Energy-Output-follow-Conservation-of-Energy" (Req FR)
 calcPCMMeltBeginL = mkLabelSame "Calculate-PCM-melt-begin-time" (Req FR)
 calcPCMMeltEndL = mkLabelSame "Calculate-PCM-melt-end-time" (Req FR)
+
+
+inputInitQuantsLbl :: Label
+inputInitQuantsLbl = mkLabelSame "Input-Variable-Requirements" Tab

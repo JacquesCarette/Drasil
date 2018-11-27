@@ -63,7 +63,7 @@ import Drasil.SWHS.GenDefs (swhsGDs)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, 
   heatEInWtr, heatEInPCM, swhsIMods)
 import Drasil.SWHS.References (parnas1972, parnasClements1984, swhsCitations)
-import Drasil.SWHS.Requirements (funcReqs, inputInitQuantsLbl, nonFuncReqs, verifyEnergyOutput)
+import Drasil.SWHS.Requirements (funcReqs, nonFuncReqs, verifyEnergyOutput)
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, swhsTMods)
 import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
   temp_C, coil_SA, w_E, coil_HTC, sim_time, tau_S_P, htCap_S_P, pcm_mass,
@@ -72,6 +72,7 @@ import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
   specParamValList, w_density, temp_init, htCap_L_P, htFusion, pcm_density,
   temp_melt_P, pcm_vol, diam, tank_length, swhsConstrained, swhsOutputs, 
   swhsInputs, swhsSymbols, swhsSymbolsAll, swhsUC)
+import Drasil.SWHS.Labels (inputInitQuantsLbl)
 
 -------------------------------------------------------------------------------
 

@@ -3,30 +3,23 @@ module Drasil.SSP.DataDefs (dataDefns, intrsliceF, surfLoads,
 
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
-import Control.Lens ((^.))
-
-import Data.Drasil.Utils (eqUnR', weave)
 
 -- Needed for derivations
-import Data.Drasil.Concepts.Documentation (definition, value)
-import Data.Drasil.SentenceStructures (eqN, foldlSentCol, foldlSP, getTandS, 
-  ofThe', sAnd)
-import Data.Drasil.Concepts.Math (equation)
+--import Data.Drasil.SentenceStructures (eqN, foldlSentCol, foldlSP, getTandS, 
+ -- ofThe', sAnd)
 
-import Drasil.SSP.Assumptions (newA3, newA4, newA5, newA9, newA10, newA11)
-import Drasil.SSP.BasicExprs (eqlExpr)
+import Drasil.SSP.Assumptions (newA9)
 import Drasil.SSP.Labels (sliceWghtL, baseWtrFL, 
   surfWtrFL, intersliceWtrFL, angleAL, angleBL, lengthLbL , sliceWghtL, 
-  lengthBL, lengthLsL, seismicLoadFL, intrsliceFL, resShearWOL, mobShearWOL,
+  lengthBL, lengthLsL, seismicLoadFL, intrsliceFL,
   surfLoadsL)
-import Drasil.SSP.TMods (effStress)
 import Drasil.SSP.References (chen2005, fredlund1977)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
-  cohesion, dryWeight, earthqkLoadFctr, fricAngle, impLoadAngle, intNormForce, 
-  intShrForce, inx, inxi, inxiM1, mobShrI, normToShear, nrmFNoIntsl, nrmFSubWat,
-  satWeight, scalFunc, shearFNoIntsl,shearRNoIntsl, shrResI, slcWght, 
+  dryWeight, earthqkLoadFctr, impLoadAngle, intNormForce, 
+  intShrForce, inx, inxi, inxiM1, normToShear,
+  satWeight, scalFunc,  slcWght, 
   slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce, surfLngth, 
-  surfLoad, ufixme1, ufixme2, waterHght, waterWeight, watrForce, watrForceDif, wiif)
+  surfLoad, ufixme1, ufixme2, waterHght, waterWeight, watrForce)
 
 ------------------------
 --  Data Definitions  --

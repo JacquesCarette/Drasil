@@ -18,7 +18,7 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc)
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
-  assumptLabel, physSyst, assumpt)
+  physSyst, assumpt)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   design, document, effect, element, endUser, environment, goalStmt, inModel, 

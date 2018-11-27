@@ -6,7 +6,7 @@ module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
 
-import Drasil.DocLang.SRS as SRS (physSystLabel, physSyst)
+import Drasil.DocLang.SRS as SRS (physSyst)
 
 import Data.Drasil.Concepts.Documentation (assumption, definition, 
   method_, property, value, variable)
@@ -30,7 +30,7 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
   cohesion, fricAngle, fs, intNormForce, intShrForce, inxi, inxiM1, 
   mobShrI, normToShear, nrmFSubWat, scalFunc, shearFNoIntsl, shrResI, 
   shrResI, shrStress, totNrmForce, xi, shearRNoIntsl, shrResI, slcWght,
-  surfHydroForce, surfLngth, surfLoad, surfAngle, impLoadAngle, earthqkLoadFctr,
+  surfHydroForce, surfLoad, surfAngle, impLoadAngle, earthqkLoadFctr,
   watrForceDif)
 
 ---------------------------

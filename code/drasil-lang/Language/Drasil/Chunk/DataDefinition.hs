@@ -8,13 +8,13 @@ import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn')
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), DefiningExpr(defnExpr), Quantity, HasSpace(typ),
-  HasDerivation(derivations), HasReference(getReferences), HasAdditionalNotes(getNotes),
+  HasDerivation(derivations),  HasAdditionalNotes(getNotes),
   HasShortName(shortname), HasLabel(getLabel), ConceptDomain(cdom), CommonIdea(abrv))
 import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Label (mkLabelSame)
-import Language.Drasil.RefTypes(RefType(..), DType(..), Reference)
+import Language.Drasil.RefTypes(RefType(..), DType(..))
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Symbol.Helpers (eqSymb)
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)

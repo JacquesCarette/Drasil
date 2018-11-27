@@ -37,7 +37,7 @@ getUIDshort (Ref _)              = []
 getUIDshort (Ref2 _)             = []
 getUIDshort ((:+:) a b)          = (getUIDshort a) ++ (getUIDshort b)
 getUIDshort (Quote a)            = getUIDshort a
-getUIDshort (E a)                = []
+getUIDshort (E _)                = []
 getUIDshort (EmptyS)             = []
 
 -----------------------------------------------------------------------------

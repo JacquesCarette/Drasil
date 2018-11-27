@@ -3,7 +3,7 @@ module Language.Drasil.Chunk.GenDefn ( GenDefn, gd', gd'') where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, IsUnit,
-  ExprRelat(relat), HasDerivation(derivations), HasReference(getReferences),
+  ExprRelat(relat), HasDerivation(derivations),
   HasLabel(getLabel), HasAdditionalNotes(getNotes), HasShortName(shortname),
   CommonIdea(abrv))
 import Data.Drasil.IdeaDicts (softEng)
@@ -14,7 +14,7 @@ import Language.Drasil.Development.Unit (unitWrapper, UnitDefn, MayHaveUnit(getU
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Label (mkLabelSame)
-import Language.Drasil.RefTypes(RefType(..), DType(..), Reference)
+import Language.Drasil.RefTypes(RefType(..), DType(..))
 import Control.Lens (makeLenses, view)
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
 import Language.Drasil.NounPhrase (cn')

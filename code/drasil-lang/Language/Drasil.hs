@@ -37,6 +37,7 @@ module Language.Drasil (
   , HasUnitSymbol(usymb)
   , IsUnit
   , HasReference(getReferences)
+  , HasReference2(getReferences2) -- HACK that will eventually go away
   , CommonIdea(abrv)
   , Constrained(constraints)
   , HasReasVal(reasVal)
@@ -157,7 +158,7 @@ module Language.Drasil (
   -- AssumpChunk
   , AssumpChunk, assuming, assump
   -- Reference
-  , makeRef, makeRefS, makeRef2S, makeCite, makeRef2, makeCiteS
+  , makeRef, makeRefS, makeRef2S, makeCite, makeCiteS, makeURI, makeRef2
   , ReferenceDB, AssumpMap, assumpLookup, assumptionsFromDB
   , rdb, assumpRefTable, HasAssumpRefs
   , RefBy(..)
@@ -237,7 +238,9 @@ import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
   IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
-  HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), HasReference(getReferences), 
+  HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), 
+  HasReference(getReferences), 
+  HasReference2(getReferences2),  -- HACK that will eventually go away
   HasLabel(getLabel), MayHaveLabel(getMaybeLabel), HasRefAddress(getRefAdd), HasSpace(typ),
   DefiningExpr(defnExpr), HasShortName(shortname), Quantity, UncertainQuantity(uncert),
   HasFields(getFields))
@@ -295,13 +298,10 @@ import Language.Drasil.ShortName (resolveSN, ShortName
   , shortname', getStringSN)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Sentence (Sentence(..), sParen, sSqBr, sC, (+:+), (+:+.), (+:), SentenceStyle(..))
-import Language.Drasil.Reference (makeRef, makeRefS, makeCite, ReferenceDB, assumpDB
-                                 , AssumpMap, assumpLookup, HasAssumpRefs
-                                 , assumpRefTable, assumptionsFromDB
-                                 , rdb, RefBy(..)
-                                 , Referable(..)
-                                 , citationRefTable, RefMap
-                                 , simpleMap, makeRef2S, makeRef2, makeCiteS)
+import Language.Drasil.Reference (makeRef, makeRefS, makeCite, makeCiteS, ReferenceDB
+ , makeURI, makeRef2
+ , AssumpMap, assumpLookup, HasAssumpRefs, assumpDB , assumpRefTable, assumptionsFromDB
+ , rdb, RefBy(..), Referable(..), citationRefTable, RefMap, simpleMap, makeRef2S)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 
   prime, compsy)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol, sCurlyBrSymb)

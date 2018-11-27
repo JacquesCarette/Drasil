@@ -1,6 +1,7 @@
 module Drasil.GlassBR.DataDefs (aspRat, dataDefns, dimLL, gbQDefns, glaTyFac, 
-  hFromt, loadDF, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac) where
-
+  hFromt, loadDF, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac,
+  probOfBreak, calofCapacity, calofDemand) where
+import Control.Lens ((^.))
 import Language.Drasil
 import Prelude hiding (log, exp, sqrt)
 
@@ -9,17 +10,17 @@ import Data.Drasil.Concepts.Math (probability, parameter, calculation)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 
 import Data.Drasil.Citations (campidelli)
-import Data.Drasil.SentenceStructures (sAnd, sOf)
+import Data.Drasil.SentenceStructures (sAnd, sOf, foldlSent, isThe, sOr)
 
 import Drasil.GlassBR.Assumptions (standardValues, ldfConstant, glassLite)
 import Drasil.GlassBR.Concepts (annealed, fullyT, heatS)
-import Drasil.GlassBR.Labels (calOfDemandL)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio, 
   demand, dimlessLoad, gTF, glassTypeAbbrsStr, glassTypeFactors, glass_type, 
   lDurFac, load_dur, mod_elas, nom_thick, nominalThicknesses, nonFactorL, pb_tol, 
   plate_len, plate_width, risk_fun, sdf_tol, sdx, sdy, sdz, standOffDist, sflawParamK, 
-  sflawParamM, stressDistFac, tolLoad, min_thick)
+  sflawParamM, stressDistFac, tolLoad, min_thick, prob_br, lRe, loadSF, demandq,
+  eqTNTWeight, wtntWithEqn)
 
 ----------------------
 -- DATA DEFINITIONS --
@@ -27,7 +28,8 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspect_ratio,
 
 dataDefns :: [DataDefinition] 
 dataDefns = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, 
-  dimLL, tolPre, tolStrDisFac, standOffDis, aspRat]
+  dimLL, tolPre, tolStrDisFac, standOffDis, aspRat, probOfBreak,
+  calofCapacity, calofDemand]
 
 gbQDefns :: [Block QDefinition]
 gbQDefns = [Parallel hFromtQD {-DD2-} [glaTyFacQD {-DD6-}]] ++ --can be calculated on their own
@@ -48,8 +50,8 @@ riskQD = mkQuantDef risk_fun risk_eq
 
 risk :: DataDefinition
 risk = mkDD riskQD 
-  [makeRef astm2009, makeRef beasonEtAl1998 {- FIXME +:+ sParen (S "Eq. 4-5") -},
-  makeRef campidelli {- FIXME +:+ sParen (S "Eq. 14") -}] 
+  [astm2009, beasonEtAl1998 {- FIXME +:+ sParen (S "Eq. 4-5") -},
+  campidelli {- FIXME +:+ sParen (S "Eq. 14") -}] 
   [{-derivation-}] "risk_fun"
   (aGrtrThanB : hRef : ldfRef : jRef : [])
 
@@ -66,7 +68,7 @@ hFromtQD :: QDefinition
 hFromtQD = mkQuantDef min_thick hFromt_eq
 
 hFromt :: DataDefinition
-hFromt = mkDD hFromtQD [makeRef astm2009] [{-derivation-}] "min_thick" [hMin]
+hFromt = mkDD hFromtQD [astm2009] [{-derivation-}] "min_thick" [hMin]
 
 --DD3-- (#749)
 
@@ -77,7 +79,7 @@ loadDFQD :: QDefinition
 loadDFQD = mkQuantDef lDurFac loadDF_eq
 
 loadDF :: DataDefinition
-loadDF = mkDD loadDFQD [makeRef astm2009] [{-derivation-}] "loadDurFactor" [makeRef2S standardValues,
+loadDF = mkDD loadDFQD [astm2009] [{-derivation-}] "loadDurFactor" [makeRef2S standardValues,
   makeRef2S ldfConstant]
 
 --DD4--
@@ -91,7 +93,7 @@ strDisFacQD :: QDefinition
 strDisFacQD = mkQuantDef stressDistFac strDisFac_eq
 
 strDisFac :: DataDefinition
-strDisFac = mkDD strDisFacQD [makeRef astm2009] [{-derivation-}] "stressDistFac"
+strDisFac = mkDD strDisFacQD [astm2009] [{-derivation-}] "stressDistFac"
   (jRef2 : qHtRef : arRef : [])
 
 --DD5--
@@ -104,7 +106,7 @@ nonFLQD :: QDefinition
 nonFLQD = mkQuantDef nonFactorL nonFL_eq
 
 nonFL :: DataDefinition
-nonFL = mkDD nonFLQD [makeRef astm2009] [{-derivation-}] "nFL"
+nonFL = mkDD nonFLQD [astm2009] [{-derivation-}] "nFL"
   (aGrtrThanB : hRef : qHtTlTolRef : [makeRef2S standardValues])
 
 --DD6--
@@ -119,7 +121,7 @@ glaTyFacQD :: QDefinition
 glaTyFacQD = mkQuantDef gTF glaTyFac_eq
 
 glaTyFac :: DataDefinition
-glaTyFac = mkDD glaTyFacQD [makeRef astm2009] [{-derivation-}] "gTF"
+glaTyFac = mkDD glaTyFacQD [astm2009] [{-derivation-}] "gTF"
   (anGlass : ftGlass : hsGlass : [])
 
 --DD7--
@@ -132,7 +134,7 @@ dimLLQD :: QDefinition
 dimLLQD = mkQuantDef dimlessLoad dimLL_eq
 
 dimLL :: DataDefinition
-dimLL = mkDD dimLLQD [makeRef astm2009, makeRef campidelli {- +:+ sParen (S "Eq. 7") -}] [{-derivation-}] "dimlessLoad"
+dimLL = mkDD dimLLQD [astm2009, campidelli {- +:+ sParen (S "Eq. 7") -}] [{-derivation-}] "dimlessLoad"
   (qRef : aGrtrThanB : hRef : gtfRef : glassLiteRef : [makeRef2S standardValues])
 
 --DD8--
@@ -145,7 +147,7 @@ tolPreQD :: QDefinition
 tolPreQD = mkQuantDef tolLoad tolPre_eq
 
 tolPre :: DataDefinition
-tolPre = mkDD tolPreQD [makeRef astm2009] [{-derivation-}] "tolLoad"
+tolPre = mkDD tolPreQD [astm2009] [{-derivation-}] "tolLoad"
   (qHtTlExtra : [])
 
 --DD9--
@@ -160,7 +162,7 @@ tolStrDisFacQD :: QDefinition
 tolStrDisFacQD = mkQuantDef sdf_tol tolStrDisFac_eq
 
 tolStrDisFac :: DataDefinition
-tolStrDisFac = mkDD tolStrDisFacQD [makeRef astm2009] [{-derivation-}] "sdf_tol"
+tolStrDisFac = mkDD tolStrDisFacQD [astm2009] [{-derivation-}] "sdf_tol"
   (jtolRelToPbtol : aGrtrThanB : hRef : ldfRef : pbTolUsr : [makeRef2S standardValues])
 
 --DD10--
@@ -172,7 +174,7 @@ standOffDisQD :: QDefinition
 standOffDisQD = mkQuantDef standOffDist standOffDis_eq
 
 standOffDis :: DataDefinition
-standOffDis = mkDD standOffDisQD [makeRef astm2009] [{-derivation-}] "standOffDist" []
+standOffDis = mkDD standOffDisQD [astm2009] [{-derivation-}] "standOffDist" []
 
 --DD11--
 
@@ -183,9 +185,61 @@ aspRatQD :: QDefinition
 aspRatQD = mkQuantDef aspect_ratio aspRat_eq
 
 aspRat :: DataDefinition
-aspRat = mkDD aspRatQD [makeRef astm2009] [{-derivation-}] "aspect_ratio" (aGrtrThanB : [])
+aspRat = mkDD aspRatQD [astm2009] [{-derivation-}] "aspect_ratio" (aGrtrThanB : [])
+
+--DD12--
+probOfBreak_eq :: Expr
+probOfBreak_eq = 1 - (exp (negate (sy risk)))
+
+probOfBreakQD :: QDefinition
+probOfBreakQD = mkQuantDef prob_br probOfBreak_eq
+
+probOfBreak :: DataDefinition
+probOfBreak = mkDD probOfBreakQD [astm2009, beasonEtAl1998] [{-derivation-}] "probOfBreak" (glassBreak : [])
+
+--DD13--
+calofCapacity_eq :: Expr
+calofCapacity_eq = ((sy nonFL) * (sy glaTyFac) * (sy loadSF))
+
+calofCapacityQD :: QDefinition
+calofCapacityQD = mkQuantDef lRe calofCapacity_eq
+
+calofCapacity :: DataDefinition
+calofCapacity = mkDD calofCapacityQD [astm2009] [{-derivation-}] "calofCapacity" capacityS
+
+--DD14--
+calofDemand_eq :: Expr
+calofDemand_eq = apply2 demand eqTNTWeight standOffDist
+
+calofDemandQD :: QDefinition
+calofDemandQD = mkQuantDef demand calofDemand_eq
+
+calofDemand :: DataDefinition
+calofDemand = mkDD calofDemandQD [astm2009] [{-derivation-}] "calofCapacity" (calofDemandDesc : [])
+
 
 --Additional Notes--
+calofDemandDesc :: Sentence
+calofDemandDesc = 
+  foldlSent [(ch demand `sOr` phrase demandq) `sC`
+  S "is the", (demandq ^. defn), 
+  S "obtained from Figure 2 by interpolation using", --use MakeRef? Issue #216
+  (phrase standOffDist), sParen (ch standOffDist) `sAnd`
+  (ch eqTNTWeight), S "as" +:+. plural parameter, 
+  (ch eqTNTWeight), S "is defined as" +:+.
+  E (wtntWithEqn^.equat), (ch standOffDist) `isThe`
+  (phrase standOffDist), S "as defined in", makeRef2S standOffDis]
+
+capacityS :: [Sentence]
+capacityS = [ch lRe +:+ S "is the" +:+ phrase lRe `sC` S "which is also called capacity" +:+.
+  ch nonFL +:+ S "is the" +:+ phrase nonFL `sC` S "as defined in" +:+.
+  makeRef2S nonFL +:+ ch glaTyFac +:+ S "is the" +:+ phrase glaTyFac `sC` S "as defined in" +:+.
+  makeRef2S glaTyFac] ++ [makeRef2S glassLite, makeRef2S glaTyFac, makeRef2S nonFL]
+
+
+glassBreak :: Sentence
+glassBreak = (ch risk +:+ S "is the" +:+ phrase risk `sC` S "as defined in" +:+
+  makeRef2S risk)
 
 aGrtrThanB :: Sentence
 aGrtrThanB = (ch plate_len `sC` ch plate_width +:+ 
@@ -234,7 +288,7 @@ qHtTlTolRef :: Sentence
 qHtTlTolRef = (ch tolLoad +:+ S "is the tolerable load defined in" +:+. makeRef2S tolPre)
 
 qRef :: Sentence
-qRef = (ch demand +:+ S "is the 3 second equivalent pressure, as given in" +:+. makeRefS calOfDemandL)
+qRef = (ch demand +:+ S "is the 3 second equivalent pressure, as given in" +:+. makeRef2S calofDemand)
 
 gtfRef :: Sentence
 gtfRef = (ch gTF +:+ S "is the" +:+. (phrase gTF `sC` S "as given by" +:+ makeRef2S glaTyFac))

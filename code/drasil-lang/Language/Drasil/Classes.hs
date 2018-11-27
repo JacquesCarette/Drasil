@@ -17,6 +17,7 @@ module Language.Drasil.Classes (
   , IsLabel
   , UnitEq(uniteq)
   , HasReference(getReferences)
+  , HasReference2(getReferences2) -- hack for now...
   , CommonIdea(abrv)
   , Constrained(constraints)
   , HasReasVal(reasVal)
@@ -42,6 +43,7 @@ import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.RefTypes (Reference)
+import Language.Drasil.RefProg (Reference2)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
@@ -84,6 +86,9 @@ class HasSpace c where
 
 class HasReference c where
   getReferences :: Lens' c [Reference]
+
+class HasReference2 c where
+  getReferences2 :: Lens' c [Reference2]
 
 class HasDerivation c where
   derivations :: Lens' c Derivation

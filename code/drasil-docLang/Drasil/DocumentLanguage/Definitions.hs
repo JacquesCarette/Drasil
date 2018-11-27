@@ -14,7 +14,7 @@ module Drasil.DocumentLanguage.Definitions
 import Language.Drasil
 import Language.Drasil.Development (MayHaveUnit(getUnit))
 import Data.Drasil.Utils (eqUnR)
-import Data.Drasil.SentenceStructures (getSource, foldlSent)
+import Data.Drasil.SentenceStructures (getSource', foldlSent)
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
 
@@ -93,7 +93,7 @@ mkTMField t _ l@DefiningEquation fs =
 mkTMField t m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] (t ^. invariants)) : fs
 mkTMField t m l@(RefBy) fs = (show l, [helpToRefField t (m ^. refbyTable)]) : fs --FIXME: fill this in
-mkTMField t _ l@(Source) fs = (show l, map (mkParagraph . Ref) $ t ^. getReferences) : fs
+mkTMField t _ l@(Source) fs = (show l, map (mkParagraph . Ref2) $ t ^. getReferences2) : fs
 mkTMField t _ l@(Notes) fs = 
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (t ^. getNotes)
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
@@ -117,8 +117,8 @@ mkDDField d _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (sy d $= d ^. defnEx
   (modifyLabelEqn (d ^.getLabel))) :[]) : fs 
 mkDDField d m l@(Description v u) fs =
   (show l, buildDDescription' v u d m) : fs
-mkDDField d m l@(RefBy) fs = (show l, [helpToRefField d (m ^. refbyTable)]) : fs --FIXME: fill this in
-mkDDField d _ l@(Source) fs = (show l, [mkParagraph $ getSource d]) : fs
+mkDDField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
+mkDDField d _ l@(Source) fs = (show l, [mkParagraph $ getSource' d]) : fs
 mkDDField d _ l@(Notes) fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (d ^. getNotes)
 mkDDField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for data definitions"
@@ -149,7 +149,7 @@ mkGDField g _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (g ^. relat)
 mkGDField g m l@(Description v u) fs = (show l,
   (buildDescription v u (g ^. relat) m) []) : fs
 mkGDField g m l@(RefBy) fs = (show l, [helpToRefField g (m ^. refbyTable)]) : fs --FIXME: fill this in
-mkGDField g _ l@(Source) fs = (show l, [mkParagraph $ getSource g]) : fs
+mkGDField g _ l@(Source) fs = (show l, [mkParagraph $ getSource' g]) : fs
 mkGDField g _ l@(Notes) fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (g ^. getNotes)
 mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 
@@ -161,7 +161,7 @@ mkIMField i _ l@DefiningEquation fs =
 mkIMField i m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] [i ^. relat]) : fs
 mkIMField i m l@(RefBy) fs = (show l, [helpToRefField i (m ^. refbyTable)]) : fs --FIXME: fill this in
-mkIMField i _ l@(Source) fs = (show l, [mkParagraph $ getSource i]) : fs
+mkIMField i _ l@(Source) fs = (show l, [mkParagraph $ getSource' i]) : fs
 mkIMField i _ l@(Output) fs = (show l, [mkParagraph x]) : fs
   where x = P . eqSymb $ i ^. imOutput
 mkIMField i _ l@(Input) fs = 

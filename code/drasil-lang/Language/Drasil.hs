@@ -37,6 +37,7 @@ module Language.Drasil (
   , HasUnitSymbol(usymb)
   , IsUnit
   , HasReference(getReferences)
+  , HasReference2(getReferences2) -- HACK that will eventually go away
   , CommonIdea(abrv)
   , Constrained(constraints)
   , HasReasVal(reasVal)
@@ -70,7 +71,7 @@ module Language.Drasil (
   , GenDefn, gd', gd''
   -- Chunk.InstanceModel
   , InstanceModel
-  , inCons, outCons, imOutput, imInputs, im, im', im'', im'''
+  , inCons, outCons, imOutput, imInputs, im', im''
   , Constraints
   -- Chunk.Quantity
   , QuantityDict, qw, mkQuant
@@ -101,12 +102,16 @@ module Language.Drasil (
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
   , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
   , cProceedings, cTechReport, cUnpublished
+  -- Chunk.Citation
+  , HasCitation(getCitations)
   -- Sentence
   , Sentence(..), sParen, sSqBr , (+:+), (+:+.), sC, (+:)
-  , RefProg(..), Reference2(..), SentenceStyle(..)
+  , Reference2(..), SentenceStyle(..)
+  -- RefProg
+  , RefProg(..), IRefProg(..)
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
-  , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase', phraseNP, pluralNP
+  , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase'
   , CapitalizationRule(..), at_startNP, at_startNP'
   , PluralRule(..)
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
@@ -122,8 +127,6 @@ module Language.Drasil (
   , HasContents(accessContents)
   , RawContent(..)
   , mkFig
-  -- Reference
-  , makeRef, makeRefS, mkRefFrmLbl, makeRef2, makeRef2S
   -- Space
   , Space(..)
   -- Symbol
@@ -156,9 +159,11 @@ module Language.Drasil (
   , refbyLookup, HasRefbyTable(..)
   -- AssumpChunk
   , AssumpChunk, assuming, assump
-  -- Referencing
+  -- Reference
+  , makeRef, makeRefS
+  , makeRef2S, makeCite, makeCiteS, makeURI, makeRef2
   , ReferenceDB, AssumpMap, assumpLookup, assumptionsFromDB
-  , rdb, assumpRefTable, customRef, HasAssumpRefs
+  , rdb, assumpRefTable, HasAssumpRefs
   , RefBy(..)
   , assumpDB, RefMap, simpleMap
   , citationRefTable
@@ -166,6 +171,7 @@ module Language.Drasil (
   , RefAdd, RefType(Cite, Tab, EqnB, Req, LCh, UnCh, Def, Lst, Link, Sect, Blank, Assump)
   , ReqType(FR, NFR)
   , Reference(Reference)
+  , LinkType(Internal, Cite2, External)
   -- Label
   , Label 
   , mkLabelRA', mkLabelSame, mkEmptyLabel, mkURILabel
@@ -235,7 +241,9 @@ import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
   IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
-  HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), HasReference(getReferences), 
+  HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), 
+  HasReference(getReferences), 
+  HasReference2(getReferences2),  -- HACK that will eventually go away
   HasLabel(getLabel), MayHaveLabel(getMaybeLabel), HasRefAddress(getRefAdd), HasSpace(typ),
   DefiningExpr(defnExpr), HasShortName(shortname), Quantity, UncertainQuantity(uncert),
   HasFields(getFields))
@@ -255,7 +263,9 @@ import Language.Drasil.Chunk.Citation (
   , cArticle, cBookA, cBookE, cBooklet
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
   , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
-  , cProceedings, cTechReport, cUnpublished)
+  , cProceedings, cTechReport, cUnpublished
+  -- move?
+  , HasCitation(getCitations) )
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained
@@ -291,13 +301,10 @@ import Language.Drasil.ShortName (resolveSN, ShortName
   , shortname', getStringSN)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Sentence (Sentence(..), sParen, sSqBr, sC, (+:+), (+:+.), (+:), SentenceStyle(..))
-import Language.Drasil.Reference (makeRef, makeRefS, mkRefFrmLbl, ReferenceDB, assumpDB
-                                 , AssumpMap, assumpLookup, HasAssumpRefs
-                                 , assumpRefTable, assumptionsFromDB
-                                 , rdb, RefBy(..)
-                                 , Referable(..), customRef
-                                 , citationRefTable, RefMap
-                                 , simpleMap, makeRef2S, makeRef2)
+import Language.Drasil.Reference (makeRef, makeRefS, makeCite, makeCiteS, ReferenceDB
+ , makeURI, makeRef2
+ , AssumpMap, assumpLookup, HasAssumpRefs, assumpDB , assumpRefTable, assumptionsFromDB
+ , rdb, RefBy(..), Referable(..), citationRefTable, RefMap, simpleMap, makeRef2S)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 
   prime, compsy)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol, sCurlyBrSymb)
@@ -308,8 +315,8 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
 import Language.Drasil.RefTypes(RefAdd, RefType(..),
-  DType(..), Reference(Reference), ReqType(FR, NFR))
-import Language.Drasil.RefProg(RefProg(..), Reference2(Reference2))
+  DType(..), Reference(Reference), ReqType(FR, NFR), LinkType(Internal, Cite2, External))
+import Language.Drasil.RefProg(RefProg(..), IRefProg(..), Reference2(Reference2))
 import Language.Drasil.Label (mkLabelRA', mkLabelSame, 
   mkEmptyLabel, mkURILabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec, modifyLabelEqn)
 import Language.Drasil.Label.Type (getAdd)

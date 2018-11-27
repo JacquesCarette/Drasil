@@ -23,10 +23,10 @@ import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
   thermal_energy, ht_trans_theo, ht_flux, heat_cap_spec, thermal_conduction,
-  thermocon, heat_trans)
+  thermocon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon)
-import Data.Drasil.Concepts.Computation (computerApp, inParam, compcon, algorithm)
+import Data.Drasil.Concepts.Computation (algorithm)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heat_cap_spec, ht_flux)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
@@ -38,7 +38,7 @@ import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
 
 import qualified Drasil.DocLang.SRS as SRS (probDesc, goalStmt, inModelLabel,
-  funcReq, likeChg, unlikeChg)
+  funcReq, likeChg, unlikeChg, inModel)
 import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose), 
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
   SolChSpec(..), SSDSec(..), DocSection(..),
@@ -276,7 +276,7 @@ scopeReqEnd tem te wa = foldlSent_ [S "predicts the",
 
 orgDocEnd :: CI -> CI -> CI -> Sentence
 orgDocEnd im_ od pro = foldlSent_ [S "The", phrase im_,
-  sParen (makeRefS SRS.inModelLabel),
+  sParen (makeRef2S $ SRS.inModel ([]::[Contents]) ([]::[Section])),
   S "to be solved is referred to as" +:+. makeRef2S eBalanceOnWtr,
   S "The", phrase im_, S "provides the",
   titleize od, sParen (short od), S "that model the"
@@ -502,7 +502,7 @@ reqFMExpr = ((sy w_mass) $= (sy w_vol) * (sy w_density) $= (((sy diam) / 2) *
 
 reqIIV, reqFM, reqCISPC, reqOIDQ, reqCTWOT, reqCCHEWT :: ConceptInstance
 reqIIV = cic "reqIIV" (titleize input_ +:+ S "the" +:+ plural quantity +:+
-    S "described in" +:+ makeRefS reqIVRTable `sC` S "which define the" +:+
+    S "described in" +:+ makeRef2S reqIVRTable `sC` S "which define the" +:+
     plural tank_para `sC` S "material" +:+ plural property +:+
     S "and initial" +:+. plural condition) "Input-Inital-Values" funcReqDom
 reqFM = cic "reqFM" (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef2S reqIIV +:+
@@ -512,7 +512,7 @@ reqFM = cic "reqFM" (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef2S reqI
     S ":" +:+ E reqFMExpr) "Find-Mass" funcReqDom  -- FIXME: Equation shouldn't be inline.
 reqCISPC = cic "reqCISPC" (S "Verify that the" +:+ plural input_ +:+
     S "satisfy the required" +:+ phrase physicalConstraint +:+
-    S "shown in" +:+. makeRefS dataConstTable1)
+    S "shown in" +:+. makeRef2S dataConstTable1)
     "Check-Inputs-Satisfy-Physical-Constraints" funcReqDom
 reqOIDQ = cic "reqOIDQ" (titleize' output_ `sAnd` plural input_ 
     +:+ plural quantity +:+
@@ -625,7 +625,7 @@ unlikeChgWFS = cic "unlikeChgWFS" (
 unlikeChgNIHG :: ConceptInstance
 unlikeChgNIHG = cic "unlikeChgNIHG" (
   foldlSent [chgsStart newA16, S "Is used for the derivations of",
-  makeRefS eBalanceOnWtr] ) "No-Internal-Heat-Generation" unlikeChgDom
+  makeRef2S eBalanceOnWtr] ) "No-Internal-Heat-Generation" unlikeChgDom
 
 ----------------------------------------------
 --Section 7:  TRACEABILITY MATRICES AND GRAPHS
@@ -646,7 +646,7 @@ traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
 traceFuncReqRef = map makeRef2S reqs
 
 traceData = ["Data Constraints"]
-traceDataRef = [makeRefS dataConstTable1] --FIXME: Reference section?
+traceDataRef = [makeRef2S dataConstTable1] --FIXME: Reference section?
 
 traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14"]

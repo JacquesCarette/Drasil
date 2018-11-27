@@ -37,7 +37,7 @@ l4 = mkLabelSame "effStress"    (Def TM)
 factOfSafety :: TheoryModel
 factOfSafety = tm (cw factOfSafety_rc)
   [qw fs, qw shearRes, qw mobShear] ([] :: [ConceptChunk])
-  [] [factOfSafety_rel] [] [makeRef fredlund1977] l1 [factOfSafety_desc]
+  [] [factOfSafety_rel] [] [makeCite fredlund1977] l1 [factOfSafety_desc]
 
 ------------------------------------
 factOfSafety_rc :: RelationConcept
@@ -59,7 +59,7 @@ factOfSafety_desc = foldlSent [
 equilibrium :: TheoryModel
 equilibrium = tm (cw equilibrium_rc)
   [qw fx] ([] :: [ConceptChunk])
-  [] [eq_rel] [] [makeRef fredlund1977] l2 [eq_desc]
+  [] [eq_rel] [] [makeCite fredlund1977] l2 [eq_desc]
 
 ------------------------------------  
 equilibrium_rc :: RelationConcept
@@ -84,7 +84,7 @@ mcShrStrgth :: TheoryModel
 mcShrStrgth = tm (cw mcShrStrgth_rc)
   [qw shrStress, qw normStress, qw fricAngle, qw cohesion] 
   ([] :: [ConceptChunk])
-  [] [mcSS_rel] [] [makeRef fredlund1977] l3 [mcSS_desc]
+  [] [mcSS_rel] [] [makeCite fredlund1977] l3 [mcSS_desc]
 
 ------------------------------------
 mcShrStrgth_rc :: RelationConcept
@@ -119,7 +119,7 @@ effStress :: TheoryModel
 effStress = tm (cw effStress_rc)
   [qw normStress, qw porePressure] 
   ([] :: [ConceptChunk])
-  [] [effS_rel] [] [makeRef fredlund1977] l4 [effS_desc]
+  [] [effS_rel] [] [makeCite fredlund1977] l4 [effS_desc]
 
 ------------------------------------
 effStress_rc :: RelationConcept

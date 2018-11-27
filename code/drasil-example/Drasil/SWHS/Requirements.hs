@@ -22,10 +22,11 @@ import Data.Drasil.Concepts.Software (correctness, verifiability,
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
   foldlSent, isThe, sAnd)
-
+import Drasil.SWHS.Assumptions (newA20)
 import Drasil.SWHS.Concepts (phsChgMtrl, tank)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, 
   heatEInPCM, swhsIMods)
+import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (t_final_melt, t_init_melt, pcm_E, w_E, temp_PCM,
   temp_W, tau_S_P, tau_L_P, eta, tau_W, w_density, pcm_mass, pcm_vol,
   pcm_density, diam, tank_length, tank_vol, w_vol, w_mass)
@@ -36,9 +37,6 @@ import Drasil.SWHS.Unitals (t_final_melt, t_init_melt, pcm_E, w_E, temp_PCM,
 -----------------------------------
 -- 5.1 : Functional Requirements --
 -----------------------------------
-
-inputInitQuantsLbl :: Label
-inputInitQuantsLbl = mkLabelSame "Input-Variable-Requirements" Tab
 
 funcReqs :: [ConceptInstance]
 funcReqs = [inputInitQuants, findMass, checkWithPhysConsts, outputInputDerivQuants,
@@ -54,9 +52,9 @@ inputInitQuantsEqn, findMassEqn :: Expr --Fixme: rename labels
 
 inputInitQuants = cic "inputInitQuants" ( foldlSent [
   titleize input_, S "the following", plural quantity, S "described in",
-  makeRefS inputInitQuantsLbl `sC` S "which define the", phrase tank,
-  plural parameter `sC` S "material", plural property, S "and initial",
-  plural condition]) "Input-Initial-Quantities" funcReqDom
+  makeRef2S inputInitQuantsTblabled `sC` S "which define the", phrase tank,
+  plural parameter `sC` S "material", plural property, S "and initial" +:+.
+  plural condition, makeRef2S newA20]) "Input-Initial-Quantities" funcReqDom
 --
 findMass = cic "findMass" ( foldlSent [
   S "Use the", plural input_, S "in", makeRef2S inputInitQuants,

@@ -38,7 +38,7 @@ getUIDshort (Ref _)              = []
 getUIDshort (Ref2 _)             = []
 getUIDshort ((:+:) a b)          = (getUIDshort a) ++ (getUIDshort b)
 getUIDshort (Quote a)            = getUIDshort a
-getUIDshort (E a)                = []
+getUIDshort (E _)                = []
 getUIDshort (EmptyS)             = []
 
 -----------------------------------------------------------------------------
@@ -59,7 +59,7 @@ lnames  (S _)          = []
 lnames  (Sp _)         = []
 lnames  (P _)          = []
 lnames  (Ref _)  = []
-lnames  (Ref2 (Reference2 u _ _ _)) = [u]
+lnames  (Ref2 (Reference2 _ _ _)) = [] -- This should be fixed.
 lnames  ((:+:) a b)    = (lnames  a) ++ (lnames  b)
 lnames  (Quote a)      = []
 lnames  (E a)          = []

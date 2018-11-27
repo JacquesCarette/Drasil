@@ -198,3 +198,5 @@ newtonSLRDesc = foldlSent [S "The net", (phrase QP.torque),
   (phrase CP.rigidBody), S "We also assume that all",
   (plural CP.rigidBody), S "involved are two-dimensional",
   makeRef2S newA2]
+
+  

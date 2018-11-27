@@ -845,7 +845,7 @@ The scope of the requirements includes the physical simulation of 2D rigid bodie
 Characteristics of Intended Reader
 </h2>
 <p class="paragraph">
-Reviewers of this documentation should have a strong knowledge in rigid body dynamics. The reviewers should also have an understanding of high school calculus. The users of Chipmunk2D can have a lower level of expertise, as explained in <a href=#Sec:UserChars>User Characteristics</a>.
+Reviewers of this documentation should have a strong knowledge in rigid body dynamics. The reviewers should also have an understanding of high school calculus. The users of Chipmunk2D can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Section: User Characteristics</a>.
 </p>
 </div>
 </div>
@@ -878,7 +878,7 @@ This section provides general information about the system including identifying
 System Context
 </h2>
 <p class="paragraph">
-<a href=#Figure:sysCtxDiag>sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (Chipmunk2D). Arrows are used to show the data flow between the system and its environment.
+<a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (Chipmunk2D). Arrows are used to show the data flow between the system and its environment.
 </p>
 <div id="Figure:sysCtxDiag">
 <figure>
@@ -959,7 +959,7 @@ This section first presents the problem description, which gives a high-level vi
 Problem Description
 </h2>
 <p class="paragraph">
-Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (<a href=#Sec:ExistingSolns>Off-The-Shelf Solutions</a>). By creating a simple, lightweight, fast and portable 2D rigid body physics library, game development will be more accessible to the masses and higher quality products will be produced.
+Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (<a href=#Sec:ExistingSolns>Section: Off-The-Shelf Solutions</a>). By creating a simple, lightweight, fast and portable 2D rigid body physics library, game development will be more accessible to the masses and higher quality products will be produced.
 </p>
 <div id="Sec:TermDefs">
 <div class="subsubsection">
@@ -1020,7 +1020,7 @@ GS4: Given the physical properties, initial positions, orientations, linear velo
 Solution Characteristics Specification
 </h2>
 <p class="paragraph">
-The instance models that govern Chipmunk2D are presented in <a href=#Sec:IMs>Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern Chipmunk2D are presented in <a href=#Sec:IMs>Section: Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
 <div id="Sec:Assumps">
 <div class="subsubsection">
@@ -1028,7 +1028,7 @@ The instance models that govern Chipmunk2D are presented in <a href=#Sec:IMs>Ins
 Assumptions
 </h3>
 <p class="paragraph">
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], or Unlikely Changes [<a href=#Sec:UCs>Unlikely Changes</a>], in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Section: Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>Section: General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Section: Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Section: Instance Models</a>], Likely Changes [<a href=#Sec:LCs>Section: Likely Changes</a>], or Unlikely Changes [<a href=#Sec:UCs>Section: Unlikely Changes</a>], in which the respective assumption is used.
 </p>
 <ul class="hide-list-style">
 <li>
@@ -2408,6 +2408,103 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </div>
+<div id="DD:impulse">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Velocity At Point B
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em><b>v</b><sub>B</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+m/s
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<div id="Eqn:DD:impulse">
+<div class="equation">
+<em><b>v</b><sub>B</sub> = <b>v</b><sub>O</sub>&plus;ω&#10799;<b>r</b><sub>OB</sub></em>
+</div>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<ul class="hide-list-style-no-indent">
+<li>
+<em><b>v</b><sub>B</sub></em> is the velocity at point B (m/s)
+</li>
+<li>
+<em><b>v</b><sub>O</sub></em> is the velocity at point origin (m/s)
+</li>
+<li>
+<em>ω</em> is the angular velocity (rad/s)
+</li>
+<li>
+<em><b>r</b><sub>OB</sub></em> is the displacement vector between the origin and point B (m)
+</li>
+</ul>
+</td>
+</tr>
+<tr>
+<th>
+Notes
+</th>
+<td>
+<p class="paragraph">
+The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigid body <a href=#A:objectTy>A: objectTy</a> is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> (m/s) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>ω</em> (rad/s) and the displacement vector between the origin and point B, <em><b>r</b><sub>OB</sub></em> (m).
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div id="Sec:IMs">
@@ -2416,7 +2513,7 @@ FIXME: This needs to be filled in
 Instance Models
 </h3>
 <p class="paragraph">
-This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
+This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Section: Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Section: Theoretical Models</a> and <a href=#Sec:GDs>Section: General Definitions</a>.
 </p>
 <div id="IM:transMot">
 <table class="idefn">
@@ -2889,7 +2986,7 @@ FIXME: This needs to be filled in
 Data Constraints
 </h3>
 <p class="paragraph">
-<a href=#Table:InDataConstraints>InDataConstraints</a> and <a href=#Table:OutDataConstraints>OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. FIXME
+<a href=#Table:InDataConstraints>Table:InDataConstraints</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. FIXME
 </p>
 <div id="Table:InDataConstraints">
 <table class="table">
@@ -3142,7 +3239,7 @@ Input-Surface-Properties: Input the surface properties of the bodies such as fri
 </p>
 <p>
 <div id="reqVPC">
-Verify-Physical_Constraints: Verify that the inputs satisfy the required physical constraints from <a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>.
+Verify-Physical_Constraints: Verify that the inputs satisfy the required physical constraints from <a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>.
 </div>
 </p>
 <p>
@@ -3250,7 +3347,7 @@ Objects-Rigid-Bodies: All objects are rigid bodies.
 Off-The-Shelf Solutions
 </h1>
 <p class="paragraph">
-As mentioned in <a href=#Sec:ProbDesc>Problem Description</a>, there already exist free open source game physics libraries. Similar 2D physics libraries are:
+As mentioned in <a href=#Sec:ProbDesc>Section: Problem Description</a>, there already exist free open source game physics libraries. Similar 2D physics libraries are:
 </p>
 <ul class="list">
 <li>
@@ -3282,7 +3379,7 @@ Newton Game Dynamics: http://newtondynamics.com/
 Traceability Matrices and Graphs
 </h1>
 <p class="paragraph">
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TraceyReqGoalsOther>TraceyReqGoalsOther</a> shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. <a href=#Table:TraceyAssumpsOther>TraceyAssumpsOther</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. <a href=#Table:TraceyItemsSecs>TraceyItemsSecs</a> shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TraceyReqGoalsOther>Table:TraceyReqGoalsOther</a> shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. <a href=#Table:TraceyAssumpsOther>Table:TraceyAssumpsOther</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. <a href=#Table:TraceyItemsSecs>Table:TraceyItemsSecs</a> shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
 </p>
 <div id="Table:TraceyReqGoalsOther">
 <table class="table">
@@ -3309,12 +3406,12 @@ R4 (<a href=#reqIIC>FR: Input-Initial-Conditions</a>)
 R7 (<a href=#reqISP>FR: Input-Surface-Properties</a>)
 </th>
 <th>
-Data Constraints (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+Data Constraints (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </th>
 </tr>
 <tr>
 <td>
-GS1 (<a href=#Sec:ProbDesc>Problem Description</a>)
+GS1 (<a href=#Sec:ProbDesc>Section: Problem Description</a>)
 </td>
 <td>
 X
@@ -3340,7 +3437,7 @@ X
 </tr>
 <tr>
 <td>
-GS2 (<a href=#Sec:ProbDesc>Problem Description</a>)
+GS2 (<a href=#Sec:ProbDesc>Section: Problem Description</a>)
 </td>
 <td>
 
@@ -3366,7 +3463,7 @@ X
 </tr>
 <tr>
 <td>
-GS3 (<a href=#Sec:ProbDesc>Problem Description</a>)
+GS3 (<a href=#Sec:ProbDesc>Section: Problem Description</a>)
 </td>
 <td>
 
@@ -3392,7 +3489,7 @@ X
 </tr>
 <tr>
 <td>
-GS4 (<a href=#Sec:ProbDesc>Problem Description</a>)
+GS4 (<a href=#Sec:ProbDesc>Section: Problem Description</a>)
 </td>
 <td>
 
@@ -3626,7 +3723,7 @@ X
 </tr>
 </table>
 <p class="caption">
-Traceability Matrix Showing the Connections Between Requirements (<a href=#Sec:Requirements>Requirements</a>), Goal Statements (<a href=#Sec:ProbDesc>Problem Description</a>) and Other Items
+Traceability Matrix Showing the Connections Between Requirements (<a href=#Sec:Requirements>Section: Requirements</a>), Goal Statements (<a href=#Sec:ProbDesc>Section: Problem Description</a>) and Other Items
 </p>
 </div>
 <div id="Table:TraceyAssumpsOther">
@@ -3789,7 +3886,7 @@ T5 (<a href=#T:newtonSLR>TM: NewtonSecLawRotMot</a>)
 </tr>
 <tr>
 <td>
-GD1 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD1 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -3815,7 +3912,7 @@ GD1 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
 </tr>
 <tr>
 <td>
-GD2 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD2 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -3841,7 +3938,7 @@ GD2 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
 </tr>
 <tr>
 <td>
-GD3 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD3 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -3867,7 +3964,7 @@ X
 </tr>
 <tr>
 <td>
-GD4 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD4 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -3893,7 +3990,7 @@ GD4 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
 </tr>
 <tr>
 <td>
-GD5 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD5 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -3919,7 +4016,7 @@ GD5 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
 </tr>
 <tr>
 <td>
-GD6 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD6 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -3945,7 +4042,7 @@ GD6 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
 </tr>
 <tr>
 <td>
-GD7 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD7 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -4179,7 +4276,7 @@ X
 </tr>
 <tr>
 <td>
-IM1 (<a href=#IM:transMot>IM: transMot</a>)
+IM1 (<a href=#DD:impulse>DD: impulse</a>)
 </td>
 <td>
 X
@@ -4205,7 +4302,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#IM:rotMot>IM: rotMot</a>)
+IM2 (<a href=#IM:transMot>IM: transMot</a>)
 </td>
 <td>
 X
@@ -4231,7 +4328,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#IM:col2D>IM: col2D</a>)
+IM3 (<a href=#IM:rotMot>IM: rotMot</a>)
 </td>
 <td>
 X
@@ -4257,7 +4354,7 @@ X
 </tr>
 <tr>
 <td>
-LC1 (<a href=#lcVODES>LC: Variable-ODE-Solver</a>)
+LC1 (<a href=#IM:col2D>IM: col2D</a>)
 </td>
 <td>
 
@@ -4283,7 +4380,7 @@ LC1 (<a href=#lcVODES>LC: Variable-ODE-Solver</a>)
 </tr>
 <tr>
 <td>
-LC2 (<a href=#lcEC>LC: Expanded-Collisions</a>)
+LC2 (<a href=#lcVODES>LC: Variable-ODE-Solver</a>)
 </td>
 <td>
 
@@ -4309,7 +4406,7 @@ X
 </tr>
 <tr>
 <td>
-LC3 (<a href=#lcID>LC: Include-Dampening</a>)
+LC3 (<a href=#lcEC>LC: Expanded-Collisions</a>)
 </td>
 <td>
 
@@ -4335,7 +4432,7 @@ X
 </tr>
 <tr>
 <td>
-LC4 (<a href=#lcIJC>LC: Include-Joints-Constraints</a>)
+LC4 (<a href=#lcID>LC: Include-Dampening</a>)
 </td>
 <td>
 
@@ -4361,7 +4458,7 @@ X
 </tr>
 </table>
 <p class="caption">
-Traceability Matrix Showing the Connections Between Assumptions (<a href=#Sec:ProbDesc>Problem Description</a>) and Other Items
+Traceability Matrix Showing the Connections Between Assumptions (<a href=#Sec:ProbDesc>Section: Problem Description</a>) and Other Items
 </p>
 </div>
 <div id="Table:TraceyItemsSecs">
@@ -4386,25 +4483,25 @@ T4 (<a href=#T:chaslesThm>TM: ChaslesTheorem</a>)
 T5 (<a href=#T:newtonSLR>TM: NewtonSecLawRotMot</a>)
 </th>
 <th>
-GD1 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD1 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </th>
 <th>
-GD2 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD2 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </th>
 <th>
-GD3 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD3 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </th>
 <th>
-GD4 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD4 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </th>
 <th>
-GD5 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD5 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </th>
 <th>
-GD6 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD6 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </th>
 <th>
-GD7 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD7 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </th>
 <th>
 DD1 (<a href=#DD:ctrOfMass>DD: ctrOfMass</a>)
@@ -4431,13 +4528,13 @@ DD7 (<a href=#DD:angAccel>DD: angAccel</a>)
 DD8 (<a href=#DD:impulse>DD: impulse</a>)
 </th>
 <th>
-IM1 (<a href=#IM:transMot>IM: transMot</a>)
+IM1 (<a href=#DD:impulse>DD: impulse</a>)
 </th>
 <th>
-IM2 (<a href=#IM:rotMot>IM: rotMot</a>)
+IM2 (<a href=#IM:transMot>IM: transMot</a>)
 </th>
 <th>
-IM3 (<a href=#IM:col2D>IM: col2D</a>)
+IM3 (<a href=#IM:rotMot>IM: rotMot</a>)
 </th>
 </tr>
 <tr>
@@ -4812,7 +4909,7 @@ X
 </tr>
 <tr>
 <td>
-GD1 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD1 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 X
@@ -4886,7 +4983,7 @@ X
 </tr>
 <tr>
 <td>
-GD2 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD2 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -4960,7 +5057,7 @@ X
 </tr>
 <tr>
 <td>
-GD3 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD3 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 X
@@ -5034,7 +5131,7 @@ X
 </tr>
 <tr>
 <td>
-GD4 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD4 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -5108,7 +5205,7 @@ GD4 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
 </tr>
 <tr>
 <td>
-GD5 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD5 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -5182,7 +5279,7 @@ X
 </tr>
 <tr>
 <td>
-GD6 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD6 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -5256,7 +5353,7 @@ GD6 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
 </tr>
 <tr>
 <td>
-GD7 (<a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>)
+GD7 (<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>)
 </td>
 <td>
 
@@ -5922,7 +6019,7 @@ X
 </tr>
 <tr>
 <td>
-IM1 (<a href=#IM:transMot>IM: transMot</a>)
+IM1 (<a href=#DD:impulse>DD: impulse</a>)
 </td>
 <td>
 X
@@ -5996,7 +6093,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#IM:rotMot>IM: rotMot</a>)
+IM2 (<a href=#IM:transMot>IM: transMot</a>)
 </td>
 <td>
 
@@ -6070,7 +6167,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#IM:col2D>IM: col2D</a>)
+IM3 (<a href=#IM:rotMot>IM: rotMot</a>)
 </td>
 <td>
 

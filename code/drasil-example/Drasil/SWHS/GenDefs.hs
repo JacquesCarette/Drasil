@@ -22,7 +22,6 @@ import Data.Drasil.Utils (unwrap, weave)
 
 import Drasil.SWHS.Assumptions (newA2, newA3, newA4, newA5, newA6)
 import Drasil.SWHS.Concepts (gauss_div)
-import Drasil.SWHS.Labels (rocTempSimpL)
 import Drasil.SWHS.References (incroperaEtAl2007)
 import Drasil.SWHS.TMods (consThermE)
 import Drasil.SWHS.Unitals (vol_ht_gen, deltaT, temp_env, pcm_SA,
@@ -42,7 +41,7 @@ swhsGDs = [nwtnCooling, rocTempSimp]
 -- FIXME: page reference
 nwtnCooling, rocTempSimp :: GenDefn
 nwtnCooling = gd' nwtnCoolingRC (Just thermal_flux) ([] :: Derivation) 
-  [makeRef incroperaEtAl2007 {- +:+ sParen (S "pg. 8") -}] "nwtnCooling" [nwtnCooling_desc]
+  [incroperaEtAl2007 {- +:+ sParen (S "pg. 8") -}] "nwtnCooling" [nwtnCooling_desc]
 rocTempSimp = gd' rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv [] -- FIXME: no sources
                  "rocTempSimp" [rocTempSimp_desc]
 
@@ -120,7 +119,7 @@ roc_temp_simp_deriv_sentences = map foldlSentCol [
 
 s4_2_3_desc1 :: (HasShortName x, Referable x) => x -> UnitalChunk -> [Sentence]
 s4_2_3_desc1 t1c vo =
-  [S "Integrating", makeRefS t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
+  [S "Integrating", makeRef2S t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
 s4_2_3_desc2 :: (NamedIdea b, HasSymbol b) => ConceptChunk -> b -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]
@@ -140,7 +139,7 @@ s4_2_3_desc4 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   [Sentence] -> [Sentence]
 s4_2_3_desc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
   ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
-  makeRefS rocTempSimpL, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
+  makeRef2S rocTempSimp, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
   (foldlList Comma List assumps) `sC` S "we have"]
 

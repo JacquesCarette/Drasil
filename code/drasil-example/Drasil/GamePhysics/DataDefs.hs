@@ -7,22 +7,26 @@ import Language.Drasil
 import Drasil.GamePhysics.Assumptions (newA1, newA2, newA4, newA5, newA6)
 import Drasil.GamePhysics.Unitals (initRelVel, mass_A, mass_B, mass_i,
   momtInert_A, momtInert_B, mTot, normalLen, normalVect,
-  perpLen_A, perpLen_B, pos_CM, pos_i)
+  perpLen_A, perpLen_B, pos_CM, pos_i, vel_B, vel_O, r_OB,)
 
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
+import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
   angularDisplacement, angularVelocity, displacement, impulseS, linearAccel, 
   linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity)
+
+import Data.Drasil.SentenceStructures (foldlSent)
+
 
 ----- Data Definitions -----
 
 dataDefns :: [DataDefinition]
 dataDefns = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-  angVelDD, angAccelDD, impulseDD]
+  angVelDD, angAccelDD, impulseDD, chaslesDD]
 
 cpDDefs :: [QDefinition]
 cpDDefs = [ctrOfMass, linDisp, linVel, linAcc, angDisp,
-  angVel, angAccel, impulse]
+  angVel, angAccel, impulse, chasles]
 
 cpQDefs :: [Block QDefinition]
 cpQDefs = map (\x -> Parallel x []) cpDDefs
@@ -206,3 +210,28 @@ dd8descr = (impulseScl ^. term) +:+ S "used to determine" +:+
   (CP.collision ^. term) +:+ S "response between two" +:+ 
   irregPlur (CP.rigidBody ^. term)
 -}
+
+chaslesDD :: DataDefinition
+chaslesDD = mkDD chasles [{-- References --}] [{-- Derivation --}] "impulse"
+  [chaslesThmDesc]
+
+chasles :: QDefinition
+chasles = mkQuantDef vel_B chaslesEqn
+
+-- The last two terms in the denominator should be cross products.
+chaslesEqn :: Expr
+chaslesEqn = (sy vel_O) + (cross (sy  QP.angularVelocity) (sy r_OB))
+
+chaslesThmDesc :: Sentence
+chaslesThmDesc = foldlSent [S "The linear", (phrase QP.velocity),
+  (ch vel_B), (sParen $ Sy $ unit_symb vel_B), S "of any point B in a",
+  (phrase CP.rigidBody), makeRef2S newA1, S "is the sum of the linear",
+  (phrase QP.velocity), (ch vel_O),
+  (sParen $ Sy $ unit_symb vel_O), S "of the", (phrase $ CP.rigidBody),
+  S "at the origin (axis of rotation) and the",
+  S "resultant vector from the cross product of the",
+  (phrase CP.rigidBody) :+: S "'s", (phrase QP.angularVelocity), 
+  (ch QP.angularVelocity), 
+  (sParen $ Sy $ unit_symb  QP.angularVelocity), S "and the", 
+  (phrase r_OB) `sC` (ch r_OB), 
+  (sParen $ Sy $ unit_symb r_OB)]

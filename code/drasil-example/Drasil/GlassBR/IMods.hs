@@ -1,73 +1,37 @@
-module Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, probOfBreak,
-  calofCapacity, calofDemand) where
+module Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, calofDemandi) where
 
 import Prelude hiding (exp)
 import Control.Lens ((^.))
 import Language.Drasil
 
-import Drasil.GlassBR.Assumptions (standardValues, glassLite,
-  boundaryConditions, responseType)
-import Drasil.GlassBR.DataDefs (glaTyFac, nonFL, risk, standOffDis)
-import Drasil.GlassBR.Labels (probOfBreakL, calOfCapacityL, calOfDemandL)
-import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
-import Drasil.GlassBR.Unitals (capacity, char_weight, demand, 
-  demandq, eqTNTWeight, lRe, loadSF, plate_len, plate_width, 
-  probBreak, prob_br, risk_fun, standOffDist, wtntWithEqn)
+import Drasil.GlassBR.DataDefs (standOffDis, calofDemand)
+import Drasil.GlassBR.Labels (calOfDemandL)
+import Drasil.GlassBR.References (astm2009)
+import Drasil.GlassBR.Unitals (char_weight, demand, 
+  demandq, eqTNTWeight, plate_len, plate_width, 
+  standOffDist, wtntWithEqn)
 
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
 
 gbrIMods :: [InstanceModel]
-gbrIMods = [probOfBreak, calofCapacity, calofDemand]
+gbrIMods = [calofDemandi]
 
 glassBRsymb :: [DefinedQuantityDict]
 glassBRsymb = map dqdWr [plate_len, plate_width, char_weight, standOffDist] ++ 
-  [dqdQd (qw probOfBreak) probBreak, dqdQd (qw calofCapacity) capacity, dqdQd (qw calofDemand) demandq]
+  [dqdQd (qw calofDemand) demandq]
+
 
 {--}
 
-probOfBreak :: InstanceModel
-probOfBreak = im' probOfBreak_RC [qw risk] 
-  [sy risk $> 0] (qw prob_br) [sy prob_br $> 0]
-  (map makeRef [astm2009, beasonEtAl1998]) probOfBreakL [makeRef2S standardValues, makeRef2S boundaryConditions,
-  makeRef2S responseType, makeRef2S risk]
-
-{--}
-
-probOfBreak_RC :: RelationConcept
-probOfBreak_RC = makeRC "probOfBreak_RC" (nounPhraseSP "Probability of Glass Breakage")
-  probOfBreakDesc ( (sy prob_br) $= 1 - (exp (negate (sy risk)))) -- probOfBreakL
-
-probOfBreakDesc :: Sentence
-probOfBreakDesc =
-  foldlSent [(ch prob_br) `isThe` (S "calculated" +:+. (phrase prob_br)),
-  (ch risk_fun) `isThe` (phrase risk)]
-
-{--}
-
-calofCapacity :: InstanceModel
-calofCapacity = im' calofCapacity_RC [qw nonFL, qw glaTyFac, qw loadSF] 
-  [sy nonFL $> 0, sy glaTyFac $> 0, sy loadSF $> 0] (qw lRe) [] [makeRef astm2009]
-  calOfCapacityL [calofCapacityDesc]
-
-calofCapacity_RC :: RelationConcept
-calofCapacity_RC = makeRC "calofCapacity_RC" (nounPhraseSP "Calculation of Capacity") 
-  calofCapacityDesc ( (sy lRe) $= ((sy nonFL) * (sy glaTyFac) * (sy loadSF))) -- calOfCapacityL
-
-calofCapacityDesc :: Sentence
-calofCapacityDesc =
-  foldlSent [makeRef2S glassLite, makeRef2S glaTyFac, makeRef2S nonFL]
-
-{--}
-
-calofDemand :: InstanceModel
-calofDemand = im' calofDemand_RC [qw demand, qw eqTNTWeight, qw standOffDist]
+calofDemandi :: InstanceModel
+calofDemandi = im' calofDemand_RCi [qw demand, qw eqTNTWeight, qw standOffDist]
   [sy demand $> 0, sy eqTNTWeight $> 0, sy standOffDist $> 0] (qw demand) []
-  [makeRef astm2009] calOfDemandL
+  [astm2009] calOfDemandL
   [calofDemandDesc]
 
-calofDemand_RC :: RelationConcept
-calofDemand_RC = makeRC "calofDemand_RC" (nounPhraseSP "Calculation of Demand") 
+calofDemand_RCi :: RelationConcept
+calofDemand_RCi = makeRC "calofDemand_RC" (nounPhraseSP "Calculation of Demand") 
   calofDemandDesc ( (sy demand) $= apply2 demand eqTNTWeight standOffDist) -- calOfDemandL
   --calofDemandDesc $ (C demand) $= FCall (asExpr interpY) [V "TSD.txt", sy standOffDist, sy eqTNTWeight] 
   

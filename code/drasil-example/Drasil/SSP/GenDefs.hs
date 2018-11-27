@@ -41,14 +41,14 @@ generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, resShearWOGD
   mobShearWOGD, normShrRGD, momentEqlGD]
 
 normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, resShearWOGD, mobShearWOGD, normShrRGD, momentEqlGD :: GenDefn
-normForcEqGD = gd'' normForcEq  [makeRef chen2005]   "normForcEq"  [nmFEq_desc]
-bsShrFEqGD   = gd'' bsShrFEq    [makeRef chen2005]   "bsShrFEq"    [bShFEq_desc]
-resShrGD     = gd'' resShr      [makeRef chen2005]   "resShr"      [resShr_desc]
-mobShrGD     = gd'' mobShr      [makeRef chen2005]   "mobShr"      [mobShr_desc]
-resShearWOGD = gd'' resShearWO  [makeRef chen2005]   "resShearWO"  []
-mobShearWOGD = gd'' mobShearWO  [makeRef chen2005]   "mobShearWO"  []
-normShrRGD   = gd'' normShrR    [makeRef chen2005]   "normShrR"    [nmShrR_desc]
-momentEqlGD  = gd'' momentEql   [makeRef chen2005]   "momentEql"   [momEql_desc]
+normForcEqGD = gd'' normForcEq  [chen2005]   "normForcEq"  [nmFEq_desc]
+bsShrFEqGD   = gd'' bsShrFEq    [chen2005]   "bsShrFEq"    [bShFEq_desc]
+resShrGD     = gd'' resShr      [chen2005]   "resShr"      [resShr_desc]
+mobShrGD     = gd'' mobShr      [chen2005]   "mobShr"      [mobShr_desc]
+resShearWOGD = gd'' resShearWO  [chen2005]   "resShearWO"  []
+mobShearWOGD = gd'' mobShearWO  [chen2005]   "mobShearWO"  []
+normShrRGD   = gd'' normShrR    [chen2005]   "normShrR"    [nmShrR_desc]
+momentEqlGD  = gd'' momentEql   [chen2005]   "momentEql"   [momEql_desc]
 
 --
 normForcEq :: RelationConcept

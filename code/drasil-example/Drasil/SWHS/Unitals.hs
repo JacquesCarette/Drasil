@@ -13,7 +13,7 @@ import Data.Drasil.Quantities.Thermodynamics (sens_heat, temp, melt_pt,
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Math (surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
-import Drasil.SWHS.Concepts (water, coil, phsChgMtrl)
+import Drasil.SWHS.Concepts (water)
 import Data.Drasil.Units.PhysicalProperties (densityU)
 import Data.Drasil.Quantities.Math (gradient)
 import Data.Drasil.Constraints (gtZeroConstr)

@@ -29,7 +29,7 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
   purpose, quantity, reference, requirement, section_, software, softwareSys, 
   solution, srs, srsDomains, symbol_, sysCont, system, thModel, traceyGraph,
   traceyMatrix, user, value, variable, doccon, doccon')
-import Data.Drasil.Concepts.Computation (computerApp, inParam, compcon, algorithm)
+import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
 import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.Physics (physicCon)

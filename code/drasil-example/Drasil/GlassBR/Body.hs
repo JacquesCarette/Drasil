@@ -18,8 +18,8 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
   outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb)
 
-import qualified Drasil.DocLang.SRS as SRS (datConLabel, datCon, dataDefnLabel, indPRCase, 
-  reference, assumptLabel, valsOfAuxCons, assumpt)
+import qualified Drasil.DocLang.SRS as SRS (datCon, dataDefnLabel, indPRCase, 
+  reference, valsOfAuxCons, assumpt)
 
 import Data.Drasil.Concepts.Computation (computerApp, inParam, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
@@ -37,7 +37,7 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon, material
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability,
-  performance, softwarecon, program)
+  performance, softwarecon)
 import Data.Drasil.Concepts.Thermodynamics (degree_')
 import Data.Drasil.Software.Products (sciCompS)
 
@@ -58,7 +58,7 @@ import Drasil.GlassBR.Changes (likelyChgs, likelyChgsList, unlikelyChgs,
   unlikelyChgsList)
 import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, gLassBR, 
   ptOfExplsn, stdOffDist, glasscon, glasscon')
-import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, probOfBreak, calofDemand, calofCapacity)
+import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns)
 import Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, calofDemandi)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, gbCitations, rbrtsn2012)

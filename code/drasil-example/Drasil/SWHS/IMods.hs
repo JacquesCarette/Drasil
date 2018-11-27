@@ -14,8 +14,7 @@ import Data.Drasil.Concepts.Thermodynamics (boil_pt, boiling, heat, heat_cap_spe
 import Drasil.SWHS.Assumptions (newA11, newA12, newA13, newA14, newA15, newA16, newA17, newA18, newA19)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, tank, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac)
-import Drasil.SWHS.Labels (eBalanceOnWtrL, eBalanceOnPCML, heatEInPCML,
-  chargeTankL, dd3HtFusionL, dd4MeltFracL)
+import Drasil.SWHS.Labels (heatEInPCML)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coil_HTC, coil_SA, eta, ht_flux_C, ht_flux_P, htCap_L_P, 

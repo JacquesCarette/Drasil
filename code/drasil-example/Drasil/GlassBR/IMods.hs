@@ -4,14 +4,12 @@ import Prelude hiding (exp)
 import Control.Lens ((^.))
 import Language.Drasil
 
-import Drasil.GlassBR.Assumptions (standardValues, glassLite,
-  boundaryConditions, responseType)
-import Drasil.GlassBR.DataDefs (glaTyFac, nonFL, risk, standOffDis, calofDemand)
+import Drasil.GlassBR.DataDefs (standOffDis, calofDemand)
 import Drasil.GlassBR.Labels (calOfDemandL)
-import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
-import Drasil.GlassBR.Unitals (capacity, char_weight, demand, 
-  demandq, eqTNTWeight, lRe, loadSF, plate_len, plate_width, 
-  probBreak, prob_br, risk_fun, standOffDist, wtntWithEqn)
+import Drasil.GlassBR.References (astm2009)
+import Drasil.GlassBR.Unitals (char_weight, demand, 
+  demandq, eqTNTWeight, plate_len, plate_width, 
+  standOffDist, wtntWithEqn)
 
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)

@@ -14,7 +14,7 @@ module Drasil.DocumentLanguage.Definitions
 import Language.Drasil
 import Language.Drasil.Development (MayHaveUnit(getUnit))
 import Data.Drasil.Utils (eqUnR)
-import Data.Drasil.SentenceStructures (getSource, getSource')
+import Data.Drasil.SentenceStructures (getSource')
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
 

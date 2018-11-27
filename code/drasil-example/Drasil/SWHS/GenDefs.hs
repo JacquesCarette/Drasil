@@ -22,7 +22,6 @@ import Data.Drasil.Utils (unwrap, weave)
 
 import Drasil.SWHS.Assumptions (newA2, newA3, newA4, newA5, newA6)
 import Drasil.SWHS.Concepts (gauss_div)
-import Drasil.SWHS.Labels (rocTempSimpL)
 import Drasil.SWHS.References (incroperaEtAl2007)
 import Drasil.SWHS.TMods (consThermE)
 import Drasil.SWHS.Unitals (vol_ht_gen, deltaT, temp_env, pcm_SA,

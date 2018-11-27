@@ -21,7 +21,6 @@ import Data.Drasil.SI_Units (joule)
 import Drasil.SWHS.Assumptions (newA1)
 import Drasil.SWHS.Concepts (transient)
 import Drasil.SWHS.DataDefs (dd3HtFusion)
-import Drasil.SWHS.Labels (thermalEnergyOnlyL)
 import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCap_V, htCap_S,
   htCap_L, vol_ht_gen, thFluxVect)
 

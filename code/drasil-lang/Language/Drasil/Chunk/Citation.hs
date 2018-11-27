@@ -1,23 +1,9 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.Citation
   ( -- Types
-    Citation, BibRef, CiteField(..), Month(..), HP(..), CitationKind(..), EntryID
-    -- Class for Reference.hs
-  , HasFields(getFields)
+    Citation, BibRef, EntryID
     -- Accessors
-  , citeID, externRefT
-    -- CiteFields smart constructors
-      -- People -> CiteField
-  , author, editor
-      -- Sentence -> CiteField
-  , address, bookTitle, howPublished, howPublishedU, institution, journal, note
-  , organization, publisher, school, series, title, typeField
-      -- Int -> CiteField
-  , chapter, edition, number, volume, year
-      -- [Int] -> CiteField
-  , pages
-      -- Month -> CiteField
-  , month
+  , citeID, citeKind
     -- Citation smart constructors
   , cArticle, cBookA, cBookE, cBooklet
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
@@ -29,110 +15,41 @@ import Language.Drasil.People (People)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
 
-import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel), HasShortName(shortname))
+import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
+import Language.Drasil.Classes (HasLabel(getLabel), HasFields(getFields))
+import Language.Drasil.Data.Citation (author, chapter, pages, editor, bookTitle, title, 
+  year, school, journal, institution, note, publisher, CitationKind(..), CiteField)
 import Language.Drasil.Misc (noSpaces)
 import Language.Drasil.Label.Core (Label)
 
-import Control.Lens (Lens', makeLenses)
+import Control.Lens (makeLenses, (^.))
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces
 
--- | Fields used in citations.
-data CiteField = Address      Sentence
-               | Author       People
-               | BookTitle    Sentence -- Used for 'InCollection' references only.
-               | Chapter      Int
-               | Edition      Int
-               | Editor       People
-               | HowPublished HP
-               | Institution  Sentence
-               | Journal      Sentence
-               | Month        Month
-               | Note         Sentence
-               | Number       Int
-               | Organization Sentence
-               | Pages        [Int] -- Range of pages (ex1. 1-32; ex2. 7,31,52-55)
-               | Publisher    Sentence
-               | School       Sentence
-               | Series       Sentence
-               | Title        Sentence
-               | Type         Sentence -- BibTeX "type" field
-               | Volume       Int
-               | Year         Int
-
--- | How Published. Necessary for URLs to work properly.
-data HP = URL Sentence
-        | Verb Sentence
-
--- | Month must be of this format.
-data Month = Jan
-           | Feb
-           | Mar
-           | Apr
-           | May
-           | Jun
-           | Jul
-           | Aug
-           | Sep
-           | Oct
-           | Nov
-           | Dec deriving (Eq, Ord)
-
-instance Show Month where
-  show Jan = "January"
-  show Feb = "February"
-  show Mar = "March"
-  show Apr = "April"
-  show May = "May"
-  show Jun = "June"
-  show Jul = "July"
-  show Aug = "August"
-  show Sep = "September"
-  show Oct = "October"
-  show Nov = "November"
-  show Dec = "December"
-
--- | External references come in many flavours. Articles, Books, etc.
--- (we are using the types available in Bibtex)
-data CitationKind = Article
-                  | Book
-                  | Booklet
-                  | InBook
-                  | InCollection
-                  | InProceedings
-                  | Manual
-                  | MThesis
-                  | Misc
-                  | PhDThesis
-                  | Proceedings
-                  | TechReport
-                  | Unpublished
-
 -- | All citations require a unique identifier (String) used by the Drasil chunk.
--- We will also have an EntryID (String) used for creating reference links.
+-- We will re-use that as an EntryID (String) used for creating reference links.
 -- Finally we will have the reference information (type and fields).
 data Citation = Cite
   { _cid :: UID
-  , citeID :: EntryID
-  , externRefT :: CitationKind
+  , _citeKind :: CitationKind
   , _fields :: [CiteField]
   , _lb :: Label
   }
 makeLenses ''Citation
 
+instance HasUID       Citation where uid       = cid
+instance HasLabel     Citation where getLabel  = lb
+instance HasShortName Citation where shortname = lb . shortname
+instance HasFields    Citation where getFields = fields
+
 -- | Smart constructor which implicitly uses EntryID as chunk i.
 cite :: EntryID -> CitationKind -> [CiteField] -> Label -> Citation
-cite i = Cite i (noSpaces i)
+cite i = Cite (noSpaces i)
 
--- | Citations are chunks.
-class HasFields c where
-  getFields :: Lens' c [CiteField]
-
-instance HasUID       Citation where uid = cid
-instance HasLabel      Citation where getLabel = lb
-instance HasShortName  Citation where shortname = lb . shortname
-instance HasFields    Citation where getFields = fields
+-- | We don't let anyone know that the EntryID is in fact the UID
+citeID :: Citation -> EntryID
+citeID c = c ^. cid
 
 -- | Article citation requires author(s), title, journal, year.
 -- Optional fields can be: volume, number, pages, month, and note.
@@ -263,44 +180,3 @@ stdFields t pub yr opt = title t : publisher pub : year yr : opt
 -- Helper function (do not export) for creating thesis reference.
 thesis :: People -> Sentence -> Sentence -> Int -> [CiteField] -> [CiteField]
 thesis auth t sch yr opt = author auth : title t : school sch : year yr : opt
-
--- | Smart field constructor
-author, editor :: People -> CiteField
-author = Author
-editor = Editor
-
--- | Smart field constructor
-address, bookTitle, howPublished, howPublishedU, institution, journal, note,
-  organization, publisher, school, series, title,
-  typeField :: Sentence -> CiteField
-
-address       = Address
-bookTitle     = BookTitle
-howPublished  = HowPublished . Verb
-howPublishedU = HowPublished . URL
-institution   = Institution
-journal       = Journal
-note          = Note
-organization  = Organization
-publisher     = Publisher
-school        = School
-series        = Series
-title         = Title
-typeField     = Type
-
--- | Smart field constructor
-chapter, edition, number, volume, year :: Int -> CiteField
-
-chapter = Chapter
-edition = Edition
-number = Number
-volume = Volume
-year = Year
-
--- | Smart field constructor
-pages :: [Int] -> CiteField
-pages = Pages
-
--- | Smart field constructor
-month :: Month -> CiteField
-month = Month

@@ -20,20 +20,20 @@ stakehldrGeneral kWord clientDetails = (SRS.stakeholder) [stakeholderIntro] subs
 stakeholderIntro :: Contents
 stakeholderIntro = foldlSP [S "This", (phrase section_),
             S "describes the" +: (plural stakeholder), S "the people who have an",
-            (phrase interest), S "in", (phrase $ the product_)]
+            (phrase interest), S "in", (phraseNP $ the product_)]
 
 tClientF :: (Idea a) => a -> Sentence ->  Section
 tClientF kWord details = SRS.theClient [clientIntro kWord details] []
 
 clientIntro :: (Idea a) => a -> Sentence -> Contents
-clientIntro kWord  details = foldlSP [(at_start $ the client),
+clientIntro kWord  details = foldlSP [(at_startNP $ the client),
   S "for", (short kWord), S "is" +:+. details,
-  (at_start $ the client), S "has the final say on acceptance of the", 
+  (at_startNP $ the client), S "has the final say on acceptance of the", 
   (phrase product_)]
 
 tCustomerF :: (Idea a) => a -> Section
 tCustomerF kWord = SRS.theCustomer [customerIntro kWord] []
 
 customerIntro :: (Idea a) => a -> Contents
-customerIntro kWord = foldlSP [(at_start' $ the customer), 
+customerIntro kWord = foldlSP [(at_startNP' $ the customer), 
   S "are the", (phrase endUser), S "of", (short kWord)]

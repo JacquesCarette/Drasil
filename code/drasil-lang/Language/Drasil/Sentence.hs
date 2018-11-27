@@ -1,13 +1,21 @@
 {-# LANGUAGE GADTs #-}
 -- | Contains Sentences and helpers
-module Language.Drasil.Sentence where
+module Language.Drasil.Sentence
+  (Sentence(Ch, Sy, S, Sp, E, Ref, Quote, (:+:), EmptyS, P, Ref2),
+   sParen, sSqBr, (+:+), sC, (+:+.), (+:), Reference2(Reference2), RefProg,
+   SentenceStyle(..), sentenceShort, sentenceSymb, sentenceTerm, sentencePlural) where
 
-import Language.Drasil.Unicode (Special(SqBrClose, SqBrOpen))
-import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.RefTypes (Reference)
+import Language.Drasil.RefTypes (Reference, RefAdd)
+import Language.Drasil.ShortName (ShortName)
+import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.UID (UID)
+import Language.Drasil.Unicode (Special(SqBrClose, SqBrOpen))
+
+-- Trying different pieces of information for a reference
+data RefProg
+data Reference2 = Reference2 RefProg RefAdd ShortName
 
 -- | For writing "sentences" via combining smaller elements
 -- Sentences are made up of some known vocabulary of things:
@@ -16,13 +24,20 @@ import Language.Drasil.UID (UID)
 -- - special characters
 -- - accented letters
 -- - References to specific layout objects
+data SentenceStyle = ShortStyle
+                   | SymbolStyle
+                   | TermStyle
+                   | PluralTerm
+
 infixr 5 :+:
 data Sentence where
-  Ch    :: UID -> Sentence
+  Ch    :: SentenceStyle -> UID -> Sentence
   Sy    :: USymb -> Sentence
   S     :: String -> Sentence       -- Strings, used for Descriptions in Chunks
   Sp    :: Special -> Sentence
-  P     :: Symbol -> Sentence
+  P     :: Symbol -> Sentence       -- should not be used in examples?
+  E     :: Expr -> Sentence
+  Ref2  :: Reference2 -> Sentence
   Ref   :: Reference -> Sentence  -- Needs helper func to create Ref
                                                        -- See Reference.hs
   Quote :: Sentence -> Sentence     -- Adds quotation marks around a sentence
@@ -30,12 +45,22 @@ data Sentence where
   -- Direct concatenation of two Sentences (no implicit spaces!)
   (:+:) :: Sentence -> Sentence -> Sentence   
   EmptyS :: Sentence
-  E :: Expr -> Sentence
 
 instance Monoid Sentence where
   mempty = EmptyS
   mappend = (:+:)
 
+sentenceShort :: UID ->Sentence
+sentenceShort u = Ch ShortStyle u
+
+sentenceSymb :: UID ->Sentence
+sentenceSymb u = Ch SymbolStyle u
+
+sentenceTerm :: UID ->Sentence
+sentenceTerm u = Ch TermStyle u
+
+sentencePlural :: UID ->Sentence
+sentencePlural u = Ch PluralTerm u
 -- | Helper function for wrapping sentences in parentheses.
 sParen :: Sentence -> Sentence
 sParen x = S "(" :+: x :+: S ")"

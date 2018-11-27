@@ -272,7 +272,7 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
                 (nub v))
                 at_start] []
     mkSubRef SI {_concepts = cccs} (TSymb' f con) = mkTSymb cccs f con
-    mkSubRef SI {_sysinfodb = db} TAandA =
+    mkSubRef SI {_usedinfodb = db} TAandA =
       table_of_abb_and_acronyms $ nub $ Map.elems (db ^. termTable)
 
 -- | Helper for creating the table of symbols
@@ -457,7 +457,7 @@ mkSolChSpec si (SCSProg l) =
       SSD.inModelF pdStub ddStub tmStub SRS.genDefnLabel (map LlC (map (instanceModel fields (_sysinfodb si')) ims))
     mkSubSCS SI {_refdb = db} Assumptions =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
-      (map (\x -> LlC $ mkRawLC (Assumption x) (x ^. getLabel)) $ assumptionsFromDB (db ^. assumpRefTable))
+      (map (\x -> LlC $ mkRawLC (Assumption (x ^. uid) (assuming x) (x ^. getLabel)) (x ^. getLabel)) $ assumptionsFromDB (db ^. assumpRefTable))
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
     inModSec = SRS.inModel [mkParagraph EmptyS] []

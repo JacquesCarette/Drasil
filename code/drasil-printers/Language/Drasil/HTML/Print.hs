@@ -11,7 +11,7 @@ import qualified Language.Drasil as L (People, Person,
   Symbol(Corners, Concat, Special, Atomic, Empty, Atop),
   DType(DD, TM, Instance, General), MaxWidthPercent, RefType(Link),
   Decoration(Prime, Hat, Vector), Document, HasDefinitionTable, HasSymbolTable,
-  nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
+  HasTermTable, nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
 
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (em, wrap, refwrap, caption, image, div_tag,
@@ -28,7 +28,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),
   Dot, Cross, Neg, Exp, Not, Dim, Cot, Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, 
   Real, Rational, Natural, Integer, IsIn, Point), 
   Expr(Sub, Sup, Over, Sqrt, Spc, Font, MO, Fenced, Spec, Ident, Row, Mtx, Case, Div, Str, 
-  Int, Dbl), Spec(Quote, EmptyS, Ref, HARDNL, Sp, Sy, S, E, (:+:)),
+  Int, Dbl), Spec(Quote, EmptyS, Ref, Ref2, HARDNL, Sp, Sy, S, E, (:+:)),
   Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label)
 import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author, 
   Editor, Pages, Type, Month, Organization, Institution, Chapter, HowPublished, School, Note,
@@ -43,8 +43,8 @@ import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..))
 data OpenClose = Open | Close
 
 -- | Generate an HTML document from a Drasil 'Document'
-genHTML :: (L.HasSymbolTable ctx, L.HasDefinitionTable ctx, HasPrintingOptions ctx) =>
-  ctx -> F.Filename -> L.Document -> Doc
+genHTML :: (L.HasSymbolTable ctx, L.HasTermTable ctx, L.HasDefinitionTable ctx,
+ HasPrintingOptions ctx) => ctx -> F.Filename -> L.Document -> Doc
 genHTML sm fn doc = build fn (makeDocument sm doc)
 
 -- | Build the HTML Document, called by genHTML
@@ -101,6 +101,7 @@ p_spec (Sp s)            = text $ unPH $ L.special s
 p_spec HARDNL            = text "<br />"
 p_spec (Ref L.Link r a _)  = reflinkURI r $ p_spec a
 p_spec (Ref _      r a _)  = reflink    r $ p_spec a
+p_spec (Ref2 _     r a _)  = reflink    r $ p_spec a -- FIXME
 p_spec EmptyS            = text "" -- Expected in the output
 p_spec (Quote q)         = text "&quot;" <> p_spec q <> text "&quot;"
 -- p_spec (Acc Grave c)     = text $ '&' : c : "grave;" --Only works on vowels.

@@ -322,8 +322,8 @@ load          = dcc "load"        (nounPhraseSP "load")
 loadResis     = cc' lResistance
   (foldlSent [S "The uniform lateral load that a glass construction can sustain",
   S "based upon a given probability of breakage and load duration as defined in",
-  makeCiteS astm2009, S "(pg. 1, 53), following", foldlList Comma List $ map makeRefS 
-  [glassConditionL, glassTypeL], S "respectively"])
+  makeCiteS astm2009, S "(pg. 1, 53), following", {--foldlList Comma List $ map makeRefS 
+  [glassConditionL, glassTypeL], --}S "respectively"])
 loadShareFac  = cc' lShareFac
   (foldlSent [S "A multiplying factor derived from the load sharing between the",
   S "double glazing, of equal or different thicknesses and types (including the",

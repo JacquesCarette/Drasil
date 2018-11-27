@@ -158,7 +158,8 @@ module Language.Drasil (
   -- AssumpChunk
   , AssumpChunk, assuming, assump
   -- Reference
-  , makeRef, makeRefS, makeRef2S, makeCite, makeCiteS, makeURI, makeRef2
+  --makeRef, makeRefS,
+  ,  makeRef2S, makeCite, makeCiteS, makeURI, makeRef2
   , ReferenceDB, AssumpMap, assumpLookup, assumptionsFromDB
   , rdb, assumpRefTable, HasAssumpRefs
   , RefBy(..)

@@ -149,6 +149,7 @@ executable ssp
     , Drasil.SSP.DataDefs
     , Drasil.SSP.DataDesc
     , Drasil.SSP.Defs
+    , Drasil.SSP.Figures
     , Drasil.SSP.GenDefs
     , Drasil.SSP.Goals
     , Drasil.SSP.IMods

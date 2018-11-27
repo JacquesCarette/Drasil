@@ -24,6 +24,7 @@ import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, momExpr)
 import Drasil.SSP.DataDefs (lengthLs, sliceWght)
 import Drasil.SSP.Defs (intrslce, slice, slope, slpSrf)
 import Drasil.SSP.Labels (forceDiagramL)
+import Drasil.SSP.Figures (fig_forceacting)
 import Drasil.SSP.References (chen2005)
 import Drasil.SSP.TMods (factOfSafety, equilibrium, mcShrStrgth, effStress)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
@@ -62,7 +63,7 @@ nmFEq_rel = inxi totNrmForce $= eqlExpr cos sin
 nmFEq_desc :: Sentence
 nmFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   S "in the shear direction", at_start force, S "equilibrium is",
-  S "derived from the free body diagram of", makeRefS forceDiagramL,
+  S "derived from the free body diagram of", makeRef2S fig_forceacting,
   S "in", makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section])]
 
 --
@@ -77,7 +78,7 @@ bShFEq_rel = inxi mobShrI $= eqlExprN sin cos
 bShFEq_desc :: Sentence
 bShFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   S "in the shear direction", at_start force, S "equilibrium is",
-  S "derived from the free body diagram of", makeRefS forceDiagramL,
+  S "derived from the free body diagram of", makeRef2S fig_forceacting,
   S "in", makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section])]
 
 --

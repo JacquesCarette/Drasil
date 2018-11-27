@@ -451,10 +451,10 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (GDs fields gs' _) =
       SSD.genDefnF (map LlC (map (gdefn fields (_sysinfodb si')) gs'))
     mkSubSCS si' (IMs fields ims ShowDerivation) = 
-      SSD.inModelF pdStub ddStub tmStub SRS.genDefnLabel 
+      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn ([]::[Contents]) ([]::[Section]))
       (concatMap (\x -> LlC (instanceModel fields (_sysinfodb si') x) : derivation x) ims)
     mkSubSCS si' (IMs fields ims _)= 
-      SSD.inModelF pdStub ddStub tmStub SRS.genDefnLabel (map LlC (map (instanceModel fields (_sysinfodb si')) ims))
+      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn ([]::[Contents]) ([]::[Section])) (map LlC (map (instanceModel fields (_sysinfodb si')) ims))
     mkSubSCS SI {_refdb = db} Assumptions =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
       (map (\x -> LlC $ mkRawLC (Assumption (x ^. uid) (assuming x) (x ^. getLabel)) (x ^. getLabel)) $ assumptionsFromDB (db ^. assumpRefTable))

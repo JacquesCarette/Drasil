@@ -92,21 +92,21 @@ mkTMField t _ l@DefiningEquation fs =
   (t ^. invariants))) : fs 
 mkTMField t m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] (t ^. invariants)) : fs
-mkTMField t m l@(RefBy) fs = (show l, [helpToRefField t (m ^. refbyTable)]) : fs --FIXME: fill this in
+mkTMField t m l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkTMField t _ l@(Source) fs = (show l, map (mkParagraph . Ref2) $ t ^. getReferences2) : fs
 mkTMField t _ l@(Notes) fs = 
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (t ^. getNotes)
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
 
-helpToRefField' :: (HasUID t) => t -> RefbyMap -> Contents
+{--helpToRefField' :: (HasUID t) => t -> RefbyMap -> Contents
 helpToRefField' t s = mkParagraph $ foldlSent $ map makeRef2S 
   $ refbyLookup (t ^. uid) s
  
 helpToRefField :: (HasUID t) => t -> TraceMap -> Contents
 helpToRefField t s = mkParagraph $ foldlSent $ map makeRef2S 
   $ traceLookup (t ^. uid) s
--- TODO: buildDescription gets list of constraints to expr and ignores 't'.
+-- TODO: buildDescription gets list of constraints to expr and ignores 't'.--}
 
 -- | Create the fields for a definition from a QDefinition (used by ddefn)
 mkDDField :: (HasSymbolTable ctx, HasTraceTable ctx, HasRefbyTable ctx) => DataDefinition -> ctx -> Field -> ModRow -> ModRow
@@ -148,7 +148,7 @@ mkGDField g _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (g ^. relat)
   (modifyLabelEqn (g ^. getLabel))):[]) : fs
 mkGDField g m l@(Description v u) fs = (show l,
   (buildDescription v u (g ^. relat) m) []) : fs
-mkGDField g m l@(RefBy) fs = (show l, [helpToRefField g (m ^. refbyTable)]) : fs --FIXME: fill this in
+mkGDField g m l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkGDField g _ l@(Source) fs = (show l, [mkParagraph $ getSource' g]) : fs
 mkGDField g _ l@(Notes) fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (g ^. getNotes)
 mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
@@ -160,7 +160,7 @@ mkIMField i _ l@DefiningEquation fs =
   (show l, (LlC $ eqUnR (i ^. relat) (modifyLabelEqn (i ^. getLabel))):[]) : fs
 mkIMField i m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] [i ^. relat]) : fs
-mkIMField i m l@(RefBy) fs = (show l, [helpToRefField i (m ^. refbyTable)]) : fs --FIXME: fill this in
+mkIMField i m l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkIMField i _ l@(Source) fs = (show l, [mkParagraph $ getSource' i]) : fs
 mkIMField i _ l@(Output) fs = (show l, [mkParagraph x]) : fs
   where x = P . eqSymb $ i ^. imOutput

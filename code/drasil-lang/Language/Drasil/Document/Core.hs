@@ -3,7 +3,7 @@ module Language.Drasil.Document.Core where
 
 import Language.Drasil.Chunk.Citation (BibRef)
 
-import Language.Drasil.Classes (HasRefAddress(getRefAdd),
+import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd),
   MayHaveLabel(getMaybeLabel), HasLabel(getLabel), HasShortName(shortname))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label)
@@ -51,20 +51,21 @@ data Contents = UlC UnlabelledContent
 
 
 -- | Types of layout objects we deal with explicitly
-data RawContent = Table [Sentence] [[Sentence]] Title Bool
+data RawContent = Table UID [Sentence] [[Sentence]] Title Bool
   -- ^ table has: header-row data(rows) label/caption showlabel?
                | Paragraph Sentence -- ^ Paragraphs are just sentences.
                | EqnBlock Expr
                | Enumeration ListType -- ^ Lists
                | Defini DType [(Identifier, [Contents])]
-               | Figure Lbl Filepath MaxWidthPercent -- ^ Should use relative file path.
+               | Figure UID Lbl Filepath MaxWidthPercent -- ^ Should use relative file path.
                | Assumption UID Sentence Label -- FIXME: hack, remove
                | Bib BibRef
-               | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl
+               | Graph UID [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl
                -- ^ TODO: Fill this one in.
 type Identifier = String
 
-data LabelledContent = LblC { _lbl :: Label
+data LabelledContent = LblC { _lid :: UID
+                            , _lbl :: Label
                             , _ctype :: RawContent
                             }
 
@@ -77,6 +78,7 @@ makeLenses ''UnlabelledContent
 class HasContents c where
   accessContents :: Lens' c RawContent
 
+instance HasUID        LabelledContent where uid = lid  
 instance HasRefAddress LabelledContent where getRefAdd = lbl . getRefAdd
 instance HasLabel      LabelledContent where getLabel = lbl
 instance MayHaveLabel  LabelledContent where getMaybeLabel x = Just (x ^. getLabel)

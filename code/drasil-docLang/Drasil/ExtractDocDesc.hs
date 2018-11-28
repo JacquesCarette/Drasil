@@ -179,14 +179,14 @@ getCon' :: Contents -> [Sentence]
 getCon' c = getCon (c ^. accessContents)
 
 getCon :: RawContent -> [Sentence]
-getCon (Table s1 s2 t _) = isVar (s1, transpose s2) ++ [t]
+getCon (Table _ s1 s2 t _) = isVar (s1, transpose s2) ++ [t]
 getCon (Paragraph s)       = [s]
 getCon (EqnBlock _)      = []
 getCon (Enumeration lst)   = getLT lst
-getCon (Figure l _ _)    = [l]
+getCon (Figure _ l _ _)    = [l]
 getCon (Assumption _ b _) = [b]
 getCon (Bib bref)          = getBib bref
-getCon (Graph [(s1, s2)] _ _ l) = s1 : s2 : [l]
+getCon (Graph _ [(s1, s2)] _ _ l) = s1 : s2 : [l]
 getCon (Defini _ []) = []
 getCon (Defini dt (hd:fs)) = concatMap getCon' (snd hd) ++ getCon (Defini dt fs)
 getCon  _ = []

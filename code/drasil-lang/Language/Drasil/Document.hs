@@ -5,7 +5,7 @@ module Language.Drasil.Document where
 import Data.Drasil.IdeaDicts (documentc)
 import Language.Drasil.Document.Core
 import Language.Drasil.Classes (HasLabel(getLabel), HasShortName(shortname))
-
+import Language.Drasil.UID (UID)
 import Language.Drasil.Label (Label)
 import Language.Drasil.Sentence (Sentence(..))
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
@@ -37,9 +37,26 @@ sectionci    = commonIdeaWithDict "sectionci"    (cn' "section")                
 -- which hold the contents of the document
 data Document = Document Title Author [Section]
 
+{--data RawContent = Table [Sentence] [[Sentence]] Title Bool
+  -- ^ table has: header-row data(rows) label/caption showlabel?
+               | Paragraph Sentence -- ^ Paragraphs are just sentences.
+               | EqnBlock Expr
+               | Enumeration ListType -- ^ Lists
+               | Defini DType [(Identifier, [Contents])]
+               | Figure Lbl Filepath MaxWidthPercent -- ^ Should use relative file path.
+               | Assumption UID Sentence Label -- FIXME: hack, remove
+               | Bib BibRef
+               | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl--}
+
+helpUIDfrmRaw :: RawContent -> UID
+helpUIDfrmRaw (Table u _ _ _ _) = u
+helpUIDfrmRaw (Figure u _ _ _)  = u
+helpUIDfrmRaw (Graph u _ _ _ _) = u
+helpUIDfrmRaw (_)   = error "This chunk doesn't have a UID." 
+
 -- | Smart constructor for labelled content chunks
 llcc :: Label -> RawContent -> LabelledContent
-llcc = LblC
+llcc = \x y -> LblC (helpUIDfrmRaw y) x y
 
 -- | Smart constructor for unlabelled content chunks
 ulcc :: RawContent -> UnlabelledContent
@@ -72,8 +89,8 @@ section'' title intro secs lbe = section title intro secs lbe
 
 -- | Figure smart constructor. Assumes 100% of page width as max width.
 fig :: Lbl -> Filepath -> RawContent
-fig l f = Figure l f 100
+fig l f = Figure "fixme" l f 100
 
 -- | Figure smart constructor for customized max widths.
 figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
-figWithWidth = Figure
+figWithWidth = Figure "fixme"

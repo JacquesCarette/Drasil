@@ -579,7 +579,7 @@ traceMatsAndGraphsColsT1_DD6 = ["IM3", "DD2", "DD5"]
 traceMatsAndGraphsColsT1_DD7 = ["DD8"]
 traceMatsAndGraphsColsT1_DD8 = ["DD2"]
 
-traceMatsAndGraphsTable1 = llcc (mkLabelSame "TraceyItemSecs" Tab) $ Table
+traceMatsAndGraphsTable1 = llcc (mkLabelSame "TraceyItemSecs" Tab) $ Table "fixme"
   (EmptyS:traceMatsAndGraphsRowHdrT1)
   (makeTMatrix traceMatsAndGraphsRowHdrT1 traceMatsAndGraphsColsT1 traceMatsAndGraphsRowT1)
   (showingCxnBw traceyMatrix
@@ -612,7 +612,7 @@ traceMatsAndGraphsColsT2_R4 = ["R1", "R2"]
 traceMatsAndGraphsColsT2_R5 = ["T1", "T2"]
 traceMatsAndGraphsColsT2_R6 = ["IM1", "IM2", "IM3", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
 
-traceMatsAndGraphsTable2 = llcc (mkLabelSame "TraceyReqsItems" Tab) $ Table
+traceMatsAndGraphsTable2 = llcc (mkLabelSame "TraceyReqsItems" Tab) $ Table "fixme"
   (EmptyS:traceMatsAndGraphsRowHdrT2)
   (makeTMatrix traceMatsAndGraphsColHdrT2 traceMatsAndGraphsColsT2 traceMatsAndGraphsRowT2)
   (showingCxnBw traceyMatrix (titleize' requirement `sAnd` S "Other" +:+
@@ -666,7 +666,7 @@ traceMatsAndGraphsColsT3_R4  = []
 traceMatsAndGraphsColsT3_R5  = []
 traceMatsAndGraphsColsT3_R6  = []
 
-traceMatsAndGraphsTable3 = llcc (mkLabelSame "TraceyAssumpsOthers" Tab) $ Table
+traceMatsAndGraphsTable3 = llcc (mkLabelSame "TraceyAssumpsOthers" Tab) $ Table "fixme"
   (EmptyS:traceMatsAndGraphsRowHdr3)
   (makeTMatrix traceMatsAndGraphsColHdr3 traceMatsAndGraphsColsT3 traceMatsAndGraphsRowT3)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other"

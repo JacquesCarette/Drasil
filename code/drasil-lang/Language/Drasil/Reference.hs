@@ -169,14 +169,14 @@ instance Referable Label where
   renderRef _                = RP name -- FIXME
 
 instance Referable LabelledContent where
-  refAdd     (LblC lb _) = getAdd (lb ^. getRefAdd)
-  rType      (LblC _ c)  = temp c
-  renderRef  (LblC _ c)  = RP $ refLabelledCon c
+  refAdd     (LblC _ lb _) = getAdd (lb ^. getRefAdd)
+  rType      (LblC _ _ c)  = temp c
+  renderRef  (LblC _ _ c)  = RP $ refLabelledCon c
 
 refLabelledCon :: RawContent -> IRefProg
-refLabelledCon (Table _ _ _ _)       = raw "Table:" +::+ name 
-refLabelledCon (Figure _ _ _)        = raw "Fig:" +::+ name
-refLabelledCon (Graph _ _ _ _)       = raw "Fig:" +::+ name
+refLabelledCon (Table _ _ _ _ _)       = raw "Table:" +::+ name 
+refLabelledCon (Figure _ _ _ _)        = raw "Fig:" +::+ name
+refLabelledCon (Graph _ _ _ _ _)       = raw "Fig:" +::+ name
 refLabelledCon (Defini _ _)          = raw "Def:" +::+ name
 refLabelledCon (Assumption _ _ _)    = raw "Assump:" +::+ name
 refLabelledCon (EqnBlock _)          = raw "EqnB:" +::+ name
@@ -187,9 +187,9 @@ refLabelledCon (Bib _)               = error $
     "You must reference the Section or an individual citation."
 
 temp :: RawContent -> RefType
-temp (Table _ _ _ _)       = Tab
-temp (Figure _ _ _)        = Fig
-temp (Graph _ _ _ _)       = Fig
+temp (Table _ _ _ _ _)       = Tab
+temp (Figure _ _ _ _)        = Fig
+temp (Graph _ _ _ _ _)       = Fig
 temp (Defini x _)          = Def x
 temp (Assumption _ _ _)    = Assump -- hard-code, will disappear
 temp (EqnBlock _)          = EqnB

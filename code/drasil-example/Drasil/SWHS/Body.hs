@@ -463,7 +463,7 @@ funcReqsList :: [Contents]
 funcReqsList = reqs ++ [inputInitQuantsTbl]
 
 inputInitQuantsTbl :: Contents
-inputInitQuantsTbl = LlC $ llcc inputInitQuantsLbl $ (Table
+inputInitQuantsTbl = LlC $ llcc inputInitQuantsLbl $ (Table "fixme"
   [titleize symbol_, titleize unit_, titleize description]
   (mkTable
   [ch, --(\ch -> Sy (unit_symb ch)),
@@ -612,7 +612,7 @@ trace2R11 = ["IM2"]
 
 traceTable2 :: LabelledContent
 traceTable2 = llcc (mkLabelSame "Tracey1" Tab) $
-  Table (EmptyS:traceMRowHeader2)
+  Table "fixme" (EmptyS:traceMRowHeader2)
   (makeTMatrix (traceMColHeader2) (traceMColumns2) (traceMRow2))
   (showingCxnBw traceyMatrix
   (titleize' requirement `sAnd` titleize' inModel)) True
@@ -1296,14 +1296,14 @@ traceTrailing3 = foldlSent_ [foldlList Comma List $ map plural (take 5 renameLis
   S "on the", plural assumption]
 
 traceTable1 :: LabelledContent
-traceTable1 = llcc (mkLabelSame "Tracey2" Tab) $ Table
+traceTable1 = llcc (mkLabelSame "Tracey2" Tab) $ Table "fixme"
   (EmptyS:traceMRowHeader1)
   (makeTMatrix (traceMRowHeader1) (traceMColumns1) (traceMRow1))
   (showingCxnBw traceyMatrix
   (titleize' item +:+ S "of Different" +:+ titleize' section_)) True
 
 traceTable3 :: LabelledContent
-traceTable3 = llcc (mkLabelSame "Tracey3" Tab) $ Table
+traceTable3 = llcc (mkLabelSame "Tracey3" Tab) $ Table "fixme"
   (EmptyS:traceMRowHeader3)
   (makeTMatrix traceMColHeader3 traceMColumns3 traceMRow3)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+

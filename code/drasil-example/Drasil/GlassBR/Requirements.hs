@@ -73,7 +73,7 @@ inputGlassPropsDesc = foldlSent [at_start input_, S "the", plural quantity, S "f
 
 inputGlassPropsTable :: LabelledContent
 inputGlassPropsTable = llcc (mkLabelSame "InputGlassPropsReqInputs" Tab) $ 
-  Table
+  Table "fixme"
   [at_start symbol_, at_start description, S "Units"]
   (mkTable
   [ch,

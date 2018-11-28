@@ -21,7 +21,7 @@ import Data.Drasil.SentenceStructures (foldlSent, sAnd, ofThe)
 -- Section 6 : LIKELY CHANGES --
 --------------------------------
 
-chgsStart :: (HasShortName x, Referable x) => x -> Sentence
+chgsStart :: (HasUID x, HasShortName x, Referable x) => x -> Sentence
 chgsStart a = makeRef2S a +:+ S "-"
 
 likelyChgs :: [ConceptInstance]

@@ -4,7 +4,7 @@ module Language.Drasil.Document where
 
 import Data.Drasil.IdeaDicts (documentc)
 import Language.Drasil.Document.Core
-import Language.Drasil.Classes (HasLabel(getLabel), HasShortName(shortname))
+import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel), HasShortName(shortname))
 import Language.Drasil.UID (UID)
 import Language.Drasil.Label (Label)
 import Language.Drasil.Sentence (Sentence(..))
@@ -21,12 +21,14 @@ data SecCons = Sub   Section
 -- | Sections have a title ('Sentence') and a list of contents ('SecCons')
 -- and its shortname
 data Section = Section 
-             { tle :: Title 
+             { _sid :: UID
+             , tle :: Title 
              , cons :: [SecCons]
              , _lab :: Label
              }
 makeLenses ''Section
 
+instance HasUID        Section where uid = sid
 instance HasLabel      Section where getLabel = lab
 instance HasShortName  Section where shortname = lab . shortname
 
@@ -87,7 +89,7 @@ mkRawLC x lb = llcc lb x
 -- | Smart constructor for creating Sections with introductory contents
 -- (ie. paragraphs, tables, etc.) and a list of subsections.
 section :: Sentence -> [Contents] -> [Section] -> Label -> Section
-section title intro secs lbe = Section title (map Con intro ++ map Sub secs) lbe
+section title intro secs lbe = Section "fixme" title (map Con intro ++ map Sub secs) lbe
 
 section'' :: Sentence -> [Contents] -> [Section] -> Label -> Section
 section'' title intro secs lbe = section title intro secs lbe

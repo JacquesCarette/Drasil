@@ -127,7 +127,7 @@ instance Referable AssumpChunk where
   renderRef l = RP $ prepend $ abrv l
 
 instance Referable Section where
-  refAdd    (Section _ _ lb ) = getAdd (lb ^. getRefAdd)
+  refAdd    (Section _ _ _ lb ) = getAdd (lb ^. getRefAdd)
   rType     _                 = Sect
   renderRef _                 = RP $ raw "Section: " +::+ name
 

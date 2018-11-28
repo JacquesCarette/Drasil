@@ -284,11 +284,11 @@ spec sm (Ch ShortStyle s)   = spec sm $ lookupS sm s
 spec sm (Ch PluralTerm s)   = spec sm $ lookupP sm s
 spec sm (Ref (Reference t r sn))   = P.Ref t r (spec sm (S . getStringSN $ resolveSN sn $
   lookupDeferredSN sm)) sn --FIXME: sn passed in twice?
-spec sm (Ref2 (Reference2 (RP rp) ra sn)) = 
+spec sm (Ref2 (Reference2 _ (RP rp) ra sn)) = 
   P.Ref2 Internal ra $ spec sm $ renderShortName sm rp sn
-spec sm (Ref2 (Reference2 Citation ra sn)) = 
+spec sm (Ref2 (Reference2 _ Citation ra sn)) = 
   P.Ref2 Cite2    ra $ spec sm $ renderCitation sm sn
-spec sm (Ref2 (Reference2 URI ra sn)) = 
+spec sm (Ref2 (Reference2 _ URI ra sn)) = 
   P.Ref2 External    ra $ spec sm $ renderURI sm sn
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS

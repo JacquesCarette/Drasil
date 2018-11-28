@@ -134,7 +134,7 @@ instance Referable Section where
 instance Referable Citation where
   refAdd    c = citeID c -- citeID should be unique.
   rType     _ = Cite
-  renderRef _ = Citation -- $ prepend $ abrv l
+  renderRef _ = Citation
 
 instance Referable TheoryModel where
   refAdd    t = getAdd ((t ^. getLabel) ^. getRefAdd)

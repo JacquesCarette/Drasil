@@ -13,7 +13,6 @@ import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 import Drasil.GlassBR.Concepts (aR, annealed, fullyT, glaPlane, glassTypeFac, 
   heatS, iGlass, lGlass, lResistance, lShareFac, loadDurFactor, nFL, responseTy, 
   stdOffDist)
-import Drasil.GlassBR.Labels (glassTypeL, glassConditionL)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016)
 import Drasil.GlassBR.Units (sFlawPU)
 
@@ -322,8 +321,7 @@ load          = dcc "load"        (nounPhraseSP "load")
 loadResis     = cc' lResistance
   (foldlSent [S "The uniform lateral load that a glass construction can sustain",
   S "based upon a given probability of breakage and load duration as defined in",
-  makeCiteS astm2009, S "(pg. 1, 53), following", foldlList Comma List $ map makeRefS 
-  [glassConditionL, glassTypeL], S "respectively"])
+  makeCiteS astm2009, S "(pg. 1, 53)"])
 loadShareFac  = cc' lShareFac
   (foldlSent [S "A multiplying factor derived from the load sharing between the",
   S "double glazing, of equal or different thicknesses and types (including the",

@@ -92,7 +92,7 @@ mkTMField t _ l@DefiningEquation fs =
   (t ^. invariants))) : fs 
 mkTMField t m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] (t ^. invariants)) : fs
-mkTMField t m l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
+mkTMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkTMField t _ l@(Source) fs = (show l, map (mkParagraph . Ref2) $ t ^. getReferences2) : fs
 mkTMField t _ l@(Notes) fs = 
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (t ^. getNotes)

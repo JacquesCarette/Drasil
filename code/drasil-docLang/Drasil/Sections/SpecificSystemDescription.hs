@@ -204,7 +204,7 @@ dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase colum
 -- Creates the input Data Constraints Table
 inDataConstTbl :: (UncertainQuantity c, Constrained c, HasReasVal c, MayHaveUnit c) => 
   [c] -> LabelledContent
-inDataConstTbl qlst = llcc (mkLabelSame "InDataConstraints" Tab) $ Table "fixme"
+inDataConstTbl qlst = llcc (mkLabelSame "InDataConstraints" Tab) $ Table "inDataConstTbl"
   titl cts (S "Input Data Constraints") True
   where
    columns = [(S "Var", map ch $ sortBySymbol qlst),
@@ -218,7 +218,7 @@ inDataConstTbl qlst = llcc (mkLabelSame "InDataConstraints" Tab) $ Table "fixme"
 
 -- Creates the output Data Constraints Table
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent
-outDataConstTbl qlst = llcc (mkLabelSame "OutDataConstraints" Tab) $ Table "fixme"
+outDataConstTbl qlst = llcc (mkLabelSame "OutDataConstraints" Tab) $ Table "outDataConstTbl"
   titl cts (S "Output Data Constraints") True
   where
    columns = [(S "Var", map ch qlst),

@@ -682,7 +682,7 @@ trace1IM2 = []
 
 traceTable1 :: LabelledContent
 traceTable1 = llcc (mkLabelSame "TraceyRI" Tab) $
-  Table "fixme" (EmptyS : traceRowHeader1)
+  Table "TraceyRINoPCM" (EmptyS : traceRowHeader1)
   (makeTMatrix (traceRowHeader1) (traceColumns1) (traceRow1))
   (showingCxnBw traceyMatrix
   (titleize' requirement `sAnd` titleize' inModel)) True
@@ -720,7 +720,7 @@ trace2R5 = ["IM1"]
 trace2R6 = ["IM2"]
 
 traceTable2 :: LabelledContent
-traceTable2 = llcc (mkLabelSame "TraceyRIs" Tab) $ Table "fixme"
+traceTable2 = llcc (mkLabelSame "TraceyRIs" Tab) $ Table "TraceyRIsNoPCM"
   (EmptyS : traceRowHeader2)
   (makeTMatrix (traceColHeader2) (traceColumns2) (traceRow2))
   (showingCxnBw traceyMatrix
@@ -755,7 +755,7 @@ trace3LC3 = ["A9"]
 trace3LC4 = ["A11"]
 
 traceTable3 :: LabelledContent
-traceTable3 = llcc (mkLabelSame "TraceyAI" Tab) $ Table "fixme"
+traceTable3 = llcc (mkLabelSame "TraceyAI" Tab) $ Table "TraceyAI3NoPCM"
   (EmptyS : traceRowHeader3)
   (makeTMatrix traceColHeader3 traceColumns3 traceAssump)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+

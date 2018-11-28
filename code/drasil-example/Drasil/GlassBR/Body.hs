@@ -681,15 +681,15 @@ traceMatsAndGraphsIntro2 = map UlC $ traceGIntro traceyGraphs
   (foldlList Comma List ((map plural (take 3 solChSpecSubsections))++
   [plural requirement, plural likelyChg +:+ S "on" +:+ plural assumption]))]
 
-fig_2 = figureLabel 2 traceyMatrix
+fig_2 = figureLabel "TraceyItemSecs" 2 traceyMatrix
   (titleize' item +:+ S "of Different" +:+ titleize' section_)
   (resourcePath ++ "Trace.png") "TraceyItemSecs"
 
-fig_3 = figureLabel 3 traceyMatrix
+fig_3 = figureLabel "TraceyReqsItems" 3 traceyMatrix
   (titleize' requirement `sAnd` S "Other" +:+ titleize' item)
   (resourcePath ++ "RTrace.png") "TraceyReqsItems"
 
-fig_4 = figureLabel 4 traceyMatrix
+fig_4 = figureLabel"TraceyAssumpsOthers" 4 traceyMatrix
   (titleize' assumption `sAnd` S "Other" +:+ titleize' item)
   (resourcePath ++ "ATrace.png") "TraceyAssumpsOthers"
 

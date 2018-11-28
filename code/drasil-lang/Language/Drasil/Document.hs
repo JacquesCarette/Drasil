@@ -37,22 +37,27 @@ sectionci    = commonIdeaWithDict "sectionci"    (cn' "section")                
 -- which hold the contents of the document
 data Document = Document Title Author [Section]
 
-{--data RawContent = Table [Sentence] [[Sentence]] Title Bool
+{--data RawContent = Table UID [Sentence] [[Sentence]] Title Bool
   -- ^ table has: header-row data(rows) label/caption showlabel?
                | Paragraph Sentence -- ^ Paragraphs are just sentences.
-               | EqnBlock Expr
-               | Enumeration ListType -- ^ Lists
-               | Defini DType [(Identifier, [Contents])]
-               | Figure Lbl Filepath MaxWidthPercent -- ^ Should use relative file path.
+               | EqnBlock UID Expr
+               | Enumeration UID ListType -- ^ Lists
+               | Defini UID DType [(Identifier, [Contents])]
+               | Figure UID Lbl Filepath MaxWidthPercent -- ^ Should use relative file path.
                | Assumption UID Sentence Label -- FIXME: hack, remove
                | Bib BibRef
-               | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl--}
+               | Graph UID [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl--}
 
 helpUIDfrmRaw :: RawContent -> UID
 helpUIDfrmRaw (Table u _ _ _ _) = u
 helpUIDfrmRaw (Figure u _ _ _)  = u
 helpUIDfrmRaw (Graph u _ _ _ _) = u
-helpUIDfrmRaw (_)   = error "This chunk doesn't have a UID." 
+helpUIDfrmRaw (EqnBlock u _)    = u
+helpUIDfrmRaw (Enumeration u _) = u
+helpUIDfrmRaw (Defini u _ _)    = u
+helpUIDfrmRaw (Assumption u _ _)= u
+helpUIDfrmRaw (Bib _)           = error "This chunk doesn't have a UID."
+helpUIDfrmRaw (Paragraph _)     = error "This chunk doesn't have a UID." 
 
 -- | Smart constructor for labelled content chunks
 llcc :: Label -> RawContent -> LabelledContent

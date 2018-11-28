@@ -320,7 +320,7 @@ probDescIntro pro cp wa sw = foldlSP [getAcc pro, S "is a",
 termAndDefn = termDefnF Nothing [termAndDefnBullets]
 
 termAndDefnBullets :: Contents
-termAndDefnBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ 
+termAndDefnBullets = UlC $ ulcc $ Enumeration "fixme" $ Bullet $ noRefs $ 
   map (\x -> Flat $
   at_start x :+: S ":" +:+ (x ^. defn))
   [ht_flux, heat_cap_spec, thermal_conduction, transient]

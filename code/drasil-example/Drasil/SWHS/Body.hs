@@ -266,7 +266,7 @@ systCont = SRS.sysCont [systCContents progName, LlC sys_context_fig, systCIntro
   progName user, systContRespBullets] []
 
 systContRespBullets :: Contents
-systContRespBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs [userResp input_ datum,
+systContRespBullets = UlC $ ulcc $ Enumeration "fixme"$ Bullet $ noRefs [userResp input_ datum,
   swhsResp]
 
 --------------------------------
@@ -301,7 +301,7 @@ termAndDefn = termDefnF Nothing [termAndDefnBullets]
 -- GlassBR has an additional sentence with a reference at the end.)
 
 termAndDefnBullets :: Contents
-termAndDefnBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ map tAndDMap
+termAndDefnBullets = UlC $ ulcc $ Enumeration "fixme"$ Bullet $ noRefs $ map tAndDMap
   [CT.ht_flux, phase_change_material, CT.heat_cap_spec,
   CT.thermal_conduction, transient]
 

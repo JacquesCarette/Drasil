@@ -36,10 +36,10 @@ import Data.Drasil.Concepts.Documentation (fterms, input_, output_, symbol_,
 import Data.Drasil.Concepts.Math (unit_)
 
 eqUnR :: Expr -> Label -> LabelledContent
-eqUnR e lbl = llcc lbl $ EqnBlock e
+eqUnR e lbl = llcc lbl $ EqnBlock "fixme" e
 
 eqUnR' :: Expr -> Contents
-eqUnR' e = UlC $ ulcc $ EqnBlock e
+eqUnR' e = UlC $ ulcc $ EqnBlock "fixme" e
 
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -138,14 +138,14 @@ bulletNested t l = Bullet . map (\(h,c) -> (Nested h c, Nothing)) $ zip t l
 
 -- | enumBullet apply Enumeration, Bullet and Flat to a list
 enumBullet :: [Sentence] -> Contents --FIXME: should Enumeration be labelled?
-enumBullet s = UlC $ ulcc $ Enumeration $ bulletFlat s
+enumBullet s = UlC $ ulcc $ Enumeration "fixme" $ bulletFlat s
 
 -- | enumSimple enumerates a list and applies simple and enumeration to it
 -- s - start index for the enumeration
 -- t - title of the list
 -- l - list to be enumerated
 enumSimple :: Integer -> Sentence -> [Sentence] -> Contents --FIXME: should Enumeration be labelled?
-enumSimple s t l = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
+enumSimple s t l = UlC $ ulcc $ Enumeration "fixme" $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
 
 -- | interweaves two lists together [[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]
 weave :: [[a]] -> [a]

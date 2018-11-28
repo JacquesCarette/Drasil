@@ -47,23 +47,23 @@ data InclUnits = IncludeUnits -- In description field (for other symbols)
 -- | Create a theoretical model using a list of fields to be displayed, a database of symbols,
 -- and a RelationConcept (called automatically by 'SCSSub' program)
 tmodel :: HasSymbolTable ctx => Fields -> ctx -> TheoryModel -> LabelledContent
-tmodel fs m t = mkRawLC (Defini TM (foldr (mkTMField t m) [] fs)) (t ^. getLabel)
+tmodel fs m t = mkRawLC (Defini "fixme" TM (foldr (mkTMField t m) [] fs)) (t ^. getLabel)
 
 -- | Create a data definition using a list of fields, a database of symbols, and a
 -- QDefinition (called automatically by 'SCSSub' program)
 ddefn :: HasSymbolTable ctx => Fields -> ctx -> DataDefinition -> LabelledContent
-ddefn fs m d = mkRawLC (Defini DD (foldr (mkDDField d m) [] fs)) (d ^. getLabel)
+ddefn fs m d = mkRawLC (Defini "fixme" DD (foldr (mkDDField d m) [] fs)) (d ^. getLabel)
 
 -- | Create a general definition using a list of fields, database of symbols,
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'
 -- program)
 gdefn :: HasSymbolTable ctx => Fields -> ctx -> GenDefn -> LabelledContent
-gdefn fs m g = mkRawLC (Defini General (foldr (mkGDField g m) [] fs)) (g ^. getLabel)
+gdefn fs m g = mkRawLC (Defini "fixme" General (foldr (mkGDField g m) [] fs)) (g ^. getLabel)
 
 -- | Create an instance model using a list of fields, database of symbols,
 -- and an 'InstanceModel' chunk (called automatically by 'SCSSub' program)
 instanceModel :: HasSymbolTable ctx => Fields -> ctx -> InstanceModel -> LabelledContent
-instanceModel fs m i = mkRawLC (Defini Instance (foldr (mkIMField i m) [] fs)) (i ^. getLabel)
+instanceModel fs m i = mkRawLC (Defini "fixme" Instance (foldr (mkIMField i m) [] fs)) (i ^. getLabel)
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
 -- or IM definition automatically (called automatically by 'SCSSub' program)
@@ -73,7 +73,7 @@ derivation g = map makeDerivationContents (g ^. derivations)
 -- | Helper function for creating the layout objects
 -- (paragraphs and equation blocks) for a derivation.
 makeDerivationContents :: Sentence -> Contents
-makeDerivationContents (E e) = LlC $ llcc (mkEmptyLabel EqnB) (EqnBlock e) --FIXME: Derivation needs labels for it's equation
+makeDerivationContents (E e) = LlC $ llcc (mkEmptyLabel EqnB) (EqnBlock "fixme" e) --FIXME: Derivation needs labels for it's equation
 makeDerivationContents s     = UlC $ ulcc $ Paragraph s
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
@@ -122,14 +122,14 @@ buildDescription :: HasSymbolTable ctx => Verbosity -> InclUnits -> Expr -> ctx 
   [Contents]
 buildDescription Succinct _ _ _ _ = []
 buildDescription Verbose u e m cs = (UlC $ ulcc $
-  Enumeration (Definitions (descPairs u (vars e m)))) : cs
+  Enumeration "fixme" (Definitions (descPairs u (vars e m)))) : cs
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a data definition
 buildDDescription' :: HasSymbolTable ctx => Verbosity -> InclUnits -> DataDefinition -> ctx ->
   [Contents]
-buildDDescription' Succinct u d _ = map (UlC . ulcc) [Enumeration (Definitions $ (firstPair' u d):[])]
-buildDDescription' Verbose u d m = map (UlC . ulcc) [Enumeration (Definitions
+buildDDescription' Succinct u d _ = map (UlC . ulcc) [Enumeration "fixme" (Definitions $ (firstPair' u d):[])]
+buildDDescription' Verbose u d m = map (UlC . ulcc) [Enumeration "fixme" (Definitions
   (firstPair' u d : descPairs u (vars (d^.defnExpr) m)))]
 
 -- | Create the fields for a general definition from a 'GenDefn' chunk.
@@ -164,9 +164,9 @@ mkIMField i _ l@(Input) fs =
   (_:_) -> (show l, [mkParagraph $ foldl (sC) x xs]) : fs
   where (x:xs) = map (P . eqSymb) (i ^. imInputs)
 mkIMField i _ l@(InConstraints) fs  = 
-  (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] (i ^. inCons)) : fs
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock "fixme") [] (i ^. inCons)) : fs
 mkIMField i _ l@(OutConstraints) fs = 
-  (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] (i ^. outCons)) : fs
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock "fixme") [] (i ^. outCons)) : fs
 mkIMField i _ l@(Notes) fs = 
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (i ^. getNotes)
 mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++

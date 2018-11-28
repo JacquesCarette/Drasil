@@ -200,7 +200,7 @@ inputDataConstraints, outputDataConstraints, traceMatsAndGraphsTable1, traceMats
 
 --------------------------------------------------------------------------------
 termsAndDescBullets :: Contents
-termsAndDescBullets = UlC $ ulcc $ Enumeration $ 
+termsAndDescBullets = UlC $ ulcc $ Enumeration "fixme"$ 
   Numeric $
   noRefs $ map tAndDOnly termsWithDefsOnly
   ++
@@ -358,7 +358,7 @@ sysCtxResp = [titleize user +:+ S "Responsibilities",
   short gLassBR +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
-sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
+sysCtxList = UlC $ ulcc $ Enumeration "fixme" $ bulletNested sysCtxResp $
   map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
    
 {--User Characteristics--}

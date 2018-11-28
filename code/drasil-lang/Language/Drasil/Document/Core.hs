@@ -54,9 +54,9 @@ data Contents = UlC UnlabelledContent
 data RawContent = Table UID [Sentence] [[Sentence]] Title Bool
   -- ^ table has: header-row data(rows) label/caption showlabel?
                | Paragraph Sentence -- ^ Paragraphs are just sentences.
-               | EqnBlock Expr
-               | Enumeration ListType -- ^ Lists
-               | Defini DType [(Identifier, [Contents])]
+               | EqnBlock UID Expr
+               | Enumeration UID ListType -- ^ Lists
+               | Defini UID DType [(Identifier, [Contents])]
                | Figure UID Lbl Filepath MaxWidthPercent -- ^ Should use relative file path.
                | Assumption UID Sentence Label -- FIXME: hack, remove
                | Bib BibRef

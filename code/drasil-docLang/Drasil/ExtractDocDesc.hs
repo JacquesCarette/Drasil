@@ -36,9 +36,9 @@ egetCon' :: Contents -> [Expr]
 egetCon' c = egetCon (c ^. accessContents)
 
 egetCon :: RawContent -> [Expr]
-egetCon (EqnBlock e) = [e]
-egetCon (Defini _ []) = []
-egetCon (Defini dt (hd:tl)) = concatMap egetCon' (snd hd) ++ egetCon (Defini dt tl)
+egetCon (EqnBlock _ e) = [e]
+egetCon (Defini _ _ []) = []
+egetCon (Defini u dt (hd:tl)) = concatMap egetCon' (snd hd) ++ egetCon (Defini u dt tl)
 egetCon _ = []
 
 egetLblCon :: LabelledContent -> [Expr]
@@ -181,14 +181,14 @@ getCon' c = getCon (c ^. accessContents)
 getCon :: RawContent -> [Sentence]
 getCon (Table _ s1 s2 t _) = isVar (s1, transpose s2) ++ [t]
 getCon (Paragraph s)       = [s]
-getCon (EqnBlock _)      = []
-getCon (Enumeration lst)   = getLT lst
+getCon (EqnBlock _ _)      = []
+getCon (Enumeration _ lst)   = getLT lst
 getCon (Figure _ l _ _)    = [l]
 getCon (Assumption _ b _) = [b]
 getCon (Bib bref)          = getBib bref
 getCon (Graph _ [(s1, s2)] _ _ l) = s1 : s2 : [l]
-getCon (Defini _ []) = []
-getCon (Defini dt (hd:fs)) = concatMap getCon' (snd hd) ++ getCon (Defini dt fs)
+getCon (Defini _ _ []) = []
+getCon (Defini u dt (hd:fs)) = concatMap getCon' (snd hd) ++ getCon (Defini u dt fs)
 getCon  _ = []
 
 -- This function is used in collecting sentence from table.

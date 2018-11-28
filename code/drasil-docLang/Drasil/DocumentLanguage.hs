@@ -353,7 +353,7 @@ tuIntro x = mkParagraph $ foldr ((+:+) . tuI) EmptyS x
 -- | mkEnumSimple is a convenience function for converting lists into
 -- Simple-type Enumerations.
 mkEnumSimple :: (a -> ListTuple) -> [a] -> [Contents]
-mkEnumSimple f = replicate 1 . UlC . ulcc . Enumeration . Simple . map f
+mkEnumSimple f = replicate 1 . UlC . ulcc . Enumeration "fixme". Simple . map f
 
 -- | mkEnumSimpleD is a convenience function for transforming types which are
 -- instances of the constraints Referable, HasShortName, and Definition, into

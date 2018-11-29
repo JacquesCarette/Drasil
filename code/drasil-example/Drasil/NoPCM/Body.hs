@@ -530,7 +530,7 @@ reqCCHEWT = cic "reqCCHEWT"
 
 reqIVRTable :: LabelledContent
 reqIVRTable = llcc (mkLabelSame "Input-Variable-Requirements" Tab) $ 
-  Table "fixme" [titleize symbol_, titleize M.unit_, titleize description]
+  Table "reqIVRTable" [titleize symbol_, titleize M.unit_, titleize description]
   (mkTable [ch, U.toSentence, phrase] inputVar)
   (titleize input_ +:+ titleize variable +:+ titleize' requirement) True
 

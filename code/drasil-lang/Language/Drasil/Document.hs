@@ -1,6 +1,7 @@
 {-# Language TemplateHaskell #-}
 -- | Document Description Language
 module Language.Drasil.Document where
+import Control.Lens((^.))
 
 import Data.Drasil.IdeaDicts (documentc)
 import Language.Drasil.Document.Core
@@ -89,7 +90,7 @@ mkRawLC x lb = llcc lb x
 -- | Smart constructor for creating Sections with introductory contents
 -- (ie. paragraphs, tables, etc.) and a list of subsections.
 section :: Sentence -> [Contents] -> [Section] -> Label -> Section
-section title intro secs lbe = Section "fixme" title (map Con intro ++ map Sub secs) lbe
+section title intro secs lbe = Section (lbe ^. uid) title (map Con intro ++ map Sub secs) lbe
 
 section'' :: Sentence -> [Contents] -> [Section] -> Label -> Section
 section'' title intro secs lbe = section title intro secs lbe

@@ -213,7 +213,7 @@ intrsliceFEqn = (sy normToShear) * (inxi scalFunc) * (inxi intNormForce)
 {--DD10
 
 resShearWO :: DataDefinition
-resShearWO = mkDDL resShearWOQD [makeRef chen2005] resShr_deriv_ssp resShearWOL
+resShearWO = mkDDL resShearWOQD [chen2005] resShr_deriv_ssp resShearWOL
   [makeRef2S newA3, makeRef2S newA4, makeRef2S newA5]--Notes
 --FIXME: fill empty lists in
 
@@ -235,7 +235,7 @@ resShr_deriv_ssp = weave [resShrDerivation_sentence, map E resShr_deriv_eqns_ssp
 --DD11
 
 mobShearWO :: DataDefinition
-mobShearWO = mkDDL mobShearWOQD [makeRef chen2005] mobShr_deriv_ssp mobShearWOL
+mobShearWO = mkDDL mobShearWOQD [chen2005] mobShr_deriv_ssp mobShearWOL
   [makeRef2S newA3, makeRef2S newA4, makeRef2S newA5]--Notes
 --FIXME: fill empty lists in
 

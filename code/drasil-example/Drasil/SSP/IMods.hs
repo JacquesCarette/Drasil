@@ -370,7 +370,7 @@ fctSftyDerivation = [foldlSP [S "Using", eqN 21, S "from", makeRef2S intsliceFs 
   S "for the", phrase fs, S "is found as", eqN 12 `sC` 
   S "also seen in", makeRef2S fctSfty],
   
-  eqUnR' fcSfty_rel,
+  eqUnR' "fcSfty_rel" fcSfty_rel,
   
   fUnknownsCon]
 
@@ -381,7 +381,7 @@ nrmShrDerivation = [
   S "about", (S "midpoint" `ofThe` S "base") `sAnd` S "the",
   phrase assumption, S "of", makeRef2S normShrRGD, S "results in", eqN 13],
   
-  eqUnR' $ 0 $=
+  eqUnR' "fixme" $ 0 $=
   momExpr (\ x y -> x - (sy normToShear * (inxi baseWthX / 2) * 
   (inxi intNormForce * inxi scalFunc + inxiM1 intNormForce *
   inxiM1 scalFunc)) + y),
@@ -389,7 +389,7 @@ nrmShrDerivation = [
   foldlSP [S "The", phrase equation, S "in terms of", ch normToShear,
   S "leads to", eqN 14],
   
-  eqUnR' $
+  eqUnR' "fixme" $
   sy normToShear $= momExpr (+)
   / ((inxi baseWthX / 2) * (inxi intNormForce * inxi scalFunc +
   inxiM1 intNormForce * inxiM1 scalFunc)),
@@ -400,7 +400,7 @@ nrmShrDerivation = [
   --NOTE: "Taking this with that and the assumption of _
   --to get equation #" pattern
   
-  eqUnR' $
+  eqUnR' "fixme" $
   inxi normToShear $= sum1toN
   (inxi baseWthX * (sy fixme1 + sy fixme2) * tan(inxi baseAngle) +
   inxi midpntHght * (sy earthqkLoadFctr * inxi slcWght -
@@ -425,7 +425,7 @@ intrSlcDerivation = [
   S "and the assumption of", makeRef2S normShrRGD, S "the equilibrium", phrase equation, 
   S "can be rewritten as", eqN 16],
   
-  eqUnR' $
+  eqUnR' "fixme" $
   inxi nrmFSubWat $= eqlExpr cos sin (\x y -> x -
   sy normToShear * inxiM1 scalFunc * inxiM1 intNormForce + 
   sy normToShear * inxi scalFunc * inxi intNormForce + y)
@@ -440,7 +440,7 @@ intrSlcDerivation = [
   -- NOTE: "Taking this with that and the assumption of _
   -- to get equation #" pattern
   
-  eqUnR' $
+  eqUnR' "fixme" $
   ((inxi totNrmForce) * tan (inxi fricAngle) + (inxi cohesion) *
   (inxi baseWthX) * sec (inxi baseAngle)) / (sy fs) $=
   --FIXME: pull the left side of this from GD4
@@ -450,7 +450,7 @@ intrSlcDerivation = [
   foldlSP [S "Substituting the", phrase equation, S "for", ch nrmFSubWat,
   S "from", eqN 16, S "into", eqN 17, S "and rearranging results in", eqN 18],
 
-  eqUnR' $
+  eqUnR' "fixme" $
   (inxi intNormForce) * (((sy normToShear)*(inxi scalFunc) *
   cos (inxi baseAngle) - sin (inxi baseAngle)) * tan (inxi fricAngle) -
   ((sy normToShear)*(inxi scalFunc) * sin (inxi baseAngle) -
@@ -468,20 +468,20 @@ intrSlcDerivation = [
   S "found below in", eqN 19 `sAnd` eqN 20, S "respectively, then", eqN 18, 
   S "can be simplified to", eqN 21 `sC` S "also seen in", makeRef2S intsliceFs],
   
-  eqUnR' $
+  eqUnR' "fixme" $
   (inxi shrResC) $= ((sy normToShear)*(inxi scalFunc) * cos (inxi baseAngle) -
   sin (inxi baseAngle)) * tan (inxi fricAngle) -
   ((sy normToShear)*(inxi scalFunc) * sin (inxi baseAngle) -
   cos (inxi baseAngle)) * (sy fs),
   -- FIXME: index everything here and add "Where i is the local
   -- slice of mass for 1 $<= i $<= n-1"
-  eqUnR' $
+  eqUnR' "fixme" $
   (inxi mobShrC) $= ((sy normToShear)*(inxi scalFunc) *
   cos (inxiP1 baseAngle) - sin (inxiP1 baseAngle)) *
   tan (inxi fricAngle) - ((sy normToShear)*(inxi scalFunc) *
   sin (inxiP1 baseAngle) - cos (inxiP1 baseAngle)) * (sy fs),
   
-  eqUnR' $
+  eqUnR' "fixme" $
   (inxi intNormForce) $= (inxiM1 mobShrC * inxiM1 intNormForce +
   sy fs * inxi shearFNoIntsl - inxi shearRNoIntsl) / inxi shrResC,
   

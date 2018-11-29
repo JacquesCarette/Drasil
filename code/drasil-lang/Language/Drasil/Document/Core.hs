@@ -51,16 +51,16 @@ data Contents = UlC UnlabelledContent
 
 
 -- | Types of layout objects we deal with explicitly
-data RawContent = Table UID [Sentence] [[Sentence]] Title Bool
+data RawContent = Table [Sentence] [[Sentence]] Title Bool
   -- ^ table has: header-row data(rows) label/caption showlabel?
                | Paragraph Sentence -- ^ Paragraphs are just sentences.
-               | EqnBlock UID Expr
-               | Enumeration UID ListType -- ^ Lists
-               | Defini UID DType [(Identifier, [Contents])]
-               | Figure UID Lbl Filepath MaxWidthPercent -- ^ Should use relative file path.
+               | EqnBlock Expr
+               | Enumeration ListType -- ^ Lists
+               | Defini DType [(Identifier, [Contents])]
+               | Figure Lbl Filepath MaxWidthPercent -- ^ Should use relative file path.
                | Assumption UID Sentence Label -- FIXME: hack, remove
                | Bib BibRef
-               | Graph UID [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl
+               | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl
                -- ^ TODO: Fill this one in.
 type Identifier = String
 

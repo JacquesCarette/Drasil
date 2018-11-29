@@ -174,26 +174,26 @@ instance Referable LabelledContent where
   renderRef  (LblC _ c)  = RP $ refLabelledCon c
 
 refLabelledCon :: RawContent -> IRefProg
-refLabelledCon (Table _ _ _ _ _)       = raw "Table:" +::+ name 
-refLabelledCon (Figure _ _ _ _)        = raw "Fig:" +::+ name
-refLabelledCon (Graph _ _ _ _ _)       = raw "Fig:" +::+ name
-refLabelledCon (Defini _ _ _)          = raw "Def:" +::+ name
+refLabelledCon (Table _ _ _ _)       = raw "Table:" +::+ name 
+refLabelledCon (Figure _ _ _)        = raw "Fig:" +::+ name
+refLabelledCon (Graph _ _ _ _)       = raw "Fig:" +::+ name
+refLabelledCon (Defini _ _)          = raw "Def:" +::+ name
 refLabelledCon (Assumption _ _ _)    = raw "Assump:" +::+ name
-refLabelledCon (EqnBlock _ _)          = raw "EqnB:" +::+ name
-refLabelledCon (Enumeration _ _)       = raw "Lst:" +::+ name 
+refLabelledCon (EqnBlock _)          = raw "EqnB:" +::+ name
+refLabelledCon (Enumeration _)       = raw "Lst:" +::+ name 
 refLabelledCon (Paragraph _)         = error "Shouldn't reference paragraphs"
 refLabelledCon (Bib _)               = error $ 
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
 
 temp :: RawContent -> RefType
-temp (Table _ _ _ _ _)       = Tab
-temp (Figure _ _ _ _)        = Fig
-temp (Graph _ _ _ _ _)       = Fig
-temp (Defini _ x _)          = Def x
+temp (Table _ _ _ _)       = Tab
+temp (Figure _ _ _)        = Fig
+temp (Graph _ _ _ _)       = Fig
+temp (Defini x _)          = Def x
 temp (Assumption _ _ _)    = Assump -- hard-code, will disappear
-temp (EqnBlock _ _)          = EqnB
-temp (Enumeration _ _)       = Lst 
+temp (EqnBlock _)          = EqnB
+temp (Enumeration _)       = Lst 
 temp (Paragraph _)         = error "Shouldn't reference paragraphs"
 temp (Bib _)               = error $
     "Bibliography list of references cannot be referenced. " ++

@@ -39,28 +39,6 @@ sectionci    = commonIdeaWithDict "sectionci"    (cn' "section")                
 -- which hold the contents of the document
 data Document = Document Title Author [Section]
 
-{--data RawContent = Table UID [Sentence] [[Sentence]] Title Bool
-  -- ^ table has: header-row data(rows) label/caption showlabel?
-               | Paragraph Sentence -- ^ Paragraphs are just sentences.
-               | EqnBlock UID Expr
-               | Enumeration UID ListType -- ^ Lists
-               | Defini UID DType [(Identifier, [Contents])]
-               | Figure UID Lbl Filepath MaxWidthPercent -- ^ Should use relative file path.
-               | Assumption UID Sentence Label -- FIXME: hack, remove
-               | Bib BibRef
-               | Graph UID [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl--}
-
-helpUIDfrmRaw :: RawContent -> UID
-helpUIDfrmRaw (Table u _ _ _ _) = u
-helpUIDfrmRaw (Figure u _ _ _)  = u
-helpUIDfrmRaw (Graph u _ _ _ _) = u
-helpUIDfrmRaw (EqnBlock u _)    = u
-helpUIDfrmRaw (Enumeration u _) = u
-helpUIDfrmRaw (Defini u _ _)    = u
-helpUIDfrmRaw (Assumption u _ _)= u
-helpUIDfrmRaw (Bib _)           = error "This chunk doesn't have a UID."
-helpUIDfrmRaw (Paragraph _)     = error "This chunk doesn't have a UID." 
-
 -- | Smart constructor for labelled content chunks
 llcc :: Label -> RawContent -> LabelledContent
 llcc = LblC
@@ -96,8 +74,8 @@ section'' title intro secs lbe = section title intro secs lbe
 
 -- | Figure smart constructor. Assumes 100% of page width as max width.
 fig :: Lbl -> Filepath -> RawContent
-fig l f = Figure "fixme" l f 100
+fig l f = Figure l f 100
 
 -- | Figure smart constructor for customized max widths.
 figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
-figWithWidth = Figure "fixme"
+figWithWidth = Figure

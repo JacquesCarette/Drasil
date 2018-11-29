@@ -36,10 +36,10 @@ import Data.Drasil.Concepts.Documentation (fterms, input_, output_, symbol_,
 import Data.Drasil.Concepts.Math (unit_)
 
 eqUnR :: Expr -> Label -> LabelledContent
-eqUnR e lbl = llcc lbl $ EqnBlock (lbl ^. uid) e
+eqUnR e lbl = llcc lbl $ EqnBlock e
 
-eqUnR' :: UID -> Expr -> Contents
-eqUnR' u e = UlC $ ulcc $ EqnBlock u e
+eqUnR' :: Expr -> Contents
+eqUnR' e = UlC $ ulcc $ EqnBlock e
 
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -108,7 +108,7 @@ makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- 
 -- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
 mkInputDatTb :: (Quantity a, MayHaveUnit a) => [a] -> LabelledContent
 mkInputDatTb inputVar = llcc (mkLabelSame "inDataTable" Tab) $ 
-  Table "inputDatTb" [titleize symbol_, titleize unit_, 
+  Table [titleize symbol_, titleize unit_, 
   S "Name"]
   (mkTable [ch , fmtU EmptyS, phrase] inputVar) 
   (S "Required" +:+ titleize' input_) True
@@ -138,14 +138,14 @@ bulletNested t l = Bullet . map (\(h,c) -> (Nested h c, Nothing)) $ zip t l
 
 -- | enumBullet apply Enumeration, Bullet and Flat to a list
 enumBullet :: Label -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
-enumBullet lb s = llcc lb $ Enumeration (lb ^. uid) $ bulletFlat s
+enumBullet lb s = llcc lb $ Enumeration $ bulletFlat s
 
 -- | enumSimple enumerates a list and applies simple and enumeration to it
 -- s - start index for the enumeration
 -- t - title of the list
 -- l - list to be enumerated
 enumSimple :: Label -> Integer -> Sentence -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
-enumSimple lb s t l = llcc lb $ Enumeration (lb ^. uid) $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
+enumSimple lb s t l = llcc lb $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
 
 -- | interweaves two lists together [[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]
 weave :: [[a]] -> [a]
@@ -168,5 +168,5 @@ noRefsLT a = uncurry zip3 (unzip a) $ repeat Nothing
 
 prodUCTbl :: [[Sentence]] -> LabelledContent
 prodUCTbl cases = llcc (mkLabelSame "useCaseTable" Tab) $ --FIXME: do we want labels across examples to be unique?
-  Table "useCaseTable" [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
+  Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
   cases (titleize useCaseTable) True

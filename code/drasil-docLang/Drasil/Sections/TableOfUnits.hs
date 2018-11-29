@@ -14,7 +14,7 @@ table_of_units u intro = Section (S "Table of Units") [Con intro, Con $ LlC (uni
 
 -- | Creates the actual table of units from a list of units
 unit_table :: IsUnit s => [s] -> LabelledContent
-unit_table u = llcc (mkLabelSame "ToU" Tab) $ Table "unitTbl"
+unit_table u = llcc (mkLabelSame "ToU" Tab) $ Table
   (map (at_start) [symbol_, description])  (mkTable
   [(\x -> Sy (x ^. usymb)),
    (\x -> (x ^. defn) +:+ sParen (phrase x))

@@ -13,7 +13,7 @@ import Data.Drasil.Concepts.Documentation (symbol_, description, tOfSymb)
 -- | table of symbols creation function
 table :: (Quantity s, MayHaveUnit s) => Stage -> [s] -> (s -> Sentence) -> LabelledContent
 table st ls f = llcc (mkLabelSame "ToS" Tab) 
-  $ Table "symbTbl"
+  $ Table
   [at_start symbol_, at_start description, at_start' CM.unit_]
   (mkTable [P . (flip symbol st), f, toSentence]
   (filter (\q -> hasStageSymbol q st) ls))  

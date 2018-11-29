@@ -14,6 +14,8 @@ module Data.Drasil.Utils
   , bulletNested
   , enumSimple
   , enumBullet
+  , enumSimpleU
+  , enumBulletU
   , mkInputDatTb
   , getRVal
   , addPercent
@@ -140,12 +142,18 @@ bulletNested t l = Bullet . map (\(h,c) -> (Nested h c, Nothing)) $ zip t l
 enumBullet :: Label -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
 enumBullet lb s = llcc lb $ Enumeration $ bulletFlat s
 
+enumBulletU ::[Sentence] -> Contents --FIXME: should Enumeration be labelled?
+enumBulletU s =  UlC $ ulcc $ Enumeration $ bulletFlat s
+
 -- | enumSimple enumerates a list and applies simple and enumeration to it
 -- s - start index for the enumeration
 -- t - title of the list
 -- l - list to be enumerated
 enumSimple :: Label -> Integer -> Sentence -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
 enumSimple lb s t l = llcc lb $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
+
+enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents --FIXME: should Enumeration be labelled?
+enumSimpleU s t l = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
 
 -- | interweaves two lists together [[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]
 weave :: [[a]] -> [a]

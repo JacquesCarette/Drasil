@@ -266,7 +266,7 @@ systCont = SRS.sysCont [systCContents progName, LlC sys_context_fig, systCIntro
   progName user, systContRespBullets] []
 
 systContRespBullets :: Contents
-systContRespBullets = UlC $ ulcc $ Enumeration "fixme"$ Bullet $ noRefs [userResp input_ datum,
+systContRespBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs [userResp input_ datum,
   swhsResp]
 
 --------------------------------
@@ -301,7 +301,7 @@ termAndDefn = termDefnF Nothing [termAndDefnBullets]
 -- GlassBR has an additional sentence with a reference at the end.)
 
 termAndDefnBullets :: Contents
-termAndDefnBullets = UlC $ ulcc $ Enumeration "fixme"$ Bullet $ noRefs $ map tAndDMap
+termAndDefnBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ map tAndDMap
   [CT.ht_flux, phase_change_material, CT.heat_cap_spec,
   CT.thermal_conduction, transient]
 
@@ -468,7 +468,7 @@ funcReqsList :: [Contents]
 funcReqsList = reqs ++ [inputInitQuantsTbl]
 
 inputInitQuantsTbl :: Contents
-inputInitQuantsTbl = LlC $ llcc inputInitQuantsLbl $ (Table "inputInitQuantsTblSWHS"
+inputInitQuantsTbl = LlC $ llcc inputInitQuantsLbl $ (Table
   [titleize symbol_, titleize unit_, titleize description]
   (mkTable
   [ch, --(\ch -> Sy (unit_symb ch)),
@@ -617,7 +617,7 @@ trace2R11 = ["IM2"]
 
 traceTable2 :: LabelledContent
 traceTable2 = llcc (mkLabelSame "Tracey1" Tab) $
-  Table "Tracey1SWHS" (EmptyS:traceMRowHeader2)
+  Table (EmptyS:traceMRowHeader2)
   (makeTMatrix (traceMColHeader2) (traceMColumns2) (traceMRow2))
   (showingCxnBw traceyMatrix
   (titleize' requirement `sAnd` titleize' inModel)) True
@@ -992,7 +992,7 @@ genDefDeriv2 :: LabelledContent -> UnitalChunk -> Contents
 genDefDeriv2 t1ct vo = foldlSPCol [S "Integrating", makeRef2S t1ct,
   S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
-genDefDeriv3 = eqUnR' "fixme" $ 
+genDefDeriv3 = eqUnR' $ 
   ((negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $=
   (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
@@ -1005,7 +1005,7 @@ genDefDeriv4 gaussdiv su vo tfv unv un = foldlSPCol [S "Applying", titleize gaus
   phrase surface `sAnd` ch unv, S "as a", phrase un,
   S "outward", phrase unv, S "for a", phrase su]
 
-genDefDeriv5 = eqUnR' "fixme" $ 
+genDefDeriv5 = eqUnR' $ 
   ((negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
   (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
@@ -1015,7 +1015,7 @@ genDefDeriv6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
   phrase vo, S "The", phrase vhg, S "is assumed constant. Then",
   sParen $ S $ show (1 :: Integer), S "can be written as"]
 
-genDefDeriv7 = eqUnR' "fixme" $ 
+genDefDeriv7 = eqUnR' $ 
   ((sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
   (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
@@ -1024,7 +1024,7 @@ genDefDeriv10 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> Contents
 genDefDeriv10 den ma vo = foldlSPCol [S "Using the fact that", ch den :+:
   S "=" :+: ch ma :+: S "/" :+: ch vo `sC` S "(2) can be written as"]
 
-genDefDeriv11 = eqUnR' "fixme" $ 
+genDefDeriv11 = eqUnR' $ 
   ((sy mass) * (sy heat_cap_spec) * deriv (sy temp)
   time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
   * (sy out_SA) + (sy vol_ht_gen) * (sy vol))
@@ -1235,7 +1235,7 @@ propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
   S "over the", phrase sim_time `sC` S "as follows"]
 
 propCorSolDeriv2 :: Contents
-propCorSolDeriv2 = eqUnR' "fixme" $ 
+propCorSolDeriv2 = eqUnR' $ 
   ((sy w_E) $= (defint (eqSymb time) 0 (sy time)
   ((sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - apply1 temp_W time)))
   - (defint (eqSymb time) 0 (sy time)
@@ -1249,7 +1249,7 @@ propCorSolDeriv3 epcm en pcmat wa =
   S "from the" +:+. phrase wa, S "This can be expressed as"]
 
 propCorSolDeriv4 :: Contents
-propCorSolDeriv4 = eqUnR' "fixme" $ 
+propCorSolDeriv4 = eqUnR' $ 
   ((sy pcm_E) $= (defint (eqSymb time) 0 (sy time)
   ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) - 
   (apply1 temp_PCM time)))))
@@ -1301,14 +1301,14 @@ traceTrailing3 = foldlSent_ [foldlList Comma List $ map plural (take 5 renameLis
   S "on the", plural assumption]
 
 traceTable1 :: LabelledContent
-traceTable1 = llcc (mkLabelSame "Tracey2" Tab) $ Table "Tracey2SWHS"
+traceTable1 = llcc (mkLabelSame "Tracey2" Tab) $ Table
   (EmptyS:traceMRowHeader1)
   (makeTMatrix (traceMRowHeader1) (traceMColumns1) (traceMRow1))
   (showingCxnBw traceyMatrix
   (titleize' item +:+ S "of Different" +:+ titleize' section_)) True
 
 traceTable3 :: LabelledContent
-traceTable3 = llcc (mkLabelSame "Tracey3" Tab) $ Table "Tracey3SWHS"
+traceTable3 = llcc (mkLabelSame "Tracey3" Tab) $ Table
   (EmptyS:traceMRowHeader3)
   (makeTMatrix traceMColHeader3 traceMColumns3 traceMRow3)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+

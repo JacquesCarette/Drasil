@@ -15,7 +15,7 @@ import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
 
 
 inputInitQuantsTbl :: Contents
-inputInitQuantsTbl = LlC $ llcc inputInitQuantsLbl $ (Table "inputInitQuantsTblSWHS"
+inputInitQuantsTbl = LlC $ llcc inputInitQuantsLbl $ (Table
   [titleize symbol_, titleize unit_, titleize description]
   (mkTable
   [ch, --(\ch -> Sy (unit_symb ch)),
@@ -23,7 +23,7 @@ inputInitQuantsTbl = LlC $ llcc inputInitQuantsLbl $ (Table "inputInitQuantsTblS
   (titleize input_ +:+ titleize variable +:+ titleize' requirement) True)
 
 inputInitQuantsTblabled :: LabelledContent
-inputInitQuantsTblabled = llcc inputInitQuantsLbl $ (Table "inputInitQuantsTblabledSWHS"
+inputInitQuantsTblabled = llcc inputInitQuantsLbl $ (Table
   [titleize symbol_, titleize unit_, titleize description]
   (mkTable
   [ch, --(\ch -> Sy (unit_symb ch)),

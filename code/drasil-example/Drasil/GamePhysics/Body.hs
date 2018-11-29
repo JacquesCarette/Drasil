@@ -301,7 +301,7 @@ sysCtxResp = [titleize user +:+ S "Responsibilities",
   short chipmunk +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
-sysCtxList = UlC $ ulcc $ Enumeration "fixme" $ bulletNested sysCtxResp $
+sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
   map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
 
 --------------------------------
@@ -744,7 +744,7 @@ traceMatTabReqGoalOtherCol = [traceMatTabReqGoalOtherGS1, traceMatTabReqGoalOthe
   traceMatTabReqGoalOtherReq8]
 
 traceMatTabReqGoalOther :: LabelledContent
-traceMatTabReqGoalOther = llcc (mkLabelSame "TraceyReqGoalsOther" Tab) $ Table "TraceyReqGoalsOther"
+traceMatTabReqGoalOther = llcc (mkLabelSame "TraceyReqGoalsOther" Tab) $ Table 
   (EmptyS:(traceMatTabReqGoalOtherRowHead))
   (makeTMatrix traceMatTabReqGoalOtherColHead traceMatTabReqGoalOtherCol
   traceMatTabReqGoalOtherRow)
@@ -817,7 +817,7 @@ traceMatTabAssumpColHead = zipWith itemRefToSent traceMatTabAssumpCol
   traceMatTabAssumpColRef
 
 traceMatTabAssump :: LabelledContent
-traceMatTabAssump = llcc (mkLabelSame "TraceyAssumpsOther" Tab) $ Table "TraceyAssumpsOther"
+traceMatTabAssump = llcc (mkLabelSame "TraceyAssumpsOther" Tab) $ Table
   (EmptyS:traceMatTabAssumpRowHead)
   (makeTMatrix traceMatTabAssumpColHead traceMatTabAssumpCol' traceMatTabAssumpRow)
   (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef2S problem_description)
@@ -879,7 +879,7 @@ traceMatTabDefnModelColHead = zipWith itemRefToSent traceMatTabDefnModelRow
 traceMatTabDefnModelRowHead = traceMatTabDefnModelColHead
 
 traceMatTabDefnModel :: LabelledContent
-traceMatTabDefnModel = llcc (mkLabelSame "TraceyItemsSecs" Tab) $ Table "TraceyItemsSecs"
+traceMatTabDefnModel = llcc (mkLabelSame "TraceyItemsSecs" Tab) $ Table 
   (EmptyS:traceMatTabDefnModelRowHead)
   (makeTMatrix traceMatTabDefnModelColHead traceMatTabDefnModelCol
   traceMatTabDefnModelRow) (showingCxnBw (traceyMatrix) (titleize' item `sAnd`

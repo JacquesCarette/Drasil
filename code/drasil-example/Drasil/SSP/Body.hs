@@ -296,7 +296,7 @@ sysCtxResp = [titleize user +:+ S "Responsibilities",
   short ssp +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
-sysCtxList = UlC $ ulcc $ Enumeration "fixme" $ bulletNested sysCtxResp $
+sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
   map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
 
 -- SECTION 3.2 --
@@ -328,7 +328,7 @@ problem_desc = probDescF EmptyS ssa ending [termi_defi, phys_sys_desc, goal_stmt
 -- SECTION 4.1.1 --
 termi_defi = termDefnF Nothing [termi_defi_list]
 
-termi_defi_list = UlC $ ulcc $ Enumeration "fixme" $ Simple $ noRefsLT $
+termi_defi_list = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
   map (\x -> (titleize $ x, Flat $ x ^. defn))
   [fs_concept, crtSlpSrf, stress, strain, normForce, shearForce, plnStrn]
   -- most of these are in concepts (physics or solidMechanics)

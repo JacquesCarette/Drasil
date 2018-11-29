@@ -200,7 +200,7 @@ inputDataConstraints, outputDataConstraints, traceMatsAndGraphsTable1, traceMats
 
 --------------------------------------------------------------------------------
 termsAndDescBullets :: Contents
-termsAndDescBullets = UlC $ ulcc $ Enumeration "fixme"$ 
+termsAndDescBullets = UlC $ ulcc $ Enumeration$ 
   Numeric $
   noRefs $ map tAndDOnly termsWithDefsOnly
   ++
@@ -362,7 +362,7 @@ sysCtxResp = [titleize user +:+ S "Responsibilities",
   short gLassBR +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
-sysCtxList = UlC $ ulcc $ Enumeration "fixme" $ bulletNested sysCtxResp $
+sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
   map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
    
 {--User Characteristics--}
@@ -589,7 +589,7 @@ traceMatsAndGraphsColsT1_DD6 = ["IM3", "DD2", "DD5"]
 traceMatsAndGraphsColsT1_DD7 = ["DD8"]
 traceMatsAndGraphsColsT1_DD8 = ["DD2"]
 
-traceMatsAndGraphsTable1 = llcc (mkLabelSame "TraceyItemSecs" Tab) $ Table "TraceyItemSecsBR"
+traceMatsAndGraphsTable1 = llcc (mkLabelSame "TraceyItemSecs" Tab) $ Table
   (EmptyS:traceMatsAndGraphsRowHdrT1)
   (makeTMatrix traceMatsAndGraphsRowHdrT1 traceMatsAndGraphsColsT1 traceMatsAndGraphsRowT1)
   (showingCxnBw traceyMatrix
@@ -622,7 +622,7 @@ traceMatsAndGraphsColsT2_R4 = ["R1", "R2"]
 traceMatsAndGraphsColsT2_R5 = ["T1", "T2"]
 traceMatsAndGraphsColsT2_R6 = ["IM1", "IM2", "IM3", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
 
-traceMatsAndGraphsTable2 = llcc (mkLabelSame "TraceyReqsItems" Tab) $ Table "TraceyReqsItemsBR"
+traceMatsAndGraphsTable2 = llcc (mkLabelSame "TraceyReqsItems" Tab) $ Table
   (EmptyS:traceMatsAndGraphsRowHdrT2)
   (makeTMatrix traceMatsAndGraphsColHdrT2 traceMatsAndGraphsColsT2 traceMatsAndGraphsRowT2)
   (showingCxnBw traceyMatrix (titleize' requirement `sAnd` S "Other" +:+
@@ -676,7 +676,7 @@ traceMatsAndGraphsColsT3_R4  = []
 traceMatsAndGraphsColsT3_R5  = []
 traceMatsAndGraphsColsT3_R6  = []
 
-traceMatsAndGraphsTable3 = llcc (mkLabelSame "TraceyAssumpsOthers" Tab) $ Table "TraceyAssumpsOthersBR"
+traceMatsAndGraphsTable3 = llcc (mkLabelSame "TraceyAssumpsOthers" Tab) $ Table
   (EmptyS:traceMatsAndGraphsRowHdr3)
   (makeTMatrix traceMatsAndGraphsColHdr3 traceMatsAndGraphsColsT3 traceMatsAndGraphsRowT3)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other"
@@ -691,15 +691,15 @@ traceMatsAndGraphsIntro2 = map UlC $ traceGIntro traceyGraphs
   (foldlList Comma List ((map plural (take 3 solChSpecSubsections))++
   [plural requirement, plural likelyChg +:+ S "on" +:+ plural assumption]))]
 
-fig_2 = figureLabel "TraceyItemSecs" 2 traceyMatrix
+fig_2 = figureLabel 2 traceyMatrix
   (titleize' item +:+ S "of Different" +:+ titleize' section_)
   (resourcePath ++ "Trace.png") "TraceyItemSecs"
 
-fig_3 = figureLabel "TraceyReqsItems" 3 traceyMatrix
+fig_3 = figureLabel 3 traceyMatrix
   (titleize' requirement `sAnd` S "Other" +:+ titleize' item)
   (resourcePath ++ "RTrace.png") "TraceyReqsItems"
 
-fig_4 = figureLabel"TraceyAssumpsOthers" 4 traceyMatrix
+fig_4 = figureLabel 4 traceyMatrix
   (titleize' assumption `sAnd` S "Other" +:+ titleize' item)
   (resourcePath ++ "ATrace.png") "TraceyAssumpsOthers"
 

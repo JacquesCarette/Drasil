@@ -21,14 +21,12 @@ import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfect_insul,
   charging, discharging)
 import Drasil.SWHS.Labels (thermalEnergyOnlyL, lawConvectiveCoolingWtrPCML, 
   waterAlwaysLiquidL, noGaseousStatePCML, atmosphericPressureTankL, 
-  likeChg1L, likeChg2L, likeChg3L, likeChg4L, likeChg5L,
-  likeChg6L,inputInitQuantsL, thermalEnergyOnlyL, heatTransferCoeffL,
+  thermalEnergyOnlyL, heatTransferCoeffL,
   contantWaterTempL, tempPcmConsL, densityWaterL, specificHeatL,
   newtoLawConvecL, tempOverTimeL, tempOverLengthL, lawConvectiveCoolingWtrPCML,
   chargeTankL, sameInitialL, pcmInitialSolidL, waterAlwaysLiquidL,
   perfectInsulationL, noInternalHeatL, volumeChangeMeltL, noGaseousStatePCML,
   atmosphericPressureTankL, volumeCoilL)
--- import Drasil.SWHS.References (swhsCitations)
 import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, temp_init, temp_W,
   temp_PCM, htCap_L_P, htCap_W, htCap_S_P, w_density, pcm_density, pcm_vol)
 

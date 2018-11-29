@@ -22,14 +22,13 @@ data SecCons = Sub   Section
 -- | Sections have a title ('Sentence') and a list of contents ('SecCons')
 -- and its shortname
 data Section = Section 
-             { _sid :: UID
-             , tle :: Title 
+             { tle :: Title 
              , cons :: [SecCons]
              , _lab :: Label
              }
 makeLenses ''Section
 
-instance HasUID        Section where uid = sid
+instance HasUID        Section where uid = lab . uid
 instance HasLabel      Section where getLabel = lab
 instance HasShortName  Section where shortname = lab . shortname
 
@@ -90,7 +89,7 @@ mkRawLC x lb = llcc lb x
 -- | Smart constructor for creating Sections with introductory contents
 -- (ie. paragraphs, tables, etc.) and a list of subsections.
 section :: Sentence -> [Contents] -> [Section] -> Label -> Section
-section title intro secs lbe = Section (lbe ^. uid) title (map Con intro ++ map Sub secs) lbe
+section title intro secs lbe = Section title (map Con intro ++ map Sub secs) lbe
 
 section'' :: Sentence -> [Contents] -> [Section] -> Label -> Section
 section'' title intro secs lbe = section title intro secs lbe

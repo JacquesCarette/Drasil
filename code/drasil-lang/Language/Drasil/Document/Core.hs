@@ -64,8 +64,7 @@ data RawContent = Table UID [Sentence] [[Sentence]] Title Bool
                -- ^ TODO: Fill this one in.
 type Identifier = String
 
-data LabelledContent = LblC { _lid :: UID
-                            , _lbl :: Label
+data LabelledContent = LblC { _lbl :: Label
                             , _ctype :: RawContent
                             }
 
@@ -78,7 +77,7 @@ makeLenses ''UnlabelledContent
 class HasContents c where
   accessContents :: Lens' c RawContent
 
-instance HasUID        LabelledContent where uid = lid  
+instance HasUID        LabelledContent where uid = lbl . uid  
 instance HasRefAddress LabelledContent where getRefAdd = lbl . getRefAdd
 instance HasLabel      LabelledContent where getLabel = lbl
 instance MayHaveLabel  LabelledContent where getMaybeLabel x = Just (x ^. getLabel)

@@ -63,7 +63,7 @@ helpUIDfrmRaw (Paragraph _)     = error "This chunk doesn't have a UID."
 
 -- | Smart constructor for labelled content chunks
 llcc :: Label -> RawContent -> LabelledContent
-llcc = \x y -> LblC (helpUIDfrmRaw y) x y
+llcc = LblC
 
 -- | Smart constructor for unlabelled content chunks
 ulcc :: RawContent -> UnlabelledContent

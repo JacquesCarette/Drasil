@@ -169,9 +169,9 @@ instance Referable Label where
   renderRef _                = RP name -- FIXME
 
 instance Referable LabelledContent where
-  refAdd     (LblC _ lb _) = getAdd (lb ^. getRefAdd)
-  rType      (LblC _ _ c)  = temp c
-  renderRef  (LblC _ _ c)  = RP $ refLabelledCon c
+  refAdd     (LblC lb _) = getAdd (lb ^. getRefAdd)
+  rType      (LblC _ c)  = temp c
+  renderRef  (LblC _ c)  = RP $ refLabelledCon c
 
 refLabelledCon :: RawContent -> IRefProg
 refLabelledCon (Table _ _ _ _ _)       = raw "Table:" +::+ name 

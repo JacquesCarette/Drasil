@@ -152,7 +152,7 @@ instance Referable ConceptInstance where
 --Should refer to an object WITH a variable.
 --Can be removed once sections have labels.
 instance Referable Label where
-  refAdd    lb@(Lbl _ _ _ _) = getAdd (lb ^. getRefAdd)
+  refAdd    lb@(Lbl _ _ _) = getAdd (lb ^. getRefAdd)
   renderRef _                = RP name -- FIXME
 
 instance Referable LabelledContent where

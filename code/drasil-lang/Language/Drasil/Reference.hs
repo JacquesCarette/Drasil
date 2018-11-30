@@ -266,8 +266,8 @@ makeCiteS :: Citation -> Sentence
 makeCiteS = Ref2 . makeCite
 
 -- | Create a reference for a URI
-makeURI :: String -> ShortName -> Reference2
-makeURI ra sn = Reference2 "fixme" URI ra sn
+makeURI :: UID -> String -> ShortName -> Reference2
+makeURI uid ra sn = Reference2 uid URI ra sn
 
 -- | Create References to a given 'LayoutObj'
 -- This should not be exported to the end-user, but should be usable

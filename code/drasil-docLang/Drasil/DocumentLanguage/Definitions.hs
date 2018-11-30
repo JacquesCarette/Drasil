@@ -51,7 +51,7 @@ tmodel fs m t = mkRawLC (Defini TM (foldr (mkTMField t m) [] fs)) (t ^. getLabel
 
 -- | Create a data definition using a list of fields, a database of symbols, and a
 -- QDefinition (called automatically by 'SCSSub' program)
-ddefn :: (HasSymbolTable ctx, HasTraceTable ctx, HasRefbyTable ctx) => Fields -> ctx -> DataDefinition -> LabelledContent
+ddefn :: (HasSymbolTable ctx, HasTraceTable ctx, HasRefbyTable ctx, HasDataDefnTable ctx) => Fields -> ctx -> DataDefinition -> LabelledContent
 ddefn fs m d = mkRawLC (Defini DD (foldr (mkDDField d m) [] fs)) (d ^. getLabel)
 
 -- | Create a general definition using a list of fields, database of symbols,
@@ -99,17 +99,17 @@ mkTMField t _ l@(Notes) fs =
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
 
-{--helpToRefField' :: (HasUID t) => t -> RefbyMap -> Contents
-helpToRefField' t s = mkParagraph $ foldlSent $ map makeRef2S 
-  $ refbyLookup (t ^. uid) s
+helpToRefField' :: (HasUID t) => t -> RefbyMap -> DatadefnMap -> Contents
+helpToRefField' t s dd = mkParagraph $ foldlSent $ map makeRef2S 
+  $ map (\x -> datadefnLookup x dd) $ refbyLookup (t ^. uid) s
  
-helpToRefField :: (HasUID t) => t -> TraceMap -> Contents
+{--helpToRefField :: (HasUID t) => t -> TraceMap -> Contents
 helpToRefField t s = mkParagraph $ foldlSent $ map makeRef2S 
-  $ traceLookup (t ^. uid) s
--- TODO: buildDescription gets list of constraints to expr and ignores 't'.--}
+  $ traceLookup (t ^. uid) s--}
+-- TODO: buildDescription gets list of constraints to expr and ignores 't'.
 
 -- | Create the fields for a definition from a QDefinition (used by ddefn)
-mkDDField :: (HasSymbolTable ctx, HasTraceTable ctx, HasRefbyTable ctx) => DataDefinition -> ctx -> Field -> ModRow -> ModRow
+mkDDField :: (HasSymbolTable ctx, HasTraceTable ctx, HasRefbyTable ctx, HasDataDefnTable ctx) => DataDefinition -> ctx -> Field -> ModRow -> ModRow
 mkDDField d _ l@Label fs = (show l, (mkParagraph $ at_start d):[]) : fs
 mkDDField d _ l@Symbol fs = (show l, (mkParagraph $ (P $ eqSymb d)):[]) : fs
 mkDDField d _ l@Units fs = (show l, (mkParagraph $ (toSentenceUnitless d)):[]) : fs
@@ -117,7 +117,7 @@ mkDDField d _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (sy d $= d ^. defnEx
   (modifyLabelEqn (d ^.getLabel))) :[]) : fs 
 mkDDField d m l@(Description v u) fs =
   (show l, buildDDescription' v u d m) : fs
-mkDDField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
+mkDDField t m l@(RefBy) fs = (show l, [helpToRefField' t (m ^. refbyTable) (m ^. dataDefnTable)]) : fs --FIXME: fill this in
 mkDDField d _ l@(Source) fs = (show l, [mkParagraph $ getSource' d]) : fs
 mkDDField d _ l@(Notes) fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (d ^. getNotes)
 mkDDField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++

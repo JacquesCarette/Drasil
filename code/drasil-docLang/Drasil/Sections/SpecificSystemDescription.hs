@@ -172,7 +172,7 @@ dataConstraintParagraph hasUncertainty tableRef middleSent trailingSent = mkPara
 -- makes a list of references to tables takes
 -- l  list of layout objects that can be referenced
 -- outputs a sentence containing references to the layout objects 
-listofTablesToRefs :: (HasUID l, HasShortName l, Referable l) => [l] -> Sentence
+listofTablesToRefs :: (HasShortName l, Referable l) => [l] -> Sentence
 listofTablesToRefs  []     = EmptyS
 listofTablesToRefs  [x]    = (makeRef2S x) +:+ S "shows"
 listofTablesToRefs  [x,y]  = (makeRef2S x) +:+ S "and" +:+ (makeRef2S y) +:+ S "show" -- for proper grammar with multiple tables

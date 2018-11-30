@@ -117,7 +117,7 @@ roc_temp_simp_deriv_sentences = map foldlSentCol [
                  makeRef2S newA5, makeRef2S newA6],
   s4_2_3_desc5 density mass vol]
 
-s4_2_3_desc1 :: (HasUID x, HasShortName x, Referable x) => x -> UnitalChunk -> [Sentence]
+s4_2_3_desc1 :: (HasShortName x, Referable x) => x -> UnitalChunk -> [Sentence]
 s4_2_3_desc1 t1c vo =
   [S "Integrating", makeRef2S t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 

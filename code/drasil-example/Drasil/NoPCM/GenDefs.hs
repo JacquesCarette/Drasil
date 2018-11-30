@@ -45,7 +45,7 @@ roc_temp_simp_deriv_sentences = map foldlSentCol [
     QT.temp vol [makeRef2S newA3, makeRef2S newA4, makeRef2S newA5],
   genDefDesc5 density mass vol]
 
-genDefDesc1 :: (HasUID x, HasShortName x, Referable x) => x -> UnitalChunk -> [Sentence]
+genDefDesc1 :: (HasShortName x, Referable x) => x -> UnitalChunk -> [Sentence]
 genDefDesc1 t1c vo =
   [S "Integrating", makeRef2S t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 

@@ -252,10 +252,10 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
   where assumptions = Map.elems am
         dropNums = map fst
 
-makeRef2 :: (HasUID l, Referable l, HasShortName l) => l -> Reference2
+makeRef2 :: (Referable l, HasShortName l) => l -> Reference2
 makeRef2 l = Reference2 (l ^. uid) (renderRef l) (refAdd l) (l ^. shortname)
 
-makeRef2S :: (HasUID l, Referable l, HasShortName l) => l -> Sentence
+makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
 makeRef2S l = Ref2 $ Reference2 (l ^. uid) (renderRef l) (refAdd l) (l ^. shortname)
 
 -- Here we don't use the Lenses as constraints, we really do want a Citation.

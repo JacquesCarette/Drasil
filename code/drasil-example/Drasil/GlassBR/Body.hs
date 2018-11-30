@@ -1,7 +1,7 @@
 module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
-
+import qualified Data.Map as Map
 import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
@@ -16,7 +16,8 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), 
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
-  outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb, generateTraceMap)
+  outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb, generateTraceMap,
+  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub)
 
 import qualified Drasil.DocLang.SRS as SRS (datCon, dataDefnLabel, indPRCase, 
   reference, valsOfAuxCons, assumpt)
@@ -82,6 +83,7 @@ gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols ++ map nw g
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw glassBRsymb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) glassBR_label glassBR_refby
+  glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory
 
 glassBR_label :: TraceMap
 glassBR_label = generateTraceMap mkSRS
@@ -89,9 +91,22 @@ glassBR_label = generateTraceMap mkSRS
 glassBR_refby :: RefbyMap
 glassBR_refby = generateRefbyMap glassBR_label 
 
+glassBR_datadefn :: DatadefnMap
+glassBR_datadefn = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromDD $ getSCSSub mkSRS
+
+glassBR_insmodel :: InsModelMap
+glassBR_insmodel = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromIM $ getSCSSub mkSRS
+
+glassBR_gendef :: GendefMap
+glassBR_gendef = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromGD $ getSCSSub mkSRS
+
+glassBR_theory :: TheoryModelMap
+glassBR_theory = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromTM $ getSCSSub mkSRS
+
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw this_symbols)
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) glassBR_label glassBR_refby
+  glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory
 
 gbRefDB :: ReferenceDB
 gbRefDB = rdb assumptions gbCitations $ funcReqs ++ likelyChgs ++

@@ -7,15 +7,17 @@ import Language.Drasil.Development (UnitDefn, unitWrapper) -- FIXME
 
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
+import qualified Data.Map as Map
 
 import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..), 
   LCsSec(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), --TSIntro, 
   TSIntro(..), UCsSec(..), Fields, Field(..), SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
-  SCSSub(..), GSDSec(..), GSDSub(..),
+  SCSSub(..), GSDSec(..), GSDSub(..), 
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc,
   mkEnumSimpleD, nonFuncReqF, outDataConstTbl, probDescF, reqF, termDefnF,
-  tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc, generateTraceMap)
+  tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc, generateTraceMap,
+  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub)
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
   physSyst, assumpt)
@@ -142,6 +144,18 @@ ssp_label = generateTraceMap mkSRS
 ssp_refby :: RefbyMap
 ssp_refby = generateRefbyMap ssp_label
 
+ssp_datadefn :: DatadefnMap
+ssp_datadefn = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromDD $ getSCSSub mkSRS
+
+ssp_insmodel :: InsModelMap
+ssp_insmodel = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromIM $ getSCSSub mkSRS
+
+ssp_gendef :: GendefMap
+ssp_gendef = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromGD $ getSCSSub mkSRS
+
+ssp_theory :: TheoryModelMap
+ssp_theory = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromTM $ getSCSSub mkSRS
+
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
   
@@ -158,10 +172,12 @@ sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms ++
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals
   ++ map nw educon ++ map nw compcon ++ [nw algorithm, nw ssp])
   (map cw sspSymbols ++ srsDomains) this_si ssp_label ssp_refby
+  ssp_datadefn ssp_insmodel ssp_gendef ssp_theory
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms)
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) ssp_label ssp_refby
+ ssp_datadefn ssp_insmodel ssp_gendef ssp_theory
 
 sspRefDB :: ReferenceDB
 sspRefDB = rdb newAssumptions sspCitations (sspRequirements ++

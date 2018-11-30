@@ -38,7 +38,10 @@ module Drasil.DocLang (
     -- Sections.TraceabilityMandGs
     traceGIntro, traceMGF,
     -- ExtractDocDesc
-    getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap
+    getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
+    -- Tracetable
+    getTraceMapFromTM, getTraceMapFromGD,
+    getTraceMapFromDD, getTraceMapFromIM, getSCSSub
     ) where 
 
 import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..), 
@@ -71,5 +74,6 @@ import Drasil.Sections.SpecificSystemDescription (assumpF,
 --import Drasil.Sections.TableOfUnits
 import Drasil.Sections.TraceabilityMandGs (traceGIntro, traceMGF)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc)
-import Drasil.TraceTable (generateTraceMap)
+import Drasil.TraceTable (generateTraceMap, getTraceMapFromTM, getTraceMapFromGD,
+    getTraceMapFromDD, getTraceMapFromIM, getSCSSub)
 -- Commented out modules aren't used - uncomment if this changes

@@ -6,6 +6,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Language.Drasil.Development (UnitDefn, unitWrapper) -- FIXME?
 
 import Control.Lens ((^.))
+import qualified Data.Map as Map
 
 import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, 
   DocSection (..), LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
@@ -16,7 +17,8 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   TraceabilitySec(TraceabilityProg),
   dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
   outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, tsymb'',
-  getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap)
+  getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
+  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub)
 import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel,
   likeChg, probDesc, sysCont, unlikeChg, inModel)
 
@@ -118,10 +120,11 @@ swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull
   ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC
   ++ [nw swhs_pcm, nw algorithm] ++ map nw compcon)
   (map cw swhsSymbols ++ srsDomains) this_si swhs_label swhs_refby
+  swhs_datadefn swhs_insmodel swhs_gendef swhs_theory
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
-  swhs_label swhs_refby
+  swhs_label swhs_refby swhs_datadefn swhs_insmodel swhs_gendef swhs_theory
 
 swhsRefDB :: ReferenceDB
 swhsRefDB = rdb newAssumptions swhsCitations (funcReqs ++
@@ -203,6 +206,18 @@ swhs_label = generateTraceMap mkSRS
  
 swhs_refby :: RefbyMap
 swhs_refby = generateRefbyMap swhs_label
+
+swhs_datadefn :: DatadefnMap
+swhs_datadefn = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromDD $ getSCSSub mkSRS
+
+swhs_insmodel :: InsModelMap
+swhs_insmodel = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromIM $ getSCSSub mkSRS
+
+swhs_gendef :: GendefMap
+swhs_gendef = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromGD $ getSCSSub mkSRS
+
+swhs_theory :: TheoryModelMap
+swhs_theory = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromTM $ getSCSSub mkSRS
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

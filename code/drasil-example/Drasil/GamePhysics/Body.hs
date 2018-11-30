@@ -6,7 +6,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Language.Drasil.Development (UnitDefn, unitWrapper)
 
 import Control.Lens ((^.))
-
+import qualified Data.Map as Map
 import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..), 
   Emphasis(..), Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), 
   IntroSub(..), RefSec(..), RefTab(..), SCSSub(..), SSDSec(SSDProg), 
@@ -15,7 +15,8 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   TraceabilitySec(TraceabilityProg), assembler, dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, outDataConstTbl,
   mkEnumSimpleD, outDataConstTbl, reqF, sSubSec, siCon, siSTitl, siSent,
-  traceMGF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap)
+  traceMGF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
+  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
@@ -121,6 +122,18 @@ game_label = generateTraceMap mkSRS
 game_refby :: RefbyMap
 game_refby = generateRefbyMap game_label
 
+game_datadefn :: DatadefnMap
+game_datadefn = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromDD $ getSCSSub mkSRS
+
+game_insmodel :: InsModelMap
+game_insmodel = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromIM $ getSCSSub mkSRS
+
+game_gendef :: GendefMap
+game_gendef = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromGD $ getSCSSub mkSRS
+
+game_theory :: TheoryModelMap
+game_theory = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromTM $ getSCSSub mkSRS
+
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
@@ -164,9 +177,11 @@ everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms ++ map n
   ++ map nw educon ++ [nw algorithm] ++ map nw derived ++ map nw fundamentals
   ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw gamephySymbols ++ srsDomains) chipUnits game_label game_refby
+  game_datadefn game_insmodel game_gendef game_theory
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) game_label game_refby
+usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: [ConceptChunk]) ([] :: [UnitDefn])
+ game_label game_refby game_datadefn game_insmodel game_gendef game_theory
 
 printSetting :: PrintingInformation
 printSetting = PI everything defaultConfiguration

@@ -6,7 +6,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Language.Drasil.Development (UnitDefn, unitWrapper) -- FIXME?
 
 import Control.Lens ((^.))
-
+import qualified Data.Map as Map
 import Data.Drasil.People (thulasi)
 import Data.Drasil.Utils (enumSimple,
   itemRefToSent, makeTMatrix, itemRefToSent, noRefs)
@@ -46,7 +46,8 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   RefSec(RefProg), RefTab(TAandA, TUnits), TraceabilitySec(TraceabilityProg),
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
-  reqF, termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap)
+  reqF, termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
+  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub)
 import qualified Drasil.DocumentLanguage.Units as U (toSentence) 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
   isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP)
@@ -167,6 +168,18 @@ nopcm_label = generateTraceMap mkSRS
 nopcm_refby :: RefbyMap
 nopcm_refby = generateRefbyMap nopcm_label
 
+nopcm_datadefn :: DatadefnMap
+nopcm_datadefn = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromDD $ getSCSSub mkSRS
+
+nopcm_insmodel :: InsModelMap
+nopcm_insmodel = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromIM $ getSCSSub mkSRS
+
+nopcm_gendef :: GendefMap
+nopcm_gendef = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromGD $ getSCSSub mkSRS
+
+nopcm_theory :: TheoryModelMap
+nopcm_theory = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromTM $ getSCSSub mkSRS
+
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -209,11 +222,12 @@ nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms 
   ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm,
   nw ht_trans])
  (map cw nopcm_Symbols ++ srsDomains)
-  this_si nopcm_label nopcm_refby
+  this_si nopcm_label nopcm_refby nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw nopcm_Symbols ++ map nw acronyms)
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) nopcm_label nopcm_refby
+ nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory
 
 printSetting :: PrintingInformation
 printSetting = PI nopcm_SymbMap defaultConfiguration

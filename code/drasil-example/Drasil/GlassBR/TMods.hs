@@ -35,6 +35,7 @@ lrIsSafe = tm (cw lrIsSafe_RC)
    [relToQD locSymbMap lrIsSafe_RC] [(sy is_safeLR) $= (sy lRe) $> (sy demand)] [] [makeCite astm2009] 
    l1 [lrIsSafeDesc]
   where locSymbMap = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) glassBRsymb ([] :: [UnitDefn]) (head ([] :: [TraceMap])) (head ([] :: [RefbyMap]))
+                       (head ([] :: [DatadefnMap])) (head ([] :: [InsModelMap])) (head ([] :: [GendefMap])) (head ([] :: [TheoryModelMap]))
 
 lrIsSafe_RC :: RelationConcept
 lrIsSafe_RC = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")

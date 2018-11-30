@@ -156,7 +156,10 @@ module Language.Drasil (
   , HasDefinitionTable, conceptMap, defTable, defLookup
   , HasUnitTable, unitMap, unitTable, collectUnits
   , TraceMap, traceLookup, HasTraceTable(..), generateRefbyMap, RefbyMap
-  , refbyLookup, HasRefbyTable(..)
+  , refbyLookup, HasRefbyTable(..), DatadefnMap, InsModelMap
+  , GendefMap, TheoryModelMap, datadefnLookup, insmodelLookup
+  , gendefLookup, theoryModelLookup, HasDataDefnTable(..)
+  , HasInsModelTable(..), HasGendefTable(..), HasTheoryModelTable(..)
   -- AssumpChunk
   , AssumpChunk, assuming, assump
   -- Reference

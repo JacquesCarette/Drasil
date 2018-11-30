@@ -23,7 +23,7 @@ select (x:xs) = case getA x of
 -- | The actual table creation function.
 table :: (Idea s) => [s] -> LabelledContent
 table ls = let chunks = sortBy (compare `on` fst) $ select ls in
-  llcc (mkLabelSame "TAbbAcc" Tab) $ Table 
+  llcc (mkLabelSame "TAbbAcc" Tab) $ Table
   (map (titleize) [abbreviation, fullForm]) (mkTable
   [(\(a,_) -> S a),
    (\(_,b) -> titleize b)]

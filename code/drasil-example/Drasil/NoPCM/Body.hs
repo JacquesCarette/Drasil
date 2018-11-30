@@ -340,8 +340,11 @@ fig_tank = llcc (mkLabelRAFig "Tank") $ fig (at_start sWHT `sC` S "with" +:+ phr
   S "from" +:+ phrase coil `sOf` ch ht_flux_C)
   "TankWaterOnly.png"
 
+physSystDesc_label :: Label
+physSystDesc_label = mkLabelRALst "physSystDescNoPCM" "physSystDescNoPCM"
+
 physSystDescList :: Contents
-physSystDescList = enumSimple 1 (short physSyst) $ map foldlSent_
+physSystDescList = LlC $ enumSimple physSystDesc_label 1 (short physSyst) $ map foldlSent_
   [physSyst1 tank water, physSyst2 coil tank ht_flux_C]
 
 goalStates = SRS.goalStmt [goalStatesIntro temp coil temp_W, goalStatesList temp_W w_E]
@@ -352,8 +355,11 @@ goalStatesIntro te co temw = foldlSPCol [S "Given", phrase te `ofThe`
   phrase co `sC` S "initial", phrase temw  `sC` S "and material",
   plural property `sC` S "the", phrase goalStmt, S "are"]
 
+goalStates_label :: Label
+goalStates_label = mkLabelRALst "goalStatesNoPCM" "goalStatesNoPCM"
+
 goalStatesList :: (NamedIdea a, NamedIdea b) => a -> b -> Contents
-goalStatesList temw we = enumSimple 1 (short goalStmt) [
+goalStatesList temw we = LlC $ enumSimple goalStates_label 1 (short goalStmt) [
   (S "predict the" +:+ phrase temw +:+ S "over time"),
   (S "predict the" +:+ phrase we +:+ S "over time")]
 

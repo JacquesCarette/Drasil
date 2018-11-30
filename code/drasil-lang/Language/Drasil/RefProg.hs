@@ -14,7 +14,7 @@ data IRefProg =
   | RS String                   -- Lifts a String into a RefProg
   | RConcat IRefProg IRefProg   -- Concatenates with two subprograms
   | Name                        -- The Symbol to insert the ShortName directly
-data Reference2 = Reference2 RefProg RefAdd ShortName
+data Reference2 = Reference2 UID RefProg RefAdd ShortName
 
 name :: IRefProg
 name = Name

@@ -206,7 +206,7 @@ inputDataConstraints, outputDataConstraints, traceMatsAndGraphsTable1, traceMats
 
 --------------------------------------------------------------------------------
 termsAndDescBullets :: Contents
-termsAndDescBullets = UlC $ ulcc $ Enumeration $ 
+termsAndDescBullets = UlC $ ulcc $ Enumeration$ 
   Numeric $
   noRefs $ map tAndDOnly termsWithDefsOnly
   ++
@@ -230,8 +230,12 @@ termsAndDescBulletsLoadSubSec = [Nested (at_start load :+: S "-" +:+ (load ^.def
   (map tAndDOnly $ drop 2 loadTypes)]
 
 --Used in "Goal Statements" Section--
+
+goalStmt_label :: Label
+goalStmt_label = mkLabelRALst "goalStmtBR" "goalStmtBR"
+
 goalStmtsList :: Contents
-goalStmtsList = enumSimple 1 (short goalStmt) goalStmtsListGS1
+goalStmtsList = LlC $ enumSimple goalStmt_label 1 (short goalStmt) goalStmtsListGS1
 
 --Used in "Traceability Matrices and Graphs" Section--
 
@@ -369,8 +373,11 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
    
 {--User Characteristics--}
 
+characteristics_label :: Label
+characteristics_label = mkLabelRALst "characteristicsBR" "characteristicsBR"
+
 user_characteristics_intro :: Contents
-user_characteristics_intro = enumBullet $ map foldlSent
+user_characteristics_intro = LlC $ enumBullet characteristics_label $ map foldlSent
   [[S "The end user of GlassBR is expected to have completed at least the",
     S "equivalent of the second year of an undergraduate degree in civil engineering or structural engineering"],
   [S "The end user is expected to have an understanding of theory behind glass",
@@ -455,7 +462,10 @@ physSystDescription = physSystDesc (short gLassBR) fig_glassbr
 fig_glassbr = llcc (mkLabelRAFig "physSystImage") $ figWithWidth 
   (at_startNP $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
 
-physSystDescriptionList = enumSimple 1 (short physSyst) physSystDescriptionListPhysys
+physSystDescription_label :: Label
+physSystDescription_label = mkLabelRALst "physSystDescriptionBR" "physSystDescriptionBR"
+
+physSystDescriptionList = LlC $ enumSimple physSystDescription_label 1 (short physSyst) physSystDescriptionListPhysys
 
 --"Dead" knowledge?
 physSystDescriptionListPhysys :: [Sentence]

@@ -882,98 +882,98 @@ This section simplifies the original problem and helps in developing the theoret
 <ul class="hide-list-style">
 <li>
 <div id="A:Thermal-Energy-Only">
-Thermal-Energy-Only: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible.
+Thermal-Energy-Only: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible. <a href=#T:consThermE>TM: consThermE</a>..
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Heat-Transfer-Coeffs-Constant">
-Heat-Transfer-Coeffs-Constant: All heat transfer coefficients are constant over time.
+Heat-Transfer-Coeffs-Constant: All heat transfer coefficients are constant over time. <a href=#GD:nwtnCooling>GD: nwtnCooling</a>..
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Constant-Water-Temp-Across-Tank">
-Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank.
+Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. <a href=#GD:rocTempSimp>GD: rocTempSimp</a>..
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Density-Water-Constant-over-Volume">
-Density-Water-Constant-over-Volume: The density of water has no spatial variation; that is, it is constant over their entire volume.
+Density-Water-Constant-over-Volume: The density of water has no spatial variation; that is, it is constant over their entire volume..
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Specific-Heat-Energy-Constant-over-Volume">
-Specific-Heat-Energy-Constant-over-Volume: The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume.
+Specific-Heat-Energy-Constant-over-Volume: The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume..
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Newton-Law-Convective-Cooling-Coil-Water">
-Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling applies between the heating coil and the water.
+Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling applies between the heating coil and the water. <a href=#DD:ht.flux.C>DD: ht_flux_C</a>..
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Temp-Heating-Coil-Constant-over-Time">
-Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time.
+Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time. <a href=#DD:ht.flux.C>DD: ht_flux_C</a>..
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Temp-Heating-Coil-Constant-over-Length">
-Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length.
+Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length. <a href=#DD:ht.flux.C>DD: ht_flux_C</a>..
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Charging-Tank-No-Temp-Discharge">
-Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil.
+Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil. <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>..
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Water-Always-Liquid">
-Water-Always-Liquid: The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature.
+Water-Always-Liquid: The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. <a href=#IM:heatEInWtr>IM: heatEInWtr</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>..
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Perfect-Insulation-Tank">
-Perfect-Insulation-Tank: The tank is perfectly insulated so that there is no heat loss from the tank.
+Perfect-Insulation-Tank: The tank is perfectly insulated so that there is no heat loss from the tank. <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>..
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:No-Internal-Heat-Generation-By-Water">
-No-Internal-Heat-Generation-By-Water: No internal heat is generated by the water; therefore, the volumetric heat generation per unit volume is zero.
+No-Internal-Heat-Generation-By-Water: No internal heat is generated by the water; therefore, the volumetric heat generation per unit volume is zero. <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>..
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Atmospheric-Pressure-Tank">
-Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature of water are 0&deg;C and 100&deg;C, respectively
+Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature of water are 0&deg;C and 100&deg;C, respectively <a href=#IM:heatEInWtr>IM: heatEInWtr</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>..
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:Volume-Coil-Negligible">
-Volume-Coil-Negligible: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible.
+Volume-Coil-Negligible: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible..
 </div>
 </li>
 </ul>

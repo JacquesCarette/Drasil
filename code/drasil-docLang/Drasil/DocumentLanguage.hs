@@ -7,7 +7,8 @@
 -- instead.
 module Drasil.DocumentLanguage where
 
-import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation, instanceModel, gdefn, tmodel)
+import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation, instanceModel, gdefn, tmodel,
+  helperRefs)
 
 import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                -- Vector - Name conflict (defined in file)
@@ -38,6 +39,7 @@ import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
 import qualified Drasil.Sections.TraceabilityMandGs as TMG (traceMGF)
 
 import Data.Drasil.Concepts.Documentation (refmat)
+import Data.Drasil.SentenceStructures (foldlSent)
 
 import Data.Function (on)
 import Data.List (nub, sortBy)
@@ -455,9 +457,9 @@ mkSolChSpec si (SCSProg l) =
       (concatMap (\x -> LlC (instanceModel fields (_sysinfodb si') x) : derivation x) ims)
     mkSubSCS si' (IMs fields ims _)= 
       SSD.inModelF pdStub ddStub tmStub (SRS.genDefn ([]::[Contents]) ([]::[Section])) (map LlC (map (instanceModel fields (_sysinfodb si')) ims))
-    mkSubSCS SI {_refdb = db} Assumptions =
+    mkSubSCS si' (Assumptions) =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
-      (map (\x -> LlC $ mkRawLC (Assumption (x ^. uid) (assuming x) (x ^. getLabel)) (x ^. getLabel)) $ assumptionsFromDB (db ^. assumpRefTable))
+      (map (\x -> LlC $ mkRawLC (Assumption (x ^. uid) (helperAssump x (_sysinfodb si')) (x ^. getLabel)) (x ^. getLabel)) $ assumptionsFromDB ((_refdb si') ^. assumpRefTable))
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
     inModSec = SRS.inModel [mkParagraph EmptyS] []
@@ -466,6 +468,8 @@ mkSolChSpec si (SCSProg l) =
     -- Could start with just a quick check of whether or not IM is included and
     -- then error out if necessary.
 
+helperAssump :: AssumpChunk -> ChunkDB -> Sentence
+helperAssump a cdb = foldlSent $ ([assuming a] ++ [helperRefs a cdb])
 {--}
 
 -- | Section stubs for implicit referencing

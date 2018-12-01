@@ -9,6 +9,7 @@ module Drasil.DocumentLanguage.Definitions
   , gdefn, derivation
   , instanceModel
   , InclUnits(..)
+  , helperRefs
   )where
 import Data.Map (keys)
 import Data.List (elem)

@@ -10,6 +10,7 @@ module Drasil.DocumentLanguage.Definitions
   , instanceModel
   , InclUnits(..)
   , helperRefs
+  , helpToRefField
   )where
 import Data.Map (keys)
 import Data.List (elem)

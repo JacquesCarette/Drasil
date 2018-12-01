@@ -16,7 +16,8 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   inDataConstTbl, intro, mkDoc, outDataConstTbl,
   mkEnumSimpleD, outDataConstTbl, reqF, sSubSec, siCon, siSTitl, siSent,
   traceMGF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
-  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub)
+  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
+  generateTraceTable)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
@@ -107,10 +108,8 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
         )
       ]
     ):
-  (map Verbatim [requirements, likelyChanges, unlikelyChanges]) ++
-  [ExistingSolnSec (ExistSolnVerb  off_the_shelf_solutions)] ++
   TraceabilitySec
-    (TraceabilityProg [traceMatTabReqGoalOther, traceMatTabAssump,
+    (TraceabilityProg [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump,
   traceMatTabDefnModel] traceability_matrices_and_graph_traces (map LlC [traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) []) :
   ([Verbatim values_of_auxiliary_constatnts]) ++
   (Bibliography : [])
@@ -669,6 +668,8 @@ off_the_shelf_solutions_3dlist = LlC $ enumBullet solution1_label [
 -----------------------------------------------------
 -- SECTION 8 : Traceability Matrices and Graph    --
 -----------------------------------------------------
+traceTable1 :: LabelledContent
+traceTable1 = generateTraceTable everything
 
 traceability_matrices_and_graph :: Section
 traceability_matrices_and_graph = traceMGF [traceMatTabReqGoalOther, traceMatTabAssump,

@@ -1,13 +1,28 @@
 module New where
 
+data Class
+data Method
+data Body
 data Block
 data Statement
+data Declaration
 data Value
 data StateType
 data Function
 data IOType
 
 type Label = String
+type Library = String
+type VarDecl = Declaration
+type FunctionDecl = Method
+
+data Module repr = Mod Label [Library] [repr VarDecl] [repr FunctionDecl] [repr Class]
+
+class MethodSym repr where
+    mainMethod :: repr Body -> repr Method
+
+class BodySym repr where
+    body :: [repr Statement] -> repr Body
 
 -- Right now the Block is the top-level structure
 class StatementSym repr => Symantics repr where
@@ -122,3 +137,8 @@ class (ValueSym repr, StateTypeSym repr) => FunctionSym repr where
     listAccess :: repr Value -> repr Function
     listAppend :: repr Value -> repr Function
     listExtend :: repr StateType -> repr Function
+
+-- Functions
+
+buildModule :: Label -> [Library] -> [repr VarDecl] -> [repr FunctionDecl] -> [repr Class] -> Module repr
+buildModule = Mod

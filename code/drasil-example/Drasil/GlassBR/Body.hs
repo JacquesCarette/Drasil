@@ -17,7 +17,8 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), 
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
   outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb, generateTraceMap,
-  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub)
+  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
+  generateTraceTable)
 
 import qualified Drasil.DocLang.SRS as SRS (datCon, dataDefnLabel, indPRCase, 
   reference, valsOfAuxCons, assumpt)
@@ -258,7 +259,7 @@ goalStmtsList = LlC $ enumSimple goalStmt_label 1 (short goalStmt) goalStmtsList
 --Used in "Traceability Matrices and Graphs" Section--
 
 traceyMatrices :: [LabelledContent]
-traceyMatrices = [traceMatsAndGraphsTable1, traceMatsAndGraphsTable2, traceMatsAndGraphsTable3]
+traceyMatrices = [traceTable1, traceMatsAndGraphsTable1, traceMatsAndGraphsTable2, traceMatsAndGraphsTable3]
 
 traceyGraphs :: [LabelledContent]
 traceyGraphs = [fig_2, fig_3, fig_4]
@@ -540,6 +541,8 @@ outputDataConstraints = outDataConstTbl [prob_br]
 {--UNLIKELY CHANGES--}
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
+traceTable1 :: LabelledContent
+traceTable1 = generateTraceTable gbSymbMap
 
 traceMatsAndGraphsTable1Desc :: Sentence
 traceMatsAndGraphsTable1Desc = foldlList Comma List (map plural (take 3 solChSpecSubsections)) +:+.

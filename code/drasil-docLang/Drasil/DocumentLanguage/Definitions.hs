@@ -123,7 +123,7 @@ helpToRefField t s = if elem t (keys $ s ^. dataDefnTable)
         then makeRef2S $ theoryModelLookup t (s ^. theoryModelTable)
         else if elem t (keys $ s ^. assumpTable)
           then makeRef2S $ assumptionLookup t (s ^. assumpTable)
-          else error "Caught."
+          else error $ t ++ "Caught."
 
 -- | Create the fields for a definition from a QDefinition (used by ddefn)
 mkDDField :: (HasSymbolTable ctx, HasDataDefnTable ctx, HasInsModelTable ctx, HasGendefTable ctx, HasTheoryModelTable ctx

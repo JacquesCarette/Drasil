@@ -16,7 +16,8 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   TraceabilitySec(TraceabilityProg),
   dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
   outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, tsymb'',
-  getDocDesc, egetDocDesc, ciGetDocDesc)
+  getDocDesc, egetDocDesc, ciGetDocDesc,
+  goalStmt_label, physSystDescription_label)
 import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel,
   likeChg, probDesc, sysCont, unlikeChg, inModel)
 
@@ -323,11 +324,9 @@ physSystDescription = physSystDesc (short progName) fig_tank [physSystDescList, 
 -- Above paragraph is general except for progName and figure. However, not
 -- every example has a physical system. Also, the SSP example is different, so
 -- this paragraph can not be abstracted out as is.
-physSystDesc_label :: Label
-physSystDesc_label = mkLabelRALst "physSystDescSWHS" "physSystDescSWHS"
 
 physSystDescList :: Contents
-physSystDescList = LlC $ enumSimple physSystDesc_label 1 (short physSyst) $ map foldlSent_ systDescList
+physSystDescList = LlC $ enumSimple physSystDescription_label 1 (short physSyst) $ map foldlSent_ systDescList
 
 systDescList :: [[Sentence]]
 systDescList = [physSyst1 tank water, physSyst2 coil tank ht_flux_C,
@@ -340,11 +339,8 @@ systDescList = [physSyst1 tank water, physSyst2 coil tank ht_flux_C,
 goalStates :: Section
 goalStates = SRS.goalStmt [goalStateIntro temp_C temp_W temp_PCM, goalStateList] []
 
-goalState_label :: Label
-goalState_label = mkLabelRALst "goalStateSWHS" "goalStateSWHS"
-
 goalStateList :: Contents
-goalStateList = LlC $ enumSimple goalState_label 1 (short goalStmt) $
+goalStateList = LlC $ enumSimple goalStmt_label 1 (short goalStmt) $
   map goalState outputConstraints
 
 -- List structure is repeated between examples. (For all of these lists I am

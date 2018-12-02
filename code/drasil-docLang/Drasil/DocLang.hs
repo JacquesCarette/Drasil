@@ -38,7 +38,10 @@ module Drasil.DocLang (
     -- Sections.TraceabilityMandGs
     traceGIntro, traceMGF,
     -- ExtractDocDesc
-    getDocDesc, egetDocDesc, ciGetDocDesc
+    getDocDesc, egetDocDesc, ciGetDocDesc,
+    -- Labels
+    goalStmt_label, solution_label, characteristics_label,
+    physSystDescription_label
     ) where 
 
 import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..), 
@@ -72,3 +75,5 @@ import Drasil.Sections.SpecificSystemDescription (assumpF,
 import Drasil.Sections.TraceabilityMandGs (traceGIntro, traceMGF)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc)
 -- Commented out modules aren't used - uncomment if this changes
+import Drasil.DocumentLanguage.Labels (goalStmt_label, solution_label, characteristics_label,
+    physSystDescription_label)

@@ -15,7 +15,8 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   SCSSub(..), GSDSec(..), GSDSub(..),
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc,
   mkEnumSimpleD, nonFuncReqF, outDataConstTbl, probDescF, reqF, termDefnF,
-  tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc)
+  tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc,
+  goalStmt_label, physSystDescription_label)
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
   physSyst, assumpt)
@@ -353,10 +354,7 @@ physSystIntro what how p1 p2 p3 indexref = foldlSP [
   p3 +:+. plural property, S "The index convention for referencing which",
   phrase p1 `sOr` phrase p2, S "is being used is shown in", makeRef2S indexref]
 
-phys_label :: Label
-phys_label = mkLabelRALst "phys_sys_descSSP" "phys_sys_descSSP"
-
-phys_sys_desc_bullets = LlC $ enumSimple phys_label 1 (short Doc.physSyst) physSystDescriptionListPhysys
+phys_sys_desc_bullets = LlC $ enumSimple physSystDescription_label 1 (short Doc.physSyst) physSystDescriptionListPhysys
 physSystDescriptionListPhysys :: [Sentence]
 physSystDescriptionListPhysys1 :: Sentence
 physSystDescriptionListPhysys2 :: Sentence
@@ -393,10 +391,7 @@ goal_stmt = goalStmtF (map (\(x, y) -> x `ofThe` y) [
   (plural mtrlPrpty, S "layers")
   ]) [goals_list]
 
-goals_label :: Label
-goals_label = mkLabelRALst "goals_listSSP" "goals_listSSP"
-
-goals_list = LlC $ enumSimple goals_label 1 (short goalStmt) sspGoals
+goals_list = LlC $ enumSimple goalStmt_label 1 (short goalStmt) sspGoals
 
 -- SECTION 4.2 --
 

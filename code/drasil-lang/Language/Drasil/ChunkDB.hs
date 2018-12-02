@@ -8,9 +8,10 @@ module Language.Drasil.ChunkDB
   , HasUnitTable(..), unitMap, collectUnits, TraceMap,
   traceLookup, HasTraceTable(..), generateRefbyMap, RefbyMap,
   refbyLookup, HasRefbyTable(..), DatadefnMap, InsModelMap,
-  GendefMap, TheoryModelMap, datadefnLookup, insmodelLookup,
-  gendefLookup, theoryModelLookup, HasDataDefnTable(..),
-  HasInsModelTable(..), HasGendefTable(..), HasTheoryModelTable(..)
+  GendefMap, TheoryModelMap, AssumptionMap, datadefnLookup, insmodelLookup,
+  gendefLookup, theoryModelLookup, assumptionLookup, HasDataDefnTable(..),
+  HasInsModelTable(..), HasGendefTable(..), HasTheoryModelTable(..),
+  HasAssumpTable(..)
   ) where
 
 import Control.Lens ((^.), Lens', makeLenses)
@@ -20,6 +21,7 @@ import Data.Tuple (fst, snd)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes (Concept, ConceptDomain, HasUID(uid), Idea, IsUnit, HasDerivation(derivations)
   ,HasAdditionalNotes(getNotes), Quantity)
+import Language.Drasil.Chunk.AssumpChunk (AssumpChunk)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw)
 import Language.Drasil.Chunk.Quantity (QuantityDict, qw)
@@ -69,6 +71,9 @@ type GendefMap = Map.Map UID GenDefn
 
 -- TheoryModel map
 type TheoryModelMap = Map.Map UID TheoryModel
+
+-- Assumption map
+type AssumptionMap = Map.Map UID AssumpChunk
 
 -- | Smart constructor for a 'SymbolMap'
 symbolMap :: (Quantity c, MayHaveUnit c) => [c] -> SymbolMap
@@ -131,6 +136,10 @@ class HasGendefTable s where
 class HasTheoryModelTable s where
   theoryModelTable :: Lens' s TheoryModelMap
 
+-- Assumption TABLE --
+class HasAssumpTable s where
+  assumpTable :: Lens' s AssumptionMap
+
 -- | Gets a unit if it exists, or Nothing.        
 getUnitLup :: HasSymbolTable s => (HasUID c, MayHaveUnit c) => s -> c -> Maybe UnitDefn
 getUnitLup m c = getUnit $ symbLookup (c ^. uid) (m ^. symbolTable)
@@ -169,6 +178,11 @@ theoryModelLookup :: UID -> TheoryModelMap -> TheoryModel
 theoryModelLookup u m = getC $ Map.lookup u m
   where getC = maybe (error $ "TheoryModel: " ++ u ++ " not found in TheoryModelMap") id
 
+-- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
+assumptionLookup :: UID -> AssumptionMap -> AssumpChunk
+assumptionLookup u m = getC $ Map.lookup u m
+  where getC = maybe (error $ "Assumption: " ++ u ++ " not found in AssumptionMap") id
+
 -- | Our chunk databases. Should contain all the maps we will need.
 data ChunkDB = CDB { _csymbs :: SymbolMap
                    , _cterms :: TermMap 
@@ -180,6 +194,7 @@ data ChunkDB = CDB { _csymbs :: SymbolMap
                    , _cins   :: InsModelMap
                    , _cgen   :: GendefMap
                    , _ctheory :: TheoryModelMap
+                   , _cassump :: AssumptionMap
                    } --TODO: Expand and add more databases
 makeLenses ''ChunkDB
 
@@ -188,8 +203,8 @@ makeLenses ''ChunkDB
 -- and Units (for UnitTable)
 cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u,
         ConceptDomain u) => [q] -> [t] -> [c] -> [u] -> TraceMap -> RefbyMap ->
-        DatadefnMap -> InsModelMap -> GendefMap ->  TheoryModelMap -> ChunkDB
-cdb s t c u tc rfm dd ins gd tm = CDB (symbolMap s) (termMap t) (conceptMap c) (unitMap u) tc rfm dd ins gd tm
+        DatadefnMap -> InsModelMap -> GendefMap ->  TheoryModelMap -> AssumptionMap -> ChunkDB
+cdb s t c u tc rfm dd ins gd tm a = CDB (symbolMap s) (termMap t) (conceptMap c) (unitMap u) tc rfm dd ins gd tm a
 
 ----------------------
 instance HasSymbolTable      ChunkDB where symbolTable       = csymbs
@@ -202,6 +217,7 @@ instance HasDataDefnTable    ChunkDB where dataDefnTable     = cdata
 instance HasInsModelTable    ChunkDB where insmodelTable     = cins
 instance HasGendefTable      ChunkDB where gendefTable       = cgen
 instance HasTheoryModelTable ChunkDB where theoryModelTable  = ctheory
+instance HasAssumpTable      ChunkDB where assumpTable       = cassump
 
 collectUnits :: HasSymbolTable s => (Quantity c, MayHaveUnit c) => s -> [c] -> [UnitDefn]
 collectUnits m symb = map unitWrapper $ concatMap maybeToList $ map (getUnitLup m) symb

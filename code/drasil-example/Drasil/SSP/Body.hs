@@ -156,6 +156,9 @@ ssp_gendef = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromGD $ getS
 ssp_theory :: TheoryModelMap
 ssp_theory = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromTM $ getSCSSub mkSRS
 
+ssp_assump :: AssumptionMap
+ssp_assump = Map.fromList $ map (\x -> (x ^. uid, x)) newAssumptions
+
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
   
@@ -172,12 +175,12 @@ sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms ++
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals
   ++ map nw educon ++ map nw compcon ++ [nw algorithm, nw ssp])
   (map cw sspSymbols ++ srsDomains) this_si ssp_label ssp_refby
-  ssp_datadefn ssp_insmodel ssp_gendef ssp_theory
+  ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms)
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) ssp_label ssp_refby
- ssp_datadefn ssp_insmodel ssp_gendef ssp_theory
+ ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump
 
 sspRefDB :: ReferenceDB
 sspRefDB = rdb newAssumptions sspCitations (sspRequirements ++

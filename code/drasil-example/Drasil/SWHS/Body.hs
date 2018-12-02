@@ -120,11 +120,11 @@ swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull
   ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC
   ++ [nw swhs_pcm, nw algorithm] ++ map nw compcon)
   (map cw swhsSymbols ++ srsDomains) this_si swhs_label swhs_refby
-  swhs_datadefn swhs_insmodel swhs_gendef swhs_theory
+  swhs_datadefn swhs_insmodel swhs_gendef swhs_theory swhs_assump
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
-  swhs_label swhs_refby swhs_datadefn swhs_insmodel swhs_gendef swhs_theory
+  swhs_label swhs_refby swhs_datadefn swhs_insmodel swhs_gendef swhs_theory swhs_assump
 
 swhsRefDB :: ReferenceDB
 swhsRefDB = rdb newAssumptions swhsCitations (funcReqs ++
@@ -218,6 +218,9 @@ swhs_gendef = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromGD $ get
 
 swhs_theory :: TheoryModelMap
 swhs_theory = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromTM $ getSCSSub mkSRS
+
+swhs_assump :: AssumptionMap
+swhs_assump = Map.fromList $ map (\x -> (x ^. uid, x)) newAssumptions
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

@@ -108,12 +108,14 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
         )
       ]
     ):
-  TraceabilitySec
-    (TraceabilityProg [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump,
-  traceMatTabDefnModel] traceability_matrices_and_graph_traces (map LlC [traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) []) :
-  ([Verbatim values_of_auxiliary_constatnts]) ++
-  (Bibliography : [])
-    where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
+    (map Verbatim [requirements, likelyChanges, unlikelyChanges]) ++
+    [ExistingSolnSec (ExistSolnVerb  off_the_shelf_solutions)] ++
+    TraceabilitySec
+      (TraceabilityProg [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump,
+    traceMatTabDefnModel] traceability_matrices_and_graph_traces (map LlC [traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) []) :
+    ([Verbatim values_of_auxiliary_constatnts]) ++
+    (Bibliography : [])
+      where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
 game_label :: TraceMap
 game_label = generateTraceMap mkSRS
@@ -132,6 +134,9 @@ game_gendef = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromGD $ get
 
 game_theory :: TheoryModelMap
 game_theory = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromTM $ getSCSSub mkSRS
+
+game_assump :: AssumptionMap
+game_assump = Map.fromList $ map (\x -> (x ^. uid, x)) newAssumptions
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -176,11 +181,11 @@ everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms ++ map n
   ++ map nw educon ++ [nw algorithm] ++ map nw derived ++ map nw fundamentals
   ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw gamephySymbols ++ srsDomains) chipUnits game_label game_refby
-  game_datadefn game_insmodel game_gendef game_theory
+  game_datadefn game_insmodel game_gendef game_theory game_assump
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: [ConceptChunk]) ([] :: [UnitDefn])
- game_label game_refby game_datadefn game_insmodel game_gendef game_theory
+ game_label game_refby game_datadefn game_insmodel game_gendef game_theory game_assump
 
 printSetting :: PrintingInformation
 printSetting = PI everything defaultConfiguration

@@ -51,10 +51,12 @@ allSymbols = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals
  ([] :: [ConceptChunk])-- FIXME: Fill in concepts
   si_units (head ([] :: [TraceMap])) (head ([] :: [RefbyMap]))
   (head ([] :: [DatadefnMap])) (head ([] :: [InsModelMap])) (head ([] :: [GendefMap])) (head ([] :: [TheoryModelMap]))
+  (head ([] :: [AssumptionMap]))
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) (head ([] :: [TraceMap])) (head ([] :: [RefbyMap]))
            (head ([] :: [DatadefnMap])) (head ([] :: [InsModelMap])) (head ([] :: [GendefMap])) (head ([] :: [TheoryModelMap]))
+           (head ([] :: [AssumptionMap]))
 
 printSetting :: PrintingInformation
 printSetting = PI allSymbols defaultConfiguration

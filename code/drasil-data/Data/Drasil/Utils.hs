@@ -3,7 +3,7 @@ module Data.Drasil.Utils
   ( foldle
   , foldle1
   , mkEnumAbbrevList
-  , zipFTable
+  , zipFTable'
   , zipSentList
   , makeTMatrix
   , itemRefToSent
@@ -31,7 +31,7 @@ import Language.Drasil
 import Language.Drasil.Development (UnitDefn, MayHaveUnit(getUnit))
 
 import Control.Lens ((^.))
-import Data.List (transpose)
+import Data.List (transpose, elem)
 
 import Data.Drasil.Concepts.Documentation (fterms, input_, output_, symbol_, 
   useCaseTable)
@@ -97,15 +97,22 @@ zipSentList acc (x:xs) (y:ys)  = zipSentList (acc ++ [x:y]) xs ys
 -- acc - accumulator
 -- k   - list of type that is comparable
 -- l   - list of type that is comparable
-zipFTable :: Eq a => [Sentence] -> [a] -> [a] -> [Sentence]
+{--zipFTable :: Eq a => [Sentence] -> [a] -> [a] -> [Sentence]
 zipFTable acc _ []              = acc
 zipFTable acc [] l              = acc ++ (take (length l) (repeat EmptyS))
 zipFTable acc k@(x:xs) (y:ys)   | x == y    = zipFTable (acc++[S "X"]) xs ys
-                                | otherwise = zipFTable (acc++[EmptyS]) k ys
+                                | otherwise = zipFTable (acc++[EmptyS]) k ys--}
+
+zipFTable' :: Eq a => [Sentence] -> [a] -> [a] -> [Sentence]
+zipFTable' acc content (hd:allcol) = if elem hd content
+  then zipFTable' (acc++[S "X"]) content allcol
+  else zipFTable' (acc++[EmptyS]) content allcol
+zipFTable' acc content []          = acc
 
 -- | makes a traceability matrix from list of column rows and list of rows
 makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
-makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- col] 
+makeTMatrix colName col row = zipSentList [] colName [zipFTable' [] x row | x <- col] 
+
 
 -- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
 mkInputDatTb :: (Quantity a, MayHaveUnit a) => [a] -> LabelledContent

@@ -112,7 +112,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
     [ExistingSolnSec (ExistSolnVerb  off_the_shelf_solutions)] ++
     TraceabilitySec
       (TraceabilityProg [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump,
-    traceMatTabDefnModel] traceability_matrices_and_graph_traces (map LlC [traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) []) :
+    traceMatTabDefnModel] traceability_matrices_and_graph_traces (map LlC [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) []) :
     ([Verbatim values_of_auxiliary_constatnts]) ++
     (Bibliography : [])
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]

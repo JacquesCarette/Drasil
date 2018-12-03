@@ -18,7 +18,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
   outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceTable)
+  generateTraceTable, goalStmt_label, characteristics_label, physSystDescription_label)
 
 import qualified Drasil.DocLang.SRS as SRS (datCon, dataDefnLabel, indPRCase, 
   reference, valsOfAuxCons, assumpt)
@@ -250,9 +250,6 @@ termsAndDescBulletsLoadSubSec = [Nested (at_start load :+: S "-" +:+ (load ^.def
 
 --Used in "Goal Statements" Section--
 
-goalStmt_label :: Label
-goalStmt_label = mkLabelRALst "goalStmtBR" "goalStmtBR"
-
 goalStmtsList :: Contents
 goalStmtsList = LlC $ enumSimple goalStmt_label 1 (short goalStmt) goalStmtsListGS1
 
@@ -392,9 +389,6 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
    
 {--User Characteristics--}
 
-characteristics_label :: Label
-characteristics_label = mkLabelRALst "characteristicsBR" "characteristicsBR"
-
 user_characteristics_intro :: Contents
 user_characteristics_intro = LlC $ enumBullet characteristics_label $ map foldlSent
   [[S "The end user of GlassBR is expected to have completed at least the",
@@ -480,9 +474,6 @@ physSystDescription = physSystDesc (short gLassBR) fig_glassbr
 
 fig_glassbr = llcc (mkLabelRAFig "physSystImage") $ figWithWidth 
   (at_startNP $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
-
-physSystDescription_label :: Label
-physSystDescription_label = mkLabelRALst "physSystDescriptionBR" "physSystDescriptionBR"
 
 physSystDescriptionList = LlC $ enumSimple physSystDescription_label 1 (short physSyst) physSystDescriptionListPhysys
 

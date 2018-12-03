@@ -41,7 +41,10 @@ module Drasil.DocLang (
     getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
     -- Tracetable
     getTraceMapFromTM, getTraceMapFromGD,
-    getTraceMapFromDD, getTraceMapFromIM, getSCSSub
+    getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
+   -- Labels
+    goalStmt_label, solution_label, characteristics_label,
+    physSystDescription_label
     ) where 
 
 import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..), 
@@ -77,3 +80,5 @@ import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc)
 import Drasil.TraceTable (generateTraceMap, getTraceMapFromTM, getTraceMapFromGD,
     getTraceMapFromDD, getTraceMapFromIM, getSCSSub)
 -- Commented out modules aren't used - uncomment if this changes
+import Drasil.DocumentLanguage.Labels (goalStmt_label, solution_label, characteristics_label,
+    physSystDescription_label)

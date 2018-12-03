@@ -14,6 +14,7 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   TSIntro(..), UCsSec(..), Fields, Field(..), SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), 
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc,
   mkEnumSimpleD, nonFuncReqF, outDataConstTbl, probDescF, reqF, termDefnF,
   tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc, generateTraceMap,
@@ -34,7 +35,7 @@ import Data.Drasil.Concepts.Math (equation, surface, mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Concepts.Physics (fbd, force, strain, stress, physicCon)
 import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability, 
-  performanceSpd, program, reusability, understandability, softwarecon)
+  performanceSpd, program, reusability, understandability, softwarecon, performance)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce, solidcon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Software.Products (sciCompS, prodtcon)
@@ -136,7 +137,12 @@ mkSRS = RefSec (RefProg intro
           )
         ]
       ):
-  map Verbatim [req] ++ [LCsSec $ LCsProg likelyChanges_SRS]
+    ReqrmntSec (ReqsProg [
+    FReqsSub funcReqList,
+    NonFReqsSub [accuracy,performance] (ssppriorityNFReqs) -- The way to render the NonFReqsSub is right for here, fixme.
+    (S "SSA is intended to be an educational tool")
+    (S "")]) :
+  [LCsSec $ LCsProg likelyChanges_SRS]
   ++ [UCsSec $ UCsProg unlikelyChanges_SRS] ++ [Verbatim aux_cons] ++ (Bibliography : [])
 
 ssp_label :: TraceMap
@@ -165,6 +171,10 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
   
 ssp_code :: CodeSpec
 ssp_code = codeSpec ssp_si [sspInputMod]
+
+ssppriorityNFReqs :: [ConceptChunk]
+ssppriorityNFReqs = [correctness, understandability, reusability,
+  maintainability]
 
 
 -- SYMBOL MAP HELPERS --
@@ -469,8 +479,11 @@ data_constraint_Table3 = outDataConstTbl sspOutputs
 req = reqF [func_req, non_func_req]
 
 -- SECTION 5.1 --
-func_req = SRS.funcReq ((mkEnumSimpleD sspRequirements) ++
-  [LlC sspInputDataTable]) []
+func_req = SRS.funcReq funcReqList []
+
+funcReqList :: [Contents]
+funcReqList = (mkEnumSimpleD sspRequirements) ++
+  [LlC sspInputDataTable]
 
 -- SECTION 5.2 --
 non_func_req = nonFuncReqF [accuracy, performanceSpd]

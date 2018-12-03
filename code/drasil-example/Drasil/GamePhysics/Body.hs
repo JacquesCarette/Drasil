@@ -12,7 +12,8 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   IntroSub(..), RefSec(..), RefTab(..), SCSSub(..), SSDSec(SSDProg), 
   SSDSub(SSDSubVerb, SSDSolChSpec), SolChSpec(SCSProg), SubSec, TConvention(..), 
   TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
-  TraceabilitySec(TraceabilityProg), assembler, dataConstraintUncertainty,
+  TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
+  assembler, dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, outDataConstTbl,
   mkEnumSimpleD, outDataConstTbl, reqF, sSubSec, siCon, siSTitl, siSent,
   traceMGF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
@@ -34,7 +35,7 @@ import Data.Drasil.Concepts.Documentation as Doc(assumption, body,
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics, educon)
 import Data.Drasil.Concepts.Software (physLib, understandability, portability,
-  reliability, maintainability, performance, correctness, softwarecon)
+  reliability, maintainability, performance, correctness, softwarecon, reliability)
 
 import Data.Drasil.Software.Products (openSource, sciCompS, videoGame)
 
@@ -108,7 +109,11 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
         )
       ]
     ):
-    (map Verbatim [requirements, likelyChanges, unlikelyChanges]) ++
+    ReqrmntSec (ReqsProg [
+    FReqsSub functional_requirements_list,
+    NonFReqsSub [performance] (gmpriorityNFReqs) -- The way to render the NonFReqsSub is right for here, fixme.
+    (S "Games are resource intensive") (S "")]) :
+    (map Verbatim [likelyChanges, unlikelyChanges]) ++
     [ExistingSolnSec (ExistSolnVerb  off_the_shelf_solutions)] ++
     TraceabilitySec
       (TraceabilityProg [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump,
@@ -195,6 +200,10 @@ chipCode = codeSpec chipmunkSysInfo []
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GamePhysics/"
+
+gmpriorityNFReqs :: [ConceptChunk]
+gmpriorityNFReqs = [correctness, understandability, portability, reliability,
+  maintainability]
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
 -- the sections below are now redundant. I have not removed them yet, because

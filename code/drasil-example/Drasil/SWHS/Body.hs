@@ -12,6 +12,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   DocSection (..), LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg), 
   IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
   RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
   Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg),
@@ -34,7 +35,8 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
   traceyMatrix, user, value, variable, doccon, doccon')
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
-import Data.Drasil.Concepts.Software (program, softwarecon)
+import Data.Drasil.Concepts.Software (program, softwarecon, performance, correctness, verifiability,
+  understandability, reusability, maintainability, portability)
 import Data.Drasil.Concepts.Physics (physicCon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Software.Products (sciCompS, compPro, prodtcon)
@@ -182,8 +184,13 @@ mkSRS = RefSec (RefProg intro [
           ]
         )
       ]
-    ):  
-  (map Verbatim [reqS, likelyChgsSect, unlikelyChgsSect]) ++
+    ):
+  ReqrmntSec (ReqsProg [
+  FReqsSub funcReqsList,
+  NonFReqsSub [performance] (swhspriorityNFReqs) -- The way to render the NonFReqsSub is right for here, fixme.
+  (S "This problem is small in size and relatively simple")
+  (S "Any reasonable implementation will be very quick and use minimal storage.")]) :
+  (map Verbatim [likelyChgsSect, unlikelyChgsSect]) ++
   TraceabilitySec
     (TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
   (map UlC traceIntro2) ++ 
@@ -225,6 +232,10 @@ swhs_assump = Map.fromList $ map (\x -> (x ^. uid, x)) newAssumptions
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
+
+swhspriorityNFReqs :: [ConceptChunk]
+swhspriorityNFReqs = [correctness, verifiability, understandability, reusability,
+  maintainability]
 -- It is sometimes hard to remember to add new sections both here and above.
 
 -- =================================== --

@@ -19,7 +19,8 @@ import Data.Drasil.Concepts.Documentation as Doc (inModel,
   doccon')
 
 import qualified Data.Drasil.Concepts.Math as M (ode, de, unit_, equation)
-import Data.Drasil.Concepts.Software (program, softwarecon)
+import Data.Drasil.Concepts.Software (program, softwarecon, performance, correctness, verifiability,
+  understandability, reusability, maintainability, portability)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
   thermal_energy, ht_trans_theo, ht_flux, heat_cap_spec, thermal_conduction,
@@ -43,6 +44,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
   SolChSpec(..), SSDSec(..), DocSection(..),
   IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
   RefSec(RefProg), RefTab(TAandA, TUnits), TraceabilitySec(TraceabilityProg),
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
@@ -59,7 +61,7 @@ import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
 import Drasil.SWHS.Assumptions (newA11, newA12, newA14, newAssumptions)
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
   orgDocIntro, physSyst1, physSyst2, traceFig1, traceFig2, traceIntro2, traceTrailing,
-  swhs_datadefn, swhs_insmodel, swhs_gendef, swhs_theory)
+  swhs_datadefn, swhs_insmodel, swhs_gendef, swhs_theory, swhspriorityNFReqs)
 import Drasil.SWHS.Changes (chgsStart, likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, tank_para, transient, water,
   swhscon)
@@ -158,7 +160,12 @@ mkSRS = RefSec (RefProg intro
         )
       ]
     ):
-  map Verbatim [reqS, likelyChgsSect, unlikelyChgsSect] ++
+  ReqrmntSec (ReqsProg [
+  FReqsSub funcReqsList,
+  NonFReqsSub [performance] (swhspriorityNFReqs) -- The way to render the NonFReqsSub is right for here, fixme.
+  (S "This problem is small in size and relatively simple")
+  (S "Any reasonable implementation will be very quick and use minimal storage.")]) :
+  map Verbatim [likelyChgsSect, unlikelyChgsSect] ++
   TraceabilitySec
     (TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
   (map UlC traceIntro2) ++ [LlC traceFig1, LlC traceFig2]) []) :

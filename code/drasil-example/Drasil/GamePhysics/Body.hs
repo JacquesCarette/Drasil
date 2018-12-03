@@ -15,7 +15,8 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   TraceabilitySec(TraceabilityProg), assembler, dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, outDataConstTbl,
   mkEnumSimpleD, outDataConstTbl, reqF, sSubSec, siCon, siSTitl, siSent,
-  traceMGF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc)
+  traceMGF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc,
+  goalStmt_label, solution_label)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
@@ -376,7 +377,10 @@ terminology_and_definitions_terms :: [ConceptChunk]
 terminology_and_definitions_terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, 
   CP.cartesian, CP.rightHand]
 
-terminology_and_definitions_bullets = enumBullet 
+terminology_label :: Label
+terminology_label = mkLabelRALst "terminologyGM" "terminologyGM"
+
+terminology_and_definitions_bullets = LlC $ enumBullet terminology_label
   (map (\x -> (at_start x) +: EmptyS +:+ (x ^. defn)) terminology_and_definitions_terms)
 
 -----------------------------
@@ -434,7 +438,7 @@ goal_statements_list' = map (foldlSent) [goal_statements_G_linear,
   goal_statements_G_angular, goal_statements_G_detectCollision, 
   goal_statements_G_collision]
 
-goal_statements_list = enumSimple 1 (getAcc goalStmt) goal_statements_list'
+goal_statements_list = LlC $ enumSimple goalStmt_label 1 (getAcc goalStmt) goal_statements_list'
 
 --------------------------------------------------
 -- 4.2 : Solution Characteristics Specification --
@@ -622,13 +626,13 @@ off_the_shelf_solutions_intro_param problmDescSec lib = mkParagraph $ foldlSentC
   S "there already exist free", (phrase openSource), (phrase game) +:+.
   (plural lib), S "Similar", (getAcc twoD), (plural lib), S "are"]
 
-off_the_shelf_solutions_2dlist = enumBullet [(S "Box2D: http://box2d.org/"),
+off_the_shelf_solutions_2dlist = LlC $ enumBullet solution_label [(S "Box2D: http://box2d.org/"),
   (S "Nape Physics Engine: http://napephys.com/")]
 
 off_the_shelf_solutions_mid = mkParagraph $ foldl (+:+) (EmptyS) [S "Free", (phrase openSource), 
         S "3D", (phrase game), (plural physLib), S "include:"]
 
-off_the_shelf_solutions_3dlist = enumBullet [
+off_the_shelf_solutions_3dlist = LlC $ enumBullet solution_label [
   (S "Bullet: http://bulletphysics.org/"),
   (S "Open Dynamics Engine: http://www.ode.org/"),
   (S "Newton Game Dynamics: http://newtondynamics.com/")]
@@ -732,7 +736,7 @@ traceMatTabReqGoalOtherCol = [traceMatTabReqGoalOtherGS1, traceMatTabReqGoalOthe
   traceMatTabReqGoalOtherReq8]
 
 traceMatTabReqGoalOther :: LabelledContent
-traceMatTabReqGoalOther = llcc (mkLabelSame "TraceyReqGoalsOther" Tab) $ Table
+traceMatTabReqGoalOther = llcc (mkLabelSame "TraceyReqGoalsOther" Tab) $ Table 
   (EmptyS:(traceMatTabReqGoalOtherRowHead))
   (makeTMatrix traceMatTabReqGoalOtherColHead traceMatTabReqGoalOtherCol
   traceMatTabReqGoalOtherRow)

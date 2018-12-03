@@ -218,7 +218,7 @@ inDataConstTbl qlst = llcc (mkLabelSame "InDataConstraints" Tab) $ Table
 
 -- Creates the output Data Constraints Table
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent
-outDataConstTbl qlst = llcc (mkLabelSame "OutDataConstraints" Tab) $ Table 
+outDataConstTbl qlst = llcc (mkLabelSame "OutDataConstraints" Tab) $ Table
   titl cts (S "Output Data Constraints") True
   where
    columns = [(S "Var", map ch qlst),

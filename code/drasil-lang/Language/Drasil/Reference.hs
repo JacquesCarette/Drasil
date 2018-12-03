@@ -114,7 +114,7 @@ instance HasConceptRefs  ReferenceDB where conceptRefTable = conceptDB
 
 
 --FIXME: "class (HasLabel s) => Referable s where" instead?
-class Referable s where
+class HasUID s => Referable s where
   refAdd    :: s -> String  -- The plaintext referencing address (what we're linking to).
                             -- Should be string with no spaces/special chars.
                             -- Only visible in the source (tex/html).
@@ -253,21 +253,21 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
         dropNums = map fst
 
 makeRef2 :: (Referable l, HasShortName l) => l -> Reference2
-makeRef2 l = Reference2 (renderRef l) (refAdd l) (l ^. shortname)
+makeRef2 l = Reference2 (l ^. uid) (renderRef l) (refAdd l) (l ^. shortname)
 
 makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
-makeRef2S l = Ref2 $ Reference2 (renderRef l) (refAdd l) (l ^. shortname)
+makeRef2S l = Ref2 $ Reference2 (l ^. uid) (renderRef l) (refAdd l) (l ^. shortname)
 
 -- Here we don't use the Lenses as constraints, we really do want a Citation.
 makeCite :: Citation -> Reference2
-makeCite l = Reference2 Citation (refAdd l) (l ^. shortname)
+makeCite l = Reference2 (l ^. uid) Citation (refAdd l) (l ^. shortname)
 
 makeCiteS :: Citation -> Sentence
 makeCiteS = Ref2 . makeCite
 
 -- | Create a reference for a URI
-makeURI :: String -> ShortName -> Reference2
-makeURI ra sn = Reference2 URI ra sn
+makeURI :: UID -> String -> ShortName -> Reference2
+makeURI uid ra sn = Reference2 uid URI ra sn
 
 -- | Create References to a given 'LayoutObj'
 -- This should not be exported to the end-user, but should be usable

@@ -39,7 +39,7 @@ import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
 import qualified Drasil.Sections.TraceabilityMandGs as TMG (traceMGF)
 
 import Data.Drasil.Concepts.Documentation (refmat)
-import Data.Drasil.SentenceStructures (foldlSent)
+import Data.Drasil.SentenceStructures (foldlSent_)
 
 import Data.Function (on)
 import Data.List (nub, sortBy)
@@ -469,7 +469,7 @@ mkSolChSpec si (SCSProg l) =
     -- then error out if necessary.
 
 helperAssump :: AssumpChunk -> ChunkDB -> Sentence
-helperAssump a cdb = foldlSent $ ([assuming a] ++ [helperRefs a cdb])
+helperAssump a cdb = foldlSent_ $ ([assuming a] ++ [helperRefs a cdb])
 {--}
 
 -- | Section stubs for implicit referencing

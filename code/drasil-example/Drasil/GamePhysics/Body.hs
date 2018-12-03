@@ -61,7 +61,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (angularVelocity, force,
   linearVelocity, position, time, velocity)
 import Drasil.GamePhysics.Assumptions(newAssumptions)
 import Drasil.GamePhysics.Changes (likelyChanges, likelyChangesList',
-  unlikelyChanges, unlikelyChangesList', unlikelyChangesList, likelyChangesList)
+  unlikelyChanges, unlikelyChangesList', unlikelyChangeswithIntro, likelyChangesListwithIntro)
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
 import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns)
 import Drasil.GamePhysics.IMods (iModels_new, im1_new, im2_new, im3_new)
@@ -114,8 +114,8 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
     FReqsSub functional_requirements_list,
     NonFReqsSub [performance] (gmpriorityNFReqs) -- The way to render the NonFReqsSub is right for here, fixme.
     (S "Games are resource intensive") (S "")]) :
-    LCsSec (LCsProg likelyChangesList) : -- The way to generate LC and UC would make these sections lost sentences of intro.
-    UCsSec (UCsProg unlikelyChangesList) :
+    LCsSec (LCsProg likelyChangesListwithIntro) :
+    UCsSec (UCsProg unlikelyChangeswithIntro) :
     [ExistingSolnSec (ExistSolnVerb  off_the_shelf_solutions)] ++
     TraceabilitySec
       (TraceabilityProg [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump,

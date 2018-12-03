@@ -15,7 +15,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
   Field(..), Fields, SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
-  TraceabilitySec(TraceabilityProg),
+  TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
   dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
   outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, tsymb'',
   getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
@@ -190,7 +190,8 @@ mkSRS = RefSec (RefProg intro [
   NonFReqsSub [performance] (swhspriorityNFReqs) -- The way to render the NonFReqsSub is right for here, fixme.
   (S "This problem is small in size and relatively simple")
   (S "Any reasonable implementation will be very quick and use minimal storage.")]) :
-  (map Verbatim [likelyChgsSect, unlikelyChgsSect]) ++
+  LCsSec (LCsProg likelyChgsList) :
+  UCsSec (UCsProg unlikelyChgsList) :
   TraceabilitySec
     (TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
   (map UlC traceIntro2) ++ 

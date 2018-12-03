@@ -62,6 +62,7 @@ data DocSection = Verbatim Section
                 | SSDSec SSDSec
                 | ReqrmntSec ReqrmntSec
                 | LCsSec LCsSec
+                | LCsSec' LCsSec'
                 | UCsSec UCsSec
                 | TraceabilitySec TraceabilitySec
                 | AuxConstntSec AuxConstntSec
@@ -204,6 +205,7 @@ data ReqsSub where
 {--}
 
 data LCsSec = LCsProg [Contents] --FIXME:Should become [LikelyChanges]
+data LCsSec' = LCsProg' [ConceptInstance]
 
 {--}
 
@@ -250,6 +252,7 @@ mkSections si l = map doit l
     doit (ScpOfProjSec sop)  = mkScpOfProjSec sop
     doit (ReqrmntSec r)      = mkReqrmntSec r
     doit (LCsSec lc')        = mkLCsSec lc'
+    doit (LCsSec' lc)        = mkLCsSec' lc
     doit (UCsSec ulcs)       = mkUCsSec ulcs
     doit (TraceabilitySec t) = mkTraceabilitySec t
     doit (AppndxSec a)       = mkAppndxSec a
@@ -495,6 +498,9 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 -- | Helper for making the 'LikelyChanges' section
 mkLCsSec :: LCsSec -> Section
 mkLCsSec (LCsProg c) = SRS.likeChg c []
+
+mkLCsSec' :: LCsSec' -> Section
+mkLCsSec' (LCsProg' c) = SRS.likeChg (mkEnumSimpleD c) []
 
 {--}
 

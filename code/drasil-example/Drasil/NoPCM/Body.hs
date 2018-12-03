@@ -185,7 +185,6 @@ nopcm_theory = Map.union swhs_theory $ Map.fromList . map (\x -> (x ^. uid, x)) 
 nopcm_assump :: AssumptionMap
 nopcm_assump = Map.fromList $ map (\x -> (x ^. uid, x)) (assumps_Nopcm_list_new ++ newAssumptions)
 
-
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
@@ -227,12 +226,12 @@ nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms 
   ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm,
   nw ht_trans])
  (map cw nopcm_Symbols ++ srsDomains)
-  this_si nopcm_label nopcm_refby nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_assump
+  this_si nopcm_label nopcm_refby nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_assump (head ([] :: [ConceptInstanceMap]))
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw nopcm_Symbols ++ map nw acronyms)
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) nopcm_label nopcm_refby
- nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_assump
+ nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_assump (head ([] :: [ConceptInstanceMap]))
 
 printSetting :: PrintingInformation
 printSetting = PI nopcm_SymbMap defaultConfiguration

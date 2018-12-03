@@ -176,12 +176,12 @@ sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms ++
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals
   ++ map nw educon ++ map nw compcon ++ [nw algorithm, nw ssp])
   (map cw sspSymbols ++ srsDomains) this_si ssp_label ssp_refby
-  ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump
+  ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump (head ([] :: [ConceptInstanceMap]))
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms)
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) ssp_label ssp_refby
- ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump
+ ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump (head ([] :: [ConceptInstanceMap]))
 
 sspRefDB :: ReferenceDB
 sspRefDB = rdb newAssumptions sspCitations (sspRequirements ++

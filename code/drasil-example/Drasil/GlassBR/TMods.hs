@@ -1,5 +1,6 @@
 module Drasil.GlassBR.TMods (gbrTMods, pbIsSafe, lrIsSafe) where
 
+import qualified Data.Map as Map
 import Language.Drasil
 import Language.Drasil.Code (relToQD) -- FIXME, this should not be needed
 import Language.Drasil.Development (UnitDefn) -- FIXME
@@ -28,6 +29,9 @@ gbrTMods = [pbIsSafe, lrIsSafe]
 -- needs to be updated properly.
 -- this is the new function but it still uses the lrIsSafe_RC,
 -- so basically we have to combine the old function with the new function
+glass_concept :: ConceptInstanceMap
+glass_concept = Map.fromList $ map (\x -> (x ^. uid, x)) ([] :: [ConceptInstance])
+
 
 lrIsSafe :: TheoryModel
 lrIsSafe = tm (cw lrIsSafe_RC)
@@ -36,7 +40,7 @@ lrIsSafe = tm (cw lrIsSafe_RC)
    l1 [lrIsSafeDesc]
   where locSymbMap = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) glassBRsymb ([] :: [UnitDefn]) (head ([] :: [TraceMap])) (head ([] :: [RefbyMap]))
                        (head ([] :: [DatadefnMap])) (head ([] :: [InsModelMap])) (head ([] :: [GendefMap]))
-                        (head ([] :: [TheoryModelMap])) (head ([] :: [AssumptionMap]))
+                        (head ([] :: [TheoryModelMap])) (head ([] :: [AssumptionMap])) glass_concept
 
 lrIsSafe_RC :: RelationConcept
 lrIsSafe_RC = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")

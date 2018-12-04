@@ -65,7 +65,7 @@ import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns)
 import Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, calofDemandi)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, gbCitations, rbrtsn2012)
-import Drasil.GlassBR.Requirements (funcReqsList, funcReqs)
+import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, inputGlassPropsTable)
 import Drasil.GlassBR.Symbols (symbolsForTable, this_symbols)
 import Drasil.GlassBR.TMods (gbrTMods)
 import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, capacity, char_weight, 
@@ -86,7 +86,7 @@ gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols ++ map nw g
   (map cw glassBRsymb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) glassBR_label glassBR_refby
   glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory glassBR_assump glassBR_concins
-  glassBR_section
+  glassBR_section glassBR_labelledcon
 
 glassBR_label :: TraceMap
 glassBR_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ likelyChgs ++ unlikelyChgs ++ funcReqs)
@@ -115,6 +115,9 @@ glassBR_concins = Map.fromList $ map (\x -> (x ^. uid, x)) (likelyChgs ++ unlike
 glassBR_section :: SectionMap
 glassBR_section = Map.fromList $ map (\x -> (x ^. uid, x)) glassBR_sec
 
+glassBR_labelledcon :: LabelledContentMap
+glassBR_labelledcon = Map.fromList $ map (\x -> (x ^. uid, x)) [inputGlassPropsTable]
+
 glassBR_sec :: [Section]
 glassBR_sec = extractSection glassBR_srs
 
@@ -122,7 +125,7 @@ usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw this_symbols)
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) glassBR_label glassBR_refby
   glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory glassBR_assump glassBR_concins
-  glassBR_section
+  glassBR_section glassBR_labelledcon
 
 gbRefDB :: ReferenceDB
 gbRefDB = rdb assumptions gbCitations $ funcReqs ++ likelyChgs ++

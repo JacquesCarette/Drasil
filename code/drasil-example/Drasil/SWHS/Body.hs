@@ -124,12 +124,12 @@ swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull
   ++ [nw swhs_pcm, nw algorithm] ++ map nw compcon)
   (map cw swhsSymbols ++ srsDomains) this_si swhs_label swhs_refby
   swhs_datadefn swhs_insmodel swhs_gendef swhs_theory swhs_assump (head ([] :: [ConceptInstanceMap]))
-  swhs_section
+  swhs_section (head ([] :: [LabelledContentMap]))
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
   swhs_label swhs_refby swhs_datadefn swhs_insmodel swhs_gendef swhs_theory swhs_assump (head ([] :: [ConceptInstanceMap]))
-  swhs_section
+  swhs_section (head ([] :: [LabelledContentMap]))
 
 swhsRefDB :: ReferenceDB
 swhsRefDB = rdb newAssumptions swhsCitations (funcReqs ++

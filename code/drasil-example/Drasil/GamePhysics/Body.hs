@@ -195,12 +195,12 @@ everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms ++ map n
   ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw gamephySymbols ++ srsDomains) chipUnits game_label game_refby
   game_datadefn game_insmodel game_gendef game_theory game_assump (head ([] :: [ConceptInstanceMap]))
-  game_section
+  game_section (head ([] :: [LabelledContentMap]))
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: [ConceptChunk]) ([] :: [UnitDefn])
  game_label game_refby game_datadefn game_insmodel game_gendef game_theory game_assump (head ([] :: [ConceptInstanceMap]))
- game_section
+ game_section (head ([] :: [LabelledContentMap]))
 
 printSetting :: PrintingInformation
 printSetting = PI everything defaultConfiguration

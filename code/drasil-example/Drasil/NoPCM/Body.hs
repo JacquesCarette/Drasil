@@ -240,13 +240,13 @@ nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms 
   nw ht_trans])
  (map cw nopcm_Symbols ++ srsDomains)
   this_si nopcm_label nopcm_refby nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_assump
-  (head ([] :: [ConceptInstanceMap])) nopcm_section
+  (head ([] :: [ConceptInstanceMap])) nopcm_section (head ([] :: [LabelledContentMap]))
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw nopcm_Symbols ++ map nw acronyms)
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) nopcm_label nopcm_refby
  nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_assump (head ([] :: [ConceptInstanceMap]))
- nopcm_section
+ nopcm_section (head ([] :: [LabelledContentMap]))
 
 printSetting :: PrintingInformation
 printSetting = PI nopcm_SymbMap defaultConfiguration

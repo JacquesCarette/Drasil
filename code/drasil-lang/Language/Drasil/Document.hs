@@ -73,7 +73,14 @@ section'' :: Sentence -> [Contents] -> [Section] -> Label -> Section
 section'' title intro secs lbe = section title intro secs lbe
 
 extractSection :: Document -> [Section]
-extractSection (Document _ _ sec) = sec
+extractSection (Document _ _ sec) = sec ++ (concatMap getSec sec)
+
+getSec :: Section -> [Section]
+getSec (Section _ sc _) = concatMap getSecCons sc
+
+getSecCons :: SecCons -> [Section]
+getSecCons (Sub sec) = getSec sec
+getSecCons (Con _)   = []
 
 -- | Figure smart constructor. Assumes 100% of page width as max width.
 fig :: Lbl -> Filepath -> RawContent

@@ -77,3 +77,7 @@ generateTraceMap a = Map.unionsWith (++) [(traceMap extractSFromNotes (getTraceM
   	gd = getTraceMapFromGD $ getSCSSub a
   	im = getTraceMapFromIM $ getSCSSub a
   	dd = getTraceMapFromDD $ getSCSSub a
+
+-- This is a hack as ConceptInstance cannot be collected yet.
+generateTraceMap' :: [ConceptInstance] -> TraceMap
+generateTraceMap' = Map.fromList . map (\x -> ((x ^. uid), lnames' [x ^. defn]))

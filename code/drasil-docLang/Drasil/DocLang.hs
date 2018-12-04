@@ -41,7 +41,7 @@ module Drasil.DocLang (
     getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
     -- Tracetable
     getTraceMapFromTM, getTraceMapFromGD,
-    getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
+    getTraceMapFromDD, getTraceMapFromIM, getSCSSub, generateTraceMap',
    -- Labels
     goalStmt_label, solution_label, characteristics_label,
     physSystDescription_label
@@ -78,7 +78,7 @@ import Drasil.Sections.SpecificSystemDescription (assumpF,
 import Drasil.Sections.TraceabilityMandGs (traceGIntro, traceMGF, generateTraceTable)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc)
 import Drasil.TraceTable (generateTraceMap, getTraceMapFromTM, getTraceMapFromGD,
-    getTraceMapFromDD, getTraceMapFromIM, getSCSSub)
+    getTraceMapFromDD, getTraceMapFromIM, getSCSSub, generateTraceMap')
 -- Commented out modules aren't used - uncomment if this changes
 import Drasil.DocumentLanguage.Labels (goalStmt_label, solution_label, characteristics_label,
     physSystDescription_label)

@@ -18,7 +18,8 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
   outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceTable, goalStmt_label, characteristics_label, physSystDescription_label)
+  generateTraceTable, goalStmt_label, characteristics_label, physSystDescription_label,
+  generateTraceMap')
 
 import qualified Drasil.DocLang.SRS as SRS (datCon, dataDefnLabel, indPRCase, 
   reference, valsOfAuxCons, assumpt)
@@ -84,10 +85,10 @@ gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols ++ map nw g
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw glassBRsymb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) glassBR_label glassBR_refby
-  glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory glassBR_assump (head ([] :: [ConceptInstanceMap]))
+  glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory glassBR_assump glassBR_concins
 
 glassBR_label :: TraceMap
-glassBR_label = generateTraceMap mkSRS
+glassBR_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ likelyChgs ++ unlikelyChgs ++ funcReqs)
  
 glassBR_refby :: RefbyMap
 glassBR_refby = generateRefbyMap glassBR_label 
@@ -107,10 +108,13 @@ glassBR_theory = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromTM $ 
 glassBR_assump :: AssumptionMap
 glassBR_assump = Map.fromList $ map (\x -> (x ^. uid, x)) assumptions
 
+glassBR_concins :: ConceptInstanceMap
+glassBR_concins = Map.fromList $ map (\x -> (x ^. uid, x)) (likelyChgs ++ unlikelyChgs ++ funcReqs)
+
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw this_symbols)
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) glassBR_label glassBR_refby
-  glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory glassBR_assump (head ([] :: [ConceptInstanceMap]))
+  glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory glassBR_assump glassBR_concins
 
 gbRefDB :: ReferenceDB
 gbRefDB = rdb assumptions gbCitations $ funcReqs ++ likelyChgs ++

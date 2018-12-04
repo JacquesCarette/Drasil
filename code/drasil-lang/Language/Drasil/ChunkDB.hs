@@ -190,7 +190,7 @@ assumptionLookup u m = getC $ Map.lookup u m
   where getC = maybe (error $ "Assumption: " ++ u ++ " not found in AssumptionMap") id
 
 -- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
-conceptinsLookup :: UID -> AssumptionMap -> AssumpChunk
+conceptinsLookup :: UID -> ConceptInstanceMap -> ConceptInstance
 conceptinsLookup u m = getC $ Map.lookup u m
   where getC = maybe (error $ "ConceptInstance: " ++ u ++ " not found in conceptInstanceMap") id
 

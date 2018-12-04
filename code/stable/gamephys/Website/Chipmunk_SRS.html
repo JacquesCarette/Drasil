@@ -1061,21 +1061,21 @@ axesDefined: The axes are defined using right-handed coordinate system. <a href=
 <ul class="hide-list-style">
 <li>
 <div id="A:collisionType">
-collisionType: All rigid bodies collisions are vertex-to-edge collisions. <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a>.
+collisionType: All rigid bodies collisions are vertex-to-edge collisions. <a href=#lcEC>LC: Expanded-Collisions</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a>.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:dampingInvolvement">
-dampingInvolvement: There is no damping involved throughout the simulation. <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#IM:col2D>IM: col2D</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
+dampingInvolvement: There is no damping involved throughout the simulation. <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#lcID>LC: Include-Dampening</a> <a href=#IM:col2D>IM: col2D</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
 </div>
 </li>
 </ul>
 <ul class="hide-list-style">
 <li>
 <div id="A:constraintsAndJointsInvolvement">
-constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#IM:col2D>IM: col2D</a>.
+constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#lcIJC>LC: Include-Joints-Constraints</a> <a href=#IM:col2D>IM: col2D</a>.
 </div>
 </li>
 </ul>
@@ -3271,7 +3271,7 @@ Determine-Collision-Response-Over-Time: Determine the positions and velocities o
 Non-Functional Requirements
 </h2>
 <p class="paragraph">
-Games are resource intensive, so performance is a high priority. Other non-functional requirements that are a priority are: correctness, understandability, portability, reliability, and maintainability.
+Games are resource intensive, so performance is not a priority.  Rather than performance, the non-functional requirement priorities are correctness, understandability, portability, reliability, and maintainability.
 </p>
 </div>
 </div>
@@ -3388,6 +3388,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 
 </th>
 <th>
+<a href=#reqVPC>FR: Verify-Physical_Constraints</a>
+</th>
+<th>
 <a href=#IM:rotMot>IM: rotMot</a>
 </th>
 <th>
@@ -3397,7 +3400,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 <a href=#IM:col2D>IM: col2D</a>
 </th>
 <th>
+<a href=#lcEC>LC: Expanded-Collisions</a>
+</th>
+<th>
 <a href=#IM:transMot>IM: transMot</a>
+</th>
+<th>
+<a href=#lcIJC>LC: Include-Joints-Constraints</a>
 </th>
 <th>
 <a href=#DD:linVel>DD: linVel</a>
@@ -3407,6 +3416,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 </th>
 <th>
 <a href=#DD:linAcc>DD: linAcc</a>
+</th>
+<th>
+<a href=#lcID>LC: Include-Dampening</a>
 </th>
 <th>
 <a href=#DD:angVel>DD: angVel</a>
@@ -3432,10 +3444,81 @@ The purpose of the traceability matrices is to provide easy references on what h
 </tr>
 <tr>
 <td>
-<a href=#DD:angAccel>DD: angAccel</a>
+<a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>
 </td>
 <td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<a href=#DD:angAccel>DD: angAccel</a>
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3482,7 +3565,19 @@ X
 <a href=#DD:angDisp>DD: angDisp</a>
 </td>
 <td>
+
+</td>
+<td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3529,7 +3624,19 @@ X
 <a href=#DD:angVel>DD: angVel</a>
 </td>
 <td>
+
+</td>
+<td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3576,13 +3683,25 @@ X
 <a href=#A:axesDefined>A: axesDefined</a>
 </td>
 <td>
-X
+
 </td>
 <td>
 X
 </td>
 <td>
 X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3626,10 +3745,22 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
 </td>
 <td>
 X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3670,6 +3801,15 @@ X
 <a href=#A:constraintsAndJointsInvolvement>A: constraintsAndJointsInvolvement</a>
 </td>
 <td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
 X
 </td>
 <td>
@@ -3680,6 +3820,9 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3717,6 +3860,9 @@ X
 <a href=#A:dampingInvolvement>A: dampingInvolvement</a>
 </td>
 <td>
+
+</td>
+<td>
 X
 </td>
 <td>
@@ -3724,6 +3870,15 @@ X
 </td>
 <td>
 X
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
 </td>
 <td>
 X
@@ -3770,7 +3925,19 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3820,7 +3987,19 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3867,7 +4046,19 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3914,7 +4105,19 @@ X
 
 </td>
 <td>
+
+</td>
+<td>
+
+</td>
+<td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3952,7 +4155,7 @@ X
 <a href=#A:objectDimension>A: objectDimension</a>
 </td>
 <td>
-X
+
 </td>
 <td>
 X
@@ -3964,13 +4167,25 @@ X
 X
 </td>
 <td>
+
+</td>
+<td>
 X
+</td>
+<td>
+
 </td>
 <td>
 X
 </td>
 <td>
 X
+</td>
+<td>
+X
+</td>
+<td>
+
 </td>
 <td>
 X
@@ -3999,7 +4214,7 @@ X
 <a href=#A:objectTy>A: objectTy</a>
 </td>
 <td>
-X
+
 </td>
 <td>
 X
@@ -4011,13 +4226,25 @@ X
 X
 </td>
 <td>
+
+</td>
+<td>
 X
+</td>
+<td>
+
 </td>
 <td>
 X
 </td>
 <td>
 X
+</td>
+<td>
+X
+</td>
+<td>
+
 </td>
 <td>
 X
@@ -4052,10 +4279,22 @@ X
 
 </td>
 <td>
-X
+
 </td>
 <td>
 X
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 

@@ -117,7 +117,7 @@ jtop c _ p _ = vcat [
 jbody :: Config -> a -> Label -> Module -> Doc
 jbody c _ p m = let cs = classes (convToClass m)
   in 
-    vibmap (classDoc c Source p) cs
+    vibmap (classDoc c Source p) cs -- replace with: vibmap ((flip runReader) c unJC) cs
 
 -- code doc functions
 valueDoc' :: Config -> Value -> Doc

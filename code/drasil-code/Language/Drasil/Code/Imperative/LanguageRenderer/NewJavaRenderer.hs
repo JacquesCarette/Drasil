@@ -64,20 +64,22 @@ javaConfig options c =
         body   = jbody c,
         bottom = \_ -> empty,
         
-        assignDoc = assignDocD c, binOpDoc = binOpDoc', bodyDoc = bodyDocD c, blockDoc = blockDocD c, callFuncParamList = callFuncParamListD c,
-        conditionalDoc = conditionalDocD'' c, declarationDoc = declarationDoc' c, enumElementsDoc = enumElementsDocD c, exceptionDoc = exceptionDoc' c, exprDoc = exprDoc' c, funcAppDoc = funcAppDocD c,
-        funcDoc = funcDoc' c, iterationDoc = iterationDocD c, litDoc = litDocD,
-        clsDecDoc = clsDecDocD c, clsDecListDoc = clsDecListDocD c, classDoc = classDocD c, objAccessDoc = objAccessDoc' c,
-        objVarDoc = objVarDocD c, paramDoc = paramDocD c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDocD c, retDoc = retDocD c, scopeDoc = scopeDocD,
-        stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
-        methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
-        ioDoc = ioDoc' c,inputDoc = inputDoc' c,
-        functionDoc = functionDocD c, functionListDoc = functionListDocD c,
-        complexDoc = complexDoc' c,
         getEnv = \_ -> error "no environment has been set"
     }
 
-data JavaCode a = JC {unJC :: Reader Config Doc}
+newtype JavaCode a = JC {unJC :: Doc}
+
+instance Monad JavaCode where
+    return = JC
+    JC a >>= f = f a
+    
+instance ClassSym JavaCode where
+    buildClass n p s vs fs = return $ (classDocD n p s vs fs)
+
+-- instance ClassSym JavaCode where
+--     buildClass n p s vs fs = JC $ do
+--         c <- ask -- not needed, only ask for config when you need to actually extract from it
+--         return (classDoc c n p s vs fs)
 
 instance StateTypeSym JavaCode
 
@@ -95,9 +97,9 @@ instance BodySym JavaCode where
         c <- ask
         return (statementDoc c sts)
 
---
+-- Monad instance for javacode, return wraps in JC
 
--- eval options = runReader unJC options
+-- runReader unJC jc options
 
 -- what is options? Config? Options? 
 -- where does this belong?

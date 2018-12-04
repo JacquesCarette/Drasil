@@ -18,6 +18,9 @@ type FunctionDecl = Method
 
 data Module repr = Mod Label [Library] [repr VarDecl] [repr FunctionDecl] [repr Class]
 
+class ClassSym repr where
+    buildClass :: Label -> Maybe Label -> repr Scope -> [repr StateVar] -> [repr Method] -> repr Class
+
 class MethodSym repr where
     mainMethod :: repr Body -> repr Method
 

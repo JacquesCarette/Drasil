@@ -1,5 +1,5 @@
 Name:		GOOLCode
-Version:	0.0.1
+Version:	0.0.2
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -49,7 +49,23 @@ executable glassbr
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
-    GOOLCode >= 0.0.1
+    GOOLCode >= 0.0.2
+  default-language: Haskell2010
+  ghc-options:      -Wall -O2
+
+executable helloworld
+  hs-source-dirs: Example
+  main-is: HelloWorld.hs
+  other-modules:
+  Build-Depends:
+    base >= 4.7,
+    lens >= 4.12,
+    containers >= 0.5.5.1,
+    pretty >= 1.1.1.1,
+    mtl >= 2.2.1,
+    directory >= 1.2.6.2,
+    split >= 0.2.3.1,
+    GOOLCode >= 0.0.2
   default-language: Haskell2010
   ghc-options:      -Wall -O2
 

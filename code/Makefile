@@ -11,6 +11,7 @@ NoPCM_DIR = NoPCM
 SWHS_DIR  = SWHS
 SSP_DIR   = SSP
 GAME_DIR  = Chipmunk
+HW_DIR = HelloWorld
 
 LANG_DIR  = drasil-lang
 CODE_DIR  = drasil-code
@@ -26,6 +27,7 @@ NoPCM_EXE = nopcm
 SWHS_EXE  = swhs
 SSP_EXE   = ssp
 GAME_EXE  = chipmunkdocs
+HW_EXE = helloworld
 
 DIRS = $(TINY_DIR) $(GLASS_DIR) $(NoPCM_DIR) $(SWHS_DIR) $(SSP_DIR) $(GAME_DIR) $(DATA_DIR) $(LANG_DIR) $(DOCL_DIR) $(EXAM_DIR) $(CODE_DIR) $(GEN_DIR) $(PRINT_DIR)
 DIFF = diff --strip-trailing-cr --ignore-all-space
@@ -96,6 +98,10 @@ ssp_build: swhs_build
 gamephys_build: ssp_build
 	mkdir -p build/$(GAME_DIR)
 	cd build/$(GAME_DIR) && stack exec -- $(GAME_EXE) $(EXECARGS)
+
+helloworld_build: gamephys_build
+	mkdir -p build/$(HW_DIR)
+	cd build/$(HW_DIR) && stack exec -- $(HW_EXE) $(EXECARGS)
 
 tiny_diff: tiny_build
 	- $(DIFF) ./stable/tiny/SRS/$(TINY_PREF)SRS.tex ./build/$(TINY_DIR)/SRS/$(TINY_PREF)SRS.tex > $(TINY_PREF)log.log 2>&1

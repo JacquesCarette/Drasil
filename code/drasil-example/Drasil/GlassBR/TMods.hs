@@ -40,7 +40,7 @@ lrIsSafe = tm (cw lrIsSafe_RC)
    l1 [lrIsSafeDesc]
   where locSymbMap = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) glassBRsymb ([] :: [UnitDefn]) (head ([] :: [TraceMap])) (head ([] :: [RefbyMap]))
                        (head ([] :: [DatadefnMap])) (head ([] :: [InsModelMap])) (head ([] :: [GendefMap]))
-                        (head ([] :: [TheoryModelMap])) (head ([] :: [AssumptionMap])) glass_concept
+                        (head ([] :: [TheoryModelMap])) (head ([] :: [AssumptionMap])) glass_concept (head ([] :: [SectionMap]))
 
 lrIsSafe_RC :: RelationConcept
 lrIsSafe_RC = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")

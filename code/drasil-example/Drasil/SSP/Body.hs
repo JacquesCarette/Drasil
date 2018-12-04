@@ -166,6 +166,12 @@ ssp_theory = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromTM $ getS
 ssp_assump :: AssumptionMap
 ssp_assump = Map.fromList $ map (\x -> (x ^. uid, x)) newAssumptions
 
+ssp_section :: SectionMap
+ssp_section = Map.fromList $ map (\x -> (x ^. uid, x)) ssp_sec
+
+ssp_sec :: [Section]
+ssp_sec = extractSection ssp_srs
+
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
   
@@ -187,11 +193,13 @@ sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms ++
   ++ map nw educon ++ map nw compcon ++ [nw algorithm, nw ssp])
   (map cw sspSymbols ++ srsDomains) this_si ssp_label ssp_refby
   ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump (head ([] :: [ConceptInstanceMap]))
+  ssp_section
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms)
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) ssp_label ssp_refby
  ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump (head ([] :: [ConceptInstanceMap]))
+ ssp_section
 
 sspRefDB :: ReferenceDB
 sspRefDB = rdb newAssumptions sspCitations (sspRequirements ++

@@ -72,6 +72,9 @@ section title intro secs lbe = Section title (map Con intro ++ map Sub secs) lbe
 section'' :: Sentence -> [Contents] -> [Section] -> Label -> Section
 section'' title intro secs lbe = section title intro secs lbe
 
+extractSection :: Document -> [Section]
+extractSection (Document _ _ sec) = sec
+
 -- | Figure smart constructor. Assumes 100% of page width as max width.
 fig :: Lbl -> Filepath -> RawContent
 fig l f = Figure l f 100

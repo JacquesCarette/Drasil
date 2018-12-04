@@ -7,11 +7,11 @@ module Language.Drasil.ChunkDB
   , HasUnitTable(..), unitMap, collectUnits
   , HasUnitTable(..), unitMap, collectUnits, TraceMap,
   traceLookup, HasTraceTable(..), generateRefbyMap, RefbyMap,
-  refbyLookup, HasRefbyTable(..), DatadefnMap, InsModelMap,
+  refbyLookup, HasRefbyTable(..), DatadefnMap, InsModelMap, SectionMap,
   GendefMap, TheoryModelMap, AssumptionMap, ConceptInstanceMap, datadefnLookup, insmodelLookup,
-  gendefLookup, theoryModelLookup, assumptionLookup, conceptinsLookup,
+  gendefLookup, theoryModelLookup, assumptionLookup, conceptinsLookup, sectionLookup,
   HasDataDefnTable(..), HasInsModelTable(..), HasGendefTable(..), HasTheoryModelTable(..),
-  HasAssumpTable(..), HasConceptInstance(..)
+  HasAssumpTable(..), HasConceptInstance(..), HasSectionTable(..),
   ) where
 
 import Control.Lens ((^.), Lens', makeLenses)
@@ -29,6 +29,7 @@ import Language.Drasil.Chunk.Concept (ConceptChunk, ConceptInstance, cw)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
 import Language.Drasil.Chunk.Theory (TheoryModel)
+import Language.Drasil.Document (Section)
 import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(getUnit), unitWrapper)
 import qualified Data.Map as Map
 import Language.Drasil.Sentence.Extract(lnames)
@@ -77,6 +78,9 @@ type AssumptionMap = Map.Map UID AssumpChunk
 
 -- ConceptInstance map
 type ConceptInstanceMap = Map.Map UID ConceptInstance
+
+-- Section map
+type SectionMap = Map.Map UID Section
 
 -- | Smart constructor for a 'SymbolMap'
 symbolMap :: (Quantity c, MayHaveUnit c) => [c] -> SymbolMap
@@ -146,6 +150,8 @@ class HasAssumpTable s where
 class HasConceptInstance s where
   conceptinsTable :: Lens' s ConceptInstanceMap
 
+class HasSectionTable s where
+  sectionTable :: Lens' s SectionMap
 -- | Gets a unit if it exists, or Nothing.        
 getUnitLup :: HasSymbolTable s => (HasUID c, MayHaveUnit c) => s -> c -> Maybe UnitDefn
 getUnitLup m c = getUnit $ symbLookup (c ^. uid) (m ^. symbolTable)
@@ -194,6 +200,11 @@ conceptinsLookup :: UID -> ConceptInstanceMap -> ConceptInstance
 conceptinsLookup u m = getC $ Map.lookup u m
   where getC = maybe (error $ "ConceptInstance: " ++ u ++ " not found in conceptInstanceMap") id
 
+-- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
+sectionLookup :: UID -> SectionMap -> Section
+sectionLookup u m = getC $ Map.lookup u m
+  where getC = maybe (error $ "Section: " ++ u ++ " not found in conceptInstanceMap") id
+
 -- | Our chunk databases. Should contain all the maps we will need.
 data ChunkDB = CDB { _csymbs :: SymbolMap
                    , _cterms :: TermMap 
@@ -207,6 +218,7 @@ data ChunkDB = CDB { _csymbs :: SymbolMap
                    , _ctheory :: TheoryModelMap
                    , _cassump :: AssumptionMap
                    , _cconceptins :: ConceptInstanceMap
+                   , _csec :: SectionMap
                    } --TODO: Expand and add more databases
 makeLenses ''ChunkDB
 
@@ -216,8 +228,9 @@ makeLenses ''ChunkDB
 cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u,
         ConceptDomain u) => [q] -> [t] -> [c] -> [u] -> TraceMap -> RefbyMap ->
         DatadefnMap -> InsModelMap -> GendefMap ->  TheoryModelMap -> AssumptionMap ->
-        ConceptInstanceMap -> ChunkDB
-cdb s t c u tc rfm dd ins gd tm a ci= CDB (symbolMap s) (termMap t) (conceptMap c) (unitMap u) tc rfm dd ins gd tm a ci
+        ConceptInstanceMap -> SectionMap -> ChunkDB
+cdb s t c u tc rfm dd ins gd tm a ci sec = CDB (symbolMap s) (termMap t) (conceptMap c) (unitMap u)
+ tc rfm dd ins gd tm a ci sec
 
 ----------------------
 instance HasSymbolTable      ChunkDB where symbolTable       = csymbs
@@ -232,6 +245,7 @@ instance HasGendefTable      ChunkDB where gendefTable       = cgen
 instance HasTheoryModelTable ChunkDB where theoryModelTable  = ctheory
 instance HasAssumpTable      ChunkDB where assumpTable       = cassump
 instance HasConceptInstance  ChunkDB where conceptinsTable   = cconceptins
+instance HasSectionTable     ChunkDB where sectionTable      = csec
 
 collectUnits :: HasSymbolTable s => (Quantity c, MayHaveUnit c) => s -> [c] -> [UnitDefn]
 collectUnits m symb = map unitWrapper $ concatMap maybeToList $ map (getUnitLup m) symb

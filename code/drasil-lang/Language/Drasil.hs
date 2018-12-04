@@ -119,7 +119,7 @@ module Language.Drasil (
   -- Document
   , Referable(..), Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListTuple
-  , LabelledContent(..), UnlabelledContent(..)
+  , LabelledContent(..), UnlabelledContent(..), extractSection
   , mkParagraph, mkRawLC
   , llcc, ulcc
   , section, fig, figWithWidth, section''
@@ -157,10 +157,10 @@ module Language.Drasil (
   , HasUnitTable, unitMap, unitTable, collectUnits
   , TraceMap, traceLookup, HasTraceTable(..), generateRefbyMap, RefbyMap
   , refbyLookup, HasRefbyTable(..), DatadefnMap, InsModelMap, AssumptionMap
-  , ConceptInstanceMap, GendefMap, TheoryModelMap, datadefnLookup, insmodelLookup
+  , ConceptInstanceMap, GendefMap, TheoryModelMap, datadefnLookup, insmodelLookup, sectionLookup
   , gendefLookup, theoryModelLookup, assumptionLookup, conceptinsLookup, HasDataDefnTable(..)
-  , HasInsModelTable(..), HasGendefTable(..), HasTheoryModelTable(..)
-  , HasAssumpTable(..), HasConceptInstance(..)
+  , HasInsModelTable(..), HasGendefTable(..), HasTheoryModelTable(..), HasSectionTable(..)
+  , HasAssumpTable(..), HasConceptInstance(..), HasTheoryModelTable(..), SectionMap
   -- AssumpChunk
   , AssumpChunk, assuming, assump
   -- Reference
@@ -235,7 +235,7 @@ import Language.Drasil.Document (section, fig, figWithWidth
   , section''
   , Section(..), SecCons(..) 
   , llcc, ulcc, Document(..)
-  , mkParagraph, mkFig, mkRawLC)
+  , mkParagraph, mkFig, mkRawLC, extractSection)
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)

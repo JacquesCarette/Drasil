@@ -50,7 +50,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
   reqF, termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceTable, goalStmt_label, physSystDescription_label)
+  generateTraceTable, goalStmt_label, physSystDescription_label, generateTraceMap')
 import qualified Drasil.DocumentLanguage.Units as U (toSentence) 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
   isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP)
@@ -71,6 +71,7 @@ import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012,
   parnasClements1986, smithLai2005)
 import Drasil.SWHS.Requirements (nonFuncReqs)
 import Drasil.SWHS.TMods (consThermE)
+import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
   coil_SA_max, deltaT, diam, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCap_L, 
   htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, sim_time, 
@@ -172,7 +173,7 @@ mkSRS = RefSec (RefProg intro
   map Verbatim [specParamVal] ++ (Bibliography : [])
 
 nopcm_label :: TraceMap
-nopcm_label = generateTraceMap mkSRS
+nopcm_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ reqs ++ likelyChgs ++ unlikelyChgs)
  
 nopcm_refby :: RefbyMap
 nopcm_refby = generateRefbyMap nopcm_label
@@ -192,8 +193,14 @@ nopcm_theory = Map.union swhs_theory $ Map.fromList . map (\x -> (x ^. uid, x)) 
 nopcm_assump :: AssumptionMap
 nopcm_assump = Map.fromList $ map (\x -> (x ^. uid, x)) (assumps_Nopcm_list_new ++ newAssumptions)
 
+nopcm_concins :: ConceptInstanceMap
+nopcm_concins = Map.fromList $ map (\x -> (x ^. uid, x)) (reqs ++ likelyChgs ++ unlikelyChgs)
+
 nopcm_section :: SectionMap
 nopcm_section = Map.fromList $ map (\x -> (x ^. uid, x)) nopcm_sec
+
+nopcm_labcon :: LabelledContentMap
+nopcm_labcon = Map.fromList $ map (\x -> (x ^. uid, x)) [inputInitQuantsTblabled, dataConstTable1]
 
 nopcm_sec :: [Section]
 nopcm_sec = extractSection nopcm_srs
@@ -240,13 +247,13 @@ nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms 
   nw ht_trans])
  (map cw nopcm_Symbols ++ srsDomains)
   this_si nopcm_label nopcm_refby nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_assump
-  (head ([] :: [ConceptInstanceMap])) nopcm_section (head ([] :: [LabelledContentMap]))
+  nopcm_concins nopcm_section nopcm_labcon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw nopcm_Symbols ++ map nw acronyms)
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) nopcm_label nopcm_refby
- nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_assump (head ([] :: [ConceptInstanceMap]))
- nopcm_section (head ([] :: [LabelledContentMap]))
+ nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_assump nopcm_concins
+ nopcm_section nopcm_labcon
 
 printSetting :: PrintingInformation
 printSetting = PI nopcm_SymbMap defaultConfiguration

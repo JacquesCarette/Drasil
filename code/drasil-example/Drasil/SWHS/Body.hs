@@ -18,7 +18,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
   dataConstraintUncertainty, genSysF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
   outDataConstTbl, physSystDesc, reqF, termDefnF, traceGIntro, tsymb'',
-  getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
+  getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap, generateTraceMap',
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   generateTraceTable, goalStmt_label, physSystDescription_label)
 import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel,
@@ -70,6 +70,7 @@ import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM,
 import Drasil.SWHS.References (parnas1972, parnasClements1984, swhsCitations)
 import Drasil.SWHS.Requirements (funcReqs, nonFuncReqs, verifyEnergyOutput)
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, swhsTMods)
+import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
   temp_C, coil_SA, w_E, coil_HTC, sim_time, tau_S_P, htCap_S_P, pcm_mass,
   ht_flux_P, eta, tau_W, htCap_W, w_mass, ht_flux_C, vol_ht_gen, thickness,
@@ -123,13 +124,13 @@ swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull
   ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC
   ++ [nw swhs_pcm, nw algorithm] ++ map nw compcon)
   (map cw swhsSymbols ++ srsDomains) this_si swhs_label swhs_refby
-  swhs_datadefn swhs_insmodel swhs_gendef swhs_theory swhs_assump (head ([] :: [ConceptInstanceMap]))
-  swhs_section (head ([] :: [LabelledContentMap]))
+  swhs_datadefn swhs_insmodel swhs_gendef swhs_theory swhs_assump swhs_concins
+  swhs_section swhs_labcon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
-  swhs_label swhs_refby swhs_datadefn swhs_insmodel swhs_gendef swhs_theory swhs_assump (head ([] :: [ConceptInstanceMap]))
-  swhs_section (head ([] :: [LabelledContentMap]))
+  swhs_label swhs_refby swhs_datadefn swhs_insmodel swhs_gendef swhs_theory swhs_assump swhs_concins
+  swhs_section swhs_labcon
 
 swhsRefDB :: ReferenceDB
 swhsRefDB = rdb newAssumptions swhsCitations (funcReqs ++
@@ -213,10 +214,10 @@ swhs_srs' :: Document
 swhs_srs' = mkDoc mkSRS for swhs_si
 
 swhs_label :: TraceMap
-swhs_label = generateTraceMap mkSRS
+swhs_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ likelyChgs ++ unlikelyChgs ++ funcReqs)
  
 swhs_refby :: RefbyMap
-swhs_refby = generateRefbyMap swhs_label
+swhs_refby = generateRefbyMap swhs_label 
 
 swhs_datadefn :: DatadefnMap
 swhs_datadefn = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromDD $ getSCSSub mkSRS
@@ -233,8 +234,14 @@ swhs_theory = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromTM $ get
 swhs_assump :: AssumptionMap
 swhs_assump = Map.fromList $ map (\x -> (x ^. uid, x)) newAssumptions
 
+swhs_concins :: ConceptInstanceMap
+swhs_concins = Map.fromList $ map (\x -> (x ^. uid, x)) (likelyChgs ++ unlikelyChgs ++ funcReqs)
+
 swhs_section :: SectionMap
 swhs_section = Map.fromList $ map (\x -> (x ^. uid, x)) swhs_sec
+
+swhs_labcon :: LabelledContentMap
+swhs_labcon = Map.fromList $ map (\x -> (x ^. uid, x)) [dataConTable1, inputInitQuantsTblabled]
 
 swhs_sec :: [Section]
 swhs_sec = extractSection swhs_srs'

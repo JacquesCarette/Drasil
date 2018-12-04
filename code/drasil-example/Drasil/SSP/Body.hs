@@ -19,7 +19,7 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   mkEnumSimpleD, nonFuncReqF, outDataConstTbl, probDescF, reqF, termDefnF,
   tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceTable, goalStmt_label, physSystDescription_label)
+  generateTraceTable, goalStmt_label, physSystDescription_label, generateTraceMap')
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
   physSyst, assumpt)
@@ -146,7 +146,7 @@ mkSRS = RefSec (RefProg intro
   ++ [UCsSec $ UCsProg unlikelyChanges_SRS] ++ [Verbatim aux_cons] ++ (Bibliography : [])
 
 ssp_label :: TraceMap
-ssp_label = generateTraceMap mkSRS
+ssp_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ sspRequirements ++ likelyChgs ++ unlikelyChgs)
  
 ssp_refby :: RefbyMap
 ssp_refby = generateRefbyMap ssp_label
@@ -165,6 +165,9 @@ ssp_theory = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromTM $ getS
 
 ssp_assump :: AssumptionMap
 ssp_assump = Map.fromList $ map (\x -> (x ^. uid, x)) newAssumptions
+
+ssp_concins :: ConceptInstanceMap
+ssp_concins = Map.fromList $ map (\x -> (x ^. uid, x)) (sspRequirements ++ likelyChgs ++ unlikelyChgs)
 
 ssp_section :: SectionMap
 ssp_section = Map.fromList $ map (\x -> (x ^. uid, x)) ssp_sec
@@ -192,13 +195,13 @@ sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms ++
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals
   ++ map nw educon ++ map nw compcon ++ [nw algorithm, nw ssp])
   (map cw sspSymbols ++ srsDomains) this_si ssp_label ssp_refby
-  ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump (head ([] :: [ConceptInstanceMap]))
+  ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump ssp_concins
   ssp_section (head ([] :: [LabelledContentMap]))
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms)
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) ssp_label ssp_refby
- ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump (head ([] :: [ConceptInstanceMap]))
+ ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump ssp_concins
  ssp_section (head ([] :: [LabelledContentMap]))
 
 sspRefDB :: ReferenceDB

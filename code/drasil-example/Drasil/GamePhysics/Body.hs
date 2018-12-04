@@ -13,7 +13,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   SSDSub(SSDSubVerb, SSDSolChSpec), SolChSpec(SCSProg), SubSec, TConvention(..), 
   TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
   TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
-  LCsSec(..), UCsSec(..),
+  LCsSec(..), UCsSec(..), generateTraceMap',
   assembler, dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, outDataConstTbl,
   mkEnumSimpleD, outDataConstTbl, reqF, sSubSec, siCon, siSTitl, siSent,
@@ -119,13 +119,15 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
     [ExistingSolnSec (ExistSolnVerb  off_the_shelf_solutions)] ++
     TraceabilitySec
       (TraceabilityProg [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump,
-    traceMatTabDefnModel] traceability_matrices_and_graph_traces (map LlC [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) []) :
+    traceMatTabDefnModel] traceability_matrices_and_graph_traces
+     (map LlC [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) []) :
     ([Verbatim values_of_auxiliary_constatnts]) ++
     (Bibliography : [])
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
 game_label :: TraceMap
-game_label = generateTraceMap mkSRS
+game_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ likelyChangesList' ++ unlikelyChangesList' ++
+  functional_requirements_list')
 
 game_refby :: RefbyMap
 game_refby = generateRefbyMap game_label
@@ -144,6 +146,10 @@ game_theory = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromTM $ get
 
 game_assump :: AssumptionMap
 game_assump = Map.fromList $ map (\x -> (x ^. uid, x)) newAssumptions
+
+game_concins :: ConceptInstanceMap
+game_concins = Map.fromList $ map (\x -> (x ^. uid, x)) (likelyChangesList' ++ unlikelyChangesList' ++
+  functional_requirements_list')
 
 game_section :: SectionMap
 game_section = Map.fromList $ map (\x -> (x ^. uid, x)) game_sec
@@ -194,12 +200,12 @@ everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms ++ map n
   ++ map nw educon ++ [nw algorithm] ++ map nw derived ++ map nw fundamentals
   ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw gamephySymbols ++ srsDomains) chipUnits game_label game_refby
-  game_datadefn game_insmodel game_gendef game_theory game_assump (head ([] :: [ConceptInstanceMap]))
+  game_datadefn game_insmodel game_gendef game_theory game_assump game_concins
   game_section (head ([] :: [LabelledContentMap]))
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: [ConceptChunk]) ([] :: [UnitDefn])
- game_label game_refby game_datadefn game_insmodel game_gendef game_theory game_assump (head ([] :: [ConceptInstanceMap]))
+ game_label game_refby game_datadefn game_insmodel game_gendef game_theory game_assump game_concins
  game_section (head ([] :: [LabelledContentMap]))
 
 printSetting :: PrintingInformation

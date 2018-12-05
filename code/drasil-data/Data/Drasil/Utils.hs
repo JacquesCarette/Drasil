@@ -100,7 +100,7 @@ zipFTable' content l = concatMap (\x -> if x `elem` content then [S "X"] else [E
 
 -- | makes a traceability matrix from list of column rows and list of rows
 makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
-makeTMatrix colName col row = zipSentList [] colName [zipFTable'' x row | x <- col] 
+makeTMatrix colName col row = zipSentList [] colName [zipFTable' x row | x <- col] 
 
 
 -- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments

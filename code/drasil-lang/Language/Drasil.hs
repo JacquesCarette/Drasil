@@ -16,7 +16,7 @@ module Language.Drasil (
   , apply, apply1, apply2
   , cross, m2x2, vec2D, dgnl2x2
   -- Expr.Extract
-  , dep, names'
+  , dep, names', lnames, lnames'
   -- Expr.Precendence
   , precA, precB, eprec
   -- all the stuff from Unicode
@@ -119,7 +119,7 @@ module Language.Drasil (
   -- Document
   , Referable(..), Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListTuple
-  , LabelledContent(..), UnlabelledContent(..)
+  , LabelledContent(..), UnlabelledContent(..), extractSection
   , mkParagraph, mkRawLC
   , llcc, ulcc
   , section, fig, figWithWidth, section''
@@ -153,8 +153,14 @@ module Language.Drasil (
   , ChunkDB, cdb
   , HasSymbolTable, symbolMap, symbLookup, symbolTable
   , HasTermTable, termLookup, termTable
-  , HasDefinitionTable, conceptMap, defTable, defLookup
-  , HasUnitTable, unitMap, unitTable, collectUnits
+  , HasDefinitionTable, conceptMap, defTable, defLookup, labelledconLookup
+  , HasUnitTable, unitMap, unitTable, collectUnits, LabelledContentMap
+  , TraceMap, traceLookup, HasTraceTable(..), generateRefbyMap, RefbyMap
+  , refbyLookup, HasRefbyTable(..), DatadefnMap, InsModelMap, AssumptionMap, HasLabelledContent(..)
+  , ConceptInstanceMap, GendefMap, TheoryModelMap, datadefnLookup, insmodelLookup, sectionLookup
+  , gendefLookup, theoryModelLookup, assumptionLookup, conceptinsLookup, HasDataDefnTable(..)
+  , HasInsModelTable(..), HasGendefTable(..), HasTheoryModelTable(..), HasSectionTable(..)
+  , HasAssumpTable(..), HasConceptInstance(..), HasTheoryModelTable(..), SectionMap
   -- AssumpChunk
   , AssumpChunk, assuming, assump
   -- Reference
@@ -224,12 +230,12 @@ import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, csc
 import Language.Drasil.Expr.Extract (dep, names', names)
 import Language.Drasil.Expr.Precedence (precA, precB, eprec)
 import Language.Drasil.Sentence.EmbedSymbol(ch)
-import Language.Drasil.Sentence.Extract(sdep)
+import Language.Drasil.Sentence.Extract(sdep, lnames, lnames')
 import Language.Drasil.Document (section, fig, figWithWidth
   , section''
   , Section(..), SecCons(..) 
   , llcc, ulcc, Document(..)
-  , mkParagraph, mkFig, mkRawLC)
+  , mkParagraph, mkFig, mkRawLC, extractSection)
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)

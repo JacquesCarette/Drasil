@@ -6,17 +6,20 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Language.Drasil.Development (UnitDefn, unitWrapper)
 
 import Control.Lens ((^.))
-
+import qualified Data.Map as Map
 import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..), 
   Emphasis(..), Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), 
   IntroSub(..), RefSec(..), RefTab(..), SCSSub(..), SSDSec(SSDProg), 
   SSDSub(SSDSubVerb, SSDSolChSpec), SolChSpec(SCSProg), SubSec, TConvention(..), 
   TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
-  TraceabilitySec(TraceabilityProg), assembler, dataConstraintUncertainty,
+  TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
+  LCsSec(..), UCsSec(..), generateTraceMap',
+  assembler, dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, outDataConstTbl,
   mkEnumSimpleD, outDataConstTbl, reqF, sSubSec, siCon, siSTitl, siSent,
-  traceMGF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc,
-  goalStmt_label, solution_label)
+  traceMGF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
+  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
+  generateTraceTable, goalStmt_label, solution_label)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
@@ -33,7 +36,7 @@ import Data.Drasil.Concepts.Documentation as Doc(assumption, body,
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics, educon)
 import Data.Drasil.Concepts.Software (physLib, understandability, portability,
-  reliability, maintainability, performance, correctness, softwarecon)
+  reliability, maintainability, performance, correctness, softwarecon, reliability)
 
 import Data.Drasil.Software.Products (openSource, sciCompS, videoGame)
 
@@ -58,7 +61,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (angularVelocity, force,
   linearVelocity, position, time, velocity)
 import Drasil.GamePhysics.Assumptions(newAssumptions)
 import Drasil.GamePhysics.Changes (likelyChanges, likelyChangesList',
-  unlikelyChanges, unlikelyChangesList')
+  unlikelyChanges, unlikelyChangesList', unlikelyChangeswithIntro, likelyChangesListwithIntro)
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
 import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns)
 import Drasil.GamePhysics.IMods (iModels_new, im1_new, im2_new, im3_new)
@@ -107,14 +110,52 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb tableOfSymbols, TAandA]) :
         )
       ]
     ):
-  (map Verbatim [requirements, likelyChanges, unlikelyChanges]) ++
-  [ExistingSolnSec (ExistSolnVerb  off_the_shelf_solutions)] ++
-  TraceabilitySec
-    (TraceabilityProg [traceMatTabReqGoalOther, traceMatTabAssump,
-  traceMatTabDefnModel] traceability_matrices_and_graph_traces (map LlC [traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) []) :
-  ([Verbatim values_of_auxiliary_constatnts]) ++
-  (Bibliography : [])
-    where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
+    ReqrmntSec (ReqsProg [
+    FReqsSub functional_requirements_list,
+    NonFReqsSub [performance] (gmpriorityNFReqs) -- The way to render the NonFReqsSub is right for here, fixme.
+    (S "Games are resource intensive") (S "")]) :
+    LCsSec (LCsProg likelyChangesListwithIntro) :
+    UCsSec (UCsProg unlikelyChangeswithIntro) :
+    [ExistingSolnSec (ExistSolnVerb  off_the_shelf_solutions)] ++
+    TraceabilitySec
+      (TraceabilityProg [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump,
+    traceMatTabDefnModel] traceability_matrices_and_graph_traces
+     (map LlC [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) []) :
+    ([Verbatim values_of_auxiliary_constatnts]) ++
+    (Bibliography : [])
+      where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
+
+game_label :: TraceMap
+game_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ likelyChangesList' ++ unlikelyChangesList' ++
+  functional_requirements_list')
+
+game_refby :: RefbyMap
+game_refby = generateRefbyMap game_label
+
+game_datadefn :: DatadefnMap
+game_datadefn = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromDD $ getSCSSub mkSRS
+
+game_insmodel :: InsModelMap
+game_insmodel = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromIM $ getSCSSub mkSRS
+
+game_gendef :: GendefMap
+game_gendef = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromGD $ getSCSSub mkSRS
+
+game_theory :: TheoryModelMap
+game_theory = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromTM $ getSCSSub mkSRS
+
+game_assump :: AssumptionMap
+game_assump = Map.fromList $ map (\x -> (x ^. uid, x)) newAssumptions
+
+game_concins :: ConceptInstanceMap
+game_concins = Map.fromList $ map (\x -> (x ^. uid, x)) (likelyChangesList' ++ unlikelyChangesList' ++
+  functional_requirements_list')
+
+game_section :: SectionMap
+game_section = Map.fromList $ map (\x -> (x ^. uid, x)) game_sec
+
+game_sec :: [Section]
+game_sec = extractSection chipmunkSRS'
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -158,10 +199,14 @@ everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms ++ map n
   ++ map nw softwarecon ++ map nw doccon ++ map nw doccon' ++ map nw CP.physicCon
   ++ map nw educon ++ [nw algorithm] ++ map nw derived ++ map nw fundamentals
   ++ map nw CM.mathcon ++ map nw CM.mathcon')
-  (map cw gamephySymbols ++ srsDomains) chipUnits
+  (map cw gamephySymbols ++ srsDomains) chipUnits game_label game_refby
+  game_datadefn game_insmodel game_gendef game_theory game_assump game_concins
+  game_section (head ([] :: [LabelledContentMap]))
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
+usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: [ConceptChunk]) ([] :: [UnitDefn])
+ game_label game_refby game_datadefn game_insmodel game_gendef game_theory game_assump game_concins
+ game_section (head ([] :: [LabelledContentMap]))
 
 printSetting :: PrintingInformation
 printSetting = PI everything defaultConfiguration
@@ -171,6 +216,10 @@ chipCode = codeSpec chipmunkSysInfo []
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GamePhysics/"
+
+gmpriorityNFReqs :: [ConceptChunk]
+gmpriorityNFReqs = [correctness, understandability, portability, reliability,
+  maintainability]
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
 -- the sections below are now redundant. I have not removed them yet, because
@@ -640,6 +689,8 @@ off_the_shelf_solutions_3dlist = LlC $ enumBullet solution_label [
 -----------------------------------------------------
 -- SECTION 8 : Traceability Matrices and Graph    --
 -----------------------------------------------------
+traceTable1 :: LabelledContent
+traceTable1 = generateTraceTable everything
 
 traceability_matrices_and_graph :: Section
 traceability_matrices_and_graph = traceMGF [traceMatTabReqGoalOther, traceMatTabAssump,

@@ -6,7 +6,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Language.Drasil.Development (UnitDefn, unitWrapper) -- FIXME?
 
 import Control.Lens ((^.))
-
+import qualified Data.Map as Map
 import Data.Drasil.People (thulasi)
 import Data.Drasil.Utils (enumSimple,
   itemRefToSent, makeTMatrix, itemRefToSent, noRefs)
@@ -19,7 +19,8 @@ import Data.Drasil.Concepts.Documentation as Doc (inModel,
   doccon')
 
 import qualified Data.Drasil.Concepts.Math as M (ode, de, unit_, equation)
-import Data.Drasil.Concepts.Software (program, softwarecon)
+import Data.Drasil.Concepts.Software (program, softwarecon, performance, correctness, verifiability,
+  understandability, reusability, maintainability, portability)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
   thermal_energy, ht_trans_theo, ht_flux, heat_cap_spec, thermal_conduction,
@@ -43,11 +44,13 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
   SolChSpec(..), SSDSec(..), DocSection(..),
   IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
   RefSec(RefProg), RefTab(TAandA, TUnits), TraceabilitySec(TraceabilityProg),
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
-  reqF, termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc,
-  goalStmt_label, physSystDescription_label)
+  reqF, termDefnF, tsymb, valsOfAuxConstantsF, getDocDesc, egetDocDesc, generateTraceMap,
+  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
+  generateTraceTable, goalStmt_label, physSystDescription_label, generateTraceMap')
 import qualified Drasil.DocumentLanguage.Units as U (toSentence) 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
   isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP)
@@ -55,9 +58,10 @@ import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
-import Drasil.SWHS.Assumptions (newA11, newA12, newA14)
+import Drasil.SWHS.Assumptions (newA11, newA12, newA14, newAssumptions)
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
-  orgDocIntro, physSyst1, physSyst2, traceFig1, traceFig2, traceIntro2, traceTrailing)
+  orgDocIntro, physSyst1, physSyst2, traceFig1, traceFig2, traceIntro2, traceTrailing,
+  swhs_datadefn, swhs_insmodel, swhs_gendef, swhs_theory, swhspriorityNFReqs)
 import Drasil.SWHS.Changes (chgsStart, likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, tank_para, transient, water,
   swhscon)
@@ -67,6 +71,7 @@ import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012,
   parnasClements1986, smithLai2005)
 import Drasil.SWHS.Requirements (nonFuncReqs)
 import Drasil.SWHS.TMods (consThermE)
+import Drasil.SWHS.Tables (inputInitQuantsTblabled)
 import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA, 
   coil_SA_max, deltaT, diam, eta, ht_flux_C, ht_flux_in, ht_flux_out, htCap_L, 
   htCap_W, htCap_W_max, htCap_W_min, htTransCoeff, in_SA, out_SA, sim_time, 
@@ -156,11 +161,49 @@ mkSRS = RefSec (RefProg intro
         )
       ]
     ):
-  map Verbatim [reqS, likelyChgsSect, unlikelyChgsSect] ++
+  ReqrmntSec (ReqsProg [
+  FReqsSub funcReqsList,
+  NonFReqsSub [performance] (swhspriorityNFReqs) -- The way to render the NonFReqsSub is right for here, fixme.
+  (S "This problem is small in size and relatively simple")
+  (S "Any reasonable implementation will be very quick and use minimal storage.")]) :
+  map Verbatim [likelyChgsSect, unlikelyChgsSect] ++
   TraceabilitySec
     (TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
   (map UlC traceIntro2) ++ [LlC traceFig1, LlC traceFig2]) []) :
   map Verbatim [specParamVal] ++ (Bibliography : [])
+
+nopcm_label :: TraceMap
+nopcm_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ reqs ++ likelyChgs ++ unlikelyChgs)
+ 
+nopcm_refby :: RefbyMap
+nopcm_refby = generateRefbyMap nopcm_label
+
+nopcm_datadefn :: DatadefnMap
+nopcm_datadefn = Map.union swhs_datadefn $ Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromDD $ getSCSSub mkSRS
+
+nopcm_insmodel :: InsModelMap
+nopcm_insmodel = Map.union swhs_insmodel $ Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromIM $ getSCSSub mkSRS
+
+nopcm_gendef :: GendefMap
+nopcm_gendef = Map.union swhs_gendef $ Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromGD $ getSCSSub mkSRS
+
+nopcm_theory :: TheoryModelMap
+nopcm_theory = Map.union swhs_theory $ Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromTM $ getSCSSub mkSRS
+
+nopcm_assump :: AssumptionMap
+nopcm_assump = Map.fromList $ map (\x -> (x ^. uid, x)) (assumps_Nopcm_list_new ++ newAssumptions)
+
+nopcm_concins :: ConceptInstanceMap
+nopcm_concins = Map.fromList $ map (\x -> (x ^. uid, x)) (reqs ++ likelyChgs ++ unlikelyChgs)
+
+nopcm_section :: SectionMap
+nopcm_section = Map.fromList $ map (\x -> (x ^. uid, x)) nopcm_sec
+
+nopcm_labcon :: LabelledContentMap
+nopcm_labcon = Map.fromList $ map (\x -> (x ^. uid, x)) [inputInitQuantsTblabled, dataConstTable1]
+
+nopcm_sec :: [Section]
+nopcm_sec = extractSection nopcm_srs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -203,11 +246,14 @@ nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms 
   ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm,
   nw ht_trans])
  (map cw nopcm_Symbols ++ srsDomains)
-  this_si
+  this_si nopcm_label nopcm_refby nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_assump
+  nopcm_concins nopcm_section nopcm_labcon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw nopcm_Symbols ++ map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) nopcm_label nopcm_refby
+ nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_assump nopcm_concins
+ nopcm_section nopcm_labcon
 
 printSetting :: PrintingInformation
 printSetting = PI nopcm_SymbMap defaultConfiguration
@@ -624,9 +670,11 @@ unlikeChgNIHG = cic "unlikeChgNIHG" (
 ----------------------------------------------
 --Section 7:  TRACEABILITY MATRICES AND GRAPHS
 ----------------------------------------------
+traceTableAll :: LabelledContent
+traceTableAll = generateTraceTable nopcm_SymbMap
 
 traceRefList :: [LabelledContent]
-traceRefList = [traceTable1, traceTable2, traceTable3]
+traceRefList = [traceTableAll, traceTable1, traceTable2, traceTable3]
 
 traceInstaModel, traceData, traceFuncReq, traceLikelyChg, traceDataDefs, traceGenDefs,
   traceAssump, traceTheories :: [String]

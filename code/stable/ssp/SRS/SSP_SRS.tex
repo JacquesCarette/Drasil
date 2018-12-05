@@ -322,34 +322,34 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Slip-Surface-Concave}:]The slip surface is concave with respect to the slope surface. The $(x,y)$ coordinates of the failure surface follow a monotonic function.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Factor-of-Safety}:]The factor of safety is assumed to be constant across a whole slip surface.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Factor-of-Safety}:]The factor of safety is assumed to be constant across a whole slip surface. \hyperref[GD:mobShr]{GD: mobShr} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Soil-Layer-Homogeneous}:]The different layers of the soil are homogeneous, with consistent soil properties throughout.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Soil-Layer-Homogeneous}:]The different layers of the soil are homogeneous, with consistent soil properties throughout. \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:mobShr]{GD: mobShr} \hyperref[LC_inhomogeneous]{LC: Calculate-Inhomogeneous-Soil-Layers}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Soil-Properties}:]The soil properties are independent of dry or saturated conditions, with the exception of unit weight.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Soil-Properties}:]The soil properties are independent of dry or saturated conditions, with the exception of unit weight. \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:mobShr]{GD: mobShr} \hyperref[IM:crtSlpId]{IM: crtSlpId}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Soil-Layers-Isotropic}:]Soil layers are treated as if they have isotropic properties.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Soil-Layers-Isotropic}:]Soil layers are treated as if they have isotropic properties. \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:mobShr]{GD: mobShr} \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Interslice-Norm-Shear-Forces-Linear}:]Interslice normal and shear forces have a linear relationship, proportional to a constant ($λ$) and an interslice force function ($f$) depending on x position.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Interslice-Norm-Shear-Forces-Linear}:]Interslice normal and shear forces have a linear relationship, proportional to a constant ($λ$) and an interslice force function ($f$) depending on x position. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[GD:normShrR]{GD: normShrR} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Plane-Strain-Conditions}:]The slope and slip surface extends far into and out of the geometry (z coordinate). This implies plane strain conditions, making 2D analysis appropriate.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Effective-Norm-Stress-Large}:]The effective normal stress is large enough that the resistive shear to effective normal stress relationship can be approximated as a linear relationship.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Effective-Norm-Stress-Large}:]The effective normal stress is large enough that the resistive shear to effective normal stress relationship can be approximated as a linear relationship. \hyperref[T:equilibrium]{TM: equilibrium} \hyperref[UC_2donly]{UC: 2D-Analysis-Only}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Surface-Base-Slice-between-Interslice-Straight-Lines}:]The surface and base of a slice between interslice nodes are approximated as straight lines.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Surface-Base-Slice-between-Interslice-Straight-Lines}:]The surface and base of a slice between interslice nodes are approximated as straight lines. \hyperref[T:mcShrStrgth]{TM: mcShrStrgth} \hyperref[DD:lengthLs]{DD: lengthLs} \hyperref[DD:lengthLb]{DD: lengthLb} \hyperref[DD:angleB]{DD: angleB} \hyperref[DD:angleA]{DD: angleA} \hyperref[DD:surfWtrF]{DD: surfWtrF} \hyperref[DD:baseWtrF]{DD: baseWtrF}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Seismic-Force}:]There is no seismic force acting on the slope.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Seismic-Force}:]There is no seismic force acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Surface-Load}:]There is no imposed surface, load and therefore no external force, acting on the slope.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Surface-Load}:]There is no imposed surface, load and therefore no external force, acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -377,7 +377,7 @@ Notes & The stability metric of the slope, known as the factor of safety ($FS$),
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[GD:mobShr]{GD: mobShr}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -403,7 +403,7 @@ Notes & For a body in static equilibrium, the net forces and net moments acting 
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[GD:normForcEq]{GD: normForcEq} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:bsShrFEq]{GD: bsShrFEq}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -430,7 +430,7 @@ Notes & For a soil under stress it will exert a shear resistive strength based o
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[GD:resShr]{GD: resShr}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -455,7 +455,7 @@ Notes & $σ$ is the total stress a soil mass needs to maintain itself as a rigid
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[GD:resShr]{GD: resShr}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{General Definitions}
@@ -493,7 +493,7 @@ Notes & This equation satisfies \hyperref[T:equilibrium]{TM: equilibrium} in the
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -528,7 +528,7 @@ Notes & This equation satisfies \hyperref[T:equilibrium]{TM: equilibrium} in the
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -558,7 +558,7 @@ Notes & The Mohr-Coulomb resistive shear strength of a slice $τ$ from \hyperref
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[GD:mobShr]{GD: mobShr}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -590,7 +590,7 @@ Notes & From the definition of the factor of safety in \hyperref[T:factOfSafety]
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -625,7 +625,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -656,7 +656,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -683,7 +683,7 @@ Notes & The assumption for the Morgenstern Price method (\hyperref[A:Interslice-
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -720,7 +720,7 @@ Notes & For a slice of mass in the slope the moment equilibrium to satisfy \hype
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Definitions}
@@ -760,7 +760,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[GD:momentEql]{GD: momentEql}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -796,7 +796,7 @@ Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Sur
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -832,7 +832,7 @@ Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Sur
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -867,7 +867,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -898,7 +898,7 @@ Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Sur
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -929,7 +929,7 @@ Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Sur
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -957,7 +957,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -988,7 +988,7 @@ Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Sur
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -1019,7 +1019,7 @@ Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Sur
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[GD:momentEql]{GD: momentEql}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -1048,7 +1048,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -1077,7 +1077,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -1107,7 +1107,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -1135,7 +1135,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & 
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -1163,7 +1163,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & 
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Instance Models}
@@ -1205,7 +1205,7 @@ Notes & Equation for the Factor of Safety is the ratio between resistive and mob
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Using equation (21) from \hyperref[IM:intsliceFs]{IM: intsliceFs}, rearranging, and applying the boundary condition that $G_{0}$ and $G_{n}$ are equal to $0$, an equation for the factor of safety is found as equation (12), also seen in \hyperref[IM:fctSfty]{IM: fctSfty}:
@@ -1272,7 +1272,7 @@ Notes & $λ$ is the magnitude ratio between shear and normal forces at the inter
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 From the moment equilibrium of \hyperref[GD:momentEql]{GD: momentEql} with the primary assumption for the Morgenstern-Price method of \hyperref[A:Interslice-Norm-Shear-Forces-Linear]{A: Interslice-Norm-Shear-Forces-Linear} and associated definition \hyperref[GD:normShrR]{GD: normShrR} equation equation (9) can be derived:
@@ -1328,7 +1328,7 @@ Notes & The value of the interslice normal force $G$ at interface $i$ The net fo
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Substituting the normal force equilibrium of \hyperref[GD:normForcEq]{GD: normForcEq} and the assumption \hyperref[A:Interslice-Norm-Shear-Forces-Linear]{A: Interslice-Norm-Shear-Forces-Linear} represented by \hyperref[GD:momentEql]{GD: momentEql} into the effective normal force definition from \hyperref[GD:normShrR]{GD: normShrR} yields equation equation (12):
@@ -1385,7 +1385,7 @@ Notes & Given the necessary slope inputs, a minimization algorithm or function $
 \\ \midrule \\
 Source & \cite{li2010}
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Constraints}
@@ -1464,7 +1464,7 @@ ${γ_{w}}$ & $\frac{\text{N}}{\text{m}^{3}}$ & unit weight of water
 \end{longtable}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
-SSA is intended to be an educational tool, so accuracy and performance are not priorities. Rather, the non-functional requirement priorities are correctness, understandability, reusability, and maintainability.
+SSA is intended to be an educational tool, so accuracy and performance are not priorities.  Rather, the non-functional requirement priorities are correctness, understandability, reusability, and maintainability.
 \section{Likely Changes}
 \label{Sec:LCs}
 \begin{itemize}

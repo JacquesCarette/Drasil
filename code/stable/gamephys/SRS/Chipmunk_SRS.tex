@@ -288,25 +288,25 @@ The instance models that govern Chipmunk2D are presented in \hyperref[Sec:IMs]{S
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}\hyperref[Sec:TMs]{Section: Theoretical Models}{]}, General Definitions {[}\hyperref[Sec:GDs]{Section: General Definitions}{]}, Data Definitions {[}\hyperref[Sec:DDs]{Section: Data Definitions}{]}, Instance Models {[}\hyperref[Sec:IMs]{Section: Instance Models}{]}, Likely Changes {[}\hyperref[Sec:LCs]{Section: Likely Changes}{]}, or Unlikely Changes {[}\hyperref[Sec:UCs]{Section: Unlikely Changes}{]}, in which the respective assumption is used.
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:objectTy}:]All objects are rigid bodies.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:objectTy}:]All objects are rigid bodies. \hyperref[DD:impulse]{DD: impulse} \hyperref[IM:transMot]{IM: transMot} \hyperref[IM:rotMot]{IM: rotMot} \hyperref[DD:ctrOfMass]{DD: ctrOfMass} \hyperref[DD:linVel]{DD: linVel} \hyperref[DD:linDisp]{DD: linDisp} \hyperref[DD:linAcc]{DD: linAcc} \hyperref[DD:impulse]{DD: impulse} \hyperref[IM:col2D]{IM: col2D} \hyperref[T:chaslesThm]{TM: ChaslesTheorem} \hyperref[DD:angVel]{DD: angVel} \hyperref[DD:angDisp]{DD: angDisp} \hyperref[DD:angAccel]{DD: angAccel}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:objectDimension}:]All objects are 2D.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:objectDimension}:]All objects are 2D. \hyperref[IM:transMot]{IM: transMot} \hyperref[IM:rotMot]{IM: rotMot} \hyperref[DD:ctrOfMass]{DD: ctrOfMass} \hyperref[T:newtonSLR]{TM: NewtonSecLawRotMot} \hyperref[DD:linVel]{DD: linVel} \hyperref[DD:linDisp]{DD: linDisp} \hyperref[DD:linAcc]{DD: linAcc} \hyperref[DD:impulse]{DD: impulse} \hyperref[IM:col2D]{IM: col2D} \hyperref[DD:angVel]{DD: angVel} \hyperref[DD:angDisp]{DD: angDisp} \hyperref[DD:angAccel]{DD: angAccel}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:coordinateSystemTy}:]The library uses a Cartesian coordinate system.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:axesDefined}:]The axes are defined using right-handed coordinate system.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:axesDefined}:]The axes are defined using right-handed coordinate system. \hyperref[IM:rotMot]{IM: rotMot} \hyperref[DD:impulse]{DD: impulse} \hyperref[IM:col2D]{IM: col2D}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:collisionType}:]All rigid bodies collisions are vertex-to-edge collisions.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:collisionType}:]All rigid bodies collisions are vertex-to-edge collisions. \hyperref[lcEC]{LC: Expanded-Collisions} \hyperref[DD:impulse]{DD: impulse} \hyperref[IM:col2D]{IM: col2D}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:dampingInvolvement}:]There is no damping involved throughout the simulation.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:dampingInvolvement}:]There is no damping involved throughout the simulation. \hyperref[IM:transMot]{IM: transMot} \hyperref[IM:rotMot]{IM: rotMot} \hyperref[DD:linVel]{DD: linVel} \hyperref[DD:linDisp]{DD: linDisp} \hyperref[DD:linAcc]{DD: linAcc} \hyperref[lcID]{LC: Include-Dampening} \hyperref[IM:col2D]{IM: col2D} \hyperref[DD:angVel]{DD: angVel} \hyperref[DD:angDisp]{DD: angDisp} \hyperref[DD:angAccel]{DD: angAccel}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:constraintsAndJointsInvolvement}:]There are no constraints and joints involved throughout the simulation.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:constraintsAndJointsInvolvement}:]There are no constraints and joints involved throughout the simulation. \hyperref[IM:transMot]{IM: transMot} \hyperref[IM:rotMot]{IM: rotMot} \hyperref[lcIJC]{LC: Include-Joints-Constraints} \hyperref[IM:col2D]{IM: col2D}.
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -334,7 +334,7 @@ Notes & The net force $\mathbf{F}$ (N) on a rigid body is proportional to the ac
 \\ \midrule \\
 Source & 
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -359,7 +359,7 @@ Notes & Every action has an equal and opposite reaction. In other words, the for
 \\ \midrule \\
 Source & 
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -389,7 +389,7 @@ Notes & Two rigid bodies in the universe attract each other with a force $\mathb
 \\ \midrule \\
 Source & 
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -416,7 +416,7 @@ Notes & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of 
 \\ \midrule \\
 Source & 
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -442,7 +442,7 @@ Notes & The net torque $τ$ (Nm) on a rigid body is proportional to its angular 
 \\ \midrule \\
 Source & 
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{General Definitions}
@@ -480,7 +480,7 @@ Notes & \hyperref[A:objectTy]{A: objectTy}
 \\ \midrule \\
 Source & 
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[IM:transMot]{IM: transMot} \hyperref[IM:col2D]{IM: col2D}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -512,7 +512,7 @@ Notes & \hyperref[A:objectTy]{A: objectTy}
 \\ \midrule \\
 Source & 
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[IM:transMot]{IM: transMot}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -544,7 +544,7 @@ Notes & \hyperref[A:objectTy]{A: objectTy}
 \\ \midrule \\
 Source & 
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[IM:transMot]{IM: transMot}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -576,7 +576,7 @@ Notes & \hyperref[A:objectTy]{A: objectTy}
 \\ \midrule \\
 Source & 
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[IM:transMot]{IM: transMot}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -608,7 +608,7 @@ Notes & \hyperref[A:objectTy]{A: objectTy}
 \\ \midrule \\
 Source & 
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[IM:rotMot]{IM: rotMot}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -640,7 +640,7 @@ Notes & \hyperref[A:objectTy]{A: objectTy}
 \\ \midrule \\
 Source & 
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[IM:rotMot]{IM: rotMot}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -672,7 +672,7 @@ Notes & \hyperref[A:objectTy]{A: objectTy}
 \\ \midrule \\
 Source & 
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[IM:rotMot]{IM: rotMot}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -713,7 +713,7 @@ Notes & \hyperref[A:objectTy]{A: objectTy}
 \\ \midrule \\
 Source & 
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & \hyperref[IM:col2D]{IM: col2D}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -744,7 +744,7 @@ Notes & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of 
 \\ \midrule \\
 Source & 
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Instance Models}
@@ -798,7 +798,7 @@ Notes & The above equation expresses the total acceleration of the rigid body \h
 \\ \midrule \\
 Source & 
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -847,7 +847,7 @@ Notes & The above equation for the total angular acceleration of the rigid body 
 \\ \midrule \\
 Source & 
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -900,7 +900,7 @@ Notes & This instance model is based on our assumptions regarding rigid body \hy
 \\ \midrule \\
 Source & 
 \\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Constraints}
@@ -971,7 +971,7 @@ This section provides the functional requirements, the business tasks that the s
 \end{itemize}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
-Games are resource intensive, so performance is a high priority. Other non-functional requirements that are a priority are: correctness, understandability, portability, reliability, and maintainability.
+Games are resource intensive, so performance is not a priority.  Rather than performance, the non-functional requirement priorities are correctness, understandability, portability, reliability, and maintainability.
 \section{Likely Changes}
 \label{Sec:LCs}
 This section lists the likely changes to be made to the game physics library.
@@ -1005,7 +1005,46 @@ Free open source 3D game physics libraries include:
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceyReqGoalsOther]{Table:TraceyReqGoalsOther} shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. \hyperref[Table:TraceyAssumpsOther]{Table:TraceyAssumpsOther} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. \hyperref[Table:TraceyItemsSecs]{Table:TraceyItemsSecs} shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey]{Table:Tracey} shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. \hyperref[Table:TraceyReqGoalsOther]{Table:TraceyReqGoalsOther} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. \hyperref[Table:TraceyAssumpsOther]{Table:TraceyAssumpsOther} shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l}
+\toprule
+ & \hyperref[reqVPC]{FR: Verify-Physical\_Constraints} & \hyperref[IM:rotMot]{IM: rotMot} & \hyperref[DD:impulse]{DD: impulse} & \hyperref[IM:col2D]{IM: col2D} & \hyperref[lcEC]{LC: Expanded-Collisions} & \hyperref[IM:transMot]{IM: transMot} & \hyperref[lcIJC]{LC: Include-Joints-Constraints} & \hyperref[DD:linVel]{DD: linVel} & \hyperref[DD:linDisp]{DD: linDisp} & \hyperref[DD:linAcc]{DD: linAcc} & \hyperref[lcID]{LC: Include-Dampening} & \hyperref[DD:angVel]{DD: angVel} & \hyperref[DD:angDisp]{DD: angDisp} & \hyperref[DD:angAccel]{DD: angAccel} & \hyperref[DD:ctrOfMass]{DD: ctrOfMass} & \hyperref[T:newtonSLR]{TM: NewtonSecLawRotMot} & \hyperref[DD:impulse]{DD: impulse} & \hyperref[T:chaslesThm]{TM: ChaslesTheorem}
+\\
+\midrule
+\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:angAccel]{DD: angAccel} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:angDisp]{DD: angDisp} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:angVel]{DD: angVel} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[A:axesDefined]{A: axesDefined} &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[A:collisionType]{A: collisionType} &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[A:constraintsAndJointsInvolvement]{A: constraintsAndJointsInvolvement} &  & X &  & X &  & X & X &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[A:dampingInvolvement]{A: dampingInvolvement} &  & X &  & X &  & X &  & X & X & X & X & X & X & X &  &  &  & 
+\\
+\hyperref[DD:impulse]{DD: impulse} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:linAcc]{DD: linAcc} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:linDisp]{DD: linDisp} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:linVel]{DD: linVel} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[A:objectDimension]{A: objectDimension} &  & X & X & X &  & X &  & X & X & X &  & X & X & X & X & X &  & 
+\\
+\hyperref[A:objectTy]{A: objectTy} &  & X & X & X &  & X &  & X & X & X &  & X & X & X & X &  & X & X
+\\
+\hyperref[DD:ctrOfMass]{DD: ctrOfMass} &  &  &  & X &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
+\label{Table:Tracey}
+\end{longtable}
 \begin{longtable}{l l l l l l l l}
 \toprule
  & IM1 (\hyperref[IM:transMot]{IM: transMot}) & IM2 (\hyperref[IM:rotMot]{IM: rotMot}) & IM3 (\hyperref[IM:col2D]{IM: col2D}) & R1 (\hyperref[reqSS]{FR: Simulation-Space}) & R4 (\hyperref[reqIIC]{FR: Input-Initial-Conditions}) & R7 (\hyperref[reqISP]{FR: Input-Surface-Properties}) & Data Constraints (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification})

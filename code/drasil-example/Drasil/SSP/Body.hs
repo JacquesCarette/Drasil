@@ -7,16 +7,19 @@ import Language.Drasil.Development (UnitDefn, unitWrapper) -- FIXME
 
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
+import qualified Data.Map as Map
 
 import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..), 
   LCsSec(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), --TSIntro, 
   TSIntro(..), UCsSec(..), Fields, Field(..), SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
-  SCSSub(..), GSDSec(..), GSDSub(..),
+  SCSSub(..), GSDSec(..), GSDSub(..), 
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc,
   mkEnumSimpleD, nonFuncReqF, outDataConstTbl, probDescF, reqF, termDefnF,
-  tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc,
-  goalStmt_label, physSystDescription_label)
+  tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc, generateTraceMap,
+  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
+  generateTraceTable, goalStmt_label, physSystDescription_label, generateTraceMap')
 
 import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
   physSyst, assumpt)
@@ -32,7 +35,7 @@ import Data.Drasil.Concepts.Math (equation, surface, mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Concepts.Physics (fbd, force, strain, stress, physicCon)
 import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability, 
-  performanceSpd, program, reusability, understandability, softwarecon)
+  performanceSpd, program, reusability, understandability, softwarecon, performance)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce, solidcon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Software.Products (sciCompS, prodtcon)
@@ -134,15 +137,53 @@ mkSRS = RefSec (RefProg intro
           )
         ]
       ):
-  map Verbatim [req] ++ [LCsSec $ LCsProg likelyChanges_SRS]
+    ReqrmntSec (ReqsProg [
+    FReqsSub funcReqList,
+    NonFReqsSub [accuracy,performance] (ssppriorityNFReqs) -- The way to render the NonFReqsSub is right for here, fixme.
+    (S "SSA is intended to be an educational tool")
+    (S "")]) :
+  [LCsSec $ LCsProg likelyChanges_SRS]
   ++ [UCsSec $ UCsProg unlikelyChanges_SRS] ++ [Verbatim aux_cons] ++ (Bibliography : [])
 
+ssp_label :: TraceMap
+ssp_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ sspRequirements ++ likelyChgs ++ unlikelyChgs)
+ 
+ssp_refby :: RefbyMap
+ssp_refby = generateRefbyMap ssp_label
+
+ssp_datadefn :: DatadefnMap
+ssp_datadefn = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromDD $ getSCSSub mkSRS
+
+ssp_insmodel :: InsModelMap
+ssp_insmodel = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromIM $ getSCSSub mkSRS
+
+ssp_gendef :: GendefMap
+ssp_gendef = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromGD $ getSCSSub mkSRS
+
+ssp_theory :: TheoryModelMap
+ssp_theory = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromTM $ getSCSSub mkSRS
+
+ssp_assump :: AssumptionMap
+ssp_assump = Map.fromList $ map (\x -> (x ^. uid, x)) newAssumptions
+
+ssp_concins :: ConceptInstanceMap
+ssp_concins = Map.fromList $ map (\x -> (x ^. uid, x)) (sspRequirements ++ likelyChgs ++ unlikelyChgs)
+
+ssp_section :: SectionMap
+ssp_section = Map.fromList $ map (\x -> (x ^. uid, x)) ssp_sec
+
+ssp_sec :: [Section]
+ssp_sec = extractSection ssp_srs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
   
 ssp_code :: CodeSpec
 ssp_code = codeSpec ssp_si [sspInputMod]
+
+ssppriorityNFReqs :: [ConceptChunk]
+ssppriorityNFReqs = [correctness, understandability, reusability,
+  maintainability]
 
 
 -- SYMBOL MAP HELPERS --
@@ -153,11 +194,15 @@ sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms ++
   ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals
   ++ map nw educon ++ map nw compcon ++ [nw algorithm, nw ssp])
-  (map cw sspSymbols ++ srsDomains) this_si
+  (map cw sspSymbols ++ srsDomains) this_si ssp_label ssp_refby
+  ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump ssp_concins
+  ssp_section (head ([] :: [LabelledContentMap]))
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) ssp_label ssp_refby
+ ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump ssp_concins
+ ssp_section (head ([] :: [LabelledContentMap]))
 
 sspRefDB :: ReferenceDB
 sspRefDB = rdb newAssumptions sspCitations (sspRequirements ++
@@ -355,6 +400,7 @@ physSystIntro what how p1 p2 p3 indexref = foldlSP [
   phrase p1 `sOr` phrase p2, S "is being used is shown in", makeRef2S indexref]
 
 phys_sys_desc_bullets = LlC $ enumSimple physSystDescription_label 1 (short Doc.physSyst) physSystDescriptionListPhysys
+
 physSystDescriptionListPhysys :: [Sentence]
 physSystDescriptionListPhysys1 :: Sentence
 physSystDescriptionListPhysys2 :: Sentence
@@ -433,6 +479,8 @@ slipVert  = verticesConst $ phrase slip
 slopeVert = verticesConst $ phrase slope
 -}
 {-input and output tables-}
+traceTableAll :: LabelledContent
+traceTableAll = generateTraceTable sspSymMap
 
 data_constraint_Table2, data_constraint_Table3 :: LabelledContent
 data_constraint_Table2 = inDataConstTbl sspInputs --FIXME: issue #295
@@ -442,8 +490,11 @@ data_constraint_Table3 = outDataConstTbl sspOutputs
 req = reqF [func_req, non_func_req]
 
 -- SECTION 5.1 --
-func_req = SRS.funcReq ((mkEnumSimpleD sspRequirements) ++
-  [LlC sspInputDataTable]) []
+func_req = SRS.funcReq funcReqList []
+
+funcReqList :: [Contents]
+funcReqList = (mkEnumSimpleD sspRequirements) ++
+  [LlC sspInputDataTable]
 
 -- SECTION 5.2 --
 non_func_req = nonFuncReqF [accuracy, performanceSpd]

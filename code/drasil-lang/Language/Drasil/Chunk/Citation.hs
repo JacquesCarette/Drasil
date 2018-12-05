@@ -13,6 +13,7 @@ module Language.Drasil.Chunk.Citation
   , HasCitation(getCitations)
   ) where
 
+import Data.Drasil.IdeaDicts (knowledgemng)
 import Language.Drasil.People (People)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)

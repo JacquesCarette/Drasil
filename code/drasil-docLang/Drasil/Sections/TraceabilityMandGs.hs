@@ -9,10 +9,10 @@ import Data.Drasil.SentenceStructures (ofThe', foldlSent, tableShows)
 import Data.Drasil.Concepts.Documentation (purpose, component, column,
   reference, traceyGraph, traceyMatrix, item, dependency)
 import Data.Drasil.Concepts.Math ( graph)
-import Data.Drasil.Concepts.Documentation(item, section_)
+import Data.Drasil.Concepts.Documentation(section_)
 import Data.Drasil.Utils (makeTMatrix)
 import qualified Drasil.DocLang.SRS as SRS
-import Data.List (nub, sort, sortBy)
+import Data.List (nub)
 import qualified Data.Map as Map
 import Data.Drasil.SentenceStructures (showingCxnBw)
 import Control.Lens ((^.))

@@ -36,7 +36,7 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
 import Data.Drasil.Concepts.Software (program, softwarecon, performance, correctness, verifiability,
-  understandability, reusability, maintainability, portability)
+  understandability, reusability, maintainability)
 import Data.Drasil.Concepts.Physics (physicCon)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Software.Products (sciCompS, compPro, prodtcon)

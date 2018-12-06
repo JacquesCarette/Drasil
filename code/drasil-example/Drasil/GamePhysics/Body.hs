@@ -60,8 +60,8 @@ import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Quantities.Physics as QP (angularVelocity, force, 
   linearVelocity, position, time, velocity)
 import Drasil.GamePhysics.Assumptions(newAssumptions)
-import Drasil.GamePhysics.Changes (likelyChanges, likelyChangesList',
-  unlikelyChanges, unlikelyChangesList', unlikelyChangeswithIntro, likelyChangesListwithIntro)
+import Drasil.GamePhysics.Changes (unlikelyChangesList', unlikelyChangeswithIntro,
+ likelyChangesListwithIntro, likelyChangesList')
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
 import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs, dataDefns)
 import Drasil.GamePhysics.IMods (iModels_new, im1_new, im2_new, im3_new)

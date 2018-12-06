@@ -16,11 +16,9 @@ module Language.Drasil.ChunkDB
 
 import Control.Lens ((^.), Lens', makeLenses)
 import Data.Maybe (maybeToList)
-import Data.List (nub, concat, union, elem, length, zip, head)
-import Data.Tuple (fst, snd)
 import Language.Drasil.UID (UID)
-import Language.Drasil.Classes (Concept, ConceptDomain, HasUID(uid), Idea, IsUnit, HasDerivation(derivations)
-  ,HasAdditionalNotes(getNotes), Quantity)
+import Language.Drasil.Classes (Concept, ConceptDomain, HasUID(uid), Idea, IsUnit,
+  Quantity)
 import Language.Drasil.Chunk.AssumpChunk (AssumpChunk)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Document.Core (LabelledContent)
@@ -33,7 +31,6 @@ import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Document (Section)
 import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(getUnit), unitWrapper)
 import qualified Data.Map as Map
-import Language.Drasil.Sentence.Extract(lnames)
 
 -- The misnomers below are not actually a bad thing, we want to ensure data can't
 -- be added to a map if it's not coming from a chunk, and there's no point confusing

@@ -69,6 +69,7 @@ executable nopcm
   other-modules:
       Drasil.NoPCM.Assumptions
     , Drasil.NoPCM.Body
+    , Drasil.NoPCM.Changes
     , Drasil.NoPCM.Unitals
     , Drasil.NoPCM.Definitions
     , Drasil.NoPCM.DataDesc
@@ -77,6 +78,7 @@ executable nopcm
     , Drasil.SWHS.Assumptions
     , Drasil.SWHS.Labels
     , Drasil.SWHS.Body
+    , Drasil.SWHS.Changes
     , Drasil.SWHS.Concepts
     , Drasil.SWHS.DataDefs
     , Drasil.SWHS.DataDesc

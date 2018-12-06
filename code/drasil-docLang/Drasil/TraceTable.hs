@@ -7,13 +7,10 @@
 -- instead.
 module Drasil.TraceTable where
 
-import Control.Lens ((^.),makeLenses)
+import Control.Lens ((^.))
 import Drasil.DocumentLanguage
 import Language.Drasil
 import qualified Data.Map as Map
-import Data.List (sortBy)
-import Data.Maybe (fromMaybe)
-import Data.Drasil.SentenceStructures (foldlSent)
 
 
 traceMap :: (HasUID l) => (l -> [Sentence]) -> [l] -> TraceMap
@@ -31,7 +28,7 @@ getTraceMapFromSSDSec _                 = error "No SSDSub found."
 getTraceMapFromSSDSub :: [SSDSub] -> SolChSpec
 getTraceMapFromSSDSub ((SSDSolChSpec s):_) = s
 getTraceMapFromSSDSub (hd:tl)              = getTraceMapFromSSDSub tl
-getTraceMapFromSSDSub _                    = error "No SolChSpec found."
+getTraceMapFromSSDSub []                    = error "No SolChSpec found."
 
 getTraceMapFromSolCh :: SolChSpec -> [SCSSub]
 getTraceMapFromSolCh (SCSProg sub) = sub

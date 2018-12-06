@@ -44,7 +44,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
   SolChSpec(..), SSDSec(..), DocSection(..),
   IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
-  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
+  ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), LCsSec(..), UCsSec(..),
   RefSec(RefProg), RefTab(TAandA, TUnits), TraceabilitySec(TraceabilityProg),
   TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
@@ -80,6 +80,7 @@ import Drasil.SWHS.Unitals (coil_HTC, coil_HTC_max, coil_HTC_min, coil_SA,
   w_density_max, w_density_min, w_E, w_mass, w_vol, specParamValList, swhsUC)
 
 import Drasil.NoPCM.Assumptions
+import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
 import Drasil.NoPCM.DataDesc (inputMod)
 import Drasil.NoPCM.Definitions (srs_swhs, ht_trans)
 import Drasil.NoPCM.GenDefs (rocTempSimp, swhsGDs)
@@ -121,7 +122,7 @@ nopcm_Constraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
   -- w_E, temp_W
 
 probDescription, termAndDefn, physSystDescription, goalStates,
-  reqS, funcReqs, likelyChgsSect, unlikelyChgsSect, specParamVal :: Section
+  reqS, funcReqs, specParamVal :: Section
 
 
 -------------------
@@ -166,14 +167,16 @@ mkSRS = RefSec (RefProg intro
   NonFReqsSub [performance] (swhspriorityNFReqs) -- The way to render the NonFReqsSub is right for here, fixme.
   (S "This problem is small in size and relatively simple")
   (S "Any reasonable implementation will be very quick and use minimal storage.")]) :
-  map Verbatim [likelyChgsSect, unlikelyChgsSect] ++
+  LCsSec (LCsProg likelyChgsList) :
+  UCsSec (UCsProg unlikelyChgsList) :
   TraceabilitySec
     (TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
   (map UlC traceIntro2) ++ [LlC traceFig1, LlC traceFig2]) []) :
   map Verbatim [specParamVal] ++ (Bibliography : [])
 
 nopcm_label :: TraceMap
-nopcm_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ reqs ++ likelyChgs ++ unlikelyChgs)
+nopcm_label = Map.union (generateTraceMap mkSRS)
+ (generateTraceMap' $ reqs ++ [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH] ++ unlikelyChgs)
  
 nopcm_refby :: RefbyMap
 nopcm_refby = generateRefbyMap nopcm_label
@@ -194,7 +197,8 @@ nopcm_assump :: AssumptionMap
 nopcm_assump = Map.fromList $ map (\x -> (x ^. uid, x)) (assumps_Nopcm_list_new ++ newAssumptions)
 
 nopcm_concins :: ConceptInstanceMap
-nopcm_concins = Map.fromList $ map (\x -> (x ^. uid, x)) (reqs ++ likelyChgs ++ unlikelyChgs)
+nopcm_concins = Map.fromList $ map (\x -> (x ^. uid, x))
+ (reqs ++ [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH] ++ unlikelyChgs)
 
 nopcm_section :: SectionMap
 nopcm_section = Map.fromList $ map (\x -> (x ^. uid, x)) nopcm_sec
@@ -591,81 +595,14 @@ funcReqsListWordsNum =
 ----------------------------
 --Section 6 : LIKELY CHANGES
 ----------------------------
-
-likelyChgsSect = SRS.likeChg likelyChgsList []
-
 likelyChgsList :: [Contents]
-likelyChgsList = mkEnumSimpleD likelyChgs
-
-likelyChgs :: [ConceptInstance]
-likelyChgs = [likeChgTCVOD, likeChgTCVOL, likeChgDT, likeChgTLH]
-
-likeChgDT :: ConceptInstance
-likeChgDT = cic "likeChgDT" (
-  (makeRef2S newA9NoPCM) :+: S "- The" +:+ phrase model +:+
-  S "currently only accounts for charging of the tank. That is, increasing the" +:+ phrase temp +:+
-  S "of the water to match the" +:+ phrase temp +:+ S "of the coil. A more complete"  
-  +:+ phrase model +:+. S "would also account for discharging of the tank") 
-  "Discharging-Tank" likeChgDom
--- likeChg4 = LikelyChange (LCChunk (nw $ npnc "likeChg4" $
-  -- nounPhraseSent (makeRefS assump11 :+: S "- Any real" +:+ phrase tank +:+
-  -- S "cannot be perfectly insulated and will lose" +:+. phrase heat))
-  -- []) EmptyS
-
----- Empty list is supposed to take a ModuleChunk. Not sure what to put there.
--- likeChg1 = LikelyChange (LCChunk (nw $ npnc "likeChg1" $
-  -- nounPhraseSent (makeRefS assump7 :+: S "- The" +:+ phrase temp_C +:+
-  -- S "will change over" +:+ (S "course" `ofThe` S "day, depending") +:+
-  -- S "on the" +:+ phrase energy +:+ S "received from the sun."))
-  -- []) EmptyS
--- likeChg2 = LikelyChange (LCChunk (nw $ npnc "likeChg2" $
-  -- nounPhraseSent (makeRefS assump8 :+: S "- The" +:+ phrase temp_C +:+
-  -- S "will actually change along its length as the" +:+ phrase water +:+
-  -- S "within it cools."))
-  -- []) EmptyS
-
--- s6_likeChg_list = [likeChg1, likeChg2, likeChg3, likeChg4]
--- likeChg1, likeChg2, likeChg3, likeChg4 :: Contents
-
--- likeChg1 = [s6_start 7, S "The", phrase temp_C,
-  -- S "will change over", S "course" `ofThe` S "day, depending",
-  -- S "on the", phrase energy, S "received from the sun"]
-
--- likeChg2 = [s6_start 8, S "The", phrase temp_C,
-  -- S "will actually change along its length as the",
-  -- phrase water, S "within it cools"]
-
--- likeChg3 = [s6_start 9, S "The", phrase model +:+.
-  -- S "currently only accounts for charging of the tank",
-  -- S "A more complete", phrase model, S "would also",
-  -- S "account for discharging of the tank"]
-
--- likeChg4 = [s6_start 11, S "Any real", phrase tank,
-  -- S "cannot be perfectly insulated and will lose",
-  -- phrase heat]
+likelyChgsList = mkEnumSimpleD $ [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH]
 
 -------------------------------
 --Section 6b : UNLIKELY CHANGES
 -------------------------------
-
-unlikelyChgsSect = SRS.unlikeChg unlikelyChgsList []
-
-unlikelyChgs :: [ConceptInstance]
-unlikelyChgs = [unlikeChgWFS, unlikeChgNIHG]
-
 unlikelyChgsList :: [Contents]
 unlikelyChgsList = mkEnumSimpleD unlikelyChgs
-
-unlikeChgWFS :: ConceptInstance
-unlikeChgWFS = cic "unlikeChgWFS" (
-  foldlSent [chgsStart newA14, S "It is unlikely for the change of",
-  phrase water, S "from liquid to a solid, or from liquid to gas to be considered"])
-  "Water-Fixed-States" unlikeChgDom
-
-unlikeChgNIHG :: ConceptInstance
-unlikeChgNIHG = cic "unlikeChgNIHG" (
-  foldlSent [chgsStart newA16, S "Is used for the derivations of",
-  makeRef2S eBalanceOnWtr] ) "No-Internal-Heat-Generation" unlikeChgDom
 
 ----------------------------------------------
 --Section 7:  TRACEABILITY MATRICES AND GRAPHS
@@ -704,7 +641,7 @@ traceDataDefs = ["DD1"]
 traceDataDefRef = map makeRef2S [dd1HtFluxC]
 
 traceLikelyChg = ["LC1", "LC2", "LC3", "LC4"]
-traceLikelyChgRef = map makeRef2S likelyChgs
+traceLikelyChgRef = map makeRef2S $ [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH]
 
 {-Traceability Matrix 1-}
 

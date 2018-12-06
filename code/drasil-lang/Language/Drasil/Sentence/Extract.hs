@@ -61,11 +61,10 @@ lnames  (P _)          = []
 lnames  (Ref _)  = []
 lnames  (Ref2 (Reference2 u _ _ _)) = [u] -- This should be fixed.
 lnames  ((:+:) a b)    = (lnames  a) ++ (lnames  b)
-lnames  (Quote a)      = []
-lnames  (E a)          = []
+lnames  (Quote _)      = []
+lnames  (E _)          = []
 lnames  (EmptyS)       = []
 
 lnames'  :: [Sentence] -> [UID]
 lnames'  (hd:tl) = lnames  hd ++ lnames'  tl
-lnames'  (hd:[]) = lnames  hd
 lnames'  []      = []

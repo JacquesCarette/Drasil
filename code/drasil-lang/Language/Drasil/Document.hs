@@ -1,12 +1,9 @@
 {-# Language TemplateHaskell #-}
 -- | Document Description Language
 module Language.Drasil.Document where
-import Control.Lens((^.))
-
 import Data.Drasil.IdeaDicts (documentc)
 import Language.Drasil.Document.Core
 import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel), HasShortName(shortname))
-import Language.Drasil.UID (UID)
 import Language.Drasil.Label (Label)
 import Language.Drasil.Sentence (Sentence(..))
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)

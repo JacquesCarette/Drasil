@@ -65,11 +65,11 @@ import Drasil.SSP.Unitals (fs, index, numbSlices, sspConstrained, sspInputs,
   sspOutputs, sspSymbols)
 
 --type declarations for sections--
-req, aux_cons :: Section
+aux_cons :: Section
 
 table_of_symbol_intro :: [TSIntro]
 
-problem_desc, termi_defi, phys_sys_desc, goal_stmt, func_req, non_func_req :: Section
+problem_desc, termi_defi, phys_sys_desc, goal_stmt :: Section
 goals_list, termi_defi_list, phys_sys_desc_p1, phys_sys_desc_bullets,
   phys_sys_desc_p2 :: Contents
 
@@ -487,19 +487,13 @@ data_constraint_Table2 = inDataConstTbl sspInputs --FIXME: issue #295
 data_constraint_Table3 = outDataConstTbl sspOutputs
 
 -- SECTION 5 --
-req = reqF [func_req, non_func_req]
 
 -- SECTION 5.1 --
-func_req = SRS.funcReq funcReqList []
-
 funcReqList :: [Contents]
 funcReqList = (mkEnumSimpleD sspRequirements) ++
   [LlC sspInputDataTable]
 
 -- SECTION 5.2 --
-non_func_req = nonFuncReqF [accuracy, performanceSpd]
-  [correctness, understandability, reusability, maintainability] r EmptyS
-  where r = (short ssa) +:+ S "is intended to be an educational tool"
 
 -- SECTION 6 --
 --Likely Changes is automatically generated

@@ -57,7 +57,7 @@ import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, item
   makeTMatrix, noRefs, prodUCTbl)
   
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
-import Drasil.GlassBR.Changes (likelyChgs, likelyChgsList, unlikelyChgs,
+import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs,
   unlikelyChgsList)
 import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, gLassBR, 
   ptOfExplsn, stdOffDist, glasscon, glasscon')

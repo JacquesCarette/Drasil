@@ -241,6 +241,3 @@ instance Show Field where
   show DefiningEquation  = "Equation"
   show (Description _ _) = "Description"
   show Notes             = "Notes"
-
-fixme :: [Contents]
-fixme = [UlC $ ulcc $ Paragraph $ S "FIXME: This needs to be filled in"]

@@ -22,7 +22,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   generateTraceMap')
 
 import qualified Drasil.DocLang.SRS as SRS (datCon, dataDefnLabel, indPRCase, 
-  reference, valsOfAuxCons, assumpt)
+  reference, valsOfAuxCons, assumpt, inModel)
 
 import Data.Drasil.Concepts.Computation (computerApp, inParam, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
@@ -154,7 +154,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     [IPurpose (purpOfDocIntro document gLassBR glaSlab),
      IScope incScoR endScoR,
      IChar (rdrKnldgbleIn glBreakage blastRisk) undIR appStanddIR,
-     IOrgSec orgOfDocIntro dataDefn SRS.dataDefnLabel orgOfDocIntroEnd]) :
+     IOrgSec orgOfDocIntro dataDefn (SRS.inModel [] []) orgOfDocIntroEnd]) :
   StkhldrSec
     (StkhldrProg2
       [Client gLassBR (S "a" +:+ phrase company

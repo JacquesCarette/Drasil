@@ -114,12 +114,12 @@ intReaderIntro topic1 topic2 progName stdrd sectionRef =
   S "can have a lower level of expertise, as explained in", (makeRef2S sectionRef)]]
 
 -- | Doc.organization of the document section constructor.  => Sentence -> c -> Section -> Sentence -> Section
-orgSec :: NamedIdea c => Sentence -> c -> Label -> Sentence -> Section
+orgSec :: NamedIdea c => Sentence -> c -> Section -> Sentence -> Section
 orgSec i b s t = SRS.orgOfDoc (orgIntro i b s t) []
 
 -- Intro -> Bottom (for bottom up approach) -> Section that contains bottom ->
 --    trailing sentences -> [Contents]
-orgIntro :: NamedIdea c => Sentence -> c -> Label -> Sentence -> [Contents]
+orgIntro :: NamedIdea c => Sentence -> c -> Section -> Sentence -> [Contents]
 orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
           intro, S "The presentation follows the standard pattern of presenting",
           (foldlsC $ map (plural) [Doc.goal, theory, definition]) `sC` S "and assumptions.",

@@ -1,11 +1,9 @@
 {-# Language TemplateHaskell #-}
 -- | Document Description Language
 module Language.Drasil.Document where
-
 import Data.Drasil.IdeaDicts (documentc)
 import Language.Drasil.Document.Core
-import Language.Drasil.Classes (HasLabel(getLabel), HasShortName(shortname))
-
+import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel), HasShortName(shortname))
 import Language.Drasil.Label (Label)
 import Language.Drasil.Sentence (Sentence(..))
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
@@ -27,6 +25,7 @@ data Section = Section
              }
 makeLenses ''Section
 
+instance HasUID        Section where uid = lab . uid
 instance HasLabel      Section where getLabel = lab
 instance HasShortName  Section where shortname = lab . shortname
 
@@ -69,6 +68,16 @@ section title intro secs lbe = Section title (map Con intro ++ map Sub secs) lbe
 
 section'' :: Sentence -> [Contents] -> [Section] -> Label -> Section
 section'' title intro secs lbe = section title intro secs lbe
+
+extractSection :: Document -> [Section]
+extractSection (Document _ _ sec) = concatMap getSec sec
+
+getSec :: Section -> [Section]
+getSec t@(Section _ sc _) = t : concatMap getSecCons sc
+
+getSecCons :: SecCons -> [Section]
+getSecCons (Sub sec) = getSec sec
+getSecCons (Con _)   = []
 
 -- | Figure smart constructor. Assumes 100% of page width as max width.
 fig :: Lbl -> Filepath -> RawContent

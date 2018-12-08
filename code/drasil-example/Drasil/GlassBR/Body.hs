@@ -1,7 +1,7 @@
 module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
-
+import qualified Data.Map as Map
 import Language.Drasil hiding (organization)
 import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
@@ -10,16 +10,19 @@ import Language.Drasil.Development (UnitDefn, unitWrapper) -- FIXME
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 
   InclUnits(IncludeUnits), IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), 
-  LCsSec(..), ProblemDescription(..), RefSec(RefProg), RefTab(TAandA, TUnits), 
+  LCsSec(..), LCsSec'(..), ProblemDescription(..), RefSec(RefProg), RefTab(TAandA, TUnits), 
   ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SCSSub(..), 
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
-  TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose), 
+  TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose),
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
-  outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb)
+  outDataConstTbl, physSystDesc, termDefnF, traceGIntro, tsymb, generateTraceMap,
+  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
+  generateTraceTable, goalStmt_label, characteristics_label, physSystDescription_label,
+  generateTraceMap')
 
 import qualified Drasil.DocLang.SRS as SRS (datCon, dataDefnLabel, indPRCase, 
-  reference, valsOfAuxCons, assumpt)
+  reference, valsOfAuxCons, assumpt, inModel)
 
 import Data.Drasil.Concepts.Computation (computerApp, inParam, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect, 
@@ -54,7 +57,7 @@ import Data.Drasil.Utils (bulletFlat, bulletNested, enumBullet, enumSimple, item
   makeTMatrix, noRefs, prodUCTbl)
   
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
-import Drasil.GlassBR.Changes (likelyChgs, likelyChgsList, unlikelyChgs,
+import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs,
   unlikelyChgsList)
 import Drasil.GlassBR.Concepts (acronyms, aR, blastRisk, glaPlane, glaSlab, gLassBR, 
   ptOfExplsn, stdOffDist, glasscon, glasscon')
@@ -62,7 +65,7 @@ import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns)
 import Drasil.GlassBR.IMods (glassBRsymb, gbrIMods, calofDemandi)
 import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, gbCitations, rbrtsn2012)
-import Drasil.GlassBR.Requirements (funcReqsList, funcReqs)
+import Drasil.GlassBR.Requirements (funcReqsList, funcReqs, inputGlassPropsTable)
 import Drasil.GlassBR.Symbols (symbolsForTable, this_symbols)
 import Drasil.GlassBR.TMods (gbrTMods)
 import Drasil.GlassBR.Unitals (aspect_ratio, blast, blastTy, bomb, capacity, char_weight, 
@@ -80,12 +83,49 @@ gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols ++ map nw g
   ++ map nw softwarecon ++ map nw terms ++ [nw lateralLoad, nw materialProprty]
    ++ [nw distance, nw algorithm] ++
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
-  (map cw glassBRsymb ++ Doc.srsDomains) $ map unitWrapper [metre, second, kilogram]
-  ++ map unitWrapper [pascal, newton]
+  (map cw glassBRsymb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
+  ++ map unitWrapper [pascal, newton]) glassBR_label glassBR_refby
+  glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory glassBR_assump glassBR_concins
+  glassBR_section glassBR_labelledcon
+
+glassBR_label :: TraceMap
+glassBR_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ likelyChgs ++ unlikelyChgs ++ funcReqs)
+ 
+glassBR_refby :: RefbyMap
+glassBR_refby = generateRefbyMap glassBR_label 
+
+glassBR_datadefn :: DatadefnMap
+glassBR_datadefn = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromDD $ getSCSSub mkSRS
+
+glassBR_insmodel :: InsModelMap
+glassBR_insmodel = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromIM $ getSCSSub mkSRS
+
+glassBR_gendef :: GendefMap
+glassBR_gendef = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromGD $ getSCSSub mkSRS
+
+glassBR_theory :: TheoryModelMap
+glassBR_theory = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromTM $ getSCSSub mkSRS
+
+glassBR_assump :: AssumptionMap
+glassBR_assump = Map.fromList $ map (\x -> (x ^. uid, x)) assumptions
+
+glassBR_concins :: ConceptInstanceMap
+glassBR_concins = Map.fromList $ map (\x -> (x ^. uid, x)) (likelyChgs ++ unlikelyChgs ++ funcReqs)
+
+glassBR_section :: SectionMap
+glassBR_section = Map.fromList $ map (\x -> (x ^. uid, x)) glassBR_sec
+
+glassBR_labelledcon :: LabelledContentMap
+glassBR_labelledcon = Map.fromList $ map (\x -> (x ^. uid, x)) [inputGlassPropsTable]
+
+glassBR_sec :: [Section]
+glassBR_sec = extractSection glassBR_srs
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw this_symbols)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn])
+usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw this_symbols ++ map nw check_si)
+ ([] :: [ConceptChunk]) check_si glassBR_label glassBR_refby
+  glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory glassBR_assump glassBR_concins
+  glassBR_section glassBR_labelledcon
 
 gbRefDB :: ReferenceDB
 gbRefDB = rdb assumptions gbCitations $ funcReqs ++ likelyChgs ++
@@ -114,7 +154,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     [IPurpose (purpOfDocIntro document gLassBR glaSlab),
      IScope incScoR endScoR,
      IChar (rdrKnldgbleIn glBreakage blastRisk) undIR appStanddIR,
-     IOrgSec orgOfDocIntro dataDefn SRS.dataDefnLabel orgOfDocIntroEnd]) :
+     IOrgSec orgOfDocIntro dataDefn (SRS.inModel [] []) orgOfDocIntroEnd]) :
   StkhldrSec
     (StkhldrProg2
       [Client gLassBR (S "a" +:+ phrase company
@@ -149,7 +189,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     (S "This problem is small in size and relatively simple")
     (S "Any reasonable" +:+ phrase implementation +:+.
     (S "will be very quick" `sAnd` S "use minimal storage"))]) :
-  LCsSec (LCsProg likelyChgsList) :
+  LCsSec' (LCsProg' likelyChgs) :
   UCsSec (UCsProg unlikelyChgsList) :
   TraceabilitySec
     (TraceabilityProg traceyMatrices [traceMatsAndGraphsTable1Desc, traceMatsAndGraphsTable2Desc, traceMatsAndGraphsTable3Desc]
@@ -200,7 +240,7 @@ inputDataConstraints, outputDataConstraints, traceMatsAndGraphsTable1, traceMats
 
 --------------------------------------------------------------------------------
 termsAndDescBullets :: Contents
-termsAndDescBullets = UlC $ ulcc $ Enumeration $ 
+termsAndDescBullets = UlC $ ulcc $ Enumeration$ 
   Numeric $
   noRefs $ map tAndDOnly termsWithDefsOnly
   ++
@@ -224,13 +264,14 @@ termsAndDescBulletsLoadSubSec = [Nested (at_start load :+: S "-" +:+ (load ^.def
   (map tAndDOnly $ drop 2 loadTypes)]
 
 --Used in "Goal Statements" Section--
+
 goalStmtsList :: Contents
-goalStmtsList = enumSimple 1 (short goalStmt) goalStmtsListGS1
+goalStmtsList = LlC $ enumSimple goalStmt_label 1 (short goalStmt) goalStmtsListGS1
 
 --Used in "Traceability Matrices and Graphs" Section--
 
 traceyMatrices :: [LabelledContent]
-traceyMatrices = [traceMatsAndGraphsTable1, traceMatsAndGraphsTable2, traceMatsAndGraphsTable3]
+traceyMatrices = [traceTable1, traceMatsAndGraphsTable1, traceMatsAndGraphsTable2, traceMatsAndGraphsTable3]
 
 traceyGraphs :: [LabelledContent]
 traceyGraphs = [fig_2, fig_3, fig_4]
@@ -364,7 +405,7 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 {--User Characteristics--}
 
 user_characteristics_intro :: Contents
-user_characteristics_intro = enumBullet $ map foldlSent
+user_characteristics_intro = LlC $ enumBullet characteristics_label $ map foldlSent
   [[S "The end user of GlassBR is expected to have completed at least the",
     S "equivalent of the second year of an undergraduate degree in civil engineering or structural engineering"],
   [S "The end user is expected to have an understanding of theory behind glass",
@@ -449,7 +490,7 @@ physSystDescription = physSystDesc (short gLassBR) fig_glassbr
 fig_glassbr = llcc (mkLabelRAFig "physSystImage") $ figWithWidth 
   (at_startNP $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
 
-physSystDescriptionList = enumSimple 1 (short physSyst) physSystDescriptionListPhysys
+physSystDescriptionList = LlC $ enumSimple physSystDescription_label 1 (short physSyst) physSystDescriptionListPhysys
 
 --"Dead" knowledge?
 physSystDescriptionListPhysys :: [Sentence]
@@ -506,6 +547,8 @@ outputDataConstraints = outDataConstTbl [prob_br]
 {--UNLIKELY CHANGES--}
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
+traceTable1 :: LabelledContent
+traceTable1 = generateTraceTable gbSymbMap
 
 traceMatsAndGraphsTable1Desc :: Sentence
 traceMatsAndGraphsTable1Desc = foldlList Comma List (map plural (take 3 solChSpecSubsections)) +:+.

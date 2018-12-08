@@ -24,6 +24,9 @@ likelyChanges :: Section
 likelyChangesIntro :: Contents
 likelyChangesList :: [Contents]
 
+likelyChangesListwithIntro :: [Contents]
+likelyChangesListwithIntro = [likelyChangesIntro] ++ likelyChangesList
+
 likelyChanges = SRS.likeChg ([likelyChangesIntro] ++ likelyChangesList) []
 
 likelyChangesIntro = foldlSP [S "This", phrase section_, 
@@ -66,6 +69,9 @@ likelyChangesList = mkEnumSimpleD likelyChangesList'
 
 unlikelyChanges :: Section
 unlikelyChangesIntro :: Contents
+
+unlikelyChangeswithIntro :: [Contents]
+unlikelyChangeswithIntro = [unlikelyChangesIntro] ++ unlikelyChangesList
 
 unlikelyChanges = SRS.unlikeChg ([unlikelyChangesIntro] ++ unlikelyChangesList) []
 

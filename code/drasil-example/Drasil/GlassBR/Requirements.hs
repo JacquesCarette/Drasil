@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Requirements (funcReqsList, funcReqs) where
+module Drasil.GlassBR.Requirements (funcReqsList, funcReqs, inputGlassPropsTable) where
 
 import Control.Lens ((^.))
 import Data.Function (on)

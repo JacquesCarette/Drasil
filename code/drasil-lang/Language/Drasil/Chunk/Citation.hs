@@ -48,8 +48,6 @@ instance HasFields    Citation where getFields = fields
 -- instance NamedIdea    Citation where term = ci . term
 -- instance CommonIdea   Citation where abrv = abrv . view ci
 
--- citation :: CI
--- citation  = commonIdeaWithDict "citation"  (cn' "citation")   "Citation"         [knowledgemng]
 
 -- | Smart constructor which implicitly uses EntryID as chunk i.
 cite :: EntryID -> CitationKind -> [CiteField] -> Label -> Citation

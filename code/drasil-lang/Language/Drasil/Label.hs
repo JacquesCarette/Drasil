@@ -1,6 +1,6 @@
 module Language.Drasil.Label (Label, mkLabelRA',
  mkLabelSame, mkEmptyLabel, mkURILabel, getAdd, mkLabelRAAssump', 
- mkLabelRAFig, mkLabelRASec, modifyLabelEqn,
+ mkLabelRAFig, mkLabelRASec, modifyLabelEqn, mkLabelRALst,
  getDefName, getReqName) where
 
 import Data.Char (isAscii)
@@ -85,6 +85,9 @@ modifyLabelEqn :: Label -> Label
 modifyLabelEqn lb = mkLabel ((getAdd (lb ^. getRefAdd)) ++ "Eqn")
                             (getAdd (lb ^. getRefAdd))
                             (getAdd (lb ^. getRefAdd)) EqnB
+
+mkLabelRALst :: String -> String -> Label
+mkLabelRALst r s = mkLabel (r ++ "Label") r s Lst
 
 --label constructor for Graphs and Figures
 mkLabelRAFig :: String -> Label

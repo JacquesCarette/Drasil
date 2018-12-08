@@ -3,7 +3,7 @@ module Language.Drasil.Document.Core where
 
 import Language.Drasil.Chunk.Citation (BibRef)
 
-import Language.Drasil.Classes (HasRefAddress(getRefAdd),
+import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd),
   MayHaveLabel(getMaybeLabel), HasLabel(getLabel), HasShortName(shortname))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label)
@@ -77,6 +77,7 @@ makeLenses ''UnlabelledContent
 class HasContents c where
   accessContents :: Lens' c RawContent
 
+instance HasUID        LabelledContent where uid = lbl . uid  
 instance HasRefAddress LabelledContent where getRefAdd = lbl . getRefAdd
 instance HasLabel      LabelledContent where getLabel = lbl
 instance MayHaveLabel  LabelledContent where getMaybeLabel x = Just (x ^. getLabel)

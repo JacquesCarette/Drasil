@@ -16,7 +16,7 @@ module Language.Drasil (
   , apply, apply1, apply2
   , cross, m2x2, vec2D, dgnl2x2
   -- Expr.Extract
-  , dep, names'
+  , dep, names', lnames, lnames'
   -- Expr.Precendence
   , precA, precB, eprec
   -- all the stuff from Unicode
@@ -119,7 +119,7 @@ module Language.Drasil (
   -- Document
   , Referable(..), Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListTuple
-  , LabelledContent(..), UnlabelledContent(..)
+  , LabelledContent(..), UnlabelledContent(..), extractSection
   , mkParagraph, mkRawLC
   , llcc, ulcc
   , section, fig, figWithWidth, section''
@@ -153,8 +153,14 @@ module Language.Drasil (
   , ChunkDB, cdb
   , HasSymbolTable, symbolMap, symbLookup, symbolTable
   , HasTermTable, termLookup, termTable
-  , HasDefinitionTable, conceptMap, defTable, defLookup
-  , HasUnitTable, unitMap, unitTable, collectUnits
+  , HasDefinitionTable, conceptMap, defTable, defLookup, labelledconLookup
+  , HasUnitTable, unitMap, unitTable, collectUnits, LabelledContentMap
+  , TraceMap, traceLookup, HasTraceTable(..), generateRefbyMap, RefbyMap
+  , refbyLookup, HasRefbyTable(..), DatadefnMap, InsModelMap, AssumptionMap, HasLabelledContent(..)
+  , ConceptInstanceMap, GendefMap, TheoryModelMap, datadefnLookup, insmodelLookup, sectionLookup
+  , gendefLookup, theoryModelLookup, assumptionLookup, conceptinsLookup, HasDataDefnTable(..)
+  , HasInsModelTable(..), HasGendefTable(..), HasTheoryModelTable(..), HasSectionTable(..)
+  , HasAssumpTable(..), HasConceptInstance(..), HasTheoryModelTable(..), SectionMap
   -- AssumpChunk
   , AssumpChunk, assuming, assump
   -- Reference
@@ -172,7 +178,7 @@ module Language.Drasil (
   -- Label
   , Label 
   , mkLabelRA', mkLabelSame, mkEmptyLabel, mkURILabel
-  , mkLabelRAAssump', mkLabelRAFig, mkLabelRASec
+  , mkLabelRAAssump', mkLabelRAFig, mkLabelRASec, mkLabelRALst
   , modifyLabelEqn
   -- Document.getChunk
   , vars, vars', combine, combine', ccss, getIdeaDict
@@ -223,12 +229,12 @@ import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, csc
 import Language.Drasil.Expr.Extract (dep, names', names)
 import Language.Drasil.Expr.Precedence (precA, precB, eprec)
 import Language.Drasil.Sentence.EmbedSymbol(ch)
-import Language.Drasil.Sentence.Extract(sdep)
+import Language.Drasil.Sentence.Extract(sdep, lnames, lnames')
 import Language.Drasil.Document (section, fig, figWithWidth
   , section''
   , Section(..), SecCons(..) 
   , llcc, ulcc, Document(..)
-  , mkParagraph, mkFig, mkRawLC)
+  , mkParagraph, mkFig, mkRawLC, extractSection)
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)
@@ -314,7 +320,7 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
 import Language.Drasil.RefTypes(RefAdd, RefType(..),
   DType(..), Reference(Reference), ReqType(FR, NFR), LinkType(Internal, Cite2, External))
 import Language.Drasil.RefProg(RefProg(..), IRefProg(..), Reference2(Reference2))
-import Language.Drasil.Label (mkLabelRA', mkLabelSame, 
+import Language.Drasil.Label (mkLabelRA', mkLabelSame, mkLabelRALst,
   mkEmptyLabel, mkURILabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec, modifyLabelEqn)
 import Language.Drasil.Label.Type (getAdd)
 --Should be in lang-dev package?

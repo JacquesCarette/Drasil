@@ -8,7 +8,7 @@ import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual),
     intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
     Field(DefiningEquation, Description, Label, Symbol, Units), SolChSpec(SCSProg), 
     SCSSub(DDs), DerivationDisplay(HideDerivation), SSDSub(SSDSolChSpec), 
-    SSDSec(SSDProg))
+    SSDSec(SSDProg), generateTraceMap)
 
 import Drasil.HGHC.HeatTransfer (fp, hghc, hghcVarsDD, htInputs, htOutputs, 
     nuclearPhys, symbols)
@@ -48,11 +48,15 @@ check_si = collectUnits allSymbols symbols
 allSymbols :: ChunkDB
 allSymbols = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
   ++ [nw fp, nw nuclearPhys, nw hghc, nw degree] ++ map nw doccon')
- ([] :: [ConceptChunk]) -- FIXME: Fill in concepts
-  si_units
+ ([] :: [ConceptChunk])-- FIXME: Fill in concepts
+  si_units (head ([] :: [TraceMap])) (head ([] :: [RefbyMap]))
+  (head ([] :: [DatadefnMap])) (head ([] :: [InsModelMap])) (head ([] :: [GendefMap])) (head ([] :: [TheoryModelMap]))
+  (head ([] :: [AssumptionMap])) (head ([] :: [ConceptInstanceMap])) (head ([] :: [SectionMap])) (head ([] :: [LabelledContentMap]))
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbols) ([] :: [ConceptChunk]) ([] :: [UnitDefn])
+usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw check_si) ([] :: [ConceptChunk]) check_si (head ([] :: [TraceMap])) (head ([] :: [RefbyMap]))
+           (head ([] :: [DatadefnMap])) (head ([] :: [InsModelMap])) (head ([] :: [GendefMap])) (head ([] :: [TheoryModelMap]))
+           (head ([] :: [AssumptionMap])) (head ([] :: [ConceptInstanceMap])) (head ([] :: [SectionMap])) (head ([] :: [LabelledContentMap]))
 
 printSetting :: PrintingInformation
 printSetting = PI allSymbols defaultConfiguration

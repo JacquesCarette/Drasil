@@ -1,8 +1,9 @@
-module Language.Drasil.Sentence.Extract(sdep, shortdep) where
+module Language.Drasil.Sentence.Extract(sdep, shortdep, lnames, lnames') where
 
 import Data.List (nub)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Sentence(Sentence(..), SentenceStyle(..))
+import Language.Drasil.RefProg (Reference2(Reference2))
 import Language.Drasil.Expr.Extract(names)
 
 
@@ -49,3 +50,21 @@ sdep = nub . getUIDs
 -- This is to collect UID who is printed out as an Abbreviation
 shortdep :: Sentence -> [UID]
 shortdep = nub . getUIDshort
+
+-- | Generic traverse of all positions that could lead to reference UID from sentences
+lnames   :: Sentence -> [UID]
+lnames  (Ch _ _)       = []
+lnames  (Sy _)         = []
+lnames  (S _)          = []
+lnames  (Sp _)         = []
+lnames  (P _)          = []
+lnames  (Ref _)  = []
+lnames  (Ref2 (Reference2 u _ _ _)) = [u] -- This should be fixed.
+lnames  ((:+:) a b)    = (lnames  a) ++ (lnames  b)
+lnames  (Quote _)      = []
+lnames  (E _)          = []
+lnames  (EmptyS)       = []
+
+lnames'  :: [Sentence] -> [UID]
+lnames'  (hd:tl) = lnames  hd ++ lnames'  tl
+lnames'  []      = []

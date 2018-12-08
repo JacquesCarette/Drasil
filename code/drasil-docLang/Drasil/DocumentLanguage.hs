@@ -7,7 +7,8 @@
 -- instead.
 module Drasil.DocumentLanguage where
 
-import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation, instanceModel, gdefn, tmodel)
+import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation, instanceModel, gdefn, tmodel,
+  helperRefs)
 
 import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                -- Vector - Name conflict (defined in file)
@@ -38,6 +39,7 @@ import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
 import qualified Drasil.Sections.TraceabilityMandGs as TMG (traceMGF)
 
 import Data.Drasil.Concepts.Documentation (refmat)
+import Data.Drasil.SentenceStructures (foldlSent_)
 
 import Data.Function (on)
 import Data.List (nub, sortBy)
@@ -60,6 +62,7 @@ data DocSection = Verbatim Section
                 | SSDSec SSDSec
                 | ReqrmntSec ReqrmntSec
                 | LCsSec LCsSec
+                | LCsSec' LCsSec'
                 | UCsSec UCsSec
                 | TraceabilitySec TraceabilitySec
                 | AuxConstntSec AuxConstntSec
@@ -134,7 +137,7 @@ data IntroSub where
   IPurpose :: Sentence -> IntroSub
   IScope   :: Sentence -> Sentence -> IntroSub
   IChar    :: Sentence -> Sentence -> Sentence -> IntroSub
-  IOrgSec  :: Sentence -> CI -> Label -> Sentence -> IntroSub
+  IOrgSec  :: Sentence -> CI -> Section -> Sentence -> IntroSub
 
 {--}
 
@@ -202,6 +205,7 @@ data ReqsSub where
 {--}
 
 data LCsSec = LCsProg [Contents] --FIXME:Should become [LikelyChanges]
+data LCsSec' = LCsProg' [ConceptInstance]
 
 {--}
 
@@ -248,6 +252,7 @@ mkSections si l = map doit l
     doit (ScpOfProjSec sop)  = mkScpOfProjSec sop
     doit (ReqrmntSec r)      = mkReqrmntSec r
     doit (LCsSec lc')        = mkLCsSec lc'
+    doit (LCsSec' lc)        = mkLCsSec' lc
     doit (UCsSec ulcs)       = mkUCsSec ulcs
     doit (TraceabilitySec t) = mkTraceabilitySec t
     doit (AppndxSec a)       = mkAppndxSec a
@@ -260,9 +265,9 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
   (map (mkSubRef si) l) (mkLabelRASec "RefMat" "Reference Material") --DO NOT CHANGE LABEL OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
-    mkSubRef SI {_sysinfodb = db}  TUnits =
+    mkSubRef SI {_usedinfodb = db}  TUnits =
         table_of_units (sortBy comp_unitdefn $ Map.elems $ db ^. unitTable) (tuIntro defaultTUI)
-    mkSubRef SI {_sysinfodb = db} (TUnits' con) =
+    mkSubRef SI {_usedinfodb = db} (TUnits' con) =
         table_of_units (sortBy comp_unitdefn $ Map.elems $ db ^. unitTable) (tuIntro con)
     mkSubRef SI {_quants = v} (TSymb con) =
       SRS.tOfSymb 
@@ -455,9 +460,9 @@ mkSolChSpec si (SCSProg l) =
       (concatMap (\x -> LlC (instanceModel fields (_sysinfodb si') x) : derivation x) ims)
     mkSubSCS si' (IMs fields ims _)= 
       SSD.inModelF pdStub ddStub tmStub (SRS.genDefn ([]::[Contents]) ([]::[Section])) (map LlC (map (instanceModel fields (_sysinfodb si')) ims))
-    mkSubSCS SI {_refdb = db} Assumptions =
+    mkSubSCS si' (Assumptions) =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
-      (map (\x -> LlC $ mkRawLC (Assumption (x ^. uid) (assuming x) (x ^. getLabel)) (x ^. getLabel)) $ assumptionsFromDB (db ^. assumpRefTable))
+      (map (\x -> LlC $ mkRawLC (Assumption (x ^. uid) (helperAssump x (_sysinfodb si')) (x ^. getLabel)) (x ^. getLabel)) $ assumptionsFromDB ((_refdb si') ^. assumpRefTable))
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
     inModSec = SRS.inModel [mkParagraph EmptyS] []
@@ -466,6 +471,8 @@ mkSolChSpec si (SCSProg l) =
     -- Could start with just a quick check of whether or not IM is included and
     -- then error out if necessary.
 
+helperAssump :: AssumpChunk -> ChunkDB -> Sentence
+helperAssump a cdb = foldlSent_ $ ([assuming a, helperRefs a cdb])
 {--}
 
 -- | Section stubs for implicit referencing
@@ -491,6 +498,9 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 -- | Helper for making the 'LikelyChanges' section
 mkLCsSec :: LCsSec -> Section
 mkLCsSec (LCsProg c) = SRS.likeChg c []
+
+mkLCsSec' :: LCsSec' -> Section
+mkLCsSec' (LCsProg' c) = SRS.likeChg (mkEnumSimpleD c) []
 
 {--}
 

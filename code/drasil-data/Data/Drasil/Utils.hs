@@ -3,7 +3,7 @@ module Data.Drasil.Utils
   ( foldle
   , foldle1
   , mkEnumAbbrevList
-  , zipFTable
+  , zipFTable'
   , zipSentList
   , makeTMatrix
   , itemRefToSent
@@ -14,6 +14,8 @@ module Data.Drasil.Utils
   , bulletNested
   , enumSimple
   , enumBullet
+  , enumSimpleU
+  , enumBulletU
   , mkInputDatTb
   , getRVal
   , addPercent
@@ -29,7 +31,7 @@ import Language.Drasil
 import Language.Drasil.Development (UnitDefn, MayHaveUnit(getUnit))
 
 import Control.Lens ((^.))
-import Data.List (transpose)
+import Data.List (transpose, elem)
 
 import Data.Drasil.Concepts.Documentation (fterms, input_, output_, symbol_, 
   useCaseTable)
@@ -92,18 +94,14 @@ zipSentList acc [] r           = acc ++ (map (EmptyS:) r)
 zipSentList acc (x:xs) (y:ys)  = zipSentList (acc ++ [x:y]) xs ys
 
 -- | traceability matrices row from a list of rows and a list of columns
--- acc - accumulator
--- k   - list of type that is comparable
--- l   - list of type that is comparable
-zipFTable :: Eq a => [Sentence] -> [a] -> [a] -> [Sentence]
-zipFTable acc _ []              = acc
-zipFTable acc [] l              = acc ++ (take (length l) (repeat EmptyS))
-zipFTable acc k@(x:xs) (y:ys)   | x == y    = zipFTable (acc++[S "X"]) xs ys
-                                | otherwise = zipFTable (acc++[EmptyS]) k ys
+
+zipFTable' :: Eq a => [a] -> [a] -> [Sentence]
+zipFTable' content l = concatMap (\x -> if x `elem` content then [S "X"] else [EmptyS]) l
 
 -- | makes a traceability matrix from list of column rows and list of rows
 makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
-makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- col] 
+makeTMatrix colName col row = zipSentList [] colName [zipFTable' x row | x <- col] 
+
 
 -- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
 mkInputDatTb :: (Quantity a, MayHaveUnit a) => [a] -> LabelledContent
@@ -137,15 +135,21 @@ bulletNested :: [Sentence] -> [ListType] -> ListType
 bulletNested t l = Bullet . map (\(h,c) -> (Nested h c, Nothing)) $ zip t l
 
 -- | enumBullet apply Enumeration, Bullet and Flat to a list
-enumBullet :: [Sentence] -> Contents --FIXME: should Enumeration be labelled?
-enumBullet s = UlC $ ulcc $ Enumeration $ bulletFlat s
+enumBullet :: Label -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
+enumBullet lb s = llcc lb $ Enumeration $ bulletFlat s
+
+enumBulletU ::[Sentence] -> Contents --FIXME: should Enumeration be labelled?
+enumBulletU s =  UlC $ ulcc $ Enumeration $ bulletFlat s
 
 -- | enumSimple enumerates a list and applies simple and enumeration to it
 -- s - start index for the enumeration
 -- t - title of the list
 -- l - list to be enumerated
-enumSimple :: Integer -> Sentence -> [Sentence] -> Contents --FIXME: should Enumeration be labelled?
-enumSimple s t l = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
+enumSimple :: Label -> Integer -> Sentence -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
+enumSimple lb s t l = llcc lb $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
+
+enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents --FIXME: should Enumeration be labelled?
+enumSimpleU s t l = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
 
 -- | interweaves two lists together [[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]
 weave :: [[a]] -> [a]
@@ -153,7 +157,7 @@ weave = concat . transpose
 
 -- | get a unit symbol if there is one
 unwrap :: (Maybe UnitDefn) -> Sentence
-unwrap (Just a) = Sy (a ^. usymb)
+unwrap (Just a) = Sy $ usymb a
 unwrap Nothing  = EmptyS
 
 -- | noRefs converts lists of simple ItemTypes into a lists which may be used

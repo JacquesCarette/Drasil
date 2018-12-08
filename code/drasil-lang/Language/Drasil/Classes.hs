@@ -136,7 +136,7 @@ class HasFields c where
 -- Below are for units only
 -- | Some chunks store a unit symbol
 class HasUnitSymbol u where
-   usymb :: Lens' u USymb
+   usymb ::u -> USymb
 
 -- | Units are Ideas with a Definition which store a unit symbol.
 -- They must also be explicitly declared to be instances of IsUnit

@@ -265,9 +265,9 @@ mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
   (map (mkSubRef si) l) (mkLabelRASec "RefMat" "Reference Material") --DO NOT CHANGE LABEL OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
-    mkSubRef SI {_sysinfodb = db}  TUnits =
+    mkSubRef SI {_usedinfodb = db}  TUnits =
         table_of_units (sortBy comp_unitdefn $ Map.elems $ db ^. unitTable) (tuIntro defaultTUI)
-    mkSubRef SI {_sysinfodb = db} (TUnits' con) =
+    mkSubRef SI {_usedinfodb = db} (TUnits' con) =
         table_of_units (sortBy comp_unitdefn $ Map.elems $ db ^. unitTable) (tuIntro con)
     mkSubRef SI {_quants = v} (TSymb con) =
       SRS.tOfSymb 

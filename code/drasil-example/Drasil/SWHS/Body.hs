@@ -51,7 +51,7 @@ import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList
   foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, ofThe, ofThe', sAnd, 
   showingCxnBw, sOf)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
-  fundamentals, derived)
+  fundamentals, derived, m_2, m_3)
 import Data.Drasil.Utils (enumSimple, itemRefToSent, makeTMatrix, eqUnR', noRefs)
 
 import qualified Data.Drasil.Concepts.Thermodynamics as CT (law_cons_energy, 
@@ -118,19 +118,19 @@ resourcePath = "../../../datafiles/SWHS/"
 
 swhsSymMap :: ChunkDB
 swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronymsFull
-  ++ map nw thermocon
+  ++ map nw thermocon ++ map nw this_si ++ map nw [m_2, m_3]
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC
   ++ [nw swhs_pcm, nw algorithm] ++ map nw compcon)
-  (map cw swhsSymbols ++ srsDomains) this_si swhs_label swhs_refby
+  (map cw swhsSymbols ++ srsDomains) (this_si ++ [m_2, m_3]) swhs_label swhs_refby
   swhs_datadefn swhs_insmodel swhs_gendef swhs_theory swhs_assump swhs_concins
   swhs_section swhs_labcon
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) 
-  swhs_label swhs_refby swhs_datadefn swhs_insmodel swhs_gendef swhs_theory swhs_assump swhs_concins
-  swhs_section swhs_labcon
+usedDB = cdb (map qw symbTT) (map nw swhsSymbols ++ map nw acronymsFull ++ map nw check_si)
+ ([] :: [ConceptChunk]) check_si swhs_label swhs_refby swhs_datadefn swhs_insmodel swhs_gendef
+ swhs_theory swhs_assump swhs_concins swhs_section swhs_labcon
 
 swhsRefDB :: ReferenceDB
 swhsRefDB = rdb newAssumptions swhsCitations (funcReqs ++

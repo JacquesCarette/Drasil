@@ -177,7 +177,7 @@ mkGDField :: (HasSymbolTable ctx, HasDataDefnTable ctx, HasInsModelTable ctx, Ha
   HasSectionTable ctx, HasLabelledContent ctx) => GenDefn -> ctx -> Field -> ModRow -> ModRow
 mkGDField g _ l@Label fs = (show l, (mkParagraph $ at_start g):[]) : fs
 mkGDField g _ l@Units fs = 
-  maybe fs (\udef -> (show l, (mkParagraph $ Sy (udef ^. usymb)):[]) : fs) (getUnit g)
+  maybe fs (\udef -> (show l, (mkParagraph $ Sy (usymb udef)):[]) : fs) (getUnit g)
 mkGDField g _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (g ^. relat) 
   (modifyLabelEqn (g ^. getLabel))):[]) : fs
 mkGDField g m l@(Description v u) fs = (show l,

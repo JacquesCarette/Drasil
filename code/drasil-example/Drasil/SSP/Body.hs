@@ -44,7 +44,7 @@ import Data.Drasil.People (henryFrankis)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.SentenceStructures (foldlList, SepType(Comma), FoldType(List), 
   foldlSP, foldlSent, foldlSent_, ofThe, sAnd, sOr, foldlSPCol)
-import Data.Drasil.SI_Units (degree, metre, newton, pascal, derived, fundamentals)
+import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
 import Data.Drasil.Utils (bulletFlat, bulletNested, enumSimple, noRefsLT)
 
 import Drasil.SSP.Assumptions (newAssumptions)
@@ -76,7 +76,7 @@ goals_list, termi_defi_list, phys_sys_desc_p1, phys_sys_desc_bullets,
 
 --Document Setup--
 this_si :: [UnitDefn]
-this_si = map unitWrapper [metre, degree] ++ map unitWrapper [newton, pascal]
+this_si = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
 
 check_si :: [UnitDefn]
 check_si = collectUnits sspSymMap symbTT
@@ -193,14 +193,14 @@ sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms ++
   ++ map nw softwarecon ++ map nw physicCon ++ map nw mathcon
   ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals
-  ++ map nw educon ++ map nw compcon ++ [nw algorithm, nw ssp])
+  ++ map nw educon ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw this_si)
   (map cw sspSymbols ++ srsDomains) this_si ssp_label ssp_refby
   ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump ssp_concins
   ssp_section (head ([] :: [LabelledContentMap]))
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) ssp_label ssp_refby
+usedDB = cdb (map qw symbTT) (map nw sspSymbols ++ map nw acronyms ++ map nw check_si)
+ ([] :: [ConceptChunk]) check_si ssp_label ssp_refby
  ssp_datadefn ssp_insmodel ssp_gendef ssp_theory ssp_assump ssp_concins
  ssp_section (head ([] :: [LabelledContentMap]))
 

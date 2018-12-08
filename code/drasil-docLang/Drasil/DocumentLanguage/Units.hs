@@ -8,7 +8,7 @@ import Control.Lens ((^.))
 
 -- | Get the units, if they exist, and wrap them as a Sentence
 toSentence :: (Quantity u, MayHaveUnit u) => u -> Sentence
-toSentence x = maybe (S "--") (\y -> Sy (y ^. usymb)) (getUnit x)
+toSentence x = maybe (S "--") (\y -> Sy $ usymb y) (getUnit x)
 
 toSentenceUnitless :: (Quantity u, MayHaveUnit u) => u -> Sentence
-toSentenceUnitless x = maybe (S "Unitless") (\y -> Sy (y ^. usymb)) (getUnit x)
+toSentenceUnitless x = maybe (S "Unitless") (\y -> Sy $ usymb y) (getUnit x)

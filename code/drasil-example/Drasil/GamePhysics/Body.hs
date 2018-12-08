@@ -204,7 +204,7 @@ everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms ++ map n
   game_section (head ([] :: [LabelledContentMap]))
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: [ConceptChunk]) ([] :: [UnitDefn])
+usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms ++ map nw check_si) ([] :: [ConceptChunk]) check_si
  game_label game_refby game_datadefn game_insmodel game_gendef game_theory game_assump game_concins
  game_section (head ([] :: [LabelledContentMap]))
 

@@ -45,5 +45,5 @@ mkUnitary u = UC (qw u) (unit u)
 -- | Helper for getting the unit's symbol from a chunk, 
 -- as opposed to the symbols of the chunk itself.
 unit_symb :: (Unitary c) => c -> USymb
-unit_symb c = unit c ^. usymb
+unit_symb c = usymb $ unit c
 

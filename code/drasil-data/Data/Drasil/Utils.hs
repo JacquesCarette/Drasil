@@ -157,7 +157,7 @@ weave = concat . transpose
 
 -- | get a unit symbol if there is one
 unwrap :: (Maybe UnitDefn) -> Sentence
-unwrap (Just a) = Sy (a ^. usymb)
+unwrap (Just a) = Sy $ usymb a
 unwrap Nothing  = EmptyS
 
 -- | noRefs converts lists of simple ItemTypes into a lists which may be used

@@ -54,7 +54,7 @@ allSymbols = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals
   (head ([] :: [AssumptionMap])) (head ([] :: [ConceptInstanceMap])) (head ([] :: [SectionMap])) (head ([] :: [LabelledContentMap]))
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbols) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) (head ([] :: [TraceMap])) (head ([] :: [RefbyMap]))
+usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw check_si) ([] :: [ConceptChunk]) check_si (head ([] :: [TraceMap])) (head ([] :: [RefbyMap]))
            (head ([] :: [DatadefnMap])) (head ([] :: [InsModelMap])) (head ([] :: [GendefMap])) (head ([] :: [TheoryModelMap]))
            (head ([] :: [AssumptionMap])) (head ([] :: [ConceptInstanceMap])) (head ([] :: [SectionMap])) (head ([] :: [LabelledContentMap]))
 

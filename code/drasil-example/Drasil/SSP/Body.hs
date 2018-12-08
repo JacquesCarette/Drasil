@@ -21,7 +21,7 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   generateTraceTable, goalStmt_label, physSystDescription_label, generateTraceMap')
 
-import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, 
+import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, inModel,
   physSyst, assumpt)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
@@ -116,7 +116,7 @@ mkSRS = RefSec (RefProg intro
     , IChar (phrase solidMechanics)
       (phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics)
       EmptyS
-    , IOrgSec orgSecStart inModel SRS.inModelLabel orgSecEnd]) :
+    , IOrgSec orgSecStart inModel (SRS.inModel [] [])  orgSecEnd]) :
     --FIXME: issue #235
     (GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList], 
       UsrChars [userCharIntro], SystCons [] []]):

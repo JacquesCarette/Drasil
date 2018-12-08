@@ -161,13 +161,6 @@ instance Referable ConceptInstance where
   rType     _ = error "makeRef, makeRefS, and rType are deprecated for ConceptInstance. Use the makeRef2S, renderRef instead."
   renderRef l = RP $ (RP.defer $ sDom $ l ^. cdom) +::+ raw ": " +::+ name
 
---Should refer to an object WITH a variable.
---Can be removed once sections have labels.
-instance Referable Label where
-  refAdd    lb@(Lbl _ _ _ _) = getAdd (lb ^. getRefAdd)
-  rType     (Lbl _ _ _ x)    = x --FIXME: is a hack; see #971
-  renderRef _                = RP name -- FIXME
-
 instance Referable LabelledContent where
   refAdd     (LblC lb _) = getAdd (lb ^. getRefAdd)
   rType      (LblC _ c)  = temp c

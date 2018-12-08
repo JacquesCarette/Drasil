@@ -4,14 +4,14 @@ module Language.Drasil.ChunkDB
   , HasSymbolTable(..), symbolMap, symbLookup
   , HasTermTable(..), termLookup
   , HasDefinitionTable(..), conceptMap, defLookup
-  , HasUnitTable(..), unitMap, unitLookup
-  , HasUnitTable(..), unitMap, collectUnits, TraceMap,
-  traceLookup, HasTraceTable(..), generateRefbyMap, RefbyMap, LabelledContentMap,
-  refbyLookup, HasRefbyTable(..), DatadefnMap, InsModelMap, SectionMap,
-  GendefMap, TheoryModelMap, AssumptionMap, ConceptInstanceMap, datadefnLookup, insmodelLookup,
-  gendefLookup, theoryModelLookup, assumptionLookup, conceptinsLookup, sectionLookup, labelledconLookup,
-  HasDataDefnTable(..), HasInsModelTable(..), HasGendefTable(..), HasTheoryModelTable(..),
-  HasAssumpTable(..), HasConceptInstance(..), HasSectionTable(..), HasLabelledContent(..)
+  , unitLookup , HasUnitTable(..), unitMap, collectUnits, TraceMap
+  , traceLookup, HasTraceTable(..), generateRefbyMap, RefbyMap, LabelledContentMap
+  , refbyLookup, HasRefbyTable(..), DatadefnMap, InsModelMap, SectionMap
+  , GendefMap, TheoryModelMap, AssumptionMap, ConceptInstanceMap, datadefnLookup
+  , insmodelLookup, gendefLookup, theoryModelLookup, assumptionLookup, conceptinsLookup
+  , sectionLookup, labelledconLookup
+  , HasDataDefnTable(..), HasInsModelTable(..), HasGendefTable(..), HasTheoryModelTable(..)
+  , HasAssumpTable(..), HasConceptInstance(..), HasSectionTable(..), HasLabelledContent(..)
   ) where
 
 import Control.Lens ((^.), Lens', makeLenses)

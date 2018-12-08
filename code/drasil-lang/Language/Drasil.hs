@@ -160,7 +160,7 @@ module Language.Drasil (
   , ConceptInstanceMap, GendefMap, TheoryModelMap, datadefnLookup, insmodelLookup, sectionLookup
   , gendefLookup, theoryModelLookup, assumptionLookup, conceptinsLookup, HasDataDefnTable(..)
   , HasInsModelTable(..), HasGendefTable(..), HasTheoryModelTable(..), HasSectionTable(..)
-  , HasAssumpTable(..), HasConceptInstance(..), HasTheoryModelTable(..), SectionMap
+  , HasAssumpTable(..), HasConceptInstance(..), SectionMap
   -- AssumpChunk
   , AssumpChunk, assuming, assump
   -- Reference

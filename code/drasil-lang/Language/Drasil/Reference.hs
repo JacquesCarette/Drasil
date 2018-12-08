@@ -2,6 +2,7 @@
 module Language.Drasil.Reference(makeRef2, makeRef2S, makeCite, makeURI,
   makeCiteS, ReferenceDB, citationsFromBibMap, citationRefTable, assumpRefTable,
   assumptionsFromDB, rdb, RefBy(..), Referable(..), RefMap, simpleMap,
+  HasConceptRefs(conceptRefTable),
   assumpDB, AssumpMap, assumpLookup, HasAssumpRefs) where
 
 import Control.Lens ((^.), Simple, Lens, makeLenses)
@@ -21,7 +22,6 @@ import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLa
   HasRefAddress(getRefAdd), HasShortName(shortname), HasFields(getFields), CommonIdea(abrv))
 import Language.Drasil.Document (Section(Section))
 import Language.Drasil.Document.Core (RawContent(..), LabelledContent(..))
-import Language.Drasil.Label.Core (Label(..))
 import Language.Drasil.Label.Type (getAdd)
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.RefProg (RefProg(..), Reference2(Reference2), (+::+), name,
@@ -91,11 +91,6 @@ assumpLookup a m = getS $ Map.lookup (a ^. uid) m
   where getS (Just x) = x
         getS Nothing = error $ "Assumption: " ++ (a ^. uid) ++
           " referencing information not found in Assumption Map"
-
-conceptLookup :: HasUID c => c -> ConceptMap -> (ConceptInstance, Int)
-conceptLookup c = maybe (error $ "ConceptInstance: " ++ (c ^. uid) ++
-          " referencing information not found in Concept Map") id .
-          Map.lookup (c ^. uid)
 
 -- Classes and instances --
 class HasAssumpRefs s where
@@ -234,4 +229,4 @@ makeCiteS = Ref2 . makeCite
 
 -- | Create a reference for a URI
 makeURI :: UID -> String -> ShortName -> Reference2
-makeURI uid ra sn = Reference2 uid URI ra sn
+makeURI u ra sn = Reference2 u URI ra sn

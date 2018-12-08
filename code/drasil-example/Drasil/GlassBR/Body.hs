@@ -122,8 +122,8 @@ glassBR_sec :: [Section]
 glassBR_sec = extractSection glassBR_srs
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw this_symbols)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) glassBR_label glassBR_refby
+usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw this_symbols ++ map nw check_si)
+ ([] :: [ConceptChunk]) check_si glassBR_label glassBR_refby
   glassBR_datadefn glassBR_insmodel glassBR_gendef glassBR_theory glassBR_assump glassBR_concins
   glassBR_section glassBR_labelledcon
 

@@ -4,7 +4,7 @@ module Language.Drasil.ChunkDB
   , HasSymbolTable(..), symbolMap, symbLookup
   , HasTermTable(..), termLookup
   , HasDefinitionTable(..), conceptMap, defLookup
-  , HasUnitTable(..), unitMap, collectUnits
+  , HasUnitTable(..), unitMap, unitLookup
   , HasUnitTable(..), unitMap, collectUnits, TraceMap,
   traceLookup, HasTraceTable(..), generateRefbyMap, RefbyMap, LabelledContentMap,
   refbyLookup, HasRefbyTable(..), DatadefnMap, InsModelMap, SectionMap,
@@ -29,7 +29,7 @@ import Language.Drasil.Chunk.InstanceModel (InstanceModel)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
 import Language.Drasil.Chunk.Theory (TheoryModel)
 import Language.Drasil.Document (Section)
-import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(getUnit), unitWrapper)
+import Language.Drasil.Development.Unit(UnitDefn, MayHaveUnit(getUnit), unitWrapper, IsUnit(getUnits))
 import qualified Data.Map as Map
 
 -- The misnomers below are not actually a bad thing, we want to ensure data can't
@@ -166,6 +166,11 @@ termLookup :: UID -> TermMap -> IdeaDict
 termLookup c m = getT $ Map.lookup c m
   where getT = maybe (error $ "Term: " ++ c ++ " not found in TermMap") id
 
+-- | Looks up an uid in the term table. If nothing is found, an error is thrown
+unitLookup :: UID -> UnitMap -> UnitDefn
+unitLookup c m = getT $ Map.lookup c m
+  where getT = maybe (error $ "Unit: " ++ c ++ " not found in UnitMap") id
+
 -- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
 defLookup :: UID -> ConceptMap -> ConceptChunk
 defLookup u m = getC $ Map.lookup u m
@@ -259,8 +264,9 @@ instance HasConceptInstance  ChunkDB where conceptinsTable   = cconceptins
 instance HasSectionTable     ChunkDB where sectionTable      = csec
 instance HasLabelledContent  ChunkDB where labelledcontent  = clabelled
 
-collectUnits :: HasSymbolTable s => (Quantity c, MayHaveUnit c) => s -> [c] -> [UnitDefn]
-collectUnits m symb = map unitWrapper $ concatMap maybeToList $ map (getUnitLup m) symb
+collectUnits :: (HasSymbolTable s, HasUnitTable s) => (Quantity c, MayHaveUnit c) => s -> [c] -> [UnitDefn]
+collectUnits m symb = map unitWrapper $ map (\x -> unitLookup x $ m ^. unitTable)
+ $ concatMap getUnits $ concatMap maybeToList $ map (getUnitLup m) symb
 
 traceLookup :: UID -> TraceMap -> [UID]
 traceLookup c m = getT $ Map.lookup c m

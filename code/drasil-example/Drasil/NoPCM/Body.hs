@@ -248,14 +248,14 @@ nopcm_SymbMap = cdb (nopcm_SymbolsAll) (map nw nopcm_Symbols ++ map nw acronyms 
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw swhscon
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw derived ++ map nw physicalcon ++ map nw swhsUC ++ [nw srs_swhs, nw algorithm,
-  nw ht_trans])
+  nw ht_trans] ++ map nw check_si)
  (map cw nopcm_Symbols ++ srsDomains)
   this_si nopcm_label nopcm_refby nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_assump
   nopcm_concins nopcm_section nopcm_labcon
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw nopcm_Symbols ++ map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) nopcm_label nopcm_refby
+usedDB = cdb (map qw symbTT) (map nw nopcm_Symbols ++ map nw acronyms ++ map nw check_si)
+ ([] :: [ConceptChunk]) check_si nopcm_label nopcm_refby
  nopcm_datadefn nopcm_insmodel nopcm_gendef nopcm_theory nopcm_assump nopcm_concins
  nopcm_section nopcm_labcon
 

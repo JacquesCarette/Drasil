@@ -1,5 +1,5 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Reference(makeRef, makeRefS, makeRef2, makeRef2S, makeCite, makeURI,
+module Language.Drasil.Reference(makeRef2, makeRef2S, makeCite, makeURI,
   makeCiteS, ReferenceDB, citationsFromBibMap, citationRefTable, assumpRefTable,
   assumptionsFromDB, rdb, RefBy(..), Referable(..), RefMap, simpleMap,
   assumpDB, AssumpMap, assumpLookup, HasAssumpRefs) where
@@ -23,15 +23,12 @@ import Language.Drasil.Document (Section(Section))
 import Language.Drasil.Document.Core (RawContent(..), LabelledContent(..))
 import Language.Drasil.Label.Core (Label(..))
 import Language.Drasil.Label.Type (getAdd)
-import Language.Drasil.Label (getDefName, getReqName)
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.RefProg (RefProg(..), Reference2(Reference2), (+::+), name,
-  prepend, raw, IRefProg)
-import Language.Drasil.RefProg as RP (defer)  -- FIXME: Remove prefix once SN.defer is no longer needed.
-import Language.Drasil.RefTypes (RefType(..), DType(..), Reference(Reference))
-import Language.Drasil.ShortName ( ShortName, getStringSN, shortname', concatSN)
-import Language.Drasil.ShortName as SN (defer)
-import Language.Drasil.Sentence (Sentence((:+:), S, Ref, Ref2))
+  prepend, raw, IRefProg, defer)
+-- import Language.Drasil.RefTypes (RefType(..))
+import Language.Drasil.ShortName ( ShortName )
+import Language.Drasil.Sentence (Sentence((:+:), S, Ref2))
 import Language.Drasil.UID (UID)
 
 -- | Database for maintaining references.
@@ -118,52 +115,42 @@ class HasUID s => Referable s where
   refAdd    :: s -> String  -- The plaintext referencing address (what we're linking to).
                             -- Should be string with no spaces/special chars.
                             -- Only visible in the source (tex/html).
-  rType     :: s -> RefType -- The reference type (referencing namespace?)
   renderRef :: s -> RefProg -- A program to render a shortname
 
 instance Referable AssumpChunk where
   refAdd    x = getAdd ((x ^. getLabel) ^. getRefAdd)
-  rType     _ = Assump
   renderRef l = RP $ prepend $ abrv l
 
 instance Referable Section where
   refAdd    (Section _ _ lb ) = getAdd (lb ^. getRefAdd)
-  rType     _                 = Sect
   renderRef _                 = RP $ raw "Section: " +::+ name
 
 instance Referable Citation where
   refAdd    c = citeID c -- citeID should be unique.
-  rType     _ = Cite
   renderRef _ = Citation
 
 instance Referable TheoryModel where
   refAdd    t = getAdd ((t ^. getLabel) ^. getRefAdd)
-  rType     _ = Def TM
   renderRef l = RP $ prepend $ abrv l
 
 instance Referable GenDefn where
   refAdd    g = getAdd ((g ^. getLabel) ^. getRefAdd)
-  rType     _ = Def General
   renderRef l = RP $ prepend $ abrv l
 
 instance Referable DataDefinition where
   refAdd    d = getAdd ((d ^. getLabel) ^. getRefAdd)
-  rType     _ = Def DD
   renderRef l = RP $ prepend $ abrv l
 
 instance Referable InstanceModel where
   refAdd    i = getAdd ((i ^. getLabel) ^. getRefAdd)
-  rType     _ = Def Instance
   renderRef l = RP $ prepend $ abrv l
 
 instance Referable ConceptInstance where
   refAdd    i = i ^. uid
-  rType     _ = error "makeRef, makeRefS, and rType are deprecated for ConceptInstance. Use the makeRef2S, renderRef instead."
-  renderRef l = RP $ (RP.defer $ sDom $ l ^. cdom) +::+ raw ": " +::+ name
+  renderRef l = RP $ (defer $ sDom $ l ^. cdom) +::+ raw ": " +::+ name
 
 instance Referable LabelledContent where
   refAdd     (LblC lb _) = getAdd (lb ^. getRefAdd)
-  rType      (LblC _ c)  = temp c
   renderRef  (LblC _ c)  = RP $ refLabelledCon c
 
 refLabelledCon :: RawContent -> IRefProg
@@ -176,19 +163,6 @@ refLabelledCon (EqnBlock _)          = raw "EqnB:" +::+ name
 refLabelledCon (Enumeration _)       = raw "Lst:" +::+ name 
 refLabelledCon (Paragraph _)         = error "Shouldn't reference paragraphs"
 refLabelledCon (Bib _)               = error $ 
-    "Bibliography list of references cannot be referenced. " ++
-    "You must reference the Section or an individual citation."
-
-temp :: RawContent -> RefType
-temp (Table _ _ _ _)       = Tab
-temp (Figure _ _ _)        = Fig
-temp (Graph _ _ _ _)       = Fig
-temp (Defini x _)          = Def x
-temp (Assumption _ _ _)    = Assump -- hard-code, will disappear
-temp (EqnBlock _)          = EqnB
-temp (Enumeration _)       = Lst 
-temp (Paragraph _)         = error "Shouldn't reference paragraphs"
-temp (Bib _)               = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
 
@@ -261,36 +235,3 @@ makeCiteS = Ref2 . makeCite
 -- | Create a reference for a URI
 makeURI :: UID -> String -> ShortName -> Reference2
 makeURI uid ra sn = Reference2 uid URI ra sn
-
--- | Create References to a given 'LayoutObj'
--- This should not be exported to the end-user, but should be usable
--- within the recipe (we want to force reference creation to check if the given
--- item exists in our database of referable objects.
---FIXME: completely shift to being `HasLabel` since customref checks for 
---  `HasShortName` and `Referable`?
-makeRef :: (HasShortName l, Referable l) => l -> Reference
-makeRef r = customRef r (r ^. shortname)
-
-makeRefS :: (HasShortName l, Referable l) => l -> Sentence
-makeRefS = Ref . makeRef
-
---FIXME: should be removed from Examples once sections have labels
--- | Create a reference with a customized 'ShortName'
-customRef :: (HasShortName l, Referable l) => l -> ShortName -> Reference
-customRef r n = Reference (fixupRType $ rType r) (refAdd r) (getAcc' (rType r) n)
-  where 
-    getAcc' :: RefType -> ShortName -> ShortName
-    getAcc' (Def dtp) sn = shortname' $ (getDefName dtp) ++ " " ++ (getStringSN sn)
-    getAcc' LCh       sn = shortname' $ "LC: " ++ (getStringSN sn)
-    getAcc' UnCh      sn = shortname' $ "UC: " ++ (getStringSN sn)
-    getAcc' Assump    sn = shortname' $ "A: " ++ (getStringSN sn)
-    getAcc' (Req rq)  sn = shortname' $ (getReqName rq)  ++ " " ++ (getStringSN sn)
-    getAcc' (DeferredCC u) s = concatSN (SN.defer u) s
-    getAcc' _         sn = sn
-    fixupRType (DeferredCC _) = Blank  -- FIXME: This is a hack
-    fixupRType a = a
-
--- This works for passing the correct id to the reference generator for Assumptions,
--- Requirements and Likely Changes but I question whether we should use it.
--- Pass it the item to be referenced and the enumerated list of the respective
--- contents for that file. Change rType values to implement.

@@ -10,7 +10,7 @@ import Language.Drasil.Development (UnitDefn, unitWrapper) -- FIXME
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 
   InclUnits(IncludeUnits), IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), 
-  LCsSec(..), LCsSec'(..), ProblemDescription(..), RefSec(RefProg), RefTab(TAandA, TUnits), 
+  LCsSec'(..), ProblemDescription(..), RefSec(RefProg), RefTab(TAandA, TUnits), 
   ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub), ScpOfProjSec(ScpOfProjProg), SCSSub(..), 
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
@@ -21,7 +21,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   generateTraceTable, goalStmt_label, characteristics_label, physSystDescription_label,
   generateTraceMap')
 
-import qualified Drasil.DocLang.SRS as SRS (datCon, dataDefnLabel, indPRCase, 
+import qualified Drasil.DocLang.SRS as SRS (datCon, indPRCase, 
   reference, valsOfAuxCons, assumpt, inModel)
 
 import Data.Drasil.Concepts.Computation (computerApp, inParam, compcon, algorithm)

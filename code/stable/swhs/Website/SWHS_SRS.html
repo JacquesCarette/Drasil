@@ -1873,7 +1873,6 @@ Detailed derivation of simplified rate of change of temperature :
 <p class="paragraph">
 Integrating <a href=#T:consThermE>TM: consThermE</a> over a volume (<em>V</em>), we have:
 </p>
-<div id="Eqn:empty">
 <div class="equation">
 <em>&minus;&int;<sub>V</sub>∇&sdot;<b>q</b>&#8239;dV&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
 <span class="fup">
@@ -1884,11 +1883,9 @@ Integrating <a href=#T:consThermE>TM: consThermE</a> over a volume (<em>V</em>),
 </span>
 </div>&#8239;dV</em>
 </div>
-</div>
 <p class="paragraph">
 Applying Gauss's Divergence Theorem to the first term over the surface <em>S</em> of the volume, with <em><b>q</b></em> as the thermal flux vector for the surface and <em><b>n&#770;</b></em> as a unit outward normal vector for a surface:
 </p>
-<div id="Eqn:empty">
 <div class="equation">
 <em>&minus;&int;<sub>S</sub><b>q</b>&sdot;<b>n&#770;</b>&#8239;dS&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
 <span class="fup">
@@ -1899,11 +1896,9 @@ Applying Gauss's Divergence Theorem to the first term over the surface <em>S</em
 </span>
 </div>&#8239;dV</em>
 </div>
-</div>
 <p class="paragraph">
 We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
 </p>
-<div id="Eqn:empty">
 <div class="equation">
 <em>q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
 <span class="fup">
@@ -1914,11 +1909,9 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 </span>
 </div>&#8239;dV</em>
 </div>
-</div>
 <p class="paragraph">
 Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by <a href=#A:Constant-Water-Temp-Across-Tank>A: Constant-Water-Temp-Across-Tank</a>, <a href=#A:Temp-PCM-Constant-Across-Volume>A: Temp-PCM-Constant-Across-Volume</a>, <a href=#A:Density-Water-PCM-Constant-over-Volume>A: Density-Water-PCM-Constant-over-Volume</a>, and <a href=#A:Specific-Heat-Energy-Constant-over-Volume>A: Specific-Heat-Energy-Constant-over-Volume</a>, we have:
 </p>
-<div id="Eqn:empty">
 <div class="equation">
 <em>ρ&#8239;C&#8239;V&#8239;<div class="fraction">
 <span class="fup">
@@ -1929,11 +1922,9 @@ d&#8239;t
 </span>
 </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
 </div>
-</div>
 <p class="paragraph">
 Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, (2) can be written as:
 </p>
-<div id="Eqn:empty">
 <div class="equation">
 <em>m&#8239;C&#8239;<div class="fraction">
 <span class="fup">
@@ -1943,7 +1934,6 @@ d&#8239;T
 d&#8239;t
 </span>
 </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
-</div>
 </div>
 </div>
 </div>
@@ -2409,10 +2399,8 @@ Output
 Input Constraints
 </th>
 <td>
-<div id="">
 <div class="equation">
 <em>T<sub>init</sub>&thinsp;&lt;&thinsp;T<sub>C</sub></em>
-</div>
 </div>
 </td>
 </tr>
@@ -2421,10 +2409,8 @@ Input Constraints
 Output Constraints
 </th>
 <td>
-<div id="">
 <div class="equation">
 <em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
-</div>
 </div>
 </td>
 </tr>
@@ -2533,7 +2519,6 @@ Derivation of the energy balance on water:
 <p class="paragraph">
 To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water <em>V<sub>W</sub></em>, which has mass of water <em>m<sub>W</sub></em> and specific heat capacity of water, <em>C<sub>W</sub></em>. <em>q<sub>C</sub></em> represents the heat transfer into the water from the heating coil and <em>q<sub>P</sub></em> represents the heat transfer into the PCM from water, over heating coil surface area and phase change material surface area of <em>A<sub>C</sub></em> and <em>A<sub>P</sub></em>, respectively. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#A:Perfect-Insulation-Tank>A: Perfect-Insulation-Tank</a>). Assuming no volumetric heat generation per unit volume (<a href=#A:No-Internal-Heat-Generation-By-Water-PCM>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
 </p>
-<div id="Eqn:empty">
 <div class="equation">
 <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
 <span class="fup">
@@ -2544,11 +2529,9 @@ d&#8239;t
 </span>
 </div> = q<sub>C</sub>&#8239;A<sub>C</sub>&minus;q<sub>P</sub>&#8239;A<sub>P</sub></em>
 </div>
-</div>
 <p class="paragraph">
 Using <a href=#DD:ht.flux.C>DD: ht_flux_C</a> and <a href=#DD:ht.flux.P>DD: ht_flux_P</a> for <em>q<sub>C</sub></em> and <em>q<sub>P</sub></em> respectively, this can be written as:
 </p>
-<div id="Eqn:empty">
 <div class="equation">
 <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
 <span class="fup">
@@ -2559,11 +2542,9 @@ d&#8239;t
 </span>
 </div> = h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)&minus;h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
 </div>
-</div>
 <p class="paragraph">
 Dividing (3) by <em>m<sub>W</sub></em><em>C<sub>W</sub></em>, we obtain:
 </p>
-<div id="Eqn:empty">
 <div class="equation">
 <em><div class="fraction">
 <span class="fup">
@@ -2588,11 +2569,9 @@ m<sub>W</sub>&#8239;C<sub>W</sub>
 </span>
 </div>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
 </div>
-</div>
 <p class="paragraph">
 Factoring the negative sign out of the second term of the RHS of Equation (4) and multiplying it by <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> / <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> yields:
 </p>
-<div id="Eqn:empty">
 <div class="equation">
 <em><div class="fraction">
 <span class="fup">
@@ -2623,12 +2602,10 @@ h<sub>P</sub>&#8239;A<sub>P</sub>
 m<sub>W</sub>&#8239;C<sub>W</sub>
 </span>
 </div>&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>)</em>
-</div>
 </div>
 <p class="paragraph">
 Which simplifies to:
 </p>
-<div id="Eqn:empty">
 <div class="equation">
 <em><div class="fraction">
 <span class="fup">
@@ -2659,7 +2636,6 @@ h<sub>C</sub>&#8239;A<sub>C</sub>
 m<sub>W</sub>&#8239;C<sub>W</sub>
 </span>
 </div>&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>)</em>
-</div>
 </div>
 <p class="paragraph">
 Setting <em>τ<sub>W</sub> = <div class="fraction">
@@ -2678,7 +2654,6 @@ h<sub>C</sub>&#8239;A<sub>C</sub>
 </span>
 </div></em> (<a href=#DD:melt.frac>DD: melt_frac</a>), Equation (5) can be written as:
 </p>
-<div id="Eqn:empty">
 <div class="equation">
 <em><div class="fraction">
 <span class="fup">
@@ -2703,7 +2678,6 @@ d&#8239;t
 </span>
 </div>&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>)</em>
 </div>
-</div>
 <p class="paragraph">
 Finally, factoring out <em><div class="fraction">
 <span class="fup">
@@ -2714,7 +2688,6 @@ Finally, factoring out <em><div class="fraction">
 </span>
 </div></em> , we are left with the governing ODE for (<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>):
 </p>
-<div id="Eqn:empty">
 <div class="equation">
 <em><div class="fraction">
 <span class="fup">
@@ -2731,7 +2704,6 @@ d&#8239;t
 τ<sub>W</sub>
 </span>
 </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>&plus;η&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>))</em>
-</div>
 </div>
 <div id="IM:eBalanceOnPCM">
 <table class="idefn">
@@ -2770,10 +2742,8 @@ Output
 Input Constraints
 </th>
 <td>
-<div id="">
 <div class="equation">
 <em>T<sub>init</sub>&thinsp;&lt;&thinsp;T<sub>melt</sub><sup>P</sup></em>
-</div>
 </div>
 </td>
 </tr>
@@ -2782,10 +2752,8 @@ Input Constraints
 Output Constraints
 </th>
 <td>
-<div id="">
 <div class="equation">
 <em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
-</div>
 </div>
 </td>
 </tr>
@@ -2914,7 +2882,6 @@ Detailed derivation of the energy balance on the PCM during  sensible heating ph
 <p class="paragraph">
 To find the rate of change of <em>T<sub>P</sub></em>, we look at the energy balance on the PCM. The volume being considered is the volume of PCM, <em>V<sub>P</sub></em>. The derivation that follows is initially for the solid PCM. The mass of phase change material is <em>m<sub>P</sub></em> and the specific heat capacity of PCM as a solid is <em>C<sub>P</sub><sup>S</sup></em>. The heat flux into the PCM from water is <em>q<sub>P</sub></em> over phase change material surface area <em>A<sub>P</sub></em>. There is no heat flux output. Assuming no volumetric heat generation per unit volume (<a href=#A:No-Internal-Heat-Generation-By-Water-PCM>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em> , the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
 </p>
-<div id="Eqn:empty">
 <div class="equation">
 <em>m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>&#8239;<div class="fraction">
 <span class="fup">
@@ -2925,11 +2892,9 @@ d&#8239;t
 </span>
 </div> = q<sub>P</sub>&#8239;A<sub>P</sub></em>
 </div>
-</div>
 <p class="paragraph">
 Using <a href=#DD:ht.flux.P>DD: ht_flux_P</a> for <em>q<sub>P</sub></em>, this equation can be written as:
 </p>
-<div id="Eqn:empty">
 <div class="equation">
 <em>m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>&#8239;<div class="fraction">
 <span class="fup">
@@ -2940,11 +2905,9 @@ d&#8239;t
 </span>
 </div> = h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
 </div>
-</div>
 <p class="paragraph">
 Dividing by <em>m<sub>P</sub></em> <em>C<sub>P</sub><sup>S</sup></em> we obtain:
 </p>
-<div id="Eqn:empty">
 <div class="equation">
 <em><div class="fraction">
 <span class="fup">
@@ -2962,11 +2925,9 @@ m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>
 </span>
 </div>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
 </div>
-</div>
 <p class="paragraph">
 Setting <em>τ<sub>P</sub><sup>S</sup></em> = <em>m<sub>P</sub></em> <em>C<sub>P</sub><sup>S</sup></em> / <em>h<sub>P</sub></em> <em>A<sub>P</sub></em> , this can be written as:
 </p>
-<div id="Eqn:empty">
 <div class="equation">
 <em><div class="fraction">
 <span class="fup">
@@ -2983,7 +2944,6 @@ d&#8239;t
 τ<sub>P</sub><sup>S</sup>
 </span>
 </div>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
-</div>
 </div>
 <p class="paragraph">
 Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that <em>C<sub>P</sub><sup>S</sup></em> is replaced by <em>C<sub>P</sub><sup>L</sup></em>, and thus <em>τ<sub>P</sub><sup>S</sup></em> is replaced by <em>τ<sub>P</sub><sup>L</sup></em>. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (<a href=#A:Volume-Change-Melting-PCM-Negligible>A: Volume-Change-Melting-PCM-Negligible</a>).
@@ -3038,10 +2998,8 @@ Input Constraints
 Output Constraints
 </th>
 <td>
-<div id="">
 <div class="equation">
 <em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
-</div>
 </div>
 </td>
 </tr>
@@ -3153,10 +3111,8 @@ Output
 Input Constraints
 </th>
 <td>
-<div id="">
 <div class="equation">
 <em>T<sub>init</sub>&thinsp;&lt;&thinsp;T<sub>melt</sub><sup>P</sup></em>
-</div>
 </div>
 </td>
 </tr>
@@ -3165,10 +3121,8 @@ Input Constraints
 Output Constraints
 </th>
 <td>
-<div id="">
 <div class="equation">
 <em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
-</div>
 </div>
 </td>
 </tr>
@@ -3679,18 +3633,14 @@ Properties of a Correct Solution
 <p class="paragraph">
 A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking <a href=#DD:ht.flux.C>DD: ht_flux_C</a> and <a href=#DD:ht.flux.P>DD: ht_flux_P</a>, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
 </p>
-<div id="">
 <div class="equation">
 <em>E<sub>W</sub> = &int;<sub>0</sub><sup>t</sup>h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))&#8239;dt&minus;&int;<sub>0</sub><sup>t</sup>h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t))&#8239;dt</em>
-</div>
 </div>
 <p class="paragraph">
 In addition, the change in heat energy in the PCM should equal the energy input to the PCM from the water. This can be expressed as
 </p>
-<div id="">
 <div class="equation">
 <em>E<sub>P</sub> = &int;<sub>0</sub><sup>t</sup>h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t))&#8239;dt</em>
-</div>
 </div>
 <p class="paragraph">
 Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as &quot;sanity&quot; checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% <a href=#verifyEnergyOutput>FR: Verify-Energy-Output-Follow-Conservation-of-Energy</a>.

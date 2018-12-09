@@ -84,7 +84,7 @@ derivation g = map makeDerivationContents (g ^. derivations)
 -- | Helper function for creating the layout objects
 -- (paragraphs and equation blocks) for a derivation.
 makeDerivationContents :: Sentence -> Contents
-makeDerivationContents (E e) = LlC $ llcc (mkEmptyLabel EqnB) (EqnBlock e) --FIXME: Derivation needs labels for it's equation
+makeDerivationContents (E e) = UlC $ ulcc $ EqnBlock e
 makeDerivationContents s     = UlC $ ulcc $ Paragraph s
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs

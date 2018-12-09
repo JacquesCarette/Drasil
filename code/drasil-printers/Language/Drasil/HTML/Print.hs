@@ -62,6 +62,7 @@ build fn (Document t a c) =
 
 -- | Helper for rendering LayoutObjects into HTML
 printLO :: LayoutObj -> Doc
+printLO (HDiv ts layoutObs EmptyS)  = div_tag ts (vcat (map printLO layoutObs))
 printLO (HDiv ts layoutObs l)  = refwrap (p_spec l) $
                                  div_tag ts (vcat (map printLO layoutObs))
 printLO (Paragraph contents)   = paragraph $ p_spec contents

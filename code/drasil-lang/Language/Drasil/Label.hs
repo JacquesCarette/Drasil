@@ -1,5 +1,5 @@
 module Language.Drasil.Label (Label, mkLabelRA',
- mkLabelSame, mkEmptyLabel, mkURILabel, getAdd, mkLabelRAAssump', 
+ mkLabelSame, mkURILabel, getAdd, mkLabelRAAssump', 
  mkLabelRAFig, mkLabelRASec, modifyLabelEqn, mkLabelRALst,
  getDefName, getReqName) where
 
@@ -93,15 +93,5 @@ mkLabelRALst r s = mkLabel (r ++ "Label") r s Lst
 mkLabelRAFig :: String -> Label
 mkLabelRAFig x = mkLabel (x ++ "Label") x x Fig
 
---mkLabelML :: String -> String -> String -> Label
---mkLabelML i ref shortn = Lbl i (MetaLink $ ensureASCII ref) (shortname' shortn)
-
---mkLabelURI :: String -> String -> String -> Label
---mkLabelURI i ref shortn = Lbl i (URI $ ensureASCII ref) (shortname' shortn)
-
 ensureASCII :: String -> String
 ensureASCII s = map (\y -> if isAscii y then y else error "Label needs to be pure ASCII.") s
-
---FIXME: remove upon adding labels to all the data types
-mkEmptyLabel :: RefType -> Label
-mkEmptyLabel rt = mkLabelSame "empty" rt

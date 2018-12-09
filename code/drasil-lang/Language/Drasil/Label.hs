@@ -62,12 +62,11 @@ repUnd c = c : []
 
 -- for when reference address and the display should be different
 mkLabelRA' :: String -> String -> RefType -> Label
-mkLabelRA' ref shortn rt = mkLabel (ref ++ "Label") ref shortn rt
+mkLabelRA' ref shortn rt = mkLabel ref ref shortn rt
 
 -- for when reference address and the display should be the same
 mkLabelSame :: String -> RefType ->Label
-mkLabelSame iAndRefAndshortn rt = mkLabel (iAndRefAndshortn++"Label") 
-  iAndRefAndshortn iAndRefAndshortn rt
+mkLabelSame i rt = mkLabel i i i rt
 
 mkLabelRAAssump :: String -> String -> Label
 mkLabelRAAssump r s = mkLabel (r ++ "Label") r s Assump

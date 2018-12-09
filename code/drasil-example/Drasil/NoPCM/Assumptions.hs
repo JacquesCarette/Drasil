@@ -43,8 +43,7 @@ assumpS4 =
   `sC` S "it is constant over their entire", phrase vol])
 
 newA5NoPCM :: AssumpChunk
-newA5NoPCM = assump "Density-Water-Constant-over-Volume" assumpS4 
-  (mkLabelRAAssump' "Density-Water-Constant-over-Volume")
+newA5NoPCM = assump (mkLabelRAAssump' "Density-Water-Constant-over-Volume") assumpS4
 
 assumpDWCoW = cic "assumpDWCoW" assumpS4
   "Density-Water-Constant-over-Volume" assumpDom
@@ -54,8 +53,7 @@ assumpS5 =
   S "is, it is constant over its entire", phrase vol])
 
 newA6NoPCM :: AssumpChunk
-newA6NoPCM = assump "Specific-Heat-Energy-Constant-over-Volume" assumpS5 
-  (mkLabelRAAssump' "Specific-Heat-Energy-Constant-over-Volume") 
+newA6NoPCM = assump (mkLabelRAAssump' "Specific-Heat-Energy-Constant-over-Volume") assumpS5
 
 assumpSHECoW = cic "assumpSHECoW" assumpS5
   "Specific-Heat-Energy-Constant-over-Volume" assumpDom
@@ -67,8 +65,7 @@ assumpS9_npcm =
   phrase temp_init, S "is less than (or equal to) the", phrase temp_C])
 
 newA9NoPCM :: AssumpChunk
-newA9NoPCM = assump "Charging-Tank-No-Temp-Discharge" assumpS9_npcm 
-  (mkLabelRAAssump' "Charging-Tank-No-Temp-Discharge")
+newA9NoPCM = assump (mkLabelRAAssump' "Charging-Tank-No-Temp-Discharge") assumpS9_npcm
 
 assumpCTNTD = cic "assumpCTNTD" assumpS9_npcm
   "Charging-Tank-No-Temp-Discharge" assumpDom
@@ -78,8 +75,7 @@ assumpS12 =
   +:+ phrase vol_ht_gen +:+. S "is zero")
 
 newA16 :: AssumpChunk
-newA16 = assump "No-Internal-Heat-Generation-By-Water" assumpS12 
-  (mkLabelRAAssump' "No-Internal-Heat-Generation-By-Water")
+newA16 = assump (mkLabelRAAssump' "No-Internal-Heat-Generation-By-Water") assumpS12
 
 assumpNIHGBW = cic "assumpNIHGBW" assumpS12
   "No-Internal-Heat-Generation-By-Water" assumpDom
@@ -91,8 +87,7 @@ assumpS13 =
   Sy (unit_symb QT.temp) `sC` S "respectively")
 
 newA19 :: AssumpChunk
-newA19 = assump "Atmospheric-Pressure-Tank" assumpS13 
-  (mkLabelRAAssump' "Atmospheric-Pressure-Tank")
+newA19 = assump (mkLabelRAAssump' "Atmospheric-Pressure-Tank") assumpS13
 
 assumpAPT = cic "assumpAPT" assumpS13
   "Atmospheric-Pressure-Tank" assumpDom

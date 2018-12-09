@@ -33,21 +33,21 @@ glassType, glassCondition, explainScenario, standardValues, glassLite, boundaryC
 -- FIXME: Remove the AssumpChunks once ConceptInstance and SCSProg's
 -- Assumptions has been migrated to using assumpDom
 
-glassType          = assump "glassTypeA"          glassTypeDesc                    glassTypeL
+glassType          = assump glassTypeL glassTypeDesc
 -- assumpGT           = cic "assumpGT"   glassTypeDesc                     "glassType"           Doc.assumpDom  -- FIXME: Use label once ConceptInstance migrates to them
-glassCondition     = assump "glassConditionA"     glassConditionDesc               glassConditionL
+glassCondition     = assump glassConditionL glassConditionDesc
 -- assumpGC           = cic "assumpGC"   glassConditionDesc                "glassCondition"      Doc.assumpDom  -- FIXME: Use label once ConceptInstance migrates to them
-explainScenario    = assump "explainScenarioA"    explainScenarioDesc              (mkLabelRAAssump' "explainScenario"   )
+explainScenario    = assump (mkLabelRAAssump' "explainScenario"   ) explainScenarioDesc
 -- assumpES           = cic "assumpES"   explainScenarioDesc               "explainScenario"     Doc.assumpDom
-standardValues     = assump "standardValuesA"    (standardValuesDesc load_dur)     (mkLabelRAAssump' "standardValues"    )
+standardValues     = assump (mkLabelRAAssump' "standardValues"    ) (standardValuesDesc load_dur)
 -- assumpSV           = cic "assumpSV"   (standardValuesDesc load_dur)     "standardValues"      Doc.assumpDom
-glassLite          = assump "glassLiteA"          glassLiteDesc                    glassLiteL
+glassLite          = assump glassLiteL glassLiteDesc
 -- assumpGL           = cic "assumpGL"   glassLiteDesc                     "glassLite"           Doc.assumpDom  -- FIXME: Use label once ConceptInstance migrates to them
-boundaryConditions = assump "boundaryConditionsA" boundaryConditionsDesc           (mkLabelRAAssump' "boundaryConditions")
+boundaryConditions = assump (mkLabelRAAssump' "boundaryConditions") boundaryConditionsDesc
 -- assumpBC           = cic "assumpBC"   boundaryConditionsDesc            "boundaryConditions"  Doc.assumpDom
-responseType       = assump "responseTypeA"       responseTypeDesc                 (mkLabelRAAssump' "responseType"      )
+responseType       = assump (mkLabelRAAssump' "responseType"      ) responseTypeDesc
 -- assumpRT           = cic "assumpRT"   responseTypeDesc                  "responseType"        Doc.assumpDom
-ldfConstant        = assump "ldfConstantA"       (ldfConstantDesc constant_LoadDF) (mkLabelRAAssump' "ldfConstant"       )
+ldfConstant        = assump (mkLabelRAAssump' "ldfConstant"       ) (ldfConstantDesc constant_LoadDF)
 -- assumpLDFC         = cic "assumpLDFC" (ldfConstantDesc constant_LoadDF) "ldfConstant"         Doc.assumpDom
 
 glassTypeDesc :: Sentence

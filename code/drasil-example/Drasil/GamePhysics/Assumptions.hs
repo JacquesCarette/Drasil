@@ -23,19 +23,19 @@ assumptions = [assumpOT, assumpOD, assumpCST, assumpAD, assumpCT, assumpDI,
 newA1, newA2, newA3, newA4, newA5, newA6, newA7 :: AssumpChunk
 assumpOT, assumpOD, assumpCST, assumpAD, assumpCT, assumpDI,
   assumpCAJI :: ConceptInstance
-newA1 = assump "objectTy" (foldlSent assumptions_assum1) (mkLabelRAAssump' "objectTy")
+newA1 = assump (mkLabelRAAssump' "objectTy") (foldlSent assumptions_assum1)
 assumpOT = cic "assumpOT" (foldlSent assumptions_assum1) "objectTy" assumpDom
-newA2 = assump "objectDimension" (foldlSent assumptions_assum2) (mkLabelRAAssump' "objectDimension")
+newA2 = assump (mkLabelRAAssump' "objectDimension") (foldlSent assumptions_assum2)
 assumpOD = cic "assumpOD" (foldlSent assumptions_assum2) "objectDimension" assumpDom
-newA3 = assump "coordinateSystemTy" (foldlSent assumptions_assum3) (mkLabelRAAssump' "coordinateSystemTy")
+newA3 = assump (mkLabelRAAssump' "coordinateSystemTy") (foldlSent assumptions_assum3)
 assumpCST = cic "assumpCST" (foldlSent assumptions_assum3) "coordinateSystemTy" assumpDom
-newA4 = assump "axesDefined" (foldlSent assumptions_assum4) (mkLabelRAAssump' "axesDefined")
+newA4 = assump (mkLabelRAAssump' "axesDefined") (foldlSent assumptions_assum4)
 assumpAD = cic "assumpAD" (foldlSent assumptions_assum4) "axesDefined" assumpDom
-newA5 = assump "collisionType" (foldlSent assumptions_assum5) (mkLabelRAAssump' "collisionType")
+newA5 = assump (mkLabelRAAssump' "collisionType") (foldlSent assumptions_assum5)
 assumpCT = cic "assumpCT" (foldlSent assumptions_assum5) "collisionType" assumpDom
-newA6 = assump "dampingInvolvement" (foldlSent assumptions_assum6) (mkLabelRAAssump' "dampingInvolvement")
+newA6 = assump (mkLabelRAAssump' "dampingInvolvement") (foldlSent assumptions_assum6)
 assumpDI = cic "assumpDI" (foldlSent assumptions_assum6) "dampingInvolvement" assumpDom
-newA7 = assump "constraintsAndJointsInvolvement" (foldlSent assumptions_assum7) (mkLabelRAAssump' "constraintsAndJointsInvolvement")
+newA7 = assump (mkLabelRAAssump' "constraintsAndJointsInvolvement") (foldlSent assumptions_assum7)
 assumpCAJI = cic "assumpCAJI" (foldlSent assumptions_assum7) "constraintsAndJointsInvolvement" assumpDom
 
 assumptions_list :: [Contents]

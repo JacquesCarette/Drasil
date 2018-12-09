@@ -472,7 +472,7 @@ mkSolChSpec si (SCSProg l) =
     -- then error out if necessary.
 
 helperAssump :: AssumpChunk -> ChunkDB -> Sentence
-helperAssump a cdb = foldlSent_ $ ([assuming a, helperRefs a cdb])
+helperAssump a c = foldlSent_ $ ([assuming a, helperRefs a c])
 {--}
 
 -- | Section stubs for implicit referencing

@@ -18,6 +18,7 @@ egetDocSec (ScpOfProjSec s)     = egetScp s
 egetDocSec (SSDSec s)           = egetSSD s
 egetDocSec (ReqrmntSec r)       = egetReq r
 egetDocSec (LCsSec l)           = egetLcs l
+egetDocSec (LCsSec' _)          = [] -- likely changes can't lead to Expr?
 egetDocSec (UCsSec u)           = egetUcs u
 egetDocSec (TraceabilitySec t)  = egetTrace t
 egetDocSec (AuxConstntSec a)    = egetAux a
@@ -161,6 +162,7 @@ getDocSec (ScpOfProjSec s)     = getScp s
 getDocSec (SSDSec s)           = getSSD s
 getDocSec (ReqrmntSec r)       = getReq r
 getDocSec (LCsSec l)           = getLcs l
+getDocSec (LCsSec' l)          = getLcs' l
 getDocSec (UCsSec u)           = getUcs u
 getDocSec (TraceabilitySec t)  = getTrace t
 getDocSec (AuxConstntSec a)    = getAux a
@@ -338,6 +340,9 @@ getReqSub (NonFReqsSub cc1 cc2 s1 s2) = (map (^. defn) cc1) ++ (map (^. defn) cc
 getLcs :: LCsSec -> [Sentence]
 getLcs (LCsProg c) = concatMap getCon' c
 
+getLcs' :: LCsSec' -> [Sentence]
+getLcs' (LCsProg' c) = map (^. defn) c
+
 getUcs :: UCsSec -> [Sentence]
 getUcs (UCsProg c) = concatMap getCon' c
 
@@ -368,6 +373,7 @@ ciGetDocSec (ScpOfProjSec    _)     = []
 ciGetDocSec (SSDSec          ssd)   = ciGetSSD ssd
 ciGetDocSec (ReqrmntSec      _)     = []
 ciGetDocSec (LCsSec          _)     = []
+ciGetDocSec (LCsSec'         _)     = []
 ciGetDocSec (UCsSec          _)     = []
 ciGetDocSec (TraceabilitySec _)     = []
 ciGetDocSec (AuxConstntSec   aux)   = ciGetAux aux

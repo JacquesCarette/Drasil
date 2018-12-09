@@ -18,41 +18,39 @@ traceMap f = Map.fromList . map (\x -> ((x ^. uid), lnames' (f x)))
 
 getTraceMapFromDocSec :: [DocSection] -> SSDSec
 getTraceMapFromDocSec ((SSDSec ssd):_)  = ssd
-getTraceMapFromDocSec  (hd:tl)          = getTraceMapFromDocSec tl
+getTraceMapFromDocSec  (_:tl)          = getTraceMapFromDocSec tl
 getTraceMapFromDocSec []                = error "No SSDSec found."
 
 getTraceMapFromSSDSec :: SSDSec -> [SSDSub]
 getTraceMapFromSSDSec (SSDProg s)       = s
-getTraceMapFromSSDSec _                 = error "No SSDSub found."
 
 getTraceMapFromSSDSub :: [SSDSub] -> SolChSpec
 getTraceMapFromSSDSub ((SSDSolChSpec s):_) = s
-getTraceMapFromSSDSub (hd:tl)              = getTraceMapFromSSDSub tl
+getTraceMapFromSSDSub (_:tl)              = getTraceMapFromSSDSub tl
 getTraceMapFromSSDSub []                    = error "No SolChSpec found."
 
 getTraceMapFromSolCh :: SolChSpec -> [SCSSub]
-getTraceMapFromSolCh (SCSProg sub) = sub
-getTraceMapFromSolCh _ = error "No SCSSub found."
+getTraceMapFromSolCh (SCSProg s) = s
 
 getTraceMapFromTM :: [SCSSub] -> [TheoryModel]
-getTraceMapFromTM ((TMs _ tm):_)      = tm
-getTraceMapFromTM  (hd:tl)            = getTraceMapFromTM tl
-getTraceMapFromTM []                  = error "No TM found."
+getTraceMapFromTM ((TMs _ t):_)     = t
+getTraceMapFromTM  (_:tl)           = getTraceMapFromTM tl
+getTraceMapFromTM []                = error "No TM found."
 
 getTraceMapFromGD :: [SCSSub] -> [GenDefn]
-getTraceMapFromGD ((GDs _ gd _):_)      = gd
-getTraceMapFromGD  (hd:tl)              = getTraceMapFromGD tl
-getTraceMapFromGD []                    = []
+getTraceMapFromGD ((GDs _ gd _):_)  = gd
+getTraceMapFromGD  (_:tl)           = getTraceMapFromGD tl
+getTraceMapFromGD []                = []
 
 getTraceMapFromDD :: [SCSSub] -> [DataDefinition]
-getTraceMapFromDD ((DDs _ dd _):_)      = dd
-getTraceMapFromDD  (hd:tl)              = getTraceMapFromDD tl
-getTraceMapFromDD []                    = []
+getTraceMapFromDD ((DDs _ dd _):_)  = dd
+getTraceMapFromDD  (_:tl)           = getTraceMapFromDD tl
+getTraceMapFromDD []                = []
 
 getTraceMapFromIM :: [SCSSub] -> [InstanceModel]
-getTraceMapFromIM ((IMs _ im _):_)      = im
-getTraceMapFromIM  (hd:tl)              = getTraceMapFromIM tl
-getTraceMapFromIM []                    = []
+getTraceMapFromIM ((IMs _ im _):_)  = im
+getTraceMapFromIM  (_:tl)           = getTraceMapFromIM tl
+getTraceMapFromIM []                = []
 
 extractSFromNotes :: HasAdditionalNotes l => l -> [Sentence]
 extractSFromNotes c = c ^. getNotes
@@ -65,15 +63,17 @@ getSCSSub a = getTraceMapFromSolCh $ getTraceMapFromSSDSub $ getTraceMapFromSSDS
  $ getTraceMapFromDocSec a
 
 generateTraceMap :: [DocSection] -> TraceMap
-generateTraceMap a = Map.unionsWith (++) [(traceMap extractSFromNotes (getTraceMapFromTM $ getSCSSub a)),
-  (traceMap extractSFromNotes gd), (traceMap extractSFromNotes dd),
-  (traceMap extractSFromNotes im), (traceMap extractSFromDeriv gd),
+generateTraceMap a = Map.unionsWith (++) [
+  (traceMap extractSFromNotes tt), (traceMap extractSFromNotes gd),
+  (traceMap extractSFromNotes dd), (traceMap extractSFromNotes im),
+  -- Theory models do not have derivations.
+  (traceMap extractSFromDeriv gd),
   (traceMap extractSFromDeriv dd), (traceMap extractSFromDeriv im)]
   where
-  	tm = getTraceMapFromTM $ getSCSSub a
-  	gd = getTraceMapFromGD $ getSCSSub a
-  	im = getTraceMapFromIM $ getSCSSub a
-  	dd = getTraceMapFromDD $ getSCSSub a
+    tt = getTraceMapFromTM $ getSCSSub a
+    gd = getTraceMapFromGD $ getSCSSub a
+    im = getTraceMapFromIM $ getSCSSub a
+    dd = getTraceMapFromDD $ getSCSSub a
 
 -- This is a hack as ConceptInstance cannot be collected yet.
 generateTraceMap' :: [ConceptInstance] -> TraceMap

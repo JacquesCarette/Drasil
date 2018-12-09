@@ -15,12 +15,10 @@ import Data.Drasil.Concepts.Documentation as Doc (inModel,
   requirement, item, assumption, thModel, traceyMatrix, model, output_, quantity, input_, 
   physicalConstraint, condition, property, variable, description, symbol_,
   information, goalStmt, physSyst, problem, definition, srs, content, reference,
-  document, goal, purpose, funcReqDom, likeChgDom, unlikeChgDom, srsDomains, doccon,
-  doccon')
+  document, goal, purpose, funcReqDom, srsDomains, doccon, doccon')
 
 import qualified Data.Drasil.Concepts.Math as M (ode, de, unit_, equation)
-import Data.Drasil.Concepts.Software (program, softwarecon, performance, correctness, verifiability,
-  understandability, reusability, maintainability, portability)
+import Data.Drasil.Concepts.Software (program, softwarecon, performance)
 import Data.Drasil.Phrase (for)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
   thermal_energy, ht_trans_theo, ht_flux, heat_cap_spec, thermal_conduction,
@@ -38,8 +36,7 @@ import Data.Drasil.Software.Products (compPro, prodtcon)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
 
-import qualified Drasil.DocLang.SRS as SRS (probDesc, goalStmt, inModelLabel,
-  funcReq, likeChg, unlikeChg, inModel)
+import qualified Drasil.DocLang.SRS as SRS (probDesc, goalStmt, funcReq, inModel)
 import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose), 
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
   SolChSpec(..), SSDSec(..), DocSection(..),
@@ -58,11 +55,11 @@ import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
-import Drasil.SWHS.Assumptions (newA11, newA12, newA14, newAssumptions)
+import Drasil.SWHS.Assumptions (newA11, newA12, newAssumptions)
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, genSystDesc, 
   orgDocIntro, physSyst1, physSyst2, traceFig1, traceFig2, traceIntro2, traceTrailing,
   swhs_datadefn, swhs_insmodel, swhs_gendef, swhs_theory, swhspriorityNFReqs)
-import Drasil.SWHS.Changes (chgsStart, likeChgTCVOD, likeChgTCVOL, likeChgTLH)
+import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, tank_para, transient, water,
   swhscon)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)

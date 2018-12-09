@@ -1,14 +1,12 @@
 module Language.Drasil.Label (Label, mkLabelRA',
  mkLabelSame, mkURILabel, getAdd, mkLabelRAAssump', 
- mkLabelRAFig, mkLabelRASec, modifyLabelEqn, mkLabelRALst,
+ mkLabelRAFig, mkLabelRASec, mkLabelRALst,
  getDefName, getReqName) where
 
 import Data.Char (isAscii)
-import Control.Lens((^.))
 
 import Language.Drasil.Label.Core
 import Language.Drasil.Label.Type (LblType(..), getAdd)
-import Language.Drasil.Classes (HasRefAddress(getRefAdd))
 import Language.Drasil.ShortName (shortname')
 import Language.Drasil.RefTypes (RefType(..), DType(..), ReqType(FR, NFR))
 
@@ -79,12 +77,6 @@ mkLabelRAAssump' rs = mkLabelRAAssump rs rs
 
 mkLabelRASec :: String -> String -> Label
 mkLabelRASec r s = mkLabel (r ++ "Label") r s Sect
-
---FIXME: hack
-modifyLabelEqn :: Label -> Label
-modifyLabelEqn lb = mkLabel ((getAdd (lb ^. getRefAdd)) ++ "Eqn")
-                            (getAdd (lb ^. getRefAdd))
-                            (getAdd (lb ^. getRefAdd)) EqnB
 
 mkLabelRALst :: String -> String -> Label
 mkLabelRALst r s = mkLabel (r ++ "Label") r s Lst

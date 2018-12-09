@@ -179,7 +179,6 @@ module Language.Drasil (
   , Label 
   , mkLabelRA', mkLabelSame, mkURILabel
   , mkLabelRAAssump', mkLabelRAFig, mkLabelRASec, mkLabelRALst
-  , modifyLabelEqn
   -- Document.getChunk
   , vars, vars', combine, combine', ccss, getIdeaDict
   -- Chunk.Sentence.EmbedSymbol
@@ -321,7 +320,7 @@ import Language.Drasil.RefTypes(RefAdd, RefType(..),
   DType(..), Reference(Reference), ReqType(FR, NFR), LinkType(Internal, Cite2, External))
 import Language.Drasil.RefProg(RefProg(..), IRefProg(..), Reference2(Reference2))
 import Language.Drasil.Label (mkLabelRA', mkLabelSame, mkLabelRALst,
-  mkURILabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec, modifyLabelEqn)
+  mkURILabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec)
 import Language.Drasil.Label.Type (getAdd)
 --Should be in lang-dev package?
 

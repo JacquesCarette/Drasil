@@ -24,7 +24,7 @@ executable tiny
     drasil-code >= 0.1.4,
     drasil-printers >= 0.1.7,
     drasil-gen >= 0.1.2,
-    drasil-docLang >= 0.1.15
+    drasil-docLang >= 0.1.17
   default-language: Haskell2010
   ghc-options:      -Wall -O2
 

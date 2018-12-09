@@ -16,7 +16,7 @@ import Data.Map (keys)
 import Data.List (elem)
 import Language.Drasil
 import Language.Drasil.Development (MayHaveUnit(getUnit))
-import Data.Drasil.Utils (eqUnR)
+import Data.Drasil.Utils (eqUnR')
 import Data.Drasil.SentenceStructures (getSource', foldlSent)
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
@@ -101,8 +101,7 @@ mkTMField :: (HasSymbolTable ctx, HasDataDefnTable ctx, HasInsModelTable ctx, Ha
   HasSectionTable ctx, HasLabelledContent ctx) => TheoryModel -> ctx  -> Field -> ModRow -> ModRow
 mkTMField t _ l@Label fs  = (show l, (mkParagraph $ at_start t):[]) : fs
 mkTMField t _ l@DefiningEquation fs =
-  (show l, (map (\x -> LlC $ eqUnR x (modifyLabelEqn (t ^. getLabel))) --FIXME: should this have labels?
-  (t ^. invariants))) : fs 
+  (show l, (map eqUnR' (t ^. invariants))) : fs 
 mkTMField t m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] (t ^. invariants)) : fs
 mkTMField t m l@(RefBy) fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
@@ -145,8 +144,7 @@ mkDDField :: (HasSymbolTable ctx, HasDataDefnTable ctx, HasInsModelTable ctx, Ha
 mkDDField d _ l@Label fs = (show l, (mkParagraph $ at_start d):[]) : fs
 mkDDField d _ l@Symbol fs = (show l, (mkParagraph $ (P $ eqSymb d)):[]) : fs
 mkDDField d _ l@Units fs = (show l, (mkParagraph $ (toSentenceUnitless d)):[]) : fs
-mkDDField d _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (sy d $= d ^. defnExpr) --FIXME: appending symbol should be done in the printing stage
-  (modifyLabelEqn (d ^.getLabel))) :[]) : fs 
+mkDDField d _ l@DefiningEquation fs = (show l, (eqUnR' (sy d $= d ^. defnExpr)) :[]) : fs 
 mkDDField d m l@(Description v u) fs =
   (show l, buildDDescription' v u d m) : fs
 mkDDField t m l@(RefBy) fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
@@ -178,8 +176,7 @@ mkGDField :: (HasSymbolTable ctx, HasDataDefnTable ctx, HasInsModelTable ctx, Ha
 mkGDField g _ l@Label fs = (show l, (mkParagraph $ at_start g):[]) : fs
 mkGDField g _ l@Units fs = 
   maybe fs (\udef -> (show l, (mkParagraph $ Sy (usymb udef)):[]) : fs) (getUnit g)
-mkGDField g _ l@DefiningEquation fs = (show l, (LlC $ eqUnR (g ^. relat) 
-  (modifyLabelEqn (g ^. getLabel))):[]) : fs
+mkGDField g _ l@DefiningEquation fs = (show l, (eqUnR' (g ^. relat)):[]) : fs
 mkGDField g m l@(Description v u) fs = (show l,
   (buildDescription v u (g ^. relat) m) []) : fs
 mkGDField g m l@(RefBy) fs = (show l, [mkParagraph $ helperRefs g m]) : fs --FIXME: fill this in
@@ -192,8 +189,7 @@ mkIMField :: (HasSymbolTable ctx, HasDataDefnTable ctx, HasInsModelTable ctx, Ha
   , HasTraceTable ctx, HasRefbyTable ctx, HasAssumpTable ctx, HasConceptInstance ctx,
   HasSectionTable ctx, HasLabelledContent ctx) => InstanceModel -> ctx -> Field -> ModRow -> ModRow
 mkIMField i _ l@Label fs  = (show l, (mkParagraph $ at_start i):[]) : fs
-mkIMField i _ l@DefiningEquation fs =
-  (show l, (LlC $ eqUnR (i ^. relat) (modifyLabelEqn (i ^. getLabel))):[]) : fs
+mkIMField i _ l@DefiningEquation fs = (show l, (eqUnR' (i ^. relat)):[]) : fs
 mkIMField i m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] [i ^. relat]) : fs
 mkIMField i m l@(RefBy) fs = (show l, [mkParagraph $ helperRefs i m]) : fs --FIXME: fill this in

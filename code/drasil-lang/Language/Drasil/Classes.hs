@@ -14,7 +14,6 @@ module Language.Drasil.Classes (
   , IsUnit(udefn, getUnits)
   , HasLabel(getLabel)
   , MayHaveLabel(getMaybeLabel)
-  , IsLabel
   , UnitEq(uniteq)
   , HasReference(getReferences)
   , HasReference2(getReferences2) -- hack for now...
@@ -114,9 +113,6 @@ class HasLabel c where
  
 class MayHaveLabel c where
   getMaybeLabel :: c -> Maybe Label
-
--- IsLabel is associated with String rendering
-class (HasLabel u, HasUID u) => IsLabel u where
 
 -- | A Quantity is an 'Idea' with a 'Space' and a symbol.
 -- In theory, it should also have MayHaveUnit, but that causes

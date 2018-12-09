@@ -2,7 +2,8 @@
 module Language.Drasil.Chunk.AssumpChunk ( AssumpChunk(..) , assump) where
 
 import Data.Drasil.IdeaDicts (softEng)
-import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
+import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
+  HasRefAddress(getRefAdd))
 import Language.Drasil.Classes (HasLabel(getLabel), ConceptDomain(cdom), CommonIdea(abrv)
   , NamedIdea(term))
 import Language.Drasil.Label.Core (Label)
@@ -23,6 +24,7 @@ makeLenses ''AssumpChunk
 instance HasUID        AssumpChunk where uid = lbl . uid
 instance Eq            AssumpChunk where a == b = a ^. uid == b ^. uid
 instance HasLabel      AssumpChunk where getLabel = lbl
+instance HasRefAddress AssumpChunk where getRefAdd = lbl . getRefAdd
 instance HasShortName  AssumpChunk where shortname = lbl . shortname
 instance ConceptDomain AssumpChunk where cdom = ci . cdom
 instance NamedIdea     AssumpChunk where term = ci . term

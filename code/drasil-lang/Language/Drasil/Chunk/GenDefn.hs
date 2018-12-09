@@ -1,11 +1,12 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.GenDefn ( GenDefn, gd', gd'') where
 
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
+import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
+  HasRefAddress(getRefAdd))
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, IsUnit,
   ExprRelat(relat), HasDerivation(derivations),
-  HasLabel(getLabel), HasAdditionalNotes(getNotes), HasShortName(shortname),
-  CommonIdea(abrv))
+  HasLabel(getLabel), HasAdditionalNotes(getNotes), CommonIdea(abrv))
 import Data.Drasil.IdeaDicts (softEng)
 import Language.Drasil.Chunk.Citation (Citation, HasCitation(getCitations))
 import Language.Drasil.Chunk.Relation (RelationConcept)
@@ -41,6 +42,7 @@ instance HasDerivation      GenDefn where derivations = deri
 instance HasCitation        GenDefn where getCitations = cit
 instance HasLabel           GenDefn where getLabel = lb
 instance HasShortName       GenDefn where shortname = lb . shortname
+instance HasRefAddress      GenDefn where getRefAdd = lb . getRefAdd
 instance HasAdditionalNotes GenDefn where getNotes = notes
 instance MayHaveUnit        GenDefn where getUnit = gdUnit
 instance CommonIdea         GenDefn where abrv = abrv . view ci

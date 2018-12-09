@@ -10,10 +10,12 @@ import Data.Drasil.IdeaDicts (softEng)
 import Language.Drasil.Chunk.Citation (Citation, HasCitation(getCitations))
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Chunk.Quantity (QuantityDict)
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA), Quantity,
-  Definition(defn),ConceptDomain(cdom), Concept, ExprRelat(relat),
-  HasDerivation(derivations), HasAdditionalNotes(getNotes),
-  HasLabel(getLabel), HasSymbol(symbol), HasSpace(typ), HasShortName(shortname),CommonIdea(abrv))
+import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
+  HasRefAddress(getRefAdd), HasSymbol(symbol))
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
+  Quantity, HasSpace(typ),
+  HasDerivation(derivations),  HasAdditionalNotes(getNotes), ExprRelat(relat),
+  HasLabel(getLabel), ConceptDomain(cdom), CommonIdea(abrv), Concept, Definition(defn))
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Development.Unit (MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Relation)
@@ -61,6 +63,7 @@ instance HasDerivation      InstanceModel where derivations = deri
 instance HasCitation        InstanceModel where getCitations = cit
 instance HasLabel           InstanceModel where getLabel = lb
 instance HasShortName       InstanceModel where shortname = lb . shortname
+instance HasRefAddress      InstanceModel where getRefAdd = lb . getRefAdd
 instance HasAdditionalNotes InstanceModel where getNotes = notes
 instance HasSymbol          InstanceModel where symbol = symbol . view imOutput -- ???
 instance HasSpace           InstanceModel where typ = imOutput . typ

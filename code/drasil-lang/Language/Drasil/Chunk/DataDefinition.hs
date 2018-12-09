@@ -6,10 +6,12 @@ import Data.Drasil.IdeaDicts (softEng)
 import Language.Drasil.Chunk.Citation (Citation, HasCitation(getCitations))
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn')
 import Language.Drasil.Derivation (Derivation)
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  HasSymbol(symbol), DefiningExpr(defnExpr), Quantity, HasSpace(typ),
+import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
+  HasRefAddress(getRefAdd), HasSymbol(symbol))
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
+  DefiningExpr(defnExpr), Quantity, HasSpace(typ),
   HasDerivation(derivations),  HasAdditionalNotes(getNotes),
-  HasShortName(shortname), HasLabel(getLabel), ConceptDomain(cdom), CommonIdea(abrv))
+  HasLabel(getLabel), ConceptDomain(cdom), CommonIdea(abrv))
 import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label)
@@ -50,6 +52,7 @@ instance HasAdditionalNotes DataDefinition where getNotes = notes
 instance MayHaveUnit        DataDefinition where getUnit = getUnit . view qd 
 instance HasLabel           DataDefinition where getLabel = lbl
 instance HasShortName       DataDefinition where shortname = lbl . shortname
+instance HasRefAddress      DataDefinition where getRefAdd = lbl . getRefAdd
 instance ConceptDomain      DataDefinition where cdom = ci . cdom
 instance CommonIdea         DataDefinition where abrv = abrv . view ci
 

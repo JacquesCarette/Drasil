@@ -4,9 +4,11 @@ module Language.Drasil.Chunk.Theory (TheoryModel, tm, Theory(..))where
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.Quantity (QuantityDict, qw)
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA), Quantity,
+import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
+  HasRefAddress(getRefAdd))
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Quantity,
   Definition(defn), ConceptDomain(cdom), Concept, HasReference2(getReferences2),
-  HasAdditionalNotes(getNotes), HasLabel(getLabel), HasShortName(shortname), CommonIdea(abrv))
+  HasAdditionalNotes(getNotes), HasLabel(getLabel), CommonIdea(abrv))
 import Language.Drasil.Development.Unit (MayHaveUnit)
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.Label.Core (Label)
@@ -72,6 +74,7 @@ instance Theory             TheoryModel where
   defined_fun   = dfun
 instance HasLabel           TheoryModel where getLabel = lb
 instance HasShortName       TheoryModel where shortname = lb . shortname
+instance HasRefAddress      TheoryModel where getRefAdd = lb . getRefAdd
 instance CommonIdea         TheoryModel where abrv = abrv . view ci
 
 softEng :: IdeaDict

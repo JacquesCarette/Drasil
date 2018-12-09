@@ -18,7 +18,7 @@ import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
 import Language.Drasil.Chunk.Theory (TheoryModel)
-import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), HasLabel(getLabel),
+import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid),
   HasRefAddress(getRefAdd), HasShortName(shortname), HasFields(getFields), CommonIdea(abrv))
 import Language.Drasil.Document (Section(Section))
 import Language.Drasil.Document.Core (RawContent(..), LabelledContent(..))
@@ -105,7 +105,6 @@ instance HasCitationRefs ReferenceDB where citationRefTable = citationDB
 instance HasConceptRefs  ReferenceDB where conceptRefTable = conceptDB
 
 
---FIXME: "class (HasLabel s) => Referable s where" instead?
 class HasUID s => Referable s where
   refAdd    :: s -> String  -- The plaintext referencing address (what we're linking to).
                             -- Should be string with no spaces/special chars.
@@ -113,7 +112,7 @@ class HasUID s => Referable s where
   renderRef :: s -> RefProg -- A program to render a shortname
 
 instance Referable AssumpChunk where
-  refAdd    x = getAdd ((x ^. getLabel) ^. getRefAdd)
+  refAdd    x = getAdd (x ^. getRefAdd)
   renderRef l = RP $ prepend $ abrv l
 
 instance Referable Section where
@@ -125,19 +124,19 @@ instance Referable Citation where
   renderRef _ = Citation
 
 instance Referable TheoryModel where
-  refAdd    t = getAdd ((t ^. getLabel) ^. getRefAdd)
+  refAdd    t = getAdd (t ^. getRefAdd)
   renderRef l = RP $ prepend $ abrv l
 
 instance Referable GenDefn where
-  refAdd    g = getAdd ((g ^. getLabel) ^. getRefAdd)
+  refAdd    g = getAdd (g ^. getRefAdd)
   renderRef l = RP $ prepend $ abrv l
 
 instance Referable DataDefinition where
-  refAdd    d = getAdd ((d ^. getLabel) ^. getRefAdd)
+  refAdd    d = getAdd (d ^. getRefAdd)
   renderRef l = RP $ prepend $ abrv l
 
 instance Referable InstanceModel where
-  refAdd    i = getAdd ((i ^. getLabel) ^. getRefAdd)
+  refAdd    i = getAdd (i ^. getRefAdd)
   renderRef l = RP $ prepend $ abrv l
 
 instance Referable ConceptInstance where

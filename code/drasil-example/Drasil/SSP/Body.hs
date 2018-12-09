@@ -16,13 +16,12 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   SCSSub(..), GSDSec(..), GSDSub(..), 
   ReqrmntSec(..), ReqsSub(FReqsSub, NonFReqsSub),
   dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc,
-  mkEnumSimpleD, nonFuncReqF, outDataConstTbl, probDescF, reqF, termDefnF,
+  mkEnumSimpleD, outDataConstTbl, probDescF, termDefnF,
   tsymb'', valsOfAuxConstantsF,getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceTable, goalStmt_label, physSystDescription_label, generateTraceMap')
+  goalStmt_label, physSystDescription_label, generateTraceMap')
 
-import qualified Drasil.DocLang.SRS as SRS (funcReq, inModelLabel, inModel,
-  physSyst, assumpt)
+import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   design, document, effect, element, endUser, environment, goalStmt, inModel, 
@@ -35,7 +34,7 @@ import Data.Drasil.Concepts.Math (equation, surface, mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (mass, physicalcon)
 import Data.Drasil.Concepts.Physics (fbd, force, strain, stress, physicCon)
 import Data.Drasil.Concepts.Software (accuracy, correctness, maintainability, 
-  performanceSpd, program, reusability, understandability, softwarecon, performance)
+  program, reusability, understandability, softwarecon, performance)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce, solidcon)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Software.Products (sciCompS, prodtcon)
@@ -479,9 +478,6 @@ slipVert  = verticesConst $ phrase slip
 slopeVert = verticesConst $ phrase slope
 -}
 {-input and output tables-}
-traceTableAll :: LabelledContent
-traceTableAll = generateTraceTable sspSymMap
-
 data_constraint_Table2, data_constraint_Table3 :: LabelledContent
 data_constraint_Table2 = inDataConstTbl sspInputs --FIXME: issue #295
 data_constraint_Table3 = outDataConstTbl sspOutputs

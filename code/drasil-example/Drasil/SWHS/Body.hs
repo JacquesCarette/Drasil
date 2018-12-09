@@ -21,7 +21,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc,
   getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap, generateTraceMap',
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   generateTraceTable, goalStmt_label, physSystDescription_label)
-import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt, inModelLabel,
+import qualified Drasil.DocLang.SRS as SRS (funcReq, goalStmt,
   likeChg, probDesc, sysCont, unlikeChg, inModel)
 
 import qualified Drasil.DocumentLanguage.Units as U (toSentence)

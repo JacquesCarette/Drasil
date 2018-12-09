@@ -1,12 +1,13 @@
 module Drasil.SWHS.Generate (generate) where
 
-import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..), 
-  ImplementationType(..), Lang(..), Logging(..), Structure(..))
+-- import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..), 
+--   ImplementationType(..), Lang(..), Logging(..), Structure(..))
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
 import Drasil.SWHS.Body (swhs_srs', printSetting)
 
+{- When ready to generate code from SWHS, re-enable
 swhsChoices :: Choices
 swhsChoices = Choices {
   lang = [Python, Cpp, CSharp, Java],
@@ -17,7 +18,7 @@ swhsChoices = Choices {
   onSfwrConstraint = Warning,  -- Warning, Exception
   onPhysConstraint = Warning,  -- Warning, Exception
   inputStructure = Loose    -- Loose, AsClass
-}
+} -}
 
 generate :: IO ()
 generate = do

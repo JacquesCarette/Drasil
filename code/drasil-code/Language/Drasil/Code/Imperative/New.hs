@@ -1,22 +1,52 @@
-module New where
+module Language.Drasil.Code.Imperative.New (
+    -- Types
+    Class, Method, Body, Block, Statement, Declaration, Value, StateType,
+    Function, StateVar, IOType, IOSt, Scope, Keyword, Label, Library, VarDecl, 
+    FunctionDecl,
+    -- Typeclasses
+    RenderSym(..), KeywordSym(..), ClassSym(..), MethodSym(..), 
+    BodySym(..), Symantics(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
+    IOStSym(..), ValueSym(..), Selector(..), FunctionSym(..)
+) where
 
-data Class
-data Method
-data Body
-data Block
-data Statement
-data Declaration
-data Value
-data StateType
-data Function
-data IOType
+import Text.PrettyPrint.HughesPJ (Doc)
+
+type Class = Doc
+type Method = Doc
+type Body = Doc
+type Block = Doc
+type Statement = Doc
+type Declaration = Doc
+type Value = Doc
+type StateType = Doc
+type Function = Doc
+type StateVar = Doc
+type IOType = Doc
+type IOSt = Doc
+type Scope = Doc
+type Keyword = Doc
 
 type Label = String
 type Library = String
 type VarDecl = Declaration
 type FunctionDecl = Method
 
-data Module repr = Mod Label [Library] [repr VarDecl] [repr FunctionDecl] [repr Class]
+class RenderSym repr where
+    renderCode :: Label -> [repr a] -> [Label] -> [(FilePath, a)]
+        -- repr -> file names -> unRepr
+    fileDoc :: repr Doc -> repr Doc
+    top :: repr Block -- Block is a placeholder for all of these, should change
+    codeBody :: repr Class -> repr Block
+    bottom :: repr Block
+
+class KeywordSym repr where
+    endStatement :: repr Keyword
+    include :: repr Keyword
+    list :: repr Keyword -- Later may need to be repr Permanence -> repr Keyword
+    printFunc :: repr Keyword
+    printLnFunc :: repr Keyword
+    printFileFunc :: repr Value -> repr Keyword
+    printFileLnFunc :: repr Value -> repr Keyword
 
 class ClassSym repr where
     buildClass :: Label -> Maybe Label -> repr Scope -> [repr StateVar] -> [repr Method] -> repr Class
@@ -38,7 +68,7 @@ class StateTypeSym repr where
     char   :: repr StateType
     string :: repr StateType
 
-class (StateTypeSym repr, ValueSym repr, IOSym repr) => StatementSym repr where
+class (StateTypeSym repr, ValueSym repr, IOStSym repr) => StatementSym repr where
     (&=)   :: repr Value -> repr Value -> repr Statement
     (&.=)  :: Label -> repr Value -> repr Statement
     (&=.)  :: repr Value -> Label -> repr Statement
@@ -80,12 +110,17 @@ class (StateTypeSym repr, ValueSym repr, IOSym repr) => StatementSym repr where
     openFileW :: repr Value -> repr Value -> repr Statement
     closeFile :: repr Value -> repr Statement
 
-    return    :: repr Value -> repr Statement
+    returnState    :: repr Value -> repr Statement
     returnVar :: Label -> repr Statement
 
-class ValueSym repr => IOSym repr where
+    ioState :: repr IOSt -> repr Statement
+
+class ValueSym repr => IOTypeSym repr where
     console :: repr IOType
     file    :: repr Value -> repr IOType
+
+class IOStSym repr where
+    out :: repr Keyword -> repr Value -> repr IOSt 
 
 class ValueSym repr where
     litBool   :: Bool -> repr Value
@@ -140,8 +175,3 @@ class (ValueSym repr, StateTypeSym repr) => FunctionSym repr where
     listAccess :: repr Value -> repr Function
     listAppend :: repr Value -> repr Function
     listExtend :: repr StateType -> repr Function
-
--- Functions
-
-buildModule :: Label -> [Library] -> [repr VarDecl] -> [repr FunctionDecl] -> [repr Class] -> Module repr
-buildModule = Mod

@@ -22,6 +22,5 @@ main = do
     
 genCode :: String -> IO()
 genCode lang = createCodeFiles $ makeCode 
-  lang 
-  (Options Nothing Nothing Nothing (Just "Code"))  
-  (toAbsCode "HelloWorld" [helloWorld])
+  lang
+  [helloWorld] ["HelloWorld"]

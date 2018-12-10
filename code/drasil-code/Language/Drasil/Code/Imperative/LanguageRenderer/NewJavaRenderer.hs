@@ -1,80 +1,103 @@
+-- | The logic to render Java code from an 'AbstractCode' is contained in this module
+module Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer (
+    -- * Java Code Configuration -- defines syntax of all Java code
+    JavaCode(..)
+) where
+
 import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.AST hiding (body,comment,bool,int,float,char)
-import Language.Drasil.Code.Imperative.LanguageRenderer (Config(Config), FileType(Source),
-  DecDef(Dec, Def), getEnv, complexDoc, inputDoc, ioDoc, functionListDoc, functionDoc, unOpDoc,
-  valueDoc, methodTypeDoc, methodDoc, methodListDoc, statementDoc, stateDoc, stateListDoc,
-  scopeDoc, retDoc, printDoc, patternDoc, paramDoc, paramListDoc, classDoc, objAccessDoc,
-  objVarDoc, clsDecListDoc, clsDecDoc, litDoc, iterationDoc, funcDoc, funcAppDoc, exprDoc,
-  exceptionDoc, declarationDoc, enumElementsDoc, conditionalDoc, callFuncParamList,
-  blockDoc, bodyDoc, binOpDoc, body, bottom, top, assignDoc, elseIf, ifBodyStart, blockEnd,
-  printFunc, printFileFunc, printFileLnFunc, printLnFunc, stateType, blockStart, clsDec,
-  listObj, package, list, iterInLabel, iterForEachLabel, inherit, inputFunc, include,
-  includeScope, fileName, ext, dir, enumsEqualInts, commentStart, endStatement, bitArray,
-  renderCode, argsList, Options, ioDocD, StatementLocation(NoLoop), dot, inputDocD,
-  valueDocD, methodDocD, methodListDocD, paramDocD, paramListDocD,
-  objAccessDocD, iterationDocD, funcDocD, assignDocD, stateTypeD, fileCode,
-  functionListDocD, methodTypeDocD, unOpDocD, statementDocD, scopeDocD, stateDocD, stateListDocD,
-  doubleSlash, retDocD, patternDocD, clsDecListDocD, clsDecDocD, funcAppDocD, enumElementsDocD,
-  litDocD, conditionalDocD'', callFuncParamListD, bodyDocD, blockDocD, binOpDocD,
-  classDec, includeD, fileNameD, new, exprDocD'', declarationDocD,
-  typeOfLit, functionDocD, printDocD, objVarDocD, classDocD, forLabel, javalist)
+import Language.Drasil.Code.Imperative.New
+import Language.Drasil.Code.Imperative.NewLanguageRenderer (renderCode', fileDoc',
+    ioDocOutD, litStringD, includeD, dot)
 import Language.Drasil.Code.Imperative.Helpers (blank,angles,oneTab,vibmap)
 
 import Prelude hiding (break,print)
-import Control.Monad.Reader
+import Control.Applicative (Applicative, liftA, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals, 
   semi, vcat, lbrace, rbrace, doubleQuotes, render, colon)
 
-javaConfig :: Options -> Config -> Config
-javaConfig options c = 
-    let listType = case (javalist options) of Nothing -> "Vector"
-                                            Just lt -> if lt `elem` validListTypes then lt
-                                                        else error $ "Unsupported Java list type specified in config file: " ++ lt ++ "\nSupported types are: " ++ show validListTypes
-    in Config {
-        renderCode = renderCode' c,
+-- javaConfig :: Options -> Config -> Config
+-- javaConfig options c = 
+--     let listType = case (javalist options) of Nothing -> "Vector"
+--                                             Just lt -> if lt `elem` validListTypes then lt
+--                                                         else error $ "Unsupported Java list type specified in config file: " ++ lt ++ "\nSupported types are: " ++ show validListTypes
+--     in Config {
+--         renderCode = renderCode' c,
         
-        argsList         = text "args",
-        bitArray         = text "BitSet",
-        commentStart     = doubleSlash,
-        endStatement     = semi,
-        enumsEqualInts   = False,
-        ext              = ".java",
-        dir              = "java",
-        fileName         = fileNameD c,
-        include          = includeD "import",
-        includeScope     = (scopeDoc c),
-        inherit          = text "extends",
-        inputFunc        = parens(text "new Scanner(System.in)"),
-        iterForEachLabel = forLabel,
-        iterInLabel      = colon,
-        list             = \_ -> text listType,
-        listObj          = new,
-        clsDec           = classDec,
-        package          = package',
-        printFunc        = text "System.out.print",
-        printLnFunc      = text "System.out.println",
-        printFileFunc    = \f -> valueDoc c f <> dot <> text "print",
-        printFileLnFunc  = \f -> valueDoc c f <> dot <> text "println",
-        stateType        = jstateType c,
+--         argsList         = text "args",
+--         bitArray         = text "BitSet",
+--         commentStart     = doubleSlash,
+--         enumsEqualInts   = False,
+--         ext              = ".java",
+--         dir              = "java",
+--         fileName         = fileNameD c,
+--         includeScope     = (scopeDoc c),
+--         inherit          = text "extends",
+--         inputFunc        = parens(text "new Scanner(System.in)"),
+--         iterForEachLabel = forLabel,
+--         iterInLabel      = colon,
+--         listObj          = new,
+--         clsDec           = classDec,
+--         package          = package',
+--         stateType        = jstateType c,
         
-        blockStart = lbrace, blockEnd = rbrace, 
-        ifBodyStart = blockStart c, elseIf = text "else if",
+--         blockStart = lbrace, blockEnd = rbrace, 
+--         ifBodyStart = blockStart c, elseIf = text "else if",
         
-        top    = jtop c,
-        body   = jbody c,
-        bottom = \_ -> empty,
-        
-        getEnv = \_ -> error "no environment has been set"
-    }
+--         getEnv = \_ -> error "no environment has been set"
+--     }
 
-newtype JavaCode a = JC {unJC :: Doc}
+newtype JavaCode a = JC {unJC :: a}
+
+instance Functor JavaCode where
+    fmap f (JC x) = JC (f x)
+
+instance Applicative JavaCode where
+    pure = JC
+    (JC f) <*> (JC x) = JC (f x)
 
 instance Monad JavaCode where
     return = JC
-    JC a >>= f = f a
+    JC x >>= f = f x
+
+instance RenderSym JavaCode where
+    renderCode files names unRepr = renderCode' files names [".java"] unRepr
+    fileDoc code = liftA3 fileDoc' top code bottom
+    top = do
+        end <- endStatement 
+        inc <- include
+        lst <- list
+        return $ vcat [
+            inc <+> text "java.util.Arrays" <> end,
+            inc <+> text "java.util.BitSet" <> end,     --TODO: only include these if they are used in the code?
+            inc <+> text "java.util.Scanner" <> end,
+            inc <+> text "java.io.PrintWriter" <> end,
+            inc <+> text "java.io.File" <> end,
+            inc <+> text ("java.util." ++ render (lst)) <> end]
+    codeBody m = m -- don't need right now
+    bottom = return empty
+
+instance KeywordSym JavaCode where
+    endStatement = return semi
+    include = return $ includeD "import"
+    list = return $ text "Vector"
+    printFunc = return $ text "System.out.print"
+    printLnFunc = return $ text "System.out.println"
+    printFileFunc f = do 
+        fname <- f
+        return $ fname <> dot <> text "print"
+    printFileLnFunc f = do 
+        fname <- f
+        return $ fname <> dot <> text "println"
     
 instance ClassSym JavaCode where
-    buildClass n p s vs fs = return $ (classDocD n p s vs fs)
+    -- buildClass n p s vs fs = liftA3 (classDocD n p) s vs fs -- vs and fs are actually lists... should 
+
+-- instance ClassSym JavaCode where
+--     buildClass n p s vs fs = do
+--         scope <- s
+--         vars <- vs
+--         funcs <- fs --ignore for the moment that fs and vs are lists
+--         return (classDocD n p scope vars funcs)
 
 -- instance ClassSym JavaCode where
 --     buildClass n p s vs fs = JC $ do
@@ -83,21 +106,34 @@ instance ClassSym JavaCode where
 
 instance StateTypeSym JavaCode
 
-instance ValueSym JavaCode
+instance ValueSym JavaCode where
+    litString s = return $ litStringD s
 
-instance IOSym JavaCode
+instance IOTypeSym JavaCode
+
+instance IOStSym JavaCode where
+    out prf v = liftA3 ioDocOutD prf v endStatement
 
 instance StatementSym JavaCode where
-    printStrLn s = JC $ printDocD 
+    print _ v = ioState (out printFunc v)
+    printLn _ v = ioState (out printLnFunc v)
+    printStr s = ioState (out printFunc (litString s))
+    printStrLn s = ioState (out printLnFunc (litString s))
+
+    printFile f _ v = ioState (out (printFileFunc f) v)
+    printFileLn f _ v = ioState (out (printFileLnFunc f) v)
+    printFileStr f s = ioState (out (printFileFunc f) (litString s))
+    printFileStrLn f s = ioState (out (printFileLnFunc f) (litString s))
+
+    ioState = id -- Now that types are Doc synonyms, I think this will work
 
 instance Symantics JavaCode
 
 instance BodySym JavaCode where
-    body sts = JC $ do
-        c <- ask
-        return (statementDoc c sts)
+    -- body sts = JC $ do
+    --     c <- ask
+    --     return (statementDoc c sts)
 
--- Monad instance for javacode, return wraps in JC
 
 -- runReader unJC jc options
 

@@ -68,4 +68,3 @@ executable helloworld
     GOOLCode >= 0.0.2
   default-language: Haskell2010
   ghc-options:      -Wall -O2
-

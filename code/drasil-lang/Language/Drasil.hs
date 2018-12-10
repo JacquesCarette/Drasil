@@ -162,7 +162,7 @@ module Language.Drasil (
   , HasInsModelTable(..), HasGendefTable(..), HasTheoryModelTable(..), HasSectionTable(..)
   , HasAssumpTable(..), HasConceptInstance(..), SectionMap
   -- AssumpChunk
-  , AssumpChunk, assuming, assump
+  , AssumpChunk(AC), assuming, assump
   -- Reference
   , makeRef2S, makeCite, makeCiteS, makeURI, makeRef2
   , ReferenceDB, AssumpMap, assumpLookup, assumptionsFromDB

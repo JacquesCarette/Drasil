@@ -13,7 +13,6 @@ module Language.Drasil.Classes (
   , HasUnitSymbol(usymb)
   , IsUnit(udefn, getUnits)
   , HasLabel(getLabel)
-  , MayHaveLabel(getMaybeLabel)
   , UnitEq(uniteq)
   , HasReference(getReferences)
   , HasReference2(getReferences2) -- hack for now...
@@ -111,9 +110,6 @@ class HasReasVal c where
 class HasLabel c where
   getLabel      :: Lens' c Label
  
-class MayHaveLabel c where
-  getMaybeLabel :: c -> Maybe Label
-
 -- | A Quantity is an 'Idea' with a 'Space' and a symbol.
 -- In theory, it should also have MayHaveUnit, but that causes
 -- all sorts of import cycles (or lost of orphans)

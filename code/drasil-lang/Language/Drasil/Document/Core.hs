@@ -4,7 +4,7 @@ module Language.Drasil.Document.Core where
 import Language.Drasil.Chunk.Citation (BibRef)
 
 import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd),
-  MayHaveLabel(getMaybeLabel), HasLabel(getLabel), HasShortName(shortname))
+  HasLabel(getLabel), HasShortName(shortname))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Label () -- for instances
@@ -80,11 +80,9 @@ class HasContents c where
 instance HasUID        LabelledContent where uid = lbl . uid  
 instance HasRefAddress LabelledContent where getRefAdd = lbl . getRefAdd
 instance HasLabel      LabelledContent where getLabel = lbl
-instance MayHaveLabel  LabelledContent where getMaybeLabel x = Just (x ^. getLabel)
 instance HasContents   LabelledContent where accessContents = ctype
 instance HasShortName  LabelledContent where shortname = lbl . shortname
 
-instance MayHaveLabel UnlabelledContent where getMaybeLabel _ = Nothing
 instance HasContents  UnlabelledContent where accessContents = cntnts
 
 instance HasContents Contents where

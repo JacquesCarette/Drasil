@@ -26,7 +26,6 @@ module Language.Drasil (
   -- Classes
   , HasUID(uid)
   , HasLabel(getLabel)
-  , MayHaveLabel(getMaybeLabel)
   , NamedIdea(term)
   , HasAdditionalNotes(getNotes)
   , Idea(getA)
@@ -246,7 +245,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), 
   HasReference2(getReferences2),  -- HACK that will eventually go away
-  HasLabel(getLabel), MayHaveLabel(getMaybeLabel), HasRefAddress(getRefAdd), HasSpace(typ),
+  HasLabel(getLabel), HasRefAddress(getRefAdd), HasSpace(typ),
   DefiningExpr(defnExpr), HasShortName(shortname), Quantity, UncertainQuantity(uncert),
   HasFields(getFields))
 import Language.Drasil.Label.Core (Label)

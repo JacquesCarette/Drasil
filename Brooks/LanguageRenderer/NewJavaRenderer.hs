@@ -18,18 +18,18 @@ import Control.Applicative (Applicative, liftA, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals, 
   semi, vcat, lbrace, rbrace, doubleQuotes, render, colon)
 
-newtype JavaCode a = JC {unJC :: Doc}
+newtype JavaCode a = JC {unJC :: a}
 
--- instance Functor JavaCodeMonad where
---     fmap f (JC x) = JC (f x)
+instance Functor JavaCode where
+    fmap f (JC x) = JC (f x)
 
--- instance Applicative JavaCodeMonad where
---     pure = JC
---     (JC f) <*> (JC x) = JC (f x)
+instance Applicative JavaCode where
+    pure = JC
+    (JC f) <*> (JC x) = JC (f x)
 
--- instance Monad JavaCodeMonad where
---     return = JC
---     JC x >>= f = f x
+instance Monad JavaCode where
+    return = JC
+    JC x >>= f = f x
 
 -- type JavaCode a = JavaCodeMonad Doc
 
@@ -46,19 +46,19 @@ liftJC3 :: (Doc -> Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCod
 liftJC3 f a b c = JC $ f (unJC a) (unJC b) (unJC c)
 
 instance RenderSym JavaCode where
-    fileDoc code = liftJC3 fileDoc' top code bottom
-    top = liftJC3 jtop endStatement include list
+    fileDoc code = liftA3 fileDoc' top code bottom
+    top = liftA3 jtop endStatement include list
     codeBody m = m -- don't need right now
-    bottom = liftJC0 empty
+    bottom = return empty
 
 instance KeywordSym JavaCode where
-    endStatement = liftJC0 semi
-    include = liftJC0 $ includeD "import"
-    list = liftJC0 $ text "Vector"
-    printFunc = liftJC0 $ text "System.out.print"
-    printLnFunc = liftJC0 $ text "System.out.println"
-    printFileFunc f = liftJC1 jPrintFileFunc f
-    printFileLnFunc f = liftJC1 jPrintFileLnFunc f
+    endStatement = return semi
+    include = return $ includeD "import"
+    list = return $ text "Vector"
+    printFunc = return $ text "System.out.print"
+    printLnFunc = return $ text "System.out.println"
+    printFileFunc f = liftA jPrintFileFunc f
+    printFileLnFunc f = liftA jPrintFileLnFunc f
     
 instance ClassSym JavaCode where
     -- buildClass n p s vs fs = liftA3 (classDocD n p) s vs fs -- vs and fs are actually lists... should 
@@ -78,12 +78,12 @@ instance ClassSym JavaCode where
 instance StateTypeSym JavaCode
 
 instance ValueSym JavaCode where
-    litString s = liftJC0 $ litStringD s
+    litString s = return $ litStringD s
 
 instance IOTypeSym JavaCode
 
 instance IOStSym JavaCode where
-    out prf v = liftJC3 ioDocOutD prf v endStatement
+    out prf v = liftA3 ioDocOutD prf v endStatement
 
 instance StatementSym JavaCode where
     print _ v = ioState (out printFunc v)

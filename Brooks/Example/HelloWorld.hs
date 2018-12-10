@@ -1,10 +1,16 @@
 module Example.HelloWorld (helloWorld) where
 
-import LanguageRenderer.NewJavaRenderer (JavaCodeMonad(..))
+import New (Class, Method, Body, Block, Statement, Declaration, Value, StateType,
+  Function, StateVar, IOType, IOSt, Scope, Keyword, Label, Library, VarDecl, 
+  FunctionDecl,
+  RenderSym(..), KeywordSym(..), ClassSym(..), MethodSym(..), 
+  BodySym(..), Symantics(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
+  IOStSym(..), ValueSym(..), Selector(..), FunctionSym(..))
+import NewLanguageRenderer (makeCode, createCodeFiles)
+import LanguageRenderer.NewJavaRenderer (JavaCode(..))
+import Text.PrettyPrint.HughesPJ (Doc)
+import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Prelude hiding (return)
-
-helloWorld :: repr Doc
-helloWorld = fileDoc (printStrLn "Hello, world")
 
 main :: IO()
 main = do
@@ -14,5 +20,8 @@ main = do
   genCode [unJC helloWorld] ["HelloWorld"] [".java"]
   setCurrentDirectory workingDir
     
-genCode :: [a] -> [Label] -> [Label] -> IO()
+genCode :: [Doc] -> [Label] -> [Label] -> IO()
 genCode files names exts = createCodeFiles $ makeCode files names exts
+
+helloWorld :: (RenderSym repr) => repr Doc
+helloWorld = fileDoc (printStrLn "Hello, world")

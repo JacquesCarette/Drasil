@@ -3,8 +3,13 @@ module LanguageRenderer.NewJavaRenderer (
     JavaCode(..)
 ) where
 
-import New
-import NewLanguageRenderer (makeCode, createCodeFiles, fileDoc', ioDocOutD, 
+import New (Class, Method, Body, Block, Statement, Declaration, Value, StateType,
+  Function, StateVar, IOType, IOSt, Scope, Keyword, Label, Library, VarDecl, 
+  FunctionDecl,
+  RenderSym(..), KeywordSym(..), ClassSym(..), MethodSym(..), 
+  BodySym(..), Symantics(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
+  IOStSym(..), ValueSym(..), Selector(..), FunctionSym(..))
+import NewLanguageRenderer (fileDoc', ioDocOutD, 
   litStringD, includeD, dot)
 import Helpers (blank,angles,oneTab,vibmap)
 
@@ -13,7 +18,7 @@ import Control.Applicative (Applicative, liftA, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals, 
   semi, vcat, lbrace, rbrace, doubleQuotes, render, colon)
 
-newtype JavaCode a = JC {unJC :: a}
+newtype JavaCode a = JC {unJC :: Doc}
 
 -- instance Functor JavaCodeMonad where
 --     fmap f (JC x) = JC (f x)
@@ -28,34 +33,32 @@ newtype JavaCode a = JC {unJC :: a}
 
 -- type JavaCode a = JavaCodeMonad Doc
 
+liftJC0 :: Doc -> JavaCode Doc
+liftJC0 = JC
+
+liftJC1 :: (Doc -> Doc) -> JavaCode Doc -> JavaCode Doc
+liftJC1 f a = JC $ f (unJC a)
+
+liftJC2 :: (Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc
+liftJC2 f a b = JC $ f (unJC a) (unJC b)
+
+liftJC3 :: (Doc -> Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc
+liftJC3 f a b c = JC $ f (unJC a) (unJC b) (unJC c)
+
 instance RenderSym JavaCode where
-    fileDoc code = liftA3 fileDoc' top code bottom
-    top = do
-        end <- endStatement 
-        inc <- include
-        lst <- list
-        return $ vcat [
-            inc <+> text "java.util.Arrays" <> end,
-            inc <+> text "java.util.BitSet" <> end,     --TODO: only include these if they are used in the code?
-            inc <+> text "java.util.Scanner" <> end,
-            inc <+> text "java.io.PrintWriter" <> end,
-            inc <+> text "java.io.File" <> end,
-            inc <+> text ("java.util." ++ render (lst)) <> end]
+    fileDoc code = liftJC3 fileDoc' top code bottom
+    top = liftJC3 jtop endStatement include list
     codeBody m = m -- don't need right now
-    bottom = return empty
+    bottom = liftJC0 empty
 
 instance KeywordSym JavaCode where
-    endStatement = return semi
-    include = return $ includeD "import"
-    list = return $ text "Vector"
-    printFunc = return $ text "System.out.print"
-    printLnFunc = return $ text "System.out.println"
-    printFileFunc f = do 
-        fname <- f
-        return $ fname <> dot <> text "print"
-    printFileLnFunc f = do 
-        fname <- f
-        return $ fname <> dot <> text "println"
+    endStatement = liftJC0 semi
+    include = liftJC0 $ includeD "import"
+    list = liftJC0 $ text "Vector"
+    printFunc = liftJC0 $ text "System.out.print"
+    printLnFunc = liftJC0 $ text "System.out.println"
+    printFileFunc f = liftJC1 jPrintFileFunc f
+    printFileLnFunc f = liftJC1 jPrintFileLnFunc f
     
 instance ClassSym JavaCode where
     -- buildClass n p s vs fs = liftA3 (classDocD n p) s vs fs -- vs and fs are actually lists... should 
@@ -65,22 +68,22 @@ instance ClassSym JavaCode where
 --         scope <- s
 --         vars <- vs
 --         funcs <- fs --ignore for the moment that fs and vs are lists
---         return (classDocD n p scope vars funcs)
+--         liftJC0 (classDocD n p scope vars funcs)
 
 -- instance ClassSym JavaCode where
 --     buildClass n p s vs fs = JC $ do
 --         c <- ask -- not needed, only ask for config when you need to actually extract from it
---         return (classDoc c n p s vs fs)
+--         liftJC0 (classDoc c n p s vs fs)
 
 instance StateTypeSym JavaCode
 
 instance ValueSym JavaCode where
-    litString s = return $ litStringD s
+    litString s = liftJC0 $ litStringD s
 
 instance IOTypeSym JavaCode
 
 instance IOStSym JavaCode where
-    out prf v = liftA3 ioDocOutD prf v endStatement
+    out prf v = liftJC3 ioDocOutD prf v endStatement
 
 instance StatementSym JavaCode where
     print _ v = ioState (out printFunc v)
@@ -100,4 +103,19 @@ instance Symantics JavaCode
 instance BodySym JavaCode where
     -- body sts = JC $ do
     --     c <- ask
-    --     return (statementDoc c sts)
+    --     liftJC0 (statementDoc c sts)
+
+jtop :: Doc -> Doc -> Doc -> Doc
+jtop end inc lst = vcat [
+    inc <+> text "java.util.Arrays" <> end,
+    inc <+> text "java.util.BitSet" <> end,     --TODO: only include these if they are used in the code?
+    inc <+> text "java.util.Scanner" <> end,
+    inc <+> text "java.io.PrintWriter" <> end,
+    inc <+> text "java.io.File" <> end,
+    inc <+> text ("java.util." ++ render (lst)) <> end]
+
+jPrintFileFunc :: Doc -> Doc
+jPrintFileFunc f = f <> dot <> text "print"
+
+jPrintFileLnFunc :: Doc -> Doc
+jPrintFileLnFunc f = f <> dot <> text "println"

@@ -23,7 +23,7 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), bracket
 
 
 -- | Takes code, filenames, and extensions
-makeCode :: [a] -> [Label] -> [Label] -> [(FilePath, a)]
+makeCode :: [Doc] -> [Label] -> [Label] -> [(FilePath, Doc)]
 makeCode files names exts =
     [(name ++ ext, file) | (name, (file, ext)) <- zip (duplicateListElems names) (zip files (cycle exts))]
 

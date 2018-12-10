@@ -19,6 +19,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (pythonCo
 import Language.Drasil.Code.Imperative.LanguageRenderer.LuaRenderer (luaConfig)
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser (cSharpLabel,cppLabel,goolLabel,javaLabel,objectiveCLabel,pythonLabel,luaLabel)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Options)
+import Language.Drasil.Code.Imperative.NewLanguageRenderer (renderCode)
 
 import Data.List (intercalate)
 import qualified Data.Map as Map (fromList,keys,lookup,Map)
@@ -27,8 +28,13 @@ import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
 import Data.Function (fix)
 
 -- | Takes a language parameter, a set of optional parameters, and a list of module names, and passes an 'AbstractCode' to the required rendering function, which produces a 'Code'
-makeCode :: Symantics repr => String -> [repr a] -> [Label] -> Code
-makeCode l files names = Code $ renderCode files names
+makeCode :: [a] -> [Label] -> [Label] -> [(FilePath, a)]
+makeCode files names exts = 
+    [(name ++ ext, file) | (name, (file, ext)) <- zip (duplicateListElems names) (zip files (cycle exts))]
+
+duplicateListElems :: [a] -> [a]
+duplicateListElems [] = []
+duplicateListElems x:xs = x:x:duplicateListElems xs
 
 ------------------
 -- IO Functions --

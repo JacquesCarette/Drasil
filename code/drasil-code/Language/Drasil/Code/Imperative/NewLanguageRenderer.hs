@@ -37,44 +37,6 @@ new = text "new"
 -- Functions for rendering code --
 ----------------------------------
 
--- | Map of (label,config) pairs for all supported languages.
-langs :: RenderSym repr => repr a -> Map.Map String a
-langs c = Map.fromList[
-    -- (cSharpLabel, csharpConfig),
-    -- (cppLabel, cppConfig),
-    -- (goolLabel, goolConfig),
-    (javaLabel, unJC c)
-    -- (objectiveCLabel, objcConfig),
-    -- (pythonLabel, pythonConfig),
-    -- (luaLabel, luaConfig)
-  ]
-
-unwrapRepr :: String -> repr a -> a
-unwrapRepr l file =
-    case Map.lookup l (langs file) of
-        Just unWrapped  -> unWrapped
-        Nothing -> error errStr
-          where errStr = "GOOL.CodeGeneration.makeCode: must supply "
-                         ++ (listLabels $ Map.keys langs)
-                         ++ " for the \"Generation Language\" option in the configuration file"
-                         
-listLabels :: [String] -> String
-listLabels ns = intercalate ", " (init ns) ++ ", or " ++ last ns
-
-renderCode' :: RenderSym repr => Label -> [repr a] -> [Label] -> [Label] -> [(FilePath, a)]
-renderCode' l files names exts unRepr = fileCode [unwrapRepr l file | file <- files] names (head exts)
-
-----------------------------------
--- CFamily Parametric Functions --
-----------------------------------
-
--- fileCode :: Config -> Package -> [Label] -> FileType -> Label -> (FilePath, Doc)
--- fileCode c (Pack p ms) ns f e = (fileName c p ns ++ e, fileDoc c f p ms) -- -$ map (clsWithName ms) ns)
-
-fileCode :: [a] -> [Label] -> Label -> [(FilePath, a)]
-fileCode files ls ext = --let classes = map (clsWithName ms) ns in
-  [(l ++ ext, file) | (file, l) <- (zip files ls)]
-
 fileDoc' :: Doc -> Doc -> Doc -> Doc
 fileDoc' t m b = vibcat [
     t,

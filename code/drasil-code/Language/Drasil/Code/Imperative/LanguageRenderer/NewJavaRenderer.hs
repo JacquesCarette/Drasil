@@ -60,7 +60,6 @@ instance Monad JavaCode where
     JC x >>= f = f x
 
 instance RenderSym JavaCode where
-    renderCode files names unRepr = renderCode' files names [".java"] unRepr
     fileDoc code = liftA3 fileDoc' top code bottom
     top = do
         end <- endStatement 

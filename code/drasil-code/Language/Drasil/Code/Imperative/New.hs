@@ -32,8 +32,6 @@ type VarDecl = Declaration
 type FunctionDecl = Method
 
 class RenderSym repr where
-    renderCode :: Label -> [repr a] -> [Label] -> [(FilePath, a)]
-        -- repr -> file names -> unRepr
     fileDoc :: repr Doc -> repr Doc
     top :: repr Block -- Block is a placeholder for all of these, should change
     codeBody :: repr Class -> repr Block

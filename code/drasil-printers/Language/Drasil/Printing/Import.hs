@@ -355,13 +355,7 @@ layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"]
 layLabelled sm x@(LblC _ (Figure c f wp))     = T.Figure 
   (P.S $ getAdd (x ^. getRefAdd))
   (spec sm c) f wp
-{-
-layLabelled sm x@(LblC _ (Requirement r))       = T.ALUR T.Requirement
-  (spec sm $ requires r) 
-  (P.S $ getAdd (x ^. getRefAdd)) 
-  (spec sm $ getShortName r)
--}
-layLabelled sm x@(LblC _ (Assumption _ b c))        = T.ALUR T.Assumption
+layLabelled sm x@(LblC c (Assumption _ b))        = T.ALUR T.Assumption
   (spec sm b)
   (P.S $ getAdd (x ^. getRefAdd))
   (spec sm $ getShortName c)
@@ -386,10 +380,8 @@ layUnlabelled sm (Paragraph c)          = T.Paragraph (spec sm c)
 layUnlabelled sm (EqnBlock c)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
 layUnlabelled sm (Enumeration cs)       = T.List $ makeL sm cs
 layUnlabelled sm (Figure c f wp)    = T.Figure (P.S "nolabel2") (spec sm c) f wp
--- layUnlabelled sm (Requirement r)      = T.ALUR T.Requirement
---   (spec sm $ requires r) (P.S "nolabel3") (spec sm $ getShortName r)
-layUnlabelled sm (Assumption _ b c)       = T.ALUR T.Assumption
-  (spec sm b) (P.S "nolabel4") (spec sm $ getShortName c)
+layUnlabelled sm (Assumption _ b)       = T.ALUR T.Assumption
+  (spec sm b) (P.S "nolabel4") (P.S "nolabel4b")
 layUnlabelled sm (Graph ps w h t)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S "nolabel6")
 layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")

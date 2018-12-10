@@ -462,7 +462,7 @@ mkSolChSpec si (SCSProg l) =
       SSD.inModelF pdStub ddStub tmStub (SRS.genDefn ([]::[Contents]) ([]::[Section])) (map LlC (map (instanceModel fields (_sysinfodb si')) ims))
     mkSubSCS si' (Assumptions) =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
-      (map (\x -> LlC $ mkRawLC (Assumption (x ^. uid) (helperAssump x (_sysinfodb si')) (x ^. getLabel)) (x ^. getLabel)) $ assumptionsFromDB ((_refdb si') ^. assumpRefTable))
+      (map (\x -> LlC $ mkRawLC (Assumption (x ^. uid) (helperAssump x (_sysinfodb si'))) (x ^. getLabel)) $ assumptionsFromDB ((_refdb si') ^. assumpRefTable))
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
     inModSec = SRS.inModel [mkParagraph EmptyS] []

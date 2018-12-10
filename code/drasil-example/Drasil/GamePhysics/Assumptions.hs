@@ -40,7 +40,7 @@ assumpCAJI = cic "assumpCAJI" (foldlSent assumptions_assum7) "constraintsAndJoin
 
 assumptions_list :: [Contents]
 assumptions_list = map (LlC . 
-  (\x -> mkRawLC (Assumption (x^.uid) (assuming x) (x^.getLabel)) (x ^. getLabel))) newAssumptions
+  (\x -> mkRawLC (Assumption (x^.uid) (assuming x)) (x ^. getLabel))) newAssumptions
 
 assumptions_assum1, assumptions_assum2, assumptions_assum3, assumptions_assum4, assumptions_assum5, 
   assumptions_assum6, assumptions_assum7 :: [Sentence]

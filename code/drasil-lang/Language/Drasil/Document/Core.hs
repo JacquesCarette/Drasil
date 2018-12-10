@@ -58,7 +58,7 @@ data RawContent = Table [Sentence] [[Sentence]] Title Bool
                | Enumeration ListType -- ^ Lists
                | Defini DType [(Identifier, [Contents])]
                | Figure Lbl Filepath MaxWidthPercent -- ^ Should use relative file path.
-               | Assumption UID Sentence Label -- FIXME: hack, remove
+               | Assumption UID Sentence -- FIXME: hack, remove
                | Bib BibRef
                | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl
                -- ^ TODO: Fill this one in.

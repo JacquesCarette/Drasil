@@ -1,10 +1,10 @@
 module Example.HelloWorld (helloWorld) where
 
-import Language.Drasil.Code
+import LanguageRenderer.NewJavaRenderer (JavaCodeMonad(..))
 import Prelude hiding (return)
 
-helloWorld :: repr Statement
-helloWorld = printStrLn "Hello, world"
+helloWorld :: repr Doc
+helloWorld = fileDoc (printStrLn "Hello, world")
 
 main :: IO()
 main = do

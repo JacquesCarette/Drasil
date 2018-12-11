@@ -1,12 +1,12 @@
 module New (
     -- Types
     Class, Method, Body, Block, Statement, Declaration, Value, StateType,
-    Function, StateVar, IOType, IOSt, Scope, Keyword, Label, Library, VarDecl, 
+    Function, StateVar, IOType, IOSt, Scope, UnaryOp, Keyword, Label, Library, VarDecl, 
     FunctionDecl,
     -- Typeclasses
     RenderSym(..), KeywordSym(..), ClassSym(..), MethodSym(..), 
     BodySym(..), Symantics(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
-    IOStSym(..), ValueSym(..), Selector(..), FunctionSym(..)
+    IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..)
 ) where
 
 import Text.PrettyPrint.HughesPJ (Doc)
@@ -24,6 +24,8 @@ type StateVar = Doc
 type IOType = Doc
 type IOSt = Doc
 type Scope = Doc
+type UnaryOp = Doc
+type BinaryOp = Doc
 type Keyword = Doc
 
 type Label = String
@@ -129,6 +131,34 @@ class ValueSym repr => IOTypeSym repr where
 class IOStSym repr where
     out :: repr Keyword -> repr Value -> repr IOSt 
 
+class UnaryOpSym repr where
+    notOp :: repr UnaryOp
+    negateOp :: repr UnaryOp
+    sqrtOp :: repr UnaryOp
+    absOp :: repr UnaryOp
+    logOp :: repr UnaryOp
+    lnOp :: repr UnaryOp
+    expOp :: repr UnaryOp
+    sinOp :: repr UnaryOp
+    cosOp :: repr UnaryOp
+    tanOp :: repr UnaryOp
+
+class BinaryOpSym repr where
+    equalOp :: repr BinaryOp
+    notEqualOp :: repr BinaryOp
+    greaterOp :: repr BinaryOp
+    greaterEqualOp :: repr BinaryOp
+    lessOp :: repr BinaryOp
+    lessEqualOp :: repr BinaryOp
+    plusOp :: repr BinaryOp
+    minusOp :: repr BinaryOp
+    multOp :: repr BinaryOp
+    divideOp :: repr BinaryOp
+    powerOp :: repr BinaryOp
+    moduloOp :: repr BinaryOp
+    andOp :: repr BinaryOp
+    orOp :: repr BinaryOp
+
 class ValueSym repr where
     litTrue   :: repr Value
     litFalse :: repr Value
@@ -142,7 +172,7 @@ class ValueSym repr where
     defaultInt :: repr Value
     defaultString :: repr Value
 
-    (?!)  :: repr Value -> repr Value
+    (?!)  :: repr Value -> repr Value  -- where to specific infix?
     (?<)  :: repr Value -> repr Value -> repr Value
     (?<=) :: repr Value -> repr Value -> repr Value
     (?>)  :: repr Value -> repr Value -> repr Value
@@ -168,6 +198,7 @@ class ValueSym repr where
     ($:)  :: Label -> Label -> repr Value
 
     log :: repr Value -> repr Value
+    ln :: repr Value -> repr Value
     exp :: repr Value -> repr Value
     sin :: repr Value -> repr Value
     cos :: repr Value -> repr Value

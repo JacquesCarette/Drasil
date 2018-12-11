@@ -1,16 +1,16 @@
 module Example.HelloWorld (helloWorld) where
 
 import New (Class, Method, Body, Block, Statement, Declaration, Value, StateType,
-  Function, StateVar, IOType, IOSt, Scope, Keyword, Label, Library, VarDecl, 
+  Function, StateVar, IOType, IOSt, Scope, UnaryOp, Keyword, Label, Library, VarDecl, 
   FunctionDecl,
   RenderSym(..), KeywordSym(..), ClassSym(..), MethodSym(..), 
   BodySym(..), Symantics(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
-  IOStSym(..), ValueSym(..), Selector(..), FunctionSym(..))
+  IOStSym(..), UnaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
 import NewLanguageRenderer (makeCode, createCodeFiles)
 import LanguageRenderer.NewJavaRenderer (JavaCode(..))
 import Text.PrettyPrint.HughesPJ (Doc)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
-import Prelude hiding (return,print)
+import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 main :: IO()
 main = do
@@ -32,4 +32,14 @@ helloWorld = fileDoc (
     print (bool) litTrue,
     printLn (float) defaultFloat,
     print (int) (litInt 0),
-    print (char) (litChar 'c')])
+    print (char) (litChar 'c'),
+    printLn (bool) ((?!) litTrue),
+    printLn (int) ((#~) (litInt 1)),
+    printLn (float) ((#/^) (litFloat 4.0)),
+    printLn (int) ((#|) (litInt (-4))),
+    printLn (float) (log (litFloat 2.0)),
+    printLn (float) (ln (litFloat 2.0)),
+    printLn (float) (exp (litFloat 2.0)),
+    printLn (float) (sin (litFloat 2.0)),
+    printLn (float) (cos (litFloat 2.0)),
+    printLn (float) (tan (litFloat 2.0))])

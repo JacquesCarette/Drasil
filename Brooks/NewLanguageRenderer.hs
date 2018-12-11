@@ -8,7 +8,9 @@ module NewLanguageRenderer (
     
     -- * Default Functions available for use in renderers
     fileDoc', blockDocD, ioDocOutD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
-    charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD, litTrueD, litFalseD, litCharD, litFloatD, litIntD,
+    charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD, 
+    notOpDocD, negateOpDocD, sqrtOpDocD, absOpDocD, logOpDocD, lnOpDocD, 
+    expOpDocD, sinOpDocD, cosOpDocD, tanOpDocD, unOpDocD, litTrueD, litFalseD, litCharD, litFloatD, litIntD,
     litStringD, defaultCharD, defaultFloatD, defaultIntD, defaultStringD, 
     includeD
 ) where
@@ -132,6 +134,39 @@ typeDocD t = text t
 
 listTypeDocD :: Doc -> Doc -> Doc
 listTypeDocD st list = list <> angles st
+
+notOpDocD :: Doc
+notOpDocD = text "!"
+
+negateOpDocD :: Doc
+negateOpDocD = text "-"
+
+sqrtOpDocD :: Doc
+sqrtOpDocD = text "sqrt"
+
+absOpDocD :: Doc
+absOpDocD = text "fabs"
+
+logOpDocD :: Doc
+logOpDocD = text "log"
+
+lnOpDocD :: Doc
+lnOpDocD = text "ln"
+
+expOpDocD :: Doc
+expOpDocD = text "exp"
+
+sinOpDocD :: Doc
+sinOpDocD = text "sin"
+
+cosOpDocD :: Doc
+cosOpDocD = text "cos"
+
+tanOpDocD :: Doc
+tanOpDocD = text "tan"
+
+unOpDocD :: Doc -> Doc -> Doc
+unOpDocD op v = op <> parens v
 
 litTrueD :: Doc
 litTrueD = text "true"

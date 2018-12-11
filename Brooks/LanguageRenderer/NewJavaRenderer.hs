@@ -4,13 +4,13 @@ module LanguageRenderer.NewJavaRenderer (
 ) where
 
 import New (Class, Method, Body, Block, Statement, Declaration, Value, StateType,
-  Function, StateVar, IOType, IOSt, Scope, Keyword, Label, Library, VarDecl, 
+  Function, StateVar, IOType, IOSt, Scope, UnaryOp, Keyword, Label, Library, VarDecl, 
   FunctionDecl,
   RenderSym(..), KeywordSym(..), ClassSym(..), MethodSym(..), 
   BodySym(..), Symantics(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
-  IOStSym(..), ValueSym(..), Selector(..), FunctionSym(..))
+  IOStSym(..), UnaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
 import NewLanguageRenderer (fileDoc', blockDocD, ioDocOutD, boolTypeDocD, intTypeDocD,
-  charTypeDocD, typeDocD, listTypeDocD, litTrueD, litFalseD,
+  charTypeDocD, typeDocD, listTypeDocD, notOpDocD, negateOpDocD, unOpDocD, litTrueD, litFalseD, 
   litCharD, litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
   defaultStringD, includeD, dot)
 import Helpers (blank,angles,oneTab,vibmap)
@@ -94,6 +94,18 @@ instance StateTypeSym JavaCode where
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
 
+instance UnaryOpSym JavaCode where
+    notOp = return $ notOpDocD
+    negateOp = return $ negateOpDocD
+    sqrtOp = return $ text "Math.sqrt"
+    absOp = return $ text "Math.abs"
+    logOp = return $ text "Math.log10"
+    lnOp = return $ text "Math.log"
+    expOp = return $ text "Math.exp"
+    sinOp = return $ text "Math.sin"
+    cosOp = return $ text "Math.cos"
+    tanOp = return $ text "Math.tan"
+
 instance ValueSym JavaCode where
     litTrue = return $ litTrueD
     litFalse = return $ litFalseD
@@ -106,6 +118,22 @@ instance ValueSym JavaCode where
     defaultFloat = return $ defaultFloatD
     defaultInt = return $ defaultIntD
     defaultString = return $ defaultStringD
+
+    (?!) v = liftA2 unOpDocD notOp v
+
+    (#~) v = liftA2 unOpDocD negateOp v
+    (#/^) v = liftA2 unOpDocD sqrtOp v
+    (#|) v = liftA2 unOpDocD absOp v
+
+    log v = liftA2 unOpDocD logOp v
+    ln v = liftA2 unOpDocD lnOp v
+    exp v = liftA2 unOpDocD expOp v
+    sin v = liftA2 unOpDocD sinOp v
+    cos v = liftA2 unOpDocD cosOp v
+    tan v = liftA2 unOpDocD tanOp v
+    -- csc v = liftA2 unOpDocD Op v             -- need binaryOp first
+    -- sec v = liftA2 unOpDocD logOp v
+    -- cot v = liftA2 unOpDocD logOp v
 
 instance IOTypeSym JavaCode
 

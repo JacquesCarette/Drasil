@@ -1,3 +1,5 @@
+{-# LANGUAGE TypeFamilies #-}
+
 module New (
     -- Types
     Class, Method, Body, Block, Statement, Declaration, Value, StateType,
@@ -47,6 +49,7 @@ class KeywordSym repr where
     printLnFunc :: repr Keyword
     printFileFunc :: repr Value -> repr Keyword
     printFileLnFunc :: repr Value -> repr Keyword
+    argsList :: repr Keyword
 
 class ClassSym repr where
     buildClass :: Label -> Maybe Label -> repr Scope -> [repr StateVar] -> [repr Method] -> repr Class
@@ -206,6 +209,22 @@ class ValueSym repr where
     csc :: repr Value -> repr Value
     sec :: repr Value -> repr Value
     cot :: repr Value -> repr Value
+
+    const :: Label -> repr Value
+    var :: Label -> repr Value
+    extVar :: Library -> Label -> repr Value
+--    global :: Label -> repr Value         -- not sure how this one works
+    self :: repr Value
+    arg :: Integer -> repr Value
+    enumElement :: Label -> Label -> repr Value
+    enumVar :: Label -> repr Value
+    objVar :: repr Value -> repr Value -> repr Value
+    objVarSelf :: Label -> repr Value
+    listVar :: Label -> repr StateType -> repr Value
+
+
+    exists :: repr Value -> repr Value
+    notNull :: repr Value -> repr Value
 
 class (FunctionSym repr, ValueSym repr) => Selector repr where
     ($.)  :: repr Value -> repr Function -> repr Value

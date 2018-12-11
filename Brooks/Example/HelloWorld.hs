@@ -54,4 +54,15 @@ helloWorld = fileDoc (
     printLn (int) ((litInt 6) #/ (litInt 2)),
     printLn (int) ((litInt 6) #% (litInt 4)),
     printLn (int) ((litInt 6) #^ (litInt 2)),
-    printLn (int) ((litInt 6) #+ ((litInt 2) #* (litInt 3)))])
+    printLn (int) ((litInt 6) #+ ((litInt 2) #* (litInt 3))),
+    printLn (float) (csc (litFloat 1.0)),
+    printLn (float) (sec (litFloat 1.0)),
+    printLn (float) (cot (litFloat 1.0)),
+    printLn (int) (notNull (litInt 5)),
+    printLn (int) (notNull (var "a")),
+    printLn (int) (var "a"),
+    printLn (int) (arg 5),
+    printLn (int) (extVar "Lib" "var"),
+    printLn (int) (self),
+    printLn (int) (objVarSelf "thisOne"),
+    printLn (int) (objVar (var "outer") (var "inner"))])

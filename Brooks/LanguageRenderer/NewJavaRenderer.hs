@@ -1,3 +1,5 @@
+{-# LANGUAGE TypeFamilies #-}
+
 module LanguageRenderer.NewJavaRenderer (
     -- * Java Code Configuration -- defines syntax of all Java code
     JavaCode(..)
@@ -15,10 +17,10 @@ import NewLanguageRenderer (fileDoc', blockDocD, ioDocOutD, boolTypeDocD, intTyp
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', litTrueD, litFalseD, 
   litCharD, litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
-  defaultStringD, includeD, dot)
+  defaultStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, notNullDocD, includeD, dot)
 import Helpers (blank,angles,oneTab,vibmap)
 
-import Prelude hiding (break,print,(<>))
+import Prelude hiding (break,print,(<>),sin,cos,tan)
 import Control.Applicative (Applicative, liftA, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals, 
   semi, vcat, lbrace, rbrace, doubleQuotes, render, colon)
@@ -67,6 +69,7 @@ instance KeywordSym JavaCode where
     printLnFunc = return $ text "System.out.println"
     printFileFunc f = liftA jPrintFileFunc f
     printFileLnFunc f = liftA jPrintFileLnFunc f
+    argsList = return $ text "args"
     
 instance ClassSym JavaCode where
     -- buildClass n p s vs fs = liftA3 (classDocD n p) s vs fs -- vs and fs are actually lists... should 
@@ -164,9 +167,23 @@ instance ValueSym JavaCode where
     sin v = liftA2 unOpDocD sinOp v
     cos v = liftA2 unOpDocD cosOp v
     tan v = liftA2 unOpDocD tanOp v
-    -- csc v = liftA2 unOpDocD Op v             -- need binaryOp first
-    -- sec v = liftA2 unOpDocD logOp v
-    -- cot v = liftA2 unOpDocD logOp v
+    csc v = (litFloat 1.0) #/ (sin v)
+    sec v = (litFloat 1.0) #/ (cos v)
+    cot v = (litFloat 1.0) #/ (tan v)
+
+    const n = var n
+    var n = return $ varDocD n
+    extVar l n = return $ extVarDocD l n
+    self = return $ selfDocD
+    arg n = liftA2 argDocD (litInt n) argsList
+    enumElement en e = return $ enumElemDocD en e
+    enumVar n = var n
+    objVar n1 n2 = liftA2 objVarDocD n1 n2
+    objVarSelf n = var n
+    listVar n _ = var n
+
+    exists v = v
+    notNull v = liftA3 notNullDocD v notEqualOp (var "null")
 
 instance IOTypeSym JavaCode
 

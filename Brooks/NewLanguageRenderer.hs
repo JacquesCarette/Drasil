@@ -16,10 +16,10 @@ module NewLanguageRenderer (
     moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', 
     litTrueD, litFalseD, litCharD, litFloatD, litIntD,
     litStringD, defaultCharD, defaultFloatD, defaultIntD, defaultStringD, 
-    includeD
+    varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, notNullDocD, includeD
 ) where
 
-import New (RenderSym(..), Symantics(..), Label, fileDoc)
+import New (Label, Library)
 import Helpers (angles,blank,doubleQuotedText,oneTab,
                             oneTabbed,himap,vibcat,vmap,vibmap)
 
@@ -257,6 +257,29 @@ defaultIntD = integer 0
 
 defaultStringD :: Doc
 defaultStringD = doubleQuotedText ""
+
+-- Value Printers --
+
+varDocD :: Label -> Doc
+varDocD l = text l
+
+extVarDocD :: Library -> Label -> Doc
+extVarDocD l n = text l <> dot <> text n
+
+selfDocD :: Doc
+selfDocD = text "this"
+
+argDocD :: Doc -> Doc -> Doc
+argDocD n args = args <> brackets n
+
+enumElemDocD :: Label -> Label -> Doc
+enumElemDocD en e = text en <> dot <> text e
+
+objVarDocD :: Doc -> Doc ->  Doc
+objVarDocD n1 n2 = n1 <> dot <> n2
+
+notNullDocD :: Doc -> Doc -> Doc -> Doc
+notNullDocD v op nullvar = binOpDocD v notEqualOpDocD nullvar
 
 -- Keywords --
 

@@ -9,8 +9,9 @@ import New (Class, Method, Body, Block, Statement, Declaration, Value, StateType
   RenderSym(..), KeywordSym(..), ClassSym(..), MethodSym(..), 
   BodySym(..), Symantics(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
   IOStSym(..), ValueSym(..), Selector(..), FunctionSym(..))
-import NewLanguageRenderer (fileDoc', ioDocOutD, 
-  litStringD, includeD, dot)
+import NewLanguageRenderer (fileDoc', blockDocD, ioDocOutD, litTrueD, litFalseD,
+  litCharD, litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
+  defaultStringD, includeD, dot)
 import Helpers (blank,angles,oneTab,vibmap)
 
 import Prelude hiding (break,print,(<>))
@@ -45,6 +46,9 @@ liftJC2 f a b = JC $ f (unJC a) (unJC b)
 liftJC3 :: (Doc -> Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc
 liftJC3 f a b c = JC $ f (unJC a) (unJC b) (unJC c)
 
+liftList :: ([Doc] -> Doc) -> [JavaCode Doc] -> JavaCode Doc
+liftList f as = JC $ f (map unJC as)
+
 instance RenderSym JavaCode where
     fileDoc code = liftA3 fileDoc' top code bottom
     top = liftA3 jtop endStatement include list
@@ -78,7 +82,17 @@ instance ClassSym JavaCode where
 instance StateTypeSym JavaCode
 
 instance ValueSym JavaCode where
+    litTrue = return $ litTrueD
+    litFalse = return $ litFalseD
+    litChar c = return $ litCharD c
+    litFloat v = return $ litFloatD v
+    litInt v = return $ litIntD v
     litString s = return $ litStringD s
+
+    defaultChar = return $ defaultCharD
+    defaultFloat = return $ defaultFloatD
+    defaultInt = return $ defaultIntD
+    defaultString = return $ defaultStringD
 
 instance IOTypeSym JavaCode
 
@@ -98,7 +112,10 @@ instance StatementSym JavaCode where
 
     ioState = id -- Now that types are Doc synonyms, I think this will work
 
-instance Symantics JavaCode
+instance Symantics JavaCode where
+    block sts = do
+        end <- endStatement
+        liftList (blockDocD end) sts
 
 instance BodySym JavaCode where
     -- body sts = JC $ do

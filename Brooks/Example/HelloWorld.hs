@@ -10,7 +10,7 @@ import NewLanguageRenderer (makeCode, createCodeFiles)
 import LanguageRenderer.NewJavaRenderer (JavaCode(..))
 import Text.PrettyPrint.HughesPJ (Doc)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
-import Prelude hiding (return)
+import Prelude hiding (return,print)
 
 main :: IO()
 main = do
@@ -24,4 +24,9 @@ genCode :: [Doc] -> [Label] -> [Label] -> IO()
 genCode files names exts = createCodeFiles $ makeCode files names exts
 
 helloWorld :: (RenderSym repr) => repr Doc
-helloWorld = fileDoc (printStrLn "Hello, world")
+helloWorld = fileDoc (
+  block [
+    printStrLn "Hello, world",
+    printLn (string) (litString " too"),
+    printStr "boo",
+    print (bool) litTrue])

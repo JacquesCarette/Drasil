@@ -7,7 +7,9 @@ module NewLanguageRenderer (
     classDec, dot, doubleSlash, forLabel, new,
     
     -- * Default Functions available for use in renderers
-    fileDoc', ioDocOutD, litStringD, includeD
+    fileDoc', blockDocD, ioDocOutD, litTrueD, litFalseD, litCharD, litFloatD, litIntD,
+    litStringD, defaultCharD, defaultFloatD, defaultIntD, defaultStringD, 
+    includeD
 ) where
 
 import New (RenderSym(..), Symantics(..), Label, fileDoc)
@@ -86,6 +88,11 @@ fileDoc' t m b = vibcat [
 --     where baseClass = case p of Nothing -> empty
 --                                 Just pn -> inherit c <+> text pn
 
+blockDocD :: Doc -> [Doc] -> Doc
+blockDocD end sts = vcat statements
+  where statements = filter notNullStatement sts
+        notNullStatement s = (not $ isEmpty s) && (render s /= render end)
+
 -- ioState just returns itself. don't need a function for this.
 -- statementDocD :: Config -> StatementLocation -> Statement -> Doc
 -- statementDocD c _ (IOState io) = ioDoc c io
@@ -101,8 +108,35 @@ ioDocOutD printFn v endSt = printFn <> parens (v) <> endSt
 -- valueDocD :: Config -> Value -> Doc
 -- valueDocD c (Lit v) = litDoc c v
 
+litTrueD :: Doc
+litTrueD = text "true"
+
+litFalseD :: Doc
+litFalseD = text "false"
+
+litCharD :: Char -> Doc
+litCharD c = quotes $ char c
+
+litFloatD :: Double -> Doc
+litFloatD v = double v
+
+litIntD :: Integer -> Doc
+litIntD v = integer v
+
 litStringD :: String -> Doc
 litStringD s = doubleQuotedText s
+
+defaultCharD :: Doc
+defaultCharD = char ' '
+
+defaultFloatD :: Doc
+defaultFloatD = double 0.0
+
+defaultIntD :: Doc
+defaultIntD = integer 0
+
+defaultStringD :: Doc
+defaultStringD = text ""
 
 includeD :: Label -> Doc
 includeD incl = text incl

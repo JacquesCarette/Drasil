@@ -31,7 +31,7 @@ type Library = String
 type VarDecl = Declaration
 type FunctionDecl = Method
 
-class (StatementSym repr) => RenderSym repr where
+class (StatementSym repr, Symantics repr) => RenderSym repr where
     fileDoc :: repr Doc -> repr Doc
     top :: repr Block -- Block is a placeholder for all of these, should change
     codeBody :: repr Class -> repr Block
@@ -121,13 +121,17 @@ class IOStSym repr where
     out :: repr Keyword -> repr Value -> repr IOSt 
 
 class ValueSym repr where
-    litBool   :: Bool -> repr Value
+    litTrue   :: repr Value
+    litFalse :: repr Value
     litChar   :: Char -> repr Value
     litFloat  :: Double -> repr Value
     litInt    :: Integer -> repr Value
     litString :: String -> repr Value
 
-    defaultValue :: repr StateType -> repr Value
+    defaultChar :: repr Value
+    defaultFloat :: repr Value
+    defaultInt :: repr Value
+    defaultString :: repr Value
 
     (?!)  :: repr Value -> repr Value
     (?<)  :: repr Value -> repr Value -> repr Value

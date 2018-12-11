@@ -12,12 +12,15 @@ import New (Class, Method, Body, Block, Statement, Declaration, Value, StateType
   BodySym(..), Symantics(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
   IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
 import NewLanguageRenderer (fileDoc', blockDocD, ioDocOutD, boolTypeDocD, intTypeDocD,
-  charTypeDocD, typeDocD, listTypeDocD, notOpDocD, negateOpDocD, unOpDocD, equalOpDocD, 
+  charTypeDocD, typeDocD, listTypeDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
+  notOpDocD, negateOpDocD, unOpDocD, equalOpDocD, 
   notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', litTrueD, litFalseD, 
   litCharD, litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
-  defaultStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, notNullDocD, includeD, dot)
+  defaultStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
+  inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
+  notNullDocD, includeD, dot, new)
 import Helpers (blank,angles,oneTab,vibmap)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan)
@@ -55,6 +58,12 @@ instance Monad JavaCode where
 liftList :: ([Doc] -> Doc) -> [JavaCode Doc] -> JavaCode Doc
 liftList f as = JC $ f (map unJC as)
 
+lift1List :: (Doc -> [Doc] -> Doc) -> JavaCode Doc -> [JavaCode Doc] -> JavaCode Doc
+lift1List f a as = JC $ f (unJC a) (map unJC as)
+
+lift2List :: (Doc -> Doc -> [Doc] -> Doc) -> JavaCode Doc -> JavaCode Doc -> [JavaCode Doc] -> JavaCode Doc
+lift2List f a1 a2 as = JC $ f (unJC a1) (unJC a2) (map unJC as)
+
 instance RenderSym JavaCode where
     fileDoc code = liftA3 fileDoc' top code bottom
     top = liftA3 jtop endStatement include list
@@ -62,6 +71,7 @@ instance RenderSym JavaCode where
     bottom = return empty
 
 instance KeywordSym JavaCode where
+    type Keyword JavaCode = Doc
     endStatement = return semi
     include = return $ includeD "import"
     list = return $ text "Vector"
@@ -70,6 +80,7 @@ instance KeywordSym JavaCode where
     printFileFunc f = liftA jPrintFileFunc f
     printFileLnFunc f = liftA jPrintFileLnFunc f
     argsList = return $ text "args"
+    listObj = return new
     
 instance ClassSym JavaCode where
     -- buildClass n p s vs fs = liftA3 (classDocD n p) s vs fs -- vs and fs are actually lists... should 
@@ -181,6 +192,11 @@ instance ValueSym JavaCode where
     objVar n1 n2 = liftA2 objVarDocD n1 n2
     objVarSelf n = var n
     listVar n _ = var n
+    inlineIf c v1 v2 = liftA3 inlineIfDocD c v1 v2
+    funcApp n vs = liftList (funcAppDocD n) vs
+    extFuncApp l n vs = liftList (extFuncAppDocD l n) vs
+    stateObj st vs = lift1List stateObjDocD st vs
+    listStateObj st vs = lift2List listStateObjDocD listObj st vs
 
     exists v = v
     notNull v = liftA3 notNullDocD v notEqualOp (var "null")
@@ -191,6 +207,19 @@ instance IOStSym JavaCode where
     out prf v = liftA3 ioDocOutD prf v endStatement
 
 instance StatementSym JavaCode where
+    assign v1 v2 = liftA3 assignDocD v1 v2 endStatement
+    (&=) v1 v2 = assign v1 v2
+    (&.=) l v = assign (var l) v
+    (&=.) v l = assign v (var l)
+    (&-=) v1 v2 = v1 &= (v1 #- v2)
+    (&.-=) l v = l &.= (var l #- v)
+    (&+=) v1 v2 = liftA3 plusEqualsDocD v1 v2 endStatement
+    (&.+=) l v = (var l) &+= v
+    (&++) v = liftA2 plusPlusDocD v endStatement
+    (&.++) l = (&++) (var l)
+    (&~-) v = v &= (v #- (litInt 1))
+    (&.~-) l = (&~-) (var l)
+    
     print _ v = ioState (out printFunc v)
     printLn _ v = ioState (out printLnFunc v)
     printStr s = ioState (out printFunc (litString s))

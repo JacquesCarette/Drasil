@@ -8,7 +8,8 @@ module NewLanguageRenderer (
     
     -- * Default Functions available for use in renderers
     fileDoc', blockDocD, ioDocOutD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
-    charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD, 
+    charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD,
+    assignDocD, plusEqualsDocD, plusPlusDocD,
     notOpDocD, negateOpDocD, sqrtOpDocD, absOpDocD, logOpDocD, lnOpDocD, 
     expOpDocD, sinOpDocD, cosOpDocD, tanOpDocD, unOpDocD, equalOpDocD, 
     notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
@@ -16,19 +17,20 @@ module NewLanguageRenderer (
     moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', 
     litTrueD, litFalseD, litCharD, litFloatD, litIntD,
     litStringD, defaultCharD, defaultFloatD, defaultIntD, defaultStringD, 
-    varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, notNullDocD, includeD
+    varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD,
+    funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, includeD
 ) where
 
 import New (Label, Library)
 import Helpers (angles,blank,doubleQuotedText,oneTab,
                             oneTabbed,himap,vibcat,vmap,vibmap)
 
-import Data.List (find)
+import Data.List (find, intersperse)
 import Prelude hiding (break,print,return,last,mod,(<>))
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), brackets, parens,
   isEmpty, rbrace, lbrace, vcat, space, char, double, quotes, integer, semi, equals, braces,
-  int, comma, colon)
+  int, comma, colon, hcat)
 
 
 -- | Takes code, filenames, and extensions
@@ -140,6 +142,17 @@ typeDocD t = text t
 
 listTypeDocD :: Doc -> Doc -> Doc
 listTypeDocD st list = list <> angles st
+
+-- Statements --
+
+assignDocD :: Doc-> Doc -> Doc -> Doc
+assignDocD v1 v2 end = v1 <+> equals <+> v2 <> end
+
+plusEqualsDocD :: Doc -> Doc -> Doc -> Doc
+plusEqualsDocD v1 v2 end = v1 <+> text "+=" <+> v2 <> end
+
+plusPlusDocD :: Doc -> Doc -> Doc
+plusPlusDocD v end = v <> text "++" <> end
 
 -- Unary Operators --
 
@@ -278,6 +291,21 @@ enumElemDocD en e = text en <> dot <> text e
 objVarDocD :: Doc -> Doc ->  Doc
 objVarDocD n1 n2 = n1 <> dot <> n2
 
+inlineIfDocD :: Doc -> Doc -> Doc -> Doc
+inlineIfDocD c v1 v2 = parens (parens c <+> text "?" <+> v1 <+> text ":" <+> v2)
+
+funcAppDocD :: Label -> [Doc] -> Doc
+funcAppDocD n vs = text n <> parens (callFuncParamList vs)
+
+extFuncAppDocD :: Library -> Label -> [Doc] -> Doc
+extFuncAppDocD l n vs = funcAppDocD (l ++ "." ++ n) vs
+
+stateObjDocD :: Doc -> [Doc] -> Doc
+stateObjDocD st vs = new <+> st <> parens (callFuncParamList vs)
+
+listStateObjDocD :: Doc -> Doc -> [Doc] -> Doc
+listStateObjDocD lstObj st vs = lstObj <+> st <> parens (callFuncParamList vs)
+
 notNullDocD :: Doc -> Doc -> Doc -> Doc
 notNullDocD v op nullvar = binOpDocD v notEqualOpDocD nullvar
 
@@ -285,3 +313,8 @@ notNullDocD v op nullvar = binOpDocD v notEqualOpDocD nullvar
 
 includeD :: Label -> Doc
 includeD incl = text incl
+
+-- Helper Functions --
+
+callFuncParamList :: [Doc] -> Doc
+callFuncParamList vs = hcat (intersperse (text ", ") vs)

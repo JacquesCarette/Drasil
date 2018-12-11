@@ -28,7 +28,7 @@ type IOSt = Doc
 type Scope = Doc
 type UnaryOp = Doc
 type BinaryOp = Doc
-type Keyword = Doc
+-- type Keyword = Doc
 
 type Label = String
 type Library = String
@@ -41,15 +41,17 @@ class (StatementSym repr, Symantics repr) => RenderSym repr where
     codeBody :: repr Class -> repr Block
     bottom :: repr Block
 
-class KeywordSym repr where
-    endStatement :: repr Keyword
-    include :: repr Keyword
-    list :: repr Keyword -- Later may need to be repr Permanence -> repr Keyword
-    printFunc :: repr Keyword
-    printLnFunc :: repr Keyword
-    printFileFunc :: repr Value -> repr Keyword
-    printFileLnFunc :: repr Value -> repr Keyword
-    argsList :: repr Keyword
+class (ValueSym repr) => KeywordSym repr where
+    type Keyword repr
+    endStatement :: repr (Keyword repr)
+    include :: repr (Keyword repr)
+    list :: repr (Keyword repr) -- Later may need to be repr Permanence -> repr Keyword
+    printFunc :: repr (Keyword repr)
+    printLnFunc :: repr (Keyword repr)
+    printFileFunc :: repr Value -> repr (Keyword repr)
+    printFileLnFunc :: repr Value -> repr (Keyword repr)
+    argsList :: repr (Keyword repr)
+    listObj :: repr (Keyword repr)
 
 class ClassSym repr where
     buildClass :: Label -> Maybe Label -> repr Scope -> [repr StateVar] -> [repr Method] -> repr Class
@@ -131,8 +133,8 @@ class ValueSym repr => IOTypeSym repr where
     console :: repr IOType
     file    :: repr Value -> repr IOType
 
-class IOStSym repr where
-    out :: repr Keyword -> repr Value -> repr IOSt 
+class (KeywordSym repr, ValueSym repr) => IOStSym repr where
+    out :: repr (Keyword repr) -> repr Value -> repr IOSt 
 
 class UnaryOpSym repr where
     notOp :: repr UnaryOp
@@ -162,7 +164,7 @@ class BinaryOpSym repr where
     andOp :: repr BinaryOp
     orOp :: repr BinaryOp
 
-class ValueSym repr where
+class (StateTypeSym repr) => ValueSym repr where
     litTrue   :: repr Value
     litFalse :: repr Value
     litChar   :: Char -> repr Value
@@ -221,13 +223,18 @@ class ValueSym repr where
     objVar :: repr Value -> repr Value -> repr Value
     objVarSelf :: Label -> repr Value
     listVar :: Label -> repr StateType -> repr Value
-
+    inlineIf :: repr Value -> repr Value -> repr Value -> repr Value
+    funcApp :: Label -> [repr Value] -> repr Value
+    extFuncApp :: Library -> Label -> [repr Value] -> repr Value
+    stateObj :: repr StateType -> [repr Value] -> repr Value
+    listStateObj :: repr StateType -> [repr Value] -> repr Value
 
     exists :: repr Value -> repr Value
     notNull :: repr Value -> repr Value
 
 class (FunctionSym repr, ValueSym repr) => Selector repr where
     ($.)  :: repr Value -> repr Function -> repr Value
+    objAccess :: repr Value -> repr Function -> repr Value
 
 class (ValueSym repr, StateTypeSym repr) => FunctionSym repr where
     func :: Label -> [repr Value] -> repr Function

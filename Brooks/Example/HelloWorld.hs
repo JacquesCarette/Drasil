@@ -26,6 +26,24 @@ genCode files names exts = createCodeFiles $ makeCode files names exts
 helloWorld :: (RenderSym repr) => repr Doc
 helloWorld = fileDoc (
   block [
+    assign (var "a") (litInt 5),
+    (var "b") &= ((var "a") #+ (litInt 2)),
+    "c" &.= ((var "b") #+ (litInt 3)),
+    (var "d") &=. "b",
+    (var "d") &-= (var "a"),
+    "c" &.-= (var "d"),
+    (var "b") &+= (litInt 17),
+    "c" &.+= (litInt 17),
+    (&++) (var "a"),
+    (&.++) "d",
+    (&~-) (var "c"),
+    (&.~-) "b",
+
+    printLn (int) (var "a"),
+    printLn (int) (var "b"),
+    printLn (int) (var "c"),
+    printLn (int) (var "d"),
+
     printStrLn "Hello, world",
     printLn (string) (litString " too"),
     printStr "boo",
@@ -65,4 +83,9 @@ helloWorld = fileDoc (
     printLn (int) (extVar "Lib" "var"),
     printLn (int) (self),
     printLn (int) (objVarSelf "thisOne"),
-    printLn (int) (objVar (var "outer") (var "inner"))])
+    printLn (int) (objVar (var "outer") (var "inner")),
+    printLn (int) (inlineIf (litTrue) (litInt 5) (litInt 0)),
+    printLn (int) (funcApp "myFunc" [(var "arg1"), (var "arg2")]),
+    printLn (int) (extFuncApp "myLib" "myFunc" [(var "arg1"), (var "arg2")]),
+    printLn (int) (stateObj bool [(var "arg1"), (var "arg2")]),
+    printLn (int) (listStateObj bool [(var "arg1"), (var "arg2")])])

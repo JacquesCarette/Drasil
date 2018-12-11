@@ -9,7 +9,8 @@ module NewLanguageRenderer (
     -- * Default Functions available for use in renderers
     fileDoc', blockDocD, ioDocOutD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
     charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD,
-    assignDocD, plusEqualsDocD, plusPlusDocD,
+    assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
+    listDecDocD, listDecDefDocD, statementDocD,
     notOpDocD, negateOpDocD, sqrtOpDocD, absOpDocD, logOpDocD, lnOpDocD, 
     expOpDocD, sinOpDocD, cosOpDocD, tanOpDocD, unOpDocD, equalOpDocD, 
     notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
@@ -18,7 +19,8 @@ module NewLanguageRenderer (
     litTrueD, litFalseD, litCharD, litFloatD, litIntD,
     litStringD, defaultCharD, defaultFloatD, defaultIntD, defaultStringD, 
     varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD,
-    funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, includeD
+    funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
+    staticDocD, dynamicDocD, includeD
 ) where
 
 import New (Label, Library)
@@ -106,8 +108,8 @@ blockDocD end sts = vcat statements
 -- statementDocD :: Config -> StatementLocation -> Statement -> Doc
 -- statementDocD c _ (IOState io) = ioDoc c io
 
-ioDocOutD :: Doc -> Doc -> Doc -> Doc
-ioDocOutD printFn v endSt = printFn <> parens (v) <> endSt
+ioDocOutD :: Doc -> Doc -> Doc
+ioDocOutD printFn v = printFn <> parens (v)
 
 -- Replaced by ioDocOutD
 -- printDocConsoleD :: Bool -> Doc -> Doc
@@ -145,14 +147,29 @@ listTypeDocD st list = list <> angles st
 
 -- Statements --
 
-assignDocD :: Doc-> Doc -> Doc -> Doc
-assignDocD v1 v2 end = v1 <+> equals <+> v2 <> end
+assignDocD :: Doc-> Doc -> Doc
+assignDocD v1 v2 = v1 <+> equals <+> v2
 
-plusEqualsDocD :: Doc -> Doc -> Doc -> Doc
-plusEqualsDocD v1 v2 end = v1 <+> text "+=" <+> v2 <> end
+plusEqualsDocD :: Doc -> Doc -> Doc
+plusEqualsDocD v1 v2 = v1 <+> text "+=" <+> v2
 
-plusPlusDocD :: Doc -> Doc -> Doc
-plusPlusDocD v end = v <> text "++" <> end
+plusPlusDocD :: Doc -> Doc
+plusPlusDocD v = v <> text "++"
+
+varDecDocD :: Label -> Doc -> Doc
+varDecDocD l st = st <+> text l
+
+varDecDefDocD :: Label -> Doc -> Doc -> Doc
+varDecDefDocD l st v = st <+> text l <+> equals <+> v
+
+listDecDocD :: Label -> Doc -> Doc -> Doc
+listDecDocD l n st = st <+> text l <+> equals <+> new <+> st <> parens n
+
+listDecDefDocD :: Label -> Doc -> [Doc] -> Doc
+listDecDefDocD l st vs = st <+> text l <+> equals <+> new <+> st <+> braces (callFuncParamList vs)
+
+statementDocD :: Doc -> Doc -> Doc
+statementDocD s end = s <> end
 
 -- Unary Operators --
 
@@ -307,12 +324,20 @@ listStateObjDocD :: Doc -> Doc -> [Doc] -> Doc
 listStateObjDocD lstObj st vs = lstObj <+> st <> parens (callFuncParamList vs)
 
 notNullDocD :: Doc -> Doc -> Doc -> Doc
-notNullDocD v op nullvar = binOpDocD v notEqualOpDocD nullvar
+notNullDocD v op nullvar = binOpDocD v op nullvar
 
 -- Keywords --
 
 includeD :: Label -> Doc
 includeD incl = text incl
+
+-- Permanence --
+
+staticDocD :: Doc
+staticDocD = text "static"
+
+dynamicDocD :: Doc
+dynamicDocD = empty
 
 -- Helper Functions --
 

@@ -1,9 +1,9 @@
 module Example.HelloWorld (helloWorld) where
 
 import New (Class, Method, Body, Block, Statement, Declaration, Value, StateType,
-  Function, StateVar, IOType, IOSt, Scope, UnaryOp, BinaryOp, Keyword, Label, Library, VarDecl, 
+  Function, StateVar, IOType, IOSt, Scope, UnaryOp, BinaryOp, Permanence, Label, Library, VarDecl, 
   FunctionDecl,
-  RenderSym(..), KeywordSym(..), ClassSym(..), MethodSym(..), 
+  RenderSym(..), KeywordSym(..), PermanenceSym(..), ClassSym(..), MethodSym(..), 
   BodySym(..), Symantics(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
   IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
 import NewLanguageRenderer (makeCode, createCodeFiles)
@@ -26,6 +26,10 @@ genCode files names exts = createCodeFiles $ makeCode files names exts
 helloWorld :: (RenderSym repr) => repr Doc
 helloWorld = fileDoc (
   block [
+    varDecDef "b" int (litInt 5),
+    varDec "a" int,
+    varDec "c" int,
+    varDec "d" int,
     assign (var "a") (litInt 5),
     (var "b") &= ((var "a") #+ (litInt 2)),
     "c" &.= ((var "b") #+ (litInt 3)),
@@ -38,6 +42,8 @@ helloWorld = fileDoc (
     (&.++) "d",
     (&~-) (var "c"),
     (&.~-) "b",
+
+    listDec "myList" 5 (intListType static),
 
     printLn (int) (var "a"),
     printLn (int) (var "b"),

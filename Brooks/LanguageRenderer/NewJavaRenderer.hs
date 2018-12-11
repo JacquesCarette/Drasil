@@ -6,13 +6,14 @@ module LanguageRenderer.NewJavaRenderer (
 ) where
 
 import New (Class, Method, Body, Block, Statement, Declaration, Value, StateType,
-  Function, StateVar, IOType, IOSt, Scope, UnaryOp, BinaryOp, Keyword, Label, Library, VarDecl, 
+  Function, StateVar, IOType, IOSt, Scope, UnaryOp, BinaryOp, Permanence, Label, Library, VarDecl, 
   FunctionDecl,
-  RenderSym(..), KeywordSym(..), ClassSym(..), MethodSym(..), 
+  RenderSym(..), KeywordSym(..), PermanenceSym(..), ClassSym(..), MethodSym(..), 
   BodySym(..), Symantics(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
   IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
 import NewLanguageRenderer (fileDoc', blockDocD, ioDocOutD, boolTypeDocD, intTypeDocD,
   charTypeDocD, typeDocD, listTypeDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
+  varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, statementDocD,
   notOpDocD, negateOpDocD, unOpDocD, equalOpDocD, 
   notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
@@ -20,7 +21,7 @@ import NewLanguageRenderer (fileDoc', blockDocD, ioDocOutD, boolTypeDocD, intTyp
   litCharD, litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
   defaultStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
   inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
-  notNullDocD, includeD, dot, new)
+  notNullDocD, staticDocD, dynamicDocD, includeD, dot, new)
 import Helpers (blank,angles,oneTab,vibmap)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan)
@@ -66,7 +67,7 @@ lift2List f a1 a2 as = JC $ f (unJC a1) (unJC a2) (map unJC as)
 
 instance RenderSym JavaCode where
     fileDoc code = liftA3 fileDoc' top code bottom
-    top = liftA3 jtop endStatement include list
+    top = liftA3 jtop endStatement include (list static)
     codeBody m = m -- don't need right now
     bottom = return empty
 
@@ -74,13 +75,17 @@ instance KeywordSym JavaCode where
     type Keyword JavaCode = Doc
     endStatement = return semi
     include = return $ includeD "import"
-    list = return $ text "Vector"
+    list _ = return $ text "Vector"
     printFunc = return $ text "System.out.print"
     printLnFunc = return $ text "System.out.println"
     printFileFunc f = liftA jPrintFileFunc f
     printFileLnFunc f = liftA jPrintFileLnFunc f
     argsList = return $ text "args"
     listObj = return new
+
+instance PermanenceSym JavaCode where
+    static = return staticDocD
+    dynamic = return dynamicDocD
     
 instance ClassSym JavaCode where
     -- buildClass n p s vs fs = liftA3 (classDocD n p) s vs fs -- vs and fs are actually lists... should 
@@ -105,9 +110,9 @@ instance StateTypeSym JavaCode where
     string = return $ jStringTypeDoc
     infile = return $ jInfileTypeDoc
     outfile = return $ jOutfileTypeDoc
-    listType st = liftA2 listTypeDocD st list
-    intListType = liftA jIntListTypeDoc list
-    floatListType = liftA jFloatListTypeDoc list
+    listType p st = liftA2 listTypeDocD st (list p)
+    intListType p = liftA jIntListTypeDoc (list p)
+    floatListType p = liftA jFloatListTypeDoc (list p)
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
 
@@ -204,22 +209,27 @@ instance ValueSym JavaCode where
 instance IOTypeSym JavaCode
 
 instance IOStSym JavaCode where
-    out prf v = liftA3 ioDocOutD prf v endStatement
+    out prf v = liftA2 ioDocOutD prf v
 
 instance StatementSym JavaCode where
-    assign v1 v2 = liftA3 assignDocD v1 v2 endStatement
+    assign v1 v2 = state (liftA2 assignDocD v1 v2)
     (&=) v1 v2 = assign v1 v2
     (&.=) l v = assign (var l) v
     (&=.) v l = assign v (var l)
     (&-=) v1 v2 = v1 &= (v1 #- v2)
     (&.-=) l v = l &.= (var l #- v)
-    (&+=) v1 v2 = liftA3 plusEqualsDocD v1 v2 endStatement
+    (&+=) v1 v2 = state (liftA2 plusEqualsDocD v1 v2)
     (&.+=) l v = (var l) &+= v
-    (&++) v = liftA2 plusPlusDocD v endStatement
+    (&++) v = state (liftA plusPlusDocD v)
     (&.++) l = (&++) (var l)
     (&~-) v = v &= (v #- (litInt 1))
     (&.~-) l = (&~-) (var l)
-    
+
+    varDec l st = state $ liftA (varDecDocD l) st
+    varDecDef l st v = state $ liftA2 (varDecDefDocD l) st v
+    listDec l n st = state $ liftA2 (listDecDocD l) (litInt n) st -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
+    -- listDecDef l st vs = state $ lift1List (listDecDefDocD l) st vs -- this syntax isn't available for vectors, will come back to this later. Could have the function return 2 statements, one for initializing and one for adding elements
+
     print _ v = ioState (out printFunc v)
     printLn _ v = ioState (out printLnFunc v)
     printStr s = ioState (out printFunc (litString s))
@@ -230,7 +240,9 @@ instance StatementSym JavaCode where
     printFileStr f s = ioState (out (printFileFunc f) (litString s))
     printFileStrLn f s = ioState (out (printFileLnFunc f) (litString s))
 
-    ioState = id -- Now that types are Doc synonyms, I think this will work
+    ioState = state -- Now that types are Doc synonyms, I think this will work
+
+    state s = liftA2 statementDocD s endStatement
 
 instance Symantics JavaCode where
     block sts = do

@@ -3,10 +3,10 @@
 module New (
     -- Types
     Class, Method, Body, Block, Statement, Declaration, Value, StateType,
-    Function, StateVar, IOType, IOSt, Scope, UnaryOp, BinaryOp, Keyword, Label, Library, VarDecl, 
-    FunctionDecl,
+    Function, StateVar, IOType, IOSt, Scope, UnaryOp, BinaryOp, Permanence, 
+    Label, Library, VarDecl, FunctionDecl, 
     -- Typeclasses
-    RenderSym(..), KeywordSym(..), ClassSym(..), MethodSym(..), 
+    RenderSym(..), KeywordSym(..), PermanenceSym(..), ClassSym(..), MethodSym(..), 
     BodySym(..), Symantics(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
     IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..)
 ) where
@@ -28,6 +28,7 @@ type IOSt = Doc
 type Scope = Doc
 type UnaryOp = Doc
 type BinaryOp = Doc
+type Permanence = Doc
 -- type Keyword = Doc
 
 type Label = String
@@ -41,17 +42,21 @@ class (StatementSym repr, Symantics repr) => RenderSym repr where
     codeBody :: repr Class -> repr Block
     bottom :: repr Block
 
-class (ValueSym repr) => KeywordSym repr where
+class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
     type Keyword repr
     endStatement :: repr (Keyword repr)
     include :: repr (Keyword repr)
-    list :: repr (Keyword repr) -- Later may need to be repr Permanence -> repr Keyword
+    list :: repr Permanence -> repr (Keyword repr)
     printFunc :: repr (Keyword repr)
     printLnFunc :: repr (Keyword repr)
     printFileFunc :: repr Value -> repr (Keyword repr)
     printFileLnFunc :: repr Value -> repr (Keyword repr)
     argsList :: repr (Keyword repr)
     listObj :: repr (Keyword repr)
+
+class PermanenceSym repr where
+    static :: repr Permanence
+    dynamic :: repr Permanence
 
 class ClassSym repr where
     buildClass :: Label -> Maybe Label -> repr Scope -> [repr StateVar] -> [repr Method] -> repr Class
@@ -74,15 +79,15 @@ class StateTypeSym repr where
     string :: repr StateType
     infile :: repr StateType
     outfile :: repr StateType
-    listType :: repr StateType -> repr StateType
-    intListType :: repr StateType
-    intListType = listType int
-    floatListType :: repr StateType
-    floatListType = listType float
+    listType :: repr Permanence -> repr StateType -> repr StateType
+    intListType :: repr Permanence -> repr StateType
+    intListType p = listType p int
+    floatListType :: repr Permanence -> repr StateType
+    floatListType p = listType p float
     obj :: Label -> repr StateType
     enumType :: Label -> repr StateType
 
-class (StateTypeSym repr, ValueSym repr, IOStSym repr) => StatementSym repr where
+class (PermanenceSym repr, StateTypeSym repr, ValueSym repr, IOStSym repr) => StatementSym repr where
     (&=)   :: repr Value -> repr Value -> repr Statement
     (&.=)  :: Label -> repr Value -> repr Statement
     (&=.)  :: repr Value -> Label -> repr Statement
@@ -96,7 +101,11 @@ class (StateTypeSym repr, ValueSym repr, IOStSym repr) => StatementSym repr wher
     (&.~-) :: Label -> repr Statement
 
     assign  :: repr Value -> repr Value -> repr Statement
+
     varDec  :: Label -> repr StateType -> repr Statement
+    varDecDef :: Label -> repr StateType -> repr Value -> repr Statement
+    listDec :: Label -> Integer -> repr StateType -> repr Statement
+    listDecDef :: Label -> repr StateType -> [repr Value] -> repr Statement
 
     print      :: repr StateType -> repr Value -> repr Statement
     printLn    :: repr StateType -> repr Value -> repr Statement
@@ -128,6 +137,8 @@ class (StateTypeSym repr, ValueSym repr, IOStSym repr) => StatementSym repr wher
     returnVar :: Label -> repr Statement
 
     ioState :: repr IOSt -> repr Statement
+
+    state :: repr Statement -> repr Statement
 
 class ValueSym repr => IOTypeSym repr where
     console :: repr IOType

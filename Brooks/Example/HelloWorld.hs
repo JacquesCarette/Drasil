@@ -44,6 +44,9 @@ helloWorld = fileDoc (
     (&.~-) "b",
 
     listDec "myList" 5 (intListType static),
+    listDecDef "myOtherList" (floatListType static) [(litFloat 1.0), (litFloat 1.5)],
+    objDecDef "myObj" char (litChar 'o'),
+    constDecDef "myConst" string (litString "Imconstant"),
 
     printLn (int) (var "a"),
     printLn (int) (var "b"),

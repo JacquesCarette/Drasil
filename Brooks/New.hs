@@ -106,6 +106,8 @@ class (PermanenceSym repr, StateTypeSym repr, ValueSym repr, IOStSym repr) => St
     varDecDef :: Label -> repr StateType -> repr Value -> repr Statement
     listDec :: Label -> Integer -> repr StateType -> repr Statement
     listDecDef :: Label -> repr StateType -> [repr Value] -> repr Statement
+    objDecDef :: Label -> repr StateType -> repr Value -> repr Statement
+    constDecDef :: Label -> repr StateType -> repr Value -> repr Statement
 
     print      :: repr StateType -> repr Value -> repr Statement
     printLn    :: repr StateType -> repr Value -> repr Statement

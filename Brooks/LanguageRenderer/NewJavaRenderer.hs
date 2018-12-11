@@ -13,7 +13,7 @@ import New (Class, Method, Body, Block, Statement, Declaration, Value, StateType
   IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
 import NewLanguageRenderer (fileDoc', blockDocD, ioDocOutD, boolTypeDocD, intTypeDocD,
   charTypeDocD, typeDocD, listTypeDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
-  varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, statementDocD,
+  varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, statementDocD,
   notOpDocD, negateOpDocD, unOpDocD, equalOpDocD, 
   notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
@@ -21,7 +21,7 @@ import NewLanguageRenderer (fileDoc', blockDocD, ioDocOutD, boolTypeDocD, intTyp
   litCharD, litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
   defaultStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
   inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
-  notNullDocD, staticDocD, dynamicDocD, includeD, dot, new)
+  notNullDocD, staticDocD, dynamicDocD, includeD, dot, new, callFuncParamList)
 import Helpers (blank,angles,oneTab,vibmap)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan)
@@ -75,7 +75,7 @@ instance KeywordSym JavaCode where
     type Keyword JavaCode = Doc
     endStatement = return semi
     include = return $ includeD "import"
-    list _ = return $ text "Vector"
+    list _ = return $ text "ArrayList"
     printFunc = return $ text "System.out.print"
     printLnFunc = return $ text "System.out.println"
     printFileFunc f = liftA jPrintFileFunc f
@@ -228,7 +228,9 @@ instance StatementSym JavaCode where
     varDec l st = state $ liftA (varDecDocD l) st
     varDecDef l st v = state $ liftA2 (varDecDefDocD l) st v
     listDec l n st = state $ liftA2 (listDecDocD l) (litInt n) st -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
-    -- listDecDef l st vs = state $ lift1List (listDecDefDocD l) st vs -- this syntax isn't available for vectors, will come back to this later. Could have the function return 2 statements, one for initializing and one for adding elements
+    listDecDef l st vs = state $ lift1List (jListDecDef l) st vs
+    objDecDef l st v = state $ liftA2 (objDecDefDocD l) st v
+    constDecDef l st v = state $ liftA2 (jConstDecDef l) st v
 
     print _ v = ioState (out printFunc v)
     printLn _ v = ioState (out printLnFunc v)
@@ -286,3 +288,10 @@ jIntListTypeDoc lst = lst <> angles (text "Integer")
 
 jFloatListTypeDoc :: Doc -> Doc
 jFloatListTypeDoc lst = lst <> angles (text "Double")
+
+jListDecDef :: Label -> Doc -> [Doc] -> Doc
+jListDecDef l st vs = st <+> text l <+> equals <+> new <+> st <+> parens (listElements)
+    where listElements = if null vs then empty else text "Arrays.asList" <> parens (callFuncParamList vs)
+
+jConstDecDef :: Label -> Doc -> Doc -> Doc
+jConstDecDef l st v = text "final" <+> st <+> text l <+> equals <+> v

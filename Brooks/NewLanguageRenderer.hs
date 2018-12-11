@@ -19,8 +19,9 @@ module NewLanguageRenderer (
     litTrueD, litFalseD, litCharD, litFloatD, litIntD,
     litStringD, defaultCharD, defaultFloatD, defaultIntD, defaultStringD, 
     varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD,
-    funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
-    staticDocD, dynamicDocD, includeD
+    funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD,
+    constDecDefDocD, notNullDocD, 
+    staticDocD, dynamicDocD, includeD, callFuncParamList
 ) where
 
 import New (Label, Library)
@@ -167,6 +168,12 @@ listDecDocD l n st = st <+> text l <+> equals <+> new <+> st <> parens n
 
 listDecDefDocD :: Label -> Doc -> [Doc] -> Doc
 listDecDefDocD l st vs = st <+> text l <+> equals <+> new <+> st <+> braces (callFuncParamList vs)
+
+objDecDefDocD :: Label -> Doc -> Doc -> Doc
+objDecDefDocD l st v = varDecDefDocD l st v
+
+constDecDefDocD :: Label -> Doc -> Doc -> Doc -- can this be done without StateType (infer from value)?
+constDecDefDocD l st v = text "const" <+> st <+> text l <+> v
 
 statementDocD :: Doc -> Doc -> Doc
 statementDocD s end = s <> end

@@ -131,7 +131,7 @@ typeDocD :: Label -> Doc
 typeDocD t = text t
 
 listTypeDocD :: Doc -> Doc -> Doc
-listTypeDocD st list = list <> angles st -- separate functions for int and float or case of st?
+listTypeDocD st list = list <> angles st
 
 litTrueD :: Doc
 litTrueD = text "true"

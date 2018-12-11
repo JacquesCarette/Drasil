@@ -89,6 +89,8 @@ instance StateTypeSym JavaCode where
     infile = return $ jInfileTypeDoc
     outfile = return $ jOutfileTypeDoc
     listType st = liftA2 listTypeDocD st list
+    intListType = liftA jIntListTypeDoc list
+    floatListType = liftA jFloatListTypeDoc list
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
 
@@ -159,3 +161,9 @@ jInfileTypeDoc = text "Scanner"
 
 jOutfileTypeDoc :: Doc
 jOutfileTypeDoc = text "PrintWriter"
+
+jIntListTypeDoc :: Doc -> Doc
+jIntListTypeDoc lst = lst <> angles (text "Integer")
+
+jFloatListTypeDoc :: Doc -> Doc
+jFloatListTypeDoc lst = lst <> angles (text "Double")

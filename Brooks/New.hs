@@ -68,6 +68,10 @@ class StateTypeSym repr where
     infile :: repr StateType
     outfile :: repr StateType
     listType :: repr StateType -> repr StateType
+    intListType :: repr StateType
+    intListType = listType int
+    floatListType :: repr StateType
+    floatListType = listType float
     obj :: Label -> repr StateType
     enumType :: Label -> repr StateType
 

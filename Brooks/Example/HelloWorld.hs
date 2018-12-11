@@ -29,4 +29,7 @@ helloWorld = fileDoc (
     printStrLn "Hello, world",
     printLn (string) (litString " too"),
     printStr "boo",
-    print (bool) litTrue])
+    print (bool) litTrue,
+    printLn (float) defaultFloat,
+    print (int) (litInt 0),
+    print (char) (litChar 'c')])

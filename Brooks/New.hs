@@ -1,7 +1,7 @@
 module New (
     -- Types
     Class, Method, Body, Block, Statement, Declaration, Value, StateType,
-    Function, StateVar, IOType, IOSt, Scope, UnaryOp, Keyword, Label, Library, VarDecl, 
+    Function, StateVar, IOType, IOSt, Scope, UnaryOp, BinaryOp, Keyword, Label, Library, VarDecl, 
     FunctionDecl,
     -- Typeclasses
     RenderSym(..), KeywordSym(..), ClassSym(..), MethodSym(..), 

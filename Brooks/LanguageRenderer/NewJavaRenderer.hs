@@ -4,13 +4,16 @@ module LanguageRenderer.NewJavaRenderer (
 ) where
 
 import New (Class, Method, Body, Block, Statement, Declaration, Value, StateType,
-  Function, StateVar, IOType, IOSt, Scope, UnaryOp, Keyword, Label, Library, VarDecl, 
+  Function, StateVar, IOType, IOSt, Scope, UnaryOp, BinaryOp, Keyword, Label, Library, VarDecl, 
   FunctionDecl,
   RenderSym(..), KeywordSym(..), ClassSym(..), MethodSym(..), 
   BodySym(..), Symantics(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
-  IOStSym(..), UnaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
+  IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
 import NewLanguageRenderer (fileDoc', blockDocD, ioDocOutD, boolTypeDocD, intTypeDocD,
-  charTypeDocD, typeDocD, listTypeDocD, notOpDocD, negateOpDocD, unOpDocD, litTrueD, litFalseD, 
+  charTypeDocD, typeDocD, listTypeDocD, notOpDocD, negateOpDocD, unOpDocD, equalOpDocD, 
+  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
+  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
+  moduloOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', litTrueD, litFalseD, 
   litCharD, litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
   defaultStringD, includeD, dot)
 import Helpers (blank,angles,oneTab,vibmap)
@@ -106,6 +109,22 @@ instance UnaryOpSym JavaCode where
     cosOp = return $ text "Math.cos"
     tanOp = return $ text "Math.tan"
 
+instance BinaryOpSym JavaCode where
+    equalOp = return $ equalOpDocD
+    notEqualOp = return $ notEqualOpDocD
+    greaterOp = return $ greaterOpDocD
+    greaterEqualOp = return $ greaterEqualOpDocD
+    lessOp = return $ lessOpDocD
+    lessEqualOp = return $ lessEqualOpDocD
+    plusOp = return $ plusOpDocD
+    minusOp = return $ minusOpDocD
+    multOp = return $ multOpDocD
+    divideOp = return $ divideOpDocD
+    powerOp = return $ text "Math.pow"
+    moduloOp = return $ moduloOpDocD
+    andOp = return $ andOpDocD
+    orOp = return $ orOpDocD
+
 instance ValueSym JavaCode where
     litTrue = return $ litTrueD
     litFalse = return $ litFalseD
@@ -120,10 +139,24 @@ instance ValueSym JavaCode where
     defaultString = return $ defaultStringD
 
     (?!) v = liftA2 unOpDocD notOp v
+    (?<)  v1 v2 = liftA3 binOpDocD v1 lessOp v2
+    (?<=) v1 v2 = liftA3 binOpDocD v1 lessEqualOp v2
+    (?>)  v1 v2 = liftA3 binOpDocD v1 greaterOp v2
+    (?>=) v1 v2 = liftA3 binOpDocD v1 greaterEqualOp v2
+    (?==) v1 v2 = liftA3 binOpDocD v1 equalOp v2
+    (?!=) v1 v2 = liftA3 binOpDocD v1 notEqualOp v2
+    (?&&) v1 v2 = liftA3 binOpDocD v1 andOp v2
+    (?||) v1 v2 = liftA3 binOpDocD v1 orOp v2
 
     (#~) v = liftA2 unOpDocD negateOp v
     (#/^) v = liftA2 unOpDocD sqrtOp v
     (#|) v = liftA2 unOpDocD absOp v
+    (#+)  v1 v2 = liftA3 binOpDocD v1 plusOp v2
+    (#-)  v1 v2 = liftA3 binOpDocD v1 minusOp v2
+    (#*)  v1 v2 = liftA3 binOpDocD v1 multOp v2
+    (#/)  v1 v2 = liftA3 binOpDocD v1 divideOp v2
+    (#%)  v1 v2 = liftA3 binOpDocD v1 moduloOp v2
+    (#^)  v1 v2 = liftA3 binOpDocD' v1 powerOp v2
 
     log v = liftA2 unOpDocD logOp v
     ln v = liftA2 unOpDocD lnOp v

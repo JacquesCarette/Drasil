@@ -1,11 +1,11 @@
 module Example.HelloWorld (helloWorld) where
 
 import New (Class, Method, Body, Block, Statement, Declaration, Value, StateType,
-  Function, StateVar, IOType, IOSt, Scope, UnaryOp, Keyword, Label, Library, VarDecl, 
+  Function, StateVar, IOType, IOSt, Scope, UnaryOp, BinaryOp, Keyword, Label, Library, VarDecl, 
   FunctionDecl,
   RenderSym(..), KeywordSym(..), ClassSym(..), MethodSym(..), 
   BodySym(..), Symantics(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
-  IOStSym(..), UnaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
+  IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
 import NewLanguageRenderer (makeCode, createCodeFiles)
 import LanguageRenderer.NewJavaRenderer (JavaCode(..))
 import Text.PrettyPrint.HughesPJ (Doc)
@@ -37,9 +37,21 @@ helloWorld = fileDoc (
     printLn (int) ((#~) (litInt 1)),
     printLn (float) ((#/^) (litFloat 4.0)),
     printLn (int) ((#|) (litInt (-4))),
-    printLn (float) (log (litFloat 2.0)),
+    printLn (float) (log ((#~) (litFloat 2.0))),
     printLn (float) (ln (litFloat 2.0)),
     printLn (float) (exp (litFloat 2.0)),
     printLn (float) (sin (litFloat 2.0)),
     printLn (float) (cos (litFloat 2.0)),
-    printLn (float) (tan (litFloat 2.0))])
+    printLn (float) (tan (litFloat 2.0)),
+    printLn (float) (tan (litFloat 2.0)),
+    printLn (bool) (litTrue ?&& litFalse),
+    printLn (bool) (litTrue ?|| litFalse),
+    printLn (bool) (litTrue ?&& ((?!) litFalse)),
+    printLn (bool) ((?!) (litTrue ?&& litTrue)),
+    printLn (int) ((litInt 6) #+ (litInt 2)),
+    printLn (int) ((litInt 6) #- (litInt 2)),
+    printLn (int) ((litInt 6) #* (litInt 2)),
+    printLn (int) ((litInt 6) #/ (litInt 2)),
+    printLn (int) ((litInt 6) #% (litInt 4)),
+    printLn (int) ((litInt 6) #^ (litInt 2)),
+    printLn (int) ((litInt 6) #+ ((litInt 2) #* (litInt 3)))])

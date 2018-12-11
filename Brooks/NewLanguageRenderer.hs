@@ -10,7 +10,11 @@ module NewLanguageRenderer (
     fileDoc', blockDocD, ioDocOutD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
     charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD, 
     notOpDocD, negateOpDocD, sqrtOpDocD, absOpDocD, logOpDocD, lnOpDocD, 
-    expOpDocD, sinOpDocD, cosOpDocD, tanOpDocD, unOpDocD, litTrueD, litFalseD, litCharD, litFloatD, litIntD,
+    expOpDocD, sinOpDocD, cosOpDocD, tanOpDocD, unOpDocD, equalOpDocD, 
+    notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
+    lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
+    moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', 
+    litTrueD, litFalseD, litCharD, litFloatD, litIntD,
     litStringD, defaultCharD, defaultFloatD, defaultIntD, defaultStringD, 
     includeD
 ) where
@@ -111,6 +115,8 @@ ioDocOutD printFn v endSt = printFn <> parens (v) <> endSt
 -- valueDocD :: Config -> Value -> Doc
 -- valueDocD c (Lit v) = litDoc c v
 
+-- Type Printers --
+
 boolTypeDocD :: Doc
 boolTypeDocD = text "Boolean" -- capital B?
 
@@ -134,6 +140,8 @@ typeDocD t = text t
 
 listTypeDocD :: Doc -> Doc -> Doc
 listTypeDocD st list = list <> angles st
+
+-- Unary Operators --
 
 notOpDocD :: Doc
 notOpDocD = text "!"
@@ -168,6 +176,58 @@ tanOpDocD = text "tan"
 unOpDocD :: Doc -> Doc -> Doc
 unOpDocD op v = op <> parens v
 
+-- Binary Operators --
+
+equalOpDocD :: Doc
+equalOpDocD = text "=="
+
+notEqualOpDocD :: Doc
+notEqualOpDocD = text "!="
+
+greaterOpDocD :: Doc
+greaterOpDocD = text ">"
+
+greaterEqualOpDocD :: Doc
+greaterEqualOpDocD = text ">="
+
+lessOpDocD :: Doc
+lessOpDocD = text "<"
+
+lessEqualOpDocD :: Doc
+lessEqualOpDocD = text "<="
+
+plusOpDocD :: Doc
+plusOpDocD = text "+"
+
+minusOpDocD :: Doc
+minusOpDocD = text "-"
+
+multOpDocD :: Doc
+multOpDocD = text "*"
+
+divideOpDocD :: Doc
+divideOpDocD = text "/"
+
+moduloOpDocD :: Doc
+moduloOpDocD = text "%"
+
+powerOpDocD :: Doc
+powerOpDocD = text "pow"
+
+andOpDocD :: Doc
+andOpDocD = text "&&"
+
+orOpDocD :: Doc
+orOpDocD = text "||"
+
+binOpDocD :: Doc -> Doc -> Doc -> Doc
+binOpDocD v1 op v2 = parens v1 <+> op <+> parens v2
+
+binOpDocD' :: Doc -> Doc -> Doc -> Doc
+binOpDocD' v1 op v2 = op <> parens (v1 <> comma <+> v2)
+
+-- Literals --
+
 litTrueD :: Doc
 litTrueD = text "true"
 
@@ -197,6 +257,8 @@ defaultIntD = integer 0
 
 defaultStringD :: Doc
 defaultStringD = doubleQuotedText ""
+
+-- Keywords --
 
 includeD :: Label -> Doc
 includeD incl = text incl

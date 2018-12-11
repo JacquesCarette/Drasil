@@ -9,7 +9,8 @@ import New (Class, Method, Body, Block, Statement, Declaration, Value, StateType
   RenderSym(..), KeywordSym(..), ClassSym(..), MethodSym(..), 
   BodySym(..), Symantics(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
   IOStSym(..), ValueSym(..), Selector(..), FunctionSym(..))
-import NewLanguageRenderer (fileDoc', blockDocD, ioDocOutD, litTrueD, litFalseD,
+import NewLanguageRenderer (fileDoc', blockDocD, ioDocOutD, boolTypeDocD, intTypeDocD,
+  charTypeDocD, typeDocD, listTypeDocD, litTrueD, litFalseD,
   litCharD, litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
   defaultStringD, includeD, dot)
 import Helpers (blank,angles,oneTab,vibmap)
@@ -34,17 +35,17 @@ instance Monad JavaCode where
 
 -- type JavaCode a = JavaCodeMonad Doc
 
-liftJC0 :: Doc -> JavaCode Doc
-liftJC0 = JC
+-- liftJC0 :: Doc -> JavaCode Doc
+-- liftJC0 = JC
 
-liftJC1 :: (Doc -> Doc) -> JavaCode Doc -> JavaCode Doc
-liftJC1 f a = JC $ f (unJC a)
+-- liftJC1 :: (Doc -> Doc) -> JavaCode Doc -> JavaCode Doc
+-- liftJC1 f a = JC $ f (unJC a)
 
-liftJC2 :: (Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc
-liftJC2 f a b = JC $ f (unJC a) (unJC b)
+-- liftJC2 :: (Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc
+-- liftJC2 f a b = JC $ f (unJC a) (unJC b)
 
-liftJC3 :: (Doc -> Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc
-liftJC3 f a b c = JC $ f (unJC a) (unJC b) (unJC c)
+-- liftJC3 :: (Doc -> Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc
+-- liftJC3 f a b c = JC $ f (unJC a) (unJC b) (unJC c)
 
 liftList :: ([Doc] -> Doc) -> [JavaCode Doc] -> JavaCode Doc
 liftList f as = JC $ f (map unJC as)
@@ -79,7 +80,17 @@ instance ClassSym JavaCode where
 --         c <- ask -- not needed, only ask for config when you need to actually extract from it
 --         liftJC0 (classDoc c n p s vs fs)
 
-instance StateTypeSym JavaCode
+instance StateTypeSym JavaCode where
+    bool = return $ boolTypeDocD
+    int = return $ intTypeDocD
+    float = return $ jFloatTypeDocD
+    char = return $ charTypeDocD
+    string = return $ jStringTypeDoc
+    infile = return $ jInfileTypeDoc
+    outfile = return $ jOutfileTypeDoc
+    listType st = liftA2 listTypeDocD st list
+    obj t = return $ typeDocD t
+    enumType t = return $ typeDocD t
 
 instance ValueSym JavaCode where
     litTrue = return $ litTrueD
@@ -136,3 +147,15 @@ jPrintFileFunc f = f <> dot <> text "print"
 
 jPrintFileLnFunc :: Doc -> Doc
 jPrintFileLnFunc f = f <> dot <> text "println"
+
+jFloatTypeDocD :: Doc
+jFloatTypeDocD = text "double"
+
+jStringTypeDoc :: Doc
+jStringTypeDoc = text "String"
+
+jInfileTypeDoc :: Doc
+jInfileTypeDoc = text "Scanner"
+
+jOutfileTypeDoc :: Doc
+jOutfileTypeDoc = text "PrintWriter"

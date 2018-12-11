@@ -65,6 +65,11 @@ class StateTypeSym repr where
     float  :: repr StateType
     char   :: repr StateType
     string :: repr StateType
+    infile :: repr StateType
+    outfile :: repr StateType
+    listType :: repr StateType -> repr StateType
+    obj :: Label -> repr StateType
+    enumType :: Label -> repr StateType
 
 class (StateTypeSym repr, ValueSym repr, IOStSym repr) => StatementSym repr where
     (&=)   :: repr Value -> repr Value -> repr Statement

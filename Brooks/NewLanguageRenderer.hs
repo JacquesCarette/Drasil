@@ -7,7 +7,8 @@ module NewLanguageRenderer (
     classDec, dot, doubleSlash, forLabel, new,
     
     -- * Default Functions available for use in renderers
-    fileDoc', blockDocD, ioDocOutD, litTrueD, litFalseD, litCharD, litFloatD, litIntD,
+    fileDoc', blockDocD, ioDocOutD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
+    charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD, litTrueD, litFalseD, litCharD, litFloatD, litIntD,
     litStringD, defaultCharD, defaultFloatD, defaultIntD, defaultStringD, 
     includeD
 ) where
@@ -108,6 +109,30 @@ ioDocOutD printFn v endSt = printFn <> parens (v) <> endSt
 -- valueDocD :: Config -> Value -> Doc
 -- valueDocD c (Lit v) = litDoc c v
 
+boolTypeDocD :: Doc
+boolTypeDocD = text "Boolean" -- capital B?
+
+intTypeDocD :: Doc
+intTypeDocD = text "int"
+
+floatTypeDocD :: Doc
+floatTypeDocD = text "float"
+
+charTypeDocD :: Doc
+charTypeDocD = text "char"
+
+stringTypeDocD :: Doc
+stringTypeDocD = text "string"
+
+fileTypeDocD :: Doc
+fileTypeDocD = text "File"
+
+typeDocD :: Label -> Doc
+typeDocD t = text t
+
+listTypeDocD :: Doc -> Doc -> Doc
+listTypeDocD st list = list <> angles st -- separate functions for int and float or case of st?
+
 litTrueD :: Doc
 litTrueD = text "true"
 
@@ -136,7 +161,7 @@ defaultIntD :: Doc
 defaultIntD = integer 0
 
 defaultStringD :: Doc
-defaultStringD = text ""
+defaultStringD = doubleQuotedText ""
 
 includeD :: Label -> Doc
 includeD incl = text incl

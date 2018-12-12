@@ -1,10 +1,10 @@
 module Example.HelloWorld (helloWorld) where
 
-import New (Class, Method, Body, Block, Statement, Declaration, Value, StateType,
+import New (Class, Method, Body, Block, Conditional, Statement, Declaration, Value, StateType,
   Function, StateVar, IOType, IOSt, Scope, UnaryOp, BinaryOp, Permanence, Label, Library, VarDecl, 
   FunctionDecl,
   RenderSym(..), KeywordSym(..), PermanenceSym(..), ClassSym(..), MethodSym(..), 
-  BodySym(..), BlockSym(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
+  BodySym(..), BlockSym(..), ConditionalSym(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
   IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
 import NewLanguageRenderer (makeCode, createCodeFiles)
 import LanguageRenderer.NewJavaRenderer (JavaCode(..))
@@ -25,6 +25,11 @@ genCode files names exts = createCodeFiles $ makeCode files names exts
 
 helloWorld :: (RenderSym repr) => repr Doc
 helloWorld = fileDoc (
+  ifCond [(litFalse, bodyStatements [(varDec "dummy" string)]),
+  (litTrue, helloIfBody)] helloElseBody)
+
+helloIfBody :: (RenderSym repr) => repr Body
+helloIfBody = body [
   block [
     varDecDef "b" int (litInt 5),
     varDec "a" int,
@@ -51,26 +56,9 @@ helloWorld = fileDoc (
     printLn (int) (var "a"),
     printLn (int) (var "b"),
     printLn (int) (var "c"),
-    printLn (int) (var "d"),
-
-    printStrLn "Hello, world",
-    printLn (string) (litString " too"),
-    printStr "boo",
-    print (bool) litTrue,
-    printLn (float) defaultFloat,
-    print (int) (litInt 0),
-    print (char) (litChar 'c'),
-    printLn (bool) ((?!) litTrue),
-    printLn (int) ((#~) (litInt 1)),
-    printLn (float) ((#/^) (litFloat 4.0)),
-    printLn (int) ((#|) (litInt (-4))),
-    printLn (float) (log ((#~) (litFloat 2.0))),
-    printLn (float) (ln (litFloat 2.0)),
-    printLn (float) (exp (litFloat 2.0)),
-    printLn (float) (sin (litFloat 2.0)),
-    printLn (float) (cos (litFloat 2.0)),
-    printLn (float) (tan (litFloat 2.0)),
-    printLn (float) (tan (litFloat 2.0)),
+    printLn (int) (var "d")],
+  
+  block [
     printLn (bool) (litTrue ?&& litFalse),
     printLn (bool) (litTrue ?|| litFalse),
     printLn (bool) (litTrue ?&& ((?!) litFalse)),
@@ -97,4 +85,25 @@ helloWorld = fileDoc (
     printLn (int) (funcApp "myFunc" [(var "arg1"), (var "arg2")]),
     printLn (int) (extFuncApp "myLib" "myFunc" [(var "arg1"), (var "arg2")]),
     printLn (int) (stateObj bool [(var "arg1"), (var "arg2")]),
-    printLn (int) (listStateObj bool [(var "arg1"), (var "arg2")])])
+    printLn (int) (listStateObj bool [(var "arg1"), (var "arg2")])]]
+
+helloElseBody :: (RenderSym repr) => repr Body
+helloElseBody = bodyStatements [
+  printStrLn "Hello, world",
+  printLn (string) (litString " too"),
+  printStr "boo",
+  print (bool) litTrue,
+  printLn (float) defaultFloat,
+  print (int) (litInt 0),
+  print (char) (litChar 'c'),
+  printLn (bool) ((?!) litTrue),
+  printLn (int) ((#~) (litInt 1)),
+  printLn (float) ((#/^) (litFloat 4.0)),
+  printLn (int) ((#|) (litInt (-4))),
+  printLn (float) (log ((#~) (litFloat 2.0))),
+  printLn (float) (ln (litFloat 2.0)),
+  printLn (float) (exp (litFloat 2.0)),
+  printLn (float) (sin (litFloat 2.0)),
+  printLn (float) (cos (litFloat 2.0)),
+  printLn (float) (tan (litFloat 2.0)),
+  printLn (float) (tan (litFloat 2.0))]

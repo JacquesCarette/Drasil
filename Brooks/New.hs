@@ -37,7 +37,7 @@ type Library = String
 type VarDecl = Declaration
 type FunctionDecl = Method
 
-class (StatementSym repr, BlockSym repr) => RenderSym repr where
+class (ConditionalSym repr) => RenderSym repr where
     fileDoc :: repr Doc -> repr Doc
     top :: repr Block -- Block is a placeholder for all of these, should change
     codeBody :: repr Class -> repr Block
@@ -54,6 +54,10 @@ class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
     printFileLnFunc :: repr Value -> repr (Keyword repr)
     argsList :: repr (Keyword repr)
     listObj :: repr (Keyword repr)
+    blockStart :: repr (Keyword repr)
+    blockEnd :: repr (Keyword repr)
+    ifBodyStart :: repr (Keyword repr)
+    elseIf :: repr (Keyword repr)
 
 class PermanenceSym repr where
     static :: repr Permanence
@@ -65,9 +69,9 @@ class ClassSym repr where
 class MethodSym repr where
     mainMethod :: repr Body -> repr Method
 
-class BodySym repr where
+class (BlockSym repr) => BodySym repr where
     body :: [repr Block] -> repr Body
-    bodyStatements :: [repr Statement] -> Body
+    bodyStatements :: [repr Statement] -> repr Body
 
 -- Right now the Block is the top-level structure
 class StatementSym repr => BlockSym repr where
@@ -89,7 +93,7 @@ class StateTypeSym repr where
     obj :: Label -> repr StateType
     enumType :: Label -> repr StateType
 
-class ConditionalSym repr where
+class (BodySym repr) => ConditionalSym repr where
     ifCond :: [(repr Value, repr Body)] -> repr Body -> repr Conditional 
     switchCond :: [(repr Value, repr Body)] -> repr Body -> repr Conditional -- is there value in separating Literals into their own type?
 

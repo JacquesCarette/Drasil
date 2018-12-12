@@ -5,14 +5,14 @@ module LanguageRenderer.NewJavaRenderer (
     JavaCode(..)
 ) where
 
-import New (Class, Method, Body, Block, Statement, Declaration, Value, StateType,
+import New (Class, Method, Body, Block, Conditional, Statement, Declaration, Value, StateType,
   Function, StateVar, IOType, IOSt, Scope, UnaryOp, BinaryOp, Permanence, Label, Library, VarDecl, 
   FunctionDecl,
   RenderSym(..), KeywordSym(..), PermanenceSym(..), ClassSym(..), MethodSym(..), 
-  BodySym(..), BlockSym(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
+  BodySym(..), BlockSym(..), ConditionalSym(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
   IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
-import NewLanguageRenderer (fileDoc', blockDocD, ioDocOutD, boolTypeDocD, intTypeDocD,
-  charTypeDocD, typeDocD, listTypeDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
+import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, ioDocOutD, boolTypeDocD, intTypeDocD,
+  charTypeDocD, typeDocD, listTypeDocD, ifCondDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
   varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, statementDocD,
   notOpDocD, negateOpDocD, unOpDocD, equalOpDocD, 
   notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
@@ -65,6 +65,12 @@ lift1List f a as = JC $ f (unJC a) (map unJC as)
 lift2List :: (Doc -> Doc -> [Doc] -> Doc) -> JavaCode Doc -> JavaCode Doc -> [JavaCode Doc] -> JavaCode Doc
 lift2List f a1 a2 as = JC $ f (unJC a1) (unJC a2) (map unJC as)
 
+unJCPair :: (JavaCode Doc, JavaCode Doc) -> (Doc, Doc)
+unJCPair (a1, a2) = (unJC a1, unJC a2) 
+
+lift4Pair :: (Doc -> Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> [(JavaCode Doc, JavaCode Doc)] -> JavaCode Doc
+lift4Pair f a1 a2 a3 a4 as = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (map unJCPair as)
+
 instance RenderSym JavaCode where
     fileDoc code = liftA3 fileDoc' top code bottom
     top = liftA3 jtop endStatement include (list static)
@@ -82,6 +88,10 @@ instance KeywordSym JavaCode where
     printFileLnFunc f = liftA jPrintFileLnFunc f
     argsList = return $ text "args"
     listObj = return new
+    blockStart = return lbrace
+    blockEnd = return rbrace
+    ifBodyStart = blockStart
+    elseIf = return $ text "else if"
 
 instance PermanenceSym JavaCode where
     static = return staticDocD
@@ -115,6 +125,9 @@ instance StateTypeSym JavaCode where
     floatListType p = liftA jFloatListTypeDoc (list p)
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
+
+instance ConditionalSym JavaCode where
+    ifCond bs b = lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs
 
 instance UnaryOpSym JavaCode where
     notOp = return $ notOpDocD
@@ -252,7 +265,7 @@ instance BlockSym JavaCode where
         liftList (blockDocD end) sts
 
 instance BodySym JavaCode where
-    body bs = liftList (bodyDocD bs)
+    body bs = liftList bodyDocD bs
     bodyStatements sts = block sts
 
 jtop :: Doc -> Doc -> Doc -> Doc

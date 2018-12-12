@@ -7,8 +7,9 @@ module NewLanguageRenderer (
     classDec, dot, doubleSlash, forLabel, new,
     
     -- * Default Functions available for use in renderers
-    fileDoc', blockDocD, ioDocOutD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
+    fileDoc', blockDocD, bodyDocD, ioDocOutD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
     charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD,
+    ifCondDocD, 
     assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
     listDecDocD, listDecDefDocD, statementDocD,
     notOpDocD, negateOpDocD, sqrtOpDocD, absOpDocD, logOpDocD, lnOpDocD, 
@@ -107,8 +108,8 @@ blockDocD end sts = vcat statements
 
 bodyDocD :: [Doc] -> Doc
 bodyDocD bs = vcat blocks
-  where blocks = filter notNullStatement bs
-        notNullStatement s = (not $ isEmpty s) && (render s /= render end)
+  where blocks = filter notNullBlock bs
+        notNullBlock b = (not $ isEmpty b)
 
 -- ioState just returns itself. don't need a function for this.
 -- statementDocD :: Config -> StatementLocation -> Statement -> Doc
@@ -150,6 +151,27 @@ typeDocD t = text t
 
 listTypeDocD :: Doc -> Doc -> Doc
 listTypeDocD st list = list <> angles st
+
+-- Conditionals --
+
+ifCondDocD :: Doc -> Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc
+ifCondDocD ifStart elseIf blockEnd elseBody (c:cs) = 
+    let ifSect (v, b) = vcat [
+            text "if" <+> parens v <+> ifStart,
+            oneTab b,
+            blockEnd]
+        elseIfSect (v, b) = vcat [
+            elseIf <+> parens v <+> ifStart,
+            oneTab b,
+            blockEnd]
+        elseSect = if isEmpty elseBody then empty else vcat [
+            text "else" <+> ifStart,
+            oneTab elseBody,
+            blockEnd]
+    in vcat [
+        ifSect c,
+        vmap elseIfSect cs,
+        elseSect]
 
 -- Statements --
 

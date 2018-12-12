@@ -4,7 +4,7 @@ import New (Class, Method, Body, Block, Statement, Declaration, Value, StateType
   Function, StateVar, IOType, IOSt, Scope, UnaryOp, BinaryOp, Permanence, Label, Library, VarDecl, 
   FunctionDecl,
   RenderSym(..), KeywordSym(..), PermanenceSym(..), ClassSym(..), MethodSym(..), 
-  BodySym(..), Symantics(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
+  BodySym(..), BlockSym(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
   IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
 import NewLanguageRenderer (makeCode, createCodeFiles)
 import LanguageRenderer.NewJavaRenderer (JavaCode(..))

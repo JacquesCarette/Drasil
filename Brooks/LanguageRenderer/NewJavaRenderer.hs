@@ -9,7 +9,7 @@ import New (Class, Method, Body, Block, Statement, Declaration, Value, StateType
   Function, StateVar, IOType, IOSt, Scope, UnaryOp, BinaryOp, Permanence, Label, Library, VarDecl, 
   FunctionDecl,
   RenderSym(..), KeywordSym(..), PermanenceSym(..), ClassSym(..), MethodSym(..), 
-  BodySym(..), Symantics(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
+  BodySym(..), BlockSym(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
   IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
 import NewLanguageRenderer (fileDoc', blockDocD, ioDocOutD, boolTypeDocD, intTypeDocD,
   charTypeDocD, typeDocD, listTypeDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
@@ -246,15 +246,14 @@ instance StatementSym JavaCode where
 
     state s = liftA2 statementDocD s endStatement
 
-instance Symantics JavaCode where
+instance BlockSym JavaCode where
     block sts = do
         end <- endStatement
         liftList (blockDocD end) sts
 
 instance BodySym JavaCode where
-    -- body sts = JC $ do
-    --     c <- ask
-    --     liftJC0 (statementDoc c sts)
+    body bs = liftList (bodyDocD bs)
+    bodyStatements sts = block sts
 
 jtop :: Doc -> Doc -> Doc -> Doc
 jtop end inc lst = vcat [

@@ -105,6 +105,11 @@ blockDocD end sts = vcat statements
   where statements = filter notNullStatement sts
         notNullStatement s = (not $ isEmpty s) && (render s /= render end)
 
+bodyDocD :: [Doc] -> Doc
+bodyDocD bs = vcat blocks
+  where blocks = filter notNullStatement bs
+        notNullStatement s = (not $ isEmpty s) && (render s /= render end)
+
 -- ioState just returns itself. don't need a function for this.
 -- statementDocD :: Config -> StatementLocation -> Statement -> Doc
 -- statementDocD c _ (IOState io) = ioDoc c io

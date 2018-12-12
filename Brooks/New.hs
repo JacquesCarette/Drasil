@@ -2,12 +2,12 @@
 
 module New (
     -- Types
-    Class, Method, Body, Block, Statement, Declaration, Value, StateType,
+    Class, Method, Body, Block, Conditional, Statement, Declaration, Value, StateType,
     Function, StateVar, IOType, IOSt, Scope, UnaryOp, BinaryOp, Permanence, 
     Label, Library, VarDecl, FunctionDecl, 
     -- Typeclasses
     RenderSym(..), KeywordSym(..), PermanenceSym(..), ClassSym(..), MethodSym(..), 
-    BodySym(..), Symantics(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
+    BodySym(..), ConditionalSym(..), BlockSym(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
     IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..)
 ) where
 
@@ -17,6 +17,7 @@ type Class = Doc
 type Method = Doc
 type Body = Doc
 type Block = Doc
+type Conditional = Doc
 type Statement = Doc
 type Declaration = Doc
 type Value = Doc
@@ -36,7 +37,7 @@ type Library = String
 type VarDecl = Declaration
 type FunctionDecl = Method
 
-class (StatementSym repr, Symantics repr) => RenderSym repr where
+class (StatementSym repr, BlockSym repr) => RenderSym repr where
     fileDoc :: repr Doc -> repr Doc
     top :: repr Block -- Block is a placeholder for all of these, should change
     codeBody :: repr Class -> repr Block
@@ -65,10 +66,11 @@ class MethodSym repr where
     mainMethod :: repr Body -> repr Method
 
 class BodySym repr where
-    body :: [repr Statement] -> repr Body
+    body :: [repr Block] -> repr Body
+    bodyStatements :: [repr Statement] -> Body
 
 -- Right now the Block is the top-level structure
-class StatementSym repr => Symantics repr where
+class StatementSym repr => BlockSym repr where
     block   :: [repr Statement] -> repr Block
 
 class StateTypeSym repr where
@@ -86,6 +88,10 @@ class StateTypeSym repr where
     floatListType p = listType p float
     obj :: Label -> repr StateType
     enumType :: Label -> repr StateType
+
+class ConditionalSym repr where
+    ifCond :: [(repr Value, repr Body)] -> repr Body -> repr Conditional 
+    switchCond :: [(repr Value, repr Body)] -> repr Body -> repr Conditional -- is there value in separating Literals into their own type?
 
 class (PermanenceSym repr, StateTypeSym repr, ValueSym repr, IOStSym repr) => StatementSym repr where
     (&=)   :: repr Value -> repr Value -> repr Statement

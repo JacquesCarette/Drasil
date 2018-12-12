@@ -7,10 +7,12 @@ module LanguageRenderer.NewJavaRenderer (
 
 import New (Declaration, StateVar, Scope, Label, Library,
   RenderSym(..), KeywordSym(..), PermanenceSym(..), ClassSym(..), MethodSym(..), 
-  ProgramBodySym(..), BodySym(..), BlockSym(..), ControlSym(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
+  ProgramBodySym(..), BodySym(..), BlockSym(..), ControlSym(..), StateTypeSym(..),
+  PreStatementSym(..),  StatementSym(..), IOTypeSym(..),
   IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
 import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, progDocD, ioDocOutD, boolTypeDocD, intTypeDocD,
-  charTypeDocD, typeDocD, listTypeDocD, ifCondDocD, switchCondDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
+  charTypeDocD, typeDocD, listTypeDocD, ifCondDocD, switchCondDocD, forDocD, 
+  assignDocD, plusEqualsDocD, plusPlusDocD,
   varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, statementDocD,
   notOpDocD, negateOpDocD, unOpDocD, equalOpDocD, 
   notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
@@ -54,6 +56,12 @@ instance Monad JavaCode where
 -- liftJC3 :: (Doc -> Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc
 -- liftJC3 f a b c = JC $ f (unJC a) (unJC b) (unJC c)
 
+liftA4 :: (Doc -> Doc -> Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc
+liftA4 f a1 a2 a3 a4 = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4)
+
+liftA6 :: (Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc
+liftA6 f a1 a2 a3 a4 a5 a6 = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (unJC a5) (unJC a6)
+
 liftList :: ([Doc] -> Doc) -> [JavaCode Doc] -> JavaCode Doc
 liftList f as = JC $ f (map unJC as)
 
@@ -83,6 +91,7 @@ instance RenderSym JavaCode where
 instance KeywordSym JavaCode where
     type Keyword JavaCode = Doc
     endStatement = return semi
+    endStatementLoop = return empty
     include = return $ includeD "import"
     list _ = return $ text "ArrayList"
     printFunc = return $ text "System.out.print"
@@ -115,7 +124,7 @@ instance BlockSym JavaCode where
     type Block JavaCode = Doc
     block sts = do
         end <- endStatement
-        liftList (blockDocD end) sts
+        liftList (blockDocD end) (map state sts)
     
 instance ClassSym JavaCode where
     -- buildClass n p s vs fs = liftA3 (classDocD n p) s vs fs -- vs and fs are actually lists... should 
@@ -152,6 +161,8 @@ instance ControlSym JavaCode where
     ifCond bs b = lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs
     switchCond v cs c = lift3Pair switchCondDocD break v c cs
 
+    for sInit vGuard sUpdate b = liftA6 forDocD blockStart blockEnd (loopState sInit) vGuard (loopState sUpdate) b
+ 
 instance UnaryOpSym JavaCode where
     type UnaryOp JavaCode = Doc
     notOp = return $ notOpDocD
@@ -251,44 +262,47 @@ instance IOStSym JavaCode where
     type IOSt JavaCode = Doc
     out prf v = liftA2 ioDocOutD prf v
 
-instance StatementSym JavaCode where
-    type Statement JavaCode = Doc
-    assign v1 v2 = state (liftA2 assignDocD v1 v2)
+instance PreStatementSym JavaCode where
+    type PreStatement JavaCode = Doc
+    assign v1 v2 = liftA2 assignDocD v1 v2
     (&=) v1 v2 = assign v1 v2
     (&.=) l v = assign (var l) v
     (&=.) v l = assign v (var l)
     (&-=) v1 v2 = v1 &= (v1 #- v2)
     (&.-=) l v = l &.= (var l #- v)
-    (&+=) v1 v2 = state (liftA2 plusEqualsDocD v1 v2)
+    (&+=) v1 v2 = liftA2 plusEqualsDocD v1 v2
     (&.+=) l v = (var l) &+= v
-    (&++) v = state (liftA plusPlusDocD v)
+    (&++) v = liftA plusPlusDocD v
     (&.++) l = (&++) (var l)
     (&~-) v = v &= (v #- (litInt 1))
     (&.~-) l = (&~-) (var l)
 
-    varDec l st = state $ liftA (varDecDocD l) st
-    varDecDef l st v = state $ liftA2 (varDecDefDocD l) st v
-    listDec l n st = state $ liftA2 (listDecDocD l) (litInt n) st -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
-    listDecDef l st vs = state $ lift1List (jListDecDef l) st vs
-    objDecDef l st v = state $ liftA2 (objDecDefDocD l) st v
-    constDecDef l st v = state $ liftA2 (jConstDecDef l) st v
+    varDec l st = liftA (varDecDocD l) st
+    varDecDef l st v = liftA2 (varDecDefDocD l) st v
+    listDec l n st = liftA2 (listDecDocD l) (litInt n) st -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
+    listDecDef l st vs = lift1List (jListDecDef l) st vs
+    objDecDef l st v = liftA2 (objDecDefDocD l) st v
+    constDecDef l st v = liftA2 (jConstDecDef l) st v
 
-    print _ v = ioState (out printFunc v)
-    printLn _ v = ioState (out printLnFunc v)
-    printStr s = ioState (out printFunc (litString s))
-    printStrLn s = ioState (out printLnFunc (litString s))
+    print _ v = out printFunc v
+    printLn _ v = out printLnFunc v
+    printStr s = out printFunc (litString s)
+    printStrLn s = out printLnFunc (litString s)
 
-    printFile f _ v = ioState (out (printFileFunc f) v)
-    printFileLn f _ v = ioState (out (printFileLnFunc f) v)
-    printFileStr f s = ioState (out (printFileFunc f) (litString s))
-    printFileStrLn f s = ioState (out (printFileLnFunc f) (litString s))
+    printFile f _ v = out (printFileFunc f) v
+    printFileLn f _ v = out (printFileLnFunc f) v
+    printFileStr f s = out (printFileFunc f) (litString s)
+    printFileStrLn f s = out (printFileLnFunc f) (litString s)
 
-    break = state $ return $ breakDocD  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
-    continue = state $ return $ continueDocD
+    break = return breakDocD  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
+    continue = return continueDocD
 
+instance StatementSym JavaCode where
+    type Statement JavaCode = Doc
     ioState = state -- Now that types are Doc synonyms, I think this will work
 
     state s = liftA2 statementDocD s endStatement
+    loopState s = liftA2 statementDocD s endStatementLoop
 
 jtop :: Doc -> Doc -> Doc -> Doc
 jtop end inc lst = vcat [

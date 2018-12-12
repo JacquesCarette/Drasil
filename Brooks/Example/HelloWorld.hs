@@ -2,7 +2,8 @@ module Example.HelloWorld (helloWorld) where
 
 import New (Declaration, StateVar, Scope, Label, Library,
   RenderSym(..), KeywordSym(..), PermanenceSym(..), ClassSym(..), MethodSym(..), 
-  ProgramBodySym(..), BodySym(..), BlockSym(..), ControlSym(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
+  ProgramBodySym(..), BodySym(..), BlockSym(..), ControlSym(..), StateTypeSym(..), 
+  PreStatementSym(..), StatementSym(..), IOTypeSym(..),
   IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
 import NewLanguageRenderer (makeCode, createCodeFiles)
 import LanguageRenderer.NewJavaRenderer (JavaCode(..))
@@ -27,7 +28,8 @@ helloWorld = fileDoc ( prog [
     (litTrue, helloIfBody)] helloElseBody,
   switchCond (var "a") [((litInt 5), (oneLiner ("b" &.= (litInt 10)))), 
     ((litInt 0), (oneLiner ("b" &.= (litInt 5))))]
-    (oneLiner ("b" &.= (litInt 0)))])
+    (oneLiner ("b" &.= (litInt 0))),
+  helloForLoop])
 
 helloIfBody :: (RenderSym repr) => repr (Body repr)
 helloIfBody = body [
@@ -73,20 +75,19 @@ helloIfBody = body [
     printLn (int) ((litInt 6) #+ ((litInt 2) #* (litInt 3))),
     printLn (float) (csc (litFloat 1.0)),
     printLn (float) (sec (litFloat 1.0)),
-    printLn (float) (cot (litFloat 1.0)),
-    printLn (int) (notNull (litInt 5)),
-    printLn (int) (notNull (var "a")),
-    printLn (int) (var "a"),
-    printLn (int) (arg 5),
-    printLn (int) (extVar "Lib" "var"),
-    printLn (int) (self),
-    printLn (int) (objVarSelf "thisOne"),
-    printLn (int) (objVar (var "outer") (var "inner")),
-    printLn (int) (inlineIf (litTrue) (litInt 5) (litInt 0)),
-    printLn (int) (funcApp "myFunc" [(var "arg1"), (var "arg2")]),
-    printLn (int) (extFuncApp "myLib" "myFunc" [(var "arg1"), (var "arg2")]),
-    printLn (int) (stateObj bool [(var "arg1"), (var "arg2")]),
-    printLn (int) (listStateObj bool [(var "arg1"), (var "arg2")])]]
+    printLn (float) (cot (litFloat 1.0))]]
+    -- printLn (int) (notNull (var "a")),
+    -- printLn (int) (var "a"),
+    -- printLn (int) (arg 5),
+    -- printLn (int) (extVar "Lib" "var"),
+    -- printLn (int) (self),
+    -- printLn (int) (objVarSelf "thisOne"),
+    -- printLn (int) (objVar (var "outer") (var "inner")),
+    -- printLn (int) (inlineIf (litTrue) (litInt 5) (litInt 0)),
+    -- printLn (int) (funcApp "myFunc" [(var "arg1"), (var "arg2")]),
+    -- printLn (int) (extFuncApp "myLib" "myFunc" [(var "arg1"), (var "arg2")]),
+    -- printLn (int) (stateObj bool [(var "arg1"), (var "arg2")]),
+    -- printLn (int) (listStateObj bool [(var "arg1"), (var "arg2")])
 
 helloElseBody :: (RenderSym repr) => repr (Body repr)
 helloElseBody = bodyStatements [
@@ -108,3 +109,7 @@ helloElseBody = bodyStatements [
   printLn (float) (cos (litFloat 2.0)),
   printLn (float) (tan (litFloat 2.0)),
   printLn (float) (tan (litFloat 2.0))]
+
+helloForLoop :: (RenderSym repr) => repr (Control repr)
+helloForLoop = for (varDecDef "i" int (litInt 0)) ((var "i") ?< (litInt 10)) ((&.++) "i")
+  (oneLiner (printLn (int) (var "i")))

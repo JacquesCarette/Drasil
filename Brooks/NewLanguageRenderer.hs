@@ -9,7 +9,7 @@ module NewLanguageRenderer (
     -- * Default Functions available for use in renderers
     fileDoc', blockDocD, bodyDocD, progDocD, ioDocOutD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
     charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD,
-    ifCondDocD, switchCondDocD,
+    ifCondDocD, switchCondDocD, forDocD,
     assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
     listDecDocD, listDecDefDocD, statementDocD,
     notOpDocD, negateOpDocD, sqrtOpDocD, absOpDocD, logOpDocD, lnOpDocD, 
@@ -196,6 +196,14 @@ switchCondDocD breakState v defBody cs =
             vmap caseDoc cs,
             defaultSection],
         rbrace]
+
+-- These signatures wont be quite so horrendous if/when we pass language options
+-- (blockStart, etc.) in as shared environment
+forDocD :: Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
+forDocD blockStart blockEnd sInit vGuard sUpdate b = vcat [
+    forLabel <+> parens (sInit <> semi <+> vGuard <> semi <+> sUpdate) <+> blockStart,
+    oneTab $ b,
+    blockEnd]
 
 -- Statements --
 

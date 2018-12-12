@@ -5,9 +5,7 @@ module LanguageRenderer.NewJavaRenderer (
     JavaCode(..)
 ) where
 
-import New (Class, Method, Body, Block, Conditional, Statement, Declaration, Value, StateType,
-  Function, StateVar, IOType, IOSt, Scope, UnaryOp, BinaryOp, Permanence, Label, Library, VarDecl, 
-  FunctionDecl,
+import New (Declaration, StateVar, Scope, Label, Library,
   RenderSym(..), KeywordSym(..), PermanenceSym(..), ClassSym(..), MethodSym(..), 
   BodySym(..), BlockSym(..), ConditionalSym(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
   IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
@@ -72,9 +70,10 @@ lift4Pair :: (Doc -> Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc) -> JavaCode Doc -
 lift4Pair f a1 a2 a3 a4 as = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (map unJCPair as)
 
 instance RenderSym JavaCode where
+    type RenderFile JavaCode = Doc
     fileDoc code = liftA3 fileDoc' top code bottom
     top = liftA3 jtop endStatement include (list static)
-    codeBody m = m -- don't need right now
+    -- codeBody m = m -- don't need right now
     bottom = return empty
 
 instance KeywordSym JavaCode where
@@ -94,8 +93,20 @@ instance KeywordSym JavaCode where
     elseIf = return $ text "else if"
 
 instance PermanenceSym JavaCode where
+    type Permanence JavaCode = Doc
     static = return staticDocD
     dynamic = return dynamicDocD
+
+instance BlockSym JavaCode where
+    type Block JavaCode = Doc
+    block sts = do
+        end <- endStatement
+        liftList (blockDocD end) sts
+
+instance BodySym JavaCode where
+    type Body JavaCode = Doc
+    body bs = liftList bodyDocD bs
+    bodyStatements sts = block sts
     
 instance ClassSym JavaCode where
     -- buildClass n p s vs fs = liftA3 (classDocD n p) s vs fs -- vs and fs are actually lists... should 
@@ -113,6 +124,7 @@ instance ClassSym JavaCode where
 --         liftJC0 (classDoc c n p s vs fs)
 
 instance StateTypeSym JavaCode where
+    type StateType JavaCode = Doc
     bool = return $ boolTypeDocD
     int = return $ intTypeDocD
     float = return $ jFloatTypeDocD
@@ -127,9 +139,11 @@ instance StateTypeSym JavaCode where
     enumType t = return $ typeDocD t
 
 instance ConditionalSym JavaCode where
+    type Conditional JavaCode = Doc
     ifCond bs b = lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs
 
 instance UnaryOpSym JavaCode where
+    type UnaryOp JavaCode = Doc
     notOp = return $ notOpDocD
     negateOp = return $ negateOpDocD
     sqrtOp = return $ text "Math.sqrt"
@@ -142,6 +156,7 @@ instance UnaryOpSym JavaCode where
     tanOp = return $ text "Math.tan"
 
 instance BinaryOpSym JavaCode where
+    type BinaryOp JavaCode = Doc
     equalOp = return $ equalOpDocD
     notEqualOp = return $ notEqualOpDocD
     greaterOp = return $ greaterOpDocD
@@ -158,6 +173,7 @@ instance BinaryOpSym JavaCode where
     orOp = return $ orOpDocD
 
 instance ValueSym JavaCode where
+    type Value JavaCode = Doc
     litTrue = return $ litTrueD
     litFalse = return $ litFalseD
     litChar c = return $ litCharD c
@@ -222,9 +238,11 @@ instance ValueSym JavaCode where
 instance IOTypeSym JavaCode
 
 instance IOStSym JavaCode where
+    type IOSt JavaCode = Doc
     out prf v = liftA2 ioDocOutD prf v
 
 instance StatementSym JavaCode where
+    type Statement JavaCode = Doc
     assign v1 v2 = state (liftA2 assignDocD v1 v2)
     (&=) v1 v2 = assign v1 v2
     (&.=) l v = assign (var l) v
@@ -258,15 +276,6 @@ instance StatementSym JavaCode where
     ioState = state -- Now that types are Doc synonyms, I think this will work
 
     state s = liftA2 statementDocD s endStatement
-
-instance BlockSym JavaCode where
-    block sts = do
-        end <- endStatement
-        liftList (blockDocD end) sts
-
-instance BodySym JavaCode where
-    body bs = liftList bodyDocD bs
-    bodyStatements sts = block sts
 
 jtop :: Doc -> Doc -> Doc -> Doc
 jtop end inc lst = vcat [

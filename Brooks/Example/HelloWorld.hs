@@ -1,8 +1,6 @@
 module Example.HelloWorld (helloWorld) where
 
-import New (Class, Method, Body, Block, Conditional, Statement, Declaration, Value, StateType,
-  Function, StateVar, IOType, IOSt, Scope, UnaryOp, BinaryOp, Permanence, Label, Library, VarDecl, 
-  FunctionDecl,
+import New (Declaration, StateVar, Scope, Label, Library,
   RenderSym(..), KeywordSym(..), PermanenceSym(..), ClassSym(..), MethodSym(..), 
   BodySym(..), BlockSym(..), ConditionalSym(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
   IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
@@ -23,12 +21,12 @@ main = do
 genCode :: [Doc] -> [Label] -> [Label] -> IO()
 genCode files names exts = createCodeFiles $ makeCode files names exts
 
-helloWorld :: (RenderSym repr) => repr Doc
+helloWorld :: (RenderSym repr) => repr (RenderFile repr)
 helloWorld = fileDoc (
   ifCond [(litFalse, bodyStatements [(varDec "dummy" string)]),
   (litTrue, helloIfBody)] helloElseBody)
 
-helloIfBody :: (RenderSym repr) => repr Body
+helloIfBody :: (RenderSym repr) => repr (Body repr)
 helloIfBody = body [
   block [
     varDecDef "b" int (litInt 5),
@@ -87,7 +85,7 @@ helloIfBody = body [
     printLn (int) (stateObj bool [(var "arg1"), (var "arg2")]),
     printLn (int) (listStateObj bool [(var "arg1"), (var "arg2")])]]
 
-helloElseBody :: (RenderSym repr) => repr Body
+helloElseBody :: (RenderSym repr) => repr (Body repr)
 helloElseBody = bodyStatements [
   printStrLn "Hello, world",
   printLn (string) (litString " too"),

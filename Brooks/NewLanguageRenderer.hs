@@ -9,9 +9,10 @@ module NewLanguageRenderer (
     -- * Default Functions available for use in renderers
     fileDoc', blockDocD, bodyDocD, progDocD, ioDocOutD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
     charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD,
-    ifCondDocD, switchCondDocD, forDocD, forEachDocD, whileDocD,
+    ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD,
     assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
-    listDecDocD, listDecDefDocD, statementDocD,
+    listDecDocD, listDecDefDocD, statementDocD, returnDocD, commentDocD,
+    freeDocD, throwDocD,
     notOpDocD, negateOpDocD, sqrtOpDocD, absOpDocD, logOpDocD, lnOpDocD, 
     expOpDocD, sinOpDocD, cosOpDocD, tanOpDocD, unOpDocD, equalOpDocD, 
     notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
@@ -178,8 +179,8 @@ ifCondDocD ifStart elseIf blockEnd elseBody (c:cs) =
         vmap elseIfSect cs,
         elseSect]
 
-switchCondDocD :: Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc
-switchCondDocD breakState v defBody cs = 
+switchDocD :: Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc
+switchDocD breakState v defBody cs = 
     let caseDoc (l, result) = vcat [
             text "case" <+> l <> colon,
             oneTabbed [
@@ -217,6 +218,14 @@ whileDocD blockStart blockEnd v b= vcat [
     oneTab b,
     blockEnd]
 
+tryCatchDocD :: Doc -> Doc -> Doc 
+tryCatchDocD tb cb = vcat [
+    text "try" <+> lbrace,
+    oneTab $ tb,
+    rbrace <+> text "catch" <+> parens (text "System.Exception" <+> text "exc") <+> lbrace,
+    oneTab $ cb,
+    rbrace]
+
 -- Statements --
 
 assignDocD :: Doc-> Doc -> Doc
@@ -245,6 +254,19 @@ objDecDefDocD l st v = varDecDefDocD l st v
 
 constDecDefDocD :: Label -> Doc -> Doc -> Doc -- can this be done without StateType (infer from value)?
 constDecDefDocD l st v = text "const" <+> st <+> text l <+> v
+
+returnDocD :: Doc -> Doc
+returnDocD v = text "return" <+> v
+
+commentDocD :: Label -> Doc -> Doc
+commentDocD cmt cStart = cStart <+> text cmt
+
+freeDocD :: Doc -> Doc
+freeDocD v = text "delete" <+> v
+
+throwDocD :: Doc -> Doc
+throwDocD errMsg = text "throw new" <+> text "System.ApplicationException" <>
+    parens errMsg
 
 statementDocD :: Doc -> Doc -> Doc
 statementDocD s end = s <> end

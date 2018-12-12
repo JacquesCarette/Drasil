@@ -63,6 +63,7 @@ class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
     elseIf :: repr (Keyword repr)
     iterForEachLabel :: repr (Keyword repr)
     iterInLabel :: repr (Keyword repr)
+    commentStart :: repr (Keyword repr)
 
 class PermanenceSym repr where
     type Permanence repr
@@ -113,12 +114,14 @@ class (BodySym repr) => ControlSym repr where
     type Control repr
 
     ifCond :: [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Control repr) 
-    switchCond :: repr (Value repr) -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Control repr) -- is there value in separating Literals into their own type?
+    switch :: repr (Value repr) -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Control repr) -- is there value in separating Literals into their own type?
 
     for :: repr (PreStatement repr) -> repr (Value repr) -> repr (PreStatement repr) -> repr (Body repr) -> repr (Control repr)
     -- Had to add StateType to forEach because I can't extract the StateType from the value.
     forEach :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (Body repr) -> repr (Control repr)
     while :: repr (Value repr) -> repr (Body repr) -> repr (Control repr) 
+
+    tryCatch :: repr (Body repr) -> repr (Body repr) -> repr (Control repr)
 
     statement :: repr (PreStatement repr) -> repr (Control repr)
     statements :: [repr (PreStatement repr)] -> repr (Control repr)
@@ -183,8 +186,16 @@ class (PermanenceSym repr, StateTypeSym repr, ValueSym repr, IOStSym repr) => Pr
     break :: repr (PreStatement repr)
     continue :: repr (PreStatement repr)
 
-    returnState    :: repr (Value repr) -> repr (PreStatement repr)
+    returnState :: repr (Value repr) -> repr (PreStatement repr)
     returnVar :: Label -> repr (PreStatement repr)
+
+    valState :: repr (Value repr) -> repr (PreStatement repr)
+
+    comment :: Label -> repr (PreStatement repr)
+
+    free :: repr (Value repr) -> repr (PreStatement repr)
+
+    throw :: Label -> repr (PreStatement repr)
 
 class (PreStatementSym repr, IOStSym repr) => StatementSym repr where
     type Statement repr

@@ -11,17 +11,19 @@ import New (Declaration, StateVar, Scope, Label, Library,
   PreStatementSym(..),  StatementSym(..), IOTypeSym(..),
   IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
 import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, progDocD, ioDocOutD, boolTypeDocD, intTypeDocD,
-  charTypeDocD, typeDocD, listTypeDocD, ifCondDocD, switchCondDocD, forDocD, 
+  charTypeDocD, typeDocD, listTypeDocD, ifCondDocD, switchDocD, forDocD, 
   forEachDocD, whileDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
-  varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, statementDocD,
-  notOpDocD, negateOpDocD, unOpDocD, equalOpDocD, 
+  varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, statementDocD, returnDocD,
+  
+  commentDocD, notOpDocD, negateOpDocD, unOpDocD, equalOpDocD, 
   notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', litTrueD, litFalseD, 
   litCharD, litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
   defaultStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
   inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
-  notNullDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, includeD, dot, new, forLabel, callFuncParamList)
+  notNullDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, includeD, dot, 
+  new, forLabel, doubleSlash, callFuncParamList)
 import Helpers (blank,angles,oneTab,vibmap)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan)
@@ -109,6 +111,7 @@ instance KeywordSym JavaCode where
     elseIf = return $ text "else if"
     iterForEachLabel = return forLabel
     iterInLabel = return colon
+    commentStart = return doubleSlash
 
 instance PermanenceSym JavaCode where
     type Permanence JavaCode = Doc
@@ -164,11 +167,13 @@ instance StateTypeSym JavaCode where
 instance ControlSym JavaCode where
     type Control JavaCode = Doc
     ifCond bs b = lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs
-    switchCond v cs c = lift3Pair switchCondDocD (state break) v c cs
+    switch v cs c = lift3Pair switchDocD (state break) v c cs
 
     for sInit vGuard sUpdate b = liftA6 forDocD blockStart blockEnd (loopState sInit) vGuard (loopState sUpdate) b
     forEach l t v b = liftA7 (forEachDocD l) blockStart blockEnd iterForEachLabel iterInLabel t v b
     while v b = liftA4 whileDocD blockStart blockEnd v b
+
+    tryCatch tb cb = liftA2 jTryCatch tb cb
 
     statement s = state s
     statements s = block s
@@ -307,6 +312,17 @@ instance PreStatementSym JavaCode where
     break = return breakDocD  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
     continue = return continueDocD
 
+    returnState v = liftA returnDocD v
+    returnVar l = liftA returnDocD (var l)
+
+    valState v = v
+
+    comment cmt = liftA (commentDocD cmt) commentStart
+
+    free _ = error "Cannot free variables in Java" -- could set variable to null?
+
+    throw errMsg = liftA jThrowDoc (litString errMsg)
+
 instance StatementSym JavaCode where
     type Statement JavaCode = Doc
     ioState = state -- Now that types are Doc synonyms, I think this will work
@@ -353,3 +369,14 @@ jListDecDef l st vs = st <+> text l <+> equals <+> new <+> st <+> parens (listEl
 
 jConstDecDef :: Label -> Doc -> Doc -> Doc
 jConstDecDef l st v = text "final" <+> st <+> text l <+> equals <+> v
+
+jThrowDoc :: Doc -> Doc
+jThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens errMsg
+
+jTryCatch :: Doc -> Doc -> Doc
+jTryCatch tb cb= vcat [
+    text "try" <+> lbrace,
+    oneTab $ tb,
+    rbrace <+> text "catch" <+> parens (text "Exception" <+> text "exc") <+> lbrace,
+    oneTab $ cb,
+    rbrace]

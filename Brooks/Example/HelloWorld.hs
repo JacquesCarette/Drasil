@@ -26,13 +26,14 @@ helloWorld :: (RenderSym repr) => repr (RenderFile repr)
 helloWorld = fileDoc ( prog [ helloInitVariables,
   ifCond [(litFalse, bodyStatements [(varDec "dummy" string)]),
     (litTrue, helloIfBody)] helloElseBody,
-  switchCond (var "a") [((litInt 5), (oneLiner ("b" &.= (litInt 10)))), 
+  switch (var "a") [((litInt 5), (oneLiner ("b" &.= (litInt 10)))), 
     ((litInt 0), (oneLiner ("b" &.= (litInt 5))))]
     (oneLiner ("b" &.= (litInt 0))),
-  helloForLoop, helloWhileLoop, helloForEachLoop])
+  helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch])
 
 helloInitVariables :: (RenderSym repr) => repr (Control repr)
-helloInitVariables = statements [(varDec "a" int), 
+helloInitVariables = statements [ (comment "Initializing variables"),
+  (varDec "a" int), 
   (varDecDef "b" int (litInt 5)),
   (listDecDef "myOtherList" (floatListType static) [(litFloat 1.0), (litFloat 1.5)])]
 
@@ -121,4 +122,9 @@ helloWhileLoop :: (RenderSym repr) => repr (Control repr)
 helloWhileLoop = while (var "a" ?< (litInt 13)) (bodyStatements [printStrLn "Hello", ((&.++) "a")]) 
 
 helloForEachLoop :: (RenderSym repr) => repr (Control repr)
-helloForEachLoop = forEach "num" (float) (listVar "myOtherList" (float)) (oneLiner (printLn (float) (var "num")))
+helloForEachLoop = forEach "num" (float) (listVar "myOtherList" (float)) 
+  (oneLiner (printLn (float) (var "num")))
+
+helloTryCatch :: (RenderSym repr) => repr (Control repr)
+helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
+  (oneLiner (printStrLn "Caught error"))

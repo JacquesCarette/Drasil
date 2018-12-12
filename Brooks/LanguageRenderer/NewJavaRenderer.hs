@@ -7,10 +7,10 @@ module LanguageRenderer.NewJavaRenderer (
 
 import New (Declaration, StateVar, Scope, Label, Library,
   RenderSym(..), KeywordSym(..), PermanenceSym(..), ClassSym(..), MethodSym(..), 
-  BodySym(..), BlockSym(..), ConditionalSym(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
+  ProgramBodySym(..), BodySym(..), BlockSym(..), ControlSym(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
   IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
-import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, ioDocOutD, boolTypeDocD, intTypeDocD,
-  charTypeDocD, typeDocD, listTypeDocD, ifCondDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
+import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, progDocD, ioDocOutD, boolTypeDocD, intTypeDocD,
+  charTypeDocD, typeDocD, listTypeDocD, ifCondDocD, switchCondDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
   varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, statementDocD,
   notOpDocD, negateOpDocD, unOpDocD, equalOpDocD, 
   notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
@@ -19,7 +19,7 @@ import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, ioDocOutD, boolTypeDo
   litCharD, litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
   defaultStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
   inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
-  notNullDocD, staticDocD, dynamicDocD, includeD, dot, new, callFuncParamList)
+  notNullDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, includeD, dot, new, callFuncParamList)
 import Helpers (blank,angles,oneTab,vibmap)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan)
@@ -69,6 +69,10 @@ unJCPair (a1, a2) = (unJC a1, unJC a2)
 lift4Pair :: (Doc -> Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> [(JavaCode Doc, JavaCode Doc)] -> JavaCode Doc
 lift4Pair f a1 a2 a3 a4 as = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (map unJCPair as)
 
+lift3Pair :: (Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> [(JavaCode Doc, JavaCode Doc)] -> JavaCode Doc
+lift3Pair f a1 a2 a3 as = JC $ f (unJC a1) (unJC a2) (unJC a3) (map unJCPair as)
+
+
 instance RenderSym JavaCode where
     type RenderFile JavaCode = Doc
     fileDoc code = liftA3 fileDoc' top code bottom
@@ -97,16 +101,21 @@ instance PermanenceSym JavaCode where
     static = return staticDocD
     dynamic = return dynamicDocD
 
-instance BlockSym JavaCode where
-    type Block JavaCode = Doc
-    block sts = do
-        end <- endStatement
-        liftList (blockDocD end) sts
+instance ProgramBodySym JavaCode where
+    type ProgramBody JavaCode = Doc
+    prog cs = liftList progDocD cs
 
 instance BodySym JavaCode where
     type Body JavaCode = Doc
     body bs = liftList bodyDocD bs
     bodyStatements sts = block sts
+    oneLiner s = bodyStatements [s]
+
+instance BlockSym JavaCode where
+    type Block JavaCode = Doc
+    block sts = do
+        end <- endStatement
+        liftList (blockDocD end) sts
     
 instance ClassSym JavaCode where
     -- buildClass n p s vs fs = liftA3 (classDocD n p) s vs fs -- vs and fs are actually lists... should 
@@ -138,9 +147,10 @@ instance StateTypeSym JavaCode where
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
 
-instance ConditionalSym JavaCode where
-    type Conditional JavaCode = Doc
+instance ControlSym JavaCode where
+    type Control JavaCode = Doc
     ifCond bs b = lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs
+    switchCond v cs c = lift3Pair switchCondDocD break v c cs
 
 instance UnaryOpSym JavaCode where
     type UnaryOp JavaCode = Doc
@@ -272,6 +282,9 @@ instance StatementSym JavaCode where
     printFileLn f _ v = ioState (out (printFileLnFunc f) v)
     printFileStr f s = ioState (out (printFileFunc f) (litString s))
     printFileStrLn f s = ioState (out (printFileLnFunc f) (litString s))
+
+    break = state $ return $ breakDocD  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
+    continue = state $ return $ continueDocD
 
     ioState = state -- Now that types are Doc synonyms, I think this will work
 

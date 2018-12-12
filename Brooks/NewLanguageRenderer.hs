@@ -7,9 +7,9 @@ module NewLanguageRenderer (
     classDec, dot, doubleSlash, forLabel, new,
     
     -- * Default Functions available for use in renderers
-    fileDoc', blockDocD, bodyDocD, ioDocOutD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
+    fileDoc', blockDocD, bodyDocD, progDocD, ioDocOutD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
     charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD,
-    ifCondDocD, 
+    ifCondDocD, switchCondDocD,
     assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
     listDecDocD, listDecDefDocD, statementDocD,
     notOpDocD, negateOpDocD, sqrtOpDocD, absOpDocD, logOpDocD, lnOpDocD, 
@@ -21,7 +21,7 @@ module NewLanguageRenderer (
     litStringD, defaultCharD, defaultFloatD, defaultIntD, defaultStringD, 
     varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD,
     funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD,
-    constDecDefDocD, notNullDocD, 
+    constDecDefDocD, notNullDocD, breakDocD, continueDocD,
     staticDocD, dynamicDocD, includeD, callFuncParamList
 ) where
 
@@ -107,9 +107,14 @@ blockDocD end sts = vcat statements
         notNullStatement s = (not $ isEmpty s) && (render s /= render end)
 
 bodyDocD :: [Doc] -> Doc
-bodyDocD bs = vcat blocks
+bodyDocD bs = vibcat blocks
   where blocks = filter notNullBlock bs
         notNullBlock b = (not $ isEmpty b)
+
+progDocD :: [Doc] -> Doc
+progDocD cs = vibcat controls
+    where controls = filter notNullControl cs
+          notNullControl c = (not $ isEmpty c)
 
 -- ioState just returns itself. don't need a function for this.
 -- statementDocD :: Config -> StatementLocation -> Statement -> Doc
@@ -152,7 +157,7 @@ typeDocD t = text t
 listTypeDocD :: Doc -> Doc -> Doc
 listTypeDocD st list = list <> angles st
 
--- Conditionals --
+-- Controls --
 
 ifCondDocD :: Doc -> Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc
 ifCondDocD ifStart elseIf blockEnd elseBody (c:cs) = 
@@ -172,6 +177,25 @@ ifCondDocD ifStart elseIf blockEnd elseBody (c:cs) =
         ifSect c,
         vmap elseIfSect cs,
         elseSect]
+
+switchCondDocD :: Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc
+switchCondDocD breakState v defBody cs = 
+    let caseDoc (l, result) = vcat [
+            text "case" <+> l <> colon,
+            oneTabbed [
+                result,
+                breakState]]
+        defaultSection = vcat [
+            text "default" <> colon,
+            oneTabbed [
+                defBody,
+                breakState]]
+    in vcat [
+        text "switch" <> parens v <+> lbrace,
+        oneTabbed [
+            vmap caseDoc cs,
+            defaultSection],
+        rbrace]
 
 -- Statements --
 
@@ -372,6 +396,14 @@ staticDocD = text "static"
 
 dynamicDocD :: Doc
 dynamicDocD = empty
+
+-- Jumps --
+
+breakDocD :: Doc
+breakDocD = text "break"
+
+continueDocD :: Doc
+continueDocD = text "continue"
 
 -- Helper Functions --
 

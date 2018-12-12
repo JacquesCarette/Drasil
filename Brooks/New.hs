@@ -6,7 +6,7 @@ module New (
     Label, Library, 
     -- Typeclasses
     RenderSym(..), KeywordSym(..), PermanenceSym(..), ClassSym(..), MethodSym(..), 
-    BodySym(..), ConditionalSym(..), BlockSym(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
+    ProgramBodySym(..), BodySym(..), ControlSym(..), BlockSym(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
     IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..)
 ) where
 
@@ -16,7 +16,7 @@ import Text.PrettyPrint.HughesPJ (Doc)
 -- type Method = Doc
 -- type Body = Doc
 -- type Block = Doc
--- type Conditional = Doc
+-- type Control = Doc
 -- type Statement = Doc
 type Declaration = Doc
 -- type Value = Doc
@@ -37,9 +37,9 @@ type Library = String
 -- type VarDecl = Declaration
 -- type FunctionDecl = Method
 
-class (ConditionalSym repr) => RenderSym repr where
+class (ProgramBodySym repr) => RenderSym repr where
     type RenderFile repr
-    fileDoc :: repr (Conditional repr) -> repr (RenderFile repr)
+    fileDoc :: repr (ProgramBody repr) -> repr (RenderFile repr)
     top :: repr (Block repr) -- Block is a placeholder for all of these, should change
     codeBody :: repr (Class repr) -> repr (Block repr)
     bottom :: repr (Block repr)
@@ -73,10 +73,15 @@ class MethodSym repr where
     type Method repr
     mainMethod :: repr (Body repr) -> repr (Method repr)
 
+class (ControlSym repr) => ProgramBodySym repr where
+    type ProgramBody repr
+    prog :: [repr (Control repr)] -> repr (ProgramBody repr)
+
 class (BlockSym repr) => BodySym repr where
     type Body repr
     body :: [repr (Block repr)] -> repr (Body repr)
     bodyStatements :: [repr (Statement repr)] -> repr (Body repr)
+    oneLiner :: repr (Statement repr) -> repr (Body repr)
 
 -- Right now the Block is the top-level structure
 class StatementSym repr => BlockSym repr where
@@ -100,10 +105,11 @@ class StateTypeSym repr where
     obj :: Label -> repr (StateType repr)
     enumType :: Label -> repr (StateType repr)
 
-class (BodySym repr) => ConditionalSym repr where
-    type Conditional repr
-    ifCond :: [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Conditional repr) 
-    switchCond :: [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Conditional repr) -- is there value in separating Literals into their own type?
+class (BodySym repr) => ControlSym repr where
+    type Control repr
+
+    ifCond :: [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Control repr) 
+    switchCond :: repr (Value repr) -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Control repr) -- is there value in separating Literals into their own type?
 
 class (PermanenceSym repr, StateTypeSym repr, ValueSym repr, IOStSym repr) => StatementSym repr where
     type Statement repr
@@ -153,6 +159,9 @@ class (PermanenceSym repr, StateTypeSym repr, ValueSym repr, IOStSym repr) => St
     openFileR :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
     openFileW :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
     closeFile :: repr (Value repr) -> repr (Statement repr)
+
+    break :: repr (Statement repr)
+    continue :: repr (Statement repr)
 
     returnState    :: repr (Value repr) -> repr (Statement repr)
     returnVar :: Label -> repr (Statement repr)

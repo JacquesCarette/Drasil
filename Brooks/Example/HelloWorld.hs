@@ -2,7 +2,7 @@ module Example.HelloWorld (helloWorld) where
 
 import New (Declaration, StateVar, Scope, Label, Library,
   RenderSym(..), KeywordSym(..), PermanenceSym(..), ClassSym(..), MethodSym(..), 
-  BodySym(..), BlockSym(..), ConditionalSym(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
+  ProgramBodySym(..), BodySym(..), BlockSym(..), ControlSym(..), StateTypeSym(..), StatementSym(..), IOTypeSym(..),
   IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
 import NewLanguageRenderer (makeCode, createCodeFiles)
 import LanguageRenderer.NewJavaRenderer (JavaCode(..))
@@ -22,9 +22,12 @@ genCode :: [Doc] -> [Label] -> [Label] -> IO()
 genCode files names exts = createCodeFiles $ makeCode files names exts
 
 helloWorld :: (RenderSym repr) => repr (RenderFile repr)
-helloWorld = fileDoc (
+helloWorld = fileDoc ( prog [
   ifCond [(litFalse, bodyStatements [(varDec "dummy" string)]),
-  (litTrue, helloIfBody)] helloElseBody)
+    (litTrue, helloIfBody)] helloElseBody,
+  switchCond (var "a") [((litInt 5), (oneLiner ("b" &.= (litInt 10)))), 
+    ((litInt 0), (oneLiner ("b" &.= (litInt 5))))]
+    (oneLiner ("b" &.= (litInt 0)))])
 
 helloIfBody :: (RenderSym repr) => repr (Body repr)
 helloIfBody = body [

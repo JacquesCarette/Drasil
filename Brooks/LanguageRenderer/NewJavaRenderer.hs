@@ -12,7 +12,7 @@ import New (Declaration, StateVar, Scope, Label, Library,
   IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
 import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, progDocD, ioDocOutD, boolTypeDocD, intTypeDocD,
   charTypeDocD, typeDocD, listTypeDocD, ifCondDocD, switchCondDocD, forDocD, 
-  assignDocD, plusEqualsDocD, plusPlusDocD,
+  forEachDocD, whileDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
   varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, statementDocD,
   notOpDocD, negateOpDocD, unOpDocD, equalOpDocD, 
   notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
@@ -21,7 +21,7 @@ import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, progDocD, ioDocOutD, 
   litCharD, litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
   defaultStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
   inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
-  notNullDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, includeD, dot, new, callFuncParamList)
+  notNullDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, includeD, dot, new, forLabel, callFuncParamList)
 import Helpers (blank,angles,oneTab,vibmap)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan)
@@ -61,6 +61,9 @@ liftA4 f a1 a2 a3 a4 = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4)
 
 liftA6 :: (Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc
 liftA6 f a1 a2 a3 a4 a5 a6 = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (unJC a5) (unJC a6)
+
+liftA7 :: (Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc
+liftA7 f a1 a2 a3 a4 a5 a6 a7 = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (unJC a5) (unJC a6) (unJC a7)
 
 liftList :: ([Doc] -> Doc) -> [JavaCode Doc] -> JavaCode Doc
 liftList f as = JC $ f (map unJC as)
@@ -104,6 +107,8 @@ instance KeywordSym JavaCode where
     blockEnd = return rbrace
     ifBodyStart = blockStart
     elseIf = return $ text "else if"
+    iterForEachLabel = return forLabel
+    iterInLabel = return colon
 
 instance PermanenceSym JavaCode where
     type Permanence JavaCode = Doc
@@ -159,10 +164,15 @@ instance StateTypeSym JavaCode where
 instance ControlSym JavaCode where
     type Control JavaCode = Doc
     ifCond bs b = lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs
-    switchCond v cs c = lift3Pair switchCondDocD break v c cs
+    switchCond v cs c = lift3Pair switchCondDocD (state break) v c cs
 
     for sInit vGuard sUpdate b = liftA6 forDocD blockStart blockEnd (loopState sInit) vGuard (loopState sUpdate) b
- 
+    forEach l t v b = liftA7 (forEachDocD l) blockStart blockEnd iterForEachLabel iterInLabel t v b
+    while v b = liftA4 whileDocD blockStart blockEnd v b
+
+    statement s = state s
+    statements s = block s
+
 instance UnaryOpSym JavaCode where
     type UnaryOp JavaCode = Doc
     notOp = return $ notOpDocD

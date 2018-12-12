@@ -9,7 +9,7 @@ module NewLanguageRenderer (
     -- * Default Functions available for use in renderers
     fileDoc', blockDocD, bodyDocD, progDocD, ioDocOutD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
     charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD,
-    ifCondDocD, switchCondDocD, forDocD,
+    ifCondDocD, switchCondDocD, forDocD, forEachDocD, whileDocD,
     assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
     listDecDocD, listDecDefDocD, statementDocD,
     notOpDocD, negateOpDocD, sqrtOpDocD, absOpDocD, logOpDocD, lnOpDocD, 
@@ -202,7 +202,19 @@ switchCondDocD breakState v defBody cs =
 forDocD :: Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
 forDocD blockStart blockEnd sInit vGuard sUpdate b = vcat [
     forLabel <+> parens (sInit <> semi <+> vGuard <> semi <+> sUpdate) <+> blockStart,
+    oneTab b,
+    blockEnd]
+
+forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
+forEachDocD l blockStart blockEnd iterForEachLabel iterInLabel t v b = vcat [
+    iterForEachLabel <+> parens (t <+> text l <+> iterInLabel <+> v) <+> blockStart,
     oneTab $ b,
+    blockEnd]
+
+whileDocD :: Doc -> Doc -> Doc -> Doc -> Doc
+whileDocD blockStart blockEnd v b= vcat [
+    text "while" <+> parens v <+> blockStart,
+    oneTab b,
     blockEnd]
 
 -- Statements --

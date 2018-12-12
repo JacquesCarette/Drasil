@@ -23,19 +23,22 @@ genCode :: [Doc] -> [Label] -> [Label] -> IO()
 genCode files names exts = createCodeFiles $ makeCode files names exts
 
 helloWorld :: (RenderSym repr) => repr (RenderFile repr)
-helloWorld = fileDoc ( prog [
+helloWorld = fileDoc ( prog [ helloInitVariables,
   ifCond [(litFalse, bodyStatements [(varDec "dummy" string)]),
     (litTrue, helloIfBody)] helloElseBody,
   switchCond (var "a") [((litInt 5), (oneLiner ("b" &.= (litInt 10)))), 
     ((litInt 0), (oneLiner ("b" &.= (litInt 5))))]
     (oneLiner ("b" &.= (litInt 0))),
-  helloForLoop])
+  helloForLoop, helloWhileLoop, helloForEachLoop])
+
+helloInitVariables :: (RenderSym repr) => repr (Control repr)
+helloInitVariables = statements [(varDec "a" int), 
+  (varDecDef "b" int (litInt 5)),
+  (listDecDef "myOtherList" (floatListType static) [(litFloat 1.0), (litFloat 1.5)])]
 
 helloIfBody :: (RenderSym repr) => repr (Body repr)
 helloIfBody = body [
   block [
-    varDecDef "b" int (litInt 5),
-    varDec "a" int,
     varDec "c" int,
     varDec "d" int,
     assign (var "a") (litInt 5),
@@ -113,3 +116,9 @@ helloElseBody = bodyStatements [
 helloForLoop :: (RenderSym repr) => repr (Control repr)
 helloForLoop = for (varDecDef "i" int (litInt 0)) ((var "i") ?< (litInt 10)) ((&.++) "i")
   (oneLiner (printLn (int) (var "i")))
+
+helloWhileLoop :: (RenderSym repr) => repr (Control repr)
+helloWhileLoop = while (var "a" ?< (litInt 13)) (bodyStatements [printStrLn "Hello", ((&.++) "a")]) 
+
+helloForEachLoop :: (RenderSym repr) => repr (Control repr)
+helloForEachLoop = forEach "num" (float) (listVar "myOtherList" (float)) (oneLiner (printLn (float) (var "num")))

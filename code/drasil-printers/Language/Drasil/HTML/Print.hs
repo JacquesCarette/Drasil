@@ -9,7 +9,7 @@ import Control.Arrow (second)
 import qualified Language.Drasil as L (People, Person, 
   CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
   Symbol(Corners, Concat, Special, Atomic, Empty, Atop),
-  DType(DD, TM, Instance, General), MaxWidthPercent, RefType(Link),
+  DType(DD, TM, Instance, General), MaxWidthPercent,
   Decoration(Prime, Hat, Vector), Document, HasDefinitionTable, HasSymbolTable,
   HasTermTable, nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US),
   LinkType(Internal, Cite2, External))
@@ -29,7 +29,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),
   Dot, Cross, Neg, Exp, Not, Dim, Cot, Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, 
   Real, Rational, Natural, Integer, IsIn, Point), 
   Expr(Sub, Sup, Over, Sqrt, Spc, Font, MO, Fenced, Spec, Ident, Row, Mtx, Case, Div, Str, 
-  Int, Dbl), Spec(Quote, EmptyS, Ref, Ref2, HARDNL, Sp, Sy, S, E, (:+:)),
+  Int, Dbl), Spec(Quote, EmptyS, Ref, HARDNL, Sp, Sy, S, E, (:+:)),
   Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label)
 import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author, 
   Editor, Pages, Type, Month, Organization, Institution, Chapter, HowPublished, School, Note,
@@ -101,11 +101,9 @@ p_spec (S s)             = text s
 p_spec (Sy s)            = text $ uSymb s
 p_spec (Sp s)            = text $ unPH $ L.special s
 p_spec HARDNL            = text "<br />"
-p_spec (Ref L.Link r a _) = reflinkURI r $ p_spec a
-p_spec (Ref _      r a _) = reflink    r $ p_spec a
-p_spec (Ref2 L.Internal r a )  = reflink  r $ p_spec a
-p_spec (Ref2 L.Cite2 r a )  = reflink  r $ p_spec a -- no difference for citations?
-p_spec (Ref2 L.External r a ) = reflinkURI  r $ p_spec a
+p_spec (Ref L.Internal r a )  = reflink  r $ p_spec a
+p_spec (Ref L.Cite2 r a )  = reflink  r $ p_spec a -- no difference for citations?
+p_spec (Ref L.External r a ) = reflinkURI  r $ p_spec a
 p_spec EmptyS             = text "" -- Expected in the output
 p_spec (Quote q)          = text "&quot;" <> p_spec q <> text "&quot;"
 -- p_spec (Acc Grave c)     = text $ '&' : c : "grave;" --Only works on vowels.

@@ -35,7 +35,7 @@ module Language.Drasil (
   , HasSpace(typ)
   , HasUnitSymbol(usymb)
   , IsUnit
-  , HasReference2(getReferences2) -- HACK that will eventually go away
+  , HasReference(getReferences)
   , CommonIdea(abrv)
   , Constrained(constraints)
   , HasReasVal(reasVal)
@@ -104,9 +104,10 @@ module Language.Drasil (
   , HasCitation(getCitations)
   -- Sentence
   , Sentence(..), sParen, sSqBr , (+:+), (+:+.), sC, (+:)
-  , Reference2(..), SentenceStyle(..)
+  , SentenceStyle(..)
   -- RefProg
   , RefProg(..), IRefProg(..)
+  , Reference(..)
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
   , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase'
@@ -241,7 +242,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
   IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), 
-  HasReference2(getReferences2),  -- HACK that will eventually go away
+  HasReference(getReferences),
   HasLabel(getLabel), HasRefAddress(getRefAdd), HasSpace(typ),
   DefiningExpr(defnExpr), HasShortName(shortname), Quantity, UncertainQuantity(uncert),
   HasFields(getFields))
@@ -314,7 +315,7 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   rendPersLFM', rendPersLFM'')
 import Language.Drasil.RefTypes(RefAdd, RefType(..),
   DType(..), ReqType(FR, NFR), LinkType(Internal, Cite2, External))
-import Language.Drasil.RefProg(RefProg(..), IRefProg(..), Reference2(Reference2))
+import Language.Drasil.RefProg(RefProg(..), IRefProg(..), Reference(Reference))
 import Language.Drasil.Label (mkLabelRA', mkLabelSame, mkLabelRALst,
   mkURILabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec)
 import Language.Drasil.Label.Type (getAdd)

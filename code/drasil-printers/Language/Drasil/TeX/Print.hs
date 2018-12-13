@@ -11,13 +11,13 @@ import Control.Arrow (second)
 import qualified Language.Drasil as L (
   RenderSpecial(..), People, rendPersLFM, HasDefinitionTable, HasSymbolTable,
   CitationKind(..), Month(..), Symbol(..), Sentence(S), (+:+), MaxWidthPercent,
-  Decoration(Prime, Hat, Vector), Document, special, getStringSN, RefType(..),
+  Decoration(Prime, Hat, Vector), Document, special,
   USymb(US), HasTermTable, LinkType(Internal, Cite2, External))
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
   ListType(Ordered, Unordered, Desc, Definitions, Simple), 
-  Spec(Quote, EmptyS, Ref, Ref2, S, Sy, Sp, HARDNL, E, (:+:)), 
+  Spec(Quote, EmptyS, Ref, S, Sy, Sp, HARDNL, E, (:+:)), 
   Fence(Norm, Abs, Curly, Paren), Expr, 
   Ops(Inte, Prod, Summ, Mul, Add, Or, And, Subt, Iff, LEq, GEq, 
   NEq, Eq, Gt, Lt, Impl, Dot, Cross, Neg, Exp, Dim, Not, Cot,
@@ -36,8 +36,8 @@ import qualified Language.Drasil.Printing.Import as I
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, item', description,
   includegraphics, center, figure, item, symbDescription, enumerate, itemize, toEqn, empty,
-  newline, superscript, parens, fraction, quote, ref, ucref, lcref, aref, sref,
-  hyperref, snref, cite, href, sec, newpage, maketoc, maketitle, document, author, title, rref)
+  newline, superscript, parens, fraction, quote,
+  snref, cite, sec, newpage, maketoc, maketitle, document, author, title)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (<>), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
 import Language.Drasil.TeX.Preamble (genPreamble)
@@ -249,8 +249,7 @@ needs (E _)            = Math
 needs (Sy _)           = Text
 needs (Sp _)           = Math
 needs HARDNL           = Text
-needs (Ref _ _ _ _)    = Text
-needs (Ref2 _ _ _)     = Text
+needs (Ref _ _ _)      = Text
 needs (EmptyS)         = Text
 needs (Quote _)        = Text
 
@@ -266,21 +265,11 @@ spec (S s)  = pure $ text (concatMap escapeChars s)
 spec (Sy s) = p_unit s
 spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = pure $ text "\\newline"
-spec (Ref t@L.Sect r _ _)    = sref (show t) (pure $ text r)
-spec (Ref t@(L.Def _) r _ _) = hyperref (show t) (pure $ text r)
-spec (Ref L.Assump r _ _)    = aref  (pure $ text r) -- solved
-spec (Ref (L.Req _) r _ _)   = rref  (pure $ text r)
-spec (Ref L.LCh r _ _)       = lcref (pure $ text r)
-spec (Ref L.UnCh r _ _)      = ucref (pure $ text r)
-spec (Ref L.Cite r _ _)      = cite  (pure $ text r)
-spec (Ref L.Blank r sn _)    = snref r $ spec sn
-spec (Ref L.Link r _ sn)     = href  r $ L.getStringSN sn
-spec (Ref t r _ _)           = ref (show t) (pure $ text r)
-spec (Ref2 L.Internal r sn)  = snref r $ spec sn
-spec (Ref2 L.Cite2 r _)      = cite $ pure $ text r
-spec (Ref2 L.External r sn)  = snref r $ spec sn
-spec EmptyS                  = empty
-spec (Quote q)               = quote $ spec q
+spec (Ref L.Internal r sn)  = snref r $ spec sn
+spec (Ref L.Cite2 r _)      = cite $ pure $ text r
+spec (Ref L.External r sn)  = snref r $ spec sn
+spec EmptyS                 = empty
+spec (Quote q)              = quote $ spec q
 
 escapeChars :: Char -> String
 escapeChars '_' = "\\_"

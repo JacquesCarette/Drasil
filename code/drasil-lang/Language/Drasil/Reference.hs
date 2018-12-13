@@ -24,11 +24,11 @@ import Language.Drasil.Document (Section(Section))
 import Language.Drasil.Document.Core (RawContent(..), LabelledContent(..))
 import Language.Drasil.Label.Type (getAdd)
 import Language.Drasil.People (People, comparePeople)
-import Language.Drasil.RefProg (RefProg(..), Reference2(Reference2), (+::+), name,
+import Language.Drasil.RefProg (RefProg(..), Reference(Reference), (+::+), name,
   prepend, raw, IRefProg, defer)
 -- import Language.Drasil.RefTypes (RefType(..))
 import Language.Drasil.ShortName ( ShortName )
-import Language.Drasil.Sentence (Sentence((:+:), S, Ref2))
+import Language.Drasil.Sentence (Sentence((:+:), S, Ref))
 import Language.Drasil.UID (UID)
 
 -- | Database for maintaining references.
@@ -213,19 +213,19 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
   where assumptions = Map.elems am
         dropNums = map fst
 
-makeRef2 :: (Referable l, HasShortName l) => l -> Reference2
-makeRef2 l = Reference2 (l ^. uid) (renderRef l) (refAdd l) (l ^. shortname)
+makeRef2 :: (Referable l, HasShortName l) => l -> Reference
+makeRef2 l = Reference (l ^. uid) (renderRef l) (refAdd l) (l ^. shortname)
 
 makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
-makeRef2S l = Ref2 $ Reference2 (l ^. uid) (renderRef l) (refAdd l) (l ^. shortname)
+makeRef2S l = Ref $ Reference (l ^. uid) (renderRef l) (refAdd l) (l ^. shortname)
 
 -- Here we don't use the Lenses as constraints, we really do want a Citation.
-makeCite :: Citation -> Reference2
-makeCite l = Reference2 (l ^. uid) Citation (refAdd l) (l ^. shortname)
+makeCite :: Citation -> Reference
+makeCite l = Reference (l ^. uid) Citation (refAdd l) (l ^. shortname)
 
 makeCiteS :: Citation -> Sentence
-makeCiteS = Ref2 . makeCite
+makeCiteS = Ref . makeCite
 
 -- | Create a reference for a URI
-makeURI :: UID -> String -> ShortName -> Reference2
-makeURI u ra sn = Reference2 u URI ra sn
+makeURI :: UID -> String -> ShortName -> Reference
+makeURI u ra sn = Reference u URI ra sn

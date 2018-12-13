@@ -3,7 +3,7 @@ module Language.Drasil.Sentence.Extract(sdep, shortdep, lnames, lnames') where
 import Data.List (nub)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Sentence(Sentence(..), SentenceStyle(..))
-import Language.Drasil.RefProg (Reference2(Reference2))
+import Language.Drasil.RefProg (Reference(Reference))
 import Language.Drasil.Expr.Extract(names)
 
 
@@ -17,7 +17,7 @@ getUIDs (Sy _)               = []
 getUIDs (S _)                = []
 getUIDs (Sp _)               = []
 getUIDs (P _)                = []
-getUIDs (Ref2 _)             = []
+getUIDs (Ref _)              = []
 getUIDs ((:+:) a b)          = (getUIDs a) ++ (getUIDs b)
 getUIDs (Quote a)            = getUIDs a
 getUIDs (E a)                = names a
@@ -33,7 +33,7 @@ getUIDshort (Sy _)               = []
 getUIDshort (S _)                = []
 getUIDshort (Sp _)               = []
 getUIDshort (P _)                = []
-getUIDshort (Ref2 _)             = []
+getUIDshort (Ref _)              = []
 getUIDshort ((:+:) a b)          = (getUIDshort a) ++ (getUIDshort b)
 getUIDshort (Quote a)            = getUIDshort a
 getUIDshort (E _)                = []
@@ -56,7 +56,7 @@ lnames  (Sy _)         = []
 lnames  (S _)          = []
 lnames  (Sp _)         = []
 lnames  (P _)          = []
-lnames  (Ref2 (Reference2 u _ _ _)) = [u] -- This should be fixed.
+lnames  (Ref (Reference u _ _ _)) = [u] -- This should be fixed.
 lnames  ((:+:) a b)    = (lnames  a) ++ (lnames  b)
 lnames  (Quote _)      = []
 lnames  (E _)          = []

@@ -7,12 +7,12 @@ import Language.Drasil.Chunk.Quantity (QuantityDict, qw)
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
   HasRefAddress(getRefAdd))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Quantity,
-  Definition(defn), ConceptDomain(cdom), Concept, HasReference2(getReferences2),
+  Definition(defn), ConceptDomain(cdom), Concept, HasReference(getReferences),
   HasAdditionalNotes(getNotes), HasLabel(getLabel), CommonIdea(abrv))
 import Language.Drasil.Development.Unit (MayHaveUnit)
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.Label.Core (Label)
-import Language.Drasil.RefProg (Reference2)
+import Language.Drasil.RefProg (Reference)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, mkIdea)
@@ -49,7 +49,7 @@ data TheoryModel = TM
   , _defq :: [QDefinition]
   , _invs :: [Relation]
   , _dfun :: [QDefinition]
-  , _ref  :: [Reference2]
+  , _ref  :: [Reference]
   , _lb :: Label
   , _notes :: [Sentence]
   , _ci :: CI
@@ -60,7 +60,7 @@ instance HasUID             TheoryModel where uid = con . uid
 instance NamedIdea          TheoryModel where term = con . term
 instance Idea               TheoryModel where getA = getA . view con
 instance Definition         TheoryModel where defn = con . defn
-instance HasReference2      TheoryModel where getReferences2 = ref
+instance HasReference       TheoryModel where getReferences = ref
 instance ConceptDomain      TheoryModel where cdom = con . cdom
 instance HasAdditionalNotes TheoryModel where getNotes = notes
 instance Concept            TheoryModel where
@@ -88,6 +88,6 @@ theoryMod    = commonIdeaWithDict "theoryMod"    (cn' "Theory Model")           
 -- have the same type!
 tm :: (Concept c0, Quantity q, MayHaveUnit q, Concept c1) => c0 ->
     [q] -> [c1] -> [QDefinition] ->
-    [Relation] -> [QDefinition] -> [Reference2] ->
+    [Relation] -> [QDefinition] -> [Reference] ->
     Label -> [Sentence] -> TheoryModel
 tm c0 q c1 dq inv dfn r lbe nts = TM (cw c0) [] [] (map qw q) (map cw c1) dq inv dfn r lbe nts theoryMod 

@@ -1,5 +1,5 @@
 module Language.Drasil.RefProg 
-  (RefProg(..), Reference2(Reference2), name, (+::+), raw, defer, prepend,
+  (RefProg(..), Reference(Reference), name, (+::+), raw, defer, prepend,
    IRefProg(..))
   where
 import Language.Drasil.RefTypes(RefAdd)
@@ -14,7 +14,7 @@ data IRefProg =
   | RS String                   -- Lifts a String into a RefProg
   | RConcat IRefProg IRefProg   -- Concatenates with two subprograms
   | Name                        -- The Symbol to insert the ShortName directly
-data Reference2 = Reference2 UID RefProg RefAdd ShortName
+data Reference = Reference UID RefProg RefAdd ShortName
 
 name :: IRefProg
 name = Name

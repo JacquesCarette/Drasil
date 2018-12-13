@@ -47,7 +47,7 @@ consThermERel = (negate (sy gradient)) $. (sy thFluxVect) + (sy vol_ht_gen) $=
   (sy density) * (sy heat_cap_spec) * (pderiv (sy temp) time)
 
 -- the second argument is a 'ShortName'...
-consThemESrc :: Reference2
+consThemESrc :: Reference
 consThemESrc = makeURI "consThemESrc"
   "http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm" $
   shortname' "Fourier Law of Heat Conduction and Heat Equation"
@@ -80,7 +80,7 @@ sensHtE_rc :: RelationConcept
 sensHtE_rc = makeRC "sensHtE_rc" (nounPhraseSP "Sensible heat energy") sensHtEdesc sensHtEEqn
   -- (mkLabelSame "SensHtE" (Def TM))
 
-sensHtESrc :: Reference2
+sensHtESrc :: Reference
 sensHtESrc = makeURI "sensHtESrc"
   "http://en.wikipedia.org/wiki/Sensible_heat" $
   shortname' "Definition of Sensible Heat"
@@ -146,7 +146,7 @@ latHtEEqn = apply1 latent_heat time $=
 
 -- Integrals need dTau at end
 
-latHtESrc :: Reference2
+latHtESrc :: Reference
 latHtESrc = makeURI "latHtESrc" "http://en.wikipedia.org/wiki/Latent_heat" $
   shortname' "Definition of Latent Heat"
 

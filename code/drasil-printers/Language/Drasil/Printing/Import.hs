@@ -282,12 +282,12 @@ spec sm (Ch SymbolStyle s)  = P.E $ symbol $ lookupC sm s
 spec sm (Ch TermStyle s)    = spec sm $ lookupT sm s
 spec sm (Ch ShortStyle s)   = spec sm $ lookupS sm s
 spec sm (Ch PluralTerm s)   = spec sm $ lookupP sm s
-spec sm (Ref2 (Reference2 _ (RP rp) ra sn)) = 
-  P.Ref2 Internal ra $ spec sm $ renderShortName sm rp sn
-spec sm (Ref2 (Reference2 _ Citation ra sn)) = 
-  P.Ref2 Cite2    ra $ spec sm $ renderCitation sm sn
-spec sm (Ref2 (Reference2 _ URI ra sn)) = 
-  P.Ref2 External    ra $ spec sm $ renderURI sm sn
+spec sm (Ref (Reference _ (RP rp) ra sn)) = 
+  P.Ref Internal ra $ spec sm $ renderShortName sm rp sn
+spec sm (Ref (Reference _ Citation ra sn)) = 
+  P.Ref Cite2    ra $ spec sm $ renderCitation sm sn
+spec sm (Ref (Reference _ URI ra sn)) = 
+  P.Ref External    ra $ spec sm $ renderURI sm sn
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm

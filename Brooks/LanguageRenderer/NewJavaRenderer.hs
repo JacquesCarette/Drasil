@@ -5,18 +5,19 @@ module LanguageRenderer.NewJavaRenderer (
     JavaCode(..)
 ) where
 
-import New (Declaration, StateVar, Scope, Label, Library,
-  RenderSym(..), KeywordSym(..), PermanenceSym(..), InputTypeSym(..), ClassSym(..), MethodSym(..), 
+import New (Declaration, StateVar, Label, Library,
+  RenderSym(..), KeywordSym(..), PermanenceSym(..), InputTypeSym(..),
   BodySym(..), BlockSym(..), ControlStatementSym(..), StateTypeSym(..),
   PreStatementSym(..),  StatementSym(..),
   IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..))
+  FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..),
+  ParameterSym(..), MethodSym(..), ClassSym(..))
 import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, bodyBlockStatementsDocD, outDocD, 
   printListDocD, boolTypeDocD, intTypeDocD,
-  charTypeDocD, typeDocD, listTypeDocD, ifCondDocD, switchDocD, forDocD, 
+  charTypeDocD, typeDocD, listTypeDocD, voidDocD, constructDocD, stateParamDocD,
+  paramListDocD, methodDocD, ifCondDocD, switchDocD, forDocD, 
   forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
   varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, statementDocD, returnDocD,
-  
   commentDocD, notOpDocD, negateOpDocD, unOpDocD, equalOpDocD, 
   notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
@@ -24,9 +25,10 @@ import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, bodyBlockStatementsDo
   litCharD, litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
   defaultStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
   inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
-  notNullDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, includeD, 
-  funcDocD, castDocD, sizeDocD, listAccessDocD, objAccessDocD, castObjDocD,dot, 
-  new, forLabel, observerListName, doubleSlash, addCommentsDocD, callFuncParamList, getterName, setterName)
+  notNullDocD, funcDocD, castDocD, sizeDocD, listAccessDocD, objAccessDocD, 
+  castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
+  publicDocD, includeD, dot, new, forLabel, observerListName, doubleSlash, 
+  addCommentsDocD, callFuncParamList, getterName, setterName)
 import Helpers (blank,angles,oneTab,vibmap)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
@@ -64,6 +66,9 @@ instance Monad JavaCode where
 
 liftA4 :: (Doc -> Doc -> Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc
 liftA4 f a1 a2 a3 a4 = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4)
+
+liftA5 :: (Doc -> Doc -> Doc -> Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc
+liftA5 f a1 a2 a3 a4 a5 = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (unJC a5)
 
 liftA6 :: (Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc
 liftA6 f a1 a2 a3 a4 a5 a6 = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (unJC a5) (unJC a6)
@@ -456,6 +461,30 @@ instance SelectorFunction JavaCode where
     listSetEnum t i v = listSet (i $. (cast int t)) v
 
     at l = listAccess (var l)
+
+instance ScopeSym JavaCode where
+    type Scope JavaCode = Doc
+    private = return privateDocD
+    public = return publicDocD
+
+instance MethodTypeSym JavaCode where
+    type MethodType JavaCode = Doc
+    mState t = t
+    void = return voidDocD
+    construct n = return $ constructDocD n
+
+instance ParameterSym JavaCode where
+    type Parameter JavaCode = Doc
+    stateParam n t = liftA (stateParamDocD n) t
+
+instance MethodSym JavaCode where
+    type Method JavaCode = Doc
+    method n s p t ps b = liftA5 (methodDocD n) s p t (liftList (paramListDocD) ps) b
+    getMethod n t = method (getterName n) public dynamic t [] getBody
+        where getBody = oneLiner $ returnState (self $-> (var n))
+    setMethod setLbl paramLbl t = method (setterName setLbl) public dynamic void [(stateParam paramLbl t)] setBody
+        where setBody = oneLiner $ (self $-> (var setLbl)) &=. paramLbl
+    mainMethod b = method "main" public static void [] b
 
 jtop :: Doc -> Doc -> Doc -> Doc
 jtop end inc lst = vcat [

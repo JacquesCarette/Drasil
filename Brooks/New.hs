@@ -5,11 +5,12 @@ module New (
     Declaration, StateVar, Scope,
     Label, Library, 
     -- Typeclasses
-    RenderSym(..), KeywordSym(..), InputTypeSym(..), PermanenceSym(..), ClassSym(..), MethodSym(..), 
+    RenderSym(..), KeywordSym(..), InputTypeSym(..), PermanenceSym(..),
     BodySym(..), ControlStatementSym(..), BlockSym(..), StateTypeSym(..), 
     PreStatementSym(..), StatementSym(..),
     IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), 
-    FunctionSym(..), SelectorFunction(..)
+    FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..),
+    ParameterSym(..), MethodSym(..), ClassSym(..)
 ) where
 
 import Text.PrettyPrint.HughesPJ (Doc)
@@ -27,7 +28,6 @@ type Declaration = Doc
 type StateVar = Doc
 -- type IOType = Doc
 -- type IOSt = Doc
-type Scope = Doc
 -- type UnaryOp = Doc
 -- type BinaryOp = Doc
 -- type RenderFile = Doc
@@ -39,9 +39,9 @@ type Library = String
 -- type VarDecl = Declaration
 -- type FunctionDecl = Method
 
-class (BodySym repr, ControlStatementSym repr) => RenderSym repr where
+class (MethodSym repr, ControlStatementSym repr) => RenderSym repr where
     type RenderFile repr
-    fileDoc :: repr (Body repr) -> repr (RenderFile repr)
+    fileDoc :: repr (Method repr) -> repr (RenderFile repr)
     top :: repr (Block repr) -- Block is a placeholder for all of these, should change
     codeBody :: repr (Class repr) -> repr (Block repr)
     bottom :: repr (Block repr)
@@ -80,14 +80,6 @@ class PermanenceSym repr where
     type Permanence repr
     static :: repr (Permanence repr)
     dynamic :: repr (Permanence repr)
-
-class ClassSym repr where
-    type Class repr
-    buildClass :: Label -> Maybe Label -> repr Scope -> [repr StateVar] -> [repr (Method repr)] -> repr (Class repr)
-
-class MethodSym repr where
-    type Method repr
-    mainMethod :: repr (Body repr) -> repr (Method repr)
 
 class (BlockSym repr) => BodySym repr where
     type Body repr
@@ -386,3 +378,30 @@ class (ValueSym repr, StateTypeSym repr, FunctionSym repr, Selector repr) => Sel
     listSetEnum      :: repr (StateType repr) -> repr (Value repr) -> repr (Value repr) -> repr (Function repr)
 
     at :: Label -> repr (Function repr)
+
+class ScopeSym repr where
+    type Scope repr
+    private :: repr (Scope repr)
+    public  :: repr (Scope repr)
+
+class MethodTypeSym repr where
+    type MethodType repr
+    mState    :: repr (StateType repr) -> repr (MethodType repr)
+    void      :: repr (MethodType repr)
+    construct :: Label -> repr (MethodType repr)
+
+class ParameterSym repr where
+    type Parameter repr
+    stateParam :: Label -> repr (StateType repr) -> repr (Parameter repr)
+    funcParam  :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Parameter repr) 
+
+class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, BodySym repr) => MethodSym repr where
+    type Method repr
+    method     :: Label -> repr (Scope repr) -> repr (Permanence repr) -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
+    getMethod  :: Label -> repr (MethodType repr) -> repr (Method repr)
+    setMethod  :: Label -> Label -> repr (StateType repr) -> repr (Method repr) 
+    mainMethod :: repr (Body repr) -> repr (Method repr)
+
+class ClassSym repr where
+    type Class repr
+    buildClass :: Label -> Maybe Label -> repr (Scope repr) -> [repr StateVar] -> [repr (Method repr)] -> repr (Class repr)

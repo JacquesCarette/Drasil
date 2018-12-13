@@ -9,6 +9,7 @@ module NewLanguageRenderer (
     -- * Default Functions available for use in renderers
     fileDoc', blockDocD, bodyDocD, bodyBlockStatementsDocD, outDocD, printListDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
     charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD,
+    voidDocD, constructDocD, stateParamDocD, paramListDocD, methodDocD,
     ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD,
     assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
     listDecDocD, listDecDefDocD, statementDocD, returnDocD, commentDocD,
@@ -22,14 +23,15 @@ module NewLanguageRenderer (
     litStringD, defaultCharD, defaultFloatD, defaultIntD, defaultStringD, 
     varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD,
     funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD,
-    constDecDefDocD, notNullDocD, breakDocD, continueDocD,
-    staticDocD, dynamicDocD, funcDocD, castDocD, sizeDocD, listAccessDocD,
-    objAccessDocD, castObjDocD, includeD, addCommentsDocD, callFuncParamList, getterName, setterName
+    constDecDefDocD, notNullDocD, funcDocD, castDocD, sizeDocD, listAccessDocD,
+    objAccessDocD, castObjDocD, includeD, breakDocD, continueDocD, staticDocD, 
+    dynamicDocD, privateDocD, publicDocD, addCommentsDocD, callFuncParamList, 
+    getterName, setterName
 ) where
 
 import New (Label, Library)
 import Helpers (angles,blank,doubleQuotedText,oneTab,capitalize,
-                            oneTabbed,himap,vibcat,vmap,vibmap)
+                            oneTabbed,himap,hicat,vibcat,vmap,vibmap)
 
 import Data.List (find, intersperse)
 import Prelude hiding (break,print,return,last,mod,(<>))
@@ -165,6 +167,30 @@ typeDocD t = text t
 
 listTypeDocD :: Doc -> Doc -> Doc
 listTypeDocD st list = list <> angles st
+
+-- Method Types --
+
+voidDocD :: Doc
+voidDocD = text "void"
+
+constructDocD :: Label -> Doc
+constructDocD _ = empty
+
+-- Parameters --
+
+stateParamDocD :: Label -> Doc -> Doc
+stateParamDocD n t = t <+> text n
+
+paramListDocD :: [Doc] -> Doc
+paramListDocD ps = hicat (text ", ") ps
+
+-- Method --
+
+methodDocD :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
+methodDocD n s p t ps b = vcat [
+    s <+> p <+> t <+> text n <> parens (ps) <+> lbrace,
+    oneTab $ b,
+    rbrace]
 
 -- Controls --
 
@@ -479,6 +505,14 @@ breakDocD = text "break"
 
 continueDocD :: Doc
 continueDocD = text "continue"
+
+-- Scope --
+
+privateDocD :: Doc
+privateDocD = text "private"
+
+publicDocD :: Doc
+publicDocD = text "public"
 
 -- Comment Functions -- 
 

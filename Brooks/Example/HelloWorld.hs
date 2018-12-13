@@ -1,10 +1,11 @@
 module Example.HelloWorld (main) where
 
-import New (Declaration, StateVar, Scope, Label, Library,
-  RenderSym(..), KeywordSym(..), PermanenceSym(..), InputTypeSym(..), ClassSym(..), MethodSym(..), 
+import New (Declaration, StateVar, Label, Library,
+  RenderSym(..), KeywordSym(..), PermanenceSym(..), InputTypeSym(..),
   BodySym(..), BlockSym(..), ControlStatementSym(..), StateTypeSym(..), 
   PreStatementSym(..), StatementSym(..), IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), 
-  ValueSym(..), Selector(..), FunctionSym(..), SelectorFunction(..))
+  ValueSym(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
+  ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), ClassSym(..))
 import NewLanguageRenderer (makeCode, createCodeFiles)
 import LanguageRenderer.NewJavaRenderer (JavaCode(..))
 import Text.PrettyPrint.HughesPJ (Doc)
@@ -23,7 +24,7 @@ genCode :: [Doc] -> [Label] -> [Label] -> IO()
 genCode files names exts = createCodeFiles $ makeCode files names exts
 
 patternTest :: (RenderSym repr) => repr (RenderFile repr)
-patternTest = fileDoc ( bodyBlockState [ (statements [(varDec "n" int), (initState "myFSM" "Off"), (changeState "myFSM" "On")]),
+patternTest = fileDoc ( mainMethod (bodyBlockState [ (statements [(varDec "n" int), (initState "myFSM" "Off"), (changeState "myFSM" "On")]),
   (checkState "myFSM" 
     [((litString "Off"), oneLiner (printStrLn "Off")), ((litString "On"), oneLiner (printStrLn "On"))] 
     (oneLiner (printStrLn "In"))),
@@ -31,16 +32,16 @@ patternTest = fileDoc ( bodyBlockState [ (statements [(varDec "n" int), (initSta
     [("myStrat", oneLiner (printStrLn "myStrat")), ("yourStrat", oneLiner (printStrLn "yourStrat"))]
     (Just (litInt 3)) (Just (var "n"))),
   (statements [(initObserverList (intListType static) [(litInt 1), (litInt 2)]), (addObserver (intListType static) (litInt 3))]),
-  (notifyObservers "addNums" (intListType static) [(litInt 2), (litInt 5)])])
+  (notifyObservers "addNums" (intListType static) [(litInt 2), (litInt 5)])]))
 
 helloWorld :: (RenderSym repr) => repr (RenderFile repr)
-helloWorld = fileDoc ( bodyBlockState [ helloInitVariables, helloListSlice,
+helloWorld = fileDoc ( mainMethod (bodyBlockState [ helloInitVariables, helloListSlice,
   ifCond [(litFalse, bodyStatements [(varDec "dummy" string)]),
     (litTrue, helloIfBody)] helloElseBody,
   switch (var "a") [((litInt 5), (oneLiner ("b" &.= (litInt 10)))), 
     ((litInt 0), (oneLiner ("b" &.= (litInt 5))))]
     (oneLiner ("b" &.= (litInt 0))),
-  helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch, goodBye1, helloFileRead, goodBye2])
+  helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch, goodBye1, helloFileRead, goodBye2]))
 
 helloInitVariables :: (RenderSym repr) => repr (Statement repr)
 helloInitVariables = statements [ (comment "Initializing variables"),

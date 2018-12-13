@@ -7,7 +7,7 @@ module NewLanguageRenderer (
     classDec, dot, doubleSlash, forLabel, new, observerListName,
     
     -- * Default Functions available for use in renderers
-    fileDoc', blockDocD, bodyDocD, progDocD, outDocD, printListDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
+    fileDoc', blockDocD, bodyDocD, bodyBlockStatementsDocD, outDocD, printListDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
     charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD,
     ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD,
     assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
@@ -117,10 +117,10 @@ bodyDocD bs = vibcat blocks
   where blocks = filter notNullBlock bs
         notNullBlock b = (not $ isEmpty b)
 
-progDocD :: [Doc] -> Doc
-progDocD cs = vibcat controls
-    where controls = filter notNullControl cs
-          notNullControl c = (not $ isEmpty c)
+bodyBlockStatementsDocD :: Doc -> [Doc] -> Doc
+bodyBlockStatementsDocD end sts = vibcat stmts
+    where stmts = filter notNullStatement sts
+          notNullStatement s = (not $ isEmpty s) && (render s /= render end)
 
 -- ioState just returns itself. don't need a function for this.
 -- statementDocD :: Config -> StatementLocation -> Statement -> Doc
@@ -280,10 +280,6 @@ freeDocD v = text "delete" <+> v
 throwDocD :: Doc -> Doc
 throwDocD errMsg = text "throw new" <+> text "System.ApplicationException" <>
     parens errMsg
-
---openFileRDocD :: Doc -> Doc -> Doc -- Wait for ObjAccess to be implemented
-
---openFileWDocD :: Doc -> Doc -> Doc -- Wait for ObjAccess to be implemented
 
 statementDocD :: Doc -> Doc -> Doc
 statementDocD s end = s <> end

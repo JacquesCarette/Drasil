@@ -6,7 +6,7 @@ module New (
     Label, Library, 
     -- Typeclasses
     RenderSym(..), KeywordSym(..), InputTypeSym(..), PermanenceSym(..), ClassSym(..), MethodSym(..), 
-    ProgramBodySym(..), BodySym(..), ControlSym(..), BlockSym(..), StateTypeSym(..), 
+    BodySym(..), ControlStatementSym(..), BlockSym(..), StateTypeSym(..), 
     PreStatementSym(..), StatementSym(..),
     IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), 
     FunctionSym(..), SelectorFunction(..)
@@ -39,9 +39,9 @@ type Library = String
 -- type VarDecl = Declaration
 -- type FunctionDecl = Method
 
-class (ProgramBodySym repr) => RenderSym repr where
+class (BodySym repr, ControlStatementSym repr) => RenderSym repr where
     type RenderFile repr
-    fileDoc :: repr (ProgramBody repr) -> repr (RenderFile repr)
+    fileDoc :: repr (Body repr) -> repr (RenderFile repr)
     top :: repr (Block repr) -- Block is a placeholder for all of these, should change
     codeBody :: repr (Class repr) -> repr (Block repr)
     bottom :: repr (Block repr)
@@ -89,15 +89,13 @@ class MethodSym repr where
     type Method repr
     mainMethod :: repr (Body repr) -> repr (Method repr)
 
-class (ControlSym repr) => ProgramBodySym repr where
-    type ProgramBody repr
-    prog :: [repr (Control repr)] -> repr (ProgramBody repr)
-
 class (BlockSym repr) => BodySym repr where
     type Body repr
     body :: [repr (Block repr)] -> repr (Body repr)
     bodyStatements :: [repr (PreStatement repr)] -> repr (Body repr)
     oneLiner :: repr (PreStatement repr) -> repr (Body repr)
+
+    bodyBlockState :: [repr (Statement repr)] -> repr (Body repr) -- for statements that don't need semi colons and should be treated as a block
 
     addComments :: Label -> repr (Body repr) -> repr (Body repr)
 
@@ -105,6 +103,7 @@ class (BlockSym repr) => BodySym repr where
 class StatementSym repr => BlockSym repr where
     type Block repr
     block   :: [repr (PreStatement repr)] -> repr (Block repr)
+    blockState :: [repr (Statement repr)] -> repr (Block repr) -- for when the statements don't need semi colons (i.e. an if or a for loop, etc.)
 
 class StateTypeSym repr where
     type StateType repr
@@ -123,27 +122,28 @@ class StateTypeSym repr where
     obj :: Label -> repr (StateType repr)
     enumType :: Label -> repr (StateType repr)
 
-class (BodySym repr) => ControlSym repr where
-    type Control repr
+class (BodySym repr, StatementSym repr) => ControlStatementSym repr where
+    ifCond :: [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Statement repr) 
+    switch :: repr (Value repr) -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Statement repr) -- is there value in separating Literals into their own type?
 
-    ifCond :: [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Control repr) 
-    switch :: repr (Value repr) -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Control repr) -- is there value in separating Literals into their own type?
+    ifExists :: repr (Value repr) -> repr (Body repr) -> repr (Body repr) -> repr (Statement repr)
 
-    ifExists :: repr (Value repr) -> repr (Body repr) -> repr (Body repr) -> repr (Control repr)
-
-    for     :: repr (PreStatement repr) -> repr (Value repr) -> repr (PreStatement repr) -> repr (Body repr) -> repr (Control repr)
+    for     :: repr (PreStatement repr) -> repr (Value repr) -> repr (PreStatement repr) -> repr (Body repr) -> repr (Statement repr)
     -- Had to add StateType to forEach because I can't extract the StateType from the value.
-    forEach :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (Body repr) -> repr (Control repr)
-    while   :: repr (Value repr) -> repr (Body repr) -> repr (Control repr) 
+    forEach :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (Body repr) -> repr (Statement repr)
+    while   :: repr (Value repr) -> repr (Body repr) -> repr (Statement repr) 
 
-    tryCatch :: repr (Body repr) -> repr (Body repr) -> repr (Control repr)
+    tryCatch :: repr (Body repr) -> repr (Body repr) -> repr (Statement repr)
 
-    checkState      :: Label -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Control repr)
-    runStrategy     :: Label -> [(Label, repr (Body repr))] -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Control repr)
-    notifyObservers :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (Control repr)
+    checkState      :: Label -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Statement repr)
+    runStrategy     :: Label -> [(Label, repr (Body repr))] -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Statement repr)
+    notifyObservers :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (Statement repr)
 
-    statement  :: repr (PreStatement repr) -> repr (Control repr)
-    statements :: [repr (PreStatement repr)] -> repr (Control repr)
+    getFileInputAll  :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
+    listSlice        :: repr (StateType repr) -> repr (Value repr) -> repr (Value repr) -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Statement repr)
+
+    statement  :: repr (PreStatement repr) -> repr (Statement repr)
+    statements :: [repr (PreStatement repr)] -> repr (Statement repr)
 
 class (PermanenceSym repr, StateTypeSym repr, ValueSym repr, IOStSym repr, InputTypeSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) => PreStatementSym repr where
     type PreStatement repr
@@ -204,7 +204,7 @@ class (PermanenceSym repr, StateTypeSym repr, ValueSym repr, IOStSym repr, Input
 
     getFileInputLine :: repr (Value repr) -> repr (Value repr) -> repr (PreStatement repr)
     discardFileLine  :: repr (Value repr) -> repr (PreStatement repr)
-    getFileInputAll  :: repr (Value repr) -> repr (Value repr) -> repr (PreStatement repr)
+    stringSplit      :: Char -> repr (Value repr) -> repr (Value repr) -> repr (PreStatement repr)
 
     break :: repr (PreStatement repr)
     continue :: repr (PreStatement repr)
@@ -284,7 +284,7 @@ class (StateTypeSym repr) => ValueSym repr where
     defaultString :: repr (Value repr)
     defaultBool   :: repr (Value repr)
 
-    (?!)  :: repr (Value repr) -> repr (Value repr)  -- where to specific infix?
+    (?!)  :: repr (Value repr) -> repr (Value repr)  -- where to specify infix?
     (?<)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
     (?<=) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
     (?>)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
@@ -345,6 +345,9 @@ class (StateTypeSym repr) => ValueSym repr where
 class (FunctionSym repr, ValueSym repr) => Selector repr where
     objAccess :: repr (Value repr) -> repr (Function repr) -> repr (Value repr)
     ($.)      :: repr (Value repr) -> repr (Function repr) -> repr (Value repr)
+
+    objMethodCall     :: repr (Value repr) -> Label -> [repr (Value repr)] -> repr (Value repr)
+    objMethodCallVoid :: repr (Value repr) -> Label -> repr (Value repr)
 
     selfAccess :: Label -> [repr (Value repr)] -> repr (Value repr)
 

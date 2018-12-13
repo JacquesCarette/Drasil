@@ -7,11 +7,11 @@ module LanguageRenderer.NewJavaRenderer (
 
 import New (Declaration, StateVar, Scope, Label, Library,
   RenderSym(..), KeywordSym(..), PermanenceSym(..), InputTypeSym(..), ClassSym(..), MethodSym(..), 
-  ProgramBodySym(..), BodySym(..), BlockSym(..), ControlSym(..), StateTypeSym(..),
+  BodySym(..), BlockSym(..), ControlStatementSym(..), StateTypeSym(..),
   PreStatementSym(..),  StatementSym(..),
   IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..))
-import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, progDocD, outDocD, 
+import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, bodyBlockStatementsDocD, outDocD, 
   printListDocD, boolTypeDocD, intTypeDocD,
   charTypeDocD, typeDocD, listTypeDocD, ifCondDocD, switchDocD, forDocD, 
   forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
@@ -131,23 +131,20 @@ instance PermanenceSym JavaCode where
     static = return staticDocD
     dynamic = return dynamicDocD
 
-instance ProgramBodySym JavaCode where
-    type ProgramBody JavaCode = Doc
-    prog cs = liftList progDocD cs
-
 instance BodySym JavaCode where
     type Body JavaCode = Doc
     body bs = liftList bodyDocD bs
     bodyStatements sts = block sts
     oneLiner s = bodyStatements [s]
 
+    bodyBlockState sts = lift1List bodyBlockStatementsDocD endStatement sts
+
     addComments s b = liftA2 (addCommentsDocD s) commentStart b
 
 instance BlockSym JavaCode where
     type Block JavaCode = Doc
-    block sts = do
-        end <- endStatement
-        liftList (blockDocD end) (map state sts)
+    block sts = lift1List blockDocD endStatement (map state sts)
+    blockState sts = lift1List blockDocD endStatement sts
     
 instance ClassSym JavaCode where
     -- buildClass n p s vs fs = liftA3 (classDocD n p) s vs fs -- vs and fs are actually lists... should 
@@ -179,8 +176,7 @@ instance StateTypeSym JavaCode where
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
 
-instance ControlSym JavaCode where
-    type Control JavaCode = Doc
+instance ControlStatementSym JavaCode where
     ifCond bs b = lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs
     switch v cs c = lift3Pair switchDocD (state break) v c cs
 
@@ -205,8 +201,28 @@ instance ControlSym JavaCode where
               initv = varDecDef index int $ litInt 0
               notify = oneLiner $ valState $ (obsList $. at index) $. func fn ps
 
+    getFileInputAll f v = while (f $. (func "hasNextLine" []))
+        (oneLiner $ valState $ v $. (listAppend $ f $. (func "nextLine" [])))
+    listSlice t vnew vold b e s = 
+        let l_temp = "temp"
+            v_temp = var l_temp
+            l_i = "i_temp"
+            v_i = var l_i
+        in
+        (blockState [
+            statement (listDec l_temp 0 t),
+            for (varDecDef l_i (int) (getB b)) (v_i ?< getE e) (getS s v_i)
+                (oneLiner $ valState $ v_temp $. (listAppend (vold $. (listAccess v_i)))),
+            statement (vnew &= v_temp)])
+        where getB Nothing = litInt 0
+              getB (Just n) = n
+              getE Nothing = vold$.listSize
+              getE (Just n) = n
+              getS Nothing v = (&++) v
+              getS (Just n) v = v &+= n
+
     statement s = state s
-    statements s = block s
+    statements s = lift1List blockDocD endStatement (map state s)
 
 instance UnaryOpSym JavaCode where
     type UnaryOp JavaCode = Doc
@@ -360,13 +376,12 @@ instance PreStatementSym JavaCode where
 
     openFileR f n = liftA2 jOpenFileR f n
     openFileW f n = liftA2 jOpenFileW f n
-    -- closeFile f = liftA closeFileDocD f  -- needs objAccess
+    closeFile f = valState $ objMethodCall f "close" []
 
-    -- getFileInputLine f v =  -- need Func
-    -- discardFileLine f =
-    -- getFileInputAll f v =
-    -- listSlice v1 v2 b e s
-    -- stringSplit v1 v2 d
+    getFileInputLine f v = v &= (f $. (func "nextLine" []))
+    discardFileLine f = valState $ f $. (func "nextLine" [])
+    stringSplit d vnew s = liftA3 jStringSplit vnew (listType dynamic string) 
+        (funcApp "Arrays.asList" [s $. (func "split" [litString [d]])])
 
     break = return breakDocD  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
     continue = return continueDocD
@@ -400,6 +415,9 @@ instance StatementSym JavaCode where
 instance Selector JavaCode where
     objAccess v f = liftA2 objAccessDocD v f
     ($.) v f = objAccess v f
+
+    objMethodCall o f ps = objAccess o (func f ps)
+    objMethodCallVoid o f = objMethodCall o f []
 
     selfAccess = funcApp
     castObj f v = liftA2 castObjDocD f v
@@ -507,3 +525,7 @@ jListExtend v = dot <> text "add" <> parens v
 
 jListExtendList :: Doc -> Doc
 jListExtendList t = new <+> t <> parens (empty)
+
+jStringSplit :: Doc -> Doc -> Doc -> Doc
+jStringSplit vnew t s = vnew <+> equals <+> new <+> t
+    <> parens s

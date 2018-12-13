@@ -26,7 +26,7 @@ import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, progDocD, outDocD,
   inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
   notNullDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, includeD, 
   funcDocD, castDocD, sizeDocD, listAccessDocD, objAccessDocD, castObjDocD,dot, 
-  new, forLabel, doubleSlash, callFuncParamList, getterName, setterName)
+  new, forLabel, observerListName, doubleSlash, callFuncParamList, getterName, setterName)
 import Helpers (blank,angles,oneTab,vibmap)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
@@ -195,6 +195,11 @@ instance ControlSym JavaCode where
         where resultState = case av of Nothing    -> return empty
                                        Just vari  -> case rv of Nothing  -> error $ "Strategy '" ++ l ++ "': Attempt to assign null return to a Value."
                                                                 Just res -> assign vari res
+    notifyObservers fn t ps = for initv (var index ?< (obsList $. listSize)) ((&.++) index) notify
+        where obsList = observerListName `listOf` t
+              index = "observerIndex"
+              initv = varDecDef index int $ litInt 0
+              notify = oneLiner $ valState $ (obsList $. at index) $. func fn ps
 
     statement s = state s
     statements s = block s
@@ -268,6 +273,9 @@ instance ValueSym JavaCode where
     floor v = liftA2 unOpDocD floorOp v
     ceil v = liftA2 unOpDocD ceilOp v
 
+    ($->) v vr = objVar v vr
+    ($:) en e = enumElement en e
+
     log v = liftA2 unOpDocD logOp v
     ln v = liftA2 unOpDocD lnOp v
     exp v = liftA2 unOpDocD expOp v
@@ -288,6 +296,7 @@ instance ValueSym JavaCode where
     objVar n1 n2 = liftA2 objVarDocD n1 n2
     objVarSelf n = var n
     listVar n _ = var n
+    n `listOf` t = listVar n t
     inlineIf c v1 v2 = liftA3 inlineIfDocD c v1 v2
     funcApp n vs = liftList (funcAppDocD n) vs
     extFuncApp l n vs = liftList (extFuncAppDocD l n) vs
@@ -345,7 +354,7 @@ instance PreStatementSym JavaCode where
 
     openFileR f n = liftA2 jOpenFileR f n
     openFileW f n = liftA2 jOpenFileW f n
-    ---closeFile f = liftA closeFileDocD f  -- needs objAccess
+    -- closeFile f = liftA closeFileDocD f  -- needs objAccess
 
     -- getFileInputLine f v =  -- need Func
     -- discardFileLine f =
@@ -369,6 +378,11 @@ instance PreStatementSym JavaCode where
 
     initState fsmName initialState = varDecDef fsmName string (litString initialState)
     changeState fsmName toState = fsmName &.= (litString toState)
+
+    initObserverList t os = listDecDef observerListName t os
+    addObserver t o = obsList $. listAdd last o
+        where obsList = observerListName `listOf` t
+              last = obsList $. listSize
 
 instance StatementSym JavaCode where
     type Statement JavaCode = Doc
@@ -416,6 +430,8 @@ instance SelectorFunction JavaCode where
 
     listAccessEnum t v = listAccess (v $. (cast int t))
     listSetEnum t i v = listSet (i $. (cast int t)) v
+
+    at l = listAccess (var l)
 
 jtop :: Doc -> Doc -> Doc -> Doc
 jtop end inc lst = vcat [

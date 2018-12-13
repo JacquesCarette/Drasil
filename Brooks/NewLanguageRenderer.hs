@@ -4,7 +4,7 @@ module NewLanguageRenderer (
     makeCode, createCodeFiles,
     
     -- * Common Syntax
-    classDec, dot, doubleSlash, forLabel, new,
+    classDec, dot, doubleSlash, forLabel, new, observerListName,
     
     -- * Default Functions available for use in renderers
     fileDoc', blockDocD, bodyDocD, progDocD, outDocD, printListDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
@@ -73,6 +73,9 @@ dot = text "."
 doubleSlash = text "//"
 forLabel = text "for"
 new = text "new"
+
+observerListName :: Label
+observerListName = "observerList"
 
 ----------------------------------
 -- Functions for rendering code --

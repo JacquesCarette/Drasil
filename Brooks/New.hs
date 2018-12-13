@@ -136,6 +136,7 @@ class (BodySym repr) => ControlSym repr where
 
     checkState :: Label -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Control repr)
     runStrategy :: Label -> [(Label, repr (Body repr))] -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Control repr)
+    notifyObservers  :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (Control repr)
 
     statement :: repr (PreStatement repr) -> repr (Control repr)
     statements :: [repr (PreStatement repr)] -> repr (Control repr)
@@ -213,8 +214,11 @@ class (PermanenceSym repr, StateTypeSym repr, ValueSym repr, IOStSym repr, Input
 
     throw :: Label -> repr (PreStatement repr)
 
-    initState :: Label -> Label -> repr (PreStatement repr)
+    initState   :: Label -> Label -> repr (PreStatement repr)
     changeState :: Label -> Label -> repr (PreStatement repr)
+
+    initObserverList :: repr (StateType repr) -> [repr (Value repr)] -> repr (PreStatement repr)
+    addObserver      :: repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
 
 class (PreStatementSym repr, IOStSym repr) => StatementSym repr where
     type Statement repr
@@ -311,21 +315,22 @@ class (StateTypeSym repr) => ValueSym repr where
     sec :: repr (Value repr) -> repr (Value repr)
     cot :: repr (Value repr) -> repr (Value repr)
 
-    const :: Label -> repr (Value repr)
-    var :: Label -> repr (Value repr)
-    extVar :: Library -> Label -> repr (Value repr)
---    global :: Label -> repr (Value repr)         -- not sure how this one works
-    self :: repr (Value repr)
-    arg :: Integer -> repr (Value repr)
-    enumElement :: Label -> Label -> repr (Value repr)
-    enumVar :: Label -> repr (Value repr)
-    objVar :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-    objVarSelf :: Label -> repr (Value repr)
-    listVar :: Label -> repr (StateType repr) -> repr (Value repr)
-    inlineIf :: repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-    funcApp :: Label -> [repr (Value repr)] -> repr (Value repr)
-    extFuncApp :: Library -> Label -> [repr (Value repr)] -> repr (Value repr)
-    stateObj :: repr (StateType repr) -> [repr (Value repr)] -> repr (Value repr)
+    const        :: Label -> repr (Value repr)
+    var          :: Label -> repr (Value repr)
+    extVar       :: Library -> Label -> repr (Value repr)
+--    global       :: Label -> repr (Value repr)         -- not sure how this one works
+    self         :: repr (Value repr)
+    arg          :: Integer -> repr (Value repr)
+    enumElement  :: Label -> Label -> repr (Value repr)
+    enumVar      :: Label -> repr (Value repr)
+    objVar       :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+    objVarSelf   :: Label -> repr (Value repr)
+    listVar      :: Label -> repr (StateType repr) -> repr (Value repr)
+    listOf       :: Label -> repr (StateType repr) -> repr (Value repr)
+    inlineIf     :: repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+    funcApp      :: Label -> [repr (Value repr)] -> repr (Value repr)
+    extFuncApp   :: Library -> Label -> [repr (Value repr)] -> repr (Value repr)
+    stateObj     :: repr (StateType repr) -> [repr (Value repr)] -> repr (Value repr)
     listStateObj :: repr (StateType repr) -> [repr (Value repr)] -> repr (Value repr)
 
     exists  :: repr (Value repr) -> repr (Value repr)
@@ -370,3 +375,5 @@ class (ValueSym repr, StateTypeSym repr, FunctionSym repr, Selector repr) => Sel
 
     listAccessEnum   :: repr(StateType repr) -> repr (Value repr) -> repr (Function repr)
     listSetEnum      :: repr (StateType repr) -> repr (Value repr) -> repr (Value repr) -> repr (Function repr)
+
+    at :: Label -> repr (Function repr)

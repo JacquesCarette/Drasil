@@ -29,7 +29,9 @@ patternTest = fileDoc ( prog [ (statements [(varDec "n" int), (initState "myFSM"
     (oneLiner (printStrLn "In"))),
   (runStrategy "myStrat" 
     [("myStrat", oneLiner (printStrLn "myStrat")), ("yourStrat", oneLiner (printStrLn "yourStrat"))]
-    (Just (litInt 3)) (Just (var "n")))])
+    (Just (litInt 3)) (Just (var "n"))),
+  (statements [(initObserverList (intListType static) [(litInt 1), (litInt 2)]), (addObserver (intListType static) (litInt 3))]),
+  (notifyObservers "addNums" (intListType static) [(litInt 2), (litInt 5)])])
 
 helloWorld :: (RenderSym repr) => repr (RenderFile repr)
 helloWorld = fileDoc ( prog [ helloInitVariables,

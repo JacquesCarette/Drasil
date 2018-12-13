@@ -23,11 +23,12 @@ module NewLanguageRenderer (
     varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD,
     funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD,
     constDecDefDocD, notNullDocD, breakDocD, continueDocD,
-    staticDocD, dynamicDocD, includeD, callFuncParamList, getterName, setterName
+    staticDocD, dynamicDocD, funcDocD, castDocD, sizeDocD, listAccessDocD,
+    objAccessDocD, castObjDocD, includeD, callFuncParamList, getterName, setterName
 ) where
 
 import New (Label, Library)
-import Helpers (angles,blank,doubleQuotedText,oneTab,
+import Helpers (angles,blank,doubleQuotedText,oneTab,capitalize,
                             oneTabbed,himap,vibcat,vmap,vibmap)
 
 import Data.List (find, intersperse)
@@ -451,10 +452,13 @@ sizeDocD :: Doc
 sizeDocD = dot <> text "Count"
 
 listAccessDocD :: Doc -> Doc
-listAccessDocD i = brackets <> i
+listAccessDocD i = brackets i
 
 objAccessDocD :: Doc -> Doc -> Doc
 objAccessDocD v f = v <> f
+
+castObjDocD :: Doc -> Doc -> Doc
+castObjDocD f v = f <> v
 
 -- Keywords --
 

@@ -3,8 +3,8 @@ module Example.HelloWorld (main) where
 import New (Declaration, StateVar, Scope, Label, Library,
   RenderSym(..), KeywordSym(..), PermanenceSym(..), InputTypeSym(..), ClassSym(..), MethodSym(..), 
   ProgramBodySym(..), BodySym(..), BlockSym(..), ControlSym(..), StateTypeSym(..), 
-  PreStatementSym(..), StatementSym(..),
-  IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
+  PreStatementSym(..), StatementSym(..), IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), 
+  ValueSym(..), Selector(..), FunctionSym(..), SelectorFunction(..))
 import NewLanguageRenderer (makeCode, createCodeFiles)
 import LanguageRenderer.NewJavaRenderer (JavaCode(..))
 import Text.PrettyPrint.HughesPJ (Doc)
@@ -38,13 +38,20 @@ helloWorld = fileDoc ( prog [ helloInitVariables,
   switch (var "a") [((litInt 5), (oneLiner ("b" &.= (litInt 10)))), 
     ((litInt 0), (oneLiner ("b" &.= (litInt 5))))]
     (oneLiner ("b" &.= (litInt 0))),
-  helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch])
+  helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch, goodBye])
 
 helloInitVariables :: (RenderSym repr) => repr (Control repr)
 helloInitVariables = statements [ (comment "Initializing variables"),
   (varDec "a" int), 
   (varDecDef "b" int (litInt 5)),
-  (listDecDef "myOtherList" (floatListType static) [(litFloat 1.0), (litFloat 1.5)])]
+  (listDecDef "myOtherList" (floatListType static) [(litFloat 1.0), (litFloat 1.5)]),
+  ("a" &.= (objAccess (var "myOtherList") listSize)),
+  (valState (objAccess (var "myOtherList") (listAdd (litInt 2) (litFloat 2.0)))),
+  (valState (objAccess (var "myOtherList") (listAppend (litFloat 2.5)))),
+  (valState (objAccess (var "myOtherList") (listExtendFloat))),
+  (varDec "e" float),
+  ("e" &.= (objAccess (var "myOtherList") (listAccess (litInt 1)))),
+  (valState (objAccess (var "myOtherList") (listSet (litInt 1) (litFloat 17.4))))]
 
 helloIfBody :: (RenderSym repr) => repr (Body repr)
 helloIfBody = body [
@@ -140,3 +147,8 @@ helloForEachLoop = forEach "num" (float) (listVar "myOtherList" (float))
 helloTryCatch :: (RenderSym repr) => repr (Control repr)
 helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
   (oneLiner (printStrLn "Caught error"))
+
+goodBye :: (RenderSym repr) => repr (Control repr)
+goodBye = statements [
+  (varDec "f" float),
+  ("f" &.= (castObj (cast float int) (var "e")))]

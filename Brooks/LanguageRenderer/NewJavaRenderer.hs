@@ -10,7 +10,7 @@ import New (Declaration, StateVar, Scope, Label, Library,
   ProgramBodySym(..), BodySym(..), BlockSym(..), ControlSym(..), StateTypeSym(..),
   PreStatementSym(..),  StatementSym(..),
   IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), 
-  FunctionSym(..), FunctionSelector(..))
+  FunctionSym(..), SelectorFunction(..))
 import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, progDocD, outDocD, 
   printListDocD, boolTypeDocD, intTypeDocD,
   charTypeDocD, typeDocD, listTypeDocD, ifCondDocD, switchDocD, forDocD, 
@@ -24,11 +24,12 @@ import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, progDocD, outDocD,
   litCharD, litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
   defaultStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
   inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
-  notNullDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, includeD, dot, 
+  notNullDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, includeD, 
+  funcDocD, castDocD, sizeDocD, listAccessDocD, objAccessDocD, castObjDocD,dot, 
   new, forLabel, doubleSlash, callFuncParamList, getterName, setterName)
 import Helpers (blank,angles,oneTab,vibmap)
 
-import Prelude hiding (break,print,(<>),sin,cos,tan)
+import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals, 
@@ -210,6 +211,8 @@ instance UnaryOpSym JavaCode where
     sinOp = return $ text "Math.sin"
     cosOp = return $ text "Math.cos"
     tanOp = return $ text "Math.tan"
+    floorOp = return $ text "Math.floor"
+    ceilOp = return $ text "Math.ceil"
 
 instance BinaryOpSym JavaCode where
     type BinaryOp JavaCode = Doc
@@ -241,6 +244,7 @@ instance ValueSym JavaCode where
     defaultFloat = return $ defaultFloatD
     defaultInt = return $ defaultIntD
     defaultString = return $ defaultStringD
+    defaultBool = litFalse
 
     (?!) v = liftA2 unOpDocD notOp v
     (?<)  v1 v2 = liftA3 binOpDocD v1 lessOp v2
@@ -261,6 +265,8 @@ instance ValueSym JavaCode where
     (#/)  v1 v2 = liftA3 binOpDocD v1 divideOp v2
     (#%)  v1 v2 = liftA3 binOpDocD v1 moduloOp v2
     (#^)  v1 v2 = liftA3 binOpDocD' v1 powerOp v2
+    floor v = liftA2 unOpDocD floorOp v
+    ceil v = liftA2 unOpDocD ceilOp v
 
     log v = liftA2 unOpDocD logOp v
     ln v = liftA2 unOpDocD lnOp v
@@ -373,27 +379,43 @@ instance StatementSym JavaCode where
 
 instance Selector JavaCode where
     objAccess v f = liftA2 objAccessDocD v f
+    ($.) v f = objAccess v f
+
+    selfAccess = funcApp
+    castObj f v = liftA2 castObjDocD f v
+    castStrToFloat v = funcApp "Double.parseDouble" [v]
 
 instance FunctionSym JavaCode where
     type Function JavaCode = Doc
     func l vs = liftA funcDocD (funcApp l vs)
     cast targT _ = liftA castDocD targT
+    castListToInt = liftA funcDocD (funcApp "ordinal" [])
     get n = liftA funcDocD (funcApp (getterName n) [])
     set n v = liftA funcDocD (funcApp (setterName n) [v])
 
     indexOf v = liftA funcDocD (funcApp "indexOf" [v])
 
     listSize = liftA funcDocD (funcApp "size" [])
-    listAccess i = liftA funcDocD (funcApp "get" [i])
     listAdd i v = liftA funcDocD (funcApp "add" [i, v])
-    listSet i v = liftA funcDocD (funcApp "set" [i, v])
-    listPopulate = return empty
+    listPopulate _ _ = return empty
     listAppend v = liftA funcDocD (funcApp "add" [v])
-    listExtend = return empty
+    listExtendInt = liftA jListExtend defaultInt 
+    listExtendFloat = liftA jListExtend defaultFloat 
+    listExtendChar = liftA jListExtend defaultChar 
+    listExtendBool = liftA jListExtend defaultBool
+    listExtendString = liftA jListExtend defaultString
+    listExtendList t = liftA jListExtendList t
 
 
     iterBegin = liftA funcDocD (funcApp "begin" [])
     iterEnd = liftA funcDocD (funcApp "end" [])
+
+instance SelectorFunction JavaCode where
+    listAccess i = liftA funcDocD (funcApp "get" [i])
+    listSet i v = liftA funcDocD (funcApp "set" [i, v])
+
+    listAccessEnum t v = listAccess (v $. (cast int t))
+    listSetEnum t i v = listSet (i $. (cast int t)) v
 
 jtop :: Doc -> Doc -> Doc -> Doc
 jtop end inc lst = vcat [
@@ -457,3 +479,9 @@ jOpenFileR f n = f <+> equals <+> new <+> text "Scanner" <> parens (new <+> text
 
 jOpenFileW :: Doc -> Doc -> Doc
 jOpenFileW f n = f <+> equals <+> new <+> text "PrintWriter" <> parens n
+
+jListExtend :: Doc -> Doc
+jListExtend v = dot <> text "add" <> parens v
+
+jListExtendList :: Doc -> Doc
+jListExtendList t = new <+> t <> parens (empty)

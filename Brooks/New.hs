@@ -8,7 +8,8 @@ module New (
     RenderSym(..), KeywordSym(..), InputTypeSym(..), PermanenceSym(..), ClassSym(..), MethodSym(..), 
     ProgramBodySym(..), BodySym(..), ControlSym(..), BlockSym(..), StateTypeSym(..), 
     PreStatementSym(..), StatementSym(..),
-    IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..)
+    IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), 
+    FunctionSym(..), SelectorFunction(..)
 ) where
 
 import Text.PrettyPrint.HughesPJ (Doc)
@@ -139,7 +140,7 @@ class (BodySym repr) => ControlSym repr where
     statement :: repr (PreStatement repr) -> repr (Control repr)
     statements :: [repr (PreStatement repr)] -> repr (Control repr)
 
-class (PermanenceSym repr, StateTypeSym repr, ValueSym repr, IOStSym repr, InputTypeSym repr) => PreStatementSym repr where
+class (PermanenceSym repr, StateTypeSym repr, ValueSym repr, IOStSym repr, InputTypeSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) => PreStatementSym repr where
     type PreStatement repr
     (&=)   :: repr (Value repr) -> repr (Value repr) -> repr (PreStatement repr)
     (&.=)  :: Label -> repr (Value repr) -> repr (PreStatement repr)
@@ -271,6 +272,7 @@ class (StateTypeSym repr) => ValueSym repr where
     defaultFloat  :: repr (Value repr)
     defaultInt    :: repr (Value repr)
     defaultString :: repr (Value repr)
+    defaultBool   :: repr (Value repr)
 
     (?!)  :: repr (Value repr) -> repr (Value repr)  -- where to specific infix?
     (?<)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
@@ -292,6 +294,8 @@ class (StateTypeSym repr) => ValueSym repr where
     (#/)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
     (#%)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
     (#^)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+    floor :: repr (Value repr) -> repr (Value repr)
+    ceil  :: repr (Value repr) -> repr (Value repr)
 
      --other operators ($)
     ($->) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
@@ -331,28 +335,38 @@ class (FunctionSym repr, ValueSym repr) => Selector repr where
     objAccess :: repr (Value repr) -> repr (Function repr) -> repr (Value repr)
     ($.)      :: repr (Value repr) -> repr (Function repr) -> repr (Value repr)
 
-    selfAccess :: repr (Function repr) -> repr (Value repr)
+    selfAccess :: Label -> [repr (Value repr)] -> repr (Value repr)
+
+    castObj        :: repr (Function repr) -> repr (Value repr) -> repr (Value repr)
+    castStrToFloat :: repr (Value repr) -> repr (Function repr)
 
 class (ValueSym repr, StateTypeSym repr) => FunctionSym repr where
     type Function repr
     func           :: Label -> [repr (Value repr)] -> repr (Function repr)
     cast           :: repr (StateType repr) -> repr (StateType repr) -> repr (Function repr)
-    castStrToFloat :: repr (Function repr)
     castListToInt  :: repr (Function repr)
     get            :: Label -> repr (Function repr)
     set            :: Label -> repr (Value repr) -> repr (Function repr)
 
     indexOf :: repr (Value repr) -> repr (Function repr)
 
-    listSize     :: repr (Function repr)
-    listAdd      :: repr (Value repr) -> repr (Value repr) -> repr (Function repr)
-    listSet      :: repr (Value repr) -> repr (Value repr) -> repr (Function repr)
-    listAppend   :: repr (Value repr) -> repr (Function repr)
-    listExtend   :: repr (StateType repr) -> repr (Function repr)
+    listSize         :: repr (Function repr)
+    listAdd          :: repr (Value repr) -> repr (Value repr) -> repr (Function repr)
+    listPopulate     :: repr (Value repr) -> repr (StateType repr) -> repr (Function repr)
+    listAppend       :: repr (Value repr) -> repr (Function repr)
+    listExtendInt    :: repr (Function repr)
+    listExtendFloat  :: repr (Function repr)
+    listExtendChar   :: repr (Function repr)
+    listExtendBool   :: repr (Function repr)
+    listExtendString :: repr (Function repr)
+    listExtendList   :: repr (StateType repr) -> repr (Function repr)
 
     iterBegin :: repr (Function repr)
     iterEnd   :: repr (Function repr)
 
 class (ValueSym repr, StateTypeSym repr, FunctionSym repr, Selector repr) => SelectorFunction repr where
-    listAccess   :: repr (Value repr) -> repr (Function repr)
-    listPopulate :: repr (Value repr) -> repr (StateType repr) -> repr (Function repr)
+    listAccess :: repr (Value repr) -> repr (Function repr)
+    listSet    :: repr (Value repr) -> repr (Value repr) -> repr (Function repr)
+
+    listAccessEnum   :: repr(StateType repr) -> repr (Value repr) -> repr (Function repr)
+    listSetEnum      :: repr (StateType repr) -> repr (Value repr) -> repr (Value repr) -> repr (Function repr)

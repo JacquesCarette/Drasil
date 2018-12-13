@@ -12,7 +12,7 @@ module NewLanguageRenderer (
     ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD,
     assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
     listDecDocD, listDecDefDocD, statementDocD, returnDocD, commentDocD,
-    freeDocD, throwDocD,
+    freeDocD, throwDocD, stratDocD,
     notOpDocD, negateOpDocD, sqrtOpDocD, absOpDocD, logOpDocD, lnOpDocD, 
     expOpDocD, sinOpDocD, cosOpDocD, tanOpDocD, unOpDocD, equalOpDocD, 
     notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
@@ -41,11 +41,12 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), bracket
 -- | Takes code, filenames, and extensions
 makeCode :: [Doc] -> [Label] -> [Label] -> [(FilePath, Doc)]
 makeCode files names exts =
-    [(name ++ ext, file) | (name, (file, ext)) <- zip (duplicateListElems names) (zip files (cycle exts))]
+    [(name ++ ext, file) | (name, (file, ext)) <- zip (repeatListElems (length exts) names) (zip files (cycle exts))]
 
-duplicateListElems :: [a] -> [a]
-duplicateListElems [] = []
-duplicateListElems (x:xs) = x:x:duplicateListElems xs
+repeatListElems :: Int -> [a] -> [a]
+repeatListElems _ [] = []
+repeatListElems 1 xs = xs
+repeatListElems n (x:xs) = (take n (repeat x)) ++ repeatListElems n xs
 
 ------------------
 -- IO Functions --
@@ -225,6 +226,11 @@ tryCatchDocD tb cb = vcat [
     rbrace <+> text "catch" <+> parens (text "System.Exception" <+> text "exc") <+> lbrace,
     oneTab $ cb,
     rbrace]
+
+stratDocD :: Doc -> Doc -> Doc
+stratDocD b resultState = vcat [
+    b,
+    resultState]
 
 -- Statements --
 

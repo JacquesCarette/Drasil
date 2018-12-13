@@ -12,7 +12,7 @@ import New (Declaration, StateVar, Scope, Label, Library,
   IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
 import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, progDocD, ioDocOutD, boolTypeDocD, intTypeDocD,
   charTypeDocD, typeDocD, listTypeDocD, ifCondDocD, switchDocD, forDocD, 
-  forEachDocD, whileDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
+  forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
   varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, statementDocD, returnDocD,
   
   commentDocD, notOpDocD, negateOpDocD, unOpDocD, equalOpDocD, 
@@ -27,6 +27,7 @@ import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, progDocD, ioDocOutD, 
 import Helpers (blank,angles,oneTab,vibmap)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan)
+import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals, 
   semi, vcat, lbrace, rbrace, doubleQuotes, render, colon)
@@ -175,6 +176,14 @@ instance ControlSym JavaCode where
 
     tryCatch tb cb = liftA2 jTryCatch tb cb
 
+    checkState l cs c = switch (var l) cs c
+    runStrategy l strats rv av = 
+        case Map.lookup l (Map.fromList strats) of Nothing -> error $ "Strategy '" ++ l ++ "': RunStrategy called on non-existent strategy."
+                                                   Just b  -> liftA2 stratDocD b (state resultState)
+        where resultState = case av of Nothing    -> return empty
+                                       Just vari  -> case rv of Nothing  -> error $ "Strategy '" ++ l ++ "': Attempt to assign null return to a Value."
+                                                                Just res -> assign vari res
+
     statement s = state s
     statements s = block s
 
@@ -322,6 +331,9 @@ instance PreStatementSym JavaCode where
     free _ = error "Cannot free variables in Java" -- could set variable to null?
 
     throw errMsg = liftA jThrowDoc (litString errMsg)
+
+    initState fsmName initialState = varDecDef fsmName string (litString initialState)
+    changeState fsmName toState = fsmName &.= (litString toState)
 
 instance StatementSym JavaCode where
     type Statement JavaCode = Doc

@@ -16,11 +16,20 @@ main = do
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False "java"
   setCurrentDirectory "java"
-  genCode [unJC helloWorld] ["HelloWorld"] [".java"]
+  genCode (map unJC [helloWorld, patternTest]) ["HelloWorld", "PatternTest"] [".java"]
   setCurrentDirectory workingDir
     
 genCode :: [Doc] -> [Label] -> [Label] -> IO()
 genCode files names exts = createCodeFiles $ makeCode files names exts
+
+patternTest :: (RenderSym repr) => repr (RenderFile repr)
+patternTest = fileDoc ( prog [ (statements [(varDec "n" int), (initState "myFSM" "Off"), (changeState "myFSM" "On")]),
+  (checkState "myFSM" 
+    [((litString "Off"), oneLiner (printStrLn "Off")), ((litString "On"), oneLiner (printStrLn "On"))] 
+    (oneLiner (printStrLn "In"))),
+  (runStrategy "myStrat" 
+    [("myStrat", oneLiner (printStrLn "myStrat")), ("yourStrat", oneLiner (printStrLn "yourStrat"))]
+    (Just (litInt 3)) (Just (var "n")))])
 
 helloWorld :: (RenderSym repr) => repr (RenderFile repr)
 helloWorld = fileDoc ( prog [ helloInitVariables,

@@ -123,6 +123,9 @@ class (BodySym repr) => ControlSym repr where
 
     tryCatch :: repr (Body repr) -> repr (Body repr) -> repr (Control repr)
 
+    checkState :: Label -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Control repr)
+    runStrategy :: Label -> [(Label, repr (Body repr))] -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Control repr)
+
     statement :: repr (PreStatement repr) -> repr (Control repr)
     statements :: [repr (PreStatement repr)] -> repr (Control repr)
 
@@ -196,6 +199,9 @@ class (PermanenceSym repr, StateTypeSym repr, ValueSym repr, IOStSym repr) => Pr
     free :: repr (Value repr) -> repr (PreStatement repr)
 
     throw :: Label -> repr (PreStatement repr)
+
+    initState :: Label -> Label -> repr (PreStatement repr)
+    changeState :: Label -> Label -> repr (PreStatement repr)
 
 class (PreStatementSym repr, IOStSym repr) => StatementSym repr where
     type Statement repr

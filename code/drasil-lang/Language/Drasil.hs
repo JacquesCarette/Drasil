@@ -170,7 +170,7 @@ module Language.Drasil (
   , assumpDB, RefMap, simpleMap
   , citationRefTable
   -- RefTypes
-  , RefAdd, RefType(Cite, Tab, EqnB, Def, Lst, Link, Sect, Blank, Assump)
+  , RefAdd, RefType(Cite, Tab, Def, Lst, Link, Sect, Assump)
   , LinkType(Internal, Cite2, External)
   -- Label
   , Label 

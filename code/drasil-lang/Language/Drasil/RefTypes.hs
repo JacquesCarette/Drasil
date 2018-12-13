@@ -19,9 +19,7 @@ data RefType = Tab    -- ^ Table
              | Sect   -- ^ Section
              | Def DType  -- ^ Definition (includes theoretical models) (DType used to set shortnames)
              | Assump -- ^ Assumption
-             | EqnB   -- ^ Equation Block
              | Cite   -- ^ Citation
-             | Blank  -- ^ Prefix filler for ConceptInstance
              | DeferredCC UID  -- ^ For ConceptInstances --FIXME: Used by References to create a Deferred ShortName (#562)
              | Link -- ^ URI
 
@@ -40,7 +38,5 @@ instance Show RefType where
   show (Def _)= "Definition"
   show Assump = "Assumption"
   show Cite   = "Citation"
-  show EqnB   = "Equation"
-  show Blank  = "Blank"
   show (DeferredCC _) = error "Cannot directly display deferred reference types." -- FIXME
   show Link   = "Link"

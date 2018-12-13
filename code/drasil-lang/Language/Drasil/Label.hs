@@ -33,9 +33,7 @@ getAcc Fig       = "Figure:"
 getAcc Sect      = "Sec:"
 getAcc (Def dtp) = getDefName dtp
 getAcc Assump    = "A:"
-getAcc EqnB      = "Eqn:"
 getAcc Cite      = "Cite:"
-getAcc Blank     = error "Why are we getting the acronym of a Blank?"
 getAcc (DeferredCC _) = error "DeferredCC RefType should not be directly used."
 getAcc Link      = "Link:"
 

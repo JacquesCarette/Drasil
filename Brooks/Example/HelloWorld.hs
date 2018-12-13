@@ -1,9 +1,9 @@
 module Example.HelloWorld (helloWorld) where
 
 import New (Declaration, StateVar, Scope, Label, Library,
-  RenderSym(..), KeywordSym(..), PermanenceSym(..), ClassSym(..), MethodSym(..), 
+  RenderSym(..), KeywordSym(..), PermanenceSym(..), InputTypeSym(..), ClassSym(..), MethodSym(..), 
   ProgramBodySym(..), BodySym(..), BlockSym(..), ControlSym(..), StateTypeSym(..), 
-  PreStatementSym(..), StatementSym(..), IOTypeSym(..),
+  PreStatementSym(..), StatementSym(..),
   IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
 import NewLanguageRenderer (makeCode, createCodeFiles)
 import LanguageRenderer.NewJavaRenderer (JavaCode(..))
@@ -65,14 +65,17 @@ helloIfBody = body [
     (&.~-) "b",
 
     listDec "myList" 5 (intListType static),
-    listDecDef "myOtherList" (floatListType static) [(litFloat 1.0), (litFloat 1.5)],
     objDecDef "myObj" char (litChar 'o'),
     constDecDef "myConst" string (litString "Imconstant"),
 
     printLn (int) (var "a"),
     printLn (int) (var "b"),
     printLn (int) (var "c"),
-    printLn (int) (var "d")],
+    printLn (int) (var "d"),
+    printLnList (float) (var "myOtherList"),
+    
+    getInput inputInt (var "d"),
+    discardInput inputInt],
   
   block [
     printLn (bool) (litTrue ?&& litFalse),

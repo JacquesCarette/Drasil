@@ -7,7 +7,7 @@ module NewLanguageRenderer (
     classDec, dot, doubleSlash, forLabel, new,
     
     -- * Default Functions available for use in renderers
-    fileDoc', blockDocD, bodyDocD, progDocD, ioDocOutD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
+    fileDoc', blockDocD, bodyDocD, progDocD, outDocD, printListDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
     charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD,
     ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD,
     assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
@@ -122,10 +122,13 @@ progDocD cs = vibcat controls
 -- statementDocD :: Config -> StatementLocation -> Statement -> Doc
 -- statementDocD c _ (IOState io) = ioDoc c io
 
-ioDocOutD :: Doc -> Doc -> Doc
-ioDocOutD printFn v = printFn <> parens (v)
+outDocD :: Doc -> Doc -> Doc
+outDocD printFn v = printFn <> parens (v)
 
--- Replaced by ioDocOutD
+printListDocD :: Doc -> Doc -> Doc -> Doc
+printListDocD open b close = vcat [open, b, close]
+
+-- Replaced by outDocD
 -- printDocConsoleD :: Bool -> Doc -> Doc
 -- printDocConsoleD newLn v = printFn <> parens (valueDoc c v)
 --     where printFn = if newLn then printLnFunc c else printFunc c

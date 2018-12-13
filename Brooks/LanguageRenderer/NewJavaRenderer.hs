@@ -6,11 +6,12 @@ module LanguageRenderer.NewJavaRenderer (
 ) where
 
 import New (Declaration, StateVar, Scope, Label, Library,
-  RenderSym(..), KeywordSym(..), PermanenceSym(..), ClassSym(..), MethodSym(..), 
+  RenderSym(..), KeywordSym(..), PermanenceSym(..), InputTypeSym(..), ClassSym(..), MethodSym(..), 
   ProgramBodySym(..), BodySym(..), BlockSym(..), ControlSym(..), StateTypeSym(..),
-  PreStatementSym(..),  StatementSym(..), IOTypeSym(..),
+  PreStatementSym(..),  StatementSym(..),
   IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
-import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, progDocD, ioDocOutD, boolTypeDocD, intTypeDocD,
+import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, progDocD, outDocD, 
+  printListDocD, boolTypeDocD, intTypeDocD,
   charTypeDocD, typeDocD, listTypeDocD, ifCondDocD, switchDocD, forDocD, 
   forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
   varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, statementDocD, returnDocD,
@@ -100,10 +101,6 @@ instance KeywordSym JavaCode where
     endStatementLoop = return empty
     include = return $ includeD "import"
     list _ = return $ text "ArrayList"
-    printFunc = return $ text "System.out.print"
-    printLnFunc = return $ text "System.out.println"
-    printFileFunc f = liftA jPrintFileFunc f
-    printFileLnFunc f = liftA jPrintFileLnFunc f
     argsList = return $ text "args"
     listObj = return new
     blockStart = return lbrace
@@ -113,6 +110,19 @@ instance KeywordSym JavaCode where
     iterForEachLabel = return forLabel
     iterInLabel = return colon
     commentStart = return doubleSlash
+    inputFunc = return (parens (text "new Scanner(System.in)"))
+    
+    printFunc = return $ text "System.out.print"
+    printLnFunc = return $ text "System.out.println"
+    printFileFunc f = liftA jPrintFileFunc f
+    printFileLnFunc f = liftA jPrintFileLnFunc f
+
+instance InputTypeSym JavaCode where
+    type InputType JavaCode = Doc
+    inputInt = return $ text "nextInt()"
+    inputFloat = return $ text "nextDouble()"
+    inputBool = return $ text "nextBoolean()"
+    inputString = return $ text "nextLine()"
 
 instance PermanenceSym JavaCode where
     type Permanence JavaCode = Doc
@@ -280,11 +290,9 @@ instance ValueSym JavaCode where
     exists v = v
     notNull v = liftA3 notNullDocD v notEqualOp (var "null")
 
-instance IOTypeSym JavaCode
-
 instance IOStSym JavaCode where
     type IOSt JavaCode = Doc
-    out prf v = liftA2 ioDocOutD prf v
+    out prf v = liftA2 outDocD prf v
 
 instance PreStatementSym JavaCode where
     type PreStatement JavaCode = Doc
@@ -317,6 +325,16 @@ instance PreStatementSym JavaCode where
     printFileLn f _ v = out (printFileLnFunc f) v
     printFileStr f s = out (printFileFunc f) (litString s)
     printFileStrLn f s = out (printFileLnFunc f) (litString s)
+
+    printList t v = liftA3 printListDocD (state (printStr "[")) (forEach "listElem" t v (bodyStatements [print t (var "listElem"), printStr ","])) (printStr "]")
+    printLnList t v = liftA3 printListDocD (state (printStr "[")) (forEach "listElem" t v (bodyStatements [print t (var "listElem"), printStr ","])) (printStrLn "]")
+    printFileList f t v = liftA3 printListDocD (state (printFileStr f "[")) (forEach "listElem" t v (bodyStatements [printFile f t (var "listElem"), printFileStr f ","])) (printFileStr f "]")
+    printFileLnList f t v = liftA3 printListDocD (state (printFileStr f "[")) (forEach "listElem" t v (bodyStatements [printFile f t (var "listElem"), printFileStr f ","])) (printFileStrLn f "]")
+
+    getInput it v = liftA3 jInput it v inputFunc
+    discardInput _ = liftA jDiscardInput inputFunc
+    getFileInput f it v = liftA3 jInput it v f
+    discardFileInput f = liftA jDiscardInput f
 
     break = return breakDocD  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
     continue = return continueDocD
@@ -392,3 +410,9 @@ jTryCatch tb cb= vcat [
     rbrace <+> text "catch" <+> parens (text "Exception" <+> text "exc") <+> lbrace,
     oneTab $ cb,
     rbrace]
+
+jDiscardInput :: Doc -> Doc
+jDiscardInput inFn = inFn <> dot <> text "next()"
+
+jInput :: Doc -> Doc -> Doc -> Doc
+jInput it v inFn = v <+> equals <+> parens (inFn <> dot <> it) -- Changed from original GOOL, original GOOL was wrong.

@@ -5,9 +5,9 @@ module New (
     Declaration, StateVar, Scope,
     Label, Library, 
     -- Typeclasses
-    RenderSym(..), KeywordSym(..), PermanenceSym(..), ClassSym(..), MethodSym(..), 
+    RenderSym(..), KeywordSym(..), InputTypeSym(..), PermanenceSym(..), ClassSym(..), MethodSym(..), 
     ProgramBodySym(..), BodySym(..), ControlSym(..), BlockSym(..), StateTypeSym(..), 
-    PreStatementSym(..), StatementSym(..), IOTypeSym(..),
+    PreStatementSym(..), StatementSym(..),
     IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..)
 ) where
 
@@ -51,10 +51,6 @@ class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
     endStatementLoop :: repr (Keyword repr)
     include :: repr (Keyword repr)
     list :: repr (Permanence repr) -> repr (Keyword repr)
-    printFunc :: repr (Keyword repr)
-    printLnFunc :: repr (Keyword repr)
-    printFileFunc :: repr (Value repr) -> repr (Keyword repr)
-    printFileLnFunc :: repr (Value repr) -> repr (Keyword repr)
     argsList :: repr (Keyword repr)
     listObj :: repr (Keyword repr)
     blockStart :: repr (Keyword repr)
@@ -64,6 +60,20 @@ class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
     iterForEachLabel :: repr (Keyword repr)
     iterInLabel :: repr (Keyword repr)
     commentStart :: repr (Keyword repr)
+
+    inputFunc :: repr (Keyword repr)
+
+    printFunc :: repr (Keyword repr)
+    printLnFunc :: repr (Keyword repr)
+    printFileFunc :: repr (Value repr) -> repr (Keyword repr)
+    printFileLnFunc :: repr (Value repr) -> repr (Keyword repr)
+
+class InputTypeSym repr where
+    type InputType repr
+    inputInt :: repr (InputType repr)
+    inputFloat :: repr (InputType repr)
+    inputBool :: repr (InputType repr)
+    inputString :: repr (InputType repr)
 
 class PermanenceSym repr where
     type Permanence repr
@@ -129,7 +139,7 @@ class (BodySym repr) => ControlSym repr where
     statement :: repr (PreStatement repr) -> repr (Control repr)
     statements :: [repr (PreStatement repr)] -> repr (Control repr)
 
-class (PermanenceSym repr, StateTypeSym repr, ValueSym repr, IOStSym repr) => PreStatementSym repr where
+class (PermanenceSym repr, StateTypeSym repr, ValueSym repr, IOStSym repr, InputTypeSym repr) => PreStatementSym repr where
     type PreStatement repr
     (&=)   :: repr (Value repr) -> repr (Value repr) -> repr (PreStatement repr)
     (&.=)  :: Label -> repr (Value repr) -> repr (PreStatement repr)
@@ -165,17 +175,18 @@ class (PermanenceSym repr, StateTypeSym repr, ValueSym repr, IOStSym repr) => Pr
     printStr   :: String -> repr (PreStatement repr)
     printStrLn :: String -> repr (PreStatement repr)
 
-    print'      :: repr (IOType repr) -> repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
-    printLn'    :: repr (IOType repr) -> repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
-    printStr'   :: repr (IOType repr) -> String -> repr (PreStatement repr)
-    printStrLn' :: repr (IOType repr) -> String -> repr (PreStatement repr)
-
     printFile      :: repr (Value repr) -> repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
     printFileLn    :: repr (Value repr) -> repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
     printFileStr   :: repr (Value repr) -> String -> repr (PreStatement repr)
     printFileStrLn :: repr (Value repr) -> String -> repr (PreStatement repr)
 
-    getInput         :: repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
+    printList       :: repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
+    printLnList     :: repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
+    printFileList   :: repr (Value repr) -> repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
+    printFileLnList :: repr (Value repr) -> repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
+
+    getInput         :: repr (InputType repr) -> repr (Value repr) -> repr (PreStatement repr)
+    discardInput     :: repr (InputType repr) -> repr (PreStatement repr)
     getFileInput     :: repr (Value repr) -> repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
     discardFileInput :: repr (Value repr) -> repr (PreStatement repr)
     getFileInputLine :: repr (Value repr) -> repr (Value repr) -> repr (PreStatement repr)
@@ -209,11 +220,6 @@ class (PreStatementSym repr, IOStSym repr) => StatementSym repr where
 
     state :: repr (PreStatement repr) -> repr (Statement repr)
     loopState :: repr (PreStatement repr) -> repr (Statement repr)
-
-class ValueSym repr => IOTypeSym repr where
-    type IOType repr
-    console :: repr (IOType repr)
-    file    :: repr (Value repr) -> repr (IOType repr)
 
 class (KeywordSym repr, ValueSym repr) => IOStSym repr where
     type IOSt repr

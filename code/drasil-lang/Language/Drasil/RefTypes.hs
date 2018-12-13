@@ -2,8 +2,6 @@
 module Language.Drasil.RefTypes(
   RefAdd, RefType(..), DType(..), LinkType(..)) where
 
-import Language.Drasil.UID (UID)
-
 -- | Types of definitions
 data DType = General
            | Instance
@@ -20,7 +18,6 @@ data RefType = Tab    -- ^ Table
              | Def DType  -- ^ Definition (includes theoretical models) (DType used to set shortnames)
              | Assump -- ^ Assumption
              | Cite   -- ^ Citation
-             | DeferredCC UID  -- ^ For ConceptInstances --FIXME: Used by References to create a Deferred ShortName (#562)
              | Link -- ^ URI
 
 -- we do need to know a bit more about references, such as whether they are
@@ -38,5 +35,4 @@ instance Show RefType where
   show (Def _)= "Definition"
   show Assump = "Assumption"
   show Cite   = "Citation"
-  show (DeferredCC _) = error "Cannot directly display deferred reference types." -- FIXME
   show Link   = "Link"

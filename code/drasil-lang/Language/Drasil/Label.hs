@@ -38,7 +38,6 @@ getAcc UnCh      = "UC:"
 getAcc Assump    = "A:"
 getAcc EqnB      = "Eqn:"
 getAcc Cite      = "Cite:"
-getAcc (Label x) = getAcc x
 getAcc Blank     = error "Why are we getting the acronym of a Blank?"
 getAcc (DeferredCC _) = error "DeferredCC RefType should not be directly used."
 getAcc Link      = "Link:"

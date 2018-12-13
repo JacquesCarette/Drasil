@@ -25,7 +25,6 @@ data RefType = Tab    -- ^ Table
              | Req ReqType
              | EqnB   -- ^ Equation Block
              | Cite   -- ^ Citation
-             | Label RefType    -- ^ Label --FIXME: hack (#971)
              | Blank  -- ^ Prefix filler for ConceptInstance
              | DeferredCC UID  -- ^ For ConceptInstances --FIXME: Used by References to create a Deferred ShortName (#562)
              | Link -- ^ URI
@@ -42,7 +41,6 @@ instance Show RefType where
   show Lst    = "List"
   show Fig    = "Figure"
   show Sect   = "Section"
-  show (Label x) = show x --FIXME: hack (#971)
   show (Def _)= "Definition"
   show (Req _)= "Requirement"
   show Assump = "Assumption"

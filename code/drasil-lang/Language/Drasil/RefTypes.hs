@@ -1,6 +1,6 @@
 -- | Contains the types associated to references
 module Language.Drasil.RefTypes(
-  RefAdd, RefType(..), DType(..), ReqType(..), LinkType(..)) where
+  RefAdd, RefType(..), DType(..), LinkType(..)) where
 
 import Language.Drasil.UID (UID)
 
@@ -12,7 +12,6 @@ data DType = General
 
 type RefAdd = String
 
-data ReqType = FR | NFR
 -- | For building references. Defines the possible type of reference.
 data RefType = Tab    -- ^ Table
              | Lst   -- ^ List
@@ -20,7 +19,6 @@ data RefType = Tab    -- ^ Table
              | Sect   -- ^ Section
              | Def DType  -- ^ Definition (includes theoretical models) (DType used to set shortnames)
              | Assump -- ^ Assumption
-             | Req ReqType
              | EqnB   -- ^ Equation Block
              | Cite   -- ^ Citation
              | Blank  -- ^ Prefix filler for ConceptInstance
@@ -40,7 +38,6 @@ instance Show RefType where
   show Fig    = "Figure"
   show Sect   = "Section"
   show (Def _)= "Definition"
-  show (Req _)= "Requirement"
   show Assump = "Assumption"
   show Cite   = "Citation"
   show EqnB   = "Equation"

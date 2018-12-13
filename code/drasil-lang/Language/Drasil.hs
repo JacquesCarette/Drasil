@@ -170,8 +170,7 @@ module Language.Drasil (
   , assumpDB, RefMap, simpleMap
   , citationRefTable
   -- RefTypes
-  , RefAdd, RefType(Cite, Tab, EqnB, Req, Def, Lst, Link, Sect, Blank, Assump)
-  , ReqType(FR, NFR)
+  , RefAdd, RefType(Cite, Tab, EqnB, Def, Lst, Link, Sect, Blank, Assump)
   , LinkType(Internal, Cite2, External)
   -- Label
   , Label 
@@ -314,7 +313,7 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
 import Language.Drasil.RefTypes(RefAdd, RefType(..),
-  DType(..), ReqType(FR, NFR), LinkType(Internal, Cite2, External))
+  DType(..), LinkType(Internal, Cite2, External))
 import Language.Drasil.RefProg(RefProg(..), IRefProg(..), Reference(Reference))
 import Language.Drasil.Label (mkLabelRA', mkLabelSame, mkLabelRALst,
   mkURILabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec)

@@ -5,12 +5,6 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (output_, simulation, quantity, 
   input_, physical, constraint, condition, property, funcReqDom)
 import Drasil.DocLang (nonFuncReqF)
-{-
-import Drasil.SWHS.Labels (inputInitQuantsL, useAboveFindMassL, checkWithPhysConstsL, 
-  outputInputDerivQuantsL, calcTempWtrOverTimeL, calcTempPCMOverTimeL,
-  calcChgHeatEnergyWtrOverTimeL, calcChgHeatEnergyPCMOverTimeL,
-  verifyEnergyOutputL, calcPCMMeltBeginL, calcPCMMeltEndL)
--}
 
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics (time, energy)

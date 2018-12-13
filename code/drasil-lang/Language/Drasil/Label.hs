@@ -34,7 +34,6 @@ getAcc Sect      = "Sec:"
 getAcc (Def dtp) = getDefName dtp
 getAcc Assump    = "A:"
 getAcc Cite      = "Cite:"
-getAcc Link      = "Link:"
 
 -- | Automatically create the label for a definition
 -- FIXME: Duplicated from Document.hs!

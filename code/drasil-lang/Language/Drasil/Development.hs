@@ -6,7 +6,7 @@ module Language.Drasil.Development (
   , (^:), (/:), (*:), (*$), (/$),(^$), new_unit
   , scale, shift
   , derUC, derUC', derUC''
-  , fund, comp_unitdefn, derCUC, derCUC', derCUC''
+  , fund, fund', comp_unitdefn, derCUC, derCUC', derCUC''
   , unitWrapper, getCu, MayHaveUnit(getUnit)
   -- NounPhrase
   , NounPhrase(phraseNP,pluralNP)
@@ -17,6 +17,6 @@ import Language.Drasil.Development.Unit (UnitDefn(..)
   , (^:), (/:), (*:), (*$), (/$),(^$), new_unit
   , scale, shift
   , derUC, derUC', derUC''
-  , fund, comp_unitdefn, derCUC, derCUC', derCUC''
+  , fund, fund', comp_unitdefn, derCUC, derCUC', derCUC''
   , makeDerU, unitWrapper, getCu, MayHaveUnit(getUnit))
 import Language.Drasil.NounPhrase (NounPhrase(phraseNP,pluralNP))

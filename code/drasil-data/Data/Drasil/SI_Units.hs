@@ -27,7 +27,8 @@ candela  = fund "candela"  "luminous intensity"   "cd"
 ------------- Commonly defined units -------------------------------------------
 
 degree :: UnitDefn --FIXME: define degree in terms of radians and pi
-degree = UD (dcc "degree" (cn' "degree") "angle") (Just $ US [(Special Circle,1)]) Nothing Nothing ["degree"]
+-- degree = UD (dcc "degree" (cn' "degree") "angle") (BaseSI (US [(Special Circle,1)])) ["degree"]
+degree = fund' "degree" "angle" (Special Circle)
 
 -- Some of these units are easiest to define via others less common names, 
 -- which we define first.

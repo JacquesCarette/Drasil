@@ -5,19 +5,19 @@ module Language.Drasil.Development.Unit (
   , (^:), (/:), (*:), (*$), (/$),(^$), new_unit
   , scale, shift
   , derUC, derUC', derUC''
-  , fund, comp_unitdefn, derCUC, derCUC', derCUC''
+  , fund, fund', comp_unitdefn, derCUC, derCUC', derCUC''
   , unitWrapper, getCu, MayHaveUnit(getUnit)
   , IsUnit(getUnits)
   ) where
 
 import Control.Lens ((^.), makeLenses, view)
 import Control.Arrow (second)
-import Data.Maybe
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), HasUnitSymbol(usymb), IsUnit(udefn, getUnits))
 import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cc')
 import Language.Drasil.Symbol (Symbol(Atomic))
-import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift), comp_usymb, from_udefn)
+import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift), 
+  comp_usymb, from_udefn, get_usymb, get_defn, UnitSymbol(BaseSI, DerivedSI, Defined))
 import Language.Drasil.UID
 import Language.Drasil.NounPhrase (cn,cn',NP)
 
@@ -26,11 +26,9 @@ import Language.Drasil.NounPhrase (cn,cn',NP)
 -- has a unit symbol, maybe another (when it is a synonym),
 -- perhaps a definition, and the list of UID of the units that make up
 -- the definition.
-data UnitDefn = UD { _vc :: ConceptChunk, 
-                     _fsymb :: Maybe USymb,
-                     _dsymb :: Maybe USymb,
-                     _ud :: Maybe UDefn,
-                     _cu :: [UID]}
+data UnitDefn = UD { _vc :: ConceptChunk 
+                   , _cas :: UnitSymbol
+                   , _cu :: [UID] }
 makeLenses ''UnitDefn
 
 instance HasUID        UnitDefn where uid = vc . uid
@@ -39,46 +37,43 @@ instance Idea          UnitDefn where getA c = getA (c ^. vc)
 instance Definition    UnitDefn where defn = vc . defn
 instance Eq            UnitDefn where a == b = (usymb a) == (usymb b)
 instance ConceptDomain UnitDefn where cdom = vc . cdom
-instance HasUnitSymbol UnitDefn where usymb u = if (isNothing $ u ^. fsymb) then (fromJust $ u ^. dsymb)
-                                                  else (fromJust $ u ^. fsymb)
-instance IsUnit        UnitDefn where udefn = ud
+instance HasUnitSymbol UnitDefn where usymb = get_usymb . view cas
+instance IsUnit        UnitDefn where udefn = get_defn . view cas
                                       getUnits u = view cu u
 class MayHaveUnit u where
    getUnit :: u -> Maybe UnitDefn
 
-data UnitEquation = UE {_contributingUnit :: [UID], _us :: USymb}
+data UnitEquation = UE {_contributingUnit :: [UID]
+                       , _us :: USymb}
 makeLenses ''UnitEquation
 instance HasUnitSymbol UnitEquation where usymb u = u ^. us
-
-getSecondSymb :: UnitDefn -> Maybe USymb
-getSecondSymb c = view fsymb c
 
 getCu :: UnitEquation -> [UID]
 getCu a = view contributingUnit a
 
 -- | Create a derived unit chunk from a concept and a unit equation
 makeDerU :: ConceptChunk -> UnitEquation -> UnitDefn
-makeDerU concept eqn = UD concept Nothing (Just $ from_udefn $ USynonym $ usymb eqn) (Just $ USynonym $ usymb eqn) (getCu eqn)
+makeDerU concept eqn = UD concept (Defined (usymb eqn) (USynonym $ usymb eqn)) (getCu eqn)
 
 -- | Create a SI_Unit with two symbol representations
 derCUC, derCUC' :: String -> String -> String -> Symbol -> UnitEquation -> UnitDefn
-derCUC a b c s ue = UD (dcc a (cn b) c) (Just $ US [(s,1)]) (Just $ usymb ue) (Just $ USynonym $ usymb ue) [a]
-derCUC' a b c s ue = UD (dcc a (cn' b) c) (Just $ US [(s,1)]) (Just $ usymb ue) (Just $ USynonym $ usymb ue) [a]
+derCUC a b c s ue = UD (dcc a (cn b) c) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) [a]
+derCUC' a b c s ue = UD (dcc a (cn' b) c) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) [a]
 -- | 
 -- | Create a derived unit chunk from an id, term (as 'String'), definition,
 -- symbol, and unit equation
 derUC, derUC' :: String -> String -> String -> Symbol -> UDefn -> UnitDefn
 -- | Uses self-plural term
-derUC  a b c s u = UD (dcc a (cn b) c) (Just $ US [(s,1)]) (Just $ from_udefn u) (Just u) []
+derUC  a b c s u = UD (dcc a (cn b) c) (DerivedSI (US [(s,1)]) (from_udefn u) u) []
 -- | Uses term that pluralizes by adding *s* to the end
-derUC' a b c s u = UD (dcc a (cn' b) c) (Just $ US [(s,1)]) (Just $ from_udefn u) (Just u) []
+derUC' a b c s u = UD (dcc a (cn' b) c) (DerivedSI (US [(s,1)]) (from_udefn u) u) []
 
 derCUC'' :: String -> NP -> String -> Symbol -> UnitEquation -> UnitDefn
-derCUC'' a b c s ue = UD (dcc a b c) (Just $ US [(s,1)]) (Just $ usymb ue) (Just $ USynonym $ usymb ue) (getCu ue)
+derCUC'' a b c s ue = UD (dcc a b c) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) (getCu ue)
 -- | Create a derived unit chunk from an id, term (as noun phrase), definition, 
 -- symbol, and unit equation
 derUC'' :: String -> NP -> String -> Symbol -> UDefn -> UnitDefn
-derUC'' a b c s u = UD (dcc a b c) (Just $ US [(s,1)]) (Just $ from_udefn u) (Just u) []
+derUC'' a b c s u = UD (dcc a b c) (DerivedSI (US [(s,1)]) (from_udefn u) u) []
 
 --FIXME: Make this use a meaningful identifier.
 -- | Helper for fundamental unit concept chunk creation. Uses the same string
@@ -90,7 +85,16 @@ unitCon s = dcc s (cn' s) s
 -- | For allowing lists to mix the two, thus forgetting
 -- the definition part
 unitWrapper :: (IsUnit u)  => u -> UnitDefn
-unitWrapper u = UD (cc' u (u ^. defn)) (Just $ usymb u) Nothing (u ^. udefn) (getUnits u)
+unitWrapper u = UD (cc' u (u ^. defn)) (Defined (usymb u) (USynonym $ usymb u)) (getUnits u)
+
+getSecondSymb :: UnitDefn -> Maybe USymb
+getSecondSymb c = get_symb2 $ view cas c
+  where
+    get_symb2 :: UnitSymbol -> Maybe USymb
+    get_symb2 (BaseSI _) = Nothing
+    get_symb2 (DerivedSI _ v _) = Just v
+    get_symb2 (Defined _ _) = Nothing
+
 
 helperUnit :: UnitDefn -> [UID]
 helperUnit a = case getSecondSymb a of
@@ -149,7 +153,11 @@ new_unit s u = makeDerU (unitCon s) u
 
 -- | Smart constructor for a "fundamental" unit
 fund :: String -> String -> String -> UnitDefn
-fund nam desc sym = UD (dcc nam (cn' nam) desc) (Just $ US [(Atomic sym, 1)]) Nothing Nothing [nam]
+fund nam desc sym = UD (dcc nam (cn' nam) desc) (BaseSI $ US [(Atomic sym, 1)]) [nam]
+
+-- | Variant of the above, useful for degree
+fund' :: String -> String -> Symbol -> UnitDefn
+fund' nam desc sym = UD (dcc nam (cn' nam) desc) (BaseSI $ US [(sym, 1)]) [nam]
 
 -- | We don't want an Ord on units, but this still allows us to compare them
 comp_unitdefn :: UnitDefn -> UnitDefn -> Ordering

@@ -1,6 +1,6 @@
 module Language.Drasil.UnitLang (
-    USymb(US), UDefn(..)
-  , from_udefn, comp_usymb
+    USymb(US), UDefn(..), UnitSymbol(BaseSI, DerivedSI, Defined)
+  , from_udefn, comp_usymb, get_usymb, get_defn
   ) where
 
 import Language.Drasil.Symbol (Symbol, compsy)
@@ -29,3 +29,21 @@ comp_usymb :: USymb -> USymb -> Ordering
 comp_usymb (US l)  (US m)  = foldl mappend EQ $ zipWith comp l m
   where
     comp (s1, i1) (s2, i2) = compsy s1 s2 `mappend` compare i1 i2
+
+-- | When we define units, they come in three flavours:
+-- SI (base) units, derived SI units (aka synonyms), and defined units.
+-- The type below captures that knowledge.
+data UnitSymbol =
+     BaseSI USymb
+   | DerivedSI USymb USymb UDefn
+   | Defined USymb UDefn
+
+get_usymb :: UnitSymbol -> USymb
+get_usymb (BaseSI u) = u
+get_usymb (DerivedSI u _ _) = u
+get_usymb (Defined u _) = u
+
+get_defn :: UnitSymbol -> Maybe UDefn
+get_defn (BaseSI _) = Nothing
+get_defn (DerivedSI _ _ d) = Just d
+get_defn (Defined _ d) = Just d

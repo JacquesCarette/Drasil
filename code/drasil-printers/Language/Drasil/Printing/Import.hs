@@ -282,8 +282,6 @@ spec sm (Ch SymbolStyle s)  = P.E $ symbol $ lookupC sm s
 spec sm (Ch TermStyle s)    = spec sm $ lookupT sm s
 spec sm (Ch ShortStyle s)   = spec sm $ lookupS sm s
 spec sm (Ch PluralTerm s)   = spec sm $ lookupP sm s
-spec sm (Ref (Reference t r sn))   = P.Ref t r (spec sm (S . getStringSN $ resolveSN sn $
-  lookupDeferredSN sm)) sn --FIXME: sn passed in twice?
 spec sm (Ref2 (Reference2 _ (RP rp) ra sn)) = 
   P.Ref2 Internal ra $ spec sm $ renderShortName sm rp sn
 spec sm (Ref2 (Reference2 _ Citation ra sn)) = 
@@ -305,10 +303,6 @@ renderURI _ sn = S $ getStringSN sn
 
 renderCitation :: ctx -> ShortName -> Sentence
 renderCitation _ sn = S $ getStringSN sn
-
-lookupDeferredSN :: (HasDefinitionTable ctx) => ctx -> UID -> String
-lookupDeferredSN ctx u = maybe "" (\x -> x ++ ": ") $
-  getA $ defLookup u $ ctx ^. defTable
 
 -- | Translates from Document to the Printing representation of Document
 makeDocument :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasTermTable ctx,

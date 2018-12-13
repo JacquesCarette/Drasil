@@ -1,8 +1,7 @@
 -- | Contains the types associated to references
 module Language.Drasil.RefTypes(
-  RefAdd, RefType(..), DType(..), Reference(Reference), ReqType(..), LinkType(..)) where
+  RefAdd, RefType(..), DType(..), ReqType(..), LinkType(..)) where
 
-import Language.Drasil.ShortName (ShortName)
 import Language.Drasil.UID (UID)
 
 -- | Types of definitions
@@ -37,8 +36,6 @@ data RefType = Tab    -- ^ Table
 -- \ref (or \hyperref) and \cite in LaTeX.
 -- in a sense, Cite2 is a very special kind of External reference.
 data LinkType = Internal | Cite2 | External
-
-data Reference = Reference RefType RefAdd ShortName
 
 instance Show RefType where
   show Tab    = "Table"

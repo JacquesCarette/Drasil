@@ -14,7 +14,6 @@ module Language.Drasil.Classes (
   , IsUnit(udefn, getUnits)
   , HasLabel(getLabel)
   , UnitEq(uniteq)
-  , HasReference(getReferences)
   , HasReference2(getReferences2) -- hack for now...
   , CommonIdea(abrv)
   , Constrained(constraints)
@@ -40,7 +39,6 @@ import Language.Drasil.UnitLang(UDefn, USymb)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Core (Label)
 import Language.Drasil.NounPhrase.Core (NP)
-import Language.Drasil.RefTypes (Reference)
 import Language.Drasil.RefProg (Reference2)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Sentence (Sentence)
@@ -81,9 +79,6 @@ class (Idea c, Definition c, ConceptDomain c) => Concept c where
 -- | HasSpace is anything which has a Space...
 class HasSpace c where
   typ      :: Lens' c Space
-
-class HasReference c where
-  getReferences :: Lens' c [Reference]
 
 class HasReference2 c where
   getReferences2 :: Lens' c [Reference2]

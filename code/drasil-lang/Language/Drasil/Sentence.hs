@@ -1,13 +1,12 @@
 {-# LANGUAGE GADTs #-}
 -- | Contains Sentences and helpers
 module Language.Drasil.Sentence
-  (Sentence(Ch, Sy, S, Sp, E, Ref, Quote, (:+:), EmptyS, P, Ref2),
+  (Sentence(Ch, Sy, S, Sp, E, Quote, (:+:), EmptyS, P, Ref2),
    sParen, sSqBr, (+:+), sC, (+:+.), (+:),
    SentenceStyle(..), sentenceShort, sentenceSymb, sentenceTerm, sentencePlural) where
 
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.RefProg (Reference2)
-import Language.Drasil.RefTypes (Reference)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.UID (UID)
@@ -34,8 +33,6 @@ data Sentence where
   P     :: Symbol -> Sentence       -- should not be used in examples?
   E     :: Expr -> Sentence
   Ref2  :: Reference2 -> Sentence
-  Ref   :: Reference -> Sentence  -- Needs helper func to create Ref
-                                                       -- See Reference.hs
   Quote :: Sentence -> Sentence     -- Adds quotation marks around a sentence
                                     
   -- Direct concatenation of two Sentences (no implicit spaces!)

@@ -15,7 +15,7 @@ module Data.Drasil.SentenceStructures
   , fmtPhys, fmtSfwr, typUncr
   , mkTableFromColumns
   , EnumType(..), WrapType(..), SepType(..), FoldType(..)
-  , getSource, getSource'
+  , getSource'
   ) where
 
 import Language.Drasil
@@ -239,11 +239,6 @@ replaceEmptyS :: Sentence -> Sentence
 replaceEmptyS EmptyS = none
 replaceEmptyS s@_ = s
 
--- | Get the source reference from the references (if it exists)
-getSource :: HasReference c => c -> Sentence
-getSource c = foldlList Comma List $ map Ref $ c ^. getReferences
-
 -- | Get the source citations (if any)
 getSource' :: HasCitation c => c -> Sentence
 getSource' c = foldlList Comma List $ map makeCiteS $ c ^. getCitations
-

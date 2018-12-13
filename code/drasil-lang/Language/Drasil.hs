@@ -35,7 +35,6 @@ module Language.Drasil (
   , HasSpace(typ)
   , HasUnitSymbol(usymb)
   , IsUnit
-  , HasReference(getReferences)
   , HasReference2(getReferences2) -- HACK that will eventually go away
   , CommonIdea(abrv)
   , Constrained(constraints)
@@ -172,7 +171,6 @@ module Language.Drasil (
   -- RefTypes
   , RefAdd, RefType(Cite, Tab, EqnB, Req, LCh, UnCh, Def, Lst, Link, Sect, Blank, Assump)
   , ReqType(FR, NFR)
-  , Reference(Reference)
   , LinkType(Internal, Cite2, External)
   -- Label
   , Label 
@@ -243,7 +241,6 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
   IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), 
-  HasReference(getReferences), 
   HasReference2(getReferences2),  -- HACK that will eventually go away
   HasLabel(getLabel), HasRefAddress(getRefAdd), HasSpace(typ),
   DefiningExpr(defnExpr), HasShortName(shortname), Quantity, UncertainQuantity(uncert),
@@ -316,7 +313,7 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
 import Language.Drasil.RefTypes(RefAdd, RefType(..),
-  DType(..), Reference(Reference), ReqType(FR, NFR), LinkType(Internal, Cite2, External))
+  DType(..), ReqType(FR, NFR), LinkType(Internal, Cite2, External))
 import Language.Drasil.RefProg(RefProg(..), IRefProg(..), Reference2(Reference2))
 import Language.Drasil.Label (mkLabelRA', mkLabelSame, mkLabelRALst,
   mkURILabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec)

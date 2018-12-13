@@ -48,19 +48,6 @@ eBalanceOnPCML = mkLabelSame "eBalanceOnPCM" (Def Instance)
 heatEInWtrL    = mkLabelSame "heatEInWtr"    (Def Instance)
 heatEInPCML    = mkLabelSame "heatEInPCM"    (Def Instance)
 
--- Likely Changes and Unlikely Changes
-likeChg1L, likeChg2L, likeChg3L, likeChg4L, likeChg5L,likeChg6L
-  , unlikeChg1L, unlikeChg2L :: Label
-likeChg1L = mkLabelSame "Uniform-Temperature-PCM"  LCh
-likeChg2L = mkLabelSame "Temperature-Coil-Variable-Over-Day"  LCh
-likeChg3L = mkLabelSame "Temperature-Coil-Variable-Over-Length"  LCh
-likeChg4L = mkLabelSame "Discharging-Tank"  LCh
-likeChg5L = mkLabelSame "Different-Initial-Temps-PCM-Water"  LCh
-likeChg6L = mkLabelSame "Tank-Lose-Heat"  LCh
-
-unlikeChg1L = mkLabelSame "Water-PCM-Fixed-States" UnCh
-unlikeChg2L = mkLabelSame "No-Internal-Heat-Generation" UnCh
-
 -- Requirements
 inputInitQuantsL, useAboveFindMassL, checkWithPhysConstsL, 
   outputInputDerivQuantsL, calcTempWtrOverTimeL, calcTempPCMOverTimeL,

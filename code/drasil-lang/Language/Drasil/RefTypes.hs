@@ -20,8 +20,6 @@ data RefType = Tab    -- ^ Table
              | Sect   -- ^ Section
              | Def DType  -- ^ Definition (includes theoretical models) (DType used to set shortnames)
              | Assump -- ^ Assumption
-             | LCh     -- ^ Likely Change
-             | UnCh     -- ^ Unlikely Change
              | Req ReqType
              | EqnB   -- ^ Equation Block
              | Cite   -- ^ Citation
@@ -44,8 +42,6 @@ instance Show RefType where
   show (Def _)= "Definition"
   show (Req _)= "Requirement"
   show Assump = "Assumption"
-  show LCh    = "Likely Change"
-  show UnCh   = "Unlikely Change"
   show Cite   = "Citation"
   show EqnB   = "Equation"
   show Blank  = "Blank"

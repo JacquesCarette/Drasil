@@ -1,4 +1,4 @@
-module Example.HelloWorld (helloWorld) where
+module Example.HelloWorld (main) where
 
 import New (Declaration, StateVar, Scope, Label, Library,
   RenderSym(..), KeywordSym(..), PermanenceSym(..), InputTypeSym(..), ClassSym(..), MethodSym(..), 

@@ -9,7 +9,8 @@ import New (Declaration, StateVar, Scope, Label, Library,
   RenderSym(..), KeywordSym(..), PermanenceSym(..), InputTypeSym(..), ClassSym(..), MethodSym(..), 
   ProgramBodySym(..), BodySym(..), BlockSym(..), ControlSym(..), StateTypeSym(..),
   PreStatementSym(..),  StatementSym(..),
-  IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), FunctionSym(..))
+  IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), 
+  FunctionSym(..), FunctionSelector(..))
 import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, progDocD, outDocD, 
   printListDocD, boolTypeDocD, intTypeDocD,
   charTypeDocD, typeDocD, listTypeDocD, ifCondDocD, switchDocD, forDocD, 
@@ -24,7 +25,7 @@ import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, progDocD, outDocD,
   defaultStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
   inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
   notNullDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, includeD, dot, 
-  new, forLabel, doubleSlash, callFuncParamList)
+  new, forLabel, doubleSlash, callFuncParamList, getterName, setterName)
 import Helpers (blank,angles,oneTab,vibmap)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan)
@@ -336,6 +337,16 @@ instance PreStatementSym JavaCode where
     getFileInput f it v = liftA3 jInput it v f
     discardFileInput f = liftA jDiscardInput f
 
+    openFileR f n = liftA2 jOpenFileR f n
+    openFileW f n = liftA2 jOpenFileW f n
+    ---closeFile f = liftA closeFileDocD f  -- needs objAccess
+
+    -- getFileInputLine f v =  -- need Func
+    -- discardFileLine f =
+    -- getFileInputAll f v =
+    -- listSlice v1 v2 b e s
+    -- stringSplit v1 v2 d
+
     break = return breakDocD  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
     continue = return continueDocD
 
@@ -359,6 +370,30 @@ instance StatementSym JavaCode where
 
     state s = liftA2 statementDocD s endStatement
     loopState s = liftA2 statementDocD s endStatementLoop
+
+instance Selector JavaCode where
+    objAccess v f = liftA2 objAccessDocD v f
+
+instance FunctionSym JavaCode where
+    type Function JavaCode = Doc
+    func l vs = liftA funcDocD (funcApp l vs)
+    cast targT _ = liftA castDocD targT
+    get n = liftA funcDocD (funcApp (getterName n) [])
+    set n v = liftA funcDocD (funcApp (setterName n) [v])
+
+    indexOf v = liftA funcDocD (funcApp "indexOf" [v])
+
+    listSize = liftA funcDocD (funcApp "size" [])
+    listAccess i = liftA funcDocD (funcApp "get" [i])
+    listAdd i v = liftA funcDocD (funcApp "add" [i, v])
+    listSet i v = liftA funcDocD (funcApp "set" [i, v])
+    listPopulate = return empty
+    listAppend v = liftA funcDocD (funcApp "add" [v])
+    listExtend = return empty
+
+
+    iterBegin = liftA funcDocD (funcApp "begin" [])
+    iterEnd = liftA funcDocD (funcApp "end" [])
 
 jtop :: Doc -> Doc -> Doc -> Doc
 jtop end inc lst = vcat [
@@ -416,3 +451,9 @@ jDiscardInput inFn = inFn <> dot <> text "next()"
 
 jInput :: Doc -> Doc -> Doc -> Doc
 jInput it v inFn = v <+> equals <+> parens (inFn <> dot <> it) -- Changed from original GOOL, original GOOL was wrong.
+
+jOpenFileR :: Doc -> Doc -> Doc
+jOpenFileR f n = f <+> equals <+> new <+> text "Scanner" <> parens (new <+> text "File" <> parens n)
+
+jOpenFileW :: Doc -> Doc -> Doc
+jOpenFileW f n = f <+> equals <+> new <+> text "PrintWriter" <> parens n

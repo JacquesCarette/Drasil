@@ -189,13 +189,14 @@ class (PermanenceSym repr, StateTypeSym repr, ValueSym repr, IOStSym repr, Input
     discardInput     :: repr (InputType repr) -> repr (PreStatement repr)
     getFileInput     :: repr (Value repr) -> repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
     discardFileInput :: repr (Value repr) -> repr (PreStatement repr)
-    getFileInputLine :: repr (Value repr) -> repr (Value repr) -> repr (PreStatement repr)
-    discardFileLine  :: repr (Value repr) -> repr (PreStatement repr)
-    getFileInputAll  :: repr (Value repr) -> repr (Value repr) -> repr (PreStatement repr)
 
     openFileR :: repr (Value repr) -> repr (Value repr) -> repr (PreStatement repr)
     openFileW :: repr (Value repr) -> repr (Value repr) -> repr (PreStatement repr)
     closeFile :: repr (Value repr) -> repr (PreStatement repr)
+
+    getFileInputLine :: repr (Value repr) -> repr (Value repr) -> repr (PreStatement repr)
+    discardFileLine  :: repr (Value repr) -> repr (PreStatement repr)
+    getFileInputAll  :: repr (Value repr) -> repr (Value repr) -> repr (PreStatement repr)
 
     break :: repr (PreStatement repr)
     continue :: repr (PreStatement repr)
@@ -227,46 +228,48 @@ class (KeywordSym repr, ValueSym repr) => IOStSym repr where
 
 class UnaryOpSym repr where
     type UnaryOp repr
-    notOp :: repr (UnaryOp repr)
+    notOp    :: repr (UnaryOp repr)
     negateOp :: repr (UnaryOp repr)
-    sqrtOp :: repr (UnaryOp repr)
-    absOp :: repr (UnaryOp repr)
-    logOp :: repr (UnaryOp repr)
-    lnOp :: repr (UnaryOp repr)
-    expOp :: repr (UnaryOp repr)
-    sinOp :: repr (UnaryOp repr)
-    cosOp :: repr (UnaryOp repr)
-    tanOp :: repr (UnaryOp repr)
+    sqrtOp   :: repr (UnaryOp repr)
+    absOp    :: repr (UnaryOp repr)
+    logOp    :: repr (UnaryOp repr)
+    lnOp     :: repr (UnaryOp repr)
+    expOp    :: repr (UnaryOp repr)
+    sinOp    :: repr (UnaryOp repr)
+    cosOp    :: repr (UnaryOp repr)
+    tanOp    :: repr (UnaryOp repr)
+    floorOp  :: repr (UnaryOp repr)
+    ceilOp   :: repr (UnaryOp repr)
 
 class BinaryOpSym repr where
     type BinaryOp repr
-    equalOp :: repr (BinaryOp repr)
-    notEqualOp :: repr (BinaryOp repr)
-    greaterOp :: repr (BinaryOp repr)
+    equalOp        :: repr (BinaryOp repr)
+    notEqualOp     :: repr (BinaryOp repr)
+    greaterOp      :: repr (BinaryOp repr)
     greaterEqualOp :: repr (BinaryOp repr)
-    lessOp :: repr (BinaryOp repr)
-    lessEqualOp :: repr (BinaryOp repr)
-    plusOp :: repr (BinaryOp repr)
-    minusOp :: repr (BinaryOp repr)
-    multOp :: repr (BinaryOp repr)
-    divideOp :: repr (BinaryOp repr)
-    powerOp :: repr (BinaryOp repr)
-    moduloOp :: repr (BinaryOp repr)
-    andOp :: repr (BinaryOp repr)
-    orOp :: repr (BinaryOp repr)
+    lessOp         :: repr (BinaryOp repr)
+    lessEqualOp    :: repr (BinaryOp repr)
+    plusOp         :: repr (BinaryOp repr)
+    minusOp        :: repr (BinaryOp repr)
+    multOp         :: repr (BinaryOp repr)
+    divideOp       :: repr (BinaryOp repr)
+    powerOp        :: repr (BinaryOp repr)
+    moduloOp       :: repr (BinaryOp repr)
+    andOp          :: repr (BinaryOp repr)
+    orOp           :: repr (BinaryOp repr)
 
 class (StateTypeSym repr) => ValueSym repr where
     type Value repr
     litTrue   :: repr (Value repr)
-    litFalse :: repr (Value repr)
+    litFalse  :: repr (Value repr)
     litChar   :: Char -> repr (Value repr)
     litFloat  :: Double -> repr (Value repr)
     litInt    :: Integer -> repr (Value repr)
     litString :: String -> repr (Value repr)
 
-    defaultChar :: repr (Value repr)
-    defaultFloat :: repr (Value repr)
-    defaultInt :: repr (Value repr)
+    defaultChar   :: repr (Value repr)
+    defaultFloat  :: repr (Value repr)
+    defaultInt    :: repr (Value repr)
     defaultString :: repr (Value repr)
 
     (?!)  :: repr (Value repr) -> repr (Value repr)  -- where to specific infix?
@@ -295,7 +298,7 @@ class (StateTypeSym repr) => ValueSym repr where
     ($:)  :: Label -> Label -> repr (Value repr)
 
     log :: repr (Value repr) -> repr (Value repr)
-    ln :: repr (Value repr) -> repr (Value repr)
+    ln  :: repr (Value repr) -> repr (Value repr)
     exp :: repr (Value repr) -> repr (Value repr)
     sin :: repr (Value repr) -> repr (Value repr)
     cos :: repr (Value repr) -> repr (Value repr)
@@ -321,18 +324,35 @@ class (StateTypeSym repr) => ValueSym repr where
     stateObj :: repr (StateType repr) -> [repr (Value repr)] -> repr (Value repr)
     listStateObj :: repr (StateType repr) -> [repr (Value repr)] -> repr (Value repr)
 
-    exists :: repr (Value repr) -> repr (Value repr)
+    exists  :: repr (Value repr) -> repr (Value repr)
     notNull :: repr (Value repr) -> repr (Value repr)
 
 class (FunctionSym repr, ValueSym repr) => Selector repr where
-    ($.)  :: repr (Value repr) -> repr (Function repr) -> repr (Value repr)
     objAccess :: repr (Value repr) -> repr (Function repr) -> repr (Value repr)
+    ($.)      :: repr (Value repr) -> repr (Function repr) -> repr (Value repr)
+
+    selfAccess :: repr (Function repr) -> repr (Value repr)
 
 class (ValueSym repr, StateTypeSym repr) => FunctionSym repr where
     type Function repr
-    func :: Label -> [repr (Value repr)] -> repr (Function repr)
+    func           :: Label -> [repr (Value repr)] -> repr (Function repr)
+    cast           :: repr (StateType repr) -> repr (StateType repr) -> repr (Function repr)
+    castStrToFloat :: repr (Function repr)
+    castListToInt  :: repr (Function repr)
+    get            :: Label -> repr (Function repr)
+    set            :: Label -> repr (Value repr) -> repr (Function repr)
 
-    listSize   :: repr (Function repr)
-    listAccess :: repr (Value repr) -> repr (Function repr)
-    listAppend :: repr (Value repr) -> repr (Function repr)
-    listExtend :: repr (StateType repr) -> repr (Function repr)
+    indexOf :: repr (Value repr) -> repr (Function repr)
+
+    listSize     :: repr (Function repr)
+    listAdd      :: repr (Value repr) -> repr (Value repr) -> repr (Function repr)
+    listSet      :: repr (Value repr) -> repr (Value repr) -> repr (Function repr)
+    listAppend   :: repr (Value repr) -> repr (Function repr)
+    listExtend   :: repr (StateType repr) -> repr (Function repr)
+
+    iterBegin :: repr (Function repr)
+    iterEnd   :: repr (Function repr)
+
+class (ValueSym repr, StateTypeSym repr, FunctionSym repr, Selector repr) => SelectorFunction repr where
+    listAccess   :: repr (Value repr) -> repr (Function repr)
+    listPopulate :: repr (Value repr) -> repr (StateType repr) -> repr (Function repr)

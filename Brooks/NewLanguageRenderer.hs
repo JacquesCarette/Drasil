@@ -23,7 +23,7 @@ module NewLanguageRenderer (
     varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD,
     funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD,
     constDecDefDocD, notNullDocD, breakDocD, continueDocD,
-    staticDocD, dynamicDocD, includeD, callFuncParamList
+    staticDocD, dynamicDocD, includeD, callFuncParamList, getterName, setterName
 ) where
 
 import New (Label, Library)
@@ -277,6 +277,10 @@ throwDocD :: Doc -> Doc
 throwDocD errMsg = text "throw new" <+> text "System.ApplicationException" <>
     parens errMsg
 
+--openFileRDocD :: Doc -> Doc -> Doc -- Wait for ObjAccess to be implemented
+
+--openFileWDocD :: Doc -> Doc -> Doc -- Wait for ObjAccess to be implemented
+
 statementDocD :: Doc -> Doc -> Doc
 statementDocD s end = s <> end
 
@@ -435,6 +439,23 @@ listStateObjDocD lstObj st vs = lstObj <+> st <> parens (callFuncParamList vs)
 notNullDocD :: Doc -> Doc -> Doc -> Doc
 notNullDocD v op nullvar = binOpDocD v op nullvar
 
+-- Functions --
+
+funcDocD :: Doc -> Doc
+funcDocD fnApp = dot <> fnApp
+
+castDocD :: Doc -> Doc
+castDocD targT = parens targT
+
+sizeDocD :: Doc
+sizeDocD = dot <> text "Count"
+
+listAccessDocD :: Doc -> Doc
+listAccessDocD i = brackets <> i
+
+objAccessDocD :: Doc -> Doc -> Doc
+objAccessDocD v f = v <> f
+
 -- Keywords --
 
 includeD :: Label -> Doc
@@ -460,3 +481,9 @@ continueDocD = text "continue"
 
 callFuncParamList :: [Doc] -> Doc
 callFuncParamList vs = hcat (intersperse (text ", ") vs)
+
+getterName :: String -> String
+getterName s = "Get" ++ capitalize s
+
+setterName :: String -> String
+setterName s = "Set" ++ capitalize s

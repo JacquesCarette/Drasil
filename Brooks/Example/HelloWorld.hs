@@ -56,7 +56,7 @@ helloInitVariables = statements [ (comment "Initializing variables"),
   (valState (objAccess (var "myOtherList") (listSet (litInt 1) (litFloat 17.4))))]
 
 helloIfBody :: (RenderSym repr) => repr (Body repr)
-helloIfBody = body [
+helloIfBody = addComments "If body" (body [
   block [
     varDec "c" int,
     varDec "d" int,
@@ -100,7 +100,7 @@ helloIfBody = body [
     printLn (int) ((litInt 6) #+ ((litInt 2) #* (litInt 3))),
     printLn (float) (csc (litFloat 1.0)),
     printLn (float) (sec (litFloat 1.0)),
-    printLn (float) (cot (litFloat 1.0))]]
+    printLn (float) (cot (litFloat 1.0))]])
     -- printLn (int) (notNull (var "a")),
     -- printLn (int) (var "a"),
     -- printLn (int) (arg 5),

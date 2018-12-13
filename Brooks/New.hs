@@ -99,6 +99,8 @@ class (BlockSym repr) => BodySym repr where
     bodyStatements :: [repr (PreStatement repr)] -> repr (Body repr)
     oneLiner :: repr (PreStatement repr) -> repr (Body repr)
 
+    addComments :: Label -> repr (Body repr) -> repr (Body repr)
+
 -- Right now the Block is the top-level structure
 class StatementSym repr => BlockSym repr where
     type Block repr
@@ -127,18 +129,20 @@ class (BodySym repr) => ControlSym repr where
     ifCond :: [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Control repr) 
     switch :: repr (Value repr) -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Control repr) -- is there value in separating Literals into their own type?
 
-    for :: repr (PreStatement repr) -> repr (Value repr) -> repr (PreStatement repr) -> repr (Body repr) -> repr (Control repr)
+    ifExists :: repr (Value repr) -> repr (Body repr) -> repr (Body repr) -> repr (Control repr)
+
+    for     :: repr (PreStatement repr) -> repr (Value repr) -> repr (PreStatement repr) -> repr (Body repr) -> repr (Control repr)
     -- Had to add StateType to forEach because I can't extract the StateType from the value.
     forEach :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (Body repr) -> repr (Control repr)
-    while :: repr (Value repr) -> repr (Body repr) -> repr (Control repr) 
+    while   :: repr (Value repr) -> repr (Body repr) -> repr (Control repr) 
 
     tryCatch :: repr (Body repr) -> repr (Body repr) -> repr (Control repr)
 
-    checkState :: Label -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Control repr)
-    runStrategy :: Label -> [(Label, repr (Body repr))] -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Control repr)
-    notifyObservers  :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (Control repr)
+    checkState      :: Label -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Control repr)
+    runStrategy     :: Label -> [(Label, repr (Body repr))] -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Control repr)
+    notifyObservers :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (Control repr)
 
-    statement :: repr (PreStatement repr) -> repr (Control repr)
+    statement  :: repr (PreStatement repr) -> repr (Control repr)
     statements :: [repr (PreStatement repr)] -> repr (Control repr)
 
 class (PermanenceSym repr, StateTypeSym repr, ValueSym repr, IOStSym repr, InputTypeSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) => PreStatementSym repr where
@@ -157,12 +161,14 @@ class (PermanenceSym repr, StateTypeSym repr, ValueSym repr, IOStSym repr, Input
 
     assign  :: repr (Value repr) -> repr (Value repr) -> repr (PreStatement repr)
 
-    varDec  :: Label -> repr (StateType repr) -> repr (PreStatement repr)
-    varDecDef :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
-    listDec :: Label -> Integer -> repr (StateType repr) -> repr (PreStatement repr)
-    listDecDef :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (PreStatement repr)
-    objDecDef :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
-    constDecDef :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
+    varDec        :: Label -> repr (StateType repr) -> repr (PreStatement repr)
+    varDecDef     :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
+    listDec       :: Label -> Integer -> repr (StateType repr) -> repr (PreStatement repr)
+    listDecDef    :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (PreStatement repr)
+    objDecDef     :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
+    objDecNew     :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (PreStatement repr)
+    objDecNewVoid :: Label -> repr (StateType repr) -> repr (PreStatement repr)
+    constDecDef   :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
 
     -- Loop versions of same functions (better way to do this? I want to avoid
     -- making a GOOL user have to specify either loopState or state for every
@@ -330,7 +336,7 @@ class (StateTypeSym repr) => ValueSym repr where
     inlineIf     :: repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> repr (Value repr)
     funcApp      :: Label -> [repr (Value repr)] -> repr (Value repr)
     extFuncApp   :: Library -> Label -> [repr (Value repr)] -> repr (Value repr)
-    stateObj     :: repr (StateType repr) -> [repr (Value repr)] -> repr (Value repr)
+    stateObj     :: repr (StateType repr) -> [repr (Value repr)] -> repr (Value repr) -- did not include version with Library because it gets ignored by default. May need to add later.
     listStateObj :: repr (StateType repr) -> [repr (Value repr)] -> repr (Value repr)
 
     exists  :: repr (Value repr) -> repr (Value repr)

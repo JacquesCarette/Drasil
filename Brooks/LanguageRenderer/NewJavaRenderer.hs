@@ -26,7 +26,7 @@ import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, progDocD, outDocD,
   inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
   notNullDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, includeD, 
   funcDocD, castDocD, sizeDocD, listAccessDocD, objAccessDocD, castObjDocD,dot, 
-  new, forLabel, observerListName, doubleSlash, callFuncParamList, getterName, setterName)
+  new, forLabel, observerListName, doubleSlash, addCommentsDocD, callFuncParamList, getterName, setterName)
 import Helpers (blank,angles,oneTab,vibmap)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
@@ -141,6 +141,8 @@ instance BodySym JavaCode where
     bodyStatements sts = block sts
     oneLiner s = bodyStatements [s]
 
+    addComments s b = liftA2 (addCommentsDocD s) commentStart b
+
 instance BlockSym JavaCode where
     type Block JavaCode = Doc
     block sts = do
@@ -181,6 +183,8 @@ instance ControlSym JavaCode where
     type Control JavaCode = Doc
     ifCond bs b = lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs
     switch v cs c = lift3Pair switchDocD (state break) v c cs
+
+    ifExists v ifBody elseBody = ifCond [(notNull v, ifBody)] elseBody
 
     for sInit vGuard sUpdate b = liftA6 forDocD blockStart blockEnd (loopState sInit) vGuard (loopState sUpdate) b
     forEach l t v b = liftA7 (forEachDocD l) blockStart blockEnd iterForEachLabel iterInLabel t v b
@@ -325,12 +329,14 @@ instance PreStatementSym JavaCode where
     (&~-) v = v &= (v #- (litInt 1))
     (&.~-) l = (&~-) (var l)
 
-    varDec l st = liftA (varDecDocD l) st
-    varDecDef l st v = liftA2 (varDecDefDocD l) st v
+    varDec l t = liftA (varDecDocD l) t
+    varDecDef l t v = liftA2 (varDecDefDocD l) t v
     listDec l n st = liftA2 (listDecDocD l) (litInt n) st -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
-    listDecDef l st vs = lift1List (jListDecDef l) st vs
-    objDecDef l st v = liftA2 (objDecDefDocD l) st v
-    constDecDef l st v = liftA2 (jConstDecDef l) st v
+    listDecDef l t vs = lift1List (jListDecDef l) t vs
+    objDecDef l t v = liftA2 (objDecDefDocD l) t v
+    objDecNew l t vs = liftA2 (objDecDefDocD l) t (stateObj t vs)
+    objDecNewVoid l t = liftA2 (objDecDefDocD l) t (stateObj t [])
+    constDecDef l t v = liftA2 (jConstDecDef l) t v
 
     print _ v = out printFunc v
     printLn _ v = out printLnFunc v

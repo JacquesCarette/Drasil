@@ -24,7 +24,7 @@ module NewLanguageRenderer (
     funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD,
     constDecDefDocD, notNullDocD, breakDocD, continueDocD,
     staticDocD, dynamicDocD, funcDocD, castDocD, sizeDocD, listAccessDocD,
-    objAccessDocD, castObjDocD, includeD, callFuncParamList, getterName, setterName
+    objAccessDocD, castObjDocD, includeD, addCommentsDocD, callFuncParamList, getterName, setterName
 ) where
 
 import New (Label, Library)
@@ -483,6 +483,31 @@ breakDocD = text "break"
 
 continueDocD :: Doc
 continueDocD = text "continue"
+
+-- Comment Functions -- 
+
+commentLength :: Int
+commentLength = 75
+
+endCommentLabel :: Label
+endCommentLabel = "End"
+
+addCommentsDocD :: Label -> Doc -> Doc -> Doc
+addCommentsDocD c cStart b = vcat [
+    commentDelimit c cStart,
+    b,
+    endCommentDelimit c cStart]
+
+commentDelimit :: Label -> Doc -> Doc
+commentDelimit c cStart = 
+    let com = cStart <> text (" " ++ c ++ " ")
+    in com <> text (dashes (render com) commentLength)
+
+endCommentDelimit :: Label -> Doc -> Doc
+endCommentDelimit c cStart = commentDelimit (endCommentLabel ++ " " ++ c) cStart
+
+dashes :: String -> Int -> String
+dashes s l = take (l - length s) (repeat '-')
 
 -- Helper Functions --
 

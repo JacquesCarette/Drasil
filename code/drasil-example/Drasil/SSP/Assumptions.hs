@@ -22,27 +22,27 @@ newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9,
 newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10, newA11 :: AssumpChunk
 assumpSSC, assumpFOSL, assumpSLH, assumpSLI, assumpINSFL, assumpBNSFLFS,
   assumpSSCIL, assumpPSC, assumpENSL, assumpSBSBISL, assumpSP :: ConceptInstance
-newA1 = assump (mkLabelRAAssump' "Slip-Surface-Concave") monotonicF
+newA1 = assump (makeAssumpRef "Slip-Surface-Concave") monotonicF
 assumpSSC = cic "assumpSSC" monotonicF "Slip-Surface-Concave" assumpDom
-newA2 = assump (mkLabelRAAssump' "Factor-of-Safety") slopeS
+newA2 = assump (makeAssumpRef "Factor-of-Safety") slopeS
 assumpFOSL = cic "assumpFOS" slopeS "Factor-of-Safety" assumpDom
-newA3 = assump (mkLabelRAAssump' "Soil-Layer-Homogeneous") homogeneousL
+newA3 = assump (makeAssumpRef "Soil-Layer-Homogeneous") homogeneousL
 assumpSLH = cic "assumpSLH" homogeneousL "Soil-Layer-Homogeneous" assumpDom
-newA4 = assump (mkLabelRAAssump' "Soil-Properties") propertiesS
+newA4 = assump (makeAssumpRef "Soil-Properties") propertiesS
 assumpSP = cic "assumpSP" propertiesS "Soil-Properties" assumpDom
-newA5 = assump (mkLabelRAAssump' "Soil-Layers-Isotropic") isotropicP
+newA5 = assump (makeAssumpRef "Soil-Layers-Isotropic") isotropicP
 assumpSLI = cic "assumpSLI" isotropicP "Soil-Layers-Isotropic" assumpDom
-newA6 = assump (mkLabelRAAssump' "Interslice-Norm-Shear-Forces-Linear") linearS
+newA6 = assump (makeAssumpRef "Interslice-Norm-Shear-Forces-Linear") linearS
 assumpINSFL = cic "assumpINSFL" linearS "Interslice-Norm-Shear-Forces-Linear" assumpDom
-newA7 = assump (mkLabelRAAssump' "Plane-Strain-Conditions") planeS
+newA7 = assump (makeAssumpRef "Plane-Strain-Conditions") planeS
 assumpPSC = cic "assumpPSC" planeS "Plane-Strain-Conditions" assumpDom
-newA8 = assump (mkLabelRAAssump' "Effective-Norm-Stress-Large") largeN
+newA8 = assump (makeAssumpRef "Effective-Norm-Stress-Large") largeN
 assumpENSL = cic "assumpENSL" largeN "Effective-Norm-Stress-Large" assumpDom
-newA9 = assump (mkLabelRAAssump' "Surface-Base-Slice-between-Interslice-Straight-Lines") straightS
+newA9 = assump (makeAssumpRef "Surface-Base-Slice-between-Interslice-Straight-Lines") straightS
 assumpSBSBISL = cic "assumpSBSBISL" straightS "Surface-Base-Slice-between-Interslice-Straight-Lines" assumpDom
-newA10 = assump (mkLabelRAAssump' "Seismic-Force") linearF
+newA10 = assump (makeAssumpRef "Seismic-Force") linearF
 assumpBNSFLFS = cic "assumpBNSFLFS" linearF "Base-Norm-Shear-Forces-Linear-on-FS" assumpDom
-newA11 = assump (mkLabelRAAssump' "Surface-Load") stressC
+newA11 = assump (makeAssumpRef "Surface-Load") stressC
 assumpSSCIL = cic "assumpSSCIL" stressC "Surface-Load" assumpDom
 
 monotonicF, slopeS, homogeneousL, isotropicP, linearS,

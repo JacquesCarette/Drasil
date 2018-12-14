@@ -4,9 +4,8 @@ module Language.Drasil.Chunk.AssumpChunk ( AssumpChunk(..) , assump) where
 import Data.Drasil.IdeaDicts (softEng)
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
   HasRefAddress(getRefAdd))
-import Language.Drasil.Classes (HasLabel(getLabel), ConceptDomain(cdom), CommonIdea(abrv)
-  , NamedIdea(term))
-import Language.Drasil.Label.Core (Label)
+import Language.Drasil.Classes (ConceptDomain(cdom), CommonIdea(abrv), NamedIdea(term))
+import Language.Drasil.RefProg (Reference)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
 import Language.Drasil.NounPhrase (cn')
@@ -16,14 +15,13 @@ import Control.Lens (makeLenses, (^.), view)
 -- Presently assumptions are captured as sentences.
 data AssumpChunk = AC 
                  { assuming :: Sentence
-                 , _lbl :: Label
+                 , _lbl :: Reference
                  , _ci :: CI
                  }
 makeLenses ''AssumpChunk
 
-instance HasUID        AssumpChunk where uid = lbl . uid
 instance Eq            AssumpChunk where a == b = a ^. uid == b ^. uid
-instance HasLabel      AssumpChunk where getLabel = lbl
+instance HasUID        AssumpChunk where uid = lbl . uid
 instance HasRefAddress AssumpChunk where getRefAdd = lbl . getRefAdd
 instance HasShortName  AssumpChunk where shortname = lbl . shortname
 instance ConceptDomain AssumpChunk where cdom = ci . cdom
@@ -33,5 +31,5 @@ instance CommonIdea    AssumpChunk where abrv = abrv . view ci
 assumption :: CI
 assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")                                  "A"         [softEng]
 -- | Smart constructor for Assumption chunks.
-assump :: Label -> Sentence -> AssumpChunk
-assump l s = AC s l assumption
+assump :: Reference -> Sentence -> AssumpChunk
+assump r s = AC s r assumption

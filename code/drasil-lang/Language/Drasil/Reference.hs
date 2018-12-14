@@ -3,7 +3,7 @@ module Language.Drasil.Reference(makeRef2, makeRef2S, makeCite, makeURI,
   makeCiteS, ReferenceDB, citationsFromBibMap, citationRefTable, assumpRefTable,
   assumptionsFromDB, rdb, RefBy(..), Referable(..), RefMap, simpleMap,
   HasConceptRefs(conceptRefTable),
-  assumpDB, AssumpMap, assumpLookup, HasAssumpRefs) where
+  assumpDB, AssumpMap, assumpLookup, HasAssumpRefs, makeAssumpRef) where
 
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
@@ -22,12 +22,11 @@ import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid),
   HasRefAddress(getRefAdd), HasShortName(shortname), HasFields(getFields), CommonIdea(abrv))
 import Language.Drasil.Document (Section(Section))
 import Language.Drasil.Document.Core (RawContent(..), LabelledContent(..))
-import Language.Drasil.Label.Type (getAdd)
+import Language.Drasil.Label.Type (LblType(RefAdd,MetaLink,URL))
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.RefProg (RefProg(..), Reference(Reference), (+::+), name,
   prepend, raw, IRefProg, defer)
--- import Language.Drasil.RefTypes (RefType(..))
-import Language.Drasil.ShortName ( ShortName )
+import Language.Drasil.ShortName (ShortName, shortname' )
 import Language.Drasil.Sentence (Sentence((:+:), S, Ref))
 import Language.Drasil.UID (UID)
 
@@ -106,45 +105,44 @@ instance HasConceptRefs  ReferenceDB where conceptRefTable = conceptDB
 
 
 class HasUID s => Referable s where
-  refAdd    :: s -> String  -- The plaintext referencing address (what we're linking to).
-                            -- Should be string with no spaces/special chars.
+  refAdd    :: s -> LblType -- The referencing address (what we're linking to).
                             -- Only visible in the source (tex/html).
   renderRef :: s -> RefProg -- A program to render a shortname
 
 instance Referable AssumpChunk where
-  refAdd    x = getAdd (x ^. getRefAdd)
+  refAdd    x = x ^. getRefAdd
   renderRef l = RP $ prepend $ abrv l
 
 instance Referable Section where
-  refAdd    (Section _ _ lb ) = getAdd (lb ^. getRefAdd)
+  refAdd    (Section _ _ lb ) = lb ^. getRefAdd
   renderRef _                 = RP $ raw "Section: " +::+ name
 
 instance Referable Citation where
-  refAdd    c = citeID c -- citeID should be unique.
+  refAdd    c = RefAdd $ citeID c -- citeID should be unique.
   renderRef _ = Citation
 
 instance Referable TheoryModel where
-  refAdd    t = getAdd (t ^. getRefAdd)
+  refAdd    t = t ^. getRefAdd
   renderRef l = RP $ prepend $ abrv l
 
 instance Referable GenDefn where
-  refAdd    g = getAdd (g ^. getRefAdd)
+  refAdd    g = g ^. getRefAdd
   renderRef l = RP $ prepend $ abrv l
 
 instance Referable DataDefinition where
-  refAdd    d = getAdd (d ^. getRefAdd)
+  refAdd    d = d ^. getRefAdd
   renderRef l = RP $ prepend $ abrv l
 
 instance Referable InstanceModel where
-  refAdd    i = getAdd (i ^. getRefAdd)
+  refAdd    i = i ^. getRefAdd
   renderRef l = RP $ prepend $ abrv l
 
 instance Referable ConceptInstance where
-  refAdd    i = i ^. uid
+  refAdd    i = MetaLink $ i ^. uid -- is this right?
   renderRef l = RP $ (defer $ sDom $ l ^. cdom) +::+ raw ": " +::+ name
 
 instance Referable LabelledContent where
-  refAdd     (LblC lb _) = getAdd (lb ^. getRefAdd)
+  refAdd     (LblC lb _) = lb ^. getRefAdd
   renderRef  (LblC _ c)  = RP $ refLabelledCon c
 
 refLabelledCon :: RawContent -> IRefProg
@@ -228,4 +226,8 @@ makeCiteS = Ref . makeCite
 
 -- | Create a reference for a URI
 makeURI :: UID -> String -> ShortName -> Reference
-makeURI u ra sn = Reference u URI ra sn
+makeURI u ra sn = Reference u URI (URL ra) sn
+
+-- FIXME: horrible hack.
+makeAssumpRef :: String -> Reference
+makeAssumpRef rs = Reference rs (RP $ prepend "A") (RefAdd $ "A:" ++ rs) (shortname' rs)

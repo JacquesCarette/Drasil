@@ -16,8 +16,8 @@ data RefType = Tab    -- ^ Table
              | Fig    -- ^ Figure
              | Sect   -- ^ Section
              | Def DType  -- ^ Definition (includes theoretical models) (DType used to set shortnames)
-             | Assump -- ^ Assumption
              | Cite   -- ^ Citation
+             | Assump
 
 -- we do need to know a bit more about references, such as whether they are
 -- an internal (document) link or a citation (and eventually, external).
@@ -32,5 +32,5 @@ instance Show RefType where
   show Fig    = "Figure"
   show Sect   = "Section"
   show (Def _)= "Definition"
-  show Assump = "Assumption"
   show Cite   = "Citation"
+  show Assump = "Assumption"

@@ -23,24 +23,25 @@ assumptions = [assumpOT, assumpOD, assumpCST, assumpAD, assumpCT, assumpDI,
 newA1, newA2, newA3, newA4, newA5, newA6, newA7 :: AssumpChunk
 assumpOT, assumpOD, assumpCST, assumpAD, assumpCT, assumpDI,
   assumpCAJI :: ConceptInstance
-newA1 = assump (mkLabelRAAssump' "objectTy") (foldlSent assumptions_assum1)
+newA1 = assump (makeAssumpRef "objectTy") (foldlSent assumptions_assum1)
 assumpOT = cic "assumpOT" (foldlSent assumptions_assum1) "objectTy" assumpDom
-newA2 = assump (mkLabelRAAssump' "objectDimension") (foldlSent assumptions_assum2)
+newA2 = assump (makeAssumpRef "objectDimension") (foldlSent assumptions_assum2)
 assumpOD = cic "assumpOD" (foldlSent assumptions_assum2) "objectDimension" assumpDom
-newA3 = assump (mkLabelRAAssump' "coordinateSystemTy") (foldlSent assumptions_assum3)
+newA3 = assump (makeAssumpRef "coordinateSystemTy") (foldlSent assumptions_assum3)
 assumpCST = cic "assumpCST" (foldlSent assumptions_assum3) "coordinateSystemTy" assumpDom
-newA4 = assump (mkLabelRAAssump' "axesDefined") (foldlSent assumptions_assum4)
+newA4 = assump (makeAssumpRef "axesDefined") (foldlSent assumptions_assum4)
 assumpAD = cic "assumpAD" (foldlSent assumptions_assum4) "axesDefined" assumpDom
-newA5 = assump (mkLabelRAAssump' "collisionType") (foldlSent assumptions_assum5)
+newA5 = assump (makeAssumpRef "collisionType") (foldlSent assumptions_assum5)
 assumpCT = cic "assumpCT" (foldlSent assumptions_assum5) "collisionType" assumpDom
-newA6 = assump (mkLabelRAAssump' "dampingInvolvement") (foldlSent assumptions_assum6)
+newA6 = assump (makeAssumpRef "dampingInvolvement") (foldlSent assumptions_assum6)
 assumpDI = cic "assumpDI" (foldlSent assumptions_assum6) "dampingInvolvement" assumpDom
-newA7 = assump (mkLabelRAAssump' "constraintsAndJointsInvolvement") (foldlSent assumptions_assum7)
+newA7 = assump (makeAssumpRef "constraintsAndJointsInvolvement") (foldlSent assumptions_assum7)
 assumpCAJI = cic "assumpCAJI" (foldlSent assumptions_assum7) "constraintsAndJointsInvolvement" assumpDom
 
+-- FIXME, this is a horrible hack, but will go away once LlC wants a Reference
 assumptions_list :: [Contents]
 assumptions_list = map (LlC . 
-  (\(AC x l _) -> mkRawLC (Assumption (l^.uid) x) l)) newAssumptions
+  (\(AC x r _) -> mkRawLC (Assumption (r^.uid) x) (mkLabelRAAssump' (r^.uid)))) newAssumptions
 
 assumptions_assum1, assumptions_assum2, assumptions_assum3, assumptions_assum4, assumptions_assum5, 
   assumptions_assum6, assumptions_assum7 :: [Sentence]

@@ -21,7 +21,7 @@ mkLabel lblUID ra sn' rtype = Lbl lblUID
 
 mkURILabel :: String -> String -> String -> Label
 mkURILabel lblUID ra sn' = Lbl lblUID 
-  (URI $ ensureASCII ra)
+  (URL $ ensureASCII ra)
   (shortname' sn')
 
 --Determines what text needs to be appended to the ref address

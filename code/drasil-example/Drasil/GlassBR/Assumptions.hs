@@ -37,17 +37,17 @@ glassType          = assump glassTypeL glassTypeDesc
 -- assumpGT           = cic "assumpGT"   glassTypeDesc                     "glassType"           Doc.assumpDom  -- FIXME: Use label once ConceptInstance migrates to them
 glassCondition     = assump glassConditionL glassConditionDesc
 -- assumpGC           = cic "assumpGC"   glassConditionDesc                "glassCondition"      Doc.assumpDom  -- FIXME: Use label once ConceptInstance migrates to them
-explainScenario    = assump (mkLabelRAAssump' "explainScenario"   ) explainScenarioDesc
+explainScenario    = assump (makeAssumpRef "explainScenario"   ) explainScenarioDesc
 -- assumpES           = cic "assumpES"   explainScenarioDesc               "explainScenario"     Doc.assumpDom
-standardValues     = assump (mkLabelRAAssump' "standardValues"    ) (standardValuesDesc load_dur)
+standardValues     = assump (makeAssumpRef "standardValues"    ) (standardValuesDesc load_dur)
 -- assumpSV           = cic "assumpSV"   (standardValuesDesc load_dur)     "standardValues"      Doc.assumpDom
 glassLite          = assump glassLiteL glassLiteDesc
 -- assumpGL           = cic "assumpGL"   glassLiteDesc                     "glassLite"           Doc.assumpDom  -- FIXME: Use label once ConceptInstance migrates to them
-boundaryConditions = assump (mkLabelRAAssump' "boundaryConditions") boundaryConditionsDesc
+boundaryConditions = assump (makeAssumpRef "boundaryConditions") boundaryConditionsDesc
 -- assumpBC           = cic "assumpBC"   boundaryConditionsDesc            "boundaryConditions"  Doc.assumpDom
-responseType       = assump (mkLabelRAAssump' "responseType"      ) responseTypeDesc
+responseType       = assump (makeAssumpRef "responseType"      ) responseTypeDesc
 -- assumpRT           = cic "assumpRT"   responseTypeDesc                  "responseType"        Doc.assumpDom
-ldfConstant        = assump (mkLabelRAAssump' "ldfConstant"       ) (ldfConstantDesc constant_LoadDF)
+ldfConstant        = assump (makeAssumpRef "ldfConstant"       ) (ldfConstantDesc constant_LoadDF)
 -- assumpLDFC         = cic "assumpLDFC" (ldfConstantDesc constant_LoadDF) "ldfConstant"         Doc.assumpDom
 
 glassTypeDesc :: Sentence

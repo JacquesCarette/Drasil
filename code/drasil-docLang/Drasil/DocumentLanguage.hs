@@ -369,7 +369,7 @@ mkEnumSimpleD = mkEnumSimple $ mkListTuple (\x -> Flat $ x ^. defn)
 -- | Creates a list tuple filling in the title with a ShortName and filling
 -- reference information.
 mkListTuple :: (Referable c, HasShortName c, Definition c) => (c -> ItemType) -> c -> ListTuple
-mkListTuple f x = ((S . getStringSN $ x ^. shortname), f x, Just $ refAdd x)
+mkListTuple f x = ((S . getStringSN $ x ^. shortname), f x, Just $ getAdd $ refAdd x)
 
 -- | table of units intro writer. Translates a TUIntro to a Sentence.
 tuI :: TUIntro -> Sentence
@@ -462,7 +462,9 @@ mkSolChSpec si (SCSProg l) =
       SSD.inModelF pdStub ddStub tmStub (SRS.genDefn ([]::[Contents]) ([]::[Section])) (map LlC (map (instanceModel fields (_sysinfodb si')) ims))
     mkSubSCS si' (Assumptions) =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
-      (map (\(y@(AC _ lb _)) -> LlC $ mkRawLC (Assumption (lb ^. uid) (helperAssump y (_sysinfodb si'))) lb) $ assumptionsFromDB ((_refdb si') ^. assumpRefTable))
+      (map (\(y@(AC _ r _)) -> 
+        let lb = mkLabelRAAssump' (r ^. uid) in
+        LlC $ mkRawLC (Assumption (r ^. uid) (helperAssump y (_sysinfodb si'))) lb) $ assumptionsFromDB ((_refdb si') ^. assumpRefTable))
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
     inModSec = SRS.inModel [mkParagraph EmptyS] []

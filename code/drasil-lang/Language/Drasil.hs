@@ -169,8 +169,9 @@ module Language.Drasil (
   , RefBy(..)
   , assumpDB, RefMap, simpleMap
   , citationRefTable
+  , makeAssumpRef
   -- RefTypes
-  , RefAdd, RefType(Cite, Tab, Def, Lst, Sect, Assump)
+  , RefAdd, RefType(Cite, Tab, Def, Lst, Sect)
   , LinkType(Internal, Cite2, External)
   -- Label
   , Label 
@@ -300,7 +301,7 @@ import Language.Drasil.ShortName (resolveSN, ShortName
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Sentence (Sentence(..), sParen, sSqBr, sC, (+:+), (+:+.), (+:), SentenceStyle(..))
 import Language.Drasil.Reference (makeCite, makeCiteS, ReferenceDB
- , makeURI, makeRef2
+ , makeURI, makeRef2, makeAssumpRef
  , AssumpMap, assumpLookup, HasAssumpRefs, assumpDB , assumpRefTable, assumptionsFromDB
  , rdb, RefBy(..), Referable(..), citationRefTable, RefMap, simpleMap, makeRef2S)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 

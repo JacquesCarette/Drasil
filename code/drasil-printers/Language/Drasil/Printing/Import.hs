@@ -283,11 +283,11 @@ spec sm (Ch TermStyle s)    = spec sm $ lookupT sm s
 spec sm (Ch ShortStyle s)   = spec sm $ lookupS sm s
 spec sm (Ch PluralTerm s)   = spec sm $ lookupP sm s
 spec sm (Ref (Reference _ (RP rp) ra sn)) = 
-  P.Ref Internal ra $ spec sm $ renderShortName sm rp sn
+  P.Ref Internal (getAdd ra) $ spec sm $ renderShortName sm rp sn
 spec sm (Ref (Reference _ Citation ra sn)) = 
-  P.Ref Cite2    ra $ spec sm $ renderCitation sm sn
+  P.Ref Cite2    (getAdd ra) $ spec sm $ renderCitation sm sn
 spec sm (Ref (Reference _ URI ra sn)) = 
-  P.Ref External    ra $ spec sm $ renderURI sm sn
+  P.Ref External    (getAdd ra) $ spec sm $ renderURI sm sn
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
@@ -325,7 +325,7 @@ createLayout sm = map (sec sm 0)
 sec :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasTermTable ctx, 
   HasPrintingOptions ctx) => ctx -> Int -> Section -> T.LayoutObj
 sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used somewhere?
-  let ref = P.S (refAdd x) in
+  let ref = P.S (getAdd $ refAdd x) in
   T.HDiv [(concat $ replicate depth "sub") ++ "section"]
   (T.Header depth (spec sm titleLb) ref :
    map (layout sm depth) contents) ref

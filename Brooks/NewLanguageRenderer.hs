@@ -124,23 +124,11 @@ bodyBlockStatementsDocD end sts = vibcat stmts
     where stmts = filter notNullStatement sts
           notNullStatement s = (not $ isEmpty s) && (render s /= render end)
 
--- ioState just returns itself. don't need a function for this.
--- statementDocD :: Config -> StatementLocation -> Statement -> Doc
--- statementDocD c _ (IOState io) = ioDoc c io
-
 outDocD :: Doc -> Doc -> Doc
 outDocD printFn v = printFn <> parens (v)
 
 printListDocD :: Doc -> Doc -> Doc -> Doc
 printListDocD open b close = vcat [open, b, close]
-
--- Replaced by outDocD
--- printDocConsoleD :: Bool -> Doc -> Doc
--- printDocConsoleD newLn v = printFn <> parens (valueDoc c v)
---     where printFn = if newLn then printLnFunc c else printFunc c
-
--- valueDocD :: Config -> Value -> Doc
--- valueDocD c (Lit v) = litDoc c v
 
 -- Type Printers --
 

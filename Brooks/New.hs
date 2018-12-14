@@ -6,40 +6,24 @@ module New (
     Label, Library, 
     -- Typeclasses
     RenderSym(..), KeywordSym(..), InputTypeSym(..), PermanenceSym(..),
-    BodySym(..), ControlStatementSym(..), BlockSym(..), StateTypeSym(..), 
-    PreStatementSym(..), StatementSym(..),
-    IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), 
+    BodySym(..), ControlBlockSym(..), BlockSym(..), StateTypeSym(..), 
+    StatementSym(..),
+    UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), 
     FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..),
     ParameterSym(..), MethodSym(..), ClassSym(..)
 ) where
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
--- type Class = Doc
--- type Method = Doc
--- type Body = Doc
--- type Block = Doc
--- type Control = Doc
--- type Statement = Doc
 type Declaration = Doc
--- type Value = Doc
--- type StateType = Doc
--- type Function = Doc
 type StateVar = Doc
--- type IOType = Doc
--- type IOSt = Doc
--- type UnaryOp = Doc
--- type BinaryOp = Doc
--- type RenderFile = Doc
--- type Permanence = Doc
--- type Keyword = Doc
 
 type Label = String
 type Library = String
 -- type VarDecl = Declaration
 -- type FunctionDecl = Method
 
-class (MethodSym repr, ControlStatementSym repr) => RenderSym repr where
+class (MethodSym repr, ControlBlockSym repr) => RenderSym repr where
     type RenderFile repr
     fileDoc :: repr (Method repr) -> repr (RenderFile repr)
     top :: repr (Block repr) -- Block is a placeholder for all of these, should change
@@ -84,18 +68,18 @@ class PermanenceSym repr where
 class (BlockSym repr) => BodySym repr where
     type Body repr
     body :: [repr (Block repr)] -> repr (Body repr)
-    bodyStatements :: [repr (PreStatement repr)] -> repr (Body repr)
-    oneLiner :: repr (PreStatement repr) -> repr (Body repr)
+    bodyStatements :: [repr (Statement repr)] -> repr (Body repr)
+    oneLiner :: repr (Statement repr) -> repr (Body repr)
 
-    bodyBlockState :: [repr (Statement repr)] -> repr (Body repr) -- for statements that don't need semi colons and should be treated as a block
+    -- bodyBlockState :: [repr (Statement repr)] -> repr (Body repr) -- for statements that don't need semi colons and should be treated as a block
 
     addComments :: Label -> repr (Body repr) -> repr (Body repr)
 
 -- Right now the Block is the top-level structure
 class StatementSym repr => BlockSym repr where
     type Block repr
-    block   :: [repr (PreStatement repr)] -> repr (Block repr)
-    blockState :: [repr (Statement repr)] -> repr (Block repr) -- for when the statements don't need semi colons (i.e. an if or a for loop, etc.)
+    block   :: [repr (Statement repr)] -> repr (Block repr)
+    -- blockState :: [repr (Statement repr)] -> repr (Block repr) -- for when the statements don't need semi colons (i.e. an if or a for loop, etc.)
 
 class StateTypeSym repr where
     type StateType repr
@@ -114,120 +98,106 @@ class StateTypeSym repr where
     obj :: Label -> repr (StateType repr)
     enumType :: Label -> repr (StateType repr)
 
-class (BodySym repr, StatementSym repr) => ControlStatementSym repr where
-    ifCond :: [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Statement repr) 
-    switch :: repr (Value repr) -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Statement repr) -- is there value in separating Literals into their own type?
+class (BodySym repr, StatementSym repr) => ControlBlockSym repr where
+    ifCond :: [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Block repr) 
+    switch :: repr (Value repr) -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Block repr) -- is there value in separating Literals into their own type?
 
-    ifExists :: repr (Value repr) -> repr (Body repr) -> repr (Body repr) -> repr (Statement repr)
+    ifExists :: repr (Value repr) -> repr (Body repr) -> repr (Body repr) -> repr (Block repr)
 
-    for     :: repr (PreStatement repr) -> repr (Value repr) -> repr (PreStatement repr) -> repr (Body repr) -> repr (Statement repr)
+    for     :: repr (Statement repr) -> repr (Value repr) -> repr (Statement repr) -> repr (Body repr) -> repr (Block repr)
     -- Had to add StateType to forEach because I can't extract the StateType from the value.
-    forEach :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (Body repr) -> repr (Statement repr)
-    while   :: repr (Value repr) -> repr (Body repr) -> repr (Statement repr) 
+    forEach :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (Body repr) -> repr (Block repr)
+    while   :: repr (Value repr) -> repr (Body repr) -> repr (Block repr) 
 
-    tryCatch :: repr (Body repr) -> repr (Body repr) -> repr (Statement repr)
+    tryCatch :: repr (Body repr) -> repr (Body repr) -> repr (Block repr)
 
-    checkState      :: Label -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Statement repr)
-    runStrategy     :: Label -> [(Label, repr (Body repr))] -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Statement repr)
-    notifyObservers :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (Statement repr)
+    checkState      :: Label -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Block repr)
+    runStrategy     :: Label -> [(Label, repr (Body repr))] -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Block repr)
+    notifyObservers :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (Block repr)
 
-    getFileInputAll  :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
-    listSlice        :: repr (StateType repr) -> repr (Value repr) -> repr (Value repr) -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Statement repr)
+    getFileInputAll  :: repr (Value repr) -> repr (Value repr) -> repr (Block repr)
+    listSlice        :: repr (StateType repr) -> repr (Value repr) -> repr (Value repr) -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Block repr)
 
-    statement  :: repr (PreStatement repr) -> repr (Statement repr)
-    statements :: [repr (PreStatement repr)] -> repr (Statement repr)
+    -- statement  :: repr (Statement repr) -> repr (Statement repr)
+    -- statements :: [repr (Statement repr)] -> repr (Statement repr)
 
-class (PermanenceSym repr, StateTypeSym repr, ValueSym repr, IOStSym repr, InputTypeSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) => PreStatementSym repr where
-    type PreStatement repr
-    (&=)   :: repr (Value repr) -> repr (Value repr) -> repr (PreStatement repr)
-    (&.=)  :: Label -> repr (Value repr) -> repr (PreStatement repr)
-    (&=.)  :: repr (Value repr) -> Label -> repr (PreStatement repr)
-    (&-=)  :: repr (Value repr) -> repr (Value repr) -> repr (PreStatement repr)
-    (&.-=) :: Label -> repr (Value repr) -> repr (PreStatement repr)
-    (&+=)  :: repr (Value repr) -> repr (Value repr) -> repr (PreStatement repr)
-    (&.+=) :: Label -> repr (Value repr) -> repr (PreStatement repr)
-    (&++)  :: repr (Value repr) -> repr (PreStatement repr)
-    (&.++) :: Label -> repr (PreStatement repr)
-    (&~-)  :: repr (Value repr) -> repr (PreStatement repr)
-    (&.~-) :: Label -> repr (PreStatement repr)
-
-    assign  :: repr (Value repr) -> repr (Value repr) -> repr (PreStatement repr)
-
-    varDec        :: Label -> repr (StateType repr) -> repr (PreStatement repr)
-    varDecDef     :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
-    listDec       :: Label -> Integer -> repr (StateType repr) -> repr (PreStatement repr)
-    listDecDef    :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (PreStatement repr)
-    objDecDef     :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
-    objDecNew     :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (PreStatement repr)
-    objDecNewVoid :: Label -> repr (StateType repr) -> repr (PreStatement repr)
-    constDecDef   :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
-
-    -- Loop versions of same functions (better way to do this? I want to avoid
-    -- making a GOOL user have to specify either loopState or state for every
-    -- statement they write, and this is the shortest way to do that)
-
-    -- Maybe have almost everything here be "PreStatement", and then StatementSym
-    -- only has state and loopState. Block/Body/Prog etc. would apply state
-    -- to all statements, whereas for would apply loopState
-
-    print      :: repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
-    printLn    :: repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
-    printStr   :: String -> repr (PreStatement repr)
-    printStrLn :: String -> repr (PreStatement repr)
-
-    printFile      :: repr (Value repr) -> repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
-    printFileLn    :: repr (Value repr) -> repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
-    printFileStr   :: repr (Value repr) -> String -> repr (PreStatement repr)
-    printFileStrLn :: repr (Value repr) -> String -> repr (PreStatement repr)
-
-    printList       :: repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
-    printLnList     :: repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
-    printFileList   :: repr (Value repr) -> repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
-    printFileLnList :: repr (Value repr) -> repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
-
-    getInput         :: repr (InputType repr) -> repr (Value repr) -> repr (PreStatement repr)
-    discardInput     :: repr (InputType repr) -> repr (PreStatement repr)
-    getFileInput     :: repr (Value repr) -> repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
-    discardFileInput :: repr (Value repr) -> repr (PreStatement repr)
-
-    openFileR :: repr (Value repr) -> repr (Value repr) -> repr (PreStatement repr)
-    openFileW :: repr (Value repr) -> repr (Value repr) -> repr (PreStatement repr)
-    closeFile :: repr (Value repr) -> repr (PreStatement repr)
-
-    getFileInputLine :: repr (Value repr) -> repr (Value repr) -> repr (PreStatement repr)
-    discardFileLine  :: repr (Value repr) -> repr (PreStatement repr)
-    stringSplit      :: Char -> repr (Value repr) -> repr (Value repr) -> repr (PreStatement repr)
-
-    break :: repr (PreStatement repr)
-    continue :: repr (PreStatement repr)
-
-    returnState :: repr (Value repr) -> repr (PreStatement repr)
-    returnVar :: Label -> repr (PreStatement repr)
-
-    valState :: repr (Value repr) -> repr (PreStatement repr)
-
-    comment :: Label -> repr (PreStatement repr)
-
-    free :: repr (Value repr) -> repr (PreStatement repr)
-
-    throw :: Label -> repr (PreStatement repr)
-
-    initState   :: Label -> Label -> repr (PreStatement repr)
-    changeState :: Label -> Label -> repr (PreStatement repr)
-
-    initObserverList :: repr (StateType repr) -> [repr (Value repr)] -> repr (PreStatement repr)
-    addObserver      :: repr (StateType repr) -> repr (Value repr) -> repr (PreStatement repr)
-
-class (PreStatementSym repr, IOStSym repr) => StatementSym repr where
+class (PermanenceSym repr, StateTypeSym repr, ValueSym repr, InputTypeSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) => StatementSym repr where
     type Statement repr
-    ioState :: repr (IOSt repr) -> repr (Statement repr)
+    (&=)   :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
+    (&.=)  :: Label -> repr (Value repr) -> repr (Statement repr)
+    (&=.)  :: repr (Value repr) -> Label -> repr (Statement repr)
+    (&-=)  :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
+    (&.-=) :: Label -> repr (Value repr) -> repr (Statement repr)
+    (&+=)  :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
+    (&.+=) :: Label -> repr (Value repr) -> repr (Statement repr)
+    (&++)  :: repr (Value repr) -> repr (Statement repr)
+    (&.++) :: Label -> repr (Statement repr)
+    (&~-)  :: repr (Value repr) -> repr (Statement repr)
+    (&.~-) :: Label -> repr (Statement repr)
 
-    state :: repr (PreStatement repr) -> repr (Statement repr)
-    loopState :: repr (PreStatement repr) -> repr (Statement repr)
+    assign  :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
 
-class (KeywordSym repr, ValueSym repr) => IOStSym repr where
-    type IOSt repr
-    out :: repr (Keyword repr) -> repr (Value repr) -> repr (IOSt repr) 
+    varDec        :: Label -> repr (StateType repr) -> repr (Statement repr)
+    varDecDef     :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
+    listDec       :: Label -> Integer -> repr (StateType repr) -> repr (Statement repr)
+    listDecDef    :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (Statement repr)
+    objDecDef     :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
+    objDecNew     :: Label -> repr (StateType repr) -> [repr (Value repr)] -> repr (Statement repr)
+    objDecNewVoid :: Label -> repr (StateType repr) -> repr (Statement repr)
+    constDecDef   :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
+
+    out :: repr (Keyword repr) -> repr (Value repr) -> repr (Statement repr) 
+
+    print      :: repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
+    printLn    :: repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
+    printStr   :: String -> repr (Statement repr)
+    printStrLn :: String -> repr (Statement repr)
+
+    printFile      :: repr (Value repr) -> repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
+    printFileLn    :: repr (Value repr) -> repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
+    printFileStr   :: repr (Value repr) -> String -> repr (Statement repr)
+    printFileStrLn :: repr (Value repr) -> String -> repr (Statement repr)
+
+    printList       :: repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
+    printLnList     :: repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
+    printFileList   :: repr (Value repr) -> repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
+    printFileLnList :: repr (Value repr) -> repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
+
+    getInput         :: repr (InputType repr) -> repr (Value repr) -> repr (Statement repr)
+    discardInput     :: repr (InputType repr) -> repr (Statement repr)
+    getFileInput     :: repr (Value repr) -> repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
+    discardFileInput :: repr (Value repr) -> repr (Statement repr)
+
+    openFileR :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
+    openFileW :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
+    closeFile :: repr (Value repr) -> repr (Statement repr)
+
+    getFileInputLine :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
+    discardFileLine  :: repr (Value repr) -> repr (Statement repr)
+    stringSplit      :: Char -> repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
+
+    break :: repr (Statement repr)
+    continue :: repr (Statement repr)
+
+    returnState :: repr (Value repr) -> repr (Statement repr)
+    returnVar :: Label -> repr (Statement repr)
+
+    valState :: repr (Value repr) -> repr (Statement repr)
+
+    comment :: Label -> repr (Statement repr)
+
+    free :: repr (Value repr) -> repr (Statement repr)
+
+    throw :: Label -> repr (Statement repr)
+
+    initState   :: Label -> Label -> repr (Statement repr)
+    changeState :: Label -> Label -> repr (Statement repr)
+
+    initObserverList :: repr (StateType repr) -> [repr (Value repr)] -> repr (Statement repr)
+    addObserver      :: repr (StateType repr) -> repr (Value repr) -> repr (Statement repr)
+
+    state :: repr (Statement repr) -> repr (Statement repr)
+    loopState :: repr (Statement repr) -> repr (Statement repr)
 
 class UnaryOpSym repr where
     type UnaryOp repr

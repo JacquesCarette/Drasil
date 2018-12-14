@@ -7,9 +7,9 @@ module LanguageRenderer.NewJavaRenderer (
 
 import New (Declaration, StateVar, Label, Library,
   RenderSym(..), KeywordSym(..), PermanenceSym(..), InputTypeSym(..),
-  BodySym(..), BlockSym(..), ControlStatementSym(..), StateTypeSym(..),
-  PreStatementSym(..),  StatementSym(..),
-  IOStSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), 
+  BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
+  StatementSym(..),
+  UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..),
   ParameterSym(..), MethodSym(..), ClassSym(..))
 import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, bodyBlockStatementsDocD, outDocD, 
@@ -142,14 +142,11 @@ instance BodySym JavaCode where
     bodyStatements sts = block sts
     oneLiner s = bodyStatements [s]
 
-    bodyBlockState sts = lift1List bodyBlockStatementsDocD endStatement sts
-
     addComments s b = liftA2 (addCommentsDocD s) commentStart b
 
 instance BlockSym JavaCode where
     type Block JavaCode = Doc
     block sts = lift1List blockDocD endStatement (map state sts)
-    blockState sts = lift1List blockDocD endStatement sts
     
 instance ClassSym JavaCode where
     -- buildClass n p s vs fs = liftA3 (classDocD n p) s vs fs -- vs and fs are actually lists... should 
@@ -181,7 +178,7 @@ instance StateTypeSym JavaCode where
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
 
-instance ControlStatementSym JavaCode where
+instance ControlBlockSym JavaCode where
     ifCond bs b = lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs
     switch v cs c = lift3Pair switchDocD (state break) v c cs
 
@@ -214,11 +211,11 @@ instance ControlStatementSym JavaCode where
             l_i = "i_temp"
             v_i = var l_i
         in
-        (blockState [
-            statement (listDec l_temp 0 t),
+        (body [
+            block [(listDec l_temp 0 t)],
             for (varDecDef l_i (int) (getB b)) (v_i ?< getE e) (getS s v_i)
                 (oneLiner $ valState $ v_temp $. (listAppend (vold $. (listAccess v_i)))),
-            statement (vnew &= v_temp)])
+            block [(vnew &= v_temp)]])
         where getB Nothing = litInt 0
               getB (Just n) = n
               getE Nothing = vold$.listSize
@@ -226,8 +223,8 @@ instance ControlStatementSym JavaCode where
               getS Nothing v = (&++) v
               getS (Just n) v = v &+= n
 
-    statement s = state s
-    statements s = lift1List blockDocD endStatement (map state s)
+    -- statement s = state s
+    -- statements s = lift1List blockDocD endStatement (map state s)
 
 instance UnaryOpSym JavaCode where
     type UnaryOp JavaCode = Doc
@@ -331,12 +328,8 @@ instance ValueSym JavaCode where
     exists v = v
     notNull v = liftA3 notNullDocD v notEqualOp (var "null")
 
-instance IOStSym JavaCode where
-    type IOSt JavaCode = Doc
-    out prf v = liftA2 outDocD prf v
-
-instance PreStatementSym JavaCode where
-    type PreStatement JavaCode = Doc
+instance StatementSym JavaCode where
+    type Statement JavaCode = Doc
     assign v1 v2 = liftA2 assignDocD v1 v2
     (&=) v1 v2 = assign v1 v2
     (&.=) l v = assign (var l) v
@@ -358,6 +351,8 @@ instance PreStatementSym JavaCode where
     objDecNew l t vs = liftA2 (objDecDefDocD l) t (stateObj t vs)
     objDecNewVoid l t = liftA2 (objDecDefDocD l) t (stateObj t [])
     constDecDef l t v = liftA2 (jConstDecDef l) t v
+
+    out prf v = liftA2 outDocD prf v
 
     print _ v = out printFunc v
     printLn _ v = out printLnFunc v
@@ -409,10 +404,6 @@ instance PreStatementSym JavaCode where
     addObserver t o = obsList $. listAdd last o
         where obsList = observerListName `listOf` t
               last = obsList $. listSize
-
-instance StatementSym JavaCode where
-    type Statement JavaCode = Doc
-    ioState = state -- Now that types are Doc synonyms, I think this will work
 
     state s = liftA2 statementDocD s endStatement
     loopState s = liftA2 statementDocD s endStatementLoop

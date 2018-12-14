@@ -24,7 +24,7 @@ genCode :: [Doc] -> [Label] -> [Label] -> IO()
 genCode files names exts = createCodeFiles $ makeCode files names exts
 
 patternTest :: (RenderSym repr) => repr (RenderFile repr)
-patternTest = fileDoc ( mainMethod (body [ (block [(varDec "n" int), (initState "myFSM" "Off"), (changeState "myFSM" "On")]),
+patternTest = fileDoc ( mainClass "PatternTest" [] [mainMethod (body [ (block [(varDec "n" int), (initState "myFSM" "Off"), (changeState "myFSM" "On")]),
   (checkState "myFSM" 
     [((litString "Off"), oneLiner (printStrLn "Off")), ((litString "On"), oneLiner (printStrLn "On"))] 
     (oneLiner (printStrLn "In"))),
@@ -32,16 +32,16 @@ patternTest = fileDoc ( mainMethod (body [ (block [(varDec "n" int), (initState 
     [("myStrat", oneLiner (printStrLn "myStrat")), ("yourStrat", oneLiner (printStrLn "yourStrat"))]
     (Just (litInt 3)) (Just (var "n"))),
   (block [(initObserverList (intListType static) [(litInt 1), (litInt 2)]), (addObserver (intListType static) (litInt 3))]),
-  (notifyObservers "addNums" (intListType static) [(litInt 2), (litInt 5)])]))
+  (notifyObservers "addNums" (intListType static) [(litInt 2), (litInt 5)])])])
 
 helloWorld :: (RenderSym repr) => repr (RenderFile repr)
-helloWorld = fileDoc ( mainMethod (body [ helloInitVariables, helloListSlice,
+helloWorld = fileDoc ( pubClass "HelloWorld" Nothing [] [mainMethod (body [ helloInitVariables, helloListSlice,
   ifCond [(litFalse, bodyStatements [(varDec "dummy" string)]),
     (litTrue, helloIfBody)] helloElseBody,
   switch (var "a") [((litInt 5), (oneLiner ("b" &.= (litInt 10)))), 
     ((litInt 0), (oneLiner ("b" &.= (litInt 5))))]
     (oneLiner ("b" &.= (litInt 0))),
-  helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch, goodBye1, helloFileRead, goodBye2]))
+  helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch, goodBye1, helloFileRead, goodBye2])])
 
 helloInitVariables :: (RenderSym repr) => repr (Block repr)
 helloInitVariables = block [ (comment "Initializing variables"),
@@ -166,9 +166,10 @@ goodBye1 = block [
   ("f" &.= (castObj (cast float int) (var "e"))),
   (varDec "file" (obj "Scanner")),
   (openFileR (var "file") (litString "filename")),
-  (varDec "fileContents" string),
-  (getFileInputLine (var "file") (var "fileContents")),
-  (discardFileLine (var "file"))]
+  (varDec "fileLine" string),
+  (getFileInputLine (var "file") (var "fileLine")),
+  (discardFileLine (var "file")),
+  (listDec "fileContents" 1 (listType dynamic string))]
 
 helloFileRead :: (RenderSym repr) => repr (Block repr)
 helloFileRead = (getFileInputAll (var "file") (var "fileContents"))

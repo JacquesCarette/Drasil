@@ -2,7 +2,7 @@ module Helpers (
     blank,spc,oneTabbed,oneTab,vertical,verticalComma,verticalNewLine,
     angles,doubleQuoted,doubleQuotedText,capitalize,containsAll,
     makeLiteralNameValid,makeVarNameValid,makeClassNameValid,powerSet,
-    hmap,himap,vicat,vibcat,vmap,vimap,vibmap, reduceLibs
+    hmap,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, reduceLibs
 ) where
 
 import Prelude hiding ((<>))
@@ -74,6 +74,9 @@ hmap f l = hcat $ map f l
 
 himap :: Doc -> (a -> Doc) -> [a] -> Doc
 himap c f l = hcat $ intersperse c (map f l)
+
+hicat :: Doc -> [Doc] -> Doc
+hicat c l = hcat $ intersperse c l
 
 vicat :: Doc -> [Doc] -> Doc
 vicat c l = vcat $ intersperse c l

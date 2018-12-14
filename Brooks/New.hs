@@ -21,9 +21,9 @@ type Library = String
 -- type VarDecl = Declaration
 -- type FunctionDecl = Method
 
-class (MethodSym repr, ControlBlockSym repr) => RenderSym repr where
+class (ClassSym repr, ControlBlockSym repr) => RenderSym repr where
     type RenderFile repr
-    fileDoc :: repr (Method repr) -> repr (RenderFile repr)
+    fileDoc :: repr (Class repr) -> repr (RenderFile repr)
     top :: repr (Block repr)
     bottom :: repr (Block repr)
 

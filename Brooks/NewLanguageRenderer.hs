@@ -408,7 +408,7 @@ orOpDocD :: Doc
 orOpDocD = text "||"
 
 binOpDocD :: Doc -> Doc -> Doc -> Doc
-binOpDocD v1 op v2 = parens v1 <+> op <+> parens v2
+binOpDocD v1 op v2 = parens (v1 <+> op <+> v2)
 
 binOpDocD' :: Doc -> Doc -> Doc -> Doc
 binOpDocD' v1 op v2 = op <> parens (v1 <> comma <+> v2)

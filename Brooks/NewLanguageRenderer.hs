@@ -7,17 +7,16 @@ module NewLanguageRenderer (
     classDec, dot, doubleSlash, forLabel, new, observerListName,
     
     -- * Default Functions available for use in renderers
-    fileDoc', blockDocD, bodyDocD, bodyBlockStatementsDocD, outDocD, 
+    fileDoc', classDocD, enumDocD, enumElementsDocD, blockDocD, bodyDocD, outDocD, 
     printListDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, charTypeDocD, 
     stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD, voidDocD, 
     constructDocD, stateParamDocD, paramListDocD, methodDocD, methodListDocD,
-    stateVarDocD, stateVarListDocD,
-    ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD,
-    assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
-    listDecDocD, listDecDefDocD, statementDocD, returnDocD, commentDocD,
-    freeDocD, throwDocD, stratDocD,
-    notOpDocD, negateOpDocD, sqrtOpDocD, absOpDocD, logOpDocD, lnOpDocD, 
-    expOpDocD, sinOpDocD, cosOpDocD, tanOpDocD, unOpDocD, equalOpDocD, 
+    stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD, forEachDocD, 
+    whileDocD, tryCatchDocD, assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, 
+    varDecDefDocD, listDecDocD, listDecDefDocD, statementDocD, returnDocD, 
+    commentDocD, freeDocD, throwDocD, stratDocD, notOpDocD, negateOpDocD, 
+    sqrtOpDocD, absOpDocD, logOpDocD, lnOpDocD, expOpDocD, sinOpDocD, cosOpDocD, 
+    tanOpDocD, unOpDocD, equalOpDocD, 
     notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
     lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
     moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', 
@@ -98,18 +97,33 @@ fileDoc' t m b = vibcat [
 -- 'Default' functions used in the renderers --
 -----------------------------------------------
 
--- Uncomment classDocD when inherit works
+-- Class --
 
--- classDocD :: Label -> Maybe Label -> Doc -> Doc -> Doc -> Doc
--- classDocD n p s vs fs = vcat [
---     s <+> clsDec c <+> text n <+> baseClass <+> lbrace, 
---     oneTabbed [
---         vs,
---         blank,
---         fs],
---     rbrace]
---     where baseClass = case p of Nothing -> empty
---                                 Just pn -> inherit c <+> text pn
+classDocD :: Label -> Maybe Label -> Doc -> Doc -> Doc -> Doc -> Doc
+classDocD n p inherit s vs fs = vcat [
+    s <+> classDec <+> text n <+> baseClass <+> lbrace, 
+    oneTabbed [
+        vs,
+        blank,
+        fs],
+    rbrace]
+    where baseClass = case p of Nothing -> empty
+                                Just pn -> inherit <+> text pn
+
+enumDocD :: Label -> Doc -> Doc -> Doc
+enumDocD n es s = vcat [
+    s <+> text "enum" <+> text n <+> lbrace,
+    oneTab $ es,
+    rbrace]
+
+enumElementsDocD :: [Label] -> Bool -> Doc
+enumElementsDocD es enumsEqualInts = vcat $
+    zipWith (\e i -> text e <+> equalsInt i <> interComma i) es nums
+    where nums = [0..length es - 1]
+          equalsInt i = if enumsEqualInts then (equals <+> int i) else empty 
+          interComma i = if i < length es - 1 then text "," else empty
+
+-- Groupings --
 
 blockDocD :: Doc -> [Doc] -> Doc
 blockDocD end sts = vcat statements
@@ -121,16 +135,13 @@ bodyDocD bs = vibcat blocks
   where blocks = filter notNullBlock bs
         notNullBlock b = (not $ isEmpty b)
 
-bodyBlockStatementsDocD :: Doc -> [Doc] -> Doc
-bodyBlockStatementsDocD end sts = vibcat stmts
-    where stmts = filter notNullStatement sts
-          notNullStatement s = (not $ isEmpty s) && (render s /= render end)
+-- IO --
 
 outDocD :: Doc -> Doc -> Doc
 outDocD printFn v = printFn <> parens (v)
 
-printListDocD :: Doc -> Doc -> Doc -> Doc
-printListDocD open b close = vcat [open, b, close]
+printListDocD :: Doc -> Doc -> Doc -> Doc -> Doc
+printListDocD open b lastElem close = vcat [open, b, lastElem, close]
 
 -- Type Printers --
 

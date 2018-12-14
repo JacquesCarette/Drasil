@@ -24,31 +24,37 @@ type Library = String
 class (MethodSym repr, ControlBlockSym repr) => RenderSym repr where
     type RenderFile repr
     fileDoc :: repr (Method repr) -> repr (RenderFile repr)
-    top :: repr (Block repr) -- Block is a placeholder for all of these, should change
-    codeBody :: repr (Class repr) -> repr (Block repr)
+    top :: repr (Block repr)
     bottom :: repr (Block repr)
 
 class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
     type Keyword repr
-    endStatement :: repr (Keyword repr)
+    endStatement     :: repr (Keyword repr)
     endStatementLoop :: repr (Keyword repr)
+
     include :: repr (Keyword repr)
-    list :: repr (Permanence repr) -> repr (Keyword repr)
+    inherit :: repr (Keyword repr)
+
+    list     :: repr (Permanence repr) -> repr (Keyword repr)
     argsList :: repr (Keyword repr)
-    listObj :: repr (Keyword repr)
+    listObj  :: repr (Keyword repr)
+
     blockStart :: repr (Keyword repr)
-    blockEnd :: repr (Keyword repr)
+    blockEnd   :: repr (Keyword repr)
+
     ifBodyStart :: repr (Keyword repr)
-    elseIf :: repr (Keyword repr)
+    elseIf      :: repr (Keyword repr)
+
     iterForEachLabel :: repr (Keyword repr)
-    iterInLabel :: repr (Keyword repr)
+    iterInLabel      :: repr (Keyword repr)
+    
     commentStart :: repr (Keyword repr)
 
     inputFunc :: repr (Keyword repr)
 
-    printFunc :: repr (Keyword repr)
-    printLnFunc :: repr (Keyword repr)
-    printFileFunc :: repr (Value repr) -> repr (Keyword repr)
+    printFunc       :: repr (Keyword repr)
+    printLnFunc     :: repr (Keyword repr)
+    printFileFunc   :: repr (Value repr) -> repr (Keyword repr)
     printFileLnFunc :: repr (Value repr) -> repr (Keyword repr)
 
 class InputTypeSym repr where
@@ -69,15 +75,11 @@ class (BlockSym repr) => BodySym repr where
     bodyStatements :: [repr (Statement repr)] -> repr (Body repr)
     oneLiner :: repr (Statement repr) -> repr (Body repr)
 
-    -- bodyBlockState :: [repr (Statement repr)] -> repr (Body repr) -- for statements that don't need semi colons and should be treated as a block
-
     addComments :: Label -> repr (Body repr) -> repr (Body repr)
 
--- Right now the Block is the top-level structure
 class StatementSym repr => BlockSym repr where
     type Block repr
     block   :: [repr (Statement repr)] -> repr (Block repr)
-    -- blockState :: [repr (Statement repr)] -> repr (Block repr) -- for when the statements don't need semi colons (i.e. an if or a for loop, etc.)
 
 class StateTypeSym repr where
     type StateType repr
@@ -115,9 +117,6 @@ class (BodySym repr, StatementSym repr) => ControlBlockSym repr where
 
     getFileInputAll  :: repr (Value repr) -> repr (Value repr) -> repr (Block repr)
     listSlice        :: repr (StateType repr) -> repr (Value repr) -> repr (Value repr) -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Block repr)
-
-    -- statement  :: repr (Statement repr) -> repr (Statement repr)
-    -- statements :: [repr (Statement repr)] -> repr (Statement repr)
 
 class (PermanenceSym repr, StateTypeSym repr, ValueSym repr, InputTypeSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) => StatementSym repr where
     type Statement repr
@@ -375,10 +374,17 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, BodySym repr) => Me
     pubMethod   :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
     constructor :: Label -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
 
-class StateVarSym repr where
+class (ScopeSym repr, PermanenceSym repr, StateTypeSym repr) => StateVarSym repr where
     type StateVar repr
     stateVar :: Int -> Label -> repr (Scope repr) -> repr (Permanence repr) -> repr (StateType repr) -> repr (StateVar repr)
+    privMVar :: Int -> Label -> repr (StateType repr) -> repr (StateVar repr)
+    pubMVar  :: Int -> Label -> repr (StateType repr) -> repr (StateVar repr)
+    pubGVar  :: Int -> Label -> repr (StateType repr) -> repr (StateVar repr)
 
-class ClassSym repr where
+class (StateVarSym repr, MethodSym repr) => ClassSym repr where
     type Class repr
     buildClass :: Label -> Maybe Label -> repr (Scope repr) -> [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
+    enum :: Label -> [Label] -> repr (Scope repr) -> repr (Class repr)
+    mainClass :: Label -> [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
+    privClass ::Label -> Maybe Label -> [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
+    pubClass ::Label -> Maybe Label -> [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)

@@ -12,7 +12,8 @@ import New (Declaration, Label, Library,
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..),
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..))
-import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, bodyBlockStatementsDocD, outDocD, 
+import NewLanguageRenderer (fileDoc', classDocD, enumDocD, enumElementsDocD,
+  blockDocD, bodyDocD, outDocD, 
   printListDocD, boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, listTypeDocD, 
   voidDocD, constructDocD, stateParamDocD,
   paramListDocD, methodListDocD, stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD, 
@@ -98,24 +99,31 @@ instance RenderSym JavaCode where
     type RenderFile JavaCode = Doc
     fileDoc code = liftA3 fileDoc' top code bottom
     top = liftA3 jtop endStatement include (list static)
-    -- codeBody m = m -- don't need right now
     bottom = return empty
 
 instance KeywordSym JavaCode where
     type Keyword JavaCode = Doc
     endStatement = return semi
     endStatementLoop = return empty
+
     include = return $ includeD "import"
+    inherit = return $ text "extends"
+
     list _ = return $ text "ArrayList"
     argsList = return $ text "args"
     listObj = return new
+
     blockStart = return lbrace
     blockEnd = return rbrace
+
     ifBodyStart = blockStart
     elseIf = return $ text "else if"
+    
     iterForEachLabel = return forLabel
     iterInLabel = return colon
+
     commentStart = return doubleSlash
+
     inputFunc = return (parens (text "new Scanner(System.in)"))
     
     printFunc = return $ text "System.out.print"
@@ -146,16 +154,6 @@ instance BodySym JavaCode where
 instance BlockSym JavaCode where
     type Block JavaCode = Doc
     block sts = lift1List blockDocD endStatement (map state sts)
-    
-instance ClassSym JavaCode where
-    -- buildClass n p s vs fs = liftA3 (classDocD n p) s vs fs -- vs and fs are actually lists... should 
-
--- instance ClassSym JavaCode where
---     buildClass n p s vs fs = do
---         scope <- s
---         vars <- vs
---         funcs <- fs --ignore for the moment that fs and vs are lists
---         liftJC0 (classDocD n p scope vars funcs)
 
 instance StateTypeSym JavaCode where
     type StateType JavaCode = Doc
@@ -216,9 +214,6 @@ instance ControlBlockSym JavaCode where
               getE (Just n) = n
               getS Nothing v = (&++) v
               getS (Just n) v = v &+= n
-
-    -- statement s = state s
-    -- statements s = lift1List blockDocD endStatement (map state s)
 
 instance UnaryOpSym JavaCode where
     type UnaryOp JavaCode = Doc
@@ -358,10 +353,10 @@ instance StatementSym JavaCode where
     printFileStr f s = out (printFileFunc f) (litString s)
     printFileStrLn f s = out (printFileLnFunc f) (litString s)
 
-    printList t v = liftA3 printListDocD (state (printStr "[")) (forEach "listElem" t v (bodyStatements [print t (var "listElem"), printStr ","])) (printStr "]")
-    printLnList t v = liftA3 printListDocD (state (printStr "[")) (forEach "listElem" t v (bodyStatements [print t (var "listElem"), printStr ","])) (printStrLn "]")
-    printFileList f t v = liftA3 printListDocD (state (printFileStr f "[")) (forEach "listElem" t v (bodyStatements [printFile f t (var "listElem"), printFileStr f ","])) (printFileStr f "]")
-    printFileLnList f t v = liftA3 printListDocD (state (printFileStr f "[")) (forEach "listElem" t v (bodyStatements [printFile f t (var "listElem"), printFileStr f ","])) (printFileStrLn f "]")
+    printList t v = liftA4 printListDocD (state (printStr "[")) (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])) (state (print t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))) (printStr "]")
+    printLnList t v = liftA4 printListDocD (state (printStr "[")) (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])) (state (print t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))) (printStrLn "]")
+    printFileList f t v = liftA4 printListDocD (state (printFileStr f "[")) (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])) (state (printFile f t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))) (printFileStr f "]")
+    printFileLnList f t v = liftA4 printListDocD (state (printFileStr f "[")) (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])) (state (printFile f t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))) (printFileStrLn f "]")
 
     getInput it v = liftA3 jInput it v inputFunc
     discardInput _ = liftA jDiscardInput inputFunc
@@ -479,6 +474,17 @@ instance MethodSym JavaCode where
 instance StateVarSym JavaCode where
     type StateVar JavaCode = Doc
     stateVar _ l s p t = liftA4 (stateVarDocD l) (includeScope s) p t endStatement
+    privMVar del l t = stateVar del l private dynamic t
+    pubMVar del l t = stateVar del l public dynamic t
+    pubGVar del l t = stateVar del l public static t
+
+instance ClassSym JavaCode where
+    type Class JavaCode = Doc
+    buildClass n p s vs fs = liftA4 (classDocD n p) inherit s (liftList stateVarListDocD vs) (liftList methodListDocD fs) -- vs and fs are actually lists... should 
+    enum n es s = liftA2 (enumDocD n) (return $ enumElementsDocD es False) s
+    mainClass n vs fs = buildClass n Nothing public vs fs
+    privClass n p vs fs = buildClass n p private vs fs
+    pubClass n p vs fs = buildClass n p public vs fs
 
 jtop :: Doc -> Doc -> Doc -> Doc
 jtop end inc lst = vcat [

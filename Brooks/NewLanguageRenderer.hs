@@ -7,7 +7,7 @@ module NewLanguageRenderer (
     classDec, dot, doubleSlash, forLabel, new, observerListName,
     
     -- * Default Functions available for use in renderers
-    fileDoc', classDocD, enumDocD, enumElementsDocD, blockDocD, bodyDocD, outDocD, 
+    fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, blockDocD, bodyDocD, outDocD, 
     printListDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, charTypeDocD, 
     stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD, voidDocD, 
     constructDocD, stateParamDocD, paramListDocD, methodDocD, methodListDocD,
@@ -96,6 +96,11 @@ fileDoc' t m b = vibcat [
 -----------------------------------------------
 -- 'Default' functions used in the renderers --
 -----------------------------------------------
+
+-- Module --
+
+moduleDocD :: [Doc] -> Doc
+moduleDocD cs = vibcat cs
 
 -- Class --
 

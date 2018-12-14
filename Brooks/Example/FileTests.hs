@@ -1,0 +1,42 @@
+module Example.FileTests (fileTests) where
+
+import New (Label, Library,
+  RenderSym(..), KeywordSym(..), PermanenceSym(..), InputTypeSym(..),
+  BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
+  StatementSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..),
+  FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..), 
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+import LanguageRenderer.NewJavaRenderer (JavaCode(..))
+import Text.PrettyPrint.HughesPJ (Doc)
+import Prelude hiding (return,print,log,exp,sin,cos,tan)
+
+fileTests :: (RenderSym repr) => repr (RenderFile repr)
+fileTests = fileDoc (buildModule "" [] [] [] [fileTestClass])
+
+fileTestClass :: (RenderSym repr) => repr (Class repr)
+fileTestClass = pubClass "FileTests" Nothing [privMVar 1 "dummy" int] 
+  [mainMethod (body [writeStory, readStory, goodBye])]
+
+writeStory :: (RenderSym repr) => repr (Block repr)
+writeStory = block [
+  (varDecDef "e" int (litInt 5)),
+  (varDec "f" float),
+  ("f" &.= (castObj (cast float int) (var "e"))),
+  (varDec "file" (obj "PrintWriter")),
+  (openFileW (var "file") (litString "../filename.txt")),
+  (printFile (var "file") int (litInt 0)),
+  (printFileLn (var "file") int (litFloat 0.89)),
+  (printFileStr (var "file") "ello"),
+  (printFileStrLn (var "file") "byebye"),
+  (varDec "fileToRead" (obj "Scanner")),
+  (openFileR (var "fileToRead") (litString "../filename.txt")),
+  (varDec "fileLine" string),
+  (getFileInputLine (var "fileToRead") (var "fileLine")),
+  (discardFileLine (var "fileToRead")),
+  (listDec "fileContents" 1 (listType dynamic string))]
+
+readStory :: (RenderSym repr) => repr (Block repr)
+readStory = (getFileInputAll (var "fileToRead") (var "fileContents"))
+
+goodBye :: (RenderSym repr) => repr (Block repr)
+goodBye = block [(closeFile (var "file")), (closeFile (var "fileToRead"))]

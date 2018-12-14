@@ -2,14 +2,14 @@
 
 module New (
     -- Types
-    Declaration, Label, Library, 
+    Label, Library, 
     -- Typeclasses
     RenderSym(..), KeywordSym(..), InputTypeSym(..), PermanenceSym(..),
     BodySym(..), ControlBlockSym(..), BlockSym(..), StateTypeSym(..), 
     StatementSym(..),
     UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), 
     FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..),
-    ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..)
+    ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..)
 ) where
 
 import Text.PrettyPrint.HughesPJ (Doc)
@@ -18,12 +18,10 @@ type Declaration = Doc
 
 type Label = String
 type Library = String
--- type VarDecl = Declaration
--- type FunctionDecl = Method
 
-class (ClassSym repr, ControlBlockSym repr) => RenderSym repr where
+class (ModuleSym repr, ControlBlockSym repr) => RenderSym repr where
     type RenderFile repr
-    fileDoc :: repr (Class repr) -> repr (RenderFile repr)
+    fileDoc :: repr (Module repr) -> repr (RenderFile repr)
     top :: repr (Block repr)
     bottom :: repr (Block repr)
 
@@ -59,46 +57,46 @@ class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
 
 class InputTypeSym repr where
     type InputType repr
-    inputInt :: repr (InputType repr)
-    inputFloat :: repr (InputType repr)
-    inputBool :: repr (InputType repr)
+    inputInt    :: repr (InputType repr)
+    inputFloat  :: repr (InputType repr)
+    inputBool   :: repr (InputType repr)
     inputString :: repr (InputType repr)
 
 class PermanenceSym repr where
     type Permanence repr
-    static :: repr (Permanence repr)
+    static  :: repr (Permanence repr)
     dynamic :: repr (Permanence repr)
 
 class (BlockSym repr) => BodySym repr where
     type Body repr
-    body :: [repr (Block repr)] -> repr (Body repr)
+    body           :: [repr (Block repr)] -> repr (Body repr)
     bodyStatements :: [repr (Statement repr)] -> repr (Body repr)
-    oneLiner :: repr (Statement repr) -> repr (Body repr)
+    oneLiner       :: repr (Statement repr) -> repr (Body repr)
 
     addComments :: Label -> repr (Body repr) -> repr (Body repr)
 
-class StatementSym repr => BlockSym repr where
+class (StatementSym repr) => BlockSym repr where
     type Block repr
     block   :: [repr (Statement repr)] -> repr (Block repr)
 
-class StateTypeSym repr where
+class (PermanenceSym repr) => StateTypeSym repr where
     type StateType repr
-    bool   :: repr (StateType repr)
-    int    :: repr (StateType repr)
-    float  :: repr (StateType repr)
-    char   :: repr (StateType repr)
-    string :: repr (StateType repr)
-    infile :: repr (StateType repr)
-    outfile :: repr (StateType repr)
-    listType :: repr (Permanence repr) -> repr (StateType repr) -> repr (StateType repr)
-    intListType :: repr (Permanence repr) -> repr (StateType repr)
+    bool          :: repr (StateType repr)
+    int           :: repr (StateType repr)
+    float         :: repr (StateType repr)
+    char          :: repr (StateType repr)
+    string        :: repr (StateType repr)
+    infile        :: repr (StateType repr)
+    outfile       :: repr (StateType repr)
+    listType      :: repr (Permanence repr) -> repr (StateType repr) -> repr (StateType repr)
+    intListType   :: repr (Permanence repr) -> repr (StateType repr)
     intListType p = listType p int
     floatListType :: repr (Permanence repr) -> repr (StateType repr)
     floatListType p = listType p float
-    obj :: Label -> repr (StateType repr)
-    enumType :: Label -> repr (StateType repr)
+    obj           :: Label -> repr (StateType repr)
+    enumType      :: Label -> repr (StateType repr)
 
-class (BodySym repr, StatementSym repr) => ControlBlockSym repr where
+class (BodySym repr) => ControlBlockSym repr where
     ifCond :: [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Block repr) 
     switch :: repr (Value repr) -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Block repr) -- is there value in separating Literals into their own type?
 
@@ -118,7 +116,7 @@ class (BodySym repr, StatementSym repr) => ControlBlockSym repr where
     getFileInputAll  :: repr (Value repr) -> repr (Value repr) -> repr (Block repr)
     listSlice        :: repr (StateType repr) -> repr (Value repr) -> repr (Value repr) -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Block repr)
 
-class (PermanenceSym repr, StateTypeSym repr, ValueSym repr, InputTypeSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) => StatementSym repr where
+class (ValueSym repr, InputTypeSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) => StatementSym repr where
     type Statement repr
     (&=)   :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
     (&.=)  :: Label -> repr (Value repr) -> repr (Statement repr)
@@ -313,7 +311,7 @@ class (FunctionSym repr, ValueSym repr) => Selector repr where
     castObj        :: repr (Function repr) -> repr (Value repr) -> repr (Value repr)
     castStrToFloat :: repr (Value repr) -> repr (Function repr)
 
-class (ValueSym repr, StateTypeSym repr) => FunctionSym repr where
+class (ValueSym repr) => FunctionSym repr where
     type Function repr
     func           :: Label -> [repr (Value repr)] -> repr (Function repr)
     cast           :: repr (StateType repr) -> repr (StateType repr) -> repr (Function repr)
@@ -337,7 +335,7 @@ class (ValueSym repr, StateTypeSym repr) => FunctionSym repr where
     iterBegin :: repr (Function repr)
     iterEnd   :: repr (Function repr)
 
-class (ValueSym repr, StateTypeSym repr, FunctionSym repr, Selector repr) => SelectorFunction repr where
+class (ValueSym repr, FunctionSym repr, Selector repr) => SelectorFunction repr where
     listAccess :: repr (Value repr) -> repr (Function repr)
     listSet    :: repr (Value repr) -> repr (Value repr) -> repr (Function repr)
 
@@ -388,3 +386,7 @@ class (StateVarSym repr, MethodSym repr) => ClassSym repr where
     mainClass :: Label -> [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
     privClass ::Label -> Maybe Label -> [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
     pubClass ::Label -> Maybe Label -> [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
+
+class (ClassSym repr) => ModuleSym repr where
+    type Module repr
+    buildModule :: Label -> [Library] -> [repr (StateVar repr)] -> [repr (Method repr)] -> [repr (Class repr)] -> repr (Module repr)

@@ -1,47 +1,23 @@
-module Example.HelloWorld (main) where
+module Example.HelloWorld (helloWorld) where
 
-import New (Declaration, Label, Library,
+import New (Label, Library,
   RenderSym(..), KeywordSym(..), PermanenceSym(..), InputTypeSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
   StatementSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..),
   FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..), 
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..))
-import NewLanguageRenderer (makeCode, createCodeFiles)
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import LanguageRenderer.NewJavaRenderer (JavaCode(..))
 import Text.PrettyPrint.HughesPJ (Doc)
-import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
-main :: IO()
-main = do
-  workingDir <- getCurrentDirectory
-  createDirectoryIfMissing False "java"
-  setCurrentDirectory "java"
-  genCode (map unJC [helloWorld, patternTest]) ["HelloWorld", "PatternTest"] [".java"]
-  setCurrentDirectory workingDir
-    
-genCode :: [Doc] -> [Label] -> [Label] -> IO()
-genCode files names exts = createCodeFiles $ makeCode files names exts
-
-patternTest :: (RenderSym repr) => repr (RenderFile repr)
-patternTest = fileDoc ( mainClass "PatternTest" [] [mainMethod (body [ (block [(varDec "n" int), (initState "myFSM" "Off"), (changeState "myFSM" "On")]),
-  (checkState "myFSM" 
-    [((litString "Off"), oneLiner (printStrLn "Off")), ((litString "On"), oneLiner (printStrLn "On"))] 
-    (oneLiner (printStrLn "In"))),
-  (runStrategy "myStrat" 
-    [("myStrat", oneLiner (printStrLn "myStrat")), ("yourStrat", oneLiner (printStrLn "yourStrat"))]
-    (Just (litInt 3)) (Just (var "n"))),
-  (block [(initObserverList (intListType static) [(litInt 1), (litInt 2)]), (addObserver (intListType static) (litInt 3))]),
-  (notifyObservers "addNums" (intListType static) [(litInt 2), (litInt 5)])])])
-
 helloWorld :: (RenderSym repr) => repr (RenderFile repr)
-helloWorld = fileDoc ( pubClass "HelloWorld" Nothing [] [mainMethod (body [ helloInitVariables, helloListSlice,
+helloWorld = fileDoc (buildModule "" [] [] [] [helloWorldClass])
+
+helloWorldClass :: (RenderSym repr) => repr (Class repr)
+helloWorldClass = pubClass "HelloWorld" Nothing [stateVar 0 "greeting" private static string] [mainMethod (body [ helloInitVariables, helloListSlice,
   ifCond [(litFalse, bodyStatements [(varDec "dummy" string)]),
     (litTrue, helloIfBody)] helloElseBody,
-  switch (var "a") [((litInt 5), (oneLiner ("b" &.= (litInt 10)))), 
-    ((litInt 0), (oneLiner ("b" &.= (litInt 5))))]
-    (oneLiner ("b" &.= (litInt 0))),
-  helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch, goodBye1, helloFileRead, goodBye2])])
+  helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch])]
 
 helloInitVariables :: (RenderSym repr) => repr (Block repr)
 helloInitVariables = block [ (comment "Initializing variables"),
@@ -62,7 +38,6 @@ helloInitVariables = block [ (comment "Initializing variables"),
 
 helloListSlice :: (RenderSym repr) => repr (Block repr)
 helloListSlice = (listSlice (floatListType static) (var "mySlicedList") (var "myOtherList") (Just (litInt 1)) (Just (litInt 3)) Nothing)
-
 
 helloIfBody :: (RenderSym repr) => repr (Body repr)
 helloIfBody = addComments "If body" (body [
@@ -93,10 +68,29 @@ helloIfBody = addComments "If body" (body [
     printLnList (float) (var "myOtherList"),
     printLnList (float) (var "mySlicedList"),
     
+    printStrLn "Type an int",
     getInput inputInt (var "d"),
+    printStrLn "Type another",
     discardInput inputInt],
   
   block [
+    printLn (string) (litString " too"),
+    printStr "boo",
+    print (bool) litTrue,
+    printLn (float) defaultFloat,
+    print (int) (litInt 0),
+    print (char) (litChar 'c'),
+    printLn (bool) ((?!) litTrue),
+    printLn (int) ((#~) (litInt 1)),
+    printLn (float) ((#/^) (litFloat 4.0)),
+    printLn (int) ((#|) (litInt (-4))),
+    printLn (float) (log ((#~) (litFloat 2.0))),
+    printLn (float) (ln (litFloat 2.0)),
+    printLn (float) (exp (litFloat 2.0)),
+    printLn (float) (sin (litFloat 2.0)),
+    printLn (float) (cos (litFloat 2.0)),
+    printLn (float) (tan (litFloat 2.0)),
+    printLn (float) (tan (litFloat 2.0)),
     printLn (bool) (litTrue ?&& litFalse),
     printLn (bool) (litTrue ?|| litFalse),
     printLn (bool) (litTrue ?&& ((?!) litFalse)),
@@ -110,40 +104,27 @@ helloIfBody = addComments "If body" (body [
     printLn (int) ((litInt 6) #+ ((litInt 2) #* (litInt 3))),
     printLn (float) (csc (litFloat 1.0)),
     printLn (float) (sec (litFloat 1.0)),
+    printLn (int) (var "a"),
+    printLn (int) (inlineIf (litTrue) (litInt 5) (litInt 0)),
     printLn (float) (cot (litFloat 1.0))]])
-    -- printLn (int) (notNull (var "a")),
-    -- printLn (int) (var "a"),
-    -- printLn (int) (arg 5),
-    -- printLn (int) (extVar "Lib" "var"),
-    -- printLn (int) (self),
-    -- printLn (int) (objVarSelf "thisOne"),
-    -- printLn (int) (objVar (var "outer") (var "inner")),
-    -- printLn (int) (inlineIf (litTrue) (litInt 5) (litInt 0)),
-    -- printLn (int) (funcApp "myFunc" [(var "arg1"), (var "arg2")]),
-    -- printLn (int) (extFuncApp "myLib" "myFunc" [(var "arg1"), (var "arg2")]),
-    -- printLn (int) (stateObj bool [(var "arg1"), (var "arg2")]),
-    -- printLn (int) (listStateObj bool [(var "arg1"), (var "arg2")])
 
 helloElseBody :: (RenderSym repr) => repr (Body repr)
 helloElseBody = bodyStatements [
-  printStrLn "Hello, world",
-  printLn (string) (litString " too"),
-  printStr "boo",
-  print (bool) litTrue,
-  printLn (float) defaultFloat,
-  print (int) (litInt 0),
-  print (char) (litChar 'c'),
-  printLn (bool) ((?!) litTrue),
-  printLn (int) ((#~) (litInt 1)),
-  printLn (float) ((#/^) (litFloat 4.0)),
-  printLn (int) ((#|) (litInt (-4))),
-  printLn (float) (log ((#~) (litFloat 2.0))),
-  printLn (float) (ln (litFloat 2.0)),
-  printLn (float) (exp (litFloat 2.0)),
-  printLn (float) (sin (litFloat 2.0)),
-  printLn (float) (cos (litFloat 2.0)),
-  printLn (float) (tan (litFloat 2.0)),
-  printLn (float) (tan (litFloat 2.0))]
+  printStrLn "These will print but (by intention) not compile"]
+  -- printLn (int) (notNull (var "a")),
+  -- printLn (int) (arg 5),
+  -- printLn (int) (extVar "Lib" "var"),
+  -- printLn (int) (self),
+  -- printLn (int) (objVarSelf "thisOne"),
+  -- printLn (int) (objVar (var "outer") (var "inner")),
+  -- printLn (int) (extFuncApp "myLib" "myFunc" [(var "arg1"), (var "arg2")]),
+  -- printLn (int) (stateObj bool [(var "arg1"), (var "arg2")]),
+  -- printLn (int) (listStateObj bool [(var "arg1"), (var "arg2")])]
+
+helloSwitch :: (RenderSym repr) => repr (Block repr)
+helloSwitch = switch (var "a") [((litInt 5), (oneLiner ("b" &.= (litInt 10)))), 
+  ((litInt 0), (oneLiner ("b" &.= (litInt 5))))]
+  (oneLiner ("b" &.= (litInt 0)))
 
 helloForLoop :: (RenderSym repr) => repr (Block repr)
 helloForLoop = for (varDecDef "i" int (litInt 0)) ((var "i") ?< (litInt 10)) ((&.++) "i")
@@ -158,21 +139,4 @@ helloForEachLoop = forEach "num" (float) (listVar "myOtherList" (float))
 
 helloTryCatch :: (RenderSym repr) => repr (Block repr)
 helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
-  (oneLiner (printStrLn "Caught error"))
-
-goodBye1 :: (RenderSym repr) => repr (Block repr)
-goodBye1 = block [
-  (varDec "f" float),
-  ("f" &.= (castObj (cast float int) (var "e"))),
-  (varDec "file" (obj "Scanner")),
-  (openFileR (var "file") (litString "filename")),
-  (varDec "fileLine" string),
-  (getFileInputLine (var "file") (var "fileLine")),
-  (discardFileLine (var "file")),
-  (listDec "fileContents" 1 (listType dynamic string))]
-
-helloFileRead :: (RenderSym repr) => repr (Block repr)
-helloFileRead = (getFileInputAll (var "file") (var "fileContents"))
-
-goodBye2 :: (RenderSym repr) => repr (Block repr)
-goodBye2 = block [(closeFile (var "file"))]
+  (oneLiner (printStrLn "Caught intentional error"))

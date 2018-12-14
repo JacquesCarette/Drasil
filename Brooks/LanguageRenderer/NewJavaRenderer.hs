@@ -5,14 +5,14 @@ module LanguageRenderer.NewJavaRenderer (
     JavaCode(..)
 ) where
 
-import New (Declaration, Label, Library,
+import New (Label, Library,
   RenderSym(..), KeywordSym(..), PermanenceSym(..), InputTypeSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   StatementSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..),
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..))
-import NewLanguageRenderer (fileDoc', classDocD, enumDocD, enumElementsDocD,
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+import NewLanguageRenderer (fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD,
   blockDocD, bodyDocD, outDocD, 
   printListDocD, boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, listTypeDocD, 
   voidDocD, constructDocD, stateParamDocD,
@@ -485,6 +485,10 @@ instance ClassSym JavaCode where
     mainClass n vs fs = buildClass n Nothing public vs fs
     privClass n p vs fs = buildClass n p private vs fs
     pubClass n p vs fs = buildClass n p public vs fs
+
+instance ModuleSym JavaCode where
+    type Module JavaCode = Doc
+    buildModule _ _ _ _ cs = liftList moduleDocD cs
 
 jtop :: Doc -> Doc -> Doc -> Doc
 jtop end inc lst = vcat [

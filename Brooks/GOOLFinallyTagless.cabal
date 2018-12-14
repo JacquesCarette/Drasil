@@ -24,7 +24,7 @@ library
 
 executable helloworld
   hs-source-dirs: Example
-  main-is: HelloWorld.hs
+  main-is: Main.hs
   other-modules:
   Build-Depends:
     base >= 4.7,

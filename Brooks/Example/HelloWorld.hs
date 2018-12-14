@@ -1,11 +1,11 @@
 module Example.HelloWorld (main) where
 
-import New (Declaration, StateVar, Label, Library,
+import New (Declaration, Label, Library,
   RenderSym(..), KeywordSym(..), PermanenceSym(..), InputTypeSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
-  StatementSym(..), UnaryOpSym(..), BinaryOpSym(..), 
-  ValueSym(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
-  ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), ClassSym(..))
+  StatementSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..),
+  FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..), 
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..))
 import NewLanguageRenderer (makeCode, createCodeFiles)
 import LanguageRenderer.NewJavaRenderer (JavaCode(..))
 import Text.PrettyPrint.HughesPJ (Doc)

@@ -2,21 +2,19 @@
 
 module New (
     -- Types
-    Declaration, StateVar, Scope,
-    Label, Library, 
+    Declaration, Label, Library, 
     -- Typeclasses
     RenderSym(..), KeywordSym(..), InputTypeSym(..), PermanenceSym(..),
     BodySym(..), ControlBlockSym(..), BlockSym(..), StateTypeSym(..), 
     StatementSym(..),
     UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), 
     FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..),
-    ParameterSym(..), MethodSym(..), ClassSym(..)
+    ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..)
 ) where
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
 type Declaration = Doc
-type StateVar = Doc
 
 type Label = String
 type Library = String
@@ -354,6 +352,8 @@ class ScopeSym repr where
     private :: repr (Scope repr)
     public  :: repr (Scope repr)
 
+    includeScope :: repr (Scope repr) -> repr (Scope repr)
+
 class MethodTypeSym repr where
     type MethodType repr
     mState    :: repr (StateType repr) -> repr (MethodType repr)
@@ -367,11 +367,18 @@ class ParameterSym repr where
 
 class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, BodySym repr) => MethodSym repr where
     type Method repr
-    method     :: Label -> repr (Scope repr) -> repr (Permanence repr) -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
-    getMethod  :: Label -> repr (MethodType repr) -> repr (Method repr)
-    setMethod  :: Label -> Label -> repr (StateType repr) -> repr (Method repr) 
-    mainMethod :: repr (Body repr) -> repr (Method repr)
+    method      :: Label -> repr (Scope repr) -> repr (Permanence repr) -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
+    getMethod   :: Label -> repr (MethodType repr) -> repr (Method repr)
+    setMethod   :: Label -> Label -> repr (StateType repr) -> repr (Method repr) 
+    mainMethod  :: repr (Body repr) -> repr (Method repr)
+    privMethod  :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
+    pubMethod   :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
+    constructor :: Label -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
+
+class StateVarSym repr where
+    type StateVar repr
+    stateVar :: Int -> Label -> repr (Scope repr) -> repr (Permanence repr) -> repr (StateType repr) -> repr (StateVar repr)
 
 class ClassSym repr where
     type Class repr
-    buildClass :: Label -> Maybe Label -> repr (Scope repr) -> [repr StateVar] -> [repr (Method repr)] -> repr (Class repr)
+    buildClass :: Label -> Maybe Label -> repr (Scope repr) -> [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)

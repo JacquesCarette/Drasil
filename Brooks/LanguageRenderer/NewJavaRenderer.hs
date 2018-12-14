@@ -5,17 +5,17 @@ module LanguageRenderer.NewJavaRenderer (
     JavaCode(..)
 ) where
 
-import New (Declaration, StateVar, Label, Library,
+import New (Declaration, Label, Library,
   RenderSym(..), KeywordSym(..), PermanenceSym(..), InputTypeSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   StatementSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..),
-  ParameterSym(..), MethodSym(..), ClassSym(..))
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..))
 import NewLanguageRenderer (fileDoc', blockDocD, bodyDocD, bodyBlockStatementsDocD, outDocD, 
-  printListDocD, boolTypeDocD, intTypeDocD,
-  charTypeDocD, typeDocD, listTypeDocD, voidDocD, constructDocD, stateParamDocD,
-  paramListDocD, methodDocD, ifCondDocD, switchDocD, forDocD, 
+  printListDocD, boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, listTypeDocD, 
+  voidDocD, constructDocD, stateParamDocD,
+  paramListDocD, methodListDocD, stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD, 
   forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
   varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, statementDocD, returnDocD,
   commentDocD, notOpDocD, negateOpDocD, unOpDocD, equalOpDocD, 
@@ -94,7 +94,6 @@ lift4Pair f a1 a2 a3 a4 as = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4) (map
 lift3Pair :: (Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> [(JavaCode Doc, JavaCode Doc)] -> JavaCode Doc
 lift3Pair f a1 a2 a3 as = JC $ f (unJC a1) (unJC a2) (unJC a3) (map unJCPair as)
 
-
 instance RenderSym JavaCode where
     type RenderFile JavaCode = Doc
     fileDoc code = liftA3 fileDoc' top code bottom
@@ -157,11 +156,6 @@ instance ClassSym JavaCode where
 --         vars <- vs
 --         funcs <- fs --ignore for the moment that fs and vs are lists
 --         liftJC0 (classDocD n p scope vars funcs)
-
--- instance ClassSym JavaCode where
---     buildClass n p s vs fs = JC $ do
---         c <- ask -- not needed, only ask for config when you need to actually extract from it
---         liftJC0 (classDoc c n p s vs fs)
 
 instance StateTypeSym JavaCode where
     type StateType JavaCode = Doc
@@ -458,6 +452,8 @@ instance ScopeSym JavaCode where
     private = return privateDocD
     public = return publicDocD
 
+    includeScope s = s
+
 instance MethodTypeSym JavaCode where
     type MethodType JavaCode = Doc
     mState t = t
@@ -470,12 +466,19 @@ instance ParameterSym JavaCode where
 
 instance MethodSym JavaCode where
     type Method JavaCode = Doc
-    method n s p t ps b = liftA5 (methodDocD n) s p t (liftList (paramListDocD) ps) b
+    method n s p t ps b = liftA5 (jMethod n) s p t (liftList (paramListDocD) ps) b
     getMethod n t = method (getterName n) public dynamic t [] getBody
         where getBody = oneLiner $ returnState (self $-> (var n))
     setMethod setLbl paramLbl t = method (setterName setLbl) public dynamic void [(stateParam paramLbl t)] setBody
         where setBody = oneLiner $ (self $-> (var setLbl)) &=. paramLbl
-    mainMethod b = method "main" public static void [] b
+    mainMethod b = method "main" public static void [return $ text "String[] args"] b
+    privMethod n t ps b = method n private dynamic t ps b
+    pubMethod n t ps b = method n public dynamic t ps b
+    constructor n ps b = method n public dynamic (construct n) ps b
+
+instance StateVarSym JavaCode where
+    type StateVar JavaCode = Doc
+    stateVar _ l s p t = liftA4 (stateVarDocD l) (includeScope s) p t endStatement
 
 jtop :: Doc -> Doc -> Doc -> Doc
 jtop end inc lst = vcat [
@@ -549,3 +552,9 @@ jListExtendList t = new <+> t <> parens (empty)
 jStringSplit :: Doc -> Doc -> Doc -> Doc
 jStringSplit vnew t s = vnew <+> equals <+> new <+> t
     <> parens s
+
+jMethod :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
+jMethod n s p t ps b = vcat [
+    s <+> p <+> t <+> text n <> parens ps <+> text "throws Exception" <+> lbrace,
+    oneTab $ b,
+    rbrace]

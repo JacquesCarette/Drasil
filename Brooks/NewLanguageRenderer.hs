@@ -7,9 +7,11 @@ module NewLanguageRenderer (
     classDec, dot, doubleSlash, forLabel, new, observerListName,
     
     -- * Default Functions available for use in renderers
-    fileDoc', blockDocD, bodyDocD, bodyBlockStatementsDocD, outDocD, printListDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
-    charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD,
-    voidDocD, constructDocD, stateParamDocD, paramListDocD, methodDocD,
+    fileDoc', blockDocD, bodyDocD, bodyBlockStatementsDocD, outDocD, 
+    printListDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, charTypeDocD, 
+    stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD, voidDocD, 
+    constructDocD, stateParamDocD, paramListDocD, methodDocD, methodListDocD,
+    stateVarDocD, stateVarListDocD,
     ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD,
     assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
     listDecDocD, listDecDefDocD, statementDocD, returnDocD, commentDocD,
@@ -179,6 +181,18 @@ methodDocD n s p t ps b = vcat [
     s <+> p <+> t <+> text n <> parens (ps) <+> lbrace,
     oneTab $ b,
     rbrace]
+
+methodListDocD :: [Doc] -> Doc
+methodListDocD ms = vibcat methods
+    where methods = filter (\m -> not $ isEmpty m) ms
+
+-- StateVar --
+
+stateVarDocD :: Label -> Doc -> Doc -> Doc -> Doc -> Doc
+stateVarDocD l s p t end = s <+> p <+> t <+> text l <> end
+
+stateVarListDocD :: [Doc] -> Doc
+stateVarListDocD svs = vcat svs
 
 -- Controls --
 

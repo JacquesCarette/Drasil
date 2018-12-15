@@ -98,7 +98,7 @@ lift3Pair f a1 a2 a3 as = JC $ f (unJC a1) (unJC a2) (unJC a3) (map unJCPair as)
 instance RenderSym JavaCode where
     type RenderFile JavaCode = Doc
     fileDoc code = liftA3 fileDoc' top code bottom
-    top = liftA3 jtop endStatement include (list static)
+    top = liftA3 jtop endStatement (include "") (list static)
     bottom = return empty
 
 instance KeywordSym JavaCode where
@@ -106,7 +106,7 @@ instance KeywordSym JavaCode where
     endStatement = return semi
     endStatementLoop = return empty
 
-    include = return $ includeD "import"
+    include _ = return $ text "import"
     inherit = return $ text "extends"
 
     list _ = return $ text "ArrayList"
@@ -130,13 +130,6 @@ instance KeywordSym JavaCode where
     printLnFunc = return $ text "System.out.println"
     printFileFunc f = liftA jPrintFileFunc f
     printFileLnFunc f = liftA jPrintFileLnFunc f
-
-instance InputTypeSym JavaCode where
-    type InputType JavaCode = Doc
-    inputInt = return $ text "nextInt()"
-    inputFloat = return $ text "nextDouble()"
-    inputBool = return $ text "nextBoolean()"
-    inputString = return $ text "nextLine()"
 
 instance PermanenceSym JavaCode where
     type Permanence JavaCode = Doc
@@ -167,6 +160,7 @@ instance StateTypeSym JavaCode where
     listType p st = liftA2 listTypeDocD st (list p)
     intListType p = liftA jIntListTypeDoc (list p)
     floatListType p = liftA jFloatListTypeDoc (list p)
+    boolListType = return jBoolListTypeDocD
     obj t = return $ typeDocD t
     enumType t = return $ typeDocD t
 
@@ -281,8 +275,6 @@ instance ValueSym JavaCode where
     (#/)  v1 v2 = liftA3 binOpDocD v1 divideOp v2
     (#%)  v1 v2 = liftA3 binOpDocD v1 moduloOp v2
     (#^)  v1 v2 = liftA3 binOpDocD' v1 powerOp v2
-    floor v = liftA2 unOpDocD floorOp v
-    ceil v = liftA2 unOpDocD ceilOp v
 
     ($->) v vr = objVar v vr
     ($:) en e = enumElement en e
@@ -296,6 +288,8 @@ instance ValueSym JavaCode where
     csc v = (litFloat 1.0) #/ (sin v)
     sec v = (litFloat 1.0) #/ (cos v)
     cot v = (litFloat 1.0) #/ (tan v)
+    floor v = liftA2 unOpDocD floorOp v
+    ceil v = liftA2 unOpDocD ceilOp v
 
     const n = var n
     var n = return $ varDocD n
@@ -310,16 +304,23 @@ instance ValueSym JavaCode where
     n `listOf` t = listVar n t
     inlineIf c v1 v2 = liftA3 inlineIfDocD c v1 v2
     funcApp n vs = liftList (funcAppDocD n) vs
+    selfFuncApp = funcApp
     extFuncApp l n vs = liftList (extFuncAppDocD l n) vs
-    stateObj st vs = lift1List stateObjDocD st vs
-    listStateObj st vs = lift2List listStateObjDocD listObj st vs
+    stateObj t vs = lift1List stateObjDocD t vs
+    extStateObj _ t vs = stateObj t vs
+    listStateObj t vs = lift2List listStateObjDocD listObj t vs
+
+    stringEqual v1 str = objAccess v1 (func "equals" [str])
 
     exists v = v
+    listIndexExists lst index = liftA3 jListIndexExists lst greaterOp index
+    argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
     notNull v = liftA3 notNullDocD v notEqualOp (var "null")
 
 instance StatementSym JavaCode where
     type Statement JavaCode = Doc
     assign v1 v2 = liftA2 assignDocD v1 v2
+    assignToListIndex lst index v = lst $. listSet index v
     (&=) v1 v2 = assign v1 v2
     (&.=) l v = assign (var l) v
     (&=.) v l = assign v (var l)
@@ -334,33 +335,39 @@ instance StatementSym JavaCode where
 
     varDec l t = liftA (varDecDocD l) t
     varDecDef l t v = liftA2 (varDecDefDocD l) t v
-    listDec l n st = liftA2 (listDecDocD l) (litInt n) st -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
+    listDec l n t = liftA2 (listDecDocD l) (litInt n) t -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
     listDecDef l t vs = lift1List (jListDecDef l) t vs
     objDecDef l t v = liftA2 (objDecDefDocD l) t v
     objDecNew l t vs = liftA2 (objDecDefDocD l) t (stateObj t vs)
     objDecNewVoid l t = liftA2 (objDecDefDocD l) t (stateObj t [])
     constDecDef l t v = liftA2 (jConstDecDef l) t v
 
-    out prf v = liftA2 outDocD prf v
+    print _ v = liftA2 outDocD printFunc v
+    printLn _ v = liftA2 outDocD printLnFunc v
+    printStr s = liftA2 outDocD printFunc (litString s)
+    printStrLn s = liftA2 outDocD printLnFunc (litString s)
 
-    print _ v = out printFunc v
-    printLn _ v = out printLnFunc v
-    printStr s = out printFunc (litString s)
-    printStrLn s = out printLnFunc (litString s)
-
-    printFile f _ v = out (printFileFunc f) v
-    printFileLn f _ v = out (printFileLnFunc f) v
-    printFileStr f s = out (printFileFunc f) (litString s)
-    printFileStrLn f s = out (printFileLnFunc f) (litString s)
+    printFile f _ v = liftA2 outDocD (printFileFunc f) v
+    printFileLn f _ v = liftA2 outDocD (printFileLnFunc f) v
+    printFileStr f s = liftA2 outDocD (printFileFunc f) (litString s)
+    printFileStrLn f s = liftA2 outDocD (printFileLnFunc f) (litString s)
 
     printList t v = liftA4 printListDocD (state (printStr "[")) (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])) (state (print t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))) (printStr "]")
     printLnList t v = liftA4 printListDocD (state (printStr "[")) (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [print t (v $. (listAccess (var "i"))), printStr ","])) (state (print t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))) (printStrLn "]")
     printFileList f t v = liftA4 printListDocD (state (printFileStr f "[")) (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])) (state (printFile f t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))) (printFileStr f "]")
     printFileLnList f t v = liftA4 printListDocD (state (printFileStr f "[")) (for (varDecDef "i" int (litInt 0)) ((var "i") ?< ((v $. (listSize)) #- (litInt 1))) ((&.++) "i") (bodyStatements [printFile f t (v $. (listAccess (var "i"))), printFileStr f ","])) (state (printFile f t (v $. (listAccess ((v $. (listSize)) #- (litInt 1)))))) (printFileStrLn f "]")
 
-    getInput it v = liftA3 jInput it v inputFunc
-    discardInput _ = liftA jDiscardInput inputFunc
-    getFileInput f it v = liftA3 jInput it v f
+    getIntInput v = liftA3 jInput (return $ text "nextInt()") v inputFunc
+    getFloatInput v = liftA3 jInput (return $ text "nextDouble()") v inputFunc
+    getBoolInput v = liftA3 jInput (return $ text "nextBoolean()") v inputFunc
+    getStringInput v = liftA3 jInput (return $ text "nextLine()") v inputFunc
+    getCharInput _ = return empty
+    discardInput = liftA jDiscardInput inputFunc
+    getIntFileInput f v = liftA3 jInput (return $ text "nextInt()") v f
+    getFloatFileInput f v = liftA3 jInput (return $ text "nextDouble()") v f
+    getBoolFileInput f v = liftA3 jInput (return $ text "nextBoolean()") v f
+    getStringFileInput f v = liftA3 jInput (return $ text "nextLine()") v f
+    getCharFileInput f v = return empty
     discardFileInput f = liftA jDiscardInput f
 
     openFileR f n = liftA2 jOpenFileR f n
@@ -404,7 +411,10 @@ instance Selector JavaCode where
     objMethodCall o f ps = objAccess o (func f ps)
     objMethodCallVoid o f = objMethodCall o f []
 
-    selfAccess = funcApp
+    selfAccess f = objAccess self f
+
+    listPopulateAccess _ _ = return empty
+
     castObj f v = liftA2 castObjDocD f v
     castStrToFloat v = funcApp "Double.parseDouble" [v]
 
@@ -420,7 +430,11 @@ instance FunctionSym JavaCode where
 
     listSize = liftA funcDocD (funcApp "size" [])
     listAdd i v = liftA funcDocD (funcApp "add" [i, v])
-    listPopulate _ _ = return empty
+    listPopulateInt _ = return empty
+    listPopulateFloat _ = return empty
+    listPopulateChar _ = return empty
+    listPopulateBool _ = return empty
+    listPopulateString _ = return empty
     listAppend v = liftA funcDocD (funcApp "add" [v])
     listExtendInt = liftA jListExtend defaultInt 
     listExtendFloat = liftA jListExtend defaultFloat 
@@ -429,7 +443,6 @@ instance FunctionSym JavaCode where
     listExtendString = liftA jListExtend defaultString
     listExtendList t = liftA jListExtendList t
 
-
     iterBegin = liftA funcDocD (funcApp "begin" [])
     iterEnd = liftA funcDocD (funcApp "end" [])
 
@@ -437,8 +450,8 @@ instance SelectorFunction JavaCode where
     listAccess i = liftA funcDocD (funcApp "get" [i])
     listSet i v = liftA funcDocD (funcApp "set" [i, v])
 
-    listAccessEnum t v = listAccess (v $. (cast int t))
-    listSetEnum t i v = listSet (i $. (cast int t)) v
+    listAccessEnum t v = listAccess (castObj (cast int t) v)
+    listSetEnum t i v = listSet (castObj (cast int t) i) v
 
     at l = listAccess (var l)
 
@@ -523,6 +536,9 @@ jIntListTypeDoc lst = lst <> angles (text "Integer")
 jFloatListTypeDoc :: Doc -> Doc
 jFloatListTypeDoc lst = lst <> angles (text "Double")
 
+jBoolListTypeDocD :: Doc
+jBoolListTypeDocD = text "BitSet"
+
 jListDecDef :: Label -> Doc -> [Doc] -> Doc
 jListDecDef l st vs = st <+> text l <+> equals <+> new <+> st <+> parens (listElements)
     where listElements = if null vs then empty else text "Arrays.asList" <> parens (callFuncParamList vs)
@@ -568,3 +584,6 @@ jMethod n s p t ps b = vcat [
     s <+> p <+> t <+> text n <> parens ps <+> text "throws Exception" <+> lbrace,
     oneTab $ b,
     rbrace]
+
+jListIndexExists :: Doc -> Doc -> Doc -> Doc
+jListIndexExists lst greater index = parens (lst <> text ".length" <+> greater <+> index)

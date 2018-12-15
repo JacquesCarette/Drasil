@@ -1,7 +1,7 @@
 module Example.PatternTest (patternTest) where
 
 import New (Label, Library,
-  RenderSym(..), KeywordSym(..), PermanenceSym(..), InputTypeSym(..),
+  RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
   StatementSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..),
   FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..), 

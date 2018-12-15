@@ -1,7 +1,7 @@
 module Example.HelloWorld (helloWorld) where
 
 import New (Label, Library,
-  RenderSym(..), KeywordSym(..), PermanenceSym(..), InputTypeSym(..),
+  RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
   StatementSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..),
   FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..), 
@@ -69,7 +69,7 @@ helloIfBody = addComments "If body" (body [
     printLnList (float) (var "mySlicedList"),
     
     printStrLn "Type an int",
-    getInput inputInt (var "d"),
+    getIntInput (var "d"),
     printStrLn "Type another",
     discardInput inputInt],
   

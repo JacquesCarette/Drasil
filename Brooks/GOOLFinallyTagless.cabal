@@ -12,6 +12,7 @@ library
     , Helpers
     , NewLanguageRenderer
     , LanguageRenderer.NewJavaRenderer
+    , LanguageRenderer.NewPythonRenderer
   other-modules:
   Build-Depends:
     base >= 4.7,

@@ -12,11 +12,13 @@ module NewLanguageRenderer (
     stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD, voidDocD, 
     constructDocD, stateParamDocD, paramListDocD, methodDocD, methodListDocD,
     stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD, forEachDocD, 
-    whileDocD, tryCatchDocD, assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, 
+    whileDocD, tryCatchDocD, assignDocD, plusEqualsDocD, plusEqualsDocD', 
+    plusPlusDocD, plusPlusDocD', varDecDocD, 
     varDecDefDocD, listDecDocD, listDecDefDocD, statementDocD, returnDocD, 
-    commentDocD, freeDocD, throwDocD, stratDocD, notOpDocD, negateOpDocD, 
-    sqrtOpDocD, absOpDocD, logOpDocD, lnOpDocD, expOpDocD, sinOpDocD, cosOpDocD, 
-    tanOpDocD, unOpDocD, equalOpDocD, 
+    commentDocD, freeDocD, throwDocD, stratDocD, notOpDocD, notOpDocD', negateOpDocD, 
+    sqrtOpDocD, sqrtOpDocD', absOpDocD, absOpDocD', logOpDocD, logOpDocD', 
+    lnOpDocD, lnOpDocD', expOpDocD, expOpDocD', sinOpDocD, sinOpDocD', 
+    cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', unOpDocD, equalOpDocD, 
     notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
     lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
     moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', 
@@ -291,8 +293,14 @@ assignDocD v1 v2 = v1 <+> equals <+> v2
 plusEqualsDocD :: Doc -> Doc -> Doc
 plusEqualsDocD v1 v2 = v1 <+> text "+=" <+> v2
 
+plusEqualsDocD' :: Doc -> Doc -> Doc -> Doc
+plusEqualsDocD' v1 plusOp v2 = v1 <+> equals <+> v1 <+> plusOp <+> v2
+
 plusPlusDocD :: Doc -> Doc
 plusPlusDocD v = v <> text "++"
+
+plusPlusDocD' :: Doc -> Doc -> Doc
+plusPlusDocD' v plusOp = v <+> equals <+> v <+> plusOp <+> int 1
 
 varDecDocD :: Label -> Doc -> Doc
 varDecDocD l st = st <+> text l
@@ -333,32 +341,59 @@ statementDocD s end = s <> end
 notOpDocD :: Doc
 notOpDocD = text "!"
 
+notOpDocD' :: Doc
+notOpDocD' = text "not"
+
 negateOpDocD :: Doc
 negateOpDocD = text "-"
 
 sqrtOpDocD :: Doc
 sqrtOpDocD = text "sqrt"
 
+sqrtOpDocD' :: Doc
+sqrtOpDocD' = text "math.sqrt"
+
 absOpDocD :: Doc
 absOpDocD = text "fabs"
+
+absOpDocD' :: Doc
+absOpDocD' = text "math.fabs"
 
 logOpDocD :: Doc
 logOpDocD = text "log"
 
+logOpDocD' :: Doc
+logOpDocD' = text "math.log"
+
 lnOpDocD :: Doc
 lnOpDocD = text "ln"
+
+lnOpDocD' :: Doc
+lnOpDocD' = text "math.ln"
 
 expOpDocD :: Doc
 expOpDocD = text "exp"
 
+expOpDocD' :: Doc
+expOpDocD' = text "math.exp"
+
 sinOpDocD :: Doc
 sinOpDocD = text "sin"
+
+sinOpDocD' :: Doc
+sinOpDocD' = text "math.sin"
 
 cosOpDocD :: Doc
 cosOpDocD = text "cos"
 
+cosOpDocD' :: Doc
+cosOpDocD' = text "math.cos"
+
 tanOpDocD :: Doc
 tanOpDocD = text "tan"
+
+tanOpDocD' :: Doc
+tanOpDocD' = text "math.tan"
 
 unOpDocD :: Doc -> Doc -> Doc
 unOpDocD op v = op <> parens v
@@ -501,12 +536,12 @@ objAccessDocD :: Doc -> Doc -> Doc
 objAccessDocD v f = v <> f
 
 castObjDocD :: Doc -> Doc -> Doc
-castObjDocD f v = f <> v
+castObjDocD f v = f <> parens v
 
 -- Keywords --
 
-includeD :: Label -> Doc
-includeD incl = text incl
+includeD :: Label -> Label -> Doc
+includeD incl n = text incl <+> text n
 
 -- Permanence --
 

@@ -16,9 +16,9 @@ import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (demand, demandq, is_safePb, is_safeLR, lRe, pb_tol, prob_br)
 
 -- Labels
-l1, l2 :: Label
-l1 = mkLabelSame "isSafeLR" (Def TM)
-l2 = mkLabelSame "isSafePb" (Def TM)
+l1, l2 :: Reference
+l1 = makeTMRef "isSafeLR"
+l2 = makeTMRef "isSafePb"
 
 {--}
 

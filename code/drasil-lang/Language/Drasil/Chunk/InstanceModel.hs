@@ -19,9 +19,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Development.Unit (MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Relation)
-import Language.Drasil.Label.Core (Label)
-import Language.Drasil.Label (mkLabelSame)
-import Language.Drasil.RefTypes (RefType(..), DType(..))
+import Language.Drasil.RefProg (Reference, makeInstRef)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
 import Language.Drasil.NounPhrase (cn')
@@ -46,7 +44,7 @@ data InstanceModel = IM { _rc :: RelationConcept
                         , _outCons :: OutputConstraints
                         , _cit :: [Citation]
                         , _deri :: Derivation
-                        , _lb :: Label
+                        , _lb :: Reference
                         , _notes :: [Sentence]
                         , _ci :: CI
                         }
@@ -76,11 +74,11 @@ instanceMod    = commonIdeaWithDict "instanceMod"    (cn' "Instance Model")     
 
 -- | Smart constructor for instance models; no derivations
 im' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> [Citation] -> Label -> [Sentence] -> InstanceModel
+  OutputConstraints -> [Citation] -> Reference -> [Sentence] -> InstanceModel
 im' rcon i ic o oc src lbe addNotes = IM rcon i ic o oc src [] lbe addNotes instanceMod
 
 -- | im but with everything defined
 im'' :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> [Citation] -> Derivation -> String -> [Sentence] -> InstanceModel
-im'' rcon i ic o oc src der sn addNotes = IM rcon i ic o oc src der (mkLabelSame sn (Def Instance))
+im'' rcon i ic o oc src der sn addNotes = IM rcon i ic o oc src der (makeInstRef sn)
  addNotes instanceMod

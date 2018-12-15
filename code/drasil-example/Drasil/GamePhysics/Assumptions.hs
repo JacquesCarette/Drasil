@@ -41,7 +41,7 @@ assumpCAJI = cic "assumpCAJI" (foldlSent assumptions_assum7) "constraintsAndJoin
 -- FIXME, this is a horrible hack, but will go away once LlC wants a Reference
 assumptions_list :: [Contents]
 assumptions_list = map (LlC . 
-  (\(AC x r _) -> mkRawLC (Assumption (r^.uid) x) (mkLabelRAAssump' (r^.uid)))) newAssumptions
+  (\(AC x r _) -> mkRawLC (Assumption (r^.uid) x) (makeAssumpRef (r^.uid)))) newAssumptions
 
 assumptions_assum1, assumptions_assum2, assumptions_assum3, assumptions_assum4, assumptions_assum5, 
   assumptions_assum6, assumptions_assum7 :: [Sentence]

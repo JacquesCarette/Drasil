@@ -17,10 +17,10 @@ import Data.Drasil.SentenceStructures (foldlSent, foldlSent_)
 import Data.Drasil.Utils (fmtU, foldle1)
 
 -- Labels
-l1, l2, l3 :: Label
-l1 = mkLabelSame "transMot" (Def Instance)
-l2 = mkLabelSame "rotMot" (Def Instance)
-l3 = mkLabelSame "col2D" (Def Instance)
+l1, l2, l3 :: Reference
+l1 = makeInstRef "transMot"
+l2 = makeInstRef "rotMot"
+l3 = makeInstRef "col2D"
 
 iModels :: [RelationConcept]
 iModels = [transMot, rotMot, col2D]

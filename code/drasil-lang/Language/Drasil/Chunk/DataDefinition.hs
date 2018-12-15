@@ -14,15 +14,13 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   HasLabel(getLabel), ConceptDomain(cdom), CommonIdea(abrv))
 import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.Label.Core (Label)
-import Language.Drasil.Label (mkLabelSame)
-import Language.Drasil.RefTypes(RefType(..), DType(..))
+import Language.Drasil.RefProg(Reference, makeDDRef)
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Symbol.Helpers (eqSymb)
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
 import Language.Drasil.NounPhrase (cn')
 
-data Scope = Scp { _spec :: Label {-indirect reference-}}
+data Scope = Scp { _spec :: Reference {-indirect reference-}}
 
 data ScopeType = Local Scope {-only visible within a limited scope-} | Global {-visible everywhere-}
 
@@ -32,7 +30,7 @@ data DataDefinition = DatDef { _qd :: QDefinition
                              , _scp :: ScopeType
                              , _cit :: [Citation]
                              , _deri :: Derivation
-                             , _lbl :: Label
+                             , _lbl :: Reference
                              , _notes :: [Sentence]
                              , _ci :: CI
                              }
@@ -61,9 +59,9 @@ dataDefn    = commonIdeaWithDict "dataDefn"    (cn' "data definition")          
 
 -- | Smart constructor for data definitions 
 mkDD :: QDefinition -> [Citation] -> Derivation -> String -> [Sentence] -> DataDefinition
-mkDD a b c d e = DatDef a Global b c (mkLabelSame d (Def DD)) e dataDefn
+mkDD a b c d e = DatDef a Global b c (makeDDRef d) e dataDefn
 
-mkDDL :: QDefinition -> [Citation] -> Derivation -> Label -> [Sentence] -> DataDefinition
+mkDDL :: QDefinition -> [Citation] -> Derivation -> Reference -> [Sentence] -> DataDefinition
 mkDDL a b c label e = DatDef a Global b c label e dataDefn
 
 qdFromDD :: DataDefinition -> QDefinition

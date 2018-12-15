@@ -10,8 +10,8 @@ glassConditionL = makeAssumpRef "glassCondition"
 glassLiteL      = makeAssumpRef "glassLite"
 
 -- Instance Models
-probOfBreakL, calOfCapacityL, calOfDemandL :: Label
+probOfBreakL, calOfCapacityL, calOfDemandL :: Reference
 
-probOfBreakL   = mkLabelSame "probOfBreak"   (Def Instance)
-calOfCapacityL = mkLabelSame "calofCapacity" (Def Instance)
-calOfDemandL   = mkLabelSame "calOfDemand"   (Def Instance)
+probOfBreakL   = makeInstRef "probOfBreak"
+calOfCapacityL = makeInstRef "calofCapacity"
+calOfDemandL   = makeInstRef "calOfDemand"

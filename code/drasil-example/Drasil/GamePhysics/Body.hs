@@ -315,7 +315,7 @@ sysCtxIntro = foldlSP
    S "and its" +:+ phrase environment]
 
 sysCtxFig1 :: LabelledContent
-sysCtxFig1 = llcc (mkLabelRAFig "sysCtxDiag") $ fig (titleize sysCont) 
+sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ fig (titleize sysCont) 
   (resourcePath ++ "sysctx.png")
 
 sysCtxDesc :: Contents
@@ -426,8 +426,8 @@ terminology_and_definitions_terms :: [ConceptChunk]
 terminology_and_definitions_terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, 
   CP.cartesian, CP.rightHand]
 
-terminology_label :: Label
-terminology_label = mkLabelRALst "terminologyGM" "terminologyGM"
+terminology_label :: Reference
+terminology_label = makeLstRef "terminologyGM" "terminologyGM"
 
 terminology_and_definitions_bullets = LlC $ enumBullet terminology_label
   (map (\x -> (at_start x) +: EmptyS +:+ (x ^. defn)) terminology_and_definitions_terms)
@@ -787,7 +787,7 @@ traceMatTabReqGoalOtherCol = [traceMatTabReqGoalOtherGS1, traceMatTabReqGoalOthe
   traceMatTabReqGoalOtherReq8]
 
 traceMatTabReqGoalOther :: LabelledContent
-traceMatTabReqGoalOther = llcc (mkLabelSame "TraceyReqGoalsOther" Tab) $ Table 
+traceMatTabReqGoalOther = llcc (makeTabRef "TraceyReqGoalsOther") $ Table 
   (EmptyS:(traceMatTabReqGoalOtherRowHead))
   (makeTMatrix traceMatTabReqGoalOtherColHead traceMatTabReqGoalOtherCol
   traceMatTabReqGoalOtherRow)
@@ -860,7 +860,7 @@ traceMatTabAssumpColHead = zipWith itemRefToSent traceMatTabAssumpCol
   traceMatTabAssumpColRef
 
 traceMatTabAssump :: LabelledContent
-traceMatTabAssump = llcc (mkLabelSame "TraceyAssumpsOther" Tab) $ Table
+traceMatTabAssump = llcc (makeTabRef "TraceyAssumpsOther") $ Table
   (EmptyS:traceMatTabAssumpRowHead)
   (makeTMatrix traceMatTabAssumpColHead traceMatTabAssumpCol' traceMatTabAssumpRow)
   (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef2S problem_description)
@@ -922,7 +922,7 @@ traceMatTabDefnModelColHead = zipWith itemRefToSent traceMatTabDefnModelRow
 traceMatTabDefnModelRowHead = traceMatTabDefnModelColHead
 
 traceMatTabDefnModel :: LabelledContent
-traceMatTabDefnModel = llcc (mkLabelSame "TraceyItemsSecs" Tab) $ Table 
+traceMatTabDefnModel = llcc (makeTabRef "TraceyItemsSecs") $ Table 
   (EmptyS:traceMatTabDefnModelRowHead)
   (makeTMatrix traceMatTabDefnModelColHead traceMatTabDefnModelCol
   traceMatTabDefnModelRow) (showingCxnBw (traceyMatrix) (titleize' item `sAnd`

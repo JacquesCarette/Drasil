@@ -6,56 +6,56 @@ import Language.Drasil
 -- Assumptions
 slipSurfaceL, geoSlopeMatL, soilLayerHomoL, soilLayerIsoL,
     intersliceNormL, baseNormShearForL, stressStrainCurveL, planeStrainL,
-    effectiveNormL, surfaceBaseSliceL :: Label
-slipSurfaceL                = mkLabelRAAssump' "Slip-Surface-Concave"
-geoSlopeMatL                = mkLabelRAAssump' "Geo-Slope-Mat-Props-of-Soil-Inputs"
-soilLayerHomoL              = mkLabelRAAssump' "Soil-Layer-Homogeneous"
-soilLayerIsoL               = mkLabelRAAssump' "Soil-Layers-Isotropic"
-intersliceNormL             = mkLabelRAAssump' "Interslice-Norm-Shear-Forces-Linear"
-baseNormShearForL           = mkLabelRAAssump' "Base-Norm-Shear-Forces-Linear-on-FS"
-stressStrainCurveL          = mkLabelRAAssump' "Stress-Strain-Curve-interslice-Linear"
-planeStrainL                = mkLabelRAAssump' "Plane-Strain-Conditions"
-effectiveNormL              = mkLabelRAAssump' "Effective-Norm-Stress-Large"
-surfaceBaseSliceL           = mkLabelRAAssump' "Surface-Base-Slice-between-Interslice-Straight-Lines"
+    effectiveNormL, surfaceBaseSliceL :: Reference
+slipSurfaceL                = makeAssumpRef "Slip-Surface-Concave"
+geoSlopeMatL                = makeAssumpRef "Geo-Slope-Mat-Props-of-Soil-Inputs"
+soilLayerHomoL              = makeAssumpRef "Soil-Layer-Homogeneous"
+soilLayerIsoL               = makeAssumpRef "Soil-Layers-Isotropic"
+intersliceNormL             = makeAssumpRef "Interslice-Norm-Shear-Forces-Linear"
+baseNormShearForL           = makeAssumpRef "Base-Norm-Shear-Forces-Linear-on-FS"
+stressStrainCurveL          = makeAssumpRef "Stress-Strain-Curve-interslice-Linear"
+planeStrainL                = makeAssumpRef "Plane-Strain-Conditions"
+effectiveNormL              = makeAssumpRef "Effective-Norm-Stress-Large"
+surfaceBaseSliceL           = makeAssumpRef "Surface-Base-Slice-between-Interslice-Straight-Lines"
 
 -- Data Definition
 sliceWghtL, baseWtrFL, surfWtrFL, intersliceWtrFL, angleAL, angleBL, lengthBL,
     lengthLbL, lengthLsL, seismicLoadFL, surfLoadsL, intrsliceFL, resShearWOL,
-    mobShearWOL :: Label
-sliceWghtL        = mkLabelSame "sliceWght" (Def DD)
-baseWtrFL         = mkLabelSame "baseWtrF" (Def DD)
-surfWtrFL         = mkLabelSame "surfWtrF" (Def DD)
-intersliceWtrFL   = mkLabelSame "intersliceWtrF" (Def DD)
-angleAL           = mkLabelSame "angleA" (Def DD)
-angleBL           = mkLabelSame "angleB" (Def DD)
-lengthBL          = mkLabelSame "lengthB" (Def DD)
-lengthLbL         = mkLabelSame "lengthLb" (Def DD)
-lengthLsL         = mkLabelSame "lengthLs" (Def DD)
-seismicLoadFL     = mkLabelSame "seismicLoadF" (Def DD)
-surfLoadsL        = mkLabelSame "surfLoads" (Def DD)
-intrsliceFL       = mkLabelSame "intrsliceF" (Def DD)
-resShearWOL       = mkLabelSame "resShearWO" (Def DD)
-mobShearWOL       = mkLabelSame "mobShearWO" (Def DD)
+    mobShearWOL :: Reference
+sliceWghtL        = makeDDRef "sliceWght"
+baseWtrFL         = makeDDRef "baseWtrF"
+surfWtrFL         = makeDDRef "surfWtrF"
+intersliceWtrFL   = makeDDRef "intersliceWtrF"
+angleAL           = makeDDRef "angleA"
+angleBL           = makeDDRef "angleB"
+lengthBL          = makeDDRef "lengthB"
+lengthLbL         = makeDDRef "lengthLb"
+lengthLsL         = makeDDRef "lengthLs"
+seismicLoadFL     = makeDDRef "seismicLoadF"
+surfLoadsL        = makeDDRef "surfLoads"
+intrsliceFL       = makeDDRef "intrsliceF"
+resShearWOL       = makeDDRef "resShearWO"
+mobShearWOL       = makeDDRef "mobShearWO"
 
 
 -- General Definations
 genDef1Label, genDef2Label, genDef3Label, genDef4Label, genDef5Label, genDef6Label 
-    :: Label
+    :: Reference
 
-genDef1Label  = mkLabelSame "normForcEq"  (Def General)
-genDef2Label  = mkLabelSame "bsShrFEq"    (Def General)
-genDef3Label  = mkLabelSame "resShr"      (Def General)
-genDef4Label  = mkLabelSame "mobShr"      (Def General)
-genDef5Label  = mkLabelSame "normShrR"    (Def General)
-genDef6Label  = mkLabelSame "momentEql"   (Def General)
+genDef1Label  = makeGDRef "normForcEq"
+genDef2Label  = makeGDRef "bsShrFEq"
+genDef3Label  = makeGDRef "resShr"
+genDef4Label  = makeGDRef "mobShr"
+genDef5Label  = makeGDRef "normShrR"
+genDef6Label  = makeGDRef "momentEql"
 
 -- Instance Models
-fctSftyL, nrmShrForL, inslideFxL, crtSlpIdL :: Label
-fctSftyL = mkLabelSame "fctSfty"    (Def Instance)
-nrmShrForL = mkLabelSame "nrmShrFor"  (Def Instance)
-inslideFxL = mkLabelSame "inslideFx"  (Def Instance)
-crtSlpIdL = mkLabelSame "crtSlpId"   (Def Instance)
+fctSftyL, nrmShrForL, inslideFxL, crtSlpIdL :: Reference
+fctSftyL = makeInstRef "fctSfty"
+nrmShrForL = makeInstRef "nrmShrFor"
+inslideFxL = makeInstRef "inslideFx"
+crtSlpIdL = makeInstRef "crtSlpId"
 
 -- Fig
-forceDiagramL :: Label
-forceDiagramL = (mkLabelRAFig "ForceDiagram")
+forceDiagramL :: Reference
+forceDiagramL = makeFigRef "ForceDiagram"

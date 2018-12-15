@@ -23,11 +23,11 @@ import Drasil.SSP.Unitals (cohesion, fricAngle, fs, fx, fy,
   momntOfBdy, normStress, porePressure, shrStress, surfHydroForce)
 
 -- Pre-defined some labels. They will be re-used for tings which are 'the same'
-l1, l2, l3, l4 :: Label
-l1 = mkLabelSame "factOfSafety" (Def TM)
-l2 = mkLabelSame "equilibrium"  (Def TM)
-l3 = mkLabelSame "mcShrStrgth"  (Def TM)
-l4 = mkLabelSame "effStress"    (Def TM)
+l1, l2, l3, l4 :: Reference
+l1 = makeTMRef "factOfSafety"
+l2 = makeTMRef "equilibrium"
+l3 = makeTMRef "mcShrStrgth"
+l4 = makeTMRef "effStress"
 
 --------------------------
 --  Theoretical Models  --

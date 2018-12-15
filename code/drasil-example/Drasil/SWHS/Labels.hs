@@ -31,24 +31,24 @@ atmosphericPressureTankL    = makeAssumpRef "Atmospheric-Pressure-Tank"
 volumeCoilL                 = makeAssumpRef "Volume-Coil-Negligible"
 
 -- Data Definition
-dd1HtFluxCL, dd2HtFluxPL, dd3HtFusionL, dd4MeltFracL :: Label
-dd1HtFluxCL = mkLabelSame "ht_flux_C" (Def DD)
-dd2HtFluxPL = mkLabelSame "ht_flux_P" (Def DD)
-dd3HtFusionL = mkLabelSame "htFusion" (Def DD)
-dd4MeltFracL = mkLabelSame "melt_frac" (Def DD)
+dd1HtFluxCL, dd2HtFluxPL, dd3HtFusionL, dd4MeltFracL :: Reference
+dd1HtFluxCL = makeDDRef "ht_flux_C"
+dd2HtFluxPL = makeDDRef "ht_flux_P"
+dd3HtFusionL = makeDDRef "htFusion"
+dd4MeltFracL = makeDDRef "melt_frac"
 
 -- General Definitions
-nwtnCoolingL, rocTempSimpL :: Label
-nwtnCoolingL = mkLabelSame "nwtnCooling" (Def General)
-rocTempSimpL = mkLabelSame "rocTempSimp" (Def General)
+nwtnCoolingL, rocTempSimpL :: Reference
+nwtnCoolingL = makeGDRef "nwtnCooling"
+rocTempSimpL = makeGDRef "rocTempSimp"
 
 -- Instance Models
-eBalanceOnWtrL, eBalanceOnPCML, heatEInWtrL, heatEInPCML :: Label
-eBalanceOnWtrL = mkLabelSame "eBalanceOnWtr" (Def Instance)
-eBalanceOnPCML = mkLabelSame "eBalanceOnPCM" (Def Instance)
-heatEInWtrL    = mkLabelSame "heatEInWtr"    (Def Instance)
-heatEInPCML    = mkLabelSame "heatEInPCM"    (Def Instance)
+eBalanceOnWtrL, eBalanceOnPCML, heatEInWtrL, heatEInPCML :: Reference
+eBalanceOnWtrL = makeInstRef "eBalanceOnWtr"
+eBalanceOnPCML = makeInstRef "eBalanceOnPCM"
+heatEInWtrL    = makeInstRef "heatEInWtr"
+heatEInPCML    = makeInstRef "heatEInPCM"
 
 -- Table
-inputInitQuantsLbl :: Label
-inputInitQuantsLbl = mkLabelSame "Input-Variable-Requirements" Tab
+inputInitQuantsLbl :: Reference
+inputInitQuantsLbl = makeTabRef "Input-Variable-Requirements"

@@ -262,7 +262,7 @@ mkSections si l = map doit l
 -- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section
 mkRefSec si (RefProg c l) = section'' (titleize refmat) [c]
-  (map (mkSubRef si) l) (mkLabelRASec "RefMat" "Reference Material") --DO NOT CHANGE LABEL OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
+  (map (mkSubRef si) l) (makeSecRef "RefMat" "Reference Material") --DO NOT CHANGE LABEL OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
     mkSubRef SI {_usedinfodb = db}  TUnits =
@@ -463,7 +463,7 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (Assumptions) =
       SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub
       (map (\(y@(AC _ r _)) -> 
-        let lb = mkLabelRAAssump' (r ^. uid) in
+        let lb = makeAssumpRef (r ^. uid) in
         LlC $ mkRawLC (Assumption (r ^. uid) (helperAssump y (_sysinfodb si'))) lb) $ assumptionsFromDB ((_refdb si') ^. assumpRefTable))
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d

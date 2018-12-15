@@ -148,7 +148,7 @@ sliceFs_desc = foldlSent_ [S "The value of the interslice normal force",
 --
 crtSlpId :: InstanceModel
 crtSlpId = im' crtSlpId_rc [] [] (qw fs_min) [] [li2010]
-  (mkLabelSame "crtSlpId" (Def Instance)) [crtSlpId_desc]
+  (makeInstRef "crtSlpId") [crtSlpId_desc]
 
 crtSlpId_rc :: RelationConcept
 crtSlpId_rc = makeRC "crtSlpId_rc" (nounPhraseSP "critical slip identification")

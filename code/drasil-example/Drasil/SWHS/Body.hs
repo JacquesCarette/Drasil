@@ -667,7 +667,7 @@ trace2R10 = ["IM2"]
 trace2R11 = ["IM2"]
 
 traceTable2 :: LabelledContent
-traceTable2 = llcc (mkLabelSame "Tracey1" Tab) $
+traceTable2 = llcc (makeTabRef "Tracey1") $
   Table (EmptyS:traceMRowHeader2)
   (makeTMatrix (traceMColHeader2) (traceMColumns2) (traceMRow2))
   (showingCxnBw traceyMatrix
@@ -888,7 +888,7 @@ systCContents pro = foldlSP [makeRef2S sys_context_fig, S "shows the" +:+. phras
   S "its", phrase environment]
 
 sys_context_fig :: LabelledContent
-sys_context_fig = llcc (mkLabelRAFig "SysCon") $ fig (foldlSent_
+sys_context_fig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
   [makeRef2S sys_context_fig +: EmptyS, titleize sysCont])
   "SystemContextFigure.png"
 
@@ -986,7 +986,7 @@ physSyst3 pcmat ta hfp = [short pcmat, S "suspended in" +:+. phrase ta,
 -- different
 
 fig_tank :: LabelledContent
-fig_tank = llcc (mkLabelRAFig "Tank") $ fig (
+fig_tank = llcc (makeFigRef "Tank") $ fig (
   foldlSent_ [at_start sWHT `sC` S "with", phrase ht_flux_C, S "of",
   ch ht_flux_C `sAnd` phrase ht_flux_P, S "of", ch ht_flux_P])
   (resourcePath ++"Tank.png")
@@ -1352,14 +1352,14 @@ traceTrailing3 = foldlSent_ [foldlList Comma List $ map plural (take 5 renameLis
   S "on the", plural assumption]
 
 traceTable1 :: LabelledContent
-traceTable1 = llcc (mkLabelSame "Tracey2" Tab) $ Table
+traceTable1 = llcc (makeTabRef "Tracey2") $ Table
   (EmptyS:traceMRowHeader1)
   (makeTMatrix (traceMRowHeader1) (traceMColumns1) (traceMRow1))
   (showingCxnBw traceyMatrix
   (titleize' item +:+ S "of Different" +:+ titleize' section_)) True
 
 traceTable3 :: LabelledContent
-traceTable3 = llcc (mkLabelSame "Tracey3" Tab) $ Table
+traceTable3 = llcc (makeTabRef "Tracey3") $ Table
   (EmptyS:traceMRowHeader3)
   (makeTMatrix traceMColHeader3 traceMColumns3 traceMRow3)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+
@@ -1380,11 +1380,11 @@ traceIntro2 = traceGIntro [traceFig1, traceFig2]
   foldlSent_ [foldlList Comma List $ map plural renameList2, S "on each other"]]
 
 traceFig1 :: LabelledContent
-traceFig1 = llcc (mkLabelRAFig "TraceyA") $ fig (showingCxnBw traceyGraph (titleize' item +:+
+traceFig1 = llcc (makeFigRef "TraceyA") $ fig (showingCxnBw traceyGraph (titleize' item +:+
   S "of Different" +:+ titleize' section_)) "ATrace.png"
 
 traceFig2 :: LabelledContent
-traceFig2 = llcc (mkLabelRAFig "TraceyR") $ fig (showingCxnBw traceyGraph (foldlList Comma List
+traceFig2 = llcc (makeFigRef "TraceyR") $ fig (showingCxnBw traceyGraph (foldlList Comma List
   $ map titleize' renameList2)) "RTrace.png"
 
 -------------------------------------------------

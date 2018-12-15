@@ -4,10 +4,10 @@ module Language.Drasil.Document where
 import Data.Drasil.IdeaDicts (documentc)
 import Language.Drasil.Document.Core
 import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel), HasShortName(shortname))
-import Language.Drasil.Label (Label)
 import Language.Drasil.Sentence (Sentence(..))
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
 import Language.Drasil.NounPhrase (cn')
+import Language.Drasil.RefProg (Reference)
 
 import Control.Lens (makeLenses)
 
@@ -19,9 +19,9 @@ data SecCons = Sub   Section
 -- | Sections have a title ('Sentence') and a list of contents ('SecCons')
 -- and its shortname
 data Section = Section 
-             { tle :: Title 
+             { tle  :: Title 
              , cons :: [SecCons]
-             , _lab :: Label
+             , _lab :: Reference
              }
 makeLenses ''Section
 
@@ -37,7 +37,7 @@ sectionci    = commonIdeaWithDict "sectionci"    (cn' "section")                
 data Document = Document Title Author [Section]
 
 -- | Smart constructor for labelled content chunks
-llcc :: Label -> RawContent -> LabelledContent
+llcc :: Reference -> RawContent -> LabelledContent
 llcc = LblC
 
 -- | Smart constructor for unlabelled content chunks
@@ -49,11 +49,11 @@ ulcc = UnlblC
 mkParagraph :: Sentence -> Contents
 mkParagraph x = UlC $ ulcc $ Paragraph x
 
-mkFig :: Label -> RawContent -> Contents
+mkFig :: Reference -> RawContent -> Contents
 mkFig x y = LlC $ llcc x y
 
 --Fixme: use mkRawLc or llcc?
-mkRawLC :: RawContent -> Label -> LabelledContent
+mkRawLC :: RawContent -> Reference -> LabelledContent
 mkRawLC x lb = llcc lb x
 
 ---------------------------------------------------------------------------
@@ -63,10 +63,10 @@ mkRawLC x lb = llcc lb x
 
 -- | Smart constructor for creating Sections with introductory contents
 -- (ie. paragraphs, tables, etc.) and a list of subsections.
-section :: Sentence -> [Contents] -> [Section] -> Label -> Section
+section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
 section title intro secs lbe = Section title (map Con intro ++ map Sub secs) lbe
 
-section'' :: Sentence -> [Contents] -> [Section] -> Label -> Section
+section'' :: Sentence -> [Contents] -> [Section] -> Reference -> Section
 section'' title intro secs lbe = section title intro secs lbe
 
 extractSection :: Document -> [Section]

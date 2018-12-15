@@ -1,13 +1,15 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.RefProg 
   (RefProg(..), Reference(Reference), name, (+::+), raw, defer, prepend,
-   IRefProg(..))
+   IRefProg(..), repUnd,
+   makeGDRef, makeTabRef, makeFigRef, makeInstRef, makeDDRef, makeCiteRef,
+   makeSecRef, makeLstRef, makeTMRef)
   where
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   HasShortName(shortname))
-import Language.Drasil.ShortName (ShortName)
+import Language.Drasil.ShortName (ShortName, shortname')
 import Language.Drasil.UID (UID)
-import Language.Drasil.Label.Type (LblType)
+import Language.Drasil.Label.Type (LblType(RefAdd))
 
 import Control.Lens (makeLenses)
 
@@ -45,3 +47,41 @@ defer = Deferred
 
 prepend :: String -> IRefProg
 prepend s = RS s +::+ RS ": " +::+ Name
+
+-- FIXME: Duplicated from Document.hs!
+repUnd :: String -> String
+repUnd = map rep
+  where
+    rep :: Char -> Char
+    rep '_' = '.'
+    rep c = c
+
+-- FIXME: horrible hacks.
+makeGDRef :: String -> Reference
+makeGDRef rs = Reference rs (RP $ prepend "GD") (RefAdd $ "GD:" ++ repUnd rs) (shortname' rs)
+
+makeTabRef :: String -> Reference
+makeTabRef rs = Reference rs (RP $ prepend "Tab") (RefAdd $ "Table:" ++ repUnd rs) (shortname' rs)
+
+makeFigRef :: String -> Reference
+makeFigRef rs = Reference rs (RP $ prepend "Fig") (RefAdd $ "Figure:" ++ repUnd rs) (shortname' rs)
+
+makeInstRef :: String -> Reference
+makeInstRef rs = Reference rs (RP $ prepend "IM") (RefAdd $ "IM:" ++ repUnd rs) (shortname' rs)
+
+makeDDRef :: String -> Reference
+makeDDRef rs = Reference rs (RP $ prepend "DD") (RefAdd $ "DD:" ++ repUnd rs) (shortname' rs)
+
+makeTMRef :: String -> Reference
+makeTMRef rs = Reference rs (RP $ prepend "TM") (RefAdd $ "T:" ++ repUnd rs) (shortname' rs)
+
+makeCiteRef :: String -> Reference
+makeCiteRef rs = Reference rs Citation (RefAdd $ repUnd rs) (shortname' rs)
+
+makeSecRef :: String -> String -> Reference
+makeSecRef r s = Reference (r ++ "Label") (RP $ prepend "Sect") (RefAdd $ "Sec:" ++ repUnd r) 
+  (shortname' s)
+
+makeLstRef :: String -> String -> Reference
+makeLstRef r s = Reference (r ++ "Label") (RP $ prepend "Lst") (RefAdd $ "Lst:" ++ repUnd r) 
+  (shortname' s)

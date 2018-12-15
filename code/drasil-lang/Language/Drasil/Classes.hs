@@ -37,7 +37,6 @@ import Language.Drasil.Data.Citation (CiteField)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.UnitLang(UDefn, USymb)
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.Label.Core (Label)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.RefProg (Reference)
 import Language.Drasil.Space (Space)
@@ -101,9 +100,9 @@ class Constrained c where
 class HasReasVal c where
   reasVal     :: Lens' c (Maybe Expr)
 
--- | For those things which "have a label"
+-- | For those things which "have a label", except that they are now Reference
 class HasLabel c where
-  getLabel      :: Lens' c Label
+  getLabel      :: Lens' c Reference
  
 -- | A Quantity is an 'Idea' with a 'Space' and a symbol.
 -- In theory, it should also have MayHaveUnit, but that causes

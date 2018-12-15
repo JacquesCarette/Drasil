@@ -62,7 +62,7 @@ traceMColumns :: ChunkDB -> [[UID]]
 traceMColumns c = map (\x -> refbyLookup x (c ^. refbyTable)) (traceMRow c)
  
 generateTraceTable :: ChunkDB -> LabelledContent
-generateTraceTable c = llcc (mkLabelSame "Tracey" Tab) $ Table
+generateTraceTable c = llcc (makeTabRef "Tracey") $ Table
   (EmptyS:(traceMColHeader c))
   (makeTMatrix (traceMRowHeader c) (traceMColumns c) (traceMCol c))
   (showingCxnBw traceyMatrix

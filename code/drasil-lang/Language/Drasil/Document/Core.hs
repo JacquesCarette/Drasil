@@ -4,13 +4,12 @@ module Language.Drasil.Document.Core where
 import Language.Drasil.Chunk.Citation (BibRef)
 
 import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd),
-  HasLabel(getLabel), HasShortName(shortname))
+  HasShortName(shortname))
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.Label.Core (Label)
-import Language.Drasil.Label () -- for instances
+import Language.Drasil.RefTypes (RefAdd, DType(..))
+import Language.Drasil.RefProg(Reference)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
-import Language.Drasil.RefTypes (RefAdd, DType(..))
 
 import Control.Lens ((^.), makeLenses, Lens', set)
 
@@ -64,7 +63,7 @@ data RawContent = Table [Sentence] [[Sentence]] Title Bool
                -- ^ TODO: Fill this one in.
 type Identifier = String
 
-data LabelledContent = LblC { _lbl :: Label
+data LabelledContent = LblC { _ref :: Reference
                             , _ctype :: RawContent
                             }
 
@@ -77,11 +76,10 @@ makeLenses ''UnlabelledContent
 class HasContents c where
   accessContents :: Lens' c RawContent
 
-instance HasUID        LabelledContent where uid = lbl . uid  
-instance HasRefAddress LabelledContent where getRefAdd = lbl . getRefAdd
-instance HasLabel      LabelledContent where getLabel = lbl
+instance HasUID        LabelledContent where uid = ref . uid  
+instance HasRefAddress LabelledContent where getRefAdd = ref . getRefAdd
 instance HasContents   LabelledContent where accessContents = ctype
-instance HasShortName  LabelledContent where shortname = lbl . shortname
+instance HasShortName  LabelledContent where shortname = ref . shortname
 
 instance HasContents  UnlabelledContent where accessContents = cntnts
 

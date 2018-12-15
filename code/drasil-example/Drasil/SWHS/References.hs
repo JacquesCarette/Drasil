@@ -21,17 +21,17 @@ bueche1986 = cBookA [jBueche]
   (S "Introduction to Physics for Scientists")
   (S "McGraw Hill") 1986
   [edition 4, address (S "New York City, New York")]
-  (mkLabelSame "bueche1986" Cite)
+  "bueche1986"
 
 incroperaEtAl2007 = cBookA [fIncropera, dDewitt, tBergman, aLavine]
   (S "Fundamentals of Heat and Mass Transfer")
   (S "John Wiley and Sons") 2007
   [edition 6, address (S "Hoboken, New Jersey")]
-  (mkLabelSame "incroperaEtAl2007" Cite)
+  "incroperaEtAl2007"
 
 lightstone2012 = cMisc [
   author [mLightstone],
   title (S "Derivation of tank/pcm model"),
   year 2012,
   note (S "From Marilyn Lightstone's Personal Notes")]
-  (mkLabelSame "lightstone2012" Cite)
+  "lightstone2012"

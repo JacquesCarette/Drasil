@@ -14,46 +14,30 @@ campidelli, koothoor2013, parnas1972, parnasClements1984, parnasClements1986, sm
 
 campidelli = cBooklet
   (S "Glass-BR Software for the design and risk assessment of glass facades subjected to blast loading")
-  [author [mCampidelli]]
-  campidelliLabel
-  where
-    campidelliLabel :: Label
-    campidelliLabel = mkLabelSame "campidelli" Cite
+  [author [mCampidelli]] "campidelli"
 
 koothoor2013 = 
   cMThesis [nKoothoor] 
   (S "A document drive approach to certifying" +:+ phrase sciCompS)
   (S "McMaster University") 2013 [address (S "Hamilton, ON, Canada")]
-  koothoor2013Label
-  where
-    koothoor2013Label :: Label
-    koothoor2013Label = mkLabelSame "koothoor2013" Cite
+  "koothoor2013"
 
 parnas1972 = cArticle [dParnas]
   (S "On the Criteria To Be Used in Decomposing Systems into Modules")
   (S "Communications of the ACM") 1972
-  [pages [1053, 1058]] parnas1972Label
-  where
-    parnas1972Label :: Label
-    parnas1972Label = mkLabelSame "dParnas1972" Cite
+  [pages [1053, 1058]] "dParnas1972"
   
 parnasClements1984 = cInProceedings
   [dParnas, pcClements, dmWiess]
   (S "The Modular Structure of Complex Systems")
   (S "ICSE '84: Proceedings of the 7th international conference on Software engineering")
-  1984 [pages [408, 417]] parnasClements1984Label
-  where
-    parnasClements1984Label :: Label
-    parnasClements1984Label = mkLabelSame "parnasClements1984" Cite
+  1984 [pages [408, 417]] "parnasClements1984"
 
 parnasClements1986 = cArticle [dParnas, pcClements] 
   (S "A rational design process: How and why to fake it")
   (S "IEEE Transactions on Software Engineering") 1986
   [month Feb, volume 12, number 2, pages [251,257], address (S "Washington, USA")]
-  parnasClements1986Label
-  where
-    parnasClements1986Label :: Label
-    parnasClements1986Label = mkLabelSame "parnasClements1986" Cite
+  "parnasClements1986"
 
 smithLai2005 = cInProceedings [spencerSmith, lLai]
   (S "A new requirements template for scientific computing")
@@ -65,10 +49,7 @@ smithLai2005 = cInProceedings [spencerSmith, lLai]
   , pages [107,121], 
   note (S "In conjunction with 13th IEEE International Requirements" +:+
   S "Engineering Conference,")] 
-  smithLai2005Label
-  where
-    smithLai2005Label :: Label
-    smithLai2005Label = mkLabelSame "smithLai2005" Cite
+  "smithLai2005"
 
 ------------------------
 -- COMMON CITE-FIELDS --

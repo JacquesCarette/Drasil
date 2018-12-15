@@ -5,14 +5,14 @@ module Drasil.DocumentLanguage.Labels
 import Language.Drasil
 
 
-goalStmt_label :: Label
-goalStmt_label = mkLabelRALst "goalStmt" "goalStmt"
+goalStmt_label :: Reference
+goalStmt_label = makeLstRef "goalStmt" "goalStmt"
 
-solution_label :: Label
-solution_label = mkLabelRALst "solution" "solution"
+solution_label :: Reference
+solution_label = makeLstRef "solution" "solution"
 
-characteristics_label :: Label
-characteristics_label = mkLabelRALst "characteristics" "characteristics"
+characteristics_label :: Reference
+characteristics_label = makeLstRef "characteristics" "characteristics"
 
-physSystDescription_label :: Label
-physSystDescription_label = mkLabelRALst "physSystDescription" "physSystDescription"
+physSystDescription_label :: Reference
+physSystDescription_label = makeLstRef "physSystDescription" "physSystDescription"

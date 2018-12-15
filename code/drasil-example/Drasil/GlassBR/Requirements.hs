@@ -72,7 +72,7 @@ inputGlassPropsDesc = foldlSent [at_start input_, S "the", plural quantity, S "f
   S "will be converted to the equivalent value in", plural metre]
 
 inputGlassPropsTable :: LabelledContent
-inputGlassPropsTable = llcc (mkLabelSame "InputGlassPropsReqInputs" Tab) $ 
+inputGlassPropsTable = llcc (makeTabRef "InputGlassPropsReqInputs") $ 
   Table
   [at_start symbol_, at_start description, S "Units"]
   (mkTable

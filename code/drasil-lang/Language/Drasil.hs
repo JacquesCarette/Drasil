@@ -108,6 +108,8 @@ module Language.Drasil (
   -- RefProg
   , RefProg(..), IRefProg(..)
   , Reference(..)
+  , makeAssumpRef, makeTabRef, makeGDRef, makeDDRef, makeInstRef, makeTMRef
+  , makeSecRef, makeLstRef, makeFigRef
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
   , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase'
@@ -169,14 +171,9 @@ module Language.Drasil (
   , RefBy(..)
   , assumpDB, RefMap, simpleMap
   , citationRefTable
-  , makeAssumpRef
   -- RefTypes
   , RefAdd, RefType(Cite, Tab, Def, Lst, Sect)
   , LinkType(Internal, Cite2, External)
-  -- Label
-  , Label 
-  , mkLabelRA', mkLabelSame, mkURILabel
-  , mkLabelRAAssump', mkLabelRAFig, mkLabelRASec, mkLabelRALst
   -- Document.getChunk
   , vars, vars', combine, combine', ccss, getIdeaDict
   -- Chunk.Sentence.EmbedSymbol
@@ -185,7 +182,7 @@ module Language.Drasil (
   , sdep
   -- Expr.Extract
   , names
-  -- Label.Core
+  -- Label.Type
   , getAdd
   -- Development.Sentence
   , introduceAbb, phrase, plural, phrase's, plural's, at_start, at_start'
@@ -246,7 +243,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasLabel(getLabel), HasRefAddress(getRefAdd), HasSpace(typ),
   DefiningExpr(defnExpr), HasShortName(shortname), Quantity, UncertainQuantity(uncert),
   HasFields(getFields))
-import Language.Drasil.Label.Core (Label)
+-- import Language.Drasil.Label.Core (Label)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.ChunkDB.GetChunk(vars, combine', vars', combine, ccss, getIdeaDict)
 import Language.Drasil.Chunk.AssumpChunk
@@ -315,11 +312,10 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   rendPersLFM', rendPersLFM'')
 import Language.Drasil.RefTypes(RefAdd, RefType(..),
   DType(..), LinkType(Internal, Cite2, External))
-import Language.Drasil.RefProg(RefProg(..), IRefProg(..), Reference(Reference))
-import Language.Drasil.Label (mkLabelRA', mkLabelSame, mkLabelRALst,
-  mkURILabel, mkLabelRAAssump', mkLabelRAFig, mkLabelRASec)
+import Language.Drasil.RefProg(RefProg(..), IRefProg(..), Reference(Reference)
+  , makeTabRef, makeGDRef, makeDDRef, makeFigRef, makeSecRef, makeLstRef, makeInstRef
+  , makeTMRef)
 import Language.Drasil.Label.Type (getAdd)
---Should be in lang-dev package?
 
 import Language.Drasil.UnitLang (USymb(US))
 

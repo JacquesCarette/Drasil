@@ -17,12 +17,12 @@ import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
   momentOfInertia, torque, velocity)
 
 -- Labels
-l1, l2, l3, l4, l5 :: Label
-l1 = mkLabelRA' "newtonSL" "NewtonSecLawMot" (Def TM)
-l2 = mkLabelRA' "newtonTL" "NewtonThirdLawMot" (Def TM)
-l3 = mkLabelRA' "newtonLUG" "UniversalGravLaw" (Def TM)
-l4 = mkLabelRA' "chaslesThm" "ChaslesTheorem" (Def TM)
-l5 = mkLabelRA' "newtonSLR" "NewtonSecLawRotMot" (Def TM)
+l1, l2, l3, l4, l5 :: Reference
+l1 = makeTMRef "NewtonSecLawMot"
+l2 = makeTMRef "NewtonThirdLawMot"
+l3 = makeTMRef "UniversalGravLaw"
+l4 = makeTMRef "ChaslesTheorem"
+l5 = makeTMRef "NewtonSecLawRotMot"
 
 ----- Theoretical Models -----
 

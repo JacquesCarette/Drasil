@@ -369,7 +369,7 @@ sysCtxIntro = foldlSP
    S "and its" +:+ phrase environment]
    
 sysCtxFig1 :: LabelledContent
-sysCtxFig1 = llcc (mkLabelRAFig "sysCtxDiag") $ 
+sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ 
   fig (titleize sysCont) (resourcePath ++ "SystemContextFigure.png") 
 
 sysCtxDesc :: Contents
@@ -487,7 +487,7 @@ termsAndDesc = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
 physSystDescription = physSystDesc (short gLassBR) fig_glassbr 
   [physSystDescriptionList, LlC fig_glassbr]
 
-fig_glassbr = llcc (mkLabelRAFig "physSystImage") $ figWithWidth 
+fig_glassbr = llcc (makeFigRef "physSystImage") $ figWithWidth 
   (at_startNP $ the physicalSystem) (resourcePath ++ "physicalsystimage.png") 30
 
 physSystDescriptionList = LlC $ enumSimple physSystDescription_label 1 (short physSyst) physSystDescriptionListPhysys
@@ -622,7 +622,7 @@ traceMatsAndGraphsColsT1_DD6 = ["IM3", "DD2", "DD5"]
 traceMatsAndGraphsColsT1_DD7 = ["DD8"]
 traceMatsAndGraphsColsT1_DD8 = ["DD2"]
 
-traceMatsAndGraphsTable1 = llcc (mkLabelSame "TraceyItemSecs" Tab) $ Table
+traceMatsAndGraphsTable1 = llcc (makeTabRef "TraceyItemSecs") $ Table
   (EmptyS:traceMatsAndGraphsRowHdrT1)
   (makeTMatrix traceMatsAndGraphsRowHdrT1 traceMatsAndGraphsColsT1 traceMatsAndGraphsRowT1)
   (showingCxnBw traceyMatrix
@@ -655,7 +655,7 @@ traceMatsAndGraphsColsT2_R4 = ["R1", "R2"]
 traceMatsAndGraphsColsT2_R5 = ["T1", "T2"]
 traceMatsAndGraphsColsT2_R6 = ["IM1", "IM2", "IM3", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
 
-traceMatsAndGraphsTable2 = llcc (mkLabelSame "TraceyReqsItems" Tab) $ Table
+traceMatsAndGraphsTable2 = llcc (makeTabRef "TraceyReqsItems") $ Table
   (EmptyS:traceMatsAndGraphsRowHdrT2)
   (makeTMatrix traceMatsAndGraphsColHdrT2 traceMatsAndGraphsColsT2 traceMatsAndGraphsRowT2)
   (showingCxnBw traceyMatrix (titleize' requirement `sAnd` S "Other" +:+
@@ -709,7 +709,7 @@ traceMatsAndGraphsColsT3_R4  = []
 traceMatsAndGraphsColsT3_R5  = []
 traceMatsAndGraphsColsT3_R6  = []
 
-traceMatsAndGraphsTable3 = llcc (mkLabelSame "TraceyAssumpsOthers" Tab) $ Table
+traceMatsAndGraphsTable3 = llcc (makeTabRef "TraceyAssumpsOthers") $ Table
   (EmptyS:traceMatsAndGraphsRowHdr3)
   (makeTMatrix traceMatsAndGraphsColHdr3 traceMatsAndGraphsColsT3 traceMatsAndGraphsRowT3)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other"
@@ -747,12 +747,12 @@ appdxIntro = foldlSP [
   sParen ((makeRef2S fig_5) `sAnd` (makeRef2S fig_6)),
   S "used for interpolating", plural value, S "needed in the", plural model]
 
-fig_5 = llcc (mkLabelRAFig "demandVSsod") $ fig (titleize figure +: S "5" +:+ (demandq ^. defn) +:+
+fig_5 = llcc (makeFigRef "demandVSsod") $ fig (titleize figure +: S "5" +:+ (demandq ^. defn) +:+
   sParen (ch demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
   `sVersus` at_start char_weight +:+ sParen (ch char_weight))
   (resourcePath ++ "ASTM_F2248-09.png")
 
-fig_6 = llcc (mkLabelRAFig "dimlessloadVSaspect") $ fig (titleize figure +: S "6" +:+ S "Non dimensional" +:+
+fig_6 = llcc (makeFigRef "dimlessloadVSaspect") $ fig (titleize figure +: S "6" +:+ S "Non dimensional" +:+
   phrase lateralLoad +:+ sParen (ch dimlessLoad)
   `sVersus` titleize aspect_ratio +:+ sParen (getAcc aR)
   `sVersus` at_start stressDistFac +:+ sParen (ch stressDistFac))

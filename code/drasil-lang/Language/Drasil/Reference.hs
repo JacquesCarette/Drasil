@@ -25,7 +25,7 @@ import Language.Drasil.Document.Core (RawContent(..), LabelledContent(..))
 import Language.Drasil.Label.Type (LblType(RefAdd,MetaLink,URL))
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.RefProg (RefProg(..), Reference(Reference), (+::+), name,
-  prepend, raw, IRefProg, defer)
+  prepend, raw, IRefProg, defer, repUnd)
 import Language.Drasil.ShortName (ShortName, shortname' )
 import Language.Drasil.Sentence (Sentence((:+:), S, Ref))
 import Language.Drasil.UID (UID)
@@ -230,4 +230,4 @@ makeURI u ra sn = Reference u URI (URL ra) sn
 
 -- FIXME: horrible hack.
 makeAssumpRef :: String -> Reference
-makeAssumpRef rs = Reference rs (RP $ prepend "A") (RefAdd $ "A:" ++ rs) (shortname' rs)
+makeAssumpRef rs = Reference rs (RP $ prepend "A") (RefAdd $ "A:" ++ repUnd rs) (shortname' rs)

@@ -11,7 +11,6 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Quantity,
   HasAdditionalNotes(getNotes), HasLabel(getLabel), CommonIdea(abrv))
 import Language.Drasil.Development.Unit (MayHaveUnit)
 import Language.Drasil.Expr (Relation)
-import Language.Drasil.Label.Core (Label)
 import Language.Drasil.RefProg (Reference)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
@@ -50,7 +49,7 @@ data TheoryModel = TM
   , _invs :: [Relation]
   , _dfun :: [QDefinition]
   , _ref  :: [Reference]
-  , _lb :: Label
+  , _lb   :: Reference
   , _notes :: [Sentence]
   , _ci :: CI
   }
@@ -89,5 +88,5 @@ theoryMod    = commonIdeaWithDict "theoryMod"    (cn' "Theory Model")           
 tm :: (Concept c0, Quantity q, MayHaveUnit q, Concept c1) => c0 ->
     [q] -> [c1] -> [QDefinition] ->
     [Relation] -> [QDefinition] -> [Reference] ->
-    Label -> [Sentence] -> TheoryModel
+    Reference -> [Sentence] -> TheoryModel
 tm c0 q c1 dq inv dfn r lbe nts = TM (cw c0) [] [] (map qw q) (map cw c1) dq inv dfn r lbe nts theoryMod 

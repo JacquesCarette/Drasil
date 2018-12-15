@@ -6,7 +6,7 @@ import Language.Drasil.Chunk.Citation (BibRef)
 import Language.Drasil.Classes (HasUID(uid), HasRefAddress(getRefAdd),
   HasShortName(shortname))
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.RefTypes (RefAdd, DType(..))
+import Language.Drasil.RefTypes (RefAdd)
 import Language.Drasil.RefProg(Reference)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
@@ -48,6 +48,11 @@ data Contents = UlC UnlabelledContent
 --   gdefn, General, mkGDField [Para, EqnBlock, Enumeration]
 --   instanceModel, Instance, mkIMField [Para, EqnBlock, Enumeration]
 
+-- | Types of definitions
+data DType = General
+           | Instance
+           | TM
+           | DD
 
 -- | Types of layout objects we deal with explicitly
 data RawContent = Table [Sentence] [[Sentence]] Title Bool

@@ -172,7 +172,7 @@ module Language.Drasil (
   , assumpDB, RefMap, simpleMap
   , citationRefTable
   -- RefTypes
-  , RefAdd, RefType(Cite, Tab, Def, Lst, Sect)
+  , RefAdd
   , LinkType(Internal, Cite2, External)
   -- Document.getChunk
   , vars, vars', combine, combine', ccss, getIdeaDict
@@ -225,11 +225,9 @@ import Language.Drasil.Expr.Precedence (precA, precB, eprec)
 import Language.Drasil.Sentence.EmbedSymbol(ch)
 import Language.Drasil.Sentence.Extract(sdep, lnames, lnames')
 import Language.Drasil.Document (section, fig, figWithWidth
-  , section''
-  , Section(..), SecCons(..) 
-  , llcc, ulcc, Document(..)
+  , section'', Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, extractSection)
-import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..)
+import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), DType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)
   , LabelledContent(..), UnlabelledContent(..) )
@@ -310,8 +308,7 @@ import Language.Drasil.Misc -- all of it
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
-import Language.Drasil.RefTypes(RefAdd, RefType(..),
-  DType(..), LinkType(Internal, Cite2, External))
+import Language.Drasil.RefTypes(RefAdd, LinkType(Internal, Cite2, External))
 import Language.Drasil.RefProg(RefProg(..), IRefProg(..), Reference(Reference)
   , makeTabRef, makeGDRef, makeDDRef, makeFigRef, makeSecRef, makeLstRef, makeInstRef
   , makeTMRef)

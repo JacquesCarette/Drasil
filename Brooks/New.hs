@@ -89,15 +89,17 @@ class (PermanenceSym repr) => StateTypeSym repr where
     enumType      :: Label -> repr (StateType repr)
 
 class (BodySym repr) => ControlBlockSym repr where
-    ifCond :: [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Block repr) 
-    switch :: repr (Value repr) -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Block repr) -- is there value in separating Literals into their own type?
+    ifCond     :: [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Block repr) 
+    switch     :: repr (Value repr) -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Block repr) -- is there value in separating Literals into their own type?
+    switchAsIf :: repr (Value repr) -> [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> repr (Block repr)
 
     ifExists :: repr (Value repr) -> repr (Body repr) -> repr (Body repr) -> repr (Block repr)
 
-    for     :: repr (Statement repr) -> repr (Value repr) -> repr (Statement repr) -> repr (Body repr) -> repr (Block repr)
+    for      :: repr (Statement repr) -> repr (Value repr) -> repr (Statement repr) -> repr (Body repr) -> repr (Block repr)
+    forRange :: Label -> Integer -> Integer -> Integer -> repr (Body repr) -> repr (Block repr)
     -- Had to add StateType to forEach because I can't extract the StateType from the value.
-    forEach :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (Body repr) -> repr (Block repr)
-    while   :: repr (Value repr) -> repr (Body repr) -> repr (Block repr) 
+    forEach  :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (Body repr) -> repr (Block repr)
+    while    :: repr (Value repr) -> repr (Body repr) -> repr (Block repr) 
 
     tryCatch :: repr (Body repr) -> repr (Body repr) -> repr (Block repr)
 

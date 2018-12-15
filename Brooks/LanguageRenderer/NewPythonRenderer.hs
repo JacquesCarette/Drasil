@@ -150,15 +150,18 @@ instance StateTypeSym PythonCode where
 
 instance ControlBlockSym PythonCode where
     ifCond bs b = lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs
-    switch v cs c = lift3Pair switchDocD (state break) v c cs
+    switch v cs c = switchAsIf v cs c
+    switchAsIf v cs c = ifCond cases c
+        where cases = map (\(l, b) -> (v ?== l, b)) cs
 
     ifExists v ifBody elseBody = ifCond [(notNull v, ifBody)] elseBody
 
-    for sInit vGuard sUpdate b = liftA6 forDocD blockStart blockEnd (loopState sInit) vGuard (loopState sUpdate) b
-    forEach l t v b = liftA7 (forEachDocD l) blockStart blockEnd iterForEachLabel iterInLabel t v b
-    while v b = liftA4 whileDocD blockStart blockEnd v b
+    for _ _ _ _ = error "Classic for loops not available in Python, please use forRange, forEach, or while instead"
+    forRange i initv finalv stepv b = liftA5 (pyForRange i) iterInLabel (litInt initv) (litInt finalv) (litInt stepv) b
+    forEach l _ v b = liftA4 (pyForEach l) iterForEachLabel iterInLabel v b
+    while v b = liftA2 pyWhile v b
 
-    tryCatch tb cb = liftA2 jTryCatch tb cb
+    tryCatch tb cb = liftA2 pyTryCatch tb cb
 
     checkState l cs c = switch (var l) cs c
     runStrategy l strats rv av = 
@@ -173,25 +176,10 @@ instance ControlBlockSym PythonCode where
               initv = varDecDef index int $ litInt 0
               notify = oneLiner $ valState $ (obsList $. at index) $. func fn ps
 
-    getFileInputAll f v = while (f $. (func "hasNextLine" []))
-        (oneLiner $ valState $ v $. (listAppend $ f $. (func "nextLine" [])))
-    listSlice t vnew vold b e s = 
-        let l_temp = "temp"
-            v_temp = var l_temp
-            l_i = "i_temp"
-            v_i = var l_i
-        in
-        (body [
-            block [(listDec l_temp 0 t)],
-            for (varDecDef l_i (int) (getB b)) (v_i ?< getE e) (getS s v_i)
-                (oneLiner $ valState $ v_temp $. (listAppend (vold $. (listAccess v_i)))),
-            block [(vnew &= v_temp)]])
-        where getB Nothing = litInt 0
-              getB (Just n) = n
-              getE Nothing = vold$.listSize
-              getE (Just n) = n
-              getS Nothing v = (&++) v
-              getS (Just n) v = v &+= n
+    getFileInputAll f v = v &= (objMethodCall f "readlines" [])
+    listSlice _ vnew vold b e s = liftA5 pyListSlice vnew vold (getVal b) (getVal e) (getVal s)
+        where getVal Nothing = return empty
+              getVal (Just v) = v
 
 instance UnaryOpSym PythonCode where
     type UnaryOp PythonCode = Doc
@@ -546,3 +534,29 @@ pyThrow errMsg = text "raise" <+> text "Exception" <> parens errMsg
 
 pyListAccess :: Doc -> Doc
 pyListAccess i = brackets i
+
+pyForRange :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
+pyForRange i iterInLabel initv finalv stepv b = vcat [
+    forLabel <+> text i <+> iterInLabel <+> text "range" <> parens (initv <> text ", " <> finalv <> text ", " <> stepv) <> colon,
+    oneTab $ b]
+
+pyForEach :: Label -> Doc -> Doc -> Doc -> Doc -> Doc
+pyForEach i iterForEachLabel iterInLabel listVar b = vcat [
+    iterForEachLabel <+> text i <+> iterInLabel <+> listVar <> colon,
+    oneTab $ b]
+
+pyWhile :: Doc -> Doc -> Doc
+pyWhile v b = vcat [
+    text "while" <+> v <> colon,
+    oneTab $ b]
+
+pyTryCatch :: Doc -> Doc -> Doc
+pyTryCatch tryB catchB = vcat [
+    text "try" <+> colon,
+    oneTab $ tryB,
+    text "except" <+> text "Exception" <+> text "as" <+> text "exc" <+> colon,
+    oneTab $ catchB]
+
+pyListSlice :: Doc -> Doc -> Doc -> Doc -> Doc -> Doc
+pyListSlice vnew vold b e s = vnew <+> equals <+> vold <> (brackets $ 
+    b <> colon <> e <> colon <> s)

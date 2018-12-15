@@ -167,10 +167,13 @@ instance StateTypeSym JavaCode where
 instance ControlBlockSym JavaCode where
     ifCond bs b = lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b bs
     switch v cs c = lift3Pair switchDocD (state break) v c cs
+    switchAsIf v cs c = ifCond cases c
+        where cases = map (\(l, b) -> (v ?== l, b)) cs
 
     ifExists v ifBody elseBody = ifCond [(notNull v, ifBody)] elseBody
 
     for sInit vGuard sUpdate b = liftA6 forDocD blockStart blockEnd (loopState sInit) vGuard (loopState sUpdate) b
+    forRange i initv finalv stepv b = for (i &.= (litInt initv)) ((var i) ?<= (litInt finalv)) (i &.+= (litInt stepv)) b
     forEach l t v b = liftA7 (forEachDocD l) blockStart blockEnd iterForEachLabel iterInLabel t v b
     while v b = liftA4 whileDocD blockStart blockEnd v b
 

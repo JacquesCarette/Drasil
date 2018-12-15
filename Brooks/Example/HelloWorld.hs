@@ -127,8 +127,7 @@ helloSwitch = switch (var "a") [((litInt 5), (oneLiner ("b" &.= (litInt 10)))),
   (oneLiner ("b" &.= (litInt 0)))
 
 helloForLoop :: (RenderSym repr) => repr (Block repr)
-helloForLoop = for (varDecDef "i" int (litInt 0)) ((var "i") ?< (litInt 10)) ((&.++) "i")
-  (oneLiner (printLn (int) (var "i")))
+helloForLoop = forRange 0 9 1 (oneLiner (printLn (int) (var "i")))
 
 helloWhileLoop :: (RenderSym repr) => repr (Block repr)
 helloWhileLoop = while (var "a" ?< (litInt 13)) (bodyStatements [printStrLn "Hello", ((&.++) "a")]) 

@@ -11,10 +11,10 @@ import Text.PrettyPrint.HughesPJ (Doc)
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 patternTest :: (RenderSym repr) => repr (RenderFile repr)
-patternTest = fileDoc (buildModule "" [] [] [] [patternTestClass])
+patternTest = fileDoc (buildModule "" ["Observer"] [] [] [patternTestClass])
 
 patternTestClass :: (RenderSym repr) => repr (Class repr)
-patternTestClass = mainClass "PatternTest" [] [patternTestMainMethod, addNums]
+patternTestClass = mainClass "PatternTest" [] [patternTestMainMethod]
 
 patternTestMainMethod :: (RenderSym repr) => repr (Method repr)
 patternTestMainMethod = mainMethod (body [ (block [(varDec "n" int), (initState "myFSM" "Off"), (changeState "myFSM" "On")]),
@@ -24,11 +24,6 @@ patternTestMainMethod = mainMethod (body [ (block [(varDec "n" int), (initState 
   (runStrategy "myStrat" 
     [("myStrat", oneLiner (printStrLn "myStrat")), ("yourStrat", oneLiner (printStrLn "yourStrat"))]
     (Just (litInt 3)) (Just (var "n"))),
-  (block [(listDec "obs1" 1 (intListType dynamic)), (listDec "obs2" 1 (intListType dynamic))]),
-  (block [(initObserverList (listType static (intListType dynamic)) [(var "obs1")]), (addObserver (intListType static) (var "obs2"))]),
-  (notifyObservers "add" (listType static (intListType dynamic)) [funcApp "addNums" [(litInt 2), (litInt 5)]])])
-
-addNums :: (RenderSym repr) => repr (Method repr)
-addNums = method "addNums" public static (mState int) [(stateParam "num1" int), (stateParam "num2" int)]
-  (bodyStatements [varDecDef "sumNum" int ((var "num1") #+ (var "num2")), 
-    returnVar "sumNum"])
+  (block [(varDecDef "obs1" (obj "Observer") (stateObj (obj "Observer") [])), (varDecDef "obs2" (obj "Observer") (stateObj (obj "Observer") []))]),
+  (block [(initObserverList (listType static (obj "Observer")) [(var "obs1")]), (addObserver (obj "Observer") (var "obs2"))]),
+  (notifyObservers "printNum" (listType static (obj "Observer")) [])])

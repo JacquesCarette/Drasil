@@ -6,7 +6,7 @@ module LanguageRenderer.NewJavaRenderer (
 ) where
 
 import New (Label, Library,
-  RenderSym(..), KeywordSym(..), PermanenceSym(..), InputTypeSym(..),
+  RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   StatementSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), 
@@ -123,8 +123,6 @@ instance KeywordSym JavaCode where
     iterInLabel = return colon
 
     commentStart = return doubleSlash
-
-    inputFunc = return (parens (text "new Scanner(System.in)"))
     
     printFunc = return $ text "System.out.print"
     printLnFunc = return $ text "System.out.println"
@@ -173,7 +171,7 @@ instance ControlBlockSym JavaCode where
     ifExists v ifBody elseBody = ifCond [(notNull v, ifBody)] elseBody
 
     for sInit vGuard sUpdate b = liftA6 forDocD blockStart blockEnd (loopState sInit) vGuard (loopState sUpdate) b
-    forRange i initv finalv stepv b = for (i &.= (litInt initv)) ((var i) ?<= (litInt finalv)) (i &.+= (litInt stepv)) b
+    forRange i initv finalv stepv b = for (varDecDef i int initv) ((var i) ?<= finalv) (i &.+= stepv) b
     forEach l t v b = liftA7 (forEachDocD l) blockStart blockEnd iterForEachLabel iterInLabel t v b
     while v b = liftA4 whileDocD blockStart blockEnd v b
 
@@ -207,7 +205,7 @@ instance ControlBlockSym JavaCode where
             block [(vnew &= v_temp)]])
         where getB Nothing = litInt 0
               getB (Just n) = n
-              getE Nothing = vold$.listSize
+              getE Nothing = vold $. listSize
               getE (Just n) = n
               getS Nothing v = (&++) v
               getS (Just n) v = v &+= n
@@ -312,6 +310,8 @@ instance ValueSym JavaCode where
     stateObj t vs = lift1List stateObjDocD t vs
     extStateObj _ t vs = stateObj t vs
     listStateObj t vs = lift2List listStateObjDocD listObj t vs
+    
+    inputFunc = return (parens (text "new Scanner(System.in)"))
 
     stringEqual v1 str = objAccess v1 (func "equals" [str])
 
@@ -417,6 +417,7 @@ instance Selector JavaCode where
     selfAccess f = objAccess self f
 
     listPopulateAccess _ _ = return empty
+    listSizeAccess v = objAccess v listSize
 
     castObj f v = liftA2 castObjDocD f v
     castStrToFloat v = funcApp "Double.parseDouble" [v]
@@ -487,6 +488,8 @@ instance MethodSym JavaCode where
     pubMethod n t ps b = method n public dynamic t ps b
     constructor n ps b = method n public dynamic (construct n) ps b
 
+    function = method
+
 instance StateVarSym JavaCode where
     type StateVar JavaCode = Doc
     stateVar _ l s p t = liftA4 (stateVarDocD l) (includeScope s) p t endStatement
@@ -496,7 +499,7 @@ instance StateVarSym JavaCode where
 
 instance ClassSym JavaCode where
     type Class JavaCode = Doc
-    buildClass n p s vs fs = liftA4 (classDocD n p) inherit s (liftList stateVarListDocD vs) (liftList methodListDocD fs) -- vs and fs are actually lists... should 
+    buildClass n p s vs fs = liftA4 (classDocD n p) inherit s (liftList stateVarListDocD vs) (liftList methodListDocD fs)
     enum n es s = liftA2 (enumDocD n) (return $ enumElementsDocD es False) s
     mainClass n vs fs = buildClass n Nothing public vs fs
     privClass n p vs fs = buildClass n p private vs fs

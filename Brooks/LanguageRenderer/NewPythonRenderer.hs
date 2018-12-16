@@ -12,31 +12,31 @@ import New (Label, Library,
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..),
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
-import NewLanguageRenderer (fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD,
+import NewLanguageRenderer (fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD',
   blockDocD, bodyDocD, intTypeDocD, floatTypeDocD, typeDocD,
   voidDocD, constructDocD, stateParamDocD,
   paramListDocD, methodListDocD, stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD, 
   forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD', plusPlusDocD',
   varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, statementDocD, returnDocD,
-  commentDocD, freeDocD, notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD', logOpDocD',
-  lnOpDocD', expOpDocD', sinOpDocD', cosOpDocD', tanOpDocD', unOpDocD, equalOpDocD, 
+  commentDocD, freeDocD, notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD',
+  expOpDocD', sinOpDocD', cosOpDocD', tanOpDocD', unOpDocD, equalOpDocD, 
   notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, binOpDocD, binOpDocD', litTrueD, litFalseD, 
   litCharD, litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
   defaultStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
   inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
-  notNullDocD, funcDocD, castDocD, sizeDocD, listAccessDocD, objAccessDocD, 
+  notNullDocD, funcDocD, castDocD, sizeDocD, listAccessDocD, listSetDocD, objAccessDocD, 
   castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
-  publicDocD, includeD, dot, new, forLabel, observerListName, doubleSlash, 
+  publicDocD, classDec, dot, new, forLabel, observerListName, doubleSlash, 
   addCommentsDocD, callFuncParamList, getterName, setterName)
-import Helpers (blank,angles,oneTab,vibmap)
+import Helpers (blank,angles,oneTab,vibmap,vibcat)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA, liftA2, liftA3)
-import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals, 
-  semi, vcat, lbrace, rbrace, doubleQuotes, render, colon, brackets)
+import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($+$), parens, empty, equals, 
+  semi, vcat, lbrace, rbrace, doubleQuotes, render, colon, brackets, isEmpty)
 
 newtype PythonCode a = PC {unPC :: a}
 
@@ -157,7 +157,7 @@ instance ControlBlockSym PythonCode where
     ifExists v ifBody elseBody = ifCond [(notNull v, ifBody)] elseBody
 
     for _ _ _ _ = error "Classic for loops not available in Python, please use forRange, forEach, or while instead"
-    forRange i initv finalv stepv b = liftA5 (pyForRange i) iterInLabel (litInt initv) (litInt finalv) (litInt stepv) b
+    forRange i initv finalv stepv b = liftA5 (pyForRange i) iterInLabel initv finalv stepv b
     forEach l _ v b = liftA4 (pyForEach l) iterForEachLabel iterInLabel v b
     while v b = liftA2 pyWhile v b
 
@@ -170,10 +170,10 @@ instance ControlBlockSym PythonCode where
         where resultState = case av of Nothing    -> return empty
                                        Just vari  -> case rv of Nothing  -> error $ "Strategy '" ++ l ++ "': Attempt to assign null return to a Value."
                                                                 Just res -> assign vari res
-    notifyObservers fn t ps = for initv (var index ?< (obsList $. listSize)) ((&.++) index) notify
+    notifyObservers fn t ps = forRange index initv ((listSizeAccess obsList)) (litInt 1) notify
         where obsList = observerListName `listOf` t
               index = "observerIndex"
-              initv = varDecDef index int $ litInt 0
+              initv = litInt 0
               notify = oneLiner $ valState $ (obsList $. at index) $. func fn ps
 
     getFileInputAll f v = v &= (objMethodCall f "readlines" [])
@@ -187,8 +187,8 @@ instance UnaryOpSym PythonCode where
     negateOp = return $ negateOpDocD
     sqrtOp = return $ sqrtOpDocD'
     absOp = return $ absOpDocD'
-    logOp = return $ logOpDocD'
-    lnOp = return $ lnOpDocD'
+    logOp = return $ pyLogOp
+    lnOp = return $ pyLnOp
     expOp = return $ expOpDocD'
     sinOp = return $ sinOpDocD'
     cosOp = return $ cosOpDocD'
@@ -274,7 +274,7 @@ instance ValueSym PythonCode where
     objVarSelf n = liftA2 objVarDocD self (var n)
     listVar n _ = var n
     n `listOf` t = listVar n t
-    inlineIf c v1 v2 = liftA3 inlineIfDocD c v1 v2
+    inlineIf c v1 v2 = liftA3 pyInlineIf c v1 v2
     funcApp n vs = liftList (funcAppDocD n) vs
     selfFuncApp = funcApp
     extFuncApp l n vs = liftList (extFuncAppDocD l n) vs
@@ -282,12 +282,12 @@ instance ValueSym PythonCode where
     extStateObj l t vs = liftA2 (pyExtStateObj l) t (liftList callFuncParamList vs)
     listStateObj t vs = t
 
-    inputFunc = return $ text "raw_input()" -- input() for Python 3.0+
+    inputFunc = return $ text "input()" -- raw_input() for < Python 3.0
 
     stringEqual v1 v2 = v1 ?== v2
 
     exists v = v ?!= (var "None")
-    listIndexExists lst index = (lst $. listSize) ?> index
+    listIndexExists lst index = (listSizeAccess lst) ?> index
     argExists i = (litInt $ fromIntegral i)
     notNull = exists
 
@@ -373,7 +373,7 @@ instance StatementSym PythonCode where
     initObserverList t os = listDecDef observerListName t os
     addObserver t o = obsList $. listAdd last o
         where obsList = observerListName `listOf` t
-              last = obsList $. listSize
+              last = listSizeAccess obsList
 
     state s = liftA2 statementDocD s endStatement
     loopState s = liftA2 statementDocD s endStatementLoop
@@ -388,7 +388,7 @@ instance Selector PythonCode where
     selfAccess f = objAccess self f
 
     listPopulateAccess v f = liftA2 pyListPopAccess v f
-    listSizeAccess v f = liftA2 pyListSizeAccess v f
+    listSizeAccess v = liftA2 pyListSizeAccess v listSize
 
     castObj f v = liftA2 castObjDocD f v
     castStrToFloat v = castObj (cast float string) v
@@ -423,7 +423,7 @@ instance FunctionSym PythonCode where
 
 instance SelectorFunction PythonCode where
     listAccess i = liftA pyListAccess i
-    listSet i v = liftA funcDocD (funcApp "set" [i, v])
+    listSet i v = liftA2 listSetDocD i v
 
     listAccessEnum _ v = listAccess v
     listSetEnum t i v = listSet (castObj (cast int t) i) v
@@ -432,8 +432,8 @@ instance SelectorFunction PythonCode where
 
 instance ScopeSym PythonCode where
     type Scope PythonCode = Doc
-    private = return privateDocD
-    public = return publicDocD
+    private = return empty
+    public = return empty
 
     includeScope s = s
 
@@ -445,38 +445,42 @@ instance MethodTypeSym PythonCode where
 
 instance ParameterSym PythonCode where
     type Parameter PythonCode = Doc
-    stateParam n t = liftA (stateParamDocD n) t
+    stateParam n _ = return $ text n
 
 instance MethodSym PythonCode where
     type Method PythonCode = Doc
-    method n s p t ps b = liftA5 (jMethod n) s p t (liftList (paramListDocD) ps) b
+    method n _ _ _ ps b = liftA3 (pyMethod n) self (liftList (paramListDocD) ps) b
     getMethod n t = method (getterName n) public dynamic t [] getBody
         where getBody = oneLiner $ returnState (self $-> (var n))
     setMethod setLbl paramLbl t = method (setterName setLbl) public dynamic void [(stateParam paramLbl t)] setBody
         where setBody = oneLiner $ (self $-> (var setLbl)) &=. paramLbl
-    mainMethod b = method "main" public static void [return $ text "String[] args"] b
+    mainMethod b = b
     privMethod n t ps b = method n private dynamic t ps b
     pubMethod n t ps b = method n public dynamic t ps b
-    constructor n ps b = method n public dynamic (construct n) ps b
+    constructor n ps b = method initName public dynamic (construct n) ps b
+
+    function n _ _ _ ps b = liftA2 (pyFunction n) (liftList (paramListDocD) ps) b
 
 instance StateVarSym PythonCode where
     type StateVar PythonCode = Doc
-    stateVar _ l s p t = liftA4 (stateVarDocD l) (includeScope s) p t endStatement
+    stateVar _ _ _ _ _ = return empty
     privMVar del l t = stateVar del l private dynamic t
     pubMVar del l t = stateVar del l public dynamic t
     pubGVar del l t = stateVar del l public static t
 
 instance ClassSym PythonCode where
     type Class PythonCode = Doc
-    buildClass n p s vs fs = liftA4 (classDocD n p) inherit s (liftList stateVarListDocD vs) (liftList methodListDocD fs) -- vs and fs are actually lists... should 
-    enum n es s = liftA2 (enumDocD n) (return $ enumElementsDocD es False) s
-    mainClass n vs fs = buildClass n Nothing public vs fs
+    buildClass n p _ _ fs = liftA2 (pyClass n) pn (liftList methodListDocD fs)
+        where pn = case p of Nothing -> return empty
+                             Just pn -> return $ parens (text pn)
+    enum n es _ = liftA2 (pyClass n) (return empty) (return $ enumElementsDocD' es)
+    mainClass _ _ fs = liftList methodListDocD fs
     privClass n p vs fs = buildClass n p private vs fs
     pubClass n p vs fs = buildClass n p public vs fs
 
 instance ModuleSym PythonCode where
     type Module PythonCode = Doc
-    buildModule _ _ _ _ cs = liftList moduleDocD cs
+    buildModule _ ls vs fs cs = liftA4 pyModule (liftList pyModuleImportList (map include ls)) (liftList pyModuleVarList vs) (liftList methodListDocD fs) (liftList pyModuleClassList cs)
 
 -- convenience
 imp, incl, initName :: Label
@@ -493,11 +497,20 @@ pytop = vcat [   -- There are also imports from the libraries supplied by module
 pyInclude :: Label -> Doc
 pyInclude n = text incl <+> text n <+> text imp
 
+pyLogOp :: Doc
+pyLogOp = text "math.log10"
+
+pyLnOp :: Doc
+pyLnOp = text "math.log"
+
 pyStateObj :: Doc -> Doc -> Doc
 pyStateObj t vs = t <> parens vs
 
 pyExtStateObj :: Label -> Doc -> Doc -> Doc
 pyExtStateObj l t vs = text l <> dot <> t <> parens vs
+
+pyInlineIf :: Doc -> Doc -> Doc -> Doc
+pyInlineIf c v1 v2 = v1 <+> text "if" <+> c <+> text "else" <+> v2
 
 pyListPopAccess :: Doc -> Doc -> Doc
 pyListPopAccess v f = v <+> equals <+> f
@@ -560,3 +573,46 @@ pyTryCatch tryB catchB = vcat [
 pyListSlice :: Doc -> Doc -> Doc -> Doc -> Doc -> Doc
 pyListSlice vnew vold b e s = vnew <+> equals <+> vold <> (brackets $ 
     b <> colon <> e <> colon <> s)
+
+pyMethod :: Label -> Doc -> Doc -> Doc -> Doc
+pyMethod n self ps b = vcat [
+    text "def" <+> text n <> parens (self <> oneParam <> ps) <> colon,
+    oneTab $ bodyD]
+        where oneParam | isEmpty ps = empty
+                       | otherwise  = text ", "
+              bodyD | isEmpty b = text "None"
+                    | otherwise = b
+
+pyFunction :: Label -> Doc -> Doc -> Doc
+pyFunction n ps b = vcat [
+    text "def" <+> text n <> parens ps <> colon,
+    oneTab $ bodyD]
+        where bodyD | isEmpty b = text "None"
+                    | otherwise = b
+
+pyClass :: Label -> Doc -> Doc -> Doc
+pyClass n pn fs = vcat [
+    classDec <+> text n <> pn <> colon,
+    oneTab $ fs]
+
+pyModuleImportList :: [Doc] -> Doc
+pyModuleImportList ls = vcat ls
+
+pyModuleVarList :: [Doc] -> Doc
+pyModuleVarList vs = vcat vs
+
+pyModuleClassList :: [Doc] -> Doc
+pyModuleClassList cs = vibcat cs
+
+pyModule :: Doc -> Doc -> Doc -> Doc -> Doc
+pyModule ls vs fs cs =
+    libs $+$
+    vars $+$
+    funcs $+$
+    cs
+    where libs = case ls of empty -> empty
+                            _  -> ls $+$ blank
+          vars = case vs of empty -> empty
+                            _ -> vs $+$ blank
+          funcs = case fs of empty -> empty
+                             _ -> fs $+$ blank

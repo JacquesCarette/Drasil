@@ -22,12 +22,12 @@ writeStory = block [
   (varDecDef "e" int (litInt 5)),
   (varDec "f" float),
   ("f" &.= (castObj (cast float int) (var "e"))),
-  (varDec "file" outfile),
-  (openFileW (var "file") (litString "../filename.txt")),
-  (printFile (var "file") int (litInt 0)),
-  (printFileLn (var "file") int (litFloat 0.89)),
-  (printFileStr (var "file") "ello"),
-  (printFileStrLn (var "file") "byebye"),
+  (varDec "fileToWrite" outfile),
+  (openFileW (var "fileToWrite") (litString "../filetowrite.txt")),
+  (printFile (var "fileToWrite") int (litInt 0)),
+  (printFileLn (var "fileToWrite") int (litFloat 0.89)),
+  (printFileStr (var "fileToWrite") "ello"),
+  (printFileStrLn (var "fileToWrite") "byebye"),
   (varDec "fileToRead" infile),
   (openFileR (var "fileToRead") (litString "../filename.txt")),
   (varDec "fileLine" string),
@@ -39,4 +39,4 @@ readStory :: (RenderSym repr) => repr (Block repr)
 readStory = (getFileInputAll (var "fileToRead") (var "fileContents"))
 
 goodBye :: (RenderSym repr) => repr (Block repr)
-goodBye = block [(closeFile (var "file")), (closeFile (var "fileToRead"))]
+goodBye = block [(closeFile (var "fileToWrite")), (closeFile (var "fileToRead"))]

@@ -15,7 +15,7 @@ helloWorld = fileDoc (buildModule "" [] [] [] [helloWorldClass])
 
 helloWorldClass :: (RenderSym repr) => repr (Class repr)
 helloWorldClass = pubClass "HelloWorld" Nothing [stateVar 0 "greeting" private static string] [mainMethod (body [ helloInitVariables, helloListSlice,
-  ifCond [(litFalse, bodyStatements [(varDec "dummy" string)]),
+  ifCond [(litFalse, bodyStatements [(varDecDef "dummy" string (litString "dummy"))]),
     (litTrue, helloIfBody)] helloElseBody,
   helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch])]
 
@@ -24,7 +24,7 @@ helloInitVariables = block [ (comment "Initializing variables"),
   (varDec "a" int), 
   (varDecDef "b" int (litInt 5)),
   (listDecDef "myOtherList" (floatListType static) [(litFloat 1.0), (litFloat 1.5)]),
-  ("a" &.= (objAccess (var "myOtherList") listSize)),
+  ("a" &.= (listSizeAccess (var "myOtherList"))),
   (valState (objAccess (var "myOtherList") (listAdd (litInt 2) (litFloat 2.0)))),
   (valState (objAccess (var "myOtherList") (listAppend (litFloat 2.5)))),
   (valState (objAccess (var "myOtherList") (listExtendFloat))),
@@ -71,7 +71,7 @@ helloIfBody = addComments "If body" (body [
     printStrLn "Type an int",
     getIntInput (var "d"),
     printStrLn "Type another",
-    discardInput inputInt],
+    discardInput],
   
   block [
     printLn (string) (litString " too"),
@@ -84,9 +84,9 @@ helloIfBody = addComments "If body" (body [
     printLn (int) ((#~) (litInt 1)),
     printLn (float) ((#/^) (litFloat 4.0)),
     printLn (int) ((#|) (litInt (-4))),
-    printLn (float) (log ((#~) (litFloat 2.0))),
+    printLn (float) (log (litFloat 2.0)),
     printLn (float) (ln (litFloat 2.0)),
-    printLn (float) (exp (litFloat 2.0)),
+    printLn (float) (exp ((#~) (litFloat 2.0))),
     printLn (float) (sin (litFloat 2.0)),
     printLn (float) (cos (litFloat 2.0)),
     printLn (float) (tan (litFloat 2.0)),
@@ -127,7 +127,7 @@ helloSwitch = switch (var "a") [((litInt 5), (oneLiner ("b" &.= (litInt 10)))),
   (oneLiner ("b" &.= (litInt 0)))
 
 helloForLoop :: (RenderSym repr) => repr (Block repr)
-helloForLoop = forRange 0 9 1 (oneLiner (printLn (int) (var "i")))
+helloForLoop = forRange "i" (litInt 0) (litInt 9) (litInt 1) (oneLiner (printLn (int) (var "i")))
 
 helloWhileLoop :: (RenderSym repr) => repr (Block repr)
 helloWhileLoop = while (var "a" ?< (litInt 13)) (bodyStatements [printStrLn "Hello", ((&.++) "a")]) 

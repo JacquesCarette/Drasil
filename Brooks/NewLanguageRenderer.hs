@@ -7,7 +7,7 @@ module NewLanguageRenderer (
     classDec, dot, doubleSlash, forLabel, new, observerListName,
     
     -- * Default Functions available for use in renderers
-    fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, blockDocD, bodyDocD, outDocD, 
+    fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, enumElementsDocD', blockDocD, bodyDocD, outDocD, 
     printListDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, charTypeDocD, 
     stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD, voidDocD, 
     constructDocD, stateParamDocD, paramListDocD, methodDocD, methodListDocD,
@@ -26,7 +26,7 @@ module NewLanguageRenderer (
     litStringD, defaultCharD, defaultFloatD, defaultIntD, defaultStringD, 
     varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD,
     funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD,
-    constDecDefDocD, notNullDocD, funcDocD, castDocD, sizeDocD, listAccessDocD,
+    constDecDefDocD, notNullDocD, funcDocD, castDocD, sizeDocD, listAccessDocD, listSetDocD, 
     objAccessDocD, castObjDocD, includeD, breakDocD, continueDocD, staticDocD, 
     dynamicDocD, privateDocD, publicDocD, addCommentsDocD, callFuncParamList, 
     getterName, setterName
@@ -129,6 +129,11 @@ enumElementsDocD es enumsEqualInts = vcat $
     where nums = [0..length es - 1]
           equalsInt i = if enumsEqualInts then (equals <+> int i) else empty 
           interComma i = if i < length es - 1 then text "," else empty
+
+enumElementsDocD' :: [Label] -> Doc
+enumElementsDocD' es = vcat $
+    zipWith (\e i -> text e <+> equals <+> int i) es nums
+        where nums = [0..length es - 1]
 
 -- Groupings --
 
@@ -531,6 +536,9 @@ sizeDocD = dot <> text "Count"
 
 listAccessDocD :: Doc -> Doc
 listAccessDocD i = brackets i
+
+listSetDocD :: Doc -> Doc -> Doc
+listSetDocD i v = brackets i <+> equals <+> v
 
 objAccessDocD :: Doc -> Doc -> Doc
 objAccessDocD v f = v <> f

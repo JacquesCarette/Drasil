@@ -96,7 +96,7 @@ class (BodySym repr) => ControlBlockSym repr where
     ifExists :: repr (Value repr) -> repr (Body repr) -> repr (Body repr) -> repr (Block repr)
 
     for      :: repr (Statement repr) -> repr (Value repr) -> repr (Statement repr) -> repr (Body repr) -> repr (Block repr)
-    forRange :: Label -> Integer -> Integer -> Integer -> repr (Body repr) -> repr (Block repr)
+    forRange :: Label -> repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> repr (Body repr) -> repr (Block repr)
     -- Had to add StateType to forEach because I can't extract the StateType from the value.
     forEach  :: Label -> repr (StateType repr) -> repr (Value repr) -> repr (Body repr) -> repr (Block repr)
     while    :: repr (Value repr) -> repr (Body repr) -> repr (Block repr) 
@@ -318,7 +318,7 @@ class (FunctionSym repr, ValueSym repr) => Selector repr where
     selfAccess :: repr (Function repr) -> repr (Value repr)
 
     listPopulateAccess :: repr (Value repr) -> repr (Function repr) -> repr (Value repr)
-    listSizeAccess     :: repr (Value repr) -> repr (Function repr) -> repr (Value repr)
+    listSizeAccess     :: repr (Value repr) -> repr (Value repr)
 
     castObj        :: repr (Function repr) -> repr (Value repr) -> repr (Value repr)
     castStrToFloat :: repr (Value repr) -> repr (Function repr)
@@ -389,6 +389,8 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, BodySym repr) => Me
     pubMethod   :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
     constructor :: Label -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
 
+    function :: Label -> repr (Scope repr) -> repr (Permanence repr) -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)  -- For methods outside of classes, not sure if function is a good name
+
 class (ScopeSym repr, PermanenceSym repr, StateTypeSym repr) => StateVarSym repr where
     type StateVar repr
     stateVar :: Int -> Label -> repr (Scope repr) -> repr (Permanence repr) -> repr (StateType repr) -> repr (StateVar repr)
@@ -406,4 +408,4 @@ class (StateVarSym repr, MethodSym repr) => ClassSym repr where
 
 class (ClassSym repr) => ModuleSym repr where
     type Module repr
-    buildModule :: Label -> [Library] -> [repr (StateVar repr)] -> [repr (Method repr)] -> [repr (Class repr)] -> repr (Module repr)
+    buildModule :: Label -> [Library] -> [repr (Statement repr)] -> [repr (Method repr)] -> [repr (Class repr)] -> repr (Module repr)

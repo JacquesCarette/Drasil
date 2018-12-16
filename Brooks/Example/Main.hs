@@ -1,11 +1,6 @@
 module Example.Main (main) where
 
-import New (Label, Library,
-  RenderSym(..), KeywordSym(..), PermanenceSym(..),
-  BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
-  StatementSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..),
-  FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..), 
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+import New (Label)
 import NewLanguageRenderer (makeCode, createCodeFiles)
 import LanguageRenderer.NewJavaRenderer (JavaCode(..))
 import LanguageRenderer.NewPythonRenderer (PythonCode(..))

@@ -1,13 +1,10 @@
 module Example.FileTests (fileTests) where
 
-import New (Label, Library,
-  RenderSym(..), KeywordSym(..), PermanenceSym(..),
+import New (RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
-  StatementSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..),
-  FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..), 
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
-import LanguageRenderer.NewJavaRenderer (JavaCode(..))
-import Text.PrettyPrint.HughesPJ (Doc)
+  StatementSym(..), ValueSym(..), Selector(..),
+  FunctionSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+import LanguageRenderer.NewJavaRenderer()
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 fileTests :: (RenderSym repr) => repr (RenderFile repr)

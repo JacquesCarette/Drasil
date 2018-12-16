@@ -12,10 +12,6 @@ module New (
     ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..)
 ) where
 
-import Text.PrettyPrint.HughesPJ (Doc)
-
-type Declaration = Doc
-
 type Label = String
 type Library = String
 
@@ -340,7 +336,6 @@ class (ValueSym repr) => FunctionSym repr where
     listPopulateChar   :: repr (Value repr) -> repr (Function repr)
     listPopulateBool   :: repr (Value repr) -> repr (Function repr)
     listPopulateString :: repr (Value repr) -> repr (Function repr)
-    listPopulateList   :: repr (Value repr) -> repr (Function repr)
     listAppend         :: repr (Value repr) -> repr (Function repr)
     listExtendInt      :: repr (Function repr)
     listExtendFloat    :: repr (Function repr)
@@ -377,7 +372,7 @@ class MethodTypeSym repr where
 class ParameterSym repr where
     type Parameter repr
     stateParam :: Label -> repr (StateType repr) -> repr (Parameter repr)
-    funcParam  :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Parameter repr) 
+    -- funcParam  :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Parameter repr) -- not implemented in GOOL
 
 class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, BodySym repr) => MethodSym repr where
     type Method repr

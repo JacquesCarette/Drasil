@@ -34,13 +34,13 @@ module NewLanguageRenderer (
 
 import New (Label, Library)
 import Helpers (angles,blank,doubleQuotedText,oneTab,capitalize,
-                            oneTabbed,himap,hicat,vibcat,vmap,vibmap)
+                            oneTabbed,hicat,vibcat,vmap)
 
-import Data.List (find, intersperse)
+import Data.List (intersperse)
 import Prelude hiding (break,print,return,last,mod,(<>))
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), brackets, parens,
-  isEmpty, rbrace, lbrace, vcat, space, char, double, quotes, integer, semi, equals, braces,
+  isEmpty, rbrace, lbrace, vcat, char, double, quotes, integer, semi, equals, braces,
   int, comma, colon, hcat)
 
 
@@ -220,6 +220,7 @@ stateVarListDocD svs = vcat svs
 -- Controls --
 
 ifCondDocD :: Doc -> Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc
+ifCondDocD _ _ _ _ [] = error "if condition created with no cases"
 ifCondDocD ifStart elseIf blockEnd elseBody (c:cs) = 
     let ifSect (v, b) = vcat [
             text "if" <+> parens v <+> ifStart,

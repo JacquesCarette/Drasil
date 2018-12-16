@@ -5,38 +5,37 @@ module LanguageRenderer.NewPythonRenderer (
     PythonCode(..)
 ) where
 
-import New (Label, Library,
+import New (Label,
   RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   StatementSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..),
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
-import NewLanguageRenderer (fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD',
+import NewLanguageRenderer (fileDoc', enumElementsDocD',
   blockDocD, bodyDocD, intTypeDocD, floatTypeDocD, typeDocD,
-  voidDocD, constructDocD, stateParamDocD,
-  paramListDocD, methodListDocD, stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD, 
-  forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD', plusPlusDocD',
-  varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, statementDocD, returnDocD,
-  commentDocD, freeDocD, notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD',
+  voidDocD, constructDocD,
+  paramListDocD, methodListDocD, ifCondDocD, stratDocD, assignDocD, plusEqualsDocD', plusPlusDocD',
+  statementDocD, returnDocD,
+  commentDocD, notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD',
   expOpDocD', sinOpDocD', cosOpDocD', tanOpDocD', unOpDocD, equalOpDocD, 
   notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, binOpDocD, binOpDocD', litTrueD, litFalseD, 
+  moduloOpDocD, binOpDocD,
   litCharD, litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
-  defaultStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
-  inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
-  notNullDocD, funcDocD, castDocD, sizeDocD, listAccessDocD, listSetDocD, objAccessDocD, 
-  castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
-  publicDocD, classDec, dot, new, forLabel, observerListName, doubleSlash, 
+  defaultStringD, varDocD, extVarDocD, argDocD, enumElemDocD, objVarDocD, 
+  funcAppDocD, extFuncAppDocD,
+  funcDocD, listSetDocD, objAccessDocD, 
+  castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD,
+  classDec, dot, forLabel, observerListName,
   addCommentsDocD, callFuncParamList, getterName, setterName)
-import Helpers (blank,angles,oneTab,vibmap,vibcat)
+import Helpers (blank,oneTab,vibcat)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($+$), parens, empty, equals, 
-  semi, vcat, lbrace, rbrace, doubleQuotes, render, colon, brackets, isEmpty)
+  vcat, colon, brackets, isEmpty)
 
 newtype PythonCode a = PC {unPC :: a}
 
@@ -57,29 +56,17 @@ liftA4 f a1 a2 a3 a4 = PC $ f (unPC a1) (unPC a2) (unPC a3) (unPC a4)
 liftA5 :: (Doc -> Doc -> Doc -> Doc -> Doc -> Doc) -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc
 liftA5 f a1 a2 a3 a4 a5 = PC $ f (unPC a1) (unPC a2) (unPC a3) (unPC a4) (unPC a5)
 
-liftA6 :: (Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc) -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc
-liftA6 f a1 a2 a3 a4 a5 a6 = PC $ f (unPC a1) (unPC a2) (unPC a3) (unPC a4) (unPC a5) (unPC a6)
-
-liftA7 :: (Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc) -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc
-liftA7 f a1 a2 a3 a4 a5 a6 a7 = PC $ f (unPC a1) (unPC a2) (unPC a3) (unPC a4) (unPC a5) (unPC a6) (unPC a7)
-
 liftList :: ([Doc] -> Doc) -> [PythonCode Doc] -> PythonCode Doc
 liftList f as = PC $ f (map unPC as)
 
 lift1List :: (Doc -> [Doc] -> Doc) -> PythonCode Doc -> [PythonCode Doc] -> PythonCode Doc
 lift1List f a as = PC $ f (unPC a) (map unPC as)
 
-lift2List :: (Doc -> Doc -> [Doc] -> Doc) -> PythonCode Doc -> PythonCode Doc -> [PythonCode Doc] -> PythonCode Doc
-lift2List f a1 a2 as = PC $ f (unPC a1) (unPC a2) (map unPC as)
-
 unPCPair :: (PythonCode Doc, PythonCode Doc) -> (Doc, Doc)
 unPCPair (a1, a2) = (unPC a1, unPC a2) 
 
 lift4Pair :: (Doc -> Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc) -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> [(PythonCode Doc, PythonCode Doc)] -> PythonCode Doc
 lift4Pair f a1 a2 a3 a4 as = PC $ f (unPC a1) (unPC a2) (unPC a3) (unPC a4) (map unPCPair as)
-
-lift3Pair :: (Doc -> Doc -> Doc -> [(Doc, Doc)] -> Doc) -> PythonCode Doc -> PythonCode Doc -> PythonCode Doc -> [(PythonCode Doc, PythonCode Doc)] -> PythonCode Doc
-lift3Pair f a1 a2 a3 as = PC $ f (unPC a1) (unPC a2) (unPC a3) (map unPCPair as)
 
 instance RenderSym PythonCode where
     type RenderFile PythonCode = Doc
@@ -280,7 +267,7 @@ instance ValueSym PythonCode where
     extFuncApp l n vs = liftList (extFuncAppDocD l n) vs
     stateObj t vs = liftA2 pyStateObj t (liftList callFuncParamList vs)
     extStateObj l t vs = liftA2 (pyExtStateObj l) t (liftList callFuncParamList vs)
-    listStateObj t vs = t
+    listStateObj t _ = t
 
     inputFunc = return $ text "input()" -- raw_input() for < Python 3.0
 
@@ -371,9 +358,9 @@ instance StatementSym PythonCode where
     changeState fsmName toState = fsmName &.= (litString toState)
 
     initObserverList t os = listDecDef observerListName t os
-    addObserver t o = obsList $. listAdd last o
+    addObserver t o = obsList $. listAdd lastelem o
         where obsList = observerListName `listOf` t
-              last = listSizeAccess obsList
+              lastelem = listSizeAccess obsList
 
     state s = liftA2 statementDocD s endStatement
     loopState s = liftA2 statementDocD s endStatementLoop
@@ -416,7 +403,7 @@ instance FunctionSym PythonCode where
     listExtendChar = liftA pyListExtend defaultChar 
     listExtendBool = liftA pyListExtend defaultBool
     listExtendString = liftA pyListExtend defaultString
-    listExtendList t = return $ brackets empty
+    listExtendList _ = return $ brackets empty
 
     iterBegin = liftA funcDocD (funcApp "begin" [])
     iterEnd = liftA funcDocD (funcApp "end" [])
@@ -470,9 +457,9 @@ instance StateVarSym PythonCode where
 
 instance ClassSym PythonCode where
     type Class PythonCode = Doc
-    buildClass n p _ _ fs = liftA2 (pyClass n) pn (liftList methodListDocD fs)
-        where pn = case p of Nothing -> return empty
-                             Just pn -> return $ parens (text pn)
+    buildClass n p _ _ fs = liftA2 (pyClass n) pname (liftList methodListDocD fs)
+        where pname = case p of Nothing -> return empty
+                                Just pn -> return $ parens (text pn)
     enum n es _ = liftA2 (pyClass n) (return empty) (return $ enumElementsDocD' es)
     mainClass _ _ fs = liftList methodListDocD fs
     privClass n p vs fs = buildClass n p private vs fs
@@ -549,13 +536,13 @@ pyListAccess :: Doc -> Doc
 pyListAccess i = brackets i
 
 pyForRange :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
-pyForRange i iterInLabel initv finalv stepv b = vcat [
-    forLabel <+> text i <+> iterInLabel <+> text "range" <> parens (initv <> text ", " <> finalv <> text ", " <> stepv) <> colon,
+pyForRange i inLabel initv finalv stepv b = vcat [
+    forLabel <+> text i <+> inLabel <+> text "range" <> parens (initv <> text ", " <> finalv <> text ", " <> stepv) <> colon,
     oneTab $ b]
 
 pyForEach :: Label -> Doc -> Doc -> Doc -> Doc -> Doc
-pyForEach i iterForEachLabel iterInLabel listVar b = vcat [
-    iterForEachLabel <+> text i <+> iterInLabel <+> listVar <> colon,
+pyForEach i forEachLabel inLabel lstVar b = vcat [
+    forEachLabel <+> text i <+> inLabel <+> lstVar <> colon,
     oneTab $ b]
 
 pyWhile :: Doc -> Doc -> Doc
@@ -575,8 +562,8 @@ pyListSlice vnew vold b e s = vnew <+> equals <+> vold <> (brackets $
     b <> colon <> e <> colon <> s)
 
 pyMethod :: Label -> Doc -> Doc -> Doc -> Doc
-pyMethod n self ps b = vcat [
-    text "def" <+> text n <> parens (self <> oneParam <> ps) <> colon,
+pyMethod n slf ps b = vcat [
+    text "def" <+> text n <> parens (slf <> oneParam <> ps) <> colon,
     oneTab $ bodyD]
         where oneParam | isEmpty ps = empty
                        | otherwise  = text ", "
@@ -610,9 +597,9 @@ pyModule ls vs fs cs =
     vars $+$
     funcs $+$
     cs
-    where libs = case ls of empty -> empty
-                            _  -> ls $+$ blank
-          vars = case vs of empty -> empty
-                            _ -> vs $+$ blank
-          funcs = case fs of empty -> empty
-                             _ -> fs $+$ blank
+    where libs | isEmpty ls = empty
+               | otherwise  = ls $+$ blank
+          vars | isEmpty vs = empty
+               | otherwise  = vs $+$ blank
+          funcs | isEmpty fs = empty
+                | otherwise  = fs $+$ blank

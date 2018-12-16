@@ -5,7 +5,7 @@ module LanguageRenderer.NewJavaRenderer (
     JavaCode(..)
 ) where
 
-import New (Label, Library,
+import New (Label,
   RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   StatementSym(..),
@@ -26,17 +26,17 @@ import NewLanguageRenderer (fileDoc', moduleDocD, classDocD, enumDocD, enumEleme
   litCharD, litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
   defaultStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
   inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
-  notNullDocD, funcDocD, castDocD, sizeDocD, listAccessDocD, objAccessDocD, 
+  notNullDocD, funcDocD, castDocD, objAccessDocD, 
   castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
-  publicDocD, includeD, dot, new, forLabel, observerListName, doubleSlash, 
+  publicDocD, dot, new, forLabel, observerListName, doubleSlash, 
   addCommentsDocD, callFuncParamList, getterName, setterName)
-import Helpers (blank,angles,oneTab,vibmap)
+import Helpers (angles,oneTab)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals, 
-  semi, vcat, lbrace, rbrace, doubleQuotes, render, colon)
+  semi, vcat, lbrace, rbrace, render, colon)
 
 newtype JavaCode a = JC {unJC :: a}
 
@@ -370,7 +370,7 @@ instance StatementSym JavaCode where
     getFloatFileInput f v = liftA3 jInput (return $ text "nextDouble()") v f
     getBoolFileInput f v = liftA3 jInput (return $ text "nextBoolean()") v f
     getStringFileInput f v = liftA3 jInput (return $ text "nextLine()") v f
-    getCharFileInput f v = return empty
+    getCharFileInput _ _ = return empty
     discardFileInput f = liftA jDiscardInput f
 
     openFileR f n = liftA2 jOpenFileR f n
@@ -400,9 +400,9 @@ instance StatementSym JavaCode where
     changeState fsmName toState = fsmName &.= (litString toState)
 
     initObserverList t os = listDecDef observerListName t os
-    addObserver t o = obsList $. listAdd last o
+    addObserver t o = obsList $. listAdd lastelem o
         where obsList = observerListName `listOf` t
-              last = obsList $. listSize
+              lastelem = obsList $. listSize
 
     state s = liftA2 statementDocD s endStatement
     loopState s = liftA2 statementDocD s endStatementLoop

@@ -1,13 +1,11 @@
 module Example.Observer (observer) where
 
-import New (Label, Library,
-  RenderSym(..), KeywordSym(..), PermanenceSym(..),
-  BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
-  StatementSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..),
-  FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..), 
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
-import LanguageRenderer.NewJavaRenderer (JavaCode(..))
-import Text.PrettyPrint.HughesPJ (Doc)
+import New (
+  RenderSym(..), PermanenceSym(..),
+  BodySym(..), StateTypeSym(..), 
+  StatementSym(..), ValueSym(..), ScopeSym(..), MethodTypeSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+import LanguageRenderer.NewJavaRenderer()
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 observer :: (RenderSym repr) => repr (RenderFile repr)

@@ -106,10 +106,10 @@ module Language.Drasil (
   , Sentence(..), sParen, sSqBr , (+:+), (+:+.), sC, (+:)
   , SentenceStyle(..)
   -- RefProg
-  , RefProg(..), IRefProg(..)
+  -- , RefProg(..), IRefProg(..)
   , Reference(..)
   , makeAssumpRef, makeTabRef, makeGDRef, makeDDRef, makeInstRef, makeTMRef
-  , makeSecRef, makeLstRef, makeFigRef
+  , makeSecRef, makeLstRef, makeFigRef, makeURI
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
   , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase'
@@ -165,7 +165,7 @@ module Language.Drasil (
   -- AssumpChunk
   , AssumpChunk(AC), assuming, assump
   -- Reference
-  , makeRef2S, makeCite, makeCiteS, makeURI, makeRef2
+  , makeRef2S, makeCite, makeCiteS, makeRef2
   , ReferenceDB, AssumpMap, assumpLookup, assumptionsFromDB
   , rdb, assumpRefTable, HasAssumpRefs
   , RefBy(..)
@@ -184,6 +184,7 @@ module Language.Drasil (
   , names
   -- Label.Type
   , getAdd
+  , LblType(RP, Citation, URI, MetaLink), IRefProg(..)
   -- Development.Sentence
   , introduceAbb, phrase, plural, phrase's, plural's, at_start, at_start'
   , titleize, titleize'
@@ -295,8 +296,7 @@ import Language.Drasil.ShortName (resolveSN, ShortName
   , shortname', getStringSN)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Sentence (Sentence(..), sParen, sSqBr, sC, (+:+), (+:+.), (+:), SentenceStyle(..))
-import Language.Drasil.Reference (makeCite, makeCiteS, ReferenceDB
- , makeURI, makeRef2, makeAssumpRef
+import Language.Drasil.Reference (makeCite, makeCiteS, ReferenceDB, makeRef2
  , AssumpMap, assumpLookup, HasAssumpRefs, assumpDB , assumpRefTable, assumptionsFromDB
  , rdb, RefBy(..), Referable(..), citationRefTable, RefMap, simpleMap, makeRef2S)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 
@@ -309,10 +309,11 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
 import Language.Drasil.RefTypes(RefAdd, LinkType(Internal, Cite2, External))
-import Language.Drasil.RefProg(RefProg(..), IRefProg(..), Reference(Reference)
+import Language.Drasil.RefProg(Reference(Reference)
   , makeTabRef, makeGDRef, makeDDRef, makeFigRef, makeSecRef, makeLstRef, makeInstRef
-  , makeTMRef)
-import Language.Drasil.Label.Type (getAdd)
+  , makeTMRef, makeAssumpRef, makeURI)
+import Language.Drasil.Label.Type (getAdd,
+    LblType(RP, Citation, URI, MetaLink), IRefProg(..))
 
 import Language.Drasil.UnitLang (USymb(US))
 

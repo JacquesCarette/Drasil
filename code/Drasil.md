@@ -2,7 +2,7 @@ A guide to Drasil, through its files. If Drasil was done in a literate style, i.
 Drasil-in-Drasil, then this information would be there, somewhere.
 
 Drasil is divided into package:
-- **drasil-lang**: the language of basic Drasil knowledge
+- **drasil-lang**: the language of used to describe basic knowledge
 - **drasil-code**: representation of output programming languages
 - **drasil-printers**: representation of output rendering languages, and renderers
 - **drasil data**: actual Drasil knowledge, represented in the Drasil language

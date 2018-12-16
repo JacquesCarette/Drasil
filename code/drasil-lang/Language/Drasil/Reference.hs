@@ -1,32 +1,31 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Reference(makeRef2, makeRef2S, makeCite, makeURI,
+module Language.Drasil.Reference(makeRef2, makeRef2S, makeCite,
   makeCiteS, ReferenceDB, citationsFromBibMap, citationRefTable, assumpRefTable,
   assumptionsFromDB, rdb, RefBy(..), Referable(..), RefMap, simpleMap,
   HasConceptRefs(conceptRefTable),
-  assumpDB, AssumpMap, assumpLookup, HasAssumpRefs, makeAssumpRef) where
+  assumpDB, AssumpMap, assumpLookup, HasAssumpRefs) where
 
-import Control.Lens ((^.), Simple, Lens, makeLenses)
+import Control.Lens ((^.), Simple, Lens, makeLenses, view)
 import Data.Function (on)
 import Data.List (concatMap, find, groupBy, sortBy)
 import qualified Data.Map as Map
 
 import Language.Drasil.Chunk.AssumpChunk as A (AssumpChunk)
 import Language.Drasil.Chunk.Citation as Ci (BibRef, citeID, Citation)
-import Language.Drasil.Data.Citation(CiteField(Author, Title, Year))
 import Language.Drasil.Chunk.Concept (ConceptInstance)
 import Language.Drasil.Chunk.DataDefinition (DataDefinition)
 import Language.Drasil.Chunk.GenDefn (GenDefn)
 import Language.Drasil.Chunk.InstanceModel (InstanceModel)
 import Language.Drasil.Chunk.Theory (TheoryModel)
-import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid),
-  HasRefAddress(getRefAdd), HasShortName(shortname), HasFields(getFields), CommonIdea(abrv))
+import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), abrv,
+  HasRefAddress(getRefAdd), HasShortName(shortname), HasFields(getFields))
+import Language.Drasil.Data.Citation(CiteField(Author, Title, Year))
 import Language.Drasil.Document (Section(Section))
-import Language.Drasil.Document.Core (RawContent(..), LabelledContent(..))
-import Language.Drasil.Label.Type (LblType(RefAdd,MetaLink,URL))
+import Language.Drasil.Document.Core (LabelledContent(..), RawContent(..))
+import Language.Drasil.Label.Type (LblType(RP,MetaLink,Citation), IRefProg,
+  prepend, name, raw, (+::+), defer, getAdd)
 import Language.Drasil.People (People, comparePeople)
-import Language.Drasil.RefProg (RefProg(..), Reference(Reference), (+::+), name,
-  prepend, raw, IRefProg, defer, repUnd)
-import Language.Drasil.ShortName (ShortName, shortname' )
+import Language.Drasil.RefProg (Reference(Reference))
 import Language.Drasil.Sentence (Sentence((:+:), S, Ref))
 import Language.Drasil.UID (UID)
 
@@ -58,10 +57,7 @@ data RefBy = ByName
            | ByNum -- If applicable
 
 rdb :: [AssumpChunk] -> BibRef -> [ConceptInstance] -> ReferenceDB
-rdb assumps citations con = RDB
-  (simpleMap assumps)
-  (bibMap citations)
-  (conceptMap con)
+rdb assumps citations con = RDB (simpleMap assumps) (bibMap citations) (conceptMap con)
 
 simpleMap :: HasUID a => [a] -> RefMap a
 simpleMap xs = Map.fromList $ zip (map (^. uid) xs) (zip xs [1..])
@@ -103,47 +99,46 @@ instance HasAssumpRefs   ReferenceDB where assumpRefTable = assumpDB
 instance HasCitationRefs ReferenceDB where citationRefTable = citationDB
 instance HasConceptRefs  ReferenceDB where conceptRefTable = conceptDB
 
-
 class HasUID s => Referable s where
   refAdd    :: s -> LblType -- The referencing address (what we're linking to).
                             -- Only visible in the source (tex/html).
-  renderRef :: s -> RefProg -- A program to render a shortname
+  renderRef :: s -> LblType -- alternate
 
 instance Referable AssumpChunk where
   refAdd    x = x ^. getRefAdd
-  renderRef l = RP $ prepend $ abrv l
+  renderRef l = RP (prepend $ abrv l) (getAdd $ l ^. getRefAdd)
 
 instance Referable Section where
   refAdd    (Section _ _ lb ) = lb ^. getRefAdd
-  renderRef _                 = RP $ raw "Section: " +::+ name
+  renderRef (Section _ _ lb)  = RP (raw "Section: " +::+ name) (getAdd $ view getRefAdd lb)
 
 instance Referable Citation where
-  refAdd    c = RefAdd $ citeID c -- citeID should be unique.
-  renderRef _ = Citation
+  refAdd    c = Citation $ citeID c -- citeID should be unique.
+  renderRef c = Citation $ citeID c
 
 instance Referable TheoryModel where
   refAdd    t = t ^. getRefAdd
-  renderRef l = RP $ prepend $ abrv l
+  renderRef l = RP (prepend $ abrv l) (getAdd $ view getRefAdd l)
 
 instance Referable GenDefn where
   refAdd    g = g ^. getRefAdd
-  renderRef l = RP $ prepend $ abrv l
+  renderRef l = RP (prepend $ abrv l) (getAdd $ view getRefAdd l)
 
 instance Referable DataDefinition where
   refAdd    d = d ^. getRefAdd
-  renderRef l = RP $ prepend $ abrv l
+  renderRef l = RP (prepend $ abrv l) (getAdd $ view getRefAdd l)
 
 instance Referable InstanceModel where
   refAdd    i = i ^. getRefAdd
-  renderRef l = RP $ prepend $ abrv l
+  renderRef l = RP (prepend $ abrv l) (getAdd $ view getRefAdd l)
 
 instance Referable ConceptInstance where
-  refAdd    i = MetaLink $ i ^. uid -- is this right?
-  renderRef l = RP $ (defer $ sDom $ l ^. cdom) +::+ raw ": " +::+ name
+  refAdd l    = RP ((defer $ sDom $ l ^. cdom) +::+ raw ": " +::+ name) (l ^. uid)
+  renderRef l = RP ((defer $ sDom $ l ^. cdom) +::+ raw ": " +::+ name) (l ^. uid)
 
 instance Referable LabelledContent where
   refAdd     (LblC lb _) = lb ^. getRefAdd
-  renderRef  (LblC _ c)  = RP $ refLabelledCon c
+  renderRef  (LblC lb c)  = RP (refLabelledCon c) (getAdd $ view getRefAdd lb)
 
 refLabelledCon :: RawContent -> IRefProg
 refLabelledCon (Table _ _ _ _)       = raw "Table:" +::+ name 
@@ -212,22 +207,15 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
         dropNums = map fst
 
 makeRef2 :: (Referable l, HasShortName l) => l -> Reference
-makeRef2 l = Reference (l ^. uid) (renderRef l) (refAdd l) (l ^. shortname)
+makeRef2 l = Reference (l ^. uid) (renderRef l) (l ^. shortname)
 
 makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
-makeRef2S l = Ref $ Reference (l ^. uid) (renderRef l) (refAdd l) (l ^. shortname)
+makeRef2S = Ref . makeRef2
 
 -- Here we don't use the Lenses as constraints, we really do want a Citation.
 makeCite :: Citation -> Reference
-makeCite l = Reference (l ^. uid) Citation (refAdd l) (l ^. shortname)
+makeCite l = Reference (l ^. uid) (refAdd l) (l ^. shortname)
 
 makeCiteS :: Citation -> Sentence
 makeCiteS = Ref . makeCite
 
--- | Create a reference for a URI
-makeURI :: UID -> String -> ShortName -> Reference
-makeURI u ra sn = Reference u URI (URL ra) sn
-
--- FIXME: horrible hack.
-makeAssumpRef :: String -> Reference
-makeAssumpRef rs = Reference rs (RP $ prepend "A") (RefAdd $ "A:" ++ repUnd rs) (shortname' rs)

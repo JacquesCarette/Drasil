@@ -1,8 +1,47 @@
-module Language.Drasil.Label.Type where
+-- | Even though we do not have 'Label's per se, here we define the
+-- different ways of construction  ways to mark labels.
+module Language.Drasil.Label.Type(
+  -- types
+    LblType(RP, Citation, URI, MetaLink), IRefProg(..)
+  -- LblType accessor
+  , getAdd
+  -- IRefProg constructors
+  , name, (+::+), raw, defer, prepend
+  ) where
 
-data LblType = RefAdd String | MetaLink String | URL String
+import Language.Drasil.UID (UID)
+
+-- | Trying different pieces of information for a reference
+-- An RP is a decorated internal reference
+-- Citation is a citation
+-- URI is for URLs and other external links
+-- MetaLink is a link to Drasil-based knowledge (such as for ConceptInstance)
+data LblType = RP IRefProg String | Citation String | URI String | MetaLink String
+
+data IRefProg =
+    Deferred UID                -- Deferred lookup; done later
+  | RS String                   -- Lifts a String into a RefProg
+  | RConcat IRefProg IRefProg   -- Concatenates with two subprograms
+  | Name                        -- The Symbol to insert the ShortName directly
 
 getAdd :: LblType -> String
-getAdd (RefAdd s)   = s
+getAdd (RP _ s)     = s
+getAdd (Citation s) = s
+getAdd (URI s)      = s
 getAdd (MetaLink s) = s
-getAdd (URL s)      = s
+
+name :: IRefProg
+name = Name
+
+(+::+) :: IRefProg -> IRefProg -> IRefProg
+(+::+) = RConcat
+
+raw :: String -> IRefProg
+raw = RS
+
+defer :: UID -> IRefProg
+defer = Deferred
+
+prepend :: String -> IRefProg
+prepend s = RS s +::+ RS ": " +::+ Name
+

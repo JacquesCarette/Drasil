@@ -36,7 +36,7 @@ import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
 import Control.Applicative (Applicative, liftA, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals, 
-  semi, vcat, lbrace, rbrace, render, colon)
+  semi, vcat, lbrace, rbrace, render, colon, isEmpty)
 
 newtype JavaCode a = JC {unJC :: a}
 
@@ -82,9 +82,6 @@ liftList f as = JC $ f (map unJC as)
 
 lift1List :: (Doc -> [Doc] -> Doc) -> JavaCode Doc -> [JavaCode Doc] -> JavaCode Doc
 lift1List f a as = JC $ f (unJC a) (map unJC as)
-
-lift2List :: (Doc -> Doc -> [Doc] -> Doc) -> JavaCode Doc -> JavaCode Doc -> [JavaCode Doc] -> JavaCode Doc
-lift2List f a1 a2 as = JC $ f (unJC a1) (unJC a2) (map unJC as)
 
 unJCPair :: (JavaCode Doc, JavaCode Doc) -> (Doc, Doc)
 unJCPair (a1, a2) = (unJC a1, unJC a2) 
@@ -307,9 +304,9 @@ instance ValueSym JavaCode where
     funcApp n vs = liftList (funcAppDocD n) vs
     selfFuncApp = funcApp
     extFuncApp l n vs = liftList (extFuncAppDocD l n) vs
-    stateObj t vs = lift1List stateObjDocD t vs
+    stateObj t vs = liftA2 stateObjDocD t (liftList callFuncParamList vs)
     extStateObj _ t vs = stateObj t vs
-    listStateObj t vs = lift2List listStateObjDocD listObj t vs
+    listStateObj t vs = liftA3 listStateObjDocD listObj t (liftList callFuncParamList vs)
     
     inputFunc = return (parens (text "new Scanner(System.in)"))
 
@@ -339,7 +336,7 @@ instance StatementSym JavaCode where
     varDec l t = liftA (varDecDocD l) t
     varDecDef l t v = liftA2 (varDecDefDocD l) t v
     listDec l n t = liftA2 (listDecDocD l) (litInt n) t -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
-    listDecDef l t vs = lift1List (jListDecDef l) t vs
+    listDecDef l t vs = liftA2 (jListDecDef l) t (liftList callFuncParamList vs)
     objDecDef l t v = liftA2 (objDecDefDocD l) t v
     objDecNew l t vs = liftA2 (objDecDefDocD l) t (stateObj t vs)
     objDecNewVoid l t = liftA2 (objDecDefDocD l) t (stateObj t [])
@@ -545,9 +542,9 @@ jFloatListTypeDoc lst = lst <> angles (text "Double")
 jBoolListTypeDocD :: Doc
 jBoolListTypeDocD = text "BitSet"
 
-jListDecDef :: Label -> Doc -> [Doc] -> Doc
+jListDecDef :: Label -> Doc -> Doc -> Doc
 jListDecDef l st vs = st <+> text l <+> equals <+> new <+> st <+> parens (listElements)
-    where listElements = if null vs then empty else text "Arrays.asList" <> parens (callFuncParamList vs)
+    where listElements = if isEmpty vs then empty else text "Arrays.asList" <> parens vs
 
 jConstDecDef :: Label -> Doc -> Doc -> Doc
 jConstDecDef l st v = text "final" <+> st <+> text l <+> equals <+> v

@@ -515,11 +515,11 @@ funcAppDocD n vs = text n <> parens (callFuncParamList vs)
 extFuncAppDocD :: Library -> Label -> [Doc] -> Doc
 extFuncAppDocD l n vs = funcAppDocD (l ++ "." ++ n) vs
 
-stateObjDocD :: Doc -> [Doc] -> Doc
-stateObjDocD st vs = new <+> st <> parens (callFuncParamList vs)
+stateObjDocD :: Doc -> Doc -> Doc
+stateObjDocD st vs = new <+> st <> parens vs
 
-listStateObjDocD :: Doc -> Doc -> [Doc] -> Doc
-listStateObjDocD lstObj st vs = lstObj <+> st <> parens (callFuncParamList vs)
+listStateObjDocD :: Doc -> Doc -> Doc -> Doc
+listStateObjDocD lstObj st vs = lstObj <+> st <> parens vs
 
 notNullDocD :: Doc -> Doc -> Doc -> Doc
 notNullDocD v op nullvar = binOpDocD v op nullvar

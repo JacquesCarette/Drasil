@@ -2,9 +2,8 @@ module Example.Observer (observer) where
 
 import New (
   RenderSym(..), PermanenceSym(..),
-  BodySym(..), StateTypeSym(..), 
-  StatementSym(..), ValueSym(..), ScopeSym(..), MethodTypeSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  BodySym(..), StateTypeSym(..), StatementSym(..), ValueSym(..), ScopeSym(..), 
+  MethodTypeSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import LanguageRenderer.NewJavaRenderer()
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 

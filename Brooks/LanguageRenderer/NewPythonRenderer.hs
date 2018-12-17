@@ -8,8 +8,8 @@ module LanguageRenderer.NewPythonRenderer (
 import New (Label,
   RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
-  StatementSym(..),
-  UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), 
+  StatementSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..),
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import NewLanguageRenderer (fileDoc', enumElementsDocD',
@@ -215,16 +215,24 @@ instance ValueSym PythonCode where
     defaultString = return $ defaultStringD
     defaultBool = litFalse
 
-    (?!) v = liftA2 unOpDocD notOp v
-    (?<)  v1 v2 = liftA3 binOpDocD v1 lessOp v2
-    (?<=) v1 v2 = liftA3 binOpDocD v1 lessEqualOp v2
-    (?>)  v1 v2 = liftA3 binOpDocD v1 greaterOp v2
-    (?>=) v1 v2 = liftA3 binOpDocD v1 greaterEqualOp v2
-    (?==) v1 v2 = liftA3 binOpDocD v1 equalOp v2
-    (?!=) v1 v2 = liftA3 binOpDocD v1 notEqualOp v2
-    (?&&) v1 v2 = liftA3 binOpDocD v1 andOp v2
-    (?||) v1 v2 = liftA3 binOpDocD v1 orOp v2
+    ($->) v vr = objVar v vr
+    ($:) en e = enumElement en e
 
+    const n = var n
+    var n = return $ varDocD n
+    extVar l n = return $ extVarDocD l n
+    self = return $ text "self"
+    arg n = liftA2 argDocD (litInt (n + 1)) argsList
+    enumElement en e = return $ enumElemDocD en e
+    enumVar n = var n
+    objVar n1 n2 = liftA2 objVarDocD n1 n2
+    objVarSelf n = liftA2 objVarDocD self (var n)
+    listVar n _ = var n
+    n `listOf` t = listVar n t
+
+    inputFunc = return $ text "input()" -- raw_input() for < Python 3.0
+
+instance NumericExpression PythonCode where
     (#~) v = liftA2 unOpDocD negateOp v
     (#/^) v = liftA2 unOpDocD sqrtOp v
     (#|) v = liftA2 unOpDocD absOp v
@@ -234,9 +242,6 @@ instance ValueSym PythonCode where
     (#/)  v1 v2 = liftA3 binOpDocD v1 divideOp v2
     (#%)  v1 v2 = liftA3 binOpDocD v1 moduloOp v2
     (#^)  v1 v2 = liftA3 binOpDocD v1 powerOp v2
-
-    ($->) v vr = objVar v vr
-    ($:) en e = enumElement en e
 
     log v = liftA2 unOpDocD logOp v
     ln v = liftA2 unOpDocD lnOp v
@@ -250,17 +255,19 @@ instance ValueSym PythonCode where
     floor v = liftA2 unOpDocD floorOp v
     ceil v = liftA2 unOpDocD ceilOp v
 
-    const n = var n
-    var n = return $ varDocD n
-    extVar l n = return $ extVarDocD l n
-    self = return $ text "self"
-    arg n = liftA2 argDocD (litInt (n + 1)) argsList
-    enumElement en e = return $ enumElemDocD en e
-    enumVar n = var n
-    objVar n1 n2 = liftA2 objVarDocD n1 n2
-    objVarSelf n = liftA2 objVarDocD self (var n)
-    listVar n _ = var n
-    n `listOf` t = listVar n t
+instance BooleanExpression PythonCode where
+    (?!) v = liftA2 unOpDocD notOp v
+    (?&&) v1 v2 = liftA3 binOpDocD v1 andOp v2
+    (?||) v1 v2 = liftA3 binOpDocD v1 orOp v2
+
+    (?<)  v1 v2 = liftA3 binOpDocD v1 lessOp v2
+    (?<=) v1 v2 = liftA3 binOpDocD v1 lessEqualOp v2
+    (?>)  v1 v2 = liftA3 binOpDocD v1 greaterOp v2
+    (?>=) v1 v2 = liftA3 binOpDocD v1 greaterEqualOp v2
+    (?==) v1 v2 = liftA3 binOpDocD v1 equalOp v2
+    (?!=) v1 v2 = liftA3 binOpDocD v1 notEqualOp v2
+
+instance ValueExpression PythonCode where
     inlineIf c v1 v2 = liftA3 pyInlineIf c v1 v2
     funcApp n vs = liftList (funcAppDocD n) vs
     selfFuncApp = funcApp
@@ -268,14 +275,8 @@ instance ValueSym PythonCode where
     stateObj t vs = liftA2 pyStateObj t (liftList callFuncParamList vs)
     extStateObj l t vs = liftA2 (pyExtStateObj l) t (liftList callFuncParamList vs)
     listStateObj t _ = t
-
-    inputFunc = return $ text "input()" -- raw_input() for < Python 3.0
-
-    stringEqual v1 v2 = v1 ?== v2
-
+    
     exists v = v ?!= (var "None")
-    listIndexExists lst index = (listSizeAccess lst) ?> index
-    argExists i = (litInt $ fromIntegral i)
     notNull = exists
 
 instance StatementSym PythonCode where
@@ -376,6 +377,11 @@ instance Selector PythonCode where
 
     listPopulateAccess v f = liftA2 pyListPopAccess v f
     listSizeAccess v = liftA2 pyListSizeAccess v listSize
+
+    listIndexExists lst index = (listSizeAccess lst) ?> index
+    argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
+
+    stringEqual v1 v2 = v1 ?== v2
 
     castObj f v = liftA2 castObjDocD f v
     castStrToFloat v = castObj (cast float string) v

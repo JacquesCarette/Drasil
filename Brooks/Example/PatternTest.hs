@@ -3,7 +3,7 @@ module Example.PatternTest (patternTest) where
 import New (
   RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
-  StatementSym(..), ValueSym(..),
+  StatementSym(..), ValueSym(..), ValueExpression(..), 
   MethodSym(..), ClassSym(..), ModuleSym(..))
 import LanguageRenderer.NewJavaRenderer()
 import Prelude hiding (return,print,log,exp,sin,cos,tan)

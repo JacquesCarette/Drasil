@@ -3,7 +3,7 @@ module Example.HelloWorld (helloWorld) where
 import New (
   RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
-  StatementSym(..), ValueSym(..), Selector(..),
+  StatementSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), ValueExpression(..), Selector(..),
   FunctionSym(..), SelectorFunction(..), ScopeSym(..),
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import LanguageRenderer.NewJavaRenderer()

@@ -6,8 +6,8 @@ module New (
     -- Typeclasses
     RenderSym(..), KeywordSym(..), PermanenceSym(..),
     BodySym(..), ControlBlockSym(..), BlockSym(..), StateTypeSym(..), 
-    StatementSym(..),
-    UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), 
+    StatementSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), 
+    NumericExpression(..), BooleanExpression(..), ValueExpression(..), Selector(..), 
     FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..),
     ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..)
 ) where
@@ -238,17 +238,27 @@ class (StateTypeSym repr, StateVarSym repr) => ValueSym repr where
     defaultString :: repr (Value repr)
     defaultBool   :: repr (Value repr)
 
-    (?!)  :: repr (Value repr) -> repr (Value repr)  -- where to specify infix?
-    (?<)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-    (?<=) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-    (?>)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-    (?>=) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-    (?==) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-    (?!=) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-    (?&&) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-    (?||) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+     --other operators ($)
+    ($->) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+    ($:)  :: Label -> Label -> repr (Value repr)
 
-    --arithmetic operators (#)
+
+    const        :: Label -> repr (Value repr)
+    var          :: Label -> repr (Value repr)
+    extVar       :: Library -> Label -> repr (Value repr)
+--    global       :: Label -> repr (Value repr)         -- not sure how this one works, but in GOOL it was hardcoded to give an error so I'm leaving it out for now
+    self         :: repr (Value repr)
+    arg          :: Integer -> repr (Value repr)
+    enumElement  :: Label -> Label -> repr (Value repr)
+    enumVar      :: Label -> repr (Value repr)
+    objVar       :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+    objVarSelf   :: Label -> repr (Value repr)
+    listVar      :: Label -> repr (StateType repr) -> repr (Value repr)
+    listOf       :: Label -> repr (StateType repr) -> repr (Value repr)
+    
+    inputFunc :: repr (Value repr)
+
+class (ValueSym repr, UnaryOpSym repr, BinaryOpSym repr) => NumericExpression repr where
     (#~)  :: repr (Value repr) -> repr (Value repr)
     (#/^) :: repr (Value repr) -> repr (Value repr)
     (#|)  :: repr (Value repr) -> repr (Value repr)
@@ -258,11 +268,7 @@ class (StateTypeSym repr, StateVarSym repr) => ValueSym repr where
     (#/)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
     (#%)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
     (#^)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-
-     --other operators ($)
-    ($->) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-    ($:)  :: Label -> Label -> repr (Value repr)
-
+    
     log   :: repr (Value repr) -> repr (Value repr)
     ln    :: repr (Value repr) -> repr (Value repr)
     exp   :: repr (Value repr) -> repr (Value repr)
@@ -275,18 +281,24 @@ class (StateTypeSym repr, StateVarSym repr) => ValueSym repr where
     floor :: repr (Value repr) -> repr (Value repr)
     ceil  :: repr (Value repr) -> repr (Value repr)
 
-    const        :: Label -> repr (Value repr)
-    var          :: Label -> repr (Value repr)
-    extVar       :: Library -> Label -> repr (Value repr)
---    global       :: Label -> repr (Value repr)         -- not sure how this one works
-    self         :: repr (Value repr)
-    arg          :: Integer -> repr (Value repr)
-    enumElement  :: Label -> Label -> repr (Value repr)
-    enumVar      :: Label -> repr (Value repr)
-    objVar       :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-    objVarSelf   :: Label -> repr (Value repr)
-    listVar      :: Label -> repr (StateType repr) -> repr (Value repr)
-    listOf       :: Label -> repr (StateType repr) -> repr (Value repr)
+-- I considered having two separate classes, BooleanExpressions and BooleanComparisons,
+-- but this would require cyclic constraints, since it is feasible to have
+-- BooleanComparisons of BooleanExpressions and also BooleanExpressions of BooleanComparisons.
+-- This has the drawback of requiring a NumericExpression constraint for the first
+-- 3 functions here, even though they don't really need it.
+class (ValueSym repr, NumericExpression repr) => BooleanExpression repr where
+    (?!)  :: repr (Value repr) -> repr (Value repr)  -- where to declare fixity?
+    (?&&) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+    (?||) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+
+    (?<)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+    (?<=) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+    (?>)  :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+    (?>=) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+    (?==) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+    (?!=) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+
+class (ValueSym repr, NumericExpression repr, BooleanExpression repr) => ValueExpression repr where -- for values that can include expressions
     inlineIf     :: repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> repr (Value repr)
     funcApp      :: Label -> [repr (Value repr)] -> repr (Value repr)
     selfFuncApp  :: Label -> [repr (Value repr)] -> repr (Value repr)
@@ -294,17 +306,17 @@ class (StateTypeSym repr, StateVarSym repr) => ValueSym repr where
     stateObj     :: repr (StateType repr) -> [repr (Value repr)] -> repr (Value repr)
     extStateObj  :: Library -> repr (StateType repr) -> [repr (Value repr)] -> repr (Value repr)
     listStateObj :: repr (StateType repr) -> [repr (Value repr)] -> repr (Value repr)
-    
-    inputFunc :: repr (Value repr)
 
-    stringEqual :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-
-    exists          :: repr (Value repr) -> repr (Value repr)
-    listIndexExists :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-    argExists       :: Integer -> repr (Value repr)
+    exists  :: repr (Value repr) -> repr (Value repr)
     notNull :: repr (Value repr) -> repr (Value repr)
 
-class (FunctionSym repr, ValueSym repr) => Selector repr where
+-- The cyclic constraints issue arises here too. I've constrained this by ValueExpression,
+-- but really one might want one of these values as part of an expression, so the
+-- constraint would have to go both ways. I'm not sure what the solution is for
+-- these sorts of problems, other than removing the constraints altogether, but 
+-- then what is the purpose of splitting the typeclasses into smaller typeclasses?
+-- I'm leaving it as is for now, even though I suspect this will change in the future.
+class (FunctionSym repr, ValueSym repr, ValueExpression repr) => Selector repr where
     objAccess :: repr (Value repr) -> repr (Function repr) -> repr (Value repr)
     ($.)      :: repr (Value repr) -> repr (Function repr) -> repr (Value repr)
 
@@ -316,10 +328,15 @@ class (FunctionSym repr, ValueSym repr) => Selector repr where
     listPopulateAccess :: repr (Value repr) -> repr (Function repr) -> repr (Value repr)
     listSizeAccess     :: repr (Value repr) -> repr (Value repr)
 
+    listIndexExists :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+    argExists       :: Integer -> repr (Value repr)
+
+    stringEqual :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+
     castObj        :: repr (Function repr) -> repr (Value repr) -> repr (Value repr)
     castStrToFloat :: repr (Value repr) -> repr (Function repr)
 
-class (ValueSym repr) => FunctionSym repr where
+class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
     type Function repr
     func           :: Label -> [repr (Value repr)] -> repr (Function repr)
     cast           :: repr (StateType repr) -> repr (StateType repr) -> repr (Function repr)

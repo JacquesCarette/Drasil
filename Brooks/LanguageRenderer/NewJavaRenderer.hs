@@ -8,8 +8,8 @@ module LanguageRenderer.NewJavaRenderer (
 import New (Label,
   RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
-  StatementSym(..),
-  UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), Selector(..), 
+  StatementSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), ScopeSym(..), MethodTypeSym(..),
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import NewLanguageRenderer (fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD,
@@ -254,16 +254,24 @@ instance ValueSym JavaCode where
     defaultString = return $ defaultStringD
     defaultBool = litFalse
 
-    (?!) v = liftA2 unOpDocD notOp v
-    (?<)  v1 v2 = liftA3 binOpDocD v1 lessOp v2
-    (?<=) v1 v2 = liftA3 binOpDocD v1 lessEqualOp v2
-    (?>)  v1 v2 = liftA3 binOpDocD v1 greaterOp v2
-    (?>=) v1 v2 = liftA3 binOpDocD v1 greaterEqualOp v2
-    (?==) v1 v2 = liftA3 binOpDocD v1 equalOp v2
-    (?!=) v1 v2 = liftA3 binOpDocD v1 notEqualOp v2
-    (?&&) v1 v2 = liftA3 binOpDocD v1 andOp v2
-    (?||) v1 v2 = liftA3 binOpDocD v1 orOp v2
+    ($->) v vr = objVar v vr
+    ($:) en e = enumElement en e
 
+    const n = var n
+    var n = return $ varDocD n
+    extVar l n = return $ extVarDocD l n
+    self = return $ selfDocD
+    arg n = liftA2 argDocD (litInt n) argsList
+    enumElement en e = return $ enumElemDocD en e
+    enumVar n = var n
+    objVar n1 n2 = liftA2 objVarDocD n1 n2
+    objVarSelf n = var n
+    listVar n _ = var n
+    n `listOf` t = listVar n t
+    
+    inputFunc = return (parens (text "new Scanner(System.in)"))
+
+instance NumericExpression JavaCode where
     (#~) v = liftA2 unOpDocD negateOp v
     (#/^) v = liftA2 unOpDocD sqrtOp v
     (#|) v = liftA2 unOpDocD absOp v
@@ -273,9 +281,6 @@ instance ValueSym JavaCode where
     (#/)  v1 v2 = liftA3 binOpDocD v1 divideOp v2
     (#%)  v1 v2 = liftA3 binOpDocD v1 moduloOp v2
     (#^)  v1 v2 = liftA3 binOpDocD' v1 powerOp v2
-
-    ($->) v vr = objVar v vr
-    ($:) en e = enumElement en e
 
     log v = liftA2 unOpDocD logOp v
     ln v = liftA2 unOpDocD lnOp v
@@ -289,17 +294,19 @@ instance ValueSym JavaCode where
     floor v = liftA2 unOpDocD floorOp v
     ceil v = liftA2 unOpDocD ceilOp v
 
-    const n = var n
-    var n = return $ varDocD n
-    extVar l n = return $ extVarDocD l n
-    self = return $ selfDocD
-    arg n = liftA2 argDocD (litInt n) argsList
-    enumElement en e = return $ enumElemDocD en e
-    enumVar n = var n
-    objVar n1 n2 = liftA2 objVarDocD n1 n2
-    objVarSelf n = var n
-    listVar n _ = var n
-    n `listOf` t = listVar n t
+instance BooleanExpression JavaCode where
+    (?!) v = liftA2 unOpDocD notOp v
+    (?&&) v1 v2 = liftA3 binOpDocD v1 andOp v2
+    (?||) v1 v2 = liftA3 binOpDocD v1 orOp v2
+
+    (?<)  v1 v2 = liftA3 binOpDocD v1 lessOp v2
+    (?<=) v1 v2 = liftA3 binOpDocD v1 lessEqualOp v2
+    (?>)  v1 v2 = liftA3 binOpDocD v1 greaterOp v2
+    (?>=) v1 v2 = liftA3 binOpDocD v1 greaterEqualOp v2
+    (?==) v1 v2 = liftA3 binOpDocD v1 equalOp v2
+    (?!=) v1 v2 = liftA3 binOpDocD v1 notEqualOp v2
+   
+instance ValueExpression JavaCode where
     inlineIf c v1 v2 = liftA3 inlineIfDocD c v1 v2
     funcApp n vs = liftList (funcAppDocD n) vs
     selfFuncApp = funcApp
@@ -307,14 +314,8 @@ instance ValueSym JavaCode where
     stateObj t vs = liftA2 stateObjDocD t (liftList callFuncParamList vs)
     extStateObj _ t vs = stateObj t vs
     listStateObj t vs = liftA3 listStateObjDocD listObj t (liftList callFuncParamList vs)
-    
-    inputFunc = return (parens (text "new Scanner(System.in)"))
-
-    stringEqual v1 str = objAccess v1 (func "equals" [str])
 
     exists v = v
-    listIndexExists lst index = liftA3 jListIndexExists lst greaterOp index
-    argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
     notNull v = liftA3 notNullDocD v notEqualOp (var "null")
 
 instance StatementSym JavaCode where
@@ -415,6 +416,11 @@ instance Selector JavaCode where
 
     listPopulateAccess _ _ = return empty
     listSizeAccess v = objAccess v listSize
+
+    listIndexExists lst index = liftA3 jListIndexExists lst greaterOp index
+    argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
+
+    stringEqual v1 str = objAccess v1 (func "equals" [str])
 
     castObj f v = liftA2 castObjDocD f v
     castStrToFloat v = funcApp "Double.parseDouble" [v]

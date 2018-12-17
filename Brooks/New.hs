@@ -433,7 +433,7 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, BodySym repr) => Me
     pubMethod   :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
     constructor :: Label -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
 
-    function :: Label -> repr (Scope repr) -> repr (Permanence repr) -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)  -- For methods outside of classes, not sure if function is a good name
+    function :: Label -> repr (Scope repr) -> repr (Permanence repr) -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)  -- For methods not parameterized by self in python
 
 class (ScopeSym repr, PermanenceSym repr, StateTypeSym repr) => StateVarSym repr where
     type StateVar repr

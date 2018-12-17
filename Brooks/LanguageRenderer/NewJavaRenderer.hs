@@ -301,7 +301,7 @@ instance ValueExpression JavaCode where
     extStateObj _ t vs = stateObj t vs
     listStateObj t vs = liftA3 listStateObjDocD listObj t (liftList callFuncParamList vs)
 
-    exists v = v
+    exists = notNull
     notNull v = liftA3 notNullDocD v notEqualOp (var "null")
 
 instance Selector JavaCode where

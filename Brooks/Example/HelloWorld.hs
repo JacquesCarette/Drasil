@@ -3,9 +3,10 @@ module Example.HelloWorld (helloWorld) where
 import New (
   RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
-  StatementSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), ValueExpression(..), Selector(..),
-  FunctionSym(..), SelectorFunction(..), ScopeSym(..),
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  StatementSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
+  ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
+  StateVarSym(..), ClassSym(..), ModuleSym(..))
 import LanguageRenderer.NewJavaRenderer()
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
@@ -13,16 +14,19 @@ helloWorld :: (RenderSym repr) => repr (RenderFile repr)
 helloWorld = fileDoc (buildModule "" [] [] [] [helloWorldClass])
 
 helloWorldClass :: (RenderSym repr) => repr (Class repr)
-helloWorldClass = pubClass "HelloWorld" Nothing [stateVar 0 "greeting" private static string] [mainMethod (body [ helloInitVariables, helloListSlice,
-  ifCond [(litFalse, bodyStatements [(varDecDef "dummy" string (litString "dummy"))]),
-    (litTrue, helloIfBody)] helloElseBody,
-  helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch])]
+helloWorldClass = pubClass "HelloWorld" Nothing [stateVar 0 "greeting" private static string] [doubleAndAdd,
+  mainMethod (body [ helloInitVariables, helloListSlice,
+    ifCond [((var "b") ?>= (litInt 6), bodyStatements [(varDecDef "dummy" string (litString "dummy"))]),
+      ((var "b") ?== (litInt 5), helloIfBody)] helloElseBody, helloIfExists,
+    helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch])]
 
 helloInitVariables :: (RenderSym repr) => repr (Block repr)
 helloInitVariables = block [ (comment "Initializing variables"),
   (varDec "a" int), 
   (varDecDef "b" int (litInt 5)),
   (listDecDef "myOtherList" (floatListType static) [(litFloat 1.0), (litFloat 1.5)]),
+  (varDecDef "oneIndex" int (var "myOtherList" $. indexOf (litFloat 1.0))),
+  (printLn int (var "oneIndex")),
   ("a" &.= (listSizeAccess (var "myOtherList"))),
   (valState (objAccess (var "myOtherList") (listAdd (litInt 2) (litFloat 2.0)))),
   (valState (objAccess (var "myOtherList") (listAppend (litFloat 2.5)))),
@@ -33,6 +37,9 @@ helloInitVariables = block [ (comment "Initializing variables"),
   (listDec "myName" 7 (listType static string)),
   (stringSplit ' ' (var "myName") (litString "Brooks Mac")),
   (printLn (string) (var "myName")),
+  (listDec "boringList" 5 boolListType),
+  (valState $ listPopulateAccess (var "boringList") (listPopulateBool (litInt 5))),
+  (printLn (boolListType) (var "boringList")),
   (listDec "mySlicedList" 2 $ floatListType static)]
 
 helloListSlice :: (RenderSym repr) => repr (Block repr)
@@ -120,6 +127,9 @@ helloElseBody = bodyStatements [
   -- printLn (int) (stateObj bool [(var "arg1"), (var "arg2")]),
   -- printLn (int) (listStateObj bool [(var "arg1"), (var "arg2")])]
 
+helloIfExists :: (RenderSym repr) => repr (Block repr)
+helloIfExists = ifExists (var "boringList") (oneLiner (printStrLn "Ew, boring list!")) (oneLiner (printStrLn "Great, no bores!"))
+
 helloSwitch :: (RenderSym repr) => repr (Block repr)
 helloSwitch = switch (var "a") [((litInt 5), (oneLiner ("b" &.= (litInt 10)))), 
   ((litInt 0), (oneLiner ("b" &.= (litInt 5))))]
@@ -133,8 +143,13 @@ helloWhileLoop = while (var "a" ?< (litInt 13)) (bodyStatements [printStrLn "Hel
 
 helloForEachLoop :: (RenderSym repr) => repr (Block repr)
 helloForEachLoop = forEach "num" (float) (listVar "myOtherList" (float)) 
-  (oneLiner (printLn (float) (var "num")))
+  (oneLiner (printLn (float) (funcApp "doubleAndAdd" [(var "num"), (litFloat 1.0)])))
 
 helloTryCatch :: (RenderSym repr) => repr (Block repr)
 helloTryCatch = tryCatch (oneLiner (throw "Good-bye!"))
   (oneLiner (printStrLn "Caught intentional error"))
+
+doubleAndAdd :: (RenderSym repr) => repr (Method repr)
+doubleAndAdd = function "doubleAndAdd" public static (mState float) [(stateParam "num1" float), (stateParam "num2" float)]
+  (bodyStatements [(varDec "doubledSum" float), ("doubledSum" &.= (((litFloat 2.0) #* (var "num1")) #+ ((litFloat 2.0) #* (var "num2")))),
+    (returnVar "doubledSum")])

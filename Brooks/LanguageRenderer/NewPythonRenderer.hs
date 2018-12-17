@@ -275,9 +275,66 @@ instance ValueExpression PythonCode where
     stateObj t vs = liftA2 pyStateObj t (liftList callFuncParamList vs)
     extStateObj l t vs = liftA2 (pyExtStateObj l) t (liftList callFuncParamList vs)
     listStateObj t _ = t
-    
+
     exists v = v ?!= (var "None")
     notNull = exists
+
+instance Selector PythonCode where
+    objAccess v f = liftA2 objAccessDocD v f
+    ($.) v f = objAccess v f
+
+    objMethodCall o f ps = objAccess o (func f ps)
+    objMethodCallVoid o f = objMethodCall o f []
+
+    selfAccess f = objAccess self f
+
+    listPopulateAccess v f = liftA2 pyListPopAccess v f
+    listSizeAccess v = liftA2 pyListSizeAccess v listSize
+
+    listIndexExists lst index = (listSizeAccess lst) ?> index
+    argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
+
+    stringEqual v1 v2 = v1 ?== v2
+
+    castObj f v = liftA2 castObjDocD f v
+    castStrToFloat v = castObj (cast float string) v
+
+instance FunctionSym PythonCode where
+    type Function PythonCode = Doc
+    func l vs = liftA funcDocD (funcApp l vs)
+    cast targT _ = targT
+    castListToInt = cast (listType static int) int
+    get n = liftA funcDocD (var n)
+    set n v = liftA funcDocD (assign (var n) v)
+
+    indexOf v = liftA funcDocD (funcApp "index" [v])
+
+    listSize = return $ text "len"
+    listAdd i v = liftA funcDocD (funcApp "insert" [i, v])
+    listPopulateInt size = liftA2 pyListPop defaultInt size
+    listPopulateFloat size = liftA2 pyListPop defaultFloat size
+    listPopulateChar size = liftA2 pyListPop defaultChar size
+    listPopulateBool size = liftA2 pyListPop defaultBool size
+    listPopulateString size = liftA2 pyListPop defaultString size
+    listAppend v = liftA funcDocD (funcApp "append" [v])
+    listExtendInt = liftA pyListExtend defaultInt 
+    listExtendFloat = liftA pyListExtend defaultFloat 
+    listExtendChar = liftA pyListExtend defaultChar 
+    listExtendBool = liftA pyListExtend defaultBool
+    listExtendString = liftA pyListExtend defaultString
+    listExtendList _ = return $ brackets empty
+
+    iterBegin = liftA funcDocD (funcApp "begin" [])
+    iterEnd = liftA funcDocD (funcApp "end" [])
+
+instance SelectorFunction PythonCode where
+    listAccess i = liftA pyListAccess i
+    listSet i v = liftA2 listSetDocD i v
+
+    listAccessEnum _ v = listAccess v
+    listSetEnum t i v = listSet (castObj (cast int t) i) v
+
+    at l = listAccess (var l)
 
 instance StatementSym PythonCode where
     type Statement PythonCode = Doc
@@ -365,63 +422,6 @@ instance StatementSym PythonCode where
 
     state s = liftA2 statementDocD s endStatement
     loopState s = liftA2 statementDocD s endStatementLoop
-
-instance Selector PythonCode where
-    objAccess v f = liftA2 objAccessDocD v f
-    ($.) v f = objAccess v f
-
-    objMethodCall o f ps = objAccess o (func f ps)
-    objMethodCallVoid o f = objMethodCall o f []
-
-    selfAccess f = objAccess self f
-
-    listPopulateAccess v f = liftA2 pyListPopAccess v f
-    listSizeAccess v = liftA2 pyListSizeAccess v listSize
-
-    listIndexExists lst index = (listSizeAccess lst) ?> index
-    argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
-
-    stringEqual v1 v2 = v1 ?== v2
-
-    castObj f v = liftA2 castObjDocD f v
-    castStrToFloat v = castObj (cast float string) v
-
-instance FunctionSym PythonCode where
-    type Function PythonCode = Doc
-    func l vs = liftA funcDocD (funcApp l vs)
-    cast targT _ = targT
-    castListToInt = cast (listType static int) int
-    get n = liftA funcDocD (var n)
-    set n v = liftA funcDocD (assign (var n) v)
-
-    indexOf v = liftA funcDocD (funcApp "index" [v])
-
-    listSize = return $ text "len"
-    listAdd i v = liftA funcDocD (funcApp "insert" [i, v])
-    listPopulateInt size = liftA2 pyListPop defaultInt size
-    listPopulateFloat size = liftA2 pyListPop defaultFloat size
-    listPopulateChar size = liftA2 pyListPop defaultChar size
-    listPopulateBool size = liftA2 pyListPop defaultBool size
-    listPopulateString size = liftA2 pyListPop defaultString size
-    listAppend v = liftA funcDocD (funcApp "append" [v])
-    listExtendInt = liftA pyListExtend defaultInt 
-    listExtendFloat = liftA pyListExtend defaultFloat 
-    listExtendChar = liftA pyListExtend defaultChar 
-    listExtendBool = liftA pyListExtend defaultBool
-    listExtendString = liftA pyListExtend defaultString
-    listExtendList _ = return $ brackets empty
-
-    iterBegin = liftA funcDocD (funcApp "begin" [])
-    iterEnd = liftA funcDocD (funcApp "end" [])
-
-instance SelectorFunction PythonCode where
-    listAccess i = liftA pyListAccess i
-    listSet i v = liftA2 listSetDocD i v
-
-    listAccessEnum _ v = listAccess v
-    listSetEnum t i v = listSet (castObj (cast int t) i) v
-
-    at l = listAccess (var l)
 
 instance ScopeSym PythonCode where
     type Scope PythonCode = Doc

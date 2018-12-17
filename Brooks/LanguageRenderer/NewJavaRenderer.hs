@@ -51,20 +51,6 @@ instance Monad JavaCode where
     return = JC
     JC x >>= f = f x
 
--- type JavaCode a = JavaCodeMonad Doc
-
--- liftJC0 :: Doc -> JavaCode Doc
--- liftJC0 = JC
-
--- liftJC1 :: (Doc -> Doc) -> JavaCode Doc -> JavaCode Doc
--- liftJC1 f a = JC $ f (unJC a)
-
--- liftJC2 :: (Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc
--- liftJC2 f a b = JC $ f (unJC a) (unJC b)
-
--- liftJC3 :: (Doc -> Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc
--- liftJC3 f a b c = JC $ f (unJC a) (unJC b) (unJC c)
-
 liftA4 :: (Doc -> Doc -> Doc -> Doc -> Doc) -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc -> JavaCode Doc
 liftA4 f a1 a2 a3 a4 = JC $ f (unJC a1) (unJC a2) (unJC a3) (unJC a4)
 
@@ -318,6 +304,63 @@ instance ValueExpression JavaCode where
     exists v = v
     notNull v = liftA3 notNullDocD v notEqualOp (var "null")
 
+instance Selector JavaCode where
+    objAccess v f = liftA2 objAccessDocD v f
+    ($.) v f = objAccess v f
+
+    objMethodCall o f ps = objAccess o (func f ps)
+    objMethodCallVoid o f = objMethodCall o f []
+
+    selfAccess f = objAccess self f
+
+    listPopulateAccess _ _ = return empty
+    listSizeAccess v = objAccess v listSize
+
+    listIndexExists lst index = liftA3 jListIndexExists lst greaterOp index
+    argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
+
+    stringEqual v1 str = objAccess v1 (func "equals" [str])
+
+    castObj f v = liftA2 castObjDocD f v
+    castStrToFloat v = funcApp "Double.parseDouble" [v]
+
+instance FunctionSym JavaCode where
+    type Function JavaCode = Doc
+    func l vs = liftA funcDocD (funcApp l vs)
+    cast targT _ = liftA castDocD targT
+    castListToInt = liftA funcDocD (funcApp "ordinal" [])
+    get n = liftA funcDocD (funcApp (getterName n) [])
+    set n v = liftA funcDocD (funcApp (setterName n) [v])
+
+    indexOf v = liftA funcDocD (funcApp "indexOf" [v])
+
+    listSize = liftA funcDocD (funcApp "size" [])
+    listAdd i v = liftA funcDocD (funcApp "add" [i, v])
+    listPopulateInt _ = return empty
+    listPopulateFloat _ = return empty
+    listPopulateChar _ = return empty
+    listPopulateBool _ = return empty
+    listPopulateString _ = return empty
+    listAppend v = liftA funcDocD (funcApp "add" [v])
+    listExtendInt = liftA jListExtend defaultInt 
+    listExtendFloat = liftA jListExtend defaultFloat 
+    listExtendChar = liftA jListExtend defaultChar 
+    listExtendBool = liftA jListExtend defaultBool
+    listExtendString = liftA jListExtend defaultString
+    listExtendList t = liftA jListExtendList t
+
+    iterBegin = liftA funcDocD (funcApp "begin" [])
+    iterEnd = liftA funcDocD (funcApp "end" [])
+
+instance SelectorFunction JavaCode where
+    listAccess i = liftA funcDocD (funcApp "get" [i])
+    listSet i v = liftA funcDocD (funcApp "set" [i, v])
+
+    listAccessEnum t v = listAccess (castObj (cast int t) v)
+    listSetEnum t i v = listSet (castObj (cast int t) i) v
+
+    at l = listAccess (var l)
+
 instance StatementSym JavaCode where
     type Statement JavaCode = Doc
     assign v1 v2 = liftA2 assignDocD v1 v2
@@ -390,7 +433,7 @@ instance StatementSym JavaCode where
 
     comment cmt = liftA (commentDocD cmt) commentStart
 
-    free _ = error "Cannot free variables in Java" -- could set variable to null?
+    free _ = error "Cannot free variables in Java" -- could set variable to null? Might be misleading.
 
     throw errMsg = liftA jThrowDoc (litString errMsg)
 
@@ -404,63 +447,6 @@ instance StatementSym JavaCode where
 
     state s = liftA2 statementDocD s endStatement
     loopState s = liftA2 statementDocD s endStatementLoop
-
-instance Selector JavaCode where
-    objAccess v f = liftA2 objAccessDocD v f
-    ($.) v f = objAccess v f
-
-    objMethodCall o f ps = objAccess o (func f ps)
-    objMethodCallVoid o f = objMethodCall o f []
-
-    selfAccess f = objAccess self f
-
-    listPopulateAccess _ _ = return empty
-    listSizeAccess v = objAccess v listSize
-
-    listIndexExists lst index = liftA3 jListIndexExists lst greaterOp index
-    argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
-
-    stringEqual v1 str = objAccess v1 (func "equals" [str])
-
-    castObj f v = liftA2 castObjDocD f v
-    castStrToFloat v = funcApp "Double.parseDouble" [v]
-
-instance FunctionSym JavaCode where
-    type Function JavaCode = Doc
-    func l vs = liftA funcDocD (funcApp l vs)
-    cast targT _ = liftA castDocD targT
-    castListToInt = liftA funcDocD (funcApp "ordinal" [])
-    get n = liftA funcDocD (funcApp (getterName n) [])
-    set n v = liftA funcDocD (funcApp (setterName n) [v])
-
-    indexOf v = liftA funcDocD (funcApp "indexOf" [v])
-
-    listSize = liftA funcDocD (funcApp "size" [])
-    listAdd i v = liftA funcDocD (funcApp "add" [i, v])
-    listPopulateInt _ = return empty
-    listPopulateFloat _ = return empty
-    listPopulateChar _ = return empty
-    listPopulateBool _ = return empty
-    listPopulateString _ = return empty
-    listAppend v = liftA funcDocD (funcApp "add" [v])
-    listExtendInt = liftA jListExtend defaultInt 
-    listExtendFloat = liftA jListExtend defaultFloat 
-    listExtendChar = liftA jListExtend defaultChar 
-    listExtendBool = liftA jListExtend defaultBool
-    listExtendString = liftA jListExtend defaultString
-    listExtendList t = liftA jListExtendList t
-
-    iterBegin = liftA funcDocD (funcApp "begin" [])
-    iterEnd = liftA funcDocD (funcApp "end" [])
-
-instance SelectorFunction JavaCode where
-    listAccess i = liftA funcDocD (funcApp "get" [i])
-    listSet i v = liftA funcDocD (funcApp "set" [i, v])
-
-    listAccessEnum t v = listAccess (castObj (cast int t) v)
-    listSetEnum t i v = listSet (castObj (cast int t) i) v
-
-    at l = listAccess (var l)
 
 instance ScopeSym JavaCode where
     type Scope JavaCode = Doc

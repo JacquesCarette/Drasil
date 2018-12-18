@@ -23,7 +23,7 @@ makeLenses ''AssumpChunk
 instance Eq            AssumpChunk where a == b = a ^. uid == b ^. uid
 instance HasUID        AssumpChunk where uid = lbl . uid
 instance HasRefAddress AssumpChunk where getRefAdd = getRefAdd . view lbl
-instance HasShortName  AssumpChunk where shortname = lbl . shortname
+instance HasShortName  AssumpChunk where shortname = shortname . view lbl
 instance ConceptDomain AssumpChunk where cdom = ci . cdom
 instance NamedIdea     AssumpChunk where term = ci . term
 instance CommonIdea    AssumpChunk where abrv = abrv . view ci

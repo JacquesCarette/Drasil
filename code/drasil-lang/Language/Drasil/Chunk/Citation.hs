@@ -24,7 +24,7 @@ import Language.Drasil.Data.Citation (author, chapter, pages, editor, bookTitle,
 import Language.Drasil.Misc (noSpaces)
 import Language.Drasil.RefProg (Reference, makeCiteRef)
 
-import Control.Lens (makeLenses, (^.), Lens')
+import Control.Lens (makeLenses, (^.), Lens', view)
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces
@@ -41,7 +41,7 @@ makeLenses ''Citation
 
 instance HasUID       Citation where uid       = lb . uid
 instance HasLabel     Citation where getLabel  = lb
-instance HasShortName Citation where shortname = lb . shortname
+instance HasShortName Citation where shortname = shortname . view lb
 instance HasFields    Citation where getFields = fields
 
 

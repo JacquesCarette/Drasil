@@ -100,44 +100,44 @@ instance HasCitationRefs ReferenceDB where citationRefTable = citationDB
 instance HasConceptRefs  ReferenceDB where conceptRefTable = conceptDB
 
 class HasUID s => Referable s where
-  refAdd    :: s -> LblType -- The referencing address (what we're linking to).
+  refAdd    :: s -> String  -- The referencing address (what we're linking to).
                             -- Only visible in the source (tex/html).
   renderRef :: s -> LblType -- alternate
 
 instance Referable AssumpChunk where
-  refAdd    x = getRefAdd x
-  renderRef l = RP (prepend $ abrv l) (getAdd $ getRefAdd l)
+  refAdd    x = getAdd $ getRefAdd x
+  renderRef l = RP (prepend $ abrv l) (refAdd l)
 
 instance Referable Section where
-  refAdd    (Section _ _ lb ) = getRefAdd lb
+  refAdd    (Section _ _ lb ) = getAdd $ getRefAdd lb
   renderRef (Section _ _ lb)  = RP (raw "Section: " +::+ name) (getAdd $ getRefAdd lb)
 
 instance Referable Citation where
-  refAdd    c = Citation $ citeID c -- citeID should be unique.
-  renderRef c = Citation $ citeID c
+  refAdd    c = citeID c -- citeID should be unique.
+  renderRef c = Citation $ refAdd c
 
 instance Referable TheoryModel where
-  refAdd    t = getRefAdd t
+  refAdd    t = getAdd $ getRefAdd t
   renderRef l = RP (prepend $ abrv l) (getAdd $ getRefAdd l)
 
 instance Referable GenDefn where
-  refAdd    g = getRefAdd g
+  refAdd    g = getAdd $ getRefAdd g
   renderRef l = RP (prepend $ abrv l) (getAdd $ getRefAdd l)
 
 instance Referable DataDefinition where
-  refAdd    d = getRefAdd d
+  refAdd    d = getAdd $ getRefAdd d
   renderRef l = RP (prepend $ abrv l) (getAdd $ getRefAdd l)
 
 instance Referable InstanceModel where
-  refAdd    i = getRefAdd i
+  refAdd    i = getAdd $ getRefAdd i
   renderRef l = RP (prepend $ abrv l) (getAdd $ getRefAdd l)
 
 instance Referable ConceptInstance where
-  refAdd l    = RP ((defer $ sDom $ l ^. cdom) +::+ raw ": " +::+ name) (l ^. uid)
+  refAdd l    = l ^. uid
   renderRef l = RP ((defer $ sDom $ l ^. cdom) +::+ raw ": " +::+ name) (l ^. uid)
 
 instance Referable LabelledContent where
-  refAdd     (LblC lb _) = getRefAdd lb
+  refAdd     (LblC lb _) = getAdd $ getRefAdd lb
   renderRef  (LblC lb c) = RP (refLabelledCon c) (getAdd $ getRefAdd lb)
 
 refLabelledCon :: RawContent -> IRefProg
@@ -207,14 +207,14 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
         dropNums = map fst
 
 makeRef2 :: (Referable l, HasShortName l) => l -> Reference
-makeRef2 l = Reference (l ^. uid) (renderRef l) (l ^. shortname)
+makeRef2 l = Reference (l ^. uid) (renderRef l) (shortname l)
 
 makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
 makeRef2S = Ref . makeRef2
 
 -- Here we don't use the Lenses as constraints, we really do want a Citation.
 makeCite :: Citation -> Reference
-makeCite l = Reference (l ^. uid) (refAdd l) (l ^. shortname)
+makeCite l = Reference (l ^. uid) (renderRef l) (shortname l)
 
 makeCiteS :: Citation -> Sentence
 makeCiteS = Ref . makeCite

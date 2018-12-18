@@ -327,7 +327,7 @@ createLayout sm = map (sec sm 0)
 sec :: (HasSymbolTable ctx, HasDefinitionTable ctx, HasTermTable ctx, 
   HasPrintingOptions ctx) => ctx -> Int -> Section -> T.LayoutObj
 sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used somewhere?
-  let ref = P.S (getAdd $ refAdd x) in
+  let ref = P.S (refAdd x) in
   T.HDiv [(concat $ replicate depth "sub") ++ "section"]
   (T.Header depth (spec sm titleLb) ref :
    map (layout sm depth) contents) ref
@@ -431,8 +431,8 @@ item sm (Flat i)     = P.Flat $ spec sm i
 item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
 
 labref :: Maybe RefAdd -> Maybe P.Spec
-labref l = maybe Nothing (\z -> Just $ P.S z) l
+labref = fmap P.S
 
 -- | Helper for getting a short name
 getShortName :: HasShortName c => c -> Sentence
-getShortName c = S . getStringSN $ c ^. shortname
+getShortName = S . getStringSN . shortname

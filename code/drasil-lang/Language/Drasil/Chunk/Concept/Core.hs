@@ -43,8 +43,7 @@ instance CommonIdea    CommonConcept where abrv = abrv . view comm
 instance ConceptDomain CommonConcept where cdom = dom
 instance Concept       CommonConcept where
 
-data ConceptInstance = ConInst { _cc :: ConceptChunk
-                               , _shnm :: ShortName}
+data ConceptInstance = ConInst { _cc :: ConceptChunk , shnm :: ShortName}
 makeLenses ''ConceptInstance
 
 instance Eq            ConceptInstance where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)

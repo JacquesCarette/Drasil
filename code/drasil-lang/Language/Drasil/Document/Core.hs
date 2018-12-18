@@ -84,7 +84,7 @@ class HasContents c where
 instance HasUID        LabelledContent where uid = ref . uid  
 instance HasRefAddress LabelledContent where getRefAdd = getRefAdd . view ref
 instance HasContents   LabelledContent where accessContents = ctype
-instance HasShortName  LabelledContent where shortname = ref . shortname
+instance HasShortName  LabelledContent where shortname = shortname . view ref
 
 instance HasContents  UnlabelledContent where accessContents = cntnts
 

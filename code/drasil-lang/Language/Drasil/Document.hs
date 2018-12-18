@@ -9,7 +9,7 @@ import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
 import Language.Drasil.NounPhrase (cn')
 import Language.Drasil.RefProg (Reference)
 
-import Control.Lens (makeLenses)
+import Control.Lens (makeLenses, view)
 
 -- | Section Contents are split into subsections or contents, where contents
 -- are standard layout objects (see 'Contents')
@@ -27,7 +27,7 @@ makeLenses ''Section
 
 instance HasUID        Section where uid = lab . uid
 instance HasLabel      Section where getLabel = lab
-instance HasShortName  Section where shortname = lab . shortname
+instance HasShortName  Section where shortname = shortname . view lab
 
 sectionci :: CI
 sectionci    = commonIdeaWithDict "sectionci"    (cn' "section")                   "DD"        [documentc]

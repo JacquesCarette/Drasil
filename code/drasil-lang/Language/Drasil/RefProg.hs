@@ -17,7 +17,7 @@ import Control.Lens (makeLenses)
 
 data Reference = Reference
   { _ui :: UID
-  , _ra :: LblType     -- the main string of the reference address
+  ,  ra :: LblType     -- the main string of the reference address
   , _sn :: ShortName } -- the human-readable short name
 makeLenses ''Reference
 

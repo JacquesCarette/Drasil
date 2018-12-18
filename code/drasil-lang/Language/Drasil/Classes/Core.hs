@@ -30,7 +30,8 @@ class HasShortName  s where
 class HasSymbol c where
   -- | Provides the Symbol --  for a particular stage of generation
   symbol  :: c -> Stage -> Symbol
-  
+ 
+-- | For a "Reference Address", we just need a getter.
 class HasRefAddress b where
-  getRefAdd :: Lens' b LblType 
+  getRefAdd :: b -> LblType 
 

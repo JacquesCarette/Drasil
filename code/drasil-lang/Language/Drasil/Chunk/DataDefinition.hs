@@ -50,7 +50,7 @@ instance HasAdditionalNotes DataDefinition where getNotes = notes
 instance MayHaveUnit        DataDefinition where getUnit = getUnit . view qd 
 instance HasLabel           DataDefinition where getLabel = lbl
 instance HasShortName       DataDefinition where shortname = lbl . shortname
-instance HasRefAddress      DataDefinition where getRefAdd = lbl . getRefAdd
+instance HasRefAddress      DataDefinition where getRefAdd = getRefAdd . view lbl
 instance ConceptDomain      DataDefinition where cdom = ci . cdom
 instance CommonIdea         DataDefinition where abrv = abrv . view ci
 

@@ -11,7 +11,7 @@ import Language.Drasil.RefProg(Reference)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
 
-import Control.Lens ((^.), makeLenses, Lens', set)
+import Control.Lens ((^.), makeLenses, Lens', set, view)
 
 data ListType = Bullet [(ItemType,Maybe RefAdd)] -- ^ Bulleted list
               | Numeric [(ItemType,Maybe RefAdd)] -- ^ Enumerated List
@@ -82,7 +82,7 @@ class HasContents c where
   accessContents :: Lens' c RawContent
 
 instance HasUID        LabelledContent where uid = ref . uid  
-instance HasRefAddress LabelledContent where getRefAdd = ref . getRefAdd
+instance HasRefAddress LabelledContent where getRefAdd = getRefAdd . view ref
 instance HasContents   LabelledContent where accessContents = ctype
 instance HasShortName  LabelledContent where shortname = ref . shortname
 

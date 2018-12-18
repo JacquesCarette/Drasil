@@ -5,7 +5,7 @@ module Language.Drasil.Reference(makeRef2, makeRef2S, makeCite,
   HasConceptRefs(conceptRefTable),
   assumpDB, AssumpMap, assumpLookup, HasAssumpRefs) where
 
-import Control.Lens ((^.), Simple, Lens, makeLenses, view)
+import Control.Lens ((^.), Simple, Lens, makeLenses)
 import Data.Function (on)
 import Data.List (concatMap, find, groupBy, sortBy)
 import qualified Data.Map as Map
@@ -22,7 +22,7 @@ import Language.Drasil.Classes (ConceptDomain(cdom), HasUID(uid), abrv,
 import Language.Drasil.Data.Citation(CiteField(Author, Title, Year))
 import Language.Drasil.Document (Section(Section))
 import Language.Drasil.Document.Core (LabelledContent(..), RawContent(..))
-import Language.Drasil.Label.Type (LblType(RP,MetaLink,Citation), IRefProg,
+import Language.Drasil.Label.Type (LblType(RP,Citation), IRefProg,
   prepend, name, raw, (+::+), defer, getAdd)
 import Language.Drasil.People (People, comparePeople)
 import Language.Drasil.RefProg (Reference(Reference))
@@ -105,40 +105,40 @@ class HasUID s => Referable s where
   renderRef :: s -> LblType -- alternate
 
 instance Referable AssumpChunk where
-  refAdd    x = x ^. getRefAdd
-  renderRef l = RP (prepend $ abrv l) (getAdd $ l ^. getRefAdd)
+  refAdd    x = getRefAdd x
+  renderRef l = RP (prepend $ abrv l) (getAdd $ getRefAdd l)
 
 instance Referable Section where
-  refAdd    (Section _ _ lb ) = lb ^. getRefAdd
-  renderRef (Section _ _ lb)  = RP (raw "Section: " +::+ name) (getAdd $ view getRefAdd lb)
+  refAdd    (Section _ _ lb ) = getRefAdd lb
+  renderRef (Section _ _ lb)  = RP (raw "Section: " +::+ name) (getAdd $ getRefAdd lb)
 
 instance Referable Citation where
   refAdd    c = Citation $ citeID c -- citeID should be unique.
   renderRef c = Citation $ citeID c
 
 instance Referable TheoryModel where
-  refAdd    t = t ^. getRefAdd
-  renderRef l = RP (prepend $ abrv l) (getAdd $ view getRefAdd l)
+  refAdd    t = getRefAdd t
+  renderRef l = RP (prepend $ abrv l) (getAdd $ getRefAdd l)
 
 instance Referable GenDefn where
-  refAdd    g = g ^. getRefAdd
-  renderRef l = RP (prepend $ abrv l) (getAdd $ view getRefAdd l)
+  refAdd    g = getRefAdd g
+  renderRef l = RP (prepend $ abrv l) (getAdd $ getRefAdd l)
 
 instance Referable DataDefinition where
-  refAdd    d = d ^. getRefAdd
-  renderRef l = RP (prepend $ abrv l) (getAdd $ view getRefAdd l)
+  refAdd    d = getRefAdd d
+  renderRef l = RP (prepend $ abrv l) (getAdd $ getRefAdd l)
 
 instance Referable InstanceModel where
-  refAdd    i = i ^. getRefAdd
-  renderRef l = RP (prepend $ abrv l) (getAdd $ view getRefAdd l)
+  refAdd    i = getRefAdd i
+  renderRef l = RP (prepend $ abrv l) (getAdd $ getRefAdd l)
 
 instance Referable ConceptInstance where
   refAdd l    = RP ((defer $ sDom $ l ^. cdom) +::+ raw ": " +::+ name) (l ^. uid)
   renderRef l = RP ((defer $ sDom $ l ^. cdom) +::+ raw ": " +::+ name) (l ^. uid)
 
 instance Referable LabelledContent where
-  refAdd     (LblC lb _) = lb ^. getRefAdd
-  renderRef  (LblC lb c)  = RP (refLabelledCon c) (getAdd $ view getRefAdd lb)
+  refAdd     (LblC lb _) = getRefAdd lb
+  renderRef  (LblC lb c) = RP (refLabelledCon c) (getAdd $ getRefAdd lb)
 
 refLabelledCon :: RawContent -> IRefProg
 refLabelledCon (Table _ _ _ _)       = raw "Table:" +::+ name 

@@ -297,7 +297,7 @@ resShr_deriv_sentences_ssp_s3 = [S "Using", ch nrmFNoIntsl `sC` S "a", phrase sh
 
 resShr_deriv_sentences_ssp_s4 :: [Sentence]
 resShr_deriv_sentences_ssp_s4 = [S "This can be further simplified by considering assumptions",
-  makeRef2S newA10, S "and", makeRef2S newA11 `sC`
+  makeRef2S newA10, S "and", makeRef2S newA12 `sC`
   S "which state that the seismic coefficient and the external force" `sC` S "respectively"
   `sC` S "are0", S "Removing seismic and external forces yields ", eqN 4]
 
@@ -402,7 +402,7 @@ mobShr_deriv_sentences_ssp_s3 :: [Sentence]
 mobShr_deriv_sentences_ssp_s3 = [S "The" +:+ plural value +:+ S "of" +:+ 
   ch shearFNoIntsl +:+ S "is now defined completely in terms of the" +:+
   S "known" +:+. plural value +:+ S "This can be further simplified by considering assumptions" +:+
-  makeRef2S newA10 +:+ S "and" +:+ makeRef2S newA11 `sC`
+  makeRef2S newA10 +:+ S "and" +:+ makeRef2S newA12 `sC`
   S "which state that the seismic coefficient and the external force" `sC` S "respectively"
   `sC` S "are0" +:+ S "Removing seismic and external forces yields " +:+ eqN 7]
 

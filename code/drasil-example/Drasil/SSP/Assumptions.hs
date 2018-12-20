@@ -4,9 +4,9 @@ import Language.Drasil
 
 import Drasil.SSP.Defs (slpSrf, slopeSrf, slope,
   soil, soilLyr, soilPrpty, intrslce, slice)
-import Drasil.SSP.Unitals (coords, normToShear, scalFunc)
+import Drasil.SSP.Unitals (coords, normToShear, numbSlices, scalFunc)
 
-import Data.Drasil.SentenceStructures (ofThe', foldlSent)
+import Data.Drasil.SentenceStructures (ofThe', foldlSent, sAnd)
 
 import Data.Drasil.Concepts.Documentation (assumpDom, condition)
 import Data.Drasil.Concepts.Physics (force, stress, strain)
@@ -14,14 +14,16 @@ import Data.Drasil.Concepts.Math (surface, unit_)
 import Data.Drasil.Concepts.SolidMechanics (shearForce)
 
 newAssumptions :: [AssumpChunk]
-newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10, newA11]
+newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10, newA11, newA12]
 
 -- FIXME: Remove the newA AssumpChunk's once ConceptInstance and SCSProg's
 -- Assumptions has been migrated to using assumpDom
 
-newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10, newA11 :: AssumpChunk
-assumpSSC, assumpFOSL, assumpSLH, assumpSLI, assumpINSFL, assumpBNSFLFS,
-  assumpSSCIL, assumpPSC, assumpENSL, assumpSBSBISL, assumpSP :: ConceptInstance
+newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10, newA11,  
+  newA12 :: AssumpChunk
+assumpSSC, assumpFOSL, assumpSLH, assumpSP, assumpSLI, assumpINSFL,
+  assumpPSC, assumpENSL, assumpSBSBISL, assumpES, assumpSF, 
+  assumpSL :: ConceptInstance
 newA1 = assump (makeAssumpRef "Slip-Surface-Concave") monotonicF
 assumpSSC = cic "assumpSSC" monotonicF "Slip-Surface-Concave" assumpDom
 newA2 = assump (makeAssumpRef "Factor-of-Safety") slopeS
@@ -40,13 +42,15 @@ newA8 = assump (makeAssumpRef "Effective-Norm-Stress-Large") largeN
 assumpENSL = cic "assumpENSL" largeN "Effective-Norm-Stress-Large" assumpDom
 newA9 = assump (makeAssumpRef "Surface-Base-Slice-between-Interslice-Straight-Lines") straightS
 assumpSBSBISL = cic "assumpSBSBISL" straightS "Surface-Base-Slice-between-Interslice-Straight-Lines" assumpDom
-newA10 = assump (makeAssumpRef "Seismic-Force") linearF
-assumpBNSFLFS = cic "assumpBNSFLFS" linearF "Base-Norm-Shear-Forces-Linear-on-FS" assumpDom
-newA11 = assump (makeAssumpRef "Surface-Load") stressC
-assumpSSCIL = cic "assumpSSCIL" stressC "Surface-Load" assumpDom
+newA10 = assump (makeAssumpRef "Edge-Slices") edgeS
+assumpES = cic "assumpES" edgeS "Edge-Slices" assumpDom
+newA11 = assump (makeAssumpRef "Seismic-Force") seismicF
+assumpSF = cic "assumpSF" seismicF "Seismic-Force" assumpDom
+newA12 = assump (makeAssumpRef "Surface-Load") surfaceL
+assumpSL = cic "assumpSL" surfaceL "Surface-Load" assumpDom
 
 monotonicF, slopeS, homogeneousL, isotropicP, linearS,
-  linearF, stressC, planeS, largeN, straightS, propertiesS :: Sentence
+  planeS, largeN, straightS, propertiesS, edgeS, seismicF, surfaceL :: Sentence
 
 monotonicF = foldlSent [S "The", phrase slpSrf,
   S "is concave with respect to", S "the" +:+. phrase slopeSrf,
@@ -71,12 +75,6 @@ linearS = foldlSent [at_start intrslce, S "normal and", plural shearForce,
   sParen (ch normToShear), S "and an", phrase intrslce, phrase force,
   S "function", sParen (ch scalFunc), S "depending on x position"]
 
-linearF = foldlSent [S "There is no seismic force acting on the slope"]
-
-stressC = foldlSent [S "There is no imposed", phrase surface `sC` 
-  S "load and therefore no external force" `sC` S "acting on the",
-  phrase slope]
-
 planeS = foldlSent [S "The", phrase slope, S "and", phrase slpSrf +:+.
   S "extends far into and out of the geometry (z coordinate)",
   S "This implies plane", phrase strain, plural condition `sC`
@@ -90,3 +88,13 @@ largeN = foldlSent [S "The effective normal", phrase stress,
 straightS = foldlSent [S "The", phrase surface, S "and base of a",
   phrase slice, S "between", phrase intrslce,
   S "nodes are approximated as straight lines"]
+
+edgeS = foldlSent [S "The", phrase intrslce, plural force, 
+  S "at the 0th" `sAnd` ch numbSlices :+: S "th", phrase intrslce,
+  S "interfaces are zero"]
+
+seismicF = foldlSent [S "There is no seismic force acting on the slope"]
+
+surfaceL = foldlSent [S "There is no imposed", phrase surface `sC` 
+  S "load and therefore no external", phrase force `sC` S "acting on the",
+  phrase slope]

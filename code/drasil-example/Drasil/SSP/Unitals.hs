@@ -144,17 +144,17 @@ waterHght = uc' "y_wt,i"
   ("height of the water table at i, " ++ smsi)
   (sub lY (Atomic "wt")) metre
 
-slopeHght = uc' "y_us,i" (cn $ "y ordinate")
-  ("height of the top of the slope at i, " ++ smsi)
-  (sub lY (Atomic "us")) metre
+slopeHght = uc' "y_slope,i" (cn $ "slope y-ordinate")
+  ("y-ordinate of a point on the slope")
+  (sub lY (Atomic "slope")) metre
 
 slipHght = uc' "y_slip,i" (cn $ "y ordinate")
   ("height of the slip surface at i, " ++ smsi)
   (sub lY (Atomic "slip")) metre
 
-slopeDist = uc' "x_us,i" (cn $ "x ordinate")
-  ("distance of the edge of the slope at i, " ++ smsi)
-  (sub lX (Atomic "us")) metre 
+slopeDist = uc' "x_slope,i" (cn $ "slope x-ordinate")
+  ("x-ordinate of a point on the slope")
+  (sub lX (Atomic "slope")) metre
 
 slipDist = uc' "x_slip,i" (cn $ "x ordinate")
   ("distance of the slip surface at i, " ++ smsi)
@@ -303,12 +303,15 @@ fy = uc' "fy" (cn "y-component of the net force") ""
 ----------------------
 
 sspUnitless :: [DefinedQuantityDict]
-sspUnitless = [earthqkLoadFctr, normToShear,scalFunc,
+sspUnitless = [constF, earthqkLoadFctr, normToShear, scalFunc,
   numbSlices, minFunction, index, varblU, varblV, fs_min,
   ufixme1, ufixme2]
 
-earthqkLoadFctr, normToShear, scalFunc, numbSlices,
+constF, earthqkLoadFctr, normToShear, scalFunc, numbSlices,
   minFunction, index, varblU, varblV, ufixme1, ufixme2 :: DefinedQuantityDict
+
+constF = dqd' (dcc "const_f" (nounPhraseSP $ "decision on f") 
+  ("boolean that determines the form of f: constant if true, or a half-sine if false")) (const (Atomic "const_f")) Boolean Nothing
 
 earthqkLoadFctr = dqd' (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
   ("proportionality factor of force that " ++

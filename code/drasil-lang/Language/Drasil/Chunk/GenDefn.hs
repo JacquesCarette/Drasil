@@ -3,7 +3,7 @@ module Language.Drasil.Chunk.GenDefn ( GenDefn, gd', gd'') where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
   HasRefAddress(getRefAdd))
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA), HasLabel(getLabel),
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, IsUnit,
   ExprRelat(relat), HasDerivation(derivations),
   HasAdditionalNotes(getNotes), CommonIdea(abrv))
@@ -38,7 +38,6 @@ instance ConceptDomain      GenDefn where cdom = relC . cdom
 instance ExprRelat          GenDefn where relat = relC . relat
 instance HasDerivation      GenDefn where derivations = deri
 instance HasCitation        GenDefn where getCitations = cit
-instance HasLabel           GenDefn where getLabel = view re
 instance HasShortName       GenDefn where shortname = shortname . view re
 instance HasRefAddress      GenDefn where getRefAdd = getRefAdd . view re
 instance HasAdditionalNotes GenDefn where getNotes = notes

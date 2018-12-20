@@ -9,9 +9,8 @@ import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
   HasRefAddress(getRefAdd), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  DefiningExpr(defnExpr), Quantity, HasSpace(typ),
-  HasDerivation(derivations),  HasAdditionalNotes(getNotes),
-  HasLabel(getLabel), ConceptDomain(cdom), CommonIdea(abrv))
+  DefiningExpr(defnExpr), Quantity, HasSpace(typ), HasDerivation(derivations),
+  HasAdditionalNotes(getNotes), ConceptDomain(cdom), CommonIdea(abrv))
 import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.RefProg(Reference, makeDDRef)
@@ -48,7 +47,6 @@ instance Eq                 DataDefinition where a == b = (a ^. uid) == (b ^. ui
 instance HasDerivation      DataDefinition where derivations = deri
 instance HasAdditionalNotes DataDefinition where getNotes = notes
 instance MayHaveUnit        DataDefinition where getUnit = getUnit . view qd 
-instance HasLabel           DataDefinition where getLabel = view lbl
 instance HasShortName       DataDefinition where shortname = shortname . view lbl
 instance HasRefAddress      DataDefinition where getRefAdd = getRefAdd . view lbl
 instance ConceptDomain      DataDefinition where cdom = ci . cdom

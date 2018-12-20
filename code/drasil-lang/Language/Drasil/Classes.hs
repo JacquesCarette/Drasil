@@ -12,7 +12,6 @@ module Language.Drasil.Classes (
   , HasSpace(typ)
   , HasUnitSymbol(usymb)
   , IsUnit(udefn, getUnits)
-  , HasLabel(getLabel)
   , UnitEq(uniteq)
   , HasReference(getReferences)
   , CommonIdea(abrv)
@@ -100,10 +99,6 @@ class Constrained c where
 class HasReasVal c where
   reasVal     :: Lens' c (Maybe Expr)
 
--- | For those things which "have a label", except that they are now Reference
-class HasLabel c where
-  getLabel      :: c -> Reference
- 
 -- | A Quantity is an 'Idea' with a 'Space' and a symbol.
 -- In theory, it should also have MayHaveUnit, but that causes
 -- all sorts of import cycles (or lost of orphans)

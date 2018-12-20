@@ -15,7 +15,7 @@ import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Quantity, HasSpace(typ),
   HasDerivation(derivations),  HasAdditionalNotes(getNotes), ExprRelat(relat),
-  HasLabel(getLabel), ConceptDomain(cdom), CommonIdea(abrv), Concept, Definition(defn))
+  ConceptDomain(cdom), CommonIdea(abrv), Concept, Definition(defn))
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Development.Unit (MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Relation)
@@ -59,7 +59,6 @@ instance ConceptDomain      InstanceModel where cdom = rc . cdom
 instance ExprRelat          InstanceModel where relat = rc . relat
 instance HasDerivation      InstanceModel where derivations = deri
 instance HasCitation        InstanceModel where getCitations = cit
-instance HasLabel           InstanceModel where getLabel = view lb
 instance HasShortName       InstanceModel where shortname = shortname . view lb
 instance HasRefAddress      InstanceModel where getRefAdd = getRefAdd . view lb
 instance HasAdditionalNotes InstanceModel where getNotes = notes

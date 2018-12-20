@@ -3,7 +3,7 @@
 module Language.Drasil.Document where
 import Data.Drasil.IdeaDicts (documentc)
 import Language.Drasil.Document.Core
-import Language.Drasil.Classes (HasUID(uid), HasLabel(getLabel), HasShortName(shortname))
+import Language.Drasil.Classes (HasUID(uid), HasShortName(shortname))
 import Language.Drasil.Sentence (Sentence(..))
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
 import Language.Drasil.NounPhrase (cn')
@@ -26,7 +26,6 @@ data Section = Section
 makeLenses ''Section
 
 instance HasUID        Section where uid = lab . uid
--- instance HasLabel      Section where getLabel = lab
 instance HasShortName  Section where shortname = shortname . view lab
 
 sectionci :: CI

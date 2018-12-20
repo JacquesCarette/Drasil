@@ -25,7 +25,6 @@ module Language.Drasil (
   , UID
   -- Classes
   , HasUID(uid)
-  , HasLabel(getLabel)
   , NamedIdea(term)
   , HasAdditionalNotes(getNotes)
   , Idea(getA)
@@ -239,7 +238,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   IsUnit, CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences),
-  HasLabel(getLabel), HasRefAddress(getRefAdd), HasSpace(typ),
+  HasRefAddress(getRefAdd), HasSpace(typ),
   DefiningExpr(defnExpr), HasShortName(shortname), Quantity, UncertainQuantity(uncert),
   HasFields(getFields))
 -- import Language.Drasil.Label.Core (Label)

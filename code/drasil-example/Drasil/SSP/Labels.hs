@@ -21,7 +21,7 @@ surfaceBaseSliceL           = makeAssumpRef "Surface-Base-Slice-between-Intersli
 -- Data Definition
 sliceWghtL, baseWtrFL, surfWtrFL, intersliceWtrFL, angleAL, angleBL, lengthBL,
     lengthLbL, lengthLsL, seismicLoadFL, surfLoadsL, intrsliceFL, resShearWOL,
-    mobShearWOL :: Reference
+    mobShearWOL, convertFunc1L, convertFunc2L :: Reference
 sliceWghtL        = makeDDRef "sliceWght"
 baseWtrFL         = makeDDRef "baseWtrF"
 surfWtrFL         = makeDDRef "surfWtrF"
@@ -36,6 +36,8 @@ surfLoadsL        = makeDDRef "surfLoads"
 intrsliceFL       = makeDDRef "intrsliceF"
 resShearWOL       = makeDDRef "resShearWO"
 mobShearWOL       = makeDDRef "mobShearWO"
+convertFunc1L     = makeDDRef "convertFunc1"
+convertFunc2L     = makeDDRef "convertFunc2"
 
 
 -- General Definations

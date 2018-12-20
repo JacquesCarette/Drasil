@@ -18,7 +18,7 @@ import Data.Drasil.SentenceStructures (andThe, eqN, foldlSent, foldlSent_,
 import Drasil.SSP.Assumptions (newA2, newA4, newA6, newA10, newA11, newA12)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, eqlExprSepG, eqlExprNSepG,   
   eqlExprNoKQ, eqlExprNNoKQ, sliceExpr, momExpr)
-import Drasil.SSP.DataDefs (fixme1, fixme2,
+import Drasil.SSP.DataDefs (fixme1, fixme2, convertFunc1, convertFunc2,
   lengthLs, seismicLoadF, sliceWght, 
   surfLoads)
 import Drasil.SSP.GenDefs (normShrRGD, momentEqlGD, normForcEqGD, mobShearWOGD, resShearWOGD,
@@ -57,7 +57,7 @@ fcSfty_rel = sy fs $= sumOp shearRNoIntsl / sumOp shearFNoIntsl
           ((idx (sy sym) (sy varblV) * prodOp)) + idx (sy sym) (sy numbSlices)
 
 fcSfty_desc :: Sentence
-fcSfty_desc = foldlSent_ [makeRef2S newA2, makeRef2S newA6]
+fcSfty_desc = foldlSent_ []
 
 --
 nrmShrFor :: InstanceModel
@@ -262,15 +262,16 @@ fctSftyDerivSentence6 = [S "The definitions of" +:+ makeRef2S resShearWOGD
 fctSftyDerivSentence7 :: [Sentence]
 fctSftyDerivSentence7 = [S "The" +:+ phrase intShrForce +:+ ch intShrForce +:+
   S "can be expressed in terms of the" +:+ phrase intNormForce +:+
-  ch intNormForce +:+ S "using" +:+ makeRef2S normShrRGD `sC` S "resulting in"]
+  ch intNormForce +:+ S "using" +:+ makeRef2S newA6 `sAnd` 
+  makeRef2S normShrRGD `sC` S "resulting in"]
 
 fctSftyDerivSentence8 :: [Sentence]
 fctSftyDerivSentence8 = [S "Rearranging yields the following"]
 
 fctSftyDerivSentence9 :: [Sentence]
 fctSftyDerivSentence9 = [S "The definitions for" +:+ ch shrResC `sAnd`
-  ch mobShrC +:+ S "from" +:+ S "REPLACE WITH NEW DD13" `sAnd` S "NEW DD14" +:+
-  S "simplify the above to", eqN 3]
+  ch mobShrC +:+ S "from" +:+ makeRef2S convertFunc1 `sAnd` 
+  makeRef2S convertFunc2 +:+ S "simplify the above to", eqN 3]
 
 fctSftyDerivSentence10 :: [Sentence]
 fctSftyDerivSentence10 = [S "Versions of", eqN 3, S "instantiated for slices",

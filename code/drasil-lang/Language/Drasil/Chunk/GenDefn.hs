@@ -13,8 +13,11 @@ import Language.Drasil.Chunk.CommonIdea (CI)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Development.Unit (unitWrapper, UnitDefn, MayHaveUnit(getUnit))
+import Language.Drasil.Label.Type (prepend, LblType(RP))
+import Language.Drasil.RefProg (Reference(Reference), repUnd)
 import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.RefProg(Reference, makeGDRef)
+import Language.Drasil.ShortName (shortname')
+
 import Control.Lens (makeLenses, view)
 
 -- | A GenDefn is a RelationConcept that may have units
@@ -42,6 +45,9 @@ instance HasRefAddress      GenDefn where getRefAdd = getRefAdd . view re
 instance HasAdditionalNotes GenDefn where getNotes = notes
 instance MayHaveUnit        GenDefn where getUnit = gdUnit
 instance CommonIdea         GenDefn where abrv = abrv . view ci
+
+makeGDRef :: String -> Reference
+makeGDRef rs = Reference rs (RP (prepend "GD") ("GD:" ++ repUnd rs)) (shortname' rs)
 
 gd' :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
   Derivation -> [Citation] -> String -> [Sentence] -> GenDefn

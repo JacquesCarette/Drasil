@@ -107,7 +107,7 @@ module Language.Drasil (
   -- RefProg
   -- , RefProg(..), IRefProg(..)
   , Reference(..)
-  , makeAssumpRef, makeTabRef, makeGDRef, makeDDRef, makeInstRef, makeTMRef
+  , makeAssumpRef, makeTabRef, makeDDRef, makeInstRef, makeTMRef
   , makeSecRef, makeLstRef, makeFigRef, makeURI
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
@@ -309,7 +309,7 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   rendPersLFM', rendPersLFM'')
 import Language.Drasil.RefTypes(RefAdd, LinkType(Internal, Cite2, External))
 import Language.Drasil.RefProg(Reference(Reference)
-  , makeTabRef, makeGDRef, makeDDRef, makeFigRef, makeSecRef, makeLstRef, makeInstRef
+  , makeTabRef, makeDDRef, makeFigRef, makeSecRef, makeLstRef, makeInstRef
   , makeTMRef, makeAssumpRef, makeURI)
 import Language.Drasil.Label.Type (getAdd, LblType(RP, Citation, URI), IRefProg(..))
 

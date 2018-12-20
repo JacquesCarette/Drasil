@@ -7,16 +7,15 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, IsUnit,
   ExprRelat(relat), HasDerivation(derivations),
   HasAdditionalNotes(getNotes), CommonIdea(abrv))
-import Data.Drasil.IdeaDicts (softEng)
+import Data.Drasil.IdeaDicts (gendef)
 import Language.Drasil.Chunk.Citation (Citation, HasCitation(getCitations))
+import Language.Drasil.Chunk.CommonIdea (CI)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Development.Unit (unitWrapper, UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.RefProg(Reference, makeGDRef)
 import Control.Lens (makeLenses, view)
-import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
-import Language.Drasil.NounPhrase (cn')
 
 -- | A GenDefn is a RelationConcept that may have units
 data GenDefn = GD { _relC  :: RelationConcept
@@ -43,9 +42,6 @@ instance HasRefAddress      GenDefn where getRefAdd = getRefAdd . view re
 instance HasAdditionalNotes GenDefn where getNotes = notes
 instance MayHaveUnit        GenDefn where getUnit = gdUnit
 instance CommonIdea         GenDefn where abrv = abrv . view ci
-
-gendef :: CI
-gendef    = commonIdeaWithDict "gendef"    (cn' "General Definition")                    "GD"        [softEng]
 
 gd' :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
   Derivation -> [Citation] -> String -> [Sentence] -> GenDefn

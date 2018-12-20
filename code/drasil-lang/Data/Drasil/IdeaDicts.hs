@@ -1,6 +1,7 @@
 module Data.Drasil.IdeaDicts where
 
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, mkIdea)
+import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
 import Language.Drasil.NounPhrase (cn')
 
 compScience, softEng, mathematics, progLanguage, idglass, physics, civilEng
@@ -18,3 +19,7 @@ civilEng     = mkIdea  "civilEng"       (cn' "Civil Engineering")     Nothing
 materialEng  = mkIdea  "materialEng"    (cn' "Material Engineering")  Nothing
 documentc    = mkIdea  "documentc"      (cn' "Document")              (Just "Doc")
 knowledgemng = mkIdea  "knowledgemng"   (cn' "Knowledge Management")  Nothing
+
+gendef :: CI
+gendef = commonIdeaWithDict "gendef"    (cn' "General Definition")    "GD"     [softEng]
+

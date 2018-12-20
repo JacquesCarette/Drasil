@@ -102,7 +102,7 @@ class HasReasVal c where
 
 -- | For those things which "have a label", except that they are now Reference
 class HasLabel c where
-  getLabel      :: Lens' c Reference
+  getLabel      :: c -> Reference
  
 -- | A Quantity is an 'Idea' with a 'Space' and a symbol.
 -- In theory, it should also have MayHaveUnit, but that causes

@@ -16,7 +16,7 @@ module Drasil.Sections.SpecificSystemDescription
   , listofTablesToRefs
   ) where
 
-import Language.Drasil hiding (Sect)
+import Language.Drasil
 import Language.Drasil.Development (MayHaveUnit)
 import Language.Drasil.Utils (sortBySymbol)
 

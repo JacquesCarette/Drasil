@@ -71,7 +71,7 @@ instance Theory             TheoryModel where
   defined_quant = defq
   invariants    = invs
   defined_fun   = dfun
-instance HasLabel           TheoryModel where getLabel = lb
+instance HasLabel           TheoryModel where getLabel = view lb
 instance HasShortName       TheoryModel where shortname = shortname . view lb
 instance HasRefAddress      TheoryModel where getRefAdd = getRefAdd . view lb
 instance CommonIdea         TheoryModel where abrv = abrv . view ci

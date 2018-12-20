@@ -48,7 +48,7 @@ instance Eq                 DataDefinition where a == b = (a ^. uid) == (b ^. ui
 instance HasDerivation      DataDefinition where derivations = deri
 instance HasAdditionalNotes DataDefinition where getNotes = notes
 instance MayHaveUnit        DataDefinition where getUnit = getUnit . view qd 
-instance HasLabel           DataDefinition where getLabel = lbl
+instance HasLabel           DataDefinition where getLabel = view lbl
 instance HasShortName       DataDefinition where shortname = shortname . view lbl
 instance HasRefAddress      DataDefinition where getRefAdd = getRefAdd . view lbl
 instance ConceptDomain      DataDefinition where cdom = ci . cdom

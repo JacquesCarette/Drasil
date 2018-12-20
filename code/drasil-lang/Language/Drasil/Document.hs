@@ -26,7 +26,7 @@ data Section = Section
 makeLenses ''Section
 
 instance HasUID        Section where uid = lab . uid
-instance HasLabel      Section where getLabel = lab
+-- instance HasLabel      Section where getLabel = lab
 instance HasShortName  Section where shortname = shortname . view lab
 
 sectionci :: CI

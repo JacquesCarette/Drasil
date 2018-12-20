@@ -52,14 +52,14 @@ data InclUnits = IncludeUnits -- In description field (for other symbols)
 tmodel :: (HasSymbolTable ctx, HasDataDefnTable ctx, HasInsModelTable ctx, HasGendefTable ctx, HasTheoryModelTable ctx
   , HasTraceTable ctx, HasRefbyTable ctx, HasAssumpTable ctx, HasConceptInstance ctx,
   HasSectionTable ctx, HasLabelledContent ctx) => Fields -> ctx  -> TheoryModel -> LabelledContent
-tmodel fs m t = mkRawLC (Defini TM (foldr (mkTMField t m) [] fs)) (t ^. getLabel)
+tmodel fs m t = mkRawLC (Defini TM (foldr (mkTMField t m) [] fs)) (getLabel t)
 
 -- | Create a data definition using a list of fields, a database of symbols, and a
 -- QDefinition (called automatically by 'SCSSub' program)
 ddefn :: (HasSymbolTable ctx, HasDataDefnTable ctx, HasInsModelTable ctx, HasGendefTable ctx, HasTheoryModelTable ctx
   , HasTraceTable ctx, HasRefbyTable ctx, HasAssumpTable ctx, HasConceptInstance ctx,
   HasSectionTable ctx, HasLabelledContent ctx) => Fields -> ctx -> DataDefinition -> LabelledContent
-ddefn fs m d = mkRawLC (Defini DD (foldr (mkDDField d m) [] fs)) (d ^. getLabel)
+ddefn fs m d = mkRawLC (Defini DD (foldr (mkDDField d m) [] fs)) (getLabel d)
 
 -- | Create a general definition using a list of fields, database of symbols,
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'
@@ -67,14 +67,14 @@ ddefn fs m d = mkRawLC (Defini DD (foldr (mkDDField d m) [] fs)) (d ^. getLabel)
 gdefn :: (HasSymbolTable ctx, HasDataDefnTable ctx, HasInsModelTable ctx, HasGendefTable ctx, HasTheoryModelTable ctx
   , HasTraceTable ctx, HasRefbyTable ctx, HasAssumpTable ctx, HasConceptInstance ctx,
   HasSectionTable ctx, HasLabelledContent ctx) => Fields -> ctx -> GenDefn -> LabelledContent
-gdefn fs m g = mkRawLC (Defini General (foldr (mkGDField g m) [] fs)) (g ^. getLabel)
+gdefn fs m g = mkRawLC (Defini General (foldr (mkGDField g m) [] fs)) (getLabel g)
 
 -- | Create an instance model using a list of fields, database of symbols,
 -- and an 'InstanceModel' chunk (called automatically by 'SCSSub' program)
 instanceModel :: (HasSymbolTable ctx, HasDataDefnTable ctx, HasInsModelTable ctx, HasGendefTable ctx, HasTheoryModelTable ctx
   , HasTraceTable ctx, HasRefbyTable ctx, HasAssumpTable ctx, HasConceptInstance ctx,
   HasSectionTable ctx, HasLabelledContent ctx) => Fields -> ctx -> InstanceModel -> LabelledContent
-instanceModel fs m i = mkRawLC (Defini Instance (foldr (mkIMField i m) [] fs)) (i ^. getLabel)
+instanceModel fs m i = mkRawLC (Defini Instance (foldr (mkIMField i m) [] fs)) (getLabel i)
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
 -- or IM definition automatically (called automatically by 'SCSSub' program)

@@ -37,17 +37,6 @@ intrsliceFL       = makeDDRef "intrsliceF"
 resShearWOL       = makeDDRef "resShearWO"
 mobShearWOL       = makeDDRef "mobShearWO"
 
-
--- General Definations
-genDef2Label, genDef3Label, genDef4Label, genDef5Label, genDef6Label 
-    :: Reference
-
-genDef2Label  = makeGDRef "bsShrFEq"
-genDef3Label  = makeGDRef "resShr"
-genDef4Label  = makeGDRef "mobShr"
-genDef5Label  = makeGDRef "normShrR"
-genDef6Label  = makeGDRef "momentEql"
-
 -- Instance Models
 fctSftyL, nrmShrForL, inslideFxL, crtSlpIdL :: Reference
 fctSftyL = makeInstRef "fctSfty"

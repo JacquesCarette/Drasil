@@ -68,7 +68,7 @@ nmFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
 --
 bsShrFEq :: RelationConcept
 bsShrFEq = makeRC "bsShrFEq" (nounPhraseSP "base shear force equilibrium")
-  bShFEq_desc bShFEq_rel -- genDef2Label
+  bShFEq_desc bShFEq_rel
 
 bShFEq_rel :: Relation
 bShFEq_rel = inxi mobShrI $= eqlExprN sin cos

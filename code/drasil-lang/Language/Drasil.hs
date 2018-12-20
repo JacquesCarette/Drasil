@@ -184,7 +184,7 @@ module Language.Drasil (
   , names
   -- Label.Type
   , getAdd
-  , LblType(RP, Citation, URI, MetaLink), IRefProg(..)
+  , LblType(RP, Citation, URI), IRefProg(..)
   -- Development.Sentence
   , introduceAbb, phrase, plural, phrase's, plural's, at_start, at_start'
   , titleize, titleize'
@@ -312,8 +312,7 @@ import Language.Drasil.RefTypes(RefAdd, LinkType(Internal, Cite2, External))
 import Language.Drasil.RefProg(Reference(Reference)
   , makeTabRef, makeGDRef, makeDDRef, makeFigRef, makeSecRef, makeLstRef, makeInstRef
   , makeTMRef, makeAssumpRef, makeURI)
-import Language.Drasil.Label.Type (getAdd,
-    LblType(RP, Citation, URI, MetaLink), IRefProg(..))
+import Language.Drasil.Label.Type (getAdd, LblType(RP, Citation, URI), IRefProg(..))
 
 import Language.Drasil.UnitLang (USymb(US))
 

@@ -288,8 +288,6 @@ spec sm (Ref (Reference _ (Citation ra) sn)) =
   P.Ref Cite2    ra $ spec sm $ renderCitation sm sn
 spec sm (Ref (Reference _ (URI ra) sn)) = 
   P.Ref External    ra $ spec sm $ renderURI sm sn
-spec sm (Ref (Reference _ (MetaLink ra) sn)) = 
-  P.Ref External    ra $ spec sm $ renderURI sm sn -- not a URI, renders same though
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm

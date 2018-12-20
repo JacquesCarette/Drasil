@@ -39,10 +39,9 @@ mobShearWOL       = makeDDRef "mobShearWO"
 
 
 -- General Definations
-genDef1Label, genDef2Label, genDef3Label, genDef4Label, genDef5Label, genDef6Label 
+genDef2Label, genDef3Label, genDef4Label, genDef5Label, genDef6Label 
     :: Reference
 
-genDef1Label  = makeGDRef "normForcEq"
 genDef2Label  = makeGDRef "bsShrFEq"
 genDef3Label  = makeGDRef "resShr"
 genDef4Label  = makeGDRef "mobShr"

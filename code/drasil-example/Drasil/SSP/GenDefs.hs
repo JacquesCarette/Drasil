@@ -53,7 +53,7 @@ momentEqlGD  = gd'' momentEql   [chen2005]   "momentEql"   [momEql_desc]
 --
 normForcEq :: RelationConcept
 normForcEq = makeRC "normForcEq" (nounPhraseSP "normal force equilibrium")
-  nmFEq_desc nmFEq_rel -- genDef1Label
+  nmFEq_desc nmFEq_rel
 
 nmFEq_rel :: Relation
 nmFEq_rel = inxi totNrmForce $= eqlExpr cos sin

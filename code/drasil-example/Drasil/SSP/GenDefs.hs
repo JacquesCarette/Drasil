@@ -53,7 +53,7 @@ momentEqlGD  = gd'' momentEql   [chen2005]   "momentEql"   [momEql_desc]
 --
 normForcEq :: RelationConcept
 normForcEq = makeRC "normForcEq" (nounPhraseSP "normal force equilibrium")
-  nmFEq_desc nmFEq_rel -- genDef1Label
+  nmFEq_desc nmFEq_rel
 
 nmFEq_rel :: Relation
 nmFEq_rel = inxi totNrmForce $= eqlExpr cos sin
@@ -68,7 +68,7 @@ nmFEq_desc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
 --
 bsShrFEq :: RelationConcept
 bsShrFEq = makeRC "bsShrFEq" (nounPhraseSP "base shear force equilibrium")
-  bShFEq_desc bShFEq_rel -- genDef2Label
+  bShFEq_desc bShFEq_rel
 
 bShFEq_rel :: Relation
 bShFEq_rel = inxi mobShrI $= eqlExprN sin cos

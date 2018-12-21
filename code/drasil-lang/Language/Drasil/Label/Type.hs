@@ -2,7 +2,7 @@
 -- different ways of construction  ways to mark labels.
 module Language.Drasil.Label.Type(
   -- types
-    LblType(RP, Citation, URI, MetaLink), IRefProg(..)
+    LblType(RP, Citation, URI), IRefProg(..)
   -- LblType accessor
   , getAdd
   -- IRefProg constructors
@@ -15,8 +15,7 @@ import Language.Drasil.UID (UID)
 -- An RP is a decorated internal reference
 -- Citation is a citation
 -- URI is for URLs and other external links
--- MetaLink is a link to Drasil-based knowledge (such as for ConceptInstance)
-data LblType = RP IRefProg String | Citation String | URI String | MetaLink String
+data LblType = RP IRefProg String | Citation String | URI String
 
 data IRefProg =
     Deferred UID                -- Deferred lookup; done later
@@ -28,7 +27,6 @@ getAdd :: LblType -> String
 getAdd (RP _ s)     = s
 getAdd (Citation s) = s
 getAdd (URI s)      = s
-getAdd (MetaLink s) = s
 
 name :: IRefProg
 name = Name

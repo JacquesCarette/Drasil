@@ -39,18 +39,6 @@ mobShearWOL       = makeDDRef "mobShearWO"
 convertFunc1L     = makeDDRef "convertFunc1"
 convertFunc2L     = makeDDRef "convertFunc2"
 
-
--- General Definations
-genDef1Label, genDef2Label, genDef3Label, genDef4Label, genDef5Label, genDef6Label 
-    :: Reference
-
-genDef1Label  = makeGDRef "normForcEq"
-genDef2Label  = makeGDRef "bsShrFEq"
-genDef3Label  = makeGDRef "resShr"
-genDef4Label  = makeGDRef "mobShr"
-genDef5Label  = makeGDRef "normShrR"
-genDef6Label  = makeGDRef "momentEql"
-
 -- Instance Models
 fctSftyL, nrmShrForL, inslideFxL, crtSlpIdL :: Reference
 fctSftyL = makeInstRef "fctSfty"

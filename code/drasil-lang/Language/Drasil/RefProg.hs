@@ -2,7 +2,7 @@
 module Language.Drasil.RefProg 
   (Reference(Reference),
    repUnd,
-   makeGDRef, makeTabRef, makeFigRef, makeInstRef, makeDDRef, makeCiteRef,
+   makeTabRef, makeFigRef, makeInstRef, makeDDRef, makeCiteRef,
    makeSecRef, makeLstRef, makeTMRef, makeURI, makeAssumpRef)
   where
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
@@ -34,9 +34,6 @@ repUnd = map rep
     rep c = c
 
 -- FIXME: horrible hacks.
-makeGDRef :: String -> Reference
-makeGDRef rs = Reference rs (RP (prepend "GD") ("GD:" ++ repUnd rs)) (shortname' rs)
-
 makeTabRef :: String -> Reference
 makeTabRef rs = Reference rs (RP (prepend "Tab") ("Table:" ++ repUnd rs)) (shortname' rs)
 

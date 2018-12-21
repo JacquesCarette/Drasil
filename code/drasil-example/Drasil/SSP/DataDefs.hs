@@ -380,7 +380,7 @@ resShrDerivation = [
   S "defined as", ch shrResI, S "in" +:+. makeRef2S genDef3Label, S "The",
   phrase nrmFSubWat, S "in the", phrase equation, S "for", ch shrResI,
   S "of the soil is defined in the perpendicular force equilibrium",
-  S "of a slice from", makeRefS genDef2Label `sC` S "using the", getTandS nrmFSubWat,
+  S "of a slice from", makeRefS bsShrFEq `sC` S "using the", getTandS nrmFSubWat,
   S "of", makeRef2S effStress, S "shown in", eqN 5],
   
   eqUnR' $ (inxi nrmFSubWat) $= eqlExpr cos sin (\x y -> x -

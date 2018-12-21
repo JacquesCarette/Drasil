@@ -37,11 +37,6 @@ dd2HtFluxPL = makeDDRef "ht_flux_P"
 dd3HtFusionL = makeDDRef "htFusion"
 dd4MeltFracL = makeDDRef "melt_frac"
 
--- General Definitions
-nwtnCoolingL, rocTempSimpL :: Reference
-nwtnCoolingL = makeGDRef "nwtnCooling"
-rocTempSimpL = makeGDRef "rocTempSimp"
-
 -- Instance Models
 eBalanceOnWtrL, eBalanceOnPCML, heatEInWtrL, heatEInPCML :: Reference
 eBalanceOnWtrL = makeInstRef "eBalanceOnWtr"

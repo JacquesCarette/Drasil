@@ -17,7 +17,7 @@ import Language.Drasil.People (People)
 import Language.Drasil.Sentence (Sentence)
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
-import Language.Drasil.Classes (HasLabel(getLabel), HasFields(getFields))
+import Language.Drasil.Classes (HasFields(getFields))
 -- import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
 import Language.Drasil.Data.Citation (author, chapter, pages, editor, bookTitle, title, 
   year, school, journal, institution, note, publisher, CitationKind(..), CiteField)
@@ -40,7 +40,6 @@ data Citation = Cite
 makeLenses ''Citation
 
 instance HasUID       Citation where uid       = lb . uid
-instance HasLabel     Citation where getLabel  = lb
 instance HasShortName Citation where shortname = shortname . view lb
 instance HasFields    Citation where getFields = fields
 

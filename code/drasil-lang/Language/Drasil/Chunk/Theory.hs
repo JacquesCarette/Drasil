@@ -8,7 +8,7 @@ import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
   HasRefAddress(getRefAdd))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Quantity,
   Definition(defn), ConceptDomain(cdom), Concept, HasReference(getReferences),
-  HasAdditionalNotes(getNotes), HasLabel(getLabel), CommonIdea(abrv))
+  HasAdditionalNotes(getNotes), CommonIdea(abrv))
 import Language.Drasil.Development.Unit (MayHaveUnit)
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.RefProg (Reference)
@@ -71,7 +71,6 @@ instance Theory             TheoryModel where
   defined_quant = defq
   invariants    = invs
   defined_fun   = dfun
-instance HasLabel           TheoryModel where getLabel = lb
 instance HasShortName       TheoryModel where shortname = shortname . view lb
 instance HasRefAddress      TheoryModel where getRefAdd = getRefAdd . view lb
 instance CommonIdea         TheoryModel where abrv = abrv . view ci

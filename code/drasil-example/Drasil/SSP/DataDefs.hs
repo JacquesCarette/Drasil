@@ -17,7 +17,7 @@ import Drasil.SSP.Labels (sliceWghtL, baseWtrFL,
 import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
   dryWeight, earthqkLoadFctr, fricAngle, fs, impLoadAngle, intNormForce, 
-  intShrForce, inx, inxi, inxiM1, mobShrC, normToShear, numbSlices,
+  intShrForce, inx, inxi, inxiM1, mobShrC, normToShear,
   satWeight, scalFunc, shrResC, slcWght, 
   slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce, surfLngth, 
   surfLoad, ufixme1, ufixme2, waterHght, waterWeight, watrForce)
@@ -241,7 +241,7 @@ convertFunc2Eqn = ((sy normToShear * inxi scalFunc *
   (cos (inxi baseAngle)) - (sin (inxi baseAngle))) * tan (sy fricAngle) - 
   (sy normToShear * inxi scalFunc * (sin (inxi baseAngle)) + 
   (cos (inxi baseAngle))) * (sy fs)) / 
-  (idx (sy shrResC) (sy numbSlices - int 1))
+  (inxiM1 shrResC)
 
 
 {--DD10

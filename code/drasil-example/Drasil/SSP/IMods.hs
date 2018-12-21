@@ -333,7 +333,7 @@ fctSftyDerivSentence20 = [ch fs +:+ S "depends on the unknowns" +:+
 fctSftyDerivEqn1 :: Expr
 fctSftyDerivEqn1 = --FIXME: pull the right side of this from GD4
   eqlExpr sin cos (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
-  $= ((inxi totNrmForce) * tan (sy fricAngle) + (sy cohesion) *
+  $= ((inxi nrmFSubWat) * tan (sy fricAngle) + (sy cohesion) *
   (inxi baseLngth)) / (sy fs)
 
 fctSftyDerivEqn2 :: Expr

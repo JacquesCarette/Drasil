@@ -181,6 +181,17 @@ Scaling Function: magnitude of interslice forces as a function of the x coordina
 </tr>
 <tr>
 <td>
+<em>F<sub>S</sub></em>
+</td>
+<td>
+Factor of Safety: The global stability of a surface in a slope
+</td>
+<td>
+--
+</td>
+</tr>
+<tr>
+<td>
 <em>F<sub>x</sub></em>
 </td>
 <td>
@@ -203,18 +214,7 @@ N
 </tr>
 <tr>
 <td>
-<em>FS</em>
-</td>
-<td>
-Factor of Safety: The global stability of a surface in a slope
-</td>
-<td>
---
-</td>
-</tr>
-<tr>
-<td>
-<em>FS<sub>min</sub></em>
+<em>F<sub>S</sub><sub>min</sub></em>
 </td>
 <td>
 Minimum Factor of Safety: The minimum factor of safety
@@ -668,7 +668,7 @@ Function: generic minimization function or algorithm
 <em>Φ</em>
 </td>
 <td>
-Constant: converts resistive shear without the influence of interslice forces, to a calculation considering the interslice forces
+First Function for Incorporating Interslice Forces Into Shear Force: converts resistive shear without the influence of interslice forces, to a calculation considering the interslice forces
 </td>
 <td>
 N
@@ -690,7 +690,7 @@ Effective Angle of Friction: The angle of inclination with respect to the horizo
 <em>Ψ</em>
 </td>
 <td>
-Constant: converts mobile shear without the influence of interslice forces, to a calculation considering the interslice forces
+Second Function for Incorporating Interslice Forces Into Shear Force: converts mobile shear without the influence of interslice forces, to a calculation considering the interslice forces
 </td>
 <td>
 N
@@ -1235,7 +1235,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>FS = <div class="fraction">
+<em>F<sub>S</sub> = <div class="fraction">
 <span class="fup">
 P
 </span>
@@ -1253,7 +1253,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>FS</em> is the factor of safety (Unitless)
+<em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 <li>
 <em>P</em> is the resistive shear force (N)
@@ -1270,7 +1270,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-The stability metric of the slope, known as the factor of safety (<em>FS</em>), is determined by the ratio of the shear force at the base of the slope (<em>S</em>), and the resistive shear (<em>P</em>).
+The stability metric of the slope, known as the factor of safety (<em>F<sub>S</sub></em>), is determined by the ratio of the shear force at the base of the slope (<em>S</em>), and the resistive shear (<em>P</em>).
 </p>
 </td>
 </tr>
@@ -1827,14 +1827,14 @@ Equation
 P<sub>i</sub>
 </span>
 <span class="fdn">
-FS
+F<sub>S</sub>
 </span>
 </div> = <div class="fraction">
 <span class="fup">
 N&prime;<sub>i</sub>&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(α<sub>i</sub>)
 </span>
 <span class="fdn">
-FS
+F<sub>S</sub>
 </span>
 </div></em>
 </div>
@@ -1856,7 +1856,7 @@ Description
 <em>P</em> is the resistive shear force (N)
 </li>
 <li>
-<em>FS</em> is the factor of safety (Unitless)
+<em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 <li>
 <em>N&prime;</em> is the effective normal force (N)
@@ -1882,7 +1882,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-From the definition of the factor of safety in <a href=#T:factOfSafety>TM: factOfSafety</a>, and the new definition of <em>P</em>, a new relation for the net mobile shear force of the slice <em>T</em> is found as the resistive shear <em>P</em> (<a href=#GD:resShr>GD: resShr</a>) divided by the factor of safety <em>FS</em>. <a href=#A:Factor-of-Safety>A: Factor-of-Safety</a> <a href=#A:Soil-Layer-Homogeneous>A: Soil-Layer-Homogeneous</a> <a href=#A:Soil-Properties>A: Soil-Properties</a> <a href=#A:Soil-Layers-Isotropic>A: Soil-Layers-Isotropic</a>
+From the definition of the factor of safety in <a href=#T:factOfSafety>TM: factOfSafety</a>, and the new definition of <em>P</em>, a new relation for the net mobile shear force of the slice <em>T</em> is found as the resistive shear <em>P</em> (<a href=#GD:resShr>GD: resShr</a>) divided by the factor of safety <em>F<sub>S</sub></em>. <a href=#A:Factor-of-Safety>A: Factor-of-Safety</a> <a href=#A:Soil-Layer-Homogeneous>A: Soil-Layer-Homogeneous</a> <a href=#A:Soil-Properties>A: Soil-Properties</a> <a href=#A:Soil-Layers-Isotropic>A: Soil-Layers-Isotropic</a>
 </p>
 </td>
 </tr>
@@ -3530,7 +3530,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Constant
+First function for incorporating interslice forces into shear force
 </p>
 </td>
 </tr>
@@ -3560,7 +3560,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>Φ = (λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i</sub>)&plus;cos(α<sub>i</sub>))&#8239;FS</em>
+<em>Φ = (λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i</sub>)&plus;cos(α<sub>i</sub>))&#8239;F<sub>S</sub></em>
 </div>
 </td>
 </tr>
@@ -3571,7 +3571,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>Φ</em> is the constant (N)
+<em>Φ</em> is the first function for incorporating interslice forces into shear force (N)
 </li>
 <li>
 <em>λ</em> is the interslice normal/shear force ratio (Unitless)
@@ -3589,7 +3589,7 @@ Description
 <em>φ&prime;</em> is the effective angle of friction (&deg;)
 </li>
 <li>
-<em>FS</em> is the factor of safety (Unitless)
+<em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 </ul>
 </td>
@@ -3624,7 +3624,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Constant
+Second function for incorporating interslice forces into shear force
 </p>
 </td>
 </tr>
@@ -3656,10 +3656,10 @@ Equation
 <div class="equation">
 <em>Ψ = <div class="fraction">
 <span class="fup">
-(λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i</sub>)&plus;cos(α<sub>i</sub>))&#8239;FS
+(λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i</sub>)&plus;cos(α<sub>i</sub>))&#8239;F<sub>S</sub>
 </span>
 <span class="fdn">
-Φ<sub>n&minus;1</sub>
+Φ<sub>i&minus;1</sub>
 </span>
 </div></em>
 </div>
@@ -3672,7 +3672,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>Ψ</em> is the constant (N)
+<em>Ψ</em> is the second function for incorporating interslice forces into shear force (N)
 </li>
 <li>
 <em>λ</em> is the interslice normal/shear force ratio (Unitless)
@@ -3690,13 +3690,10 @@ Description
 <em>φ&prime;</em> is the effective angle of friction (&deg;)
 </li>
 <li>
-<em>FS</em> is the factor of safety (Unitless)
+<em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 <li>
-<em>Φ</em> is the constant (N)
-</li>
-<li>
-<em>n</em> is the number of slices (Unitless)
+<em>Φ</em> is the first function for incorporating interslice forces into shear force (N)
 </li>
 </ul>
 </td>
@@ -3925,7 +3922,7 @@ Output
 </th>
 <td>
 <p class="paragraph">
-<em>FS</em>
+<em>F<sub>S</sub></em>
 </p>
 </td>
 </tr>
@@ -3949,7 +3946,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>FS = <div class="fraction">
+<em>F<sub>S</sub> = <div class="fraction">
 <span class="fup">
 &sum;<sub>v = 1</sub><sup>n&minus;1</sup>R<sub>v</sub>&#8239;&prod;<sub>u = i</sub><sup>n&minus;1</sup>Ψ<sub>u</sub>&plus;R<sub>n</sub>
 </span>
@@ -3967,7 +3964,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>FS</em> is the factor of safety (Unitless)
+<em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 <li>
 <em>R</em> is the resistive shear force (N)
@@ -3976,7 +3973,7 @@ Description
 <em>v</em> is the local index (Unitless)
 </li>
 <li>
-<em>Ψ</em> is the constant (N)
+<em>Ψ</em> is the second function for incorporating interslice forces into shear force (N)
 </li>
 <li>
 <em>u</em> is the local index (Unitless)
@@ -4028,10 +4025,10 @@ The mobilized shear force defined in <a href=#GD:bsShrFEq>GD: bsShrFEq</a> can b
 <div class="equation">
 <em>(W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>) = <div class="fraction">
 <span class="fup">
-N<sub>i</sub>&#8239;tan(φ&prime;)&plus;c&prime;&#8239;ℓ<sub>b,i</sub>
+N&prime;<sub>i</sub>&#8239;tan(φ&prime;)&plus;c&prime;&#8239;ℓ<sub>b,i</sub>
 </span>
 <span class="fdn">
-FS
+F<sub>S</sub>
 </span>
 </div></em>
 </div>
@@ -4050,7 +4047,7 @@ Substituting equation (2) into equation (1) gives:
 ((W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(φ&prime;)&plus;c&prime;&#8239;ℓ<sub>b,i</sub>
 </span>
 <span class="fdn">
-FS
+F<sub>S</sub>
 </span>
 </div></em>
 </div>
@@ -4063,7 +4060,7 @@ Since the interslice shear force <em>X</em> and interslice normal force <em>G</e
 ((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&plus;(&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>)&#8239;sin(α<sub>i</sub>)&plus;(&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>)&#8239;cos(α<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(φ&prime;)&plus;c&prime;&#8239;ℓ<sub>b,i</sub>
 </span>
 <span class="fdn">
-FS
+F<sub>S</sub>
 </span>
 </div></em>
 </div>
@@ -4076,7 +4073,7 @@ Applying assumptions <a href=#A:Seismic-Force>A: Seismic-Force</a> and <a href=#
 ((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>))&#8239;cos(α<sub>i</sub>)&plus;(&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&plus;(&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>)&#8239;sin(α<sub>i</sub>)&plus;(&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>)&#8239;cos(α<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(φ&prime;)&plus;c&prime;&#8239;ℓ<sub>b,i</sub>
 </span>
 <span class="fdn">
-FS
+F<sub>S</sub>
 </span>
 </div></em>
 </div>
@@ -4089,7 +4086,7 @@ The definitions of <a href=#GD:resShearWO>GD: resShearWO</a> and <a href=#GD:mob
 R<sub>i</sub>&plus;((&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>)&#8239;cos(α<sub>i</sub>)&plus;(&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>)&#8239;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)
 </span>
 <span class="fdn">
-FS
+F<sub>S</sub>
 </span>
 </div></em>
 </div>
@@ -4102,7 +4099,7 @@ The interslice shear force <em>X</em> can be expressed in terms of the interslic
 R<sub>i</sub>&plus;((&minus;λ&#8239;f<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&plus;λ&#8239;f<sub>i</sub>&#8239;G<sub>i</sub>)&#8239;cos(α<sub>i</sub>)&plus;(&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>)&#8239;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)
 </span>
 <span class="fdn">
-FS
+F<sub>S</sub>
 </span>
 </div></em>
 </div>
@@ -4110,43 +4107,43 @@ FS
 Rearranging yields the following:
 </p>
 <div class="equation">
-<em>G<sub>i</sub>&#8239;((λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i</sub>)&plus;cos(α<sub>i</sub>))&#8239;FS) = G<sub>i&minus;1</sub>&#8239;((λ&#8239;f<sub>i&minus;1</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)&minus;(λ&#8239;f<sub>i&minus;1</sub>&#8239;sin(α<sub>i</sub>)&plus;cos(α<sub>i</sub>))&#8239;FS)&plus;FS&#8239;T<sub>i</sub>&minus;R<sub>i</sub></em>
+<em>G<sub>i</sub>&#8239;((λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i</sub>)&plus;cos(α<sub>i</sub>))&#8239;F<sub>S</sub>) = G<sub>i&minus;1</sub>&#8239;((λ&#8239;f<sub>i&minus;1</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;)&minus;(λ&#8239;f<sub>i&minus;1</sub>&#8239;sin(α<sub>i</sub>)&plus;cos(α<sub>i</sub>))&#8239;F<sub>S</sub>)&plus;F<sub>S</sub>&#8239;T<sub>i</sub>&minus;R<sub>i</sub></em>
 </div>
 <p class="paragraph">
 The definitions for <em>Φ</em> and <em>Ψ</em> from <a href=#DD:convertFunc1>DD: convertFunc1</a> and <a href=#DD:convertFunc2>DD: convertFunc2</a> simplify the above to equation (3):
 </p>
 <div class="equation">
-<em>G<sub>i</sub>&#8239;Φ<sub>i</sub> = Ψ<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&#8239;Φ<sub>i&minus;1</sub>&plus;FS&#8239;T<sub>i</sub>&minus;R<sub>i</sub></em>
+<em>G<sub>i</sub>&#8239;Φ<sub>i</sub> = Ψ<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&#8239;Φ<sub>i&minus;1</sub>&plus;F<sub>S</sub>&#8239;T<sub>i</sub>&minus;R<sub>i</sub></em>
 </div>
 <p class="paragraph">
 Versions of equation (3) instantiated for slices 1 to <em>n</em> are shown below:
 </p>
 <div class="equation">
-<em>G<sub>1</sub>&#8239;Φ<sub>1</sub> = Ψ<sub>0</sub>&#8239;G<sub>0</sub>&#8239;Φ<sub>0</sub>&plus;FS&#8239;T<sub>1</sub>&minus;R<sub>1</sub></em>
+<em>G<sub>1</sub>&#8239;Φ<sub>1</sub> = Ψ<sub>0</sub>&#8239;G<sub>0</sub>&#8239;Φ<sub>0</sub>&plus;F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub></em>
 </div>
 <div class="equation">
-<em>G<sub>2</sub>&#8239;Φ<sub>2</sub> = Ψ<sub>1</sub>&#8239;G<sub>1</sub>&#8239;Φ<sub>1</sub>&plus;FS&#8239;T<sub>2</sub>&minus;R<sub>2</sub></em>
+<em>G<sub>2</sub>&#8239;Φ<sub>2</sub> = Ψ<sub>1</sub>&#8239;G<sub>1</sub>&#8239;Φ<sub>1</sub>&plus;F<sub>S</sub>&#8239;T<sub>2</sub>&minus;R<sub>2</sub></em>
 </div>
 <div class="equation">
-<em>G<sub>3</sub>&#8239;Φ<sub>3</sub> = Ψ<sub>2</sub>&#8239;G<sub>2</sub>&#8239;Φ<sub>2</sub>&plus;FS&#8239;T<sub>3</sub>&minus;R<sub>3</sub></em>
+<em>G<sub>3</sub>&#8239;Φ<sub>3</sub> = Ψ<sub>2</sub>&#8239;G<sub>2</sub>&#8239;Φ<sub>2</sub>&plus;F<sub>S</sub>&#8239;T<sub>3</sub>&minus;R<sub>3</sub></em>
 </div>
 <p class="paragraph">
 ...
 </p>
 <div class="equation">
-<em>G<sub>n&minus;2</sub>&#8239;Φ<sub>n&minus;2</sub> = Ψ<sub>n&minus;3</sub>&#8239;G<sub>n&minus;3</sub>&#8239;Φ<sub>n&minus;3</sub>&plus;FS&#8239;T<sub>n&minus;2</sub>&minus;R<sub>n&minus;2</sub></em>
+<em>G<sub>n&minus;2</sub>&#8239;Φ<sub>n&minus;2</sub> = Ψ<sub>n&minus;3</sub>&#8239;G<sub>n&minus;3</sub>&#8239;Φ<sub>n&minus;3</sub>&plus;F<sub>S</sub>&#8239;T<sub>n&minus;2</sub>&minus;R<sub>n&minus;2</sub></em>
 </div>
 <div class="equation">
-<em>G<sub>n&minus;1</sub>&#8239;Φ<sub>n&minus;1</sub> = Ψ<sub>n&minus;2</sub>&#8239;G<sub>n&minus;2</sub>&#8239;Φ<sub>n&minus;2</sub>&plus;FS&#8239;T<sub>n&minus;1</sub>&minus;R<sub>n&minus;1</sub></em>
+<em>G<sub>n&minus;1</sub>&#8239;Φ<sub>n&minus;1</sub> = Ψ<sub>n&minus;2</sub>&#8239;G<sub>n&minus;2</sub>&#8239;Φ<sub>n&minus;2</sub>&plus;F<sub>S</sub>&#8239;T<sub>n&minus;1</sub>&minus;R<sub>n&minus;1</sub></em>
 </div>
 <div class="equation">
-<em>G<sub>n</sub>&#8239;Φ<sub>n</sub> = Ψ<sub>n&minus;1</sub>&#8239;G<sub>n&minus;1</sub>&#8239;Φ<sub>n&minus;1</sub>&plus;FS&#8239;T<sub>n</sub>&minus;R<sub>n</sub></em>
+<em>G<sub>n</sub>&#8239;Φ<sub>n</sub> = Ψ<sub>n&minus;1</sub>&#8239;G<sub>n&minus;1</sub>&#8239;Φ<sub>n&minus;1</sub>&plus;F<sub>S</sub>&#8239;T<sub>n</sub>&minus;R<sub>n</sub></em>
 </div>
 <p class="paragraph">
 Applying <a href=#A:Edge-Slices>A: Edge-Slices</a>, which says that <em>G<sub>0</sub></em> and <em>G<sub>n</sub></em> are zero, results in the following special cases: equation (8) for the first slice:
 </p>
 <div class="equation">
-<em>G<sub>1</sub>&#8239;Φ<sub>1</sub> = FS&#8239;T<sub>1</sub>&minus;R<sub>1</sub></em>
+<em>G<sub>1</sub>&#8239;Φ<sub>1</sub> = F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub></em>
 </div>
 <p class="paragraph">
 and equation (9) for the <em>n</em>th slice:
@@ -4154,7 +4151,7 @@ and equation (9) for the <em>n</em>th slice:
 <div class="equation">
 <em>&minus;(<div class="fraction">
 <span class="fup">
-FS&#8239;T<sub>n</sub>&minus;R<sub>n</sub>
+F<sub>S</sub>&#8239;T<sub>n</sub>&minus;R<sub>n</sub>
 </span>
 <span class="fdn">
 Ψ<sub>n&minus;1</sub>
@@ -4165,19 +4162,19 @@ FS&#8239;T<sub>n</sub>&minus;R<sub>n</sub>
 Substituting equation (8) into equation (4) yields equation (10):
 </p>
 <div class="equation">
-<em>G<sub>2</sub>&#8239;Φ<sub>2</sub> = Ψ<sub>1</sub>&#8239;(FS&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;FS&#8239;T<sub>2</sub>&minus;R<sub>2</sub></em>
+<em>G<sub>2</sub>&#8239;Φ<sub>2</sub> = Ψ<sub>1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;F<sub>S</sub>&#8239;T<sub>2</sub>&minus;R<sub>2</sub></em>
 </div>
 <p class="paragraph">
 which can be substituted into equation (5) to get equation (11):
 </p>
 <div class="equation">
-<em>G<sub>3</sub>&#8239;Φ<sub>3</sub> = Ψ<sub>2</sub>&#8239;(Ψ<sub>1</sub>&#8239;(FS&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;FS&#8239;T<sub>2</sub>&minus;R<sub>2</sub>)&plus;FS&#8239;T<sub>3</sub>&minus;R<sub>3</sub></em>
+<em>G<sub>3</sub>&#8239;Φ<sub>3</sub> = Ψ<sub>2</sub>&#8239;(Ψ<sub>1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;F<sub>S</sub>&#8239;T<sub>2</sub>&minus;R<sub>2</sub>)&plus;F<sub>S</sub>&#8239;T<sub>3</sub>&minus;R<sub>3</sub></em>
 </div>
 <p class="paragraph">
 and so on until equation (12) is obtained from equation (7):
 </p>
 <div class="equation">
-<em>G<sub>n&minus;1</sub>&#8239;Φ<sub>n&minus;1</sub> = Ψ<sub>n&minus;2</sub>&#8239;(Ψ<sub>n&minus;3</sub>&#8239;(Ψ<sub>1</sub>&#8239;(FS&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;FS&#8239;T<sub>2</sub>&minus;R<sub>2</sub>)&plus;FS&#8239;T<sub>n&minus;2</sub>&minus;R<sub>n&minus;2</sub>)&plus;FS&#8239;T<sub>n&minus;1</sub>&minus;R<sub>n&minus;1</sub></em>
+<em>G<sub>n&minus;1</sub>&#8239;Φ<sub>n&minus;1</sub> = Ψ<sub>n&minus;2</sub>&#8239;(Ψ<sub>n&minus;3</sub>&#8239;(Ψ<sub>1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;F<sub>S</sub>&#8239;T<sub>2</sub>&minus;R<sub>2</sub>)&plus;F<sub>S</sub>&#8239;T<sub>n&minus;2</sub>&minus;R<sub>n&minus;2</sub>)&plus;F<sub>S</sub>&#8239;T<sub>n&minus;1</sub>&minus;R<sub>n&minus;1</sub></em>
 </div>
 <p class="paragraph">
 equation (9) can then be substituted into the left-hand side of equation (12), resulting in:
@@ -4185,30 +4182,30 @@ equation (9) can then be substituted into the left-hand side of equation (12), r
 <div class="equation">
 <em>&minus;(<div class="fraction">
 <span class="fup">
-FS&#8239;T<sub>n</sub>&minus;R<sub>n</sub>
+F<sub>S</sub>&#8239;T<sub>n</sub>&minus;R<sub>n</sub>
 </span>
 <span class="fdn">
 Ψ<sub>n&minus;1</sub>
 </span>
-</div>) = Ψ<sub>n&minus;2</sub>&#8239;(Ψ<sub>n&minus;3</sub>&#8239;(Ψ<sub>1</sub>&#8239;(FS&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;FS&#8239;T<sub>2</sub>&minus;R<sub>2</sub>)&plus;FS&#8239;T<sub>n&minus;2</sub>&minus;R<sub>n&minus;2</sub>)&plus;FS&#8239;T<sub>n&minus;1</sub>&minus;R<sub>n&minus;1</sub></em>
+</div>) = Ψ<sub>n&minus;2</sub>&#8239;(Ψ<sub>n&minus;3</sub>&#8239;(Ψ<sub>1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;F<sub>S</sub>&#8239;T<sub>2</sub>&minus;R<sub>2</sub>)&plus;F<sub>S</sub>&#8239;T<sub>n&minus;2</sub>&minus;R<sub>n&minus;2</sub>)&plus;F<sub>S</sub>&#8239;T<sub>n&minus;1</sub>&minus;R<sub>n&minus;1</sub></em>
 </div>
 <p class="paragraph">
 This can be rearranged by multiplying boths sides by <em>Ψ<sub>n&minus;1</sub></em> and then distributing the multiplication of each <em>Ψ</em> over addition to obtain:
 </p>
 <div class="equation">
-<em>&minus;(FS&#8239;T<sub>n</sub>&minus;R<sub>n</sub>) = Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>1</sub>&#8239;(FS&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>2</sub>&#8239;(FS&#8239;T<sub>2</sub>&minus;R<sub>2</sub>)&plus;Ψ<sub>n&minus;1</sub>&#8239;(FS&#8239;T<sub>n&minus;1</sub>&minus;R<sub>n&minus;1</sub>)</em>
+<em>&minus;(F<sub>S</sub>&#8239;T<sub>n</sub>&minus;R<sub>n</sub>) = Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub>)&plus;Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>2</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>2</sub>&minus;R<sub>2</sub>)&plus;Ψ<sub>n&minus;1</sub>&#8239;(F<sub>S</sub>&#8239;T<sub>n&minus;1</sub>&minus;R<sub>n&minus;1</sub>)</em>
 </div>
 <p class="paragraph">
 The multiplication of the <em>Ψ</em> terms can be further distributed over the subtractins, resulting in the equation having terms that each either contain an <em>R</em> or a <em>T</em>. The equation can then be rearranged so terms containing an <em>R</em> are on one side of the equality, and terms containing a <em>T</em> are on the other. The multiplication by the factor of safety is common to all of the <em>T</em> terms, and thus can be factored out, resulting in:
 </p>
 <div class="equation">
-<em>FS&#8239;(Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>1</sub>&#8239;T<sub>1</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>2</sub>&#8239;T<sub>2</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;T<sub>n&minus;1</sub>&plus;T<sub>n</sub>) = Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>1</sub>&#8239;R<sub>1</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>2</sub>&#8239;R<sub>2</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;R<sub>n&minus;1</sub>&plus;R<sub>n</sub></em>
+<em>F<sub>S</sub>&#8239;(Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>1</sub>&#8239;T<sub>1</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>2</sub>&#8239;T<sub>2</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;T<sub>n&minus;1</sub>&plus;T<sub>n</sub>) = Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>1</sub>&#8239;R<sub>1</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;Ψ<sub>n&minus;2</sub>&#8239;Ψ<sub>2</sub>&#8239;R<sub>2</sub>&plus;Ψ<sub>n&minus;1</sub>&#8239;R<sub>n&minus;1</sub>&plus;R<sub>n</sub></em>
 </div>
 <p class="paragraph">
 Isolating the factor of safety on the left-hand side and using compact notation for the products and sums yields equation (13), which can also be seen in <a href=#IM:fctSfty>IM: fctSfty</a>:
 </p>
 <div class="equation">
-<em>FS = <div class="fraction">
+<em>F<sub>S</sub> = <div class="fraction">
 <span class="fup">
 &sum;<sub>v = 1</sub><sup>n&minus;1</sup>R<sub>v</sub>&#8239;&prod;<sub>u = i</sub><sup>n&minus;1</sup>Ψ<sub>u</sub>&plus;R<sub>n</sub>
 </span>
@@ -4218,7 +4215,7 @@ Isolating the factor of safety on the left-hand side and using compact notation 
 </div></em>
 </div>
 <p class="paragraph">
-<em>FS</em> depends on the unknowns <em>λ</em> (<a href=#IM:nrmShrFor>IM: nrmShrFor</a>) and <em>G</em> (<a href=#IM:intsliceFs>IM: intsliceFs</a>).
+<em>F<sub>S</sub></em> depends on the unknowns <em>λ</em> (<a href=#IM:nrmShrFor>IM: nrmShrFor</a>) and <em>G</em> (<a href=#IM:intsliceFs>IM: intsliceFs</a>).
 </p>
 <div id="IM:nrmShrFor">
 <table class="idefn">
@@ -4562,7 +4559,7 @@ Input
 </th>
 <td>
 <p class="paragraph">
-<em>i</em>, <em>FS</em>, <em>R</em>, <em>T</em>, <em>Ψ</em>, <em>Φ</em>
+<em>i</em>, <em>F<sub>S</sub></em>, <em>R</em>, <em>T</em>, <em>Ψ</em>, <em>Φ</em>
 </p>
 </td>
 </tr>
@@ -4603,7 +4600,7 @@ Equation
 <span>
 <div class="fraction">
 <span class="fup">
-FS&#8239;T<sub>1</sub>&minus;R<sub>1</sub>
+F<sub>S</sub>&#8239;T<sub>1</sub>&minus;R<sub>1</sub>
 </span>
 <span class="fdn">
 Φ<sub>1</sub>
@@ -4615,7 +4612,7 @@ i = 1
 <span>
 <div class="fraction">
 <span class="fup">
-Ψ<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&plus;FS&#8239;T<sub>i</sub>&minus;R<sub>i</sub>
+Ψ<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&plus;F<sub>S</sub>&#8239;T<sub>i</sub>&minus;R<sub>i</sub>
 </span>
 <span class="fdn">
 Φ<sub>i</sub>
@@ -4646,7 +4643,7 @@ Description
 <em>i</em> is the index (Unitless)
 </li>
 <li>
-<em>FS</em> is the factor of safety (Unitless)
+<em>F<sub>S</sub></em> is the factor of safety (Unitless)
 </li>
 <li>
 <em>T</em> is the mobilized shear force (N)
@@ -4655,10 +4652,10 @@ Description
 <em>R</em> is the resistive shear force (N)
 </li>
 <li>
-<em>Φ</em> is the constant (N)
+<em>Φ</em> is the first function for incorporating interslice forces into shear force (N)
 </li>
 <li>
-<em>Ψ</em> is the constant (N)
+<em>Ψ</em> is the second function for incorporating interslice forces into shear force (N)
 </li>
 <li>
 <em>n</em> is the number of slices (Unitless)
@@ -4713,7 +4710,7 @@ Taking the base shear force equilibrium of <a href=#GD:bsShrFEq>GD: bsShrFEq</a>
 N<sub>i</sub>&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(α<sub>i</sub>)
 </span>
 <span class="fdn">
-FS
+F<sub>S</sub>
 </span>
 </div> = (W<sub>i</sub>&minus;λ&#8239;f<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&plus;λ&#8239;f<sub>i</sub>&#8239;G<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(ω<sub>i</sub>))&#8239;sin(α<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;G<sub>i</sub>&plus;G<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(β<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(ω<sub>i</sub>))&#8239;cos(α<sub>i</sub>)</em>
 </div>
@@ -4721,21 +4718,21 @@ FS
 Substituting the equation for <em>N&prime;</em> from equation (16) <a href=#GD:resShearWO>GD: resShearWO</a> and <a href=#GD:mobShearWO>GD: mobShearWO</a> into equation (17) and rearranging results in equation (18):
 </p>
 <div class="equation">
-<em>G<sub>i</sub>&#8239;((λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;<sub>i</sub>)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i</sub>)&minus;cos(α<sub>i</sub>))&#8239;FS) = G<sub>i&minus;1</sub>&#8239;((λ&#8239;f<sub>i&minus;1</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;<sub>i</sub>)&minus;(λ&#8239;f<sub>i&minus;1</sub>&#8239;sin(α<sub>i</sub>)&minus;cos(α<sub>i</sub>))&#8239;FS)&plus;FS&#8239;T<sub>i</sub>&minus;R<sub>i</sub></em>
+<em>G<sub>i</sub>&#8239;((λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;<sub>i</sub>)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i</sub>)&minus;cos(α<sub>i</sub>))&#8239;F<sub>S</sub>) = G<sub>i&minus;1</sub>&#8239;((λ&#8239;f<sub>i&minus;1</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;<sub>i</sub>)&minus;(λ&#8239;f<sub>i&minus;1</sub>&#8239;sin(α<sub>i</sub>)&minus;cos(α<sub>i</sub>))&#8239;F<sub>S</sub>)&plus;F<sub>S</sub>&#8239;T<sub>i</sub>&minus;R<sub>i</sub></em>
 </div>
 <p class="paragraph">
 Where <em>R</em> and <em>T</em> are the resistive and mobile shear of the slice, without the influence of interslice forces <em>G</em> and <em>X</em>, as defined in <a href=#GD:resShearWO>GD: resShearWO</a> and <a href=#GD:mobShearWO>GD: mobShearWO</a> Making use of the constants, and with full equations found below in equation (19) and equation (20) respectively, then equation (18) can be simplified to equation (21), also seen in <a href=#IM:intsliceFs>IM: intsliceFs</a>:
 </p>
 <div class="equation">
-<em>Φ<sub>i</sub> = (λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;<sub>i</sub>)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i</sub>)&minus;cos(α<sub>i</sub>))&#8239;FS</em>
+<em>Φ<sub>i</sub> = (λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i</sub>)&minus;sin(α<sub>i</sub>))&#8239;tan(φ&prime;<sub>i</sub>)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i</sub>)&minus;cos(α<sub>i</sub>))&#8239;F<sub>S</sub></em>
 </div>
 <div class="equation">
-<em>Ψ<sub>i</sub> = (λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i&plus;1</sub>)&minus;sin(α<sub>i&plus;1</sub>))&#8239;tan(φ&prime;<sub>i</sub>)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i&plus;1</sub>)&minus;cos(α<sub>i&plus;1</sub>))&#8239;FS</em>
+<em>Ψ<sub>i</sub> = (λ&#8239;f<sub>i</sub>&#8239;cos(α<sub>i&plus;1</sub>)&minus;sin(α<sub>i&plus;1</sub>))&#8239;tan(φ&prime;<sub>i</sub>)&minus;(λ&#8239;f<sub>i</sub>&#8239;sin(α<sub>i&plus;1</sub>)&minus;cos(α<sub>i&plus;1</sub>))&#8239;F<sub>S</sub></em>
 </div>
 <div class="equation">
 <em>G<sub>i</sub> = <div class="fraction">
 <span class="fup">
-Ψ<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&plus;FS&#8239;T<sub>i</sub>&minus;R<sub>i</sub>
+Ψ<sub>i&minus;1</sub>&#8239;G<sub>i&minus;1</sub>&plus;F<sub>S</sub>&#8239;T<sub>i</sub>&minus;R<sub>i</sub>
 </span>
 <span class="fdn">
 Φ<sub>i</sub>
@@ -4743,7 +4740,7 @@ Where <em>R</em> and <em>T</em> are the resistive and mobile shear of the slice,
 </div></em>
 </div>
 <p class="paragraph">
-The constants <em>Ψ</em> and <em>Φ</em> described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio <em>λ</em> (<a href=#IM:nrmShrFor>IM: nrmShrFor</a>) and the factor of safety <em>FS</em> (<a href=#IM:fctSfty>IM: fctSfty</a>).
+The constants <em>Ψ</em> and <em>Φ</em> described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio <em>λ</em> (<a href=#IM:nrmShrFor>IM: nrmShrFor</a>) and the factor of safety <em>F<sub>S</sub></em> (<a href=#IM:fctSfty>IM: fctSfty</a>).
 </p>
 <div id="IM:crtSlpId">
 <table class="idefn">
@@ -4773,7 +4770,7 @@ Output
 </th>
 <td>
 <p class="paragraph">
-<em>FS<sub>min</sub></em>
+<em>F<sub>S</sub><sub>min</sub></em>
 </p>
 </td>
 </tr>
@@ -4797,7 +4794,7 @@ Equation
 </th>
 <td>
 <div class="equation">
-<em>FS<sub>min</sub> = Υ({x<sub>cs</sub>,y<sub>cs</sub>})</em>
+<em>F<sub>S</sub><sub>min</sub> = Υ({x<sub>cs</sub>,y<sub>cs</sub>})</em>
 </div>
 </td>
 </tr>
@@ -4808,7 +4805,7 @@ Description
 <td>
 <ul class="hide-list-style-no-indent">
 <li>
-<em>FS<sub>min</sub></em> is the minimum factor of safety (Unitless)
+<em>F<sub>S</sub><sub>min</sub></em> is the minimum factor of safety (Unitless)
 </li>
 <li>
 <em>Υ</em> is the function (Unitless)
@@ -4825,7 +4822,7 @@ Notes
 </th>
 <td>
 <p class="paragraph">
-Given the necessary slope inputs, a minimization algorithm or function <em>Υ</em> will identify the critical slip surface of the slope, with the critical slip coordinates <em>{x<sub>cs</sub>,y<sub>cs</sub>}</em> and the minimum factor of safety <em>FS<sub>min</sub></em> that results. <a href=#A:Soil-Properties>A: Soil-Properties</a>
+Given the necessary slope inputs, a minimization algorithm or function <em>Υ</em> will identify the critical slip surface of the slope, with the critical slip coordinates <em>{x<sub>cs</sub>,y<sub>cs</sub>}</em> and the minimum factor of safety <em>F<sub>S</sub><sub>min</sub></em> that results. <a href=#A:Soil-Properties>A: Soil-Properties</a>
 </p>
 </td>
 </tr>
@@ -4964,10 +4961,10 @@ Physical Constraints
 </tr>
 <tr>
 <td>
-<em>FS</em>
+<em>F<sub>S</sub></em>
 </td>
 <td>
-<em>FS&thinsp;&gt;&thinsp;0</em>
+<em>F<sub>S</sub>&thinsp;&gt;&thinsp;0</em>
 </td>
 </tr>
 <tr>

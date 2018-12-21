@@ -93,7 +93,7 @@ waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   (dbl 9.8) defultUncrt
 
 {-Output Variables-} --FIXME: See if there should be typical values
-fs = constrained' (dqd' fs_concept (const $ Atomic "FS") Real Nothing)
+fs = constrained' (dqd' fs_concept (const $ sub cF (Atomic "S")) Real Nothing)
   [gtZeroConstr] (dbl 1)
 
 fs_min :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.
@@ -184,11 +184,13 @@ shrResI = uc' "shearRes" (cn $ "resistive shear force") ("Mohr Coulomb " ++
               -- symbol is used, it is usually indexed at i. That is handled in
               -- Expr.
   
-mobShrC = uc' "Psi" (cn $ "constant") ("converts mobile shear " ++ 
+mobShrC = uc' "Psi" (cn $ "second function for incorporating interslice " ++
+  "forces into shear force") ("converts mobile shear " ++ 
   wiif ++ ", to a calculation considering the interslice forces")
   cPsi newton
 
-shrResC = uc' "Phi" (cn $ "constant") ("converts resistive shear " ++ 
+shrResC = uc' "Phi" (cn $ "first function for incorporating interslice " ++
+  "forces into shear force") ("converts resistive shear " ++ 
   wiif ++ ", to a calculation considering the interslice forces")
   cPhi newton
 

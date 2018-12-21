@@ -131,11 +131,11 @@ $x$ & X Ordinate: refers to either slice i midpoint, or slice interface i & m
 \\
 ${x_{slip}}$ & X Ordinate: distance of the slip surface at i, refers to either slice i midpoint, or slice interface i & m
 \\
-${x_{us}}$ & X Ordinate: distance of the edge of the slope at i, refers to either slice i midpoint, or slice interface i & m
+${x_{slope}}$ & Slope X-Ordinate: x-ordinate of a point on the slope & m
 \\
 ${y_{slip}}$ & Y Ordinate: height of the slip surface at i, refers to either slice i midpoint, or slice interface i & m
 \\
-${y_{us}}$ & Y Ordinate: height of the top of the slope at i, refers to either slice i midpoint, or slice interface i & m
+${y_{slope}}$ & Slope Y-Ordinate: y-ordinate of a point on the slope & m
 \\
 ${y_{wt}}$ & Y Ordinate: height of the water table at i, refers to either slice i midpoint, or slice interface i & m
 \\
@@ -322,7 +322,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Slip-Surface-Concave}:]The slip surface is concave with respect to the slope surface. The $(x,y)$ coordinates of the failure surface follow a monotonic function.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Factor-of-Safety}:]The factor of safety is assumed to be constant across a whole slip surface. \hyperref[GD:mobShr]{GD: mobShr} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Factor-of-Safety}:]The factor of safety is assumed to be constant across a whole slip surface. \hyperref[GD:mobShr]{GD: mobShr} \hyperref[IM:intsliceFs]{IM: intsliceFs}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Soil-Layer-Homogeneous}:]The different layers of the soil are homogeneous, with consistent soil properties throughout. \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:mobShr]{GD: mobShr} \hyperref[LC_inhomogeneous]{LC: Calculate-Inhomogeneous-Soil-Layers}.
@@ -344,6 +344,9 @@ This section simplifies the original problem and helps in developing the theoret
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Surface-Base-Slice-between-Interslice-Straight-Lines}:]The surface and base of a slice between interslice nodes are approximated as straight lines. \hyperref[T:mcShrStrgth]{TM: mcShrStrgth} \hyperref[DD:lengthLs]{DD: lengthLs} \hyperref[DD:lengthLb]{DD: lengthLb} \hyperref[DD:angleB]{DD: angleB} \hyperref[DD:angleA]{DD: angleA} \hyperref[DD:surfWtrF]{DD: surfWtrF} \hyperref[DD:baseWtrF]{DD: baseWtrF}.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Edge-Slices}:]The interslice forces at the 0th and $n$th interslice interfaces are zero. \hyperref[IM:fctSfty]{IM: fctSfty}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Seismic-Force}:]There is no seismic force acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
@@ -471,7 +474,7 @@ This section collects the laws and equations that will be used in deriving the d
 Label & Normal force equilibrium
 \\ \midrule \\
 Equation & \begin{dmath}
-           N_{i}=\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)
+           N_{i}=\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)-\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -493,7 +496,7 @@ Notes & This equation satisfies \hyperref[T:equilibrium]{TM: equilibrium} in the
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs}.
+RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -506,7 +509,7 @@ RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs}.
 Label & Base shear force equilibrium
 \\ \midrule \\
 Equation & \begin{dmath}
-           S_{i}=\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)
+           S_{i}=\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)+\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -528,7 +531,7 @@ Notes & This equation satisfies \hyperref[T:equilibrium]{TM: equilibrium} in the
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs}.
+RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -590,7 +593,7 @@ Notes & From the definition of the factor of safety in \hyperref[T:factOfSafety]
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs}.
+RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -625,7 +628,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs}.
+RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -656,7 +659,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs}.
+RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -683,7 +686,7 @@ Notes & The assumption for the Morgenstern Price method (\hyperref[A:Interslice-
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs}.
+RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -741,9 +744,9 @@ Units & N
 \\ \midrule \\
 Equation & \begin{dmath}
            W=b_{i} \begin{cases}
-\left({y_{us,i}}-{y_{slip,i}}\right) {γ_{Sat}}, & {y_{wt,i}}\geq{}{y_{us,i}}\\
-\left({y_{us,i}}-{y_{wt,i}}\right) γ+\left({y_{wt,i}}-{y_{slip,i}}\right) {γ_{Sat}}, & {y_{us,i}}>{y_{wt,i}}>{y_{slip,i}}\\
-\left({y_{us,i}}-{y_{slip,i}}\right) γ, & {y_{wt,i}}\leq{}{y_{slip,i}}
+\left({y_{slope,i}}-{y_{slip,i}}\right) {γ_{Sat}}, & {y_{wt,i}}\geq{}{y_{slope,i}}\\
+\left({y_{slope,i}}-{y_{wt,i}}\right) γ+\left({y_{wt,i}}-{y_{slip,i}}\right) {γ_{Sat}}, & {y_{slope,i}}>{y_{wt,i}}>{y_{slip,i}}\\
+\left({y_{slope,i}}-{y_{slip,i}}\right) γ, & {y_{wt,i}}\leq{}{y_{slip,i}}
 \end{cases}
            \end{dmath}
 \\ \midrule \\
@@ -751,7 +754,7 @@ Description & \begin{symbDescription}
               \item{$W$ is the weight (N)}
               \item{$b$ is the base width of a slice (m)}
               \item{$i$ is the index (Unitless)}
-              \item{${y_{us}}$ is the y ordinate (m)}
+              \item{${y_{slope}}$ is the slope y-ordinate (m)}
               \item{${y_{slip}}$ is the y ordinate (m)}
               \item{${γ_{Sat}}$ is the saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
               \item{${y_{wt}}$ is the y ordinate (m)}
@@ -814,8 +817,8 @@ Units & N
 \\ \midrule \\
 Equation & \begin{dmath}
            {U_{t}}={ℓ_{s,i}} \begin{cases}
-\left({y_{wt,i}}-{y_{us,i}}\right) {γ_{w}}, & {y_{wt,i}}>{y_{us,i}}\\
-0, & {y_{wt,i}}\leq{}{y_{us,i}}
+\left({y_{wt,i}}-{y_{slope,i}}\right) {γ_{w}}, & {y_{wt,i}}>{y_{slope,i}}\\
+0, & {y_{wt,i}}\leq{}{y_{slope,i}}
 \end{cases}
            \end{dmath}
 \\ \midrule \\
@@ -824,7 +827,7 @@ Description & \begin{symbDescription}
               \item{${ℓ_{s}}$ is the length of an interslice surface (m)}
               \item{$i$ is the index (Unitless)}
               \item{${y_{wt}}$ is the y ordinate (m)}
-              \item{${y_{us}}$ is the y ordinate (m)}
+              \item{${y_{slope}}$ is the slope y-ordinate (m)}
               \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -850,15 +853,15 @@ Units & N
 \\ \midrule \\
 Equation & \begin{dmath}
            H=\begin{cases}
-\frac{\left({y_{us,i}}-{y_{slip,i}}\right)^{2}}{2} {γ_{Sat}}+\left({y_{wt,i}}-{y_{us,i}}\right)^{2} {γ_{Sat}}, & {y_{wt,i}}\geq{}{y_{us,i}}\\
-\frac{\left({y_{wt,i}}-{y_{slip,i}}\right)^{2}}{2} {γ_{Sat}}, & {y_{us,i}}>{y_{wt,i}}>{y_{slip,i}}\\
+\frac{\left({y_{slope,i}}-{y_{slip,i}}\right)^{2}}{2} {γ_{Sat}}+\left({y_{wt,i}}-{y_{slope,i}}\right)^{2} {γ_{Sat}}, & {y_{wt,i}}\geq{}{y_{slope,i}}\\
+\frac{\left({y_{wt,i}}-{y_{slip,i}}\right)^{2}}{2} {γ_{Sat}}, & {y_{slope,i}}>{y_{wt,i}}>{y_{slip,i}}\\
 0, & {y_{wt,i}}\leq{}{y_{slip,i}}
 \end{cases}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$H$ is the interslice water force (N)}
-              \item{${y_{us}}$ is the y ordinate (m)}
+              \item{${y_{slope}}$ is the slope y-ordinate (m)}
               \item{$i$ is the index (Unitless)}
               \item{${y_{slip}}$ is the y ordinate (m)}
               \item{${γ_{Sat}}$ is the saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
@@ -915,14 +918,14 @@ Symbol & $β$
 Units & ${}^{\circ}$
 \\ \midrule \\
 Equation & \begin{dmath}
-           β=\frac{{y_{us,i}}-{y_{us,i-1}}}{{x_{us,i}}-{x_{us,i-1}}}
+           β=\frac{{y_{slope,i}}-{y_{slope,i-1}}}{{x_{slope,i}}-{x_{slope,i-1}}}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$β$ is the angle (${}^{\circ}$)}
-              \item{${y_{us}}$ is the y ordinate (m)}
+              \item{${y_{slope}}$ is the slope y-ordinate (m)}
               \item{$i$ is the index (Unitless)}
-              \item{${x_{us}}$ is the x ordinate (m)}
+              \item{${x_{slope}}$ is the slope x-ordinate (m)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & \hyperref[A:Surface-Base-Slice-between-Interslice-Straight-Lines]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}
@@ -1113,6 +1116,72 @@ RefBy &
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:convertFunc1}
+\phantomsection 
+\label{DD:convertFunc1}
+\\ \midrule \\
+Label & Constant
+\\ \midrule \\
+Symbol & $Φ$
+\\ \midrule \\
+Units & N
+\\ \midrule \\
+Equation & \begin{dmath}
+           Φ=\left(λ f_{i} \cos\left(α_{i}\right)-\sin\left(α_{i}\right)\right) \tan\left(φ'\right)-\left(λ f_{i} \sin\left(α_{i}\right)+\cos\left(α_{i}\right)\right) FS
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$Φ$ is the constant (N)}
+              \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
+              \item{$f$ is the scaling function (Unitless)}
+              \item{$i$ is the index (Unitless)}
+              \item{$α$ is the angle (${}^{\circ}$)}
+              \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
+              \item{$FS$ is the factor of safety (Unitless)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & \cite{chen2005} and \cite{karchewski2012}
+\\ \midrule \\
+RefBy & \hyperref[IM:fctSfty]{IM: fctSfty}.
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:convertFunc2}
+\phantomsection 
+\label{DD:convertFunc2}
+\\ \midrule \\
+Label & Constant
+\\ \midrule \\
+Symbol & $Ψ$
+\\ \midrule \\
+Units & N
+\\ \midrule \\
+Equation & \begin{dmath}
+           Ψ=\frac{\left(λ f_{i} \cos\left(α_{i}\right)-\sin\left(α_{i}\right)\right) \tan\left(φ'\right)-\left(λ f_{i} \sin\left(α_{i}\right)+\cos\left(α_{i}\right)\right) FS}{Φ_{n-1}}
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$Ψ$ is the constant (N)}
+              \item{$λ$ is the interslice normal/shear force ratio (Unitless)}
+              \item{$f$ is the scaling function (Unitless)}
+              \item{$i$ is the index (Unitless)}
+              \item{$α$ is the angle (${}^{\circ}$)}
+              \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
+              \item{$FS$ is the factor of safety (Unitless)}
+              \item{$Φ$ is the constant (N)}
+              \item{$n$ is the number of slices (Unitless)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & \cite{chen2005} and \cite{karchewski2012}
+\\ \midrule \\
+RefBy & \hyperref[IM:fctSfty]{IM: fctSfty}.
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:fixme1}
 \phantomsection 
 \label{DD:fixme1}
@@ -1178,7 +1247,7 @@ This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: 
 \\ \midrule \\
 Label & Factor of safety
 \\ \midrule \\
-Input & $R$, $T$, $Ψ$, $Φ$, $v$
+Input & ${x_{slope}}$, ${y_{slope}}$, ${y_{wt}}$, $c'$, $φ'$, $γ$, ${γ_{Sat}}$, ${γ_{w}}$, ${x_{slip}}$, ${y_{slip}}$, $const_f$
 \\ \midrule \\
 Output & $FS$
 \\ \midrule \\
@@ -1187,7 +1256,7 @@ Input Constraints &
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{dmath}
-           FS=\frac{\displaystyle\sum_{v=1}^{n-1}{R_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{Ψ_{u}}{Φ_{u}}}}+R_{n}}{\displaystyle\sum_{v=1}^{n-1}{T_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{Ψ_{u}}{Φ_{u}}}}+T_{n}}
+           FS=\frac{\displaystyle\sum_{v=1}^{n-1}{R_{v} \displaystyle\prod_{u=i}^{n-1}{Ψ_{u}}}+R_{n}}{\displaystyle\sum_{v=1}^{n-1}{T_{v} \displaystyle\prod_{u=i}^{n-1}{Ψ_{u}}}+T_{n}}
            \end{dmath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1196,23 +1265,110 @@ Description & \begin{symbDescription}
               \item{$v$ is the local index (Unitless)}
               \item{$Ψ$ is the constant (N)}
               \item{$u$ is the local index (Unitless)}
-              \item{$Φ$ is the constant (N)}
               \item{$n$ is the number of slices (Unitless)}
               \item{$T$ is the mobilized shear force (N)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & Equation for the Factor of Safety is the ratio between resistive and mobile shear of the slip surface. The sum of values from each slice is taken to find the total resistive and mobile shear for the slip surface. The constants $Φ$ and $Ψ$ convert the resistive and mobile shear without the inluence of interslice forces, to a calculation considering the interslice forces. \hyperref[A:Factor-of-Safety]{A: Factor-of-Safety} \hyperref[A:Interslice-Norm-Shear-Forces-Linear]{A: Interslice-Norm-Shear-Forces-Linear} \hyperref[A:Seismic-Force]{A: Seismic-Force} \hyperref[A:Surface-Load]{A: Surface-Load}
+Notes & 
 \\ \midrule \\
-Source & \cite{chen2005}
+Source & \cite{chen2005} and \cite{karchewski2012}
 \\ \midrule \\
-RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[IM:fctSfty]{IM: fctSfty}.
+RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
-Using equation (21) from \hyperref[IM:intsliceFs]{IM: intsliceFs}, rearranging, and applying the boundary condition that $G_{0}$ and $G_{n}$ are equal to $0$, an equation for the factor of safety is found as equation (12), also seen in \hyperref[IM:fctSfty]{IM: fctSfty}:
+The mobilized shear force defined in \hyperref[GD:bsShrFEq]{GD: bsShrFEq} can be substituted into the definition of mobilized shear force based on the factor of safety, from \hyperref[GD:mobShr]{GD: mobShr} yielding equation (1) below:
 \begin{dmath}
-FS=\frac{\displaystyle\sum_{v=1}^{n-1}{R_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{Ψ_{u}}{Φ_{u}}}}+R_{n}}{\displaystyle\sum_{v=1}^{n-1}{T_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{Ψ_{u}}{Φ_{u}}}}+T_{n}}
+\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)=\frac{N_{i} \tan\left(φ'\right)+c' {ℓ_{b,i}}}{FS}
 \end{dmath}
-The constants $Ψ$ and $Φ$ described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio $λ$ (\hyperref[IM:nrmShrFor]{IM: nrmShrFor}) and the factor of safety $FS$ (\hyperref[IM:fctSfty]{IM: fctSfty}).
+An expression for the effective normal force, $N'$, can be derived by substituting the normal force equilibrium from \hyperref[GD:normForcEq]{GD: normForcEq} into the definition for effective normal force from \hyperref[GD:resShearWO]{GD: resShearWO}. This results in equation (2):
+\begin{dmath}
+{N'}_{i}=\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}
+\end{dmath}
+Substituting equation (2) into equation (1) gives:
+\begin{dmath}
+\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)=\frac{\left(\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}\right) \tan\left(φ'\right)+c' {ℓ_{b,i}}}{FS}
+\end{dmath}
+Since the interslice shear force $X$ and interslice normal force $G$ are unknown, they are separated from the other terms as follows:
+\begin{dmath}
+\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-\left(-{K_{c}} W_{i}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)-\left(-G_{i}+G_{i-1}\right) \cos\left(α_{i}\right)+\left(-X_{i-1}+X_{i}\right) \sin\left(α_{i}\right)=\frac{\left(\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{K_{c}} W_{i}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)+\left(-G_{i}+G_{i-1}\right) \sin\left(α_{i}\right)+\left(-X_{i-1}+X_{i}\right) \cos\left(α_{i}\right)-{U_{b,i}}\right) \tan\left(φ'\right)+c' {ℓ_{b,i}}}{FS}
+\end{dmath}
+Applying assumptions \hyperref[A:Seismic-Force]{A: Seismic-Force} and \hyperref[A:Surface-Load]{A: Surface-Load}, which state that the earthquake load factor and the imposed surface load, respectively, are zero, allows for further simplification as shown below:
+\begin{dmath}
+\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)\right) \sin\left(α_{i}\right)-\left(-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)\right) \cos\left(α_{i}\right)-\left(-G_{i}+G_{i-1}\right) \cos\left(α_{i}\right)+\left(-X_{i-1}+X_{i}\right) \sin\left(α_{i}\right)=\frac{\left(\left(W_{i}+{U_{t,i}} \cos\left(β_{i}\right)\right) \cos\left(α_{i}\right)+\left(-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)\right) \sin\left(α_{i}\right)+\left(-G_{i}+G_{i-1}\right) \sin\left(α_{i}\right)+\left(-X_{i-1}+X_{i}\right) \cos\left(α_{i}\right)-{U_{b,i}}\right) \tan\left(φ'\right)+c' {ℓ_{b,i}}}{FS}
+\end{dmath}
+The definitions of \hyperref[GD:resShearWO]{GD: resShearWO} and \hyperref[GD:mobShearWO]{GD: mobShearWO} are present in this equation, and thus can be replaced by $R_{i}$ and $T_{i}$, respectively:
+\begin{dmath}
+T_{i}+\left(-X_{i-1}+X_{i}\right) \sin\left(α_{i}\right)-\left(-G_{i}+G_{i-1}\right) \cos\left(α_{i}\right)=\frac{R_{i}+\left(\left(-X_{i-1}+X_{i}\right) \cos\left(α_{i}\right)+\left(-G_{i}+G_{i-1}\right) \sin\left(α_{i}\right)\right) \tan\left(φ'\right)}{FS}
+\end{dmath}
+The interslice shear force $X$ can be expressed in terms of the interslice normal force $G$ using \hyperref[A:Interslice-Norm-Shear-Forces-Linear]{A: Interslice-Norm-Shear-Forces-Linear} and \hyperref[GD:normShrR]{GD: normShrR}, resulting in:
+\begin{dmath}
+T_{i}+\left(-λ f_{i-1} G_{i-1}+λ f_{i} G_{i}\right) \sin\left(α_{i}\right)-\left(-G_{i}+G_{i-1}\right) \cos\left(α_{i}\right)=\frac{R_{i}+\left(\left(-λ f_{i-1} G_{i-1}+λ f_{i} G_{i}\right) \cos\left(α_{i}\right)+\left(-G_{i}+G_{i-1}\right) \sin\left(α_{i}\right)\right) \tan\left(φ'\right)}{FS}
+\end{dmath}
+Rearranging yields the following:
+\begin{dmath}
+G_{i} \left(\left(λ f_{i} \cos\left(α_{i}\right)-\sin\left(α_{i}\right)\right) \tan\left(φ'\right)-\left(λ f_{i} \sin\left(α_{i}\right)+\cos\left(α_{i}\right)\right) FS\right)=G_{i-1} \left(\left(λ f_{i-1} \cos\left(α_{i}\right)-\sin\left(α_{i}\right)\right) \tan\left(φ'\right)-\left(λ f_{i-1} \sin\left(α_{i}\right)+\cos\left(α_{i}\right)\right) FS\right)+FS T_{i}-R_{i}
+\end{dmath}
+The definitions for $Φ$ and $Ψ$ from \hyperref[DD:convertFunc1]{DD: convertFunc1} and \hyperref[DD:convertFunc2]{DD: convertFunc2} simplify the above to equation (3):
+\begin{dmath}
+G_{i} Φ_{i}=Ψ_{i-1} G_{i-1} Φ_{i-1}+FS T_{i}-R_{i}
+\end{dmath}
+Versions of equation (3) instantiated for slices 1 to $n$ are shown below:
+\begin{dmath}
+G_{1} Φ_{1}=Ψ_{0} G_{0} Φ_{0}+FS T_{1}-R_{1}
+\end{dmath}
+\begin{dmath}
+G_{2} Φ_{2}=Ψ_{1} G_{1} Φ_{1}+FS T_{2}-R_{2}
+\end{dmath}
+\begin{dmath}
+G_{3} Φ_{3}=Ψ_{2} G_{2} Φ_{2}+FS T_{3}-R_{3}
+\end{dmath}
+...
+\begin{dmath}
+G_{n-2} Φ_{n-2}=Ψ_{n-3} G_{n-3} Φ_{n-3}+FS T_{n-2}-R_{n-2}
+\end{dmath}
+\begin{dmath}
+G_{n-1} Φ_{n-1}=Ψ_{n-2} G_{n-2} Φ_{n-2}+FS T_{n-1}-R_{n-1}
+\end{dmath}
+\begin{dmath}
+G_{n} Φ_{n}=Ψ_{n-1} G_{n-1} Φ_{n-1}+FS T_{n}-R_{n}
+\end{dmath}
+Applying \hyperref[A:Edge-Slices]{A: Edge-Slices}, which says that $G_{0}$ and $G_{n}$ are zero, results in the following special cases: equation (8) for the first slice:
+\begin{dmath}
+G_{1} Φ_{1}=FS T_{1}-R_{1}
+\end{dmath}
+and equation (9) for the $n$th slice:
+\begin{dmath}
+-\left(\frac{FS T_{n}-R_{n}}{Ψ_{n-1}}\right)=G_{n-1} Φ_{n-1}
+\end{dmath}
+Substituting equation (8) into equation (4) yields equation (10):
+\begin{dmath}
+G_{2} Φ_{2}=Ψ_{1} \left(FS T_{1}-R_{1}\right)+FS T_{2}-R_{2}
+\end{dmath}
+which can be substituted into equation (5) to get equation (11):
+\begin{dmath}
+G_{3} Φ_{3}=Ψ_{2} \left(Ψ_{1} \left(FS T_{1}-R_{1}\right)+FS T_{2}-R_{2}\right)+FS T_{3}-R_{3}
+\end{dmath}
+and so on until equation (12) is obtained from equation (7):
+\begin{dmath}
+G_{n-1} Φ_{n-1}=Ψ_{n-2} \left(Ψ_{n-3} \left(Ψ_{1} \left(FS T_{1}-R_{1}\right)+FS T_{2}-R_{2}\right)+FS T_{n-2}-R_{n-2}\right)+FS T_{n-1}-R_{n-1}
+\end{dmath}
+equation (9) can then be substituted into the left-hand side of equation (12), resulting in:
+\begin{dmath}
+-\left(\frac{FS T_{n}-R_{n}}{Ψ_{n-1}}\right)=Ψ_{n-2} \left(Ψ_{n-3} \left(Ψ_{1} \left(FS T_{1}-R_{1}\right)+FS T_{2}-R_{2}\right)+FS T_{n-2}-R_{n-2}\right)+FS T_{n-1}-R_{n-1}
+\end{dmath}
+This can be rearranged by multiplying boths sides by $Ψ_{n-1}$ and then distributing the multiplication of each $Ψ$ over addition to obtain:
+\begin{dmath}
+-\left(FS T_{n}-R_{n}\right)=Ψ_{n-1} Ψ_{n-2} Ψ_{1} \left(FS T_{1}-R_{1}\right)+Ψ_{n-1} Ψ_{n-2} Ψ_{2} \left(FS T_{2}-R_{2}\right)+Ψ_{n-1} \left(FS T_{n-1}-R_{n-1}\right)
+\end{dmath}
+The multiplication of the $Ψ$ terms can be further distributed over the subtractins, resulting in the equation having terms that each either contain an $R$ or a $T$. The equation can then be rearranged so terms containing an $R$ are on one side of the equality, and terms containing a $T$ are on the other. The multiplication by the factor of safety is common to all of the $T$ terms, and thus can be factored out, resulting in:
+\begin{dmath}
+FS \left(Ψ_{n-1} Ψ_{n-2} Ψ_{1} T_{1}+Ψ_{n-1} Ψ_{n-2} Ψ_{2} T_{2}+Ψ_{n-1} T_{n-1}+T_{n}\right)=Ψ_{n-1} Ψ_{n-2} Ψ_{1} R_{1}+Ψ_{n-1} Ψ_{n-2} Ψ_{2} R_{2}+Ψ_{n-1} R_{n-1}+R_{n}
+\end{dmath}
+Isolating the factor of safety on the left-hand side and using compact notation for the products and sums yields equation (13), which can also be seen in \hyperref[IM:fctSfty]{IM: fctSfty}:
+\begin{dmath}
+FS=\frac{\displaystyle\sum_{v=1}^{n-1}{R_{v} \displaystyle\prod_{u=i}^{n-1}{Ψ_{u}}}+R_{n}}{\displaystyle\sum_{v=1}^{n-1}{T_{v} \displaystyle\prod_{u=i}^{n-1}{Ψ_{u}}}+T_{n}}
+\end{dmath}
+$FS$ depends on the unknowns $λ$ (\hyperref[IM:nrmShrFor]{IM: nrmShrFor}) and $G$ (\hyperref[IM:intsliceFs]{IM: intsliceFs}).
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -1333,11 +1489,11 @@ RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: ints
 \end{minipage}\\
 Substituting the normal force equilibrium of \hyperref[GD:normForcEq]{GD: normForcEq} and the assumption \hyperref[A:Interslice-Norm-Shear-Forces-Linear]{A: Interslice-Norm-Shear-Forces-Linear} represented by \hyperref[GD:momentEql]{GD: momentEql} into the effective normal force definition from \hyperref[GD:normShrR]{GD: normShrR} yields equation equation (12):
 \begin{dmath}
-{N'}_{i}=\left(W_{i}-λ f_{i-1} G_{i-1}+λ f_{i} G_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)+\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}
+{N'}_{i}=\left(W_{i}-λ f_{i-1} G_{i-1}+λ f_{i} G_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \cos\left(α_{i}\right)-\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-{U_{b,i}}
 \end{dmath}
 Taking the base shear force equilibrium of \hyperref[GD:bsShrFEq]{GD: bsShrFEq} with the definition of mobilized shear force from \hyperref[GD:mobShr]{GD: mobShr} and the assumption of \hyperref[GD:normShrR]{GD: normShrR}, the equilibrium equation can be rewritten as equation (17):
 \begin{dmath}
-\frac{N_{i} \tan\left({φ'}_{i}\right)+{c'}_{i} b_{i} \sec\left(α_{i}\right)}{FS}=\left(W_{i}-λ f_{i-1} G_{i-1}+λ f_{i} G_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)+\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)
+\frac{N_{i} \tan\left({φ'}_{i}\right)+{c'}_{i} b_{i} \sec\left(α_{i}\right)}{FS}=\left(W_{i}-λ f_{i-1} G_{i-1}+λ f_{i} G_{i}+{U_{t,i}} \cos\left(β_{i}\right)+Q_{i} \cos\left(ω_{i}\right)\right) \sin\left(α_{i}\right)-\left(-{K_{c}} W_{i}-G_{i}+G_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(β_{i}\right)+Q_{i} \sin\left(ω_{i}\right)\right) \cos\left(α_{i}\right)
 \end{dmath}
 Substituting the equation for $N'$ from equation (16) \hyperref[GD:resShearWO]{GD: resShearWO} and \hyperref[GD:mobShearWO]{GD: mobShearWO} into equation (17) and rearranging results in equation (18):
 \begin{dmath}
@@ -1492,6 +1648,14 @@ month={apr},
 pages={"429-439"},
 volume={14},
 number={3}}
+
+@inproceedings{karchewski2012,
+author={Karchewski, Brandon and Guo, Peijun and Stolle, Dieter},
+title={Influence of inherent anisotropy of soil strength on limit equilibrium slope stability analysis},
+booktitle={Proceedings of the 65th annual Canadian GeoTechnical Conference},
+year={2012},
+address={Winnipeg, MB, Canada},
+organization={Canadian Geotechnical Society}}
 
 @mastersthesis{koothoor2013,
 author={Koothoor, Nirmitha},

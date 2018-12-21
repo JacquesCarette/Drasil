@@ -53,8 +53,8 @@ fcSfty_rel :: Relation
 fcSfty_rel = sy fs $= sumOp shearRNoIntsl / sumOp shearFNoIntsl
   where prodOp = defprod lU (sy index) (sy numbSlices - 1)
           (idx (sy mobShrC) (sy varblU))
-        sumOp sym = defsum lV 1 (sy numbSlices - 1)
-          ((idx (sy sym) (sy varblV) * prodOp)) + idx (sy sym) (sy numbSlices)
+        sumOp sym = (defsum lV 1 (sy numbSlices - 1)
+          (idx (sy sym) (sy varblV) * prodOp)) + idx (sy sym) (sy numbSlices)
 
 fcSfty_desc :: Sentence
 fcSfty_desc = foldlSent_ []

@@ -1,5 +1,6 @@
 module Drasil.SSP.DataDefs (dataDefns, intrsliceF, surfLoads, 
-  seismicLoadF, lengthLs, lengthLb, sliceWght, fixme1, fixme2) where 
+  seismicLoadF, lengthLs, lengthLb, sliceWght, convertFunc1, convertFunc2,
+  fixme1, fixme2) where 
 
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
@@ -12,12 +13,12 @@ import Drasil.SSP.Assumptions (newA9)
 import Drasil.SSP.Labels (sliceWghtL, baseWtrFL, 
   surfWtrFL, intersliceWtrFL, angleAL, angleBL, lengthLbL , sliceWghtL, 
   lengthBL, lengthLsL, seismicLoadFL, intrsliceFL,
-  surfLoadsL)
-import Drasil.SSP.References (chen2005, fredlund1977)
+  surfLoadsL, convertFunc1L, convertFunc2L)
+import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
-  dryWeight, earthqkLoadFctr, impLoadAngle, intNormForce, 
-  intShrForce, inx, inxi, inxiM1, normToShear,
-  satWeight, scalFunc,  slcWght, 
+  dryWeight, earthqkLoadFctr, fricAngle, fs, impLoadAngle, intNormForce, 
+  intShrForce, inx, inxi, inxiM1, mobShrC, normToShear,
+  satWeight, scalFunc, shrResC, slcWght, 
   slipDist, slipHght, slopeDist, slopeHght, surfAngle, surfHydroForce, surfLngth, 
   surfLoad, ufixme1, ufixme2, waterHght, waterWeight, watrForce)
 
@@ -27,7 +28,8 @@ import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX,
 
 dataDefns :: [DataDefinition]
 dataDefns = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB, 
-  lengthB, lengthLb, lengthLs, seismicLoadF, surfLoads, intrsliceF, fixme1, fixme2]
+  lengthB, lengthLb, lengthLs, seismicLoadF, surfLoads, intrsliceF, 
+  convertFunc1, convertFunc2, fixme1, fixme2]
 
 --DD1
 
@@ -210,6 +212,38 @@ intrsliceFQD = mkQuantDef intShrForce intrsliceFEqn
 intrsliceFEqn :: Expr
 intrsliceFEqn = (sy normToShear) * (inxi scalFunc) * (inxi intNormForce)
 
+--DD13
+
+convertFunc1 :: DataDefinition
+convertFunc1 = mkDDL convertFunc1QD [chen2005, karchewski2012] [{-Derivation-}]
+  convertFunc1L []
+
+convertFunc1QD :: QDefinition
+convertFunc1QD = mkQuantDef shrResC convertFunc1Eqn
+
+convertFunc1Eqn :: Expr
+convertFunc1Eqn = (sy normToShear * inxi scalFunc * 
+  (cos (inxi baseAngle)) - (sin (inxi baseAngle))) * tan (sy fricAngle) - 
+  (sy normToShear * inxi scalFunc * (sin (inxi baseAngle)) + 
+  (cos (inxi baseAngle))) * (sy fs)
+
+--DD14
+
+convertFunc2 :: DataDefinition
+convertFunc2 = mkDDL convertFunc2QD [chen2005, karchewski2012] [{-Derivation-}]
+  convertFunc2L []
+
+convertFunc2QD :: QDefinition
+convertFunc2QD = mkQuantDef mobShrC convertFunc2Eqn
+
+convertFunc2Eqn :: Expr
+convertFunc2Eqn = ((sy normToShear * inxi scalFunc * 
+  (cos (inxi baseAngle)) - (sin (inxi baseAngle))) * tan (sy fricAngle) - 
+  (sy normToShear * inxi scalFunc * (sin (inxi baseAngle)) + 
+  (cos (inxi baseAngle))) * (sy fs)) / 
+  (inxiM1 shrResC)
+
+
 {--DD10
 
 resShearWO :: DataDefinition
@@ -297,7 +331,7 @@ resShr_deriv_sentences_ssp_s3 = [S "Using", ch nrmFNoIntsl `sC` S "a", phrase sh
 
 resShr_deriv_sentences_ssp_s4 :: [Sentence]
 resShr_deriv_sentences_ssp_s4 = [S "This can be further simplified by considering assumptions",
-  makeRef2S newA10, S "and", makeRef2S newA11 `sC`
+  makeRef2S newA10, S "and", makeRef2S newA12 `sC`
   S "which state that the seismic coefficient and the external force" `sC` S "respectively"
   `sC` S "are0", S "Removing seismic and external forces yields ", eqN 4]
 
@@ -402,7 +436,7 @@ mobShr_deriv_sentences_ssp_s3 :: [Sentence]
 mobShr_deriv_sentences_ssp_s3 = [S "The" +:+ plural value +:+ S "of" +:+ 
   ch shearFNoIntsl +:+ S "is now defined completely in terms of the" +:+
   S "known" +:+. plural value +:+ S "This can be further simplified by considering assumptions" +:+
-  makeRef2S newA10 +:+ S "and" +:+ makeRef2S newA11 `sC`
+  makeRef2S newA10 +:+ S "and" +:+ makeRef2S newA12 `sC`
   S "which state that the seismic coefficient and the external force" `sC` S "respectively"
   `sC` S "are0" +:+ S "Removing seismic and external forces yields " +:+ eqN 7]
 

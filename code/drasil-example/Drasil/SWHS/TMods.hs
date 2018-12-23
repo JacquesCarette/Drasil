@@ -34,8 +34,7 @@ consThermE :: TheoryModel
 consThermE = tm consThermE_rc
   [qw thFluxVect, qw gradient, qw vol_ht_gen, 
     qw density, qw heat_cap_spec, qw temp, qw time] ([] :: [ConceptChunk])
-  [] [consThermERel] [] [consThemESrc] 
-  (makeTMRef "consThermE") [consThermEdesc]
+  [] [consThermERel] [] [consThemESrc] "consThermE" [consThermEdesc]
 
 consThermE_rc :: RelationConcept
 consThermE_rc = makeRC "consThermE_rc"
@@ -72,8 +71,7 @@ sensHtE :: TheoryModel
 sensHtE = tm sensHtE_rc
   [qw sens_heat, qw htCap_S, qw mass, 
     qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [ConceptChunk])
-  [] [sensHtEEqn] [] [sensHtESrc] 
-  (makeTMRef "sensHtE") [sensHtEdesc]
+  [] [sensHtEEqn] [] [sensHtESrc] "sensHtE" [sensHtEdesc]
 
 sensHtE_rc :: RelationConcept
 sensHtE_rc = makeRC "sensHtE_rc" (nounPhraseSP "Sensible heat energy") sensHtEdesc sensHtEEqn
@@ -131,7 +129,7 @@ sensHtEdesc = foldlSent [
 latentHtE :: TheoryModel
 latentHtE = tm latentHtE_rc
   [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
-  [] [latHtEEqn] [] [latHtESrc] (makeTMRef "latentHtE") [latentHtEdesc]
+  [] [latHtEEqn] [] [latHtESrc] "latentHtE" [latentHtEdesc]
 
 latentHtE_rc :: RelationConcept
 latentHtE_rc = makeRC "latentHtE_rc"

@@ -373,9 +373,9 @@ This section focuses on the general equations and laws that GlassBR is based on.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:isSafePb}
+\toprule \textbf{Refname} & \textbf{TM:isSafePb}
 \phantomsection 
-\label{T:isSafePb}
+\label{TM:isSafePb}
 \\ \midrule \\
 Label & Safety Req-Pb
 \\ \midrule \\
@@ -389,19 +389,19 @@ Description & \begin{symbDescription}
               \item{${P_{btol}}$ is the tolerable probability of breakage (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is\_safePb$, the glass is considered safe. $is\_safePb$ and $is\_safeLR$ (from \hyperref[T:isSafeLR]{TM: isSafeLR}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[DD:probOfBreak]{DD: probOfBreak}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
+Notes & If $is\_safePb$, the glass is considered safe. $is\_safePb$ and $is\_safeLR$ (from \hyperref[TM:isSafeLR]{TM: isSafeLR}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[DD:probOfBreak]{DD: probOfBreak}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
-RefBy & \hyperref[T:isSafeLR]{TM: isSafeLR} \hyperref[checkGlassSafety]{FR: Check-Glass-Safety}.
+RefBy & \hyperref[TM:isSafeLR]{TM: isSafeLR} \hyperref[checkGlassSafety]{FR: Check-Glass-Safety}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:isSafeLR}
+\toprule \textbf{Refname} & \textbf{TM:isSafeLR}
 \phantomsection 
-\label{T:isSafeLR}
+\label{TM:isSafeLR}
 \\ \midrule \\
 Label & Safety Req-LR
 \\ \midrule \\
@@ -415,11 +415,11 @@ Description & \begin{symbDescription}
               \item{$q$ is the applied load (demand) (Pa)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is\_safeLR$, the glass is considered safe. $is\_safePb$ (from \hyperref[T:isSafePb]{TM: isSafePb}) and $is\_safeLR$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[DD:calofCapacity]{DD: calofCapacity}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[DD:calofCapacity]{DD: calofCapacity}.
+Notes & If $is\_safeLR$, the glass is considered safe. $is\_safePb$ (from \hyperref[TM:isSafePb]{TM: isSafePb}) and $is\_safeLR$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[DD:calofCapacity]{DD: calofCapacity}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[DD:calofCapacity]{DD: calofCapacity}.
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
-RefBy & \hyperref[T:isSafePb]{TM: isSafePb} \hyperref[checkGlassSafety]{FR: Check-Glass-Safety}.
+RefBy & \hyperref[TM:isSafePb]{TM: isSafePb} \hyperref[checkGlassSafety]{FR: Check-Glass-Safety}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{General Definitions}
@@ -841,7 +841,7 @@ Notes & $B$ is the risk of failure, as defined in \hyperref[DD:risk.fun]{DD: ris
 \\ \midrule \\
 Source & \cite{astm2009} and \cite{beasonEtAl1998}
 \\ \midrule \\
-RefBy & \hyperref[T:isSafePb]{TM: isSafePb}.
+RefBy & \hyperref[TM:isSafePb]{TM: isSafePb}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -875,7 +875,7 @@ Notes & $LR$ is the load resistance, which is also called capacity $NFL$. is the
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
-RefBy & \hyperref[T:isSafeLR]{TM: isSafeLR}.
+RefBy & \hyperref[TM:isSafeLR]{TM: isSafeLR}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -906,7 +906,7 @@ Notes & $q$ or demand, is the 3 second duration equivalent pressure obtained fro
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
-RefBy & \hyperref[T:isSafeLR]{TM: isSafeLR} \hyperref[DD:dimlessLoad]{DD: dimlessLoad}.
+RefBy & \hyperref[TM:isSafeLR]{TM: isSafeLR} \hyperref[DD:dimlessLoad]{DD: dimlessLoad}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Instance Models}
@@ -1010,7 +1010,7 @@ This section provides the functional requirements, the business tasks that the s
                                                                                                 \end{itemize}
 \item[Check-Input-with-Data\_Constraints:\phantomsection\label{checkInputWithDataCons}]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in \hyperref[Sec:DataConstraints]{Section: Data Constraints}. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.
 \item[Output-Values-and-Known-Quantities:\phantomsection\label{outputValsAndKnownQuants}]Output the input quantities from \hyperref[inputGlassProps]{FR: Input-Glass-Props} and the known quantities from \hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions}.
-\item[Check-Glass-Safety:\phantomsection\label{checkGlassSafety}]If $is\_safePb$ ∧ $is\_safeLR$ (from \hyperref[T:isSafePb]{TM: isSafePb} and \hyperref[T:isSafeLR]{TM: isSafeLR}) are true, output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
+\item[Check-Glass-Safety:\phantomsection\label{checkGlassSafety}]If $is\_safePb$ ∧ $is\_safeLR$ (from \hyperref[TM:isSafePb]{TM: isSafePb} and \hyperref[TM:isSafeLR]{TM: isSafeLR}) are true, output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
 \item[Output-Quantities:\phantomsection\label{outputQuants}]Output the following quantities:
                                                             \begin{itemize}
                                                             \item{Aspect ratio ($AR$) (\hyperref[DD:aspect.ratio]{DD: aspect\_ratio})}
@@ -1077,7 +1077,7 @@ This problem is small in size and relatively simple, so performance is not a pri
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey]{Table:Tracey} shows the dependencies of theoretical models, instance models, and data definitions with each other. \hyperref[Table:TraceyItemSecs]{Table:TraceyItemSecs} shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. \hyperref[Table:TraceyReqsItems]{Table:TraceyReqsItems} shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints} & \hyperref[inputGlassProps]{FR: Input-Glass-Props} & \hyperref[DD:tolLoad]{DD: tolLoad} & \hyperref[DD:stressDistFac]{DD: stressDistFac} & \hyperref[accMoreBoundaryConditions]{LC: Accomodate-More-Boundary-Conditions} & \hyperref[T:isSafeLR]{TM: isSafeLR} & \hyperref[DD:dimlessLoad]{DD: dimlessLoad} & \hyperref[calcInternalBlastRisk]{LC: Calculate-Internal-Blask-Risk} & \hyperref[DD:calofCapacity]{DD: calofCapacity} & \hyperref[accAlteredGlass]{UC: Accommodate-Altered-Glass} & \hyperref[accMoreThanSingleLite]{LC: Accomodate-More-than-Single-Lite} & \hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities} & \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E} & \hyperref[DD:loadDurFactor]{DD: loadDurFactor} & \hyperref[DD:sdf.tol]{DD: sdf\_tol} & \hyperref[DD:risk.fun]{DD: risk\_fun} & \hyperref[DD:nFL]{DD: nFL} & \hyperref[T:isSafePb]{TM: isSafePb} & \hyperref[considerMoreThanFlexGlass]{LC: Consider-More-than-Flexure-Glass} & \hyperref[DD:probOfBreak]{DD: probOfBreak} & \hyperref[checkGlassSafety]{FR: Check-Glass-Safety} & \hyperref[DD:calofCapacity]{DD: calofCapacity} & \hyperref[IM:calOfDemand]{IM: calOfDemand}
+ & \hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints} & \hyperref[inputGlassProps]{FR: Input-Glass-Props} & \hyperref[DD:tolLoad]{DD: tolLoad} & \hyperref[DD:stressDistFac]{DD: stressDistFac} & \hyperref[accMoreBoundaryConditions]{LC: Accomodate-More-Boundary-Conditions} & \hyperref[TM:isSafeLR]{TM: isSafeLR} & \hyperref[DD:dimlessLoad]{DD: dimlessLoad} & \hyperref[calcInternalBlastRisk]{LC: Calculate-Internal-Blask-Risk} & \hyperref[DD:calofCapacity]{DD: calofCapacity} & \hyperref[accAlteredGlass]{UC: Accommodate-Altered-Glass} & \hyperref[accMoreThanSingleLite]{LC: Accomodate-More-than-Single-Lite} & \hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities} & \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E} & \hyperref[DD:loadDurFactor]{DD: loadDurFactor} & \hyperref[DD:sdf.tol]{DD: sdf\_tol} & \hyperref[DD:risk.fun]{DD: risk\_fun} & \hyperref[DD:nFL]{DD: nFL} & \hyperref[TM:isSafePb]{TM: isSafePb} & \hyperref[considerMoreThanFlexGlass]{LC: Consider-More-than-Flexure-Glass} & \hyperref[DD:probOfBreak]{DD: probOfBreak} & \hyperref[checkGlassSafety]{FR: Check-Glass-Safety} & \hyperref[DD:calofCapacity]{DD: calofCapacity} & \hyperref[IM:calOfDemand]{IM: calOfDemand}
 \\
 \midrule
 \hyperref[Sec:DataConstraints]{Section: Data Constraints} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1118,9 +1118,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:risk.fun]{DD: risk\_fun} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & 
 \\
-\hyperref[T:isSafeLR]{TM: isSafeLR} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & X &  & 
+\hyperref[TM:isSafeLR]{TM: isSafeLR} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & X &  & 
 \\
-\hyperref[T:isSafePb]{TM: isSafePb} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
+\hyperref[TM:isSafePb]{TM: isSafePb} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
 \\
 \hyperref[DD:sdf.tol]{DD: sdf\_tol} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1140,12 +1140,12 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:isSafePb]{TM: isSafePb}) & T2 (\hyperref[T:isSafeLR]{TM: isSafeLR}) & IM1 (\hyperref[IM:calOfDemand]{IM: calOfDemand}) & IM2 (\hyperref[DD:risk.fun]{DD: risk\_fun}) & IM3 (\hyperref[DD:min.thick]{DD: min\_thick}) & DD1 (\hyperref[DD:loadDurFactor]{DD: loadDurFactor}) & DD2 (\hyperref[DD:stressDistFac]{DD: stressDistFac}) & DD3 (\hyperref[DD:nFL]{DD: nFL}) & DD4 (\hyperref[DD:gTF]{DD: gTF}) & DD5 (\hyperref[DD:dimlessLoad]{DD: dimlessLoad}) & DD6 (\hyperref[DD:tolLoad]{DD: tolLoad}) & DD7 (\hyperref[DD:sdf.tol]{DD: sdf\_tol}) & DD8 (\hyperref[DD:standOffDist]{DD: standOffDist})
+ & T1 (\hyperref[TM:isSafePb]{TM: isSafePb}) & T2 (\hyperref[TM:isSafeLR]{TM: isSafeLR}) & IM1 (\hyperref[IM:calOfDemand]{IM: calOfDemand}) & IM2 (\hyperref[DD:risk.fun]{DD: risk\_fun}) & IM3 (\hyperref[DD:min.thick]{DD: min\_thick}) & DD1 (\hyperref[DD:loadDurFactor]{DD: loadDurFactor}) & DD2 (\hyperref[DD:stressDistFac]{DD: stressDistFac}) & DD3 (\hyperref[DD:nFL]{DD: nFL}) & DD4 (\hyperref[DD:gTF]{DD: gTF}) & DD5 (\hyperref[DD:dimlessLoad]{DD: dimlessLoad}) & DD6 (\hyperref[DD:tolLoad]{DD: tolLoad}) & DD7 (\hyperref[DD:sdf.tol]{DD: sdf\_tol}) & DD8 (\hyperref[DD:standOffDist]{DD: standOffDist})
 \\
 \midrule
-T1 (\hyperref[T:isSafePb]{TM: isSafePb}) &  & X & X &  &  &  &  &  &  &  &  &  & 
+T1 (\hyperref[TM:isSafePb]{TM: isSafePb}) &  & X & X &  &  &  &  &  &  &  &  &  & 
 \\
-T2 (\hyperref[T:isSafeLR]{TM: isSafeLR}) & X &  &  & X & X &  &  &  &  &  &  &  & 
+T2 (\hyperref[TM:isSafeLR]{TM: isSafeLR}) & X &  &  & X & X &  &  &  &  &  &  &  & 
 \\
 IM1 (\hyperref[IM:calOfDemand]{IM: calOfDemand}) &  &  &  &  &  & X & X & X &  &  &  &  & 
 \\
@@ -1175,7 +1175,7 @@ DD8 (\hyperref[DD:standOffDist]{DD: standOffDist}) &  &  &  &  &  &  & X &  &  &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:isSafePb]{TM: isSafePb}) & T2 (\hyperref[T:isSafeLR]{TM: isSafeLR}) & IM1 (\hyperref[IM:calOfDemand]{IM: calOfDemand}) & IM2 (\hyperref[DD:risk.fun]{DD: risk\_fun}) & IM3 (\hyperref[DD:min.thick]{DD: min\_thick}) & DD1 (\hyperref[DD:loadDurFactor]{DD: loadDurFactor}) & DD2 (\hyperref[DD:stressDistFac]{DD: stressDistFac}) & DD3 (\hyperref[DD:nFL]{DD: nFL}) & DD4 (\hyperref[DD:gTF]{DD: gTF}) & DD5 (\hyperref[DD:dimlessLoad]{DD: dimlessLoad}) & DD6 (\hyperref[DD:tolLoad]{DD: tolLoad}) & DD7 (\hyperref[DD:sdf.tol]{DD: sdf\_tol}) & DD8 (\hyperref[DD:standOffDist]{DD: standOffDist}) & Data Constraints (\hyperref[Sec:DataConstraints]{Section: Data Constraints}) & R1 (\hyperref[inputGlassProps]{FR: Input-Glass-Props}) & R2 (\hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions}) & R3 (\hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints}) & R4 (\hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities}) & R5 (\hyperref[checkGlassSafety]{FR: Check-Glass-Safety}) & R6 (\hyperref[outputQuants]{FR: Output-Quantities})
+ & T1 (\hyperref[TM:isSafePb]{TM: isSafePb}) & T2 (\hyperref[TM:isSafeLR]{TM: isSafeLR}) & IM1 (\hyperref[IM:calOfDemand]{IM: calOfDemand}) & IM2 (\hyperref[DD:risk.fun]{DD: risk\_fun}) & IM3 (\hyperref[DD:min.thick]{DD: min\_thick}) & DD1 (\hyperref[DD:loadDurFactor]{DD: loadDurFactor}) & DD2 (\hyperref[DD:stressDistFac]{DD: stressDistFac}) & DD3 (\hyperref[DD:nFL]{DD: nFL}) & DD4 (\hyperref[DD:gTF]{DD: gTF}) & DD5 (\hyperref[DD:dimlessLoad]{DD: dimlessLoad}) & DD6 (\hyperref[DD:tolLoad]{DD: tolLoad}) & DD7 (\hyperref[DD:sdf.tol]{DD: sdf\_tol}) & DD8 (\hyperref[DD:standOffDist]{DD: standOffDist}) & Data Constraints (\hyperref[Sec:DataConstraints]{Section: Data Constraints}) & R1 (\hyperref[inputGlassProps]{FR: Input-Glass-Props}) & R2 (\hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions}) & R3 (\hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints}) & R4 (\hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities}) & R5 (\hyperref[checkGlassSafety]{FR: Check-Glass-Safety}) & R6 (\hyperref[outputQuants]{FR: Output-Quantities})
 \\
 \midrule
 R1 (in \hyperref[inputGlassProps]{FR: Input-Glass-Props}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1199,9 +1199,9 @@ R6 (in \hyperref[outputQuants]{FR: Output-Quantities}) &  &  & X & X & X &  & X 
  & A1 (\hyperref[A:glassType]{A: glassType}) & A2 (\hyperref[A:glassCondition]{A: glassCondition}) & A3 (\hyperref[A:explainScenario]{A: explainScenario}) & A4 (\hyperref[A:standardValues]{A: standardValues}) & A5 (\hyperref[A:glassLite]{A: glassLite}) & A6 (\hyperref[A:boundaryConditions]{A: boundaryConditions}) & A7 (\hyperref[A:responseType]{A: responseType}) & A8 (\hyperref[A:ldfConstant]{A: ldfConstant})
 \\
 \midrule
-T1 (\hyperref[T:isSafePb]{TM: isSafePb}) &  &  &  &  &  &  &  & 
+T1 (\hyperref[TM:isSafePb]{TM: isSafePb}) &  &  &  &  &  &  &  & 
 \\
-T2 (\hyperref[T:isSafeLR]{TM: isSafeLR}) &  &  &  &  &  &  &  & 
+T2 (\hyperref[TM:isSafeLR]{TM: isSafeLR}) &  &  &  &  &  &  &  & 
 \\
 IM1 (\hyperref[IM:calOfDemand]{IM: calOfDemand}) &  &  &  & X &  & X & X & 
 \\

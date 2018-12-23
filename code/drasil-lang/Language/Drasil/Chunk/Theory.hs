@@ -13,9 +13,9 @@ import Language.Drasil.Development.Unit (MayHaveUnit)
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.RefProg (Reference)
 import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
-import Language.Drasil.Chunk.NamedIdea (IdeaDict, mkIdea)
-import Language.Drasil.NounPhrase (cn')
+import Language.Drasil.ShortName (ShortName, shortname')
+import Language.Drasil.Chunk.CommonIdea (prependAbrv)
+import Data.Drasil.IdeaDicts (theoryMod)
 
 import Control.Lens (Lens', view, makeLenses)
 
@@ -49,9 +49,9 @@ data TheoryModel = TM
   , _invs :: [Relation]
   , _dfun :: [QDefinition]
   , _ref  :: [Reference]
-  , _lb   :: Reference
+  ,  lb   :: ShortName
+  ,  ra   :: String
   , _notes :: [Sentence]
-  , _ci :: CI
   }
 makeLenses ''TheoryModel
 
@@ -71,15 +71,9 @@ instance Theory             TheoryModel where
   defined_quant = defq
   invariants    = invs
   defined_fun   = dfun
-instance HasShortName       TheoryModel where shortname = shortname . view lb
-instance HasRefAddress      TheoryModel where getRefAdd = getRefAdd . view lb
-instance CommonIdea         TheoryModel where abrv = abrv . view ci
-
-softEng :: IdeaDict
-softEng      = mkIdea  "softEng"        (cn' "Software Engineering")  (Just "SE")
-
-theoryMod :: CI
-theoryMod    = commonIdeaWithDict "theoryMod"    (cn' "Theory Model")                    "TM"        [softEng]
+instance HasShortName       TheoryModel where shortname = lb
+instance HasRefAddress      TheoryModel where getRefAdd = ra
+instance CommonIdea         TheoryModel where abrv _ = abrv theoryMod
 
 -- This "smart" constructor is really quite awful, it takes way too many arguments.
 -- This should likely be re-arranged somehow. Especially since since of the arguments
@@ -87,5 +81,7 @@ theoryMod    = commonIdeaWithDict "theoryMod"    (cn' "Theory Model")           
 tm :: (Concept c0, Quantity q, MayHaveUnit q, Concept c1) => c0 ->
     [q] -> [c1] -> [QDefinition] ->
     [Relation] -> [QDefinition] -> [Reference] ->
-    Reference -> [Sentence] -> TheoryModel
-tm c0 q c1 dq inv dfn r lbe nts = TM (cw c0) [] [] (map qw q) (map cw c1) dq inv dfn r lbe nts theoryMod 
+    String -> [Sentence] -> TheoryModel
+tm c0 q c1 dq inv dfn r lbe nts = 
+  TM (cw c0) [] [] (map qw q) (map cw c1) dq inv dfn r (shortname' lbe)
+      (prependAbrv theoryMod lbe) nts

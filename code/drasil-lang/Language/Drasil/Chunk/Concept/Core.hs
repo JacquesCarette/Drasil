@@ -18,7 +18,7 @@ import Control.Lens (makeLenses, (^.), view)
 -- | The ConceptChunk datatype is a Concept
 data ConceptChunk = ConDict { _idea :: IdeaDict
                             , _defn' :: Sentence
-                            , _cdom' :: [UID]
+                            , cdom' :: [UID]
                             }
 makeLenses ''ConceptChunk
 
@@ -31,7 +31,7 @@ instance ConceptDomain ConceptChunk where cdom = cdom'
 instance Concept       ConceptChunk where
 
 
-data CommonConcept = ComConDict { _comm :: CI, _def :: Sentence, _dom :: [UID]}
+data CommonConcept = ComConDict { _comm :: CI, _def :: Sentence, dom :: [UID]}
 makeLenses ''CommonConcept
 
 instance Eq            CommonConcept where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
@@ -51,6 +51,6 @@ instance HasUID        ConceptInstance where uid = cc . idea . uid
 instance NamedIdea     ConceptInstance where term = cc . idea . term
 instance Idea          ConceptInstance where getA = getA . view (cc . idea)
 instance Definition    ConceptInstance where defn = cc . defn'
-instance ConceptDomain ConceptInstance where cdom = cc . cdom'
+instance ConceptDomain ConceptInstance where cdom = cdom' . view cc
 instance Concept       ConceptInstance where
 instance HasShortName  ConceptInstance where shortname = shnm

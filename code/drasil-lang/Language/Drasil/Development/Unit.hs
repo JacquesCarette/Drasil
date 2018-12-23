@@ -36,7 +36,7 @@ instance NamedIdea     UnitDefn where term   = vc . term
 instance Idea          UnitDefn where getA c = getA (c ^. vc)
 instance Definition    UnitDefn where defn = vc . defn
 instance Eq            UnitDefn where a == b = (usymb a) == (usymb b)
-instance ConceptDomain UnitDefn where cdom = vc . cdom
+instance ConceptDomain UnitDefn where cdom = cdom . view vc
 instance HasUnitSymbol UnitDefn where usymb = get_usymb . view cas
 instance IsUnit        UnitDefn where udefn = get_defn . view cas
                                       getUnits u = view cu u

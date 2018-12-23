@@ -72,7 +72,7 @@ instance UncertainQuantity UncertQ where uncert = unc
 instance Constrained       UncertQ where constraints = coco . constraints
 instance HasReasVal        UncertQ where reasVal = coco . reasVal
 instance Definition        UncertQ where defn = coco . defn
-instance ConceptDomain     UncertQ where cdom = coco . cdom
+instance ConceptDomain     UncertQ where cdom = cdom . view coco
 instance Concept           UncertQ where
 instance MayHaveUnit       UncertQ where getUnit = getUnit . view coco
 

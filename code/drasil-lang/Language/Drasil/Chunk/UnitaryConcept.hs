@@ -12,7 +12,7 @@ import Language.Drasil.UID (UID)
 
 data UnitaryConceptDict = UCC { _unitary :: UnitaryChunk
                               , _defn' :: Sentence
-                              , _cdom' :: [UID]
+                              , cdom' :: [UID]
                               }
 makeLenses ''UnitaryConceptDict
 
@@ -30,4 +30,4 @@ instance MayHaveUnit   UnitaryConceptDict where getUnit u = getUnit $ u ^. unita
 instance Unitary       UnitaryConceptDict where unit x = unit (x ^. unitary)
 
 ucw :: (Unitary c, Concept c, MayHaveUnit c) => c -> UnitaryConceptDict
-ucw c = UCC (mkUnitary c) (c ^. defn) (c ^. cdom)
+ucw c = UCC (mkUnitary c) (c ^. defn) (cdom c)

@@ -73,7 +73,7 @@ bibMap cs = Map.fromList $ zip (map (^. uid) scs) (zip scs [1..])
 conGrp :: ConceptInstance -> ConceptInstance -> Bool
 conGrp a b = cdl a == cdl b where
   cdl :: ConceptInstance -> UID
-  cdl x = sDom $ x ^. cdom
+  cdl = sDom . cdom
 
 conceptMap :: [ConceptInstance] -> ConceptMap
 conceptMap cs = Map.fromList $ zip (map (^. uid) (concat grp)) $ concatMap
@@ -134,7 +134,7 @@ instance Referable InstanceModel where
 
 instance Referable ConceptInstance where
   refAdd l    = l ^. uid
-  renderRef l = RP ((defer $ sDom $ l ^. cdom) +::+ raw ": " +::+ name) (l ^. uid)
+  renderRef l = RP ((defer $ sDom $ cdom l) +::+ raw ": " +::+ name) (l ^. uid)
 
 instance Referable LabelledContent where
   refAdd     (LblC lb _) = getRefAdd lb

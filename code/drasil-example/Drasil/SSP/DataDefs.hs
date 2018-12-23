@@ -10,10 +10,6 @@ import Language.Drasil
  -- ofThe', sAnd)
 
 import Drasil.SSP.Assumptions (newA9)
-import Drasil.SSP.Labels (sliceWghtL, baseWtrFL, 
-  surfWtrFL, intersliceWtrFL, angleAL, angleBL, lengthLbL , sliceWghtL, 
-  lengthBL, lengthLsL, seismicLoadFL, intrsliceFL,
-  surfLoadsL, convertFunc1L, convertFunc2L)
 import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012)
 import Drasil.SSP.Unitals (baseAngle, baseHydroForce, baseLngth, baseWthX, 
   dryWeight, earthqkLoadFctr, fricAngle, fs, impLoadAngle, intNormForce, 
@@ -34,7 +30,7 @@ dataDefns = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB,
 --DD1
 
 sliceWght :: DataDefinition
-sliceWght = mkDDL sliceWghtQD [fredlund1977] [{-Derivation-}] sliceWghtL []--Notes
+sliceWght = mkDD sliceWghtQD [fredlund1977] [{-Derivation-}] "sliceWght" []--Notes
 --FIXME: fill empty lists in
 
 sliceWghtQD :: QDefinition
@@ -55,7 +51,7 @@ slcWgtEqn = (inxi baseWthX) * (case_ [case1,case2,case3])
 --DD2
 
 baseWtrF :: DataDefinition
-baseWtrF = mkDDL baseWtrFQD [fredlund1977] [{-Derivation-}] baseWtrFL 
+baseWtrF = mkDD baseWtrFQD [fredlund1977] [{-Derivation-}] "baseWtrF"
   [makeRef2S newA9]--Notes
 --FIXME: fill empty lists in
 
@@ -72,7 +68,7 @@ bsWtrFEqn = (inxi baseLngth)*(case_ [case1,case2])
 --DD3
 
 surfWtrF :: DataDefinition
-surfWtrF = mkDDL surfWtrFQD [fredlund1977] [{-Derivation-}] surfWtrFL
+surfWtrF = mkDD surfWtrFQD [fredlund1977] [{-Derivation-}] "surfWtrF"
   [makeRef2S newA9]--Notes
 --FIXME: fill empty lists in
 
@@ -89,7 +85,7 @@ surfWtrFEqn = (inxi surfLngth)*(case_ [case1,case2])
 --DD4
 
 intersliceWtrF :: DataDefinition
-intersliceWtrF = mkDDL intersliceWtrFQD [fredlund1977] [{-Derivation-}] intersliceWtrFL
+intersliceWtrF = mkDD intersliceWtrFQD [fredlund1977] [{-Derivation-}] "intersliceWtrF"
   []--Notes
 --FIXME: fill empty lists in
 
@@ -110,7 +106,7 @@ intersliceWtrFEqn = case_ [case1,case2,case3]
 --DD5
 
 angleA :: DataDefinition
-angleA = mkDDL angleAQD [fredlund1977] [{-Derivation-}] angleAL 
+angleA = mkDD angleAQD [fredlund1977] [{-Derivation-}] "angleA" 
   [makeRef2S newA9]--Notes
 --FIXME: fill empty lists in
 
@@ -124,7 +120,7 @@ angleAEqn = (inxi slipHght - inx slipHght (-1)) /
 --DD5.5
 
 angleB :: DataDefinition
-angleB = mkDDL angleBQD [fredlund1977] [{-Derivation-}] angleBL 
+angleB = mkDD angleBQD [fredlund1977] [{-Derivation-}] "angleB"
   [makeRef2S newA9]--Notes
 --FIXME: fill empty lists in
 
@@ -138,7 +134,7 @@ angleBEqn = (inxi slopeHght - inx slopeHght (-1)) /
 --DD6
 
 lengthB :: DataDefinition
-lengthB = mkDDL lengthBQD [fredlund1977] [{-Derivation-}] lengthBL []--Notes
+lengthB = mkDD lengthBQD [fredlund1977] [{-Derivation-}] "lengthB" []--Notes
 --FIXME: fill empty lists in
 
 lengthBQD :: QDefinition
@@ -150,7 +146,7 @@ lengthBEqn = inxi slipDist - inx slipDist (-1)
 --DD6.3
 
 lengthLb :: DataDefinition
-lengthLb = mkDDL lengthLbQD [fredlund1977] [{-Derivation-}] lengthLbL
+lengthLb = mkDD lengthLbQD [fredlund1977] [{-Derivation-}] "lengthLb"
   [makeRef2S newA9]--Notes
 --FIXME: fill empty lists in
 
@@ -163,7 +159,7 @@ lengthLbEqn = (inxi baseWthX) * sec (inxi baseAngle)
 --DD6.6
 
 lengthLs :: DataDefinition
-lengthLs = mkDDL lengthLsQD [fredlund1977] [{-Derivation-}] lengthLsL
+lengthLs = mkDD lengthLsQD [fredlund1977] [{-Derivation-}] "lengthLs"
   [makeRef2S newA9]--Notes
 --FIXME: fill empty lists in
 
@@ -176,7 +172,7 @@ lengthLsEqn = (inxi baseWthX) * sec (inxi surfAngle)
 --DD7
 
 seismicLoadF :: DataDefinition
-seismicLoadF = mkDDL seismicLoadFQD [fredlund1977] [{-Derivation-}] seismicLoadFL []--Notes
+seismicLoadF = mkDD seismicLoadFQD [fredlund1977] [{-Derivation-}] "seismicLoadF" []--Notes
 --FIXME: fill empty lists in
 
 seismicLoadFQD :: QDefinition
@@ -189,7 +185,7 @@ ssmcLFEqn = ((sy earthqkLoadFctr) * (inxi slcWght))
 --DD8
 
 surfLoads :: DataDefinition
-surfLoads = mkDDL surfLoadsQD [chen2005] [{-Derivation-}] surfLoadsL []--Notes
+surfLoads = mkDD surfLoadsQD [chen2005] [{-Derivation-}] "surfLoads" []--Notes
 --FIXME: fill empty lists in
 
 surfLoadsQD :: QDefinition
@@ -203,7 +199,7 @@ surfLEqn = (inxi surfLoad) * (inxi impLoadAngle)
 --DD9
 
 intrsliceF :: DataDefinition
-intrsliceF = mkDDL intrsliceFQD [chen2005] [{-Derivation-}] intrsliceFL []--Notes
+intrsliceF = mkDD intrsliceFQD [chen2005] [{-Derivation-}] "intrsliceF" []--Notes
 --FIXME: fill empty lists in
 
 intrsliceFQD :: QDefinition
@@ -215,8 +211,8 @@ intrsliceFEqn = (sy normToShear) * (inxi scalFunc) * (inxi intNormForce)
 --DD13
 
 convertFunc1 :: DataDefinition
-convertFunc1 = mkDDL convertFunc1QD [chen2005, karchewski2012] [{-Derivation-}]
-  convertFunc1L []
+convertFunc1 = mkDD convertFunc1QD [chen2005, karchewski2012] [{-Derivation-}]
+  "convertFunc1" []
 
 convertFunc1QD :: QDefinition
 convertFunc1QD = mkQuantDef shrResC convertFunc1Eqn
@@ -230,8 +226,8 @@ convertFunc1Eqn = (sy normToShear * inxi scalFunc *
 --DD14
 
 convertFunc2 :: DataDefinition
-convertFunc2 = mkDDL convertFunc2QD [chen2005, karchewski2012] [{-Derivation-}]
-  convertFunc2L []
+convertFunc2 = mkDD convertFunc2QD [chen2005, karchewski2012] [{-Derivation-}]
+  "convertFunc2" []
 
 convertFunc2QD :: QDefinition
 convertFunc2QD = mkQuantDef mobShrC convertFunc2Eqn
@@ -247,7 +243,7 @@ convertFunc2Eqn = ((sy normToShear * inxi scalFunc *
 {--DD10
 
 resShearWO :: DataDefinition
-resShearWO = mkDDL resShearWOQD [chen2005] resShr_deriv_ssp resShearWOL
+resShearWO = mkDD resShearWOQD [chen2005] resShr_deriv_ssp resShearWOL
   [makeRef2S newA3, makeRef2S newA4, makeRef2S newA5]--Notes
 --FIXME: fill empty lists in
 
@@ -269,7 +265,7 @@ resShr_deriv_ssp = weave [resShrDerivation_sentence, map E resShr_deriv_eqns_ssp
 --DD11
 
 mobShearWO :: DataDefinition
-mobShearWO = mkDDL mobShearWOQD [chen2005] mobShr_deriv_ssp mobShearWOL
+mobShearWO = mkDD mobShearWOQD [chen2005] mobShr_deriv_ssp mobShearWOL
   [makeRef2S newA3, makeRef2S newA4, makeRef2S newA5]--Notes
 --FIXME: fill empty lists in
 

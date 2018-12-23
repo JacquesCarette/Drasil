@@ -19,7 +19,7 @@ instance HasUID        RelationConcept where uid = conc . uid
 instance NamedIdea     RelationConcept where term = conc . term
 instance Idea          RelationConcept where getA = getA . view conc
 instance Definition    RelationConcept where defn = conc . defn
-instance ConceptDomain RelationConcept where cdom = conc . cdom
+instance ConceptDomain RelationConcept where cdom = cdom . view conc
 instance Concept       RelationConcept where
 instance ExprRelat     RelationConcept where relat = rel
 instance Eq            RelationConcept where a == b = (a ^. uid) == (b ^. uid)

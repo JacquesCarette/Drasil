@@ -51,7 +51,7 @@ ccs n d l = ConDict (nw n) d $ map (^. uid) l
 
 -- | For projecting out to the ConceptChunk data-type
 cw :: Concept c => c -> ConceptChunk
-cw c = ConDict (nw c) (c ^. defn) (c ^. cdom)
+cw c = ConDict (nw c) (c ^. defn) (cdom c)
 
 cic :: Concept c => String -> Sentence -> String -> c -> ConceptInstance
 cic u d sn dom = ConInst (ccs (nc u $ pn sn) d [dom]) $ shortname' sn

@@ -60,7 +60,7 @@ instance NamedIdea          TheoryModel where term = con . term
 instance Idea               TheoryModel where getA = getA . view con
 instance Definition         TheoryModel where defn = con . defn
 instance HasReference       TheoryModel where getReferences = ref
-instance ConceptDomain      TheoryModel where cdom = con . cdom
+instance ConceptDomain      TheoryModel where cdom = cdom . view con
 instance HasAdditionalNotes TheoryModel where getNotes = notes
 instance Concept            TheoryModel where
 instance Theory             TheoryModel where

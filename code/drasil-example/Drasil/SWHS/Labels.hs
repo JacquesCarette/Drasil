@@ -30,13 +30,6 @@ noGaseousStatePCML          = makeAssumpRef "No-Gaseous-State-PCM"
 atmosphericPressureTankL    = makeAssumpRef "Atmospheric-Pressure-Tank"
 volumeCoilL                 = makeAssumpRef "Volume-Coil-Negligible"
 
--- Data Definition
-dd1HtFluxCL, dd2HtFluxPL, dd3HtFusionL, dd4MeltFracL :: Reference
-dd1HtFluxCL = makeDDRef "ht_flux_C"
-dd2HtFluxPL = makeDDRef "ht_flux_P"
-dd3HtFusionL = makeDDRef "htFusion"
-dd4MeltFracL = makeDDRef "melt_frac"
-
 -- Instance Models
 eBalanceOnWtrL, eBalanceOnPCML, heatEInWtrL, heatEInPCML :: Reference
 eBalanceOnWtrL = makeInstRef "eBalanceOnWtr"

@@ -66,8 +66,8 @@ class HasAdditionalNotes c where
   getNotes :: Lens' c [Sentence]
 
 class ConceptDomain c where
-  -- | cdom provides (a 'Lens' to) the concept domain tags for a chunk
-  cdom :: Lens' c [UID]
+  -- | cdom provides Getter for the concept domain tags for a chunk
+  cdom :: c -> [UID]
   -- ^ /cdom/ should be exported for use by the
   -- Drasil framework, but should not be exported beyond that.
 

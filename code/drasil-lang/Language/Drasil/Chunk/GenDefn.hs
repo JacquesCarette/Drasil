@@ -34,7 +34,7 @@ instance NamedIdea          GenDefn where term = relC . term
 instance Idea               GenDefn where getA = getA . view relC
 instance Concept            GenDefn where
 instance Definition         GenDefn where defn = relC . defn
-instance ConceptDomain      GenDefn where cdom = relC . cdom
+instance ConceptDomain      GenDefn where cdom = cdom . view relC
 instance ExprRelat          GenDefn where relat = relC . relat
 instance HasDerivation      GenDefn where derivations = deri
 instance HasCitation        GenDefn where getCitations = cit

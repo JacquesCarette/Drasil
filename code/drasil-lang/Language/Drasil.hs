@@ -63,7 +63,7 @@ module Language.Drasil (
   -- Chunk.Eq
   , QDefinition, fromEqn, fromEqn', equat, ec
   -- Chunk.DataDefinition
-  , DataDefinition, mkQuantDef, mkDD, qdFromDD, mkDDL
+  , DataDefinition, mkQuantDef, mkDD, qdFromDD
   -- Chunk.GenDefn
   , GenDefn, gd', gd''
   -- Chunk.InstanceModel
@@ -107,7 +107,7 @@ module Language.Drasil (
   -- RefProg
   -- , RefProg(..), IRefProg(..)
   , Reference(..)
-  , makeAssumpRef, makeTabRef, makeDDRef, makeInstRef, makeTMRef
+  , makeAssumpRef, makeTabRef, makeInstRef, makeTMRef
   , makeSecRef, makeLstRef, makeFigRef, makeURI
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
@@ -267,7 +267,7 @@ import Language.Drasil.Chunk.Constrained.Core (physc, sfwrc, enumc, isPhysC, isS
   Constraint(..), ConstraintReason(..))
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', equat, ec)
-import Language.Drasil.Chunk.DataDefinition (DataDefinition, mkQuantDef, mkDD, qdFromDD, mkDDL)
+import Language.Drasil.Chunk.DataDefinition (DataDefinition, mkQuantDef, mkDD, qdFromDD)
 import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.InstanceModel
 import Language.Drasil.Chunk.NamedIdea
@@ -309,7 +309,7 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   rendPersLFM', rendPersLFM'')
 import Language.Drasil.RefTypes(RefAdd, LinkType(Internal, Cite2, External))
 import Language.Drasil.RefProg(Reference(Reference)
-  , makeTabRef, makeDDRef, makeFigRef, makeSecRef, makeLstRef, makeInstRef
+  , makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeInstRef
   , makeTMRef, makeAssumpRef, makeURI)
 import Language.Drasil.Label.Type (getAdd, LblType(RP, Citation, URI), IRefProg(..))
 

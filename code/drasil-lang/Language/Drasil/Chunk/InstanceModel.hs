@@ -55,7 +55,7 @@ instance NamedIdea          InstanceModel where term = rc . term
 instance Idea               InstanceModel where getA = getA . view rc
 instance Concept            InstanceModel where
 instance Definition         InstanceModel where defn = rc . defn
-instance ConceptDomain      InstanceModel where cdom = rc . cdom
+instance ConceptDomain      InstanceModel where cdom = cdom . view rc
 instance ExprRelat          InstanceModel where relat = rc . relat
 instance HasDerivation      InstanceModel where derivations = deri
 instance HasCitation        InstanceModel where getCitations = cit

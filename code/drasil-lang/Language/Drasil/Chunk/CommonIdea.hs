@@ -2,19 +2,19 @@
 module Language.Drasil.Chunk.CommonIdea
   (CI, commonIdea, getAcc, commonIdeaWithDict, prependAbrv) where
 
-import Control.Lens ((^.))
-import Language.Drasil.UID (UID)
+import Language.Drasil.Chunk.NamedIdea (IdeaDict)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
  CommonIdea(abrv), ConceptDomain(cdom))
-import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.NounPhrase (NP)
-import Language.Drasil.Chunk.NamedIdea (IdeaDict)
+import Language.Drasil.RefProg (repUnd)
+import Language.Drasil.Sentence (Sentence(S))
+import Language.Drasil.UID (UID)
 
-import Control.Lens (makeLenses, view)
+import Control.Lens (makeLenses, (^.), view)
 
 -- | The common idea (with nounPhrase) data type. It must have a 
 -- 'NounPhrase' for its 'term', and must have an abbreviation.
-data CI = CI { _cid :: UID, _ni :: NP, _ab :: String, _cdom' :: [UID]}
+data CI = CI { _cid :: UID, _ni :: NP, _ab :: String, cdom' :: [UID]}
 makeLenses ''CI
 
 instance HasUID        CI where uid  = cid
@@ -35,4 +35,4 @@ getAcc :: CI -> Sentence
 getAcc = S . abrv
 
 prependAbrv :: CommonIdea c => c -> String -> String
-prependAbrv c s = abrv c ++ (':':s)
+prependAbrv c s = abrv c ++ (':' : repUnd s)

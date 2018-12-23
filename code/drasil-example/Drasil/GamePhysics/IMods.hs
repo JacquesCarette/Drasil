@@ -16,12 +16,6 @@ import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
 import Data.Drasil.SentenceStructures (foldlSent, foldlSent_)
 import Data.Drasil.Utils (fmtU, foldle1)
 
--- Labels
-l1, l2, l3 :: Reference
-l1 = makeInstRef "transMot"
-l2 = makeInstRef "rotMot"
-l3 = makeInstRef "col2D"
-
 iModels :: [RelationConcept]
 iModels = [transMot, rotMot, col2D]
 
@@ -32,11 +26,10 @@ iModels_new = [im1_new, im2_new, im3_new]
 im1_new :: InstanceModel
 im1_new = im' transMot [qw vel_i, qw QP.time, qw QP.gravitationalAccel, qw force_i, qw mass_i] 
   [sy vel_i $> 0, sy QP.time $> 0, sy QP.gravitationalAccel $> 0, 
-            sy force_i $> 0, sy mass_i $> 0 ] (qw acc_i) [] [] l1
-  [transMotDesc]
+            sy force_i $> 0, sy mass_i $> 0 ] (qw acc_i) [] [] "transMot" [transMotDesc]
 
 transMot :: RelationConcept
-transMot = makeRC "transMot" transMotNP (transMotDesc +:+ transMotLeg) transMotRel -- l1
+transMot = makeRC "transMot" transMotNP (transMotDesc +:+ transMotLeg) transMotRel
 
 transMotNP :: NP
 transMotNP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
@@ -66,11 +59,11 @@ transMotLeg = foldle1 (+:+) (+:+) $ map defList transMotLegTerms
 im2_new :: InstanceModel
 im2_new = im' rotMot [qw QP.angularVelocity, qw QP.time, qw torque_i, qw QP.momentOfInertia]
   [sy QP.angularVelocity $> 0, sy QP.time $> 0, sy torque_i $> 0, sy QP.momentOfInertia $> 0] 
-    (qw QP.angularAccel) [sy QP.angularAccel $> 0] [] l2
+    (qw QP.angularAccel) [sy QP.angularAccel $> 0] [] "rotMot"
   [rotMotDesc]
 
 rotMot :: RelationConcept
-rotMot = makeRC "rotMot" (rotMotNP) (rotMotDesc +:+ rotMotLeg) rotMotRel -- l2
+rotMot = makeRC "rotMot" (rotMotNP) (rotMotDesc +:+ rotMotLeg) rotMotRel
 
 rotMotNP :: NP
 rotMotNP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid body"
@@ -97,11 +90,11 @@ rotMotLeg = foldle1 (+:+) (+:+) $ map defList rotMotLegTerms
 im3_new :: InstanceModel
 im3_new = im' col2D [qw QP.time, qw QP.impulseS, qw mass_A, qw normalVect] 
   [sy QP.time $> 0, sy QP.impulseS $> 0, sy mass_A $> 0, sy normalVect $> 0]
-  (qw time_c) [sy vel_A $> 0, sy time_c $> 0] [] l3
+  (qw time_c) [sy vel_A $> 0, sy time_c $> 0] [] "col2D"
   [col2DDesc]
 
 col2D :: RelationConcept
-col2D = makeRC "col2D" (col2DNP) (col2DDesc +:+ col2DLeg) col2DRel -- l3
+col2D = makeRC "col2D" (col2DNP) (col2DDesc +:+ col2DLeg) col2DRel
 
 col2DNP :: NP
 col2DNP =  nounPhraseSP "Collisions on 2D rigid bodies"

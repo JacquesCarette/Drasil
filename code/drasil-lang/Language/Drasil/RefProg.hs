@@ -2,8 +2,8 @@
 module Language.Drasil.RefProg 
   (Reference(Reference),
    repUnd,
-   makeTabRef, makeFigRef, makeInstRef, makeCiteRef,
-   makeSecRef, makeLstRef, makeTMRef, makeURI, makeAssumpRef)
+   makeTabRef, makeFigRef, makeCiteRef,
+   makeSecRef, makeLstRef, makeURI, makeAssumpRef)
   where
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   HasShortName(shortname))
@@ -39,12 +39,6 @@ makeTabRef rs = Reference rs (RP (prepend "Tab") ("Table:" ++ repUnd rs)) (short
 
 makeFigRef :: String -> Reference
 makeFigRef rs = Reference rs (RP (prepend "Fig") ("Figure:" ++ repUnd rs)) (shortname' rs)
-
-makeInstRef :: String -> Reference
-makeInstRef rs = Reference rs (RP (prepend "IM") ("IM:" ++ repUnd rs)) (shortname' rs)
-
-makeTMRef :: String -> Reference
-makeTMRef rs = Reference rs (RP (prepend "TM") ("T:" ++ repUnd rs)) (shortname' rs)
 
 makeCiteRef :: String -> Reference
 makeCiteRef rs = Reference rs (Citation $ repUnd rs) (shortname' rs)

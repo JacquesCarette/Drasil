@@ -18,13 +18,6 @@ planeStrainL                = makeAssumpRef "Plane-Strain-Conditions"
 effectiveNormL              = makeAssumpRef "Effective-Norm-Stress-Large"
 surfaceBaseSliceL           = makeAssumpRef "Surface-Base-Slice-between-Interslice-Straight-Lines"
 
--- Instance Models
-fctSftyL, nrmShrForL, inslideFxL, crtSlpIdL :: Reference
-fctSftyL = makeInstRef "fctSfty"
-nrmShrForL = makeInstRef "nrmShrFor"
-inslideFxL = makeInstRef "inslideFx"
-crtSlpIdL = makeInstRef "crtSlpId"
-
 -- Fig
 forceDiagramL :: Reference
 forceDiagramL = makeFigRef "ForceDiagram"

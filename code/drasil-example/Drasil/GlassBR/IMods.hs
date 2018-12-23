@@ -5,7 +5,6 @@ import Control.Lens ((^.))
 import Language.Drasil
 
 import Drasil.GlassBR.DataDefs (standOffDis, calofDemand)
-import Drasil.GlassBR.Labels (calOfDemandL)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (char_weight, demand, 
   demandq, eqTNTWeight, plate_len, plate_width, 
@@ -27,12 +26,12 @@ glassBRsymb = map dqdWr [plate_len, plate_width, char_weight, standOffDist] ++
 calofDemandi :: InstanceModel
 calofDemandi = im' calofDemand_RCi [qw demand, qw eqTNTWeight, qw standOffDist]
   [sy demand $> 0, sy eqTNTWeight $> 0, sy standOffDist $> 0] (qw demand) []
-  [astm2009] calOfDemandL
+  [astm2009] "calOfDemand"
   [calofDemandDesc]
 
 calofDemand_RCi :: RelationConcept
 calofDemand_RCi = makeRC "calofDemand_RC" (nounPhraseSP "Calculation of Demand") 
-  calofDemandDesc ( (sy demand) $= apply2 demand eqTNTWeight standOffDist) -- calOfDemandL
+  calofDemandDesc ( (sy demand) $= apply2 demand eqTNTWeight standOffDist)
   --calofDemandDesc $ (C demand) $= FCall (asExpr interpY) [V "TSD.txt", sy standOffDist, sy eqTNTWeight] 
   
 calofDemandDesc :: Sentence

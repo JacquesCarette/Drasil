@@ -30,13 +30,6 @@ noGaseousStatePCML          = makeAssumpRef "No-Gaseous-State-PCM"
 atmosphericPressureTankL    = makeAssumpRef "Atmospheric-Pressure-Tank"
 volumeCoilL                 = makeAssumpRef "Volume-Coil-Negligible"
 
--- Instance Models
-eBalanceOnWtrL, eBalanceOnPCML, heatEInWtrL, heatEInPCML :: Reference
-eBalanceOnWtrL = makeInstRef "eBalanceOnWtr"
-eBalanceOnPCML = makeInstRef "eBalanceOnPCM"
-heatEInWtrL    = makeInstRef "heatEInWtr"
-heatEInPCML    = makeInstRef "heatEInPCM"
-
 -- Table
 inputInitQuantsLbl :: Reference
 inputInitQuantsLbl = makeTabRef "Input-Variable-Requirements"

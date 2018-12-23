@@ -341,24 +341,24 @@ layLabelled :: (HasSymbolTable ctx, HasTermTable ctx, HasDefinitionTable ctx,
  HasPrintingOptions ctx) => ctx -> LabelledContent -> T.LayoutObj
 layLabelled sm x@(LblC _ (Table hdr lls t b)) = T.Table ["table"]
   ((map (spec sm) hdr) : (map (map (spec sm)) lls)) 
-  (P.S $ getAdd (getRefAdd x))
+  (P.S $ getRefAdd x)
   b (spec sm t)
 layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"] 
   [T.EqnBlock (P.E (expr c sm))] 
-  (P.S $ getAdd (getRefAdd x))
+  (P.S $ getRefAdd x)
 layLabelled sm x@(LblC _ (Figure c f wp))     = T.Figure 
-  (P.S $ getAdd (getRefAdd x))
+  (P.S $ getRefAdd x)
   (spec sm c) f wp
 layLabelled sm x@(LblC c (Assumption _ b))        = T.ALUR T.Assumption
   (spec sm b)
-  (P.S $ getAdd (getRefAdd x))
+  (P.S $ getRefAdd x)
   (spec sm $ getShortName c)
 layLabelled sm x@(LblC _ (Graph ps w h t))    = T.Graph 
   (map (\(y,z) -> (spec sm y, spec sm z)) ps) w h (spec sm t)
-  (P.S $ getAdd (getRefAdd x))
+  (P.S $ getRefAdd x)
 layLabelled sm x@(LblC _ (Defini dtyp pairs)) = T.Definition 
   dtyp (layPairs pairs) 
-  (P.S $ getAdd (getRefAdd x))
+  (P.S $ getRefAdd x)
   where layPairs = map (\(x',y) -> (x', map (lay sm) y))
 layLabelled sm (LblC _ (Paragraph c))           = T.Paragraph (spec sm c)
 layLabelled sm (LblC _ (Enumeration cs))        = T.List $ makeL sm cs

@@ -9,7 +9,7 @@ import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   HasShortName(shortname))
 import Language.Drasil.ShortName (ShortName, shortname')
 import Language.Drasil.UID (UID)
-import Language.Drasil.Label.Type (LblType(RP,Citation, URI),
+import Language.Drasil.Label.Type (LblType(RP,Citation, URI), getAdd,
   -- name, (+::+), raw, defer, 
   prepend)
 
@@ -22,7 +22,7 @@ data Reference = Reference
 makeLenses ''Reference
 
 instance HasUID        Reference where uid = ui
-instance HasRefAddress Reference where getRefAdd = ra
+instance HasRefAddress Reference where getRefAdd = getAdd . ra
 instance HasShortName  Reference where shortname = sn
 
 -- FIXME: Duplicated from Document.hs!

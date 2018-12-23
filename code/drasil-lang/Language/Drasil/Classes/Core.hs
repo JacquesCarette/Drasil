@@ -7,7 +7,6 @@ module Language.Drasil.Classes.Core (
   , HasSymbol(symbol)
   ) where
 
-import Language.Drasil.Label.Type (LblType)
 import Language.Drasil.ShortName (ShortName)
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.Symbol (Symbol)
@@ -33,5 +32,4 @@ class HasSymbol c where
  
 -- | For a "Reference Address", we just need a getter.
 class HasRefAddress b where
-  getRefAdd :: b -> LblType 
-
+  getRefAdd :: b -> String

@@ -8,7 +8,7 @@ import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn,
   typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (ode, parameter)
 import Data.Drasil.Phrase (with)
-import Data.Drasil.IdeaDicts
+import Data.Drasil.IdeaDicts (materialEng)
 
 swhscon :: [ConceptChunk]
 swhscon = [charging, coil, discharging, gauss_div,

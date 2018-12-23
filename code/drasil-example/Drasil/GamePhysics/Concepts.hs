@@ -4,7 +4,7 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn, 
     goalStmt, inModel, likelyChg, requirement, srs, thModel, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (ode)
-import Data.Drasil.IdeaDicts
+import Data.Drasil.IdeaDicts (physics)
 ----- Acronyms -----
 
 centreMass, twoD, chipmunk :: CI

@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.DataDefinition where
 
 import Control.Lens(makeLenses, (^.), view)
-import Data.Drasil.IdeaDicts (softEng)
+import Data.Drasil.IdeaDicts (dataDefn)
 import Language.Drasil.Chunk.Citation (Citation, HasCitation(getCitations))
 import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict, prependAbrv)
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn')
@@ -15,14 +15,16 @@ import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase (cn')
-import Language.Drasil.RefProg(Reference)
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.ShortName (ShortName, shortname')
 import Language.Drasil.Symbol.Helpers (eqSymb)
+import Language.Drasil.UID (UID)
 
-data Scope = Scp { _spec :: Reference {-indirect reference-}}
+data Scope = Scp { _spec :: UID } {-indirect reference-}
 
-data ScopeType = Local Scope {-only visible within a limited scope-} | Global {-visible everywhere-}
+data ScopeType =
+    Local Scope {- only visible within a limited scope -}
+  | Global      {- visible everywhere -}
 
 -- A data definition is a QDefinition that may have additional notes. 
 -- It also has attributes like derivation, source, etc.
@@ -53,9 +55,6 @@ instance HasRefAddress      DataDefinition where getRefAdd = ra
 instance ConceptDomain      DataDefinition where cdom _ = cdom dataDefn
 instance CommonIdea         DataDefinition where abrv _ = abrv dataDefn
 
-dataDefn :: CI
-dataDefn    = commonIdeaWithDict "dataDefn"    (cn' "data definition")                             "DD"        [softEng]
-
 -- | Smart constructor for data definitions 
 mkDD :: QDefinition -> [Citation] -> Derivation -> String -> [Sentence] -> DataDefinition
 mkDD a b c d e = DatDef a Global b c (shortname' d) (prependAbrv dataDefn d) e
@@ -65,6 +64,6 @@ qdFromDD dd = dd ^. qd
 
 -- Used to help make Qdefinitions when uid, term, and symbol come from the same source
 mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
-mkQuantDef cncpt equation = datadef $ getUnit cncpt --should [Reference] be passed in at this point?
+mkQuantDef cncpt equation = datadef $ getUnit cncpt
   where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS (eqSymb cncpt) a equation
         datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS (eqSymb cncpt) equation

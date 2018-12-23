@@ -9,6 +9,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   HasAdditionalNotes(getNotes), CommonIdea(abrv))
 import Data.Drasil.IdeaDicts (gendef)
 import Language.Drasil.Chunk.Citation (Citation, HasCitation(getCitations))
+import Language.Drasil.Chunk.CommonIdea (prependAbrv)
 import Language.Drasil.Chunk.Relation (RelationConcept)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Development.Unit (unitWrapper, UnitDefn, MayHaveUnit(getUnit))
@@ -43,13 +44,10 @@ instance HasAdditionalNotes GenDefn where getNotes = notes
 instance MayHaveUnit        GenDefn where getUnit = gdUnit
 instance CommonIdea         GenDefn where abrv _ = abrv gendef
 
-decorate :: CommonIdea c => c -> String -> String
-decorate c s = abrv c ++ (':':s)
-
 gd' :: (IsUnit u, ConceptDomain u) => RelationConcept -> Maybe u ->
   Derivation -> [Citation] -> String -> [Sentence] -> GenDefn
 gd' r u derivs ref sn_ note = 
-  GD r (fmap unitWrapper u) derivs ref (shortname' sn_) (decorate gendef sn_) note
+  GD r (fmap unitWrapper u) derivs ref (shortname' sn_) (prependAbrv gendef sn_) note
 
 gd'' :: RelationConcept -> [Citation] -> String -> [Sentence] -> GenDefn
-gd'' r ref sn_ note = GD r Nothing  [] ref (shortname' sn_) (decorate gendef sn_) note
+gd'' r ref sn_ note = GD r Nothing  [] ref (shortname' sn_) (prependAbrv gendef sn_) note

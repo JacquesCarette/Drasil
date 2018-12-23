@@ -1,5 +1,6 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.CommonIdea (CI, commonIdea, getAcc, commonIdeaWithDict) where
+module Language.Drasil.Chunk.CommonIdea
+  (CI, commonIdea, getAcc, commonIdeaWithDict, prependAbrv) where
 
 import Control.Lens ((^.))
 import Language.Drasil.UID (UID)
@@ -32,3 +33,6 @@ commonIdeaWithDict = (\x y z i -> CI x y z (map (^.uid) i))
 
 getAcc :: CI -> Sentence
 getAcc = S . abrv
+
+prependAbrv :: CommonIdea c => c -> String -> String
+prependAbrv c s = abrv c ++ (':':s)

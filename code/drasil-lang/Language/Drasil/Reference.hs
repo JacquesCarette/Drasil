@@ -113,7 +113,7 @@ instance Referable Section where
   renderRef (Section _ _ lb)  = RP (raw "Section: " +::+ name) (getRefAdd lb)
 
 instance Referable Citation where
-  refAdd    c = citeID c -- citeID should be unique.
+  refAdd    c = c ^. citeID -- citeID should be unique.
   renderRef c = Citation $ refAdd c
 
 instance Referable TheoryModel where

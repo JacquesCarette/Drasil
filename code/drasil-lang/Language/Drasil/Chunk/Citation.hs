@@ -22,9 +22,10 @@ import Language.Drasil.Classes (HasFields(getFields))
 import Language.Drasil.Data.Citation (author, chapter, pages, editor, bookTitle, title, 
   year, school, journal, institution, note, publisher, CitationKind(..), CiteField)
 import Language.Drasil.Misc (noSpaces)
-import Language.Drasil.RefProg (Reference, makeCiteRef)
+import Language.Drasil.ShortName (ShortName, shortname')
+import Language.Drasil.UID (UID)
 
-import Control.Lens (makeLenses, (^.), Lens', view)
+import Control.Lens (makeLenses, Lens')
 
 type BibRef = [Citation]
 type EntryID = String -- Should contain no spaces
@@ -35,22 +36,18 @@ type EntryID = String -- Should contain no spaces
 data Citation = Cite
   { _citeKind :: CitationKind
   , _fields :: [CiteField]
-  , _lb :: Reference
+  , _citeID :: UID
+  ,  sn :: ShortName
   }
 makeLenses ''Citation
 
-instance HasUID       Citation where uid       = lb . uid
-instance HasShortName Citation where shortname = shortname . view lb
+instance HasUID       Citation where uid       = citeID
+instance HasShortName Citation where shortname = sn
 instance HasFields    Citation where getFields = fields
-
 
 -- | Smart constructor which implicitly uses EntryID as chunk i.
 cite :: CitationKind -> [CiteField] -> String -> Citation
-cite x y z = let s = noSpaces z in Cite x y (makeCiteRef s)
-
--- | We don't let anyone know that the EntryID is in fact the UID
-citeID :: Citation -> EntryID
-citeID c = c ^. uid
+cite x y z = let s = noSpaces z in Cite x y s (shortname' s)
 
 -- | Article citation requires author(s), title, journal, year.
 -- Optional fields can be: volume, number, pages, month, and note.

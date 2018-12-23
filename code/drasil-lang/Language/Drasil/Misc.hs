@@ -1,4 +1,4 @@
-module Language.Drasil.Misc(mkTable, noSpaces) where
+module Language.Drasil.Misc(mkTable, noSpaces, repUnd) where
 
 {- |
   Create a table body (not including header row) by applying the given
@@ -24,6 +24,14 @@ noSpaces :: String -> String
 noSpaces s
   | not (' ' `elem` s) = s
   | otherwise          = error "String has at least one space in it."
+
+-- | repUnd - Replace Underscore (with '.').
+repUnd :: String -> String
+repUnd = map rep
+  where
+    rep :: Char -> Char
+    rep '_' = '.'
+    rep c = c
 
 {-
 --------------------- WIP ---------------------

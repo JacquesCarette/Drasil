@@ -5,8 +5,8 @@ module Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.NamedIdea (IdeaDict)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
  CommonIdea(abrv), ConceptDomain(cdom))
+import Language.Drasil.Misc (repUnd)
 import Language.Drasil.NounPhrase (NP)
-import Language.Drasil.RefProg (repUnd)
 import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.UID (UID)
 

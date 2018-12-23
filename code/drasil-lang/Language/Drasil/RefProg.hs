@@ -1,17 +1,15 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.RefProg 
   (Reference(Reference),
-   repUnd,
-   makeTabRef, makeFigRef, makeCiteRef,
+   makeTabRef, makeFigRef,
    makeSecRef, makeLstRef, makeURI, makeAssumpRef)
   where
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   HasShortName(shortname))
+import Language.Drasil.Label.Type (LblType(RP, URI), getAdd, prepend)
 import Language.Drasil.ShortName (ShortName, shortname')
+import Language.Drasil.Misc (repUnd)
 import Language.Drasil.UID (UID)
-import Language.Drasil.Label.Type (LblType(RP,Citation, URI), getAdd,
-  -- name, (+::+), raw, defer, 
-  prepend)
 
 import Control.Lens (makeLenses)
 
@@ -25,23 +23,12 @@ instance HasUID        Reference where uid = ui
 instance HasRefAddress Reference where getRefAdd = getAdd . ra
 instance HasShortName  Reference where shortname = sn
 
--- FIXME: Duplicated from Document.hs!
-repUnd :: String -> String
-repUnd = map rep
-  where
-    rep :: Char -> Char
-    rep '_' = '.'
-    rep c = c
-
 -- FIXME: horrible hacks.
 makeTabRef :: String -> Reference
 makeTabRef rs = Reference rs (RP (prepend "Tab") ("Table:" ++ repUnd rs)) (shortname' rs)
 
 makeFigRef :: String -> Reference
 makeFigRef rs = Reference rs (RP (prepend "Fig") ("Figure:" ++ repUnd rs)) (shortname' rs)
-
-makeCiteRef :: String -> Reference
-makeCiteRef rs = Reference rs (Citation $ repUnd rs) (shortname' rs)
 
 makeSecRef :: String -> String -> Reference
 makeSecRef r s = Reference (r ++ "Label") (RP (prepend "Section") ("Sec:" ++ repUnd r))

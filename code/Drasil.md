@@ -5,9 +5,10 @@ Drasil is divided into package:
 - **drasil-lang**: the language of used to describe basic knowledge
 - **drasil-code**: representation of output programming languages
 - **drasil-printers**: representation of output rendering languages, and renderers
-- **drasil data**: actual Drasil knowledge, represented in the Drasil language
+- **drasil data**: actual knowledge, represented in the Drasil language
 - **drasil-docLang**: the language of documents
-- **drasil-gen**: the actual top-level generators, which interprets recipes and generates everything
+- **drasil-gen**: the actual top-level generators, which interprets recipes and
+  generates everything
 - **drasil-example**: our current examples
 
 So we can in turn dig into each package in more depth.
@@ -16,6 +17,9 @@ So we can in turn dig into each package in more depth.
 
 We will go through each of the files, in topological-sort order. Everything here is
 under the namespace *Language.Drasil*, which will thus be omitted.
+
+- **Data/Date**: representation of dates. Mostly Month for now, but will extend, or
+  replace with something more standard.
 
 - **People**: Defines Person, which holds a person's name as data. People as lists of Person(s).
   A name can have many parts, and can follow Western or Eastern convention, or by a Mononym.
@@ -181,8 +185,6 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 
 - **Chunk/UncertainQuantity**: Either a Quantity or a DefinedQuantity that has
   some uncertainty.
-
-- **Data/Date**: representation of dates. Mostly Month for now, but will extend.
 
 - **Data/Citation**: internal representation of the data in citations, and their
   smart constructors.

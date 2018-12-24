@@ -1008,7 +1008,7 @@ Free open source 3D game physics libraries include:
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey]{Table:Tracey} shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. \hyperref[Table:TraceyReqGoalsOther]{Table:TraceyReqGoalsOther} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. \hyperref[Table:TraceyAssumpsOther]{Table:TraceyAssumpsOther} shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[reqVPC]{FR: Verify-Physical\_Constraints} & \hyperref[IM:rotMot]{IM: rotMot} & \hyperref[DD:impulse]{DD: impulse} & \hyperref[IM:col2D]{IM: col2D} & \hyperref[lcEC]{LC: Expanded-Collisions} & \hyperref[IM:transMot]{IM: transMot} & \hyperref[lcIJC]{LC: Include-Joints-Constraints} & \hyperref[DD:linVel]{DD: linVel} & \hyperref[DD:linDisp]{DD: linDisp} & \hyperref[DD:linAcc]{DD: linAcc} & \hyperref[lcID]{LC: Include-Dampening} & \hyperref[DD:angVel]{DD: angVel} & \hyperref[DD:angDisp]{DD: angDisp} & \hyperref[DD:angAccel]{DD: angAccel} & \hyperref[DD:ctrOfMass]{DD: ctrOfMass} & \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} & \hyperref[DD:impulse]{DD: impulse} & \hyperref[TM:ChaslesThm]{TM: ChaslesThm}
+ & \hyperref[reqVPC]{FR: Verify-Physical\_Constraints} & \hyperref[IM:rotMot]{IM: rotMot} & \hyperref[DD:impulse]{DD: impulse} & \hyperref[IM:col2D]{IM: col2D} & \hyperref[IM:transMot]{IM: transMot} & \hyperref[lcIJC]{LC: Include-Joints-Constraints} & \hyperref[lcEC]{LC: Expanded-Collisions} & \hyperref[DD:linVel]{DD: linVel} & \hyperref[DD:linDisp]{DD: linDisp} & \hyperref[DD:linAcc]{DD: linAcc} & \hyperref[lcID]{LC: Include-Dampening} & \hyperref[DD:angVel]{DD: angVel} & \hyperref[DD:angDisp]{DD: angDisp} & \hyperref[DD:angAccel]{DD: angAccel} & \hyperref[DD:ctrOfMass]{DD: ctrOfMass} & \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} & \hyperref[DD:impulse]{DD: impulse} & \hyperref[TM:ChaslesThm]{TM: ChaslesThm}
 \\
 \midrule
 \hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -1021,25 +1021,25 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[A:axesDefined]{A: axesDefined} &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:collisionType]{A: collisionType} &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[A:constraintsAndJointsInvolvement]{A: constraintsAndJointsInvolvement} &  & X &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:constraintsAndJointsInvolvement]{A: constraintsAndJointsInvolvement} &  & X &  & X &  & X & X &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[A:collisionType]{A: collisionType} &  &  & X & X &  &  & X &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:dampingInvolvement]{A: dampingInvolvement} &  & X &  & X &  & X &  & X & X & X & X & X & X & X &  &  &  & 
+\hyperref[A:dampingInvolvement]{A: dampingInvolvement} &  & X &  & X & X &  &  & X & X & X & X & X & X & X &  &  &  & 
+\\
+\hyperref[A:objectDimension]{A: objectDimension} &  & X & X & X & X &  &  & X & X & X &  & X & X & X & X & X &  & 
+\\
+\hyperref[A:objectTy]{A: objectTy} &  & X & X & X & X &  &  & X & X & X &  & X & X & X & X &  & X & X
 \\
 \hyperref[DD:impulse]{DD: impulse} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:linAcc]{DD: linAcc} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:linAcc]{DD: linAcc} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:linDisp]{DD: linDisp} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:linDisp]{DD: linDisp} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:linVel]{DD: linVel} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:linVel]{DD: linVel} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:objectDimension]{A: objectDimension} &  & X & X & X &  & X &  & X & X & X &  & X & X & X & X & X &  & 
-\\
-\hyperref[A:objectTy]{A: objectTy} &  & X & X & X &  & X &  & X & X & X &  & X & X & X & X &  & X & X
-\\
-\hyperref[DD:ctrOfMass]{DD: ctrOfMass} &  &  &  & X &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:ctrOfMass]{DD: ctrOfMass} &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}

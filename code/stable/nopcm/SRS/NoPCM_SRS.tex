@@ -292,7 +292,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Temp-Heating-Coil-Constant-over-Length}:]The temperature of the heating coil does not vary along its length. \hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length} \hyperref[DD:ht.flux.C]{DD: ht\_flux\_C}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Charging-Tank-No-Temp-Discharge}:]The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil. \hyperref[likeChgDT]{LC: Discharging-Tank} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Charging-Tank-No-Temp-Discharge}:]The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil. \hyperref[likeChgDT]{LC: Discharging-Tank}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:Water-Always-Liquid}:]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. \hyperref[unlikeChgWFS]{UC: Water-Fixed-States} \hyperref[IM:heatEInWtr]{IM: heatEInWtr} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.
@@ -668,42 +668,44 @@ This problem is small in size and relatively simple, so performance is not a pri
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey]{Table:Tracey} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. \hyperref[Table:TraceyRI]{Table:TraceyRI} shows the dependencies of instance models, requirements, and data constraints on each other. \hyperref[Table:TraceyRIs]{Table:TraceyRIs} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[IM:heatEInWtr]{IM: heatEInWtr} & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} & \hyperref[likeChgDT]{LC: Discharging-Tank} & \hyperref[GD:rocTempSimp]{GD: rocTempSimp} & \hyperref[GD:nwtnCooling]{GD: nwtnCooling} & \hyperref[reqCISPC]{FR: Check-Inputs-Satisfy-Physical-Constraints} & \hyperref[reqIIV]{FR: Input-Inital-Values} & \hyperref[DD:ht.flux.C]{DD: ht\_flux\_C} & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation} & \hyperref[likeChgTLH]{LC: Tank-Lose-Heat} & \hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length} & \hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day} & \hyperref[TM:consThermE]{TM: consThermE} & \hyperref[unlikeChgWFS]{UC: Water-Fixed-States} & \hyperref[reqFM]{FR: Find-Mass} & \hyperref[reqOIDQ]{FR: Output-Input-Derivied-Quantities} & \hyperref[reqCCHEWT]{FR: Calculate-Change-Heat\_Energy-Water-Time}
+ & \hyperref[reqCISPC]{FR: Check-Inputs-Satisfy-Physical-Constraints} & \hyperref[reqIIV]{FR: Input-Inital-Values} & \hyperref[IM:heatEInWtr]{IM: heatEInWtr} & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} & \hyperref[likeChgDT]{LC: Discharging-Tank} & \hyperref[GD:rocTempSimp]{GD: rocTempSimp} & \hyperref[GD:nwtnCooling]{GD: nwtnCooling} & \hyperref[DD:ht.flux.C]{DD: ht\_flux\_C} & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation} & \hyperref[likeChgTLH]{LC: Tank-Lose-Heat} & \hyperref[TM:consThermE]{TM: consThermE} & \hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length} & \hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day} & \hyperref[unlikeChgWFS]{UC: Water-Fixed-States} & \hyperref[reqFM]{FR: Find-Mass} & \hyperref[reqOIDQ]{FR: Output-Input-Derivied-Quantities} & \hyperref[reqCCHEWT]{FR: Calculate-Change-Heat\_Energy-Water-Time}
 \\
 \midrule
-\hyperref[A:Atmospheric-Pressure-Tank]{A: Atmospheric-Pressure-Tank} & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[Table:InDataConstraints]{Table:InDataConstraints} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:Charging-Tank-No-Temp-Discharge]{A: Charging-Tank-No-Temp-Discharge} &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[Table:Input-Variable-Requirements]{Table:Input-Variable-Requirements} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:Constant-Water-Temp-Across-Tank]{A: Constant-Water-Temp-Across-Tank} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[A:Atmospheric-Pressure-Tank]{A: Atmospheric-Pressure-Tank} &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:Density-Water-PCM-Constant-over-Volume]{A: Density-Water-PCM-Constant-over-Volume} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[A:Charging-Tank-No-Temp-Discharge]{A: Charging-Tank-No-Temp-Discharge} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:Heat-Transfer-Coeffs-Constant]{A: Heat-Transfer-Coeffs-Constant} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[A:Charging-Tank-No-Temp-Discharge]{A: Charging-Tank-No-Temp-Discharge} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[Table:InDataConstraints]{Table:InDataConstraints} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[A:Constant-Water-Temp-Across-Tank]{A: Constant-Water-Temp-Across-Tank} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[Table:Input-Variable-Requirements]{Table:Input-Variable-Requirements} &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & 
+\hyperref[A:Density-Water-PCM-Constant-over-Volume]{A: Density-Water-PCM-Constant-over-Volume} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:Law-Convective-Cooling-Water-PCM]{A: Law-Convective-Cooling-Water-PCM} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[A:Heat-Transfer-Coeffs-Constant]{A: Heat-Transfer-Coeffs-Constant} &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[A:Newton-Law-Convective-Cooling-Coil-Water]{A: Newton-Law-Convective-Cooling-Coil-Water} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:No-Internal-Heat-Generation-By-Water]{A: No-Internal-Heat-Generation-By-Water} &  & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+\hyperref[A:Law-Convective-Cooling-Water-PCM]{A: Law-Convective-Cooling-Water-PCM} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:Perfect-Insulation-Tank]{A: Perfect-Insulation-Tank} &  & X &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
+\hyperref[A:No-Internal-Heat-Generation-By-Water]{A: No-Internal-Heat-Generation-By-Water} &  &  &  & X &  &  &  &  & X &  &  &  &  &  &  &  & 
 \\
-\hyperref[A:Temp-Heating-Coil-Constant-over-Length]{A: Temp-Heating-Coil-Constant-over-Length} &  &  &  &  &  &  &  & X &  &  & X &  &  &  &  &  & 
+\hyperref[A:Perfect-Insulation-Tank]{A: Perfect-Insulation-Tank} &  &  &  & X &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
-\hyperref[A:Temp-Heating-Coil-Constant-over-Time]{A: Temp-Heating-Coil-Constant-over-Time} &  &  &  &  &  &  &  & X &  &  &  & X &  &  &  &  & 
+\hyperref[A:Thermal-Energy-Only]{A: Thermal-Energy-Only} &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
 \\
-\hyperref[A:Temp-PCM-Constant-Across-Volume]{A: Temp-PCM-Constant-Across-Volume} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[A:Temp-Heating-Coil-Constant-over-Length]{A: Temp-Heating-Coil-Constant-over-Length} &  &  &  &  &  &  &  & X &  &  &  & X &  &  &  &  & 
 \\
-\hyperref[A:Thermal-Energy-Only]{A: Thermal-Energy-Only} &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  & 
+\hyperref[A:Temp-Heating-Coil-Constant-over-Time]{A: Temp-Heating-Coil-Constant-over-Time} &  &  &  &  &  &  &  & X &  &  &  &  & X &  &  &  & 
 \\
-\hyperref[A:Water-Always-Liquid]{A: Water-Always-Liquid} & X & X &  &  &  &  &  &  &  &  &  &  &  & X &  &  & 
+\hyperref[A:Temp-PCM-Constant-Across-Volume]{A: Temp-PCM-Constant-Across-Volume} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:consThermE]{TM: consThermE} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[A:Water-Always-Liquid]{A: Water-Always-Liquid} &  &  & X & X &  &  &  &  &  &  &  &  &  & X &  &  & 
+\\
+\hyperref[TM:consThermE]{TM: consThermE} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
 \\
@@ -711,15 +713,15 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[IM:heatEInWtr]{IM: heatEInWtr} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X
 \\
-\hyperref[DD:ht.flux.C]{DD: ht\_flux\_C} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:ht.flux.C]{DD: ht\_flux\_C} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[reqFM]{FR: Find-Mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & 
 \\
 \hyperref[reqIIV]{FR: Input-Inital-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & 
 \\
-\hyperref[GD:rocTempSimp]{GD: rocTempSimp} &  & X &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:rocTempSimp]{GD: rocTempSimp} &  &  &  & X &  & X &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:sensHtE]{TM: sensHtE} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:sensHtE]{TM: sensHtE} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}

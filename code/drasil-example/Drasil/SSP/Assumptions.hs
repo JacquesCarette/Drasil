@@ -24,29 +24,30 @@ newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10, newA11,
 assumpSSC, assumpFOSL, assumpSLH, assumpSP, assumpSLI, assumpINSFL,
   assumpPSC, assumpENSL, assumpSBSBISL, assumpES, assumpSF, 
   assumpSL :: ConceptInstance
-newA1 = assump (makeAssumpRef "Slip-Surface-Concave") monotonicF
+newA1  = assump "assumpSSC" monotonicF "Slip-Surface-Concave"
+newA2  = assump "assumpFOS" slopeS "Factor-of-Safety"
+newA3  = assump "assumpSLH" homogeneousL "Soil-Layer-Homogeneous"
+newA4  = assump "assumpSP" propertiesS "Soil-Properties"
+newA5  = assump "assumpSLI" isotropicP "Soil-Layers-Isotropic"
+newA6  = assump "assumpINSFL" linearS "Interslice-Norm-Shear-Forces-Linear"
+newA7  = assump "assumpPSC" planeS "Plane-Strain-Conditions"
+newA8  = assump "assumpENSL" largeN "Effective-Norm-Stress-Large"
+newA9  = assump "assumpSBSBISL" straightS "Surface-Base-Slice-between-Interslice-Straight-Lines"
+newA10 = assump "assumpES" edgeS "Edge-Slices"
+newA11 = assump "assumpSF" seismicF "Seismic-Force"
+newA12 = assump "assumpSL" surfaceL "Surface-Load"
+
 assumpSSC = cic "assumpSSC" monotonicF "Slip-Surface-Concave" assumpDom
-newA2 = assump (makeAssumpRef "Factor-of-Safety") slopeS
 assumpFOSL = cic "assumpFOS" slopeS "Factor-of-Safety" assumpDom
-newA3 = assump (makeAssumpRef "Soil-Layer-Homogeneous") homogeneousL
 assumpSLH = cic "assumpSLH" homogeneousL "Soil-Layer-Homogeneous" assumpDom
-newA4 = assump (makeAssumpRef "Soil-Properties") propertiesS
 assumpSP = cic "assumpSP" propertiesS "Soil-Properties" assumpDom
-newA5 = assump (makeAssumpRef "Soil-Layers-Isotropic") isotropicP
 assumpSLI = cic "assumpSLI" isotropicP "Soil-Layers-Isotropic" assumpDom
-newA6 = assump (makeAssumpRef "Interslice-Norm-Shear-Forces-Linear") linearS
 assumpINSFL = cic "assumpINSFL" linearS "Interslice-Norm-Shear-Forces-Linear" assumpDom
-newA7 = assump (makeAssumpRef "Plane-Strain-Conditions") planeS
 assumpPSC = cic "assumpPSC" planeS "Plane-Strain-Conditions" assumpDom
-newA8 = assump (makeAssumpRef "Effective-Norm-Stress-Large") largeN
 assumpENSL = cic "assumpENSL" largeN "Effective-Norm-Stress-Large" assumpDom
-newA9 = assump (makeAssumpRef "Surface-Base-Slice-between-Interslice-Straight-Lines") straightS
 assumpSBSBISL = cic "assumpSBSBISL" straightS "Surface-Base-Slice-between-Interslice-Straight-Lines" assumpDom
-newA10 = assump (makeAssumpRef "Edge-Slices") edgeS
 assumpES = cic "assumpES" edgeS "Edge-Slices" assumpDom
-newA11 = assump (makeAssumpRef "Seismic-Force") seismicF
 assumpSF = cic "assumpSF" seismicF "Seismic-Force" assumpDom
-newA12 = assump (makeAssumpRef "Surface-Load") surfaceL
 assumpSL = cic "assumpSL" surfaceL "Surface-Load" assumpDom
 
 monotonicF, slopeS, homogeneousL, isotropicP, linearS,

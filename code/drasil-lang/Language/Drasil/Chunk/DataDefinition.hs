@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.DataDefinition where
 import Control.Lens(makeLenses, (^.), view)
 import Data.Drasil.IdeaDicts (dataDefn)
 import Language.Drasil.Chunk.Citation (Citation, HasCitation(getCitations))
-import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict, prependAbrv)
+import Language.Drasil.Chunk.CommonIdea (prependAbrv)
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn')
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
   HasRefAddress(getRefAdd), HasSymbol(symbol))
@@ -14,7 +14,6 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.Development.Unit(MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.NounPhrase (cn')
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.ShortName (ShortName, shortname')
 import Language.Drasil.Symbol.Helpers (eqSymb)

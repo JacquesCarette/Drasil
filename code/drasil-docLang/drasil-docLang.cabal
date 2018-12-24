@@ -1,5 +1,5 @@
 Name:		drasil-docLang
-Version:	0.1.17
+Version:	0.1.18
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -43,7 +43,7 @@ library
     MissingH >= 1.4.0.1,
     parsec >= 3.1.9,
     data-fix (>= 0.0.4 && <= 1.0),
-    drasil-lang >= 0.1.48,
+    drasil-lang >= 0.1.50,
     drasil-data >= 0.1.9
   default-language: Haskell2010
   ghc-options:      -Wall

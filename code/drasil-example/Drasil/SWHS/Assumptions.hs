@@ -19,14 +19,6 @@ import Data.Drasil.Concepts.Physics (mech_energy)
 import Data.Drasil.SentenceStructures (foldlSent, ofThe, ofThe', sAnd, isThe)
 import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfect_insul,
   charging, discharging)
-import Drasil.SWHS.Labels (thermalEnergyOnlyL, lawConvectiveCoolingWtrPCML, 
-  waterAlwaysLiquidL, noGaseousStatePCML, atmosphericPressureTankL, 
-  thermalEnergyOnlyL, heatTransferCoeffL,
-  contantWaterTempL, tempPcmConsL, densityWaterL, specificHeatL,
-  newtoLawConvecL, tempOverTimeL, tempOverLengthL, lawConvectiveCoolingWtrPCML,
-  chargeTankL, sameInitialL, pcmInitialSolidL, waterAlwaysLiquidL,
-  perfectInsulationL, noInternalHeatL, volumeChangeMeltL, noGaseousStatePCML,
-  atmosphericPressureTankL, volumeCoilL)
 import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, temp_init, temp_W,
   temp_PCM, htCap_L_P, htCap_W, htCap_S_P, w_density, pcm_density, pcm_vol)
 
@@ -49,45 +41,46 @@ assumpTEO, assumpHTCC, assumpCWTAT, assumpTPCAV, assumpDWPCoV, assumpSHECoV,
 -- FIXME: Remove the newA AssumpChunk's once ConceptInstance and SCSProg's
 -- Assumptions has been migrated to using assumpDom
 
-newA1  = assump thermalEnergyOnlyL           assumpS1
+newA1  = assump "assumpTEO"              assumpS1 "Thermal-Energy-Only"
+newA2  = assump "assumpHTCC"             assumpS2 "Heat-Transfer-Coeffs-Constant"
+newA3  = assump "assumpCWTAT"            assumpS3 "Constant-Water-Temp-Across-Tank"
+newA4  = assump "assumpTPCAV"            assumpS4 "Temp-PCM-Constant-Across-Volume"
+newA5  = assump "assumpDWPCoV"           assumpS5 "Density-Water-PCM-Constant-over-Volume"
+newA6  = assump "assumpSHECov"           assumpS6 "Specific-Heat-Energy-Constant-over-Volume"
+newA7  = assump "assumpLCCCW"            assumpS7 "Newton-Law-Convective-Cooling-Coil-Water"
+newA8  = assump "assumpTHCCoT"           assumpS8 "Temp-Heating-Coil-Constant-over-Time"
+newA9  = assump "assumpTHCCoL"           assumpS9 "Temp-Heating-Coil-Constant-over-Length"
+newA10 = assump "assumpLCCWP"            assumpS10 "Law-Convective-Cooling-Water-PCM"
+newA11 = assump "assumpCTNOD"            assumpS11 "Charging-Tank-No-Temp-Discharge"
+newA12 = assump "assumpSITWP"            assumpS12 "Same-Initial-Temp-Water-PCM"
+newA13 = assump "assumpPIS"              assumpS13 "PCM-Initially-Solid"
+newA14 = assump "assumpWAL"              assumpS14 "Water-Always-Liquid"
+newA15 = assump "assumpPIT"              assumpS15 "Perfect-Insulation-Tank"
+newA16 = assump "assumpNIHGBWP"          assumpS16 "No-Internal-Heat-Generation-By-Water-PCM"
+newA17 = assump "assumpVCMPN"            assumpS17 "Volume-Change-Melting-PCM-Negligible"
+newA18 = assump "assumpNGSP"             assumpS18 "No-Gaseous-State-PCM"
+newA19 = assump "assumpAPT"              assumpS19 "Atmospheric-Pressure-Tank"
+newA20 = assump "assumpVCN"              assumpS20 "Volume-Coil-Negligible"
+
 assumpTEO = cic "assumpTEO"                  assumpS1 "Thermal-Energy-Only"                        assumpDom
-newA2  = assump heatTransferCoeffL           assumpS2
 assumpHTCC = cic "assumpHTCC"                assumpS2 "Heat-Transfer-Coeffs-Constant"              assumpDom
-newA3  = assump contantWaterTempL            assumpS3
 assumpCWTAT = cic "assumpCWTAT"              assumpS3 "Constant-Water-Temp-Across-Tank"            assumpDom
-newA4  = assump tempPcmConsL                 assumpS4
 assumpTPCAV = cic "assumpTPCAV"              assumpS4 "Temp-PCM-Constant-Across-Volume"            assumpDom
-newA5  = assump densityWaterL                assumpS5
 assumpDWPCoV = cic "assumpDWPCoV"            assumpS5 "Density-Water-PCM-Constant-over-Volume"     assumpDom
-newA6  = assump specificHeatL                assumpS6
 assumpSHECoV = cic "assumpSHECov"            assumpS6 "Specific-Heat-Energy-Constant-over-Volume"  assumpDom
-newA7  = assump newtoLawConvecL              assumpS7
 assumpLCCCW = cic "assumpLCCCW"              assumpS7 "Newton-Law-Convective-Cooling-Coil-Water"   assumpDom
-newA8  = assump tempOverTimeL                assumpS8
 assumpTHCCoT = cic "assumpTHCCoT"            assumpS8 "Temp-Heating-Coil-Constant-over-Time"       assumpDom
-newA9  = assump tempOverLengthL              assumpS9
 assumpTHCCoL = cic "assumpTHCCoL"            assumpS9 "Temp-Heating-Coil-Constant-over-Length"     assumpDom
-newA10 = assump lawConvectiveCoolingWtrPCML  assumpS10
-assumpLCCWP = cic "assumpLCCWP"              assumpS10 "Law-Convective-Cooling-Water-PCM"          assumpDom -- FIXME: Use label once ConceptInstance migrates to them
-newA11 = assump chargeTankL                  assumpS11
+assumpLCCWP = cic "assumpLCCWP"              assumpS10 "Law-Convective-Cooling-Water-PCM"          assumpDom
 assumpCTNOD = cic "assumpCTNOD"              assumpS11 "Charging-Tank-No-Temp-Discharge"           assumpDom
-newA12 = assump sameInitialL                 assumpS12
 assumpSITWP = cic "assumpSITWP"              assumpS12 "Same-Initial-Temp-Water-PCM"               assumpDom
-newA13 = assump pcmInitialSolidL             assumpS13
 assumpPIS = cic "assumpPIS"                  assumpS13 "PCM-Initially-Solid"                       assumpDom
-newA14 = assump waterAlwaysLiquidL           assumpS14
-assumpWAL = cic "assumpWAL"                  assumpS14 "Water-Always-Liquid"                       assumpDom -- FIXME: Use label once ConceptInstance migrates to them
-newA15 = assump perfectInsulationL           assumpS15
+assumpWAL = cic "assumpWAL"                  assumpS14 "Water-Always-Liquid"                       assumpDom
 assumpPIT = cic "assumpPIT"                  assumpS15 "Perfect-Insulation-Tank"                   assumpDom
-newA16 = assump noInternalHeatL              assumpS16
 assumpNIHGBWP = cic "assumpNIHGBWP"          assumpS16 "No-Internal-Heat-Generation-By-Water-PCM"  assumpDom
-newA17 = assump volumeChangeMeltL            assumpS17
 assumpVCMPN = cic "assumpVCMPN"              assumpS17 "Volume-Change-Melting-PCM-Negligible"      assumpDom
-newA18 = assump noGaseousStatePCML           assumpS18
-assumpNGSP = cic "assumpNGSP"                assumpS18 "No-Gaseous-State-PCM"                      assumpDom -- FIXME: Use label once ConceptInstance migrates to them
-newA19 = assump atmosphericPressureTankL     assumpS19
-assumpAPT = cic "assumpAPT"                  assumpS19 "Atmospheric-Pressure-Tank"                 assumpDom -- FIXME: Use label once ConceptInstance migrates to them
-newA20 = assump volumeCoilL                  assumpS20
+assumpNGSP = cic "assumpNGSP"                assumpS18 "No-Gaseous-State-PCM"                      assumpDom
+assumpAPT = cic "assumpAPT"                  assumpS19 "Atmospheric-Pressure-Tank"                 assumpDom
 assumpVCN = cic "assumpVCN"                  assumpS20 "Volume-Coil-Negligible"                    assumpDom
 
 swhsAssumptionsS:: [Sentence]

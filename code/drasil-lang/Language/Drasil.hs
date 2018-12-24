@@ -105,9 +105,7 @@ module Language.Drasil (
   , Sentence(..), sParen, sSqBr , (+:+), (+:+.), sC, (+:)
   , SentenceStyle(..)
   -- RefProg
-  -- , RefProg(..), IRefProg(..)
   , Reference(..)
-  , makeTabRef, makeSecRef, makeLstRef, makeFigRef, makeURI
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
   , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase'
@@ -126,6 +124,7 @@ module Language.Drasil (
   , HasContents(accessContents)
   , RawContent(..)
   , mkFig
+  , makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeURI
   -- Space
   , Space(..)
   -- Symbol
@@ -225,7 +224,8 @@ import Language.Drasil.Sentence.EmbedSymbol(ch)
 import Language.Drasil.Sentence.Extract(sdep, lnames, lnames')
 import Language.Drasil.Document (section, fig, figWithWidth
   , section'', Section(..), SecCons(..) , llcc, ulcc, Document(..)
-  , mkParagraph, mkFig, mkRawLC, extractSection)
+  , mkParagraph, mkFig, mkRawLC, extractSection
+  , makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeURI)
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), DType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)
@@ -307,8 +307,7 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
   , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'')
 import Language.Drasil.RefTypes(RefAdd, LinkType(Internal, Cite2, External))
-import Language.Drasil.RefProg(Reference(Reference)
-  , makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeURI)
+import Language.Drasil.RefProg(Reference(Reference))
 import Language.Drasil.Label.Type (getAdd, LblType(RP, Citation, URI), IRefProg(..))
 
 import Language.Drasil.UnitLang (USymb(US))

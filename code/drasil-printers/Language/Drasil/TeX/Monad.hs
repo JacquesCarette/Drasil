@@ -12,9 +12,6 @@ import Data.Monoid (Monoid(..))
 
 import qualified Language.Drasil.Printing.Helpers as H
 
---import Language.Drasil.Unicode (RenderSpecial, Special(SqBrClose, SqBrOpen, 
-  --CurlyBrClose, CurlyBrOpen, Hash, Percent, UScore, Partial, Circle), special)
-
 -----------------------------------------------------------------------------
 -- Printing monad
 --
@@ -111,11 +108,6 @@ lub _    _    = Text -- Text is top-most
 -- Hacked up version, will get deleted
 data Latex = L { unPL :: String }
 
---instance RenderGreek Latex where
-
- 
-  
-
 instance RenderSpecial Latex where
   special Circle       = L "{}^{\\circ}"
   special Partial      = L "\\partial{}"
@@ -124,5 +116,3 @@ instance RenderSpecial Latex where
   special Hash         = L "\\#"
   special CurlyBrOpen  = L "\\{"
   special CurlyBrClose = L "\\}"
-  special SqBrOpen     = L "{[}"
-  special SqBrClose    = L "{]}"

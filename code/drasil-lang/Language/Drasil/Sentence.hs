@@ -2,7 +2,7 @@
 -- | Contains Sentences and helpers
 module Language.Drasil.Sentence
   (Sentence(Ch, Sy, S, Sp, E, Quote, (:+:), EmptyS, P, Ref),
-   sParen, sSqBr, (+:+), sC, (+:+.), (+:),
+   sParen, (+:+), sC, (+:+.), (+:),
    SentenceStyle(..), sentenceShort, sentenceSymb, sentenceTerm, sentencePlural) where
 
 import Language.Drasil.Expr (Expr)
@@ -10,7 +10,7 @@ import Language.Drasil.RefProg (Reference)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.UID (UID)
-import Language.Drasil.Unicode (Special(SqBrClose, SqBrOpen))
+import Language.Drasil.Unicode (Special)
 
 -- | For writing "sentences" via combining smaller elements
 -- Sentences are made up of some known vocabulary of things:
@@ -57,10 +57,6 @@ sentencePlural u = Ch PluralTerm u
 -- | Helper function for wrapping sentences in parentheses.
 sParen :: Sentence -> Sentence
 sParen x = S "(" :+: x :+: S ")"
-
--- | Helper function for wrapping sentences in square brackets.
-sSqBr :: Sentence -> Sentence
-sSqBr x = Sp SqBrOpen :+: x :+: Sp SqBrClose
 
 -- | Helper for concatenating two sentences with a space between them.
 (+:+) :: Sentence -> Sentence -> Sentence

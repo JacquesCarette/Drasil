@@ -50,18 +50,15 @@ under the namespace *Language.Drasil*, which will thus be omitted.
 
 - **Label.Type**: Label type. Is a reference address, link or URI.
 
-- **Label.Core**: Label structure. Has a type, shortname and a reference type (hack?).
-  (probably should be abstract, but isn't yet)
+- **Unicode**: Misnamed. Really is a few special characters which need special code to be
+  displayed properly. Unclear how much this should be used in examples, so maybe this should
+  no longer be exported?
 
 - **Symbol**: Abstract definition of symbol layout primitives. Enough information for
   renderers to display them.
 
 - **Classes.Core**: The 'core' classes which abstract over HasUID, HasShortName,
   HasRefAddress, HasSymbol.
-
-- **Unicode**: Misnamed. Really is a few special characters which need special code to be
-  displayed properly. Unclear how much this should be used in examples, so maybe this should
-  no longer be exported?
 
 - **SymbolAlphabet**: The long names of many symbols, and even some short ones (because of the
   tag) is inconvenient; provides some short-hand way of referring to them.

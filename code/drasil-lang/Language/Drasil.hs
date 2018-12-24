@@ -102,7 +102,7 @@ module Language.Drasil (
   -- Chunk.Citation
   , HasCitation(getCitations)
   -- Sentence
-  , Sentence(..), sParen, sSqBr , (+:+), (+:+.), sC, (+:)
+  , Sentence(..), sParen, (+:+), (+:+.), sC, (+:)
   , SentenceStyle(..)
   -- RefProg
   , Reference(..)
@@ -289,7 +289,7 @@ import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- 
 import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getStringSN)
 import Language.Drasil.Space (Space(..))
-import Language.Drasil.Sentence (Sentence(..), sParen, sSqBr, sC, (+:+), (+:+.), (+:), SentenceStyle(..))
+import Language.Drasil.Sentence (Sentence(..), sParen, sC, (+:+), (+:+.), (+:), SentenceStyle(..))
 import Language.Drasil.Reference (makeCite, makeCiteS, ReferenceDB, makeRef2
  , AssumpMap, assumpLookup, HasAssumpRefs, assumpDB , assumpRefTable, assumptionsFromDB
  , rdb, RefBy(..), Referable(..), citationRefTable, RefMap, simpleMap, makeRef2S)

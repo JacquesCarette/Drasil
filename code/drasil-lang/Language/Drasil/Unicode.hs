@@ -9,8 +9,6 @@ data Special = Partial
              | Hash
              | CurlyBrOpen
              | CurlyBrClose
-             | SqBrOpen
-             | SqBrClose
              | UScore
   deriving (Eq, Ord)
 

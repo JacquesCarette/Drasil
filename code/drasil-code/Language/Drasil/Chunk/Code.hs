@@ -107,8 +107,6 @@ specialToCodeName UScore        = "_"
 specialToCodeName Percent       = "%"
 specialToCodeName CurlyBrOpen   = "{"
 specialToCodeName CurlyBrClose  = "}"
-specialToCodeName SqBrOpen      = "["
-specialToCodeName SqBrClose     = "]"
 specialToCodeName Hash          = "#" -- TODO: Double check that this is valid for
                                       -- all of the output langs.
 

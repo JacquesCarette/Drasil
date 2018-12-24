@@ -1,8 +1,7 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.RefProg 
   (Reference(Reference),
-   makeTabRef, makeFigRef,
-   makeSecRef, makeLstRef, makeURI, makeAssumpRef)
+   makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeURI)
   where
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   HasShortName(shortname))
@@ -37,9 +36,6 @@ makeSecRef r s = Reference (r ++ "Label") (RP (prepend "Section") ("Sec:" ++ rep
 makeLstRef :: String -> String -> Reference
 makeLstRef r s = Reference (r ++ "Label") (RP (prepend "Lst") ("Lst:" ++ repUnd r))
   (shortname' s)
-
-makeAssumpRef :: String -> Reference
-makeAssumpRef rs = Reference rs (RP (prepend "A") ("A:" ++ repUnd rs)) (shortname' rs)
 
 -- | Create a reference for a URI
 makeURI :: UID -> String -> ShortName -> Reference

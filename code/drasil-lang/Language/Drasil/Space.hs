@@ -1,7 +1,7 @@
 module Language.Drasil.Space (Space(..)) where
 
--- FIXME: These need to be spaces and not just types, but until Steven
---  has a chance to integrate his work I think this should be left alone
+-- FIXME: These need to be spaces and not just types.
+
 -- | Spaces
 data Space =
     Integer

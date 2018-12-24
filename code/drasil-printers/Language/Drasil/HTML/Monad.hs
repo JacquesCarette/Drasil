@@ -13,4 +13,3 @@ instance RenderSpecial PrintHTML where
   special Partial      = PH "&part;"
   special UScore       = PH "_"
   special Percent      = PH "%"
-  special Hash         = PH "#"

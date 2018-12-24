@@ -1242,7 +1242,7 @@ dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
   [sParen (S "+"), S "These", plural qua, S "cannot be zero" `sC`
   S "or there would be freezing", sParen (makeRef2S newA13)],
 
-  [sParen (Sp Hash), S "The", plural constraint, S "on the", phrase sa,
+  [sParen (S "++"), S "The", plural constraint, S "on the", phrase sa,
   S "are calculated by considering the", phrase sa, S "to", phrase vo +:+.
   S "ratio", S "The", phrase assumption, S "is that the lowest ratio is",
   (S $ show (1 :: Integer)) `sAnd`

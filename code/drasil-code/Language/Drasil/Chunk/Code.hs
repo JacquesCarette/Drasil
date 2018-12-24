@@ -46,13 +46,12 @@ decorate s Hat = s ++ "_hat"
 decorate s Vector = s ++ "_vect"
 decorate s Prime = s ++ "'"
 
+-- TODO: Double check that this is valid in all output languages
 specialToCodeName :: Special -> String
 specialToCodeName Circle        = "circ"
 specialToCodeName Partial       = "partial"
 specialToCodeName UScore        = "_"
 specialToCodeName Percent       = "%"
-specialToCodeName Hash          = "#" -- TODO: Double check that this is valid for
-                                      -- all of the output langs.
 
 toCodeName :: String -> String
 toCodeName s =

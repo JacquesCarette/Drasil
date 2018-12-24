@@ -113,4 +113,3 @@ instance RenderSpecial Latex where
   special Partial      = L "\\partial{}"
   special UScore       = L "\\_"
   special Percent      = L "\\%"
-  special Hash         = L "\\#"

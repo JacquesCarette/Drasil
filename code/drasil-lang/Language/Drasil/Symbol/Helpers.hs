@@ -1,7 +1,8 @@
+-- | Routines to help with Symbols and Stages.
 module Language.Drasil.Symbol.Helpers(eqSymb, codeSymb, hasStageSymbol) where
 
 import Language.Drasil.Classes (HasSymbol(symbol))
-import Language.Drasil.Symbol (Symbol(Empty, Concat, Special))
+import Language.Drasil.Symbol (Symbol(Empty))
 import Language.Drasil.Stages (Stage(Equational,Implementation))
 
 -- | Helper function for getting a symbol in the Equational Stage

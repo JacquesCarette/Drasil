@@ -6,7 +6,6 @@ module Language.Drasil.Unicode where
 data Special = Partial
              | Circle
              | Percent
-             | Hash
              | UScore
   deriving (Eq, Ord)
 

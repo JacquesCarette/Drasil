@@ -3,7 +3,7 @@ module Language.Drasil.ChunkDB
   ( ChunkDB, cdb
   , HasSymbolTable(..), symbolMap, symbLookup
   , HasTermTable(..), termLookup
-  , HasDefinitionTable(..), conceptMap, defLookup
+  , HasDefinitionTable(..), conceptMap, traceMap, defLookup
   , unitLookup , HasUnitTable(..), unitMap, collectUnits, TraceMap
   , traceLookup, HasTraceTable(..), generateRefbyMap, RefbyMap, LabelledContentMap
   , refbyLookup, HasRefbyTable(..), DatadefnMap, InsModelMap, SectionMap
@@ -36,68 +36,78 @@ import qualified Data.Map as Map
 -- be added to a map if it's not coming from a chunk, and there's no point confusing
 -- what the map is for. One is for symbols + their units, and the others are for
 -- what they state.
+type UMap a = Map.Map UID a
 
 -- | A bit of a misnomer as it's really a map of all quantities, for retrieving
 -- symbols and their units.
-type SymbolMap  = Map.Map UID QuantityDict
+type SymbolMap  = UMap QuantityDict
 
 -- | A map of all concepts, normally used for retrieving definitions.
-type ConceptMap = Map.Map UID ConceptChunk
+type ConceptMap = UMap ConceptChunk
 
 -- | A map of all the units used. Should be restricted to base units/synonyms.
-type UnitMap = Map.Map UID UnitDefn
+type UnitMap = UMap UnitDefn
 
 -- | Again a bit of a misnomer as it's really a map of all NamedIdeas.
 -- Until these are built through automated means, there will
 -- likely be some 'manual' duplication of terms as this map will contain all
 -- quantities, concepts, etc.
-type TermMap = Map.Map UID IdeaDict
+type TermMap = UMap IdeaDict
 
 -- Reference map
-type TraceMap = Map.Map UID [UID]
+type TraceMap = UMap [UID]
 
 -- Refby map
 type RefbyMap = Map.Map UID [UID]
 
 -- DataDefinition map
-type DatadefnMap = Map.Map UID DataDefinition
+type DatadefnMap = UMap DataDefinition
 
 -- InstanceModel map
-type InsModelMap = Map.Map UID InstanceModel
+type InsModelMap = UMap InstanceModel
 
 -- GenDef map
-type GendefMap = Map.Map UID GenDefn
+type GendefMap = UMap GenDefn
 
 -- TheoryModel map
-type TheoryModelMap = Map.Map UID TheoryModel
+type TheoryModelMap = UMap TheoryModel
 
 -- Assumption map
-type AssumptionMap = Map.Map UID AssumpChunk
+type AssumptionMap = UMap AssumpChunk
 
 -- ConceptInstance map
-type ConceptInstanceMap = Map.Map UID ConceptInstance
+type ConceptInstanceMap = UMap ConceptInstance
 
 -- Section map
-type SectionMap = Map.Map UID Section
+type SectionMap = UMap Section
 
 -- LabelledContent map
-type LabelledContentMap = Map.Map UID LabelledContent
+type LabelledContentMap = UMap LabelledContent
+
+cdbMap :: HasUID a => (a -> b) -> [a] -> Map.Map UID b
+cdbMap fn = Map.fromList . map (\x -> (x ^. uid, fn x))
 
 -- | Smart constructor for a 'SymbolMap'
 symbolMap :: (Quantity c, MayHaveUnit c) => [c] -> SymbolMap
-symbolMap = Map.fromList . map (\x -> (x ^. uid, qw x))
+symbolMap = cdbMap qw
 
 -- | Smart constructor for a 'TermMap'
 termMap :: (Idea c) => [c] -> TermMap
-termMap = Map.fromList . map (\x -> (x ^. uid, nw x))
+termMap = cdbMap nw
 
 -- | Smart constructor for a 'ConceptMap'
 conceptMap :: (Concept c) => [c] -> ConceptMap
-conceptMap = Map.fromList . map (\x -> (x ^. uid, cw x))
+conceptMap = cdbMap cw
 
 -- | Smart constructor for a 'UnitMap'
 unitMap :: (IsUnit u) => [u] -> UnitMap
-unitMap = Map.fromList . map (\x -> (x ^. uid, unitWrapper x)) 
+unitMap = cdbMap unitWrapper
+
+idMap :: HasUID a => [a] -> Map.Map UID a
+idMap = cdbMap id
+
+traceMap :: HasUID l => (l -> [UID]) -> [l] -> TraceMap
+traceMap f = cdbMap f
 
 -- | Looks up an uid in the symbol table. If nothing is found, an error is thrown
 symbLookup :: UID -> SymbolMap -> QuantityDict
@@ -243,10 +253,10 @@ makeLenses ''ChunkDB
 -- and Units (for UnitTable)
 cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u,
         ConceptDomain u) => [q] -> [t] -> [c] -> [u] -> TraceMap -> RefbyMap ->
-        DatadefnMap -> InsModelMap -> GendefMap ->  TheoryModelMap -> AssumptionMap ->
-        ConceptInstanceMap -> SectionMap -> LabelledContentMap -> ChunkDB
+        [DataDefinition] -> [InstanceModel] -> [GenDefn] ->  [TheoryModel] -> [AssumpChunk] ->
+        [ConceptInstance] -> [Section] -> [LabelledContent] -> ChunkDB
 cdb s t c u tc rfm dd ins gd tm a ci sec lc = CDB (symbolMap s) (termMap t) (conceptMap c) (unitMap u)
- tc rfm dd ins gd tm a ci sec lc
+ tc rfm (idMap dd) (idMap ins) (idMap gd) (idMap tm) (idMap a) (idMap ci) (idMap sec) (idMap lc)
 
 ----------------------
 instance HasSymbolTable      ChunkDB where symbolTable       = csymbs

@@ -16,8 +16,8 @@ import Language.Drasil.Development (lnames')
 import Drasil.DocumentLanguage
 
 
-traceMap :: (HasUID l) => (l -> [Sentence]) -> [l] -> TraceMap
-traceMap f = Map.fromList . map (\x -> ((x ^. uid), lnames' (f x)))
+traceMap' :: HasUID l => (l -> [Sentence]) -> [l] -> TraceMap
+traceMap' f = traceMap $ lnames' . f
 
 getTraceMapFromDocSec :: [DocSection] -> SSDSec
 getTraceMapFromDocSec ((SSDSec ssd):_)  = ssd
@@ -67,11 +67,11 @@ getSCSSub a = getTraceMapFromSolCh $ getTraceMapFromSSDSub $ getTraceMapFromSSDS
 
 generateTraceMap :: [DocSection] -> TraceMap
 generateTraceMap a = Map.unionsWith (++) [
-  (traceMap extractSFromNotes tt), (traceMap extractSFromNotes gd),
-  (traceMap extractSFromNotes dd), (traceMap extractSFromNotes im),
+  (traceMap' extractSFromNotes tt), (traceMap' extractSFromNotes gd),
+  (traceMap' extractSFromNotes dd), (traceMap' extractSFromNotes im),
   -- Theory models do not have derivations.
-  (traceMap extractSFromDeriv gd),
-  (traceMap extractSFromDeriv dd), (traceMap extractSFromDeriv im)]
+  (traceMap' extractSFromDeriv gd),
+  (traceMap' extractSFromDeriv dd), (traceMap' extractSFromDeriv im)]
   where
     tt = getTraceMapFromTM $ getSCSSub a
     gd = getTraceMapFromGD $ getSCSSub a
@@ -80,4 +80,4 @@ generateTraceMap a = Map.unionsWith (++) [
 
 -- This is a hack as ConceptInstance cannot be collected yet.
 generateTraceMap' :: [ConceptInstance] -> TraceMap
-generateTraceMap' = Map.fromList . map (\x -> ((x ^. uid), lnames' [x ^. defn]))
+generateTraceMap' = traceMap' (\x -> [x ^. defn])

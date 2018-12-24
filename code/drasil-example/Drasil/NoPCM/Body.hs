@@ -178,30 +178,30 @@ nopcm_label = Map.union (generateTraceMap mkSRS)
 nopcm_refby :: RefbyMap
 nopcm_refby = generateRefbyMap nopcm_label
 
-nopcm_datadefn :: DatadefnMap
-nopcm_datadefn = Map.union swhs_datadefn $ Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromDD $ getSCSSub mkSRS
+nopcm_datadefn :: [DataDefinition]
+nopcm_datadefn = swhs_datadefn ++ (getTraceMapFromDD $ getSCSSub mkSRS)
 
-nopcm_insmodel :: InsModelMap
-nopcm_insmodel = Map.union swhs_insmodel $ Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromIM $ getSCSSub mkSRS
+nopcm_insmodel :: [InstanceModel]
+nopcm_insmodel = swhs_insmodel ++ (getTraceMapFromIM $ getSCSSub mkSRS)
 
-nopcm_gendef :: GendefMap
-nopcm_gendef = Map.union swhs_gendef $ Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromGD $ getSCSSub mkSRS
+nopcm_gendef :: [GenDefn]
+nopcm_gendef = swhs_gendef ++ (getTraceMapFromGD $ getSCSSub mkSRS)
 
-nopcm_theory :: TheoryModelMap
-nopcm_theory = Map.union swhs_theory $ Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromTM $ getSCSSub mkSRS
+nopcm_theory :: [TheoryModel]
+nopcm_theory = swhs_theory ++ (getTraceMapFromTM $ getSCSSub mkSRS)
 
-nopcm_assump :: AssumptionMap
-nopcm_assump = Map.fromList $ map (\x -> (x ^. uid, x)) (assumps_Nopcm_list_new ++ newAssumptions)
+nopcm_assump :: [AssumpChunk]
+nopcm_assump = assumps_Nopcm_list_new ++ newAssumptions
 
-nopcm_concins :: ConceptInstanceMap
-nopcm_concins = Map.fromList $ map (\x -> (x ^. uid, x))
- (reqs ++ [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH] ++ unlikelyChgs)
+nopcm_concins :: [ConceptInstance]
+nopcm_concins =
+ reqs ++ [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH] ++ unlikelyChgs
 
-nopcm_section :: SectionMap
-nopcm_section = Map.fromList $ map (\x -> (x ^. uid, x)) nopcm_sec
+nopcm_section :: [Section]
+nopcm_section = nopcm_sec
 
-nopcm_labcon :: LabelledContentMap
-nopcm_labcon = Map.fromList $ map (\x -> (x ^. uid, x)) [inputInitQuantsTblabled, dataConstTable1]
+nopcm_labcon :: [LabelledContent]
+nopcm_labcon = [inputInitQuantsTblabled, dataConstTable1]
 
 nopcm_sec :: [Section]
 nopcm_sec = extractSection nopcm_srs

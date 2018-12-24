@@ -132,27 +132,27 @@ game_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ likelyChang
 game_refby :: RefbyMap
 game_refby = generateRefbyMap game_label
 
-game_datadefn :: DatadefnMap
-game_datadefn = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromDD $ getSCSSub mkSRS
+game_datadefn :: [DataDefinition]
+game_datadefn = getTraceMapFromDD $ getSCSSub mkSRS
 
-game_insmodel :: InsModelMap
-game_insmodel = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromIM $ getSCSSub mkSRS
+game_insmodel :: [InstanceModel]
+game_insmodel = getTraceMapFromIM $ getSCSSub mkSRS
 
-game_gendef :: GendefMap
-game_gendef = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromGD $ getSCSSub mkSRS
+game_gendef :: [GenDefn]
+game_gendef = getTraceMapFromGD $ getSCSSub mkSRS
 
-game_theory :: TheoryModelMap
-game_theory = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromTM $ getSCSSub mkSRS
+game_theory :: [TheoryModel]
+game_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
-game_assump :: AssumptionMap
-game_assump = Map.fromList $ map (\x -> (x ^. uid, x)) newAssumptions
+game_assump :: [AssumpChunk]
+game_assump = newAssumptions
 
-game_concins :: ConceptInstanceMap
-game_concins = Map.fromList $ map (\x -> (x ^. uid, x)) (likelyChangesList' ++ unlikelyChangesList' ++
-  functional_requirements_list')
+game_concins :: [ConceptInstance]
+game_concins = likelyChangesList' ++ unlikelyChangesList' ++
+  functional_requirements_list'
 
-game_section :: SectionMap
-game_section = Map.fromList $ map (\x -> (x ^. uid, x)) game_sec
+game_section :: [Section]
+game_section = game_sec
 
 game_sec :: [Section]
 game_sec = extractSection chipmunkSRS'
@@ -201,12 +201,12 @@ everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms ++ map n
   ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw gamephySymbols ++ srsDomains) chipUnits game_label game_refby
   game_datadefn game_insmodel game_gendef game_theory game_assump game_concins
-  game_section (head ([] :: [LabelledContentMap]))
+  game_section []
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw cpSymbolsAll ++ map nw cpAcronyms ++ map nw check_si) ([] :: [ConceptChunk]) check_si
  game_label game_refby game_datadefn game_insmodel game_gendef game_theory game_assump game_concins
- game_section (head ([] :: [LabelledContentMap]))
+ game_section []
 
 printSetting :: PrintingInformation
 printSetting = PI everything defaultConfiguration

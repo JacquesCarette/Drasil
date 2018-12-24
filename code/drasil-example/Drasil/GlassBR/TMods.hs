@@ -24,8 +24,8 @@ gbrTMods = [pbIsSafe, lrIsSafe]
 -- needs to be updated properly.
 -- this is the new function but it still uses the lrIsSafe_RC,
 -- so basically we have to combine the old function with the new function
-glass_concept :: ConceptInstanceMap
-glass_concept = Map.fromList $ map (\x -> (x ^. uid, x)) ([] :: [ConceptInstance])
+glass_concept :: [ConceptInstance]
+glass_concept = []
 
 
 lrIsSafe :: TheoryModel
@@ -33,10 +33,9 @@ lrIsSafe = tm (cw lrIsSafe_RC)
    [qw is_safeLR, qw lRe, qw demand] ([] :: [ConceptChunk])
    [relToQD locSymbMap lrIsSafe_RC] [(sy is_safeLR) $= (sy lRe) $> (sy demand)] [] [makeCite astm2009] 
    "isSafeLR" [lrIsSafeDesc]
-  where locSymbMap = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) glassBRsymb ([] :: [UnitDefn]) (head ([] :: [TraceMap])) (head ([] :: [RefbyMap]))
-                       (head ([] :: [DatadefnMap])) (head ([] :: [InsModelMap])) (head ([] :: [GendefMap]))
-                        (head ([] :: [TheoryModelMap])) (head ([] :: [AssumptionMap])) glass_concept (head ([] :: [SectionMap]))
-                        (head ([] :: [LabelledContentMap]))
+   where locSymbMap = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) glassBRsymb
+                        ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
+                        glass_concept [] []
 
 lrIsSafe_RC :: RelationConcept
 lrIsSafe_RC = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")

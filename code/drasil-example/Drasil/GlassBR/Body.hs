@@ -94,29 +94,29 @@ glassBR_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ likelyCh
 glassBR_refby :: RefbyMap
 glassBR_refby = generateRefbyMap glassBR_label 
 
-glassBR_datadefn :: DatadefnMap
-glassBR_datadefn = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromDD $ getSCSSub mkSRS
+glassBR_datadefn :: [DataDefinition]
+glassBR_datadefn = getTraceMapFromDD $ getSCSSub mkSRS
 
-glassBR_insmodel :: InsModelMap
-glassBR_insmodel = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromIM $ getSCSSub mkSRS
+glassBR_insmodel :: [InstanceModel]
+glassBR_insmodel = getTraceMapFromIM $ getSCSSub mkSRS
 
-glassBR_gendef :: GendefMap
-glassBR_gendef = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromGD $ getSCSSub mkSRS
+glassBR_gendef :: [GenDefn]
+glassBR_gendef = getTraceMapFromGD $ getSCSSub mkSRS
 
-glassBR_theory :: TheoryModelMap
-glassBR_theory = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromTM $ getSCSSub mkSRS
+glassBR_theory :: [TheoryModel]
+glassBR_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
-glassBR_assump :: AssumptionMap
-glassBR_assump = Map.fromList $ map (\x -> (x ^. uid, x)) assumptions
+glassBR_assump :: [AssumpChunk]
+glassBR_assump = assumptions
 
-glassBR_concins :: ConceptInstanceMap
-glassBR_concins = Map.fromList $ map (\x -> (x ^. uid, x)) (likelyChgs ++ unlikelyChgs ++ funcReqs)
+glassBR_concins :: [ConceptInstance]
+glassBR_concins = likelyChgs ++ unlikelyChgs ++ funcReqs
 
-glassBR_section :: SectionMap
-glassBR_section = Map.fromList $ map (\x -> (x ^. uid, x)) glassBR_sec
+glassBR_section :: [Section]
+glassBR_section = glassBR_sec
 
-glassBR_labelledcon :: LabelledContentMap
-glassBR_labelledcon = Map.fromList $ map (\x -> (x ^. uid, x)) [inputGlassPropsTable]
+glassBR_labelledcon :: [LabelledContent]
+glassBR_labelledcon = [inputGlassPropsTable]
 
 glassBR_sec :: [Section]
 glassBR_sec = extractSection glassBR_srs

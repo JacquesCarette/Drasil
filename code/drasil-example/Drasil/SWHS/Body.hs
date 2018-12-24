@@ -219,29 +219,29 @@ swhs_label = Map.union (generateTraceMap mkSRS) (generateTraceMap' $ likelyChgs 
 swhs_refby :: RefbyMap
 swhs_refby = generateRefbyMap swhs_label 
 
-swhs_datadefn :: DatadefnMap
-swhs_datadefn = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromDD $ getSCSSub mkSRS
+swhs_datadefn :: [DataDefinition]
+swhs_datadefn = getTraceMapFromDD $ getSCSSub mkSRS
 
-swhs_insmodel :: InsModelMap
-swhs_insmodel = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromIM $ getSCSSub mkSRS
+swhs_insmodel :: [InstanceModel]
+swhs_insmodel = getTraceMapFromIM $ getSCSSub mkSRS
 
-swhs_gendef :: GendefMap
-swhs_gendef = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromGD $ getSCSSub mkSRS
+swhs_gendef :: [GenDefn]
+swhs_gendef = getTraceMapFromGD $ getSCSSub mkSRS
 
-swhs_theory :: TheoryModelMap
-swhs_theory = Map.fromList . map (\x -> (x ^. uid, x)) $ getTraceMapFromTM $ getSCSSub mkSRS
+swhs_theory :: [TheoryModel]
+swhs_theory = getTraceMapFromTM $ getSCSSub mkSRS
 
-swhs_assump :: AssumptionMap
-swhs_assump = Map.fromList $ map (\x -> (x ^. uid, x)) newAssumptions
+swhs_assump :: [AssumpChunk]
+swhs_assump = newAssumptions
 
-swhs_concins :: ConceptInstanceMap
-swhs_concins = Map.fromList $ map (\x -> (x ^. uid, x)) (likelyChgs ++ unlikelyChgs ++ funcReqs)
+swhs_concins :: [ConceptInstance]
+swhs_concins = likelyChgs ++ unlikelyChgs ++ funcReqs
 
-swhs_section :: SectionMap
-swhs_section = Map.fromList $ map (\x -> (x ^. uid, x)) swhs_sec
+swhs_section :: [Section]
+swhs_section = swhs_sec
 
-swhs_labcon :: LabelledContentMap
-swhs_labcon = Map.fromList $ map (\x -> (x ^. uid, x)) [dataConTable1, inputInitQuantsTblabled]
+swhs_labcon :: [LabelledContent]
+swhs_labcon = [dataConTable1, inputInitQuantsTblabled]
 
 swhs_sec :: [Section]
 swhs_sec = extractSection swhs_srs'
